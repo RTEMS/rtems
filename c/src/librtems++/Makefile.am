@@ -26,7 +26,7 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems++ \
 
 endif
 
-LIB = ${ARCH}/librtems++.a
+LIB = ${ARCH}/librtems++$(LIB_VARIANT).a
 
 CC_FILES = src/rtemsEvent.cc src/rtemsInterrupt.cc src/rtemsMessageQueue.cc \
     src/rtemsSemaphore.cc src/rtemsStatusCode.cc src/rtemsTask.cc src/rtemsTimer.cc

@@ -1,3 +1,7 @@
+2003-03-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Build librtems++$(LIB_VARIANT).a
+
 2002-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Eliminate *_O_FILES.
