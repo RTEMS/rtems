@@ -34,8 +34,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 # (OPTIONAL) Add local stuff here using +=
 #
 
-DEFINES  += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
-     -DDIAGNOSTIC -DBOOTP_COMPAT
+DEFINES  += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 CPPFLAGS +=
 CFLAGS   +=
 
