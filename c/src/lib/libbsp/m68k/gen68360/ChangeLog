@@ -1,3 +1,8 @@
+2004-11-25	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds, startup/linkcmds.bootp, startup/linkcmds.prom: Add
+	new bss sections .bss.* and .gnu.linkonce.b*.
+
 2004-10-28	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Add .gnu.linkonce.b.*.

@@ -125,8 +125,8 @@ SECTIONS {
         .bss : {
                 M68Kvec = .;
                 . += (256 * 4);
-                _clear_start = .;
-                *(.bss)
+                *(.dynbss)
+                *(.bss .bss.* .gnu.linkonce.b.*)
                 *(COMMON)
                 . = ALIGN (16);
                 PROVIDE (end = .);
