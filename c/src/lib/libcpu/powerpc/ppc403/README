@@ -1,3 +1,7 @@
+#
+#  $Id$
+#
+
 Various non BSP dependant support routines.
 
 clock - Uses the 403 PIT (Programmable interval timer) to
