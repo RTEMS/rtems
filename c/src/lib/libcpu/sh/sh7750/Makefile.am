@@ -2,15 +2,14 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../../aclocal
-
-include $(top_srcdir)/../../../../automake/compile.am
-include $(top_srcdir)/../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 CLEANFILES =
 EXTRA_PROGRAMS =
 noinst_DATA =
 
+if sh7750
 # NOTE: Unlike other CPUS, we install into a subdirectory to avoid
 #       file name conflicts
 include_shdir = $(includedir)/sh
@@ -80,22 +79,25 @@ timer_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 timer_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += timer$(LIB_VARIANT).rel
+endif
 
-# --
+## --
 
 all-local: $(PREINSTALL_FILES)
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
+if sh7750
 $(PROJECT_INCLUDE)/sh/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/sh
 	@: > $(PROJECT_INCLUDE)/sh/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sh/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
 $(PROJECT_INCLUDE)/sh/sh4uart.h: include/sh/sh4uart.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/sh4uart.h
@@ -120,7 +122,9 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ispsh7750.h
 $(PROJECT_INCLUDE)/rtems/score/sh4_regs.h: include/rtems/score/sh4_regs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/sh4_regs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/sh4_regs.h
+endif
 
 CLEANFILES += $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

@@ -1,3 +1,16 @@
+2003-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Unconditionally build subdirs sh7032, sh7045, sh7750.
+	* configure.ac: Merge-in sh7032/configure.ac, sh7045/configure.ac,
+	sh7750/configure.ac.
+	Add AM_CONDITIONALS sh7032, sh7045, sh7750.
+	* sh7032/Makefile.am, sh7045/Makefile.am, sh7750/Makefile.am: 
+	Reflect changes above. Add PREINSTALL_DIRS.
+	* sh7032/configure.ac, sh7045/configure.ac, sh7750/configure.ac:
+	Remove.
+	* sh7032/.cvsignore, sh7045/.cvsignore, sh7750/.cvsignore: 
+	Reflect changes above.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
