@@ -443,6 +443,12 @@ Objects_Control *_Objects_Get (
   Objects_Locations   *location
 );
 
+Objects_Control *_Objects_Get_by_index (
+  Objects_Information *information,
+  Objects_Id           id,
+  Objects_Locations   *location
+);
+
 /*
  *  _Objects_Get_next
  *

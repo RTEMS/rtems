@@ -53,11 +53,18 @@ Objects_Control *_Objects_Get(
   Objects_Control *the_object;
   unsigned32       index;
 
-  index = _Objects_Get_index( id );
+#if defined(RTEMS_MULTIPROCESSING)
+  index = id - information->minimum_id + 1;
+#else
+  /* index = _Objects_Get_index( id ); */
+  index = id & 0x0000ffff;
+  /* This should work but doesn't always :( */
+  /* index = (unsigned16) id; */
+#endif
 
   if ( information->maximum >= index ) {
     _Thread_Disable_dispatch();
-    if ( (the_object = _Objects_Get_local_object( information, index )) != NULL ) {
+    if ( (the_object = information->local_table[ index ]) != NULL ) {
       *location = OBJECTS_LOCAL;
       return( the_object );
     }
@@ -67,12 +74,7 @@ Objects_Control *_Objects_Get(
   }
   *location = OBJECTS_ERROR;
 #if defined(RTEMS_MULTIPROCESSING)
-  _Objects_MP_Is_remote(
-    information,
-    _Objects_Build_id( information->the_class, _Objects_Local_node, index ),
-    location,
-    &the_object
-  );
+  _Objects_MP_Is_remote( information, id, location, &the_object );
   return the_object;
 #else
   return NULL;
