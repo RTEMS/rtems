@@ -12,8 +12,15 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 /*
+ * 2001-01-30 KJO (vac4050@cae597.rsc.raytheon.com):
+ *  Fixed rtems_monitor_command_lookup() to accept partial 
+ *  commands to uniqeness.  Added support for setting 
+ *  the monitor prompt via an environment variable:
+ *  RTEMS_MONITOR_PROMPT
+ *
  * CCJ: 26-3-2000, adding command history and command line
  * editing. This code is donated from My Right Boot and not
  * covered by GPL, only the RTEMS license.
@@ -461,17 +468,23 @@ rtems_monitor_command_read(char *command,
                            int  *argc,
                            char **argv)
 {
+	char *env_prompt;
+
+	env_prompt = getenv("RTEMS_MONITOR_PROMPT");
+
   /*
    * put node number in the prompt if we are multiprocessing
    */
-
   if (!rtems_configuration_get_user_multiprocessing_table ())
-    sprintf (monitor_prompt, "%s", MONITOR_PROMPT);
+    sprintf (monitor_prompt, "%s",  
+             (env_prompt == NULL) ? MONITOR_PROMPT: env_prompt);
   else if (rtems_monitor_default_node != rtems_monitor_node)
     sprintf (monitor_prompt, "%d-%s-%d", rtems_monitor_node,
-             MONITOR_PROMPT, rtems_monitor_default_node);
+             (env_prompt == NULL) ? MONITOR_PROMPT : env_prompt,
+             rtems_monitor_default_node);
   else
-    sprintf (monitor_prompt, "%d-%s", rtems_monitor_node, MONITOR_PROMPT);
+    sprintf (monitor_prompt, "%d-%s", rtems_monitor_node, 
+             (env_prompt == NULL) ? MONITOR_PROMPT : env_prompt);
 
 #if defined(RTEMS_UNIX)
   /* RTEMS on unix gets so many interrupt system calls this is hosed */
@@ -498,25 +511,45 @@ rtems_monitor_command_lookup(
     char                          **argv
 )
 {
-  char *command;
+  int command_length;
+  rtems_monitor_command_entry_t *found_it = NULL;
 
-  command = argv[0];
+  command_length = strlen (argv[0]);
 
-  if ((table == 0) || (command == 0))
+  if ((table == 0) || (argv[0] == 0))
     return 0;
     
   while (table)
   {
     if (table->command)
     {
-      if (STREQ (command, table->command))  /* exact match */
+
+      /*
+       * Check for ambiguity
+       */
+      if (!strncmp (table->command, argv[0], command_length))
       {
-        if (table->command_function == 0)
+        if (found_it)
+        {
           return 0;
-        return table;
+        }
+       
+        else
+          found_it = table;
       }
     }
     table = table->next;
+  }
+
+  /*
+   * No ambiguity (the possible partial command was unique after all)
+   */
+  if (found_it)
+  {
+    if (table->command_function == 0)
+      return 0;
+
+    return found_it;
   }
 
   return 0;
