@@ -1,5 +1,8 @@
-/*  powerpc.h
- *
+/**
+ * @file rtems/score/powerpc.h
+ */
+
+/*
  *  This file contains definitions for the IBM/Motorola PowerPC
  *  family members.
  *

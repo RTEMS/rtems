@@ -1,3 +1,7 @@
+/**
+ * @file rtems/score/ppc.h
+ */
+
 /*
  *  The license and distribution terms for this file may in
  *  the file LICENSE in this distribution or at
