@@ -40,7 +40,7 @@ CLOBBER_ADDITIONS +=
 all: 	preinstall
 
 preinstall: $(SRCS)
-	$(INSTALL) $(INSTINCFLAGS) $(H_FILES) $(PROJECT_INCLUDE)
+	$(INSTALL_CHANGE) $(INSTINCFLAGS) $(H_FILES) $(PROJECT_INCLUDE)
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
