@@ -856,7 +856,7 @@ retry:
 	outlen = strlen((char *)arg1)+1;
 	tmparg = malloc(outlen, M_SYSCTLTMP, M_WAITOK);
 
-	if (strlcpy(tmparg, (char *)arg1, outlen) >= outlen) {
+	if (strncpy(tmparg, (char *)arg1, outlen) >= outlen) {
 		free(tmparg, M_SYSCTLTMP);
 		goto retry;
 	}
