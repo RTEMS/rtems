@@ -142,7 +142,7 @@ PSIGNAL_C_FILES = src/psignal.c src/alarm.c src/kill.c src/killinfo.c src/pause.
     src/pthreadkill.c src/pthreadsigmask.c src/sigaction.c src/sigaddset.c src/sigdelset.c \
     src/sigemptyset.c src/sigfillset.c src/sigismember.c src/sigpending.c src/sigprocmask.c \
     src/sigqueue.c src/sigsuspend.c src/sigtimedwait.c src/sigwait.c src/sigwaitinfo.c \
-    src/signal_2.c
+    src/signal_2.c src/ualarm.c
 
 SEMAPHORE_C_FILES = src/semaphore.c src/semaphorecreatesupp.c src/semaphoredeletesupp.c \
     src/semaphoremp.c src/semaphorenametoid.c src/semaphorewaitsupp.c src/semclose.c \
@@ -152,7 +152,7 @@ SEMAPHORE_C_FILES = src/semaphore.c src/semaphorecreatesupp.c src/semaphoredelet
 TIME_C_FILES = src/adjtime.c src/time.c src/posixtimespecsubtract.c \
     src/posixtimespectointerval.c src/posixintervaltotimespec.c src/clockgetcpuclockid.c \
     src/clockgetenableattr.c src/clockgetres.c src/clockgettime.c src/clocksetenableattr.c \
-    src/clocksettime.c src/nanosleep.c src/sleep.c
+    src/clocksettime.c src/nanosleep.c src/sleep.c src/usleep.c
 
 # the timer manager needs to be split further but only after its
 # dependence on the Classic API Timer Manager is removed.

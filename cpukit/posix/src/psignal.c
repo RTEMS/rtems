@@ -73,8 +73,6 @@ struct sigaction _POSIX_signals_Default_vectors[ SIG_ARRAY_MAX ] = {
 
 struct sigaction _POSIX_signals_Vectors[ SIG_ARRAY_MAX ];
 
-Watchdog_Control _POSIX_signals_Alarm_timer;
-
 Thread_queue_Control _POSIX_signals_Wait_queue;
 
 Chain_Control _POSIX_signals_Inactive_siginfo;
@@ -148,23 +146,6 @@ restart:
 
 /*PAGE
  *
- *  _POSIX_signals_Alarm_TSR
- */
- 
-void _POSIX_signals_Alarm_TSR(
-  Objects_Id      id,
-  void           *argument
-)
-{
-  int status;
-
-  status = kill( getpid(), SIGALRM );
-  /* XXX can't print from an ISR, should this be fatal? */
-  assert( !status );
-}
-
-/*PAGE
- *
  *  _POSIX_signals_Manager_Initialization
  */
 
@@ -175,7 +156,7 @@ void _POSIX_signals_Manager_Initialization(
   unsigned32 signo;
 
   /*
-   *  Insure we have the same number of vectors and default vector entries
+   *  Ensure we have the same number of vectors and default vector entries
    */
 
   assert(
@@ -194,17 +175,6 @@ void _POSIX_signals_Manager_Initialization(
 
   sigemptyset( &_POSIX_signals_Pending );
 
-  /*
-   *  Initialize the timer used to implement alarm().
-   */
-
-  _Watchdog_Initialize(
-    &_POSIX_signals_Alarm_timer,
-    _POSIX_signals_Alarm_TSR,
-    0,
-    NULL
-  );
- 
   /*
    *  Initialize the queue we use to block for signals
    */

@@ -1,7 +1,7 @@
 /*
- *  3.4.1 Schedule Alarm, P1003.1b-1993, p. 79
+ *  XXX 3.4.1 Schedule Alarm, P1003.1b-1993, p. 79
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2003.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -21,15 +21,16 @@
 #include <rtems/system.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/psignal.h>
+#include <rtems/posix/time.h>
 
-Watchdog_Control _POSIX_signals_Alarm_timer;
+Watchdog_Control _POSIX_signals_Ualarm_timer;
 
 /*PAGE
  *
- *  _POSIX_signals_Alarm_TSR
+ *  _POSIX_signals_Ualarm_TSR
  */
  
-void _POSIX_signals_Alarm_TSR(
+void _POSIX_signals_Ualarm_TSR(
   Objects_Id      id,
   void           *argument
 )
@@ -40,21 +41,24 @@ void _POSIX_signals_Alarm_TSR(
   /* XXX can't print from an ISR, should this be fatal? */
 }
 
-unsigned int alarm(
-  unsigned int seconds
+useconds_t ualarm(
+  useconds_t useconds,
+  useconds_t interval
 )
 {
-  unsigned int      remaining = 0;
+  useconds_t        remaining = 0;
   Watchdog_Control *the_timer;
+  Watchdog_Interval ticks;
+  struct timespec   tp;
 
-  the_timer = &_POSIX_signals_Alarm_timer;
+  the_timer = &_POSIX_signals_Ualarm_timer;
 
   /*
    *  Initialize the timer used to implement alarm().
    */
 
   if ( !the_timer->routine ) {
-    _Watchdog_Initialize( the_timer, _POSIX_signals_Alarm_TSR, 0, NULL );
+    _Watchdog_Initialize( the_timer, _POSIX_signals_Ualarm_TSR, 0, NULL );
   } else {
     switch ( _Watchdog_Remove( the_timer ) ) {
       case WATCHDOG_INACTIVE:
@@ -69,14 +73,22 @@ unsigned int alarm(
          *  this.
          */
 
-        remaining = the_timer->initial -
+	
+        ticks = the_timer->initial -
          ((the_timer->stop_time - the_timer->start_time) /
 	   _TOD_Ticks_per_second);
+
+        _POSIX_Interval_to_timespec( ticks, &tp );
+        remaining  = tp.tv_sec * TOD_MICROSECONDS_PER_SECOND;
+        remaining += tp.tv_nsec / 1000;
         break;
     }
   }
 
-  _Watchdog_Insert_seconds( the_timer, seconds );
+  tp.tv_sec = useconds / TOD_MICROSECONDS_PER_SECOND;
+  tp.tv_nsec = (useconds % TOD_MICROSECONDS_PER_SECOND) * 1000;
+  ticks = _POSIX_Timespec_to_interval( &tp );
+  _Watchdog_Insert_ticks( the_timer, ticks );
 
   return remaining;
 }
