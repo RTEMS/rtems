@@ -1,13 +1,5 @@
 2003-12-17	Joel Sherrill <joel@OARcorp.com>
 
-	* VERSION: Updated to rtems-20031217-test.
-
-2003-12-17  
-
-    * aclocal/version.m4: Updated to rtems-20031217-test.
-
-2003-12-17	Joel Sherrill <joel@OARcorp.com>
-
 	* release_support: Use dirname not basedir.  Keep going until I
 	can get a tarball cut.
 
