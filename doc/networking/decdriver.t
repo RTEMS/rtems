@@ -83,7 +83,7 @@ There is no ASCII version of the PCI Device's Configuration Header Space Format
 @image{PCIreg,,}
 @end ifset
 
-@c @image{PCI_reg}
+@c @image{PCIreg}
 
 @ifset use-html
 @c <IMG SRC="PCIreg.jpg" WIDTH=500 HEIGHT=600 ALT="PCI Device's Configuration Header Space Format">
@@ -163,28 +163,21 @@ please refer to the [DEC21140 Hardware Manual].
 @example
 @group
 XXXXX reference it in the previous paragraph
-XXXXX insert recv_bd.eps
+XXXXX insert recvbd.eps
 XXXXX Caption Buffer Descriptor
 @end group
 @end example
 @end ifset
 
 @ifset use-tex
-@example
-@group
-XXXXX reference it in the previous paragraph
-XXXXX insert recv_bd.eps
-XXXXX Caption Buffer Descriptor
-@end group
-@end example
+@image{recvbd}
 @end ifset
 
-@c @image{recv_bd}
 
 @ifset use-html
-@c <IMG SRC="recv_bd.jpg" WIDTH=500 HEIGHT=600 ALT="Buffer Descriptor">
+@c <IMG SRC="recvbd.jpg" WIDTH=500 HEIGHT=600 ALT="Buffer Descriptor">
 @html
-<IMG SRC="recv_bd.jpg" ALT="Buffer Descriptor">
+<IMG SRC="recvbd.jpg" ALT="Buffer Descriptor">
 @end html
 @end ifset
 
