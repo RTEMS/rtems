@@ -31,6 +31,21 @@ void _CPU_Initialize(
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {
+#if ( M68K_HAS_VBR == 0 )
+  /* fill the isr redirect table with the code to place the format/id
+     onto the stack */
+
+  unsigned32 slot;
+
+  for (slot = 0; slot < CPU_INTERRUPT_NUMBER_OF_VECTORS; slot++)
+  {
+    _CPU_ISR_jump_table[slot].move_a7 = M68K_MOVE_A7;
+    _CPU_ISR_jump_table[slot].format_id = slot << 2;
+    _CPU_ISR_jump_table[slot].jmp = M68K_JMP;
+    _CPU_ISR_jump_table[slot].isr_handler = (unsigned32) 0xDEADDEAD;
+  }
+#endif /* M68K_HAS_VBR */
+
   _CPU_Table = *cpu_table;
 }
 
@@ -63,12 +78,13 @@ void _CPU_ISR_install_raw_handler(
 
   m68k_get_vbr( interrupt_table );
 
-#if ( M68K_HAS_VBR == 1)
   *old_handler = interrupt_table[ vector ];
+
+#if ( M68K_HAS_VBR == 1 )
   interrupt_table[ vector ] = new_handler;
 #else
-  *old_handler = *(proc_ptr *)( (int)interrupt_table+ (int)vector*6-10);
-  *(proc_ptr *)( (int)interrupt_table+ (int)vector*6-10) = new_handler;
+  _CPU_ISR_jump_table[vector].isr_handler = (unsigned32) new_handler;
+  interrupt_table[ vector ] = (proc_ptr) &_CPU_ISR_jump_table[vector];
 #endif /* M68K_HAS_VBR */
 }
 

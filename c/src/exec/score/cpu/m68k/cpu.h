@@ -139,10 +139,37 @@ typedef struct {
 
 /* variables */
 
-SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
-SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
+SCORE_EXTERN void                   *_CPU_Interrupt_stack_low;
+SCORE_EXTERN void                   *_CPU_Interrupt_stack_high;
+
+extern char                         _VBR[]; 
+
+#if ( M68K_HAS_VBR == 0 )
+
+/*
+ * Table of ISR handler entries that resides in RAM. The FORMAT/ID is
+ * pushed onto the stack. This is not is the same order as VBR processors.
+ * The ISR handler takes the format and uses it for dispatching the user
+ * handler.
+ *
+ * FIXME : should be moved to below CPU_INTERRUPT_NUMBER_OF_VECTORS
+ *
+ */
+
+typedef struct {
+  unsigned16 move_a7;            /* move #FORMAT_ID,%a7@- */
+  unsigned16 format_id;
+  unsigned16 jmp;                /* jmp  _ISR_Handlers */
+  unsigned32 isr_handler;
+} _CPU_ISR_handler_entry;
+
+#define M68K_MOVE_A7 0x3F3C
+#define M68K_JMP     0x4EF9
+
       /* points to jsr-exception-table in targets wo/ VBR register */
-extern char                      _VBR[]; 
+SCORE_EXTERN _CPU_ISR_handler_entry _CPU_ISR_jump_table[256]; 
+
+#endif /* M68K_HAS_VBR */
 
 /* constants */
 

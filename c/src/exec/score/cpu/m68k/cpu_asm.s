@@ -122,9 +122,9 @@ norst:  frestore a0@+                     | restore the fp state frame
 .set PC_OFFSET,    2                     | Program Counter offset
 .set FVO_OFFSET,   6                     | Format/vector offset
 #else
-.set JSR_OFFSET,   0                     | return address from jsr table
-.set SR_OFFSET,    4
-.set PC_OFFSET,    6
+.set SR_OFFSET,    2                     | Status register offset
+.set PC_OFFSET,    4                     | Program Counter offset
+.set FVO_OFFSET,   0                     | Format/vector offset placed in the stack
 #endif /* M68K_HAS_VBR */
  
 .set SAVED,        16                    | space for saved registers
@@ -144,17 +144,8 @@ SYM (_ISR_Handler):
  *  to switch to the software maintained interrupt stack.
  */
 
-#if ( M68K_HAS_VBR == 0)
-        movel   a7@(SAVED+JSR_OFFSET),d0 | assume the exception table at 0x0000
-        addql   #6,d0                    | points to a jump table (jsr) in RAM
-        subl    #_VBR,d0                 | VBR is the location of the jump table
-        divs    #3,d0
-        lsll    #1,d0
-        extl    d0
-#else
         movew   a7@(SAVED+FVO_OFFSET),d0 | d0 = F/VO
         andl    #0x0fff,d0               | d0 = vector offset in vbr
-#endif
 
 #if ( M68K_HAS_PREINDEXING == 1 )
         movel   @( SYM (_ISR_Vector_table),d0:w:1),a0| fetch the ISR
@@ -212,8 +203,8 @@ bframe: clrl    SYM (_ISR_Signals_to_thread_executing)
 #endif
 
 exit:   moveml  a7@+,d0-d1/a0-a1         | restore d0-d1,a0-a1
-#if ( M68K_HAS_VBR == 0)
-        addql   #4,a7                    | pop vector address
+#if ( M68K_HAS_VBR == 0 )
+        addql   #2,a7                    | pop format/id
 #endif /* M68K_HAS_VBR */
         rte                              | return to thread
                                          |   OR _Isr_dispatch
@@ -237,7 +228,7 @@ SYM (_ISR_Dispatch):
         movml   d0-d1/a0-a1,a7@-
         jsr     SYM (_Thread_Dispatch)
         movml   a7@+,d0-d1/a0-a1
-#if ( M68K_HAS_VBR == 0)
-        addql   #4,a7                    | pop vector address
+#if ( M68K_HAS_VBR == 0 )
+        addql   #2,a7                    | pop format/id
 #endif /* M68K_HAS_VBR */
         rte
