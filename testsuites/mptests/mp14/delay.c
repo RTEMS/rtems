@@ -29,5 +29,5 @@ rtems_timer_service_routine Delayed_send_event(
     Task_id[ rtems_get_index( timer_id ) ],
     RTEMS_EVENT_16
   );
-  directive_failed( status, "rtems_event_send" );
+  fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL, "rtems_event_send" );
 }
