@@ -1,3 +1,8 @@
+2001-01-22	Michael Hamel <mhamel@adi.co.nz>
+
+	* include/rtems.h, src/signalcatch.c: Modifications to make
+	CodeWarrior happy.
+
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
 	* src/regiongetinfo.c: Removed unused variable to eliminate warning.

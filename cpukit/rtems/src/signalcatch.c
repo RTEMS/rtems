@@ -48,7 +48,7 @@ rtems_status_code rtems_signal_catch(
 
 /* XXX normalize mode */
   executing = _Thread_Executing;
-  api = executing->API_Extensions[ THREAD_API_RTEMS ];
+  api = (RTEMS_API_Control*)executing->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
 
   _Thread_Disable_dispatch(); /* cannot reschedule while */

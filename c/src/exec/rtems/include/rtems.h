@@ -30,7 +30,7 @@ extern "C" {
  *  Define this at your own risk. 
  */
 
-#if !defined(__RTEMS_VIOLATE_KERNEL_VISIBILITY__) && !defined(__RTEMS_INSIDE__)
+#if (!defined(__RTEMS_VIOLATE_KERNEL_VISIBILITY__)) && (!defined(__RTEMS_INSIDE__))
 #define __RTEMS_APPLICATION__
 #endif
 
