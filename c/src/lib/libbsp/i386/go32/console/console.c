@@ -202,7 +202,6 @@ rtems_device_driver console_read(
     if (buffer[ count ] == '\n' || buffer[ count ] == '\r') {
       /* What if this goes past the end of the buffer?  We're hosed. [bhc] */
       buffer[ count++ ]  = '\n';
-      buffer[ count ]  = 0;
       break;
     }
   }

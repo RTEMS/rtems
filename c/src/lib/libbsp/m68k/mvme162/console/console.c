@@ -199,7 +199,6 @@ rtems_device_driver console_read(
     buffer[ count ] = inbyte( minor );
     if (buffer[ count ] == '\n' || buffer[ count ] == '\r') {
       buffer[ count++ ]  = '\n';
-      buffer[ count ]  = 0;
       break;
     }
   }
