@@ -107,7 +107,7 @@
 
 #define DRIVER_PREFIX   "dc"
 
-#define IO_MASK  0x3
+#define IO_MASK   0x3
 #define MEM_MASK  0xF
 
 /* command and status registers, 32-bit access, only if IO-ACCESS */
@@ -271,8 +271,9 @@ struct dec21140_softc {
       struct arpcom		arpcom;
 
       rtems_irq_connect_data    irqInfo;
-
       rtems_event_set           ioevent;
+
+      int                       numRxbuffers, numTxbuffers;
 
       volatile struct MD	*MDbase;
       volatile struct MD        *nextRxMD;
@@ -516,8 +517,8 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
    /*
     * Init RX ring
     */
-   cp = (volatile unsigned char *)malloc(((NRXBUFS+NTXBUFS)*sizeof(struct MD))
-                                         + (NTXBUFS*RBUF_SIZE)
+   cp = (volatile unsigned char *)malloc(((sc->numRxbuffers+sc->numTxbuffers)*sizeof(struct MD))
+                                         + (sc->numTxbuffers*RBUF_SIZE)
                                          + CPU_CACHE_ALIGNMENT_FOR_BUFFER);
    sc->bufferBase = cp;
    cp += (CPU_CACHE_ALIGNMENT_FOR_BUFFER - (int)cp) & (CPU_CACHE_ALIGNMENT_FOR_BUFFER - 1);
@@ -526,8 +527,8 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
    if (_CPU_is_paging_enabled())
       _CPU_change_memory_mapping_attribute
          (NULL, cp,
-          ((NRXBUFS+NTXBUFS)*sizeof(struct MD))
-          + (NTXBUFS*RBUF_SIZE),
+          ((sc->numRxbuffers+sc->numTxbuffers)*sizeof(struct MD))
+          + (sc->numTxbuffers*RBUF_SIZE),
           PTE_CACHE_DISABLE | PTE_WRITABLE);
 #endif
 #endif
@@ -535,10 +536,10 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
    sc->MDbase = rmd;
    sc->nextRxMD = sc->MDbase;
 
-   buffer = cp + ((NRXBUFS+NTXBUFS)*sizeof(struct MD));
+   buffer = cp + ((sc->numRxbuffers+sc->numTxbuffers)*sizeof(struct MD));
    st_le32( (tbase+memCSR3), (long)(phys_to_bus((long)(sc->MDbase))));
 
-   for (i=0 ; i<NRXBUFS; i++)
+   for (i=0 ; i<sc->numRxbuffers; i++)
    {
       struct mbuf *m;
     
@@ -558,9 +559,9 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
    /*
     * mark last RX buffer.
     */
-   sc->MDbase [NRXBUFS-1].buf2   = 0;
-   sc->MDbase [NRXBUFS-1].counts = 0xfec00000 | (RBUF_SIZE);
-   sc->MDbase [NRXBUFS-1].next   = sc->MDbase;
+   sc->MDbase [sc->numRxbuffers-1].buf2   = 0;
+   sc->MDbase [sc->numRxbuffers-1].counts = 0xfec00000 | (RBUF_SIZE);
+   sc->MDbase [sc->numRxbuffers-1].next   = sc->MDbase;
 
 
 
@@ -568,7 +569,7 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
     * Init TX ring
     */
    st_le32( (tbase+memCSR4), (long)(phys_to_bus((long)(rmd))) );
-   for (i=0 ; i<NTXBUFS; i++){
+   for (i=0 ; i<sc->numTxbuffers; i++){
       (rmd+i)->buf2   = phys_to_bus(rmd+i+1);
       (rmd+i)->buf1   = phys_to_bus(buffer + (i*RBUF_SIZE));
       (rmd+i)->counts = 0x01000000;
@@ -580,8 +581,8 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
    /*
     * mark last TX buffer.
     */
-   (rmd+NTXBUFS-1)->buf2   = phys_to_bus(rmd);
-   (rmd+NTXBUFS-1)->next   = rmd;
+   (rmd+sc->numTxbuffers-1)->buf2   = phys_to_bus(rmd);
+   (rmd+sc->numTxbuffers-1)->next   = rmd;
 
 
    /*
@@ -648,7 +649,7 @@ dec21140_rxDaemon (void *arg)
    volatile unsigned int *tbase;
    volatile struct MD    *rmd;
    struct dec21140_softc *sc;
-   volatile struct ifnet *ifp;
+   struct ifnet          *ifp;
    struct ether_header   *eh;
    struct mbuf           *m;
    unsigned int          i,len;
@@ -1123,6 +1124,12 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    */
    sc->ioevent = unit_signals[unitNumber-1];
 
+   /*
+   ** Save the buffer counts 
+   */
+   sc->numRxbuffers = (config->rbuf_count) ? config->rbuf_count : NRXBUFS;
+   sc->numTxbuffers = (config->xbuf_count) ? config->xbuf_count : NTXBUFS;
+
 
    /*
     * Get card address spaces & retrieve its isr vector
@@ -1179,13 +1186,20 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    /*
    ** Prep the board
    */
+
+#if defined(__PPC)
    pci_write_config_word(pbus, pdev, pfun,
                          PCI_COMMAND,
-                         (unsigned16)( PCI_COMMAND_MEMORY |
-                                       PCI_COMMAND_MASTER | 
-                                       PCI_COMMAND_INVALIDATE | 
-                                       PCI_COMMAND_WAIT |
-                                       PCI_COMMAND_FAST_BACK ) );
+                         (unsigned16) ( PCI_COMMAND_MEMORY |
+                                        PCI_COMMAND_MASTER | 
+                                        PCI_COMMAND_INVALIDATE | 
+                                        PCI_COMMAND_WAIT |
+                                        PCI_COMMAND_FAST_BACK ) );
+#endif
+#if defined(__i386__)
+   pcib_conf_write16(signature, 0x04, ( 0x2 | 0x4 | 0x10 | 0x80 | 0x200) );
+#endif
+
 
    /*
    ** Store the interrupt name, we'll use it later when we initialize
