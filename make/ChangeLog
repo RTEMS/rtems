@@ -1,3 +1,10 @@
+2003-02-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/armulator.cfg: CPU_CFLAGS = -msoft-float.
+	* custom/vegaplus.cfg: CPU_CFLAGS = -msoft-float.
+	* custom/ebd7312.cfg: CPU_CFLAGS = -msoft-float.
+	* custom/arm_bare_bsp.cfg: CPU_CFLAGS += -msoft-float.
+
 2003-01-20	Duane Gustavus <duane@unt.edu>
 
 	* custom/m2m332.cfg: Fix path to linkcmds_ROM.
