@@ -49,7 +49,7 @@
 @set BINUTILS-UNTAR       binutils-2.9.1
 @set BINUTILS-FTPSITE     ftp.gnu.org
 @set BINUTILS-FTPDIR      /pub/gnu
-@set BINUTILS-RTEMSPATCH  binutils-2.9.1-rtems-diff-19981012.gz
+@set BINUTILS-RTEMSPATCH  binutils-2.9.1-rtems-diff-19981027.gz
 
 @c When forced to use a snapshot
 @c @set BINUTILS-VERSION     gas 980314
@@ -68,7 +68,7 @@
 @set NEWLIB-UNTAR       newlib-1.8.0
 @set NEWLIB-FTPSITE     ftp.cygnus.com
 @set NEWLIB-FTPDIR      /pub/newlib
-@set NEWLIB-RTEMSPATCH  newlib-1.8.0-rtems-diff-19981012.gz
+@set NEWLIB-RTEMSPATCH  newlib-1.8.0-rtems-diff-19981027.gz
 
 @c
 @c  GDB Version
@@ -79,18 +79,18 @@
 @set GDB-UNTAR       gdb-4.17
 @set GDB-FTPSITE     ftp.gnu.org
 @set GDB-FTPDIR      /pub/gnu
-@set GDB-RTEMSPATCH  gdb-4.17-rtems-diff-19981012.gz
+@set GDB-RTEMSPATCH  gdb-4.17-rtems-diff-19981027.gz
 @c @set GDB-GNATPATCH   gdb-ada-patch-1.17.8.gz
 
 @c
 @c  RTEMS Version
 @c
 
-@set RTEMS-VERSION     RTEMS 4.0.0-beta4b
-@set RTEMS-TAR         rtems-4.0.0-beta4b.tgz
-@set RTEMS-UNTAR       rtems-4.0.0-beta4b
+@set RTEMS-VERSION     RTEMS 4.0.0
+@set RTEMS-TAR         rtems-4.0.0.tgz
+@set RTEMS-UNTAR       rtems-4.0.0
 @set RTEMS-FTPSITE     ftp.OARcorp.com
-@set RTEMS-FTPDIR      /oarcorp/private/beta4
-@set BUILDTOOLS-TAR    ada_build_scripts-19981012.tgz
+@set RTEMS-FTPDIR      /pub/rtems/4.0.0
+@set BUILDTOOLS-TAR    ada_build_scripts-4.0.0.tgz
 
 

@@ -184,14 +184,6 @@ a collection of freely distributable and public domain source
 code and is freely distributable with as few restrictions as
 possible placed on the end user.
 
-The RTEMS specific support code for NEWLIB has been
-submitted to the NEWLIB maintainers and should be included in a
-future release.  Until that time, it is recommended that the
-beta version of NEWLIB with RTEMS support added be used by the
-application developer.  The beta version of NEWLIB with RTEMS
-specific support is ONLY available on the OAR ftp site.  This
-beta version is strictly tied to a particular RTEMS release.
-
 The primary ftp site for this library is ftp.cygnus.com (205.180.83.42).
 
 @ifinfo

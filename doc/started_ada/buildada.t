@@ -114,7 +114,7 @@ specific patches.
 @example
     FTP Site:    @value{RTEMS-FTPSITE}
     Directory:   @value{RTEMS-FTPDIR}/ada_tools
-    File:        bit_ada
+    File:        @value{BUILDTOOLS-TAR}
 @ifset BINUTILS-RTEMSPATCH
     File:        @value{BINUTILS-RTEMSPATCH}
 @end ifset
