@@ -1,4 +1,8 @@
+NOTE: If you get the following assertion, then your target does not
+have enough memory in the heap used by malloc to allocate all the
+files used during this test:
 
+assertion "memory" failed: file "...../c/src/lib/libc/memfile.c", line 340
 
 *** FILE TEST 1 ***
 *************** Dump of Entire IMFS ***************
