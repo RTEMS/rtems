@@ -41,6 +41,36 @@ FRAME(exc_utlb_code,sp,0,ra)
 ENDFRAME(exc_utlb_code)
 
 /* 
+ * MIPS ISA Level 32
+ * XXX Again, reliance on SIM. Not good.??????????
+ */
+#elif __mips == 32
+FRAME(exc_tlb_code,sp,0,ra)
+        la      k0, _ISR_Handler
+        j       k0
+	nop
+ENDFRAME(exc_tlb_code)
+
+FRAME(exc_xtlb_code,sp,0,ra)
+        la      k0, _ISR_Handler
+        j       k0
+	nop
+
+ENDFRAME(exc_xtlb_code)
+
+FRAME(exc_cache_code,sp,0,ra)
+        la      k0, _ISR_Handler
+        j       k0
+	nop
+ENDFRAME(exc_cache_code)
+
+FRAME(exc_norm_code,sp,0,ra)
+	la	k0, _ISR_Handler /* generic external int hndlr */
+	j	k0
+	nop
+ENDFRAME(exc_norm_code)
+	
+/* 
  * MIPS ISA Level 3
  * XXX Again, reliance on SIM. Not good.
  */

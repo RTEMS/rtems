@@ -30,8 +30,11 @@ AM_CONDITIONAL(tx39, test "$RTEMS_CPU_MODEL" = "tx3904")
 
 AM_CONDITIONAL(mongoosev, test "$RTEMS_CPU_MODEL" = "mongoosev")
 
+AM_CONDITIONAL(au1x00, test "$RTEMS_CPU_MODEL" = "au1x00")
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+au1x00/Makefile
 mongoosev/Makefile
 shared/Makefile
 r46xx/Makefile

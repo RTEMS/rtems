@@ -1,3 +1,11 @@
+2005-02-24	Jay Monkman <jtm@lopingdog.com>
+
+	* Makefile.am, configure.ac: New CPU.
+        * shared/interrupts/installisrentries.c,
+	shared/interrupts/isr_entries.S: Added CPU32 support.
+	* au1x00/Makefile.am, au1x00/include/au1x00.h,
+	au1x00/vectorisrs/maxvectors.c, au1x00/vectorisrs/vectorisrs.c: New CPU.
+
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* mongoosev/Makefile.am, r46xx/Makefile.am, shared/Makefile.am,
