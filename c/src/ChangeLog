@@ -1,3 +1,8 @@
+2002-01-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add AC_CONFIG_SUBDIRS(optman). Remove
+	AC_CONFIG_COMMANDS.
+
 2001-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* config-ml.in: New file. Imported from gcc and modified for RTEMS.

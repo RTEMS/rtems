@@ -32,6 +32,7 @@ AC_CONFIG_SUBDIRS(make)
 if test x"$multilib" = x"no"; then
 AC_CONFIG_SUBDIRS(exec)
 fi
+AC_CONFIG_SUBDIRS(optman)
 AC_CONFIG_SUBDIRS(lib)
 AC_CONFIG_SUBDIRS(lib/libcpu)
 AC_CONFIG_SUBDIRS(lib/libbsp)
@@ -65,8 +66,5 @@ AC_CONFIG_SUBDIRS(wrapup tests)
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-])
-AC_CONFIG_COMMANDS([default],[[]],[[test -d lib || mkdir lib
-]])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
