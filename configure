@@ -1197,6 +1197,969 @@ fi
 RTEMS_PREFIX=${target_cpu}-${target_vendor}
 
 #
+#  Generate the configure.host file
+#
+
+
+# Extract the first word of "cat", so it can be a program name with args.
+set dummy cat; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1208: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_CAT'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$CAT" in
+  /*)
+  ac_cv_path_CAT="$CAT" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_CAT="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+CAT="$ac_cv_path_CAT"
+if test -n "$CAT"; then
+  echo "$ac_t""$CAT" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "rm", so it can be a program name with args.
+set dummy rm; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1239: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_RM'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$RM" in
+  /*)
+  ac_cv_path_RM="$RM" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_RM="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+RM="$ac_cv_path_RM"
+if test -n "$RM"; then
+  echo "$ac_t""$RM" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "cp", so it can be a program name with args.
+set dummy cp; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1270: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_CP'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$CP" in
+  /*)
+  ac_cv_path_CP="$CP" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_CP="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+CP="$ac_cv_path_CP"
+if test -n "$CP"; then
+  echo "$ac_t""$CP" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "mv", so it can be a program name with args.
+set dummy mv; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1301: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_MV'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$MV" in
+  /*)
+  ac_cv_path_MV="$MV" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_MV="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+MV="$ac_cv_path_MV"
+if test -n "$MV"; then
+  echo "$ac_t""$MV" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "ln", so it can be a program name with args.
+set dummy ln; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1332: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_LN'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$LN" in
+  /*)
+  ac_cv_path_LN="$LN" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_LN="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+LN="$ac_cv_path_LN"
+if test -n "$LN"; then
+  echo "$ac_t""$LN" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "chmod", so it can be a program name with args.
+set dummy chmod; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1363: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_CHMOD'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$CHMOD" in
+  /*)
+  ac_cv_path_CHMOD="$CHMOD" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_CHMOD="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+CHMOD="$ac_cv_path_CHMOD"
+if test -n "$CHMOD"; then
+  echo "$ac_t""$CHMOD" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "sort", so it can be a program name with args.
+set dummy sort; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1394: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_SORT'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$SORT" in
+  /*)
+  ac_cv_path_SORT="$SORT" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_SORT="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+SORT="$ac_cv_path_SORT"
+if test -n "$SORT"; then
+  echo "$ac_t""$SORT" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+# Extract the first word of "mkdir", so it can be a program name with args.
+set dummy mkdir; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1426: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_MKDIR'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$MKDIR" in
+  /*)
+  ac_cv_path_MKDIR="$MKDIR" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_MKDIR="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+MKDIR="$ac_cv_path_MKDIR"
+if test -n "$MKDIR"; then
+  echo "$ac_t""$MKDIR" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+
+
+echo $ac_n "checking for working $MKDIR -m 0755""... $ac_c" 1>&6
+echo "configure:1458: checking for working $MKDIR -m 0755" >&5
+if eval "test \"`echo '$''{'rtems_cv_prog_MKDIR_P'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  rm -rf conftestdata
+if $MKDIR -m 0775 conftestdata 2>/dev/null; then
+rtems_cv_prog_MKDIR_M="yes"
+else
+rtems_cv_prog_MKDIR_M="no"
+fi
+fi
+rm -rf conftestdata
+echo "$ac_t""$rtems_cv_prog_MKDIR_M" 1>&6
+
+
+
+echo $ac_n "checking for working $MKDIR -p""... $ac_c" 1>&6
+echo "configure:1475: checking for working $MKDIR -p" >&5
+if eval "test \"`echo '$''{'rtems_cv_prog_mkdir_p'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  rm -rf conftestdata
+if $MKDIR -p conftestdata 2>/dev/null ;then
+rtems_cv_prog_MKDIR_P="yes"
+else
+rtems_cv_prog_MKDIR_P="no"
+fi
+fi
+rm -rf conftestdata
+echo "$ac_t""$rtems_cv_prog_MKDIR_P" 1>&6
+
+test "$rtems_cv_prog_MKDIR_P" = "yes" && MKDIR="$MKDIR -p"
+test "$rtems_cv_prog_MKDIR_M" = "yes" && MKDIR="$MKDIR -m 0755"
+
+# Extract the first word of "enscript", so it can be a program name with args.
+set dummy enscript; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1495: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_PR'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$PR" in
+  /*)
+  ac_cv_path_PR="$PR" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_PR="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+PR="$ac_cv_path_PR"
+if test -n "$PR"; then
+  echo "$ac_t""$PR" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+test -n "$PR" && PR="$PR -G2r"
+
+if test -z "$PR"; then
+# Extract the first word of "mp", so it can be a program name with args.
+set dummy mp; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1529: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_PR'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$PR" in
+  /*)
+  ac_cv_path_PR="$PR" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in /usr/openwin$ac_dummy; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_PR="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+PR="$ac_cv_path_PR"
+if test -n "$PR"; then
+  echo "$ac_t""$PR" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+test -n "$PR" && PR="$PR -l"
+fi
+
+if test -z "$PR"; then
+# Extract the first word of "pr", so it can be a program name with args.
+set dummy pr; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1564: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_PR'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$PR" in
+  /*)
+  ac_cv_path_PR="$PR" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_PR="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+PR="$ac_cv_path_PR"
+if test -n "$PR"; then
+  echo "$ac_t""$PR" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+fi
+
+if test -z "$PR"; then
+echo "configure: warning: ***
+    Cannot determine a suitable program for
+    printing asci files on ps-printers
+    Expect errors when printing files " 1>&2
+fi
+
+for ac_prog in lp lpr
+do
+# Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1606: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_PRINT'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$PRINT" in
+  /*)
+  ac_cv_path_PRINT="$PRINT" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_PRINT="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+PRINT="$ac_cv_path_PRINT"
+if test -n "$PRINT"; then
+  echo "$ac_t""$PRINT" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+test -n "$PRINT" && break
+done
+
+
+# Extract the first word of "touch", so it can be a program name with args.
+set dummy touch; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1641: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_TOUCH'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$TOUCH" in
+  /*)
+  ac_cv_path_TOUCH="$TOUCH" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_TOUCH="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+TOUCH="$ac_cv_path_TOUCH"
+if test -n "$TOUCH"; then
+  echo "$ac_t""$TOUCH" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "cmp", so it can be a program name with args.
+set dummy cmp; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1672: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_CMP'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$CMP" in
+  /*)
+  ac_cv_path_CMP="$CMP" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_CMP="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+CMP="$ac_cv_path_CMP"
+if test -n "$CMP"; then
+  echo "$ac_t""$CMP" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "dirname", so it can be a program name with args.
+set dummy dirname; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1703: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_DIRNAME'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$DIRNAME" in
+  /*)
+  ac_cv_path_DIRNAME="$DIRNAME" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_DIRNAME="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+DIRNAME="$ac_cv_path_DIRNAME"
+if test -n "$DIRNAME"; then
+  echo "$ac_t""$DIRNAME" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "basename", so it can be a program name with args.
+set dummy basename; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1734: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_BASENAME'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$BASENAME" in
+  /*)
+  ac_cv_path_BASENAME="$BASENAME" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_BASENAME="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+BASENAME="$ac_cv_path_BASENAME"
+if test -n "$BASENAME"; then
+  echo "$ac_t""$BASENAME" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+# Extract the first word of "unifdef", so it can be a program name with args.
+set dummy unifdef; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1766: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_UNIFDEF'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$UNIFDEF" in
+  /*)
+  ac_cv_path_UNIFDEF="$UNIFDEF" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_UNIFDEF="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+UNIFDEF="$ac_cv_path_UNIFDEF"
+if test -n "$UNIFDEF"; then
+  echo "$ac_t""$UNIFDEF" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "ed", so it can be a program name with args.
+set dummy ed; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1797: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_ED'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$ED" in
+  /*)
+  ac_cv_path_ED="$ED" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_ED="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+ED="$ac_cv_path_ED"
+if test -n "$ED"; then
+  echo "$ac_t""$ED" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "sed", so it can be a program name with args.
+set dummy sed; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1828: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_SED'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$SED" in
+  /*)
+  ac_cv_path_SED="$SED" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_SED="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+SED="$ac_cv_path_SED"
+if test -n "$SED"; then
+  echo "$ac_t""$SED" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+for ac_prog in mawk gawk nawk awk
+do
+# Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1861: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_AWK'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$AWK" in
+  /*)
+  ac_cv_path_AWK="$AWK" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_AWK="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+AWK="$ac_cv_path_AWK"
+if test -n "$AWK"; then
+  echo "$ac_t""$AWK" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+test -n "$AWK" && break
+done
+
+for ac_prog in gm4 m4
+do
+# Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1897: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_M4'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$M4" in
+  /*)
+  ac_cv_path_M4="$M4" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_M4="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+M4="$ac_cv_path_M4"
+if test -n "$M4"; then
+  echo "$ac_t""$M4" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+test -n "$M4" && break
+done
+
+
+# Extract the first word of "fgrep", so it can be a program name with args.
+set dummy fgrep; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1932: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_FGREP'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$FGREP" in
+  /*)
+  ac_cv_path_FGREP="$FGREP" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_FGREP="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+FGREP="$ac_cv_path_FGREP"
+if test -n "$FGREP"; then
+  echo "$ac_t""$FGREP" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "grep", so it can be a program name with args.
+set dummy grep; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1963: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_GREP'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$GREP" in
+  /*)
+  ac_cv_path_GREP="$GREP" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_GREP="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+GREP="$ac_cv_path_GREP"
+if test -n "$GREP"; then
+  echo "$ac_t""$GREP" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "egrep", so it can be a program name with args.
+set dummy egrep; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1994: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_EGREP'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$EGREP" in
+  /*)
+  ac_cv_path_EGREP="$EGREP" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_EGREP="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+EGREP="$ac_cv_path_EGREP"
+if test -n "$EGREP"; then
+  echo "$ac_t""$EGREP" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+# Extract the first word of "catman", so it can be a program name with args.
+set dummy catman; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:2026: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_CATMAN'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$CATMAN" in
+  /*)
+  ac_cv_path_CATMAN="$CATMAN" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH:/usr/etc:/etc$ac_dummy; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_CATMAN="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+CATMAN="$ac_cv_path_CATMAN"
+if test -n "$CATMAN"; then
+  echo "$ac_t""$CATMAN" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+for ac_prog in bash ksh sh
+do
+# Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:2060: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_KSH'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$KSH" in
+  /*)
+  ac_cv_path_KSH="$KSH" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_KSH="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+KSH="$ac_cv_path_KSH"
+if test -n "$KSH"; then
+  echo "$ac_t""$KSH" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+test -n "$KSH" && break
+done
+
+
+if test -z "$KSH"; then
+{ echo "configure: error: ***
+    Cannot determine a usable shell bash/ksh/sh
+    Please contact your system administrator " 1>&2; exit 1; };
+fi
+
+# Extract the first word of "ident", so it can be a program name with args.
+set dummy ident; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:2101: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_RCS_IDENT'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$RCS_IDENT" in
+  /*)
+  ac_cv_path_RCS_IDENT="$RCS_IDENT" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_RCS_IDENT="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+RCS_IDENT="$ac_cv_path_RCS_IDENT"
+if test -n "$RCS_IDENT"; then
+  echo "$ac_t""$RCS_IDENT" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "co", so it can be a program name with args.
+set dummy co; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:2132: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_RCS_CO'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$RCS_CO" in
+  /*)
+  ac_cv_path_RCS_CO="$RCS_CO" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_RCS_CO="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+RCS_CO="$ac_cv_path_RCS_CO"
+if test -n "$RCS_CO"; then
+  echo "$ac_t""$RCS_CO" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+
+
+#
 #  Target configurations are listed in alphabetical order.  
 #  The BSPs for a target configuration are also listed in alphabetical order.
 #
@@ -1264,17 +2227,6 @@ case "${target}" in
 	;;
 esac
 
-case "${host}" in
-  *-pc-linux*)		host_os=Linux ;;
-  sparc-sun-sunos*)     host_os=SunOS ;;
-  sparc-sun-solaris*)   host_os=Solaris ;;
-  *-nextstep*)		host_os=Nextstep3;;
-  mips*-sgi-irix5*)	host_os=Irix5;;
-  *-hp-hpux9*)		host_os=HPUX9;;
-  *)                    host_os=none
-			echo RTEMS not supported on host: $host
-			exit 1;;
-esac
 
 if [ "${program_prefix}" = "NONE" ] ; then
   if [ "${target}" = "${host}" ] ; then
@@ -1285,41 +2237,8 @@ if [ "${program_prefix}" = "NONE" ] ; then
 fi
 
 
-for ac_prog in mawk gawk nawk awk
-do
-# Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1294: checking for $ac_word" >&5
-if eval "test \"`echo '$''{'ac_cv_prog_AWK'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  if test -n "$AWK"; then
-  ac_cv_prog_AWK="$AWK" # Let the user override the test.
-else
-  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
-  for ac_dir in $PATH; do
-    test -z "$ac_dir" && ac_dir=.
-    if test -f $ac_dir/$ac_word; then
-      ac_cv_prog_AWK="$ac_prog"
-      break
-    fi
-  done
-  IFS="$ac_save_ifs"
-fi
-fi
-AWK="$ac_cv_prog_AWK"
-if test -n "$AWK"; then
-  echo "$ac_t""$AWK" 1>&6
-else
-  echo "$ac_t""no" 1>&6
-fi
-
-test -n "$AWK" && break
-done
-
 echo $ac_n "checking whether ln -s works""... $ac_c" 1>&6
-echo "configure:1323: checking whether ln -s works" >&5
+echo "configure:2242: checking whether ln -s works" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_LN_S'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1502,87 +2421,88 @@ done
 
 ac_given_srcdir=$srcdir
 
-trap 'rm -fr `echo "Makefile \
-c/Makefile \
-c/build-tools/Makefile \
-c/build-tools/os/Makefile \
-c/build-tools/os/msdos/Makefile \
-c/build-tools/scripts/Makefile \
-c/build-tools/src/Makefile \
-c/make/Makefile \
-c/make/Templates/Makefile.inc \
-c/src/Makefile \
-c/src/exec/Makefile \
-c/src/exec/posix/Makefile \
-c/src/exec/posix/base/Makefile \
-c/src/exec/posix/headers/Makefile \
-c/src/exec/posix/inline/Makefile \
-c/src/exec/posix/macros/Makefile \
-c/src/exec/posix/optman/Makefile \
-c/src/exec/posix/src/Makefile \
-c/src/exec/posix/sys/Makefile \
-c/src/exec/rtems/Makefile \
-c/src/exec/rtems/headers/Makefile \
-c/src/exec/rtems/inline/Makefile \
-c/src/exec/rtems/macros/Makefile \
-c/src/exec/rtems/optman/Makefile \
-c/src/exec/rtems/src/Makefile \
-c/src/exec/sapi/Makefile \
-c/src/exec/sapi/headers/Makefile \
-c/src/exec/sapi/inline/Makefile \
-c/src/exec/sapi/macros/Makefile \
-c/src/exec/sapi/optman/Makefile \
-c/src/exec/sapi/src/Makefile \
-c/src/exec/score/Makefile \
-c/src/exec/score/cpu/Makefile \
-c/src/exec/score/headers/Makefile \
-c/src/exec/score/inline/Makefile \
-c/src/exec/score/macros/Makefile \
-c/src/exec/score/src/Makefile \
-c/src/exec/score/tools/Makefile \
-c/src/exec/score/tools/generic/Makefile \
-c/src/exec/wrapup/Makefile \
-c/src/exec/wrapup/posix/Makefile \
-c/src/exec/wrapup/rtems/Makefile \
-c/src/lib/Makefile \
-c/src/lib/include/Makefile \
-c/src/lib/libbsp/Makefile \
-c/src/lib/libbsp/shmdr/Makefile \
-c/src/lib/libc/Makefile \
-c/src/lib/libcpu/Makefile \
-c/src/lib/libmisc/Makefile \
-c/src/lib/libmisc/assoc/Makefile \
-c/src/lib/libmisc/cpuuse/Makefile \
-c/src/lib/libmisc/error/Makefile \
-c/src/lib/libmisc/monitor/Makefile \
-c/src/lib/libmisc/rtmonuse/Makefile \
-c/src/lib/libmisc/stackchk/Makefile \
-c/src/lib/libmisc/wrapup/Makefile \
-c/src/lib/start/Makefile \
-c/src/lib/wrapup/Makefile \
-c/src/tests/Makefile \
-c/src/tests/samples/Makefile \
-c/src/tests/samples/base_mp/Makefile \
-c/src/tests/samples/base_mp/node1/Makefile \
-c/src/tests/samples/base_mp/node2/Makefile \
-c/src/tests/samples/base_sp/Makefile \
-c/src/tests/samples/cdtest/Makefile \
-c/src/tests/samples/hello/Makefile \
-c/src/tests/samples/paranoia/Makefile \
-c/src/tests/samples/ticker/Makefile \
-c/src/tests/support/Makefile \
-c/src/tests/support/include/Makefile \
-c/src/tests/support/stubdr/Makefile \
-c/src/tests/support/wrapup/Makefile \
-c/src/tests/tools/Makefile \
-c/src/tests/tools/generic/Makefile \
-c/src/tests/tools/hppa1_1/Makefile \
-c/src/tests/tools/hppa1_1/simhppa/Makefile \
-c/src/tests/tools/sparc/Makefile \
-c/src/tests/tools/sparc/erc32/Makefile \
-c/src/tests/tools/unix/Makefile \
-c/src/tests/tools/unix/posix/Makefile \
-$makefiles \
+trap 'rm -fr `echo "Makefile
+c/Makefile
+c/build-tools/Makefile
+c/build-tools/os/Makefile
+c/build-tools/os/msdos/Makefile
+c/build-tools/scripts/Makefile
+c/build-tools/src/Makefile
+c/make/Makefile
+c/make/host.cfg
+c/make/Templates/Makefile.inc
+c/src/Makefile
+c/src/exec/Makefile
+c/src/exec/posix/Makefile
+c/src/exec/posix/base/Makefile
+c/src/exec/posix/headers/Makefile
+c/src/exec/posix/inline/Makefile
+c/src/exec/posix/macros/Makefile
+c/src/exec/posix/optman/Makefile
+c/src/exec/posix/src/Makefile
+c/src/exec/posix/sys/Makefile
+c/src/exec/rtems/Makefile
+c/src/exec/rtems/headers/Makefile
+c/src/exec/rtems/inline/Makefile
+c/src/exec/rtems/macros/Makefile
+c/src/exec/rtems/optman/Makefile
+c/src/exec/rtems/src/Makefile
+c/src/exec/sapi/Makefile
+c/src/exec/sapi/headers/Makefile
+c/src/exec/sapi/inline/Makefile
+c/src/exec/sapi/macros/Makefile
+c/src/exec/sapi/optman/Makefile
+c/src/exec/sapi/src/Makefile
+c/src/exec/score/Makefile
+c/src/exec/score/cpu/Makefile
+c/src/exec/score/headers/Makefile
+c/src/exec/score/inline/Makefile
+c/src/exec/score/macros/Makefile
+c/src/exec/score/src/Makefile
+c/src/exec/score/tools/Makefile
+c/src/exec/score/tools/generic/Makefile
+c/src/exec/wrapup/Makefile
+c/src/exec/wrapup/posix/Makefile
+c/src/exec/wrapup/rtems/Makefile
+c/src/lib/Makefile
+c/src/lib/include/Makefile
+c/src/lib/libbsp/Makefile
+c/src/lib/libbsp/shmdr/Makefile
+c/src/lib/libc/Makefile
+c/src/lib/libcpu/Makefile
+c/src/lib/libmisc/Makefile
+c/src/lib/libmisc/assoc/Makefile
+c/src/lib/libmisc/cpuuse/Makefile
+c/src/lib/libmisc/error/Makefile
+c/src/lib/libmisc/monitor/Makefile
+c/src/lib/libmisc/rtmonuse/Makefile
+c/src/lib/libmisc/stackchk/Makefile
+c/src/lib/libmisc/wrapup/Makefile
+c/src/lib/start/Makefile
+c/src/lib/wrapup/Makefile
+c/src/tests/Makefile
+c/src/tests/samples/Makefile
+c/src/tests/samples/base_mp/Makefile
+c/src/tests/samples/base_mp/node1/Makefile
+c/src/tests/samples/base_mp/node2/Makefile
+c/src/tests/samples/base_sp/Makefile
+c/src/tests/samples/cdtest/Makefile
+c/src/tests/samples/hello/Makefile
+c/src/tests/samples/paranoia/Makefile
+c/src/tests/samples/ticker/Makefile
+c/src/tests/support/Makefile
+c/src/tests/support/include/Makefile
+c/src/tests/support/stubdr/Makefile
+c/src/tests/support/wrapup/Makefile
+c/src/tests/tools/Makefile
+c/src/tests/tools/generic/Makefile
+c/src/tests/tools/hppa1_1/Makefile
+c/src/tests/tools/hppa1_1/simhppa/Makefile
+c/src/tests/tools/sparc/Makefile
+c/src/tests/tools/sparc/erc32/Makefile
+c/src/tests/tools/unix/Makefile
+c/src/tests/tools/unix/posix/Makefile
+$makefiles
 c/update-tools/Makefile " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -1629,7 +2549,32 @@ s%@build_alias@%$build_alias%g
 s%@build_cpu@%$build_cpu%g
 s%@build_vendor@%$build_vendor%g
 s%@build_os@%$build_os%g
+s%@CAT@%$CAT%g
+s%@RM@%$RM%g
+s%@CP@%$CP%g
+s%@MV@%$MV%g
+s%@LN@%$LN%g
+s%@CHMOD@%$CHMOD%g
+s%@SORT@%$SORT%g
+s%@MKDIR@%$MKDIR%g
+s%@PR@%$PR%g
+s%@PRINT@%$PRINT%g
+s%@TOUCH@%$TOUCH%g
+s%@CMP@%$CMP%g
+s%@DIRNAME@%$DIRNAME%g
+s%@BASENAME@%$BASENAME%g
+s%@UNIFDEF@%$UNIFDEF%g
+s%@ED@%$ED%g
+s%@SED@%$SED%g
 s%@AWK@%$AWK%g
+s%@M4@%$M4%g
+s%@FGREP@%$FGREP%g
+s%@GREP@%$GREP%g
+s%@EGREP@%$EGREP%g
+s%@CATMAN@%$CATMAN%g
+s%@KSH@%$KSH%g
+s%@RCS_IDENT@%$RCS_IDENT%g
+s%@RCS_CO@%$RCS_CO%g
 s%@LN_S@%$LN_S%g
 s%@RTEMS_BSP@%$RTEMS_BSP%g
 s%@RTEMS_HOST@%$RTEMS_HOST%g
@@ -1684,87 +2629,88 @@ EOF
 
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"Makefile \
-c/Makefile \
-c/build-tools/Makefile \
-c/build-tools/os/Makefile \
-c/build-tools/os/msdos/Makefile \
-c/build-tools/scripts/Makefile \
-c/build-tools/src/Makefile \
-c/make/Makefile \
-c/make/Templates/Makefile.inc \
-c/src/Makefile \
-c/src/exec/Makefile \
-c/src/exec/posix/Makefile \
-c/src/exec/posix/base/Makefile \
-c/src/exec/posix/headers/Makefile \
-c/src/exec/posix/inline/Makefile \
-c/src/exec/posix/macros/Makefile \
-c/src/exec/posix/optman/Makefile \
-c/src/exec/posix/src/Makefile \
-c/src/exec/posix/sys/Makefile \
-c/src/exec/rtems/Makefile \
-c/src/exec/rtems/headers/Makefile \
-c/src/exec/rtems/inline/Makefile \
-c/src/exec/rtems/macros/Makefile \
-c/src/exec/rtems/optman/Makefile \
-c/src/exec/rtems/src/Makefile \
-c/src/exec/sapi/Makefile \
-c/src/exec/sapi/headers/Makefile \
-c/src/exec/sapi/inline/Makefile \
-c/src/exec/sapi/macros/Makefile \
-c/src/exec/sapi/optman/Makefile \
-c/src/exec/sapi/src/Makefile \
-c/src/exec/score/Makefile \
-c/src/exec/score/cpu/Makefile \
-c/src/exec/score/headers/Makefile \
-c/src/exec/score/inline/Makefile \
-c/src/exec/score/macros/Makefile \
-c/src/exec/score/src/Makefile \
-c/src/exec/score/tools/Makefile \
-c/src/exec/score/tools/generic/Makefile \
-c/src/exec/wrapup/Makefile \
-c/src/exec/wrapup/posix/Makefile \
-c/src/exec/wrapup/rtems/Makefile \
-c/src/lib/Makefile \
-c/src/lib/include/Makefile \
-c/src/lib/libbsp/Makefile \
-c/src/lib/libbsp/shmdr/Makefile \
-c/src/lib/libc/Makefile \
-c/src/lib/libcpu/Makefile \
-c/src/lib/libmisc/Makefile \
-c/src/lib/libmisc/assoc/Makefile \
-c/src/lib/libmisc/cpuuse/Makefile \
-c/src/lib/libmisc/error/Makefile \
-c/src/lib/libmisc/monitor/Makefile \
-c/src/lib/libmisc/rtmonuse/Makefile \
-c/src/lib/libmisc/stackchk/Makefile \
-c/src/lib/libmisc/wrapup/Makefile \
-c/src/lib/start/Makefile \
-c/src/lib/wrapup/Makefile \
-c/src/tests/Makefile \
-c/src/tests/samples/Makefile \
-c/src/tests/samples/base_mp/Makefile \
-c/src/tests/samples/base_mp/node1/Makefile \
-c/src/tests/samples/base_mp/node2/Makefile \
-c/src/tests/samples/base_sp/Makefile \
-c/src/tests/samples/cdtest/Makefile \
-c/src/tests/samples/hello/Makefile \
-c/src/tests/samples/paranoia/Makefile \
-c/src/tests/samples/ticker/Makefile \
-c/src/tests/support/Makefile \
-c/src/tests/support/include/Makefile \
-c/src/tests/support/stubdr/Makefile \
-c/src/tests/support/wrapup/Makefile \
-c/src/tests/tools/Makefile \
-c/src/tests/tools/generic/Makefile \
-c/src/tests/tools/hppa1_1/Makefile \
-c/src/tests/tools/hppa1_1/simhppa/Makefile \
-c/src/tests/tools/sparc/Makefile \
-c/src/tests/tools/sparc/erc32/Makefile \
-c/src/tests/tools/unix/Makefile \
-c/src/tests/tools/unix/posix/Makefile \
-$makefiles \
+CONFIG_FILES=\${CONFIG_FILES-"Makefile
+c/Makefile
+c/build-tools/Makefile
+c/build-tools/os/Makefile
+c/build-tools/os/msdos/Makefile
+c/build-tools/scripts/Makefile
+c/build-tools/src/Makefile
+c/make/Makefile
+c/make/host.cfg
+c/make/Templates/Makefile.inc
+c/src/Makefile
+c/src/exec/Makefile
+c/src/exec/posix/Makefile
+c/src/exec/posix/base/Makefile
+c/src/exec/posix/headers/Makefile
+c/src/exec/posix/inline/Makefile
+c/src/exec/posix/macros/Makefile
+c/src/exec/posix/optman/Makefile
+c/src/exec/posix/src/Makefile
+c/src/exec/posix/sys/Makefile
+c/src/exec/rtems/Makefile
+c/src/exec/rtems/headers/Makefile
+c/src/exec/rtems/inline/Makefile
+c/src/exec/rtems/macros/Makefile
+c/src/exec/rtems/optman/Makefile
+c/src/exec/rtems/src/Makefile
+c/src/exec/sapi/Makefile
+c/src/exec/sapi/headers/Makefile
+c/src/exec/sapi/inline/Makefile
+c/src/exec/sapi/macros/Makefile
+c/src/exec/sapi/optman/Makefile
+c/src/exec/sapi/src/Makefile
+c/src/exec/score/Makefile
+c/src/exec/score/cpu/Makefile
+c/src/exec/score/headers/Makefile
+c/src/exec/score/inline/Makefile
+c/src/exec/score/macros/Makefile
+c/src/exec/score/src/Makefile
+c/src/exec/score/tools/Makefile
+c/src/exec/score/tools/generic/Makefile
+c/src/exec/wrapup/Makefile
+c/src/exec/wrapup/posix/Makefile
+c/src/exec/wrapup/rtems/Makefile
+c/src/lib/Makefile
+c/src/lib/include/Makefile
+c/src/lib/libbsp/Makefile
+c/src/lib/libbsp/shmdr/Makefile
+c/src/lib/libc/Makefile
+c/src/lib/libcpu/Makefile
+c/src/lib/libmisc/Makefile
+c/src/lib/libmisc/assoc/Makefile
+c/src/lib/libmisc/cpuuse/Makefile
+c/src/lib/libmisc/error/Makefile
+c/src/lib/libmisc/monitor/Makefile
+c/src/lib/libmisc/rtmonuse/Makefile
+c/src/lib/libmisc/stackchk/Makefile
+c/src/lib/libmisc/wrapup/Makefile
+c/src/lib/start/Makefile
+c/src/lib/wrapup/Makefile
+c/src/tests/Makefile
+c/src/tests/samples/Makefile
+c/src/tests/samples/base_mp/Makefile
+c/src/tests/samples/base_mp/node1/Makefile
+c/src/tests/samples/base_mp/node2/Makefile
+c/src/tests/samples/base_sp/Makefile
+c/src/tests/samples/cdtest/Makefile
+c/src/tests/samples/hello/Makefile
+c/src/tests/samples/paranoia/Makefile
+c/src/tests/samples/ticker/Makefile
+c/src/tests/support/Makefile
+c/src/tests/support/include/Makefile
+c/src/tests/support/stubdr/Makefile
+c/src/tests/support/wrapup/Makefile
+c/src/tests/tools/Makefile
+c/src/tests/tools/generic/Makefile
+c/src/tests/tools/hppa1_1/Makefile
+c/src/tests/tools/hppa1_1/simhppa/Makefile
+c/src/tests/tools/sparc/Makefile
+c/src/tests/tools/sparc/erc32/Makefile
+c/src/tests/tools/unix/Makefile
+c/src/tests/tools/unix/posix/Makefile
+$makefiles
 c/update-tools/Makefile "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

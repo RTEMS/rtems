@@ -471,6 +471,106 @@ test -d ${enableval} || AC_MSG_ERROR("$enableval is not a directory" ) ] )
 RTEMS_PREFIX=${target_cpu}-${target_vendor}
 
 #
+#  Generate the configure.host file
+#
+
+dnl BEGIN configure.host.in
+
+AC_PATH_PROG(CAT,cat)
+dnl FIXME: check if rm accepts -f
+dnl NOTE : Check for rm -f seems not to be necessary since autoconf
+dnl        itself depends on it
+AC_PATH_PROG(RM,rm)
+AC_PATH_PROG(CP,cp)
+AC_PATH_PROG(MV,mv)
+AC_PATH_PROG(LN,ln)
+AC_PATH_PROG(CHMOD,chmod)
+AC_PATH_PROG(SORT,sort)
+
+dnl check mkdir behaviour, try to get mkdir -p -m 0755
+RTEMS_PATH_MKDIR
+RTEMS_PROG_MKDIR_M
+RTEMS_PROG_MKDIR_P
+test "$rtems_cv_prog_MKDIR_P" = "yes" && MKDIR="$MKDIR -p"
+test "$rtems_cv_prog_MKDIR_M" = "yes" && MKDIR="$MKDIR -m 0755"
+
+dnl determine which program to use to format ps-docs to 2 pages per sheet
+dnl try enscript
+AC_PATH_PROG(PR,enscript)
+test -n "$PR" && PR="$PR -G2r"
+
+if test -z "$PR"; then
+dnl try /usr/openwin/mp
+dnl NOTE: Cannot test for mp in $PATH
+dnl because there exists a program named mp for TeX
+dnl which isn't what we want
+AC_PATH_PROG(PR,mp,,/usr/openwin)
+test -n "$PR" && PR="$PR -l"
+fi
+
+if test -z "$PR"; then
+dnl fallback to pr
+AC_PATH_PROG(PR,pr)
+fi
+
+if test -z "$PR"; then
+AC_MSG_WARN(
+[***]
+[    Cannot determine a suitable program for]
+[    printing asci files on ps-printers]
+[    Expect errors when printing files] )
+fi
+
+dnl Prefer lp over lpr for SYSV systems
+dnl NOTE: Dangerous for SYSV systems using BSD printing
+AC_PATH_PROGS(PRINT,lp lpr)
+
+AC_PATH_PROG(TOUCH,touch)
+AC_PATH_PROG(CMP,cmp)
+AC_PATH_PROG(DIRNAME,dirname)
+AC_PATH_PROG(BASENAME,basename)
+
+dnl NOTE: Does anybody but SUN have unifdef?
+dnl should probably be avoided at all
+AC_PATH_PROG(UNIFDEF,unifdef)
+AC_PATH_PROG(ED,ed)
+AC_PATH_PROG(SED,sed)
+AC_PATH_PROGS(AWK,mawk gawk nawk awk)
+AC_PATH_PROGS(M4,gm4 m4)
+
+AC_PATH_PROG(FGREP,fgrep)
+AC_PATH_PROG(GREP,grep)
+AC_PATH_PROG(EGREP,egrep)
+
+dnl catman might not be in $PATH
+AC_PATH_PROG(CATMAN,catman,,$PATH:/usr/etc:/etc)
+
+dnl NOTE: prefer bash over ksh over sh
+AC_PATH_PROGS(KSH,bash ksh sh)
+
+if test -z "$KSH"; then
+dnl NOTE: This cannot happen -- /bin/sh must always exist
+AC_MSG_ERROR(
+[***]
+[    Cannot determine a usable shell bash/ksh/sh]
+[    Please contact your system administrator] );
+fi
+
+dnl check for RCS
+AC_PATH_PROG(RCS_IDENT,ident)
+AC_PATH_PROG(RCS_CO,co)
+
+dnl check for libraries
+dnl this does't work, uses host-linker instead of target-linker
+dnl Skip for now, since I (RC) don't believe it is used at all
+dnl libm
+dnl AC_CHECK_LIB(m,cos,
+dnl LIB_MATH="-lm")
+dnl AC_SUBST(LIB_MATH)
+
+dnl END configure.host.in
+
+#
 #  Target configurations are listed in alphabetical order.  
 #  The BSPs for a target configuration are also listed in alphabetical order.
 #
@@ -538,17 +638,7 @@ case "${target}" in
 	;;
 esac
 
-case "${host}" in
-  *-pc-linux*)		host_os=Linux ;;
-  sparc-sun-sunos*)     host_os=SunOS ;;
-  sparc-sun-solaris*)   host_os=Solaris ;;
-  *-nextstep*)		host_os=Nextstep3;;
-  mips*-sgi-irix5*)	host_os=Irix5;;
-  *-hp-hpux9*)		host_os=HPUX9;;
-  *)                    host_os=none
-			echo RTEMS not supported on host: $host
-			exit 1;;
-esac
+dnl NOTE: host_os is automatically set by autoconf
 
 if [[ "${program_prefix}" = "NONE" ]] ; then
   if [[ "${target}" = "${host}" ]] ; then
@@ -559,7 +649,6 @@ if [[ "${program_prefix}" = "NONE" ]] ; then
 fi
 
 
-AC_PROG_AWK
 AC_PROG_LN_S
 dnl AC_PROG_CC
 dnl AC_PROG_CXX
@@ -598,87 +687,88 @@ AC_SUBST(RTEMS_LIBC_DIR)
 AC_SUBST(PROJECT_ROOT)
 AC_SUBST(program_prefix)
 
-AC_OUTPUT( Makefile \
-c/Makefile \
-c/build-tools/Makefile \
-c/build-tools/os/Makefile \
-c/build-tools/os/msdos/Makefile \
-c/build-tools/scripts/Makefile \
-c/build-tools/src/Makefile \
-c/make/Makefile \
-c/make/Templates/Makefile.inc \
-c/src/Makefile \
-c/src/exec/Makefile \
-c/src/exec/posix/Makefile \
-c/src/exec/posix/base/Makefile \
-c/src/exec/posix/headers/Makefile \
-c/src/exec/posix/inline/Makefile \
-c/src/exec/posix/macros/Makefile \
-c/src/exec/posix/optman/Makefile \
-c/src/exec/posix/src/Makefile \
-c/src/exec/posix/sys/Makefile \
-c/src/exec/rtems/Makefile \
-c/src/exec/rtems/headers/Makefile \
-c/src/exec/rtems/inline/Makefile \
-c/src/exec/rtems/macros/Makefile \
-c/src/exec/rtems/optman/Makefile \
-c/src/exec/rtems/src/Makefile \
-c/src/exec/sapi/Makefile \
-c/src/exec/sapi/headers/Makefile \
-c/src/exec/sapi/inline/Makefile \
-c/src/exec/sapi/macros/Makefile \
-c/src/exec/sapi/optman/Makefile \
-c/src/exec/sapi/src/Makefile \
-c/src/exec/score/Makefile \
-c/src/exec/score/cpu/Makefile \
-c/src/exec/score/headers/Makefile \
-c/src/exec/score/inline/Makefile \
-c/src/exec/score/macros/Makefile \
-c/src/exec/score/src/Makefile \
-c/src/exec/score/tools/Makefile \
-c/src/exec/score/tools/generic/Makefile \
-c/src/exec/wrapup/Makefile \
-c/src/exec/wrapup/posix/Makefile \
-c/src/exec/wrapup/rtems/Makefile \
-c/src/lib/Makefile \
-c/src/lib/include/Makefile \
-c/src/lib/libbsp/Makefile \
-c/src/lib/libbsp/shmdr/Makefile \
-c/src/lib/libc/Makefile \
-c/src/lib/libcpu/Makefile \
-c/src/lib/libmisc/Makefile \
-c/src/lib/libmisc/assoc/Makefile \
-c/src/lib/libmisc/cpuuse/Makefile \
-c/src/lib/libmisc/error/Makefile \
-c/src/lib/libmisc/monitor/Makefile \
-c/src/lib/libmisc/rtmonuse/Makefile \
-c/src/lib/libmisc/stackchk/Makefile \
-c/src/lib/libmisc/wrapup/Makefile \
-c/src/lib/start/Makefile \
-c/src/lib/wrapup/Makefile \
-c/src/tests/Makefile \
-c/src/tests/samples/Makefile \
-c/src/tests/samples/base_mp/Makefile \
-c/src/tests/samples/base_mp/node1/Makefile \
-c/src/tests/samples/base_mp/node2/Makefile \
-c/src/tests/samples/base_sp/Makefile \
-c/src/tests/samples/cdtest/Makefile \
-c/src/tests/samples/hello/Makefile \
-c/src/tests/samples/paranoia/Makefile \
-c/src/tests/samples/ticker/Makefile \
-c/src/tests/support/Makefile \
-c/src/tests/support/include/Makefile \
-c/src/tests/support/stubdr/Makefile \
-c/src/tests/support/wrapup/Makefile \
-c/src/tests/tools/Makefile \
-c/src/tests/tools/generic/Makefile \
-c/src/tests/tools/hppa1_1/Makefile \
-c/src/tests/tools/hppa1_1/simhppa/Makefile \
-c/src/tests/tools/sparc/Makefile \
-c/src/tests/tools/sparc/erc32/Makefile \
-c/src/tests/tools/unix/Makefile \
-c/src/tests/tools/unix/posix/Makefile \
-$makefiles \
+AC_OUTPUT( Makefile
+c/Makefile
+c/build-tools/Makefile
+c/build-tools/os/Makefile
+c/build-tools/os/msdos/Makefile
+c/build-tools/scripts/Makefile
+c/build-tools/src/Makefile
+c/make/Makefile
+c/make/host.cfg
+c/make/Templates/Makefile.inc
+c/src/Makefile
+c/src/exec/Makefile
+c/src/exec/posix/Makefile
+c/src/exec/posix/base/Makefile
+c/src/exec/posix/headers/Makefile
+c/src/exec/posix/inline/Makefile
+c/src/exec/posix/macros/Makefile
+c/src/exec/posix/optman/Makefile
+c/src/exec/posix/src/Makefile
+c/src/exec/posix/sys/Makefile
+c/src/exec/rtems/Makefile
+c/src/exec/rtems/headers/Makefile
+c/src/exec/rtems/inline/Makefile
+c/src/exec/rtems/macros/Makefile
+c/src/exec/rtems/optman/Makefile
+c/src/exec/rtems/src/Makefile
+c/src/exec/sapi/Makefile
+c/src/exec/sapi/headers/Makefile
+c/src/exec/sapi/inline/Makefile
+c/src/exec/sapi/macros/Makefile
+c/src/exec/sapi/optman/Makefile
+c/src/exec/sapi/src/Makefile
+c/src/exec/score/Makefile
+c/src/exec/score/cpu/Makefile
+c/src/exec/score/headers/Makefile
+c/src/exec/score/inline/Makefile
+c/src/exec/score/macros/Makefile
+c/src/exec/score/src/Makefile
+c/src/exec/score/tools/Makefile
+c/src/exec/score/tools/generic/Makefile
+c/src/exec/wrapup/Makefile
+c/src/exec/wrapup/posix/Makefile
+c/src/exec/wrapup/rtems/Makefile
+c/src/lib/Makefile
+c/src/lib/include/Makefile
+c/src/lib/libbsp/Makefile
+c/src/lib/libbsp/shmdr/Makefile
+c/src/lib/libc/Makefile
+c/src/lib/libcpu/Makefile
+c/src/lib/libmisc/Makefile
+c/src/lib/libmisc/assoc/Makefile
+c/src/lib/libmisc/cpuuse/Makefile
+c/src/lib/libmisc/error/Makefile
+c/src/lib/libmisc/monitor/Makefile
+c/src/lib/libmisc/rtmonuse/Makefile
+c/src/lib/libmisc/stackchk/Makefile
+c/src/lib/libmisc/wrapup/Makefile
+c/src/lib/start/Makefile
+c/src/lib/wrapup/Makefile
+c/src/tests/Makefile
+c/src/tests/samples/Makefile
+c/src/tests/samples/base_mp/Makefile
+c/src/tests/samples/base_mp/node1/Makefile
+c/src/tests/samples/base_mp/node2/Makefile
+c/src/tests/samples/base_sp/Makefile
+c/src/tests/samples/cdtest/Makefile
+c/src/tests/samples/hello/Makefile
+c/src/tests/samples/paranoia/Makefile
+c/src/tests/samples/ticker/Makefile
+c/src/tests/support/Makefile
+c/src/tests/support/include/Makefile
+c/src/tests/support/stubdr/Makefile
+c/src/tests/support/wrapup/Makefile
+c/src/tests/tools/Makefile
+c/src/tests/tools/generic/Makefile
+c/src/tests/tools/hppa1_1/Makefile
+c/src/tests/tools/hppa1_1/simhppa/Makefile
+c/src/tests/tools/sparc/Makefile
+c/src/tests/tools/sparc/erc32/Makefile
+c/src/tests/tools/unix/Makefile
+c/src/tests/tools/unix/posix/Makefile
+$makefiles
 c/update-tools/Makefile )
 
 echo
