@@ -795,38 +795,6 @@ void _CPU_ISR_install_raw_handler(
 
 /* end of ISR handler macros */
 
-/*
- *  Simple spin delay in microsecond units for device drivers.
- *  This is very dependent on the clock speed of the target.
- */
-
-#ifndef ASM
-
-#define CPU_Get_timebase_low( _value ) \
-    asm volatile( "mftb  %0" : "=r" (_value) )
-
-#define rtems_bsp_delay( _microseconds ) \
-  do { \
-    uint32_t   start, ticks, now; \
-    CPU_Get_timebase_low( start ) ; \
-    ticks = (_microseconds) * _CPU_Table.clicks_per_usec; \
-    do \
-      CPU_Get_timebase_low( now ) ; \
-    while (now - start < ticks); \
-  } while (0)
-
-#define rtems_bsp_delay_in_bus_cycles( _cycles ) \
-  do { \
-    uint32_t   start, now; \
-    CPU_Get_timebase_low( start ); \
-    do \
-      CPU_Get_timebase_low( now ); \
-    while (now - start < (_cycles)); \
-  } while (0)
-
-#endif
-
-
 /* Context handler macros */
 
 /*
