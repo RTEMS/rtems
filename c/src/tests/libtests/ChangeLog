@@ -1,3 +1,14 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* cpuuse/Makefile.am: Use $(OBJEXT) instead of .o.
+	* malloctest/Makefile.am: Use $(OBJEXT) instead of .o.
+	* monitor/Makefile.am: Use $(OBJEXT) instead of .o.
+	* putenvtest/Makefile.am: Use $(OBJEXT) instead of .o.
+	* rtems++/Makefile.am: Use $(OBJEXT) instead of .o.
+	* rtmonuse/Makefile.am: Use $(OBJEXT) instead of .o.
+	* stackchk/Makefile.am: Use $(OBJEXT) instead of .o.
+	* termios/Makefile.am: Use $(OBJEXT) instead of .o.
+
 2002-08-01	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR47 add support for buffered test output.  This involved

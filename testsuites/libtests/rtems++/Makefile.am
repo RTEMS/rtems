@@ -8,7 +8,7 @@ TEST = rtems++
 MANAGERS = event io msg sem signal timer rate_monotonic
 
 CC_FILES = Init.cc Task1.cc Task2.cc Task3.cc
-CC_O_FILES = $(CC_FILES:%.cc=${ARCH}/%.o)
+CC_O_FILES = $(CC_FILES:%.cc=${ARCH}/%.$(OBJEXT))
 
 H_FILES = System.h
 noinst_HEADERS = $(H_FILES)

@@ -8,7 +8,7 @@ TEST = rtmonuse
 MANAGERS = io rate_monotonic
 
 C_FILES = init.c getall.c task1.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h
 noinst_HEADERS = $(H_FILES)

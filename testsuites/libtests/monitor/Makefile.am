@@ -9,7 +9,7 @@ MANAGERS = dpmem event io msg mp part region sem signal timer rate_monotonic \
     ext
 
 C_FILES = init.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h
 noinst_HEADERS = $(H_FILES)
