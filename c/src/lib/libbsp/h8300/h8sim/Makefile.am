@@ -44,9 +44,14 @@ console_rel_SOURCES = ../../shared/console-polled.c console/console-io.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
+noinst_PROGRAMS += timer.rel
+timer_rel_SOURCES = ../../shared/timerstub.c
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
+timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LIBADD = startup.rel clock.rel console.rel
+libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
