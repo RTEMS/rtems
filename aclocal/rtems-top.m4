@@ -11,6 +11,10 @@ AC_CHECK_PROGS(MAKE, gmake make)
 AC_BEFORE([$0], [AC_CONFIG_AUX_DIR])dnl
 AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
 
+## HACK to allow gnu-make conditionals in automake-Makefiles.
+ENDIF=endif
+AC_SUBST(ENDIF)
+
 AC_ARG_WITH(target-subdir,
 [  --with-target-subdir=DIR],
 TARGET_SUBDIR="$withval",

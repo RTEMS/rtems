@@ -175,6 +175,12 @@ depend-am: $(C_FILES) $(CC_FILES) $(S_FILES)
 	mv $(DEPEND).tmp $(DEPEND)
 depend: depend-am
 
+# pull in dependencies if they exist  
+ifeq (${DEPEND},$(wildcard ${DEPEND}))
+include ${DEPEND}
+@ENDIF@
+
+
 # spell out all the LINK_FILE's, rather than using -lbsp, so
 #  that $(LINK_FILES) can be a dependency
 
