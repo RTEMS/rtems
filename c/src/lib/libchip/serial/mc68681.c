@@ -656,8 +656,8 @@ MC68681_STATIC void mc68681_process(
     ucLineStatus >>= 4;
 
   if(ucLineStatus & MC68681_IR_TX_READY) {
-    rtems_termios_dequeue_characters(Console_Port_Data[minor].termios_data, 1);
-    if (rtems_termios_is_more_to_tx( Console_Port_Data[minor].termios_data )) {
+    if (rtems_termios_dequeue_characters(
+         Console_Port_Data[minor].termios_data, 1)) {
       Console_Port_Data[minor].bActive = FALSE;
       mc68681_enable_interrupts(minor, MC68681_IMR_ENABLE_ALL_EXCEPT_TX);
     }

@@ -481,6 +481,7 @@ AC_SUBST(CC_LDFLAGS_PROFILE_V)
 # pick up all the Makefiles in required parts of the tree
 RTEMS_CHECK_MAKEFILE(c/build-tools)
 RTEMS_CHECK_MAKEFILE(make)
+RTEMS_CHECK_MAKEFILE(c/src/lib/libchip)
 RTEMS_CHECK_MAKEFILE(c/src/lib/libmisc)
 RTEMS_CHECK_MAKEFILE(c/src/tests/samples)
 

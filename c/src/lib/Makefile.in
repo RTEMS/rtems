@@ -24,5 +24,6 @@ LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
 # General Hardware API library 
 LIBHWAPI=$(wildcard libhwapi)
 
-SUB_DIRS=start include $(NETWORKING_INCLUDE) libmisc libc libcpu libbsp \
-         $(LIBNETWORKING) $(LIBHWAPI) $(LIBRTEMSCPLUSPLUS) wrapup
+SUB_DIRS=start include $(NETWORKING_INCLUDE) libmisc \
+         libc libchip libcpu libbsp $(LIBNETWORKING) \
+         $(LIBHWAPI) $(LIBRTEMSCPLUSPLUS) wrapup

@@ -140,6 +140,8 @@ struct termios {
 #define CIBAUD	  002003600000	/* input baud rate (not used) */
 #define CRTSCTS	  020000000000		/* flow control */
 
+#define RTEMS_TERMIOS_NUMBER_BAUD_RATES 20
+
 /* c_lflag bits */
 #define ISIG	0000001
 #define ICANON	0000002

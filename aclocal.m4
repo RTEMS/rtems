@@ -361,6 +361,7 @@ dnl special treatment of ranlib
 dnl NOTE: These may not be available if not using gnutools
   RTEMS_PATH_TOOL(OBJCOPY_FOR_TARGET,objcopy,no)
   RTEMS_PATH_TOOL(SIZE_FOR_TARGET,size,no)
+  RTEMS_PATH_TOOL(STRIP_FOR_TARGET,strip,no)
 ])
 
 dnl
