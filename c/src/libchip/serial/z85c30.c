@@ -659,8 +659,8 @@ Z85C30_STATIC rtems_isr z85c30_isr(
            */
 
           if (ulCtrlPort == Console_Port_Tbl[minor].ulCtrlPort1) {
-            ucIntPendPort = ucIntPend>>3;
-            ucIntPendPort = ucIntPendPort&=7;
+            ucIntPendPort = ucIntPend >> 3;
+            ucIntPendPort &= 7;
           } else {
             ucIntPendPort = ucIntPend &= 7;
           }

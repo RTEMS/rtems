@@ -1,3 +1,7 @@
+2002-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* serial/z85c30.c: Eliminated warning by clarifying statement.
+
 2002-09-07	Chris Johns <ccj@acm.org>
 
 	* network/Makefile.am, network/README.cs8900, network/cs8900.c,
