@@ -14,6 +14,8 @@ AC_DEFUN([_RTEMS_BSP_ALIAS],
     mtx603e)      $2=motorola_powerpc ;; # Motorola PPC board variant
     mvme162lx)    $2=mvme162          ;; # m68k - mvme162 board variant
     gen68360_040) $2=gen68360         ;; # m68k - 68360 in companion mode
+    p4600)        $2=p4000            ;; # mips - p4000 board w/IDT 4600
+    p4650)        $2=p4000            ;; # mips - p4000 board w/IDT 4650
     mbx8*)        $2=mbx8xx           ;; # MBX821/MBX860 board
     pc386dx)      $2=pc386            ;; # i386 - PC w/o FPU
     pc486)        $2=pc386            ;; # i386 - PC with i486DX

@@ -1,3 +1,8 @@
+2004-02-06	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/bsp-alias.m4: Readd aliases for p4600 and p4650
+	which were accidentally removed when purging the mips64orion.
+
 2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/rpm.m4: Make osversions the default.
