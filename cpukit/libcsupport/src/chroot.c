@@ -38,14 +38,17 @@ int chroot(
     rtems_set_errno_and_return_minus_one( ENOTSUP );
   }; 
 
-  loc = rtems_filesystem_root;     /* save the value */
-
   result = chdir(pathname);
   if (result) {
-    rtems_filesystem_root = loc; /* restore the value */
     rtems_set_errno_and_return_minus_one( errno );
   };
-  rtems_filesystem_root = rtems_filesystem_current;
+  /* clone the new root location */
+  if (rtems_filesystem_evaluate_path(".", 0, &loc, 0)) {
+	/* our cwd has changed, though - but there is no easy way of return :-( */
+    rtems_set_errno_and_return_minus_one( errno );
+  }
+  rtems_filesystem_freenode(&rtems_filesystem_root);
+  rtems_filesystem_root = loc;
 
   return 0;
 }
