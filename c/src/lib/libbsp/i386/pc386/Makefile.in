@@ -14,7 +14,7 @@ include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
 # We only build the Network library if HAS_NETWORKING was defined
-NETWORK_yes_V = network ne2000
+NETWORK_yes_V = dec21140 ne2000 wd8003
 NETWORK = $(NETWORK_$(HAS_NETWORKING)_V)
 
 # wrapup is the one that actually builds and installs the library

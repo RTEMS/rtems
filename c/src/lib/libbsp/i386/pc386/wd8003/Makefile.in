@@ -10,10 +10,10 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 INSTALL = @INSTALL@
 
-PGM=${ARCH}/network.rel
+PGM=${ARCH}/wd8003.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=network
+C_PIECES=wd8003
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
