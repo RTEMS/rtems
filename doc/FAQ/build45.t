@@ -72,7 +72,7 @@ Native Cygwin binaries should be available at Cygnus.
 
 GNU-Toolchain binaries (gcc, binutils etc.) for Linux and patches required
 to build them from source are available from 
-@uref{ftp://ftp.oarcorp.com,OAR Corporation}.
+@uref{@value{RTEMSFTPURL},the RTEMS ftp site}.
 
 
 @section Issues when building RTEMS
@@ -154,8 +154,8 @@ prefix, eg.  i386-rtems-gcc, m68k-rtems-ld are target tools.
 Host tools are supposed not to be prefixed.
 e.g.: cc, ld, gcc, autoconf, automake, aclocal etc.
 
-If using OAR Corporation's rpms for the toolchain, simply prepend
-@code{/opt/rtems/bin} to @code{$PATH}.
+If using the pre-built tool binaries provided by the RTEMS project,
+simply prepend @code{@value{RTEMSPREFIX}} to @code{$PATH}.
 
 @subsection Can I build RTEMS Canadian Cross?
 
@@ -411,8 +411,8 @@ have been adapted to autoconf >= 2.50 demands.
 
 Several possibilities (In decreasing preference):
 @itemize @bullet
-@item File a bug report at @uref{http://www.oarcorp.com/cgi-bin/gnatsweb.pl,OAR's GNAT}
-@item Send an email to @uref{mailto:rtems-bugs@@OARcorp.com,rtems-bugs@@OARcorp.com}
+@item File a bug report at @uref{@value{RTEMSGNATS},RTEMS's GNATS}
+@item Send an email to @uref{mailto:@value{RTEMSBUGS},@value{RTEMSBUGS}}
 @item Report your problem to one of the RTEMS mailing lists 
 (Cf. @ref{Are there any mailing lists?}).
 @end itemize

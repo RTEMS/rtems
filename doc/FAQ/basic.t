@@ -138,43 +138,55 @@ source code was available and royalties were paid.
 
 In other words, RTEMS was open source before open source was cool.
 
+Since the initial release to the world, the RTEMS Community has 
+grown enormously and contributed significantly to RTEMS.  Important
+additions such as the TCP/IP stack, FAT filesystem, multiple ports,
+device drivers, and most BSPs have come from users like yourself.
+
 @section Are there no similar commercial products?
 
 Yes, but not all are based on standards and the open source philosophy.
 
 @section How can I get RTEMS?
 
-RTEMS is distributed by OAR Corporation via the Internet.  Point your
+RTEMS is distributed from @uref{@value{RTEMSHTTPURL},@value{RTEMSHTTPURL}}.
+This is a server dedicated to the RTEMS Project which was donated by and
+hosted by @uref{http://www.OARcorp.com,OAR Corporation} to provide
+a focal point for all RTEMS activities.  Point your
 favorite browser at the following URL and following the link:
 
-@c this version should work
-@c @set OAR-URL http://www.OARcorp.com
-@c @uref{@value{OAR-URL},@value{OAR-URL}}
-@uref{http://www.OARcorp.com,http://www.OARcorp.com}
+@uref{@value{RTEMSHTTPURL},@value{RTEMSHTTPURL}}
+
+But if you are already reading this, you probably already found it. :)
 
 @section What about support?
 
-OAR Corporation provides numerous services for RTEMS including support,
-training, and custom development.
+RTEMS development and support services are available from a number
+of firms.  See
+@uref{@value{RTEMSHTTPURL}/support.html,@value{RTEMSHTTPURL}/support.html}
+for the current list of RTEMS service providers.
+
+Remember that RTEMS maintenance is funded by users.  If you are
+using RTEMS on a commercial project, please get support.
 
 @section Are there any mailing lists?
 
-The primary RTEMS mailing list is @code{rtems-users@@oarcorp.com}.  This
+The primary RTEMS mailing list is @code{@value{RTEMSUSERS}}.  This
 list is for general RTEMS discussions, questions, design help, advice,
 etc..  Subscribe by sending an empty mail
-message to @code{rtems-users-subscribe@@OARcorp.com}.  This
+message to @code{@value{RTEMSUSERSSUBSCRIBE}}.  This
 mailing list is archived at:
 
 @example
 http://www.oarcorp.com/rtems/maillistArchives/rtems-users
 @end example
 
-The @code{rtems-snapshots@@oarcorp.com} mailing list is for those
+The @code{@value{RTEMSSNAPSHOTS}} mailing list is for those
 interested in taking a more active role in the design, development,
 and maintenance of RTEMS.  Discussions on this list tend to focus
 on problems in the development source, design of new features, problem
 reports, etc..  Subscribe by sending an empty mail
-message to @code{rtems-snapshots-subscribe@@OARcorp.com}.
+message to @code{@value{RTEMSSNAPSHOTSSUBSCRIBE}}.
 mailing list is archived at:
 
 @example

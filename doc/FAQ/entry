@@ -29,8 +29,8 @@ POSIX 1003.1b support, and file system support.  It also includes optional
 debug aids like stack overflow and heap integrity checking. 
 
 RTEMS is built using GNU autoconf and can be built on any host supporting
-the GNU tools including Linux, FreeBSD, NetBSD, Solaris, and MS-Windows to
-name but a few.  The current RTEMS release supports the following CPU
+the GNU tools including GNU/Linux, FreeBSD, NetBSD, Solaris, and MS-Windows
+to name but a few.  The current RTEMS release supports the following CPU
 families: 
 
   Motorola m680x0, m683xx, and ColdFire
@@ -47,13 +47,13 @@ families:
 
 There are over 35 Board Support Packages included with RTEMS including
 BSPs for a standard PC as well as the SPARC, MIPS, PowerPC simulators
-included with gdb.  There are
-numerous BSPs for CPUs targetting the embedded market such as the Motorola
-m683xx, ppc4xx, and mpc8xx series which support the on-CPU peripherals. 
+included with gdb.  There are numerous BSPs for CPUs targetting the
+embedded market such as the Motorola m683xx, ppc4xx, and mpc8xx series
+which support the on-CPU peripherals. 
 
 WWW: 
 
-@uref{http://www.OARcorp.com}
+@uref{http://www.rtems.com}
 
 E-mail: 
 
