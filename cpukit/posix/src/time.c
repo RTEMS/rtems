@@ -247,7 +247,10 @@ int nanosleep(
   ticks = _POSIX_Timespec_to_interval( rqtp );
   
   _Thread_Disable_dispatch();
-    _Thread_Set_state( _Thread_Executing, STATES_WAITING_FOR_TIME );
+    _Thread_Set_state(
+      _Thread_Executing,
+      STATES_DELAYING | STATES_INTERRUPTIBLE_BY_SIGNAL
+    );
     _Watchdog_Initialize(
       &_Thread_Executing->Timer,
       _Thread_Delay_ended,          /* XXX may need to be POSIX specific */

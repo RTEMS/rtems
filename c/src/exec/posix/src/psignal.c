@@ -127,6 +127,14 @@ boolean _POSIX_signals_Check_signal(
 
   if ( !do_callout )
     return FALSE;
+
+  /*
+   *  Since we made a union of these, only one test is necessary but this is
+   *  safer.
+   */ 
+
+  assert( _POSIX_signals_Vectors[ signo ].sa_handler ||
+          _POSIX_signals_Vectors[ signo ].sa_sigaction );
  
   switch ( _POSIX_signals_Vectors[ signo ].sa_flags ) {
     case SA_SIGINFO:
@@ -150,7 +158,7 @@ boolean _POSIX_signals_Check_signal(
   return TRUE;
 }
 
-void _POSIX_signals_Run_Them(
+void _POSIX_signals_Post_switch_extension(
   Thread_Control  *the_thread
 )
 {
@@ -376,7 +384,7 @@ int sigaction(
 
   _POSIX_signals_Vectors[ sig ] = *act;
 
-  return POSIX_NOT_IMPLEMENTED();
+  return 0;
 }
 
 /*
@@ -604,7 +612,7 @@ int pthread_kill(
        *  If sig == 0 then just validate arguments
        */
 
-      api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+      api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
       if ( sig ) {
 
@@ -615,12 +623,22 @@ int pthread_kill(
         if ( api->signals_pending & ~api->signals_blocked ) {
           the_thread->do_post_task_switch_extension = TRUE;
 
-          /* XXX may have to unblock the task */
-
+ 
+          /* XXX may have to unblock the task -- this is a kludge -- fix it */
+          if ( the_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL ) {
+            the_thread->Wait.return_code = EINTR;
+            if ( _States_Is_waiting_on_thread_queue(the_thread->current_state) )
+              _Thread_queue_Extract_with_proxy( the_thread );
+            else if ( _States_Is_delaying(the_thread->current_state)){
+              if ( _Watchdog_Is_active( &the_thread->Timer ) )
+                (void) _Watchdog_Remove( &the_thread->Timer );
+              _Thread_Unblock( the_thread );
+            }
         }
       }
-      _Thread_Enable_dispatch();
-      return 0;
+    }
+    _Thread_Enable_dispatch();
+    return 0;
   }
 
   return POSIX_BOTTOM_REACHED();

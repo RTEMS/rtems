@@ -15,6 +15,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/priority.h>
+#include <rtems/posix/psignal.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/time.h>
@@ -222,7 +223,7 @@ API_extensions_Control _POSIX_Threads_API_extensions = {
   { NULL, NULL },
   NULL,                                     /* predriver */
   _POSIX_Threads_Initialize_user_threads,   /* postdriver */
-  NULL,                                     /* post switch */
+  _POSIX_signals_Post_switch_extension,     /* post switch */
 };
  
 User_extensions_Control _POSIX_Threads_User_extensions = {
