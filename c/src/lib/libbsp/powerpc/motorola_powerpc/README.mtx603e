@@ -1,0 +1,58 @@
+#
+#  README.mtx603e,v 1.1 2002/11/6 1:00:00 gregm Exp
+#
+
+BSP NAME:           mtx603e
+BOARD:              MTX-60X boards from motorola
+BUS:                PCI, W83C554
+CPU FAMILY:         ppc
+CPU:                PowerPC 603e
+COPROCESSORS:       N/A
+MODE:               32 bit mode
+
+DEBUG MONITOR:      PPCBUG mode 
+
+PERIPHERALS
+===========
+TIMERS:             PPC internal Timebase register
+  RESOLUTION:         ???
+SERIAL PORTS:       simulated via bug
+REAL-TIME CLOCK:    PPC internal Decrementer register
+DMA:                none
+VIDEO:              none
+SCSI:               none
+NETWORKING:         DEC21140
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       PPC internal
+IOSUPP DRIVER:      N/A
+SHMSUPP:            N/A
+TIMER DRIVER:       PPC internal
+TTY DRIVER:         PPC internal
+
+STDIO
+=====
+PORT:               Console port 0
+ELECTRICAL:         na
+BAUD:               na
+BITS PER CHARACTER: na
+PARITY:             na
+STOP BITS:          na
+
+Notes
+=====
+
+This bsp is an instantiation of the generic motorola_powerpc BSP.  It is
+"virtual" in the sense it does not supply any per-bsp files.  Instead,
+it is defined by the aclocal and make/custom config files which supply
+#defines that adapt the shared powerpc code.  This is seen in the
+bootloader and irq setup files.
+
+Although created for a MTX-603e board, this bsp should be readily
+portable to any of the Motorola MTX boards, and has in fact run on a
+MCP750 board.
+
+Some MTX boards have multiple processors, at this time RTEMS does not
+support SMP and there is no internal awareness of the architecture.
+
