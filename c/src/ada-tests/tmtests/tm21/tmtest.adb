@@ -106,6 +106,7 @@ package body TMTEST is
             INDEX,
             TIME_TEST_SUPPORT.OPERATION_COUNT,
             RTEMS.DEFAULT_ATTRIBUTES,
+            RTEMS.NO_PRIORITY,
             ID,
             STATUS
          );

@@ -661,6 +661,7 @@ TEST_SUPPORT.PAUSE;
                NAME, 
                128,
                RTEMS.DEFAULT_ATTRIBUTES,
+               RTEMS.NO_PRIORITY,
                ID, 
                STATUS 
             );

@@ -331,11 +331,12 @@ package body DUMMY_RTEMS is
 -- Semaphore Manager
 
    procedure SEMAPHORE_CREATE (
-      NAME          : in     RTEMS.NAME;
-      COUNT         : in     RTEMS.UNSIGNED32;
-      ATTRIBUTE_SET : in     RTEMS.ATTRIBUTE;
-      ID            :    out RTEMS.ID;
-      RESULT        :    out RTEMS.STATUS_CODES
+      NAME             : in     RTEMS.NAME;
+      COUNT            : in     RTEMS.UNSIGNED32;
+      ATTRIBUTE_SET    : in     RTEMS.ATTRIBUTE;
+      PRIORITY_CEILING : in     RTEMS.TASK_PRIORITY;
+      ID               :    out RTEMS.ID;
+      RESULT           :    out RTEMS.STATUS_CODES
    ) is
    begin
 

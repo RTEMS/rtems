@@ -133,6 +133,7 @@ package body TMTEST is
          RTEMS.BUILD_NAME( 'S', 'M', '1', ' ' ),
          0,
          RTEMS.DEFAULT_ATTRIBUTES,
+         RTEMS.NO_PRIORITY,
          TMTEST.SEMAPHORE_ID,
          STATUS
       );
