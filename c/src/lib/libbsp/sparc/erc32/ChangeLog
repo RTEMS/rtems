@@ -1,3 +1,7 @@
+2000-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* gnatsupp/gnatsupp.c: Added prototype to eliminate warning.
+
 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 
 	* erc32sonic/Makefile.am: Only compile this if networking is enabled.
