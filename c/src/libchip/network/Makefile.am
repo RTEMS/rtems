@@ -9,8 +9,8 @@ LIB = $(ARCH)/$(LIBNAME).a
 C_FILES = cs8900.c dec21140.c i82586.c sonic.c if_fxp.c elnk.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../automake/compile.am
-include $(top_srcdir)/../../automake/lib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 $(PROJECT_INCLUDE)/libchip:
 	@$(mkinstalldirs) $@
@@ -50,4 +50,4 @@ endif
 EXTRA_DIST = README README.cs8900 README.dec21140 README.i82586 README.sonic \
     cs8900.c cs8900.c.bsp dec21140.c i82586.c if_fxp.c sonic.c
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/local.am

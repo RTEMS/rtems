@@ -13,8 +13,8 @@ noinst_HEADERS = ata_internal.h
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../automake/compile.am
-include $(top_srcdir)/../../automake/lib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/libchip \
     $(include_ide_HEADERS:%=$(PROJECT_INCLUDE)/libchip/%)
@@ -36,5 +36,5 @@ endif
 
 EXTRA_DIST = $(C_FILES)
 
-include $(top_srcdir)/../../automake/subdirs.am
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/subdirs.am
+include $(top_srcdir)/automake/local.am

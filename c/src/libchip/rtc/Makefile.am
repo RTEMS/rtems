@@ -13,8 +13,8 @@ C_FILES = rtcprobe.c icm7170.c icm7170_reg.c icm7170_reg2.c icm7170_reg4.c \
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 
-include $(top_srcdir)/../../automake/compile.am
-include $(top_srcdir)/../../automake/lib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/libchip \
@@ -42,4 +42,4 @@ DOC_FILES = README.ds1643 README.icm7170 README.m48t08 README.m48t18 STATUS
 
 EXTRA_DIST = $(C_FILES) $(DOC_FILES)
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/local.am

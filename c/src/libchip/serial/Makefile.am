@@ -13,8 +13,8 @@ OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 noinst_HEADERS = mc68681_p.h ns16550_p.h z85c30_p.h
 
-include $(top_srcdir)/../../automake/compile.am
-include $(top_srcdir)/../../automake/lib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/libchip \
     $(include_libchip_HEADERS:%=$(PROJECT_INCLUDE)/libchip/%)
@@ -42,4 +42,4 @@ DOC_FILES = README.mc68681 README.ns16550 README.xr88681 README.z85c30 \
 
 EXTRA_DIST = $(C_FILES) $(DOC_FILES)
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/local.am
