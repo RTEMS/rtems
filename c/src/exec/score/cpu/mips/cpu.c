@@ -29,9 +29,12 @@
  *  $Id$
  */
 
-#ifndef lint
-static char _sccsid[] = "@(#)cpu.c 08/20/96     1.5\n";
-#endif
+/*
+ *  Rather than deleting this, it is commented out to (hopefully) help
+ *  the submitter send updates.
+ *
+ * static char _sccsid[] = "@(#)cpu.c 08/20/96     1.5\n";
+ */
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
