@@ -47,7 +47,6 @@ rtems_extensions_table Stack_check_Extension_table = {
   0,                                /* rtems_task_restart */
   0,                                /* rtems_task_delete  */
   Stack_check_Switch_extension,     /* task_switch  */
-  0,                                /* task_post_switch  */
   Stack_check_Begin_extension,      /* task_begin   */
   0,                                /* task_exitted */
   Stack_check_Fatal_extension,      /* fatal        */

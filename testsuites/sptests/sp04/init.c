@@ -31,7 +31,6 @@ rtems_extensions_table Extensions = {
   NULL,                      /* task restart user extension */
   NULL,                      /* task delete user extension */
   Task_switch,               /* task switch user extension */
-  NULL,                      /* task post switch user extension */
   NULL,                      /* task begin user extension */
   NULL,                      /* task exitted user extension */
   NULL                       /* fatal error user extension */

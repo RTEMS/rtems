@@ -46,7 +46,6 @@ rtems_extensions_table initial_extensions = {
     NULL,                    /* restart */
     NULL,                    /* delete */
     NULL,                    /* switch */
-    NULL,                    /* post switch */
     NULL,                    /* begin */
     NULL,                    /* exitted */
     Fatal_extension          /* fatal */
