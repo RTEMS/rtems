@@ -13,10 +13,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -61,6 +57,10 @@
  * any improvements or extensions that they make and grant Carnegie the
  * rights to redistribute these changes.
  *
+ * $FreeBSD: src/sys/vm/vm_kern.h,v 1.28 2005/01/07 02:29:27 imp Exp $
+ */
+
+/*
  * $Id$
  */
 
@@ -71,14 +71,9 @@
 extern vm_map_t buffer_map;
 extern vm_map_t kernel_map;
 extern vm_map_t kmem_map;
-extern vm_map_t mb_map;
-extern int mb_map_full;
-extern vm_map_t io_map;
 extern vm_map_t clean_map;
-extern vm_map_t phys_map;
 extern vm_map_t exec_map;
-extern vm_map_t u_map;
-
-extern vm_offset_t kernel_vm_end;
+extern vm_map_t pipe_map;
+extern u_int vm_kmem_size;
 
 #endif				/* _VM_VM_KERN_H_ */
