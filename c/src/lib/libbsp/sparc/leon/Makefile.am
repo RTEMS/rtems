@@ -9,7 +9,6 @@ include $(top_srcdir)/../../bsp.am
 
 EXTRA_PROGRAMS =
 CLEANFILES =
-EXTRA_DIST =
 noinst_DATA =
 
 # wrapup is the one that actually builds and installs the library
@@ -19,7 +18,7 @@ SUBDIRS = . tools
 include_HEADERS += include/leon.h
 include_HEADERS += include/coverhd.h
 
-EXTRA_DIST += ../../sparc/shared/start.S
+EXTRA_DIST = ../../sparc/shared/start.S
 start$(LIB_VARIANT).$(OBJEXT): ../../sparc/shared/start.S
 	${CCASCOMPILE} -DASM -o $@ -c $<
 
@@ -123,15 +122,15 @@ endif
 EXTRA_LIBRARIES = libbsp.a
 CLEANFILES += libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_LDADD = startup$(LIB_VARIANT).rel console$(LIB_VARIANT).rel \
+libbsp_a_LIBADD = startup$(LIB_VARIANT).rel console$(LIB_VARIANT).rel \
     clock$(LIB_VARIANT).rel timer$(LIB_VARIANT).rel \
     gnatsupp$(LIB_VARIANT).rel
 
 if HAS_NETWORKING
-libbsp_a_LDADD += leon_open_eth$(LIB_VARIANT).rel
+libbsp_a_LIBADD += leon_open_eth$(LIB_VARIANT).rel
 endif
 
-libbsp_a_LDADD += ../../../libcpu/sparc/cache$(LIB_VARIANT).rel \
+libbsp_a_LIBADD += ../../../libcpu/sparc/cache$(LIB_VARIANT).rel \
     ../../../libcpu/sparc/reg_win$(LIB_VARIANT).rel \
     ../../../libcpu/sparc/syscall$(LIB_VARIANT).rel
 

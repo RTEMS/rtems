@@ -1,3 +1,8 @@
+2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Cosmetics.
+	* configure.ac: Add nostdinc to AUTOMAKE_OPTIONS.
+
 2004-01-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in clock/Makefile.am, leon_open_eth/Makefile.am,
