@@ -1147,7 +1147,8 @@ procedure Rate_Monotonic_Period (
 @code{SUCCESSFUL} - period initiated successfully@*
 @code{INVALID_ID} - invalid rate monotonic period id@*
 @code{NOT_OWNER_OF_RESOURCE} - period not created by calling task@*
-@code{NOT_DEFINED} - period has never been initiated@*
+@code{NOT_DEFINED} - period has never been initiated (only
+possible when period is set to PERIOD_STATUS)@*
 @code{TIMEOUT} - period has expired
 
 @subheading DESCRIPTION:
