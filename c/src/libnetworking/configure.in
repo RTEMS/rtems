@@ -4,8 +4,8 @@ dnl $Id$
 
 AC_PREREQ(2.13)
 AC_INIT(arpa)
-RTEMS_TOP(../../../..)
-AC_CONFIG_AUX_DIR(../../../..)
+RTEMS_TOP(../../..)
+AC_CONFIG_AUX_DIR(../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 

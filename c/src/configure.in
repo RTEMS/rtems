@@ -27,7 +27,7 @@ AC_CONFIG_SUBDIRS(make)
 AC_CONFIG_SUBDIRS(exec)
 AC_CONFIG_SUBDIRS(lib)
 if test "$HAS_NETWORKING" = "yes"; then
-cfg_subdirs="librpc"
+cfg_subdirs="libnetworking librpc"
 fi
 if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
 cfg_subdirs="$cfg_subdirs librtems++";

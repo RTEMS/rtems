@@ -45,13 +45,10 @@ AC_CONFIG_SUBDIRS(libbsp)
 
 # If the TCP/IP stack is enabled, then find all TCP/IP Makefiles
 if test "$HAS_NETWORKING" = "yes"; then
-  cfg_subdirs="$cfg_subdirs libnetworking"
-
   if test "$RTEMS_HAS_RDBG" = "yes"; then
     RTEMS_CHECK_RDBG(RTEMS_BSP)
   fi
 fi
-
 
 if test "$HAS_RDBG" = "yes"; then
   cfg_subdirs="$cfg_subdirs librdbg"
