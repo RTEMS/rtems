@@ -109,7 +109,7 @@ typedef Objects_Control ITRON_Objects_Control;
  */
 
 #define _ITRON_Objects_Get( _the_information, _id, _the_object ) \
-    _Objects_Get( (_the_information), (_id), (_the_object) )
+    _Objects_Get_by_index( (_the_information), (_id), (_the_object) )
 
 #ifdef __cplusplus
 }
