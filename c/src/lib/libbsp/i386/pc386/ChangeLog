@@ -1,3 +1,7 @@
+2001-04-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ne2000/ne2000.c: Remove #define __INSIDE_RTEMS_BSD_TCPIP_STACK__.
+
 2001-01-05	Joel Sherrill <joel@OARcorp.com>
 
 	* console/vt.c: Added include of <rtems.h> so _CPU_ISR_disable 
