@@ -52,12 +52,6 @@ mpc505/timer/Makefile
 mpc505/vectors/Makefile
 mpc505/ictrl/Makefile
 mpc8xx/Makefile
-mpc8xx/clock/Makefile
-mpc8xx/console-generic/Makefile
-mpc8xx/cpm/Makefile
-mpc8xx/exceptions/Makefile
-mpc8xx/mmu/Makefile
-mpc8xx/timer/Makefile
 ppc403/Makefile
 ppc403/clock/Makefile
 ppc403/console/Makefile

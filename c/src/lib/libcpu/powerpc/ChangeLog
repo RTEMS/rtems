@@ -1,5 +1,16 @@
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* mpc8xx/clock/Makefile.am: Remove.
+	* mpc8xx/console-generic/Makefile.am: Remove.
+	* mpc8xx/cpm/Makefile.am: Remove.
+	* mpc8xx/exceptions/Makefile.am: Remove.
+	* mpc8xx/mmu/Makefile.am: Remove.
+	* mpc8xx/timer/Makefile.am: Remove.
+	* mpc8xx/Makefile.am: Merge-in Makefile.ams above.
+	* configure.ac: Reflect changes to mpc8xx/Makefile.ams.
+
+2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Remove mpc6xx/*/Makefile,  mpc8260/*/Makefile.
 
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
