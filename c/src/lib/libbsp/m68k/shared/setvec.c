@@ -7,7 +7,7 @@
  *  hardware to enable/disable, mask, prioritize, etc an interrupt
  *  source, then this routine should be customized to support that.
  *
- *  COPYRIGHT (c) 1989-1998. 1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *

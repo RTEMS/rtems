@@ -6,7 +6,7 @@
  *  then this routine must be functional.  This is the default
  *  implementation which raises an error.
  *
- *  COPYRIGHT (c) 1989-1998. 1997.
+ *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *
