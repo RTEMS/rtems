@@ -2,6 +2,9 @@
 ##  $Id$
 ##
 
+include $(top_srcdir)/../../../automake/multilib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 LIBNAME = libcsupport
 LIB = ${ARCH}/${LIBNAME}.a
@@ -36,7 +39,7 @@ PASSWORD_GROUP_C_FILES = getpwent.c getgrent.c
 TERMINAL_IDENTIFICATION_C_FILES = ctermid.c isatty.c ttyname.c ttyname_r.c
 
 LIBC_GLUE_C_FILES = __getpid.c __gettod.c __times.c truncate.c access.c \
-    stat.c lstat.c pathconf.c newlibc.c no_posix.c no_libc.c
+    stat.c lstat.c pathconf.c newlibc.c no_posix.c no_libc.c utsname.c
 
 UNIX_LIBC_C_FILES = unixlibc.c hosterr.c
 
@@ -56,10 +59,6 @@ else
 C_FILES = $(COMMON_C_FILES) $(EMBEDDED_C_FILES)
 endif
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
-
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/$(LIBNAME)$(LIB_VARIANT).a
 

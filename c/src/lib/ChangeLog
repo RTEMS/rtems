@@ -1,3 +1,14 @@
+2002-05-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>	
+
+	* include/Makefile.am: Remove.
+	* include/sys/utsname.h: Added, removed times (now in newlib).
+	* Makefile.am: Merge include/Makefile.am
+
+	* libc/utsname.c: Relocated from posix/src.
+	* libc/Makefile.am: Reflect changes above.
+
+	* configure.ac: Remove include/Makefile
+
 2002-05-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/sys/ioctl.h: Relocated from libnetworking/sys.

@@ -35,6 +35,5 @@ AM_CONFIG_HEADER(libc/config.h)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-include/Makefile
 libc/Makefile])
 AC_OUTPUT
