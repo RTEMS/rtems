@@ -8,14 +8,7 @@
 #ifndef _PCIB_H
 #define _PCIB_H
 
-/* Error codes */
-#define PCIB_ERR_SUCCESS       (0)
-#define PCIB_ERR_UNINITIALIZED (-1)  /* PCI BIOS is not initilized */
-#define PCIB_ERR_NOTPRESENT    (-2)  /* PCI BIOS not present */
-#define PCIB_ERR_NOFUNC        (-3)  /* Function not supported */
-#define PCIB_ERR_BADVENDOR     (-4)  /* Bad Vendor ID */
-#define PCIB_ERR_DEVNOTFOUND   (-5)  /* Device not found */
-#define PCIB_ERR_BADREG        (-6)  /* Bad register number */
+#include <rtems/pci.h>
 
 /*
  * Make device signature from bus number, device numebr and function
@@ -34,7 +27,6 @@
 extern "C" {
 #endif
 
-int pcib_init(void);
 int pcib_find_by_devid(int vendorId, int devId, int idx, int *sig);
 int pcib_find_by_class(int classCode, int idx, int *sig);
 int pcib_special_cycle(int busNo, int data);

@@ -1,3 +1,8 @@
+2005-03-04	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/pci/pcibios.c, shared/pci/pcibios.h: Make PCI initialize
+	function part of the unified PCI API as pci_initialize().
+
 2005-01-19	Joel Sherrill <joel@OARcorp.com>
 
 	* pc386/console/vgainit.c, pc386/wd8003/wd8003.c, shared/comm/uart.c:

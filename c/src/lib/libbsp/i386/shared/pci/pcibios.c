@@ -37,7 +37,7 @@ static int pcib_convert_err(int err);
  * error code
  */
 int 
-pcib_init(void)
+pci_initialize(void)
 {
   unsigned char *ucp;
   unsigned char sum;
@@ -211,22 +211,11 @@ pcib_find_by_class(int classCode, int idx, int *sig)
   return PCIB_ERR_SUCCESS;
 }
   
-#define PCI_MULTI_FUNCTION       0x80
-#define PCI_MAX_DEVICES		 16
-#define PCI_MAX_FUNCTIONS	 8
-
-#define PCI_VENDOR_ID           0x00    /* 16 bits */
-#define PCI_DEVICE_ID           0x02    /* 16 bits */
-#define PCI_CLASS_REVISION      0x08
-#define PCI_HEADER_TYPE         0x0e  
-#define PCI_SUBORDINATE_BUS     0x1a 
-
-#define  PCI_CLASS_BRIDGE_PCI           0x0604
+#define PCI_MULTI_FUNCTION      0x80
 
 static unsigned8 ucBusCount = 0xff;
 
-
-int
+unsigned char
 BusCountPCI()
 {
    if( ucBusCount == 0xff )
