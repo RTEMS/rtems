@@ -219,6 +219,18 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
   (void) _Workspace_Free( api );
 }
 
+/*
+ *
+ *  _POSIX_Threads_Exitted_extension
+ */
+ 
+User_extensions_routine _POSIX_Threads_Exitted_extension(
+  Thread_Control *executing
+)
+{
+  pthread_exit( executing->Wait.return_argument );
+}
+
 /*PAGE
  *
  *  _POSIX_Threads_Initialize_user_threads
@@ -293,7 +305,7 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
     _POSIX_Threads_Delete_extension,          /* delete */
     NULL,                                     /* switch */
     NULL,                                     /* begin */
-    NULL,                                     /* exitted */
+    _POSIX_Threads_Exitted_extension,         /* exitted */
     NULL                                      /* fatal */
   }
 };

@@ -36,9 +36,14 @@ extern "C" {
 
 /*
  *  The following defines the "return type" of a thread.
+ *
+ *  NOTE:  This cannot always be right.  Some APIs have void
+ *         tasks/threads, others return pointers, others may 
+ *         return a numeric value.  Hopefully a pointer is
+ *         always at least as big as an unsigned32. :)
  */
 
-typedef void Thread;
+typedef void *Thread;
 
 /*
  *  The following defines the ways in which the entry point for a

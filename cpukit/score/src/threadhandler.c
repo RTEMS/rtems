@@ -86,28 +86,39 @@ void _Thread_Handler( void )
  
   switch ( executing->Start.prototype ) {
     case THREAD_START_NUMERIC:
-      (*(Thread_Entry_numeric) executing->Start.entry_point)(
-        executing->Start.numeric_argument
+      executing->Wait.return_argument = 
+        (*(Thread_Entry_numeric) executing->Start.entry_point)(
+          executing->Start.numeric_argument
       );
       break;
     case THREAD_START_POINTER:
-      (*(Thread_Entry_pointer) executing->Start.entry_point)(
-        executing->Start.pointer_argument
-      );
+      executing->Wait.return_argument =
+        (*(Thread_Entry_pointer) executing->Start.entry_point)(
+          executing->Start.pointer_argument
+        );
       break;
     case THREAD_START_BOTH_POINTER_FIRST:
-      (*(Thread_Entry_both_pointer_first) executing->Start.entry_point)( 
-        executing->Start.pointer_argument,
-        executing->Start.numeric_argument
-      );
+      executing->Wait.return_argument = 
+         (*(Thread_Entry_both_pointer_first) executing->Start.entry_point)( 
+           executing->Start.pointer_argument,
+           executing->Start.numeric_argument
+         );
       break;
     case THREAD_START_BOTH_NUMERIC_FIRST:
-      (*(Thread_Entry_both_numeric_first) executing->Start.entry_point)( 
-        executing->Start.numeric_argument,
-        executing->Start.pointer_argument
-      );
+      executing->Wait.return_argument = 
+         (*(Thread_Entry_both_numeric_first) executing->Start.entry_point)( 
+           executing->Start.numeric_argument,
+           executing->Start.pointer_argument
+         );
       break;
   }
+
+  /*
+   *  In the switch above, the return code from the user thread body
+   *  was placed in return_argument.  This assumed that if it returned
+   *  anything (which is not supporting in all APIs), then it would be 
+   *  able to fit in a (void *).
+   */
 
   _User_extensions_Thread_exitted( executing );
 
