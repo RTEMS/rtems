@@ -20,7 +20,7 @@
 
 char *rtems_progname;
 
-rtems_interrupt_level bsp_isr_level;
+extern rtems_interrupt_level bsp_isr_level;
 
 int main(int argc, char **argv)
 {

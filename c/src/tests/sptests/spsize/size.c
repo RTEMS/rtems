@@ -356,7 +356,9 @@ uninitialized =
                 (sizeof _Thread_Ready_chain)              +
                 (sizeof _Thread_Executing)                +
                 (sizeof _Thread_Heir)                     +
+#if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
                 (sizeof _Thread_Allocated_fp)             +
+#endif
                 (sizeof _Thread_Internal_information)     +
                 (sizeof _Thread_Idle)                     +
 

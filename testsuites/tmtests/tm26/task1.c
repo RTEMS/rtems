@@ -281,7 +281,9 @@ rtems_task Low_task(
   _Thread_Disable_dispatch();
 
   Timer_initialize();
+#if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
     _Context_Restore_fp( &_Thread_Executing->fp_context );
+#endif
     _Context_Switch( &executing->Registers, &_Thread_Executing->Registers );
 }
 
@@ -306,8 +308,10 @@ rtems_task Floating_point_task_1(
   _Thread_Disable_dispatch();
 
   Timer_initialize();
+#if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
     _Context_Save_fp( &executing->fp_context );
     _Context_Restore_fp( &_Thread_Executing->fp_context );
+#endif
     _Context_Switch( &executing->Registers, &_Thread_Executing->Registers );
   /* switch to Floating_point_task_2 */
 
@@ -327,8 +331,10 @@ rtems_task Floating_point_task_1(
   _Thread_Disable_dispatch();
 
   Timer_initialize();
+#if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
     _Context_Save_fp( &executing->fp_context );
     _Context_Restore_fp( &_Thread_Executing->fp_context );
+#endif
     _Context_Switch( &executing->Registers, &_Thread_Executing->Registers );
   /* switch to Floating_point_task_2 */
 }
@@ -356,8 +362,10 @@ rtems_task Floating_point_task_2(
   _Thread_Disable_dispatch();
 
   Timer_initialize();
+#if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
     _Context_Save_fp( &executing->fp_context );
     _Context_Restore_fp( &_Thread_Executing->fp_context );
+#endif
     _Context_Switch( &executing->Registers, &_Thread_Executing->Registers );
   /* switch to Floating_point_task_1 */
 
@@ -493,6 +501,7 @@ void complete_test( void )
     0
   );
 
+#if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)
   put_time(
     "fp context switch: restore 1st FP task",
     context_switch_restore_1st_fp_time,
@@ -524,6 +533,12 @@ void complete_test( void )
     0,
     0
   );
+#else
+    puts( "fp context switch: restore 1st FP task - NA" );
+    puts( "fp context switch: save idle, restore initialized - NA" );
+    puts( "fp context switch: save idle, restore idle - NA" );
+    puts( "fp context switch: save initialized, restore initialized - NA" );
+#endif
 
   put_time(
     "_Thread_Resume",

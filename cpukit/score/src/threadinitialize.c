@@ -95,6 +95,7 @@ boolean _Thread_Initialize(
    *  Allocate the floating point area for this thread
    */
   
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   if ( is_fp ) {
 
     fp_area = _Workspace_Allocate( CONTEXT_FP_SIZE );
@@ -109,6 +110,7 @@ boolean _Thread_Initialize(
 
   the_thread->fp_context       = fp_area;
   the_thread->Start.fp_context = fp_area;
+#endif
 
   /*
    *  Allocate the extensions area for this thread

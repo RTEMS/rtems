@@ -1,4 +1,2 @@
 Makefile
 Makefile.in
-configure
-aclocal.m4

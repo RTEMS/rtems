@@ -525,7 +525,11 @@ rtems_monitor_task(
 
         debugee = _Thread_Executing;
         rp = &debugee->Registers;
+#if (CPU_HARDWARE_FP == TRUE) || (CPU_SOFTWARE_FP == TRUE)
         fp = (rtems_context_fp *) debugee->fp_context;  /* possibly 0 */
+#else
+        fp = 0;
+#endif
 
         if (0 == rtems_monitor_command_read(command_buffer, &argc, argv))
             continue;
