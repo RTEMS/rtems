@@ -1,3 +1,9 @@
+2003-03-18  Till Straumann <strauman@slac.stanford.edu>
+
+	PR 356/bsps
+	* custom/mvme2307.cfg: This patch makes RTEMS/PowerPC eabi compliant.
+	Enable EABI by adding -meabi -msdata=eabi CFLAGS.
+
 2003-03-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/ppcn_60x.cfg: Fix mal-formed CVS-Id.
