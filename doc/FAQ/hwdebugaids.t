@@ -58,6 +58,9 @@ The Macraigor OCD BDM module has a driver for Linux
 written by Gunter Magin (magin@@skil.camelot.de).  
 No URLs yet.
 
+Finally, there is a overview of BDM at the following URL: 
+http://cmp.felk.cvut.cz/~pisa/m683xx/bdm_driver.html.
+
 Information in this section from:
 
 @itemize @bullet
