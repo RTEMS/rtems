@@ -110,8 +110,6 @@
 /* Go to the right section */
 #if PPC_ASM == PPC_ASM_ELF
 	.section .vectors,"awx",@progbits
-#elif PPC_ASM == PPC_ASM_XCOFF
-	.csect	.text[PR]
 #endif
 
 	PUBLIC_VAR (__vectors)
