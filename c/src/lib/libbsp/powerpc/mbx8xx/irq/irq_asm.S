@@ -35,8 +35,26 @@ SYM (decrementer_exception_vector_prolog_code):
 	 */
 	stwu    r1, - (EXCEPTION_FRAME_END)(r1)
 	stw	r4, GPR4_OFFSET(r1)
+#ifdef THIS_CODE_LINKED_USING_FLASH_ADDR_RANGE
+	/* 
+	 * save link register
+	 */
+	mflr	r4
+	stw	r4,  EXC_LR_OFFSET(r1)
+	/* 
+	 * make link register contain shared_raw_irq_code_entry
+	 * address
+	 */
+	lis	r4,shared_raw_irq_code_entry@h
+	ori	r4,r4,shared_raw_irq_code_entry@l
+	mtlr	r4
+	
+	li	r4, ASM_DEC_VECTOR
+	blr
+#else
 	li	r4, ASM_DEC_VECTOR
 	ba	shared_raw_irq_code_entry
+#endif			
 
 	PUBLIC_VAR (decrementer_exception_vector_prolog_code_size)
 	
@@ -50,9 +68,27 @@ SYM (external_exception_vector_prolog_code):
 	 */
 	stwu    r1, - (EXCEPTION_FRAME_END)(r1)
 	stw	r4, GPR4_OFFSET(r1)
+#ifdef THIS_CODE_LINKED_USING_FLASH_ADDR_RANGE
+	/* 
+	 * save link register
+	 */
+	mflr	r4
+	stw	r4,  EXC_LR_OFFSET(r1)
+	/* 
+	 * make link register contain shared_raw_irq_code_entry
+	 * address
+	 */
+	lis	r4,shared_raw_irq_code_entry@h
+	ori	r4,r4,shared_raw_irq_code_entry@l
+	mtlr	r4
+
+	li	r4, ASM_EXT_VECTOR
+	blr
+#else
 	li	r4, ASM_EXT_VECTOR
 	ba	shared_raw_irq_code_entry
-
+#endif
+	
 	PUBLIC_VAR (external_exception_vector_prolog_code_size)
 	
 	external_exception_vector_prolog_code_size = . - external_exception_vector_prolog_code
@@ -116,13 +152,17 @@ SYM (shared_raw_irq_code_entry):
 	mfcr	r5
 	mfctr	r6
 	mfxer	r7
+#ifndef THIS_CODE_LINKED_USING_FLASH_ADDR_RANGE
 	mflr	r8
-	
+#endif
+		
 	stw	r5,  EXC_CR_OFFSET(r1)
 	stw	r6,  EXC_CTR_OFFSET(r1)
 	stw	r7,  EXC_XER_OFFSET(r1)
+#ifndef THIS_CODE_LINKED_USING_FLASH_ADDR_RANGE	
 	stw	r8,  EXC_LR_OFFSET(r1)
-
+#endif
+		
 	/*
 	 * Add some non volatile registers to store information
 	 * that will be used when returning from C handler

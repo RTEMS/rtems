@@ -43,7 +43,14 @@ SYM (default_exception_vector_code_prolog):
 	 * r3 = r3 >> 8 = vector
 	 */
 	srwi	r3,r3,8
+#ifdef THIS_CODE_LINKED_USING_FLASH_ADDR_RANGE	
+	lis	r2,push_normalized_frame@h
+	ori	r2,r2,push_normalized_frame@l
+	mtlr	r2
+	blr
+#else
 	ba	push_normalized_frame
+#endif		
 	
 	PUBLIC_VAR (default_exception_vector_code_prolog_size)
 	
