@@ -1,6 +1,8 @@
 /*
  *  Workspace Handler
  *
+ *  JUNK
+ *
  *  NOTE:
  *
  *  This file only exists to contain the one function which cannot
