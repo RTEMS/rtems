@@ -35,7 +35,7 @@ include_rtems_score_HEADERS = \
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h)
 
-REL = $(ARCH)/rtems-cpu.rel
+LIB = $(ARCH)/libscorecpu.a
 
 C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
@@ -43,15 +43,13 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
-rtems_cpu_rel_OBJECTS = $(C_O_FILES) $(S_O_FILES)
+libscorecpu_a_OBJECTS = $(C_O_FILES) $(S_O_FILES)
 
-$(REL): $(rtems_cpu_rel_OBJECTS)
-	$(make-rel)
+$(LIB): $(libscorecpu_a_OBJECTS)
+	$(make-library)
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
+all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB) \
     $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(REL)
 
 EXTRA_DIST = cpu.c cpu_asm.S
 

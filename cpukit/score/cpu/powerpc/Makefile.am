@@ -42,7 +42,6 @@ $(PROJECT_INCLUDE)/rtems/new-exceptions:
 include_rtems_new_exceptionsdir = $(includedir)/rtems/new-exceptions
 include_rtems_new_exceptions_HEADERS = rtems/new-exceptions/cpu.h
 
-
 $(PROJECT_INCLUDE)/rtems/powerpc:
 	$(mkinstalldirs) $@
 
@@ -61,16 +60,18 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/new-exceptions \
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/powerpc \
     $(include_rtems_powerpc_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h)
 
-# $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).$(OBJEXT): $(ARCH)/rtems.$(OBJEXT)
-#	$(INSTALL_DATA) $< $@
+C_FILES = # cpu.c
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-# $(REL): $(rtems_cpu_rel_OBJECTS)
-#	$(make-rel)
+S_FILES = # cpu_asm.S
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
+libscorecpu_a_OBJECTS = $(C_O_FILES) $(S_O_FILES)
 
-# TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).$(OBJEXT)
+$(LIB): $(libscorecpu_a_OBJECTS)
+	$(make-library)
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
+all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB) \
     $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

@@ -38,17 +38,15 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
-REL = $(ARCH)/rtems-cpu.rel
+LIB = $(ARCH)/libscorecpu.a
 
-rtems_cpu_rel_OBJECTS = $(C_O_FILES) $(S_O_FILES)
+libscorecpu_a_OBJECTS = $(C_O_FILES) $(S_O_FILES)
 
-$(REL): $(rtems_cpu_rel_OBJECTS)
-	$(make-rel)
+$(LIB): $(libscorecpu_a_OBJECTS)
+	$(make-library)
 
-all: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
+all: $(ARCH) $(PREINSTALL_FILES) $(libscorecpu_a_OBJECTS) $(LIB) \
     $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(REL)
 
 EXTRA_DIST = cpu.c cpu_asm.S
 

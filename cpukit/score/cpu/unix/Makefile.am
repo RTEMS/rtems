@@ -34,16 +34,14 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/score \
 C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-REL = $(ARCH)/rtems-cpu.rel
+LIB = $(ARCH)/libscorecpu.a
 
-rtems_cpu_rel_OBJECTS = $(C_O_FILES)
+libscorecpu_a_OBJECTS = $(C_O_FILES)
 
-$(REL): $(rtems_cpu_rel_OBJECTS)
-	$(make-rel)
+$(LIB): $(libscorecpu_a_OBJECTS)
+	$(make-library)
 
-all-local: $(ARCH) $(rtems_cpu_rel_OBJECTS) $(REL)
-
-.PRECIOUS: $(REL)
+all-local: $(ARCH) $(LIB)
 
 EXTRA_DIST = cpu.c
 

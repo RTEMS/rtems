@@ -1,3 +1,7 @@
+2002-07-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Build libscorecpu.a instead of rtems-cpu.rel.
+
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use .$(OBJEXT) instead of .o.
