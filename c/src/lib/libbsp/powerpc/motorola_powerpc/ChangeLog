@@ -1,5 +1,10 @@
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* bootloader/Makefile.am: Remove references to $(top_srcdir).
+	Remove NM, LD. Cosmetics.
+
+2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Explicitly check for NM.
 
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

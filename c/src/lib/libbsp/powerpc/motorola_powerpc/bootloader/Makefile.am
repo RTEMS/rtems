@@ -10,23 +10,20 @@ AUTOMAKE_OPTIONS = no-exeext
 noinst_PROGRAMS = bootloader
 
 ## IMPORTANT: head.S must be first, T. Straumann 12/17/2001
-bootloader_SOURCES = $(top_srcdir)/../../powerpc/shared/bootloader/head.S \
-    $(top_srcdir)/../../powerpc/shared/bootloader/exception.S \
-    $(top_srcdir)/../../powerpc/shared/bootloader/em86real.S \
-    $(top_srcdir)/../../powerpc/shared/bootloader/misc.c \
-    $(top_srcdir)/../../powerpc/shared/bootloader/pci.c \
-    $(top_srcdir)/../../powerpc/shared/bootloader/zlib.c \
-    $(top_srcdir)/../../powerpc/shared/bootloader/mm.c \
-    $(top_srcdir)/../../powerpc/shared/bootloader/em86.c \
-    $(top_srcdir)/../../powerpc/shared/console/polled_io.c \
-    $(top_srcdir)/../../powerpc/shared/bootloader/lib.c \
-    $(top_srcdir)/../../powerpc/shared/bootloader/bootldr.h \
-    $(top_srcdir)/../../powerpc/shared/bootloader/zlib.h \
-    $(top_srcdir)/../../powerpc/shared/bootloader/pci.h \
-    $(top_srcdir)/../../powerpc/shared/console/keyboard.h
-
-NM = @NM@
-LD = @LD@
+bootloader_SOURCES = ../../powerpc/shared/bootloader/head.S \
+    ../../powerpc/shared/bootloader/exception.S \
+    ../../powerpc/shared/bootloader/em86real.S \
+    ../../powerpc/shared/bootloader/misc.c \
+    ../../powerpc/shared/bootloader/pci.c \
+    ../../powerpc/shared/bootloader/zlib.c \
+    ../../powerpc/shared/bootloader/mm.c \
+    ../../powerpc/shared/bootloader/em86.c \
+    ../../powerpc/shared/console/polled_io.c \
+    ../../powerpc/shared/bootloader/lib.c \
+    ../../powerpc/shared/bootloader/bootldr.h \
+    ../../powerpc/shared/bootloader/zlib.h \
+    ../../powerpc/shared/bootloader/pci.h \
+    ../../powerpc/shared/console/keyboard.h
 
 # ----
 DEFAULT_INCLUDES =
@@ -58,11 +55,6 @@ bootloader.$(OBJEXT): bootloader$(EXEEXT)
 
 project_lib_DATA = bootloader.$(OBJEXT)
 project_lib_DATA += ../../shared/bootloader/ppcboot.lds
-
-# FIXME: Tmp-install stuff to make mcp750.cfg's make-exe happy.
-# As mcp750.cfg's make-exe doesn't work outside of the source-tree.
-# We might consider to use this directory directly for in-source-tree
-# building, instead.
 
 all-local: $(TMPINSTALL_FILES)
 
