@@ -1,8 +1,10 @@
-/*
-  ------------------------------------------------------------------------
-  $Id$
-  ------------------------------------------------------------------------
+/**
+ * @file rtems/mkrootfs.h
+ *
+ * RTEMS Root FS creation support.
+ */
 
+/*
   Copyright Cybertec Pty Ltd, 2000
   All rights reserved Cybertec Pty Ltd, 2000
 
@@ -16,10 +18,7 @@
 
   This software with is provided ``as is'' and with NO WARRANTY.
 
-  ------------------------------------------------------------------------
-
-  RTEMS Root FS creatation support.
-
+  $Id$
 */
 
 #ifndef __RTEMS_MKROOTFS_h

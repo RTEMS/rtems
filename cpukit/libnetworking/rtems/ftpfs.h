@@ -1,9 +1,12 @@
-/*
+/**
+ * @file rtems/ftpfs.h
+ *
  * File Transfer Protocol client declarations
  *
  * Transfer file to/from remote host
- *
- *
+ */
+
+/*
  * (c) Copyright 2002
  * Thomas Doerfler
  * IMD Ingenieurbuero fuer Microcomputertechnik
