@@ -3,7 +3,7 @@
 #
 
 The RTEMS TCP/IP stack is a port of the FreeBSD TCP/IP stack.  The following
-copyright and licensing information appliese to this code.
+copyright and licensing information applies to this code.
 
 This code is found under the c/src/libnetworking directory but does not
 constitute the entire contents of that subdirectory.
@@ -22,7 +22,7 @@ are met:
    notice, this list of conditions and the following disclaimer in the
    documentation and/or other materials provided with the distribution.
 3. All advertising materials mentioning features or use of this software
-   must display the following acknowledgement:
+   must display the following acknowledgment:
 	This product includes software developed by the University of
 	California, Berkeley and its contributors.
 4. Neither the name of the University nor the names of its contributors

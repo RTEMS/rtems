@@ -81,9 +81,9 @@ By default, multiprocessing is is not built.  It can be enabled
 for those BSPs supporting it by the --enable-multiprocessing option.
 
 By default, all bsps for a target are built. The bare BSP is not built
-unless directlty specified. There are  two ways of changing this:
+unless directly specified. There are  two ways of changing this:
 
-  + use the --enable-rtemsbsp otion which will set the specified
+  + use the --enable-rtemsbsp option which will set the specified
     bsps as the default bsps, or 
   + set the RTEMS_BSP variable during make (see below).
 
@@ -105,7 +105,7 @@ architecture.  The following targets are supported:
         bare                    see notes
 	
 The cross-compiler is set to $(target)-gcc by default. This can be
-overriden by:
+overridden by:
 
   + using the --program-prefix option to configure to specify the
     string which will prepended to the tool names.  Be sure to include
@@ -170,7 +170,7 @@ following:
 
 The following bsps are supported:
 
-host-based	: posix (on linux, solaris and hpux)
+host-based	: posix (on Linux, Solaris and HPUX)
 
 a29k		: portsw
 i386		: i386ex pc386
@@ -188,13 +188,13 @@ any             : bare
 5. Makefile structure
 =====================
 
-The makefiles have been re-organised. Most gnu-based bsps now use three
+The makefiles have been re-organized. Most gnu-based bsps now use three
 main makefiles:
     + custom/default.cfg,
     + custom/bsp.cfg and
-    + ompilers/gcc-target-default.cfg.
+    + compilers/gcc-target-default.cfg.
 
-Default.cfg sets the deafult values of certain common build options.
+Default.cfg sets the default values of certain common build options.
 
 Bsp.cfg set bsp-specific build options and can also override the
 default settings.
@@ -209,7 +209,7 @@ The top-level configure.in has to be modified if a new target is added
 or if a new bsp is to be built by default. The additions required is
 basically to add which makefiles are to be created by configure and
 to add the target to the selection statement. To re-generate
-configure, autoconf-2.12 is needed.
+configure, autoconf-2.13 and automake-1.14 are needed.
 
 7. Tested configurations
 ========================
@@ -233,17 +233,17 @@ gcc version ???
 TODO
 ====
 
-The install-if-change script requires bash. On solaris systems, this should
-be changed to ksh, since ksh is provided with solaris (bash not).
+The install-if-change script requires bash. On Solaris systems, this should
+be changed to ksh, since ksh is provided with Solaris (bash not).
 
-A fairly rescent version of gawk is needed to build RTEMS. This should be
+A fairly recent version of gawk is needed to build RTEMS. This should be
 changed so that a plain vanilla awk also works. [NOTE: This dependency
 should disappear when the "gcc 2.8 -specs" is finished.]
 
 'make install' should only install necessary files, not the full
 PROJECT_RELEASE directory as now.
 
-Posix port on solaris-2.5 fails due to undefined built-in functions
+Posix port on Solaris-2.5 fails due to undefined built-in functions
 (gcc-2.7.2, might be my installation).
 
 Improve support for 'make CFLAGS=xxx'. 

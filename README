@@ -39,7 +39,7 @@ Ada versus C
 There are two implementations of RTEMS in this source tree -- 
 in Ada and in C.  These two implementations are functionally
 and structurally equivalent.  The C implementation follows
-the packaging conventions and hiearchical nature of the Ada 
+the packaging conventions and hierarchical nature of the Ada 
 implementation.  In addition, a style has been followed which 
 allows one to easily find the corresponding Ada and C 
 implementations.  

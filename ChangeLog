@@ -1,5 +1,9 @@
 2000-09-01	Ralf Corsepius
 
+	* LICENSE.NET, README, README.configure: Spelling corrections.
+
+2000-09-01	Ralf Corsepius
+
 	* aclocal/check-bsps.m4: Fix c4* and sim68000 entries
 
 2000-08-30	Joel Sherrill <joel@OARcorp.com>
