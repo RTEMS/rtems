@@ -427,8 +427,7 @@ set_up_tty(fd, local)
 	}
     }
 /*    baud_rate = 9600;*/
-/* na razie wpisujemy na twardo*/
-
+/* we hardcode it temporarily */
     if (tcsetattr(fd, TCSANOW, &tios) < 0) {
 	syslog(LOG_ERR, "tcsetattr: %m");
 	die(1);

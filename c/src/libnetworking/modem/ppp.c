@@ -75,7 +75,7 @@
 
 #include "ppp.h"
 #if NPPP > 0
-/* na razie wylaczmy kompresje*/
+/* temporarily we switch off the compression */
 
 #include <rtems/rtems_bsdnet.h> /* to get right defines */
 
@@ -216,7 +216,7 @@ int rtems_ppp_driver_attach (struct rtems_bsdnet_ifconfig *config,
 	bpfattach(&sc->sc_bpf, &sc->sc_if, DLT_PPP, PPP_HDRLEN);
 #endif
     }
-/* wpisane na twardo do rtems_glue.c
+/* hardcoded in rtems_glue.c
     netisrs[NETISR_PPP] = pppintr; */
 	return 1;
 }

@@ -15,7 +15,9 @@ easily configurable.
   specific manner.   main.c is particularly guilty of this although
   other files suffer from this also.
 
-+ Find comments in Polish and get Tomasz to translate them. :)
++ Find comments in Polish and get Tomasz to translate them. :) 
+ (DONE but not sure if completely 
+  Radzislaw Galler <rgaller@et.put.poznan.pl>)
 
 + Add netdemo showing configuration and initialization.
 

@@ -321,7 +321,7 @@ char *argv[];
 /* XXX PPPConfiguration */
 	    	char t[100];
 			stat=LockSTBSystemParam();
-			sprintf(t,"Dzwoniê pod numer %s ...",stat->Phone_Number);
+			sprintf(t,"Calling number %s ...",stat->Phone_Number);
 			UnlockSTBSystemParam();	    	
 #endif
 	    	SetStatusInfo(0, t,0);
@@ -344,11 +344,11 @@ char *argv[];
 		if (i<0)
 		{
 	    	char t[100];
-			sprintf(t,"£¹czenie z Internetem z prêdkosci¹ %d baud...",-i);
+			sprintf(t,"Connecting the Internet at %d baud...",-i);
 		    SetStatusInfo(0, t,0);
 		}
 		else		
-			    SetStatusInfo(0, "£¹czenie z Internetem...",0);
+			    SetStatusInfo(0, "Connecting the Internet...",0);
 		syslog(LOG_INFO, "Serial connection established.");
 
 		sleep(1);				/* give it time to set up its terminal */
@@ -382,7 +382,7 @@ char *argv[];
 		lcp_open(0);			/* Start protocol */
 
 		rtems_bsdnet_semaphore_release();
-        SetStatusInfo(0, "Po³¹czenie z Internetem nawi¹zane.",1);
+        SetStatusInfo(0, "Internet connection established.",1);
 
 		for (phase = PHASE_ESTABLISH; phase != PHASE_DEAD;) {
 			wait_input(timeleft(&timo));
@@ -393,7 +393,7 @@ char *argv[];
 			stat=LockSTBSystemParam();
 			if (stat->WantConnection==DontConnect) {
 				stat->ConnectionStatus = NotConnected;
-			    SetStatusInfo(0, "Roz³¹czam siê ...",0);
+			    SetStatusInfo(0, "Disconnecting...",0);
 				lcp_close(0, "");
 				kill_link = 0;
 			}
@@ -414,7 +414,7 @@ char *argv[];
 		 */
 		clean_check();
 		disestablish_ppp(ttyfd);
-	    SetStatusInfo(0, "Po³¹czenie z Internetem zerwane.",1);
+	    SetStatusInfo(0, "Broken internet connection.",1);
 
 		/*
 		 * Run disconnector script, if requested.
@@ -772,7 +772,7 @@ int connect_script(int fd)
 	else
 		stat->provider=DumbLogin;
 	switch (stat->provider) {
-	case Poland_TPSA:
+	case Poland_TPSA:       /* TPSA - Polish Telecom */
 		sprintf(program, scripts[1], stat->Phone_Number, stat->PPP_User, stat->PPP_Password);
 		break;
 	default:

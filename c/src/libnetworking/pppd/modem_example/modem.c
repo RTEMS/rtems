@@ -714,15 +714,15 @@ modem_txDaemon (void *arg)
 	register int level,i,maxonce;
 	while (1)
 	{
-		if (xmt_len==0) //jezeli nic nie ma to czekajmy na event
+		if (xmt_len==0) //if there is nothing then wait for an event
 			rtems_event_receive(START_TRANSMIT_EVENT|INTERRUPT_EVENT,RTEMS_EVENT_ANY | RTEMS_WAIT, RTEMS_NO_TIMEOUT,&events);
 		/* wait for transmit buffer to become empty */
 
-		while(_tx_stop) //tu czekamy na start transmisji
+		while(_tx_stop) //here we are wainting for transmission start
 			rtems_event_receive(INTERRUPT_EVENT|START_TRANSMIT_EVENT,RTEMS_EVENT_ANY | RTEMS_WAIT, RTEMS_NO_TIMEOUT,&events);
 
 		_CPU_ISR_Disable(level);
-		if (*LSR & THRE) //jezeli nie ma transmisji to wyslijmy pierwsze bajty, jezeli jest, same pojda
+		if (*LSR & THRE) //if there is no transmission then send first bytes, if there is one they will go eitherway
 		{
 			maxonce=(xmt_len>14)?14:xmt_len;
 			if (maxonce>0)
@@ -792,8 +792,8 @@ modem_init (int speed)  /* port is the SMC number (i.e. 1 or 2) */
 	set_modem_speed(speed);
   /* Line control setup */
 
-  *LCR = (char)(WL_8 ); /* 8 bitowe slowo */
-  /* bylo NSB - bylo 2 jest 1*/
+  *LCR = (char)(WL_8 ); /* 8 bit word */
+  /* was NSB - was 2 is 1*/
 
   /* Interrupt setup */
   *IER = (char) 0x0f;		/* enable transmit, receive, modem stat int */
@@ -810,9 +810,9 @@ modem_init (int speed)  /* port is the SMC number (i.e. 1 or 2) */
 
 void set_modem_dtr(int how)
 {
-	unsigned char znak;
-	znak=*MCR;
-	*MCR=(how)?(znak|DTR):(znak&(~DTR));	
+	unsigned char ch;
+	ch=*MCR;
+	*MCR=(how)?(ch|DTR):(ch&(~DTR));	
 }	
 void modem_status()
 {
@@ -861,7 +861,7 @@ modemInterruptHandler (rtems_vector_number v)
 		  /*
 		   * Buffer transmitted ?
 		   */
-		if (*LSR & THRE) //jezeli nie ma transmisji (a nie powinno byc) to wyslijmy  bajty
+		if (*LSR & THRE) //if there is no transmission (and it shouldn't be) then send some bytes
 		{
 			maxonce=(xmt_len>14)?14:xmt_len;
 			if (maxonce>0)
@@ -1226,10 +1226,10 @@ rtems_device_driver modem_read(
     for (;;) {
 		if (sc->sc_inq.ifq_head != NULL)
 		{
-/*	      printf("Read : Dane sa w buforze\n");
+/*	      printf("Read : Data are in the buffer\n");
 */			break;
 		}
-/*      printf("Read : Czekam na dane\n");
+/*      printf("Read : Waiting for data\n");
 */
 		status=rtems_semaphore_obtain(ModemData.pppsem,RTEMS_WAIT,ticks);
 		if (_modem_cd==0)
@@ -1319,7 +1319,7 @@ rtems_device_driver modem_write(
 	    m0->m_data += PPP_HDRLEN;
 	    m0->m_len -= PPP_HDRLEN;
 
-/*		printf("Wysylam %d bajtow \n",m0->m_len);
+/*		printf("Sending %d bytes \n",m0->m_len);
 */		n=pppoutput(&sc->sc_if, m0, &dst, (struct rtentry *)0);
 		rtems_bsdnet_semaphore_release();
 		return n;
@@ -1418,19 +1418,19 @@ wait_input(timo)
     rtems_event_set events;
     rtems_interval    ticks;
   rtems_status_code              err;
-	int czekaj=1;
+	int num_wait=1;
     register struct ppp_softc *sc = (struct ppp_softc *)ModemData.t_sc;
     ticks = 1+(timo->tv_sec*1000000+timo->tv_usec)/rtems_bsdnet_microseconds_per_tick;
-	while (czekaj)
+	while (num_wait)
 	{
 			
 		if (sc->sc_inq.ifq_head != NULL)
 			break;
-/*      printf("Wait : Czekam na dane przez %d ticks\n",ticks);
+/*      printf("Wait : Waiting for data for %d ticks\n",ticks);
 */		err=rtems_semaphore_obtain(ModemData.pppsem,RTEMS_WAIT,ticks);
 		if (err==RTEMS_TIMEOUT)
 		{
-/*			printf("TIMEOUT :Brak danych\n");
+/*			printf("TIMEOUT : No data\n");
 */			break;
 		}
 	}
