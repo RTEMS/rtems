@@ -1075,6 +1075,11 @@ int rtems_bsdnet_ifconfig (const char *ifname, unsigned32 cmd, void *param)
 			*((int*) param) = ifreq.ifr_media;
 			break;	
 			
+		case SIOCAIFADDR:
+		case SIOCDIFADDR:
+			r = ioctl(s, cmd, (struct freq *) param);
+			break;
+
 		default:
 			errno = EOPNOTSUPP;
 			r = -1;
