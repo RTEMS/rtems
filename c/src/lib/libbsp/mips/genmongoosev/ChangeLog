@@ -1,3 +1,7 @@
+2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Fix typo.
+
 2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove build-variant support.
