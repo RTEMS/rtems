@@ -3,7 +3,7 @@ dnl
 dnl  $Id$
 
 AC_PREREQ(2.13)
-AC_INIT(wrapup)
+AC_INIT(include)
 RTEMS_TOP(../../../..)
 AC_CONFIG_AUX_DIR(../../../..)
 
@@ -31,6 +31,4 @@ AC_SUBST(BARE_CPU_MODEL)
 AC_OUTPUT( 
 Makefile
 include/Makefile
-stubdr/Makefile
-wrapup/Makefile
 )

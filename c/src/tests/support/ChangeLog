@@ -1,3 +1,12 @@
+2001-01-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Remove stubdr, wrapup, AC_INIT(include).
+	* Makefile.am: Remove stubdr, wrapup.
+	* stubdr/Makefile.am, stubdr/open.c, stubdr/close.c, stubdr/init.c,
+	stubdr/stubdrv.h, stubdr/cntrl.c, stubdr/.cvsignore, stubdr/read.c,
+	stubdr/write.c, wrapup/Makefile.am, wrapup/.cvsignore, stubdr/,
+	wrapup/: Remove.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
