@@ -1,5 +1,9 @@
 2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Use libscore.a.
+
+2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/canonicalize-tools.m4: Remove LD.
 	* automake/lib.am: Remove LD.
 	* Makefile.am: Put preinstall-stamp into CLEANFILES.
