@@ -10,14 +10,16 @@
 *lib:
 %{!qrtems: %(old_lib)} %{!nostdlib: %{qrtems: --start-group \
 %{!qrtems_debug: -lrtemsbsp -lrtemscpu} %{qrtems_debug: -lrtemsbsp_g -lrtemscpu_g} \
--lc -lgcc --end-group  ecrtn%O%s \
+-lc -lgcc --end-group  \
 %{!qnolinkcmds: -T linkcmds%s}}}
 
 *startfile:
-%{!qrtems: %(old_startfile)} %{!nostdlib: %{qrtems:  ecrti%O%s \
+%{!qrtems: %(old_startfile)} %{!nostdlib: %{qrtems:  ecrti%O%s  crtbegin.o%s  \
 %{!qrtems_debug: start.o%s} \
 %{qrtems_debug: start_g.o%s}}}
 
 *link:
 %{!qrtems: %(old_link)} %{qrtems: -Qy -dp -Bstatic -e __rtems_entry_point -u __vectors}
 
+*endfile:
+%{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s ecrtn.o%s}

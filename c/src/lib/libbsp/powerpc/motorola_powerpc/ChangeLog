@@ -1,3 +1,10 @@
+2002-11-14      Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* bsp_specs: Added crtbegin,crtend objects so C++ global objects
+	constructors/destructors run correctly.  
+	* startup/linkcmds: Increased code length and updated the ctor/dtor
+	sections to handle crtbegin, crtend objects.
+> 	
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

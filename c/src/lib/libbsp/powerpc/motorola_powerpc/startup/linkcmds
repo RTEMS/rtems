@@ -7,7 +7,7 @@ ENTRY(_start)
 PROVIDE (__stack = 0);
 MEMORY {
 	VECTORS	: ORIGIN = 0x0 ,  LENGTH = 0x3000
-	CODE : ORIGIN = 0x3000 , LENGTH = 0x100000 
+	CODE : ORIGIN = 0x3000 , LENGTH = 0x200000 
 }
 SECTIONS
 {
@@ -59,13 +59,32 @@ SECTIONS
     *(.gnu.warning)
     *(.gnu.linkonce.t*)
   }  > CODE
-  .init		  : { _init = .; *(.init)	} >CODE
-  .fini		  : { _fini = .; *(.fini)	} >CODE
+  .init		  : { _init = .; KEEP(*(.init))	} >CODE
+  .fini		  : { _fini = .; KEEP(*(.fini))	} >CODE
   .rodata         : { *(.rodata*) *(.gnu.linkonce.r*) }	> CODE
   .rodata1        : { *(.rodata1) }	> CODE
   .eh_frame	  : { *.(eh_frame)		} >CODE
   _etext = .;
   PROVIDE (etext = .);
+
+  /* Adjust the address for the data segment.  We want to adjust up to
+     the same address within the page on the next page up.  */
+  . = ALIGN(0x10000) + (. & (0x10000 - 1));
+  /* Ensure the __preinit_array_start label is properly aligned.  We
+     could instead move the label definition inside the section, but
+     the linker would then create the section even if it turns out to
+     be empty, which isn't pretty.  */
+  . = ALIGN(32 / 8);
+  PROVIDE (__preinit_array_start = .);
+  .preinit_array     : { *(.preinit_array) } >CODE
+  PROVIDE (__preinit_array_end = .);
+  PROVIDE (__init_array_start = .);
+  .init_array     : { *(.init_array) } >CODE
+  PROVIDE (__init_array_end = .);
+  PROVIDE (__fini_array_start = .);
+  .fini_array     : { *(.fini_array) } >CODE
+  PROVIDE (__fini_array_end = .);
+
   .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >CODE
   .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >CODE
   /* Adjust the address for the data segment.  We want to adjust up to
@@ -87,7 +106,7 @@ SECTIONS
   {
     *(.data)
     *(.gnu.linkonce.d*)	
-    CONSTRUCTORS
+    SORT(CONSTRUCTORS)
   } > CODE
   .data1   : { *(.data1) }	> CODE
   PROVIDE (__EXCEPT_START__ = .);
@@ -100,20 +119,60 @@ SECTIONS
      The current compiler no longer needs this, but keep it around for 2.7.2  */
                 PROVIDE (_GOT2_START_ = .);
   .got2           :  { *(.got2) }	> CODE
+
+
+/* removed 11/14, gregm
                 PROVIDE (__CTOR_LIST__ = .);
   .ctors          : { *(.ctors) }	> CODE
                 PROVIDE (__CTOR_END__ = .);
                 PROVIDE (__DTOR_LIST__ = .);
   .dtors          : { *(.dtors) }	> CODE
                 PROVIDE (__DTOR_END__ = .);
+*/
+
+
+  .ctors          :
+  {
+    /* gcc uses crtbegin.o to find the start of
+       the constructors, so we make sure it is
+       first.  Because this is a wildcard, it
+       doesn't matter if the user does not
+       actually link against crtbegin.o; the
+       linker won't look for a file to match a
+       wildcard.  The wildcard also means that it
+       doesn't matter which directory crtbegin.o
+       is in.  */
+    KEEP (*crtbegin.o(.ctors))
+    /* We don't want to include the .ctor section from
+       from the crtend.o file until after the sorted ctors.
+       The .ctor section from the crtend file contains the
+       end of ctors marker and it must be last */
+    KEEP (*(EXCLUDE_FILE (*crtend.o ) .ctors))
+    KEEP (*(SORT(.ctors.*)))
+    KEEP (*(.ctors))
+  } > CODE
+  .dtors          :
+  {
+    KEEP (*crtbegin.o(.dtors))
+    KEEP (*(EXCLUDE_FILE (*crtend.o ) .dtors))
+    KEEP (*(SORT(.dtors.*)))
+    KEEP (*(.dtors))
+  } > CODE
+
+
                 PROVIDE (_FIXUP_START_ = .);
   .fixup          : { *(.fixup) }	> CODE
                 PROVIDE (_FIXUP_END_ = .);
                 PROVIDE (_GOT2_END_ = .);
                 PROVIDE (_GOT_START_ = .);
+
   .got            : { *(.got) }	> CODE
   .got.plt        : { *(.got.plt) }	> CODE
+
                 PROVIDE (_GOT_END_ = .);
+
+  .jcr            : { KEEP (*(.jcr)) } > CODE
+
   /* We want the small data sections together, so single-instruction offsets
      can access them all, and initialized data all before uninitialized, so
      we can shorten the on-disk segment size.  */
