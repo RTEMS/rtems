@@ -58,32 +58,8 @@ done
 ## Adjust paths
 _RTEMS_ADJUST_SRCDIR([rtems_bsp_configure],[src])
 rtems_bsp_configure="$rtems_bsp_configure/configure"
-
-## Remove --cache-file, --srcdir and --enable-rtemsbsp arguments
-## so they do not pile up
-  rtems_bsp_configure_args=
-  for ac_arg in $ac_configure_args; do
-    if test -n "$ac_prev"; then
-      ac_prev=
-      continue
-    fi
-    case "$ac_arg" in
-    -cache-file | --cache-file | --cache-fil | --cache-fi \
-    | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
-      ac_prev=cache_file ;;
-    -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
-    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
-      ;;
-    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
-      ac_prev=srcdir ;;
-    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
-      ;;
-    -enable-rtemsbsp=* | --enable-rtemsbsp=*) ;;
-    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
-      ;;
-    *) rtems_bsp_configure_args="$rtems_bsp_configure_args $ac_arg" ;;
-    esac
-  done
+  RTEMS_CONFIGURE_ARGS_QUOTE([rtems_bsp_configure_args],
+    [--enable-rtemsbsp=* | --enable-rtemsbsp=* ) ;;])
 
 rtems_bsp_configure="$rtems_bsp_configure $rtems_bsp_configure_args"
 AC_SUBST(rtems_bsp_configure)
