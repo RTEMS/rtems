@@ -99,6 +99,7 @@ END-INFO-DIR-ENTRY
 @include memorymgmt.texi
 @include sched.texi
 @include clock.texi
+@include timer.texi
 @include message.texi
 @include thread.texi
 @include key.texi
@@ -126,6 +127,7 @@ This is the online version of the RTEMS POSIX API User's Guide
 * Memory Management Manager::
 * Scheduler Manager::
 * Clock Manager::
+* Timer Manager::
 * Message Passing Manager::
 * Thread Manager::
 * Key Manager::
