@@ -352,4 +352,9 @@
 
 #define SR_IMASKSHIFT	8
 
+
+
+#define MONGOOSEV_IC_SIZE	0x1000		/* instruction cache = 4Kbytes */
+#define MONGOOSEV_DC_SIZE	0x800		/* data cache 2Kbytes */
+
 #endif
