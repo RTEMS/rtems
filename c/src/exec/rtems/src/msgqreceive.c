@@ -60,7 +60,8 @@ rtems_status_code rtems_message_queue_receive(
   register Message_queue_Control *the_message_queue;
   Objects_Locations               location;
   boolean                         wait;
-
+  CORE_message_queue_Submit_types core_priority;
+ 
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
 
@@ -91,6 +92,7 @@ rtems_status_code rtems_message_queue_receive(
         buffer,
         size,
         wait,
+        &core_priority,
         timeout
       );
       _Thread_Enable_dispatch();
