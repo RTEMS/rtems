@@ -14,6 +14,7 @@
 #include <rtems.h>
 #include <rtems/monitor.h>
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>             /* strtoul() */
 
@@ -92,25 +93,25 @@ INITIAL (startup) Configuration Info\n");
 }
 
 
-void
+int
 rtems_monitor_config_dump(
     rtems_monitor_config_t *monitor_config,
     boolean                 verbose
 )
 {
-    uint32_t     length = 0;
+    int     length = 0;
 
     length = 0;
     length += fprintf(stdout,"WORKSPACE");
     length += rtems_monitor_pad(DATACOL, length);
-    length += fprintf(stdout,"start: %p;  size: 0x%x\n",
+    length += fprintf(stdout,"start: %p;  size: 0x%" PRIx32 "\n",
                      monitor_config->work_space_start,
                      monitor_config->work_space_size);
 
     length = 0;
     length += fprintf(stdout,"TIME");
     length += rtems_monitor_pad(DATACOL, length);
-    length += fprintf(stdout,"usec/tick: %d;  tick/timeslice: %d;  tick/sec: %d\n",
+    length += fprintf(stdout,"usec/tick: %" PRId32 ";  tick/timeslice: %" PRId32 ";  tick/sec: %" PRId32 "\n",
                      monitor_config->microseconds_per_tick,
                      monitor_config->ticks_per_timeslice,
                      1000000 / monitor_config->microseconds_per_tick);
@@ -118,7 +119,7 @@ rtems_monitor_config_dump(
     length = 0;
     length += fprintf(stdout,"MAXIMUMS");
     length += rtems_monitor_pad(DATACOL, length);
-    length += fprintf(stdout,"tasks: %d;  timers: %d;  sems: %d;  que's: %d;  ext's: %d\n",
+    length += fprintf(stdout,"tasks: %" PRId32 ";  timers: %" PRId32 ";  sems: %" PRId32 ";  que's: %" PRId32 ";  ext's: %" PRId32 "\n",
                      monitor_config->maximum_tasks,
                      monitor_config->maximum_timers,
                      monitor_config->maximum_semaphores,
@@ -126,9 +127,10 @@ rtems_monitor_config_dump(
                      monitor_config->maximum_extensions);
     length = 0;
     length += rtems_monitor_pad(CONTCOL, length);
-    length += fprintf(stdout,"partitions: %d;  regions: %d;  ports: %d;  periods: %d\n",
+    length += fprintf(stdout,"partitions: %" PRId32 ";  regions: %" PRId32 ";  ports: %" PRId32 ";  periods: %" PRId32 "\n",
                      monitor_config->maximum_partitions,
                      monitor_config->maximum_regions,
                      monitor_config->maximum_ports,
                      monitor_config->maximum_periods);
+    return length;
 }

@@ -143,7 +143,7 @@ stack_check_dope_stack(Stack_Control *stack)
  *  Stack_check_Initialize
  */
 
-uint32_t   stack_check_initialized = 0;
+static int   stack_check_initialized = 0;
 
 void Stack_check_Initialize( void )
 {

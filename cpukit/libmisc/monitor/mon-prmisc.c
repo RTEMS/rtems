@@ -18,6 +18,7 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <inttypes.h>
 
 void
 rtems_monitor_separator(void)
@@ -53,13 +54,13 @@ rtems_monitor_dump_char(char ch)
 int
 rtems_monitor_dump_decimal(uint32_t   num)
 {
-    return fprintf(stdout,"%4d", num);
+    return fprintf(stdout,"%4" PRId32, num);
 }
 
 int
 rtems_monitor_dump_hex(uint32_t   num)
 {
-    return fprintf(stdout,"0x%x", num);
+    return fprintf(stdout,"0x%" PRIx32, num);
 }
 
 int
@@ -84,7 +85,7 @@ rtems_monitor_dump_assoc_bitfield(
             if (name)
                 length += fprintf(stdout,"%s", name);
             else
-                length += fprintf(stdout,"0x%x", b);
+                length += fprintf(stdout,"0x%" PRIx32, b);
         }
 
     return length;
@@ -93,7 +94,7 @@ rtems_monitor_dump_assoc_bitfield(
 int
 rtems_monitor_dump_id(rtems_id id)
 {
-    return fprintf(stdout,"%08x", id);
+    return fprintf(stdout,"%08" PRIx32, id);
 }
 
 int
@@ -121,7 +122,7 @@ rtems_monitor_dump_name(rtems_name name)
 int
 rtems_monitor_dump_priority(rtems_task_priority priority)
 {
-    return fprintf(stdout,"%3d", priority);
+    return fprintf(stdout,"%3" PRId32, priority);
 }
 
 
@@ -262,7 +263,7 @@ rtems_monitor_dump_notepad(uint32_t   *notepad)
 
     for (i=0; i < RTEMS_NUMBER_NOTEPADS; i++)
         if (notepad[i])
-            length += fprintf(stdout,"%d: 0x%x ", i, notepad[i]);
+            length += fprintf(stdout,"%d: 0x%" PRIx32, i, notepad[i]);
 
     return length;
 }

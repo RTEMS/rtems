@@ -12,6 +12,7 @@
 #include <rtems.h>
 #include <rtems/monitor.h>
 
+#include <inttypes.h>
 #include <stdio.h>
 
 /*
@@ -101,7 +102,8 @@ rtems_monitor_init_task_dump(
     length += rtems_monitor_symbol_dump(&monitor_itask->entry, verbose);
 
     length += rtems_monitor_pad(25, length);
-    length += fprintf(stdout,"%d [0x%x]", monitor_itask->argument, monitor_itask->argument);
+    length += fprintf(stdout,"%" PRId32 " [0x%" PRIx32 "]", 
+      monitor_itask->argument, monitor_itask->argument);
 
     length += rtems_monitor_pad(39, length);
     length += rtems_monitor_dump_priority(monitor_itask->priority);
@@ -113,7 +115,8 @@ rtems_monitor_init_task_dump(
     length += rtems_monitor_dump_attributes(monitor_itask->attributes);
 
     length += rtems_monitor_pad(66, length);
-    length += fprintf(stdout,"%d [0x%x]", monitor_itask->stack_size, monitor_itask->stack_size);
+    length += fprintf(stdout,"%" PRId32 " [0x%" PRIx32 "]",
+      monitor_itask->stack_size, monitor_itask->stack_size);
 
     fprintf(stdout,"\n");
 }

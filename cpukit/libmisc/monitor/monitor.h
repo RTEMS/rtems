@@ -386,7 +386,7 @@ void      *rtems_monitor_manager_next(void *, void *, rtems_id *);
 void       rtems_monitor_config_canonical(rtems_monitor_config_t *, void *);
 void      *rtems_monitor_config_next(void *, rtems_monitor_config_t *, rtems_id *);
 void       rtems_monitor_config_dump_header(boolean);
-void       rtems_monitor_config_dump(rtems_monitor_config_t *, boolean verbose);
+int        rtems_monitor_config_dump(rtems_monitor_config_t *, boolean verbose);
 
 /* mpci.c */
 #if defined(RTEMS_MULTIPROCESSING)

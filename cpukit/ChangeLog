@@ -1,5 +1,11 @@
 2004-11-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* monitor/monitor.h: Let rtems_monitor_config_dump return int.
+	* monitor/mon-config.c: Ditto. Use PRI*N macros.
+	* monitor/mon-itask.c, monitor/mon-prmisc.c: Use PRI*N macros.
+
+2004-11-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* configure.ac: Remove -ansi (Cygwin breaks with it).
 	* libcsupport/include/stdint.h: Use sys/_stdint.h to setup fixed
 	size types.
