@@ -1,3 +1,37 @@
+2001-01-12	Sergei Organov <osv@javad.ru>
+
+	* rtems_servers/ftpd.c, rtems_servers/ftpd.h: Major enhancements
+	as listed below:
+	    - use pool of pre-created threads to handle sessions instead of
+  	      creating/deleting threads on the fly
+	    - LIST output is now similar to what "/bin/ls -al" would output,
+	      thus FTP clients such Netscape are happy with it.
+	    - LIST NAME now works (both for files and directories)
+	    - added support for NLST, CDUP, and MDTM FTP commands to make
+	      more FTP clients happy 
+	    - keep track of CWD for every session separately
+	    - ability to specify root directory name for FTPD in configuration
+	      table. FTPD will then create illusion for FTP clients that this
+	      is actually root directory.
+	    - ignore options sent in commands, thus LIST -al FILE works and
+	      doesn't try to list "-al" directory.
+	    - buffers are allocated on stack instead of heap where possible to
+	      eliminate malloc/free calls (avoid possible heap fragmentation
+	      troubles).
+	    - drop using of task notepad to pass parameters - use function
+	      arguments instead
+	    - use snprintf() instead of sprintf() as the latter is unsafe
+	    - use of PF_INET in socket() instead of AF_INET
+
+	    Here are ftp clients I've tried new FTPD with (all of them
+	    running on Debian GNU/Linux 2.2):
+
+	         Lftp 2.1.10
+	         NcFTP 2.4.3
+	         Netscape 4.75
+	         ftp
+	         mc 4.5.49
+
 2001-01-02	Joel Sherrill <joel@OARcorp.com>
 
 	* CHANGELOG: Removed.

@@ -25,6 +25,8 @@ struct rtems_ftpd_configuration
                                                /*    for hooks        */
    int                     port;               /* Well-known port     */
    struct rtems_ftpd_hook  *hooks;             /* List of hooks       */
+   char const              *root;              /* Root for FTPD or 0 for / */
+   int                     tasks_count;        /* Max. connections    */
 };
 
 /*
