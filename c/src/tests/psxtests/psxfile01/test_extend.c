@@ -21,6 +21,8 @@
 
 #include <assert.h>
 
+#include <pmacros.h>
+
 /*
  *  test_extend routine
  */
@@ -37,7 +39,7 @@ void test_extend(
   fd = open( file, O_WRONLY );
   if ( fd == -1 ) {
     printf( "test_extend: open( %s ) failed : %s\n", file, strerror( errno ) );
-    exit( 0 );
+    rtems_test_exit( 0 );
   }
 
   status = lseek( fd, offset - 1, SEEK_SET );
@@ -46,13 +48,13 @@ void test_extend(
   status = write( fd, &c, 1 );
   if ( status == -1 ) {
     printf( "test_extend: write( %s ) failed : %s\n", file, strerror( errno ) );
-    exit( 0 );
+    rtems_test_exit( 0 );
   }
 
   if ( status != 1 ) {
     printf( "test_extend: write( %s ) only wrote %d of %d bytes\n",
             file, status, 1 );
-    exit( 0 );
+    rtems_test_exit( 0 );
   }
 
   status = close( fd );

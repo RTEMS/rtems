@@ -1,3 +1,25 @@
+2002-08-01	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR47 add support for buffered test output.  This involved
+	adding defines to redirect output to a buffer and dump it when
+	full, at "test pause", and at exit.  To avoid problems when redefining
+	exit(), all tests were modified to call rtems_test_exit().
+	Some tests, notable psxtests, had to be modified to include 
+	the standard test macro .h file (pmacros.h or tmacros.h) to
+	enable this support.
+	* include/pmacros.h, psx01/task.c, psx02/init.c, psx02/task.c,
+	psx03/init.c, psx04/init.c, psx05/init.c, psx06/init.c, psx07/init.c,
+	psx08/task3.c, psx09/init.c, psx10/init.c, psx11/init.c,
+	psx12/init.c, psx13/Makefile.am, psx13/main.c, psx13/test.c,
+	psxcancel/init.c, psxchroot01/Makefile.am, psxchroot01/main.c,
+	psxchroot01/test.c, psxfile01/Makefile.am, psxfile01/main.c,
+	psxfile01/test.c, psxfile01/test_cat.c, psxfile01/test_extend.c,
+	psxfile01/test_write.c, psxmount/Makefile.am, psxmount/main.c,
+	psxmount/test.c, psxmsgq01/init.c, psxreaddir/Makefile.am,
+	psxreaddir/main.c, psxreaddir/test.c, psxsem01/init.c,
+	psxstat/Makefile.am, psxstat/main.c, psxstat/test.c, psxtime/main.c,
+	psxtime/test.c, psxtimer/psxtimer.c: Modified.
+
 2002-07-05	Joel Sherrill <joel@OARcorp.com>
 
 	* psxcancel/Makefile.am, psxcancel/init.c, psxcancel/psxcancel.scn:

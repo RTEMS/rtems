@@ -17,6 +17,8 @@
 
 #include <assert.h>
 
+#include <pmacros.h>
+
 /*
  *  test_cat routine
  */
@@ -44,7 +46,7 @@ void test_cat(
   fd = open( file, O_RDONLY );
   if ( fd == -1 ) {
     printf( "test_cat: open( %s ) failed : %s\n", file, strerror( errno ) );
-    exit( 0 );
+    rtems_test_exit( 0 );
   }
 
   for ( ;; ) {

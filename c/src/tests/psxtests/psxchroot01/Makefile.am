@@ -29,6 +29,8 @@ include $(top_srcdir)/psxtests.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
+AM_CPPFLAGS += -I$(top_srcdir)/include
+
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 

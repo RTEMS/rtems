@@ -114,7 +114,7 @@ void *POSIX_Init(
   printf( "Destructor invoked %d times\n", Destructor_invoked );
 
   puts( "*** END OF POSIX TEST 6 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
 }

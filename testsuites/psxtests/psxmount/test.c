@@ -31,6 +31,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <imfs.h>
+#include <pmacros.h>
 
 extern rtems_filesystem_location_info_t rtems_filesystem_current;
 
@@ -441,6 +442,6 @@ int main(
   assert( status == 0 );
 
   printf( "\n\n*** END OF MOUNT/UNMOUNT TEST ***\n" );
-  exit(0);
+  rtems_test_exit(0);
 }
 

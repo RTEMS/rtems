@@ -24,6 +24,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <imfs.h>
+#include <pmacros.h>
 
 #define MAXSYMLINK 5   /* There needs to be a better way of getting this. */
 #define TIMEOUT_VALUE  ( 5 * TICKS_PER_SECOND )
@@ -845,7 +846,7 @@ int main(
   chown_multiple_files( Links_to_Dirs );
  
   puts( "\n\n*** END OF STAT TEST 01 ***" );
-  exit(0);
+  rtems_test_exit(0);
 }
 
 

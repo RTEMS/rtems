@@ -16,6 +16,8 @@
 
 #include <assert.h>
 
+#include <pmacros.h>
+
 /*
  *  test_write routine
  */
@@ -36,7 +38,7 @@ void test_write(
   fd = open( file, O_WRONLY );
   if ( fd == -1 ) {
     printf( "test_write: open( %s ) failed : %s\n", file, strerror( errno ) );
-    exit( 0 );
+    rtems_test_exit( 0 );
   }
 
   status = lseek( fd, offset, SEEK_SET );
@@ -45,13 +47,13 @@ void test_write(
   status = write( fd, buffer, length );
   if ( status == -1 ) {
     printf( "test_write: write( %s ) failed : %s\n", file, strerror( errno ) );
-    exit( 0 );
+    rtems_test_exit( 0 );
   }
 
   if ( status != length ) {
     printf( "test_write: write( %s ) only wrote %d of %d bytes\n",
             file, status, length );
-    exit( 0 );
+    rtems_test_exit( 0 );
   }
 
   status = close( fd );

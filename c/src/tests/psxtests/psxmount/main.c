@@ -7,6 +7,7 @@
 #define TEST_INIT
 
 #include <bsp.h>
+#include <pmacros.h>
 
 void test_main( void );
 
@@ -15,7 +16,7 @@ rtems_task Init(
 )
 {
   test_main();
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 
 /* configuration information */

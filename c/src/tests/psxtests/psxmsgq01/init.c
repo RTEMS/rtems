@@ -1157,7 +1157,7 @@ void *POSIX_Init(
   verify_with_threads();
   
   puts( "*** END OF POSIX MESSAGE QUEUE TEST ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
 }

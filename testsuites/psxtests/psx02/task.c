@@ -38,7 +38,7 @@ void *Task_1_through_3(
     assert( !seconds );
   }
   puts( "*** END OF POSIX TEST 2 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
 }

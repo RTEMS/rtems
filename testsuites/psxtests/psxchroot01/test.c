@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <rtems/libio.h>
+#include <pmacros.h>
 
 void touch( char *file )
 {
@@ -117,6 +118,6 @@ int main(
   printf( "%s on /two/two.test\n", (!status) ? "SUCCESS" : "FAILURE" );
 
   printf( "*** END OF CHROOT01 TEST ***\n" );
-  exit(0);
+  rtems_test_exit(0);
 }
 

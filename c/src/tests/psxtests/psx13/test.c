@@ -34,6 +34,8 @@
 
 #include <stdio.h>
 
+#include <pmacros.h>
+
 /*-------------------------------------------------------------------
  * InitFiles function
  *
@@ -669,7 +671,7 @@ int main(
     printf ("\n\nError opening files for write!!!!\n");
 
   printf( "\n\n*** END OF TEST PSX13 ***" );
-  exit(0);
+  rtems_test_exit(0);
 }
 
 

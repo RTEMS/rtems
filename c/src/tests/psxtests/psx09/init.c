@@ -219,7 +219,7 @@ void *POSIX_Init(
   print_current_time( "Init: ", buffer );
 
   puts( "*** END OF POSIX TEST 9 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
 }

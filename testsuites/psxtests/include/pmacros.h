@@ -13,6 +13,8 @@
 #include <time.h>
 #include <unistd.h>
 
+#include <buffer_test_io.h>
+
 /*
  *  These help manipulate the "struct tm" form of time
  */
@@ -67,16 +69,16 @@
 
 #define print_current_time(s1, s2) \
   do { \
-    char _buffer[32]; \
+    char _time_buffer[32]; \
     int  _status; \
     struct timespec _tv; \
     \
     _status = clock_gettime( CLOCK_REALTIME, &_tv ); \
     assert( !_status ); \
     \
-    (void) ctime_r( &_tv.tv_sec, _buffer ); \
-    _buffer[ strlen( _buffer ) - 1 ] = 0; \
-    printf( "%s%s%s\n", s1, _buffer, s2 ); \
+    (void) ctime_r( &_tv.tv_sec, _time_buffer ); \
+    _time_buffer[ strlen( _time_buffer ) - 1 ] = 0; \
+    printf( "%s%s%s\n", s1, _time_buffer, s2 ); \
     fflush(stdout); \
   } while ( 0 )
 

@@ -503,7 +503,7 @@ int main(
   test_case_reopen_append();
 
   printf( "*** END OF FILE TEST 1 ***\n" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 
 /*

@@ -101,7 +101,7 @@ void *POSIX_Init(
   assert( !status );
 
   puts( "*** END OF POSIX TEST 11 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
 }

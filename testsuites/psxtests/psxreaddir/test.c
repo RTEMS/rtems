@@ -48,6 +48,7 @@ int scandir ( const char *dirname,
 
 #if defined(__rtems__)
 #define d_type d_reclen
+#include <pmacros.h>
 #endif
 
 void printdir( DIR *directory )
@@ -495,6 +496,6 @@ int main(
 
   test_across_mount();
   printf( "\n\n*** END OF READDIR TEST ***\n" );
-  exit(0);
+  rtems_test_exit(0);
 }
 

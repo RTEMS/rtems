@@ -29,6 +29,7 @@
 #include <sched.h>
 
 #include <bsp.h> /* for device driver prototypes */
+#include <pmacros.h>
 
 rtems_task Init( rtems_task_argument argument);
 
@@ -92,7 +93,7 @@ int main(){
     task_ret = pthread_create(&count, NULL, (void *) countTaskDeferred, (void *) &taskparameter);
     if (task_ret) {
       perror("pthread_create: countTask");
-      exit(EXIT_FAILURE);
+      rtems_test_exit(EXIT_FAILURE);
     }
     /* sleep for 5 seconds, then cancel it */
     sleep(5);
@@ -106,7 +107,7 @@ int main(){
     task_ret = pthread_create(&count, NULL, (void *) countTaskAsync, (void *) &taskparameter);
     if (task_ret) {
       perror("pthread_create: countTask");
-      exit(EXIT_FAILURE);
+      rtems_test_exit(EXIT_FAILURE);
     }
     /* sleep for 5 seconds, then cancel it */
     sleep(5);
@@ -120,7 +121,7 @@ int main(){
 #ifdef __linux__
   return 0;
 #else
-  exit(EXIT_SUCCESS);
+  rtems_test_exit(EXIT_SUCCESS);
 #endif
 }
 

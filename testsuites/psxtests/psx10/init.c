@@ -305,7 +305,7 @@ void *POSIX_Init(
   sleep( 1 );
 
   puts( "*** END OF POSIX TEST 10 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
 }

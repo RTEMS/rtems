@@ -239,7 +239,7 @@ void *POSIX_Init(
   /* Try adding in unlinking before closing... (can we still open?) */
 
   puts( "*** POSIX SEMAPHORE MANAGER TEST 1 COMPLETED ***" );
-  exit(0);
+  rtems_test_exit(0);
 
   return NULL; /* just so the compiler thinks we returned something */
 }
