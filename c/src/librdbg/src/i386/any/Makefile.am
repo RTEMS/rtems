@@ -20,7 +20,7 @@ S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 
 # Generated C source names, if any, go here -- minus the .c
 GEN_C_FILES = remdeb_xdr.c remdeb_svc.c
-GEN_C_O_FILES = $(GEN_C_PIECES:%.c=${ARCH}/%.o)
+GEN_C_O_FILES = $(GEN_C_FILES:%.c=${ARCH}/%.o)
 
 # H source names, if any, go here -- minus the .h
 H_FILES = remdeb.h
