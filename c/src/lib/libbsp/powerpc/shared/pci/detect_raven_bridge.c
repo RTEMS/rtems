@@ -3,6 +3,7 @@
  */
 
 #include <libcpu/io.h>
+#include <libcpu/spr.h>
 
 #include <bsp.h>
 #include <bsp/pci.h>
@@ -12,6 +13,8 @@
 
 #include <rtems/bspIo.h>
 
+SPR_RW(HID0)
+
 #define RAVEN_MPIC_IOSPACE_ENABLE	0x1
 #define RAVEN_MPIC_MEMSPACE_ENABLE	0x2
 #define RAVEN_MASTER_ENABLE		0x4
@@ -19,10 +22,42 @@
 #define RAVEN_SYSTEM_ERROR_ENABLE	0x100
 #define RAVEN_CLEAR_EVENTS_MASK		0xf9000000
 
+#define RAVEN_MPIC_MEREN		0xfeff0020
+#define RAVEN_MPIC_MERST		0xfeff0024
+/* enable machine check on all conditions
+ * EXCEPT for signalled master abort (which
+ * can be caused by PCI configuration space
+ * accesses to non-present devices)
+ * - of course, this is sort of a hack :-(
+ */
+#define MEREN_VAL				0x2d00
+
 #define pci BSP_pci_configuration
 
 extern const pci_config_access_functions pci_direct_functions;
 extern const pci_config_access_functions pci_indirect_functions;
+
+unsigned long
+_BSP_clear_hostbridge_errors(int enableMCP, int quiet)
+{
+unsigned merst;
+
+		merst = in_be32(RAVEN_MPIC_MERST);
+		/* write back value to clear status */
+		out_be32(RAVEN_MPIC_MERST, merst);
+
+		if (enableMCP) {
+			if (!quiet)
+				printk("Enabling MCP generation on hostbridge errors\n");
+			out_be32(RAVEN_MPIC_MEREN, MEREN_VAL);
+			_write_HID0(_read_HID0() | HID0_EMCP );
+		} else {
+			if ( !quiet && enableMCP ) {
+				printk("leaving MCP interrupt disabled\n");
+			}
+		}
+		return (merst & 0xffff);
+}
 
 void detect_host_bridge()
 {
