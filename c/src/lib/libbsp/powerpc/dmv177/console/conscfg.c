@@ -142,13 +142,14 @@ mc68681_baud_t
 #endif
 
 boolean dmv177_z85c30_probe(int minor);
+boolean dmv177_mc68681_probe(int minor);
 
 console_tbl	Console_Port_Tbl[] = {
 	{
 		"/dev/com0",			/* sDeviceName */
                 SERIAL_MC68681,                 /* deviceType */
 		MC68681_FUNCTIONS,		/* pDeviceFns */
-		NULL,				/* deviceProbe */
+		dmv177_mc68681_probe,		/* deviceProbe */
 		NULL,				/* pDeviceFlow */
 		16,				/* ulMargin */
 		8,				/* ulHysteresis */
@@ -167,7 +168,7 @@ console_tbl	Console_Port_Tbl[] = {
 		"/dev/com1",			/* sDeviceName */
                 SERIAL_MC68681,                 /* deviceType */
 		MC68681_FUNCTIONS,		/* pDeviceFns */
-		NULL,				/* deviceProbe */
+		dmv177_mc68681_probe,		/* deviceProbe */
 		NULL,				/* pDeviceFlow */
 		16,				/* ulMargin */
 		8,				/* ulHysteresis */
@@ -234,15 +235,26 @@ console_data  Console_Port_Data[NUM_CONSOLE_PORTS];
 
 rtems_device_minor_number  Console_Port_Minor;
 
+/*
+ *  Hopefully, by checking the card resource register, this BSP
+ *  will be able to operate on the DMV171, DMV176, or DMV177.
+ */
+
 boolean dmv177_z85c30_probe(int minor)
 {
   volatile unsigned32 *dma_control_status_reg;
+  volatile unsigned32 *card_resource_reg;
+
+  card_resource_reg = (volatile unsigned32 *) DMV170_CARD_RESORCE_REG;
+
+  if ( !(*card_resource_reg & DMV170_DUART_PRESENT_BIT) )
+    return FALSE;
 
   /*
    *  Figure out the clock speed of the Z85C30 SCC
    */
 
-  dma_control_status_reg = DMV170_DMA_CONTROL_STATUS_REG;
+  dma_control_status_reg = (volatile unsigned32 *)DMV170_DMA_CONTROL_STATUS_REG;
 
   if ( *dma_control_status_reg & DMV170_SCC_10MHZ )
     Console_Port_Tbl[minor].ulClock = Z85C30_CLOCK_10;
@@ -250,4 +262,16 @@ boolean dmv177_z85c30_probe(int minor)
     Console_Port_Tbl[minor].ulClock = Z85C30_CLOCK_2;
 
   return TRUE;
+}
+
+boolean dmv177_mc68681_probe(int minor)
+{
+  volatile unsigned32 *card_resource_reg;
+
+  card_resource_reg = (volatile unsigned32 *) DMV170_CARD_RESORCE_REG;
+
+  if ( *card_resource_reg & DMV170_DUART_PRESENT_BIT )
+    return TRUE;
+
+  return FALSE;
 }

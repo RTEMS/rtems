@@ -31,12 +31,14 @@
  * all others being given the name indicated.
  */
 
+boolean dmv177_icm7170_probe(int minor);
+
 rtc_tbl	RTC_Table[] = {
 	{
 		"/dev/rtc0",			/* sDeviceName */
                 RTC_ICM7170,                    /* deviceType */
 		&icm7170_fns,			/* pDeviceFns */
-		rtc_probe,			/* deviceProbe */
+		dmv177_icm7170_probe,		/* deviceProbe */
 		(void *) ICM7170_AT_1_MHZ,	/* pDeviceParams */
 		DMV170_RTC_ADDRESS,		/* ulCtrlPort1 */
 		NULL,				/* ulDataPort */
@@ -54,3 +56,21 @@ rtc_tbl	RTC_Table[] = {
 unsigned long  RTC_Count = NUM_RTCS;
 
 rtems_device_minor_number  RTC_Minor;
+
+/*
+ *  Hopefully, by checking the card resource register, this BSP
+ *  will be able to operate on the DMV171, DMV176, or DMV177.
+ */
+
+boolean dmv177_icm7170_probe(int minor)
+{
+  volatile unsigned32 *card_resource_reg;
+
+  card_resource_reg = (volatile unsigned32 *) DMV170_CARD_RESORCE_REG;
+
+  if ( *card_resource_reg & DMV170_RTC_PRESENT_BIT )
+    return TRUE;
+
+  return FALSE;
+}
+

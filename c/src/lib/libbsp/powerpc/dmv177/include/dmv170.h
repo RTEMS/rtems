@@ -272,6 +272,17 @@ extern "C" {
 #define SCV64_Is_IRQ4( _status ) (_status&0x10)
 #define SCV64_Is_IRQ5( _status ) (_status&0x20)
 
+
+/*
+ *  Card Resource Register Constants
+ */
+
+#define DMV170_DUART_PRESENT_BIT  0x0100
+#define DMV170_SONIC_PRESENT_BIT  0x0200
+#define DMV170_16MBYTES_FLASH_BIT 0x0400
+#define DMV170_SCC_PRESENT_BIT    0x0800
+#define DMV170_RTC_PRESENT_BIT    0x1000
+
 /*
  *  scv64.c
  */
