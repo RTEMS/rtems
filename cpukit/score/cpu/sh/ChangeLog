@@ -1,3 +1,9 @@
+2004-04-06	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Remove (Merged into$(top_srcdir)/configure.ac).
+	* Makefile.am: Don't include multilib.am.
+	Reflect merging configure.ac into $(top_srcdir)/configure.ac.
+
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* Makefile.am: Install asm.h to $(includedir)/rtems.

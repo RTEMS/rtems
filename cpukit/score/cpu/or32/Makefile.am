@@ -2,10 +2,7 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../aclocal
-
-include $(top_srcdir)/../../../automake/multilib.am
-include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/automake/compile.am
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS= asm.h
@@ -62,4 +59,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpu_asm.h
 CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/automake/local.am
