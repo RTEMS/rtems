@@ -4,12 +4,11 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = ${ARCH}/console-generic.rel
+PGM = $(ARCH)/console-generic.rel
 
-## C sources
 C_FILES = console-generic.c
 
-console_generic_rel_OBJECTS = $(C_FILES:%.c=${ARCH}/%.o)
+console_generic_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/lib.am
@@ -23,8 +22,10 @@ AM_CFLAGS = $(CFLAGS_OS_V)
 $(PGM): $(console_generic_rel_OBJECTS)
 	$(make-rel)
 
-all-local: ${ARCH} $(PGM)
+all-local: $(ARCH) $(console_generic_rel_OBJECTS) $(PGM)
 
-EXTRA_DIST = $(C_FILES)
+.PRECIOUS: $(PGM)
+
+EXTRA_DIST = console-generic.c
 
 include $(top_srcdir)/../../../../../automake/local.am

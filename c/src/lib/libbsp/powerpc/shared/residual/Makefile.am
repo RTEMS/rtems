@@ -7,7 +7,6 @@ AUTOMAKE_OPTIONS = foreign 1.4
 C_FILES = residual.c
 
 H_FILES = pnp.h residual.h
-noinst_HEADERS = $(H_FILES)
 
 $(PROJECT_INCLUDE)/bsp:
 	$(mkinstalldirs) $@
@@ -15,9 +14,11 @@ $(PROJECT_INCLUDE)/bsp:
 $(PROJECT_INCLUDE)/bsp/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp \
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp \
     $(H_FILES:%.h=$(PROJECT_INCLUDE)/bsp/%.h)
 
-EXTRA_DIST = $(C_FILES)
+all-local: $(PREINSTALL_FILES)
+
+EXTRA_DIST = pnp.h residual.c residual.h
 
 include $(top_srcdir)/../../../../../automake/local.am

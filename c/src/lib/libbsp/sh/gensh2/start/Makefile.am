@@ -4,11 +4,10 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGMS = ${ARCH}/start.o
+PGMS = $(ARCH)/start.o
 
-## Assembly source names
 S_FILES = start.S
-S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
 OBJS = $(S_O_FILES)
 
@@ -19,9 +18,13 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-all-local: ${ARCH} $(OBJS)
-	@$(INSTALL_VARIANT) -m 755 ${PGMS} $(PROJECT_RELEASE)/lib
+$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(PGMS)
+	$(INSTALL_DATA) $< $@
 
-EXTRA_DIST = $(S_FILES)
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
+
+all-local: $(ARCH) $(OBJS) $(TMPINSTALL_FILES)
+
+EXTRA_DIST = start.S start.ram start.rom
 
 include $(top_srcdir)/../../../../../../automake/local.am

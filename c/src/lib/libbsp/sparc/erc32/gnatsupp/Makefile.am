@@ -6,11 +6,10 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 VPATH = @srcdir@:@srcdir@/../../../shared
 
-PGM = ${ARCH}/gnatsupp.rel
+PGM = $(ARCH)/gnatsupp.rel
 
-## C source names
 C_FILES = gnatsupp.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
@@ -21,11 +20,13 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-$(PGM): ${OBJS}
+$(PGM): $(OBJS)
 	$(make-rel)
 
-all-local: ${ARCH} $(PGM)
+all-local: $(ARCH) $(OBJS) $(PGM)
 
-EXTRA_DIST = $(C_FILES)
+.PRECIOUS: $(PGM)
+
+EXTRA_DIST = gnatsupp.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

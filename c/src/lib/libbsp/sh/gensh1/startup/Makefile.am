@@ -4,14 +4,13 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = ${ARCH}/startup.rel
+PGM = $(ARCH)/startup.rel
 
 VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
    
-## C source names
 C_FILES = bsplibc.c bsppost.c bspstart.c bspclean.c sbrk.c bootcard.c main.c \
     gnatinstallhandler.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
@@ -24,7 +23,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 AM_CPPFLAGS += -DHZ=$(HZ)
 
-$(PGM): ${OBJS}
+$(PGM): $(OBJS)
 	$(make-rel)
 
 $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
@@ -32,7 +31,9 @@ $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
 
-all-local: ${ARCH} $(PREINSTALL_FILES) $(PGM) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+
+.PRECIOUS: $(PGM)
 
 EXTRA_DIST = bspclean.c bspstart.c linkcmds
 

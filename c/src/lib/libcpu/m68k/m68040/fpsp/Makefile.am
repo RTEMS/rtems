@@ -4,26 +4,23 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = ${ARCH}/fpsp.rel
+PGM = $(ARCH)/fpsp.rel
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/lib.am
 
-# C source names, if any, go here -- minus the .c
 C_FILES = rtems_fpsp.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 H_FILES = fpsp.defs
-noinst_HEADERS = fpsp.defs
 
-# Assembly source names, if any, go here -- minus the .S
 S_FILES = bindec.S binstr.S bugfix.S decbin.S do_func.S gen_except.S \
     get_op.S kernel_ex.S res_func.S round.S rtems_skel.S sacos.S sasin.S \
     satan.S satanh.S scale.S scosh.S setox.S sgetem.S sint.S slog2.S slogn.S \
     smovecr.S srem_mod.S ssin.S ssinh.S stan.S stanh.S sto_res.S stwotox.S \
     tbldo.S util.S x_bsun.S x_fline.S x_operr.S x_ovfl.S x_snan.S x_store.S \
     x_unfl.S x_unimp.S x_unsupp.S
-S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES) $(S_O_FILES)
 
@@ -33,15 +30,20 @@ OBJS = $(C_O_FILES) $(S_O_FILES)
 
 AM_CFLAGS += $(CFLAGS_OS_V)
 
-$(PGM): ${OBJS}
+$(PGM): $(OBJS)
 	$(make-rel)
 
 if m68040
-all-local: ${ARCH} $(PGM)
-else
-all-local:
+all-local: $(ARCH) $(OBJS) $(PGM)
 endif
 
-EXTRA_DIST = $(S_FILES) $(C_FILES)
+.PRECIOUS: $(PGM)
+
+EXTRA_DIST = README bindec.S binstr.S bugfix.S decbin.S do_func.S fpsp.defs \
+    gen_except.S get_op.S kernel_ex.S res_func.S round.S rtems_fpsp.c \
+    rtems_skel.S sacos.S sasin.S satan.S satanh.S scale.S scosh.S setox.S \
+    sgetem.S sint.S slog2.S slogn.S smovecr.S srem_mod.S ssin.S ssinh.S \
+    stan.S stanh.S sto_res.S stwotox.S tbldo.S util.S x_bsun.S x_fline.S \
+    x_operr.S x_ovfl.S x_snan.S x_store.S x_unfl.S x_unimp.S x_unsupp.S
 
 include $(top_srcdir)/../../../../../automake/local.am

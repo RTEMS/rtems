@@ -11,7 +11,6 @@ WD80X3 = wd80x3.h
 endif
 
 H_FILES = bsp.h crt.h $(WD80X3)
-noinst_HEADERS = $(H_FILES)
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
@@ -22,10 +21,11 @@ $(PROJECT_INCLUDE)/%.h: %.h
 $(PROJECT_INCLUDE)/coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) \
-$(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h) \
-$(PROJECT_INCLUDE)/coverhd.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h) \
+    $(PROJECT_INCLUDE)/coverhd.h
 
 all-local: $(PREINSTALL_FILES)
+
+EXTRA_DIST = bsp.h crt.h wd80x3.h
 
 include $(top_srcdir)/../../../../../../automake/local.am

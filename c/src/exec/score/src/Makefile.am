@@ -52,7 +52,6 @@ TOD_C_FILES = coretod.c coretodset.c coretodtickle.c coretodtoseconds.c \
 WATCHDOG_C_FILES = watchdog.c watchdogadjust.c watchdoginsert.c \
     watchdogremove.c watchdogtickle.c
 
-# C and C++ source names, if any, go here -- minus the .c or .cc
 STD_C_FILES = apiext.c chain.c $(CORE_MESSAGE_QUEUE_C_FILES) \
     $(CORE_MUTEX_C_FILES) $(CORE_SEMAPHORE_C_FILES) $(HEAP_C_FILES) interr.c \
     isr.c $(OBJECT_C_FILES) $(THREAD_C_FILES) $(THREADQ_C_FILES) \

@@ -4,32 +4,27 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = ${ARCH}/null.rel
+PGM = $(ARCH)/null.rel
 
-## C source names
 C_FILES = open.c close.c read.c write.c init.c cntrl.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
-
-H_FILES =
-
-## Assembly source names
-S_FILES =
-S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/leaf.cfg
+include $(top_srcdir)/../../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-${PGM}: ${OBJS}
+$(PGM): $(OBJS)
 	$(make-rel)
 
-all: ${ARCH} $(PGM)
+all-local: $(ARCH) $(OBJS) $(PGM)
 
-EXTRA_DIST = $(C_FILES) $(S_FILES)
+.PRECIOUS: $(PGM)
+
+EXTRA_DIST = close.c cntrl.c init.c open.c read.c write.c
 
 include $(top_srcdir)/../../../../../automake/local.am

@@ -4,22 +4,15 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = ${ARCH}/clock.rel
+PGM = $(ARCH)/clock.rel
 
-## C source names
 C_FILES = ckinit.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES =
-
-## Assembly source names
-S_FILES =
-S_O_FILES = $(S_FILES:%.s=${ARCH}/%.o)
-
-OBJS = $(C_O_FILES) $(S_O_FILES)
+OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/leaf.cfg
+include $(top_srcdir)/../../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -27,11 +20,13 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 
 AM_CFLAGS += $(CFLAGS_OS_V)
 
-${PGM}: ${OBJS}
-	${make-rel}
+$(PGM): $(OBJS)
+	$(make-rel)
 
-all: ${ARCH} $(PGM)
+all-local: $(ARCH) $(OBJS) $(PGM)
 
-EXTRA_DIST = $(C_FILES) $(S_FILES)
+.PRECIOUS: $(PGM)
+
+EXTRA_DIST = ckinit.c
 
 include $(top_srcdir)/../../../../../automake/local.am

@@ -1,0 +1,29 @@
+## 
+## $Id$
+## 
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+VPATH = @srcdir@:@srcdir@/../../shared/irq
+
+C_FILES = irq_init.c i8259.c irq.c
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+
+# FIXME: this does give any sense here
+H_FILES = ../../shared/irq/irq.h
+
+S_FILES = irq_asm.S
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
+
+OBJS = $(S_O_FILES) $(C_O_FILES)
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/lib.am
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+all-local: $(ARCH) $(OBJS)
+
+include $(top_srcdir)/../../../../../../automake/local.am

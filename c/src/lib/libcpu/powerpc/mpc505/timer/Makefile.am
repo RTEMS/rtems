@@ -4,12 +4,11 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = ${ARCH}/timer.rel
+PGM = $(ARCH)/timer.rel
 
-## C sources
 C_FILES = timer.c
 
-timer_rel_OBJECTS = $(C_FILES:%.c=${ARCH}/%.o)
+timer_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/lib.am
@@ -23,8 +22,10 @@ AM_CFLAGS = $(CFLAGS_OS_V)
 $(PGM): $(timer_rel_OBJECTS)
 	$(make-rel)
 
-all-local: ${ARCH} $(PGM)
+all-local: $(ARCH) $(timer_rel_OBJECTS) $(PGM)
 
-EXTRA_DIST = $(C_FILES)
+.PRECIOUS: $(PGM)
+
+EXTRA_DIST = timer.c
 
 include $(top_srcdir)/../../../../../automake/local.am

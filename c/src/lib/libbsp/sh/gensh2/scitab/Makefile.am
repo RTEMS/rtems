@@ -6,9 +6,8 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 PGM = $(ARCH)/scitab.rel
 
-## C source names
 C_FILES = scitab.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
@@ -21,16 +20,16 @@ SHGEN = $(PROJECT_ROOT)/tools/cpu/sh/shgen
 # (OPTIONAL) Add local stuff here using +=
 #
 
-$(PGM): ${OBJS}
+$(PGM): $(OBJS)
 	$(make-rel)
-
-all-local: ${ARCH} $(PGM)
 
 scitab.c: $(SHGEN)
 	$(SHGEN) -H $(HZ) sci > $@
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-EXTRA_DIST = $(C_FILES)
+all-local: $(ARCH) $(OBJS) $(PGM)
+
+.PRECIOUS: $(PGM)
 
 include $(top_srcdir)/../../../../../../automake/local.am

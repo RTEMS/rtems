@@ -8,27 +8,21 @@ ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 LIBNAME = libcpu
 LIB = $(ARCH)/$(LIBNAME).a
 
-# C source names, if any, go here -- minus the .c
 C_FILES = cpu.c displayCpu.c page.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 H_FILES = cpu.h registers.h cpuModel.h
-noinst_HEADERS = $(H_FILES)
 
-# Assembly source names, if any, go here -- minus the .s
 S_FILES = cpu_asm.S cpuModel.S
-S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES) $(S_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/lib.am
 
-$(LIB): ${OBJS}
+$(LIB): $(OBJS)
 	$(make-library)
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/libcpu \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/libcpu/%)
 
 $(PROJECT_INCLUDE)/libcpu:
 	$(mkinstalldirs) $@
@@ -36,15 +30,19 @@ $(PROJECT_INCLUDE)/libcpu:
 $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += \
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
-
 $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
+    $(H_FILES:%=$(PROJECT_INCLUDE)/libcpu/%)
 
-all-local: ${ARCH} $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
-EXTRA_DIST = $(C_FILES) $(S_FILES)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB) $(TMPINSTALL_FILES)
+
+.PRECIOUS: $(LIB)
+
+EXTRA_DIST = cpu.c cpu.h cpuModel.S cpuModel.h cpu_asm.S displayCpu.c page.c \
+    registers.h
 
 include $(top_srcdir)/../../../../../automake/local.am

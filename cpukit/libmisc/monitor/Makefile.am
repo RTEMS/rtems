@@ -7,7 +7,6 @@ AUTOMAKE_OPTIONS = foreign 1.4
 LIBNAME = libmonitor-tmp
 LIB = ${ARCH}/$(LIBNAME).a
 
-# C source names, if any, go here -- minus the .c
 # We only build multiprocessing related files if HAS_MP was defined
 MP_C_FILES = mon-mpci.c
 

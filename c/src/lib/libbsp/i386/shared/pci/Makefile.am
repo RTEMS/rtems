@@ -5,7 +5,6 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 H_FILES = pcibios.h
-noinst_HEADERS = $(H_FILES)
 
 C_FILES = pcibios.c
 
@@ -14,8 +13,10 @@ $(PROJECT_INCLUDE):
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES = $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h)
 
-EXTRA_DIST = $(C_FILES)
+all-local: $(PREINSTALL_FILES)
+
+EXTRA_DIST = pcibios.c pcibios.h
 
 include $(top_srcdir)/../../../../../automake/local.am

@@ -5,7 +5,6 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 H_FILES = uart.h
-noinst_HEADERS = $(H_FILES)
 
 C_FILES = i386-stub-glue.c i386-stub.c uart.c
 
@@ -16,8 +15,10 @@ $(PROJECT_INCLUDE):
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES = $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h)
 
-EXTRA_DIST = $(C_FILES) $(noinst_DATA)
+all-local: $(PREINSTALL_FILES)
+
+EXTRA_DIST = GDB.HOWTO i386-stub-glue.c i386-stub.c uart.c uart.h
 
 include $(top_srcdir)/../../../../../automake/local.am

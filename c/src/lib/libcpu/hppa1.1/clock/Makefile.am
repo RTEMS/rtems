@@ -4,12 +4,11 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = ${ARCH}/clock.rel
+PGM = $(ARCH)/clock.rel
 
-## C source names
 C_FILES = clock.c
 
-clock_rel_OBJECTS = $(C_FILES:%.c=${ARCH}/%.o)
+clock_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/lib.am
@@ -21,8 +20,10 @@ include $(top_srcdir)/../../../../../automake/lib.am
 $(PGM): $(clock_rel_OBJECTS)
 	$(make-rel)
 
-all-local: ${ARCH} $(PGM)
+all-local: $(ARCH) $(clock_rel_OBJECTS) $(PGM)
 
-EXTRA_DIST = $(C_FILES)
+.PRECIOUS: $(PGM)
+
+EXTRA_DIST = clock.c
 
 include $(top_srcdir)/../../../../../automake/local.am

@@ -6,12 +6,11 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 VPATH = @srcdir@:@srcdir@/../../../shared
 
-PGM = ${ARCH}/startup.rel
+PGM = $(ARCH)/startup.rel
 
-## C source names
 C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c main.c bootcard.c sbrk.c \
     setvec.c spurious.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
@@ -26,16 +25,18 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 AM_CPPFLAGS += -DUSE_INIT_FINI
 
-$(PGM): ${OBJS}
+$(PGM): $(OBJS)
 	$(make-rel)
 
 $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES = $(PROJECT_RELEASE)/lib/linkcmds
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
 
-all-local: ${ARCH} $(PGM) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
-EXTRA_DIST = bspclean.c bspstart.c setvec.c spurious.c linkcmds
+.PRECIOUS: $(PGM)
+
+EXTRA_DIST = bspclean.c bspstart.c linkcmds setvec.c spurious.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

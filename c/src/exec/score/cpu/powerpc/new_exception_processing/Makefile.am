@@ -4,7 +4,6 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-# C source names, if any, go here -- minus the .c
 C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
@@ -12,7 +11,6 @@ ROOT_H_FILES =
 RTEMS_SCORE_H_FILES = cpu.h c_isr.inl
 noinst_HEADERS =  $(ROOT_H_FILES) $(RTEMS_SCORE_H_FILES)
 
-# Assembly source names, if any, go here -- minus the .S
 S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 

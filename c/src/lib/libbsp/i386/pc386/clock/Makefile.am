@@ -4,11 +4,10 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = ${ARCH}/clock.rel
+PGM = $(ARCH)/clock.rel
 
-## C source names
 C_FILES = ckinit.c rtc.c
-clock_rel_OBJECTS = $(C_FILES:%.c=${ARCH}/%.o)
+clock_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/lib.am
@@ -20,10 +19,12 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 $(PGM): $(clock_rel_OBJECTS)
 	$(make-rel)
 
-all-local: ${ARCH} $(PGM)
-
 # the .rel file built here will be put into libbsp.a by 
 # 	../wrapup/Makefile
+
+all-local: $(ARCH) $(clock_rel_OBJECTS) $(PGM)
+
+.PRECIOUS: $(PGM)
 
 EXTRA_DIST = ckinit.c rtc.c
 

@@ -12,19 +12,21 @@ SUBDIRS = rtems
 
 AM_CPPFLAGS = -DCPU_SYNC_IO $(LIBC_DEFINES)
 
-# C source names, if any, go here -- minus the .c
 C_FILES = cpu.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 REL = $(ARCH)/rtems-cpu.rel
 
-$(REL): $(C_O_FILES)
+rtems_cpu_rel_OBJECTS = $(C_O_FILES)
+
+$(REL): $(rtems_cpu_rel_OBJECTS)
 	$(make-rel)
 
-all-local: $(ARCH) $(REL) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(rtems_cpu_rel_OBJECTS) $(REL)
 
-EXTRA_DIST = \
-cpu.c
+.PRECIOUS: $(REL)
+
+EXTRA_DIST = cpu.c
 
 include $(top_srcdir)/../../../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../../../automake/local.am

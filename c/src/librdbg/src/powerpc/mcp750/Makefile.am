@@ -9,20 +9,20 @@ VPATH = @srcdir@:@srcdir@/..:@srcdir@/../..
 LIBNAME = librdbg
 LIB = ${ARCH}/${LIBNAME}.a
 
-# C and C++ source names, if any, go here -- minus the .c or .cc
+# C and C++ source names
 C_FILES = rdbg.c servcon.c servbkpt.c servrpc.c excep.c excep_f.c servtgt.c \
     servtsp.c servutil.c _servtgt.c rdbg_f.c ptrace.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-# Asm source names, if any, go here -- minus the .s 
+# Asm source names
 S_FILES = rdbg_cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 
-# Generated C source names, if any, go here -- minus the .c
+# Generated C source names
 GEN_C_FILES = remdeb_xdr.c remdeb_svc.c
 GEN_C_O_FILES = $(GEN_C_FILES:%.c=${ARCH}/%.o)
 
-# H source names, if any, go here -- minus the .h
+# H source names
 H_FILES = remdeb.h
 
 # X source names

@@ -4,12 +4,11 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = ${ARCH}/milli.rel
+PGM = $(ARCH)/milli.rel
 
-## Assembly source names
 S_FILES = milli.S
 
-milli_rel_OBJECTS = $(S_FILES:%.S=${ARCH}/%.o)
+milli_rel_OBJECTS = $(S_FILES:%.S=$(ARCH)/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/lib.am
@@ -21,8 +20,10 @@ include $(top_srcdir)/../../../../../automake/lib.am
 $(PGM): $(milli_rel_OBJECTS)
 	$(make-rel)
 
-all-local: ${ARCH} $(PGM)
+all-local: $(ARCH) $(milli_rel_OBJECTS) $(PGM)
 
-EXTRA_DIST = $(S_FILES)
+.PRECIOUS: $(PGM)
+
+EXTRA_DIST = milli.S
 
 include $(top_srcdir)/../../../../../automake/local.am

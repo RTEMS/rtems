@@ -7,7 +7,6 @@ AUTOMAKE_OPTIONS = foreign 1.4
 LIBNAME = librpc
 LIB = ${ARCH}/${LIBNAME}.a
 
-# C and C++ source names, if any, go here -- minus the .c or .cc
 C_FILES = rpc_callmsg.c rpc_prot.c svc.c svc_auth.c svc_udp.c xdr.c \
     xdr_array.c xdr_mem.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)

@@ -1,41 +1,36 @@
-#
-#  $Id$
-#
+## 
+## $Id$
+## 
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
 PGMNAME = dummy
-PGM = ${ARCH}/$(PGMNAME).rel
+PGM = $(ARCH)/$(PGMNAME).rel
 
-# C source names, if any, go here -- minus the .c
 C_FILES = dummy.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-SRCS = $(C_FILES)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/lib.cfg
-
-TMPINSTALL_FILES = \
-$(PROJECT_INCLUDE)/rtems \
-$(PROJECT_RELEASE)/lib/$(PGMNAME)$(LIB_VARIANT).rel
-
-$(PROJECT_INCLUDE)/rtems:
-	@$(mkinstalldirs) $@
+include $(top_srcdir)/../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-${PGM}: ${OBJS}
+$(PGM): $(OBJS)
 	$(make-rel)
 
 $(PROJECT_RELEASE)/lib/$(PGMNAME)$(LIB_VARIANT).rel: $(PGM)
 	$(INSTALL_DATA) $< $@
 
-all: ${ARCH} $(TMPINSTALL_FILES)
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(PGMNAME)$(LIB_VARIANT).rel
 
-EXTRA_DIST = $(C_FILES)
+all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+
+.PRECIOUS: $(PGM)
+
+EXTRA_DIST = README dummy.c
 
 include $(top_srcdir)/../../../automake/local.am

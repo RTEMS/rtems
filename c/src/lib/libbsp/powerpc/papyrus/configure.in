@@ -8,50 +8,30 @@ RTEMS_TOP(../../../../../..)
 AC_CONFIG_AUX_DIR(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
-AC_PROG_MAKE_SET
-AC_PROG_INSTALL
+AM_INIT_AUTOMAKE(rtems-c-src-lib-libbsp-powerpc-papyrus,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
+RTEMS_ENABLE_LIBCDIR
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENABLE_NETWORKING
-RTEMS_ENABLE_LIBCDIR
 
 RTEMS_ENV_RTEMSBSP
-
-RTEMS_CHECK_CPU
+RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
+RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
+RTEMS_CHECK_NETWORKING
 RTEMS_CANONICAL_HOST
 
 RTEMS_PROJECT_ROOT
-
-dnl check target cc
-RTEMS_PROG_CC_FOR_TARGET
-RTEMS_CANONICALIZE_TOOLS
-
-RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
-RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
-RTEMS_CHECK_NETWORKING(RTEMS_BSP)
-
-# find all the Makefiles for the BSPs
-RTEMS_CHECK_MAKEFILE(.)
-
-# HACK: sed out bsp-tools from makefiles
-t="tools"
-if test -d "$srcdir/$t"; then
-  bsptools_cfgdirs="$bsptools_cfgdirs $t"
-  makefiles=`echo "$makefiles" | sed -e "s%.*$t/.*Makefile%%g"`
-fi
-
-if test "$HAS_MP" = "yes"; then
-:
-else
-  # HACK: sed out shmsupp/Makefile from makefiles
-  t="shmsupp"
-  makefiles=`echo "$makefiles" | sed -e "s%.*$t/.*Makefile%%g"`
-fi
+AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
-AC_CONFIG_SUBDIRS($bsptools_cfgdirs)
-
-# try to explicitly list a Makefile here 
+# Explicitly list a Makefile here 
 AC_OUTPUT( 
-$makefiles)
+Makefile
+dlentry/Makefile
+flashentry/Makefile
+include/Makefile
+startup/Makefile
+wrapup/Makefile)
+

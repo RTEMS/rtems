@@ -4,11 +4,10 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM = ${ARCH}/timer.rel
+PGM = $(ARCH)/timer.rel
 
-## C source names
 C_FILES = timer.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
@@ -21,12 +20,16 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 AM_CFLAGS = $(CFLAGS_OS_V)
 
-$(PGM): ${OBJS}
+$(PGM): $(OBJS)
 	$(make-rel)
-
-all-local: ${ARCH} $(PGM)
 
 # the .rel file built here will be put into libbsp.a by
 #    ../wrapup/Makefile
+
+all-local: $(ARCH) $(OBJS) $(PGM)
+
+.PRECIOUS: $(PGM)
+
+EXTRA_DIST = timer.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

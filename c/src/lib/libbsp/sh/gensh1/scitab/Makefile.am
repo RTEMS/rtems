@@ -6,9 +6,8 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 PGM = $(ARCH)/scitab.rel
 
-## C source names
 C_FILES = scitab.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
@@ -23,12 +22,14 @@ SHGEN = $(PROJECT_ROOT)/tools/cpu/sh/shgen
 
 CLEANFILES = scitab.c
 
-$(PGM): ${OBJS}
+$(PGM): $(OBJS)
 	$(make-rel)
-
-all-local: ${ARCH} $(PGM)
 
 scitab.c: $(SHGEN)
 	$(SHGEN) -H $(HZ) sci > $@
+
+all-local: $(ARCH) $(OBJS) $(PGM)
+
+.PRECIOUS: $(PGM)
 
 include $(top_srcdir)/../../../../../../automake/local.am

@@ -6,12 +6,11 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 
-PGM = ${ARCH}/startup.rel
+PGM = $(ARCH)/startup.rel
 
-## C source names
 C_FILES = hw_init.c bsplibc.c bsppost.c bspstart.c bspclean.c sbrk.c \
     bootcard.c main.c gnatinstallhandler.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
@@ -22,18 +21,21 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
-	$(INSTALL_DATA) $< $@
- 
-PREINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
-
 AM_CPPFLAGS += -DHZ=$(HZ)
 
-$(PGM): ${OBJS}
+$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
+	$(INSTALL_DATA) $< $@
+
+$(PGM): $(OBJS)
 	$(make-rel)
 
-all-local: ${ARCH} $(PREINSTALL_FILES) $(PGM)
+PREINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
 
-EXTRA_DIST = $(C_FILES) linkcmds linkcmds.rom linkcmds.ram
+all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(PGM)
+
+.PRECIOUS: $(PGM)
+
+EXTRA_DIST = bspclean.c bspstart.c hw_init.c linkcmds linkcmds.ram \
+    linkcmds.rom
 
 include $(top_srcdir)/../../../../../../automake/local.am
