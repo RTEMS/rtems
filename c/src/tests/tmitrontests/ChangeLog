@@ -1,3 +1,8 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* include/timesys.h, tmitronsem01/init.c, tmitronsem01/system.h,
+	tmitronsem01/tmitronsem01.doc: URL for license changed.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
