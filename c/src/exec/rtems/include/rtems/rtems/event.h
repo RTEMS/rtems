@@ -52,7 +52,6 @@ typedef enum {
   EVENT_SYNC_TIMEOUT,
   EVENT_SYNC_SATISFIED
 }  Event_Sync_states;
- 
 
 /*
  *  _Event_Manager_initialization
