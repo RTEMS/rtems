@@ -106,11 +106,14 @@ The following persons/organizations have made contributions:
   also submitted the RTEMS++ C++ class library and test code for
   that library.
 
-+ Katsutoshi Shibuya (shibuya@mxb.meshnet.or.jp)of BU-Denken Co., Ltd. 
++ Katsutoshi Shibuya (shibuya@mxb.meshnet.or.jp) of BU-Denken Co., Ltd. 
   (Sapporo, Japan) submitted the extended console driver for the 
   MVME162LX BSP and the POSIX tcsetattr() and tcgetattr() routines.
   This device driver supports four serial ports, cooked IO, and 
   provides a portable base for Zilog 8530 based console drivers.
+
++ Eric Norum (eric@skatter.usask.ca) and Katsutoshi Shibuya
+  (shibuya@mxb.meshnet.or.jp) jointly developed the termios support.
 
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
