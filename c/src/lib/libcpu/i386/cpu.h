@@ -43,7 +43,7 @@
   { \
     asm volatile ( "push %0 ; \
                     popf" \
-                    : : "rm" ((_level)) \
+                    : : "rm" ((_level)) : "cc" \
     ); \
   }
 
@@ -52,7 +52,7 @@
     asm volatile ( "push %0 ; \
                     popf ; \
                     cli" \
-                    : : "rm" ((_level)) \
+                    : : "rm" ((_level)) : "cc" \
     ); \
   }
 
