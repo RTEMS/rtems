@@ -1,3 +1,24 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* clock/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* mongoosev/duart/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* mongoosev/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* mongoosev/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* mongoosev/vectorisrs/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* r46xx/vectorisrs/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* r46xx/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* shared/cache/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* shared/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* shared/interrupts/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* timer/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tx39/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tx39/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* tx39/vectorisrs/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2002-03-05	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* shared/interrupts/installisrentries.c: Added support for debug
