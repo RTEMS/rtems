@@ -11,15 +11,10 @@
 include $(RTEMS_ROOT)/../make/target.cfg
 include $(RTEMS_ROOT)/make/host.cfg
 
-include $(RTEMS_ROOT)/make/main.cfg
 include $(RTEMS_ROOT)/make/bsp.cfg
 
 ## Target compiler config file, if any
 CONFIG.CC = $(RTEMS_ROOT)/make/compilers/gcc-target-default.cfg
 
-## GCC specs extension file location
-RTEMS_BSP_SPECS = $(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs
-
 # Base name of start file
 START_BASE=start
-

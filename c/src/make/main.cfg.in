@@ -1,9 +1,0 @@
-#  $Id$
-#
-# make/main.cfg
-#
-#   Make(1) configuration file include'd by all Makefile's
-#
-# NOTE: This file does not get exported from the source tree
-#
-# Now, it's empty :)
