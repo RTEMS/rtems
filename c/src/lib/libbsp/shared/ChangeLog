@@ -1,3 +1,7 @@
+2001-01-12	Joel Sherrill <joel@OARcorp.com>
+
+	* setvec.c: Removed unused variables.
+
 2001-01-09	Joel Sherrill <joel@OARcorp.com>
 
 	* clockdrv_shell.c (CLOCK_DRIVER_ISRS_PER_TICK): Add support for

@@ -31,8 +31,6 @@ rtems_isr_entry set_vector(                   /* returns old vector */
 )
 {
   rtems_isr_entry previous_isr;
-  unsigned32      real_trap;
-  unsigned32      source;
 
   if ( type )
     rtems_interrupt_catch( handler, vector, &previous_isr );
