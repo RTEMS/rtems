@@ -1,3 +1,7 @@
+2004-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Preinstall dirs.
+
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Don't include lib.am.
