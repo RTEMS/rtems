@@ -427,6 +427,6 @@ int pthread_cond_timedwait(
   return _POSIX_Condition_variables_Wait_support(
     cond,
     mutex,
-    _POSIX_Time_Spec_to_interval( abstime )
+    _POSIX_Timespec_to_interval( abstime )
   );
 }

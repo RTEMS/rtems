@@ -496,7 +496,7 @@ int sem_timedwait(
   return _POSIX_Semaphore_Wait_support(
     sem,
     TRUE,
-    _POSIX_Time_Spec_to_interval( timeout )
+    _POSIX_Timespec_to_interval( timeout )
   );
 }
 

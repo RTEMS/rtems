@@ -456,7 +456,7 @@ int pthread_mutex_timedlock(
   return _POSIX_Mutex_Lock_support( 
     mutex,
     TRUE,
-    _POSIX_Time_Spec_to_interval( timeout )
+    _POSIX_Timespec_to_interval( timeout )
   );
 }
 

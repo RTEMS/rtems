@@ -270,7 +270,7 @@ int intr_timed_wait(
   Watchdog_Interval                  ticks;
   POSIX_API_Thread_Support_Control  *thread_support;
 
-  ticks = _POSIX_Time_Spec_to_interval( timeout );
+  ticks = _POSIX_Timespec_to_interval( timeout );
 
   thread_support = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
 

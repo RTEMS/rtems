@@ -13,11 +13,12 @@
 
 #include <rtems/posix/time.h>
 
-/*
- *  _POSIX_Time_Spec_to_interval
+/*PAGE
+ *
+ *  _POSIX_Timespec_to_interval
  */
 
-Watchdog_Interval _POSIX_Time_Spec_to_interval(
+Watchdog_Interval _POSIX_Timespec_to_interval(
   const struct timespec *time
 )
 {
@@ -32,7 +33,27 @@ Watchdog_Interval _POSIX_Time_Spec_to_interval(
   return ticks;
 }
 
-/*
+/*PAGE
+ *
+ *  _POSIX_Interval_to_timespec
+ */
+ 
+void _POSIX_Interval_to_timespec(
+  Watchdog_Interval  ticks,
+  struct timespec   *time
+)
+{
+  unsigned32  usecs;
+
+  usecs = ticks * _TOD_Microseconds_per_tick;
+
+  time->tv_sec  = usecs / TOD_MICROSECONDS_PER_SECOND;
+  time->tv_nsec = (usecs % TOD_MICROSECONDS_PER_SECOND) * 
+                    TOD_NANOSECONDS_PER_MICROSECOND;
+}
+
+/*PAGE
+ *
  *  4.5.1 Get System Time, P1003.1b-1993, p. 91
  */
 
@@ -203,12 +224,8 @@ int clock_getres(
     case CLOCK_REALTIME:
     case CLOCK_PROCESS_CPUTIME:
     case CLOCK_THREAD_CPUTIME:
-      if ( res ) {
-        res->tv_sec  = _TOD_Microseconds_per_tick / TOD_MICROSECONDS_PER_SECOND;
-        res->tv_nsec = 
-          (_TOD_Microseconds_per_tick % TOD_MICROSECONDS_PER_SECOND) *
-            TOD_NANOSECONDS_PER_MICROSECOND;
-      }
+      if ( res )
+        _POSIX_Interval_to_timespec( _TOD_Microseconds_per_tick, res ); 
       break;
  
     default:
@@ -248,9 +265,7 @@ int nanosleep(
  
 /* XXX this is interruptible by a posix signal */
 
-/* XXX rmtp is the time remaining on the timer -- we do not support this */
-
-  ticks = _POSIX_Time_Spec_to_interval( rqtp );
+  ticks = _POSIX_Timespec_to_interval( rqtp );
   
   _Thread_Disable_dispatch();
     _Thread_Set_state( _Thread_Executing, STATES_WAITING_FOR_TIME );
@@ -263,8 +278,14 @@ int nanosleep(
     _Watchdog_Insert_ticks( &_Thread_Executing->Timer, ticks );
   _Thread_Enable_dispatch();
 
+  /* calculate time remaining */
+
   if ( rmtp ) {
-    /* XXX calculate time remaining */
+
+    _POSIX_Interval_to_timespec(
+      _Thread_Executing->Timer.stop_time - _Thread_Executing->Timer.start_time,
+      rmtp
+    );
   }
 
   return 0;                    /* XXX should account for signal */

@@ -439,7 +439,7 @@ int mq_timedsend(
     msg_ptr,
     msg_len,
     msg_prio,
-    _POSIX_Time_Spec_to_interval( timeout )
+    _POSIX_Timespec_to_interval( timeout )
   );
 }
 
@@ -537,7 +537,7 @@ int mq_timedreceive(                  /* XXX: should this be ssize_t */
     msg_ptr,
     msg_len,
     msg_prio,
-    _POSIX_Time_Spec_to_interval( timeout )
+    _POSIX_Timespec_to_interval( timeout )
   );
 }
 
