@@ -9,7 +9,6 @@ EXTRA_DIST = README
 AM_CPPFLAGS += -I$(top_builddir)
 
 include_rtemsdir = $(includedir)/rtems
-include_HEADERS =
 include_rtems_HEADERS =
 EXTRA_LIBRARIES =
 TMP_LIBS =
@@ -171,7 +170,7 @@ TMP_LIBS += librtmonuse$(LIB_VARIANT).a
 ## serdbg
 
 if LIBSERDBG
-include_HEADERS += serdbg/serdbgcnf.h serdbg/serdbg.h \
+include_rtems_HEADERS += serdbg/serdbgcnf.h serdbg/serdbg.h \
     serdbg/termios_printk_cnf.h serdbg/termios_printk.h
 
 EXTRA_LIBRARIES += libserdbg.a
@@ -249,11 +248,6 @@ all-local: $(PREINSTALL_FILES) $(TMP_LIBS)
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
@@ -302,21 +296,21 @@ $(PROJECT_INCLUDE)/rtems/rtmonuse.h: rtmonuse/rtmonuse.h $(PROJECT_INCLUDE)/rtem
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtmonuse.h
 
 if LIBSERDBG
-$(PROJECT_INCLUDE)/serdbgcnf.h: serdbg/serdbgcnf.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/serdbgcnf.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/serdbgcnf.h
+$(PROJECT_INCLUDE)/rtems/serdbgcnf.h: serdbg/serdbgcnf.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/serdbgcnf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/serdbgcnf.h
 
-$(PROJECT_INCLUDE)/serdbg.h: serdbg/serdbg.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/serdbg.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/serdbg.h
+$(PROJECT_INCLUDE)/rtems/serdbg.h: serdbg/serdbg.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/serdbg.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/serdbg.h
 
-$(PROJECT_INCLUDE)/termios_printk_cnf.h: serdbg/termios_printk_cnf.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/termios_printk_cnf.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/termios_printk_cnf.h
+$(PROJECT_INCLUDE)/rtems/termios_printk_cnf.h: serdbg/termios_printk_cnf.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/termios_printk_cnf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/termios_printk_cnf.h
 
-$(PROJECT_INCLUDE)/termios_printk.h: serdbg/termios_printk.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/termios_printk.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/termios_printk.h
+$(PROJECT_INCLUDE)/rtems/termios_printk.h: serdbg/termios_printk.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/termios_printk.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/termios_printk.h
 endif
 
 $(PROJECT_INCLUDE)/rtems/stackchk.h: stackchk/stackchk.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)

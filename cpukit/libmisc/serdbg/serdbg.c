@@ -29,7 +29,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <serdbg.h>
+#include <rtems/serdbg.h>
 
 
 /*=========================================================================*\

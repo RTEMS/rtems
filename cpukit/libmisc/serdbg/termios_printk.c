@@ -37,7 +37,7 @@
 
 #include <rtems/termiostypes.h>
 #include <rtems/bspIo.h>
-#include <termios_printk.h>
+#include <rtems/termios_printk.h>
 
 /*
  * internal variables

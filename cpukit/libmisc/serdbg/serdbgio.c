@@ -38,7 +38,7 @@
 #include <termios.h>
 
 #include <rtems/termiostypes.h>
-#include <serdbg.h>
+#include <rtems/serdbg.h>
 
 
 /*
