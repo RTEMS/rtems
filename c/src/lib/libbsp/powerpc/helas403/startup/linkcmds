@@ -36,6 +36,7 @@ SECTIONS
      *(.text)
      *(.rodata)
      *(.rodata1)
+     *.(eh_frame)
      *(.descriptors)
      *(rom_ver)
      etext = ALIGN(0x10);

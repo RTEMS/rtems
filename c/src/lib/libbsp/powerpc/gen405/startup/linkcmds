@@ -36,6 +36,7 @@ SECTIONS
      *(.text)
      *(.rodata)
      *(.rodata1)
+     *.(eh_frame)
      *(.gnu.linkonce.r*)
      *(.descriptors)
      *(rom_ver)
