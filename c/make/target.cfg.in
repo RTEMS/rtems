@@ -8,7 +8,7 @@ prefix = @prefix@
 
 CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
-DEFS = @DEFS@
+# DEFS = @DEFS@
 LDFLAGS =
 LIBS = @LIBS@
 
