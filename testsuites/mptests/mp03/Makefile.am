@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-
 SUBDIRS = node1 node2
 
 EXTRA_DIST = system.h delay.c init.c task1.c
