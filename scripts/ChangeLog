@@ -1,5 +1,10 @@
 2004-03-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* gcc3newlib/target-gcc.add, gcc3newlib/target-c++.add:
+	Reflect changes to gcc3newlib/gccnewlib.add.
+
+2004-03-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* gcc3newlib/gccnewlib.add: Preps. for gcc-3.4.0.
 	Add %gcclib, %gccexec.
 

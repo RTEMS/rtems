@@ -20,11 +20,11 @@ This is the gcc/g++ compiler for %{gcc_target}
 %{_prefix}/bin/%{gcc_target}-c++%{_exeext}
 %{_prefix}/bin/%{gcc_target}-g++%{_exeext}
 
-%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/cc1plus%{_exeext}
-%dir %{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/include
+%{gccexec}/%{gcc_target}/%{gcc_version}/cc1plus%{_exeext}
+%dir %{gcclib}/%{gcc_target}/%{gcc_version}/include
 %if "%{gcc_version}" >= "3.2"
-%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/include/c++
+%{gcclib}/%{gcc_target}/%{gcc_version}/include/c++
 %else
-%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/include/g++
+%{gcclib}/%{gcc_target}/%{gcc_version}/include/g++
 %endif
 %endif
