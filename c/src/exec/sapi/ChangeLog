@@ -1,3 +1,9 @@
+2002-01-07	Joel Sherrill <joel@OARcorp.com>
+
+	* optman/, optman/.cvsignore, optman/Makefile.am, optman/no-ext.c,
+	optman/no-io.c: Removed entire contents of optman/ directory since
+	it has been moved.
+
 2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* optman/Makefile.am: Add multilib support.
