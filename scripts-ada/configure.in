@@ -28,11 +28,11 @@ fi
 AC_MSG_RESULT($RPM_SPECSdir)
 AC_SUBST(RPM_SPECSdir)
 
-GCCNEWLIBVERS="gcc-${gcc_version}-newlib-${newlib_version}"
-AC_SUBST(GCCNEWLIBVERS)
-BINUTILSVERS="binutils-${binutils_version}"
+GNATNEWLIBVERS="gnat-${gnat_version}-newlib-${newlib_version}"
+AC_SUBST(GNATNEWLIBVERS)
+BINUTILSVERS="gnat-binutils-${binutils_version}"
 AC_SUBST(BINUTILSVERS)
-GDBVERS="gdb-${gdb_version}"
+GDBVERS="gnat-gdb-${gdb_version}"
 AC_SUBST(GDBVERS)
 BSPVERS="${rtems_version}"
 AC_SUBST(RTEMS_VERSION)

@@ -98,12 +98,21 @@ Authors:
 
   if test -f $RPM_BUILD_ROOT/opt/gnatrtems/info/configure.info.gz;
   then
-# These are only present in binutils >= 2.9.5
+# These common files are only present in binutils >= 2.9.5
     find $RPM_BUILD_ROOT/opt/gnatrtems/info -name 'configure.*' | \
       sed -e "s,^$RPM_BUILD_ROOT,,g" > ../files
   else
     touch ../files
   fi
+# These target specific files are only present in binutils >= 2.9.5
+  if test -f /opt/gnatrtems/bin/@target_alias@-readelf@exe_ext@;
+  then
+    echo /opt/gnatrtems/bin/@target_alias@-readelf@exe_ext@ > ../files.target
+  else
+    touch ../files.target
+  fi
+
+
 
 %post
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
@@ -155,7 +164,7 @@ Authors:
 %dir /opt/gnatrtems/share
 %dir /opt/gnatrtems/share/locale
 
-%files -n @target_alias@-gnat-binutils
+%files -n @target_alias@-gnat-binutils -f files.target
 %doc /opt/gnatrtems/man/man1/@target_alias@-*.1
 
 %dir /opt/gnatrtems/bin
@@ -169,7 +178,8 @@ Authors:
 /opt/gnatrtems/bin/@target_alias@-objcopy@exe_ext@
 /opt/gnatrtems/bin/@target_alias@-objdump@exe_ext@
 /opt/gnatrtems/bin/@target_alias@-ranlib@exe_ext@
-/opt/gnatrtems/bin/@target_alias@-readelf@exe_ext@
+# readelf is not in older binutils so get it from file list
+# /opt/gnatrtems/bin/@target_alias@-readelf@exe_ext@
 /opt/gnatrtems/bin/@target_alias@-size@exe_ext@
 /opt/gnatrtems/bin/@target_alias@-strings@exe_ext@
 /opt/gnatrtems/bin/@target_alias@-strip@exe_ext@

@@ -22,7 +22,10 @@ Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 Version:      @gdb_version@
 Summary:      gdb for target @target_alias@
 Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-@gdb_version@.tar.gz
+Source1:	ftp://cs.nyu.edu/pub/gnat/gnat-@gnat_version@-src.tar.gz
 Patch0:	      gdb-@gdb_version@-rtems-@gdb_patch_version@.diff
+Buildroot:	/tmp
+
 #
 # The original sources are not included in the source RPM.
 # If we included them, then the source RPMs for each target
@@ -35,7 +38,6 @@ Patch0:	      gdb-@gdb_version@-rtems-@gdb_patch_version@.diff
 # Or you can try the ftp options of rpm :-)
 #
 NoSource:      0
-
 
 %description
 RTEMS is an open source operating system for embedded systems.
@@ -72,9 +74,12 @@ Authors:
 %prep
 echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 # untar the sources inside @target_alias@-gnat-gdb
-%setup -c -n @target_alias@-gnat-gdb -a 0
+%setup -c -n @target_alias@-gnat-gdb -a 0 -a 1
 
-%patch0 -p0
+  cd gdb-@gdb_version@
+  patch -p0 <../gnat-@gnat_version@-src/src/gdb-@gdb_version@.gnat.diff
+
+%patch0 -p1
 
 %build
 test -d build || mkdir build
@@ -82,7 +87,7 @@ test -d build || mkdir build
   ../gdb-@gdb_version@/configure --target=@target_alias@ \
     --verbose --prefix=/opt/gnatrtems @extra_configure_arguments@
 
-  make all
+  make CC=gcc CFLAGS="-O2 -g -DRTEMS_TARGET" all
   make info
 
 %install
@@ -91,9 +96,11 @@ test -d build || mkdir build
   make prefix=$RPM_BUILD_ROOT/opt/gnatrtems install-info
 
   # gzip info files
-  gzip -f $RPM_BUILD_ROOT/opt/gnatrtems/info/*.info 2>/dev/null
-  gzip -f $RPM_BUILD_ROOT/opt/gnatrtems/info/*.info-? 2>/dev/null
-  gzip -f $RPM_BUILD_ROOT/opt/gnatrtems/info/*.info-?? 2>/dev/null
+  find $RPM_BUILD_ROOT/opt/gnatrtems/info -name "*.info*" | \
+    grep -v "\.gz$" | xargs -e gzip -f 2>/dev/null
+  # gzip -f $RPM_BUILD_ROOT/opt/gnatrtems/info/*.info 2>/dev/null
+  # gzip -f $RPM_BUILD_ROOT/opt/gnatrtems/info/*.info-? 2>/dev/null
+  # gzip -f $RPM_BUILD_ROOT/opt/gnatrtems/info/*.info-?? 2>/dev/null
 
 %post
   if test -d $RPM_INSTALL_PREFIX/rtems/info;
@@ -137,7 +144,7 @@ test -d build || mkdir build
 # /opt/gnatrtems/lib/libiberty*
 
 %files -n @target_alias@-gnat-gdb
-%doc /opt/gnatrtems/man/man1/@target_alias@-gnat-gdb.1
+%doc /opt/gnatrtems/man/man1/@target_alias@-gdb.1
 
 %dir /opt/gnatrtems/bin
 /opt/gnatrtems/bin/@target_alias@-gdb@exe_ext@

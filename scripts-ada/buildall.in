@@ -62,7 +62,7 @@ newlib=${newlib_version}
 buildroot=/tmp
 
 testing=no
-do_binutils=yes
+do_binutils=no    # binutils included in gnatnewlib
 do_gnatnewlib=yes
 do_gdb=yes
 
@@ -135,14 +135,14 @@ do
     # now build gcc/newlib
     #    NOTE: This requires having binutils installed and we immediately
     #          remove it once finished.
-    base_binutils_rpm=${dst}/../RPMS/i386/rtems-base-binutils-${binutils}-${binutils_rpm_release}.i386.rpm
-    binutils_rpm=${dst}/../RPMS/i386/${target}-binutils-${binutils}-${binutils_rpm_release}.i386.rpm
-    if [ ! -f ${binutils_rpm} ] ; then
-      echo There is no RPM for binutils for ${target}.
-      echo Looked for ${binutils_rpm}.
-    fi
-    ${ECHO} rpm -i ${base_binutils_rpm}
-    ${ECHO} rpm -i ${binutils_rpm}
+    # base_binutils_rpm=${dst}/../RPMS/i386/rtems-base-binutils-${binutils}-${binutils_rpm_release}.i386.rpm
+    # binutils_rpm=${dst}/../RPMS/i386/${target}-binutils-${binutils}-${binutils_rpm_release}.i386.rpm
+    # if [ ! -f ${binutils_rpm} ] ; then
+    #   echo There is no RPM for binutils for ${target}.
+    #   echo Looked for ${binutils_rpm}.
+    # fi
+    # ${ECHO} rpm -i ${base_binutils_rpm}
+    # ${ECHO} rpm -i ${binutils_rpm}
 
     logfile=log/${target}-gnatnewlib
     specfile=${dst}/${target}-gcc-${gcc}-newlib-${newlib}.spec
@@ -153,11 +153,11 @@ do
     ${ECHO} rm -rf ${dst}/../BUILD/${target}-gcc*
     ${ECHO} rm -rf ${buildroot}/opt/gnatrtems
 
-    echo uninstalling binutils for ${target} 
-    if [ ${testing} = no ] ; then
-      rpm -e `rpm -qa | grep rtems`
-      rm -rf /opt/gnatrtems/*
-    fi
+    # echo uninstalling binutils for ${target} 
+    # if [ ${testing} = no ] ; then
+    #   rpm -e `rpm -qa | grep rtems`
+    #   rm -rf /opt/gnatrtems/*
+    # fi
   else
     echo Skipping gcc/newlib for ${target}
   fi
