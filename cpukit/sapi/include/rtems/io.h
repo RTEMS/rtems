@@ -74,7 +74,7 @@ typedef struct {
 
 typedef struct {
     char                     *device_name;
-    uint32_t                  device_name_length;
+    size_t                    device_name_length;
     rtems_device_major_number major;
     rtems_device_minor_number minor;
 } rtems_driver_name_t;
