@@ -1,3 +1,10 @@
+2003-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in src/Makefile.am, src/imfs/Makefile.am,
+	src/dosfs/Makefile.am.
+	* src/Makefile.am, src/imfs/Makefile.am, src/dosfs/Makefile.am:
+	Removed.
+
 2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/dosfs/config.h: Remove.
