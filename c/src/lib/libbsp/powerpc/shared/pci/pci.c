@@ -21,6 +21,7 @@
 
 #include <libcpu/io.h>
 #include <bsp/pci.h>
+#include <rtems/bspIo.h>
 
 /* allow for overriding these definitions */
 #ifndef PCI_CONFIG_ADDR
@@ -388,7 +389,7 @@ void FixupPCI( struct _int_map *bspmap, int (*swizzler)(int,int) )
                      }
                      if( int_name == -1 )
                      {
-                        printk("pci : Unable to resolve device %d:%d w/ swizzled int pin %i to an interrupt_line.\n", pbus, pslot, int_pin );
+                        printk("pci : Unable to resolve device %d:%d w/ swizzled int pin %d to an interrupt_line.\n", pbus, pslot, int_pin );
                      }
                      else
                      {
@@ -458,7 +459,7 @@ void FixupPCI( struct _int_map *bspmap, int (*swizzler)(int,int) )
                            }
                            if( int_name == -1 )
                            {
-                              printk("pci : Unable to resolve device %d:%d w/ swizzled int pin %i to an interrupt_line.\n", pbus, pslot, int_pin );
+                              printk("pci : Unable to resolve device %d:%d w/ swizzled int pin %d to an interrupt_line.\n", pbus, pslot, int_pin );
                            }
                            else
                            {
@@ -499,7 +500,7 @@ void FixupPCI( struct _int_map *bspmap, int (*swizzler)(int,int) )
                      }
                      else
                      {
-                        printk("pci : No bridge from bus %i towards root found\n", tbus );
+                        printk("pci : No bridge from bus %d towards root found\n", tbus );
                         goto donesearch;
                      }
                      

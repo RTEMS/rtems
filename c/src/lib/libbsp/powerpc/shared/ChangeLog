@@ -1,3 +1,11 @@
+2003-08-05	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 437/bsps
+	* irq/irc.c: calls to bspIo/printk must not use '%i' format which is 
+	apparently not supported 
+        * pci/pci.c: calls to bspIo/printk must not use '%i' format which is
+	apparently not supported 
+
 2003-07-18	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 288/rtems

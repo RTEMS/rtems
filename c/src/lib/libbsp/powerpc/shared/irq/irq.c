@@ -128,11 +128,11 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
     rtems_irq_connect_data* vchain;
   
     if (!isValidInterrupt(irq->name)) {
-      printk("Invalid interrupt vector %i\n",irq->name);
+      printk("Invalid interrupt vector %d\n",irq->name);
       return 0;
     }
     if ( (int)rtems_hdl_tbl[irq->name].next_handler  == -1 ) {
-      printk("IRQ vector %i already connected to an unshared handler\n",irq->name);
+      printk("IRQ vector %d already connected to an unshared handler\n",irq->name);
       return 0;
     }
     _CPU_ISR_Disable(level);
@@ -191,7 +191,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     unsigned int level;
   
     if (!isValidInterrupt(irq->name)) {
-      printk("Invalid interrupt vector %i\n",irq->name);
+      printk("Invalid interrupt vector %d\n",irq->name);
       return 0;
     }
     /*
@@ -202,7 +202,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * to get the previous handler before accepting to disconnect.
      */
     if (rtems_hdl_tbl[irq->name].hdl != default_rtems_entry.hdl) {
-      printk("IRQ vector %i already connected\n",irq->name);
+      printk("IRQ vector %d already connected\n",irq->name);
       return 0;
     }
     _CPU_ISR_Disable(level);
