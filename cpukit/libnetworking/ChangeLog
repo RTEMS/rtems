@@ -1,3 +1,8 @@
+2002-10-02	Joel Sherrill <joel@OARcorp.com>
+
+	* kern/uipc_socket.c: Make sure that small non-zero delays work.
+	Suggested cleanup from Eric Norum.
+
 2002-10-02	Eric Norum <eric.norum@usask.ca>
 
 	* rtems/mkrootfs.c: As part of PR283, remove redundant code that

@@ -960,8 +960,9 @@ sosetopt(so, level, optname, m0)
 				error = EDOM;
 				goto bad;
 			}
+
 			val = tv->tv_sec * hz + tv->tv_usec / tick;
-			if (val == 0)
+			if ((val == 0) && (tv->tv_sec || tv->tv_usec))
 				val = 1;
 
 			switch (optname) {
