@@ -1,3 +1,9 @@
+2003-09-15	Joel Sherrill <joel@OARcorp.com>
+
+	PR 483/bsps
+	* start/start.c, startup/bspstart.c: Spurious interrupt handlers cannot
+	be installed until RTEMS has initialized the vector table.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/ckinit.c, console/console.c, include/16550.h,

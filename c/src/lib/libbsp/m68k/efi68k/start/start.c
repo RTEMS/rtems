@@ -56,7 +56,8 @@ void  boot_card();
   /*
    * Initalize the board.
    */
-  Spurious_Initialize();
+  /* Spurious should be called in the predriver hook */
+  /* Spurious_Initialize(); */
   console_init();
   watch_dog_init();
   bsp_tcp_init();
