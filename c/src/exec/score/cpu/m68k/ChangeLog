@@ -1,3 +1,15 @@
+2001-08-09	Chris Johns <ccj@acm.org>
+
+	* cpu_asm.S: This patch was co-developed with Eric Norum
+	<eric.norum@usask.ca>.  It closes a one instruction window
+	on some m68k CPU cores.  It fixes symptoms seen as:
+	    1) No more `interrupt handler invoked twice for
+	       a single interrupt'.
+	    2) No more `lockup when mc68360 CPM and PIT interrupts
+	       are at different levels'.
+	It does insert a little more overhead on machines without hardware
+	interrupt stacks but correctness has a price.
+
 2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am, rtems/score/Makefile.am: 
