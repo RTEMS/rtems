@@ -694,6 +694,15 @@ int pthread_create(
   api->Attributes = *attrp;
   api->detachstate = attr->detachstate;
 
+  _Thread_queue_Initialize(
+    &api->Join_List,
+    OBJECTS_NO_CLASS,                 /* only used for proxy operations */
+    THREAD_QUEUE_DISCIPLINE_FIFO,
+    0,                                /* XXX join blocking state */
+    NULL,                             /* no extract proxy handler */
+    0
+  );
+
   status = _Thread_Start(
     the_thread,
     THREAD_START_POINTER,
@@ -750,10 +759,17 @@ int pthread_join(
       if ( api->detachstate == PTHREAD_CREATE_DETACHED )
         return EINVAL;
 
-      /*  XXX do something useful here */
+      /*
+       *  Put ourself on the threads join list
+       */
 
-      return POSIX_NOT_IMPLEMENTED();
-      break;
+      /* XXX is this right? */
+
+      _Thread_Executing->Wait.return_argument = (unsigned32 *) value_ptr;
+
+      _Thread_queue_Enqueue( &api->Join_List, WATCHDOG_NO_TIMEOUT );
+
+      return 0;
   }
 
   return POSIX_BOTTOM_REACHED();
@@ -796,21 +812,28 @@ void pthread_exit(
   void  *value_ptr
 )
 {
+  register Thread_Control *executing;
   register Thread_Control *the_thread;
+  POSIX_API_Control       *api;
 
-  the_thread = _Thread_Executing;
+  executing = _Thread_Executing;
 
   _Thread_Disable_dispatch();
 
+  _Thread_Close( &_POSIX_Threads_Information, executing );
+
   /*
-   *  XXX Will need to deal with join/detach
+   *  Wakeup all the tasks which joined with this one
    */
+
+  api = executing->API_Extensions[ THREAD_API_POSIX ];
+
+  while ( (the_thread = _Thread_queue_Dequeue( &api->Join_List )) )
+      *(void **)the_thread->Wait.return_argument = value_ptr;
 
   /* XXX run _POSIX_Keys_Run_destructors here? */
 
-  _Thread_Close( &_POSIX_Threads_Information, the_thread );
- 
-  _POSIX_Threads_Free( the_thread );
+  _POSIX_Threads_Free( executing );
 
   _Thread_Enable_dispatch();
 }
@@ -863,8 +886,9 @@ int pthread_equal(
     case OBJECTS_REMOTE:
       return 0;
     case OBJECTS_LOCAL:
-      return _Objects_Are_ids_equal( t1, t2 ); 
+      break;
   }
+  return _Objects_Are_ids_equal( t1, t2 ); 
 }
 
 /*PAGE
