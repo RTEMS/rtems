@@ -8,6 +8,28 @@
 #include <rtems.h>
 
 /*
+ *  If this file is included from inside the Network Stack proper or
+ *  a device driver, then __INSIDE_RTEMS_BSD_TCPIP_STACK__ should be
+ *  defined.  This triggers a number of internally used definitions.
+ */
+
+#if defined(__INSIDE_RTEMS_BSD_TCPIP_STACK__)
+#undef _COMPILING_BSD_KERNEL_
+#undef KERNEL
+#undef INET
+#undef NFS
+#undef DIAGNOSTIC
+#undef BOOTP_COMPAT
+
+#define _COMPILING_BSD_KERNEL_
+#define KERNEL
+#define INET
+#define NFS
+#define DIAGNOSTIC
+#define BOOTP_COMPAT
+#endif
+
+/*
  * Values that may be obtained by BOOTP
  */
 extern struct in_addr rtems_bsdnet_bootp_server_address;
