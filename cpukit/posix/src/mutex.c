@@ -223,8 +223,10 @@ int pthread_mutex_init(
   CORE_mutex_Attributes        *the_mutex_attr;
   const pthread_mutexattr_t    *the_attr;
   CORE_mutex_Disciplines        the_discipline;
+#if 0
   register POSIX_Mutex_Control *mutex_in_use;
   Objects_Locations             location;
+#endif
 
   if ( attr ) the_attr = attr;
   else        the_attr = &_POSIX_Mutex_Default_attributes;
