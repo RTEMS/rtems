@@ -2,4 +2,13 @@
 #  $Id$
 #
 
-This is supported by the mc146818a driver.
+The mc146818a driver supports:
+    Motorola
+        MC146818A
+        MC146818B
+    Dallas Semiconductor
+        DS12885
+        DS12887
+        DS1685
+        DS1687
+This is the Time-of-Day chip used in 'IBM-PC/AT compatible' machines.
