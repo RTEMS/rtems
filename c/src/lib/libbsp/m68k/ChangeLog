@@ -1,5 +1,10 @@
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
+	* acinclude.m4: Remove efi68k and efi332 references as they are no
+	longer in the tree.
+
+2004-01-07	Joel Sherrill <joel@OARcorp.com>
+
 	Per John S. Gwynne <jgwynne@mrcday.com>, there are no longer any
 	users of these boards so we are removing them.
 	* efi332/.cvsignore, efi332/ChangeLog, efi332/Makefile.am,

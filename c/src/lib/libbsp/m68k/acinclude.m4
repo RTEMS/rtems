@@ -4,10 +4,6 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
   case "$RTEMS_BSP_FAMILY" in
   dmv152 )
     AC_CONFIG_SUBDIRS([dmv152]);;
-  efi332 )
-    AC_CONFIG_SUBDIRS([efi332]);;
-  efi68k )
-    AC_CONFIG_SUBDIRS([efi68k]);;
   gen68302 )
     AC_CONFIG_SUBDIRS([gen68302]);;
   gen68340 )
