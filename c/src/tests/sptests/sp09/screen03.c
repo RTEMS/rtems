@@ -20,6 +20,7 @@
 #include "system.h"
 
 extern rtems_configuration_table BSP_Configuration;
+extern rtems_cpu_table           _CPU_Table;
 
 void Screen3()
 {
@@ -42,20 +43,32 @@ void Screen3()
   );
   puts( "TA1 - rtems_task_create - RTEMS_INVALID_NAME" );
 
-  status = rtems_task_create(
-    task_name,
-    1,
-    BSP_Configuration.work_space_size,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &Junk_id
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_UNSATISFIED,
-    "rtems_task_create with a stack size larger than the workspace"
-  );
-  puts( "TA1 - rtems_task_create - stack size - RTEMS_UNSATISFIED" );
+  /*
+   * If the bsp provides its own stack allocator, then
+   * skip the test that tries to allocate a stack that is too big.
+   */
+
+  if (_CPU_Table.stack_allocate_hook)
+  {
+      puts( "TA1 - rtems_task_create - stack size - RTEMS_UNSATISFIED  -- SKIPPED" );
+  }
+  else
+  {
+      status = rtems_task_create(
+        task_name,
+        1,
+        BSP_Configuration.work_space_size,
+        RTEMS_DEFAULT_MODES,
+        RTEMS_DEFAULT_ATTRIBUTES,
+        &Junk_id
+      );
+      fatal_directive_status(
+        status,
+        RTEMS_UNSATISFIED,
+        "rtems_task_create with a stack size larger than the workspace"
+      );
+      puts( "TA1 - rtems_task_create - stack size - RTEMS_UNSATISFIED" );
+  }
 
   status = rtems_task_create(
     Task_name[ 2 ],
