@@ -46,7 +46,7 @@
 extern "C" {
 #endif
 
-#include <rtems/score/ppctypes.h>
+#include <rtems/score/types.h>
 
 /*
  *  Define the name of the CPU family.

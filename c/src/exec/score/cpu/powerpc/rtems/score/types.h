@@ -1,4 +1,4 @@
-/*  ppctypes.h
+/*  types.h
  *
  *  This include file contains type definitions pertaining to the PowerPC
  *  processor family.
