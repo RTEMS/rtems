@@ -217,7 +217,7 @@ struct Thread_Control_struct {
   Priority_Information                  Priority_map;
   Thread_Start_information              Start;
   Context_Control                       Registers;
-#if ( CPU_HARDWARE_FP == TRUE )
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   void                                 *fp_context;
 #endif
   void                                 *API_Extensions[ THREAD_API_LAST + 1 ];
@@ -312,7 +312,7 @@ SCORE_EXTERN Thread_Control *_Thread_Heir;
  *  context is currently loaded.
  */
 
-#if ( CPU_HARDWARE_FP == TRUE )
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
 #endif
 
