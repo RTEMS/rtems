@@ -31,8 +31,8 @@ THREAD_PIECES=\
     threadyieldprocessor
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES=apiext chain coremsg coremutex coresem heap interr \
-    isr object $(THREAD_PIECES) threadq tod userext \
+C_PIECES=apiext chain coremsg coremutex coresem coretod heap interr \
+    isr object $(THREAD_PIECES) threadq userext \
     watchdog wkspace $(MP_PIECES)
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
