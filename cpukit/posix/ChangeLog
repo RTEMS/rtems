@@ -570,7 +570,7 @@
 
 	* ChangeLog: New file.
 
-2000-05-24	Fernando Ruiz Casas <fernando.ruiz@ctv.es>
+2001-05-24	Fernando Ruiz Casas <fernando.ruiz@ctv.es>
 
 	* src/getegid.c, src/geteuid.c, src/getgid.c, src/getlogin.c,
 	src/getuid.c: Now save their values in private user environment.
