@@ -1,3 +1,8 @@
+2001-10-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: AC_PREREQ(2.52), Adapt CONFIG_SUBDIRS to
+	autoconf-2.52.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
