@@ -240,7 +240,7 @@ rtems_device_driver console_initialize(
       break;
     }
   }
-  if ( minor==Console_Port_Count ) {
+  if ( minor == Console_Port_Count ) {
     /*
      * Failed to find a working device
      */
