@@ -25,9 +25,6 @@ RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_NEWLIB
 
-# Check if there is custom/*.cfg for this BSP
-RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 rtems/Makefile

@@ -1,3 +1,10 @@
+2002-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* asm.h: Remove #include <rtems/score/targopts.h>.
+	Add #include <rtems/score/cpuopts.h>.
+	* configure.ac: Remove RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP).
+
+
 2001-12-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use RTEMS_ENV_RTEMSCPU.

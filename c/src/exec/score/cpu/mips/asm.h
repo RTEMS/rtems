@@ -34,7 +34,7 @@
 #ifndef ASM
 #define ASM
 #endif
-#include <rtems/score/targopts.h>
+#include <rtems/score/cpuopts.h>
 #include <rtems/score/mips.h>
 
 /*
