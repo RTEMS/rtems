@@ -59,7 +59,7 @@ fi
 if test "$HAS_ITRON_API" = "yes"; then
   AC_CONFIG_SUBDIRS(itron)
 fi
-AC_CONFIG_SUBDIRS(score/cpu/$RTEMS_CPU)
+RTEMS_CPU_SUBDIRS([score/cpu])
 
 RTEMS_DEFINE_POSIX_API
 RTEMS_DEFINE_ITRON_API
