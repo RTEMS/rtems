@@ -99,8 +99,17 @@ void _CPU_ISR_install_raw_handler(
 #if ( M68K_HAS_VBR == 1 )
   interrupt_table[ vector ] = new_handler;
 #else
+
+  /*
+   *  Install handler into RTEMS jump table and if VBR table is in
+   *  RAM, install the pointer to the appropriate jump table slot.
+   *  If the VBR table is in ROM, it is the BSP's responsibility to
+   *  load it appropriately to vector to the RTEMS jump table.
+   */
+
   _CPU_ISR_jump_table[vector].isr_handler = (unsigned32) new_handler;
-  interrupt_table[ vector ] = (proc_ptr) &_CPU_ISR_jump_table[vector];
+  if ( (unsigned32) interrupt_table != 0xFFFFFFFF )
+    interrupt_table[ vector ] = (proc_ptr) &_CPU_ISR_jump_table[vector];
 #endif /* M68K_HAS_VBR */
 }
 
