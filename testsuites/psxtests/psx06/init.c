@@ -61,7 +61,7 @@ void *POSIX_Init(
   empty_line();
 
   Destructor_invoked = 0;
-  puts( "Init: Creating a key" );
+  puts( "Init: pthread_key_create - SUCCESSFUL" );
   status = pthread_key_create( &Key_id, Key_destructor );
   if ( status )
     printf( "status = %d\n", status );
@@ -69,7 +69,21 @@ void *POSIX_Init(
 
   printf( "Destructor invoked %d times\n", Destructor_invoked );
 
+  puts( "Init: pthread_key_create - EAGAIN (too many keys)" );
+  status = pthread_key_create( &Key_id, Key_destructor );
+  assert( status == EAGAIN );
 
+  puts( "Init: pthread_setspecific - EINVAL (invalid key)" );
+  status = pthread_setspecific( -1, &Data_array[ 0 ] );
+  assert( status == EINVAL );
+
+  puts( "Init: pthread_getspecific - EINVAL (invalid key)" );
+  key_data = pthread_getspecific( -1 );
+  assert( !key_data );
+
+  puts( "Init: pthread_key_delete - EINVAL (invalid key)" );
+  status = pthread_key_delete( -1 );
+  assert( status == EINVAL );
 
   printf( "Init: Setting the key to %d\n", 0 );
   status = pthread_setspecific( Key_id, &Data_array[ 0 ] );
@@ -92,7 +106,7 @@ void *POSIX_Init(
 
   /* delete the key */
 
-  puts( "Init: Deleting a key" );
+  puts( "Init: pthread_key_delete - SUCCESSFUL" );
   status = pthread_key_delete( Key_id );
   if ( status )
     printf( "status = %d\n", status );
