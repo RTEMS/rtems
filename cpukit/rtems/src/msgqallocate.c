@@ -35,7 +35,7 @@
  *  _Message_queue_Allocate
  *
  *  Allocate a message queue and the space for its messages
- * 
+ *
  *  Input parameters:
  *    the_message_queue - the message queue to allocate message buffers
  *    count             - maximum message and reserved buffer count
@@ -50,7 +50,7 @@ Message_queue_Control *_Message_queue_Allocate (
   uint32_t             max_message_size
 )
 {
-  return 
+  return
     (Message_queue_Control *)_Objects_Allocate(&_Message_queue_Information);
 
 }

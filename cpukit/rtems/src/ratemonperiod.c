@@ -115,9 +115,9 @@ rtems_status_code rtems_rate_monotonic_period(
 
           _Thread_Executing->Wait.id = the_period->Object.id;
           _Thread_Set_state( _Thread_Executing, STATES_WAITING_FOR_PERIOD );
-          
+
           /*
-           *  Did the watchdog timer expire while we were actually blocking 
+           *  Did the watchdog timer expire while we were actually blocking
            *  on it?
            */
 

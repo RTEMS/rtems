@@ -26,8 +26,8 @@ extern "C" {
  *  Unless told otherwise, the RTEMS include files will hide some stuff
  *  from normal application code.  Defining this crosses a boundary which
  *  is undesirable since it means your application is using RTEMS features
- *  which are not included in the formally defined and supported API.  
- *  Define this at your own risk. 
+ *  which are not included in the formally defined and supported API.
+ *  Define this at your own risk.
  */
 
 #if (!defined(__RTEMS_VIOLATE_KERNEL_VISIBILITY__)) && (!defined(__RTEMS_INSIDE__))
@@ -70,22 +70,22 @@ extern "C" {
 /*
  *  The following define the constants which may be used in name searches.
  */
- 
+
 #define RTEMS_SEARCH_ALL_NODES   OBJECTS_SEARCH_ALL_NODES
 #define RTEMS_SEARCH_OTHER_NODES OBJECTS_SEARCH_OTHER_NODES
 #define RTEMS_SEARCH_LOCAL_NODE  OBJECTS_SEARCH_LOCAL_NODE
 #define RTEMS_WHO_AM_I           OBJECTS_WHO_AM_I
- 
+
 /*
  * Parameters and return id's for _Objects_Get_next
  */
- 
+
 #define RTEMS_OBJECT_ID_INITIAL_INDEX        OBJECTS_ID_INITIAL_INDEX
 #define RTEMS_OBJECT_ID_FINAL_INDEX          OBJECTS_ID_FINAL_INDEX
 #define RTEMS_OBJECT_ID_INITIAL(api, class, node) OBJECTS_ID_INITIAL(api, class, node)
- 
+
 #define RTEMS_OBJECT_ID_FINAL                OBJECTS_ID_FINAL
- 
+
 /*
  *  The following constant defines the minimum stack size which every
  *  thread must exceed.
@@ -102,9 +102,9 @@ extern "C" {
 /*
  *  An MPCI must support packets of at least this size.
  */
- 
+
 #define RTEMS_MINIMUM_PACKET_SIZE  MP_PACKET_MINIMUM_PACKET_SIZE
- 
+
 /*
  *  The following constant defines the number of uint32_t  's
  *  in a packet which must be converted to native format in a
@@ -112,13 +112,13 @@ extern "C" {
  *  MP_PACKET_MINIMUN_HETERO_CONVERSION uint32_t  's, some of the "extra" data
  *  may a user message buffer which is not automatically endian swapped.
  */
- 
+
 #define RTEMS_MINIMUN_HETERO_CONVERSION  MP_PACKET_MINIMUN_HETERO_CONVERSION
 
 /*
  *  rtems_object_id_to_name
  *
- *  This directive returns the name associated with the specified 
+ *  This directive returns the name associated with the specified
  *  object ID.
  *
  *  Input parameters:

@@ -1,4 +1,4 @@
-/*  
+/*
  *  chdir() - POSIX 1003.1b - 5.2.1 - Change Current Working Directory
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -34,7 +34,7 @@ int chdir(
    *  Get the node where we wish to go.
    */
 
-  result = rtems_filesystem_evaluate_path( 
+  result = rtems_filesystem_evaluate_path(
     pathname, RTEMS_LIBIO_PERMS_SEARCH, &loc, TRUE );
   if ( result != 0 )
      return -1;
@@ -52,10 +52,10 @@ int chdir(
     rtems_filesystem_freenode( &loc );
     rtems_set_errno_and_return_minus_one( ENOTDIR );
   }
-  
+
   rtems_filesystem_freenode( &rtems_filesystem_current );
-   
+
   rtems_filesystem_current = loc;
-  
+
   return 0;
 }

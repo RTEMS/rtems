@@ -28,7 +28,7 @@ int ftruncate(
 {
   rtems_libio_t                    *iop;
   rtems_filesystem_location_info_t  loc;
-  
+
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open(iop);
@@ -36,7 +36,7 @@ int ftruncate(
   /*
    *  Now process the ftruncate() request.
    */
-  
+
   /*
    *  Make sure we are not working on a directory
    */
@@ -44,7 +44,7 @@ int ftruncate(
   loc = iop->pathinfo;
   if ( !loc.ops->node_type_h )
     rtems_set_errno_and_return_minus_one( ENOTSUP );
-    
+
   if ( (*loc.ops->node_type_h)( &loc ) == RTEMS_FILESYSTEM_DIRECTORY )
     rtems_set_errno_and_return_minus_one( EISDIR );
 

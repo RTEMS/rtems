@@ -93,9 +93,9 @@ rtems_status_code rtems_message_queue_broadcast(
 #endif
                       count
                     );
-                      
+
       _Thread_Enable_dispatch();
-      return 
+      return
         _Message_queue_Translate_core_message_queue_return_code( core_status );
 
   }

@@ -32,19 +32,19 @@ typedef ISR_Level rtems_interrupt_level;
  *  The following type defines the control block used to manage
  *  the vectors.
  */
- 
+
 typedef ISR_Vector_number rtems_vector_number;
 
 /*
  *  Return type for ISR Handler
  */
- 
+
 typedef void rtems_isr;
 
 /*
  *  Pointer to an ISR Handler
  */
- 
+
 typedef rtems_isr ( *rtems_isr_entry )(
                  rtems_vector_number
              );
@@ -88,7 +88,7 @@ rtems_status_code rtems_interrupt_catch(
 
 #define rtems_interrupt_disable( _isr_cookie ) \
     _ISR_Disable(_isr_cookie)
-        
+
 /*
  *  rtems_interrupt_enable
  *
@@ -100,7 +100,7 @@ rtems_status_code rtems_interrupt_catch(
 
 #define rtems_interrupt_enable( _isr_cookie ) \
     _ISR_Enable(_isr_cookie)
-        
+
 /*
  *  rtems_interrupt_flash
  *
@@ -123,7 +123,7 @@ rtems_status_code rtems_interrupt_catch(
  *  that the caller is an interrupt service routine, NOT a thread.  The
  *  directives available to an interrupt service routine are restricted.
  */
- 
+
 #define rtems_interrupt_is_in_progress() \
     _ISR_Is_in_progress()
 

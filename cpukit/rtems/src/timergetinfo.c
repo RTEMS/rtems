@@ -35,7 +35,7 @@
  *    *the_info        - region information block filled in
  *    RTEMS_SUCCESSFUL - if successful
  *    error code       - if unsuccessful
- * 
+ *
  */
 
 rtems_status_code rtems_timer_get_information(

@@ -3,7 +3,7 @@
  *
  *  This was copied from Newlib 1.8.0.
  *
- *  
+ *
  * Copyright (c) 1983 Regents of the University of California.
  * All rights reserved.
  *
@@ -99,7 +99,7 @@ scandir(dirname, namelist, select, dcomp)
 
 	/*
 	 * estimate the array size by taking the size of the directory file
-	 * and dividing it by a multiple of the minimum size entry. 
+	 * and dividing it by a multiple of the minimum size entry.
 	 */
 	arraysz = (stb.st_size / 24);
 	names = (struct dirent **)malloc(arraysz * sizeof(struct dirent *));
@@ -145,7 +145,7 @@ cleanup_and_bail:
 
 	if ( dirp )
 		closedir( dirp );
-	
+
 	if ( names ) {
 		for (i=0; i < nitems; i++ )
 			free( names[i] );

@@ -13,7 +13,7 @@
  * These routines provide general purpose error reporting.
  * rtems_error reports an error to stderr and allows use of
  * printf style formatting.  A newline is appended to all messages.
- * 
+ *
  * error_flag can be specified as any of the following:
  *
  *  	RTEMS_ERROR_ERRNO       -- include errno text in output
@@ -21,7 +21,7 @@
  *  	RTEMS_ERROR_ABORT       -- abort after output
  *
  * It can also include a rtems_status value which can be OR'd
- * with the above flags. * 
+ * with the above flags. *
  *
  * EXAMPLE
  *	#include <rtems.h>
@@ -135,11 +135,11 @@ static int rtems_verror(
 
     if (_System_state_Is_multiprocessing)
         fprintf(stderr, "[%d] ", _Configuration_MP_table->node);
-    
+
     if (rtems_progname && *rtems_progname)
         chars_written += fprintf(stderr, "%s: ", rtems_progname);
     chars_written += vfprintf(stderr, printf_format, arglist);
-    
+
     if (status)
         chars_written += fprintf(stderr, " (status: %s)", rtems_status_text(status));
 
@@ -150,7 +150,7 @@ static int rtems_verror(
       else
         chars_written += fprintf(stderr, " (unknown errno=%d)", local_errno);
     }
-    
+
     chars_written += fprintf(stderr, "\n");
 
     (void) fflush(stderr);
@@ -176,7 +176,7 @@ static int rtems_verror(
  * Report an error.
  * error_flag is as above; printf_format is a normal
  * printf(3) format string, with its concommitant arguments.
- * 
+ *
  * Returns the number of characters written.
  */
 
@@ -192,11 +192,11 @@ int rtems_error(
     va_start(arglist, printf_format);
     chars_written = rtems_verror(error_flag, printf_format, arglist);
     va_end(arglist);
-    
+
     return chars_written;
 }
 
-/* 
+/*
  * rtems_panic is shorthand for rtems_error(RTEMS_ERROR_PANIC, ...)
  */
 

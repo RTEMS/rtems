@@ -33,7 +33,7 @@ int readlink(
   result = rtems_filesystem_evaluate_path( pathname, 0, &loc, FALSE );
   if ( result != 0 )
      return -1;
-  
+
   if ( !loc.ops->node_type_h ){
     rtems_filesystem_freenode( &loc );
     rtems_set_errno_and_return_minus_one( ENOTSUP );
@@ -52,6 +52,6 @@ int readlink(
   result =  (*loc.ops->readlink_h)( &loc, buf, bufsize );
 
   rtems_filesystem_freenode( &loc );
-  
+
   return result;
 }

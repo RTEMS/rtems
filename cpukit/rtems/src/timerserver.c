@@ -93,16 +93,16 @@ Thread _Timer_Server_body(
     _Thread_Enable_dispatch();
 
     /*
-     *  At this point, at least one of the timers this task relies 
+     *  At this point, at least one of the timers this task relies
      *  upon has fired.  Stop them both while we process any outstanding
      *  timers.  Before we block, we will restart them.
      */
- 
+
       _Timer_Server_stop_ticks_timer();
       _Timer_Server_stop_seconds_timer();
 
     /*
-     *  Disable dispatching while processing the timers since we want 
+     *  Disable dispatching while processing the timers since we want
      *  to mimic the environment that non-task-based TSRs execute in.
      *  This ensures that the primary difference is that _ISR_Nest_level
      *  is 0 for task-based timers and non-zero for the others.
@@ -124,7 +124,7 @@ Thread _Timer_Server_body(
  *  It must be invoked before any task-based timers can be initiated.
  *
  *  Input parameters:
- *    priority         - timer server priority 
+ *    priority         - timer server priority
  *    stack_size       - stack size in bytes
  *    attribute_set    - timer server attributes
  *
@@ -149,7 +149,7 @@ rtems_status_code rtems_timer_initiate_server(
    */
 
   _priority = priority;
-  if ( priority == RTEMS_TIMER_SERVER_DEFAULT_PRIORITY ) 
+  if ( priority == RTEMS_TIMER_SERVER_DEFAULT_PRIORITY )
     _priority = 0;
   else if ( !_RTEMS_tasks_Priority_is_valid( priority ) )
     return RTEMS_INVALID_PRIORITY;
@@ -173,7 +173,7 @@ rtems_status_code rtems_timer_initiate_server(
    *  an interrupt to other tasks.
    *
    *  We allow the user to override the default priority because the Timer
-   *  Server can invoke TSRs which must adhere to language run-time or 
+   *  Server can invoke TSRs which must adhere to language run-time or
    *  other library rules.  For example, if using a TSR written in Ada the
    *  Server should run at the same priority as the priority Ada task.
    *  Otherwise, the priority ceiling for the mutex used to protect the
@@ -204,7 +204,7 @@ rtems_status_code rtems_timer_initiate_server(
     /*
      *  One would expect a call to rtems_task_delete() here to clean up
      *  but there is actually no way (in normal circumstances) that the
-     *  start can fail.  The id and starting address are known to be 
+     *  start can fail.  The id and starting address are known to be
      *  be good.  If this service fails, something is weirdly wrong on the
      *  target such as a stray write in an ISR or incorrect memory layout.
      */
@@ -232,8 +232,8 @@ rtems_status_code rtems_timer_initiate_server(
   _Chain_Initialize_empty( &_Timer_Ticks_chain );
   _Chain_Initialize_empty( &_Timer_Seconds_chain );
 
-  /* 
-   *  Initialize the timers that will be used to control when the 
+  /*
+   *  Initialize the timers that will be used to control when the
    *  Timer Server wakes up and services the task-based timers.
    */
 
@@ -248,7 +248,7 @@ rtems_status_code rtems_timer_initiate_server(
  *
  *  _Timer_Server_process_ticks_chain
  *
- *  This routine is responsible for adjusting the list of task-based 
+ *  This routine is responsible for adjusting the list of task-based
  *  interval timers to reflect the passage of time.
  *
  *  Input parameters:   NONE
@@ -266,7 +266,7 @@ void _Timer_Server_process_ticks_chain(void)
      ticks = snapshot - _Timer_Server_ticks_last_time;
   else
      ticks = (0xFFFFFFFF - _Timer_Server_ticks_last_time) + snapshot;
- 
+
   _Timer_Server_ticks_last_time = snapshot;
   _Watchdog_Adjust( &_Timer_Ticks_chain, WATCHDOG_FORWARD, ticks );
 }
@@ -275,7 +275,7 @@ void _Timer_Server_process_ticks_chain(void)
  *
  *  _Timer_Server_process_seconds_chain
  *
- *  This routine is responsible for adjusting the list of task-based 
+ *  This routine is responsible for adjusting the list of task-based
  *  time of day timers to reflect the passage of time.
  *
  *  Input parameters:   NONE
@@ -289,7 +289,7 @@ void _Timer_Server_process_seconds_chain(void)
   Watchdog_Interval ticks;
 
   /*
-   *  Process the seconds chain.  Start by checking that the Time 
+   *  Process the seconds chain.  Start by checking that the Time
    *  of Day (TOD) has not been set backwards.  If it has then
    *  we want to adjust the _Timer_Seconds_chain to indicate this.
    */
@@ -304,7 +304,7 @@ void _Timer_Server_process_seconds_chain(void)
     ticks = snapshot - _Timer_Server_seconds_last_time;
     _Watchdog_Adjust( &_Timer_Seconds_chain, WATCHDOG_FORWARD, ticks );
 
-  } else if ( snapshot < _Timer_Server_seconds_last_time ) { 
+  } else if ( snapshot < _Timer_Server_seconds_last_time ) {
      /*
       *  The current TOD is before the last TOD which indicates that
       *  TOD has been set backwards.

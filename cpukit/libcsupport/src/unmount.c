@@ -1,7 +1,7 @@
 /*
  *  unmount() - Unmount a File System
  *
- *  This routine is not defined in the POSIX 1003.1b standard but 
+ *  This routine is not defined in the POSIX 1003.1b standard but
  *  in some form is supported on most UNIX and POSIX systems.  This
  *  routine is necessary to mount instantiations of a file system
  *  into the file system name space.
@@ -43,7 +43,7 @@ int search_mt_for_mount_point(
   rtems_filesystem_location_info_t *location_of_mount_point
 );
 
-rtems_boolean rtems_filesystem_nodes_equal( 
+rtems_boolean rtems_filesystem_nodes_equal(
   const rtems_filesystem_location_info_t   *loc1,
   const rtems_filesystem_location_info_t   *loc2
 ){
@@ -59,11 +59,11 @@ rtems_boolean rtems_filesystem_nodes_equal(
  *  compare the mount tables mt_fs_root to the new_fs_root_node. If any of the
  *  mount table file system root nodes matches the new file system root node
  *  this indicates that we are trying to mount a file system that has already
- *  been mounted. This is not a permitted operation. temp_loc is set to 
+ *  been mounted. This is not a permitted operation. temp_loc is set to
  *  the root node of the file system being unmounted.
  */
 
-rtems_boolean file_systems_below_this_mountpoint( 
+rtems_boolean file_systems_below_this_mountpoint(
   const char                            *path,
   rtems_filesystem_location_info_t      *fs_root_loc,
   rtems_filesystem_mount_table_entry_t  *fs_to_unmount
@@ -91,7 +91,7 @@ rtems_boolean file_systems_below_this_mountpoint(
 
 /*
  *  unmount
- * 
+ *
  *  This routine will attempt to unmount the file system that has been
  *  is mounted a path.  If the operation is successful, 0 will
  *  be returned to the calling routine.  Otherwise, 1 will be returned.
@@ -119,7 +119,7 @@ int unmount(
   mt_entry     = loc.mt_entry;
   fs_mount_loc = &mt_entry->mt_point_node;
   fs_root_loc  = &mt_entry->mt_fs_root;
-	
+
   /*
    * Verify this is the root node for the file system to be unmounted.
    */
@@ -167,12 +167,12 @@ int unmount(
   /*
    *  Run the file descriptor table to determine if there are any file
    *  descriptors that are currently active and reference nodes in the
-   *  file system that we are trying to unmount 
+   *  file system that we are trying to unmount
    */
 
-  if ( rtems_libio_is_open_files_in_fs( mt_entry ) == 1 ) 
+  if ( rtems_libio_is_open_files_in_fs( mt_entry ) == 1 )
     rtems_set_errno_and_return_minus_one( EBUSY );
-  
+
   /*
    * Allow the file system being unmounted on to do its cleanup.
    * If it fails it will set the errno to the approprate value
@@ -191,7 +191,7 @@ int unmount(
    *  directory node.
    *
    *  NOTE:  Fatal error is called in a case which should never happen
-   *         This was response was questionable but the best we could 
+   *         This was response was questionable but the best we could
    *         come up with.
    */
 

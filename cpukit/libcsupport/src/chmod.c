@@ -37,7 +37,7 @@ int chmod(
   status = rtems_filesystem_evaluate_path( path, 0, &loc, TRUE );
   if ( status != 0 )
     return -1;
-  
+
   if ( !loc.handlers ){
     rtems_filesystem_freenode( &loc );
     rtems_set_errno_and_return_minus_one( EBADF );
@@ -51,6 +51,6 @@ int chmod(
   result = (*loc.handlers->fchmod_h)( &loc, mode );
 
   rtems_filesystem_freenode( &loc );
-  
+
   return result;
 }

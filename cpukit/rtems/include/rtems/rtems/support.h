@@ -35,10 +35,10 @@ extern "C" {
  *  This must be implemented as a macro for use in Configuration Tables.
  *
  */
- 
+
 #define rtems_build_name( _C1, _C2, _C3, _C4 ) \
   ( (uint32_t  )(_C1) << 24 | (uint32_t  )(_C2) << 16 | (uint32_t  )(_C3) << 8 | (uint32_t  )(_C4) )
- 
+
 /*
  *  rtems_get_class
  *
@@ -47,10 +47,10 @@ extern "C" {
  *  This function returns the class portion of the ID.
  *
  */
- 
+
 #define rtems_get_class( _id ) \
   _Objects_Get_class( _id )
- 
+
 /*
  *  rtems_get_node
  *
@@ -59,10 +59,10 @@ extern "C" {
  *  This function returns the node portion of the ID.
  *
  */
- 
+
 #define rtems_get_node( _id ) \
   _Objects_Get_node( _id )
- 
+
 /*
  *  rtems_get_index
  *
@@ -71,7 +71,7 @@ extern "C" {
  *  This function returns the index portion of the ID.
  *
  */
- 
+
 #define rtems_get_index( _id ) \
   _Objects_Get_index( _id )
 

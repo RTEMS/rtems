@@ -75,11 +75,11 @@ void _Semaphore_Manager_initialization(
     _Semaphore_MP_Send_extract_proxy /* Proxy extraction support callout */
 #endif
   );
- 
+
   /*
    *  Register the MP Process Packet routine.
    */
- 
+
 #if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Register_packet_processor(
     MP_PACKET_SEMAPHORE,

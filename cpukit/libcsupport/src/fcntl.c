@@ -35,7 +35,7 @@ static int vfcntl(
   int            flags;
   int            mask;
   int            ret = 0;
-  
+
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open(iop);
@@ -78,7 +78,7 @@ static int vfcntl(
        *  Interpret the third argument as the "close on exec()" flag.
        *  If this argument is 1, then the file descriptor is to be closed
        *  if a new process is exec()'ed.  Since RTEMS does not support
-       *  processes, then we can ignore this one except to make 
+       *  processes, then we can ignore this one except to make
        *  F_GETFD work.
        */
 
@@ -136,10 +136,10 @@ static int vfcntl(
 
   /*
    *  If we got this far successfully, then we give the optional
-   *  filesystem specific handler a chance to process this.  
+   *  filesystem specific handler a chance to process this.
    */
 
-  if (ret >= 0) {    
+  if (ret >= 0) {
     if (iop->handlers->fcntl_h) {
       int err = (*iop->handlers->fcntl_h)( cmd, iop );
       if (err) {

@@ -31,13 +31,13 @@
  *
  *  Output parameters:  NONE
  */
- 
+
 void _Signal_Manager_initialization( void )
 {
   /*
    *  Register the MP Process Packet routine.
    */
- 
+
 #if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Register_packet_processor(
     MP_PACKET_SIGNAL,

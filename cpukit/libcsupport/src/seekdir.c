@@ -37,7 +37,7 @@ void seekdir(
    * This is not a nice way to error out, but we have no choice here.
    */
 
-  if ( status == -1 ) 
+  if ( status == -1 )
     return;
 
   dirp->dd_loc = 0;

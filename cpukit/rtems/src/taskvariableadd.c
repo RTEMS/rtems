@@ -19,7 +19,7 @@
 /*
  *  rtems_task_variable_add
  *
- *  This directive registers a task variable. 
+ *  This directive registers a task variable.
  */
 
 rtems_status_code rtems_task_variable_add(

@@ -56,7 +56,7 @@
  *    name             - user defined semaphore name
  *    count            - initial count of semaphore
  *    attribute_set    - semaphore attributes
- *    priority_ceiling - semaphore's ceiling priority 
+ *    priority_ceiling - semaphore's ceiling priority
  *    id               - pointer to semaphore id
  *
  *  Output parameters:
@@ -90,15 +90,15 @@ rtems_status_code rtems_semaphore_create(
     if ( _Attributes_Is_inherit_priority( attribute_set ) )
       return RTEMS_NOT_DEFINED;
 
-  } else 
+  } else
 #endif
 
-  if ( _Attributes_Is_inherit_priority( attribute_set ) || 
+  if ( _Attributes_Is_inherit_priority( attribute_set ) ||
               _Attributes_Is_priority_ceiling( attribute_set ) ) {
 
     if ( ! ( (_Attributes_Is_binary_semaphore( attribute_set ) ||
               _Attributes_Is_simple_binary_semaphore( attribute_set )) &&
-             
+
              _Attributes_Is_priority( attribute_set ) ) )
       return RTEMS_NOT_DEFINED;
 
@@ -129,7 +129,7 @@ rtems_status_code rtems_semaphore_create(
   the_semaphore->attribute_set = attribute_set;
 
   /*
-   *  If it is not a counting semaphore, then it is either a 
+   *  If it is not a counting semaphore, then it is either a
    *  simple binary semaphore or a more powerful mutex style binary
    *  semaphore.
    */

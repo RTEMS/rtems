@@ -72,7 +72,7 @@ typedef CPU_Interrupt_frame        rtems_interrupt_frame;
 typedef Heap_Information_block region_information_block;
 
 /*
- *  Time related 
+ *  Time related
  */
 
 typedef Watchdog_Interval rtems_interval;
@@ -81,7 +81,7 @@ typedef TOD_Control       rtems_time_of_day;
 /*
  *  Define the type for an RTEMS API task mode.
  */
- 
+
 typedef Modes_Control rtems_mode;
 
 /*

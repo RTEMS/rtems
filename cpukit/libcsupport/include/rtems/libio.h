@@ -140,9 +140,9 @@ struct _rtems_filesystem_file_handlers_r {
 
 /*
  *  XXX
- *  This routine does not allocate any space and rtems_filesystem_freenode_t 
+ *  This routine does not allocate any space and rtems_filesystem_freenode_t
  *  is not called by the generic after calling this routine.
- *  ie. node_access does not have to contain valid data when the 
+ *  ie. node_access does not have to contain valid data when the
  *      routine returns.
  */
 
@@ -228,9 +228,9 @@ typedef int (*rtems_filesystem_symlink_t)(
 );
 
 typedef int (*rtems_filesystem_readlink_t)(
- rtems_filesystem_location_info_t  *loc,     /* IN  */       
- char                              *buf,     /* OUT */       
- size_t                            bufsize    
+ rtems_filesystem_location_info_t  *loc,     /* IN  */
+ char                              *buf,     /* OUT */
+ size_t                            bufsize
 );
 
 /*
@@ -342,7 +342,7 @@ struct rtems_libio_tt {
     off_t                             offset;    /* current offset into file */
     uint32_t                          flags;
     rtems_filesystem_location_info_t  pathinfo;
-    Objects_Id                        sem;      
+    Objects_Id                        sem;
     uint32_t                          data0;     /* private to "driver" */
     void                             *data1;     /* ... */
     void                             *file_info; /* used by file handlers */
@@ -476,8 +476,8 @@ union __rtems_dev_t {
   } __overlay;
 };
 
-static inline dev_t rtems_filesystem_make_dev_t( 
-  rtems_device_major_number _major, 
+static inline dev_t rtems_filesystem_make_dev_t(
+  rtems_device_major_number _major,
   rtems_device_minor_number _minor
 )
 {

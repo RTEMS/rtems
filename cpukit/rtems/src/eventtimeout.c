@@ -49,12 +49,12 @@ void _Event_Timeout(
     case OBJECTS_ERROR:
       break;
     case OBJECTS_LOCAL:
- 
+
       /*
        *  If the event manager is not synchronized, then it is either
        *  "nothing happened", "timeout", or "satisfied".   If the_thread
        *  is the executing thread, then it is in the process of blocking
-       *  and it is the thread which is responsible for the synchronization 
+       *  and it is the thread which is responsible for the synchronization
        *  process.
        *
        *  If it is not satisfied, then it is "nothing happened" and
@@ -65,7 +65,7 @@ void _Event_Timeout(
       _ISR_Disable( level );
       if ( the_thread->Wait.count ) {  /* verify thread is waiting */
         the_thread->Wait.count = 0;
-        if ( _Event_Sync_state != EVENT_SYNC_SYNCHRONIZED && 
+        if ( _Event_Sync_state != EVENT_SYNC_SYNCHRONIZED &&
              _Thread_Is_executing( the_thread ) ) {
           if ( _Event_Sync_state != EVENT_SYNC_SATISFIED ) {
             _Event_Sync_state = EVENT_SYNC_TIMEOUT;
@@ -79,7 +79,7 @@ void _Event_Timeout(
       }
       else {
         _ISR_Enable( level );
-      } 
+      }
 
       _Thread_Unnest_dispatch();
       break;

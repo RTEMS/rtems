@@ -35,7 +35,7 @@ rtems_user_env_t * rtems_current_user_env = &rtems_global_user_env;
  *  rtems_filesystem_initialize
  *
  *  Initialize the foundation of the file system.  This is specified
- *  by the structure rtems_filesystem_mount_table.  The usual 
+ *  by the structure rtems_filesystem_mount_table.  The usual
  *  configuration is a single instantiation of the IMFS or miniIMFS with
  *  a single "/dev" directory in it.
  */
@@ -50,7 +50,7 @@ void rtems_filesystem_initialize( void )
   rtems_filesystem_mount_table_entry_t *entry;
   rtems_filesystem_mount_table_t       *mt;
   rtems_filesystem_location_info_t		loc;
-  
+
   /*
    *  Set the default umask to "022".
    */
@@ -125,8 +125,8 @@ void rtems_filesystem_initialize( void )
 
   /*
    *  This code if if'ed 0 out because you can't mount another
-   *  filesystem properly until the mount point it will be 
-   *  mounted onto is created.  Moreover, if it is going to 
+   *  filesystem properly until the mount point it will be
+   *  mounted onto is created.  Moreover, if it is going to
    *  use a device, then it is REALLY unfair to attempt this
    *  before device drivers are initialized.
    */

@@ -60,7 +60,7 @@ rtems_status_code rtems_message_queue_receive(
   register Message_queue_Control *the_message_queue;
   Objects_Locations               location;
   boolean                         wait;
- 
+
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
 
@@ -84,7 +84,7 @@ rtems_status_code rtems_message_queue_receive(
         wait = FALSE;
       else
         wait = TRUE;
- 
+
       _CORE_message_queue_Seize(
         &the_message_queue->message_queue,
         the_message_queue->Object.id,

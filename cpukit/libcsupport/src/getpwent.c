@@ -226,7 +226,7 @@ int getpwnam_r(
   return getpw_r(name, 0, pwd, buffer, bufsize, result);
 }
 
-struct passwd *getpwnam( 
+struct passwd *getpwnam(
   const char *name
 )
 {
@@ -385,7 +385,7 @@ int getgrnam_r(
   return getgr_r(name, 0, grp, buffer, bufsize, result);
 }
 
-struct group *getgrnam( 
+struct group *getgrnam(
   const char *name
 )
 {

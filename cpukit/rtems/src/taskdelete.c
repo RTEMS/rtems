@@ -74,7 +74,7 @@ rtems_status_code rtems_task_delete(
         return RTEMS_INVALID_ID;
         /* This should never happen if _Thread_Get() works right */
       }
-  
+
       _Thread_Close( the_information, the_thread );
 
       _RTEMS_tasks_Free( the_thread );

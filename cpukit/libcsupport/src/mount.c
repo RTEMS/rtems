@@ -3,8 +3,8 @@
  *
  *  XXX
  *
- *  XXX make sure no required ops are NULL 
- *  XXX make sure no optional ops you are using are NULL 
+ *  XXX make sure no required ops are NULL
+ *  XXX make sure no optional ops you are using are NULL
  *  XXX unmount should be required.
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -55,8 +55,8 @@ static int Is_node_fs_root(
 /*
  *  mount
  *
- *  This routine will attempt to mount a new file system at the specified 
- *  mount point. A series of tests will be run to determine if any of the 
+ *  This routine will attempt to mount a new file system at the specified
+ *  mount point. A series of tests will be run to determine if any of the
  *  following reasons exist to prevent the mount operation:
  *
  * 	1) The file system type or options are not valid
@@ -95,7 +95,7 @@ int mount(
    *  Are the file system options valid?
    */
 
-  if ( options != RTEMS_FILESYSTEM_READ_ONLY && 
+  if ( options != RTEMS_FILESYSTEM_READ_ONLY &&
        options != RTEMS_FILESYSTEM_READ_WRITE ) {
     errno = EINVAL;
     return -1;
@@ -109,7 +109,7 @@ int mount(
 
 
   /*
-   * Allocate a mount table entry 
+   * Allocate a mount table entry
    */
 
    size = sizeof(rtems_filesystem_mount_table_entry_t);
@@ -133,12 +133,12 @@ int mount(
 
   /*
    *  The mount_point should be a directory with read/write/execute
-   *  permissions in the existing tree. 
+   *  permissions in the existing tree.
    */
 
   if ( mount_point ) {
 
-    if ( rtems_filesystem_evaluate_path( 
+    if ( rtems_filesystem_evaluate_path(
             mount_point, RTEMS_LIBIO_PERMS_RWX, &loc, TRUE ) == -1 )
       goto cleanup_and_bail;
 
@@ -153,12 +153,12 @@ int mount(
       goto cleanup_and_bail;
     }
 
-    /* 
+    /*
      *  Test to see if it is a directory
      */
 
     if ( loc.ops->node_type_h( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
-      errno = ENOTDIR; 
+      errno = ENOTDIR;
       goto cleanup_and_bail;
     }
 
@@ -170,11 +170,11 @@ int mount(
       errno = EBUSY;
       goto cleanup_and_bail;
     }
- 
+
     /*
      *  This must be a good mount point, so move the location information
      *  into the allocated mount entry.  Note:  the information that
-     *  may have been allocated in loc should not be sent to freenode 
+     *  may have been allocated in loc should not be sent to freenode
      *  until the system is unmounted.  It may be needed to correctly
      *  traverse the tree.
      */
@@ -184,9 +184,9 @@ int mount(
     temp_mt_entry->mt_point_node.ops = loc.ops;
     temp_mt_entry->mt_point_node.mt_entry = loc.mt_entry;
 
-    /* 
-     *  This link to the parent is only done when we are dealing with system 
-     *  below the base file system 
+    /*
+     *  This link to the parent is only done when we are dealing with system
+     *  below the base file system
      */
 
     if ( !loc.ops->mount_h ){
@@ -199,9 +199,9 @@ int mount(
     }
   } else {
 
-    /* 
-     *  This is a mount of the base file system --> The 
-     *  mt_point_node.node_access will be set to null to indicate that this 
+    /*
+     *  This is a mount of the base file system --> The
+     *  mt_point_node.node_access will be set to null to indicate that this
      *  is the root of the entire file system.
      */
 
@@ -224,7 +224,7 @@ int mount(
   }
 
   /*
-   *  Add the mount table entry to the mount table chain 
+   *  Add the mount table entry to the mount table chain
    */
 
   Chain_Append( &rtems_filesystem_mount_table_control, &temp_mt_entry->Node );
@@ -236,7 +236,7 @@ int mount(
 cleanup_and_bail:
 
   free( temp_mt_entry );
-  
+
   if ( loc_to_free )
     rtems_filesystem_freenode( loc_to_free );
 
@@ -264,7 +264,7 @@ int init_fs_mount_table()
  *  This routine will run through the entries that currently exist in the
  *  mount table chain. For each entry in the mount table chain it will
  *  compare the mount tables root node to the node describing the selected
- *  mount point. If any match is found true is returned else false is 
+ *  mount point. If any match is found true is returned else false is
  *  returned.
  *
  */
@@ -276,8 +276,8 @@ static int Is_node_fs_root(
   Chain_Node                           *the_node;
   rtems_filesystem_mount_table_entry_t *the_mount_entry;
 
-  /* 
-   * For each mount table entry 
+  /*
+   * For each mount table entry
    */
 
   for ( the_node = rtems_filesystem_mount_table_control.first;

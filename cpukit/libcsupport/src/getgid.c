@@ -18,13 +18,13 @@
 
 /*
  * MACRO in userenv.h
- * 
+ *
 gid_t _POSIX_types_Gid = 0;
 */
 
 /*PAGE
  *
- *  4.2.1 Get Real User, Effective User, Ral Group, and Effective Group IDs, 
+ *  4.2.1 Get Real User, Effective User, Ral Group, and Effective Group IDs,
  *        P1003.1b-1993, p. 84
  */
 

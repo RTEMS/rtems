@@ -96,12 +96,12 @@ rtems_status_code rtems_semaphore_obtain(
       if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) {
         _CORE_mutex_Seize(
           &the_semaphore->Core_control.mutex,
-          id, 
+          id,
           wait,
           timeout,
           level
         );
-        return _Semaphore_Translate_core_mutex_return_code( 
+        return _Semaphore_Translate_core_mutex_return_code(
                   _Thread_Executing->Wait.return_code );
       }
 
@@ -113,7 +113,7 @@ rtems_status_code rtems_semaphore_obtain(
         timeout,
         &level
       );
-      return _Semaphore_Translate_core_semaphore_return_code( 
+      return _Semaphore_Translate_core_semaphore_return_code(
                   _Thread_Executing->Wait.return_code );
   }
 

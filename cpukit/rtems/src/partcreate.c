@@ -64,7 +64,7 @@ rtems_status_code rtems_partition_create(
      return RTEMS_INVALID_ADDRESS;
 
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( _Attributes_Is_global( attribute_set ) && 
+  if ( _Attributes_Is_global( attribute_set ) &&
        !_System_state_Is_multiprocessing )
     return RTEMS_MP_NOT_CONFIGURED;
 #endif

@@ -195,7 +195,7 @@ boolean _Semaphore_Seize(
  *  This function returns a RTEMS status code based on the mutex
  *  status code specified.
  */
- 
+
 rtems_status_code _Semaphore_Translate_core_mutex_return_code (
   uint32_t   the_mutex_status
 );
@@ -208,11 +208,11 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
  *  This function returns a RTEMS status code based on the semaphore
  *  status code specified.
  */
- 
+
 rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
   uint32_t   the_mutex_status
 );
- 
+
 /*PAGE
  *
  *  _Semaphore_Core_mutex_mp_support
@@ -237,11 +237,11 @@ void  _Semaphore_Core_mutex_mp_support (
  *
  *  DESCRIPTION:
  *
- *  This function processes the global actions necessary for remote 
+ *  This function processes the global actions necessary for remote
  *  accesses to a global semaphore based on a core semaphore.  This function
  *  is called by the core.
  */
- 
+
 void  _Semaphore_Core_semaphore_mp_support (
   Thread_Control *the_thread,
   rtems_id        id

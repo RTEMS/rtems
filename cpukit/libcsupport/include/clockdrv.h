@@ -29,7 +29,7 @@ extern rtems_device_minor_number rtems_clock_minor;
 
 #define CLOCK_DRIVER_TABLE_ENTRY \
   { Clock_initialize, NULL, NULL, NULL, NULL, Clock_control }
- 
+
 rtems_device_driver Clock_initialize(
   rtems_device_major_number,
   rtems_device_minor_number,

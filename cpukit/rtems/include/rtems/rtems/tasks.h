@@ -75,12 +75,12 @@ typedef Priority_Control rtems_task_priority;
  *  caller wants to obtain the current priority.
  */
 
-#define RTEMS_CURRENT_PRIORITY      PRIORITY_MINIMUM   
+#define RTEMS_CURRENT_PRIORITY      PRIORITY_MINIMUM
 
 /*
  *  Notepads constants (indices into notepad array)
  */
- 
+
 #define RTEMS_NOTEPAD_FIRST 0             /* lowest numbered notepad */
 #define RTEMS_NOTEPAD_0    0              /* notepad location 0  */
 #define RTEMS_NOTEPAD_1    1              /* notepad location 1  */
@@ -99,7 +99,7 @@ typedef Priority_Control rtems_task_priority;
 #define RTEMS_NOTEPAD_14   14             /* notepad location 14 */
 #define RTEMS_NOTEPAD_15   15             /* notepad location 15 */
 #define RTEMS_NOTEPAD_LAST RTEMS_NOTEPAD_15     /* highest numbered notepad */
- 
+
 #define RTEMS_NUMBER_NOTEPADS  (RTEMS_NOTEPAD_LAST+1)
 
 /*
@@ -111,30 +111,30 @@ typedef Thread_Control rtems_tcb;
 /*
  *  The following defines the "return type" of an RTEMS task.
  */
- 
+
 typedef void rtems_task;
 
 /*
  *  The following defines the argument to an RTEMS task.
  */
- 
+
 typedef uint32_t   rtems_task_argument;
 
 /*
  *  The following defines the type for the entry point of an RTEMS task.
  */
- 
+
 typedef rtems_task ( *rtems_task_entry )(
                       rtems_task_argument
                    );
- 
+
 /*
  *  The following records define the Initialization Tasks Table.
  *  Each entry contains the information required by RTEMS to
  *  create and start a user task automatically at executive
  *  initialization time.
  */
- 
+
 typedef struct {
   rtems_name            name;              /* task name */
   uint32_t              stack_size;        /* task stack size */
@@ -150,7 +150,7 @@ typedef struct {
  *  the RTEMS API to function correctly.
  */
 
- 
+
 typedef struct {
   uint32_t                 Notepads[ RTEMS_NUMBER_NOTEPADS ];
   rtems_event_set          pending_events;
@@ -169,7 +169,7 @@ RTEMS_EXTERN Objects_Information _RTEMS_tasks_Information;
  *  These are used to manage the user initialization tasks.
  */
 
-RTEMS_EXTERN rtems_initialization_tasks_table 
+RTEMS_EXTERN rtems_initialization_tasks_table
                *_RTEMS_tasks_User_initialization_tasks;
 RTEMS_EXTERN uint32_t     _RTEMS_tasks_Number_of_initialization_tasks;
 
@@ -180,7 +180,7 @@ RTEMS_EXTERN uint32_t     _RTEMS_tasks_Number_of_initialization_tasks;
  *
  *  This routine initializes all Task Manager related data structures.
  */
- 
+
 void _RTEMS_tasks_Manager_initialization(
   uint32_t                          maximum_tasks,
   uint32_t                          number_of_initialization_tasks,
@@ -449,7 +449,7 @@ rtems_status_code rtems_task_variable_delete(
  *
  *  Output parameters:  NONE
  */
- 
+
 void _RTEMS_tasks_Initialize_user_tasks( void );
 
 #ifndef __RTEMS_APPLICATION__

@@ -44,9 +44,9 @@
 
 #include <rtems/libio.h>                /* libio.h not pulled in by rtems */
 
-/*                            
+/*
  *  File descriptor Table Information
- */         
+ */
 
 extern uint32_t    rtems_libio_number_iops;
 rtems_id           rtems_libio_semaphore;
@@ -102,7 +102,7 @@ void rtems_libio_init( void )
 
 /*
  *  rtems_libio_fcntl_flags
- * 
+ *
  *  Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
  */
 
@@ -131,7 +131,7 @@ uint32_t   rtems_libio_fcntl_flags(
   /*
    * Access mode is a small integer
    */
-  
+
   access_modes = fcntl_flags & O_ACCMODE;
   fcntl_flags &= ~O_ACCMODE;
   flags = rtems_assoc_local_by_remote( access_modes_assoc, access_modes );
@@ -147,7 +147,7 @@ uint32_t   rtems_libio_fcntl_flags(
 
 /*
  *  rtems_libio_to_fcntl_flags
- * 
+ *
  *  Convert RTEMS internal flags to UNIX fnctl(2) flags
  */
 
@@ -183,7 +183,7 @@ uint32_t   rtems_libio_to_fcntl_flags(
 /*
  *  rtems_libio_allocate
  *
- *  This routine searches the IOP Table for an unused entry.  If it 
+ *  This routine searches the IOP Table for an unused entry.  If it
  *  finds one, it returns it.  Otherwise, it returns NULL.
  */
 
@@ -191,7 +191,7 @@ rtems_libio_t *rtems_libio_allocate( void )
 {
   rtems_libio_t *iop, *next;
   rtems_status_code rc;
-  
+
   rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
 
   if (rtems_libio_iop_freelist) {
@@ -211,10 +211,10 @@ rtems_libio_t *rtems_libio_allocate( void )
     rtems_libio_iop_freelist = next;
     goto done;
   }
-  
+
 failed:
   iop = 0;
-  
+
 done:
   rtems_semaphore_release( rtems_libio_semaphore );
   return iop;
@@ -250,7 +250,7 @@ void rtems_libio_free(
  *  are any active file descriptors that refer to the at least one node in the
  *  file system that we are trying to dismount.
  *
- *  If there is at least one node in the file system referenced by the mount 
+ *  If there is at least one node in the file system referenced by the mount
  *  table entry a 1 is returned, otherwise a 0 is returned.
  */
 
@@ -263,15 +263,15 @@ int rtems_libio_is_open_files_in_fs(
   int                i;
 
   rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
-              
+
   /*
    *  Look for any active file descriptor entry.
-   */         
-     
+   */
+
   for (iop=rtems_libio_iops,i=0; i < rtems_libio_number_iops; iop++, i++){
-        
+
     if ((iop->flags & LIBIO_FLAGS_OPEN) != 0) {
-        
+
        /*
         *  Check if this node is under the file system that we
         *  are trying to dismount.
@@ -285,7 +285,7 @@ int rtems_libio_is_open_files_in_fs(
   }
 
   rtems_semaphore_release( rtems_libio_semaphore );
- 
+
   return result;
 }
 
@@ -294,7 +294,7 @@ int rtems_libio_is_open_files_in_fs(
  *
  *  This routine scans the entire file descriptor table to determine if the
  *  given file refers to an active file descriptor.
- * 
+ *
  *  If the given file is open a 1 is returned, otherwise a 0 is returned.
  */
 
@@ -311,10 +311,10 @@ int rtems_libio_is_file_open(
   /*
    *  Look for any active file descriptor entry.
    */
-  
- for (iop=rtems_libio_iops,i=0; i < rtems_libio_number_iops; iop++, i++){ 
+
+ for (iop=rtems_libio_iops,i=0; i < rtems_libio_number_iops; iop++, i++){
     if ((iop->flags & LIBIO_FLAGS_OPEN) != 0) {
-  
+
        /*
         *  Check if this node is under the file system that we
         *  are trying to dismount.

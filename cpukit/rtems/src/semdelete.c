@@ -95,13 +95,13 @@ rtems_status_code rtems_semaphore_delete(
           return RTEMS_RESOURCE_IN_USE;
         }
         _CORE_mutex_Flush(
-          &the_semaphore->Core_control.mutex, 
+          &the_semaphore->Core_control.mutex,
           SEMAPHORE_MP_OBJECT_WAS_DELETED,
           CORE_MUTEX_WAS_DELETED
         );
       } else {
         _CORE_semaphore_Flush(
-          &the_semaphore->Core_control.semaphore, 
+          &the_semaphore->Core_control.semaphore,
           SEMAPHORE_MP_OBJECT_WAS_DELETED,
           CORE_SEMAPHORE_WAS_DELETED
         );

@@ -101,7 +101,7 @@ rtems_status_code rtems_region_return_segment(
            break;
 
         the_segment = (void **) _Region_Allocate_segment(
-           the_region, 
+           the_region,
            the_thread->Wait.count
         );
 

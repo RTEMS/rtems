@@ -28,7 +28,7 @@
 
 /*
  * MACRO in userenv.h
- * 
+ *
 static char _POSIX_types_Getlogin_buffer[ LOGIN_NAME_MAX ];
 */
 
@@ -50,7 +50,7 @@ int getlogin_r(
   size_t  namesize
 )
 {
-  struct passwd *pw;	
+  struct passwd *pw;
   if ( namesize < LOGIN_NAME_MAX )
     return ERANGE;
 

@@ -74,7 +74,7 @@ typedef uint32_t   Modes_Control;
 
 #define RTEMS_INTERRUPT_LEVEL( _mode_set ) \
   ( (_mode_set) & RTEMS_INTERRUPT_MASK )
- 
+
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/modes.inl>

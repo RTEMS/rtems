@@ -29,8 +29,8 @@ int ioctl(
   int  fd,
   int  command,
   ...
-) 
-{ 
+)
+{
   va_list            ap;
   rtems_status_code  rc;
   rtems_libio_t     *iop;

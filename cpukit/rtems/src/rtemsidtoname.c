@@ -21,7 +21,7 @@
  *
  *  rtems_object_id_to_name
  *
- *  This directive returns the name associated with the specified 
+ *  This directive returns the name associated with the specified
  *  object ID.
  *
  *  Input parameters:

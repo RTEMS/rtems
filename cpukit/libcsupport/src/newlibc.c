@@ -41,11 +41,11 @@
  *        we just don't for now.
  *        Not sure if this is a problem with hpux, newlib, or something else.
  */
- 
+
 #if defined(RTEMS_UNIX) && !defined(hpux)
 #define NEED_SETVBUF
 #endif
- 
+
 #include <stdio.h>
 
 int _fwalk(struct _reent *ptr, int (*function) (FILE *) );
@@ -65,7 +65,7 @@ extern void _reclaim_reent(struct _reent *);
 void libc_wrapup(void)
 {
   /*
-   *  In case RTEMS is already down, don't do this.  It could be 
+   *  In case RTEMS is already down, don't do this.  It could be
    *  dangerous.
    */
 
@@ -87,7 +87,7 @@ void libc_wrapup(void)
 #endif
       _REENT = &libc_global_reent;
   }
-  
+
   /*
    * Try to drain output buffers.
    *
@@ -100,7 +100,7 @@ void libc_wrapup(void)
   fclose (stderr);
 }
 
-/* 
+/*
  * reent struct allocation moved here from libc_start_hook() to avoid
  * mutual exclusion problems when memory is allocated from the start hook.
  *
@@ -129,14 +129,14 @@ rtems_boolean libc_create_hook(
 #endif
 
   if (ptr)
-  {   
- 
+  {
+
 #ifdef __GNUC__
       /* GCC extension: structure constants */
       _REENT_INIT_PTR((ptr));
 #else
-      /* 
-       *  WARNING: THIS IS VERY DEPENDENT ON NEWLIB!!! 
+      /*
+       *  WARNING: THIS IS VERY DEPENDENT ON NEWLIB!!!
        *           Last visual check was against newlib 1.8.2 but last known
        *           use was against 1.7.0.  This is basically an exansion of
        *           REENT_INIT() in <sys/reent.h>.
@@ -171,7 +171,7 @@ rtems_extension libc_start_hook(
 /*
  * Called for all user TASKS (system tasks are MPCI Receive Server and IDLE)
  */
- 
+
 #ifdef NEED_SETVBUF
 rtems_extension libc_begin_hook(rtems_tcb *current_task)
 {
@@ -248,7 +248,7 @@ rtems_extension libc_delete_hook(
 */
     /*
      *  Just in case there are some buffers lying around.
-     */ 
+     */
     _fwalk(ptr, newlib_free_buffers);
 #if REENT_MALLOCED
     free(ptr);

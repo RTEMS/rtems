@@ -47,6 +47,6 @@ int dup2(
   /*
    *  This fcntl handles everything else.
    */
-  
+
   return fcntl( fildes, F_DUPFD, fildes2 );
 }

@@ -68,9 +68,9 @@ int rmdir(
     rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  result =  (*loc.handlers->rmnod_h)( &loc );  
+  result =  (*loc.handlers->rmnod_h)( &loc );
 
   rtems_filesystem_freenode( &loc );
-  
+
   return result;
 }

@@ -112,7 +112,7 @@ void RTEMS_Malloc_Initialize(
 
   /*
    *  If the BSP is not clearing out the workspace, then it is most likely
-   *  not clearing out the initial memory for the heap.  There is no 
+   *  not clearing out the initial memory for the heap.  There is no
    *  standard supporting zeroing out the heap memory.  But much code
    *  with UNIX history seems to assume that memory malloc'ed during
    *  initialization (before any free's) is zero'ed.  This is true most
@@ -145,7 +145,7 @@ void RTEMS_Malloc_Initialize(
   /* zero all the stats */
   (void) memset( &rtems_malloc_stats, 0, sizeof(rtems_malloc_stats) );
 #endif
-  
+
   MSBUMP(space_available, length);
 }
 
@@ -173,11 +173,11 @@ void *malloc(
   if (_System_state_Is_up(_System_state_Get())) {
     if (_Thread_Dispatch_disable_level > 0)
       return (void *) 0;
- 
+
     if (_ISR_Nest_level > 0)
       return (void *) 0;
   }
- 
+
   /*
    *  If some free's have been deferred, then do them now.
    */
@@ -212,7 +212,7 @@ void *malloc(
 
     the_size = ((size + sbrk_amount) / sbrk_amount * sbrk_amount);
 
-    if ((starting_address = (void *)sbrk(the_size)) 
+    if ((starting_address = (void *)sbrk(the_size))
             == (void*) -1)
       return (void *) 0;
 
@@ -226,7 +226,7 @@ void *malloc(
       errno = ENOMEM;
       return (void *) 0;
     }
-    
+
     MSBUMP(space_available, the_size);
 
     status = rtems_region_get_segment(
@@ -302,11 +302,11 @@ void *realloc(
   if (_System_state_Is_up(_System_state_Get())) {
     if (_Thread_Dispatch_disable_level > 0)
       return (void *) 0;
- 
+
     if (_ISR_Nest_level > 0)
       return (void *) 0;
   }
- 
+
   /*
    * Continue with calloc().
    */
@@ -319,11 +319,11 @@ void *realloc(
   }
 
   new_area = malloc( size );
- 
+
   MSBUMP(malloc_calls, -1);   /* subtract off the malloc */
 
   /*
-   *  There used to be a free on this error case but it is wrong to 
+   *  There used to be a free on this error case but it is wrong to
    *  free the memory per OpenGroup Single UNIX Specification V2
    *  and the C Standard.
    */
@@ -366,7 +366,7 @@ void free(
       return;
     }
   }
- 
+
 #ifdef MALLOC_STATS
   {
       size_t size;
@@ -376,7 +376,7 @@ void free(
       }
   }
 #endif
-  
+
   status = rtems_region_return_segment( RTEMS_Malloc_Heap, ptr );
   if ( status != RTEMS_SUCCESSFUL ) {
     errno = EINVAL;
@@ -421,7 +421,7 @@ void malloc_walk(size_t source, size_t printf_enabled)
 {
    register Region_Control *the_region;
    Objects_Locations        location;
- 
+
   _RTEMS_Lock_allocator();                      /* to prevent deletion */
    the_region = _Region_Get( RTEMS_Malloc_Heap, &location );
    if ( location == OBJECTS_LOCAL )
@@ -437,7 +437,7 @@ void malloc_dump(void)
 {
    return;
 }
- 
+
 void malloc_walk(size_t source, size_t printf_enabled)
 {
    return;

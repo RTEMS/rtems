@@ -55,9 +55,9 @@ typedef enum {
 
 #define RTEMS_PERIOD_STATUS       WATCHDOG_NO_TIMEOUT
 
-/* 
+/*
  *  The following defines the period status structure.
- */ 
+ */
 
 typedef struct {
   rtems_rate_monotonic_period_states  state;

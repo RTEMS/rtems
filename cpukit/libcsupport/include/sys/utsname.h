@@ -1,4 +1,4 @@
-/*  sys/utsname.h 
+/*  sys/utsname.h
  *
  *  $Id$
  */
@@ -16,9 +16,9 @@ extern "C" {
 /*
  *  4.4.1 Get System Name (Table 4-1), P1003.1b-1993, p. 90
  *
- *  NOTE:  The lengths of the strings in this structure are 
+ *  NOTE:  The lengths of the strings in this structure are
  *         just long enough to reliably contain the RTEMS information.
- *         For example, the fields are not long enough to support 
+ *         For example, the fields are not long enough to support
  *         Internet hostnames.
  */
 

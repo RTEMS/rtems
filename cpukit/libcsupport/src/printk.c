@@ -31,7 +31,7 @@
 |      Description: print number in a given base.
 | Global Variables: None.
 |        Arguments: num - number to print, base - base used to print the number.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 static void
 printNum(long unsigned int num, int base, int sign, int maxwidth, int lead)
@@ -45,7 +45,7 @@ printNum(long unsigned int num, int base, int sign, int maxwidth, int lead)
     num = -num;
     if (maxwidth) maxwidth--;
   }
-  
+
   count = 0;
   while ((n = num / base) > 0) {
     toPrint[count++] = (num - (n*base));
@@ -70,7 +70,7 @@ printNum(long unsigned int num, int base, int sign, int maxwidth, int lead)
                     console is not yet initialized or in ISR's.
 | Global Variables: None.
 |        Arguments: as in printf: fmt - format string, ... - unnamed arguments.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
 vprintk(char *fmt, va_list ap)
@@ -80,7 +80,7 @@ vprintk(char *fmt, va_list ap)
   /* unsigned int level; */
 
   /* _CPU_ISR_Disable(level); */
- 
+
   for (; *fmt != '\0'; fmt++)
   {
     lflag = 0;
@@ -114,7 +114,7 @@ vprintk(char *fmt, va_list ap)
         case 'u': case 'U': base = 10; sign = 0; break;
         case 'x': case 'X': base = 16; sign = 0; break;
         case 's':
-          for (str = va_arg(ap, char *); *str; str++) 
+          for (str = va_arg(ap, char *); *str; str++)
             BSP_output_char(*str);
           break;
         case 'c':
@@ -150,7 +150,7 @@ void
 printk(char *fmt, ...)
 {
   va_list  ap;      /* points to each unnamed argument in turn */
- 
+
   va_start(ap, fmt); /* make ap point to 1st unnamed arg */
   vprintk(fmt, ap);
   va_end(ap); /* clean up when done */

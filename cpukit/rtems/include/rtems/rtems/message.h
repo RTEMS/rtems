@@ -45,7 +45,7 @@ extern "C" {
  *  may be submitted to a message queue.  The message may be posted
  *  in a send or urgent fashion.
  */
- 
+
 typedef enum {
   MESSAGE_QUEUE_SEND_REQUEST   = 0,
   MESSAGE_QUEUE_URGENT_REQUEST = 1
@@ -182,7 +182,7 @@ rtems_status_code rtems_message_queue_urgent(
  *
  *  This routine implements the rtems_message_queue_broadcast directive.
  *  This directive sends the message buffer to all of the tasks blocked
- *  waiting for a message on the message queue indicated by ID.  
+ *  waiting for a message on the message queue indicated by ID.
  *  If no tasks are waiting, then the message buffer will not be queued.
  */
 
@@ -237,8 +237,8 @@ rtems_status_code rtems_message_queue_flush(
  *  DESCRIPTION:
  *
  *  This routine implements the rtems_message_queue_get_number_pending
- *  directive.  This directive returns the number of pending 
- *  messages for the message queue indicated by ID 
+ *  directive.  This directive returns the number of pending
+ *  messages for the message queue indicated by ID
  *  chain.  The number of messages pending is returned in COUNT.
  */
 
@@ -260,7 +260,7 @@ rtems_status_code rtems_message_queue_get_number_pending(
  *  at the rear of the queue or it will be processed as an urgent message
  *  which will be inserted at the front of the queue.
  */
- 
+
 rtems_status_code _Message_queue_Submit(
   Objects_Id                  id,
   void                       *buffer,
@@ -290,7 +290,7 @@ Message_queue_Control *_Message_queue_Allocate (
  *  This function returns a RTEMS status code based on the core message queue
  *  status code specified.
  */
- 
+
 rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
   uint32_t   the_message_queue_status
 );
@@ -305,7 +305,7 @@ rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
  *
  *  Output parameters: NONE
  */
- 
+
 #if defined(RTEMS_MULTIPROCESSING)
 void  _Message_queue_Core_message_queue_mp_support (
   Thread_Control *the_thread,

@@ -76,7 +76,7 @@ int link(
   }
 
   result = (*parent_loc.ops->link_h)( &existing_loc, &parent_loc, name_start );
-  
+
   rtems_filesystem_freenode( &existing_loc );
   rtems_filesystem_freenode( &parent_loc );
 

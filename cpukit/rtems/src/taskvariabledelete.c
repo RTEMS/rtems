@@ -19,7 +19,7 @@
 /*
  *  rtems_task_variable_delete
  *
- *  This directive removes a task variable. 
+ *  This directive removes a task variable.
  */
 
 rtems_status_code rtems_task_variable_delete(

@@ -12,10 +12,10 @@
  *
  *  $Id$
  */
- 
+
 #ifndef __RTEMS_API_h
 #define __RTEMS_API_h
- 
+
 #include <rtems/config.h>
 
 /*PAGE
@@ -26,7 +26,7 @@
  *  routine for each RTEMS manager with the appropriate parameters
  *  from the configuration_table.
  */
- 
+
 void _RTEMS_API_Initialize(
   rtems_configuration_table *configuration_table
 );

@@ -132,7 +132,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
       /*
        * Copy the data into place if needed
        */
-      
+
       if (buffer) {
           the_packet->Buffer.size = *size_p;
           _CORE_message_queue_Copy_buffer(
@@ -166,7 +166,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
 
       _Thread_Executing->Wait.return_argument   = (uint32_t   *)buffer;
       _Thread_Executing->Wait.return_argument_1 = size_p;
-      
+
       return (rtems_status_code) _MPCI_Send_request_packet(
         rtems_get_node(message_queue_id),
         &the_packet->Prefix,
@@ -226,7 +226,7 @@ void _Message_queue_MP_Send_response_packet (
 
       if (operation == MESSAGE_QUEUE_MP_RECEIVE_RESPONSE)
           the_packet->Prefix.length += the_packet->size;
-      
+
       _MPCI_Send_response_packet(
         rtems_get_node( the_packet->Prefix.source_tid ),
         &the_packet->Prefix
@@ -318,7 +318,7 @@ void _Message_queue_MP_Process_packet (
       the_thread = _MPCI_Process_response( the_packet_prefix );
 
       if (the_packet->Prefix.return_code == RTEMS_SUCCESSFUL) {
-        *(uint32_t   *)the_thread->Wait.return_argument_1 = 
+        *(uint32_t   *)the_thread->Wait.return_argument_1 =
            the_packet->size;
 
         _CORE_message_queue_Copy_buffer(

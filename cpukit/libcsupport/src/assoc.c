@@ -27,7 +27,7 @@ rtems_assoc_ptr_by_name(
 
     if (rtems_assoc_is_default(ap))
         default_ap = ap++;
-    
+
     for ( ; ap->name; ap++)
         if (strcmp(ap->name, name) == 0)
             return ap;
@@ -45,7 +45,7 @@ rtems_assoc_ptr_by_local(
 
     if (rtems_assoc_is_default(ap))
         default_ap = ap++;
-    
+
     for ( ; ap->name; ap++)
         if (ap->local_value == local_value)
             return ap;
@@ -64,7 +64,7 @@ rtems_assoc_ptr_by_remote(
 
     if (rtems_assoc_is_default(ap))
         default_ap = ap++;
-    
+
     for ( ; ap->name; ap++)
         if (ap->remote_value == remote_value)
             return ap;
@@ -77,7 +77,7 @@ rtems_assoc_ptr_by_remote(
  * Get values
  */
 
-uint32_t  
+uint32_t
 rtems_assoc_remote_by_local(
     const rtems_assoc_t *ap,
     uint32_t       local_value
@@ -87,11 +87,11 @@ rtems_assoc_remote_by_local(
     nap = rtems_assoc_ptr_by_local(ap, local_value);
     if (nap)
         return nap->remote_value;
-    
+
     return 0;
 }
 
-uint32_t  
+uint32_t
 rtems_assoc_local_by_remote(
     const rtems_assoc_t *ap,
     uint32_t       remote_value
@@ -101,11 +101,11 @@ rtems_assoc_local_by_remote(
     nap = rtems_assoc_ptr_by_remote(ap, remote_value);
     if (nap)
         return nap->local_value;
-    
+
     return 0;
 }
 
-uint32_t  
+uint32_t
 rtems_assoc_remote_by_name(
     const rtems_assoc_t *ap,
     const char          *name
@@ -115,11 +115,11 @@ rtems_assoc_remote_by_name(
     nap = rtems_assoc_ptr_by_name(ap, name);
     if (nap)
         return nap->remote_value;
-    
+
     return 0;
 }
 
-uint32_t  
+uint32_t
 rtems_assoc_local_by_name(
     const rtems_assoc_t *ap,
     const char          *name
@@ -129,7 +129,7 @@ rtems_assoc_local_by_name(
     nap = rtems_assoc_ptr_by_name(ap, name);
     if (nap)
         return nap->local_value;
-    
+
     return 0;
 }
 
@@ -155,7 +155,7 @@ rtems_assoc_name_by_local(
     nap = rtems_assoc_ptr_by_local(ap, local_value);
     if (nap)
         return nap->name;
-    
+
     return rtems_assoc_name_bad(local_value);
 }
 
@@ -169,7 +169,7 @@ rtems_assoc_name_by_remote(
     nap = rtems_assoc_ptr_by_remote(ap, remote_value);
     if (nap)
         return nap->name;
-    
+
     return rtems_assoc_name_bad(remote_value);
 }
 
@@ -182,14 +182,14 @@ uint32_t   rtems_assoc_remote_by_local_bitfield(
     const rtems_assoc_t *ap,
     uint32_t       local_value
   )
-{  
+{
     uint32_t   b;
     uint32_t   remote_value = 0;
 
     for (b = 1; b; b <<= 1)
         if (b & local_value)
             remote_value |= rtems_assoc_remote_by_local(ap, b);
-        
+
     return remote_value;
 }
 
@@ -198,14 +198,14 @@ uint32_t   rtems_assoc_local_by_remote_bitfield(
     const rtems_assoc_t *ap,
     uint32_t       remote_value
   )
-{  
+{
     uint32_t   b;
     uint32_t   local_value = 0;
 
     for (b = 1; b; b <<= 1)
         if (b & remote_value)
             local_value |= rtems_assoc_local_by_remote(ap, b);
-        
+
     return local_value;
 }
 
@@ -215,7 +215,7 @@ rtems_assoc_name_by_remote_bitfield(
     uint32_t       value,
     char          *buffer
   )
-{  
+{
     uint32_t   b;
 
     *buffer = 0;
@@ -227,7 +227,7 @@ rtems_assoc_name_by_remote_bitfield(
                 strcat(buffer, " ");
             strcat(buffer, rtems_assoc_name_by_remote(ap, b));
         }
-        
+
     return buffer;
 }
 
@@ -237,7 +237,7 @@ rtems_assoc_name_by_local_bitfield(
     uint32_t       value,
     char          *buffer
   )
-{  
+{
     uint32_t   b;
 
     *buffer = 0;
@@ -249,6 +249,6 @@ rtems_assoc_name_by_local_bitfield(
                 strcat(buffer, " ");
             strcat(buffer, rtems_assoc_name_by_local(ap, b));
         }
-        
+
     return buffer;
 }

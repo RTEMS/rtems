@@ -22,7 +22,7 @@ gid_t _POSIX_types_Egid = 0;
 
 /*PAGE
  *
- *  4.2.1 Get Real User, Effective User, Ral Group, and Effective Group IDs, 
+ *  4.2.1 Get Real User, Effective User, Ral Group, and Effective Group IDs,
  *        P1003.1b-1993, p. 84
  */
 

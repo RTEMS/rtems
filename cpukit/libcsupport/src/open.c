@@ -36,10 +36,10 @@
  *    EINTR    - The open( operation was interrupted by a signal.
  *    EINVAL   - This implementation does not support synchronized IO for this
  *               file.
- *    EISDIR   - The named file is a directory and the flags argument 
+ *    EISDIR   - The named file is a directory and the flags argument
  *               specified write or read/write access.
  *    EMFILE   - Too many file descriptors are in used by this process.
- *    ENAMETOOLONG - 
+ *    ENAMETOOLONG -
  *               The length of the path exceeds PATH_MAX or a pathname
  *               component is longer than NAME_MAX while POSIX_NO_TRUNC
  *               is in effect.
@@ -74,7 +74,7 @@ int open(
 
 
   /*
-   * Set the Evaluation flags 
+   * Set the Evaluation flags
    */
 
   eval_flags = 0;
@@ -84,7 +84,7 @@ int open(
   if ( ( status & _FWRITE ) == _FWRITE )
     eval_flags |= RTEMS_LIBIO_PERMS_WRITE;
 
-  
+
   va_start(ap, flags);
 
   mode = va_arg( ap, int );
@@ -160,7 +160,7 @@ int open(
 
   if ( !iop->handlers->open_h ) {
     rc = ENOTSUP;
-    goto done; 
+    goto done;
   }
 
   rc = (*iop->handlers->open_h)( iop, pathname, flags, mode );
@@ -180,7 +180,7 @@ int open(
       loc_to_free = NULL;
     }
   }
-    
+
   /*
    *  Single exit and clean up path.
    */

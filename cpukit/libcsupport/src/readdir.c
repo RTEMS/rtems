@@ -3,7 +3,7 @@
  *
  *  This was copied from Newlib 1.8.0.
  *
- *  
+ *
  * Copyright (c) 1983 Regents of the University of California.
  * All rights reserved.
  *
@@ -59,7 +59,7 @@ struct dirent *
 readdir(dirp)
 register DIR *dirp; {
   register struct dirent *dp;
-  
+
   if ( !dirp )
     return NULL;
 
@@ -68,7 +68,7 @@ register DIR *dirp; {
       dirp->dd_size = getdents (dirp->dd_fd,
 				dirp->dd_buf,
 				dirp->dd_len);
-      
+
       if (dirp->dd_size <= 0)
 	return NULL;
     }

@@ -14,11 +14,11 @@
  *  are divided into data cache and instruction cache functions. Data cache
  *  functions are only meaningful if a data cache is supported. Instruction
  *  cache functions are only meaningful if an instruction cache is supported.
- *  
+ *
  *  The functions below are implemented with CPU dependent support routines
  *  implemented as part of libcpu. In the event that a CPU does not support a
  *  specific function, the CPU dependent routine does nothing (but does exist).
- *  
+ *
  *  At this point, the Cache Manager makes no considerations, and provides no
  *  support for BSP specific issues such as a secondary cache. In such a system,
  *  the CPU dependent routines would have to be modified, or a BSP layer added

@@ -1,13 +1,13 @@
 /*
  *  telldir() - XXX
- * 
+ *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
- * 
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- * 
+ *
  */
 
 #if HAVE_CONFIG_H
@@ -31,7 +31,7 @@ long telldir(
   rtems_libio_t  *iop;
 
   if ( !dirp )
-    rtems_set_errno_and_return_minus_one( EBADF ); 
+    rtems_set_errno_and_return_minus_one( EBADF );
 
   /*
    *  Get the file control block structure associated with the

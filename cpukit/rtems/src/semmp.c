@@ -316,7 +316,7 @@ Semaphore_MP_Packet *_Semaphore_MP_Get_packet ( void )
  *
  *  Output parameters: NONE
  */
- 
+
 #if defined(RTEMS_MULTIPROCESSING)
 void  _Semaphore_Core_mutex_mp_support (
   Thread_Control *the_thread,
@@ -324,7 +324,7 @@ void  _Semaphore_Core_mutex_mp_support (
 )
 {
   the_thread->receive_packet->return_code = RTEMS_SUCCESSFUL;
- 
+
   _Semaphore_MP_Send_response_packet(
      SEMAPHORE_MP_OBTAIN_RESPONSE,
      id,
@@ -344,7 +344,7 @@ void  _Semaphore_Core_mutex_mp_support (
  *
  *  Output parameters: NONE
  */
- 
+
 #if defined(RTEMS_MULTIPROCESSING)
 void  _Semaphore_Core_semaphore_mp_support (
   Thread_Control *the_thread,
@@ -352,7 +352,7 @@ void  _Semaphore_Core_semaphore_mp_support (
 )
 {
   the_thread->receive_packet->return_code = RTEMS_SUCCESSFUL;
- 
+
   _Semaphore_MP_Send_response_packet(
      SEMAPHORE_MP_OBTAIN_RESPONSE,
      id,

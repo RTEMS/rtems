@@ -86,7 +86,7 @@ rtems_status_code rtems_region_create(
 
   _Thread_queue_Initialize(
     &the_region->Wait_queue,
-    _Attributes_Is_priority( attribute_set ) ? 
+    _Attributes_Is_priority( attribute_set ) ?
        THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_SEGMENT,
     RTEMS_TIMEOUT

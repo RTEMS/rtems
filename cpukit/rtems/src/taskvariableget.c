@@ -19,7 +19,7 @@
 /*
  *  rtems_task_variable_get
  *
- *  This directive gets the value of a task variable. 
+ *  This directive gets the value of a task variable.
  */
 
 rtems_status_code rtems_task_variable_get(

@@ -40,7 +40,7 @@
  */
 
 boolean _RTEMS_tasks_Create_extension(
-  Thread_Control *executing, 
+  Thread_Control *executing,
   Thread_Control *created
 )
 {
@@ -53,12 +53,12 @@ boolean _RTEMS_tasks_Create_extension(
     return FALSE;
 
   created->API_Extensions[ THREAD_API_RTEMS ] = api;
- 
+
   api->pending_events = EVENT_SETS_NONE_PENDING;
   _ASR_Initialize( &api->Signal );
   created->task_variables = NULL;
 
-  for (i=0; i < RTEMS_NUMBER_NOTEPADS; i++) 
+  for (i=0; i < RTEMS_NUMBER_NOTEPADS; i++)
     api->Notepads[i] = 0;
 
   return TRUE;
@@ -71,7 +71,7 @@ boolean _RTEMS_tasks_Create_extension(
  *  This extension routine is invoked when a task is started for the
  *  first time.
  */
- 
+
 User_extensions_routine _RTEMS_tasks_Start_extension(
   Thread_Control *executing,
   Thread_Control *started
@@ -80,7 +80,7 @@ User_extensions_routine _RTEMS_tasks_Start_extension(
   RTEMS_API_Control *api;
 
   api = started->API_Extensions[ THREAD_API_RTEMS ];
- 
+
   api->pending_events = EVENT_SETS_NONE_PENDING;
 
   _ASR_Initialize( &api->Signal );
@@ -92,9 +92,9 @@ User_extensions_routine _RTEMS_tasks_Start_extension(
  *
  *  This extension routine is invoked when a task is deleted.
  */
- 
+
 User_extensions_routine _RTEMS_tasks_Delete_extension(
-  Thread_Control *executing, 
+  Thread_Control *executing,
   Thread_Control *deleted
 )
 {
@@ -130,7 +130,7 @@ User_extensions_routine _RTEMS_tasks_Delete_extension(
  *
  *  This extension routine is invoked at each context switch.
  */
- 
+
 void _RTEMS_tasks_Switch_extension(
   Thread_Control *executing,
   Thread_Control *heir
@@ -154,7 +154,7 @@ void _RTEMS_tasks_Switch_extension(
     tvp->gval = *tvp->ptr;
     *tvp->ptr = tvp->tval;
     tvp = tvp->next;
-  } 
+  }
 }
 
 /*PAGE
@@ -163,7 +163,7 @@ void _RTEMS_tasks_Switch_extension(
  *
  *  This extension routine is invoked at each context switch.
  */
- 
+
 void _RTEMS_tasks_Post_switch_extension(
   Thread_Control *executing
 )
@@ -181,19 +181,19 @@ void _RTEMS_tasks_Post_switch_extension(
    */
 
   asr = &api->Signal;
- 
+
   _ISR_Disable( level );
     signal_set = asr->signals_posted;
     asr->signals_posted = 0;
   _ISR_Enable( level );
- 
- 
+
+
   if ( !signal_set ) /* similar to _ASR_Are_signals_pending( asr ) */
     return;
- 
+
   asr->nest_level += 1;
   rtems_task_mode( asr->mode_set, RTEMS_ALL_MODE_MASKS, &prev_mode );
- 
+
   (*asr->handler)( signal_set );
 
   asr->nest_level -= 1;

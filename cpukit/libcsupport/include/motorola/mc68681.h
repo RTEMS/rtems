@@ -83,15 +83,15 @@
 
 
 
-#define  MC68681_CLEAR                                     0x00 
+#define  MC68681_CLEAR                                     0x00
 
 #define MC68681_PORT_A                                     0
 #define MC68681_PORT_B                                     1
 
-/* 
- *  DUART Command Register Definitions: 
+/*
+ *  DUART Command Register Definitions:
  *
- *  MC68681_COMMAND_REG_A,MC68681_COMMAND_REG_B       
+ *  MC68681_COMMAND_REG_A,MC68681_COMMAND_REG_B
  */
 #define MC68681_MODE_REG_ENABLE_RX                          0x01
 #define MC68681_MODE_REG_DISABLE_RX                         0x02
@@ -114,8 +114,8 @@
 /*
  * Mode Register Definitions
  *
- *  MC68681_MODE_REG_1A 
- *  MC68681_MODE_REG_1B 
+ *  MC68681_MODE_REG_1A
+ *  MC68681_MODE_REG_1B
  */
 #define MC68681_5BIT_CHARS                                  0x00
 #define MC68681_6BIT_CHARS                                  0x01
@@ -186,17 +186,17 @@
 #define MC68681_RECEIVED_BREAK                              0x80
 
 
-/* 
- * Interupt Status Register Definitions.  
+/*
+ * Interupt Status Register Definitions.
  *
- * MC68681_INTERRUPT_STATUS_REG          
+ * MC68681_INTERRUPT_STATUS_REG
  */
 
 
-/* 
- *  Interupt Mask Register Definitions     
+/*
+ *  Interupt Mask Register Definitions
  *
- *  MC68681_INTERRUPT_MASK_REG 
+ *  MC68681_INTERRUPT_MASK_REG
  */
 #define MC68681_IR_TX_READY_A                               0x01
 #define MC68681_IR_RX_READY_A                               0x02
@@ -207,10 +207,10 @@
 #define MC68681_IR_BREAK_B                                  0x40
 #define MC68681_IR_INPUT_PORT_CHANGE                        0x80
 
-/* 
- * Status Register Definitions.  
- * 
- * MC68681_STATUS_REG_A,MC68681_STATUS_REG_B          
+/*
+ * Status Register Definitions.
+ *
+ * MC68681_STATUS_REG_A,MC68681_STATUS_REG_B
  */
 #define MC68681_STATUS_RXRDY                                0x01
 #define MC68681_STATUS_FFULL                                0x02
@@ -221,34 +221,34 @@
 #define MC68681_STATUS_FRAMING_ERROR                        0x40
 #define MC68681_STATUS_RECEIVED_BREAK                       0x80
 
-/* 
- * Definitions for the Interrupt Vector Register: 
+/*
+ * Definitions for the Interrupt Vector Register:
  *
- * MC68681_INTERRUPT_VECTOR_REG  
+ * MC68681_INTERRUPT_VECTOR_REG
  */
 #define  MC68681_INTERRUPT_VECTOR_INIT                      0x0f
 
-/* 
- * Definitions for the Auxiliary Control Register  
+/*
+ * Definitions for the Auxiliary Control Register
  *
- * MC68681_AUX_CTRL_REG 
+ * MC68681_AUX_CTRL_REG
  */
 #define MC68681_AUX_BRG_SET1                                0x00
 #define MC68681_AUX_BRG_SET2                                0x80
 
 
-/* 
- * The following Baud rates assume the X1 clock pin is driven with a 
+/*
+ * The following Baud rates assume the X1 clock pin is driven with a
  * 3.6864 MHz signal.  If a different frequency is used the DUART channel
  * is running at the follwoing baud rate:
- *       ((Table Baud Rate)*frequency)/3.6864 MHz 
+ *       ((Table Baud Rate)*frequency)/3.6864 MHz
  */
 
-/* 
- * Definitions for the Clock Select Register: 
+/*
+ * Definitions for the Clock Select Register:
  *
- * MC68681_CLOCK_SELECT_REG_A,MC68681_CLOCK_SELECT_REG_A 
- * 
+ * MC68681_CLOCK_SELECT_REG_A,MC68681_CLOCK_SELECT_REG_A
+ *
  * Note:  ACR[7] is the MSB of the Auxiliary Control register
  *        X is the extend bit.
  *        CRA - 0x08  Set Rx BRG Select Extend Bit   (X=1)
@@ -260,8 +260,8 @@
                                                    /* ARC[7]=1,X=1 */
 #define MC68681_BAUD_RATE_MASK_75           0x00   /* ACR[7]=0,X=0 */
                                                    /* ARC[7]=1,X=1 */
-#define MC68681_BAUD_RATE_MASK_110          0x01   
-#define MC68681_BAUD_RATE_MASK_134_5        0x02   
+#define MC68681_BAUD_RATE_MASK_110          0x01
+#define MC68681_BAUD_RATE_MASK_134_5        0x02
 #define MC68681_BAUD_RATE_MASK_150          0x03   /* ACR[7]=0,X=0 */
                                                    /* ARC[7]=1,X=1 */
 #define MC68681_BAUD_RATE_MASK_200          0x03   /* ACR[7]=0,X=0 */
@@ -280,10 +280,10 @@
                                                    /* ARC[7]=1,X=1 */
 #define MC68681_BAUD_RATE_MASK_3600         0x04   /* ACR[7]=0,X=0 */
                                                    /* ARC[7]=1,X=1 */
-#define MC68681_BAUD_RATE_MASK_4800         0x09   
+#define MC68681_BAUD_RATE_MASK_4800         0x09
 #define MC68681_BAUD_RATE_MASK_7200         0x0a   /* ACR[7]=0,X=0 */
                                                    /* ARC[7]=1,X=1 */
-#define MC68681_BAUD_RATE_MASK_9600         0xbb   
+#define MC68681_BAUD_RATE_MASK_9600         0xbb
 
 #define MC68681_BAUD_RATE_MASK_14_4K        0x05   /* ACR[7]=0,X=0 */
                                                    /* ARC[7]=1,X=1 */
@@ -295,9 +295,9 @@
                                                    /* ARC[7]=1,X=1 */
 #define MC68681_BAUD_RATE_MASK_57_6K        0x07   /* ACR[7]=0,X=0 */
                                                    /* ARC[7]=1,X=1 */
-#define MC68681_BAUD_RATE_MASK_115_5K       0x08  
-#define MC68681_BAUD_RATE_MASK_TIMER        0xdd   
-#define MC68681_BAUD_RATE_MASK_TIMER_16X    0xee   
-#define MC68681_BAUD_RATE_MASK_TIMER_1X     0xff   
+#define MC68681_BAUD_RATE_MASK_115_5K       0x08
+#define MC68681_BAUD_RATE_MASK_TIMER        0xdd
+#define MC68681_BAUD_RATE_MASK_TIMER_16X    0xee
+#define MC68681_BAUD_RATE_MASK_TIMER_1X     0xff
 
 #endif

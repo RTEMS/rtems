@@ -70,12 +70,12 @@ rtems_status_code rtems_task_create(
   Priority_Control         core_priority;
   RTEMS_API_Control       *api;
   ASR_Information         *asr;
- 
+
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
 
-  /* 
+  /*
    *  Core Thread Initialize insures we get the minimum amount of
    *  stack space.
    */
@@ -132,7 +132,7 @@ rtems_status_code rtems_task_create(
 
   /*
    *  Disable dispatch for protection
-   */ 
+   */
 
   _Thread_Disable_dispatch();
 
@@ -171,7 +171,7 @@ rtems_status_code rtems_task_create(
 
   status = _Thread_Initialize(
     &_RTEMS_tasks_Information,
-    the_thread, 
+    the_thread,
     NULL,
     stack_size,
     is_fp,
@@ -197,7 +197,7 @@ rtems_status_code rtems_task_create(
 
   api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
- 
+
   asr->is_enabled = _Modes_Is_asr_disabled(initial_modes) ? FALSE : TRUE;
 
   *id = the_thread->Object.id;

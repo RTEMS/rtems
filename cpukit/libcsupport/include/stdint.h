@@ -1,4 +1,4 @@
-/* 
+/*
  * stdint.h
  *
  * ISO C99 integer types
@@ -16,7 +16,7 @@ extern "C" {
 #include <rtems/score/types.h>
 
 /*
- * map RTEMS internal types onto C99 types 
+ * map RTEMS internal types onto C99 types
  */
 typedef signed8        int8_t;
 typedef signed16       int16_t;

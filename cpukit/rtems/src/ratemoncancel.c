@@ -43,8 +43,8 @@ rtems_status_code rtems_rate_monotonic_cancel(
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_REMOTE:            
-      return RTEMS_INTERNAL_ERROR;  /* should never return this */ 
+    case OBJECTS_REMOTE:
+      return RTEMS_INTERNAL_ERROR;  /* should never return this */
 
     case OBJECTS_ERROR:
       return RTEMS_INVALID_ID;

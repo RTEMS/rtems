@@ -41,7 +41,7 @@ clock_t _times(
   (void) rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &ticks );
 
   /*
-   *  RTEMS technically has no notion of system versus user time 
+   *  RTEMS technically has no notion of system versus user time
    *  since there is no separation of OS from application tasks.
    *  But we can at least make a distinction between the number
    *  of ticks since boot and the number of ticks executed by this

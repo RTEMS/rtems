@@ -62,7 +62,7 @@ int _STAT_NAME(
   status = rtems_filesystem_evaluate_path( path, 0, &loc, _STAT_FOLLOW_LINKS );
   if ( status != 0 )
     return -1;
-  
+
   if ( !loc.handlers->fstat_h ){
     rtems_filesystem_freenode( &loc );
     rtems_set_errno_and_return_minus_one( ENOTSUP );
@@ -78,7 +78,7 @@ int _STAT_NAME(
   status =  (*loc.handlers->fstat_h)( &loc, buf );
 
   rtems_filesystem_freenode( &loc );
-  
+
   return status;
 }
 #endif

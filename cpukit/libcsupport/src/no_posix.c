@@ -52,10 +52,10 @@ int __kill( pid_t pid, int sig )
  *  3.4.3 Delay Process Execution, P1003.1b-1993, p. 81
  *
  *  $Id$
- */ 
+ */
 
 #include <time.h>
-#include <unistd.h> 
+#include <unistd.h>
 
 #include <rtems.h>
 

@@ -21,7 +21,7 @@ extern "C" {
 #include <rtems.h>
 #include <rtems/libio.h>                /* include before standard IO */
 
-#include <sys/types.h>                  
+#include <sys/types.h>
 
 #include <errno.h>
 
@@ -64,9 +64,9 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
 #define rtems_libio_iop_to_descriptor(_iop) \
    ((!(_iop)) ? -1 : (_iop - rtems_libio_iops))
 
-/*  
+/*
  *  rtems_libio_check_is_open
- *  
+ *
  *  Macro to check if a file descriptor is actually open.
  */
 
@@ -190,8 +190,8 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
  */
 #include <rtems/userenv.h>
 
-extern rtems_user_env_t * rtems_current_user_env; 
-extern rtems_user_env_t   rtems_global_user_env; 
+extern rtems_user_env_t * rtems_current_user_env;
+extern rtems_user_env_t   rtems_global_user_env;
 
 /*
  *  Instantiate a private copy of the per user information for the calling task.
@@ -199,7 +199,7 @@ extern rtems_user_env_t   rtems_global_user_env;
 
 rtems_status_code rtems_libio_set_private_env(void);
 rtems_status_code rtems_libio_share_private_env(rtems_id task_id) ;
-	
+
 /*
  *  File Descriptor Routine Prototypes
  */

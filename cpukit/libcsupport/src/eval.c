@@ -41,7 +41,7 @@ int rtems_filesystem_evaluate_path(
 
   if ( !pathloc )
     rtems_set_errno_and_return_minus_one( EIO );       /* should never happen */
-  
+
   /*
    * Evaluate the path using the optable evalpath.
    */
@@ -80,7 +80,7 @@ int rtems_filesystem_evaluate_path(
          * Let the FS implementation deal with this case.  It
          * should probably free pathloc in either case:
          *  - if the link evaluation fails, it must free the
-         *    original (valid) pathloc because we are going 
+         *    original (valid) pathloc because we are going
          *    to return -1 and hence the FS generics won't
          *    cleanup pathloc.
          *  - if the link evaluation is successful, the updated
@@ -90,7 +90,7 @@ int rtems_filesystem_evaluate_path(
          */
 
         result =  (*pathloc->ops->eval_link_h)( pathloc, flags );
- 
+
     }
   }
 
@@ -108,7 +108,7 @@ int rtems_filesystem_evaluate_parent(
 
   if ( !pathloc )
     rtems_set_errno_and_return_minus_one( EIO );       /* should never happen */
-  
+
   if ( !pathloc->ops->evalpath_h )
     rtems_set_errno_and_return_minus_one( ENOTSUP );
 

@@ -10,7 +10,7 @@
  *     + create a timer
  *     + get an ID of a timer
  *     + delete a timer
- *     + set timer to fire in context of clock tick 
+ *     + set timer to fire in context of clock tick
  *        - after a number of ticks have passed
  *        - when a specified date and time has been reached
  *     + initiate the timer server task
@@ -58,9 +58,9 @@ typedef enum {
 /*
  *  The following types define a pointer to a timer service routine.
  */
- 
+
 typedef void rtems_timer_service_routine;
- 
+
 typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
                  rtems_id,
                  void *
@@ -81,17 +81,17 @@ RTEMS_EXTERN Objects_Information  _Timer_Information;
 
 RTEMS_EXTERN Thread_Control *_Timer_Server;
 
-/*  
+/*
  *  The following chains contain the list of interval timers that are
  *  executed in the context of the Timer Server.
  *
  *  NOTE: These are extern'ed because they do not have to be in the
- *        minimum footprint.  They are only really required when 
+ *        minimum footprint.  They are only really required when
  *        task-based timers are used.  Since task-based timers can
  *        not be started until the server is initiated, these structures
  *        do not have to be initialized until then.  They are declared
  *        in the same file as _Timer_Server_body.
- */   
+ */
 
 extern Chain_Control _Timer_Ticks_chain;
 extern Chain_Control _Timer_Seconds_chain;
@@ -311,9 +311,9 @@ rtems_status_code rtems_timer_initiate_server(
 
 typedef struct {
   Timer_Classes      the_class;
-  Watchdog_Interval  initial; 
-  Watchdog_Interval  start_time; 
-  Watchdog_Interval  stop_time; 
+  Watchdog_Interval  initial;
+  Watchdog_Interval  start_time;
+  Watchdog_Interval  stop_time;
 } rtems_timer_information;
 
 rtems_status_code rtems_timer_get_information(

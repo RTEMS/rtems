@@ -68,7 +68,7 @@ rtems_status_code rtems_message_queue_create(
     return RTEMS_INVALID_NAME;
 
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( (is_global = _Attributes_Is_global( attribute_set ) ) && 
+  if ( (is_global = _Attributes_Is_global( attribute_set ) ) &&
        !_System_state_Is_multiprocessing )
     return RTEMS_MP_NOT_CONFIGURED;
 #endif
@@ -86,12 +86,12 @@ rtems_status_code rtems_message_queue_create(
    * It seems reasonable to create a que with a large max size,
    * and then just send smaller msgs from remote (or all) nodes.
    */
-  
+
   if ( is_global && (_MPCI_table->maximum_packet_size < max_message_size) )
     return RTEMS_INVALID_SIZE;
 #endif
 #endif
-       
+
   _Thread_Disable_dispatch();              /* protects object pointer */
 
   the_message_queue = _Message_queue_Allocate( count, max_message_size );

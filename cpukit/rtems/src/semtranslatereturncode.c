@@ -56,7 +56,7 @@
  *    rtems status code - translated RTEMS status code
  *
  */
- 
+
 rtems_status_code _Semaphore_Translate_core_mutex_return_code_[] = {
   RTEMS_SUCCESSFUL,         /* CORE_MUTEX_STATUS_SUCCESSFUL */
   RTEMS_UNSATISFIED,        /* CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT */
@@ -73,9 +73,9 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
 )
 {
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( the_mutex_status == THREAD_STATUS_PROXY_BLOCKING ) 
+  if ( the_mutex_status == THREAD_STATUS_PROXY_BLOCKING )
     return RTEMS_PROXY_BLOCKING;
-  else 
+  else
 #endif
   if ( the_mutex_status > CORE_MUTEX_STATUS_CEILING_VIOLATED )
     return RTEMS_INTERNAL_ERROR;
@@ -94,14 +94,14 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
  *    rtems status code - translated RTEMS status code
  *
  */
- 
+
 rtems_status_code _Semaphore_Translate_core_semaphore_return_code_[] = {
   RTEMS_SUCCESSFUL,         /* CORE_SEMAPHORE_STATUS_SUCCESSFUL */
   RTEMS_UNSATISFIED,        /* CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT */
   RTEMS_OBJECT_WAS_DELETED, /* CORE_SEMAPHORE_WAS_DELETED */
   RTEMS_TIMEOUT,            /* CORE_SEMAPHORE_TIMEOUT  */
   RTEMS_INTERNAL_ERROR,     /* CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED */
-  
+
 };
 
 rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
@@ -109,9 +109,9 @@ rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
 )
 {
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( the_semaphore_status == THREAD_STATUS_PROXY_BLOCKING ) 
+  if ( the_semaphore_status == THREAD_STATUS_PROXY_BLOCKING )
     return RTEMS_PROXY_BLOCKING;
-  else 
+  else
 #endif
   if ( the_semaphore_status > CORE_MUTEX_STATUS_CEILING_VIOLATED )
     return RTEMS_INTERNAL_ERROR;

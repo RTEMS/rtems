@@ -3,7 +3,7 @@
  *
  *  This routine is not defined in the POSIX 1003.1b standard but is
  *  commonly supported on most UNIX and POSIX systems.  It is the
- *  foundation for creating file system objects.  
+ *  foundation for creating file system objects.
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -42,7 +42,7 @@ int mknod(
 
   if ( !(mode & (S_IFREG|S_IFCHR|S_IFBLK|S_IFIFO) ) )
     rtems_set_errno_and_return_minus_one( EINVAL );
-  
+
   if ( S_ISFIFO(mode) )
     rtems_set_errno_and_return_minus_one( ENOTSUP );
 
@@ -52,9 +52,9 @@ int mknod(
     rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
-  result = (*temp_loc.ops->evalformake_h)( 
+  result = (*temp_loc.ops->evalformake_h)(
     &pathname[i],
-    &temp_loc, 
+    &temp_loc,
     &name_start
   );
   if ( result != 0 )

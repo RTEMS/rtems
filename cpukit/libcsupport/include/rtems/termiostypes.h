@@ -37,7 +37,7 @@ struct rtems_termios_rawbuf {
   volatile unsigned int	Head;
   volatile unsigned int	Tail;
   volatile unsigned int	Size;
-  rtems_id		Semaphore;  
+  rtems_id		Semaphore;
 };
 /*
  * Variables associated with each termios instance.
@@ -112,8 +112,8 @@ struct rtems_termios_tty {
 	/*
 	 * I/O task IDs (for task-driven drivers)
 	 */
-        rtems_id                rxTaskId;  
-        rtems_id                txTaskId;  
+        rtems_id                rxTaskId;
+        rtems_id                txTaskId;
         /*
 	 * line discipline related stuff
 	 */
@@ -155,8 +155,8 @@ void rtems_termios_rxirq_occured(struct rtems_termios_tty *tty);
  * FIXME: this should move to termios.h!
  * put a string to output ring buffer
  */
-void rtems_termios_puts (const char *buf, 
-			 int len, 
+void rtems_termios_puts (const char *buf,
+			 int len,
 			 struct rtems_termios_tty *tty);
 /*
  * global hooks for line disciplines

@@ -24,7 +24,7 @@
  *
  *  rtems_rate_monotonic_get_status
  *
- *  This directive allows a thread to obtain status information on a 
+ *  This directive allows a thread to obtain status information on a
  *  period.
  *
  *  Input parameters:

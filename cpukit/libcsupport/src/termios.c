@@ -236,7 +236,7 @@ rtems_termios_open (
                                    rtems_build_name ('T', 'x', 'T', c),
 				   TERMIOS_TXTASK_PRIO,
 				   TERMIOS_TXTASK_STACKSIZE,
-				   RTEMS_NO_PREEMPT | RTEMS_NO_TIMESLICE | 
+				   RTEMS_NO_PREEMPT | RTEMS_NO_TIMESLICE |
 				   RTEMS_NO_ASR,
 				   RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
 				   &tty->txTaskId);
@@ -246,13 +246,13 @@ rtems_termios_open (
                                    rtems_build_name ('R', 'x', 'T', c),
 				   TERMIOS_RXTASK_PRIO,
 				   TERMIOS_RXTASK_STACKSIZE,
-				   RTEMS_NO_PREEMPT | RTEMS_NO_TIMESLICE | 
+				   RTEMS_NO_PREEMPT | RTEMS_NO_TIMESLICE |
 				   RTEMS_NO_ASR,
 				   RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
 				   &tty->rxTaskId);
 			if (sc != RTEMS_SUCCESSFUL)
 				rtems_fatal_error_occurred (sc);
-				
+
 		}
 		if ((tty->device.pollRead == NULL) ||
 		    (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN)){
@@ -316,7 +316,7 @@ rtems_termios_open (
 				  (rtems_task_argument)tty);
 	    if (sc != RTEMS_SUCCESSFUL)
 	      rtems_fatal_error_occurred (sc);
-	    
+
 	    sc = rtems_task_start(tty->txTaskId,
 				  rtems_termios_txdaemon,
 				  (rtems_task_argument)tty);
@@ -376,8 +376,8 @@ rtems_termios_close (void *arg)
 			 */
 		        drainOutput (tty);
 		}
-	  
-		if (tty->device.outputUsesInterrupts 
+
+		if (tty->device.outputUsesInterrupts
 		    == TERMIOS_TASK_DRIVEN) {
 			/*
 			 * send "terminate" to I/O tasks
@@ -440,12 +440,12 @@ rtems_status_code rtems_termios_bufsize (
   return RTEMS_SUCCESSFUL;
 }
 
-static void 
+static void
 termios_set_flowctrl(struct rtems_termios_tty *tty)
 {
   rtems_interrupt_level level;
-  /* 
-   * check for flow control options to be switched off 
+  /*
+   * check for flow control options to be switched off
    */
 
   /* check for outgoing XON/XOFF flow control switched off */
@@ -483,17 +483,17 @@ termios_set_flowctrl(struct rtems_termios_tty *tty)
       !(tty->termios.c_cflag & CRTSCTS)) {
     /* clear related flags in flow_ctrl */
     tty->flow_ctrl &= ~(FL_MDRTS);
-    
+
     /* restart remote Tx, if it was stopped */
     if ((tty->flow_ctrl & FL_IRTSOFF) &&
 	(tty->device.startRemoteTx != NULL)) {
       tty->device.startRemoteTx(tty->minor);
     }
     tty->flow_ctrl &= ~(FL_IRTSOFF);
-  }    
-  
-  /* 
-   * check for flow control options to be switched on  
+  }
+
+  /*
+   * check for flow control options to be switched on
    */
   /* check for incoming RTS/CTS flow control switched on */
   if (tty->termios.c_cflag & CRTSCTS) {
@@ -608,9 +608,9 @@ rtems_termios_ioctl (void *arg)
 			sc = linesw[tty->t_line].l_open(tty);
 		}
 		break;
-	case TIOCGETD:	
+	case TIOCGETD:
 		*(int*)(args->buffer)=tty->t_line;
-		break;		
+		break;
 #endif
  	case FIONREAD:
 		/* Half guess that this is the right operation */
@@ -672,7 +672,7 @@ rtems_termios_puts (const char *buf, int len, struct rtems_termios_tty *tty)
 		  }
 		  else {
 		    /* remember that output has been stopped due to flow ctrl*/
-		    tty->flow_ctrl |= FL_OSTOP; 
+		    tty->flow_ctrl |= FL_OSTOP;
 		  }
 		  tty->rawOutBufState = rob_busy;
 		}
@@ -1031,12 +1031,12 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 			      && ((tty->rawOutBufState == rob_idle)
 				  || (tty->flow_ctrl & FL_OSTOP))) {
 			    /* XON should be sent now... */
-			    (*tty->device.write)(tty->minor, 
+			    (*tty->device.write)(tty->minor,
 						 &(tty->termios.c_cc[VSTART]),
 						 1);
 			  }
-			  else if (tty->flow_ctrl & FL_MDRTS) {		    
-			    tty->flow_ctrl &= ~FL_IRTSOFF;		
+			  else if (tty->flow_ctrl & FL_MDRTS) {
+			    tty->flow_ctrl &= ~FL_IRTSOFF;
 			    /* activate RTS line */
 			    if (tty->device.startRemoteTx != NULL) {
 			      tty->device.startRemoteTx(tty->minor);
@@ -1144,7 +1144,7 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 	    c = *buf++;
 	    linesw[tty->t_line].l_rint(c,tty);
 	  }
-	    
+
 	  /*
 	   * check to see if rcv wakeup callback was set
 	   */
@@ -1159,7 +1159,7 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 	  c = *buf++;
 	  /* FIXME: implement IXANY: any character restarts output */
 	  /* if incoming XON/XOFF controls outgoing stream: */
-	  if (tty->flow_ctrl & FL_MDXON) {	    
+	  if (tty->flow_ctrl & FL_MDXON) {
 	    /* if received char is V_STOP and V_START (both are equal value) */
 	    if (c == tty->termios.c_cc[VSTOP]) {
 	      if (c == tty->termios.c_cc[VSTART]) {
@@ -1196,20 +1196,20 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 	      /* reenable interrupts */
 	      rtems_interrupt_enable(level);
 	    }
-	  }	
+	  }
 	  else {
 		newTail = (tty->rawInBuf.Tail + 1) % tty->rawInBuf.Size;
 		/* if chars_in_buffer > highwater                */
 		rtems_interrupt_disable(level);
 		if ((((newTail - tty->rawInBuf.Head + tty->rawInBuf.Size)
 		      % tty->rawInBuf.Size)
-		     > tty->highwater) && 
+		     > tty->highwater) &&
 		    !(tty->flow_ctrl & FL_IREQXOF)) {
 		  /* incoming data stream should be stopped */
-		  tty->flow_ctrl |= FL_IREQXOF; 
-		  if ((tty->flow_ctrl & (FL_MDXOF | FL_ISNTXOF)) 
+		  tty->flow_ctrl |= FL_IREQXOF;
+		  if ((tty->flow_ctrl & (FL_MDXOF | FL_ISNTXOF))
 		      ==                (FL_MDXOF             ) ){
-		    if ((tty->flow_ctrl & FL_OSTOP) || 
+		    if ((tty->flow_ctrl & FL_OSTOP) ||
 			(tty->rawOutBufState == rob_idle)) {
 		      /* if tx is stopped due to XOFF or out of data */
 		      /*    call write function here                 */
@@ -1219,9 +1219,9 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 					   1);
 		    }
 		  }
-		  else if ((tty->flow_ctrl & (FL_MDRTS | FL_IRTSOFF)) 
+		  else if ((tty->flow_ctrl & (FL_MDRTS | FL_IRTSOFF))
 			   ==                (FL_MDRTS             ) ) {
-		    tty->flow_ctrl |= FL_IRTSOFF;		
+		    tty->flow_ctrl |= FL_IRTSOFF;
 		    /* deactivate RTS line */
 		    if (tty->device.stopRemoteTx != NULL) {
 		      tty->device.stopRemoteTx(tty->minor);
@@ -1237,7 +1237,7 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 		else {
 		        tty->rawInBuf.theBuf[newTail] = c;
 		        tty->rawInBuf.Tail = newTail;
-	    
+
 			/*
 			 * check to see if rcv wakeup callback was set
 			 */
@@ -1245,7 +1245,7 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 			  (*tty->tty_rcv.sw_pfn)(&tty->termios, tty->tty_rcv.sw_arg);
 			  tty->tty_rcvwakeup = 1;
 			}
-		}		
+		}
 	  }
 	}
 	tty->rawInBufDropped += dropped;
@@ -1269,7 +1269,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 	if ((tty->flow_ctrl & (FL_MDXOF | FL_IREQXOF | FL_ISNTXOF))
 	    == (FL_MDXOF | FL_IREQXOF)) {
 	  /* XOFF should be sent now... */
-	  (*tty->device.write)(tty->minor, 
+	  (*tty->device.write)(tty->minor,
 			       &(tty->termios.c_cc[VSTOP]), 1);
 
 	  rtems_interrupt_disable(level);
@@ -1284,12 +1284,12 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 	  /* NOTE: send XON even, if no longer in XON/XOFF mode... */
 	  /* XON should be sent now... */
 		/*
-		 * FIXME: this .write call will generate another 
+		 * FIXME: this .write call will generate another
 		 * dequeue callback. This will advance the "Tail" in the data
 		 * buffer, although the corresponding data is not yet out!
 		 * Therefore the dequeue "length" should be reduced by 1
 		 */
-	  (*tty->device.write)(tty->minor, 
+	  (*tty->device.write)(tty->minor,
 			       &(tty->termios.c_cc[VSTART]), 1);
 
 	  rtems_interrupt_disable(level);
@@ -1305,12 +1305,12 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 	     * buffer was empty
 	     */
 	    if (tty->rawOutBufState == rob_wait) {
-	      /* 
-	       * this should never happen... 
+	      /*
+	       * this should never happen...
 	       */
 	      rtems_semaphore_release (tty->rawOutBuf.Semaphore);
 	    }
-	    return 0;	
+	    return 0;
 	  }
 
 	  rtems_interrupt_disable(level);
@@ -1321,7 +1321,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 	  newTail = (tty->rawOutBuf.Tail + len) % tty->rawOutBuf.Size;
 	  tty->rawOutBuf.Tail = newTail;
 	  if (tty->rawOutBufState == rob_wait) {
-	    /* 
+	    /*
 	     * wake up any pending writer task
 	     */
 	    rtems_semaphore_release (tty->rawOutBuf.Semaphore);
@@ -1332,7 +1332,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 	     */
 	    tty->rawOutBufState = rob_idle;
 	    nToSend = 0;
-	    
+
 	    /*
 	     * check to see if snd wakeup callback was set
 	     */
@@ -1341,7 +1341,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 	    }
 	  }
 	  /* check, whether output should stop due to received XOFF */
-	  else if ((tty->flow_ctrl & (FL_MDXON | FL_ORCVXOF)) 
+	  else if ((tty->flow_ctrl & (FL_MDXON | FL_ORCVXOF))
 		   ==                (FL_MDXON | FL_ORCVXOF)) {
 		  /* Buffer not empty, but output stops due to XOFF */
 		  /* set flag, that output has been stopped */
@@ -1366,8 +1366,8 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 		    nToSend = 1;
 	    }
 	    tty->rawOutBufState = rob_busy; /*apm*/
-	    (*tty->device.write)(tty->minor, 
-				 (char *)&tty->rawOutBuf.theBuf[newTail], 
+	    (*tty->device.write)(tty->minor,
+				 (char *)&tty->rawOutBuf.theBuf[newTail],
 				 nToSend);
 	  }
 	  tty->rawOutBuf.Tail = newTail; /*apm*/
@@ -1381,7 +1381,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
  *       device transmit interrupt handler.
  * The second argument is the number of characters transmitted so far.
  * This value will always be 1 for devices which generate an interrupt
- * for each transmitted character. 
+ * for each transmitted character.
  * It returns number of characters left to transmit
  */
 int
@@ -1431,7 +1431,7 @@ static rtems_task rtems_termios_txdaemon(rtems_task_argument argument)
 		/*
 		 * wait for rtems event
 		 */
-		rtems_event_receive((TERMIOS_TX_START_EVENT | 
+		rtems_event_receive((TERMIOS_TX_START_EVENT |
 				     TERMIOS_TX_TERMINATE_EVENT),
 				    RTEMS_EVENT_ANY | RTEMS_WAIT,
 				    RTEMS_NO_TIMEOUT,
@@ -1468,7 +1468,7 @@ static rtems_task rtems_termios_rxdaemon(rtems_task_argument argument)
 		/*
 		 * wait for rtems event
 		 */
-		rtems_event_receive((TERMIOS_RX_PROC_EVENT | 
+		rtems_event_receive((TERMIOS_RX_PROC_EVENT |
 				     TERMIOS_RX_TERMINATE_EVENT),
 				    RTEMS_EVENT_ANY | RTEMS_WAIT,
 				    RTEMS_NO_TIMEOUT,

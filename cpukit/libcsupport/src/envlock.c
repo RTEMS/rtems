@@ -1,6 +1,6 @@
 /*
  *  Author: Till Straumann <strauman@slac.stanford.edu>, 3/2002
- * 
+ *
  *  $Id$
  */
 
@@ -33,7 +33,7 @@
  *  Used by the following functions:
  *    findenv_r(), setenv_r(), and unsetenv_r() which are called by
  *    getenv(), getenv_r(), setenv(), and unsetenv().
- *  
+ *
  */
 
 #if defined(ENVLOCK_DEDIDCATED_MUTEX)

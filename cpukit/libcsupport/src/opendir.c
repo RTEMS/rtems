@@ -3,7 +3,7 @@
  *
  *  This was copied from Newlib 1.8.0.
  *
- *  
+ *
  * Copyright (c) 1983 Regents of the University of California.
  * All rights reserved.
  *

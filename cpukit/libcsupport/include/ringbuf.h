@@ -1,5 +1,5 @@
 /*
- *  ringbuf.h 
+ *  ringbuf.h
  *
  *  This file provides simple ring buffer functionality.
  *
@@ -22,8 +22,8 @@ typedef struct {
 #define Ring_buffer_Initialize( _buffer ) \
   do { \
     (_buffer)->head = (_buffer)->tail = 0; \
-  } while ( 0 ) 
-  
+  } while ( 0 )
+
 #define Ring_buffer_Is_empty( _buffer ) \
    ( (_buffer)->head == (_buffer)->tail )
 
@@ -38,7 +38,7 @@ typedef struct {
       (_buffer)->tail = ((_buffer)->tail+1) % RINGBUF_QUEUE_LENGTH; \
       (_buffer)->buffer[ (_buffer)->tail ] = (_ch); \
     rtems_interrupt_enable( isrlevel ); \
-  } while ( 0 ) 
+  } while ( 0 )
 
 #define Ring_buffer_Remove_character( _buffer, _ch ) \
   do { \
@@ -48,6 +48,6 @@ typedef struct {
       (_buffer)->head = ((_buffer)->head+1) % RINGBUF_QUEUE_LENGTH; \
       (_ch) = (_buffer)->buffer[ (_buffer)->head ]; \
     rtems_interrupt_enable( isrlevel ); \
-  } while ( 0 ) 
+  } while ( 0 )
 
 #endif

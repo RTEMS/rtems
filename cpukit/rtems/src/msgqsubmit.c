@@ -138,7 +138,7 @@ rtems_status_code _Message_queue_Submit(
 
       return
         _Message_queue_Translate_core_message_queue_return_code( msg_status );
-          
+
   }
   return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }

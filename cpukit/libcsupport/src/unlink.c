@@ -20,8 +20,8 @@
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int unlink( 
-  const char *path 
+int unlink(
+  const char *path
 )
 {
   rtems_filesystem_location_info_t  loc;
@@ -34,7 +34,7 @@ int unlink(
   result = rtems_filesystem_evaluate_path( path, 0, &loc, FALSE );
   if ( result != 0 )
      return -1;
-  
+
   result = rtems_filesystem_evaluate_parent(RTEMS_LIBIO_PERMS_WRITE, &loc );
   if (result != 0){
     rtems_filesystem_freenode( &loc );
@@ -59,7 +59,7 @@ int unlink(
   result = (*loc.ops->unlink_h)( &loc );
 
   rtems_filesystem_freenode( &loc );
-  
+
   return result;
 }
 

@@ -25,7 +25,7 @@
  *
  *  rtems_timer_server_fire_when
  *
- *  This directive allows a thread to start a timer which will by 
+ *  This directive allows a thread to start a timer which will by
  *  executed by the Timer Server when it fires.
  *
  *  Input parameters:

@@ -60,7 +60,7 @@ rtems_status_code rtems_message_queue_ident(
     &_Message_queue_Information,
     (Objects_Name) name,
     node,
-    id 
+    id
   );
 
   return _Status_Object_name_errors_to_status[ status ];

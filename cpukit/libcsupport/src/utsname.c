@@ -46,7 +46,7 @@ int uname(
   strcpy( name->release, RTEMS_VERSION );
 
   strcpy( name->version, "" );
- 
+
   sprintf( name->machine, "%s/%s", CPU_NAME, CPU_MODEL_NAME );
 
   return 0;

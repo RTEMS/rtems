@@ -1,4 +1,4 @@
-/*  
+/*
  *  chroot() -  Change Root Directory
  *  Author: fernando.ruiz@ctv.es
  *
@@ -30,13 +30,13 @@ int chroot(
 {
   int                               result;
   rtems_filesystem_location_info_t  loc;
-  
+
   /* an automatic call to new private env the first time */
   if (rtems_current_user_env == &rtems_global_user_env) {
    rtems_libio_set_private_env(); /* try to set a new private env*/
    if (rtems_current_user_env == &rtems_global_user_env) /* not ok */
     rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }; 
+  };
 
   result = chdir(pathname);
   if (result) {

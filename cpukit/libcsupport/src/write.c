@@ -20,7 +20,7 @@
 
 /*
  * write
- * 
+ *
  * This routine writes count bytes from from buffer pointed to by buffer
  * to the file associated with the open file descriptor, fildes.
  */

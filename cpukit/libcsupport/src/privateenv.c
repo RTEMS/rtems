@@ -38,7 +38,7 @@ free_user_env(void *venv)
 {
   rtems_user_env_t *env = (rtems_user_env_t*) venv ;
 
-	if (env != &rtems_global_user_env 
+	if (env != &rtems_global_user_env
 #ifdef HAVE_USERENV_REFCNT
 		&& --env->refcnt <= 0
 #endif
@@ -76,11 +76,11 @@ rtems_status_code rtems_libio_set_private_env(void) {
      return sc;
    }
    rtems_current_user_env = tmp;
-  }; 
+  };
 
   *rtems_current_user_env = rtems_global_user_env; /* get the global values*/
   rtems_current_user_env->task_id=task_id;         /* mark the local values*/
-  
+
   /* get a clean root */
   rtems_filesystem_root    = THE_ROOT_FS_LOC;
 
@@ -127,11 +127,11 @@ rtems_status_code rtems_libio_share_private_env(rtems_id task_id) {
   if (sc != RTEMS_SUCCESSFUL) return sc;
 
   if (rtems_current_user_env->task_id==current_task_id) {
-   /* kill the current user env & task_var*/	  
+   /* kill the current user env & task_var*/
 	rtems_user_env_t 	*tmp = rtems_current_user_env;
    sc = rtems_task_variable_delete(RTEMS_SELF,(void*)&rtems_current_user_env);
    if (sc != RTEMS_SUCCESSFUL) return sc;
-   free_user_env(tmp);	  
+   free_user_env(tmp);
   };
 
   /* AT THIS POINT, rtems_current_user_env is DANGLING */
@@ -144,7 +144,7 @@ rtems_status_code rtems_libio_share_private_env(rtems_id task_id) {
   sc = rtems_task_variable_add(RTEMS_SELF,(void*)&rtems_current_user_env,free_user_env);
   if (sc != RTEMS_SUCCESSFUL)
     goto bailout;
-  
+
   /* the current_user_env is the same pointer that remote env */
   rtems_current_user_env = shared_user_env;
 

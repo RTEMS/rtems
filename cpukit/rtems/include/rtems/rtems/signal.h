@@ -39,7 +39,7 @@ extern "C" {
  *
  *  This routine performs the initialization necessary for this manager.
  */
- 
+
 void _Signal_Manager_initialization( void );
 
 /*

@@ -41,7 +41,7 @@
  *    rtems status code - translated RTEMS status code
  *
  */
- 
+
 rtems_status_code _Message_queue_Translate_core_return_code_[] = {
   RTEMS_SUCCESSFUL,         /* CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL */
   RTEMS_INVALID_SIZE,       /* CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE */

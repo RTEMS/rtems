@@ -69,7 +69,7 @@ rtems_status_code rtems_port_create(
   the_port->external_base = external_start;
   the_port->length        = length - 1;
 
-  _Objects_Open( 
+  _Objects_Open(
     &_Dual_ported_memory_Information,
     &the_port->Object,
     (Objects_Name) name
