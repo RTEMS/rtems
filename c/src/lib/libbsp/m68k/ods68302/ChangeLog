@@ -1,3 +1,7 @@
+2000-10-19  Antti P Miettinen  <anmietti@trshp.ntc.nokia.com>
+
+	* clock/ckinit.c: Do not just set the IMR, OR the enable bit in.
+
 2000-09-29	Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
 
 	* startup/linkcmds: Added lines so DWARF debug information

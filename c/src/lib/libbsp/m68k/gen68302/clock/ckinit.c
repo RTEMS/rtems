@@ -93,7 +93,7 @@ void Install_clock(
   /*
    * Enable TIMER1 interrupts only.
    */
-  m302.reg.imr  = RBIT_IMR_TIMER1;	/* set 68302 int-mask to allow ints */
+  m302.reg.imr |= RBIT_IMR_TIMER1;	/* set 68302 int-mask to allow ints */
 
   atexit( Clock_exit );
 }
