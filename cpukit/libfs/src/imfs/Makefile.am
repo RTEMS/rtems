@@ -2,11 +2,7 @@
 ##  $Id$
 ##
 
-
-INCLUDES = -I../..
-
-LIBNAME = libimfs
-LIB = ${ARCH}/${LIBNAME}.a
+LIB = ${ARCH}/libimfs.a
 
 IMFS_C_FILES = imfs_chown.c imfs_config.c imfs_creat.c imfs_directory.c \
     imfs_eval.c imfs_free.c imfs_fsunmount.c imfs_gtkn.c imfs_init.c \
@@ -36,6 +32,8 @@ include $(top_srcdir)/../automake/multilib.am
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/lib.am
 
+AM_CPPFLAGS += -I../.. $(LIBC_DEFINES)
+
 PREINSTALL_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
@@ -50,8 +48,6 @@ OBJS = $(C_O_FILES)
 #
 # Add local stuff here using +=
 #
-
-AM_CFLAGS += $(LIBC_DEFINES) 
 
 all-local: ${ARCH} $(LIB)
 

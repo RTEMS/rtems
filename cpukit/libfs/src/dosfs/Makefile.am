@@ -7,9 +7,7 @@ include $(top_srcdir)/../automake/multilib.am
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/lib.am
 
-INCLUDES = -I../..
-
-AM_CFLAGS += $(LIBC_DEFINES) 
+AM_CPPFLAGS += -I../.. $(LIBC_DEFINES) 
 
 FATFS_C_FILES = fat.c fat_fat_operations.c fat_file.c
 
@@ -19,8 +17,7 @@ DOSFS_C_FILES = msdos_create.c msdos_dir.c msdos_eval.c msdos_file.c \
                 msdos_misc.c msdos_mknod.c msdos_node_type.c
 
 if !UNIX
-LIBNAME = libdosfs
-LIB = ${ARCH}/${LIBNAME}.a
+LIB = ${ARCH}/libdosfs.a
 
 C_FILES = $(FATFS_C_FILES) $(DOSFS_C_FILES)
 

@@ -1,3 +1,11 @@
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/dosfs/Makefile.am: Use AM_CPPFLAGS instead of INCLUDES and
+	AM_CFLAGS. Eliminate LIBNAME.
+	* src/imfs/Makefile.am: Use AM_CPPFLAGS instead of INCLUDES and
+	AM_CFLAGS. Eliminate LIBNAME.
+	* wrapup/Makefile.am: Eliminate LIBNAME.
+
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_TOP(../..).

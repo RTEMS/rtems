@@ -2,8 +2,7 @@
 ## $Id$
 ##
 
-LIBNAME = libfs
-LIB = $(ARCH)/$(LIBNAME).a
+LIB = $(ARCH)/libfs.a
 
 include $(top_srcdir)/../automake/multilib.am
 include $(top_srcdir)/../automake/compile.am
