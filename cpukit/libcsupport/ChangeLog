@@ -1,3 +1,10 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	PR 479/rtems_misc
+	* src/malloc.c: Per multiple standards realloc does not free the
+	original memory if the allocation of the requested larger block
+	fails.
+
 2003-09-02	Joel Sherrill <joel@OARcorp.com>
 
 	* src/open.c: Fix typo.
