@@ -33,8 +33,6 @@ include $(top_srcdir)/libtests.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-LD_LIBS += $(CPLUS_LD_LIBS)
-
 if HAS_CXX
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-cxx-exe)

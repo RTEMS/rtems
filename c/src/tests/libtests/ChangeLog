@@ -1,3 +1,8 @@
+2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libtests.am: Use TMPINSTALL_FILES = to make automake-1.5 happy.
+	* rtems++/Makefile: Remove LD_LIBS.
+
 2001-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* malloctest/Makefile.am: include leaf.am instead of leaf.cfg.
