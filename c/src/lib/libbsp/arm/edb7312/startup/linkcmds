@@ -139,10 +139,10 @@ SECTIONS
     _edata = .;
   } > sdram 
 
-  .eh_frame : { *(.eh_frame) } > RAM
-  .data1   : { *(.data1) } > RAM
-  .eh_frame : { *(.eh_frame) } > RAM
-  .gcc_except_table : { *(.gcc_except_table) } > RAM
+  .eh_frame : { *(.eh_frame) } > sdram
+  .data1   : { *(.data1) } > sdram
+  .eh_frame : { *(.eh_frame) } > sdram
+  .gcc_except_table : { *(.gcc_except_table) } > sdram
 
   .rodata :
   {
@@ -157,6 +157,7 @@ SECTIONS
 	_clear_start = .;
 	*(.bss)
 	*(.bss.*)
+	*(.gnu.linkonce.b.*)
 	*(COMMON)
 	. = ALIGN(64);
 	_clear_end = .;
