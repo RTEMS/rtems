@@ -1,3 +1,8 @@
+2004-10-18	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* acinclude.m4: Remove RTEMS_CHECK_CPU.
+	* configure.ac: Remove RTEMS_CHECK_CPU, RTEMS_ENABLE_BARE. 
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.

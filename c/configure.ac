@@ -13,10 +13,7 @@ AM_INIT_AUTOMAKE([no-define foreign 1.9])
 AM_MAINTAINER_MODE
 
 ## These options are used within this file.
-RTEMS_ENABLE_BARE
 RTEMS_ENABLE_RTEMSBSP
-
-RTEMS_CHECK_CPU
 
 AS_IF([test x"$enable_rtemsbsp" = x"no"],[
   rtems_bsp=""
