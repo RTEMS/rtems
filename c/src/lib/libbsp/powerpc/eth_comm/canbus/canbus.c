@@ -12,7 +12,7 @@
  *
  *  Note: All of this code assumes a 10Mhz clock input to the 82527
  *
- *  $Id: 
+ *  $Id$
  */
 #include <stdio.h>
 #include <bsp.h>

@@ -24,7 +24,9 @@
  * Author: Jay Monkman (jmonkman@frasca.com) 
  * Copyright (C) 1998 by Frasca International, Inc.
  *
+ *  $Id$
  */
+
 #include <rtems/libio.h>
 #include <mpc860.h>
 #include <mpc860/console.h>

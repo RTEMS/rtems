@@ -3,6 +3,8 @@
  *
  * Written by Jay Monkman 7/21/98
  * Copyright Frasca International, Inc 1998
+ *
+ *  $Id$
  */
 
 #ifndef __info_h__

@@ -1,5 +1,5 @@
 /*
- * RTEMS/KA9Q driver for MPC860 SCC1 Ethernet
+ * RTEMS/TCPIP driver for MPC860 SCC1 Ethernet
  *
  * Modified for MPC860 by Jay Monkman (jmonkman@frasca.com)
  *
@@ -48,7 +48,7 @@
 
 /*
  * RTEMS event used by interrupt handler to signal daemons.
- * This must *not* be the same event used by the KA9Q task synchronization.
+ * This must *not* be the same event used by the TCP/IP task synchronization.
  */
 #define INTERRUPT_EVENT RTEMS_EVENT_1
 
