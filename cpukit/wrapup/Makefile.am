@@ -2,15 +2,13 @@
 ## $Id$
 ##
 
-
-LIBNAME = librtemscpu
-LIB = $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/$(LIBNAME)$(LIB_VARIANT).a
+LIB = $(project_libdir)$(MULTISUBDIR)/librtemscpu$(LIB_VARIANT).a
 
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
-CPU_OBJS = $(wildcard ../score/cpu/$(RTEMS_CPU)/$(ARCH)/*.rel)
+CPU_OBJS = $(wildcard ../score/cpu/$(RTEMS_CPU)/$(ARCH)/*.o)
 CORE_OBJS = $(wildcard ../score/src/$(ARCH)/*.o)
 SAPI_OBJS = $(wildcard ../sapi/src/$(ARCH)/*.o)
 RTEMS_OBJS = $(wildcard ../rtems/src/$(ARCH)/*.o)
@@ -70,13 +68,14 @@ $(LIB): ${OBJS}
 	    ;; \
 	  esac; \
 	done
+	test -d $(project_libdir)$(MULTISUBDIR) || $(mkinstalldirs) $(project_libdir)$(MULTISUBDIR)
 	$(AR) rc $@ $(ARCH)/*
 	rm -f $(ARCH)/*.o
 	$(RANLIB) $@
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/$(LIBNAME)$(LIB_VARIANT).a
+TMPINSTALL_FILES += $(project_libdir)$(MULTISUBDIR)/librtemscpu$(LIB_VARIANT).a
 
-#$(PROJECT_RELEASE)/lib$(MULTISUBDIR)/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
+#$(project_libdir)$(MULTISUBDIR)/librtemscpu$(LIB_VARIANT).a: $(LIB)
 #	$(INSTALL_DATA) $< $@
 
 cpulibdir = $(libdir)

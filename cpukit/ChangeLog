@@ -1,5 +1,11 @@
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Use project_libdir instead of
+	$(PROJECT_RELEASE)/lib. Eliminate LIBNAME. Pickup *.o's instead of
+	*.rels for CPU_OBJS. Manually create $(project_libdir)$(MULTISUBDIR).
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/lib.am: Use project_libdir instead of
 	$(PROJECT_RELEASE)/lib.
 
