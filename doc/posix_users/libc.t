@@ -180,20 +180,20 @@ This section lists the routines that provided by the Newlib C Library.
 
 
 @itemize @bullet
-@item @code{Equivalent for errno variable:
+@item Equivalent for errno variable:
 
 @itemize @bullet
 @item @code{errno_r} - XXX
 @end itemize
 
-@item @code{Locale functions:
+@item Locale functions:
 
 @itemize @bullet
 @item @code{localeconv_r} - XXX
 @item @code{setlocale_r} - XXX
 @end itemize
 
-@item @code{Equivalents for stdio variables:
+@item Equivalents for stdio variables:
 
 @itemize @bullet
 @item @code{stdin_r} - XXX
@@ -201,7 +201,7 @@ This section lists the routines that provided by the Newlib C Library.
 @item @code{stderr_r} - XXX
 @end itemize
 
-@item @code{Stdio functions:
+@item Stdio functions:
 
 @itemize @bullet
 @item @code{fdopen_r} - XXX
@@ -226,7 +226,7 @@ This section lists the routines that provided by the Newlib C Library.
 @item @code{sprintf_r} - XXX
 @end itemize
 
-@item @code{Signal functions:
+@item Signal functions:
 
 @itemize @bullet
 @item @code{init_signal_r} - XXX
@@ -236,7 +236,7 @@ This section lists the routines that provided by the Newlib C Library.
 @item @code{raise_r} - XXX
 @end itemize
 
-@item @code{Stdlib functions:
+@item Stdlib functions:
 
 @itemize @bullet
 @item @code{calloc_r} - XXX
@@ -264,13 +264,13 @@ This section lists the routines that provided by the Newlib C Library.
 @item @code{setenv_r} - XXX
 @end itemize
 
-@item @code{String functions:
+@item String functions:
 
 @itemize @bullet
 @item @code{strtok_r} - XXX
 @end itemize
 
-@item @code{System functions:
+@item System functions:
 
 @itemize @bullet
 @item @code{close_r} - XXX
@@ -292,7 +292,7 @@ This section lists the routines that provided by the Newlib C Library.
 @item @code{times_r} - XXX
 @end itemize
 
-@item @code{Time function:
+@item Time function:
 
 @itemize @bullet
 @item @code{asctime_r} - XXX
@@ -312,14 +312,14 @@ This section lists the routines that provided by the Newlib C Library.
 
 @itemize @bullet
 
-@item @code{Stdarg (stdarg.h):
+@item Stdarg (stdarg.h):
 @itemize @bullet
 @item @code{va_start} - XXX
 @item @code{va_arg} - XXX
 @item @code{va_end} - XXX
 @end itemize
 
-@item @code{Vararg (varargs.h):
+@item Vararg (varargs.h):
 @itemize @bullet
 @item @code{va_alist} - XXX
 @item @code{va_start-trad} - XXX

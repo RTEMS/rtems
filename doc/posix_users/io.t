@@ -807,6 +807,7 @@ int unmount(
 
 @table @b
 @item EXXX
+@end table
 
 @subheading DESCRIPTION:
 
