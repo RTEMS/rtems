@@ -135,24 +135,6 @@ Thread _Timer_Server_body(
 );
 
 /*
- *  _Timer_Server_reset
- *
- *  DESCRIPTION:
- *
- *  This routine resets the timers which determine when the Timer Server
- *  will wake up next to service task-based timers.
- */
-
-typedef enum {
-  TIMER_SERVER_RESET_TICKS,
-  TIMER_SERVER_RESET_SECONDS
-} Timer_Server_reset_mode;
-
-void _Timer_Server_reset(
-  Timer_Server_reset_mode  reset_mode
-);
-
-/*
  *  rtems_timer_create
  *
  *  DESCRIPTION:
@@ -338,6 +320,39 @@ rtems_status_code rtems_timer_get_information(
   Objects_Id               id,
   rtems_timer_information *the_info
 );
+
+/*
+ *  Macros and routines that expose the mechanisms required to service
+ *  the Timer Server timer.  These stop the timer, synchronize it with
+ *  the current time, and restart it.
+ */
+
+extern Watchdog_Control _Timer_Seconds_timer;
+
+#define _Timer_Server_stop_ticks_timer() \
+      _Watchdog_Remove( &_Timer_Server->Timer )
+
+#define _Timer_Server_stop_seconds_timer() \
+      _Watchdog_Remove( &_Timer_Seconds_timer );
+
+void _Timer_Server_process_ticks_chain(void);
+void _Timer_Server_process_seconds_chain(void);
+
+#define _Timer_Server_reset_ticks_timer() \
+   do { \
+      if ( !_Chain_Is_empty( &_Timer_Ticks_chain ) ) { \
+        _Watchdog_Insert_ticks( &_Timer_Server->Timer, \
+           ((Watchdog_Control *)_Timer_Ticks_chain.first)->delta_interval ); \
+      } \
+   } while (0)
+
+#define _Timer_Server_reset_seconds_timer() \
+   do { \
+      if ( !_Chain_Is_empty( &_Timer_Seconds_chain ) ) { \
+        _Watchdog_Insert_seconds( &_Timer_Seconds_timer, \
+          ((Watchdog_Control *)_Timer_Seconds_chain.first)->delta_interval ); \
+      } \
+   } while (0)
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/timer.inl>

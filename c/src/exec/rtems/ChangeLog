@@ -1,3 +1,14 @@
+2001-03-29	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR147 addressed problems when reseting and inserting a timer
+	into a timer chain that did not honor time passage since the last
+	time the timer server was scheduled and the new insertion.
+	* include/rtems/rtems/timer.h, src/timerreset.c, src/timerserver.c,
+	src/timerserverfireafter.c, src/timerserverfirewhen.c: Broke up
+	the "reset server" routine into a set of very specific routines
+	that allowed the server to be unscheduled, timer chains to be
+	"synchronized" with the current time before inserting a new timer.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.

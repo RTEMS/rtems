@@ -77,8 +77,12 @@ rtems_status_code rtems_timer_server_fire_when(
       the_timer->the_class = TIMER_TIME_OF_DAY_ON_TASK;
       _Watchdog_Initialize( &the_timer->Ticker, routine, id, user_data );
       the_timer->Ticker.initial = seconds - _TOD_Seconds_since_epoch;
+
+      _Timer_Server_stop_seconds_timer();
+      _Timer_Server_process_seconds_chain();
       _Watchdog_Insert( &_Timer_Seconds_chain, &the_timer->Ticker );
-      _Timer_Server_reset( TIMER_SERVER_RESET_SECONDS );
+       _Timer_Server_reset_seconds_timer();
+
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
   }

@@ -49,18 +49,9 @@ Watchdog_Interval _Timer_Server_ticks_last_time;
 /*
  *  The timer used to control when the Timer Server wakes up to service
  *  "when" timers.
- *
- *  NOTE: This should NOT be used outside this file.
  */
 
 Watchdog_Control _Timer_Seconds_timer;
-
-/*
- *  prototypes for support routines to process the chains
- */
-
-void _Timer_Process_ticks_chain(void);
-void _Timer_Process_seconds_chain(void);
 
 /*PAGE
  *
@@ -97,10 +88,18 @@ Thread _Timer_Server_body(
      */
 
       _Thread_Set_state( _Timer_Server, STATES_DELAYING );
-      _Timer_Server_reset( TIMER_SERVER_RESET_TICKS );
-      _Timer_Server_reset( TIMER_SERVER_RESET_SECONDS );
+      _Timer_Server_reset_ticks_timer();
+      _Timer_Server_reset_seconds_timer();
     _Thread_Enable_dispatch();
 
+    /*
+     *  At this point, at least one of the timers this task relies 
+     *  upon has fired.  Stop them both while we process any outstanding
+     *  timers.  Before we block, we will restart them.
+     */
+ 
+      _Timer_Server_stop_ticks_timer();
+      _Timer_Server_stop_seconds_timer();
 
     /*
      *  Disable dispatching while processing the timers since we want 
@@ -110,8 +109,8 @@ Thread _Timer_Server_body(
      */
 
     _Thread_Disable_dispatch();
-      _Timer_Process_ticks_chain();
-      _Timer_Process_seconds_chain();
+      _Timer_Server_process_ticks_chain();
+      _Timer_Server_process_seconds_chain();
   }
 }
 
@@ -245,47 +244,7 @@ rtems_status_code rtems_timer_initiate_server(
 
 /*PAGE
  *
- *  _Timer_Server_reset
- *
- *  This routine resets the timers which determine when the Timer Server
- *  will wake up next to service task-based timers.
- *
- *  Input parameters:
- *    do_ticks - TRUE indicates to process the ticks list
- *               FALSE indicates to process the seconds list
- *
- *  Output parameters:  NONE
- */
-
-void _Timer_Server_reset(
-  Timer_Server_reset_mode reset_mode
-)
-{
-  Watchdog_Interval  units;
-
-  switch ( reset_mode ) {
-    case TIMER_SERVER_RESET_TICKS:
-      _Watchdog_Remove( &_Timer_Server->Timer );
-      _Timer_Process_ticks_chain();
-      if ( !_Chain_Is_empty( &_Timer_Ticks_chain ) ) {
-        units = ((Watchdog_Control *)_Timer_Ticks_chain.first)->delta_interval;
-        _Watchdog_Insert_ticks( &_Timer_Server->Timer, units );
-      }
-      break;
-    case TIMER_SERVER_RESET_SECONDS:
-      _Watchdog_Remove(  &_Timer_Seconds_timer );
-      _Timer_Process_seconds_chain();
-      if ( !_Chain_Is_empty( &_Timer_Seconds_chain ) ) {
-        units = ((Watchdog_Control *)_Timer_Seconds_chain.first)->delta_interval;
-        _Watchdog_Insert_seconds( &_Timer_Seconds_timer, units );
-      }
-      break;
-  }
-}
-
-/*PAGE
- *
- *  _Timer_Server_Process_ticks_chain
+ *  _Timer_Server_process_ticks_chain
  *
  *  This routine is responsible for adjusting the list of task-based 
  *  interval timers to reflect the passage of time.
@@ -295,7 +254,7 @@ void _Timer_Server_reset(
  *  Output parameters:  NONE
  */
 
-void _Timer_Process_ticks_chain(void)
+void _Timer_Server_process_ticks_chain(void)
 {
   Watchdog_Interval snapshot;
   Watchdog_Interval ticks;
@@ -312,7 +271,7 @@ void _Timer_Process_ticks_chain(void)
 
 /*PAGE
  *
- *  _Timer_Server_Process_seconds_chain
+ *  _Timer_Server_process_seconds_chain
  *
  *  This routine is responsible for adjusting the list of task-based 
  *  time of day timers to reflect the passage of time.
@@ -322,7 +281,7 @@ void _Timer_Process_ticks_chain(void)
  *  Output parameters:  NONE
  */
 
-void _Timer_Process_seconds_chain(void)
+void _Timer_Server_process_seconds_chain(void)
 {
   Watchdog_Interval snapshot;
   Watchdog_Interval ticks;

@@ -69,8 +69,12 @@ rtems_status_code rtems_timer_server_fire_after(
       the_timer->the_class = TIMER_INTERVAL_ON_TASK;
       _Watchdog_Initialize( &the_timer->Ticker, routine, id, user_data );
       the_timer->Ticker.initial = ticks;
+
+      _Timer_Server_stop_ticks_timer();
+      _Timer_Server_process_ticks_chain();
       _Watchdog_Insert( &_Timer_Ticks_chain, &the_timer->Ticker );
-      _Timer_Server_reset( TIMER_SERVER_RESET_TICKS );
+       _Timer_Server_reset_ticks_timer();
+
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
   }
