@@ -15,7 +15,7 @@ rtems_make_DATA = $(MAKE_FILES) $(GENERIC_FILES)
 
 noinst_DATA = leaf.cfg
 
-rtemsdir = $(prefix)
+rtemsdir = $(exec_prefix)
 rtems_bspdir = $(rtemsdir)/@RTEMS_BSP@
 rtems_bsp_DATA = Makefile.inc
 

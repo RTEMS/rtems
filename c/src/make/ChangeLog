@@ -1,3 +1,7 @@
+2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use exec_prefix not prefix.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.inc.in: Add exec_prefix, remove terminating / from
