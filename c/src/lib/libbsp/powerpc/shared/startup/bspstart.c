@@ -77,14 +77,14 @@ unsigned int BSP_time_base_divisor;
 
 void BSP_panic(char *s)
 {
-  printk("RTEMS 4.x PANIC %s\n", s);
-  _return_to_ppcbug();
+  printk("%s PANIC %s\n",_RTEMS_version, s);
+  __asm__ __volatile ("sc"); 
 }
 
 void _BSP_Fatal_error(unsigned int v)
 {
-  printk("RTEMS 4.x PANIC ERROR %x\n", v);
-  _return_to_ppcbug();
+  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
+  __asm__ __volatile ("sc"); 
 }
  
 /*
