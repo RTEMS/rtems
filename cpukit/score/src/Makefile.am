@@ -11,7 +11,8 @@ include $(top_srcdir)/../../../automake/lib.am
 MP_C_FILES = mpci.c objectmp.c threadmp.c
 
 CORE_MESSAGE_QUEUE_C_FILES = coremsg.c coremsgbroadcast.c coremsgclose.c \
-    coremsgflush.c coremsgflushsupp.c coremsgseize.c coremsgsubmit.c
+    coremsgflush.c coremsgflushwait.c coremsginsert.c coremsgflushsupp.c \
+    coremsgseize.c coremsgsubmit.c
 
 CORE_MUTEX_C_FILES = coremutex.c coremutexflush.c coremutexseize.c \
     coremutexsurrender.c
