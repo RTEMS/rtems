@@ -43,7 +43,7 @@ rtems_assoc_t errno_assoc[] = {
     { 0, 0, 0 },
 };
 
-static unsigned32
+static int
 rtems_deviceio_errno(rtems_status_code code)
 {
     int rc;
@@ -84,10 +84,8 @@ int device_open(
     the_jnode->info.device.minor,
     (void *) &args
   );
-  if ( status ) {
-    rtems_deviceio_errno(status);
-    return RTEMS_UNSATISFIED;
-  }
+  if ( status )
+    return rtems_deviceio_errno(status);
 
   return 0;
 }
@@ -118,8 +116,7 @@ int device_close(
     (void *) &args
   );
   if ( status ) {
-    rtems_deviceio_errno(status);
-    return RTEMS_UNSATISFIED;
+    return rtems_deviceio_errno(status);
   }
   return 0;
 }
