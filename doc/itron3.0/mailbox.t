@@ -1,4 +1,4 @@
-@c@*
+@c
 @c  This is the chapter from the RTEMS ITRON User's Guide that
 @c  documents the services provided by the mailbox
 @c  manager.

@@ -20,7 +20,7 @@ The services provided by the eventflags manager are:
 @item @code{set_flg} - Set Eventflag
 @item @code{clr_flg} - Clear Eventflag
 @item @code{wai_flg} - Wait on Eventflag
-@item @code{pol_flg} - Wait for Eventflag(Polling)
+@item @code{pol_flg} - Wait for Eventflag (Polling)
 @item @code{twai_flg} - Wait on Eventflag with Timeout
 @item @code{ref_flg} - Reference Eventflag Status
 @end itemize
@@ -30,9 +30,7 @@ The services provided by the eventflags manager are:
 @subsection Event sets
 
 An eventflag is used by a task (or ISR) to inform another task of the
-occurrence of a significant situation. Thirty-two eventflags are
-associated with each task. A collection of one or more eventflags is
-referred to as an event set. The application developer should remember the
+occurrence of a significant situation. One word bit-field is associated with each eventflags. The application developer should remember the
 following key characteristics of event operations when utilizing the event
 manager:
 
@@ -45,7 +43,7 @@ manager:
 @item Events are not queued. In other words, if an event is sent more than once to a task before being received, the second and subsequent send operations to that same task have no effect.
 @end itemize
 
-A pending event is an event that has been posted but not received. An
+A pending event is an event that has been set. An
 event condition is used to specify the events which the task desires to
 receive and the algorithm which will be used to determine when the request
 is satisfied. An event condition is satisfied based upon one of two
@@ -54,7 +52,7 @@ states that an event condition is satisfied when at least a single
 requested event is posted. The @code{TWF_ANDW} algorithm states that an
 event condition is satisfied when every requested event is posted.
 
-An event set or condition is built by a bitwise OR of the desired events.
+An eventflags or condition is built by a bitwise OR of the desired events.
 If an event is not explicitly specified in the set or condition, then it
 is not present. Events are specifically designed to be mutually exclusive,
 therefore bitwise OR and addition operations are equivalent as long as
@@ -106,10 +104,10 @@ where the meaning of each field is:
 
 may be used freely by the user for including extended information about
 the eventflag to be created. Information set here may be accessed by
-ref_flg. If a larger region is desired for including user information, or
+@code{ref_flg}. If a larger region is desired for including user information, or
 if the user wishes to change the contents of this information, the usr
 should allocate memory area and set the address of this memory packet to
-exinf.  The OS does not take care of the contents of exinf. This
+@code{exinf}.  The OS does not take care of the contents of @code{exinf}. This
 implementation does not use this field.
 
 @item flgatr
@@ -134,8 +132,8 @@ defined as follows:
 @example
 /* Reference Eventflags (ref_flg) Structure */ 
 typedef struct t_rflg @{
- VP       exinf; /* extended information */
- BOOL_ID  wtsk; /* indicates whether there is a waiting task */
+ VP       exinf;  /* extended information */
+ BOOL_ID  wtsk;   /* indicates whether or not there is a waiting task */
  UINT     flgptn; /* eventflag bit pattern */
  /* additional implementation dependent information may be included */
 @} T_RFLG; 
@@ -150,8 +148,8 @@ see @code{T_CFLG}.
 @item wtsk
 
 indicates whether or not there is a task waiting for the eventflag in
-question.  If there is no waiting task, wtsk is returned as FALSE = 0.  
-If there is a waiting task, wtsk is returned as a value other than 0.
+question.  If there is no waiting task, @code{wtsk} is returned as FALSE = 0.  
+If there is a waiting task, @code{wtsk} is returned as a value other than 0.
 
 @item flgptn
 
@@ -358,7 +356,7 @@ outside supported range was specified for setptn or clrptn)
 
 The @code{set_flg} system call sets the bits specified by @code{setptn} of the
 one word eventflag specified by @code{flgid}.  In other words, a logical
-sum is taken for the values of the eventflag specified by flgid with the
+sum is taken for the values of the eventflag specified by @code{flgid} with the
 value of @code{setptn}.
 
 If the eventflag value is changed by @code{set_flg} and the new eventflag
@@ -516,7 +514,7 @@ flgptn)
 
 The @code{wai_flg} system call waits for the eventflag specified by
 @code{flgid} to be set to satisfy the wait release condition specified by
-@code{wfmode}.
+@code{wfmode}. The Eventflags bit-pattern will be returned with a pointer @code{p_flgptn}.
 
 If the eventflag specified by @code{flgid} already satisfies the wait
 release conditions given by @code{wfmode}, the issuing task will continue
@@ -702,6 +700,7 @@ ER twai_flg(
   ID flgid,
   UINT waiptn,
   UINT wfmode,
+  TMO tmout
 );
 @end example
 @end ifset
@@ -855,4 +854,3 @@ release conditions are satisfied (it clears the eventflag if
 Depending on the implementation, additional information besides
 @code{wtsk} and @code{flgptn} (such as eventflag attributes,
 @code{flgatr}) may also be referred.
-

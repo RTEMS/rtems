@@ -174,6 +174,8 @@ A memory block is allocated from the fixed-size memorypool specified by mpfid.  
 
 @subheading NOTES:
 
+NONE
+
 
 @c
 @c  pget_blf
@@ -235,6 +237,8 @@ The pget_blf system call has the same function as get_blf except for the waiting
 
 @subheading NOTES:
 
+NONE
+
 
 @c
 @c  tget_blf
@@ -287,6 +291,8 @@ task in dispatch disabled state; implementation dependent for pget_blf and tget_
 The tget_blf system call has the same function as get_blf with an additional timeout feature.  A maximum wait time (timeout value) can be specified using the parameter tmout.  When a timeout is specified, a timeout error, E_TMOUT, will result and the system call will finish if the period specified by tmout elapses without conditions for releasing wait being satisfied (i.e. without free memory becoming available).
 
 @subheading NOTES:
+
+NONE
 
 @c
 @c  rel_blf

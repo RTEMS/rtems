@@ -250,6 +250,8 @@ The pget_blk system call has the same function as get_blk except for the waiting
 
 @subheading NOTES:
 
+NONE
+
 @c
 @c  tget_blk
 @c
@@ -304,6 +306,8 @@ pget_blk and tget_blk(tmout=TMO_POL))
 The tget_blk system call has the same function as get_blk with an additional timeout feature.  A maximum wait time (timeout value) can be specified using the parameter tmout.  When a timeout is specified, a timeout error, E_TMOUT, will result and the system call will finish if the period specified by tmout elapses without conditions for releasing wait being satisfied (i.e. without sufficient free memory becoming available).
 
 @subheading NOTES:
+
+NONE
 
 @c
 @c  rel_blk

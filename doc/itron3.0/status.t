@@ -177,6 +177,7 @@ See .doc file, verify correct
 @itemize @bullet
 @item Functional tests for complete routines.
 @item Yellow line testing needs to be verified.
+@item No Timing Tests
 @end itemize
 
 @item Documentation
@@ -229,6 +230,7 @@ See .doc file, verify correct
 @item Testing
 @itemize @bullet
 @item Yellow Lined BUT Timeout Cases Not Actually Executed
+@item No Timing Tests
 @end itemize
 
 @item Documentation
@@ -292,11 +294,14 @@ See .doc file, verify correct
 @item Testing
 @itemize @bullet
 @item No Tests Written
+@item No Timing Tests
 @end itemize
 
 @item Documentation
 @itemize @bullet
-@item Shell, Needs to be Fleshed Out
+@item Good First Draft.
+@item No Information in Operations.
+@item Should not use "standard-like" language.
 @end itemize
 
 @item ITRON 3.0 API Conformance
@@ -357,11 +362,14 @@ See .doc file, verify correct
 @item Testing
 @itemize @bullet
 @item No Tests Written
+@item No Timing Tests
 @end itemize
 
 @item Documentation
 @itemize @bullet
-@item Shell, Needs to be Fleshed Out
+@item Needs More Text
+@item No Information in Background or Operations.
+@item Service Descriptions are Weak.
 @end itemize
 
 @item ITRON 3.0 API Conformance
@@ -424,11 +432,13 @@ This is required for POSIX Message Queues as well.]
 @item Testing
 @itemize @bullet
 @item No Tests Written
+@item No Timing Tests
 @end itemize
 
 @item Documentation
 @itemize @bullet
-@item Shell, Needs to be Fleshed Out
+@item Good First Draft.
+@item No Information in Operations
 @end itemize
 
 @item ITRON 3.0 API Conformance
@@ -488,6 +498,7 @@ This is required for POSIX Message Queues as well.]
 @item Testing
 @itemize @bullet
 @item No Tests Written
+@item No Timing Tests
 @end itemize
 
 @item Documentation
@@ -578,6 +589,7 @@ that is meaningful on a particular CPU.
 @item Testing
 @itemize @bullet
 @item No Tests Written
+@item No Timing Tests
 @end itemize
 
 @item Documentation
@@ -642,11 +654,14 @@ that is meaningful on a particular CPU.
 @item Testing
 @itemize @bullet
 @item No Tests Written
+@item No Timing Tests
 @end itemize
 
 @item Documentation
 @itemize @bullet
-@item Shell, Needs to be Fleshed Out
+@item Good First Draft.
+@item No Information in Operations
+@item Should not use "standard-like" language.
 @end itemize
 
 @item ITRON 3.0 API Conformance
@@ -706,11 +721,14 @@ that is meaningful on a particular CPU.
 @item Testing
 @itemize @bullet
 @item No Tests Written
+@item No Timing Tests
 @end itemize
 
 @item Documentation
 @itemize @bullet
-@item Shell, Needs to be Fleshed Out
+@item Good First Draft.
+@item No Information in Background or Operations
+@item Should not use "standard-like" language.
 @end itemize
 
 @item ITRON 3.0 API Conformance
@@ -773,11 +791,12 @@ that is meaningful on a particular CPU.
 @item Testing
 @itemize @bullet
 @item No Tests Written
+@item No Timing Tests
 @end itemize
 
 @item Documentation
 @itemize @bullet
-@item Shell, Needs to be Fleshed Out
+@item Have Version in Word
 @end itemize
 
 @item ITRON 3.0 API Conformance
@@ -833,6 +852,7 @@ that is meaningful on a particular CPU.
 @item Testing
 @itemize @bullet
 @item No Tests Written
+@item No Timing Tests
 @end itemize
 
 @item Documentation
@@ -891,6 +911,7 @@ that is meaningful on a particular CPU.
 @item Testing
 @itemize @bullet
 @item No Tests Written
+@item No Timing Tests
 @end itemize
 
 @item Documentation
