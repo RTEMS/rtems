@@ -62,7 +62,6 @@ mpc8xx/clock/Makefile
 mpc8xx/console-generic/Makefile
 mpc8xx/cpm/Makefile
 mpc8xx/exceptions/Makefile
-mpc8xx/include/Makefile
 mpc8xx/mmu/Makefile
 mpc8xx/timer/Makefile
 ppc403/Makefile
@@ -81,7 +80,6 @@ mpc6xx/wrapup/Makefile
 mpc8260/Makefile
 mpc8260/clock/Makefile
 mpc8260/console-generic/Makefile
-mpc8260/include/Makefile
 mpc8260/timer/Makefile
 mpc8260/exceptions/Makefile
 mpc8260/mmu/Makefile
