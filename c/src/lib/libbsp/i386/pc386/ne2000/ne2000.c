@@ -34,6 +34,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <errno.h>
 
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
