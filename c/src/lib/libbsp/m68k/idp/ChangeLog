@@ -1,7 +1,9 @@
 2004-04-13	Ralf Corsepius <ralf_corsepius@rtems.org>
 
-	* include/bsp.h: Include <rtems/motorola/mc68230.h> instead of <motorola/mc68230.h>.
-	* include/bsp.h: Include <rtems/motorola/mc68681.h> instead of <motorola/mc68681.h>.
+	* include/bsp.h: Include <rtems/motorola/mc68230.h> instead of
+	<motorola/mc68230.h>.
+	* include/bsp.h: Include <rtems/motorola/mc68681.h> instead of
+	<motorola/mc68681.h>.
 
 2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
 
