@@ -58,6 +58,8 @@ void *POSIX_Init(
   status = pthread_attr_init( &attr );
   assert( !status );
 
+  status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
+  assert( !status );
   attr.schedpolicy = -1;
 
   puts( "Init: pthread_create - EINVAL (invalid scheduling policy)" );
@@ -85,6 +87,9 @@ void *POSIX_Init(
   status = pthread_attr_setschedparam( &attr, &schedparam );
   assert( !status );
 
+  status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
+  assert( !status );
+ 
   puts( "Init: pthread_create - EINVAL (replenish < budget)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   assert( status == EINVAL );
