@@ -1,5 +1,10 @@
 2004-02-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ChangeLog: Merge-in started/ChangeLog.
+	* started/ChangeLog: Remove.
+
+2004-02-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Add RTEMS_ENABLE_RPMPREFIX.
 	Add RTEMSRPMPREFIX.
 	* common/rtems.texi.in: Add RTEMSRPMPREFIX.
