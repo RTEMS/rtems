@@ -3,6 +3,7 @@
 #include <sched.h>
 #include <fcntl.h>
 #include <time.h>
+#include <tmacros.h>
 
 void *POSIX_Init(
   void *argument
@@ -17,116 +18,168 @@ void *POSIX_Init(
   sem_t           *n_sem2;
   sem_t           testsem;
   struct timespec waittime;
+  char            failure_msg[80];
 
   puts( "\n\n*** POSIX SEMAPHORE MANAGER TEST 1 ***" );
 
   puts( "Init: sem_init - SUCCESSFUL" );
   for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_SEMAPHORES; i++) {
     status = sem_init(&sems[i], 0, i);
-    assert( status == 0 );
+    sprintf(failure_msg, "sem_init %d", i );
+    fatal_directive_status( status, 0, failure_msg);
   }
   puts( "Init: sem_init - UNSUCCESSFUL (ENOSPC)" );
   status = sem_init(&sem2, 0, 1);
-  assert( (status == -1) && (errno == ENOSPC) );
+  fatal_directive_status( status, -1, "sem_init error return status");
+  fatal_directive_status( errno, ENOSPC, "sem_init errorno ENOSPC" );
  
   puts( "Init: sem_init - UNSUCCESSFUL (ENOSYS -- pshared not supported)" );
   status = sem_init(&sem2, 1, 1);
-  assert( (status == -1) && (errno == ENOSYS) );
+  fatal_directive_status( status, -1, "sem_init error return status");
+  fatal_directive_status( errno, ENOSYS, "sem_init errno set to ENOSYS");
   
   puts( "Init: sem_getvalue - SUCCESSFUL ");
   for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_SEMAPHORES; i++) {
     status = sem_getvalue(&sems[i], &value);
-    assert( (status == 0) && (value == i) );
+    sprintf( failure_msg, "sem_getvalue %d", i );
+    fatal_directive_status( status, 0, failure_msg );
+    fatal_directive_status( value, i, "sem_getvalue correct value" );
   }
   puts( "Init: sem_getvalue - UNSUCCESSFUL ");
   status = sem_getvalue(&sem2, &value);
-  assert( (status == -1) && (errno == EINVAL) );
+  fatal_directive_status( status, -1, "sem_init error return status"); 
+  fatal_directive_status( errno, EINVAL, "sem_getvalue errno EINVAL");
 
   puts( "Init: sem_destroy - SUCCESSFUL" );
   status = sem_destroy(&sems[0]);
-  assert( status == 0 );
+  fatal_directive_status( status, 0, "sem_destroy semaphore 0"); 
 
   puts( "Init: sem_destroy - UNSUCCESSFUL (EINVAL)" );
   status = sem_destroy(&sem2);
-  assert( (status == -1) && (errno == EINVAL) );
+  fatal_directive_status( status, -1, "sem_init error return status");
+  fatal_directive_status( errno, EINVAL, "sem_destroy errno EINVAL");
 
   puts( "Init: sem_wait - SUCCESSFUL" );
   status = sem_wait(&sems[1]);
-  assert( status == 0);
+  fatal_directive_status( status, 0, "sem_wait semaphore 1"); 
 
   puts( "Init: sem_wait - UNSUCCESSFUL (EINVAL)" );
   status = sem_wait(&sem2);
-  assert( (status == -1) && (errno == EINVAL) );
+  fatal_directive_status( status, -1, "sem_init error return status");
+  fatal_directive_status( errno, EINVAL, "sem_wait errno EINVAL");
 
   puts( "Init: sem_post - SUCCESSFUL" );
   status = sem_post(&sems[1]);
-  assert( status == 0 );
+  fatal_directive_status( status, 0, "sem_post semaphore 1"); 
 
   puts( "Init: sem_wait - SUCCESSFUL (after a sem_post)" );
   status = sem_wait(&sems[1]);
-  assert( status == 0 );
+  fatal_directive_status( status, 0, "sem_wait semaphore 1"); 
 
   puts( "Init: sem_trywait - SUCCESSFUL" );
   status = sem_trywait(&sems[2]);
-  assert( status == 0 );
+  fatal_directive_status( status, 0, "sem_trywait semaphore 2"); 
 
   puts( "Init: sem_trywait - UNSUCCESSFUL (EAGAIN)" );
   status = sem_trywait(&sems[1]);
-  assert( (status == -1) && (errno == EAGAIN) );
+  fatal_directive_status( status, -1, "sem_init error return status");
+  fatal_directive_status( errno, EAGAIN, "sem_trywait errno EAGAIN");
 
   puts( "Init: sem_trywait - UNSUCCESSFUL (EINVAL)" );
   status = sem_trywait(&sem2);
-  assert( (status == -1) && (errno == EINVAL) );
+  fatal_directive_status( status, -1, "sem_init error return status");
+  fatal_directive_status( errno, EINVAL, "sem_trywait errno EINVAL");
 
   puts( "Init: sem_timedwait - SUCCESSFUL" );
   waittime.tv_sec = 0;
   waittime.tv_nsec = 100;
   status = sem_timedwait(&sems[2], &waittime);
-  assert( status == 0 );
+  fatal_directive_status( status, 0, "sem_timedwait semaphore 2"); 
 
   puts( "Init: sem_timedwait - UNSUCCESSFUL (ETIMEDOUT)" );
   status = sem_timedwait(&sems[1], &waittime);
-  assert( (status == -1) && (errno == ETIMEDOUT) );
+  fatal_directive_status( status, -1, "sem_init error return status");
+  fatal_directive_status( errno, ETIMEDOUT, "sem_init errno ETIMEDOUT");
 
   puts( "Init: sem_timedwait - UNSUCCESSFUL (EINVAL)" );
   status = sem_timedwait(&sem2, &waittime);
-  assert( (status == -1) && (errno == EINVAL) );
+  fatal_directive_status( status, -1, "sem_init error return status");
+  fatal_directive_status( errno, EINVAL, "sem_init errno EINVAL");
 
   puts( "Init: sem_post - UNSUCCESSFUL (EINVAL)" );
   status = sem_post(&sem2);
-  assert( (status == -1) && (errno == EINVAL) );
+  fatal_directive_status( status, -1, "sem_init error return status");
+  fatal_directive_status( errno, EINVAL, "sem_post errno EINVAL");
 
   puts( "Init: sem_destroy - SUCCESSFUL" );
   for (i = 1; i < CONFIGURE_MAXIMUM_POSIX_SEMAPHORES; i++) {
     status = sem_destroy(&sems[i]);
-    assert( status == 0);
+    sprintf( failure_msg, "sem_destroy %d", i );
+    fatal_directive_status( status, 0, failure_msg ); 
   }
 
   /* Modes are currently unsupported */
 
-  puts( "Init: sem_open - SUCCESSFUL" );
+  /*
+   * Validate all sem_open return paths.
+   */
+
+  puts( "Init: sem_open - sem1 SUCCESSFUL" );
   n_sem1 = sem_open("sem1", O_CREAT, 00777, 1);
   assert( n_sem1 != SEM_FAILED );
 
   puts( "Init: sem_open - UNSUCCESSFUL (EEXIST)" );
   n_sem2 = sem_open("sem1", O_CREAT | O_EXCL, 00777, 1);
-  assert( (n_sem2 == SEM_FAILED) && (errno == EEXIST) );
-
-  puts( "Init: sem_close - SUCCESSFUL" );
-  status = sem_close(n_sem1);
-  assert( status == 0);
+  fatal_directive_status( 
+    (int) n_sem2, (int ) SEM_FAILED, "sem_open error return status" );
+  fatal_directive_status( errno, EEXIST,  "sem_open errno EEXIST"); 
 
   /*
+   * Validate we can wait on a semaphore opened with sem_open.
+   */
+
+  puts( "Init: sem_wait on sem1" );
+  status = sem_wait(n_sem1);
+  fatal_directive_status( status, 0, "sem_wait opened semaphore"); 
+
+#if 0
+  puts( "Init: sem_unlink - sem1 SUCCESSFUL" );
+  status = sem_unlink( "sem1" );
+  fatal_directive_status( status, 0, "sem_unlink locked semaphore"); 
+
+  puts( "Init: sem_open - Reopen sem1 SUCCESSFUL with a different id" );
+  n_sem2 = sem_open( "sem1", O_CREAT | O_EXCL, 00777, 1);
+  assert( n_sem2 != SEM_FAILED );
+#endif
+
+  /*
+   * Validate we can call close on a semaphore opened with sem_open.
+   */
+
+  puts( "Init: sem_close - SUCCESSFUL" );
+  status = sem_close( n_sem1 );
+  fatal_directive_status( status, 0, "sem_close semaphore"); 
+
+  /*
+   * Notes:  
+   *  Calls to sem_close when sem_link has not been previously called shall
+   *  have no effect on the state of the semaphore.
+   *
+   *
+  
   puts( "Init: sem_close - UNSUCCESSFUL (EINVAL)" );
   status = sem_close(n_sem2);
-  assert( (status == -1) && (errno == EINVAL) );
+  fatal_directive_status( status, -1, "sem_init error return status");
+  fatal_directive_status( errno, EINVAL, "sem_close errno EINVAL");
 
   puts( "Init: sem_unlink - SUCCESSFUL" );
   status = sem_unlink("sem1");
-  assert( status == 0 );
+  fatal_directive_status( status, 0, "sem_unlink semaphore"); 
 
   puts( "Init: sem_unlink - UNSUCCESSFUL (ENOENT)" );
   status = sem_unlink("sem2");
+  fatal_directive_status( status, -1, "sem_init error return status");
+  fatal_directive_status( errno, ENOENT, "sem_unlink errno ENOENT");
   assert( (status == -1) && (errno == ENOENT) );
   */
 
@@ -137,3 +190,6 @@ void *POSIX_Init(
 
   return NULL; /* just so the compiler thinks we returned something */
 }
+
+
+
