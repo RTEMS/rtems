@@ -1,6 +1,6 @@
 2005-01-31	Sergei Organov <osv@topconrd.ru>
 
-	PR 771/pppd
+	PR 751/pppd
 	* libnetworking/pppd/chat.c, libnetworking/pppd/rtemsmain.c: The fix
 	committed to fix PR736 breaks pppd. chat.c should have its own static
 	ttyfd for pppd to work correctly. The symptom is that second
