@@ -29,7 +29,7 @@ main.o: main.c base.h
 
 chain.o: chain.c 
 
-dvi: $(PROJECT).dvi
+dvi: dirs $(PROJECT).dvi
 ps: $(PROJECT).ps
 pdf: dirs $(PROJECT).pdf
 	
@@ -46,7 +46,8 @@ $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
 
 $(PROJECT).dvi: $(FILES)
-	texi2dvi $(PROJECT).texi
+	$(TEXI2DVI) $(PROJECT).texi
+	cp $(PROJECT).dvi $(WWW_INSTALL)/$(PROJECT)
 
 view:
 	test -r $(PROJECT).ps && ghostview $(PROJECT).ps

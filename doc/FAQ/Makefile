@@ -32,22 +32,21 @@ info: dirs $(PROJECT)
 $(PROJECT): $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
 
-dvi: $(PROJECT).dvi
+dvi: dirs $(PROJECT).dvi
 ps: dirs $(PROJECT).ps
 pdf: dirs $(PROJECT).pdf
 	
 $(PROJECT).pdf: $(FILES)
 	$(TEXI2PDF) $(PROJECT).texi
-	cp $(PROJECT).pdf $(PDF_INSTALL)
+	cp $(PROJECT).pdf $(WWW_INSTALL)/$(PROJECT)
 	
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
-	cp $(PROJECT).ps $(PS_INSTALL)
+	cp $(PROJECT).ps $(WWW_INSTALL)/$(PROJECT)
 
-# run texi2dvi twice to generate the xref's properly.
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
-	texi2dvi $(PROJECT).texi
+	cp $(PROJECT).dvi $(WWW_INSTALL)/$(PROJECT)
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)

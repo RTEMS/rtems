@@ -29,27 +29,28 @@ FILES= $(PROJECT).texi \
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
-info: dirs networking
+info: dirs $(PROJECT)
 	#cp $(wildcard $(PROJECT) $(PROJECT)-*) $(INFO_INSTALL)
 	cp $(PROJECT) $(INFO_INSTALL)
 
-networking: $(FILES)
+$(PROJECT): $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
 
-dvi: $(PROJECT).dvi
+dvi: dirs $(PROJECT).dvi
 ps: dirs $(PROJECT).ps
 pdf: dirs $(PROJECT).pdf
 	
 $(PROJECT).pdf: $(FILES)
 	$(TEXI2PDF) $(PROJECT).texi
-	cp $(PROJECT).pdf $(PDF_INSTALL)
+	cp $(PROJECT).pdf $(WWW_INSTALL)/$(PROJECT)
 	
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
-	cp $(PROJECT).ps $(PS_INSTALL)
+	cp $(PROJECT).ps $(WWW_INSTALL)/$(PROJECT)
 
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
+	cp $(PROJECT).dvi $(WWW_INSTALL)/$(PROJECT)
 
 networktasks.texi: networktasks.t Makefile
 	$(BMENU) -p "Preface" \
@@ -97,7 +98,7 @@ clean:
 	rm -f *.o $(PROG) *.txt core $(PROJECT).pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* $(GENERATED_FILES)
-	rm -f networking networking-*
+	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f timedata.texi timetbl.texi intr.texi wksheets.texi
 	rm -f timetbl.t wksheets.t
 	rm -f *.fixed _*
