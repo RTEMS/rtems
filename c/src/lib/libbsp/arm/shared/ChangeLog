@@ -1,3 +1,7 @@
+2001-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* comm/Makefile.am: Use *_HEADERS instead of *H_FILES.
+
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
 	* comm/console.c: Added casts to eliminate warnings.

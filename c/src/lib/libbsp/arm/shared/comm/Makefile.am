@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = uart.h
+include_HEADERS = uart.h
 
 C_FILES = console.c uart.c
 
@@ -13,10 +13,11 @@ $(PROJECT_INCLUDE):
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) \
+    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all: $(PREINSTALL_FILES)
 
-EXTRA_DIST = console.c uart.c uart.h
+EXTRA_DIST = console.c uart.c
 
 include $(top_srcdir)/../../../../../automake/local.am
