@@ -1,5 +1,10 @@
 2000-05-24	Fernando Ruiz Casas <fernando.ruiz@ctv.es>
 
+	* include/rtems/libio_.h: Added login name, uid, gid, euid, and egid
+	so they can be part of the private environment.
+
+2000-05-24	Fernando Ruiz Casas <fernando.ruiz@ctv.es>
+
 	* libc/ttyname.c (ttyname_r): Removed duplicate call to closedir().
 	* libc/getpwent.c: Create a more robust /etc/passwd and /etc/group.
 	* libc/base_fs.c: Change permissions of files and directories.  Now uses

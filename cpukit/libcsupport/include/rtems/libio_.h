@@ -22,10 +22,13 @@ extern "C" {
 #include <rtems/libio.h>                /* include before standard IO */
 #include <rtems/assoc.h>                /* assoc.h not included by rtems.h */
 
+#include <sys/types.h>                  
+	
 #include <stdio.h>                      /* O_RDONLY, et.al. */
 #include <fcntl.h>                      /* O_RDONLY, et.al. */
 #include <assert.h>
 #include <stdarg.h>
+#include <limits.h>
 #include <errno.h>
 
 #if ! defined(O_NDELAY)
@@ -215,6 +218,14 @@ typedef struct {
  /* Default mode for all files. */
  mode_t                           umask;
  nlink_t                          link_counts;
+ /* _POSIX_types */
+ uid_t                            uid;
+ gid_t                            gid;
+ uid_t                            euid;
+ gid_t                            egid;
+ char      login_buffer[LOGIN_NAME_MAX];
+
+ pid_t                            pgrp; /* process group id */
 } rtems_user_env_t;
 
 extern rtems_user_env_t * rtems_current_user_env; 
@@ -224,6 +235,13 @@ extern rtems_user_env_t   rtems_global_user_env;
 #define rtems_filesystem_root        (rtems_current_user_env->root_directory)
 #define rtems_filesystem_link_counts (rtems_current_user_env->link_counts)
 #define rtems_filesystem_umask       (rtems_current_user_env->umask)
+
+#define _POSIX_types_Uid             (rtems_current_user_env->uid)
+#define _POSIX_types_Gid             (rtems_current_user_env->gid)
+#define _POSIX_types_Euid            (rtems_current_user_env->euid)
+#define _POSIX_types_Egid            (rtems_current_user_env->egid)
+#define _POSIX_types_Getlogin_buffer (rtems_current_user_env->login_buffer)
+
 
 /*
  *  Instantiate a private copy of the per user information for the calling task.
