@@ -129,7 +129,7 @@ extern "C" {
 #define PPC_ALIGNMENT           4
 #define PPC_CACHE_ALIGNMENT     16
 #define PPC_I_CACHE             4096
-#define PPC_I_CACHE             0
+#define PPC_D_CACHE             0
 
 
 #elif defined(ppc601)
@@ -449,7 +449,14 @@ extern "C" {
 #define PPC_IRQ_FIT	 (PPC_STD_IRQ_LAST+2) /*0x01010- Fixed int. timer  */
 #define PPC_IRQ_WATCHDOG (PPC_STD_IRQ_LAST+3) /*0x01020- Watchdog timer    */
 #define PPC_IRQ_DEBUG	 (PPC_STD_IRQ_LAST+4) /*0x02000- Debug exceptions  */
-#define PPC_IRQ_LAST     PPC_IRQ_DEBUG    
+#define PPC_IRQ_LAST     PPC_IRQ_DEBUG
+
+#elif defined(mpc505) || defined(mpc509)
+#define PPC_IRQ_SOFTEMU   (PPC_STD_IRQ_LAST+1)    /* Software emulation. */
+#define PPC_IRQ_DATA_BP   (PPC_STD_IRQ_LAST+ 2)
+#define PPC_IRQ_INST_BP   (PPC_STD_IRQ_LAST+ 3)
+#define PPC_IRQ_MEXT_BP   (PPC_STD_IRQ_LAST+ 4)
+#define PPC_IRQ_NMEXT_BP  (PPC_STD_IRQ_LAST+ 5)
 
 #elif defined(ppc601)
 #define PPC_IRQ_TRACE    (PPC_STD_IRQ_LAST+1) /*0x02000-Run/Trace Exception*/
