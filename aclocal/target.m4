@@ -53,54 +53,14 @@ if test "$no_recursion" != yes; then
       continue
     fi
 
-    echo configuring in $ac_config_dir
+    _RTEMS_PUSH_BUILDDIR([$ac_config_dir])
 
-    case "$srcdir" in
-##    .) ;;
-    *)
-      if test -d $ac_config_dir || mkdir $ac_config_dir; then :;
-      else
-        AC_MSG_ERROR(can not create `pwd`/$ac_config_dir)
-      fi
-      ;;
-    esac
-
-    ac_popdir=`pwd`
-    cd $ac_config_dir
-
-changequote(, )dnl
-      # A "../" for each directory in /$ac_config_dir.
-      ac_dots=`echo $ac_config_dir|sed -e 's%^\./%%' -e 's%[^/]$%&/%' -e 's%[^/]*/%../%g'`
-changequote([, ])dnl
-
-    case "$srcdir" in
-##    .) # No --srcdir option.  We are building in place.
-##      ac_sub_srcdir=$srcdir ;;
-    /*) # Absolute path.
-      ac_sub_srcdir=$srcdir/$ac_config_dir ;;
-    *) # Relative path.
-      ac_sub_srcdir=$ac_dots$srcdir/$ac_config_dir ;;
-    esac
-
-    # Check for configure
-    if test -f $ac_sub_srcdir/configure; then
-      ac_sub_configure=$ac_sub_srcdir/configure
-    else
-      AC_MSG_WARN(no configuration information is in $ac_config_dir)
-      ac_sub_configure=
-    fi
+    _RTEMS_SUB_SRCDIR([$ac_config_dir])
 
     # The recursion is here.
     if test -n "$ac_sub_configure"; then
       ac_sub_cache_file=./config.cache
-ifdef([AC_PROVIDE_AC_PROG_INSTALL],
-      [  case "$ac_given_INSTALL" in
-changequote(, )dnl
-        [/$]*) INSTALL="$ac_given_INSTALL" ;;
-changequote([, ])dnl
-        *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
-        esac
-])dnl
+      _RTEMS_GIVEN_INSTALL
 
       echo "[running ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file] --srcdir=$ac_sub_srcdir"
       # The eval makes quoting arguments work.
@@ -111,11 +71,11 @@ changequote([, ])dnl
         --cache-file=$ac_sub_cache_file 
       then :
       else
-        AC_MSG_ERROR($ac_sub_configure failed for $ac_config_dir)
+        AC_MSG_ERROR([$ac_sub_configure failed for $ac_config_dir])
       fi
     fi
 
-    cd $ac_popdir
+    _RTEMS_POP_BUILDDIR
   done
 fi
 ])
