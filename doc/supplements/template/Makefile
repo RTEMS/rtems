@@ -21,13 +21,14 @@ dirs:
 COMMON_FILES=../../common/cpright.texi ../../common/setup.texi \
   ../../common/timing.texi
 
-FILES= $(PROJECT).texi preface.texi \
-  $(COMMON_FILES) $(GENERATED_FILES)
 GENERATED_FILES=\
   cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi \
-  bsp.texi cputable.texi
+  bsp.texi cputable.texi wksheets.texi
 
 #  timetbl.texi timedata.texi wksheets.texi 
+
+FILES= $(PROJECT).texi preface.texi \
+  $(COMMON_FILES) $(GENERATED_FILES)
 
 info: dirs c_$(PROJECT)
 	@echo NEED TO INSTALL THE INFO FILES
@@ -65,14 +66,17 @@ memmodel.texi: memmodel.t Makefile
 	    -u "Top" \
 	    -n "" ${*}.t
 
+# Interrupt Chapter:
+#  1.  Replace Times and Sizes
+#  2.  Build Node Structure
+intr.t: intr_NOTIMES.t BSP_TIMES
+	${REPLACE} -p BSP_TIMES intr_NOTIMES.t
+	mv intr_NOTIMES.t.fixed intr.t
+
 intr.texi: intr.t Makefile
 	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
-
-intr.t: intr_NOTIMES.t BSP_TIMES
-	${REPLACE} -p BSP_TIMES intr_NOTIMES.t
-	mv intr_NOTIMES.t.fixed intr.t
 
 fatalerr.texi: fatalerr.t Makefile
 	$(BMENU) -p "" \
@@ -89,28 +93,36 @@ cputable.texi: cputable.t Makefile
 	    -u "Top" \
 	    -n "" ${*}.t
 
+# Worksheets Chapter:
+#  1.  Specialize the Shared File
+#  2.  Replace Times and Sizes
+#  3.  Build Node Structure
+
+wksheets_NOTIMES.t: ../../common/wksheets.t
+	cp ../../common/wksheets.t wksheets_NOTIMES.t
+
+wksheets.t: wksheets_NOTIMES.t BSP_TIMES
+	${REPLACE} -p BSP_TIMES wksheets_NOTIMES.t
+	mv wksheets_NOTIMES.t.fixed wksheets.t
+
+wksheets.texi: wksheets.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
 replace: timedata.texi
 
 timetbl.t: ../../common/timetbl.t
 	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
             <../../common/timetbl.t >timetbl.t
 
-timetbl.texi: timetbl.t MVME136_TIMES
-	${REPLACE} -p MVME136_TIMES timetbl.t
+timetbl.texi: timetbl.t BSP_TIMES
+	${REPLACE} -p BSP_TIMES timetbl.t
 	mv timetbl.t.fixed timetbl.texi
 
-timedata.texi: timedata.t MVME136_TIMES
-	${REPLACE} -p MVME136_TIMES timedata.t
+timedata.texi: timedata.t BSP_TIMES
+	${REPLACE} -p BSP_TIMES timedata.t
 	mv timedata.t.fixed timedata.texi
-
-wksheets.t: ../../common/wksheets.t
-	sed -e 's/WORKSHEETS_PREVIOUS_LINK/Processor Dependent Information Table CPU Dependent Information Table/' \
-            -e 's/WORKSHEETS_NEXT_LINK/MVME136 Timing Data/' \
-            <../../common/wksheets.t >wksheets.t
-
-wksheets.texi: wksheets.t MVME136_TIMES
-	${REPLACE} -p MVME136_TIMES wksheets.t
-	mv wksheets.t.fixed wksheets.texi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
@@ -122,6 +134,7 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f c_$(PROJECT) c_$(PROJECT)-*
-	rm -f timedata.texi timetbl.texi intr.t wksheets.texi
-	rm -f timetbl.t wksheets.t
+	rm -f wksheets.t wksheets_NOTIMES.t 
+	#rm -f timedata.texi timetbl.texi intr.t 
+	#rm -f timetbl.t 
 	rm -f *.fixed _* $(GENERATED_FILES)

@@ -21,9 +21,13 @@ dirs:
 COMMON_FILES=../../common/cpright.texi ../../common/setup.texi \
   ../../common/timing.texi
 
+GENERATED_FILES= \
+  wksheets.texi
+
 FILES= $(PROJECT).texi \
   bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
-  intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi wksheets.texi 
+  intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi \
+  $(GENERATED_FILES)
 
 info: dirs c_i386
 	cp c_$(PROJECT) c_$(PROJECT)-* $(INFO_INSTALL)
@@ -43,6 +47,10 @@ $(PROJECT).dvi: $(FILES)
 
 replace: timedata.texi
 
+#
+#  Chapters which get automatic processing
+#
+
 intr.texi: intr.t FORCE386_TIMES
 	${REPLACE} -p FORCE386_TIMES intr.t
 	mv intr.t.fixed intr.texi
@@ -59,14 +67,22 @@ timedata.texi: timedata.t FORCE386_TIMES
 	${REPLACE} -p FORCE386_TIMES timedata.t
 	mv timedata.t.fixed timedata.texi
 
-wksheets.t: ../../common/wksheets.t
-	sed -e 's/WORKSHEETS_PREVIOUS_LINK/Processor Dependent Information Table CPU Dependent Information Table/' \
-            -e 's/WORKSHEETS_NEXT_LINK/CPU386 Timing Data/' \
-            <../../common/wksheets.t >wksheets.t
+# Worksheets Chapter:
+#  1.  Obtain the Shared File
+#  2.  Replace Times and Sizes
+#  3.  Build Node Structure
 
-wksheets.texi: wksheets.t FORCE386_TIMES
-	${REPLACE} -p FORCE386_TIMES wksheets.t
-	mv wksheets.t.fixed wksheets.texi
+wksheets_NOTIMES.t: ../../common/wksheets.t
+	cp ../../common/wksheets.t wksheets_NOTIMES.t
+
+wksheets.t: wksheets_NOTIMES.t FORCE386_TIMES
+	${REPLACE} -p FORCE386_TIMES wksheets_NOTIMES.t
+	mv wksheets_NOTIMES.t.fixed wksheets.t
+
+wksheets.texi: wksheets.t Makefile
+	$(BMENU) -p "Processor Dependent Information Table CPU Dependent Information Table" \
+	    -u "Top" \
+	    -n "CPU386 Timing Data" ${*}.t
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_i386
@@ -78,7 +94,7 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f c_i386 c_i386-*
-	rm -f timedata.texi timetbl.texi intr.texi wksheets.texi
-	rm -f timetbl.t wksheets.t
+	rm -f timedata.texi timetbl.texi intr.texi $(GENERATED_FILES)
+	rm -f timetbl.t wksheets.t wksheets_NOTIMES.t
 	rm -f *.fixed _*
 
