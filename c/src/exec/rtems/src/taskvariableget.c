@@ -59,7 +59,7 @@ rtems_status_code rtems_task_variable_get(
 	 * Should this return the current (i.e not the
 	 * saved) value if `tid' is the current task?
 	 */
-        *result = tvp->var;
+        *result = tvp->tval;
         _Thread_Enable_dispatch();
         return RTEMS_SUCCESSFUL;
       }

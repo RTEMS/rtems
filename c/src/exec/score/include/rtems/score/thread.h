@@ -94,7 +94,8 @@ struct rtems_task_variable_tt;
 struct rtems_task_variable_tt {
   struct rtems_task_variable_tt  *next;
   void                          **ptr;
-  void                           *var;
+  void                           *gval;
+  void                           *tval;
   void                          (*dtor)(void *);
 };
 
