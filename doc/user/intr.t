@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Interrupt Manager, Interrupt Manager Introduction, TASK_WAKE_WHEN - Wake up when specified, Top
-@end ifinfo
 @chapter Interrupt Manager
-@ifinfo
-@menu
-* Interrupt Manager Introduction::
-* Interrupt Manager Background::
-* Interrupt Manager Operations::
-* Interrupt Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Interrupt Manager Introduction, Interrupt Manager Background, Interrupt Manager, Interrupt Manager
-@end ifinfo
 @section Introduction
 
 Any real-time executive must provide a mechanism for
@@ -41,21 +27,8 @@ directive:
 @item @code{@value{DIRPREFIX}interrupt_is_in_progress} - Is an ISR in Progress
 @end itemize
 
-@ifinfo
-@node Interrupt Manager Background, Processing an Interrupt, Interrupt Manager Introduction, Interrupt Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Processing an Interrupt::
-* RTEMS Interrupt Levels::
-* Disabling of Interrupts by RTEMS::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Processing an Interrupt, RTEMS Interrupt Levels, Interrupt Manager Background, Interrupt Manager Background
-@end ifinfo
 @subsection Processing an Interrupt
 
 The interrupt manager allows the application to
@@ -138,9 +111,6 @@ interrupt nesting by allowing the nested ISRs to terminate
 without performing any dispatch processing.  Only when the
 outermost ISR terminates will the postponed dispatching occur.
 
-@ifinfo
-@node RTEMS Interrupt Levels, Disabling of Interrupts by RTEMS, Processing an Interrupt, Interrupt Manager Background
-@end ifinfo
 @subsection RTEMS Interrupt Levels
 
 Many processors support multiple interrupt levels or
@@ -152,9 +122,6 @@ processor's interrupt levels, refer to the Interrupt Processing
 chapter of the Applications Supplement document for a specific
 target processor.
 
-@ifinfo
-@node Disabling of Interrupts by RTEMS, Interrupt Manager Operations, RTEMS Interrupt Levels, Interrupt Manager Background
-@end ifinfo
 @subsection Disabling of Interrupts by RTEMS
 
 During the execution of directive calls, critical
@@ -175,20 +142,8 @@ occur due to the inability of RTEMS to protect its critical
 sections.  However, ISRs that make no system calls may safely
 execute as non-maskable interrupts.
 
-@ifinfo
-@node Interrupt Manager Operations, Establishing an ISR, Disabling of Interrupts by RTEMS, Interrupt Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Establishing an ISR::
-* Directives Allowed from an ISR::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Establishing an ISR, Directives Allowed from an ISR, Interrupt Manager Operations, Interrupt Manager Operations
-@end ifinfo
 @subsection Establishing an ISR
 
 The @code{@value{DIRPREFIX}interrupt_catch}
@@ -200,9 +155,6 @@ Interrupt Vector Table and the address of the user's ISR in the
 RTEMS' Vector Table.  This directive returns the previous
 contents of the specified vector in the RTEMS' Vector Table.
 
-@ifinfo
-@node Directives Allowed from an ISR, Interrupt Manager Directives, Establishing an ISR, Interrupt Manager Operations
-@end ifinfo
 @subsection Directives Allowed from an ISR
 
 Using the interrupt manager insures that RTEMS knows
@@ -266,19 +218,7 @@ made from an ISR:
 @end itemize
 @end itemize
 
-@ifinfo
-@node Interrupt Manager Directives, INTERRUPT_CATCH - Establish an ISR, Directives Allowed from an ISR, Interrupt Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* INTERRUPT_CATCH - Establish an ISR::
-* INTERRUPT_DISABLE - Disable Interrupts::
-* INTERRUPT_ENABLE - Enable Interrupts::
-* INTERRUPT_FLASH - Flash Interrupts::
-* INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress::
-@end menu
-@end ifinfo
 
 This section details the interrupt manager's
 directives.  A subsection is dedicated to each of this manager's
@@ -286,9 +226,6 @@ directives and describes the calling sequence, related
 constants, usage, and status codes.
 
 @page
-@ifinfo
-@node INTERRUPT_CATCH - Establish an ISR, INTERRUPT_DISABLE - Disable Interrupts, Interrupt Manager Directives, Interrupt Manager Directives
-@end ifinfo
 @subsection INTERRUPT_CATCH - Establish an ISR
 
 @subheading CALLING SEQUENCE:
@@ -332,9 +269,6 @@ returned in @code{old_isr_handler}.
 This directive will not cause the calling task to be preempted.
 
 @page
-@ifinfo
-@node INTERRUPT_DISABLE - Disable Interrupts, INTERRUPT_ENABLE - Enable Interrupts, INTERRUPT_CATCH - Establish an ISR, Interrupt Manager Directives
-@end ifinfo
 @subsection INTERRUPT_DISABLE - Disable Interrupts
 
 @subheading CALLING SEQUENCE:
@@ -375,9 +309,6 @@ parameter.}
 @end ifset
 
 @page
-@ifinfo
-@node INTERRUPT_ENABLE - Enable Interrupts, INTERRUPT_FLASH - Flash Interrupts, INTERRUPT_DISABLE - Disable Interrupts, Interrupt Manager Directives
-@end ifinfo
 @subsection INTERRUPT_ENABLE - Enable Interrupts
 
 @subheading CALLING SEQUENCE:
@@ -417,9 +348,6 @@ This directive will not cause the calling task to be preempted.
 
 
 @page
-@ifinfo
-@node INTERRUPT_FLASH - Flash Interrupts, INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress, INTERRUPT_ENABLE - Enable Interrupts, Interrupt Manager Directives
-@end ifinfo
 @subsection INTERRUPT_FLASH - Flash Interrupts
 
 @subheading CALLING SEQUENCE:
@@ -458,9 +386,6 @@ and will be redisabled when this directive returns to the caller.
 This directive will not cause the calling task to be preempted.
 
 @page
-@ifinfo
-@node INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress, Clock Manager, INTERRUPT_FLASH - Flash Interrupts, Interrupt Manager Directives
-@end ifinfo
 @subsection INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress
 
 @subheading CALLING SEQUENCE:

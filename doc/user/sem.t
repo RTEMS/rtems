@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Semaphore Manager, Semaphore Manager Introduction, TIMER_RESET - Reset an interval timer, Top
-@end ifinfo
 @chapter Semaphore Manager
-@ifinfo
-@menu
-* Semaphore Manager Introduction::
-* Semaphore Manager Background::
-* Semaphore Manager Operations::
-* Semaphore Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Semaphore Manager Introduction, Semaphore Manager Background, Semaphore Manager, Semaphore Manager
-@end ifinfo
 @section Introduction
 
 The semaphore manager utilizes standard Dijkstra
@@ -37,20 +23,7 @@ semaphore manager are:
 @item @code{@value{DIRPREFIX}semaphore_release} - Release a semaphore
 @end itemize
 
-@ifinfo
-@node Semaphore Manager Background, Nested Resource Access, Semaphore Manager Introduction, Semaphore Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Nested Resource Access::
-* Priority Inversion::
-* Priority Inheritance::
-* Priority Ceiling::
-* Building a Semaphore's Attribute Set::
-* Building a SEMAPHORE_OBTAIN Option Set::
-@end menu
-@end ifinfo
 
 A semaphore can be viewed as a protected variable
 whose value can be modified only with the
@@ -92,9 +65,6 @@ performs a corresponding @code{@value{DIRPREFIX}semaphore_release}
 operation when it reaches its synchronization point, thus unblocking
 the pending task.
 
-@ifinfo
-@node Nested Resource Access, Priority Inversion, Semaphore Manager Background, Semaphore Manager Background
-@end ifinfo
 @subsection Nested Resource Access
 
 Deadlock occurs when a task owning a binary semaphore
@@ -114,9 +84,6 @@ outermost @code{@value{DIRPREFIX}semaphore_obtain} is matched with
 a @code{@value{DIRPREFIX}semaphore_release}.
 
 
-@ifinfo
-@node Priority Inversion, Priority Inheritance, Nested Resource Access, Semaphore Manager Background
-@end ifinfo
 @subsection Priority Inversion
 
 Priority inversion is a form of indefinite
@@ -132,9 +99,6 @@ cannot complete its interaction with the resource and release
 that resource.  The high priority task is effectively prevented
 from executing by lower priority tasks.
 
-@ifinfo
-@node Priority Inheritance, Priority Ceiling, Priority Inversion, Semaphore Manager Background
-@end ifinfo
 @subsection Priority Inheritance
 
 Priority inheritance is an algorithm that calls for
@@ -163,9 +127,6 @@ any of the semaphores the task holds.  Only when the task
 releases ALL of the binary semaphores it holds will its priority
 be restored to the normal value.
 
-@ifinfo
-@node Priority Ceiling, Building a Semaphore's Attribute Set, Priority Inheritance, Semaphore Manager Background
-@end ifinfo
 @subsection Priority Ceiling
 
 Priority ceiling is an algorithm that calls for the
@@ -207,9 +168,6 @@ any of the semaphores the task holds.  Only when the task
 releases ALL of the binary semaphores it holds will its priority
 be restored to the normal value.
 
-@ifinfo
-@node Building a Semaphore's Attribute Set, Building a SEMAPHORE_OBTAIN Option Set, Priority Ceiling, Semaphore Manager Background
-@end ifinfo
 @subsection Building a Semaphore's Attribute Set
 
 In general, an attribute set is built by a bitwise OR
@@ -263,9 +221,6 @@ similar semaphore were to be known globally, then the
 attribute_set parameter would be
 @code{@value{RPREFIX}GLOBAL @value{OR} @value{RPREFIX}PRIORITY}.
 
-@ifinfo
-@node Building a SEMAPHORE_OBTAIN Option Set, Semaphore Manager Operations, Building a Semaphore's Attribute Set, Semaphore Manager Background
-@end ifinfo
 @subsection Building a SEMAPHORE_OBTAIN Option Set
 
 In general, an option is built by a bitwise OR of the
@@ -292,23 +247,8 @@ to poll for a semaphore.  The option parameter passed to the
 @code{@value{DIRPREFIX}semaphore_obtain}
 directive should be @code{@value{RPREFIX}NO_WAIT}.
 
-@ifinfo
-@node Semaphore Manager Operations, Creating a Semaphore, Building a SEMAPHORE_OBTAIN Option Set, Semaphore Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Creating a Semaphore::
-* Obtaining Semaphore IDs::
-* Acquiring a Semaphore::
-* Releasing a Semaphore::
-* Deleting a Semaphore::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Creating a Semaphore, Obtaining Semaphore IDs, Semaphore Manager Operations, Semaphore Manager Operations
-@end ifinfo
 @subsection Creating a Semaphore
 
 The @code{@value{DIRPREFIX}semaphore_create} directive creates a binary or
@@ -328,9 +268,6 @@ must be specified.  RTEMS allocates a Semaphore Control Block
 RTEMS to manage the newly created semaphore.  Also, a unique
 semaphore ID is generated and returned to the calling task.
 
-@ifinfo
-@node Obtaining Semaphore IDs, Acquiring a Semaphore, Creating a Semaphore, Semaphore Manager Operations
-@end ifinfo
 @subsection Obtaining Semaphore IDs
 
 When a semaphore is created, RTEMS generates a unique
@@ -344,9 +281,6 @@ the semaphore ID may be obtained later using the
 used by other semaphore manager directives to access this
 semaphore.
 
-@ifinfo
-@node Acquiring a Semaphore, Releasing a Semaphore, Obtaining Semaphore IDs, Semaphore Manager Operations
-@end ifinfo
 @subsection Acquiring a Semaphore
 
 The @code{@value{DIRPREFIX}semaphore_obtain} directive is used to acquire the
@@ -389,9 +323,6 @@ priority ceiling and the priority ceiling for this semaphore is
 greater than that of the holder, then the holder's priority will
 be elevated.
 
-@ifinfo
-@node Releasing a Semaphore, Deleting a Semaphore, Acquiring a Semaphore, Semaphore Manager Operations
-@end ifinfo
 @subsection Releasing a Semaphore
 
 The @code{@value{DIRPREFIX}semaphore_release} directive is used to release
@@ -412,9 +343,6 @@ the task does not currently hold any other binary semaphores,
 then the task performing the @code{@value{DIRPREFIX}semaphore_release}
 will have its priority restored to its normal value.
 
-@ifinfo
-@node Deleting a Semaphore, Semaphore Manager Directives, Releasing a Semaphore, Semaphore Manager Operations
-@end ifinfo
 @subsection Deleting a Semaphore
 
 The @code{@value{DIRPREFIX}semaphore_delete} directive removes a semaphore
@@ -425,19 +353,7 @@ the semaphore will be readied and returned a status code which
 indicates that the semaphore was deleted.  Any subsequent
 references to the semaphore's name and ID are invalid.
 
-@ifinfo
-@node Semaphore Manager Directives, SEMAPHORE_CREATE - Create a semaphore, Deleting a Semaphore, Semaphore Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* SEMAPHORE_CREATE - Create a semaphore::
-* SEMAPHORE_IDENT - Get ID of a semaphore::
-* SEMAPHORE_DELETE - Delete a semaphore::
-* SEMAPHORE_OBTAIN - Acquire a semaphore::
-* SEMAPHORE_RELEASE - Release a semaphore::
-@end menu
-@end ifinfo
 
 This section details the semaphore manager's
 directives.  A subsection is dedicated to each of this manager's
@@ -445,9 +361,6 @@ directives and describes the calling sequence, related
 constants, usage, and status codes.
 
 @page
-@ifinfo
-@node SEMAPHORE_CREATE - Create a semaphore, SEMAPHORE_IDENT - Get ID of a semaphore, Semaphore Manager Directives, Semaphore Manager Directives
-@end ifinfo
 @subsection SEMAPHORE_CREATE - Create a semaphore
 
 @subheading CALLING SEQUENCE:
@@ -549,9 +462,6 @@ semaphores, is limited by the maximum_global_objects field in
 the Configuration Table.
 
 @page
-@ifinfo
-@node SEMAPHORE_IDENT - Get ID of a semaphore, SEMAPHORE_DELETE - Delete a semaphore, SEMAPHORE_CREATE - Create a semaphore, Semaphore Manager Directives
-@end ifinfo
 @subsection SEMAPHORE_IDENT - Get ID of a semaphore
 
 @subheading CALLING SEQUENCE:
@@ -609,9 +519,6 @@ nodes.  It accesses only the local copy of the global object
 table.
 
 @page
-@ifinfo
-@node SEMAPHORE_DELETE - Delete a semaphore, SEMAPHORE_OBTAIN - Acquire a semaphore, SEMAPHORE_IDENT - Get ID of a semaphore, Semaphore Manager Directives
-@end ifinfo
 @subsection SEMAPHORE_DELETE - Delete a semaphore
 
 @subheading CALLING SEQUENCE:
@@ -670,9 +577,6 @@ Proxies, used to represent remote tasks, are
 reclaimed when the semaphore is deleted.
 
 @page
-@ifinfo
-@node SEMAPHORE_OBTAIN - Acquire a semaphore, SEMAPHORE_RELEASE - Release a semaphore, SEMAPHORE_DELETE - Delete a semaphore, Semaphore Manager Directives
-@end ifinfo
 @subsection SEMAPHORE_OBTAIN - Acquire a semaphore
 
 @subheading CALLING SEQUENCE:
@@ -762,9 +666,6 @@ A clock tick is required to support the timeout functionality of
 this directive.
 
 @page
-@ifinfo
-@node SEMAPHORE_RELEASE - Release a semaphore, Message Manager, SEMAPHORE_OBTAIN - Acquire a semaphore, Semaphore Manager Directives
-@end ifinfo
 @subsection SEMAPHORE_RELEASE - Release a semaphore
 
 @subheading CALLING SEQUENCE:

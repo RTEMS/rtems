@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Initialization Manager, Initialization Manager Introduction, Key Concepts Memory Management, Top
-@end ifinfo
 @chapter Initialization Manager
-@ifinfo
-@menu
-* Initialization Manager Introduction::
-* Initialization Manager Background::
-* Initialization Manager Operations::
-* Initialization Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Initialization Manager Introduction, Initialization Manager Background, Initialization Manager, Initialization Manager
-@end ifinfo
 @section Introduction
 
 The initialization manager is responsible for
@@ -39,22 +25,8 @@ directives provided by the initialization manager are:
 @item @code{@value{DIRPREFIX}shutdown_executive} - Shutdown RTEMS
 @end itemize
 
-@ifinfo
-@node Initialization Manager Background, Initialization Tasks, Initialization Manager Introduction, Initialization Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Initialization Tasks::
-* The System Initialization Task::
-* The Idle Task::
-* Initialization Manager Failure::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Initialization Tasks, The System Initialization Task, Initialization Manager Background, Initialization Manager Background
-@end ifinfo
 @subsection Initialization Tasks
 
 Initialization task(s) are the mechanism by which
@@ -80,9 +52,6 @@ This transformation typically involves changing priority and
 execution mode.  RTEMS does not automatically delete the
 initialization tasks.
 
-@ifinfo
-@node The System Initialization Task, The Idle Task, Initialization Tasks, Initialization Manager Background
-@end ifinfo
 @subsection The System Initialization Task
 
 The System Initialization Task is responsible for
@@ -107,9 +76,6 @@ Multiprocessing Server which initializes the Multiprocessor
 Communications Interface Layer, verifies multiprocessor system
 consistency, and processes all requests from remote nodes.
 
-@ifinfo
-@node The Idle Task, Initialization Manager Failure, The System Initialization Task, Initialization Manager Background
-@end ifinfo
 @subsection The Idle Task
 
 The Idle Task is the lowest priority task in a system
@@ -117,9 +83,6 @@ and executes only when no other task is ready to execute.  This
 task consists of an infinite loop and will be preempted when any
 other task is made ready to execute.
 
-@ifinfo
-@node Initialization Manager Failure, Initialization Manager Operations, The Idle Task, Initialization Manager Background
-@end ifinfo
 @subsection Initialization Manager Failure
 
 The fatal_error_occurred directive will be called
@@ -155,20 +118,8 @@ initialization sequence.
 created or started successfully.
 @end itemize
 
-@ifinfo
-@node Initialization Manager Operations, Initializing RTEMS, Initialization Manager Failure, Initialization Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Initializing RTEMS::
-* Shutting Down RTEMS::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Initializing RTEMS, Shutting Down RTEMS, Initialization Manager Operations, Initialization Manager Operations
-@end ifinfo
 @subsection Initializing RTEMS
 
 The @code{@value{DIRPREFIX}initialize_executive}
@@ -221,9 +172,6 @@ directive is invoked to start
 multitasking.  It is critical that only one of the RTEMS
 initialization sequences be used in an application.
 
-@ifinfo
-@node Shutting Down RTEMS, Initialization Manager Directives, Initializing RTEMS, Initialization Manager Operations
-@end ifinfo
 @subsection Shutting Down RTEMS
 
 The @code{@value{DIRPREFIX}shutdown_executive} directive is invoked by the
@@ -232,18 +180,7 @@ support package.  The board support package resumes execution at
 the code immediately following the invocation of the
 @code{@value{DIRPREFIX}initialize_executive} directive.
 
-@ifinfo
-@node Initialization Manager Directives, INITIALIZE_EXECUTIVE - Initialize RTEMS, Shutting Down RTEMS, Initialization Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* INITIALIZE_EXECUTIVE - Initialize RTEMS::
-* INITIALIZE_EXECUTIVE_EARLY - Initialize RTEMS and do NOT Start Multitasking::
-* INITIALIZE_EXECUTIVE_LATE - Complete Initialization and Start Multitasking::
-* SHUTDOWN_EXECUTIVE - Shutdown RTEMS::
-@end menu
-@end ifinfo
 
 This section details the initialization manager's
 directives.  A subsection is dedicated to each of this manager's
@@ -251,9 +188,6 @@ directives and describes the calling sequence, related
 constants, usage, and status codes.
 
 @page
-@ifinfo
-@node INITIALIZE_EXECUTIVE - Initialize RTEMS, INITIALIZE_EXECUTIVE_EARLY - Initialize RTEMS and do NOT Start Multitasking, Initialization Manager Directives, Initialization Manager Directives
-@end ifinfo
 @subsection INITIALIZE_EXECUTIVE - Initialize RTEMS
 
 @subheading CALLING SEQUENCE:
@@ -317,9 +251,6 @@ directive is logically equivalent to invoking
 with no intervening actions.
 
 @page
-@ifinfo
-@node INITIALIZE_EXECUTIVE_EARLY - Initialize RTEMS and do NOT Start Multitasking, INITIALIZE_EXECUTIVE_LATE - Complete Initialization and Start Multitasking, INITIALIZE_EXECUTIVE - Initialize RTEMS, Initialization Manager Directives
-@end ifinfo
 @subsection INITIALIZE_EXECUTIVE_EARLY - Initialize RTEMS and do NOT Start Multitasking
 
 @subheading CALLING SEQUENCE:
@@ -372,9 +303,6 @@ initialization sequences:
 @code{@value{DIRPREFIX}nitialize_executive_late}.
 
 @page
-@ifinfo
-@node INITIALIZE_EXECUTIVE_LATE - Complete Initialization and Start Multitasking, SHUTDOWN_EXECUTIVE - Shutdown RTEMS, INITIALIZE_EXECUTIVE_EARLY - Initialize RTEMS and do NOT Start Multitasking, Initialization Manager Directives
-@end ifinfo
 @subsection INITIALIZE_EXECUTIVE_LATE - Complete Initialization and Start Multitasking
 
 @subheading CALLING SEQUENCE:
@@ -432,9 +360,6 @@ initialization sequences:
 
 
 @page
-@ifinfo
-@node SHUTDOWN_EXECUTIVE - Shutdown RTEMS, Task Manager, INITIALIZE_EXECUTIVE_LATE - Complete Initialization and Start Multitasking, Initialization Manager Directives
-@end ifinfo
 @subsection SHUTDOWN_EXECUTIVE - Shutdown RTEMS
 
 @subheading CALLING SEQUENCE:

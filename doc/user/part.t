@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Partition Manager, Partition Manager Introduction, SIGNAL_SEND - Send signal set to a task, Top
-@end ifinfo
 @chapter Partition Manager
-@ifinfo
-@menu
-* Partition Manager Introduction::
-* Partition Manager Background::
-* Partition Manager Operations::
-* Partition Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Partition Manager Introduction, Partition Manager Background, Partition Manager, Partition Manager
-@end ifinfo
 @section Introduction
 
 The partition manager provides facilities to
@@ -36,20 +22,8 @@ provided by the partition manager are:
 @item @code{@value{DIRPREFIX}partition_return_buffer} - Return buffer to a partition
 @end itemize
 
-@ifinfo
-@node Partition Manager Background, Partition Manager Definitions, Partition Manager Introduction, Partition Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Partition Manager Definitions::
-* Building a Partition's Attribute Set::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Partition Manager Definitions, Building a Partition's Attribute Set, Partition Manager Background, Partition Manager Background
-@end ifinfo
 @subsection Partition Manager Definitions
 
 A partition is a physically contiguous memory area
@@ -66,9 +40,6 @@ Therefore, modifying memory that is outside of an allocated
 buffer could destroy the free buffer chain or the contents of an
 adjacent allocated buffer.
 
-@ifinfo
-@node Building a Partition's Attribute Set, Partition Manager Operations, Partition Manager Definitions, Partition Manager Background
-@end ifinfo
 @subsection Building a Partition's Attribute Set
 
 In general, an attribute set is built by a bitwise OR
@@ -93,23 +64,8 @@ specified on this call.  The attribute_set parameter should be
 @code{@value{RPREFIX}GLOBAL} to indicate that the partition
 is to be known globally.
 
-@ifinfo
-@node Partition Manager Operations, Creating a Partition, Building a Partition's Attribute Set, Partition Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Creating a Partition::
-* Obtaining Partition IDs::
-* Acquiring a Buffer::
-* Releasing a Buffer::
-* Deleting a Partition::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Creating a Partition, Obtaining Partition IDs, Partition Manager Operations, Partition Manager Operations
-@end ifinfo
 @subsection Creating a Partition
 
 The @code{@value{DIRPREFIX}partition_create} directive creates a partition
@@ -123,9 +79,6 @@ of buffers in the partition is calculated based upon the
 specified partition length and buffer size, and returned to the
 calling task along with a unique partition ID.
 
-@ifinfo
-@node Obtaining Partition IDs, Acquiring a Buffer, Creating a Partition, Partition Manager Operations
-@end ifinfo
 @subsection Obtaining Partition IDs
 
 When a partition is created, RTEMS generates a unique
@@ -138,9 +91,6 @@ ID may be obtained later using the @code{@value{DIRPREFIX}partition_ident}
 directive.  The partition ID is used by other partition manager directives
 to access this partition.
 
-@ifinfo
-@node Acquiring a Buffer, Releasing a Buffer, Obtaining Partition IDs, Partition Manager Operations
-@end ifinfo
 @subsection Acquiring a Buffer
 
 A buffer can be obtained by calling the
@@ -151,9 +101,6 @@ Otherwise, an unsuccessful return code is returned immediately
 to the caller.  Tasks cannot block to wait for a buffer to
 become available.
 
-@ifinfo
-@node Releasing a Buffer, Deleting a Partition, Acquiring a Buffer, Partition Manager Operations
-@end ifinfo
 @subsection Releasing a Buffer
 
 Buffers are returned to a partition's free buffer
@@ -161,9 +108,6 @@ chain with the @code{@value{DIRPREFIX}partition_return_buffer} directive.  This
 directive returns an error status code if the returned buffer
 was not previously allocated from this partition.
 
-@ifinfo
-@node Deleting a Partition, Partition Manager Directives, Releasing a Buffer, Partition Manager Operations
-@end ifinfo
 @subsection Deleting a Partition
 
 The @code{@value{DIRPREFIX}partition_delete} directive allows a partition to
@@ -172,19 +116,7 @@ the PTCB for that partition is returned to the PTCB free list.
 A partition with buffers still allocated cannot be deleted.  Any
 task attempting to do so will be returned an error status code.
 
-@ifinfo
-@node Partition Manager Directives, PARTITION_CREATE - Create a partition, Deleting a Partition, Partition Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* PARTITION_CREATE - Create a partition::
-* PARTITION_IDENT - Get ID of a partition::
-* PARTITION_DELETE - Delete a partition::
-* PARTITION_GET_BUFFER - Get buffer from a partition::
-* PARTITION_RETURN_BUFFER - Return buffer to a partition::
-@end menu
-@end ifinfo
 
 This section details the partition manager's
 directives.  A subsection is dedicated to each of this manager's
@@ -192,9 +124,6 @@ directives and describes the calling sequence, related
 constants, usage, and status codes.
 
 @page
-@ifinfo
-@node PARTITION_CREATE - Create a partition, PARTITION_IDENT - Get ID of a partition, Partition Manager Directives, Partition Manager Directives
-@end ifinfo
 @subsection PARTITION_CREATE - Create a partition
 
 @subheading CALLING SEQUENCE:
@@ -281,9 +210,6 @@ partitions, is limited by the maximum_global_objects field in
 the Configuration Table.
 
 @page
-@ifinfo
-@node PARTITION_IDENT - Get ID of a partition, PARTITION_DELETE - Delete a partition, PARTITION_CREATE - Create a partition, Partition Manager Directives
-@end ifinfo
 @subsection PARTITION_IDENT - Get ID of a partition
 
 @subheading CALLING SEQUENCE:
@@ -341,9 +267,6 @@ nodes.  It accesses only the local copy of the global object
 table.
 
 @page
-@ifinfo
-@node PARTITION_DELETE - Delete a partition, PARTITION_GET_BUFFER - Get buffer from a partition, PARTITION_IDENT - Get ID of a partition, Partition Manager Directives
-@end ifinfo
 @subsection PARTITION_DELETE - Delete a partition
 
 @subheading CALLING SEQUENCE:
@@ -395,9 +318,6 @@ The partition must reside on the local node, even if
 the partition was created with the @code{@value{RPREFIX}GLOBAL} option.
 
 @page
-@ifinfo
-@node PARTITION_GET_BUFFER - Get buffer from a partition, PARTITION_RETURN_BUFFER - Return buffer to a partition, PARTITION_DELETE - Delete a partition, Partition Manager Directives
-@end ifinfo
 @subsection PARTITION_GET_BUFFER - Get buffer from a partition
 
 @subheading CALLING SEQUENCE:
@@ -446,9 +366,6 @@ not reside on the local node will generate a request telling the
 remote node to allocate a buffer from the specified partition.
 
 @page
-@ifinfo
-@node PARTITION_RETURN_BUFFER - Return buffer to a partition, Region Manager, PARTITION_GET_BUFFER - Get buffer from a partition, Partition Manager Directives
-@end ifinfo
 @subsection PARTITION_RETURN_BUFFER - Return buffer to a partition
 
 @subheading CALLING SEQUENCE:

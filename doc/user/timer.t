@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Timer Manager, Timer Manager Introduction, CLOCK_TICK - Announce a clock tick, Top
-@end ifinfo
 @chapter Timer Manager
-@ifinfo
-@menu
-* Timer Manager Introduction::
-* Timer Manager Background::
-* Timer Manager Operations::
-* Timer Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Timer Manager Introduction, Timer Manager Background, Timer Manager, Timer Manager
-@end ifinfo
 @section Introduction
 
 The timer manager provides support for timer
@@ -38,28 +24,12 @@ facilities.  The directives provided by the timer manager are:
 @end itemize
 
 
-@ifinfo
-@node Timer Manager Background, Timer Manager Required Support, Timer Manager Introduction, Timer Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Timer Manager Required Support::
-* Timers::
-* Timer Service Routines::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Timer Manager Required Support, Timers, Timer Manager Background, Timer Manager Background
-@end ifinfo
 @subsection Required Support
 
 A clock tick is required to support the functionality provided by this manager.
 
-@ifinfo
-@node Timers, Timer Service Routines, Timer Manager Required Support, Timer Manager Background
-@end ifinfo
 @subsection Timers
 
 A timer is an RTEMS object which allows the
@@ -80,9 +50,6 @@ timer service routine will fire to indicate that the application
 has failed to reach a reset point.  This use of a timer is
 sometimes referred to as a "keep alive" or a "deadman" timer.
 
-@ifinfo
-@node Timer Service Routines, Timer Manager Operations, Timers, Timer Manager Background
-@end ifinfo
 @subsection Timer Service Routines
 
 The timer service routine should adhere to @value{LANGUAGE} calling
@@ -111,25 +78,8 @@ of the timer which is being fired and user_data is a pointer to
 user-defined information which may be utilized by the timer
 service routine.  The argument user_data may be NULL.
 
-@ifinfo
-@node Timer Manager Operations, Creating a Timer, Timer Service Routines, Timer Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Creating a Timer::
-* Obtaining Timer IDs::
-* Initiating an Interval Timer::
-* Initiating a Time of Day Timer::
-* Canceling a Timer::
-* Resetting a Timer::
-* Deleting a Timer::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Creating a Timer, Obtaining Timer IDs, Timer Manager Operations, Timer Manager Operations
-@end ifinfo
 @subsection Creating a Timer
 
 The @code{@value{DIRPREFIX}timer_create} directive creates a timer by
@@ -138,9 +88,6 @@ user-specified name, and assigning it a timer ID.  Newly created
 timers do not have a timer service routine associated with them
 and are not active.
 
-@ifinfo
-@node Obtaining Timer IDs, Initiating an Interval Timer, Creating a Timer, Timer Manager Operations
-@end ifinfo
 @subsection Obtaining Timer IDs
 
 When a timer is created, RTEMS generates a unique
@@ -153,9 +100,6 @@ Second, the timer ID may be obtained later using the
 @code{@value{DIRPREFIX}timer_ident} directive.  The timer ID
 is used by other directives to manipulate this timer.
 
-@ifinfo
-@node Initiating an Interval Timer, Initiating a Time of Day Timer, Obtaining Timer IDs, Timer Manager Operations
-@end ifinfo
 @subsection Initiating an Interval Timer
 
 The @code{@value{DIRPREFIX}timer_fire_after} directive initiates a timer to
@@ -164,9 +108,6 @@ number of clock ticks have elapsed.  When the interval has
 elapsed, the timer service routine will be invoked from the
 @code{@value{DIRPREFIX}clock_tick} directive.
 
-@ifinfo
-@node Initiating a Time of Day Timer, Canceling a Timer, Initiating an Interval Timer, Timer Manager Operations
-@end ifinfo
 @subsection Initiating a Time of Day Timer
 
 The @code{@value{DIRPREFIX}timer_fire_when} directive initiates a timer to
@@ -175,9 +116,6 @@ time of day has been reached.  When the interval has elapsed,
 the timer service routine will be invoked from the
 @code{@value{DIRPREFIX}clock_tick} directive.
 
-@ifinfo
-@node Canceling a Timer, Resetting a Timer, Initiating a Time of Day Timer, Timer Manager Operations
-@end ifinfo
 @subsection Canceling a Timer
 
 The @code{@value{DIRPREFIX}timer_cancel} directive is used to halt the
@@ -187,9 +125,6 @@ reinitiated using the @code{@value{DIRPREFIX}timer_reset},
 @code{@value{DIRPREFIX}timer_fire_after}, and
 @code{@value{DIRPREFIX}timer_fire_when} directives.
 
-@ifinfo
-@node Resetting a Timer, Deleting a Timer, Canceling a Timer, Timer Manager Operations
-@end ifinfo
 @subsection Resetting a Timer
 
 The @code{@value{DIRPREFIX}timer_reset} directive is used to restore an
@@ -201,9 +136,6 @@ was by a @code{@value{DIRPREFIX}timer_fire_when} directive, then an error is
 returned.  The timer service routine is not changed or
 fired by this directive.
 
-@ifinfo
-@node Deleting a Timer, Timer Manager Directives, Resetting a Timer, Timer Manager Operations
-@end ifinfo
 @subsection Deleting a Timer
 
 The @code{@value{DIRPREFIX}timer_delete} directive is used to delete a timer.
@@ -213,21 +145,7 @@ to the TMCB free list when it is deleted.  A timer can be
 deleted by a task other than the task which created the timer.
 Any subsequent references to the timer's name and ID are invalid.
 
-@ifinfo
-@node Timer Manager Directives, TIMER_CREATE - Create a timer, Deleting a Timer, Timer Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* TIMER_CREATE - Create a timer::
-* TIMER_IDENT - Get ID of a timer::
-* TIMER_CANCEL - Cancel a timer::
-* TIMER_DELETE - Delete a timer::
-* TIMER_FIRE_AFTER - Fire timer after interval::
-* TIMER_FIRE_WHEN - Fire timer when specified::
-* TIMER_RESET - Reset an interval timer::
-@end menu
-@end ifinfo
 
 This section details the timer manager's directives.
 A subsection is dedicated to each of this manager's directives
@@ -235,9 +153,6 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@ifinfo
-@node TIMER_CREATE - Create a timer, TIMER_IDENT - Get ID of a timer, Timer Manager Directives, Timer Manager Directives
-@end ifinfo
 @subsection TIMER_CREATE - Create a timer
 
 @subheading CALLING SEQUENCE:
@@ -280,9 +195,6 @@ This directive will not cause the calling task to be
 preempted.
 
 @page
-@ifinfo
-@node TIMER_IDENT - Get ID of a timer, TIMER_CANCEL - Cancel a timer, TIMER_CREATE - Create a timer, Timer Manager Directives
-@end ifinfo
 @subsection TIMER_IDENT - Get ID of a timer
 
 @subheading CALLING SEQUENCE:
@@ -325,9 +237,6 @@ This directive will not cause the running task to be
 preempted.
 
 @page
-@ifinfo
-@node TIMER_CANCEL - Cancel a timer, TIMER_DELETE - Delete a timer, TIMER_IDENT - Get ID of a timer, Timer Manager Directives
-@end ifinfo
 @subsection TIMER_CANCEL - Cancel a timer
 
 @subheading CALLING SEQUENCE:
@@ -365,9 +274,6 @@ be reinitiated by the next invocation of @code{@value{DIRPREFIX}timer_reset},
 This directive will not cause the running task to be preempted.
 
 @page
-@ifinfo
-@node TIMER_DELETE - Delete a timer, TIMER_FIRE_AFTER - Fire timer after interval, TIMER_CANCEL - Cancel a timer, Timer Manager Directives
-@end ifinfo
 @subsection TIMER_DELETE - Delete a timer
 
 @subheading CALLING SEQUENCE:
@@ -408,9 +314,6 @@ A timer can be deleted by a task other than the task
 which created the timer.
 
 @page
-@ifinfo
-@node TIMER_FIRE_AFTER - Fire timer after interval, TIMER_FIRE_WHEN - Fire timer when specified, TIMER_DELETE - Delete a timer, Timer Manager Directives
-@end ifinfo
 @subsection TIMER_FIRE_AFTER - Fire timer after interval
 
 @subheading CALLING SEQUENCE:
@@ -458,9 +361,6 @@ This directive will not cause the running task to be
 preempted.
 
 @page
-@ifinfo
-@node TIMER_FIRE_WHEN - Fire timer when specified, TIMER_RESET - Reset an interval timer, TIMER_FIRE_AFTER - Fire timer after interval, Timer Manager Directives
-@end ifinfo
 @subsection TIMER_FIRE_WHEN - Fire timer when specified
 
 @subheading CALLING SEQUENCE:
@@ -509,9 +409,6 @@ This directive will not cause the running task to be
 preempted.
 
 @page
-@ifinfo
-@node TIMER_RESET - Reset an interval timer, Semaphore Manager, TIMER_FIRE_WHEN - Fire timer when specified, Timer Manager Directives
-@end ifinfo
 @subsection TIMER_RESET - Reset an interval timer
 
 @subheading CALLING SEQUENCE:

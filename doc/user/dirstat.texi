@@ -7,7 +7,7 @@
 @c
 
 @ifinfo
-@node Directive Status Codes, Example Application, MULTIPROCESSING_ANNOUNCE - Announce the arrival of a packet, Top
+@node Directive Status Codes, Example Application, Multiprocessing Manager MULTIPROCESSING_ANNOUNCE - Announce the arrival of a packet, Top
 @end ifinfo
 @chapter Directive Status Codes
 @table @b

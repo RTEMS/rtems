@@ -13,29 +13,8 @@
 @c     Figure 1-2  RTEMS Internal Architecture
 @c
 
-@ifinfo
-@node Overview, Overview Introduction, Preface, Top
-@end ifinfo
 @chapter Overview
-@ifinfo
-@menu
-* Overview Introduction::
-* Overview Real-time Application Systems::
-* Overview Real-time Executive::
-* Overview RTEMS Application Architecture::
-* Overview RTEMS Internal Architecture::
-* Overview User Customization and Extensibility::
-* Overview Portability::
-* Overview Memory Requirements::
-* Overview Audience::
-* Overview Conventions::
-* Overview Manual Organization::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Overview Introduction, Overview Real-time Application Systems, Overview, Overview
-@end ifinfo
 @section Introduction
 
 RTEMS, Real-Time Executive for Multiprocessor Systems, is a
@@ -63,9 +42,6 @@ document which addresses specific architectural issues that
 affect RTEMS is provided for each processor type that is
 supported.
 
-@ifinfo
-@node Overview Real-time Application Systems, Overview Real-time Executive, Overview Introduction, Overview
-@end ifinfo
 @section Real-time Application Systems
 
 Real-time application systems are a special class of
@@ -108,9 +84,6 @@ must be shared between competing processors are introduced.  The
 ramifications of multiple processors complicate each and every
 characteristic of a real-time system.
 
-@ifinfo
-@node Overview Real-time Executive, Overview RTEMS Application Architecture, Overview Real-time Application Systems, Overview
-@end ifinfo
 @section Real-time Executive
 
 Fortunately, real-time operating systems or real-time
@@ -159,9 +132,6 @@ the application.  By using standard software components, the
 time and cost required to develop sophisticated real-time
 applications is significantly reduced.
 
-@ifinfo
-@node Overview RTEMS Application Architecture, Overview RTEMS Internal Architecture, Overview Real-time Executive, Overview
-@end ifinfo
 @section RTEMS Application Architecture
 
 One important design goal of RTEMS was to provide a
@@ -252,9 +222,6 @@ real-time projects.
 @end html
 @end ifset
 
-@ifinfo
-@node Overview RTEMS Internal Architecture, Overview User Customization and Extensibility, Overview RTEMS Application Architecture, Overview
-@end ifinfo
 @section RTEMS Internal Architecture
 
 RTEMS can be viewed as a set of layered components that work in
@@ -327,9 +294,6 @@ provided by each of the following RTEMS managers:
 @item multiprocessing
 @end itemize
 
-@ifinfo
-@node Overview User Customization and Extensibility, Overview Portability, Overview RTEMS Internal Architecture, Overview
-@end ifinfo
 @section User Customization and Extensibility
 
 As thirty-two bit microprocessors have decreased in
@@ -350,9 +314,6 @@ integrated with RTEMS.  The customization and extensibility
 features allow RTEMS to efficiently support as many environments
 as possible.
 
-@ifinfo
-@node Overview Portability, Overview Memory Requirements, Overview User Customization and Extensibility, Overview
-@end ifinfo
 @section Portability
 
 The issue of portability was the major factor in the
@@ -363,9 +324,6 @@ processor.  The use of RTEMS allows the development of real-time
 applications which can be completely independent of a particular
 microprocessor architecture.
 
-@ifinfo
-@node Overview Memory Requirements, Overview Audience, Overview Portability, Overview
-@end ifinfo
 @section Memory Requirements
 
 Since memory is a critical resource in many real-time
@@ -401,9 +359,6 @@ RTEMS utilizes memory for both code and data space.
 Although RTEMS' data space must be in RAM, its code space can be
 located in either ROM or RAM.
 
-@ifinfo
-@node Overview Audience, Overview Conventions, Overview Memory Requirements, Overview
-@end ifinfo
 @section Audience
 
 This manual was written for experienced real-time
@@ -425,9 +380,6 @@ features are interrelated.  Experienced RTEMS users will find
 that the manual organization facilitates its use as a reference
 document.
 
-@ifinfo
-@node Overview Conventions, Overview Manual Organization, Overview Audience, Overview
-@end ifinfo
 @section Conventions
 
 The following conventions are used in this manual:
@@ -450,9 +402,6 @@ the number is in hexadecimal format.  Any other numbers are
 assumed to be in decimal format.
 @end itemize
 
-@ifinfo
-@node Overview Manual Organization, Key Concepts, Overview Conventions, Overview
-@end ifinfo
 @section Manual Organization
 
 This first chapter has presented the introductory and

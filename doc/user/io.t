@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node I/O Manager, I/O Manager Introduction, PORT_INTERNAL_TO_EXTERNAL - Convert internal to external address, Top
-@end ifinfo
 @chapter I/O Manager
-@ifinfo
-@menu
-* I/O Manager Introduction::
-* I/O Manager Background::
-* I/O Manager Operations::
-* I/O Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node I/O Manager Introduction, I/O Manager Background, I/O Manager, I/O Manager
-@end ifinfo
 @section Introduction
 
 The input/output interface manager provides a
@@ -40,26 +26,8 @@ directives provided by the I/O manager are:
 @item @code{@value{DIRPREFIX}io_control} - Special device services
 @end itemize
 
-
-
-@ifinfo
-@node I/O Manager Background, Device Driver Table, I/O Manager Introduction, I/O Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Device Driver Table::
-* Major and Minor Device Numbers::
-* Device Names::
-* Device Driver Environment::
-* Device Driver Interface::
-* Device Driver Initialization::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Device Driver Table, Major and Minor Device Numbers, I/O Manager Background, I/O Manager Background
-@end ifinfo
 @subsection Device Driver Table
 
 Each application utilizing the RTEMS I/O manager must
@@ -84,9 +52,6 @@ be NULL.  RTEMS will return
 zero (0) as the device driver's return code for these device
 driver entry points.
 
-@ifinfo
-@node Major and Minor Device Numbers, Device Names, Device Driver Table, I/O Manager Background
-@end ifinfo
 @subsection Major and Minor Device Numbers
 
 Each call to the I/O manager must provide a device's
@@ -97,9 +62,6 @@ The exact usage of the minor number is driver specific, but is
 commonly used to distinguish between a number of devices
 controlled by the same driver.
 
-@ifinfo
-@node Device Names, Device Driver Environment, Major and Minor Device Numbers, I/O Manager Background
-@end ifinfo
 @subsection Device Names
 
 The I/O Manager provides facilities to associate a
@@ -107,9 +69,6 @@ name with a particular device.  Directives are provided to
 register the name of a device and to look up the major/minor
 number pair associated with a device name.
 
-@ifinfo
-@node Device Driver Environment, Device Driver Interface, Device Names, I/O Manager Background
-@end ifinfo
 @subsection Device Driver Environment
 
 Application developers, as well as device driver
@@ -140,9 +99,6 @@ Although the RTEMS I/O manager provides a framework
 for device drivers, it makes no assumptions regarding the
 construction or operation of a device driver.
 
-@ifinfo
-@node Device Driver Interface, Device Driver Initialization, Device Driver Environment, I/O Manager Background
-@end ifinfo
 @subsection Device Driver Interface
 
 When an application invokes an I/O manager directive,
@@ -181,9 +137,6 @@ application components.  A common technique used to generate
 driver specific error codes is to make the most significant part
 of the status indicate a driver specific code.
 
-@ifinfo
-@node Device Driver Initialization, I/O Manager Operations, Device Driver Interface, I/O Manager Background
-@end ifinfo
 @subsection Device Driver Initialization
 
 RTEMS automatically initializes all device drivers
@@ -208,20 +161,8 @@ The returned status will be ignored by RTEMS.  If the driver
 cannot successfully initialize the device, then it should invoke
 the fatal_error_occurred directive.
 
-@ifinfo
-@node I/O Manager Operations, Register and Lookup Name, Device Driver Initialization, I/O Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Register and Lookup Name::
-* Accessing an Device Driver::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Register and Lookup Name, Accessing an Device Driver, I/O Manager Operations, I/O Manager Operations
-@end ifinfo
 @subsection Register and Lookup Name
 
 The @code{@value{DIRPREFIX}io_register} directive associates a name with the
@@ -235,9 +176,6 @@ application from being dependent on the arbitrary assignment of
 major numbers in a particular application.  No device naming
 conventions are dictated by RTEMS.
 
-@ifinfo
-@node Accessing an Device Driver, I/O Manager Directives, Register and Lookup Name, I/O Manager Operations
-@end ifinfo
 @subsection Accessing an Device Driver
 
 The I/O manager provides directives which enable the
@@ -252,22 +190,7 @@ manager directives
 @code{@value{DIRPREFIX}io_control}
 and the underlying device driver entry points.
 
-@ifinfo
-@node I/O Manager Directives, IO_INITIALIZE - Initialize a device driver, Accessing an Device Driver, I/O Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* IO_INITIALIZE - Initialize a device driver::
-* IO_REGISTER_NAME - Register a device::
-* IO_LOOKUP_NAME - Lookup a device::
-* IO_OPEN - Open a device::
-* IO_CLOSE - Close a device::
-* IO_READ - Read from a device::
-* IO_WRITE - Write to a device::
-* IO_CONTROL - Special device services::
-@end menu
-@end ifinfo
 
 This section details the I/O manager's directives.  A
 subsection is dedicated to each of this manager's directives and
@@ -275,9 +198,6 @@ describes the calling sequence, related constants, usage, and
 status codes.
 
 @page
-@ifinfo
-@node IO_INITIALIZE - Initialize a device driver, IO_REGISTER_NAME - Register a device, I/O Manager Directives, I/O Manager Directives
-@end ifinfo
 @subsection IO_INITIALIZE - Initialize a device driver
 
 @subheading CALLING SEQUENCE:
@@ -328,9 +248,6 @@ to be preempted.  This is dependent on the device driver being
 initialized.
 
 @page
-@ifinfo
-@node IO_REGISTER_NAME - Register a device, IO_LOOKUP_NAME - Lookup a device, IO_INITIALIZE - Initialize a device driver, I/O Manager Directives
-@end ifinfo
 @subsection IO_REGISTER_NAME - Register a device
 
 @subheading CALLING SEQUENCE:
@@ -371,9 +288,6 @@ This directive will not cause the calling task to be
 preempted.
 
 @page
-@ifinfo
-@node IO_LOOKUP_NAME - Lookup a device, IO_OPEN - Open a device, IO_REGISTER_NAME - Register a device, I/O Manager Directives
-@end ifinfo
 @subsection IO_LOOKUP_NAME - Lookup a device
 
 @subheading CALLING SEQUENCE:
@@ -412,9 +326,6 @@ This directive will not cause the calling task to be
 preempted.
 
 @page
-@ifinfo
-@node IO_OPEN - Open a device, IO_CLOSE - Close a device, IO_LOOKUP_NAME - Lookup a device, I/O Manager Directives
-@end ifinfo
 @subsection IO_OPEN - Open a device
 
 @subheading CALLING SEQUENCE:
@@ -459,9 +370,6 @@ to be preempted.  This is dependent on the device driver being
 invoked.
 
 @page
-@ifinfo
-@node IO_CLOSE - Close a device, IO_READ - Read from a device, IO_OPEN - Open a device, I/O Manager Directives
-@end ifinfo
 @subsection IO_CLOSE - Close a device
 
 @subheading CALLING SEQUENCE:
@@ -506,9 +414,6 @@ to be preempted.  This is dependent on the device driver being
 invoked.
 
 @page
-@ifinfo
-@node IO_READ - Read from a device, IO_WRITE - Write to a device, IO_CLOSE - Close a device, I/O Manager Directives
-@end ifinfo
 @subsection IO_READ - Read from a device
 
 @subheading CALLING SEQUENCE:
@@ -554,9 +459,6 @@ to be preempted.  This is dependent on the device driver being
 invoked.
 
 @page
-@ifinfo
-@node IO_WRITE - Write to a device, IO_CONTROL - Special device services, IO_READ - Read from a device, I/O Manager Directives
-@end ifinfo
 @subsection IO_WRITE - Write to a device
 
 @subheading CALLING SEQUENCE:
@@ -602,9 +504,6 @@ to be preempted.  This is dependent on the device driver being
 invoked.
 
 @page
-@ifinfo
-@node IO_CONTROL - Special device services, Fatal Error Manager, IO_WRITE - Write to a device, I/O Manager Directives
-@end ifinfo
 @subsection IO_CONTROL - Special device services
 
 @subheading CALLING SEQUENCE:

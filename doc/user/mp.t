@@ -6,23 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Multiprocessing Manager, Multiprocessing Manager Introduction, Configuring a System Sizing the RTEMS RAM Workspace, Top
-@end ifinfo
 @chapter Multiprocessing Manager
-@ifinfo
-@menu
-* Multiprocessing Manager Introduction::
-* Multiprocessing Manager Background::
-* Multiprocessing Manager Multiprocessor Communications Interface Layer::
-* Multiprocessing Manager Operations::
-* Multiprocessing Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Multiprocessing Manager Introduction, Multiprocessing Manager Background, Multiprocessing Manager, Multiprocessing Manager
-@end ifinfo
 @section Introduction
 
 In multiprocessor real-time systems, new
@@ -56,20 +41,7 @@ performs the actions required to access the desired object.
 Simply stated, RTEMS allows the entire system, both hardware and
 software, to be viewed logically as a single system.
 
-@ifinfo
-@node Multiprocessing Manager Background, Nodes, Multiprocessing Manager Introduction, Multiprocessing Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Nodes::
-* Global Objects::
-* Global Object Table::
-* Remote Operations::
-* Proxies::
-* Multiprocessor Configuration Table::
-@end menu
-@end ifinfo
 
 RTEMS makes no assumptions regarding the connection
 media or topology of a multiprocessor system.  The tasks which
@@ -96,9 +68,6 @@ for a homogeneous one.  In keeping with RTEMS philosophy of
 providing transparent physical node boundaries, the minimal
 heterogeneous processing required is isolated in the MPCI layer.
 
-@ifinfo
-@node Nodes, Global Objects, Multiprocessing Manager Background, Multiprocessing Manager Background
-@end ifinfo
 @subsection Nodes
 
 A processor in a RTEMS system is referred to as a
@@ -116,9 +85,6 @@ node when performing remote operations.  Thus, the
 Multiprocessor Communications Interface Layer (MPCI) must be
 able to route messages based on the node number.
 
-@ifinfo
-@node Global Objects, Global Object Table, Nodes, Multiprocessing Manager Background
-@end ifinfo
 @subsection Global Objects
 
 All RTEMS objects which are created with the GLOBAL
@@ -133,9 +99,6 @@ Configuration Table.  The distribution of tasks to processors is
 performed during the application design phase.  Dynamic task
 relocation is not supported by RTEMS.
 
-@ifinfo
-@node Global Object Table, Remote Operations, Global Objects, Multiprocessing Manager Background
-@end ifinfo
 @subsection Global Object Table
 
 RTEMS maintains two tables containing object
@@ -158,9 +121,6 @@ nodes.  To maintain consistency among the table copies, every
 node in the system must be informed of the creation or deletion
 of a global object.
 
-@ifinfo
-@node Remote Operations, Proxies, Global Object Table, Multiprocessing Manager Background
-@end ifinfo
 @subsection Remote Operations
 
 When an application performs an operation on a remote
@@ -229,9 +189,6 @@ MPCI layer, the fatal error handler should be invoked.  RTEMS
 assumes the reliable transmission and reception of messages by
 the MPCI and makes no attempt to detect or correct errors.
 
-@ifinfo
-@node Proxies, Multiprocessor Configuration Table, Remote Operations, Multiprocessing Manager Background
-@end ifinfo
 @subsection Proxies
 
 A proxy is an RTEMS data structure which resides on a
@@ -252,9 +209,6 @@ to be configured.  The distribution of proxy control blocks is
 application dependent and is different from the distribution of
 tasks.
 
-@ifinfo
-@node Multiprocessor Configuration Table, Multiprocessing Manager Multiprocessor Communications Interface Layer, Proxies, Multiprocessing Manager Background
-@end ifinfo
 @subsection Multiprocessor Configuration Table
 
 The Multiprocessor Configuration Table contains
@@ -263,20 +217,7 @@ system.  This table is discussed in detail in the section
 Multiprocessor Configuration Table of the Configuring a System
 chapter.
 
-@ifinfo
-@node Multiprocessing Manager Multiprocessor Communications Interface Layer, INITIALIZATION, Multiprocessor Configuration Table, Multiprocessing Manager
-@end ifinfo
 @section Multiprocessor Communications Interface Layer
-@ifinfo
-@menu
-* INITIALIZATION::
-* GET_PACKET::
-* RETURN_PACKET::
-* RECEIVE_PACKET::
-* SEND_PACKET::
-* Supporting Heterogeneous Environments::
-@end menu
-@end ifinfo
 
 The Multiprocessor Communications Interface Layer
 (MPCI) is a set of user-provided procedures which enable the
@@ -332,9 +273,6 @@ the packet.  The Multiprocessing Server will call the get_packet
 entry to obtain a packet buffer and the receive_entry entry to
 copy the message into the buffer obtained.
 
-@ifinfo
-@node INITIALIZATION, GET_PACKET, Multiprocessing Manager Multiprocessor Communications Interface Layer, Multiprocessing Manager Multiprocessor Communications Interface Layer
-@end ifinfo
 @subsection INITIALIZATION
 
 The INITIALIZATION component of the user-provided
@@ -375,9 +313,6 @@ routine must create and initialize a pool of packet buffers.
 There must be enough packet buffers so RTEMS can obtain one
 whenever needed.
 
-@ifinfo
-@node GET_PACKET, RETURN_PACKET, INITIALIZATION, Multiprocessing Manager Multiprocessor Communications Interface Layer
-@end ifinfo
 @subsection GET_PACKET
 
 The GET_PACKET component of the user-provided MPCI
@@ -415,9 +350,6 @@ For example, RTEMS sends response messages (RR) back to the
 originator in the same packet in which the request message (RQ)
 arrived.
 
-@ifinfo
-@node RETURN_PACKET, RECEIVE_PACKET, GET_PACKET, Multiprocessing Manager Multiprocessor Communications Interface Layer
-@end ifinfo
 @subsection RETURN_PACKET
 
 The RETURN_PACKET component of the user-provided MPCI
@@ -447,9 +379,6 @@ where packet is the address of a packet.  If the
 packet cannot be successfully returned, the fatal error manager
 should be invoked.
 
-@ifinfo
-@node RECEIVE_PACKET, SEND_PACKET, RETURN_PACKET, Multiprocessing Manager Multiprocessor Communications Interface Layer
-@end ifinfo
 @subsection RECEIVE_PACKET
 
 The RECEIVE_PACKET component of the user-provided
@@ -481,9 +410,6 @@ available, then packet will contain the address of the message
 from another node.  If no messages are available, this entry
 packet should contain NULL.
 
-@ifinfo
-@node SEND_PACKET, Supporting Heterogeneous Environments, RECEIVE_PACKET, Multiprocessing Manager Multiprocessor Communications Interface Layer
-@end ifinfo
 @subsection SEND_PACKET
 
 The SEND_PACKET component of the user-provided MPCI
@@ -529,9 +455,6 @@ The to_convert field of the MP_packet_prefix portion of the packet indicates
 how much of the packet (in unsigned32's) may require conversion in a 
 heterogeneous system.
 
-@ifinfo
-@node Supporting Heterogeneous Environments, Multiprocessing Manager Operations, SEND_PACKET, Multiprocessing Manager Multiprocessor Communications Interface Layer
-@end ifinfo
 @subsection Supporting Heterogeneous Environments
 
 Developing an MPCI layer for a heterogeneous system
@@ -614,19 +537,8 @@ sending or receiving MPCI layer.
 data component of the packet.
 @end itemize
 
-@ifinfo
-@node Multiprocessing Manager Operations, Announcing a Packet, Supporting Heterogeneous Environments, Multiprocessing Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Announcing a Packet::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Announcing a Packet, Multiprocessing Manager Directives, Multiprocessing Manager Operations, Multiprocessing Manager Operations
-@end ifinfo
 @subsection Announcing a Packet
 
 The @code{@value{DIRPREFIX}multiprocessing_announce} directive is called by
@@ -634,15 +546,7 @@ the MPCI layer to inform RTEMS that a packet has arrived from
 another node.  This directive can be called from an interrupt
 service routine or from within a polling routine.
 
-@ifinfo
-@node Multiprocessing Manager Directives, MULTIPROCESSING_ANNOUNCE - Announce the arrival of a packet, Announcing a Packet, Multiprocessing Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* MULTIPROCESSING_ANNOUNCE - Announce the arrival of a packet::
-@end menu
-@end ifinfo
 
 This section details the additional directives
 required to support RTEMS in a multiprocessor configuration.  A
@@ -651,9 +555,6 @@ describes the calling sequence, related constants, usage, and
 status codes.
 
 @page
-@ifinfo
-@node MULTIPROCESSING_ANNOUNCE - Announce the arrival of a packet, Directive Status Codes, Multiprocessing Manager Directives, Multiprocessing Manager Directives
-@end ifinfo
 @subsection MULTIPROCESSING_ANNOUNCE - Announce the arrival of a packet
 
 @subheading CALLING SEQUENCE:

@@ -6,24 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Task Manager, Task Manager Introduction, SHUTDOWN_EXECUTIVE - Shutdown RTEMS, Top
-@end ifinfo
-
 @chapter Task Manager
 
-@ifinfo
-@menu
-* Task Manager Introduction::
-* Task Manager Background::
-* Task Manager Operations::
-* Task Manager Directives::
-@end menu
-@end ifinfo
-
-@ifinfo
-@node Task Manager Introduction, Task Manager Background, Task Manager, Task Manager
-@end ifinfo
 @section Introduction
 
 The task manager provides a comprehensive set of directives to
@@ -46,30 +30,7 @@ by the task manager are:
 @item @code{@value{DIRPREFIX}task_wake_when} - Wake up when specified  
 @end itemize
 
-@ifinfo
-@node Task Manager Background, Task Definition, Task Manager Introduction, Task Manager
-@end ifinfo
-
 @section Background
-
-@ifinfo
-@menu
-* Task Definition::
-* Task Control Block::
-* Task States::
-* Task Priority::
-* Task Mode::
-* Accessing Task Arguments::
-* Floating Point Considerations::
-* Building a Task's Attribute Set::
-* Building a Mode and Mask::
-@end menu
-
-@end ifinfo
-
-@ifinfo
-@node Task Definition, Task Control Block, Task Manager Background, Task Manager Background
-@end ifinfo
 
 @subsection Task Definition
 
@@ -99,9 +60,6 @@ execution which can compete on its own for system resources.  A
 task is manifested by the existence of a task control block
 (TCB).
 
-@ifinfo
-@node Task Control Block, Task States, Task Definition, Task Manager Background
-@end ifinfo
 @subsection Task Control Block
 
 The Task Control Block (TCB) is an RTEMS defined data structure
@@ -126,9 +84,6 @@ restored from the TCB.  When a task is restarted, the initial
 state of the task is restored from the starting context area in
 the task's TCB.
 
-@ifinfo
-@node Task States, Task Priority, Task Control Block, Task Manager Background
-@end ifinfo
 @subsection Task States
 
 A task may exist in one of the following five states:
@@ -151,9 +106,6 @@ to the CPU for periods of time determined by the RTEMS
 scheduling algorithm.  The scheduling of a task is based on its
 current state and priority.
 
-@ifinfo
-@node Task Priority, Task Mode, Task States, Task Manager Background
-@end ifinfo
 @subsection Task Priority
 
 A task's priority determines its importance in relation to the
@@ -175,9 +127,6 @@ task will be allowed to execute.  In general, the higher the
 logical priority of a task, the more likely it is to receive
 processor execution time.
 
-@ifinfo
-@node Task Mode, Accessing Task Arguments, Task Priority, Task Manager Background
-@end ifinfo
 @subsection Task Mode
 
 A task's mode is a combination of the following four components:
@@ -237,9 +186,6 @@ specifies that the task will execute at interrupt level n.
 @item @code{@value{RPREFIX}INTERRUPT_LEVEL(n)} - execute at interrupt level n
 @end itemize
 
-@ifinfo
-@node Accessing Task Arguments, Floating Point Considerations, Task Mode, Task Manager Background
-@end ifinfo
 @subsection Accessing Task Arguments
 
 All RTEMS tasks are invoked with a single argument which is
@@ -267,9 +213,6 @@ procedure User_Task (
 Application tasks requiring more information may view this
 single argument as an index into an array of parameter blocks.
 
-@ifinfo
-@node Floating Point Considerations, Building a Task's Attribute Set, Accessing Task Arguments, Task Manager Background
-@end ifinfo
 @subsection Floating Point Considerations
 
 Creating a task with the @code{@value{RPREFIX}FLOATING_POINT} flag results
@@ -321,9 +264,6 @@ attribute.  The consequence of a @code{@value{RPREFIX}NO_FLOATING_POINT}
 task attempting to access the floating point unit is CPU dependent but will
 generally result in an exception condition. 
 
-@ifinfo
-@node Building a Task's Attribute Set, Building a Mode and Mask, Floating Point Considerations, Task Manager Background
-@end ifinfo
 @subsection Building a Task's Attribute Set
 
 In general, an attribute set is built by a bitwise OR of the
@@ -355,9 +295,6 @@ tasks.  If the task were global and used the numeric
 coprocessor, then the attribute_set parameter would be
 @code{@value{RPREFIX}GLOBAL @value{OR} @value{RPREFIX}FLOATING_POINT}. 
 
-@ifinfo
-@node Building a Mode and Mask, Task Manager Operations, Building a Task's Attribute Set, Task Manager Background
-@end ifinfo
 @subsection Building a Mode and Mask
 
 In general, a mode and its corresponding mask is built by a
@@ -482,29 +419,8 @@ interrupt level, while the mask parameter should be set to
 @value{RPREFIX}NO_PREEMPT_MASK} to indicate that the calling task's
 interrupt level and preemption mode are being altered.
 
-@ifinfo
-@node Task Manager Operations, Creating Tasks, Building a Mode and Mask, Task Manager
-@end ifinfo
-
 @section Operations
 
-@ifinfo
-@menu
-* Creating Tasks::
-* Obtaining Task IDs::
-* Starting and Restarting Tasks::
-* Suspending and Resuming Tasks::
-* Delaying the Currently Executing Task::
-* Changing Task Priority::
-* Changing Task Mode::
-* Notepad Locations::
-* Task Deletion::
-@end menu
-@end ifinfo
-
-@ifinfo
-@node Creating Tasks, Obtaining Task IDs, Task Manager Operations, Task Manager Operations
-@end ifinfo
 @subsection Creating Tasks
 
 The @code{@value{DIRPREFIX}task_create}
@@ -516,9 +432,6 @@ initial mode, and assigning it a task ID.  Newly created tasks
 are initially placed in the dormant state.  All RTEMS tasks
 execute in the most privileged mode of the processor.
 
-@ifinfo
-@node Obtaining Task IDs, Starting and Restarting Tasks, Creating Tasks, Task Manager Operations 
-@end ifinfo
 @subsection Obtaining Task IDs
 
 When a task is created, RTEMS generates a unique task ID and
@@ -531,9 +444,6 @@ obtained later using the @code{@value{DIRPREFIX}task_ident}
 directive.  The task ID is
 used by other directives to manipulate this task.
 
-@ifinfo
-@node Starting and Restarting Tasks, Suspending and Resuming Tasks, Obtaining Task IDs, Task Manager Operations 
-@end ifinfo
 @subsection Starting and Restarting Tasks
 
 The @code{@value{DIRPREFIX}task_start}
@@ -566,9 +476,6 @@ returned to RTEMS.  A task cannot be restarted unless it has
 previously been started (i.e. dormant tasks cannot be
 restarted).  All restarted tasks are placed in the ready state.
 
-@ifinfo
-@node Suspending and Resuming Tasks, Delaying the Currently Executing Task, Starting and Restarting Tasks, Task Manager Operations 
-@end ifinfo
 @subsection Suspending and Resuming Tasks
 
 The @code{@value{DIRPREFIX}task_suspend}
@@ -590,9 +497,6 @@ suspension and leaves the task in the blocked state.
 Suspending a task which is already suspended or resuming a 
 task which is not suspended is considered an error.
 
-@ifinfo
-@node Delaying the Currently Executing Task, Changing Task Priority, Suspending and Resuming Tasks, Task Manager Operations 
-@end ifinfo
 @subsection Delaying the Currently Executing Task
 
 The @code{@value{DIRPREFIX}task_wake_after} directive creates a sleep timer
@@ -610,9 +514,6 @@ a task to go to sleep until a specified date and time.  The
 calling task is blocked until the specified date and time has
 occurred, at which time the task is unblocked.
 
-@ifinfo
-@node Changing Task Priority, Changing Task Mode, Delaying the Currently Executing Task, Task Manager Operations 
-@end ifinfo
 @subsection Changing Task Priority 
 
 The @code{@value{DIRPREFIX}task_set_priority}
@@ -629,9 +530,6 @@ The @code{@value{DIRPREFIX}task_restart}
 directive resets the priority of a task to its
 original value.
 
-@ifinfo
-@node Changing Task Mode, Notepad Locations, Changing Task Priority, Task Manager Operations 
-@end ifinfo
 @subsection Changing Task Mode
 
 The @code{@value{DIRPREFIX}task_mode}
@@ -644,9 +542,6 @@ The @code{@value{DIRPREFIX}task_restart}
 directive resets the mode of a task to its
 original value.
 
-@ifinfo
-@node Notepad Locations, Task Deletion, Changing Task Mode, Task Manager Operations 
-@end ifinfo
 @subsection Notepad Locations
 
 RTEMS provides sixteen notepad locations for each task.  Each
@@ -662,9 +557,6 @@ to set a task's notepad entry to a specified note.  The
 directive allows the user to obtain the note
 contained in any one of the sixteen notepads of a specified task.
 
-@ifinfo
-@node Task Deletion, Task Manager Directives, Notepad Locations, Task Manager Operations 
-@end ifinfo
 @subsection Task Deletion
 
 RTEMS provides the @code{@value{DIRPREFIX}task_delete}
@@ -692,29 +584,7 @@ task to delete itself by sending a "delete self" message, event,
 or signal, or by restarting the task with special arguments
 which instruct the task to delete itself.
 
-@ifinfo
-@node Task Manager Directives, TASK_CREATE - Create a task, Task Deletion, Task Manager
-@end ifinfo
-
 @section Directives
-
-@ifinfo
-@menu
-* TASK_CREATE - Create a task::
-* TASK_IDENT - Get ID of a task::
-* TASK_START - Start a task::
-* TASK_RESTART - Restart a task::
-* TASK_DELETE - Delete a task::
-* TASK_SUSPEND - Suspend a task::
-* TASK_RESUME - Resume a task::
-* TASK_SET_PRIORITY - Set task priority::
-* TASK_MODE - Change current task's mode::
-* TASK_GET_NOTE - Get task notepad entry::
-* TASK_SET_NOTE - Set task notepad entry::
-* TASK_WAKE_AFTER - Wake up after interval::
-* TASK_WAKE_WHEN - Wake up when specified::
-@end menu
-@end ifinfo
 
 This section details the task manager's directives.  A
 subsection is dedicated to each of this manager's directives and
@@ -723,9 +593,6 @@ status codes.
 
 @page
 
-@ifinfo
-@node TASK_CREATE - Create a task, TASK_IDENT - Get ID of a task, Task Manager Directives, Task Manager Directives
-@end ifinfo
 @subsection TASK_CREATE - Create a task
 
 @subheading CALLING SEQUENCE:
@@ -835,9 +702,6 @@ by the maximum_global_objects field in the Configuration Table.
 
 @page
 
-@ifinfo
-@node TASK_IDENT - Get ID of a task, TASK_START - Start a task, TASK_CREATE - Create a task, Task Manager Directives
-@end ifinfo
 @subsection TASK_IDENT - Get ID of a task
 
 @subheading CALLING SEQUENCE:
@@ -893,9 +757,6 @@ accesses only the local copy of the global object table.
 
 @page
 
-@ifinfo
-@node TASK_START - Start a task, TASK_RESTART - Restart a task, TASK_IDENT - Get ID of a task, Task Manager Directives
-@end ifinfo
 @subsection TASK_START - Start a task
 
 @subheading CALLING SEQUENCE:
@@ -945,9 +806,6 @@ the @code{@value{DIRPREFIX}task_start} directive.
 
 @page
 
-@ifinfo
-@node TASK_RESTART - Restart a task, TASK_DELETE - Delete a task, TASK_START - Start a task, Task Manager Directives
-@end ifinfo
 @subsection TASK_RESTART - Restart a task
 
 @subheading CALLING SEQUENCE:
@@ -1009,9 +867,6 @@ created with the @code{@value{RPREFIX}GLOBAL} option.
 
 @page
 
-@ifinfo
-@node TASK_DELETE - Delete a task, TASK_SUSPEND - Suspend a task, TASK_RESTART - Restart a task, Task Manager Directives
-@end ifinfo
 @subsection TASK_DELETE - Delete a task
 
 @subheading CALLING SEQUENCE:
@@ -1068,9 +923,6 @@ created with the @code{@value{RPREFIX}GLOBAL} option.
 
 @page
 
-@ifinfo
-@node TASK_SUSPEND - Suspend a task, TASK_RESUME - Resume a task, TASK_DELETE - Delete a task, Task Manager Directives
-@end ifinfo
 @subsection TASK_SUSPEND - Suspend a task
 
 @subheading CALLING SEQUENCE:
@@ -1119,9 +971,6 @@ If the task specified by id is already suspended, then the
 
 @page
 
-@ifinfo
-@node TASK_RESUME - Resume a task, TASK_SET_PRIORITY - Set task priority, TASK_SUSPEND - Suspend a task, Task Manager Directives
-@end ifinfo
 @subsection TASK_RESUME - Resume a task
 
 @subheading CALLING SEQUENCE:
@@ -1167,9 +1016,6 @@ If the task specified by id is not suspended, then the
 
 @page
 
-@ifinfo
-@node TASK_SET_PRIORITY - Set task priority, TASK_MODE - Change current task's mode, TASK_RESUME - Resume a task, Task Manager Directives
-@end ifinfo
 @subsection TASK_SET_PRIORITY - Set task priority
 
 @subheading CALLING SEQUENCE:
@@ -1231,9 +1077,6 @@ binary semaphores.
 
 @page
 
-@ifinfo
-@node TASK_MODE - Change current task's mode, TASK_GET_NOTE - Get task notepad entry, TASK_SET_PRIORITY - Set task priority, Task Manager Directives
-@end ifinfo
 @subsection TASK_MODE - Change current task's mode
 
 @subheading CALLING SEQUENCE:
@@ -1388,9 +1231,6 @@ mask constant is provided in the following table:
 
 @page
 
-@ifinfo
-@node TASK_GET_NOTE - Get task notepad entry, TASK_SET_NOTE - Set task notepad entry, TASK_MODE - Change current task's mode, Task Manager Directives
-@end ifinfo
 @subsection TASK_GET_NOTE - Get task notepad entry
 
 @subheading CALLING SEQUENCE:
@@ -1443,9 +1283,6 @@ the notepad entry of the specified task.
 
 @page
 
-@ifinfo
-@node TASK_SET_NOTE - Set task notepad entry, TASK_WAKE_AFTER - Wake up after interval, TASK_GET_NOTE - Get task notepad entry, Task Manager Directives
-@end ifinfo
 @subsection TASK_SET_NOTE - Set task notepad entry
 
 @subheading CALLING SEQUENCE:
@@ -1498,9 +1335,6 @@ node to set the specified notepad entry.
 
 @page
 
-@ifinfo
-@node TASK_WAKE_AFTER - Wake up after interval, TASK_WAKE_WHEN - Wake up when specified, TASK_SET_NOTE - Set task notepad entry, Task Manager Directives
-@end ifinfo
 @subsection TASK_WAKE_AFTER - Wake up after interval
 
 @subheading CALLING SEQUENCE:
@@ -1545,9 +1379,6 @@ A clock tick is required to support the functionality of this directive.
 
 @page
 
-@ifinfo
-@node TASK_WAKE_WHEN - Wake up when specified, Interrupt Manager, TASK_WAKE_AFTER - Wake up after interval, Task Manager Directives
-@end ifinfo
 @subsection TASK_WAKE_WHEN - Wake up when specified
 
 @subheading CALLING SEQUENCE:

@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Message Manager, Message Manager Introduction, SEMAPHORE_RELEASE - Release a semaphore, Top
-@end ifinfo
 @chapter Message Manager
-@ifinfo
-@menu
-* Message Manager Introduction::
-* Message Manager Background::
-* Message Manager Operations::
-* Message Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Message Manager Introduction, Message Manager Background, Message Manager, Message Manager
-@end ifinfo
 @section Introduction
 
 The message manager provides communication and
@@ -40,22 +26,8 @@ directives provided by the message manager are:
 @item @code{@value{DIRPREFIX}message_queue_flush} - Flush all messages on a queue
 @end itemize
 
-@ifinfo
-@node Message Manager Background, Messages, Message Manager Introduction, Message Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Messages::
-* Message Queues::
-* Building a Message Queue's Attribute Set::
-* Building a MESSAGE_QUEUE_RECEIVE Option Set::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Messages, Message Queues, Message Manager Background, Message Manager Background
-@end ifinfo
 @subsection Messages
 
 A message is a variable length buffer where
@@ -63,9 +35,6 @@ information can be stored to support communication.  The length
 of the message and the information stored in that message are
 user-defined and can be actual data, pointer(s), or empty.
 
-@ifinfo
-@node Message Queues, Building a Message Queue's Attribute Set, Messages, Message Manager Background
-@end ifinfo
 @subsection Message Queues
 
 A message queue permits the passing of messages among
@@ -83,9 +52,6 @@ a queue for the arrival of a message.
 The maximum length message which can be sent is set
 on a per message queue basis.
 
-@ifinfo
-@node Building a Message Queue's Attribute Set, Building a MESSAGE_QUEUE_RECEIVE Option Set, Message Queues, Message Manager Background
-@end ifinfo
 @subsection Building a Message Queue's Attribute Set
 
 In general, an attribute set is built by a bitwise OR
@@ -118,9 +84,6 @@ message queues.  If a similar message queue were to be known globally, then the
 attribute_set parameter would be
 @code{@value{RPREFIX}GLOBAL @value{OR} @value{RPREFIX}PRIORITY}.
 
-@ifinfo
-@node Building a MESSAGE_QUEUE_RECEIVE Option Set, Message Manager Operations, Building a Message Queue's Attribute Set, Message Manager Background
-@end ifinfo
 @subsection Building a MESSAGE_QUEUE_RECEIVE Option Set
 
 In general, an option is built by a bitwise OR of the
@@ -144,24 +107,8 @@ to poll for a message to arrive.  The option parameter passed to
 the @code{@value{DIRPREFIX}message_queue_receive} directive should
 be @code{@value{RPREFIX}NO_WAIT}.
 
-@ifinfo
-@node Message Manager Operations, Creating a Message Queue, Building a MESSAGE_QUEUE_RECEIVE Option Set, Message Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Creating a Message Queue::
-* Obtaining Message Queue IDs::
-* Receiving a Message::
-* Sending a Message::
-* Broadcasting a Message::
-* Deleting a Message Queue::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Creating a Message Queue, Obtaining Message Queue IDs, Message Manager Operations, Message Manager Operations
-@end ifinfo
 @subsection Creating a Message Queue
 
 The @code{@value{DIRPREFIX}message_queue_create} directive creates a message
@@ -179,9 +126,6 @@ For GLOBAL message queues, the maximum message size
 is effectively limited to the longest message which the MPCI is
 capable of transmitting.
 
-@ifinfo
-@node Obtaining Message Queue IDs, Receiving a Message, Creating a Message Queue, Message Manager Operations
-@end ifinfo
 @subsection Obtaining Message Queue IDs
 
 When a message queue is created, RTEMS generates a
@@ -193,9 +137,6 @@ ID may be obtained later using the @code{@value{DIRPREFIX}message_queue_ident}
 directive.  The queue ID is used by other message manager
 directives to access this message queue.
 
-@ifinfo
-@node Receiving a Message, Sending a Message, Obtaining Message Queue IDs, Message Manager Operations
-@end ifinfo
 @subsection Receiving a Message
 
 The @code{@value{DIRPREFIX}message_queue_receive} directive attempts to
@@ -222,9 +163,6 @@ the message queue's task wait queue in either FIFO or task
 priority order.  All tasks waiting on a message queue are
 returned an error code when the message queue is deleted.
 
-@ifinfo
-@node Sending a Message, Broadcasting a Message, Receiving a Message, Message Manager Operations
-@end ifinfo
 @subsection Sending a Message
 
 Messages can be sent to a queue with the
@@ -245,9 +183,6 @@ message queue.  Neither directive can successfully send a
 message to a message queue which has a full queue of pending
 messages.
 
-@ifinfo
-@node Broadcasting a Message, Deleting a Message Queue, Sending a Message, Message Manager Operations
-@end ifinfo
 @subsection Broadcasting a Message
 
 The @code{@value{DIRPREFIX}message_queue_broadcast} directive sends the same
@@ -256,9 +191,6 @@ an atomic operation.  The message is copied to each waiting
 task's message buffer and each task is unblocked.  The number of
 tasks which were unblocked is returned to the caller.
 
-@ifinfo
-@node Deleting a Message Queue, Message Manager Directives, Broadcasting a Message, Message Manager Operations
-@end ifinfo
 @subsection Deleting a Message Queue
 
 The @code{@value{DIRPREFIX}message_queue_delete} directive removes a message
@@ -272,23 +204,7 @@ message queue was deleted.  Any subsequent references to the
 message queue's name and ID are invalid.  Any messages waiting
 at the message queue are also deleted and deallocated.
 
-@ifinfo
-@node Message Manager Directives, MESSAGE_QUEUE_CREATE - Create a queue, Deleting a Message Queue, Message Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* MESSAGE_QUEUE_CREATE - Create a queue::
-* MESSAGE_QUEUE_IDENT - Get ID of a queue::
-* MESSAGE_QUEUE_DELETE - Delete a queue::
-* MESSAGE_QUEUE_SEND - Put message at rear of a queue::
-* MESSAGE_QUEUE_URGENT - Put message at front of a queue::
-* MESSAGE_QUEUE_BROADCAST - Broadcast N messages to a queue::
-* MESSAGE_QUEUE_RECEIVE - Receive message from a queue::
-* MESSAGE_QUEUE_GET_NUMBER_PENDING - Get number of messages pending on a queue::
-* MESSAGE_QUEUE_FLUSH - Flush all messages on a queue::
-@end menu
-@end ifinfo
 
 This section details the message manager's
 directives.  A subsection is dedicated to each of this manager's
@@ -296,9 +212,6 @@ directives and describes the calling sequence, related
 constants, usage, and status codes.
 
 @page
-@ifinfo
-@node MESSAGE_QUEUE_CREATE - Create a queue, MESSAGE_QUEUE_IDENT - Get ID of a queue, Message Manager Directives, Message Manager Directives
-@end ifinfo
 @subsection MESSAGE_QUEUE_CREATE - Create a queue
 
 @subheading CALLING SEQUENCE:
@@ -384,9 +297,6 @@ queues, is limited by the maximum_global_objects field in the
 configuration table.
 
 @page
-@ifinfo
-@node MESSAGE_QUEUE_IDENT - Get ID of a queue, MESSAGE_QUEUE_DELETE - Delete a queue, MESSAGE_QUEUE_CREATE - Create a queue, Message Manager Directives
-@end ifinfo
 @subsection MESSAGE_QUEUE_IDENT - Get ID of a queue
 
 @subheading CALLING SEQUENCE:
@@ -444,9 +354,6 @@ nodes.  It accesses only the local copy of the global object
 table.
 
 @page
-@ifinfo
-@node MESSAGE_QUEUE_DELETE - Delete a queue, MESSAGE_QUEUE_SEND - Put message at rear of a queue, MESSAGE_QUEUE_IDENT - Get ID of a queue, Message Manager Directives
-@end ifinfo
 @subsection MESSAGE_QUEUE_DELETE - Delete a queue
 
 @subheading CALLING SEQUENCE:
@@ -508,9 +415,6 @@ Proxies, used to represent remote tasks, are
 reclaimed when the message queue is deleted.
 
 @page
-@ifinfo
-@node MESSAGE_QUEUE_SEND - Put message at rear of a queue, MESSAGE_QUEUE_URGENT - Put message at front of a queue, MESSAGE_QUEUE_DELETE - Delete a queue, Message Manager Directives
-@end ifinfo
 @subsection MESSAGE_QUEUE_SEND - Put message at rear of a queue
 
 @subheading CALLING SEQUENCE:
@@ -569,9 +473,6 @@ the appropriate node, the waiting task is unblocked, and the
 proxy used to represent the task is reclaimed.
 
 @page
-@ifinfo
-@node MESSAGE_QUEUE_URGENT - Put message at front of a queue, MESSAGE_QUEUE_BROADCAST - Broadcast N messages to a queue, MESSAGE_QUEUE_SEND - Put message at rear of a queue, Message Manager Directives
-@end ifinfo
 @subsection MESSAGE_QUEUE_URGENT - Put message at front of a queue
 
 @subheading CALLING SEQUENCE:
@@ -631,9 +532,6 @@ the appropriate node, the waiting task is unblocked, and the
 proxy used to represent the task is reclaimed.
 
 @page
-@ifinfo
-@node MESSAGE_QUEUE_BROADCAST - Broadcast N messages to a queue, MESSAGE_QUEUE_RECEIVE - Receive message from a queue, MESSAGE_QUEUE_URGENT - Put message at front of a queue, Message Manager Directives
-@end ifinfo
 @subsection MESSAGE_QUEUE_BROADCAST - Broadcast N messages to a queue
 
 @subheading CALLING SEQUENCE:
@@ -697,9 +595,6 @@ to the appropriate node,  the waiting task is unblocked, and the
 proxy used to represent the task is reclaimed.
 
 @page
-@ifinfo
-@node MESSAGE_QUEUE_RECEIVE - Receive message from a queue, MESSAGE_QUEUE_GET_NUMBER_PENDING - Get number of messages pending on a queue, MESSAGE_QUEUE_BROADCAST - Broadcast N messages to a queue, Message Manager Directives
-@end ifinfo
 @subsection MESSAGE_QUEUE_RECEIVE - Receive message from a queue
 
 @subheading CALLING SEQUENCE:
@@ -786,9 +681,6 @@ A clock tick is required to support the timeout functionality of
 this directive.
 
 @page
-@ifinfo
-@node MESSAGE_QUEUE_GET_NUMBER_PENDING - Get number of messages pending on a queue, MESSAGE_QUEUE_FLUSH - Flush all messages on a queue, MESSAGE_QUEUE_RECEIVE - Receive message from a queue, Message Manager Directives
-@end ifinfo
 @subsection MESSAGE_QUEUE_GET_NUMBER_PENDING - Get number of messages pending on a queue
 
 @subheading CALLING SEQUENCE:
@@ -831,9 +723,6 @@ the specified message queue.
 
 
 @page
-@ifinfo
-@node MESSAGE_QUEUE_FLUSH - Flush all messages on a queue, Event Manager, MESSAGE_QUEUE_GET_NUMBER_PENDING - Get number of messages pending on a queue, Message Manager Directives
-@end ifinfo
 @subsection MESSAGE_QUEUE_FLUSH - Flush all messages on a queue
 
 @subheading CALLING SEQUENCE:

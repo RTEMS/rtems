@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Dual-Ported Memory Manager, Dual-Ported Memory Manager Introduction, REGION_GET_SEGMENT_SIZE - Obtain size of a segment, Top
-@end ifinfo
 @chapter Dual-Ported Memory Manager
-@ifinfo
-@menu
-* Dual-Ported Memory Manager Introduction::
-* Dual-Ported Memory Manager Background::
-* Dual-Ported Memory Manager Operations::
-* Dual-Ported Memory Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Dual-Ported Memory Manager Introduction, Dual-Ported Memory Manager Background, Dual-Ported Memory Manager, Dual-Ported Memory Manager
-@end ifinfo
 @section Introduction
 
 The dual-ported memory manager provides a mechanism
@@ -37,9 +23,6 @@ The directives provided by the dual-ported memory manager are:
 @item @code{@value{DIRPREFIX}port_internal_to_external} - Convert internal to external address
 @end itemize
 
-@ifinfo
-@node Dual-Ported Memory Manager Background, Dual-Ported Memory Manager Operations, Dual-Ported Memory Manager Introduction, Dual-Ported Memory Manager
-@end ifinfo
 @section Background
 
 A dual-ported memory area (DPMA) is an contiguous
@@ -58,22 +41,8 @@ systems with intelligent peripheral controllers.  These
 controllers typically utilize the DPMA for high-performance data
 transfers.
 
-@ifinfo
-@node Dual-Ported Memory Manager Operations, Creating a Port, Dual-Ported Memory Manager Background, Dual-Ported Memory Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Creating a Port::
-* Obtaining Port IDs::
-* Converting an Address::
-* Deleting a DPMA Port::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Creating a Port, Obtaining Port IDs, Dual-Ported Memory Manager Operations, Dual-Ported Memory Manager Operations
-@end ifinfo
 @subsection Creating a Port
 
 The @code{@value{DIRPREFIX}port_create} directive creates a port into a DPMA
@@ -86,9 +55,6 @@ which is returned to the calling task.  RTEMS does not
 initialize the dual-ported memory area or access any memory
 within it.
 
-@ifinfo
-@node Obtaining Port IDs, Converting an Address, Creating a Port, Dual-Ported Memory Manager Operations
-@end ifinfo
 @subsection Obtaining Port IDs
 
 When a port is created, RTEMS generates a unique port
@@ -102,9 +68,6 @@ may be obtained later using the
 ID is used by other dual-ported memory manager directives to
 access this port.
 
-@ifinfo
-@node Converting an Address, Deleting a DPMA Port, Obtaining Port IDs, Dual-Ported Memory Manager Operations
-@end ifinfo
 @subsection Converting an Address
 
 The @code{@value{DIRPREFIX}port_external_to_internal} directive is used to
@@ -116,28 +79,13 @@ representation for the specified port.  If an attempt is made to
 convert an address which lies outside the specified DPMA, then
 the address to be converted will be returned.
 
-@ifinfo
-@node Deleting a DPMA Port, Dual-Ported Memory Manager Directives, Converting an Address, Dual-Ported Memory Manager Operations
-@end ifinfo
 @subsection Deleting a DPMA Port
 
 A port can be removed from the system and returned to
 RTEMS with the @code{@value{DIRPREFIX}port_delete} directive.  When a port is deleted,
 its control block is returned to the DPCB free list.
 
-@ifinfo
-@node Dual-Ported Memory Manager Directives, PORT_CREATE - Create a port, Deleting a DPMA Port, Dual-Ported Memory Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* PORT_CREATE - Create a port::
-* PORT_IDENT - Get ID of a port::
-* PORT_DELETE - Delete a port::
-* PORT_EXTERNAL_TO_INTERNAL - Convert external to internal address::
-* PORT_INTERNAL_TO_EXTERNAL - Convert internal to external address::
-@end menu
-@end ifinfo
 
 This section details the dual-ported memory manager's
 directives.  A subsection is dedicated to each of this manager's
@@ -145,9 +93,6 @@ directives and describes the calling sequence, related
 constants, usage, and status codes.
 
 @page
-@ifinfo
-@node PORT_CREATE - Create a port, PORT_IDENT - Get ID of a port, Dual-Ported Memory Manager Directives, Dual-Ported Memory Manager Directives
-@end ifinfo
 @subsection PORT_CREATE - Create a port
 
 @subheading CALLING SEQUENCE:
@@ -205,9 +150,6 @@ This directive will not cause the calling task to be
 preempted.
 
 @page
-@ifinfo
-@node PORT_IDENT - Get ID of a port, PORT_DELETE - Delete a port, PORT_CREATE - Create a port, Dual-Ported Memory Manager Directives
-@end ifinfo
 @subsection PORT_IDENT - Get ID of a port
 
 @subheading CALLING SEQUENCE:
@@ -250,9 +192,6 @@ This directive will not cause the running task to be
 preempted.
 
 @page
-@ifinfo
-@node PORT_DELETE - Delete a port, PORT_EXTERNAL_TO_INTERNAL - Convert external to internal address, PORT_IDENT - Get ID of a port, Dual-Ported Memory Manager Directives
-@end ifinfo
 @subsection PORT_DELETE - Delete a port
 
 @subheading CALLING SEQUENCE:
@@ -294,9 +233,6 @@ created the port.  Any local task that knows the port id can
 delete the port.
 
 @page
-@ifinfo
-@node PORT_EXTERNAL_TO_INTERNAL - Convert external to internal address, PORT_INTERNAL_TO_EXTERNAL - Convert internal to external address, PORT_DELETE - Delete a port, Dual-Ported Memory Manager Directives
-@end ifinfo
 @subsection PORT_EXTERNAL_TO_INTERNAL - Convert external to internal address
 
 @subheading CALLING SEQUENCE:
@@ -341,9 +277,6 @@ This directive will not cause the calling task to be
 preempted.
 
 @page
-@ifinfo
-@node PORT_INTERNAL_TO_EXTERNAL - Convert internal to external address, I/O Manager, PORT_EXTERNAL_TO_INTERNAL - Convert external to internal address, Dual-Ported Memory Manager Directives
-@end ifinfo
 @subsection PORT_INTERNAL_TO_EXTERNAL - Convert internal to external address
 
 @subheading CALLING SEQUENCE:

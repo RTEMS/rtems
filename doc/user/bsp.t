@@ -6,23 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Board Support Packages, Board Support Packages Introduction, RATE_MONOTONIC_GET_STATUS - Obtain status information on period, Top
-@end ifinfo
 @chapter Board Support Packages
-@ifinfo
-@menu
-* Board Support Packages Introduction::
-* Board Support Packages Reset and Initialization::
-* Board Support Packages Device Drivers::
-* Board Support Packages User Extensions::
-* Board Support Packages Multiprocessor Communications Interface (MPCI)::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Board Support Packages Introduction, Board Support Packages Reset and Initialization, Board Support Packages, Board Support Packages
-@end ifinfo
 @section Introduction
 
 A board support package (BSP) is a collection of
@@ -33,17 +18,7 @@ extensions, and a Multiprocessor Communications Interface
 (MPCI).  However, a minimal BSP need only support processor
 reset and initialization and, if needed, a clock tick.
 
-@ifinfo
-@node Board Support Packages Reset and Initialization, Interrupt Stack Requirements, Board Support Packages Introduction, Board Support Packages
-@end ifinfo
 @section Reset and Initialization
-@ifinfo
-@menu
-* Interrupt Stack Requirements::
-* Processors with a Separate Interrupt Stack::
-* Processors without a Separate Interrupt Stack::
-@end menu
-@end ifinfo
 
 An RTEMS based application is initiated or
 re-initiated when the processor is reset.  This initialization
@@ -121,9 +96,6 @@ initialization which is dependent on RTEMS facilities.  The user
 initialization task facility is typically used to create the
 application's set of tasks.
 
-@ifinfo
-@node Interrupt Stack Requirements, Processors with a Separate Interrupt Stack, Board Support Packages Reset and Initialization, Board Support Packages Reset and Initialization
-@end ifinfo
 @subsection Interrupt Stack Requirements
 
 The worst-case stack usage by interrupt service
@@ -147,9 +119,6 @@ stack usage must account for the following requirements:
 The size of the interrupt stack must be greater than
 or equal to the constant @code{@value{RPREFIX}MINIMUM_STACK_SIZE}.
 
-@ifinfo
-@node Processors with a Separate Interrupt Stack, Processors without a Separate Interrupt Stack, Interrupt Stack Requirements, Board Support Packages Reset and Initialization
-@end ifinfo
 @subsection Processors with a Separate Interrupt Stack
 
 Some processors support a separate stack for
@@ -165,9 +134,6 @@ initialization code of the user's board support package.  Since
 all ISRs use this stack, the stack size must take into account
 the worst case stack usage by any combination of nested ISRs.
 
-@ifinfo
-@node Processors without a Separate Interrupt Stack, Board Support Packages Device Drivers, Processors with a Separate Interrupt Stack, Board Support Packages Reset and Initialization
-@end ifinfo
 @subsection Processors without a Separate Interrupt Stack
 
 Some processors do not support a separate stack for
@@ -183,15 +149,7 @@ software.  If this capability is supported on a CPU, then it is
 logically equivalent to the processor supporting a separate
 interrupt stack in hardware.
 
-@ifinfo
-@node Board Support Packages Device Drivers, Clock Tick Device Driver, Processors without a Separate Interrupt Stack, Board Support Packages
-@end ifinfo
 @section Device Drivers
-@ifinfo
-@menu
-* Clock Tick Device Driver::
-@end menu
-@end ifinfo
 
 Device drivers consist of control software for
 special peripheral devices and provide a logical interface for
@@ -206,9 +164,6 @@ interfaces, and network controllers.
 For more information on device drivers, refer to the
 I/O Manager chapter.
 
-@ifinfo
-@node Clock Tick Device Driver, Board Support Packages User Extensions, Board Support Packages Device Drivers, Board Support Packages Device Drivers
-@end ifinfo
 @subsection Clock Tick Device Driver
 
 Most RTEMS applications will include a clock tick
@@ -244,9 +199,6 @@ high clock tick frequency results in less processor time being
 available for task execution due to the increased number of
 clock tick ISRs.
 
-@ifinfo
-@node Board Support Packages User Extensions, Board Support Packages Multiprocessor Communications Interface (MPCI), Clock Tick Device Driver, Board Support Packages
-@end ifinfo
 @section User Extensions
 
 RTEMS allows the application developer to augment
@@ -280,18 +232,7 @@ device.
 For more information on user extensions, refer to the
 User Extensions chapter.
 
-@ifinfo
-@node Board Support Packages Multiprocessor Communications Interface (MPCI), Tightly-Coupled Systems, Board Support Packages User Extensions, Board Support Packages
-@end ifinfo
 @section Multiprocessor Communications Interface (MPCI)
-@ifinfo
-@menu
-* Tightly-Coupled Systems::
-* Loosely-Coupled Systems::
-* Systems with Mixed Coupling::
-* Heterogeneous Systems::
-@end menu
-@end ifinfo
 
 RTEMS requires that an MPCI layer be provided when a
 multiple node application is developed.  This MPCI layer must
@@ -304,9 +245,6 @@ target platform.
 For more information on the MPCI, refer to the
 Multiprocessing Manager chapter.
 
-@ifinfo
-@node Tightly-Coupled Systems, Loosely-Coupled Systems, Board Support Packages Multiprocessor Communications Interface (MPCI), Board Support Packages Multiprocessor Communications Interface (MPCI)
-@end ifinfo
 @subsection Tightly-Coupled Systems
 
 A tightly-coupled system is a multiprocessor
@@ -331,9 +269,6 @@ itself or the target platform.  The second technique is to have
 a node poll for arrival of packets.  The drawback to this
 technique is the overhead associated with polling.
 
-@ifinfo
-@node Loosely-Coupled Systems, Systems with Mixed Coupling, Tightly-Coupled Systems, Board Support Packages Multiprocessor Communications Interface (MPCI)
-@end ifinfo
 @subsection Loosely-Coupled Systems
 
 A loosely-coupled system is a multiprocessor
@@ -350,9 +285,6 @@ Ethernet, lend themselves to supporting an MPCI layer.  These
 networks provide both the point-to-point and broadcast
 capabilities which are expected by RTEMS.
 
-@ifinfo
-@node Systems with Mixed Coupling, Heterogeneous Systems, Loosely-Coupled Systems, Board Support Packages Multiprocessor Communications Interface (MPCI)
-@end ifinfo
 @subsection Systems with Mixed Coupling
 
 A mixed-coupling system is a multiprocessor
@@ -367,9 +299,6 @@ algorithms. In addition, the router may provide alternate
 communications paths in the event of an overload or a partial
 failure.
 
-@ifinfo
-@node Heterogeneous Systems, User Extensions Manager, Systems with Mixed Coupling, Board Support Packages Multiprocessor Communications Interface (MPCI)
-@end ifinfo
 @subsection Heterogeneous Systems
 
 Designing an MPCI layer for a heterogeneous system

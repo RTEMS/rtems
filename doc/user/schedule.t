@@ -11,21 +11,8 @@
 @c      Figure 17-1  RTEMS Task State Transitions
 @c
 
-@ifinfo
-@node Scheduling Concepts, Scheduling Concepts Introduction, FATAL_ERROR_OCCURRED - Invoke the fatal error handler, Top
-@end ifinfo
 @chapter Scheduling Concepts
-@ifinfo
-@menu
-* Scheduling Concepts Introduction::
-* Scheduling Concepts Scheduling Mechanisms::
-* Scheduling Concepts Task State Transitions::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Scheduling Concepts Introduction, Scheduling Concepts Scheduling Mechanisms, Scheduling Concepts, Scheduling Concepts
-@end ifinfo
 @section Introduction
 
 The concept of scheduling in real-time systems
@@ -60,19 +47,7 @@ chain is allocated the processor.  RTEMS schedules tasks using
 the second method to guarantee faster response times to external
 events.
 
-@ifinfo
-@node Scheduling Concepts Scheduling Mechanisms, Task Priority and Scheduling, Scheduling Concepts Introduction, Scheduling Concepts
-@end ifinfo
 @section Scheduling Mechanisms
-@ifinfo
-@menu
-* Task Priority and Scheduling::
-* Preemption::
-* Timeslicing::
-* Manual Round-Robin::
-* Dispatching Tasks::
-@end menu
-@end ifinfo
 
 RTEMS provides four mechanisms which allow the user
 to impact the task scheduling process:
@@ -97,9 +72,6 @@ preemption (if enabled) of a task by higher priority tasks will
 occur as required, overriding the other factors presented in the
 description.
 
-@ifinfo
-@node Task Priority and Scheduling, Preemption, Scheduling Concepts Scheduling Mechanisms, Scheduling Concepts Scheduling Mechanisms
-@end ifinfo
 @subsection Task Priority and Scheduling
 
 The most significant of these mechanisms is the
@@ -121,9 +93,6 @@ priority task that is ready to run when allocating the processor
 to a task.}
 @end itemize
 
-@ifinfo
-@node Preemption, Timeslicing, Task Priority and Scheduling, Scheduling Concepts Scheduling Mechanisms
-@end ifinfo
 @subsection Preemption
 
 Another way the user can alter the basic scheduling
@@ -137,9 +106,6 @@ Note that the preemption setting has no effect on the manner in
 which a task is scheduled.  It only applies once a task has
 control of the processor.
 
-@ifinfo
-@node Timeslicing, Manual Round-Robin, Preemption, Scheduling Concepts Scheduling Mechanisms
-@end ifinfo
 @subsection Timeslicing
 
 Timeslicing or round-robin scheduling is an
@@ -159,9 +125,6 @@ task will preempt the task (unless preemption is disabled) as
 soon as it is ready to run, even if the task has not used up its
 entire timeslice.
 
-@ifinfo
-@node Manual Round-Robin, Dispatching Tasks, Timeslicing, Scheduling Concepts Scheduling Mechanisms
-@end ifinfo
 @subsection Manual Round-Robin
 
 The final mechanism for altering the RTEMS scheduling
@@ -174,9 +137,6 @@ end of its priority group.  If no other tasks of the same
 priority are ready to run, then the task does not lose control
 of the processor.
 
-@ifinfo
-@node Dispatching Tasks, Scheduling Concepts Task State Transitions, Manual Round-Robin, Scheduling Concepts Scheduling Mechanisms
-@end ifinfo
 @subsection Dispatching Tasks
 
 The dispatcher is the RTEMS component responsible for
@@ -205,9 +165,6 @@ operations, the state of the numeric coprocessor is only saved
 when a @code{@value{RPREFIX}FLOATING_POINT} task is dispatched and that task was not
 the last task to utilize the coprocessor.
 
-@ifinfo
-@node Scheduling Concepts Task State Transitions, Rate Monotonic Manager, Dispatching Tasks, Scheduling Concepts
-@end ifinfo
 @section Task State Transitions
 
 Tasks in an RTEMS system must always be in one of the

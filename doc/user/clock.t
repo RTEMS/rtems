@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Clock Manager, Clock Manager Introduction, INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress, Top
-@end ifinfo
 @chapter Clock Manager
-@ifinfo
-@menu
-* Clock Manager Introduction::
-* Clock Manager Background::
-* Clock Manager Operations::
-* Clock Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Clock Manager Introduction, Clock Manager Background, Clock Manager, Clock Manager
-@end ifinfo
 @section Introduction
 
 The clock manager provides support for time of day
@@ -34,23 +20,8 @@ the clock manager are:
 @item @code{@value{DIRPREFIX}clock_tick} - Announce a clock tick
 @end itemize
 
-@ifinfo
-@node Clock Manager Background, Required Support, Clock Manager Introduction, Clock Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Required Support::
-* Time and Date Data Structures::
-* Clock Tick and Timeslicing::
-* Delays::
-* Timeouts::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Required Support, Time and Date Data Structures, Clock Manager Background, Clock Manager Background
-@end ifinfo
 @subsection Required Support
 
 For the features provided by the clock manager to be
@@ -63,9 +34,6 @@ has occurred.  Elapsed time is measured in ticks.  A tick is
 defined to be an integral number of microseconds which is
 specified by the user in the Configuration Table.
 
-@ifinfo
-@node Time and Date Data Structures, Clock Tick and Timeslicing, Required Support, Clock Manager Background
-@end ifinfo
 @subsection Time and Date Data Structures
 
 The clock facilities of the clock manager operate
@@ -136,9 +104,6 @@ type Clock_Time_Value is
 The seconds field in this @value{STRUCTURE} is the number of
 seconds since the RTEMS epoch of January 1, 1988.
 
-@ifinfo
-@node Clock Tick and Timeslicing, Delays, Time and Date Data Structures, Clock Manager Background
-@end ifinfo
 @subsection Clock Tick and Timeslicing
 
 Timeslicing is a task scheduling discipline in which
@@ -160,9 +125,6 @@ timeslicing and preemption are enabled.  If the task's timeslice
 has expired, then that task will be preempted if there exists a
 ready task of equal priority.
 
-@ifinfo
-@node Delays, Timeouts, Clock Tick and Timeslicing, Clock Manager Background
-@end ifinfo
 @subsection Delays
 
 A sleep timer allows a task to delay for a given
@@ -174,9 +136,6 @@ does not have an RTEMS ID.  Once activated, a sleep timer cannot
 be explicitly deleted.  Each task may activate one and only one
 sleep timer at a time.
 
-@ifinfo
-@node Timeouts, Clock Manager Operations, Delays, Clock Manager Background
-@end ifinfo
 @subsection Timeouts
 
 Timeouts are a special type of timer automatically
@@ -188,21 +147,8 @@ created when the timeout option is used on the
 Each task may have one and only one timeout active at a time.  
 When a timeout expires, it unblocks the task with a timeout status code.
 
-@ifinfo
-@node Clock Manager Operations, Announcing a Tick, Timeouts, Clock Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Announcing a Tick::
-* Setting the Time::
-* Obtaining the Time::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Announcing a Tick, Setting the Time, Clock Manager Operations, Clock Manager Operations
-@end ifinfo
 @subsection Announcing a Tick
 
 RTEMS provides the @code{@value{DIRPREFIX}clock_tick} directive which is
@@ -223,9 +169,6 @@ two times per second.  The @code{@value{DIRPREFIX}clock_tick}
 directive is responsible for maintaining both
 calendar time and the dynamic set of timers.
 
-@ifinfo
-@node Setting the Time, Obtaining the Time, Announcing a Tick, Clock Manager Operations
-@end ifinfo
 @subsection Setting the Time
 
 The @code{@value{DIRPREFIX}clock_set} directive allows a task or an ISR to
@@ -234,9 +177,6 @@ and time causes any outstanding timers to pass their deadline,
 then the expired timers will be fired during the invocation of
 the @code{@value{DIRPREFIX}clock_set} directive.
 
-@ifinfo
-@node Obtaining the Time, Clock Manager Directives, Setting the Time, Clock Manager Operations
-@end ifinfo
 @subsection Obtaining the Time
 
 The @code{@value{DIRPREFIX}clock_get} directive allows a task or an ISR to
@@ -271,17 +211,7 @@ ticks per second
 Calendar time operations will return an error code if
 invoked before the date and time have been set.
 
-@ifinfo
-@node Clock Manager Directives, CLOCK_SET - Set system date and time, Obtaining the Time, Clock Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* CLOCK_SET - Set system date and time::
-* CLOCK_GET - Get system date and time information::
-* CLOCK_TICK - Announce a clock tick::
-@end menu
-@end ifinfo
 
 This section details the clock manager's directives.
 A subsection is dedicated to each of this manager's directives
@@ -289,9 +219,6 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@ifinfo
-@node CLOCK_SET - Set system date and time, CLOCK_GET - Get system date and time information, Clock Manager Directives, Clock Manager Directives
-@end ifinfo
 @subsection CLOCK_SET - Set system date and time
 
 @subheading CALLING SEQUENCE:
@@ -342,9 +269,6 @@ to be reset to an uninitialized state.  Another call to
 the system date and time to application specific specifications.
 
 @page
-@ifinfo
-@node CLOCK_GET - Get system date and time information, CLOCK_TICK - Announce a clock tick, CLOCK_SET - Set system date and time, Clock Manager Directives
-@end ifinfo
 @subsection CLOCK_GET - Get system date and time information
 
 @subheading CALLING SEQUENCE:
@@ -435,9 +359,6 @@ time to be reset to an uninitialized state.  Another call to
 system date and time to application specific specifications.
 
 @page
-@ifinfo
-@node CLOCK_TICK - Announce a clock tick, Timer Manager, CLOCK_GET - Get system date and time information, Clock Manager Directives
-@end ifinfo
 @subsection CLOCK_TICK - Announce a clock tick
 
 @subheading CALLING SEQUENCE:

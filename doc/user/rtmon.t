@@ -12,22 +12,8 @@
 @c    - use math mode to print formulas
 @c
 
-@ifinfo
-@node Rate Monotonic Manager, Rate Monotonic Manager Introduction, Scheduling Concepts Task State Transitions, Top
-@end ifinfo
 @chapter Rate Monotonic Manager
-@ifinfo
-@menu
-* Rate Monotonic Manager Introduction::
-* Rate Monotonic Manager Background::
-* Rate Monotonic Manager Operations::
-* Rate Monotonic Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Rate Monotonic Manager Introduction, Rate Monotonic Manager Background, Rate Monotonic Manager, Rate Monotonic Manager
-@end ifinfo
 @section Introduction
 
 The rate monotonic manager provides facilities to
@@ -43,25 +29,7 @@ directives provided by the rate monotonic manager are:
 @item @code{@value{DIRPREFIX}rate_monotonic_get_status} - Obtain status information on period
 @end itemize
 
-@ifinfo
-@node Rate Monotonic Manager Background, Rate Monotonic Manager Required Support, Rate Monotonic Manager Introduction, Rate Monotonic Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Rate Monotonic Manager Required Support::
-* Rate Monotonic Manager Definitions::
-* Rate Monotonic Scheduling Algorithm::
-* Schedulability Analysis::
-* Assumptions::
-* Processor Utilization Rule::
-* Processor Utilization Rule Example::
-* First Deadline Rule::
-* First Deadline Rule Example::
-* Relaxation of Assumptions::
-* Further Reading::
-@end menu
-@end ifinfo
 
 The rate monotonic manager provides facilities to
 manage the execution of periodic tasks.  This manager was
@@ -72,16 +40,10 @@ overload conditions.  Although designed for hard real-time
 systems, the services provided by the rate monotonic manager may
 be used by any application which requires periodic tasks.
 
-@ifinfo
-@node Rate Monotonic Manager Required Support, Rate Monotonic Manager Definitions, Rate Monotonic Manager Background, Rate Monotonic Manager Background
-@end ifinfo
 @subsection Rate Monotonic Manager Required Support
 
 A clock tick is required to support the functionality provided by this manager.
 
-@ifinfo
-@node Rate Monotonic Manager Definitions, Rate Monotonic Scheduling Algorithm, Rate Monotonic Manager Required Support, Rate Monotonic Manager Background
-@end ifinfo
 @subsection Rate Monotonic Manager Definitions
 
 A periodic task is one which must be executed at a
@@ -114,9 +76,6 @@ button on a joystick.  The mechanical action of the fire button
 insures a minimum time period between successive activations,
 but the missile must be launched by a hard deadline.
 
-@ifinfo
-@node Rate Monotonic Scheduling Algorithm, Schedulability Analysis, Rate Monotonic Manager Definitions, Rate Monotonic Manager Background
-@end ifinfo
 @subsection Rate Monotonic Scheduling Algorithm
 
 The Rate Monotonic Scheduling Algorithm (RMS) is
@@ -235,9 +194,6 @@ Although RMS may be used to assign priorities to the
 non-critical tasks, it is not necessary.  In this instance,
 schedulability is only guaranteed for the critical task set.
 
-@ifinfo
-@node Schedulability Analysis, Assumptions, Rate Monotonic Scheduling Algorithm, Rate Monotonic Manager Background
-@end ifinfo
 @subsection Schedulability Analysis
 
 RMS allows application designers to insure that tasks
@@ -247,9 +203,6 @@ proven schedulability analysis rules.
 
 @lowersections
 
-@ifinfo
-@node Assumptions, Processor Utilization Rule, Schedulability Analysis, Rate Monotonic Manager Background
-@end ifinfo
 @subsection Assumptions
 
 The schedulability analysis rules for RMS were
@@ -278,9 +231,6 @@ Once the basic schedulability analysis is understood,
 some of the above assumptions can be relaxed and the
 side-effects accounted for.
 
-@ifinfo
-@node Processor Utilization Rule, Processor Utilization Rule Example, Assumptions, Rate Monotonic Manager Background
-@end ifinfo
 @subsection Processor Utilization Rule
 
 The Processor Utilization Rule requires that
@@ -313,9 +263,6 @@ greater utilization factor.  In fact, the average processor
 utilization threshold for a randomly generated task set is
 approximately 0.88.
 
-@ifinfo
-@node Processor Utilization Rule Example, First Deadline Rule, Processor Utilization Rule, Rate Monotonic Manager Background
-@end ifinfo
 @subsection Processor Utilization Rule Example
 
 This example illustrates the application of the
@@ -398,9 +345,6 @@ The total processor utilization for this task set is
 0.779, imposed by the Processor Utilization Rule.  Therefore,
 this task set is guaranteed to be schedulable using RMS.
 
-@ifinfo
-@node First Deadline Rule, First Deadline Rule Example, Processor Utilization Rule Example, Rate Monotonic Manager Background
-@end ifinfo
 @subsection First Deadline Rule
 
 If a given set of tasks do exceed the processor
@@ -424,9 +368,6 @@ deletes itself.  This technique insures that all tasks begin to
 compete for execution time at the same instant -- when the user
 initialization task deletes itself.
 
-@ifinfo
-@node First Deadline Rule Example, Relaxation of Assumptions, First Deadline Rule, Rate Monotonic Manager Background
-@end ifinfo
 @subsection First Deadline Rule Example
 
 The First Deadline Rule can insure schedulability
@@ -606,9 +547,6 @@ time 200.  Thus, all of the tasks have met their first deadlines
 at time 200, and the task set is schedulable using the First
 Deadline Rule.
 
-@ifinfo
-@node Relaxation of Assumptions, Further Reading, First Deadline Rule Example, Rate Monotonic Manager Background
-@end ifinfo
 @subsection Relaxation of Assumptions
 
 The assumptions used to develop the RMS
@@ -647,9 +585,6 @@ Every hardware and software factor which impacts the execution
 time of each task must be accounted for in the schedulability
 analysis.
 
-@ifinfo
-@node Further Reading, Rate Monotonic Manager Operations, Relaxation of Assumptions, Rate Monotonic Manager Background
-@end ifinfo
 @subsection Further Reading
 
 For more information on Rate Monotonic Scheduling and
@@ -674,26 +609,8 @@ review."  @b{Software Engineering Journal}. May 1991. pp. 116-128.}
 
 @raisesections
 
-@ifinfo
-@node Rate Monotonic Manager Operations, Creating a Rate Monotonic Period, Further Reading, Rate Monotonic Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Creating a Rate Monotonic Period::
-* Manipulating a Period::
-* Obtaining a Period's Status::
-* Canceling a Period::
-* Deleting a Rate Monotonic Period::
-* Examples::
-* Simple Periodic Task::
-* Task with Multiple Periods::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Creating a Rate Monotonic Period, Manipulating a Period, Rate Monotonic Manager Operations, Rate Monotonic Manager Operations
-@end ifinfo
 @subsection Creating a Rate Monotonic Period
 
 The @code{@value{DIRPREFIX}rate_monotonic_create} directive creates a rate
@@ -705,9 +622,6 @@ returns a unique period ID to the application which is used by
 other rate monotonic manager directives to access this rate
 monotonic period.
 
-@ifinfo
-@node Manipulating a Period, Obtaining a Period's Status, Creating a Rate Monotonic Period, Rate Monotonic Manager Operations
-@end ifinfo
 @subsection Manipulating a Period
 
 The @code{@value{DIRPREFIX}rate_monotonic_period} directive is used to
@@ -734,9 +648,6 @@ returns immediately with a timeout error status.
 
 @end itemize
 
-@ifinfo
-@node Obtaining a Period's Status, Canceling a Period, Manipulating a Period, Rate Monotonic Manager Operations
-@end ifinfo
 @subsection Obtaining a Period's Status
 
 If the @code{@value{DIRPREFIX}rate_monotonic_period} directive is invoked
@@ -758,9 +669,6 @@ directive:
 Obtaining the status of a rate monotonic period does
 not alter the state or length of that period.
 
-@ifinfo
-@node Canceling a Period, Deleting a Rate Monotonic Period, Obtaining a Period's Status, Rate Monotonic Manager Operations
-@end ifinfo
 @subsection Canceling a Period
 
 The @code{@value{DIRPREFIX}rate_monotonic_cancel} directive is used to stop
@@ -768,9 +676,6 @@ the period maintained by the specified rate monotonic period.
 The period is stopped and the rate monotonic period can be
 reinitiated using the @code{@value{DIRPREFIX}rate_monotonic_period} directive.
 
-@ifinfo
-@node Deleting a Rate Monotonic Period, Examples, Canceling a Period, Rate Monotonic Manager Operations
-@end ifinfo
 @subsection Deleting a Rate Monotonic Period
 
 The @code{@value{DIRPREFIX}rate_monotonic_delete} directive is used to delete
@@ -780,17 +685,11 @@ monotonic period's control block is returned to the PCB free
 list when it is deleted.  A rate monotonic period can be deleted
 by a task other than the task which created the period.
 
-@ifinfo
-@node Examples, Simple Periodic Task, Deleting a Rate Monotonic Period, Rate Monotonic Manager Operations
-@end ifinfo
 @subsection Examples
 
 The following sections illustrate common uses of rate
 monotonic periods to construct periodic tasks.
 
-@ifinfo
-@node Simple Periodic Task, Task with Multiple Periods, Examples, Rate Monotonic Manager Operations
-@end ifinfo
 @subsection Simple Periodic Task
 
 This example consists of a single periodic task
@@ -836,9 +735,6 @@ directive will return the @code{@value{RPREFIX}TIMEOUT} status.
 If the above task misses its deadline, it will delete the rate
 monotonic period and itself.
 
-@ifinfo
-@node Task with Multiple Periods, Rate Monotonic Manager Directives, Simple Periodic Task, Rate Monotonic Manager Operations
-@end ifinfo
 @subsection Task with Multiple Periods
 
 This example consists of a single periodic task
@@ -925,20 +821,7 @@ return the @code{@value{RPREFIX}TIMEOUT}
 directive status.  If the above task misses its deadline, it
 will delete the rate monotonic periods and itself.
 
-@ifinfo
-@node Rate Monotonic Manager Directives, RATE_MONOTONIC_CREATE - Create a rate monotonic period, Task with Multiple Periods, Rate Monotonic Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* RATE_MONOTONIC_CREATE - Create a rate monotonic period::
-* RATE_MONOTONIC_IDENT - Get ID of a period::
-* RATE_MONOTONIC_CANCEL - Cancel a period::
-* RATE_MONOTONIC_DELETE - Delete a rate monotonic period::
-* RATE_MONOTONIC_PERIOD - Conclude current/Start next period::
-* RATE_MONOTONIC_GET_STATUS - Obtain status information on period::
-@end menu
-@end ifinfo
 
 This section details the rate monotonic manager's
 directives.  A subsection is dedicated to each of this manager's
@@ -946,9 +829,6 @@ directives and describes the calling sequence, related
 constants, usage, and status codes.
 
 @page
-@ifinfo
-@node RATE_MONOTONIC_CREATE - Create a rate monotonic period, RATE_MONOTONIC_IDENT - Get ID of a period, Rate Monotonic Manager Directives, Rate Monotonic Manager Directives
-@end ifinfo
 @subsection RATE_MONOTONIC_CREATE - Create a rate monotonic period
 
 @subheading CALLING SEQUENCE:
@@ -992,9 +872,6 @@ This directive will not cause the calling task to be
 preempted.
 
 @page
-@ifinfo
-@node RATE_MONOTONIC_IDENT - Get ID of a period, RATE_MONOTONIC_CANCEL - Cancel a period, RATE_MONOTONIC_CREATE - Create a rate monotonic period, Rate Monotonic Manager Directives
-@end ifinfo
 @subsection RATE_MONOTONIC_IDENT - Get ID of a period
 
 @subheading CALLING SEQUENCE:
@@ -1037,9 +914,6 @@ This directive will not cause the running task to be
 preempted.
 
 @page
-@ifinfo
-@node RATE_MONOTONIC_CANCEL - Cancel a period, RATE_MONOTONIC_DELETE - Delete a rate monotonic period, RATE_MONOTONIC_IDENT - Get ID of a period, Rate Monotonic Manager Directives
-@end ifinfo
 @subsection RATE_MONOTONIC_CANCEL - Cancel a period
 
 @subheading CALLING SEQUENCE:
@@ -1081,9 +955,6 @@ The rate monotonic period specified by id must have
 been created by the calling task.
 
 @page
-@ifinfo
-@node RATE_MONOTONIC_DELETE - Delete a rate monotonic period, RATE_MONOTONIC_PERIOD - Conclude current/Start next period, RATE_MONOTONIC_CANCEL - Cancel a period, Rate Monotonic Manager Directives
-@end ifinfo
 @subsection RATE_MONOTONIC_DELETE - Delete a rate monotonic period
 
 @subheading CALLING SEQUENCE:
@@ -1124,9 +995,6 @@ A rate monotonic period can be deleted by a task
 other than the task which created the period.
 
 @page
-@ifinfo
-@node RATE_MONOTONIC_PERIOD - Conclude current/Start next period, RATE_MONOTONIC_GET_STATUS - Obtain status information on period, RATE_MONOTONIC_DELETE - Delete a rate monotonic period, Rate Monotonic Manager Directives
-@end ifinfo
 @subsection RATE_MONOTONIC_PERIOD - Conclude current/Start next period
 
 @subheading CALLING SEQUENCE:
@@ -1178,9 +1046,6 @@ This directive will not cause the running task to be preempted.
 
 ---------------------
 @page
-@ifinfo
-@node RATE_MONOTONIC_GET_STATUS - Obtain status information on period, Board Support Packages, RATE_MONOTONIC_PERIOD - Conclude current/Start next period, Rate Monotonic Manager Directives
-@end ifinfo
 @subsection RATE_MONOTONIC_GET_STATUS - Obtain status information on period
 
 @subheading CALLING SEQUENCE:

@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node User Extensions Manager, User Extensions Manager Introduction, Heterogeneous Systems, Top
-@end ifinfo
 @chapter User Extensions Manager
-@ifinfo
-@menu
-* User Extensions Manager Introduction::
-* User Extensions Manager Background::
-* User Extensions Manager Operations::
-* User Extensions Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node User Extensions Manager Introduction, User Extensions Manager Background, User Extensions Manager, User Extensions Manager
-@end ifinfo
 @section Introduction
 
 The RTEMS User Extensions Manager allows the
@@ -36,27 +22,7 @@ manager are:
 @item @code{@value{DIRPREFIX}extension_delete} - Delete an extension set
 @end itemize
 
-@ifinfo
-@node User Extensions Manager Background, Extension Sets, User Extensions Manager Introduction, User Extensions Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Extension Sets::
-* TCB Extension Area::
-* Extensions::
-* TASK_CREATE Extension::
-* TASK_START Extension::
-* TASK_RESTART Extension::
-* TASK_DELETE Extension::
-* TASK_SWITCH Extension::
-* TASK_POST_SWITCH Extension::
-* TASK_BEGIN Extension::
-* TASK_EXITTED Extension::
-* FATAL Error Extension::
-* Order of Invocation::
-@end menu
-@end ifinfo
 
 User extension routines are invoked when the
 following system events occur:
@@ -76,9 +42,6 @@ following system events occur:
 These extensions are invoked as a function with
 arguments that are appropriate to the system event.
 
-@ifinfo
-@node Extension Sets, TCB Extension Area, User Extensions Manager Background, User Extensions Manager Background
-@end ifinfo
 @subsection Extension Sets
 
 An extension set is defined as a set of routines
@@ -154,9 +117,6 @@ independently of the others.
 All user extensions are optional and RTEMS places no
 naming  restrictions on the user.
 
-@ifinfo
-@node TCB Extension Area, Extensions, Extension Sets, User Extensions Manager Background
-@end ifinfo
 @subsection TCB Extension Area
 
 RTEMS provides for a pointer to a user-defined data
@@ -193,9 +153,6 @@ could create a partition of fixed size TCB extension buffers and
 use the partition manager's allocation and deallocation
 directives to obtain and release the extension buffers.
 
-@ifinfo
-@node Extensions, TASK_CREATE Extension, TCB Extension Area, User Extensions Manager Background
-@end ifinfo
 @subsection Extensions
 
 The sections that follow will contain a description
@@ -207,9 +164,6 @@ its arguments are all defined by the user.  The names used in
 the examples were arbitrarily chosen and impose no naming
 conventions on the user.
 
-@ifinfo
-@node TASK_CREATE Extension, TASK_START Extension, Extensions, User Extensions Manager Background
-@end ifinfo
 @subsection TASK_CREATE Extension
 
 The TASK_CREATE extension directly corresponds to the
@@ -244,9 +198,6 @@ invoked from the task_create directive after new_task has been
 completely initialized, but before it is placed on a ready TCB
 chain.
 
-@ifinfo
-@node TASK_START Extension, TASK_RESTART Extension, TASK_CREATE Extension, User Extensions Manager Background
-@end ifinfo
 @subsection TASK_START Extension
 
 The TASK_START extension directly corresponds to the
@@ -281,9 +232,6 @@ extension is invoked from the task_start directive after
 started_task has been made ready to start execution, but before
 it is placed on a ready TCB chain.
 
-@ifinfo
-@node TASK_RESTART Extension, TASK_DELETE Extension, TASK_START Extension, User Extensions Manager Background
-@end ifinfo
 @subsection TASK_RESTART Extension
 
 The TASK_RESTART extension directly corresponds to
@@ -317,9 +265,6 @@ invoked from the task_restart directive after restarted_task has
 been made ready to start execution, but before it is placed on a
 ready TCB chain.
 
-@ifinfo
-@node TASK_DELETE Extension, TASK_SWITCH Extension, TASK_RESTART Extension, User Extensions Manager Background
-@end ifinfo
 @subsection TASK_DELETE Extension
 
 The TASK_DELETE extension is associated with the
@@ -356,9 +301,6 @@ including the TCB have been returned to their respective free
 pools.  This extension should not call any RTEMS directives if a
 task is deleting itself (current_task is equal to deleted_task).
 
-@ifinfo
-@node TASK_SWITCH Extension, TASK_POST_SWITCH Extension, TASK_DELETE Extension, User Extensions Manager Background
-@end ifinfo
 @subsection TASK_SWITCH Extension
 
 The TASK_SWITCH extension corresponds to a task
@@ -394,9 +336,6 @@ context has been saved, but before the heir_task context has
 been restored.  This extension should not call any RTEMS
 directives.
 
-@ifinfo
-@node TASK_POST_SWITCH Extension, TASK_BEGIN Extension, TASK_SWITCH Extension, User Extensions Manager Background
-@end ifinfo
 @subsection TASK_POST_SWITCH Extension
 
 The TASK_POST_SWITCH extension corresponds to a task
@@ -429,9 +368,6 @@ invoked from RTEMS' dispatcher routine after the current_task
 context has been restored and the extension runs in the context
 of the current_task.
 
-@ifinfo
-@node TASK_BEGIN Extension, TASK_EXITTED Extension, TASK_POST_SWITCH Extension, User Extensions Manager Background
-@end ifinfo
 @subsection TASK_BEGIN Extension
 
 The TASK_BEGIN extension is invoked when a task
@@ -463,9 +399,6 @@ task while the TASK_START extension is executed in the context
 of the task performing the task_start directive.  For most
 extensions, this is not a critical distinction.
 
-@ifinfo
-@node TASK_EXITTED Extension, FATAL Error Extension, TASK_BEGIN Extension, User Extensions Manager Background
-@end ifinfo
 @subsection TASK_EXITTED Extension
 
 The TASK_EXITTED extension is invoked when a task
@@ -503,9 +436,6 @@ fatal_error_occurred with the @code{@value{RPREFIX}TASK_EXITTED} directive statu
 
 @lowersections
 
-@ifinfo
-@node FATAL Error Extension, Order of Invocation, TASK_EXITTED Extension, User Extensions Manager Background
-@end ifinfo
 @subsection FATAL Error Extension
 
 The FATAL error extension is associated with the
@@ -544,9 +474,6 @@ This extension should not call any RTEMS directives.
 
 @raisesections
 
-@ifinfo
-@node Order of Invocation, User Extensions Manager Operations, FATAL Error Extension, User Extensions Manager Background
-@end ifinfo
 @subsection Order of Invocation
 
 When one of the critical system events occur, the
@@ -591,21 +518,8 @@ the Standard C Library will operate correctly even if they
 utilize the C Library because the C Library's TASK_DELETE
 extension is invoked after that of the other extensions.
 
-@ifinfo
-@node User Extensions Manager Operations, Creating an Extension Set, Order of Invocation, User Extensions Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Creating an Extension Set::
-* Obtaining Extension Set IDs::
-* Deleting an Extension Set::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Creating an Extension Set, Obtaining Extension Set IDs, User Extensions Manager Operations, User Extensions Manager Operations
-@end ifinfo
 @subsection Creating an Extension Set
 
 The @code{@value{DIRPREFIX}extension_create} directive creates and installs
@@ -615,9 +529,6 @@ assigning it an extension set ID.  Newly created extension sets
 are immediately installed and are invoked upon the next system
 even supporting an extension.
 
-@ifinfo
-@node Obtaining Extension Set IDs, Deleting an Extension Set, Creating an Extension Set, User Extensions Manager Operations
-@end ifinfo
 @subsection Obtaining Extension Set IDs
 
 When an extension set is created, RTEMS generates a
@@ -631,9 +542,6 @@ be obtained later using the @code{@value{DIRPREFIX}extension_ident}
 directive.  The extension set ID is used by other directives
 to manipulate this extension set.
 
-@ifinfo
-@node Deleting an Extension Set, User Extensions Manager Directives, Obtaining Extension Set IDs, User Extensions Manager Operations
-@end ifinfo
 @subsection Deleting an Extension Set
 
 The @code{@value{DIRPREFIX}extension_delete} directive is used to delete an
@@ -643,17 +551,7 @@ deleted by a task other than the task which created the
 extension set.  Any subsequent references to the extension's
 name and ID are invalid.
 
-@ifinfo
-@node User Extensions Manager Directives, EXTENSION_CREATE - Create a extension set, Deleting an Extension Set, User Extensions Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* EXTENSION_CREATE - Create a extension set::
-* EXTENSION_IDENT - Get ID of a extension set::
-* EXTENSION_DELETE - Delete a extension set::
-@end menu
-@end ifinfo
 
 This section details the user extension manager's
 directives.  A subsection is dedicated to each of this manager's
@@ -661,9 +559,6 @@ directives and describes the calling sequence, related
 constants, usage, and status codes.
 
 @page
-@ifinfo
-@node EXTENSION_CREATE - Create a extension set, EXTENSION_IDENT - Get ID of a extension set, User Extensions Manager Directives, User Extensions Manager Directives
-@end ifinfo
 @subsection EXTENSION_CREATE - Create a extension set
 
 @subheading CALLING SEQUENCE:
@@ -709,9 +604,6 @@ This directive will not cause the calling task to be
 preempted.
 
 @page
-@ifinfo
-@node EXTENSION_IDENT - Get ID of a extension set, EXTENSION_DELETE - Delete a extension set, EXTENSION_CREATE - Create a extension set, User Extensions Manager Directives
-@end ifinfo
 @subsection EXTENSION_IDENT - Get ID of a extension set
 
 @subheading CALLING SEQUENCE:
@@ -755,9 +647,6 @@ This directive will not cause the running task to be
 preempted.
 
 @page
-@ifinfo
-@node EXTENSION_DELETE - Delete a extension set, Configuring a System, EXTENSION_IDENT - Get ID of a extension set, User Extensions Manager Directives
-@end ifinfo
 @subsection EXTENSION_DELETE - Delete a extension set
 
 @subheading CALLING SEQUENCE:

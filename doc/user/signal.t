@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Signal Manager, Signal Manager Introduction, EVENT_RECEIVE - Receive event condition, Top
-@end ifinfo
 @chapter Signal Manager
-@ifinfo
-@menu
-* Signal Manager Introduction::
-* Signal Manager Background::
-* Signal Manager Operations::
-* Signal Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Signal Manager Introduction, Signal Manager Background, Signal Manager, Signal Manager
-@end ifinfo
 @section Introduction
 
 The signal manager provides the capabilities required
@@ -33,22 +19,8 @@ signal manager are:
 @item @code{@value{DIRPREFIX}signal_send} - Send signal set to a task
 @end itemize
 
-@ifinfo
-@node Signal Manager Background, Signal Manager Definitions, Signal Manager Introduction, Signal Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Signal Manager Definitions::
-* A Comparison of ASRs and ISRs::
-* Building a Signal Set::
-* Building an ASR's Mode::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Signal Manager Definitions, A Comparison of ASRs and ISRs, Signal Manager Background, Signal Manager Background
-@end ifinfo
 @subsection Signal Manager Definitions
 
 The signal manager allows a task to optionally define
@@ -69,9 +41,6 @@ task. A pending signal is a signal that has been sent to a task
 with a valid ASR, but has not been processed by that task's ASR.
 
 
-@ifinfo
-@node A Comparison of ASRs and ISRs, Building a Signal Set, Signal Manager Definitions, Signal Manager Background
-@end ifinfo
 @subsection A Comparison of ASRs and ISRs
 
 The format of an ASR is similar to that of an ISR
@@ -94,9 +63,6 @@ of the task.  An ISR does not execute as a task and, as a
 result, does not have a task mode.
 @end itemize
 
-@ifinfo
-@node Building a Signal Set, Building an ASR's Mode, A Comparison of ASRs and ISRs, Signal Manager Background
-@end ifinfo
 @subsection Building a Signal Set
 
 A signal set is built by a bitwise OR of the desired
@@ -116,9 +82,6 @@ to the @code{@value{DIRPREFIX}signal_send} directive should be
 @code{@value{RPREFIX}SIGNAL_6 @value{OR} 
 @value{RPREFIX}SIGNAL_15 @value{OR} @value{RPREFIX}SIGNAL_31}.
 
-@ifinfo
-@node Building an ASR's Mode, Signal Manager Operations, Building a Signal Set, Signal Manager Background
-@end ifinfo
 @subsection Building an ASR's Mode
 
 In general, an ASR's mode is built by a bitwise OR of
@@ -171,21 +134,8 @@ be set to
 to indicate the
 desired processor mode and interrupt level.
 
-@ifinfo
-@node Signal Manager Operations, Establishing an ASR, Building an ASR's Mode, Signal Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Establishing an ASR::
-* Sending a Signal Set::
-* Processing an ASR::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Establishing an ASR, Sending a Signal Set, Signal Manager Operations, Signal Manager Operations
-@end ifinfo
 @subsection Establishing an ASR
 
 The @code{@value{DIRPREFIX}signal_catch} directive establishes an ASR for the
@@ -215,9 +165,6 @@ Normally, signal processing is disabled for the ASR's
 execution mode, but if signal processing is enabled for the ASR,
 the ASR must be reentrant.
 
-@ifinfo
-@node Sending a Signal Set, Processing an ASR, Establishing an ASR, Signal Manager Operations
-@end ifinfo
 @subsection Sending a Signal Set
 
 The @code{@value{DIRPREFIX}signal_send} directive allows both
@@ -246,9 +193,6 @@ to a task (without any intermediate signal processing occurring
 for the task), has the same result as sending that signal to
 that task once.
 
-@ifinfo
-@node Processing an ASR, Signal Manager Directives, Sending a Signal Set, Signal Manager Operations
-@end ifinfo
 @subsection Processing an ASR
 
 Asynchronous signals were designed to provide the
@@ -279,16 +223,7 @@ When the ASR returns to RTEMS the mode and execution
 path of the interrupted task (or ASR) is restored to the context
 prior to entering the ASR.
 
-@ifinfo
-@node Signal Manager Directives, SIGNAL_CATCH - Establish an ASR, Processing an ASR, Signal Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* SIGNAL_CATCH - Establish an ASR::
-* SIGNAL_SEND - Send signal set to a task::
-@end menu
-@end ifinfo
 
 This section details the signal manager's directives.
 A subsection is dedicated to each of this manager's directives
@@ -296,9 +231,6 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@ifinfo
-@node SIGNAL_CATCH - Establish an ASR, SIGNAL_SEND - Send signal set to a task, Signal Manager Directives, Signal Manager Directives
-@end ifinfo
 @subsection SIGNAL_CATCH - Establish an ASR
 
 @subheading CALLING SEQUENCE:
@@ -370,9 +302,6 @@ The following task mode constants are defined by RTEMS:
 @end itemize
 
 @page
-@ifinfo
-@node SIGNAL_SEND - Send signal set to a task, Partition Manager, SIGNAL_CATCH - Establish an ASR, Signal Manager Directives
-@end ifinfo
 @subsection SIGNAL_SEND - Send signal set to a task
 
 @subheading CALLING SEQUENCE:

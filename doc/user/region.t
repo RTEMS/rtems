@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Region Manager, Region Manager Introduction, PARTITION_RETURN_BUFFER - Return buffer to a partition, Top
-@end ifinfo
 @chapter Region Manager
-@ifinfo
-@menu
-* Region Manager Introduction::
-* Region Manager Background::
-* Region Manager Operations::
-* Region Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Region Manager Introduction, Region Manager Background, Region Manager, Region Manager
-@end ifinfo
 @section Introduction
 
 The region manager provides facilities to dynamically
@@ -38,21 +24,8 @@ provided by the region manager are:
 @item @code{@value{DIRPREFIX}region_get_segment_size} - Obtain size of a segment
 @end itemize
 
-@ifinfo
-@node Region Manager Background, Region Manager Definitions, Region Manager Introduction, Region Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Region Manager Definitions::
-* Building an Attribute Set::
-* Building an Option Set::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Region Manager Definitions, Building an Attribute Set, Region Manager Background, Region Manager Background
-@end ifinfo
 @subsection Region Manager Definitions
 
 A region makes up a physically contiguous memory
@@ -80,9 +53,6 @@ Upon return to the region, the free block is
 coalesced with its neighbors (if free) on both sides to produce
 the largest possible unused block.
 
-@ifinfo
-@node Building an Attribute Set, Building an Option Set, Region Manager Definitions, Region Manager Background
-@end ifinfo
 @subsection Building an Attribute Set
 
 In general, an attribute set is built by a bitwise OR
@@ -110,9 +80,6 @@ discipline.  The attribute_set parameter to the
 @code{@value{DIRPREFIX}region_create}
 directive should be @code{@value{RPREFIX}PRIORITY}.
 
-@ifinfo
-@node Building an Option Set, Region Manager Operations, Building an Attribute Set, Region Manager Background
-@end ifinfo
 @subsection Building an Option Set
 
 In general, an option is built by a bitwise OR of the
@@ -140,25 +107,8 @@ to poll for a segment.  The option parameter passed to the
 @code{@value{DIRPREFIX}region_get_segment} directive should
 be @code{@value{RPREFIX}NO_WAIT}.
 
-@ifinfo
-@node Region Manager Operations, Creating a Region, Building an Option Set, Region Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Creating a Region::
-* Obtaining Region IDs::
-* Adding Memory to a Region::
-* Acquiring a Segment::
-* Releasing a Segment::
-* Obtaining the Size of a Segment::
-* Deleting a Region::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Creating a Region, Obtaining Region IDs, Region Manager Operations, Region Manager Operations
-@end ifinfo
 @subsection Creating a Region
 
 The @code{@value{DIRPREFIX}region_create} directive creates a region with the
@@ -181,9 +131,6 @@ Due to automatic coalescing, the number of segments
 in the region dynamically changes.  Therefore, the total
 overhead required by RTEMS dynamically changes.
 
-@ifinfo
-@node Obtaining Region IDs, Adding Memory to a Region, Creating a Region, Region Manager Operations
-@end ifinfo
 @subsection Obtaining Region IDs
 
 When a region is created, RTEMS generates a unique
@@ -197,9 +144,6 @@ using the @code{@value{DIRPREFIX}region_ident} directive.
 The region ID is used by other region manager directives to
 access this region.
 
-@ifinfo
-@node Adding Memory to a Region, Acquiring a Segment, Obtaining Region IDs, Region Manager Operations
-@end ifinfo
 @subsection Adding Memory to a Region
 
 The @code{@value{DIRPREFIX}region_extend} directive may be used to add memory
@@ -211,9 +155,6 @@ code for information regarding restrictions on the location of
 the memory being added in relation to memory already in the
 region.
 
-@ifinfo
-@node Acquiring a Segment, Releasing a Segment, Adding Memory to a Region, Region Manager Operations
-@end ifinfo
 @subsection Acquiring a Segment
 
 The @code{@value{DIRPREFIX}region_get_segment} directive attempts to acquire
@@ -237,9 +178,6 @@ in the region's task wait queue in either FIFO or task priority
 order.  All tasks waiting on a region are returned an error when
 the message queue is deleted.
 
-@ifinfo
-@node Releasing a Segment, Obtaining the Size of a Segment, Acquiring a Segment, Region Manager Operations
-@end ifinfo
 @subsection Releasing a Segment
 
 When a segment is returned to a region by the
@@ -250,9 +188,6 @@ segment request can now be satisfied.  If so, it is given a
 segment and unblocked.  This process is repeated until the first
 task's segment request cannot be satisfied.
 
-@ifinfo
-@node Obtaining the Size of a Segment, Deleting a Region, Releasing a Segment, Region Manager Operations
-@end ifinfo
 @subsection Obtaining the Size of a Segment
 
 The @code{@value{DIRPREFIX}region_get_segment_size} directive returns the
@@ -260,9 +195,6 @@ size in bytes of the specified segment.  The size returned
 includes any "extra" memory included in the segment because of
 rounding up to a page size boundary.
 
-@ifinfo
-@node Deleting a Region, Region Manager Directives, Obtaining the Size of a Segment, Region Manager Operations
-@end ifinfo
 @subsection Deleting a Region
 
 A region can be removed from the system and returned
@@ -275,21 +207,7 @@ error.  As a result of this directive, all tasks blocked waiting
 to obtain a segment from the region will be readied and returned
 a status code which indicates that the region was deleted.
 
-@ifinfo
-@node Region Manager Directives, REGION_CREATE - Create a region, Deleting a Region, Region Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* REGION_CREATE - Create a region::
-* REGION_IDENT - Get ID of a region::
-* REGION_DELETE - Delete a region::
-* REGION_EXTEND - Add memory to a region::
-* REGION_GET_SEGMENT - Get segment from a region::
-* REGION_RETURN_SEGMENT - Return segment to a region::
-* REGION_GET_SEGMENT_SIZE - Obtain size of a segment::
-@end menu
-@end ifinfo
 
 This section details the region manager's directives.
 A subsection is dedicated to each of this manager's directives
@@ -297,9 +215,6 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@ifinfo
-@node REGION_CREATE - Create a region, REGION_IDENT - Get ID of a region, Region Manager Directives, Region Manager Directives
-@end ifinfo
 @subsection REGION_CREATE - Create a region
 
 @subheading CALLING SEQUENCE:
@@ -378,9 +293,6 @@ by RTEMS:
 @end itemize
 
 @page
-@ifinfo
-@node REGION_IDENT - Get ID of a region, REGION_DELETE - Delete a region, REGION_CREATE - Create a region, Region Manager Directives
-@end ifinfo
 @subsection REGION_IDENT - Get ID of a region
 
 @subheading CALLING SEQUENCE:
@@ -423,9 +335,6 @@ access this region in other region manager directives.
 This directive will not cause the running task to be preempted.
 
 @page
-@ifinfo
-@node REGION_DELETE - Delete a region, REGION_EXTEND - Add memory to a region, REGION_IDENT - Get ID of a region, Region Manager Directives
-@end ifinfo
 @subsection REGION_DELETE - Delete a region
 
 @subheading CALLING SEQUENCE:
@@ -469,9 +378,6 @@ created the region.  Any local task that knows the region id can
 delete the region.
 
 @page
-@ifinfo
-@node REGION_EXTEND - Add memory to a region, REGION_GET_SEGMENT - Get segment from a region, REGION_DELETE - Delete a region, Region Manager Directives
-@end ifinfo
 @subsection REGION_EXTEND - Add memory to a region
 
 @subheading CALLING SEQUENCE:
@@ -517,9 +423,6 @@ created the region.  Any local task that knows the region id can
 extend the region.
 
 @page
-@ifinfo
-@node REGION_GET_SEGMENT - Get segment from a region, REGION_RETURN_SEGMENT - Return segment to a region, REGION_EXTEND - Add memory to a region, Region Manager Directives
-@end ifinfo
 @subsection REGION_GET_SEGMENT - Get segment from a region
 
 @subheading CALLING SEQUENCE:
@@ -607,9 +510,6 @@ A clock tick is required to support the timeout functionality of
 this directive.
 
 @page
-@ifinfo
-@node REGION_RETURN_SEGMENT - Return segment to a region, REGION_GET_SEGMENT_SIZE - Obtain size of a segment, REGION_GET_SEGMENT - Get segment from a region, Region Manager Directives
-@end ifinfo
 @subsection REGION_RETURN_SEGMENT - Return segment to a region
 
 @subheading CALLING SEQUENCE:
@@ -663,9 +563,6 @@ is less than or equal to the size of the segment returned.
 @end itemize
 
 @page
-@ifinfo
-@node REGION_GET_SEGMENT_SIZE - Obtain size of a segment, Dual-Ported Memory Manager, REGION_RETURN_SEGMENT - Return segment to a region, Region Manager Directives
-@end ifinfo
 @subsection REGION_GET_SEGMENT_SIZE - Obtain size of a segment
 
 @subheading CALLING SEQUENCE:

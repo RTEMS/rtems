@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Fatal Error Manager, Fatal Error Manager Introduction, IO_CONTROL - Special device services, Top
-@end ifinfo
 @chapter Fatal Error Manager
-@ifinfo
-@menu
-* Fatal Error Manager Introduction::
-* Fatal Error Manager Background::
-* Fatal Error Manager Operations::
-* Fatal Error Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Fatal Error Manager Introduction, Fatal Error Manager Background, Fatal Error Manager, Fatal Error Manager
-@end ifinfo
 @section Introduction
 
 The fatal error manager processes all fatal or
@@ -32,9 +18,6 @@ manager is:
 @item @code{@value{DIRPREFIX}fatal_error_occurred} - Invoke the fatal error handler
 @end itemize
 
-@ifinfo
-@node Fatal Error Manager Background, Fatal Error Manager Operations, Fatal Error Manager Introduction, Fatal Error Manager
-@end ifinfo
 @section Background
 
 The fatal error manager is called upon detection of
@@ -73,19 +56,8 @@ RTEMS fatal error are discussed in the Default Fatal Error
 Processing chapter of the Applications Supplement document for
 a specific target processor.
 
-@ifinfo
-@node Fatal Error Manager Operations, Announcing a Fatal Error, Fatal Error Manager Background, Fatal Error Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Announcing a Fatal Error::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Announcing a Fatal Error, Fatal Error Manager Directives, Fatal Error Manager Operations, Fatal Error Manager Operations
-@end ifinfo
 @subsection Announcing a Fatal Error
 
 The @code{@value{DIRPREFIX}fatal_error_occurred} directive is invoked when a
@@ -131,15 +103,7 @@ the default handler provided by RTEMS is executed.  This default
 handler will halt execution on the processor where the error
 occurred.
 
-@ifinfo
-@node Fatal Error Manager Directives, FATAL_ERROR_OCCURRED - Invoke the fatal error handler, Announcing a Fatal Error, Fatal Error Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* FATAL_ERROR_OCCURRED - Invoke the fatal error handler::
-@end menu
-@end ifinfo
 
 This section details the fatal error manager's
 directives.  A subsection is dedicated to each of this manager's
@@ -147,9 +111,6 @@ directives and describes the calling sequence, related
 constants, usage, and status codes.
 
 @page
-@ifinfo
-@node FATAL_ERROR_OCCURRED - Invoke the fatal error handler, Scheduling Concepts, Fatal Error Manager Directives, Fatal Error Manager Directives
-@end ifinfo
 @subsection FATAL_ERROR_OCCURRED - Invoke the fatal error handler
 
 @subheading CALLING SEQUENCE:

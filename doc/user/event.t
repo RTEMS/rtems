@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Event Manager, Event Manager Introduction, MESSAGE_QUEUE_FLUSH - Flush all messages on a queue, Top
-@end ifinfo
 @chapter Event Manager
-@ifinfo
-@menu
-* Event Manager Introduction::
-* Event Manager Background::
-* Event Manager Operations::
-* Event Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Event Manager Introduction, Event Manager Background, Event Manager, Event Manager
-@end ifinfo
 @section Introduction
 
 The event manager provides a high performance method
@@ -33,21 +19,8 @@ provided by the event manager are:
 @item @code{@value{DIRPREFIX}event_receive} - Receive event condition
 @end itemize
 
-@ifinfo
-@node Event Manager Background, Event Sets, Event Manager Introduction, Event Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Event Sets::
-* Building an Event Set or Condition::
-* Building an EVENT_RECEIVE Option Set::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Event Sets, Building an Event Set or Condition, Event Manager Background, Event Manager Background
-@end ifinfo
 @subsection Event Sets
 
 An event flag is used by a task (or ISR) to inform
@@ -85,9 +58,6 @@ an event condition is satisfied when at least a single requested
 event is posted.  The @code{@value{RPREFIX}EVENT_ALL} algorithm states that an event
 condition is satisfied when every requested event is posted.
 
-@ifinfo
-@node Building an Event Set or Condition, Building an EVENT_RECEIVE Option Set, Event Sets, Event Manager Background
-@end ifinfo
 @subsection Building an Event Set or Condition
 
 An event set or condition is built by a bitwise OR of
@@ -104,9 +74,6 @@ the event parameter to the @code{@value{DIRPREFIX}event_send}
 directive should be @code{@value{RPREFIX}EVENT_6 @value{OR}
 @value{RPREFIX}EVENT_15 @value{OR} @value{RPREFIX}EVENT_31}.
 
-@ifinfo
-@node Building an EVENT_RECEIVE Option Set, Event Manager Operations, Building an Event Set or Condition, Event Manager Background
-@end ifinfo
 @subsection Building an EVENT_RECEIVE Option Set
 
 In general, an option is built by a bitwise OR of the
@@ -139,22 +106,8 @@ or @code{@value{RPREFIX}NO_WAIT}.  The option parameter can be set to
 @code{@value{RPREFIX}NO_WAIT} because @code{@value{RPREFIX}EVENT_ALL} is the
 default condition for @code{@value{DIRPREFIX}event_receive}.
 
-@ifinfo
-@node Event Manager Operations, Sending an Event Set, Building an EVENT_RECEIVE Option Set, Event Manager
-@end ifinfo
 @section Operations
-@ifinfo
-@menu
-* Sending an Event Set::
-* Receiving an Event Set::
-* Determining the Pending Event Set::
-* Receiving all Pending Events::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Sending an Event Set, Receiving an Event Set, Event Manager Operations, Event Manager Operations
-@end ifinfo
 @subsection Sending an Event Set
 
 The @code{@value{DIRPREFIX}event_send} directive allows a task (or an ISR) to
@@ -183,9 +136,6 @@ task remains blocked.
 
 @end itemize
 
-@ifinfo
-@node Receiving an Event Set, Determining the Pending Event Set, Sending an Event Set, Event Manager Operations
-@end ifinfo
 @subsection Receiving an Event Set
 
 The @code{@value{DIRPREFIX}event_receive} directive is used by tasks to
@@ -208,9 +158,6 @@ with an error status code.
 wait before returning with an error status code.
 @end itemize
 
-@ifinfo
-@node Determining the Pending Event Set, Receiving all Pending Events, Receiving an Event Set, Event Manager Operations
-@end ifinfo
 @subsection Determining the Pending Event Set
 
 A task can determine the pending event set by calling
@@ -219,9 +166,6 @@ the @code{@value{DIRPREFIX}event_receive} directive with a value of
 The pending events are returned to the calling task but the event
 set is left unaltered.
 
-@ifinfo
-@node Receiving all Pending Events, Event Manager Directives, Determining the Pending Event Set, Event Manager Operations
-@end ifinfo
 @subsection Receiving all Pending Events
 
 A task can receive all of the currently pending
@@ -233,16 +177,7 @@ for the option set.  The pending events are returned to the
 calling task and the event set is cleared.  If no events are
 pending then the @code{@value{RPREFIX}UNSATISFIED} status code will be returned.
 
-@ifinfo
-@node Event Manager Directives, EVENT_SEND - Send event set to a task, Receiving all Pending Events, Event Manager
-@end ifinfo
 @section Directives
-@ifinfo
-@menu
-* EVENT_SEND - Send event set to a task::
-* EVENT_RECEIVE - Receive event condition::
-@end menu
-@end ifinfo
 
 This section details the event manager's directives.
 A subsection is dedicated to each of this manager's directives
@@ -250,9 +185,6 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@ifinfo
-@node EVENT_SEND - Send event set to a task, EVENT_RECEIVE - Receive event condition, Event Manager Directives, Event Manager Directives
-@end ifinfo
 @subsection EVENT_SEND - Send event set to a task
 
 @subheading CALLING SEQUENCE:
@@ -309,9 +241,6 @@ reside on the local node will generate a request telling the
 remote node to send the event set to the appropriate task.
 
 @page
-@ifinfo
-@node EVENT_RECEIVE - Receive event condition, Signal Manager, EVENT_SEND - Send event set to a task, Event Manager Directives
-@end ifinfo
 @subsection EVENT_RECEIVE - Receive event condition
 
 @subheading CALLING SEQUENCE:

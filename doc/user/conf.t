@@ -6,29 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Configuring a System, Configuring a System Configuration Table, EXTENSION_DELETE - Delete a extension set, Top
-@end ifinfo
 @chapter Configuring a System
-@ifinfo
-@menu
-* Configuring a System Configuration Table::
-* Configuring a System RTEMS API Configuration Table::
-* Configuring a System POSIX API Configuration Table::
-* Configuring a System CPU Dependent Information Table::
-* Configuring a System Initialization Task Table::
-* Configuring a System Driver Address Table::
-* Configuring a System User Extensions Table::
-* Configuring a System Multiprocessor Configuration Table::
-* Configuring a System Multiprocessor Communications Interface Table::
-* Configuring a System Determining Memory Requirements::
-* Configuring a System Sizing the RTEMS RAM Workspace::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Configuring a System Configuration Table, Configuring a System RTEMS API Configuration Table, Configuring a System, Configuring a System
-@end ifinfo
 @section Configuration Table
 
 The RTEMS Configuration Table is used to tailor an
@@ -145,9 +124,6 @@ NULL if the POSIX API is not used.
 
 @end table
 
-@ifinfo
-@node Configuring a System RTEMS API Configuration Table, Configuring a System POSIX API Configuration Table, Configuring a System Configuration Table, Configuring a System
-@end ifinfo
 @section RTEMS API Configuration Table
 
 The RTEMS API Configuration Table is used to configure the 
@@ -238,9 +214,6 @@ initialization tasks.  The format of this table will be discussed below.
 
 @end table
 
-@ifinfo
-@node Configuring a System POSIX API Configuration Table, Configuring a System CPU Dependent Information Table, Configuring a System RTEMS API Configuration Table, Configuring a System
-@end ifinfo
 @section POSIX API Configuration Table
 
 The POSIX API Configuration Table is used to configure the
@@ -340,9 +313,6 @@ posix_initialization_threads_table @value{STRUCTURE}.
 
 @end table
 
-@ifinfo
-@node Configuring a System CPU Dependent Information Table, Configuring a System Initialization Task Table, Configuring a System POSIX API Configuration Table, Configuring a System
-@end ifinfo
 @section CPU Dependent Information Table
 
 The CPU Dependent Information Table is used to
@@ -353,9 +323,6 @@ table are discussed in the CPU Dependent Information Table
 chapter of the Applications Supplement document for a specific
 target processor.
 
-@ifinfo
-@node Configuring a System Initialization Task Table, Configuring a System Driver Address Table, Configuring a System CPU Dependent Information Table, Configuring a System
-@end ifinfo
 @section Initialization Task Table
 
 The Initialization Task Table is used to describe
@@ -477,9 +444,6 @@ Initialization_Tasks : aliased RTEMS.Initialization_Tasks_Table( 1 .. 2 ) := (
 @end example
 @end ifset
 
-@ifinfo
-@node Configuring a System Driver Address Table, Configuring a System User Extensions Table, Configuring a System Initialization Task Table, Configuring a System
-@end ifinfo
 @section Driver Address Table
 
 The Device Driver Table is used to inform the I/O
@@ -574,9 +538,6 @@ More information regarding the construction and
 operation of device drivers is provided in the I/O Manager
 chapter.
 
-@ifinfo
-@node Configuring a System User Extensions Table, Configuring a System Multiprocessor Configuration Table, Configuring a System Driver Address Table, Configuring a System
-@end ifinfo
 @section User Extensions Table
 
 The User Extensions Table is used to inform RTEMS of
@@ -743,9 +704,6 @@ User_Extensions : RTEMS.Extensions_Table := (
 More information regarding the user extensions is
 provided in the User Extensions chapter.
 
-@ifinfo
-@node Configuring a System Multiprocessor Configuration Table, Configuring a System Multiprocessor Communications Interface Table, Configuring a System User Extensions Table, Configuring a System
-@end ifinfo
 @section Multiprocessor Configuration Table
 
 The Multiprocessor Configuration Table contains
@@ -828,9 +786,6 @@ regarding its entries can be found in the next section.
 
 @end table
 
-@ifinfo
-@node Configuring a System Multiprocessor Communications Interface Table, Configuring a System Determining Memory Requirements, Configuring a System Multiprocessor Configuration Table, Configuring a System
-@end ifinfo
 @section Multiprocessor Communications Interface Table
 
 The format of this table is defined in 
@@ -909,9 +864,6 @@ supplied multiprocessor communications layer.
 More information regarding the required functionality of these
 entry points is provided in the Multiprocessor chapter.
 
-@ifinfo
-@node Configuring a System Determining Memory Requirements, Configuring a System Sizing the RTEMS RAM Workspace, Configuring a System Multiprocessor Communications Interface Table, Configuring a System
-@end ifinfo
 @section Determining Memory Requirements
 
 Since memory is a critical resource in many real-time
@@ -959,9 +911,6 @@ with the underscore character and followed by an upper-case
 letter to avoid any naming conflicts.  All RTEMS directive names
 should be treated as reserved words.
 
-@ifinfo
-@node Configuring a System Sizing the RTEMS RAM Workspace, Multiprocessing Manager, Configuring a System Determining Memory Requirements, Configuring a System
-@end ifinfo
 @section Sizing the RTEMS RAM Workspace
 
 The RTEMS RAM Workspace is a user-specified block of

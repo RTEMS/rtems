@@ -10,23 +10,9 @@
 @c  The following figure was replaced with an ASCII equivalent.
 @c    Figure 2-1 Object ID Composition
 @c
-@ifinfo
-@node Key Concepts, Key Concepts Introduction, Overview Manual Organization, Top
-@end ifinfo
-@chapter Key Concepts
-@ifinfo
-@menu
-* Key Concepts Introduction::
-* Key Concepts Objects::
-* Key Concepts Communication and Synchronization::
-* Key Concepts Time::
-* Key Concepts Memory Management::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Key Concepts Introduction, Key Concepts Objects, Key Concepts, Key Concepts
-@end ifinfo
+@chapter Key Concepts
+
 @section Introduction
 
 The facilities provided by RTEMS are built upon a
@@ -35,9 +21,6 @@ understood before the application developer can efficiently
 utilize RTEMS.  The purpose of this chapter is to familiarize
 one with these concepts.
 
-@ifinfo
-@node Key Concepts Objects, Key Concepts Communication and Synchronization, Key Concepts Introduction, Key Concepts
-@end ifinfo
 @section Objects
 
 RTEMS provides directives which can be used to
@@ -194,9 +177,6 @@ the object is deleted.  With the exception of user extension
 routines, object control blocks are not directly manipulated by
 user applications.
 
-@ifinfo
-@node Key Concepts Communication and Synchronization, Key Concepts Time, Key Concepts Objects, Key Concepts
-@end ifinfo
 @section Communication and Synchronization
 
 In real-time multitasking applications, the ability
@@ -238,9 +218,6 @@ high performance synchronization mechanism.  The signal manager
 supports only asynchronous communication and is typically used
 for exception handling.
 
-@ifinfo
-@node Key Concepts Time, Key Concepts Memory Management, Key Concepts Communication and Synchronization, Key Concepts
-@end ifinfo
 @section Time
 
 The development of responsive real-time applications
@@ -288,9 +265,6 @@ time cannot operate without some external mechanism which
 provides a periodic clock tick.  This clock tick is typically
 provided by a real time clock or counter/timer device.
 
-@ifinfo
-@node Key Concepts Memory Management, Initialization Manager, Key Concepts Time, Key Concepts
-@end ifinfo
 @section Memory Management
 
 RTEMS memory management facilities can be grouped
