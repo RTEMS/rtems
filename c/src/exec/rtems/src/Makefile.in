@@ -41,7 +41,7 @@ MESSAGE_QUEUE_C_PIECES = msg msgqallocate msgqbroadcast msgqcreate \
     msgqsubmit msgqtranslatereturncode msgqurgent
 
 SEMAPHORE_C_PIECES = sem semcreate semdelete semident semobtain semrelease \
-    semtranslatereturncode
+    semflush semtranslatereturncode
 
 EVENT_C_PIECES = event eventreceive eventseize eventsend eventsurrender \
     eventtimeout

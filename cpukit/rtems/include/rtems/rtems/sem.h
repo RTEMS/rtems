@@ -162,6 +162,17 @@ rtems_status_code rtems_semaphore_release(
 );
 
 /*
+ *  rtems_semaphore_flush
+ *
+ *  This directive allows a thread to flush the threads
+ *  pending on the semaphore.
+ */
+
+rtems_status_code rtems_semaphore_flush(
+  Objects_Id      id
+);
+
+/*
  *  _Semaphore_Seize
  *
  *  DESCRIPTION:
