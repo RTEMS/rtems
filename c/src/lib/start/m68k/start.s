@@ -26,7 +26,7 @@ BEGIN_CODE
          PUBLIC (M68Kvec)               |   Vector Table
 
 SYM (start):
-SYM (M68Kvec):                           | standard location for vectors
+SYM (M68Kvec):                          | standard location for vectors
         nop                             | for linkers with problem
                                         | location zero
         jmp      SYM (start_around)
@@ -53,7 +53,7 @@ SYM (hiintstack):
 	PUBLIC (start_around)
 SYM (start_around):
         move.w  sr, SYM (initial_sr)
-        oriw    #0x3700,sr             | SUPV MODE,INTS OFF!!!
+        oriw    #0x3700,sr              | SUPV MODE,INTERRUPTS OFF!!!
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
         movec   isp,a0
         move.l  a0, SYM (initial_isp)
@@ -66,22 +66,22 @@ SYM (start_around):
         | zero out uninitialized data area
         |
 zerobss:
-        moveal  # SYM (end),a0                | find end of .bss
-        moveal  # SYM (bss_start),a1          | find beginning of .bss
+        moveal  # SYM (end),a0          | find end of .bss
+        moveal  # SYM (bss_start),a1    | find beginning of .bss
         movel   #0,d0
 
-loop:   movel   #0,a1@+                | to zero out uninitialized
+loop:   movel   #0,a1@+                 | to zero out uninitialized
         cmpal   a0,a1
         jlt     loop                    | loop until _end reached
 
-        movel   # SYM (end),d0               | d0 = end of bss/start of heap
-        addl    # SYM (heap_size),d0          | d0 = end of heap
-        movel   d0, SYM (stack_start)  | Save for brk() routine
-        addl    # SYM (stack_size),d0         | make room for stack
-        andl    #0xffffffc0,d0         | align it on 16 byte boundary
-        movw    #0x3700,sr             | SUPV MODE,INTERRUPTS OFF!!!
-        movel   d0,a7                 | set master stack pointer
-        movel   d0,a6                 | set base pointer
+        movel   # SYM (end),d0          | d0 = end of bss/start of heap
+        addl    # SYM (heap_size),d0    | d0 = end of heap
+        movel   d0, SYM (stack_start)   | Save for brk() routine
+        addl    # SYM (stack_size),d0   | make room for stack
+        andl    #0xffffffc0,d0          | align it on 16 byte boundary
+        movw    #0x3700,sr              | SUPV MODE,INTERRUPTS OFF!!!
+        movel   d0,a7                   | set master stack pointer
+        movel   d0,a6                   | set base pointer
 
       /*
        *  RTEMS should maintain a separate interrupt stack on CPUs
@@ -90,11 +90,9 @@ loop:   movel   #0,a1@+                | to zero out uninitialized
        */
 
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
-        lea     SYM (hiintstack),a0          | a0 = high end of intr stack
+        lea     SYM (hiintstack),a0   | a0 = high end of intr stack
         movec   a0,isp                | set interrupt stack
 #endif
-
-
         movel   #0,a7@-               | push environp
         movel   #0,a7@-               | push argv
         movel   #0,a7@-               | push argc
