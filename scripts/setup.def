@@ -14,6 +14,7 @@ gccnewlib_rpm_release=7
 gdb_version=4.18
 gdb_patch_version=20000524
 gdb_rpm_release=4
-rtems_version=rtems-4.5.0-beta3a
+# RTEMS version is unused as RTEMS RPMS are not currently built.
+rtems_version=rtems-4.5.0
 rtems_rpm_release=1
 rpm_build_root=/tmp
