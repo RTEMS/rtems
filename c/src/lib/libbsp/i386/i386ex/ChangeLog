@@ -1,3 +1,7 @@
+2004-07-28	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Add gnu.linkonce.d and gcc_except_table sections.
+
 2004-07-25	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Add -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ for network.
