@@ -1,3 +1,8 @@
+2000-09-25	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/hppa.h: Switched to using cpuopts.h not
+	targopts.h to reduce dependency on BSP.
+
 2000-09-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/score/Makefile.am: Use PROJECT_TOPdir in path to genoffsets.

@@ -35,6 +35,12 @@ extern "C" {
  *  present in a particular member of the family.
  */
 
+/*
+ *  Hack to allow multlib effort to continue -- known to build.
+ */
+
+#define CPU_MODEL_NAME  "hppa 7xxx"
+#if 0
 #if defined(rtems_multilib)
 /*
  *  Figure out all CPU Model Feature Flags based upon compiler 
@@ -55,6 +61,7 @@ extern "C" {
 
 #error "Unsupported CPU Model"
 
+#endif
 #endif
           
 /*
