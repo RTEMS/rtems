@@ -723,10 +723,15 @@ rtems_task Periodic_task()
 
   name = rtems_build_name( 'P', 'E', 'R', 'D' );
 
-  (void) rate_monotonic_create( name, &period );
+  status = rate_monotonic_create( name, &period );
+  if ( status != RTEMS_STATUS_SUCCESSFUL ) {
+    printf( "rtems_monotonic_create failed with status of %d.\n", rc );
+    exit( 1 );
+  }
+
 
   while ( 1 ) @{
-    if ( rate_monotonic_period( period, 100 ) == TIMEOUT )
+    if ( rate_monotonic_period( period, 100 ) == RTEMS_TIMEOUT )
       break;
 
     /* Perform some periodic actions */
@@ -734,8 +739,15 @@ rtems_task Periodic_task()
 
   /* missed period so delete period and SELF */
 
-  (void) rate_monotonic_delete( period );
-  (void) task_delete( SELF );
+  status = rate_monotonic_delete( period );
+  if ( status != RTEMS_STATUS_SUCCESSFUL ) {
+    printf( "rate_monotonic_delete failed with status of %d.\n", status );
+    exit( 1 );
+  }
+
+  status = rtems_task_delete( SELF );    /* should not return */
+  printf( "rtems_task_delete returned with status of %d.\n", status );
+  exit( 1 );
 @}
 @end example
 
