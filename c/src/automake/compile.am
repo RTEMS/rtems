@@ -36,10 +36,6 @@
 ## CFLAGS_OPTIMIZE, CFLAGS_DEBUG are set by the 
 ## 'VARIANT=<OPTIMIZE|DEBUG>' targets to their _V values.
 
-## XCPPFLAGS, XCFLAGS, XCXXFLAGS, XASFLAGS 
-## are used to add flags from the shell
-## cf. make.info ("Implicit rules/variables" for details)
-
 if RTEMS_USE_GCC
 ## All the stuff below is specific to gcc
 
@@ -53,84 +49,15 @@ endif # RTEMS_USE_GCC
 
 DEFS = @DEFS@
 
-CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(DEFINES) $(XCPPFLAGS)
-CFLAGS   = @RTEMS_CFLAGS@ $(XCFLAGS)
+CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(DEFINES)
+CFLAGS   = @RTEMS_CFLAGS@
 ## FIXME: This should be correct, but is not supported, yet
 # CXXFLAGS = @RTEMS_CXXFLAGS@ $(XCXXFLAGS)
 ## Fall back to using RTEMS_CFLAGS for C++
 CXXFLAGS = @RTEMS_CFLAGS@ $(XCXXFLAGS)
 ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
 
-#
-# Client compiler and support tools
-#
-
-#
-# How to compile stuff into ${ARCH} subdirectory
-#
-
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-        $(AM_LDFLAGS) $(LDFLAGS) -o $@
-
-CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-CXXLD = $(CXX)
-CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-
-CCAS = $(CC)
-CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
-
-# OBSOLETE: Don't use
-AS = $(CC)
-ASCOMPILE = $(AS) $(AM_ASFLAGS) $(ASFLAGS)
-
-${ARCH}/%.o: %.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-
-${ARCH}/%.o: %.cc $(ARCH)/$(dirstamp)
-	${CXXCOMPILE} -o $@ -c $<
-
-${ARCH}/%.o: %.S $(ARCH)/$(dirstamp)
-	${CCASCOMPILE} -DASM -o $@ -c $<
-
-${ARCH}/$(dirstamp):
-	@$(mkdir_p) $(ARCH)
-	@: > $(ARCH)/$(dirstamp)
-
-# Dependency files for use by gmake
-# NOTE: we don't put them into $(ARCH)
-#       so that 'make clean' doesn't blow it away
-
-DEPEND=Depends-${ARCH}
-
-# We deliberately don't have anything depend on the
-# $(DEPEND) file; otherwise it will get rebuilt even
-# on 'make clean'
-#
-
-if RTEMS_USE_GCC
-## HACK: Specific to gcc
-## FIXME: The approach below is known to be conceptionally broken.
-depend-gcc: $(C_FILES) $(CC_FILES) $(S_FILES)
-##       Use gcc -M to generate dependencies
-##       Replace foo.o with $(ARCH)/foo.o
-##       Replace $(ARCH) value with string $(ARCH)
-##           so that it will for debug cases
-	$(COMPILE) -M   $^    |  \
-	sed -e 's?^\(.*\)\.o[ ]*:?$$(ARCH)/\1.o:?' \
-	    -e 's?$(ARCH)/?$$(ARCH)/?'   >$(DEPEND).tmp
-	mv $(DEPEND).tmp $(DEPEND)
-
-# pull in dependencies if they exist  
-ifeq (${DEPEND},$(wildcard ${DEPEND}))
-include ${DEPEND}
-@ENDIF@
-endif
-depend: depend-am
+depend:
 
 if RTEMS_USE_GCC
 ## gcc >= 2.8
@@ -156,13 +83,6 @@ VARIANT_optimize_V = OPTIMIZE
 VARIANT_debug_V = DEBUG
 
 VARIANT_V = $(VARIANT_$(VARIANT)_V)
-
-## Setup the variant build subdirectory
-ARCH_OPTIMIZE_V = o-optimize
-ARCH_DEBUG_V = o-debug
-
-ARCH__V = $(ARCH_OPTIMIZE_V)
-ARCH = $(ARCH_$(VARIANT_V)_V)
 
 ## Setup the library suffix
 LIBSUFFIX_OPTIMIZE_V =
@@ -206,8 +126,4 @@ STRIP = @STRIP@
 AM_CPPFLAGS = $(RTEMS_CPPFLAGS)
 AM_CFLAGS =
 AM_CXXFLAGS =
-AM_CCASFLAGS = $(CPU_CFLAGS) $(RTEMS_CPPFLAGS) $(RTEMS_CCASFLAGS)
-
-clean-local:
-	$(RM) -r o-optimize o-debug $(CLEANDIRS)
-	$(RM) Depends-o-optimize.tmp Depends-o-debug.tmp
+AM_CCASFLAGS = $(RTEMS_CPPFLAGS) $(RTEMS_CCASFLAGS)

@@ -1,3 +1,8 @@
+2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Don't include lib.am.
+	* automake/compile.am: Use automake compilation rules.
+
 2004-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libnetworking/pppd/Makefile.am,

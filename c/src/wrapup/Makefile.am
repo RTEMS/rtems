@@ -5,9 +5,17 @@
 ##
 
 include $(top_srcdir)/automake/compile.am
-include $(top_srcdir)/automake/lib.am
+
+## Setup the variant build subdirectory
+ARCH_OPTIMIZE_V = o-optimize
+ARCH_DEBUG_V = o-debug
+                                                                                
+ARCH__V = $(ARCH_OPTIMIZE_V)
+ARCH = $(ARCH_$(VARIANT_V)_V)
 
 project_lib_DATA = $(ARCH)/librtemsbsp$(LIB_VARIANT).a
+CLEANFILES = o-optimize/librtemsbsp.a
+CLEANFILES += o-debug/librtemsbsp_g.a
 
 SRCS = ../support/libsupport$(LIB_VARIANT).a
 
@@ -34,7 +42,8 @@ if HAS_RDBG
 SRCS += ../librdbg/src/@RTEMS_CPU@/librdbg$(LIB_VARIANT).a
 endif
 
-SRCS += $(wildcard $(PROJECT_LIB)/libcpu$(LIB_VARIANT).a)
+# FIXME: ATM, there is no libcpu.a, anymore.
+# SRCS += $(wildcard $(PROJECT_LIB)/libcpu$(LIB_VARIANT).a)
 
 if LIBCHIP
 SRCS += ../libchip/librtcio$(LIB_VARIANT).a
@@ -53,7 +62,9 @@ endif
 
 all-local: $(TMPINSTALL_FILES)
 
-$(ARCH)/librtemsbsp$(LIB_VARIANT).a: $(SRCS) $(ARCH)/$(dirstamp)
+$(ARCH)/librtemsbsp$(LIB_VARIANT).a: $(SRCS)
+	rm -f $@
+	$(mkdir_p) $(ARCH)
 	rm -rf $(ARCH)/*.a $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
 	for f in $(SRCS); do \
 	  case $$f in \
@@ -79,6 +90,7 @@ $(ARCH)/librtemsbsp$(LIB_VARIANT).a: $(SRCS) $(ARCH)/$(dirstamp)
 	  esac; \
 	done
 	$(AR) rc $@ $(ARCH)/*
+	rm -f $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
 	$(RANLIB) $@
 
 TMPINSTALL_FILES =
@@ -92,6 +104,6 @@ $(PROJECT_LIB)/librtemsbsp$(LIB_VARIANT).a: $(ARCH)/librtemsbsp$(LIB_VARIANT).a 
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemsbsp$(LIB_VARIANT).a
 TMPINSTALL_FILES += $(PROJECT_LIB)/librtemsbsp$(LIB_VARIANT).a
 
-CLEANFILES = $(TMPINSTALL_FILES)
+CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am
