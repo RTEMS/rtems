@@ -26,7 +26,7 @@ into one of the following categories.
 This class of code includes the foundation
 routines for the executive proper such as the context switch and
 the interrupt subroutine implementations.  Sources for the supported
-processor families can be found in @code{c/src/exec/score/cpu}.
+processor families can be found in @code{cpukit/score/cpu}.
 A good starting point for a new family of processors is the
 @code{no_cpu} directory, which holds both prototypes and
 descriptions of each needed CPU dependent function. 
@@ -34,7 +34,7 @@ descriptions of each needed CPU dependent function.
 CPU dependent code is further subcategorized if the implementation is
 dependent on a particular CPU model.  For example, the MC68000 and MC68020
 processors are both members of the m68k CPU family but there are significant
-differents between these CPU models which RTEMS must take into account.
+differences between these CPU models which RTEMS must take into account.
 
 @section Board Dependent
 
@@ -115,7 +115,7 @@ The CPU dependent files in the RTEMS executive source code are found
 in the following directory:
 
 @example
-c/src/exec/score/cpu/@i{CPU}
+cpukit/score/cpu/@i{CPU}
 @end example
 
 where @i{CPU} is replaced with the CPU family name.
