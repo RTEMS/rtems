@@ -1,3 +1,8 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* tmitronsem01/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+
 2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* tmitrontests.am: Add dirstamp support.
