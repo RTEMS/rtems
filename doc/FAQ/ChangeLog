@@ -1,5 +1,9 @@
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* build45.t: Several fixes and additions.
+
+2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* FAQ.texi: Rename section "Building RTEMS 4.5" into "Building
 	RTEMS".
 	build45.t: Remove references to 4.5. Several minor updates.
