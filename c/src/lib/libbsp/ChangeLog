@@ -1,5 +1,9 @@
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* bsp.am: Remove project_libdir.
+
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Misc. fixes.
 	* bsp.am: Add project_libdir.
 
