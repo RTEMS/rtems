@@ -13,9 +13,7 @@ C_FILES = addr2ascii.c ascii2addr.c base64.c gethostbydns.c gethostbyht.c \
     ns_parse.c ns_print.c ns_ttl.c res_comp.c res_data.c res_debug.c \
     res_init.c res_mkquery.c res_mkupdate.c res_query.c res_send.c \
     res_stubs.c res_update.c strsep.c rcmd.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES)
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../automake/multilib.am
 include $(top_srcdir)/../automake/compile.am
@@ -34,7 +32,7 @@ AM_CPPFLAGS += -DNOPOLL -DNOSELECT
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(OBJS) $(LIB)
+all-local: $(ARCH) $(LIB)
 
 .PRECIOUS: $(LIB)
 

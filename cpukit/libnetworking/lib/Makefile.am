@@ -5,9 +5,7 @@
 LIB = $(ARCH)/lib.a
 
 C_FILES = getprotoby.c rtems_bsdnet_ntp.c ftpfs.c syslog.c tftpDriver.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES)
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../automake/multilib.am
 include $(top_srcdir)/../automake/compile.am
@@ -22,7 +20,7 @@ AM_CPPFLAGS += -DNOPOLL -DNOSELECT
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(OBJS) $(LIB)
+all-local: $(ARCH) $(LIB)
 
 .PRECIOUS: $(LIB)
 

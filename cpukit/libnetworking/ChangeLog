@@ -1,3 +1,14 @@
+2002-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* kern/Makefile.am: Remove C_O_FILES; 
+	Don't let all-local depend on $OBJS)
+	* lib/Makefile.am: Ditto.
+	* libc/Makefile.am: Ditto.
+	* net/Makefile.am: Ditto.
+	* netinet/Makefile.am: Ditto.
+	* nfs/Makefile.am: Ditto.
+	* rtems/Makefile.am: Ditto.
+
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Fix package name.

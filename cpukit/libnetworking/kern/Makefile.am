@@ -5,9 +5,7 @@
 LIB = $(ARCH)/lib.a
 
 C_FILES = kern_subr.c uipc_domain.c uipc_mbuf.c uipc_socket.c uipc_socket2.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES)
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../automake/multilib.am
 include $(top_srcdir)/../automake/compile.am
@@ -23,7 +21,7 @@ AM_CPPFLAGS += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC \
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(OBJS) $(LIB)
+all-local: $(ARCH) $(LIB)
 
 .PRECIOUS: $(LIB)
 
