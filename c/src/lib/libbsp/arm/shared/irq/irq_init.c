@@ -15,7 +15,7 @@
 
 #include <irq.h>
 #include <bsp.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 #include <registers.h>
 
 /*

@@ -21,7 +21,7 @@
 void __assert (const char *file, int line, const char *msg);
 
 #include <bsp.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 #include <irq.h>
 #include <rtems/libio.h>
 #include <termios.h>
