@@ -66,7 +66,6 @@ extern BSP_polling_getchar_function_type BSP_poll_char;
 extern void _IBMPC_keyboard_isr(void);
 extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
 extern char BSP_wait_polled_input(void);
-extern void _IBMPC_initVideo(void);
 
 static int  conSetAttr(int minor, const struct termios *);
 static void isr_on(const rtems_irq_connect_data *);
@@ -145,8 +144,10 @@ console_initialize(rtems_device_major_number major,
 {
   rtems_status_code status;
 
-  /* Initialize video */
-  _IBMPC_initVideo();
+  /*
+   *  The video was initialized in the start.s code and does not need
+   *  to be reinitialized.
+   */
 
   if(PC386ConsolePort == PC386_CONSOLE_PORT_CONSOLE)
     {
