@@ -18,6 +18,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifndef MONITOR_PROMPT
+#define MONITOR_PROMPT "rtems"          /* will have '> ' appended */
+#endif
+
 /*
  * 2001-01-30 KJO (vac4050@cae597.rsc.raytheon.com):
  *  Fixed rtems_monitor_command_lookup() to accept partial 

@@ -1,5 +1,12 @@
 2003-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* monitor/monitor.h: Remove STREQ, STNEQ (pollute namespace), 
+	RTEMS_MONITOR_PROMPT (pollutes namespace, useless).
+	* monitor/mon-command.c: Add RTEMS_MONITOR_PROMPT.
+	* monitor/mon-monitor.c: Apply private version of STREQ.
+
+2003-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* monitor/symbols.h: Convert to private header.
 	* monitor/monitor.h: Don't include symbols.h.
 	Add forward decls. for symbols from symbols.h.

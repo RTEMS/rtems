@@ -36,6 +36,8 @@
 
 #include <rtems/monitor.h>
 
+#define STREQ(a,b)      (strcmp(a,b) == 0)
+
 /* set by trap handler */
 extern rtems_tcb       *debugger_interrupted_task;
 extern rtems_context   *debugger_interrupted_task_context;

@@ -444,15 +444,7 @@ void    rtems_monitor_symbol_cmd(int, char **, unsigned32, boolean);
 
 extern rtems_symbol_table_t *rtems_monitor_symbols;
 
-#ifndef MONITOR_PROMPT
-#define MONITOR_PROMPT "rtems"		/* will have '> ' appended */
-#endif
-
 #define MONITOR_WAKEUP_EVENT   RTEMS_EVENT_0
-
-
-#define STREQ(a,b)	(strcmp(a,b) == 0)
-#define STRNEQ(a,b,n)	(strncmp(a,b,n) == 0)
 
 #ifdef __cplusplus
 }
