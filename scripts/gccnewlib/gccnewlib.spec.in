@@ -9,9 +9,11 @@
 Vendor:       OAR Corporation
 Distribution: Linux
 Name:         @target_alias@-gcc
+Summary:      gcc and newlib C Library for @target_alias@.
+Group:	      unsorted
 Release:      @Release@
 Copyright:    1999 OARCorp
-Group:        unsorted
+
 Provides:     @target_alias@-gcc-newlib
 Requires:     @target_alias@-binutils
 
@@ -19,7 +21,6 @@ Autoreqprov:  on
 Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
 Version:      @gcc_version@newlib@newlib_version@
-Summary:      rtems gcc and newlib C Library for target @target_alias@
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.gz
 Source1:	ftp://sourceware.cygnus/com/pub/newlib/newlib-@newlib_version@.tar.gz
 Patch0:		gcc-@gcc_version@-rtems-@gcc_patch_version@.diff
@@ -50,19 +51,32 @@ Authors:
     Joel Sherrill (joel@oarcorp.com)
     ...
 
+%package -n @target_alias@-gcc-newlib
+Summary:      rtems gcc and newlib C Library for target @target_alias@
+Group: unsorted
+
+%description -n @target_alias@-gcc-newlib
+RTEMS is an open source operating system for embedded systems.
+
+This is gcc and newlib C Library for @target_alias@.
+
+Authors:
+--------
+    Joel Sherrill (joel@oarcorp.com)
+    ...
+
 %prep
-echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
-# untar the sources inside @target_alias@-gcc-newlib -@Version@
+# untar the sources inside @target_alias@-gcc-newlib
 %setup -c -n @target_alias@-gcc-newlib -a 0 -a 1
 
 %patch0 -p0
 %patch1 -p0
 
-  # Now link the C library into the source tree 
-  ln -s ../newlib-1.8.2/newlib gcc-@gcc_version@
+  # Copy the C library into gcc's source tree
+  ln -s ../newlib-@newlib_version@/newlib gcc-@gcc_version@
+  test -d build || mkdir build
 
 %build
-  test -d build || mkdir build
   cd build
   ../gcc-@gcc_version@/configure --target=@target_alias@ \
     --with-gnu-as --with-gnu-ld --with-newlib --verbose \
@@ -84,6 +98,11 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 
 %install
   cd build
+  # Bug in gcc-2.95.1: It doesn't build this installation directory
+  # If it doesn't find it, gcc doesn't install @target_alias@/bin/gcc
+  ../gcc-@gcc_version@/mkinstalldirs \
+    $RPM_BUILD_ROOT/opt/rtems/@target_alias@/bin
+
   make prefix=$RPM_BUILD_ROOT/opt/rtems install
   cd @target_alias@/newlib
   make prefix=$RPM_BUILD_ROOT/opt/rtems install-info
@@ -95,39 +114,6 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
   gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info 2>/dev/null
   gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-? 2>/dev/null
   gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-?? 2>/dev/null
-
-  rm -f files
-
-  # collect c++ headers
-  if test -d $RPM_BUILD_ROOT/opt/rtems/include/g++-3; then
-    find $RPM_BUILD_ROOT/opt/rtems/include/g++-3 \
-      -type d | \
-      sed -e "s,^$RPM_BUILD_ROOT,%dir ,g" >> files
-    find $RPM_BUILD_ROOT/opt/rtems/include/g++-3 \
-      \( -type f -o -type l \) | \
-      sed -e "s,^$RPM_BUILD_ROOT,,g" >> files
-  fi
-
-  # collect target gcc-lib
-  if test -d "$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@"; \
-  then
-    find "$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@" \
-      -type d | sed -e "s,^$RPM_BUILD_ROOT,%dir ,g" >> files
-    find "$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@" \
-      \( -type f -o -type l \) \
-      | sed -e "s,^$RPM_BUILD_ROOT,,g" >> files
-  fi
-
-  # collect target files
-  if test -d "$RPM_BUILD_ROOT/opt/rtems/@target_alias@"; \
-  then
-    find "$RPM_BUILD_ROOT/opt/rtems/@target_alias@" \
-      -type d | \
-      sed -e "s,^$RPM_BUILD_ROOT,%dir ,g" >> files
-    find "$RPM_BUILD_ROOT/opt/rtems/@target_alias@" \
-      \( -type f -o -type l \) | \
-      sed -e "s,^$RPM_BUILD_ROOT,,g" >> files
-  fi
 
 %post
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
@@ -149,8 +135,8 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
     done
   fi
 
-%files -f build/files
-%docdir /opt/rtems/info
+%files -n @target_alias@-gcc-newlib
+%dir /opt/rtems/info
 %doc /opt/rtems/info/dir
 %doc /opt/rtems/info/chill.info*
 %doc /opt/rtems/info/cpp.info*
@@ -159,8 +145,8 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 %doc /opt/rtems/info/libc.info*
 %doc /opt/rtems/info/libm.info*
 
-%docdir /opt/rtems/man
-%docdir /opt/rtems/man/man1
+%dir /opt/rtems/man
+%dir /opt/rtems/man/man1
 %doc /opt/rtems/man/man1/cccp.1
 %doc /opt/rtems/man/man1/@target_alias@-gcc.1
 %doc /opt/rtems/man/man1/@target_alias@-g++.1
@@ -182,9 +168,12 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 /opt/rtems/bin/@target_alias@-unprotoize
 
 %dir /opt/rtems/lib
-/opt/rtems/lib/libiberty*
+# We use libiberty from binutils
+# /opt/rtems/lib/libiberty*
 %dir /opt/rtems/include
+/opt/rtems/include/g++-3
 
 %dir /opt/rtems/lib/gcc-lib
-%dir /opt/rtems/lib/gcc-lib/@target_alias@
+/opt/rtems/lib/gcc-lib/@target_alias@
 
+/opt/rtems/@target_alias@

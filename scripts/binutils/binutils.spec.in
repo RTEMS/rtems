@@ -47,14 +47,13 @@ Authors:
     ...
 
 %prep
-echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 # untar the sources inside @target_alias@-binutils
 %setup -c -n @target_alias@-binutils -a 0
 
 %patch0 -p0
+  test -d build || mkdir build
 
 %build
-  test -d build || mkdir build
   cd build
   ../binutils-@binutils_version@/configure --target=@target_alias@ \
     --verbose --prefix=/opt/rtems 
@@ -89,7 +88,7 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
   then
     rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
     f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
-    test -n "$f" && for i in $f; do
+    test x"$f" != x"" && for i in $f; do
       install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
     done
   fi
@@ -99,13 +98,13 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
   then
     rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
     f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
-    test -n "$f" && for i in $f; do
+    test x"$f" != x"" && for i in $f; do
       install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
     done
   fi
 
 %files -f files
-%docdir /opt/rtems/info
+%dir /opt/rtems/info
 %doc /opt/rtems/info/dir
 %doc /opt/rtems/info/as.info.gz
 %doc /opt/rtems/info/as.info-?.gz
@@ -118,8 +117,8 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 %doc /opt/rtems/info/gasp.info.gz
 %doc /opt/rtems/info/standards.info.gz
 
-%docdir /opt/rtems/man
-%docdir /opt/rtems/man/man1
+%dir /opt/rtems/man
+%dir /opt/rtems/man/man1
 %doc /opt/rtems/man/man1/@target_alias@-*.1
 
 %dir /opt/rtems/bin
@@ -161,5 +160,4 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 /opt/rtems/@target_alias@/bin/strip
 
 %dir /opt/rtems/@target_alias@/lib
-%dir /opt/rtems/@target_alias@/lib/ldscripts
-/opt/rtems/@target_alias@/lib/ldscripts/*
+/opt/rtems/@target_alias@/lib/ldscripts

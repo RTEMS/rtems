@@ -91,13 +91,13 @@ test -d build || mkdir build
   fi
 
 %files
-%docdir /opt/rtems/info
+%dir /opt/rtems/info
 %doc /opt/rtems/info/gdb.info*
 %doc /opt/rtems/info/mmalloc.info*
 %doc /opt/rtems/info/readline.info*
 
-%docdir /opt/rtems/man
-%docdir /opt/rtems/man/man1
+%dir /opt/rtems/man
+%dir /opt/rtems/man/man1
 %doc /opt/rtems/man/man1/@target_alias@-gdb.1
 
 %dir /opt/rtems/include
