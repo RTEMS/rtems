@@ -6,25 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Interrupt Processing, Interrupt Processing Introduction, Memory Model Flat Memory Model, Top
-@end ifinfo
 @chapter Interrupt Processing
-@ifinfo
-@menu
-* Interrupt Processing Introduction::
-* Interrupt Processing Vectoring of Interrupt Handler::
-* Interrupt Processing Interrupt Record::
-* Interrupt Processing Interrupt Levels::
-* Interrupt Processing Disabling of Interrupts by RTEMS::
-* Interrupt Processing Register Cache Flushing::
-* Interrupt Processing Interrupt Stack::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Interrupt Processing Introduction, Interrupt Processing Vectoring of Interrupt Handler, Interrupt Processing, Interrupt Processing
-@end ifinfo
 @section Introduction
 
 Different types of processors respond to the
@@ -42,9 +25,6 @@ processor's unique architecture. Discussed in this chapter are
 the the processor's response and control mechanisms as they
 pertain to RTEMS.
 
-@ifinfo
-@node Interrupt Processing Vectoring of Interrupt Handler, Interrupt Processing Interrupt Record, Interrupt Processing Introduction, Interrupt Processing
-@end ifinfo
 @section Vectoring of Interrupt Handler
 
 Upon receipt of an interrupt  the i960CA
@@ -87,9 +67,6 @@ Interrupt Record is examined by RTEMS to determine when an outer
 most interrupt is being exited.  Therefore, the user application
 code MUST NOT modify this bit.
 
-@ifinfo
-@node Interrupt Processing Interrupt Record, Interrupt Processing Interrupt Levels, Interrupt Processing Vectoring of Interrupt Handler, Interrupt Processing
-@end ifinfo
 @section Interrupt Record
 
 The structure of the Interrupt Record for the i960CA
@@ -151,9 +128,6 @@ response to an interrupt is as follows:
 @end html
 @end ifset
 
-@ifinfo
-@node Interrupt Processing Interrupt Levels, Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing Interrupt Record, Interrupt Processing
-@end ifinfo
 @section Interrupt Levels
 
 Thirty-two levels (0-31) of interrupt priorities are
@@ -169,9 +143,6 @@ through 31 directly correspond to i960CA interrupt levels.  All
 other RTEMS interrupt levels are undefined and their behavior is
 unpredictable.
 
-@ifinfo
-@node Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing Register Cache Flushing, Interrupt Processing Interrupt Levels, Interrupt Processing
-@end ifinfo
 @section Disabling of Interrupts by RTEMS
 
 During the execution of directive calls, critical
@@ -194,9 +165,6 @@ occur due to the inability of RTEMS to protect its critical
 sections.  However, ISRs that make no system calls may safely
 execute as non-maskable interrupts.
 
-@ifinfo
-@node Interrupt Processing Register Cache Flushing, Interrupt Processing Interrupt Stack, Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing
-@end ifinfo
 @section Register Cache Flushing
 
 The i960CA version of the RTEMS interrupt manager is
@@ -214,9 +182,6 @@ nested interrupt or when a context switch is not necessary.
 This optimization is essential to providing high-performance
 interrupt management on the i960CA.
 
-@ifinfo
-@node Interrupt Processing Interrupt Stack, Default Fatal Error Processing, Interrupt Processing Register Cache Flushing, Interrupt Processing
-@end ifinfo
 @section Interrupt Stack
 
 On the i960CA, RTEMS allocates the interrupt stack

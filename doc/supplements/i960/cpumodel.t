@@ -6,21 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node CPU Model Dependent Features, CPU Model Dependent Features Introduction, Preface, Top
-@end ifinfo
 @chapter CPU Model Dependent Features
-@ifinfo
-@menu
-* CPU Model Dependent Features Introduction::
-* CPU Model Dependent Features CPU Model Name::
-* CPU Model Dependent Features Floating Point Unit::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node CPU Model Dependent Features Introduction, CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features, CPU Model Dependent Features
-@end ifinfo
 @section Introduction
 
 Microprocessors are generally classified into
@@ -62,18 +49,12 @@ The set of CPU model feature macros are defined in the file
 c/src/exec/score/cpu/i960/i960.h based upon the particular CPU
 model defined on the compilation command line.
 
-@ifinfo
-@node CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features Floating Point Unit, CPU Model Dependent Features Introduction, CPU Model Dependent Features
-@end ifinfo
 @section CPU Model Name
 
 The macro CPU_MODEL_NAME is a string which designates
 the name of this CPU model.  For example, for the Intel i960CA,
 this macro is set to the string "i960ca".
 
-@ifinfo
-@node CPU Model Dependent Features Floating Point Unit, Calling Conventions, CPU Model Dependent Features CPU Model Name, CPU Model Dependent Features
-@end ifinfo
 @section Floating Point Unit
 
 The macro I960_HAS_FPU is set to 1 to indicate that

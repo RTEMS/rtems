@@ -20,16 +20,12 @@ dirs:
 
 COMMON_FILES=../../common/cpright.texi ../../common/setup.texi
 
-#GENERATED_FILES=\
-#  cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi \
-#  bsp.texi cputable.texi timing.texi wksheets.texi timeFORCE386.texi
-
-GENERATED_FILES= \
-  timing.texi wksheets.texi 
+GENERATED_FILES=\
+  cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi \
+  bsp.texi cputable.texi timing.texi wksheets.texi timeCVME961.texi
 
 FILES= $(PROJECT).texi \
-  bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
-  intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi \
+  preface.texi \
   $(GENERATED_FILES)
 
 info: dirs c_i960
@@ -48,8 +44,6 @@ $(PROJECT).ps: $(PROJECT).dvi
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
-replace: timedata.texi
-
 #
 #  Chapters which get automatic processing
 #
@@ -65,7 +59,7 @@ callconv.texi: callconv.t Makefile
 	    -n "Memory Model" ${*}.t
 
 memmodel.texi: memmodel.t Makefile
-	$(BMENU) -p "Calling Conventions User-Provided Routines" \
+	$(BMENU) -p "Calling Conventions Leaf Procedures" \
 	    -u "Top" \
 	    -n "Interrupt Processing" ${*}.t
 
@@ -126,19 +120,25 @@ timing.texi: timing.t Makefile
             -u "Top" \
             -n "CVME961 Timing Data" ${*}.t
 
-# Timing Chapter
+# Timing Data for BSP Chapter:
+#  1.  Copy the Shared File
+#  2.  Replace Times and Sizes
+#  3.  Build Node Structure
 
-timetbl.t: ../../common/timetbl.t
-	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
-            <../../common/timetbl.t >timetbl.t
+timeCVME961_.t: ../../common/timetbl.t timeCVME961.t
+	cat timeCVME961.t ../../common/timetbl.t            >timeCVME961_.t
+	@echo                                               >>timeCVME961_.t
+	@echo "@tex"                                        >>timeCVME961_.t
+	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeCVME961_.t
+	@echo "@end tex"                                    >>timeCVME961_.t
+	${REPLACE} -p CVME961_TIMES timeCVME961_.t
+	mv timeCVME961_.t.fixed timeCVME961_.t
 
-timetbl.texi: timetbl.t CVME961_TIMES
-	${REPLACE} -p CVME961_TIMES timetbl.t
-	mv timetbl.t.fixed timetbl.texi
-
-timedata.texi: timedata.t CVME961_TIMES
-	${REPLACE} -p CVME961_TIMES timedata.t
-	mv timedata.t.fixed timedata.texi
+timeCVME961.texi: timeCVME961_.t Makefile
+	$(BMENU) -p "Timing Specification Terminology" \
+	    -u "Top" \
+	    -n "Command and Variable Index" timeCVME961_.t
+	mv timeCVME961_.texi timeCVME961.texi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_i960
@@ -150,7 +150,8 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f c_i960 c_i960-*
-	rm -f timedata.texi timetbl.texi timetbl.t intr.t $(GENERATED_FILES)
+	rm -f intr.t $(GENERATED_FILES)
 	rm -f wksheets.t wksheets_NOTIMES.t 
 	rm -f *.fixed _* timing.t timing.texi
+	rm -f timeCVME961_.t timeCVME961_.texi
 

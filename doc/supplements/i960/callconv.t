@@ -6,25 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Calling Conventions, Calling Conventions Introduction, CPU Model Dependent Features Floating Point Unit, Top
-@end ifinfo
 @chapter Calling Conventions
-@ifinfo
-@menu
-* Calling Conventions Introduction::
-* Calling Conventions Processor Background::
-* Calling Conventions Calling Mechanism::
-* Calling Conventions Register Usage::
-* Calling Conventions Parameter Passing::
-* Calling Conventions User-Provided Routines::
-* Calling Conventions Leaf Procedures::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Calling Conventions Introduction, Calling Conventions Processor Background, Calling Conventions, Calling Conventions
-@end ifinfo
 @section Introduction
 
 Each high-level language compiler generates
@@ -47,9 +30,6 @@ target processor are the same, different compilers may use
 different calling conventions.  As a result, calling conventions
 are both processor and compiler dependent.
 
-@ifinfo
-@node Calling Conventions Processor Background, Calling Conventions Calling Mechanism, Calling Conventions Introduction, Calling Conventions
-@end ifinfo
 @section Processor Background
 
 All members of the i960 architecture family support
@@ -80,18 +60,12 @@ retain the last five to sixteen recent register caches.  When
 the register cache is full, the oldest cached register set is
 written to the stack.
 
-@ifinfo
-@node Calling Conventions Calling Mechanism, Calling Conventions Register Usage, Calling Conventions Processor Background, Calling Conventions
-@end ifinfo
 @section Calling Mechanism
 
 All RTEMS directives are invoked using either a call
 or callx instruction and return to the user via the ret
 instruction.
 
-@ifinfo
-@node Calling Conventions Register Usage, Calling Conventions Parameter Passing, Calling Conventions Calling Mechanism, Calling Conventions
-@end ifinfo
 @section Register Usage
 
 As discussed above, the call and callx instructions
@@ -101,9 +75,6 @@ be restored as part of returning to the application.  The
 contents of global registers G0 through G7 are not preserved by
 RTEMS directives.
 
-@ifinfo
-@node Calling Conventions Parameter Passing, Calling Conventions User-Provided Routines, Calling Conventions Register Usage, Calling Conventions
-@end ifinfo
 @section Parameter Passing
 
 RTEMS uses the standard i960 family C parameter
@@ -111,18 +82,12 @@ passing mechanism in which G0 contains the first parameter, G1
 the second,  and so on  for the remaining parameters.  No RTEMS
 directive requires more than six parameters.
 
-@ifinfo
-@node Calling Conventions User-Provided Routines, Calling Conventions Leaf Procedures, Calling Conventions Parameter Passing, Calling Conventions
-@end ifinfo
 @section User-Provided Routines
 
 All user-provided routines invoked by RTEMS, such as
 user extensions, device drivers, and MPCI routines, must also
 adhere to these calling conventions.
 
-@ifinfo
-@node Calling Conventions Leaf Procedures, Memory Model, Calling Conventions User-Provided Routines, Calling Conventions
-@end ifinfo
 @section Leaf Procedures
 
 RTEMS utilizes leaf procedures internally to improve

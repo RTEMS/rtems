@@ -11,40 +11,12 @@
 \global\advance \smallskipamount by -4pt
 @end tex
 
-@ifinfo
-@node CVME961 Timing Data, CVME961 Timing Data Introduction, Timing Specification Terminology, Top
-@end ifinfo
-@chapter Timing Data
-@ifinfo
-@menu
-* CVME961 Timing Data Introduction::
-* CVME961 Timing Data Hardware Platform::
-* CVME961 Timing Data Interrupt Latency::
-* CVME961 Timing Data Context Switch::
-* CVME961 Timing Data Directive Times::
-* CVME961 Timing Data Task Manager::
-* CVME961 Timing Data Interrupt Manager::
-* CVME961 Timing Data Clock Manager::
-* CVME961 Timing Data Timer Manager::
-* CVME961 Timing Data Semaphore Manager::
-* CVME961 Timing Data Message Manager::
-* CVME961 Timing Data Event Manager::
-* CVME961 Timing Data Signal Manager::
-* CVME961 Timing Data Partition Manager::
-* CVME961 Timing Data Region Manager::
-* CVME961 Timing Data Dual-Ported Memory Manager::
-* CVME961 Timing Data I/O Manager::
-* CVME961 Timing Data Rate Monotonic Manager::
-@end menu
-@end ifinfo
+@chapter CVME961 Timing Data
 
 NOTE: The CVME961 board used by the RTEMS Project to
 obtain i960CA times is currently broken.  The information in
 this chapter was obtained using Release 3.2.1.
 
-@ifinfo
-@node CVME961 Timing Data Introduction, CVME961 Timing Data Hardware Platform, CVME961 Timing Data, CVME961 Timing Data
-@end ifinfo
 @section Introduction
 
 The timing data for the i960CA version of RTEMS is
@@ -55,9 +27,6 @@ understanding of each directive time provided.  Also, provided
 is a description of the  interrupt latency and the context
 switch times as they pertain to the i960CA version of RTEMS.
 
-@ifinfo
-@node CVME961 Timing Data Hardware Platform, CVME961 Timing Data Interrupt Latency, CVME961 Timing Data Introduction, CVME961 Timing Data
-@end ifinfo
 @section Hardware Platform
 
 All times reported except for the maximum period
@@ -78,9 +47,6 @@ executed with interrupts disabled, including the instructions to
 disable and enable interrupts, was divided by 33 to simulate a
 i960CA executing at 33 Mhz with zero wait states.
 
-@ifinfo
-@node CVME961 Timing Data Interrupt Latency, CVME961 Timing Data Context Switch, CVME961 Timing Data Hardware Platform, CVME961 Timing Data
-@end ifinfo
 @section Interrupt Latency
 
 The maximum period with interrupts disabled within
@@ -104,9 +70,6 @@ vector and entry overhead time was generated on the Cyclone
 CVME961 benchmark platform using the sysctl instruction as the
 interrupt source.
 
-@ifinfo
-@node CVME961 Timing Data Context Switch, CVME961 Timing Data Directive Times, CVME961 Timing Data Interrupt Latency, CVME961 Timing Data
-@end ifinfo
 @section Context Switch
 
 The RTEMS processor context switch time is RTEMS_NO_FP_CONTEXTS
@@ -122,10 +85,4 @@ and floating point tasks are not supported.
 
 The following table summarizes the context switch
 times for the CVME961 benchmark platform:
-
-@include timetbl.texi
- 
-@tex
-\global\advance \smallskipamount by 4pt
-@end tex
 
