@@ -28,8 +28,6 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include "/usr1/rtems/mg10/rtems-mg10/c/src/lib/libc/libio_.h"
-
 DIR *directory;
 DIR *directory2;
 DIR *directory3;
