@@ -71,10 +71,10 @@ RPM_BUILD_ROOT="$rpm_build_root/%{name}-root"
 AC_SUBST(RPM_BUILD_ROOT)
 
 AC_CONFIG_FILES([Makefile
-i386-cygwin-binutils.spec
-i386-cygwin-libs.spec
-i386-cygwin-w32api.spec
-i386-cygwin-gcc.spec
-i386-cygwin-mingw.spec
+i686-pc-cygwin-binutils.spec
+i686-pc-cygwin-libs.spec
+i686-pc-cygwin-w32api.spec
+i686-pc-cygwin-gcc.spec
+i686-pc-cygwin-mingw.spec
 ])
 AC_OUTPUT

@@ -1,3 +1,14 @@
+2004-11-05	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* i686-pc-cygwin-binutils.spec.in, i686-pc-cygwin-gcc.spec.in,
+	i686-pc-cygwin-libs.spec.in, i686-pc-cygwin-mingw.spec.in,
+	i686-pc-cygwin-w32api.spec.in: New.
+	* i386-cygwin-binutils.spec.in, i386-cygwin-gcc.spec.in,
+	i386-cygwin-libs.spec.in, i386-cygwin-mingw.spec.in,
+	i386-cygwin-w32api.spec.in: Remove.
+	* setup.def: Update to current cygwin.
+	* Makefile.am, configure.ac: Reflect changes above.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.

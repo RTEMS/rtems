@@ -5,8 +5,8 @@ config.*
 configure
 Makefile
 Makefile.in
-i386-cygwin-binutils.spec
-i386-cygwin-gcc.spec
-i386-cygwin-libs.spec
-i386-cygwin-mingw.spec
-i386-cygwin-w32api.spec
+i686-pc-cygwin-binutils.spec
+i686-pc-cygwin-gcc.spec
+i686-pc-cygwin-libs.spec
+i686-pc-cygwin-mingw.spec
+i686-pc-cygwin-w32api.spec

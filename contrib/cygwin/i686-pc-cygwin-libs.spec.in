@@ -1,0 +1,78 @@
+#
+# spec file for package i686-pc-cygwin-libs
+# 
+
+%define cygwin_version @CYGWIN_VERS@
+%define cygwin_rpmvers %{expand: %(echo @CYGWIN_VERS@ | tr - _)} 
+
+%define __os_install_post       %{nil}
+
+Distribution: Linux
+Name:         i686-pc-cygwin
+Release:      @CYGWIN_RPMREL@
+License:      Red Hat Inc.
+Group:        Development/Tools/Cygwin
+
+Prefix:		%{_prefix}
+BuildRoot:	@RPM_BUILD_ROOT@
+BuildArch:	noarch
+
+Version:      	%cygwin_rpmvers
+Summary:      	Cygwin Libraries
+
+Source0:	ftp://cygwin.com/pub/cygwin/release/cygwin/cygwin-%{cygwin_version}.tar.bz2
+NoSource:	0
+
+%description
+Cygwin libraries.
+
+%prep
+%setup -c
+
+%build
+  rm -rf i686-pc-cygwin
+
+  # Setup sys-root (Usable for gcc >= 3.4)
+  mkdir -p i686-pc-cygwin/sys-root
+  cp -a usr i686-pc-cygwin/sys-root
+
+  # Setup sys-lib and sys-include (Required by gcc < 3.4)
+  mkdir -p i686-pc-cygwin/lib
+  cp -a i686-pc-cygwin/sys-root/usr/lib/* i686-pc-cygwin/lib
+  mkdir -p i686-pc-cygwin/include
+  cp -a i686-pc-cygwin/sys-root/usr/include/* i686-pc-cygwin/include
+
+%install
+  rm -rf $RPM_BUILD_ROOT
+  mkdir -p $RPM_BUILD_ROOT%{_prefix}
+  cp -a i686-pc-cygwin $RPM_BUILD_ROOT%{_prefix}
+
+%clean
+  rm -rf $RPM_BUILD_ROOT
+
+%package libs
+Group: Development/Tools/Cygwin
+Summary: i686-pc-cygwin target files for gcc < 3.4
+AutoReqProv: No
+
+%description libs
+Cygwin target files or gcc < 3.4
+
+%files libs
+%defattr(-,root,root,-)
+%dir %{_prefix}/i686-pc-cygwin
+%{_prefix}/i686-pc-cygwin/include
+%{_prefix}/i686-pc-cygwin/lib
+
+%package sys-root
+Group: Development/Tools/Cygwin
+Summary: i686-pc-cygwin target files for gcc >= 3.4
+AutoReqProv: No
+
+%description sys-root
+Cygwin target files for gcc >= 3.4
+
+%files sys-root
+%defattr(-,root,root,-)
+%dir %{_prefix}/i686-pc-cygwin
+%{_prefix}/i686-pc-cygwin/sys-root
