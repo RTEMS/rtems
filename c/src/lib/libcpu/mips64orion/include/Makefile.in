@@ -18,8 +18,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 
 INSTALL_CHANGE = @INSTALL_CHANGE@
 
-all: FORCEIT
-	cd ../../../libbsp/$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/include; $(MAKE) all
+all: 
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

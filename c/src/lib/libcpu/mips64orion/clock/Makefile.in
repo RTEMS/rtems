@@ -62,7 +62,6 @@ ${PGM}: ${SRCS} ${OBJS}
 
 all: ${ARCH} $(SRCS) $(PGM)
 
-# the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 install: all
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
