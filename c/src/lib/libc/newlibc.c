@@ -84,7 +84,11 @@ libc_wrapup(void)
     if (!_System_state_Is_up(_System_state_Get()))
        return;
 
+    /*
+     *  This was already done if the user called exit() directly .
+
     _wrapup_reent(0);
+     */
     if (_REENT != &libc_global_reent)
     {
         _wrapup_reent(&libc_global_reent);
@@ -363,7 +367,13 @@ int get_errno()
 #if !defined(RTEMS_UNIX) && !defined(_AM29K)
 void _exit(int status)
 {
-    libc_wrapup(); /* Why? XXX */
+    /*
+     *  We need to do the exit processing on the global reentrancy structure.
+     *  This has already been done on the per task reentrancy structure
+     *  associated with this task.
+     */
+
+    libc_wrapup();
     rtems_shutdown_executive(status);
 }
 
