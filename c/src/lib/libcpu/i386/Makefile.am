@@ -12,7 +12,7 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 include_libcpudir = $(includedir)/libcpu
 
 noinst_HEADERS = cache_.h
-include_libcpu_HEADERS = cpu.h registers.h cpuModel.h cache.h
+include_libcpu_HEADERS = cpu.h cpuModel.h cache.h
 
 S_FILES = cpuModel.S idtr.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)

@@ -25,7 +25,7 @@
  */
 
 #include <asm.h>
-#include <libcpu/registers.h>
+#include <rtems/score/registers.h>
 
 BEGIN_CODE
 	PUBLIC(checkCPUtypeSetCr0); 
