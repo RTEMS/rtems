@@ -54,6 +54,16 @@ The following persons/organizations have made contributions:
   evangelist and promoting the use of RTEMS both at I-CUBED Ltd. as well  
   as within the Internet community as a whole.
 
++ John S. Gwynne (jsg@coulomb.eng.ohio-state.edu) of Ohio State University 
+  submitted the support for the Motorola MC68332 CPU as well as completing 
+  the support for CPUs based on the MC68000 core.  This included the "efi68k" 
+  and "efi332" BSPs as well as completing the modifications to the m68k 
+  dependent executive code to support m68k family members based on the 
+  MC68000 core.  "efi68k" and "efi332" are single board computers designed 
+  primarily for automotive electronic fuel injection (EFI) control, but can 
+  be considered general purpose controllers when used without the EFI 
+  companion board(s). See the README in each BSP for more information.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU

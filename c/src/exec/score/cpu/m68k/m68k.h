@@ -139,6 +139,15 @@ extern "C" {
 #define M68K_HAS_BFFFO           1
 #define M68K_HAS_PREINDEXING     1
 
+#elif defined(m68332)
+ 
+#define RTEMS_MODEL_NAME         "m68332"
+#define M68K_HAS_VBR             1
+#define M68K_HAS_SEPARATE_STACKS 0
+#define M68K_HAS_FPU             0
+#define M68K_HAS_BFFFO           0
+#define M68K_HAS_PREINDEXING     0
+
 #else
 
 #error "Unsupported CPU Model"
@@ -235,7 +244,7 @@ extern "C" {
                        : "=a" (_vbr) : "0" (_vbr) ); \
   }
 #else
-#define m68k_get_vbr( _vbr ) _vbr = 0
+#define m68k_get_vbr( _vbr ) _vbr = (void *)_VBR
 #define m68k_set_vbr( _vbr )
 #endif
 

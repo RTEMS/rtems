@@ -101,36 +101,63 @@ norst:  frestore a0@+                     | restore the fp state frame
  *    transfer control to the interrupt dispatcher.
  */
 
+/*  m68000 notes:
+ *
+ *  with this approach, lower interrupts (1-5 for efi68k) may
+ *  execute twice if a higher priority interrupt is
+ *  acknowledged before _Thread_Dispatch_disable is
+ *  increamented and the higher priority interrupt
+ *  preforms a context switch after executing. The lower
+ *  priority intterrupt will execute (1) at the end of the
+ *  higher priority interrupt in the new context if
+ *  permitted by the new interrupt level mask, and (2) when
+ *  the original context regains the cpu.
+ */
+ 
+#if ( M68K_HAS_VBR == 1)
 .set SR_OFFSET,    0                     | Status register offset
 .set PC_OFFSET,    2                     | Program Counter offset
 .set FVO_OFFSET,   6                     | Format/vector offset
-
+#else
+.set JSR_OFFSET,   0                     | return address from jsr table
+.set SR_OFFSET,    4
+.set PC_OFFSET,    6
+#endif /* M68K_HAS_VBR */
+ 
 .set SAVED,        16                    | space for saved registers
 
         .align  4
         .global SYM (_ISR_Handler)
 
 SYM (_ISR_Handler):
-        moveml  d0-d1/a0-a1,a7@-    | save d0-d1,a0-a1
-        addql   #1,SYM (_ISR_Nest_level)       | one nest level deeper
-        addql   #1,SYM (_Thread_Dispatch_disable_level)
-                                         | disable multitasking
+        addql   #1,SYM (_ISR_Nest_level) | one nest level deeper
+        addql   #1,SYM (_Thread_Dispatch_disable_level) | disable multitasking
+        moveml  d0-d1/a0-a1,a7@-         | save d0-d1,a0-a1
+
+#if ( M68K_HAS_VBR == 0)
+        movel   a7@(SAVED+JSR_OFFSET),d0 | assume the exception table at 0x0000
+        addql   #6,d0                    | points to a jump table (jsr) in RAM
+        subl    #_VBR,d0                 | VBR is the location of the jump table
+        divs    #3,d0
+        lsll    #1,d0
+        extl    d0
+#else
         movew   a7@(SAVED+FVO_OFFSET),d0 | d0 = F/VO
-        andl    #0x0fff,d0              | d0 = vector offset in vbr
+        andl    #0x0fff,d0               | d0 = vector offset in vbr
+#endif
 
 #if ( M68K_HAS_PREINDEXING == 1 )
         movel   @( SYM (_ISR_Vector_table),d0:w:1),a0| fetch the ISR
 #else
         movel   # SYM (_ISR_Vector_table),a0   | a0 = base of RTEMS table
-        addal   d0,a0                  | a0 = address of vector
-        movel   @(a0),a0               | a0 = address of user routine
-#warning "UNTESTED CODE!!!"
+        addal   d0,a0                    | a0 = address of vector
+        movel   (a0),a0                  | a0 = address of user routine
 #endif
 
-        lsrl    #2,d0                   | d0 = vector number
-        movel   d0,a7@-                | push vector number
-        jbsr    a0@                     | invoke the user ISR
-        addql   #4,a7                   | remove vector number
+        lsrl    #2,d0                    | d0 = vector number
+        movel   d0,a7@-                  | push vector number
+        jbsr    a0@                      | invoke the user ISR
+        addql   #4,a7                    | remove vector number
 
 /*
  *   The following entry should be unnecessary once the support is
@@ -140,15 +167,15 @@ SYM (_ISR_Handler):
         .global SYM (_ISR_Exit)
 SYM (_ISR_Exit):
 
-        subql   #1,SYM (_ISR_Nest_level)       | one less nest level
+        subql   #1,SYM (_ISR_Nest_level) | one less nest level
         subql   #1,SYM (_Thread_Dispatch_disable_level)
                                          | unnest multitasking
         bne     exit                     | If dispatch disabled, exit
 
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
-        movew   #0xf000,d0              | isolate format nibble
+        movew   #0xf000,d0               | isolate format nibble
         andw    a7@(SAVED+FVO_OFFSET),d0 | get F/VO
-        cmpiw   #0x1000,d0              | is it a throwaway isf?
+        cmpiw   #0x1000,d0               | is it a throwaway isf?
         bne     exit                     | NOT outer level, so branch
 #endif
 
@@ -167,7 +194,7 @@ bframe: clrl    SYM (_ISR_Signals_to_thread_executing)
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
         movec   msp,a0                   | a0 = master stack pointer
         movew   #0,a0@-                  | push format word
-        movel   # SYM (_ISR_Dispatch),a0@-    | push return addr
+        movel   # SYM (_ISR_Dispatch),a0@- | push return addr
         movew   a0@(6+SR_OFFSET),a0@-    | push thread sr
         movec   a0,msp                   | set master stack pointer
 #else
@@ -178,6 +205,9 @@ bframe: clrl    SYM (_ISR_Signals_to_thread_executing)
 #endif
 
 exit:   moveml  a7@+,d0-d1/a0-a1         | restore d0-d1,a0-a1
+#if ( M68K_HAS_VBR == 0)
+        addql   #4,a7                    | pop vector address
+#endif /* M68K_HAS_VBR */
         rte                              | return to thread
                                          |   OR _Isr_dispatch
 
@@ -200,15 +230,7 @@ SYM (_ISR_Dispatch):
         movml   d0-d1/a0-a1,a7@-
         jsr     SYM (_Thread_Dispatch)
         movml   a7@+,d0-d1/a0-a1
-	rte
-
-
-
-
-
-
-
-
-
-
-
+#if ( M68K_HAS_VBR == 0)
+        addql   #4,a7                    | pop vector address
+#endif /* M68K_HAS_VBR */
+        rte

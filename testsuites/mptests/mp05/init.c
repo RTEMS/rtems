@@ -43,7 +43,7 @@ rtems_task Init(
   status = rtems_task_create(
     Task_name[Multiprocessing_configuration.node],
     1,
-    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_MINIMUM_STACK_SIZE * 2,
     RTEMS_TIMESLICE,
     RTEMS_GLOBAL,
     &Task_id[ 1 ]

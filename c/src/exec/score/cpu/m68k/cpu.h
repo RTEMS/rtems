@@ -146,6 +146,8 @@ typedef struct {
 
 EXTERN void               *_CPU_Interrupt_stack_low;
 EXTERN void               *_CPU_Interrupt_stack_high;
+      /* points to jsr-exception-table in targets wo/ VBR register */
+extern char               _VBR[]; 
 
 /* constants */
 
@@ -324,23 +326,48 @@ unsigned32 _CPU_ISR_Get_level( void );
 
 #else
 
+/* duplicates BFFFO results for 16 bits (i.e., 15-(_priority) in
+   _CPU_Priority_Bits_index is not needed), handles the 0 case, and
+   does not molest _value -- jsg */
+#ifndef m68000
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
-    extern const unsigned char __log2table[256]; \
+    extern const unsigned char __BFFFOtable[256]; \
+    register int dumby; \
     \
-    asm     ( "   tst.b   %1\n"           /* check for bits in ls byte */ \
-              "   beq.s   0f\n"           /* branch if no bits set */ \
-              "   moveq.l #0,%0\n"        /* set up for bits 0..7 */ \
-              "   andi.w  #0x00ff,%1\n"   /* clear ms byte for add inst */ \
-              "   bra.s   1f\n"           /* go add */ \
-              "0: moveq.l #8,%0\n"        /* set up for bits 8..15 */ \
-              "   lsr.w   #8,%1\n"        /* shift ms byte to ls byte, */ \
-                                          /*   filling ms byte with 0s */ \
-              "1: add.b   (%2,%1.w),%0\n" /* add offset for bit pattern */ \
-               : "=&d" ((_output)) \
-               : "d" ((_value)), "ao" (__log2table) \
-               : "cc" ) ; \
+    asm volatile ( "   move.w  %2,%1\n"        \
+       "   lsr.w   #8,%1\n"        \
+       "   beq.s   1f\n"           \
+       "   move.b  (%3,%1.w),%0\n" \
+       "   extb.l  %0\n"           \
+       "   bra.s   0f\n"           \
+       "1: moveq.l #8,%0\n"        \
+       "   add.b   (%3,%2.w),%0\n" \
+       "0:\n"                      \
+       : "=&d" ((_output)), "=&d" ((dumby)) \
+       : "d" ((_value)), "ao" ((__BFFFOtable)) \
+       : "cc" ) ; \
   }
+#else
+#define _CPU_Bitfield_Find_first_bit( _value, _output ) \
+  { \
+    extern const unsigned char __BFFFOtable[256]; \
+    register int dumby; \
+    \
+    asm volatile ( "   move.w  %2,%1\n"        \
+       "   lsr.w   #8,%1\n"        \
+       "   beq.s   1f\n"           \
+       "   move.b  (%3,%1.w),%0\n" \
+       "   and.l   #0x000000ff,%0\n"\
+       "   bra.s   0f\n"           \
+       "1: moveq.l #8,%0\n"        \
+       "   add.b   (%3,%2.w),%0\n" \
+       "0:\n"                      \
+       : "=&d" ((_output)), "=&d" ((dumby)) \
+       : "d" ((_value)), "ao" ((__BFFFOtable)) \
+       : "cc" ) ; \
+  }
+#endif /* m68000 */
 
 #endif
 
@@ -359,13 +386,8 @@ unsigned32 _CPU_ISR_Get_level( void );
 #define _CPU_Priority_Mask( _bit_number ) \
   ( 0x8000 >> (_bit_number) )
 
-#if ( M68K_HAS_BFFFO == 1 )
 #define _CPU_Priority_Bits_index( _priority ) \
   (_priority)
-#else
-#define _CPU_Priority_Bits_index( _priority ) \
-  (15 - (_priority))
-#endif
 
 /* end of Priority handler macros */
 
