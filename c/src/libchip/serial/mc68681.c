@@ -33,7 +33,7 @@
 
 console_fns mc68681_fns =
 {
-  mc68681_probe,                  /* deviceProbe */
+  libchip_serial_default_probe,   /* deviceProbe */
   mc68681_open,                   /* deviceFirstOpen */
   mc68681_flush,                  /* deviceLastClose */
   NULL,                           /* deviceRead */
@@ -46,7 +46,7 @@ console_fns mc68681_fns =
 
 console_fns mc68681_fns_polled =
 {
-  mc68681_probe,                       /* deviceProbe */
+  libchip_serial_default_probe,        /* deviceProbe */
   mc68681_open,                        /* deviceFirstOpen */
   mc68681_close,                       /* deviceLastClose */
   mc68681_inbyte_nonblocking_polled,   /* deviceRead */
@@ -62,21 +62,6 @@ extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
 /*
  *  Console Device Driver Entry Points
  */
-
-/*
- *  mc68681_probe
- *
- *  Default probe routine which simply say the port is present.
- */
-
-MC68681_STATIC boolean mc68681_probe(int minor)
-{
-  /*
-   * If the configuration dependent probe has located the device then
-   * assume it is there
-   */
-  return(TRUE);
-}
 
 /*
  *  mc68681_baud_rate
