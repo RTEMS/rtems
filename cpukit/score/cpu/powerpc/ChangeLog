@@ -1,5 +1,28 @@
 2005-02-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/score/cpu.h: 
+	(rtems_cpu_configuration_get_serial_per_sec,
+	rtems_cpu_configuration_get_serial_external_clock,
+	rtems_cpu_configuration_get_serial_xon_xoff,
+	rtems_cpu_configuration_get_serial_cts_rts,
+	rtems_cpu_configuration_get_serial_rate,
+	rtems_cpu_configuration_get_timer_average_overhead,
+	rtems_cpu_configuration_get_timer_least_valid,
+	rtems_cpu_configuration_get_timer_internal_clock,
+	rtems_cpu_configuration_get_clock_speed): New.
+	* rtems/old-exceptions/cpu.h:
+	(rtems_cpu_configuration_get_serial_per_sec,
+	rtems_cpu_configuration_get_serial_external_clock,
+	rtems_cpu_configuration_get_serial_xon_xoff,
+	rtems_cpu_configuration_get_serial_cts_rts,
+	rtems_cpu_configuration_get_serial_rate,
+	rtems_cpu_configuration_get_timer_average_overhead,
+	rtems_cpu_configuration_get_timer_least_valid,
+	rtems_cpu_configuration_get_timer_internal_clock,
+	rtems_cpu_configuration_get_clock_speed): Remove.
+
+2005-02-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h
 	(rtems_cpu_table): Sync defines between {old|new}-exceptions.
 

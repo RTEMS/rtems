@@ -343,41 +343,7 @@ typedef struct {
 #ifndef ASM
 #define rtems_cpu_configuration_get_spurious_handler() \
    (_CPU_Table.spurious_handler)
-
-#if (defined(ppc403) || defined(ppc405) || defined(mpc860) || defined(mpc821))
-
-#define rtems_cpu_configuration_get_serial_per_sec() \
-   (_CPU_Table.serial_per_sec)
-
-#define rtems_cpu_configuration_get_serial_external_clock() \
-   (_CPU_Table.serial_external_clock)
-
-#define rtems_cpu_configuration_get_serial_xon_xoff() \
-   (_CPU_Table.serial_xon_xoff)
-
-#define rtems_cpu_configuration_get_serial_cts_rts() \
-   (_CPU_Table.serial_cts_rts)
-
-#define rtems_cpu_configuration_get_serial_rate() \
-   (_CPU_Table.serial_rate)
-
-#define rtems_cpu_configuration_get_timer_average_overhead() \
-   (_CPU_Table.timer_average_overhead)
-
-#define rtems_cpu_configuration_get_timer_least_valid() \
-   (_CPU_Table.timer_least_valid)
-
-#define rtems_cpu_configuration_get_timer_internal_clock() \
-   (_CPU_Table.timer_internal_clock)
-
-#endif
-
-#if (defined(mpc860) || defined(mpc821))
-#define rtems_cpu_configuration_get_clock_speed() \
-   (_CPU_Table.clock_speed)
-#endif
-
-#endif
+#endif /* ASM */
 
 /*
  *  The following type defines an entry in the PPC's trap table.
