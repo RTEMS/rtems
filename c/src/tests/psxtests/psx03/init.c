@@ -139,6 +139,8 @@ void *POSIX_Init(
    *  wait on SIGUSR1 for 3 seconds, Task_2 will send it to us
    */
 
+  empty_line();
+
   /* create a thread */
 
   status = pthread_create( &Task_id, NULL, Task_2, NULL );
