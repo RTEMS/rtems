@@ -31,18 +31,20 @@ unsigned32 CPU_usage_Ticks_at_last_reset;
 void CPU_usage_Dump( void )
 {
   unsigned32           i;
-  unsigned32           class_index;
+  unsigned32           api_index;
   Thread_Control      *the_thread;
   Objects_Information *information;
   unsigned32           u32_name;
   char                 name[5];
   unsigned32           total_units = 0;
 
-  for ( class_index = OBJECTS_CLASSES_FIRST ;
-        class_index <= OBJECTS_CLASSES_LAST ;
-        class_index++ ) {
-    information = _Objects_Information_table[ class_index ];
-    if ( information && information->is_thread ) {
+  for ( api_index = 1 ;
+        api_index <= OBJECTS_APIS_LAST ;
+        api_index++ ) {
+    if ( !_Objects_Information_table[ api_index ] )
+      continue;
+    information = _Objects_Information_table[ api_index ][ 1 ];
+    if ( information ) {
       for ( i=1 ; i <= information->maximum ; i++ ) {
         the_thread = (Thread_Control *)information->local_table[ i ];
  
@@ -59,11 +61,13 @@ void CPU_usage_Dump( void )
   printf( "   ID        NAME        TICKS\n" );
 #endif
 
-  for ( class_index = OBJECTS_CLASSES_FIRST ; 
-        class_index <= OBJECTS_CLASSES_LAST ; 
-        class_index++ ) {
-    information = _Objects_Information_table[ class_index ];
-    if ( information && information->is_thread ) {
+  for ( api_index = 1 ; 
+        api_index <= OBJECTS_APIS_LAST ; 
+        api_index++ ) {
+    if ( !_Objects_Information_table[ api_index ] )
+      continue;
+    information = _Objects_Information_table[ api_index ][ 1 ];
+    if ( information ) {
       for ( i=1 ; i <= information->maximum ; i++ ) {
         the_thread = (Thread_Control *)information->local_table[ i ];
         
@@ -113,17 +117,19 @@ void CPU_usage_Dump( void )
 void CPU_usage_Reset( void )
 {
   unsigned32           i;
-  unsigned32           class_index;
+  unsigned32           api_index;
   Thread_Control      *the_thread;
   Objects_Information *information;
  
   CPU_usage_Ticks_at_last_reset = _Watchdog_Ticks_since_boot;
 
-  for ( class_index = OBJECTS_CLASSES_FIRST ;
-        class_index <= OBJECTS_CLASSES_LAST ;
-        class_index++ ) {
-    information = _Objects_Information_table[ class_index ];
-    if ( information && information->is_thread ) {
+  for ( api_index = 1 ;
+        api_index <= OBJECTS_APIS_LAST ;
+        api_index++ ) {
+    if ( !_Objects_Information_table[ api_index ] )
+      continue;
+    information = _Objects_Information_table[ api_index ][ 1 ];
+    if ( information ) {
       for ( i=1 ; i <= information->maximum ; i++ ) {
         the_thread = (Thread_Control *)information->local_table[ i ];
  

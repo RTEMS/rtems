@@ -1,5 +1,13 @@
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
+	* capture/capture-cli.c, cpuuse/cpuuse.c, monitor/mon-monitor.c,
+	monitor/mon-object.c, monitor/monitor.h: Corrected use of
+	_Objects_Information_table now that it is a two dimensional
+	array based upon API and class.  In addition, in the monitor, 
+	corrected an error which occured when a target has 64 bit pointers.
+
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
 	* stackchk/check.c: Corrected use of
 	_Objects_Information_table now that it is a two dimensional
 	array based upon API and class.

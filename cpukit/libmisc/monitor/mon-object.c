@@ -129,7 +129,8 @@ rtems_monitor_id_fixup(
         if (rtems_get_class(id) != OBJECTS_NO_CLASS)
             type = rtems_get_class(id);
 
-        id = _Objects_Build_id(type, default_node, rtems_get_index(id));
+        id = _Objects_Build_id(
+          OBJECTS_CLASSIC_API, type, default_node, rtems_get_index(id));
     }
     return id;
 }
@@ -295,7 +296,7 @@ rtems_monitor_object_dump_all(
     rtems_id next_id;
     rtems_monitor_union_t canonical;
 
-    next_id = RTEMS_OBJECT_ID_INITIAL(info->type, rtems_monitor_default_node);
+    next_id = RTEMS_OBJECT_ID_INITIAL(OBJECTS_CLASSIC_API, info->type, rtems_monitor_default_node);
 
     while ((next_id = rtems_monitor_object_canonical_next(
                                          info,

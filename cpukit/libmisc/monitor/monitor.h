@@ -36,7 +36,7 @@ typedef enum {
     /* following monitor objects are not known to RTEMS, but
      * we like to have "types" for them anyway */
     
-    RTEMS_MONITOR_OBJECT_DRIVER    =  OBJECTS_CLASSES_LAST+1,
+    RTEMS_MONITOR_OBJECT_DRIVER    =  OBJECTS_RTEMS_CLASSES_LAST+1,
     RTEMS_MONITOR_OBJECT_DNAME,
     RTEMS_MONITOR_OBJECT_CONFIG,
     RTEMS_MONITOR_OBJECT_INIT_TASK,
@@ -289,13 +289,19 @@ typedef void ( *rtems_monitor_command_function_t )(
                  boolean     verbose
              );
 
+#if defined(__mips64)
+    typedef unsigned64   rtems_monitor_command_arg_t;
+#else
+    typedef unsigned32   rtems_monitor_command_arg_t;
+#endif
+
 struct rtems_monitor_command_entry_s {
     char        *command;      /* command name */
     char        *usage;        /* usage string for the command */
     unsigned32   arguments_required;    /* # of required args */
     rtems_monitor_command_function_t command_function;
                                /* Some argument for the command */
-    unsigned32   command_arg;
+    rtems_monitor_command_arg_t   command_arg;
     struct rtems_monitor_command_entry_s *next;
 };
 

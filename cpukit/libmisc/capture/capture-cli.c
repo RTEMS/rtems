@@ -573,7 +573,7 @@ rtems_capture_cli_get_name_id (char*          arg,
                                rtems_name*    name,
                                rtems_id*      id)
 {
-  Objects_Classes objclass;
+  unsigned32 objclass;
   int             l;
   int             i;
 
@@ -597,11 +597,7 @@ rtems_capture_cli_get_name_id (char*          arg,
       
   objclass = _Objects_Get_class (*id);
   
-  if ((i == l) && (l > 4) &&
-      ((objclass == OBJECTS_INTERNAL_THREADS) ||
-       (objclass == OBJECTS_RTEMS_TASKS) ||
-       (objclass == OBJECTS_POSIX_THREADS) ||
-       (objclass == OBJECTS_ITRON_TASKS)))
+  if ((i == l))
     *valid_id = 1;
   else
   {
