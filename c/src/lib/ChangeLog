@@ -1,3 +1,8 @@
+2001-11-30	Jennifer Averett <jennifer@OARcorp.com>
+
+	This was tracked as PR88.
+	* libc/scandir.c: Fixed to perform cleanup on error conditions.
+
 2001-11-07	Jennifer Averett <jennifer@OARcorp.com>
 
 	Reported by Ibragimov Ilya <ibr@oktet.ru> and tracked as PR63.

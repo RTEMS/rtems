@@ -83,16 +83,19 @@ scandir(dirname, namelist, select, dcomp)
 	int (*select) __P((struct dirent *));
 	int (*dcomp) __P((const void *, const void *));
 {
-	register struct dirent *d, *p, **names;
+	register struct dirent *d = NULL;
+	register struct dirent *p = NULL;
+	register struct dirent **names = NULL;
 	register size_t nitems;
 	struct stat stb;
 	long arraysz;
-	DIR *dirp;
+	DIR *dirp = NULL;
+        int i;
 
 	if ((dirp = opendir(dirname)) == NULL)
 		return(-1);
 	if (fstat(dirp->dd_fd, &stb) < 0)
-		return(-1);
+		goto cleanup_and_bail;
 
 	/*
 	 * estimate the array size by taking the size of the directory file
@@ -101,7 +104,7 @@ scandir(dirname, namelist, select, dcomp)
 	arraysz = (stb.st_size / 24);
 	names = (struct dirent **)malloc(arraysz * sizeof(struct dirent *));
 	if (names == NULL)
-		return(-1);
+		goto  cleanup_and_bail;
 
 	nitems = 0;
 	while ((d = readdir(dirp)) != NULL) {
@@ -112,7 +115,7 @@ scandir(dirname, namelist, select, dcomp)
 		 */
 		p = (struct dirent *)malloc(DIRSIZ(d));
 		if (p == NULL)
-			return(-1);
+		      goto  cleanup_and_bail;
 		p->d_ino = d->d_ino;
 		p->d_reclen = d->d_reclen;
 		p->d_namlen = d->d_namlen;
@@ -123,12 +126,12 @@ scandir(dirname, namelist, select, dcomp)
 		 */
 		if (++nitems >= arraysz) {
 			if (fstat(dirp->dd_fd, &stb) < 0)
-				return(-1);	/* just might have grown */
+				goto  cleanup_and_bail;	/* just might have grown */
 			arraysz = stb.st_size / 12;
 			names = (struct dirent **)realloc((char *)names,
 				arraysz * sizeof(struct dirent *));
 			if (names == NULL)
-				return(-1);
+		      goto  cleanup_and_bail;
 		}
 		names[nitems-1] = p;
 	}
@@ -138,6 +141,19 @@ scandir(dirname, namelist, select, dcomp)
         }
 	*namelist = names;
 	return(nitems);
+
+cleanup_and_bail:
+
+	if ( dirp )
+		closedir( dirp );
+	
+	if ( names ) {
+		for (i=0; i < nitems; i++ )
+			free( names[i] );
+		free( names );
+	}
+
+	return(-1);
 }
 
 /*
