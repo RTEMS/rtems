@@ -85,6 +85,8 @@ and status codes.
 
 @ifset is-C
 @example
+#include <admin.h>
+
 int admin_shutdown(
   struct admin_args   *args[],
   size_t               nargs
