@@ -38,6 +38,10 @@ extern "C" {
 #define __STRICT_ANSI__
 #endif
 
+#if defined(linux)
+#define MALLOC_0_RETURNS_NULL
+#endif
+
 #if 0
 
 /*
