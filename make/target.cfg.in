@@ -1,0 +1,56 @@
+#
+#
+# Target specific settings. To be included in application Makefiles.
+#
+
+prefix = @prefix@
+
+CFLAGS = @CFLAGS@
+CPPFLAGS = @CPPFLAGS@
+DEFS = @DEFS@
+LDFLAGS =
+LIBS = @LIBS@
+CC_FOR_BUILD = gcc
+
+CC_FOR_TARGET = @program_prefix@gcc
+AS_FOR_TARGET = @program_prefix@as
+AR_FOR_TARGET = @program_prefix@ar
+NM_FOR_TARGET = @program_prefix@nm
+LD_FOR_TARGET = @program_prefix@ld
+SIZE_FOR_TARGET = @program_prefix@size
+OBJCOPY_FOR_TARGET = @program_prefix@objcopy
+
+CC= $(CC_FOR_TARGET)
+AS= $(AS_FOR_TARGET)
+LD= $(LD_FOR_TARGET)
+NM= $(NM_FOR_TARGET)
+AR= $(AR_FOR_TARGET)
+SIZE= $(SIZE_FOR_TARGET)
+OBJCOPY= $(OBJCOPY_FOR_TARGET)
+
+export CC
+export AS
+export LD
+export NM
+export AR
+export SIZE
+export OBJCOPY
+
+
+RTEMS_ROOT = @RTEMS_ROOT@
+RTEMS_HOST = @RTEMS_HOST@
+RTEMS_USE_OWN_PDIR = @RTEMS_USE_OWN_PDIR@
+RTEMS_HAS_POSIX_API = @RTEMS_HAS_POSIX_API@
+RTEMS_HAS_KA9Q = @RTEMS_HAS_KA9Q@
+RTEMS_HAS_CPLUSPLUS = @RTEMS_HAS_CPLUSPLUS@
+RTEMS_USE_MACROS = @RTEMS_USE_MACROS@
+RTEMS_USE_GCC272 = @RTEMS_USE_GCC272@
+RTEMS_LIBC_DIR = @RTEMS_LIBC_DIR@
+RTEMS_CUSTOM = $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+
+INSTALL=$(PROJECT_ROOT)/$(RTEMS_BSP)/build-tools/install-if-change
+XCFLAGS=$(CFLAGS_FOR_TARGET)
+ 
+export RTEMS_BSP
+export RTEMS_CUSTOM
+export PROJECT_ROOT
