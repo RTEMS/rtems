@@ -193,7 +193,7 @@ mips            : p4600 p4650 (p4000 port with either R4600 or R4650)
                   jmr3904 genmongoosev
 mips64orion 	: (deprecated)
                   p4600 p4650 (p4000 port with either R4600 or R4650)
-powerpc		: dmv177 eth_comm helas403 mbx8xx motorola_powerpc (covers
+powerpc		: dmv177 eth_comm helas403 gen405 mbx8xx motorola_powerpc (covers
                   most Motorola VMEbus and CompactPCI boards) ppcn_60x
                   psim score603e
 sh              : gensh1 gensh2

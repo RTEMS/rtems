@@ -1,3 +1,12 @@
+2001-11-08	Dennis Ehlin (ECS) <Dennis.Ehlin@ecs.ericsson.se>
+
+	This modification is part of the submitted modifications necessary to
+	support the IBM PPC405 family.  This submission was reviewed by
+	Thomas Doerfler <Thomas.Doerfler@imd-systems.de> who ensured it did
+	not negatively impact the ppc403 BSPs.  The submission and tracking
+	process was captured as PR50.
+	* README.configure: Added gen405 BSP.
+
 2001-10-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Adopt more automake rules:
