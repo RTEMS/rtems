@@ -17,24 +17,5 @@
 #ifndef __MACROS_EVENT_h
 #define __MACROS_EVENT_h
 
-/*
- *  Event_Manager_initialization
- */
-
-#define _Event_Manager_initialization() \
-  do { \
-    \
-    _Event_Sync_state = EVENT_SYNC_SYNCHRONIZED; \
-    \
-    /* \
-     *  Register the MP Process Packet routine. \
-     */ \
-    \
-    _MPCI_Register_packet_processor( \
-      MP_PACKET_EVENT, \
-      _Event_MP_Process_packet \
-    ); \
-  } while ( 0 )
-
 #endif
 /* end of include file */
