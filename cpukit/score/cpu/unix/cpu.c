@@ -40,7 +40,7 @@
 
 typedef struct {
   jmp_buf   regs;
-  unsigned32  isr_level;
+  int  isr_level;
 } Context_Control_overlay;
 
 void  _CPU_Signal_initialize(void);
