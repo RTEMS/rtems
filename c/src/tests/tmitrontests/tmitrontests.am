@@ -8,6 +8,6 @@ $(project_bspdir)/tests:
 $(project_bspdir)/tests/$(TEST)$(LIB_VARIANT).exe: $(PGM)
 	$(INSTALL_PROGRAM) $< $@
 
-TMPINSTALL_FILES += \
+TMPINSTALL_FILES = \
 $(project_bspdir)/tests \
 $(project_bspdir)/tests/$(TEST)$(LIB_VARIANT).exe
