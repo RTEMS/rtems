@@ -143,9 +143,9 @@ extern "C" {
 #define MSR_POW		0x0004	/* Upper 16 bits */
 #else
 #include <rtems.h>
-#include <console.h>
-#include <clockdrv.h>
-#include <iosupp.h>
+#include <rtems/console.h>
+#include <rtems/clockdrv.h>
+#include <rtems/iosupp.h>
 #include <tod.h>
 #include <nvram.h>
 

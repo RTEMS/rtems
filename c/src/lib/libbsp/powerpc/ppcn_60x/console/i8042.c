@@ -25,7 +25,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <libchip/serial.h>
-#include <ringbuf.h>
+#include <rtems/ringbuf.h>
 
 #include "console.h"
 #include "i8042_p.h"

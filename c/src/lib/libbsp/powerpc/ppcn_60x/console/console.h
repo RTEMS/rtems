@@ -19,7 +19,7 @@
  *  $Id$
  */
 
-#include <ringbuf.h>
+#include <rtems/ringbuf.h>
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>
 #include <libchip/z85c30.h>
