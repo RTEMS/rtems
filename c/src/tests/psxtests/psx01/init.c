@@ -30,15 +30,6 @@ void *POSIX_Init(
 
   puts( "\n\n*** POSIX TEST 1 ***" );
 
-  /* set the time of day, and print our buffer in multiple ways */
-
-  build_time( &tm, TM_FRIDAY, TM_MAY, 24, 96, 11, 5, 0 );
-
-  tv.tv_sec = mktime( &tm );
-  assert( tv.tv_sec != -1 );
-
-  tv.tv_nsec = 0;
-
   /* error cases in clock_gettime and clock_settime */
 
   puts( "Init: clock_gettime - EINVAL (invalid clockid)" );
@@ -51,7 +42,33 @@ void *POSIX_Init(
   assert( status == -1 );
   assert( errno == EINVAL );
 
+  /* exercise clock_getres */
+
+  puts( "Init: clock_getres - EINVAL (invalid clockid)" );
+  status = clock_getres( -1, &tv );
+  assert( status == -1 );
+  assert( errno == EINVAL );
+
+  puts( "Init: clock_getres - EINVAL (NULL resolution)" );
+  status = clock_getres( CLOCK_REALTIME, NULL );
+  assert( status == -1 );
+  assert( errno == EINVAL );
+
+  puts( "Init: clock_getres - SUCCESSFUL" );
+  status = clock_getres( CLOCK_REALTIME, &tv );
+  printf( "Init: resolution = sec (%ld), nsec (%ld)\n", tv.tv_sec, tv.tv_nsec );
+  assert( !status );
+
+  /* set the time of day, and print our buffer in multiple ways */
+
+  tv.tv_sec = mktime( &tm );
+  assert( tv.tv_sec != -1 );
+
+  tv.tv_nsec = 0;
+
   /* now set the time of day */
+
+  empty_line();
 
   printf( asctime( &tm ) );
   puts( "Init: clock_settime - SUCCESSFUL" );
@@ -88,6 +105,7 @@ void *POSIX_Init(
 
   /* error cases in nanosleep */
 
+  empty_line();
   puts( "Init: nanosleep - EINVAL (NULL time)" );
   status = nanosleep ( NULL, &tr );
   assert( status == -1 );
