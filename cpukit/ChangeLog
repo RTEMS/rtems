@@ -1,5 +1,11 @@
 2004-10-22	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libnetworking/Makefile.am: Reflect changes below.
+	* libnetworking/net/slcompress.h: New (from FreeBSD).
+	* libnetworking/net/slcompress.c: New (from FreeBSD).
+
+2004-10-22	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libcsupport/include/stdint.h: Add intptr_t uintptr_t.
 	* libnetworking/kern/kern_sysctl.c: Remove uintptr_t.
 	Cosmetics.
