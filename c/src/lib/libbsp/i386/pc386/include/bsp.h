@@ -72,19 +72,21 @@ extern "C" {
  */
 
 struct rtems_bsdnet_ifconfig;
-extern int rtems_wd_driver_attach (struct rtems_bsdnet_ifconfig *config);
-extern int rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config);
 
-#if 0
-#define RTEMS_BSP_NETWORK_DRIVER_NAME "wd1"
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH       rtems_wd_driver_attach
-#endif
+extern int rtems_ne_driver_attach(struct rtems_bsdnet_ifconfig *, int);
+#define BSP_NE2000_NETWORK_DRIVER_NAME      "ne1"
+#define BSP_NE2000_NETWORK_DRIVER_ATTACH    rtems_ne_driver_attach
 
-#if 1
-#define RTEMS_BSP_NETWORK_DRIVER_NAME "dc1"
-#define RTEMS_BSP_NETWORK_DRIVER_ATTACH       rtems_dec21140_driver_attach
-#endif
+extern int rtems_wd_driver_attach(struct rtems_bsdnet_ifconfig *, int);
+#define BSP_WD8003_NETWORK_DRIVER_NAME      "wd1"
+#define BSP_WD8003_NETWORK_DRIVER_ATTACH    rtems_wd_driver_attach
 
+extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
+#define BSP_DEC21140_NETWORK_DRIVER_NAME    "dc1"
+#define BSP_DEC21140_NETWORK_DRIVER_ATTACH  rtems_dec21140_driver_attach
+
+#define RTEMS_BSP_NETWORK_DRIVER_NAME   BSP_DEC21140_NETWORK_DRIVER_NAME
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH BSP_DEC21140_NETWORK_DRIVER_ATTACH
 
 /*-------------------------------------------------------------------------+
 | Constants

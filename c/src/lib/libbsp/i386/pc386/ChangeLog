@@ -1,3 +1,45 @@
+2000-10-20	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h: Cleaned up network driver name and attach defines.
+
+2000-10-20	Dmitry Kargapolov <dk@gentex.ru>
+
+	* ne2000/ne2000.c: Fix some errors in the driver.  
+	1. There was no sufficient check of data in ethernet header.
+	The code in ne_rx_daemon() was:
+            inport_word (dport, len);
+	    ...
+	    len -= 4;
+	      ...
+	    if (len > 0)
+	      ne_read_data (sc, startaddr, len, p);
+	Unfortunately, sometimes my NIC gave me too big len value,
+	the result was memory override.  To fix this, I added ethernet
+	header data checking.
+
+	2. The way overrides were serviced was not good.  It was complex
+	but sometimes did not provide reliable continuing of NIC working.
+	I had the situation of an endless loop in ne_check_status()
+	after override processing.
+
+	3. There was conceptual error of porting.  The old method of
+	overrides curing was ported from the OS-s, where override-processing
+	did start immediately.  But RTEMS-version uses events, and cleaning
+	of the overrides can start later.
+
+	I selected the way of ne2000 programming that is used
+	in freebsd kernel (v4.0).
+
+	Because of both problems, incorrect data in header of raw packet
+	and receiver override, it went through ne_reset() and fully
+	reset the ne2000.
+
+	So, in summary
+	- added detecting of the incorrect data in ethernet header;
+	- replaced handling of receiver overrides with new scheme,
+	via resetting of NIC, this method is used also in case of
+	invalid header detecting.
+
 2000-10-18	 Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
 
 	* console/console.c, console/serial_mouse.c, include/bsp.h:
