@@ -61,6 +61,60 @@
 #include <rtems/new-exceptions/cpu.h>
 #endif
 
+/*
+ *  Should be large enough to run all RTEMS tests.  This insures
+ *  that a "reasonable" small application should not have any problems.
+ */
+
+#define CPU_STACK_MINIMUM_SIZE          (1024*8)
+
+/*
+ *  CPU's worst alignment requirement for data types on a byte boundary.  This
+ *  alignment does not take into account the requirements for the stack.
+ */
+
+#define CPU_ALIGNMENT              (PPC_ALIGNMENT)
+
+/*
+ *  This number corresponds to the byte alignment requirement for the
+ *  heap handler.  This alignment requirement may be stricter than that
+ *  for the data types alignment specified by CPU_ALIGNMENT.  It is
+ *  common for the heap to follow the same alignment requirement as
+ *  CPU_ALIGNMENT.  If the CPU_ALIGNMENT is strict enough for the heap,
+ *  then this should be set to CPU_ALIGNMENT.
+ *
+ *  NOTE:  This does not have to be a power of 2.  It does have to
+ *         be greater or equal to than CPU_ALIGNMENT.
+ */
+
+#define CPU_HEAP_ALIGNMENT         (PPC_ALIGNMENT)
+
+/*
+ *  This number corresponds to the byte alignment requirement for memory
+ *  buffers allocated by the partition manager.  This alignment requirement
+ *  may be stricter than that for the data types alignment specified by
+ *  CPU_ALIGNMENT.  It is common for the partition to follow the same
+ *  alignment requirement as CPU_ALIGNMENT.  If the CPU_ALIGNMENT is strict
+ *  enough for the partition, then this should be set to CPU_ALIGNMENT.
+ *
+ *  NOTE:  This does not have to be a power of 2.  It does have to
+ *         be greater or equal to than CPU_ALIGNMENT.
+ */
+
+#define CPU_PARTITION_ALIGNMENT    (PPC_ALIGNMENT)
+
+/*
+ *  This number corresponds to the byte alignment requirement for the
+ *  stack.  This alignment requirement may be stricter than that for the
+ *  data types alignment specified by CPU_ALIGNMENT.  If the CPU_ALIGNMENT
+ *  is strict enough for the stack, then this should be set to 0.
+ *
+ *  NOTE:  This must be a power of 2 either 0 or greater than CPU_ALIGNMENT.
+ */
+
+#define CPU_STACK_ALIGNMENT        (PPC_STACK_ALIGNMENT)
+
+
 #ifndef ASM
 /*  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.
