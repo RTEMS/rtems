@@ -1,7 +1,13 @@
+2004-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ChangeLog: Reformat. Merge-in develenv/ChangeLog.
+	* develenv/ChangeLog: Remove.
+
 2004-01-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove AUTOMAKE_FILES. Add ../scripts/setup.def
 	../COPYING to EXTRA_DIST. Add rtems.html.in to EXTRA_DIST.
+	* develenv/Makefile.am: Add direct.t sample.t utils.t to EXTRA_DIST.
 
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
@@ -12,11 +18,18 @@
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
+	* develenv/Makefile.am: Cosmetics.
+
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* develenv/Makefile.am: Cosmetics.
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* project.am: Remove $(PROJECT).info* from CLEANFILES (Doesn't work with
 	automake-1.7f/1.8 anymore).
+	* develenv/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
 
 2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -41,6 +54,7 @@
 	* index.html.in: Purge hppa1.1.
 	* project.am: Merger from rtems-4-6-branch.
 	* rtems_support.html.in: Purge hppa1.1.
+	* develenv/Makefile.am: Merger from rtems-4-6-branch.
 
 2003-09-19	Joel Sherrill <joel@OARcorp.com>
 
@@ -50,20 +64,47 @@
 	* SUPPORT, tools/texi2www/archive/texi2www-960103.tgz: Removed.
 	* common/cpright.texi, common/setup.texi: Merge from branch.
 	* common/rtems.texi.in: New file.
+	* develenv/develenv.texi, develenv/direct.t, develenv/sample.t,
+	develenv/utils.t: Merge from branch.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
 
+2003-04-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* develenv/develenv.texi: Fix @setfilename to develenv.info.
+
+2003-04-16	Joel Sherrill <joel@OARcorp.com>
+
+	* develenv/Makefile.am, develenv/develenv.texi: Remove unused file.
+	* develenv/compile.texi: Removed.
+	* develenv/Makefile.am: Fix next/previous section names.
+
 2003-04-11	Joel Sherrill <joel@OARcorp.com>
 
 	* index.html.in: Development Environment Guide should be updated now.
+
+2003-03-24	Joel Sherrill <joel@OARcorp.com>
+
+	* develenv/direct.t, develenv/sample.t, develenv/utils.t: Significantly
+	updated.
+
+2003-02-28	Joel Sherrill <joel@OARcorp.com>
+
+	* develenv/.cvsignore: Add newly generated .texi files.
 
 2003-02-18	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, configure.ac: Remove src2html references.
 	* index.html.in: Update to reflect partial update of Development
 	Environment Guide.
+	* develenv/Makefile.am, develenv/develenv.texi: Relect generating .texi
+	from .t's.
+	* develenv/direct.t, develenv/sample.t, develenv/utils.t: New files.
+	* develenv/direct.texi, develenv/sample.texi, develenv/utils.texi:
+	Removed. Now generated from corresponding .t files which are in the
+	process of being updated. This commit is a anspshot of the update effort.
 
 2003-02-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -78,6 +119,7 @@
 	* index.html.in: Add c4x.
 	* configure.ac: Add c4x.
 	* project.am: Add version.texi hack.
+	* develenv/develenv.texi: Set @setfilename develenv.info.
 
 2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -95,6 +137,13 @@
 	started/pictures/Makefile.
 	* started/Makefile.am: Merge-in pictures/Makefile.am	.
 	* started/pictures/Makefile.am: Remove.
+	* develenv/version.texi: Remove from CVS.
+	* develenv/stamp-vti: Remove from CVS.
+	* develenv/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+
+2003-01-21	Joel Sherrill <joel@OARcorp.com>
+
+	* develenv/stamp-vti, develenv/version.texi: Regenerated.
 
 2002-12-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -108,10 +157,12 @@
 
 	* index.html.in: Note that the Getting Started with GNAT/RTEMS  manual
 	is largely obsolete now that GNAT is in GCC.
+	* develenv/stamp-vti, develenv/version.texi: Regenerated.
 
 2002-10-24	Joel Sherrill <joel@OARcorp.com>
 
 	* index.html.in: Add links to multiple missing CPU supplements.
+	* develenv/stamp-vti, develenv/version.texi: Regenerated.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -144,6 +195,7 @@
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* images/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* develenv/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2002-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -174,6 +226,7 @@
 	* bootstrap: Sync with RTEMS's toplevel bootstrap.sh.
 	* common/Makefile.am: Require automake-1.5.
 	* images/Makefile.am: Require automake-1.5.
+	* develenv/Makefile.am: include main.am, require automake-1.5.
 
 2002-01-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -195,12 +248,15 @@
 	* Numerous files touched as part of merging the 4.5 branch onto the
 	mainline development trunk and ensuring that the script that cuts
 	snapshots and releases works on the documentation.
+	* develenv/.cvsignore: Added rtems_header.html and rtems_footer.html.
 
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Removed GENERATED_FILES from list of TEXINFOS.
+	* develenv/Makefile.am: Removed GENERATED_FILES from list of TEXINFOS.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+	* develenv/ChangeLog: New file.
 
