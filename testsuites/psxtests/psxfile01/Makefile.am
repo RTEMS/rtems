@@ -1,0 +1,42 @@
+## 
+## $Id$
+## 
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+VPATH = @srcdir@:@srcdir@/../filesupp
+
+TEST = psxfile01
+
+MANAGERS = all
+
+# C source names, if any, go here -- minus the .c
+C_FILES = main.c test.c test_cat.c test_extend.c test_write.c
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+
+DOCTYPES = scn
+DOCS = $(DOCTYPES:%=$(TEST).%)
+
+SRCS = $(DOCS) $(C_FILES) $(H_FILES)
+OBJS = $(C_O_FILES)
+
+PRINT_SRCS = $(DOCS)
+
+PGM = ${ARCH}/$(TEST).exe
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+include $(top_srcdir)/psxtests.am
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+${PGM}: $(OBJS) $(LINK_FILES)
+	$(make-exe)
+
+all-local: $(ARCH) $(TMPINSTALL_FILES)
+
+EXTRA_DIST = $(C_FILES) $(DOCS)
+
+include $(top_srcdir)/../../../../automake/local.am

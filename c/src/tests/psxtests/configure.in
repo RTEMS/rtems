@@ -9,7 +9,7 @@ AC_CONFIG_AUX_DIR(../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE(rtems-c-src-tests-sptests,$RTEMS_VERSION,no)
+AM_INIT_AUTOMAKE(rtems-c-src-tests-psxtests,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_INLINES
@@ -40,6 +40,7 @@ AC_SUBST(CC_LDFLAGS_PROFILE_V)
 # Try to explicitly list a Makefile here
 AC_OUTPUT( 
 Makefile
+filesupp/Makefile
 psx01/Makefile
 psx02/Makefile
 psx03/Makefile
@@ -55,6 +56,7 @@ psx12/Makefile
 psx13/Makefile
 psxcancel/Makefile
 psxfile01/Makefile
+psxfile02/Makefile
 psxhdrs/Makefile
 psxmount/Makefile
 psxmsgq01/Makefile
