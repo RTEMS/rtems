@@ -38,7 +38,6 @@ posix_api_configuration_table BSP_POSIX_Configuration;
 /* Initialize C++ global Ctor/Dtor and initializes exception handling. */
 #if defined(USE_INIT_FINI)
 extern void _fini( void );
-extern void _init( void );
 #endif
 
 rtems_interrupt_level bsp_isr_level;
@@ -120,7 +119,6 @@ int boot_card(int argc, char **argv, char **envp)
    */
 #ifdef USE_INIT_FINI 
    atexit( _fini );
-   _init();
 #endif
 
   status = main( argc, argv_p, envp_p );
