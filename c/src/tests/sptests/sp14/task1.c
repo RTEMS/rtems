@@ -78,7 +78,7 @@ rtems_test_pause();
     Timer_id[ 1 ],
     TICKS_PER_SECOND / 2,
     Signal_3_to_task_1,
-    Task_1
+    (void *) Task_1
   );
   directive_failed( status, "rtems_timer_fire_after" );
 
