@@ -53,6 +53,10 @@ all-local: $(PGM) $(TMPINSTALL_FILES)
 EXTRA_DIST = bspclean.c bspstart.c exit.c main.c no-ctor.c rtems-ctor.cc \
     setvec.c
 
+${PROJECT_RELEASE}/lib/$(dirstamp):
+	@$(mkdir_p) ${PROJECT_RELEASE}/lib
+	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+
 if HAS_CXX
 ${PROJECT_RELEASE}/lib/libno-ctor$(LIB_VARIANT).a: ${ARCH}/libno-ctor$(LIB_VARIANT).a ${PROJECT_RELEASE}/lib/$(dirstamp)
 	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/libno-ctor$(LIB_VARIANT).a
