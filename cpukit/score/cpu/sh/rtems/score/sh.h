@@ -40,29 +40,24 @@ extern "C" {
  */
  
 #if defined(sh7032)
-
-#define CPU_MODEL_NAME  "SH 7032"
+#define CPU_MODEL_NAME  "SH7032"
 #define SH_HAS_FPU 	0
-
-/*
- * If the following macro is set to 0 there will be no software irq stack
- */
-#define SH_HAS_SEPARATE_STACKS 1
 
 #elif defined (sh7045)
-
-#define CPU_MODEL_NAME  "SH 7045"
+#define CPU_MODEL_NAME  "SH7045"
 #define SH_HAS_FPU 	0
+
+#else
+#error "Unsupported CPU Model"
+ 
+#endif
 
 /*
  * If the following macro is set to 0 there will be no software irq stack
  */
-#define SH_HAS_SEPARATE_STACKS 1
 
-#else
- 
-#error "Unsupported CPU Model"
- 
+#ifndef SH_HAS_SEPARATE_STACKS
+#define SH_HAS_SEPARATE_STACKS 1
 #endif
 
 /*
