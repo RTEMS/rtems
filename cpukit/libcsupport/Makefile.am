@@ -41,18 +41,11 @@ include_rtems_HEADERS += include/rtems/assoc.h include/rtems/error.h \
 
 ## sys
 
-include_sysdir = $(includedir)/sys
-
-include_sys_HEADERS =
-
 if NEWLIB
-include_sys_HEADERS += include/sys/ioccom.h include/sys/filio.h \
+include_sysdir = $(includedir)/sys
+include_sys_HEADERS = include/sys/ioccom.h include/sys/filio.h \
     include/sys/ioctl.h include/sys/sockio.h include/sys/ttycom.h \
-    include/sys/termios.h include/sys/utsname.h
-endif
-
-if NEED_SYS_CDEFS_H
-include_sys_HEADERS += include/sys/cdefs.h
+    include/sys/termios.h include/sys/utsname.h include/sys/cdefs.h
 endif
 
 ## zilog
@@ -227,12 +220,12 @@ $(PROJECT_INCLUDE)/rtems/cdefs.h: include/rtems/cdefs.h $(PROJECT_INCLUDE)/rtems
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/cdefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cdefs.h
 
+if NEWLIB
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
-if NEWLIB
 $(PROJECT_INCLUDE)/sys/ioccom.h: include/sys/ioccom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioccom.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioccom.h
@@ -260,9 +253,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/termios.h
 $(PROJECT_INCLUDE)/sys/utsname.h: include/sys/utsname.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/utsname.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/utsname.h
-endif
 
-if NEED_SYS_CDEFS_H
 $(PROJECT_INCLUDE)/sys/cdefs.h: include/sys/cdefs.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/cdefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/cdefs.h
