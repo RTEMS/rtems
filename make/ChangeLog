@@ -1,4 +1,9 @@
 
+2001-04-11	Eric Valette <valette@crf.canon.fr>
+
+	* custom/eth_comm.cfg: Switch the eth_comm BSP to use the
+	"new exception processing model."
+
 2001-04-11	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/default.cfg: Switch to using exec_prefix to reflect new
