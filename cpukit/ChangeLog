@@ -1,3 +1,8 @@
+2005-02-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove LIBSCORECPU.
+	* wrapup/Makefile.am: Reflect changes above.
+
 2005-02-10	Joel Sherrill <joel@OARcorp.com>
 
 	PR 753/rtems

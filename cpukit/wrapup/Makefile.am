@@ -13,9 +13,7 @@ CLEANFILES = librtemscpu.a
 DISTCLEANFILES =
 
 TMP_LIBS =
-if LIBSCORECPU
 TMP_LIBS += ../score/cpu/@RTEMS_CPU@/libscorecpu.a
-endif
 TMP_LIBS += ../score/libscore.a
 TMP_LIBS += ../sapi/libsapi.a
 TMP_LIBS += ../rtems/librtems.a

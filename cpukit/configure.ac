@@ -262,10 +262,6 @@ AM_CONDITIONAL(HAS_POSIX,test x"$rtems_cv_HAS_POSIX_API" = x"yes")
 AM_CONDITIONAL(HAS_ITRON,test x"$rtems_cv_HAS_ITRON_API" = x"yes")
 AM_CONDITIONAL(HAS_NETWORKING,test x"$HAS_NETWORKING" = x"yes")
 
-# FIXME: All ports should have a libscorecpu.a - But the powerpc doesn't!
-AM_CONDITIONAL([LIBSCORECPU],
-[test -f "${srcdir}/score/cpu/${RTEMS_CPU}/cpu.c"])
-
 AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
   && test x"$HAS_POSIX_API" = x"yes"])
 
