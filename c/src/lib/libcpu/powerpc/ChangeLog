@@ -1,5 +1,10 @@
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* mpc6xx/wrapup/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* wrapup/Makefile.am: Use .$(OBJEXT) instead of .o.
+
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* mpc505/ictrl/Makefile.am: Use .$(OBJEXT) instead of .o.
  	* mpc505/timer/Makefile.am: Use .$(OBJEXT) instead of .o.
  	* mpc505/vectors/Makefile.am: Use .$(OBJEXT) instead of .o.

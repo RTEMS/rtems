@@ -7,12 +7,12 @@ GENERIC_FILES = shared
 
 # Use two variables so that I can make two ar command.
 # So far FAMILY_OBJS is empty and ar dislike it...
-CPU_SPECIFIC_OBJS = $(wildcard ../$(RTEMS_CPU_MODEL)/*/$(ARCH)/*.o)
+CPU_SPECIFIC_OBJS = $(wildcard ../$(RTEMS_CPU_MODEL)/*/$(ARCH)/*.$(OBJEXT))
 FAMILY_OBJS = \
-    $(wildcard ../shared/$(ARCH)/*.o ../shared/*/$(ARCH)/*.o \
-	../old_exception_processing/*/$(ARCH)/*.o \
-	../new_exception_processing/*/$(ARCH)/*.o \
-	../mpc6xx/*/$(ARCH)/*.o)
+    $(wildcard ../shared/$(ARCH)/*.$(OBJEXT) ../shared/*/$(ARCH)/*.$(OBJEXT) \
+	../old_exception_processing/*/$(ARCH)/*.$(OBJEXT) \
+	../new_exception_processing/*/$(ARCH)/*.$(OBJEXT) \
+	../mpc6xx/*/$(ARCH)/*.$(OBJEXT))
 
 LIB = $(ARCH)/libcpu.a
 
