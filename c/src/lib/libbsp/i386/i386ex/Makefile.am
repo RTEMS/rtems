@@ -25,11 +25,12 @@ EXTRA_PROGRAMS += startup.rel
 CLEANFILES += startup.rel
 startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/main.c ../../shared/sbrk.c ../shared/irq/idt.c \
-    ../shared/irq/irq.c ../shared/irq/irq_init.c ../shared/comm/i386-stub.c \
-    ../shared/comm/i386-stub-glue.c ../shared/comm/uart.c \
-    ../../shared/gnatinstallhandler.c ../shared/comm/gdb_glue.c \
-    ../shared/comm/tty_drv.c ../shared/irq/irq_asm.S
+    ../../shared/main.c ../../shared/sbrk.c ../../i386/shared/irq/idt.c \
+    ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \
+    ../../i386/shared/comm/i386-stub.c \
+    ../../i386/shared/comm/i386-stub-glue.c ../../i386/shared/comm/uart.c \
+    ../../shared/gnatinstallhandler.c ../../i386/shared/comm/gdb_glue.c \
+    ../../i386/shared/comm/tty_drv.c ../../i386/shared/irq/irq_asm.S
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
