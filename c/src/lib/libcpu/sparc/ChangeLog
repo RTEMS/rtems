@@ -1,3 +1,9 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sparc/cache/Makefile.am: Reformat. Use dirstamps for preinstallation.
+	* sparc/reg_win/Makefile.am: Reformat.
+	* sparc/syscall/Makefile.am: Reformat.
+
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CANONICAL_HOST.

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/reg_win.rel
 
 S_FILES = window.S
