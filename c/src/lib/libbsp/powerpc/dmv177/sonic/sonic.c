@@ -55,8 +55,9 @@ void break_when_you_get_here();
 #define SONIC_DEBUG_CAM              0x0008
 #define SONIC_DEBUG_DESCRIPTORS      0x0010
 
-#define SONIC_DEBUG \
-    (SONIC_DEBUG_MEMORY|SONIC_DEBUG_DESCRIPTORS)
+#define SONIC_DEBUG (SONIC_DEBUG_NONE)
+
+/* (SONIC_DEBUG_MEMORY|SONIC_DEBUG_DESCRIPTORS) */
 
 /* SONIC_DEBUG_ALL */
 
@@ -194,6 +195,7 @@ struct sonic {
    */
   int                             rdaCount;
   ReceiveResourcePointer_t        rsa;
+  ReceiveResourcePointer_t        rea;
   CamDescriptorPointer_t          cdp;
   ReceiveDescriptorPointer_t      rda;
   ReceiveDescriptorPointer_t      rdp_last;
@@ -482,10 +484,9 @@ SONIC_STATIC void sonic_retire_tda (struct sonic *dp)
     dp->tdaActiveCount--;
     free_p ((struct mbuf **)&dp->tdaTail->mbufp);
 
-/*  XXX this does not help when you wrap
-    dp->tdaTail->frag_count        = 1;
+/*  XXX this does not help when you wrap */
     dp->tdaTail->frag[0].frag_link = LSW(dp->tdaTail->link_pad);
-*/
+    dp->tdaTail->frag_count        = 0;
 
     /*
      * Move to the next transmit descriptor
@@ -655,7 +656,8 @@ puts( "Wait for more TDAs" );
 
   tdp->linkp = &(fp+1)->frag_link;
   *tdp->linkp = LSW(tdp->next) | TDA_LINK_EOL;
-  *dp->tdaHead->linkp &= ~TDA_LINK_EOL;
+  if ( dp->tdaHead->frag_count )
+    *dp->tdaHead->linkp &= ~TDA_LINK_EOL;
   dp->tdaActiveCount++;
   dp->tdaHead = tdp;
 
@@ -803,6 +805,9 @@ SONIC_STATIC void sonic_rda_wait(
             RTEMS_WAIT|RTEMS_EVENT_ANY,
             RTEMS_NO_TIMEOUT);
   }
+#if (SONIC_DEBUG & SONIC_DEBUG_DESCRIPTORS)
+  printf( "RDA %p\n", rdp );
+#endif
 }
 
 /*
@@ -822,7 +827,7 @@ SONIC_STATIC void sonic_rx (int dev, void *p1, void *p2)
   int continuousCount;
 
   rwp = dp->rsa;
-  rea = rwp;
+  rea = dp->rea; /* XXX was rwp; */
   rdp = dp->rda; /* XXX was rdp_last */
 
   /*
@@ -845,7 +850,9 @@ SONIC_STATIC void sonic_rx (int dev, void *p1, void *p2)
       sonic_rda_wait (dp, rdp);
     }
 
-/* printf( "Incoming packet %p\n", rdp ); */
+#if (SONIC_DEBUG & SONIC_DEBUG_DESCRIPTORS)
+    printf( "Incoming packet %p status=0x%04x\n", rdp, rdp->status );
+#endif
 
     /*
      * Check that packet is valid
@@ -912,8 +919,12 @@ SONIC_STATIC void sonic_rx (int dev, void *p1, void *p2)
       rwp->buff_ptr_lsw = LSW(bp->data);
       rwp->buff_ptr_msw = MSW(bp->data);
       rwp++;
-      if (rwp == rea)
+      if (rwp == rea) {
+#if (SONIC_DEBUG & SONIC_DEBUG_MEMORY)
+        printf( "Wrapping RWP from %p to %p\n", rwp, dp->rsa );
+#endif
         rwp = dp->rsa;
+      }
       sonic_write_register( rp, SONIC_REG_RWP , LSW(rwp) );
 
       /*
@@ -972,7 +983,7 @@ SONIC_STATIC void sonic_initialize_hardware(
   rtems_isr_entry old_handler;
   TransmitDescriptorPointer_t tdp;
   ReceiveDescriptorPointer_t ordp, rdp;
-  ReceiveResourcePointer_t rwp, rea;
+  ReceiveResourcePointer_t rwp;
   struct mbuf *bp;
   CamDescriptorPointer_t cdp;
 
@@ -1013,7 +1024,7 @@ SONIC_STATIC void sonic_initialize_hardware(
       tdp->pkt_config = TDA_CONFIG_PINT;
 */
 
-    tdp->frag_count        = 1;
+    tdp->frag_count        = 0;
     tdp->frag[0].frag_link = LSW(tdp + 1);
     tdp->link_pad          = LSW(tdp + 1) | TDA_LINK_EOL;
     tdp->linkp             = &((tdp + 1)->frag[0].frag_link);
@@ -1059,8 +1070,8 @@ SONIC_STATIC void sonic_initialize_hardware(
    *  Link the last desriptor to the 1st one and mark it as the end
    *  of the list.
    */
-  ordp->next  = dp->rda;
-  ordp->link |= RDA_LINK_EOL;
+  ordp->next   = dp->rda;
+  ordp->link   = LSW(dp->rda) | RDA_LINK_EOL;
   dp->rdp_last = rdp;
  
   /*
@@ -1105,7 +1116,11 @@ SONIC_STATIC void sonic_initialize_hardware(
     rwp->buff_wc_lsw = RBUF_WC;
     rwp->buff_wc_msw = 0;
   }
-  rea = rwp;
+  dp->rea = rwp;
+#if (SONIC_DEBUG & SONIC_DEBUG_MEMORY)
+  printf( "rea area = %p\n", dp->rea );
+#endif
+
 
   /*
    * Issue a software reset.
@@ -1157,7 +1172,7 @@ SONIC_STATIC void sonic_initialize_hardware(
   sonic_write_register( rp, SONIC_REG_URRA, MSW(dp->rsa) );
   sonic_write_register( rp, SONIC_REG_RSA, LSW(dp->rsa) );
 
-  sonic_write_register( rp, SONIC_REG_REA, LSW(rea) );
+  sonic_write_register( rp, SONIC_REG_REA, LSW(dp->rea) );
 
   sonic_write_register( rp, SONIC_REG_RRP, LSW(dp->rsa) );
   sonic_write_register( rp, SONIC_REG_RWP, LSW(dp->rsa) ); /* XXX was rea */
