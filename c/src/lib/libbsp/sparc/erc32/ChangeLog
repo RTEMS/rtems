@@ -1,3 +1,7 @@
+2000-11-30	Joel Sherrill <joel@OARcorp.com>
+
+	* erc32sonic/Makefile.am: Only compile this if networking is enabled.
+
 2000-11-21	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
 	* erc32sonic/erc32sonic.c: Minor modifications which enable
