@@ -1,3 +1,8 @@
+2005-03-10	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/netinet/in_cksum_m68k.h: Change back to lcsum[12]_lbl
+	since my fix did not fix all issues.
+
 2005-03-05	Joel Sherrill <joel@OARcorp.com>
 
 	* libnetworking/netinet/in_cksum_m68k.h: Change lcsum[12]_lbl to
