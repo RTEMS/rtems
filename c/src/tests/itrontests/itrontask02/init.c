@@ -371,7 +371,7 @@ void ITRON_Init( void )
   /* XXX - This routine is not coded */
 
   puts( "Init - rel_rdq - XXX Add when rel_wai coded - E_OK" );
-  status = rel_wai( ID );
+  status = rel_wai( 1 );
   fatal_directive_status( status, E_OK, "rel_wai");
 
   puts( "Init - rel_rdq - XXX Add when rel_wai coded - E_ID" );
