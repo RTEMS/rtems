@@ -1,3 +1,13 @@
+2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* aclocal/rtems-top.m4: Add MULTISUBDIR. Add MULTIBUILDTOP.
+	Add rtems_updir. Remove version.m4 check. 
+	Add PROJECT_ROOT/with_project_root processing.
+	Add PROJECT_INCLUDE. Add PROJECT_LIB.
+	* aclocal/env-rtemscpu.a4: Remove cpukit_topdir.
+	Remove with_project_root processing. Remove PROJECT_INCLUDE,
+	PROJECT_LIB.
+
 2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* libmisc/capture/capture-cli.c, libmisc/capture/capture.c,
