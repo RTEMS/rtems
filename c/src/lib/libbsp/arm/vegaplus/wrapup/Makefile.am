@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 BSP_FILES = clock console startup irq timer
 
