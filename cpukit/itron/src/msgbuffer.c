@@ -38,18 +38,18 @@ void _ITRON_Message_buffer_Manager_initialization(
 {
   _Objects_Initialize_information(
     &_ITRON_Message_buffer_Information, /* object information table */
+    OBJECTS_ITRON_API,                  /* object API */
     OBJECTS_ITRON_MESSAGE_BUFFERS,      /* object class */
-    FALSE,                              /* TRUE if this is a
-                                           global object class */ 
     maximum_message_buffers,            /* maximum objects of this class */
-    sizeof( ITRON_Message_buffer_Control ),  /* size of this
-                                                object's control
-                                                block */ 
-    FALSE,                         /* TRUE if names for this
-                                      object are strings */ 
-    ITRON_MAXIMUM_NAME_LENGTH,     /* maximum length of each
-                                      object's name */ 
-    FALSE                          /* TRUE if this class is threads */
+    sizeof( ITRON_Message_buffer_Control ),
+                               /* size of this object's control block */ 
+    FALSE,                     /* TRUE if names for this object are strings */ 
+    ITRON_MAXIMUM_NAME_LENGTH  /* maximum length of each object's name */ 
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                     /* TRUE if this is a global object class */
+    NULL                       /* Proxy extraction support callout */
+#endif
   );
   
   /*

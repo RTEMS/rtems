@@ -67,11 +67,9 @@ ER cre_mbf(
 
   _CORE_message_queue_Initialize(
     &the_message_buffer->message_queue,
-    OBJECTS_ITRON_MESSAGE_BUFFERS,
     &the_msgq_attributes,
     pk_cmbf->bufsz / pk_cmbf->maxmsz,
-    pk_cmbf->maxmsz,
-    NULL                           /* Multiprocessing not supported */
+    pk_cmbf->maxmsz
   );
 
   _ITRON_Objects_Open( &_ITRON_Message_buffer_Information,

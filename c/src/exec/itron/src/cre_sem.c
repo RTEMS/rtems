@@ -79,10 +79,8 @@ ER cre_sem(
 
   _CORE_semaphore_Initialize(
     &the_semaphore->semaphore,
-    OBJECTS_ITRON_SEMAPHORES,
     &the_semaphore_attributes,
-    pk_csem->isemcnt,
-    NULL                           /* Multiprocessing not supported */
+    pk_csem->isemcnt
   );
 
   _ITRON_Objects_Open( &_ITRON_Semaphore_Information, &the_semaphore->Object );

@@ -35,17 +35,18 @@ void _ITRON_Fixed_memory_pool_Manager_initialization(
 {
   _Objects_Initialize_information(
     &_ITRON_Fixed_memory_pool_Information, /* object information table */
+    OBJECTS_ITRON_API,                 /* object API */
     OBJECTS_ITRON_FIXED_MEMORY_POOLS,  /* object class */
-    FALSE,                             /* TRUE if this is a global */
-                                       /*   object class */
     maximum_fixed_memory_pools,        /* maximum objects of this class */
     sizeof( ITRON_Fixed_memory_pool_Control ),
-                                       /* size of this object's control block */
-    FALSE,                             /* TRUE if names for this object */
-                                       /*   are strings */
-    ITRON_MAXIMUM_NAME_LENGTH,         /* maximum length of each object's */
-                                       /*   name */
-    FALSE                              /* TRUE if this class is threads */
+                                 /* size of this object's control block */
+    FALSE,                       /* TRUE if names for this object are strings */
+    ITRON_MAXIMUM_NAME_LENGTH    /* maximum length of each object's name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                       /* TRUE if this is a global object class */
+    NULL                         /* Proxy extraction support callout */
+#endif
   );
     
   /*
