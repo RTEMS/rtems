@@ -1,3 +1,8 @@
+2003-09-26	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h: Obsoleting HP PA-RISC port and removing all
+	references.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* asm.h, cpu.c, cpu_asm.S, rtems/score/arm.h, rtems/score/cpu.h,

@@ -163,13 +163,6 @@ extern "C" {
  *  If TRUE, then the RTEMS_FLOATING_POINT task attribute is assumed.
  *  If FALSE, then the RTEMS_FLOATING_POINT task attribute is followed.
  *
- *  So far, the only CPU in which this option has been used is the
- *  HP PA-RISC.  The HP C compiler and gcc both implicitly use the
- *  floating point registers to perform integer multiplies.  If
- *  a function which you would not think utilize the FP unit DOES,
- *  then one can not easily predict which tasks will use the FP hardware.
- *  In this case, this option should be TRUE.
- *
  *  If CPU_HARDWARE_FP is FALSE, then this should be FALSE as well.
  */
 
