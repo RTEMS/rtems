@@ -1,0 +1,14 @@
+#
+#  $Id$
+#
+
+Simple BSP for the SH simulator built into gdb.
+
+Simulator Invocation
+====================
+target sim
+
+Status
+======
+Does not link yet.  libcpu/sh code needs to be addressed so we can
+get context switch code.
