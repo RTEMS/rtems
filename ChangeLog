@@ -1,5 +1,13 @@
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/version.m4: New file.
+	* aclocal/rtems-top.m4: Add RTEMS_VERSIONING, replace VERSION w/
+	aclocal/version.m4.
+	* bootstrap: Use aclocal/version.m4 instead of VERSION.
+	* configure.ac: Use aclocal/version.m4 instead of VERSION.
+
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac:
 	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
