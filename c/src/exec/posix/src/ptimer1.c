@@ -70,32 +70,6 @@ static void PRINT_MSG_S ( char *msg )
 
 }
 
-/* *************************************************************************** 
- * PRINT_ERRNO_S
- * 
- *  Description: Print the value of the global variable errno in the display
- * ***************************************************************************/
-
-static void PRINT_ERRNO_S ()
-{
-#ifdef DEBUG_MESSAGES
-  switch (errno)
-  {
-     case EINVAL:
-       PRINT_MSG_S ( "errno EINVAL"); break; 
-     case EPERM:
-       PRINT_MSG_S ( "errno EPERM"); break; 
-     case ESRCH:
-       PRINT_MSG_S ( "errno ESRCH"); break; 
-     case EAGAIN:
-       PRINT_MSG_S ( "errno EAGAIN"); break; 
-     default :
-       printf ("errno: %d\n", errno);
-       break;
-  }
-#endif
-}
- 
 /* ***************************************************************************
  * TIMER_INITIALIZE_S
  *
@@ -317,24 +291,21 @@ int timer_create(
   int               timer_pos; /* Position in the table of timers  */
 
  /* 
-  * The data of the structure evp are checked in order to verify if they
-  * are coherent. 
+  *  The data of the structure evp are checked in order to verify if they
+  *  are coherent. 
   */
 
   if (evp != NULL) {
-     /* The structure has data */
-
-     if ( ( evp->sigev_notify != SIGEV_NONE ) && 
-          ( evp->sigev_notify != SIGEV_SIGNAL ) ) {
+    /* The structure has data */
+    if ( ( evp->sigev_notify != SIGEV_NONE ) && 
+         ( evp->sigev_notify != SIGEV_SIGNAL ) ) {
        /* The value of the field sigev_notify is not valid */
-
        set_errno_and_return_minus_one( EINVAL );
-
      }
   }
  
  /*
-  * A timer is created using the primitive rtems_timer_create
+  *  A timer is created using the primitive rtems_timer_create
   */
 
   return_v = rtems_timer_create ( clock_id, &timer_id );
@@ -524,11 +495,11 @@ int timer_settime(
       /* The old data of the timer are returned */
 
       if ( ovalue )
-        COPY_ITIMERSPEC_S ( &timer_struct[timer_pos].timer_data, ovalue );
+        *ovalue = timer_struct[timer_pos].timer_data;
 
       /* The new data are set */
 
-      COPY_ITIMERSPEC_S ( value, &timer_struct[timer_pos].timer_data );
+      timer_struct[timer_pos].timer_data = *value;
 
       /* Indicates that the timer is created and stopped */
  
@@ -582,9 +553,9 @@ int timer_settime(
                * returns the old ones in "ovalue" */
 
               if ( ovalue )
-                COPY_ITIMERSPEC_S ( &timer_struct[timer_pos].timer_data, ovalue );
+                *ovalue = timer_struct[timer_pos].timer_data;
 
-              COPY_ITIMERSPEC_S ( value, &timer_struct[timer_pos].timer_data );
+              timer_struct[timer_pos].timer_data = *value;
  
               /* It indicates that the time is running */
 
@@ -656,9 +627,9 @@ int timer_settime(
                * returns the old ones in "ovalue" */
 
               if ( ovalue )
-                COPY_ITIMERSPEC_S ( &timer_struct[timer_pos].timer_data, ovalue );
+                *ovalue = timer_struct[timer_pos].timer_data;
 
-              COPY_ITIMERSPEC_S ( value, &timer_struct[timer_pos].timer_data );
+              timer_struct[timer_pos].timer_data = *value;
  
               /* It indicates that the time is running */
 

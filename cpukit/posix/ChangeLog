@@ -1,11 +1,19 @@
 2000-08-15	Joel Sherrill <joel@OARcorp.com>
 
-	* posix/src/ptimer1.c: Switched to using set_errno_and_return_minus_one()
+	* src/ptimer1.c: Removed unused routine PRINT_ERRNO_S.
+	* src/ptimer1.c: Removed unnecessary routine COPY_ITIMERSPEC_S
+	and used structure copy instead.
+	* src/ptimer1.c: Renamed timer_alive_t to POSIX_Timer_Control.
+	* include/rtems/posix/timer.h: Ditto.
+
+2000-08-15	Joel Sherrill <joel@OARcorp.com>
+
+	* src/ptimer1.c: Switched to using set_errno_and_return_minus_one()
 	to ensure that errno was always set.
 
 2000-08-15	Joel Sherrill <joel@OARcorp.com>
 
-	* posix/src/ptimer1.c (timer_settime): Converted use of rtems_clock_get
+	* src/ptimer1.c (timer_settime): Converted use of rtems_clock_get
 	to use SuperCore _TOD_Current variable.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>

@@ -74,7 +74,7 @@ void TIMER_INITIALIZE_S ( int timer_pos )
  * ***************************************************************************/
 
 int timer_max;
-timer_alive_t *timer_struct;
+POSIX_Timer_Control *timer_struct;
 
 
 void _POSIX_Timer_Manager_initialization ( int max_timers )
@@ -82,7 +82,7 @@ void _POSIX_Timer_Manager_initialization ( int max_timers )
    int index;
 
    timer_struct = _Workspace_Allocate_or_fatal_error(
-      max_timers * sizeof(timer_alive_t) );
+      max_timers * sizeof(POSIX_Timer_Control) );
 
    /* 
     *  Initialize all the timers

@@ -43,14 +43,14 @@ typedef struct {
   unsigned32        ticks;      /* Number of ticks of the initialization */
   unsigned32        overrun;    /* Number of expirations of the timer    */
   rtems_time_of_day time;       /* Time in which the timer was started   */
-} timer_alive_t;
+} POSIX_Timer_Control;
 
 /*
  * Array of Timers
  */
 
 extern int timer_max;
-extern timer_alive_t *timer_struct;
+extern POSIX_Timer_Control *timer_struct;
 
 #endif
 /* end of include file */
