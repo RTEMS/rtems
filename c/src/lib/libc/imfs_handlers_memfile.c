@@ -31,7 +31,7 @@ rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   IMFS_fchmod,
   memfile_ftruncate,
   NULL,                /* fpathconf */
-  NULL,                /* fsync */
+  IMFS_fdatasync,      /* fsync */
   IMFS_fdatasync,
   IMFS_fcntl,
   memfile_rmnod
