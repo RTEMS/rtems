@@ -17,6 +17,7 @@
 /* functions */
 
 #include <pmacros.h>
+#include <errno.h>
 
 void *POSIX_Init(
   void *argument
