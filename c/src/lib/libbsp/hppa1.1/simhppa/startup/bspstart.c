@@ -363,12 +363,12 @@ bsp_start(void)
     Cpu_table.external_interrupts = 0;
 
     Cpu_table.external_interrupt[ Cpu_table.external_interrupts ] =
-         HPPA_INTERRUPT_EXTERNAL_INTERVAL_TIMER - HPPA_INTERRUPT_EXTERNAL_BASE;
+                                   HPPA_INTERRUPT_EXTERNAL_INTERVAL_TIMER;
     Cpu_table.external_interrupts++;
 
     if ( Configuration.User_multiprocessing_table ) {
       Cpu_table.external_interrupt[ Cpu_table.external_interrupts ] =
-         HPPA_INTERRUPT_EXTERNAL_10 - HPPA_INTERRUPT_EXTERNAL_BASE;
+                                               HPPA_INTERRUPT_EXTERNAL_10;
       Cpu_table.external_interrupts++;
     }
 #endif
