@@ -145,6 +145,7 @@ SECTIONS
 	_clear_start = .;
 	*(.bss)
 	*(.bss.*)
+	*(.gnu.linkonce.b.*)
 	*(COMMON)
 	. = ALIGN(64);
 	_clear_end = .;

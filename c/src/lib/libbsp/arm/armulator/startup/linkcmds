@@ -48,6 +48,7 @@ SECTIONS
     { 
  	*(.data) 
 	*(.jcr)
+	*(.gnu.linkonce.d*)
 	CONSTRUCTORS
 	 _edata = .;
     }  
@@ -56,6 +57,7 @@ SECTIONS
 	 _bss_start = .;
 	_clear_start = .;
 	*(.bss)	 
+	*(.gnu.linkonce.b.*)
 	*(COMMON) 
 	. = ALIGN (64);
 	_stack_init = .;

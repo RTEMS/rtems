@@ -1,3 +1,7 @@
+2004-11-05	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Add .gnu.linkonce.b section.
+
 2004-09-29	Joel Sherrill <joel@OARcorp.com>
 
 	* include/tm27.h: i960 obsoleted and all references removed.
