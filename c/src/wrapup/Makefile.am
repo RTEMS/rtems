@@ -14,8 +14,8 @@ LIB = $(PROJECT_RELEASE)/lib/librtemsall${LIB_VARIANT}.a
 if HAS_NETWORKING
 LIBNETWORKING = $(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a \
     $(PROJECT_RELEASE)/lib/librpc$(LIB_VARIANT).a \
+    $(PROJECT_RELEASE)/lib/libxdr$(LIB_VARIANT).a
 endif
-##    $(PROJECT_RELEASE)/lib/libxdr$(LIB_VARIANT).a
 
 if HAS_RDBG
 LIBRDBG = $(PROJECT_RELEASE)/lib/librdbg$(LIB_VARIANT).a
