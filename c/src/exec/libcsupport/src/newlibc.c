@@ -290,6 +290,7 @@ libc_init(int reentrant)
     }
 }
 
+#if 0
 /*
  *  Routines required by the gnat runtime.
  */
@@ -298,6 +299,7 @@ int get_errno()
 {
   return errno;
 }
+#endif
 
 /*
  *  Function:   _exit
@@ -373,6 +375,7 @@ int __kill( pid_t pid, int sig )
   return 0;
 }
 
+#if !defined(RTEMS_POSIX_API)
 unsigned int sleep(
   unsigned int seconds
 )
@@ -397,6 +400,7 @@ unsigned int sleep(
  
   return 0;
 }
+#endif
 
 
 #endif
