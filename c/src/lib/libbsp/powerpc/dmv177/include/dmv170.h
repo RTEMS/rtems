@@ -46,11 +46,18 @@ extern "C" {
 /* Real Time Clock Base Address */
 #define  DMV170_RTC_ADDRESS   (unsigned char *)0xf2c00000
 
-/* base address of the DUART(68681) */
-#define  DUART_ADDR	0xf2800000
+/* base address of the DUART (68681) */
+#define  MC68681_ADDR         0xf2800000
+#define  MC68681_PORT1_ADDR   0xf2800000
+#define  MC68681_PORT2_ADDR   0xf2800040
 
 /* base address for the SCC (85C30) */ 
-#define  SCC_ADDR       0xfb000000
+#define  Z85C30_ADDR       0xfb000000
+#define  Z85C30_CTRL_A     0xfb000000
+#define  Z85C30_DATA_A     0xfb000000
+#define  Z85C30_CTRL_B     0xfb000000
+#define  Z85C30_DATA_B     0xfb000000
+#define  Z85C30_CLOCK      0
 
 #define DMV170_LOCAL_CONTROL_STATUS_REG                   0xf2400000
 #define DMV170_TIMER0_COUNT_INTERVAL_REG                  0xf2400008
