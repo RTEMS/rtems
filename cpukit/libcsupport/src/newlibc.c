@@ -42,6 +42,8 @@
  
 #include <stdio.h>
 
+int _fwalk(struct _reent *ptr, int (*function) (FILE *) );
+
 int              libc_reentrant;        /* do we think we are reentrant? */
 struct _reent    libc_global_reent;
 
@@ -196,6 +198,26 @@ rtems_extension libc_begin_hook(rtems_tcb *current_task)
  *
  */
 
+int newlib_free_buffers(
+  FILE *fp
+)
+{
+  switch ( fileno(fp) ) {
+    case 0:
+    case 1:
+    case 2:
+      if (fp->_flags & __SMBF) {
+        free( fp->_bf._base );
+        fp->_flags &= ~__SMBF;
+        fp->_bf._base = fp->_p = (unsigned char *) NULL;
+      }
+      break;
+    default:
+     fclose(fp);
+  }
+  return 0;
+}
+
 rtems_extension libc_delete_hook(
   rtems_tcb *current_task,
   rtems_tcb *deleted_task
@@ -215,8 +237,14 @@ rtems_extension libc_delete_hook(
 
   /* if (ptr) */
   if (ptr && ptr != &libc_global_reent) {
+/*
     _wrapup_reent(ptr);
     _reclaim_reent(ptr);
+*/
+    /*
+     *  Just in case there are some buffers lying around.
+     */ 
+    _fwalk(ptr, newlib_free_buffers);
 #if REENT_MALLOCED
     free(ptr);
 #else
