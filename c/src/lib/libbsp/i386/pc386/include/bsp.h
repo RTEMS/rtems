@@ -58,11 +58,6 @@ extern "C" {
 #define BSP_LIBIO_MAX_FDS 20             /* Number of libio files we want.    */
 
 /*-------------------------------------------------------------------------+
-| Memory related constants.
-+--------------------------------------------------------------------------*/
-#define HEAP_SIZE 64  /* Size of libc Heap (used for malloc et al) in KBytes. */
-
-/*-------------------------------------------------------------------------+
 | Video (console) related constants.
 +--------------------------------------------------------------------------*/
 
