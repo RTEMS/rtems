@@ -1,3 +1,8 @@
+2004-10-26	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* Makefile.am: Fix network_CPPFLAGS. Reformat.
+	* network/GT64260eth.c: Properly prototype GT64260eth_err().
+
 2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* network/GT64260eth.c: Remove ether_sprintf.

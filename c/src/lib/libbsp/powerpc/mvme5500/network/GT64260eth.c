@@ -548,7 +548,7 @@ static void GT64260eth_stats(struct GTeth_softc *sc)
   printf("         Active Txqs:%-8lu\n", sc->txq_nactive); 
 }
 
-GT64260eth_err()
+void GT64260eth_err()
 {
   printf(" Missed Frame errors:%-8lu\n", GTeth_MissedFrame_err);
 }
