@@ -1,3 +1,41 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* sp01/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp02/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp03/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp04/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp05/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp06/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp07/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp08/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp09/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp11/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp12/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp13/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp14/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp15/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp16/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp17/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp19/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp20/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp21/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp22/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp23/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp24/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp25/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp26/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp27/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp28/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp29/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp30/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* sp31/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* spfatal/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* spsize/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2002-03-20	Chris Johns <ccj@acm.org>
 
 	* PR145.
