@@ -23,15 +23,13 @@
  *  Global information for the base file system.
  */
 
-rtems_filesystem_location_info_t rtems_filesystem_current;
-rtems_filesystem_location_info_t rtems_filesystem_root;
-nlink_t                          rtems_filesystem_link_counts;
+rtems_user_env_t   rtems_global_user_env;
+rtems_user_env_t * rtems_current_user_env = &rtems_global_user_env;
 
 /*
  *  Default mode for created files.
  */
 
-mode_t rtems_filesystem_umask;
 
 /*
  *  rtems_filesystem_initialize

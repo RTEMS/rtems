@@ -12,7 +12,7 @@ ERROR_C_FILES = error.c
 ASSOCIATION_C_FILES = assoc.c assocnamebad.c
 
 BASE_FS_C_FILES = base_fs.c mount.c unmount.c libio.c \
-    libio_sockets.c eval.c fs_null_handlers.c
+    libio_sockets.c eval.c fs_null_handlers.c privateenv.c
 
 TERMIOS_C_FILES = cfgetispeed.c cfgetospeed.c cfsetispeed.c cfsetospeed.c \
     tcgetattr.c tcsetattr.c tcdrain.c tcflow.c tcflush.c tcgetprgrp.c \

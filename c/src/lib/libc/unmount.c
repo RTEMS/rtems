@@ -37,7 +37,6 @@
  */
 
 extern Chain_Control                    rtems_filesystem_mount_table_control;
-extern rtems_filesystem_location_info_t rtems_filesystem_current;
 
 int search_mt_for_mount_point(
   rtems_filesystem_location_info_t *location_of_mount_point

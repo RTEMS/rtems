@@ -65,12 +65,6 @@ extern rtems_libio_t  *rtems_libio_last_iop;
 extern rtems_libio_t *rtems_libio_iop_freelist;
 
 /*
- *  Default mode for all files.
- */
-
-extern mode_t    rtems_filesystem_umask;
-
-/*
  *  set_errno_and_return_minus_one
  *
  *  Macro to ease common way to return an error.
@@ -214,10 +208,27 @@ extern mode_t    rtems_filesystem_umask;
 /*
  *  External structures
  */
+typedef struct {
+ rtems_filesystem_location_info_t current_directory;
+ rtems_filesystem_location_info_t root_directory;
+ /* Default mode for all files. */
+ mode_t                           umask;
+ nlink_t                          link_counts;
+} rtems_user_env_t;
 
-extern rtems_filesystem_location_info_t rtems_filesystem_current;
-extern rtems_filesystem_location_info_t rtems_filesystem_root;
-extern nlink_t                          rtems_filesystem_link_counts;
+extern rtems_user_env_t * rtems_current_user_env; 
+extern rtems_user_env_t   rtems_global_user_env; 
+
+#define rtems_filesystem_current     (rtems_current_user_env->current_directory)
+#define rtems_filesystem_root        (rtems_current_user_env->root_directory)
+#define rtems_filesystem_link_counts (rtems_current_user_env->link_counts)
+#define rtems_filesystem_umask       (rtems_current_user_env->umask)
+
+/*
+ *  Instantiate a private copy of the per user information for the calling task.
+ */
+
+rtems_status_code rtems_libio_set_private_env(void);
 
 
 /*
