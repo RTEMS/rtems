@@ -34,6 +34,7 @@
 /* PCI 0 memory space as seen from the CPU */
 #define PCI0_MEM_BASE		0x80000000
 #define PCI_MEM_BASE            0  /* glue for vmeUniverse */
+#define PCI_MEM_BASE_ADJUSTMENT        0
 
 /* address of our ram on the PCI bus */
 #define	PCI_DRAM_OFFSET	        0

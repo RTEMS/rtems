@@ -1,3 +1,7 @@
+2004-11-30	Eric Norum <norume@aps.anl.gov>
+
+    * mvme5500/include/bsp.h: Add definition for PCI_MEM_BASE_ADJUSTMENT
+
 2004-11-23	Joel Sherrill <joel@OARcorp.com>
 
 	* eth_comm/.cvsignore, eth_comm/ChangeLog, eth_comm/Makefile.am,
