@@ -22,9 +22,7 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 RTEMS_CHECK_CXX(RTEMS_BSP)
 ## check for g++
-if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
-  RTEMS_PROG_CXX_FOR_TARGET
-fi
+RTEMS_PROG_CXX_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
 AM_CONDITIONAL(HAS_CXX,test "$HAS_CPLUSPLUS" = "yes")
@@ -32,8 +30,5 @@ AM_CONDITIONAL(HAS_CXX,test "$HAS_CPLUSPLUS" = "yes")
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-include/Makefile
-src/Makefile
-])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

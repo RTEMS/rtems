@@ -1,3 +1,11 @@
+2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/Makefile.am: Remove.
+	* include/Makefile.am: Remove.
+	* Makefile.am: Merge-in src/Makefile.am, include/Makefile.am.
+	* configure.ac: Reflect changes above. 
+	Unconditionally check for CXX.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.
