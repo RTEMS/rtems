@@ -326,16 +326,28 @@ typedef struct @{
 
 @subheading Corresponding Structure Element:
 
-XXX
+evalpath
 
 @subheading Arguments:
 
-XXX
+@example
+  const char                        *pathname,      /* IN     */
+  int                                flags,         /* IN     */
+  rtems_filesystem_location_info_t  *pathloc        /* IN/OUT */
+@end example
 
 @subheading Description:
 
-XXX
+This routine is responsible for evaluating the pathname passed in
+based upon the flags and the valid @code{rthems_filesystem_location_info_t}.
+Additionally, it must make any changes to pathloc necessary to identify 
+the pathname node.  This should include calling the evalpath for a mounted 
+filesystem, if the given filesystem supports the mount command.  
 
+This routine returns a 0 if the evaluation was successful. 
+Otherwise, it returns a -1 and sets errno to the correct error.
+
+This routine is required and should NOT be set to NULL.
 
 @c
 @c
@@ -346,16 +358,31 @@ XXX
 
 @subheading Corresponding Structure Element:
 
-XXX
+evalformake
 
 @subheading Arguments:
 
-XXX
+@example
+   const char                       *path,       /* IN */
+   rtems_filesystem_location_info_t *pathloc,    /* IN/OUT */
+   const char                      **name        /* OUT    */
+@end example
 
 @subheading Description:
 
-XXX
+This method is given a path to evaluate and a valid start location.  It
+is responsible for finding the parent node for a requested make command,
+setting pathloc information to identify the parent node, and setting
+the name pointer to the first character of the name of the new node.
+Additionally, if the filesystem supports the mount command, this method 
+should call the evalformake routine for the mounted filesystem. 
 
+This routine returns a 0 if the evaluation was successful.  Otherwise, it 
+returns a -1 and sets errno to the correct error.
+
+This routine is required and should NOT be set to NULL.  However, if
+the filesystem does not support user creation of a new node, it may
+set errno to ENOSYS and return -1.
 
 @c
 @c
@@ -387,6 +414,8 @@ If the link count exceeds LINK_MAX an error will be returned.
 
 The name of the link will be normalized to remove extraneous separators from
 the end of the name.
+
+This routine is not required and may be set to NULL.
 
 @c
 @c
