@@ -712,3 +712,18 @@ int mq_getattr(
   }
   return POSIX_BOTTOM_REACHED();
 }
+
+/*PAGE
+ *
+ *  _POSIX_Message_queue_Name_to_id
+ *
+ *  XXX
+ */
+
+int _POSIX_Message_queue_Name_to_id(
+  const char          *name,
+  Objects_Id          *id
+)
+{
+  return 0; /* XXX fill me in */
+}
