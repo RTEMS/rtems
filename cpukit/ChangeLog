@@ -1,3 +1,11 @@
+2004-01-30	Wilfried Busalski <w.busalski@lancier-monitoring.de>
+
+	PR pppd/564
+	* libnetworking/net/if_ppp.c, libnetworking/net/if_pppvar.h,
+	libnetworking/net/ppp_tty.c: ppp0 Interface lose packets if the
+	system use a slow baudrate for the modem or the tcp/ip-packet is
+	fragmented.
+
 2004-01-30	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog, rtems/Makefile.am, rtems/include/rtems/rtems/support.h:
