@@ -1,3 +1,20 @@
+2002-06-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: RTEMS_TOP(../../../..).
+	AC_CONFIG_AUX_DIR(../../../..).
+	Remove RTEMS_CANONICAL_HOST.
+	Use RTEMS_ENV_RTEMSCPU.
+	Add AC_PROG_RANLIB.
+	* include/rpc/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* include/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* include/rpcsvc/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	ACLOCAL_AMFLAGS = -I ../aclocal.
+	* src/rpc/PSD.doc/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* src/rpc/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* src/xdr/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:

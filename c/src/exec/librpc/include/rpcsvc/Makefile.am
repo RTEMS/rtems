@@ -9,4 +9,4 @@ EXTRA_DIST = bootparam_prot.x crypt.x key_prot.x klm_prot.x mount.x \
     rstat.x rwall.x sm_inter.x spray.x yp.x yp_prot.h ypclnt.h yppasswd.x \
     ypupdate_prot.x ypxfrd.x
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../automake/local.am
