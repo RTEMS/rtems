@@ -38,6 +38,19 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free (
 {
   _Objects_Free( &_POSIX_Message_queue_Information, &the_mq->Object );
 }
+
+/*PAGE
+ *
+ *  _POSIX_Message_queue_Namespace_remove
+ */
+ 
+RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Namespace_remove (
+  POSIX_Message_queue_Control *the_mq
+)
+{
+  _Objects_Namespace_remove( 
+    &_POSIX_Message_queue_Information, &the_mq->Object );
+}
  
 /*PAGE
  *
