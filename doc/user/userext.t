@@ -199,7 +199,8 @@ conventions on the user.
 @subsubsection TASK_CREATE Extension
 
 The TASK_CREATE extension directly corresponds to the
-task_create directive.  If this extension is defined in any
+@code{@value{DIRPREFIX}task_create} directive.  If this extension
+is defined in any
 static or dynamic extension set and a task is being created,
 then the extension routine will automatically be invoked by
 RTEMS.  The extension should have a prototype similar to the
@@ -209,7 +210,7 @@ following:
 @findex rtems_extension
 @ifset is-C
 @example
-rtems_extension user_task_create(
+boolean user_task_create(
   rtems_tcb *current_task,
   rtems_tcb *new_task
 );
@@ -218,19 +219,28 @@ rtems_extension user_task_create(
 
 @ifset is-Ada
 @example
-procedure User_Task_Create (
+function User_Task_Create (
    Current_Task : in     RTEMS.TCB_Pointer;
    New_Task     : in     RTEMS.TCB_Pointer
-);
+) returns Boolean;
 @end example
 @end ifset
 
-where current_task can be used to access the TCB for
+where @code{current_task} can be used to access the TCB for
 the currently executing task, and new_task can be used to access
 the TCB for the new task being created.  This extension is
-invoked from the task_create directive after new_task has been
+invoked from the @code{@value{DIRPREFIX}task_create}
+directive after @code{new_task} has been
 completely initialized, but before it is placed on a ready TCB
 chain.
+
+The user extension is expected to return the boolean
+value @code{TRUE} if it successfully executed and
+@code{FALSE} otherwise.  A task create user extension
+will frequently attempt to allocate resources.  If this
+allocation fails, then the extension should return
+@code{FALSE} and the entire task create operation
+will fail.
 
 @subsubsection TASK_START Extension
 
