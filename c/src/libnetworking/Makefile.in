@@ -18,8 +18,7 @@ VPATH = @srcdir@
 include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
-# add rtems_servers
-SUB_DIRS=kern lib libc net netinet nfs rtems wrapup
+SUB_DIRS=kern lib libc net netinet nfs rtems rtems_servers wrapup
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
