@@ -1,5 +1,11 @@
 2000-12-19	Joel Sherrill <joel@OARcorp.com>
 
+	* cpu_asm.S (_ISR_Handler): Return to the address in the EPC register.
+	Previous code resulting in the interrupted immediately returning
+	to the caller of the routine it was inside.
+
+2000-12-19	Joel Sherrill <joel@OARcorp.com>
+
 	* cpu.c (_CPU_Initialize): Do not initialize _ISR_Vector_table() here
 	because it has not been allocated yet.
 

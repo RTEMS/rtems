@@ -909,9 +909,11 @@ _ISR_Handler_exit:
 	.set at
 
 	addiu sp,sp,EXCP_STACK_SIZE 
+
+	mfc0	k0, C0_EPC
 	
         rfe  /* Might not need to do RFE here... */
-	j ra
+	j k0
 	nop
 
        .set    reorder
