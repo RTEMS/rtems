@@ -1,3 +1,7 @@
+/*
+ *  $Id$
+ */
+
 #define TEST_INIT
 #include <tmacros.h>
 
@@ -16,7 +20,6 @@ rtems_task Init(rtems_task_argument argument);
 
 #include <bsp.h>
 #include <rtems/error.h>
-#include <rtems/rtems/task_variable.h>
 #include <stdio.h>
 
 volatile int taskvar;
