@@ -11,9 +11,7 @@ PGM = ${ARCH}/$(PGMNAME).rel
 C_FILES = dummy.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-H_FILES =
-
-SRCS = $(C_FILES) $(H_FILES)
+SRCS = $(C_FILES)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
@@ -23,14 +21,14 @@ TMPINSTALL_FILES = \
 $(PROJECT_INCLUDE)/rtems \
 $(PROJECT_RELEASE)/lib/$(PGMNAME)$(LIB_VARIANT).rel
 
-$(PROJECT_INCLUDE)/rtems):
+$(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-${PGM}: ${SRCS} ${OBJS}
+${PGM}: ${OBJS}
 	$(make-rel)
 
 $(PROJECT_RELEASE)/lib/$(PGMNAME)$(LIB_VARIANT).rel: $(PGM)

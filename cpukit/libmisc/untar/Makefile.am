@@ -32,7 +32,7 @@ $(PROJECT_INCLUDE)/rtems/%.h: %.h
 # (OPTIONAL) Add local stuff here using +=
 #
 
-${LIB}: ${SRCS} ${OBJS}
+${LIB}: ${OBJS}
 	$(make-library)
 
 all: ${ARCH} $(PREINSTALL_FILES) $(LIB) $(TMPINSTALL_FILES)

@@ -8,20 +8,17 @@ LIBNAME = libmisc
 LIB = ${ARCH}/$(LIBNAME).a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/lib.cfg
+include $(top_srcdir)/../../../automake/lib.am
 
 TMP_LIBS = ../monitor/$(ARCH)/libmonitor-tmp.a ../untar/$(ARCH)/libuntar-tmp.a \
     ../stackchk/$(ARCH)/libstackchk-tmp.a ../cpuuse/$(ARCH)/libcpuuse-tmp.a \
     ../rtmonuse/$(ARCH)/librtmonuse-tmp.a \
     ../dumpbuf/$(ARCH)/libdumpbuf-tmp.a
 
-TMPINSTALL_FILES = \
-$(PROJECT_RELEASE)/lib \
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIBSUFFIX_VA)
+TMPINSTALL_FILES += \
+$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
-$(PROJECT_RELEASE)/lib:
-	@$(mkinstalldirs) $@
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIBSUFFIX_VA): $(LIB)
+$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
 #
