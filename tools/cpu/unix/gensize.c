@@ -34,8 +34,8 @@
 #include <signal.h>
 
 typedef struct {
-  jmp_buf   regs;
-  sigset_t  isr_level;
+  jmp_buf     regs;
+  int         isr_level;
 } Context_Control;
 
 int main(
