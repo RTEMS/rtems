@@ -1,5 +1,9 @@
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* new-exceptions/cpu.c: Add CPU_MINIMUM_STACK_FRAME_SIZE.
+
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* new-exceptions/cpu.c (_CPU_ISR_install_vector): New.
 
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>

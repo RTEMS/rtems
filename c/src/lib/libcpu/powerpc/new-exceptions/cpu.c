@@ -65,6 +65,9 @@ void _CPU_Initialize(
  *  _CPU_Context_Initialize
  */
 
+/* PPC_ABI_SVR4 or PPC_ABI_EABI */
+#define CPU_MINIMUM_STACK_FRAME_SIZE 8
+
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
   uint32_t         *stack_base,
