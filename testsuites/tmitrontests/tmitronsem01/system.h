@@ -14,7 +14,7 @@
  */
 
 #include <tmacros.h>
-#include <itron.h>
+#include <rtems/itron.h>
 #include <assert.h>
 
 /* functions */
