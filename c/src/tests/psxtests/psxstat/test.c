@@ -481,8 +481,11 @@ void Cause_faults()
   assert( errno == EPERM );
 
   /*
-   * Try to chdir to a file.
+   * Change file to executable then try to chdir to it. 
    */
+
+  status = chmod( Files[0], S_IXUSR );
+  assert( status != -1 );
 
   printf("chdir to a file should fail with ENOTDIR\n");
   status = chdir( Files[0] );
