@@ -1,3 +1,10 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/ckinit.c, console/console.c, console/consolereserveresources.c,
+	console/debugputs.c, include/bsp.h, include/coverhd.h,
+	include/leon.h, startup/setvec.c, timer/timer.c: URL for license
+	changed.
+
 2003-09-03	Jiri Gaisler <jiri@gaisler.com>
 
 	PR 477/networking
