@@ -1,9 +1,9 @@
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Makefile.am: Reflect having moved automake.
-	i960ca/Makefile.am: Reflect having moved automake.
-	i960ka/Makefile.am: Reflect having moved automake.
-	i960rp/Makefile.am: Reflect having moved automake.
+	* Makefile.am: Reflect having moved automake/.
+	* i960ca/Makefile.am: Reflect having moved automake/.
+	* i960ka/Makefile.am: Reflect having moved automake/.
+	* i960rp/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

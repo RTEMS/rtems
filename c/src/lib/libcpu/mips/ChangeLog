@@ -1,19 +1,19 @@
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Makefile.am: Reflect having moved automake.
-	clock/Makefile.am: Reflect having moved automake.
-	mongoosev/Makefile.am: Reflect having moved automake.
-	mongoosev/duart/Makefile.am: Reflect having moved automake.
-	mongoosev/vectorisrs/Makefile.am: Reflect having moved automake.
-	r46xx/Makefile.am: Reflect having moved automake.
-	r46xx/vectorisrs/Makefile.am: Reflect having moved automake.
-	shared/Makefile.am: Reflect having moved automake.
-	shared/cache/Makefile.am: Reflect having moved automake.
-	shared/interrupts/Makefile.am: Reflect having moved automake.
-	timer/Makefile.am: Reflect having moved automake.
-	tx39/Makefile.am: Reflect having moved automake.
-	tx39/include/Makefile.am: Reflect having moved automake.
-	tx39/vectorisrs/Makefile.am: Reflect having moved automake.
+	* Makefile.am: Reflect having moved automake/.
+	* clock/Makefile.am: Reflect having moved automake/.
+	* mongoosev/Makefile.am: Reflect having moved automake/.
+	* mongoosev/duart/Makefile.am: Reflect having moved automake/.
+	* mongoosev/vectorisrs/Makefile.am: Reflect having moved automake/.
+	* r46xx/Makefile.am: Reflect having moved automake/.
+	* r46xx/vectorisrs/Makefile.am: Reflect having moved automake/.
+	* shared/Makefile.am: Reflect having moved automake/.
+	* shared/cache/Makefile.am: Reflect having moved automake/.
+	* shared/interrupts/Makefile.am: Reflect having moved automake/.
+	* timer/Makefile.am: Reflect having moved automake/.
+	* tx39/Makefile.am: Reflect having moved automake/.
+	* tx39/include/Makefile.am: Reflect having moved automake/.
+	* tx39/vectorisrs/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

@@ -1,10 +1,10 @@
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Makefile.am: Reflect having moved automake.
-	ide/Makefile.am: Reflect having moved automake.
-	network/Makefile.am: Reflect having moved automake.
-	rtc/Makefile.am: Reflect having moved automake.
-	serial/Makefile.am: Reflect having moved automake.
+	* Makefile.am: Reflect having moved automake/.
+	* ide/Makefile.am: Reflect having moved automake/.
+	* network/Makefile.am: Reflect having moved automake/.
+	* rtc/Makefile.am: Reflect having moved automake/.
+	* serial/Makefile.am: Reflect having moved automake/.
 
 2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

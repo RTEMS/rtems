@@ -1,11 +1,11 @@
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Makefile.am: Reflect having moved automake.
-	clock/Makefile.am: Reflect having moved automake.
-	include/Makefile.am: Reflect having moved automake.
-	milli/Makefile.am: Reflect having moved automake.
-	semaphore/Makefile.am: Reflect having moved automake.
-	timer/Makefile.am: Reflect having moved automake.
+	* Makefile.am: Reflect having moved automake/.
+	* clock/Makefile.am: Reflect having moved automake/.
+	* include/Makefile.am: Reflect having moved automake/.
+	* milli/Makefile.am: Reflect having moved automake/.
+	* semaphore/Makefile.am: Reflect having moved automake/.
+	* timer/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

@@ -1,14 +1,14 @@
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Makefile.am: Reflect having moved automake.
-	debug_ada/Makefile.am: Reflect having moved automake.
-	debug_c/Makefile.am: Reflect having moved automake.
-	dos_sup/Makefile.am: Reflect having moved automake.
-	network_ada/Makefile.am: Reflect having moved automake.
-	network_ada/adasockets/Makefile.am: Reflect having moved automake.
-	network_ada/listener/Makefile.am: Reflect having moved automake.
-	network_ada/tcprelay/Makefile.am: Reflect having moved automake.
-	ts_1325_ada/Makefile.am: Reflect having moved automake.
+	* Makefile.am: Reflect having moved automake/.
+	* debug_ada/Makefile.am: Reflect having moved automake/.
+	* debug_c/Makefile.am: Reflect having moved automake/.
+	* dos_sup/Makefile.am: Reflect having moved automake/.
+	* network_ada/Makefile.am: Reflect having moved automake/.
+	* network_ada/adasockets/Makefile.am: Reflect having moved automake/.
+	* network_ada/listener/Makefile.am: Reflect having moved automake/.
+	* network_ada/tcprelay/Makefile.am: Reflect having moved automake/.
+	* ts_1325_ada/Makefile.am: Reflect having moved automake/.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

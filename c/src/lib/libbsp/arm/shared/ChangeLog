@@ -1,8 +1,8 @@
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Makefile.am: Reflect having moved automake.
-	comm/Makefile.am: Reflect having moved automake.
-	irq/Makefile.am: Reflect having moved automake.
+	* Makefile.am: Reflect having moved automake/.
+	* comm/Makefile.am: Reflect having moved automake/.
+	* irq/Makefile.am: Reflect having moved automake/.
 
 2002-11-13	Jay Monkman <jtm@smoothsmoothie.com>
 

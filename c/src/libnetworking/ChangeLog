@@ -1,11 +1,11 @@
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Makefile.am: Reflect having moved automake.
-	pppd/Makefile.am: Reflect having moved automake.
-	rtems_servers/Makefile.am: Reflect having moved automake.
-	rtems_telnetd/Makefile.am: Reflect having moved automake.
-	rtems_webserver/Makefile.am: Reflect having moved automake.
-	wrapup/Makefile.am: Reflect having moved automake.
+	* Makefile.am: Reflect having moved automake/.
+	* pppd/Makefile.am: Reflect having moved automake/.
+	* rtems_servers/Makefile.am: Reflect having moved automake/.
+	* rtems_telnetd/Makefile.am: Reflect having moved automake/.
+	* rtems_webserver/Makefile.am: Reflect having moved automake/.
+	* wrapup/Makefile.am: Reflect having moved automake/.
 
 2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
