@@ -1,3 +1,8 @@
+2001-01-02	Joel Sherrill <joel@OARcorp.com>
+
+	* CHANGELOG: Removed.
+	* README: Merged CHANGELOG contents as initial changes.
+
 2000-12-14	Eric Norum <eric.norum@usask.ca>
 
 	* lib/tftpDriver.c: Added write capability.
