@@ -1,5 +1,10 @@
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
+	* Makefile.am: mips64orion port removed as mips port more completely
+	covers the MIPS family.
+
+2004-01-07	Joel Sherrill <joel@OARcorp.com>
+
 	* mips64orion/.cvsignore, mips64orion/BSP_TIMES, mips64orion/ChangeLog,
 	mips64orion/Makefile.am, mips64orion/bsp.t, mips64orion/callconv.t,
 	mips64orion/cpumodel.t, mips64orion/cputable.t,
