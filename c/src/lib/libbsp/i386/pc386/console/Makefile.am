@@ -37,7 +37,7 @@ $(PROJECT_INCLUDE)/rtems/%.h: %.h
 # the .rel file built here will be put into libbsp.a by
 # 	../wrapup/Makefile
 
-all-local: $(PREINSTALL_FILES) $(ARCH) $(console_rel_OBJECTS) $(PGM)
+all-local: $(PREINSTALL_FILES) $(console_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

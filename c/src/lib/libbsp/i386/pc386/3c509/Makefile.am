@@ -26,7 +26,7 @@ $(PGM): $(X3c509_rel_OBJECTS)
 # 	../wrapup/Makefile
 
 if HAS_NETWORKING
-all-local: $(ARCH) $(X3c509_rel_OBJECTS) $(PGM)
+all-local: $(X3c509_rel_OBJECTS) $(PGM)
 endif
 
 .PRECIOUS: $(PGM)

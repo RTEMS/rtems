@@ -21,7 +21,7 @@ $(PGM): $(clock_rel_OBJECTS)
 # the .rel file built here will be put into libbsp.a by
 # 	../wrapup/Makefile
 
-all-local: $(ARCH) $(clock_rel_OBJECTS) $(PGM)
+all-local: $(clock_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

@@ -1,3 +1,16 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* 3c509/Makefile.am: Remove all-local: $(ARCH).
+	* clock/Makefile.am: Remove all-local: $(ARCH).
+	* console/Makefile.am: Remove all-local: $(ARCH).
+	* ide/Makefile.am: Remove all-local: $(ARCH).
+	* ne2000/Makefile.am: Remove all-local: $(ARCH).
+	* start/Makefile.am: Remove all-local: $(ARCH).
+	* startup/Makefile.am: Remove all-local: $(ARCH).
+	* timer/Makefile.am: Remove all-local: $(ARCH).
+	* wd8003/Makefile.am: Remove all-local: $(ARCH).
+	* wrapup/Makefile.am: Remove all-local: $(ARCH).
+
 2003-10-02	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 502/bsps
