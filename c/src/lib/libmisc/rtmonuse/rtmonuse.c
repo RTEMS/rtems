@@ -128,6 +128,11 @@ void Period_usage_Dump( void )
   unsigned32              u32_name;
   char                    name[5];
  
+  if ( !Period_usage_Information ) {
+    printf( "Period statistics library is not initialized\n" );
+    return;
+  }
+
   printf( "Period information by period\n" ); 
   printf( "   ID      OWNER   PERIODS  MISSED    CPU TIME    WALL TIME\n" );
 
