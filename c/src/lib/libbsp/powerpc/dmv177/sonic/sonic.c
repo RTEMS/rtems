@@ -206,6 +206,7 @@ struct sonic {
   /*
    * Statistics
    */
+  unsigned long                   Interrupts;
   unsigned long                   rxInterrupts;
   unsigned long                   rxMissed;
   unsigned long                   rxGiant;
@@ -317,6 +318,7 @@ SONIC_STATIC void sonic_show (struct iface *iface)
 {
   struct sonic *dp = &sonic[iface->dev];
 
+  printf (" Total Interrupts:%-8lu", dp->Interrupts);
   printf ("    Rx Interrupts:%-8lu", dp->rxInterrupts);
   printf ("            Giant:%-8lu", dp->rxGiant);
   printf ("        Non-octet:%-8lu\n", dp->rxNonOctet);
@@ -365,6 +367,8 @@ SONIC_STATIC rtems_isr sonic_interrupt_handler (rtems_vector_number v)
    * Get pointer to SONIC registers
    */
   rp = dp->sonic;
+
+  dp->Interrupts++;
 
   /*
    * Packet received or receive buffer area exceeded?
@@ -532,6 +536,7 @@ SONIC_STATIC int sonic_raw (struct iface *iface, struct mbuf **bpp)
    * Wait for transmit descriptor to become available.
    */
   if (dp->tdaActiveCount == dp->tdaCount) {
+puts( "Wait for more TDAs" );
     /*
      * Find out who we are
      */
@@ -631,13 +636,6 @@ SONIC_STATIC int sonic_raw (struct iface *iface, struct mbuf **bpp)
   tdp->status = 0;
 
   /*
-   * Let KA9Q know the packet is on the way before we give it to the SONIC.
-   */
-
-  dp->txWaitTid = 0;
-  *bpp = NULL;
-
-  /*
    * Chain onto list and start transmission.
    */
   tdp->linkp = &(fp+1)->frag_link;
@@ -654,6 +652,12 @@ SONIC_STATIC int sonic_raw (struct iface *iface, struct mbuf **bpp)
   );
   sonic_write_register( rp, SONIC_REG_CR, CR_TXP );
 
+  /*
+   * Let KA9Q know the packet is on the way 
+   */
+
+  dp->txWaitTid = 0;
+  *bpp = NULL;
   return 0;
 }
 
@@ -1128,9 +1132,9 @@ SONIC_STATIC void sonic_initialize_hardware(
    */
 
   if (broadcastFlag)
-    sonic_write_register( rp, SONIC_REG_RCR, RCR_BRD );
+    sonic_write_register( rp, SONIC_REG_RCR, RCR_BRD | RDA_STATUS_PRO );
   else
-    sonic_write_register( rp, SONIC_REG_RCR, 0 );
+    sonic_write_register( rp, SONIC_REG_RCR, 0  | RDA_STATUS_PRO);
 
   /*
    * Set up Resource Area pointers
@@ -1165,13 +1169,11 @@ SONIC_STATIC void sonic_initialize_hardware(
   while (sonic_read_register( rp, SONIC_REG_CR ) & CR_RRRA)
     continue;
 
-#if 0
   /*
    * Remove device reset
    */
 
   sonic_write_register( rp, SONIC_REG_CR, 0 );
-#endif
 
   /*
    * Set up the SONIC CAM with our hardware address.
@@ -1187,11 +1189,11 @@ SONIC_STATIC void sonic_initialize_hardware(
     cdp->desc[i].cep = i;
   }
 
-  cdp->desc[0].cep = 0;      /* Fill first entry in CAM */
 #if (SONIC_DEBUG & SONIC_DEBUG_CAM)
   printf( "hwaddr: %2x:%2x:%2x:%2x:%2x:%2x\n",
      hwaddr[0], hwaddr[1], hwaddr[2], hwaddr[3], hwaddr[4], hwaddr[5] );
 #endif
+  cdp->desc[0].cep = 0;      /* Fill first entry in CAM */
   cdp->desc[0].cap2 = hwaddr[0] << 8 | hwaddr[1];
   cdp->desc[0].cap1 = hwaddr[2] << 8 | hwaddr[3];
   cdp->desc[0].cap0 = hwaddr[4] << 8 | hwaddr[5];
@@ -1295,11 +1297,17 @@ rtems_ka9q_driver_attach (int argc, char *argv[], void *p)
   }
 
   /*
+   *  zero out the control structure
+   */
+
+  memset( dp, 0, sizeof(struct sonic) );
+
+  /*
    * Create an inteface descriptor
    */
   iface = callocw (1, sizeof *iface);
   iface->name = strdup (argv[0]);
-  iface->dev = dp - sonic;;
+  iface->dev = dp - sonic;
 
   /*
    * Set default values
