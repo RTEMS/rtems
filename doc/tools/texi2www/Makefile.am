@@ -6,7 +6,7 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 noinst_SCRIPTS = texi2www texi2dvi
 
