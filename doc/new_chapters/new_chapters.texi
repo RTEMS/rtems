@@ -1,6 +1,6 @@
 \input ../texinfo/texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename posix_users_new
+@setfilename new_chapters
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
@@ -31,7 +31,7 @@
 @ifinfo
 @format
 START-INFO-DIR-ENTRY
-* RTEMS Posix API User's Guide: (posix_users).   Posix API User's Guide Plan
+* New Chapters: (new_chapters).   Miscellaneous New Chapters
 END-INFO-DIR-ENTRY
 @end format
 @end ifinfo
@@ -65,14 +65,14 @@ END-INFO-DIR-ENTRY
 @c
 @c  I don't really like having a short title page.  --joel
 @c
-@c @shorttitlepage RTEMS POSIX API User's Guide
+@c @shorttitlepage New Chapters
 
 @setchapternewpage odd
-@settitle RTEMS POSIX API User's Guide 
+@settitle New Chapters
 @titlepage
 @finalout
 
-@title RTEMS POSIX API User's Guide
+@title New Chapters
 @subtitle Edition @value{edition}, for RTEMS @value{version}
 @sp 1
 @subtitle @value{update-month}
@@ -84,25 +84,6 @@ END-INFO-DIR-ENTRY
 @c  This prevents a black box from being printed on "overflow" lines.
 @c  The alternative is to rework a sentence to avoid this problem.
 
-@include preface.texi
-@include process.texi
-@include signal.texi
-@include procenv.texi
-@include files.texi
-@include io.texi
-@include device.texi
-@include cspecific.texi
-@include systemdb.texi
-@include semaphores.texi
-@include mutex.texi
-@include cond.texi
-@include memorymgmt.texi
-@include sched.texi
-@include clock.texi
-@include message.texi
-@include thread.texi
-@include key.texi
-@include cancel.texi
 @include eventlog.texi
 @include dumpcontrol.texi
 @include confspace.texi
@@ -119,25 +100,6 @@ END-INFO-DIR-ENTRY
 This is the online version of the RTEMS POSIX API User's Guide
 
 @menu
-* Preface::
-* Process Creation and Execution Manager::
-* Signal Manager::
-* Process Environment Manager::
-* Files and Directories Manager::
-* Input and Output Primitives Manager::
-* Device- and Class- Specific Functions Manager::
-* Language-Specific Services for the C Programming Language Manager::
-* System Databases Manager::
-* Semaphores Manager::
-* Mutex Manager::
-* Condition Variable Manager::
-* Memory Management Manager::
-* Scheduler Manager::
-* Clock Manager::
-* Message Passing Manager::
-* Thread Manager::
-* Key Manager::
-* Thread Cancellation Manager::
 * Event Logging Manager::
 * Process Dump Control Manager::
 * Configuration Space Manager::
