@@ -569,7 +569,10 @@ dont_switch_stacks:
         orcc     %l7, %g0, %g0   ! Were signals sent to the currently
                                  !   executing thread?
         bz       simple_return   ! yes, then invoke the dispatcher
-        nop                      ! delay slot
+                                 ! use the delay slot to clear the signals
+                                 !   to the currently executing task flag
+        st       %g0, [%l6 + %lo(SYM(_ISR_Signals_to_thread_executing))]
+                                 
 
         /*
          *  Invoke interrupt dispatcher.
