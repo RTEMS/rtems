@@ -1,3 +1,10 @@
+2001-01-09	Joel Sherrill <joel@OARcorp.com>
+
+	* Removing non-function shmsupp directory.
+	* shmsupp/.cvsignore, shmsupp/Makefile.am, shmsupp/addrconv.c,
+	shmsupp/getcfg.c, shmsupp/lock.c, shmsupp/mpisr.c: Removed.
+	* configure.in, Makefile.am, wrapup/Makefile.am
+
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h: Removed incorrect error case.
