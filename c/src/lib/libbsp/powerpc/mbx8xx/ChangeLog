@@ -1,3 +1,13 @@
+2002-12-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* clock/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* console/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* irq/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	Remove SORDID_HACK. Eliminate *_O_FILES.
+	* network/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* startup/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* vectors/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+
 2002-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Don't include @RTEMS_BSP@.cfg.
