@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-#include <rtems/core/isr.h>
+#include <rtems/score/isr.h>
 
 /*
  *  Interrupt level type

@@ -28,8 +28,8 @@
 extern "C" {
 #endif
 
-#include <rtems/core/object.h>
-#include <rtems/core/userext.h>
+#include <rtems/score/object.h>
+#include <rtems/score/userext.h>
 #include <rtems/rtems/status.h>  /* XXX */
 #include <rtems/rtems/types.h>  /* XXX */
 

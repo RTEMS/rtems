@@ -17,7 +17,7 @@
 #ifndef __MESSAGE_QUEUE_inl
 #define __MESSAGE_QUEUE_inl
 
-#include <rtems/core/wkspace.h>
+#include <rtems/score/wkspace.h>
 
 /*PAGE
  *

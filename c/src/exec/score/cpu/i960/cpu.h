@@ -23,9 +23,9 @@ extern "C" {
 
 #pragma align 4            /* for GNU C structure alignment */
 
-#include <rtems/core/i960.h>
+#include <rtems/score/i960.h>
 #ifndef ASM
-#include <rtems/core/i960types.h>
+#include <rtems/score/i960types.h>
 #endif
 
 #define CPU_INLINE_ENABLE_DISPATCH       FALSE

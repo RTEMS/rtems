@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-#include <rtems/core/address.h>
+#include <rtems/score/address.h>
 
 /*
  *  This is used to manage each element (node) which is placed
@@ -422,7 +422,7 @@ STATIC INLINE boolean _Chain_Is_null_node(
   Chain_Node *the_node
 );
 
-#include <rtems/core/chain.inl>
+#include <rtems/score/chain.inl>
 
 #ifdef __cplusplus
 }

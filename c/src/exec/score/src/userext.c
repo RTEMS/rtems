@@ -15,7 +15,7 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/userext.h>
+#include <rtems/score/userext.h>
 
 /*PAGE
  *

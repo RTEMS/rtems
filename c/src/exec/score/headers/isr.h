@@ -50,6 +50,13 @@ typedef ISR_Handler ( *ISR_Handler_entry )(
                  ISR_Vector_number
              );
 /*
+ *  This constant promotes out the number of vectors supported by
+ *  the current CPU being used.
+ */
+ 
+#define ISR_NUMBER_OF_VECTORS    CPU_INTERRUPT_NUMBER_OF_VECTORS
+
+/*
  *  The following is TRUE if signals have been sent to the currently
  *  executing thread by an ISR handler.
  */
@@ -239,7 +246,7 @@ void _ISR_Handler( void );
 
 void _ISR_Dispatch( void );
 
-#include <rtems/core/isr.inl>
+#include <rtems/score/isr.inl>
 
 #ifdef __cplusplus
 }

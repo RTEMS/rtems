@@ -17,17 +17,17 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/modes.h>
-#include <rtems/core/object.h>
-#include <rtems/core/stack.h>
-#include <rtems/core/states.h>
+#include <rtems/score/object.h>
+#include <rtems/score/stack.h>
+#include <rtems/score/states.h>
 #include <rtems/rtems/tasks.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/threadq.h>
-#include <rtems/core/tod.h>
-#include <rtems/core/userext.h>
-#include <rtems/core/wkspace.h>
-#include <rtems/core/apiext.h>
-#include <rtems/core/sysstate.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/threadq.h>
+#include <rtems/score/tod.h>
+#include <rtems/score/userext.h>
+#include <rtems/score/wkspace.h>
+#include <rtems/score/apiext.h>
+#include <rtems/score/sysstate.h>
 
 /*PAGE
  *

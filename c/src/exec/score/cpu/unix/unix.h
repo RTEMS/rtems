@@ -64,15 +64,15 @@ extern "C" {
  
 #if defined(hpux)
  
-#define RTEMS_MODEL_NAME  "HP-UX"
+#define CPU_MODEL_NAME  "HP-UX"
  
 #elif defined(solaris)
  
-#define RTEMS_MODEL_NAME  "Solaris"
+#define CPU_MODEL_NAME  "Solaris"
  
 #elif defined(linux)
  
-#define RTEMS_MODEL_NAME  "Linux"
+#define CPU_MODEL_NAME  "Linux"
  
 #else
  

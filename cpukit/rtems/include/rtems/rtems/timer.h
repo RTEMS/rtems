@@ -33,9 +33,9 @@
 extern "C" {
 #endif
 
-#include <rtems/core/object.h>
-#include <rtems/core/tod.h>
-#include <rtems/core/watchdog.h>
+#include <rtems/score/object.h>
+#include <rtems/score/tod.h>
+#include <rtems/score/watchdog.h>
 
 /*
  *  The following enumerated type details the classes to which a timer

@@ -17,7 +17,7 @@
 #ifndef __PRIORITY_inl
 #define __PRIORITY_inl
 
-#include <rtems/core/bitfield.h>
+#include <rtems/score/bitfield.h>
 
 /*PAGE
  *

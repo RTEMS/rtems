@@ -15,10 +15,10 @@
 
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
-#include <rtems/core/address.h>
-#include <rtems/core/object.h>
+#include <rtems/score/address.h>
+#include <rtems/score/object.h>
 #include <rtems/rtems/part.h>
-#include <rtems/core/thread.h>
+#include <rtems/score/thread.h>
 
 void _Partition_Manager_initialization(
   unsigned32 maximum_partitions

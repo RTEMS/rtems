@@ -14,8 +14,8 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/watchdog.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/watchdog.h>
 
 /*PAGE
  *

@@ -85,7 +85,7 @@ STATIC INLINE unsigned32 _Stack_Adjust_size (
   unsigned32 size
 );
 
-#include <rtems/core/stack.inl>
+#include <rtems/score/stack.inl>
 
 #ifdef __cplusplus
 }

@@ -38,9 +38,9 @@
 extern "C" {
 #endif
 
-#include <rtems/core/object.h>
-#include <rtems/core/states.h>
-#include <rtems/core/thread.h>
+#include <rtems/score/object.h>
+#include <rtems/score/states.h>
+#include <rtems/score/thread.h>
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/eventset.h>
 #include <rtems/rtems/asr.h>

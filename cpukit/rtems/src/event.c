@@ -15,11 +15,11 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/event.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/object.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
-#include <rtems/core/states.h>
-#include <rtems/core/thread.h>
+#include <rtems/score/states.h>
+#include <rtems/score/thread.h>
 #include <rtems/rtems/tasks.h>
 
 /*PAGE

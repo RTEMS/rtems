@@ -30,19 +30,19 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/attr.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/object.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/sem.h>
-#include <rtems/core/coremutex.h>
-#include <rtems/core/coresem.h>
-#include <rtems/core/states.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/threadq.h>
-#include <rtems/core/mpci.h>
-#include <rtems/core/sysstate.h>
+#include <rtems/score/coremutex.h>
+#include <rtems/score/coresem.h>
+#include <rtems/score/states.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/threadq.h>
+#include <rtems/score/mpci.h>
+#include <rtems/score/sysstate.h>
 
-#include <rtems/core/interr.h>
+#include <rtems/score/interr.h>
 
 /*PAGE
  *

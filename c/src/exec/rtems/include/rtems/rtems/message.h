@@ -35,11 +35,11 @@ extern "C" {
 #endif
 
 #include <rtems/rtems/types.h>
-#include <rtems/core/chain.h>
-#include <rtems/core/object.h>
+#include <rtems/score/chain.h>
+#include <rtems/score/object.h>
 #include <rtems/rtems/attr.h>
-#include <rtems/core/threadq.h>
-#include <rtems/core/coremsg.h>
+#include <rtems/score/threadq.h>
+#include <rtems/score/coremsg.h>
 
 /*
  *  The following enumerated type details the modes in which a message

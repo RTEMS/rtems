@@ -58,14 +58,14 @@ int gettimeofday(
    * yet.  When it does this needs to be fixed.
    */
 
+#if 0
   if ( tzp ) {
     tzp->tz_minuteswest = 0;  /* at UTC */
     tzp->tz_dsttime = 0;      /* no daylight savings */
-#if 0
   tzp->minuteswest = timezone / 60; /* from seconds to minutes */
   tzp->dsttime = daylight;
-#endif
   }
+#endif
   return 0;
 }
 

@@ -22,9 +22,9 @@ extern "C" {
 #endif
 
 #ifndef ASM
-#include <rtems/core/i386types.h>
+#include <rtems/score/i386types.h>
 #endif
-#include <rtems/core/i386.h>
+#include <rtems/score/i386.h>
 
 /* conditional compilation parameters */
 

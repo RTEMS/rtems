@@ -21,10 +21,10 @@
 extern "C" {
 #endif
 
-#include <rtems/core/thread.h>
-#include <rtems/core/threadq.h>
-#include <rtems/core/priority.h>
-#include <rtems/core/watchdog.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/threadq.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/watchdog.h>
  
 /*
  *  The following type defines the callout which the API provides
@@ -110,19 +110,29 @@ typedef struct {
 }   CORE_message_queue_Attributes;
  
 /*
+ *  The following defines the type for a Notification handler.  A notification
+ *  handler is invoked when the message queue makes a 0->1 transition on
+ *  pending messages.
+ */
+
+typedef void (*CORE_message_queue_Notify_Handler)( void * );
+
+/*
  *  The following defines the control block used to manage each 
  *  counting message_queue.
  */
  
 typedef struct {
-  Thread_queue_Control           Wait_queue;
-  CORE_message_queue_Attributes  Attributes;
-  unsigned32                     maximum_pending_messages;
-  unsigned32                     number_of_pending_messages;
-  unsigned32                     maximum_message_size;
-  Chain_Control                  Pending_messages;
-  CORE_message_queue_Buffer     *message_buffers;
-  Chain_Control                  Inactive_messages;
+  Thread_queue_Control               Wait_queue;
+  CORE_message_queue_Attributes      Attributes;
+  unsigned32                         maximum_pending_messages;
+  unsigned32                         number_of_pending_messages;
+  unsigned32                         maximum_message_size;
+  Chain_Control                      Pending_messages;
+  CORE_message_queue_Buffer         *message_buffers;
+  CORE_message_queue_Notify_Handler  notify_handler;
+  void                              *notify_argument;
+  Chain_Control                      Inactive_messages;
 }   CORE_message_queue_Control;
 
 /*
@@ -389,15 +399,41 @@ STATIC INLINE void _CORE_message_queue_Prepend (
  *
  *  DESCRIPTION:
  *
- *  This function places the_message at the rear of the outstanding
- *  messages on the_message_queue.
+ *  This function returns TRUE if the_message_queue is TRUE and FALSE otherwise.
  */
  
 STATIC INLINE boolean _CORE_message_queue_Is_null (
   CORE_message_queue_Control *the_message_queue
 );
 
-#include <rtems/core/coremsg.inl>
+/*
+ *  _CORE_message_queue_Is_notify_enabled
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if notification is enabled on this message
+ *  queue and FALSE otherwise.
+ */
+ 
+STATIC INLINE boolean _CORE_message_queue_Is_notify_enabled (
+  CORE_message_queue_Control *the_message_queue
+);
+
+/*
+ *  _CORE_message_queue_Set_notify
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine initializes the notification information for the_message_queue.
+ */
+ 
+STATIC INLINE void _CORE_message_queue_Set_notify (
+  CORE_message_queue_Control        *the_message_queue,
+  CORE_message_queue_Notify_Handler  the_handler,
+  void                              *the_argument
+);
+
+#include <rtems/score/coremsg.inl>
 
 #ifdef __cplusplus
 }

@@ -396,7 +396,7 @@ STATIC INLINE unsigned32 _Heap_Build_flag (
   unsigned32 in_use_flag
 );
 
-#include <rtems/core/heap.inl>
+#include <rtems/score/heap.inl>
 
 #ifdef __cplusplus
 }

@@ -25,9 +25,9 @@
 extern "C" {
 #endif
 
-#include <rtems/core/object.h>
-#include <rtems/core/priority.h>
-#include <rtems/core/watchdog.h>
+#include <rtems/score/object.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/watchdog.h>
 
 /*
  *  The following enumerated type defines the packet classes.
@@ -114,7 +114,7 @@ STATIC INLINE boolean _Mp_packet_Is_null (
   MP_packet_Prefix   *the_packet
 );
 
-#include <rtems/core/mppkt.inl>
+#include <rtems/score/mppkt.inl>
 
 #ifdef __cplusplus
 }

@@ -22,7 +22,7 @@
 extern "C" {
 #endif
 
-#include <rtems/core/object.h>
+#include <rtems/score/object.h>
 
 /*
  *  The following type defines the control block used to manage
@@ -408,7 +408,7 @@ void _Watchdog_Tickle (
   Chain_Control *header
 );
 
-#include <rtems/core/watchdog.inl>
+#include <rtems/score/watchdog.inl>
 
 #ifdef __cplusplus
 }

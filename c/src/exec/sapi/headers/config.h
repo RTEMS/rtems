@@ -24,7 +24,7 @@ extern "C" {
 #include <rtems/rtems/status.h>
 #include <rtems/extension.h>
 #include <rtems/io.h>
-#include <rtems/core/mpci.h>
+#include <rtems/score/mpci.h>
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/tasks.h>
 

@@ -35,5 +35,14 @@
 #define _Thread_queue_Is_reverse_search( _the_priority ) \
      ( (_the_priority) & 0x20 )
 
+/*PAGE
+ *
+ *  _Thread_queue_Get_number_waiting
+ *
+ */
+ 
+#define _Thread_queue_Get_number_waiting( _the_thread_queue ) \
+  ( (_the_thread_queue)->count )
+
 #endif
 /* end of include file */

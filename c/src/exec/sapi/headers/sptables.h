@@ -27,7 +27,7 @@ extern "C" {
 #include <rtems/fatal.h>
 #include <rtems/init.h>
 #include <rtems/io.h>
-#include <rtems/core/sysstate.h>
+#include <rtems/score/sysstate.h>
 
 #include <rtems/rtems/intr.h>
 #include <rtems/rtems/clock.h>
@@ -62,7 +62,7 @@ const rtems_multiprocessing_table
  */
 
 const char _RTEMS_version[] =
-  "RTEMS RELEASE V3.5.01 (" CPU_NAME "/" RTEMS_MODEL_NAME ")";
+  "RTEMS RELEASE V3.5.01 (" CPU_NAME "/" CPU_MODEL_NAME ")";
 
 
 /*

@@ -55,7 +55,7 @@ extern "C" {
  
 #if defined(no_cpu)
  
-#define RTEMS_MODEL_NAME  "no_cpu"
+#define CPU_MODEL_NAME  "no_cpu"
 #define NOCPU_HAS_FPU     1
  
 #else

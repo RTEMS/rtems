@@ -21,10 +21,10 @@
 extern "C" {
 #endif
 
-#include <rtems/core/mppkt.h>
-#include <rtems/core/object.h>
+#include <rtems/score/mppkt.h>
+#include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
-#include <rtems/core/thread.h>
+#include <rtems/score/thread.h>
 
 #include <rtems/rtems/part.h>
 

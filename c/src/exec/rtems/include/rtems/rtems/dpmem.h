@@ -32,7 +32,7 @@
 extern "C" {
 #endif
 
-#include <rtems/core/object.h>
+#include <rtems/score/object.h>
 
 /*
  *  The following structure defines the port control block.  Each port

@@ -181,6 +181,34 @@ STATIC INLINE boolean _CORE_message_queue_Is_null (
   return ( the_message_queue == NULL  );
 }
 
+/*PAGE
+ *
+ *  _CORE_message_queue_Is_notify_enabled
+ *
+ */
+ 
+STATIC INLINE boolean _CORE_message_queue_Is_notify_enabled (
+  CORE_message_queue_Control *the_message_queue
+)
+{
+  return (the_message_queue->notify_handler != NULL);
+}
+ 
+/*PAGE
+ *
+ *  _CORE_message_queue_Set_notify
+ *
+ */
+ 
+STATIC INLINE void _CORE_message_queue_Set_notify (
+  CORE_message_queue_Control        *the_message_queue,
+  CORE_message_queue_Notify_Handler  the_handler,
+  void                              *the_argument
+)
+{
+  the_message_queue->notify_handler  = the_handler;
+  the_message_queue->notify_argument = the_argument;
+}
 
 #endif
 /* end of include file */

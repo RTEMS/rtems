@@ -65,27 +65,27 @@ extern "C" {
 
 #if defined(i386_fp)
 
-#define RTEMS_MODEL_NAME  "i386 with i387"
+#define CPU_MODEL_NAME  "i386 with i387"
 #define I386_HAS_FPU 1
 
 #elif defined(i386_nofp)
 
-#define RTEMS_MODEL_NAME  "i386 w/o i387"
+#define CPU_MODEL_NAME  "i386 w/o i387"
 #define I386_HAS_FPU 1
 
 #elif defined(i486dx)
 
-#define RTEMS_MODEL_NAME  "i486dx"
+#define CPU_MODEL_NAME  "i486dx"
 #define I386_HAS_FPU 1
 
 #elif defined(i486sx)
 
-#define RTEMS_MODEL_NAME  "i486sx"
+#define CPU_MODEL_NAME  "i486sx"
 #define I386_HAS_FPU 0
 
 #elif defined(pentium)
 
-#define RTEMS_MODEL_NAME  "Pentium"
+#define CPU_MODEL_NAME  "Pentium"
 #define I386_HAS_FPU 1
 
 #else

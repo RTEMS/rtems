@@ -35,10 +35,10 @@ extern "C" {
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/attr.h>
-#include <rtems/core/coremutex.h>
-#include <rtems/core/object.h>
-#include <rtems/core/coresem.h>
-#include <rtems/core/threadq.h>
+#include <rtems/score/coremutex.h>
+#include <rtems/score/object.h>
+#include <rtems/score/coresem.h>
+#include <rtems/score/threadq.h>
 
 /*
  *  The following defines the control block used to manage each semaphore.

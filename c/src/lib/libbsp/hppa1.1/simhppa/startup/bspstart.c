@@ -29,7 +29,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <rtems/libio.h>
-#include <rtems/core/intthrd.h>
+#include <rtems/score/intthrd.h>
 
 #include <libcsupport.h>
 

@@ -15,8 +15,8 @@
 
 #include <rtems/system.h>
 #include <rtems/io.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/thread.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/thread.h>
 
 #include <string.h>
 

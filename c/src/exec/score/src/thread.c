@@ -14,16 +14,16 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/context.h>
-#include <rtems/core/interr.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/object.h>
-#include <rtems/core/priority.h>
-#include <rtems/core/states.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/threadq.h>
-#include <rtems/core/userext.h>
-#include <rtems/core/wkspace.h>
+#include <rtems/score/context.h>
+#include <rtems/score/interr.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/object.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/states.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/threadq.h>
+#include <rtems/score/userext.h>
+#include <rtems/score/wkspace.h>
 
 /*PAGE
  *

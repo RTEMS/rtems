@@ -21,16 +21,16 @@
 extern "C" {
 #endif
 
-#include <rtems/core/context.h>
-#include <rtems/core/cpu.h>
-#include <rtems/core/mppkt.h>
-#include <rtems/core/object.h>
-#include <rtems/core/priority.h>
-#include <rtems/core/stack.h>
-#include <rtems/core/states.h>
-#include <rtems/core/tod.h>
-#include <rtems/core/tqdata.h>
-#include <rtems/core/watchdog.h>
+#include <rtems/score/context.h>
+#include <rtems/score/cpu.h>
+#include <rtems/score/mppkt.h>
+#include <rtems/score/object.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/stack.h>
+#include <rtems/score/states.h>
+#include <rtems/score/tod.h>
+#include <rtems/score/tqdata.h>
+#include <rtems/score/watchdog.h>
 
 /*
  *  The following defines the "return type" of a thread.
@@ -130,11 +130,12 @@ typedef struct {
  */
 
 typedef enum {
-  THREAD_API_RTEMS
+  THREAD_API_RTEMS,
+  THREAD_API_POSIX,
 }  Thread_APIs;
 
 #define THREAD_API_FIRST THREAD_API_RTEMS
-#define THREAD_API_LAST  THREAD_API_RTEMS
+#define THREAD_API_LAST  THREAD_API_POSIX
 
 typedef struct {
   Objects_Control           Object;
@@ -757,8 +758,8 @@ STATIC INLINE boolean _Thread_Is_proxy_blocking (
   unsigned32 code
 );
 
-#include <rtems/core/thread.inl>
-#include <rtems/core/threadmp.h>
+#include <rtems/score/thread.inl>
+#include <rtems/score/threadmp.h>
 
 #ifdef __cplusplus
 }

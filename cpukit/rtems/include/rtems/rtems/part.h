@@ -31,8 +31,8 @@
 extern "C" {
 #endif
 
-#include <rtems/core/address.h>
-#include <rtems/core/object.h>
+#include <rtems/score/address.h>
+#include <rtems/score/object.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/types.h>
 

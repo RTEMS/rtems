@@ -16,7 +16,7 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/mp.h>
-#include <rtems/core/mpci.h>
+#include <rtems/score/mpci.h>
 
 /*PAGE
  *

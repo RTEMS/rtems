@@ -21,7 +21,7 @@
 
 /* pull in the generated offsets */
 
-#include <rtems/core/offsets.h>
+#include <rtems/score/offsets.h>
 
 /*
  * Hardware General Registers

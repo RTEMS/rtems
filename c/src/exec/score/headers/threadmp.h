@@ -104,7 +104,7 @@ EXTERN Thread_Control *_Thread_MP_Receive;
 EXTERN Chain_Control _Thread_MP_Active_proxies;
 EXTERN Chain_Control _Thread_MP_Inactive_proxies;
 
-#include <rtems/core/threadmp.inl>
+#include <rtems/score/threadmp.inl>
 
 #ifdef __cplusplus
 }

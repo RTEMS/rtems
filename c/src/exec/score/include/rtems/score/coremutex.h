@@ -23,10 +23,10 @@
 extern "C" {
 #endif
 
-#include <rtems/core/thread.h>
-#include <rtems/core/threadq.h>
-#include <rtems/core/priority.h>
-#include <rtems/core/watchdog.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/threadq.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/watchdog.h>
  
 /*
  *  The following type defines the callout which the API provides
@@ -236,7 +236,7 @@ STATIC INLINE boolean _CORE_mutex_Is_nesting_allowed(
   CORE_mutex_Attributes *the_attribute
 );
 
-#include <rtems/core/coremutex.inl>
+#include <rtems/score/coremutex.inl>
 
 #ifdef __cplusplus
 }

@@ -14,8 +14,8 @@
  *  $Id$
  */
 
-#include <rtems/core/hppa.h>
-#include <rtems/core/cpu_asm.h>
+#include <rtems/score/hppa.h>
+#include <rtems/score/cpu_asm.h>
 
 	.SPACE $PRIVATE$
 	.SUBSPA $DATA$,QUAD=1,ALIGN=8,ACCESS=31

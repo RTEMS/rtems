@@ -56,7 +56,7 @@ extern "C" {
 
 #if defined(i960ca)
 
-#define RTEMS_MODEL_NAME  "i960ca"
+#define CPU_MODEL_NAME  "i960ca"
 #define I960_HAS_FPU 0
 
 #else

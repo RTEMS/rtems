@@ -19,14 +19,14 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/chain.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/object.h>
-#include <rtems/core/coremsg.h>
-#include <rtems/core/states.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/wkspace.h>
-#include <rtems/core/mpci.h>
+#include <rtems/score/chain.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/object.h>
+#include <rtems/score/coremsg.h>
+#include <rtems/score/states.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/wkspace.h>
+#include <rtems/score/mpci.h>
 
 /*PAGE
  *
@@ -63,6 +63,7 @@ boolean _CORE_message_queue_Initialize(
   the_message_queue->maximum_pending_messages   = maximum_pending_messages;
   the_message_queue->number_of_pending_messages = 0;
   the_message_queue->maximum_message_size       = maximum_message_size;
+  _CORE_message_queue_Set_notify( the_message_queue, NULL, NULL );
  
   /*
    * round size up to multiple of a ptr for chain init

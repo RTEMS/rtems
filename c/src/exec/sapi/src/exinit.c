@@ -26,21 +26,21 @@
 #include <rtems/fatal.h>
 #include <rtems/init.h>
 #include <rtems/io.h>
-#include <rtems/core/sysstate.h>
+#include <rtems/score/sysstate.h>
 
-#include <rtems/core/apiext.h>
-#include <rtems/core/copyrt.h>
-#include <rtems/core/heap.h>
-#include <rtems/core/interr.h>
+#include <rtems/score/apiext.h>
+#include <rtems/score/copyrt.h>
+#include <rtems/score/heap.h>
+#include <rtems/score/interr.h>
 #include <rtems/intthrd.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/mpci.h>
-#include <rtems/core/priority.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/tod.h>
-#include <rtems/core/userext.h>
-#include <rtems/core/watchdog.h>
-#include <rtems/core/wkspace.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/mpci.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/tod.h>
+#include <rtems/score/userext.h>
+#include <rtems/score/watchdog.h>
+#include <rtems/score/wkspace.h>
 
 #include <rtems/directives.h>
 #include <rtems/sptables.h>

@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-#include <rtems/core/isr.h>
+#include <rtems/score/isr.h>
 
 /*
  *  The following type defines the control block used to manage

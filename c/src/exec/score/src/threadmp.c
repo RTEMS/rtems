@@ -14,10 +14,10 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/priority.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/wkspace.h>
-#include <rtems/core/isr.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/wkspace.h>
+#include <rtems/score/isr.h>
 
 /*PAGE
  *

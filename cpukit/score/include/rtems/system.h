@@ -76,7 +76,7 @@ extern "C" {
 
 typedef void * proc_ptr;
 
-#include <rtems/core/cpu.h>        /* processor specific information */
+#include <rtems/score/cpu.h>        /* processor specific information */
 
 /*
  *  Define NULL

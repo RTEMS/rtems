@@ -17,8 +17,8 @@
 #include <rtems/rtems/status.h>
 #include <rtems/config.h>
 #include <rtems/io.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/thread.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/thread.h>
 
 void _IO_Initialize_all_drivers( void )
 {

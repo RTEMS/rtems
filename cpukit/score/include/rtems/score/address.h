@@ -97,7 +97,7 @@ STATIC INLINE boolean _Addresses_Is_in_range (
   void *limit
 );
 
-#include <rtems/core/address.inl>
+#include <rtems/score/address.inl>
 
 #ifdef __cplusplus
 }

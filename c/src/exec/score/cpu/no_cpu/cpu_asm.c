@@ -24,7 +24,7 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/cpu.h>
+#include <rtems/score/cpu.h>
 /* #include "cpu_asm.h> */
 
 /*

@@ -29,9 +29,9 @@
 extern "C" {
 #endif
 
-#include <rtems/core/object.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/watchdog.h>
+#include <rtems/score/object.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/watchdog.h>
 
 /*
  *  The following enumerated type defines the states in which a

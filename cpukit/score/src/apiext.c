@@ -15,7 +15,7 @@
 
 
 #include <rtems/system.h>
-#include <rtems/core/apiext.h>
+#include <rtems/score/apiext.h>
 
 /*PAGE
  *

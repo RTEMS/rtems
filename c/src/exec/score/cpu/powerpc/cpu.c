@@ -29,10 +29,10 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/context.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/wkspace.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/context.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/wkspace.h>
 
 /*
  *  These are for testing purposes.

@@ -17,8 +17,8 @@
 #include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/directives.h>
-#include <rtems/core/apiext.h>
-#include <rtems/core/copyrt.h>
+#include <rtems/score/apiext.h>
+#include <rtems/score/copyrt.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/dpmem.h>
@@ -27,24 +27,24 @@
 #include <rtems/fatal.h>
 #include <rtems/init.h>
 #include <rtems/intthrd.h>
-#include <rtems/core/isr.h>
+#include <rtems/score/isr.h>
 #include <rtems/rtems/intr.h>
 #include <rtems/io.h>
 #include <rtems/rtems/message.h>
 #include <rtems/rtems/mp.h>
-#include <rtems/core/mpci.h>
+#include <rtems/score/mpci.h>
 #include <rtems/rtems/part.h>
-#include <rtems/core/priority.h>
+#include <rtems/score/priority.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/rtems/region.h>
 #include <rtems/rtems/sem.h>
 #include <rtems/rtems/signal.h>
-#include <rtems/core/sysstate.h>
-#include <rtems/core/thread.h>
+#include <rtems/score/sysstate.h>
+#include <rtems/score/thread.h>
 #include <rtems/rtems/timer.h>
-#include <rtems/core/tod.h>
-#include <rtems/core/userext.h>
-#include <rtems/core/wkspace.h>
+#include <rtems/score/tod.h>
+#include <rtems/score/userext.h>
+#include <rtems/score/wkspace.h>
 
 #include <stdlib.h>
 

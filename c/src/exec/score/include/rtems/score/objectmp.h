@@ -176,7 +176,7 @@ void _Objects_MP_Is_remote (
 EXTERN unsigned32     _Objects_MP_Maximum_global_objects;
 EXTERN Chain_Control  _Objects_MP_Inactive_global_objects;
 
-#include <rtems/core/objectmp.inl>
+#include <rtems/score/objectmp.inl>
 
 #ifdef __cplusplus
 }

@@ -16,8 +16,8 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/core/object.h>
-#include <rtems/core/thread.h>
+#include <rtems/score/object.h>
+#include <rtems/score/thread.h>
 #include <rtems/extension.h>
 
 void _Extension_Manager_initialization(

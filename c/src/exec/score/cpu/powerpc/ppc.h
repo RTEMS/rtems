@@ -73,7 +73,7 @@ extern "C" {
  
 #if defined(ppc403)
  
-#define RTEMS_MODEL_NAME  "PowerPC 403"
+#define CPU_MODEL_NAME  "PowerPC 403"
 
 #define PPC_ALIGNMENT		4
 #define PPC_CACHE_ALIGNMENT	16
@@ -96,7 +96,7 @@ extern "C" {
 
 #elif defined(ppc601)
  
-#define RTEMS_MODEL_NAME  "PowerPC 601"
+#define CPU_MODEL_NAME  "PowerPC 601"
 
 #define PPC_ALIGNMENT		8
 #define PPC_CACHE_ALIGNMENT	32
@@ -119,7 +119,7 @@ extern "C" {
  
 #elif defined(ppc602)
  
-#define RTEMS_MODEL_NAME  "PowerPC 602"
+#define CPU_MODEL_NAME  "PowerPC 602"
 
 #define PPC_ALIGNMENT		4
 #define PPC_CACHE_ALIGNMENT	32
@@ -137,7 +137,7 @@ extern "C" {
 
 #elif defined(ppc603)
  
-#define RTEMS_MODEL_NAME  "PowerPC 603"
+#define CPU_MODEL_NAME  "PowerPC 603"
 
 #define PPC_ALIGNMENT		8
 #define PPC_CACHE_ALIGNMENT	32
@@ -160,7 +160,7 @@ extern "C" {
 
 #elif defined(ppc603e)
  
-#define RTEMS_MODEL_NAME  "PowerPC 603e"
+#define CPU_MODEL_NAME  "PowerPC 603e"
 
 #define PPC_ALIGNMENT		8
 #define PPC_CACHE_ALIGNMENT	32
@@ -183,7 +183,7 @@ extern "C" {
 
 #elif defined(ppc604)
  
-#define RTEMS_MODEL_NAME  "PowerPC 604"
+#define CPU_MODEL_NAME  "PowerPC 604"
 
 #define PPC_ALIGNMENT		8
 #define PPC_CACHE_ALIGNMENT	32

@@ -13,9 +13,9 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/interr.h>
-#include <rtems/core/sysstate.h>
-#include <rtems/core/userext.h>
+#include <rtems/score/interr.h>
+#include <rtems/score/sysstate.h>
+#include <rtems/score/userext.h>
 
 /*PAGE
  *

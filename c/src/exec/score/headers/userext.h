@@ -22,9 +22,9 @@
 extern "C" {
 #endif
 
-#include <rtems/core/interr.h>
-#include <rtems/core/chain.h>
-#include <rtems/core/thread.h>
+#include <rtems/score/interr.h>
+#include <rtems/score/chain.h>
+#include <rtems/score/thread.h>
 
 /*
  *  The following records defines the User Extension Table.
@@ -285,7 +285,7 @@ void _User_extensions_Fatal (
   unsigned32              the_error
 );
 
-#include <rtems/core/userext.inl>
+#include <rtems/score/userext.inl>
 
 #ifdef __cplusplus
 }

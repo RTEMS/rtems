@@ -30,9 +30,9 @@
 extern "C" {
 #endif
 
-#include <rtems/core/object.h>
-#include <rtems/core/threadq.h>
-#include <rtems/core/heap.h>
+#include <rtems/score/object.h>
+#include <rtems/score/threadq.h>
+#include <rtems/score/heap.h>
 #include <rtems/debug.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/types.h>

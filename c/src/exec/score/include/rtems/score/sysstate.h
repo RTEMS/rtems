@@ -152,7 +152,7 @@ STATIC INLINE boolean _System_state_Is_failed (
   System_state_Codes state
 );
 
-#include <rtems/core/sysstate.inl>
+#include <rtems/score/sysstate.inl>
 
 #ifdef __cplusplus
 }

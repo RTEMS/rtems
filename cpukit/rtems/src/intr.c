@@ -15,7 +15,7 @@
 
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
-#include <rtems/core/isr.h>
+#include <rtems/score/isr.h>
 #include <rtems/rtems/intr.h>
 
 /*  _Interrupt_Manager_initialization

@@ -14,7 +14,7 @@
 
 #include <rtems/system.h>
 #include <rtems/fatal.h>
-#include <rtems/core/interr.h>
+#include <rtems/score/interr.h>
 
 /*PAGE
  *

@@ -18,8 +18,8 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/wkspace.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/wkspace.h>
 
 void hppa_external_interrupt_initialize(void);
 void hppa_external_interrupt_enable(unsigned32);

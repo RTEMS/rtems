@@ -26,9 +26,9 @@
 extern "C" {
 #endif
 
-#include <rtems/core/unix.h>
+#include <rtems/score/unix.h>
 #ifndef ASM
-#include <rtems/core/unixtypes.h>
+#include <rtems/score/unixtypes.h>
 #endif
 
 #if defined(solaris2)

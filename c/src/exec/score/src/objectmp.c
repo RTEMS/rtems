@@ -14,10 +14,10 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/interr.h>
-#include <rtems/core/object.h>
-#include <rtems/core/wkspace.h>
-#include <rtems/core/thread.h>
+#include <rtems/score/interr.h>
+#include <rtems/score/object.h>
+#include <rtems/score/wkspace.h>
+#include <rtems/score/thread.h>
 
 /*PAGE
  *
@@ -133,9 +133,7 @@ void _Objects_MP_Close (
 
       _Chain_Extract( the_node );
       _Objects_MP_Free_global_object( the_object );
-
       return;
-
     }
 
   }

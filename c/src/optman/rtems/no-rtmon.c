@@ -15,9 +15,9 @@
 
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/object.h>
-#include <rtems/core/thread.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/object.h>
+#include <rtems/score/thread.h>
 
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/ratemon.h>

@@ -14,12 +14,12 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/chain.h>
-#include <rtems/core/object.h>
-#include <rtems/core/objectmp.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/wkspace.h>
-#include <rtems/core/sysstate.h>
+#include <rtems/score/chain.h>
+#include <rtems/score/object.h>
+#include <rtems/score/objectmp.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/wkspace.h>
+#include <rtems/score/sysstate.h>
 
 /*PAGE
  *

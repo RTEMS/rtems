@@ -78,7 +78,7 @@ extern "C" {
  
 #if defined(m68000)
  
-#define RTEMS_MODEL_NAME         "m68000"
+#define CPU_MODEL_NAME         "m68000"
 #define M68K_HAS_VBR             0
 #define M68K_HAS_SEPARATE_STACKS 0
 #define M68K_HAS_FPU             0
@@ -87,7 +87,7 @@ extern "C" {
 
 #elif defined(m68020)
  
-#define RTEMS_MODEL_NAME         "m68020"
+#define CPU_MODEL_NAME         "m68020"
 #define M68K_HAS_VBR             1
 #define M68K_HAS_SEPARATE_STACKS 1
 #define M68K_HAS_FPU             1
@@ -96,7 +96,7 @@ extern "C" {
  
 #elif defined(m68020_nofp)
  
-#define RTEMS_MODEL_NAME         "m68020 w/o fp"
+#define CPU_MODEL_NAME         "m68020 w/o fp"
 #define M68K_HAS_VBR             1
 #define M68K_HAS_SEPARATE_STACKS 1
 #define M68K_HAS_FPU             0
@@ -105,7 +105,7 @@ extern "C" {
  
 #elif defined(m68030)
  
-#define RTEMS_MODEL_NAME         "m68030"
+#define CPU_MODEL_NAME         "m68030"
 #define M68K_HAS_VBR             1
 #define M68K_HAS_SEPARATE_STACKS 1
 #define M68K_HAS_FPU             1
@@ -114,7 +114,7 @@ extern "C" {
  
 #elif defined(m68040)
 
-#define RTEMS_MODEL_NAME         "m68040"
+#define CPU_MODEL_NAME         "m68040"
 #define M68K_HAS_VBR             1
 #define M68K_HAS_SEPARATE_STACKS 1
 #define M68K_HAS_FPU             1
@@ -123,7 +123,7 @@ extern "C" {
  
 #elif defined(m68lc040)
 
-#define RTEMS_MODEL_NAME         "m68lc040"
+#define CPU_MODEL_NAME         "m68lc040"
 #define M68K_HAS_VBR             1
 #define M68K_HAS_SEPARATE_STACKS 1
 #define M68K_HAS_FPU             0
@@ -132,7 +132,7 @@ extern "C" {
  
 #elif defined(m68ec040)
 
-#define RTEMS_MODEL_NAME         "m68ec040"
+#define CPU_MODEL_NAME         "m68ec040"
 #define M68K_HAS_VBR             1
 #define M68K_HAS_SEPARATE_STACKS 1
 #define M68K_HAS_FPU             0
@@ -141,7 +141,7 @@ extern "C" {
 
 #elif defined(m68332)
  
-#define RTEMS_MODEL_NAME         "m68332"
+#define CPU_MODEL_NAME         "m68332"
 #define M68K_HAS_VBR             1
 #define M68K_HAS_SEPARATE_STACKS 0
 #define M68K_HAS_FPU             0

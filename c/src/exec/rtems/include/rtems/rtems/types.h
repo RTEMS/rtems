@@ -20,11 +20,11 @@
 extern "C" {
 #endif
 
-#include <rtems/core/object.h>
-#include <rtems/core/priority.h>
+#include <rtems/score/object.h>
+#include <rtems/score/priority.h>
 #include <rtems/rtems/modes.h>
-#include <rtems/core/mpci.h>
-#include <rtems/core/mppkt.h>
+#include <rtems/score/mpci.h>
+#include <rtems/score/mppkt.h>
 
 /*
  *  RTEMS basic type definitions

@@ -17,7 +17,7 @@
 #ifndef __INLINE_ASR_inl
 #define __INLINE_ASR_inl
 
-#include <rtems/core/isr.h>
+#include <rtems/score/isr.h>
 
 /*PAGE
  *

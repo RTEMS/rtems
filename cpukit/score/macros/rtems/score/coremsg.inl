@@ -117,5 +117,27 @@ _id, _api_message_queue_mp_support ) \
 #define _CORE_message_queue_Is_null( _the_message_queue ) \
    ( (_the_message_queue) == NULL  )
 
+/*PAGE
+ *
+ *  _CORE_message_queue_Is_notify_enabled
+ *
+ */
+ 
+#define _CORE_message_queue_Is_notify_enabled( _the_message_queue ) \
+  ( (_the_message_queue)->notify_handler != NULL )
+ 
+/*PAGE
+ *
+ *  _CORE_message_queue_Set_notify
+ *
+ */
+ 
+#define _CORE_message_queue_Set_notify( \
+  _the_message_queue, _the_handler, _the_argument ) \
+    do { \
+      (_the_message_queue->notify_handler  = (_the_handler); \
+      (_the_message_queue->notify_argument = (_the_argument); \
+    } while ( 0 )
+
 #endif
 /* end of include file */

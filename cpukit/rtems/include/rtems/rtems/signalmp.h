@@ -22,10 +22,10 @@ extern "C" {
 #endif
 
 #include <rtems/rtems/asr.h>
-#include <rtems/core/mppkt.h>
-#include <rtems/core/object.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/watchdog.h>
+#include <rtems/score/mppkt.h>
+#include <rtems/score/object.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/watchdog.h>
 
 /*
  *  The following enumerated type defines the list of

@@ -179,7 +179,7 @@ STATIC INLINE boolean _Priority_Is_group_empty (
   Priority_Control      the_priority
 );
 
-#include <rtems/core/priority.inl>
+#include <rtems/score/priority.inl>
 
 #ifdef __cplusplus
 }

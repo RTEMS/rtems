@@ -13,6 +13,7 @@
 #include <rtems.h>
 #include <rtems/assoc.h>                /* assoc.h not included by rtems.h */
 
+#include <stdio.h>                      /* O_RDONLY, et.al. */
 #include <fcntl.h>                      /* O_RDONLY, et.al. */
 #include <sys/fcntl.h>                      /* O_RDONLY, et.al. */
 #if defined(solaris2)

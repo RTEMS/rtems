@@ -22,8 +22,8 @@
 extern "C" {
 #endif
 
-#include <rtems/core/heap.h>
-#include <rtems/core/interr.h>
+#include <rtems/score/heap.h>
+#include <rtems/score/interr.h>
 
 /*
  *  The following is used to manage the Workspace.
@@ -87,7 +87,7 @@ STATIC INLINE boolean _Workspace_Free(
   void *block
 );
 
-#include <rtems/core/wkspace.inl>
+#include <rtems/score/wkspace.inl>
 
 #ifdef __cplusplus
 }

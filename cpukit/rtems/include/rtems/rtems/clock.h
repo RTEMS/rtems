@@ -29,7 +29,7 @@
 extern "C" {
 #endif
 
-#include <rtems/core/tod.h>
+#include <rtems/score/tod.h>
 #include <rtems/rtems/types.h>
 
 /*

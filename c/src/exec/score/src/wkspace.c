@@ -17,8 +17,8 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/wkspace.h>
-#include <rtems/core/interr.h>
+#include <rtems/score/wkspace.h>
+#include <rtems/score/interr.h>
 
 /*PAGE
  *

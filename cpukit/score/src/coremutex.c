@@ -18,11 +18,11 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/coremutex.h>
-#include <rtems/core/states.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/threadq.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/coremutex.h>
+#include <rtems/score/states.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/threadq.h>
 
 /*PAGE
  *

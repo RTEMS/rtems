@@ -14,10 +14,10 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/stack.h>
-#include <rtems/core/interr.h>
-#include <rtems/core/wkspace.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/stack.h>
+#include <rtems/score/interr.h>
+#include <rtems/score/wkspace.h>
 
 /*  _ISR_Handler_initialization
  *

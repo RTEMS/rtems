@@ -14,10 +14,10 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/object.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/tod.h>
-#include <rtems/core/watchdog.h>
+#include <rtems/score/object.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/tod.h>
+#include <rtems/score/watchdog.h>
 
 /*PAGE
  *

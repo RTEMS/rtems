@@ -21,9 +21,9 @@
 extern "C" {
 #endif
 
-#include <rtems/core/chain.h>
-#include <rtems/core/priority.h>
-#include <rtems/core/states.h>
+#include <rtems/score/chain.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/states.h>
 
 /*
  *  The following enumerated type details all of the disciplines
@@ -52,6 +52,7 @@ typedef struct {
   Thread_queue_Disciplines discipline; /* queue discipline               */
   States_Control           state;      /* state of threads on Thread_q   */
   unsigned32               timeout_status;
+  unsigned32               count;
 }   Thread_queue_Control;
 
 /*
@@ -81,7 +82,7 @@ STATIC INLINE boolean _Thread_queue_Is_reverse_search (
   Priority_Control the_priority
 );
 
-#include <rtems/core/tqdata.inl>
+#include <rtems/score/tqdata.inl>
 
 #ifdef __cplusplus
 }

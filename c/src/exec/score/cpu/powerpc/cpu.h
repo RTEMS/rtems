@@ -37,11 +37,11 @@
 extern "C" {
 #endif
 
-#include <rtems/core/ppc.h>               /* pick up machine definitions */
+#include <rtems/score/ppc.h>               /* pick up machine definitions */
 #ifndef ASM
 struct CPU_Interrupt_frame;
 
-#include <rtems/core/ppctypes.h>
+#include <rtems/score/ppctypes.h>
 #endif
 
 /* conditional compilation parameters */

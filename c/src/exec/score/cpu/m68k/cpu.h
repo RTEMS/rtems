@@ -30,9 +30,9 @@ extern "C" {
 
 #define NO_UNINITIALIZED_WARNINGS
 
-#include <rtems/core/m68k.h>
+#include <rtems/score/m68k.h>
 #ifndef ASM
-#include <rtems/core/m68ktypes.h>
+#include <rtems/score/m68ktypes.h>
 #endif
 
 /* conditional compilation parameters */

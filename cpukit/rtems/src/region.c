@@ -16,11 +16,11 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
-#include <rtems/core/object.h>
+#include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/region.h>
-#include <rtems/core/states.h>
-#include <rtems/core/thread.h>
+#include <rtems/score/states.h>
+#include <rtems/score/thread.h>
 
 /*PAGE
  *

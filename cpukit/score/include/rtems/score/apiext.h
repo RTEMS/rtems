@@ -17,7 +17,7 @@
 #ifndef __API_EXTENSIONS_h
 #define __API_EXTENSIONS_h
 
-#include <rtems/core/chain.h>
+#include <rtems/score/chain.h>
 
 /*
  *  The control structure which defines the points at which an API

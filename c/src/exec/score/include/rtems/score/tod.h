@@ -21,8 +21,8 @@
 extern "C" {
 #endif
 
-#include <rtems/core/object.h>
-#include <rtems/core/watchdog.h>
+#include <rtems/score/object.h>
+#include <rtems/score/watchdog.h>
 
 /*
  *  The following constants are related to the time of day.
@@ -36,6 +36,8 @@ extern "C" {
 #define TOD_SECONDS_PER_DAY    (TOD_SECONDS_PER_MINUTE * \
                                 TOD_MINUTES_PER_HOUR   * \
                                 TOD_HOURS_PER_DAY)
+
+#define TOD_SECONDS_PER_NON_LEAP_YEAR (365 * TOD_SECONDS_PER_DAY)
 
 #define TOD_MICROSECONDS_PER_SECOND 1000000
 #define TOD_MILLISECONDS_PER_SECOND 1000
@@ -290,7 +292,7 @@ void _TOD_Tickle(
 #define TOD_MILLISECONDS_TO_TICKS(_ms) \
     (TOD_MILLISECONDS_TO_MICROSECONDS(_ms) / _TOD_Microseconds_per_tick)
 
-#include <rtems/core/tod.inl>
+#include <rtems/score/tod.inl>
 
 #ifdef __cplusplus
 }

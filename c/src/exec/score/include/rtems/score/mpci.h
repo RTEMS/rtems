@@ -21,13 +21,13 @@
 extern "C" {
 #endif
 
-#include <rtems/core/mppkt.h>
-#include <rtems/core/states.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/threadq.h>
-#include <rtems/core/tqdata.h>
-#include <rtems/core/watchdog.h>
-#include <rtems/core/coresem.h>
+#include <rtems/score/mppkt.h>
+#include <rtems/score/states.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/threadq.h>
+#include <rtems/score/tqdata.h>
+#include <rtems/score/watchdog.h>
+#include <rtems/score/coresem.h>
 
 /*
  *  The following defines the node number used when a broadcast is desired.

@@ -21,11 +21,17 @@
 extern "C" {
 #endif
 
-#include <rtems/core/tqdata.h>
+#include <rtems/score/tqdata.h>
 
-#include <rtems/core/object.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/watchdog.h>
+#include <rtems/score/object.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/watchdog.h>
+
+/*
+ *  Constant for indefinite wait.
+ */
+ 
+#define THREAD_QUEUE_WAIT_FOREVER  WATCHDOG_NO_TIMEOUT
 
 /*
  *  The following type defines the callout used when a remote task

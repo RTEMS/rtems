@@ -17,8 +17,8 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/core/isr.h>
-#include <rtems/core/interr.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/interr.h>
 
 #include <stdio.h>
 #include <stdlib.h>

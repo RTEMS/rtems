@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 
-#include <rtems/core/chain.h>
+#include <rtems/score/chain.h>
 
 /*
  *  The following type defines the control block used to manage
@@ -78,21 +78,30 @@ typedef unsigned32 Objects_Id;
  */
 
 typedef enum {
-  OBJECTS_NO_CLASS             =  0,
-  OBJECTS_INTERNAL_THREADS     =  1,
-  OBJECTS_RTEMS_TASKS          =  2,
-  OBJECTS_RTEMS_TIMERS         =  3,
-  OBJECTS_RTEMS_SEMAPHORES     =  4,
-  OBJECTS_RTEMS_MESSAGE_QUEUES =  5,
-  OBJECTS_RTEMS_PARTITIONS     =  6,
-  OBJECTS_RTEMS_REGIONS        =  7,
-  OBJECTS_RTEMS_PORTS          =  8,
-  OBJECTS_RTEMS_PERIODS        =  9,
-  OBJECTS_RTEMS_EXTENSIONS     = 10
+  OBJECTS_NO_CLASS                  =  0,
+  OBJECTS_INTERNAL_THREADS          =  1,
+  OBJECTS_RTEMS_TASKS               =  2,
+  OBJECTS_POSIX_THREADS             =  3,
+  OBJECTS_RTEMS_TIMERS              =  4,
+  OBJECTS_RTEMS_SEMAPHORES          =  5,
+  OBJECTS_RTEMS_MESSAGE_QUEUES      =  6,
+  OBJECTS_RTEMS_PARTITIONS          =  7,
+  OBJECTS_RTEMS_REGIONS             =  8,
+  OBJECTS_RTEMS_PORTS               =  9,
+  OBJECTS_RTEMS_PERIODS             = 10,
+  OBJECTS_RTEMS_EXTENSIONS          = 11,
+  OBJECTS_POSIX_KEYS                = 12,
+  OBJECTS_POSIX_INTERRUPTS          = 13,
+  OBJECTS_POSIX_MESSAGE_QUEUES      = 14,
+  OBJECTS_POSIX_MUTEXES             = 15,
+  OBJECTS_POSIX_SEMAPHORES          = 16,
+  OBJECTS_POSIX_CONDITION_VARIABLES = 17
 } Objects_Classes;
-
-#define OBJECTS_CLASSES_FIRST  OBJECTS_NO_CLASS
-#define OBJECTS_CLASSES_LAST   OBJECTS_RTEMS_EXTENSIONS
+ 
+#define OBJECTS_CLASSES_FIRST               OBJECTS_NO_CLASS
+#define OBJECTS_CLASSES_LAST                OBJECTS_POSIX_CONDITION_VARIABLES
+#define OBJECTS_CLASSES_FIRST_THREAD_CLASS  OBJECTS_INTERNAL_THREADS
+#define OBJECTS_CLASSES_LAST_THREAD_CLASS   OBJECTS_POSIX_THREADS
 
 /*
  *  This enumerated type lists the locations which may be returned
@@ -208,8 +217,9 @@ void _Objects_Handler_initialization(
  *  SUPPORTS_GLOBAL is TRUE if the object class supports global
  *  objects, and FALSE otherwise.  Maximum indicates the number
  *  of objects required in this class and size indicates the size
- *  in bytes of each control block for this object class.
- *
+ *  in bytes of each control block for this object class.  The
+ *  name length and string designator are also set.  In addition,
+ *  the class may be a task, therefore this information is also included.
  */
 
 void _Objects_Initialize_information (
@@ -544,8 +554,8 @@ STATIC INLINE void _Objects_Close(
   Objects_Control     *the_object
 );
 
-#include <rtems/core/object.inl>
-#include <rtems/core/objectmp.h>
+#include <rtems/score/object.inl>
+#include <rtems/score/objectmp.h>
 
 #ifdef __cplusplus
 }

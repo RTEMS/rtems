@@ -43,5 +43,18 @@ STATIC INLINE boolean _Thread_queue_Is_reverse_search (
   return ( the_priority & 0x20 );
 }
 
+/*PAGE
+ *
+ *  _Thread_queue_Get_number_waiting
+ *
+ */
+ 
+STATIC INLINE unsigned32 _Thread_queue_Get_number_waiting (
+  Thread_queue_Control *the_thread_queue
+)
+{
+  return ( the_thread_queue->count );
+}
+
 #endif
 /* end of include file */

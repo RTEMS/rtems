@@ -14,8 +14,8 @@
 
 
 #include <rtems/system.h>
-#include <rtems/core/sysstate.h>
-#include <rtems/core/heap.h>
+#include <rtems/score/sysstate.h>
+#include <rtems/score/heap.h>
 
 /*PAGE
  *

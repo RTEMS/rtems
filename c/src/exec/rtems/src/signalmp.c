@@ -15,14 +15,14 @@
 
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
-#include <rtems/core/mpci.h>
-#include <rtems/core/mppkt.h>
-#include <rtems/core/object.h>
+#include <rtems/score/mpci.h>
+#include <rtems/score/mppkt.h>
+#include <rtems/score/object.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/signal.h>
-#include <rtems/core/states.h>
-#include <rtems/core/thread.h>
-#include <rtems/core/watchdog.h>
+#include <rtems/score/states.h>
+#include <rtems/score/thread.h>
+#include <rtems/score/watchdog.h>
 #include <rtems/rtems/support.h>
 
 /*PAGE
