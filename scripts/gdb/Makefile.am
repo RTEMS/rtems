@@ -30,6 +30,9 @@ hppa1.1-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 i386-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . i386-rtems
 
+i386-RTEMS-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . i386-RTEMS
+
 i960-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . i960-rtems
 
@@ -47,6 +50,9 @@ mips-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 
 mipstx39-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . mipstx39-rtems
+
+powerpc-RTEMS-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . powerpc-RTEMS
 
 powerpc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . powerpc-rtems
@@ -67,7 +73,8 @@ RPM_SPECS_DATA = \
     m68k-rtems-$(GDBVERS).spec mips-rtems-$(GDBVERS).spec \
     mipstx39-rtems-$(GDBVERS).spec mips64orion-rtems-$(GDBVERS).spec \
     powerpc-rtems-$(GDBVERS).spec sh-rtems-$(GDBVERS).spec \
-    sh-rtemself-$(GDBVERS).spec sparc-rtems-$(GDBVERS).spec
+    sh-rtemself-$(GDBVERS).spec sparc-rtems-$(GDBVERS).spec \
+    i386-RTEMS-$(GDBVERS).spec powerpc-RTEMS-$(GDBVERS).spec
 
 CLEANFILES += $(RPM_SPECS_DATA)
 

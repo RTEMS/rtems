@@ -1,3 +1,9 @@
+2001-10-16	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Bumped the gdb_patch_version to account for a configuration
+	problem on psim where it could not be enabled for powerpc-RTEMS.
+	* gdb/Makefile.am: Add i386-RTEMS and powerpc-RTEMS targets.
+
 2001-10-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mkbinutilsspec.in: Guard sed-pattern against autoconf.
