@@ -42,7 +42,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 #include "bsp.h"
 
 #ifndef PPC_VECTOR_FILE_BASE

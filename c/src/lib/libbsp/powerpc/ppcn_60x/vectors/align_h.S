@@ -43,7 +43,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 #include "bsp.h"
 
 .set    CACHE_SIZE,16           # cache line size of 32 bytes

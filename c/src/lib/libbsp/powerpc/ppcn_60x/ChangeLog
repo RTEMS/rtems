@@ -1,3 +1,8 @@
+2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* vectors/align_h.S: Include <rtems/asm.h> instead of <asm.h>.
+	* vectors/vectors.S: Include <rtems/asm.h> instead of <asm.h>.
+
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* startup/genpvec.c: Include <rtems/chain.h> instead of <chain.h>.
