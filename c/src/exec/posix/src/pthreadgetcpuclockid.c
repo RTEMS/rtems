@@ -14,6 +14,8 @@
 #include <pthread.h>
 #include <errno.h>
 
+#include <rtems/system.h>
+
 int pthread_getcpuclockid(
   pthread_t    pid,
   clockid_t   *clock_id
