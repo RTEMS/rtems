@@ -47,7 +47,7 @@ void Timer_initialize()
 
 int Read_timer()
 {
-  rtems_unsigned32  total;
+  uint32_t          total;
 
   total = TX3904_TIMER_READ( TX3904_TIMER1_BASE, TX3904_TIMER_TRR );
 

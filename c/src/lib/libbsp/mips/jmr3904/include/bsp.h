@@ -66,13 +66,13 @@ extern "C" {
 
 #define Cause_tm27_intr() \
   do { \
-    unsigned32 _clicks = 20; \
+    uint32_t   _clicks = 20; \
     TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_CCDR, 0x3 ); \
     TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_CPRA, _clicks ); \
     TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_TISR, 0x00 ); \
     TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_ITMR, 0x8001 ); \
     TX3904_TIMER_WRITE( TX3904_TIMER0_BASE, TX3904_TIMER_TCR,   0xC0 ); \
-    *((volatile unsigned32 *) 0xFFFFC01C) = 0x00000700; \
+    *((volatile uint32_t*) 0xFFFFC01C) = 0x00000700; \
   } while(0)
 
 #define Clear_tm27_intr() \

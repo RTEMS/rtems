@@ -38,7 +38,7 @@ char *rtems_progname;
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -61,7 +61,7 @@ void bsp_pretasking_hook(void)
     void         *heapStart = &HeapBase;
     unsigned long heapSize = (unsigned long)&HeapSize;
 
-    bsp_libc_init(heapStart, (unsigned32) heapSize, 0);
+    bsp_libc_init(heapStart, (uint32_t) heapSize, 0);
 
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
