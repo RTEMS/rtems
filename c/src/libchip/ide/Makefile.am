@@ -22,7 +22,7 @@ include_ide_HEADERS = ata.h ide_ctrl_cfg.h ide_ctrl.h ide_ctrl_io.h
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
+all-local: $(PREINSTALL_FILES) $(LIB)
 endif
 
 EXTRA_DIST = $(C_FILES)

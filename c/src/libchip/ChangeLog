@@ -1,3 +1,10 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ide/Makefile.am: Remove all-local: $(ARCH).
+	* network/Makefile.am: Remove all-local: $(ARCH).
+	* rtc/Makefile.am: Remove all-local: $(ARCH).
+	* serial/Makefile.am: Remove all-local: $(ARCH).
+
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ide/Makefile.am: Use dirstamps for preinstallation. Reformat.

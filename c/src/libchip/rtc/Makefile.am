@@ -24,7 +24,7 @@ include_libchip_HEADERS = rtc.h icm7170.h m48t08.h
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
+all-local: $(PREINSTALL_FILES) $(LIB)
 endif
 
 DOC_FILES = README.ds1643 README.icm7170 README.m48t08 README.m48t18 STATUS

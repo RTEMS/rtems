@@ -25,7 +25,7 @@ include_libchip_HEADERS = mc68681.h ns16550.h z85c30.h serial.h sersupp.h
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
+all-local: $(PREINSTALL_FILES) $(LIB)
 endif
 
 DOC_FILES = README.mc68681 README.ns16550 README.xr88681 README.z85c30 \
