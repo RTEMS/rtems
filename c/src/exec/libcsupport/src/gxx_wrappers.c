@@ -63,17 +63,16 @@ int rtems_gxx_once(__gthread_once_t *once, void (*func) ())
 #ifdef DEBUG_GXX_WRAPPERS
    printk( "gxx_wrappers: once=%x, func=%x\n", *once, func );
 #endif
-   if( *once == 0 ) 
+   if( *(volatile __gthread_once_t *)once == 0 )
    {
-      /* 
-       * NOTE: could not use the call to disable "preemption", it causes
-       * one exception. Somebody might want to investiage it further
-       * sometime later.
-       */
-      _Thread_Disable_dispatch();
-      *once = 1;
-      (*func)();
-      _Thread_Enable_dispatch();
+      rtems_mode saveMode;
+      rtems_task_mode(RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &saveMode);
+      if( *(volatile __gthread_once_t *)once == 0 )
+      {
+         *(volatile __gthread_once_t *)once = 1;
+         (*func)();
+      }
+      rtems_task_mode(saveMode, RTEMS_PREEMPT_MASK, &saveMode);
    }
    return 0;
 }

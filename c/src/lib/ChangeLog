@@ -1,3 +1,9 @@
+2002-03-01	Eric Norum <eric.norum@usask.ca>
+
+	* libc/gxx_wrappers.c: Task is not preemptable while running a 
+	pthread_once init function.  This is slightly less heavy handed
+	than disabling dispatching and seems better than consuming a mutex.
+
 2001-01-31	Mike Siers <mikes@poliac.com>
 
 	* Nice Update of PPPD support which eliminates the
