@@ -58,7 +58,7 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all: ${ARCH} $(SRCS) $(OBJS) $(PGM)
-	$(INSTALL_VARIANT) -m 755 ${PGMS} $(PROJECT_RELEASE)/lib
+	$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/lib
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
