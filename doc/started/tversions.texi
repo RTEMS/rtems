@@ -21,13 +21,13 @@
 @c  GCC Version
 @c
 
-@set GCC-VERSION     gcc 3.2.1
-@set GCC-TAR         gcc-3.2..1tar.gz
-@set GCC-UNTAR       gcc-3.2.1
+@set GCC-VERSION     gcc 3.2.2
+@set GCC-TAR         gcc-3.2.2.tar.bz2
+@set GCC-UNTAR       gcc-3.2.2
 @set GCC-FTPSITE     gcc.gnu.org
 @set GCC-FTPDIR      /pub/gnu/gcc/
 @set GCC-HTTPDIR     /pub/gcc/releases/index.html
-@set GCC-RTEMSPATCH  gcc-3.2.1-rtems-20021209.diff
+@set GCC-RTEMSPATCH  gcc-3.2.2-rtems-20030326.diff
 
 @c
 @c  BINUTILS Version
@@ -41,22 +41,6 @@
 @set BINUTILS-FTPDIR      /pub/gnu/binutils
 @c @set BINUTILS-RTEMSPATCH  binutils-2.10-rtems-diff-20001107.gz
 
-@c The "official" Linux binutils
-@c @set BINUTILS-VERSION     binutils 2.9.5.0.24
-@c @set BINUTILS-TAR         binutils-2.9.5.0.24.tar.gz
-@c @set BINUTILS-UNTAR       binutils-2.9.5.0.24
-@c @set BINUTILS-FTPSITE     ftp.varesearch.com
-@c @set BINUTILS-FTPDIR      /pub/support/hjl/binutils
-@c @set BINUTILS-RTEMSPATCH  binutils-2.9.5.0.24-rtems-20000207.diff.gz
-
-@c When forced to use a snapshot
-@c @set BINUTILS-VERSION     gas 980314
-@c @set BINUTILS-TAR         gas-980314.tgz
-@c @set BINUTILS-UNTAR       gas-980314
-@c @set BINUTILS-FTPSITE     ftp.OARcorp.com
-@c @set BINUTILS-FTPDIR      /oarcorp/private/beta3/ada_tools
-@c @set BINUTILS-RTEMSPATCH  binutils-2.8.1-rtems-diff-1998xxxx.gz
-
 @c
 @c  NEWLIB Version
 @c
@@ -67,7 +51,7 @@
 @set NEWLIB-UNTAR       newlib-1.11.0
 @set NEWLIB-FTPSITE     sources.redhat.com
 @set NEWLIB-FTPDIR      /pub/newlib
-@set NEWLIB-RTEMSPATCH  newlib-1.11.0-rtems-20030120.diff.gz
+@set NEWLIB-RTEMSPATCH  newlib-1.11.0-rtems-20030326.diff.gz
 
 @c
 @c  GDB Version
@@ -84,11 +68,9 @@
 @c  RTEMS Version
 @c
 
-@set RTEMS-VERSION   RTEMS SS-20030128
-@set RTEMS-TAR       rtems-ss-20030128.tar.bz2
-@set RTEMS-UNTAR     rtems-ss-20030128
+@set RTEMS-VERSION   RTEMS SS-20030417
+@set RTEMS-TAR       rtems-ss-20030417.tar.bz2
+@set RTEMS-UNTAR     rtems-ss-20030417
 @set RTEMS-FTPSITE   ftp.OARcorp.com
-@set RTEMS-FTPDIR    /pub/rtems/cd-working
-@c @set BUILDTOOLS-TAR  c_build_scripts-4.5.1.tgz 
-
+@set RTEMS-FTPDIR    /pub/rtems/snapshots/rtems
 

@@ -2,6 +2,10 @@
 
 	* index.html.in: Development Environment Guide should be updated now.
 
+2003-04-11	Joel Sherrill <joel@OARcorp.com>
+
+	* index.html.in: Development Environment Guide should be updated now.
+
 2003-02-18	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, configure.ac: Remove src2html references.
