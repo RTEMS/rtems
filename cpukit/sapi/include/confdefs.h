@@ -305,7 +305,7 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 
 #ifdef CONFIGURE_INIT
 #ifdef STACK_CHECKER_ON
-#include <stackchk.h>
+#include <rtems/stackchk.h>
 #endif
 
 rtems_extensions_table Configuration_Initial_Extensions[] = {

@@ -46,9 +46,10 @@ LDFLAGS   +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-${LIB}: ${SRCS} ${OBJS}
+${LIB}: ${SRCS} preinstall ${OBJS}
 	$(make-library)
 
-all: ${ARCH} $(SRCS) $(LIB)
-	$(INSTALL) -m 444 ${INSTALLED_H_FILES} $(PROJECT_INCLUDE)
-#	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems
+all: ${ARCH} $(SRCS) preinstall $(LIB)
+
+preinstall:
+	$(INSTALL) -m 444 ${INSTALLED_H_FILES} $(PROJECT_INCLUDE)/rtems
