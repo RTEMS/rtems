@@ -1,3 +1,7 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2000-04-23	Jiri Gaisler <jiri@gaisler.com>
 
 	* start.S: Modificatins to preserve the current CWP and adjust the

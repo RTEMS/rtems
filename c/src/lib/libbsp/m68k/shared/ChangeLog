@@ -1,3 +1,7 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bspspuriousinit.c, m68000spurious.c: Include rtems/bspIo.h

@@ -1,3 +1,7 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* console.c, setvec.c: Fixed typo.
