@@ -17,7 +17,7 @@
 
 /* page 0 read or read/write registers */
 
-#define	CMDR		0x00+RO	
+#define	CMDR		0x00+RO
 #define CLDA0  		0x01+RO	/* current local dma addr 0 for read */
 #define CLDA1  		0x02+RO	/* current local dma addr 1 for read */
 #define BNRY   		0x03+RO	/* boundary reg for rd and wr */
@@ -63,7 +63,7 @@
 
 /*-----CMDR command bits-----*/
 #define MSK_STP		0x01	/* stop the chip */
-#define MSK_STA		0x02	/* start the chip */  
+#define MSK_STA		0x02	/* start the chip */
 #define MSK_TXP	       	0x04	/* initial txing of a frm */
 #define MSK_RRE		0x08	/* remote read */
 #define MSK_RWR		0x10	/* remote write */

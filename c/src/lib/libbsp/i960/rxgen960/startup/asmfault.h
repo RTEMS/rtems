@@ -9,7 +9,7 @@
 #ifndef _ASMFAULT_H_
 #define _ASMFAULT_H_
 
-  /* Fault handler start point. 
+  /* Fault handler start point.
    */
 extern void faultHndlEntry(void);
 

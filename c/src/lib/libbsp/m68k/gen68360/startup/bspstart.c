@@ -19,7 +19,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
- 
+
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
@@ -37,7 +37,7 @@ unsigned long _M68K_RamSize;
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void);               /* m68k version */
@@ -51,7 +51,7 @@ void bsp_pretasking_hook(void);               /* m68k version */
 void bsp_start( void )
 {
   extern void *_WorkspaceBase;
-  
+
   /*
    *  _M68k_Ramsize is the amount of RAM on this board and
    *  is set by many m68k BSPs at this point.  With this

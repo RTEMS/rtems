@@ -20,8 +20,8 @@
 #include <stdio.h> /* for sprintf */
 
 
-/* 
- * Proto types for this file                                          
+/*
+ * Proto types for this file
  */
 
 rtems_isr external_exception_ISR (
@@ -31,8 +31,8 @@ rtems_isr external_exception_ISR (
 #define   NUM_LIRQ_HANDLERS   20
 #define   NUM_LIRQ            ( MAX_BOARD_IRQS - PPC_IRQ_LAST )
 
-/* 
- * Structure to for one of possible multiple interrupt handlers for 
+/*
+ * Structure to for one of possible multiple interrupt handlers for
  * a given interrupt.
  */
 typedef struct
@@ -47,7 +47,7 @@ typedef struct
  *        handlers at a later time.
  */
   EE_ISR_Type       ISR_Nodes [NUM_LIRQ_HANDLERS];
-  uint16_t          Nodes_Used; 
+  uint16_t          Nodes_Used;
   Chain_Control     ISR_Array  [NUM_LIRQ];
 
 /* XXX */
@@ -67,14 +67,14 @@ void initialize_external_exception_vector ()
 
   for (i=0; i <NUM_LIRQ; i++)
     Chain_Initialize_empty( &ISR_Array[i] );
-  
+
   init_irq_data_register();
-   
-  /*  
-   * Install external_exception_ISR () as the handler for 
+
+  /*
+   * Install external_exception_ISR () as the handler for
    *  the General Purpose Interrupt.
    */
-  status = rtems_interrupt_catch( external_exception_ISR, 
+  status = rtems_interrupt_catch( external_exception_ISR,
            PPC_IRQ_EXTERNAL, (rtems_isr_entry *) &previous_isr );
 }
 
@@ -83,7 +83,7 @@ void Init_EE_mask_init() {
 }
 
 /*
- *  This routine installs one of multiple ISRs for the general purpose 
+ *  This routine installs one of multiple ISRs for the general purpose
  *  inerrupt.
  */
 rtems_isr_entry  set_EE_vector(
@@ -93,9 +93,9 @@ rtems_isr_entry  set_EE_vector(
 {
   uint16_t         vec_idx  = vector - Score_IRQ_First;
   uint32_t         index;
-  
+
   assert  (Nodes_Used < NUM_LIRQ_HANDLERS);
-   
+
   /*
    *  If we have already installed this handler for this vector, then
    *  just reset it.
@@ -110,15 +110,15 @@ rtems_isr_entry  set_EE_vector(
   /*
    *  Doing things in this order makes them more atomic
    */
-  
-  Nodes_Used++; 
+
+  Nodes_Used++;
 
   index = Nodes_Used - 1;
 
   ISR_Nodes[index].handler = handler;
   ISR_Nodes[index].vector  = vector;
 
-  /* printf( "Vector Index: %04x, Vector: %d (%x)\n", 
+  /* printf( "Vector Index: %04x, Vector: %d (%x)\n",
           vec_idx, vector, vector); */
 
   Chain_Append( &ISR_Array[vec_idx], &ISR_Nodes[index].Node );
@@ -131,13 +131,13 @@ rtems_isr_entry  set_EE_vector(
   return NULL;
 }
 
-/* 
+/*
  * This interrupt service routine is called for an External Exception.
  */
 rtems_isr external_exception_ISR (
   rtems_vector_number   vector             /* IN  */
 )
-{ 
+{
  uint16_t            index;
  EE_ISR_Type         *node;
  uint16_t            value;
@@ -167,7 +167,7 @@ rtems_isr external_exception_ISR (
         node = (EE_ISR_Type *)(ISR_Array[ index ].first);
 
         if ( _Chain_Is_tail( &ISR_Array[ index ], (void *)node ) ) {
-          sprintf(err_msg,"ERROR:: check %d interrupt %02d has no isr\n", 
+          sprintf(err_msg,"ERROR:: check %d interrupt %02d has no isr\n",
                   check_irq, index);
           DEBUG_puts( err_msg);
           value = get_irq_mask();
@@ -183,7 +183,7 @@ rtems_isr external_exception_ISR (
   }
   else
 #endif
-  { 
+  {
     node = (EE_ISR_Type *)(ISR_Array[ index ].first);
     if ( _Chain_Is_tail( &ISR_Array[ index ], (void *)node ) ) {
       sprintf(err_msg,"ERROR:: interrupt %02x has no isr\n", index);

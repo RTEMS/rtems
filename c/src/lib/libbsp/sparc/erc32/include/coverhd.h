@@ -11,10 +11,10 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
+ *  Research Corporation (OAR) under contract to the European Space
  *  Agency (ESA).
  *
- *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
  *
  *  $Id$

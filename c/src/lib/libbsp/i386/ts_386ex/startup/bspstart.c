@@ -13,10 +13,10 @@
  *
  *  Ported to the i386ex and submitted by:
  *
- *    Erik Ivanenko 
+ *    Erik Ivanenko
  *    University of Toronto
  *    erik.ivanenko@utoronto.ca
- *  
+ *
  *  $Id$
  */
 
@@ -45,7 +45,7 @@ extern uint32_t          rdb_start;
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
@@ -62,7 +62,7 @@ void bsp_libc_init( void *, uint32_t, int );
  *      not yet initialized.
  *
  */
- 
+
 void bsp_pretasking_hook(void)
 {
     extern int heap_bottom;

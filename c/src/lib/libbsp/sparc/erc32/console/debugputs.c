@@ -40,7 +40,7 @@ void console_outbyte_polled(
 }
 
 /*
- *  console_inbyte_nonblocking 
+ *  console_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */
@@ -104,7 +104,7 @@ void DEBUG_puts(
   uint32_t   old_level;
 
   ERC32_Disable_interrupt( ERC32_INTERRUPT_UART_A_RX_TX, old_level );
-    for ( s = string ; *s ; s++ ) 
+    for ( s = string ; *s ; s++ )
       console_outbyte_polled( 0, *s );
 
     console_outbyte_polled( 0, '\r' );

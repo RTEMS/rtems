@@ -1,7 +1,7 @@
 /*
  *  C4X Spurious Trap Handler
  *
- *  This is just enough of a trap handler to let us know what 
+ *  This is just enough of a trap handler to let us know what
  *  the likely source of the trap was.
  *
  *  COPYRIGHT (c) 1989-1999.

@@ -56,7 +56,7 @@ static char shift_map[] =
   '*',0x80,' ',0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,
   0x80,0x80,0x80,0x80,'7','8','9',0x80,'4','5','6',0x80,
   '1','2','3','0',177
-}; /* Keyboard scancode -> character map with SHIFT key modifier. */ 
+}; /* Keyboard scancode -> character map with SHIFT key modifier. */
 
 static char             kbd_buffer[KBD_BUF_SIZE];
 static uint16_t         kbd_first = 0;
@@ -152,7 +152,7 @@ _IBMPC_scankey(char *outChar)
       break;
 
     case 0x53:
-      if (ctrl_pressed && alt_pressed) 
+      if (ctrl_pressed && alt_pressed)
         rtemsReboot(); /* ctrl+alt+del -> reboot */
       break;
 
@@ -251,11 +251,11 @@ _IBMPC_inch(void)
     return c;
 } /* _IBMPC_inch */
 
- 
+
  /*
   * Routine that can be used before interrupt management is initialized.
   */
- 
+
 char
 BSP_wait_polled_input(void)
 {
@@ -268,7 +268,7 @@ BSP_wait_polled_input(void)
 
 /*-------------------------------------------------------------------------+
 |         Function: _IBMPC_inch_sleep
-|      Description: If charcter is ready return it, otherwise sleep until 
+|      Description: If charcter is ready return it, otherwise sleep until
 |                   it is ready
 | Global Variables: None.
 |        Arguments: None.
@@ -288,14 +288,14 @@ _IBMPC_inch_sleep(void)
 	  {
 	    return c;
 	  }
- 
+
         if(ticks_per_second == 0)
           {
-            rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, 
+            rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND,
                             &ticks_per_second);
           }
 	rtems_task_wake_after((ticks_per_second+24)/25);
       }
-	
+
     return c;
 } /* _IBMPC_inch */

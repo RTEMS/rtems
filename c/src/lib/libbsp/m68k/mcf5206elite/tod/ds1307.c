@@ -53,17 +53,17 @@ ds1307_initialize(int minor)
     uint8_t         sec;
     i2c_bus_number bus;
     i2c_address addr;
-    
+
     bus = RTC_Table[minor].ulCtrlPort1;
     addr = RTC_Table[minor].ulDataPort;
-    
+
     /* Read SECONDS register */
     try = 0;
     do {
         status = i2c_wbrd(bus, addr, 0, &sec, sizeof(sec));
         try++;
     } while ((status != I2C_SUCCESSFUL) && (try < 15));
-    
+
     /* If clock is halted, reset and start the clock */
     if ((sec & DS1307_SECOND_HALT) != 0)
     {
@@ -98,13 +98,13 @@ ds1307_get_time(int minor, rtems_time_of_day *time)
     uint32_t         v1, v2;
     i2c_message_status status;
     int try;
-    
+
     if (time == NULL)
         return -1;
-    
+
     bus = RTC_Table[minor].ulCtrlPort1;
     addr = RTC_Table[minor].ulDataPort;
-    
+
     memset(time, 0, sizeof(rtems_time_of_day));
     try = 0;
     do {
@@ -116,20 +116,20 @@ ds1307_get_time(int minor, rtems_time_of_day *time)
     {
         return -1;
     }
-    
+
     v1 = info[DS1307_YEAR];
     v2 = From_BCD(v1);
     if (v2 < 88)
         time->year = 2000 + v2;
     else
         time->year = 1900 + v2;
-    
+
     v1 = info[DS1307_MONTH] & ~0xE0;
     time->month = From_BCD(v1);
-    
+
     v1 = info[DS1307_DAY] & ~0xC0;
     time->day = From_BCD(v1);
-    
+
     v1 = info[DS1307_HOUR];
     if (v1 & DS1307_HOUR_12)
     {
@@ -151,11 +151,11 @@ ds1307_get_time(int minor, rtems_time_of_day *time)
 
     v1 = info[DS1307_MINUTE] & ~0x80;
     time->minute = From_BCD(v1);
-    
+
     v1 = info[DS1307_SECOND];
     v2 = v1 & ~0x80;
     time->second = From_BCD(v2);
-    
+
     return 0;
 }
 
@@ -178,7 +178,7 @@ ds1307_set_time(int minor, rtems_time_of_day *time)
     uint8_t         info[8];
     i2c_message_status status;
     int try;
-    
+
     if (time == NULL)
         return -1;
 
@@ -187,7 +187,7 @@ ds1307_set_time(int minor, rtems_time_of_day *time)
 
     if (time->year >= 2088)
         rtems_fatal_error_occurred(RTEMS_INVALID_NUMBER);
-    
+
     info[0] = DS1307_SECOND;
     info[1 + DS1307_YEAR] = To_BCD(time->year % 100);
     info[1 + DS1307_MONTH] = To_BCD(time->month);
@@ -196,7 +196,7 @@ ds1307_set_time(int minor, rtems_time_of_day *time)
     info[1 + DS1307_MINUTE] = To_BCD(time->minute);
     info[1 + DS1307_SECOND] = To_BCD(time->second);
     info[1 + DS1307_DAY_OF_WEEK] = 1; /* Do not set day of week */
- 
+
     try = 0;
     do {
         status = i2c_write(bus, addr, info, 8);

@@ -15,8 +15,8 @@
 #include <irq_asm.h>
 
 	       BEGIN_CODE
-	
-SYM (_ISR_Handler):	
+
+SYM (_ISR_Handler):
        /*
         *  Before this was point is reached the vectors unique
         *  entry point did the following:
@@ -77,7 +77,7 @@ SYM (_ISR_Handler):
 	outb    $PIC_SLAVE_COMMAND_IO_PORT
 .master:
         outb    $PIC_MASTER_COMMAND_IO_PORT
-	
+
 .check_stack_switch:
 	pushl	  ebp
         movl      esp, ebp                  /* ebp = previous stack pointer */
@@ -100,12 +100,12 @@ nested:
 	 * interrupt source is now masked via i8259
 	 */
 	sti
-	
+
         /*
 	 *  ECX is preloaded with the vector number but it is a scratch register
 	 *  so we must save it again.
 	 */
-	
+
         pushl     ecx                       /* push vector number */
         mov       SYM (current_irq) (,ecx,4),eax
                                             /* eax = Users handler */
@@ -129,8 +129,8 @@ nested:
 	outb	  $PIC_MASTER_IMR_IO_PORT
 	movb	  ah, al
 	outb	  $PIC_SLAVE_IMR_IO_PORT
-	
-	
+
+
         decl      SYM (_ISR_Nest_level)     /* one less ISR nest level */
                                             /* If interrupts are nested, */
                                             /*   then dispatching is disabled */
@@ -149,13 +149,13 @@ nested:
                                             /*   while in interrupt handler? */
         je        .exit                     /* No, exit */
 
-	
+
 .bframe:
         movl      $0, SYM (_ISR_Signals_to_thread_executing)
 	/*
 	 * This code is the less critical path. In order to have a single
-	 * Thread Context, we take the same frame than the one pushed on 
-	 * exceptions. This makes sense because Signal is a software 
+	 * Thread Context, we take the same frame than the one pushed on
+	 * exceptions. This makes sense because Signal is a software
 	 * exception.
 	 */
 	popl	edx
@@ -172,11 +172,11 @@ nested:
 	popa
 	addl	$8, esp
 	iret
-			
+
 .schedule:
 	/*
 	 * the scratch registers have already been saved and we are already
-	 * back on the thread system stack. So we can call _Thread_Displatch 
+	 * back on the thread system stack. So we can call _Thread_Displatch
 	 * directly
 	 */
 	call _Thread_Dispatch
@@ -203,7 +203,7 @@ nested:
 	popl	eax
 	iret
 
-				
+
 #define DISTINCT_INTERRUPT_ENTRY(_vector) \
         .p2align 4                         ; \
         PUBLIC (rtems_irq_prologue_ ## _vector ) ; \
@@ -230,21 +230,21 @@ DISTINCT_INTERRUPT_ENTRY(12)
 DISTINCT_INTERRUPT_ENTRY(13)
 DISTINCT_INTERRUPT_ENTRY(14)
 DISTINCT_INTERRUPT_ENTRY(15)
-	
+
 	/*
 	 * routine used to initialize the IDT by default
 	 */
-		
+
 PUBLIC (default_raw_idt_handler)
 PUBLIC (raw_idt_notify)
-		
+
 SYM (default_raw_idt_handler):
 	pusha
 	cld
 	call	raw_idt_notify
 	popa
 	iret
-	
+
 END_CODE
 
 END

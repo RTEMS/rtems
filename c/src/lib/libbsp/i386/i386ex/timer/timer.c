@@ -48,7 +48,7 @@ void TimerOn(const rtems_raw_irq_connect_data* used)
   outport_byte  ( TMRCON , 0xb0 ); /* select tmr2, stay in mode 0 */
   outport_byte  ( TMR1   , 0xfa ); /* set to 250 usec interval */
   outport_byte	( TMR1   , 0x00 );
-  outport_byte  ( TMRCON , 0x64 ); /* change to mode 2 ( starts timer ) */ 
+  outport_byte  ( TMRCON , 0x64 ); /* change to mode 2 ( starts timer ) */
                                    /* interrupts ARE enabled */
   /*  outport_byte( IERA, 0x41 );             enable interrupt */
   /*
@@ -116,7 +116,7 @@ int Read_timer()
 /*  outport_byte( TBCR, 0x00 );  stop the timer -- not needed on intel */
 
   outport_byte ( TMRCON, 0x40 );   /* latch the count */
-  inport_byte  ( TMR1,   clicks ); /* read the count */ 
+  inport_byte  ( TMR1,   clicks ); /* read the count */
 
   total = Ttimer_val + 250 - clicks;
 

@@ -429,7 +429,7 @@ static boolean config_PMX1553_probe(int minor)
 	 * Disable special register set and lock Enhanced Feature Register
 	 */
 	outport_byte(&pNS16550Write->LineControl, 0);
-	
+
 	/*
 	 * The PMX1553 currently uses a 16 MHz clock rather than the
 	 * 7.3728 MHz clock described in the ST16C654 data sheet. When

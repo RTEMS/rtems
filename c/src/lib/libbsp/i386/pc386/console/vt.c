@@ -73,7 +73,7 @@ _kd_mksound(unsigned int hz, unsigned int ticks)
 
 	if (hz > 20 && hz < 32767)
 		count = 1193180 / hz;
-	
+
 	 _CPU_ISR_Disable(level);
 /*	del_timer(&sound_timer);  */
 	if (count) {
@@ -121,7 +121,7 @@ do_kdsk_ioctl(int cmd, struct kbentry *user_kbe, int perm, struct kbd_struct *kb
 
 	tmp = *user_kbe;
 	if (i >= NR_KEYS || s >= MAX_NR_KEYMAPS)
-		return -EINVAL;	
+		return -EINVAL;
 
 	switch (cmd) {
 	case KDGKBENT:
@@ -147,7 +147,7 @@ do_kdsk_ioctl(int cmd, struct kbentry *user_kbe, int perm, struct kbd_struct *kb
 
 #define  HZ  100
 
-static inline int 
+static inline int
 do_kbkeycode_ioctl(int cmd, struct kbkeycode *user_kbkc, int perm)
 {
 	struct kbkeycode tmp;
@@ -177,7 +177,7 @@ do_kdgkb_ioctl(int cmd, struct kbsentry *user_kdgkb, int perm)
 
 /*
  * We handle the console-specific ioctl's here.  We allow the
- * capability to modify any console, not just the fg_console. 
+ * capability to modify any console, not just the fg_console.
  */
 int vt_ioctl( unsigned int cmd, unsigned long arg)
 {
@@ -207,7 +207,7 @@ int vt_ioctl( unsigned int cmd, unsigned long arg)
 			return -EPERM;
 	{
 		unsigned int ticks, count;
-		
+
 		/*
 		 * Generate the tone for the appropriate number of ticks.
 		 * If the time is zero, turn off sound ourselves.

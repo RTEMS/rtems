@@ -28,7 +28,7 @@ extern "C" {
 /*
  * Include some preprocessor value also used by assember code
  */
-  
+
 #include <irq_asm.h>
 #include <rtems.h>
 /*-------------------------------------------------------------------------+
@@ -37,7 +37,7 @@ extern "C" {
 
 typedef enum {
     /* Base vector for our IRQ handlers. */
-  BSP_IRQ_VECTOR_BASE		=	BSP_ASM_IRQ_VECTOR_BASE,       
+  BSP_IRQ_VECTOR_BASE		=	BSP_ASM_IRQ_VECTOR_BASE,
   BSP_IRQ_LINES_NUMBER    	= 	16,
   BSP_LOWEST_OFFSET		= 	0,
   BSP_MAX_OFFSET		= 	BSP_IRQ_LINES_NUMBER - 1,
@@ -46,7 +46,7 @@ typedef enum {
      * NB : 1) Interrupt vector number in IDT = offset + BSP_ASM_IRQ_VECTOR_BASE
      * 	    2) The same name should be defined on all architecture
      *	       so that handler connexion can be unchanged.
-     */	       
+     */
   BSP_PERIODIC_TIMER      	= 	0,
 
   BSP_KEYBOARD          	= 	1,
@@ -56,11 +56,11 @@ typedef enum {
   BSP_UART_COM1_IRQ		=	4,
 
   BSP_RT_TIMER1	      	= 	8,
-  
+
   BSP_RT_TIMER3		= 	10
 } rtems_irq_symbolic_name;
 
-    
+
 
 
 /*
@@ -94,9 +94,9 @@ typedef struct __rtems_irq_connect_data__ {
    * It is usually called immediately AFTER connecting the interrupt handler.
    * RTEMS may well need such a function when restoring normal interrupt
    * processing after a debug session.
-   * 
+   *
    */
-    rtems_irq_enable		on;	
+    rtems_irq_enable		on;
   /*
    * function for disabling interrupts at device level (ONLY!).
    * The code will disable it at i8259s level. RATIONALE : anyway
@@ -132,7 +132,7 @@ typedef struct {
   rtems_irq_symbolic_name	irqBase;
   /*
    * software priorities associated with interrupts.
-   * if irqPrio  [i]  >  intrPrio  [j]  it  means  that  
+   * if irqPrio  [i]  >  intrPrio  [j]  it  means  that
    * interrupt handler hdl connected for interrupt name i
    * will  not be interrupted by the handler connected for interrupt j
    * The interrupt source  will be physically masked at i8259 level.
@@ -209,7 +209,7 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine);
  *	4) perform rescheduling when necessary,
  *	5) restore the C scratch registers...
  *	6) restore initial execution flow
- * 
+ *
  */
 int BSP_install_rtems_irq_handler   	(const rtems_irq_connect_data*);
 /*
@@ -252,7 +252,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config);
  * (Re) get info on current RTEMS interrupt management.
  */
 int BSP_rtems_irq_mngt_get(rtems_irq_global_settings**);
-  
+
 #ifdef __cplusplus
 }
 #endif

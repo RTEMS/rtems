@@ -5,28 +5,28 @@
  *  all remaining initialization.
  *
  * This file is based on several others:
- * 
- * (1) start360.s from the gen68360 BSP by 
+ *
+ * (1) start360.s from the gen68360 BSP by
  *     W. Eric Norum (eric@skatter.usask.ca)
  *     with the following copyright and license:
  *
  *     COPYRIGHT (c) 1989-1998.
  *     On-Line Applications Research Corporation (OAR).
- *     
+ *
  *     The license and distribution terms for this file may in
  *     the file LICENSE in this distribution or at
  *     http://www.rtems.com/license/LICENSE.
  *
  * (2) start.s for the eth_comm port by
  *     Jay Monkman (jmonkman@fracsa.com),
- *     which itself is based on the 
- * 
+ *     which itself is based on the
+ *
  * (3) dlentry.s for the Papyrus BSP, written by:
  *     Andrew Bray <andy@i-cubed.co.uk>
  *     with the following copyright and license:
  *
  *     COPYRIGHT (c) 1995 by i-cubed ltd.
- *     
+ *
  * (4) start860.S for the MBX821/MBX860, written by:
  *     Darlene A. Stewart <darlene.stewart@iit.nrc.ca>
  *     Copyright (c) 1999, National Research Council of Canada
@@ -182,7 +182,7 @@
 .L_D4_e:
 .L_D2:
 	.previous
-	
+
 /*
  * Tell C's eabi-ctor's that we have an atexit function,
  * and that it is to register __do_global_dtors.
@@ -191,7 +191,7 @@
 	PUBLIC_VAR(__atexit)
 	.section ".sdata","aw"
 	.align	2
-SYM(__atexit):			
+SYM(__atexit):
 	EXT_PROC_REF(atexit)@fixup
 	.previous
 
@@ -201,7 +201,7 @@ SYM(__atexit):
 	.previous
 
 /* That should do it */
-			
+
 /*
  *  Put the entry point in its own section. That way, we can guarantee
  *  to put it first in the .text section in the linker script.
@@ -211,7 +211,7 @@ SYM(__atexit):
         PUBLIC_VAR (start)
 SYM(start):
         bl      .startup	/* or bl .spin */
-base_addr:      
+base_addr:
 
 /*
  * Parameters from linker
@@ -219,19 +219,19 @@ base_addr:
 stack_top:
 	.long	initStackPtr
 
-toc_pointer:    
+toc_pointer:
         .long   __GOT_START__
 
-bss_length:     
+bss_length:
         .long   bss.size
-bss_addr:       
+bss_addr:
         .long   bss.start
 
-data_length:     
+data_length:
         .long   data.size
-data_addr:       
+data_addr:
         .long   data.start
-contents_addr:       
+contents_addr:
         .long   data.contents.start
 
 PUBLIC_VAR (text_addr)
@@ -244,7 +244,7 @@ text_length:
 
 /*
  * Spin, if necessary, to acquire control from debugger (CodeWarrior).
- */     
+ */
 spin:
 	.long	0x0001
 .spin:
@@ -254,9 +254,9 @@ spin:
 	beq	.spin
 
 /*
- * Initialization code 
+ * Initialization code
  */
-.startup:	
+.startup:
         /* Capture address of linker parameters. */
         mflr    r3
 
@@ -273,7 +273,7 @@ spin:
         /* Initialize the memory mapped MPC555 registers (done in C). */
         EXTERN_PROC (_InitSS555)
         bl	PROC (_InitSS555)
-        
+
         /* Clear the .bss section. */
         bl      bssclr
 
@@ -295,7 +295,7 @@ spin:
 	li	r3, 0			/* argc */
         EXTERN_PROC (boot_card)
         bl       PROC (boot_card)	/* call the first C routine */
-        
+
         /* We should never return from boot_card, but in case we do ... */
 	/* The next instructions are dependent on your runtime environment. */
 
@@ -323,7 +323,7 @@ dc1:
         addi    r4, r4, 0x4                     /* next source */
         addi    r5, r5, 0x4                     /* next target */
         bdnz    dc1                             /* dec counter and loop */
-        
+
         blr                                     /* return */
 
 /*
@@ -345,7 +345,7 @@ clear_bss:
         stw     r5, 0(r4)                       /* store r6 */
         addi    r4, r4, 0x4                     /* update r4 */
         bdnz    clear_bss                       /* dec counter and loop */
-        
+
         blr                                     /* return */
 
 /*
@@ -356,7 +356,7 @@ clear_bss:
  *	r0 - scratch
  */
 initregs:
-	/*        
+	/*
 	 * Set the processor for big-endian mode, exceptions vectored to
 	 * 0x000n_nnnn, no execution tracing, machine check exceptions
 	 * enabled, floating-point not available, supervisor priviledge
@@ -366,10 +366,10 @@ initregs:
 	li	r0, 0x1000	/* MSR_ME */
 	mtmsr	r0		/* Context-synchronizing */
 	isync
-	
+
 	/*
 	 * Clear the exception handling registers.
-	 */	
+	 */
 	li	r0, 0x0000
 	mtdar   r0
 	mtspr	sprg0, r0
@@ -378,13 +378,13 @@ initregs:
 	mtspr	sprg3, r0
 	mtspr	srr0, r0
 	mtspr	srr1, r0
-			
+
 	mr	r6, r0
 	mr	r7, r0
 	mr	r8, r0
 	mr	r9, r0
 	mr	r10, r0
-	mr	r11, r0 
+	mr	r11, r0
 	mr	r12, r0
 	mr	r13, r0
 	mr	r14, r0
@@ -405,9 +405,9 @@ initregs:
 	mr	r29, r0
 	mr	r30, r0
 	mr	r31, r0
-	
+
 	blr			/* return */
-	
+
 .L_text_e:
 
 	.comm	environ,4,4

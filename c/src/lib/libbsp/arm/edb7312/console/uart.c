@@ -34,8 +34,8 @@ static int     uart_set_attributes(int minor, const struct termios *t);
 unsigned long Console_Port_Count = NUM_DEVS;
 console_data  Console_Port_Data[NUM_DEVS];
 rtems_device_minor_number  Console_Port_Minor = 0;
-console_fns uart_fns = 
-{ 
+console_fns uart_fns =
+{
     libchip_serial_default_probe,
     uart_first_open,
     uart_last_close,
@@ -69,7 +69,7 @@ console_tbl Console_Port_Tbl[] = {
 
 static int     uart_first_open(int major, int minor, void *arg) {return 0;}
 static int     uart_last_close(int major, int minor, void *arg) {return 0;}
-static int     uart_read(int minor) 
+static int     uart_read(int minor)
 {
     return uart_poll_read(minor);
 }
@@ -79,7 +79,7 @@ static void    uart_write_polled(int minor, char c)
     uart_write(minor, &c, 1);
 }
 
-static int     uart_set_attributes(int minor, const struct termios *t) 
+static int     uart_set_attributes(int minor, const struct termios *t)
 {
     return 0;
 }
@@ -100,7 +100,7 @@ int uart_poll_read(int minor)
         return -1;
     }
 
-    
+
 
     err  = *data_reg;
     c    = err & 0xff;
@@ -133,7 +133,7 @@ static int uart_write(int minor, const char *buf, int len)
         c = (char) buf[i];
         *data_reg = c;
     }
-    
+
     return 1;
 }
 
@@ -142,7 +142,7 @@ static void uart_init(int minor)
     volatile uint32_t   *data_reg;
     volatile uint32_t   *ctrl_reg1;
     volatile uint32_t   *ctrl_reg2;
-    
+
     data_reg = (uint32_t*)Console_Port_Tbl[minor].ulDataPort;
     ctrl_reg1 = (uint32_t*)Console_Port_Tbl[minor].ulCtrlPort1;
     ctrl_reg2 = (uint32_t*)Console_Port_Tbl[minor].ulCtrlPort2;
@@ -156,6 +156,6 @@ static void uart_init(int minor)
     *ctrl_reg1 = (EP7312_UART_WRDLEN8    |
                  EP7312_UART_FIFOEN     |
                  0x17);              /* 9600 baud */
-    
+
 
 }

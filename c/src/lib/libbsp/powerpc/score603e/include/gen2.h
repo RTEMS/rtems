@@ -9,7 +9,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: 
+ *  $Id:
  */
 
 #ifndef __SCORE_GENERATION_2_h
@@ -24,11 +24,11 @@ extern "C" {
 /*
  * ISA/PCI I/O space.
  */
-#define SCORE603E_VME_JUMPER_ADDR      0x00e20000       
+#define SCORE603E_VME_JUMPER_ADDR      0x00e20000
 #define SCORE603E_FLASH_BASE_ADDR      0x04000000
 #define SCORE603E_ISA_PCI_IO_BASE      0x80000000
-#define SCORE603E_TIMER_PORT_C         0xfd000000       
-#define SCORE603E_TIMER_INT_ACK        0xfd000000       
+#define SCORE603E_TIMER_PORT_C         0xfd000000
+#define SCORE603E_TIMER_INT_ACK        0xfd000000
 #define SCORE603E_TIMER_PORT_B         0xfd000008
 #define SCORE603E_TIMER_PORT_A         0xfd000004
 
@@ -45,7 +45,7 @@ extern "C" {
 #define SCORE603E_85C30_DATA_3         ((volatile uint8_t*)0xfe20000c)
 
 /*
- * PSC8 - PMC Card 
+ * PSC8 - PMC Card
  */
 #define SCORE603E_PCI_CONFIGURATION_BASE   0x80800000
 #define SCORE603E_PMC_BASE                 SCORE603E_PCI_CONFIGURATION_BASE
@@ -55,7 +55,7 @@ extern "C" {
 
 #define SCORE603E_PCI_DEVICE_ADDRESS( _offset) \
          ((volatile uint32_t*)( SCORE603E_PCI_PMC_DEVICE_BASE + _offset ))
-  
+
 
 #define SCORE603E_PMC_SERIAL_ADDRESS( _offset )    \
         ((volatile uint8_t*)(SCORE603E_PCI_REGISTER_BASE + _offset))
@@ -63,29 +63,29 @@ extern "C" {
 /*
  * PMC serial channels - (4-7: 232 and 8-11: 422)
  */
-#define SCORE603E_85C30_CTRL_4        SCORE603E_PMC_SERIAL_ADDRESS(0x200020) 
-#define SCORE603E_85C30_DATA_4        SCORE603E_PMC_SERIAL_ADDRESS(0x200024) 
-#define SCORE603E_85C30_CTRL_5        SCORE603E_PMC_SERIAL_ADDRESS(0x200028) 
-#define SCORE603E_85C30_DATA_5        SCORE603E_PMC_SERIAL_ADDRESS(0x20002c) 
-#define SCORE603E_85C30_CTRL_6        SCORE603E_PMC_SERIAL_ADDRESS(0x200030) 
-#define SCORE603E_85C30_DATA_6        SCORE603E_PMC_SERIAL_ADDRESS(0x200034) 
-#define SCORE603E_85C30_CTRL_7        SCORE603E_PMC_SERIAL_ADDRESS(0x200038) 
-#define SCORE603E_85C30_DATA_7        SCORE603E_PMC_SERIAL_ADDRESS(0x20003c) 
-#define SCORE603E_85C30_CTRL_8        SCORE603E_PMC_SERIAL_ADDRESS(0x200000) 
-#define SCORE603E_85C30_DATA_8        SCORE603E_PMC_SERIAL_ADDRESS(0x200004) 
-#define SCORE603E_85C30_CTRL_9        SCORE603E_PMC_SERIAL_ADDRESS(0x200008) 
-#define SCORE603E_85C30_DATA_9        SCORE603E_PMC_SERIAL_ADDRESS(0x20000c) 
-#define SCORE603E_85C30_CTRL_10       SCORE603E_PMC_SERIAL_ADDRESS(0x200010) 
-#define SCORE603E_85C30_DATA_10       SCORE603E_PMC_SERIAL_ADDRESS(0x200014) 
-#define SCORE603E_85C30_CTRL_11       SCORE603E_PMC_SERIAL_ADDRESS(0x200018) 
-#define SCORE603E_85C30_DATA_11       SCORE603E_PMC_SERIAL_ADDRESS(0x20001c) 
+#define SCORE603E_85C30_CTRL_4        SCORE603E_PMC_SERIAL_ADDRESS(0x200020)
+#define SCORE603E_85C30_DATA_4        SCORE603E_PMC_SERIAL_ADDRESS(0x200024)
+#define SCORE603E_85C30_CTRL_5        SCORE603E_PMC_SERIAL_ADDRESS(0x200028)
+#define SCORE603E_85C30_DATA_5        SCORE603E_PMC_SERIAL_ADDRESS(0x20002c)
+#define SCORE603E_85C30_CTRL_6        SCORE603E_PMC_SERIAL_ADDRESS(0x200030)
+#define SCORE603E_85C30_DATA_6        SCORE603E_PMC_SERIAL_ADDRESS(0x200034)
+#define SCORE603E_85C30_CTRL_7        SCORE603E_PMC_SERIAL_ADDRESS(0x200038)
+#define SCORE603E_85C30_DATA_7        SCORE603E_PMC_SERIAL_ADDRESS(0x20003c)
+#define SCORE603E_85C30_CTRL_8        SCORE603E_PMC_SERIAL_ADDRESS(0x200000)
+#define SCORE603E_85C30_DATA_8        SCORE603E_PMC_SERIAL_ADDRESS(0x200004)
+#define SCORE603E_85C30_CTRL_9        SCORE603E_PMC_SERIAL_ADDRESS(0x200008)
+#define SCORE603E_85C30_DATA_9        SCORE603E_PMC_SERIAL_ADDRESS(0x20000c)
+#define SCORE603E_85C30_CTRL_10       SCORE603E_PMC_SERIAL_ADDRESS(0x200010)
+#define SCORE603E_85C30_DATA_10       SCORE603E_PMC_SERIAL_ADDRESS(0x200014)
+#define SCORE603E_85C30_CTRL_11       SCORE603E_PMC_SERIAL_ADDRESS(0x200018)
+#define SCORE603E_85C30_DATA_11       SCORE603E_PMC_SERIAL_ADDRESS(0x20001c)
 
 #define SCORE603E_PCI_IO_CFG_ADDR      0x80000cf8
 #define SCORE603E_PCI_IO_CFG_DATA      0x80000cfc
 
 #define SCORE603E_UNIVERSE_BASE        0x80030000
 #define SCORE603E_IO_VME_UNIVERSE_BASE 0x80007000
-#define SCORE603E_PCI_MEM_BASE         0xc0000000       
+#define SCORE603E_PCI_MEM_BASE         0xc0000000
 #define SCORE603E_NVRAM_BASE           0xfd100000
 #define SCORE603E_RTC_ADDRESS          ((volatile unsigned char *)0xfd180000)
 #define SCORE603E_JP1_JP2_PROM_BASE    0xfff00000
@@ -106,7 +106,7 @@ extern "C" {
 
 /*
  *  Definations for the ICM 1770 RTC chip
- */ 
+ */
     /*
      * These values are programed into a register and must not be changed.
      */
@@ -115,25 +115,25 @@ extern "C" {
 #define ICM1770_CRYSTAL_FREQ_2M       0x02
 #define ICM1770_CRYSTAL_FREQ_4M       0x03
 
-#define SCORE_RTC_FREQUENCY           ICM1770_CRYSTAL_FREQ_32K 
+#define SCORE_RTC_FREQUENCY           ICM1770_CRYSTAL_FREQ_32K
 
 /*
  *  Z85C30 Definations for the 423 interface.
  */
 #define SCORE603E_85C30_0_CLOCK     14745600  /* 10,000,000 ?10->14.5 */
-#define SCORE603E_85C30_0_CLOCK_X       16 
+#define SCORE603E_85C30_0_CLOCK_X       16
 
 /*
  *  Z85C30 Definations for the 422 interface.
  */
 #define SCORE603E_85C30_1_CLOCK     16000000  /* 10,000,000 ?10->14.5 */
-#define SCORE603E_85C30_1_CLOCK_X       16    
+#define SCORE603E_85C30_1_CLOCK_X       16
 
 /*
  *  Z85C30 Definations for the PMC serial chips
  */
 #define SCORE603E_85C30_PMC_CLOCK     16000000  /* 10,000,000 ?10->14.5 */
-#define SCORE603E_85C30_PMC_CLOCK_X       16    
+#define SCORE603E_85C30_PMC_CLOCK_X       16
 
 #define SCORE603E_85C30_2_CLOCK       SCORE603E_85C30_PMC_CLOCK
 #define SCORE603E_85C30_3_CLOCK       SCORE603E_85C30_PMC_CLOCK
@@ -156,7 +156,7 @@ extern "C" {
 #define SCORE603E_FPGA_IRQ_INPUT    ((volatile uint16_t*)0xfd00004c)
 
 /*
- * The PMC status word is at the PMC base address 
+ * The PMC status word is at the PMC base address
  */
 #define SCORE603E_PMC_STATUS_ADDRESS  (SCORE603E_PMC_SERIAL_ADDRESS (0))
 #define Is_PMC_85C30_4_IRQ( _status ) (_status & 0x80)    /* SCC 422-1 */
@@ -167,17 +167,17 @@ extern "C" {
 #define SCORE603E_PMC_CONTROL_ADDRESS    SCORE603E_PMC_SERIAL_ADDRESS(0x100000)
 #define SCORE603E_PMC_SCC_232_LOOPBACK (_word) (_word|0x20)
 
-#define PMC_SET_232_LOOPBACK(_word)   (_word | 0x02)   
-#define PMC_CLEAR_232_LOOPBACK(_word) (_word & 0xfd)   
-#define PMC_SET_422_LOOPBACK(_word)   (_word | 0x01)   
-#define PMC_CLEAR_422_LOOPBACK(_word) (_word & 0xfe) 
-  
+#define PMC_SET_232_LOOPBACK(_word)   (_word | 0x02)
+#define PMC_CLEAR_232_LOOPBACK(_word) (_word & 0xfd)
+#define PMC_SET_422_LOOPBACK(_word)   (_word | 0x01)
+#define PMC_CLEAR_422_LOOPBACK(_word) (_word & 0xfe)
+
 
 /*
  *  Score603e Interupt Definations.
  */
 
-/* 
+/*
  * First Score Unique IRQ
  */
 #define Score_IRQ_First ( PPC_IRQ_LAST +  1 )
@@ -202,25 +202,25 @@ extern "C" {
 #define SCORE603E_IRQ14   ( Score_IRQ_First + 14 )
 #define SCORE603E_IRQ15   ( Score_IRQ_First + 15 )
 
-#define SCORE603E_TIMER1_IRQ           SCORE603E_IRQ00    
-#define SCORE603E_TIMER2_IRQ           SCORE603E_IRQ01    
-#define SCORE603E_TIMER3_IRQ           SCORE603E_IRQ02    
-#define SCORE603E_85C30_1_IRQ          SCORE603E_IRQ03    
-#define SCORE603E_85C30_0_IRQ          SCORE603E_IRQ04    
-#define SCORE603E_RTC_IRQ              SCORE603E_IRQ05    
-#define SCORE603E_PCI_IRQ_0            SCORE603E_IRQ06    
-#define SCORE603E_PCI_IRQ_1            SCORE603E_IRQ07    
-#define SCORE603E_PCI_IRQ_2            SCORE603E_IRQ08    
-#define SCORE603E_PCI_IRQ_3            SCORE603E_IRQ09     
-#define SCORE603E_UNIVERSE_IRQ         SCORE603E_IRQ10      
-#define SCORE603E_1553_IRQ             SCORE603E_IRQ11    
-#define SCORE603E_MAIL_BOX_IRQ_0       SCORE603E_IRQ12    
-#define SCORE603E_MAIL_BOX_IRQ_1       SCORE603E_IRQ13    
-#define SCORE603E_MAIL_BOX_IRQ_2       SCORE603E_IRQ14    
-#define SCORE603E_MAIL_BOX_IRQ_3       SCORE603E_IRQ15    
+#define SCORE603E_TIMER1_IRQ           SCORE603E_IRQ00
+#define SCORE603E_TIMER2_IRQ           SCORE603E_IRQ01
+#define SCORE603E_TIMER3_IRQ           SCORE603E_IRQ02
+#define SCORE603E_85C30_1_IRQ          SCORE603E_IRQ03
+#define SCORE603E_85C30_0_IRQ          SCORE603E_IRQ04
+#define SCORE603E_RTC_IRQ              SCORE603E_IRQ05
+#define SCORE603E_PCI_IRQ_0            SCORE603E_IRQ06
+#define SCORE603E_PCI_IRQ_1            SCORE603E_IRQ07
+#define SCORE603E_PCI_IRQ_2            SCORE603E_IRQ08
+#define SCORE603E_PCI_IRQ_3            SCORE603E_IRQ09
+#define SCORE603E_UNIVERSE_IRQ         SCORE603E_IRQ10
+#define SCORE603E_1553_IRQ             SCORE603E_IRQ11
+#define SCORE603E_MAIL_BOX_IRQ_0       SCORE603E_IRQ12
+#define SCORE603E_MAIL_BOX_IRQ_1       SCORE603E_IRQ13
+#define SCORE603E_MAIL_BOX_IRQ_2       SCORE603E_IRQ14
+#define SCORE603E_MAIL_BOX_IRQ_3       SCORE603E_IRQ15
 
-/* 
- * The Score FPGA maps all interrupts comming from the PMC card to 
+/*
+ * The Score FPGA maps all interrupts comming from the PMC card to
  * the FPGA interrupt SCORE603E_PCI_IRQ_0 the PMC status word must be
  * read to indicate which interrupt was chained to the FPGA.
  */
@@ -239,7 +239,7 @@ extern "C" {
 
 #define MAX_BOARD_IRQS                 SCORE603E_IRQ19
 
- 
+
 /*
  *  BSP_TIMER_AVG_OVERHEAD and BSP_TIMER_LEAST_VALID for the shared timer
  *  driver.
@@ -250,7 +250,7 @@ extern "C" {
 #define BSP_TIMER_LEAST_VALID    1  /* Don't trust a value lower than this */
 
 /*
- *  Convert decrement value to tenths of microsecnds (used by 
+ *  Convert decrement value to tenths of microsecnds (used by
  *  shared timer driver).
  *
  *    + CPU has a 66.67 Mhz bus,

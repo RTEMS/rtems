@@ -104,7 +104,7 @@ hdlc_output(ifp, m0, dst, rt0)
 	struct mbuf *mcopy = (struct mbuf *)0;
 /*	register struct ether_header *eh; */
 	int off, len = m->m_pkthdr.len;
-	
+
 /*	printk( "hdlc output" ); */
 /*	struct arpcom *ac = (struct arpcom *)ifp; */
 
@@ -175,8 +175,8 @@ hdlc_output(ifp, m0, dst, rt0)
 
 	if (m == 0)
 		senderr(ENOBUFS);
-		
-#if 0	
+
+#if 0
 	eh = mtod(m, struct ether_header *);
 	(void)memcpy(&eh->ether_type, &type,
 		sizeof(eh->ether_type));
@@ -199,7 +199,7 @@ hdlc_output(ifp, m0, dst, rt0)
 	if ((ifp->if_flags & IFF_OACTIVE) == 0)
 		(*ifp->if_start)(ifp);
 	splx(s);
-	
+
 	ifp->if_obytes += len /*+ sizeof (struct ether_header)*/;
 	if (m->m_flags & M_MCAST)
 		ifp->if_omcasts++;
@@ -223,21 +223,21 @@ hdlc_input(ifp, m)
 {
 	register struct ifqueue *inq;
 	int s;
-	
+
 	struct ether_header eh;
-	
+
 	if ((ifp->if_flags & IFF_UP) == 0) {
 		m_freem(m);
 		return;
 	}
 	ifp->if_ibytes += m->m_pkthdr.len;
-/*	
+/*
 	if (memcmp((caddr_t)etherbroadcastaddr, (caddr_t)eh->ether_dhost,
 	    sizeof(etherbroadcastaddr)) == 0)
 		m->m_flags |= M_BCAST;
 	else if (eh->ether_dhost[0] & 1)
 		m->m_flags |= M_MCAST;
-*/		
+*/
 	if (m->m_flags & (M_BCAST|M_MCAST))
 		ifp->if_imcasts++;
 
@@ -285,11 +285,11 @@ hdlc_ifattach(ifp)
 		    sdl->sdl_family == AF_LINK) {
 			sdl->sdl_type = IFT_ETHER;
 			sdl->sdl_alen = ifp->if_addrlen;
-/*			
+/*
 			memcpy(LLADDR(sdl),
 			      (caddr_t)((struct arpcom *)ifp)->ac_enaddr,
 			      ifp->if_addrlen);
-*/			
+*/
 			break;
 		}
 }
@@ -309,7 +309,7 @@ hdlc_ioctl(struct ifnet *ifp, int command, caddr_t data)
 		ifp->if_flags |= IFF_UP;
 
 		switch (ifa->ifa_addr->sa_family) {
-#if 0		
+#if 0
 #ifdef INET
 		case AF_INET:
 			ifp->if_init(ifp->if_softc);	/* before arpwhohas */
@@ -329,11 +329,11 @@ hdlc_ioctl(struct ifnet *ifp, int command, caddr_t data)
 			struct sockaddr *sa;
 
 			sa = (struct sockaddr *) & ifr->ifr_data;
-/*			
+/*
 			memcpy((caddr_t) sa->sa_data,
 			      ((struct arpcom *)ifp->if_softc)->ac_enaddr,
 			      ETHER_ADDR_LEN);
-*/			
+*/
 		}
 		break;
 

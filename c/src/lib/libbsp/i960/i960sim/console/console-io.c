@@ -47,7 +47,7 @@ void console_outbyte_polled(
 }
 
 /*
- *  console_inbyte_nonblocking 
+ *  console_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */
@@ -61,7 +61,7 @@ int console_inbyte_nonblocking(
   char c;
 
   status = _sys_read (0, &c, 1, &nread);
-  if ( status == 0 ) 
+  if ( status == 0 )
     return c;
   return -1;
 }

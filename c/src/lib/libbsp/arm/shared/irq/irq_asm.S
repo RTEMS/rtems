@@ -25,16 +25,16 @@
 _ISR_Handler:
         stmdb   sp!, {r0, r1, r2, r3, r12}   /* save regs on INT stack */
         stmdb   sp!, {lr}               /*    now safe to call C funcs */
-        
+
 
 /* one nest level deeper */
-        ldr     r0, =_ISR_Nest_level 
+        ldr     r0, =_ISR_Nest_level
         ldr     r1, [r0]
         add     r1, r1,#1
         str     r1, [r0]
-        
+
 /* disable multitasking */
-        ldr     r0, =_Thread_Dispatch_disable_level          
+        ldr     r0, =_Thread_Dispatch_disable_level
         ldr     r1, [r0]
         add     r1, r1,#1
         str     r1, [r0]
@@ -42,14 +42,14 @@ _ISR_Handler:
 /* BSP specific function to INT handler */
         /* FIXME: I'm not sure why I can't save just r12. I'm also  */
         /*     not sure which of r1-r3 are important.               */
-        bl      ExecuteITHandler 
+        bl      ExecuteITHandler
 
-/* one less nest level  */      
+/* one less nest level  */
         ldr     r0, =_ISR_Nest_level
         ldr     r1, [r0]
         sub     r1, r1,#1
         str     r1, [r0]
-        
+
 /* unnest multitasking */
         ldr     r0, =_Thread_Dispatch_disable_level
         ldr     r1, [r0]
@@ -59,7 +59,7 @@ _ISR_Handler:
 /* check to see if we interrupted nd INT (with FIQ?) */
         mrs   r0, spsr
         and   r0, r0, #0x1f
-        cmp   r0, #0x12        /* is it INT mode? */  
+        cmp   r0, #0x12        /* is it INT mode? */
         beq   exitit
 
 /* If thread dispatching is disabled, exit */
@@ -70,18 +70,18 @@ _ISR_Handler:
         ldr     r0, =_Context_Switch_necessary
         ldr     r1, [r0]
         cmp     r1, #0
-        
+
         /* since bframe is going to clear _ISR_Signals_to_thread_executing, */
         /*    we need to load it here */
-        ldr     r0, =_ISR_Signals_to_thread_executing   
+        ldr     r0, =_ISR_Signals_to_thread_executing
         ldr     r1, [r0]
         bne     bframe
-        
+
 /* If a signals to be sent (_ISR_Signals_to_thread_executing != 0),        */
 /*  call scheduler */
         cmp     r1, #0
         beq     exitit
-        
+
 /* _ISR_Signals_to_thread_executing = FALSE */
         mov     r1, #0
         str     r1, [r0]
@@ -94,7 +94,7 @@ bframe:
         mrs     r0, spsr
         ldmia   sp!, {r1}       /* get lr off stack */
         stmdb   sp!, {r1}
-        mrs     r2, cpsr    
+        mrs     r2, cpsr
         orr     r3, r2, #0x1    /* change to SVC mode */
         msr     cpsr_c, r3
 
@@ -111,10 +111,10 @@ bframe:
         ldmia   sp!, {r1}                 /* out with the old          */
         stmdb   sp!, {lr}                 /*    in with the new (lr) */
 
-        
+
         orr     r0, r0, #0xc0
         msr     spsr, r0
-                                        
+
 exitit:
         ldmia   sp!, {lr}                     /* restore regs from INT stack */
         ldmia   sp!, {r0, r1, r2, r3, r12}    /* restore regs from INT stack */
@@ -122,7 +122,7 @@ exitit:
 
 
 
-        /* on entry to _ISR_Dispatch, we're in SVC mode */      
+        /* on entry to _ISR_Dispatch, we're in SVC mode */
         .globl _ISR_Dispatch
 _ISR_Dispatch:
         stmdb   sp!, {r0-r3, r12,lr}      /* save regs on SVC stack */
@@ -130,15 +130,15 @@ _ISR_Dispatch:
                                           /*    we don't save lr, since  */
                                           /*    it's just going to get   */
                                           /*    overwritten              */
-_ISR_Dispatch_p_4:	
+_ISR_Dispatch_p_4:
         bl      _Thread_Dispatch
 	ldmia	sp!, {r0-r3, r12, lr}
 
 	stmdb   sp!, {r0-r2}
         /* Now we have to screw with the stack */
         mov     r0, sp                  /* copy the SVC stack pointer */
-        
-        mrs     r1, cpsr    
+
+        mrs     r1, cpsr
         bic     r2, r1, #0x1            /* change to INT mode */
         orr     r2, r2, #0xc0           /* disable interrupts */
         msr     cpsr_c, r2
@@ -147,7 +147,7 @@ _ISR_Dispatch_p_4:
         stmdb   sp!, {r4, r5, r6}   /* save temp vars on INT stack */
         ldmia   r0!, {r4, r5, r6}   /* Get r0-r3 from SVC stack */
         stmdb   sp!, {r4, r5, r6}   /*    and save them on INT stack */
-        
+
         ldmia   r0!, {r4, r5}           /* get saved values from SVC stack */
                                         /*      r4=spsr, r5=lr */
         mov     lr,   r5                /* restore lr_int */

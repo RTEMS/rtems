@@ -42,23 +42,23 @@
  */
 
 
-        .section ".entry"  /* This might have to be the first thing in the 
+        .section ".entry"  /* This might have to be the first thing in the
                             * text section. At one time, it had to be
                             * first, but I don't believe it is true
                             * any more. */
         PUBLIC_VAR (start)
 SYM(start):
         bl      .startup
-base_addr:      
+base_addr:
 
 /*
  * Parameters from linker
  */
-toc_pointer:    
+toc_pointer:
         .long   s.got
-bss_length:     
+bss_length:
         .long   bss.size
-bss_addr:       
+bss_addr:
         .long   bss.start
 
 PUBLIC_VAR (data_length )
@@ -80,7 +80,7 @@ text_length:
 
 
 /*
- * Initialization code 
+ * Initialization code
  */
 .startup:
     /* Get start address */
@@ -104,15 +104,15 @@ text_length:
 
 
 
-#ifdef ENABLE_CACHE	
+#ifdef ENABLE_CACHE
 	/* Enable caches */
 	mfspr	r5, 1008
 	ori	r5, r5, 0x8000
 	isync
 	mtspr	1008, r5
-	
+
 /*	Leave D-cache disabled for now */
-#if 0	
+#if 0
 	ori	r5, r5, 0x4000
 	sync
 	mtspr	1008, r5
@@ -128,7 +128,7 @@ text_length:
 	 *-------------------------------------------------- */
 
 	lis	r13, 0x0050     /* set nap mode and DPM */
-	or	r5, r5, r13	
+	or	r5, r5, r13
 	mtspr	1008, r5
 
 	/*--------------------------------------------------
@@ -155,11 +155,11 @@ text_length:
         /* clear argc and argv */
         xor     r3, r3, r3
         xor     r4, r4, r4
-        
+
         .extern SYM (boot_card)
         bl       SYM (boot_card)	/* call the first C routine */
 
-	
+
 
 	/* we don't expect to return from boot_card but if we do */
 	/* wait here for watchdog to kick us into hard reset     */

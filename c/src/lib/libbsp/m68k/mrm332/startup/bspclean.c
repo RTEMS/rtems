@@ -1,7 +1,7 @@
 /*  bsp_cleanup()
  *
  *  This routine cleans up in the sense that it places the board
- *  in a safe state and flushes the I/O buffers before exiting. 
+ *  in a safe state and flushes the I/O buffers before exiting.
  *
  *  INPUT:  NONE
  *

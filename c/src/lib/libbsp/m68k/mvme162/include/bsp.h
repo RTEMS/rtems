@@ -53,30 +53,30 @@ typedef volatile struct {
   unsigned char     chipREV;
   unsigned char     gen_control;
   unsigned char     vector_base;
-  
+
   unsigned long     timer_cmp_1;
   unsigned long     timer_cnt_1;
   unsigned long     timer_cmp_2;
   unsigned long     timer_cnt_2;
-  
+
   unsigned char     LSB_prescaler_count;
   unsigned char     prescaler_clock_adjust;
   unsigned char     time_ctl_2;
   unsigned char     time_ctl_1;
-  
+
   unsigned char     time_int_ctl_4;
   unsigned char     time_int_ctl_3;
   unsigned char     time_int_ctl_2;
   unsigned char     time_int_ctl_1;
-  
+
   unsigned char     dram_err_int_ctl;
   unsigned char     SCC_int_ctl;
   unsigned char     time_ctl_4;
   unsigned char     time_ctl_3;
-  
+
   unsigned short    DRAM_space_base;
   unsigned short    SRAM_space_base;
-  
+
   unsigned char     DRAM_size;
   unsigned char     DRAM_SRAM_opt;
   unsigned char     SRAM_size;
@@ -96,43 +96,43 @@ typedef volatile struct {
   unsigned long     timer_cnt_3;
   unsigned long     timer_cmp_4;
   unsigned long     timer_cnt_4;
-  
+
   unsigned char     bus_clk;
   unsigned char     PROM_acc_time_ctl;
   unsigned char     FLASH_acc_time_ctl;
   unsigned char     ABORT_int_ctl;
-  
+
   unsigned char     RESET_ctl;
   unsigned char     watchdog_timer_ctl;
   unsigned char     acc_watchdog_time_base_sel;
   unsigned char     reserved2;
-  
+
   unsigned char     DRAM_ctl;
   unsigned char     reserved4;
   unsigned char     MPU_status;
   unsigned char     reserved3;
-  
+
   unsigned long     prescaler_count;
-  
+
 } mcchip_regs;
- 
+
 #define mcchip      ((mcchip_regs * const) 0xFFF42000)
 
 /*----------------------------------------------------------------*/
 
-/* 
- * SCC Z8523(0) defines and macros 
- * ------------------------------- 
+/*
+ * SCC Z8523(0) defines and macros
+ * -------------------------------
  * Prototypes for the low-level serial io are also included here,
  * because such stuff is bsp-specific (yet). The function bodies
  * are in console.c
  *
  * NOTE from Eric Vaitl <evaitl@viasat.com>:
  *
- * I dropped RTEMS into a 162FX today (the MVME162-513). The 162FX has a 
- * bug in the MC2 chip (revision 1) such that the SCC data register is 
- * not accessible, it has to be accessed indirectly through the SCC 
- * control register. 
+ * I dropped RTEMS into a 162FX today (the MVME162-513). The 162FX has a
+ * bug in the MC2 chip (revision 1) such that the SCC data register is
+ * not accessible, it has to be accessed indirectly through the SCC
+ * control register.
  */
 
 enum {portB, portA};
@@ -177,7 +177,7 @@ typedef volatile struct {
 #define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
 
 /*
- *  Define the interrupt mechanism for Time Test 27 
+ *  Define the interrupt mechanism for Time Test 27
  *
  *  NOTE: We use software interrupt 0
  */
@@ -210,7 +210,7 @@ typedef volatile struct {
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

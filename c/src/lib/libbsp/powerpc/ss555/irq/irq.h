@@ -38,8 +38,8 @@ extern "C" {
 /*
  * The SS555 has no external interrupt controller chip, so use the standard
  * routines from the CPU-dependent code.
- */ 
-#define BSP_install_rtems_irq_handler(ptr)	CPU_install_rtems_irq_handler(ptr) 
+ */
+#define BSP_install_rtems_irq_handler(ptr)	CPU_install_rtems_irq_handler(ptr)
 #define BSP_get_current_rtems_irq_handler(ptr)	CPU_get_current_rtems_irq_handler(ptr)
 #define BSP_remove_rtems_irq_handler(ptr) 	CPU_remove_rtems_irq_handler(ptr)
 #define BSP_rtems_irq_mngt_set(config)		CPU_rtems_irq_mngt_set(config)

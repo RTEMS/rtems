@@ -224,16 +224,16 @@ rtems_isr_entry Prev_modem_isr;     /* Previous modem/timer isr */
 {
   unsigned long i = 20000;  /* In case clock is off */
   rtems_interval ticks_per_second, start_ticks, end_ticks, current_ticks;
-    
+
   rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second );
   rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks );
   end_ticks = start_ticks + delay;
-  
+
   do {
     rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &current_ticks);
   } while ( --i && (current_ticks <= end_ticks) );
-  
-  CD2401_RECORD_DELAY_INFO(( start_ticks, end_ticks, current_ticks, i )); 
+
+  CD2401_RECORD_DELAY_INFO(( start_ticks, end_ticks, current_ticks, i ));
 }
 
 
@@ -744,7 +744,7 @@ int cd2401_firstOpen(
   }
 
   CD2401_RECORD_FIRST_OPEN_INFO(( minor, Init_count ));
-  
+
   rtems_interrupt_enable (level);
 
   /* Return something */
@@ -771,7 +771,7 @@ int cd2401_lastClose(
   rtems_interrupt_level level;
 
   rtems_interrupt_disable (level);
-  
+
   /* Mark that the channel is no longer is use */
   CD2401_Channel_Info[minor].tty = NULL;
 
@@ -787,7 +787,7 @@ int cd2401_lastClose(
   }
 
   CD2401_RECORD_LAST_CLOSE_INFO(( minor, Init_count ));
-  
+
   rtems_interrupt_enable (level);
 
   /* return something */
@@ -1004,14 +1004,14 @@ int cd2401_setAttributes(
 
   cd2401->car = minor;          /* Select channel */
   read_enabled = cd2401->csr & 0x80 ? TRUE : FALSE;
-  
+
   if ( (t->c_cflag & CREAD ? TRUE : FALSE ) != read_enabled ) {
     /* Read enable status is changing */
     need_reinitialization = TRUE;
   }
-  
-  if ( need_reinitialization ) { 
-    /* 
+
+  if ( need_reinitialization ) {
+    /*
      *  Could not find a way to test whether the CD2401 was done transmitting.
      *  The TxEmpty interrupt does not seem to indicate that the FIFO is empty
      *  in DMA mode. So, just wait a while for output to drain. May not be
@@ -1019,7 +1019,7 @@ int cd2401_setAttributes(
      *  9600 bsp)...
      */
     cd2401_udelay( 2000L );
-  
+
     /* Clear channel */
     cd2401_chan_cmd (minor, 0x40, 1);
 
@@ -1033,11 +1033,11 @@ int cd2401_setAttributes(
     cd2401->cor6 = igncr | icrnl | inlcr | ignbrk | brkint | parmrk | inpck;
     cd2401->cor7 = istrip;  /* No LNext; ignore XON/XOFF if frame error; no tx translations */
     /* Special char 1: XON character */
-    cd2401->u1.async.schr1 = t->c_cc[VSTART]; 
+    cd2401->u1.async.schr1 = t->c_cc[VSTART];
     /* special char 2: XOFF character */
     cd2401->u1.async.schr2 = t->c_cc[VSTOP];
-    
-    /* 
+
+    /*
      *  Special chars 3 and 4, char range, LNext, RFAR[1..4] and CRC
      *  are unused, left as is.
      */
@@ -1047,10 +1047,10 @@ int cd2401_setAttributes(
     cd2401->rcor = (unsigned char)(rx_period >> 8); /* no DPLL */
     cd2401->tbpr = (unsigned char)tx_period;
     cd2401->tcor = (tx_period >> 3) & 0xE0; /* no x1 ext clk, no loopback */
-  
+
     /* Timeout for 4 chars at 9600, 8 bits per char, 1 stop bit */
     cd2401->u2.w.rtpr  = 0x04;  /* NEED TO LOOK AT THIS LINE! */
-    
+
     if ( t->c_cflag & CREAD ) {
       /* Re-initialize channel, enable rx and tx */
       cd2401_chan_cmd (minor, 0x2A, 1);
@@ -1060,8 +1060,8 @@ int cd2401_setAttributes(
       /* Re-initialize channel, enable tx, disable rx */
       cd2401_chan_cmd (minor, 0x29, 1);
     }
-  }   
-  
+  }
+
   CD2401_RECORD_SET_ATTRIBUTES_INFO(( minor, need_reinitialization, csize,
                                       cstopb, parodd, parenb, ignpar, inpck,
                                       hw_flow_ctl, sw_flow_ctl, extra_flow_ctl,
@@ -1070,11 +1070,11 @@ int cd2401_setAttributes(
                                       out_baud, in_baud ));
 
   rtems_interrupt_enable (level);
-  
-  /* 
+
+  /*
    *  Looks like the CD2401 needs time to settle after initialization. Give it
    *  10 ms. I don't really believe it, but if output resumes to quickly after
-   *  this call, the first few characters are not right.   
+   *  this call, the first few characters are not right.
    */
   if ( need_reinitialization )
     cd2401_udelay( 10000L );
@@ -1117,7 +1117,7 @@ int cd2401_startRemoteTx(
   cd2401->stcr = 0x01;              /* Send SCHR1 ahead of chars in FIFO */
 
   CD2401_RECORD_START_REMOTE_TX_INFO(( minor ));
-  
+
   rtems_interrupt_enable (level);
 
   /* Return something */
@@ -1256,11 +1256,11 @@ int cd2401_drainOutput(
   CD2401_RECORD_DRAIN_OUTPUT_INFO(( CD2401_Channel_Info[minor].txEmpty,
                                     CD2401_Channel_Info[minor].own_buf_A,
                                     CD2401_Channel_Info[minor].own_buf_B ));
-    
-  while( ! (CD2401_Channel_Info[minor].txEmpty && 
+
+  while( ! (CD2401_Channel_Info[minor].txEmpty &&
             CD2401_Channel_Info[minor].own_buf_A &&
             CD2401_Channel_Info[minor].own_buf_B) );
-        
+
   /* Return something */
   return RTEMS_SUCCESSFUL;
 }
@@ -1291,13 +1291,13 @@ int _167Bug_pollRead(
   unsigned char c;
   rtems_interrupt_level previous_level;
 
-  /* 
+  /*
    *  Redirection of .INSTAT does not work: 167-Bug crashes.
    *  Switch the input stream to the specified port.
    *  Make sure this is atomic code.
    */
   rtems_interrupt_disable( previous_level );
-  
+
   asm volatile( "movew  %1, -(%%sp)\n\t"/* Channel */
                 "trap   #15\n\t"        /* Trap to 167Bug */
                 ".short 0x61\n\t"       /* Code for .REDIR_I */
@@ -1320,7 +1320,7 @@ int _167Bug_pollRead(
     : "=d" (c) : );
 
   rtems_interrupt_enable( previous_level );
-  
+
   return (int)c;
 }
 
@@ -1409,7 +1409,7 @@ rtems_status_code do_poll_read(
  *  Output characters through 167Bug. Returns only once every character has
  *  been sent.
  *
- *  CR is transmitted AFTER a LF on output. 
+ *  CR is transmitted AFTER a LF on output.
  *
  *  Input parameters:
  *    major - ignored. Should be the major number for this driver.
@@ -1453,8 +1453,8 @@ void _BSP_output_char(char c)
 {
   rtems_device_minor_number printk_minor;
   char cr ='\r';
-  
-  /* 
+
+  /*
    *  Can't rely on console_initialize having been called before this function
    *  is used.
    */
@@ -1463,13 +1463,13 @@ void _BSP_output_char(char c)
     printk_minor = (nvram->console_printk_port & 0x30) >> 4;
   else
     printk_minor = PRINTK_MINOR;
-   
+
   _167Bug_pollWrite(printk_minor, &c, 1);
   if ( c == '\n' )
       _167Bug_pollWrite(printk_minor, &cr, 1);
 }
 
-  
+
 /*
  ***************
  * BOILERPLATE *
@@ -1496,7 +1496,7 @@ rtems_device_driver console_initialize(
   if ( NVRAM_CONFIGURE ) {
     /* J1-4 is on, use NVRAM info for configuration */
     console_minor = nvram->console_printk_port & 0x03;
-          
+
     if ( nvram->console_mode & 0x01 )
       /* termios */
       rtems_termios_initialize ();
@@ -1559,7 +1559,7 @@ rtems_device_driver console_open(
     NULL,                       /* startRemoteTx */
     0                           /* outputUsesInterrupts */
   };
-  
+
   static const rtems_termios_callbacks intrCallbacks = {
     cd2401_firstOpen,           /* firstOpen */
     cd2401_lastClose,           /* lastClose */
@@ -1572,7 +1572,7 @@ rtems_device_driver console_open(
   };
 
   if ( NVRAM_CONFIGURE )
-    /* J1-4 is on, use NVRAM info for configuration */ 
+    /* J1-4 is on, use NVRAM info for configuration */
     if ( nvram->console_mode & 0x01 )
       /* termios */
       if ( nvram->console_mode & 0x02 )
@@ -1612,7 +1612,7 @@ rtems_device_driver console_close(
 )
 {
   if ( NVRAM_CONFIGURE ) {
-    /* J1-4 is on, use NVRAM info for configuration */ 
+    /* J1-4 is on, use NVRAM info for configuration */
     if ( nvram->console_mode & 0x01 )
       /* termios */
       return rtems_termios_close (arg);
@@ -1642,7 +1642,7 @@ rtems_device_driver console_read(
 )
 {
   if ( NVRAM_CONFIGURE ) {
-    /* J1-4 is on, use NVRAM info for configuration */ 
+    /* J1-4 is on, use NVRAM info for configuration */
     if ( nvram->console_mode & 0x01 )
       /* termios */
       return rtems_termios_read (arg);
@@ -1672,7 +1672,7 @@ rtems_device_driver console_write(
 )
 {
   if ( NVRAM_CONFIGURE ) {
-    /* J1-4 is on, use NVRAM info for configuration */ 
+    /* J1-4 is on, use NVRAM info for configuration */
     if ( nvram->console_mode & 0x01 )
       /* termios */
       return rtems_termios_write (arg);
@@ -1702,7 +1702,7 @@ rtems_device_driver console_control(
 )
 {
   if ( NVRAM_CONFIGURE ) {
-    /* J1-4 is on, use NVRAM info for configuration */ 
+    /* J1-4 is on, use NVRAM info for configuration */
     if ( nvram->console_mode & 0x01 )
       /* termios */
       return rtems_termios_ioctl (arg);

@@ -39,7 +39,7 @@
  *  GDB likes to have debugging information for the entry veneer.
  *  Here is some DWARF information.
  */
-/* 
+/*
  * There was some debugging info here, but I removed it because I
  * couldn't get it to work. It isn't really necessary as far as I
  * can tell. It should still be in the papyrus BSP. -Jay
@@ -47,30 +47,30 @@
 
 
 
-/* 
+/*
  * On entry to download_entry, R3 will hold a pointer to a Board Info
  *  Block (boardinfo_t). This should be copied as soon as possible
  *  to the global M860_binfo. (The block should be copied, _NOT_
  *  the pointer)
  */
 
-        .section ".entry"  /* This might have to be the first thing in the 
+        .section ".entry"  /* This might have to be the first thing in the
                             * text section. At one time, it had to be
                             * first, but I don't believe it is true
                             * andy more. */
         PUBLIC_VAR (start)
 SYM(start):
         bl      .startup
-base_addr:      
+base_addr:
 
 /*
  * Parameters from linker
  */
-toc_pointer:    
+toc_pointer:
         .long   s.got
-bss_length:     
+bss_length:
         .long   bss.size
-bss_addr:       
+bss_addr:
         .long   bss.start
 
 PUBLIC_VAR (text_addr)
@@ -83,16 +83,16 @@ text_length:
 
 
 /*
- * Initialization code 
+ * Initialization code
  */
 .startup:
         /* Get start address */
         mflr    r1
-        
+
         /* clear the bss section */
         bl      bssclr
 
-/* 
+/*
  * Copy the Board Info Block
  */
         .extern SYM(M860_binfo)

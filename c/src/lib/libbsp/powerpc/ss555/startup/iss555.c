@@ -38,7 +38,7 @@ void _InitSS555 (void)
    * Initialize the System Protection Control Register (SYPCR).
    * The SYPCR can only be written once after Reset.
    */
-  usiu.sypcr = 
+  usiu.sypcr =
       USIU_SYPCR_SWTC(WATCHDOG_TIMEOUT)	/* set watchdog timeout */
     | USIU_SYPCR_BMT(0xFF) 		/* set bus monitor timeout */
     | USIU_SYPCR_BME 			/* enable bus monitor */
@@ -50,12 +50,12 @@ void _InitSS555 (void)
     | USIU_SYPCR_SWP;			/* prescale watchdog by 2048 */
 
   TICKLE_WATCHDOG();			/* restart watchdog timer */
-  
-  /* 
+
+  /*
    * Re-tune the PLL to the desired system clock frequency.
    */
   usiu.plprck = USIU_UNLOCK_KEY;	/* unlock PLPRCR */
-  usiu.plprcr = 
+  usiu.plprcr =
       USIU_PLPRCR_TEXPS			/* assert TEXP always */
     | USIU_PLPRCR_MF(BSP_CLOCK_HZ / BSP_CRYSTAL_HZ);
   					/* PLL multiplication factor */
@@ -63,11 +63,11 @@ void _InitSS555 (void)
 
   while (((plprcr = usiu.plprcr) & USIU_PLPRCR_SPLS) == 0)
     ;					/* wait for PLL to re-lock */
-    
-  /* 
+
+  /*
    * Enable the timebase and decrementer, then initialize decrementer
    * register to a large value to guarantee that a decrementer interrupt
-   * will not be generated before the kernel is fully initialized. 
+   * will not be generated before the kernel is fully initialized.
    * Initialize the timebase register to zero.
    */
   usiu.tbscrk = USIU_UNLOCK_KEY;
@@ -84,7 +84,7 @@ void _InitSS555 (void)
    * Run the Inter-Module Bus at full speed.
    */
   imb.uimb.umcr &= ~UIMB_UMCR_HSPEED;
-  
+
   /*
    * Initialize Memory Controller for External RAM
    *
@@ -96,19 +96,19 @@ void _InitSS555 (void)
    * zero but set it up appropriately.
    */
   extern char int_ram_top[];		/* top of internal ram */
-                      
+
   usiu.memc[0]._or =
       USIU_MEMC_OR_512K			/* bank size */
     | USIU_MEMC_OR_SCY(0)		/* wait states in first beat of burst */
     | USIU_MEMC_OR_BSCY(0);		/* wait states in subsequent beats */
-  		       
+
   usiu.memc[0]._br =
-      USIU_MEMC_BR_BA(_read_IMMR() & IMMR_FLEN 
+      USIU_MEMC_BR_BA(_read_IMMR() & IMMR_FLEN
         ? (rtems_unsigned32)int_ram_top : 0)	/* base address */
     | USIU_MEMC_BR_PS32			/* 32-bit data bus */
     | USIU_MEMC_BR_TBDIP		/* toggle bdip */
     | USIU_MEMC_BR_V;			/* base register valid */
-  
+
   /*
    * Initialize Memory Controller for External CPLD
    *
@@ -120,21 +120,21 @@ void _InitSS555 (void)
     | USIU_MEMC_OR_CSNT			/* negate CS/WE early */
     | USIU_MEMC_OR_ACS_HALF		/* assert CS half cycle after address */
     | USIU_MEMC_OR_SCY(15)		/* wait states in first beat of burst */
-    | USIU_MEMC_OR_TRLX;		/* relaxed timing */	
+    | USIU_MEMC_OR_TRLX;		/* relaxed timing */
 
   usiu.memc[3]._br =
       USIU_MEMC_BR_BA(&cpld)		/* base address */
     | USIU_MEMC_BR_PS16			/* 16-bit data bus */
     | USIU_MEMC_BR_BI			/* inhibit bursting */
     | USIU_MEMC_BR_V;			/* base register valid */
-  
+
   /*
    * Disable show cycles and serialization so that burst accesses will work
    * properly.  A different value, such as 0x0, may be more appropriate for
    * debugging, but can be set with the debugger, if needed.
    */
   _write_ICTRL(0x00000007);
-	
+
   /*
    * Set up Burst Buffer Controller (BBC)
    */
@@ -144,6 +144,6 @@ void _InitSS555 (void)
   _isync;
 
   _CPU_MSR_GET(msr);
-  msr |= MSR_IP;		/* set prefix for exception relocation */  
+  msr |= MSR_IP;		/* set prefix for exception relocation */
   _CPU_MSR_SET(msr);
 }

@@ -15,7 +15,7 @@ extern void nmiHandler(void);
   /* Interrupt Handlers for Dedicated Interrupts.
    */
 extern void intr5Handler(void);
-extern void intr6Handler(void);   
+extern void intr6Handler(void);
 
 #endif
 /*-------------*/

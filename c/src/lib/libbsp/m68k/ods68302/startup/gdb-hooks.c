@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*
   $Id$
-  
+
   Hooks for GDB
 
  */
@@ -21,7 +21,7 @@ void putDebugChar(char ch)
     scc_initialise(DEBUG_PORT, DEBUG_BAUD, 0);
     initialised = 1;
   }
-  
+
   scc_out(DEBUG_PORT, ch);
 }
 
@@ -34,8 +34,8 @@ char getDebugChar(void)
   }
 
   while (!scc_status(DEBUG_PORT, 0));
-  
-  return scc_in(DEBUG_PORT);  
+
+  return scc_in(DEBUG_PORT);
 }
 
 /*
@@ -65,7 +65,7 @@ static GDB_HANDLER_ENTRY gdb_jump_table[256];
 void exceptionHandler(unsigned int vector, void *handler)
 {
   uint32_t         *interrupt_table = 0;
-  
+
   gdb_jump_table[vector].move_a7 = M68K_MOVE_A7;
   gdb_jump_table[vector].format_id = vector;
   gdb_jump_table[vector].jmp = M68K_JMP;

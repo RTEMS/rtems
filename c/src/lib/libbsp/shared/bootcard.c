@@ -1,7 +1,7 @@
 /*
  *  A simple main which can be used on any embedded target.
  *
- *  This style of initialization insures that the C++ global 
+ *  This style of initialization insures that the C++ global
  *  constructors are executed after RTEMS is initialized.
  *
  *  Thanks to Chris Johns <cjohns@plessey.com.au> for this idea.
@@ -130,7 +130,7 @@ int boot_card(int argc, char **argv, char **envp)
    *  Perform any BSP specific shutdown actions.
    */
 
-  bsp_cleanup();  
+  bsp_cleanup();
 
   /*
    *  Now return to the start code.

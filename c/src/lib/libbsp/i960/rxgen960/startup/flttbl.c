@@ -1,7 +1,7 @@
 /*-------------------------------------*/
 /* flttbl.c                            */
 /* Last change :  3.11.94              */
-/*-------------------------------------*/  
+/*-------------------------------------*/
 /*
  *  $Id$
  */
@@ -21,10 +21,10 @@
 FaultTblEntry faultTbl[] = {
   {faultHndlEntry + LOCAL_FH, LOCAL_FW},            /* Parallel */
   {faultHndlEntry + LOCAL_FH, LOCAL_FW},            /* Trace */
-  {faultHndlEntry + LOCAL_FH, LOCAL_FW},            /* Operation */ 
-  {faultHndlEntry + LOCAL_FH, LOCAL_FW},            /* Arithmetic */ 
-  {0, 0},                       		          /* Reserved */ 
-  {faultHndlEntry + LOCAL_FH, LOCAL_FW},            /* Constraint */ 
+  {faultHndlEntry + LOCAL_FH, LOCAL_FW},            /* Operation */
+  {faultHndlEntry + LOCAL_FH, LOCAL_FW},            /* Arithmetic */
+  {0, 0},                       		          /* Reserved */
+  {faultHndlEntry + LOCAL_FH, LOCAL_FW},            /* Constraint */
   {0, 0},                                           /* Reserved */
   {faultHndlEntry + LOCAL_FH, LOCAL_FW},            /* Protection */
   {0, 0},                                           /* Reserved */
@@ -40,9 +40,9 @@ void fltTblInit(void)
 static unsigned int fltTblCheckSum(void)
 {
   unsigned int * f = faultStart;
-  unsigned int * l = faultEnd; 
+  unsigned int * l = faultEnd;
   unsigned int sum;
-  
+
   for (sum = 0; f < l; f ++)  {
     sum += * f;
   }
@@ -68,34 +68,34 @@ void faultTblHandler(unsigned int * fp, unsigned int * faultBuffer)
 
     /* Address of faulting instruction.
      */
-  ip = (unsigned int *) fp[-1]; 
+  ip = (unsigned int *) fp[-1];
     /* Type/Subtype word.
      */
 
   /* put address of faulting instruction to console */
   kkprintf("Fault: %x\n", ip);
- 
-  tw = * (struct typeWord *) & fp[-2];  
+
+  tw = * (struct typeWord *) & fp[-2];
     /* Type and subtype.
      */
   type = tw.type;
-  sbtp = tw.sbtp; 
+  sbtp = tw.sbtp;
     /* Arithmetic controls.
      */
-  ac = fp[-3]; 
+  ac = fp[-3];
     /* Process controls.
      */
-  pc = fp[-4];    
+  pc = fp[-4];
     /* Global and local registers are in faultBuffer
      * already. Save the rest. Change RIP to IP.
      */
   faultBuffer[IP_REGNUM] = (unsigned int) ip;
   faultBuffer[ACW_REGNUM] = ac;
-  faultBuffer[PCW_REGNUM] = pc;  
+  faultBuffer[PCW_REGNUM] = pc;
     /* Bad instruction itself. We do
      * this here since it may be repaired (by copying from PROM).
      */
-  inst = * ip; 
+  inst = * ip;
     /* Now, to handling.
      */
   if (faultCheckSum != fltTblCheckSum())  {
@@ -104,15 +104,15 @@ void faultTblHandler(unsigned int * fp, unsigned int * faultBuffer)
        * Repair RAM memory which is
        * destroyed by silly user.
        */
-    copyCodeToRom(); 
+    copyCodeToRom();
       /* And call RAM-based fault handler.
        */
     faultBad(1, inst, faultBuffer, type, sbtp);
-  } 
+  }
   else  {
       /* There exist a chance to recover.
        */
-    faultGood(inst, faultBuffer, type, sbtp);  
+    faultGood(inst, faultBuffer, type, sbtp);
   }
 }
 /*-------------*/

@@ -45,7 +45,7 @@
  *  Interrupt-driven I/O requires termios.
  *
  *  TESTS:
- * 
+ *
  *  TO RUN THE TESTS, USE POLLED I/O WITHOUT TERMIOS SUPPORT. Some tests
  *  play with the interrupt masks and turn off I/O. Those tests will hang
  *  when interrupt-driven I/O is used. Other tests, such as cdtest, do I/O
@@ -55,16 +55,16 @@
  *  should all be fixed to work with interrupt-driven I/O and to
  *  produce output in the expected sequence. Obviously, the termios test
  *  requires termios support in the driver.
- *  
+ *
  *  Set CONSOLE_MINOR to the appropriate device minor number in the
  *  config file. This allows the RTEMS application console to be different
  *  from the EPPBug debug console or the GDB port.
- * 
+ *
  *  This driver handles all five available serial ports: it distinguishes
  *  the sub-devices using minor device numbers. It is not possible to have
  *  other protocols running on the other ports when this driver is used as
  *  currently written.
- *  
+ *
  *  Based on code (alloc860.c in eth_comm port) by
  *  Jay Monkman (jmonkman@frasca.com),
  *  Copyright (C) 1998 by Frasca International, Inc.
@@ -118,7 +118,7 @@ static int _EPPCBug_pollRead(
   volatile int simask;		/* We must read and write m8xx.simask */
   int retval;
   ISR_Level level;
-  
+
   struct {
     int clun;
     int dlun;
@@ -126,7 +126,7 @@ static int _EPPCBug_pollRead(
     int nbytes_requested;
     int reserved;
   } volatile input_params;
-  
+
   struct {
     int status;
     union {
@@ -145,30 +145,30 @@ static int _EPPCBug_pollRead(
   retval = -1;
 
   input_params.clun = 0;
-  
+
   switch( minor ) {
-    case SMC1_MINOR:    
+    case SMC1_MINOR:
       input_params.dlun = 0;  /* Should be 4, but doesn't work with EPPCBug 1.1 */
       break;
-    case SMC2_MINOR:    
+    case SMC2_MINOR:
       input_params.dlun = 5;
       break;
-    case SCC2_MINOR:    
+    case SCC2_MINOR:
       input_params.dlun = 1;
       break;
 #ifdef mpc860
-    case SCC3_MINOR:    
+    case SCC3_MINOR:
       input_params.dlun = 2;
       break;
-    case SCC4_MINOR:    
+    case SCC4_MINOR:
       input_params.dlun = 3;
       break;
 #endif
-    default:    
+    default:
       input_params.dlun = 0;
       break;
   }
-  
+
   _ISR_Disable( level );
   simask = m8xx.simask;
 
@@ -180,21 +180,21 @@ static int _EPPCBug_pollRead(
     :: "g" (&input_params), "g" (&output_params) : "3", "4", "10" );
 
   if ( (output_params.status == 0) && output_params.u.stat.input_char_available) {
-  
+
     /* Read the char and return it */
     input_params.inbuf = &c;
     input_params.nbytes_requested = 1;
-  
+
     asm volatile( "li     10,0x200     /* Code for .CIO_READ */\n\
                    mr    3, %0         /* Address of input_params */\n\
                    mr    4, %1         /* Address of output_params */\n\
-                   sc"             /* Call EPPCBUG */ 
+                   sc"             /* Call EPPCBUG */
       :: "g" (&input_params), "g" (&output_params) : "3", "4", "10" );
 
     if ( (output_params.status == 0) && output_params.u.read.nbytes_received)
       retval = (int)c;
   }
-  
+
   m8xx.simask = simask;
   _ISR_Enable( level );
   return retval;
@@ -227,7 +227,7 @@ static int _EPPCBug_pollWrite(
   volatile int simask;
   int i, retval;
   ISR_Level level;
-  
+
   struct {
     int clun;
     int dlun;
@@ -235,7 +235,7 @@ static int _EPPCBug_pollWrite(
     int nbytes_to_output;
     int reserved;
   } volatile input_params;
-  
+
   struct {
     int status;
     union {
@@ -255,26 +255,26 @@ static int _EPPCBug_pollWrite(
 
   input_params.clun = 0;
   input_params.reserved = 0;
-  
+
   switch( minor ) {
-    case SMC1_MINOR:    
+    case SMC1_MINOR:
       input_params.dlun = 0;  /* Should be 4, but doesn't work with EPPCBug 1.1 */
       break;
-    case SMC2_MINOR:    
+    case SMC2_MINOR:
       input_params.dlun = 5;
       break;
-    case SCC2_MINOR:    
+    case SCC2_MINOR:
       input_params.dlun = 1;
       break;
 #ifdef mpc860
-    case SCC3_MINOR:    
+    case SCC3_MINOR:
       input_params.dlun = 2;
       break;
-    case SCC4_MINOR:    
+    case SCC4_MINOR:
       input_params.dlun = 3;
       break;
 #endif
-    default:    
+    default:
       input_params.dlun = 0;
       break;
   }
@@ -291,7 +291,7 @@ static int _EPPCBug_pollWrite(
       asm volatile( "li 10,0x202        /* Code for .CIO_STAT */\n\
                      mr 3, %0           /* Address of input_params */\n\
                      mr 4, %1           /* Address of output_params */\n\
-                     sc"            /* Call EPPCBUG */ 
+                     sc"            /* Call EPPCBUG */
         :: "g" (&input_params), "g" (&output_params) : "3", "4", "10" );
 
       if (output_params.status)
@@ -301,11 +301,11 @@ static int _EPPCBug_pollWrite(
     /* Output the characters until done */
     input_params.outbuf = &buf[i];
     input_params.nbytes_to_output = len - i;
-  
+
     asm volatile( "li 10,0x201          /* Code for .CIO_WRITE */\n\
                    mr 3, %0             /* Address of input_params */\n\
                    mr 4, %1             /* Address of output_params */\n\
-                   sc"                  /* Call EPPCBUG */ 
+                   sc"                  /* Call EPPCBUG */
       :: "g" (&input_params), "g" (&output_params) : "3", "4", "10" );
 
     if (output_params.status)
@@ -313,7 +313,7 @@ static int _EPPCBug_pollWrite(
 
     i += output_params.u.write.nbytes_sent;
   }
-  
+
   /* Return something */
   m8xx.simask = simask;
   _ISR_Enable( level );
@@ -361,7 +361,7 @@ static rtems_status_code do_poll_read(
 #if NVRAM_CONFIGURE == 1
 
   int (*pollRead)( int minor );
-  
+
   if ( (nvram->console_mode & 0x06) == 0x04 )
     pollRead = _EPPCBug_pollRead;
   else
@@ -399,7 +399,7 @@ static rtems_status_code do_poll_read(
  *  Output characters through polled I/O. Returns only once every character has
  *  been sent.
  *
- *  CR is transmitted AFTER a LF on output. 
+ *  CR is transmitted AFTER a LF on output.
  *
  *  Input parameters:
  *    major - ignored. Should be the major number for this driver.
@@ -427,7 +427,7 @@ static rtems_status_code do_poll_write(
 #if NVRAM_CONFIGURE == 1
 
   int (*pollWrite)(int minor, const char *buf, int len);
-  
+
   if ( (nvram->console_mode & 0x06) == 0x04 )
     pollWrite = _EPPCBug_pollWrite;
   else
@@ -468,8 +468,8 @@ static rtems_status_code do_poll_write(
 static void _BSP_output_char( char c )
 {
   char cr = '\r';
-  
-  /* 
+
+  /*
    *  Can't rely on console_initialize having been called before this function
    *  is used, so it may fail unless output is done through EPPC-Bug.
    */
@@ -489,8 +489,8 @@ static void _BSP_output_char( char c )
     if( c == '\n' )
       m8xx_uart_pollWrite( PRINTK_MINOR, &cr, 1 );
 	}
-	
-#else  
+
+#else
 
 #if PRINTK_IO_MODE == 2
 #define PRINTK_WRITE _EPPCBug_pollWrite
@@ -501,7 +501,7 @@ static void _BSP_output_char( char c )
   PRINTK_WRITE( PRINTK_MINOR, &c, 1 );
   if( c == '\n' )
     PRINTK_WRITE( PRINTK_MINOR, &cr, 1 );
-    
+
 #endif
 }
 
@@ -543,7 +543,7 @@ serial_init()
 	bd_t	*bd;
 
 	bd = eppcbugInfo;
-	
+
 	cp = cpmp;
 	sp = (smc_t*)&(cp->cp_smc[SMC_INDEX]);
 	up = (smc_uart_t *)&cp->cp_dparam[PROFF_CONS];
@@ -723,14 +723,14 @@ rtems_device_driver console_initialize(
 {
   rtems_status_code status;
   rtems_device_minor_number console_minor;
-  
+
   /*
    * Set up TERMIOS if needed
    */
 #if NVRAM_CONFIGURE == 1
   /* Use NVRAM info for configuration */
   console_minor = nvram->console_printk_port & 0x07;
-        
+
   if ( nvram->console_mode & 0x01 )
     /* termios */
     rtems_termios_initialize ();
@@ -739,7 +739,7 @@ rtems_device_driver console_initialize(
    *  Do common initialization.
    */
   m8xx_uart_initialize();
-  
+
   /*
    * Do device-specific initialization
    */
@@ -750,12 +750,12 @@ rtems_device_driver console_initialize(
 
   if ( ((nvram->console_mode & 0x30) != 0x20) ||
       (((nvram->console_printk_port & 0x30) >> 4) != SMC2_MINOR) )
-    m8xx_uart_smc_initialize(SMC2_MINOR); /* /dev/tty1 */                             
+    m8xx_uart_smc_initialize(SMC2_MINOR); /* /dev/tty1 */
 
   if ( ((nvram->console_mode & 0x30) != 0x20) ||
       (((nvram->console_printk_port & 0x30) >> 4) != SCC2_MINOR) )
     m8xx_uart_scc_initialize(SCC2_MINOR); /* /dev/tty2    */
-                           
+
 #ifdef mpc860
 
   if ( ((nvram->console_mode & 0x30) != 0x20) ||
@@ -771,18 +771,18 @@ rtems_device_driver console_initialize(
 #else /* NVRAM_CONFIGURE != 1 */
 
     console_minor = CONSOLE_MINOR;
-    
+
 #if UARTS_USE_TERMIOS == 1
 
     rtems_termios_initialize ();
-    
+
 #endif /* UARTS_USE_TERMIOS */
-    
+
   /*
    *  Do common initialization.
    */
   m8xx_uart_initialize();
-  
+
   /*
    * Do device-specific initialization
    */
@@ -791,13 +791,13 @@ rtems_device_driver console_initialize(
 #endif
 
 #if PRINTK_IO_MODE != 2 || PRINTK_MINOR != SMC2_MINOR
-  m8xx_uart_smc_initialize(SMC2_MINOR); /* /dev/tty1 */                             
+  m8xx_uart_smc_initialize(SMC2_MINOR); /* /dev/tty1 */
 #endif
 
   #if PRINTK_IO_MODE != 2 || PRINTK_MINOR != SCC2_MINOR
   m8xx_uart_scc_initialize(SCC2_MINOR); /* /dev/tty2    */
    #endif
-                           
+
 #ifdef mpc860
 
 #if PRINTK_IO_MODE != 2 || PRINTK_MINOR != SCC3_MINOR
@@ -818,31 +818,31 @@ rtems_device_driver console_initialize(
   status = rtems_io_register_name ("/dev/tty0", major, SMC1_MINOR);
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
-    
+
   status = rtems_io_register_name ("/dev/tty1", major, SMC2_MINOR);
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
-    
+
   status = rtems_io_register_name ("/dev/tty2", major, SCC2_MINOR);
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
-    
+
 #ifdef mpc860
   status = rtems_io_register_name ("/dev/tty3", major, SCC3_MINOR);
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
-                              
+
   status = rtems_io_register_name ("/dev/tty4", major, SCC4_MINOR);
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
-    
+
 #endif /* mpc860 */
-    
+
   /* Now register the RTEMS console */
   status = rtems_io_register_name ("/dev/console", major, console_minor);
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
-    
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -881,12 +881,12 @@ rtems_device_driver console_open(
     0                           	/* outputUsesInterrupts */
   };
   rtems_status_code sc;
-  
-   
+
+
 #if (NVRAM_CONFIGURE == 1) || \
     ((NVRAM_CONFIGURE != 1) && (UARTS_USE_TERMIOS == 1) && \
       (UARTS_IO_MODE == 1))
-  
+
   static const rtems_termios_callbacks intrCallbacks = {
     NULL,                       	/* firstOpen */
     NULL,                       	/* lastClose */
@@ -898,13 +898,13 @@ rtems_device_driver console_open(
     1                           	/* outputUsesInterrupts */
   };
 #endif
-  
-  if ( minor > NUM_PORTS-1 ) 
+
+  if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 
 #if NVRAM_CONFIGURE == 1
 
-  /* Use NVRAM info for configuration */ 
+  /* Use NVRAM info for configuration */
   if ( nvram->console_mode & 0x01 ) {
     /* Use termios */
     if ( (nvram->console_mode & 0x06) == 0x02 ) {
@@ -923,7 +923,7 @@ rtems_device_driver console_open(
   else
     /* no termios -- default to polled I/O */
     return RTEMS_SUCCESSFUL;
-	  
+
 #else /* NVRAM_CONFIGURE != 1 */
 
 #if UARTS_USE_TERMIOS == 1
@@ -943,7 +943,7 @@ rtems_device_driver console_open(
 #endif /* UARTS_USE_TERMIOS != 1 */
 
   return sc;
-  
+
 #endif /* NVRAM_CONFIGURE != 1 */
 }
 
@@ -962,7 +962,7 @@ rtems_device_driver console_close(
 
 #if NVRAM_CONFIGURE == 1
 
-  /* Use NVRAM info for configuration */ 
+  /* Use NVRAM info for configuration */
   if ( nvram->console_mode & 0x01 )
     /* use termios */
     return rtems_termios_close( arg );
@@ -996,7 +996,7 @@ rtems_device_driver console_read(
 
 #if NVRAM_CONFIGURE == 1
 
-  /* Use NVRAM info for configuration */ 
+  /* Use NVRAM info for configuration */
   if ( nvram->console_mode & 0x01 )
     /* use termios */
     return rtems_termios_read( arg );
@@ -1030,7 +1030,7 @@ rtems_device_driver console_write(
 
 #if NVRAM_CONFIGURE == 1
 
-  /* Use NVRAM info for configuration */ 
+  /* Use NVRAM info for configuration */
   if ( nvram->console_mode & 0x01 )
     /* use termios */
     return rtems_termios_write( arg );
@@ -1059,13 +1059,13 @@ rtems_device_driver console_control(
   rtems_device_minor_number minor,
   void *arg
 )
-{ 
+{
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 
 #if NVRAM_CONFIGURE == 1
 
-  /* Uuse NVRAM info for configuration */ 
+  /* Uuse NVRAM info for configuration */
   if ( nvram->console_mode & 0x01 )
     /* termios */
     return rtems_termios_ioctl( arg );

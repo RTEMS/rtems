@@ -112,7 +112,7 @@ void _Init68360 (void)
 	 * 70 nsec DRAM
 	 * 180 nsec ROM (3 wait states)
 	 */
-	m360.gmr = M360_GMR_RCNT(23) | M360_GMR_RFEN | 
+	m360.gmr = M360_GMR_RCNT(23) | M360_GMR_RFEN |
 				M360_GMR_RCYC(0) | M360_GMR_PGS(1) |
 				M360_GMR_DPS_32BIT | M360_GMR_NCS |
 				M360_GMR_TSS40;
@@ -152,7 +152,7 @@ void _Init68360 (void)
 	for (i = 0; i < 256; ++i)
 		M68Kvec[i] = vbr[i];
 	m68k_set_vbr (M68Kvec);
-	
+
 	/*
 	 * Step 14: More system initialization
 	 * SDCR (Serial DMA configuration register)
@@ -259,8 +259,8 @@ void _Init68360 (void)
 	/*
 	 * Step 11: Remap Chip Select 0 (CS0*), set up GMR
 	 */
-	m360.gmr = M360_GMR_RCNT(12) | M360_GMR_RFEN | 
-				M360_GMR_RCYC(0) | M360_GMR_PGS(1) | 
+	m360.gmr = M360_GMR_RCNT(12) | M360_GMR_RFEN |
+				M360_GMR_RCYC(0) | M360_GMR_PGS(1) |
 				M360_GMR_DPS_32BIT | M360_GMR_DWQ |
 				M360_GMR_GAMX;
 	m360.memc[0].br = (unsigned long)&_RomBase | M360_MEMC_BR_WP |
@@ -305,7 +305,7 @@ void _Init68360 (void)
 	for (i = 0; i < 256; ++i)
 		M68Kvec[i] = vbr[i];
 	m68k_set_vbr (M68Kvec);
-	
+
 	/*
 	 * Step 14: More system initialization
 	 * SDCR (Serial DMA configuration register)
@@ -365,7 +365,7 @@ void _Init68360 (void)
     * Enable bus monitor for external cycles
     * 1024 clocks for external timeout
     */
-    m360.sypcr = 0xEC; 
+    m360.sypcr = 0xEC;
 
    /*
     * Step 9: Clear parameter RAM and reset communication processor module
@@ -374,8 +374,8 @@ void _Init68360 (void)
       *((long *)((char *)&m360 + 0xC00 + i)) = 0;
       *((long *)((char *)&m360 + 0xD00 + i)) = 0;
       *((long *)((char *)&m360 + 0xE00 + i)) = 0;
-      *((long *)((char *)&m360 + 0xF00 + i)) = 0; 
-   } 
+      *((long *)((char *)&m360 + 0xF00 + i)) = 0;
+   }
    M360ExecuteRISC (M360_CR_RST);
 
    /*
@@ -397,16 +397,16 @@ void _Init68360 (void)
 
    /*
     * Step 11: Set up GMR
-    *      
+    *
     */
    m360.gmr = 0x0;
 
    /*
     * Step 11a: Remap 512Kx8 flash memory on CS0*
-    * 2 wait states 
-    * Make it read-only for now 
+    * 2 wait states
+    * Make it read-only for now
     */
-   m360.memc[0].br = (unsigned long)&_RomBase | M360_MEMC_BR_WP | 
+   m360.memc[0].br = (unsigned long)&_RomBase | M360_MEMC_BR_WP |
                                                    M360_MEMC_BR_V;
    m360.memc[0].or = M360_MEMC_OR_WAITS(2) | M360_MEMC_OR_512KB |
                                                    M360_MEMC_OR_8BIT;
@@ -419,10 +419,10 @@ void _Init68360 (void)
    ramSize = 4 * 1024 * 1024;
    m360.memc[1].br = (unsigned long)&_RamBase | M360_MEMC_BR_V;
    m360.memc[1].or = M360_MEMC_OR_WAITS(0) | M360_MEMC_OR_2MB |
-                                                   M360_MEMC_OR_32BIT; 
+                                                   M360_MEMC_OR_32BIT;
    m360.memc[2].br = ((unsigned long)&_RamBase + 0x200000) | M360_MEMC_BR_V;
    m360.memc[2].or = M360_MEMC_OR_WAITS(0) | M360_MEMC_OR_2MB |
-                                                   M360_MEMC_OR_32BIT; 
+                                                   M360_MEMC_OR_32BIT;
    /*
     * Step 13: Copy  the exception vector table to system RAM
     */
@@ -544,9 +544,9 @@ void _Init68360 (void)
 	 *	startup code may be running in a bootstrap PROM or in
 	 *	a program downloaded by the bootstrap PROM.
 	 */
-	m360.gmr = (m360.gmr & 0x001C0000) | M360_GMR_RCNT(23) | 
-					M360_GMR_RFEN | M360_GMR_RCYC(0) | 
-					M360_GMR_DPS_32BIT | M360_GMR_NCS | 
+	m360.gmr = (m360.gmr & 0x001C0000) | M360_GMR_RCNT(23) |
+					M360_GMR_RFEN | M360_GMR_RCYC(0) |
+					M360_GMR_DPS_32BIT | M360_GMR_NCS |
 					M360_GMR_GAMX;
 	m360.memc[0].br = (unsigned long)&_RomBase | M360_MEMC_BR_WP |
 								M360_MEMC_BR_V;
@@ -617,7 +617,7 @@ void _Init68360 (void)
 	for (i = 0; i < 256; ++i)
 		M68Kvec[i] = vbr[i];
 	m68k_set_vbr (M68Kvec);
-	
+
 	/*
 	 * Step 14: More system initialization
 	 * SDCR (Serial DMA configuration register)

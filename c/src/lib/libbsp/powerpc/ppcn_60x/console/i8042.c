@@ -94,7 +94,7 @@ static volatile Ring_buffer_t KbdInputBuffer;
  * to polled mode as required for command processing
  */
 void i8042_polled_on(
-	int minor 
+	int minor
 )
 {
 #if CONSOLE_USE_INTERRUPTS
@@ -103,7 +103,7 @@ void i8042_polled_on(
 }
 
 void i8042_polled_off(
-	int minor 
+	int minor
 )
 {
 #if CONSOLE_USE_INTERRUPTS
@@ -856,7 +856,7 @@ static void i8042_scan_code(
 		}
 	}
 
-	/* 
+	/*
 	 * If we got a character then queue it
 	 */
 	if(cChar)
@@ -944,13 +944,13 @@ void i8042_init(int minor)
 
 /* PAGE
  *
- *  i8042_inbyte_nonblocking_polled 
+ *  i8042_inbyte_nonblocking_polled
  *
  *  Console Termios polling input entry point.
  */
 
-int i8042_inbyte_nonblocking_polled( 
-	int minor 
+int i8042_inbyte_nonblocking_polled(
+	int minor
 )
 {
 	uint8_t  	ucScan;

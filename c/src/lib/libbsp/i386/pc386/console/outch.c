@@ -37,12 +37,12 @@ static unsigned char  column;
 static unsigned short attribute;
 static unsigned int   nLines;
 
-static void 
+static void
 scroll(void)
 {
     int i, j;				    /* Counters	*/
     unsigned short *pt_scroll, *pt_bitmap;  /* Pointers on the bit-map	*/
-      
+
     pt_bitmap = bitMapBaseAddr;
     j = 0;
     pt_bitmap = pt_bitmap + j;
@@ -50,11 +50,11 @@ scroll(void)
     for (i = j; i < (maxRow - 1) * maxCol; i++) {
 	*pt_bitmap++ = *pt_scroll++;
     }
-    
+
     /*
      * Blank characters are displayed on the last line.
-     */ 
-    for (i = 0; i < maxCol; i++) {	
+     */
+    for (i = 0; i < maxCol; i++) {
 	*pt_bitmap++ = (short) (' ' | attribute);
     }
 }
@@ -63,9 +63,9 @@ static void
 doCRNL(int cr, int nl)
 {
 	if (nl) {
-    if (++row == maxRow) { 
+    if (++row == maxRow) {
 	scroll(); 	/* Scroll the screen now */
-	row = maxRow - 1; 
+	row = maxRow - 1;
     }
     nLines++;
 	}
@@ -102,7 +102,7 @@ gotorc(int r, int c)
 #define BLANK	((char)0x7f)
 
 
-static void 
+static void
 videoPutChar(char car)
 {
     unsigned short *pt_bitmap = bitMapBaseAddr + row * maxCol + column;
@@ -123,7 +123,7 @@ videoPutChar(char car)
 		doCRNL(1,1);
 		return;
 	    }
-	    while (i--)	*pt_bitmap++ = ' ' | attribute;		
+	    while (i--)	*pt_bitmap++ = ' ' | attribute;
 	    wr_cursor(row * maxCol + column, ioCrtBaseAddr);
 	    return;
 	}
@@ -134,7 +134,7 @@ videoPutChar(char car)
     case 7:		{	/* Bell code must be inserted here */
 	    return;
 	}
-	case '\r' : { 
+	case '\r' : {
 		doCRNL(1,0);
 	    return;
 	}
@@ -149,7 +149,7 @@ videoPutChar(char car)
 	    return;
 	}
     }
-}	
+}
 
 /* trivial state machine to handle escape sequences:
  *
@@ -161,9 +161,9 @@ videoPutChar(char car)
  *          ^\        \          \               \
  * KEY:     | \other   \ other    \ other         \ other
  *           <-------------------------------------
- *     
+ *
  * in state '-1', the DCABHKJ cases are handled
- * 
+ *
  * (cursor motion and screen clearing)
  */
 
@@ -262,7 +262,7 @@ clear_screen(void)
 |      Description: Higher level (console) interface to consPutc.
 | Global Variables: None.
 |        Arguments: c - character to write to console.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
 _IBMPC_outch(char c)
@@ -280,7 +280,7 @@ static int escaped = 0;
 | Global Variables: bitMapBaseAddr, ioCrtBaseAddr, maxCol, maxRow, row
 |		    column, attribute, nLines;
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
 _IBMPC_initVideo(void)
@@ -301,7 +301,7 @@ _IBMPC_initVideo(void)
     attribute = ((BLACK << 4) | WHITE)<<8;
     nLines = 0;
     clear_screen();
-#ifdef DEBUG_EARLY_STAGE    
+#ifdef DEBUG_EARLY_STAGE
     printk("bitMapBaseAddr = %X, display controller base IO = %X\n",
 	   (unsigned) bitMapBaseAddr,
 	   (unsigned) ioCrtBaseAddr);

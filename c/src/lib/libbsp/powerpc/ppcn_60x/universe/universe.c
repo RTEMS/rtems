@@ -100,9 +100,9 @@ typedef struct {
   uint32_t         V6_STATID;              /* Offset 0x0338 */
   uint32_t         V7_STATID;              /* Offset 0x033C */
   uint32_t         Buf_Offset_0x0340[ 0x30 ]; /* Offset 0x0340 */
-  uint32_t         MAST_CTL;               /* Offset 0x0400 */ 
-  uint32_t         MISC_CTL;               /* Offset 0x0404 */ 
-  uint32_t         MISC_STAT;              /* Offset 0x0408 */ 
+  uint32_t         MAST_CTL;               /* Offset 0x0400 */
+  uint32_t         MISC_CTL;               /* Offset 0x0404 */
+  uint32_t         MISC_STAT;              /* Offset 0x0408 */
   uint32_t         USER_AM;                /* Offset 0x040C */
   uint32_t         Buf_Offset_0x0410[ 0x2bc ];/* Offset 0x0410 */
   uint32_t         VSI0_CTL;               /* Offset 0x0F00 */
@@ -146,7 +146,7 @@ volatile Universe_Memory *UNIVERSE;
 void PCI_bus_write(
   volatile uint32_t         * _addr,                  /* IN */
   uint32_t         _data                              /* IN */
-) 
+)
 {
   outport_32(_addr, _data);
 }
@@ -156,7 +156,7 @@ uint32_t         PCI_bus_read(
 )
 {
   uint32_t         data;
- 
+
   inport_32(_addr, data);
   return data;
 }
@@ -179,14 +179,14 @@ void InitializeUniverse()
 {
   uint32_t         pci_id;
   uint32_t         universe_temp_value;
- 
+
   /*
-   * Verify the UNIVERSE CHIP ID 
+   * Verify the UNIVERSE CHIP ID
    */
    (void)PCIConfigRead32(0,4,0,PCI_CONFIG_VENDOR_LOW, &pci_id);
 
-   /* 
-    * compare to known ID 
+   /*
+    * compare to known ID
     */
    if (pci_id != 0x000010e3 ){
      DEBUG_puts ("Invalid PPCN_60X_UNIVERSE_CHIP_ID: ");
@@ -205,16 +205,16 @@ void InitializeUniverse()
    					      PCI_ENABLE_MEMORY_SPACE |
 					      PCI_ENABLE_BUS_MASTER);
 
-   /* 
+   /*
     * Turn off the sysfail by setting SYSFAIL bit to 1 on the VCSR_CLR register
     */
-   PCI_bus_write( &UNIVERSE->VCSR_CLR, 0x40000000 );   
+   PCI_bus_write( &UNIVERSE->VCSR_CLR, 0x40000000 );
 
 #if 0
    /*
     * Set VMEbus Slave Image 0 Base Address to 0x04000000 on VSI0_BS register.
     */
-   PCI_bus_write( &UNIVERSE->VSI0_BS, 0x04000000 );   
+   PCI_bus_write( &UNIVERSE->VSI0_BS, 0x04000000 );
 
    /*
     * Set VMEbus Slave Image 0 Bound Address to 0x05000000 on VSI0_BD register.
@@ -222,7 +222,7 @@ void InitializeUniverse()
    PCI_bus_write( &UNIVERSE->VSI0_BD, 0x05000000 );
 
    /*
-    * VMEbus Slave Image 0 Translation Offset to 0x7C000000 on VSI0_TO 
+    * VMEbus Slave Image 0 Translation Offset to 0x7C000000 on VSI0_TO
     * register. Map the VME base address 0x4000000 to local memory address 0x0
     */
    PCI_bus_write( &UNIVERSE->VSI0_TO, 0x7C000000 );
@@ -231,12 +231,12 @@ void InitializeUniverse()
     * Set the VMEbus Slave Image 0 Control register with write posted,
     * read prefetch and AM code set for program, data, supervisor and user mode
     */
-   PCI_bus_write( &UNIVERSE->VSI0_CTL, 0xE0F20000 );   
+   PCI_bus_write( &UNIVERSE->VSI0_CTL, 0xE0F20000 );
 #endif
 
    /*
     * Set the VMEbus Master Control register with retry forever, 256 bytes
-    * posted write transfer count, VMEbus request level 3, RWD, PCI 32 bytes 
+    * posted write transfer count, VMEbus request level 3, RWD, PCI 32 bytes
     * aligned burst size and PCI bus number to be zero
     */
    PCI_bus_write( &UNIVERSE->MAST_CTL, 0x01C00000 );
@@ -245,9 +245,9 @@ void InitializeUniverse()
     * VMEbus DMA Transfer Control register with 32 bit VMEbus Maximum Data
     * width, A32 VMEbus Address Space, AM code to be data, none-privilleged,
     * single and BLT cycles on VME bus and 64-bit PCI Bus Transactions enable
-    PCI_bus_write( &UNIVERSE->DCTL, 0x00820180 );   
+    PCI_bus_write( &UNIVERSE->DCTL, 0x00820180 );
     */
-   
+
    PCI_bus_write( &UNIVERSE->LSI0_CTL, 0x80700040 );
    PCI_bus_write( &UNIVERSE->LSI0_BS,  0x04000000 );
    PCI_bus_write( &UNIVERSE->LSI0_BD,  0x05000000 );
@@ -257,44 +257,44 @@ void InitializeUniverse()
 #if 0
    /*
     * Set the PCI Slave Image 0 Control register with posted write enable,
-    * 32 bit data width, A32 VMEbus address base, AM code to be data, 
-    * none-privilleged, single and BLT cycles on VME bus with PCI 
+    * 32 bit data width, A32 VMEbus address base, AM code to be data,
+    * none-privilleged, single and BLT cycles on VME bus with PCI
     * bus memory space.
-   PCI_bus_write( &UNIVERSE->LSI0_CTL, 0xC0820100 );   
+   PCI_bus_write( &UNIVERSE->LSI0_CTL, 0xC0820100 );
     */
-   PCI_bus_write( &UNIVERSE->LSI0_CTL, 0x80700040 );   
+   PCI_bus_write( &UNIVERSE->LSI0_CTL, 0x80700040 );
 
    /*
-    * Set the PCI Slave Image 0 Base Address to be 
+    * Set the PCI Slave Image 0 Base Address to be
     * 0x0 on LSI0_BS register.
     */
    PCI_bus_write( &UNIVERSE->LSI0_BS, 0x00FF0000 );
 
    /*
-    * Set the PCI Slave Image 0 Bound Address to be 
+    * Set the PCI Slave Image 0 Bound Address to be
     * 0xFFFFF000 on VSI0_BD register.
     */
-   PCI_bus_write( &UNIVERSE->LSI0_BD, 0x00FFF000 );   
+   PCI_bus_write( &UNIVERSE->LSI0_BD, 0x00FFF000 );
 
    /*
-    * Set the PCI Slave Image 0 Translation Offset to be 
+    * Set the PCI Slave Image 0 Translation Offset to be
     * 0x0 on VSI0_TO register.
-    * Note: If the actual VME address is bigger than 0x40000000, we need 
+    * Note: If the actual VME address is bigger than 0x40000000, we need
     *   to set the PCI Slave Image 0 Translation Offset = 0x40000000
-    *   register.  
-    *   i.e. if actual VME ADRR = 0x50000000, then we 
-    *     need to subtract it by 0x40000000 and set 
+    *   register.
+    *   i.e. if actual VME ADRR = 0x50000000, then we
+    *     need to subtract it by 0x40000000 and set
     *      the LSI0_T0 register to be 0x40000000 and then
     *     perform a PCI data access by adding 0xC0000000 to
     *     0x10000000 -- which is came form the result of
-    *     (0x50000000 - 0x40000000). 
+    *     (0x50000000 - 0x40000000).
     */
-   PCI_bus_write( &UNIVERSE->LSI0_TO, 0x0 );   
+   PCI_bus_write( &UNIVERSE->LSI0_TO, 0x0 );
 #endif
 
-   /* 
+   /*
     * Remove the Universe from VMEbus BI-Mode (bus-isolation).  Once out of
-    * BI-Mode VMEbus accesses can be made. 
+    * BI-Mode VMEbus accesses can be made.
     */
 
    universe_temp_value = PCI_bus_read( &UNIVERSE->MISC_CTL );
@@ -309,22 +309,22 @@ void InitializeUniverse()
  *       Slave Image 0 registers.
  */
 void set_vme_base_address (
-  uint32_t         base_address 
+  uint32_t         base_address
 )
-{  
+{
   volatile uint32_t         temp;
 
   /*
    * Calculate the current size of the Slave VME image 0
    */
-  temp = ( PCI_bus_read( &UNIVERSE->VSI0_BD) & 0xFFFFF000) - 
+  temp = ( PCI_bus_read( &UNIVERSE->VSI0_BD) & 0xFFFFF000) -
           ( PCI_bus_read( &UNIVERSE->VSI0_BS) & 0xFFFFF000);
 
   /*
-   * Set the VMEbus Slave Image 0 Base Address to be 
+   * Set the VMEbus Slave Image 0 Base Address to be
    * the specifed base address on VSI0_BS register.
    */
-   PCI_bus_write( &UNIVERSE->VSI0_BS, (base_address & 0xFFFFF000) );   
+   PCI_bus_write( &UNIVERSE->VSI0_BS, (base_address & 0xFFFFF000) );
 
   /*
    * Update the VMEbus Slave Image 0 Bound Address.
@@ -342,7 +342,7 @@ void set_vme_base_address (
  * Gets the VME base address
  */
 uint32_t         get_vme_base_address ()
-{  
+{
   volatile uint32_t         temp;
 
   temp = PCI_bus_read( &UNIVERSE->VSI0_BS );
@@ -364,15 +364,15 @@ uint32_t         get_vme_slave_size()
  * Note: The maximum size is up to 24 M bytes. (00000000 - 017FFFFF)
  */
 void set_vme_slave_size (uint32_t         size)
-{  
+{
   volatile uint32_t         temp;
 
-  if (size<0) 
+  if (size<0)
     size = 0;
-  
-  if (size > 0x17FFFFF) 
+
+  if (size > 0x17FFFFF)
     size = 0x17FFFFF;
-   
+
   /*
    * Read the VME slave image base address
    */
@@ -424,20 +424,20 @@ void put_vme(
   uint16_t         *vme_ptr,
   uint16_t         value
 )
-{ 
+{
 
   if (vme_ptr > (uint16_t*)0x3EFFFFFF) {
-    /* 
+    /*
      * LSI0_TO register to 0x3EFFF000 if it had not been updated already
      */
      if (( PCI_bus_read( &UNIVERSE->LSI0_TO) & 0xFFFFF000) != 0x3EFFF000)
        PCI_bus_write( &UNIVERSE->LSI0_TO, 0x3EFFF000 );
-   
-    *(uint16_t*) (((uint32_t)vme_ptr - 0x3EFFF000) + 
+
+    *(uint16_t*) (((uint32_t)vme_ptr - 0x3EFFF000) +
                             PPCN_60X_PCI_MEM_BASE) = value;
    }
    else
-      *(uint16_t*)((uint32_t)vme_ptr + 
+      *(uint16_t*)((uint32_t)vme_ptr +
                              PPCN_60X_PCI_MEM_BASE) = value;
 }
 #endif

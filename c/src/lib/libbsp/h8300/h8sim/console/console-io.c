@@ -40,12 +40,12 @@ void console_outbyte_polled(
   char ch
 )
 {
-  asm volatile( "mov.b #0,r1l ;  mov.b %0l,r2l ; jsr @@0xc4" 
-       :  : "r" (ch)  : "r1", "r2");  
+  asm volatile( "mov.b #0,r1l ;  mov.b %0l,r2l ; jsr @@0xc4"
+       :  : "r" (ch)  : "r1", "r2");
 }
 
 /*
- *  console_inbyte_nonblocking 
+ *  console_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */

@@ -36,7 +36,7 @@ static int mystrcat(
 )
 {
   int i;
-  
+
   for ( i = 0; ( *destination++ = *source++) != '\0'; i++ );
   return i;
 }
@@ -45,7 +45,7 @@ static int mystrcat(
 /*
  *  bsp_fatal_error_occurred
  *
- *  Called when rtems_fatal_error_occurred() is called. Returns control to 
+ *  Called when rtems_fatal_error_occurred() is called. Returns control to
  *  167Bug. The _Internal_error_Occurred() function has already saved the
  *  parameters in Internal_errors_What_happened. If the function returns,
  *  RTEMS will halt the CPU.
@@ -72,33 +72,33 @@ User_extensions_routine bsp_fatal_error_occurred(
     char index;         /* First byte is number of chars in strbuf  */
     char strbuf[254];   /* In case count is bumped up by one by 167Bug */
   } my_p_str;
-  
+
   my_p_str.index = 0;
   my_p_str.index += mystrcat(
       my_p_str.strbuf + my_p_str.index,
       "\r\nRTEMS Fatal Error Occurred:\r\n    the_source  = " );
-  
+
   switch ( the_source ) {
     case INTERNAL_ERROR_CORE:
-      my_p_str.index += mystrcat( 
+      my_p_str.index += mystrcat(
           my_p_str.strbuf + my_p_str.index,
           "INTERNAL_ERROR_CORE\r\n    is_internal = " );
       break;
-      
+
     case INTERNAL_ERROR_RTEMS_API:
-      my_p_str.index += mystrcat( 
+      my_p_str.index += mystrcat(
           my_p_str.strbuf + my_p_str.index,
           "INTERNAL_ERROR_RTEMS_API\r\n    is_internal = " );
       break;
-      
+
     case INTERNAL_ERROR_POSIX_API:
-      my_p_str.index += mystrcat( 
+      my_p_str.index += mystrcat(
           my_p_str.strbuf + my_p_str.index,
           "INTERNAL_ERROR_POSIX_API\r\n    is_internal = " );
       break;
-      
+
     default:
-      my_p_str.index += mystrcat( 
+      my_p_str.index += mystrcat(
           my_p_str.strbuf + my_p_str.index,
           "UNKNOWN\r\n    is_internal = " );
       break;
@@ -106,22 +106,22 @@ User_extensions_routine bsp_fatal_error_occurred(
 
   if ( is_internal )
     my_p_str.index += mystrcat(
-        my_p_str.strbuf + my_p_str.index, 
+        my_p_str.strbuf + my_p_str.index,
         "TRUE\r\n    the_error   = 0x|10,8|\r\n" );
   else
-    my_p_str.index += mystrcat( 
-        my_p_str.strbuf + my_p_str.index, 
+    my_p_str.index += mystrcat(
+        my_p_str.strbuf + my_p_str.index,
         "FALSE\r\n    the_error   = 0x|10,8|\r\n" );
-  
+
   lcsr->intr_ena = 0;               /* disable interrupts */
   m68k_set_vbr(0xFFE00000);         /* restore 167Bug vectors */
-  
+
   asm volatile( "movel  %0, -(%%a7)\n\t"
                 "pea    (%%a7)\n\t"
                 "pea    (%1)\n\t"
                 "trap   #15\n\t"         /* trap to 167Bug (.WRITDLN) */
                 ".short 0x25\n\t"
                 "trap   #15\n\t"
-                ".short 0x63"       
+                ".short 0x63"
     :: "d" (the_error), "a" (&my_p_str) );
 }

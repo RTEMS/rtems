@@ -1,21 +1,21 @@
-/*  
+/*
  *  $Id$
  *
  *  Re-written the gen68302 start-up code.
- *  
+ *
  *  Uses gas syntax only, removed the OAR asm.h.
- *  
+ *
  *  Supplies a complete vector table in ROM.
- *  
+ *
  *  Manages all vectors with seperate handlers to trap unhandled
  *  execptions.
- *  
- *  Uses the target specific header file to get the runtime 
+ *
+ *  Uses the target specific header file to get the runtime
  *  configuration
- *  
+ *
  *  COPYRIGHT (c) 1996
  *  Objective Design Systems Pty Ltd (ODS)
- *        
+ *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -32,17 +32,17 @@
 
         .global _start                  | program entry
         .global M68Kvec                 | Vector Table
-        
+
 _start:                                 | standard name for program entry
 M68Kvec:                                | standard location for vectors
-        
+
 |
 | Make relative, can have the code positioned any where
 |
 
 V___ISSP: .long  STACK_AT_RESET
 V____IPC: .long  start - V___ISSP
-        
+
 |
 | Create the rest of the vector table to point to the unhandled expection
 | handler
@@ -63,7 +63,7 @@ MAKE_EXCEPTION_VECTOR(6)
 MAKE_EXCEPTION_VECTOR(7)
 MAKE_EXCEPTION_VECTOR(8)
 MAKE_EXCEPTION_VECTOR(9)
-        
+
 MAKE_EXCEPTION_VECTOR(10)
 MAKE_EXCEPTION_VECTOR(11)
 MAKE_EXCEPTION_VECTOR(12)
@@ -85,7 +85,7 @@ MAKE_EXCEPTION_VECTOR(26)
 MAKE_EXCEPTION_VECTOR(27)
 MAKE_EXCEPTION_VECTOR(28)
 MAKE_EXCEPTION_VECTOR(29)
-        
+
 MAKE_EXCEPTION_VECTOR(30)
 MAKE_EXCEPTION_VECTOR(31)
 MAKE_EXCEPTION_VECTOR(32)
@@ -96,7 +96,7 @@ MAKE_EXCEPTION_VECTOR(36)
 MAKE_EXCEPTION_VECTOR(37)
 MAKE_EXCEPTION_VECTOR(38)
 MAKE_EXCEPTION_VECTOR(39)
-        
+
 MAKE_EXCEPTION_VECTOR(40)
 MAKE_EXCEPTION_VECTOR(41)
 MAKE_EXCEPTION_VECTOR(42)
@@ -107,7 +107,7 @@ MAKE_EXCEPTION_VECTOR(46)
 MAKE_EXCEPTION_VECTOR(47)
 MAKE_EXCEPTION_VECTOR(48)
 MAKE_EXCEPTION_VECTOR(49)
-        
+
 MAKE_EXCEPTION_VECTOR(50)
 MAKE_EXCEPTION_VECTOR(51)
 MAKE_EXCEPTION_VECTOR(52)
@@ -118,7 +118,7 @@ MAKE_EXCEPTION_VECTOR(56)
 MAKE_EXCEPTION_VECTOR(57)
 MAKE_EXCEPTION_VECTOR(58)
 MAKE_EXCEPTION_VECTOR(59)
-        
+
 MAKE_EXCEPTION_VECTOR(60)
 MAKE_EXCEPTION_VECTOR(61)
 MAKE_EXCEPTION_VECTOR(62)
@@ -129,7 +129,7 @@ MAKE_EXCEPTION_VECTOR(66)
 MAKE_EXCEPTION_VECTOR(67)
 MAKE_EXCEPTION_VECTOR(68)
 MAKE_EXCEPTION_VECTOR(69)
-        
+
 MAKE_EXCEPTION_VECTOR(70)
 MAKE_EXCEPTION_VECTOR(71)
 MAKE_EXCEPTION_VECTOR(72)
@@ -140,7 +140,7 @@ MAKE_EXCEPTION_VECTOR(76)
 MAKE_EXCEPTION_VECTOR(77)
 MAKE_EXCEPTION_VECTOR(78)
 MAKE_EXCEPTION_VECTOR(79)
-        
+
 MAKE_EXCEPTION_VECTOR(80)
 MAKE_EXCEPTION_VECTOR(81)
 MAKE_EXCEPTION_VECTOR(82)
@@ -151,7 +151,7 @@ MAKE_EXCEPTION_VECTOR(86)
 MAKE_EXCEPTION_VECTOR(87)
 MAKE_EXCEPTION_VECTOR(88)
 MAKE_EXCEPTION_VECTOR(89)
-        
+
 MAKE_EXCEPTION_VECTOR(90)
 MAKE_EXCEPTION_VECTOR(91)
 MAKE_EXCEPTION_VECTOR(92)
@@ -162,7 +162,7 @@ MAKE_EXCEPTION_VECTOR(96)
 MAKE_EXCEPTION_VECTOR(97)
 MAKE_EXCEPTION_VECTOR(98)
 MAKE_EXCEPTION_VECTOR(99)
-        
+
 MAKE_EXCEPTION_VECTOR(100)
 MAKE_EXCEPTION_VECTOR(101)
 MAKE_EXCEPTION_VECTOR(102)
@@ -173,7 +173,7 @@ MAKE_EXCEPTION_VECTOR(106)
 MAKE_EXCEPTION_VECTOR(107)
 MAKE_EXCEPTION_VECTOR(108)
 MAKE_EXCEPTION_VECTOR(109)
-        
+
 MAKE_EXCEPTION_VECTOR(110)
 MAKE_EXCEPTION_VECTOR(111)
 MAKE_EXCEPTION_VECTOR(112)
@@ -195,7 +195,7 @@ MAKE_EXCEPTION_VECTOR(126)
 MAKE_EXCEPTION_VECTOR(127)
 MAKE_EXCEPTION_VECTOR(128)
 MAKE_EXCEPTION_VECTOR(129)
-        
+
 MAKE_EXCEPTION_VECTOR(130)
 MAKE_EXCEPTION_VECTOR(131)
 MAKE_EXCEPTION_VECTOR(132)
@@ -206,7 +206,7 @@ MAKE_EXCEPTION_VECTOR(136)
 MAKE_EXCEPTION_VECTOR(137)
 MAKE_EXCEPTION_VECTOR(138)
 MAKE_EXCEPTION_VECTOR(139)
-                       
+
 MAKE_EXCEPTION_VECTOR(140)
 MAKE_EXCEPTION_VECTOR(141)
 MAKE_EXCEPTION_VECTOR(142)
@@ -217,7 +217,7 @@ MAKE_EXCEPTION_VECTOR(146)
 MAKE_EXCEPTION_VECTOR(147)
 MAKE_EXCEPTION_VECTOR(148)
 MAKE_EXCEPTION_VECTOR(149)
-        
+
 MAKE_EXCEPTION_VECTOR(150)
 MAKE_EXCEPTION_VECTOR(151)
 MAKE_EXCEPTION_VECTOR(152)
@@ -228,7 +228,7 @@ MAKE_EXCEPTION_VECTOR(156)
 MAKE_EXCEPTION_VECTOR(157)
 MAKE_EXCEPTION_VECTOR(158)
 MAKE_EXCEPTION_VECTOR(159)
-                       
+
 MAKE_EXCEPTION_VECTOR(160)
 MAKE_EXCEPTION_VECTOR(161)
 MAKE_EXCEPTION_VECTOR(162)
@@ -239,7 +239,7 @@ MAKE_EXCEPTION_VECTOR(166)
 MAKE_EXCEPTION_VECTOR(167)
 MAKE_EXCEPTION_VECTOR(168)
 MAKE_EXCEPTION_VECTOR(169)
-        
+
 MAKE_EXCEPTION_VECTOR(170)
 MAKE_EXCEPTION_VECTOR(171)
 MAKE_EXCEPTION_VECTOR(172)
@@ -250,7 +250,7 @@ MAKE_EXCEPTION_VECTOR(176)
 MAKE_EXCEPTION_VECTOR(177)
 MAKE_EXCEPTION_VECTOR(178)
 MAKE_EXCEPTION_VECTOR(179)
-                       
+
 MAKE_EXCEPTION_VECTOR(180)
 MAKE_EXCEPTION_VECTOR(181)
 MAKE_EXCEPTION_VECTOR(182)
@@ -261,7 +261,7 @@ MAKE_EXCEPTION_VECTOR(186)
 MAKE_EXCEPTION_VECTOR(187)
 MAKE_EXCEPTION_VECTOR(188)
 MAKE_EXCEPTION_VECTOR(189)
-        
+
 MAKE_EXCEPTION_VECTOR(190)
 MAKE_EXCEPTION_VECTOR(191)
 MAKE_EXCEPTION_VECTOR(192)
@@ -272,7 +272,7 @@ MAKE_EXCEPTION_VECTOR(196)
 MAKE_EXCEPTION_VECTOR(197)
 MAKE_EXCEPTION_VECTOR(198)
 MAKE_EXCEPTION_VECTOR(199)
-        
+
 MAKE_EXCEPTION_VECTOR(200)
 MAKE_EXCEPTION_VECTOR(201)
 MAKE_EXCEPTION_VECTOR(202)
@@ -283,7 +283,7 @@ MAKE_EXCEPTION_VECTOR(206)
 MAKE_EXCEPTION_VECTOR(207)
 MAKE_EXCEPTION_VECTOR(208)
 MAKE_EXCEPTION_VECTOR(209)
-                      
+
 MAKE_EXCEPTION_VECTOR(210)
 MAKE_EXCEPTION_VECTOR(211)
 MAKE_EXCEPTION_VECTOR(212)
@@ -294,7 +294,7 @@ MAKE_EXCEPTION_VECTOR(216)
 MAKE_EXCEPTION_VECTOR(217)
 MAKE_EXCEPTION_VECTOR(218)
 MAKE_EXCEPTION_VECTOR(219)
-                      
+
 MAKE_EXCEPTION_VECTOR(220)
 MAKE_EXCEPTION_VECTOR(221)
 MAKE_EXCEPTION_VECTOR(222)
@@ -305,7 +305,7 @@ MAKE_EXCEPTION_VECTOR(226)
 MAKE_EXCEPTION_VECTOR(227)
 MAKE_EXCEPTION_VECTOR(228)
 MAKE_EXCEPTION_VECTOR(229)
-                      
+
 MAKE_EXCEPTION_VECTOR(230)
 MAKE_EXCEPTION_VECTOR(231)
 MAKE_EXCEPTION_VECTOR(232)
@@ -316,7 +316,7 @@ MAKE_EXCEPTION_VECTOR(236)
 MAKE_EXCEPTION_VECTOR(237)
 MAKE_EXCEPTION_VECTOR(238)
 MAKE_EXCEPTION_VECTOR(239)
-                      
+
 MAKE_EXCEPTION_VECTOR(240)
 MAKE_EXCEPTION_VECTOR(241)
 MAKE_EXCEPTION_VECTOR(242)
@@ -327,13 +327,13 @@ MAKE_EXCEPTION_VECTOR(246)
 MAKE_EXCEPTION_VECTOR(247)
 MAKE_EXCEPTION_VECTOR(248)
 MAKE_EXCEPTION_VECTOR(249)
-                      
+
 MAKE_EXCEPTION_VECTOR(250)
 MAKE_EXCEPTION_VECTOR(251)
 MAKE_EXCEPTION_VECTOR(252)
 MAKE_EXCEPTION_VECTOR(253)
 MAKE_EXCEPTION_VECTOR(254)
-MAKE_EXCEPTION_VECTOR(255)                                
+MAKE_EXCEPTION_VECTOR(255)
 #endif
 
 |
@@ -341,7 +341,7 @@ MAKE_EXCEPTION_VECTOR(255)
 |
 | Entered from a hardware reset.
 |
-        
+
         .global start                           | Default entry point for GNU
 start:
 
@@ -353,13 +353,13 @@ copy_data:
         moveal  #_etext,%a0                     | find the end of .text
         moveal  #_copy_start,%a1                | find the beginning of .data
         moveal  #_edata,%a2                     | find the end of .data
-        
+
 copy_data_loop:
-        
+
         movel   %a0@+,%a1@+                     | copy the data
         cmpal   %a2,%a1
         jlt     copy_data_loop                  | loop until edata reached
-                                
+
         |
         | zero out uninitialized data area
         |
@@ -368,9 +368,9 @@ zerobss:
         moveal  #_clear_end,%a0                 | find end of .bss
         moveal  #_clear_start,%a1               | find beginning of .bss
         moveq   #0,%d0
-        
+
 zerobss_loop:
-        
+
         movel   %d0,%a1@+                       | to zero out uninitialized
         cmpal   %a0,%a1
         jlt     zerobss_loop                    | loop until _end reached
@@ -392,23 +392,23 @@ bsp_exitted:
 	jmp 	bsp_exitted
 
 
-|                
+|
 | Initialised data
 |
 
         .sect   .data
-        
+
 |
 | Uninitialised data
 |
 
         .sect   .bss
-        
+
 env: .long  0
 arg: .long  0
 
         .global environ
         .align  2
-        
+
 environ:
         .long   env

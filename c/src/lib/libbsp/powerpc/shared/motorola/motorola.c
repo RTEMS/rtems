@@ -61,7 +61,7 @@
 **      multiple interrupt lines over the interrupt pin supplied by the
 **      record.  If more than one entry is present, the most preferable
 **      should supplied first.
-** 
+**
 */
 
 #define NULL_PINMAP     {-1,{-1,-1,-1,-1}}
@@ -69,7 +69,7 @@
 
 
 
-static struct _int_map mcp750_intmap[] = { 
+static struct _int_map mcp750_intmap[] = {
 
    { 0, 16, 0, {{1,  {5, 19,-1,-1}}, /* pmc slot */
                 NULL_PINMAP}},
@@ -226,12 +226,12 @@ motorolaBoard	getMotorolaBoard()
   for (entry = 0; mot_boards[entry].cpu_type != 0; entry++) {
     if ((mot_boards[entry].cpu_type & 0xff) != cpu_type)
       continue;
-      
+
     if (mot_boards[entry].base_type == 0) {
       mot_entry = entry;
       break;
     }
-      
+
     if (mot_boards[entry].base_type != base_mod)
       continue;
     else{

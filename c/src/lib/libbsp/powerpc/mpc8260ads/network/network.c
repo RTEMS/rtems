@@ -250,13 +250,13 @@ m8260_scc_initialize_hardware (struct m8260_hdlc_struct *sc)
   /*
    * Allocate mbuf pointers
    */
-  sc->rxMbuf = malloc (sc->rxBdCount * sizeof *sc->rxMbuf, 
+  sc->rxMbuf = malloc (sc->rxBdCount * sizeof *sc->rxMbuf,
 		       M_MBUF, M_NOWAIT);
-  sc->txMbuf = malloc (sc->txBdCount * sizeof *sc->txMbuf, 
+  sc->txMbuf = malloc (sc->txBdCount * sizeof *sc->txMbuf,
 		       M_MBUF, M_NOWAIT);
   if (!sc->rxMbuf || !sc->txMbuf)
     rtems_panic ("No memory for mbuf pointers");
-  
+
   /*
    * Set receiver and transmitter buffer descriptor bases
    */
@@ -265,7 +265,7 @@ m8260_scc_initialize_hardware (struct m8260_hdlc_struct *sc)
 
   m8260.scc3p.rbase = (char *)sc->rxBdBase - (char *)&m8260;
   m8260.scc3p.tbase = (char *)sc->txBdBase - (char *)&m8260;
-  
+
   /*
    * Send "Init parameters" command
    */
@@ -277,7 +277,7 @@ m8260_scc_initialize_hardware (struct m8260_hdlc_struct *sc)
    */
   m8260.scc3p.rfcr = M8260_RFCR_MOT | M8260_RFCR_60X_BUS;
   m8260.scc3p.tfcr = M8260_TFCR_MOT | M8260_TFCR_60X_BUS;
-  
+
   /*
    * Set maximum receive buffer length
    */
@@ -394,7 +394,7 @@ m8260Enet_retire_tx_bd (struct m8260_hdlc_struct *sc)
   int i;
   int nRetired;
   struct mbuf *m, *n;
-  
+
   i = sc->txBdTail;
   nRetired = 0;
   while ((sc->txBdActiveCount != 0)
@@ -409,7 +409,7 @@ m8260Enet_retire_tx_bd (struct m8260_hdlc_struct *sc)
        */
       if( status & M8260_BD_UNDERRUN ) {
           hdlc_driver[0].txUnderrun++;
-        
+
         /*
          * Restart the transmitter
          */
@@ -451,7 +451,7 @@ scc_rxDaemon (void *arg)
   uint16_t         status;
   m8260BufferDescriptor_t *rxBd;
   int rxBdIndex;
-  
+
   /*
    * Allocate space for incoming packets and start reception
    */
@@ -479,7 +479,7 @@ scc_rxDaemon (void *arg)
   rxBdIndex = 0;
   for (;;) {
     rxBd = sc->rxBdBase + rxBdIndex;
-    
+
     /*
      * Wait for packet if there's not one ready
      */
@@ -506,7 +506,7 @@ scc_rxDaemon (void *arg)
         m8260.scc3.sccm |= M8260_SCCE_RXF;
 
 /*        printk( "Rxdwait "); */
-        
+
         rtems_bsdnet_event_receive (INTERRUPT_EVENT,
                                     RTEMS_WAIT|RTEMS_EVENT_ANY,
                                     RTEMS_NO_TIMEOUT,
@@ -515,7 +515,7 @@ scc_rxDaemon (void *arg)
 /*        printk( "Rxd " ); */
       }
     }
-    
+
     /*
      * Check that packet is valid
      */
@@ -577,13 +577,13 @@ scc_rxDaemon (void *arg)
       if (status & M8260_BD_CARRIER_LOST)
         sc->rxLostCarrier++;
     }
-    
+
     /*
      * Reenable the buffer descriptor
      */
     rxBd->status = (status & (M8260_BD_WRAP | M8260_BD_INTERRUPT)) |
                     M8260_BD_EMPTY;
-    
+
     /*
      * Move to next buffer descriptor
      */
@@ -601,12 +601,12 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
   struct mbuf *l = NULL;
   uint16_t         status;
   int nAdded;
-  
+
   /*
    * Free up buffer descriptors
    */
   m8260Enet_retire_tx_bd (sc);
-  
+
   /*
    * Set up the transmit buffer descriptors.
    * No need to pad out short packets since the
@@ -630,7 +630,7 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
        * Clear old events
        */
       m8260.scc3.scce = M8260_SCCE_TX | M8260_SCCE_TXE;
-      
+
       /*
        * Wait for buffer descriptor to become available.
        * Note that the buffer descriptors are checked
@@ -646,7 +646,7 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
       m8260Enet_retire_tx_bd (sc);
       while ((sc->txBdActiveCount + nAdded) == sc->txBdCount) {
         rtems_event_set events;
-        
+
         /*
          * Unmask TX (buffer transmitted) event
          */
@@ -659,13 +659,13 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
         m8260Enet_retire_tx_bd (sc);
       }
     }
-    
+
     /*
      * Don't set the READY flag till the
      * whole packet has been readied.
      */
     status = nAdded ? M8260_BD_READY : 0;
-    
+
     /*
      *  FIXME: Why not deal with empty mbufs at at higher level?
      * The IP fragmentation routine in ip_output
@@ -715,7 +715,7 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
       if (l != NULL)
         l->m_next = m;
     }
-    
+
     /*
      * Set the transmit buffer status.
      * Break out of the loop if this mbuf is the last in the frame.
@@ -745,13 +745,13 @@ scc_txDaemon (void *arg)
   struct ifnet *ifp = &sc->ac_if;
   struct mbuf *m;
   rtems_event_set events;
-  
+
   for (;;) {
     /*
      * Wait for packet
      */
     rtems_bsdnet_event_receive (START_TRANSMIT_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, RTEMS_NO_TIMEOUT, &events);
-    
+
     /*
      * Send packets till queue is empty
      */
@@ -780,7 +780,7 @@ static void
 m8260_hdlc_start (struct ifnet *ifp)
 {
   struct m8260_hdlc_struct *sc = ifp->if_softc;
-  
+
   rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
   ifp->if_flags |= IFF_OACTIVE;
 }
@@ -793,22 +793,22 @@ scc_init (void *arg)
 {
   struct m8260_hdlc_struct *sc = arg;
   struct ifnet *ifp = &sc->ac_if;
-  
+
   if (sc->txDaemonTid == 0) {
-    
+
     /*
      * Set up SCC hardware
      */
     m8260_scc_initialize_hardware (sc);
-    
+
     /*
      * Start driver tasks
      */
     sc->txDaemonTid = rtems_bsdnet_newproc ("SCtx", 4096, scc_txDaemon, sc);
     sc->rxDaemonTid = rtems_bsdnet_newproc ("SCrx", 4096, scc_rxDaemon, sc);
-    
+
   }
-  
+
 #if 0
   /*
    * Set flags appropriately
@@ -823,7 +823,7 @@ scc_init (void *arg)
    * Tell the world that we're running.
    */
   ifp->if_flags |= IFF_RUNNING;
-  
+
   /*
    * Enable receiver and transmitter
    */
@@ -839,9 +839,9 @@ static void
 scc_stop (struct m8260_hdlc_struct *sc)
 {
   struct ifnet *ifp = &sc->ac_if;
-  
+
   ifp->if_flags &= ~IFF_RUNNING;
-  
+
   /*
    * Shut down receiver and transmitter
    */
@@ -862,7 +862,7 @@ hdlc_stats (struct m8260_hdlc_struct *sc)
   printf ("            Overrun:%-8lu", sc->rxOverrun);
   printf ("         No Carrier:%-8lu\n", sc->rxLostCarrier);
   printf ("          Discarded:%-8lu\n", (unsigned long)m8260.scc3p.un.hdlc.disfc);
-  
+
   printf ("      Tx Interrupts:%-8lu", sc->txInterrupts);
   printf ("         No Carrier:%-8lu", sc->txLostCarrier);
   printf ("           Underrun:%-8lu\n", sc->txUnderrun);
@@ -877,37 +877,37 @@ scc_ioctl (struct ifnet *ifp, int command, caddr_t data)
 {
   struct m8260_hdlc_struct *sc = ifp->if_softc;
   int error = 0;
-  
+
   switch (command) {
   case SIOCGIFADDR:
   case SIOCSIFADDR:
     hdlc_ioctl (ifp, command, data);
     break;
-    
+
   case SIOCSIFFLAGS:
     switch (ifp->if_flags & (IFF_UP | IFF_RUNNING)) {
     case IFF_RUNNING:
       scc_stop (sc);
       break;
-      
+
     case IFF_UP:
       scc_init (sc);
       break;
-      
+
     case IFF_UP | IFF_RUNNING:
       scc_stop (sc);
       scc_init (sc);
       break;
-      
+
     default:
       break;
     }
     break;
-    
+
   case SIO_RTEMS_SHOW_STATS:
     hdlc_stats (sc);
     break;
-    
+
     /*
      * FIXME: All sorts of multicast commands need to be added here!
      */
@@ -930,7 +930,7 @@ rtems_scc3_driver_attach (struct rtems_bsdnet_ifconfig *config)
   struct ifnet *ifp;
   int mtu;
   int i;
-  
+
   /*
    * Find a free driver
    */
@@ -976,7 +976,7 @@ rtems_scc3_driver_attach (struct rtems_bsdnet_ifconfig *config)
   else
     sc->txBdCount = TX_BUF_COUNT * TX_BD_PER_BUF;
   sc->acceptBroadcast = !config->ignore_broadcast;
-  
+
   /*
    * Set up network interface values
    */
@@ -991,7 +991,7 @@ rtems_scc3_driver_attach (struct rtems_bsdnet_ifconfig *config)
   ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX | /*IFF_PROMISC |*/ IFF_NOARP;
   if (ifp->if_snd.ifq_maxlen == 0)
     ifp->if_snd.ifq_maxlen = ifqmaxlen;
-  
+
   /*
    * Attach the interface
    */

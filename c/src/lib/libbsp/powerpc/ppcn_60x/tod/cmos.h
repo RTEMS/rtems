@@ -17,7 +17,7 @@
 /* CMOS is the 64 bytes of RAM in the DS1385 chip */
 /* The CRC's are computed with x**16+x**12+x**5 + 1 polynomial */
 /* The clock is kept in 24 hour BCD mode and should be set to UT(GMT) */
- 
+
 #ifndef _CMOS_
 #define _CMOS_
 
@@ -65,7 +65,7 @@
 
 /* Define Control Register D structure. */
 #define DS1385_REGD_VALID	0x80
- 
+
 typedef struct _CMOS_MAP {
     volatile uint8_t         DateAndTime[14];
 
@@ -91,5 +91,5 @@ typedef struct _CMOS_MAP {
     attribute = lock */
     uint8_t         ConfigCrc[2]; /* CRC on ConfigPW */
 } CMOS_MAP, *PCMOS_MAP;
- 
+
 #endif /* _CMOS_ */

@@ -10,10 +10,10 @@ typedef unsigned char uchar ;           /* Abbreviations */
 typedef unsigned short ushort ;
 typedef unsigned long ulong ;
 int DBGConsole_make_sync = 0;
-#define CONSOLE_CHANNELS	1 
+#define CONSOLE_CHANNELS	1
 
 #define MAX_CONSOLE 4
-static int consoles[MAX_CONSOLE]; 
+static int consoles[MAX_CONSOLE];
 static int active_consoles = 0;
 static struct{
 	rtems_id sem;
@@ -25,7 +25,7 @@ static struct{
 
 
 /* This uses the message out and in buffers as serial emulator.
-	Pretty stupid eh? 
+	Pretty stupid eh?
 */
 
 #define uart1	((volatile unsigned char *)0x1318)
@@ -51,7 +51,7 @@ console_uartinit(unsigned int BAUDRate)
 	return(0);
 }
 
-	
+
 /* Introduce a new console channel */
 console_new(char * name)
 {
@@ -71,13 +71,13 @@ console_new(char * name)
 	rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &consoles[active_consoles] );
 #endif
 }
-	
+
 
 
     /***********************************************************************
      ***  Transmit character to host.
      *** put the console ID in upper byte
-     *** 
+     ***
      ***********************************************************************/
 
 int console_sps_putc(int cc)
@@ -138,10 +138,10 @@ wait:
        char  buffer[9];
        int   count;
        int   digit;
-     
+
        for (count = 7 ; count >= 0 ; count--) {
          digit = (num >> (count * 4)) & 0xf;
-     
+
          if (digit <= 9)
            console_sps_putc( (char) ('0' + digit));
          else
@@ -161,7 +161,7 @@ wait:
        int j = 0;
        int val = 0;
        int digit = 0;
-      
+
        console_sps_putc(13);
        console_sps_putc(10);
        putnum((unsigned int) addr);
@@ -176,7 +176,7 @@ wait:
            digit = (val & 0xf0) >> 4;
            val <<= 4;
 
-           if (digit < 10) 
+           if (digit < 10)
            {
              console_sps_putc(digit + '0');
            }
@@ -218,7 +218,7 @@ wait:
        unsigned int *satucmd = (unsigned int *) 0x1298;
        unsigned int *soccar = (unsigned int *) 0x12a8;
        unsigned int *soccdp = (unsigned int *) 0x12b0;
-      
+
        *satucmd = 4;
 
        console_sps_putc(13);
@@ -236,7 +236,7 @@ wait:
            digit = (val & 0xf000) >> 12;
            val <<= 4;
 
-           if (digit < 10) 
+           if (digit < 10)
            {
              console_sps_putc(digit + '0');
            }
@@ -269,7 +269,7 @@ wait:
 #ifdef CONSOLE_CHANNELS
 int console_sps_getc()
 {
-	
+
 	int consinx;
 	int rtid, i;
 	unsigned int level, level2;
@@ -304,7 +304,7 @@ int console_sps_getc()
 	rtems_interrupt_enable(level);
 	return ch;
 }
-	
+
 
 void cons_isr()
 {
@@ -323,7 +323,7 @@ void cons_isr()
 release:
 	*uart_rx = 0;
 }
-	
+
 #else
 volatile int console_foo = 0;
 int console_sps_getc()

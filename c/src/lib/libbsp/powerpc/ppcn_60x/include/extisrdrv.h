@@ -20,7 +20,7 @@ extern rtems_device_minor_number rtems_externalISR_minor;
 
 #define EXTISR_DRIVER_TABLE_ENTRY \
   { ExternalISR_initialize, NULL, NULL, NULL, NULL, ExternalISR_control }
- 
+
 rtems_device_driver ExternalISR_initialize(
   rtems_device_major_number,
   rtems_device_minor_number,

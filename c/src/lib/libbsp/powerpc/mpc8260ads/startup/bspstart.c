@@ -180,11 +180,11 @@ extern void m8260_console_reserve_resources(rtems_configuration_table *);
  *      not yet initialized.
  *
  */
- 
+
 void
 bsp_pretasking_hook(void)
 {
-  /* 
+  /*
    *  These are assigned addresses in the linkcmds file for the BSP. This
    *  approach is better than having these defined as manifest constants and
    *  compiled into the kernel, but it is still not ideal when dealing with
@@ -200,16 +200,16 @@ bsp_pretasking_hook(void)
     bsp_libc_init( &_HeapStart, &_HeapEnd - &_HeapStart, 0 );
 
 
-  
+
 #ifdef STACK_CHECKER_ON
   /*
    *  Initialize the stack bounds checker
    *  We can either turn it on here or from the app.
    */
-  
+
   Stack_check_Initialize();
 #endif
-  
+
 #ifdef RTEMS_DEBUG
   rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
@@ -266,7 +266,7 @@ void bsp_start(void)
 /*
   mmu_init();
 */
-  
+
   /*
    * Enable instruction and data caches. Do not force writethrough mode.
    */

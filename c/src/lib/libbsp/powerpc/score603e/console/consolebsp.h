@@ -9,7 +9,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: 
+ *  $Id:
  */
 
 #ifndef __CONSOLEBSP_H
@@ -25,12 +25,12 @@ extern "C" {
 
 /*
  *
- * Note:  The Ports are numbered 0..NUM_Z85C30_CHIPS with port 0 and 1 
- *        being on the first chip, and ports 2 and 3 being on the 
+ * Note:  The Ports are numbered 0..NUM_Z85C30_CHIPS with port 0 and 1
+ *        being on the first chip, and ports 2 and 3 being on the
  *        second chip...
  */
 
- 
+
 /*
  * Z85c30 configuration informaiton.
  */
@@ -60,7 +60,7 @@ typedef enum {
 typedef enum {
   CONSOLE_PARITY_NONE,
   CONSOLE_PARITY_ODD,
-  CONSOLE_PARITY_EVEN,  
+  CONSOLE_PARITY_EVEN,
 } CONSOLE_Parity;
 
 typedef enum {
@@ -72,7 +72,7 @@ typedef enum {
 
 typedef struct {
   uint32_t                baud_rate;         /* baud rate value */
-  CONSOLE_Stop_bits        stop_bits;         
+  CONSOLE_Stop_bits        stop_bits;
   CONSOLE_Parity           parity;
   CONSOLE_Character_bits   read_char_bits;
   CONSOLE_Character_bits   write_char_bits;
@@ -83,7 +83,7 @@ typedef struct {
   void          *console_termios_data;
 #endif
 
-} Console_Protocol; 
+} Console_Protocol;
 
 
 /*
@@ -112,7 +112,7 @@ typedef struct {
 } Port_85C30_info;
 
 /*
- * Console port chip configuration tables. 
+ * Console port chip configuration tables.
  */
 extern Chip_85C30_info Chips_85C30 [ NUM_Z85C30_CHIPS ];
 extern const Port_85C30_info Ports_85C30 [ NUM_Z85C30_PORTS ];
@@ -130,7 +130,7 @@ void outbyte_polled_85c30(
   char ch
 );
 
-int inbyte_nonblocking_85c30(   
+int inbyte_nonblocking_85c30(
   const Port_85C30_info      *Port
 );
 

@@ -18,7 +18,7 @@
  *  in the SIU when it takes control, but does not restore it before
  *  returning control to the program. We thus keep a copy of the
  *  register, and restore it from gdb using the hook facilities.
- *  
+ *
  *  We arrange for simask_copy to be initialized to zero so that
  *  it resides in the .data section. This avoids having gdb set
  *  the mask to crud before we get to initialize explicitly. Of
@@ -35,11 +35,11 @@ uint32_t   simask_copy = 0;
  *  number MBXA/PG1. We are assuming that the values in MBXA/PG1
  *  are for the older MBX boards whose part number does not have
  *  the "B" suffix, but we have discovered that the values from
- *  MBXA/PG2 work better, even for the older boards. 
- *  
+ *  MBXA/PG2 work better, even for the older boards.
+ *
  *  THESE VALUES HAVE ONLY BEEN VERIFIED FOR THE MBX821-001 and
  *  MBX860-002. USE WITH CARE!
- *  
+ *
  *  NOTE: The MBXA/PG2 manual lists the clock speed of the MBX821_001B
  *  as being 50 MHz, while the MBXA/IH2.1 manual lists it as 40 MHz.
  *  We think the MBX821_001B is an entry level board and thus is 50 MHz,
@@ -58,7 +58,7 @@ static uint32_t   upmaTable[64] = {
          * initialized by EPPCBug 1.1. In particular, the original
          * burst-write values do not work! Also, the following values
          * facilitate higher performance.
-         */  
+         */
 	/* DRAM 60ns - single read. (offset 0x00 in UPM RAM) */
 	0xCFAFC004, 0x0FAFC404, 0x0CAF8C04, 0x10AF0C04,
 	0xF0AF0C00, 0xF3BF4805, 0xFFFFC005, 0xFFFFC005,
@@ -83,7 +83,7 @@ static uint32_t   upmaTable[64] = {
 	0xFCFFC004, 0xC0FFC004, 0x01FFC004, 0x0FFFC004,
 	0x1FFFC004, 0xFFFFC004, 0xFFFFC005, 0xFFFFC005,
 	0xFFFFC005, 0xFFFFC005, 0xFFFFC005, 0xFFFFC005,
- 
+
 	/*  Exception. (offset 0x3c in UPM RAM) */
 	0xFFFFC007, 0xFFFFC007, 0xFFFFC007, 0xFFFFC007
 
@@ -109,14 +109,14 @@ static uint32_t   upmaTable[64] = {
 
         /* 40 MHz MBX */
         /*
-         * Note: For the older MBX models (i.e. without the "b" 
+         * Note: For the older MBX models (i.e. without the "b"
          * suffix, e.g. mbx860_001), the following values (from the
          * MBXA/PG2 manual) work better than, but are different
          * from those published in the original MBXA/PG1 manual and
          * initialized by EPPCBug 1.1. In particular, the following
          * burst-read and burst-write values facilitate higher
          * performance.
-         */  
+         */
 	/* DRAM 60ns - single read. (offset 0x00 in UPM RAM) */
 	0xCFAFC004, 0x0FAFC404, 0x0CAF0C04, 0x30AF0C00,
 	0xF1BF4805, 0xFFFFC005, 0xFFFFC005, 0xFFFFC005,
@@ -141,7 +141,7 @@ static uint32_t   upmaTable[64] = {
 	0xFCFFC004, 0xC0FFC004, 0x01FFC004, 0x0FFFC004,
 	0x3FFFC004, 0xFFFFC005, 0xFFFFC005, 0xFFFFC005,
 	0xFFFFC005, 0xFFFFC005, 0xFFFFC005, 0xFFFFC005,
- 
+
 	/*  Exception. (offset 0x3c in UPM RAM) */
 	0xFFFFC007, 0xFFFFC007, 0xFFFFC007, 0xFFFFC007
 #else
@@ -157,14 +157,14 @@ void _InitMBX8xx (void)
   register uint32_t   r1, i;
   extern uint32_t   simask_copy;
 
-  /*			
+  /*
    *  Initialize the Debug Enable Register (DER) to an appropriate
-   *  value for EPPCBug debugging. 
+   *  value for EPPCBug debugging.
    *  (This value should also work for BDM debugging.)
    */
   r1 = 0x70C67C07;	/* All except EXTIE, ALIE, DECIE */
   _mtspr( M8xx_DER, r1 );
-  
+
   /*
    * Initialize the Instruction Support Control Register (ICTRL) to a
    * an appropriate value for normal operation. A different value,
@@ -172,7 +172,7 @@ void _InitMBX8xx (void)
    */
   r1 = 0x00000007;
   _mtspr( M8xx_ICTRL, r1 );
-	
+
   /*
    * Disable and invalidate the instruction and data caches.
    */
@@ -185,7 +185,7 @@ void _InitMBX8xx (void)
   r1 = M8xx_CACHE_CMD_INVALIDATE;	/* invalidate all */
   _mtspr( M8xx_IC_CST, r1 );
   _isync;
-  
+
   r1 = M8xx_CACHE_CMD_DISABLE;
   _mtspr( M8xx_DC_CST, r1 );
   _isync;
@@ -214,14 +214,14 @@ void _InitMBX8xx (void)
    *  imd: accessing m8xx.* should not occure before setting up the immr !
    */
    simask_copy = m8xx.simask;
-  
-  /* 
-   * Initialize the SIU Module Configuration Register (SIUMCR) 
+
+  /*
+   * Initialize the SIU Module Configuration Register (SIUMCR)
    * m8xx.siumcr = 0x00602900, the default MBX and firmware value.
    */
-  m8xx.siumcr = M8xx_SIUMCR_EARP0 | M8xx_SIUMCR_DBGC3 | M8xx_SIUMCR_DBPC0 | 
+  m8xx.siumcr = M8xx_SIUMCR_EARP0 | M8xx_SIUMCR_DBGC3 | M8xx_SIUMCR_DBPC0 |
 		M8xx_SIUMCR_DPC | M8xx_SIUMCR_MLRC2 | M8xx_SIUMCR_SEME;
-  
+
   /*
    * Initialize the System Protection Control Register (SYPCR).
    * The SYPCR can only be written once after Reset.
@@ -229,39 +229,39 @@ void _InitMBX8xx (void)
    *	- Disable software watchdog timer
    * m8xx.sypcr = 0xFFFFFF88, the default MBX and firmware value.
    */
-  m8xx.sypcr = M8xx_SYPCR_SWTC(0xFFFF) | M8xx_SYPCR_BMT(0xFF) | 
+  m8xx.sypcr = M8xx_SYPCR_SWTC(0xFFFF) | M8xx_SYPCR_BMT(0xFF) |
 		M8xx_SYPCR_BME | M8xx_SYPCR_SWF;
 
   /* Initialize the SIU Interrupt Edge Level Mask Register (SIEL) */
   m8xx.siel = 0xAAAA0000;         	/* Default MBX and firmware value. */
-  
+
   /* Initialize the Transfer Error Status Register (TESR) */
   m8xx.tesr = 0xFFFFFFFF;         	/* Default firmware value. */
-  
+
   /* Initialize the SDMA Configuration Register (SDCR) */
   m8xx.sdcr = 0x00000001;         	/* Default firmware value. */
-  
+
   /*
    * Initialize the Timebase Status and Control Register (TBSCR)
    * m8xx.tbscr = 0x00C3, default MBX and firmware value.
    */
   m8xx.tbscrk = M8xx_UNLOCK_KEY;	/* unlock TBSCR */
-  m8xx.tbscr = M8xx_TBSCR_REFA | M8xx_TBSCR_REFB | 
+  m8xx.tbscr = M8xx_TBSCR_REFA | M8xx_TBSCR_REFB |
   		M8xx_TBSCR_TBF | M8xx_TBSCR_TBE;
-  
+
   /* Initialize the Real-Time Clock Status and Control Register (RTCSC) */
   m8xx.rtcsk = M8xx_UNLOCK_KEY;		/* unlock RTCSC */
   m8xx.rtcsc = 0x00C3;			/* Default MBX and firmware value. */
-  
+
   /* Unlock other Real-Time Clock registers */
   m8xx.rtck = M8xx_UNLOCK_KEY;		/* unlock RTC */
   m8xx.rtseck = M8xx_UNLOCK_KEY;	/* unlock RTSEC */
   m8xx.rtcalk = M8xx_UNLOCK_KEY;	/* unlock RTCAL */
-  
+
   /* Initialize the Periodic Interrupt Status and Control Register (PISCR) */
   m8xx.piscrk = M8xx_UNLOCK_KEY;	/* unlock PISCR */
   m8xx.piscr = 0x0083; 			/* Default MBX and firmware value. */
-      
+
   /* Initialize the System Clock and Reset Control Register (SCCR)
    * Set the clock sources and division factors:
    *   Timebase Source is GCLK2 / 16
@@ -299,18 +299,18 @@ void _InitMBX8xx (void)
         defined(mbx821_005))
   m8xx.plprcr = 0x4C400000;
 #else
-#error "MBX board not defined"  
+#error "MBX board not defined"
 #endif
   /* Unlock the timebase and decrementer registers. */
   m8xx.tbk = M8xx_UNLOCK_KEY;
-  /* 
+  /*
    * Initialize decrementer register to a large value to
    * guarantee that a decrementer interrupt will not be
    * generated before the kernel is fully initialized.
    */
   r1 = 0x7FFFFFFF;
   _mtspr( M8xx_DEC, r1 );
-	
+
   /* Initialize the timebase register (TB is 64 bits) */
   r1 = 0x00000000;
   _mtspr( M8xx_TBU_WR, r1 );
@@ -322,24 +322,24 @@ void _InitMBX8xx (void)
 
   /*
    * User Programmable Machine A (UPMA) Initialization
-   * 
+   *
    * If this initialization code is running from DRAM, it is very
    * dangerous to change the value of any UPMA Ram array word from
    * what the firmware (EPPCBug) initialized it to. Thus we don't
    * initialize UPMA if EPPCBUG_VECTORS is defined; we assume EPPCBug
    * has done the appropriate initialization.
-   * 
+   *
    * An exception to our rule, is that, for the older MBX boards
    * (those without the "B" suffix, e.g. MBX821-001 and MBX860-002),
    * we do re-initialize the burst-read and burst-write values with
    * values that are more efficient. Also, in the MBX821 case,
-   * the burst-write original values set by EPPCBug do not work! 
+   * the burst-write original values set by EPPCBug do not work!
    * This change can be done safely because the caches have not yet
    * been activated.
    *
    * The RAM array of UPMA is initialized by writing to each of
    * its 64 32-bit RAM locations.
-   * Note: UPM register initialization should occur before 
+   * Note: UPM register initialization should occur before
    * initialization of the corresponding BRx and ORx registers.
    */
 #if ( !defined(EPPCBUG_VECTORS) )
@@ -373,27 +373,27 @@ void _InitMBX8xx (void)
 #if ( !defined(EPPCBUG_VECTORS) )
   /*
    *  Initialize the memory periodic timer.
-   *	Memory Periodic Timer Prescaler Register (MPTPR: 16-bit register) 
+   *	Memory Periodic Timer Prescaler Register (MPTPR: 16-bit register)
    *  m8xx.mptpr = 0x0200;
    */
   m8xx.mptpr = M8xx_MPTPR_PTP(0x2);
-  
+
   /*
    *  Initialize the Machine A Mode Register (MAMR)
-   * 
+   *
    *  ASSUMES THAT DIMMs ARE NOT INSTALLED!
-   *  
+   *
    *  Without DIMMs:
    *  m8xx.mamr = 0x13821000 (40 MHz) or 0x18821000 (50 MHz).
-   *  
+   *
    *  With DIMMs:
    *  m8xx.mamr = 0x06821000 (40 MHz) or 0x08821000 (50 MHz).
    */
 #if ( defined(mbx821_001) || defined(mbx821_001b) || defined(mbx860_001b) )
-  m8xx.mamr = M8xx_MEMC_MMR_PTP(0x18) | M8xx_MEMC_MMR_PTE | 
+  m8xx.mamr = M8xx_MEMC_MMR_PTP(0x18) | M8xx_MEMC_MMR_PTE |
 	M8xx_MEMC_MMR_DSP(0x1) | M8xx_MEMC_MMR_G0CL(0) | M8xx_MEMC_MMR_UPWAIT;
 #else
-  m8xx.mamr = M8xx_MEMC_MMR_PTP(0x13) | M8xx_MEMC_MMR_PTE | 
+  m8xx.mamr = M8xx_MEMC_MMR_PTP(0x13) | M8xx_MEMC_MMR_PTE |
 	M8xx_MEMC_MMR_DSP(0x1) | M8xx_MEMC_MMR_G0CL(0) | M8xx_MEMC_MMR_UPWAIT;
 #endif
 #endif /* ! defined(EPPCBUG_VECTORS) */
@@ -416,31 +416,31 @@ void _InitMBX8xx (void)
    *	FC000000  FC7FFFFF  7    8  N   N   GPCM  Y   Y  Socketed FLASH Memory
    *
    *  z = 3 for 4MB installed on the motherboard, z = F for 16M
-   *  
+   *
    *  NOTE: The devices selected by CS0 and CS7 can be selected with jumper J4.
    *  This table assumes that the 32-bit soldered flash device is the boot ROM.
    */
 
   /*
    *  CS0 : Soldered (32-bit) Flash Memory at 0xFE000000
-   *  
+   *
    *  CHANGE THIS CODE IF YOU CHANGE JUMPER J4 FROM ITS FACTORY DEFAULT SETTING!
    *  (or better yet, don't reprogram BR0 and OR0; just program BR7 and OR7 to
    *  access whatever flash device is not selected during hard reset.)
-   * 
+   *
    *  MBXA/PG2 appears to lie in note 14 for table 2-4. The manual states that
    *  "EPPCBUG configures the reset flash device at the lower address, and the
    *  nonreset flash device at the higher address." If we take reset flash device
    *  to mean the boot flash memory, then the statement must mean that BR0 must
    *  point to the device at the lower address, i.e. 0xFC000000, while BR7 must
    *  point to the device at the highest address, i.e. 0xFE000000.
-   *  
+   *
    *  THIS IS NOT THE CASE!
-   *  
+   *
    *  The boot flash is always configured to start at 0xFE000000, and the other
    *  one to start at 0xFC000000. Changing jumper J4 only changes the width of
    *  the memory ports into these two region.
-   *  
+   *
    * BR0 = 0xFE000001
    *	Base addr [0-16]	0b11111110000000000 = 0xFE000000
    *	Address type [17-19]	0b000
@@ -464,7 +464,7 @@ void _InitMBX8xx (void)
    *
    * m8xx.memc[0]._or = 0xFF800930 (40 MHz)
    * m8xx.memc[0]._or = 0xFF800940 (50 MHz)
-   * m8xx.memc[0]._br = 0xFE000001 
+   * m8xx.memc[0]._br = 0xFE000001
    */
 #if ( defined(mbx821_001) || defined(mbx821_001b) || defined(mbx860_001b) )
   m8xx.memc[0]._or = M8xx_MEMC_OR_8M | M8xx_MEMC_OR_ATM(0) | M8xx_MEMC_OR_CSNT |
@@ -476,13 +476,13 @@ void _InitMBX8xx (void)
   m8xx.memc[0]._br = M8xx_BR_BA(0xFE000000) | M8xx_BR_AT(0) | M8xx_BR_PS32 |
 		M8xx_BR_MS_GPCM | M8xx_MEMC_BR_V;
 
-  /* 
+  /*
    * CS1 : Local DRAM Memory at 0x00000000
    * m8xx.memc[1]._or = 0xFFC00400;
    * m8xx.memc[1]._br = 0x00000081;
    */
 #if ( defined(mbx860_001b) )
-    m8xx.memc[1]._or = M8xx_MEMC_OR_2M | M8xx_MEMC_OR_ATM(0) | 
+    m8xx.memc[1]._or = M8xx_MEMC_OR_2M | M8xx_MEMC_OR_ATM(0) |
     M8xx_MEMC_OR_ACS_QRTR | M8xx_MEMC_OR_SCY(0);
 #elif ( defined(mbx860_002b) || \
          defined(mbx860_003b) || \
@@ -495,7 +495,7 @@ void _InitMBX8xx (void)
          defined(mbx821_001)  || \
          defined(mbx821_002)  || \
          defined(mbx821_003) )
-    m8xx.memc[1]._or = M8xx_MEMC_OR_4M | M8xx_MEMC_OR_ATM(0) | 
+    m8xx.memc[1]._or = M8xx_MEMC_OR_4M | M8xx_MEMC_OR_ATM(0) |
     M8xx_MEMC_OR_ACS_QRTR | M8xx_MEMC_OR_SCY(0);
 #elif ( defined(mbx860_004) || \
         defined(mbx860_005) || \
@@ -507,7 +507,7 @@ void _InitMBX8xx (void)
         defined(mbx821_004b) || \
         defined(mbx821_005b) || \
         defined(mbx821_006b) )
-    m8xx.memc[1]._or = M8xx_MEMC_OR_16M | M8xx_MEMC_OR_ATM(0) | 
+    m8xx.memc[1]._or = M8xx_MEMC_OR_16M | M8xx_MEMC_OR_ATM(0) |
       M8xx_MEMC_OR_ACS_QRTR | M8xx_MEMC_OR_SCY(0);
 #else
 #error "MBX board not defined"
@@ -515,28 +515,28 @@ void _InitMBX8xx (void)
   m8xx.memc[1]._br = M8xx_BR_BA(0x00000000) | M8xx_BR_AT(0) | M8xx_BR_PS32 |
 		M8xx_BR_MS_UPMA | M8xx_MEMC_BR_V;
 
-  /* 
-   * CS2 : DIMM Memory - Bank #0, not present 
+  /*
+   * CS2 : DIMM Memory - Bank #0, not present
    * m8xx.memc[2]._or = 0x00000400;
    * m8xx.memc[2]._br = 0x00000080;
    */
-  m8xx.memc[2]._or = M8xx_MEMC_OR_ATM(0) | 
+  m8xx.memc[2]._or = M8xx_MEMC_OR_ATM(0) |
 		M8xx_MEMC_OR_ACS_QRTR | M8xx_MEMC_OR_SCY(0);
   m8xx.memc[2]._br = M8xx_BR_AT(0) | M8xx_BR_PS32 |
 		M8xx_BR_MS_UPMA;	/* ! M8xx_MEMC_BR_V */
 
-  /* 
-   * CS3 : DIMM Memory - Bank #1, not present 
+  /*
+   * CS3 : DIMM Memory - Bank #1, not present
    * m8xx.memc[3]._or = 0x00000400;
    * m8xx.memc[3]._br = 0x00000080;
    */
-  m8xx.memc[3]._or = M8xx_MEMC_OR_ATM(0) | 
+  m8xx.memc[3]._or = M8xx_MEMC_OR_ATM(0) |
 		M8xx_MEMC_OR_ACS_QRTR | M8xx_MEMC_OR_SCY(0);
   m8xx.memc[3]._br = M8xx_BR_AT(0) | M8xx_BR_PS32 |
 		M8xx_BR_MS_UPMA;	/* ! M8xx_MEMC_BR_V */
 
   /*
-   * CS4 : Battery-Backed SRAM at 0xFA000000 
+   * CS4 : Battery-Backed SRAM at 0xFA000000
    * m8xx.memc[4]._or = 0xFFE00920@ 40 MHz, 0xFFE00930 @ 50 MHz
    * m8xx.memc[4]._br = 0xFA000401;
    */
@@ -551,7 +551,7 @@ void _InitMBX8xx (void)
 		M8xx_BR_MS_GPCM | M8xx_MEMC_BR_V;
 
   /*
-   * CS5 : PCI I/O and Memory at 0x80000000 
+   * CS5 : PCI I/O and Memory at 0x80000000
    * m8xx.memc[5]._or = 0xA0000108;
    * m8xx.memc[5]._br = 0x80000001;
    */
@@ -560,8 +560,8 @@ void _InitMBX8xx (void)
   m8xx.memc[5]._br = M8xx_BR_BA(0x80000000) | M8xx_BR_AT(0) | M8xx_BR_PS32 |
 		M8xx_BR_MS_GPCM | M8xx_MEMC_BR_V;
 
-  /* 
-   * CS6 : QSPAN Registers at 0xFA210000 
+  /*
+   * CS6 : QSPAN Registers at 0xFA210000
    * m8xx.memc[6]._or = 0xFFFF0108;
    * m8xx.memc[6]._br = 0xFA210001;
    */
@@ -570,8 +570,8 @@ void _InitMBX8xx (void)
   m8xx.memc[6]._br = M8xx_BR_BA(0xFA210000) | M8xx_BR_AT(0) | M8xx_BR_PS32 |
 		M8xx_BR_MS_GPCM | M8xx_MEMC_BR_V;
 
-  /* 
-   * CS7 : Socketed (8-bit) Flash at 0xFC000000 
+  /*
+   * CS7 : Socketed (8-bit) Flash at 0xFC000000
    * m8xx.memc[7]._or = 0xFF800930 @ 40 MHz, 0xFF800940 @ 50 MHz
    * m8xx.memc[7]._br = 0xFC000401;
    */
@@ -591,36 +591,36 @@ void _InitMBX8xx (void)
    * PCMCIA region 0: common memory
    */
   m8xx.pbr0 = PCMCIA_MEM_ADDR;
-  m8xx.por0 = (M8xx_PCMCIA_POR_BSIZE_64MB 
-	       | M8xx_PCMCIA_POR_PSHT(15) | M8xx_PCMCIA_POR_PSST(15) 
-	       | M8xx_PCMCIA_POR_PSL(32)  
-	       | M8xx_PCMCIA_POR_PPS_16   | M8xx_PCMCIA_POR_PRS_MEM 
+  m8xx.por0 = (M8xx_PCMCIA_POR_BSIZE_64MB
+	       | M8xx_PCMCIA_POR_PSHT(15) | M8xx_PCMCIA_POR_PSST(15)
+	       | M8xx_PCMCIA_POR_PSL(32)
+	       | M8xx_PCMCIA_POR_PPS_16   | M8xx_PCMCIA_POR_PRS_MEM
 	       |M8xx_PCMCIA_POR_PSLOT_A   |  M8xx_PCMCIA_POR_VALID);
   /*
    * PCMCIA region 1: dma memory
    */
   m8xx.pbr1 = PCMCIA_DMA_ADDR;
-  m8xx.por1 = (M8xx_PCMCIA_POR_BSIZE_64MB 
-	       | M8xx_PCMCIA_POR_PSHT(15) | M8xx_PCMCIA_POR_PSST(15) 
-	       | M8xx_PCMCIA_POR_PSL(32)  
-	       | M8xx_PCMCIA_POR_PPS_16   | M8xx_PCMCIA_POR_PRS_DMA 
+  m8xx.por1 = (M8xx_PCMCIA_POR_BSIZE_64MB
+	       | M8xx_PCMCIA_POR_PSHT(15) | M8xx_PCMCIA_POR_PSST(15)
+	       | M8xx_PCMCIA_POR_PSL(32)
+	       | M8xx_PCMCIA_POR_PPS_16   | M8xx_PCMCIA_POR_PRS_DMA
 	       |M8xx_PCMCIA_POR_PSLOT_A   |  M8xx_PCMCIA_POR_VALID);
   /*
    * PCMCIA region 2: attribute memory
    */
   m8xx.pbr2 = PCMCIA_ATTRB_ADDR;
-  m8xx.por2 = (M8xx_PCMCIA_POR_BSIZE_64MB 
-	       | M8xx_PCMCIA_POR_PSHT(15) | M8xx_PCMCIA_POR_PSST(15) 
-	       | M8xx_PCMCIA_POR_PSL(32)  
+  m8xx.por2 = (M8xx_PCMCIA_POR_BSIZE_64MB
+	       | M8xx_PCMCIA_POR_PSHT(15) | M8xx_PCMCIA_POR_PSST(15)
+	       | M8xx_PCMCIA_POR_PSL(32)
 	       | M8xx_PCMCIA_POR_PPS_16   | M8xx_PCMCIA_POR_PRS_ATT
 	       |M8xx_PCMCIA_POR_PSLOT_A   |  M8xx_PCMCIA_POR_VALID);
   /*
    * PCMCIA region 3: I/O access
    */
   m8xx.pbr3 = PCMCIA_IO_ADDR;
-  m8xx.por3 = (M8xx_PCMCIA_POR_BSIZE_64MB 
-	       | M8xx_PCMCIA_POR_PSHT(15) | M8xx_PCMCIA_POR_PSST(15) 
-	       | M8xx_PCMCIA_POR_PSL(32)  
+  m8xx.por3 = (M8xx_PCMCIA_POR_BSIZE_64MB
+	       | M8xx_PCMCIA_POR_PSHT(15) | M8xx_PCMCIA_POR_PSST(15)
+	       | M8xx_PCMCIA_POR_PSL(32)
 	       | M8xx_PCMCIA_POR_PPS_16   | M8xx_PCMCIA_POR_PRS_IO
 	       |M8xx_PCMCIA_POR_PSLOT_A   |  M8xx_PCMCIA_POR_VALID);
 

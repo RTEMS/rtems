@@ -33,5 +33,5 @@ i2cdrv_initialize(rtems_device_major_number major,
 #ifdef __cplusplus
 }
 #endif
-                  
+
 #endif /* __I2CDRV_H__ */

@@ -1,6 +1,6 @@
 /*  page_table.h
  *
- *  This file was submitted by Eric Vaitl <vaitl@viasat.com> and 
+ *  This file was submitted by Eric Vaitl <vaitl@viasat.com> and
  *  supports page table initialization.
  *
  *  For now, we only use the transparent translation registers. Page tables
@@ -27,17 +27,17 @@
 void page_table_teardown( void );
 void page_table_init( rtems_configuration_table *config_table );
 
-enum { 
-  CACHE_WRITE_THROUGH, 
-  CACHE_COPYBACK, 
+enum {
+  CACHE_WRITE_THROUGH,
+  CACHE_COPYBACK,
   CACHE_NONE_SERIALIZED,
-  CACHE_NONE 
+  CACHE_NONE
 };
 
-enum { 
-  PTM_SUCCESS, 
-  PTM_BAD_ADDR, 
-  PTM_BAD_SIZE, 
+enum {
+  PTM_SUCCESS,
+  PTM_BAD_ADDR,
+  PTM_BAD_SIZE,
   PTM_BAD_CACHE,
   PTM_NO_TABLE_SPACE
 };

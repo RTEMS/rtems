@@ -30,9 +30,9 @@ void create_interrupt_gate_descriptor (interrupt_gate_descriptor* idtEntry,
 				       rtems_raw_irq_hdl hdl)
 {
     idtEntry->low_offsets_bits	= (((unsigned) hdl) & 0xffff);
-    idtEntry->segment_selector	= i386_get_cs(); 
+    idtEntry->segment_selector	= i386_get_cs();
     idtEntry->fixed_value_bits	= 0;
-    idtEntry->gate_type		= 0xe; 
+    idtEntry->gate_type		= 0xe;
     idtEntry->privilege		= 0;
     idtEntry->present		= 1;
     idtEntry->high_offsets_bits	= ((((unsigned) hdl) >> 16) & 0xffff);
@@ -45,15 +45,15 @@ rtems_raw_irq_hdl get_hdl_from_vector(rtems_vector_offset index)
     unsigned			limit;
 
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
-	
+
     /* Convert limit into number of entries */
     limit = (limit + 1) / sizeof(interrupt_gate_descriptor);
-  
+
     if(index >= limit) {
         return 0;
     }
 
-    * ((unsigned int*) &hdl) = (idt_entry_tbl[index].low_offsets_bits | 
+    * ((unsigned int*) &hdl) = (idt_entry_tbl[index].low_offsets_bits |
 			      (idt_entry_tbl[index].high_offsets_bits << 16));
     return hdl;
 }
@@ -64,7 +64,7 @@ int i386_set_idt_entry  (const rtems_raw_irq_connect_data* irq)
     unsigned			limit;
     unsigned int 		level;
 
-    
+
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
     /* Convert limit into number of entries */
@@ -85,11 +85,11 @@ int i386_set_idt_entry  (const rtems_raw_irq_connect_data* irq)
     }
 
     _CPU_ISR_Disable(level);
-    
+
     raw_irq_table [irq->idtIndex] = *irq;
     create_interrupt_gate_descriptor (&idt_entry_tbl[irq->idtIndex], irq->hdl);
     irq->on(irq);
-    
+
     _CPU_ISR_Enable(level);
     return 1;
 }
@@ -102,7 +102,7 @@ void _CPU_ISR_install_vector (unsigned vector,
     unsigned			limit;
     interrupt_gate_descriptor	new;
     unsigned int 		level;
-    
+
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
     /* Convert limit into number of entries */
@@ -120,7 +120,7 @@ void _CPU_ISR_install_vector (unsigned vector,
 
     _CPU_ISR_Enable(level);
 }
-				
+
 int i386_get_current_idt_entry (rtems_raw_irq_connect_data* irq)
 {
     interrupt_gate_descriptor* 	idt_entry_tbl;
@@ -135,9 +135,9 @@ int i386_get_current_idt_entry (rtems_raw_irq_connect_data* irq)
       return 0;
     }
     raw_irq_table [irq->idtIndex].hdl = get_hdl_from_vector(irq->idtIndex);
-    
+
     *irq = raw_irq_table [irq->idtIndex];
-    
+
     return 1;
 }
 
@@ -146,7 +146,7 @@ int i386_delete_idt_entry (const rtems_raw_irq_connect_data* irq)
     interrupt_gate_descriptor* 	idt_entry_tbl;
     unsigned			limit;
     unsigned int 		level;
-    
+
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
     /* Convert limit into number of entries */
@@ -170,12 +170,12 @@ int i386_delete_idt_entry (const rtems_raw_irq_connect_data* irq)
     idt_entry_tbl[irq->idtIndex] = default_idt_entry;
 
     irq->off(irq);
-    
+
     raw_irq_table[irq->idtIndex] = default_raw_irq_entry;
     raw_irq_table[irq->idtIndex].idtIndex = irq->idtIndex;
 
     _CPU_ISR_Enable(level);
-    
+
     return 1;
 }
 
@@ -188,12 +188,12 @@ int i386_init_idt (rtems_raw_irq_global_settings* config)
     unsigned 			i;
     unsigned 			level;
     interrupt_gate_descriptor*	idt_entry_tbl;
-    
+
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
     /* Convert limit into number of entries */
     limit = (limit + 1) / sizeof(interrupt_gate_descriptor);
-      
+
     if (config->idtSize != limit) {
       return 0;
     }
@@ -241,7 +241,7 @@ int i386_set_gdt_entry (unsigned short segment_selector, unsigned base,
     unsigned int                limit_adjusted;
     segment_descriptors* 	gdt_entry_tbl;
 
-      
+
     i386_get_info_from_GDTR (&gdt_entry_tbl, &gdt_limit);
 
     if (segment_selector > limit) {
@@ -283,6 +283,6 @@ int i386_set_gdt_entry (unsigned short segment_selector, unsigned base,
                    : "=r" (tmp_segment)
                    : "0"  (tmp_segment)
 		  );
-    
+
     return 1;
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  *  $Id$
  *
  *  This file was submitted by Eric Vaitl <vaitl@viasat.com>.
@@ -85,15 +85,15 @@ static unsigned long *table_alloc(int size){
    illegal.
 */
 void page_table_init(){
-    
+
     /* put everything in a known state */
     page_table_teardown();
 
     root_table=table_alloc(ROOT_TABLE_SIZE);
 
-    /* First set up TTR. 
+    /* First set up TTR.
        base address = 0x80000000
-       address mask = 0x7f 
+       address mask = 0x7f
        Ignore FC2 for match.
        Noncachable.
        Not write protected.*/
@@ -117,7 +117,7 @@ void page_table_init(){
     asm volatile ("movec %0,%%cacr"
 		  :: "d" (0x80008000));
 }
- 
+
 void page_table_teardown(){
     next_avail=(unsigned long *)BASE_TABLE_ADDR;
     /* Turn off paging.  Turn off the cache. Flush the cache. Tear down
@@ -156,7 +156,7 @@ int page_table_map(void *addr, unsigned long size, int cache_type){
 	root_index &= 0x7f;
 
 	if(root_table[root_index]){
-	    pointer_table = 
+	    pointer_table =
 		(unsigned long *) (root_table[root_index] & 0xfffffe00);
 	}else{
 	    if(!(pointer_table=table_alloc(POINTER_TABLE_SIZE))){
@@ -164,21 +164,21 @@ int page_table_map(void *addr, unsigned long size, int cache_type){
 	    }
 	    root_table[root_index]=((unsigned long)pointer_table) + 0x03;
 	}
-	
+
 	pointer_index=(unsigned long)addr;
 	pointer_index >>=18;
 	pointer_index &= 0x7f;
-	
+
 	if(pointer_table[pointer_index]){
-	    page_table = 
-		(unsigned long *) (pointer_table[pointer_index] & 
+	    page_table =
+		(unsigned long *) (pointer_table[pointer_index] &
 				   0xffffff00);
 	}else{
 	    if(!(page_table=table_alloc(PAGE_TABLE_SIZE))){
 		return  PTM_NO_TABLE_SPACE;
 	    }
 	    pointer_table[pointer_index]=
-		((unsigned long)page_table) + 0x03;  
+		((unsigned long)page_table) + 0x03;
 	}
 
 	page_index=(unsigned long)addr;

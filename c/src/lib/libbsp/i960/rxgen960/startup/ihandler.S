@@ -11,11 +11,11 @@
 	.globl _nmiHandler
 	.globl _intr5Handler
 	.globl _intr6Handler
-	.globl _clockHandler 
+	.globl _clockHandler
 
-	.text 
+	.text
 
-# NMI Handler 
+# NMI Handler
 _nmiHandler :
 	ldconst 64, r4
 	addo 	sp, r4, sp

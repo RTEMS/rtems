@@ -4,7 +4,7 @@
 
 /* BSP specific address space configuration parameters */
 
-/* 
+/*
  * The BSP maps VME address ranges into
  * one BAT.
  * NOTE: the BSP (startup/bspstart.c) uses

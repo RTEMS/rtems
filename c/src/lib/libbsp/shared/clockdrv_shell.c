@@ -41,11 +41,11 @@ volatile uint32_t         Clock_driver_ticks;
 rtems_isr_entry  Old_ticker;
 
 void Clock_exit( void );
- 
+
 /*
  *  Major and minor number.
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
@@ -74,7 +74,7 @@ rtems_isr Clock_isr(
   Clock_driver_ticks += 1;
 
 #ifdef CLOCK_DRIVER_USE_FAST_IDLE
-  do { 
+  do {
     rtems_clock_tick();
   } while ( _Thread_Executing == _Thread_Idle &&
           _Thread_Heir == _Thread_Executing);
@@ -169,7 +169,7 @@ void Clock_exit( void )
 
   /* do not restore old vector */
 }
- 
+
 /*
  *  Clock_initialize
  *
@@ -193,14 +193,14 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
- 
+
   /*
    * make major/minor avail to others such as shared memory driver
    */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   /*
    *  If we are counting ISRs per tick, then initialize the counter.
    */
@@ -211,7 +211,7 @@ rtems_device_driver Clock_initialize(
 
   return RTEMS_SUCCESSFUL;
 }
- 
+
 /*
  *  Clock_control
  *
@@ -237,18 +237,18 @@ rtems_device_driver Clock_control(
     uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
     rtems_isr_entry  ignored_ticker;
- 
+
     if (args == 0)
         goto done;
- 
+
     /*
      * This is hokey, but until we get a defined interface
      * to do this, it will just be this simple...
      */
- 
+
     if (args->command == rtems_build_name('I', 'S', 'R', ' '))
     {
-       
+
         Clock_isr(CLOCK_VECTOR);
     }
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
@@ -257,7 +257,7 @@ rtems_device_driver Clock_control(
        Clock_driver_support_install_isr( args->buffer, ignored_ticker );
       rtems_interrupt_enable( isrlevel );
     }
- 
+
 done:
     return RTEMS_SUCCESSFUL;
 }

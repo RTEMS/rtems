@@ -22,7 +22,7 @@
 
 static int same_DevID(unsigned short vendor,
 	       unsigned short Number,
-	       char * str) 
+	       char * str)
 {
 	static unsigned const char hexdigit[]="0123456789ABCDEF";
 	if (strlen(str)!=7) return 0;
@@ -68,11 +68,11 @@ PnP_TAG_PACKET *PnP_find_packet(unsigned char *p,
 	if (tag_type(packet_tag)) mask=0xff; else mask=0xF8;
 	masked_tag = packet_tag&mask;
 	for(; *p != END_TAG; p+=size) {
-		if ((*p & mask) == masked_tag && !(n--)) 
+		if ((*p & mask) == masked_tag && !(n--))
 			return (PnP_TAG_PACKET *) p;
 		if (tag_type(*p))
 			size=ld_le16((unsigned short *)(p+1))+3;
-		else 
+		else
 			size=tag_small_count(*p)+1;
 	}
 	return 0; /* not found */
@@ -85,7 +85,7 @@ PnP_TAG_PACKET *PnP_find_small_vendor_packet(unsigned char *p,
 	int next=0;
 	while (p) {
 		p = (unsigned char *) PnP_find_packet(p, 0x70, next);
-		if (p && p[1]==packet_type && !(n--)) 
+		if (p && p[1]==packet_type && !(n--))
 			return (PnP_TAG_PACKET *) p;
 		next = 1;
 	};
@@ -99,7 +99,7 @@ PnP_TAG_PACKET *PnP_find_large_vendor_packet(unsigned char *p,
 	int next=0;
 	while (p) {
 		p = (unsigned char *) PnP_find_packet(p, 0x84, next);
-		if (p && p[3]==packet_type && !(n--)) 
+		if (p && p[3]==packet_type && !(n--))
 			return (PnP_TAG_PACKET *) p;
 		next = 1;
 	};

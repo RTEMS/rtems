@@ -25,7 +25,7 @@
  *
  *  $Id$
  */
- 
+
 #include <stdlib.h>
 #include <bsp.h>
 #include <rtems/libio.h>
@@ -59,7 +59,7 @@ rtems_device_minor_number rtems_clock_minor;
 volatile uint32_t         Clock_driver_ticks;
 
 
-/* 
+/*
  *  Clock_isrs is the number of clock ISRs until the next invocation of the
  *  RTEMS clock tick routine. This clock tick device driver gets an interrupt
  *  once a millisecond and counts down until the length of time between the
@@ -104,16 +104,16 @@ rtems_isr VMEchip2_T2_isr(
   char overflow;                /* Content of overflow counter */
   long i;
   long ct;                      /* Number of T2 ticks per RTEMS ticks */
-  
+
   ct = BSP_Configuration.microseconds_per_tick / 1000;
-  
+
   /*
    *  May have missed interrupts, so should look at the overflow counter.
    */
   lcsr->intr_clear |= 0x02000000;   /* Clear the interrupt */
   overflow = (lcsr->board_ctl >> 12) & 0xF;
   lcsr->board_ctl |= 0x400;         /* Reset overflow counter */
-  
+
   /* Attempt to protect against one more period */
   if ( overflow == 0 )
     overflow = 16;
@@ -128,7 +128,7 @@ rtems_isr VMEchip2_T2_isr(
     /* Reset the counter */
     Clock_isrs = (uint32_t)-i;
   }
-  else 
+  else
     Clock_isrs -= overflow;
 }
 
@@ -138,7 +138,7 @@ rtems_isr VMEchip2_T2_isr(
  *
  *  Initialize the VMEchip2 Tick Timer #2.
  *
- *  THE VMECHIP2 PRESCALER REGISTER IS ASSUMED TO BE SET! 
+ *  THE VMECHIP2 PRESCALER REGISTER IS ASSUMED TO BE SET!
  *  The prescaler is used by all VMEchip2 timers, including the VMEbus grant
  *  timeout counter, the DMAC time off timer, the DMAC timer on timer, and the
  *  VMEbus global timeout timer. The prescaler value is normally set by the
@@ -211,7 +211,7 @@ void clock_exit( void )
  *
  *  Return values:
  *     rtems_device_driver status code
- */ 
+ */
 rtems_device_driver Clock_initialize(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -219,13 +219,13 @@ rtems_device_driver Clock_initialize(
 )
 {
   VMEchip2_T2_initialize();
- 
+
   /*
    *  Make major/minor avail to others such as shared memory driver
    */
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -251,10 +251,10 @@ rtems_device_driver Clock_control(
 {
     uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
- 
+
     if ( args == 0 )
         goto done;
- 
+
     /*
      * This is hokey, but until we get a defined interface
      * to do this, it will just be this simple...
@@ -269,7 +269,7 @@ rtems_device_driver Clock_control(
       set_vector( args->buffer, CLOCK_VECTOR, 1 );
       rtems_interrupt_enable( isrlevel );
     }
- 
+
 done:
     return RTEMS_SUCCESSFUL;
 }

@@ -7,8 +7,8 @@
  *  4, rue du Clos Courtel
  *  35512 CESSON-SEVIGNE
  *  FRANCE
- * 
- *  e-mail: g_montel@yahoo.com 
+ *
+ *  e-mail: g_montel@yahoo.com
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -69,9 +69,9 @@ uart_channel_config m340_uart_config[UART_NUMBER_OF_CHANNELS];
   Output parameters: -
   Description: Init the m340_uart_config
 	       THIS SHOULD NOT BE HERE!
-	       Its aim was to let the user configure 
+	       Its aim was to let the user configure
 	       UARTs for each application.
-	       As we can't pass args to the console 
+	       As we can't pass args to the console
 	       driver initialisation routine at the
 	       moment, this was not done.
   ATTENTION: TERMIOS init presupposes that the channel
@@ -109,18 +109,18 @@ void Init_UART_Table(void)
 
 /******************************************************
   Name: Find_Right_m340_UART_Channel_Config
-  Input parameters: Send/Receive baud rates for a 
+  Input parameters: Send/Receive baud rates for a
 		    given channel
   Output parameters: UART compatible configs for this
 		    channel
-  Description: returns which uart configurations fit 
-	       Receiver Baud Rate and Transmitter Baud 
+  Description: returns which uart configurations fit
+	       Receiver Baud Rate and Transmitter Baud
 	       Rate for a given channel
-	       For instance, according to the 
+	       For instance, according to the
 	       m340_Baud_Rates_Table:
                - Output Speed = 50, Input Speed = 75
 		 is not a correct config, because
-		 50 bauds implies set 1 and 75 bauds 
+		 50 bauds implies set 1 and 75 bauds
 		 implies set 2
                - Output Speed = 9600, Input Speed = 9600
 		 two correct configs for this:
@@ -142,7 +142,7 @@ Find_Right_m340_UART_Channel_Config(float ReceiverBaudRate, float TransmitterBau
  int i,j;
 
  /* Receiver and Transmitter baud rates must be compatible, ie in the same set */
- 
+
  /* search for configurations for ReceiverBaudRate - there can't be more than two (only two sets) */
  for (i=0;i<16;i++)
      for (j=0;j<2;j++)
@@ -151,7 +151,7 @@ Find_Right_m340_UART_Channel_Config(float ReceiverBaudRate, float TransmitterBau
 	    Receiver[Receiver_nb_of_config].set=j;
 	    Receiver_nb_of_config++;
 	 }
- 
+
  /* search for configurations for TransmitterBaudRate - there can't be more than two (only two sets) */
  for (i=0;i<16;i++)
      for (j=0;j<2;j++)
@@ -161,15 +161,15 @@ Find_Right_m340_UART_Channel_Config(float ReceiverBaudRate, float TransmitterBau
 	    Transmitter_nb_of_config++;
 	 }
 
- /* now check if there's a compatible config */  
+ /* now check if there's a compatible config */
  return_value.nb=0;
- 
+
  for (i=0; i<Receiver_nb_of_config; i++)
      for (j=0;j<Transmitter_nb_of_config;j++)
 	 if (Receiver[i].set == Transmitter[j].set) {
 	    return_value.baud_speed_table[return_value.nb].set = Receiver[i].set + 1; /* we want set 1 or set 2, not 0 or 1 */
 	    return_value.baud_speed_table[return_value.nb].rcs = Receiver[i].cs;
-	    return_value.baud_speed_table[return_value.nb].tcs = Transmitter[j].cs;	    
+	    return_value.baud_speed_table[return_value.nb].tcs = Transmitter[j].cs;
 	    return_value.nb++;
 	 }
 
@@ -178,17 +178,17 @@ Find_Right_m340_UART_Channel_Config(float ReceiverBaudRate, float TransmitterBau
 
 /******************************************************
   Name: Find_Right_m340_UART_Config
-  Input parameters: Send/Receive baud rates for both 
+  Input parameters: Send/Receive baud rates for both
 		    channels
-  Output parameters: UART compatible configs for 
+  Output parameters: UART compatible configs for
 		     BOTH channels
-  Description: returns which uart configurations fit 
-	       Receiver Baud Rate and Transmitter Baud 
+  Description: returns which uart configurations fit
+	       Receiver Baud Rate and Transmitter Baud
 	       Rate for both channels
-	       For instance, if we want 9600/38400 on 
-	       channel A and 9600/19200 on channel B, 
-	       this is not a good m340 uart config 
-	       (channel A needs set 1 and channel B 
+	       For instance, if we want 9600/38400 on
+	       channel A and 9600/19200 on channel B,
+	       this is not a good m340 uart config
+	       (channel A needs set 1 and channel B
 	       needs set 2)
  *****************************************************/
 t_baud_speed_table
@@ -245,7 +245,7 @@ Find_Right_m340_UART_Config(float ChannelA_ReceiverBaudRate, float ChannelA_Tran
                we need to know real speed in order
                to use the functions above
  *****************************************************/
-float termios_baud_rates_equivalence ( int speed ) 
+float termios_baud_rates_equivalence ( int speed )
 {
  switch (speed) {
 	default:	return 0;	break;
@@ -304,7 +304,7 @@ int dbugRead (int minor)
 int dbugWrite (int minor, const char *buf, int len)
 {
 	static char txBuf;
-	
+
 	while (len--) {
  		txBuf = *buf++;
         	dbug_out_char( minor, (int)txBuf );
@@ -318,7 +318,7 @@ static void fmt_str( int minor, const char* );
 /******************************************************
   Name: RAW_GETC
   Input parameters: channel, buffer and its length
-  Output parameters: 
+  Output parameters:
   Description: a light blocking "getc"
  *****************************************************/
 char RAW_GETC(int minor)

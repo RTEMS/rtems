@@ -87,8 +87,8 @@ uint32_t   erc32_sonic_read_register(
 #define SONIC_VECTOR 0x1E
 
 sonic_configuration_t erc32_sonic_configuration = {
-  SONIC_BASE_ADDRESS,        /* base address */ 
-  SONIC_VECTOR,              /* vector number */ 
+  SONIC_BASE_ADDRESS,        /* base address */
+  SONIC_VECTOR,              /* vector number */
   SONIC_DCR,                 /* DCR register value */
   SONIC_DC2,                 /* DC2 register value */
   TDA_COUNT,                 /* number of transmit descriptors */
@@ -105,5 +105,5 @@ int rtems_erc32_sonic_driver_attach(struct rtems_bsdnet_ifconfig *config)
   ERC32_MEC.Control |= 0x10000; 		/* Enable DMA */
   ERC32_MEC.Interrupt_Mask &= ~(1 << (SONIC_VECTOR - 0x10));
   return(rtems_sonic_driver_attach( config, &erc32_sonic_configuration ));
-  
+
 }

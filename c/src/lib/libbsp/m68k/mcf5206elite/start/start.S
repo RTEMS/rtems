@@ -314,17 +314,17 @@ SYM(start):
 	move.l	#(INITIAL_STACK),sp	| Set up stack again (may be we are
 					| going here from monitor or with
 					| BDM interface assistance)
-	
+
 	/*
 	 * Remainder of the startup code is handled by C code
 	 */
 	jmp	SYM(Init5206e)		| Start C code (which never returns)
-	
+
 /***************************************************************************
    Function : CopyDataClearBSSAndStart
 
-   Description : Copy DATA segment, clear BSS segment, initialize heap, 
-   initialise real stack, start C program. Assume that DATA and BSS sizes 
+   Description : Copy DATA segment, clear BSS segment, initialize heap,
+   initialise real stack, start C program. Assume that DATA and BSS sizes
    are multiples of 4.
  ***************************************************************************/
 	PUBLIC (CopyDataClearBSSAndStart)
@@ -396,7 +396,7 @@ _avec2_int:
 
 _avec3_int:
 	nop
-	jmp	_unexp_int 
+	jmp	_unexp_int
 
 _avec4_int:
 	nop

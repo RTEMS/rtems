@@ -142,9 +142,9 @@ static void m860_scc1_interrupt_handler ()
          */
         if ((m8xx.scc1.sccm & 0x8) && (m8xx.scc1.scce & 0x8)) {
                 m8xx.scc1.scce = 0x8;
-                /* I don't think the next line is needed. It was in 
+                /* I don't think the next line is needed. It was in
                  * the 68360 stuff, though.
-                 *   m8xx.scc1.sccm &= ~0x8; 
+                 *   m8xx.scc1.sccm &= ~0x8;
                  */
                 enet_driver[0].rxInterrupts++;
                 rtems_event_send (enet_driver[0].rxDaemonTid, INTERRUPT_EVENT);
@@ -155,9 +155,9 @@ static void m860_scc1_interrupt_handler ()
          */
         if ((m8xx.scc1.sccm & 0x12) && (m8xx.scc1.scce & 0x12)) {
                 m8xx.scc1.scce = 0x12;
-                /* I don't think the next line is needed. It was in 
+                /* I don't think the next line is needed. It was in
                  * the 68360 stuff, though.
-                 *   m8xx.scc1.sccm &= ~0x12; 
+                 *   m8xx.scc1.sccm &= ~0x12;
                  */
                 enet_driver[0].txInterrupts++;
                 rtems_event_send (enet_driver[0].txDaemonTid, INTERRUPT_EVENT);
@@ -177,7 +177,7 @@ static void m860_fec_interrupt_handler ()
     enet_driver[0].rxInterrupts++;
     rtems_event_send (enet_driver[0].rxDaemonTid, INTERRUPT_EVENT);
   }
-  
+
   /*
    * Buffer transmitted or transmitter error?
    */
@@ -203,17 +203,17 @@ m860_scc_initialize_hardware (struct m860_enet_struct *sc)
 {
   int i;
   unsigned char *hwaddr;
-  
+
   /*
    * Configure port A CLK1, CLK2, TXD1 and RXD1 pins
    */
   m8xx.papar |=  0x303;
   m8xx.padir &= ~0x303;
   m8xx.paodr &= ~0x303;
-  
+
   /*
    * Configure port C CTS1* and CD1* pins, and PC4-PC7
-   *  
+   *
    */
   m8xx.pcpar &= ~0x30;
   m8xx.pcdir |= 0x0f00;
@@ -221,28 +221,28 @@ m860_scc_initialize_hardware (struct m860_enet_struct *sc)
   m8xx.pcso  |=  0x30;
   m8xx.pcdat &= ~0x0f00;  /* Clear LOOP */
   m8xx.pcdat |= 0x0700;   /* Set FULDL, TPSQEL, TPAPCE */
-  
+
   /*
    * Connect CLK1 and CLK2 to SCC1
    */
   m8xx.sicr &= ~0xFF;
   m8xx.sicr |= (5 << 3) | 4;
-  
+
   /*
    * Initialize SDMA configuration register
    */
   m8xx.sdcr = 1;
-  
+
   /*
    * Allocate mbuf pointers
    */
-  sc->rxMbuf = malloc (sc->rxBdCount * sizeof *sc->rxMbuf, 
+  sc->rxMbuf = malloc (sc->rxBdCount * sizeof *sc->rxMbuf,
 		       M_MBUF, M_NOWAIT);
-  sc->txMbuf = malloc (sc->txBdCount * sizeof *sc->txMbuf, 
+  sc->txMbuf = malloc (sc->txBdCount * sizeof *sc->txMbuf,
 		       M_MBUF, M_NOWAIT);
   if (!sc->rxMbuf || !sc->txMbuf)
     rtems_panic ("No memory for mbuf pointers",0);
-  
+
   /*
    * Set receiver and transmitter buffer descriptor bases
    */
@@ -250,46 +250,46 @@ m860_scc_initialize_hardware (struct m860_enet_struct *sc)
   sc->txBdBase = m8xx_bd_allocate(sc->txBdCount);
   m8xx.scc1p.rbase = (char *)sc->rxBdBase - (char *)&m8xx;
   m8xx.scc1p.tbase = (char *)sc->txBdBase - (char *)&m8xx;
-  
+
   /*
    * Send "Init parameters" command
    */
   m8xx_cp_execute_cmd (M8xx_CR_OP_INIT_RX_TX | M8xx_CR_CHAN_SCC1);
-  
+
   /*
    * Set receive and transmit function codes
    */
   m8xx.scc1p.rfcr = M8xx_RFCR_MOT | M8xx_RFCR_DMA_SPACE(0);
   m8xx.scc1p.tfcr = M8xx_TFCR_MOT | M8xx_TFCR_DMA_SPACE(0);
-  
+
   /*
    * Set maximum receive buffer length
    */
   m8xx.scc1p.mrblr = RBUF_SIZE;
-  
+
   /*
    * Set CRC parameters
    */
   m8xx.scc1p.un.ethernet.c_pres = 0xFFFFFFFF;
   m8xx.scc1p.un.ethernet.c_mask = 0xDEBB20E3;
-  
+
   /*
    * Clear diagnostic counters
    */
   m8xx.scc1p.un.ethernet.crcec = 0;
   m8xx.scc1p.un.ethernet.alec = 0;
   m8xx.scc1p.un.ethernet.disfc = 0;
-  
+
   /*
    * Set pad value
    */
   m8xx.scc1p.un.ethernet.pads = 0x8888;
-  
+
   /*
    * Set retry limit
    */
   m8xx.scc1p.un.ethernet.ret_lim = 15;
-  
+
   /*
    * Set maximum and minimum frame length
    */
@@ -297,7 +297,7 @@ m860_scc_initialize_hardware (struct m860_enet_struct *sc)
   m8xx.scc1p.un.ethernet.minflr = 64;
   m8xx.scc1p.un.ethernet.maxd1 = RBUF_SIZE;
   m8xx.scc1p.un.ethernet.maxd2 = RBUF_SIZE;
-  
+
   /*
    * Clear group address hash table
    */
@@ -305,21 +305,21 @@ m860_scc_initialize_hardware (struct m860_enet_struct *sc)
   m8xx.scc1p.un.ethernet.gaddr2 = 0;
   m8xx.scc1p.un.ethernet.gaddr3 = 0;
   m8xx.scc1p.un.ethernet.gaddr4 = 0;
-  
+
   /*
    * Set our physical address
    */
   hwaddr = sc->arpcom.ac_enaddr;
-  
+
   m8xx.scc1p.un.ethernet.paddr_h = (hwaddr[5] << 8) | hwaddr[4];
   m8xx.scc1p.un.ethernet.paddr_m = (hwaddr[3] << 8) | hwaddr[2];
   m8xx.scc1p.un.ethernet.paddr_l = (hwaddr[1] << 8) | hwaddr[0];
-  
+
   /*
    * Aggressive retry
    */
   m8xx.scc1p.un.ethernet.p_per = 0;
-  
+
   /*
    * Clear individual address hash table
    */
@@ -327,14 +327,14 @@ m860_scc_initialize_hardware (struct m860_enet_struct *sc)
   m8xx.scc1p.un.ethernet.iaddr2 = 0;
   m8xx.scc1p.un.ethernet.iaddr3 = 0;
   m8xx.scc1p.un.ethernet.iaddr4 = 0;
-  
+
   /*
    * Clear temp address
    */
   m8xx.scc1p.un.ethernet.taddr_l = 0;
   m8xx.scc1p.un.ethernet.taddr_m = 0;
   m8xx.scc1p.un.ethernet.taddr_h = 0;
-  
+
   /*
    * Set up receive buffer descriptors
    */
@@ -351,12 +351,12 @@ m860_scc_initialize_hardware (struct m860_enet_struct *sc)
   }
   sc->txBdHead = sc->txBdTail = 0;
   sc->txBdActiveCount = 0;
-  
+
   /*
    * Clear any outstanding events
    */
   m8xx.scc1.scce = 0xFFFF;
-  
+
   /*
    * Set up interrupts
    */
@@ -364,20 +364,20 @@ m860_scc_initialize_hardware (struct m860_enet_struct *sc)
     rtems_panic ("Can't attach M8xx SCC1 interrupt handler\n",0);
   }
   m8xx.scc1.sccm = 0;     /* No interrupts unmasked till necessary */
-  
+
   /*
    * Set up General SCC Mode Register
    * Ethernet configuration
    */
   m8xx.scc1.gsmr_h = 0x0;
   m8xx.scc1.gsmr_l = 0x1088000c;
-  
+
   /*
    * Set up data synchronization register
    * Ethernet synchronization pattern
    */
   m8xx.scc1.dsr = 0xd555;
-  
+
   /*
    * Set up protocol-specific mode register
    *      No Heartbeat check
@@ -395,13 +395,13 @@ m860_scc_initialize_hardware (struct m860_enet_struct *sc)
    *      Disable full-duplex operation
    */
   m8xx.scc1.psmr = 0x080A | (sc->acceptBroadcast ? 0 : 0x100);
-  
+
   /*
    * Enable the TENA (RTS1*) pin
    */
   m8xx.pcpar |=  0x1;
   m8xx.pcdir &= ~0x1;
-  
+
   /*
    * Enable receiver and transmitter
    */
@@ -433,7 +433,7 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
    */
   m8xx.fec.ecntrl=0x1;
 
-  /* 
+  /*
    * Put ethernet transciever in reset
    */
   m8xx.pgcra |= 0x80;
@@ -452,10 +452,10 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
 
   /*
    * Set SIU interrupt level to LVL2
-   *  
+   *
    */
   m8xx.fec.ivec = ((((unsigned) BSP_FAST_ETHERNET_CTRL)/2) << 29);
-  
+
   /*
    * Set the TX and RX fifo sizes. For now, we'll split it evenly
    */
@@ -468,7 +468,7 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
    * Set our physical address
    */
   hwaddr = sc->arpcom.ac_enaddr;
-  
+
   m8xx.fec.addr_low = (hwaddr[0] << 24) | (hwaddr[1] << 16) |
                       (hwaddr[2] << 8)  | (hwaddr[3] << 0);
   m8xx.fec.addr_high = (hwaddr[4] << 24) | (hwaddr[5] << 16);
@@ -487,13 +487,13 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
   /*
    * Allocate mbuf pointers
    */
-  sc->rxMbuf = malloc (sc->rxBdCount * sizeof *sc->rxMbuf, 
+  sc->rxMbuf = malloc (sc->rxBdCount * sizeof *sc->rxMbuf,
                        M_MBUF, M_NOWAIT);
-  sc->txMbuf = malloc (sc->txBdCount * sizeof *sc->txMbuf, 
+  sc->txMbuf = malloc (sc->txBdCount * sizeof *sc->txMbuf,
                        M_MBUF, M_NOWAIT);
   if (!sc->rxMbuf || !sc->txMbuf)
     rtems_panic ("No memory for mbuf pointers",0);
-  
+
   /*
    * Set receiver and transmitter buffer descriptor bases
    */
@@ -501,7 +501,7 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
   sc->txBdBase = m8xx_bd_allocate(sc->txBdCount);
   m8xx.fec.r_des_start = (int)sc->rxBdBase;
   m8xx.fec.x_des_start = (int)sc->txBdBase;
-  
+
   /*
    * Set up Receive Control Register:
    *   Not promiscuous mode
@@ -535,17 +535,17 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
   m8xx.sdcr = 1;
 
   /*
-   * Set MII speed to 2.5 MHz for 25 Mhz system clock  
+   * Set MII speed to 2.5 MHz for 25 Mhz system clock
    */
   m8xx.fec.mii_speed = 0x0a;
   m8xx.fec.mii_data = 0x58021000;
-  
+
   /*
    * Set up receive buffer descriptors
    */
   for (i = 0 ; i < sc->rxBdCount ; i++)
     (sc->rxBdBase + i)->status = 0;
-  
+
   /*
    * Set up transmit buffer descriptors
    */
@@ -555,13 +555,13 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
   }
   sc->txBdHead = sc->txBdTail = 0;
   sc->txBdActiveCount = 0;
-  
-  
+
+
 
   /*
    * Mask all FEC interrupts and clear events
    */
-  m8xx.fec.imask = M8xx_FEC_IEVENT_TFINT | 
+  m8xx.fec.imask = M8xx_FEC_IEVENT_TFINT |
                    M8xx_FEC_IEVENT_RFINT;
   m8xx.fec.ievent = ~0;
 
@@ -589,7 +589,7 @@ m860Enet_retire_tx_bd (struct m860_enet_struct *sc)
   int i;
   int nRetired;
   struct mbuf *m, *n;
-  
+
   i = sc->txBdTail;
   nRetired = 0;
   while ((sc->txBdActiveCount != 0)
@@ -615,7 +615,7 @@ m860Enet_retire_tx_bd (struct m860_enet_struct *sc)
           enet_driver[0].txRetryLimit++;
         if (status & M8xx_BD_UNDERRUN)
           enet_driver[0].txUnderrun++;
-        
+
         /*
          * Restart the transmitter
          */
@@ -661,7 +661,7 @@ scc_rxDaemon (void *arg)
   uint16_t   status;
   m8xxBufferDescriptor_t *rxBd;
   int rxBdIndex;
-  
+
   /*
    * Allocate space for incoming packets and start reception
    */
@@ -678,14 +678,14 @@ scc_rxDaemon (void *arg)
       break;
     }
   }
-  
+
   /*
    * Input packet handling loop
    */
   rxBdIndex = 0;
   for (;;) {
     rxBd = sc->rxBdBase + rxBdIndex;
-    
+
     /*
      * Wait for packet if there's not one ready
      */
@@ -694,7 +694,7 @@ scc_rxDaemon (void *arg)
        * Clear old events
        */
       m8xx.scc1.scce = 0x8;
-      
+
       /*
        * Wait for packet
        * Note that the buffer descriptor is checked
@@ -704,19 +704,19 @@ scc_rxDaemon (void *arg)
        */
       while ((status = rxBd->status) & M8xx_BD_EMPTY) {
         rtems_event_set events;
-        
+
         /*
          * Unmask RXF (Full frame received) event
          */
         m8xx.scc1.sccm |= 0x8;
-        
+
         rtems_bsdnet_event_receive (INTERRUPT_EVENT,
                                     RTEMS_WAIT|RTEMS_EVENT_ANY,
                                     RTEMS_NO_TIMEOUT,
                                     &events);
       }
     }
-    
+
     /*
      * Check that packet is valid
      */
@@ -735,7 +735,7 @@ scc_rxDaemon (void *arg)
        * FIXME: Packet filtering hook could be done here.
        */
       struct ether_header *eh;
-      
+
       m = sc->rxMbuf[rxBdIndex];
       m->m_len = m->m_pkthdr.len = rxBd->length -
         sizeof(uint32_t) -
@@ -743,7 +743,7 @@ scc_rxDaemon (void *arg)
       eh = mtod (m, struct ether_header *);
       m->m_data += sizeof(struct ether_header);
       ether_input (ifp, eh, m);
-      
+
       /*
        * Allocate a new mbuf
        */
@@ -774,13 +774,13 @@ scc_rxDaemon (void *arg)
       if (status & M8xx_BD_COLLISION)
         sc->rxCollision++;
     }
-    
+
     /*
      * Reenable the buffer descriptor
      */
     rxBd->status = (status & (M8xx_BD_WRAP | M8xx_BD_INTERRUPT)) |
                     M8xx_BD_EMPTY;
-    
+
     /*
      * Move to next buffer descriptor
      */
@@ -798,7 +798,7 @@ fec_rxDaemon (void *arg)
   uint16_t   status;
   m8xxBufferDescriptor_t *rxBd;
   int rxBdIndex;
-  
+
   /*
    * Allocate space for incoming packets and start reception
    */
@@ -816,14 +816,14 @@ fec_rxDaemon (void *arg)
       break;
     }
   }
-  
+
   /*
    * Input packet handling loop
    */
   rxBdIndex = 0;
   for (;;) {
     rxBd = sc->rxBdBase + rxBdIndex;
-    
+
     /*
      * Wait for packet if there's not one ready
      */
@@ -832,7 +832,7 @@ fec_rxDaemon (void *arg)
        * Clear old events
        */
       m8xx.fec.ievent = M8xx_FEC_IEVENT_RFINT;
-      
+
       /*
        * Wait for packet
        * Note that the buffer descriptor is checked
@@ -842,19 +842,19 @@ fec_rxDaemon (void *arg)
        */
       while ((status = rxBd->status) & M8xx_BD_EMPTY) {
         rtems_event_set events;
-        
+
         /*
          * Unmask RXF (Full frame received) event
          */
         m8xx.fec.ievent |= M8xx_FEC_IEVENT_RFINT;
-        
+
         rtems_bsdnet_event_receive (INTERRUPT_EVENT,
                                     RTEMS_WAIT|RTEMS_EVENT_ANY,
                                     RTEMS_NO_TIMEOUT,
                                     &events);
       }
     }
-    
+
     /*
      * Check that packet is valid
      */
@@ -864,7 +864,7 @@ fec_rxDaemon (void *arg)
        * FIXME: Packet filtering hook could be done here.
        */
       struct ether_header *eh;
-      
+
       m = sc->rxMbuf[rxBdIndex];
       m->m_len = m->m_pkthdr.len = rxBd->length -
         sizeof(uint32_t) -
@@ -872,7 +872,7 @@ fec_rxDaemon (void *arg)
       eh = mtod (m, struct ether_header *);
       m->m_data += sizeof(struct ether_header);
       ether_input (ifp, eh, m);
-      
+
       /*
        * Allocate a new mbuf
        */
@@ -923,12 +923,12 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
   struct mbuf *l = NULL;
   uint16_t   status;
   int nAdded;
-  
+
   /*
    * Free up buffer descriptors
    */
   m860Enet_retire_tx_bd (sc);
-  
+
   /*
    * Set up the transmit buffer descriptors.
    * No need to pad out short packets since the
@@ -947,7 +947,7 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
        * Clear old events
        */
       m8xx.scc1.scce = 0x12;
-      
+
       /*
        * Wait for buffer descriptor to become available.
        * Note that the buffer descriptors are checked
@@ -963,7 +963,7 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
       m860Enet_retire_tx_bd (sc);
       while ((sc->txBdActiveCount + nAdded) == sc->txBdCount) {
         rtems_event_set events;
-        
+
                                 /*
                                  * Unmask TXB (buffer transmitted) and
                                  * TXE (transmitter error) events.
@@ -976,13 +976,13 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
         m860Enet_retire_tx_bd (sc);
       }
     }
-    
+
     /*
      * Don't set the READY flag till the
      * whole packet has been readied.
      */
     status = nAdded ? M8xx_BD_READY : 0;
-    
+
     /*
      *  FIXME: Why not deal with empty mbufs at at higher level?
      * The IP fragmentation routine in ip_output
@@ -1016,7 +1016,7 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
       if (l != NULL)
         l->m_next = m;
     }
-    
+
     /*
      * Set the transmit buffer status.
      * Break out of the loop if this mbuf is the last in the frame.
@@ -1043,12 +1043,12 @@ fec_sendpacket (struct ifnet *ifp, struct mbuf *m)
   /*  struct mbuf *l = NULL; */
   uint16_t   status;
   int nAdded;
-  
+
   /*
    * Free up buffer descriptors
    */
   m860Enet_retire_tx_bd (sc);
-  
+
   /*
    * Set up the transmit buffer descriptors.
    * No need to pad out short packets since the
@@ -1067,7 +1067,7 @@ fec_sendpacket (struct ifnet *ifp, struct mbuf *m)
        * Clear old events
        */
       m8xx.fec.ievent = M8xx_FEC_IEVENT_TFINT;
-      
+
       /*
        * Wait for buffer descriptor to become available.
        * Note that the buffer descriptors are checked
@@ -1083,7 +1083,7 @@ fec_sendpacket (struct ifnet *ifp, struct mbuf *m)
       m860Enet_retire_tx_bd (sc);
       while ((sc->txBdActiveCount + nAdded) == sc->txBdCount) {
         rtems_event_set events;
-        
+
         /*
          * Unmask TXB (buffer transmitted) and
          * TXE (transmitter error) events.
@@ -1096,13 +1096,13 @@ fec_sendpacket (struct ifnet *ifp, struct mbuf *m)
         m860Enet_retire_tx_bd (sc);
       }
     }
-    
+
     /*
      * Don't set the READY flag till the
      * whole packet has been readied.
      */
     status = nAdded ? M8xx_BD_READY : 0;
-    
+
     /*
      *  FIXME: Why not deal with empty mbufs at at higher level?
      * The IP fragmentation routine in ip_output
@@ -1138,7 +1138,7 @@ fec_sendpacket (struct ifnet *ifp, struct mbuf *m)
         l->m_next = m;
       */
     }
-    
+
     /*
      * Set the transmit buffer status.
      * Break out of the loop if this mbuf is the last in the frame.
@@ -1168,13 +1168,13 @@ scc_txDaemon (void *arg)
   struct ifnet *ifp = &sc->arpcom.ac_if;
   struct mbuf *m;
   rtems_event_set events;
-  
+
   for (;;) {
     /*
      * Wait for packet
      */
     rtems_bsdnet_event_receive (START_TRANSMIT_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, RTEMS_NO_TIMEOUT, &events);
-    
+
     /*
      * Send packets till queue is empty
      */
@@ -1198,16 +1198,16 @@ fec_txDaemon (void *arg)
   struct ifnet *ifp = &sc->arpcom.ac_if;
   struct mbuf *m;
   rtems_event_set events;
-  
+
   for (;;) {
     /*
      * Wait for packet
      */
-    rtems_bsdnet_event_receive (START_TRANSMIT_EVENT, 
-                                RTEMS_EVENT_ANY | RTEMS_WAIT, 
-                                RTEMS_NO_TIMEOUT, 
+    rtems_bsdnet_event_receive (START_TRANSMIT_EVENT,
+                                RTEMS_EVENT_ANY | RTEMS_WAIT,
+                                RTEMS_NO_TIMEOUT,
                                 &events);
-    
+
     /*
      * Send packets till queue is empty
      */
@@ -1231,7 +1231,7 @@ static void
 m860_enet_start (struct ifnet *ifp)
 {
   struct m860_enet_struct *sc = ifp->if_softc;
-  
+
   rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
   ifp->if_flags |= IFF_OACTIVE;
 }
@@ -1244,22 +1244,22 @@ scc_init (void *arg)
 {
   struct m860_enet_struct *sc = arg;
   struct ifnet *ifp = &sc->arpcom.ac_if;
-  
+
   if (sc->txDaemonTid == 0) {
-    
+
     /*
      * Set up SCC hardware
      */
     m860_scc_initialize_hardware (sc);
-    
+
     /*
      * Start driver tasks
      */
     sc->txDaemonTid = rtems_bsdnet_newproc ("SCtx", 4096, scc_txDaemon, sc);
     sc->rxDaemonTid = rtems_bsdnet_newproc ("SCrx", 4096, scc_rxDaemon, sc);
-    
+
   }
-  
+
   /*
    * Set flags appropriately
    */
@@ -1267,12 +1267,12 @@ scc_init (void *arg)
     m8xx.scc1.psmr |= 0x200;
   else
     m8xx.scc1.psmr &= ~0x200;
-  
+
   /*
    * Tell the world that we're running.
    */
   ifp->if_flags |= IFF_RUNNING;
-  
+
   /*
    * Enable receiver and transmitter
    */
@@ -1284,22 +1284,22 @@ fec_init (void *arg)
 {
   struct m860_enet_struct *sc = arg;
   struct ifnet *ifp = &sc->arpcom.ac_if;
-  
+
   if (sc->txDaemonTid == 0) {
-    
+
     /*
      * Set up SCC hardware
      */
     m860_fec_initialize_hardware (sc);
-    
+
     /*
      * Start driver tasks
      */
     sc->txDaemonTid = rtems_bsdnet_newproc ("SCtx", 4096, fec_txDaemon, sc);
     sc->rxDaemonTid = rtems_bsdnet_newproc ("SCrx", 4096, fec_rxDaemon, sc);
-    
+
   }
-  
+
   /*
    * Set flags appropriately
    */
@@ -1308,12 +1308,12 @@ fec_init (void *arg)
   else
     m8xx.fec.r_cntrl &= ~0x8;
 
-  
+
   /*
    * Tell the world that we're running.
    */
   ifp->if_flags |= IFF_RUNNING;
-  
+
   /*
    * Enable receiver and transmitter
    */
@@ -1328,9 +1328,9 @@ static void
 scc_stop (struct m860_enet_struct *sc)
 {
   struct ifnet *ifp = &sc->arpcom.ac_if;
-  
+
   ifp->if_flags &= ~IFF_RUNNING;
-  
+
   /*
    * Shut down receiver and transmitter
    */
@@ -1341,9 +1341,9 @@ static void
 fec_stop (struct m860_enet_struct *sc)
 {
   struct ifnet *ifp = &sc->arpcom.ac_if;
-  
+
   ifp->if_flags &= ~IFF_RUNNING;
-  
+
   /*
    * Shut down receiver and transmitter
    */
@@ -1366,7 +1366,7 @@ enet_stats (struct m860_enet_struct *sc)
   printf ("         Overrun:%-8lu", sc->rxOverrun);
   printf ("       Collision:%-8lu\n", sc->rxCollision);
   printf ("          Discarded:%-8lu\n", (unsigned long)m8xx.scc1p.un.ethernet.disfc);
-  
+
   printf ("      Tx Interrupts:%-8lu", sc->txInterrupts);
   printf ("        Deferred:%-8lu", sc->txDeferred);
   printf (" Missed Hearbeat:%-8lu\n", sc->txHeartbeat);
@@ -1385,37 +1385,37 @@ scc_ioctl (struct ifnet *ifp, int command, caddr_t data)
 {
   struct m860_enet_struct *sc = ifp->if_softc;
   int error = 0;
-  
+
   switch (command) {
   case SIOCGIFADDR:
   case SIOCSIFADDR:
     ether_ioctl (ifp, command, data);
     break;
-    
+
   case SIOCSIFFLAGS:
     switch (ifp->if_flags & (IFF_UP | IFF_RUNNING)) {
     case IFF_RUNNING:
       scc_stop (sc);
       break;
-      
+
     case IFF_UP:
       scc_init (sc);
       break;
-      
+
     case IFF_UP | IFF_RUNNING:
       scc_stop (sc);
       scc_init (sc);
       break;
-      
+
     default:
       break;
     }
     break;
-    
+
   case SIO_RTEMS_SHOW_STATS:
     enet_stats (sc);
     break;
-    
+
     /*
      * FIXME: All sorts of multicast commands need to be added here!
      */
@@ -1431,37 +1431,37 @@ fec_ioctl (struct ifnet *ifp, int command, caddr_t data)
 {
   struct m860_enet_struct *sc = ifp->if_softc;
   int error = 0;
-  
+
   switch (command) {
   case SIOCGIFADDR:
   case SIOCSIFADDR:
     ether_ioctl (ifp, command, data);
     break;
-    
+
   case SIOCSIFFLAGS:
     switch (ifp->if_flags & (IFF_UP | IFF_RUNNING)) {
     case IFF_RUNNING:
       fec_stop (sc);
       break;
-      
+
     case IFF_UP:
       fec_init (sc);
       break;
-      
+
     case IFF_UP | IFF_RUNNING:
       fec_stop (sc);
       fec_init (sc);
       break;
-      
+
     default:
       break;
     }
     break;
-    
+
   case SIO_RTEMS_SHOW_STATS:
     enet_stats (sc);
     break;
-    
+
     /*
      * FIXME: All sorts of multicast commands need to be added here!
      */
@@ -1482,7 +1482,7 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
   struct ifnet *ifp;
   int mtu;
   int i;
-  
+
   /*
    * Find a free driver
    */
@@ -1496,7 +1496,7 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
     printf ("Too many SCC drivers.\n");
     return 0;
   }
-  
+
   /*
    * Process options
    */
@@ -1524,7 +1524,7 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
   else
     sc->txBdCount = TX_BUF_COUNT * TX_BD_PER_BUF;
   sc->acceptBroadcast = !config->ignore_broadcast;
-  
+
   /*
    * Set up network interface values
    */
@@ -1539,7 +1539,7 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
   ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX;
   if (ifp->if_snd.ifq_maxlen == 0)
     ifp->if_snd.ifq_maxlen = ifqmaxlen;
-  
+
   /*
    * Attach the interface
    */
@@ -1554,7 +1554,7 @@ rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
   struct m860_enet_struct *sc;
   struct ifnet *ifp;
   int mtu;
-  
+
   /*
    * Find a free driver
    */
@@ -1563,7 +1563,7 @@ rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
   if (ifp->if_softc != NULL)
     return 0;
 
-  
+
   /*
    * Process options
    */
@@ -1591,7 +1591,7 @@ rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
   else
     sc->txBdCount = TX_BUF_COUNT * TX_BD_PER_BUF;
   sc->acceptBroadcast = !config->ignore_broadcast;
-  
+
   /*
    * Set up network interface values
    */
@@ -1606,7 +1606,7 @@ rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
   ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX;
   if (ifp->if_snd.ifq_maxlen == 0)
     ifp->if_snd.ifq_maxlen = ifqmaxlen;
-  
+
   /*
    * Attach the interface
    */

@@ -44,7 +44,7 @@ rtems_irq_connect_data clock_isr_data = {BSP_TC1OI,
      } while(0)
 
 
-/* 
+/*
  * Set up the clock hardware
 */
 #define Clock_driver_support_initialize_hardware()                            \

@@ -27,7 +27,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: 
+ *  $Id:
  */
 
 #include <string.h>
@@ -61,7 +61,7 @@ static unsigned long ulBusSpeed[] = {
  *  The original table from the application and our copy of it with
  *  some changes.
  */
- 
+
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
 
@@ -142,13 +142,13 @@ void bsp_std_close( void )
 	close(stdout_fd);
 	close(stderr_fd);
 }
- 
+
 
 /*
  *  bsp_predriver_hook
  *
  *  Before drivers are setup.
- */ 
+ */
 void bsp_predriver_hook(void)
 {
   /* bsp_spurious_initialize; ??*/
@@ -266,7 +266,7 @@ void bsp_start( void )
    *  of work space from the last physical address on the CPU board.
    */
 
-  work_space_start = 
+  work_space_start =
     (unsigned char *)ulMemorySize - BSP_Configuration.work_space_size;
 
   if ( work_space_start <= (unsigned char *)&end ) {
@@ -282,7 +282,7 @@ void bsp_start( void )
 
   Cpu_table.exceptions_in_RAM = TRUE;
   Cpu_table.pretasking_hook = bsp_pretasking_hook;    /* init libc, etc. */
-  Cpu_table.predriver_hook = bsp_predriver_hook; 
+  Cpu_table.predriver_hook = bsp_predriver_hook;
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.do_zero_of_workspace = TRUE;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;

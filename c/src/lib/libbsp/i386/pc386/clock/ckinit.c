@@ -64,7 +64,7 @@ rtems_device_minor_number rtems_clock_minor;
 |      Description: Interrupt Service Routine for clock (0h) interruption.
 | Global Variables: Clock_driver_ticks, Clock_isrs.
 |        Arguments: vector - standard RTEMS argument - see documentation.
-|          Returns: standard return value - see documentation. 
+|          Returns: standard return value - see documentation.
 +--------------------------------------------------------------------------*/
 static void clockIsr()
 {
@@ -99,7 +99,7 @@ static void clockIsr()
 |                   not really necessary, since there will be a reset at exit.
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void clockOff(const rtems_irq_connect_data* unused)
 {
@@ -115,7 +115,7 @@ void clockOff(const rtems_irq_connect_data* unused)
 |      Description: Initialize and install clock interrupt handler.
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 static void clockOn(const rtems_irq_connect_data* unused)
 {
@@ -162,9 +162,9 @@ static void clockOn(const rtems_irq_connect_data* unused)
     outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
     outport_byte(TIMER_CNTR0, count >> 0 & 0xff);
     outport_byte(TIMER_CNTR0, count >> 8 & 0xff);
-  } 
+  }
 
-} 
+}
 
 int clockIsOn(const rtems_irq_connect_data* unused)
 {
@@ -176,8 +176,8 @@ static rtems_irq_connect_data clockIrqData = {BSP_PERIODIC_TIMER,
 					      clockOn,
 					      clockOff,
 					      clockIsOn};
-					      
-					      
+
+
 
 /*-------------------------------------------------------------------------+
 | Clock device driver INITIALIZE entry point.
@@ -195,14 +195,14 @@ Clock_initialize(rtems_device_major_number major,
     rtems_fatal_error_occurred(1);
   }
   /* make major/minor avail to others such as shared memory driver */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 } /* Clock_initialize */
 
-					      
+
 /*-------------------------------------------------------------------------+
 | Console device driver CONTROL entry point
 +--------------------------------------------------------------------------*/
@@ -214,12 +214,12 @@ Clock_control(rtems_device_major_number major,
   if (pargp != NULL)
   {
     rtems_libio_ioctl_args_t *args = pargp;
-        
+
     /*-------------------------------------------------------------------------+
     | This is hokey, but until we get a defined interface to do this, it will
     | just be this simple...
     +-------------------------------------------------------------------------*/
- 
+
     if      (args->command == rtems_build_name('I', 'S', 'R', ' '))
       clockIsr();
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))

@@ -24,7 +24,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
- 
+
 /*
  *  The original table from the application and our copy of it with
  *  some changes.

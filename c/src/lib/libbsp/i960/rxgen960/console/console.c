@@ -38,20 +38,20 @@ rtems_device_driver console_initialize(
 )
 {
   rtems_status_code status;
- 
+
      if ( console_pmr_init(*(uint32_t*)arg) )
         return RTEMS_INVALID_NUMBER;
 
- 
+
   status = rtems_io_register_name(
     "/dev/console",
     major,
     (rtems_device_minor_number) 0
   );
- 
+
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
-  
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -133,7 +133,7 @@ rtems_device_driver console_open(
 {
   return RTEMS_SUCCESSFUL;
 }
- 
+
 /*
  *  Close entry point
  */
@@ -161,7 +161,7 @@ rtems_device_driver console_read(
   uint8_t   *buffer;
   uint32_t   maximum;
   uint32_t   count = 0;
- 
+
   rw_args = (rtems_libio_rw_args_t *) arg;
 
   buffer = rw_args->buffer;
@@ -191,7 +191,7 @@ rtems_device_driver console_read(
 }
 
 /*
- * write bytes to the serial port. Stdout and stderr are the same. 
+ * write bytes to the serial port. Stdout and stderr are the same.
  */
 
 rtems_device_driver console_write(

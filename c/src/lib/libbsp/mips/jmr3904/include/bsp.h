@@ -57,7 +57,7 @@ extern "C" {
 
 #define CLOCK_VECTOR TX3904_IRQ_TMR0
 
-#define Clear_tm27_intr()  
+#define Clear_tm27_intr()
 
 #define Lower_tm27_intr()
 #else
@@ -100,7 +100,7 @@ extern rtems_configuration_table BSP_Configuration;
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

@@ -25,16 +25,16 @@
  * residual data. The holes between these areas can be virtually
  * remapped to any of these, since for some functions it is very handy
  * to have virtually contiguous but physically discontiguous memory.
- * 
+ *
  * Physical memory allocation is also very crude, since it's only
  * designed to manage a small number of large chunks. For valloc/vfree
  * and palloc/pfree, the unit of allocation is the 4kB page.
- * 
+ *
  * The salloc/sfree has been added after tracing gunzip and seeing
  * how it performed a very large number of small allocations.
  * For these the unit of allocation is 8 bytes (the s stands for
- * small or subpage). This memory is cleared when allocated. 
- * 
+ * small or subpage). This memory is cleared when allocated.
+ *
  */
 
 #include <rtems/bspIo.h>
@@ -50,7 +50,7 @@
  * we want to avoid potential clashes with kernel includes.
  * Here a map maps contiguous areas from base to end,
  * the firstpte entry corresponds to physical address and has the low
- * order bits set for caching and permission. 
+ * order bits set for caching and permission.
  */
 
 typedef struct _map {
@@ -82,7 +82,7 @@ typedef struct _map {
 #define MAP_FREE_SUBS 6
 #define MAP_USED_SUBS 7
 
-#define MAP_FREE 4	
+#define MAP_FREE 4
 #define MAP_FREE_PHYS 12
 #define MAP_USED_PHYS 13
 #define MAP_FREE_VIRT 20
@@ -114,7 +114,7 @@ struct _mm_private {
   	map *sallocused;   /* Used maps for salloc */
   	map *sallocphys;   /* Physical areas used by salloc */
   	u_int hashcnt;     /* Used to cycle in PTEG when they overflow */
-} mm_private = {hashmask: 0xffc0, 
+} mm_private = {hashmask: 0xffc0,
 		freemaps: free_maps+0};
 
 /* A simplified hash table entry declaration */
@@ -125,7 +125,7 @@ typedef struct _hash_entry {
 
 void print_maps(map *, const char *);
 
-/* The handler used for all exceptions although for now it is only 
+/* The handler used for all exceptions although for now it is only
  * designed to properly handle MMU interrupts to fill the hash table.
  */
 
@@ -149,7 +149,7 @@ void _handler(int vec, ctxt *p) {
 			printk("\nPanic: vector=%x, cause=%lx\n", vec, cause);
 			hang("Memory protection violation at ", vaddr, p);
 		}
-		
+
 		for(area=mm->mappings; area; area=area->next) {
 		  	if(area->base<=vaddr && vaddr<=area->end) break;
 		}
@@ -158,13 +158,13 @@ void _handler(int vec, ctxt *p) {
 			u_long hash, vsid, rpn;
 			hash_entry volatile *hte, *_hte1;
 			u_int i, alt=0, flushva;
-		
+
 			vsid = _read_SR((void *)vaddr);
 			rpn = (vaddr&PAGE_MASK)-area->base+area->firstpte;
 			hash = vsid<<6;
 			hash ^= (vaddr>>(PAGE_SHIFT-6))&0x3fffc0;
 			hash &= mm->hashmask;
-			/* Find an empty entry in the PTEG, else 
+			/* Find an empty entry in the PTEG, else
 			 * replace a random one.
 			 */
 			hte = (hash_entry *) ((u_long)(mm->sdr1)+hash);
@@ -174,14 +174,14 @@ void _handler(int vec, ctxt *p) {
 			hash ^= mm->hashmask;
 			alt = 0x40; _hte1 = hte;
 			hte = (hash_entry *) ((u_long)(mm->sdr1)+hash);
-			
+
 			for (i=0; i<8; i++) {
 				if (hte[i].key>=0) goto found;
 			}
 			alt = 0;
 			hte = _hte1;
 			/* Chose a victim entry and replace it. There might be
-			 * better policies to choose the victim, but in a boot 
+			 * better policies to choose the victim, but in a boot
 			 * loader we want simplicity as long as it works.
 			 *
 			 * We would not need to invalidate the TLB entry since
@@ -211,7 +211,7 @@ void _handler(int vec, ctxt *p) {
 		}
 	} else {
 	  MMUon();
-	  printk("\nPanic: vector=%x, dsisr=%lx, faultaddr =%lx, msr=%lx opcode=%lx\n", vec, 
+	  printk("\nPanic: vector=%x, dsisr=%lx, faultaddr =%lx, msr=%lx opcode=%lx\n", vec,
 		 cause, p->nip, p->msr, * ((unsigned int*) p->nip) );
 	  if (vec == 7) {
 	    unsigned int* ptr = ((unsigned int*) p->nip) - 4 * 10;
@@ -308,13 +308,13 @@ map * alloc_map_page(void) {
 	if (!from) return NULL;
 
 	from->end -= PAGE_SIZE;
-	
+
 	mm->freemaps = (map *) (from->end+1);
-	
+
 	for(p=mm->freemaps; p<mm->freemaps+PAGE_SIZE/sizeof(map)-1; p++) {
 		p->next = p+1;
 		p->firstpte = MAP_FREE;
-	}  
+	}
 	(p-1)->next=0;
 
 	/* Take the last one as pointer to self and insert
@@ -324,12 +324,12 @@ map * alloc_map_page(void) {
 	p->firstpte = MAP_PERM_PHYS;
 	p->base=(u_long) mm->freemaps;
 	p->end = p->base+PAGE_SIZE-1;
-	
+
 	insert_map(&mm->physperm, p);
-	
-	if (from->end+1 == from->base) 
+
+	if (from->end+1 == from->base)
 		free_map(remove_map(&mm->physavail, from));
-	
+
 	return mm->freemaps;
 }
 
@@ -364,13 +364,13 @@ void coalesce_maps(map *p) {
 
 /* These routines are used to find the free memory zones to avoid
  * overlapping destructive copies when initializing.
- * They work from the top because of the way we want to boot. 
+ * They work from the top because of the way we want to boot.
  * In the following the term zone refers to the memory described
  * by one or several contiguous so called segments in the
  * residual data.
  */
 #define STACK_PAGES 2
-static inline u_long 
+static inline u_long
 find_next_zone(RESIDUAL *res, u_long lowpage, u_long flags) {
 	u_long i, newmin=0, size=0;
 	for(i=0; i<res->ActualNumMemSegs; i++) {
@@ -384,14 +384,14 @@ find_next_zone(RESIDUAL *res, u_long lowpage, u_long flags) {
 	return newmin+size;
 }
 
-static inline u_long 
+static inline u_long
 find_zone_start(RESIDUAL *res, u_long highpage, u_long flags) {
 	u_long i;
 	int progress;
 	do {
 		progress=0;
 		for (i=0; i<res->ActualNumMemSegs; i++) {
-		  	if ( (res->Segs[i].BasePage+res->Segs[i].PageCount 
+		  	if ( (res->Segs[i].BasePage+res->Segs[i].PageCount
 			      == highpage)
 			     && res->Segs[i].Usage & flags) {
 			  	highpage=res->Segs[i].BasePage;
@@ -441,8 +441,8 @@ fix_residual( RESIDUAL *res )
 	res->Segs[i].BasePage = seg_fix[i].BasePage;
 	res->Segs[i].PageCount = seg_fix[i].PageCount;
     }
-    /* The following should be fixed in the current version of the 
-     * kernel and of the bootloader. 
+    /* The following should be fixed in the current version of the
+     * kernel and of the bootloader.
      */
 #if 0
     /* PPCBug has this zero */
@@ -468,10 +468,10 @@ fix_residual( RESIDUAL *res )
 
 /* This routine is the first C code called with very little stack space!
  * Its goal is to find where the boot image can be moved. This will
- * be the highest address with enough room. 
+ * be the highest address with enough room.
  */
 int early_setup(u_long image_size) {
-	register RESIDUAL *res = bd->residual; 
+	register RESIDUAL *res = bd->residual;
 	u_long minpages = PAGE_ALIGN(image_size)>>PAGE_SHIFT;
 
 	/* Fix residual if we are loaded by Motorola NT firmware */
@@ -481,19 +481,19 @@ int early_setup(u_long image_size) {
 	/* FIXME: if OF we should do something different */
 	if( !bd->of_entry && res &&
 	   res->ResidualLength <= sizeof(RESIDUAL) && res->Version == 0 ) {
-		u_long lowpage=ULONG_MAX, highpage; 
+		u_long lowpage=ULONG_MAX, highpage;
 		u_long imghigh=0, stkhigh=0;
-		/* Find the highest and large enough contiguous zone 
+		/* Find the highest and large enough contiguous zone
 		   consisting of free and BootImage sections. */
-		/* Find 3 free areas of memory, one for the main image, one 
-		 * for the stack (STACK_PAGES), and page one to put the map  
-		 * structures. They are allocated from the top of memory. 
+		/* Find 3 free areas of memory, one for the main image, one
+		 * for the stack (STACK_PAGES), and page one to put the map
+		 * structures. They are allocated from the top of memory.
 		 * In most cases the stack will be put just below the image.
 		 */
-		while((highpage = 
+		while((highpage =
 		       find_next_zone(res, lowpage, BootImage|Free))) {
 			lowpage=find_zone_start(res, highpage, BootImage|Free);
-			if ((highpage-lowpage)>minpages && 
+			if ((highpage-lowpage)>minpages &&
 			    highpage>imghigh) {
 				imghigh=highpage;
 				highpage -=minpages;
@@ -510,14 +510,14 @@ int early_setup(u_long image_size) {
 
 		/* The code mover is put at the lowest possible place
 		 * of free memory. If this corresponds to the loaded boot
-		 * partition image it does not matter because it overrides 
-		 * the unused part of it (x86 code). 
+		 * partition image it does not matter because it overrides
+		 * the unused part of it (x86 code).
 		 */
 		bd->mover=(void *) (lowpage<<PAGE_SHIFT);
 
-		/* Let us flush the caches in all cases. After all it should 
-		 * not harm even on 601 and we don't care about performance. 
-		 * Right now it's easy since all processors have a line size 
+		/* Let us flush the caches in all cases. After all it should
+		 * not harm even on 601 and we don't care about performance.
+		 * Right now it's easy since all processors have a line size
 		 * of 32 bytes. Once again residual data has proved unreliable.
 		 */
 		bd->cache_lsize = 32;
@@ -548,14 +548,14 @@ void * valloc(u_long size) {
 	return (void *)q->base;
 }
 
-static 
+static
 void vflush(map *virtmap) {
 	struct _mm_private * mm = (struct _mm_private *) bd->mm_private;
 	u_long i, limit=(mm->hashmask>>3)+8;
 	hash_entry volatile *p=(hash_entry *) mm->sdr1;
 
 	/* PTE handling is simple since the processor never update
-	 * the entries. Writable pages always have the C bit set and 
+	 * the entries. Writable pages always have the C bit set and
 	 * all valid entries have the R bit set. From the processor
 	 * point of view the hash table is read only.
 	 */
@@ -578,7 +578,7 @@ void vflush(map *virtmap) {
 void vfree(void *vaddr) {
 	map *physmap, *virtmap; /* Actual mappings pertaining to this vm */
 	struct _mm_private * mm = (struct _mm_private *) bd->mm_private;
-	
+
 	/* Flush memory queues */
 	asm volatile("sync": : : "memory");
 
@@ -588,7 +588,7 @@ void vfree(void *vaddr) {
 	/* Remove mappings corresponding to virtmap */
 	for (physmap=mm->mappings; physmap; ) {
 		map *nextmap=physmap->next;
-		if (physmap->base>=virtmap->base 
+		if (physmap->base>=virtmap->base
 		    && physmap->base<virtmap->end) {
 			free_map(remove_map(&mm->mappings, physmap));
 		}
@@ -598,22 +598,22 @@ void vfree(void *vaddr) {
 	vflush(virtmap);
 
 	virtmap->firstpte= MAP_FREE_VIRT;
-	insert_map(&mm->virtavail, virtmap); 
+	insert_map(&mm->virtavail, virtmap);
 	coalesce_maps(mm->virtavail);
 }
 
 void vunmap(void *vaddr) {
 	map *physmap, *virtmap; /* Actual mappings pertaining to this vm */
 	struct _mm_private *mm = (struct _mm_private *) bd->mm_private;
-	
+
 	/* Flush memory queues */
 	asm volatile("sync": : : "memory");
 
 	/* vaddr must be within one of the vm areas in use and
-	 * then must correspond to one of the physical areas 
+	 * then must correspond to one of the physical areas
 	 */
 	for (virtmap=mm->virtused; virtmap; virtmap=virtmap->next) {
-	  	if (virtmap->base<=(u_long)vaddr && 
+	  	if (virtmap->base<=(u_long)vaddr &&
 		    virtmap->end>=(u_long)vaddr) break;
 	}
 	if (!virtmap) return;
@@ -632,7 +632,7 @@ int vmap(void *vaddr, u_long p, u_long size) {
 	if(!size) return 1;
 	/* Check that the requested area fits in one vm image */
 	for (q=mm->virtused; q; q=q->next) {
-	  	if ((q->base <= (u_long)vaddr) && 
+	  	if ((q->base <= (u_long)vaddr) &&
 		    (q->end>=(u_long)vaddr+size -1)) break;
 	}
 	if (!q) return 1;
@@ -673,7 +673,7 @@ void add_free_map(u_long base, u_long end) {
 	q->base=base;
 	q->end=end-1;
 	q->firstpte=MAP_FREE_VIRT;
-	insert_map(&mm->virtavail, q); 
+	insert_map(&mm->virtavail, q);
 }
 
 static inline
@@ -691,10 +691,10 @@ void create_free_vm(void) {
 }
 
 /* Memory management initialization.
- * Set up the mapping lists. 
+ * Set up the mapping lists.
  */
 
-static inline 
+static inline
 void add_perm_map(u_long start, u_long size) {
 	struct _mm_private *mm = (struct _mm_private *) bd->mm_private;
 	map *p=alloc_map();
@@ -704,7 +704,7 @@ void add_perm_map(u_long start, u_long size) {
 	insert_map(& mm->physperm , p);
 }
 
-void mm_init(u_long image_size) 
+void mm_init(u_long image_size)
 {
 	u_long lowpage=ULONG_MAX, highpage;
 	struct _mm_private *mm = (struct _mm_private *) bd->mm_private;
@@ -716,7 +716,7 @@ void mm_init(u_long image_size)
 
 	/* The checks are simplified by the fact that the image
 	 * and stack area are always allocated at the upper end
-	 * of a free block. 
+	 * of a free block.
 	 */
 	while((highpage = find_next_zone(res, lowpage, BootImage|Free))) {
 		lowpage=find_zone_start(res, highpage, BootImage|Free);
@@ -727,7 +727,7 @@ void mm_init(u_long image_size)
 		}
 		if ( (( u_long)bd->stack>>PAGE_SHIFT) == highpage) {
 		  	highpage -= STACK_PAGES;
-			add_perm_map(highpage<<PAGE_SHIFT, 
+			add_perm_map(highpage<<PAGE_SHIFT,
 				     STACK_PAGES*PAGE_SIZE);
 		}
 		/* Protect the interrupt handlers that we need ! */
@@ -751,8 +751,8 @@ void mm_init(u_long image_size)
 	/* Setup the segment registers as we want them */
 	for (i=0; i<16; i++) _write_SR(i, (void *)(i<<28));
 	/* Create the maps for the physical memory, firwmarecode does not
-	 * seem to be necessary. ROM is mapped read-only to reduce the risk 
-	 * of reprogramming it because it's often Flash and some are 
+	 * seem to be necessary. ROM is mapped read-only to reduce the risk
+	 * of reprogramming it because it's often Flash and some are
 	 * amazingly easy to overwrite.
 	 */
 	create_identity_mappings(BootImage|Free|FirmwareCode|FirmwareHeap|
@@ -762,14 +762,14 @@ void mm_init(u_long image_size)
 				 PCIAddr|PCIConfig|ISAAddr, PTE_IO);
 
 	create_free_vm();
-	
+
 	/* Install our own MMU and trap handlers. */
-	codemove((void *) 0x300, _handler_glue, 0x100, bd->cache_lsize); 
-	codemove((void *) 0x400, _handler_glue, 0x100, bd->cache_lsize); 
-	codemove((void *) 0x600, _handler_glue, 0x100, bd->cache_lsize); 
-	codemove((void *) 0x700, _handler_glue, 0x100, bd->cache_lsize); 
+	codemove((void *) 0x300, _handler_glue, 0x100, bd->cache_lsize);
+	codemove((void *) 0x400, _handler_glue, 0x100, bd->cache_lsize);
+	codemove((void *) 0x600, _handler_glue, 0x100, bd->cache_lsize);
+	codemove((void *) 0x700, _handler_glue, 0x100, bd->cache_lsize);
 }
-  
+
 void * salloc(u_long size) {
 	map *p, *q;
 	struct _mm_private *mm = (struct _mm_private *) bd->mm_private;
@@ -816,17 +816,17 @@ void sfree(void *p) {
 }
 
 /* first/last area fit, flags is a power of 2 indicating the required
- * alignment. The algorithms are stupid because we expect very little 
+ * alignment. The algorithms are stupid because we expect very little
  * fragmentation of the areas, if any. The unit of allocation is the page.
  * The allocation is by default performed from higher addresses down,
- * unless flags&PA_LOW is true. 
+ * unless flags&PA_LOW is true.
  */
 
-void * __palloc(u_long size, int flags) 
+void * __palloc(u_long size, int flags)
 {
 	u_long mask = ((1<<(flags&PA_ALIGN_MASK))-1);
 	map *newmap, *frommap, *p, *splitmap=0;
-	map **queue; 
+	map **queue;
 	u_long qflags;
 	struct _mm_private *mm = (struct _mm_private *) bd->mm_private;
 
@@ -849,7 +849,7 @@ void * __palloc(u_long size, int flags)
 	}
 	/* We need to allocate that one now so no two allocations may attempt
 	 * to take the same memory simultaneously. Alloc_map_page does
-	 * not call back here to avoid infinite recursion in alloc_map. 
+	 * not call back here to avoid infinite recursion in alloc_map.
 	 */
 
 	if (mask&PAGE_MASK) {
@@ -868,11 +868,11 @@ void * __palloc(u_long size, int flags)
 
 	if (!frommap) {
 		if (splitmap) free_map(splitmap);
-		return NULL;  
+		return NULL;
 	}
-	
+
 	newmap=alloc_map();
-	
+
 	if (flags&PA_LOW) {
 		newmap->base = (frommap->base+mask)&~mask;
 	} else {
@@ -883,7 +883,7 @@ void * __palloc(u_long size, int flags)
 	newmap->firstpte = qflags;
 
 	/* Add a fragment if we don't allocate until the end. */
-	
+
 	if (splitmap) {
 		splitmap->base=newmap->base+size;
 		splitmap->end=frommap->end;
@@ -904,13 +904,13 @@ void * __palloc(u_long size, int flags)
 	  	if (splitmap->base == splitmap->end+1) {
 			free_map(remove_map(&mm->physavail, splitmap));
 		} else {
-			insert_map(&mm->physavail, splitmap);  
+			insert_map(&mm->physavail, splitmap);
 		}
 	}
 
 	insert_map(queue, newmap);
 	return (void *) newmap->base;
-		
+
 }
 
 void pfree(void * p) {
@@ -923,13 +923,13 @@ void pfree(void * p) {
 	coalesce_maps(mm->physavail);
 }
 
-#ifdef DEBUG 
+#ifdef DEBUG
 /* Debugging functions */
 void print_maps(map *chain, const char *s) {
 	map *p;
 	printk("%s",s);
 	for(p=chain; p; p=p->next) {
-		printk("    %08lx-%08lx: %08lx\n", 
+		printk("    %08lx-%08lx: %08lx\n",
 		       p->base, p->end, p->firstpte);
 	}
 }

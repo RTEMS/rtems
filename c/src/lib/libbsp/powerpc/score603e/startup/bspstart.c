@@ -12,7 +12,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: 
+ *  $Id:
  */
 
 #include <string.h>
@@ -25,7 +25,7 @@
  *  The original table from the application and our copy of it with
  *  some changes.
  */
- 
+
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
 rtems_cpu_table                   Cpu_table;
@@ -71,7 +71,7 @@ void bsp_pretasking_hook(void)
  *  bsp_predriver_hook
  *
  *  Before drivers are setup initialize interupt vectors.
- */ 
+ */
 
 void init_RTC();
 void initialize_PMC();
@@ -88,13 +88,13 @@ void bsp_predriver_hook(void)
   initialize_PMC();
 #endif
 
- /* 
+ /*
   * Initialize Bsp General purpose vector table.
   */
  initialize_external_exception_vector();
 
 #if (0)
-  /* 
+  /*
    * XXX - Modify this to write a 48000000 (loop to self) command
    *       to each interrupt location.  This is better for debug.
    */
@@ -167,7 +167,7 @@ void initialize_PMC() {
  *
  *  Standard post driver hook plus some BSP specific stuff.
  */
- 
+
 void SCORE603e_bsp_postdriver_hook(void)
 {
   extern void Init_EE_mask_init(void);
@@ -205,27 +205,27 @@ void bsp_start( void )
   );
 
   /*
-   *  There are multiple ROM monitors available for this board.  
+   *  There are multiple ROM monitors available for this board.
    */
 #if (SCORE603E_USE_SDS)
 
-  /* 
+  /*
    * Write instruction for Unconditional Branch to ROM vector.
    */
-    
-   Code = 0x4bf00002;          
-   for (Address = 0x100; Address <= 0xe00; Address += 0x100) { 
+
+   Code = 0x4bf00002;
+   for (Address = 0x100; Address <= 0xe00; Address += 0x100) {
      A_Vector = (uint32_t*)Address;
      Code = 0x4bf00002 + Address;
      *A_Vector = Code;
    }
-    
-   for (Address = 0x1000; Address <= 0x1400; Address += 0x100) { 
+
+   for (Address = 0x1000; Address <= 0x1400; Address += 0x100) {
      A_Vector = (uint32_t*)Address;
      Code = 0x4bf00002 + Address;
      *A_Vector = Code;
    }
-   
+
   Cpu_table.exceptions_in_RAM = TRUE;
   msr_value = 0x2030;
 
@@ -263,7 +263,7 @@ void bsp_start( void )
    *  not malloc'ed.  It is just "pulled from the air".
    */
 
-  work_space_start = 
+  work_space_start =
     (unsigned char *)&RAM_END - BSP_Configuration.work_space_size;
 
   if ( work_space_start <= (unsigned char *)&end ) {
@@ -287,7 +287,7 @@ void bsp_start( void )
   Cpu_table.idle_task_stack_size = (3 * STACK_MINIMUM_SIZE);
 
 #if ( PPC_USE_DATA_CACHE )
-  instruction_cache_enable (); 
+  instruction_cache_enable ();
   data_cache_enable ();
 #endif
 }

@@ -1,5 +1,5 @@
 /*
- *  This file contains the assembly code for the PowerPC 
+ *  This file contains the assembly code for the PowerPC
  *  IRQ veneers for RTEMS.
  *
  *  The license and distribution terms for this file may be
@@ -15,22 +15,22 @@
  *
  * $Id$
  */
-  	
+
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <bsp/vectors.h>
 #include <libcpu/raw_exception.h>
-	
+
 
 #define SYNC \
 	sync; \
 	isync
-	
+
 	.text
-	.p2align 5	
-		
+	.p2align 5
+
 	PUBLIC_VAR(decrementer_exception_vector_prolog_code)
-	
+
 SYM (decrementer_exception_vector_prolog_code):
 	/*
 	 * let room for exception frame
@@ -41,11 +41,11 @@ SYM (decrementer_exception_vector_prolog_code):
 	ba	shared_raw_irq_code_entry
 
 	PUBLIC_VAR (decrementer_exception_vector_prolog_code_size)
-	
+
 	decrementer_exception_vector_prolog_code_size = . - decrementer_exception_vector_prolog_code
 
 	PUBLIC_VAR(external_exception_vector_prolog_code)
-	
+
 SYM (external_exception_vector_prolog_code):
 	/*
 	 * let room for exception frame
@@ -56,12 +56,12 @@ SYM (external_exception_vector_prolog_code):
 	ba	shared_raw_irq_code_entry
 
 	PUBLIC_VAR (external_exception_vector_prolog_code_size)
-	
+
 	external_exception_vector_prolog_code_size = . - external_exception_vector_prolog_code
 
 	PUBLIC_VAR(shared_raw_irq_code_entry)
 	PUBLIC_VAR(C_dispatch_irq_handler)
-	
+
 	.p2align 5
 SYM (shared_raw_irq_code_entry):
 	/*
@@ -72,7 +72,7 @@ SYM (shared_raw_irq_code_entry):
 	 *	R4  :	vector number
 	 */
 	/*
-	 * Save SRR0/SRR1 As soon As possible as it is the minimal needed 
+	 * Save SRR0/SRR1 As soon As possible as it is the minimal needed
 	 * to reenable exception processing
 	 */
 	stw	r0, GPR0_OFFSET(r1)
@@ -81,10 +81,10 @@ SYM (shared_raw_irq_code_entry):
 	 */
 	stw	r2, GPR2_OFFSET(r1)
 	stw	r3, GPR3_OFFSET(r1)
-	
+
 	mfsrr0  r0
 	mfsrr1  r3
-	
+
 	stw	r0, SRR0_FRAME_OFFSET(r1)
 	stw	r3, SRR1_FRAME_OFFSET(r1)
 
@@ -123,7 +123,7 @@ SYM (shared_raw_irq_code_entry):
 	mfctr	r6
 	mfxer	r7
 	mflr	r8
-	
+
 	stw	r5,  EXC_CR_OFFSET(r1)
 	stw	r6,  EXC_CTR_OFFSET(r1)
 	stw	r7,  EXC_XER_OFFSET(r1)
@@ -161,9 +161,9 @@ SYM (shared_raw_irq_code_entry):
 	cmpwi	r3,0
 	bne	nested
 	mfspr	r1, SPRG1
-	
-nested:	
-	/* 
+
+nested:
+	/*
 	 * Start Incrementing nesting level in R3
 	 */
 	addi	r3,r3,1
@@ -180,7 +180,7 @@ nested:
 	/* store new nesting level in _ISR_Nest_level */
 	stw		r3, _ISR_Nest_level@l(r7)
 #endif
-	
+
 	addi	r6, r6, 1
 	mfmsr	r5
 	/*
@@ -190,7 +190,7 @@ nested:
 	/*
 	 * We are now running on the interrupt stack. External and decrementer
 	 * exceptions are still disabled. I see no purpose trying to optimize
-	 * further assembler code. 
+	 * further assembler code.
 	 */
 	/*
 	 * Call C exception handler for decrementer Interrupt frame is passed just
@@ -199,7 +199,7 @@ nested:
 	addi	r3, r14, 0x8
 	bl	C_dispatch_irq_handler /* C_dispatch_irq_handler(cpu_interrupt_frame* r3, vector r4) */
 	/*
-	 * start decrementing nesting level. Note : do not test result against 0 
+	 * start decrementing nesting level. Note : do not test result against 0
 	 * value as an easy exit condition because if interrupt nesting level > 1
 	 * then _Thread_Dispatch_disable_level > 1
 	 */
@@ -223,7 +223,7 @@ nested:
 	stw	r3,_Thread_Dispatch_disable_level@l(r15) /* End decrementing _Thread_Dispatch_disable_level */
 	cmpwi	r3, 0
 	/*
-	 * switch back to original stack (done here just optimize registers 
+	 * switch back to original stack (done here just optimize registers
 	 * contention. Could have been done before...)
 	 */
 	addi	r1, r14, 0
@@ -231,14 +231,14 @@ nested:
 	/*
 	 * Here we are running again on the thread system stack.
 	 * We have interrupt nesting level = _Thread_Dispatch_disable_level = 0.
-	 * Interrupt are still disabled. Time to check if scheduler request to 
+	 * Interrupt are still disabled. Time to check if scheduler request to
 	 * do something with the current thread...
 	 */
 	addis	r4, 0, _Context_Switch_necessary@ha
 	lwz	r5, _Context_Switch_necessary@l(r4)
 	cmpwi	r5, 0
 	bne	switch
-	
+
 	addis	r6, 0, _ISR_Signals_to_thread_executing@ha
 	lwz	r7, _ISR_Signals_to_thread_executing@l(r6)
 	cmpwi	r7, 0
@@ -270,12 +270,12 @@ nested:
 	lwz	r30,  EXC_XER_OFFSET(r1)
 	lwz	r29,  EXC_CR_OFFSET(r1)
 	lwz	r28,  EXC_LR_OFFSET(r1)
-	
+
 	mtctr	r31
 	mtxer	r30
 	mtcr	r29
 	mtlr	r28
-	
+
 	lmw	r4, GPR4_OFFSET(r1)
 	lwz	r2, GPR2_OFFSET(r1)
 	lwz	r0, GPR0_OFFSET(r1)
@@ -290,21 +290,21 @@ nested:
 	/*
 	 * Restore rfi related settings
 	 */
-		 
+
 	lwz	r3, SRR1_FRAME_OFFSET(r1)
 	mtsrr1	r3
 	lwz	r3, SRR0_FRAME_OFFSET(r1)
 	mtsrr0	r3
-	
+
 	lwz	r3, GPR3_OFFSET(r1)
 	addi 	r1,r1, EXCEPTION_FRAME_END
 	SYNC
 	rfi
-	
+
 switch:
 	bl	SYM (_Thread_Dispatch)
-	
-easy_exit:	
+
+easy_exit:
 	/*
 	 * start restoring interrupt frame
 	 */
@@ -312,7 +312,7 @@ easy_exit:
 	lwz	r4,  EXC_XER_OFFSET(r1)
 	lwz	r5,  EXC_CR_OFFSET(r1)
 	lwz	r6,  EXC_LR_OFFSET(r1)
-	
+
 	mtctr	r3
 	mtxer	r4
 	mtcr	r5
@@ -341,7 +341,7 @@ easy_exit:
 	/*
 	 * Restore rfi related settings
 	 */
-		 
+
 	lwz	r4, SRR1_FRAME_OFFSET(r1)
 	lwz	r3, SRR0_FRAME_OFFSET(r1)
 	lwz	r2, GPR2_OFFSET(r1)

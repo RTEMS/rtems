@@ -53,13 +53,13 @@ extern boolean vga_probe(int minor);
 extern void vga_init(int minor);
 
 extern void vga_write(
-	int   minor, 
+	int   minor,
 	char  cChar
 );
 
 extern int vga_write_support(
-	int   minor, 
-	const char *buf, 
+	int   minor,
+	const char *buf,
 	int   len
 );
 

@@ -2,7 +2,7 @@
  * Cirrus EP7312 Intererrupt handler
  *
  * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
- *	
+ *
  * Copyright (c) 2002 by Charlie Steader <charlies@poliac.com>
  *
  *  The license and distribution terms for this file may be
@@ -15,11 +15,11 @@
 */
 #define __asm__
 #include "irq.h"
-	
+
 #define VECTOR_TABLE 0x40
-	
-/* 
- * Function to obtain, execute an IT handler and acknowledge the IT 
+
+/*
+ * Function to obtain, execute an IT handler and acknowledge the IT
  */
 
 	.globl ExecuteITHandler

@@ -97,8 +97,8 @@ uint32_t   dmv177_sonic_read_register(
 #endif
 
 sonic_configuration_t dmv177_sonic_configuration = {
-  SONIC_BASE_ADDRESS,        /* base address */ 
-  SONIC_VECTOR,              /* vector number */ 
+  SONIC_BASE_ADDRESS,        /* base address */
+  SONIC_VECTOR,              /* vector number */
   SONIC_DCR,                 /* DCR register value */
   SONIC_DC2,                 /* DC2 register value */
   TDA_COUNT,                 /* number of transmit descriptors */
@@ -110,5 +110,5 @@ sonic_configuration_t dmv177_sonic_configuration = {
 int rtems_dmv177_sonic_driver_attach(struct rtems_bsdnet_ifconfig *config)
 {
   return rtems_sonic_driver_attach( config, &dmv177_sonic_configuration );
-  
+
 }

@@ -9,16 +9,16 @@
  *    as far as this copyight notice is kept unchanged, but does not imply
  *    an endorsement by T.sqware of the product in which it is included.
  *
- *  
+ *
  *     Modifications for RTEMS threads and more
  *
- *     Copyright (C) 2000 Quality Quorum, Inc. 
- * 
+ *     Copyright (C) 2000 Quality Quorum, Inc.
+ *
  *     All Rights Reserved
- * 
- *     Permission to use, copy, modify, and distribute this software and its 
- *     documentation for any purpose and without fee is hereby granted. 
- * 
+ *
+ *     Permission to use, copy, modify, and distribute this software and its
+ *     documentation for any purpose and without fee is hereby granted.
+ *
  *     QQI DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
  *     ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
  *     QQI BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR
@@ -35,7 +35,7 @@
 
 /* Change it to something meaningful when debugging */
 #undef ASSERT
-#define ASSERT(x) 
+#define ASSERT(x)
 
 extern const char gdb_hexchars[];
 
@@ -45,7 +45,7 @@ extern const char gdb_hexchars[];
  *  at the bottom of this file.
  */
 
-void rtems_gdb_stub_get_registers_from_context( 
+void rtems_gdb_stub_get_registers_from_context(
   int            *registers,
   Thread_Control *th
 );
@@ -85,7 +85,7 @@ int rtems_gdb_stub_id_to_index(
 
   if (_System_state_Get() != SYSTEM_STATE_UP) {
     /* We have one thread let us use value reserved for idle thread */
-    return 1; 
+    return 1;
   }
 
   if (_Thread_Executing == _Thread_Idle) {
@@ -109,7 +109,7 @@ int rtems_gdb_stub_id_to_index(
   min_id = _Objects_Information_table[OBJECTS_POSIX_API][1]->minimum_id;
 
   return first_posix_id + (thread_obj_id - min_id);
-} 
+}
 
 
 
@@ -208,7 +208,7 @@ int rtems_gdb_stub_get_next_thread(int athread)
   }
 
   first_rtems_id = 2;
- 
+
   obj_info = _Objects_Information_table[OBJECTS_CLASSIC_API][1];
 
   min_id = obj_info->minimum_id;
@@ -229,7 +229,7 @@ int rtems_gdb_stub_get_next_thread(int athread)
       }
     }
   }
-      
+
   first_posix_id = first_rtems_id + (max_id - min_id) + 1;
 
   obj_info = _Objects_Information_table[OBJECTS_POSIX_API][1];
@@ -245,7 +245,7 @@ int rtems_gdb_stub_get_next_thread(int athread)
     } else {
       start = 1 + athread;
     }
-      
+
     for (id=start; id<=lim; id++) {
       if (obj_info->local_table[id - first_posix_id + 1] != NULL) {
         return id;
@@ -262,7 +262,7 @@ int rtems_gdb_stub_get_next_thread(int athread)
 
 
 
-/* Get thread registers, return 0 if thread does not 
+/* Get thread registers, return 0 if thread does not
    exist, and 1 otherwise */
 int rtems_gdb_stub_get_thread_regs(
   int thread,
@@ -286,8 +286,8 @@ int rtems_gdb_stub_get_thread_regs(
 
 
 
-/* Set thread registers, return 0 if thread does not 
-   exist or register values will screw up the threads, 
+/* Set thread registers, return 0 if thread does not
+   exist or register values will screw up the threads,
    and 1 otherwise */
 
 int rtems_gdb_stub_set_thread_regs(
@@ -296,7 +296,7 @@ int rtems_gdb_stub_set_thread_regs(
 )
 {
   /* In current situation there is no point in changing any registers here
-     thread status is displayed as being deep inside thread switching 
+     thread status is displayed as being deep inside thread switching
      and we better do not screw up anything there - it may be fixed eventually
      though */
   return 1;
@@ -307,7 +307,7 @@ int rtems_gdb_stub_set_thread_regs(
 
 
 
-/* Get thread information, return 0 if thread does not 
+/* Get thread information, return 0 if thread does not
    exist and 1 otherwise */
 int rtems_gdb_stub_get_thread_info(
   int thread,
@@ -343,14 +343,14 @@ int rtems_gdb_stub_get_thread_info(
 
    /* Let us figure out thread_id for gdb */
    first_rtems_id = 2;
-  
+
    obj_info = _Objects_Information_table[OBJECTS_CLASSIC_API][1];
 
    min_id = obj_info->minimum_id;
    max_id = obj_info->maximum_id;
 
    if (thread <= (first_rtems_id + (max_id - min_id))) {
-      th = (Thread_Control *)(obj_info->local_table[thread - 
+      th = (Thread_Control *)(obj_info->local_table[thread -
                                                     first_rtems_id + 1]);
 
       if (th == NULL) {
@@ -374,7 +374,7 @@ int rtems_gdb_stub_get_thread_info(
 #if 0
       name = *(uint32_t*)(obj_info->local_table[thread]->name);
 #else
-      name = *(uint32_t*)(obj_info->local_table[thread - 
+      name = *(uint32_t*)(obj_info->local_table[thread -
 						   first_rtems_id + 1]->name);
 #endif
       info->name[0] = (name >> 24) & 0xff;
@@ -416,7 +416,7 @@ int rtems_gdb_stub_get_thread_info(
 
    strcat(info->display, tmp_buf);
 
-   name = *(uint32_t*)(obj_info->local_table[thread - 
+   name = *(uint32_t*)(obj_info->local_table[thread -
                                                 first_posix_id + 1]->name);
 
    info->name[0] = (name >> 24) & 0xff;
@@ -426,7 +426,7 @@ int rtems_gdb_stub_get_thread_info(
    info->name[4] = 0;
 
    info->more_display[0] = 0; /* Nothing */
-  
+
    return 1;
 }
 
@@ -441,7 +441,7 @@ int rtems_gdb_stub_get_thread_info(
 int parse_zbreak(const char *in, int *type, unsigned char **addr, int *len)
 {
   int ttmp, atmp, ltmp;
-  
+
   ASSERT(in != NULL);
   ASSERT(type != NULL);
   ASSERT(addr != NULL);
@@ -681,7 +681,7 @@ pack_qm_header(char *out, int count, int done, int athread)
 
 
 
-void rtems_gdb_process_query( 
+void rtems_gdb_process_query(
   char *inbuffer,
   char *outbuffer,
   int   do_threads,
@@ -689,7 +689,7 @@ void rtems_gdb_process_query(
 )
 {
   char *optr;
-    
+
   switch(inbuffer[1]) {
     case 'C':
       /* Current thread query query - return stopped thread */
@@ -865,7 +865,7 @@ thread2vhstr(char *buf, int thread)
   for(i=0, shift=28; i<8; i++, shift-=4)
     {
       nibble = (thread >> shift) & 0x0f;
-      
+
       if (nibble != 0)
 	{
 	  break;
@@ -988,7 +988,7 @@ vhstr2thread(const char *buf, int *thread)
 	  *thread = val;
 	  return buf;
 	}
-	  
+
       ASSERT(nibble >= 0 && nibble < 16);
 
       val = (val << 4) | nibble;
@@ -999,7 +999,7 @@ vhstr2thread(const char *buf, int *thread)
       /* Value is too long */
       return NULL;
     }
-  
+
   *thread = val;
   return buf;
 }
@@ -1016,7 +1016,7 @@ int2vhstr(char *buf, int val)
   for(i=0, shift=28; i<8; i++, shift-=4)
     {
       nibble = (val >> shift) & 0x0f;
-      
+
       if (nibble != 0)
 	{
 	  break;
@@ -1126,7 +1126,7 @@ vhstr2int(const char *buf, int *ival)
 	  *ival = val;
 	  return buf;
 	}
-	  
+
       ASSERT(nibble >= 0 && nibble < 16);
 
       val = (val << 4) | nibble;
@@ -1159,7 +1159,7 @@ hstr2byte(const char *buf, int *bval)
   return 1;
 }
 
-int 
+int
 hstr2nibble(const char *buf, int *nibble)
 {
   int ch;
@@ -1196,7 +1196,7 @@ static void (*volatile mem_fault_routine) (void) = NULL;
 
 
 
-/* convert count bytes of the memory pointed to by mem into hex string, 
+/* convert count bytes of the memory pointed to by mem into hex string,
    placing result in buf, return pointer to next location in hex strng
    in case of success or NULL otherwise */
 char*
@@ -1208,7 +1208,7 @@ mem2hstr(char *buf, const unsigned char *mem, int count)
   mem_err = 0;
 
   mem_fault_routine = set_mem_err;
- 
+
   for (i = 0; i<count; i++, mem++)
     {
       ch = get_byte (mem);
@@ -1217,11 +1217,11 @@ mem2hstr(char *buf, const unsigned char *mem, int count)
 	  mem_fault_routine = NULL;
 	  return NULL;
 	}
-     
+
       *buf++ = gdb_hexchars[ch >> 4];
       *buf++ = gdb_hexchars[ch & 0x0f];
     }
-  
+
   *buf = 0;
 
   mem_fault_routine = NULL;
@@ -1248,7 +1248,7 @@ hstr2mem (unsigned char *mem, const char *buf, int count)
 	  mem_fault_routine = NULL;
 	  return 0;
 	}
-	  
+
       ASSERT(bval >=0 && bval < 256);
 
       set_byte (mem, bval);
@@ -1276,7 +1276,7 @@ set_mem_err (void)
    to mem_fault, they won't get restored, so there better not be any
    saved).  */
 
-unsigned char 
+unsigned char
 get_byte (const unsigned char *addr)
 {
   return *addr;
@@ -1315,7 +1315,7 @@ enum i386_stub_regnames {
   I386_STUB_REG_FS, I386_STUB_REG_GS
 };
 
-void rtems_gdb_stub_get_registers_from_context( 
+void rtems_gdb_stub_get_registers_from_context(
   int            *registers,
   Thread_Control *th
 )
@@ -1331,7 +1331,7 @@ void rtems_gdb_stub_get_registers_from_context(
   registers[I386_STUB_REG_PC]  = *(int *)th->Registers.esp;
   registers[I386_STUB_REG_PS]  = (int)th->Registers.eflags;
 
-  /* RTEMS never changes base registers (especially once 
+  /* RTEMS never changes base registers (especially once
      threads are running) */
 
   registers[I386_STUB_REG_CS]  = 0x8; /* We just know these values */
@@ -1344,7 +1344,7 @@ void rtems_gdb_stub_get_registers_from_context(
 
 int rtems_gdb_stub_get_offsets(
   unsigned char **text_addr,
-  unsigned char **data_addr, 
+  unsigned char **data_addr,
   unsigned char **bss_addr
 )
 {
@@ -1366,7 +1366,7 @@ int rtems_gdb_stub_get_offsets(
 #elif defined(__mips__)
 
 
-void rtems_gdb_stub_get_registers_from_context( 
+void rtems_gdb_stub_get_registers_from_context(
   int            *registers,
   Thread_Control *th
 )
@@ -1390,10 +1390,10 @@ void rtems_gdb_stub_get_registers_from_context(
 
 int rtems_gdb_stub_get_offsets(
   unsigned char **text_addr,
-  unsigned char **data_addr, 
+  unsigned char **data_addr,
   unsigned char **bss_addr
 )
-{ 
+{
 /*
   extern uint32_t   _ftext;
   extern uint32_t   _fdata;
@@ -1412,7 +1412,7 @@ int rtems_gdb_stub_get_offsets(
 #elif defined(__mc68000__)
 
 
-void rtems_gdb_stub_get_registers_from_context( 
+void rtems_gdb_stub_get_registers_from_context(
   int            *registers,
   Thread_Control *th
 )
@@ -1422,7 +1422,7 @@ void rtems_gdb_stub_get_registers_from_context(
    * they are located on thread stack ...
    * -> they are not needed for context switch
    */
-  registers[D0] = 0; 
+  registers[D0] = 0;
   registers[D1] = 0;
   registers[D2] = (uint32_t)th->Registers.d2;
   registers[D3] = (uint32_t)th->Registers.d3;
@@ -1439,7 +1439,7 @@ void rtems_gdb_stub_get_registers_from_context(
   registers[A5] = (uint32_t)th->Registers.a5;
   registers[A6] = (uint32_t)th->Registers.a6;
   registers[A7] = (uint32_t)th->Registers.a7_msp;
-  
+
   registers[PS] = (uint32_t)th->Registers.sr;
 #if 0
   registers[PC] = *(uint32_t*)th->Registers.a7_msp; /* *SP = ret adr */
@@ -1451,10 +1451,10 @@ void rtems_gdb_stub_get_registers_from_context(
 
 int rtems_gdb_stub_get_offsets(
   unsigned char **text_addr,
-  unsigned char **data_addr, 
+  unsigned char **data_addr,
   unsigned char **bss_addr
 )
-{ 
+{
 /*
   extern uint32_t   _ftext;
   extern uint32_t   _fdata;

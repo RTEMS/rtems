@@ -105,13 +105,13 @@ struct enet_statistics{
 struct i596_tbd;  /* necessary forward declaration */
 
 enum commands {
-  CmdNOp           = 0, 
-  CmdSASetup       = 1, 
-  CmdConfigure     = 2, 
+  CmdNOp           = 0,
+  CmdSASetup       = 1,
+  CmdConfigure     = 2,
   CmdMulticastList = 3,
-  CmdTx            = 4, 
-  CmdTDR           = 5, 
-  CmdDump          = 6, 
+  CmdTx            = 4,
+  CmdTDR           = 5,
+  CmdDump          = 6,
   CmdDiagnose      = 7
 };
 
@@ -127,7 +127,7 @@ typedef volatile struct i596_dump_result {
   unsigned short tx_crc_byte01;
   unsigned short tx_crc_byte23;
   unsigned short rx_crc_byte01;
-  unsigned short rx_crc_byte23;  
+  unsigned short rx_crc_byte23;
   unsigned short rx_temp_mem01;
   unsigned short rx_temp_mem23;
   unsigned short rx_temp_mem45;
@@ -201,10 +201,10 @@ typedef volatile struct i596_selftest {
   unsigned long results;
 } i596_selftest;
 
-/* 
+/*
  * Action commands
  *   (big endian, linear mode)
- */ 
+ */
 typedef volatile struct i596_cmd {
   unsigned short status;
   unsigned short command;
@@ -251,7 +251,7 @@ typedef volatile struct i596_tbd {
 	  unsigned short size;
 	  unsigned short pad;
 	  volatile struct i596_tbd *next;
-	  char *data; 
+	  char *data;
 } i596_tbd;
 
 /*
@@ -262,7 +262,7 @@ typedef volatile struct i596_rbd {
 	  unsigned short count;
 	  unsigned short offset;
 	  volatile struct i596_rbd *next;
-	  char *data; 
+	  char *data;
 	  unsigned short size;
 	  unsigned short pad;
 } i596_rbd;
@@ -274,10 +274,10 @@ typedef volatile struct i596_rfd {
 	  unsigned short stat;
 	  unsigned short cmd;
 	  volatile struct i596_rfd *next;
-	  i596_rbd *pRbd; 
+	  i596_rbd *pRbd;
 	  unsigned short count;
 	  unsigned short size;
-	  char data [1532];    
+	  char data [1532];
 } i596_rfd;
 
 /*
@@ -300,7 +300,7 @@ typedef volatile struct i596_scb {
 	  i596_rfd *pRfd;
 } i596_scb;
 
-/* 
+/*
  * Intermediate System Configuration Pointer
  */
 typedef volatile struct i596_iscp {
@@ -333,7 +333,7 @@ typedef volatile struct uti596_softc {
   i596_set_add set_add;
   i596_configure set_conf;
   i596_tdr tdr;
-  i596_nop nop;               
+  i596_nop nop;
   i596_tx  *pTxCmd;
   i596_tbd *pTbd;
 

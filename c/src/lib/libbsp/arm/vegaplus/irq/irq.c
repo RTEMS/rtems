@@ -40,7 +40,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_irq_hdl *HdlTable;
     rtems_interrupt_level level;
-    
+
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -51,7 +51,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     if (*(HdlTable + irq->name) != default_int_handler) {
       return 0;
     }
-    
+
     _CPU_ISR_Disable(level);
 
     /*
@@ -60,7 +60,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     *(HdlTable + irq->name) = irq->hdl;
 
     /*
-     * initialize the control register for the concerned interrupt 
+     * initialize the control register for the concerned interrupt
      */
     Regs[(INTCNTL0 + irq->name)] = (long)(irq->irqTrigger) | (long)(irq->irqLevel) ;
 
@@ -68,17 +68,17 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * ack pending interrupt
      */
     Regs[INTACK] |= (long)(1 << irq->name);
-    
+
     /*
      * unmask at INT controler level level
      */
     Regs[INTMASK] &= ~(long)(1 << irq->name);
-    
+
     /*
      * Enable interrupt on device
      */
     irq->on(irq);
-    
+
     _CPU_ISR_Enable(level);
 
     return 1;
@@ -88,7 +88,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_irq_hdl *HdlTable;
     rtems_interrupt_level level;
-  
+
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -115,7 +115,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * restore the default irq value
      */
     *(HdlTable + irq->name) = default_int_handler;
-          
+
     _CPU_ISR_Enable(level);
 
     return 1;

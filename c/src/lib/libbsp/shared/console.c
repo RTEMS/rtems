@@ -30,7 +30,7 @@
 extern console_data  Console_Port_Data[];
 extern unsigned long  Console_Port_Count;
 extern rtems_device_minor_number  Console_Port_Minor;
- 
+
 /*PAGE
  *
  *  console_open
@@ -74,17 +74,17 @@ rtems_device_driver console_open(
   Callbacks.startRemoteTx        = cptr->pDeviceFlow->deviceStartRemoteTx;
   Callbacks.outputUsesInterrupts = cptr->pDeviceFns->deviceOutputUsesInterrupts;
 
-  /* XXX what about 
+  /* XXX what about
    *        Console_Port_Tbl[minor].ulMargin,
    *        Console_Port_Tbl[minor].ulHysteresis);
    */
 
   status = rtems_termios_open ( major, minor, arg, &Callbacks );
   Console_Port_Data[minor].termios_data = args->iop->data1;
-  
+
   /* Get tty pointeur from the Console_Port_Data */
   current_tty = Console_Port_Data[minor].termios_data;
-  
+
   if ( (current_tty->refcount == 1) ) {
   /*
    * If it's the first open, modified, if need, the port parameters
@@ -112,7 +112,7 @@ rtems_device_driver console_open(
 
   return status;
 }
- 
+
 /*PAGE
  *
  *  console_close
@@ -136,7 +136,7 @@ rtems_device_driver console_close(
 
   return rtems_termios_close (arg);
 }
- 
+
 /*PAGE
  *
  *  console_read
@@ -152,7 +152,7 @@ rtems_device_driver console_read(
 {
   return rtems_termios_read (arg);
 }
- 
+
 /*PAGE
  *
  *  console_write
@@ -168,7 +168,7 @@ rtems_device_driver console_write(
 {
   return rtems_termios_write (arg);
 }
- 
+
 /*PAGE
  *
  *  console_control
@@ -228,7 +228,7 @@ rtems_device_driver console_initialize(
      */
     rtems_fatal_error_occurred(RTEMS_IO_ERROR);
   }
-  
+
   Console_Port_Minor=minor;
 
   /*

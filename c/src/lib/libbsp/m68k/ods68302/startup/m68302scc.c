@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*
   $Id$
-  
+
   M68302 SCC Polled Driver
 
  */
@@ -27,29 +27,29 @@ static const uint16_t         baud_clocks[] =
   (SYSTEM_CLOCK / ( 57600 * 16)),
   (SYSTEM_CLOCK / (115700 * 16))
 };
-  
+
 void scc_initialise(int channel, int baud, int translate)
 {
   uint16_t         scon;
-  
+
   if (channel < M68302_SCC_COUNT)
   {
     scc[channel] = &m302.scc1 + channel;
     scc_reg[channel] = &m302.reg.scc[channel];
     scc_translate[channel] = translate;
-    
+
     scon  = (baud_clocks[baud] & 0xF800) == 0 ? 0 : 1;
     scon |= (((baud_clocks[baud] / (1 + scon * 3)) - 1) << 1) & 0x0FFE;
-    
+
     scc_reg[channel]->scon = scon;
     scc_reg[channel]->scm = 0x0171;
 
-    scc[channel]->bd.tx[0].status = 0x2000; 
+    scc[channel]->bd.tx[0].status = 0x2000;
     scc[channel]->bd.tx[0].length = 0;
     scc[channel]->bd.tx[0].buffer =
       (uint8_t*) &(scc[channel]->bd.tx[1].buffer);
 
-    scc[channel]->bd.rx[0].status = 0x2000; 
+    scc[channel]->bd.rx[0].status = 0x2000;
     scc[channel]->bd.rx[0].length = 0;
     scc[channel]->bd.rx[0].buffer =
       (uint8_t*) &(scc[channel]->bd.rx[1].buffer);
@@ -73,7 +73,7 @@ void scc_initialise(int channel, int baud, int translate)
     scc_reg[channel]->sccm = 0x15;
 
     scc_reg[channel]->scm = 0x17d;
-  }  
+  }
 }
 
 unsigned char scc_status(int channel, unsigned char status)
@@ -84,7 +84,7 @@ unsigned char scc_status(int channel, unsigned char status)
 
   if ((channel < M68302_SCC_COUNT) && scc[channel])
   {
-    rx_status = scc[channel]->bd.rx[0].status; 
+    rx_status = scc[channel]->bd.rx[0].status;
 
     if ((rx_status & 0x8000) == 0)
     {
@@ -98,7 +98,7 @@ unsigned char scc_status(int channel, unsigned char status)
       }
     }
   }
-  
+
   return 0;
 }
 
@@ -115,11 +115,11 @@ unsigned char scc_in(int channel)
       c = *(scc[channel]->bd.rx[0].buffer);
 
       scc[channel]->bd.rx[0].status = 0xa000;
-    
+
       return c;
     }
   }
-  
+
   return 0;
 }
 
@@ -139,11 +139,11 @@ void scc_out(int channel, unsigned char character)
     scc[channel]->bd.tx[0].status = 0xa000;
 
     if (scc_translate[channel])
-    {    
+    {
       if (character == '\n')
-      {    
+      {
         scc_out(channel, '\r');
       }
     }
-  }  
+  }
 }

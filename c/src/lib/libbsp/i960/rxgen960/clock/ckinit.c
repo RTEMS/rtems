@@ -1,6 +1,6 @@
 /*  Clock_init()
  *
- *  This routine initializes the i960RP onboard timer 
+ *  This routine initializes the i960RP onboard timer
  *  The tick frequency is 1 millisecond; assuming 33MHz core
  *
  *  Input parameters:  NONE
@@ -34,11 +34,11 @@ volatile uint32_t         Clock_driver_ticks;
 unsigned int clock_isr_global[16];  /* place to store global regs */
 
 void Clock_exit( void );
- 
+
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
@@ -72,14 +72,14 @@ void Install_clock(
     Old_ticker = set_vector( (((unsigned int) clock_isr) | 0x2), CLOCK_VECTOR, 1 );
 
     /* initialize the i960RP timer 0 here */
-    
+
     /* set the timer countdown (Assume 33MHz operation) */
     *trr0 = 30 * BSP_Configuration.microseconds_per_tick ;
     *tcr0 = 30 * BSP_Configuration.microseconds_per_tick ;
 /*
 kkprintf("Load the timers with %x\n", 30 * BSP_Configuration.microseconds_per_tick / Reload_Clock_isrs);
 */
-  
+
     *tmr0 = BUS_CLOCK_1 | TMR_AUTO_RELOAD | TMR_ENABLE;
 /* Unmask the interrupts */
 	*ipnd &= ~(1 << 12);
@@ -105,19 +105,19 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
- 
+
   atexit( Clock_exit );
 
   /*
    * make major/minor avail to others such as shared memory driver
    */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 }
- 
+
 rtems_device_driver Clock_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -126,15 +126,15 @@ rtems_device_driver Clock_control(
 {
     uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
- 
+
     if (args == 0)
         goto done;
- 
+
     /*
      * This is hokey, but until we get a defined interface
      * to do this, it will just be this simple...
      */
- 
+
     if (args->command == rtems_build_name('I', 'S', 'R', ' '))
     {
         Clock_isr(CLOCK_VECTOR);
@@ -145,7 +145,7 @@ rtems_device_driver Clock_control(
        (void) set_tmr_vector( args->buffer, CLOCK_VECTOR, 0 );
       rtems_interrupt_enable( isrlevel );
     }
- 
+
 done:
     return RTEMS_SUCCESSFUL;
 }

@@ -1,5 +1,5 @@
 /*  bsp.h
- * 
+ *
  *  This include file contains all Motorola 680x0 IDP board IO definitions.
  *
  *  $Id$
@@ -38,18 +38,18 @@
 #define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
 
 /*
- *  Define the interrupt mechanism for Time Test 27 
+ *  Define the interrupt mechanism for Time Test 27
  *
  *  NOTE: tm27 apparently not supported.
  */
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
-#define Install_tm27_vector( handler ) 
+#define Install_tm27_vector( handler )
 
-#define Cause_tm27_intr()  
+#define Cause_tm27_intr()
 
-#define Clear_tm27_intr()  
+#define Clear_tm27_intr()
 
 #define Lower_tm27_intr()
 
@@ -73,7 +73,7 @@
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

@@ -74,7 +74,7 @@
 	slwi	r4,r0,2
 	lwz	r28, Nest_level(r11)
 	add	r4, r4, r30
-	
+
 	lwz	r30, 0(r28)
 	mr	r3, r0
 	lwz	r31, Stack(r11)
@@ -86,14 +86,14 @@
    */
 	/* Switch stacks, here we must prevent ALL interrupts */
 #if (PPC_USE_SPRG)
-	mfmsr	r5          
-	mfspr   r6, sprg2   
-#else	
+	mfmsr	r5
+	mfspr   r6, sprg2
+#else
         lwz	r6,msr_initial(r11)
 	lis     r5,~PPC_MSR_DISABLE_MASK@ha
         ori     r5,r5,~PPC_MSR_DISABLE_MASK@l
 	and	r6,r6,r5
-	mfmsr	r5          
+	mfmsr	r5
 #endif
 	mtmsr	r6
 	cmpwi	r30, 0
@@ -154,10 +154,10 @@ LABEL (nested):
 	/*	We must re-disable the interrupts */
 #if (PPC_USE_SPRG)
 	mfspr	r11, sprg3
-	mfspr	r0, sprg2  
+	mfspr	r0, sprg2
 #else
 	lis     r11,_CPU_IRQ_info@ha
-	addi	r11,r11,_CPU_IRQ_info@l	
+	addi	r11,r11,_CPU_IRQ_info@l
         lwz	r0,msr_initial(r11)
 	lis     r30,~PPC_MSR_DISABLE_MASK@ha
         ori     r30,r30,~PPC_MSR_DISABLE_MASK@l
@@ -190,8 +190,8 @@ LABEL (nested):
 	bne	LABEL (easy_exit)
 	lwz	r30, 0(r30)
 	lwz	r31, Signal(r11)
-	
-  /*  
+
+  /*
    *  if ( _Context_Switch_necessary )
    *    goto switch
    */
@@ -199,7 +199,7 @@ LABEL (nested):
 	lwz	r28, 0(r31)
 	li	r6,0
 	bne	LABEL (switch)
-  /*  
+  /*
    *  if ( !_ISR_Signals_to_thread_executing )
    *    goto easy_exit
    *  _ISR_Signals_to_thread_executing = 0;
@@ -232,14 +232,14 @@ LABEL (switch):
 	mfspr   r0, sprg2
 #else
 	lis     r11,_CPU_IRQ_info@ha
-	addi	r11,r11,_CPU_IRQ_info@l	
+	addi	r11,r11,_CPU_IRQ_info@l
         lwz	r0,msr_initial(r11)
 	lis     r5,~PPC_MSR_DISABLE_MASK@ha
         ori     r5,r5,~PPC_MSR_DISABLE_MASK@l
 	and	r0,r0,r5
 #endif
 	mtmsr   r0
-	
+
   /*
    *  easy_exit:
    *  prepare to get out of interrupt

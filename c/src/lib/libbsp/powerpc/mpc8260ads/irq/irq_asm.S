@@ -1,5 +1,5 @@
 /*
- *  This file contains the assembly code for the PowerPC 
+ *  This file contains the assembly code for the PowerPC
  *  IRQ veneers for RTEMS.
  *
  *  The license and distribution terms for this file may be
@@ -14,7 +14,7 @@
  *
  * $Id$
  */
-  	
+
 #include <bsp/vectors.h>
 #include <rtems/score/cpuopts.h>  /* for PPC_HAS_FPU */
 #include <rtems/score/cpu.h>
@@ -24,13 +24,13 @@
 #define SYNC \
 	sync; \
 	isync
-	
+
 	.text
-	.p2align 5	
-		
-	
+	.p2align 5
+
+
 	PUBLIC_VAR(decrementer_exception_vector_prolog_code)
-	
+
 SYM (decrementer_exception_vector_prolog_code):
 
 	/*
@@ -42,11 +42,11 @@ SYM (decrementer_exception_vector_prolog_code):
 	ba	shared_raw_irq_code_entry
 
 	PUBLIC_VAR (decrementer_exception_vector_prolog_code_size)
-	
+
 	decrementer_exception_vector_prolog_code_size = . - decrementer_exception_vector_prolog_code
 
 	PUBLIC_VAR(external_exception_vector_prolog_code)
-	
+
 SYM (external_exception_vector_prolog_code):
 	/*
 	 * let room for exception frame
@@ -57,12 +57,12 @@ SYM (external_exception_vector_prolog_code):
 	ba	shared_raw_irq_code_entry
 
 	PUBLIC_VAR (external_exception_vector_prolog_code_size)
-	
+
 	external_exception_vector_prolog_code_size = . - external_exception_vector_prolog_code
 
 	PUBLIC_VAR(shared_raw_irq_code_entry)
 	PUBLIC_VAR(C_dispatch_irq_handler)
-	
+
 	.p2align 5
 SYM (shared_raw_irq_code_entry):
 	/*
@@ -73,7 +73,7 @@ SYM (shared_raw_irq_code_entry):
 	 *	R4  :	vector number
 	 */
 	/*
-	 * Save SRR0/SRR1 As soon As possible as it is the minimal needed 
+	 * Save SRR0/SRR1 As soon As possible as it is the minimal needed
 	 * to reenable exception processing
 	 */
 	stw	r0, GPR0_OFFSET(r1)
@@ -100,7 +100,7 @@ SYM (shared_raw_irq_code_entry):
 #endif
 	mtmsr   r3
 	SYNC
-	
+
 	/*
 	 * Push C scratch registers on the current stack. It may
 	 * actually be the thread stack or the interrupt stack.
@@ -122,7 +122,7 @@ SYM (shared_raw_irq_code_entry):
 	mfctr	r6
 	mfxer	r7
 	mflr	r8
-	
+
 	stw		r5,  EXC_CR_OFFSET(r1)
 	stw		r6,  EXC_CTR_OFFSET(r1)
 	stw		r7,  EXC_XER_OFFSET(r1)
@@ -148,23 +148,23 @@ SYM (shared_raw_irq_code_entry):
 /*	mfspr	r2, SPRG0 */
 	addis	r6, 0, _ISR_Nest_level@ha
 	lwz		r2, _ISR_Nest_level@l( r6 )
-	
+
 	/*
 	 * Check if stack switch is necessary
 	 */
 	cmpwi	r2,0
 	bne		nested
 	mfspr	r1, SPRG1
-	
-nested:	
-	/* 
+
+nested:
+	/*
 	 * Start Incrementing nesting level in R2
 	 */
 	addi	r2,r2,1
-	
+
 	addis	r6, 0, _ISR_Nest_level@ha
 	stw		r2, _ISR_Nest_level@l( r6 )
-	
+
 	/*
 	 * Start Incrementing _Thread_Dispatch_disable_level R4 = _Thread_Dispatch_disable_level
 	 */
@@ -173,7 +173,7 @@ nested:
 	 * store new nesting level in SPRG0
 	 */
 /*	mtspr	SPRG0, r2 */
-	
+
 	addi	r6, r6, 1
 	mfmsr	r5
 	/*
@@ -183,40 +183,40 @@ nested:
 	/*
 	 * We are now running on the interrupt stack. External and decrementer
 	 * exceptions are still disabled. I see no purpose trying to optimize
-	 * further assembler code. 
+	 * further assembler code.
 	 */
 	/*
 	 * Call C exception handler for decrementer Interrupt frame is passed just
 	 * in case...
 	 */
-	
+
 	addi	r3, r14, 0x8
 	bl		C_dispatch_irq_handler /* C_dispatch_irq_handler(cpu_interrupt_frame* r3, vector r4) */
 
 	/*
-	 * start decrementing nesting level. Note : do not test result against 0 
+	 * start decrementing nesting level. Note : do not test result against 0
 	 * value as an easy exit condition because if interrupt nesting level > 1
 	 * then _Thread_Dispatch_disable_level > 1
 	 */
 /*	mfspr	r2, SPRG0 */
-	
+
 	addis	r6, 0, _ISR_Nest_level@ha
 	lwz		r2, _ISR_Nest_level@l( r6 )
-	
+
 	/*
 	 * start decrementing _Thread_Dispatch_disable_level
 	 */
 	lwz		r3,_Thread_Dispatch_disable_level@l(r15)
 	addi	r2, r2, -1	/* Continue decrementing nesting level */
 	addi	r3, r3, -1	/* Continue decrementing _Thread_Dispatch_disable_level */
-	
-	stw		r2, _ISR_Nest_level@l( r6 )	
+
+	stw		r2, _ISR_Nest_level@l( r6 )
 /*	mtspr	SPRG0, r2 */ 	/* End decrementing nesting level */
-	
+
 	stw		r3,_Thread_Dispatch_disable_level@l(r15) /* End decrementing _Thread_Dispatch_disable_level */
 	cmpwi	r3, 0
 	/*
-	 * switch back to original stack (done here just optimize registers 
+	 * switch back to original stack (done here just optimize registers
 	 * contention. Could have been done before...)
 	 */
 	addi	r1, r14, 0
@@ -224,14 +224,14 @@ nested:
 	/*
 	 * Here we are running again on the thread system stack.
 	 * We have interrupt nesting level = _Thread_Dispatch_disable_level = 0.
-	 * Interrupt are still disabled. Time to check if scheduler request to 
+	 * Interrupt are still disabled. Time to check if scheduler request to
 	 * do something with the current thread...
 	 */
 	addis	r4, 0, _Context_Switch_necessary@ha
 	lwz		r5, _Context_Switch_necessary@l(r4)
 	cmpwi	r5, 0
 	bne		switch
-	
+
 	addis	r6, 0, _ISR_Signals_to_thread_executing@ha
 	lwz		r7, _ISR_Signals_to_thread_executing@l(r6)
 	cmpwi	r7, 0
@@ -244,7 +244,7 @@ nested:
 	 */
 	stmw	r16, GPR16_OFFSET(r1)
 	addi	r3, r1, 0x8
-	
+
     /*
      * compute SP at exception entry
      */
@@ -257,7 +257,7 @@ nested:
 	 * Call High Level signal handling code
 	 */
 	bl		_ThreadProcessSignalsFromIrq
-	
+
 
 	/*
 	 * start restoring exception like frame
@@ -266,16 +266,16 @@ nested:
 	lwz		r30,  EXC_XER_OFFSET(r1)
 	lwz		r29,  EXC_CR_OFFSET(r1)
 	lwz		r28,  EXC_LR_OFFSET(r1)
-	
+
 	mtctr	r31
 	mtxer	r30
 	mtcr	r29
 	mtlr	r28
-	
-	
+
+
 	lmw		r4, GPR4_OFFSET(r1)
 
-	
+
 	lwz		r2, GPR2_OFFSET(r1)
 	lwz		r0, GPR0_OFFSET(r1)
 
@@ -289,21 +289,21 @@ nested:
 	/*
 	 * Restore rfi related settings
 	 */
-		
+
 	lwz		r3, SRR1_FRAME_OFFSET(r1)
 	mtsrr1	r3
 	lwz		r3, SRR0_FRAME_OFFSET(r1)
 	mtsrr0	r3
-	
+
 	lwz		r3, GPR3_OFFSET(r1)
 	addi 	r1,r1, EXCEPTION_FRAME_END
 	SYNC
 	rfi
-	
+
 switch:
 	bl		SYM (_Thread_Dispatch)
-	
-easy_exit:	
+
+easy_exit:
 	/*
 	 * start restoring interrupt frame
 	 */
@@ -311,7 +311,7 @@ easy_exit:
 	lwz		r4,  EXC_XER_OFFSET(r1)
 	lwz		r5,  EXC_CR_OFFSET(r1)
 	lwz		r6,  EXC_LR_OFFSET(r1)
-	
+
 	mtctr	r3
 	mtxer	r4
 	mtcr	r5
@@ -337,11 +337,11 @@ easy_exit:
 	xori	r3, r3, MSR_RI /*| MSR_IR | MSR_DR*/
 	mtmsr   r3
 	SYNC
-	
+
 	/*
 	 * Restore rfi related settings
 	 */
-		 
+
 	lwz		r4, SRR1_FRAME_OFFSET(r1)
 	lwz		r2, SRR0_FRAME_OFFSET(r1)
 	lwz		r3, GPR3_OFFSET(r1)

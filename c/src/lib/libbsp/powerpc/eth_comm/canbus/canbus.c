@@ -56,7 +56,7 @@ canInterruptHandler (rtems_vector_number v)
   }
   tmpTail = rxMsgBufTail[dev];
   while (1) {
-    if ((tmpTail == rxMsgBufHead[dev]) && 
+    if ((tmpTail == rxMsgBufHead[dev]) &&
         (rxMsgBuf[dev][tmpTail].ctrl1 & I82527_MSG_CTRL_NEWDAT)) {
       break;  /* Buf is full */
     }
@@ -69,7 +69,7 @@ canInterruptHandler (rtems_vector_number v)
       rxMsgBuf[dev][tmpTail].ctrl1 = candev[dev]->msg15.ctrl1;
       rxMsgBuf[dev][tmpTail].arb = candev[dev]->msg15.arb;
       rxMsgBuf[dev][tmpTail].cfg = candev[dev]->msg15.cfg;
-      
+
       pkt_len = (rxMsgBuf[dev][tmpTail].cfg >> 4) & 0xf;
       for (i=0; i<pkt_len; i++) {
         rxMsgBuf[dev][tmpTail].data[i] = candev[dev]->msg15.data[i];
@@ -97,7 +97,7 @@ canInterruptHandler (rtems_vector_number v)
 
   candev[dev]->msg15.ctrl0  = 0xff & (I82527_MSG_CTRL_MSGVAL_SET |
                                       I82527_MSG_CTRL_INTPND_CLR);
-  candev[dev]->msg15.ctrl1  = 0xff & (I82527_MSG_CTRL_NEWDAT_CLR | 
+  candev[dev]->msg15.ctrl1  = 0xff & (I82527_MSG_CTRL_NEWDAT_CLR |
                                       I82527_MSG_CTRL_RMTPND_CLR);
   candev[dev]->status = 0x0;
 }
@@ -117,7 +117,7 @@ rtems_device_driver canbus_initialize(
 #endif
   rtems_status_code status;
   rtems_isr_entry old_handler;
-  
+
 #if (NUM_CAN_DEVS > 0)
   candev[0]=&canbus0;
   rtems_interrupt_catch (canInterruptHandler,
@@ -135,7 +135,7 @@ rtems_device_driver canbus_initialize(
   rtems_interrupt_catch (canInterruptHandler,
                          PPC_IRQ_IRQ2,
                          &old_handler);
-  
+
   /* Right now, we only support 3 CAN interfaces */
 #else
 #error NUM_CAN_DEVS is too big. Fix it, damnit!
@@ -147,7 +147,7 @@ rtems_device_driver canbus_initialize(
 
 
   for (i=0; i < NUM_CAN_DEVS; i++) {
-    
+
     /* clear rx buffers */
     rxMsgBufHead[i] = 0;
     rxMsgBufTail[i] = 0;
@@ -158,10 +158,10 @@ rtems_device_driver canbus_initialize(
 
     candev[i]->ctrl = I82527_CTRL_CCE | /* Enable cfg reg writes */
                       I82527_CTRL_INIT; /* Disable external xfers */
-  
+
     candev[i]->cir = I82527_CIR_DMC;    /* Divide memory clock by 2 */
 
-    
+
     /* We want 250 kbps so assuming an input clock rate of 10 MHz:
      *   DSC = 0  =>  SCLK = 10 MHz, tSCLK = 100ns
      *   BRP = 1  =>  tq = 200ns
@@ -181,7 +181,7 @@ rtems_device_driver canbus_initialize(
 
     candev[i]->gms = 0xffff;            /* addresses must match exactly */
     candev[i]->gml = 0xffffffff;        /* addresses must match exactly */
-    
+
     candev[i]->mlm = 0x0;               /* all addresses accepted */
 
     candev[i]->p2conf = 0xff;           /* make all outputs */
@@ -190,85 +190,85 @@ rtems_device_driver canbus_initialize(
     candev[i]->msg1.ctrl0  = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR   |/* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg2.cfg    = I82527_MSG_CFG_DIR ;        /* dir is xmit */
     candev[i]->msg2.ctrl0  = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR   |/* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg3.cfg    = I82527_MSG_CFG_DIR ;        /* dir is xmit */
     candev[i]->msg3.ctrl0  = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR   |/* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg4.cfg    = I82527_MSG_CFG_DIR ;        /* dir is xmit */
     candev[i]->msg4.ctrl0  = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR  | /* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg5.cfg    = I82527_MSG_CFG_DIR ;        /* dir is xmit */
     candev[i]->msg5.ctrl0  = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR   |/* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg6.cfg    = I82527_MSG_CFG_DIR ;        /* dir is xmit */
     candev[i]->msg6.ctrl0  = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR   |/* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg7.cfg    = I82527_MSG_CFG_DIR ;        /* dir is xmit */
     candev[i]->msg7.ctrl0  = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR   |/* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg8.cfg    = I82527_MSG_CFG_DIR ;        /* dir is xmit */
     candev[i]->msg8.ctrl0  = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR   |/* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg9.cfg    = I82527_MSG_CFG_DIR ;        /* dir is xmit */
     candev[i]->msg9.ctrl0  = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR   |/* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg10.cfg   = I82527_MSG_CFG_DIR ;        /* dir is xmit */
     candev[i]->msg10.ctrl0 = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR  | /* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg11.cfg   = I82527_MSG_CFG_DIR ;        /* dir is xmit */
     candev[i]->msg11.ctrl0 = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR   |/* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg12.cfg   = I82527_MSG_CFG_DIR ;        /* dir is xmit */
     candev[i]->msg12.ctrl0 = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR   |/* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg13.cfg   = I82527_MSG_CFG_DIR ;        /* dir is xmit */
     candev[i]->msg13.ctrl0 = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR   |/* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg14.cfg   = I82527_MSG_CFG_DIR ;        /* dir is xmit */
     candev[i]->msg14.ctrl0 = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
                              I82527_MSG_CTRL_TXIE_CLR   |/* no tx interrupts */
                              I82527_MSG_CTRL_RXIE_CLR   |/* no rx interrupts */
-                             I82527_MSG_CTRL_INTPND_CLR; 
+                             I82527_MSG_CTRL_INTPND_CLR;
 
     candev[i]->msg15.cfg   = 0 ;        /* dir is rcv */
     candev[i]->msg15.ctrl0 = I82527_MSG_CTRL_MSGVAL_CLR |/* this msg invalid */
@@ -306,7 +306,7 @@ rtems_device_driver canbus_open(
     /* msg is in use, rx interrupts are enabled */
   candev[minor]->msg15.ctrl0 = 0xff & (I82527_MSG_CTRL_MSGVAL_SET |
                                        I82527_MSG_CTRL_RXIE_SET);
-    
+
   candev[minor]->ctrl |= I82527_CTRL_IE;
   candev[minor]->ctrl &= ~(I82527_CTRL_CCE | I82527_CTRL_INIT);
   switch (minor) {
@@ -329,10 +329,10 @@ rtems_device_driver canbus_close(
   candev[minor]->msg15.ctrl0 = 0xff & (I82527_MSG_CTRL_MSGVAL_CLR |
                                        I82527_MSG_CTRL_RXIE_CLR |
                                        I82527_MSG_CTRL_TXIE_CLR);
-    
+
   /* Take transceiver off the bus, enable cfg. reg. writes */
   candev[minor]->ctrl |= (I82527_CTRL_CCE | I82527_CTRL_INIT);
-    
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -351,7 +351,7 @@ rtems_device_driver canbus_read(
   tmpHead = rxMsgBufHead[minor];
 
   while (1){
-    if ((tmpHead == rxMsgBufTail[minor]) && 
+    if ((tmpHead == rxMsgBufTail[minor]) &&
         !(rxMsgBuf[minor][tmpHead].ctrl1 & I82527_MSG_CTRL_NEWDAT)) {
       break;
     }
@@ -361,7 +361,7 @@ rtems_device_driver canbus_read(
       msg->ctrl1 = rxMsgBuf[minor][tmpHead].ctrl1;
       msg->arb = rxMsgBuf[minor][tmpHead].arb;
       msg->cfg = rxMsgBuf[minor][tmpHead].cfg;
-      
+
       pkt_len = (msg->cfg >> 4) & 0xf;
       for (i=0; i<pkt_len; i++) {
         msg->data[i] = rxMsgBuf[minor][tmpHead].data[i];
@@ -390,7 +390,7 @@ rtems_device_driver canbus_read(
   return RTEMS_UNSATISFIED;
 
 }
-    
+
 rtems_device_driver canbus_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -436,7 +436,7 @@ rtems_device_driver canbus_control(
 
 
 /* part of old canbus_read */
-#if 0 
+#if 0
   for (i=0; i < RX_CAN_BUF_SIZE) {
     if (rxMsgBuf[minor][i].ctrl1 & I82527_MSG_CTRL_NEWDAT)
       break;
@@ -447,17 +447,17 @@ rtems_device_driver canbus_control(
     int j;
     msg.arb = rxMsgBuf[minor][i].arb;
     msg.cfg = rxMsgBuf[minor][i].cfg;
-    
+
     pkt_len = (msg.cfg >> 4) & 0xf;
 
-    for (j=0; j < pkt_len; j++) 
+    for (j=0; j < pkt_len; j++)
       msg.data[j] = rxMsgBuf[minor][i].data[j];
-  
-  
+
+
   /* wait until there is a msg */
   while (!(candev->msg15.ctrl1 & I82527_MSG_CTRL_NEWDAT))
      continue;
- 
+
   msg->ctrl1 = candev->msg15.ctrl1;
   msg->cfg = candev->msg15.cfg;
   msg->arb = candev->msg15.arb;
@@ -468,7 +468,7 @@ rtems_device_driver canbus_control(
 
   candev->msg15.ctrl0  = 0xff & (I82527_MSG_CTRL_MSGVAL_SET |
                                  I82527_MSG_CTRL_INTPND_CLR);
-  candev->msg15.ctrl1  = 0xff & (I82527_MSG_CTRL_NEWDAT_CLR | 
+  candev->msg15.ctrl1  = 0xff & (I82527_MSG_CTRL_NEWDAT_CLR |
                                  I82527_MSG_CTRL_RMTPND_CLR);
 
   candev->status = 0x0;

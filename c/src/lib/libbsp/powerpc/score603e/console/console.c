@@ -24,8 +24,8 @@
 
 #if (1)
 /*
- * The Port Used for the Console interface is based upon which 
- * debugger is being used.  The SDS debugger uses a binary 
+ * The Port Used for the Console interface is based upon which
+ * debugger is being used.  The SDS debugger uses a binary
  * interface on port 0 as part of the debugger.  Thus port 0 can
  * not be used as the console port for the SDS debugger.
  */
@@ -58,7 +58,7 @@ int USE_FOR_CONSOLE = USE_FOR_CONSOLE_DEF;
  *
  *  Console Device Driver Entry Points
  */
- 
+
 /* PAGE
  *
  *  DEBUG_puts
@@ -89,7 +89,7 @@ void DEBUG_puts(
 
   /* should disable interrupts here */
 
-  for ( s = string ; *s ; s++ ) 
+  for ( s = string ; *s ; s++ )
     outbyte_polled_85c30( csr, *s );
 
   outbyte_polled_85c30( csr, '\r' );
@@ -100,28 +100,28 @@ void DEBUG_puts(
 
 /* PAGE
  *
- *  console_inbyte_nonblocking 
+ *  console_inbyte_nonblocking
  *
  *  Console Termios polling input entry point.
  */
 
-int console_inbyte_nonblocking( 
-  int minor 
+int console_inbyte_nonblocking(
+  int minor
 )
 {
   int                       port = minor;
 
-  /* 
-   * verify port Number 
+  /*
+   * verify port Number
    */
   assert ( port < NUM_Z85C30_PORTS );
- 
+
   /*
    * return a character from the 85c30 port.
    */
   return inbyte_nonblocking_85c30( &Ports_85C30[ port ] );
 }
- 
+
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -130,7 +130,7 @@ rtems_device_driver console_close(
 {
   return rtems_termios_close (arg);
 }
- 
+
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -139,7 +139,7 @@ rtems_device_driver console_read(
 {
   return rtems_termios_read (arg);
 }
- 
+
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -148,7 +148,7 @@ rtems_device_driver console_write(
 {
   return rtems_termios_write (arg);
 }
- 
+
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -171,7 +171,7 @@ rtems_isr console_isr(
 )
 {
   int  i;
-  
+
   for (i=0; i < NUM_Z85C30_PORTS; i++){
       ISR_85c30_Async( &Ports_85C30[i] );
 
@@ -180,7 +180,7 @@ rtems_isr console_isr(
       ISR_85c30_Async( &Ports_85C30[i] );
     }
 #endif
-  }  
+  }
 }
 
 void console_exit()
@@ -190,12 +190,12 @@ void console_exit()
   uint32_t         ch;
 
   for ( i=0 ; i < NUM_Z85C30_PORTS ; i++ ) {
-    
+
     buffer = &( Ports_85C30[i].Protocol->TX_Buffer);
 
     while ( !Ring_buffer_Is_empty( buffer ) ) {
       Ring_buffer_Remove_character( buffer, ch );
-      outbyte_polled_85c30( Ports_85C30[i].ctrl, ch ); 
+      outbyte_polled_85c30( Ports_85C30[i].ctrl, ch );
     }
   }
 }
@@ -205,7 +205,7 @@ void console_initialize_interrupts( void )
   volatile Ring_buffer_t     *buffer;
   Console_Protocol  *protocol;
   int               i;
-  
+
   for ( i=0 ; i < NUM_Z85C30_PORTS ; i++ ) {
     protocol = Ports_85C30[i].Protocol;
 
@@ -217,15 +217,15 @@ void console_initialize_interrupts( void )
     protocol->Is_TX_active = FALSE;
   }
 
-  /* 
+  /*
    * Connect each vector to the interupt service routine.
    */
   for (i=0; i < NUM_Z85C30_CHIPS; i++)
     set_vector( console_isr, Chips_85C30[i].vector, 1 );
-  
+
 
   atexit( console_exit );
-   
+
 }
 void console_outbyte_interrupts(
   const Port_85C30_info *Port,
@@ -282,7 +282,7 @@ rtems_device_driver console_initialize(
    * Force to perform a hardware reset w/o
    * Master interrupt enable via register 9
    */
-  
+
   for (port=0; port<NUM_Z85C30_PORTS; port++){
     p0 = port;
     port++;
@@ -290,7 +290,7 @@ rtems_device_driver console_initialize(
     Reset_85c30_chip( Ports_85C30[p0].ctrl, Ports_85C30[p1].ctrl );
   }
 #else
-  /* TEMP - To see if this makes a diff with the new ports. 
+  /* TEMP - To see if this makes a diff with the new ports.
    *        Never reset chip 1 when using the chip as a monitor
    */
   for (port=2; port<NUM_Z85C30_PORTS; port++){
@@ -301,7 +301,7 @@ rtems_device_driver console_initialize(
   }
 #endif
 
-  /* 
+  /*
    * Initialize each port.
    * Note:  the ports are numbered such that 0,1 are on the first chip
    *        2,3 are on the second ....
@@ -327,16 +327,16 @@ rtems_device_driver console_initialize(
  *
  */
 int console_write_support(
-  int   minor, 
-  const char *buf, 
+  int   minor,
+  const char *buf,
   int   len)
 {
   int nwrite = 0;
   volatile uint8_t         *csr;
   int                       port = minor;
 
-  /* 
-   * verify port Number 
+  /*
+   * verify port Number
    */
   assert ( port < NUM_Z85C30_PORTS );
 
@@ -453,7 +453,7 @@ void console_outbyte_interrupts(
   uint32_t            isrlevel;
 
   protocol = Port->Protocol;
-  
+
   /*
    *  If this is the first character then we need to prime the pump
    */
@@ -469,7 +469,7 @@ void console_outbyte_interrupts(
   }
 
   while ( Ring_buffer_Is_full( &protocol->TX_Buffer ) );
- 
+
   Ring_buffer_Add_character( &protocol->TX_Buffer, ch );
 }
 

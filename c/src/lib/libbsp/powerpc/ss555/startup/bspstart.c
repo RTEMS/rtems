@@ -64,13 +64,13 @@ void bsp_libc_init( void *, unsigned32, int );
 void BSP_panic(char *s)
 {
   printk("%s PANIC %s\n",_RTEMS_version, s);
-  __asm__ __volatile ("sc"); 
+  __asm__ __volatile ("sc");
 }
 
 void _BSP_Fatal_error(unsigned int v)
 {
   printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  __asm__ __volatile ("sc"); 
+  __asm__ __volatile ("sc");
 }
 
 /*
@@ -95,7 +95,7 @@ void _BSP_Fatal_error(unsigned int v)
  */
 void bsp_pretasking_hook(void)
 {
-  /* 
+  /*
    *  These are assigned addresses in the linkcmds file for the BSP. This
    *  approach is better than having these defined as manifest constants and
    *  compiled into the kernel, but it is still not ideal when dealing with
@@ -105,13 +105,13 @@ void bsp_pretasking_hook(void)
    *  the kernel and the application can be linked and burned into ROM
    *  independently of each other.
    */
-    unsigned char *_HeapStart = 
-      (char*)BSP_Configuration.work_space_start 
+    unsigned char *_HeapStart =
+      (char*)BSP_Configuration.work_space_start
            + BSP_Configuration.work_space_size;
     extern unsigned char _HeapEnd[];
 
     bsp_libc_init( _HeapStart, _HeapEnd - _HeapStart, 0 );
-  
+
 #ifdef RTEMS_DEBUG
   rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
@@ -141,11 +141,11 @@ void bsp_pretasking_hook(void)
 void bsp_start(void)
 {
   extern char _WorkspaceBase[];
-  
+
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
   register unsigned char* intrStack;
-  
+
   /*
    * Get CPU identification dynamically.  Note that the get_ppc_cpu_type()
    * function stores the result in global variables so that it can be used
@@ -190,7 +190,7 @@ void bsp_start(void)
   Cpu_table.clicks_per_usec = BSP_CRYSTAL_HZ / 4 / 1000000;
   Cpu_table.clock_speed = BSP_CLOCK_HZ;	/* for SCI baud rate generator */
 
-  /* 
+  /*
    * Call this in case we use TERMIOS for console I/O
    */
   m5xx_uart_reserve_resources( &BSP_Configuration );

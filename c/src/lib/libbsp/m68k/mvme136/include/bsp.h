@@ -143,7 +143,7 @@ extern m68k_isr_entry M68Kvec[];   /* vector table address */
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

@@ -51,7 +51,7 @@ SPR_RW(SPRG1)
 /*
  * Copy of residuals passed by firmware
  */
-RESIDUAL residualCopy; 
+RESIDUAL residualCopy;
 /*
  * Copy Additional boot param passed by boot loader
  */
@@ -85,15 +85,15 @@ unsigned int BSP_time_base_divisor;
 void BSP_panic(char *s)
 {
   printk("%s PANIC %s\n",_RTEMS_version, s);
-  __asm__ __volatile ("sc"); 
+  __asm__ __volatile ("sc");
 }
 
 void _BSP_Fatal_error(unsigned int v)
 {
   printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  __asm__ __volatile ("sc"); 
+  __asm__ __volatile ("sc");
 }
- 
+
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
@@ -110,7 +110,7 @@ char *rtems_progname;
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
@@ -127,10 +127,10 @@ void bsp_libc_init( void *, uint32_t, int );
  *      not yet initialized.
  *
  */
- 
+
 void bsp_pretasking_hook(void)
 {
-    uint32_t                heap_start;    
+    uint32_t                heap_start;
     uint32_t                heap_size;
     uint32_t                heap_sbrk_spared;
 	extern uint32_t         _bsp_sbrk_init(uint32_t, uint32_t*);
@@ -145,7 +145,7 @@ void bsp_pretasking_hook(void)
 
 #ifdef SHOW_MORE_INIT_SETTINGS
    	printk(" HEAP start %x  size %x (%x bytes spared for sbrk)\n", heap_start, heap_size, heap_sbrk_spared);
-#endif    
+#endif
 
     bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
 
@@ -167,7 +167,7 @@ void zero_bss()
 
 void save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_options)
 {
-  
+
   residualCopy = *r3;
   strncpy(loaderParam, additional_boot_options, MAX_LOADER_ADD_PARM);
   loaderParam[MAX_LOADER_ADD_PARM - 1] ='\0';
@@ -209,7 +209,7 @@ void bsp_start( void )
   l2cr = get_L2CR();
 #ifdef SHOW_LCR2_REGISTER
   printk("Initial L2CR value = %x\n", l2cr);
-#endif  
+#endif
   if ( (! (l2cr & 0x80000000)) && ((int) l2cr == -1))
     set_L2CR(0xb9A14000);
   /*
@@ -262,15 +262,15 @@ void bsp_start( void )
   /* T. Straumann: give more PCI address space */
   setdbat(2, PCI_MEM_BASE, PCI_MEM_BASE, 0x10000000, IO_PAGE);
   /*
-   * Must have acces to open pic PCI ACK registers 
+   * Must have acces to open pic PCI ACK registers
    * provided by the RAVEN
-   * 
+   *
    */
   setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
 
   select_console(CONSOLE_LOG);
 
-  /* We check that the keyboard is present and immediately 
+  /* We check that the keyboard is present and immediately
    * select the serial console if not.
    */
   err = kbdreset();
@@ -282,11 +282,11 @@ void bsp_start( void )
     while (1);
   }
   myBoard = getMotorolaBoard();
-  
+
   printk("-----------------------------------------\n");
   printk("Welcome to %s on %s\n", _RTEMS_version, motorolaBoardToString(myBoard));
   printk("-----------------------------------------\n");
-#ifdef SHOW_MORE_INIT_SETTINGS  
+#ifdef SHOW_MORE_INIT_SETTINGS
   printk("Residuals are located at %x\n", (unsigned) &residualCopy);
   printk("Additionnal boot options are %s\n", loaderParam);
   printk("Initial system stack at %x\n",stack);
@@ -294,7 +294,7 @@ void bsp_start( void )
   printk("-----------------------------------------\n");
 #endif
 
-#ifdef TEST_RETURN_TO_PPCBUG  
+#ifdef TEST_RETURN_TO_PPCBUG
   printk("Hit <Enter> to return to PPCBUG monitor\n");
   printk("When Finished hit GO. It should print <Back from monitor>\n");
   debug_getc();
@@ -305,7 +305,7 @@ void bsp_start( void )
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Going to start PCI buses scanning and initialization\n");
-#endif  
+#endif
   InitializePCI();
 
  {
@@ -323,7 +323,7 @@ void bsp_start( void )
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Number of PCI buses found is : %d\n", BusCountPCI());
 #endif
-#ifdef TEST_RAW_EXCEPTION_CODE  
+#ifdef TEST_RAW_EXCEPTION_CODE
   printk("Testing exception handling Part 1\n");
   /*
    * Cause a software exception
@@ -334,7 +334,7 @@ void bsp_start( void )
    */
   printk("Testing exception handling Part 2\n");
   __asm__ __volatile ("sc");
-#endif  
+#endif
 
 
   BSP_mem_size 				= residualCopy.TotalMemory;
@@ -369,7 +369,7 @@ void bsp_start( void )
 										)) {
 	printk("WARNING: unable to setup page tables VME bridge must share PCI space\n");
   }
-  
+
   /*
    * Set up our hooks
    * Make sure libc_init is done before drivers initialized so that
@@ -385,8 +385,8 @@ void bsp_start( void )
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("BSP_Configuration.work_space_size = %x\n", BSP_Configuration.work_space_size);
-#endif  
-  work_space_start = 
+#endif
+  work_space_start =
     (unsigned char *)BSP_mem_size - BSP_Configuration.work_space_size;
 
   if ( work_space_start <= ((unsigned char *)__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE) {
@@ -401,18 +401,18 @@ void bsp_start( void )
    */
   BSP_rtems_irq_mng_init(0);
 
-  
+
   /* Activate the page table mappings only after
    * initializing interrupts because the irq_mng_init()
    * routine needs to modify the text
-   */           
+   */
   if (pt) {
 #ifdef  SHOW_MORE_INIT_SETTINGS
     printk("Page table setup finished; will activate it NOW...\n");
 #endif
     BSP_pgtbl_activate(pt);
   	/* finally, switch off DBAT3 */
-	setdbat(3, 0, 0, 0, 0); 
+	setdbat(3, 0, 0, 0, 0);
   }
 
   /*
@@ -430,5 +430,5 @@ void bsp_start( void )
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");
-#endif  
+#endif
 }

@@ -16,7 +16,7 @@
  *
  *  $Id$
  */
-  
+
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <rtems.h>
@@ -146,7 +146,7 @@ static m82xxIrqMasks_t SIU_MaskBit[BSP_CPM_IRQ_NUMBER] =
 void dump_irq_masks(void )
 {
 	int i;
-	for( i=0; i<BSP_CPM_IRQ_NUMBER;i++ )	
+	for( i=0; i<BSP_CPM_IRQ_NUMBER;i++ )
 	{
 		printk( "%04d: %08X %08X\n",
 	 		i,
@@ -172,9 +172,9 @@ static void compute_SIU_IvectMask_from_prio ()
 	 * correspond to the priorities defined
 	 * for the SIU in irq_init.c.
 	 */
-	
+
 	 int i,j;
-	
+
 	 for( i=0; i<BSP_CPM_IRQ_NUMBER; i++ )
 	 {
 	 	for( j=0;j<BSP_CPM_IRQ_NUMBER; j++ )
@@ -182,9 +182,9 @@ static void compute_SIU_IvectMask_from_prio ()
 		 	{
 				SIU_MaskBit[i].priority_h |= SIU_MaskBit[j].mask_h;
 				SIU_MaskBit[i].priority_l |= SIU_MaskBit[j].mask_l;
-			}		 		
+			}
 	 }
-	
+
 }
 
 /*
@@ -217,10 +217,10 @@ int BSP_irq_enable_at_cpm(const rtems_irq_symbolic_name irqLine)
 int BSP_irq_disable_at_cpm(const rtems_irq_symbolic_name irqLine)
 {
 	int cpm_irq_index;
-  
+
 	if (!is_cpm_irq(irqLine))
 		return 1;
-  
+
 	cpm_irq_index = ((int) (irqLine) - BSP_CPM_IRQ_LOWEST_OFFSET);
 
 	m8260.simr_h &= ~(SIU_MaskBit[cpm_irq_index].mask_h);
@@ -233,10 +233,10 @@ int BSP_irq_disable_at_cpm(const rtems_irq_symbolic_name irqLine)
 int BSP_irq_enabled_at_cpm(const rtems_irq_symbolic_name irqLine)
 {
 	int cpm_irq_index;
-  
+
 	if (!is_cpm_irq(irqLine))
 		return 0;
-  
+
 	cpm_irq_index = ((int) (irqLine) - BSP_CPM_IRQ_LOWEST_OFFSET);
 
 	return ((m8260.simr_h & SIU_MaskBit[cpm_irq_index].mask_h) ||
@@ -274,7 +274,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 	 * store the data provided by user
 	 */
 	rtems_hdl_tbl[irq->name] = *irq;
-	
+
 	if (is_cpm_irq(irq->name)) {
 	    /*
 	     * Enable interrupt at PIC level
@@ -317,7 +317,7 @@ int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
 	unsigned int level;
-  
+
 	if (!isValidInterrupt(irq->name)) {
 		return 0;
 	}
@@ -332,32 +332,32 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 	  return 0;
 	}
 	_CPU_ISR_Disable(level);
-	
+
 	if (is_cpm_irq(irq->name)) {
 	  /*
 	   * disable interrupt at PIC level
 	   */
 	  BSP_irq_disable_at_cpm (irq->name);
 	}
-	
+
 	if (is_processor_irq(irq->name)) {
 	  /*
 	   * disable exception at processor level
 	   */
-	}    
-	
+	}
+
 	/*
 	 * Disable interrupt on device
 	 */
 	irq->off(irq);
-	
+
 	/*
 	 * restore the default irq value
 	 */
 	rtems_hdl_tbl[irq->name] = default_rtems_entry;
-	
+
 	_CPU_ISR_Enable(level);
-	
+
 	return 1;
 }
 
@@ -378,7 +378,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 
 	/* Fill in priority masks */
 	compute_SIU_IvectMask_from_prio();
-	
+
 	_CPU_ISR_Disable(level);
 	/*
 	 * start with CPM IRQ
@@ -458,14 +458,14 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 	 */
 #ifdef DISPATCH_HANDLER_STAT
 	loopCounter = 0;
-#endif  
+#endif
 
 	while (1) {
 
 		if( ((m8260.sipnr_h & m8260.simr_h) | (m8260.sipnr_l & m8260.simr_l)) == 0 ) {
 #ifdef DISPATCH_HANDLER_STAT
 			if (loopCounter >  maxLoop) maxLoop = loopCounter;
-#endif      
+#endif
 			break;
 		}
 
@@ -495,11 +495,11 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 
 			/* disable exceptions again */
 			_CPU_MSR_SET(msr);
-			
+
 			/* restore interrupt masks */
 			m8260.simr_h = old_simr_h;
 			m8260.simr_l = old_simr_l;
-			
+
 		}
 #ifdef DISPATCH_HANDLER_STAT
 		++ loopCounter;
@@ -507,8 +507,8 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 	}
 }
 
-    
-  
+
+
 void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
 {
 	/*

@@ -14,7 +14,7 @@
       F U N C T I O N S
   */
 #if __cplusplus
-extern "C" 
+extern "C"
 {
 #endif
 

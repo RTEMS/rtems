@@ -48,7 +48,7 @@ void console_interrupt(unsigned int vector,unsigned int pc,
   if(pending)
     {
       reason = uart->read.IIR;
-      
+
       switch(reason)
 	{
 	case 0: /* Interrupt because of modem status */
@@ -124,10 +124,10 @@ rtems_device_driver console_initialize(
     major,
     (rtems_device_minor_number) 0
   );
- 
+
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
- 
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -220,7 +220,7 @@ rtems_device_driver console_open(
 {
   return RTEMS_SUCCESSFUL;
 }
- 
+
 /*
  *  Close entry point
  */
@@ -248,13 +248,13 @@ rtems_device_driver console_read(
   char *buffer;
   int maximum;
   int count = 0;
- 
+
   rw_args = (rtems_libio_rw_args_t *) arg;
 
   buffer = rw_args->buffer;
   maximum = rw_args->count;
 
-  
+
   for (count = 0; count < maximum; count++)
     {
       buffer[ count ] = inbyte();
@@ -285,7 +285,7 @@ rtems_device_driver console_read(
 }
 
 /*
- * write bytes to the serial port. Stdout and stderr are the same. 
+ * write bytes to the serial port. Stdout and stderr are the same.
  */
 
 rtems_device_driver console_write(
@@ -343,7 +343,7 @@ rtems_device_driver console_control(
       param = (int)(request->data);
       switch(param)
 	{
-	case 50: 
+	case 50:
         case 150:
 	case 300:
 	case 600:

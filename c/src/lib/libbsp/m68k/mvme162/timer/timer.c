@@ -45,7 +45,7 @@ rtems_isr timerisr();
 void Timer_initialize()
 {
   (void) set_vector( timerisr, VBR0 * 0x10 + 0x8, 0 );
-  
+
   Ttimer_val = 0;                     /* clear timer ISR count */
   lcsr->vector_base |= MASK_INT;      /* unmask VMEchip2 interrupts */
   lcsr->intr_clear |= 0x01000000;     /* clear pending interrupt */
@@ -63,7 +63,7 @@ void Timer_initialize()
                                 /* (3 countdowns) to start/stop the timer. */
 #define LEAST_VALID       10U   /* Don't trust a value lower than this */
 
-int Read_timer() 
+int Read_timer()
 {
   uint32_t            total;
 

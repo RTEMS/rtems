@@ -1,10 +1,10 @@
 #define  GDB_STUB_ENABLE_THREAD_SUPPORT 1
 /****************************************************************************
 
-		THIS SOFTWARE IS NOT COPYRIGHTED  
-   
+		THIS SOFTWARE IS NOT COPYRIGHTED
+
    HP offers the following for use in the public domain.  HP makes no
-   warranty with regard to the software or it's performance and the 
+   warranty with regard to the software or it's performance and the
    user accepts the software "AS IS" with all faults.
 
    HP DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED, WITH REGARD
@@ -14,22 +14,22 @@
 ****************************************************************************/
 
 /****************************************************************************
- *  Header: remcom.c,v 1.34 91/03/09 12:29:49 glenne Exp $                   
+ *  Header: remcom.c,v 1.34 91/03/09 12:29:49 glenne Exp $
  *
- *  Module name: remcom.c $  
+ *  Module name: remcom.c $
  *  Revision: 1.34 $
  *  Date: 91/03/09 12:29:49 $
  *  Contributor:     Lake Stevens Instrument Division$
- *  
+ *
  *  Description:     low level support for gdb debugger. $
  *
  *  Considerations:  only works on target hardware $
  *
  *  Written by:      Glenn Engel $
- *  ModuleState:     Experimental $ 
+ *  ModuleState:     Experimental $
  *
  *  NOTES:           See Below $
- * 
+ *
  *  To enable debugger support, two things need to happen.  One, a
  *  call to set_debug_traps() is necessary in order to allow any breakpoints
  *  or error conditions to be properly intercepted and reported to gdb.
@@ -40,15 +40,15 @@
  *  there either should be a standard breakpoint instruction, or the protocol
  *  should be extended to provide some means to communicate which breakpoint
  *  instruction is in use (or have the stub insert the breakpoint).
- *  
+ *
  *  Some explanation is probably necessary to explain how exceptions are
  *  handled.  When an exception is encountered the 68000 pushes the current
  *  program counter and status register onto the supervisor stack and then
  *  transfers execution to a location specified in it's vector table.
  *  The handlers for the exception vectors are hardwired to jmp to an address
- *  given by the relation:  (exception - 256) * 6.  These are decending 
+ *  given by the relation:  (exception - 256) * 6.  These are decending
  *  addresses starting from -6, -12, -18, ...  By allowing 6 bytes for
- *  each entry, a jsr, jmp, bsr, ... can be used to enter the exception 
+ *  each entry, a jsr, jmp, bsr, ... can be used to enter the exception
  *  handler.  Using a jsr to handle an exception has an added benefit of
  *  allowing a single handler to service several exceptions and use the
  *  return address as the key differentiation.  The vector number can be
@@ -60,50 +60,50 @@
  *  For 68020 machines, the ability to have a return address around just
  *  so the vector can be determined is not necessary because the '020 pushes an
  *  extra word onto the stack containing the vector offset
- * 
+ *
  *  Because gdb will sometimes write to the stack area to execute function
  *  calls, this program cannot rely on using the supervisor stack so it
- *  uses it's own stack area reserved in the int array remcomStack.  
- * 
+ *  uses it's own stack area reserved in the int array remcomStack.
+ *
  *************
  *
  *    The following gdb commands are supported:
- * 
+ *
  * command          function                               Return value
- * 
+ *
  *    g             return the value of the CPU registers  hex data or ENN
  *    G             set the value of the CPU registers     OK or ENN
- * 
+ *
  *    mAA..AA,LLLL  Read LLLL bytes at address AA..AA      hex data or ENN
  *    MAA..AA,LLLL: Write LLLL bytes at address AA.AA      OK or ENN
- * 
+ *
  *    c             Resume at current address              SNN   ( signal NN)
  *    cAA..AA       Continue at address AA..AA             SNN
- * 
+ *
  *    s             Step one instruction                   SNN
  *    sAA..AA       Step one instruction from AA..AA       SNN
- * 
+ *
  *    k             kill
  *
  *    ?             What was the last sigval ?             SNN   (signal NN)
- * 
- * All commands and responses are sent with a packet which includes a 
- * checksum.  A packet consists of 
- * 
+ *
+ * All commands and responses are sent with a packet which includes a
+ * checksum.  A packet consists of
+ *
  * $<packet info>#<checksum>.
- * 
+ *
  * where
  * <packet info> :: <characters representing the command or response>
  * <checksum>    :: < two hex digits computed as modulo 256 sum of <packetinfo>>
- * 
+ *
  * When a packet is received, it is first acknowledged with either '+' or '-'.
  * '+' indicates a successful transfer.  '-' indicates a failed transfer.
- * 
+ *
  * Example:
- * 
+ *
  * Host:                  Reply:
  * $m0,10#2a               +$00010203040506070809101112131415#42
- * 
+ *
  ***************************************************************************
  *    added 05/27/02 by IMD, Thomas Doerfler:
  *    XAA..AA,LLLL: Write LLLL binary bytes at address AA.AA      OK or ENN
@@ -124,7 +124,7 @@ int current_thread_registers[NUMREGBYTES/4];
 
 /************************************************************************
  *
- * external low-level support routines 
+ * external low-level support routines
  */
 typedef void (*ExceptionHook)(int);   /* pointer to function with int parm */
 typedef void (*Function)();           /* pointer to a function */
@@ -148,7 +148,7 @@ initializeRemcomErrorFrame ();
 static char initialized;  /* boolean flag. != 0 means we've been initialized */
 
 int     remote_debug;
-/*  debug >  0 prints ill-formed commands in valid packets & checksum errors */ 
+/*  debug >  0 prints ill-formed commands in valid packets & checksum errors */
 
 const char gdb_hexchars[]="0123456789abcdef";
 #define highhex(x) gdb_hexchars [(x >> 4) & 0xf]
@@ -193,12 +193,12 @@ static int* stackPtr = &remcomStack[STACKSIZE/sizeof(int) - 1];
 
 /*
  * In many cases, the system will want to continue exception processing
- * when a continue command is given.  
+ * when a continue command is given.
  * oldExceptionHook is a function to invoke in this case.
  */
 
 static ExceptionHook oldExceptionHook;
-/* the size of the exception stack on the 68020/30/40/CPU32 varies with 
+/* the size of the exception stack on the 68020/30/40/CPU32 varies with
  * the type of exception.  The following table is the number of WORDS used
  * for each exception format.
  * This table should be common for all 68k with VBR
@@ -217,7 +217,7 @@ jmp_buf remcomEnv;
 /* do an fsave, then remember the address to begin a restore from */
 #define SAVE_FP_REGS()    asm(" fsave   -(%a0)");		\
 			  asm(" fmovem.x %fp0-%fp7,registers+72");        \
-			  asm(" fmovem.l %fpcr/%fpsr/%fpi,registers+168"); 
+			  asm(" fmovem.l %fpcr/%fpsr/%fpi,registers+168");
 #define RESTORE_FP_REGS()                              \
 asm("                                                \n\
     fmovem.l  registers+168,%fpcr/%fpsr/%fpi            \n\
@@ -255,9 +255,9 @@ void m68k_exceptionHandler
 
 ExceptionHook exceptionHook;  /* hook variable for errors/exceptions */
 
-void m68k_stub_dummy_asm_wrapper() 
+void m68k_stub_dummy_asm_wrapper()
      /*
-      * this dummy wrapper function ensures, 
+      * this dummy wrapper function ensures,
       * that the C compiler manages sections properly
       */
 {
@@ -289,9 +289,9 @@ copyUserLoop:                                                           \n\
         move.w   -(%a1),-(%sp) 						\n\
         dbf     %d0,copyUserLoop                                        \n\
 ");
-        RESTORE_FP_REGS() 
-   asm("   movem.l  registers,%d0-%d7/%a0-%a6");			        
-   asm("   rte");  /* pop and go! */                                    
+        RESTORE_FP_REGS()
+   asm("   movem.l  registers,%d0-%d7/%a0-%a6");
+   asm("   rte");  /* pop and go! */
 
 #define DISABLE_INTERRUPTS()   asm("         oriw   #0x0700,%sr");
 #define BREAKPOINT() asm("   trap #2");
@@ -333,11 +333,11 @@ asm("	rte");
  * stack on entry:                       stack on exit:
  *   N bytes of junk                     exception # MSWord
  *   Exception Format Word               exception # MSWord
- *   Program counter LSWord              
- *   Program counter MSWord             
- *   Status Register                    
- *                                       
- *                                       
+ *   Program counter LSWord
+ *   Program counter MSWord
+ *   Status Register
+ *
+ *
  */
 asm(" 						\n\
 .text						\n\
@@ -348,7 +348,7 @@ asm("									\n\
         movem.l  %d0-%d7/%a0-%a6,registers /* save registers        */	\n\
 	move.l	lastFrame,%a0	/* last frame pointer */		\n\
 ");
-SAVE_FP_REGS();        
+SAVE_FP_REGS();
 asm("\n\
 	lea     registers,%a5   /* get address of registers     */\n\
         move.w  (%sp),%d1        /* get status register          */\n\
@@ -422,14 +422,14 @@ a7saveDone:\n\
 /* This function is called when an exception occurs.  It translates the
  * return address found on the stack into an exception vector # which
  * is then handled by either handle_exception or a system handler.
- * _catchException provides a front end for both.  
+ * _catchException provides a front end for both.
  *
  * stack on entry:                       stack on exit:
- *   Program counter MSWord              exception # MSWord 
+ *   Program counter MSWord              exception # MSWord
  *   Program counter LSWord              exception # MSWord
- *   Status Register                     
- *   Return Address  MSWord              
- *   Return Address  LSWord             
+ *   Status Register
+ *   Return Address  MSWord
+ *   Return Address  LSWord
  */
 asm("\n\
 .text\n\
@@ -440,7 +440,7 @@ asm("\
         moveml %d0-%d7/%a0-%a6,registers  /* save registers               */ \n\
 	movel	lastFrame,%a0	/* last frame pointer */ \n\
 ");
-SAVE_FP_REGS();        
+SAVE_FP_REGS();
 asm(" \n\
         lea     registers,%a5   /* get address of registers     */ \n\
         movel   (%sp)+,%d2         /* pop return address           */ \n\
@@ -534,7 +534,7 @@ void _returnFromException( Frame *frame )
     frame->pc = registers[(int) PC];
 
     if (registers[(int) PS] & 0x2000)
-    { 
+    {
         /* return to supervisor mode... */
         return_to_super();
     }
@@ -563,15 +563,15 @@ char * buffer;
   int  i;
   int  count;
   char ch;
-  
+
   do {
     /* wait around for the start character, ignore all other characters */
-    while ((ch = getDebugChar()) != '$'); 
+    while ((ch = getDebugChar()) != '$');
     checksum = 0;
     xmitcsum = -1;
-    
+
     count = 0;
-    
+
     /* now, read until a # or end of buffer is found */
     while (count < BUFMAX) {
       ch = getDebugChar();
@@ -589,8 +589,8 @@ char * buffer;
         fprintf (stderr,"bad checksum.  My count = 0x%x, sent=0x%x. buf=%s\n",
 						     checksum,xmitcsum,buffer);
       }
-      
-      if (checksum != xmitcsum) putDebugChar('-');  /* failed checksum */ 
+
+      if (checksum != xmitcsum) putDebugChar('-');  /* failed checksum */
       else {
 	 putDebugChar('+');  /* successful transfer */
 	 /* if a sequence char is present, reply the sequence ID */
@@ -600,14 +600,14 @@ char * buffer;
 	    /* remove sequence chars from buffer */
 	    count = strlen(buffer);
 	    for (i=3; i <= count; i++) buffer[i-3] = buffer[i];
-	 } 
-      } 
-    } 
+	 }
+      }
+    }
   } while (checksum != xmitcsum);
-  
+
 }
 
-/* send the packet in buffer.  The host get's one chance to read it.  
+/* send the packet in buffer.  The host get's one chance to read it.
    This routine does not wait for a positive acknowledge.  */
 
 
@@ -687,7 +687,7 @@ int   count;
           *buf++ = gdb_hexchars[ch >> 4];
           *buf++ = gdb_hexchars[ch % 16];
       }
-      *buf = 0; 
+      *buf = 0;
       return(buf);
 }
 
@@ -753,7 +753,7 @@ void handle_buserror()
   longjmp(remcomEnv,1);
 }
 
-/* this function takes the 68000 exception number and attempts to 
+/* this function takes the 68000 exception number and attempts to
    translate this number into a unix compatible signal value */
 int computeSignal( exceptionVector )
 int exceptionVector;
@@ -792,7 +792,7 @@ int exceptionVector;
     case 52: sigval = 8;  break; /* operand error       */
     case 53: sigval = 8;  break; /* overflow            */
     case 54: sigval = 8;  break; /* NAN                 */
-    default: 
+    default:
       sigval = 7;         /* "software generated"*/
   }
   return (sigval);
@@ -806,7 +806,7 @@ int hexToInt(char **ptr, int *intValue)
 {
     int numChars = 0;
     int hexValue;
-    
+
     *intValue = 0;
 
     while (**ptr)
@@ -819,7 +819,7 @@ int hexToInt(char **ptr, int *intValue)
         }
         else
             break;
-        
+
         (*ptr)++;
     }
 
@@ -849,21 +849,21 @@ void gdb_stub_report_exception_info(
    *optr++ = highhex(A7);
    *optr++ = lowhex(A7);
    *optr++ = ':';
-   optr    = mem2hstr(optr, 
-		      (unsigned char *)&(regs[A7]), 
+   optr    = mem2hstr(optr,
+		      (unsigned char *)&(regs[A7]),
 		      sizeof(regs[A7]));
    *optr++ = ';';
-  
+
    *optr++ = highhex(PC);
    *optr++ = lowhex(PC);
    *optr++ = ':';
-   optr    = mem2hstr(optr, 
-		      (unsigned char *)&(regs[PC]), 
+   optr    = mem2hstr(optr,
+		      (unsigned char *)&(regs[PC]),
 		      sizeof(regs[PC]) );
    *optr++ = ';';
 
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
-   if (do_threads) 
+   if (do_threads)
    {
       *optr++ = 't';
       *optr++ = 'h';
@@ -894,9 +894,9 @@ void handle_exception(int exceptionVector)
    void         *regptr;
    int binary;
 
-  if (remote_debug) printf("vector=%d, sr=0x%x, pc=0x%x\n", 
+  if (remote_debug) printf("vector=%d, sr=0x%x, pc=0x%x\n",
 			    exceptionVector,
-			    registers[ PS ], 
+			    registers[ PS ],
 			    registers[ PC ]);
 
    thread = 0;
@@ -906,7 +906,7 @@ void handle_exception(int exceptionVector)
    }
 #endif
    current_thread = thread;
-  
+
 #if 0
   /* reply to host that an exception has occurred */
   sigval = computeSignal( exceptionVector );
@@ -919,9 +919,9 @@ void handle_exception(int exceptionVector)
    gdb_stub_report_exception_info(exceptionVector, registers, thread);
 #endif
 
-  putpacket(remcomOutBuffer); 
+  putpacket(remcomOutBuffer);
 
-  while (!(host_has_detached)) { 
+  while (!(host_has_detached)) {
     binary = 0;
     error = 0;
     remcomOutBuffer[0] = 0;
@@ -932,7 +932,7 @@ void handle_exception(int exceptionVector)
                    remcomOutBuffer[1] =  gdb_hexchars[sigval >> 4];
                    remcomOutBuffer[2] =  gdb_hexchars[sigval % 16];
                    remcomOutBuffer[3] = 0;
-                 break; 
+                 break;
 #else
       case '?' : gdb_stub_report_exception_info(exceptionVector,
 						registers,
@@ -940,11 +940,11 @@ void handle_exception(int exceptionVector)
 	         break;
 #endif
       case 'd' : remote_debug = !(remote_debug);  /* toggle debug flag */
-                 break; 
+                 break;
       case 'D' : /* host has detached */
 	         strcpy(remcomOutBuffer,"OK");
 	         host_has_detached = 1;
-                 break; 
+                 break;
          case 'g':               /* return the values of the CPU registers */
             regptr = registers;
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
@@ -961,8 +961,8 @@ void handle_exception(int exceptionVector)
 	   if (do_threads && current_thread != thread )
 	     regptr = &current_thread_registers;
 #endif
-	   if (hex2mem (&remcomInBuffer[1], 
-			regptr, 
+	   if (hex2mem (&remcomInBuffer[1],
+			regptr,
 			sizeof registers)) {
 	     strcpy (remcomOutBuffer, "OK");
 	   }
@@ -970,18 +970,18 @@ void handle_exception(int exceptionVector)
 	     strcpy (remcomOutBuffer, "E00"); /* E00 = bad "set register" command */
 	   }
 	   break;
-      
+
       /* mAA..AA,LLLL  Read LLLL bytes at address AA..AA */
-      case 'm' : 
+      case 'm' :
 	        if (setjmp(remcomEnv) == 0)
                 {
-                    m68k_exceptionHandler(2,handle_buserror); 
+                    m68k_exceptionHandler(2,handle_buserror);
 
 		    /* TRY TO READ %x,%x.  IF SUCCEED, SET PTR = 0 */
                     ptr = &remcomInBuffer[1];
                     if (hexToInt(&ptr,&addr))
                         if (*(ptr++) == ',')
-                            if (hexToInt(&ptr,&length)) 
+                            if (hexToInt(&ptr,&length))
                             {
                                 ptr = 0;
                                 mem2hex((char*) addr, remcomOutBuffer, length);
@@ -991,27 +991,27 @@ void handle_exception(int exceptionVector)
                     {
 		      strcpy(remcomOutBuffer,"E01");
 		      debug_error("malformed read memory command: %s",remcomInBuffer);
-                  }     
-                } 
+                  }
+                }
 		else {
-		  m68k_exceptionHandler(2,_catchException);   
+		  m68k_exceptionHandler(2,_catchException);
 		  strcpy(remcomOutBuffer,"E03");
 		  debug_error("bus error", 0);
-		  }     
-                
+		  }
+
 		/* restore handler for bus error */
-		m68k_exceptionHandler(2,_catchException);   
+		m68k_exceptionHandler(2,_catchException);
 		break;
-      
+
       /* XAA..AA,LLLL: Write LLLL bytes at address AA.AA return OK */
       /* Transfer is in binary, '$', '#' and 0x7d is escaped with 0x7d */
-      case 'X' : 
+      case 'X' :
                 binary = 1;
       /* MAA..AA,LLLL: Write LLLL bytes at address AA.AA return OK */
-      case 'M' : 
+      case 'M' :
 	        if (setjmp(remcomEnv) == 0) {
-		    m68k_exceptionHandler(2,handle_buserror); 
-                    
+		    m68k_exceptionHandler(2,handle_buserror);
+
 		    /* TRY TO READ '%x,%x:'.  IF SUCCEED, SET PTR = 0 */
                     ptr = &remcomInBuffer[1];
                     if (hexToInt(&ptr,&addr))
@@ -1032,35 +1032,35 @@ void handle_exception(int exceptionVector)
                     {
 		      strcpy(remcomOutBuffer,"E02");
 		      debug_error("malformed write memory command: %s",remcomInBuffer);
-		      }     
-                } 
+		      }
+                }
 		else {
-		  m68k_exceptionHandler(2,_catchException);   
+		  m68k_exceptionHandler(2,_catchException);
 		  strcpy(remcomOutBuffer,"E03");
 		  debug_error("bus error", 0);
-		  }     
+		  }
 
                 /* restore handler for bus error */
-                m68k_exceptionHandler(2,_catchException);   
+                m68k_exceptionHandler(2,_catchException);
                 break;
 
      /* cAA..AA    Continue at address AA..AA(optional) */
      /* sAA..AA   Step one instruction from AA..AA(optional) */
-     case 'c' : 
-     case 's' : 
+     case 'c' :
+     case 's' :
           /* try to read optional parameter, pc unchanged if no parm */
          ptr = &remcomInBuffer[1];
          if (hexToInt(&ptr,&addr))
              registers[ PC ] = addr;
-             
+
           newPC = registers[ PC];
-          
+
           /* clear the trace bit */
           registers[ PS ] &= 0x7fff;
-          
+
           /* set the trace bit if we're stepping */
           if (remcomInBuffer[0] == 's') registers[ PS ] |= 0x8000;
-          
+
           /*
            * look for newPC in the linked list of exception frames.
            * if it is found, use the old frame it.  otherwise,
@@ -1085,24 +1085,24 @@ void handle_exception(int exceptionVector)
                   (frame->exceptionPC == (newPC+2))) break;
               if (frame == frame->previous)
 	      {
-	          frame = 0; /* no match found */ 
-	          break; 
+	          frame = 0; /* no match found */
+	          break;
 	      }
 	      frame = frame->previous;
           }
-          
+
           /*
            * If we found a match for the PC AND we are not returning
            * as a result of a breakpoint (33),
            * trace exception (9), nmi (31), jmp to
            * the old exception handler as if this code never ran.
            */
-          if (frame) 
+          if (frame)
           {
-              if ((frame->exceptionVector != 9)  && 
-                  (frame->exceptionVector != 31) && 
+              if ((frame->exceptionVector != 9)  &&
+                  (frame->exceptionVector != 31) &&
                   (frame->exceptionVector != 33))
-              { 
+              {
                   /*
                    * invoke the previous handler.
                    */
@@ -1121,13 +1121,13 @@ void handle_exception(int exceptionVector)
 	              _returnFromException( frame );  /* this is a jump */
                   }
               }
-          }         
+          }
 
     	  /* if we couldn't find a frame, create one */
           if (frame == 0)
 	  {
     	      frame = lastFrame -1 ;
-	      
+
 	      /* by using a bunch of print commands with breakpoints,
     	         it's possible for the frame stack to creep down.  If it creeps
 		 too far, give up and reset it to the top.  Normal use should
@@ -1136,22 +1136,22 @@ void handle_exception(int exceptionVector)
 	      if ((unsigned int) (frame-2) < (unsigned int) &gdbFrameStack)
     	      {
     	         initializeRemcomErrorFrame();
-    	         frame = lastFrame; 
+    	         frame = lastFrame;
 	      }
     	      frame->previous = lastFrame;
               lastFrame = frame;
-              frame = 0;  /* null so _return... will properly initialize it */ 
-	  }    
-	  
+              frame = 0;  /* null so _return... will properly initialize it */
+	  }
+
 	  _returnFromException( frame ); /* this is a jump */
 
           break;
-          
+
          case 'q':   /* queries */
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
-            rtems_gdb_process_query( remcomInBuffer, 
-				     remcomOutBuffer, 
-				     do_threads, 
+            rtems_gdb_process_query( remcomInBuffer,
+				     remcomOutBuffer,
+				     do_threads,
 				     thread );
 #endif
             break;
@@ -1161,7 +1161,7 @@ void handle_exception(int exceptionVector)
          {
             int testThread;
 
-            if( vhstr2thread(&remcomInBuffer[1], &testThread) == NULL ) 
+            if( vhstr2thread(&remcomInBuffer[1], &testThread) == NULL )
             {
                strcpy(remcomOutBuffer, "E01");
                break;
@@ -1178,20 +1178,20 @@ void handle_exception(int exceptionVector)
          }
          break;
 #endif
-        
+
          case 'H':  /* set new thread */
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
             if (remcomInBuffer[1] != 'g') {
                break;
             }
-	  
+
             if (!do_threads) {
                break;
             }
-	  
+
             {
                int tmp, ret;
-	    
+
                /* Set new generic thread */
                if (vhstr2thread(&remcomInBuffer[2], &tmp) == NULL) {
                   strcpy(remcomOutBuffer, "E01");
@@ -1209,7 +1209,7 @@ void handle_exception(int exceptionVector)
                   break;
                }
 
-               /* Save current thread registers if necessary */ 
+               /* Save current thread registers if necessary */
                if (current_thread != thread) {
                   ret = rtems_gdb_stub_set_thread_regs(
                      current_thread, (unsigned int *) &current_thread_registers);
@@ -1226,7 +1226,7 @@ void handle_exception(int exceptionVector)
                      break;
                   }
                }
-	    
+
                current_thread = tmp;
                strcpy(remcomOutBuffer, "OK");
             }
@@ -1236,10 +1236,10 @@ void handle_exception(int exceptionVector)
       /* kill the program */
       case 'k' :  /* do nothing */
                 break;
-      } /* switch */ 
-    
+      } /* switch */
+
     /* reply to the request */
-    putpacket(remcomOutBuffer); 
+    putpacket(remcomOutBuffer);
     }
 }
 
@@ -1251,7 +1251,7 @@ initializeRemcomErrorFrame()
     lastFrame->previous = lastFrame;
 }
 
-/* this function is used to set up exception handlers for tracing and 
+/* this function is used to set up exception handlers for tracing and
    breakpoints */
 void set_debug_traps()
 {
@@ -1263,33 +1263,33 @@ void set_debug_traps()
   stackPtr  = &remcomStack[STACKSIZE/sizeof(int) - 1];
 
   for (exception = 2; exception <= 23; exception++)
-      m68k_exceptionHandler(exception,_catchException);   
+      m68k_exceptionHandler(exception,_catchException);
 
   /* level 7 interrupt              */
-  m68k_exceptionHandler(31,_debug_level7);    
-  
+  m68k_exceptionHandler(31,_debug_level7);
+
   /* GDB breakpoint exception (trap #1) */
   m68k_exceptionHandler(33,_catchException);
 
   /* coded breakpoint exception (trap #2) */
   m68k_exceptionHandler(34,_catchException);
-  
+
   /* This is a trap #8 instruction.  Apparently it is someone's software
      convention for some sort of SIGFPE condition.  Whose?  How many
      people are being screwed by having this code the way it is?
      Is there a clean solution?  */
   m68k_exceptionHandler(40,_catchException);
-  
+
   /* 48 to 54 are floating point coprocessor errors */
   for (exception = 48; exception <= 54; exception++)
-      m68k_exceptionHandler(exception,_catchException);   
+      m68k_exceptionHandler(exception,_catchException);
 
   if (oldExceptionHook != remcomHandler)
   {
       oldExceptionHook = exceptionHook;
       exceptionHook    = remcomHandler;
   }
-  
+
   initialized = 1;
 
 }
@@ -1298,7 +1298,7 @@ void set_debug_traps()
    beginning of a program to sync up with a debugger and can be used
    otherwise as a quick means to stop program execution and "break" into
    the debugger. */
-   
+
 void breakpoint()
 {
   if (initialized) BREAKPOINT();

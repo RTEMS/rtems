@@ -53,10 +53,10 @@ _start16:
 	movw	%ax, %ss	#
 
 #if defined(RTEMS_VIDEO_80x50)
-	
+
 	movl	$0x0040,%eax	# use 32 bit constant to ensure 16 MSB=0
 	mov     %ax,%es
-	movw	%es:0x4a, %ax	# get 16 bit number of columns 
+	movw	%es:0x4a, %ax	# get 16 bit number of columns
 	cmpw	$0, %ax         # or 0 if no video adapter
 	je	1f              # if no video, skip touching it
 	/*---------------------------------------------------------------------+
@@ -87,12 +87,12 @@ _start16:
 	movl	%cr0, %eax
 	orl	$CR0_PE, %eax
 	movl	%eax, %cr0		# turn on protected mode
-	
+
 #ifdef NEW_GAS
 	ljmpl	$PROT_CODE_SEG, $1f	# flush prefetch queue, and reload %cs
 #else
 	ljmp	$PROT_CODE_SEG, $1f	# flush prefetch queue, and reload %cs
-#endif	
+#endif
 .code32
 1:
         /*---------------------------------------------------------------------+
@@ -127,10 +127,10 @@ _start16:
 /*----------------------------------------------------------------------------+
 | pc386_delay
 +------------------------------------------------------------------------------
-| Delay is needed after doing I/O. 
+| Delay is needed after doing I/O.
 |
 | The outb version is OK on most machines BUT the loop version ...
-| 
+|
 | will delay for 1us on 1Gz machine, it will take a little bit
 | longer on slower machines, however, it does not matter because we
 | are going to call this function only a few times
@@ -180,7 +180,7 @@ no_output:
 	test	$0x02, %al	# is input buffer full?
 	jnz	empty_8042	# yes - loop
 	ret
-	
+
 /*----------------------------------------------------------------------------+
 | DATA section
 +----------------------------------------------------------------------------*/

@@ -45,7 +45,7 @@ typedef unsigned int u32;
 
 typedef struct _pci_resource {
       struct _pci_resource *next;
-      struct pci_dev *dev; 
+      struct pci_dev *dev;
       u_long base;    /* will be 64 bits on 64 bits machines */
       u_long size;
       u_char type;	/* 1 is I/O else low order 4 bits of the memory type */
@@ -80,9 +80,9 @@ struct _pci_private {
       pci_area_head io, mem;
 
 } pci_private = {
-   config_addr: NULL, 
-   config_data: (volatile u_char *) 0x80800000, 
-   last_dev_p: NULL, 
+   config_addr: NULL,
+   config_data: (volatile u_char *) 0x80800000,
+   last_dev_p: NULL,
    resources: NULL,
    io: {NULL, 0xfff, 0},
    mem: {NULL, 0xfffff, 0}
@@ -100,33 +100,33 @@ struct _pci_private {
 #endif
 
 #if defined(PCI_DEBUG)
-static void 
+static void
 print_pci_resources(const char *s) {
    pci_resource *p;
    printk("%s", s);
    for (p=pci->resources; p; p=p->next) {
 /*
-      printk("  %p:%p %06x %08lx %08lx %d\n", 
+      printk("  %p:%p %06x %08lx %08lx %d\n",
              p, p->next,
              (p->dev->devfn<<8)+(p->dev->bus->number<<16)
              +0x10+p->reg*4,
              p->base,
              p->size,
-             p->type); 
+             p->type);
 */
 
-      printk("  %p:%p %d:%02x (%04x:%04x) %08lx %08lx %d\n", 
+      printk("  %p:%p %d:%02x (%04x:%04x) %08lx %08lx %d\n",
              p, p->next,
-             p->dev->bus->number, PCI_SLOT(p->dev->devfn), 
+             p->dev->bus->number, PCI_SLOT(p->dev->devfn),
              p->dev->vendor, p->dev->device,
              p->base,
              p->size,
-             p->type); 
+             p->type);
 
    }
 }
 
-static void 
+static void
 print_pci_area(pci_area *p) {
    for (; p; p=p->next) {
       printk("    %p:%p %p %08lx %08lx\n",
@@ -134,7 +134,7 @@ print_pci_area(pci_area *p) {
    }
 }
 
-static void 
+static void
 print_pci_areas(const char *s) {
    printk("%s  PCI I/O areas:\n",s);
    print_pci_area(pci->io.head);
@@ -142,7 +142,7 @@ print_pci_areas(const char *s) {
    print_pci_area(pci->mem.head);
 }
 #else
-#define print_pci_areas(x) 
+#define print_pci_areas(x)
 #define print_pci_resources(x)
 #endif
 
@@ -159,7 +159,7 @@ struct blacklist_entry {
 };
 
 #define BLACKLIST(vid, did, breg, actual_size) \
-	{PCI_VENDOR_ID_##vid, PCI_DEVICE_ID_##vid##_##did, breg, actual_size} 
+	{PCI_VENDOR_ID_##vid, PCI_DEVICE_ID_##vid##_##did, breg, actual_size}
 
 static struct blacklist_entry blacklist[] = {
    BLACKLIST(S3, TRIO, 0, 0x04000000),
@@ -168,7 +168,7 @@ static struct blacklist_entry blacklist[] = {
 
 
 /* This function filters resources and then inserts them into a list of
- * configurable pci resources. 
+ * configurable pci resources.
  */
 
 
@@ -180,7 +180,7 @@ static struct blacklist_entry blacklist[] = {
 
 
 static int insert_before(pci_resource *e, pci_resource *t) {
-   if (e->dev->bus->number != t->dev->bus->number) 
+   if (e->dev->bus->number != t->dev->bus->number)
       return e->dev->bus->number > t->dev->bus->number;
    if (AREA(e) != AREA(t)) return AREA(e)<AREA(t);
    return (e->size > t->size);
@@ -195,8 +195,8 @@ static void insert_resource(pci_resource *r) {
    pci_resource *p;
    if (!r) return;
 
-   /* First fixup in case we have a blacklist entry. Note that this 
-    * may temporarily leave a resource in an inconsistent state: with 
+   /* First fixup in case we have a blacklist entry. Note that this
+    * may temporarily leave a resource in an inconsistent state: with
     * (base & (size-1)) !=0. This is harmless.
     */
    for (b=blacklist; b->vendor!=0xffff; b++) {
@@ -207,13 +207,13 @@ static void insert_resource(pci_resource *r) {
          break;
       }
    }
-	
+
    /* Motorola NT firmware does not configure pci devices which are not
     * required for booting, others do. For now:
     * - allocated devices in the ISA range (64kB I/O, 16Mb memory)
     *   but non zero base registers are left as is.
-    * - all other registers, whether already allocated or not, are 
-    *   reallocated unless they require an inordinate amount of 
+    * - all other registers, whether already allocated or not, are
+    *   reallocated unless they require an inordinate amount of
     *   resources (>256 Mb for memory >64kB for I/O). These
     *   devices with too large mapping requirements are simply ignored
     *   and their bases are set to 0. This should disable the
@@ -233,37 +233,37 @@ static void insert_resource(pci_resource *r) {
    ** the hardware, we are stuck with the kludge below.  Note that
    ** everything is remapped on the CPCI backplane and any downstream
    ** hardware, its just the builtin stuff we're tiptoeing around.
-   ** 
+   **
    ** Gregm, 7/16/2003
    */
    if( r->dev->bus->number <= 1 )
    {
-   if ((r->type==PCI_BASE_ADDRESS_SPACE_IO) 
+   if ((r->type==PCI_BASE_ADDRESS_SPACE_IO)
        ? (r->base && r->base <0x10000)
        : (r->base && r->base <0x1000000)) {
 
 #ifdef PCI_DEBUG
-         printk("freeing region;  %p:%p %d:%02x (%04x:%04x) %08lx %08lx %d\n", 
+         printk("freeing region;  %p:%p %d:%02x (%04x:%04x) %08lx %08lx %d\n",
                 r, r->next,
-                r->dev->bus->number, PCI_SLOT(r->dev->devfn), 
+                r->dev->bus->number, PCI_SLOT(r->dev->devfn),
                 r->dev->vendor, r->dev->device,
                 r->base,
                 r->size,
-                r->type); 
+                r->type);
 #endif
       sfree(r);
       return;
    }
    }
 
-   if ((r->type==PCI_BASE_ADDRESS_SPACE_IO) 
+   if ((r->type==PCI_BASE_ADDRESS_SPACE_IO)
        ? (r->size >= 0x10000)
        : (r->size >= 0x10000000)) {
       r->size  = 0;
       r->base  = 0;
    }
 
-   /* Now insert into the list sorting by 
+   /* Now insert into the list sorting by
     * 1) decreasing bus number
     * 2) space: prefetchable memory, non-prefetchable and finally I/O
     * 3) decreasing size
@@ -284,21 +284,21 @@ static void insert_resource(pci_resource *r) {
 
 
 
-/* This version only works for bus 0. I don't have any P2P bridges to test 
+/* This version only works for bus 0. I don't have any P2P bridges to test
  * a more sophisticated version which has therefore not been implemented.
  * Prefetchable memory is not yet handled correctly either.
  * And several levels of PCI bridges much less even since there must be
- * allocated together to be able to setup correctly the top bridge. 
+ * allocated together to be able to setup correctly the top bridge.
  */
 
-static u_long find_range(u_char bus, u_char type, 
+static u_long find_range(u_char bus, u_char type,
                          pci_resource **first,
                          pci_resource **past, u_int *flags) {
    pci_resource *p;
    u_long total=0;
    u_int fl=0;
 
-   for (p=pci->resources; p; p=p->next) 
+   for (p=pci->resources; p; p=p->next)
    {
       if ((p->dev->bus->number == bus) &&
           AREA(p)==type) break;
@@ -306,12 +306,12 @@ static u_long find_range(u_char bus, u_char type,
 
    *first = p;
 
-   for (; p; p=p->next) 
+   for (; p; p=p->next)
    {
       if ((p->dev->bus->number != bus) ||
           AREA(p)!=type || p->size == 0) break;
       total = total+p->size;
-      fl |= 1<<p->type; 
+      fl |= 1<<p->type;
    }
 
    *past = p;
@@ -328,7 +328,7 @@ static u_long find_range(u_char bus, u_char type,
 
 
 
-static inline void init_free_area(pci_area_head *h, u_long start, 
+static inline void init_free_area(pci_area_head *h, u_long start,
                                   u_long end, u_int mask, int high) {
    pci_area *p;
    p = salloc(sizeof(pci_area));
@@ -376,12 +376,12 @@ static void insert_area(pci_area_head *h, pci_area *p) {
 
 
 static
-void remove_area(pci_area_head *h, pci_area *p) 
+void remove_area(pci_area_head *h, pci_area *p)
 {
    pci_area *q = h->head;
 
    if (!p || !q) return;
-   if (q==p) 
+   if (q==p)
    {
       h->head = q->next;
       return;
@@ -401,7 +401,7 @@ static pci_area * alloc_area(pci_area_head *h, struct pci_bus *bus,
    pci_area *from, *split, *new;
 
    required = (required+h->mask) & ~h->mask;
-   for (p=h->head, from=NULL; p; p=p->next) 
+   for (p=h->head, from=NULL; p; p=p->next)
    {
       u_long l1 = ((p->start+required+mask)&~mask)-1;
       u_long l2 = ((p->start+mask)&~mask)+required-1;
@@ -417,41 +417,41 @@ static pci_area * alloc_area(pci_area_head *h, struct pci_bus *bus,
    /* If allocation of new succeeds then allocation of split has
     * also been successful (given the current mm algorithms) !
     */
-   if (!new) { 
-      sfree(split); 
-      return NULL; 
+   if (!new) {
+      sfree(split);
+      return NULL;
    }
    new->bus = bus;
    new->flags = flags;
    /* Now allocate pci_space taking alignment into account ! */
-   if (h->high) 
+   if (h->high)
    {
       u_long l1 = ((from->end+1)&~mask)-required;
-      u_long l2 = (from->end+1-required)&~mask; 
+      u_long l2 = (from->end+1-required)&~mask;
       new->start = (l1>l2) ? l1 : l2;
       split->end = from->end;
       from->end = new->start-1;
       split->start = new->start+required;
       new->end = new->start+required-1;
-   } 
-   else 
+   }
+   else
    {
       u_long l1 = ((from->start+mask)&~mask)+required-1;
-      u_long l2 = ((from->start+required+mask)&~mask)-1; 
+      u_long l2 = ((from->start+required+mask)&~mask)-1;
       new->end = (l1<l2) ? l1 : l2;
       split->start = from->start;
       from->start = new->end+1;
       new->start = new->end+1-required;
       split->end = new->start-1;
    }
-	
+
    if (from->end+1 == from->start) remove_area(h, from);
-   if (split->end+1 != split->start) 
+   if (split->end+1 != split->start)
    {
       split->bus = NULL;
       insert_area(h, split);
-   } 
-   else 
+   }
+   else
    {
       sfree(split);
    }
@@ -465,7 +465,7 @@ static pci_area * alloc_area(pci_area_head *h, struct pci_bus *bus,
 
 
 static inline
-void alloc_space(pci_area *p, pci_resource *r) 
+void alloc_space(pci_area *p, pci_resource *r)
 {
    if (p->start & (r->size-1)) {
       r->base = p->end+1-r->size;
@@ -480,7 +480,7 @@ void alloc_space(pci_area *p, pci_resource *r)
 
 
 
-static void reconfigure_bus_space(u_char bus, u_char type, pci_area_head *h) 
+static void reconfigure_bus_space(u_char bus, u_char type, pci_area_head *h)
 {
    pci_resource *first, *past, *r;
    pci_area *area, tmp;
@@ -494,7 +494,7 @@ static void reconfigure_bus_space(u_char bus, u_char type, pci_area_head *h)
    if (!area) return;
 
    tmp = *area;
-   for (r=first; r!=past; r=r->next) 
+   for (r=first; r!=past; r=r->next)
    {
       alloc_space(&tmp, r);
    }
@@ -537,8 +537,8 @@ static void reconfigure_pci(void) {
 
 
    /* First reconfigure the I/O space, this will be more
-    * complex when there is more than 1 bus. And 64 bits 
-    * devices are another kind of problems. 
+    * complex when there is more than 1 bus. And 64 bits
+    * devices are another kind of problems.
     */
    reconfigure_bus_space(0, PCI_AREA_IO, &pci->io);
    reconfigure_bus_space(0, PCI_AREA_MEMORY, &pci->mem);
@@ -546,7 +546,7 @@ static void reconfigure_pci(void) {
 
    /* Now we have to touch the configuration space of all
     * the devices to remap them better than they are right now.
-    * This is done in 3 steps: 
+    * This is done in 3 steps:
     * 1) first disable I/O and memory response of all devices
     * 2) modify the base registers
     * 3) restore the original PCI_COMMAND register.
@@ -562,12 +562,12 @@ static void reconfigure_pci(void) {
    }
 
    for (r=pci->resources; r; r= r->next) {
-      pci_write_config_dword(r->dev, 
+      pci_write_config_dword(r->dev,
                              PCI_BASE_ADDRESS_0+(r->reg<<2),
                              r->base);
       if ((r->type&
            (PCI_BASE_ADDRESS_SPACE|
-            PCI_BASE_ADDRESS_MEM_TYPE_MASK)) == 
+            PCI_BASE_ADDRESS_MEM_TYPE_MASK)) ==
           (PCI_BASE_ADDRESS_SPACE_MEMORY|
            PCI_BASE_ADDRESS_MEM_TYPE_64)) {
          pci_write_config_dword(r->dev,
@@ -592,60 +592,60 @@ static void reconfigure_pci(void) {
 
 
 static int
-indirect_pci_read_config_byte(unsigned char bus, unsigned char dev_fn, 
+indirect_pci_read_config_byte(unsigned char bus, unsigned char dev_fn,
 			      unsigned char offset, unsigned char *val) {
-   out_be32(pci->config_addr, 
+   out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|((offset&~3)<<24));
    *val=in_8(pci->config_data + (offset&3));
    return PCIBIOS_SUCCESSFUL;
 }
 
 static int
-indirect_pci_read_config_word(unsigned char bus, unsigned char dev_fn, 
+indirect_pci_read_config_word(unsigned char bus, unsigned char dev_fn,
 			      unsigned char offset, unsigned short *val) {
-   *val = 0xffff; 
+   *val = 0xffff;
    if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
-   out_be32(pci->config_addr, 
+   out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|((offset&~3)<<24));
    *val=in_le16((volatile u_short *)(pci->config_data + (offset&3)));
    return PCIBIOS_SUCCESSFUL;
 }
 
 static int
-indirect_pci_read_config_dword(unsigned char bus, unsigned char dev_fn, 
+indirect_pci_read_config_dword(unsigned char bus, unsigned char dev_fn,
                                unsigned char offset, unsigned int *val) {
-   *val = 0xffffffff; 
+   *val = 0xffffffff;
    if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
-   out_be32(pci->config_addr, 
+   out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|(offset<<24));
    *val=in_le32((volatile u_int *)pci->config_data);
    return PCIBIOS_SUCCESSFUL;
 }
 
 static int
-indirect_pci_write_config_byte(unsigned char bus, unsigned char dev_fn, 
+indirect_pci_write_config_byte(unsigned char bus, unsigned char dev_fn,
 			       unsigned char offset, unsigned char val) {
-   out_be32(pci->config_addr, 
+   out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|((offset&~3)<<24));
    out_8(pci->config_data + (offset&3), val);
    return PCIBIOS_SUCCESSFUL;
 }
 
 static int
-indirect_pci_write_config_word(unsigned char bus, unsigned char dev_fn, 
+indirect_pci_write_config_word(unsigned char bus, unsigned char dev_fn,
 			       unsigned char offset, unsigned short val) {
    if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
-   out_be32(pci->config_addr, 
+   out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|((offset&~3)<<24));
    out_le16((volatile u_short *)(pci->config_data + (offset&3)), val);
    return PCIBIOS_SUCCESSFUL;
 }
 
 static int
-indirect_pci_write_config_dword(unsigned char bus, unsigned char dev_fn, 
+indirect_pci_write_config_dword(unsigned char bus, unsigned char dev_fn,
 				unsigned char offset, unsigned int val) {
    if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
-   out_be32(pci->config_addr, 
+   out_be32(pci->config_addr,
             0x80|(bus<<8)|(dev_fn<<16)|(offset<<24));
    out_le32((volatile u_int *)pci->config_data, val);
    return PCIBIOS_SUCCESSFUL;
@@ -662,21 +662,21 @@ static const struct pci_config_access_functions indirect_functions = {
 
 
 static int
-direct_pci_read_config_byte(unsigned char bus, unsigned char dev_fn, 
+direct_pci_read_config_byte(unsigned char bus, unsigned char dev_fn,
                             unsigned char offset, unsigned char *val) {
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
       *val=0xff;
       return PCIBIOS_DEVICE_NOT_FOUND;
    }
-   *val=in_8(pci->config_data + ((1<<PCI_SLOT(dev_fn))&~1) 
+   *val=in_8(pci->config_data + ((1<<PCI_SLOT(dev_fn))&~1)
              + (PCI_FUNC(dev_fn)<<8) + offset);
    return PCIBIOS_SUCCESSFUL;
 }
 
 static int
-direct_pci_read_config_word(unsigned char bus, unsigned char dev_fn, 
+direct_pci_read_config_word(unsigned char bus, unsigned char dev_fn,
                             unsigned char offset, unsigned short *val) {
-   *val = 0xffff; 
+   *val = 0xffff;
    if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
       return PCIBIOS_DEVICE_NOT_FOUND;
@@ -688,9 +688,9 @@ direct_pci_read_config_word(unsigned char bus, unsigned char dev_fn,
 }
 
 static int
-direct_pci_read_config_dword(unsigned char bus, unsigned char dev_fn, 
+direct_pci_read_config_dword(unsigned char bus, unsigned char dev_fn,
                              unsigned char offset, unsigned int *val) {
-   *val = 0xffffffff; 
+   *val = 0xffffffff;
    if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
       return PCIBIOS_DEVICE_NOT_FOUND;
@@ -702,19 +702,19 @@ direct_pci_read_config_dword(unsigned char bus, unsigned char dev_fn,
 }
 
 static int
-direct_pci_write_config_byte(unsigned char bus, unsigned char dev_fn, 
+direct_pci_write_config_byte(unsigned char bus, unsigned char dev_fn,
                              unsigned char offset, unsigned char val) {
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
       return PCIBIOS_DEVICE_NOT_FOUND;
    }
-   out_8(pci->config_data + ((1<<PCI_SLOT(dev_fn))&~1) 
-         + (PCI_FUNC(dev_fn)<<8) + offset, 
+   out_8(pci->config_data + ((1<<PCI_SLOT(dev_fn))&~1)
+         + (PCI_FUNC(dev_fn)<<8) + offset,
          val);
    return PCIBIOS_SUCCESSFUL;
 }
 
 static int
-direct_pci_write_config_word(unsigned char bus, unsigned char dev_fn, 
+direct_pci_write_config_word(unsigned char bus, unsigned char dev_fn,
                              unsigned char offset, unsigned short val) {
    if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
@@ -728,7 +728,7 @@ direct_pci_write_config_word(unsigned char bus, unsigned char dev_fn,
 }
 
 static int
-direct_pci_write_config_dword(unsigned char bus, unsigned char dev_fn, 
+direct_pci_write_config_dword(unsigned char bus, unsigned char dev_fn,
                               unsigned char offset, unsigned int val) {
    if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
    if (bus != 0 || (1<<PCI_SLOT(dev_fn) & 0xff8007fe)) {
@@ -765,35 +765,35 @@ void pci_read_bases(struct pci_dev *dev, unsigned int howmany)
    u32 l, ml;
    pci_read_config_word(dev, PCI_COMMAND, &cmd);
 
-   for(reg=0; reg<howmany; reg=nextreg) 
+   for(reg=0; reg<howmany; reg=nextreg)
    {
       pci_resource *r;
 
       nextreg=reg+1;
       pci_read_config_dword(dev, REG, &l);
 #if 0
-      if (l == 0xffffffff /*AJF || !l*/) continue; 
+      if (l == 0xffffffff /*AJF || !l*/) continue;
 #endif
-      /* Note that disabling the memory response of a host bridge 
-       * would lose data if a DMA transfer were in progress. In a 
-       * bootloader we don't care however. Also we can't print any 
+      /* Note that disabling the memory response of a host bridge
+       * would lose data if a DMA transfer were in progress. In a
+       * bootloader we don't care however. Also we can't print any
        * message for a while since we might just disable the console.
        */
-      pci_write_config_word(dev, PCI_COMMAND, cmd & 
+      pci_write_config_word(dev, PCI_COMMAND, cmd &
                             ~(PCI_COMMAND_IO|PCI_COMMAND_MEMORY));
       pci_write_config_dword(dev, REG, ~0);
       pci_read_config_dword(dev, REG, &ml);
       pci_write_config_dword(dev, REG, l);
 
-      /* Reenable the device now that we've played with 
-       * base registers. 
+      /* Reenable the device now that we've played with
+       * base registers.
        */
       pci_write_config_word(dev, PCI_COMMAND, cmd);
 
       /* seems to be an unused entry skip it */
       if ( ml == 0 || ml == 0xffffffff ) continue;
 
-      if ((l & 
+      if ((l &
            (PCI_BASE_ADDRESS_SPACE|PCI_BASE_ADDRESS_MEM_TYPE_MASK))
           == (PCI_BASE_ADDRESS_MEM_TYPE_64
               |PCI_BASE_ADDRESS_SPACE_MEMORY)) {
@@ -864,7 +864,7 @@ u_int pci_scan_bus(struct pci_bus *bus)
       dev->vendor = l & 0xffff;
       dev->device = (l >> 16) & 0xffff;
 
-      pcibios_read_config_dword(bus->number, devfn, 
+      pcibios_read_config_dword(bus->number, devfn,
                                 PCI_CLASS_REVISION, &class);
       class >>= 8;				    /* upper 3 bytes */
       dev->class = class;
@@ -1030,14 +1030,14 @@ u_int pci_scan_bus(struct pci_bus *bus)
 #if 0
 
 void
-pci_fixup(void) 
+pci_fixup(void)
 {
    struct pci_dev *p;
    struct pci_bus *bus;
 
-   for (bus = &pci_root; bus; bus=bus->next) 
+   for (bus = &pci_root; bus; bus=bus->next)
    {
-      for (p=bus->devices; p; p=p->sibling) 
+      for (p=bus->devices; p; p=p->sibling)
       {
       }
    }
@@ -1059,7 +1059,7 @@ static void print_pci_info()
    for(pb= &pci_root; pb; pb=pb->children )
    {
       printk("   number %d, primary %d, secondary %d, subordinate %d\n",
-             pb->number, 
+             pb->number,
              pb->primary,
              pb->secondary,
              pb->subordinate );
@@ -1076,7 +1076,7 @@ static void print_pci_info()
                    pd->vendor,
                    pd->device,
                    pd->irq );
-           
+
          }
          printk("\n");
       }
@@ -1088,7 +1088,7 @@ static void print_pci_info()
    for (r=pci->resources; r; r= r->next)
    {
       printk("   bus %d, vendor %04x, device %04x, base %08x, size %08x, type %d\n",
-             r->dev->bus->number, 
+             r->dev->bus->number,
              r->dev->vendor,
              r->dev->device,
              r->base,
@@ -1198,9 +1198,9 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
                 childbus->subordinate );
 #endif
 
-   
 
-         /* 
+
+         /*
          **use the current values & the saved ones to figure out
          ** the address spaces for the bridge
          */
@@ -1269,7 +1269,7 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
          printk("pci:   pf memory %04x, limit %04x\n", base16, limit16);
 #endif
 #ifdef WRITE_BRIDGE_PF
-         pcibios_write_config_dword(pdev->bus->number, pdev->devfn, PCI_PREF_BASE_UPPER32, 0);  
+         pcibios_write_config_dword(pdev->bus->number, pdev->devfn, PCI_PREF_BASE_UPPER32, 0);
          pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_PREF_MEMORY_BASE, base16 );
          pcibios_write_config_dword(pdev->bus->number, pdev->devfn, PCI_PREF_LIMIT_UPPER32, 0);
          pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_PREF_MEMORY_LIMIT, limit16 );
@@ -1280,7 +1280,7 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
          pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_BRIDGE_CONTROL, (uint16_t)( PCI_BRIDGE_CTL_PARITY |
                                                                                                      PCI_BRIDGE_CTL_SERR ));
 
-         pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_COMMAND, (uint16_t)( PCI_COMMAND_IO | 
+         pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_COMMAND, (uint16_t)( PCI_COMMAND_IO |
                                                                                               PCI_COMMAND_MEMORY |
                                                                                               PCI_COMMAND_MASTER |
                                                                                               PCI_COMMAND_PARITY |
@@ -1351,7 +1351,7 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
                else
                {
                   /* memory space */
-                  
+
                   /* shift base pointer up to an integer multiple of the size of the desired region */
                   if( astart.start_pcimem % r->size )
                      astart.start_pcimem = (((astart.start_pcimem / r->size) + 1) * r->size);
@@ -1379,7 +1379,7 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
 
 
 
-void pci_init(void) 
+void pci_init(void)
 {
    PPC_DEVICE *hostbridge;
 
@@ -1388,18 +1388,18 @@ void pci_init(void)
       return;
    }
    pci->last_dev_p = &(bd->pci_devices);
-   hostbridge=residual_find_device(PROCESSORDEVICE, NULL, 
+   hostbridge=residual_find_device(PROCESSORDEVICE, NULL,
                                    BridgeController,
                                    PCIBridge, -1, 0);
    if (hostbridge) {
       if (hostbridge->DeviceId.Interface==PCIBridgeIndirect) {
          bd->pci_functions=&indirect_functions;
-         /* Should be extracted from residual data, 
+         /* Should be extracted from residual data,
           * indeed MPC106 in CHRP mode is different,
           * but we should not use residual data in
-          * this case anyway. 
+          * this case anyway.
           */
-         pci->config_addr = ((volatile u_int *) 
+         pci->config_addr = ((volatile u_int *)
                              (ptr_mem_map->io_base+0xcf8));
          pci->config_data = ptr_mem_map->io_base+0xcfc;
       } else if(hostbridge->DeviceId.Interface==PCIBridgeDirect) {
@@ -1412,7 +1412,7 @@ void pci_init(void)
       u_int id0;
       bd->pci_functions = &direct_functions;
       /* On all direct bridges I know the host bridge itself
-       * appears as device 0 function 0. 
+       * appears as device 0 function 0.
        */
       pcibios_read_config_dword(0, 0, PCI_VENDOR_ID, &id0);
       if (id0==~0U) {

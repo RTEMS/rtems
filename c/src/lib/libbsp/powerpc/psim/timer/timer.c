@@ -1,4 +1,4 @@
-/* 
+/*
  *  This file implements a benchmark timer using the PPC decrement register.
  *
  *  COPYRIGHT (c) 1989-2000.

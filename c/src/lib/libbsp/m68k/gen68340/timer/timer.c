@@ -13,7 +13,7 @@
  * 4, rue du Clos Courtel
  * 35512 CESSON-SEVIGNE
  * FRANCE
- * 
+ *
  * e-mail: g_montel@yahoo.com
  *
  *  $Id$
@@ -25,7 +25,7 @@
  *
  *  Output parameters:  NONE
  *
- *  NOTE: It is important that the timer start/stop overhead be 
+ *  NOTE: It is important that the timer start/stop overhead be
  *        determined when porting or modifying this code.
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -66,7 +66,7 @@ int preload = 0;
   Input parameters: -
   Output parameters: -
   Description: when a character is received, sets
-               the TIMER to raise an interrupt at 
+               the TIMER to raise an interrupt at
 	       TIMEOUT.
 	       It's necessary to prevent from not
 	       getting n-1 characters (with n the
@@ -128,7 +128,7 @@ void Fifo_Full_Timer_initialize (void)
     *  USE TIMER 1 for UART FIFO FULL mode
     */
 
-   if ( Fifo_Full_on_A || Fifo_Full_on_B )	
+   if ( Fifo_Full_on_A || Fifo_Full_on_B )
       {
 	/* Disable the timer */
 	TCR1 &= ~m340_SWR;
@@ -145,8 +145,8 @@ void Fifo_Full_Timer_initialize (void)
 
 	/* compute prescaler */
    	if ( Fifo_Full_on_A && Fifo_Full_on_B)
-		max_baud_rate = max(m340_uart_config[UART_CHANNEL_A].rx_baudrate, m340_uart_config[UART_CHANNEL_B].rx_baudrate);	
-	else if ( Fifo_Full_on_A )	
+		max_baud_rate = max(m340_uart_config[UART_CHANNEL_A].rx_baudrate, m340_uart_config[UART_CHANNEL_B].rx_baudrate);
+	else if ( Fifo_Full_on_A )
 		max_baud_rate = m340_uart_config[UART_CHANNEL_A].rx_baudrate;
 	     else max_baud_rate = m340_uart_config[UART_CHANNEL_B].rx_baudrate;
 
@@ -154,7 +154,7 @@ void Fifo_Full_Timer_initialize (void)
 	nb_of_clock_ticks = (10/max_baud_rate)*(CLOCK_SPEED*1000000)*1.2;
 	if (nb_of_clock_ticks < 0xFFFF) {
 	   preload = nb_of_clock_ticks;
-	   prescaler_output_tap = -1;	
+	   prescaler_output_tap = -1;
 	} else if (nb_of_clock_ticks/2 < 0xFFFF) {
 	   preload = nb_of_clock_ticks/2;
 	   prescaler_output_tap = m340_Divide_by_2;
@@ -179,7 +179,7 @@ void Fifo_Full_Timer_initialize (void)
 	} else if (nb_of_clock_ticks/256 < 0xFFFF) {
 	   preload = nb_of_clock_ticks/256;
 	   prescaler_output_tap = m340_Divide_by_256;
-	} 
+	}
 
 	/* Input Capture/Output Compare (ICOC) */
 	TCR1 = m340_SWR | m340_TO_Enabled | m340_ICOC;
@@ -250,7 +250,7 @@ void Timer_initialize (void)
 }
 
 /******************************************************
-  Name: Read_timer 
+  Name: Read_timer
   Input parameters: -
   Output parameters: -
   Description: Return timer value in microsecond units
@@ -263,10 +263,10 @@ Read_timer (void)
 }
 
 /******************************************************
-  Name: Empty_function 
+  Name: Empty_function
   Input parameters: -
   Output parameters: -
-  Description: Empty function call used in loops to 
+  Description: Empty function call used in loops to
                measure basic cost of looping
                in Timing Test Suite.
  *****************************************************/

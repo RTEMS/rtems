@@ -23,7 +23,7 @@
  *
  *  Output parameters:  NONE
  *
- *  NOTE: It is important that the timer start/stop overhead be 
+ *  NOTE: It is important that the timer start/stop overhead be
  *        determined when porting or modifying this code.
  *
  *  COPYRIGHT (c) 1989-1999.

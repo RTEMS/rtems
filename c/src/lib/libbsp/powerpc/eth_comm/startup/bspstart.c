@@ -51,13 +51,13 @@ void bsp_libc_init( void *, uint32_t, int );
 void BSP_panic(char *s)
 {
   printk("%s PANIC %s\n",_RTEMS_version, s);
-  __asm__ __volatile ("sc"); 
+  __asm__ __volatile ("sc");
 }
 
 void _BSP_Fatal_error(unsigned int v)
 {
   printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  __asm__ __volatile ("sc"); 
+  __asm__ __volatile ("sc");
 }
 
 /*
@@ -73,14 +73,14 @@ void _BSP_Fatal_error(unsigned int v)
  *      not yet initialized.
  *
  */
- 
+
 void
 bsp_pretasking_hook(void)
 {
   extern int       _end;
   uint32_t    heap_start;
 
-  /* 
+  /*
    * Let's check to see if the size of M860_binfo is what
    * it should be. It might not be if the info.h files
    * for RTEMS and the bootloader define boardinfo_t
@@ -103,7 +103,7 @@ bsp_pretasking_hook(void)
   }
   /* set up a 256K heap */
   bsp_libc_init((void *) heap_start, 256 * 1024, 0);
-  
+
 #ifdef RTEMS_DEBUG
   rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
@@ -121,7 +121,7 @@ void bsp_start(void)
   ppc_cpu_revision_t myCpuRevision;
   register unsigned char* intrStack;
   extern void cpu_init(void);
-   
+
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
    * store the result in global variables so that it can be used latter...
@@ -134,19 +134,19 @@ void bsp_start(void)
   /*
    * Initialize some SPRG registers related to irq handling
    */
-   
+
   intrStack = (((unsigned char*)&intrStackPtr) - CPU_MINIMUM_STACK_FRAME_SIZE);
 
   _write_SPRG1((unsigned int)intrStack);
 
   /* Signal them that this BSP has fixed PR288 - eventually, this should go away */
   _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
- 
+
    /*
     * Install our own set of exception vectors
     */
    initialize_exceptions();
- 
+
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
    *  a variety of places: hard coded address, malloc'ed from outside
@@ -172,7 +172,7 @@ void bsp_start(void)
   }
 
   BSP_Configuration.work_space_start = (void *)ws_start;
-  BSP_Configuration.work_space_size = 512 * 1024; 
+  BSP_Configuration.work_space_size = 512 * 1024;
 
   /*
    *  initialize the CPU table for this BSP
@@ -195,7 +195,7 @@ void bsp_start(void)
   /*
    * Since we are currently autodetecting whether to use SCC1 or
    * the FEC for ethernet, we set up a register in the ethernet
-   * transciever that is used for 10/100 Mbps ethernet now, so that 
+   * transciever that is used for 10/100 Mbps ethernet now, so that
    * we can attempt to read it later in rtems_enet_driver_attach()
   */
   m8xx.fec.mii_speed = 0x0a;
@@ -212,6 +212,6 @@ void bsp_start(void)
   BSP_rtems_irq_mng_init(0);
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");
-#endif  
+#endif
 
 }

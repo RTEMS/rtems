@@ -2,9 +2,9 @@
  *
  *  This include file contains information pertaining to the DMV170.
  *
- *  NOTE:  Other than where absolutely required, this version currently 
- *         supports only the peripherals and bits used by the basic board 
- *         support package. This includes at least significant pieces of 
+ *  NOTE:  Other than where absolutely required, this version currently
+ *         supports only the peripherals and bits used by the basic board
+ *         support package. This includes at least significant pieces of
  *         the following items:
  *
  *           + UART Channels A and B
@@ -18,7 +18,7 @@
  *
  *  $Id$
  */
- 
+
 #ifndef _INCLUDE_DMV170_h
 #define _INCLUDE_DMV170_h
 
@@ -59,7 +59,7 @@ extern "C" {
 #define SONIC_BASE_ADDRESS DMV170_SONIC_ADDR
 #define SONIC_VECTOR       DMV170_ETHERNET_IRQ
 
-/* base address for the SCC (85C30) */ 
+/* base address for the SCC (85C30) */
 #define Z85C30_ADDR       0xfb000010
 #define Z85C30_CTRL_A     0xfb000010
 #define Z85C30_DATA_A     0xfb000018
@@ -127,7 +127,7 @@ extern "C" {
 #define DMV170_LOWER_STATUS_LED_CONTROL_MASK              0x2000
 #define DMV170_LOWER_STATUS_LED_IS_OFF                    0x2000
 #define DMV170_LOWER_STATUS_LED_IS_ON                     0x0000
-#ifdef DMV176                                             
+#ifdef DMV176
        /* The following are not available for the DMV171 */
 #define DMV170_RAM_TYPE_MASK                              0x4000
 #define DMV170_RAM_TYPE_IS_DRAM                           0x4000
@@ -136,7 +136,7 @@ extern "C" {
 #define DMV170_IACK_VECTOR_AUTOVECTOR_IS_VECTOR           0x8000
 #define DMV170_IACK_VECTOR_AUTOVECTOR_IS_NOT_VECTOR       0x0000
 #endif
- 
+
 /*
  *  The following defines the bits in the Timer Control Register.
  */
@@ -220,7 +220,7 @@ extern "C" {
  * DUART Baud Rate Definitions.
  */
 
-#define DMV170_DUART_9621     MC68681_BAUD_RATE_MASK_600 /* close to 9600 */  
+#define DMV170_DUART_9621     MC68681_BAUD_RATE_MASK_600 /* close to 9600 */
 
 #define DMV170_RTC_FREQUENCY             0x0000
 
@@ -248,10 +248,10 @@ extern "C" {
 #define DMV170_ETHERNET_IRQ                    DMV170_LIRQ5
 #define DMV170_SCSI_IRQ                        DMV170_LIRQ5
 #define DMV170_SCC_IRQ                         DMV170_LIRQ5
-#define DMV170_MEZZANINE_IRQ_0                 DMV170_LIRQ4       
+#define DMV170_MEZZANINE_IRQ_0                 DMV170_LIRQ4
 #define DMV170_TICK_IRQ                        DMV170_LIRQ3
-#define DMV170_LOCATION_MON_IRQ                DMV170_LIRQ2        
-#define DMV170_SCV64_IRQ                       DMV170_LIRQ1 
+#define DMV170_LOCATION_MON_IRQ                DMV170_LIRQ2
+#define DMV170_SCV64_IRQ                       DMV170_LIRQ1
 #define DMV170_RTC_IRQ                         DMV170_LIRQ0
 
 #define DMV170_ACFAIL_IRQ                      DMV170_L7IACF
@@ -283,6 +283,6 @@ uint32_t   SCV64_Get_Interrupt_Enable();
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif /* !_INCLUDE_DMV170_h */
 /* end of include file */

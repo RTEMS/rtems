@@ -2,7 +2,7 @@
  * Cirrus EP7312 Intererrupt handler
  *
  * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
- *	
+ *
  * Copyright (c) 2002 by Charlie Steader <charlies@poliac.com>
  *
  *  The license and distribution terms for this file may be

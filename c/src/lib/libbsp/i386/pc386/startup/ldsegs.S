@@ -41,7 +41,7 @@
 | CODE section
 +----------------------------------------------------------------------------*/
 EXTERN (rtems_i8259_masks)
-	
+
 BEGIN_CODE
 
         EXTERN (_establish_stack)
@@ -51,17 +51,17 @@ BEGIN_CODE
 /*----------------------------------------------------------------------------+
 | pc386_delay
 +------------------------------------------------------------------------------
-| Delay is needed after doing I/O. 
+| Delay is needed after doing I/O.
 |
 | The outb version is OK on most machines BUT the loop version ...
-| 
+|
 | will delay for 1us on 1Gz machine, it will take a little bit
 | longer on slower machines, however, it does not matter because we
 | are going to call this function only a few times
 
 +----------------------------------------------------------------------------*/
 #define DELAY_USE_OUTB
-	
+
 	.p2align 4
 	.globl _pc386_delay
 	.globl pc386_delay
@@ -88,10 +88,10 @@ pc386_delay1:
 |                   with apropriate values +  reprogram PIC.
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 	.p2align 4
-	
+
         PUBLIC (_load_segments)
 SYM (_load_segments):
 
@@ -101,7 +101,7 @@ SYM (_load_segments):
 	/* Load CS, flush prefetched queue */
 	ljmp $0x8, $next_step
 
-next_step:	
+next_step:
         /* Load segment registers */
 	movw $0x10, ax
 	movw ax, ss
@@ -125,27 +125,27 @@ next_step:
 	call	SYM(pc386_delay)
 	outb	al, $0xA0		/* and to 8259A-2                   */
 	call	SYM(pc386_delay)
-	
+
 	movb	$0x20, al		/* start of hardware int's (0x20)   */
 	outb	al, $0x21
 	call	SYM(pc386_delay)
 	movb	$0x28, al		/* start of hardware int's 2 (0x28) */
 	outb	al, $0xA1
 	call	SYM(pc386_delay)
-	
+
 	movb	$0x04, al		/* 8259-1 is master                 */
 	outb	al, $0x21
 	call	SYM(pc386_delay)
 	movb	$0x02, al		/* 8259-2 is slave                  */
 	outb	al, $0xA1
 	call	SYM(pc386_delay)
-	
+
 	movb	$0x01, al		/* 8086 mode for both               */
 	outb	al, $0x21
 	call	SYM(pc386_delay)
 	outb	al, $0xA1
 	call	SYM(pc386_delay)
-	
+
 	movb	$0xFF, al		/* mask off all interrupts for now  */
 	outb	al, $0xA1
 	call	SYM(pc386_delay)
@@ -154,7 +154,7 @@ next_step:
 	call	SYM(pc386_delay)
 
 	movw	$0xFFFB, SYM(i8259s_cache) /* set up same values in cache */
-	
+
 	jmp	SYM (_establish_stack)	# return to the bsp entry code
 
 /*-------------------------------------------------------------------------+
@@ -162,11 +162,11 @@ next_step:
 |      Description: Return to board's monitor (we have none so simply restart).
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 
 	.p2align 4
-	
+
         PUBLIC (_return_to_monitor)
 SYM (_return_to_monitor):
 
@@ -179,21 +179,21 @@ SYM (_return_to_monitor):
 |      Description: default interrupt handler
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 	.p2align 4
-	
+
 /*---------------------------------------------------------------------------+
 | GDT itself
 +--------------------------------------------------------------------------*/
 
 	.p2align 4
-		
+
 	PUBLIC (_Global_descriptor_table)
 SYM (_Global_descriptor_table):
 
 	/* NULL segment */
-	.word 0, 0     
+	.word 0, 0
 	.byte 0, 0, 0, 0
 
 	/* code segment */
@@ -203,13 +203,13 @@ SYM (_Global_descriptor_table):
 	/* data segment */
 	.word 0xffff, 0
 	.byte 0, 0x92, 0xcf, 0
- 
+
 
 /*---------------------------------------------------------------------------+
 | Descriptor of GDT
 +--------------------------------------------------------------------------*/
 SYM (gdtdesc):
-	.word (3*8 - 1)  
+	.word (3*8 - 1)
 	.long SYM (_Global_descriptor_table)
 
 
@@ -218,23 +218,23 @@ SYM (gdtdesc):
 +---------------------------------------------------------------------------*/
 BEGIN_DATA
 	.p2align 4
-	
+
 	PUBLIC(Interrupt_descriptor_table)
 SYM(Interrupt_descriptor_table):
 	.rept 256
 	.word 0,0,0,0
 	.endr
 END_DATA
-		
+
 /*---------------------------------------------------------------------------+
 | Descriptor of IDT
 +--------------------------------------------------------------------------*/
 BEGIN_CODE
 	.p2align 4
-SYM(idtdesc):	
+SYM(idtdesc):
 	.word  (256*8 - 1)
 	.long  SYM (Interrupt_descriptor_table)
-	
+
 END_CODE
 
     .section .m_hdr

@@ -10,7 +10,7 @@
 #define _SCTNS_H_
 
   /* Copy all code into SRAM.
-   * Fault Table and Fault Handler stays in EPROM to not be 
+   * Fault Table and Fault Handler stays in EPROM to not be
    * destroyed by a buggy user program. Beyond that only
    * monitor Start point and procedures to copy code
    * into RAM will be relocated in ROM.
@@ -28,7 +28,7 @@ extern unsigned int codeRamStart[];
 extern unsigned int codeRamEnd[];
 
 extern unsigned int bssStart[];
-extern unsigned int bssEnd[]; 
+extern unsigned int bssEnd[];
 
 #endif
 /*-------------*/

@@ -17,7 +17,7 @@
 #define _PCNET_H
 
 /*
- * IO space structure for the AMD79C970 device 
+ * IO space structure for the AMD79C970 device
  */
 
 typedef volatile struct pc_net
@@ -69,10 +69,10 @@ typedef struct pc_net_eeprom {
 } pc_net_eeprom_t;
 
 /*
- * PCnet-PCI Single Chip Ethernet Controller for PCI Local Bus 
+ * PCnet-PCI Single Chip Ethernet Controller for PCI Local Bus
  */
 /*
- * Register and bit definitions 
+ * Register and bit definitions
  */
 
 #define	CSR0	0
@@ -104,7 +104,7 @@ typedef struct pc_net_eeprom {
 #define	APROM2	0x08
 
 /*
- * CSR0: Bit definitions 
+ * CSR0: Bit definitions
  */
 #define CSR0_ERR	0x8000	/* error summary */
 #define CSR0_BABL	0x4000	/* babble error */
@@ -181,10 +181,10 @@ typedef struct pc_net_eeprom {
 #define CSR80_XMTFW16	(0<<8)	/* fifo level to stop dma */
 #define CSR80_XMTFW32	(1<<8)
 #define CSR80_XMTFW64	(2<<8)
-/* must also clear csr4 CSR4_DMAPLUS: */ 
+/* must also clear csr4 CSR4_DMAPLUS: */
 #define CSR80_DMATC(x)	((x)&0xff)	/* max transfers per burst. deflt 16 */
 /*
- * must also set csr4 CSR4_TIMER: 
+ * must also set csr4 CSR4_TIMER:
  */
 #define CSR82_DMABAT(x)	((x)&0xffff)	/* max burst time nanosecs*100 */
 
@@ -198,12 +198,12 @@ typedef struct pc_net_eeprom {
 #define BCR19_PVALID	0x8000	/* aprom (eeprom) read checksum ok */
 
 /*
- * initial setting of csr0 
+ * initial setting of csr0
  */
 #define CSR0_IVALUE	(CSR0_IDON | CSR0_IENA | CSR0_STRT | CSR0_INIT)
 
 /*
- * our setting of csr3 
+ * our setting of csr3
  */
 #define CSR3_VALUE	(CSR3_ACON | CSR3_BSWP)
 
@@ -226,7 +226,7 @@ typedef volatile struct initblk {
  * The bytes must be swapped within the word, so that, for example,
  * the address 8:0:20:1:25:5a is written in the order
  *             0 8 1 20 5a 25
- * For PCI970 that is long word swapped: so no swapping needed, since 
+ * For PCI970 that is long word swapped: so no swapping needed, since
  * the bus will swap.
  */
 	uint8_t  	ib_padr[8];	/* physical address */
@@ -237,11 +237,11 @@ typedef volatile struct initblk {
 
 
 /*
- * bits in mode register: allows alteration of the chips operating parameters 
+ * bits in mode register: allows alteration of the chips operating parameters
  */
 #define IBM_PROM	0x8000	/* promiscuous mode */
 /*
- * mode is also in cr15 
+ * mode is also in cr15
  */
 #define MODE_DRCVBC	0x4000	/* disable receive broadcast */
 #define MODE_DRCVPA	0x2000	/* disable receive physical address */
@@ -259,15 +259,15 @@ typedef volatile struct initblk {
 #define IBM_DTX		0x0002	/* disable transmitter */
 #define IBM_DRX		0x0001	/* disable receiver */
 
-/* 
+/*
  * Buffer Management is accomplished through message descriptors organized
  * in ring structures in main memory. There are two rings allocated for the
- * device: a receive ring and a transmit ring. The following defines the 
+ * device: a receive ring and a transmit ring. The following defines the
  * structure of the descriptor rings.
  */
 
 /*
- *                  Receive  List type definition                            
+ *                  Receive  List type definition
  *
  * This essentially consists of 4, 32 bit LE words. In the following the
  * fields are ordered so that they map correctly in BE mode, however each
@@ -277,7 +277,7 @@ typedef volatile struct initblk {
 typedef volatile struct rmde {
 	uint32_t  	rmde_addr;	/* buf addr */
 
-	uint16_t  	rmde_bcnt; 
+	uint16_t  	rmde_bcnt;
 	uint16_t  	rmde_flags;
 
 	uint16_t  	rmde_mcnt;
@@ -288,7 +288,7 @@ typedef volatile struct rmde {
 
 
 /*
- * bits in the flags field 
+ * bits in the flags field
  */
 #define RFLG_OWN	0x8000	/* ownership bit, 1==LANCE */
 #define RFLG_ERR	0x4000	/* error summary */
@@ -300,19 +300,19 @@ typedef volatile struct rmde {
 #define RFLG_ENP	0x0100	/* end of packet */
 
 /*
- * bits in the buffer byte count field 
+ * bits in the buffer byte count field
  */
 #define RBCNT_ONES	0xf000	/* must be ones */
 #define RBCNT_BCNT	0x0fff	/* buf byte count, in 2's compl */
 
 /*
- * bits in the message byte count field 
+ * bits in the message byte count field
  */
 #define RMCNT_RES	0xf000	/* reserved, read as zeros */
 #define RMCNT_BCNT	0x0fff	/* message byte count */
 
 /*
- *                  Transmit List type definition                            
+ *                  Transmit List type definition
  *
  * This essentially consists of 4, 32 bit LE words. In the following the
  * fields are ordered so that they map correctly in BE mode, however each
@@ -321,7 +321,7 @@ typedef volatile struct rmde {
 typedef volatile struct tmde {
     	uint32_t  	tmde_addr;	/* buf addr */
 
-	uint16_t  	tmde_bcnt; 
+	uint16_t  	tmde_bcnt;
 	uint16_t  	tmde_status;	/* misc error and status bits */
 
 	uint32_t  	tmde_error;
@@ -330,7 +330,7 @@ typedef volatile struct tmde {
 } tmde_t;
 
 /*
- * bits in the status field 
+ * bits in the status field
  */
 #define TST_OWN		0x8000	/* ownership bit, 1==LANCE */
 #define TST_ERR		0x4000	/* error summary */
@@ -342,18 +342,18 @@ typedef volatile struct tmde {
 #define TST_ENP		0x0100	/* end of packet */
 
 /*
- * setting of status field when packet is to be transmitted 
+ * setting of status field when packet is to be transmitted
  */
 #define TST_XMIT	(TST_STP | TST_ENP | TST_OWN)
 
 /*
- * bits in the buffer byte count field 
+ * bits in the buffer byte count field
  */
 #define TBCNT_ONES	0xf000	/* must be ones */
 #define TBCNT_BCNT	0x0fff	/* buf byte count, in 2's compl */
 
 /*
- * bits in the error field 
+ * bits in the error field
  */
 #define TERR_BUFF	0x8000	/* buffer error */
 #define TERR_UFLO	0x4000	/* underflow error */
@@ -368,7 +368,7 @@ typedef volatile struct tmde {
  */
 
 /*
- * receive errors 
+ * receive errors
  */
 #define ERR_FRAM	0	/* framing error */
 #define ERR_OFLO	1	/* overflow error */
@@ -376,7 +376,7 @@ typedef volatile struct tmde {
 #define ERR_RBUFF	3	/* receive buffer error */
 
 /*
- * transmit errors 
+ * transmit errors
  */
 #define ERR_MORE	4	/* more than one retry */
 #define ERR_ONE		5	/* one retry */
@@ -388,7 +388,7 @@ typedef volatile struct tmde {
 #define ERR_RTRY	11	/* retry error, >16 retries */
 
 /*
- * errors reported in csr0 
+ * errors reported in csr0
  */
 #define ERR_BABL	12	/* transmitter timeout error */
 #define ERR_MISS	13	/* missed packet */
@@ -400,7 +400,7 @@ typedef volatile struct tmde {
 #define NHARD_ERRORS	18	/* error types used in diagnostic */
 
 /*
- * other statistics 
+ * other statistics
  */
 #define ERR_TTOUT	18	/* transmit timeouts */
 #define ERR_ITOUT	19	/* init timeouts */
@@ -412,7 +412,7 @@ typedef volatile struct tmde {
 #define NUM_ERRORS	24	/* number of errors types */
 
 /*
- * Bit definitions for BCR19 
+ * Bit definitions for BCR19
  */
 #define	prom_EDI	(uint16_t)0x0001
 #define	prom_EDO	(uint16_t)0x0001

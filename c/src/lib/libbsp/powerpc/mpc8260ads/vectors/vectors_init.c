@@ -1,4 +1,4 @@
-/* 
+/*
  * vectors_init.c Exception hanlding initialisation (and generic handler).
  *
  *  This include file describe the data structure and the functions implemented
@@ -69,7 +69,7 @@ void C_exception_handler(BSP_Exception_frame* excPtr)
   if (excPtr->_EXC_number == ASM_DEC_VECTOR)
        recoverable = 1;
   if (excPtr->_EXC_number == ASM_SYS_VECTOR)
-#ifdef TEST_RAW_EXCEPTION_CODE      
+#ifdef TEST_RAW_EXCEPTION_CODE
     recoverable = 1;
 #else
     recoverable = 0;

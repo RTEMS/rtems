@@ -37,7 +37,7 @@ inline unsigned int Swap32(
 		"rlwimi %0,%1,24,16,23;"
 		"rlwimi %0,%1,8,8,15;"
 		"rlwimi %0,%1,24,0,7;" :
-		
+
 		"=&r" ((ulSwapped)) :
 		"r" ((ulValue))
 	);

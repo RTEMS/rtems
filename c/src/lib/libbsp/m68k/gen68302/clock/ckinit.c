@@ -50,11 +50,11 @@ volatile uint32_t         Clock_driver_ticks;
 uint32_t         Clock_isrs;
 
 void Clock_exit( void );
- 
+
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
@@ -111,17 +111,17 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
- 
+
   /*
    * make major/minor avail to others such as shared memory driver
    */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 }
- 
+
 rtems_device_driver Clock_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -130,15 +130,15 @@ rtems_device_driver Clock_control(
 {
     uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
- 
+
     if (args == 0)
         goto done;
- 
+
     /*
      * This is hokey, but until we get a defined interface
      * to do this, it will just be this simple...
      */
- 
+
     if (args->command == rtems_build_name('I', 'S', 'R', ' '))
     {
         Clock_isr( CLOCK_VECTOR);
@@ -149,7 +149,7 @@ rtems_device_driver Clock_control(
        (void) set_vector( args->buffer, CLOCK_VECTOR, 1 );
       rtems_interrupt_enable( isrlevel );
     }
- 
+
 done:
     return RTEMS_SUCCESSFUL;
 }

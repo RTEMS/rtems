@@ -26,7 +26,7 @@ uint64_t         Timer_driver_Start_time;
 rtems_boolean Timer_driver_Find_average_overhead;
 
 /*
- * Timer_initialize 
+ * Timer_initialize
  */
 
 void Timer_initialize()

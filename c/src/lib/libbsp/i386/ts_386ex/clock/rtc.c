@@ -79,9 +79,9 @@
 |      Description: Convert 2 digit number to its BCD representation.
 | Global Variables: None.
 |        Arguments: i - Number to convert.
-|          Returns: BCD representation of number. 
+|          Returns: BCD representation of number.
 +--------------------------------------------------------------------------*/
-static inline uint8_t        
+static inline uint8_t
 bcd(uint8_t         i)
 {
   return ((i / 16) * 10 + (i % 16));
@@ -99,9 +99,9 @@ bcd(uint8_t         i)
 |      Description: Convert years to seconds (since 1970).
 | Global Variables: None.
 |        Arguments: y - year to convert (1970 <= y <= 2100).
-|          Returns: number of seconds since 1970. 
+|          Returns: number of seconds since 1970.
 +--------------------------------------------------------------------------*/
-static inline uint32_t        
+static inline uint32_t
 ytos(uint16_t         y)
 {                                       /* v NUM LEAP YEARS v */
   return ((y - 1970) * SECS_PER_REG_YEAR + (y - 1970 + 1) / 4 * SECS_PER_DAY);
@@ -113,9 +113,9 @@ ytos(uint16_t         y)
 |      Description: Convert months to seconds since January.
 | Global Variables: None.
 |        Arguments: m - month to convert, leap - is this a month of a leap year.
-|          Returns: number of seconds since January. 
+|          Returns: number of seconds since January.
 +--------------------------------------------------------------------------*/
-static inline uint32_t        
+static inline uint32_t
 mtos(uint8_t         m, rtems_boolean leap)
 {
   static uint16_t         daysMonth[] = { 0, 0, 31,  59,  90, 120, 151, 181,
@@ -132,9 +132,9 @@ mtos(uint8_t         m, rtems_boolean leap)
 |      Description: Perform action on RTC and return its result.
 | Global Variables: None.
 |        Arguments: what - what to write to RTC port (what to do).
-|          Returns: result received from RTC port after action performed. 
+|          Returns: result received from RTC port after action performed.
 +--------------------------------------------------------------------------*/
-static inline uint8_t        
+static inline uint8_t
 rtcin(uint8_t         what)
 {
     uint8_t         r;
@@ -153,7 +153,7 @@ rtcin(uint8_t         what)
 |      Description: Initialize real-time clock (RTC).
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void
 init_rtc(void)
@@ -181,7 +181,7 @@ init_rtc(void)
 |      Description: Read present time from RTC and return it.
 | Global Variables: None.
 |        Arguments: tod - to return present time in 'rtems_time_of_day' format.
-|          Returns: number of seconds from 1970/01/01 corresponding to 'tod'. 
+|          Returns: number of seconds from 1970/01/01 corresponding to 'tod'.
 +--------------------------------------------------------------------------*/
 long int
 rtc_read(rtems_time_of_day *tod)
@@ -201,7 +201,7 @@ rtc_read(rtems_time_of_day *tod)
     sa = rtcin(RTC_STATUSA);
 
   tod->year	= bcd(rtcin(RTC_YEAR)) + 1900;  /* year    */
-  if (tod->year < 1970)	tod->year += 100;	
+  if (tod->year < 1970)	tod->year += 100;
   tod->month	= bcd(rtcin(RTC_MONTH));        /* month   */
   tod->day	= bcd(rtcin(RTC_DAY));          /* day     */
   (void)          bcd(rtcin(RTC_WDAY));         /* weekday */

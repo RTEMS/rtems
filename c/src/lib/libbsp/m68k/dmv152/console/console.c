@@ -53,7 +53,7 @@ void console_outbyte_polled(
 }
 
 /*
- *  console_inbyte_nonblocking 
+ *  console_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */
@@ -103,7 +103,7 @@ void DEBUG_puts(
   char *s;
 
   /* should disable interrupts here */
-    for ( s = string ; *s ; s++ ) 
+    for ( s = string ; *s ; s++ )
       console_outbyte_polled( 0, *s );
 
     console_outbyte_polled( 0, '\r' );
@@ -132,7 +132,7 @@ int console_write_support (int minor, const char *buf, int len)
  *  Console Device Driver Entry Points
  *
  */
- 
+
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
@@ -171,7 +171,7 @@ rtems_device_driver console_initialize(
   /*
    *  Initialize Hardware
    */
- 
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -201,7 +201,7 @@ rtems_device_driver console_open(
 
   return RTEMS_SUCCESSFUL;
 }
- 
+
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -210,7 +210,7 @@ rtems_device_driver console_close(
 {
   return rtems_termios_close (arg);
 }
- 
+
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -219,7 +219,7 @@ rtems_device_driver console_read(
 {
   return rtems_termios_read (arg);
 }
- 
+
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -228,7 +228,7 @@ rtems_device_driver console_write(
 {
   return rtems_termios_write (arg);
 }
- 
+
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,

@@ -3,14 +3,47 @@
 // $Header$
 //
 // Copyright (c) 2000 - Rosimildo da Silva ( rdasilva@connecttel.com )
-//  
+//
 // MODULE DESCRIPTION:
-// This module implements the micro FB driver for "Bare VGA". It uses the 
+// This module implements the micro FB driver for "Bare VGA". It uses the
 // routines for "bare hardware" that comes with MicroWindows.
 //
 // MODIFICATION/HISTORY:
 //
 // $Log$
+// Revision 1.1  2000/08/30 08:15:30  joel
+// 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
+//
+// 	* Major rework of the "/dev/console" driver.
+// 	* Added termios support for stdin ( keyboard ).
+// 	* Added ioctls() to support modes similar to Linux( XLATE,
+// 	RAW, MEDIUMRAW ).
+// 	* Added Keyboard mapping and handling of the keyboard's leds.
+// 	* Added Micro FrameBuffer driver ( "/dev/fb0" ) for bare VGA
+// 	controller ( 16 colors ).
+// 	* Added PS/2 and Serial mouse support for PC386 BSP.
+// 	* console/defkeymap.c: New file.
+// 	* console/fb_vga.c: New file.
+// 	* console/fb_vga.h: New file.
+// 	* console/i386kbd.h: New file.
+// 	* console/kd.h: New file.
+// 	* console/keyboard.c: New file.
+// 	* console/keyboard.h: New file.
+// 	* console/mouse_parser.c: New file.
+// 	* console/mouse_parser.h: New file.
+// 	* console/pc_keyb.c: New file.
+// 	* console/ps2_drv.h: New file.
+// 	* console/ps2_mouse.c: New file.
+// 	* console/ps2_mouse.h: New file.
+// 	* console/serial_mouse.c: New file.
+// 	* console/serial_mouse.h: New file.
+// 	* console/vgainit.c: New file.
+// 	* console/vt.c: New file.
+// 	* console/Makefile.am: Reflect new files.
+// 	* console/console.c, console/inch.c, console/outch.c: Console
+// 	functionality modifications.
+// 	* startup/Makefile.am: Pick up tty_drv.c and gdb_glue.c
+//
 //
 /////////////////////////////////////////////////////////////////////////////
 */
@@ -28,14 +61,14 @@
 
 /* these routines are defined in the microwindows code. This
    driver is here more as an example of how to implement and
-   use the micro FB interface 
+   use the micro FB interface
 */
 extern void ega_hwinit( void );
 extern void ega_hwterm( void );
 
 
 /* screen information for the VGA driver */
-static struct fb_screeninfo fb_info = 
+static struct fb_screeninfo fb_info =
 {
    640, 480,                     /* screen size x, y  */
    4,                            /* bits per pixel    */
@@ -109,7 +142,7 @@ fbvga_close(rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 }
 
- 
+
 /*
  * fbvga device driver READ entry point.
  * Read characters from the PS/2 mouse.
@@ -124,7 +157,7 @@ fbvga_read( rtems_device_major_number major,
   rw_args->bytes_moved = 0;
   return RTEMS_SUCCESSFUL;
 }
- 
+
 
 /*
  * fbvga device driver WRITE entry point.
@@ -187,15 +220,15 @@ static int set_palette( struct fb_cmap *cmap )
  * IOCTL entry point -- This method is called to carry
  * all services of this interface.
  */
-rtems_device_driver 
+rtems_device_driver
 fbvga_control( rtems_device_major_number major,
                rtems_device_minor_number minor,
                void                      * arg
 )
-{ 
+{
 	rtems_libio_ioctl_args_t *args = arg;
    printk( "FBVGA ioctl called, cmd=%x\n", args->command  );
-   switch( args->command ) 
+   switch( args->command )
    {
       case FB_SCREENINFO:
       args->ioctl_return =  get_screen_info( args->buffer );
@@ -208,7 +241,7 @@ fbvga_control( rtems_device_major_number major,
       break;
 
       /* this function would execute one of the routines of the
-       * interface based on the operation requested 
+       * interface based on the operation requested
        */
       case FB_EXEC_FUNCTION:
       {

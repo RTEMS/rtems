@@ -131,7 +131,7 @@ WRITE_LE(
 #warning "SYNC instruction unknown for this architecture"
 #endif
 
-/* registers should be mapped to guarded, non-cached memory; hence 
+/* registers should be mapped to guarded, non-cached memory; hence
  * subsequent stores are ordered. eieio is only needed to enforce
  * ordering of loads with respect to stores.
  */
@@ -174,11 +174,11 @@ return READ_LE0((volatile LERegister *)(((unsigned long)adrs)+off));
 }
 
 #define PORT_UNALIGNED(addr,port) \
-	( (port)%4 ? ((addr) & 0xffff) : ((addr) & 4095) ) 
+	( (port)%4 ? ((addr) & 0xffff) : ((addr) & 4095) )
 
 
 #define UNIV_REV(base) (READ_LE(base,2*sizeof(LERegister)) & 0xff)
-	
+
 #if defined(__rtems__) && 0
 static int
 uprintk(char *fmt, va_list ap)
@@ -213,7 +213,7 @@ va_list	ap;
 		 * to a buffer.
 		 */
 		vprintk(fmt,ap);
-	} else 
+	} else
 #endif
 	{
 		vfprintf(f,fmt,ap);
@@ -440,7 +440,7 @@ unsigned long	mode=0;
                  */
 		if (ismaster)
 			mode |= UNIV_MCTL_EN | UNIV_MCTL_PWEN | UNIV_MCTL_VDW64 | UNIV_MCTL_VCT;
-		else 
+		else
 			mode |= UNIV_SCTL_EN | UNIV_SCTL_PWEN | UNIV_SCTL_PREN;
 
 #ifdef TSILL
@@ -521,7 +521,7 @@ showUniversePort(
 			cntrl&UNIV_MCTL_PGM ?   "Pgm" : "Dat",
 			cntrl&UNIV_MCTL_SUPER ? "Sup" : "Usr");
 	} else {
-		uprintf(f,"%s %s %s %s", 
+		uprintf(f,"%s %s %s %s",
 			cntrl&UNIV_SCTL_PGM ?   "Pgm," : "    ",
 			cntrl&UNIV_SCTL_DAT ?   "Dat," : "    ",
 			cntrl&UNIV_SCTL_SUPER ? "Sup," : "    ",
@@ -614,7 +614,7 @@ int	rval;
 		uprintf(stderr,"unable to find the universe in pci config space\n");
 		return -1;
 	}
-	rptr = (base + 
+	rptr = (base +
 		(ismaster ? UNIV_REGOFF_PCITGT0_CTRL : UNIV_REGOFF_VMESLV0_CTRL)/sizeof(LERegister));
 #undef TSILL
 #ifdef TSILL
@@ -629,7 +629,7 @@ int	rval;
 	/* only rev. 2 has 8 ports */
 	if (UNIV_REV(base)<2) return -1;
 
-	rptr = (base + 
+	rptr = (base +
 		(ismaster ? UNIV_REGOFF_PCITGT4_CTRL : UNIV_REGOFF_VMESLV4_CTRL)/sizeof(LERegister));
 	for (port=4; port<UNIV_NUM_MPORTS; port++) {
 		if ((rval=func(ismaster,port,rptr,arg))) return rval;
@@ -724,7 +724,7 @@ vmeUniverseReset(void)
 	vmeUniverseDisableAllSlaves();
 
 	vmeUniverseDisableAllMasters();
-	
+
 	vmeUniverseWriteReg(UNIV_VCSR_CLR_SYSFAIL, UNIV_REGOFF_VCSR_CLR);
 
 	/* clear interrupt status bits */
@@ -955,14 +955,14 @@ register unsigned long		status;
  * like this:
  *
  *
- *   VME IRQ ------ 
- *                  & ----- LINT_STAT ---- 
+ *   VME IRQ ------
+ *                  & ----- LINT_STAT ----
  *                  |                       &  ---------- PCI LINE
  *                  |                       |
- *                  |                       | 
- *       LINT_EN --------------------------- 
+ *                  |                       |
+ *       LINT_EN ---------------------------
  *
- *  I.e. 
+ *  I.e.
  *   - if LINT_EN is disabled, a VME IRQ will not set LINT_STAT.
  *   - while LINT_STAT is set, it will pull the PCI line unless
  *     masked by LINT_EN.
@@ -999,7 +999,7 @@ unsigned long lvl,msk,lintstat,linten,status;
 				/* try the special handler */
 				universeSpecialISR();
 
-				/* 
+				/*
 				 * let the pic end this cycle
 				 */
 				BSP_PIC_DO_EOI;
@@ -1165,7 +1165,7 @@ vmeUniverseIntEnable(unsigned int level)
 		if (!vmeUniverseIrqMgrInstalled || level<1 || level>7)
 				return -1;
 		vmeUniverseWriteReg(
-				(vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) | 
+				(vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) |
 				 (UNIV_LINT_EN_VIRQ1 << (level-1))
 				),
 				UNIV_REGOFF_LINT_EN);
@@ -1178,7 +1178,7 @@ vmeUniverseIntDisable(unsigned int level)
 		if (!vmeUniverseIrqMgrInstalled || level<1 || level>7)
 				return -1;
 		vmeUniverseWriteReg(
-				(vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) & 
+				(vmeUniverseReadReg(UNIV_REGOFF_LINT_EN) &
 				 ~ (UNIV_LINT_EN_VIRQ1 << (level-1))
 				),
 				UNIV_REGOFF_LINT_EN);

@@ -75,10 +75,10 @@ static uint8_t    cursCol   = 0;       /* Current cursor column.        */
 
 /*-------------------------------------------------------------------------+
 |         Function: setHardwareCursorPos
-|      Description: Set hardware video cursor at given offset into video RAM. 
+|      Description: Set hardware video cursor at given offset into video RAM.
 | Global Variables: None.
 |        Arguments: videoCursor - Offset into video memory.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 static inline void
 setHardwareCursorPos(uint16_t   videoCursor)
@@ -91,10 +91,10 @@ setHardwareCursorPos(uint16_t   videoCursor)
 /*-------------------------------------------------------------------------+
 |         Function: updateVideoRamPtr
 |      Description: Updates value of global variable "videoRamPtr" based on
-|                   current window's cursor position. 
+|                   current window's cursor position.
 | Global Variables: videoRamPtr, cursRow, cursCol.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 static inline void
 updateVideoRamPtr(void)
@@ -108,7 +108,7 @@ updateVideoRamPtr(void)
 |      Description: Scrolls display up n lines.
 | Global Variables: None.
 |        Arguments: lines - number of lines to scroll.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 static void
 scrollUp(uint8_t   lines)
@@ -130,7 +130,7 @@ scrollUp(uint8_t   lines)
 		blankCount = lines * videoCols;
 		nonBlankCount = DISPLAY_CELL_COUNT - blankCount;
 		ptrSrc = videoRam + blankCount;
-		ptrDst = videoRam; 
+		ptrDst = videoRam;
 
 		while(nonBlankCount--)
 		{
@@ -139,7 +139,7 @@ scrollUp(uint8_t   lines)
 	}
 	else
 	{
-		/* 
+		/*
 		 * Clear the whole display.
 		 */
 		blankCount = DISPLAY_CELL_COUNT;
@@ -159,7 +159,7 @@ scrollUp(uint8_t   lines)
 |      Description: Print printable character to display.
 | Global Variables: videoRamPtr, cursRow, cursCol.
 |        Arguments: c - character to write to display.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 static void
 printCHAR(char c)
@@ -184,7 +184,7 @@ printCHAR(char c)
 |      Description: Print BS (BackSpace - '\b') character to display.
 | Global Variables: videoRamPtr, cursRow, cursCol.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 static inline void
 printBS(void)
@@ -214,7 +214,7 @@ printBS(void)
 |      Description: Print HT (Horizontal Tab - '\t') character to display.
 | Global Variables: cursCol.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 static inline void
 printHT(void)
@@ -232,7 +232,7 @@ printHT(void)
 |      Description: Print LF (Line Feed  - '\n') character to display.
 | Global Variables: cursRow.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 static inline void
 printLF(void)
@@ -252,7 +252,7 @@ printLF(void)
 |      Description: Print CR (Carriage Return - '\r') to display.
 | Global Variables: cursCol.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 static inline void
 printCR(void)
@@ -266,7 +266,7 @@ printCR(void)
  */
 void
 vga_write(
-	int   minor, 
+	int   minor,
 	char cChar)
 {
 	switch (cChar)
@@ -291,15 +291,15 @@ vga_write(
 	setHardwareCursorPos(videoRamPtr - videoRam);
 } /* vga_write */
 
-/* 
+/*
  *  vga_write_support
  *
  *  Console Termios output entry point.
  *
  */
 int vga_write_support(
-	int   minor, 
-	const char *buf, 
+	int   minor,
+	const char *buf,
 	int   len
 )
 {

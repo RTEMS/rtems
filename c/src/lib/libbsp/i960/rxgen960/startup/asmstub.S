@@ -44,7 +44,7 @@ _asm_exit:
 
 	.text
 _asm_sysctl:
-	b	_asm_sysctl	
+	b	_asm_sysctl
 	sysctl	g0, g1, g2
 	ret
 

@@ -34,8 +34,8 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 **************************************************************************/
 
 /*
- * 950313: Ketan fixed bugs in mfc0/mtc0 hazards, and removed hack 
- * to set mem_size. 
+ * 950313: Ketan fixed bugs in mfc0/mtc0 hazards, and removed hack
+ * to set mem_size.
  */
 
 #include <rtems/mips/iregdef.h>
@@ -44,12 +44,12 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 
 	.data
 mem_size:
-	.word	0	
+	.word	0
 dcache_size:
-	.word 	0		
+	.word 	0
 icache_size:
 #if __mips == 1
-	.word	MINCACHE	
+	.word	MINCACHE
 #endif
 #if __mips == 3
 	.word	0
@@ -71,11 +71,11 @@ scache_linesize:
 		.text
 
 #if __mips == 1
-#define CONFIGFRM ((2*4)+4)	
+#define CONFIGFRM ((2*4)+4)
 
 /*************************************************************************
 **
-** Config_Dcache() -- determine size of Data cache 
+** Config_Dcache() -- determine size of Data cache
 **
 **************************************************************************/
 
@@ -100,7 +100,7 @@ FRAME(config_Dcache,sp, CONFIGFRM, ra)
 	addu	sp,CONFIGFRM		/* pop stack */
 	j	ra
 ENDFRAME(config_Dcache)
- 
+
 
 /*************************************************************************
 **
@@ -123,7 +123,7 @@ FRAME(config_Icache,sp, CONFIGFRM, ra)
 	.set	reorder
 	jal	_size_cache		/* returns instruction cache size */
 	.set	noreorder
-	mtc0	zero,C0_SR		/* swap back caches */  
+	mtc0	zero,C0_SR		/* swap back caches */
 	nop
 	and	s0,~SR_PE		/* do not inadvertantly clear PE */
 	mtc0	s0,C0_SR		/* restore SR */
@@ -198,7 +198,7 @@ ENDFRAME(_size_cache)
 **
 ****************************************************************************/
 FRAME(flush_Dcache,sp,FLUSHFRM,ra)
-	lw      t2, dcache_size		
+	lw      t2, dcache_size
 	.set	noreorder
 	mfc0	t3,C0_SR		/* save SR */
 	nop
@@ -240,7 +240,7 @@ ENDFRAME(flush_Dcache)
 **
 ****************************************************************************/
 FRAME(flush_Icache,sp,FLUSHFRM,ra)
-	lw	t1,icache_size 
+	lw	t1,icache_size
 	.set	noreorder
 	mfc0	t3,C0_SR		/* save SR */
 	nop
@@ -346,7 +346,7 @@ FRAME(clear_Icache,sp,0,ra)
 	 */
 	.set	noreorder
 	mfc0	t3,C0_SR		/* save SR */
-	nop 
+	nop
 	la	v0,1f
 	li	v1,K1BASE
 	or	v0,v1
@@ -386,7 +386,7 @@ ENDFRAME(clear_Icache)
 
 /**************************************************************************
 **
-**  get_mem_conf - get memory configuration 
+**  get_mem_conf - get memory configuration
 **
 ***************************************************************************/
 
@@ -398,7 +398,7 @@ FRAME(get_mem_conf,sp,0,ra)
 	lw	t7, icache_size
 	sw	t7, 4(a0)
 	lw	t8, dcache_size
-	sw	t8, 8(a0) 
+	sw	t8, 8(a0)
 	j	ra
 
 ENDFRAME(get_mem_conf)
@@ -429,24 +429,24 @@ label:
 
 /* This is a bit of a hack really because it relies on minaddr=a0 */
 #define _doop1(op1) \
-	cache	op1,0(a0) 
+	cache	op1,0(a0)
 
 #define _doop2(op1, op2) \
 	cache	op1,0(a0) ;		\
-	cache	op2,0(a0) 
+	cache	op2,0(a0)
 
 /* specials for cache initialisation */
 #define _doop1lw1(op1) \
 	cache	op1,0(a0) ;		\
 	lw	zero,0(a0) ;		\
-	cache	op1,0(a0) 
+	cache	op1,0(a0)
 
 #define _doop121(op1,op2) \
 	cache	op1,0(a0) ;		\
 	nop;				\
 	cache	op2,0(a0) ;		\
 	nop;				\
-	cache	op1,0(a0) 
+	cache	op1,0(a0)
 
 #define _oploopn(minaddr, maxaddr, linesize, tag, ops) \
 	.set	noreorder ;		\
@@ -481,7 +481,7 @@ label:
 
 /*
  * static void _size_cache()    R4000
- * 
+ *
  * Internal routine to determine cache sizes by looking at R4000 config
  * register.  Sizes are returned in registers, as follows:
  *	t2	icache size
@@ -508,20 +508,20 @@ LEAF(_size_cache)
 	and	t1,t0,CFG_IB
 	bnez	t1,1f
 	li	t4,16
-1:	
+1:
 
 	li	t5,32
 	and	t1,t0,CFG_DB
 	bnez	t1,1f
 	li	t5,16
-1:	
+1:
 
 	move	t6,zero			# default to no scache
 	move	t7,zero			#
 
 	and	t1,t0,CFG_C_UNCACHED	# test config register
 	bnez	t1,1f			# no scache if uncached/non-coherent
-	
+
 	li	t6,0x100000		# assume 1Mb scache <<-NOTE
 	and	t1,t0,CFG_SBMASK
 	srl	t1,CFG_SBSHIFT
@@ -533,7 +533,7 @@ END(_size_cache)
 
 /*
  * void config_cache()   R4000
- * 
+ *
  * Work out size of I, D & S caches, assuming they are already initialised.
  */
 LEAF(config_cache)
@@ -563,7 +563,7 @@ LEAF(_init_cache)
 	move	v0,ra
 	bal	_size_cache
 	move	ra,v0
-	
+
 	/*
 	 * The caches may be in an indeterminate state,
 	 * so we force good parity into them by doing an
@@ -603,7 +603,7 @@ LEAF(_init_cache)
 1:	mtc0	v0,C0_SR
 	j	ra
 END(_init_cache)
-	
+
 
 /*
  * void flush_cache (void)   R4000
@@ -620,7 +620,7 @@ LEAF(flush_cache)
 	icacheop(a0,a1,a2,a3,Index_Writeback_Inv_SD)
 	b	2f
 
-1:	
+1:
 	lw	a2,icache_size
 	blez	a2,2f
 	lw	a3,icache_linesize
@@ -636,7 +636,7 @@ LEAF(flush_cache)
 
 2:	j	ra
 END(flush_cache)
-	
+
 /*
  * void flush_cache_nowrite (void)   R4000
  *
@@ -673,7 +673,7 @@ LEAF(flush_cache_nowrite)
 2:	mtc0	v0,C0_SR
 	j	ra
 END(flush_cache_nowrite)
-	
+
 /*
  * void clean_cache (unsigned kva, size_t n)   R4000
  *
@@ -706,7 +706,7 @@ XLEAF(clear_cache)
 
 2:	j	ra
 END(clean_cache)
-	
+
 /*
  * void clean_dcache (unsigned kva, size_t n)   R4000
  *
@@ -721,7 +721,7 @@ LEAF(clean_dcache)
 
 2:	j	ra
 END(clean_dcache)
-	
+
 /*
  * void clean_dcache_indexed (unsigned kva, size_t n)   R4000
  *
@@ -745,7 +745,7 @@ LEAF(clean_dcache_indexed)
 
 2:	j	ra
 END(clean_dcache_indexed)
-	
+
 /*
  * void clean_dcache_nowrite (unsigned kva, size_t n)   R4000
  *
@@ -760,7 +760,7 @@ LEAF(clean_dcache_nowrite)
 
 2:	j	ra
 END(clean_dcache_nowrite)
-	
+
 /*
  * void clean_dcache_nowrite_indexed (unsigned kva, size_t n)   R4000
  *
@@ -792,7 +792,7 @@ LEAF(clean_dcache_nowrite_indexed)
 2:	mtc0	v0,C0_SR
 	j	ra
 END(clean_dcache_nowrite_indexed)
-	
+
 /*
  * void clean_icache (unsigned kva, size_t n)   R4000
  *
@@ -807,7 +807,7 @@ LEAF(clean_icache)
 
 2:	j	ra
 END(clean_icache)
-	
+
 /*
  * void clean_icache_indexed (unsigned kva, size_t n)   R4000
  *
@@ -831,7 +831,7 @@ LEAF(clean_icache_indexed)
 
 2:	j	ra
 END(clean_icache_indexed)
-	
+
 
 
 /*
@@ -847,7 +847,7 @@ LEAF(clean_scache)
 
 2:	j	ra
 END(clean_scache)
-	
+
 /*
  * void clean_scache_indexed (unsigned kva, size_t n)   R4000
  *
@@ -862,7 +862,7 @@ LEAF(clean_scache_indexed)
 
 2:	j	ra
 END(clean_scache_indexed)
-	
+
 /*
  * void clean_scache_nowrite (unsigned kva, size_t n)   R4000
  *
@@ -877,7 +877,7 @@ LEAF(clean_scache_nowrite)
 
 2:	j	ra
 END(clean_scache_nowrite)
-	
+
 /*
  * void clean_scache_nowrite_indexed (unsigned kva, size_t n)   R4000
  *
@@ -900,7 +900,7 @@ LEAF(clean_scache_nowrite_indexed)
 2:	mtc0	v0,C0_SR
 	j	ra
 END(clean_scache_nowrite_indexed)
-	
+
 /**************************************************************************
 **
 **  get_mem_conf - get memory configuration  R4000
@@ -915,9 +915,9 @@ FRAME(get_mem_conf,sp,0,ra)
 	lw	t7, icache_size
 	sw	t7, 4(a0)
 	lw	t8, dcache_size
-	sw	t8, 8(a0) 
+	sw	t8, 8(a0)
 	lw	t7, scache_size
-	sw	t7, 12(a0) 
+	sw	t7, 12(a0)
 	j	ra
 
 ENDFRAME(get_mem_conf)
@@ -925,7 +925,7 @@ ENDFRAME(get_mem_conf)
 #endif /* __mips == 3 */
 
 /*
- * void set_mem_size (mem_size) 
+ * void set_mem_size (mem_size)
  *
  * config_memory()'s memory size gets written into mem_size here.
  * Now we don't need to call config_cache() with memory size - New to IDTC6.0

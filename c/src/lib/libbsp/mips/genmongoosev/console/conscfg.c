@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#include <bsp.h> 
- 
+#include <bsp.h>
+
 #include <libchip/serial.h>
 #include <libchip/mg5uart.h>
 
@@ -88,6 +88,6 @@ rtems_device_minor_number  Console_Port_Minor;
 #include <rtems/bspIo.h>
 
 void GENMG5_output_char(char c) { write( 2, &c, 1 ); }
-  
+
 BSP_output_char_function_type           BSP_output_char = GENMG5_output_char;
 BSP_polling_getchar_function_type       BSP_poll_char = NULL;

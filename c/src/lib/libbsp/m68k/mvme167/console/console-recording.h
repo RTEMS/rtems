@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  */
- 
+
 /* CD2401 CONSOLE DRIVER DEBUG INFO RECORDING */
 
 #ifdef CD2401_RECORD_DEBUG_INFO
@@ -243,8 +243,8 @@ int cd2401_get_record_size(
   /* Not the best way to do this */
   return size + 4;
 }
-  
-  
+
+
 void cd2401_record_write_info(
   int len,
   const char * buf,
@@ -252,9 +252,9 @@ void cd2401_record_write_info(
 )
 {
   int max_length;
-  
+
   max_length = (len < CD2401_DEBUG_CHAR_BUFSIZE ) ? len : CD2401_DEBUG_CHAR_BUFSIZE;
-  
+
   memset( &(cd2401_debug_buffer[cd2401_debug_index]), '\0', sizeof( struct cd2401_debug_info )  );
   cd2401_debug_buffer[cd2401_debug_index].discriminant = CD2401_WRITE_INFO;
   cd2401_debug_buffer[cd2401_debug_index].record_size =
@@ -262,7 +262,7 @@ void cd2401_record_write_info(
   cd2401_debug_buffer[cd2401_debug_index].u.write_info.length = len;
   memcpy ( &(cd2401_debug_buffer[cd2401_debug_index].u.write_info.buffer), buf, max_length );
   cd2401_debug_buffer[cd2401_debug_index].u.write_info.dmabuf = dmabuf;
-   
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
@@ -274,7 +274,7 @@ void cd2401_record_tx_isr_info(
   unsigned char final_ier,
   uint8_t         txEmpty
 )
-{ 
+{
   memset( &(cd2401_debug_buffer[cd2401_debug_index]), '\0', sizeof( struct cd2401_debug_info )  );
   cd2401_debug_buffer[cd2401_debug_index].discriminant = CD2401_TX_ISR_INFO;
   cd2401_debug_buffer[cd2401_debug_index].record_size =
@@ -284,7 +284,7 @@ void cd2401_record_tx_isr_info(
   cd2401_debug_buffer[cd2401_debug_index].u.tx_isr_info.initial_ier = initial_ier;
   cd2401_debug_buffer[cd2401_debug_index].u.tx_isr_info.final_ier = final_ier;
   cd2401_debug_buffer[cd2401_debug_index].u.tx_isr_info.txEmpty = txEmpty;
-  
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
@@ -308,7 +308,7 @@ void cd2401_record_tx_isr_spurious_info(
   cd2401_debug_buffer[cd2401_debug_index].u.tx_isr_spurious_info.final_ier = final_ier;
   cd2401_debug_buffer[cd2401_debug_index].u.tx_isr_spurious_info.spurdev = spur_dev;
   cd2401_debug_buffer[cd2401_debug_index].u.tx_isr_spurious_info.spurcount = spur_cnt;
-  
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
@@ -332,7 +332,7 @@ void cd2401_record_tx_isr_buserr_info(
   cd2401_debug_buffer[cd2401_debug_index].u.tx_isr_buserr_info.buserr = buserr;
   cd2401_debug_buffer[cd2401_debug_index].u.tx_isr_buserr_info.type = buserr_type;
   cd2401_debug_buffer[cd2401_debug_index].u.tx_isr_buserr_info.addr = buserr_addr;
-  
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
@@ -344,16 +344,16 @@ void cd2401_record_rx_isr_info(
 )
 {
   int max_length;
-  
+
   max_length = (total < CD2401_DEBUG_CHAR_BUFSIZE ) ? total : CD2401_DEBUG_CHAR_BUFSIZE;
-  
+
   memset( &(cd2401_debug_buffer[cd2401_debug_index]), '\0', sizeof( struct cd2401_debug_info )  );
   cd2401_debug_buffer[cd2401_debug_index].discriminant = CD2401_RX_ISR_INFO;
   cd2401_debug_buffer[cd2401_debug_index].record_size =
       cd2401_get_record_size( sizeof( struct cd2401_rx_isr_info ) );
   cd2401_debug_buffer[cd2401_debug_index].u.rx_isr_info.length = max_length;
  memcpy ( &(cd2401_debug_buffer[cd2401_debug_index].u.rx_isr_info.buffer), buffer, max_length );
-   
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
@@ -373,7 +373,7 @@ void cd2401_record_rx_isr_spurious_info(
   cd2401_debug_buffer[cd2401_debug_index].u.rx_isr_spurious_info.status = status;
   cd2401_debug_buffer[cd2401_debug_index].u.rx_isr_spurious_info.spurdev = spur_dev;
   cd2401_debug_buffer[cd2401_debug_index].u.rx_isr_spurious_info.spurcount = spur_cnt;
-   
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
@@ -391,7 +391,7 @@ void cd2401_record_re_isr_spurious_info(
   cd2401_debug_buffer[cd2401_debug_index].u.re_isr_spurious_info.channel = ch;
   cd2401_debug_buffer[cd2401_debug_index].u.re_isr_spurious_info.spurdev = spur_dev;
   cd2401_debug_buffer[cd2401_debug_index].u.re_isr_spurious_info.spurcount = spur_cnt;
-   
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
@@ -409,7 +409,7 @@ void cd2401_record_modem_isr_spurious_info(
   cd2401_debug_buffer[cd2401_debug_index].u.modem_isr_spurious_info.channel = ch;
   cd2401_debug_buffer[cd2401_debug_index].u.modem_isr_spurious_info.spurdev = spur_dev;
   cd2401_debug_buffer[cd2401_debug_index].u.modem_isr_spurious_info.spurcount = spur_cnt;
-   
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
@@ -425,7 +425,7 @@ void cd2401_record_first_open_info(
       cd2401_get_record_size( sizeof( struct cd2401_first_open_info ) );
   cd2401_debug_buffer[cd2401_debug_index].u.first_open_info.channel = ch;
   cd2401_debug_buffer[cd2401_debug_index].u.first_open_info.init_count = init_count;
-   
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
@@ -441,7 +441,7 @@ void cd2401_record_last_close_info(
       cd2401_get_record_size( sizeof( struct cd2401_last_close_info ) );
   cd2401_debug_buffer[cd2401_debug_index].u.last_close_info.channel = ch;
   cd2401_debug_buffer[cd2401_debug_index].u.last_close_info.init_count = init_count;
-   
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
@@ -455,7 +455,7 @@ void cd2401_record_start_remote_tx_info(
   cd2401_debug_buffer[cd2401_debug_index].record_size =
       cd2401_get_record_size( sizeof( struct cd2401_start_remote_tx_info ) );
   cd2401_debug_buffer[cd2401_debug_index].u.start_remote_tx_info.channel = ch;
-   
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
@@ -469,12 +469,12 @@ void cd2401_record_stop_remote_tx_info(
   cd2401_debug_buffer[cd2401_debug_index].record_size =
       cd2401_get_record_size( sizeof( struct cd2401_stop_remote_tx_info ) );
   cd2401_debug_buffer[cd2401_debug_index].u.stop_remote_tx_info.channel = ch;
-   
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
 
-void cd2401_record_set_attributes_info( 
+void cd2401_record_set_attributes_info(
   int minor,
   uint8_t         need_reinit,
   uint8_t         csize,
@@ -526,7 +526,7 @@ void cd2401_record_set_attributes_info(
   cd2401_debug_buffer[cd2401_debug_index].u.set_attribute_info.rx_period = rx_period;
   cd2401_debug_buffer[cd2401_debug_index].u.set_attribute_info.out_baud = out_baud;
   cd2401_debug_buffer[cd2401_debug_index].u.set_attribute_info.in_baud = in_baud;
-  
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
@@ -544,7 +544,7 @@ void cd2401_record_drain_output_info(
   cd2401_debug_buffer[cd2401_debug_index].u.drain_output_info.txEmpty = txEmpty;
   cd2401_debug_buffer[cd2401_debug_index].u.drain_output_info.own_buf_A = own_buf_A;
   cd2401_debug_buffer[cd2401_debug_index].u.drain_output_info.own_buf_B = own_buf_B;
-  
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
@@ -564,7 +564,7 @@ void cd2401_record_delay_info(
   cd2401_debug_buffer[cd2401_debug_index].u.delay_info.end = end;
   cd2401_debug_buffer[cd2401_debug_index].u.delay_info.current = current;
   cd2401_debug_buffer[cd2401_debug_index].u.delay_info.loop_count = loop_count;
-  
+
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 

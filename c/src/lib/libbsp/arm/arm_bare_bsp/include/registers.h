@@ -12,10 +12,10 @@
 
 
 #ifndef  __REGS_H__
-#define __REGS_H__  
+#define __REGS_H__
 
 /*
- * VARIABLE DECLARATION   
+ * VARIABLE DECLARATION
  */
 
 #ifndef __asm__

@@ -7,7 +7,7 @@
  *  4, rue du Clos Courtel
  *  35512 CESSON-SEVIGNE
  *  FRANCE
- * 
+ *
  *  e-mail: g_montel@yahoo.com
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -102,7 +102,7 @@ InterruptHandler (rtems_vector_number v)
 	   else {
 		 /* this is necessary, otherwise it blocks when FIFO is full */
 		 ch = DURBA;
-		 rtems_termios_enqueue_raw_characters(ttypA,&ch,1); 
+		 rtems_termios_enqueue_raw_characters(ttypA,&ch,1);
 	   }
        } while (DUSRA & m340_Rx_RDY);
        Restart_Fifo_Full_A_Timer();	/* only if necessary (pointer to a fake function if
@@ -142,9 +142,9 @@ InterruptHandler (rtems_vector_number v)
 		    /* push them in a trash */
 		    ch = DURBB;
 	   }
-	   else { 
+	   else {
 		 ch = DURBB;
-		 rtems_termios_enqueue_raw_characters(ttypB,&ch,1); 
+		 rtems_termios_enqueue_raw_characters(ttypB,&ch,1);
 	   }
 
        } while (DUSRB & m340_Rx_RDY);
@@ -189,16 +189,16 @@ InterruptWrite (int minor, const char *buf, int len)
   Input parameters: channel, character to emit
   Output parameters: -
   Description: wait for the UART to be ready to emit
-	       a character and send it 
+	       a character and send it
  *****************************************************/
 void dbug_out_char( int minor, int ch )
 {
  if (minor==UART_CHANNEL_A) {
-    while (!(DUSRA & m340_Tx_RDY)) continue; 
+    while (!(DUSRA & m340_Tx_RDY)) continue;
     DUTBA=ch;
  }
  else if (minor==UART_CHANNEL_B) {
-    while (!(DUSRB & m340_Tx_RDY)) continue; 
+    while (!(DUSRB & m340_Tx_RDY)) continue;
     DUTBB=ch;
  }
 }
@@ -262,7 +262,7 @@ dbugInitialise ()
      DUCRB = m340_Reset_Transmitter;
 
      /*
-      * Enable serial module for normal operation, ignore FREEZE, select the crystal clock, 
+      * Enable serial module for normal operation, ignore FREEZE, select the crystal clock,
       * supervisor/user serial registers unrestricted
       * interrupt arbitration at priority CONSOLE_INTERRUPT_ARBITRATION
       * WARNING : 8 bits access only on this UART!
@@ -322,17 +322,17 @@ dbugInitialise ()
  	 	 */
 		unset_DUIER(m340_RxRDYA&m340_TxRDYA);
 	}
-	
+
 	/*
 	 * Change set of baud speeds
 	 * disable input control
 	 */
 	/* no good uart configuration ? */
 	if (uart_config.nb<1) rtems_fatal_error_occurred (-1);
-	
-	if (uart_config.baud_speed_table[UART_CHANNEL_A].set==1) 
+
+	if (uart_config.baud_speed_table[UART_CHANNEL_A].set==1)
 	   DUACR = m340_BRG_Set1;
-	else 
+	else
 	   DUACR = m340_BRG_Set2;
 
 	/*
@@ -347,13 +347,13 @@ dbugInitialise ()
 	/*
 	 * Serial Channel Baud Speed
 	 */
-	DUCSRA = (uart_config.baud_speed_table[UART_CHANNEL_A].rcs << 4) 
+	DUCSRA = (uart_config.baud_speed_table[UART_CHANNEL_A].rcs << 4)
 	       | (uart_config.baud_speed_table[UART_CHANNEL_A].tcs);
 
 	/*
 	 * Serial Channel Configuration
 	 */
-	DUMR1A = m340_uart_config[UART_CHANNEL_A].parity_mode 
+	DUMR1A = m340_uart_config[UART_CHANNEL_A].parity_mode
 	       | m340_uart_config[UART_CHANNEL_A].bits_per_char
 	       | m340_RxRTS;
 
@@ -376,7 +376,7 @@ dbugInitialise ()
      if (CHANNEL_ENABLED_B) {
 
 	/* we mustn't set the console vector twice! */
-	if ((USE_INTERRUPTS_B && !(CHANNEL_ENABLED_A)) 
+	if ((USE_INTERRUPTS_B && !(CHANNEL_ENABLED_A))
 	   || (USE_INTERRUPTS_B && CHANNEL_ENABLED_A && !USE_INTERRUPTS_A)) {
 	   rtems_isr_entry old_handler;
 	   rtems_status_code sc;
@@ -408,7 +408,7 @@ dbugInitialise ()
  	 	 */
 		unset_DUIER(m340_RxRDYB&m340_TxRDYB);
 	}
-	
+
 	/*
 	 * Change set of baud speeds
 	 * disable input control
@@ -416,7 +416,7 @@ dbugInitialise ()
 
 	/* no good uart configuration ? */
 	if (uart_config.nb<2) rtems_fatal_error_occurred (-1);
-	
+
 	/* don't set DUACR twice! */
 	if (!CHANNEL_ENABLED_A) {
 	   if (uart_config.baud_speed_table[UART_CHANNEL_B].set==1)
@@ -437,13 +437,13 @@ dbugInitialise ()
 	/*
 	 * Serial Channel Baud Speed
 	 */
-	DUCSRB = (uart_config.baud_speed_table[UART_CHANNEL_B].rcs << 4) 
+	DUCSRB = (uart_config.baud_speed_table[UART_CHANNEL_B].rcs << 4)
 	       | (uart_config.baud_speed_table[UART_CHANNEL_B].tcs);
 
 	/*
 	 * Serial Channel Configuration
 	 */
-	DUMR1B = m340_uart_config[UART_CHANNEL_B].parity_mode 
+	DUMR1B = m340_uart_config[UART_CHANNEL_B].parity_mode
 	       | m340_uart_config[UART_CHANNEL_B].bits_per_char
 	       | m340_RxRTS;
 
@@ -479,7 +479,7 @@ SetAttributes (int minor, const struct termios *t)
  /* output speed */
  if (t->c_cflag & CBAUDEX)
     osp = (t->c_cflag & CBAUD) + CBAUD + 1;
- else 
+ else
     osp = t->c_cflag & CBAUD;
 
  /* input speed */
@@ -633,7 +633,7 @@ rtems_device_driver console_open(
 
  return sc;
 }
- 
+
 /******************************************************
   Name: console_close
   Input parameters: channel #, termios args
@@ -692,9 +692,9 @@ rtems_device_driver console_control(
 )
 {
  	rtems_libio_ioctl_args_t *args = arg;
- 
+
  	if (args->command == RTEMS_IO_SET_ATTRIBUTES)
  		SetAttributes (minor, (struct termios *)args->buffer);
- 
+
 	return rtems_termios_ioctl (arg);
 }

@@ -13,7 +13,7 @@
   Chip selects are programmed as required. Three are controlled in the
   boot code. They are RAM, ROM, and peripherals. You can optionally
   configure the other two chip selects.
-  
+
   SYSTEM_CLOCK - You must defined this. It is used for setting the
   baud rate.
 
@@ -30,7 +30,7 @@
   CSEL_1, CSEL_2 - If defined the other macros needed to define the
   chip select must be defined. If not defined they are not programmed
   and registers are left in the reset state.
-  
+
   Card Specific Devices - The MVF card uses a chip select to address a
   range of peripherials (CSEL_2). These include front panel leds, and
   4 digit diagnostic display device. Put what ever you need.
@@ -45,7 +45,7 @@
 
   This file allows a range of common parameters which vary from one
   variant of card to another to placed in a central file.
-  
+
 */
 /*****************************************************************************/
 
@@ -53,7 +53,7 @@
 #define _BARE_H_
 
 #if __cplusplus
-extern "C" 
+extern "C"
 {
 #endif
 
@@ -84,8 +84,8 @@ extern "C"
 #define CSEL_2_SIZE        (0x00040000)
 #define CSEL_2_WAIT_STATES (OR_DTACK_EXT)
 
-/* 
- * Need to define a watchdog period  
+/*
+ * Need to define a watchdog period
  */
 #define WATCHDOG_TIMEOUT_PERIOD (3000 * 2)
 
@@ -182,42 +182,42 @@ extern "C"
 #define PIA_BASE                  (PERIPHERIALS_BASE + 0x0001C000)
 
 #define LED_1         0x0002
-#define LED_1_GREEN   0xFFFD                  
+#define LED_1_GREEN   0xFFFD
 #define LED_1_RED     0xFFFF
-#define LED_1_OFF     0xFFFC       
+#define LED_1_OFF     0xFFFC
 
 #define LED_2         0x0001
-#define LED_2_GREEN   0xFFFE    
+#define LED_2_GREEN   0xFFFE
 #define LED_2_RED     0xFFFF
 #define LED_2_OFF     0xFFFC
 
 #define LED_3         0x0000
-#define LED_3_GREEN   0xFFFC    
+#define LED_3_GREEN   0xFFFC
 #define LED_3_RED     0xFFFC
 #define LED_3_OFF     0xFFFC
 
 #define LED_4         0x0000
-#define LED_4_GREEN   0xFFFC    
+#define LED_4_GREEN   0xFFFC
 #define LED_4_RED     0xFFFC
 #define LED_4_OFF     0xFFFC
 
 #define LED_5         0x0000
-#define LED_5_GREEN   0xFFFC    
+#define LED_5_GREEN   0xFFFC
 #define LED_5_RED     0xFFFC
 #define LED_5_OFF     0xFFFC
 
 #define LED_6         0x0000
-#define LED_6_GREEN   0xFFFC    
+#define LED_6_GREEN   0xFFFC
 #define LED_6_RED     0xFFFC
 #define LED_6_OFF     0xFFFC
 
 #define LED_7         0x0000
-#define LED_7_GREEN   0xFFFC    
+#define LED_7_GREEN   0xFFFC
 #define LED_7_RED     0xFFFC
 #define LED_7_OFF     0xFFFC
 
 #define LED_8         0x0000
-#define LED_8_GREEN   0xFFFC    
+#define LED_8_GREEN   0xFFFC
 #define LED_8_RED     0xFFFC
 #define LED_8_OFF     0xFFFC
 
@@ -239,7 +239,7 @@ extern "C"
 #else
 #define GDB_RUN_MONITOR() (1 == 0)
 #endif
-                   
+
 #if __cplusplus
 }
 #endif

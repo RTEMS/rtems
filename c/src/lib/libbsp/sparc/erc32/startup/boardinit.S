@@ -19,11 +19,11 @@ __bsp_board_init:
 */
 
         set     SYM(ERC32_MEC), %g3  ! g3 = base address of peripherals
-	ld	[%g3], %g2		
+	ld	[%g3], %g2
 	set	0xfe080000, %g1
 	andcc	%g1, %g2, %g0
  	bne	2f
- 
+
  /* Stop the watchdog */
 
 	st	%g0, [%g3 + SYM(ERC32_MEC_WATCHDOG_TRAP_DOOR_SET_OFFSET)]
@@ -33,8 +33,8 @@ __bsp_board_init:
 	st	%g0, [%g3 + SYM(ERC32_MEC_WAIT_STATE_CONFIGURATION_OFFSET)]
 
  /* Set the correct memory size in MEC memory config register */
- 
- 	set	SYM(PROM_SIZE), %l0	
+
+ 	set	SYM(PROM_SIZE), %l0
  	set	0, %l1
  	srl	%l0, 18, %l0
 1:
@@ -43,8 +43,8 @@ __bsp_board_init:
  	bne,a	1b
  	inc	%l1
  	sll	%l1, 8, %l1
- 
- 	set	SYM(RAM_SIZE), %l0	
+
+ 	set	SYM(RAM_SIZE), %l0
  	srl	%l0, 19, %l0
 1:
  	tst	%l0
@@ -52,10 +52,10 @@ __bsp_board_init:
  	bne,a	1b
  	inc	%l1
  	sll	%l1, 10, %l1
- 
+
                                            ! set the Memory Configuration
         st     %l1, [ %g3 + ERC32_MEC_MEMORY_CONFIGURATION_OFFSET ]
-          
+
  	set	SYM(RAM_START), %l1  ! Cannot use RAM_END due to bug in linker
  	set	SYM(RAM_SIZE), %l2
  	add	%l1, %l2, %sp

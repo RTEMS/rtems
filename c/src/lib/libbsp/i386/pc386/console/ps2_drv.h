@@ -5,7 +5,7 @@
  * $Header$
  *
  * Copyright (c) 1999 ConnectTel, Inc. All Rights Reserved.
- *  
+ *
  * MODULE DESCRIPTION: Prototype routines for the paux driver.
  *
  * by: Rosimildo da Silva:
@@ -15,6 +15,9 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.2  2004/04/15 13:26:12  ralf
+ * Remove stray white spaces.
+ *
  * Revision 1.1  2000/08/30 08:15:30  joel
  * 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
  *

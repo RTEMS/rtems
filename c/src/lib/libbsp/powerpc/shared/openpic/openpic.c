@@ -243,13 +243,13 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
 		    /* No processor */
 		    openpic_maptimer(i, 0);
 	    }
-	    
+
 	    /* Initialize IPI interrupts */
 	    for (i = 0; i < OPENPIC_NUM_IPI; i++) {
 		    /* Disabled, Priority 0 */
 		    openpic_initipi(i, 0, OPENPIC_VEC_IPI+i);
 	    }
-	    
+
 	    /* Initialize external interrupts */
 	    for (i = 0; i < NumSources; i++) {
 		    /* Enabled, Priority 8 */
@@ -259,14 +259,14 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
 		    /* Processor 0 */
 		    openpic_mapirq(i, 1<<0);
 	    }
-	    
+
 	    /* Initialize the spurious interrupt */
 	    openpic_set_spurious(OPENPIC_VEC_SPURIOUS);
-#if 0	    
+#if 0
 	    if (request_irq(IRQ_8259_CASCADE, no_action, SA_INTERRUPT,
 			    "82c59 cascade", NULL))
 	      printk("Unable to get OpenPIC IRQ 0 for cascade\n");
-#endif	    
+#endif
 	    openpic_set_priority(0, 0);
 	    openpic_disable_8259_pass_through();
     }

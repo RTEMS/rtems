@@ -125,25 +125,25 @@ void VIA_isa_bridge_interrupts_setup(void)
 
   maxBus = BusCountPCI();
   pci_dev.function 	= 0; /* Assumes the bidge is the first function */
-     
+
   for (pci_dev.bus = 0; pci_dev.bus < maxBus; pci_dev.bus++) {
-#ifdef SCAN_PCI_PRINT       
+#ifdef SCAN_PCI_PRINT
     printk("isa_bridge_interrupts_setup: Scanning bus %d\n", pci_dev.bus);
-#endif       
+#endif
     for (pci_dev.device = 0; pci_dev.device < PCI_MAX_DEVICES; pci_dev.device++) {
-#ifdef SCAN_PCI_PRINT       
+#ifdef SCAN_PCI_PRINT
       printk("isa_bridge_interrupts_setup: Scanning device %d\n", pci_dev.device);
-#endif       
+#endif
       pci_read_config_dword(pci_dev.bus, pci_dev.device,  pci_dev.function,
 			       PCI_VENDOR_ID, &temp);
-#ifdef SCAN_PCI_PRINT       
+#ifdef SCAN_PCI_PRINT
       printk("Vendor/device = %x\n", temp);
 #endif
       if ((temp == (((unsigned short) PCI_VENDOR_ID_VIA) | (PCI_DEVICE_ID_VIA_82C586_0 << 16)))
 	 ) {
 	bridge = pci_dev;
 	via_82c586 = &bridge;
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
+#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
 	/*
 	 * Should print : bus = 0, device = 11, function = 0 on a MCP750.
 	 */
@@ -151,27 +151,27 @@ void VIA_isa_bridge_interrupts_setup(void)
 	       via_82c586->bus,
 	       via_82c586->device,
 	       via_82c586->function);
-#endif       
+#endif
 	found = 1;
 	goto loop_exit;
-	   
+
       }
     }
   }
 loop_exit:
   if (!found) BSP_panic("VIA_82C586 PCI/ISA bridge not found!n");
-     
+
   tmp = inb(0x810);
   if  ( !(tmp & 0x2)) {
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
+#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
     printk("This is a second generation MCP750 board\n");
     printk("We must reprogram the PCI/ISA bridge...\n");
-#endif       
+#endif
     pci_read_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
 			 0x47,  &tmp);
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
+#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
     printk(" PCI ISA bridge control2 = %x\n", (unsigned) tmp);
-#endif       
+#endif
     /*
      * Enable 4D0/4D1 ISA interrupt level/edge config registers
      */
@@ -190,31 +190,31 @@ loop_exit:
      */
     pci_read_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
 			    0x54, &tmp);
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
+#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
     printk(" PCI ISA bridge PCI/IRQ Edge/Level Select = %x\n", (unsigned) tmp);
-#endif       
+#endif
     tmp = 0;
     pci_write_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
 			  0x54, tmp);
   }
   else {
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
+#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
     printk("This is a first generation MCP750 board\n");
     printk("We just show the actual value used by PCI/ISA bridge\n");
-#endif       
+#endif
     pci_read_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
 			 0x47,  &tmp);
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
+#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
     printk(" PCI ISA bridge control2 = %x\n", (unsigned) tmp);
-#endif       
+#endif
     /*
      * Show the Interrupt inputs inverting/non-inverting level status
      */
     pci_read_config_byte(via_82c586->bus, via_82c586->device, via_82c586->function,
 			 0x54, &tmp);
-#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS	
+#ifdef SHOW_ISA_PCI_BRIDGE_SETTINGS
     printk(" PCI ISA bridge PCI/IRQ Edge/Level Select = %x\n", (unsigned) tmp);
-#endif       
+#endif
   }
 }
 
@@ -229,15 +229,15 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   rtems_raw_except_connect_data vectorDesc;
   int known_cpi_isa_bridge = 0;
   int i;
-  
+
   /*
    * First initialize the Interrupt management hardware
    */
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
   printk("Going to initialize raven interrupt controller (openpic compliant)\n");
-#endif       
+#endif
   openpic_init(1, mcp750_openpic_initpolarities, mcp750_openpic_initsenses);
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
   printk("Going to initialize the PCI/ISA bridge IRQ related setting (VIA 82C586)\n");
 #endif
   if ( currentBoard == MESQUITE ) {
@@ -258,9 +258,9 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     printk("If your card works correctly please add a test and set known_cpi_isa_bridge to true\n");
     printk("currentBoard = %i\n", currentBoard);
   }
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
   printk("Going to initialize the ISA PC legacy IRQ management hardware\n");
-#endif       
+#endif
   BSP_i8259s_init();
   /*
    * Initialize Rtems management interrupt table
@@ -287,7 +287,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
        */
       BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
     }
-  
+
   /*
    * We must connect the raw irq handler for the two
    * expected interrupt sources : decrementer and external interrupts.
@@ -309,7 +309,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     if (!mpc60x_set_exception (&vectorDesc)) {
       BSP_panic("Unable to initialize RTEMS external raw exception\n");
     }
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
     printk("RTEMS IRQ management is now operationnal\n");
 #endif
 }

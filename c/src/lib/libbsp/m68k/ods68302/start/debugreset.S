@@ -1,21 +1,21 @@
-/*  
+/*
  *  $Id$
  *
  *  Re-written the gen68302 start-up code.
- *  
+ *
  *  Uses gas syntax only, removed the OAR asm.h.
- *  
+ *
  *  Supplies a complete vector table in ROM.
- *  
+ *
  *  Manages all vectors with seperate handlers to trap unhandled
  *  execptions.
- *  
- *  Uses the target specific header file to get the runtime 
+ *
+ *  Uses the target specific header file to get the runtime
  *  configuration
- *  
+ *
  *  COPYRIGHT (c) 1996
  *  Objective Design Systems Pty Ltd (ODS)
- *        
+ *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -31,7 +31,7 @@
 |
 | Entered from a hardware reset.
 |
-        
+
         .global start                           | Default entry point for GNU
 start:
 
@@ -45,9 +45,9 @@ zerobss:
         moveal  #_clear_end,%a0                 | find end of .bss
         moveal  #_clear_start,%a1               | find beginning of .bss
         moveq   #0,%d0
-        
+
 zerobss_loop:
-        
+
         movel   %d0,%a1@+                       | to zero out uninitialized
         cmpal   %a0,%a1
         jlt     zerobss_loop                    | loop until end reached
@@ -60,14 +60,14 @@ zerobss_loop:
 
         jsr     boot_phase_3
 
-|                
+|
 | Initialised data
 |
 
         .sect   .data
-        
+
         .global start_frame
-        
+
 start_frame:
         .space  4,0
 
@@ -76,10 +76,10 @@ start_frame:
 |
 
         .sect   .bss
-        
+
         .global environ
         .align  2
-        
+
 environ:
         .long   0
 

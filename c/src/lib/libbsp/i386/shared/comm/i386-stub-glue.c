@@ -19,7 +19,7 @@ int  putDebugChar(int ch);     /* write a single character      */
 int  getDebugChar(void);       /* read and return a single char */
 
 /* assign an exception handler */
-void exceptionHandler(int, void (*handler)(void));   
+void exceptionHandler(int, void (*handler)(void));
 
 void BSP_loop(int uart);
 
@@ -37,7 +37,7 @@ i386_stub_glue_init(int uart)
 
   uart_current = uart;
 
-  BSP_uart_init(uart, 38400, CHR_8_BITS, 0, 0, 0); 
+  BSP_uart_init(uart, 38400, CHR_8_BITS, 0, 0, 0);
 }
 
 void BSP_uart_on(const rtems_raw_irq_connect_data* used)
@@ -57,7 +57,7 @@ int BSP_uart_isOn(const rtems_raw_irq_connect_data* used)
 
 
 /*
- * In order to have a possibility to break into 
+ * In order to have a possibility to break into
  * running program, one has to call this function
  */
 void i386_stub_glue_init_breakin(void)
@@ -75,13 +75,13 @@ void i386_stub_glue_init_breakin(void)
       uart_raw_irq_data.idtIndex = BSP_UART_COM2_IRQ + BSP_IRQ_VECTOR_BASE;
     }
 
-  if(!i386_get_current_idt_entry(&uart_raw_irq_data)) 
+  if(!i386_get_current_idt_entry(&uart_raw_irq_data))
     {
       printk("cannot get idt entry\n");
       rtems_fatal_error_occurred(1);
     }
 
-  if(!i386_delete_idt_entry(&uart_raw_irq_data)) 
+  if(!i386_delete_idt_entry(&uart_raw_irq_data))
     {
       printk("cannot delete idt entry\n");
       rtems_fatal_error_occurred(1);
@@ -103,12 +103,12 @@ void i386_stub_glue_init_breakin(void)
       uart_raw_irq_data.hdl = BSP_uart_dbgisr_com2;
     }
 
-  if (!i386_set_idt_entry (&uart_raw_irq_data)) 
+  if (!i386_set_idt_entry (&uart_raw_irq_data))
     {
       printk("raw exception handler connection failed\n");
       rtems_fatal_error_occurred(1);
     }
-  
+
   /* Enable interrupts */
   BSP_uart_intr_ctrl(uart_current, BSP_UART_INTR_CTRL_GDB);
 
@@ -146,13 +146,13 @@ void exceptionHandler(int vector, void (*handler)(void))
 
   excep_raw_irq_data.idtIndex = vector;
 
-  if(!i386_get_current_idt_entry(&excep_raw_irq_data)) 
+  if(!i386_get_current_idt_entry(&excep_raw_irq_data))
     {
       printk("cannot get idt entry\n");
       rtems_fatal_error_occurred(1);
     }
 
-  if(!i386_delete_idt_entry(&excep_raw_irq_data)) 
+  if(!i386_delete_idt_entry(&excep_raw_irq_data))
     {
       printk("cannot delete idt entry\n");
       rtems_fatal_error_occurred(1);

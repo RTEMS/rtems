@@ -19,7 +19,7 @@
  * 4, rue du Clos Courtel
  * 35512 CESSON-SEVIGNE
  * FRANCE
- * 
+ *
  * e-mail: g_montel@yahoo.com
  *
  *  $Id$
@@ -408,7 +408,7 @@ sync_wait:
 	/* -- chip select initialization -- */
 	lea.l   SIM_MASKH0(a0),a2
 	lea.l   _table_cs(%pc),a1
-	
+
 	moveq.l #0x07,d1
 
 _b_cs:
@@ -427,7 +427,7 @@ _fill_loop:
         clr.l	(a0)+
         subq.l	#1,d1
         bne	_fill_loop
-        
+
 _dont_fill:
 	jmp	SYM(_Init68340)		| Start C code (which never returns)
 

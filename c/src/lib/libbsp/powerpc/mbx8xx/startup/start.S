@@ -6,28 +6,28 @@
  *  all remaining initialization.
  *
  * This file is based on several others:
- * 
- * (1) start360.s from the gen68360 BSP by 
+ *
+ * (1) start360.s from the gen68360 BSP by
  *     W. Eric Norum (eric@skatter.usask.ca)
  *     with the following copyright and license:
  *
  *     COPYRIGHT (c) 1989-1998.
  *     On-Line Applications Research Corporation (OAR).
- *     
+ *
  *     The license and distribution terms for this file may in
  *     the file LICENSE in this distribution or at
  *     http://www.rtems.com/license/LICENSE.
  *
  * (2) start.s for the eth_comm port by
  *     Jay Monkman (jmonkman@fracsa.com),
- *     which itself is based on the 
- * 
+ *     which itself is based on the
+ *
  * (3) dlentry.s for the Papyrus BSP, written by:
  *     Andrew Bray <andy@i-cubed.co.uk>
  *     with the following copyright and license:
  *
  *     COPYRIGHT (c) 1995 by i-cubed ltd.
- *     
+ *
  * (4) start860.S for the MBX821/MBX860, written by:
  *     Darlene A. Stewart <darlene.stewart@iit.nrc.ca>
  *     Copyright (c) 1999, National Research Council of Canada
@@ -179,7 +179,7 @@
 .L_D4_e:
 .L_D2:
 	.previous
-	
+
 /*
  * Tell C's eabi-ctor's that we have an atexit function,
  * and that it is to register __do_global_dtors.
@@ -188,7 +188,7 @@
 	PUBLIC_VAR(__atexit)
 	.section ".sdata","aw"
 	.align	2
-SYM(__atexit):			
+SYM(__atexit):
 	EXT_PROC_REF(atexit)@fixup
 	.previous
 
@@ -198,7 +198,7 @@ SYM(__atexit):
 	.previous
 
 /* That should do it */
-			
+
 /*
  *  Put the entry point in its own section. That way, we can guarantee
  *  to put it first in the .text section in the linker script.
@@ -208,16 +208,16 @@ SYM(__atexit):
         PUBLIC_VAR (start)
 SYM(start):
         bl      .startup	/* or bl .spin */
-base_addr:      
+base_addr:
 
 /*
  * Parameters from linker
  */
-toc_pointer:    
+toc_pointer:
         .long   __GOT_START__
-bss_length:     
+bss_length:
         .long   bss.size
-bss_addr:       
+bss_addr:
         .long   bss.start
 
 PUBLIC_VAR (text_addr)
@@ -230,7 +230,7 @@ text_length:
 
 /*
  * Spin, if necessary, to acquire control from debugger (CodeWarrior).
- */     
+ */
 spin:
 	.long	0x0001
 .spin:
@@ -238,22 +238,22 @@ spin:
 	lwz	r3, spin@l(r3)
 	cmpwi	r3, 0x1
 	beq	.spin
-/*	
+/*
  * #define LOADED_BY_EPPCBUG
  */
 #define LOADED_BY_EPPCBUG
-#define EARLY_CONSOLE		
+#define EARLY_CONSOLE
 /*
- * Initialization code 
+ * Initialization code
  */
-.startup:	
+.startup:
         /* Get the start address. */
         mflr    r1
-#ifdef LOADED_BY_EPPCBUG	
+#ifdef LOADED_BY_EPPCBUG
 	/* Save pointer to residual/board data */
 	lis	r9,eppcbugInfo@ha
 	stw	r3,eppcbugInfo@l(r9)
-#endif	
+#endif
         /* Initialize essential registers. */
         bl      initregs
         nop
@@ -272,24 +272,24 @@ spin:
         EXTERN_PROC (_InitMBX8xx)
         bl	PROC (_InitMBX8xx)
         nop
-        
+
         /* Clear the bss section. */
         bl      bssclr
         nop
 #if defined(EARLY_CONSOLE) && defined(LOADED_BY_EPPCBUG)
 	EXTERN_PROC (serial_init)
 	bl	PROC (serial_init)
-#endif	
+#endif
 	lis	r5,environ@ha
         la	r5,environ@l(r5)		/* environp */
         /* clear argc and argv */
         xor     r3, r3, r3
         xor     r4, r4, r4
-        
+
         EXTERN_PROC (boot_card)
         bl       PROC (boot_card)	/* call the first C routine */
         nop
-        
+
         /* we should never return from boot_card, but in case we do ... */
 	/* The next instructions are dependent on your runtime environment */
 
@@ -297,14 +297,14 @@ spin:
 	lis  	r10, 0x0400		/* Data cache disable */
 	mtspr 	568, r10
 	isync
-		
+
 	mtspr   560, r10		/* Instruction cache disable */
 	isync
-		
+
 stop_here:
 	li	r10, 0x0F00		/* .RETURN */
 	sc
-	
+
 	b	stop_here
         nop
 
@@ -320,13 +320,13 @@ bssclr:
         rlwinm. r5,r5,30,0x3FFFFFFF             /* form length/4 */
         beqlr                                   /* no bss - return */
         mtctr   r5                              /* set ctr reg */
-        
+
         li      r5,0x0000                       /* r5 = 0 */
 clear_bss:
         stw     r5,0(r4)                        /* store r6 */
         addi    r4,r4,0x4                       /* update r4 */
         bdnz    clear_bss                       /* dec counter and loop */
-        
+
         blr                                     /* return */
 
 /*
@@ -337,24 +337,24 @@ clear_bss:
  *	r0 - scratch
  */
 initregs:
-	/*        
+	/*
 	 * Disable address translation. We should already be running in real space,
 	 * so this should be a no-op, i.e. no need to switch instruction stream
 	 * addresses from virtual space to real space. Other bits set the processor
 	 * for big-endian mode, exceptions vectored to 0x000n_nnnn (vectors are
 	 * already in low memory!), no execution tracing, machine check exceptions
-	 * enabled, floating-point not available (MPC8xx has none), supervisor 
+	 * enabled, floating-point not available (MPC8xx has none), supervisor
 	 * priviledge level, external interrupts disabled, power management
 	 * disabled (normal operation mode).
 	 */
 	li	r0, 0x1000	/* MSR_ME */
 	mtmsr	r0		/* Context-synchronizing */
 	isync
-	
+
 	/*
 	 * Clear the exception handling registers.
 	 * Note SPRG3 is reserved for use by EPPCBug on the MBX8xx.
-	 */	
+	 */
 	li	r0, 0x0000
 	mtdar   r0
 	mtspr	sprg0, r0
@@ -362,13 +362,13 @@ initregs:
 	mtspr	sprg2, r0
 	mtspr	srr0, r0
 	mtspr	srr1, r0
-			
+
 	mr	r6, r0
 	mr	r7, r0
 	mr	r8, r0
 	mr	r9, r0
 	mr	r10, r0
-	mr	r11, r0 
+	mr	r11, r0
 	mr	r12, r0
 	mr	r13, r0
 	mr	r14, r0
@@ -389,9 +389,9 @@ initregs:
 	mr	r29, r0
 	mr	r30, r0
 	mr	r31, r0
-	
+
 	blr			/* return */
-	
+
 .L_text_e:
 
 	.comm	environ,4,4

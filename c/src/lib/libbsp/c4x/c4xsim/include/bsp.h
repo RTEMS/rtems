@@ -74,15 +74,15 @@ extern "C" {
 /*
  *  Device Driver Table Entries
  */
- 
+
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */
- 
+
 
 /*
  *  Information placed in the linkcmds file.

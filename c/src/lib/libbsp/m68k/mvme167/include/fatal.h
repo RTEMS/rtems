@@ -8,7 +8,7 @@
  *
  *  $Id$
  */
- 
+
 #include <rtems/score/interr.h>
 #include <rtems/score/userext.h>
 

@@ -40,7 +40,7 @@ initialize_monitor_handles (void)
 {
 #ifdef ARM_RDI_MONITOR
   int volatile block[3];
-  
+
   block[0] = (int) ":tt";
   block[2] = 3;     /* length of filename */
   block[1] = 0;     /* mode "r" */
@@ -80,11 +80,11 @@ _swiread (int file,
   int fh = file;
 #ifdef ARM_RDI_MONITOR
   int block[3];
-  
+
   block[0] = fh;
   block[1] = (int) ptr;
   block[2] = len;
-  
+
   return do_AngelSWI (AngelSWI_Reason_Read, block);
 #else
   asm ("mov r0, %1; mov r1, %2;mov r2, %3; swi %a0"
@@ -104,11 +104,11 @@ _swiwrite (
   int fh = file;
 #ifdef ARM_RDI_MONITOR
   int block[3];
-  
+
   block[0] = fh;
   block[1] = (int) ptr;
   block[2] = len;
-  
+
   return do_AngelSWI (AngelSWI_Reason_Write, block);
 #else
   asm ("mov r0, %1; mov r1, %2;mov r2, %3; swi %a0"
@@ -119,14 +119,14 @@ _swiwrite (
 }
 
 /*
- *  Move me 
+ *  Move me
  */
 
 void
 bsp_cleanup (void )
 {
   /* FIXME: return code is thrown away */
-  
+
 #ifdef ARM_RDI_MONITOR
   do_AngelSWI (AngelSWI_Reason_ReportException,
 	      (void *) ADP_Stopped_ApplicationExit);

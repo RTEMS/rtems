@@ -14,10 +14,10 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Ported to LEON implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
+ *  Research Corporation (OAR) under contract to the European Space
  *  Agency (ESA).
  *
- *  LEON modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  LEON modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
  *
  *  $Id$
@@ -52,11 +52,11 @@ extern uint32_t         CPU_SPARC_CLICKS_PER_TICK;
 rtems_isr_entry  Old_ticker;
 
 void Clock_exit( void );
- 
+
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
@@ -87,7 +87,7 @@ rtems_isr Clock_isr(
 #if SIMSPARC_FAST_IDLE
   LEON_REG.Real_Time_Clock_Counter = CPU_SPARC_CLICKS_PER_TICK;
   LEON_REG_Set_Real_Time_Clock_Timer_Control(
-    LEON_REG_TIMER_COUNTER_ENABLE_COUNTING | 
+    LEON_REG_TIMER_COUNTER_ENABLE_COUNTING |
       LEON_REG_TIMER_COUNTER_LOAD_COUNTER
   );
 #endif
@@ -131,11 +131,11 @@ void Install_clock(
     LEON_REG.Timer_Reload_1  = CPU_SPARC_CLICKS_PER_TICK - 1;
 
     LEON_REG.Timer_Control_1 = (
-      LEON_REG_TIMER_COUNTER_ENABLE_COUNTING | 
+      LEON_REG_TIMER_COUNTER_ENABLE_COUNTING |
         LEON_REG_TIMER_COUNTER_RELOAD_AT_ZERO |
-        LEON_REG_TIMER_COUNTER_LOAD_COUNTER 
+        LEON_REG_TIMER_COUNTER_LOAD_COUNTER
     );
- 
+
     atexit( Clock_exit );
   }
 
@@ -165,7 +165,7 @@ void Clock_exit( void )
     /* do not restore old vector */
   }
 }
- 
+
 /*
  *  Clock_initialize
  *
@@ -189,17 +189,17 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
- 
+
   /*
    * make major/minor avail to others such as shared memory driver
    */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 }
- 
+
 /*
  *  Clock_control
  *
@@ -224,15 +224,15 @@ rtems_device_driver Clock_control(
 {
     uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
- 
+
     if (args == 0)
         goto done;
- 
+
     /*
      * This is hokey, but until we get a defined interface
      * to do this, it will just be this simple...
      */
- 
+
     if (args->command == rtems_build_name('I', 'S', 'R', ' '))
     {
         Clock_isr(CLOCK_VECTOR);
@@ -243,7 +243,7 @@ rtems_device_driver Clock_control(
        (void) set_vector( args->buffer, CLOCK_VECTOR, 1 );
       rtems_interrupt_enable( isrlevel );
     }
- 
+
 done:
     return RTEMS_SUCCESSFUL;
 }

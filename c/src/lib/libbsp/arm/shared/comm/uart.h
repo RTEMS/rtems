@@ -38,7 +38,7 @@ extern int BSPConsolePort;
 extern int BSPBaseBaud;
 /*
  * Command values for BSP_uart_intr_ctrl(),
- * values are strange in order to catch errors 
+ * values are strange in order to catch errors
  * with assert
  */
 #define BSP_UART_INTR_CTRL_DISABLE  (0)
@@ -71,20 +71,20 @@ extern int BSPBaseBaud;
 #define RBR  RSRBR   /* Rx Buffer Register (read) */
 #define THR  RSTHR   /* Tx Buffer Register (write) */
 #define IER  RSIER   /* Interrupt Enable Register */
-  
+
 /* DLAB X */
 #define IIR  RSIIR   /* Interrupt Ident Register (read) */
 #define FCR  RSFCR   /* FIFO Control Register (write) */
 #define LCR  RSLCR   /* Line Control Register */
 #define LSR  RSLSR   /* Line Status Register */
-  
+
 /* DLAB 1 */
 #define DLL  RSDLL   /* Divisor Latch, LSB */
 #define DLM  RSDLH   /* Divisor Latch, MSB */
-  
+
 /* Uart control */
 #define CNT  RSCNT   /* General Control register */
-  
+
 /*
  * define bit for CNT
  */

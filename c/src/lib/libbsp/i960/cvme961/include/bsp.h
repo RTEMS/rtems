@@ -135,7 +135,7 @@ BSP_EXTERN i960ca_control_table  *Ctl_tbl;
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

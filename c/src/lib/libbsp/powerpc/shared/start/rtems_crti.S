@@ -4,11 +4,11 @@
 #include <libcpu/io.h>
 
 	/* terminate the __init() function and create
-	 * a new head '_init' for use by RTEMS to 
+	 * a new head '_init' for use by RTEMS to
 	 * invoke C++ global constructors
 	 * NOTE: it is essential that this snippet
 	 * is hooked between ecrti and crtbegin
-	 * 
+	 *
 	 * ecrti has the following .init section:
 	 * __init:
 	 *    stwu r1,-16(r1)

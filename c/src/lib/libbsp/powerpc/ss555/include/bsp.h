@@ -40,7 +40,7 @@ extern "C" {
 /*
  * Clock definitions
  */
- 
+
 #define BSP_CRYSTAL_HZ 	 4000000	/* crystal frequency, Hz */
 #define BSP_CLOCK_HZ	40000000	/* CPU clock frequency, Hz
 
@@ -72,9 +72,9 @@ typedef struct cpld_ {
   rtems_unsigned8	nflash_writess;	/* Enable/disable NAND-flash writes */
   rtems_unsigned8	padA[0xC00000 - 0xA00002];
 } cpld_t;
-                  
+
 extern volatile cpld_t cpld;              /* defined in linkcmds */
-   
+
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
  *  Long test and short test duration limits are provided.  These
@@ -154,7 +154,7 @@ extern rtems_configuration_table BSP_Configuration;
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

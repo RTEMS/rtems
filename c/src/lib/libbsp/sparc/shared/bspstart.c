@@ -12,10 +12,10 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
+ *  Research Corporation (OAR) under contract to the European Space
  *  Agency (ESA).
  *
- *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
  *
  *  $Id$
@@ -29,12 +29,12 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
- 
+
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
  */
- 
+
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
 
@@ -62,8 +62,8 @@ uint32_t         CPU_SPARC_CLICKS_PER_TICK;
  *
  * Try to speed those tests up by speeding up the clock when in the idle task.
  *
- *  NOTE:  At the current setting, 5 second delays in the tests take 
- *         approximately 5 seconds of wall time. 
+ *  NOTE:  At the current setting, 5 second delays in the tests take
+ *         approximately 5 seconds of wall time.
  */
 
 rtems_extension fast_idle_switch_hook(
@@ -98,7 +98,7 @@ rtems_extension fast_idle_switch_hook(
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 extern void bsp_spurious_initialize();
@@ -148,7 +148,7 @@ void bsp_pretasking_hook(void)
 
     rc = rtems_extension_create(
       rtems_build_name('F', 'D', 'L', 'E'),
-      &fast_idle_extension, 
+      &fast_idle_extension,
       &extension_id
     );
     if (rc != RTEMS_SUCCESSFUL)
@@ -195,7 +195,7 @@ void bsp_start( void )
 
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
-  work_space_start = 
+  work_space_start =
     (unsigned char *)rdb_start - BSP_Configuration.work_space_size;
 
   if ( work_space_start <= (unsigned char *)&end ) {

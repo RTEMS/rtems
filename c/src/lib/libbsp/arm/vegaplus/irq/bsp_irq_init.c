@@ -21,7 +21,7 @@ void BSP_rtems_irq_mngt_init() {
 
   /* Initialize the vector table address in internal RAM */
   Regs[INTTAB] = VECTOR_TABLE;
-  
+
   /* Initialize the GLOBAL INT CONTROL register */
   Regs[INTGCNTL] = 0x00;
 
@@ -33,7 +33,7 @@ void BSP_rtems_irq_mngt_init() {
 
   /* Ack pending interrupt */
   while ( ( Regs[INTSTAT] & 0xF433 ) != 0 ) {
-    Regs[INTACK] = 0xFFFF;	
+    Regs[INTACK] = 0xFFFF;
     Regs[INTEOI] = EOI;
   }
 }

@@ -104,7 +104,7 @@
 	.set	FP_31, (FP_30 + 4)
 	.set	FP_FPSCR, (FP_31 + 4)
 #endif
-	
+
 	.set	IP_LINK, 0
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
 	.set	IP_0, (IP_LINK + 56)
@@ -117,12 +117,12 @@
 	.set	IP_4, (IP_3 + 4)
 	.set	IP_5, (IP_4 + 4)
 	.set	IP_6, (IP_5 + 4)
-	
+
 	.set	IP_7, (IP_6 + 4)
 	.set	IP_8, (IP_7 + 4)
 	.set	IP_9, (IP_8 + 4)
 	.set	IP_10, (IP_9 + 4)
-	
+
 	.set	IP_11, (IP_10 + 4)
 	.set	IP_12, (IP_11 + 4)
 	.set	IP_13, (IP_12 + 4)
@@ -132,15 +132,15 @@
 	.set	IP_30, (IP_29 + 4)
 	.set	IP_31, (IP_30 + 4)
 	.set	IP_CR, (IP_31 + 4)
-	
+
 	.set	IP_CTR, (IP_CR + 4)
 	.set	IP_XER, (IP_CTR + 4)
 	.set	IP_LR, (IP_XER + 4)
 	.set	IP_PC, (IP_LR + 4)
-	
+
 	.set	IP_MSR, (IP_PC + 4)
 	.set	IP_END, (IP_MSR + 16)
-	
+
 	/* _CPU_IRQ_info offsets */
 
 	/* These must be in this order */
@@ -162,5 +162,5 @@
 #endif
 	.set	Signal, Switch_necessary + 4
         .set    msr_initial, Signal + 4
-	
+
 #endif  /* __PPC_OFFS_H */

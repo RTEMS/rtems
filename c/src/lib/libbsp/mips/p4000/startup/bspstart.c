@@ -26,7 +26,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
- 
+
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
@@ -43,7 +43,7 @@ char *rtems_progname;
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
@@ -60,7 +60,7 @@ void bsp_libc_init( void *, uint32_t, int );
  *      not yet initialized.
  *
  */
- 
+
 #define LIBC_HEAP_SIZE (64 * 1024)
 
 void bsp_pretasking_hook(void)
@@ -78,7 +78,7 @@ void bsp_pretasking_hook(void)
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
 }
- 
+
 extern int end; /* defined by linker */
 
 /*

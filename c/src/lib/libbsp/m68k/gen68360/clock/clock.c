@@ -1,4 +1,4 @@
-/* 
+/*
  * This routine initializes the MC68360 Periodic Interval Timer
  *
  * The PIT has rather poor resolution, but it is easy to set up
@@ -77,7 +77,7 @@ static unsigned long nsec;
  *     To reduce the jitter in the calls to RTEMS the
  *     hardware interrupt interval is never greater than
  *     the maximum non-prescaled value from the PIT.
- * 
+ *
  *     For a 25 MHz external clock the basic clock rate is
  *        40 nsec * 128 * 4 = 20.48 usec/tick
  */

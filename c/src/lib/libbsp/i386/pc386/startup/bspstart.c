@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------+
 | This file contains the PC386 BSP startup package. It includes application,
 | board, and monitor specific initialization and configuration. The generic CPU
-| dependent initialization has been performed before this routine is invoked. 
+| dependent initialization has been performed before this routine is invoked.
 +--------------------------------------------------------------------------+
 | (C) Copyright 1997 -
 | - NavIST Group - Real-Time Distributed Systems and Industrial Automation
@@ -40,11 +40,11 @@
 | Global Variables
 +--------------------------------------------------------------------------*/
 extern uint32_t         _end;         /* End of BSS. Defined in 'linkcmds'. */
-/* 
- * Size of heap if it is 0 it will be dynamically defined by memory size, 
- * otherwise the value should be changed by binary patch 
+/*
+ * Size of heap if it is 0 it will be dynamically defined by memory size,
+ * otherwise the value should be changed by binary patch
  */
-uint32_t         _heap_size = 0; 
+uint32_t         _heap_size = 0;
 
 /* Size of stack used during initialization. Defined in 'start.s'.  */
 extern uint32_t         _stack_size;
@@ -77,20 +77,20 @@ void bsp_postdriver_hook(void);
 |                   since drivers are not yet initialized.
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void bsp_pretasking_hook(void)
 {
   uint32_t         topAddr, val;
   int i;
-  
-  
+
+
   if (rtemsFreeMemStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
     rtemsFreeMemStart = (rtemsFreeMemStart+CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
   if(_heap_size == 0)
     {
-      /* 
+      /*
        * We have to dynamically size memory. Memory size can be anything
        * between 2M and 2048M.
        * let us first write
@@ -110,12 +110,12 @@ void bsp_pretasking_hook(void)
 	      break;
 	    }
 	}
-      
+
       topAddr = (i-1)*1024*1024 - 4;
 
       _heap_size = topAddr - rtemsFreeMemStart;
     }
-      
+
   bsp_libc_init((void *)rtemsFreeMemStart, _heap_size, 0);
   rtemsFreeMemStart += _heap_size;           /* HEAP_SIZE  in KBytes */
 
@@ -126,19 +126,19 @@ void bsp_pretasking_hook(void)
 
 #endif /* RTEMS_DEBUG */
 } /* bsp_pretasking_hook */
- 
+
 
 /*-------------------------------------------------------------------------+
 |         Function: bsp_start
 |      Description: Called before main is invoked.
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void bsp_start_default( void )
 {
   void Calibrate_loop_1ms(void);
-  
+
   /*
    * Calibrate variable for 1ms-loop (see timer.c)
    */

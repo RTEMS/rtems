@@ -1,4 +1,4 @@
-/* 
+/*
  * vectors.h Exception frame related contant and API.
  *
  *  This include file describe the data structure and the functions implemented
@@ -16,10 +16,10 @@
 #define LIBBSP_POWERPC_ETH_COMM_VECTORS_H
 
 /*
- * The callee (high level exception code written in C) 
+ * The callee (high level exception code written in C)
  * will store the Link Registers (return address) at entry r1 + 4 !!!.
  * So let room for it!!!.
- */ 
+ */
 #define LINK_REGISTER_CALLEE_UPDATE_ROOM 4
 #define SRR0_FRAME_OFFSET 8
 #define SRR1_FRAME_OFFSET 12
@@ -81,7 +81,7 @@ extern	int  default_exception_vector_code_prolog_size;
  * zero, it performs more or less like memmove. No copy is performed if
  * source and destination addresses are equal. However the caches
  * are synchronized. Note that the size is always rounded up to the
- * next mutiple of 4. 
+ * next mutiple of 4.
  */
 extern void * codemove(void *, const void *, unsigned int, unsigned long);
 extern void initialize_exceptions();

@@ -102,7 +102,7 @@ int format_string(const char * fmt, ArgType * args, char * buffer)
         s = s1;
         do {
 	  if (s == 0) break;
-	  if (* s == 0)  
+	  if (* s == 0)
 	    break;
 	  s ++;
         } while (-- ndigit);
@@ -111,7 +111,7 @@ int format_string(const char * fmt, ArgType * args, char * buffer)
         j = 2;
       case 'u':
         getu:
-      
+
         if (! lflag) {
 	  geta(& inte, wsize(inte));
 	  goto i_unsignd;
@@ -119,7 +119,7 @@ int format_string(const char * fmt, ArgType * args, char * buffer)
 #     ifdef DO_LONG
       case 'U':
         getlu:
-      
+
         geta((ArgType *) & l, wsize(l));
         goto l_unsignd;
       case 'B':
@@ -133,21 +133,21 @@ int format_string(const char * fmt, ArgType * args, char * buffer)
         goto getlu ;
       case 'D':
         l_signed:
-      
+
         geta((ArgType *) & l, wsize(l));
         if (l < 0) {
           STORE_BYTE(s ++, '-');
           l = -l;
         }
         goto do_l;
-      
+
         l_unsignd:
 
         if (l && ndigit)
 	  STORE_BYTE(s ++, '0');
 
         do_l:
-      
+
         s = l_compute(l, j, s);
         break;
 #     endif
@@ -165,14 +165,14 @@ int format_string(const char * fmt, ArgType * args, char * buffer)
 	  inte = - inte;
         }
         goto do_i;
-      
+
         i_unsignd:
-      
+
         if (inte && ndigit)
 	  STORE_BYTE(s ++, '0');
 
         do_i:
-      
+
 	s = i_compute(inte, j, s);
         break;
       case 'c':
@@ -204,7 +204,7 @@ int format_string(const char * fmt, ArgType * args, char * buffer)
 	do STORE_BYTE(buffer ++, zfill);
 	while (-- c);
       }
-    }  
+    }
     while (-- j >= 0)
       STORE_BYTE(buffer ++, * s1 ++);
     while (-- c >= 0)
@@ -268,7 +268,7 @@ static char *l_compute(long l1,int d, char * s)
     l2 = ((l1>>1) & ~signbit(l1));
     l1 = l2 / (d>>1);
     c += (l2%(d>>1))<<1;
-  } 
+  }
   else  {
     c = l1 % d;
     l1 = l1 / d;
@@ -306,7 +306,7 @@ long store_byte(char * cp, long c)
 #define	INT	0
 #define	FLOAT	1
 
-static int new_c(void); 
+static int new_c(void);
 static void unnew_c(char);
 static int _innum(int ** ptr, int type, int len, int size, int * eofptr);
 static int _instr(char * ptr, int type, int len, int * eofptr);
@@ -336,13 +336,13 @@ int unformat_string(const char * fmt, int ** argp, const char * buffer)
 
   line = buffer;
   linep = (char*)line;
-  
+
   nmatch = 0;
   fileended = 0;
   for (;;) switch (ch = * fmt ++)  {
-    case '\0': 
+    case '\0':
       return (nmatch);
-    case '%': 
+    case '%':
       if ((ch = * fmt ++) == '%')
         goto def;
       ptr = 0;
@@ -381,16 +381,16 @@ int unformat_string(const char * fmt, int ** argp, const char * buffer)
 	break;
     case ' ':
     case '\n':
-    case '\t': 
+    case '\t':
       while ((ch1 = new_c())==' ' || ch1=='\t' || ch1=='\n')
 	;
       if (ch1 != EOF)
 	unnew_c(ch1);
       break;
     default:
-     
+
     def:
-    
+
       ch1 = new_c();
       if (ch1 != ch)  {
 	if (ch1==EOF)
@@ -400,10 +400,10 @@ int unformat_string(const char * fmt, int ** argp, const char * buffer)
       }
    }
 }
-static int new_c()             
+static int new_c()
 {
   char c;
-  
+
   if (linep)  {
     c = * linep ++;
     return c;
@@ -421,7 +421,7 @@ static int _innum(int ** ptr, int type, int len, int size, int * eofptr)
 {
 # ifdef DO_FLOAT
   extern double atof();
-# endif  
+# endif
   char * np;
   char numbuf[64];
   int c, base;
@@ -571,7 +571,7 @@ static int _instr(char * ptr, int type, int len, int * eofptr)
     return 1;
   }
   return 0;
-}  
+}
 static const char * _getccl(const char * s)
 {
   int c, t;

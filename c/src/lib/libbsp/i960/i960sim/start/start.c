@@ -4,7 +4,7 @@ char **environ = __env;
 #define ENABLE_TRACE_MASK 1
 #define STACK_ALIGN 64
 
-__inline static void 
+__inline static void
 init_Cregs (void)
 {
     /* set register values gcc like */

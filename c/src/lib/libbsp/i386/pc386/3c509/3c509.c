@@ -6,7 +6,7 @@
  * e-mail: rdasilva@connecttel.com
  *
  * MODULE DESCRIPTION:
- * RTEMS driver for 3COM 3C509 Ethernet Card. 
+ * RTEMS driver for 3COM 3C509 Ethernet Card.
  * The driver has been tested on PC with a single network card.
  *
  *
@@ -54,10 +54,13 @@
  * Saskatoon, Saskatchewan, CANADA
  * eric@skatter.usask.ca
  *******************************************************************************
- * 
+ *
  *
  * MODIFICATION/HISTORY:
  * $Log$
+ * Revision 1.2  1999/12/13 21:21:31  joel
+ * Warning removal patch from Philip A. Prindeville <philipp@zembu.com>.
+ *
  * Revision 1.1  1999/05/14 16:23:42  joel
  * Added 3COM 3C509 driver from Rosimildo DaSilva <rdasilva@connecttel.com>.
  *
@@ -140,7 +143,7 @@
  * more powerful mechanism for detecting and dealing with multiple types
  * of non-fatal conflict.  -jkh XXX
  */
-struct isa_device 
+struct isa_device
 {
   int	id_id;		/* device id */
   int	id_unit;	/* unit number */
@@ -149,7 +152,7 @@ struct isa_device
 };
 
 
-struct ep_board 
+struct ep_board
 {
   int epb_addr;	        /* address of this board */
   char epb_used;		/* was this entry already used for configuring ? */
@@ -163,7 +166,7 @@ struct ep_board
 /*
  * Ethernet software status per interface.
  */
-struct ep_softc 
+struct ep_softc
 {
     struct arpcom arpcom;	/* Ethernet common part		 */
     int ep_io_addr;			/* i/o bus address		 	 */
@@ -194,7 +197,7 @@ struct ep_softc
 static volatile unsigned long overrun;
 static volatile unsigned long resend;
 static struct ep_softc ep_softc[ NWDDRIVER ];
-static struct isa_device isa_dev[ NWDDRIVER ] = 
+static struct isa_device isa_dev[ NWDDRIVER ] =
 {
   { 0, 	   		/* device id 		  		*/
     0, 	   		/* unit number 		  		*/
@@ -230,7 +233,7 @@ extern void Wait_X_ms( unsigned int timeToWait );  /* timer.c ??? */
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Writes a buffer of data to the I/O port. The data is sent to the
  *				port as 32 bits units( 4 bytes ).
  *
@@ -239,7 +242,7 @@ extern void Wait_X_ms( unsigned int timeToWait );  /* timer.c ??? */
  **********************************************************************************/
 static __inline void outsl( unsigned short io_addr, unsigned char *out_data, int len )
 {
-   u_long *pl = ( u_long *)out_data; 
+   u_long *pl = ( u_long *)out_data;
    while( len-- )
    {
      outport_long( io_addr, *pl );
@@ -248,7 +251,7 @@ static __inline void outsl( unsigned short io_addr, unsigned char *out_data, int
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Writes a buffer of data to the I/O port. The data is sent to the
  *				port as 16 bits units( 2 bytes ).
  *
@@ -257,7 +260,7 @@ static __inline void outsl( unsigned short io_addr, unsigned char *out_data, int
  **********************************************************************************/
 static __inline void outsw( unsigned short io_addr, unsigned char *out_data, int len )
 {
-   u_short *ps = ( u_short *)out_data; 
+   u_short *ps = ( u_short *)out_data;
    while( len-- )
    {
      outport_word( io_addr, *ps );
@@ -266,7 +269,7 @@ static __inline void outsw( unsigned short io_addr, unsigned char *out_data, int
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Writes a buffer of data to the I/O port. The data is sent to the
  *				port as 8 bits units( 1 byte ).
  *
@@ -284,7 +287,7 @@ static __inline void outsb( unsigned short io_addr, unsigned char *out_data, int
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Read a buffer of data from an I/O port. The data is read as 16 bits
  *			    units or 2 bytes.
  *
@@ -293,7 +296,7 @@ static __inline void outsb( unsigned short io_addr, unsigned char *out_data, int
  **********************************************************************************/
 static __inline void insw( unsigned short io_addr, unsigned char *in_data, int len )
 {
-   u_short *ps = ( u_short *)in_data; 
+   u_short *ps = ( u_short *)in_data;
    while( len-- )
    {
      inport_word( io_addr, *ps );
@@ -302,7 +305,7 @@ static __inline void insw( unsigned short io_addr, unsigned char *in_data, int l
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Read a buffer of data from an I/O port. The data is read as 32 bits
  *			    units or 4 bytes.
  *
@@ -311,7 +314,7 @@ static __inline void insw( unsigned short io_addr, unsigned char *in_data, int l
  **********************************************************************************/
 static __inline void insl( unsigned short io_addr, unsigned char *in_data, int len )
 {
-   u_long *pl = ( u_long *)in_data; 
+   u_long *pl = ( u_long *)in_data;
    while( len-- )
    {
      inport_long( io_addr, *pl );
@@ -320,7 +323,7 @@ static __inline void insl( unsigned short io_addr, unsigned char *in_data, int l
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Read a buffer of data from an I/O port. The data is read as 8 bits
  *			    units or 1 bytes.
  *
@@ -337,7 +340,7 @@ static __inline void insb( unsigned short io_addr, unsigned char *in_data, int l
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Writes a word to the I/O port.
  *
  * RETURNS: nothing.
@@ -353,7 +356,7 @@ static __inline void outw( unsigned short io_addr, unsigned short out_data )
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION:  Routine to read a word as defined in FreeBSD.
  *
  * RETURNS: nothing
@@ -367,7 +370,7 @@ static __inline unsigned short inw( unsigned short io_addr )
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Routine to output a word as defined in FreeBSD.
  *
  * RETURNS: nothing.
@@ -379,7 +382,7 @@ void __inline outb( unsigned short io_addr, unsigned char out_data )
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Routine to read a word as defined in FreeBSD.
  *
  * RETURNS: byte read.
@@ -394,7 +397,7 @@ static __inline unsigned char inb( unsigned short io_addr )
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION:
  * We get eeprom data from the id_port given an offset into the eeprom.
  * Basically; after the ID_sequence is sent to all of the cards; they enter
@@ -422,7 +425,7 @@ static int get_eeprom_data( int id_port, int offset )
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Waits until the EEPROM of the card is ready to be accessed.
  *
  * RETURNS: 0 - not ready; 1 - ok
@@ -434,7 +437,7 @@ static int eeprom_rdy( struct ep_softc *sc )
 
     for (i = 0; is_eeprom_busy(BASE) && i < MAX_EEPROMBUSY; i++)
 	    continue;
-    if (i >= MAX_EEPROMBUSY) 
+    if (i >= MAX_EEPROMBUSY)
     {
 	   printf("ep%d: eeprom failed to come ready.\n", sc->unit);
 	   return (0);
@@ -443,9 +446,9 @@ static int eeprom_rdy( struct ep_softc *sc )
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION:
- * get_e: gets a 16 bits word from the EEPROM. 
+ * get_e: gets a 16 bits word from the EEPROM.
  * We must have set the window before call this routine.
  *
  * RETURNS: data from EEPROM
@@ -463,7 +466,7 @@ u_short get_e(  struct ep_softc *sc, int offset )
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION:
  * Driver interrupt handler. This routine is called by the RTEMS kernel when this
  * interrupt is raised.
@@ -477,14 +480,14 @@ static rtems_isr ap_interrupt_handler( rtems_vector_number v )
 
   /* de-activate any pending interrrupt, and sent and event to interrupt task
    * to process all events required by this interrupt.
-   */  
+   */
   outw( BASE + EP_COMMAND, SET_INTR_MASK ); 	/* disable all Ints */
-  rtems_event_send( sc->rxDaemonTid, INTERRUPT_EVENT );    
+  rtems_event_send( sc->rxDaemonTid, INTERRUPT_EVENT );
 }
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION:
  *
  * RETURNS:
@@ -496,7 +499,7 @@ static void nopOn(const rtems_irq_connect_data* notUsed)
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION:
  *
  * RETURNS:
@@ -509,7 +512,7 @@ static int _3c509_IsOn(const rtems_irq_connect_data* irq)
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION:
  * Initializes the ethernet hardware.
  *
@@ -521,15 +524,15 @@ static void _3c509_initialize_hardware (struct ep_softc *sc)
   rtems_status_code st;
 
   epinit( sc );
-  
+
   /*
-   * Set up interrupts 
+   * Set up interrupts
    */
   sc->irqInfo.hdl = ( rtems_irq_hdl )ap_interrupt_handler;
   sc->irqInfo.on  = nopOn;
   sc->irqInfo.off = nopOn;
   sc->irqInfo.isOn = _3c509_IsOn;
-  
+
   printf ("3c509: IRQ with Kernel: %d\n", sc->irqInfo.name );
   st = BSP_install_rtems_irq_handler( &sc->irqInfo );
   if( !st )
@@ -539,7 +542,7 @@ static void _3c509_initialize_hardware (struct ep_softc *sc)
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Driver interrupt daemon.
  *
  * RETURNS: nothing.
@@ -561,13 +564,13 @@ static void _3c509_rxDaemon (void *arg)
     /* printk( "R+" ); */
     ep_intr( dp );
     epstart( &dp->arpcom.ac_if );
-  }	
+  }
   printf ("3C509: RX Daemon is finishing.\n");
 }
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Driver transmit daemon
  *
  * RETURNS:
@@ -578,7 +581,7 @@ static void _3c509_txDaemon (void *arg)
     struct ep_softc *sc = (struct ep_softc *)&ep_softc[0];
 	struct ifnet *ifp = &sc->arpcom.ac_if;
 	rtems_event_set events;
-  
+
     printf ("3C509: TX Daemon is starting.\n");
     for( ;; )
 	{
@@ -586,9 +589,9 @@ static void _3c509_txDaemon (void *arg)
 		 * Wait for packet
 		 */
 	  /* printk( "T-\n" ); */
-		rtems_bsdnet_event_receive( START_TRANSMIT_EVENT, 
-									RTEMS_EVENT_ANY | RTEMS_WAIT, 
-									RTEMS_NO_TIMEOUT, 
+		rtems_bsdnet_event_receive( START_TRANSMIT_EVENT,
+									RTEMS_EVENT_ANY | RTEMS_WAIT,
+									RTEMS_NO_TIMEOUT,
 									&events );
 		/*	printk( "T+\n" ); */
       epstart( ifp );
@@ -600,7 +603,7 @@ static void _3c509_txDaemon (void *arg)
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Activates the trabsmitter task...
  *
  * RETURNS: nothing.
@@ -615,7 +618,7 @@ static void _3c509_start (struct ifnet *ifp)
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Initialize and start the device
  *
  * RETURNS:
@@ -628,11 +631,11 @@ static void _3c509_init (void *arg)
 
   printf ("3C509: Initialization called.\n");
   if (sc->txDaemonTid == 0) {
-    
+
     /*
      * Set up WD hardware
      */
-    _3c509_initialize_hardware (sc); 
+    _3c509_initialize_hardware (sc);
     printf ("3C509: starting network driver tasks..\n");
     /*
      * Start driver tasks
@@ -648,7 +651,7 @@ static void _3c509_init (void *arg)
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Stop the device
  *
  * RETURNS:
@@ -679,7 +682,7 @@ static void _3c509_stop (struct ep_softc *sc)
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION:  Show interface statistics
  *
  * RETURNS: nothing.
@@ -697,10 +700,10 @@ static void _3c509_stats (struct ep_softc *sc)
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Driver ioctl handler
  *
- * RETURNS: 
+ * RETURNS:
  *
  **********************************************************************************/
 static int _3c509_ioctl (struct ifnet *ifp, int command, caddr_t data)
@@ -738,7 +741,7 @@ static int _3c509_ioctl (struct ifnet *ifp, int command, caddr_t data)
 	case SIO_RTEMS_SHOW_STATS:
 		_3c509_stats( sc );
 		break;
-		
+
 	/*
 	 * FIXME: All sorts of multicast commands need to be added here!
 	 */
@@ -750,7 +753,7 @@ static int _3c509_ioctl (struct ifnet *ifp, int command, caddr_t data)
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION:
  * Attaches this network driver to the system. This function is called by the network
  * interface during the initialization of the system.
@@ -784,7 +787,7 @@ int rtems_3c509_driver_attach (struct rtems_bsdnet_ifconfig *config )
 		if (ifp->if_softc == NULL)
 			break;
 	}
-	if (i >= NWDDRIVER) 
+	if (i >= NWDDRIVER)
 	{
 		printf ("Too many 3C509 drivers.\n");
 		return 0;
@@ -793,11 +796,11 @@ int rtems_3c509_driver_attach (struct rtems_bsdnet_ifconfig *config )
 	/*
 	 * Process options
 	 */
-	if( config->hardware_address ) 
+	if( config->hardware_address )
 	{
 	  memcpy (sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
 	}
-	else 
+	else
 	{
 	  /* set it to something ... */
 	  memset (sc->arpcom.ac_enaddr, 0x08,ETHER_ADDR_LEN);
@@ -856,11 +859,11 @@ int rtems_3c509_driver_attach (struct rtems_bsdnet_ifconfig *config )
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION:
  * This function looks for a 3COM card 3c5x9 in an isa bus. If a board is found, it
  * returns a structure describing the caracteristics of the card. It returns zero when
- * card can not be found. 							
+ * card can not be found.
  *
  * RETURNS:  	0 - fail - could not find a card...
  *				<>  description of the card.
@@ -871,7 +874,7 @@ static struct ep_board *ep_look_for_board_at( struct isa_device *is )
     int data, i, j, id_port = ELINK_ID_PORT;
     int count = 0;
 
-    if(ep_current_tag == (EP_LAST_TAG + 1) ) 
+    if(ep_current_tag == (EP_LAST_TAG + 1) )
     {
     	/* Come here just one time */
 		ep_current_tag--;
@@ -883,7 +886,7 @@ static struct ep_board *ep_look_for_board_at( struct isa_device *is )
 		elink_idseq(0xCF);
 		elink_reset();
       Wait_X_ms( 10 );  /* RPS: assuming delay in miliseconds */
-		for (i = 0; i < EP_MAX_BOARDS; i++) 
+		for (i = 0; i < EP_MAX_BOARDS; i++)
         {
 	    	outb(id_port, 0);
 		    outb(id_port, 0);
@@ -923,7 +926,7 @@ static struct ep_board *ep_look_for_board_at( struct isa_device *is )
 		    ep_current_tag--;
 		}
 		ep_board[ep_boards].epb_addr = 0;
-		if( count ) 
+		if( count )
 		{
 	    	printf("%d 3C5x9 board(s) on ISA found at", count);
 		    for (j = 0; ep_board[j].epb_addr; j++)
@@ -943,7 +946,7 @@ static struct ep_board *ep_look_for_board_at( struct isa_device *is )
      *
      */
 
-    if (IS_BASE == -1) 
+    if (IS_BASE == -1)
     { /* port? */
 		for (i = 0; ep_board[i].epb_addr && ep_board[i].epb_used; i++) ;
 		if (ep_board[i].epb_addr == 0)
@@ -952,15 +955,15 @@ static struct ep_board *ep_look_for_board_at( struct isa_device *is )
 		IS_BASE = ep_board[i].epb_addr;
 		ep_board[i].epb_used = 1;
 		return &ep_board[ i ];
-    } 
-    else 
+    }
+    else
     {
 		for (i = 0; ep_board[i].epb_addr && ep_board[i].epb_addr != IS_BASE;  i++ ) ;
 		if (ep_board[i].epb_used || ep_board[i].epb_addr != IS_BASE)
 			    return 0;
-		if (inw(IS_BASE + EP_W0_EEPROM_COMMAND) & EEPROM_TST_MODE) 
+		if (inw(IS_BASE + EP_W0_EEPROM_COMMAND) & EEPROM_TST_MODE)
 		{
-	    	printf("ep%d: 3c5x9 at 0x%x in PnP mode. Disable PnP mode!\n", 
+	    	printf("ep%d: 3c5x9 at 0x%x in PnP mode. Disable PnP mode!\n",
 	    			is->id_unit, IS_BASE );
 		}
 		ep_board[i].epb_used = 1;
@@ -971,7 +974,7 @@ static struct ep_board *ep_look_for_board_at( struct isa_device *is )
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION:
  * This routine checks if there card installed on the machine.
  *
@@ -989,7 +992,7 @@ static int ep_isa_probe( struct isa_device *is )
     if( (epb = ep_look_for_board_at(is)) == 0 )
 		return (0);
 
-    sc = &ep_softc[ 0 ]; 
+    sc = &ep_softc[ 0 ];
     sc->ep_io_addr = epb->epb_addr;
     sc->epb = epb;
 
@@ -1001,10 +1004,10 @@ static int ep_isa_probe( struct isa_device *is )
     GO_WINDOW(0);
     k = sc->epb->prod_id;
 #ifdef PC98
-    if ((k & 0xf0f0) != (PROD_ID & 0xf0f0)) 
+    if ((k & 0xf0f0) != (PROD_ID & 0xf0f0))
     {
 #else
-    if ((k & 0xf0ff) != (PROD_ID & 0xf0ff)) 
+    if ((k & 0xf0ff) != (PROD_ID & 0xf0ff))
     {
 #endif
 	    printf("ep_isa_probe: ignoring model %04x\n", k );
@@ -1024,7 +1027,7 @@ static int ep_isa_probe( struct isa_device *is )
      *
      */
 
-    if (is->id_irq == 0) 
+    if (is->id_irq == 0)
     {    /* irq? */
        is->id_irq = ( k == 2 ) ? 9 : k;
     }
@@ -1039,9 +1042,9 @@ static int ep_isa_probe( struct isa_device *is )
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION:
- * This routine attaches this network driver and the network interface routines. 
+ * This routine attaches this network driver and the network interface routines.
  *
  * RETURNS: 0 - failed to attach
  *			1 - success
@@ -1055,15 +1058,15 @@ static int ep_isa_attach( struct isa_device *is )
 
     sc->ep_connectors = 0;
     config = inw( IS_BASE + EP_W0_CONFIG_CTRL );
-    if (config & IS_AUI) 
+    if (config & IS_AUI)
     {
 	   sc->ep_connectors |= AUI;
     }
-    if (config & IS_BNC) 
+    if (config & IS_BNC)
     {
 	   sc->ep_connectors |= BNC;
     }
-    if (config & IS_UTP) 
+    if (config & IS_UTP)
     {
 	   sc->ep_connectors |= UTP;
     }
@@ -1082,7 +1085,7 @@ static int ep_isa_attach( struct isa_device *is )
     GO_WINDOW( 0 );
     SET_IRQ( BASE, irq );
 
-    printf( "3C509: I/O=0x%x, IRQ=%d, CONNECTOR=%s, ",  
+    printf( "3C509: I/O=0x%x, IRQ=%d, CONNECTOR=%s, ",
 	    sc->ep_io_addr, sc->irqInfo.name,ep_conn_type[ sc->ep_connector ] );
 
     ep_attach( sc );
@@ -1090,7 +1093,7 @@ static int ep_isa_attach( struct isa_device *is )
 }
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Completes the initialization/attachement of the driver.
  *
  * RETURNS: 0 - ok.
@@ -1100,21 +1103,21 @@ static int ep_attach( struct ep_softc *sc )
 {
     u_short *p;
     int i;
-    
+
     /*
      * Setup the station address
      */
     p = (u_short *) &sc->arpcom.ac_enaddr;
     GO_WINDOW(2);
     printf("ADDRESS=" );
-    for (i = 0; i < 3; i++) 
+    for (i = 0; i < 3; i++)
     {
 	    p[i] = htons( sc->epb->eth_addr[i] );
         outw( BASE + EP_W2_ADDR_0 + (i * 2), ntohs( p[i] ) );
         printf("%04x ", (u_short)ntohs( p[i] ) );
     }
     printf("\n" );
-    
+
     sc->rx_no_first = sc->rx_no_mbuf =
 	sc->rx_bpf_disc = sc->rx_overrunf = sc->rx_overrunl =
 	sc->tx_underrun = 0;
@@ -1126,7 +1129,7 @@ static int ep_attach( struct ep_softc *sc )
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION:
  * Initializes the card.
  * The order in here seems important. Otherwise we may not receive interrupts. ?!
@@ -1199,19 +1202,19 @@ static void epinit( struct ep_softc *sc )
       */
 
     /* Set the xcvr. */
-    if (ifp->if_flags & IFF_LINK0 && sc->ep_connectors & AUI) 
+    if (ifp->if_flags & IFF_LINK0 && sc->ep_connectors & AUI)
     {
 	   i = ACF_CONNECTOR_AUI;
-    } 
-    else if (ifp->if_flags & IFF_LINK1 && sc->ep_connectors & BNC) 
+    }
+    else if (ifp->if_flags & IFF_LINK1 && sc->ep_connectors & BNC)
     {
 	   i = ACF_CONNECTOR_BNC;
-    } 
-    else if (ifp->if_flags & IFF_LINK2 && sc->ep_connectors & UTP) 
+    }
+    else if (ifp->if_flags & IFF_LINK2 && sc->ep_connectors & UTP)
     {
 	   i = ACF_CONNECTOR_UTP;
-    } 
-    else 
+    }
+    else
     {
 	   i = sc->ep_connector;
     }
@@ -1219,10 +1222,10 @@ static void epinit( struct ep_softc *sc )
     j = inw(BASE + EP_W0_ADDRESS_CFG) & 0x3fff;
     outw(BASE + EP_W0_ADDRESS_CFG, j | (i << ACF_CONNECTOR_BITS));
 
-    switch(i) 
+    switch(i)
     {
       case ACF_CONNECTOR_UTP:
-	  if (sc->ep_connectors & UTP) 
+	  if (sc->ep_connectors & UTP)
 	  {
 	    GO_WINDOW(4);
 	    outw(BASE + EP_W4_MEDIA_TYPE, ENABLE_UTP);
@@ -1230,7 +1233,7 @@ static void epinit( struct ep_softc *sc )
 	  break;
 
       case ACF_CONNECTOR_BNC:
-	   if (sc->ep_connectors & BNC) 
+	   if (sc->ep_connectors & BNC)
 	   {
 	    outw(BASE + EP_COMMAND, START_TRANSCEIVER);
 	    Wait_X_ms( 1 );
@@ -1258,7 +1261,7 @@ static void epinit( struct ep_softc *sc )
 	sc->tx_underrun = 0;
 
     ep_fset(F_RX_FIRST);
-    if( sc->top ) 
+    if( sc->top )
     {
 	   m_freem( sc->top );
 	   sc->top = sc->mcur = 0;
@@ -1279,7 +1282,7 @@ static void epinit( struct ep_softc *sc )
 static const char padmap[] = {0, 3, 2, 1};
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Routine to transmit frames to the card.
  *
  * RETURNS: nothing.
@@ -1293,14 +1296,14 @@ static void epstart( struct ifnet *ifp )
     struct mbuf *top;
     int pad;
 
-    while( inw(BASE + EP_STATUS) & S_COMMAND_IN_PROGRESS ) 
+    while( inw(BASE + EP_STATUS) & S_COMMAND_IN_PROGRESS )
         ;
 startagain:
     /*    printk( "S-" ); */
 
     /* Sneak a peek at the next packet */
     m = ifp->if_snd.ifq_head;
-    if (m == 0) 
+    if (m == 0)
     {
        ifp->if_flags &= ~IFF_OACTIVE;
        return;
@@ -1316,7 +1319,7 @@ startagain:
      * but we drop packets that are too large. Perhaps we should truncate
      * them instead?
      */
-    if( len + pad > ETHER_MAX_LEN ) 
+    if( len + pad > ETHER_MAX_LEN )
     {
 	   /* packet is obviously too large: toss it */
        ++ifp->if_oerrors;
@@ -1324,30 +1327,30 @@ startagain:
        m_freem( m );
    	   goto readcheck;
     }
-    if (inw(BASE + EP_W1_FREE_TX) < len + pad + 4) 
+    if (inw(BASE + EP_W1_FREE_TX) < len + pad + 4)
     {
 	   /* no room in FIFO */
 	   outw(BASE + EP_COMMAND, SET_TX_AVAIL_THRESH | (len + pad + 4));
        /* make sure */
-	   if (inw(BASE + EP_W1_FREE_TX) < len + pad + 4) 
+	   if (inw(BASE + EP_W1_FREE_TX) < len + pad + 4)
 	   {
 	       ifp->if_flags |= IFF_OACTIVE;
 	       return;
 	   }
     }
     IF_DEQUEUE( &ifp->if_snd, m );
-    outw(BASE + EP_W1_TX_PIO_WR_1, len); 
+    outw(BASE + EP_W1_TX_PIO_WR_1, len);
     outw(BASE + EP_W1_TX_PIO_WR_1, 0x0);	/* Second dword meaningless */
 
     for (top = m; m != 0; m = m->m_next)
 	{
-       if( ep_ftst(F_ACCESS_32_BITS ) ) 
+       if( ep_ftst(F_ACCESS_32_BITS ) )
        {
 	      outsl( BASE + EP_W1_TX_PIO_WR_1, mtod(m, caddr_t), m->m_len / 4 );
 	      if( m->m_len & 3 )
              outsb(BASE + EP_W1_TX_PIO_WR_1, mtod(m, caddr_t) + (m->m_len & (~3)), m->m_len & 3 );
-       } 
-       else 
+       }
+       else
        {
 	      outsw( BASE + EP_W1_TX_PIO_WR_1, mtod(m, caddr_t), m->m_len / 2 );
 	      if( m->m_len & 1 )
@@ -1368,13 +1371,13 @@ startagain:
      * fifo.
      */
 readcheck:
-    if( inw(BASE + EP_W1_RX_STATUS) & RX_BYTES_MASK ) 
+    if( inw(BASE + EP_W1_RX_STATUS) & RX_BYTES_MASK )
     {
 	/*
 	 * we check if we have packets left, in that case we prepare to come
 	 * back later
 	 */
-	   if( ifp->if_snd.ifq_head ) 
+	   if( ifp->if_snd.ifq_head )
 	   {
 	      outw(BASE + EP_COMMAND, SET_TX_AVAIL_THRESH | 8);
        }
@@ -1386,7 +1389,7 @@ readcheck:
 
 
 /**********************************************************************************
- * 
+ *
  * DESCRIPTION: Routine to read frames from the card.
  *
  * RETURNS: nothing.
@@ -1407,10 +1410,10 @@ static void epread( register struct ep_softc *sc )
 
 read_again:
 
-    if (status & ERR_RX) 
+    if (status & ERR_RX)
     {
 	   ++ifp->if_ierrors;
-	   if( status & ERR_RX_OVERRUN ) 
+	   if( status & ERR_RX_OVERRUN )
 	   {
 	    /*
 	     * we can think the rx latency is actually greather than we
@@ -1426,7 +1429,7 @@ read_again:
     }
     rx_fifo = rx_fifo2 = status & RX_BYTES_MASK;
 
-    if( ep_ftst( F_RX_FIRST ) ) 
+    if( ep_ftst( F_RX_FIRST ) )
     {
 	   MGETHDR( m, M_DONTWAIT, MT_DATA );
        if( !m )
@@ -1443,8 +1446,8 @@ read_again:
 	   top->m_len = sizeof(struct ether_header);
 	   rx_fifo -= sizeof(struct ether_header);
 	   sc->cur_len = rx_fifo2;
-    } 
-    else 
+    }
+    else
     {
 	   /* come here if we didn't have a complete packet last time */
 	   top = sc->top;
@@ -1453,10 +1456,10 @@ read_again:
     }
 
     /* Reads what is left in the RX FIFO */
-    while (rx_fifo > 0) 
+    while (rx_fifo > 0)
     {
 	   lenthisone = min( rx_fifo, M_TRAILINGSPACE(m) );
-	   if( lenthisone == 0 ) 
+	   if( lenthisone == 0 )
 	   {	/* no room in this one */
 	       mcur = m;
 	       MGET(m, M_WAIT, MT_DATA);
@@ -1468,15 +1471,15 @@ read_again:
 	       mcur->m_next = m;
 	       lenthisone = min(rx_fifo, M_TRAILINGSPACE(m));
 	   }
-	   if( ep_ftst( F_ACCESS_32_BITS ) ) 
+	   if( ep_ftst( F_ACCESS_32_BITS ) )
 	   { /* default for EISA configured cards*/
 	      insl( BASE + EP_W1_RX_PIO_RD_1, mtod(m, caddr_t) + m->m_len, lenthisone / 4);
 	      m->m_len += (lenthisone & ~3);
 	      if (lenthisone & 3)
 		     insb(BASE + EP_W1_RX_PIO_RD_1, mtod(m, caddr_t) + m->m_len, lenthisone & 3);
 	      m->m_len += (lenthisone & 3);
-	    } 
-	    else 
+	    }
+	    else
 	    {
 	      insw(BASE + EP_W1_RX_PIO_RD_1, mtod(m, caddr_t) + m->m_len, lenthisone / 2);
 	      m->m_len += lenthisone;
@@ -1486,12 +1489,12 @@ read_again:
 	   rx_fifo -= lenthisone;
     }
 
-    if( status & ERR_RX_INCOMPLETE) 
+    if( status & ERR_RX_INCOMPLETE)
     {	/* we haven't received the complete packet */
 	    sc->mcur = m;
      	sc->rx_no_first++;	/* to know how often we come here */
      	ep_frst( F_RX_FIRST );
-	    if( !((status = inw(BASE + EP_W1_RX_STATUS)) & ERR_RX_INCOMPLETE) ) 
+	    if( !((status = inw(BASE + EP_W1_RX_STATUS)) & ERR_RX_INCOMPLETE) )
 	    {
 	      /* we see if by now, the packet has completly arrived */
 	      goto read_again;
@@ -1516,7 +1519,7 @@ read_again:
 
 out:
     outw(BASE + EP_COMMAND, RX_DISCARD_TOP_PACK);
-    if (sc->top) 
+    if (sc->top)
     {
 	   m_freem(sc->top);
 	   sc->top = 0;
@@ -1530,10 +1533,10 @@ out:
 
 
 /**********************************************************************************
- * 
- * DESCRIPTION: 
- * This routine handles interrupts. It is called from the "RX" task whenever 
- * the ISR post an event to the task. 
+ *
+ * DESCRIPTION:
+ * This routine handles interrupts. It is called from the "RX" task whenever
+ * the ISR post an event to the task.
  * This is basically the "isr" from the FreeBSD driver.
  *
  * RETURNS: nothing.
@@ -1548,17 +1551,17 @@ static void ep_intr( struct ep_softc *sc )
 rescan:
 
   /*  printk( "I-" ); */
-  while( ( status = inw(BASE + EP_STATUS)) & S_5_INTS ) 
+  while( ( status = inw(BASE + EP_STATUS)) & S_5_INTS )
   {
 	/* first acknowledge all interrupt sources */
     outw( BASE + EP_COMMAND, ACK_INTR | ( status & S_MASK ) );
 
-	if( status & ( S_RX_COMPLETE | S_RX_EARLY ) ) 
+	if( status & ( S_RX_COMPLETE | S_RX_EARLY ) )
 	{
 	    epread( sc );
 	    continue;
 	}
-	if (status & S_TX_AVAIL) 
+	if (status & S_TX_AVAIL)
 	{
 	    /* we need ACK */
 	    ifp->if_timer = 0;
@@ -1567,7 +1570,7 @@ rescan:
 	    inw(BASE + EP_W1_FREE_TX);
 	    epstart(ifp);
 	}
-	if (status & S_CARD_FAILURE) 
+	if (status & S_CARD_FAILURE)
 	{
 	    ifp->if_timer = 0;
 	    printf("\nep%d:\n\tStatus: %x\n", sc->unit, status);
@@ -1584,7 +1587,7 @@ rescan:
 	    epinit(sc);
 	    return;
 	}
-	if (status & S_TX_COMPLETE) 
+	if (status & S_TX_COMPLETE)
 	{
 	    ifp->if_timer = 0;
 	    /* we  need ACK. we do it at the end */
@@ -1592,18 +1595,18 @@ rescan:
 	     * We need to read TX_STATUS until we get a 0 status in order to
 	     * turn off the interrupt flag.
 	     */
-	    while ((status = inb(BASE + EP_W1_TX_STATUS)) & TXS_COMPLETE) 
+	    while ((status = inb(BASE + EP_W1_TX_STATUS)) & TXS_COMPLETE)
 	    {
 		   if (status & TXS_SUCCES_INTR_REQ)
 		        ;
-		   else if( status & (TXS_UNDERRUN | TXS_JABBER | TXS_MAX_COLLISION ) ) 
+		   else if( status & (TXS_UNDERRUN | TXS_JABBER | TXS_MAX_COLLISION ) )
 		   {
 		      outw(BASE + EP_COMMAND, TX_RESET);
-		      if (status & TXS_UNDERRUN) 
+		      if (status & TXS_UNDERRUN)
 		      {
 			     sc->tx_underrun++;
-		      } 
-		      else 
+		      }
+		      else
 		      {
 			      if( status & TXS_JABBER )
 			           ;
@@ -1616,7 +1619,7 @@ rescan:
 		      * To have a tx_avail_int but giving the chance to the
 		      * Reception
 		      */
-		      if( ifp->if_snd.ifq_head ) 
+		      if( ifp->if_snd.ifq_head )
 		      {
 			     outw(BASE + EP_COMMAND, SET_TX_AVAIL_THRESH | 8);
 		      }
@@ -1632,7 +1635,7 @@ rescan:
   outw(BASE + EP_COMMAND, C_INTR_LATCH);	/* ACK int Latch */
   if( (status = inw(BASE + EP_STATUS) ) & S_5_INTS )
       goto rescan;
-   
+
   /* re-enable Ints */
   outw( BASE + EP_COMMAND, SET_INTR_MASK | S_5_INTS );
   /* printk( "I+" ); */

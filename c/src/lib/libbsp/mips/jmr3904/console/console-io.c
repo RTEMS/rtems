@@ -93,7 +93,7 @@ void console_outbyte_polled(
 }
 
 /*
- *  console_inbyte_nonblocking 
+ *  console_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */

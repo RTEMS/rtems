@@ -1,10 +1,13 @@
 /*
  *  $Id$
  *
- *  This file was submitted by Eric Vaitl <vaitl@viasat.com> and 
+ *  This file was submitted by Eric Vaitl <vaitl@viasat.com> and
  *  supports page table initialization.
  *
  *  $Log$
+ *  Revision 1.2  1995/12/19 20:10:12  joel
+ *  changes remerged after disk crash -- history lost
+ *
  * Revision 1.1  1995/12/19  19:22:36  joel
  * file lost in crash and re-added
  *
@@ -28,16 +31,16 @@ extern void page_table_teardown(void);
 extern void page_table_init(void);
 extern int page_table_map(void *addr, unsigned long size, int cache_type);
 
-enum { 
-    CACHE_WRITE_THROUGH, 
-    CACHE_COPYBACK, 
+enum {
+    CACHE_WRITE_THROUGH,
+    CACHE_COPYBACK,
     CACHE_NONE_SERIALIZED,
-    CACHE_NONE 
+    CACHE_NONE
 };
-enum { 
-    PTM_SUCCESS, 
-    PTM_BAD_ADDR, 
-    PTM_BAD_SIZE, 
+enum {
+    PTM_SUCCESS,
+    PTM_BAD_ADDR,
+    PTM_BAD_SIZE,
     PTM_BAD_CACHE,
     PTM_NO_TABLE_SPACE
 };

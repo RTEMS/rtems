@@ -49,11 +49,11 @@ rtems_device_driver console_open(
 
     /* SCI internal uart */
 
-    status = rtems_termios_open( major, minor, arg, SciGetTermiosHandlers( TRUE ) );       
+    status = rtems_termios_open( major, minor, arg, SciGetTermiosHandlers( TRUE ) );
 
     return status;
 }
- 
+
 /*PAGE
  *
  *  console_close
@@ -69,7 +69,7 @@ rtems_device_driver console_close(
 {
   return rtems_termios_close (arg);
 }
- 
+
 /*PAGE
  *
  *  console_read
@@ -85,7 +85,7 @@ rtems_device_driver console_read(
 {
   return rtems_termios_read (arg);
 }
- 
+
 /*PAGE
  *
  *  console_write
@@ -101,7 +101,7 @@ rtems_device_driver console_write(
 {
   return rtems_termios_write (arg);
 }
- 
+
 /*PAGE
  *
  *  console_control
@@ -167,7 +167,7 @@ rtems_device_driver console_initialize(
   if ( link( "/dev/sci", "/dev/console") < 0 )
   {
     rtems_fatal_error_occurred( RTEMS_IO_ERROR );
-  }                               
+  }
 #endif
 
   /*

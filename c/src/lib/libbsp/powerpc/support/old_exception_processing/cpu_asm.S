@@ -38,7 +38,7 @@
 
 #include <rtems/asm.h>
 #include <rtems/score/ppc_offs.h>
-	
+
 	BEGIN_CODE
 /*
  *  _CPU_Context_save_fp_context
@@ -365,7 +365,7 @@ PROC (_CPU_Context_switch):
 	stw	r7, GP_PC-GP_26(r3)
 	mfmsr	r8
 	stw	r8, GP_MSR-GP_26(r3)
-	
+
 #if ( PPC_USE_DATA_CACHE )
 	dcbt	r5, r4
 #endif

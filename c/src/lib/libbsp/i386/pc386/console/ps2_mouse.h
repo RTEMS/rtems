@@ -6,7 +6,7 @@
  * RTEMS port: by Rosimildo da Silva.
  *
  * This module was ported from Linux.
- * 
+ *
  */
 
 /*

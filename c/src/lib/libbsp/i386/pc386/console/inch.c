@@ -64,7 +64,7 @@ static char shift_map[] =
   '*',0x80,' ',0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,
   0x80,0x80,0x80,0x80,'7','8','9',0x80,'4','5','6',0x80,
   '1','2','3','0',177
-}; /* Keyboard scancode -> character map with SHIFT key modifier. */ 
+}; /* Keyboard scancode -> character map with SHIFT key modifier. */
 
 
 static unsigned short   kbd_buffer[KBD_BUF_SIZE];
@@ -175,7 +175,7 @@ _IBMPC_scankey(char *outChar)
       break;
 
     case 0x53:
-      if (ctrl_pressed && alt_pressed) 
+      if (ctrl_pressed && alt_pressed)
         rtemsReboot(); /* ctrl+alt+del -> reboot */
       break;
 
@@ -256,11 +256,11 @@ _IBMPC_inch(void)
     return c;
 } /* _IBMPC_inch */
 
- 
+
  /*
   * Routine that can be used before interrupt management is initialized.
   */
- 
+
 char
 BSP_wait_polled_input(void)
 {

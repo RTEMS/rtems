@@ -68,7 +68,7 @@ extern rtems_configuration_table BSP_Configuration;
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

@@ -2,7 +2,7 @@
  * Cirrus EP7312 Timer driver
  *
  * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
- *	
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *
@@ -14,7 +14,7 @@
  *  Timer_initialize() and Read_timer().  Read_timer() usually returns
  *  the number of microseconds since Timer_initialize() exitted.
  *
- *  It is important that the timer start/stop overhead be determined 
+ *  It is important that the timer start/stop overhead be determined
  *  when porting or modifying this code.
  *
  *  $Id$

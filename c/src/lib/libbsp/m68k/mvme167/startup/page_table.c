@@ -17,7 +17,7 @@
  *  is mapped to physical address 0x12345678. With this mapping, the MMU is
  *  only used to control the caching modes for the various regions of memory.
  *  Mapping the virtual addresses to their corresponding physical address makes
- *  it unnecessary to map addresses under software control during the 
+ *  it unnecessary to map addresses under software control during the
  *  initialization of RTEMS, before address translation is turned on.
  *
  *  With the above approach, address translation may be set up either with the
@@ -50,13 +50,13 @@
 
 /*
  *  page_table_init
- *  
+ *
  *  Map the virtual range 0x00000000--0x7FFFFFFF to the physical range
  *  0x00000000--0x7FFFFFFF. Rely on the hardware to raise exceptions when
  *  addressing non-existent memory. Use only the transparent translation
  *  registers (for now).
  *
- *  On all processors, the local virtual address range 0xFF000000--0xFFFFFFFF 
+ *  On all processors, the local virtual address range 0xFF000000--0xFFFFFFFF
  *  is mapped to the physical address range 0xFF000000--0xFFFFFFFF as
  *  caching disabled, serialized access.
  *
@@ -74,7 +74,7 @@ void page_table_init(
   unsigned char j1;               /* State of J1 jumpers */
   register unsigned long dtt0;    /* Content of dtt0 */
   register unsigned long cacr;    /* Content of cacr */
-  
+
   /*
    *  Logical base addr = 0x00    map starting at 0x00000000
    *  Logical address mask = 0x7F map up to 0x7FFFFFFF
@@ -85,9 +85,9 @@ void page_table_init(
    *  W = 0b0                     read/write access allowed
    */
   dtt0 = 0x007FC020;
-  
+
   cacr = 0x00000000;              /* Data and instruction cache off */
-  
+
   /* Read the J1 header */
   j1 = (unsigned char)(lcsr->vector_base & 0xFF);
 
@@ -105,15 +105,15 @@ void page_table_init(
   }
 	else {
 		/* Configure according to other jumper settings */
-  
+
 	  if ( !(j1 & 0x80) )
   	  /* Jumper J1-7 if on, enable data caching */
    		cacr |= 0x80000000;
-      
+
 	  if ( !(j1 & 0x40) )
 	    /* Jumper J1-6 if on, enable instruction caching */
 	    cacr |= 0x00008000;
-      
+
 	  if ( j1 & 0x20 )
 	    /* Jumper J1-5 is off, enable writethrough caching */
 	    dtt0 &= 0xFFFFFF9F;
@@ -131,7 +131,7 @@ void page_table_init(
 	  :: "d" (0), "d" (dtt0), "d" (0xFF00C040), "d" (cacr));
 }
 
- 
+
 /*
  *  page_table_teardown
  *

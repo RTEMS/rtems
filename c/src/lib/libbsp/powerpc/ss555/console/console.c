@@ -18,7 +18,7 @@
  *  (although that would be easy to change).
  *
  *  I/O may be interrupt-driven (recommended for real-time applications) or
- *  polled. 
+ *  polled.
  *
  *  LIMITATIONS:
  *
@@ -34,7 +34,7 @@
  *  Interrupt-driven I/O requires termios.
  *
  *  TESTS:
- * 
+ *
  *  TO RUN THE TESTS, USE POLLED I/O WITHOUT TERMIOS SUPPORT. Some tests
  *  play with the interrupt masks and turn off I/O. Those tests will hang
  *  when interrupt-driven I/O is used. Other tests, such as cdtest, do I/O
@@ -44,17 +44,17 @@
  *  should all be fixed to work with interrupt-driven I/O and to
  *  produce output in the expected sequence. Obviously, the termios test
  *  requires termios support in the driver.
- *  
+ *
  *  Set CONSOLE_MINOR to the appropriate device minor number in the
  *  config file. This allows the RTEMS application console to be different
  *  from the GDB port.
- * 
+ *
  *  This driver handles both available serial ports: it distinguishes
  *  the sub-devices using minor device numbers. It is not possible to have
  *  other protocols running on the other ports when this driver is used as
  *  currently written.
  *
- *    
+ *
  *  SS555 port sponsored by Defence Research and Development Canada - Suffield
  *  Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  *
@@ -133,7 +133,7 @@ static rtems_status_code do_poll_read(
  *  Output characters through polled I/O. Returns only once every character has
  *  been sent.
  *
- *  CR is transmitted AFTER a LF on output. 
+ *  CR is transmitted AFTER a LF on output.
  *
  *  Input parameters:
  *    major - ignored. Should be the major number for this driver.
@@ -176,8 +176,8 @@ static rtems_status_code do_poll_write(
 static void _BSP_output_char( char c )
 {
   char cr = '\r';
-  
-  /* 
+
+  /*
    *  Can't rely on console_initialize having been called before this
    *  function is used, so it may fail.
    */
@@ -206,14 +206,14 @@ rtems_device_driver console_initialize(
 )
 {
   rtems_status_code status;
-  
+
   /*
    * Set up TERMIOS if needed
    */
   #if UARTS_USE_TERMIOS == 1
     rtems_termios_initialize ();
   #endif /* UARTS_USE_TERMIOS */
-      
+
   /*
    * Do device-specific initialization
    */
@@ -223,17 +223,17 @@ rtems_device_driver console_initialize(
   status = rtems_io_register_name ("/dev/tty0", major, SCI1_MINOR);
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
-    
+
   m5xx_uart_initialize(SCI2_MINOR);
   status = rtems_io_register_name ("/dev/tty1", major, SCI2_MINOR);
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
-    
+
   /* Now register the RTEMS console */
   status = rtems_io_register_name ("/dev/console", major, CONSOLE_MINOR);
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
-    
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -249,10 +249,10 @@ rtems_device_driver console_open(
 {
   rtems_status_code sc;
 
-  if ( minor > NUM_PORTS - 1 ) 
+  if ( minor > NUM_PORTS - 1 )
     return RTEMS_INVALID_NUMBER;
 
-  #if (UARTS_USE_TERMIOS == 1) 
+  #if (UARTS_USE_TERMIOS == 1)
   {
     #if (UARTS_IO_MODE == 1)    /* RTEMS interrupt-driven I/O with termios */
 
@@ -283,7 +283,7 @@ rtems_device_driver console_open(
       sc = rtems_termios_open( major, minor, arg, &callbacks );
 
     #endif
-    
+
     return sc;
   }
 
@@ -365,7 +365,7 @@ rtems_device_driver console_control(
   rtems_device_minor_number minor,
   void *arg
 )
-{ 
+{
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 

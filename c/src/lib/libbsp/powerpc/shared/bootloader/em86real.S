@@ -16,7 +16,7 @@
  */
 
 /* If the symbol __BOOT__ is defined, a slightly different version is
- * generated to be compiled with the -m relocatable option 
+ * generated to be compiled with the -m relocatable option
  */
 
 #ifdef __BOOT__
@@ -24,23 +24,23 @@
 /* It is impossible to gather statistics in the boot version */
 #undef EIP_STATS
 #endif
-	
+
 /*
  *
  * Given the size of this code, it deserves a few comments on how it works,
- * and why it was implemented the way it is. 
- * 
+ * and why it was implemented the way it is.
+ *
  * The goal is to have a real mode i486SX emulator to initialize hardware,
  * mostly graphics boards, by interpreting ROM BIOSes. The choice of a 486SX
  * is logical since this is the lowest processor that PCI ROM BIOSes must run
  * on.
- * 
+ *
  * The goal of this emulator is not performance, but a small enough memory
  * footprint to include it in a bootloader.
  *
  * It is actually likely to be comparable to a 25MHz 386DX on a 200MHz 603e !
- * This is not as serious as it seems since most of the BIOS code performs 
- * a lot of accesses to I/O and non-cacheable memory spaces. For such 
+ * This is not as serious as it seems since most of the BIOS code performs
+ * a lot of accesses to I/O and non-cacheable memory spaces. For such
  * instructions, the execution time is often dominated by bus accesses.
  * Statistics of the code also shows that it spends a large function of
  * the time in loops waiting for vertical retrace or programs one of the
@@ -61,41 +61,41 @@
  *   (debug registers are impossible to implement at a reasonable cost)
  */
 
-/* Code options,  put them on the compiler command line */	
+/* Code options,  put them on the compiler command line */
 /* #define EIP_STATS */	/* EIP based profiling */
 /* #undef EIP_STATS */
 
 /*
  * Implementation notes:
  *
- * A) flags emulation.	
- * 
+ * A) flags emulation.
+ *
  * The most important decisions when it comes to obtain a reasonable speed
  * are related to how the EFLAGS register is emulated.
  *
  *   Note: the code to set up flags is complex, but it is only seldom
- * executed since cmp and test instructions use much faster flag evaluation 
- * paths. For example the overflow flag is almost only needed for pushf and 
+ * executed since cmp and test instructions use much faster flag evaluation
+ * paths. For example the overflow flag is almost only needed for pushf and
  * int. Comparison results only involve (SF^OF) or (SF^OF)+ZF and the
- * implementation is fast in this case. 
+ * implementation is fast in this case.
  *
  * Rarely used flags: AC, NT and IOPL are kept in a memory EFLAGS image.
  * All other flags are either kept explicitly in PPC cr (DF, IF, and TF) or
  * lazily evaluated from the state of 4 registers called flags, result, op1,
- * op2, and sometimes the cr itself. The emulation has been designed for 
- * minimal overhead for the common case where the flags are never used. With 
- * few exceptions, all instructions that set flags leave the result of the 
- * computation in a register called result, and operands are taken from op1 
- * and op2 registers. However a few instructions like cmp, test and bit tests 
+ * op2, and sometimes the cr itself. The emulation has been designed for
+ * minimal overhead for the common case where the flags are never used. With
+ * few exceptions, all instructions that set flags leave the result of the
+ * computation in a register called result, and operands are taken from op1
+ * and op2 registers. However a few instructions like cmp, test and bit tests
  * (bt/btc/btr/bts/bsf/bsr) explicitly set cr bits to short circuit
  * condition code evaluation of conditional instructions.
  *
  * As a very brief summary:
- * 
- * - the result of the last flag setting operation is often either in the 
- *   result register or in op2 after increment or decrement instructions 
+ *
+ * - the result of the last flag setting operation is often either in the
+ *   result register or in op2 after increment or decrement instructions
  *   because result and op1 may be needed to compute the carry.
- * 
+ *
  * - compare instruction leave the result of the unsigned comparison
  *   in cr4 and of signed comparison in cr6. This means that:
  *   - cr4[0]=CF            (short circuit for jc/jnc)
@@ -103,7 +103,7 @@
  *   - cr6[0]=(OF^SF)       (short circuit for jl/jnl)
  *   - cr6[1]=~((SF^OF)+ZF) (short circuit for jg/jng)
  *   - cr6[2]=ZF            (short circuit for jz/jnz)
- * 
+ *
  * - test instruction set flags in cr6 and clear overflow. This means that:
  *   - cr6[0]=SF=(SF^OF)    (short circuit for jl/jnl/js/jns)
  *   - cr6[1]=~((SF^OF)+ZF) (short circuit for jg/jng)
@@ -111,16 +111,16 @@
  *
  * All flags may be lazily evaluated from several values kept in registers:
  *
- *	Flag:	Depends upon:	
+ *	Flag:	Depends upon:
  *	OF      result, op1, op2, flags[INCDEC_FIELD,SUBTRACTING,OF_STATE_MASK]
  *	SF	result, op2, flags[INCDEC_FIELD,RES_SIZE]
  *	ZF	result, op2, cr6[2], flags[INCDEC_FIELD,RES_SIZE,ZF_PROTECT]
  *	AF	op1, op2, flags[INCDEC_FIELD,SUBTRACTING,CF_IN]
  *	PF	result, op2, flags[INCDEC_FIELD]
  *	CF	result, op1, flags[CF_STATE_MASK, CF_IN]
- * 
- * The order of the fields in the flags register has been chosen so that a 
- * single rlwimi is necessary for common instruction that do not affect all 
+ *
+ * The order of the fields in the flags register has been chosen so that a
+ * single rlwimi is necessary for common instruction that do not affect all
  * flags. (See the code for inc/dec emulation).
  *
  *
@@ -129,8 +129,8 @@
  * The register called opcode holds in its low order 8 bits the opcode
  * (second byte if the first byte is 0x0f). More precisely it holds the
  * last byte fetched before the modrm byte or the immediate operand(s)
- * of the instruction, if any. High order 24 bits are zero unless the 
- * instruction has prefixes. These higher order bits have the following 
+ * of the instruction, if any. High order 24 bits are zero unless the
+ * instruction has prefixes. These higher order bits have the following
  * meaning:
  * 0x80000000	segment override prefix
  * 0x00001000   repnz prefix (0xf2)
@@ -139,8 +139,8 @@
  * 0x00000200   operand size prefix (0x66)
  * (bit 0x1000 and 0x800 cannot be set simultaneously)
  *
- * Therefore if there is a segment override the value will be between very 
- * negative (between 0x80000000 and 0x800016ff), if there is no segment 
+ * Therefore if there is a segment override the value will be between very
+ * negative (between 0x80000000 and 0x800016ff), if there is no segment
  * override, the value will be between 0 and 0x16ff. The reason for
  * this choice will be understood in the next part.
  *
@@ -149,7 +149,7 @@
  * the encoding of the modrm bytes (especially in 16 bit mode) is quite
  * complex. Hence a table, indexed by the five useful bits of the modrm
  * byte is used to simplify decoding. Here is a description:
- * 
+ *
  *  bit mask	meaning
  *  0x80000000	use ss as default segment register
  *  0x00004000	means that this addressing mode needs a base register
@@ -164,8 +164,8 @@
  *		10: 32 bit addressing mode
  *		60: 16 bit addressing mode with %si as index
  *		70: 16 bit addressing mode with %di as index
- *  
- *  This convention leads to the following special values used to check for 
+ *
+ *  This convention leads to the following special values used to check for
  * sib present and displacement-only, which happen to the three lowest
  * values in the table (unsigned):
  * 0x00003090	sib follows (implies it is a 32 bit mode)
@@ -186,11 +186,11 @@
  * instruction has no override prefix.
  *
  * D) BUGS
- * 
+ *
  * This software is obviously bug-free :-). Nevertheless, if you encounter
  * an interesting feature. Mail me a note, if possible with a detailed
  * instruction example showing where and how it fails.
- *  
+ *
  */
 
 
@@ -205,7 +205,7 @@ is actually never checked (real mode is CPL 0 anyway). */
 /* Actually NT and IOPL are kept in memory */
 #define NT86    17
 #define IOPL86  18		/* Actually 18 and 19 */
-#define OF86	20				
+#define OF86	20
 #define DF86	21
 #define IF86	22
 #define TF86	23
@@ -222,11 +222,11 @@ is actually never checked (real mode is CPL 0 anyway). */
 #define TF      23		/* Single step flag: cr5[3] */
 
 /* Now the flags which are frequently used */
-/* 
+/*
  * CF_IN is a copy of the input carry with PPC polarity,
  * it is cleared for add, set for sub and cmp,
- * equal to the x86 carry for adc and to its complement for sbb. 
- * it is used to evaluate AF and CF. 
+ * equal to the x86 carry for adc and to its complement for sbb.
+ * it is used to evaluate AF and CF.
  */
 #define CF_IN		0x80000000
 
@@ -237,10 +237,10 @@ is actually never checked (real mode is CPL 0 anyway). */
 
 #define EVAL_CF		andis. r3,flags,(CF_IN_CR)>>16; beql- _eval_cf
 
-/* 
- * CF_STATE tells how to compute the carry bit.  
- * NOTRESULT16 and NOTRESULT8 are never set explicitly, 
- * but they may happen after a cmc instruction. 
+/*
+ * CF_STATE tells how to compute the carry bit.
+ * NOTRESULT16 and NOTRESULT8 are never set explicitly,
+ * but they may happen after a cmc instruction.
  */
 #define CF		16		/* cr4[0] */
 #define CF_LOCATION	0x30000000
@@ -256,7 +256,7 @@ is actually never checked (real mode is CPL 0 anyway). */
 #define CF_NOTRES16	0x28000000
 #define CF_RES8		0x30000000
 #define CF_NOTRES8	0x38000000
-	
+
 #define CF_ADDL		CF_RES32
 #define CF_SUBL		CF_NOTRES32
 #define CF_ADDW		CF_RES16
@@ -269,11 +269,11 @@ is actually never checked (real mode is CPL 0 anyway). */
 #define CF_POL_INSERT(dst,pos)	\
 			rlwimi dst,flags,(36-pos)%32,pos,pos
 #define RES2CF(dst)	rlwinm dst,result,8,7,15
-	
-/* 
+
+/*
  * OF_STATE tells how to compute the overflow bit. When the low order bit
  * is set (OF_EXPLICIT), it means that OF is the exclusive or of the
- * two other bits. For the reason of this choice, see rotate instructions. 
+ * two other bits. For the reason of this choice, see rotate instructions.
  */
 #define	OF		1		/* Only after EVAL_OF */
 #define OF_STATE_MASK	0x07000000
@@ -289,11 +289,11 @@ is actually never checked (real mode is CPL 0 anyway). */
 #define OF_ARITHB	0x04000000
 
 #define EVAL_OF		rlwinm. r3,flags,6,0,1; bngl+ _eval_of; andis. r3,flags,OF_VALUE>>16
-	
+
 /* See _eval_of to see how this can be used */
 #define OF_ROTCNT(dst)	rlwinm dst,flags,10,0x1c
-	
-/* 
+
+/*
  * SIGNED_IN_CR means that cr6 is set as after a signed compare:
  * - cr6[0] is SF^OF for jl/jnl/setl/setnl...
  * - cr6[1] is ~((SF^OF)+ZF) for jg/jng/setg/setng...
@@ -305,7 +305,7 @@ is actually never checked (real mode is CPL 0 anyway). */
 
 #define EVAL_SIGNED	andis. r3,flags,SIGNED_IN_CR>>16; beql- _eval_signed
 
-/* 
+/*
  * Above in CR means that cr4 is set as after an unsigned compare:
  * - cr4[0] is CF (CF_IN_CR is also set)
  * - cr4[1] is ~(CF+ZF) (ZF_IN_CR is also set)
@@ -320,28 +320,28 @@ is actually never checked (real mode is CPL 0 anyway). */
 #define SF_IN_CR	0x00200000
 
 #define EVAL_SF		andis. r3,flags,SF_IN_CR>>16; beql- _eval_sf_zf
-	
+
 /* ZF_IN_CR means cr6[2] is a copy of ZF. */
-#define ZF	26		
+#define ZF	26
 #define ZF_IN_CR	0x00100000
-	
+
 #define EVAL_ZF		andis. r3,flags,ZF_IN_CR>>16; beql- _eval_sf_zf
 #define ZF2ZF86(s,d)	rlwimi d,s,ZF-ZF86,ZF86,ZF86
 #define ZF862ZF(reg)	rlwimi reg,reg,32+ZF86-ZF,ZF,ZF
-	
-/* 
+
+/*
  * ZF_PROTECT means cr6[2] is the only valid value for ZF. This is necessary
- * because some infrequent instructions may leave SF and ZF in an apparently 
+ * because some infrequent instructions may leave SF and ZF in an apparently
  * inconsistent state (both set): sahf, popf and the few (not implemented)
  * instructions that only affect ZF.
  */
 #define ZF_PROTECT	0x00080000
-	
+
 /* The parity is always evaluated when it is needed */
 #define PF		0		/* Only after EVAL_PF */
 #define EVAL_PF		bl _eval_pf
 
-/* This field gives the shift amount to use to evaluate SF 
+/* This field gives the shift amount to use to evaluate SF
    and ZF when ZF_PROTECT is not set */
 #define RES_SIZE_MASK	0x00060000
 #define RESL		0x00000000
@@ -355,12 +355,12 @@ is actually never checked (real mode is CPL 0 anyway). */
 #define SUBTRACTING	0x00010000
 
 #define GET_ADDSUB(dst)	rlwinm dst,flags,16,0x01
-	
+
 /* rotate (rcl/rcr/rol/ror) affect CF and OF but not other flags */
 #define ROTATE_MASK	(CF_IN_CR|CF_STATE_MASK|ABOVE_IN_CR|OF_STATE_MASK|SIGNED_IN_CR)
 #define ROTATE_FLAGS	rlwimi flags,one,24,ROTATE_MASK
 
-/* 
+/*
  * INCDEC_FIELD has at most one bit set when the last flag setting instruction
  * was either inc or dec (which do not affect the carry). When one of these
  * bits is set, it affects the way OF, SF, ZF, AF, and PF are evaluated.
@@ -380,7 +380,7 @@ is actually never checked (real mode is CPL 0 anyway). */
 /* Operations to perform to tell where the flags are after inc or dec */
 #define INC_FLAGS(BWL)	rlwimi flags,one,INC##BWL##_SHIFT,INCDEC_MASK
 #define DEC_FLAGS(BWL)	rlwimi flags,one,DEC##BWL##_SHIFT,INCDEC_MASK
-	
+
 /* How the flags are set after arithmetic operations */
 #define FLAGS_ADD(BWL)	(CF_ADD##BWL|OF_ARITH##BWL|RES##BWL)
 #define FLAGS_SBB(BWL)	(CF_SUB##BWL|OF_ARITH##BWL|RES##BWL|SUBTRACTING)
@@ -405,7 +405,7 @@ is actually never checked (real mode is CPL 0 anyway). */
 
 /* How the flags are set after multiplies */
 #define FLAGS_MUL	(CF_EXPLICIT|OF_EXPLICIT)
-	
+
 #define SET_FLAGS(fl)	lis flags,(fl)>>16
 #define ADD_FLAGS(fl)	addis flags,flags,(fl)>>16
 
@@ -413,14 +413,14 @@ is actually never checked (real mode is CPL 0 anyway). */
  * We are always off by one when compared with Intel's eip, this shortens
  * code by allowing to load next byte with lbzu x,1(eip). The register
  * called eip actually contains csbase+eip, and thus should be called lip
- * for linear ip. 
+ * for linear ip.
  */
-		
-/* 
- * Reason codes passed to the C part of the emulator, this includes all 
- * instructions which may change the current code segment. These definitions 
+
+/*
+ * Reason codes passed to the C part of the emulator, this includes all
+ * instructions which may change the current code segment. These definitions
  * will soon go into a separate include file. Codes 0 to 255 correspond
- * directly to the interrupt/trap that has to be generated. 
+ * directly to the interrupt/trap that has to be generated.
  */
 
 #define code_divide_err	0
@@ -430,7 +430,7 @@ is actually never checked (real mode is CPL 0 anyway). */
 #define code_bound	5
 #define code_ud		6
 #define code_dna	7	/* FPU not available */
-	
+
 #define code_iretw	256	/* Interrupt returns */
 #define code_iretl	257
 #define code_lcallw	258	/* Far calls and jumps */
@@ -446,7 +446,7 @@ is actually never checked (real mode is CPL 0 anyway). */
  - bit of weight 512 means out if set, in if clear
  - bit of weight 256 means ins/outs if set, in/out if clear
  - bit of weight 128 means use 32 bit addresses if set, 16 bit if clear
-   (only used for ins/outs instructions, always clear for in/out) 	
+   (only used for ins/outs instructions, always clear for in/out)
  */
 #define code_inb	1024+1
 #define code_inw	1024+2
@@ -468,13 +468,13 @@ is actually never checked (real mode is CPL 0 anyway). */
 #define code_outsl_a32	1024+512+256+128+4
 
 #define state 31
-/* r31 (state) is a pointer to a structure describing the emulated x86 
+/* r31 (state) is a pointer to a structure describing the emulated x86
 processor, its layout is the following:
 
 first the general purpose registers, they are in little endian byte order
 
 offset	name
-	
+
    0	eax/ax/al
    1	ah
    4	ecx/cx/cl
@@ -509,10 +509,10 @@ offset	name
 #define DI	28
 #define EDI	28
 
-/* 
+/*
 than the rest of the machine state, big endian !
 
-offset     name     
+offset     name
 
   32       essel     segment register selectors (values)
   36	   cssel
@@ -541,7 +541,7 @@ offset     name
 
  128       vbase     where the 1Mb memory is mapped
  132       cntimg    instruction counter
- 136                 scratch         
+ 136                 scratch
  192       eipstat   array of 32k unsigned long pairs for eip stats
 */
 
@@ -575,18 +575,18 @@ offset     name
 #endif
 /* Global registers */
 
-/* Some segment register bases are permanently kept in registers since they 
+/* Some segment register bases are permanently kept in registers since they
 are often used: these are csb, esb and ssb because they are
 required for jumps, string instructions, and pushes/pops/calls/rets.
 dsbase is not kept in a register but loaded from memory to allow somewhat
-more parallelism in the main emulation loop. 
+more parallelism in the main emulation loop.
 */
 
 #define one	30		/* Constant one, so pervasive */
 #define ssb	29
 #define csb	28
 #define esb	27
-#define eip	26		/* That one is indeed csbase+(e)ip-1 */	
+#define eip	26		/* That one is indeed csbase+(e)ip-1 */
 #define result	25		/* For the use of result, op1, op2 */
 #define op1	24		/* see the section on flag emulation */
 #define op2	23
@@ -605,11 +605,11 @@ specified by the modrm byte */
 #define adbase	16		/* addressing mode table */
 /* Following registers are used only as dedicated temporaries during decoding,
 they are free for use during emulation */
-/* 
- * ceip (current eip) is only in use when we call the external emulator for 
- * instructions that fault. Note that it is forbidden to change flags before 
- * the check for the fault happens (divide by zero...) ! ceip is also used 
- * when measuring timing. 
+/*
+ * ceip (current eip) is only in use when we call the external emulator for
+ * instructions that fault. Note that it is forbidden to change flags before
+ * the check for the fault happens (divide by zero...) ! ceip is also used
+ * when measuring timing.
  */
 #define ceip 15
 
@@ -641,7 +641,7 @@ they are free for use during emulation */
 		GOT_ENTRY(jtab_www)
 		GOT_ENTRY(adtable)
 		END_GOT
-#else	
+#else
 		.text
 #endif
 		.align 2
@@ -717,7 +717,7 @@ exit:		lwz r0,100(r1)
 		mtcr r4
 		addi r1,r1,96
 		blr
-	
+
 trap:		crmove 0,RF
 		crclr RF
 		bt- 0,resume
@@ -745,23 +745,23 @@ complex:	addi eip,eip,1
 		cmpwi r3,0
 		bne exit
 		b restart
-	
+
 /* Main loop */
-/* 
+/*
  * The two LSB of each entry in the main table mean the following:
- * 00: indirect opcode: modrm follows and the three middle bits are an 
+ * 00: indirect opcode: modrm follows and the three middle bits are an
  *     opcode extension. The entry points to another jump table.
  * 01: direct instruction, branch directly to the routine.
  * 10: modrm specifies byte size memory and register operands.
  * 11: modrm specifies word/long memory and register operands.
- *	
+ *
  *  The modrm byte, if present, is always loaded in r7.
  *
  * Note: most "mr x,y" instructions have been replaced by "addi x,y,0" since
- * the latter can be executed in the second integer unit on 603e. 
+ * the latter can be executed in the second integer unit on 603e.
  */
 
-/* 
+/*
  * This code is very good example of absolutely unmaintainable code.
  * It was actually much easier to write than it is to understand !
  * If my computations are right, the maximum path length from fetching
@@ -769,7 +769,7 @@ complex:	addi eip,eip,1
  * 46 instructions (for non-prefixed, single byte opcode instructions).
  *
  */
-		.align 5	
+		.align 5
 #ifdef EIP_STATS
 nop:		NEXTBYTE(opcode)
 gotopcode:	slwi r3,opcode,2
@@ -838,9 +838,9 @@ _ds:		NEXTBYTE(r7)
 
 /* Lock (unimplemented) and repeat prefixes */
 _lock:		li r3,code_lock; b complex
-_repnz:		NEXTBYTE(r7); rlwimi opcode,one,12,0x1800; b 2f	
+_repnz:		NEXTBYTE(r7); rlwimi opcode,one,12,0x1800; b 2f
 _repz:		NEXTBYTE(r7); rlwimi opcode,one,11,0x1800; b 2f
-			
+
 /* Operand and address size prefixes */
 		.align 4
 _opsize:	NEXTBYTE(r7); ori opcode,opcode,0x200
@@ -859,7 +859,7 @@ _twobytes:	NEXTBYTE(r7); addi r3,r3,0x400
 		NEXTBYTE(r7)			# modrm byte
 		cmpwi cr1,r7,192
 		rlwinm opreg,r7,31,0x1c
-		beq- 6f	
+		beq- 6f
 /* modrm with middle 3 bits specifying a register (prefixed) */
 		rlwinm r0,r4,3,0x8
 		li r4,0x1c0d
@@ -874,7 +874,7 @@ _twobytes:	NEXTBYTE(r7); addi r3,r3,0x400
 		rlwimi r3,r7,31,0x60
 		lwzx r4,r3,adbase
 		cmpwi cr1,r4,0x3090
-		bnl+ cr1,10f	
+		bnl+ cr1,10f
 /* displacement only addressing modes */
 4:		cmpwi r4,0x2000
 		bne 5f
@@ -882,7 +882,7 @@ _twobytes:	NEXTBYTE(r7); addi r3,r3,0x400
 		bctr
 5:		NEXTDWORD(offset)
 		bctr
-/* modrm with opcode extension (prefixed) */ 
+/* modrm with opcode extension (prefixed) */
 6:		lwzx r4,r4,opreg
 		mtctr r4
 		blt cr1,3b
@@ -914,7 +914,7 @@ _twobytes:	NEXTBYTE(r7); addi r3,r3,0x400
 		rlwinm r3,r4,30,0x1c	# 16bit/32bit/%si index/%di index
 		cmpwi cr1,r3,8		# set cr1 as early as possible
 		rlwinm r6,r4,26,0x1c	# base register
-		lwbrx offset,state,r6	# load the base register 
+		lwbrx offset,state,r6	# load the base register
 		beq cr0,14f		# no displacement
 		cmpw cr2,r4,opcode	# check for ss as default base
 		bgt cr0,12f		# byte offset
@@ -933,7 +933,7 @@ _twobytes:	NEXTBYTE(r7); addi r3,r3,0x400
 		bgtctr cr2
 		addi base,ssb,0
 		bctr
-/* 8 bit displacement */	
+/* 8 bit displacement */
 12:		NEXTBYTE(r5)
 		extsb r5,r5
 		bgt cr1,13f
@@ -953,7 +953,7 @@ _twobytes:	NEXTBYTE(r7); addi r3,r3,0x400
 		bgtctr cr2
 		addi base,ssb,0
 		bctr
-/* no displacement: only indexed modes may use ss as default base */ 
+/* no displacement: only indexed modes may use ss as default base */
 14:		beqctr cr1		# 32 bit register indirect
 		clrlwi offset,offset,16
 		bltctr cr1		# 16 bit register indirect
@@ -970,7 +970,7 @@ _twobytes:	NEXTBYTE(r7); addi r3,r3,0x400
 		rlwinm r3,r7,31,0x1c		# index
 		rlwinm offset,r7,2,0x1c		# base
 		cmpwi cr1,r3,ESP		# has index ?
-		bne cr0,18f			# base+d8/d32	
+		bne cr0,18f			# base+d8/d32
 		cmpwi offset,EBP
 		beq 17f				# d32(,index,scale)
 		xori r4,one,0xcc01		# build 0x0000cc00
@@ -1026,25 +1026,25 @@ _twobytes:	NEXTBYTE(r7); addi r3,r3,0x400
 
 /*
  *  Flag evaluation subroutines: they have not been written for performance
- * since they are not often used in practice. The rule of the game was to 
+ * since they are not often used in practice. The rule of the game was to
  * write them with as few branches as possible.
  * The first routines eveluate either one or 2 (ZF and SF simultaneously)
  * flags and do not use r0 and r7.
  * The more complex routines (_eval_above, _eval_signed and _eval_flags)
  * call the former ones, using r0 as a return address save register and
- * r7 as a safe temporary. 
+ * r7 as a safe temporary.
  */
 
-/* 
+/*
  * _eval_sf_zf evaluates simultaneously SF and ZF unless ZF is already valid
  * and protected because it is possible, although it is exceptional, to have
- * SF and ZF set at the same time after a few instructions which may leave the 
- * flags in this apparently inconsistent state: sahf, popf, iret and the few 
- * (for now unimplemented) instructions which only affect ZF (lar, lsl, arpl, 
- * cmpxchg8b). This also solves the obscure case of ZF set and PF clear. 
+ * SF and ZF set at the same time after a few instructions which may leave the
+ * flags in this apparently inconsistent state: sahf, popf, iret and the few
+ * (for now unimplemented) instructions which only affect ZF (lar, lsl, arpl,
+ * cmpxchg8b). This also solves the obscure case of ZF set and PF clear.
  * On return: SF=cr6[0], ZF=cr6[2].
  */
-	
+
 _eval_sf_zf:	andis. r5,flags,ZF_PROTECT>>16
 		rlwinm r3,flags,0,INCDEC_FIELD
 		RES_SHIFT(r4)
@@ -1066,7 +1066,7 @@ _eval_sf_zf:	andis. r5,flags,ZF_PROTECT>>16
 		crmove SF,0
 		blr
 
-/* 
+/*
  * _eval_cf may be called at any time, no other flag is affected.
  * On return: CF=cr4[0], r3= CF ? 0x100:0 = CF<<8.
  */
@@ -1083,11 +1083,11 @@ _eval_cf:	addc r3,flags,flags		# CF_IN to xer[ca]
 		cmplw cr4,one,r3		# sets cr4[0]
 		blr
 
-/* 
+/*
  * eval_of returns the overflow flag in OF_STATE field, which will be
  * either 001 (OF clear) or 101 (OF set), is is only called when the two
- * low order bits of OF_STATE are not 01 (otherwise it will work but 
- * it is an elaborate variant of a nop with a few registers destroyed) 
+ * low order bits of OF_STATE are not 01 (otherwise it will work but
+ * it is an elaborate variant of a nop with a few registers destroyed)
  * The code multiplexes several sources in a branchless way, was fun to write.
  */
 _eval_of:	GET_ADDSUB(r4)			# 0(add)/1(sub)
@@ -1113,7 +1113,7 @@ _eval_of:	GET_ADDSUB(r4)			# 0(add)/1(sub)
 		rlwimi flags,r3,3,OF_VALUE	# insert OF
 		blr
 
-/* 
+/*
  * _eval_pf will always be called when needed (complex but infrequent),
  * there are a few quirks for a branchless solution.
  * On return: PF=cr0[0], PF=MSB(r3)
@@ -1135,12 +1135,12 @@ _eval_pf:	rlwinm r3,flags,0,INCDEC_FIELD
 		add. r3,r4,r5			# and test to simplify
 		blr				# returns in r3 and cr0 set.
 
-/* 
+/*
  * _eval_af will always be called when needed (complex but infrequent):
  * - if after inc, af is set when 4 low order bits of op1 are 0
  * - if after dec, af is set when 4 low order bits of op1 are 1
  *   (or 0 after adding 1 as implemented here)
- * - if after add/sub/adc/sbb/cmp af is set from sum of 4 LSB of op1 
+ * - if after add/sub/adc/sbb/cmp af is set from sum of 4 LSB of op1
  *    and 4 LSB of op2 (eventually complemented) plus carry in.
  * - other instructions leave AF undefined so the returned value is irrelevant.
  * Returned value must be masked with 0x10, since all other bits are undefined.
@@ -1164,7 +1164,7 @@ _eval_af:	rlwinm r3,flags,0,INCDEC_FIELD
 		or r3,r4,r5
 		blr
 
-/* 
+/*
  * _eval_above will only be called if ABOVE_IN_CR is not set.
  * On return: ZF=cr6[2], CF=cr4[0], ABOVE=cr4[1]
  */
@@ -1218,7 +1218,7 @@ _eval_flags:	mflr r0
 
 /* Quite simple for real mode, input in r4, returns in r3. */
 _segment_load:	lwz r5,vbase(state)
-		rlwinm r3,r4,4,0xffff0		# segment selector * 16 
+		rlwinm r3,r4,4,0xffff0		# segment selector * 16
 		add r3,r3,r5
 		blr
 
@@ -1234,10 +1234,10 @@ _check_port:	lwz r5,ioperm(state)
 		and. r0,r0,r5
 		bne- complex
 		blr
-/* 
+/*
  * Instructions are in approximate functional order:
- * 1) move, exchange, lea, push/pop, pusha/popa 
- * 2) cbw/cwde/cwd/cdq, zero/sign extending moves, in/out 
+ * 1) move, exchange, lea, push/pop, pusha/popa
+ * 2) cbw/cwde/cwd/cdq, zero/sign extending moves, in/out
  * 3) arithmetic: add/sub/adc/sbb/cmp/inc/dec/neg
  * 4) logical: and/or/xor/test/not/bt/btc/btr/bts/bsf/bsr
  * 5) jump, call, ret
@@ -1256,20 +1256,20 @@ _check_port:	lwz r5,ioperm(state)
 movb_imm_reg:	rlwinm opreg,opcode,2,28,29; lbz r3,1(eip)
 		rlwimi opreg,opcode,30,31,31; lbzu opcode,2(eip)
 		stbx r3,REG; GOTNEXT
-	
-movw_imm_reg:	lhz r3,1(eip); clrlslwi opreg,opcode,29,2; lbzu opcode,3(eip) 
-		sthx r3,REG; GOTNEXT 
-		
-movl_imm_reg:	lwz r3,1(eip); clrlslwi opreg,opcode,29,2; lbzu opcode,5(eip) 
-		stwx r3,REG; GOTNEXT 
-		
+
+movw_imm_reg:	lhz r3,1(eip); clrlslwi opreg,opcode,29,2; lbzu opcode,3(eip)
+		sthx r3,REG; GOTNEXT
+
+movl_imm_reg:	lwz r3,1(eip); clrlslwi opreg,opcode,29,2; lbzu opcode,5(eip)
+		stwx r3,REG; GOTNEXT
+
 movb_imm_mem:	lbz r0,1(eip); cmpwi opreg,0
 		lbzu opcode,2(eip); bne- ud
 		stbx r0,MEM; GOTNEXT
 
 movw_imm_mem:	lhz r0,1(eip); cmpwi opreg,0
 		lbzu opcode,3(eip); bne- ud
-		sthx r0,MEM; GOTNEXT 
+		sthx r0,MEM; GOTNEXT
 
 movl_imm_mem:	lwz r0,1(eip); cmpwi opreg,0
 		lbzu opcode,5(eip); bne- ud
@@ -1277,7 +1277,7 @@ movl_imm_mem:	lwz r0,1(eip); cmpwi opreg,0
 
 /* The special short form moves between memory and al/ax/eax */
 movb_al_a32:	lwbrx offset,eip,one; lbz r0,AL(state); lbzu opcode,5(eip)
-		stbx r0,MEM; GOTNEXT 
+		stbx r0,MEM; GOTNEXT
 
 movb_al_a16:	lhbrx offset,eip,one; lbz r0,AL(state); lbzu opcode,3(eip)
 		stbx r0,MEM; GOTNEXT
@@ -1298,13 +1298,13 @@ movb_a32_al:	lwbrx offset,eip,one; lbzu opcode,5(eip); lbzx r0,MEM
 		stb r0,AL(state); GOTNEXT
 
 movb_a16_al:	lhbrx offset,eip,one; lbzu opcode,3(eip); lbzx r0,MEM
-		stb r0,AL(state); GOTNEXT 
+		stb r0,AL(state); GOTNEXT
 
 movw_a32_ax:	lwbrx offset,eip,one; lbzu opcode,5(eip); lhzx r0,MEM
 		sth r0,AX(state); GOTNEXT
 
 movw_a16_ax:	lhbrx offset,eip,one; lbzu opcode,3(eip); lhzx r0,MEM
-		sth r0,AX(state); GOTNEXT 
+		sth r0,AX(state); GOTNEXT
 
 movl_a32_eax:	lwbrx offset,eip,one; lbzu opcode,5(eip); lwzx r0,MEM
 		stw r0,EAX(state); GOTNEXT
@@ -1384,12 +1384,12 @@ leaw:		cmpw base,state
 		beq- ud
 		sthbrx offset,REG
 		NEXT
-	
+
 leal:		cmpw base,state
 		beq- ud
 		stwbrx offset,REG
 		NEXT
-	
+
 /* Short form pushes and pops */
 pushw_sp_reg:	li r3,SP
 		lhbrx r4,state,r3
@@ -1400,7 +1400,7 @@ pushw_sp_reg:	li r3,SP
 		clrlwi r4,r4,16
 		sthx r0,ssb,r4
 		NEXT
-	
+
 pushl_sp_reg:	li r3,SP
 		lhbrx r4,state,r3
 		clrlslwi opreg,opcode,29,2
@@ -1410,7 +1410,7 @@ pushl_sp_reg:	li r3,SP
 		clrlwi r4,r4,16
 		stwx r0,ssb,r4
 		NEXT
-	
+
 popw_sp_reg:	li r3,SP
 		lhbrx r4,state,r3
 		clrlslwi opreg,opcode,29,2
@@ -1419,7 +1419,7 @@ popw_sp_reg:	li r3,SP
 		sthbrx r4,state,r3
 		sthx r0,REG
 		NEXT
-	
+
 popl_sp_reg:	li r3,SP
 		lhbrx r4,state,r3
 		clrlslwi opreg,opcode,29,2
@@ -1437,9 +1437,9 @@ pushw_sp_imm:	li r3,SP
 		sthbrx r4,state,r3
 		clrlwi r4,r4,16
 		lbzu opcode,3(eip)
-		sthx r0,ssb,r4		
+		sthx r0,ssb,r4
 		GOTNEXT
-	
+
 pushl_sp_imm:	li r3,SP
 		lhbrx r4,state,r3
 		lwz r0,1(eip)
@@ -1447,7 +1447,7 @@ pushl_sp_imm:	li r3,SP
 		sthbrx r4,state,r3
 		clrlwi r4,r4,16
 		lbzu opcode,5(eip)
-		stwx r0,ssb,r4		
+		stwx r0,ssb,r4
 		GOTNEXT
 
 pushw_sp_imm8:	li r3,SP
@@ -1458,9 +1458,9 @@ pushw_sp_imm8:	li r3,SP
 		clrlwi r4,r4,16
 		lbzu opcode,2(eip)
 		extsb r0,r0
-		sthx r0,ssb,r4		
+		sthx r0,ssb,r4
 		GOTNEXT
-	
+
 pushl_sp_imm8:	li r3,SP
 		lhbrx r4,state,r3
 		lhz r0,1(eip)
@@ -1469,9 +1469,9 @@ pushl_sp_imm8:	li r3,SP
 		clrlwi r4,r4,16
 		lbzu opcode,2(eip)
 		extsb r0,r0
-		stwx r0,ssb,r4		
+		stwx r0,ssb,r4
 		GOTNEXT
-	
+
 /* General push/pop */
 pushw_sp:	lhbrx r0,MEM
 		li r3,SP
@@ -1481,7 +1481,7 @@ pushw_sp:	lhbrx r0,MEM
 		clrlwi r4,r4,16
 		sthbrx r0,r4,ssb
 		NEXT
-	
+
 pushl_sp:	lwbrx r0,MEM
 		li r3,SP
 		lhbrx r4,state,r3
@@ -1490,11 +1490,11 @@ pushl_sp:	lwbrx r0,MEM
 		clrlwi r4,r4,16
 		stwbrx r0,r4,ssb
 		NEXT
-			
+
 /* pop is an exception with 32 bit addressing modes, it is possible
 to calculate wrongly the address when esp is used as base. But 16 bit
 addressing modes are safe */
-		
+
 popw_sp_a16:	cmpw cr1,opreg,0	# first check the opcode
 		li r3,SP
 		lhbrx r4,state,r3
@@ -1504,7 +1504,7 @@ popw_sp_a16:	cmpw cr1,opreg,0	# first check the opcode
 		sthx r0,MEM
 		sthbrx r4,state,r3
 		NEXT
-	
+
 popl_sp_a16:	cmpw cr1,opreg,0
 		li r3,SP
 		lhbrx r4,state,r3
@@ -1558,7 +1558,7 @@ popaw_sp:	li r3,SP
 		bdnz 1b
 		sthbrx r4,r3,state	# updated sp
 		NEXT
-	
+
 popal_sp:	li r3,SP
 		lis r0,0xef00		# mask to skip esp
 		lhbrx r4,state,r3
@@ -1577,12 +1577,12 @@ popal_sp:	li r3,SP
 2:		sthbrx r4,state,r3	# updated sp
 		NEXT
 
-/* Moves with zero or sign extension: first the special cases */	
+/* Moves with zero or sign extension: first the special cases */
 cbw:		lbz r3,AL(state)
 		extsb r3,r3
 		sthbrx r3,AX,state
 		NEXT
-	
+
 cwde:		lhbrx r3,AX,state
 		extsh r3,r3
 		stwbrx r3,EAX,state
@@ -1618,12 +1618,12 @@ movsbl:		lbzx r3,MEM
 		NEXT
 
 		.equ movsww, movw_mem_reg
-	
+
 movswl:		lhbrx r3,MEM
 		extsh r3,r3
 		stwbrx r3,REG
 		NEXT
-	
+
 movzbw:		lbzx r3,MEM
 		rlwimi opreg,opreg,4,0x10
 		rlwinm opreg,opreg,0,0x1c
@@ -1635,19 +1635,19 @@ movzbl:		lbzx r3,MEM
 		rlwinm opreg,opreg,0,0x1c
 		stwbrx r3,REG
 		NEXT
-	
+
 		.equ movzww, movw_mem_reg
 
 movzwl:		lhbrx r3,MEM
 		stwbrx r3,REG
 		NEXT
 
-/* Byte swapping */	
+/* Byte swapping */
 bswap:		clrlslwi opreg,opcode,29,2	# extract reg from opcode
 		lwbrx r0,REG
 		stwx r0,REG
 		NEXT
-	
+
 /* Input/output */
 inb_port_al:	NEXTBYTE(r4)
 		b 1f
@@ -1659,8 +1659,8 @@ inb_dx_al:	li r4,DX
 		lbzx r5,r4,r3
 		eieio
 		stb r5,AL(state)
-		NEXT		
-	
+		NEXT
+
 inw_port_ax:	NEXTBYTE(r4)
 		b 1f
 inw_dx_ax:	li r4,DX
@@ -1671,8 +1671,8 @@ inw_dx_ax:	li r4,DX
 		lhzx r5,r4,r3
 		eieio
 		sth r5,AX(state)
-		NEXT		
-	
+		NEXT
+
 inl_port_eax:	NEXTBYTE(r4)
 		b 1f
 inl_dx_eax:	li r4,DX
@@ -1684,7 +1684,7 @@ inl_dx_eax:	li r4,DX
 		eieio
 		stw r5,EAX(state)
 		NEXT
-		
+
 outb_al_port:	NEXTBYTE(r4)
 		b 1f
 outb_al_dx:	li r4,DX
@@ -1695,8 +1695,8 @@ outb_al_dx:	li r4,DX
 		lbz r5,AL(state)
 		stbx r5,r4,r3
 		eieio
-		NEXT		
-	
+		NEXT
+
 outw_ax_port:	NEXTBYTE(r4)
 		b 1f
 outw_ax_dx:	li r4,DX
@@ -1707,8 +1707,8 @@ outw_ax_dx:	li r4,DX
 		lhz r5,AX(state)
 		sthx r5,r4,r3
 		eieio
-		NEXT		
-	
+		NEXT
+
 outl_eax_port:	NEXTBYTE(r4)
 		b 1f
 outl_eax_dx:	li r4,DX
@@ -1825,13 +1825,13 @@ carryforadc:	addc r3,flags,flags		# CF_IN to xer[ca]
 		blr
 
 		ARITH_WITH_CARRY(adc, FLAGS_ADD)
-	
+
 /* for sbb the input carry must be the complement of the x86 carry */
 carryforsbb:	addc r3,flags,flags		# CF_IN to xer[ca]
 		RES2CF(r4)			# 8/16 bit carry from result
 		subfe r3,result,op1
 		CF_ROTCNT(r5)
-		addze r3,r4	
+		addze r3,r4
 		CF_POL(r4,23)
 		rlwnm r3,r3,r5,0x100
 		eqv flags,r4,r3			# CF86 ? 0xfffffeff:0xffffffff
@@ -1934,7 +1934,7 @@ cmpw_imm8:	lbz op2,1(eip)
 		sub result,op1,op2
 		cmplw cr4,op1,op2
 		GOTNEXT
-		
+
 cmpl_imm_eax:	addi base,state,0
 		li offset,EAX
 cmpl_imm:	lwbrx op1,MEM
@@ -2082,7 +2082,7 @@ op##l_imm8:	lbz op2,1(eip); SET_FLAGS(FLAGS_LOG(L)); lwbrx op1,MEM; \
 		extsb op2,op2; lbzu opcode,2(eip); \
 		op result,op1,op2; \
 		stwbrx result,MEM; GOTNEXT
-		
+
 		LOGICAL(or)
 
 		LOGICAL(and)
@@ -2149,17 +2149,17 @@ notb:		lbzx r3,MEM
 		xori r3,r3,255
 		stbx r3,MEM
 		NEXT
-	
+
 notw:		lhzx r3,MEM
 		xori r3,r3,65535
 		sthx r3,MEM
 		NEXT
-	
+
 notl:		lwzx r3,MEM
 		not r3,r3
 		stwx r3,MEM
 		NEXT
-	
+
 boundw:		lhbrx r4,REG
 		li r3,code_bound
 		lhbrx r5,MEM
@@ -2173,7 +2173,7 @@ boundw:		lhbrx r4,REG
 		cmpw r4,r6
 		ble+ nop
 		b complex
-		
+
 boundl:		lwbrx r4,REG
 		li r3,code_bound
 		lwbrx r5,MEM
@@ -2186,10 +2186,10 @@ boundl:		lwbrx r4,REG
 		b complex
 
 /* Bit test and modify instructions */
-	
-/* Common routine: bit index in op2, returns memory value in r3, mask in op2, 
-and of mask and value in op1. CF flag is set as with 32 bit add when bit is 
-non zero since result (which is cleared) will be less than op1, and in cr4, 
+
+/* Common routine: bit index in op2, returns memory value in r3, mask in op2,
+and of mask and value in op1. CF flag is set as with 32 bit add when bit is
+non zero since result (which is cleared) will be less than op1, and in cr4,
 all other flags are undefined from Intel doc. Here OF and SF are cleared
 and ZF is set as a side effect of result being cleared.  */
 _setup_bitw:	cmpw base,state
@@ -2205,7 +2205,7 @@ _setup_bitw:	cmpw base,state
 		and op1,r3,op2			# if result<op1
 		cmplw cr4,result,op1		# sets CF in cr4
 		blr
-	
+
 _setup_bitl:	cmpw base,state
 		SET_FLAGS(FLAGS_BTEST)
 		beq- 1f
@@ -2217,14 +2217,14 @@ _setup_bitl:	cmpw base,state
 		and op1,r3,op2
 		cmplw cr4,result,op1
 		blr
-	
+
 /* Immediate forms bit tests are not frequent since logical are often faster */
 btw_imm:	NEXTBYTE(op2)
 		b 1f
 btw_reg_mem:	lhbrx op2,REG
 1:		bl _setup_bitw
 		NEXT
-		
+
 btl_imm:	NEXTBYTE(op2)
 		b 1f
 btl_reg_mem:	lhbrx op2,REG
@@ -2238,7 +2238,7 @@ btcw_reg_mem:	lhbrx op2,REG
 		xor r3,r3,op2
 		sthbrx r3,MEM
 		NEXT
-		
+
 btcl_imm:	NEXTBYTE(op2)
 		b 1f
 btcl_reg_mem:	lhbrx op2,REG
@@ -2246,7 +2246,7 @@ btcl_reg_mem:	lhbrx op2,REG
 		xor r3,r3,op2
 		stwbrx result,MEM
 		NEXT
-		
+
 btrw_imm:	NEXTBYTE(op2)
 		b 1f
 btrw_reg_mem:	lhbrx op2,REG
@@ -2254,7 +2254,7 @@ btrw_reg_mem:	lhbrx op2,REG
 		andc r3,r3,op2
 		sthbrx r3,MEM
 		NEXT
-		
+
 btrl_imm:	NEXTBYTE(op2)
 		b 1f
 btrl_reg_mem:	lhbrx op2,REG
@@ -2262,7 +2262,7 @@ btrl_reg_mem:	lhbrx op2,REG
 		andc r3,r3,op2
 		stwbrx r3,MEM
 		NEXT
-		
+
 btsw_imm:	NEXTBYTE(op2)
 		b 1f
 btsw_reg_mem:	lhbrx op2,REG
@@ -2270,7 +2270,7 @@ btsw_reg_mem:	lhbrx op2,REG
 		or r3,r3,op2
 		sthbrx r3,MEM
 		NEXT
-		
+
 btsl_imm:	NEXTBYTE(op2)
 		b 1f
 btsl_reg_mem:	lhbrx op2,REG
@@ -2352,11 +2352,11 @@ sjmp_l:		lbz r3,1(eip)
 jmp_l:		lwbrx r3,eip,one		# Simple
 		addi eip,eip,5
 		lbzux opcode,eip,r3
-		GOTNEXT	
+		GOTNEXT
 
-/*  The conditional jumps: although it should not happen, 
+/*  The conditional jumps: although it should not happen,
 byte relative jumps (sjmp) may wrap around in 16 bit mode */
-	
+
 #define NOTTAKEN_S lbzu opcode,2(eip); GOTNEXT
 #define NOTTAKEN_W lbzu opcode,3(eip); GOTNEXT
 #define NOTTAKEN_L lbzu opcode,5(eip); GOTNEXT
@@ -2388,35 +2388,35 @@ jecxz_l:	lwz r3,ECX(state); cmpwi r3,0; beq- sjmp_l; NOTTAKEN_S
 /* Note that loop is somewhat strange, the data size attribute gives
 the size of eip, and the address size whether the counter is cx or ecx.
 This is the same for jcxz/jecxz. */
-	
+
 loopw_w:	li opreg,CX
 		lhbrx r0,REG
 		sub. r0,r0,one
 		sthbrx r0,REG
 		bne+ sjmp_w
 		NOTTAKEN_S
-	
+
 loopl_w:	li opreg,ECX
 		lwbrx r0,REG
 		sub. r0,r0,one
 		stwbrx r0,REG
 		bne+ sjmp_w
 		NOTTAKEN_S
-	
+
 loopw_l:	li opreg,CX
 		lhbrx r0,REG
 		sub. r0,r0,one
 		sthbrx r0,REG
 		bne+ sjmp_l
 		NOTTAKEN_S
-	
+
 loopl_l:	li opreg,ECX
 		lwbrx r0,REG
 		sub. r0,r0,one
 		stwbrx r0,REG
 		bne+ sjmp_l
 		NOTTAKEN_S
-	
+
 loopzw_w:	li opreg,CX
 		lhbrx r0,REG
 		EVAL_ZF
@@ -2425,7 +2425,7 @@ loopzw_w:	li opreg,CX
 		bf ZF,1f
 		bne+ sjmp_w
 1:		NOTTAKEN_S
-	
+
 loopzl_w:	li opreg,ECX
 		lwbrx r0,REG
 		EVAL_ZF
@@ -2434,7 +2434,7 @@ loopzl_w:	li opreg,ECX
 		bf ZF,1f
 		bne+ sjmp_w
 1:		NOTTAKEN_S
-	
+
 loopzw_l:	li opreg,CX
 		lhbrx r0,REG
 		EVAL_ZF
@@ -2443,7 +2443,7 @@ loopzw_l:	li opreg,CX
 		bf ZF,1f
 		bne+ sjmp_l
 1:		NOTTAKEN_S
-	
+
 loopzl_l:	li opreg,ECX
 		lwbrx r0,REG
 		EVAL_ZF
@@ -2452,7 +2452,7 @@ loopzl_l:	li opreg,ECX
 		bf ZF,1f
 		bne+ sjmp_l
 1:		NOTTAKEN_S
-	
+
 loopnzw_w:	li opreg,CX
 		lhbrx r0,REG
 		EVAL_ZF
@@ -2461,7 +2461,7 @@ loopnzw_w:	li opreg,CX
 		bt ZF,1f
 		bne+ sjmp_w
 1:		NOTTAKEN_S
-	
+
 loopnzl_w:	li opreg,ECX
 		lwbrx r0,REG
 		EVAL_ZF
@@ -2470,7 +2470,7 @@ loopnzl_w:	li opreg,ECX
 		bt ZF,1f
 		bne+ sjmp_w
 1:		NOTTAKEN_S
-	
+
 loopnzw_l:	li opreg,CX
 		lhbrx r0,REG
 		EVAL_ZF
@@ -2479,7 +2479,7 @@ loopnzw_l:	li opreg,CX
 		bt ZF,1f
 		bne+ sjmp_l
 1:		NOTTAKEN_S
-	
+
 loopnzl_l:	li opreg,ECX
 		lwbrx r0,REG
 		EVAL_ZF
@@ -2489,7 +2489,7 @@ loopnzl_l:	li opreg,ECX
 		bne+ sjmp_l
 1:		NOTTAKEN_S
 
-/* Memory indirect calls are rare enough to limit code duplication */	
+/* Memory indirect calls are rare enough to limit code duplication */
 callw_sp_mem:	lhbrx r3,MEM
 		sub r4,eip,csb
 		addi r4,r4,1			# r4 is now return address
@@ -2522,7 +2522,7 @@ retw_sp_imm:	li opreg,SP
 		GOTNEXT
 
 		.equ retl_sp_imm, unimpl
-	
+
 retw_sp:	li opreg,SP
 		lhbrx r4,REG
 		addi r5,r4,2
@@ -2535,8 +2535,8 @@ retw_sp:	li opreg,SP
 
 /* Enter is a mess, and the description in Intel documents is actually wrong
  * in most revisions (all PPro/PII I have but the old Pentium is Ok) !
- */	
-	 	
+ */
+
 enterw_sp:	lhbrx r0,eip,one		# Stack space to allocate
 		li opreg,SP
 		lhbrx r3,REG			# SP
@@ -2557,12 +2557,12 @@ enterw_sp:	lhbrx r0,eip,one		# Stack space to allocate
 		addi r3,r3,-2
 		clrlwi r3,r3,16
 		sthx r4,ssb,r3
-2:		bdnz 1b	
+2:		bdnz 1b
 		addi r3,r3,-2			# save current frame pointer
 		clrlwi r3,r3,16
 		sthbrx r6,ssb,r3
 3:		sthbrx r6,state,r7		# New BP
-		sub r3,r3,r0			
+		sub r3,r3,r0
 		sthbrx r3,REG			# Save new stack pointer
 		NEXT
 
@@ -2570,13 +2570,13 @@ enterw_sp:	lhbrx r0,eip,one		# Stack space to allocate
 
 leavew_sp:	li opreg,BP
 		lhbrx r3,REG			# Stack = BP
-		addi r4,r3,2			# 
+		addi r4,r3,2			#
 		lhzx r3,ssb,r3
 		li opreg,SP
 		sthbrx r4,REG			# New Stack
 		sth r3,BP(state)		# Popped BP
 		NEXT
-			
+
 		.equ leavel_sp, unimpl
 
 /* String instructions:	first a generic setup routine, which exits early
@@ -2596,11 +2596,11 @@ _setup_stringw:	li offset,SI			#
 		cmpwi r3,0
 		beq nop				# early exit here !
 1:		mtctr r3			# ctr=CX or 1
-		li r7,1				# stride		
+		li r7,1				# stride
 		bflr+ DF
 		li r7,-1			# change stride sign
 		blr
-		
+
 /* Ending routine to update all changed registers (goes directly to NEXT) */
 _finish_strw:	li r4,SI
 		sthbrx offset,state,r4		# update si
@@ -2620,7 +2620,7 @@ lodsb_a16:	bl _setup_stringw
 		bdnz 1b
 		stb r0,AL(state)
 		b _finish_strw
-		
+
 lodsw_a16:	bl _setup_stringw
 		slwi r7,r7,1
 1:		lhzx r0,STRINGSRC		# [rep] lodsw
@@ -2629,7 +2629,7 @@ lodsw_a16:	bl _setup_stringw
 		bdnz 1b
 		sth r0,AX(state)
 		b _finish_strw
-	
+
 lodsl_a16:	bl _setup_stringw
 		slwi r7,r7,2
 1:		lwzx r0,STRINGSRC		# [rep] lodsl
@@ -2638,7 +2638,7 @@ lodsl_a16:	bl _setup_stringw
 		bdnz 1b
 		stw r0,EAX(state)
 		b _finish_strw
-	
+
 stosb_a16:	bl _setup_stringw
 		lbz r0,AL(state)
 1:		stbx r0,STRINGDST		# [rep] stosb
@@ -2646,7 +2646,7 @@ stosb_a16:	bl _setup_stringw
 		clrlwi opreg,opreg,16
 		bdnz 1b
 		b _finish_strw
-	
+
 stosw_a16:	bl _setup_stringw
 		lhz r0,AX(state)
 		slwi r7,r7,1
@@ -2655,7 +2655,7 @@ stosw_a16:	bl _setup_stringw
 		clrlwi opreg,opreg,16
 		bdnz 1b
 		b _finish_strw
-	
+
 stosl_a16:	bl _setup_stringw
 		lwz r0,EAX(state)
 		slwi r7,r7,2
@@ -2664,7 +2664,7 @@ stosl_a16:	bl _setup_stringw
 		clrlwi opreg,opreg,16
 		bdnz 1b
 		b _finish_strw
-	
+
 movsb_a16:	bl _setup_stringw
 1:		lbzx r0,STRINGSRC		# [rep] movsb
 		add offset,offset,r7
@@ -2674,7 +2674,7 @@ movsb_a16:	bl _setup_stringw
 		clrlwi opreg,opreg,16
 		bdnz 1b
 		b _finish_strw
-	
+
 movsw_a16:	bl _setup_stringw
 		slwi r7,r7,1
 1:		lhzx r0,STRINGSRC		# [rep] movsw
@@ -2685,7 +2685,7 @@ movsw_a16:	bl _setup_stringw
 		clrlwi opreg,opreg,16
 		bdnz 1b
 		b _finish_strw
-	
+
 movsl_a16:	bl _setup_stringw
 		slwi r7,r7,2
 1:		lwzx r0,STRINGSRC		# [rep] movsl
@@ -2696,14 +2696,14 @@ movsl_a16:	bl _setup_stringw
 		clrlwi opreg,opreg,16
 		bdnz 1b
 		b _finish_strw
-	
+
 /* At least on a Pentium, repeated string I/O instructions check for
 access port permission even if count is 0 ! So the order of the check is not
 important. */
 insb_a16:	li r4,DX
 		li r3,code_insb_a16
 		lhbrx r4,state,r4
-		bl _check_port		
+		bl _check_port
 		bl _setup_stringw
 		lwz base,iobase(state)
 1:		lbzx r0,base,r4			# [rep] insb
@@ -2713,11 +2713,11 @@ insb_a16:	li r4,DX
 		clrlwi opreg,opreg,16
 		bdnz 1b
 		b _finish_strw
-	
+
 insw_a16:	li r4,DX
 		li r3,code_insw_a16
 		lhbrx r4,state,r4
-		bl _check_port		
+		bl _check_port
 		bl _setup_stringw
 		lwz base,iobase(state)
 		slwi r7,r7,1
@@ -2728,11 +2728,11 @@ insw_a16:	li r4,DX
 		clrlwi opreg,opreg,16
 		bdnz 1b
 		b _finish_strw
-	
+
 insl_a16:	li r4,DX
 		li r3,code_insl_a16
 		lhbrx r4,state,r4
-		bl _check_port		
+		bl _check_port
 		bl _setup_stringw
 		lwz base,iobase(state)
 		slwi r7,r7,2
@@ -2743,17 +2743,17 @@ insl_a16:	li r4,DX
 		clrlwi opreg,opreg,16
 		bdnz 1b
 		b _finish_strw
-	
+
 outsb_a16:	li r4,DX
 		li r3,code_outsb_a16
 		lhbrx r4,state,r4
-		bl _check_port		
+		bl _check_port
 		bl _setup_stringw
 		lwz r6,iobase(state)
 1:		lbzx r0,STRINGSRC		# [rep] outsb
 		add offset,offset,r7
 		stbx r0,r6,r4
-		clrlwi offset,offset,16	
+		clrlwi offset,offset,16
 		eieio
 		bdnz 1b
 		b _finish_strw
@@ -2761,7 +2761,7 @@ outsb_a16:	li r4,DX
 outsw_a16:	li r4,DX
 		li r3,code_outsw_a16
 		lhbrx r4,state,r4
-		bl _check_port		
+		bl _check_port
 		bl _setup_stringw
 		li r5,DX
 		lwz r6,iobase(state)
@@ -2769,7 +2769,7 @@ outsw_a16:	li r4,DX
 1:		lhzx r0,STRINGSRC		# [rep] outsw
 		add offset,offset,r7
 		sthx r0,r6,r4
-		clrlwi offset,offset,16	
+		clrlwi offset,offset,16
 		eieio
 		bdnz 1b
 		b _finish_strw
@@ -2777,14 +2777,14 @@ outsw_a16:	li r4,DX
 outsl_a16:	li r4,DX
 		li r3,code_outsl_a16
 		lhbrx r4,state,r4
-		bl _check_port		
+		bl _check_port
 		bl _setup_stringw
 		lwz r6,iobase(state)
 		slwi r7,r7,2
 1:		lwzx r0,STRINGSRC		# [rep] outsl
 		add offset,offset,r7
 		stwx r0,r6,r4
-		clrlwi offset,offset,16	
+		clrlwi offset,offset,16
 		eieio
 		bdnz 1b
 		b _finish_strw
@@ -2869,7 +2869,7 @@ cmpsl_a16:	bl _setup_stringw
 		clrlwi opreg,opreg,16
 		bdnzf CF+2,3b
 		b 2b
-	
+
 scasb_a16:	bl _setup_stringw
 		lbzx op1,AL,state		# AL
 		SET_FLAGS(FLAGS_CMP(B))
@@ -2939,7 +2939,7 @@ scasl_a16:	bl _setup_stringw
 		.equ lodsb_a32, unimpl
 		.equ lodsw_a32, unimpl
 		.equ lodsl_a32, unimpl
-		.equ stosb_a32, unimpl		
+		.equ stosb_a32, unimpl
 		.equ stosw_a32, unimpl
 		.equ stosl_a32, unimpl
 		.equ movsb_a32, unimpl
@@ -2964,22 +2964,22 @@ xlatb_a16:	li offset,BX
 		add r3,r3,base
 		lbzx r3,r3,offset
 		stb r3,AL(state)
-		NEXT		
+		NEXT
 
 		.equ xlatb_a32, unimpl
 
-/* 
+/*
  * Shift and rotates: note the oddity that rotates do not affect SF/ZF/AF/PF
  * but shifts do. Also testing has indicated that rotates with a count of zero
- * do not affect any flag. The documentation specifies this for shifts but 
- * is more obscure for rotates. The overflow flag setting is only specified 
+ * do not affect any flag. The documentation specifies this for shifts but
+ * is more obscure for rotates. The overflow flag setting is only specified
  * when count is 1, otherwise OF is undefined which simplifies emulation.
  */
 
-/* 
+/*
  * The rotates through carry are among the most difficult instructions,
  * they are implemented as a shift of 2*n+some bits depending on case.
- * First the left rotates through carry. 
+ * First the left rotates through carry.
  */
 
 /* Byte rcl is performed on 18 bits (17 actually used) in a single register */
@@ -3008,7 +3008,7 @@ rclb_1:		li r3,1
 		rlwnm r0,r0,r3,0x000001ff	# (23)0:NewCF:Result8
 		rlwimi flags,r0,19,CF_VALUE
 		stbx r0,MEM
-		rlwimi flags,r0,18,OF_XOR	
+		rlwimi flags,r0,18,OF_XOR
 		NEXT
 
 /* Word rcl is performed on 33 bits (CF:data16:CF:(15 MSB of data16) */
@@ -3040,7 +3040,7 @@ rclw_1:		li r3,1
 		add r0,r0,r4			# result
 		rlwimi flags,r0,11,CF_VALUE
 		sthbrx r0,MEM
-		rlwimi flags,r0,10,OF_XOR	
+		rlwimi flags,r0,10,OF_XOR
 		NEXT
 
 /* Longword rcl only needs 64 bits because the maximum rotate count is 31 ! */
@@ -3106,7 +3106,7 @@ rcrb_1:		li r3,1
 
 /* Word rcr is a 33 bit right shift with a quirk, because the 33rd bit
 is only needed when the rotate count is 16 and rotating left or right
-by 16 a 32 bit quantity is the same ! */	
+by 16 a 32 bit quantity is the same ! */
 rcrw_imm:	NEXTBYTE(r3)
 		b 1f
 rcrw_cl:	lbz r3,CL(state)
@@ -3179,7 +3179,7 @@ rolb_1:		li r3,1
 		rlwimi r0,r0,24,0xff000000	# replicate for shift in
 		beq- nop			# no flags changed if count 0
 		ROTATE_FLAGS
-		rotlw r0,r0,r3		
+		rotlw r0,r0,r3
 		rlwimi flags,r0,27,CF_VALUE	# New CF
 		stbx r0,MEM
 		rlwimi flags,r0,26,OF_XOR	# New OF (CF xor MSB)
@@ -3660,7 +3660,7 @@ divl:		li opreg,EDX			# Not yet fully implemented
 		stwbrx r5,EAX,state
 		stwbrx r4,REG
 		NEXT
-/* 
+/*
  * Divide r4:r5 by r3, quotient in r5, remainder in r4.
  * The algorithm is stupid because it won't be used very often.
  */
@@ -3805,7 +3805,7 @@ movw_sr_mem:	cmpwi opreg,20			# SREG 0 to 5 only
 1:		sthbrx r0,MEM
 		NEXT
 
-/* Now the instructions that modify the segment registers, note that 
+/* Now the instructions that modify the segment registers, note that
 move/pop to ss disable interrupts and traps for one instruction ! */
 popl_sp_sr:	li r6,4
 		b 1f
@@ -3826,7 +3826,7 @@ popw_sp_sr:	li r6,2
 		lwz ssb,ssbase(state)		# pop ss
 		crmove RF,TF			# prevent traps
 		NEXT
-	
+
 movw_mem_sr:	cmpwi opreg,20
 		addi r7,state,SELBASES
 		bgt- ud
@@ -3841,11 +3841,11 @@ movw_mem_sr:	cmpwi opreg,20
 		bne+ nop
 		lwz ssb,ssbase(state)
 		crmove RF,TF			# prevent traps
-		NEXT	
-	
+		NEXT
+
 		.equ movl_mem_sr, movw_mem_sr
 
-/* The encoding of les/lss/lds/lfs/lgs is strange, opcode is c4/b2/c5/b4/b5 
+/* The encoding of les/lss/lds/lfs/lgs is strange, opcode is c4/b2/c5/b4/b5
 for es/ss/ds/fs/gs which are sreg 0/2/3/4/5. And obviously there is
 no lcs instruction, it's called a far jump. */
 
@@ -3859,7 +3859,7 @@ ldlptrw:	lhzux r7,MEM
 		bl 1f
 		sthx r7,REG
 		NEXT
-	
+
 1:		cmpw base,state
 		lis r3,0xc011			# es/ss/ds/fs/gs
 		rlwinm r5,opcode,2,0x0c		# 00/08/04/00/04
@@ -3879,7 +3879,7 @@ ldlptrw:	lhzux r7,MEM
 		blr
 
 
-/* Intructions that may modify the current code segment: the next optimization 
+/* Intructions that may modify the current code segment: the next optimization
  * might be to avoid calling C code when the code segment does not change. But
  * it's probably not worth the effort.
  */
@@ -3972,13 +3972,13 @@ stc:		oris flags,flags,\
 			(CF_IN_CR|CF_LOCATION|CF_COMPLEMENT|ABOVE_IN_CR)>>16
 		xoris flags,flags,(CF_IN_CR|CF_LOCATION|ABOVE_IN_CR)>>16
 		NEXT
-		
+
 cld:		crclr DF
 		NEXT
 
 std:		crset DF
 		NEXT
-	
+
 cli:		crclr IF
 		NEXT
 
@@ -4029,7 +4029,7 @@ popfl_sp:	li r4,SP
 		stw r3,eflags(state)
 		sthbrx r5,r4,state
 		b 1f
-		
+
 popfw_sp:	li r4,SP
 		lhbrx r5,r4,state
 		lhbrx r3,ssb,r5
@@ -4066,7 +4066,7 @@ setnz:		EVAL_ZF
 #define SETCC(cond, eval, flag) \
 set##cond:	EVAL_##eval; bt flag,1b; b 0b; \
 setn##cond:	EVAL_##eval; bt flag,0b; b 1b
-	
+
 		SETCC(c, CF, CF)
 		SETCC(a, ABOVE, ABOVE)
 		SETCC(s, SF, SF)
@@ -4134,7 +4134,7 @@ daa:		lbz r0,AL(state)
 		stb result,AL(state)
 		rlwimi result,r3,2,0x100	# set CF if added
 		NEXT
-	
+
 das:		lbz r0,AL(state)
 		bl _eval_af
 		rlwinm r7,r3,0,0x10
@@ -4153,7 +4153,7 @@ das:		lbz r0,AL(state)
 		stb result,AL(state)
 		rlwimi result,r3,2,0x100	# set CF
 		NEXT
-	
+
 /* 486 specific instructions */
 
 /* For cmpxchg, only the zero flag is important */
@@ -4226,7 +4226,7 @@ esc:		li r3,code_dna			# DNA interrupt
 
 		.equ invd, unimpl
 
-/* Undefined in real address mode */	
+/* Undefined in real address mode */
 		.equ lar, ud
 
 		.equ lgdt, unimpl
@@ -4250,7 +4250,7 @@ esc:		li r3,code_dna			# DNA interrupt
 		.equ smsw, unimpl
 
 		.equ str, ud
-	
+
 ud:		li r3,code_ud
 		li r4,0
 		b complex
@@ -4272,7 +4272,7 @@ em86_end:
 		.section .rodata
 #define ENTRY(x,t) .long x+t
 #endif
-	
+
 #define	BOP(x)	ENTRY(x,2)	/* Byte operation with mod/rm byte */
 #define WLOP(x) ENTRY(x,3)	/* 16 or 32 bit operation with mod/rm byte */
 #define EXTOP(x) ENTRY(x,0)	/* Opcode with extension in mod/rm byte */
@@ -4488,7 +4488,7 @@ _jtables:	jtable(w, a16, sp, ax, www)	/* data16, addr16 */
 		jtable(l, a32, sp, eax, llw)	/* data32, addr32 */
 /* The other possible combinations are only required by protected mode
 code using a big stack segment */
-/* Here are the auxiliary tables for opcode extensions, note that 
+/* Here are the auxiliary tables for opcode extensions, note that
 all entries get 2 or 3 added. */
 #define grp1table(bwl,t,s8) \
 grp1##bwl##_imm##s8:; \
@@ -4543,7 +4543,7 @@ grp5##wl##_##spesp: \
 		WLOP(inc##wl); WLOP(dec##wl); \
 		WLOP(call##wl##_##spesp##_mem); WLOP(lcall##wl##); \
 		WLOP(jmp##wl); WLOP(ljmp##wl); \
-		WLOP(push##wl##_##spesp); OP(ud) 
+		WLOP(push##wl##_##spesp); OP(ud)
 
 		grp5table(w,sp)
 		grp5table(l,sp)
@@ -4551,7 +4551,7 @@ grp5##wl##_##spesp: \
 #define grp8table(wl) \
 grp8##wl:	OP(ud); OP(ud); OP(ud); OP(ud); \
 		WLOP(bt##wl##_imm); WLOP(bts##wl##_imm); \
-		WLOP(btr##wl##_imm); WLOP(btc##wl##_imm) 
+		WLOP(btr##wl##_imm); WLOP(btc##wl##_imm)
 
 		grp8table(w)
 		grp8table(l)

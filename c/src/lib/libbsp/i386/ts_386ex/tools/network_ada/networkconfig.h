@@ -1,9 +1,9 @@
 /*
  * Network configuration
- * 
+ *
  ************************************************************
  * EDIT THIS FILE TO REFLECT YOUR NETWORK CONFIGURATION     *
- * BEFORE RUNNING ANY RTEMS PROGRAMS WHICH USE THE NETWORK! * 
+ * BEFORE RUNNING ANY RTEMS PROGRAMS WHICH USE THE NETWORK! *
  ************************************************************
  *
  *  $Id$

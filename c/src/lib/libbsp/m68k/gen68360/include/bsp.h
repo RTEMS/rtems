@@ -45,7 +45,7 @@ extern "C" {
 
 /* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
-  
+
 /*
  * Network driver configuration
  */
@@ -107,7 +107,7 @@ extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

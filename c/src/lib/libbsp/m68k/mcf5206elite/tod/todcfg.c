@@ -63,12 +63,12 @@ mcf5206elite_ds1307_probe(int minor)
     rtc_tbl *rtc;
     i2c_bus_number bus;
     i2c_address addr;
-    
+
     if (minor >= NUM_RTCS)
         return FALSE;
-    
+
     rtc = RTC_Table + minor;
-    
+
     bus = rtc->ulCtrlPort1;
     addr = rtc->ulDataPort;
     do {

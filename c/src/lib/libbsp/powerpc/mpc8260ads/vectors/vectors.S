@@ -2,26 +2,26 @@
  * (c) 1999, Eric Valette valette@crf.canon.fr
  *
  *
- *  This file contains the assembly code for the PowerPC 
+ *  This file contains the assembly code for the PowerPC
  *  exception veneers for RTEMS.
  *
  * $Id$
  */
-	
+
 
 
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <bsp/vectors.h>
-	
+
 
 #define SYNC \
 	sync; \
 	isync
-	
+
 	.text
-	.p2align 5	
-		
+	.p2align 5
+
 PUBLIC_VAR(default_exception_vector_code_prolog)
 SYM (default_exception_vector_code_prolog):
 	/*
@@ -34,7 +34,7 @@ SYM (default_exception_vector_code_prolog):
 	stw	r2, EXC_LR_OFFSET(r1)
 	bl	0f
 0:	/*
-	 * r3 = exception vector entry point 
+	 * r3 = exception vector entry point
 	 * (256 * vector number) + few instructions
 	 */
 	mflr	r3
@@ -43,13 +43,13 @@ SYM (default_exception_vector_code_prolog):
 	 */
 	srwi	r3,r3,8
 	ba	push_normalized_frame
-	
+
 	PUBLIC_VAR (default_exception_vector_code_prolog_size)
-	
+
 	default_exception_vector_code_prolog_size= . - default_exception_vector_code_prolog
-	
+
 	.p2align 5
-PUBLIC_VAR (push_normalized_frame)	
+PUBLIC_VAR (push_normalized_frame)
 SYM (push_normalized_frame):
 	stw	r3, EXCEPTION_NUMBER_OFFSET(r1)
 	stw	r0, GPR0_OFFSET(r1)
@@ -63,7 +63,7 @@ SYM (push_normalized_frame):
 	 * Saved a few line above  : R0
 	 *
 	 * Manual says that "stmw" instruction may be slower than
-	 * series of individual "stw" but who cares about performance 
+	 * series of individual "stw" but who cares about performance
 	 * for the DEFAULT exception handler?
 	 */
 	stmw	r4, GPR4_OFFSET(r1)	/* save R4->R31 */
@@ -90,7 +90,7 @@ SYM (push_normalized_frame):
 	ori     r3,r3, MSR_RI /*| MSR_IR | MSR_DR*/
 	mtmsr   r3
 	SYNC
-	
+
 	/*
 	 * Call C exception handler
 	 */
@@ -128,16 +128,16 @@ SYM (push_normalized_frame):
 	xori	r3, r3, MSR_RI /*| MSR_IR | MSR_DR*/
 	mtmsr   r3
 	SYNC
-	
+
 	/*
 	 * Restore rfi related settings
 	 */
-		 
+
 	lwz	r3, SRR1_FRAME_OFFSET(r1)
 	mtsrr1	r3
 	lwz	r3, SRR0_FRAME_OFFSET(r1)
 	mtsrr0	r3
-	
+
 	lwz	r3, GPR3_OFFSET(r1)
 	addi 	r1,r1, EXCEPTION_FRAME_END
 	SYNC

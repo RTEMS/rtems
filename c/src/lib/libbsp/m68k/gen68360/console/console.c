@@ -168,7 +168,7 @@ smc1Initialize (int major, int minor, void *arg)
 	 * Put SMC1 in NMSI mode, connect SMC1 to BRG1
 	 */
 	m360.simode |= M360_SI_SMC1_BRG1;
-	 
+
 	/*
 	 * Set up SMC1 parameter RAM common to all protocols
 	 */
@@ -180,7 +180,7 @@ smc1Initialize (int major, int minor, void *arg)
 		m360.smc1p.mrblr = RXBUFSIZE;
 	else
 		m360.smc1p.mrblr = 1;
-	 
+
 	/*
 	 * Set up SMC1 parameter RAM UART-specific parameters
 	 */
@@ -188,19 +188,19 @@ smc1Initialize (int major, int minor, void *arg)
 	m360.smc1p.un.uart.brklen = 0;
 	m360.smc1p.un.uart.brkec = 0;
 	m360.smc1p.un.uart.brkcr = 0;
-	 
+
 	/*
 	 * Set up the Receive Buffer Descriptor
 	 */
 	smcRxBd->status = M360_BD_EMPTY | M360_BD_WRAP | M360_BD_INTERRUPT;
 	smcRxBd->length = 0;
 	smcRxBd->buffer = rxBuf;
-	 
+
 	/*
 	 * Setup the Transmit Buffer Descriptor
 	 */
 	smcTxBd->status = M360_BD_WRAP;
-	 
+
 	/*
 	 * Set up SMC1 general and protocol-specific mode registers
 	 */
@@ -357,7 +357,7 @@ rtems_device_driver console_open(
 	}
 	return sc;
 }
- 
+
 /*
  * Close the device
  */
@@ -402,6 +402,6 @@ rtems_device_driver console_control(
   rtems_device_minor_number minor,
   void                    * arg
 )
-{ 
+{
 	return rtems_termios_ioctl (arg);
 }

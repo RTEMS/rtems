@@ -60,7 +60,7 @@ rtems_i8259_masks i8259s_cache = 0xFFFB;
 |      Description: Mask IRQ line in appropriate PIC chip.
 | Global Variables: i8259s_cache
 |        Arguments: vector_offset - number of IRQ line to mask.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 int BSP_irq_disable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
 {
@@ -71,12 +71,12 @@ int BSP_irq_disable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
        ((int)irqLine > BSP_MAX_OFFSET )
        )
     return 1;
-  
+
   _CPU_ISR_Disable(level);
-  
+
   mask = 1 << irqLine;
   i8259s_cache |= mask;
-  
+
   if (irqLine < 8)
   {
     outport_byte(PIC_MASTER_IMR_IO_PORT, i8259s_cache & 0xff);
@@ -88,14 +88,14 @@ int BSP_irq_disable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
   _CPU_ISR_Enable (level);
 
   return 0;
-} 
+}
 
 /*-------------------------------------------------------------------------+
 |         Function:  BSP_irq_enable_at_i8259s
 |      Description: Unmask IRQ line in appropriate PIC chip.
 | Global Variables: i8259s_cache
 |        Arguments: irqLine - number of IRQ line to mask.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 int BSP_irq_enable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
 {
@@ -108,10 +108,10 @@ int BSP_irq_enable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
     return 1;
 
   _CPU_ISR_Disable(level);
-  
+
   mask = ~(1 << irqLine);
   i8259s_cache &= mask;
-  
+
   if (irqLine < 8)
   {
     outport_byte(PIC_MASTER_IMR_IO_PORT, i8259s_cache & 0xff);
@@ -137,14 +137,14 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine)
   mask = (1 << irqLine);
   return  (~(i8259s_cache & mask));
 }
-  
+
 
 /*-------------------------------------------------------------------------+
 |         Function: BSP_irq_ack_at_i8259s
 |      Description: Signal generic End Of Interrupt (EOI) to appropriate PIC.
 | Global Variables: None.
 |        Arguments: irqLine - number of IRQ line to acknowledge.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 int BSP_irq_ack_at_i8259s  	(const rtems_irq_symbolic_name irqLine)
 {
@@ -165,7 +165,7 @@ int BSP_irq_ack_at_i8259s  	(const rtems_irq_symbolic_name irqLine)
 /*
  * ------------------------ RTEMS Irq helper functions ----------------
  */
- 
+
 /*
  * Caution : this function assumes the variable "internal_config"
  * is already set and that the tables it contains are still valid
@@ -224,7 +224,7 @@ static int isValidInterrupt(int irq)
 int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     unsigned int level;
-  
+
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -257,7 +257,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * Enable interrupt on device
      */
     irq->on(irq);
-    
+
     _CPU_ISR_Enable(level);
 
     return 1;
@@ -280,7 +280,7 @@ int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     unsigned int level;
-  
+
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -313,7 +313,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     rtems_hdl_tbl[irq->name] = default_rtems_entry;
 
     current_irq[irq->name] = default_rtems_entry.hdl;
-    
+
     _CPU_ISR_Enable(level);
 
     return 1;
@@ -363,7 +363,7 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
 {
     *config = internal_config;
     return 0;
-}    
+}
 
 void _ThreadProcessSignalsFromIrq (CPU_Exception_frame* ctx)
 {

@@ -4,7 +4,7 @@
 
 /*
  * asmfault.s
- * Last change : 31. 1.95 
+ * Last change : 31. 1.95
  */
 
 	.text
@@ -21,7 +21,7 @@ _faultHndlEntry :
 	ldconst	_faultBuffer, r3
 	  /* Save global registers. */
 	stq	g0, 64+0(r3)
-	stq	g4, 64+16(r3)	
+	stq	g4, 64+16(r3)
 	stq	g8, 64+32(r3)
 	stt	g12, 64+48(r3)
 	  /* Faulted code's fp (g15) is our pfp. */
@@ -38,7 +38,7 @@ _faultHndlEntry :
 	ldq	32(g3), r4
 	stq	r4, 32(r3)
 	ldq	48(g3), r4
-	stq	r4, 48(r3)  
+	stq	r4, 48(r3)
 	  /* To handling. */
 	mov	fp, g0
 	mov	r3, g1

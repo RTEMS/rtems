@@ -7,7 +7,7 @@
  *
  *  The external exception vector numbers begin with DMV170_IRQ_FIRST.
  *  DMV170_IRQ_FIRST is defined to be one greater than the last processor
- *  interrupt.  
+ *  interrupt.
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -26,8 +26,8 @@
 #define   NUM_LIRQ_HANDLERS   20
 #define   NUM_LIRQ            ( MAX_BOARD_IRQS - PPC_IRQ_LAST )
 
-/* 
- * Structure to for one of possible multiple interrupt handlers for 
+/*
+ * Structure to for one of possible multiple interrupt handlers for
  * a given interrupt.
  */
 typedef struct
@@ -42,7 +42,7 @@ typedef struct
  *        handlers at a later time.
  */
 EE_ISR_Type       ISR_Nodes [NUM_LIRQ_HANDLERS];
-uint16_t    Nodes_Used; 
+uint16_t    Nodes_Used;
 Chain_Control     ISR_Array  [NUM_LIRQ];
 
 /*PAGE
@@ -56,22 +56,22 @@ Chain_Control     ISR_Array  [NUM_LIRQ];
  *
  *  Output parameters:  NONE
  *
- *  Return values: 
+ *  Return values:
  */
 
 rtems_isr external_exception_ISR (
   rtems_vector_number   vector             /* IN  */
 )
-{ 
+{
   uint16_t        index;
   rtems_boolean         is_active=FALSE;
   uint32_t        scv64_status;
   Chain_Node           *node;
   EE_ISR_Type          *ee_isr;
-  
+
 
   /*
-   * Get all active interrupts. 
+   * Get all active interrupts.
    */
   scv64_status = SCV64_Get_Interrupt();
   scv64_status &= SCV64_Get_Interrupt_Enable();
@@ -121,7 +121,7 @@ rtems_isr external_exception_ISR (
  *  initialize_external_exception_vector
  *
  *  This routine initializes the external exception vector
- * 
+ *
  *  Input parameters: NONE
  *
  *  Output parameters:  NONE
@@ -134,24 +134,24 @@ void initialize_external_exception_vector ()
   int i;
   rtems_isr_entry previous_isr;
   rtems_status_code status;
-  extern void SCV64_Initialize( void ); 
+  extern void SCV64_Initialize( void );
 
   Nodes_Used = 0;
 
   /*
    * Initialize the SCV64 chip
    */
-  SCV64_Initialize(); 
+  SCV64_Initialize();
 
   for (i=0; i <NUM_LIRQ; i++)
     Chain_Initialize_empty( &ISR_Array[i] );
 
-  /*  
-   * Install external_exception_ISR () as the handler for 
+  /*
+   * Install external_exception_ISR () as the handler for
    *  the General Purpose Interrupt.
    */
 
-  status = rtems_interrupt_catch( external_exception_ISR, 
+  status = rtems_interrupt_catch( external_exception_ISR,
            PPC_IRQ_EXTERNAL , (rtems_isr_entry *) &previous_isr );
 
 }
@@ -160,7 +160,7 @@ void initialize_external_exception_vector ()
  *
  *  set_EE_vector
  *
- *  This routine installs one of multiple ISRs for the general purpose 
+ *  This routine installs one of multiple ISRs for the general purpose
  *  inerrupt.
  *
  *  Input parameters:
@@ -179,12 +179,12 @@ rtems_isr_entry  set_EE_vector(
 {
   uint16_t   vec_idx  = vector - DMV170_IRQ_FIRST;
   uint32_t   index;
-  
-  /* 
+
+  /*
    *  Verify that all of the nodes have not been used.
    */
   assert  (Nodes_Used < NUM_LIRQ_HANDLERS);
-   
+
   /*
    *  If we have already installed this handler for this vector, then
    *  just reset it.
@@ -200,8 +200,8 @@ rtems_isr_entry  set_EE_vector(
    * Increment the number of nedes used and set the index for the node
    * array.
    */
-  
-  Nodes_Used++; 
+
+  Nodes_Used++;
   index = Nodes_Used - 1;
 
   /*
@@ -211,8 +211,8 @@ rtems_isr_entry  set_EE_vector(
   ISR_Nodes[index].vector  = vector;
 
   /*
-   * Connect this node to the chain at the location of the 
-   * vector index.  
+   * Connect this node to the chain at the location of the
+   * vector index.
    */
   Chain_Append( &ISR_Array[vec_idx], &ISR_Nodes[index].Node );
 

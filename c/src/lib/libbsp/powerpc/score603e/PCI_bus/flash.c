@@ -22,7 +22,7 @@ unsigned int SCORE603e_FLASH_Disable(
 )
 {
   uint8_t         value;
- 
+
   value = *SCORE603E_BOARD_CTRL_REG;
   value = value | (~SCORE603E_BRD_FLASH_DISABLE_MASK);
   *SCORE603E_BOARD_CTRL_REG = value;
@@ -32,7 +32,7 @@ unsigned int SCORE603e_FLASH_Disable(
 
 unsigned int SCORE603e_FLASH_verify_enable()
 {
-  volatile uint8_t         *Ctrl_Status_Register = 
+  volatile uint8_t         *Ctrl_Status_Register =
            (void *)SCORE603E_BOARD_CTRL_REG;
   uint8_t          ctrl_value;
   uint32_t         pci_value;

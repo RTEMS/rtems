@@ -27,11 +27,11 @@ void* memcpy(void *dst, const void * src, unsigned int n)
 {
   unsigned char *d=dst;
   const unsigned char *s=src;
-                                                     
+
   while(n-- > 0) *d++=*s++;
   return dst;
 }
-                                                     
+
 char* strcat(char * dest, const char * src)
 {
   char *tmp = dest;

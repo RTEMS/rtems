@@ -55,7 +55,7 @@ int rtems_gdb_stub_get_current_thread(void);
 int rtems_gdb_stub_get_next_thread(int);
 int rtems_gdb_stub_get_offsets(
   unsigned char **text_addr,
-  unsigned char **data_addr, 
+  unsigned char **data_addr,
   unsigned char **bss_addr
 );
 int rtems_gdb_stub_get_thread_regs(
@@ -66,7 +66,7 @@ int rtems_gdb_stub_set_thread_regs(
   int thread,
   unsigned int *registers
 );
-void rtems_gdb_process_query( 
+void rtems_gdb_process_query(
   char *inbuffer,
   char *outbuffer,
   int   do_threads,

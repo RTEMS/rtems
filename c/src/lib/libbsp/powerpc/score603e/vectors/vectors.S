@@ -1,6 +1,6 @@
 /*  vectors.s	1.1 - 95/12/04
  *
- *  This file contains the assembly code for the PowerPC 
+ *  This file contains the assembly code for the PowerPC
  *  interrupt veneers for RTEMS.
  *
  */
@@ -64,101 +64,101 @@
 
 	PUBLIC_VAR (__vectors)
 SYM (__vectors):
-	
+
   /* Decrementer interrupt */
-	.org    reset_vector - file_base    
-	ba  0x00100  
-	ba  0xfff00100  
-	ba  0xfff00100  
+	.org    reset_vector - file_base
+	ba  0x00100
 	ba  0xfff00100
-	  
-	.org    mach_vector - file_base  
+	ba  0xfff00100
+	ba  0xfff00100
+
+	.org    mach_vector - file_base
 	ba  0x00200
 	ba  0xfff00200
 	ba  0xfff00200
 	ba  0xfff00200
-	
-	.org    prot_vector - file_base  
+
+	.org    prot_vector - file_base
 	ba  0x00300
 	ba  0xfff00300
 	ba  0xfff00300
 	ba  0xfff00300
-	
-	.org    isi_vector - file_base  
+
+	.org    isi_vector - file_base
 	ba  0x00400
 	ba  0xfff00400
 	ba  0xfff00400
 	ba  0xfff00400
-		
-	.org    ext_vector - file_base    
-	ba  0x0500  
-	ba  0xfff00500  
-	ba  0xfff00500  
-	ba  0xfff00500  
-	
-	.org    align_vector - file_base    
-	ba  0x00600  
-	ba  0xfff00600  
-	ba  0xfff00600  
-	ba  0xfff00600  
-	
-	.org    prog_vector - file_base    
-	ba  0x00700  
-	ba  0xfff00700  
-	ba  0xfff00700  
-	ba  0xfff00700  
 
-	.org    float_vector - file_base  
+	.org    ext_vector - file_base
+	ba  0x0500
+	ba  0xfff00500
+	ba  0xfff00500
+	ba  0xfff00500
+
+	.org    align_vector - file_base
+	ba  0x00600
+	ba  0xfff00600
+	ba  0xfff00600
+	ba  0xfff00600
+
+	.org    prog_vector - file_base
+	ba  0x00700
+	ba  0xfff00700
+	ba  0xfff00700
+	ba  0xfff00700
+
+	.org    float_vector - file_base
 	ba  0x00800
 	ba  0xfff00800
 	ba  0xfff00800
 	ba  0xfff00800
 
-	.org    dec_vector - file_base  
+	.org    dec_vector - file_base
 	rfi
 	ba  0xfff00900
 	ba  0xfff00900
 	ba  0xfff00900
-	
-	.org    sys_vector - file_base    
-	ba  0x0c00  
-	ba  0xfff00C00  
-	ba  0xfff00C00  
-	ba  0xfff00C00  
-		
-	.org    trace_vector - file_base  
-	ba  0x0d00  
-	ba  0xfff00d00  
-	ba  0xfff00d00  
-	ba  0xfff00d00  
-	
-	.org    itm_vector - file_base    
-	ba  0x01000  
-	ba  0xfff01000  
-	ba  0xfff01000  
-	ba  0xfff01000  
-	
-	.org    dltm_vector - file_base    
-	ba  0x01100  
-	ba  0xfff01100  
-	ba  0xfff01100  
-	ba  0xfff01100  
-	
-	.org    dstm_vector - file_base    
-	ba  0x1200  
-	ba  0xfff01200  
-	ba  0xfff01200  
-	ba  0xfff01200  
-	
-	.org    addr_vector - file_base    
-	ba  0x1300  
-	ba  0xfff01300  
-	ba  0xfff01300  
-	ba  0xfff01300  
-	
-	.org    sysmgmt_vector - file_base    
-	ba  0x1400  
-	ba  0xfff01400  
-	ba  0xfff01400  
-	ba  0xfff01400  
+
+	.org    sys_vector - file_base
+	ba  0x0c00
+	ba  0xfff00C00
+	ba  0xfff00C00
+	ba  0xfff00C00
+
+	.org    trace_vector - file_base
+	ba  0x0d00
+	ba  0xfff00d00
+	ba  0xfff00d00
+	ba  0xfff00d00
+
+	.org    itm_vector - file_base
+	ba  0x01000
+	ba  0xfff01000
+	ba  0xfff01000
+	ba  0xfff01000
+
+	.org    dltm_vector - file_base
+	ba  0x01100
+	ba  0xfff01100
+	ba  0xfff01100
+	ba  0xfff01100
+
+	.org    dstm_vector - file_base
+	ba  0x1200
+	ba  0xfff01200
+	ba  0xfff01200
+	ba  0xfff01200
+
+	.org    addr_vector - file_base
+	ba  0x1300
+	ba  0xfff01300
+	ba  0xfff01300
+	ba  0xfff01300
+
+	.org    sysmgmt_vector - file_base
+	ba  0x1400
+	ba  0xfff01400
+	ba  0xfff01400
+	ba  0xfff01400
 #endif

@@ -45,7 +45,7 @@ static void bsp_return_to_monitor_trap( void )
   m68k_set_vbr(0xFFE00000);         /* restore 167Bug vectors */
   asm volatile( "trap   #15\n\t"    /* trap to 167Bug */
                 ".short 0x63" );    /* return to 167Bug (.RETURN) */
-  
+
   /* restart program */
   start_addr = start;
   asm volatile( "jmp %0@" : "=a" (start_addr) : "0" (start_addr) );
@@ -61,7 +61,7 @@ static void bsp_return_to_monitor_trap( void )
  *  function that makes a 167Bug .RETURN syscall in the trap 13 entry in the
  *  exception vector, and then issues a trap 13 call. It is also possible that
  *  the code was copied from some other OS that does run tasks in user mode.
- *  In any case, it appears to be a bit of paranoia, and could lead to 
+ *  In any case, it appears to be a bit of paranoia, and could lead to
  *  problems if 167Bug is invoked before we get to switch the VBR back to
  *  167Bug because trap 13 is documented as being reserved for the internal
  *  use of the debugger.

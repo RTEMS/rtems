@@ -166,5 +166,5 @@ char *prep_nvram_first_var(void);
 char *prep_nvram_next_var(char *name);
 
 #endif /* ASM */
-	  
+
 #endif /* _PPC_NVRAM_H */

@@ -58,13 +58,13 @@ struct enet_statistics{
 
 
 enum commands {
-  CmdNOp           = 0, 
-  CmdSASetup       = 1, 
-  CmdConfigure     = 2, 
+  CmdNOp           = 0,
+  CmdSASetup       = 1,
+  CmdConfigure     = 2,
   CmdMulticastList = 3,
-  CmdTx            = 4, 
-  CmdTDR           = 5, 
-  CmdDump          = 6, 
+  CmdTx            = 4,
+  CmdTDR           = 5,
+  CmdDump          = 6,
   CmdDiagnose      = 7
 };
 
@@ -142,7 +142,7 @@ struct i596_tbd {
     unsigned short size;
     unsigned short pad;
     struct i596_tbd *next;
-    char *data; 
+    char *data;
 };
 
 /*
@@ -153,7 +153,7 @@ struct i596_rbd {
     unsigned short count;
     unsigned short offset;
     struct i596_rbd *next;
-    char           *data; 
+    char           *data;
     unsigned short size;
     unsigned short pad;
 };
@@ -176,10 +176,10 @@ struct i596_rfd {
     volatile unsigned short stat;
     volatile unsigned short cmd;
     struct i596_rfd *next;
-    struct i596_rbd *pRbd; 
+    struct i596_rbd *pRbd;
     unsigned short count;
     unsigned short size;
-    char data [1532 ];    
+    char data [1532 ];
 } ;
 
 
@@ -228,7 +228,7 @@ struct i596_scb {
 };
 
 
-/* 
+/*
  * Intermediate System Control Block
  */
 struct i596_iscp {
@@ -253,7 +253,7 @@ struct uti596_softc {
   struct i596_set_add           set_add;
   struct i596_configure         set_conf;
   struct i596_tdr               tdr;
-  struct i596_nop               nop;               
+  struct i596_nop               nop;
   unsigned long                 stat;
   struct tx_cmd                *pTxCmd;
   struct i596_tbd              *pTbd;

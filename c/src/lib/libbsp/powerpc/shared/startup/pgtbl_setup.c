@@ -61,7 +61,7 @@ unsigned		ldPtSize,tmp;
 						0, /* WIMG */
 						TRIV121_PP_RO_PAGE);
 	if (TRIV121_MAP_SUCCESS != tmp) {
-		printk("Unable to map page index %i; reverting to BAT0\n", 
+		printk("Unable to map page index %i; reverting to BAT0\n",
 				tmp);
 		pt = 0;
 	} else {
@@ -74,7 +74,7 @@ unsigned		ldPtSize,tmp;
 						0, /* WIMG */
 						TRIV121_PP_RW_PAGE);
 		if (TRIV121_MAP_SUCCESS != tmp) {
-			printk("Unable to map page index %i; reverting to BAT0\n", 
+			printk("Unable to map page index %i; reverting to BAT0\n",
 					tmp);
 			pt = 0;
 		}

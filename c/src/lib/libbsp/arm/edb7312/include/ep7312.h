@@ -2,7 +2,7 @@
  * Cirrus EP7312 register declarations
  *
  * Copyright (c) 2002 by Charlie Steader <charlies@poliac.com>
- * 
+ *
  * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
  *
  *  The license and distribution terms for this file may be

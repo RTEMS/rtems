@@ -11,11 +11,11 @@
 	.globl _start
 	.globl _romFaultStart
 	.globl _led_array
-	.text   
+	.text
 start:  /* JRS */
 _start:  /* JRS */
-SYM(romStart ): 
-SYM(_romStart ): 
+SYM(romStart ):
+SYM(_romStart ):
           # This line is to make compiler happy.
 	mov	0, g14
         ldconst 0x120f,r10   # BIST register
@@ -50,8 +50,8 @@ SYM(_romStart ):
 	  # This point will never be reached.
 */
 
-SYM(_pmc_start) :  
-SYM(pmc_start) :  
+SYM(_pmc_start) :
+SYM(pmc_start) :
         ldconst 0x120f,r10   # BIST register
 	ldconst 0x4,r3
 	stob	r3,0(r10)	//# 4->LED
@@ -62,7 +62,7 @@ SYM(pmc_start) :
 */
 
 	ldconst	_svrStackPtr, fp
-	lda	16*4(fp), sp 
+	lda	16*4(fp), sp
 	ldconst 0x5,r3
 	stob	r3,0(r10)	//# 5->LED
 
@@ -78,8 +78,8 @@ SYM(pmc_start) :
 /*	  # if _romMain ever returns ...	*/
 	b	_romExit
 
-SYM(romFaultStart) :  
-SYM(_romFaultStart) :  
+SYM(romFaultStart) :
+SYM(_romFaultStart) :
 
 	mov	0, g14
 
@@ -90,7 +90,7 @@ SYM(_romFaultStart) :
 	  # _svrStackPtr is defined directly in rom.ld.
 */
 	ldconst	_svrStackPtr, fp
-	lda	16*4(fp), sp 
+	lda	16*4(fp), sp
 /*
 	  # Set processor priority to zero.
 */
@@ -100,7 +100,7 @@ SYM(_romFaultStart) :
 //	  # Now to real code
 // Fix this up	callx	_romFaultMain
 	callx	_rx_boot_card
-//	  # if _romMain ever returns ...	
+//	  # if _romMain ever returns ...
 	b	_romExit
 
 _romExit :
@@ -146,7 +146,7 @@ SYM(led_array):
 	.globl _bssStart_1
 	.globl _bssEnd_1
 	.globl _intStackPtr
-	
+
 _faultStart:
 _faultEnd:
 _faultCheckSum:

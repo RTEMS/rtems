@@ -7,9 +7,9 @@
  *              IMD Ingenieurbuero fuer Microcomputertechnik
  *
  *  COPYRIGHT (c) 1998 by IMD
- * 
+ *
  *  Changes from IMD are covered by the original distributions terms.
- *  This file has been derived from the papyrus BSP:	
+ *  This file has been derived from the papyrus BSP:
  *
  *  This file contains the entry veneer for RTEMS programs
  *  downloaded to Papyrus.
@@ -31,8 +31,8 @@
  *
  *  $Id$
  *
- *  derived from "helas403/dlentry.S":	
- *  Id: dlentry.S,v 1.2 2000/08/02 16:30:57 joel Exp 
+ *  derived from "helas403/dlentry.S":
+ *  Id: dlentry.S,v 1.2 2000/08/02 16:30:57 joel Exp
  */
 
 #include <rtems/asm.h>
@@ -52,7 +52,7 @@
  *    .text
  *    .data
  *    .bss
- * see linker command file for section placement	
+ * see linker command file for section placement
  *
  *  The initial stack is set to stack.end
  *
@@ -63,7 +63,7 @@
  *  GDB likes to have debugging information for the entry veneer.
  *  Here was some DWARF information. IMD removed it, because we
  *  could not check, whether it was still correct. Sorry.
-	
+
  */
 
 #if PPC_ASM == PPC_ASM_ELF
@@ -75,20 +75,20 @@
 	PUBLIC_VAR (download_entry)
 SYM(download_entry):
 	bl	.startup
-base_addr:	
+base_addr:
 
 /*---------------------------------------------------------------------------
  * Parameters from linker
  *--------------------------------------------------------------------------*/
-toc_pointer:	
+toc_pointer:
 #if PPC_ASM == PPC_ASM_ELF
 	.long	s.got
 #else
 	.long	TOC[tc0]
 #endif
-bss_length:	
+bss_length:
 	.long	bss.size
-bss_addr:	
+bss_addr:
 	.long	bss.start
 stack_top:
 	.long	stack.end
@@ -105,7 +105,7 @@ stack_top:
 	.extern SYM(__vectors)
 
 	lis	r2,__vectors@h          /* set EVPR exc. vector prefix */
-	mtspr	evpr,r2	
+	mtspr	evpr,r2
 
         /*-------------------------------------------------------------------
          * C_setup.

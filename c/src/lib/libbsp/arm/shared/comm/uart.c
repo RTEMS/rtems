@@ -33,10 +33,10 @@ struct uart_data
 
 static struct uart_data uart_data[2];
 
-/* 
+/*
  * Macros to read/wirte register of uart, if configuration is
  * different just rewrite these macros
- */ 
+ */
 
 static inline unsigned char
 uread(int uart, unsigned int reg)
@@ -44,11 +44,11 @@ uread(int uart, unsigned int reg)
   register unsigned char val;
 
   val = Regs[reg];
-  
+
   return val;
 }
 
-static inline void      
+static inline void
 uwrite(int uart, int reg, unsigned int val)
 {
 
@@ -81,13 +81,13 @@ uartError(int uart)
 inline void uartError(int uart)
 {
   unsigned char uartStatus;
-  
+
   uartStatus = uread(uart, LSR);
   uartStatus = uread(uart, RBR);
 }
 #endif
 
-/* 
+/*
  * Uart initialization, it is hardcoded to 8 bit, no parity,
  * one stop bit, FIFO, things to be changed
  * are baud rate and nad hw flow control,
@@ -97,10 +97,10 @@ void
 BSP_uart_init(int uart, int baud, int hwFlow)
 {
   unsigned char tmp;
-  
+
   /* Sanity check */
   assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
-  
+
   switch(baud)
     {
     case 50:
@@ -121,20 +121,20 @@ BSP_uart_init(int uart, int baud, int hwFlow)
       assert(0);
       return;
     }
-  
+
   /* Enable UART block */
   uwrite(uart, CNT, UART_ENABLE | PAD_ENABLE);
 
   /* Set DLAB bit to 1 */
   uwrite(uart, LCR, DLAB);
-  
+
   /* Set baud rate */
-  uwrite(uart, DLL,  (BSPBaseBaud/baud) & 0xff); 
-  uwrite(uart, DLM,  ((BSPBaseBaud/baud) >> 8) & 0xff); 
+  uwrite(uart, DLL,  (BSPBaseBaud/baud) & 0xff);
+  uwrite(uart, DLM,  ((BSPBaseBaud/baud) >> 8) & 0xff);
 
   /* 8-bit, no parity , 1 stop */
   uwrite(uart, LCR, CHR_8_BITS);
-  
+
   /* Enable FIFO */
   uwrite(uart, FCR, FIFO_EN | XMIT_RESET | RCV_RESET | RECEIVE_FIFO_TRIGGER12);
 
@@ -151,7 +151,7 @@ BSP_uart_init(int uart, int baud, int hwFlow)
   return;
 }
 
-/* 
+/*
  * Set baud
  */
 void
@@ -161,10 +161,10 @@ BSP_uart_set_baud(int uart, int baud)
 
   /* Sanity check */
   assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
-  
-  /* 
+
+  /*
    * This function may be called whenever TERMIOS parameters
-   * are changed, so we have to make sure that baud change is 
+   * are changed, so we have to make sure that baud change is
    * indeed required
    */
 
@@ -178,14 +178,14 @@ BSP_uart_set_baud(int uart, int baud)
   BSP_uart_init(uart, baud, uart_data[uart].hwFlow);
 
   uwrite(uart, IER, ier);
-  
+
   return;
 }
 
 /*
- * Enable/disable interrupts 
+ * Enable/disable interrupts
  */
-void 
+void
 BSP_uart_intr_ctrl(int uart, int cmd)
 {
 
@@ -218,7 +218,7 @@ BSP_uart_intr_ctrl(int uart, int cmd)
       assert(0);
       break;
     }
- 
+
   return;
 }
 
@@ -227,12 +227,12 @@ BSP_uart_intr_ctrl(int uart, int cmd)
  * Status function, -1 if error
  * detected, 0 if no received chars available,
  * 1 if received char available, 2 if break
- * is detected, it will eat break and error 
- * chars. It ignores overruns - we cannot do 
+ * is detected, it will eat break and error
+ * chars. It ignores overruns - we cannot do
  * anything about - it execpt count statistics
  * and we are not counting it.
  */
-int 
+int
 BSP_uart_polled_status(int uart)
 {
   unsigned char val;
@@ -250,7 +250,7 @@ BSP_uart_polled_status(int uart)
 
   if((val & (DR | OE | FE)) ==  1)
     {
-      /* No error, character present */ 
+      /* No error, character present */
       return BSP_UART_STATUS_CHAR;
     }
 
@@ -260,12 +260,12 @@ BSP_uart_polled_status(int uart)
       return BSP_UART_STATUS_NOCHAR;
     }
 
-  /* 
+  /*
    * Framing or parity error
    * eat character
    */
   uread(uart, RBR);
- 
+
   return BSP_UART_STATUS_ERROR;
 }
 
@@ -273,24 +273,24 @@ BSP_uart_polled_status(int uart)
 /*
  * Polled mode write function
  */
-void 
+void
 BSP_uart_polled_write(int uart, int val)
 {
   unsigned char val1;
-  
+
   /* Sanity check */
   assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
-  
+
   for(;;)
     {
-      if((val1=uread(uart, LSR)) & THRE) 
+      if((val1=uread(uart, LSR)) & THRE)
 	{
 	  break;
 	}
     }
 
   uwrite(uart, THR, val & 0xff);
-      
+
   return;
 }
 
@@ -301,16 +301,16 @@ BSP_output_char_via_serial(int val)
   if (val == '\n') BSP_uart_polled_write(BSPConsolePort,'\r');
 }
 
-/* 
+/*
  * Polled mode read function
  */
-int 
+int
 BSP_uart_polled_read(int uart)
 {
   unsigned char val;
 
   assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
-  
+
   for(;;)
     {
       if(uread(uart, LSR) & DR)
@@ -318,13 +318,13 @@ BSP_uart_polled_read(int uart)
 	  break;
 	}
     }
-  
+
   val = uread(uart, RBR);
 
   return (int)(val & 0xff);
 }
 
-unsigned 
+unsigned
 BSP_poll_char_via_serial()
 {
 	return BSP_uart_polled_read(BSPConsolePort);
@@ -346,19 +346,19 @@ static char          termios_tx_hold_com2        = 0;
 static volatile char termios_tx_hold_valid_com2  = 0;
 
 /*
- * Set channel parameters 
+ * Set channel parameters
  */
 void
 BSP_uart_termios_set(int uart, void *ttyp)
 {
   assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
-  
+
   if(uart == BSP_UART_COM1)
     {
       termios_stopped_com1 = 0;
       termios_tx_active_com1      = 0;
       termios_ttyp_com1           = ttyp;
-      termios_tx_hold_com1        = 0; 
+      termios_tx_hold_com1        = 0;
       termios_tx_hold_valid_com1  = 0;
     }
   else
@@ -366,7 +366,7 @@ BSP_uart_termios_set(int uart, void *ttyp)
       termios_stopped_com2 = 0;
       termios_tx_active_com2      = 0;
       termios_ttyp_com2           = ttyp;
-      termios_tx_hold_com2        = 0; 
+      termios_tx_hold_com2        = 0;
       termios_tx_hold_valid_com2  = 0;
     }
 
@@ -384,7 +384,7 @@ BSP_uart_termios_write_com1(int minor, const char *buf, int len)
     }
 
   /* If there TX buffer is busy - something is royally screwed up */
-  assert((uread(BSP_UART_COM1, LSR) & THRE) != 0); 
+  assert((uread(BSP_UART_COM1, LSR) & THRE) != 0);
 
   if(termios_stopped_com1)
     {
@@ -401,7 +401,7 @@ BSP_uart_termios_write_com1(int minor, const char *buf, int len)
   if(!termios_tx_active_com1)
     {
       termios_tx_active_com1 = 1;
-      uwrite(BSP_UART_COM1, IER, 
+      uwrite(BSP_UART_COM1, IER,
 	     (RECEIVE_ENABLE  |
 	      TRANSMIT_ENABLE |
 	      RECEIVER_LINE_ST_ENABLE
@@ -465,7 +465,7 @@ BSP_uart_termios_isr_com1(void)
   for(;;)
     {
       vect = uread(BSP_UART_COM1, IIR) & 0xf;
-      
+
       switch(vect)
 	{
 	case NO_MORE_INTR :
@@ -479,9 +479,9 @@ BSP_uart_termios_isr_com1(void)
 	    }
 	  return;
 	case TRANSMITTER_HODING_REGISTER_EMPTY :
-	  /* 
-	   * TX holding empty: we have to disable these interrupts 
-	   * if there is nothing more to send. 
+	  /*
+	   * TX holding empty: we have to disable these interrupts
+	   * if there is nothing more to send.
 	   */
 
 	  ret = rtems_termios_dequeue_characters(termios_ttyp_com1, 1);
@@ -514,7 +514,7 @@ BSP_uart_termios_isr_com1(void)
 	}
     }
 }
-	  
+
 void
 BSP_uart_termios_isr_com2()
 {
@@ -526,7 +526,7 @@ BSP_uart_termios_isr_com2()
   for(;;)
     {
       vect = uread(BSP_UART_COM2, IIR) & 0xf;
-      
+
       switch(vect)
 	{
 	case NO_MORE_INTR :
@@ -540,8 +540,8 @@ BSP_uart_termios_isr_com2()
 	    }
 	  return;
 	case TRANSMITTER_HODING_REGISTER_EMPTY :
-	  /* 
-	   * TX holding empty: we have to disable these interrupts 
+	  /*
+	   * TX holding empty: we have to disable these interrupts
 	   * if there is nothing more to send.
 	   */
 

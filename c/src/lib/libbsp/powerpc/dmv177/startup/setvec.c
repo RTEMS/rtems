@@ -41,7 +41,7 @@ rtems_isr_entry set_vector(                    /* returns old vector */
   rtems_isr_entry previous_isr;
   rtems_status_code status;
 
-  /* 
+  /*
    * vectors greater than PPC603e_IRQ_LAST are handled by the General purpose
    * interupt handler.
    */

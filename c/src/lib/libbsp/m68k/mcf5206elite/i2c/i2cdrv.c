@@ -32,7 +32,7 @@
 #define I2C_SELECT_BUS(bus)
 #endif
 
-/* 
+/*
  * Few I2C transfers may be posted simultaneously, but MBUS driver is able
  * to process it one-by-one. To serialize transfers, function i2c_transfer
  * put transfer information to the queue and initiate new transfers if MBUS
@@ -40,7 +40,7 @@
  * when current active transfer is finished.
  */
 
-/* 
+/*
  * i2c_qel - I2C transfers queue element; contain information about
  * delayed transfer
  */
@@ -113,7 +113,7 @@ i2cdrv_unload(void)
         mbus_busy = 1;
         rtems_interrupt_enable(level);
         qel = tqueue + tqueue_tail;
-        
+
         I2C_SELECT_BUS(qel->bus);
         if (i2cdrv_bus_clock_div[qel->bus] != i2cdrv_bus_clock_div_current)
         {
@@ -160,17 +160,17 @@ i2c_transfer(i2c_bus_number bus, int nmsg, i2c_message *msg,
 {
     i2c_qel qel;
     rtems_interrupt_level level;
-    
+
     if (bus >= I2C_NUMBER_OF_BUSES)
     {
         return RTEMS_INVALID_NUMBER;
     }
-    
+
     if (msg == NULL)
     {
         return RTEMS_INVALID_ADDRESS;
     }
-    
+
     qel.bus = bus;
     qel.msg = msg;
     qel.nmsg = nmsg;
@@ -204,11 +204,11 @@ i2cdrv_initialize(rtems_device_major_number major,
     tqueue_tail = tqueue_head = 0;
     tqueue_size = 32;
     tqueue = calloc(tqueue_size, sizeof(i2c_qel));
-    
+
     sc = mcfmbus_initialize(&mbus, MBAR);
     if (sc != RTEMS_SUCCESSFUL)
         return sc;
-    
+
     for (i = 0; i < I2C_NUMBER_OF_BUSES; i++)
     {
         sc = i2c_select_clock_rate(i, 4096);
@@ -221,7 +221,7 @@ i2cdrv_initialize(rtems_device_major_number major,
 
 /* i2c_select_clock_rate --
  *     select I2C bus clock rate for specified bus. Some bus controller do not
- *     allow to select arbitrary clock rate; in this case nearest possible 
+ *     allow to select arbitrary clock rate; in this case nearest possible
  *     slower clock rate is selected.
  *
  * PARAMETERS:
@@ -229,7 +229,7 @@ i2cdrv_initialize(rtems_device_major_number major,
  *     bps - data transfer rate for this bytes in bits per second
  *
  * RETURNS:
- *     RTEMS_SUCCESSFUL, if operation performed successfully, 
+ *     RTEMS_SUCCESSFUL, if operation performed successfully,
  *     RTEMS_INVALID_NUMBER, if wrong bus number is specified,
  *     RTEMS_UNSATISFIED, if bus do not support data transfer rate selection
  *     or specified data transfer rate could not be used.
@@ -240,10 +240,10 @@ i2c_select_clock_rate(i2c_bus_number bus, int bps)
     int div;
     if (bus >= I2C_NUMBER_OF_BUSES)
         return RTEMS_INVALID_NUMBER;
-    
+
     if (bps == 0)
         return RTEMS_UNSATISFIED;
-    
+
     div = BSP_SYSTEM_FREQUENCY / bps;
     i2cdrv_bus_clock_div[bus] = div;
     return RTEMS_SUCCESSFUL;

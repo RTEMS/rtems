@@ -1,15 +1,15 @@
 /*  flashentry.s
  *
  *  This file contains the entry code for RTEMS programs starting
- *  directly from Flash. 
+ *  directly from Flash.
  *
  *  Author:	Thomas Doerfler <td@imd.m.isar.de>
  *              IMD Ingenieurbuero fuer Microcomputertechnik
  *
  *  COPYRIGHT (c) 1998 by IMD
- * 
+ *
  *  Changes from IMD are covered by the original distributions terms.
- *  This file has been derived from the papyrus BSP:	
+ *  This file has been derived from the papyrus BSP:
  *
  *  This file contains the entry veneer for RTEMS programs
  *  stored in Papyrus' flash ROM.
@@ -39,7 +39,7 @@
  * Reset_entry.
  *---------------------------------------------------------------------------*/
 #if PPC_ASM == PPC_ASM_ELF
-        .section .reset,"ax",@progbits 
+        .section .reset,"ax",@progbits
 	/* this section MUST be located at absolute address 0xFFFFFFFC
 	   or last word of EPROM */
 #else
@@ -49,7 +49,7 @@
 	ba	flash_entry /* this is the first instruction after reset */
 
 	.previous
-	
+
 /*----------------------------------------------------------------------------
  * ROM Vector area.
  *---------------------------------------------------------------------------*/
@@ -71,23 +71,23 @@ toc_pointer:
 #else
 	.long	TOC[tc0]
 #endif
-text_length:	
+text_length:
 	.long	text.size
 text_addr:
 	.long	text.start
-copy_src:	
+copy_src:
 	.long	copy.src
 copy_length:
 	.long	copy.size
-copy_dest:	
+copy_dest:
 	.long	copy.dest
-bss_length:	
+bss_length:
 	.long	bss.size
-bss_addr:	
+bss_addr:
 	.long	bss.start
 stack_top:
 	.long	stack.end
-	
+
 /*----------------------------------------------------------------------------
  * from Reset_entry.
  *---------------------------------------------------------------------------*/
@@ -99,12 +99,12 @@ stack_top:
 	/* set up bank register BR0 for Flash-EPROM:
          * NOTE: bank size should stay 1MByte, this is standard size
          *       after RESET
-	 * base addr = Fffxxxxx -> 0b11111111........................ 
+	 * base addr = Fffxxxxx -> 0b11111111........................
 	 * bank size = 1 MByte  -> 0b........000..................... (std)
 	 * bank use  = readonly -> 0b...........01...................
-	 * seq. fill = targ frst-> 0b.............0.................. 
+	 * seq. fill = targ frst-> 0b.............0..................
 	 * burst mode= enable   -> 0b..............1.................
-	 * bus width = 8 bit    -> 0b...............00............... 
+	 * bus width = 8 bit    -> 0b...............00...............
 	 * ready pin = disable  -> 0b.................0..............
 	 * first wait= 2 clocks -> 0b..................0010..........
 	 * burst wait= 2 clocks -> 0b......................10........
@@ -130,12 +130,12 @@ stack_top:
 	 * test RAM config 16 MByte (1x4Mx32Bit)
 	 *------------------------------------------------------------------*/
 	/* set up bank register BR7 for DRAM:
-	 * base addr = 000xxxxx -> 0b00000000........................ 
+	 * base addr = 000xxxxx -> 0b00000000........................
 	 * bank size = 16MByte  -> 0b........100.....................
 	 * bank use  = readwrite-> 0b...........11...................
-	 * seq. fill = targ.frst-> 0b.............0.................. 
+	 * seq. fill = targ.frst-> 0b.............0..................
 	 * early RAS = disabled -> 0b..............0.................
-	 * bus width = 32bit    -> 0b...............10............... 
+	 * bus width = 32bit    -> 0b...............10...............
 	 * adr mux   = internal -> 0b.................0..............
 	 * RAS to CAS= 2 clocks -> 0b..................1.............
 	 * Alt. Rfrsh= normal   -> 0b...................0............
@@ -151,7 +151,7 @@ stack_top:
 	 */
 	lis	r2,0x0099
 	ori	r2,r2,0x2AB0
-	mtdcr	br7,r2 /* write to DCR BR7*/	
+	mtdcr	br7,r2 /* write to DCR BR7*/
 
 	lis	r2,0x0000       /* start address = 0x00000000 */
 	lis	r3,0x0100       /* size  16 MB   = 0x01000000 */
@@ -163,13 +163,13 @@ stack_top:
 	 * test RAM config 32 MByte (2x4Mx32Bit)
 	 *------------------------------------------------------------------*/
 	/* set up bank register BR7 like above
-	 * set up bank register BR6 for DRAM:	
-	 * base addr = 010xxxxx -> 0b00010000........................ 
+	 * set up bank register BR6 for DRAM:
+	 * base addr = 010xxxxx -> 0b00010000........................
 	 * bank size = 16MByte  -> 0b........100..................... (for now)
 	 * bank use  = readwrite-> 0b...........11...................
-	 * seq. fill = targ.frst-> 0b.............0.................. 
+	 * seq. fill = targ.frst-> 0b.............0..................
 	 * early RAS = disabled -> 0b..............0.................
-	 * bus width = 32bit    -> 0b...............10............... 
+	 * bus width = 32bit    -> 0b...............10...............
 	 * adr mux   = internal -> 0b.................0..............
 	 * RAS to CAS= 2 clocks -> 0b..................1.............
 	 * Alt. Rfrsh= normal   -> 0b...................0............
@@ -185,29 +185,29 @@ stack_top:
 	 */
 	lis	r2,0x1099
 	ori	r2,r2,0x2AB0
-	mtdcr	br6,r2		/* write to DCR BR6*/	
+	mtdcr	br6,r2		/* write to DCR BR6*/
 
 	lis	r2,0x0100       /* start address = 0x01000000 */
 	lis	r3,0x0100       /* size  16 MB   = 0x01000000 */
 	bl	ramacc		/* test memory accessibility  */
 	cmpi	0,0,r4,0	/* memory ok? else test smaller size */
 	beq	ramcfgok	/* ok, we found configuration... +/
-	
+
 	lis	r2,0x0000	/* disable BR6, config not ok */
-	mtdcr	br6,r2		/* write to DCR BR6*/	
+	mtdcr	br6,r2		/* write to DCR BR6*/
 	b	ramcfgok	/* and finish configuration */
-	
-ramcfgt18:			
+
+ramcfgt18:
 	/*--------------------------------------------------------------------
 	 * test RAM config 8 MByte (1x2Mx32Bit)
 	 *------------------------------------------------------------------*/
 	/* set up bank register BR7 for DRAM:
-	 * base addr = 000xxxxx -> 0b00000000........................ 
+	 * base addr = 000xxxxx -> 0b00000000........................
 	 * bank size =  8MByte  -> 0b........011.....................
 	 * bank use  = readwrite-> 0b...........11...................
-	 * seq. fill = targ.frst-> 0b.............0.................. 
+	 * seq. fill = targ.frst-> 0b.............0..................
 	 * early RAS = disabled -> 0b..............0.................
-	 * bus width = 32bit    -> 0b...............10............... 
+	 * bus width = 32bit    -> 0b...............10...............
 	 * adr mux   = internal -> 0b.................0..............
 	 * RAS to CAS= 2 clocks -> 0b..................1.............
 	 * Alt. Rfrsh= normal   -> 0b...................0............
@@ -223,7 +223,7 @@ ramcfgt18:
 	 */
 	lis	r2,0x0079
 	ori	r2,r2,0x2AB0
-	mtdcr	br7,r2         /* write to DCR BR7           */	
+	mtdcr	br7,r2         /* write to DCR BR7           */
 
 	lis	r2,0x0000       /* start address = 0x00000000 */
 	lis	r3,0x0080       /* size   8 MB   = 0x00800000 */
@@ -235,13 +235,13 @@ ramcfgt18:
 	 * test RAM config 16 MByte (2x2Mx32Bit)
 	 *------------------------------------------------------------------*/
 	/* set up bank register BR7 like above
-	 * set up bank register BR6 for DRAM:	
-	 * base addr = 008xxxxx -> 0b00001000........................ 
+	 * set up bank register BR6 for DRAM:
+	 * base addr = 008xxxxx -> 0b00001000........................
 	 * bank size = 08MByte  -> 0b........011..................... (for now)
 	 * bank use  = readwrite-> 0b...........11...................
-	 * seq. fill = targ.frst-> 0b.............0.................. 
+	 * seq. fill = targ.frst-> 0b.............0..................
 	 * early RAS = disabled -> 0b..............0.................
-	 * bus width = 32bit    -> 0b...............10............... 
+	 * bus width = 32bit    -> 0b...............10...............
 	 * adr mux   = internal -> 0b.................0..............
 	 * RAS to CAS= 2 clocks -> 0b..................1.............
 	 * Alt. Rfrsh= normal   -> 0b...................0............
@@ -257,29 +257,29 @@ ramcfgt18:
 	 */
 	lis	r2,0x0879
 	ori	r2,r2,0x2AB0
-	mtdcr	br6,r2		/* write to DCR BR6*/	
+	mtdcr	br6,r2		/* write to DCR BR6*/
 
 	lis	r2,0x0080       /* start address = 0x00800000 */
 	lis	r3,0x0080       /* size   8 MB   = 0x00800000 */
 	bl	ramacc		/* test memory accessibility  */
 	cmpi	0,0,r4,0	/* memory ok? else test smaller size */
 	beq	ramcfgok	/* ok, we found configuration... +/
-	
+
 	lis	r2,0x0000	/* disable BR6, config not ok */
-	mtdcr	br6,r2		/* write to DCR BR6*/	
+	mtdcr	br6,r2		/* write to DCR BR6*/
 	b	ramcfgok	/* and finish configuration */
-	
-ramcfgt14:			
+
+ramcfgt14:
 	/*--------------------------------------------------------------------
 	 * test RAM config 4 MByte (1x1Mx32Bit)
 	 *------------------------------------------------------------------*/
 	/* set up bank register BR7 for DRAM:
-	 * base addr = 000xxxxx -> 0b00000000........................ 
+	 * base addr = 000xxxxx -> 0b00000000........................
 	 * bank size =  4MByte  -> 0b........010.....................
 	 * bank use  = readwrite-> 0b...........11...................
-	 * seq. fill = targ.frst-> 0b.............0.................. 
+	 * seq. fill = targ.frst-> 0b.............0..................
 	 * early RAS = disabled -> 0b..............0.................
-	 * bus width = 32bit    -> 0b...............10............... 
+	 * bus width = 32bit    -> 0b...............10...............
 	 * adr mux   = internal -> 0b.................0..............
 	 * RAS to CAS= 2 clocks -> 0b..................1.............
 	 * Alt. Rfrsh= normal   -> 0b...................0............
@@ -299,19 +299,19 @@ ramcfgt14:
          */
 	lis	r2,0x0059
 	ori	r2,r2,0x2AB0
-	mtdcr	br7,r2 /* write to DCR BR7*/	
+	mtdcr	br7,r2 /* write to DCR BR7*/
 
 	/*--------------------------------------------------------------------
 	 * test RAM config  8 MByte (2x1Mx32Bit)
 	 *------------------------------------------------------------------*/
 	/* set up bank register BR7 like above
-	 * set up bank register BR6 for DRAM:	
-	 * base addr = 004xxxxx -> 0b00000100........................ 
+	 * set up bank register BR6 for DRAM:
+	 * base addr = 004xxxxx -> 0b00000100........................
 	 * bank size =  4MByte  -> 0b........010..................... (for now)
 	 * bank use  = readwrite-> 0b...........11...................
-	 * seq. fill = targ.frst-> 0b.............0.................. 
+	 * seq. fill = targ.frst-> 0b.............0..................
 	 * early RAS = disabled -> 0b..............0.................
-	 * bus width = 32bit    -> 0b...............10............... 
+	 * bus width = 32bit    -> 0b...............10...............
 	 * adr mux   = internal -> 0b.................0..............
 	 * RAS to CAS= 2 clocks -> 0b..................1.............
 	 * Alt. Rfrsh= normal   -> 0b...................0............
@@ -327,19 +327,19 @@ ramcfgt14:
 	 */
 	lis	r2,0x0459
 	ori	r2,r2,0x2AB0
-	mtdcr	br6,r2		/* write to DCR BR6*/	
+	mtdcr	br6,r2		/* write to DCR BR6*/
 
 	lis	r2,0x0040       /* start address = 0x00400000 */
 	lis	r3,0x0040       /* size   4 MB   = 0x00400000 */
 	bl	ramacc		/* test memory accessibility  */
 	cmpi	0,0,r4,0	/* memory ok? else test smaller size */
 	beq	ramcfgok	/* ok, we found configuration... +/
-	
+
 	lis	r2,0x0000	/* disable BR6, config not ok */
-	mtdcr	br6,r2		/* write to DCR BR6*/	
+	mtdcr	br6,r2		/* write to DCR BR6*/
 	b	ramcfgok	/* and finish configuration */
 
-ramcfgok:	
+ramcfgok:
         /*--------------------------------------------------------------------
          * init the DRAM where STACK+ DATA+ BBS will be placed.  If this is OK
          * we will return here.
@@ -350,24 +350,24 @@ ramcfgok:
 	addi	r2,0,PPC_I_CACHE/PPC_CACHE_ALIGNMENT
 	mtctr	r2		/* count the loops needed... */
 	xor	r2,r2,r2	/* start at adr zero */
-icinvlp:	
+icinvlp:
 	iccci	0,r2
 	addi	r2,r2,PPC_CACHE_ALIGNMENT
 	bdnz	icinvlp
-	
+
 	addi	r2,r0,PPC_D_CACHE/PPC_CACHE_ALIGNMENT
 	mtctr	r2		/* count the loops needed... */
 	xor	r2,r2,r2	/* start at adr 0 */
-dcinvlp:		
+dcinvlp:
 	dccci	0,r2
 	addi	r2,r2,PPC_CACHE_ALIGNMENT
 	bdnz	dcinvlp
         /*--------------------------------------------------------------------
          * Enable two 128MB cachable regions.
 	 * FEPROM is cachable    at 0xFFF00000..0xFFFFFFFF
-	 * DRAM   is cachable    at 0x00000000..0x00FFFFFF	
+	 * DRAM   is cachable    at 0x00000000..0x00FFFFFF
 	 * FEPROM is noncachable at 0x7FF00000..0x7FFFFFFF
-	 * DRAM   is noncachable at 0x80000000..0x80FFFFFF	
+	 * DRAM   is noncachable at 0x80000000..0x80FFFFFF
          *-------------------------------------------------------------------*/
         addis   r2,r0,0x8000
         addi    r2,r2,0x0001
@@ -386,17 +386,17 @@ dcinvlp:
         lis     r2,0x0000               /* do not allow critical IRQ */
         ori     r2,r2,0x0000
         mtdcr   exier, r2               /* disable all external IRQs */
-	
+
         addi    r2,r0,-1                /* r2 = 0xffffffff               */
         mtdcr   exisr, r2               /* clear all pendingdisable IRQs */
-	
+
         /*--------------------------------------------------------------------
          * C_setup.
          *-------------------------------------------------------------------*/
 
         lwz     r2,toc_pointer-base_addr(r1)       /* set r2 to toc */
         lwz     r1,stack_top-base_addr(r1)         /* set r1 to stack_top */
-	
+
         addi    r1,r1,-56                /* start stack at data_addr - 56 */
         addi    r3,r0,0x0                /* clear r3 */
 	stw	r3, 0(r1)		 /* Clear stack chain */
@@ -452,7 +452,7 @@ ramacc:
 	xor	r4,r4,r4		/* r4 = 0                    */
 	stw	r4,0(r2)		/* init ram at start address */
 	addi	r4,r0,0x04              /* set start shift           */
-ramaccf1:	
+ramaccf1:
 	cmp     0,0,r4,r3               /* compare with length       */
 	bge     ramaccfx		/* r4 >= r3? then finished   */
 	add	r5,r4,r2		/* get next address to fill  */
@@ -463,7 +463,7 @@ ramaccf1:
 ramaccfx:
 	lwz	r4,0(r2)		/* get memory at start adr  */
 	blr
-	
+
 
 #if PPC_ABI == PPC_ABI_POWEROPEN
 	DESCRIPTOR (startup)

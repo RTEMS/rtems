@@ -20,7 +20,7 @@ __bsp_board_init:
 
         set     SYM(LEON_REG), %l0  	! %l0 = base address of peripherals
 	ld	[%l0+LEON_REG_CACHECTRL_OFFSET], %l1 ! Check if LEON has been initialised
-	andcc	%l1, 3, %g0		
+	andcc	%l1, 3, %g0
 	bne	2f
 	nop
 

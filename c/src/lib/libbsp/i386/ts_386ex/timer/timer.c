@@ -33,7 +33,7 @@ rtems_boolean Timer_driver_Find_average_overhead;
 
 extern void timerisr();
 
-/* 
+/*
  * Number of us per timer interrupt. Note: 1 us == 1 tick.
  */
 
@@ -87,7 +87,7 @@ static rtems_raw_irq_connect_data timer_raw_irq_data = {
 
 static rtems_raw_irq_connect_data old_raw_irq_data = {
   BSP_PERIODIC_TIMER + BSP_IRQ_VECTOR_BASE,
-};  
+};
 
 void Timer_exit()
 {
@@ -143,7 +143,7 @@ int Read_timer(void)
   /* latch the count */
   outport_byte (TIMER_MODE, TIMER_SEL0|TIMER_LATCH );
 
-  /* read the count */ 
+  /* read the count */
   inport_byte (TIMER_CNTR0, lsb );
   inport_byte (TIMER_CNTR0, msb );
 

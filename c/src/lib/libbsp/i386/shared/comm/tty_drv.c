@@ -7,7 +7,7 @@
  * as /dev/ttyS1 for COM1 and /dev/ttyS2 as COM2. If one of the ports
  * is used as the console, this driver would fail to initialize.
  *
- * This code was based on the console driver. It is based on the 
+ * This code was based on the console driver. It is based on the
  * current termios framework. This is just a shell around the
  * termios support.
  *
@@ -18,6 +18,11 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.5  2001/08/16 20:52:05  joel
+ * 2001-08-16	Mike Siers <mikes@poliac.com>
+ *
+ * 	* comm/tty_drv.c, comm/uart.c: Correct some minor cut and paste bugs.
+ *
  * Revision 1.4  2001/07/03 17:56:32  joel
  * 2001-07-03	Mike Seirs <mike@poliac.com>
  *
@@ -88,8 +93,8 @@ extern void rtems_set_waiting_id_comx( int port,  rtems_id id, rtems_event_set e
 /*
  * Interrupt structure for tty1
  */
-static rtems_irq_connect_data tty1_isr_data = 
-{ 
+static rtems_irq_connect_data tty1_isr_data =
+{
   BSP_UART_COM1_IRQ,
   BSP_uart_termios_isr_com1,
   isr_on,
@@ -99,8 +104,8 @@ static rtems_irq_connect_data tty1_isr_data =
 /*
  * Interrupt structure for tty2
  */
-static rtems_irq_connect_data tty2_isr_data = 
-{ 
+static rtems_irq_connect_data tty2_isr_data =
+{
   BSP_UART_COM2_IRQ,
   BSP_uart_termios_isr_com2,
   isr_on,
@@ -112,7 +117,7 @@ isr_on(const rtems_irq_connect_data *unused)
 {
   return;
 }
-						   
+
 static void
 isr_off(const rtems_irq_connect_data *unused)
 {
@@ -153,7 +158,7 @@ tty1_initialize(rtems_device_major_number major,
    * Set up TERMIOS
    */
   rtems_termios_initialize();
-  
+
   /*
    * Do device-specific initialization
    */
@@ -195,7 +200,7 @@ tty1_open(rtems_device_major_number major,
 {
   rtems_status_code  status;
 #ifndef USE_TASK_DRIVEN
-  static rtems_termios_callbacks cb = 
+  static rtems_termios_callbacks cb =
   {
     NULL,                        /* firstOpen */
     tty1_last_close,             /* lastClose */
@@ -207,7 +212,7 @@ tty1_open(rtems_device_major_number major,
     TERMIOS_IRQ_DRIVEN           /* outputUsesInterrupts */
   };
 #else
-  static rtems_termios_callbacks cb = 
+  static rtems_termios_callbacks cb =
   {
     NULL,                        /* firstOpen */
     NULL,                        /* lastClose */
@@ -230,7 +235,7 @@ tty1_open(rtems_device_major_number major,
   /*
    * Pass data area info down to driver
    */
-  BSP_uart_termios_set( BSP_UART_COM1, 
+  BSP_uart_termios_set( BSP_UART_COM1,
                        ((rtems_libio_open_close_args_t *)arg)->iop->data1 );
   /* Enable interrupts  on channel */
   BSP_uart_intr_ctrl( BSP_UART_COM1, BSP_UART_INTR_CTRL_TERMIOS);
@@ -247,10 +252,10 @@ tty_close(rtems_device_major_number major,
 {
 
   return (rtems_termios_close (arg));
-  
+
 } /* tty_close */
 
- 
+
 /*
  * TTY device driver READ entry point.
  * Read characters from the tty device.
@@ -262,7 +267,7 @@ tty_read(rtems_device_major_number major,
 {
   return rtems_termios_read (arg);
 } /* tty_read */
- 
+
 
 /*
  * TTY device driver WRITE entry point.
@@ -274,7 +279,7 @@ tty_write(rtems_device_major_number major,
               void                    * arg)
 {
     return rtems_termios_write (arg);
- 
+
 } /* tty_write */
 
 /*
@@ -282,9 +287,9 @@ tty_write(rtems_device_major_number major,
  * routine to handle both devices.
  */
 static rtems_device_driver tty_control( int port, void  *arg )
-{ 
+{
 	rtems_libio_ioctl_args_t *args = arg;
-	switch( args->command ) 
+	switch( args->command )
 	{
 	   default:
       return rtems_termios_ioctl (arg);
@@ -299,12 +304,12 @@ static rtems_device_driver tty_control( int port, void  *arg )
 /*
  * Handle ioctl request for ttyS1.
  */
-rtems_device_driver 
+rtems_device_driver
 tty1_control(rtems_device_major_number major,
 		rtems_device_minor_number minor,
 		void                      * arg
 )
-{ 
+{
   return tty_control( BSP_UART_COM1, arg );
 }
 
@@ -314,45 +319,45 @@ conSetAttr(int port, int minor, const struct termios *t)
 {
   unsigned long baud, databits, parity, stopbits;
 
-  switch (t->c_cflag & CBAUD) 
+  switch (t->c_cflag & CBAUD)
     {
-    case B50:	
+    case B50:
       baud = 50;
       break;
-    case B75:	
-      baud = 75;	
+    case B75:
+      baud = 75;
       break;
-    case B110:	
-      baud = 110;	
+    case B110:
+      baud = 110;
       break;
-    case B134:	
-      baud = 134;	
+    case B134:
+      baud = 134;
       break;
-    case B150:	
-      baud = 150;	
+    case B150:
+      baud = 150;
       break;
     case B200:
-      baud = 200;	
+      baud = 200;
       break;
-    case B300:	
+    case B300:
       baud = 300;
       break;
-    case B600:	
-      baud = 600;	
+    case B600:
+      baud = 600;
       break;
-    case B1200:	
+    case B1200:
       baud = 1200;
       break;
-    case B1800:	
-      baud = 1800;	
+    case B1800:
+      baud = 1800;
       break;
-    case B2400:	
+    case B2400:
       baud = 2400;
       break;
-    case B4800:	
+    case B4800:
       baud = 4800;
       break;
-    case B9600:	
+    case B9600:
       baud = 9600;
       break;
     case B19200:
@@ -361,7 +366,7 @@ conSetAttr(int port, int minor, const struct termios *t)
     case B38400:
       baud = 38400;
       break;
-    case B57600:	
+    case B57600:
       baud = 57600;
       break;
     case B115200:
@@ -387,7 +392,7 @@ conSetAttr(int port, int minor, const struct termios *t)
     /* No parity */
     parity = 0;
   }
-  
+
   switch (t->c_cflag & CSIZE) {
     case CS5: databits = CHR_5_BITS; break;
     case CS6: databits = CHR_6_BITS; break;
@@ -443,7 +448,7 @@ tty2_initialize(rtems_device_major_number major,
    * Set up TERMIOS
    */
   rtems_termios_initialize();
-  
+
   /*
    * Do device-specific initialization
    */
@@ -485,7 +490,7 @@ tty2_open(rtems_device_major_number major,
 {
   rtems_status_code              status;
 #ifndef USE_TASK_DRIVEN
-  static rtems_termios_callbacks cb = 
+  static rtems_termios_callbacks cb =
   {
     NULL,                        /* firstOpen */
     tty2_last_close,             /* lastClose */
@@ -497,7 +502,7 @@ tty2_open(rtems_device_major_number major,
     TERMIOS_IRQ_DRIVEN           /* outputUsesInterrupts */
   };
 #else
-  static rtems_termios_callbacks cb = 
+  static rtems_termios_callbacks cb =
   {
     NULL,                        /* firstOpen */
     NULL,                        /* lastClose */
@@ -520,7 +525,7 @@ tty2_open(rtems_device_major_number major,
   /*
    * Pass data area info down to driver
    */
-  BSP_uart_termios_set( BSP_UART_COM2, 
+  BSP_uart_termios_set( BSP_UART_COM2,
 			 ((rtems_libio_open_close_args_t *)arg)->iop->data1 );
    /* Enable interrupts  on channel */
   BSP_uart_intr_ctrl( BSP_UART_COM2, BSP_UART_INTR_CTRL_TERMIOS);
@@ -530,12 +535,12 @@ tty2_open(rtems_device_major_number major,
 /*
  * Handle ioctl request for TTY2
  */
-rtems_device_driver 
+rtems_device_driver
 tty2_control(rtems_device_major_number major,
 		rtems_device_minor_number minor,
 		void                      * arg
 )
-{ 
+{
    return tty_control( BSP_UART_COM2, arg );
 }
 

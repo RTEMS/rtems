@@ -46,9 +46,9 @@ void Timer_initialize()
   /* write countdown preload value */
   pcc->timer1_control = 0x00; /* load preload value */
   pcc->timer1_control = 0x07; /* clear T1 overflow counter, enable counter */
-  pcc->timer1_int_control = TIMER_INT_LEVEL|0x08; 
+  pcc->timer1_int_control = TIMER_INT_LEVEL|0x08;
   /* Enable Timer 1 and set its int. level */
-  
+
 }
 
 #define AVG_OVERHEAD      0  /* No need to start/stop the timer to read

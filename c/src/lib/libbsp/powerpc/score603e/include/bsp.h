@@ -33,7 +33,7 @@ extern "C" {
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS (4)
 #endif
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (12 * 1024)
-  
+
 #ifdef ASM
 /* Definition of where to store registers in alignment handler */
 #define ALIGN_REGS 0x0140
@@ -61,11 +61,11 @@ extern "C" {
 
 #define Score603e_Z8530_Chip1_Baud( _value ) \
   _Score603e_Z8530_Baud( SCORE603E_85C30_1_CLOCK, \
-     SCORE603E_85C30_1_CLOCK_X, _value ) 
+     SCORE603E_85C30_1_CLOCK_X, _value )
 
 #define Score603e_Z8530_Chip0_Baud( _value ) \
   _Score603e_Z8530_Baud( SCORE603E_85C30_0_CLOCK, \
-     SCORE603E_85C30_0_CLOCK_X, _value ) 
+     SCORE603E_85C30_0_CLOCK_X, _value )
 
 #define Initialize_Board_ctrl_register()                         \
   *SCORE603E_BOARD_CTRL_REG = (*SCORE603E_BOARD_CTRL_REG |       \
@@ -119,15 +119,15 @@ extern "C" {
 /*
  *  Device Driver Table Entries
  */
- 
+
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */
- 
+
 
 /*
  *  Information placed in the linkcmds file.
@@ -149,7 +149,7 @@ extern int   end;        /* last address in the program */
 /*
  * How many libio files we want
  */
- 
+
 #define BSP_LIBIO_MAX_FDS       20
 
 /* functions */
@@ -169,13 +169,13 @@ rtems_isr_entry set_vector(                    /* returns old vector */
  */
 rtems_isr bsp_stub_handler(
    rtems_vector_number trap
-); 
+);
 rtems_isr bsp_spurious_handler(
    rtems_vector_number trap
 );
 void bsp_spurious_initialize();
 
-/* 
+/*
  * genvec.c
  */
 rtems_isr_entry  set_EE_vector(
@@ -217,7 +217,7 @@ void set_irq_mask(
 
 uint16_t         get_irq_mask();
 
-void unmask_irq( 
+void unmask_irq(
   uint16_t         irq_idx
 );
 

@@ -23,5 +23,5 @@ void BSP_rtems_irq_mngt_init() {
    * Here is the code to initialize the INT for
    * the specified BSP
    */
-    
+
 }

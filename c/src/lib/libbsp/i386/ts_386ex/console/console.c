@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------+
 | console.c v1.1 - i386ex BSP - 1997/08/07
 +--------------------------------------------------------------------------+
-| This file contains the i386ex console I/O package. It is just a termios 
+| This file contains the i386ex console I/O package. It is just a termios
 | wrapper.
 +--------------------------------------------------------------------------+
 | (C) Copyright 1997 -
@@ -48,7 +48,7 @@
  * Possible value for console input/output :
  *	BSP_UART_COM1
  *	BSP_UART_COM2
- *  BSP_CONSOLE_PORT_CONSOLE is not valid in this BSP.  
+ *  BSP_CONSOLE_PORT_CONSOLE is not valid in this BSP.
  *      All references to either keyboard or video handling have been removed.
  */
 
@@ -67,7 +67,7 @@ static int  isr_is_on(const rtems_irq_connect_data *);
  * Change references to com2 if required.
  */
 
-static rtems_irq_connect_data console_isr_data = 
+static rtems_irq_connect_data console_isr_data =
 { BSP_UART_COM2_IRQ,
   BSP_uart_termios_isr_com2,
   isr_on,
@@ -79,7 +79,7 @@ isr_on(const rtems_irq_connect_data *unused)
 {
   return;
 }
-						   
+
 static void
 isr_off(const rtems_irq_connect_data *unused)
 {
@@ -108,20 +108,20 @@ console_initialize(rtems_device_major_number major,
    * Set up TERMIOS
    */
   rtems_termios_initialize ();
-  
+
   /*
    * Do device-specific initialization
    */
-  
+
   /* 115200-8-N-1, without hardware flow control */
   BSP_uart_init(BSPConsolePort, 115200, CHR_8_BITS, 0, 0, 0);
-  
+
   /* Set interrupt handler */
   if(BSPConsolePort == BSP_UART_COM1)
     {
       console_isr_data.name = BSP_UART_COM1_IRQ;
       console_isr_data.hdl  = BSP_uart_termios_isr_com1;
-      
+
     }
   else
     {
@@ -129,9 +129,9 @@ console_initialize(rtems_device_major_number major,
       console_isr_data.name = BSP_UART_COM2_IRQ;
       console_isr_data.hdl  = BSP_uart_termios_isr_com2;
     }
-  
+
   status = BSP_install_rtems_irq_handler(&console_isr_data);
-  
+
   if (!status){
     printk("Error installing serial console interrupt handler!\n");
     rtems_fatal_error_occurred(status);
@@ -145,7 +145,7 @@ console_initialize(rtems_device_major_number major,
       printk("Error registering console device!\n");
       rtems_fatal_error_occurred (status);
     }
-  
+
   if(BSPConsolePort == BSP_UART_COM1)
     {
       printk("Initialized console on port COM1 115200-8-N-1\n\n");
@@ -175,7 +175,7 @@ console_open(rtems_device_major_number major,
                 void                      *arg)
 {
   rtems_status_code              status;
-  static rtems_termios_callbacks cb = 
+  static rtems_termios_callbacks cb =
   {
     NULL,	              /* firstOpen */
     console_last_close,       /* lastClose */
@@ -203,9 +203,9 @@ console_open(rtems_device_major_number major,
   /*
    * Pass data area info down to driver
    */
-  BSP_uart_termios_set(BSPConsolePort, 
+  BSP_uart_termios_set(BSPConsolePort,
 			 ((rtems_libio_open_close_args_t *)arg)->iop->data1);
-  
+
   /* Enable interrupts  on channel */
   BSP_uart_intr_ctrl(BSPConsolePort, BSP_UART_INTR_CTRL_TERMIOS);
 
@@ -222,10 +222,10 @@ console_close(rtems_device_major_number major,
 {
 
   return (rtems_termios_close (arg));
-  
+
 } /* console_close */
 
- 
+
 /*-------------------------------------------------------------------------+
 | Console device driver READ entry point.
 +--------------------------------------------------------------------------+
@@ -246,7 +246,7 @@ console_read(rtems_device_major_number major,
   return sc;
 
 } /* console_read */
- 
+
 
 /*-------------------------------------------------------------------------+
 | Console device driver WRITE entry point.
@@ -259,20 +259,20 @@ console_write(rtems_device_major_number major,
               void                    * arg)
 {
         return rtems_termios_write (arg);
- 
+
 } /* console_write */
 
 
- 
+
 /*
  * Handle ioctl request.
  */
-rtems_device_driver 
+rtems_device_driver
 console_control(rtems_device_major_number major,
 		rtems_device_minor_number minor,
 		void                      * arg
 )
-{ 
+{
   return rtems_termios_ioctl (arg);
 }
 
@@ -281,45 +281,45 @@ conSetAttr(int minor, const struct termios *t)
 {
   int baud;
 
-  switch (t->c_cflag & CBAUD) 
+  switch (t->c_cflag & CBAUD)
     {
-    case B50:	
+    case B50:
       baud = 50;
       break;
-    case B75:	
-      baud = 75;	
+    case B75:
+      baud = 75;
       break;
-    case B110:	
-      baud = 110;	
+    case B110:
+      baud = 110;
       break;
-    case B134:	
-      baud = 134;	
+    case B134:
+      baud = 134;
       break;
-    case B150:	
-      baud = 150;	
+    case B150:
+      baud = 150;
       break;
     case B200:
-      baud = 200;	
+      baud = 200;
       break;
-    case B300:	
+    case B300:
       baud = 300;
       break;
-    case B600:	
-      baud = 600;	
+    case B600:
+      baud = 600;
       break;
-    case B1200:	
+    case B1200:
       baud = 1200;
       break;
-    case B1800:	
-      baud = 1800;	
+    case B1800:
+      baud = 1800;
       break;
-    case B2400:	
+    case B2400:
       baud = 2400;
       break;
-    case B4800:	
+    case B4800:
       baud = 4800;
       break;
-    case B9600:	
+    case B9600:
       baud = 9600;
       break;
     case B19200:
@@ -328,7 +328,7 @@ conSetAttr(int minor, const struct termios *t)
     case B38400:
       baud = 38400;
       break;
-    case B57600:	
+    case B57600:
       baud = 57600;
       break;
     case B115200:
@@ -349,13 +349,13 @@ conSetAttr(int minor, const struct termios *t)
  * BSP initialization
  */
 
-BSP_output_char_function_type BSP_output_char = 
+BSP_output_char_function_type BSP_output_char =
                        (BSP_output_char_function_type)    BSP_output_char_via_serial;
 
-BSP_polling_getchar_function_type BSP_poll_char =  
+BSP_polling_getchar_function_type BSP_poll_char =
                       (BSP_polling_getchar_function_type) BSP_poll_char_via_serial;
 
 int BSP_poll_read(int ttyMinor){
-  
+
   return BSP_poll_char_via_serial();
 }

@@ -10,7 +10,7 @@
 #define _FAULTRET_H_
 
   /* Return to the point where fault happened.
-   * Fault state keeps all registers. 
+   * Fault state keeps all registers.
    */
 extern void faultRet(unsigned int * faultState);
 

@@ -53,9 +53,9 @@ extern "C" {
 
 #define Install_tm27_vector( handler ) /* set_vector( (handler), 6, 1 ) */
 
-#define Cause_tm27_intr()  
+#define Cause_tm27_intr()
 
-#define Clear_tm27_intr()  
+#define Clear_tm27_intr()
 
 #define Lower_tm27_intr()
 
@@ -89,7 +89,7 @@ extern rtems_configuration_table BSP_Configuration;
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

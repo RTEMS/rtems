@@ -39,7 +39,7 @@
  * The number of transmit buffer descriptors has to be quite large
  * since a single frame often uses four or more buffer descriptors.
  *
- * Set the number of Tx and Rx buffers, using Log_2(# buffers). 
+ * Set the number of Tx and Rx buffers, using Log_2(# buffers).
  */
 #define LANCE_LOG2_TX_BUFFERS 4
 #define LANCE_LOG2_RX_BUFFERS 4
@@ -76,11 +76,11 @@
 #define RD_CSR32(dp, index, value) \
 	PCNET_IO_WR32(dp, rap, index); \
 	PCNET_IO_RD32(dp, rdp, value)
-	
+
 #define WR_CSR32(dp, index, value) \
 	PCNET_IO_WR32(dp, rap, index); \
 	PCNET_IO_WR32(dp, rdp, value)
-	
+
 #define RD_BCR32(dp, index, value) \
 	PCNET_IO_WR32(dp, rap, index); \
 	PCNET_IO_RD32(dp, bdp, value)
@@ -363,21 +363,21 @@ amd79c970_initialize_hardware (int instance, int broadcastFlag)
 	}
 
 	/*
-	 * Set the receive descriptor ring length 
+	 * Set the receive descriptor ring length
 	 */
 	dp->initBlk.ib_rlen=RX_RING_LEN_BITS;
 	/*
-	 * Set the receive descriptor ring address 
+	 * Set the receive descriptor ring address
 	 */
 	dp->initBlk.ib_rdra=Swap32((uint32_t)&dp->rxBdBase[0]+
 				     PCI_SYS_MEM_BASE);
 
 	/*
-	 * Set the transmit descriptor ring length 
+	 * Set the transmit descriptor ring length
 	 */
 	dp->initBlk.ib_tlen=TX_RING_LEN_BITS;
 	/*
-	 * Set the tranmit descriptor ring address 
+	 * Set the tranmit descriptor ring address
 	 */
 	dp->initBlk.ib_tdra=Swap32((uint32_t)&dp->txBdBase[0]+
 				     PCI_SYS_MEM_BASE);
@@ -386,7 +386,7 @@ amd79c970_initialize_hardware (int instance, int broadcastFlag)
 	{
 		dp->initBlk.ib_padr[i]=dp->iface->hwaddr[i];
 	}
-	
+
 	/*
 	 * Ensure that we are in DWIO mode
 	 */
@@ -405,13 +405,13 @@ amd79c970_initialize_hardware (int instance, int broadcastFlag)
 
 	ulInitClkPCIAddr=(uint32_t)&dp->initBlk+PCI_SYS_MEM_BASE;
 	/*
-	 * CSR2 must contain the high order 16 bits of the first word in 
-	 * the initialization block 
+	 * CSR2 must contain the high order 16 bits of the first word in
+	 * the initialization block
 	 */
 	WR_CSR32(dp, CSR2, (ulInitClkPCIAddr >> 16) & 0xffff);
 	/*
-	 * CSR1 must contain the low order 16 bits of the first word in 
-	 * the initialization block 
+	 * CSR1 must contain the low order 16 bits of the first word in
+	 * the initialization block
 	 */
 	WR_CSR32(dp, CSR1, (ulInitClkPCIAddr & 0xffff));
 
@@ -752,7 +752,7 @@ amd79c970_rx (int dev, void *p1, void *p2)
 
 			/*
 			 * Give the network code a chance to digest the
-			 * packet.  This guards against a flurry of 
+			 * packet.  This guards against a flurry of
 			 * incoming packets (usually an ARP storm) from
 			 * using up all the available memory.
 			 */
@@ -876,7 +876,7 @@ amd79c970_show (struct iface *iface)
  * Following arguments are optional, but if present, must appear in
  * the following order:
  * Following arguments are optional, but if Ethernet address is
- * specified, Internet address must also be specified. 
+ * specified, Internet address must also be specified.
  * ###.###.###.###   -- IP address
  * ##:##:##:##:##:## -- Ethernet address
  */
@@ -946,7 +946,7 @@ rtems_ka9q_driver_attach (int argc, char *argv[], void *p)
 	 * Set receive buffer descriptor count
 	 */
 	dp->rxBdCount=RX_RING_SIZE;
-		
+
 	/*
 	 * Set transmit buffer descriptor count
 	 */

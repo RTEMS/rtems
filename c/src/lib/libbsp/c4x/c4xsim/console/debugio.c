@@ -43,7 +43,7 @@ C4X_BSP_output_char( int c )
 }
 
 /*
- *  console_inbyte_nonblocking 
+ *  console_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */

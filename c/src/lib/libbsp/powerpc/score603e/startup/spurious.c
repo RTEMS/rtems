@@ -1,11 +1,11 @@
 /*
  *  Score603e Spurious Trap Handler
  *
- *  This is just enough of a trap handler to let us know what 
+ *  This is just enough of a trap handler to let us know what
  *  the likely source of the trap was.
  *
- *  Developed as part of the port of RTEMS to the ERC32 implementation 
- *  of the SPARC by On-Line Applications Research Corporation (OAR) 
+ *  Developed as part of the port of RTEMS to the ERC32 implementation
+ *  of the SPARC by On-Line Applications Research Corporation (OAR)
  *  under contract to the European Space Agency (ESA).
  *
  *  COPYRIGHT (c) 1995. European Space Agency.
@@ -82,9 +82,9 @@ rtems_isr bsp_spurious_handler(
       break;
 
 #if defined(ppc403)
-#error "Please fill in names. "                                  
+#error "Please fill in names. "
     case PPC_IRQ_CRIT :
-      DEBUG_puts( "\nTrap: Critical Error ");     
+      DEBUG_puts( "\nTrap: Critical Error ");
       break;
     case PPC_IRQ_PIT:
       DEBUG_puts( "\nTrap: 0x01000" );
@@ -100,13 +100,13 @@ rtems_isr bsp_spurious_handler(
       break;
 
 #elif defined(ppc601)
-#error "Please fill in names. "                                  
+#error "Please fill in names. "
     case PPC_IRQ_TRACE    :
       DEBUG_puts( "\nTrap: 0x02000" );
       break;
 
 #elif defined(ppc603)
-#error "Please fill in names. "                                  
+#error "Please fill in names. "
     case PPC_IRQ_TRANS_MISS :
       DEBUG_puts( "\nTrap: 0x1000" );
       break;
@@ -141,7 +141,7 @@ rtems_isr bsp_spurious_handler(
       break;
 
 #elif defined(mpc604)
-#error "Please fill in names. "                                  
+#error "Please fill in names. "
     case PPC_IRQ_ADDR_BRK:
       DEBUG_puts( "0x1300" );
       break;
@@ -179,7 +179,7 @@ void bsp_spurious_initialize()
       ;
       /* set_vector( bsp_stub_handler, trap, 1 ); */
     else
-      set_vector( bsp_spurious_handler, trap,  1 ); 
+      set_vector( bsp_spurious_handler, trap,  1 );
   }
 }
 

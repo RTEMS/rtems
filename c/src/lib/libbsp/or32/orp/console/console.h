@@ -1,11 +1,11 @@
 /* console.h -- console header file for the Bender board using the
  *              Or1k architecture.
- *	
+ *
  *  Copyright (C) 2001 Chris Ziomkowski, chris@asics.ws
  *
  *  This file is distributed as part of the RTEMS package from
  *  OAR Corporation, and follows the licensing and distribution
- *  terms as stated for RTEMS. 
+ *  terms as stated for RTEMS.
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).

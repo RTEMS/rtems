@@ -73,7 +73,7 @@ extern "C" {
 #define KBD_CMD_ENABLE		0xf4    /* Clears Buffer and Starts Scanning. */
 #define KBD_CMD_DISABLE		0xf5    /* reset to power up */
 
-#define KBD_CMD_SET_DEFAULT	0xf6    
+#define KBD_CMD_SET_DEFAULT	0xf6
 #define KBD_CMD_SET_ALL_TLMTIC	0xf7    /* Set all keys telematic */
 #define KBD_CMD_SET_ALL_MKBR	0xf8    /* Set all keys Make /Break */
 #define KBD_CMD_SET_ALL_MAKE	0xf9    /* Set all keys Make only */

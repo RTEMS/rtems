@@ -154,7 +154,7 @@ console_first_open(int major, int minor, void *arg)
     rtems_libio_open_close_args_t *args = arg;
     rtems_status_code sc;
     uint8_t         intvec;
-    
+
     switch (minor)
     {
         case 0: intvec = BSP_INTVEC_UART1; break;
@@ -251,7 +251,7 @@ console_initialize(rtems_device_major_number major,
             sc = mcfuart_reset(&uart[1]);
         return sc;
     }
-    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -267,8 +267,8 @@ console_initialize(rtems_device_major_number major,
  * RETURNS:
  *     RTEMS error code
  */
-rtems_device_driver 
-console_open(rtems_device_major_number major, 
+rtems_device_driver
+console_open(rtems_device_major_number major,
              rtems_device_minor_number minor,
              void *arg)
 {
@@ -297,10 +297,10 @@ console_open(rtems_device_major_number major,
     {
         case CONSOLE_MODE_RAW:
             return RTEMS_SUCCESSFUL;
-            
+
         case CONSOLE_MODE_INT:
             return rtems_termios_open(major, minor, arg, &intr_callbacks);
-            
+
         case CONSOLE_MODE_POLL:
             return rtems_termios_open(major, minor, arg, &poll_callbacks);
 
@@ -321,7 +321,7 @@ console_open(rtems_device_major_number major,
  * RETURNS:
  *     RTEMS error code
  */
-rtems_device_driver 
+rtems_device_driver
 console_close(rtems_device_major_number major,
               rtems_device_minor_number minor,
               void *arg)
@@ -431,7 +431,7 @@ rtems_device_driver
 console_control(rtems_device_major_number major,
                 rtems_device_minor_number minor,
                 void *arg)
-{ 
+{
     if (console_mode != CONSOLE_MODE_RAW)
     {
         return rtems_termios_ioctl (arg);

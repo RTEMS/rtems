@@ -25,7 +25,7 @@ extern "C" {
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 4
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (12 * 1024)
-  
+
 #ifdef ASM
 /* Definition of where to store registers in alignment handler */
 #define ALIGN_REGS 0x0140
@@ -118,15 +118,15 @@ int rtems_dmv177_sonic_driver_attach(struct rtems_bsdnet_ifconfig *config);
 /*
  *  Device Driver Table Entries
  */
- 
+
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */
- 
+
 
 /*
  *  Information placed in the linkcmds file.
@@ -147,12 +147,12 @@ extern int   end;        /* last address in the program */
 /*
  * How many libio files we want
  */
- 
+
 #define BSP_LIBIO_MAX_FDS       20
 
 /* functions */
 
-/* 
+/*
  * genvec.c
  */
 rtems_isr_entry  set_EE_vector(

@@ -35,14 +35,14 @@ volatile uint32_t         Clock_driver_ticks; /* ticks since initialization */
 rtems_isr_entry  Old_ticker;
 
 void Clock_exit( void );
- 
+
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
- 
+
 
 /*
  *  ISR Handler
@@ -57,7 +57,7 @@ rtems_isr Clock_isr(rtems_vector_number vector)
     rtems_clock_tick();
     Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
   }
-  else 
+  else
     Clock_isrs -= 1;
 }
 
@@ -75,7 +75,7 @@ void Install_clock(rtems_isr_entry clock_isr )
   pcc->timer2_control = 0x07; /* clear T2 overflow counter, enable counter */
   pcc->timer2_int_control = CLOCK_INT_LEVEL|0x08;
   /* Enable Timer 2 and set its int. level */
-    
+
   atexit( Clock_exit );
 }
 
@@ -91,17 +91,17 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
- 
+
   /*
    * make major/minor avail to others such as shared memory driver
    */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 }
- 
+
 rtems_device_driver Clock_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -110,15 +110,15 @@ rtems_device_driver Clock_control(
 {
     uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
- 
+
     if (args == 0)
         goto done;
- 
+
     /*
      * This is hokey, but until we get a defined interface
      * to do this, it will just be this simple...
      */
- 
+
     if (args->command == rtems_build_name('I', 'S', 'R', ' '))
     {
         Clock_isr(TIMER_2_VECTOR);
@@ -129,7 +129,7 @@ rtems_device_driver Clock_control(
        (void) set_vector( args->buffer, TIMER_2_VECTOR, 1 );
       rtems_interrupt_enable( isrlevel );
     }
- 
+
 done:
     return RTEMS_SUCCESSFUL;
 }

@@ -55,7 +55,7 @@ int rtems_gdb_stub_get_current_thread(void);
 int rtems_gdb_stub_get_next_thread(int);
 int rtems_gdb_stub_get_offsets(
   unsigned char **text_addr,
-  unsigned char **data_addr, 
+  unsigned char **data_addr,
   unsigned char **bss_addr
 );
 int rtems_gdb_stub_get_thread_regs(
@@ -66,7 +66,7 @@ int rtems_gdb_stub_set_thread_regs(
   int thread,
   unsigned int *registers
 );
-void rtems_gdb_process_query( 
+void rtems_gdb_process_query(
   char *inbuffer,
   char *outbuffer,
   int   do_threads,
@@ -77,8 +77,8 @@ void rtems_gdb_process_query(
 /* there are 180 bytes of registers on a 68020 w/68881      */
 /* many of the fpa registers are 12 byte (96 bit) registers */
 #define NUMREGBYTES 180
-enum regnames {D0,D1,D2,D3,D4,D5,D6,D7, 
-               A0,A1,A2,A3,A4,A5,A6,A7, 
+enum regnames {D0,D1,D2,D3,D4,D5,D6,D7,
+               A0,A1,A2,A3,A4,A5,A6,A7,
                PS,PC,
                FP0,FP1,FP2,FP3,FP4,FP5,FP6,FP7,
                FPCONTROL,FPSTATUS,FPIADDR

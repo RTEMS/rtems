@@ -5,17 +5,17 @@
  */
 
 /****************************************************************************
-  
+
   THIS SOFTWARE IS NOT COPYRIGHTED
-  
+
   HP offers the following for use in the public domain.  HP makes no
   warranty with regard to the software or it's performance and the
   user accepts the software "AS IS" with all faults.
-  
+
   HP DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED, WITH REGARD
   TO THIS SOFTWARE INCLUDING BUT NOT LIMITED TO THE WARRANTIES
   OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-  
+
   ****************************************************************************/
 
 /****************************************************************************
@@ -446,13 +446,13 @@ asm ("		movl stackPtr, %esp");	/* move to remcom stack area  */
 asm ("		pushl %eax");	/* push exception onto stack  */
 asm ("		call  handle_exception");	/* this never returns */
 
-void 
+void
 _returnFromException (void)
 {
   return_to_prog ();
 }
 
-int 
+int
 hex (char ch)
 {
   if ((ch >= 'a') && (ch <= 'f'))
@@ -466,7 +466,7 @@ hex (char ch)
 
 
 /* scan for the sequence $<data>#<checksum>     */
-void 
+void
 getpacket (char *buffer)
 {
   unsigned char checksum;
@@ -531,7 +531,7 @@ getpacket (char *buffer)
 /* send the packet in buffer.  */
 
 
-void 
+void
 putpacket (char *buffer)
 {
   unsigned char checksum;
@@ -566,7 +566,7 @@ char remcomInBuffer[BUFMAX];
 char remcomOutBuffer[BUFMAX];
 static short error;
 
-void 
+void
 debug_error (
      char *format,
      char *parm
@@ -656,7 +656,7 @@ hex2mem (char *buf, char *mem, int count, int may_fault)
 
 /* this function takes the 386 exception vector and attempts to
    translate this number into a unix compatible signal value */
-int 
+int
 computeSignal (int exceptionVector)
 {
   int sigval;
@@ -717,7 +717,7 @@ computeSignal (int exceptionVector)
 /* WHILE WE FIND NICE HEX CHARS, BUILD AN INT */
 /* RETURN NUMBER OF CHARS PROCESSED           */
 /**********************************************/
-int 
+int
 hexToInt (char **ptr, int *intValue)
 {
   int numChars = 0;
@@ -745,7 +745,7 @@ hexToInt (char **ptr, int *intValue)
 /*
  * This function does all command procesing for interfacing to gdb.
  */
-void 
+void
 handle_exception (int exceptionVector)
 {
   int sigval;
@@ -929,7 +929,7 @@ handle_exception (int exceptionVector)
 
 /* this function is used to set up exception handlers for tracing and
    breakpoints */
-void 
+void
 set_debug_traps (void)
 {
   extern void remcomHandler ();
@@ -965,7 +965,7 @@ set_debug_traps (void)
    otherwise as a quick means to stop program execution and "break" into
    the debugger. */
 
-void 
+void
 breakpoint (void)
 {
   if (initialized)

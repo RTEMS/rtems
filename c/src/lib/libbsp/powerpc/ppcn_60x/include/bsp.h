@@ -42,7 +42,7 @@ extern "C" {
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (32 * 1024)
-  
+
 /*  Define processor identification. */
 
 #define MPC601	1
@@ -157,8 +157,8 @@ extern "C" {
 /*
  * 8259 IRQ definations.
  */
-#define PPCN_60X_IRQ_SYS_TIMER	(PPCN_60X_8259_IRQ_BASE +  0)  
-#define PPCN_60X_IRQ_KBD		(PPCN_60X_8259_IRQ_BASE +  1)  
+#define PPCN_60X_IRQ_SYS_TIMER	(PPCN_60X_8259_IRQ_BASE +  0)
+#define PPCN_60X_IRQ_KBD		(PPCN_60X_8259_IRQ_BASE +  1)
 #define PPCN_60X_IRQ_COM2		(PPCN_60X_8259_IRQ_BASE +  3)
 #define PPCN_60X_IRQ_COM1		(PPCN_60X_8259_IRQ_BASE +  4)
 #define PPCN_60X_IRQ_CIO		(PPCN_60X_8259_IRQ_BASE +  5)
@@ -343,7 +343,7 @@ void InitializeNvRAM(void);
 #define BSP_TIMER_LEAST_VALID    1  /* Don't trust a value lower than this */
 
 /*
- *  Convert decrement value to tenths of microsecnds (used by 
+ *  Convert decrement value to tenths of microsecnds (used by
  *  shared timer driver).
  *
  *    + There are 4 bus cycles per click
@@ -404,19 +404,19 @@ void InitializeNvRAM(void);
 /*
  *  Device Driver Table Entries
  */
- 
+
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */
- 
+
 /*
  * How many libio files we want
  */
- 
+
 #define BSP_LIBIO_MAX_FDS       20
 
 /* functions */
@@ -436,13 +436,13 @@ rtems_isr_entry set_vector(                    /* returns old vector */
  */
 rtems_isr bsp_stub_handler(
    rtems_vector_number trap
-); 
+);
 rtems_isr bsp_spurious_handler(
    rtems_vector_number trap
 );
 void bsp_spurious_initialize();
 
-/* 
+/*
  * genvec.c
  */
 void set_EE_vector(

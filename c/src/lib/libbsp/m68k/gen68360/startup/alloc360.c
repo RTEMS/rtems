@@ -91,6 +91,6 @@ M360AllocateRiscTimers (int count)
 	 * descriptors are allocated with appropriate alignment.
 	 */
 	return M360AllocateBufferDescriptors (((count * 4) +
-					sizeof(m360BufferDescriptor_t) - 1) / 
+					sizeof(m360BufferDescriptor_t) - 1) /
 					sizeof(m360BufferDescriptor_t));
 }

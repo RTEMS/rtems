@@ -41,7 +41,7 @@ volatile uint32_t         Clock_driver_ticks;
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
@@ -68,7 +68,7 @@ rtems_isr Clock_isr(
 )
 {
  /*
-  *  The counter register gets reset automatically as well as the 
+  *  The counter register gets reset automatically as well as the
   *  interrupt occurred flag so we should not have to do anything
   *  with the hardware.
   */
@@ -127,7 +127,7 @@ void Install_clock(
 
   Clock_counter_register_value = (unsigned int) tmp;
 #if 0
-  Clock_counter_register_value = 
+  Clock_counter_register_value =
       (uint32_t) ((float) BSP_Configuration.microseconds_per_tick /
        ((float)_ClockFrequency / 2.0)));
 #endif
@@ -185,14 +185,14 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
- 
+
   /*
    * make major/minor avail to others such as shared memory driver
    */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -204,15 +204,15 @@ rtems_device_driver Clock_control(
 {
     uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
- 
+
     if (args == 0)
         goto done;
- 
+
     /*
      * This is hokey, but until we get a defined interface
      * to do this, it will just be this simple...
      */
- 
+
     if (args->command == rtems_build_name('I', 'S', 'R', ' '))
     {
         Clock_isr(CLOCK_VECTOR);
@@ -223,7 +223,7 @@ rtems_device_driver Clock_control(
        (void) set_vector( args->buffer, CLOCK_VECTOR, 1 );
       rtems_interrupt_enable( isrlevel );
     }
- 
+
 done:
     return RTEMS_SUCCESSFUL;
 }

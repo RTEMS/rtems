@@ -96,7 +96,7 @@ isr_on(const rtems_irq_connect_data *unused)
 {
   return;
 }
-						   
+
 static void
 isr_off(const rtems_irq_connect_data *unused)
 {
@@ -151,9 +151,9 @@ void __assert (const char *file, int line, const char *msg)
 {
     static   char exit_msg[] = "EXECUTIVE SHUTDOWN! Any key to reboot...";
   unsigned char  ch;
-   
+
   /*
-   * Note we cannot call exit or printf from here, 
+   * Note we cannot call exit or printf from here,
    * assert can fail inside ISR too
    */
 
@@ -218,13 +218,13 @@ console_initialize(rtems_device_major_number major,
     {
       /* Install keyboard interrupt handler */
       status = BSP_install_rtems_irq_handler(&console_isr_data);
-  
+
     if (!status)
 	{
 	  printk("Error installing keyboard interrupt handler!\n");
 	  rtems_fatal_error_occurred(status);
 	}
-      
+
       status = rtems_io_register_name("/dev/console", major, 0);
       if (status != RTEMS_SUCCESSFUL)
 	{
@@ -240,14 +240,14 @@ console_initialize(rtems_device_major_number major,
        */
       /* 9600-8-N-1 */
       BSP_uart_init(BSPConsolePort, 9600, CHR_8_BITS, 0, 0, 0);
-      
-      
+
+
       /* Set interrupt handler */
       if(BSPConsolePort == BSP_UART_COM1)
    	{
 	     console_isr_data.name = BSP_UART_COM1_IRQ;
         console_isr_data.hdl  = BSP_uart_termios_isr_com1;
-	  
+
    	}
       else
 	   {
@@ -322,7 +322,7 @@ console_open(rtems_device_major_number major,
                 void                      *arg)
 {
   rtems_status_code              status;
-  static rtems_termios_callbacks cb = 
+  static rtems_termios_callbacks cb =
   {
     NULL,	              /* firstOpen */
     console_last_close,       /* lastClose */
@@ -338,7 +338,7 @@ console_open(rtems_device_major_number major,
     {
 
       /* Let's set the routines for termios to poll the
-       * Kbd queue for data 
+       * Kbd queue for data
        */
       cb.pollRead = kbd_poll_read;
       cb.outputUsesInterrupts = 0;
@@ -371,9 +371,9 @@ console_open(rtems_device_major_number major,
   /*
    * Pass data area info down to driver
    */
-  BSP_uart_termios_set(BSPConsolePort, 
+  BSP_uart_termios_set(BSPConsolePort,
 			 ((rtems_libio_open_close_args_t *)arg)->iop->data1);
-  
+
   /* Enable interrupts  on channel */
   BSP_uart_intr_ctrl(BSPConsolePort, BSP_UART_INTR_CTRL_TERMIOS);
 
@@ -391,7 +391,7 @@ console_close(rtems_device_major_number major,
    return rtems_termios_close (arg);
 } /* console_close */
 
- 
+
 /*-------------------------------------------------------------------------+
 | Console device driver READ entry point.
 +--------------------------------------------------------------------------+
@@ -404,7 +404,7 @@ console_read(rtems_device_major_number major,
 {
  return rtems_termios_read( arg );
 } /* console_read */
- 
+
 
 /*-------------------------------------------------------------------------+
 | Console device driver WRITE entry point.
@@ -424,7 +424,7 @@ console_write(rtems_device_major_number major,
     {
       return rtems_termios_write (arg);
     }
- 
+
   /* write data to VGA */
   ibmpc_console_write( minor, buffer, maximum );
   rw_args->bytes_moved = maximum;
@@ -433,18 +433,18 @@ console_write(rtems_device_major_number major,
 
 
 extern int vt_ioctl( unsigned int cmd, unsigned long arg);
- 
+
 /*
  * Handle ioctl request.
  */
-rtems_device_driver 
+rtems_device_driver
 console_control(rtems_device_major_number major,
 		rtems_device_minor_number minor,
 		void                      * arg
 )
-{ 
+{
 	rtems_libio_ioctl_args_t *args = arg;
-	switch (args->command) 
+	switch (args->command)
 	{
 	   default:
       if( vt_ioctl( args->command, (unsigned long)args->buffer ) != 0 )
@@ -469,45 +469,45 @@ conSetAttr(int minor, const struct termios *t)
 {
   unsigned long baud, databits, parity, stopbits;
 
-  switch (t->c_cflag & CBAUD) 
+  switch (t->c_cflag & CBAUD)
     {
-    case B50:	
+    case B50:
       baud = 50;
       break;
-    case B75:	
-      baud = 75;	
+    case B75:
+      baud = 75;
       break;
-    case B110:	
-      baud = 110;	
+    case B110:
+      baud = 110;
       break;
-    case B134:	
-      baud = 134;	
+    case B134:
+      baud = 134;
       break;
-    case B150:	
-      baud = 150;	
+    case B150:
+      baud = 150;
       break;
     case B200:
-      baud = 200;	
+      baud = 200;
       break;
-    case B300:	
+    case B300:
       baud = 300;
       break;
-    case B600:	
-      baud = 600;	
+    case B600:
+      baud = 600;
       break;
-    case B1200:	
+    case B1200:
       baud = 1200;
       break;
-    case B1800:	
-      baud = 1800;	
+    case B1800:
+      baud = 1800;
       break;
-    case B2400:	
+    case B2400:
       baud = 2400;
       break;
-    case B4800:	
+    case B4800:
       baud = 4800;
       break;
-    case B9600:	
+    case B9600:
       baud = 9600;
       break;
     case B19200:
@@ -516,7 +516,7 @@ conSetAttr(int minor, const struct termios *t)
     case B38400:
       baud = 38400;
       break;
-    case B57600:	
+    case B57600:
       baud = 57600;
       break;
     case B115200:
@@ -542,7 +542,7 @@ conSetAttr(int minor, const struct termios *t)
     /* No parity */
     parity = 0;
   }
-  
+
   switch (t->c_cflag & CSIZE) {
     case CS5: databits = CHR_5_BITS; break;
     case CS6: databits = CHR_6_BITS; break;
@@ -569,7 +569,7 @@ conSetAttr(int minor, const struct termios *t)
  * BSP initialization
  */
 
-BSP_output_char_function_type BSP_output_char = 
+BSP_output_char_function_type BSP_output_char =
                        (BSP_output_char_function_type) _IBMPC_outch;
 
 BSP_polling_getchar_function_type BSP_poll_char = BSP_wait_polled_input;

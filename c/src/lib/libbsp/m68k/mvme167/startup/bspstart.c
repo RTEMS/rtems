@@ -17,7 +17,7 @@
  *
  *  $Id$
  */
- 
+
 
 #include <string.h>
 
@@ -78,7 +78,7 @@ void bsp_pretasking_hook(void);               /* m68k version */
 void bsp_start( void )
 {
   void M68KFPSPInstallExceptionHandlers (void);
-  
+
   extern m68k_isr_entry  M68Kvec[];
   extern void           *_WorkspaceBase;
   extern void           *_RamSize;
@@ -88,7 +88,7 @@ void bsp_start( void )
   int index;
 
   _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
-  
+
   /*
    *  167Bug Vectors are at 0xFFE00000
    */
@@ -96,7 +96,7 @@ void bsp_start( void )
   m68k_set_vbr( rom_monitor_vector_table );
 
 
-  /* 
+  /*
    *  Copy 167Bug Bus Error handler into our exception vector. All 167Bug
    *  exception vectors are the same and point to the generalized exception
    *  handler. The bus error handler is the one that Motorola says to copy
@@ -108,7 +108,7 @@ void bsp_start( void )
 
   /* Any exceptions during initialization should be trapped by 167Bug */
   m68k_set_vbr( &M68Kvec );
-  
+
   /* Install the 68040 FPSP here */
   M68KFPSPInstallExceptionHandlers();
 
@@ -120,7 +120,7 @@ void bsp_start( void )
   /* Set the Interrupt Base Vectors */
   lcsr->vector_base = (VBR0 << 28) | (VBR1 << 24);
 
-  /* 
+  /*
    *  Initialize address translation
    *  May need to pass the multiprocessor configuration table.
    */
@@ -132,8 +132,8 @@ void bsp_start( void )
   Cpu_table.interrupt_vector_table = (m68k_isr_entry *) &M68Kvec;
   /* Must match value in start.s */
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
-  
-  /* 
+
+  /*
    *  If the application has not overriden the default User_extension_table,
    *  supply one with our own fatal error handler that returns control to
    *  167Bug.
@@ -142,7 +142,7 @@ void bsp_start( void )
     user_extension_table.fatal = bsp_fatal_error_occurred;
     BSP_Configuration.User_extension_table = &user_extension_table;
   }
-  
+
   /*
    *  Need to "allocate" the memory for the RTEMS Workspace and
    *  tell the RTEMS configuration where it is.  This memory is

@@ -36,7 +36,7 @@ char *rtems_progname;
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
@@ -53,7 +53,7 @@ void bsp_libc_init( void *, uint32_t, int );
  *      not yet initialized.
  *
  */
- 
+
 void bsp_pretasking_hook(void)
 {
     extern int HeapBase;
@@ -68,7 +68,7 @@ void bsp_pretasking_hook(void)
 #endif
 
 }
- 
+
 /*
  *  bsp_start
  *

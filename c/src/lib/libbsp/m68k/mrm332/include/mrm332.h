@@ -64,7 +64,7 @@
 
 /*
  *  This prototype really should have the noreturn attribute but
- *  that causes a warning. Not sure how to fix that. 
+ *  that causes a warning. Not sure how to fix that.
  */
 /*   static void reboot(void) __attribute__ ((noreturn)); */
 static void reboot(void);

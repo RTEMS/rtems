@@ -57,13 +57,13 @@ extern struct console_io vacuum_console_functions;
 extern opaque log_console_setup, serial_console_setup, vga_console_setup;
 
 boot_data __bd = {0, 0, 0, 0, 0, 0, 0, 0,
-		  32, 0, 0, 0, 0, 0, 0, 
+		  32, 0, 0, 0, 0, 0, 0,
 		  &mm_private,
 		  NULL,
 		  &pci_private,
 		  NULL,
 		  &v86_private,
-		  "root=/dev/hdc1"	
+		  "root=/dev/hdc1"
 		 };
 
 static void exit(void) __attribute__((noreturn));
@@ -80,7 +80,7 @@ void hang(const char *s, u_long x, ctxt *p) {
 #ifdef DEBUG
 	print_all_maps("\nMemory mappings at exception time:\n");
 #endif
-	printk("%s %lx NIP: %p LR: %p\n" 
+	printk("%s %lx NIP: %p LR: %p\n"
 	       "Callback trace (stack:return address)\n",
 	       s, x, (void *) p->nip, (void *) p->lr);
 	asm volatile("lwz %0,0(1); lwz %0,0(%0); lwz %0,0(%0)": "=b" (r1));
@@ -142,7 +142,7 @@ void gunzip(void *dst, int dstlen, unsigned char *src, int *lenp)
 		printk("gunzip: ran out of data in header\n");
 		exit();
 	}
-	
+
 	s.zalloc = zalloc;
 	s.zfree = zfree;
 	r = inflateInit2(&s, -MAX_WBITS);
@@ -163,9 +163,9 @@ void gunzip(void *dst, int dstlen, unsigned char *src, int *lenp)
 	inflateEnd(&s);
 }
 
-void decompress_kernel(int kernel_size, void * zimage_start, int len, 
+void decompress_kernel(int kernel_size, void * zimage_start, int len,
 		       void * initrd_start, int initrd_len ) {
-	u_char *parea; 
+	u_char *parea;
 	RESIDUAL* rescopy;
 	int zimage_size= len;
 
@@ -181,12 +181,12 @@ void decompress_kernel(int kernel_size, void * zimage_start, int len,
 		exit();
 	}
 	/* Note that this clears the bss as a side effect, so some code
-	 * with ugly special case for SMP could be removed from the kernel! 
+	 * with ugly special case for SMP could be removed from the kernel!
 	 */
 	memset(parea, 0, kernel_size);
 	printk("\nUncompressing the kernel...\n");
 	rescopy=salloc(sizeof(RESIDUAL));
-	/* Let us hope that residual data is aligned on word boundary */ 
+	/* Let us hope that residual data is aligned on word boundary */
 	*rescopy =  *bd->residual;
 	bd->residual = (void *)PAGE_ALIGN(kernel_size);
 
@@ -203,7 +203,7 @@ void decompress_kernel(int kernel_size, void * zimage_start, int len,
 		 * DMA from the last pages of memory is slower because
 		 * prefetching from PCI has to be disabled to avoid accessing
 		 * non existing memory. So it is the ideal place to put the
-		 * hash table. 
+		 * hash table.
 		 */
 	        unsigned tmp = rescopy->TotalMemory;
 		/* It's equivalent to tmp & (-tmp), but using the negation
@@ -227,7 +227,7 @@ void decompress_kernel(int kernel_size, void * zimage_start, int len,
 	printk("done\nNow booting...\n");
 	MMUoff();	/* We need to access address 0 ! */
 	codemove(0, parea, kernel_size, bd->cache_lsize);
-	codemove(bd->residual, rescopy, sizeof(RESIDUAL), bd->cache_lsize); 
+	codemove(bd->residual, rescopy, sizeof(RESIDUAL), bd->cache_lsize);
 	codemove(bd->r6, bd->cmd_line, sizeof(bd->cmd_line), bd->cache_lsize);
 	/* codemove checks for 0 length */
 	codemove(bd->load_address, initrd_start, initrd_len, bd->cache_lsize);
@@ -248,7 +248,7 @@ boot_udelay(uint32_t   _microseconds)
    } while (now - start < ticks);
 }
 
-void 
+void
 setup_hw(void)
 {
 	char *cp, ch;
@@ -258,9 +258,9 @@ setup_hw(void)
 	int timer, err;
 	u_short default_vga_cmd;
 	static unsigned int indic;
-	
+
 	indic = 0;
-	
+
 	res=bd->residual;
 	default_vga=NULL;
 	default_vga_cmd = 0;
@@ -274,10 +274,10 @@ setup_hw(void)
 			ticks_per_ms = 16500; /* assume 66 MHz on bus */
 		}
 	}
-	
+
 	select_console(CONSOLE_LOG);
 
-	/* We check that the keyboard is present and immediately 
+	/* We check that the keyboard is present and immediately
 	 * select the serial console if not.
 	 */
 	err = kbdreset();
@@ -294,11 +294,11 @@ setup_hw(void)
 	       (vpd.TimeBaseDivisor ? vpd.TimeBaseDivisor : 4000),
 	       res->TotalMemory);
 	printk("Original MSR: %lx\nOriginal HID0: %lx\nOriginal R31: %lx\n",
-	       bd->o_msr, bd->o_hid0, bd->o_r31); 
+	       bd->o_msr, bd->o_hid0, bd->o_r31);
 
 	/* This reconfigures all the PCI subsystem */
         pci_init();
-	
+
 	/* The Motorola NT firmware does not set the correct mem size */
 	if ( vpd.FirmwareSupplier == 0x10000 ) {
 		int memsize;
@@ -311,7 +311,7 @@ setup_hw(void)
 		}
 	}
 #define	ENABLE_VGA_USAGE
-#undef ENABLE_VGA_USAGE 
+#undef ENABLE_VGA_USAGE
 #ifdef ENABLE_VGA_USAGE
 	/* Find the primary VGA device, chosing the first one found
 	 * if none is enabled. The basic loop structure has been copied
@@ -338,7 +338,7 @@ setup_hw(void)
 
 	/* Disable the enabled VGA device, if any. */
 	if (default_vga)
-		pci_write_config_word(default_vga, PCI_COMMAND, 
+		pci_write_config_word(default_vga, PCI_COMMAND,
 				      default_vga_cmd&
 				      ~(PCI_COMMAND_IO|PCI_COMMAND_MEMORY));
 	init_v86();
@@ -349,23 +349,23 @@ setup_hw(void)
 		    ((p->class) >> 16 != PCI_BASE_CLASS_DISPLAY))
 		  	continue;
 		if (p->bus->number != 0) continue;
-		pci_read_config_word(p, PCI_COMMAND, &cmd); 
-		pci_write_config_word(p, PCI_COMMAND, 
+		pci_read_config_word(p, PCI_COMMAND, &cmd);
+		pci_write_config_word(p, PCI_COMMAND,
 				      cmd|PCI_COMMAND_IO|PCI_COMMAND_MEMORY);
 		printk("Calling the emulator.\n");
 		em86_main(p);
 		pci_write_config_word(p, PCI_COMMAND, cmd);
-	}	
+	}
 
 	cleanup_v86_mess();
-#endif	
+#endif
 	/* Reenable the primary VGA device */
 	if (default_vga) {
-		pci_write_config_word(default_vga, PCI_COMMAND, 
+		pci_write_config_word(default_vga, PCI_COMMAND,
 				      default_vga_cmd|
 				      (PCI_COMMAND_IO|PCI_COMMAND_MEMORY));
-		if (err) { 
-			printk("Keyboard error %d, using serial console!\n", 
+		if (err) {
+			printk("Keyboard error %d, using serial console!\n",
 			       err);
 		} else {
 			select_console(CONSOLE_VGA);
@@ -386,14 +386,14 @@ setup_hw(void)
 	/* In the future we may use the NVRAM to store default
 	 * kernel parameters.
 	 */
-	nvram=residual_find_device(~0UL, NULL, SystemPeripheral, NVRAM, 
+	nvram=residual_find_device(~0UL, NULL, SystemPeripheral, NVRAM,
 				   ~0UL, 0);
 	if (nvram) {
 		PnP_TAG_PACKET * pkt;
-		switch (nvram->DevId.Interface) {	
+		switch (nvram->DevId.Interface) {
 		case IndirectNVRAM:
 			  pkt=PnP_find_packet(res->DevicePnpHeap
-				      +nvram->AllocatedOffset, 
+				      +nvram->AllocatedOffset,
 					      )
 		}
 	}
@@ -426,7 +426,7 @@ setup_hw(void)
 /* Functions to deal with the residual data */
 static int same_DevID(unsigned short vendor,
 	       unsigned short Number,
-	       char * str) 
+	       char * str)
 {
 	static unsigned const char hexdigit[]="0123456789ABCDEF";
 	if (strlen(str)!=7) return 0;
@@ -473,11 +473,11 @@ PnP_TAG_PACKET *PnP_find_packet(unsigned char *p,
 	if (tag_type(packet_tag)) mask=0xff; else mask=0xF8;
 	masked_tag = packet_tag&mask;
 	for(; *p != END_TAG; p+=size) {
-		if ((*p & mask) == masked_tag && !(n--)) 
+		if ((*p & mask) == masked_tag && !(n--))
 			return (PnP_TAG_PACKET *) p;
 		if (tag_type(*p))
 			size=ld_le16((unsigned short *)(p+1))+3;
-		else 
+		else
 			size=tag_small_count(*p)+1;
 	}
 	return 0; /* not found */
@@ -490,7 +490,7 @@ PnP_TAG_PACKET *PnP_find_small_vendor_packet(unsigned char *p,
 	int next=0;
 	while (p) {
 		p = (unsigned char *) PnP_find_packet(p, 0x70, next);
-		if (p && p[1]==packet_type && !(n--)) 
+		if (p && p[1]==packet_type && !(n--))
 			return (PnP_TAG_PACKET *) p;
 		next = 1;
 	};
@@ -504,7 +504,7 @@ PnP_TAG_PACKET *PnP_find_large_vendor_packet(unsigned char *p,
 	int next=0;
 	while (p) {
 		p = (unsigned char *) PnP_find_packet(p, 0x84, next);
-		if (p && p[3]==packet_type && !(n--)) 
+		if (p && p[3]==packet_type && !(n--))
 			return (PnP_TAG_PACKET *) p;
 		next = 1;
 	};
@@ -526,12 +526,12 @@ find_max_mem( struct pci_dev *dev )
 		      (dev->device == PCI_DEVICE_ID_MOTOROLA_MPC105)) ||
 		     ((dev->vendor == PCI_VENDOR_ID_IBM) &&
 		      (dev->device == 0x0037/*IBM 660 Bridge*/)) ) {
-			pci_read_config_byte(dev, 0xa0, &banks); 
+			pci_read_config_byte(dev, 0xa0, &banks);
 			for (i = 0; i < 8; i++) {
 				if ( banks & (1<<i) ) {
-					pci_read_config_byte(dev, 0x90+i, &tmp); 
+					pci_read_config_byte(dev, 0x90+i, &tmp);
 					top = tmp;
-					pci_read_config_byte(dev, 0x98+i, &tmp); 
+					pci_read_config_byte(dev, 0x98+i, &tmp);
 					top |= (tmp&3)<<8;
 					if ( top > max ) max = top;
 				}

@@ -63,6 +63,6 @@ int BSP_connect_clock_handler (rtems_irq_hdl hdl)
   clockIrqData.on = (rtems_irq_enable)clockOn;
   clockIrqData.off = (rtems_irq_enable)clockOff;
   clockIrqData.isOn = (rtems_irq_is_enabled)clockIsOn;
-  
+
   return BSP_install_rtems_irq_handler (&clockIrqData);
 }

@@ -41,7 +41,7 @@ rtems_device_driver console_open(
 {
   return RTEMS_SUCCESSFUL;
 }
- 
+
 /*
  *  Close entry point
  */
@@ -69,7 +69,7 @@ rtems_device_driver console_read(
 }
 
 /*
- * write bytes to the serial port. Stdout and stderr are the same. 
+ * write bytes to the serial port. Stdout and stderr are the same.
  */
 
 rtems_device_driver console_write(

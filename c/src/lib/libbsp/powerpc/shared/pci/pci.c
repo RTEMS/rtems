@@ -44,9 +44,9 @@ unsigned char ucMaxPCIBus;
 
 static int
 indirect_pci_read_config_byte(unsigned char bus, unsigned char slot,
-			      unsigned char function, 
+			      unsigned char function,
 			      unsigned char offset, unsigned char *val) {
-	out_be32((unsigned int*) pci.pci_config_addr, 
+	out_be32((unsigned int*) pci.pci_config_addr,
 		 0x80|(bus<<8)|(PCI_DEVFN(slot,function)<<16)|((offset&~3)<<24));
 	*val = in_8(pci.pci_config_data + (offset&3));
 	return PCIBIOS_SUCCESSFUL;
@@ -54,11 +54,11 @@ indirect_pci_read_config_byte(unsigned char bus, unsigned char slot,
 
 static int
 indirect_pci_read_config_word(unsigned char bus, unsigned char slot,
-			      unsigned char function, 
+			      unsigned char function,
 			      unsigned char offset, unsigned short *val) {
-	*val = 0xffff; 
+	*val = 0xffff;
 	if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
-	out_be32((unsigned int*) pci.pci_config_addr, 
+	out_be32((unsigned int*) pci.pci_config_addr,
 		 0x80|(bus<<8)|(PCI_DEVFN(slot,function)<<16)|((offset&~3)<<24));
 	*val = in_le16((volatile unsigned short *)(pci.pci_config_data + (offset&3)));
 	return PCIBIOS_SUCCESSFUL;
@@ -66,11 +66,11 @@ indirect_pci_read_config_word(unsigned char bus, unsigned char slot,
 
 static int
 indirect_pci_read_config_dword(unsigned char bus, unsigned char slot,
-			      unsigned char function, 
+			      unsigned char function,
 			      unsigned char offset, unsigned int *val) {
-	*val = 0xffffffff; 
+	*val = 0xffffffff;
 	if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
-	out_be32((unsigned int*) pci.pci_config_addr, 
+	out_be32((unsigned int*) pci.pci_config_addr,
 		 0x80|(bus<<8)|(PCI_DEVFN(slot,function)<<16)|(offset<<24));
 	*val = in_le32((volatile unsigned int *)pci.pci_config_data);
 	return PCIBIOS_SUCCESSFUL;
@@ -78,9 +78,9 @@ indirect_pci_read_config_dword(unsigned char bus, unsigned char slot,
 
 static int
 indirect_pci_write_config_byte(unsigned char bus, unsigned char slot,
-			       unsigned char function, 
+			       unsigned char function,
 			       unsigned char offset, unsigned char val) {
-	out_be32((unsigned int*) pci.pci_config_addr, 
+	out_be32((unsigned int*) pci.pci_config_addr,
 		 0x80|(bus<<8)|(PCI_DEVFN(slot,function)<<16)|((offset&~3)<<24));
 	out_8(pci.pci_config_data + (offset&3), val);
 	return PCIBIOS_SUCCESSFUL;
@@ -88,10 +88,10 @@ indirect_pci_write_config_byte(unsigned char bus, unsigned char slot,
 
 static int
 indirect_pci_write_config_word(unsigned char bus, unsigned char slot,
-			       unsigned char function, 
+			       unsigned char function,
 			       unsigned char offset, unsigned short val) {
 	if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
-	out_be32((unsigned int*) pci.pci_config_addr, 
+	out_be32((unsigned int*) pci.pci_config_addr,
 		 0x80|(bus<<8)|(PCI_DEVFN(slot,function)<<16)|((offset&~3)<<24));
 	out_le16((volatile unsigned short *)(pci.pci_config_data + (offset&3)), val);
 	return PCIBIOS_SUCCESSFUL;
@@ -99,10 +99,10 @@ indirect_pci_write_config_word(unsigned char bus, unsigned char slot,
 
 static int
 indirect_pci_write_config_dword(unsigned char bus, unsigned char slot,
-				unsigned char function, 
+				unsigned char function,
 				unsigned char offset, unsigned int val) {
 	if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
-	out_be32((unsigned int*) pci.pci_config_addr, 
+	out_be32((unsigned int*) pci.pci_config_addr,
 		 0x80|(bus<<8)|(PCI_DEVFN(slot,function)<<16)|(offset<<24));
 	out_le32((volatile unsigned int *)pci.pci_config_data, val);
 	return PCIBIOS_SUCCESSFUL;
@@ -123,22 +123,22 @@ pci_config BSP_pci_configuration = {(volatile unsigned char*)PCI_CONFIG_ADDR,
 
 static int
 direct_pci_read_config_byte(unsigned char bus, unsigned char slot,
-			    unsigned char function, 
+			    unsigned char function,
 			    unsigned char offset, unsigned char *val) {
 	if (bus != 0 || (1<<slot & 0xff8007fe)) {
 		*val=0xff;
  		return PCIBIOS_DEVICE_NOT_FOUND;
 	}
-	*val=in_8(pci.pci_config_data + ((1<<slot)&~1) 
+	*val=in_8(pci.pci_config_data + ((1<<slot)&~1)
 		  + (function<<8) + offset);
 	return PCIBIOS_SUCCESSFUL;
 }
 
 static int
 direct_pci_read_config_word(unsigned char bus, unsigned char slot,
-			    unsigned char function, 
+			    unsigned char function,
 			    unsigned char offset, unsigned short *val) {
-	*val = 0xffff; 
+	*val = 0xffff;
 	if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
 	if (bus != 0 || (1<<slot & 0xff8007fe)) {
  		return PCIBIOS_DEVICE_NOT_FOUND;
@@ -151,9 +151,9 @@ direct_pci_read_config_word(unsigned char bus, unsigned char slot,
 
 static int
 direct_pci_read_config_dword(unsigned char bus, unsigned char slot,
-			     unsigned char function, 
+			     unsigned char function,
 			     unsigned char offset, unsigned int *val) {
-	*val = 0xffffffff; 
+	*val = 0xffffffff;
 	if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
 	if (bus != 0 || (1<<slot & 0xff8007fe)) {
  		return PCIBIOS_DEVICE_NOT_FOUND;
@@ -166,20 +166,20 @@ direct_pci_read_config_dword(unsigned char bus, unsigned char slot,
 
 static int
 direct_pci_write_config_byte(unsigned char bus, unsigned char slot,
-			     unsigned char function, 
+			     unsigned char function,
 			     unsigned char offset, unsigned char val) {
 	if (bus != 0 || (1<<slot & 0xff8007fe)) {
  		return PCIBIOS_DEVICE_NOT_FOUND;
 	}
-	out_8(pci.pci_config_data + ((1<<slot)&~1) 
-	      + (function<<8) + offset, 
+	out_8(pci.pci_config_data + ((1<<slot)&~1)
+	      + (function<<8) + offset,
 	      val);
 	return PCIBIOS_SUCCESSFUL;
 }
 
 static int
 direct_pci_write_config_word(unsigned char bus, unsigned char slot,
-			     unsigned char function, 
+			     unsigned char function,
 			     unsigned char offset, unsigned short val) {
 	if (offset&1) return PCIBIOS_BAD_REGISTER_NUMBER;
 	if (bus != 0 || (1<<slot & 0xff8007fe)) {
@@ -194,7 +194,7 @@ direct_pci_write_config_word(unsigned char bus, unsigned char slot,
 
 static int
 direct_pci_write_config_dword(unsigned char bus, unsigned char slot,
-			      unsigned char function, 
+			      unsigned char function,
 			      unsigned char offset, unsigned int val) {
 	if (offset&3) return PCIBIOS_BAD_REGISTER_NUMBER;
 	if (bus != 0 || (1<<slot & 0xff8007fe)) {
@@ -232,7 +232,7 @@ const pci_config_access_functions pci_direct_functions = {
              printk("pci : Device %d:%02x routed to interrupt_line %d\n", pbus, pslot, int_name )
 
 
-/* 
+/*
 ** Validate a test interrupt name and print a warning if its not one of
 ** the names defined in the routing record.
 */
@@ -244,19 +244,19 @@ static int test_intname(
 
    for(j=0; row->pin_route[j].pin > -1; j++)
    {
-      if( row->pin_route[j].pin == int_pin ) 
+      if( row->pin_route[j].pin == int_pin )
       {
          _nopin = 0;
-         
+
          for(k=0; k<4 && row->pin_route[j].int_name[k] > -1; k++ )
          {
-            if( row->pin_route[j].int_name[k] == int_name ){ _noname=0; break; } 
+            if( row->pin_route[j].int_name[k] == int_name ){ _noname=0; break; }
          }
          break;
       }
    }
 
-   if( _nopin  ) 
+   if( _nopin  )
    {
       printk("pci : Device %d:%02x supplied a bogus interrupt_pin %d\n", pbus, pslot, int_pin );
       return -1;
@@ -288,7 +288,7 @@ static int FindPCIbridge( int mybus, struct pcibridge *pb )
    for(pbus=0; pbus< BusCountPCI(); pbus++)
    {
       for(pslot=0; pslot< PCI_MAX_DEVICES; pslot++)
-      { 
+      {
          pci_read_config_word(pbus, pslot, 0, PCI_DEVICE_ID, &devid);
          if( devid == 0xffff ) continue;
 
@@ -297,7 +297,7 @@ static int FindPCIbridge( int mybus, struct pcibridge *pb )
 
          pci_read_config_word(pbus, pslot, 0, PCI_CLASS_DEVICE, &dclass);
 
-         if( dclass == PCI_CLASS_BRIDGE_PCI ) 
+         if( dclass == PCI_CLASS_BRIDGE_PCI )
          {
             pci_read_config_byte(pbus, pslot, 0, PCI_PRIMARY_BUS,    &buspri);
             pci_read_config_byte(pbus, pslot, 0, PCI_SECONDARY_BUS,  &bussec);
@@ -349,7 +349,7 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
    for(pbus=0; pbus< BusCountPCI(); pbus++)
    {
       for(pslot=0; pslot< PCI_MAX_DEVICES; pslot++)
-      { 
+      {
          pci_read_config_word(pbus, pslot, 0, PCI_DEVICE_ID, &devid);
          if( devid == 0xffff ) continue;
 
@@ -406,13 +406,13 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
                }
             }
 
-            
+
             if( !ismatch )
             {
-               /* 
+               /*
                ** no match, which means we're on a bus someplace.  Work
                ** backwards from it to one of our defined busses,
-               ** swizzling thru each bridge on the way. 
+               ** swizzling thru each bridge on the way.
                */
 
                /* keep pbus, pslot pointed to the device being
@@ -481,7 +481,7 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
                   {
                      struct pcibridge   pb;
 
-                     /* 
+                     /*
                      ** Haven't found our bus in the int map, so work
                      ** upwards thru the bridges till we find it.
                      */
@@ -504,7 +504,7 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
                         printk("pci : No bridge from bus %d towards root found\n", tbus );
                         goto donesearch;
                      }
-                     
+
                   }
 
                }

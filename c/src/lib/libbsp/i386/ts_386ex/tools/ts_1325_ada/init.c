@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -28,7 +28,7 @@ pid_t getpid()
  *  of the "Ada environment task".  Otherwise, we would be
  *  stuck with the defaults set by RTEMS.
  */
- 
+
 void *start_gnat_main( void * argument )
 {
   extern int gnat_main ( int argc, char **argv, char **envp );

@@ -70,7 +70,7 @@ int mg5rdbgOpenGDBuart(int breakoninit)
    /* set up vectoring for gdb */
    mips_gdb_stub_install(-1);
 
-   /* 
+   /*
       this is a rough approximation of our memory map.  Yours is
       probably different.  It only needs to be sufficient for the stub
       to know what it can and can't do and where.
@@ -81,10 +81,10 @@ int mg5rdbgOpenGDBuart(int breakoninit)
    gdbstub_add_memsegment(0x81500000, 0x81ffffff, MEMOPT_READABLE | MEMOPT_WRITEABLE );
 
 
-   if( breakoninit ) 
+   if( breakoninit )
    {
       printf("gdbstub: GDB stub entered, connect host debugger now\n");
-      /* 
+      /*
          break to gdb.  We'll wait there for the operator to get their gdb
          going, then they can 'continue' or do whatever.
       */
@@ -145,10 +145,10 @@ void putDebugChar (char c)
       * configure dcic for trapping, user & kernel mode, PC traps and enable it *
       dcic = DCIC_TR | DCIC_UD | DCIC_KD | DCIC_PCE | DCIC_DE;
       * dcic = DCIC_UD | DCIC_KD | DCIC_PCE | DCIC_DE; *
-      mips_set_dcic( dcic ); 
+      mips_set_dcic( dcic );
 
       mips_get_bpcrm( reg, mask );
-      mips_get_dcic( dcic ); 
+      mips_get_dcic( dcic );
       * printf("bpc is %08X, bpc_mask is %08X, dcic is now %08X\n", reg, mask, dcic ); *
    }
 */

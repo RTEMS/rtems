@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*
   $Id$
-  
+
   Trace Exception dumps a back trace to the debug serial port
 
  */
@@ -135,13 +135,13 @@ void trace_exception(unsigned long d0,
     }
     else
     {
-      debug_port_out(' ');      
+      debug_port_out(' ');
     }
-    
+
     ch = (*(((char*) &index) + index) >> 4) & 0x0F;
-    
+
     if (ch < 10)
-    {      
+    {
       ch += '0';
     }
     else
@@ -152,9 +152,9 @@ void trace_exception(unsigned long d0,
     debug_port_out((char) ch);
 
     ch = *(((char*) &index) + index) & 0x0F;
-    
+
     if (ch < 10)
-    {      
+    {
       ch += '0';
     }
     else
@@ -167,9 +167,9 @@ void trace_exception(unsigned long d0,
   debug_port_write("\nhalting cpu...");
 
 #if defined(UPDATE_DISPLAY)
-  UPDATE_DISPLAY("HALT");  
+  UPDATE_DISPLAY("HALT");
 #endif
-  
+
   WATCHDOG_TRIGGER();
   while (1 == 1);
 }

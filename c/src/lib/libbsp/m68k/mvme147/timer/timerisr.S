@@ -22,7 +22,7 @@ SYM (timerisr):
 	orb	#0x80, T1_CONTROL_REGISTER | clear T1 int status bit
         addql   #1, SYM (Ttimer_val)     | increment timer value
 end_timerisr:
-	rte	
+	rte
 
 END_CODE
 END

@@ -33,7 +33,7 @@ void
 );
 
 typedef
-uint8_t  
+uint8_t
 (*PNVRAMREAD)
 (
 	uint32_t   ulOffset

@@ -14,16 +14,16 @@
 
 #define __asm__
 #include  <registers.h>
-		
-/* 
- * Function to obtain, execute an IT handler and acknowledge the IT 
+
+/*
+ * Function to obtain, execute an IT handler and acknowledge the IT
  */
 
 	.globl ExecuteITHandler
-	
-ExecuteITHandler :	
+
+ExecuteITHandler :
   ldr	r0, =INTPHAI3            /* read the vector number */
-  ldr	r0, [r0]	
+  ldr	r0, [r0]
   ldr	r0, [r0]		/* extract the IT handler @ */
 
   /*
@@ -52,14 +52,14 @@ IRQ_return:
   msr	cpsr, r0
 
   mov pc, lr
-	
-/* 
- * Function to acknowledge the IT controller 
+
+/*
+ * Function to acknowledge the IT controller
  */
 	.globl AckControler
 
-#if 0	
-AckControler:	  
+#if 0
+AckControler:
   ldr	r0, =INTEOI3
   mov   r1, #EOI
   str	r1, [r0]

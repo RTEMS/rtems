@@ -10,7 +10,7 @@
  *        for some compilers.  The multiple writes to the MC68230
  *        may be optimized away.
  *
- *        It is important that the timer start/stop overhead be 
+ *        It is important that the timer start/stop overhead be
  *        determined when porting or modifying this code.
  *
  *  Code Modified for the MC68230 by Doug McBride, Colorado Space Grant College
@@ -40,7 +40,7 @@ rtems_isr timerisr();
 void Timer_initialize()
 {
   (void) set_vector( timerisr, TIMER_VECTOR, 0 );  /* install ISR */
-  
+
   Ttimer_val = 0;                          /* clear timer ISR count */
 
   /* some PI/T initialization stuff here */
@@ -65,7 +65,7 @@ void Timer_initialize()
 #define AVG_OVERHEAD      9  /* may not be right -- do this later */
 #define LEAST_VALID       10 /* Don't trust a value lower than this */
 
-int Read_timer() 
+int Read_timer()
 {
   uint8_t         data;
   uint8_t          msb, osb, lsb;
@@ -99,7 +99,7 @@ int Read_timer()
 
   if ( total < LEAST_VALID )
     return 0;            /* below timer resolution */
-   
+
   /* Clocked at 6.5 Mhz */
   /* Avoid floating point problems, be lazy, and return the total minus
      the average overhead */

@@ -22,13 +22,13 @@
 #include <string.h>
 #include <fcntl.h>
 #include <stdio.h>
- 
+
 #define RXGEN960_INIT
 
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
- 
+
 #define HEAP_SIZE 1024*1024*2
 
 /*
@@ -61,7 +61,7 @@ unsigned int top_of_used_memory;
  *      not yet initialized.
  *
  */
- 
+
 void
 bsp_pretasking_hook(void)
 {
@@ -83,9 +83,9 @@ bsp_pretasking_hook(void)
 #endif
 *(unsigned char *)(0x120f) = 0xf;
 }
- 
 
-/* we need to have the top of memory remembered later to start libc_init with 
+
+/* we need to have the top of memory remembered later to start libc_init with
    the correct values
 */
 int rx_boot_card( int argc, char **argv, char **environp)
@@ -122,7 +122,7 @@ bsp_start(void)
   /* just trying to get along */
   Cpu_table.stack_allocate_hook = 0;
   Cpu_table.stack_free_hook = 0;
-  
+
   /*
    * Tell libio how many fd's we want and allow it to tweak config
    */

@@ -36,6 +36,9 @@
 * $Id$
 *
 * $Log$
+* Revision 1.6  2004/04/15 13:26:13  ralf
+* Remove stray white spaces.
+*
 * Revision 1.5  2004/03/31 04:37:05  ralf
 * 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 *
@@ -486,7 +489,7 @@ static int8_t   SciRcvBufGetChar()
 {
     rtems_interrupt_level level;
     uint8_t   ch;
-    
+
     if ( SciRcvBufCount == 0 )
     {
         rtems_fatal_error_occurred(0xDEAD);     // check the count first!
@@ -521,7 +524,7 @@ static int8_t   SciRcvBufGetChar()
 static void SciRcvBufPutChar( uint8_t   ch )
 {
     rtems_interrupt_level level;
-    
+
     if ( SciRcvBufCount == SCI_RCV_BUF_SIZE )   // is there room?
     {
         return;                                 // no, throw it away
@@ -556,7 +559,7 @@ static void SciRcvBufPutChar( uint8_t   ch )
 static void SciRcvBufFlush( void )
 {
     rtems_interrupt_level level;
-    
+
     rtems_interrupt_disable( level );           // disable interrupts
 
     memset( SciRcvBuffer, 0, sizeof(SciRcvBuffer) );
@@ -740,7 +743,7 @@ int32_t   SciSetAttributes(
     uint16_t    sci_databits = 0;
 
     if ( minor != SCI_MINOR )                   // check the minor dev num
-    {      
+    {
         return -1;                              // return error
     }
 
@@ -754,7 +757,7 @@ int32_t   SciSetAttributes(
 //        baud_requested = B9600;                 // default to 9600 baud
         baud_requested = B19200;                 // default to 19200 baud
     }
-    
+
     sci_rate = termios_baud_to_number( baud_requested );
 
     // parity error detection
@@ -1123,7 +1126,7 @@ rtems_device_driver SciRead (
     rtems_libio_rw_args_t *rw_args;             // ptr to argument struct
     uint8_t   *buffer;
     uint16_t   length;
- 
+
     rw_args = (rtems_libio_rw_args_t *) arg;    // arguments to read()
 
 
@@ -1184,7 +1187,7 @@ rtems_device_driver SciWrite (
     rtems_libio_rw_args_t *rw_args;             // ptr to argument struct
     uint8_t   *buffer;
     uint16_t   length;
- 
+
     rw_args = (rtems_libio_rw_args_t *) arg;
 
     if (minor != SCI_MINOR)
@@ -1234,7 +1237,7 @@ rtems_device_driver SciControl (
     uint16_t   command;                         // the cmd to execute
     uint16_t   unused;                          // maybe later
     uint16_t   *ptr;                            // ptr to user data
- 
+
 //printk("%s major=%d minor=%d\r\n", __FUNCTION__,major,minor);
 
     // do some sanity checking

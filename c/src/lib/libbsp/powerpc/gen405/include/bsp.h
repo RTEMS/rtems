@@ -3,12 +3,12 @@
  *  This include file contains all GEN405 board IO definitions.
  *
  * derived from helas403/include/bsp.h:
- *  Id: bsp.h,v 1.4 2001/06/18 17:01:48 joel Exp 
+ *  Id: bsp.h,v 1.4 2001/06/18 17:01:48 joel Exp
  *  Author:	Thomas Doerfler <td@imd.m.isar.de>
  *              IMD Ingenieurbuero fuer Microcomputertechnik
  *
  *  COPYRIGHT (c) 1998 by IMD
- * 
+ *
  *  Changes from IMD are covered by the original distributions terms.
  *  This file has been derived from the papyrus BSP.
  *
@@ -109,15 +109,15 @@ extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 /*
  *  Device Driver Table Entries
  */
- 
+
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */
- 
+
 /* functions */
 
 rtems_isr_entry set_vector(                    /* returns old vector */

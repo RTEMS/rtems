@@ -32,8 +32,8 @@
 #include <rtems/chain.h>
 #include <assert.h>
 
-/* 
- * Proto types for this file                                          
+/*
+ * Proto types for this file
  */
 
 rtems_isr external_exception_ISR (
@@ -49,8 +49,8 @@ rtems_isr external_exception_ISR (
 uint8_t  	ucMaster8259Mask;
 uint8_t  	ucSlave8259Mask;
 
-/* 
- * Structure to for one of possible multiple interrupt handlers for 
+/*
+ * Structure to for one of possible multiple interrupt handlers for
  * a given interrupt.
  */
 typedef struct
@@ -65,7 +65,7 @@ typedef struct
  *        handlers at a later time.
  */
   EE_ISR_Type       ISR_Nodes [NUM_LIRQ_HANDLERS];
-  uint16_t          Nodes_Used; 
+  uint16_t          Nodes_Used;
   Chain_Control     ISR_Array  [NUM_LIRQ];
 
 void initialize_external_exception_vector()
@@ -139,7 +139,7 @@ void initialize_external_exception_vector()
 				     ELCRM_INT5_LVL);
 			break;
 		}
-		
+
 		case SYS_TYPE_PPC2:
 		case SYS_TYPE_PPC2a:
 		case SYS_TYPE_PPC4:
@@ -158,18 +158,18 @@ void initialize_external_exception_vector()
 		}
 	}
 
-	/*  
-	 * Install external_exception_ISR () as the handler for 
+	/*
+	 * Install external_exception_ISR () as the handler for
 	 *  the General Purpose Interrupt.
 	 */
 
-	status = rtems_interrupt_catch( external_exception_ISR, 
+	status = rtems_interrupt_catch( external_exception_ISR,
 					PPC_IRQ_EXTERNAL,
 					(rtems_isr_entry *) &previous_isr );
 }
 
 /*
- *  This routine installs one of multiple ISRs for the general purpose 
+ *  This routine installs one of multiple ISRs for the general purpose
  *  inerrupt.
  */
 void set_EE_vector(
@@ -200,7 +200,7 @@ void set_EE_vector(
 	 *  Doing things in this order makes them more atomic
 	 */
 
-	Nodes_Used++; 
+	Nodes_Used++;
 
 	index = Nodes_Used - 1;
 
@@ -215,13 +215,13 @@ void set_EE_vector(
 	En_Ext_Interrupt(vector);
 }
 
-/* 
+/*
  * This interrupt service routine is called for an External Exception.
  */
 rtems_isr external_exception_ISR (
   rtems_vector_number   vector             /* IN  */
 )
-{ 
+{
 	uint16_t  	index;
 	uint8_t  	ucISr;
 	EE_ISR_Type	*node;

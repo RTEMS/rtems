@@ -78,7 +78,7 @@ __rt_stkovf_split_big:
         @       dummy space on the stack and passing in a "phantom" arg1 into
         @       the function. This means that we do not need to worry about
         @       preserving the stack under "sp" even on function return.
-        @ 
+        @
         @        Code should never poke values beneath sp. The sp register
         @        should always be "dropped" first to cover the data. This
         @        protects the data against any events that may try and use

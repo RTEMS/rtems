@@ -58,7 +58,7 @@ uint32_t         CPU_CLICKS_PER_TICK;
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
@@ -83,7 +83,7 @@ void bsp_pretasking_hook(void)
         Heap_size = strtol(getenv("RTEMS_HEAPSPACE_SIZE"), 0, 0);
     else
         Heap_size = DEFAULT_HEAPSPACE_SIZE;
- 
+
     heap_start = 0;
 
     bsp_libc_init((void *)heap_start, Heap_size, 1024 * 1024);
@@ -102,9 +102,9 @@ void bsp_pretasking_hook(void)
 }
 
 /*
- *  DO NOT Use the shared bsp_postdriver_hook() implementation 
+ *  DO NOT Use the shared bsp_postdriver_hook() implementation
  */
- 
+
 void bsp_postdriver_hook(void)
 {
   return;
@@ -125,7 +125,7 @@ void bsp_start(void)
      */
 
     BSP_Configuration = Configuration;
- 
+
     /*
      *  If the node number is -1 then the application better provide
      *  it through environment variables RTEMS_NODE.
@@ -134,17 +134,17 @@ void bsp_start(void)
 
     if (BSP_Configuration.User_multiprocessing_table) {
         char *p;
- 
+
         /* make a copy for possible editing */
         BSP_Multiprocessing = *BSP_Configuration.User_multiprocessing_table;
         BSP_Configuration.User_multiprocessing_table = &BSP_Multiprocessing;
- 
+
         if (BSP_Multiprocessing.node == -1)
         {
             p = getenv("RTEMS_NODE");
             BSP_Multiprocessing.node = p ? atoi(p) : 1;
         }
- 
+
         /* If needed provide maximum_nodes also */
         if (BSP_Multiprocessing.maximum_nodes == -1)
         {
@@ -163,22 +163,22 @@ void bsp_start(void)
         cpu_number = 0;
 
     if (getenv("RTEMS_WORKSPACE_SIZE"))
-        BSP_Configuration.work_space_size = 
+        BSP_Configuration.work_space_size =
            strtol(getenv("RTEMS_WORKSPACE_SIZE"), 0, 0);
     else
         BSP_Configuration.work_space_size = DEFAULT_WORKSPACE_SIZE;
- 
+
     /*
      * Allocate workspace memory, ensuring it is properly aligned
      */
- 
-    workspace_ptr = 
+
+    workspace_ptr =
       (uint32_t) sbrk(BSP_Configuration.work_space_size + CPU_ALIGNMENT);
     workspace_ptr += CPU_ALIGNMENT - 1;
     workspace_ptr &= ~(CPU_ALIGNMENT - 1);
 
     BSP_Configuration.work_space_start = (void *) workspace_ptr;
- 
+
     /*
      * Set up our hooks
      * Make sure libc_init is done before drivers init'd so that

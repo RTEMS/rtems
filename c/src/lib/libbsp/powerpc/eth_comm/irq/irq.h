@@ -69,7 +69,7 @@ typedef enum {
      * Some SIU IRQ symbolic name definition. Please note that
      * INT IRQ are defined but a single one will be used to
      * redirect all CPM interrupt.
-     */	       
+     */
   BSP_SIU_EXT_IRQ_0      	= 	0,
   BSP_SIU_INT_IRQ_0         	= 	1,
 
@@ -78,19 +78,19 @@ typedef enum {
 
   BSP_SIU_EXT_IRQ_2      	= 	4,
   BSP_SIU_INT_IRQ_2         	= 	5,
-  
+
   BSP_SIU_EXT_IRQ_3      	= 	6,
   BSP_SIU_INT_IRQ_3         	= 	7,
-  
+
   BSP_SIU_EXT_IRQ_4      	= 	8,
   BSP_SIU_INT_IRQ_4         	= 	9,
 
   BSP_SIU_EXT_IRQ_5      	= 	10,
   BSP_SIU_INT_IRQ_5         	= 	11,
-  
+
   BSP_SIU_EXT_IRQ_6      	= 	12,
   BSP_SIU_INT_IRQ_6         	= 	13,
-  
+
   BSP_SIU_EXT_IRQ_7      	= 	14,
   BSP_SIU_INT_IRQ_7         	= 	15,
   /*
@@ -110,18 +110,18 @@ typedef enum {
   BSP_CPM_IRQ_SPI		=	BSP_CPM_IRQ_LOWEST_OFFSET + 5,
   BSP_CPM_IRQ_PARALLEL_IO_PC6	=	BSP_CPM_IRQ_LOWEST_OFFSET + 6,
   BSP_CPM_IRQ_TIMER_4		=	BSP_CPM_IRQ_LOWEST_OFFSET + 7,
-  
+
   BSP_CPM_IRQ_PARALLEL_IO_PC7	=	BSP_CPM_IRQ_LOWEST_OFFSET + 9,
   BSP_CPM_IRQ_PARALLEL_IO_PC8	=	BSP_CPM_IRQ_LOWEST_OFFSET + 10,
   BSP_CPM_IRQ_PARALLEL_IO_PC9	=	BSP_CPM_IRQ_LOWEST_OFFSET + 11,
   BSP_CPM_IRQ_TIMER_3		=	BSP_CPM_IRQ_LOWEST_OFFSET + 12,
-  
+
   BSP_CPM_IRQ_PARALLEL_IO_PC10	=	BSP_CPM_IRQ_LOWEST_OFFSET + 14,
   BSP_CPM_IRQ_PARALLEL_IO_PC11	=	BSP_CPM_IRQ_LOWEST_OFFSET + 15,
   BSP_CPM_I2C			=	BSP_CPM_IRQ_LOWEST_OFFSET + 16,
   BSP_CPM_RISC_TIMER_TABLE	=	BSP_CPM_IRQ_LOWEST_OFFSET + 17,
   BSP_CPM_IRQ_TIMER_2		=	BSP_CPM_IRQ_LOWEST_OFFSET + 18,
-  
+
   BSP_CPM_IDMA2			=	BSP_CPM_IRQ_LOWEST_OFFSET + 20,
   BSP_CPM_IDMA1			=	BSP_CPM_IRQ_LOWEST_OFFSET + 21,
   BSP_CPM_SDMA_CHANNEL_BUS_ERR	=	BSP_CPM_IRQ_LOWEST_OFFSET + 22,
@@ -138,10 +138,10 @@ typedef enum {
      * Some Processor exception handled as rtems IRQ symbolic name definition
      */
   BSP_DECREMENTER		=	BSP_PROCESSOR_IRQ_LOWEST_OFFSET
-  
+
 }rtems_irq_symbolic_name;
 
-#define CPM_INTERRUPT		    
+#define CPM_INTERRUPT
 
 
 /*
@@ -171,9 +171,9 @@ typedef struct __rtems_irq_connect_data__ {
    * It is usually called immediately AFTER connecting the interrupt handler.
    * RTEMS may well need such a function when restoring normal interrupt
    * processing after a debug session.
-   * 
+   *
    */
-    rtems_irq_enable		on;	
+    rtems_irq_enable		on;
   /*
    * function for disabling interrupts at device level (ONLY!).
    * The code will disable it at SIU and CPM level. RATIONALE : anyway
@@ -209,7 +209,7 @@ typedef struct {
   rtems_irq_symbolic_name	irqBase;
   /*
    * software priorities associated with interrupts.
-   * if irqPrio  [i]  >  intrPrio  [j]  it  means  that  
+   * if irqPrio  [i]  >  intrPrio  [j]  it  means  that
    * interrupt handler hdl connected for interrupt name i
    * will  not be interrupted by the handler connected for interrupt j
    * The interrupt source  will be physically masked at i8259 level.
@@ -285,7 +285,7 @@ int BSP_irq_enabled_at_siu     	(const rtems_irq_symbolic_name irqLine);
  *	4) perform rescheduling when necessary,
  *	5) restore the C scratch registers...
  *	6) restore initial execution flow
- * 
+ *
  */
 int BSP_install_rtems_irq_handler   	(const rtems_irq_connect_data*);
 /*
@@ -328,7 +328,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config);
  * (Re) get info on current RTEMS interrupt management.
  */
 int BSP_rtems_irq_mngt_get(rtems_irq_global_settings**);
-  
+
 extern void BSP_rtems_irq_mng_init(unsigned cpuId);
 
 #ifdef __cplusplus

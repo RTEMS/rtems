@@ -12,15 +12,15 @@
 
 
 #ifndef  __LMREGS_H__
-#define __LMREGS_H__  
+#define __LMREGS_H__
 
 /*
- * VARIABLE DECLARATION   
+ * VARIABLE DECLARATION
  ******************************************************************************
  */
 
 /* register area size                                                         */
-#define LM_REG_AREA_SIZ (0x4000/4)      
+#define LM_REG_AREA_SIZ (0x4000/4)
 
 /*** Register mapping : defined by indexes in an array                      ***/
 /*** NOTE : only 1 register every 4 byte address location (+ some holes)      */
@@ -216,7 +216,7 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define RINGCNTL        ((MISC_BASE+0x90)/4)
 #define RINGFREQ        ((MISC_BASE+0x94)/4)
 #define RSCNTL          ((MISC_BASE+0xA0)/4)
-/*#ifndef PRODUCT_VERSION*/	
+/*#ifndef PRODUCT_VERSION*/
 #define RSRXD           ((MISC_BASE+0xA4)/4)
 #define RSTXD           ((MISC_BASE+0xA8)/4)
 /*#endif*/
@@ -235,7 +235,7 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define CLKCNTL         ((MISC_BASE+0xF4)/4)
 #define OSCCOR          ((MISC_BASE+0xF8)/4)
 
-/* PRODUCT_VERSION */	
+/* PRODUCT_VERSION */
 /* Added 30/08/99 : New Control register for UART control */
 #define UART_BASE       0x3000
 #define RSRBR           ((UART_BASE+0x00)/4)
@@ -248,7 +248,7 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define RSDLL           ((UART_BASE+0x00)/4)
 #define RSDLH           ((UART_BASE+0x04)/4)
 #define RSCNT           ((UART_BASE+0x20)/4)
-/*PRODUCT_VERSION*/ 
+/*PRODUCT_VERSION*/
 
 
 /** THUMB and INTERFACES BLOCK              0x3400 - 0x4FFF                   */
@@ -830,12 +830,12 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 
 
 /* DCC register                                                               */
-/* bit ENABLE=0x80 already defined */ 
+/* bit ENABLE=0x80 already defined */
 #define DCC_ENABLE   0x80
 
 
 /* TIMERCNTL[0:1] register                                                    */
-/* bit ENABLE=0x80 already defined */ 
+/* bit ENABLE=0x80 already defined */
 #define TIMER_ENABLE   0x80
 #define RELOAD          0x0040
 #define MSK_FREQ        0x0003              /* mask on FREQ field             */
@@ -882,7 +882,7 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 
 
 /******************************************************************************
- * Memory Mapping definition 
+ * Memory Mapping definition
  ******************************************************************************
  */
 
@@ -901,7 +901,7 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 
 
 /******************************************************************************
- * Slot Control bloc 
+ * Slot Control bloc
  ******************************************************************************
  */
 
@@ -915,7 +915,7 @@ typedef volatile struct                     /* normal Slot Control Block      */
     unsigned char CNTL0;
     unsigned char CNTL1;
     unsigned char CNTL2;
-    unsigned char STAT0;                       
+    unsigned char STAT0;
     unsigned char STAT1;
     unsigned char STAT2;
     unsigned char CRYPT;
@@ -1051,7 +1051,7 @@ typedef LM_SCB *LM_SCB_P;                   /* pointer to Slot Control Block  */
 #define ZFIELD      0x01
 
 /* AMSG  parameter                                                            */
-#define PP_FP       0x80   
+#define PP_FP       0x80
 #define CT          0x40
 #define NT          0x20                    /* NT/CTSEND mapped on same bit   */
 #define CTSEND      0x20
@@ -1071,8 +1071,8 @@ typedef LM_SCB *LM_SCB_P;                   /* pointer to Slot Control Block  */
 
 
 
-/* 
- * Some macros to mask the VEGA+ interrupt sources                            
+/*
+ * Some macros to mask the VEGA+ interrupt sources
  ******************************************************************************
  */
 

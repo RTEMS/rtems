@@ -43,7 +43,7 @@ extern "C" {
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 4
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
-  
+
 #include <mvme16x_hw.h>
 
 /* GCSR is in mvme16x_hw.h */
@@ -153,7 +153,7 @@ typedef volatile struct memc040_regs_ {
  *  nearly identical to the ones of the MEMC040, and the memc040_X structures
  *  can be used to read those first eight registers.
  */
- 
+
 
 /*
  *  Representation of the Cirrus Logic CL-CD2401 Multi-Protocol Controller
@@ -189,7 +189,7 @@ typedef volatile struct cd2401_regs_ {
       unsigned char rfar2;          /* 0xFFF4501E - Receive Frame Address 2 */
       unsigned char rfar1;          /* 0xFFF4501F - Receive Frame Address 1 */
     } sync;
-  } u1;    
+  } u1;
   unsigned char     reserved4[2];
   unsigned char     scrh;           /* 0xFFF45022 - Special Character Range High */
   unsigned char     scrl;           /* 0xFFF45023 - Special Character Range Low */
@@ -263,7 +263,7 @@ typedef volatile struct cd2401_regs_ {
       unsigned char risrh;          /* 0xFFF45088 - Receive Interrupt Status High */
       unsigned char risrl;          /* 0xFFF45089 - Receive Interrupt Status Low */
     } b;
-  } u5;   
+  } u5;
   unsigned char     tisr;           /* 0xFFF4508A - Transmit Interrupt Status */
   unsigned char     misr;           /* 0xFFF4508B - Modem/Timer Interrupt Status */
   unsigned char     reserved13[2];
@@ -334,7 +334,7 @@ m68k_isr_entry set_vector(
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */
@@ -365,7 +365,7 @@ extern m68k_isr_entry M68Kvec[];   /* vector table address */
 #define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
 
 /*
- *  Define the interrupt mechanism for Time Test 27 
+ *  Define the interrupt mechanism for Time Test 27
  *
  *  NOTE: We use software interrupt 0
  */

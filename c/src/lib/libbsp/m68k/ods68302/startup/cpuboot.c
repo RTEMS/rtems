@@ -26,9 +26,9 @@
   This code executes with a valid C environment. That is the data
   section has been intialised and the bss section set to 0. This phase
   performs any special card initialisation and then calls boot card.
-  
+
   $Id$
-  
+
 */
 /*****************************************************************************/
 
@@ -62,12 +62,12 @@ void boot_phase_1()
   WRITE_OR(CSEL_1, CSEL_1_SIZE, CSEL_1_WAIT_STATES, OR_MASK_RW, OR_MASK_FC);
   WRITE_BR(CSEL_1, CSEL_1_BASE, BR_READ_WRITE, BR_FC_NULL, BR_ENABLED);
 #endif
-  
+
 #if defined(CSEL_2)
   WRITE_OR(CSEL_2, CSEL_2_SIZE, CSEL_2_WAIT_STATES, OR_MASK_RW, OR_MASK_FC);
   WRITE_BR(CSEL_2, CSEL_2_BASE, BR_READ_WRITE, BR_FC_NULL, BR_ENABLED);
 #endif
-  
+
   m302.reg.ipr = m302.reg.imr = m302.reg.isr = 0;
   m302.reg.gimr = 0x0080;
 
@@ -86,7 +86,7 @@ void boot_phase_1()
 #if defined(LED_CONTROL)
   LED_CONTROL(LED_1_RED, LED_2_OFF, LED_3_OFF, LED_4_OFF,
               LED_5_OFF, LED_6_OFF, LED_7_OFF, LED_8_OFF);
-#endif  
+#endif
 }
 
 /*
@@ -96,15 +96,15 @@ void boot_phase_1()
 void boot_phase_2(void)
 {
   uint32_t         stack;
-  
+
 #if defined(LED_CONTROL)
   LED_CONTROL(LED_1_RED, LED_2_RED, LED_3_OFF, LED_4_OFF,
               LED_5_OFF, LED_6_OFF, LED_7_OFF, LED_8_OFF);
 #endif
-  
+
   WRITE_BR(CSEL_ROM, _ROM_BASE, BR_READ_ONLY, BR_FC_NULL, BR_ENABLED);
   WRITE_BR(CSEL_RAM, _RAM_BASE, BR_READ_WRITE, BR_FC_NULL, BR_ENABLED);
-  
+
 #if defined(LED_CONTROL)
   LED_CONTROL(LED_1_GREEN, LED_2_RED, LED_3_OFF, LED_4_OFF,
               LED_5_OFF, LED_6_OFF, LED_7_OFF, LED_8_OFF);
@@ -130,11 +130,11 @@ void boot_phase_3(void)
     set_debug_traps();
     breakpoint();
   }
-  
+
   debug_port_banner();
-  
+
   /* FIXME : add RAM and ROM checks */
-  
+
   /* boot the bsp, what ever this means */
   boot_card();
 

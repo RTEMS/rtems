@@ -38,7 +38,7 @@ extern int BSPConsolePort;
 extern int BSPBaseBaud;
 /*
  * Command values for BSP_uart_intr_ctrl(),
- * values are strange in order to catch errors 
+ * values are strange in order to catch errors
  * with assert
  */
 #define BSP_UART_INTR_CTRL_DISABLE  (0)

@@ -1,4 +1,4 @@
-/* 
+/*
  * This routine initializes the MC68340/349 Periodic Interval Timer
  *
  * Based on the `gen68360' board support package, and covered by the
@@ -9,7 +9,7 @@
  * 4, rue du Clos Courtel
  * 35512 CESSON-SEVIGNE
  * FRANCE
- * 
+ *
  * e-mail: g_montel@yahoo.com
  *
  *  $Id$
@@ -54,7 +54,7 @@ rtems_device_minor_number rtems_clock_minor;
 
 /******************************************************
   Name: Clock_isr
-  Input parameters: irq vector 
+  Input parameters: irq vector
   Output parameters: none
   Description: update # of clock ticks
  *****************************************************/
@@ -79,7 +79,7 @@ Clock_exit (void)
 {
 	/*
 	 * Turn off periodic interval timer
-	 */		
+	 */
 	SIMPITR = 0;
 }
 
@@ -99,23 +99,23 @@ Install_clock (rtems_isr_entry clock_isr)
 	Clock_driver_ticks = 0;
 
 	set_vector (clock_isr, CLOCK_VECTOR, 1);
-		
+
 	/* sets the Periodic Interrupt Control Register PICR */
 	/* voir a quoi correspond exactement le Clock Vector */
 
-	SIMPICR = ( CLOCK_IRQ_LEVEL << 8 ) | ( CLOCK_VECTOR );		
-			  
+	SIMPICR = ( CLOCK_IRQ_LEVEL << 8 ) | ( CLOCK_VECTOR );
+
 	/* sets the PITR count value */
 	/* this assumes a 32.765 kHz crystal */
-		
+
         usecs_per_tick = BSP_Configuration.microseconds_per_tick;
 	/* find out whether prescaler should be enabled or not */
 	if ( usecs_per_tick <= 31128 ) {
 	   pitr_tmp = ( usecs_per_tick * 8192 ) / 1000000 ;
 	} else {
 	   pitr_tmp = ( usecs_per_tick / 1000000 ) * 16;
-	   /* enable it */		   
-	   pitr_tmp |= 0x100; 		   
+	   /* enable it */
+	   pitr_tmp |= 0x100;
 	}
 
 	SIMPITR = (unsigned char) pitr_tmp;
@@ -126,7 +126,7 @@ Install_clock (rtems_isr_entry clock_isr)
 /******************************************************
   Name: Clock_initialize
   Input parameters: major & minor numbers
-  Output parameters: - 
+  Output parameters: -
   Description: main entry for clock initialization
 	       calls the bsp dependant routine
  *****************************************************/
@@ -138,16 +138,16 @@ Clock_initialize(
 )
 {
 	Install_clock (Clock_isr);
- 
+
 	/*
 	 * make major/minor avail to others such as shared memory driver
 	 */
 	rtems_clock_major = major;
 	rtems_clock_minor = minor;
- 
+
 	return RTEMS_SUCCESSFUL;
 }
- 
+
 /******************************************************
   Name: Clock_control
   Input parameters: major & minor number

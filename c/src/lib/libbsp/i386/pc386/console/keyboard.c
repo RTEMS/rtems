@@ -14,7 +14,7 @@
  * `Sticky' modifier keys, 951006.
  *
  * 11-11-96: SAK should now work in the raw mode (Martin Mares)
- * 
+ *
  * Modified to provide 'generic' keyboard support by Hamish Macdonald
  * Merge with the m68k keyboard driver and split-off of the PC low-level
  * parts by Geert Uytterhoeven, May 1997
@@ -24,7 +24,7 @@
  * -------------------------------------------------------------------
  * End of Linux - Copyright notes...
  *
- * Ported to RTEMS to provide the basic fuctionality to the console driver. 
+ * Ported to RTEMS to provide the basic fuctionality to the console driver.
  * by: Rosimildo da Silva:  rdasilva@connecttel.com
  *
  */
@@ -110,9 +110,9 @@ static unsigned char k_down[NR_SHIFT] = {0, };
 static unsigned long key_down[256/BITS_PER_LONG] = { 0, };
 
 static int dead_key_next = 0;
-/* 
+/*
  * In order to retrieve the shift_state (for the mouse server), either
- * the variable must be global, or a new procedure must be created to 
+ * the variable must be global, or a new procedure must be created to
  * return the value. I chose the former way.
  */
 int shift_state = 0;

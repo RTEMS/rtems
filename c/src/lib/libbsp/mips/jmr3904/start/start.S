@@ -33,9 +33,9 @@
 # else
 #  define LA(t,x) la t,x-PICBASE ; addu t,s0,t
 # endif
-#else /* __mips_embedded_pic */ 
+#else /* __mips_embedded_pic */
 # define LA(t,x) la t,x
-#endif /* __mips_embedded_pic */ 
+#endif /* __mips_embedded_pic */
 
 	.text
 	.align	2
@@ -76,7 +76,7 @@ relocate:
 	nop
 	.end _start
 
-	
+
 	.globl	_start_in_ram
 	.ent _start_in_ram
 _start_in_ram:
@@ -118,7 +118,7 @@ _start_in_ram:
 	li	v0, SR_PE|SR_FR|SR_KX|SR_SX|SR_UX
 	mtc0	v0, C0_SR
 2:
-/* Fix high bits, if any, of the PC so that exception handling 
+/* Fix high bits, if any, of the PC so that exception handling
    doesn't get confused.  */
 	LA (v0, 3f)
 	jr	v0
@@ -141,12 +141,12 @@ zerobss:
 	bltu	v0,v1,3b
 	addiu	v0,v0,4				# executed in delay slot
 
-	la	t0, _stack_init			# initialize stack so we 
+	la	t0, _stack_init			# initialize stack so we
 	/* We must subtract 24 bytes for the 3 8 byte arguments to main, in
 	   case main wants to write them back to the stack.  The caller is
 	   supposed to allocate stack space for parameters in registers in
 	   the old MIPS ABIs.  We must do this even though we aren't passing
-	   arguments, because main might be declared to have them. 
+	   arguments, because main might be declared to have them.
 
 	   Some ports need a larger alignment for the stack, so we subtract
 	   32, which satisifes the stack for the arguments and keeps the
@@ -169,7 +169,7 @@ init:
 						/* destructors */
 	move	a0,v0				/* pass through the exit code */
 	.end	init
-	
+
 /*
  * _sys_exit -- Exit from the application. Normally we cause a user trap
  *          to return to the ROM monitor for another run. NOTE: This is

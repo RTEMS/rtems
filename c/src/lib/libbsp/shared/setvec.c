@@ -34,7 +34,7 @@ rtems_isr_entry set_vector(                   /* returns old vector */
 
   if ( type )
     rtems_interrupt_catch( handler, vector, &previous_isr );
-  else 
+  else
     _CPU_ISR_install_raw_handler( vector, handler, (void *)&previous_isr );
 
   return previous_isr;

@@ -13,9 +13,9 @@
  *              IMD Ingenieurbuero fuer Microcomputertechnik
  *
  *  COPYRIGHT (c) 1998 by IMD
- * 
+ *
  *  Changes from IMD are covered by the original distributions terms.
- *  This file has been derived from the papyrus BSP:	
+ *  This file has been derived from the papyrus BSP:
  *
  *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
@@ -45,7 +45,7 @@
  *      the above copyright notice and this notice appears in all
  *      copies. IMD makes no representations about the suitability
  *      of this software for any purpose.
- * 
+ *
  *  Derived from c/src/lib/libbsp/no_cpu/no_bsp/startup/bspstart.c:
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
@@ -63,7 +63,7 @@
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <ictrl.h>
- 
+
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
@@ -81,7 +81,7 @@ void *bsp_ram_end = (void *)RAM_END;  /* first addr behind avail. ram area */
 /*      Initialize whatever libc we are using
  *      called from postdriver hook
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
@@ -90,7 +90,7 @@ void bsp_libc_init( void *, uint32_t, int );
  *  bsp_predriver_hook
  *
  *  Before drivers are setup.
- */ 
+ */
 
 void bsp_predriver_hook(void)
 {
@@ -112,7 +112,7 @@ void bsp_predriver_hook(void)
  *      not yet initialized.
  *
  */
- 
+
 void bsp_pretasking_hook(void)
 {
     extern int _end;
@@ -133,13 +133,13 @@ void bsp_pretasking_hook(void)
     heap_size = heap_end - heap_start;
 
     bsp_libc_init((void *) heap_start, heap_size, 0); /* 64 * 1024 */
- 
+
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
 
 }
- 
+
 
 /*
  *  bsp_start
@@ -162,11 +162,11 @@ void bsp_start( void )
    *  tell the RTEMS configuration where it is.  This memory is
    *  not malloc'ed.  It is just "pulled from the air".
    */
-  /* FIME: plan usage of RAM better: 
+  /* FIME: plan usage of RAM better:
      - make top of ram dynamic,
      - take out some part for persistant log
-     - make rest of ram to heap... 
-     -remove RAM_END from bsp.h, this cannot be valid... 
+     - make rest of ram to heap...
+     -remove RAM_END from bsp.h, this cannot be valid...
       or must be a function call
    */
   BSP_Configuration.work_space_start = (void *)
@@ -181,7 +181,7 @@ void bsp_start( void )
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
-  Cpu_table.clicks_per_usec = 300; 
+  Cpu_table.clicks_per_usec = 300;
   Cpu_table.serial_per_sec = 14625000; /* = (CPU Clock / UART Internal Clock Divisor) */
   Cpu_table.serial_external_clock = 0;
   Cpu_table.timer_internal_clock  = 1;

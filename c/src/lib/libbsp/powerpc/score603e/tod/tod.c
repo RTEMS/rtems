@@ -1,14 +1,14 @@
 /*
- * Real Time Clock (Harris ICM7170) for RTEMS 
+ * Real Time Clock (Harris ICM7170) for RTEMS
  *
- *  This part is found on the second generation of this board. 
+ *  This part is found on the second generation of this board.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
- */ 
+ */
 
 #include <rtems.h>
 #include <tod.h>
@@ -74,7 +74,7 @@ int checkRealTime()
 }
 
 /*
- *  These routines are ICM7170 should be in 
+ *  These routines are ICM7170 should be in
  *  a separate support library.
  * XXX Make static
  */
@@ -113,13 +113,13 @@ void ICM7170_GetTOD(
   if (init ) {
     ICM7170_SetField( imc1770_regs,  0x11, (0x0c | icm1770_freq) );
     init = FALSE;
-  } 
+  }
 
   /* Latch times */
   /* rtc_tod->ticks  = */
-  
+
   usec = ICM7170_GetField( imc1770_regs, 0x00 );
-   
+
   year = ICM7170_GetField( imc1770_regs, 0x06 );
   if ( year >= 88 )
     year += 1900;
@@ -151,7 +151,7 @@ void ICM7170_SetTOD(
     year -= 2000;
   else
     year -= 1900;
-  
+
   ICM7170_SetField( imc1770_regs, 0x11, (0x04 |icm1770_freq ) );
 
   ICM7170_SetField( imc1770_regs, 0x06, year );
@@ -162,8 +162,8 @@ void ICM7170_SetTOD(
   ICM7170_SetField( imc1770_regs, 0x03, rtc_tod->second );
 
   /*
-   * I don't know which day of week is 
-   *  
+   * I don't know which day of week is
+   *
    */
   ICM7170_SetField( imc1770_regs, 0x07, 1 );
 

@@ -66,7 +66,7 @@ _start:
  */
 
 	bl	.Laddr			/* get current address */
-	
+
 .Laddr:
 	mflr	r4			/* real address of .Laddr */
 	lwz	r5,(.Lptr-.Laddr)(r4)	/* linker generated address of .LCTOC1 */

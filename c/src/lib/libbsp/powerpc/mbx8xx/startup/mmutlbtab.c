@@ -1,7 +1,7 @@
-/* 
+/*
  * mmutlbtab.c
- * 
- * This file defines the  MMU_TLB_table for the MBX8xx. 
+ *
+ * This file defines the  MMU_TLB_table for the MBX8xx.
  *
  * Copyright (c) 1999, National Research Council of Canada
  *
@@ -27,14 +27,14 @@
  * The instruction and data TLBs each can hold 32 entries, so _TLB_Table must
  * not have more than 32 lines in it!
  *
- * We set up the virtual memory map so that virtual address of a 
+ * We set up the virtual memory map so that virtual address of a
  * location is equal to its real address.
  */
 MMU_TLB_table_t MMU_TLB_table[] = {
 #if ( defined(mbx860_001b) )
   /*
-	 * DRAM: CS1, Start address 0x00000000, 2M, 
-	 *	ASID=0x0, APG=0x0, not guarded memory, copyback data cache policy, 
+	 * DRAM: CS1, Start address 0x00000000, 2M,
+	 *	ASID=0x0, APG=0x0, not guarded memory, copyback data cache policy,
 	 *	R/W,X for all, no ASID comparison, not cache-inhibited.
 	 *	Last 512K block is cache-inhibited, but not guarded for use by EPPCBug.
 	 * EPN		TWC	RPN
@@ -55,8 +55,8 @@ MMU_TLB_table_t MMU_TLB_table[] = {
          defined(mbx821_002)  || \
          defined(mbx821_003) )
   /*
-	 * DRAM: CS1, Start address 0x00000000, 4M, 
-	 *	ASID=0x0, APG=0x0, not guarded memory, copyback data cache policy, 
+	 * DRAM: CS1, Start address 0x00000000, 4M,
+	 *	ASID=0x0, APG=0x0, not guarded memory, copyback data cache policy,
 	 *	R/W,X for all, no ASID comparison, not cache-inhibited.
 	 *	Last 512K block is cache-inhibited, but not guarded for use by EPPCBug.
 	 * EPN		TWC	RPN
@@ -78,10 +78,10 @@ MMU_TLB_table_t MMU_TLB_table[] = {
         defined(mbx821_005) || \
         defined(mbx821_004b) || \
         defined(mbx821_005b) || \
-        defined(mbx821_006b) ) 
+        defined(mbx821_006b) )
   /*
-	 * DRAM: CS1, Start address 0x00000000, 16M, 
-	 *	ASID=0x0, APG=0x0, not guarded memory, copyback data cache policy, 
+	 * DRAM: CS1, Start address 0x00000000, 16M,
+	 *	ASID=0x0, APG=0x0, not guarded memory, copyback data cache policy,
 	 *	R/W,X for all, no ASID comparison, not cache-inhibited.
 	 * EPN		TWC	RPN
 	 */
@@ -93,9 +93,9 @@ MMU_TLB_table_t MMU_TLB_table[] = {
 	/*
 	 *
 	 * NVRAM: CS4, Start address 0xFA000000, 32K,
-	 *	ASID=0x0, APG=0x0, not guarded memory, copyback data cache policy, 
+	 *	ASID=0x0, APG=0x0, not guarded memory, copyback data cache policy,
 	 *	R/W,X for all, no ASID comparison, cache-inhibited.
-	 * 
+	 *
 	 * EPN		TWC	RPN
 	 */
 	{ 0xFA000200,	0x01,	0xFA0009FF },	/* NVRAM - PS=16K */
@@ -103,7 +103,7 @@ MMU_TLB_table_t MMU_TLB_table[] = {
 	/*
 	 *
 	 * Board Control/Status Register #1/#2: CS4, Start address 0xFA100000, (4 x 8 bits?)
-	 *	ASID=0x0, APG=0x0, guarded memory, write-through data cache policy, 
+	 *	ASID=0x0, APG=0x0, guarded memory, write-through data cache policy,
 	 *	R/W,X for all, no ASID comparison, cache-inhibited.
 	 * EPN		TWC	RPN
 	 */
@@ -111,10 +111,10 @@ MMU_TLB_table_t MMU_TLB_table[] = {
 	/*
 	 *
 	 * (IMMR-SPRs) Dual Port RAM: Start address 0xFA200000, 16K,
-	 *	ASID=0x0, APG=0x0, guarded memory, write-through data cache policy, 
+	 *	ASID=0x0, APG=0x0, guarded memory, write-through data cache policy,
 	 *	R/W,X for all, no ASID comparison, cache-inhibited.
-	 *	
-	 *	Note: We use the value in MBXA/PG2, which is also the value that 
+	 *
+	 *	Note: We use the value in MBXA/PG2, which is also the value that
 	 *	EPPC-Bug programmed into our boards. The alternative is the value
 	 * 	in MBXA/PG1: 0xFFA00000. This value might well depend on the revision
 	 *	of the firmware.
@@ -124,7 +124,7 @@ MMU_TLB_table_t MMU_TLB_table[] = {
 	/*
 	 *
 	 * Flash: CS0, Start address 0xFE000000, 4M, (BootROM-EPPCBug)
-	 *	ASID=0x0, APG=0x0, not guarded memory, 
+	 *	ASID=0x0, APG=0x0, not guarded memory,
 	 *	R/O,X for all, no ASID comparison, not cache-inhibited.
 	 * EPN		TWC	RPN
 	 */
@@ -138,7 +138,7 @@ MMU_TLB_table_t MMU_TLB_table[] = {
 	{ 0xFE380200,	0x05,	0xFE380CFD },	/* Flash - PS=512K */
 	/*
 	 * BootROM: CS7, Start address 0xFC000000, 4M?, (socketed FLASH)
-	 *	ASID=0x0, APG=0x0, not guarded memory, 
+	 *	ASID=0x0, APG=0x0, not guarded memory,
 	 *	R/O,X for all, no ASID comparison, not cache-inhibited.
 	 * EPN		TWC	RPN
 	 */
@@ -173,23 +173,23 @@ MMU_TLB_table_t MMU_TLB_table[] = {
 	 * For each space (MEM/DMA/ATTRIB/IO) only the first 8MB are mapped
 	 *	ASID=0x0, APG=0x0, guarded memory,
 	 *	R/W,X for all, no ASID comparison, cache-inhibited.
-	 * EPN		                           TWC	
+	 * EPN		                           TWC
 	 * RPN
 	 */
-	{ (PCMCIA_MEM_ADDR & 0xfffff000) | 0x200, 0x1D,	
+	{ (PCMCIA_MEM_ADDR & 0xfffff000) | 0x200, 0x1D,
 	  (PCMCIA_MEM_ADDR & 0xfffff000) | 0x9F7 },/* PCMCIA Memory - PS=8M */
 
-	{ (PCMCIA_DMA_ADDR & 0xfffff000) | 0x200, 0x1D,	
+	{ (PCMCIA_DMA_ADDR & 0xfffff000) | 0x200, 0x1D,
 	  (PCMCIA_DMA_ADDR & 0xfffff000) | 0x9F7 },/* PCMCIA DMA - PS=8M */
 
-	{ (PCMCIA_ATTRB_ADDR & 0xfffff000) | 0x200, 0x1D,	
+	{ (PCMCIA_ATTRB_ADDR & 0xfffff000) | 0x200, 0x1D,
 	  (PCMCIA_ATTRB_ADDR & 0xfffff000) | 0x9F7 },/* PCMCIA ATTRIB-PS=8M*/
 
-	{ (PCMCIA_IO_ADDR & 0xfffff000) | 0x200, 0x1D,	
+	{ (PCMCIA_IO_ADDR & 0xfffff000) | 0x200, 0x1D,
 	  (PCMCIA_IO_ADDR & 0xfffff000) | 0x9F7 }     /* PCMCIA I/O - PS=8M */
 };
 
-/* 
+/*
  * MMU_N_TLB_Table_Entries is defined here because the size of the
  * MMU_TLB_table is only known in this file.
  */

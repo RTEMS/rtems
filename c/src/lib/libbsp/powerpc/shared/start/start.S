@@ -28,20 +28,20 @@
 	li	r10,0x63	;	\
 	sc
 
-		
+
 	.text
 	.globl	__rtems_entry_point
 	.type	__rtems_entry_point,@function
 __rtems_entry_point:
 #ifdef DEBUG_EARLY_START
 	MONITOR_ENTER
-#endif	
-		
-/* 
+#endif
+
+/*
  * PREP
  * This is jumped to on prep systems right after the kernel is relocated
  * to its proper place in memory by the boot loader.  The expected layout
- * of the regs is:	
+ * of the regs is:
  *   r3: ptr to residual data
  *   r4: initrd_start or if no initrd then 0
  *   r5: initrd_end - unused if r4 is 0
@@ -51,7 +51,7 @@ __rtems_entry_point:
  *   The Prep boot loader insure that the MMU is currently off...
  *
  */
-	
+
 	mr	r31,r3			/* save parameters */
 	mr	r30,r4
 	mr	r29,r5
@@ -64,7 +64,7 @@ __rtems_entry_point:
 	bl	flush_tlbs
 /*
  * Use the first pair of BAT registers to map the 1st 256MB
- * of RAM to KERNELBASE. 
+ * of RAM to KERNELBASE.
  */
 	lis	r11,KERNELBASE@h
 	ori	r11,r11,0x1ffe		/* set up BAT registers for 604 */
@@ -77,14 +77,14 @@ __rtems_entry_point:
 	isync
 
 /*
- * we now have the 1st 256M of ram mapped with the bats. We are still 
- * running on the bootloader stack and cannot switch to an RTEMS allocated 
+ * we now have the 1st 256M of ram mapped with the bats. We are still
+ * running on the bootloader stack and cannot switch to an RTEMS allocated
  * init stack before copying the residual data that may have been set just after
  * rtems_end address. This bug has been experienced on MVME2304. Thank to
- * Till Straumann <strauman@SLAC.Stanford.EDU> for hunting it and suggesting 
+ * Till Straumann <strauman@SLAC.Stanford.EDU> for hunting it and suggesting
  * the appropriate code.
  */
-	
+
 enter_C_code:
 	bl	MMUon
 	bl  __eabi	/* setup EABI and SYSV environment */
@@ -96,7 +96,7 @@ enter_C_code:
 	mr	r4,r30
 	mr	r5,r29
 	mr	r6,r28
-	mr	r7,r27 
+	mr	r7,r27
 	bl	save_boot_params
 	/*
 	 * stack = &__rtems_end + 4096
@@ -113,10 +113,10 @@ enter_C_code:
 	li	r3, 0			/* argc */
 	bl	boot_card
 	bl	_return_to_ppcbug
-	
+
 	.globl  MMUon
 	.type	MMUon,@function
-MMUon:	
+MMUon:
 	mfmsr	r0
 #if (PPC_HAS_FPU == 0)
 	ori	r0,r0, MSR_IP | MSR_RI | MSR_IR | MSR_DR | MSR_EE | MSR_FE0 | MSR_FE1 | MSR_FP
@@ -130,10 +130,10 @@ MMUon:
 	mtsrr1	r0
 	SYNC
 	rfi
-	
+
 	.globl  MMUoff
 	.type	MMUoff,@function
-MMUoff:	
+MMUoff:
 	mfmsr	r0
 	ori	r0,r0,MSR_IR| MSR_DR | MSR_IP
 	mflr	r11
@@ -146,22 +146,22 @@ MMUoff:
 	.globl	_return_to_ppcbug
 	.type	_return_to_ppcbug,@function
 
-	
+
 _return_to_ppcbug:
 	mflr	r30
 	bl	MMUoff
 	MONITOR_ENTER
 	bl	MMUon
 	mtctr	r30
-	bctr	
+	bctr
 
-/* 
+/*
  * An undocumented "feature" of 604e requires that the v bit
  * be cleared before changing BAT values.
  *
  * Also, newer IBM firmware does not clear bat3 and 4 so
  * this makes sure it's done.
- *  -- Cort 
+ *  -- Cort
  */
 clear_bats:
 	li	r20,0
@@ -171,14 +171,14 @@ clear_bats:
 	SYNC
 	beq	1f
 	mtspr	DBAT0U,r20
-	mtspr	DBAT0L,r20	
+	mtspr	DBAT0L,r20
 	mtspr	DBAT1U,r20
 	mtspr	DBAT1L,r20
 	mtspr	DBAT2U,r20
-	mtspr	DBAT2L,r20	
+	mtspr	DBAT2L,r20
 	mtspr	DBAT3U,r20
 	mtspr	DBAT3L,r20
-1:	
+1:
 	mtspr	IBAT0U,r20
 	mtspr	IBAT0L,r20
 	mtspr	IBAT1U,r20
@@ -187,7 +187,7 @@ clear_bats:
 	mtspr	IBAT2L,r20
 	mtspr	IBAT3U,r20
 	mtspr	IBAT3L,r20
-	SYNC	
+	SYNC
 	blr
 
 flush_tlbs:
@@ -197,6 +197,6 @@ flush_tlbs:
 	bgt	1b
 	sync
 	blr
-	
+
 
 	.comm	environ,4,4

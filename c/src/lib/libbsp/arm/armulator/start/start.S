@@ -59,11 +59,11 @@ _mainCRTStartup:
 	mov 	a2, #0			/* Second arg: fill value */
 	mov	fp, a2			/* Null frame pointer */
 	mov	r7, a2			/* Null frame pointer for Thumb */
-	
+
 	ldr	a1, .LC1		/* First arg: start of memory block */
-	ldr	a3, .LC2	
+	ldr	a3, .LC2
 	sub	a3, a3, a1		/* Third arg: length of block */
-	
+
 
 #ifdef __thumb__		/* Enter Thumb mode.... */
 
@@ -73,9 +73,9 @@ _mainCRTStartup:
 	.code 16
 	.global __change_mode
 	.thumb_func
-__change_mode:	
+__change_mode:
 #endif
-	
+
 	bl	FUNCTION (memset)
 #if !defined (ARM_RDP_MONITOR) && !defined (ARM_RDI_MONITOR)
 	mov	r0, #0		/*  no arguments  */
@@ -83,9 +83,9 @@ __change_mode:
 #else
 	/* Need to set up standard file handles */
 	bl	FUNCTION (initialize_monitor_handles)
-	
+
 /* XXX for now let's just get the code up :) */
-#if 0 
+#if 0
 #ifdef ARM_RDP_MONITOR
 	swi	SWI_GetEnv	/*  sets r0 to point to the command line */
 	mov	r1, r0
@@ -171,7 +171,7 @@ __change_mode:
 	str	r4, [r3]
 	add	r3, #4
 	b	.LC15
-.LC14:	
+.LC14:
 #else
 	add	r2, sp, r0, LSL #2	/* End of args */
 	mov	r3, sp			/* Start of args */
@@ -206,10 +206,10 @@ change_back:
 	*/
 	swi	SWI_Exit
 #endif
-	
-	/* For Thumb, constants must be after the code since only 
+
+	/* For Thumb, constants must be after the code since only
 	positive offsets are supported for PC relative addresses. */
-	
+
 	.align 0
 .LC0:
 #ifdef ARM_RDI_MONITOR
@@ -241,9 +241,9 @@ StackLimit:	.word	0
 CommandLine:	.space	256,0	/*  Maximum length of 255 chars handled */
 #endif
 	.globl SWI_Handler
-SWI_Handler:	
-        B       SWI_Handler 
-	
+SWI_Handler:
+        B       SWI_Handler
+
 #ifdef __pe__
 	.section .idata$3
 	.long	0,0,0,0,0,0,0,0

@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------+
 | This file contains the ARM BSP startup package. It includes application,
 | board, and monitor specific initialization and configuration. The generic CPU
-| dependent initialization has been performed before this routine is invoked. 
+| dependent initialization has been performed before this routine is invoked.
 +--------------------------------------------------------------------------+
 |
 | Copyright (c) 2000 Canon Research Centre France SA.
@@ -26,11 +26,11 @@
 volatile unsigned long *Regs = (unsigned long*)0xF0000; 		/* Chip registers */
 
 extern uint32_t         _end;         /* End of BSS. Defined in 'linkcmds'. */
-/* 
- * Size of heap if it is 0 it will be dynamically defined by memory size, 
- * otherwise the value should be changed by binary patch 
+/*
+ * Size of heap if it is 0 it will be dynamically defined by memory size,
+ * otherwise the value should be changed by binary patch
  */
-uint32_t         _heap_size = 0; 
+uint32_t         _heap_size = 0;
 
 /* Size of stack used during initialization. Defined in 'start.s'.  */
 extern uint32_t         _stack_size;
@@ -63,7 +63,7 @@ void bsp_postdriver_hook(void);
 |                   since drivers are not yet initialized.
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void bsp_pretasking_hook(void)
 {
@@ -72,9 +72,9 @@ void bsp_pretasking_hook(void)
     {
       _heap_size = 0x420000 - rtemsFreeMemStart;
     }
-        
+
   bsp_libc_init((void *)rtemsFreeMemStart, _heap_size, 0);
-  
+
   rtemsFreeMemStart += _heap_size;           /* HEAP_SIZE  in KBytes */
 
 
@@ -85,14 +85,14 @@ void bsp_pretasking_hook(void)
 #endif /* RTEMS_DEBUG */
 
 } /* bsp_pretasking_hook */
- 
+
 
 /*-------------------------------------------------------------------------+
 |         Function: bsp_start
 |      Description: Called before main is invoked.
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 void bsp_start_default( void )
 {
@@ -112,7 +112,7 @@ void bsp_start_default( void )
 
   /* Place RTEMS workspace at beginning of free memory. */
   BSP_Configuration.work_space_start = (void *)rtemsFreeMemStart;
- 
+
    rtemsFreeMemStart += BSP_Configuration.work_space_size;
 
   /*

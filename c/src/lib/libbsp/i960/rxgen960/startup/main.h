@@ -9,7 +9,7 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
-  /* ROM monitor main function(s). 
+  /* ROM monitor main function(s).
    * Gets control from rommon.s.
    */
 extern void romMain(void);

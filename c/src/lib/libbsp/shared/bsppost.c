@@ -1,5 +1,5 @@
 /*
- *  This is a basic BSP post driver hook. 
+ *  This is a basic BSP post driver hook.
  *
  * After drivers are setup, register some "filenames"
  * and open stdin, stdout, stderr files

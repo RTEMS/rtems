@@ -66,7 +66,7 @@ past_constants:
 	mr      r4,r5
 	ori     r4,r4,0x0000            /* 0x2030  */
         mtmsr   r4
-	
+
         /* The first generation board needed initialization here but the */
         /* second does not. */
 

@@ -17,7 +17,7 @@
  */
 /*  vectors.s	1.1 - 95/12/04
  *
- *  This file contains the assembly code for the PowerPC 
+ *  This file contains the assembly code for the PowerPC
  *  interrupt veneers for RTEMS.
  *
  */
@@ -116,58 +116,58 @@
 
 	PUBLIC_VAR (__vectors)
 SYM (__vectors):
-	
-#if PPCN_60X_USE_DINK
-	.org    reset_vector - file_base    
-	/* This is where the DINK soft reset handler is located */
-	ba  0xfff00180  
-	  
-	.org    mach_vector - file_base  
-	ba  0xfff00200
-	
-	.org    prot_vector - file_base  
-	ba  0xfff00300
-	
-	.org    isi_vector - file_base  
-	ba  0xfff00400
-		
-	.org    ext_vector - file_base    
-	rfi
-	
-	.org    align_vector - file_base    
-	ba  0xfff00600  
-	
-	.org    prog_vector - file_base    
-	ba  0xfff00700  
 
-	.org    float_vector - file_base  
+#if PPCN_60X_USE_DINK
+	.org    reset_vector - file_base
+	/* This is where the DINK soft reset handler is located */
+	ba  0xfff00180
+
+	.org    mach_vector - file_base
+	ba  0xfff00200
+
+	.org    prot_vector - file_base
+	ba  0xfff00300
+
+	.org    isi_vector - file_base
+	ba  0xfff00400
+
+	.org    ext_vector - file_base
+	rfi
+
+	.org    align_vector - file_base
+	ba  0xfff00600
+
+	.org    prog_vector - file_base
+	ba  0xfff00700
+
+	.org    float_vector - file_base
 	ba  0xfff00800
 
-	.org    dec_vector - file_base  
+	.org    dec_vector - file_base
 	rfi
-	
-	.org    sys_vector - file_base    
-	ba  0xfff00C00  
-		
-	.org    trace_vector - file_base  
-	ba  0xfff00d00  
-	
-	.org    itm_vector - file_base    
-	ba  0xfff01000  
-	
-	.org    dltm_vector - file_base    
-	ba  0xfff01100  
-	
-	.org    dstm_vector - file_base    
-	ba  0xfff01200  
-	
-	.org    addr_vector - file_base    
-	ba  0xfff01300  
-	
-	.org    sysmgmt_vector - file_base    
-	ba  0xfff01400  
+
+	.org    sys_vector - file_base
+	ba  0xfff00C00
+
+	.org    trace_vector - file_base
+	ba  0xfff00d00
+
+	.org    itm_vector - file_base
+	ba  0xfff01000
+
+	.org    dltm_vector - file_base
+	ba  0xfff01100
+
+	.org    dstm_vector - file_base
+	ba  0xfff01200
+
+	.org    addr_vector - file_base
+	ba  0xfff01300
+
+	.org    sysmgmt_vector - file_base
+	ba  0xfff01400
 #else
-	.org    reset_vector - file_base    
+	.org    reset_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	li		r4,1
@@ -198,8 +198,8 @@ waitfortx:
 	lwz		r3,IP_3(r1)
 	addi	r1,r1,IP_END
 	rfi
-	  
-	.org    mach_vector - file_base  
+
+	.org    mach_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	stw		r3,IP_3(r1)
@@ -215,80 +215,80 @@ waitfortx:
 	dcbst	0,r4
 	li		r4,0x02
 	b		display_exc
-	
-	.org    prot_vector - file_base  
+
+	.org    prot_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	li		r4,0x03
 	b		display_exc
-	
-	.org    isi_vector - file_base  
+
+	.org    isi_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	li		r4,0x04
 	b		display_exc
-		
-	.org    ext_vector - file_base    
+
+	.org    ext_vector - file_base
 	rfi
-	
-	.org    align_vector - file_base    
+
+	.org    align_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	li		r4,0x06
 	b		display_exc
-	
-	.org    prog_vector - file_base    
+
+	.org    prog_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	li		r4,0x07
 	b		display_exc
 
-	.org    float_vector - file_base  
+	.org    float_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	li		r4,0x08
 	b		display_exc
 
-	.org    dec_vector - file_base  
+	.org    dec_vector - file_base
 	rfi
-	
-	.org    sys_vector - file_base    
+
+	.org    sys_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	li		r4,0x0a
 	b		display_exc
-		
-	.org    trace_vector - file_base  
+
+	.org    trace_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	li		r4,0x0b
 	b		display_exc
-	
-	.org    itm_vector - file_base    
+
+	.org    itm_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	li		r4,0x0c
 	b		display_exc
-	
-	.org    dltm_vector - file_base    
+
+	.org    dltm_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	li		r4,0x0d
 	b		display_exc
-	
-	.org    dstm_vector - file_base    
+
+	.org    dstm_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	li		r4,0x0e
 	b		display_exc
-	
-	.org    addr_vector - file_base    
+
+	.org    addr_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	li		r4,0x0f
 	b		display_exc
-	
-	.org    sysmgmt_vector - file_base    
+
+	.org    sysmgmt_vector - file_base
 	stwu    r1, -(IP_END)(r1)
 	stw		r4,IP_4(r1)
 	li		r4,0x00

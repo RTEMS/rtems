@@ -1,7 +1,7 @@
 /*-------------------------------------*/
 /* memchnl.h                           */
 /* Last change : 16. 5.95              */
-/*-------------------------------------*/ 
+/*-------------------------------------*/
 /*
  *  $Id$
  */
@@ -10,7 +10,7 @@
 #define _MEMCHNL_H_
 
 /* The following is a dummy for now to be filled in
-	as the message passing stuff gets migrated to 
+	as the message passing stuff gets migrated to
 	I20 (or other standard )
 */
 
@@ -34,15 +34,15 @@ extern void memChnlIotFinished(IOTrCBlk *);
    */
 extern void memChnlI960Fault(void);
   /* IOT handler procedure.
-   */   
+   */
 typedef void (* IotHandler)(IOTrCBlk *, int tr_req);
   /* Register handler to process IOT's.
-   */   
+   */
 extern void memChnlRegisterHndl(IotHandler);
   /* Intermediate image buffer.
    * Defined in *.ld
    */
-extern unsigned int downloadStart[];   
+extern unsigned int downloadStart[];
 
 typedef struct {
   int ptr_len;

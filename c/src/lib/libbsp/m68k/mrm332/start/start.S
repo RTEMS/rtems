@@ -88,7 +88,7 @@ END_CODE
   /*    see section 9 of the SIM Reference Manual */
   *DDRE = (unsigned char) 0xff;
   *DDRF = (unsigned char) 0xfd;
-  
+
   /* Port E and F Pin Assignment Register */
   /*    see section 9 of the SIM Reference Manual */
   *PEPAR = (unsigned char) 0;
@@ -109,7 +109,7 @@ END_CODE
       /* ROM has data at end of text; copy it. */
       while (dst < _edata)
 	*dst++ = *src++;
-    
+
     /* Zero bss */
     for (dst = _clear_start; dst< end; dst++)
       {
@@ -130,7 +130,7 @@ END_CODE
     M68Kvec[ 31 ] = monitors_vector_table[ 31 ];   /* level 7 interrupt */
     M68Kvec[ 47 ] = monitors_vector_table[ 47 ];   /* system call vector */
     M68Kvec[ 66 ] = monitors_vector_table[ 66 ];   /* user defined */
-    
+
     m68k_set_vbr(&M68Kvec);
   }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * DS1307-based Non-Volatile memory device driver
  *
  * DS1307 chip is a I2C Real-Time Clock. It contains 56 bytes of
@@ -142,7 +142,7 @@ nvram_driver_write(rtems_device_major_number major,
     i2c_bus_number bus = DS1307_I2C_BUS_NUMBER;
     i2c_address    addr = DS1307_I2C_ADDRESS;
     i2c_message_status status;
-    
+
     if (args->offset >= DS1307_NVRAM_SIZE)
     {
         count = 0;

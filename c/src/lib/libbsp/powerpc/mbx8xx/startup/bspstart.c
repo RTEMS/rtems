@@ -57,13 +57,13 @@ void bsp_libc_init( void *, uint32_t, int );
 void BSP_panic(char *s)
 {
   printk("%s PANIC %s\n",_RTEMS_version, s);
-  __asm__ __volatile ("sc"); 
+  __asm__ __volatile ("sc");
 }
 
 void _BSP_Fatal_error(unsigned int v)
 {
   printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  __asm__ __volatile ("sc"); 
+  __asm__ __volatile ("sc");
 }
 
 /*
@@ -75,7 +75,7 @@ void _BSP_Fatal_error(unsigned int v)
  *  Must not use libc (to do io) from here, since drivers are not yet
  *  initialized.
  *
- *  Installed in the rtems_cpu_table defined in 
+ *  Installed in the rtems_cpu_table defined in
  *  rtems/c/src/exec/score/cpu/m68k/cpu.h in main() below. Called from
  *  rtems_initialize_executive() defined in rtems/c/src/exec/sapi/src/init.c
  *
@@ -87,7 +87,7 @@ void _BSP_Fatal_error(unsigned int v)
  */
 void bsp_pretasking_hook(void)
 {
-  /* 
+  /*
    *  These are assigned addresses in the linkcmds file for the BSP. This
    *  approach is better than having these defined as manifest constants and
    *  compiled into the kernel, but it is still not ideal when dealing with
@@ -101,7 +101,7 @@ void bsp_pretasking_hook(void)
     extern unsigned char _HeapEnd;
 
     bsp_libc_init( &_HeapStart, &_HeapEnd - &_HeapStart, 0 );
-  
+
 #ifdef RTEMS_DEBUG
   rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
@@ -135,11 +135,11 @@ void bsp_pretasking_hook(void)
 void bsp_start(void)
 {
   extern void *_WorkspaceBase;
-  
+
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
   register unsigned char* intrStack;
-  
+
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
    * store the result in global variables so that it can be used latter...
@@ -148,7 +148,7 @@ void bsp_start(void)
   myCpuRevision = get_ppc_cpu_revision();
 
   mmu_init();
-  
+
   /*
    * Enable instruction and data caches. Do not force writethrough mode.
    */
@@ -168,7 +168,7 @@ void bsp_start(void)
   /*
    * Initialize some SPRG registers related to irq handling
    */
-  
+
   intrStack = (((unsigned char*)&intrStackPtr) - CPU_MINIMUM_STACK_FRAME_SIZE);
   _write_SPRG1((unsigned int)intrStack);
   /* signal them that we have fixed PR288 - eventually, this should go away */
@@ -217,7 +217,7 @@ void bsp_start(void)
   Cpu_table.timer_least_valid = 3;
 #endif
 
-  /* 
+  /*
    * Call this in case we use TERMIOS for console I/O
    */
   m8xx_uart_reserve_resources( &BSP_Configuration );
@@ -232,6 +232,6 @@ void bsp_start(void)
   BSP_rtems_irq_mng_init(0);
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");
-#endif  
+#endif
 
 }

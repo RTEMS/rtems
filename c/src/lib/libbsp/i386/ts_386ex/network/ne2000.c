@@ -23,7 +23,7 @@
  *  is any point to having more than two transmit buffers.  However, the
  *  code does make it possible, by changing NE_TX_BUFS, although that
  *  would of course reduce the number of receive buffers.
- *  
+ *
  *  I suspect that the wd80x3 driver would benefit slightly from copying
  *  the multiple transmit buffer code.  However, I have no way to test
  *  that.
@@ -223,7 +223,7 @@ ne_read_data (struct ne_softc *sc, int addr, int len, unsigned char *p)
   if (sc->byte_transfers)
     while (len > 0) {
       unsigned char d;
-      
+
       inport_byte (dport, d);
       *p++ = d;
       len--;
@@ -231,7 +231,7 @@ ne_read_data (struct ne_softc *sc, int addr, int len, unsigned char *p)
   else  /* word transfers */
     while (len > 0) {
       unsigned short d;
-      
+
       inport_word (dport, d);
       *p++ = d;
       *p++ = d >> 8;
@@ -643,7 +643,7 @@ ne_loadpacket (struct ne_softc *sc, struct mbuf *m)
       leftover = 0;
     }
 
-    /* If using byte transfers, len always ends up as zero so 
+    /* If using byte transfers, len always ends up as zero so
        there are no leftovers. */
 
     if (sc->byte_transfers)
@@ -954,7 +954,7 @@ rtems_ne_driver_attach (struct rtems_bsdnet_ifconfig *config)
   memset (sc, 0, sizeof *sc);
 
   /* Check whether we do byte-wide or word-wide transfers.  */
-  
+
 #ifdef NE2000_BYTE_TRANSFERS
   sc->byte_transfers = TRUE;
 #else

@@ -1,8 +1,8 @@
-/* 
- *  cpuinit.c - this file contains functions for initializing the CPU 
+/*
+ *  cpuinit.c - this file contains functions for initializing the CPU
  *
  *  Written by Jay Monkman (jmonkman@frasca.com)
- * 
+ *
  *  $Id$
  */
 
@@ -18,14 +18,14 @@ void cpu_init(void)
 {
   register unsigned long t1, t2;
 
-  /* Let's clear MSR[IR] and MSR[DR] */ 
+  /* Let's clear MSR[IR] and MSR[DR] */
   t2 = PPC_MSR_IR | PPC_MSR_DR;
   __asm__ volatile (
     "mfmsr    %0\n"
     "andc     %0, %0, %1\n"
     "mtmsr    %0\n" :"=r"(t1), "=r"(t2):
     "1"(t2));
-  
+
   t1 = M8xx_CACHE_CMD_UNLOCK;
   /*  PUT_DC_CST(t1); */
   PUT_IC_CST(t1);

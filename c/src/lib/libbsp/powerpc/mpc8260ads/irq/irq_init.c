@@ -74,7 +74,7 @@ static rtems_irq_prio irqPrioTable[BSP_CPM_IRQ_NUMBER]={
 };
 
 
-/* 
+/*
  * Initialize CPM interrupt management
  */
 void
@@ -99,7 +99,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
   rtems_raw_except_connect_data vectorDesc;
   int i;
-  
+
   BSP_CPM_irq_init();
   /*
    * Initialize Rtems management interrupt table
@@ -126,7 +126,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
        */
       BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
     }
-  
+
   /*
    * We must connect the raw irq handler for the two
    * expected interrupt sources : decrementer and external interrupts.
@@ -148,7 +148,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     if (!mpc8xx_set_exception (&vectorDesc)) {
       BSP_panic("Unable to initialize RTEMS external raw exception\n");
     }
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
     printk("RTEMS IRQ management is now operationnal\n");
 #endif
 }

@@ -99,9 +99,9 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_LINES_NUMBER]={
   255,
   0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 };
-    
 
-    
+
+
 static interrupt_gate_descriptor	idtEntry;
 
 static rtems_irq_global_settings     initial_config;
@@ -128,7 +128,7 @@ void  rtems_irq_mngt_init()
        printk("IDT table size mismatch !!! System locked\n");
        while(1);
     }
-    
+
 
     _CPU_ISR_Disable(level);
 
@@ -143,7 +143,7 @@ void  rtems_irq_mngt_init()
     raw_initial_config.idtSize = IDT_SIZE;
     raw_initial_config.defaultRawEntry = defaultRawIrq;
     raw_initial_config.rawIrqHdlTbl = idtHdl;
-    
+
     if (!i386_init_idt (&raw_initial_config)) {
       /*
        * put something here that will show the failure...
@@ -189,7 +189,7 @@ void  rtems_irq_mngt_init()
     }
 
     /*
-     * #define DEBUG    
+     * #define DEBUG
      */
 #ifdef DEBUG
     {
@@ -206,5 +206,5 @@ void  rtems_irq_mngt_init()
     }
     printk("i8259s_cache = %x\n", * (unsigned short*) &i8259s_cache);
     BSP_wait_polled_input();
-#endif    
+#endif
 }

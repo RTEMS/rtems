@@ -63,7 +63,7 @@ rtems_isr timerisr();
  *        It is important that the timer start/stop overhead be
  *        determined when porting or modifying this code.
  *
- *  THE VMECHIP2 PRESCALER REGISTER IS ASSUMED TO BE SET! 
+ *  THE VMECHIP2 PRESCALER REGISTER IS ASSUMED TO BE SET!
  *  The prescaler is used by all VMEchip2 timers, including the VMEbus grant
  *  timeout counter, the DMAC time off timer, the DMAC timer on timer, and the
  *  VMEbus global timeout timer. The prescaler value is normally set by the
@@ -73,7 +73,7 @@ rtems_isr timerisr();
 void Timer_initialize()
 {
   (void) set_vector( timerisr, TIMER_VECTOR, 0 );
-  
+
   Ttimer_val = 0;                       /* clear timer ISR count */
   lcsr->intr_ena &= 0xFEFFFFFF;         /* disable tick timer 1 interrupt */
   lcsr->intr_clear |= 0x01000000;       /* clear tick timer 1 interrupt */
@@ -106,7 +106,7 @@ void Timer_initialize()
  *  LEAST_VALID is the lowest number this routine should trust.  Numbers
  *  below this are "noise" and zero is returned.
  */
-int Read_timer() 
+int Read_timer()
 {
   uint32_t            total;
 

@@ -41,9 +41,9 @@ rtems_isr C_Receive_ISR(rtems_vector_number vector)
   if      (ipend == 0x04) port = 0;   /* channel B intr pending */
   else if (ipend == 0x20) port = 1;   /* channel A intr pending */
   else return;
-    
+
   Ring_buffer_Add_character(&Console_Buffer[port], ZREADD(port));
-  
+
   if (ZREAD(port, 1) & 0x70) {    /* check error stat */
     ZWRITE0(port, 0x30);          /* reset error */
   }
@@ -57,7 +57,7 @@ rtems_device_driver console_initialize(
 {
   int     i;
   rtems_status_code status;
-  
+
   /*
    * Initialise receiver interrupts on both ports
    */
@@ -69,7 +69,7 @@ rtems_device_driver console_initialize(
     ZWRITE(i, 1, 0x10);     /* int on all Rx chars or special condition */
     ZWRITE(i, 9, 8);        /* master interrupt enable */
   }
-    
+
   set_vector(C_Receive_ISR, SCC_VECTOR, 1); /* install ISR for ports A and B */
 
   mcchip->vector_base = 0;
@@ -81,28 +81,28 @@ rtems_device_driver console_initialize(
     major,
     (rtems_device_minor_number) 1
   );
- 
+
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
- 
+
   status = rtems_io_register_name(
     "/dev/tty00",
     major,
     (rtems_device_minor_number) 0
   );
- 
+
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
- 
+
   status = rtems_io_register_name(
     "/dev/tty01",
     major,
     (rtems_device_minor_number) 1
   );
- 
+
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
- 
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -116,7 +116,7 @@ rtems_boolean char_ready(int port, char *ch)
     return FALSE;
 
   Ring_buffer_Remove_character( &Console_Buffer[port], *ch );
-  
+
   return TRUE;
 }
 
@@ -127,12 +127,12 @@ rtems_boolean char_ready(int port, char *ch)
 char inbyte(int port)
 {
   unsigned char tmp_char;
- 
+
   while ( !char_ready(port, &tmp_char) );
   return tmp_char;
 }
 
-/*  
+/*
  *   This routine transmits a character out the SCC.  It no longer supports
  *   XON/XOFF flow control.
  */
@@ -157,7 +157,7 @@ rtems_device_driver console_open(
 {
   return RTEMS_SUCCESSFUL;
 }
- 
+
 /*
  *  Close entry point
  */
@@ -185,7 +185,7 @@ rtems_device_driver console_read(
   char *buffer;
   int maximum;
   int count = 0;
- 
+
   rw_args = (rtems_libio_rw_args_t *) arg;
 
   buffer = rw_args->buffer;
@@ -207,7 +207,7 @@ rtems_device_driver console_read(
 }
 
 /*
- * write bytes to the serial port. Stdout and stderr are the same. 
+ * write bytes to the serial port. Stdout and stderr are the same.
  */
 
 rtems_device_driver console_write(

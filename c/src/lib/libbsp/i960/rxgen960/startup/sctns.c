@@ -23,7 +23,7 @@ void ledcyc()
    i = 1;
 loop:
 	if (i > 9 )
-		i = 1;	
+		i = 1;
 	*(unsigned char *) LED_REG = la[i];
 	for(t=1; t < 0x10000; t++)
 		k = m + 33;
@@ -31,7 +31,7 @@ loop:
 	goto loop;
 }
 
-void copyCodeToRom(void) 
+void copyCodeToRom(void)
 {
   register int errval = 0;
   unsigned int * s;
@@ -66,12 +66,12 @@ extern unsigned char * led_array;
 	goto error;
   WRITE_LED(0x4);
   for (s = codeRomStart, d = codeRamStart; d < codeRamEnd; s ++, d ++)  {
-    * d = * s;  
+    * d = * s;
   }
   WRITE_LED(0x5);
   for (s = codeRomStart, d = codeRamStart; d < codeRamEnd; s ++, d ++)  {
     if( * d != * s )
-	goto error; 
+	goto error;
   }
   WRITE_LED(0x6);
   return;
@@ -83,7 +83,7 @@ error:
 	for(t=1; t < 0x100000; t++)
 		*(unsigned char *) LED_REG = led_array[0];
    }
-	
+
 }
 void zeroBss(void)
 {

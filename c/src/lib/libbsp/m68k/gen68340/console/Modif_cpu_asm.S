@@ -49,7 +49,7 @@
  *  permitted by the new interrupt level mask, and (2) when
  *  the original context regains the cpu.
  */
- 
+
 #if ( M68K_HAS_VBR == 1)
 .set SR_OFFSET,    0                     | Status register offset
 .set PC_OFFSET,    2                     | Program Counter offset
@@ -59,7 +59,7 @@
 .set PC_OFFSET,    4                     | Program Counter offset
 .set FVO_OFFSET,   0                     | Format/vector offset placed in the stack
 #endif /* M68K_HAS_VBR */
- 
+
 .set SAVED,        16                    | space for saved registers
 
         .align  4
@@ -68,7 +68,7 @@
 SYM (_Debug_ISR_Handler_Console):
 
 					 |
-	tst.w	0x14000000		 | ALLUME CS5 
+	tst.w	0x14000000		 | ALLUME CS5
 					 |
 
         addql   #1,SYM (_Thread_Dispatch_disable_level) | disable multitasking

@@ -60,9 +60,9 @@ typedef enum {
   HOST_BRIDGE_HAWK	= 1,
   HOST_BRIDGE_UNKNOWN	= 255
 }motorolaHostBridge;
-  
+
 #define MOTOROLA_CPUTYPE_REG	0x800
-#define MOTOROLA_BASETYPE_REG	0x803  
+#define MOTOROLA_BASETYPE_REG	0x803
 
 extern prep_t 			checkPrepBoardType(RESIDUAL *res);
 extern prep_t 			currentPrepType;

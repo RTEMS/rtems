@@ -20,7 +20,7 @@
 
 /*
  *  Should we use a polled or interrupt drived console?
- *  
+ *
  *  NOTE: This is defined in the custom/erc32.cfg file.
  *
  *  WARNING:  In sis 1.6, it did not appear that the UART interrupts
@@ -28,7 +28,7 @@
  *            a character into the TX buffer, an interrupt was generated.
  *            This did not allow enough time for the program to put more
  *            characters in the buffer.  So every character resulted in
- *            "priming" the transmitter.   This effectively results in 
+ *            "priming" the transmitter.   This effectively results in
  *            in a polled console with a useless interrupt per character
  *            on output.  It is reasonable to assume that input does not
  *            share this problem although it was not investigated.
@@ -49,7 +49,7 @@ void console_outbyte_polled(
 /* body is in debugputs.c */
 
 /*
- *  console_inbyte_nonblocking 
+ *  console_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */
@@ -69,10 +69,10 @@ int console_inbyte_nonblocking( int port );
  */
 
 #include <rtems/ringbuf.h>
- 
+
 Ring_buffer_t  TX_Buffer[ 2 ];
 boolean        Is_TX_active[ 2 ];
- 
+
 void *console_termios_data[ 2 ];
 
 /*
@@ -81,7 +81,7 @@ void *console_termios_data[ 2 ];
  *  This routine is the console interrupt handler for Channel A.
  *
  *  Input parameters:
- *    vector - vector number 
+ *    vector - vector number
  *
  *  Output parameters: NONE
  *
@@ -91,10 +91,10 @@ void *console_termios_data[ 2 ];
 rtems_isr console_isr_a(
   rtems_vector_number vector
 )
-{ 
+{
   char ch;
   int UStat;
- 
+
   if ( (UStat = ERC32_MEC.UART_Status) & ERC32_MEC_UART_STATUS_DRA ) {
     if (UStat & ERC32_MEC_UART_STATUS_ERRA) {
       ERC32_MEC.UART_Status = ERC32_MEC_UART_STATUS_CLRA;
@@ -104,7 +104,7 @@ rtems_isr console_isr_a(
 
     rtems_termios_enqueue_raw_characters( console_termios_data[ 0 ], &ch, 1 );
   }
- 
+
   if ( ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEA ) {
     if ( !Ring_buffer_Is_empty( &TX_Buffer[ 0 ] ) ) {
       Ring_buffer_Remove_character( &TX_Buffer[ 0 ], ch );
@@ -112,7 +112,7 @@ rtems_isr console_isr_a(
     } else
      Is_TX_active[ 0 ] = FALSE;
   }
- 
+
   ERC32_Clear_interrupt( ERC32_INTERRUPT_UART_A_RX_TX );
 }
 
@@ -122,13 +122,13 @@ rtems_isr console_isr_a(
  *  This routine is the console interrupt handler for Channel B.
  *
  *  Input parameters:
- *    vector - vector number 
+ *    vector - vector number
  *
  *  Output parameters: NONE
  *
  *  Return values:     NONE
  */
- 
+
 rtems_isr console_isr_b(
   rtems_vector_number vector
 )
@@ -194,11 +194,11 @@ void console_exit()
    *  Now wait for all the data to actually get out ... the send register
    *  should be empty.
    */
- 
-  while ( (ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEA) != 
+
+  while ( (ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEA) !=
           ERC32_MEC_UART_STATUS_THEA );
 
-  while ( (ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEB) != 
+  while ( (ERC32_MEC.UART_Status & ERC32_MEC_UART_STATUS_THEB) !=
           ERC32_MEC_UART_STATUS_THEB );
 
 }
@@ -253,7 +253,7 @@ void console_initialize_interrupts( void )
  *
  *  Return values:      NONE
  */
- 
+
 void console_outbyte_interrupt(
   int   port,
   char  ch
@@ -300,7 +300,7 @@ int console_write_support (int minor, const char *buf, int len)
  *  Console Device Driver Entry Points
  *
  */
- 
+
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
@@ -326,7 +326,7 @@ rtems_device_driver console_initialize(
   /*
    *  Initialize Hardware
    */
- 
+
 #if (CONSOLE_USE_INTERRUPTS)
   console_initialize_interrupts();
 #endif
@@ -369,7 +369,7 @@ rtems_device_driver console_open(
   assert( minor <= 1 );
   if ( minor > 2 )
     return RTEMS_INVALID_NUMBER;
- 
+
 #if (CONSOLE_USE_INTERRUPTS)
   sc = rtems_termios_open (major, minor, arg, &intrCallbacks);
 
@@ -380,7 +380,7 @@ rtems_device_driver console_open(
 
   return RTEMS_SUCCESSFUL;
 }
- 
+
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -389,7 +389,7 @@ rtems_device_driver console_close(
 {
   return rtems_termios_close (arg);
 }
- 
+
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -398,7 +398,7 @@ rtems_device_driver console_read(
 {
   return rtems_termios_read (arg);
 }
- 
+
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -407,7 +407,7 @@ rtems_device_driver console_write(
 {
   return rtems_termios_write (arg);
 }
- 
+
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,

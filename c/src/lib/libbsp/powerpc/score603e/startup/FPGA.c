@@ -7,7 +7,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: 
+ *  $Id:
  */
 
 #include <bsp.h>
@@ -63,7 +63,7 @@ uint16_t         get_irq_mask()
   return value;
 }
 
-void unmask_irq( 
+void unmask_irq(
   uint16_t         irq_idx
 )
 {
@@ -85,7 +85,7 @@ void unmask_irq(
   }
 #endif
 
-  value &= (~(0x1 << mask_idx)); 
+  value &= (~(0x1 << mask_idx));
   set_irq_mask( value );
 }
 
@@ -111,7 +111,7 @@ void init_irq_data_register()
 
 uint16_t         read_and_clear_PMC_irq(
   uint16_t            irq
-) 
+)
 {
   uint16_t            status_word = irq;
 
@@ -155,7 +155,7 @@ uint16_t         read_and_clear_irq()
   irq = (*SCORE603E_FPGA_VECT_DATA);
 
   if ((irq & 0xffff0) != 0x10) {
-    DEBUG_puts( "ERROR:: no irq data\n");    
+    DEBUG_puts( "ERROR:: no irq data\n");
     return (irq | 0x80);
   }
 

@@ -88,7 +88,7 @@ static rtems_id	semRTC;
 /*
  * This only works for the Gregorian calendar - i.e. after 1752 (in the UK)
  */
-uint8_t         
+uint8_t
 GregorianDay(rtems_time_of_day *pTOD)
 {
 	boolean isLeap;
@@ -164,7 +164,7 @@ Return Value:
 	return;
 }
 
-uint8_t        
+uint8_t
 DsReadRawClockRegister (
 	uint8_t         Register
 )
@@ -233,7 +233,7 @@ Return Value:
 	return;
 }
 
-uint8_t        
+uint8_t
 DsReadClockRegister (
 	uint8_t         Register
 )

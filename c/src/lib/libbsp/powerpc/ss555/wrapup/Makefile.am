@@ -9,7 +9,7 @@ CLEANFILES = ../libbsp.a
 ___libbsp_a_SOURCES =
 
 ___libbsp_a_LIBADD = ../pclock$(LIB_VARIANT).rel \
-    ../console$(LIB_VARIANT).rel ../startup$(LIB_VARIANT).rel 
+    ../console$(LIB_VARIANT).rel ../startup$(LIB_VARIANT).rel
 
 ___libbsp_a_LIBADD += \
     ../../../../libcpu/powerpc/shared/cpuIdent$(LIB_VARIANT).rel \

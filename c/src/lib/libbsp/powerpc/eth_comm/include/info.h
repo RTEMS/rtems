@@ -25,7 +25,7 @@ typedef struct BoardInfoBlock_ {
   uint8_t          fpn[16];      /* Frasca part number in ASCII */
   uint16_t         rev;          /* Board revision */
   uint32_t         ip_num;       /* Board IP number */
-  
+
 } boardinfo_t;
 
 #define IFACE_ARINC429_TX0 0x00000001;

@@ -4,7 +4,7 @@
  *  Author:
  *    COPYRIGHT (C) 1997
  *    by Katsutoshi Shibuya - BU Denken Co.,Ltd. - Sapporo - JAPAN
- *    ALL RIGHTS RESERVED 
+ *    ALL RIGHTS RESERVED
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -15,7 +15,7 @@
  *  RTEMS above.
  *
  *  $Id$
- */ 
+ */
 
 #include <rtems.h>
 #include <tod.h>

@@ -15,10 +15,10 @@
 #define PCIB_ERR_NOFUNC        (-3)  /* Function not supported */
 #define PCIB_ERR_BADVENDOR     (-4)  /* Bad Vendor ID */
 #define PCIB_ERR_DEVNOTFOUND   (-5)  /* Device not found */
-#define PCIB_ERR_BADREG        (-6)  /* Bad register number */   
+#define PCIB_ERR_BADREG        (-6)  /* Bad register number */
 
-/* 
- * Make device signature from bus number, device numebr and function 
+/*
+ * Make device signature from bus number, device numebr and function
  * number
  */
 #define PCIB_DEVSIG_MAKE(b,d,f) ((b<<8)|(d<<3)|(f))

@@ -57,25 +57,25 @@ void detect_host_bridge()
   PPC_DEVICE *hostbridge;
   unsigned int id0;
   unsigned int tmp;
-  
+
   /*
    * This code assumes that the host bridge is located at
    * bus 0, dev 0, func 0 AND that the old pre PCI 2.1
    * standart devices detection mecahnism that was used on PC
    * (still used in BSD source code) works.
    */
-  hostbridge=residual_find_device(&residualCopy, PROCESSORDEVICE, NULL, 
+  hostbridge=residual_find_device(&residualCopy, PROCESSORDEVICE, NULL,
 				  BridgeController,
 				  PCIBridge, -1, 0);
   if (hostbridge) {
     if (hostbridge->DeviceId.Interface==PCIBridgeIndirect) {
       pci.pci_functions=&pci_indirect_functions;
-      /* Should be extracted from residual data, 
+      /* Should be extracted from residual data,
        * indeed MPC106 in CHRP mode is different,
        * but we should not use residual data in
-       * this case anyway. 
+       * this case anyway.
        */
-      pci.pci_config_addr = ((volatile unsigned char *) 
+      pci.pci_config_addr = ((volatile unsigned char *)
 			      (ptr_mem_map->io_base+0xcf8));
       pci.pci_config_data = ptr_mem_map->io_base+0xcfc;
     } else if(hostbridge->DeviceId.Interface==PCIBridgeDirect) {
@@ -87,7 +87,7 @@ void detect_host_bridge()
     /* Let us try by experimentation at our own risk! */
     pci.pci_functions = &pci_direct_functions;
     /* On all direct bridges I know the host bridge itself
-     * appears as device 0 function 0. 
+     * appears as device 0 function 0.
 		 */
     pci_read_config_dword(0, 0, 0, PCI_VENDOR_ID, &id0);
     if (id0==~0U) {
@@ -108,27 +108,27 @@ void detect_host_bridge()
      * We have a Raven bridge. We will get information about its settings
      */
     pci_read_config_dword(0, 0, 0, PCI_COMMAND, &id0);
-#ifdef SHOW_RAVEN_SETTING    
+#ifdef SHOW_RAVEN_SETTING
     printk("RAVEN PCI command register = %x\n",id0);
-#endif    
+#endif
     id0 |= RAVEN_CLEAR_EVENTS_MASK;
     pci_write_config_dword(0, 0, 0, PCI_COMMAND, id0);
     pci_read_config_dword(0, 0, 0, PCI_COMMAND, &id0);
-#ifdef SHOW_RAVEN_SETTING    
+#ifdef SHOW_RAVEN_SETTING
     printk("After error clearing RAVEN PCI command register = %x\n",id0);
-#endif    
-    
+#endif
+
     if (id0 & RAVEN_MPIC_IOSPACE_ENABLE) {
       pci_read_config_dword(0, 0, 0,PCI_BASE_ADDRESS_0, &tmp);
-#ifdef SHOW_RAVEN_SETTING    
+#ifdef SHOW_RAVEN_SETTING
       printk("Raven MPIC is accessed via IO Space Access at address : %x\n",(tmp & ~0x1));
-#endif    
+#endif
     }
     if (id0 & RAVEN_MPIC_MEMSPACE_ENABLE) {
       pci_read_config_dword(0, 0, 0,PCI_BASE_ADDRESS_1, &tmp);
-#ifdef SHOW_RAVEN_SETTING    
+#ifdef SHOW_RAVEN_SETTING
       printk("Raven MPIC is accessed via memory Space Access at address : %x\n", tmp);
-#endif    
+#endif
       OpenPIC=(volatile struct OpenPIC *) (tmp + PREP_ISA_MEM_BASE);
       printk("OpenPIC found at %x.\n",
 	     OpenPIC);

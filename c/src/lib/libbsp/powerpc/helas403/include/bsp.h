@@ -6,7 +6,7 @@
  *              IMD Ingenieurbuero fuer Microcomputertechnik
  *
  *  COPYRIGHT (c) 1998 by IMD
- * 
+ *
  *  Changes from IMD are covered by the original distributions terms.
  *  This file has been derived from the papyrus BSP.
  *
@@ -106,15 +106,15 @@ extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 /*
  *  Device Driver Table Entries
  */
- 
+
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */
- 
+
 /* functions */
 
 rtems_isr_entry set_vector(                    /* returns old vector */

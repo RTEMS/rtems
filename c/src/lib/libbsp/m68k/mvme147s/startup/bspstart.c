@@ -39,7 +39,7 @@ char *rtems_progname;
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void);               /* m68k version */
@@ -74,9 +74,9 @@ void bsp_start( void )
 
   m68k_set_vbr( &M68Kvec );
 
-  pcc->int_base_vector = PCC_BASE_VECTOR & 0xF0; 
+  pcc->int_base_vector = PCC_BASE_VECTOR & 0xF0;
   /* Set the PCC int vectors base */
-  
+
   /* VME shared memory configuration */
   /* Only the first node shares its top 128k DRAM */
 
@@ -86,16 +86,16 @@ void bsp_start( void )
   /* Enable SIGLP interruption (see shm support) */
   pcc->general_purpose_control &= 0x10;
   /* Enable VME master interruptions */
-  
+
   if (vme_lcsr->system_controller & 0x01) {
     /* the board is system controller */
-    vme_lcsr->system_controller = 0x08; 
+    vme_lcsr->system_controller = 0x08;
     /* Make VME access round-robin */
   }
 
-  
-  node_number = 
-    (uint8_t) 
+
+  node_number =
+    (uint8_t)
     (Configuration.User_multiprocessing_table->node - 1) & 0xF;
   /* Get and store node ID, first node_number = 0 */
   vme_gcsr->board_identification = node_number;

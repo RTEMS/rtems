@@ -43,10 +43,10 @@ BEGIN_CODE
 |                   interrupt at maximum intervals.
 | Global Variables: None.
 |        Arguments: standard - see RTEMS documentation.
-|          Returns: standard return value - see RTEMS documentation. 
+|          Returns: standard return value - see RTEMS documentation.
 +--------------------------------------------------------------------------*/
 	PUBLIC(timerisr)
-SYM (timerisr): 
+SYM (timerisr):
 	incl	Ttimer_val	# another tick
 	pushl	eax
 	movb	$0x20, al

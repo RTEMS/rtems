@@ -14,7 +14,7 @@
 .equ IRQ_Stack, 0x100
 .equ FIQ_Stack, 0x200
 .equ SVC_Stack, 0x300
-	
+
 /* Some standard definitions...*/
 
 .equ Mode_USR,        	     0x10
@@ -33,20 +33,20 @@
 	.text
 	.globl	_start
 
-	 
+
 _start:
 
 /*
  * Here is the code to initialize the low-level BSP environment
  * (Chip Select, PLL, ....?)
 
-	
+
 /* Copy data from FLASH to RAM */
         LDR     r0, =_initdata        /* load address of region */
 	LDR     r1, =0x400000         /* execution address of region */
         LDR     r2, =_edata           /* copy execution address into r2 */
 
-copy:	
+copy:
         CMP     r1, r2		      /* loop whilst r1 < r2 */
         LDRLO   r3, [r0], #4
         STRLO   r3, [r1], #4
@@ -55,15 +55,15 @@ copy:
 /* zero the bss */
         LDR     r1, =__bss_end__       /* get end of ZI region */
         LDR     r0, =__bss_start__     /* load base address of ZI region */
-zi_init:	
+zi_init:
         MOV     r2, #0
         CMP     r0, r1		       /* loop whilst r0 < r1 */
         STRLOT   r2, [r0], #4
-        BLO     zi_init 
+        BLO     zi_init
 
-	
+
 /* Load basic ARM7 interrupt table */
-VectorInit:	
+VectorInit:
 	MOV	R8, #0
 	ADR	R9, Vector_Init_Block
 	LDMIA	R9!, {R0-R7}	/* Copy the Vectors (8 words) */
@@ -75,10 +75,10 @@ VectorInit:
 
 /*******************************************************
  standard exception vectors table
- *** Must be located at address 0 
-********************************************************/	 
+ *** Must be located at address 0
+********************************************************/
 
-Vector_Init_Block:	
+Vector_Init_Block:
 	LDR	PC, Reset_Addr
 	LDR	PC, Undefined_Addr
 	LDR	PC, SWI_Addr
@@ -89,36 +89,36 @@ Vector_Init_Block:
 	LDR	PC, FIQ_Addr
 
 	.globl Reset_Addr
-Reset_Addr:	.long   _start 
+Reset_Addr:	.long   _start
 Undefined_Addr:	.long	Undefined_Handler
 SWI_Addr:	.long	SWI_Handler
 Prefetch_Addr:	.long	Prefetch_Handler
 Abort_Addr:	.long	Abort_Handler
-		.long	0	
+		.long	0
 IRQ_Addr:	.long	IRQ_Handler
 FIQ_Addr:	.long	FIQ_Handler
-	
+
 /* The following handlers do not do anything useful */
 	.globl Undefined_Handler
-Undefined_Handler:	
+Undefined_Handler:
         B       Undefined_Handler
 	.globl SWI_Handler
-SWI_Handler:	
-        B       SWI_Handler 
+SWI_Handler:
+        B       SWI_Handler
 	.globl Prefetch_Handler
-Prefetch_Handler:	
+Prefetch_Handler:
         B       Prefetch_Handler
 	.globl Abort_Handler
-Abort_Handler:	
+Abort_Handler:
         B       Abort_Handler
 	.globl IRQ_Handler
-IRQ_Handler:	
+IRQ_Handler:
         B       IRQ_Handler
 	.globl FIQ_Handler
-FIQ_Handler:	
+FIQ_Handler:
         B       FIQ_Handler
 
-init2 :	
+init2 :
 /* --- Initialise stack pointer registers
    Set up the ABORT stack pointer last and stay in SVC mode */
     MOV     r0, #(Mode_ABORT | I_Bit | F_Bit)   /* No interrupts */

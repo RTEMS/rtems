@@ -73,8 +73,8 @@ extern uint32_t   mips_get_timer( void );
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  *
- *  NOTE: This macro generates a warning like "integer constant out 
- *        of range" which is safe to ignore.  In 64 bit mode, uint32_t  
+ *  NOTE: This macro generates a warning like "integer constant out
+ *        of range" which is safe to ignore.  In 64 bit mode, uint32_t
  *        types are actually 64 bits long so that comparisons between
  *        uint32_t   types and pointers are valid.  The warning is caused
  *        by code in the delay macro that is necessary for 64 bit mode.
@@ -108,7 +108,7 @@ extern rtems_configuration_table BSP_Configuration;
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

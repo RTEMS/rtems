@@ -5,7 +5,7 @@
  * provided that this copyright notice remains intact.
  *
  * UNIX Serial Port Mouse Driver
- * 
+ *
  * This driver opens a serial port directly, and interprets serial data.
  * Microsoft, PC, Logitech and PS/2 mice are supported.
  * The PS/2 mouse is only supported if the OS runs the mouse
@@ -148,7 +148,7 @@ int MOU_Data( int ch, COORD *dx, COORD *dy, COORD *dz, BUTTON *bptr)
 	 * When a complete state has been read, return the results,
 	 * leaving further bytes in the buffer for later calls.
 	 */
-	if( (*parse)( ch ) ) 
+	if( (*parse)( ch ) )
 	{
 		*dx = xd;
 		*dy = yd;
@@ -268,7 +268,7 @@ static int ParsePS2(int byte)
 	switch (state) {
 		case IDLE:
 			if (byte & PS2_CTRL_BYTE) {
-				buttons = byte & 
+				buttons = byte &
 					(PS2_LEFT_BUTTON|PS2_RIGHT_BUTTON);
 				state = XSET;
 			}
@@ -372,7 +372,7 @@ static void kbd_parser( void *ptr, unsigned short keycode, unsigned long mods )
     m.m.kbd.modifiers  = kbd->ledflagstate;
     m.m.kbd.mode       = kbd->kbdmode;
     /*  printk( "kbd: msg: keycode=%X, mod=%X\n", keycode, mods );  */
-    rtems_message_queue_send( queue_id, ( void * )&m, 
+    rtems_message_queue_send( queue_id, ( void * )&m,
                               sizeof( struct MW_UID_MESSAGE ) );
 }
 

@@ -104,7 +104,7 @@ typedef enum {
   BSP_MAX_OFFSET		=	BSP_MISC_IRQ_MAX_OFFSET,
     /*
      * Some ISA IRQ symbolic name definition
-     */	       
+     */
   BSP_ISA_PERIODIC_TIMER      	= 	0,
 
   BSP_ISA_KEYBOARD          	= 	1,
@@ -114,7 +114,7 @@ typedef enum {
   BSP_ISA_UART_COM1_IRQ		=	4,
 
   BSP_ISA_RT_TIMER1	      	= 	8,
-  
+
   BSP_ISA_RT_TIMER3		= 	10,
     /*
      * Some PCI IRQ symbolic name definition
@@ -125,10 +125,10 @@ typedef enum {
      * Some Processor execption handled as rtems IRQ symbolic name definition
      */
   BSP_DECREMENTER		=	BSP_PROCESSOR_IRQ_LOWEST_OFFSET
-  
+
 }rtems_irq_symbolic_name;
 
-    
+
 
 
 /*
@@ -162,9 +162,9 @@ typedef struct __rtems_irq_connect_data__ {
        * It is usually called immediately AFTER connecting the interrupt handler.
        * RTEMS may well need such a function when restoring normal interrupt
        * processing after a debug session.
-       * 
+       *
        */
-      rtems_irq_enable		on;	
+      rtems_irq_enable		on;
       /*
        * function for disabling interrupts at device level (ONLY!).
        * The code will disable it at i8259s level. RATIONALE : anyway
@@ -205,7 +205,7 @@ typedef struct {
   rtems_irq_symbolic_name	irqBase;
   /*
    * software priorities associated with interrupts.
-   * if irqPrio  [i]  >  intrPrio  [j]  it  means  that  
+   * if irqPrio  [i]  >  intrPrio  [j]  it  means  that
    * interrupt handler hdl connected for interrupt name i
    * will  not be interrupted by the handler connected for interrupt j
    * The interrupt source  will be physically masked at i8259 level.
@@ -282,7 +282,7 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine);
  *	4) perform rescheduling when necessary,
  *	5) restore the C scratch registers...
  *	6) restore initial execution flow
- * 
+ *
  */
 int BSP_install_rtems_irq_handler   	(const rtems_irq_connect_data*);
 int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data*);
@@ -329,7 +329,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config);
  * (Re) get info on current RTEMS interrupt management.
  */
 int BSP_rtems_irq_mngt_get(rtems_irq_global_settings**);
-  
+
 extern void BSP_rtems_irq_mng_init(unsigned cpuId);
 extern void BSP_i8259s_init(void);
 

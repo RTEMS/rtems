@@ -33,8 +33,8 @@
 
 /* #define DATAREG_16BIT */ /* 16 bit mode not yet working */
 /* #define DEBUG_OUT */
-/* 
- * support functions for PCMCIA IDE IF 
+/*
+ * support functions for PCMCIA IDE IF
  */
 /*=========================================================================*\
 | Function:                                                                 |
@@ -55,11 +55,11 @@ boolean mbx8xx_pcmciaide_probe
 \*=========================================================================*/
 {
   boolean ide_card_plugged = TRUE; /* assume: we have a card plugged in */
-  
+
   /*
    * check, that the CD# pins are low -> a PCMCIA card is plugged in
    */
-  if ((m8xx.pipr 
+  if ((m8xx.pipr
        & (M8xx_PCMCIA_PIPR_CACD1 | M8xx_PCMCIA_PIPR_CACD2)) != 0x00) {
     ide_card_plugged = FALSE;
   }
@@ -79,7 +79,7 @@ boolean mbx8xx_pcmciaide_probe
     int cis_pos = 0;
     boolean fixed_disk_tuple_found = FALSE;
     boolean ata_disk_tuple_found   = FALSE;
-    
+
     while ((cis_pos < 256) &&
 	   (CIS_BYTE(cis_pos) != 0xff) &&
 	   (!fixed_disk_tuple_found || !ata_disk_tuple_found)) {
@@ -95,10 +95,10 @@ boolean mbx8xx_pcmciaide_probe
 	       (CIS_BYTE(cis_pos+3) == 0x01)) {
 	ata_disk_tuple_found = TRUE;
       }
-      /* 
-       * advance using the length field 
+      /*
+       * advance using the length field
        */
-      cis_pos += CIS_BYTE(cis_pos+1)+2; 
+      cis_pos += CIS_BYTE(cis_pos+1)+2;
     }
     ide_card_plugged = fixed_disk_tuple_found && ata_disk_tuple_found;
   }
@@ -127,7 +127,7 @@ void mbx8xx_pcmciaide_initialize
    * FIXME: enable interrupts, if needed
    */
   /*
-   * FIXME: set programming voltage as requested 
+   * FIXME: set programming voltage as requested
    */
 }
 
@@ -155,14 +155,14 @@ void mbx8xx_pcmciaide_read_reg
 
   if (reg == IDE_REGISTER_DATA_WORD) {
 #ifdef DATAREG_16BIT
-    *value = *(volatile uint16_t*)(port+reg);    
+    *value = *(volatile uint16_t*)(port+reg);
 #else
-    *value = ((*(volatile uint8_t*)(port+reg) << 8) + 
-	      (*(volatile uint8_t*)(port+reg+1) ));    
+    *value = ((*(volatile uint8_t*)(port+reg) << 8) +
+	      (*(volatile uint8_t*)(port+reg+1) ));
 #endif
   }
   else {
-    *value = *(volatile uint8_t*)(port+reg);    
+    *value = *(volatile uint8_t*)(port+reg);
   }
 #ifdef DEBUG_OUT
   printk("mbx8xx_pcmciaide_read_reg(0x%x)=0x%x\r\n",reg,*value & 0xff);
@@ -196,14 +196,14 @@ void mbx8xx_pcmciaide_write_reg
 #endif
   if (reg == IDE_REGISTER_DATA_WORD) {
 #ifdef DATAREG_16BIT
-    *(volatile uint16_t*)(port+reg) = value;    
+    *(volatile uint16_t*)(port+reg) = value;
 #else
-    *(volatile uint8_t*)(port+reg) = value >> 8;    
-    *(volatile uint8_t*)(port+reg+1) = value;    
+    *(volatile uint8_t*)(port+reg) = value >> 8;
+    *(volatile uint8_t*)(port+reg+1) = value;
 #endif
   }
   else {
-    *(volatile uint8_t*)(port+reg)= value;    
+    *(volatile uint8_t*)(port+reg)= value;
   }
 }
 
@@ -218,9 +218,9 @@ void mbx8xx_pcmciaide_read_block
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- int minor, 
- uint16_t   block_size, 
- blkdev_sg_buffer *bufs, 
+ int minor,
+ uint16_t   block_size,
+ blkdev_sg_buffer *bufs,
  uint32_t   *cbuf,
  uint32_t   *pos
  )
@@ -242,17 +242,17 @@ void mbx8xx_pcmciaide_read_block
     ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
 #endif
   uint32_t    llength = bufs[(*cbuf)].length;
-    
-  while (((*(volatile uint8_t*)(port+IDE_REGISTER_STATUS)) 
-	  & IDE_REGISTER_STATUS_DRQ) && 
+
+  while (((*(volatile uint8_t*)(port+IDE_REGISTER_STATUS))
+	  & IDE_REGISTER_STATUS_DRQ) &&
 	 (cnt < block_size)) {
 #ifdef DATAREG_16BIT
     *lbuf++ = *(volatile uint16_t*)(port+8); /* 16 bit data port */
-    cnt += 2; 
+    cnt += 2;
     (*pos) += 2;
 #else
     *lbuf++ = *(volatile uint8_t*)(port+IDE_REGISTER_DATA);
-    cnt += 1; 
+    cnt += 1;
     (*pos) += 1;
 #endif
     if ((*pos) == llength) {
@@ -261,7 +261,7 @@ void mbx8xx_pcmciaide_read_block
       lbuf = bufs[(*cbuf)].buffer;
       llength = bufs[(*cbuf)].length;
     }
-  } 
+  }
 }
 
 /*=========================================================================*\
@@ -275,9 +275,9 @@ void mbx8xx_pcmciaide_write_block
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- int minor, 
- uint16_t   block_size, 
- blkdev_sg_buffer *bufs, 
+ int minor,
+ uint16_t   block_size,
+ blkdev_sg_buffer *bufs,
  uint32_t   *cbuf,
  uint32_t   *pos
  )
@@ -300,17 +300,17 @@ void mbx8xx_pcmciaide_write_block
     ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
 #endif
   uint32_t    llength = bufs[(*cbuf)].length;
-    
-  while (((*(volatile uint8_t*)(port+IDE_REGISTER_STATUS)) 
-	  & IDE_REGISTER_STATUS_DRQ) && 
+
+  while (((*(volatile uint8_t*)(port+IDE_REGISTER_STATUS))
+	  & IDE_REGISTER_STATUS_DRQ) &&
 	 (cnt < block_size)) {
 #ifdef DATAREG_16BIT
     *(volatile uint16_t*)(port+8) = *lbuf++; /* 16 bit data port */
-    cnt += 2; 
+    cnt += 2;
     (*pos) += 2;
 #else
     *(volatile uint8_t*)(port+IDE_REGISTER_DATA) = *lbuf++;
-    cnt += 1; 
+    cnt += 1;
     (*pos) += 1;
 #endif
     if ((*pos) == llength) {
@@ -319,7 +319,7 @@ void mbx8xx_pcmciaide_write_block
       lbuf = bufs[(*cbuf)].buffer;
       llength = bufs[(*cbuf)].length;
     }
-  } 
+  }
 }
 
 /*=========================================================================*\
@@ -368,7 +368,7 @@ rtems_status_code mbx8xx_pcmciaide_config_io_speed
 }
 
 /*
- * The following table configures the functions used for IDE drivers 
+ * The following table configures the functions used for IDE drivers
  * in this BSP.
  */
 

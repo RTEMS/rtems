@@ -36,7 +36,7 @@ void Clock_exit( void );
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_major_number rtems_clock_minor = 0;
 
@@ -100,7 +100,7 @@ rtems_device_driver Clock_initialize(
     /* External Prototypes */
     extern void init_rtc(void);                /* defined in 'rtc.c' */
     extern long rtc_read(rtems_time_of_day *); /* defined in 'rtc.c' */
-    
+
 #ifdef BSP_DEBUG
     printk("Loading clock from on-board real-time clock.\n");
 #endif
@@ -113,25 +113,25 @@ rtems_device_driver Clock_initialize(
 
   Clock_driver_ticks = 0;
 
-  Clock_isrs = 
-    Clock_initial_isr_value = 
+  Clock_isrs =
+    Clock_initial_isr_value =
     BSP_Configuration.microseconds_per_tick / 1000; /* ticks per clock_isr */
-  
+
   /*
    * configure the counter timer ( should be based on microsecs/tick )
    * NB. The divisor(Clock_isrs) resolves the  is the same number that appears in confdefs.h
    * when setting the microseconds_per_tick value.
    */
   ClockOff      ( &clockIrqData );
-  
+
   timer_counter_init_value  =  BSP_Configuration.microseconds_per_tick / Clock_isrs;
   clock_lsb = (unsigned char)timer_counter_init_value;
   clock_msb = timer_counter_init_value >> 8;
-  
-  outport_byte (TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN); 
+
+  outport_byte (TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
   outport_byte (TIMER_CNTR0, clock_lsb );   /* load LSB first */
   outport_byte (TIMER_CNTR0, clock_msb );   /* then MSB       */
- 
+
   if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
     printk("Unable to initialize system clock\n");
     rtems_fatal_error_occurred(1);
@@ -140,10 +140,10 @@ rtems_device_driver Clock_initialize(
   /*
    * make major/minor avail to others such as shared memory driver
    */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -154,15 +154,15 @@ rtems_device_driver Clock_control(
 )
 {
     rtems_libio_ioctl_args_t *args = pargp;
- 
+
     if (args == 0)
         goto done;
- 
+
     /*
      * This is hokey, but until we get a defined interface
      * to do this, it will just be this simple...
      */
- 
+
     if (args->command == rtems_build_name('I', 'S', 'R', ' '))
     {
         Clock_isr();
@@ -178,13 +178,13 @@ rtems_device_driver Clock_control(
 	printk("Clock installed AGAIN\n");
 #endif
     }
- 
+
 done:
     return RTEMS_SUCCESSFUL;
 }
 
 void Clock_exit()
 {
-  ClockOff(&clockIrqData);  
+  ClockOff(&clockIrqData);
   BSP_remove_rtems_irq_handler (&clockIrqData);
 }

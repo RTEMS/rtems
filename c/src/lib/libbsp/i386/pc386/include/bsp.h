@@ -54,7 +54,7 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <libcpu/cpu.h>
 #include <rtems/bspIo.h>
-  
+
 /*
  *  confdefs.h overrides for this BSP:
  *   - number of termios serial ports
@@ -104,8 +104,8 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 | Video (console) related constants.
 +--------------------------------------------------------------------------*/
 
-#include <crt.h>  
-  
+#include <crt.h>
+
 /*-------------------------------------------------------------------------+
 | Constants relating to the 8254 (or 8253) programmable interval timers.
 +--------------------------------------------------------------------------*/
@@ -192,7 +192,7 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 
 extern interrupt_gate_descriptor Interrupt_descriptor_table[IDT_SIZE];
 extern segment_descriptors Global_descriptor_table   [GDT_SIZE];
- 
+
 extern rtems_configuration_table BSP_Configuration;
                                     /* User provided BSP configuration table. */
 extern uint32_t                  rtemsFreeMemStart;
@@ -204,8 +204,8 @@ extern uint32_t                  rtemsFreeMemStart;
 +--------------------------------------------------------------------------*/
 void          _IBMPC_initVideo(void);    /* from 'outch.c'  */
 void          _IBMPC_outch    (char);    /* from 'outch.c'  */
-char          _IBMPC_inch     (void);    /* from 'inch.c'   */ 
-char          _IBMPC_inch_sleep (void);  /* from 'inch.c'   */ 
+char          _IBMPC_inch     (void);    /* from 'inch.c'   */
+char          _IBMPC_inch_sleep (void);  /* from 'inch.c'   */
 
 void rtemsReboot(void);                  /* from 'exit.c'   */
 

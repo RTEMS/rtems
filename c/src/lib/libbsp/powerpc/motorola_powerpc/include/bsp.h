@@ -48,7 +48,7 @@
 
 #define BSP_CONSOLE_PORT	BSP_UART_COM1
 #define BSP_UART_BAUD_BASE	115200
-  
+
 #include <bsp/openpic.h>
 #define BSP_PIC_DO_EOI openpic_eoi(0)
 

@@ -12,7 +12,7 @@
  */
 
 #include <stdlib.h>
-  
+
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/VME.h>
@@ -80,7 +80,7 @@ static inline int is_processor_irq(const rtems_irq_symbolic_name irqLine)
 /*
  * ------------------------ RTEMS Irq helper functions ----------------
  */
- 
+
 /*
  * Caution : this function assumes the variable "internal_config"
  * is already set and that the tables it contains are still valid
@@ -126,7 +126,7 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
 {
     unsigned int level;
     rtems_irq_connect_data* vchain;
-  
+
     if (!isValidInterrupt(irq->name)) {
       printk("Invalid interrupt vector %d\n",irq->name);
       return 0;
@@ -144,7 +144,7 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
 
     /* save off topmost handler */
     vchain[0]= rtems_hdl_tbl[irq->name];
-    
+
     /*
      * store the data provided by user
      */
@@ -153,14 +153,14 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
     /* link chain to new topmost handler */
     rtems_hdl_tbl[irq->name].next_handler = (void *)vchain;
 
-    
+
     if (is_isa_irq(irq->name)) {
       /*
        * Enable interrupt at PIC level
        */
       BSP_irq_enable_at_i8259s (irq->name);
     }
-    
+
     if (is_pci_irq(irq->name)) {
       /*
        * Enable interrupt at OPENPIC level
@@ -177,7 +177,7 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
      * Enable interrupt on device
      */
     irq->on(irq);
-    
+
     _CPU_ISR_Enable(level);
 
     return 1;
@@ -191,7 +191,7 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
 int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     unsigned int level;
-  
+
     if (!isValidInterrupt(irq->name)) {
       printk("Invalid interrupt vector %d\n",irq->name);
       return 0;
@@ -215,14 +215,14 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      */
     rtems_hdl_tbl[irq->name] = *irq;
     rtems_hdl_tbl[irq->name].next_handler = (void *)-1;
-    
+
     if (is_isa_irq(irq->name)) {
       /*
        * Enable interrupt at PIC level
        */
       BSP_irq_enable_at_i8259s (irq->name);
     }
-    
+
     if (is_pci_irq(irq->name)) {
       /*
        * Enable interrupt at OPENPIC level
@@ -239,7 +239,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * Enable interrupt on device
      */
     irq->on(irq);
-    
+
     _CPU_ISR_Enable(level);
 
     return 1;
@@ -263,7 +263,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
    rtems_irq_connect_data *pchain= NULL, *vchain = NULL;
     unsigned int level;
-  
+
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -302,7 +302,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     }
     else
     {
-       if (rtems_hdl_tbl[irq->name].hdl != irq->hdl) 
+       if (rtems_hdl_tbl[irq->name].hdl != irq->hdl)
        {
           _CPU_ISR_Enable(level);
          return 0;
@@ -325,7 +325,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
       /*
        * disable exception at processor level
        */
-    }    
+    }
 
     /*
      * Disable interrupt on device
@@ -394,7 +394,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
          {
             rtems_irq_connect_data* vchain;
             for( vchain = &rtems_hdl_tbl[i];
-                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
                  vchain = (rtems_irq_connect_data*)vchain->next_handler )
             {
                vchain->on(vchain);
@@ -406,7 +406,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
          {
             rtems_irq_connect_data* vchain;
             for( vchain = &rtems_hdl_tbl[i];
-                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
                  vchain = (rtems_irq_connect_data*)vchain->next_handler )
             {
                vchain->off(vchain);
@@ -434,7 +434,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
          {
             rtems_irq_connect_data* vchain;
             for( vchain = &rtems_hdl_tbl[i];
-                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
                  vchain = (rtems_irq_connect_data*)vchain->next_handler )
             {
                vchain->on(vchain);
@@ -447,13 +447,13 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
          {
             rtems_irq_connect_data* vchain;
             for( vchain = &rtems_hdl_tbl[i];
-                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
                  vchain = (rtems_irq_connect_data*)vchain->next_handler )
             {
                vchain->off(vchain);
             }
          }
-         
+
          openpic_disable_irq ((int) i - BSP_PCI_IRQ_LOWEST_OFFSET);
       }
     }
@@ -470,7 +470,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
          {
             rtems_irq_connect_data* vchain;
             for( vchain = &rtems_hdl_tbl[i];
-                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
                  vchain = (rtems_irq_connect_data*)vchain->next_handler )
             {
                vchain->on(vchain);
@@ -483,7 +483,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
          {
             rtems_irq_connect_data* vchain;
             for( vchain = &rtems_hdl_tbl[i];
-                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl); 
+                 ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
                  vchain = (rtems_irq_connect_data*)vchain->next_handler )
             {
                vchain->off(vchain);
@@ -500,10 +500,10 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
 {
     *config = internal_config;
     return 0;
-}    
+}
 
 int _BSP_vme_bridge_irq = -1;
- 
+
 unsigned BSP_spuriousIntr = 0;
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
@@ -522,12 +522,12 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     _CPU_MSR_GET(msr);
     new_msr = msr | MSR_EE;
     _CPU_MSR_SET(new_msr);
-    
+
     rtems_hdl_tbl[BSP_DECREMENTER].hdl();
 
     _CPU_MSR_SET(msr);
     return;
-    
+
   }
   irq = openpic_irq(0);
   if (irq == OPENPIC_VEC_SPURIOUS) {
@@ -554,7 +554,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   _CPU_MSR_GET(msr);
   new_msr = msr | MSR_EE;
   _CPU_MSR_SET(new_msr);
-    
+
   /* rtems_hdl_tbl[irq].hdl(); */
   {
      rtems_irq_connect_data* vchain;
@@ -585,9 +585,9 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     		openpic_eoi(0);
   }
 }
-    
-    
-  
+
+
+
 void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
 {
   /*

@@ -43,7 +43,7 @@
 #include "mg5.h"
 
 
-	
+
 #ifdef __mips16
    /* This file contains 32 bit assembly code.  */
    .set nomips16
@@ -136,14 +136,14 @@ _branch:
    or     t0,t2
    jal    t0
    nop
-	
 
-			
-		
+
+
+
 
    li	k0,0
    li   k1,0
-	
+
    move t1,a1
    nop
    li	t2,0xa0000000	/* lower limit of kseg1 */
@@ -152,13 +152,13 @@ _branch:
    subu	t0,t1,t2
    srl  t0,31		/* shift high bit down to bit 0 */
    bnez t0,1f		/* booting from below kseg1 */
-	
+
    subu t0,t3,t1
    srl  t0,31		/* shift high bit down to bit 0 */
    bnez t0,1f		/* booting from above kseg1 */
 
-		
-	
+
+
    /*
    ** Call IcacheFlush. Masking used to call EEPROM address of IcacheFlush.  Label is RAM label.
    */
@@ -211,7 +211,7 @@ _branch:
    nop
 
 
-1:	
+1:
    /*
    ** Print ' RTEMS  b'.  Show that we are booting.
    */
@@ -431,7 +431,7 @@ _initialize_rtems:
    la		a0,_promIcache
    sw		k0,0(a0)
    nop
-	
+
    la		a0,_promDcache
    sw		k1,0(a0)
    nop
@@ -801,34 +801,34 @@ _cpuinit:
 
 
 
-	
 
 
-	
+
+
 /**********************************************************************
 **
 ** Keep the boot-time address of the I & D cache reset code for
-** later on.  If we need to clear the I/D caches, we <must> run from 
-** non-cached memory.  This means the relocated versions are useless, 
+** later on.  If we need to clear the I/D caches, we <must> run from
+** non-cached memory.  This means the relocated versions are useless,
 ** thankfully they are quite small.
 */
-	
+
 _promIcache:	.word 0
 _promDcache:	.word 0
 
-		
+
 
 	.globl promCopyIcacheFlush
 	.ent promCopyIcacheFlush
 	.set noreorder
-promCopyIcacheFlush:	
+promCopyIcacheFlush:
 	move	a0,ra
-	
+
 	la	t1,_promIcache
 	lw	t0,0(t1)
 	nop
 	beqz	t0,1f
-	
+
 	jal	t0
 	nop
 
@@ -836,20 +836,20 @@ promCopyIcacheFlush:
 	nop
 	.set reorder
 	.end promCopyIcacheFlush
-	
 
-	
+
+
 	.globl promCopyDcacheFlush
 	.ent promCopyDcacheFlush
 	.set noreorder
-promCopyDcacheFlush:	
+promCopyDcacheFlush:
 	move	a0,ra
-	
+
 	la	t1,_promDcache
 	lw	t0,0(t1)
 	nop
 	beqz	t0,1f
-	
+
 	jal	t0
 	nop
 
@@ -857,11 +857,11 @@ promCopyDcacheFlush:
 	nop
 	.set reorder
 	.end promCopyDcacheFlush
-			
-	
-		
 
-	
+
+
+
+
 /*******************************************************************************
 ** Function Name:   IcacheFlush
 ** Description:     This functions flushes the on chip icache.
@@ -879,7 +879,7 @@ IcacheFlush:
      li        t0, M_BIU
      lw        t1, 0(t0)
 
-     /* 
+     /*
      ** Isolate I cache
      */
      mfc0      t3, C0_SR        /* Read Status Register */

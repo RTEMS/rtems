@@ -22,7 +22,7 @@ _start:
 	ldi	0800h,st
 	ldp	@mem_control
 	ldi	@mem_control,ar0
-	ldp	@mem_data	
+	ldp	@mem_data
 	ldi	@mem_data,r0
 	sti	r0,*+ar0(0)
 	sti	r0,*+ar0(4)
@@ -42,7 +42,7 @@ _start:
 	ldi	0800h,st
 	ldp	@mem_control
 	ldi	@mem_control,ar0
-	ldp	@mem_data	
+	ldp	@mem_data
 	ldi	@mem_data,r0
 	sti	r0,*+ar0(0)
 	sti	r0,*+ar0(4)

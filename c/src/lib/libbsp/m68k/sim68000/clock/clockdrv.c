@@ -16,9 +16,9 @@ typedef struct {
   volatile uint8_t    cr;       /*  0 -  0 : Timer Control Register */
   volatile uint8_t    pad0;     /*  1 -  1 : pad */
   volatile uint8_t    ivr;      /*  2 -  2 : Timer Interrupt Vector Register */
-  volatile uint8_t    pad1;     /*  3 -  3 : pad */ 
+  volatile uint8_t    pad1;     /*  3 -  3 : pad */
   volatile uint32_t   cpr;      /*  4 -  7 : Timer Counter Preload Register */
-  volatile uint8_t    pad2[12]; /*  8 - 19 : pad */ 
+  volatile uint8_t    pad2[12]; /*  8 - 19 : pad */
   volatile uint32_t   sr;       /* 20 - 23 : Timer Status Register */
 } timer_hw_t;
 
@@ -40,10 +40,10 @@ void Clock_driver_support_initialize_hardware()
 void Clock_driver_support_at_tick()
 {
   timer_hw_t *t = TIMER_BASE;
-  
+
   t->sr  = 0xA0;  /* Negate timer interrupt request */
 }
-  
+
 
 void Clock_driver_support_shutdown_hardware()
 {

@@ -21,7 +21,7 @@
  *
  * $Id$
  */
-  
+
 #include <stdlib.h>
 #include <assert.h>
 #include <stdlib.h>
@@ -97,7 +97,7 @@ console_initialize(rtems_device_major_number major,
    * Set up TERMIOS
    */
   rtems_termios_initialize ();
-      
+
   /*
    * Do device-specific initialization
    */
@@ -105,7 +105,7 @@ console_initialize(rtems_device_major_number major,
   /* RTEMS calls this routine once with 'minor'==0; loop through
    * all known instances...
    */
-     
+
   for (minor=0; minor < sizeof(ttyS)/sizeof(ttyS[0]); minor++) {
 	char *nm;
 	  /*
@@ -173,7 +173,7 @@ console_open(rtems_device_major_number major,
                 void                      *arg)
 {
   rtems_status_code              status;
-  static rtems_termios_callbacks cb = 
+  static rtems_termios_callbacks cb =
   {
     console_first_open,			/* firstOpen */
     console_last_close,			/* lastClose */
@@ -196,7 +196,7 @@ console_open(rtems_device_major_number major,
   /*
    * Pass data area info down to driver
    */
-  BSP_uart_termios_set(minor, 
+  BSP_uart_termios_set(minor,
 			 ((rtems_libio_open_close_args_t *)arg)->iop->data1);
   /* Enable interrupts  on channel */
   BSP_uart_intr_ctrl(minor, BSP_UART_INTR_CTRL_TERMIOS);
@@ -215,11 +215,11 @@ console_close(rtems_device_major_number major,
   rtems_device_driver res = RTEMS_SUCCESSFUL;
 
   res =  rtems_termios_close (arg);
-  
+
   return res;
 } /* console_close */
 
- 
+
 /*-------------------------------------------------------------------------+
 | Console device driver READ entry point.
 +--------------------------------------------------------------------------+
@@ -233,7 +233,7 @@ console_read(rtems_device_major_number major,
 
   return rtems_termios_read (arg);
 } /* console_read */
- 
+
 
 /*-------------------------------------------------------------------------+
 | Console device driver WRITE entry point.
@@ -247,20 +247,20 @@ console_write(rtems_device_major_number major,
 {
 
   return rtems_termios_write (arg);
- 
+
 } /* console_write */
 
 
- 
+
 /*
  * Handle ioctl request.
  */
-rtems_device_driver 
+rtems_device_driver
 console_control(rtems_device_major_number	major,
 		rtems_device_minor_number			minor,
 		void                      			*arg
 )
-{ 
+{
 /* does the BSP support break callbacks ? */
 #if defined(BIOCSETBREAKCB) && defined(BIOCGETBREAKCB)
 rtems_libio_ioctl_args_t	*ioa=arg;
@@ -269,7 +269,7 @@ rtems_libio_ioctl_args_t	*ioa=arg;
 				return BSP_uart_set_break_cb(minor, ioa);
 			case BIOCGETBREAKCB:
 				return BSP_uart_get_break_cb(minor, ioa);
-			
+
 			default:
 			   	break;
 	}
@@ -282,45 +282,45 @@ conSetAttr(int minor, const struct termios *t)
 {
   int baud;
 
-  switch (t->c_cflag & CBAUD) 
+  switch (t->c_cflag & CBAUD)
     {
-    case B50:	
+    case B50:
       baud = 50;
       break;
-    case B75:	
-      baud = 75;	
+    case B75:
+      baud = 75;
       break;
-    case B110:	
-      baud = 110;	
+    case B110:
+      baud = 110;
       break;
-    case B134:	
-      baud = 134;	
+    case B134:
+      baud = 134;
       break;
-    case B150:	
-      baud = 150;	
+    case B150:
+      baud = 150;
       break;
     case B200:
-      baud = 200;	
+      baud = 200;
       break;
-    case B300:	
+    case B300:
       baud = 300;
       break;
-    case B600:	
-      baud = 600;	
+    case B600:
+      baud = 600;
       break;
-    case B1200:	
+    case B1200:
       baud = 1200;
       break;
-    case B1800:	
-      baud = 1800;	
+    case B1800:
+      baud = 1800;
       break;
-    case B2400:	
+    case B2400:
       baud = 2400;
       break;
-    case B4800:	
+    case B4800:
       baud = 4800;
       break;
-    case B9600:	
+    case B9600:
       baud = 9600;
       break;
     case B19200:
@@ -329,7 +329,7 @@ conSetAttr(int minor, const struct termios *t)
     case B38400:
       baud = 38400;
       break;
-    case B57600:	
+    case B57600:
       baud = 57600;
       break;
     case B115200:

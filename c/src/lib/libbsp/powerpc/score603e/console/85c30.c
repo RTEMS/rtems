@@ -1,5 +1,5 @@
 /*
- *  This file contains the console driver chip level routines for the 
+ *  This file contains the console driver chip level routines for the
  *  z85c30 chip.
  *
  *  Currently only polled mode is supported.
@@ -11,7 +11,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: 
+ *  $Id:
  */
 
 #include <rtems.h>
@@ -42,19 +42,19 @@ typedef struct {
 } char_size_info;
 
 static const char_size_info Char_size_85c30[] = {
-  { Z8530_READ_CHARACTER_BITS_8, Z8530_WRITE_CHARACTER_BITS_8, 0xFF }, 
-  { Z8530_READ_CHARACTER_BITS_7, Z8530_WRITE_CHARACTER_BITS_7, 0x7F }, 
-  { Z8530_READ_CHARACTER_BITS_6, Z8530_WRITE_CHARACTER_BITS_6, 0x3F }, 
+  { Z8530_READ_CHARACTER_BITS_8, Z8530_WRITE_CHARACTER_BITS_8, 0xFF },
+  { Z8530_READ_CHARACTER_BITS_7, Z8530_WRITE_CHARACTER_BITS_7, 0x7F },
+  { Z8530_READ_CHARACTER_BITS_6, Z8530_WRITE_CHARACTER_BITS_6, 0x3F },
   { Z8530_READ_CHARACTER_BITS_5, Z8530_WRITE_CHARACTER_BITS_5, 0x1F }
 };
 
-static const unsigned char Clock_speed_85c30[] = { 
+static const unsigned char Clock_speed_85c30[] = {
   Z8530_x1_CLOCK, Z8530_x16_CLOCK, Z8530_x32_CLOCK,  Z8530_x64_CLOCK };
 
-static const unsigned char Stop_bit_85c30[] = { 
+static const unsigned char Stop_bit_85c30[] = {
   Z8530_STOP_BITS_1, Z8530_STOP_BITS_1_AND_A_HALF, Z8530_STOP_BITS_2 };
 
-static const unsigned char Parity_85c30[] = { 
+static const unsigned char Parity_85c30[] = {
   Z8530_PARITY_NONE, Z8530_PARITY_ODD, Z8530_PARITY_EVEN };
 
 
@@ -64,19 +64,19 @@ static const unsigned char Parity_85c30[] = {
  *
  * Read a Z85c30 register
  */
-static unsigned char Read_85c30_register( 
+static unsigned char Read_85c30_register(
   volatile unsigned char *csr,                        /* IN  */
   unsigned char  register_number                      /* IN  */
 )
 {
   unsigned char Data;
- 
-  *csr = register_number; 
+
+  *csr = register_number;
 
   rtems_bsp_delay_in_bus_cycles( 40 );
 
   Data = *csr;
-  
+
   rtems_bsp_delay_in_bus_cycles( 40 );
 
   return Data;
@@ -118,7 +118,7 @@ void Reset_85c30_chip(
   Write_85c30_register( ctrl_0, 0x09, 0x80 );
   Write_85c30_register( ctrl_1, 0x09, 0x40 );
 }
- 
+
 
 /* PAGE
  *
@@ -138,7 +138,7 @@ void initialize_85c30_port(
   Setup = Port->Protocol;
   ctrl  = Port->ctrl;
 
-  baud_constant = _Score603e_Z8530_Baud( Port->Chip->clock_frequency, 
+  baud_constant = _Score603e_Z8530_Baud( Port->Chip->clock_frequency,
     Port->Chip->clock_x, Setup->baud_rate );
 
   /*
@@ -244,13 +244,13 @@ void initialize_85c30_port(
   value = 0x8a;
   value = value |  Char_size_85c30[ Setup->write_char_bits ].write_setup;
   Write_85c30_register( ctrl, 0x05, value );
- 
+
   /*
    * Reset Tx UNDERRUN/EOM LATCH and ERROR
-   * via register 0 
+   * via register 0
    */
    Write_85c30_register( ctrl, 0x00, 0xf0 );
- 
+
 #if CONSOLE_USE_INTERRUPTS
   /*
    *  Set Write Register 1 to interrupt on Rx characters or special condition.
@@ -311,7 +311,7 @@ void outbyte_polled_85c30(
 {
   unsigned char       z8530_status;
   uint32_t            isrlevel;
- 
+
   rtems_interrupt_disable( isrlevel );
 
   /*
@@ -324,7 +324,7 @@ void outbyte_polled_85c30(
   /*
    * Write the character.
    */
-  Write_85c30_register( csr, DATA_REGISTER, (unsigned char) ch ); 
+  Write_85c30_register( csr, DATA_REGISTER, (unsigned char) ch );
 
   rtems_interrupt_enable( isrlevel );
 }
@@ -336,7 +336,7 @@ void outbyte_polled_85c30(
  *  This routine polls for a character.
  */
 
-int inbyte_nonblocking_85c30(   
+int inbyte_nonblocking_85c30(
   const Port_85C30_info      *Port
 )
 {
@@ -352,7 +352,7 @@ int inbyte_nonblocking_85c30(
   z8530_status = Read_85c30_register( csr, STATUS_REGISTER );
   if ( !Z8530_Status_Is_RX_character_available( z8530_status ) )
     return -1;
-  
+
   /*
    * Return the character read.
    */
@@ -396,7 +396,7 @@ rtems_isr ISR_85c30_Async(
   if ( Z8530_Status_Is_RX_character_available( status ) ) {
     data = Read_85c30_register( Port->ctrl, DATA_REGISTER );
     data &= Char_size_85c30[ Port->Protocol->read_char_bits ].mask_value;
-    
+
     rtems_termios_enqueue_raw_characters( Port->Protocol->console_termios_data,
        &data, 1 );
     did_something = TRUE;

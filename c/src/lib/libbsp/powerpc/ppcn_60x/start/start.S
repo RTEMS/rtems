@@ -75,7 +75,7 @@ _start:
 	ori	r3,r3 ,H0_60X_ICE
 #endif
 	mtspr	HID0,r3
-	
+
 	/* clear bss */
 	lis	r6,__bss_start@h
 	ori	r6,r6,__bss_start@l

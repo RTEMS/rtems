@@ -1,5 +1,5 @@
 /*
- *  This file contains the hardware independent portion of a polled 
+ *  This file contains the hardware independent portion of a polled
  *  console device driver.  If a BSP chooses to use this, then it
  *  only has to provide a few board dependent routines.
  *
@@ -56,7 +56,7 @@ int console_write_support (
  *  Console Device Driver Entry Points
  *
  */
- 
+
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
@@ -106,12 +106,12 @@ rtems_device_driver console_open(
   assert( minor <= 1 );
   if ( minor > 2 )
     return RTEMS_INVALID_NUMBER;
- 
+
   sc = rtems_termios_open (major, minor, arg, &pollCallbacks );
 
   return RTEMS_SUCCESSFUL;
 }
- 
+
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -120,7 +120,7 @@ rtems_device_driver console_close(
 {
   return rtems_termios_close (arg);
 }
- 
+
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -129,7 +129,7 @@ rtems_device_driver console_read(
 {
   return rtems_termios_read (arg);
 }
- 
+
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -138,7 +138,7 @@ rtems_device_driver console_write(
 {
   return rtems_termios_write (arg);
 }
- 
+
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,

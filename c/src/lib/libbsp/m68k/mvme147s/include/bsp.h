@@ -46,7 +46,7 @@ extern "C" {
 #define DRAM_END  0x00400000
   /* We leave 128k for the shared memory */
 
-  /* MVME 147 Peripheral controller chip 
+  /* MVME 147 Peripheral controller chip
      see MVME147/D1, 3.4 */
 
 struct pcc_map {
@@ -160,9 +160,9 @@ struct vme_gcsr_map {
 #define PCC_BASE_VECTOR        0x40 /* First user int */
 #define SCC_VECTOR             PCC_BASE_VECTOR+3
 #define TIMER_1_VECTOR         PCC_BASE_VECTOR+8
-#define TIMER_2_VECTOR         PCC_BASE_VECTOR+9  
+#define TIMER_2_VECTOR         PCC_BASE_VECTOR+9
 #define SOFT_1_VECTOR          PCC_BASE_VECTOR+10
-#define SOFT_2_VECTOR          PCC_BASE_VECTOR+11 
+#define SOFT_2_VECTOR          PCC_BASE_VECTOR+11
 
 #define VME_BASE_VECTOR        0x50
 #define VME_SIGLP_VECTOR       VME_BASE_VECTOR+1
@@ -233,7 +233,7 @@ extern m68k_isr_entry M68Kvec[];   /* vector table address */
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

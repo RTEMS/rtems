@@ -150,7 +150,7 @@ m360Enet_initialize_hardware (struct scc_softc *sc)
 	m360.papar |=  0x303;
 	m360.padir &= ~0x303;
 	m360.paodr &= ~0x303;
-	
+
 	/*
 	 * Configure port C CTS1* and CD1* pins
 	 */
@@ -247,7 +247,7 @@ m360Enet_initialize_hardware (struct scc_softc *sc)
 	 * Aggressive retry
 	 */
 	m360.scc1p.un.ethernet.p_per = 0;
-	
+
 	/*
 	 * Clear individual address hash table
 	 */
@@ -377,10 +377,10 @@ m360Enet_retire_tx_bd (struct scc_softc *sc)
 				status = (sc->txBdBase + j)->status;
 				if (status & M360_BD_READY)
 					break;
-				(sc->txBdBase + j)->status = M360_BD_READY | 
-					(status & (M360_BD_PAD | 
-						   M360_BD_WRAP | 
-						   M360_BD_INTERRUPT | 
+				(sc->txBdBase + j)->status = M360_BD_READY |
+					(status & (M360_BD_PAD |
+						   M360_BD_WRAP |
+						   M360_BD_INTERRUPT |
 						   M360_BD_LAST |
 						   M360_BD_TX_CRC));
 				if (status & M360_BD_LAST)
@@ -393,7 +393,7 @@ m360Enet_retire_tx_bd (struct scc_softc *sc)
 			 * Move transmitter back to the first
 			 * buffer descriptor in the frame.
 			 */
-			m360.scc1p._tbptr = m360.scc1p.tbase + 
+			m360.scc1p._tbptr = m360.scc1p.tbase +
 				sc->txBdTail * sizeof (m360BufferDescriptor_t);
 
 			/*
@@ -658,7 +658,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 				MFREE (m, n);
 				m = n;
 			}
-			
+
 			/*
 			 * Redo the send with the new mbuf cluster
 			 */
@@ -927,7 +927,7 @@ scc_ioctl (struct ifnet *ifp, int command, caddr_t data)
 	case SIO_RTEMS_SHOW_STATS:
 		scc_stats (sc);
 		break;
-		
+
 	/*
 	 * FIXME: All sorts of multicast commands need to be added here!
 	 */
@@ -957,13 +957,13 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int attaching)
 		printf ("SCC1 driver can not be detached.\n");
 		return 0;
 	}
-		
+
 	/*
  	 * Parse driver name
 	 */
 	if ((unitNumber = rtems_bsdnet_parse_driver_name (config, &unitName)) < 0)
 		return 0;
-	
+
 	/*
 	 * Is driver free?
 	 */

@@ -36,7 +36,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: 
+ *  $Id:
  */
 
 #include <rtems.h>
@@ -44,8 +44,8 @@
 
 
 /*
- *  This routine installs vector number vector. 
- *  
+ *  This routine installs vector number vector.
+ *
  */
 rtems_isr_entry set_vector(                    /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
@@ -57,7 +57,7 @@ rtems_isr_entry set_vector(                    /* returns old vector */
   rtems_status_code status;
 
 
-  /* 
+  /*
    * vectors greater than PPC603e_IRQ_LAST are handled by the General purpose
    * interupt handler.
    */

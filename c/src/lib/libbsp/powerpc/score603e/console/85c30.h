@@ -1,6 +1,6 @@
 /*  85c30.h
  *
- *  This include file contains z85c30 chip information. 
+ *  This include file contains z85c30 chip information.
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -9,7 +9,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: 
+ *  $Id:
  */
 
 #ifndef __85c30_H
@@ -18,7 +18,7 @@
 /*
  * Clock Speed Definations
  */
- 
+
 #define Z8530_x1_CLOCK                        0x00
 #define Z8530_x16_CLOCK                       0x40
 #define Z8530_x32_CLOCK                       0x80

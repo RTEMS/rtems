@@ -57,7 +57,7 @@ extern "C" {
 
 /* XXX - JRS - I want to compile the tmtests */
 
-#define MUST_WAIT_FOR_INTERRUPT 1 
+#define MUST_WAIT_FOR_INTERRUPT 1
 
 #define Install_tm27_vector( handler )
 
@@ -65,7 +65,7 @@ extern "C" {
 
 #define Clear_tm27_intr()
 
-#define Lower_tm27_intr() 
+#define Lower_tm27_intr()
 
 /*
  *  Simple spin delay in microsecond units for device drivers.
@@ -130,11 +130,11 @@ extern int stack_start;
 /*
  *  Device Driver Table Entries
  */
- 
+
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

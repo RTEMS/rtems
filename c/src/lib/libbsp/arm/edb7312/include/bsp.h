@@ -24,7 +24,7 @@ extern "C" {
 #include <rtems/iosupp.h>
 #include <rtems/console.h>
 #include <rtems/clockdrv.h>
-  
+
 /*
  *  Define the interrupt mechanism for Time Test 27
  *
@@ -42,16 +42,16 @@ extern rtems_configuration_table BSP_Configuration;
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
-#define Install_tm27_vector( handler ) 
+#define Install_tm27_vector( handler )
 
-#define Cause_tm27_intr()  
+#define Cause_tm27_intr()
 
-#define Clear_tm27_intr()  
+#define Clear_tm27_intr()
 
 #define Lower_tm27_intr()
 
 
-  
+
 /*
  * Network driver configuration
  */

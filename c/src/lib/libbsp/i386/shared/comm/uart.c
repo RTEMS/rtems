@@ -33,10 +33,10 @@ struct uart_data
 
 static struct uart_data uart_data[2];
 
-/* 
+/*
  * Macros to read/write register of uart, if configuration is
  * different just rewrite these macros
- */ 
+ */
 
 static inline unsigned char
 uread(int uart, unsigned int reg)
@@ -52,7 +52,7 @@ uread(int uart, unsigned int reg)
   return val;
 }
 
-static inline void      
+static inline void
 uwrite(int uart, int reg, unsigned int val)
 {
   if (uart == 0) {
@@ -87,13 +87,13 @@ uartError(int uart)
 inline void uartError(int uart)
 {
   unsigned char uartStatus;
-  
+
   uartStatus = uread(uart, LSR);
   uartStatus = uread(uart, RBR);
 }
 #endif
 
-/* 
+/*
  * Uart initialization, it is hardcoded to 8 bit, no parity,
  * one stop bit, FIFO, things to be changed
  * are baud rate and nad hw flow control,
@@ -111,10 +111,10 @@ BSP_uart_init
 )
 {
   unsigned char tmp;
-  
+
   /* Sanity check */
   assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
-  
+
   switch(baud)
     {
     case 50:
@@ -135,23 +135,23 @@ BSP_uart_init
       assert(0);
       return;
     }
-  
+
   /* Set DLAB bit to 1 */
   uwrite(uart, LCR, DLAB);
-  
+
   /* Set baud rate */
-  uwrite(uart, DLL,  (BSPBaseBaud/baud) & 0xff); 
-  uwrite(uart, DLM,  ((BSPBaseBaud/baud) >> 8) & 0xff); 
+  uwrite(uart, DLL,  (BSPBaseBaud/baud) & 0xff);
+  uwrite(uart, DLM,  ((BSPBaseBaud/baud) >> 8) & 0xff);
 
   /* 8-bit, no parity , 1 stop */
   uwrite(uart, LCR, databits | parity | stopbits);
-  
+
 
   /* Set DTR, RTS and OUT2 high */
   uwrite(uart, MCR, DTR | RTS | OUT_2);
 
   /* Enable FIFO */
-  uwrite(uart, FCR, FIFO_EN | XMIT_RESET | RCV_RESET | RECEIVE_FIFO_TRIGGER12); 
+  uwrite(uart, FCR, FIFO_EN | XMIT_RESET | RCV_RESET | RECEIVE_FIFO_TRIGGER12);
 
   /* Disable Interrupts */
   uwrite(uart, IER, 0);
@@ -170,12 +170,12 @@ BSP_uart_init
   return;
 }
 
-/* 
+/*
  * Set baud
  */
 
 void
-BSP_uart_set_baud( 
+BSP_uart_set_baud(
   int uart,
   unsigned long baud
 )
@@ -183,7 +183,7 @@ BSP_uart_set_baud(
   /* Sanity check */
   assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
 
-  BSP_uart_set_attributes( uart, baud, uart_data[uart].databits, 
+  BSP_uart_set_attributes( uart, baud, uart_data[uart].databits,
     uart_data[uart].parity, uart_data[uart].stopbits );
 }
 
@@ -205,10 +205,10 @@ BSP_uart_set_attributes
 
   /* Sanity check */
   assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
-  
-  /* 
+
+  /*
    * This function may be called whenever TERMIOS parameters
-   * are changed, so we have to make sure that baud change is 
+   * are changed, so we have to make sure that baud change is
    * indeed required
    */
 
@@ -227,14 +227,14 @@ BSP_uart_set_attributes
 
   uwrite(uart, MCR, mcr);
   uwrite(uart, IER, ier);
-  
+
   return;
 }
 
 /*
- * Enable/disable interrupts 
+ * Enable/disable interrupts
  */
-void 
+void
 BSP_uart_intr_ctrl(int uart, int cmd)
 {
   int iStatus = (int)INTERRUPT_DISABLE;
@@ -262,7 +262,7 @@ BSP_uart_intr_ctrl(int uart, int cmd)
 
   uart_data[uart].ier = iStatus;
   uwrite(uart, IER, iStatus);
- 
+
   return;
 }
 
@@ -270,7 +270,7 @@ void
 BSP_uart_throttle(int uart)
 {
   unsigned int mcr;
-  
+
   assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
 
   if(!uart_data[uart].hwFlow)
@@ -312,12 +312,12 @@ BSP_uart_unthrottle(int uart)
  * Status function, -1 if error
  * detected, 0 if no received chars available,
  * 1 if received char available, 2 if break
- * is detected, it will eat break and error 
- * chars. It ignores overruns - we cannot do 
+ * is detected, it will eat break and error
+ * chars. It ignores overruns - we cannot do
  * anything about - it execpt count statistics
  * and we are not counting it.
  */
-int 
+int
 BSP_uart_polled_status(int uart)
 {
   unsigned char val;
@@ -335,7 +335,7 @@ BSP_uart_polled_status(int uart)
 
   if((val & (DR | OE | FE)) ==  1)
     {
-      /* No error, character present */ 
+      /* No error, character present */
       return BSP_UART_STATUS_CHAR;
     }
 
@@ -345,12 +345,12 @@ BSP_uart_polled_status(int uart)
       return BSP_UART_STATUS_NOCHAR;
     }
 
-  /* 
+  /*
    * Framing or parity error
    * eat character
    */
   uread(uart, RBR);
- 
+
   return BSP_UART_STATUS_ERROR;
 }
 
@@ -358,14 +358,14 @@ BSP_uart_polled_status(int uart)
 /*
  * Polled mode write function
  */
-void 
+void
 BSP_uart_polled_write(int uart, int val)
 {
   unsigned char val1;
-  
+
   /* Sanity check */
   assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
-  
+
   for(;;)
     {
       if((val1=uread(uart, LSR)) & THRE)
@@ -386,7 +386,7 @@ BSP_uart_polled_write(int uart, int val)
     }
 
   uwrite(uart, THR, val & 0xff);
-      
+
   /*
    * Wait for character to be transmitted.
    * This ensures that printk and printf play nicely together
@@ -413,16 +413,16 @@ BSP_output_char_via_serial(int val)
   if (val == '\n') BSP_uart_polled_write(BSPConsolePort,'\r');
 }
 
-/* 
+/*
  * Polled mode read function
  */
-int 
+int
 BSP_uart_polled_read(int uart)
 {
   unsigned char val;
 
   assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
-  
+
   for(;;)
     {
       if(uread(uart, LSR) & DR)
@@ -430,13 +430,13 @@ BSP_uart_polled_read(int uart)
 	  break;
 	}
     }
-  
+
   val = uread(uart, RBR);
 
   return (int)(val & 0xff);
 }
 
-unsigned 
+unsigned
 BSP_poll_char_via_serial()
 {
 	return BSP_uart_polled_read(BSPConsolePort);
@@ -480,7 +480,7 @@ void uart_set_driver_handler( int port, void ( *handler )( void *,  char *, int 
 
 
 /*
- * Set channel parameters 
+ * Set channel parameters
  */
 void
 BSP_uart_termios_set(int uart, void *ttyp)
@@ -488,7 +488,7 @@ BSP_uart_termios_set(int uart, void *ttyp)
   struct rtems_termios_tty *p = (struct rtems_termios_tty *)ttyp;
   unsigned char val;
   assert(uart == BSP_UART_COM1 || uart == BSP_UART_COM2);
-  
+
   if(uart == BSP_UART_COM1)
     {
       uart_data[uart].ioMode = p->device.outputUsesInterrupts;
@@ -504,7 +504,7 @@ BSP_uart_termios_set(int uart, void *ttyp)
 	}
       termios_tx_active_com1      = 0;
       termios_ttyp_com1           = ttyp;
-      termios_tx_hold_com1        = 0; 
+      termios_tx_hold_com1        = 0;
       termios_tx_hold_valid_com1  = 0;
     }
   else
@@ -522,7 +522,7 @@ BSP_uart_termios_set(int uart, void *ttyp)
 	}
       termios_tx_active_com2      = 0;
       termios_ttyp_com2           = ttyp;
-      termios_tx_hold_com2        = 0; 
+      termios_tx_hold_com2        = 0;
       termios_tx_hold_valid_com2  = 0;
     }
 
@@ -657,7 +657,7 @@ BSP_uart_termios_isr_com1(void)
   for(;;)
     {
       vect = uread(BSP_UART_COM1, IIR) & 0xf;
-      
+
       switch(vect)
 	{
 	case MODEM_STATUS :
@@ -690,7 +690,7 @@ BSP_uart_termios_isr_com1(void)
          if( driver_input_handler_com1 )
          {
              driver_input_handler_com1( termios_ttyp_com1, (char *)buf, off );
-         } 
+         }
          else
          {
             /* Update rx buffer */
@@ -699,9 +699,9 @@ BSP_uart_termios_isr_com1(void)
 	    }
 	  return;
 	case TRANSMITTER_HODING_REGISTER_EMPTY :
-	  /* 
-	   * TX holding empty: we have to disable these interrupts 
-	   * if there is nothing more to send. 
+	  /*
+	   * TX holding empty: we have to disable these interrupts
+	   * if there is nothing more to send.
 	   */
 
 	  /* If nothing else to send disable interrupts */
@@ -740,7 +740,7 @@ BSP_uart_termios_isr_com1(void)
 	}
     }
 }
-	  
+
 void
 BSP_uart_termios_isr_com2()
 {
@@ -753,7 +753,7 @@ BSP_uart_termios_isr_com2()
   for(;;)
     {
       vect = uread(BSP_UART_COM2, IIR) & 0xf;
-      
+
       switch(vect)
 	{
 	case MODEM_STATUS :
@@ -786,7 +786,7 @@ BSP_uart_termios_isr_com2()
          if( driver_input_handler_com2 )
          {
              driver_input_handler_com2( termios_ttyp_com2, (char *)buf, off );
-         } 
+         }
          else
          {
 	        rtems_termios_enqueue_raw_characters(termios_ttyp_com2, (char *)buf, off);
@@ -794,8 +794,8 @@ BSP_uart_termios_isr_com2()
 	    }
 	  return;
 	case TRANSMITTER_HODING_REGISTER_EMPTY :
-	  /* 
-	   * TX holding empty: we have to disable these interrupts 
+	  /*
+	   * TX holding empty: we have to disable these interrupts
 	   * if there is nothing more to send.
 	   */
 
@@ -835,13 +835,13 @@ BSP_uart_termios_isr_com2()
 	}
     }
 }
-	  
-  
-/* ================= GDB support     ===================*/ 
+
+
+/* ================= GDB support     ===================*/
 static int sav[4] __attribute__ ((unused));
 
 /*
- * Interrupt service routine for COM1 - all, 
+ * Interrupt service routine for COM1 - all,
  * it does it check whether ^C is received
  * if yes it will flip TF bit before returning
  * Note: it should be installed as raw interrupt
@@ -858,7 +858,7 @@ asm ("    movl %edx, sav + 8");      /* Save edx */
 
 asm ("    movl $0, %ebx");           /* Clear flag */
 
-/* 
+/*
  * We know that only receive related interrupts
  * are available, eat chars
  */
@@ -873,7 +873,7 @@ asm ("    inb  %dx, %al");    /* Get input character */
 asm ("    cmpb $3, %al");
 asm ("    jne  uart_dbgisr_com1_1");
 
-/* ^C received, set flag */ 
+/* ^C received, set flag */
 asm ("    movl $1, %ebx");
 asm ("    jmp uart_dbgisr_com1_1");
 
@@ -920,10 +920,10 @@ asm ("   iret");                 /* Done */
 
 
 /*
- * Interrupt service routine for COM2 - all, 
+ * Interrupt service routine for COM2 - all,
  * it does it check whether ^C is received
  * if yes it will flip TF bit before returning
- * Note: it has to be installed as raw interrupt 
+ * Note: it has to be installed as raw interrupt
  * handler
  */
 asm (".p2align 4");
@@ -936,7 +936,7 @@ asm ("    movl %edx, sav + 8");      /* Save edx */
 
 asm ("    movl $0, %ebx");           /* Clear flag */
 
-/* 
+/*
  * We know that only receive related interrupts
  * are available, eat chars
  */
@@ -951,7 +951,7 @@ asm ("    inb  %dx, %al");    /* Get input character */
 asm ("    cmpb $3, %al");
 asm ("    jne  uart_dbgisr_com2_1");
 
-/* ^C received, set flag */ 
+/* ^C received, set flag */
 asm ("    movl $1, %ebx");
 asm ("    jmp uart_dbgisr_com2_1");
 

@@ -21,20 +21,20 @@
 #ifndef KB
 #define KB (1024)
 #endif
-#ifndef MB 
+#ifndef MB
 #define MB (KB*KB)
 #endif
 
 /*** Board resources allocation ***/
 
 
-/* 
+/*
  * To achieve some compatibility with dBUG monitor, we use the same
  * memory resources allocation as it is used in dBUG.
  *
  * If this definitions will be changed, change the linker script also.
  */
- 
+
 /* Memory mapping */
 /* CS0: Boot Flash */
 #define BSP_MEM_ADDR_FLASH    (0xFFE00000)
@@ -214,7 +214,7 @@ extern char _SYS_CLOCK_FREQUENCY; /* Don't use this variable directly!!! */
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

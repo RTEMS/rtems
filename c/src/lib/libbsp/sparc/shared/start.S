@@ -36,10 +36,10 @@
 SYM(start):
 start:
 
-/* 
+/*
  *  The trap table has to be the first code in a boot PROM.  But because
  *  the Memory Configuration comes up thinking we only have 4K of PROM, we
- *  cannot have a full trap table and still have room left over to 
+ *  cannot have a full trap table and still have room left over to
  *  reprogram the Memory Configuration register correctly.  This file
  *  uses an abbreviated trap which has every entry which might be used
  *  before RTEMS installs its own trap table.
@@ -49,8 +49,8 @@ start:
   PUBLIC(trap_table)
 SYM(trap_table):
 
-  RTRAP( 0, SYM(hard_reset) );                   ! 00 reset trap 
-  BAD_TRAP;                                     ! 01 instruction access 
+  RTRAP( 0, SYM(hard_reset) );                   ! 00 reset trap
+  BAD_TRAP;                                     ! 01 instruction access
                                                 !    exception
   BAD_TRAP;                                     ! 02 illegal instruction
   BAD_TRAP;                                     ! 03 privileged instruction
@@ -68,7 +68,7 @@ SYM(trap_table):
   BAD_TRAP;                                     ! 0F undefined
   BAD_TRAP;                                     ! 10 undefined
 
-  /* 
+  /*
    *  ERC32 defined traps
    */
 
@@ -115,7 +115,7 @@ SYM(trap_table):
   BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 74 - 77 undefined
   BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 78 - 7B undefined
 
-/* 
+/*
    This is a sad patch to make sure that we know where the
    MEC timer control register mirror is so we can stop the timers
    from an external debugger. It is needed because the control
@@ -138,10 +138,10 @@ SYM(_ERC32_MEC_Timer_Control_Mirror):
 SYM(CLOCK_SPEED):
 
   .word	0x0a, 0, 0, 0				! 7E (10 MHz default)
-  
+
   BAD_TRAP; 					! 7F undefined
 
-  /* 
+  /*
    *  Software traps
    *
    *  NOTE: At the risk of being redundant... this is not a full
@@ -207,7 +207,7 @@ SYM(hard_reset):
 	and	%g2, 0x7, %g2
 	set	1, %g3
 	sll	%g3, %g2, %g3
-        mov     %g3, %wim               
+        mov     %g3, %wim
 
 	or	%g1, 0x20, %g1
         wr      %g1, %psr         ! enable traps
@@ -233,11 +233,11 @@ SYM(hard_reset):
         /*
          *  Copy the initialized data to RAM
          *
-         *  FROM:   _endtext 
-         *  TO:     _data_start 
+         *  FROM:   _endtext
+         *  TO:     _data_start
          *  LENGTH: (__bss_start - _data_start) bytes
          */
- 
+
 
         sethi %hi(_endtext),%g2
         or    %g2,%lo(_endtext),%g2     ! g2 = start of initialized data in ROM

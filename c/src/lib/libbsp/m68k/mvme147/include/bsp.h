@@ -44,7 +44,7 @@ extern "C" {
 #define RAM_START 0x00005000
 #define RAM_END   0x00400000
 
-  /* MVME 147 Peripheral controller chip 
+  /* MVME 147 Peripheral controller chip
      see MVME147/D1, 3.4 */
 
 struct pcc_map {
@@ -99,9 +99,9 @@ struct pcc_map {
 #define PCC_BASE_VECTOR        0x40 /* First user int */
 #define SCC_VECTOR             PCC_BASE_VECTOR+3
 #define TIMER_1_VECTOR         PCC_BASE_VECTOR+8
-#define TIMER_2_VECTOR         PCC_BASE_VECTOR+9  
+#define TIMER_2_VECTOR         PCC_BASE_VECTOR+9
 #define SOFT_1_VECTOR          PCC_BASE_VECTOR+10
-#define SOFT_2_VECTOR          PCC_BASE_VECTOR+11 
+#define SOFT_2_VECTOR          PCC_BASE_VECTOR+11
 
 #define USE_CHANNEL_A   1                /* 1 = use channel A for console */
 #define USE_CHANNEL_B   0                /* 1 = use channel B for console */
@@ -169,7 +169,7 @@ extern m68k_isr_entry M68Kvec[];   /* vector table address */
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

@@ -158,15 +158,15 @@ m302Enet_initialize_hardware (struct scc_softc *sc)
 #define DSQE	0x0010
 #define FDE		0x0020
 
-	
+
 
 	/*
 	 * standard loopback
 	 */
-	M68302imp_port_data	(1) &= ~(LBK);	
+	M68302imp_port_data	(1) &= ~(LBK);
 	M68302imp_port_data	(1) |= (FDE);
 
-		
+
 	M68en302imp_ecntrl=0x0001;
 	/*
 	 * Set dma configuration status register EDMA
@@ -175,15 +175,15 @@ m302Enet_initialize_hardware (struct scc_softc *sc)
 			(sc->txBdCount == 32) ? EDMA_BDSIZE_32T_96R :
 			(sc->txBdCount == 64) ? EDMA_BDSIZE_64T_64R :
 			EDMA_BDSIZE_8T_120R;
-	
+
 	M68en302imp_edma =  EDMA_BLIM_8ACCESS | EDMA_WMRK_16FIFO | EDMA_BIT_TSRLY | (ushort)i;
-	
+
 	/*
 	 * Set maximum receive buffer length
 	 */
 
 	M68en302imp_emrblr = RBUF_SIZE;	/* 1520 */
-	
+
 	/*
 	 * Set interrupt vector
 	 */
@@ -191,23 +191,23 @@ m302Enet_initialize_hardware (struct scc_softc *sc)
 
 
 	M68en302imp_intr_mask=0x0;
-	
+
 	/*
 	 * Set ethernet Configuration
 	 */
 	M68en302imp_ecnfig=0x0000;
-	
+
 	/*
 	 * Set ETHER_TEST
 	 */
 	M68en302imp_ether_test=0x0000;
-	
+
 	/*
 	 *  Set AR control Register
 	 *	Ignore/accept broadcast packets as specified
 	 */
 	M68en302imp_ar_cntrl = ((sc->acceptBroadcast) ? 0 : AR_CNTRL_BIT_NO_BROADCAST) ;
-	
+
 	/*
 	 * Allocate mbuf pointers
 	 */
@@ -220,7 +220,7 @@ m302Enet_initialize_hardware (struct scc_softc *sc)
 	 * Set our physical address
 	 */
 	hwaddr = sc->arpcom.ac_enaddr;
-	
+
 	cam=(ushort *)(M68en302imp_cet);
 	for (i=0;i<64;i++){
 		cam[(4*i)]=0x00ff;
@@ -232,7 +232,7 @@ m302Enet_initialize_hardware (struct scc_softc *sc)
 	cam[5] = (hwaddr[2] << 8) | hwaddr[3];
 	cam[6] = (hwaddr[4] << 8) | hwaddr[5];
 
-	
+
 	/*
 	 * Set receiver and transmitter buffer descriptor bases
 	 */
@@ -240,13 +240,13 @@ m302Enet_initialize_hardware (struct scc_softc *sc)
 
 
 	for (i=0;i<128;i++){
-		
+
 		M68302_scc_bd_stat_ctrl	(a_bd + i) = 0;
 		M68302_scc_bd_data_lgth	(a_bd + i) = 0;
 		M68302_scc_bd_p_buffer	(a_bd + i) = NULL;
 	}
 
-	
+
 	sc->txBdBase = M68302imp_a_eth_bd (  0 );			/* point to first BD */
 	sc->rxBdBase = M68302imp_a_eth_bd ( sc->txBdCount);		/* point to first RX BD atfer all TX*/
 
@@ -266,7 +266,7 @@ m302Enet_initialize_hardware (struct scc_softc *sc)
 	/*
 	 * Set up interrupts
 	 */
-	
+
 	status = rtems_interrupt_catch (m302Enet_interrupt_handler,
 						M302_ETHER_IVECTOR,
 						&old_handler);
@@ -403,7 +403,7 @@ scc_rxDaemon (void *arg)
 		sc->rxMbuf[rxBdIndex] = m;
 		rxBd->p_buffer = mtod (m, void *);
 
-		
+
 		if (++rxBdIndex == sc->rxBdCount) {
 			rxBd->stat_ctrl = BUF_STAT_EMPTY | BUF_STAT_INTERRUPT | BUF_STAT_WRAP;
 			break;
@@ -443,7 +443,7 @@ scc_rxDaemon (void *arg)
 				 */
 				rtems_interrupt_disable (level);
 				M68en302imp_intr_mask |= INTR_MASK_BIT_RFIEN;
-				
+
 				rtems_interrupt_enable (level);
 				rtems_bsdnet_event_receive (INTERRUPT_EVENT,
 						RTEMS_WAIT|RTEMS_EVENT_ANY,
@@ -452,7 +452,7 @@ scc_rxDaemon (void *arg)
 			}
 		}
 
-		
+
 		/*
 		 * Check that packet is valid
 		 */
@@ -478,7 +478,7 @@ scc_rxDaemon (void *arg)
 						sizeof(struct ether_header);
 			eh = mtod (m, struct ether_header *);
 			m->m_data += sizeof(struct ether_header);
-			
+
 			ether_input (ifp, eh, m);
 
 			/*
@@ -535,7 +535,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 	struct mbuf *l = NULL;
 	uint16_t         status;
 	int nAdded;
-	
+
 	/*
 	 * Free up buffer descriptors
 	 */
@@ -611,14 +611,14 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 				MFREE (m, n);
 				m = n;
 			}
-			
+
 			/*
 			 * Redo the send with the new mbuf cluster
 			 */
 			m = nm;
 			nAdded = 0;
 			status = 0;
-			
+
 			continue;
 		}
 
@@ -677,7 +677,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 			txBd = sc->txBdBase + sc->txBdHead;
 			txBd->p_buffer = mtod (m, void *);
 			txBd->data_lgth = m->m_len;
-			
+
 			sc->txMbuf[sc->txBdHead] = m;
 			status = nAdded ? BUF_STAT_READY : 0;
 			if (++sc->txBdHead == sc->txBdCount) {
@@ -688,7 +688,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 			l = m;
 			m = m->m_next;
 			nAdded++;
-		
+
 		}
 		else {
 			/*
@@ -699,7 +699,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 			m = n;
 			if (l != NULL)
 				l->m_next = m;
-		
+
 		}
 	}
 	if (nAdded) {
@@ -709,7 +709,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 		txBd->stat_ctrl = status | BUF_STAT_LAST | BUF_STAT_TX_CRC | BUF_STAT_INTERRUPT;
 		firstTxBd->stat_ctrl |= BUF_STAT_READY;
 		sc->txBdActiveCount += nAdded;
-	
+
 	}
 
 }
@@ -782,7 +782,7 @@ scc_init (void *arg)
 		sc->rxDaemonTid = rtems_bsdnet_newproc ("SCrx", 4096, scc_rxDaemon, sc);
 
 	}
-	
+
 	/*
 	 * Set flags appropriately
 	 */
@@ -800,7 +800,7 @@ scc_init (void *arg)
 	 * Enable receiver and transmitter
 	 */
 	M68en302imp_ecntrl = ECNTRL_BIT_RESET	| ECNTRL_BIT_ETHER_EN;
-	
+
 }
 
 /*
@@ -891,7 +891,7 @@ scc_ioctl (struct ifnet *ifp, int command, caddr_t data)
 	case SIO_RTEMS_SHOW_STATS:
 		scc_stats (sc);
 		break;
-		
+
 	/*
 	 * FIXME: All sorts of multicast commands need to be added here!
 	 */
@@ -922,7 +922,7 @@ rtems_ether1_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	 */
 	if ((unitNumber = rtems_bsdnet_parse_driver_name (config, &unitName)) < 0)
 		return 0;
-	
+
 	/*
 	 * Is driver free?
 	 */
@@ -943,7 +943,7 @@ rtems_ether1_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	if (config->hardware_address) {
 		memcpy (sc->arpcom.ac_enaddr, config->hardware_address, ETHER_ADDR_LEN);
 	}
-	
+
 	if (config->mtu)
 		mtu = config->mtu;
 	else

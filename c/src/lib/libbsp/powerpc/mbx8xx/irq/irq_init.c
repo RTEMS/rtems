@@ -80,7 +80,7 @@ void BSP_SIU_irq_init()
   ((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_siel = ((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_siel;
 }
 
-/* 
+/*
  * Initialize CPM interrupt management
  */
 void
@@ -94,7 +94,7 @@ BSP_CPM_irq_init(void)
     (CICR_SCD_SCC4 | CICR_SCC_SCC3 | CICR_SCB_SCC2 | CICR_SCA_SCC1) |
 #else
     (CICR_SCB_SCC2 | CICR_SCA_SCC1) |
-#endif    
+#endif
     ((BSP_CPM_INTERRUPT/2) << 13) | CICR_HP_MASK;
   ((volatile immap_t *)IMAP_ADDR)->im_cpic.cpic_cimr = 0;
 
@@ -105,7 +105,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
   rtems_raw_except_connect_data vectorDesc;
   int i;
-  
+
   BSP_SIU_irq_init();
   BSP_CPM_irq_init();
   /*
@@ -133,7 +133,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
        */
       BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
     }
-  
+
   /*
    * We must connect the raw irq handler for the two
    * expected interrupt sources : decrementer and external interrupts.
@@ -155,7 +155,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     if (!mpc8xx_set_exception (&vectorDesc)) {
       BSP_panic("Unable to initialize RTEMS external raw exception\n");
     }
-#ifdef TRACE_IRQ_INIT  
+#ifdef TRACE_IRQ_INIT
     printk("RTEMS IRQ management is now operationnal\n");
 #endif
 }

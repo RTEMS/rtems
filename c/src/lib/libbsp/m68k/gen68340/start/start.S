@@ -19,7 +19,7 @@
  * 4, rue du Clos Courtel
  * 35512 CESSON-SEVIGNE
  * FRANCE
- * 
+ *
  * e-mail: g_montel@yahoo.com
  *
  *  $Id$
@@ -537,7 +537,7 @@ _table_csepld:
 #if 1
 	dc.w (((_EPLD_CS_BASE&0x0F)+0x80) << 8)	| 0x80 | 16 bits, 0ws
 	dc.w 0x9090				| 16 bits, ext /dsack
-      
+
 #else
 	dc.b	(_EPLD_CS_BASE&0x0F)+0x80	| 16 bits, 0ws
 	dc.b	0x80				| 16 bits, 0 ws
@@ -560,7 +560,7 @@ _begin_68349_init:
 
 	/*-------------------------------------------------*/
 	/* 68349 chip select initialization
-	
+
 	at this stage, the width of /CS0 may be incorrect
 	it will be corrected later
 	*/

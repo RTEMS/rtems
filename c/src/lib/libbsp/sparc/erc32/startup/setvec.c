@@ -21,10 +21,10 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
+ *  Research Corporation (OAR) under contract to the European Space
  *  Agency (ESA).
  *
- *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
  *
  *  $Id$
@@ -44,13 +44,13 @@ rtems_isr_entry set_vector(                   /* returns old vector */
 
   if ( type )
     rtems_interrupt_catch( handler, vector, &previous_isr );
-  else 
+  else
     _CPU_ISR_install_raw_handler( vector, handler, (void *)&previous_isr );
 
   real_trap = SPARC_REAL_TRAP_NUMBER( vector );
 
   if ( ERC32_Is_MEC_Trap( real_trap ) ) {
-    
+
     source = ERC32_TRAP_SOURCE( real_trap );
 
     ERC32_Clear_interrupt( source );

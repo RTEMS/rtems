@@ -183,6 +183,6 @@ extern unsigned char aux_device_present;
 					   but then the read function would need
 					   a lock etc - ick */
 
-#define  mark_bh(x)  
+#define  mark_bh(x)
 
 #endif /* _I386_KEYBOARD_H */

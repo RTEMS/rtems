@@ -1,4 +1,4 @@
-/*  
+/*
  *  This file contains the Motorola IDP console IO package.
  *
  *  Written by Doug McBride, Colorado Space Grant College
@@ -49,28 +49,28 @@ rtems_device_driver console_initialize(
     major,
     (rtems_device_minor_number) 0
   );
- 
+
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
- 
+
   status = rtems_io_register_name(
     "/dev/tty00",
     major,
     (rtems_device_minor_number) 0
   );
- 
+
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
- 
+
   status = rtems_io_register_name(
     "/dev/tty01",
     major,
     (rtems_device_minor_number) 1
   );
- 
+
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
- 
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -86,7 +86,7 @@ rtems_device_driver console_initialize(
  *  Return values:
  */
 
-rtems_boolean is_character_ready( 
+rtems_boolean is_character_ready(
   char *ch,
   int   port
 )
@@ -110,7 +110,7 @@ rtems_boolean is_character_ready(
  *  Return values:
  */
 
-rtems_boolean quick_char_check( 
+rtems_boolean quick_char_check(
   int   port
 )
 {
@@ -132,17 +132,17 @@ rtems_boolean quick_char_check(
  *    character read from UART
  */
 
-char inbyte( 
+char inbyte(
   int port
 )
 {
   unsigned char tmp_char;
- 
+
   /* If you come into this routine without checking is_character_ready() first
      and you want nonblocking code, then it's your own fault */
 
   while ( !is_character_ready( &tmp_char, port ) );
- 
+
   return tmp_char;
 }
 
@@ -153,12 +153,12 @@ char inbyte(
  *  XON/XOFF flow control.
  *
  *  Input parameters:
- *    ch  - character to be transmitted 
+ *    ch  - character to be transmitted
  *
  *  Output parameters:  NONE
  */
 
-void outbyte( 
+void outbyte(
   char ch,
   int  port
 )
@@ -186,7 +186,7 @@ rtems_device_driver console_open(
 {
   return RTEMS_SUCCESSFUL;
 }
- 
+
 /*
  *  Close entry point
  */
@@ -214,7 +214,7 @@ rtems_device_driver console_read(
   char *buffer;
   int maximum;
   int count = 0;
- 
+
   rw_args = (rtems_libio_rw_args_t *) arg;
 
   buffer = rw_args->buffer;
@@ -236,7 +236,7 @@ rtems_device_driver console_read(
 }
 
 /*
- * write bytes to the serial port. Stdout and stderr are the same. 
+ * write bytes to the serial port. Stdout and stderr are the same.
  */
 
 rtems_device_driver console_write(

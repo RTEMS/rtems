@@ -54,7 +54,7 @@ int MVMEControl(u_long entry, int reset, int go);
 
 unsigned int ahdtoi(unsigned char digit)
 /*   converts a hexadecimal char to an integer
- *  
+ *
  *   entry        : digit = character to convert
  *                        : 0..15 = result
  *                        : -1    = char is not a digit
@@ -77,7 +77,7 @@ unsigned int ahdtoi(unsigned char digit)
 
 int issrec(char *str)
 /*  attempts to identify the type of Srecord string passed
- *  
+ *
  *   entry   : str =  pointer to null terminated string
  *   returns : 0,1,2,3,5,7,8,9 for S0..S9 except S6 & S4
  *           : -1 = invalid header or header not found
@@ -106,7 +106,7 @@ int issrec(char *str)
 int validrec(char *str)
 /*  Tests for a valid srecord. tests checksum & for nondigit characters
  *  doesn't rely on any other srecord routines.
- *  
+ *
  *    entry   : str   =  pointer to null terminated string
  *    returns : -1        =  srecord contains invalid characters
  *                        : -2    =  srecord checksum is invalid
@@ -141,7 +141,7 @@ int validrec(char *str)
 
 void hdr2str(char *sstr, char *pstr)
 /*  converts header record (S0) string into a plain string
- *  
+ *
  *  entry        : sstr = pointer to S0 string record
  *  exit         : pstr = pointer to string long enough to hold string
  *                                (caller must allocate enough space for string)
@@ -157,7 +157,7 @@ void hdr2str(char *sstr, char *pstr)
 
 unsigned long getaddr(char *str)
 /*  returns the address of the srecord in str. assumes record is valid.
- *  
+ *
  *  entry        : str = pointer to srecord string
  *  exit         : address of data, word or long.
  */
@@ -165,23 +165,23 @@ unsigned long getaddr(char *str)
   unsigned long addr=0;
 
   switch (issrec(str)) {
-    case 0 : 
-    case 1 : 
-    case 5 : 
+    case 0 :
+    case 1 :
+    case 5 :
     case 9 :  addr = ahdtoi(str[4])*0x1000 + ahdtoi(str[5])*0x100
               + ahdtoi(str[6])*0x10 + ahdtoi(str[7]);
               return(addr);
-    case 2 : 
+    case 2 :
     case 8 :  addr = ahdtoi(str[4])*0x100000 + ahdtoi(str[5])*0x10000
               + ahdtoi(str[6])*0x1000 + ahdtoi(str[7])*0x100
               + ahdtoi(str[8])*0x10 + ahdtoi(str[9]);
               return(addr);
-    case 3 : 
+    case 3 :
     case 7 :  addr = ahdtoi(str[4])*0x10000000 + ahdtoi(str[5])*0x1000000
               + ahdtoi(str[6])*0x100000 + ahdtoi(str[7])*0x10000
               + ahdtoi(str[8])*0x1000 + ahdtoi(str[9])*0x100
               + ahdtoi(str[10])*0x10 + ahdtoi(str[11]);
-              return(addr); 
+              return(addr);
     default : return(-1);
   }
 }
@@ -189,7 +189,7 @@ unsigned long getaddr(char *str)
 unsigned int datasize(char *str)
 /*
  *  returns the number of data bytes in the srecord. assumes record is valid.
- *  
+ *
  *  entry        : str = pointer to srecord string
  *  exit         : number of bytes of data in the data field.
  */
@@ -227,8 +227,8 @@ void usage (void)
 int MVMEControl(u_long entry, int reset, int go)
 /*  Controls MVME-162 from other VME master:
  *  if entry != 0, loads it as start address
- *  if go != 0, starts program execution from entry 
- *  if reset != 0, resets mvme162's local bus  
+ *  if go != 0, starts program execution from entry
+ *  if reset != 0, resets mvme162's local bus
  *  Depends upon #define'ed GROUP_BASE_ADDRESS and BOARD_BASE_ADDRESS
  *  which in turn are set by the 162-BUG's ENV command.
  */
@@ -239,7 +239,7 @@ int MVMEControl(u_long entry, int reset, int go)
   struct gcsr *gcsr_map;
 
   pagesize = sysconf(_SC_PAGESIZE);   /* mmap likes to be page-aligned */
-  
+
   if ((vme = open(vmedev, O_RDWR)) == -1) {
     perror("open");
     fprintf(stderr, "Cannot open vme as %s to access GCSR\n", vmedev);
@@ -258,7 +258,7 @@ int MVMEControl(u_long entry, int reset, int go)
 
 /*
  * use GCSR to start execution in MVME162
- * adjust pointer to compensate for page alignement 
+ * adjust pointer to compensate for page alignement
  */
   gcsr_map = (struct gcsr *)((u_long)gcsr_map + (u_long)gcsr_vme % pagesize);
 
@@ -283,10 +283,10 @@ main(int argc, char *argv[])
   int         i, j, k, result, size, line=0, lastrec=0;
   long        addr, tsize=0, naddr=0, blksize=0, blknum=1;
   FILE        *in;
-  char        infile[256] = ""; 
+  char        infile[256] = "";
   char        vmedev[32] = "/dev/vme32d32";   /* Assume "/dev/vme32d32"  */
   int         vme, verbose = 0, go = 0, reset = 0, havefile = 0;
-  
+
 /*  Parse the command line */
 
   --argc;
@@ -325,11 +325,11 @@ main(int argc, char *argv[])
     }
     exit(0);
   }
-  
+
   if ((in = fopen(infile, "r")) == NULL) {
     perror("open");
     fprintf(stderr, "Cannot open input file %s\n", infile);
-    exit(1); 
+    exit(1);
   }
 
   if ((vme = open(vmedev, O_RDWR)) == -1) {
@@ -340,12 +340,12 @@ main(int argc, char *argv[])
     line++;
     if (validrec(inpstr) == 0) {
       switch (issrec(inpstr)) {
-      case 0 : 
+      case 0 :
         hdr2str(inpstr, hdrstr);
         if (verbose) printf("HEADER string = `%s'\n", hdrstr);
         lastrec=HEADER;
         break;
-      case 1 : 
+      case 1 :
         addr = getaddr(inpstr);
         size = datasize(inpstr);
         if (blksize == 0) {
@@ -381,7 +381,7 @@ main(int argc, char *argv[])
           }
         }
         break;
-      case 2 : 
+      case 2 :
         addr = getaddr(inpstr);
         size = datasize(inpstr);
         if (blksize == 0) {
@@ -417,7 +417,7 @@ main(int argc, char *argv[])
           }
         }
         break;
-      case 3 : 
+      case 3 :
         addr = getaddr(inpstr);
         size = datasize(inpstr);
         if (blksize == 0) {
@@ -453,7 +453,7 @@ main(int argc, char *argv[])
           }
         }
         break;
-      case 7 : 
+      case 7 :
         if (lastrec==DATA19){if (verbose) printf("\t$%04lX\t%lu",naddr-1,blksize);}
         if (lastrec==DATA28){if (verbose) printf("\t$%06lX\t%lu",naddr-1,blksize);}
         if (lastrec==DATA37){if (verbose) printf("\t$%08lX\t%lu",naddr-1,blksize);}
@@ -463,7 +463,7 @@ main(int argc, char *argv[])
         printf("\nExecution address = $%08lX\n", addr);
         lastrec=TERMINATOR;
         break;
-      case 8 : 
+      case 8 :
         if (lastrec==DATA19){if (verbose) printf("\t$%04lX\t%lu",naddr-1,blksize);}
         if (lastrec==DATA28){if (verbose) printf("\t$%06lX\t%lu",naddr-1,blksize);}
         if (lastrec==DATA37){if (verbose) printf("\t$%08lX\t%lu",naddr-1,blksize);}
@@ -473,7 +473,7 @@ main(int argc, char *argv[])
         printf("\nExecution address = $%06lX\n", addr);
         lastrec=TERMINATOR;
         break;
-      case 9 : 
+      case 9 :
         if (lastrec==DATA19){if (verbose) printf("\t$%04lX\t%lu",naddr-1,blksize);}
         if (lastrec==DATA28){if (verbose) printf("\t$%06lX\t%lu",naddr-1,blksize);}
         if (lastrec==DATA37){if (verbose) printf("\t$%08lX\t%lu",naddr-1,blksize);}

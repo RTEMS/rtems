@@ -27,7 +27,7 @@ extern "C" {
 #include <rtems/bspIo.h>
 #include <libcpu/cpu.h>
 #include <irq.h>
-  
+
 /*
  *  confdefs.h overrides for this BSP:
  *   - number of termios serial ports (defaults to 1)
@@ -120,15 +120,15 @@ extern "C" {
 /*
  *  Device Driver Table Entries
  */
- 
+
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */
- 
+
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;

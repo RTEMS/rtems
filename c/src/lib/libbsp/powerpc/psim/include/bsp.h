@@ -46,7 +46,7 @@ extern "C" {
 
 /* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (12 * 1024)
-  
+
 #ifdef ASM
 /* Definition of where to store registers in alignment handler */
 #define ALIGN_REGS 0x0140
@@ -106,15 +106,15 @@ extern "C" {
 /*
  *  Device Driver Table Entries
  */
- 
+
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */
- 
+
 
 /*
  *  Information placed in the linkcmds file.

@@ -19,7 +19,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
- 
+
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
@@ -36,7 +36,7 @@ char *rtems_progname;
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void);               /* m68k version */
@@ -54,7 +54,7 @@ void bsp_start( void )
   extern unsigned long  _M68k_Ramsize;
 
   _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
-  
+
 #if 0
   Cpu_table.interrupt_vector_table = (mc68000_isr *) 0/*&M68Kvec*/;
 #endif

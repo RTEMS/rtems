@@ -7,7 +7,7 @@
  *  4, rue du Clos Courtel
  *  35512 CESSON-SEVIGNE
  *  FRANCE
- * 
+ *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -104,7 +104,7 @@ extern char RAW_GETC(int minor);
 
 /******************************************************
   Name: _dbug_dump
-  Input parameters: sr, pc, stack pointer, 
+  Input parameters: sr, pc, stack pointer,
 		    size to display
   Output parameters: -
   Description: display the supervisor stack

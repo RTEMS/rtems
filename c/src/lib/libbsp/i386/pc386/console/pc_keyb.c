@@ -369,7 +369,7 @@ static unsigned char handle_kbd_event(void)
 		}
 
 		status = kbd_read_status();
-		
+
 		if(!work--)
 		{
 			printk( "pc_keyb: controller jammed (0x%02X).\n", status);
@@ -378,10 +378,10 @@ static unsigned char handle_kbd_event(void)
       return status;
 	}
 
-   /* 
-    * the commands to set the leds for some reason, returns 0x14, 0x16 
+   /*
+    * the commands to set the leds for some reason, returns 0x14, 0x16
     * and I am intepreting as an ACK, because the original code from
-    * Linux was timeing out here... 
+    * Linux was timeing out here...
     */
 	acknowledge = 1;
 	reply_expected = 0;
@@ -595,7 +595,7 @@ static char * initialize_kbd(void)
 		kbd_wait_for_input();
 	}
 
-	
+
 	kbd_write_output_w(KBD_CMD_ENABLE);
 	if (kbd_wait_for_input() != KBD_REPLY_ACK)
 		return "Enable keyboard: no ACK";

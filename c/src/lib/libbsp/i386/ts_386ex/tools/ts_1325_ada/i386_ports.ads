@@ -43,5 +43,3 @@ private
    P3DIR: constant Port_Address := 16#F874#;
 
 end I386_Ports;
-
-

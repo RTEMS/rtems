@@ -1,4 +1,4 @@
-/*  
+/*
  *  This routine is an implementation of the bsp_pretasking_hook
  *  that can be used by all m68k BSPs following linkcmds conventions
  *  regarding heap, stack, and workspace allocation.

@@ -26,7 +26,7 @@
  *  The original table from the application and our copy of it with
  *  some changes.
  */
- 
+
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
 
@@ -44,7 +44,7 @@ extern uint32_t          rdb_start;
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
@@ -87,7 +87,7 @@ void bsp_start( void )
   unsigned char *work_space_start;
 
 #if 0
-  /* 
+  /*
    * Set MSR to show vectors at 0 XXX
    */
   _CPU_MSR_Value( msr_value );
@@ -126,7 +126,7 @@ void bsp_start( void )
 
   BSP_Configuration.work_space_size += 1024;
 
-  work_space_start = 
+  work_space_start =
     (unsigned char *)&RAM_END - BSP_Configuration.work_space_size;
 
   if ( work_space_start <= (unsigned char *)&end ) {

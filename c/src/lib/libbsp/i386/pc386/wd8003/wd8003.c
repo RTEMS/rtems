@@ -89,7 +89,7 @@ struct wd_softc {
   unsigned int 			port;
   unsigned char			*base;
   unsigned long			bpar;
-  
+
   /*
    * Statistics
    */
@@ -102,7 +102,7 @@ struct wd_softc {
   unsigned long	rxBadCRC;
   unsigned long	rxOverrun;
   unsigned long	rxCollision;
-  
+
   unsigned long	txInterrupts;
   unsigned long	txDeferred;
   unsigned long	txHeartbeat;
@@ -165,7 +165,7 @@ wd8003Enet_interrupt_handler (void)
   if (status & (MSK_PRX+MSK_RXE)) {
     outport_byte(tport+ISR, status & (MSK_PRX+MSK_RXE));
     wd_softc[0].rxInterrupts++;
-    rtems_event_send (wd_softc[0].rxDaemonTid, INTERRUPT_EVENT);    
+    rtems_event_send (wd_softc[0].rxDaemonTid, INTERRUPT_EVENT);
   }
 
 }
@@ -209,8 +209,8 @@ wd8003Enet_initialize_hardware (struct wd_softc *sc)
     if (i1 < 6)
       hwaddr[i1] = cc1;
   }
-  
-  inport_byte(tport+0x04, temp); 
+
+  inport_byte(tport+0x04, temp);
   outport_byte(tport+0x04, temp | 0x80);	/* alternate registers */
   outport_byte(tport+W83CREG, MSK_RESET);	/* reset board, set buffer */
   outport_byte(tport+W83CREG, 0);
@@ -219,7 +219,7 @@ wd8003Enet_initialize_hardware (struct wd_softc *sc)
   outport_byte(tport+CMDR, MSK_PG0 + MSK_RD2);
   cc1 = MSK_BMS + MSK_FT10; /* configure 8 or 16 bits */
 
-  inport_byte(tport+0x07, temp) ; 
+  inport_byte(tport+0x07, temp) ;
 
   ultra = ((temp & 0xf0) == 0x20 || (temp & 0xf0) == 0x40);
   if (ultra)
@@ -247,14 +247,14 @@ wd8003Enet_initialize_hardware (struct wd_softc *sc)
   outport_byte(tport+CMDR, MSK_PG0 + MSK_RD2);
   outport_byte(tport+CMDR, MSK_STA + MSK_RD2);	/* put 8390 on line */
   outport_byte(tport+RCR, MSK_AB);		/* MSK_AB accept broadcast */
-  
+
   if (ultra) {
     inport_byte(tport+0x0c, temp);
     outport_byte(tport+0x0c, temp | 0x80);
     outport_byte(tport+0x05, 0x80);
     outport_byte(tport+0x06, 0x01);
   }
-  
+
   /*
    * Set up interrupts
    */
@@ -262,7 +262,7 @@ wd8003Enet_initialize_hardware (struct wd_softc *sc)
   sc->irqInfo.on  = nopOn;
   sc->irqInfo.off = nopOn;
   sc->irqInfo.isOn = wdIsOn;
-  
+
   st = BSP_install_rtems_irq_handler (&sc->irqInfo);
   if (!st)
     rtems_panic ("Can't attach WD interrupt handler for irq %d\n",
@@ -298,7 +298,7 @@ wd_rxDaemon (void *arg)
 
       outport_byte(tport+CMDR, MSK_PG1 + MSK_RD2);
       inport_byte(tport+CURR, current);
-      outport_byte(tport+CMDR, MSK_PG0 + MSK_RD2); 
+      outport_byte(tport+CMDR, MSK_PG0 + MSK_RD2);
 
       start += 1;
       if (start >= OUTPAGE){
@@ -307,7 +307,7 @@ wd_rxDaemon (void *arg)
 
       if (current == start)
 	break;
-      
+
       shp = dp->base + 1 + (SHAPAGE * start);
       next = *shp++;
       len = *((short *)shp)++ - 4;
@@ -315,14 +315,14 @@ wd_rxDaemon (void *arg)
       if (next >= OUTPAGE){
 	next = 0;
       }
-      
+
       MGETHDR (m, M_WAIT, MT_DATA);
       MCLGET (m, M_WAIT);
       m->m_pkthdr.rcvif = ifp;
-      
+
       temp = m->m_data;
       m->m_len = m->m_pkthdr.len = len - sizeof(struct ether_header);
-      
+
       if ((i2 = (OUTPAGE - start) * SHAPAGE - 4) < len){
 	memcpy(temp, shp, i2);
 	len -= i2;
@@ -330,18 +330,18 @@ wd_rxDaemon (void *arg)
 	shp = dp->base;
       }
       memcpy(temp, shp, len);
-      
+
       eh = mtod (m, struct ether_header *);
       m->m_data += sizeof(struct ether_header);
       ether_input (ifp, eh, m);
-      
+
       outport_byte(tport+BNRY, next-1);
     }
-    
+
   /*
    * Ring overwrite
    */
-    if (overrun){     
+    if (overrun){
       outport_byte(tport+ISR, MSK_OVW);		/* reset IR */
       outport_byte(tport+TCR, 0);		/* out of loopback */
       if (resend  == 1)
@@ -349,9 +349,9 @@ wd_rxDaemon (void *arg)
       resend = 0;
       overrun = 0;
     }
-    
+
     outport_byte(tport+IMR, 0x15);  /* re-enable IT rx */
-  }	
+  }
 }
 
 static void
@@ -366,16 +366,16 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 
   /*
    * Waiting for Transmitter ready
-   */	
-  inport_byte(tport+CMDR, txReady); 
+   */
+  inport_byte(tport+CMDR, txReady);
   while(txReady & MSK_TXP)
-    inport_byte(tport+CMDR, txReady); 
+    inport_byte(tport+CMDR, txReady);
 
   len = 0;
   shp = dp->base + (SHAPAGE * OUTPAGE);
 
   n = m;
-  
+
   for (;;){
     len += m->m_len;
     memcpy(shp, (char *)m->m_data, m->m_len);
@@ -385,7 +385,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
   }
 
   m_freem(n);
-  
+
   if (len < ET_MINLEN) len = ET_MINLEN;
   outport_byte(tport+TBCR0, len);
   outport_byte(tport+TBCR1, (len >> 8) );
@@ -448,12 +448,12 @@ wd_init (void *arg)
   struct ifnet *ifp = &sc->arpcom.ac_if;
 
   if (sc->txDaemonTid == 0) {
-    
+
     /*
      * Set up WD hardware
      */
     wd8003Enet_initialize_hardware (sc);
-    
+
     /*
      * Start driver tasks
      */
@@ -555,7 +555,7 @@ wd_ioctl (struct ifnet *ifp, int command, caddr_t data)
 	case SIO_RTEMS_SHOW_STATS:
 		wd_stats (sc);
 		break;
-		
+
 	/*
 	 * FIXME: All sorts of multicast commands need to be added here!
 	 */
@@ -625,7 +625,7 @@ rtems_wd_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 		sc->bpar = 0xD0000;
 		sc->base = (unsigned char*) 0xD0000;
 	}
-	
+
 	sc->acceptBroadcast = !config->ignore_broadcast;
 
 	/*

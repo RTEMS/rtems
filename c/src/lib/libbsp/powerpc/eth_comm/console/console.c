@@ -1,10 +1,10 @@
-#define I_WANT_TERMIOS 
+#define I_WANT_TERMIOS
 /*
  *  BSP specific Serial I/O Functions for the eth-comm BSP
  *
- * This file contains the BSP specific functions for 
+ * This file contains the BSP specific functions for
  * performing serial I/O. These are the functions
- * RTEMS uses (the 6 listed in the device driver 
+ * RTEMS uses (the 6 listed in the device driver
  * structure)
  *
  * The SCCs and SMCs are assigned as follows
@@ -21,7 +21,7 @@
  *  appear to work correctly yet. On startup, with termios enabled,
  *  the board hangs for a few seconds before running correctly
  *
- * Author: Jay Monkman (jmonkman@frasca.com) 
+ * Author: Jay Monkman (jmonkman@frasca.com)
  * Copyright (C) 1998 by Frasca International, Inc.
  *
  *  $Id$
@@ -42,7 +42,7 @@ rtems_device_driver console_initialize(rtems_device_major_number major,
                                        void *arg)
 {
   rtems_status_code status;
-  
+
 #ifdef I_WANT_TERMIOS
   /*
    * Set up TERMIOS (for /dev/console)
@@ -59,11 +59,11 @@ rtems_device_driver console_initialize(rtems_device_major_number major,
    * Do device-specific initialization
    */
   m8xx_uart_smc_initialize(SMC1_MINOR); /* /dev/tty0 */
-  m8xx_uart_smc_initialize(SMC2_MINOR); /* /dev/tty1 */                             
+  m8xx_uart_smc_initialize(SMC2_MINOR); /* /dev/tty1 */
   m8xx_uart_scc_initialize(SCC2_MINOR); /* /dev/tty2    */
   m8xx_uart_scc_initialize(SCC3_MINOR); /* /dev/tty3    */
   m8xx_uart_scc_initialize(SCC4_MINOR); /* /dev/tty4    */
-  
+
   /*
    * Register the devices
    */
@@ -84,7 +84,7 @@ rtems_device_driver console_initialize(rtems_device_major_number major,
     rtems_fatal_error_occurred (status);
   return RTEMS_SUCCESSFUL;
 }
- 
+
 rtems_device_driver console_open(rtems_device_major_number major,
                                  rtems_device_minor_number minor,
                                  void *arg)
@@ -116,7 +116,7 @@ rtems_device_driver console_open(rtems_device_major_number major,
   case 2:
     sccregs = &m8xx.scc1;
     break;
-  case 3: 
+  case 3:
     sccregs = &m8xx.scc2;
     break;
   case 4:
@@ -136,7 +136,7 @@ rtems_device_driver console_open(rtems_device_major_number major,
   if (minor == SCC2_MINOR) {
     return rtems_termios_open (major, minor, arg, &sccPollCallbacks);
   }
-  else { 
+  else {
     return RTEMS_SUCCESSFUL;
   }
 #else
@@ -207,7 +207,7 @@ rtems_device_driver console_write(rtems_device_major_number major,
 rtems_device_driver console_control(rtems_device_major_number major,
                                     rtems_device_minor_number minor,
                                     void *arg)
-{ 
+{
 #ifdef I_WANT_TERMIOS
   if (minor == SCC2_MINOR) {
     return rtems_termios_ioctl (arg);

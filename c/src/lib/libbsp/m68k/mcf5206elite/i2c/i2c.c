@@ -65,7 +65,7 @@ i2c_transfer_wait_sema(i2c_bus_number bus, i2c_message *msg, int nmsg)
     sc = rtems_semaphore_create(
         rtems_build_name('I', '2', 'C', 'S'),
         0,
-        RTEMS_COUNTING_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY | 
+        RTEMS_COUNTING_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY |
         RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL,
         0,
         &sema
@@ -101,7 +101,7 @@ i2c_transfer_wait_poll(i2c_bus_number bus, i2c_message *msg, int nmsg)
     volatile rtems_boolean poll_done_flag;
     rtems_status_code sc;
     poll_done_flag = 0;
-    sc = i2c_transfer(bus, nmsg, msg, i2c_transfer_poll_done_func, 
+    sc = i2c_transfer(bus, nmsg, msg, i2c_transfer_poll_done_func,
                       (uint32_t)&poll_done_flag);
     if (sc != RTEMS_SUCCESSFUL)
         return sc;
@@ -123,7 +123,7 @@ i2c_transfer_wait_poll(i2c_bus_number bus, i2c_message *msg, int nmsg)
  *     nmsg - number of messages in transfer
  *
  * RETURNS:
- *     I2C_SUCCESSFUL, if tranfer finished successfully, 
+ *     I2C_SUCCESSFUL, if tranfer finished successfully,
  *     I2C_RESOURCE_NOT_AVAILABLE, if semaphore operations has failed,
  *     value of status field of first error-finished message in transfer,
  *     if something wrong.
@@ -141,10 +141,10 @@ i2c_transfer_wait(i2c_bus_number bus, i2c_message *msg, int nmsg)
     {
         sc = i2c_transfer_wait_poll(bus, msg, nmsg);
     }
-    
+
     if (sc != RTEMS_SUCCESSFUL)
         return I2C_RESOURCE_NOT_AVAILABLE;
-    
+
     for (i = 0; i < nmsg; i++)
     {
         if (msg[i].status != I2C_SUCCESSFUL)
@@ -264,7 +264,7 @@ i2c_wrrd(i2c_bus_number bus, i2c_address addr, void *bufw, int sizew,
     msg[0].status = 0;
     msg[0].len = sizew;
     msg[0].buf = bufw;
-    
+
     msg[1].addr = addr;
     msg[1].flags = 0;
     if (addr > 0xff)
@@ -303,7 +303,7 @@ i2c_wbrd(i2c_bus_number bus, i2c_address addr, uint8_t         cmd,
     msg[0].status = 0;
     msg[0].len = sizeof(bufw);
     msg[0].buf = &bufw;
-    
+
     msg[1].addr = addr;
     msg[1].flags = I2C_MSG_ERRSKIP;
     if (addr > 0xff)

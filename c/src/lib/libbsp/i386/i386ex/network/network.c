@@ -7,7 +7,7 @@ void dump_scb(void);
 void printk_time(void);
 
 #ifdef DBG_VERSION
-#define BREAKPOINT()  asm("   int $3"); 
+#define BREAKPOINT()  asm("   int $3");
 #else
 #define BREAKPOINT()
 #endif
@@ -16,7 +16,7 @@ void printk_time(void);
 
 
 /*
-    
+
   EII: Oct 16 : Version 0.0
 
 */
@@ -25,9 +25,9 @@ void printk_time(void);
 #define DMA_MASK_REG     0x0A
 #define DMA_MODE_REG     0x0B
 #define DMA_ENABLE       0x0
-#define DMA_DISABLE      0x4   
+#define DMA_DISABLE      0x4
 
-struct i596_rfd *pISR_Rfd;  
+struct i596_rfd *pISR_Rfd;
 
 void show_buffers (void);
 void show_queues(void);
@@ -111,7 +111,7 @@ char uti596initSetup[] = {
 /* These are extern, and non-inline  for testing purposes */
 
 void        uti596addCmd                  (struct i596_cmd *pCmd);
-void        uti596_initMem                (struct uti596_softc *); 
+void        uti596_initMem                (struct uti596_softc *);
 void        uti596_init                   (void * );
 int         uti596initRxBufs              (int num);
 int         uti596_initRFA                (int num);
@@ -139,7 +139,7 @@ void uti596addPolledCmd(struct i596_cmd *);
 void uti596supplyFD(struct i596_rfd *);
 
 struct i596_rfd * uti596dequeue( struct i596_rfd ** );
-void uti596append( struct i596_rfd ** , struct i596_rfd * ); 
+void uti596append( struct i596_rfd ** , struct i596_rfd * );
 
 #ifdef DEBUG_INIT
 static void         print_eth              (unsigned char *);
@@ -167,7 +167,7 @@ void send_packet(struct ifnet *, struct mbuf *);
 }
 /*************************************************************************/
 
-void 
+void
 uti596_request_reset(void){
    rtems_status_code sc;
 
@@ -225,7 +225,7 @@ int uti596_initRFA(int num)
     printf ("%s: uti596_initRFA %d.\n", num);
 #endif
 
-    /* 
+    /*
      * Initialize the first rfd in the rfa
      */
     pRfd = (struct i596_rfd *) calloc (1,sizeof (struct i596_rfd));
@@ -236,7 +236,7 @@ int uti596_initRFA(int num)
     else {
       uti596_softc.countRFD = 1;
       uti596_softc.pBeginRFA = uti596_softc.pEndRFA = pRfd;
-    printf ( "First Rfd allocated is: %p\n", 
+    printf ( "First Rfd allocated is: %p\n",
 	     uti596_softc.pBeginRFA);
     }
 
@@ -244,31 +244,31 @@ int uti596_initRFA(int num)
       pRfd = (struct i596_rfd *) calloc (1,sizeof (struct i596_rfd) );
       if ( pRfd != NULL ) {
 	uti596_softc.countRFD++;
-	uti596_softc.pEndRFA -> next = pRfd; /* link it in   */	  
+	uti596_softc.pEndRFA -> next = pRfd; /* link it in   */
 	uti596_softc.pEndRFA         = pRfd; /* move the end */
 #ifdef DBG_596_RFA
 	printf("Allocated RFD @ %p\n", pRfd);
 #endif
       }
-      else {	
+      else {
 	printf("Can't allocate all buffers: only %d allocated\n", i);
 	break;
       }
     } /* end for */
-    
+
     uti596_softc.pEndRFA -> next = I596_NULL;
-    UTI_596_ASSERT(uti596_softc.countRFD == RX_BUF_COUNT,"INIT:WRONG RFD COUNT\n" ); 
-    
+    UTI_596_ASSERT(uti596_softc.countRFD == RX_BUF_COUNT,"INIT:WRONG RFD COUNT\n" );
+
 #ifdef DBG_596_RFA
-    printf ( "Head of RFA is buffer %p\nEnd of RFA is buffer %p \n", 
-	     uti596_softc.pBeginRFA, 
+    printf ( "Head of RFA is buffer %p\nEnd of RFA is buffer %p \n",
+	     uti596_softc.pBeginRFA,
 	     uti596_softc.pEndRFA );
 #endif
     /* initialize the Rfd's */
     for ( pRfd = uti596_softc.pBeginRFA;
 	  pRfd != I596_NULL;
 	  pRfd = pRfd -> next ) {
-	  
+
       pRfd->cmd = 0x0000;
       pRfd->stat = 0x0000;
       pRfd->pRbd =  I596_NULL;
@@ -278,7 +278,7 @@ int uti596_initRFA(int num)
 	printf("Can't allocate the RFD data buffer\n");
     }
 
-    /* mark the last FD */ 
+    /* mark the last FD */
     uti596_softc.pEndRFA -> cmd = CMD_EOL; /* moved jan 13 from before the init stuff */
 
 #ifdef DBG_596_RFA
@@ -286,15 +286,15 @@ int uti596_initRFA(int num)
 #endif
 
 
-    uti596_softc.pSavedRfdQueue = 
+    uti596_softc.pSavedRfdQueue =
       uti596_softc.pEndSavedQueue = I596_NULL;   /* initially empty */
-    
+
     uti596_softc.savedCount = 0;
 
     uti596_softc.nop.cmd.command = CmdNOp; /* initialize the nop command */
 
     return (i); /* the number of allocated buffers */
-    
+
 }
 /***********************************************************************
  *  Function:   uti596supplyFD
@@ -316,10 +316,10 @@ void uti596supplyFD(struct i596_rfd * pRfd )
  pRfd -> next = I596_NULL;
  pRfd -> stat = 0x0000;      /* clear STAT_C and STAT_B bits */
 
- /* 
+ /*
   * Check if the list is empty:
   */
- if ( uti596_softc.pBeginRFA == I596_NULL ) {  
+ if ( uti596_softc.pBeginRFA == I596_NULL ) {
    /* Init a list w/ one entry */
    uti596_softc.pBeginRFA = uti596_softc.pEndRFA = pRfd;
    UTI_596_ASSERT(uti596_softc.countRFD == 0, "Null begin, but non-zero count\n");
@@ -332,22 +332,22 @@ void uti596supplyFD(struct i596_rfd * pRfd )
   * Check if the last RFD is used/read by the 596.
   */
  pLastRfd = uti596_softc.pEndRFA;
- 
- if (    pLastRfd != I596_NULL && 
+
+ if (    pLastRfd != I596_NULL &&
       ! (pLastRfd -> stat & ( STAT_C | STAT_B ) )) { /* C = complete, B = busy (prefetched) */
-   
-   /* 
-    * Not yet too late to add it 
+
+   /*
+    * Not yet too late to add it
     */
    pLastRfd -> next = pRfd;
    pLastRfd -> cmd &= ~CMD_EOL;  /* RESET_EL : reset EL bit to 0  */
-   uti596_softc.countRFD++;  /* Lets assume we add it successfully 
+   uti596_softc.countRFD++;  /* Lets assume we add it successfully
 			        If not, the RFD may be used, and may decrement countRFD < 0 !!*/
    /*
     * Check if the last RFD was used while appending.
     */
    if ( pLastRfd -> stat & ( STAT_C | STAT_B ) ) { /* completed or was prefetched */
-     /* 
+     /*
       * Either the EL bit of the last rfd has been read by the 82596,
       * and it will stop after reception,( true when RESET_EL not reached ) or
       * the EL bit was NOT read by the 82596 and it will use the linked
@@ -356,7 +356,7 @@ void uti596supplyFD(struct i596_rfd * pRfd )
       * Therefore, the end of list CANNOT be updated.
       */
      UTI_596_ASSERT ( uti596_softc.pLastUnkRFD == I596_NULL, "Too many Unk RFD's\n" );
-     uti596_softc.pLastUnkRFD = pRfd;              
+     uti596_softc.pLastUnkRFD = pRfd;
      return;
    }
    else {
@@ -364,20 +364,20 @@ void uti596supplyFD(struct i596_rfd * pRfd )
       * The RFD being added was not touched by the 82596
       */
      if (uti596_softc.pLastUnkRFD != I596_NULL ) {
-   
+
        uti596append(&uti596_softc.pSavedRfdQueue, pRfd); /* Only here! saved Q */
        uti596_softc.pEndSavedQueue = pRfd;
        uti596_softc.savedCount++;
        uti596_softc.countRFD--;
-       
+
      }
      else {
        uti596_softc.pEndRFA = pRfd;           /* the RFA has been extended */
-       if ( ( uti596_softc.scb.status & SCB_STAT_RNR || 
+       if ( ( uti596_softc.scb.status & SCB_STAT_RNR ||
 	      uti596_softc.scb.status & RU_NO_RESOURCES ) &&
 	    uti596_softc.countRFD > 1 ) {   /* was == 2 */
 	 uti596_softc.pBeginRFA -> cmd &= ~CMD_EOL;  /* Ensure that beginRFA is not EOL */
-	 
+
 	 UTI_596_ASSERT(uti596_softc.pEndRFA -> next == I596_NULL, "supply: List buggered\n");
 	 UTI_596_ASSERT(uti596_softc.pEndRFA -> cmd & CMD_EOL, "supply: No EOL at end.\n");
 	 UTI_596_ASSERT(uti596_softc.scb.command == 0, "Supply: scb command must be zero\n");
@@ -389,24 +389,24 @@ void uti596supplyFD(struct i596_rfd * pRfd )
 	 uti596_softc.scb.pRfd = uti596_softc.pBeginRFA;
 	 uti596_softc.scb.command = RX_START | SCB_STAT_RNR;  /* Don't ack RNR! The receiver should be stopped in this case */
 	 UTI_596_ASSERT( !(uti596_softc.scb.status & SCB_STAT_FR),"FRAME RECEIVED INT COMING!\n");
-	 outport_byte(CHAN_ATTN, 0); 
+	 outport_byte(CHAN_ATTN, 0);
        }
      }
      return;
-     
+
    }
- } 
+ }
  else {
-   /* 
-    * too late , pLastRfd in use ( or NULL ), 
-    * in either case, EL bit has been read, and RNR condition will occur 
+   /*
+    * too late , pLastRfd in use ( or NULL ),
+    * in either case, EL bit has been read, and RNR condition will occur
     */
    uti596append( &uti596_softc.pSavedRfdQueue, pRfd); /* save it for RNR */
-   
-   uti596_softc.pEndSavedQueue = pRfd;                /* reset end of saved queue */  
+
+   uti596_softc.pEndSavedQueue = pRfd;                /* reset end of saved queue */
    uti596_softc.savedCount++;
-   
-    
+
+
    return;
  }
 }
@@ -427,7 +427,7 @@ uti596_initialize_hardware(struct uti596_softc *sc)
   rtems_status_code status_code;
 
   printf("uti596_initialize_hardware\n");
-  
+
   /* reset the board  */
   outport_word( PORT_ADDR, 0 );
   outport_word( PORT_ADDR, 0 );
@@ -442,12 +442,12 @@ uti596_initialize_hardware(struct uti596_softc *sc)
 #ifdef DBG_INIT
   printf("initialize_hardware:change scp address to : %p\n",sc->pScp);
 #endif
-  
+
   /* change the scp address */
 #ifdef DBG_INIT
   printf("Change the SCP address\n");
 #endif
-  
+
   /*
    * Set the DMA mode to enable the 82596 to become a bus-master
    */
@@ -458,37 +458,37 @@ uti596_initialize_hardware(struct uti596_softc *sc)
   /* reset the board  */
   outport_word( PORT_ADDR, 0 );
   outport_word( PORT_ADDR, 0 );
-  
+
   outport_word(PORT_ADDR, ((((int)sc->pScp) &  0xffff) | 2 ));
   outport_word(PORT_ADDR, (( (int)sc->pScp) >> 16 ) & 0xffff );
-  
+
   /* This is linear mode, LOCK function is disabled  */
-  
+
   sc->pScp->sysbus = 0x00540000;
   sc->pScp->iscp   = &sc->iscp;
   sc->iscp.scb     = &sc->scb;
   sc->iscp.stat    = 0x0001;
-  
+
   sc->pCmdHead     = sc->scb.pCmd = I596_NULL;
-  
+
 #ifdef DBG_596
   printf("Starting i82596.\n");
 #endif
-  
+
   /* Pass the scb address to the 596 */
   outport_word(CHAN_ATTN,0);
-  
+
   while (sc->iscp.stat)
     if (--boguscnt == 0)
       {
-	printf("initialize_hardware: timed out with status %4.4lx\n", 
+	printf("initialize_hardware: timed out with status %4.4lx\n",
 	       sc->iscp.stat );
 	break;
       }
-  
+
   /* clear the command word */
   sc->scb.command = 0;
-      
+
   /*
    * Set up interrupts ( NEW irq style )
    */
@@ -497,7 +497,7 @@ uti596_initialize_hardware(struct uti596_softc *sc)
   sc->irqInfo.on   = uti596_maskOn;
   sc->irqInfo.off  = uti596_maskOff;
   sc->irqInfo.isOn = uti596_isOn;
-  
+
   status_code = BSP_install_rtems_irq_handler (&sc->irqInfo);
   if (!status_code)
     rtems_panic ("Can't attach uti596 interrupt handler for irq %d\n",
@@ -505,7 +505,7 @@ uti596_initialize_hardware(struct uti596_softc *sc)
 
   /* Initialize the 82596 memory ( Transmit buffers ) */
   uti596_initMem(sc);
-  
+
 #ifdef DBG_INIT
   printf("After attach, status of board = 0x%x\n", sc->scb.status );
 #endif
@@ -519,11 +519,11 @@ uti596_reset_hardware(struct uti596_softc *sc)
   int boguscnt = 1000;
   rtems_status_code status_code;
   struct i596_cmd *pCmd;
- 
+
 
   printf("uti596_reset_hardware\n");
   pCmd = sc->pCmdHead;  /* This is a tx command for sure (99.99999%)  */
-  
+
   /* reset the board  */
   outport_word( PORT_ADDR, 0 );
   outport_word( PORT_ADDR, 0 );
@@ -538,17 +538,17 @@ uti596_reset_hardware(struct uti596_softc *sc)
 #endif
   sc->pScp = (struct i596_scp *)
     ((((int)uti596_softc.pScp) + 0xf) & 0xfffffff0);
-  
+
 #ifdef DBG_RESET
   printf("reset_hardware:change scp address to : %p\n",sc->pScp);
 #endif
 
-  
+
   /* change the scp address */
 #ifdef DBG_RESET
   printf("Change the SCP address\n");
 #endif
-  
+
   /*
    * Set the DMA mode to enable the 82596 to become a bus-master
    */
@@ -559,52 +559,52 @@ uti596_reset_hardware(struct uti596_softc *sc)
   /* reset the board  */
   outport_word( PORT_ADDR, 0 );
   outport_word( PORT_ADDR, 0 );
-  
+
   /*  outport_word(PORT_ADDR, ((((int)uti596_softc.pScp) &  0xffff) | 2 ));
   outport_word(PORT_ADDR, (( (int)uti596_softc.pScp) >> 16 ) & 0xffff ); */
- 
+
   outport_word(PORT_ADDR, ((((int)sc->pScp) &  0xffff) | 2 ));
   outport_word(PORT_ADDR, (( (int)sc->pScp) >> 16 ) & 0xffff );
-  
+
   /* This is linear mode, LOCK function is disabled  */
-  
+
   sc->pScp->sysbus = 0x00540000;
   sc->pScp->iscp   = &sc->iscp;
   sc->iscp.scb     = &sc->scb;
   sc->iscp.stat    = 0x0001;
-  
+
   sc->pCmdHead     = sc->scb.pCmd = I596_NULL;
   /*
-   * Wake the transmitter if needed. 
+   * Wake the transmitter if needed.
    */
-  if ( uti596_softc.txDaemonTid && pCmd != I596_NULL ){  
+  if ( uti596_softc.txDaemonTid && pCmd != I596_NULL ){
     printf("****RESET: wakes transmitter!\n");
-    status_code = rtems_event_send (uti596_softc.txDaemonTid, 
+    status_code = rtems_event_send (uti596_softc.txDaemonTid,
 			   INTERRUPT_EVENT);
-    
+
     if ( status_code != RTEMS_SUCCESSFUL )
       printk("****ERROR:Could NOT send event to tid 0x%x : %s\n",
 	     uti596_softc.txDaemonTid, rtems_status_text (status_code) );
   }
-  
+
 #ifdef DBG_596
   printf("reset_hardware: starting i82596.\n");
 #endif
-  
+
   /* Pass the scb address to the 596 */
   outport_word(CHAN_ATTN,0);
-  
+
   while (sc->iscp.stat)
     if (--boguscnt == 0)
       {
-	printf("reset_hardware: timed out with status %4.4lx\n", 
+	printf("reset_hardware: timed out with status %4.4lx\n",
 	       sc->iscp.stat );
 	break;
       }
-  
+
   /* clear the command word */
   sc->scb.command = 0;
-        
+
 #ifdef DBG_RESET
   printf("After reset_hardware, status of board = 0x%x\n", sc->scb.status );
 #endif
@@ -635,18 +635,18 @@ uti596_initMem(struct uti596_softc * sc)
     sc->resetDone = 0; /* ??? */
 
     /*
-     * Set up receive frame area (RFA) 
+     * Set up receive frame area (RFA)
      */
     i = uti596_initRFA( sc->rxBdCount );
-    if ( i < sc->rxBdCount  ) 
+    if ( i < sc->rxBdCount  )
       printf("init_rfd: only able to allocate %d receive frame descriptors\n", i);
-    
-    sc->scb.pRfd =  sc->pBeginRFA; 
+
+    sc->scb.pRfd =  sc->pBeginRFA;
 
 #ifdef DBG_INIT
     printf(" IRQ %d.\n", sc->irqInfo.name);
-#endif    
-    
+#endif
+
     /*
      * Diagnose the health of the board
      */
@@ -678,7 +678,7 @@ uti596_initMem(struct uti596_softc * sc)
 
     /*******/
 
-    /* 
+    /*
      * Create the IA setup command
      */
 
@@ -692,11 +692,11 @@ uti596_initMem(struct uti596_softc * sc)
     sc->cmdOk = 0;
     uti596addPolledCmd((struct i596_cmd *)&sc->set_add);
         /*******/
-    
+
     count = 2000;
     while( !(sc->set_add.cmd.status & STAT_C ) && --count)
       printf(".");
-    
+
     if ( count )
       printf ("Set Address OK, count= %d\n",count);
     else
@@ -704,9 +704,9 @@ uti596_initMem(struct uti596_softc * sc)
     /*******/
 
 #ifdef DBG_INIT
-    printf( "After initialization, status and command: 0x%x, 0x%x\n", 
+    printf( "After initialization, status and command: 0x%x, 0x%x\n",
 	    sc->scb.status, sc->scb.status);
-      
+
 #endif
 
     /* initialize transmit buffer descriptors*/
@@ -716,19 +716,19 @@ uti596_initMem(struct uti596_softc * sc)
     sc->pTxCmd -> pTbd = sc->pTbd;
     sc->pTxCmd->cmd.command  = CMD_FLEX|CmdTx;
     sc->pTxCmd->pad          = 0;
-    sc->pTxCmd->size         = 0; /* all bytes are in list of TBD's */                         
+    sc->pTxCmd->size         = 0; /* all bytes are in list of TBD's */
 
     pTbd = sc->pTbd;
 
     for ( i=0; i<sc->txBdCount; i++)
       pTbd = pTbd -> next = (struct i596_tbd *) calloc (1,sizeof (struct i596_tbd) );
-      
+
     pTbd -> next = I596_NULL;
 
-    memset ( &sc->zeroes, 0, 64);   
+    memset ( &sc->zeroes, 0, 64);
 
 #ifdef DBG_596
-    printf( "After receiver start, status and command: 0x%x, 0x%x\n", 
+    printf( "After receiver start, status and command: 0x%x, 0x%x\n",
 	    sc->scb.status, sc->scb.status);
 #endif
     printf("uti596_initMem allows ISR's\n");
@@ -743,7 +743,7 @@ uti596_initMem(struct uti596_softc * sc)
  *
  *  Description: Dump 596 registers
  *
- *  Algorithm: 
+ *  Algorithm:
  ***********************************************************************/
 /* static */ int
 uti596dump(char * pDumpArea)
@@ -752,7 +752,7 @@ uti596dump(char * pDumpArea)
   int boguscnt = 25000000; /* over a second! */
 
 
-#ifdef DBG_596  
+#ifdef DBG_596
 printf("uti596dump:\n");
 #endif
 
@@ -770,8 +770,8 @@ printf("uti596dump:\n");
       if ( uti596_softc.cmdOk )
 	return 1; /* successful completion */
     }
-      
-  
+
+
 }
 
 /***********************************************************************
@@ -779,7 +779,7 @@ printf("uti596dump:\n");
  *
  *  Description: Receiver task
  *
- *  Algorithm: Extract the packet from an RFD, and place into an 
+ *  Algorithm: Extract the packet from an RFD, and place into an
  *             mbuf chain.  Place the mbuf chain in the network task
  *             queue. Assumes that the frame check sequence is removed
  *             by the 82596.
@@ -798,19 +798,19 @@ uti596_rxDaemon(void *arg)
   int tid;
   rtems_event_set events;
   struct ether_header *eh;
-  
+
   int frames = 0;
-  
+
 #ifdef DBG_596
   printf ("uti596_rxDaemon\n");
   printf("&scb = %p, pRfd = %p\n", &sc->scb,sc->scb.pRfd);
-#endif    
+#endif
 
   rtems_task_ident (0, 0, &tid);
 
 #ifdef DBG_596
   printf("RX tid = 0x%x\n", tid);
-#endif    
+#endif
 
     for(;;) {
       /*
@@ -824,16 +824,16 @@ uti596_rxDaemon(void *arg)
 				  RTEMS_WAIT|RTEMS_EVENT_ANY,
 				  RTEMS_NO_TIMEOUT,
 				  &events);
-      
+
 #ifdef DBG_596
       printf("Receiver wakes\n");
 #endif
-      /* 
+      /*
        * While received frames are available. Note that the frame may be
        * a fragment, so it is NOT a complete packet.
        */
       pRfd = uti596dequeue( &sc->pInboundFrameQueue);
-      while ( pRfd && 
+      while ( pRfd &&
 	      pRfd != I596_NULL &&
 	      pRfd -> stat & STAT_C )
 	{
@@ -852,12 +852,12 @@ uti596_rxDaemon(void *arg)
 #endif
 	    frames++;
 
-	    
-            /* 
+
+            /*
 	     * Allocate an mbuf to give to the stack
              * The format of the data portion of the RFD is:
-             * <ethernet header, payload>.  
-	     * The FRAME CHECK SEQUENCE / CRC is stripped by the uti596. 
+             * <ethernet header, payload>.
+	     * The FRAME CHECK SEQUENCE / CRC is stripped by the uti596.
              * This is to be optimized later.... should not have to memcopy!
 	     */
 	    MGETHDR(m, M_WAIT, MT_DATA);
@@ -865,8 +865,8 @@ uti596_rxDaemon(void *arg)
 
 	    m->m_pkthdr.rcvif = ifp;
 	    /* move everything into an mbuf */
-	    memcpy(m->m_data, 
-		   pRfd->data, 
+	    memcpy(m->m_data,
+		   pRfd->data,
 		   pkt_len);
 
 	    m->m_len = m->m_pkthdr.len = pkt_len - sizeof(struct ether_header) - 4;
@@ -892,43 +892,43 @@ uti596_rxDaemon(void *arg)
 	    ether_input (ifp, eh, m);
 
           } /* end if STAT_OK */
-	   
+
 	  else {
-	    /* 
+	    /*
 	     * A bad frame is present: Note that this could be the last RFD!
 	     */
 #ifdef DBG_596
 	    printf("Bad frame\n");
 #endif
-	    /* 
+	    /*
 	     * FIX ME: use the statistics from the SCB
 	     */
 	    sc->stats.rx_errors++;
-	    if ((sc->scb.pRfd->stat) & 0x0001) 
+	    if ((sc->scb.pRfd->stat) & 0x0001)
 	      sc->stats.collisions++;
-	    if ((sc->scb.pRfd->stat) & 0x0080) 
+	    if ((sc->scb.pRfd->stat) & 0x0080)
 	      sc->stats.rx_length_errors++;
-	    if ((sc->scb.pRfd->stat) & 0x0100) 
+	    if ((sc->scb.pRfd->stat) & 0x0100)
 	      sc->stats.rx_over_errors++;
-	    if ((sc->scb.pRfd->stat) & 0x0200) 
+	    if ((sc->scb.pRfd->stat) & 0x0200)
 	      sc->stats.rx_fifo_errors++;
-	    if ((sc->scb.pRfd->stat) & 0x0400) 
+	    if ((sc->scb.pRfd->stat) & 0x0400)
 	      sc->stats.rx_frame_errors++;
-	    if ((sc->scb.pRfd->stat) & 0x0800) 
+	    if ((sc->scb.pRfd->stat) & 0x0800)
 	      sc->stats.rx_crc_errors++;
-	    if ((sc->scb.pRfd->stat) & 0x1000) 
+	    if ((sc->scb.pRfd->stat) & 0x1000)
 	      sc->stats.rx_length_errors++;
 	  }
 
 	  UTI_596_ASSERT(pRfd != I596_NULL, "Supplying NULL RFD\n");
 
-#ifdef DBG_SUPPLY_FD 
+#ifdef DBG_SUPPLY_FD
 	  printf("Supply FD Starting\n");
 #endif
 	  _ISR_Disable(level);
 	  uti596supplyFD ( pRfd );   /* Return RFD to RFA. CAN WE REALLY?*/
 	  _ISR_Enable(level);
-#ifdef DBG_SUPPLY_FD 
+#ifdef DBG_SUPPLY_FD
 	  printf("Supply FD Complete\n");
 #endif
 #ifdef DBG_VERSION
@@ -936,14 +936,14 @@ uti596_rxDaemon(void *arg)
 #endif
 
 	  pRfd = uti596dequeue( &sc->pInboundFrameQueue); /* grab next frame */
-	  
+
 	} /* end while */
     } /* end for(;;)*/
-    
+
 #ifdef DBG_596
     printf ("frames %d\n", frames);
 #endif
-    
+
 }
 
  /***********************************************************************
@@ -951,7 +951,7 @@ uti596_rxDaemon(void *arg)
   *
   *  Description:
   *             Clear the stat fields for all rfd's
-  *  Algorithm: 
+  *  Algorithm:
   *
   ***********************************************************************/
 
@@ -961,7 +961,7 @@ uti596clearListStatus(struct i596_rfd *pRfd)
 
   while ( pRfd != I596_NULL ) {
     pRfd -> stat = 0;           /* clear the status field */
-    pRfd = pRfd-> next; 
+    pRfd = pRfd-> next;
   }
 }
 
@@ -978,15 +978,15 @@ void uti596reset(void)
   sc->resetDone = 0;
   sc->irqInfo.off(&sc->irqInfo);
 
-  UTI_WAIT_COMMAND_ACCEPTED(10000, "reset: wait for previous command complete");  
+  UTI_WAIT_COMMAND_ACCEPTED(10000, "reset: wait for previous command complete");
 
   /* abort ALL of the current work */
-    /* FEB 17 REMOVED 
+    /* FEB 17 REMOVED
     >>>>>
     sc->scb.command = CUC_ABORT | RX_ABORT;
     outport_word(CHAN_ATTN,0);
     UTI_WAIT_COMMAND_ACCEPTED(4000, "reset: abort requested");
-    <<<<< 
+    <<<<<
     */
 
   uti596_reset_hardware(&uti596_softc); /* reset the ethernet hardware. must re-config */
@@ -998,38 +998,38 @@ void uti596reset(void)
   sc->set_conf.cmd.command = CmdConfigure;
   memcpy (sc->set_conf.data, uti596initSetup, 14);
   uti596addPolledCmd( (struct i596_cmd *) &sc->set_conf);
-  
+
   /****
    * POLL
    ****/
-  
+
   count = 2000;
   while( !( sc->set_conf.cmd.status & STAT_C ) && --count )
     printf(".");
-  
+
   if ( count )
     printf("Configure OK, count = %d\n",count);
   else
     printf("***reset: Configure failed\n");
-  
-  /* 
+
+  /*
    * Create the IA setup command
    */
-  
+
 #ifdef DBG_RESET
   printf("reset: Setting Address\n");
 #endif
   sc->set_add.cmd.command = CmdSASetup;
   for ( i=0; i<6; i++)
     sc->set_add.data[i]=sc->arpcom.ac_enaddr[i];
-  
+
   sc->cmdOk = 0;
   uti596addPolledCmd((struct i596_cmd *)&sc->set_add);
-  
+
   count = 2000;
   while( !(sc->set_add.cmd.status & STAT_C ) && --count)
     printf(".");
-  
+
   if ( count )
     printf ("Reset Set Address OK, count= %d\n",count);
   else
@@ -1039,11 +1039,11 @@ void uti596reset(void)
   sc->pCmdHead = sc->pCmdTail = sc->scb.pCmd = I596_NULL; /* Feb 17. clear these out */
 
 #ifdef DBG_RESET
-  printf( "After reset, status and command: 0x%x, 0x%x\n", 
+  printf( "After reset, status and command: 0x%x, 0x%x\n",
 	  sc->scb.status, sc->scb.status);
-  
+
 #endif
-  
+
 
   /* restore the RFA */
 
@@ -1051,9 +1051,9 @@ void uti596reset(void)
 
   if ( sc->pLastUnkRFD != I596_NULL ) {
     sc-> pEndRFA =  sc->pLastUnkRFD; /* The end position can be updated */
-    sc-> pLastUnkRFD = I596_NULL;           
+    sc-> pLastUnkRFD = I596_NULL;
   }
-  
+
   sc->pEndRFA->next = sc->pSavedRfdQueue;
   if ( sc->pSavedRfdQueue != I596_NULL ) {
     sc->pEndRFA = sc->pEndSavedQueue;
@@ -1067,7 +1067,7 @@ void uti596reset(void)
       sc->pEndRFA -> next = sc->pInboundFrameQueue;
       sc->pInboundFrameQueue = pRfd;
      } while( pRfd != I596_NULL ) ;
-    
+
   }
   */
 
@@ -1081,14 +1081,14 @@ void uti596reset(void)
   sc->scb.command = RX_START;
   sc->started = 1;               /* we assume that the start works */
   sc->resetDone = 1;             /* moved here from after channel attn. */
-  outport_word(CHAN_ATTN,0 ); 
+  outport_word(CHAN_ATTN,0 );
   UTI_WAIT_COMMAND_ACCEPTED(4000, "reset");
   printf("Reset:Start complete \n");
   UTI_596_ASSERT(sc->pCmdHead == I596_NULL, "Reset: CMD not cleared\n");
   sc->irqInfo.on(&sc->irqInfo);  /* moved back here. Tried it before RX command issued. */
-    
+
   /* uti596addCmd(&uti506_softc.nop); */ /* just for fun */
-  
+
 #ifdef DBG_RESET
   printf("reset: complete\n");
 #endif
@@ -1117,7 +1117,7 @@ void uti596reset(void)
  #endif
 
 #ifdef DEBUG_ADD
-     
+
      switch ( pCmd -> command & 0x7 ){ /* check bottom 7 bits */
      case CmdConfigure:
        printf("ADD: Configure Command 0x%x\n", pCmd->command);
@@ -1146,7 +1146,7 @@ void uti596reset(void)
        printf("****Unknown Command encountered 0x%x\n", pCmd->command);
        break;
      } /* end switch */
-       
+
 #endif
 
 
@@ -1159,7 +1159,7 @@ void uti596reset(void)
      _ISR_Disable(level);
      if (uti596_softc.pCmdHead == I596_NULL)
        {
-	 uti596_softc.pCmdHead =      
+	 uti596_softc.pCmdHead =
 	   uti596_softc.pCmdTail =
 	   uti596_softc.scb.pCmd = pCmd;
 #ifdef DBG_596
@@ -1171,23 +1171,23 @@ void uti596reset(void)
 	 outport_word (CHAN_ATTN,0);
      _ISR_Enable(level);
        }
-     else 
+     else
        {
 #ifdef DBG_596
 	 printf("Chained Cmd\n");
 #endif
-	 uti596_softc.pCmdTail->next = pCmd; 
+	 uti596_softc.pCmdTail->next = pCmd;
 	 uti596_softc.pCmdTail = pCmd;           /* added Jan 30 */
      _ISR_Enable(level);
        }
 
 
 #ifdef DBG_596
-	 printf("Scb status & command 0x%x 0x%x\n", 
+	 printf("Scb status & command 0x%x 0x%x\n",
 		uti596_softc.scb.status,
 		uti596_softc.scb.command );
 #endif
-	 
+
  }
  
  /***********************************************************************
@@ -1199,7 +1199,7 @@ void uti596reset(void)
   *
   *  Algorithm:
   *            Give the command to the driver. ( CUC_START is ALWAYS required )
-  *            Poll for completion. 
+  *            Poll for completion.
   *
   ***********************************************************************/
 
@@ -1211,7 +1211,7 @@ void uti596addPolledCmd(struct i596_cmd *pCmd)
  #endif
 
 #ifdef DBG_POLLED_CMD
-     
+
      switch ( pCmd -> command & 0x7 ){ /* check bottom 7 bits */
      case CmdConfigure:
        printf("PolledCMD: Configure Command 0x%x\n", pCmd->command);
@@ -1240,7 +1240,7 @@ void uti596addPolledCmd(struct i596_cmd *pCmd)
        printf("PolledCMD: ****Unknown Command encountered 0x%x\n", pCmd->command);
        break;
      } /* end switch */
-       
+
 #endif
 
      pCmd->status = 0;
@@ -1254,15 +1254,15 @@ void uti596addPolledCmd(struct i596_cmd *pCmd)
      uti596_softc.scb.command = CUC_START;
      outport_word (CHAN_ATTN,0);
 
-     UTI_WAIT_COMMAND_ACCEPTED(10000,"Add Polled command: start"); 
+     UTI_WAIT_COMMAND_ACCEPTED(10000,"Add Polled command: start");
      uti596_softc.pCmdHead = uti596_softc.pCmdTail = uti596_softc.scb.pCmd = I596_NULL;
 
 #ifdef DBG_POLLED_CMD
-     printf("Scb status & command 0x%x 0x%x\n", 
+     printf("Scb status & command 0x%x 0x%x\n",
 	    uti596_softc.scb.status,
 	    uti596_softc.scb.command );
 #endif
-	 
+
  }
 /*
  * Driver transmit daemon
@@ -1279,15 +1279,15 @@ uti596_txDaemon (void *arg)
 	  /*
 	   * Wait for packet from stack
 	   */
-	  rtems_bsdnet_event_receive (START_TRANSMIT_EVENT, 
-				      RTEMS_EVENT_ANY | RTEMS_WAIT, 
+	  rtems_bsdnet_event_receive (START_TRANSMIT_EVENT,
+				      RTEMS_EVENT_ANY | RTEMS_WAIT,
 				      RTEMS_NO_TIMEOUT, &events);
-	  
+
 	  /*
 	   * Send packets till queue is empty.
 	   * Ensure that irq is on before sending.
 	   */
-	  for (;;) { 
+	  for (;;) {
 	      /* Feb 17: No need to make sure a reset is in progress,
 	       *         Since reset daemon runs at same priority as this thread
 	       */
@@ -1297,7 +1297,7 @@ uti596_txDaemon (void *arg)
 	      IF_DEQUEUE(&ifp->if_snd, m);
 	      if (!m)
 		break;
-	      
+
 	      send_packet (ifp, m); /* blocks */
 	  } /* end for */
 	  ifp->if_flags &= ~IFF_OACTIVE; /* no more to send, mark output inactive  */
@@ -1321,8 +1321,8 @@ uti596_resetDaemon (void *arg)
 	  /*
 	   * Wait for reset event from ISR
 	   */
-	  rtems_bsdnet_event_receive (NIC_RESET_EVENT, 
-				      RTEMS_EVENT_ANY | RTEMS_WAIT, 
+	  rtems_bsdnet_event_receive (NIC_RESET_EVENT,
+				      RTEMS_EVENT_ANY | RTEMS_WAIT,
 				      RTEMS_NO_TIMEOUT, &events);
 
 	  rtems_clock_get(RTEMS_CLOCK_GET_TOD, &tm_struct);
@@ -1344,7 +1344,7 @@ uti596_resetDaemon (void *arg)
   *  Function:   send_packet
   *
   *  Description: Send a raw ethernet packet
-  *              
+  *
   *  Algorithm:
   *             increment some stats counters,
   *             create the transmit command,
@@ -1359,22 +1359,22 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
     *pRemainingTbdList,
     *pTbd;
   struct mbuf *n, *input_m = m;
-  
+
   struct uti596_softc *sc = ifp->if_softc; /* is this available from ifp ?*/
 
-  struct mbuf *l = NULL; 
+  struct mbuf *l = NULL;
   unsigned int length = 0;
   rtems_status_code status;
   int bd_count = 0;
   rtems_event_set events;
 
-  /* 
-   * For all mbufs in the chain, 
+  /*
+   * For all mbufs in the chain,
    *  fill a transmit buffer descriptor
    */
   pTbd = sc->pTxCmd->pTbd;
 
-  do {              
+  do {
     if (m->m_len) {
       /*
        * Fill in the buffer descriptor
@@ -1404,30 +1404,30 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
     printf("TX ERROR:Too many mbufs in the packet!!!\n");
     printf("Must coalesce!\n");
   }
-  
-  
+
+
   if ( length < UTI_596_ETH_MIN_SIZE ) {
     pTbd->data = sc->zeroes;       /* add padding to pTbd */
     pTbd->size = UTI_596_ETH_MIN_SIZE - length; /* zeroes have no effect on the CRC */
   }
   else
     pTbd = pPrev; /* Don't use pTbd in the send routine */
-  
+
   /*  Disconnect the packet from the list of Tbd's  */
   pRemainingTbdList = pTbd->next;
-  pTbd->next  = I596_NULL;     
-  pTbd->size |= UTI_596_END_OF_FRAME;    
-  
+  pTbd->next  = I596_NULL;
+  pTbd->size |= UTI_596_END_OF_FRAME;
+
 #ifdef DBG_RAW
   printf("RAW:Add cmd and sleep\n");
 #endif
-  
-  sc->rawsndcnt++;     
-    
+
+  sc->rawsndcnt++;
+
 #ifdef DBG_RAW
   printf ("sending packet\n");
 #endif
-  
+
   /* Sending Zero length packet: shouldn't happen */
   if (pTbd->size <= 0) return ;
 
@@ -1445,23 +1445,23 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
 
   /* add the command to the output command queue */
   uti596addCmd ( (struct i596_cmd *) sc->pTxCmd );
-  
+
   /* sleep until the command has been processed or Timeout encountered. */
   status= rtems_bsdnet_event_receive (INTERRUPT_EVENT,
 				      RTEMS_WAIT|RTEMS_EVENT_ANY,
 				      RTEMS_NO_TIMEOUT,
 				      &events);
-   
+
   if ( status != RTEMS_SUCCESSFUL ) {
-    printf("Could not sleep %s\n", rtems_status_text(status)); 
+    printf("Could not sleep %s\n", rtems_status_text(status));
   }
-  
+
 #ifdef DBG_RAW
   printf("RAW: wake\n");
 #endif
-  
+
   sc->txInterrupts++;
-      
+
 #ifdef DEBUG_INIT
   printf("\nTransmitter issued packet\n");
   print_hdr    ( sc->pTxCmd->pTbd -> data ); /* print the first part */
@@ -1476,23 +1476,23 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
       printf("******Driver Error 0x%x\n", sc->pTxCmd -> cmd.status );
 #endif
       sc->stats.tx_errors++;
-      if ( sc->pTxCmd->cmd.status  & 0x0020 ) 
+      if ( sc->pTxCmd->cmd.status  & 0x0020 )
 	sc->stats.tx_retries_exceeded++;
-      if (!(sc->pTxCmd->cmd.status & 0x0040)) 
+      if (!(sc->pTxCmd->cmd.status & 0x0040))
 	sc->stats.tx_heartbeat_errors++;
-      if ( sc->pTxCmd->cmd.status  & 0x0400 ) 
+      if ( sc->pTxCmd->cmd.status  & 0x0400 )
 	sc->stats.tx_carrier_errors++;
-      if ( sc->pTxCmd->cmd.status  & 0x0800 ) 
+      if ( sc->pTxCmd->cmd.status  & 0x0800 )
 	sc->stats.collisions++;
-      if ( sc->pTxCmd->cmd.status  & 0x1000 ) 
+      if ( sc->pTxCmd->cmd.status  & 0x1000 )
 	sc->stats.tx_aborted_errors++;
-    } /* end if stat_ok */	 
-  
-  /* 
+    } /* end if stat_ok */
+
+  /*
    * Restore the transmited buffer descriptor chain.
    */
   pTbd -> next = pRemainingTbdList;
-  
+
   /*
    * Free the mbufs used by the sender.
    */
@@ -1502,7 +1502,7 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
     m = n;
   }
 
-  
+
 }
 
  /***********************************************************************
@@ -1578,7 +1578,7 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
        { /* an IP packet */
 	 printf("*********************IP HEADER******************\n");
 	 printf("IP version/IPhdr length: %2.2X TOS: %2.2X\n", add[14] , add[15]);
-	 printf("IP total length: %2.2X %2.2X, decimal %d\n", add[16], add[17], length = (add[16]<<8 | add[17] )); 
+	 printf("IP total length: %2.2X %2.2X, decimal %d\n", add[16], add[17], length = (add[16]<<8 | add[17] ));
 	 printf("IP identification: %2.2X %2.2X, 3-bit flags and offset %2.2X %2.2X\n",
 		add[18],add[19], add[20], add[21]);
 	 printf("IP TTL: %2.2X, protocol: %2.2X, checksum: %2.2X %2.2X \n",
@@ -1706,7 +1706,7 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
        { /* an IP packet */
 	 printf("*********************IP HEADER******************\n");
 	 printf("IP version/IPhdr length: %2.2X TOS: %2.2X\n", add[14] , add[15]);
-	 printf("IP total length: %2.2X %2.2X, decimal %d\n", add[16], add[17], length = (add[16]<<8 | add[17] )); 
+	 printf("IP total length: %2.2X %2.2X, decimal %d\n", add[16], add[17], length = (add[16]<<8 | add[17] ));
 	 printf("IP identification: %2.2X %2.2X, 3-bit flags and offset %2.2X %2.2X\n",
 		add[18],add[19], add[20], add[21]);
 	 printf("IP TTL: %2.2X, protocol: %2.2X, checksum: %2.2X %2.2X \n",
@@ -1755,55 +1755,55 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
      short int length;
 
      if ( add[12] == 0x08 && add[13] == 0x00 ){ /* an IP packet */
-       
+
        printf("Packet Location %p\n", add);
-       
+
        printf ("Dest  ");
-       
+
        for (i = 0; i < 6; i++)
 	 printf(" %2.2X", add[i]);
-       
+
        printf ("\n");
-       
+
        printf ("Source");
-       
+
        for (i = 6; i < 12; i++)
 	 printf(" %2.2X", add[i]);
-       
+
        printf ("\n");
-       
+
        printf ("frame type %2.2X%2.2X\n", add[12], add[13]);
-       
+
        printf("*********************IP HEADER******************\n");
        printf("IP version/IPhdr length: %2.2X TOS: %2.2X\n", add[14] , add[15]);
-       printf("IP total length: %2.2X %2.2X, decimal %d\n", add[16], add[17], length = (add[16]<<8 | add[17] )); 
+       printf("IP total length: %2.2X %2.2X, decimal %d\n", add[16], add[17], length = (add[16]<<8 | add[17] ));
        printf("IP identification: %2.2X %2.2X, 3-bit flags and offset %2.2X %2.2X\n",
 	      add[18],add[19], add[20], add[21]);
        printf("IP TTL: %2.2X, protocol: %2.2X, checksum: %2.2X %2.2X \n",
 	      add[22],add[23],add[24],add[25]);
        printf("IP packet type: %2.2X code %2.2X\n", add[34],add[35]);
-       
+
        printf("Source IP address: ");
        for ( i=0; i< 3 ; i++)
 	 printf( "%u.", add[26 + i]);
-       
+
        printf("%u\n", add[29]);
-       
+
        printf("Destination IP address: ");
        for ( i=0; i< 3 ; i++)
 	 printf( "%u.", add[30 + i]);
        printf("%u\n", add[33]);
-       
+
        printf("********************IP Packet Data*******************\n");
        length -=20;
        for ( i=0; i < length ; i++)
 	 printf("0x%2.2x ", add[34+i]);
        printf("\n");
-       
+
        printf("ICMP checksum: %2.2x %2.2x\n", add[36], add[37]);
        printf("ICMP identifier: %2.2x %2.2x\n", add[38], add[39]);
        printf("ICMP sequence nbr: %2.2x %2.2x\n", add[40], add[41]);
-     }   
+     }
  }
 #endif
  
@@ -1823,7 +1823,7 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
   *              initialize required rx and tx buffers
   *              hook interrupt
   *              issue start command and some diagnostics
-  *              return       
+  *              return
   *
   ***********************************************************************/
 
@@ -1833,31 +1833,31 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
   struct uti596_softc *sc = &uti596_softc;          /* soft config */
   struct ifnet * ifp = &sc->arpcom.ac_if;
   int i = 0;
-  
+
 #ifdef DBG_ATTACH
   printf("attach");
 #endif
 
-  
+
   sc->started = 0; /* The NIC is not started yet */
   sc->ioAddr = IO_ADDR;
 
-  /* Indicate to ULCS that this is initialized */  
-  ifp->if_softc = sc;  
+  /* Indicate to ULCS that this is initialized */
+  ifp->if_softc = sc;
   sc -> pScp = NULL;
-  
+
   /* Assign the name */
   ifp->if_name = "uti";
-  
+
   /* Assign the unit number */
   ifp->if_unit = 1;
-  
+
   /* Assign mtu */
   if ( pConfig -> mtu )
     ifp->if_mtu = pConfig -> mtu;
   else
     ifp->if_mtu = ETHERMTU;
-  
+
   /* Assign and possibly override the hw address */
 
   if ( !pConfig->hardware_address) { /* Read the ethernet address from the board */
@@ -1865,14 +1865,14 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
       inport_byte(NIC_ADDR+i,sc->arpcom.ac_enaddr[i] );
   }
   else {
-    /* hwaddr override */ 
+    /* hwaddr override */
     memcpy (sc->arpcom.ac_enaddr, pConfig->hardware_address, ETHER_ADDR_LEN);
   }
-  
+
   /* Test for valid hwaddr */
   if(memcmp(sc->arpcom.ac_enaddr,"\xAA\x55\x01",3)!= 0)/* b0 of byte 0 != 0 => multicast */
     return ENODEV;
-  
+
   /* Assign requested receive buffer descriptor count */
   if (pConfig->rbuf_count)
     sc->rxBdCount = pConfig->rbuf_count;
@@ -1894,15 +1894,15 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
   /* to init_hardware */
   sc->started = 1;
   sc->pInboundFrameQueue = I596_NULL;
- 
- 
+
+
   ifp->if_ioctl = uti596_ioctl;
   ifp->if_init  = uti596_init;
   ifp->if_start    = uti596_start;
   ifp->if_output   = ether_output;
-  
+
   sc->scb.command = 0;
-  
+
   /*
    * Attach the interface
    */
@@ -1945,8 +1945,8 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
    /*   printk("***INFO: ACK %x\n", scbStatus);*/
    uti596_softc.scb.command = scbStatus;
    outport_word(CHAN_ATTN, 0);
-   
-   if( uti596_softc.resetDone ) { 
+
+   if( uti596_softc.resetDone ) {
      /* stack is attached */
      UTI_WAIT_COMMAND_ACCEPTED(20000, "****ERROR:ACK");
    }
@@ -1959,7 +1959,7 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
    printk("\n***ERROR: Spurious interrupt. Resetting...\n");
    uti596_softc.nic_reset = 1;
  }
-  
+
  if ( (scbStatus & SCB_STAT_CX) && !(scbStatus & SCB_STAT_CNA) ){
    printk_time();
    printk("\n*****ERROR: Command Complete, and CNA available: 0x%x\nResetting...", scbStatus);
@@ -1987,7 +1987,7 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
    uti596_softc.nic_reset = 1;
    return;
  }
- 
+
  if ( scbStatus & SCB_STAT_RNR ) {
    printk_time();
    printk("\n*****WARNING: RNR %x\n",scbStatus);
@@ -1995,13 +1995,13 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 	  uti596_softc.pBeginRFA -> cmd,
 	  uti596_softc.pBeginRFA -> stat);
  }
- 
- /* 
+
+ /*
   * Receive Unit Control
   */
  if ( scbStatus & SCB_STAT_FR ) { /* a frame has been received */
    uti596_softc.rxInterrupts++;
-   
+
 #ifdef DBG_FR
    printk("\nISR:FR\n");
 #endif
@@ -2010,9 +2010,9 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
      uti596_softc.nic_reset = 1;
    }
    else
-     while ( uti596_softc.pBeginRFA != I596_NULL && 
+     while ( uti596_softc.pBeginRFA != I596_NULL &&
 	     ( uti596_softc.pBeginRFA -> stat & STAT_C)) {
-       
+
 #ifdef DBG_ISR
        printk("ISR:pBeginRFA != NULL\n");
 #endif
@@ -2020,19 +2020,19 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
        if ( count_rx > 1)
 	 printk("****WARNING: Received 2 frames on 1 interrupt \n");
 
-       /* 
-	* Give Received Frame to the ULCS 
-	*/	
+       /*
+	* Give Received Frame to the ULCS
+	*/
        uti596_softc.countRFD--;
-       
+
        if ( uti596_softc.countRFD < 0 )
 	 printk("Count < 0 !!!: count == %d, beginRFA = %p\n",
 		uti596_softc.countRFD, uti596_softc.pBeginRFA);
-       
+
        uti596_softc.stats.rx_packets++;
        pIsrRfd = uti596_softc.pBeginRFA -> next; /* the append destroys the link */
        uti596append( &uti596_softc.pInboundFrameQueue , uti596_softc.pBeginRFA );
-       
+
        /*
 	* if we have just received the a frame int he last unknown RFD,
 	* then it is certain that the RFA is empty.
@@ -2041,60 +2041,60 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 	 UTI_596_ASSERT(uti596_softc.pLastUnkRFD != I596_NULL,"****ERROR:LastUnk is NULL, begin ptr @ end!\n");
 	 uti596_softc.pEndRFA = uti596_softc.pLastUnkRFD = I596_NULL;
        }
-       
+
 #ifdef DBG_ISR
        printk("Wake %#x\n",uti596_softc.rxDaemonTid);
 #endif
        sc = rtems_event_send(uti596_softc.rxDaemonTid, INTERRUPT_EVENT);
        if ( sc != RTEMS_SUCCESSFUL )
-	 rtems_panic ("Can't notify rxDaemon: %s\n", 
-		      rtems_status_text (sc)); 
+	 rtems_panic ("Can't notify rxDaemon: %s\n",
+		      rtems_status_text (sc));
 #ifdef DBG_RAW_ISR
        else
 	 printk("Rx Wake: %#x\n",uti596_softc.rxDaemonTid);
 #endif
-       
+
        uti596_softc.pBeginRFA = pIsrRfd;
      } /* end while */
-   
+
    if ( uti596_softc.pBeginRFA == I596_NULL ){ /* adjust the pEndRFA to reflect an empty list */
      if ( uti596_softc.pLastUnkRFD == I596_NULL && uti596_softc.countRFD != 0 )
        printk("Last Unk is NULL, BeginRFA is null, and count == %d\n",uti596_softc.countRFD);
-     
+
      uti596_softc.pEndRFA = I596_NULL;
      if ( uti596_softc.countRFD != 0 ) {
        printk("****ERROR:Count is %d, but begin ptr is NULL\n",uti596_softc.countRFD );
      }
    }
-   
+
  } /* end scb_stat_fr */
- 
+
  /*
   * Check For Command Complete
   */
  if (  scbStatus & SCB_STAT_CX ){
 #ifdef DBG_ISR
    printk("ISR:CU\n");
-#endif   
-   
+#endif
+
    pIsrCmd = uti596_softc.pCmdHead;
-   
-   /* 
+
+   /*
     * For ALL completed commands
     */
    if ( pIsrCmd !=  I596_NULL && pIsrCmd->status & STAT_C  ){
-     
+
 #ifdef DBG_RAW_ISR
        printk("ISR:pIsrCmd != NULL\n");
 #endif
-     
-     /* 
-      * Adjust the command block list 
+
+     /*
+      * Adjust the command block list
       */
      uti596_softc.pCmdHead = pIsrCmd -> next;
-     
+
      /*
-      * If there are MORE commands to process, 
+      * If there are MORE commands to process,
       * the serialization in the raw routine has failed.
       * ( Perhaps AddCmd is bad? )
       */
@@ -2110,9 +2110,9 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 	 /*	 printk("****INFO:Configure OK\n"); */
 	 uti596_softc.cmdOk = 1;
 	 break;
-	 
+
        case CmdDump:
-	 
+
 #ifdef DBG_ISR
 	   printk("dump!\n");
 #endif
@@ -2120,13 +2120,13 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 	 break;
 
        case CmdDiagnose:
-	 
+
 #ifdef DBG_ISR
 	   printk("diagnose!\n");
 #endif
 	 uti596_softc.cmdOk = 1;
 	 break;
-	 
+
        case CmdSASetup:
 
 	 /*	 printk("****INFO:Set address interrupt\n");	 */
@@ -2135,7 +2135,7 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 	 else
 	   printk("****ERROR:SET ADD FAILED\n");
 	 break;
-	 
+
        case CmdTx:
 	 {
 	   UTI_596_ASSERT(uti596_softc.txDaemonTid, "****ERROR:Null txDaemonTid\n");
@@ -2143,7 +2143,7 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 	   printk("wake TX:0x%x\n",uti596_softc.txDaemonTid);
 #endif
 	   if ( uti596_softc.txDaemonTid ){  /* Ensure that the transmitter is present */
-	     sc = rtems_event_send (uti596_softc.txDaemonTid, 
+	     sc = rtems_event_send (uti596_softc.txDaemonTid,
 				    INTERRUPT_EVENT);
 
 	   if ( sc != RTEMS_SUCCESSFUL )
@@ -2152,22 +2152,22 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 #ifdef DBG_RAW_ISR
 	   else
 	     printk("****INFO:Tx wake: %#x\n",uti596_softc.txDaemonTid);
-#endif	   
+#endif
 	   }
 	 } /* End case Cmd_Tx */
 	 break;
-	 
+
        case CmdMulticastList:
 
 	 printk("***ERROR:Multicast?!\n");
 	 pIsrCmd->next = I596_NULL;
 	 break;
-	 
+
        case CmdTDR:
 	 {
 	   unsigned long status = *( (unsigned long *)pIsrCmd)+1;
 	   printk("****ERROR:TDR?!\n");
-	   
+
 	   if (status & STAT_C)
 	     {
 	       /*
@@ -2183,47 +2183,47 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 		 printk("****WARNING:Termination problem.\n");
 	       if (status & 0x1000)
 		 printk("****WARNING:Short circuit.\n");
-	       
+
 	       /*	       printk("****INFO:Time %ld.\n", status & 0x07ff); */
 	     }
 	 }
 	 break;
-	 
-       default: 
-	 /* 
-	  * This should never be reached 
+
+       default:
+	 /*
+	  * This should never be reached
 	  */
 	 printk("CX but NO known command\n");
        } /* end switch */
-     pIsrCmd = uti596_softc.pCmdHead; /* next command */ 
+     pIsrCmd = uti596_softc.pCmdHead; /* next command */
      if ( pIsrCmd != I596_NULL )
        printk("****WARNING: more commands in list, but no start to NIC\n");
    } /* end if pIsrCmd != NULL && pIsrCmd->stat & STAT_C  */
    else {
      if ( pIsrCmd != I596_NULL ) { /* The command MAY be NULL from a RESET */
-       
+
        /* Reset the ethernet card, and wake the transmitter (if necessary) */
        printk_time();
        printk("****INFO: Request board reset ( tx )\n");
        uti596_softc.nic_reset = 1;
        if ( uti596_softc.txDaemonTid){  /* Ensure that a transmitter is present */
-	 sc = rtems_event_send (uti596_softc.txDaemonTid, 
+	 sc = rtems_event_send (uti596_softc.txDaemonTid,
 				INTERRUPT_EVENT);
-	 
+
 	 if ( sc != RTEMS_SUCCESSFUL )
 	   printk("****ERROR:Could NOT send event to tid 0x%x : %s\n",uti596_softc.txDaemonTid, rtems_status_text (sc) );
 #ifdef DBG_RAW_ISR
 	 else
 	   printk("****INFO:Tx wake: %#x\n",uti596_softc.txDaemonTid);
-#endif	   
+#endif
        }
      }
-   } 
- }  /* end if command complete */   
- 
- 
- /* if the receiver has stopped, 
-  * check if this is a No Resources scenario, 
+   }
+ }  /* end if command complete */
+
+
+ /* if the receiver has stopped,
+  * check if this is a No Resources scenario,
   * Try to add more RFD's ( no RBDs are used )
   */
  if ( uti596_softc.started ) {
@@ -2234,16 +2234,16 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
      /*
       * THE RECEIVER IS OFF!
       */
-     if ( uti596_softc.pLastUnkRFD != I596_NULL  ){ /* We have an unknown RFD, it is not inbound*/ 
+     if ( uti596_softc.pLastUnkRFD != I596_NULL  ){ /* We have an unknown RFD, it is not inbound*/
        if ( uti596_softc.pLastUnkRFD -> stat & (STAT_C | STAT_B )) /* in use */
 	 uti596_softc.pEndRFA = uti596_softc.pLastUnkRFD;      /* update end */
-       else {      
-	 /* 
+       else {
+	 /*
 	  *  It is NOT in use, and since RNR, we know EL bit of pEndRFA was read!
 	  *  So, unlink it from the RFA and move it to the saved queue.
 	  *  But pBegin can equal LastUnk!
 	  */
-	
+
 	   if ( uti596_softc.pEndRFA != I596_NULL ){      /* check added feb24. */
 #ifdef DEBUG_RFA
 	     if (uti596_softc.pEndRFA -> next != uti596_softc.pLastUnkRFD){
@@ -2260,7 +2260,7 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 	 uti596_softc.savedCount++;
 	 uti596_softc.pEndSavedQueue = uti596_softc.pLastUnkRFD;
 	 uti596_softc.countRFD--;                    /* It was not in the RFA */
-	 /* 
+	 /*
 	  * The Begin pointer CAN advance this far. We must resynch the CPU side
 	  * with the chip.
 	  */
@@ -2277,11 +2277,11 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
        }
 
        uti596_softc.pLastUnkRFD = I596_NULL;
- 
+
      } /* end if exists UnkRFD */
 
-     /* 
-      * Append the saved queue to  the RFA.  
+     /*
+      * Append the saved queue to  the RFA.
       * Any further RFD's being supplied will be added to
       * this new list.
       */
@@ -2292,11 +2292,11 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 	   printk("****ERROR:Begin pointer is NULL, but count == %d\n",uti596_softc.countRFD);
 	 }
 #endif
-	 uti596_softc.pBeginRFA      = uti596_softc.pSavedRfdQueue; 
+	 uti596_softc.pBeginRFA      = uti596_softc.pSavedRfdQueue;
 	 uti596_softc.pEndRFA        = uti596_softc.pEndSavedQueue;
 	 uti596_softc.pSavedRfdQueue = uti596_softc.pEndSavedQueue = I596_NULL;  /* Reset the End */
        }
-       else {  
+       else {
 #ifdef DEBUG_RFA
 	 if ( uti596_softc.countRFD <= 0) {
 	   printk("****ERROR:Begin pointer is not NULL, but count == %d\n",uti596_softc.countRFD);
@@ -2304,15 +2304,15 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 #endif
 	 UTI_596_ASSERT( uti596_softc.pEndRFA != I596_NULL, "****WARNING: END RFA IS NULL\n");
 	 UTI_596_ASSERT( uti596_softc.pEndRFA->next == I596_NULL, "****ERROR:END RFA -> next must be NULL\n");
-	 
-	 uti596_softc.pEndRFA->next   = uti596_softc.pSavedRfdQueue; 
-	 uti596_softc.pEndRFA->cmd   &= ~CMD_EOL;      /* clear the end of list */ 
+
+	 uti596_softc.pEndRFA->next   = uti596_softc.pSavedRfdQueue;
+	 uti596_softc.pEndRFA->cmd   &= ~CMD_EOL;      /* clear the end of list */
 	 uti596_softc.pEndRFA         = uti596_softc.pEndSavedQueue;
 	 uti596_softc.pSavedRfdQueue  = uti596_softc.pEndSavedQueue = I596_NULL; /* Reset the End */
 #ifdef DEBUG_ISR
 	 printk("count: %d, saved: %d \n", uti596_softc.countRFD , uti596_softc.savedCount);
 #endif
- 
+
        }
        /*       printk("Isr: countRFD = %d\n",uti596_softc.countRFD); */
        uti596_softc.countRFD += uti596_softc.savedCount;
@@ -2320,15 +2320,15 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
        uti596_softc.savedCount = 0;
      }
 
- 
+
 #ifdef DBG_596_RFD
      printk("The list starts here %p\n",uti596_softc.pBeginRFA );
 #endif
-     
+
      if ( uti596_softc.countRFD > 1) {
        /****REMOVED FEB 18.
-	 &&            
-	  !( uti596_softc.pBeginRFA -> stat & (STAT_C | STAT_B ))) { 
+	 &&
+	  !( uti596_softc.pBeginRFA -> stat & (STAT_C | STAT_B ))) {
        *****/
        printk_time();
        printk("****INFO: pBeginRFA -> stat = 0x%x\n",uti596_softc.pBeginRFA -> stat);
@@ -2337,7 +2337,7 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
        UTI_596_ASSERT(uti596_softc.scb.command == 0, "****ERROR:scb command must be zero\n");
        uti596_softc.scb.pRfd = uti596_softc.pBeginRFA;
        /* start RX here  */
-       printk("****INFO: ISR Starting receiver\n"); 
+       printk("****INFO: ISR Starting receiver\n");
        uti596_softc.scb.command = RX_START; /* should this also be CU start? */
        outport_word(CHAN_ATTN, 0);
     }
@@ -2345,39 +2345,39 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
        else {
        printk("****WARNING: Receiver NOT Started -- countRFD = %d\n", uti596_softc.countRFD);
        printk("82596 cmd: 0x%x, status: 0x%x RFA len: %d\n",
-	      uti596_softc.scb.command, 
+	      uti596_softc.scb.command,
 	      uti596_softc.scb.status,
 	      uti596_softc.countRFD);
-       
+
        printk("\nRFA: \n");
        for ( pISR_Rfd = uti596_softc.pBeginRFA;
 	     pISR_Rfd != I596_NULL;
-	     pISR_Rfd = pISR_Rfd->next) 
+	     pISR_Rfd = pISR_Rfd->next)
 	 printk("Frame @ %x, status: %x, cmd: %x\n",
 		pISR_Rfd, pISR_Rfd->stat, pISR_Rfd->cmd);
-       
+
        printk("\nInbound: \n");
        for ( pISR_Rfd = uti596_softc.pInboundFrameQueue;
 	     pISR_Rfd != I596_NULL;
-	     pISR_Rfd = pISR_Rfd->next) 
+	     pISR_Rfd = pISR_Rfd->next)
 	 printk("Frame @ %x, status: %x, cmd: %x\n",
 		pISR_Rfd, pISR_Rfd->stat, pISR_Rfd->cmd);
-       
-       
+
+
        printk("\nSaved: \n");
        for ( pISR_Rfd = uti596_softc.pSavedRfdQueue;
 	     pISR_Rfd != I596_NULL;
-	     pISR_Rfd = pISR_Rfd->next) 
+	     pISR_Rfd = pISR_Rfd->next)
 	 printk("Frame @ %x, status: %x, cmd: %x\n",
 		pISR_Rfd, pISR_Rfd->stat, pISR_Rfd->cmd);
        printk("\nUnknown: %p\n",uti596_softc.pLastUnkRFD);
      }
      *****/
-   } /* end stat_rnr */	 
+   } /* end stat_rnr */
 
  } /* end if receiver started */
  /* UTI_596_ASSERT(uti596_softc.scb.status == scbStatus, "****WARNING:scbStatus change!\n"); */
- 
+
 #ifdef DBG_ISR
    printk("X\n");
 #endif
@@ -2413,13 +2413,13 @@ struct i596_rfd * uti596dequeue( struct i596_rfd ** ppQ )
 
    struct i596_rfd * pRfd;
    _ISR_Disable(level);
-   
+
    /* invalid address, or empty queue or emptied queue */
    if( ppQ == NULL || *ppQ == NULL || *ppQ == I596_NULL) {
      _ISR_Enable(level);
      return I596_NULL;
    }
-   
+
      pRfd = *ppQ;            /* The dequeued buffer           */
      *ppQ = pRfd->next;      /* advance the queue pointer     */
      pRfd->next = I596_NULL; /* unlink the rfd being returned */
@@ -2427,7 +2427,7 @@ struct i596_rfd * uti596dequeue( struct i596_rfd ** ppQ )
 
    _ISR_Enable(level);
    return pRfd;
-}	
+}
 
 /***********************************************************************
  *  Function:   void uti596append
@@ -2435,13 +2435,13 @@ struct i596_rfd * uti596dequeue( struct i596_rfd ** ppQ )
  *  Description:
  *              adds an RFD to the end of the received frame queue,
  *              for processing by the rxproc.
- *              Also removes this RFD from the RFA 
+ *              Also removes this RFD from the RFA
  *
  *  Algorithm:
  *
  ***********************************************************************/
 
-void uti596append( struct i596_rfd ** ppQ , struct i596_rfd * pRfd ) 
+void uti596append( struct i596_rfd ** ppQ , struct i596_rfd * pRfd )
 {
 
   struct i596_rfd *p;
@@ -2449,7 +2449,7 @@ void uti596append( struct i596_rfd ** ppQ , struct i596_rfd * pRfd )
   if ( pRfd != NULL && pRfd != I596_NULL) {
     pRfd -> next = I596_NULL;
     pRfd -> cmd |= CMD_EOL;    /* set EL bit */
-    
+
     if ( *ppQ == NULL || *ppQ == I596_NULL ) {
       /* Empty or emptied */
       *ppQ = pRfd;
@@ -2458,7 +2458,7 @@ void uti596append( struct i596_rfd ** ppQ , struct i596_rfd * pRfd )
       {
 	for ( p=*ppQ; p -> next != I596_NULL; p=p->next)
 	  ;
-	
+
 	p->cmd &= ~CMD_EOL; /* Clear EL bit at end */
 	p->next = pRfd;
       }
@@ -2479,14 +2479,14 @@ void uti596append( struct i596_rfd ** ppQ , struct i596_rfd * pRfd )
  *             mark transmitter as busy
  *             abort any transmissions/receptions
  *             clean-up all buffers ( RFD's et. al. )
- *             
- *             
- * 
+ *
+ *
+ *
  *
  ***********************************************************************/
 
 
-/* static */ 
+/* static */
 void uti596_stop(struct uti596_softc *sc)
 {
     sc->started  = 0;
@@ -2546,7 +2546,7 @@ uti596_ioctl (struct ifnet *ifp, int command, caddr_t data)
 	        printk("show stats\n");
 		uti596_stats (sc);
 		break;
-		
+
 	/*
 	 * FIXME: All sorts of multicast commands need to be added here!
 	 */
@@ -2571,7 +2571,7 @@ uti596_ioctl (struct ifnet *ifp, int command, caddr_t data)
  ***********************************************************************/
 
 
-void 
+void
 uti596_stats(struct uti596_softc *sc)
       {
         printf(" CPU Reports:\n");
@@ -2580,14 +2580,14 @@ uti596_stats(struct uti596_softc *sc)
 	printf ("Tx Interrupts:%-8lu\n",  sc->txInterrupts);
 	printf ("Rx Packets:%-8u",  sc->stats.rx_packets);
 	printf ("Tx Attempts:%-u\n",  sc->stats.tx_packets);
-	
+
 	printf ("Rx Dropped:%-8u",     sc->stats.rx_dropped);
 	printf ("Rx IP Packets:%-8u",  sc->stats.rx_packets);
 	printf ("Tx Errors:%-8u\n",      sc->stats.tx_errors);
 	printf ("Tx aborted:%-8u",     sc->stats.tx_aborted_errors);
 	printf ("Tx Dropped:%-8u\n",     sc->stats.tx_dropped);
 	printf ("Tx IP packets:%-8u",  sc->stats.tx_packets);
-	
+
 	printf ("Collisions Detected:%-8u\n",  sc->stats.collisions);
 	printf ("Tx Heartbeat Errors:%-8u",  sc->stats.tx_heartbeat_errors);
 	printf ("Tx Carrier Errors:%-8u\n",    sc->stats.tx_carrier_errors);
@@ -2614,19 +2614,19 @@ void dumpQ(void) {
 	   printf("savedQ:\n");
 	   for( pRfd = uti596_softc.pSavedRfdQueue;
 		pRfd != I596_NULL;
-		pRfd = pRfd -> next) 
+		pRfd = pRfd -> next)
 	     printf("pRfd: %p, stat: 0x%x cmd: 0x%x\n",pRfd,pRfd -> stat,pRfd -> cmd);
 	   printf("Inbound:\n");
 	   for( pRfd = uti596_softc.pInboundFrameQueue;
 		pRfd != I596_NULL;
-		pRfd = pRfd -> next) 
+		pRfd = pRfd -> next)
 	     printf("pRfd: %p, stat: 0x%x cmd: 0x%x\n",pRfd,pRfd -> stat,pRfd -> cmd);
 	    printf("Last Unk: %p\n", uti596_softc.pLastUnkRFD );
-	 
+
 	   printf("RFA:\n");
 	   for( pRfd = uti596_softc.pBeginRFA;
 		pRfd != I596_NULL;
-		pRfd = pRfd -> next) 
+		pRfd = pRfd -> next)
 	     printf("pRfd: %p, stat: 0x%x cmd: 0x%x\n",pRfd,pRfd -> stat,pRfd -> cmd);
 }
 
@@ -2646,34 +2646,34 @@ void uti596Diagnose(int verbose){
     printf("Status diagnostic: 0x%2.2x\n", diagnose.status);
 
 }
-void show_buffers (void) 
+void show_buffers (void)
 {
     struct i596_rfd *pRfd;
 
       printf("82596 cmd: 0x%x, status: 0x%x RFA len: %d\n",
-	     uti596_softc.scb.command, 
+	     uti596_softc.scb.command,
 	     uti596_softc.scb.status,
 	     uti596_softc.countRFD);
- 
+
       printf("\nRFA: \n");
       for ( pRfd = uti596_softc.pBeginRFA;
 	    pRfd != I596_NULL;
-	    pRfd = pRfd->next) 
+	    pRfd = pRfd->next)
 	printf("Frame @ %p, status: %2.2x, cmd: %2.2x\n",
 	       pRfd, pRfd->stat, pRfd->cmd);
-      
+
       printf("\nInbound: \n");
       for ( pRfd = uti596_softc.pInboundFrameQueue;
 	    pRfd != I596_NULL;
-	    pRfd = pRfd->next) 
+	    pRfd = pRfd->next)
 	printf("Frame @ %p, status: %2.2x, cmd: %2.2x\n",
 	       pRfd, pRfd->stat, pRfd->cmd);
-      
+
 
       printf("\nSaved: \n");
       for ( pRfd = uti596_softc.pSavedRfdQueue;
 	    pRfd != I596_NULL;
-	    pRfd = pRfd->next) 
+	    pRfd = pRfd->next)
 	printf("Frame @ %p, status: %2.2x, cmd: %2.2x\n",
 	       pRfd, pRfd->stat, pRfd->cmd);
     printf("\nUnknown: %p\n",uti596_softc.pLastUnkRFD);
@@ -2684,26 +2684,26 @@ void show_queues(void)
     struct i596_rfd *pRfd;
 
 
-      printf("CMD: 0x%x, Status: 0x%x\n", 
+      printf("CMD: 0x%x, Status: 0x%x\n",
 	     uti596_softc.scb.command,
 	     uti596_softc.scb.status);
       printf("saved Q\n");
-      
+
       for ( pRfd = uti596_softc.pSavedRfdQueue;
 	    pRfd != I596_NULL &&
 	      pRfd != NULL;
 	    pRfd = pRfd->next)
 	printf("0x%p\n", pRfd);
-      
+
       printf("End saved Q 0x%p\n", uti596_softc.pEndSavedQueue);
-      
+
       printf("\nRFA:\n");
       for ( pRfd = uti596_softc.pBeginRFA;
 	    pRfd != I596_NULL &&
 	      pRfd != NULL;
 	    pRfd = pRfd->next)
 	printf("0x%p\n", pRfd);
-      
+
       printf("uti596_softc.pEndRFA: %p\n",uti596_softc.pEndRFA);
 }
 
@@ -2717,17 +2717,17 @@ void uti596_init(void * arg){
   if (sc->txDaemonTid == 0) {
 
     uti596_initialize_hardware(sc);
-    
+
     /*
      * Start driver tasks
      */
-    
+
     sc->txDaemonTid = rtems_bsdnet_newproc ("UTtx", 2*4096, uti596_txDaemon, sc);
     sc->rxDaemonTid = rtems_bsdnet_newproc ("UTrx", 2*4096, uti596_rxDaemon, sc);
-    sc->resetDaemonTid = rtems_bsdnet_newproc ("UTrt", 2*4096, 
+    sc->resetDaemonTid = rtems_bsdnet_newproc ("UTrt", 2*4096,
 					       uti596_resetDaemon, sc);
-    
-    
+
+
 #ifdef DBG_INIT
     printf("After attach, status of board = 0x%x\n", sc->scb.status );
 #endif
@@ -2735,25 +2735,25 @@ void uti596_init(void * arg){
 
   }
 
-  /* 
+  /*
    * Enable receiver
    */
-  UTI_WAIT_COMMAND_ACCEPTED(4000, "init:Before RX_START"); 
+  UTI_WAIT_COMMAND_ACCEPTED(4000, "init:Before RX_START");
   sc->scb.pRfd = sc -> pBeginRFA;
   sc->scb.command = RX_START;
-  outport_word(CHAN_ATTN,0 ); 
-  UTI_WAIT_COMMAND_ACCEPTED(4000, "init:RX_START"); 
+  outport_word(CHAN_ATTN,0 );
+  UTI_WAIT_COMMAND_ACCEPTED(4000, "init:RX_START");
   /*
    * Tell the world that we're running.
    */
   ifp->if_flags |= IFF_RUNNING;
-  
+
 }
 void dump_scb(void){
   printk("status 0x%x\n",uti596_softc.scb.status);
   printk("command 0x%x\n",uti596_softc.scb.command);
   printk("cmd 0x%x\n",(int)uti596_softc.scb.pCmd);
-  printk("rfd 0x%x\n",(int)uti596_softc.scb.pRfd);  
+  printk("rfd 0x%x\n",(int)uti596_softc.scb.pRfd);
   printk("crc_err 0x%x\n",uti596_softc.scb.crc_err);
   printk("align_err 0x%x\n",uti596_softc.scb.align_err);
   printk("resource_err 0x%x\n",uti596_softc.scb.resource_err );
@@ -2768,5 +2768,5 @@ void printk_time(void){
     rtems_time_of_day tm_struct;
 
     rtems_clock_get(RTEMS_CLOCK_GET_TOD, &tm_struct);
-    printk("Current time: %d:%d:%d \n", tm_struct.hour, tm_struct.minute, tm_struct.second);  
+    printk("Current time: %d:%d:%d \n", tm_struct.hour, tm_struct.minute, tm_struct.second);
 }

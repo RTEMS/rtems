@@ -28,8 +28,8 @@ void cs8900_io_set_reg (int dev, unsigned short reg, unsigned short data)
 {
     /* works the same for all values of dev */
 /*
-    printf("cs8900_io_set_reg: reg: %#6x, val %#6x\n", 
-           CS8900_BASE + reg, 
+    printf("cs8900_io_set_reg: reg: %#6x, val %#6x\n",
+           CS8900_BASE + reg,
            data);
 */
    *(unsigned short *)(CS8900_BASE + reg) = data;
@@ -47,7 +47,7 @@ unsigned short cs8900_io_get_reg (int dev, unsigned short reg)
     return val;
 }
 
-/* cs8900_mem_set_reg - sets one of the registers mapped through 
+/* cs8900_mem_set_reg - sets one of the registers mapped through
  *                      PacketPage
  */
 void cs8900_mem_set_reg (int dev, unsigned long reg, unsigned short data)
@@ -57,7 +57,7 @@ void cs8900_mem_set_reg (int dev, unsigned long reg, unsigned short data)
     cs8900_io_set_reg(dev, CS8900_IO_PP_DATA_PORT0, data);
 }
 
-/* cs8900_mem_get_reg - reads one of the registers mapped through 
+/* cs8900_mem_get_reg - reads one of the registers mapped through
  *                      PacketPage
  */
 unsigned short cs8900_mem_get_reg (int dev, unsigned long reg)
@@ -96,7 +96,7 @@ unsigned short cs8900_get_data_block (int dev, unsigned char *data)
     len = cs8900_mem_get_reg(dev, CS8900_PP_RxLength);
 
     for (i = 0; i < ((len + 1) / 2); i++) {
-        ((short *)data)[i] = cs8900_io_get_reg(dev, 
+        ((short *)data)[i] = cs8900_io_get_reg(dev,
                                                CS8900_IO_RX_TX_DATA_PORT0);
     }
     return len;
@@ -115,10 +115,10 @@ void cs8900_tx_load (int dev, struct mbuf *m)
         len += m->m_len;
         m = m->m_next;
     } while (m != 0);
-    
+
     data = (unsigned short *) &g_enetbuf[0];
     for (i = 0; i < ((len + 1) / 2); i++) {
-        cs8900_io_set_reg(dev, 
+        cs8900_io_set_reg(dev,
                           CS8900_IO_RX_TX_DATA_PORT0,
                           data[i]);
     }

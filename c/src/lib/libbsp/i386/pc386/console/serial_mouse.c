@@ -7,7 +7,7 @@
  * as /dev/ttyS1 for COM1 and /dev/ttyS2 as COM2. If one of the ports
  * is used as the console, this driver would fail to initialize.
  *
- * This code was based on the console driver. It is based on the 
+ * This code was based on the console driver. It is based on the
  * current termios framework. This is just a shell around the
  * termios support.
  *
@@ -18,6 +18,12 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.5  2000/12/05 16:37:38  joel
+ * 2000-12-01	Joel Sherrill <joel@OARcorp.com>
+ *
+ * 	* pc386/console/console.c, pc386/console/serial_mouse.c,
+ * 	pc386/console/vgainit.c, shared/comm/tty_drv.c: Remove warnings.
+ *
  * Revision 1.4  2000/10/23 14:10:25  joel
  * 2000-10-23	Joel Sherrill <joel@OARcorp.com>
  *
@@ -80,8 +86,8 @@ extern int BSPConsolePort;
 /*
  * Interrupt structure for serial_mouse
  */
-static rtems_irq_connect_data serial_mouse_isr_data = 
-{ 
+static rtems_irq_connect_data serial_mouse_isr_data =
+{
   BSP_UART_IRQ,
   BSP_ISR_FUNC,
   isr_on,
@@ -92,7 +98,7 @@ static void isr_on(const rtems_irq_connect_data *unused)
 {
   return;
 }
-						   
+
 static void isr_off(const rtems_irq_connect_data *unused)
 {
   return;
@@ -131,7 +137,7 @@ serial_mouse_initialize(rtems_device_major_number major,
    * Set up TERMIOS
    */
   rtems_termios_initialize();
-  
+
   /*
    * Do device-specific initialization
    */
@@ -172,7 +178,7 @@ serial_mouse_open(rtems_device_major_number major,
                 void                      *arg)
 {
   rtems_status_code  status;
-  static rtems_termios_callbacks cb = 
+  static rtems_termios_callbacks cb =
   {
     NULL,	              /* firstOpen */
     serial_mouse_last_close,       /* lastClose */
@@ -194,7 +200,7 @@ serial_mouse_open(rtems_device_major_number major,
   /*
    * Pass data area info down to driver
    */
-  BSP_uart_termios_set( BSP_UART_PORT, 
+  BSP_uart_termios_set( BSP_UART_PORT,
                        ((rtems_libio_open_close_args_t *)arg)->iop->data1 );
   /* Enable interrupts  on channel */
   BSP_uart_intr_ctrl( BSP_UART_PORT, BSP_UART_INTR_CTRL_TERMIOS);
@@ -211,10 +217,10 @@ serial_mouse_close(rtems_device_major_number major,
 {
 
   return (rtems_termios_close (arg));
-  
+
 } /* tty_close */
 
- 
+
 /*
  * TTY device driver READ entry point.
  * Read characters from the tty device.
@@ -226,7 +232,7 @@ serial_mouse_read(rtems_device_major_number major,
 {
   return rtems_termios_read (arg);
 } /* tty_read */
- 
+
 
 /*
  * TTY device driver WRITE entry point.
@@ -238,7 +244,7 @@ serial_mouse_write(rtems_device_major_number major,
               void                    * arg)
 {
     return rtems_termios_write (arg);
- 
+
 } /* tty_write */
 
 /*
@@ -246,9 +252,9 @@ serial_mouse_write(rtems_device_major_number major,
  * routine to handle both devices.
  */
 static rtems_device_driver serial_mouse_control_internal( int port, void  *arg )
-{ 
+{
 	rtems_libio_ioctl_args_t *args = arg;
-	switch( args->command ) 
+	switch( args->command )
 	{
 	   default:
       return rtems_termios_ioctl (arg);
@@ -271,12 +277,12 @@ static rtems_device_driver serial_mouse_control_internal( int port, void  *arg )
 /*
  * Handle ioctl request for ttyS1.
  */
-rtems_device_driver 
+rtems_device_driver
 serial_mouse_control(rtems_device_major_number major,
 		rtems_device_minor_number minor,
 		void                      * arg
 )
-{ 
+{
   return serial_mouse_control_internal( BSP_UART_PORT, arg );
 }
 
@@ -287,45 +293,45 @@ conSetAttr(int port, int minor, const struct termios *t)
 {
   unsigned long baud, databits, parity, stopbits;
 
-  switch (t->c_cflag & CBAUD) 
+  switch (t->c_cflag & CBAUD)
     {
-    case B50:	
+    case B50:
       baud = 50;
       break;
-    case B75:	
-      baud = 75;	
+    case B75:
+      baud = 75;
       break;
-    case B110:	
-      baud = 110;	
+    case B110:
+      baud = 110;
       break;
-    case B134:	
-      baud = 134;	
+    case B134:
+      baud = 134;
       break;
-    case B150:	
-      baud = 150;	
+    case B150:
+      baud = 150;
       break;
     case B200:
-      baud = 200;	
+      baud = 200;
       break;
-    case B300:	
+    case B300:
       baud = 300;
       break;
-    case B600:	
-      baud = 600;	
+    case B600:
+      baud = 600;
       break;
-    case B1200:	
+    case B1200:
       baud = 1200;
       break;
-    case B1800:	
-      baud = 1800;	
+    case B1800:
+      baud = 1800;
       break;
-    case B2400:	
+    case B2400:
       baud = 2400;
       break;
-    case B4800:	
+    case B4800:
       baud = 4800;
       break;
-    case B9600:	
+    case B9600:
       baud = 9600;
       break;
     case B19200:
@@ -334,7 +340,7 @@ conSetAttr(int port, int minor, const struct termios *t)
     case B38400:
       baud = 38400;
       break;
-    case B57600:	
+    case B57600:
       baud = 57600;
       break;
     case B115200:
@@ -360,7 +366,7 @@ conSetAttr(int port, int minor, const struct termios *t)
     /* No parity */
     parity = 0;
   }
-  
+
   switch (t->c_cflag & CSIZE) {
     case CS5: databits = CHR_5_BITS; break;
     case CS6: databits = CHR_6_BITS; break;

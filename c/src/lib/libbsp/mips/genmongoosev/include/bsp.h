@@ -45,7 +45,7 @@ extern "C" {
 
 
 
-/* 
+/*
  * assertSoftwareInt defined in vectorisrs.c the prototype is here so
  * userspace code can get to it directly.
  *  */
@@ -83,26 +83,26 @@ extern void assertSoftwareInterrupt(uint32_t);
 #if 1
 
 #define Install_tm27_vector( handler ) \
-    (void) set_vector( handler, MONGOOSEV_IRQ_SOFTWARE_1, 1 ); 
+    (void) set_vector( handler, MONGOOSEV_IRQ_SOFTWARE_1, 1 );
 
 
 
 #define Cause_tm27_intr()   assertSoftwareInterrupt(0);
 
-#define Clear_tm27_intr()  
+#define Clear_tm27_intr()
 #define Lower_tm27_intr()
 
 #else
 
 #define Install_tm27_vector( handler ) \
-    (void) set_vector( handler, MONGOOSEV_IRQ_TIMER1, 1 ); 
+    (void) set_vector( handler, MONGOOSEV_IRQ_TIMER1, 1 );
 
 #define Cause_tm27_intr() \
   do { \
     ; \
   } while(0)
 
-#define Clear_tm27_intr() 
+#define Clear_tm27_intr()
 #define Lower_tm27_intr()
 
 #endif
@@ -120,7 +120,7 @@ extern rtems_configuration_table BSP_Configuration;
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */
@@ -130,7 +130,7 @@ extern rtems_configuration_table BSP_Configuration;
 void bsp_cleanup( void );
 
 rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
-   
+
 #ifdef __cplusplus
 }
 #endif

@@ -44,7 +44,7 @@
 console_data	Console_Port_Data[NUM_CONSOLE_PORTS];
 unsigned long	Console_Port_Count;
 rtems_device_minor_number  Console_Port_Minor;
-		
+
 /* PAGE
  *
  *  console_open
@@ -82,9 +82,9 @@ rtems_device_driver console_open(
 	Callbacks.pollRead      = c->deviceRead;
 	Callbacks.write         = c->deviceWrite;
 	Callbacks.setAttributes = c->deviceSetAttributes;
-	Callbacks.stopRemoteTx  = 
+	Callbacks.stopRemoteTx  =
 		Console_Port_Tbl[minor].pDeviceFlow->deviceStopRemoteTx;
-	Callbacks.startRemoteTx = 
+	Callbacks.startRemoteTx =
 		Console_Port_Tbl[minor].pDeviceFlow->deviceStartRemoteTx;
 	Callbacks.outputUsesInterrupts = c->deviceOutputUsesInterrupts;
 	status = rtems_termios_open ( major, minor, arg, &Callbacks);
@@ -94,7 +94,7 @@ rtems_device_driver console_open(
 	 * Patch in flow control routines
 	 */
 /* XXX */
-#if 0 
+#if 0
 	if((status==RTEMS_SUCCESSFUL) &&
 	   (Console_Port_Tbl[minor].pDeviceFlow))
 	{
@@ -132,7 +132,7 @@ rtems_device_driver console_open(
 
 	return status;
 }
- 
+
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -150,7 +150,7 @@ rtems_device_driver console_close(
 
 	return rtems_termios_close (arg);
 }
- 
+
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -159,7 +159,7 @@ rtems_device_driver console_read(
 {
   return rtems_termios_read (arg);
 }
- 
+
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -168,7 +168,7 @@ rtems_device_driver console_write(
 {
   return rtems_termios_write (arg);
 }
- 
+
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -224,7 +224,7 @@ rtems_device_driver console_initialize(
 		 */
 		rtems_fatal_error_occurred(RTEMS_IO_ERROR);
 	}
-	
+
 	Console_Port_Minor=minor;
 
 	/*
@@ -296,7 +296,7 @@ void DEBUG_puts(
 
 	rtems_interrupt_disable(Irql);
 
-	for ( s = string ; *s ; s++ ) 
+	for ( s = string ; *s ; s++ )
 	{
 		Console_Port_Tbl[Console_Port_Minor].pDeviceFns->
 			deviceWritePolled(Console_Port_Minor, *s);
@@ -329,7 +329,7 @@ DEBUG_puth(
 	uint32_t   Irql;
 
 	rtems_interrupt_disable(Irql);
-	
+
 	Console_Port_Tbl[Console_Port_Minor].pDeviceFns->
 		deviceWritePolled(Console_Port_Minor, '0');
 	Console_Port_Tbl[Console_Port_Minor].pDeviceFns->

@@ -11,7 +11,7 @@
  *
  *  $Id$
  */
-  
+
 #include <bsp.h>
 #include <bsp/irq.h>
 
@@ -29,7 +29,7 @@ volatile rtems_i8259_masks i8259s_cache = 0xfffb;
 |      Description: Mask IRQ line in appropriate PIC chip.
 | Global Variables: i8259s_cache
 |        Arguments: vector_offset - number of IRQ line to mask.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 int BSP_irq_disable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
 {
@@ -40,12 +40,12 @@ int BSP_irq_disable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
        ((int)irqLine > BSP_ISA_IRQ_MAX_OFFSET)
        )
     return 1;
-  
+
   _CPU_ISR_Disable(level);
-  
+
   mask = 1 << irqLine;
   i8259s_cache |= mask;
-  
+
   if (irqLine < 8)
   {
     outport_byte(PIC_MASTER_IMR_IO_PORT, i8259s_cache & 0xff);
@@ -57,14 +57,14 @@ int BSP_irq_disable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
   _CPU_ISR_Enable (level);
 
   return 0;
-} 
+}
 
 /*-------------------------------------------------------------------------+
 |         Function:  BSP_irq_enable_at_i8259s
 |      Description: Unmask IRQ line in appropriate PIC chip.
 | Global Variables: i8259s_cache
 |        Arguments: irqLine - number of IRQ line to mask.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 int BSP_irq_enable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
 {
@@ -77,10 +77,10 @@ int BSP_irq_enable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
     return 1;
 
   _CPU_ISR_Disable(level);
-  
+
   mask = ~(1 << irqLine);
   i8259s_cache &= mask;
-  
+
   if (irqLine < 8)
   {
     outport_byte(PIC_MASTER_IMR_IO_PORT, i8259s_cache & 0xff);
@@ -106,14 +106,14 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine)
   mask = (1 << irqLine);
   return  (~(i8259s_cache & mask));
 }
-  
+
 
 /*-------------------------------------------------------------------------+
 |         Function: BSP_irq_ack_at_i8259s
 |      Description: Signal generic End Of Interrupt (EOI) to appropriate PIC.
 | Global Variables: None.
 |        Arguments: irqLine - number of IRQ line to acknowledge.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 int BSP_irq_ack_at_i8259s  	(const rtems_irq_symbolic_name irqLine)
 {
@@ -147,5 +147,5 @@ void BSP_i8259s_init(void)
   outport_byte(PIC_SLAVE_IMR_IO_PORT, 0x02);/* edge triggered, Cascade (slave) on IRQ2 */
   outport_byte(PIC_SLAVE_IMR_IO_PORT, 0x01); /* Select 8086 mode */
   outport_byte(PIC_SLAVE_IMR_IO_PORT, 0xFF); /* Mask all */
-  
+
 }

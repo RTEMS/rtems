@@ -25,7 +25,7 @@
 |
 | **************************************************************************
 | *  COPYRIGHT (c) 1989-1999.
-| *  On-Line Applications Research Corporation (OAR). 
+| *  On-Line Applications Research Corporation (OAR).
 | *
 | *  The license and distribution terms for this file may be
 | *  found in the file LICENSE in this distribution or at
@@ -44,7 +44,7 @@
 #include <rtems/asm.h>
 
 /*----------------------------------------------------------------------------+
-| Size of heap and stack:	
+| Size of heap and stack:
 +----------------------------------------------------------------------------*/
 
 .set STACK_SIZE, 0x1000
@@ -63,7 +63,7 @@ BEGIN_CODE
 	EXTERN (_IBMPC_initVideo)
 	EXTERN (debugPollingGetChar)
 	EXTERN (checkCPUtypeSetCr0)
-	
+
 
 /*
  * In case this crashes on your machine and this is not due
@@ -75,7 +75,7 @@ BEGIN_CODE
 SYM (start):
         /*
          *  When things are really, REALLY!, bad -- turn on the speaker and
-         *  lock up.  This shows whether or not we make it to a certain 
+         *  lock up.  This shows whether or not we make it to a certain
          *  location.
          */
 #if 0
@@ -91,7 +91,7 @@ speakl:	jmp	speakl             # and SPIN!!!
 #ifdef DEBUG_EARLY_START
 	/*
 	 * Must get video attribute to have a working printk.
-	 * Note that the following code assume we already have 
+	 * Note that the following code assume we already have
 	 * valid segments and a stack. It should be true for
 	 * any loader starting RTEMS in protected mode (or
 	 * at least I hope so :	-)).
@@ -105,13 +105,13 @@ speakl:	jmp	speakl             # and SPIN!!!
 	addl	$4, esp
 
 	/* call	debugPollingGetChar */
-	
-#endif	
+
+#endif
 
 /*----------------------------------------------------------------------------+
 | Load the segment registers (this is done by the board's BSP) and perform any
 | other board specific initialization procedures, this piece of code
-| does not know anything about 
+| does not know anything about
 |
 | NOTE: Upon return, gs will contain the segment descriptor for a segment which
 |       maps directly to all of physical memory.
@@ -153,12 +153,12 @@ SYM (zero_bss):
 | So from now we can use printk
 +-------------------------------------------------------------------*/
 	call _IBMPC_initVideo
-		
+
 /*---------------------------------------------------------------------+
 | Check CPU type. Enable Cache and init coprocessor if needed.
 +---------------------------------------------------------------------*/
 	call checkCPUtypeSetCr0
-	
+
 /*---------------------------------------------------------------------+
 | Transfer control to User's Board Support Package
 +---------------------------------------------------------------------*/

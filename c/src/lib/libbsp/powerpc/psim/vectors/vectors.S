@@ -1,6 +1,6 @@
 /*  vectors.s	1.1 - 95/12/04
  *
- *  This file contains the assembly code for the PowerPC 
+ *  This file contains the assembly code for the PowerPC
  *  interrupt vectors for RTEMS.
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -55,29 +55,29 @@
 	.set	IP_4, (IP_3 + 4)
 	.set	IP_5, (IP_4 + 4)
 	.set	IP_6, (IP_5 + 4)
-	
+
 	.set	IP_7, (IP_6 + 4)
 	.set	IP_8, (IP_7 + 4)
 	.set	IP_9, (IP_8 + 4)
 	.set	IP_10, (IP_9 + 4)
-	
+
 	.set	IP_11, (IP_10 + 4)
 	.set	IP_12, (IP_11 + 4)
 	.set	IP_13, (IP_12 + 4)
 	.set	IP_28, (IP_13 + 4)
-	
+
 	.set	IP_29, (IP_28 + 4)
 	.set	IP_30, (IP_29 + 4)
 	.set	IP_31, (IP_30 + 4)
 	.set	IP_CR, (IP_31 + 4)
-	
+
 	.set	IP_CTR, (IP_CR + 4)
 	.set	IP_XER, (IP_CTR + 4)
 	.set	IP_LR, (IP_XER + 4)
 	.set	IP_PC, (IP_LR + 4)
-	
+
 	.set	IP_MSR, (IP_PC + 4)
-	
+
 	.set	IP_END, (IP_MSR + 16)
 
 	/* Vector offsets			 */
@@ -104,7 +104,7 @@
 
 	PUBLIC_VAR (__vectors)
 SYM (__vectors):
-	
+
 /* Decrementer interrupt */
 	.org	dec_vector - file_base
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)

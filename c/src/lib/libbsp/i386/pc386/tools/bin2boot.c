@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
   unsigned long headerAddr, addr1, addr2;
   int      size1, size2, len1, len2, len, imageCnt, cnt;
   char     *ofile, *ifile, *end;
-  
+
   verbose = 0;
 
   /* parse command line options */
@@ -60,13 +60,13 @@ int main(int argc, char* argv[])
 	  return 1;
 	}
     }
-  
+
   if((argc - optind) != 8 && (argc - optind) != 5)
     {
       usage();
       return 1;
     }
-  
+
   ofile = argv[optind];
   ofp   = fopen(ofile, "wb");
   if(ofp == NULL)
@@ -74,15 +74,15 @@ int main(int argc, char* argv[])
       fprintf(stderr, "unable to open file %s\n", ofile);
       return 1;
     }
-  
-  /* 
-   * Layout is very simple first 512 is header shared by all 
+
+  /*
+   * Layout is very simple first 512 is header shared by all
    * images, then images at 512 bytes border
    */
-  
+
   /* Fill buffer with 0's */
   memset(buf, 0, sizeof(buf));
-  
+
   fwrite(buf, 1, sizeof(buf), ofp);
 
   optind++;
@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
       fclose(ofp);
       return 1;
     }
-  
+
   /* Copy the first image */
   optind++;
   ifile = argv[optind];
@@ -183,7 +183,7 @@ int main(int argc, char* argv[])
     {
       /* Areas overlapped */
       printf("area overlapping: \n");
-      printf("header address      0x%08lx, its memory size 0x%08x\n", 
+      printf("header address      0x%08lx, its memory size 0x%08x\n",
 	     headerAddr, sizeof(buf));
       printf("first image address 0x%08lx, its memory size 0x%08x\n",
 	     addr1, size1);
@@ -198,7 +198,7 @@ int main(int argc, char* argv[])
       fclose(ofp);
       return 1;
     }
-      
+
 
   if(optind == (argc - 1))
     {
@@ -242,12 +242,12 @@ int main(int argc, char* argv[])
   for(;;)
     {
       len = fread(buf, 1, sizeof(buf), ifp);
-      
+
       if(len != 0)
 	{
 	  fwrite(buf, len, 1, ofp);
 	  cnt  += sizeof(buf);
-	 
+
 	  if(len != sizeof(buf))
 	    {
 	      memset(buf, 0, sizeof(buf) - len);
@@ -287,13 +287,13 @@ int main(int argc, char* argv[])
        (addr2 < addr1 && addr2 < headerAddr) ||
        (addr1 > headerAddr && addr2 > (headerAddr + sizeof(buf)) &&
 	(addr2 + size2) <= addr1) ||
-       (addr1 < headerAddr && addr2 > (addr1 + size1) && 
+       (addr1 < headerAddr && addr2 > (addr1 + size1) &&
 	(addr2 + size2) <= headerAddr)))
-     
+
     {
       /* Areas overlapped */
       printf("area overlapping: \n");
-      printf("header address       0x%08lx, its memory size 0x%08x\n", 
+      printf("header address       0x%08lx, its memory size 0x%08x\n",
 	     headerAddr, sizeof(buf));
       printf("first  image address 0x%08lx, its memory size 0x%08x\n",
 	     addr1, size1);
@@ -322,8 +322,8 @@ writeHeader:
   buf[0xa]  = (headerAddr >> 4) & 0xff;
   buf[0xb]  = (headerAddr >> 12) & 0xff;
 
-  /* 
-   * Execute address in cs:ip format, which addr1 
+  /*
+   * Execute address in cs:ip format, which addr1
    */
   buf[0xc] = addr1 & 0xf;
   buf[0xd] = 0;
@@ -361,7 +361,7 @@ writeHeader:
 
       /* Flags, tags and lengths */
       buf[0x20] = 4;
-      
+
       buf[0x23] = 4;
 
 
@@ -370,13 +370,13 @@ writeHeader:
       buf[0x25] = (addr2 >> 8) & 0xff;
       buf[0x26] = (addr2 >> 16) & 0xff;
       buf[0x27] = (addr2 >> 24) & 0xff;
-      
+
       /* Image Length */
       buf[0x28] = len2 & 0xff;
       buf[0x29] = (len2 >> 8) & 0xff;
       buf[0x2a] = (len2 >> 16) & 0xff;
       buf[0x2b] = (len2 >> 24) & 0xff;
-      
+
       /* Memory Size */
       buf[0x2c] = size2 & 0xff;
       buf[0x2d] = (size2 >> 8) & 0xff;
@@ -392,7 +392,7 @@ writeHeader:
 
   if(verbose)
     {
-      printf("header address       0x%08lx, its memory size 0x%08x\n", 
+      printf("header address       0x%08lx, its memory size 0x%08x\n",
 	     headerAddr, sizeof(buf));
       printf("first  image address 0x%08lx, its memory size 0x%08x\n",
 	     addr1, size1);

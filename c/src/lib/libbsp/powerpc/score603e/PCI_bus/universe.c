@@ -97,9 +97,9 @@ typedef struct {
   uint32_t         V6_STATID;              /* 0x80030338 */
   uint32_t         V7_STATID;              /* 0x8003033C */
   uint32_t         Buf_0x80030340[ 0x30 ]; /* 0x80030340 */
-  uint32_t         MAST_CTL;               /* 0x80030400 */ 
-  uint32_t         MISC_CTL;               /* 0x80030404 */ 
-  uint32_t         MISC_STAT;              /* 0x80030408 */ 
+  uint32_t         MAST_CTL;               /* 0x80030400 */
+  uint32_t         MISC_CTL;               /* 0x80030404 */
+  uint32_t         MISC_STAT;              /* 0x80030408 */
   uint32_t         USER_AM;                /* 0x8003040C */
   uint32_t         Buf_0x80030410[ 0x2bc ];/* 0x80030410 */
   uint32_t         VSI0_CTL;               /* 0x80030F00 */
@@ -135,7 +135,7 @@ typedef struct {
   uint32_t         VCSR_BS;                /* 0x80030FFC */
 } Universe_Memory;
 
-volatile Universe_Memory *UNIVERSE = 
+volatile Universe_Memory *UNIVERSE =
                          (volatile Universe_Memory *)SCORE603E_UNIVERSE_BASE;
 
 
@@ -160,21 +160,21 @@ void initialize_universe()
 #if (SCORE603E_USE_SDS) | (SCORE603E_USE_OPEN_FIRMWARE) | (SCORE603E_USE_NONE)
   volatile uint32_t         universe_temp_value;
 #endif
- 
+
   /*
    * Read the VME jumper location to determine the VME base address
    */
-  jumper_selection = PCI_bus_read( 
+  jumper_selection = PCI_bus_read(
                      (volatile uint32_t*)SCORE603E_VME_JUMPER_ADDR );
   jumper_selection = (jumper_selection >> 3) & 0x1f;
 
   /*
-   * Verify the UNIVERSE CHIP ID 
+   * Verify the UNIVERSE CHIP ID
    */
    pci_id = Read_pci_device_register( SCORE603E_IO_VME_UNIVERSE_BASE );
 
-   /* 
-    * compare to known ID 
+   /*
+    * compare to known ID
     */
    if (pci_id !=  SCORE603E_UNIVERSE_CHIP_ID ){
      DEBUG_puts ("Invalid SCORE603E_UNIVERSE_CHIP_ID: ");
@@ -197,14 +197,14 @@ void initialize_universe()
     */
    Write_pci_device_register( SCORE603E_IO_VME_UNIVERSE_BASE+0x4, 0x2800007 );
 
-   /* 
+   /*
     * Turn off the sysfail by setting SYSFAIL bit to 1 on the VCSR_CLR register
     */
-   PCI_bus_write( &UNIVERSE->VCSR_CLR, 0x40000000 );   
+   PCI_bus_write( &UNIVERSE->VCSR_CLR, 0x40000000 );
 
    /*
     * Set the VMEbus Master Control register with retry forever, 256 bytes
-    * posted write transfer count, VMEbus request level 3, RWD, PCI 32 bytes 
+    * posted write transfer count, VMEbus request level 3, RWD, PCI 32 bytes
     * aligned burst size and PCI bus number to be zero
     */
    PCI_bus_write( &UNIVERSE->MAST_CTL, 0x01C00000 );
@@ -213,17 +213,17 @@ void initialize_universe()
     * VMEbus DMA Transfer Control register with 32 bit VMEbus Maximum Data
     * width, A32 VMEbus Address Space, AM code to be data, none-privilleged,
     * single and BLT cycles on VME bus and 64-bit PCI Bus Transactions enable
-    PCI_bus_write( &UNIVERSE->DCTL, 0x00820180 );   
+    PCI_bus_write( &UNIVERSE->DCTL, 0x00820180 );
     */
-   
+
    PCI_bus_write( &UNIVERSE->LSI0_CTL, 0x80700040 );
    PCI_bus_write( &UNIVERSE->LSI0_BS,  0x04000000 );
    PCI_bus_write( &UNIVERSE->LSI0_BD,  0x05000000 );
    PCI_bus_write( &UNIVERSE->LSI0_TO,  0x7C000000 );
 
-   /* 
+   /*
     * Remove the Universe from VMEbus BI-Mode (bus-isolation).  Once out of
-    * BI-Mode VMEbus accesses can be made. 
+    * BI-Mode VMEbus accesses can be made.
     */
 
    universe_temp_value = PCI_bus_read( &UNIVERSE->MISC_CTL );
@@ -232,7 +232,7 @@ void initialize_universe()
      PCI_bus_write( &UNIVERSE->MISC_CTL,(universe_temp_value | ~0xFF0FFFFF));
 
 #elif (SCORE603E_USE_DINK)
-   /* 
+   /*
     * Do not modify the DINK setup of the universe chip.
     */
 
@@ -249,22 +249,22 @@ void initialize_universe()
  *       Slave Image 0 registers.
  */
 void set_vme_base_address (
-  uint32_t         base_address 
+  uint32_t         base_address
 )
-{  
+{
   volatile uint32_t         temp;
 
   /*
    * Calculate the current size of the Slave VME image 0
    */
-  temp = ( PCI_bus_read( &UNIVERSE->VSI0_BD) & 0xFFFFF000) - 
+  temp = ( PCI_bus_read( &UNIVERSE->VSI0_BD) & 0xFFFFF000) -
           ( PCI_bus_read( &UNIVERSE->VSI0_BS) & 0xFFFFF000);
 
   /*
-   * Set the VMEbus Slave Image 0 Base Address to be 
+   * Set the VMEbus Slave Image 0 Base Address to be
    * the specifed base address on VSI0_BS register.
    */
-   PCI_bus_write( &UNIVERSE->VSI0_BS, (base_address & 0xFFFFF000) );   
+   PCI_bus_write( &UNIVERSE->VSI0_BS, (base_address & 0xFFFFF000) );
 
   /*
    * Update the VMEbus Slave Image 0 Bound Address.
@@ -282,7 +282,7 @@ void set_vme_base_address (
  * Gets the VME base address
  */
 uint32_t         get_vme_base_address ()
-{  
+{
   volatile uint32_t         temp;
 
   temp = PCI_bus_read( &UNIVERSE->VSI0_BS );
@@ -304,15 +304,15 @@ uint32_t         get_vme_slave_size()
  * Note: The maximum size is up to 24 M bytes. (00000000 - 017FFFFF)
  */
 void set_vme_slave_size (uint32_t         size)
-{  
+{
   volatile uint32_t         temp;
 
-  if (size<0) 
+  if (size<0)
     size = 0;
-  
-  if (size > 0x17FFFFF) 
+
+  if (size > 0x17FFFFF)
     size = 0x17FFFFF;
-   
+
   /*
    * Read the VME slave image base address
    */

@@ -10,7 +10,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: 
+ *  $Id:
  */
 #ifndef __PCI_h
 #define __PCI_h
@@ -20,12 +20,12 @@
  */
 
 void PCI_bus_write(
-  volatile uint32_t         * _addr, 
-  uint32_t         _data 
-); 
+  volatile uint32_t         * _addr,
+  uint32_t         _data
+);
 
 uint32_t         PCI_bus_read(
-  volatile uint32_t         *  _addr 
+  volatile uint32_t         *  _addr
 );
 
 uint32_t         Read_pci_device_register(
@@ -34,7 +34,7 @@ uint32_t         Read_pci_device_register(
 
 void  Write_pci_device_register(
   uint32_t         address,
-  uint32_t         data 
+  uint32_t         data
 );
 
 #endif

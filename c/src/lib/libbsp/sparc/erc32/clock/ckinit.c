@@ -15,10 +15,10 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
+ *  Research Corporation (OAR) under contract to the European Space
  *  Agency (ESA).
  *
- *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
  *
  *  $Id$
@@ -53,11 +53,11 @@ extern uint32_t         CPU_SPARC_CLICKS_PER_TICK;
 rtems_isr_entry  Old_ticker;
 
 void Clock_exit( void );
- 
+
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
@@ -88,7 +88,7 @@ rtems_isr Clock_isr(
 #if SIMSPARC_FAST_IDLE
   ERC32_MEC.Real_Time_Clock_Counter = CPU_SPARC_CLICKS_PER_TICK;
   ERC32_MEC_Set_Real_Time_Clock_Timer_Control(
-    ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING | 
+    ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING |
       ERC32_MEC_TIMER_COUNTER_LOAD_COUNTER
   );
 #endif
@@ -135,14 +135,14 @@ void Install_clock(
   ERC32_MEC.Real_Time_Clock_Counter = CPU_SPARC_CLICKS_PER_TICK;
 
   ERC32_MEC_Set_Real_Time_Clock_Timer_Control(
-    ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING | 
-      ERC32_MEC_TIMER_COUNTER_LOAD_SCALER | 
-      ERC32_MEC_TIMER_COUNTER_LOAD_COUNTER 
+    ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING |
+      ERC32_MEC_TIMER_COUNTER_LOAD_SCALER |
+      ERC32_MEC_TIMER_COUNTER_LOAD_COUNTER
   );
- 
+
   ERC32_MEC_Set_Real_Time_Clock_Timer_Control(
     ERC32_MEC_TIMER_COUNTER_ENABLE_COUNTING |
-      ERC32_MEC_TIMER_COUNTER_RELOAD_AT_ZERO 
+      ERC32_MEC_TIMER_COUNTER_RELOAD_AT_ZERO
   );
 
   atexit( Clock_exit );
@@ -167,12 +167,12 @@ void Clock_exit( void )
   ERC32_Mask_interrupt( ERC32_INTERRUPT_REAL_TIME_CLOCK );
 
   ERC32_MEC_Set_Real_Time_Clock_Timer_Control(
-    ERC32_MEC_TIMER_COUNTER_DISABLE_COUNTING 
+    ERC32_MEC_TIMER_COUNTER_DISABLE_COUNTING
   );
 
   /* do not restore old vector */
 }
- 
+
 /*
  *  Clock_initialize
  *
@@ -196,17 +196,17 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
- 
+
   /*
    * make major/minor avail to others such as shared memory driver
    */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 }
- 
+
 /*
  *  Clock_control
  *
@@ -231,15 +231,15 @@ rtems_device_driver Clock_control(
 {
     uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
- 
+
     if (args == 0)
         goto done;
- 
+
     /*
      * This is hokey, but until we get a defined interface
      * to do this, it will just be this simple...
      */
- 
+
     if (args->command == rtems_build_name('I', 'S', 'R', ' '))
     {
         Clock_isr(CLOCK_VECTOR);
@@ -250,7 +250,7 @@ rtems_device_driver Clock_control(
        (void) set_vector( args->buffer, CLOCK_VECTOR, 1 );
       rtems_interrupt_enable( isrlevel );
     }
- 
+
 done:
     return RTEMS_SUCCESSFUL;
 }

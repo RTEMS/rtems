@@ -15,33 +15,33 @@
 
 #define __asm__
 #include  <registers.h>
-		
-/* 
- * Function to obtain, execute an IT handler and acknowledge the IT 
+
+/*
+ * Function to obtain, execute an IT handler and acknowledge the IT
  */
 
 	.globl ExecuteITHandler
-	
-ExecuteITHandler :	
+
+ExecuteITHandler :
 
   /*
-   * Here is the code to execute the appropriate INT handler 
+   * Here is the code to execute the appropriate INT handler
    */
-	
+
 	mov pc, r0
 
-#if 0	
-/* 
- * Function to acknowledge the IT controller 
+#if 0
+/*
+ * Function to acknowledge the IT controller
  */
 	.globl AckControler
-	
-AckControler:	  
+
+AckControler:
 
   /*
    * Here is the code to acknowledge the PIC
    */
-	
+
   b	ReturnFromAck		/* return to ISR handler */
 
 #endif

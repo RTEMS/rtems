@@ -31,7 +31,7 @@
  * The CRC's are computed with x**16+x**12+x**5 + 1 polynomial
  * The clock is kept in 24 hour BCD mode and should be set to UT(GMT)
  */
- 
+
 typedef struct _MK48T18_CMOS_MAP {
     uint8_t   SystemDependentArea2[8];
     uint8_t   FeatureByte0[1];

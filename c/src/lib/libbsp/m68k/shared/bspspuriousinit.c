@@ -1,7 +1,7 @@
 /*
  *  CXX Spurious Trap Handler Install Routine
  *
- *  This is just enough of a trap handler to let us know what 
+ *  This is just enough of a trap handler to let us know what
  *  the likely source of the trap was.
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -20,7 +20,7 @@
 /*
  *  bsp_spurious_initialize
  *
- *  Install the spurious handler for most vectors. 
+ *  Install the spurious handler for most vectors.
  */
 
 rtems_isr bsp_spurious_handler(

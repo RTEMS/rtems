@@ -56,7 +56,7 @@ rtems_isr __gnat_interrupt_handler
 }
 
 /*
- * Default signal handler with error reporting 
+ * Default signal handler with error reporting
  */
 
 void
@@ -98,7 +98,7 @@ __gnat_install_handler_common (int t1, int t2)
          *  Skip window overflow, underflow, and flush as well as software
          *  trap 0 which we will use as a shutdown. Also avoid trap 0x70 - 0x7f
          *  which cannot happen and where some of the space is used to pass
-         *  paramaters to the program.  0x80 for system traps and 
+         *  paramaters to the program.  0x80 for system traps and
 	 *  0x81 - 0x83 by the remote debugging stub.
 	 *  Avoid two bsp specific interrupts which normally are used
 	 *  by the real-time clock and UART B.

@@ -1,4 +1,4 @@
-/* 
+/*
  *  This file implements a stub benchmark timer that is sufficient to
  *  satisfy linking the RTEMS Benchmarks.
  *

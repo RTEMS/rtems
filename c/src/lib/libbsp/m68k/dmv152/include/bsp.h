@@ -46,7 +46,7 @@ extern "C" {
 
 #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
 /* #define CONFIGURE_INTERRUPT_STACK_MEMORY  (TBD * 1024) */
-  
+
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
  *  Long test and short test duration limits are provided.  These
@@ -165,7 +165,7 @@ extern m68k_isr_entry M68Kvec[];   /* vector table address */
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */

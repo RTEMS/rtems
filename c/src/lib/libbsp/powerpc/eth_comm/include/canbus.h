@@ -11,7 +11,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: 
+ *  $Id:
  */
 
 #ifndef __CANBUS_H_
@@ -102,8 +102,8 @@ typedef struct i82527_t_ {
 #define I82527_DCR0             (1)
 #define I82527_BTR1_SPL         (1<<7)
 #define I82527_MSG_CTRL_MSGVAL     (2<<6)
-#define I82527_MSG_CTRL_MSGVAL_NC  (3<<6) 
-#define I82527_MSG_CTRL_MSGVAL_SET (2<<6) 
+#define I82527_MSG_CTRL_MSGVAL_NC  (3<<6)
+#define I82527_MSG_CTRL_MSGVAL_SET (2<<6)
 #define I82527_MSG_CTRL_MSGVAL_CLR (1<<6)
 #define I82527_MSG_CTRL_TXIE       (2<<4)
 #define I82527_MSG_CTRL_TXIE_NC    (3<<4)
@@ -145,23 +145,23 @@ extern i82527_t canbus1;
 extern i82527_t canbus2;
 
 
-rtems_device_driver canbus_initialize(rtems_device_major_number, 
-				      rtems_device_minor_number, 
+rtems_device_driver canbus_initialize(rtems_device_major_number,
+				      rtems_device_minor_number,
 				      void *);
-rtems_device_driver canbus_open(rtems_device_major_number, 
-				rtems_device_minor_number, 
+rtems_device_driver canbus_open(rtems_device_major_number,
+				rtems_device_minor_number,
 				void *);
-rtems_device_driver canbus_close(rtems_device_major_number, 
-				 rtems_device_minor_number, 
+rtems_device_driver canbus_close(rtems_device_major_number,
+				 rtems_device_minor_number,
 				 void *);
-rtems_device_driver canbus_read(rtems_device_major_number, 
-				rtems_device_minor_number, 
+rtems_device_driver canbus_read(rtems_device_major_number,
+				rtems_device_minor_number,
 				void *);
-rtems_device_driver canbus_write(rtems_device_major_number, 
-				 rtems_device_minor_number, 
+rtems_device_driver canbus_write(rtems_device_major_number,
+				 rtems_device_minor_number,
 				 void *);
-rtems_device_driver canbus_control(rtems_device_major_number, 
-				   rtems_device_minor_number, 
+rtems_device_driver canbus_control(rtems_device_major_number,
+				   rtems_device_minor_number,
 				   void *);
 
 

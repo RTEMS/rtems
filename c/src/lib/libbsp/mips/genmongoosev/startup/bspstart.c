@@ -91,7 +91,7 @@ void bsp_start( void )
    extern int WorkspaceBase;
    extern void mips_install_isr_entries();
    extern void mips_gdb_stub_install(void);
-   
+
    /* Configure Number of Register Caches */
 
    Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
@@ -142,7 +142,7 @@ void bsp_start( void )
    /* mips_set_sr( (SR_CU0 | SR_CU1 | 0xA400) ); */
 
    /* to start up, only enable coprocessor 0 & timer int. per-task
-   ** processor settings will be applied as they are created, this 
+   ** processor settings will be applied as they are created, this
    ** is just to configure the processor for startup
    */
    mips_set_sr( (SR_CU0 | 0x400) );
@@ -166,7 +166,7 @@ void clear_cache( void )
 
 
 /*
- 
+
 //Structure filled in by get_mem_info.
 
 

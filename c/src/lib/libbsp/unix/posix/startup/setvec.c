@@ -40,5 +40,5 @@ set_vector(                                     /* returns old vector */
       _CPU_ISR_install_vector( vector, (proc_ptr) handler, &raw_isr_ptr );
       return raw_isr_ptr;
     }
-   
+
 }

@@ -54,9 +54,9 @@ void Timer_initialize()
     #define TMR_AUTO_RELOAD 4
     #define TMR_ENABLE 2
     #define TMR_TERM_CNT_STAT 1
-  
-    *tmr1 = BUS_CLOCK_1 | TMR_AUTO_RELOAD; 
-     *icon = 0x6000; 
+
+    *tmr1 = BUS_CLOCK_1 | TMR_AUTO_RELOAD;
+     *icon = 0x6000;
 
 
     set_vector( (((unsigned int) timerisr) | 0x2), TIMER_VECTOR, 1 );
@@ -64,13 +64,13 @@ void Timer_initialize()
     *imap2 = (*imap2 & 0xff0fffff) | (((TIMER_VECTOR >> 4) & 0xf) << 20);
 
     /* initialize the i960RP timer 1 here */
-    
+
     /* set the timer countdown */
     *trr1 = 33 * BSP_Configuration.microseconds_per_tick;
     *tcr1 = 33 * BSP_Configuration.microseconds_per_tick;
-  
+
     *ipnd &= ~(1<<13);
-    *imsk |= (1 << 13); 
+    *imsk |= (1 << 13);
     Ttimer_val = 0;
     *tmr1 = BUS_CLOCK_1 | TMR_AUTO_RELOAD | TMR_ENABLE;
 

@@ -1,21 +1,21 @@
-/*  
+/*
  *  $Id$
  *
  *  Re-written the gen68302 start-up code.
- *  
+ *
  *  Uses gas syntax only, removed the OAR asm.h.
- *  
+ *
  *  Supplies a complete vector table in ROM.
- *  
+ *
  *  Manages all vectors with seperate handlers to trap unhandled
  *  execptions.
- *  
- *  Uses the target specific header file to get the runtime 
+ *
+ *  Uses the target specific header file to get the runtime
  *  configuration
- *  
+ *
  *  COPYRIGHT (c) 1996
  *  Objective Design Systems Pty Ltd (ODS)
- *        
+ *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -36,16 +36,16 @@
         .sect   .resettext
 
         .global M68Kvec                 | Vector Table
-        
+
 M68Kvec:                                | standard location for vectors
-        
+
 |
 | Make relative, can have the code positioned any where
 |
 
 V___ISSP: .long  MC68302_BASE + MC68302_SYS_RAM_SIZE
 V____IPC: .long  start - V___ISSP
-        
+
 |
 | Create the rest of the vector table to point to the unhandled expection
 | handler
@@ -64,7 +64,7 @@ MAKE_EXCEPTION_VECTOR(6)
 MAKE_EXCEPTION_VECTOR(7)
 MAKE_EXCEPTION_VECTOR(8)
 MAKE_EXCEPTION_VECTOR(9)
-        
+
 MAKE_EXCEPTION_VECTOR(10)
 MAKE_EXCEPTION_VECTOR(11)
 MAKE_EXCEPTION_VECTOR(12)
@@ -86,7 +86,7 @@ MAKE_EXCEPTION_VECTOR(26)
 MAKE_EXCEPTION_VECTOR(27)
 MAKE_EXCEPTION_VECTOR(28)
 MAKE_EXCEPTION_VECTOR(29)
-        
+
 MAKE_EXCEPTION_VECTOR(30)
 MAKE_EXCEPTION_VECTOR(31)
 MAKE_EXCEPTION_VECTOR(32)
@@ -97,7 +97,7 @@ MAKE_EXCEPTION_VECTOR(36)
 MAKE_EXCEPTION_VECTOR(37)
 MAKE_EXCEPTION_VECTOR(38)
 MAKE_EXCEPTION_VECTOR(39)
-        
+
 MAKE_EXCEPTION_VECTOR(40)
 MAKE_EXCEPTION_VECTOR(41)
 MAKE_EXCEPTION_VECTOR(42)
@@ -108,7 +108,7 @@ MAKE_EXCEPTION_VECTOR(46)
 MAKE_EXCEPTION_VECTOR(47)
 MAKE_EXCEPTION_VECTOR(48)
 MAKE_EXCEPTION_VECTOR(49)
-        
+
 MAKE_EXCEPTION_VECTOR(50)
 MAKE_EXCEPTION_VECTOR(51)
 MAKE_EXCEPTION_VECTOR(52)
@@ -119,7 +119,7 @@ MAKE_EXCEPTION_VECTOR(56)
 MAKE_EXCEPTION_VECTOR(57)
 MAKE_EXCEPTION_VECTOR(58)
 MAKE_EXCEPTION_VECTOR(59)
-        
+
 MAKE_EXCEPTION_VECTOR(60)
 MAKE_EXCEPTION_VECTOR(61)
 MAKE_EXCEPTION_VECTOR(62)
@@ -130,7 +130,7 @@ MAKE_EXCEPTION_VECTOR(66)
 MAKE_EXCEPTION_VECTOR(67)
 MAKE_EXCEPTION_VECTOR(68)
 MAKE_EXCEPTION_VECTOR(69)
-        
+
 MAKE_EXCEPTION_VECTOR(70)
 MAKE_EXCEPTION_VECTOR(71)
 MAKE_EXCEPTION_VECTOR(72)
@@ -141,7 +141,7 @@ MAKE_EXCEPTION_VECTOR(76)
 MAKE_EXCEPTION_VECTOR(77)
 MAKE_EXCEPTION_VECTOR(78)
 MAKE_EXCEPTION_VECTOR(79)
-        
+
 MAKE_EXCEPTION_VECTOR(80)
 MAKE_EXCEPTION_VECTOR(81)
 MAKE_EXCEPTION_VECTOR(82)
@@ -152,7 +152,7 @@ MAKE_EXCEPTION_VECTOR(86)
 MAKE_EXCEPTION_VECTOR(87)
 MAKE_EXCEPTION_VECTOR(88)
 MAKE_EXCEPTION_VECTOR(89)
-        
+
 MAKE_EXCEPTION_VECTOR(90)
 MAKE_EXCEPTION_VECTOR(91)
 MAKE_EXCEPTION_VECTOR(92)
@@ -163,7 +163,7 @@ MAKE_EXCEPTION_VECTOR(96)
 MAKE_EXCEPTION_VECTOR(97)
 MAKE_EXCEPTION_VECTOR(98)
 MAKE_EXCEPTION_VECTOR(99)
-        
+
 MAKE_EXCEPTION_VECTOR(100)
 MAKE_EXCEPTION_VECTOR(101)
 MAKE_EXCEPTION_VECTOR(102)
@@ -174,7 +174,7 @@ MAKE_EXCEPTION_VECTOR(106)
 MAKE_EXCEPTION_VECTOR(107)
 MAKE_EXCEPTION_VECTOR(108)
 MAKE_EXCEPTION_VECTOR(109)
-        
+
 MAKE_EXCEPTION_VECTOR(110)
 MAKE_EXCEPTION_VECTOR(111)
 MAKE_EXCEPTION_VECTOR(112)
@@ -196,7 +196,7 @@ MAKE_EXCEPTION_VECTOR(126)
 MAKE_EXCEPTION_VECTOR(127)
 MAKE_EXCEPTION_VECTOR(128)
 MAKE_EXCEPTION_VECTOR(129)
-        
+
 MAKE_EXCEPTION_VECTOR(130)
 MAKE_EXCEPTION_VECTOR(131)
 MAKE_EXCEPTION_VECTOR(132)
@@ -207,7 +207,7 @@ MAKE_EXCEPTION_VECTOR(136)
 MAKE_EXCEPTION_VECTOR(137)
 MAKE_EXCEPTION_VECTOR(138)
 MAKE_EXCEPTION_VECTOR(139)
-                       
+
 MAKE_EXCEPTION_VECTOR(140)
 MAKE_EXCEPTION_VECTOR(141)
 MAKE_EXCEPTION_VECTOR(142)
@@ -218,7 +218,7 @@ MAKE_EXCEPTION_VECTOR(146)
 MAKE_EXCEPTION_VECTOR(147)
 MAKE_EXCEPTION_VECTOR(148)
 MAKE_EXCEPTION_VECTOR(149)
-        
+
 MAKE_EXCEPTION_VECTOR(150)
 MAKE_EXCEPTION_VECTOR(151)
 MAKE_EXCEPTION_VECTOR(152)
@@ -229,7 +229,7 @@ MAKE_EXCEPTION_VECTOR(156)
 MAKE_EXCEPTION_VECTOR(157)
 MAKE_EXCEPTION_VECTOR(158)
 MAKE_EXCEPTION_VECTOR(159)
-                       
+
 MAKE_EXCEPTION_VECTOR(160)
 MAKE_EXCEPTION_VECTOR(161)
 MAKE_EXCEPTION_VECTOR(162)
@@ -240,7 +240,7 @@ MAKE_EXCEPTION_VECTOR(166)
 MAKE_EXCEPTION_VECTOR(167)
 MAKE_EXCEPTION_VECTOR(168)
 MAKE_EXCEPTION_VECTOR(169)
-        
+
 MAKE_EXCEPTION_VECTOR(170)
 MAKE_EXCEPTION_VECTOR(171)
 MAKE_EXCEPTION_VECTOR(172)
@@ -251,7 +251,7 @@ MAKE_EXCEPTION_VECTOR(176)
 MAKE_EXCEPTION_VECTOR(177)
 MAKE_EXCEPTION_VECTOR(178)
 MAKE_EXCEPTION_VECTOR(179)
-                       
+
 MAKE_EXCEPTION_VECTOR(180)
 MAKE_EXCEPTION_VECTOR(181)
 MAKE_EXCEPTION_VECTOR(182)
@@ -262,7 +262,7 @@ MAKE_EXCEPTION_VECTOR(186)
 MAKE_EXCEPTION_VECTOR(187)
 MAKE_EXCEPTION_VECTOR(188)
 MAKE_EXCEPTION_VECTOR(189)
-        
+
 MAKE_EXCEPTION_VECTOR(190)
 MAKE_EXCEPTION_VECTOR(191)
 MAKE_EXCEPTION_VECTOR(192)
@@ -273,7 +273,7 @@ MAKE_EXCEPTION_VECTOR(196)
 MAKE_EXCEPTION_VECTOR(197)
 MAKE_EXCEPTION_VECTOR(198)
 MAKE_EXCEPTION_VECTOR(199)
-        
+
 MAKE_EXCEPTION_VECTOR(200)
 MAKE_EXCEPTION_VECTOR(201)
 MAKE_EXCEPTION_VECTOR(202)
@@ -284,7 +284,7 @@ MAKE_EXCEPTION_VECTOR(206)
 MAKE_EXCEPTION_VECTOR(207)
 MAKE_EXCEPTION_VECTOR(208)
 MAKE_EXCEPTION_VECTOR(209)
-                      
+
 MAKE_EXCEPTION_VECTOR(210)
 MAKE_EXCEPTION_VECTOR(211)
 MAKE_EXCEPTION_VECTOR(212)
@@ -295,7 +295,7 @@ MAKE_EXCEPTION_VECTOR(216)
 MAKE_EXCEPTION_VECTOR(217)
 MAKE_EXCEPTION_VECTOR(218)
 MAKE_EXCEPTION_VECTOR(219)
-                      
+
 MAKE_EXCEPTION_VECTOR(220)
 MAKE_EXCEPTION_VECTOR(221)
 MAKE_EXCEPTION_VECTOR(222)
@@ -306,7 +306,7 @@ MAKE_EXCEPTION_VECTOR(226)
 MAKE_EXCEPTION_VECTOR(227)
 MAKE_EXCEPTION_VECTOR(228)
 MAKE_EXCEPTION_VECTOR(229)
-                      
+
 MAKE_EXCEPTION_VECTOR(230)
 MAKE_EXCEPTION_VECTOR(231)
 MAKE_EXCEPTION_VECTOR(232)
@@ -317,7 +317,7 @@ MAKE_EXCEPTION_VECTOR(236)
 MAKE_EXCEPTION_VECTOR(237)
 MAKE_EXCEPTION_VECTOR(238)
 MAKE_EXCEPTION_VECTOR(239)
-                      
+
 MAKE_EXCEPTION_VECTOR(240)
 MAKE_EXCEPTION_VECTOR(241)
 MAKE_EXCEPTION_VECTOR(242)
@@ -328,20 +328,20 @@ MAKE_EXCEPTION_VECTOR(246)
 MAKE_EXCEPTION_VECTOR(247)
 MAKE_EXCEPTION_VECTOR(248)
 MAKE_EXCEPTION_VECTOR(249)
-                      
+
 MAKE_EXCEPTION_VECTOR(250)
 MAKE_EXCEPTION_VECTOR(251)
 MAKE_EXCEPTION_VECTOR(252)
 MAKE_EXCEPTION_VECTOR(253)
 MAKE_EXCEPTION_VECTOR(254)
-MAKE_EXCEPTION_VECTOR(255)                                
+MAKE_EXCEPTION_VECTOR(255)
 
 |
 | Start
 |
 | Entered from a hardware reset.
 |
-        
+
         .global start                           | Default entry point for GNU
 start:
 
@@ -368,27 +368,27 @@ start:
         | watch for sign extended maths with the linker on (boot_phase_1-V___ISSP)
         | manage the address with code, limited address of 2K at reset for CS0
         |
-        
+
         move.l  #boot_phase_1,%d0
         and.l   #0x1FFF,%d0
         move.l  %d0,%a0
         jsr     %a0@(0)                         | programs all basic 302 registers
-        
+
         |
         | Map to the 68302 registers
         |
-        
+
         move.l  #MC68302_BASE,%a5
-        
+
         |
         | Make a vector table in RAM
         |
-        
+
         move.l  #RAM_BASE,%a0                   | a0 -> rom vector table
         moveal  #ROM_BASE,%a1                   | d1 -> start of tmp SRAM
-        
+
         move.l  #255,%d0
-        
+
 copy_vec_table:
 
         move.l  (%a0)+,%d1
@@ -397,7 +397,7 @@ copy_vec_table:
         subq.l  #1,%d0
         bne     copy_vec_table
 
-#if defined(SYSTEM_TABLE_ANCHOR_OFFSET)        
+#if defined(SYSTEM_TABLE_ANCHOR_OFFSET)
         |
         | Clear the system table
         |
@@ -405,11 +405,11 @@ copy_vec_table:
         move.l  #SYSTEM_TABLE_ANCHOR_OFFSET,%a0
         move.l  #0,(%a0)
 #endif
-        
+
         |
         | Copy the chip select swap code to DPRAM and run it
         |
-        
+
         move.l  #boot_phase_2,%d0
         and.l   #(ROM_SIZE - 1),%d0
         move.l  %d0,%a0                         | a0 -> remap code
@@ -418,7 +418,7 @@ copy_vec_table:
         move.l  #boot_phase_3,%d0
         and.l   #(ROM_SIZE - 1),%d0
         sub.l   %a0,%d0
-        
+
 copy_remap:
         move.b  (%a0)+,(%a1)+                   | copy
         dbra    %d0,copy_remap
@@ -432,9 +432,9 @@ copy_remap:
         |
         | Map to the 68302 registers
         |
-        
+
         move.l  #MC68302_BASE,%a5
-        
+
         |
         | Copy initialized data area from ROM to RAM
         |
@@ -443,13 +443,13 @@ copy_data:
         moveal  #_etext,%a0                     | find the end of .text
         moveal  #_copy_start,%a1                | find the beginning of .data
         moveal  #_edata,%a2                     | find the end of .data
-        
+
 copy_data_loop:
-        
+
         movel   %a0@+,%a1@+                     | copy the data
         cmpal   %a2,%a1
         jlt     copy_data_loop                  | loop until edata reached
-                                
+
         |
         | zero out uninitialized data area
         |
@@ -458,16 +458,16 @@ zerobss:
         moveal  #_clear_end,%a0                 | find end of .bss
         moveal  #_clear_start,%a1               | find beginning of .bss
         moveq   #0,%d0
-        
+
 zerobss_loop:
-        
+
         movel   %d0,%a1@+                       | to zero out uninitialized
         cmpal   %a0,%a1
         jlt     zerobss_loop                    | loop until _end reached
 
         movel   #stack_end,%d0
         andl    #0xfffffffc,%d0                 | align it on 16 byte boundary
- 
+
         movw    #0x3700,%sr                     | SUPV MODE,INTERRUPTS OFF!!!
         movel   %d0,%a7                         | set master stack pointer
         movel   %d0,%a6                         | set base pointer
@@ -478,17 +478,17 @@ zerobss_loop:
 | Create an unhandled exception jump table. The table has an entry for
 | each vector in the vector table. The entry pushes the vector number onto
 | the stack and then calls a common exception handler using PIC.
-| 
+|
 | The macros are to create the labels and format vectors.
 |
-                               
+
 #define FORMAT_ID(n) (n << 2)
 #define EXPAND(x) x
 #define EXCEPTION_HANDLER(h, n) EH__##n: move.w EXPAND(h) FORMAT_ID(n),-(%sp) ;  \
                                         bra  common_exception_handler
 
 unhandled_exception:
-                
+
 EXCEPTION_HANDLER(#, 0)
 EXCEPTION_HANDLER(#, 1)
 EXCEPTION_HANDLER(#, 2)
@@ -499,7 +499,7 @@ EXCEPTION_HANDLER(#, 6)
 EXCEPTION_HANDLER(#, 7)
 EXCEPTION_HANDLER(#, 8)
 EXCEPTION_HANDLER(#, 9)
-        
+
 EXCEPTION_HANDLER(#, 10)
 EXCEPTION_HANDLER(#, 11)
 EXCEPTION_HANDLER(#, 12)
@@ -521,7 +521,7 @@ EXCEPTION_HANDLER(#, 26)
 EXCEPTION_HANDLER(#, 27)
 EXCEPTION_HANDLER(#, 28)
 EXCEPTION_HANDLER(#, 29)
-        
+
 EXCEPTION_HANDLER(#, 30)
 EXCEPTION_HANDLER(#, 31)
 EXCEPTION_HANDLER(#, 32)
@@ -532,7 +532,7 @@ EXCEPTION_HANDLER(#, 36)
 EXCEPTION_HANDLER(#, 37)
 EXCEPTION_HANDLER(#, 38)
 EXCEPTION_HANDLER(#, 39)
-        
+
 EXCEPTION_HANDLER(#, 40)
 EXCEPTION_HANDLER(#, 41)
 EXCEPTION_HANDLER(#, 42)
@@ -543,7 +543,7 @@ EXCEPTION_HANDLER(#, 46)
 EXCEPTION_HANDLER(#, 47)
 EXCEPTION_HANDLER(#, 48)
 EXCEPTION_HANDLER(#, 49)
-        
+
 EXCEPTION_HANDLER(#, 50)
 EXCEPTION_HANDLER(#, 51)
 EXCEPTION_HANDLER(#, 52)
@@ -554,7 +554,7 @@ EXCEPTION_HANDLER(#, 56)
 EXCEPTION_HANDLER(#, 57)
 EXCEPTION_HANDLER(#, 58)
 EXCEPTION_HANDLER(#, 59)
-        
+
 EXCEPTION_HANDLER(#, 60)
 EXCEPTION_HANDLER(#, 61)
 EXCEPTION_HANDLER(#, 62)
@@ -565,7 +565,7 @@ EXCEPTION_HANDLER(#, 66)
 EXCEPTION_HANDLER(#, 67)
 EXCEPTION_HANDLER(#, 68)
 EXCEPTION_HANDLER(#, 69)
-        
+
 EXCEPTION_HANDLER(#, 70)
 EXCEPTION_HANDLER(#, 71)
 EXCEPTION_HANDLER(#, 72)
@@ -576,7 +576,7 @@ EXCEPTION_HANDLER(#, 76)
 EXCEPTION_HANDLER(#, 77)
 EXCEPTION_HANDLER(#, 78)
 EXCEPTION_HANDLER(#, 79)
-        
+
 EXCEPTION_HANDLER(#, 80)
 EXCEPTION_HANDLER(#, 81)
 EXCEPTION_HANDLER(#, 82)
@@ -587,7 +587,7 @@ EXCEPTION_HANDLER(#, 86)
 EXCEPTION_HANDLER(#, 87)
 EXCEPTION_HANDLER(#, 88)
 EXCEPTION_HANDLER(#, 89)
-        
+
 EXCEPTION_HANDLER(#, 90)
 EXCEPTION_HANDLER(#, 91)
 EXCEPTION_HANDLER(#, 92)
@@ -598,7 +598,7 @@ EXCEPTION_HANDLER(#, 96)
 EXCEPTION_HANDLER(#, 97)
 EXCEPTION_HANDLER(#, 98)
 EXCEPTION_HANDLER(#, 99)
-        
+
 EXCEPTION_HANDLER(#, 100)
 EXCEPTION_HANDLER(#, 101)
 EXCEPTION_HANDLER(#, 102)
@@ -609,7 +609,7 @@ EXCEPTION_HANDLER(#, 106)
 EXCEPTION_HANDLER(#, 107)
 EXCEPTION_HANDLER(#, 108)
 EXCEPTION_HANDLER(#, 109)
-        
+
 EXCEPTION_HANDLER(#, 110)
 EXCEPTION_HANDLER(#, 111)
 EXCEPTION_HANDLER(#, 112)
@@ -631,7 +631,7 @@ EXCEPTION_HANDLER(#, 126)
 EXCEPTION_HANDLER(#, 127)
 EXCEPTION_HANDLER(#, 128)
 EXCEPTION_HANDLER(#, 129)
-        
+
 EXCEPTION_HANDLER(#, 130)
 EXCEPTION_HANDLER(#, 131)
 EXCEPTION_HANDLER(#, 132)
@@ -642,7 +642,7 @@ EXCEPTION_HANDLER(#, 136)
 EXCEPTION_HANDLER(#, 137)
 EXCEPTION_HANDLER(#, 138)
 EXCEPTION_HANDLER(#, 139)
-                       
+
 EXCEPTION_HANDLER(#, 140)
 EXCEPTION_HANDLER(#, 141)
 EXCEPTION_HANDLER(#, 142)
@@ -653,7 +653,7 @@ EXCEPTION_HANDLER(#, 146)
 EXCEPTION_HANDLER(#, 147)
 EXCEPTION_HANDLER(#, 148)
 EXCEPTION_HANDLER(#, 149)
-        
+
 EXCEPTION_HANDLER(#, 150)
 EXCEPTION_HANDLER(#, 151)
 EXCEPTION_HANDLER(#, 152)
@@ -664,7 +664,7 @@ EXCEPTION_HANDLER(#, 156)
 EXCEPTION_HANDLER(#, 157)
 EXCEPTION_HANDLER(#, 158)
 EXCEPTION_HANDLER(#, 159)
-                       
+
 EXCEPTION_HANDLER(#, 160)
 EXCEPTION_HANDLER(#, 161)
 EXCEPTION_HANDLER(#, 162)
@@ -675,7 +675,7 @@ EXCEPTION_HANDLER(#, 166)
 EXCEPTION_HANDLER(#, 167)
 EXCEPTION_HANDLER(#, 168)
 EXCEPTION_HANDLER(#, 169)
-        
+
 EXCEPTION_HANDLER(#, 170)
 EXCEPTION_HANDLER(#, 171)
 EXCEPTION_HANDLER(#, 172)
@@ -686,7 +686,7 @@ EXCEPTION_HANDLER(#, 176)
 EXCEPTION_HANDLER(#, 177)
 EXCEPTION_HANDLER(#, 178)
 EXCEPTION_HANDLER(#, 179)
-                       
+
 EXCEPTION_HANDLER(#, 180)
 EXCEPTION_HANDLER(#, 181)
 EXCEPTION_HANDLER(#, 182)
@@ -697,7 +697,7 @@ EXCEPTION_HANDLER(#, 186)
 EXCEPTION_HANDLER(#, 187)
 EXCEPTION_HANDLER(#, 188)
 EXCEPTION_HANDLER(#, 189)
-        
+
 EXCEPTION_HANDLER(#, 190)
 EXCEPTION_HANDLER(#, 191)
 EXCEPTION_HANDLER(#, 192)
@@ -708,7 +708,7 @@ EXCEPTION_HANDLER(#, 196)
 EXCEPTION_HANDLER(#, 197)
 EXCEPTION_HANDLER(#, 198)
 EXCEPTION_HANDLER(#, 199)
-        
+
 EXCEPTION_HANDLER(#, 200)
 EXCEPTION_HANDLER(#, 201)
 EXCEPTION_HANDLER(#, 202)
@@ -719,7 +719,7 @@ EXCEPTION_HANDLER(#, 206)
 EXCEPTION_HANDLER(#, 207)
 EXCEPTION_HANDLER(#, 208)
 EXCEPTION_HANDLER(#, 209)
-                      
+
 EXCEPTION_HANDLER(#, 210)
 EXCEPTION_HANDLER(#, 211)
 EXCEPTION_HANDLER(#, 212)
@@ -730,7 +730,7 @@ EXCEPTION_HANDLER(#, 216)
 EXCEPTION_HANDLER(#, 217)
 EXCEPTION_HANDLER(#, 218)
 EXCEPTION_HANDLER(#, 219)
-                      
+
 EXCEPTION_HANDLER(#, 220)
 EXCEPTION_HANDLER(#, 221)
 EXCEPTION_HANDLER(#, 222)
@@ -741,7 +741,7 @@ EXCEPTION_HANDLER(#, 226)
 EXCEPTION_HANDLER(#, 227)
 EXCEPTION_HANDLER(#, 228)
 EXCEPTION_HANDLER(#, 229)
-                      
+
 EXCEPTION_HANDLER(#, 230)
 EXCEPTION_HANDLER(#, 231)
 EXCEPTION_HANDLER(#, 232)
@@ -752,7 +752,7 @@ EXCEPTION_HANDLER(#, 236)
 EXCEPTION_HANDLER(#, 237)
 EXCEPTION_HANDLER(#, 238)
 EXCEPTION_HANDLER(#, 239)
-                      
+
 EXCEPTION_HANDLER(#, 240)
 EXCEPTION_HANDLER(#, 241)
 EXCEPTION_HANDLER(#, 242)
@@ -763,15 +763,15 @@ EXCEPTION_HANDLER(#, 246)
 EXCEPTION_HANDLER(#, 247)
 EXCEPTION_HANDLER(#, 248)
 EXCEPTION_HANDLER(#, 249)
-                      
+
 EXCEPTION_HANDLER(#, 250)
 EXCEPTION_HANDLER(#, 251)
 EXCEPTION_HANDLER(#, 252)
 EXCEPTION_HANDLER(#, 253)
 EXCEPTION_HANDLER(#, 254)
-EXCEPTION_HANDLER(#, 255)                                
+EXCEPTION_HANDLER(#, 255)
 
-common_exception_handler: 
+common_exception_handler:
 
         |
         | Need to put the format/vector above the PC and status register
@@ -792,14 +792,14 @@ common_exception_handler:
         beq     ceh_10
 
         bra     ceh_20
-ceh_10:              
+ceh_10:
 
         move.w  %d0,12(%sp)                     | need to move the format/id
         move.l  (%sp)+,%d0                      | recover d0
         addq    #8,%sp                          | trash the stack
         move.l  %d0,-(%sp)                      | free a register, again
         move.w  4(%sp),%d0                      | get the format/vector id
-        
+
 ceh_20:
 
         move.w  6(%sp),4(%sp)
@@ -829,7 +829,7 @@ ceh_20:
         move.l  %d0,%a0                         | need an address register for jumping
         jsr     %a0@(0)
 
-ceh_30:                 
+ceh_30:
         jmp     ceh_30
 
 |
@@ -840,17 +840,17 @@ ceh_30:
 
         .global vector_table
 
-vector_table:   
+vector_table:
         .space  (256 * 4),0
 
-|                
+|
 | Initialised data
 |
 
         .sect   .data
-        
+
         .global start_frame
-        
+
 start_frame:
         .space  4,0
 
@@ -860,10 +860,10 @@ start_frame:
 |
 
         .sect   .bss
-        
+
         .global environ
         .align  2
-        
+
 environ:
         .long   0
 
@@ -873,7 +873,7 @@ environ:
         .global stack_size
         .set    stack_size,0x1000
         .global stack_start
-        
+
 stack_start:
 stack_base:
         .space  0x2000, 0

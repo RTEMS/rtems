@@ -20,7 +20,7 @@ _start:
 	jmp	@_start 	; restart
 #else
 
-#if defined(__H8300H__) 
+#if defined(__H8300H__)
 	.h8300h
 #else /* must be __H300S__ */
 	.h8300s

@@ -46,7 +46,7 @@ rtems_device_driver console_initialize(
 
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred(status);
- 
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -131,7 +131,7 @@ rtems_device_driver console_open(
 {
   return RTEMS_SUCCESSFUL;
 }
- 
+
 /*
  *  Close entry point
  */
@@ -159,7 +159,7 @@ rtems_device_driver console_read(
   char *buffer;
   int maximum;
   int count = 0;
- 
+
   rw_args = (rtems_libio_rw_args_t *) arg;
 
   buffer = rw_args->buffer;
@@ -178,7 +178,7 @@ rtems_device_driver console_read(
 }
 
 /*
- * write bytes to the serial port. Stdout and stderr are the same. 
+ * write bytes to the serial port. Stdout and stderr are the same.
  */
 
 rtems_device_driver console_write(

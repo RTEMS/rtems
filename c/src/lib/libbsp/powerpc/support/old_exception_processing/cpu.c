@@ -93,7 +93,7 @@ void _CPU_Initialize(
    * Store Msr Value in the IRQ info structure.
    */
    _CPU_MSR_Value(_CPU_IRQ_info.msr_initial);
-  
+
 #if (PPC_USE_SPRG)
   i = _CPU_IRQ_info.msr_initial;
   asm volatile("mtspr 0x112, %0" : "=r" (i) : "0" (i)); /* SPRG 2 */
@@ -111,7 +111,7 @@ void _CPU_Initialize(
  *
  *  Complete initialization since the table is now allocated.
  */
- 
+
 void _CPU_Initialize_vectors(void)
 {
   int i;
@@ -126,7 +126,7 @@ void _CPU_Initialize_vectors(void)
     _ISR_Vector_table[i] = handler;
 
 }
- 
+
 /*PAGE
  *
  *  _CPU_ISR_Calculate_level
@@ -137,7 +137,7 @@ void _CPU_Initialize_vectors(void)
  *  is why it was necessary to adopt a scheme which allowed the user
  *  to specify specifically which interrupt sources were enabled.
  */
- 
+
 uint32_t   _CPU_ISR_Calculate_level(
   uint32_t   new_level
 )
@@ -189,7 +189,7 @@ void _CPU_ISR_Set_level(
  *
  *  _CPU_ISR_Get_level
  *
- *  This routine gets the current interrupt level from the MSR and 
+ *  This routine gets the current interrupt level from the MSR and
  *  converts it to an RTEMS interrupt level.
  */
 
@@ -197,9 +197,9 @@ uint32_t   _CPU_ISR_Get_level( void )
 {
   uint32_t   level = 0;
   uint32_t   msr;
- 
+
   asm volatile("mfmsr %0" : "=r" ((msr)));
- 
+
   msr &= PPC_MSR_DISABLE_MASK;
 
   /*
@@ -246,12 +246,12 @@ void _CPU_Context_Initialize(
   sp = (uint32_t)stack_base + size - CPU_MINIMUM_STACK_FRAME_SIZE;
   *((uint32_t*)sp) = 0;
   the_context->gpr1 = sp;
-   
+
   the_context->msr = _CPU_ISR_Calculate_level( new_level );
 
   /*
    *  The FP bit of the MSR should only be enabled if this is a floating
-   *  point task.  Unfortunately, the vfprintf_r routine in newlib 
+   *  point task.  Unfortunately, the vfprintf_r routine in newlib
    *  ends up pushing a floating point register regardless of whether or
    *  not a floating point number is being printed.  Serious restructuring
    *  of vfprintf.c will be required to avoid this behavior.  At this
@@ -266,7 +266,7 @@ void _CPU_Context_Initialize(
    *
    *     + Set the exception prefix bit to point to the exception table
    *     + Force the RI bit
-   *     + Use the DR and IR bits 
+   *     + Use the DR and IR bits
    */
   _CPU_MSR_Value( msr_value );
   the_context->msr |= (msr_value & PPC_MSR_EP);
@@ -284,7 +284,7 @@ void _CPU_Context_Initialize(
 #if (PPC_ABI == PPC_ABI_SVR4)
   { unsigned    r13 = 0;
     asm volatile ("mr %0, 13" : "=r" ((r13)));
-   
+
     the_context->pc = (uint32_t)entry_point;
     the_context->gpr13 = r13;
   }
@@ -294,7 +294,7 @@ void _CPU_Context_Initialize(
   { uint32_t    r2 = 0;
     unsigned    r13 = 0;
     asm volatile ("mr %0,2; mr %1,13" : "=r" ((r2)), "=r" ((r13)));
- 
+
     the_context->pc = (uint32_t)entry_point;
     the_context->gpr2 = r2;
     the_context->gpr13 = r13;
@@ -335,7 +335,7 @@ void _CPU_ISR_install_vector(
    /*
     * Install the wrapper so this ISR can be invoked properly.
     */
-   if (_CPU_Table.exceptions_in_RAM) 
+   if (_CPU_Table.exceptions_in_RAM)
       _CPU_ISR_install_raw_handler( vector, _ISR_Handler, &ignored );
 
    /*
@@ -344,7 +344,7 @@ void _CPU_ISR_install_vector(
     */
 
     _ISR_Vector_table[ vector ] = new_handler ? (ISR_Handler_entry)new_handler :
-       _CPU_Table.spurious_handler ? 
+       _CPU_Table.spurious_handler ?
           (ISR_Handler_entry)_CPU_Table.spurious_handler :
           (ISR_Handler_entry)ppc_spurious;
 }
@@ -440,7 +440,7 @@ const CPU_Trap_table_entry _CPU_Trap_slot_template_m860 = {
 };
 #endif /* mpc860 */
 
-uint32_t    ppc_exception_vector_addr( 
+uint32_t    ppc_exception_vector_addr(
   uint32_t   vector
 );
 
@@ -453,24 +453,24 @@ uint32_t    ppc_exception_vector_addr(
  *  supported trap handler (a.k.a. interrupt service routine).
  *
  *  Input Parameters:
- *    vector      - trap table entry number plus synchronous 
+ *    vector      - trap table entry number plus synchronous
  *                    vs. asynchronous information
  *    new_handler - address of the handler to be installed
  *    old_handler - pointer to an address of the handler previously installed
  *
  *  Output Parameters: NONE
  *    *new_handler - address of the handler previously installed
- * 
- *  NOTE: 
+ *
+ *  NOTE:
  *
  *  This routine is based on the SPARC routine _CPU_ISR_install_raw_handler.
- *  Install a software trap handler as an executive interrupt handler 
+ *  Install a software trap handler as an executive interrupt handler
  *  (which is desirable since RTEMS takes care of window and register issues),
- *  then the executive needs to know that the return address is to the trap 
+ *  then the executive needs to know that the return address is to the trap
  *  rather than the instruction following the trap.
  *
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,
@@ -506,8 +506,8 @@ void _CPU_ISR_install_raw_handler(
 #define LOW_BITS_MASK    0x000003FF
 
   if (slot->stwu_r1 == _CPU_Trap_slot_template.stwu_r1) {
-    /* 
-     * Set u32_handler = to target address  
+    /*
+     * Set u32_handler = to target address
      */
     u32_handler = slot->b_Handler & 0x03fffffc;
 
@@ -518,15 +518,15 @@ void _CPU_ISR_install_raw_handler(
 
     *old_handler =  (proc_ptr) u32_handler;
   } else
-/* There are two kinds of handlers for the MPC860. One is the 'standard' 
+/* There are two kinds of handlers for the MPC860. One is the 'standard'
  *  one like above. The other is for the cascaded interrupts from the SIU
  *  and CPM. Therefore we must check for the alternate one if the standard
  *  one is not present
  */
 #if defined(mpc860) || defined(mpc821)
   if (slot->stwu_r1 == _CPU_Trap_slot_template_m860.stwu_r1) {
-    /* 
-     * Set u32_handler = to target address  
+    /*
+     * Set u32_handler = to target address
      */
     u32_handler = slot->b_Handler & 0x03fffffc;
     *old_handler =  (proc_ptr) u32_handler;
@@ -547,9 +547,9 @@ void _CPU_ISR_install_raw_handler(
 
   u32_handler = (uint32_t) new_handler;
 
-  /* 
-   * IMD FIX: insert address fragment only (bits 6..29) 
-   *          therefore check for proper address range 
+  /*
+   * IMD FIX: insert address fragment only (bits 6..29)
+   *          therefore check for proper address range
    *          and remove unwanted bits
    */
   if ((u32_handler & 0xfc000000) == 0xfc000000) {
@@ -568,7 +568,7 @@ void _CPU_ISR_install_raw_handler(
   _CPU_Data_Cache_Block_Flush( slot );
 }
 
-uint32_t    ppc_exception_vector_addr( 
+uint32_t    ppc_exception_vector_addr(
   uint32_t   vector
 )
 {
@@ -632,7 +632,7 @@ uint32_t    ppc_exception_vector_addr(
       break;
 
 #if defined(ppc403) || defined(ppc405)
-                                  
+
 /*  PPC_IRQ_CRIT is the same vector as PPC_IRQ_RESET
     case PPC_IRQ_CRIT:
       Offset = 0x00100;

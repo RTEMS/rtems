@@ -105,7 +105,7 @@ rtems_device_driver Clock_control(
        (void) set_vector( args->buffer, Clock_driver_vector, 1 );
       rtems_interrupt_enable( isrlevel );
     }
-    
+
 done:
     return RTEMS_SUCCESSFUL;
 }

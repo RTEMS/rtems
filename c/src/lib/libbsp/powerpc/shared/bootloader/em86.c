@@ -16,7 +16,7 @@
  */
 
 /*****************************************************************************
-* 
+*
 * Code to interpret Video BIOS ROM routines.
 *
 *
@@ -33,7 +33,7 @@
 #endif
 
 
-/* Code options,  put them on the compiler command line */	
+/* Code options,  put them on the compiler command line */
 /* #define EIP_STATS */	/* EIP based profiling */
 /* #undef EIP_STATS */
 
@@ -61,10 +61,10 @@ typedef struct _x86 {
 	  *esbase, *csbase, *ssbase, *dsbase, *fsbase, *gsbase;
 	volatile unsigned char *iobase;
 	unsigned char *ioperm;
-	unsigned 
+	unsigned
 	  reason, nexteip, parm1, parm2, opcode, base;
 	unsigned *optable, opreg; /* no more used! */
-	unsigned char* vbase; 
+	unsigned char* vbase;
 	unsigned instructions;
 #ifdef __BOOT__
 	u_char * ram;
@@ -80,7 +80,7 @@ x86 v86_private __attribute__((aligned(32)));
 
 
 /* Emulator is in another source file */
-extern 
+extern
 void em86_enter(x86 * p);
 
 #define EAX (p->_eax.e)
@@ -116,19 +116,19 @@ void em86_enter(x86 * p);
 static void dump86(x86 * p){
 	unsigned char *s = p->csbase + p->eip;
 	printf("cs:eip=%04x:%08x, eax=%08x, ecx=%08x, edx=%08x, ebx=%08x\n",
-	       p->cs, p->eip, ld_le32(&EAX), 
+	       p->cs, p->eip, ld_le32(&EAX),
 	       ld_le32(&ECX), ld_le32(&EDX), ld_le32(&EBX));
 	printf("ss:esp=%04x:%08x, ebp=%08x, esi=%08x, edi=%08x, efl=%08x\n",
-	       p->ss, ld_le32(&ESP), ld_le32(&EBP), 
+	       p->ss, ld_le32(&ESP), ld_le32(&EBP),
 	       ld_le32(&ESI), ld_le32(&EDI), p->eflags);
 	printf("nip=%08x, ds=%04x, es=%04x, fs=%04x, gs=%04x, total=%d\n",
 	       p->nexteip, p->ds, p->es, p->fs, p->gs, p->instructions);
-	printf("code: %02x %02x %02x %02x %02x %02x " 
+	printf("code: %02x %02x %02x %02x %02x %02x "
 	       "%02x %02x %02x %02x %02x %02x\n",
-	       s[0], s[1], s[2], s[3], s[4], s[5], 
+	       s[0], s[1], s[2], s[3], s[4], s[5],
 	       s[6], s[7], s[8], s[9], s[10], s[11]);
 #ifndef __BOOT__
-	printf("op1=%08x, op2=%08x, result=%08x, flags=%08x\n", 
+	printf("op1=%08x, op2=%08x, result=%08x, flags=%08x\n",
 	       p->filler[11], p->filler[12], p->filler[13], p->filler[14]);
 #endif
 }
@@ -139,10 +139,10 @@ static void dump86(x86 * p){
 int bios86pci(x86 * p) {
 	unsigned reg=ld_le16(&DI);
 	reg_type2 tmp;
-	
+
 	if (AL>=8 && AL<=13 && reg>0xff) {
 	  	AH = PCIBIOS_BAD_REGISTER_NUMBER;
-	} else { 
+	} else {
 		switch(AL) {
 		case 2:	/* find_device */
 		  /* Should be improved for BIOS able to handle
@@ -222,13 +222,13 @@ int int10h(x86 * p) { /* Process BIOS video interrupt */
 #else
 		p->eflags = (p->eflags&0xfcff)|0x100;  /* Set TF for debugging */
 #endif
-		/* p->eflags|=0x100; uncomment to force a trap */ 
+		/* p->eflags|=0x100; uncomment to force a trap */
 		return(0);
 	} else {
 	  	switch(AH) {
 		case 0x12:
 		  switch(BL){
-		  case 0x32: 
+		  case 0x32:
 		    p->eip=p->nexteip;
 		    return(0);
 		    break;
@@ -238,7 +238,7 @@ int int10h(x86 * p) { /* Process BIOS video interrupt */
 		default:
 		  break;
 		}
-		printf("unhandled soft interrupt 0x10: vector=%x\n", vector); 
+		printf("unhandled soft interrupt 0x10: vector=%x\n", vector);
 		return(1);
 	}
 }
@@ -261,11 +261,11 @@ int process_softint(x86 * p) {
 	}
 	dump86(p);
 	printf("Unhandled soft interrupt number 0x%04x, AX=0x%04x\n",
-	     p->parm1, ld_le16(&AX)); 
+	     p->parm1, ld_le16(&AX));
 	return(1);
 }
 
-/* The only function called back by the emulator is em86_trap, all 
+/* The only function called back by the emulator is em86_trap, all
    instructions may that change the code segment are trapped here.
    p->reason is one of the following codes.  */
 #define code_zerdiv	0
@@ -275,7 +275,7 @@ int process_softint(x86 * p) {
 #define code_bound	5
 #define code_ud		6
 #define code_dna	7
-	
+
 #define code_iretw	256
 #define code_iretl	257
 #define code_lcallw	258
@@ -290,8 +290,8 @@ int process_softint(x86 * p) {
  - The three LSB define the port size (1, 2 or 4)
  - bit of weight 512 means out if set, in if clear
  - bit of weight 256 means ins/outs if set, in/out if clear
- - bit of weight 128 means use esi/edi if set, si/di if clear 
-   (only used for ins/outs instructions, always clear for in/out) 	
+ - bit of weight 128 means use esi/edi if set, si/di if clear
+   (only used for ins/outs instructions, always clear for in/out)
  */
 #define code_inb	1024+1
 #define code_inw	1024+2
@@ -327,7 +327,7 @@ int em86_trap(x86 *p) {
 	  switch(p->reason) {
 	  case code_int3:
 #ifndef __BOOT__
-	    if(p->csbase+p->eip == bptaddr) { 
+	    if(p->csbase+p->eip == bptaddr) {
 	      *bptaddr=bptopc;
 	      bptaddr=NULL;
 	    }
@@ -352,8 +352,8 @@ int em86_trap(x86 *p) {
 		  if(bptaddr) *bptaddr=bptopc;
 		  t=strtok(0," 	\n");
 		  i=sscanf(t,"%x",&tmp);
-		  if(i==1) { 
-		    bptaddr=p->vbase + tmp; 
+		  if(i==1) {
+		    bptaddr=p->vbase + tmp;
 		    bptopc=*bptaddr;
 		    *bptaddr=0xcc;
 		  } else bptaddr=NULL;
@@ -362,13 +362,13 @@ int em86_trap(x86 *p) {
 		case 'Q':
 		  return 1;
 		  break;
-		  
+
 		case 'g':
 		case 'G':
 		  p->eflags &= ~0x100;
 		  return 0;
 		  break;
-		  
+
 		case 's':
 		case 'S': /* Print the 8 stack top words */
 		  fp = (unsigned short *)(p->ssbase+ld_le16(&SP));
@@ -390,7 +390,7 @@ int em86_trap(x86 *p) {
 	    break;
 	  case code_ud:
 	    printf("Attempt to execute an unimplemented"
-		   "or undefined opcode!\n"); 
+		   "or undefined opcode!\n");
 	    dump86(p);
 	    return(1); /* exit interpreter */
 	    break;
@@ -433,7 +433,7 @@ int em86_trap(x86 *p) {
 	    for(i=p->parm1; i<p->parm1+(p->reason&7); i++) {
 	      p->ioperm[i/8] &= ~(1<<i%8);
 	    }
-	    printf("Access to ports %04x-%04x enabled.\n", 
+	    printf("Access to ports %04x-%04x enabled.\n",
 		   p->parm1, p->parm1+(p->reason&7)-1);
 	    return(0);
 #endif
@@ -451,7 +451,7 @@ int em86_trap(x86 *p) {
 
 void cleanup_v86_mess(void) {
 	x86 *p = (x86 *) bd->v86_private;
-	
+
 	/* This automatically removes the mappings ! */
 	vfree(p->vbase);
 	p->vbase = 0;
@@ -460,11 +460,11 @@ void cleanup_v86_mess(void) {
 	sfree(p->ioperm);
 	p->ioperm=0;
 }
-     
+
 
 int init_v86(void) {
 	x86 *p = (x86 *) bd->v86_private;
-	
+
 	/* p->vbase is non null when the v86 is properly set-up */
 	if (p->vbase) return 0;
 
@@ -485,7 +485,7 @@ int init_v86(void) {
 	/* These calls should never fail. */
 	vmap(p->vbase, (u_long)p->ram|PTE_RAM, 0xa0000);
 	vmap(p->vbase+0x100000, (u_long)p->ram|PTE_RAM, 0x10000);
-	vmap(p->vbase+0xa0000, 
+	vmap(p->vbase+0xa0000,
 	     ((u_long)ptr_mem_map->isa_mem_base+0xa0000)|PTE_IO, 0x20000);
 	return 0;
 }
@@ -502,7 +502,7 @@ void em86_main(struct pci_dev *dev){
 #define IOMASK 0
 #endif
 
-	
+
 #ifndef __BOOT__
 	int i;
 	/* Allow or disable access to all ports */
@@ -523,21 +523,21 @@ void em86_main(struct pci_dev *dev){
 	AH=dev->bus->number;
 	AL=dev->devfn;
 
-	/* All other registers are irrelevant except ES:DI which 
+	/* All other registers are irrelevant except ES:DI which
 	 * should point to a PnP installation check block. This
 	 * is not yet implemented due to lack of references. */
 
 	/* Store a return address of 0xffff:0xffff as eyecatcher */
 	*(u_int *)(p->ssbase+ld_le16(&SP)) = UINT_MAX;
-	
+
 	/* Interrupt for BIOS EGA services is 0xf000:0xf065 (int 0x10) */
 	st_le32((u_int *)p->vbase + 0x10, 0xf000f065);
-	
+
 	/* Enable the ROM, read it and disable it immediately */
 	pci_read_config_dword(dev, PCI_ROM_ADDRESS, &saved_rom);
 	pci_write_config_dword(dev, PCI_ROM_ADDRESS, 0x000c0001);
 
-	/* Check that there is an Intel ROM. Should we also check that 
+	/* Check that there is an Intel ROM. Should we also check that
 	 * the first instruction is a jump (0xe9 or 0xeb) ?
 	 */
 	signature = *(u_short *)(ptr_mem_map->isa_mem_base+0xc0000);
@@ -551,26 +551,26 @@ void em86_main(struct pci_dev *dev){
 	if (!p->rom) return;
 
 
-	for(dst=(u_int *) p->rom, 
+	for(dst=(u_int *) p->rom,
 	    src=(volatile u_int *)(ptr_mem_map->isa_mem_base+0xc0000),
-	    left = length*512/sizeof(u_int); 
-	    left--; 
+	    left = length*512/sizeof(u_int);
+	    left--;
 	    *dst++=*src++);
-	
-	/* Disable the ROM and map the copy in virtual address space, note 
+
+	/* Disable the ROM and map the copy in virtual address space, note
 	 * that the ROM has to be mapped as RAM since some BIOSes (at least
 	 * Cirrus) perform write accesses to their own ROM. The reason seems
 	 * to be that they check that they must execute from shadow RAM
-	 * because accessing the ROM prevents accessing the video RAM       
+	 * because accessing the ROM prevents accessing the video RAM
 	 * according to comments in linux/arch/alpha/kernel/bios32.c.
 	 */
-	
+
 	pci_write_config_dword(dev, PCI_ROM_ADDRESS, saved_rom);
 	vmap(p->vbase+0xc0000, (u_long)p->rom|PTE_RAM, length*512);
 
 	/* Now actually emulate the ROM init routine */
 	em86_enter(p);
-	
+
 	/* Free the acquired resources */
 	vunmap(p->vbase+0xc0000);
 	pfree(p->rom);

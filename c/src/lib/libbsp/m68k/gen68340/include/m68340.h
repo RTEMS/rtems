@@ -4,7 +4,7 @@
  *  Developed by         : Motorola                                   *
  *                         High Performance Embedded Systems Division *
  *                         Austin, TX                                 *
- *  Rectified by	 : Geoffroy Montel	
+ *  Rectified by	 : Geoffroy Montel
  *			   g_montel@yahoo.com			      *
  *                                                                    *
  **********************************************************************/
@@ -14,7 +14,7 @@ typedef volatile unsigned short * portw;  /* 16-bit port */
 typedef volatile unsigned int *   portl;  /* 32-bit port */
 
 #define MBASE 0xEFFFF000             /* Module Base Address          */
-			             /* not EFFFF000 due to a 68349 
+			             /* not EFFFF000 due to a 68349
 					hardware incompatibility     */
 
 #define MBAR   (*(portb) 0x0003FF00) /* Module Base Addr Reg         */

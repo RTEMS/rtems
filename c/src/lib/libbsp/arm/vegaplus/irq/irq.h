@@ -22,7 +22,7 @@ extern "C" {
 /*
  * Include some preprocessor value also used by assember code
  */
-  
+
 #include <rtems.h>
 
 extern void default_int_handler();
@@ -62,11 +62,11 @@ typedef enum {
 
 #define MASKIRQ		 0x80
 #define MASKFIQ          0x40
-  
+
 #define END_OF_INT       0x80
 
 #define VECTOR_TABLE	 0x40
-  
+
 /*
  * Type definition for RTEMS managed interrupts
  */
@@ -96,9 +96,9 @@ typedef struct __rtems_irq_connect_data__ {
    * It is usually called immediately AFTER connecting the interrupt handler.
    * RTEMS may well need such a function when restoring normal interrupt
    * processing after a debug session.
-   * 
+   *
    */
-    rtems_irq_enable		on;	
+    rtems_irq_enable		on;
   /*
    * function for disabling interrupts at device level (ONLY!).
    * The code will disable it at i8259s level. RATIONALE : anyway
@@ -168,7 +168,7 @@ void BSP_rtems_irq_mngt_init();
  *	4) perform rescheduling when necessary,
  *	5) restore the C scratch registers...
  *	6) restore initial execution flow
- * 
+ *
  */
 
 int BSP_install_rtems_irq_handler   	(const rtems_irq_connect_data*);

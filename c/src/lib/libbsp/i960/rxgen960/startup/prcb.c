@@ -12,8 +12,8 @@
 #include "systbl.h"
 #include "prcb.h"
 /*-------------------------------------*/
-  /* RAM based PRocess Control Block  
-   */      
+  /* RAM based PRocess Control Block
+   */
 #ifdef DBPRECISE_FAULTS
 #define AC                      (INT_OVFL_DISABLE | PRECISE_FLTS)
 #else
@@ -40,17 +40,17 @@
 
 
 struct PRCB ram_prcb = {
-  & faultTbl[0],                        /* Fault Table Base */   
-  & controlTbl[0],                  /* Control Table Base */    
-  AC,                                   /* AC */ 
+  & faultTbl[0],                        /* Fault Table Base */
+  & controlTbl[0],                  /* Control Table Base */
+  AC,                                   /* AC */
   FAULT_CONFIG,                         /* Fault Configuration Word */
-  & interruptTbl,                       /* Interrupt Table Base */ 
-  & systemTbl,                          /* System Procedure Table Base */   
-  0,                                    /* Reserved */  
+  & interruptTbl,                       /* Interrupt Table Base */
+  & systemTbl,                          /* System Procedure Table Base */
+  0,                                    /* Reserved */
   & intStackPtr[0],                     /* Interrupt Stack Pointer */
-  INST_CACHE_CONFIG,                    /* Instruction Cache Config */ 
-  REG_CACHE_CONFIG,                     /* Reg Cache Config */ 
-};  
+  INST_CACHE_CONFIG,                    /* Instruction Cache Config */
+  REG_CACHE_CONFIG,                     /* Reg Cache Config */
+};
 
 /*-------------*/
 /* End of file */

@@ -21,7 +21,7 @@
  */
 
 	/* In monochrome */
-#define V_MONO	0xb0000	
+#define V_MONO	0xb0000
 	/* In color	 */
 #define V_COLOR	0xb8000
 
@@ -73,7 +73,7 @@
 #define ON              1
 
 
-/* 
+/*
  * CRT Controller register offset definitions
  */
 

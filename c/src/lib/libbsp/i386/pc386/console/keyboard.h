@@ -5,11 +5,17 @@
 // MODULE DESCRIPTION:
 //
 // This module was based on the Linux version keyboard.h + kbd_kern.h
-// 
+//
 //  by: Rosimildo da Silva:  rdasilva@connecttel.com
 //
 // MODIFICATION/HISTORY:
 // $Log$
+// Revision 1.2  2000/08/30 17:06:23  joel
+// 2000-08-30	Joel Sherrill <joel@OARcorp.com>
+//
+// 	* console/keyboard.h: Changed numerous routines from extern inline
+// 	to static inline.
+//
 // Revision 1.1  2000/08/30 08:15:30  joel
 // 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
 //

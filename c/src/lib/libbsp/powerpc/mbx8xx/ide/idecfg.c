@@ -45,5 +45,5 @@ ide_controller_bsp_table_t IDE_Controller_Table[] = {
 };
 
 /* Number of rows in IDE_Controller_Table */
-unsigned long IDE_Controller_Count = 
+unsigned long IDE_Controller_Count =
    sizeof(IDE_Controller_Table)/sizeof(IDE_Controller_Table[0]);

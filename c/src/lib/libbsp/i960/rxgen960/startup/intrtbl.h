@@ -17,17 +17,17 @@ typedef void (* IntrHndl)(void);
 typedef struct {
   unsigned int pendPrty;		/* Pending Priorities */
   unsigned int pendIntr[8];		/* Pending Interrupts */
-  IntrHndl intrHndl[248];		/* Interrupt Handlers */         
+  IntrHndl intrHndl[248];		/* Interrupt Handlers */
 } InterruptTbl;
   /* Interrupt Handler Type.
    */
 #define	NORMAL_IH	0
-#define	IN_CACHE_IH	0x10   
+#define	IN_CACHE_IH	0x10
   /* Interrupt Table Itself.
    */
 extern InterruptTbl interruptTbl;
 
-#endif   
+#endif
 /*-------------*/
 /* End of file */
 /*-------------*/

@@ -10,7 +10,7 @@
  *
  *  $Id$
  */
-  
+
 #include <rtems/system.h>
 #include <bsp.h>
 #include <bsp/irq.h>
@@ -66,9 +66,9 @@ static inline int is_processor_irq(const rtems_irq_symbolic_name irqLine)
 
 
 /*
- * masks used to mask off the interrupts. For exmaple, for ILVL2, the  
- * mask is used to mask off interrupts ILVL2, IRQ3, ILVL3, ... IRQ7    
- * and ILVL7.                                                          
+ * masks used to mask off the interrupts. For exmaple, for ILVL2, the
+ * mask is used to mask off interrupts ILVL2, IRQ3, ILVL3, ... IRQ7
+ * and ILVL7.
  *
  */
 const static unsigned int SIU_IvectMask[BSP_SIU_IRQ_NUMBER] =
@@ -132,10 +132,10 @@ int BSP_irq_enable_at_cpm(const rtems_irq_symbolic_name irqLine)
 int BSP_irq_disable_at_cpm(const rtems_irq_symbolic_name irqLine)
 {
   int cpm_irq_index;
-  
+
   if (!is_cpm_irq(irqLine))
     return 1;
-  
+
   cpm_irq_index = ((int) (irqLine) - BSP_CPM_IRQ_LOWEST_OFFSET);
   ((volatile immap_t *)IMAP_ADDR)->im_cpic.cpic_cimr &= ~(1 << cpm_irq_index);
 
@@ -145,10 +145,10 @@ int BSP_irq_disable_at_cpm(const rtems_irq_symbolic_name irqLine)
 int BSP_irq_enabled_at_cpm(const rtems_irq_symbolic_name irqLine)
 {
   int cpm_irq_index;
-  
+
   if (!is_cpm_irq(irqLine))
     return 0;
-  
+
   cpm_irq_index = ((int) (irqLine) - BSP_CPM_IRQ_LOWEST_OFFSET);
   return (((volatile immap_t *)IMAP_ADDR)->im_cpic.cpic_cimr & (1 << cpm_irq_index));
 }
@@ -156,7 +156,7 @@ int BSP_irq_enabled_at_cpm(const rtems_irq_symbolic_name irqLine)
 int BSP_irq_enable_at_siu(const rtems_irq_symbolic_name irqLine)
 {
   int siu_irq_index;
-  
+
   if (!is_siu_irq(irqLine))
     return 1;
 
@@ -173,7 +173,7 @@ int BSP_irq_disable_at_siu(const rtems_irq_symbolic_name irqLine)
 
   if (!is_siu_irq(irqLine))
     return 1;
-  
+
   siu_irq_index = ((int) (irqLine) - BSP_SIU_IRQ_LOWEST_OFFSET);
   ppc_cached_irq_mask &= ~(1 << (31-siu_irq_index));
   ((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_simask = ppc_cached_irq_mask;
@@ -199,7 +199,7 @@ int BSP_irq_enabled_at_siu     	(const rtems_irq_symbolic_name irqLine)
 int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     unsigned int level;
-  
+
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -220,14 +220,14 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * store the data provided by user
      */
     rtems_hdl_tbl[irq->name] = *irq;
-    
+
     if (is_cpm_irq(irq->name)) {
       /*
        * Enable interrupt at PIC level
        */
       BSP_irq_enable_at_cpm (irq->name);
     }
-    
+
     if (is_siu_irq(irq->name)) {
       /*
        * Enable interrupt at SIU level
@@ -245,7 +245,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
      * Enable interrupt on device
      */
     irq->on(irq);
-    
+
     _CPU_ISR_Enable(level);
 
     return 1;
@@ -264,7 +264,7 @@ int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     unsigned int level;
-  
+
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -296,7 +296,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
       /*
        * disable exception at processor level
        */
-    }    
+    }
 
     /*
      * Disable interrupt on device
@@ -412,7 +412,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     _CPU_MSR_GET(msr);
     new_msr = msr | MSR_EE;
     _CPU_MSR_SET(new_msr);
-    
+
     rtems_hdl_tbl[BSP_DECREMENTER].hdl();
 
     _CPU_MSR_SET(msr);
@@ -423,12 +423,12 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
    */
 #ifdef DISPATCH_HANDLER_STAT
   loopCounter = 0;
-#endif  
+#endif
   while (1) {
     if ((ppc_cached_irq_mask & ((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_sipend) == 0) {
 #ifdef DISPATCH_HANDLER_STAT
       if (loopCounter >  maxLoop) maxLoop = loopCounter;
-#endif      
+#endif
       break;
     }
     irq = (((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_sivec >> 26);
@@ -443,12 +443,12 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
      * Acknowledge current interrupt. This has no effect on internal level interrupt.
      */
     ((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_sipend = (1 << (31 - irq));
-    
+
     if (cpmIntr)  {
       /*
        * We will reenable the SIU CPM interrupt to allow nesting of CPM interrupt.
        * We must before acknowledege the current irq at CPM level to avoid trigerring
-       * the interrupt again. 
+       * the interrupt again.
        */
       /*
        * Acknowledge and get the vector.
@@ -468,7 +468,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     _CPU_MSR_GET(msr);
     new_msr = msr | MSR_EE;
     _CPU_MSR_SET(new_msr);
-    
+
     rtems_hdl_tbl[irq].hdl();
 
     _CPU_MSR_SET(msr);
@@ -481,12 +481,12 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     ((volatile immap_t *)IMAP_ADDR)->im_siu_conf.sc_simask = ppc_cached_irq_mask;
 #ifdef DISPATCH_HANDLER_STAT
     ++ loopCounter;
-#endif    
+#endif
   }
 }
 
-    
-  
+
+
 void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
 {
   /*

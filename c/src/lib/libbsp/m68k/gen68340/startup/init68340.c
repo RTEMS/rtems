@@ -6,9 +6,9 @@
  * 4, rue du Clos Courtel
  * 35512 CESSON-SEVIGNE
  * FRANCE
- * 
+ *
  * e-mail: g_montel@yahoo.com
- * 
+ *
  *  $Id$
  */
 

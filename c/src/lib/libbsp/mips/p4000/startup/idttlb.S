@@ -186,7 +186,7 @@ ENDFRAME(ret_tlbhi)
 FRAME(ret_tlbpid,sp,0,ra)
 #if __mips == 1
 	.set	noreorder
-	mfc0	v0,C0_TLBHI		# fetch tlb high 
+	mfc0	v0,C0_TLBHI		# fetch tlb high
 	nop
 	and	v0,TLBHI_PIDMASK	# isolate and position
 	srl	v0,TLBHI_PIDSHIFT
@@ -219,8 +219,8 @@ FRAME(tlbprobe,sp,0,ra)
 	mfc0	t0,C0_SR		/* fetch status reg */
 	and	a0,TLBHI_VPNMASK	/* isolate just the vpn */
 	and	t0,~SR_PE		/* don't inadvertantly clear pe */
-	mtc0	zero,C0_SR 
-	mfc0	t1,C0_TLBHI	
+	mtc0	zero,C0_SR
+	mfc0	t1,C0_TLBHI
 	sll	a1,TLBHI_PIDSHIFT	/* possition the pid */
 	and	a1,TLBHI_PIDMASK
 	or	a0,a1			/* build entry hi value */
@@ -271,7 +271,7 @@ ENDFRAME(tlbprobe)
 FRAME(resettlb,sp,0,ra)
 #if __mips == 1
 	.set	noreorder
-	mfc0	t0,C0_TLBHI		# fetch the current hi 
+	mfc0	t0,C0_TLBHI		# fetch the current hi
 	mfc0	v0,C0_SR		# fetch the status reg.
 	li	t2,K0BASE&TLBHI_VPNMASK
 	and	v0,~SR_PE		# dont inadvertantly clear PE
@@ -329,13 +329,13 @@ FRAME(map_tlb,sp,0,ra)
 
 	mtc0	zero,C0_SR
 	mtc0	a1,C0_TLBHI		# set the hi entry
-	mtc0	a2,C0_TLBLO		# set the lo entry 
+	mtc0	a2,C0_TLBLO		# set the lo entry
 	mtc0	a0,C0_INX		# load the index
 	nop
 	tlbwi				# put the hi/lo in tlb entry indexed
 	nop
-	mtc0	a3,C0_TLBHI		# put back the tlb hi reg 
-	mtc0	v0,C0_SR		# restore the status register 
+	mtc0	a3,C0_TLBHI		# put back the tlb hi reg
+	mtc0	v0,C0_SR		# restore the status register
 	j	ra
 	nop
 	.set	reorder
@@ -357,7 +357,7 @@ FRAME(map_tlb4000,sp,0,ra)
 	mfc0	t1,C0_TLBHI		# save current TLBPID
 	mfc0	v0,C0_SR		# save SR and disable interrupts
 	mtc0	zero,C0_SR
-	mtc0	t2,C0_PAGEMASK		# set 
+	mtc0	t2,C0_PAGEMASK		# set
 	mtc0	a1,C0_TLBHI		# set VPN and TLBPID
 	mtc0	a2,C0_TLBLO0		# set PPN and access bits
 	mtc0	a3,C0_TLBLO1		# set PPN and access bits

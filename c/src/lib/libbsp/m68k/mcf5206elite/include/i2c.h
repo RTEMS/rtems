@@ -90,7 +90,7 @@ i2c_initialize(rtems_device_major_number major,
 
 /* i2c_select_clock_rate --
  *     select I2C bus clock rate for specified bus. Some bus controller do not
- *     allow to select arbitrary clock rate; in this case nearest possible 
+ *     allow to select arbitrary clock rate; in this case nearest possible
  *     slower clock rate is selected.
  *
  * PARAMETERS:
@@ -98,7 +98,7 @@ i2c_initialize(rtems_device_major_number major,
  *     bps - data transfer rate for this bytes in bits per second
  *
  * RETURNS:
- *     RTEMS_SUCCESSFUL, if operation performed successfully, 
+ *     RTEMS_SUCCESSFUL, if operation performed successfully,
  *     RTEMS_INVALID_NUMBER, if wrong bus number is specified,
  *     RTEMS_UNSATISFIED, if bus do not support data transfer rate selection
  *     or specified data transfer rate could not be used.
@@ -123,7 +123,7 @@ i2c_select_clock_rate(i2c_bus_number bus, int bps);
  *     code if something failed.
  */
 rtems_status_code
-i2c_transfer(i2c_bus_number bus, int nmsg, i2c_message *msg, 
+i2c_transfer(i2c_bus_number bus, int nmsg, i2c_message *msg,
              i2c_transfer_done done, uint32_t         done_arg);
 
 /* i2c_transfer_wait --
@@ -137,7 +137,7 @@ i2c_transfer(i2c_bus_number bus, int nmsg, i2c_message *msg,
  *     nmsg - number of messages in transfer
  *
  * RETURNS:
- *     I2C_SUCCESSFUL, if tranfer finished successfully, 
+ *     I2C_SUCCESSFUL, if tranfer finished successfully,
  *     I2C_RESOURCE_NOT_AVAILABLE, if semaphore operations has failed,
  *     value of status field of first error-finished message in transfer,
  *     if something wrong.

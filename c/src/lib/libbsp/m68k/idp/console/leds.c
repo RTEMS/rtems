@@ -16,12 +16,12 @@ void clear_leds();
  *		the led display.
  *		Setting the bit to 0 turns it on, 1 turns it off.
  * 		the LED's are controlled by setting the right bit mask in the base
- * 		address. 
+ * 		address.
  *		The bits are:
  *			[d.p | g | f | e | d | c | b | a ] is the byte.
  *
  *		The locations are:
- *		
+ *
  *			 a
  *		       -----
  *		    f |     | b

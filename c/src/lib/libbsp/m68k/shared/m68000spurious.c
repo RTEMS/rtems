@@ -1,7 +1,7 @@
 /*
  *  C3X Spurious Trap Handler
  *
- *  This is just enough of a trap handler to let us know what 
+ *  This is just enough of a trap handler to let us know what
  *  the likely source of the trap was.
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -24,7 +24,7 @@
  */
 
 void bsp_spurious_handler_assistant(
-  rtems_vector_number /*, 
+  rtems_vector_number /*,
   CPU_Interrupt_frame * */
 );
 

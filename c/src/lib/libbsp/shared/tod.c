@@ -6,7 +6,7 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
- */ 
+ */
 
 #include <rtems.h>
 #include <libchip/rtc.h>
@@ -36,13 +36,13 @@ rtems_device_driver rtc_initialize(
   rtems_status_code          status;
 
   for (minor=0; minor < RTC_Count ; minor++) {
-    /* 
+    /*
      * First perform the configuration dependent probe, then the
      * device dependent probe
      */
 
     if (RTC_Table[minor].deviceProbe && RTC_Table[minor].deviceProbe(minor)) {
-      /* 
+      /*
        * Use this device as the primary RTC
        */
       RTC_Minor = minor;
@@ -52,7 +52,7 @@ rtems_device_driver rtc_initialize(
   }
 
   if ( !RTC_Present ) {
-    /* 
+    /*
      * Failed to find an RTC -- this is not a fatal error.
      */
 
@@ -71,7 +71,7 @@ rtems_device_driver rtc_initialize(
   RTC_Table[minor].pDeviceFns->deviceInitialize( RTC_Minor );
 
   /*
-   *  Now initialize any secondary RTC's 
+   *  Now initialize any secondary RTC's
    */
 
   for ( minor++ ; minor<RTC_Count ; minor++) {
@@ -105,9 +105,9 @@ rtems_device_driver rtc_initialize(
 /*PAGE
  *
  *  This routine copies the time from the real time clock to RTEMS
- * 
+ *
  *  Input parameters:  NONE
- * 
+ *
  *  Output parameters:  NONE
  *
  *  Return values: NONE
@@ -129,9 +129,9 @@ void setRealTimeToRTEMS()
  *  setRealTimeFromRTEMS
  *
  *  This routine copies the time from RTEMS to the real time clock
- * 
+ *
  *  Input parameters:  NONE
- * 
+ *
  *  Output parameters:  NONE
  *
  *  Return values: NONE
@@ -153,9 +153,9 @@ void setRealTimeFromRTEMS()
  *  getRealTime
  *
  *  This routine reads the current time from the RTC.
- * 
+ *
  *  Input parameters:  NONE
- * 
+ *
  *  Output parameters:  NONE
  *
  *  Return values: NONE
@@ -173,29 +173,29 @@ void getRealTime(
 }
 
 /*PAGE
- * 
+ *
  *  setRealTime
- *  
+ *
  *  This routine sets the RTC.
- *  
+ *
  *  Input parameters:  NONE
- * 
+ *
  *  Output parameters:  NONE
  *
  *  Return values: NONE
  */
 
-/* XXX this routine should be part of the public RTEMS interface */ 
+/* XXX this routine should be part of the public RTEMS interface */
 rtems_boolean _TOD_Validate( rtems_time_of_day *tod );
 
 int setRealTime(
   rtems_time_of_day *tod
 )
 {
-  
+
   if (!RTC_Present)
     return -1;
-  
+
   if ( !_TOD_Validate(tod) )
     return -1;
 
@@ -210,16 +210,16 @@ int setRealTime(
  *
  *  This routine reads the returns the variance betweent the real time and
  *  rtems time.
- * 
+ *
  *  Input parameters: NONE
- * 
+ *
  *  Output parameters:  NONE
  *
- *  Return values: 
+ *  Return values:
  *    int   The differance between the real time clock and rtems time.
  */
 
-/* XXX this routine should be part of the public RTEMS interface */ 
+/* XXX this routine should be part of the public RTEMS interface */
 uint32_t   _TOD_To_seconds( rtems_time_of_day *tod );
 
 int checkRealTime()
@@ -235,8 +235,8 @@ int checkRealTime()
   rtems_clock_get( RTEMS_CLOCK_GET_TOD, &rtems_tod );
   RTC_Table[RTC_Minor].pDeviceFns->deviceGetTime(RTC_Minor, &rtc_tod);
 
-  rtems_time = _TOD_To_seconds( &rtems_tod ); 
-  rtc_time = _TOD_To_seconds( &rtc_tod ); 
+  rtems_time = _TOD_To_seconds( &rtems_tod );
+  rtc_time = _TOD_To_seconds( &rtc_tod );
 
   return rtems_time - rtc_time;
 }

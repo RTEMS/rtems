@@ -51,16 +51,16 @@ typedef struct _ctxt {
 /* The main structure which is pointed to permanently by r13. Things
  * are not separated very well between parts because it would cause
  * too much code bloat for such a simple program like the bootloader.
- * The code is designed to be compiled with the -m relocatable option and 
- * tries to minimize the number of relocations/fixups and the number of 
- * functions who have to access the .got2 sections (this increases the 
+ * The code is designed to be compiled with the -m relocatable option and
+ * tries to minimize the number of relocations/fixups and the number of
+ * functions who have to access the .got2 sections (this increases the
  * size of the prologue in every function).
  */
 typedef struct _boot_data {
 	RESIDUAL *residual;
 	void *load_address;
         void *of_entry;
-	void *r6, *r7, *r8, *r9, *r10; 
+	void *r6, *r7, *r8, *r9, *r10;
 	u_long cache_lsize;
 	void *image;  /* Where to copy ourselves */
 	void *stack;
@@ -77,80 +77,80 @@ typedef struct _boot_data {
 register boot_data *bd __asm__("r13");
 
 extern inline int
-pcibios_read_config_byte(u_char bus, u_char dev_fn, 
+pcibios_read_config_byte(u_char bus, u_char dev_fn,
 			 u_char where, u_char * val) {
 	return bd->pci_functions->read_config_byte(bus, dev_fn, where, val);
 }
 
 extern inline int
-pcibios_read_config_word(u_char bus, u_char dev_fn, 
+pcibios_read_config_word(u_char bus, u_char dev_fn,
 			 u_char where, u_short * val) {
 	return bd->pci_functions->read_config_word(bus, dev_fn, where, val);
 }
 
 extern inline int
-pcibios_read_config_dword(u_char bus, u_char dev_fn, 
+pcibios_read_config_dword(u_char bus, u_char dev_fn,
 			 u_char where, u_int * val) {
 	return bd->pci_functions->read_config_dword(bus, dev_fn, where, val);
 }
 
 extern inline int
-pcibios_write_config_byte(u_char bus, u_char dev_fn, 
+pcibios_write_config_byte(u_char bus, u_char dev_fn,
 			 u_char where, u_char val) {
 	return bd->pci_functions->write_config_byte(bus, dev_fn, where, val);
 }
 
 extern inline int
-pcibios_write_config_word(u_char bus, u_char dev_fn, 
+pcibios_write_config_word(u_char bus, u_char dev_fn,
 			 u_char where, u_short val) {
 	return bd->pci_functions->write_config_word(bus, dev_fn, where, val);
 }
 
 extern inline int
-pcibios_write_config_dword(u_char bus, u_char dev_fn, 
+pcibios_write_config_dword(u_char bus, u_char dev_fn,
 			 u_char where, u_int val) {
 	return bd->pci_functions->write_config_dword(bus, dev_fn, where, val);
 }
 
 extern inline int
 pci_read_config_byte(struct pci_dev *dev, u_char where, u_char * val) {
-	return bd->pci_functions->read_config_byte(dev->bus->number, 
-						   dev->devfn, 
+	return bd->pci_functions->read_config_byte(dev->bus->number,
+						   dev->devfn,
 						   where, val);
 }
 
 extern inline int
 pci_read_config_word(struct pci_dev *dev, u_char where, u_short * val) {
-	return bd->pci_functions->read_config_word(dev->bus->number, 
-						   dev->devfn, 
+	return bd->pci_functions->read_config_word(dev->bus->number,
+						   dev->devfn,
 						   where, val);
 }
 
 extern inline int
 pci_read_config_dword(struct pci_dev *dev, u_char where, u_int * val) {
-	return bd->pci_functions->read_config_dword(dev->bus->number, 
-						    dev->devfn, 
+	return bd->pci_functions->read_config_dword(dev->bus->number,
+						    dev->devfn,
 						    where, val);
 }
 
 extern inline int
 pci_write_config_byte(struct pci_dev *dev, u_char where, u_char val) {
-	return bd->pci_functions->write_config_byte(dev->bus->number, 
-						    dev->devfn, 
+	return bd->pci_functions->write_config_byte(dev->bus->number,
+						    dev->devfn,
 						    where, val);
 }
 
 extern inline int
 pci_write_config_word(struct pci_dev *dev, u_char where, u_short val) {
-	return bd->pci_functions->write_config_word(dev->bus->number, 
-						    dev->devfn, 
+	return bd->pci_functions->write_config_word(dev->bus->number,
+						    dev->devfn,
 						    where, val);
 }
 
 extern inline int
 pci_write_config_dword(struct pci_dev *dev, u_char where, u_int val) {
-	return bd->pci_functions->write_config_dword(dev->bus->number, 
-						     dev->devfn, 
+	return bd->pci_functions->write_config_dword(dev->bus->number,
+						     dev->devfn,
 						     where, val);
 }
 
@@ -159,12 +159,12 @@ pci_write_config_dword(struct pci_dev *dev, u_char where, u_int val) {
  * zero, it performs more or less like memmove. No copy is performed if
  * source and destination addresses are equal. However the caches
  * are synchronized. Note that the size is always rounded up to the
- * next mutiple of 4. 
+ * next mutiple of 4.
  */
 extern void * codemove(void *, const void *, size_t, unsigned long);
 
 /* The physical memory allocator allows to align memory by
- * powers of 2 given by the lower order bits of flags. 
+ * powers of 2 given by the lower order bits of flags.
  * By default it allocates from higher addresses towrds lower ones,
  * setting PA_LOW reverses this behaviour.
  */
@@ -212,11 +212,11 @@ int find_max_mem(struct pci_dev *);
 
 #ifdef ASM
 /* These definitions simplify the ugly declarations necessary for
- * GOT definitions. 
+ * GOT definitions.
  */
 
 #define GOT_ENTRY(NAME) .L_ ## NAME = . - .LCTOC1	; .long	NAME
-#define GOT(NAME) .L_ ## NAME (r30)	
+#define GOT(NAME) .L_ ## NAME (r30)
 
 #define START_GOT	\
 	.section	".got2","aw"; \

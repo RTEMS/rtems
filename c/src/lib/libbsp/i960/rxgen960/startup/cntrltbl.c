@@ -71,18 +71,18 @@ ControlTblEntry controlTbl[] = {
   REGION_8_CONFIG,
   0,
   REGION_A_CONFIG,
-  0,  
+  0,
   /* --group 5 -- */
   REGION_C_CONFIG,
   0,
   REGION_BOOT_CONFIG,
-  0,  
+  0,
   /* --group 6 -- */
-  0, 		 		/* Reserved */ 
+  0, 		 		/* Reserved */
   0,
   TC,
   BCON
-};   
+};
 /*-------------*/
 /* End of file */
 /*-------------*/

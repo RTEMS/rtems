@@ -26,7 +26,7 @@ extern "C" {
 /*
  * Network driver configuration
  */
- 
+
 struct rtems_bsdnet_ifconfig;
 int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig, int attaching );
 #define RTEMS_BSP_NETWORK_DRIVER_NAME   "uti1"
@@ -91,14 +91,14 @@ typedef volatile struct {
   unsigned long     vector_base;
 } lcsr_regs;
 
-/*  
+/*
  *  Base address of VMEchip2 LCSR
  *  Not configurable on the MVME167.
  *  XXX what about 162?
  */
 #define lcsr        ((lcsr_regs * const) 0xFFF40000)
 
-/* 
+/*
  *  Vector numbers for the interrupts from the VMEchip2. Use the values
  *  "recommended" by Motorola.
  *  See pages 2-70 to 2-92, and table 2-3.
@@ -178,7 +178,7 @@ typedef volatile struct pccchip2_regs_ {
  *  we have to reconcile them later.
  */
 
-/* 
+/*
  * Vector numbers for the interrupts from the PCCchip2. Use the values
  * "recommended" by Motorola.
  * See page 3-15.

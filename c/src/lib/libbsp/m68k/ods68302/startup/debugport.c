@@ -3,7 +3,7 @@
   High Level Debug Port Functions
 
   $Id$
-  
+
  */
 /*****************************************************************************/
 
@@ -28,10 +28,10 @@ unsigned char debug_port_status(const unsigned char status)
 {
   if (!initialised)
   {
-    initialised = 1;    
+    initialised = 1;
     debug_port_initialise();
   }
-  
+
   return scc_status(CONSOLE_PORT, status);
 }
 
@@ -39,10 +39,10 @@ unsigned char debug_port_in(void)
 {
   if (!initialised)
   {
-    initialised = 1;    
+    initialised = 1;
     debug_port_initialise();
   }
-  
+
   return scc_in(CONSOLE_PORT);
 }
 
@@ -50,10 +50,10 @@ void debug_port_out(const unsigned char character)
 {
   if (!initialised)
   {
-    initialised = 1;    
+    initialised = 1;
     debug_port_initialise();
   }
-  
+
   scc_out(CONSOLE_PORT, character);
 }
 
@@ -137,7 +137,7 @@ void debug_port_printf(const char *format, ...)
   written = vsprintf(buffer, format, args);
 
   /* try an trap format buffer overflows */
-  if ((buffer[BUFFER_SIZE - 2] != '\xAA') || 
+  if ((buffer[BUFFER_SIZE - 2] != '\xAA') ||
       (buffer[BUFFER_SIZE - 1] != '\x55'))
   {
     debug_port_write("debug port buffer overflow, halting...");
@@ -155,7 +155,7 @@ void debug_port_printf(const char *format, ...)
 void debug_port_banner(void)
 {
 #define CARD_LABEL "ods68302-" #VARIANT
-  
+
   debug_port_write("\n\n\r");
   debug_port_write(_Copyright_Notice);
   debug_port_write("\n\r  " CARD_ID "\n\r");

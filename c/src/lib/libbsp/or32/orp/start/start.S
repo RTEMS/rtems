@@ -1,11 +1,11 @@
 /* start.S -- bootup code for the Bender board using the Or1k
  *            architecture.
- *	
+ *
  *  Copyright (C) 2001 Chris Ziomkowski, chris@asics.ws
  *
  *  This file is distributed as part of the RTEMS package from
  *  OAR Corporation, and follows the licensing and distribution
- *  terms as stated for RTEMS. 
+ *  terms as stated for RTEMS.
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  */
-	
+
 #include <rtems/asm.h>
 
 
@@ -36,10 +36,10 @@
    return a bus error when accessed.
 */
 .file	"start.S"
-	
+
 .data
 	PUBLIC(Or1k_Interrupt_Vectors)
-SYM (Or1k_Interrupt_Vectors):	
+SYM (Or1k_Interrupt_Vectors):
 	.word	0x00000000			# No Vector
 	.word	_start				# Reset Vector (Ignored)
 	.word	__Internal_error_Occurred	# Bus Error
@@ -58,17 +58,17 @@ SYM (Or1k_Interrupt_Vectors):
 
 /*
 	PUBLIC(BOTTOM_OF_MEMORY)
-SYM (BOTTOM_OF_MEMORY):	
+SYM (BOTTOM_OF_MEMORY):
 	.word	0x10000000       # Assume RAM @ 0 for the sim
 
 	PUBLIC(TOP_OF_MEMORY)
-SYM (TOP_OF_MEMORY):	
+SYM (TOP_OF_MEMORY):
 	.word	0x10800000	# Assume RAM @ 0 for the sim
-*/	
+*/
 	PUBLIC(_mem_end)
 SYM (_mem_end):
 	.word	0x10800000
-	
+
         BEGIN_CODE
 	.org	0x0
 	/**************/
@@ -76,7 +76,7 @@ SYM (_mem_end):
 	/**************/
 
 	/* Place the panic vector at 0 */
-	
+
 .proc	__panic
 	.def	__panic
 	.val	__panic
@@ -85,10 +85,10 @@ SYM (_mem_end):
 	.endef
 	.global	__panic
 __panic:
-	
+
 	l.jal		__exit
 	l.nop
-	
+
 .endproc __panic
 	.def	__panic
 	.val	.
@@ -106,7 +106,7 @@ __panic:
 	   values, and finally disable exceptions, restore
 	   EPCR and ESR (EEAR is not essential to restore)
 	   and then return from the interrupt. */
-	   
+
 	/******************************************/
 	/*       Normal exception handling        */
         /* Called with 80 bytes allocated on the  */
@@ -121,7 +121,7 @@ __panic:
 	.type	044
 	.endef
 	.global	___standard_exception
-___standard_exception:		
+___standard_exception:
 	l.sfeqi	r11,0			/* Ignore it if it is zero */
 	l.bf	L2_2
 	l.sw	4(r1),r4		/* Save r4 */
@@ -133,11 +133,11 @@ ___standard_exception:
 	l.sw	8(r1),r5
 	l.sw	12(r1),r6
 	l.sw	16(r1),r7
-	
+
 	l.mfspr	r4,r0,0x20		/* Save EPCR */
 	l.mfspr	r5,r0,0x30		/* Save EEAR */
 	l.mfspr	r6,r0,0x40		/* Save ESR */
-	
+
 	l.mfspr	r7,r0,17
 	l.ori	r7,r7,2
 	l.mtspr	r0,r7,17		/* Reenable exceptions */
@@ -187,7 +187,7 @@ ___standard_exception:
 	l.mfspr	r3,r0,17		/* Get SR value */
 	l.and	r3,r3,r6		/* Clear exception bit */
 	l.mfspr	r0,r3,17		/* Disable exceptions */
-	
+
 	l.lwz	r6,76(r1)		/* Recover ESR */
 	l.lwz	r4,72(r1)		/* Recover EPCR */
 	l.mtspr	r0,r4,0x20		/* Restore ESR */
@@ -203,7 +203,7 @@ L2_2:
 	l.nop				/* The document doesn't say this is
 					   a delay slot instruction, but the
 					   simulator doesn't work without this. */
-	
+
 .endproc ___standard_exception
 	.def	___standard_exception
 	.val	.
@@ -228,7 +228,7 @@ SYM (TOP_OF_MEMORY):
 	    are being used here. If you add code to the above
 	    routine, make sure it isn't more than 7 instructions
 	    or you will overflow into the reset vector. **/
-		
+
 	/****************************/
 	/* Reset vector static code */
 	/****************************/
@@ -240,7 +240,7 @@ ___rst:
 	l.movhi		r1,hi(_TOP_OF_MEMORY)
 	l.ori		r1,r1,lo(_TOP_OF_MEMORY)
 	l.lwz		r1,0(r1)   /* Dereference it */
-	
+
 	/* Set the frame pointer */
 	l.add		r2,r0,r1
 
@@ -262,7 +262,7 @@ ___rst:
 	/* error vector, which is why it is left to the _start     */
 	/* routine.                                                */
 	/***********************************************************/
-	
+
 	/********************************/
 	/* Bus Error vector static code */
 	/********************************/
@@ -278,17 +278,17 @@ ___bus_error:
 	l.lwz	r11,8(r11)
 	l.j	___standard_exception
 	l.addi	r3,r0,2
-	
+
 .endproc ___bus_error
 
 	/* Put _Internal_error_Occurred and _int_reenable here */
 	/* No reason to waste space...it'll be filled with 0 if */
 	/* we don't... */
-	
+
 	/********************************/
 	/*   _Internal_error_Occurred   */
 	/********************************/
-		
+
 .proc	__Internal_error_Occurred
 	.def	__Internal_error_Occurred
 	.val	__Internal_error_Occurred
@@ -297,21 +297,21 @@ ___bus_error:
 	.endef
 	.global	__Internal_error_Occurred
 __Internal_error_Occurred:
-	
+
 	l.jal		__panic
 	l.nop
-	
+
 .endproc __Internal_error_Occurred
 	.def	__Internal_error_Occurred
 	.val	.
 	.scl	-1
 	.endef
 
-	
+
 	/*********************/
 	/*   _int_reenable   */
 	/*********************/
-		
+
 .proc	__int_reenable
 	.def	__int_reenable
 	.val	__int_reenable
@@ -320,12 +320,12 @@ __Internal_error_Occurred:
 	.endef
 	.global	__int_reenable
 __int_reenable:
-	
+
 	l.mfspr	r11,r0,17
 	l.ori	r11,r11,0x04
 	l.jr	r9
 	l.mtspr r0,r11,17
-	
+
 .endproc __int_reenable
 	.def	__int_reenable
 	.val	.
@@ -335,7 +335,7 @@ __int_reenable:
 	/*********************&**/
 	/*   ___user_function   */
 	/************************/
-		
+
 .proc	___user_function
 	.def	___user_function
 	.val	___user_function
@@ -347,18 +347,18 @@ ___user_function:
 
 	/* r11 contains the address to call. We can
 	   modify r7, r8, r12, and r14 at will */
-	
+
 	l.movhi	r7,hi(__Thread_Dispatch_disable_level)
 	l.ori	r7,r7,lo(__Thread_Dispatch_disable_level)
 	l.lwz	r8,0(r7)
-	
+
 	l.addi	r1,r1,-8	#  Stack must be DWORD aligned
 	l.sw	0(r1),r9	#  Save the return address
 
 	l.addi	r8,r8,1		# Increment __Thread_Dispatch...
 	l.jalr	r11
 	l.sw	0(r7),r8	# Disable thread dispatching
-	
+
 	/* Now, we need to determine if we need to
 	   service the RTEMS environment. RTEMS tries
 	   to draw a distinction between a RAW handler
@@ -387,20 +387,20 @@ ___user_function:
 	   place of the interrupt stack. We don't use a
 	   separate exception stack, so this should not
 	   be an issue for us. */
-		
+
 	l.movhi	r7,hi(__Thread_Dispatch_disable_level)
 	l.ori	r7,r7,lo(__Thread_Dispatch_disable_level)
 	l.lwz	r8,0(r7)
 	l.addi	r8,r8,-1	# Decrement __Thread_Dispatch...
-	l.sw	0(r7),r8	# Memory stall likely here...		
+	l.sw	0(r7),r8	# Memory stall likely here...
 
 	l.sfeqi	r8,0		# Skip if _Thread_Dispatch != 0
 	l.bnf	L4_2
 	l.movhi	r7,hi(__Context_Switch_necessary)
-	
+
 	l.ori	r7,r7,lo(__Context_Switch_necessary)
 	l.lwz	r8,0(r7)
-		
+
 	l.movhi	r7,hi(__ISR_Signals_to_thread_executing)
 	l.ori	r7,r7,lo(__ISR_Signals_to_thread_executing)
 	l.lwz	r12,0(r7)
@@ -408,28 +408,28 @@ ___user_function:
 	l.sfeqi	r8,0		# Skip if __Context... is false
 	l.bf	L4_2
 	l.movhi	r14,hi(__Thread_Dispatch)
-	
+
 	l.sfeqi	r12,0		# Skip if __ISR... is true
 	l.bnf	L4_2
 	l.ori	r14,r14,lo(__Thread_Dispatch)
-	
+
 	l.jalr	r14
 	l.sw	0(r7),r0	# Set __ISR... to false
-		
-L4_2:			
+
+L4_2:
 	l.lwz	r9,0(r1)	#  Recover the return address
 	l.jr	r9
 	l.addi	r1,r1,8		#  Reset the stack
-	
+
 .endproc ___user_function
 	.def	___user_function
 	.val	.
 	.scl	-1
 	.endef
 
-	
+
 	/* Code wasted between here and 0x300 */
-	
+
 	/**************************************/
 	/* Data Page Fault vector static code */
 	/**************************************/
@@ -448,7 +448,7 @@ ___data_page_fault:
 .endproc ___data_page_fault
 
 	/* Code wasted between here and 0x400 */
-		
+
 	/*********************************************/
 	/* Instruction Page Fault vector static code */
 	/*********************************************/
@@ -467,7 +467,7 @@ ___insn_page_fault:
 .endproc ___insn_page_fault
 
 	/* Code wasted between here and 0x500 */
-	
+
 	/**************************************/
 	/* Low Priority Interrupt static code */
 	/**************************************/
@@ -490,7 +490,7 @@ ___low_priority_int:
 .endproc ___low_priority_int
 
 	/* Code wasted between here and 0x600 */
-	
+
 	/******************************************/
 	/* Alignment Exception vector static code */
 	/******************************************/
@@ -509,7 +509,7 @@ ___alignment_exception:
 .endproc ___alignment_exception
 
 	/* Code wasted between here and 0x700 */
-	
+
 	/******************************************/
 	/* Illegal Instruction vector static code */
 	/******************************************/
@@ -528,7 +528,7 @@ ___illegal_instruction:
 .endproc ___illegal_instruction
 
 	/* Code wasted between here and 0x800 */
-	
+
 	/***************************************/
 	/* High Priority Interrupt static code */
 	/***************************************/
@@ -551,7 +551,7 @@ ___high_priority_int:
 .endproc ___high_priority_int
 
 	/* Code wasted between here and 0x900 */
-	
+
 	/********************************/
 	/* ITBL Miss vector static code */
 	/********************************/
@@ -570,7 +570,7 @@ ___ITBL_miss_exception:
 .endproc ___ITBL_miss_exception
 
 	/* Code wasted between here and 0xA00 */
-	
+
 	/********************************/
 	/* DTBL Miss vector static code */
 	/********************************/
@@ -589,7 +589,7 @@ ___DTBL_miss_exception:
 .endproc ___DTBL_miss_exception
 
 	/* Code wasted between here and 0xB00 */
-	
+
 	/**************************************/
 	/* Range Exception vector static code */
 	/**************************************/
@@ -608,7 +608,7 @@ ___range_exception:
 .endproc ___range_exception
 
 	/* Code wasted between here and 0xC00 */
-	
+
 	/**********************************/
 	/* System Call vector static code */
 	/**********************************/
@@ -627,7 +627,7 @@ ___system_call:
 .endproc ___system_call
 
 	/* Code wasted between here and 0xD00 */
-	
+
 	/**********************************/
 	/* Breakpoint vector static code */
 	/**********************************/
@@ -648,7 +648,7 @@ ___breakpoint:
 .endproc ___breakpoint
 
 	/* Code wasted between here and 0xE00 */
-	
+
 	/*************************************/
 	/* Trap Exception vector static code */
 	/*************************************/
@@ -667,13 +667,13 @@ ___trap_exception:
 .endproc ___trap_exception
 
 	/* Code wasted between here and 0x2000 */
-	
+
 	/* Exceptions from 0xF00 to 0x1F00 are not defined */
 	/* in the Or1k architecture. They should be filled */
 	/* in here for other implementations.              */
 
 	.org	0x2000		/* Start after exception vector table */
-		
+
 	/*********************/
 	/*       start       */
 	/*********************/
@@ -688,13 +688,13 @@ ___trap_exception:
 	   information by probing, as the scheme would be too
 	   complex and inherently unreliable. */
 
-	/* Initialize strings and structures here */	
-L_program:	
+	/* Initialize strings and structures here */
+L_program:
 	.ascii	"RTEMS_or1k\000"
 	.align	4
-L_argv:	
+L_argv:
 	.word	L_program
-				
+
 .proc _start
 	.def	_start
 	.val	_start
@@ -702,11 +702,11 @@ L_argv:
 	.type	044
 	.endef
 	.global	_start
-_start:	
+_start:
 
 	/* Initialize the memory controller here!
 	   Discussions with Rudi have stated that
-	   the first few bytes of the ROM image should 
+	   the first few bytes of the ROM image should
 	   contain a RAM map as opposed to trying to
 	   figure out what to do based on probing. This
 	   means a separate build of the OS for every
@@ -714,12 +714,12 @@ _start:
 	   doesn't seem to be a better alternative. */
 
 	/*** FIX ME! Initialize the external memory controller! ***/
-	
+
 	/* Move the data segment to RAM. Alternatively, we may
 	   copy the text segment as well. For now, we'll assume
 	   that the cache gives us sufficient performance that this
 	   is not necessary. It will be very easy to add this later.
-	 */	
+	 */
 	l.movhi		r4,hi(_etext)
 	l.ori		r4,r4,lo(_etext)
 	l.movhi		r5,hi(_BOTTOM_OF_MEMORY)
@@ -730,8 +730,8 @@ _start:
 	l.ori		r3,r3,lo(_edata)
         l.movhi         r5,hi(_data_start)
         l.ori           r5,r5,lo(_data_start)
-	
-L3_0:	
+
+L3_0:
 	l.lwz		r6,0(r4)
 	l.addi		r5,r5,4
 	l.addi		r4,r4,4
@@ -747,7 +747,7 @@ L3_0:
 	l.sfleu		r3,r5
 	l.bf		L3_2		   # Check for no BSS segment!
 	l.nop
-		
+
 L3_1:
         l.addi          r5,r5,4
 	l.sfeq		r5,r3
@@ -759,44 +759,44 @@ L3_2:
 	l.movhi		r4,hi(__mem_end)
 	l.ori		r4,r4,lo(__mem_end)
 	l.sw		0(r4),r5
-			
+
 	/* Due to what I consider a bug in RTEMS, the entire
 	   heap must be zeroed. I think this is the dumbest thing
 	   I've ever heard, but whatever turns them on. I'd rather
 	   see the code which depends on this behavior fixed. I
 	   myself have never written code which assumes zeroes
-	   will be returned from memory allocated from the heap. 
+	   will be returned from memory allocated from the heap.
 	   Anyway, if I don't do it here, I have to set a flag in
 	   the CPU structure which then will do it anyway, but
 	   from less efficient C code! Zero from here to the
 	   stack pointer... One day when I'm old and gray maybe
 	   I'll set this to random values instead and fix
 	   whatever breaks. */
-	
+
 	l.sw		0(r5),r0
 	l.sfeq		r5,r1
 	l.bnf		L3_3
-	l.addi		r5,r5,4	
-	
+	l.addi		r5,r5,4
+
 L3_3:
 	l.addi		r3,r0,1		/* Set argc to 1 */
 	l.movhi		r4,hi(L_argv)	/* Initialize argv */
 	l.ori		r4,r4,lo(L_argv)
 	l.addi		r5,r5,0		/* Set envp to NULL */
-		
+
         l.mfspr         r11,r0,17	/* Get SR value */
         l.ori           r11,r11,0x4     /* Set interrupt enable bit */
         l.jal           _boot_card      /* Boot up the card...run the OS */
         l.mtspr         r0,r11,17       /* Enable exceptions (DELAY) */
-	
+
 	/* We're done. We exited normally. Shut down. */
 	l.jal		__exit
 	l.nop
-	
+
 .endproc _start
 	.def	_start
 	.val	.
 	.scl	-1
 	.endef
-	
+
 	END_CODE

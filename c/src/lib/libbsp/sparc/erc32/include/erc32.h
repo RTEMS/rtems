@@ -5,9 +5,9 @@
  *  601/602 chipset.  This CPU has a number of on-board peripherals and
  *  was developed by the European Space Agency to target space applications.
  *
- *  NOTE:  Other than where absolutely required, this version currently 
- *         supports only the peripherals and bits used by the basic board 
- *         support package. This includes at least significant pieces of 
+ *  NOTE:  Other than where absolutely required, this version currently
+ *         supports only the peripherals and bits used by the basic board
+ *         support package. This includes at least significant pieces of
  *         the following items:
  *
  *           + UART Channels A and B
@@ -26,20 +26,20 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
+ *  Research Corporation (OAR) under contract to the European Space
  *  Agency (ESA).
  *
- *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
  *
  *  $Id$
  */
- 
+
 #ifndef _INCLUDE_ERC32_h
 #define _INCLUDE_ERC32_h
 
 #include <rtems/score/sparc.h>
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -47,7 +47,7 @@ extern "C" {
 /*
  *  Interrupt Sources
  *
- *  The interrupt source numbers directly map to the trap type and to 
+ *  The interrupt source numbers directly map to the trap type and to
  *  the bits used in the Interrupt Clear, Interrupt Force, Interrupt Mask,
  *  and the Interrupt Pending Registers.
  */
@@ -75,7 +75,7 @@ extern "C" {
  *
  *  Source: Table 8 - Interrupt Trap Type and Default Priority Assignments
  *
- *  NOTE: The priority level for each source corresponds to the least 
+ *  NOTE: The priority level for each source corresponds to the least
  *        significant nibble of the trap type.
  */
 
@@ -88,12 +88,12 @@ extern "C" {
     (_trap) <= ERC32_TRAP_TYPE( ERC32_INTERRUPT_WATCHDOG_TIMEOUT ) )
 
 /*
- *  Structure for ERC32 memory mapped registers.  
+ *  Structure for ERC32 memory mapped registers.
  *
  *  Source: Section 3.25.2 - Register Address Map
  *
- *  NOTE:  There is only one of these structures per CPU, its base address 
- *         is 0x01f80000, and the variable MEC is placed there by the 
+ *  NOTE:  There is only one of these structures per CPU, its base address
+ *         is 0x01f80000, and the variable MEC is placed there by the
  *         linkcmds file.
  */
 
@@ -116,7 +116,7 @@ typedef struct {
   volatile uint32_t    Interrupt_Force;                      /* offset 0x54 */
   volatile uint32_t    Unimplemented_3[ 2 ];                 /* offset 0x58 */
                                                              /* offset 0x60 */
-  volatile uint32_t    Watchdog_Program_and_Timeout_Acknowledge; 
+  volatile uint32_t    Watchdog_Program_and_Timeout_Acknowledge;
   volatile uint32_t    Watchdog_Trap_Door_Set;               /* offset 0x64 */
   volatile uint32_t    Unimplemented_4[ 6 ];                 /* offset 0x68 */
   volatile uint32_t    Real_Time_Clock_Counter;              /* offset 0x80 */
@@ -249,7 +249,7 @@ typedef struct {
 #define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_4M  ( 5 << 18 )
 #define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_8M  ( 6 << 18 )
 #define ERC32_MEMORY_CONFIGURATION_PROM_SIZE_16M  ( 7 << 18 )
- 
+
 /*
  *  The following defines the bits in the Timer Control Register.
  */
@@ -277,8 +277,8 @@ typedef struct {
  *
  */
 
-#define ERC32_MEC_UART_CONTROL_RTD  0x000000FF /* RX/TX data */ 
- 
+#define ERC32_MEC_UART_CONTROL_RTD  0x000000FF /* RX/TX data */
+
 /*
  *  The following defines the bits in the MEC UART Control Registers.
  */
@@ -324,7 +324,7 @@ typedef struct {
  */
 
 extern ERC32_Register_Map ERC32_MEC;
- 
+
 /*
  *  Macros to manipulate the Interrupt Clear, Interrupt Force, Interrupt Mask,
  *  and the Interrupt Pending Registers.
@@ -349,13 +349,13 @@ extern ERC32_Register_Map ERC32_MEC;
     ERC32_MEC.Interrupt_Force = (1 << (_source)); \
     sparc_enable_interrupts( _level ); \
   } while (0)
- 
+
 #define ERC32_Is_interrupt_pending( _source ) \
   (ERC32_MEC.Interrupt_Pending & (1 << (_source)))
- 
+
 #define ERC32_Is_interrupt_masked( _source ) \
   (ERC32_MEC.Interrupt_Masked & (1 << (_source)))
- 
+
 #define ERC32_Mask_interrupt( _source ) \
   do { \
     uint32_t   _level; \
@@ -364,7 +364,7 @@ extern ERC32_Register_Map ERC32_MEC;
       ERC32_MEC.Interrupt_Mask |= (1 << (_source)); \
     sparc_enable_interrupts( _level ); \
   } while (0)
- 
+
 #define ERC32_Unmask_interrupt( _source ) \
   do { \
     uint32_t   _level; \
@@ -385,7 +385,7 @@ extern ERC32_Register_Map ERC32_MEC;
     sparc_enable_interrupts( _level ); \
     (_previous) &= _mask; \
   } while (0)
- 
+
 #define ERC32_Restore_interrupt( _source, _previous ) \
   do { \
     uint32_t   _level; \
@@ -405,9 +405,9 @@ extern ERC32_Register_Map ERC32_MEC;
  *  and status of the other timer.
  *
  *  This code promotes the view that the two timers are completely independent.
- *  By exclusively using the routines below to access the Timer Control 
+ *  By exclusively using the routines below to access the Timer Control
  *  Register, the application can view the system as having a General Purpose
- *  Timer Control Register and a Real Time Clock Timer Control Register 
+ *  Timer Control Register and a Real Time Clock Timer Control Register
  *  rather than the single shared value.
  *
  *  Each logical timer control register is organized as follows:
@@ -451,7 +451,7 @@ extern ERC32_Register_Map ERC32_MEC;
 extern uint32_t   _ERC32_MEC_Timer_Control_Mirror;
 
 /*
- *  This macros manipulate the General Purpose Timer portion of the 
+ *  This macros manipulate the General Purpose Timer portion of the
  *  Timer Control register and promote the view that there are actually
  *  two independent Timer Control Registers.
  */
@@ -480,11 +480,11 @@ extern uint32_t   _ERC32_MEC_Timer_Control_Mirror;
   } while ( 0 )
 
 /*
- *  This macros manipulate the Real Timer Clock Timer portion of the 
+ *  This macros manipulate the Real Timer Clock Timer portion of the
  *  Timer Control register and promote the view that there are actually
  *  two independent Timer Control Registers.
  */
- 
+
 #define ERC32_MEC_Set_Real_Time_Clock_Timer_Control( _value ) \
   do { \
     uint32_t   _level; \
@@ -502,7 +502,7 @@ extern uint32_t   _ERC32_MEC_Timer_Control_Mirror;
       ERC32_MEC.Timer_Control = _control; \
     sparc_enable_interrupts( _level ); \
   } while ( 0 )
- 
+
 #define ERC32_MEC_Get_Real_Time_Clock_Timer_Control( _value ) \
   do { \
     (_value) = (_ERC32_MEC_Timer_Control_Mirror >> 8) & 0xf; \
@@ -514,6 +514,6 @@ extern uint32_t   _ERC32_MEC_Timer_Control_Mirror;
 #ifdef __cplusplus
 }
 #endif
- 
+
 #endif /* !_INCLUDE_ERC32_h */
 /* end of include file */

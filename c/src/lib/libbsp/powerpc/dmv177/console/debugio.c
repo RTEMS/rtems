@@ -38,7 +38,7 @@
 
 extern console_data  Console_Port_Data[];
 extern rtems_device_minor_number  Console_Port_Minor;
- 
+
 /* PAGE
  *
  *  DEBUG_puts
@@ -95,7 +95,7 @@ void DEBUG_puth(
   unsigned long  i,d;
   uint32_t        Irql;
   void          (*poll)(int minor, char cChar);
-  
+
   poll = Console_Port_Tbl[Console_Port_Minor].pDeviceFns->deviceWritePolled;
 
   rtems_interrupt_disable(Irql);

@@ -30,8 +30,8 @@
 #include <libchip/ide_ctrl_io.h>
 
 /* #define DEBUG_OUT */
-/* 
- * support functions for IDE harddisk IF 
+/*
+ * support functions for IDE harddisk IF
  */
 /*=========================================================================*\
 | Function:                                                                 |
@@ -52,7 +52,7 @@ boolean pc386_ide_probe
 \*=========================================================================*/
 {
   boolean ide_card_plugged = TRUE; /* assume: we have a disk here */
-  
+
   return ide_card_plugged;
 }
 
@@ -160,9 +160,9 @@ void pc386_ide_read_block
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- int minor, 
- uint16_t   block_size, 
- blkdev_sg_buffer *bufs, 
+ int minor,
+ uint16_t   block_size,
+ blkdev_sg_buffer *bufs,
  uint32_t         *cbuf,
  uint32_t         *pos
  )
@@ -179,7 +179,7 @@ void pc386_ide_read_block
     ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
 
   inport_byte(port+IDE_REGISTER_STATUS,status_val);
-  while ((status_val & IDE_REGISTER_STATUS_DRQ) && 
+  while ((status_val & IDE_REGISTER_STATUS_DRQ) &&
 	 (cnt < block_size)) {
     inport_word(port+IDE_REGISTER_DATA,*lbuf);
 
@@ -187,7 +187,7 @@ void pc386_ide_read_block
     printk("0x%x ",*lbuf);
 #endif
     lbuf++;
-    cnt    += sizeof(*lbuf); 
+    cnt    += sizeof(*lbuf);
     (*pos) += sizeof(*lbuf);
     if ((*pos) == llength) {
       (*pos) = 0;
@@ -196,7 +196,7 @@ void pc386_ide_read_block
       llength = bufs[(*cbuf)].length;
     }
     inport_byte(port+IDE_REGISTER_STATUS,status_val);
-  } 
+  }
 #ifdef DEBUG_OUT
   printk("pc386_ide_read_block()\r\n");
 #endif
@@ -213,9 +213,9 @@ void pc386_ide_write_block
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- int minor, 
- uint16_t   block_size, 
- blkdev_sg_buffer *bufs, 
+ int minor,
+ uint16_t   block_size,
+ blkdev_sg_buffer *bufs,
  uint32_t         *cbuf,
  uint32_t         *pos
  )
@@ -230,19 +230,19 @@ void pc386_ide_write_block
   uint8_t     status_val;
   uint16_t   *lbuf = (uint16_t*)
     ((uint8_t*)(bufs[(*cbuf)].buffer) + (*pos));
-    
+
 #ifdef DEBUG_OUT
   printk("pc386_ide_write_block()\r\n");
 #endif
   inport_byte(port+IDE_REGISTER_STATUS,status_val);
-  while ((status_val & IDE_REGISTER_STATUS_DRQ) && 
+  while ((status_val & IDE_REGISTER_STATUS_DRQ) &&
 	 (cnt < block_size)) {
 #ifdef DEBUG_OUT
     printk("0x%x ",*lbuf);
 #endif
     outport_word(port+IDE_REGISTER_DATA,*lbuf);
     lbuf++;
-    cnt    += sizeof(*lbuf); 
+    cnt    += sizeof(*lbuf);
     (*pos) += sizeof(*lbuf);
     if ((*pos) == llength) {
       (*pos) = 0;
@@ -300,7 +300,7 @@ rtems_status_code pc386_ide_config_io_speed
 }
 
 /*
- * The following table configures the functions used for IDE drivers 
+ * The following table configures the functions used for IDE drivers
  * in this BSP.
  */
 

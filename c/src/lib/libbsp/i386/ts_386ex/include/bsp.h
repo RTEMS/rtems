@@ -37,7 +37,7 @@ extern "C" {
 
 /* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (8 * 1024)
-  
+
 /*
  * Network driver configuration
  */
@@ -163,15 +163,15 @@ extern void Wait_X_ms (unsigned);
 /*
  *  Device Driver Table Entries
  */
- 
+
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */
- 
+
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;

@@ -16,5 +16,5 @@
 void bsp_cleanup( void )
 {
 
-   VME_interrupt_Disable( 0xff ); 
+   VME_interrupt_Disable( 0xff );
 }

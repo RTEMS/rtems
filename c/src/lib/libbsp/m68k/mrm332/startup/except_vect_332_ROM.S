@@ -2,18 +2,18 @@
  *  $Id$
  */
 
-/* Exception Vector definitions follow */	
+/* Exception Vector definitions follow */
 
 	/* !!! Warning !!! This table is not tested, and
 	   the user must make sure it is complete. */
 
-	/* If we use TRAP #15 for reboot, note that group 0 and 1 exceptions 
+	/* If we use TRAP #15 for reboot, note that group 0 and 1 exceptions
 	   will have priority. */
 
 	/* This is the "magic word" that CPU32bug uses to indicate that
 	   there is a bootable image here. */
 	.long   0xBEEFBEEF
-	
+
 	/* Vector 0:	RESET:	Initial SSP */
 	.long	_RamEnd
 	/* Vector 1:	RESET:	Initial PC */
@@ -21,7 +21,7 @@
 
 	/* default action for undefined vectors is to re-boot */
 
-	/* Note group 0 and 1 exception (like trace) have priority 
+	/* Note group 0 and 1 exception (like trace) have priority
 	   over other exceptions (like trap #15) that may call this. */
 
 	/* Vectors 2-255 */
@@ -287,8 +287,8 @@ _reboot:
 	movea.l	(0x4).w,%a0	/* jmp to location of reset vector */
 	jmp	(%a0)
 
-reboot:	
-	trap	#15		/* use trap exception to enter supervisor 
-				   state. Trace mode ( and other group 0 
-				   and 1 exceptions) *could* screw this up if 
+reboot:
+	trap	#15		/* use trap exception to enter supervisor
+				   state. Trace mode ( and other group 0
+				   and 1 exceptions) *could* screw this up if
 				   not vectored to reboot or did not return. */

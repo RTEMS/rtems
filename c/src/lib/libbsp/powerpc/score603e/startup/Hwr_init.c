@@ -1,6 +1,6 @@
 /*  Hwr_init.c
  *
- *  $Id: 
+ *  $Id:
  */
 
 #include <bsp.h>
@@ -75,22 +75,22 @@ typedef struct {
 void init_RTC()
 {
   volatile Harris_RTC *the_RTC;
-  
+
   the_RTC = (volatile Harris_RTC *)SCORE603E_RTC_ADDRESS;
 
   the_RTC->command_register = 0x0;
 }
 
 void init_PCI()
-{  
+{
 #if (SCORE603E_USE_SDS) | (SCORE603E_USE_OPEN_FIRMWARE) | (SCORE603E_USE_NONE)
   uint32_t         value;
 
  /*
-  * NOTE:  Accessing any memory location not mapped by the BAT 
-  * registers will cause a TLB miss exception.   
-  * Set the DBAT1 to be configured for 256M of PCI MEM 
-  * at 0xC0000000 with Write-through and Guarded Attributed and 
+  * NOTE:  Accessing any memory location not mapped by the BAT
+  * registers will cause a TLB miss exception.
+  * Set the DBAT1 to be configured for 256M of PCI MEM
+  * at 0xC0000000 with Write-through and Guarded Attributed and
   * read/write access allowed
   */
 
@@ -118,10 +118,10 @@ void init_PCI()
 
 #if (0)
  /*
-  * NOTE:  Accessing any memory location not mapped by the BAT 
-  * registers will cause a TLB miss exception.   
-  * Set the DBAT3 to be configured for 256M of PCI MEM 
-  * at 0xC0000000 with Write-through and Guarded Attributed and 
+  * NOTE:  Accessing any memory location not mapped by the BAT
+  * registers will cause a TLB miss exception.
+  * Set the DBAT3 to be configured for 256M of PCI MEM
+  * at 0xC0000000 with Write-through and Guarded Attributed and
   * read/write access allowed
   */
 
@@ -192,7 +192,7 @@ void data_cache_enable ()
   uint32_t         value;
 
   /*
-   * enable data cache 
+   * enable data cache
    */
 
   PPC_Get_HID0( value );

@@ -1,4 +1,4 @@
-/* 
+/*
  *  NOTE: This routine is not used when in polling mode.  Either
  *        this routine OR Shm_clockisr is used in a particular system.
  *

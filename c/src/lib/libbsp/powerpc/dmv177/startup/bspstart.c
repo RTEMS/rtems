@@ -21,7 +21,7 @@
  *  The original table from the application and our copy of it with
  *  some changes.
  */
- 
+
 extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
 rtems_cpu_table                   Cpu_table;
@@ -67,7 +67,7 @@ void bsp_pretasking_hook(void)
  *  bsp_predriver_hook
  *
  *  Initialization before drivers are setup.
- */ 
+ */
 
 void bsp_predriver_hook(void)
 {
@@ -93,14 +93,14 @@ void bsp_start( void )
    */
 
   _CPU_MSR_SET( msr_value );
-   
+
   /*
    *  Need to "allocate" the memory for the RTEMS Workspace and
    *  tell the RTEMS configuration where it is.  This memory is
    *  not malloc'ed.  It is just "pulled from the air".
    */
 
-  work_space_start = 
+  work_space_start =
     (unsigned char *)&RAM_END - BSP_Configuration.work_space_size;
 
   if ( work_space_start <= (unsigned char *)&end ) {

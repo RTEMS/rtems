@@ -32,7 +32,7 @@
  * all others being given the name indicated.
  */
 
-mc68681_baud_t 
+mc68681_baud_t
   dmv177_mc68681_baud_table[4][RTEMS_TERMIOS_NUMBER_BAUD_RATES] = {
   { /* ACR[7] = 0, X = 0 */
     MC68681_BAUD_NOT_VALID,    /* B0 */
@@ -125,7 +125,7 @@ mc68681_baud_t
 };
 
 #define MC68681_PORT_CONFIG  \
-  (MC68681_DATA_BAUD_RATE_SET_1|MC68681_XBRG_ENABLED) 
+  (MC68681_DATA_BAUD_RATE_SET_1|MC68681_XBRG_ENABLED)
 
 /*
  *  Based on BSP configuration information decide whether to do polling IO

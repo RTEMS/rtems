@@ -83,7 +83,7 @@ void _CPU_Context_Initialize(
 
   *((uint32_t*)sp) = 0;
   the_context->gpr1 = sp;
-   
+
   _CPU_MSR_GET( msr_value );
 
   if (!(new_level & CPU_MODES_INTERRUPT_MASK)) {
@@ -97,7 +97,7 @@ void _CPU_Context_Initialize(
 
   /*
    *  The FP bit of the MSR should only be enabled if this is a floating
-   *  point task.  Unfortunately, the vfprintf_r routine in newlib 
+   *  point task.  Unfortunately, the vfprintf_r routine in newlib
    *  ends up pushing a floating point register regardless of whether or
    *  not a floating point number is being printed.  Serious restructuring
    *  of vfprintf.c will be required to avoid this behavior.  At this
@@ -124,14 +124,14 @@ void _CPU_Context_Initialize(
 #if (PPC_ABI == PPC_ABI_SVR4)
   { unsigned    r13 = 0;
     asm volatile ("mr %0, 13" : "=r" ((r13)));
-   
+
     the_context->gpr13 = r13;
   }
 #elif (PPC_ABI == PPC_ABI_EABI)
   { uint32_t    r2 = 0;
     unsigned    r13 = 0;
     asm volatile ("mr %0,2; mr %1,13" : "=r" ((r2)), "=r" ((r13)));
- 
+
     the_context->gpr2 = r2;
     the_context->gpr13 = r13;
   }

@@ -15,14 +15,14 @@
 extern void romStart(void);
 
 
-struct IBR rom_ibr = { 
+struct IBR rom_ibr = {
  {((REGION_BOOT_CONFIG) & 0xff),            /* Initial Bus Configuration */
-  ((REGION_BOOT_CONFIG) >> 8) & 0xff,  
+  ((REGION_BOOT_CONFIG) >> 8) & 0xff,
   ((REGION_BOOT_CONFIG) >> 16) & 0xff,
-  ((REGION_BOOT_CONFIG) >> 24) & 0xff},   
+  ((REGION_BOOT_CONFIG) >> 24) & 0xff},
   romStart,                         /* Start Point */
   & rom_prcb,                       /* PRCB */
-  {-2,                               /* CheckSum */ 
+  {-2,                               /* CheckSum */
   0,
   0,
   0,

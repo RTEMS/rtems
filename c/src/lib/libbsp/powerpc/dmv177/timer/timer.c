@@ -21,8 +21,8 @@ rtems_boolean Timer_driver_Find_average_overhead;
 /*PAGE
  *
  *  Timer_initialize
- *  
- *  This routine initializes the timer.  
+ *
+ *  This routine initializes the timer.
  *
  *  Input parameters:   NONE
  *
@@ -40,7 +40,7 @@ void Timer_initialize()
 
 
   Timer_driver_Start_time = PPC_Get_timebase_register();
-  
+
 
 }
 
@@ -97,7 +97,7 @@ int Read_timer()
  *
  *  Input parameters:   NONE
  *
- *  Output parameters:  
+ *  Output parameters:
  *    status code of successful
  *
  *  Return values:      NONE
@@ -115,7 +115,7 @@ rtems_status_code Empty_function( void )
  *
  *  This routine sets a global boolean to the value passed in.
  *
- *  Input parameters: 
+ *  Input parameters:
  *    find_flag  - flag to indicate to find the average overhead.
  *
  *  Output parameters:  NONE

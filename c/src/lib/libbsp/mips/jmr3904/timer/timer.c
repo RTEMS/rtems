@@ -1,4 +1,4 @@
-/* 
+/*
  *  This file implements a benchmark timer using a TX39 timer.
  *
  *  NOTE: On the simulator, the count directly reflects instructions.

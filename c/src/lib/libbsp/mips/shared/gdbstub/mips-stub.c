@@ -252,7 +252,7 @@ struct z0break
 
   /* the address pointer, really, really must be a pointer to
   ** a 32 bit quantity (likely 64 on the R4k), so the full instruction is read &
-  ** written.  Making it a char * as on the i386 will cause 
+  ** written.  Making it a char * as on the i386 will cause
   ** the zbreaks to mess up the breakpoint instructions
   */
   unsigned *address;
@@ -921,7 +921,7 @@ void gdb_stub_report_exception_info(
    *optr++ = ':';
    optr    = mem2hstr(optr, (unsigned char *)&frame->sp, R_SZ );
    *optr++ = ';';
-  
+
    *optr++ = highhex(PC); /*gdb_hexchars[PC]; */
    *optr++ = lowhex(PC);
    *optr++ = ':';
@@ -929,7 +929,7 @@ void gdb_stub_report_exception_info(
    *optr++ = ';';
 
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
-   if (do_threads) 
+   if (do_threads)
    {
       *optr++ = 't';
       *optr++ = 'h';
@@ -974,7 +974,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
    long long    regval;
    void         *regptr;
    int          binary;
-   
+
 
    registers = (mips_register_t *)frame;
 
@@ -991,7 +991,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
       /* reapply all breakpoints regardless of how we came in */
       struct z0break *z0, *zother;
 
-      for (zother=z0break_list; zother!=NULL; zother=zother->next) 
+      for (zother=z0break_list; zother!=NULL; zother=zother->next)
       {
          if( zother->instr == 0xffffffff )
          {
@@ -1008,9 +1008,9 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
       if( *((unsigned *)frame->epc) == BREAK_INSTR )
       {
          /* see if its one of our zbreaks */
-         for (z0=z0break_list; z0!=NULL; z0=z0->next) 
+         for (z0=z0break_list; z0!=NULL; z0=z0->next)
          {
-            if( (unsigned)z0->address == frame->epc) 
+            if( (unsigned)z0->address == frame->epc)
                break;
          }
          if( z0 )
@@ -1020,7 +1020,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
             /* flag the breakpoint */
             z0->instr = 0xffffffff;
 
-            /* 
+            /*
                now when we return, we'll execute the original code in
                the original state.  This leaves our breakpoint inactive
                since the break instruction isn't there, but we'll reapply
@@ -1208,7 +1208,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
          {
             int testThread;
 
-            if( vhstr2thread(&inBuffer[1], &testThread) == NULL ) 
+            if( vhstr2thread(&inBuffer[1], &testThread) == NULL )
             {
                strcpy(outBuffer, "E01");
                break;
@@ -1225,20 +1225,20 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
          }
          break;
 #endif
-        
+
          case 'H':  /* set new thread */
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
             if (inBuffer[1] != 'g') {
                break;
             }
-	  
+
             if (!do_threads) {
                break;
             }
-	  
+
             {
                int tmp, ret;
-	    
+
                /* Set new generic thread */
                if (vhstr2thread(&inBuffer[2], &tmp) == NULL) {
                   strcpy(outBuffer, "E01");
@@ -1256,7 +1256,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
                   break;
                }
 
-               /* Save current thread registers if necessary */ 
+               /* Save current thread registers if necessary */
                if (current_thread != thread) {
                   ret = rtems_gdb_stub_set_thread_regs(
                      current_thread, (unsigned int *) &current_thread_registers);
@@ -1274,7 +1274,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
                      break;
                   }
                }
-	    
+
                current_thread = tmp;
                strcpy(outBuffer, "OK");
             }
@@ -1285,7 +1285,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
 
 
          case 'Z':  /* Add breakpoint */
-         { 
+         {
             int ret, type, len;
             unsigned *address;
             struct z0break *z0;
@@ -1334,7 +1334,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
             /* Let us copy memory from address add stuff the break point in */
             /*
             *if (mem2hstr(z0->buf, address, 1) == NULL ||
-              !hstr2mem(address, "cc" , 1)) { 
+              !hstr2mem(address, "cc" , 1)) {
 
                * Memory error *
                z0->next = z0break_avail;
@@ -1367,7 +1367,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
 
                z0->prev = NULL;
                z0->next = znxt;
-               
+
                if( znxt ) znxt->prev = z0;
                z0break_list = z0;
             }
@@ -1378,18 +1378,18 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
 
 
          case 'z': /* remove breakpoint */
-            if (inBuffer[1] == 'z') 
+            if (inBuffer[1] == 'z')
             {
                goto dumpzbreaks;
-               
+
 
                /*
                 * zz packet - remove all breaks *
                 z0last = NULL;
 
-                for (z0=z0break_list; z0!=NULL; z0=z0->next) 
+                for (z0=z0break_list; z0!=NULL; z0=z0->next)
                 {
-                if(!hstr2mem(z0->address, z0->buf, R_SZ)) 
+                if(!hstr2mem(z0->address, z0->buf, R_SZ))
                 {
                 ret = 0;
                 }
@@ -1416,7 +1416,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
                int ret, type, len;
                unsigned *address;
                struct z0break *z0;
-              
+
 
                ret = parse_zbreak(inBuffer, &type, (unsigned char **)&address, &len);
                if (!ret) {
@@ -1433,20 +1433,20 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
                   strcpy(outBuffer, "E02");
                   break;
                }
-	   
+
                /* Let us check whether this break point set */
                for (z0=z0break_list; z0!=NULL; z0=z0->next) {
                   if (z0->address == address) {
                      break;
                   }
                }
-              
+
                if (z0 == NULL) {
                   /* Unknown breakpoint */
                   strcpy(outBuffer, "E03");
                   break;
                }
-	    
+
                /*
                if (!hstr2mem(z0->address, z0->buf, R_SZ)) {
                   strcpy(outBuffer, "E04");
@@ -1458,7 +1458,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
                   /* put the old instruction back  */
                   *(z0->address) = z0->instr;
                }
-   
+
                /* Unlink entry */
                {
                   struct z0break *zprv = z0->prev, *znxt = z0->next;
@@ -1474,7 +1474,7 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
                   z0->prev = NULL;
                   z0->next = znxt;
                }
-    
+
                strcpy(outBuffer, "OK");
             }
             break;
@@ -1605,7 +1605,7 @@ static int is_steppable(unsigned ptr)
 
 static char initialized = 0;   /* 0 means we are not initialized */
 
-void mips_gdb_stub_install(int enableThreads) 
+void mips_gdb_stub_install(int enableThreads)
 {
    /*
      These are the RTEMS-defined vectors for all the MIPS exceptions
@@ -1632,7 +1632,7 @@ void mips_gdb_stub_install(int enableThreads)
    int  i;
    rtems_isr_entry old;
 
-   if (initialized) 
+   if (initialized)
    {
       ASSERT(0);
       return;
@@ -1653,16 +1653,16 @@ void mips_gdb_stub_install(int enableThreads)
 
       z0break_avail = NULL;
       z0break_list  = NULL;
-   
+
       /* z0breaks list init, now we'll do it so it makes sense... */
-      for (i=0; i<BREAKNUM; i++) 
+      for (i=0; i<BREAKNUM; i++)
       {
          memset( (z0= &z0break_arr[i]), 0, sizeof(struct z0break));
 
          z0->next = z0break_avail;
          z0break_avail = z0;
       }
-   }     
+   }
 
    for(i=0; exceptionVector[i] > -1; i++)
    {

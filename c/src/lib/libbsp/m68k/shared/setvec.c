@@ -1,7 +1,7 @@
-/*  
+/*
  *
  *  This routine installs an interrupt vector using the basic
- *  RTEMS mechanisms.  This implementation should be suitable for 
+ *  RTEMS mechanisms.  This implementation should be suitable for
  *  most m68k based boards.  However, if the board has an unusual
  *  interrupt controller or most somehow manipulate board specific
  *  hardware to enable/disable, mask, prioritize, etc an interrupt

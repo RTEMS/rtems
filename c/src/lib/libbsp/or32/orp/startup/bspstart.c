@@ -18,12 +18,12 @@
 
 #include <bsp.h>
 #include <rtems/libio.h>
- 
+
 #include <rtems/libcsupport.h>
- 
+
 #include <string.h>
 extern int _mem_end;
- 
+
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
@@ -38,7 +38,7 @@ rtems_cpu_table Cpu_table;
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 
@@ -55,7 +55,7 @@ void bsp_libc_init( void *, uint32_t, int );
  *      not yet initialized.
  *
  */
- 
+
 void bsp_pretasking_hook(void)
 {
     uint32_t                heap_start;
@@ -70,7 +70,7 @@ void bsp_pretasking_hook(void)
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
 }
- 
+
 /*
  *  bsp_start
  *
@@ -96,7 +96,7 @@ void bsp_start( void )
   BSP_Configuration.work_space_start = _mem_end;
   _mem_end += BSP_Configuration.work_space_size + 512;
   ( BSP_Configuration.work_space_size + 512 );
-   
+
   BSP_Configuration.work_space_start = (void *) ((unsigned int)((char *)BSP_Configuration.work_space_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1));
 
   /*

@@ -10,10 +10,10 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  Ported to ERC32 implementation of the SPARC by On-Line Applications
- *  Research Corporation (OAR) under contract to the European Space 
+ *  Research Corporation (OAR) under contract to the European Space
  *  Agency (ESA).
  *
- *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995.
  *  European Space Agency.
  *
  *  $Id$
@@ -91,9 +91,9 @@ extern int rtems_leon_open_eth_driver_attach (struct rtems_bsdnet_ifconfig *conf
 #define Cause_tm27_intr() \
   asm volatile( "ta 0x10; nop " );
 
-#define Clear_tm27_intr()  
+#define Clear_tm27_intr()
 
-#define Lower_tm27_intr() 
+#define Lower_tm27_intr()
 
 /*
  *  The asynchronous trap is an arbitrarily chosen ERC32 interrupt source.
@@ -106,11 +106,11 @@ extern int rtems_leon_open_eth_driver_attach (struct rtems_bsdnet_ifconfig *conf
 #define TEST_INTERRUPT_SOURCE2 LEON_INTERRUPT_EXTERNAL_1+1
 #define TEST_VECTOR2 LEON_TRAP_TYPE( TEST_INTERRUPT_SOURCE2 )
 #define MUST_WAIT_FOR_INTERRUPT 1
- 
+
 #define Install_tm27_vector( handler ) \
   set_vector( (handler), TEST_VECTOR, 1 ); \
   set_vector( (handler), TEST_VECTOR2, 1 );
- 
+
 #define Cause_tm27_intr() \
   do { \
     LEON_Force_interrupt( TEST_INTERRUPT_SOURCE+(Interrupt_nest>>1)); \
@@ -118,10 +118,10 @@ extern int rtems_leon_open_eth_driver_attach (struct rtems_bsdnet_ifconfig *conf
     nop(); \
     nop(); \
   } while (0)
- 
+
 #define Clear_tm27_intr() \
   LEON_Clear_interrupt( TEST_INTERRUPT_SOURCE )
- 
+
 #define Lower_tm27_intr()
 
 #endif
@@ -144,28 +144,28 @@ extern void Clock_delay(uint32_t         microseconds);
 extern int   RAM_START;
 extern int   RAM_END;
 extern int   RAM_SIZE;
- 
+
 extern int   PROM_START;
 extern int   PROM_END;
 extern int   PROM_SIZE;
 
 extern int   CLOCK_SPEED;
- 
+
 extern int   end;        /* last address in the program */
 
 /*
  *  Device Driver Table Entries
  */
- 
+
 /*
  * NOTE: Use the standard Console driver entry
  */
- 
+
 /*
  * NOTE: Use the standard Clock driver entry
  */
- 
- 
+
+
 /* miscellaneous stuff assumed to exist */
 
 void bsp_cleanup( void );

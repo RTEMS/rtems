@@ -51,18 +51,18 @@ void Shm_Get_configuration(
   shm_config_table **shmcfg
 )
 {
-  /* A shared mem space has bee left between RAM_END and DRAM_END 
+  /* A shared mem space has bee left between RAM_END and DRAM_END
    on the first node*/
   if (localnode == 1)
-    BSP_shm_cfgtbl.base       = (vol_u32 *) RAM_END; 
+    BSP_shm_cfgtbl.base       = (vol_u32 *) RAM_END;
   else
     BSP_shm_cfgtbl.base       = (vol_u32 *) (DRAM_END + RAM_END);
 
-  BSP_shm_cfgtbl.length       = DRAM_END - RAM_END; 
+  BSP_shm_cfgtbl.length       = DRAM_END - RAM_END;
   BSP_shm_cfgtbl.format       = SHM_BIG;
-  
+
   BSP_shm_cfgtbl.cause_intr   = Shm_Cause_interrupt;
-  
+
 #ifdef NEUTRAL_BIG
   BSP_shm_cfgtbl.convert      = NULL_CONVERT;
 #else

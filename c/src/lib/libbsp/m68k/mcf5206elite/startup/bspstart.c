@@ -21,15 +21,15 @@
  *  found in the file LICENSE in this distribution or at
  *
  *  http://www.rtems.com/license/LICENSE.
- * 
+ *
  *  $Id$
  */
 
 #include <bsp.h>
 #include <rtems/libio.h>
- 
+
 #include <rtems/libcsupport.h>
- 
+
 #include <string.h>
 
 /*
@@ -49,7 +49,7 @@ char *rtems_progname;
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void);               /* m68k version */

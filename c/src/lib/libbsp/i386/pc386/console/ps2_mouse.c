@@ -82,7 +82,7 @@ isr_on(const rtems_irq_connect_data *unused)
 {
   return;
 }
-						   
+
 static void
 isr_off(const rtems_irq_connect_data *unused)
 {
@@ -126,7 +126,7 @@ static void kb_wait(void)
 		if (! (status & KBD_STAT_IBF))
 			return;
 
-		mdelay(1); 
+		mdelay(1);
 
 		timeout--;
 	} while (timeout);
@@ -463,11 +463,11 @@ size_t read_aux(char * buffer, size_t count )
 	size_t i = count;
 	unsigned char c;
 
-	if (queue_empty()) 
+	if (queue_empty())
 	{
 		return 0;
    }
-	while (i > 0 && !queue_empty()) 
+	while (i > 0 && !queue_empty())
 	{
 		c = get_from_queue();
 		*buffer++ = c;
@@ -591,7 +591,7 @@ static int paux_last_close(int major, int minor, void *arg)
  * It does nothing write now.
  */
 static int write_aux_echo( int minor, const char * buffer, int count )
-{ 
+{
    return 0;
 }
 
@@ -617,7 +617,7 @@ paux_open(rtems_device_major_number major,
                 void                      *arg)
 {
   rtems_status_code              status;
-  static rtems_termios_callbacks cb = 
+  static rtems_termios_callbacks cb =
   {
     NULL,	              /* firstOpen */
     paux_last_close,      /* lastClose */
@@ -645,7 +645,7 @@ paux_close(rtems_device_major_number major,
   return (rtems_termios_close (arg));
 }
 
- 
+
 /*
  * paux device driver READ entry point.
  * Read characters from the PS/2 mouse.
@@ -657,7 +657,7 @@ paux_read(rtems_device_major_number major,
 {
   return rtems_termios_read (arg);
 } /* tty_read */
- 
+
 
 /*
  * paux device driver WRITE entry point.
@@ -675,18 +675,18 @@ paux_write(rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 } /* tty_write */
 
- 
+
 /*
  * Handle ioctl request.
  */
-rtems_device_driver 
+rtems_device_driver
 paux_control(rtems_device_major_number major,
 		rtems_device_minor_number minor,
 		void                      * arg
 )
-{ 
+{
 	rtems_libio_ioctl_args_t *args = arg;
-	switch( args->command ) 
+	switch( args->command )
 	{
 	   default:
       return rtems_termios_ioctl (arg);

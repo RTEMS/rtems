@@ -109,7 +109,7 @@
 	.set	FP_30, (FP_29 + FP_SIZE)
 	.set	FP_31, (FP_30 + FP_SIZE)
 	.set	FP_FPSCR, (FP_31 + FP_SIZE)
-	
+
 	.set	IP_LINK, 0
 	.set	IP_0, (IP_LINK + 8)
 	.set	IP_2, (IP_0 + 4)
@@ -118,12 +118,12 @@
 	.set	IP_4, (IP_3 + 4)
 	.set	IP_5, (IP_4 + 4)
 	.set	IP_6, (IP_5 + 4)
-	
+
 	.set	IP_7, (IP_6 + 4)
 	.set	IP_8, (IP_7 + 4)
 	.set	IP_9, (IP_8 + 4)
 	.set	IP_10, (IP_9 + 4)
-	
+
 	.set	IP_11, (IP_10 + 4)
 	.set	IP_12, (IP_11 + 4)
 	.set	IP_13, (IP_12 + 4)
@@ -133,15 +133,15 @@
 	.set	IP_30, (IP_29 + 4)
 	.set	IP_31, (IP_30 + 4)
 	.set	IP_CR, (IP_31 + 4)
-	
+
 	.set	IP_CTR, (IP_CR + 4)
 	.set	IP_XER, (IP_CTR + 4)
 	.set	IP_LR, (IP_XER + 4)
 	.set	IP_PC, (IP_LR + 4)
-	
+
 	.set	IP_MSR, (IP_PC + 4)
 	.set	IP_END, (IP_MSR + 16)
-	
+
 	BEGIN_CODE
 /*
  *  _CPU_Context_save_fp_context

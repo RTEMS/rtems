@@ -2,7 +2,7 @@
  * Cirrus EP7312 Intererrupt handler
  *
  * Copyright (c) 2002 by Jay Monkman <jtm@smoothsmoothie.com>
- *	
+ *
  * Copyright (c) 2002 by Charlie Steader <charlies@poliac.com>
  *
  *  The license and distribution terms for this file may be
@@ -39,7 +39,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_irq_hdl *HdlTable;
     rtems_interrupt_level level;
-    
+
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -50,7 +50,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     if (*(HdlTable + irq->name) != default_int_handler) {
       return 0;
     }
-    
+
     _CPU_ISR_Disable(level);
 
     /*
@@ -81,7 +81,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
         /* interrupt managed by INTMR3 and INTSR3 */
         *EP7312_INTMR3 |= (1 << (irq->name - 21));
     }
-    
+
     /*
      * Enable interrupt on device
      */
@@ -89,9 +89,9 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     {
     	irq->on(irq);
     }
-    
+
     _CPU_ISR_Enable(level);
-    
+
     return 1;
 }
 
@@ -99,7 +99,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_irq_hdl *HdlTable;
     rtems_interrupt_level level;
-  
+
     if (!isValidInterrupt(irq->name)) {
       return 0;
     }
@@ -135,18 +135,18 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
         /* interrupt managed by INTMR3 and INTSR3 */
         *EP7312_INTMR3 &= ~(1 << (irq->name - 21));
     }
-    
+
     /*
      * Disable interrupt on device
      */
     if(irq->off)
         irq->off(irq);
-    
+
     /*
      * restore the default irq value
      */
     *(HdlTable + irq->name) = default_int_handler;
-    
+
     _CPU_ISR_Enable(level);
 
     return 1;

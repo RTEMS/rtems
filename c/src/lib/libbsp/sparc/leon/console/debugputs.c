@@ -40,7 +40,7 @@ void console_outbyte_polled(
 }
 
 /*
- *  console_inbyte_nonblocking 
+ *  console_inbyte_nonblocking
  *
  *  This routine polls for a character.
  */
@@ -100,7 +100,7 @@ void DEBUG_puts(
 
   LEON_Disable_interrupt( LEON_INTERRUPT_UART_1_RX_TX, old_level );
   LEON_REG.UART_Control_1 = LEON_REG_UART_CTRL_TE;
-    for ( s = string ; *s ; s++ ) 
+    for ( s = string ; *s ; s++ )
       console_outbyte_polled( 0, *s );
 
     console_outbyte_polled( 0, '\r' );

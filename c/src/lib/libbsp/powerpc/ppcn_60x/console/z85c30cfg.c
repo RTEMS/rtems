@@ -28,7 +28,7 @@
 #include <rtems.h>
 #include <bsp.h>
 
-/* 
+/*
  *  Read_85c30_register
  *
  *  Read a Z85c30 register
@@ -64,7 +64,7 @@ void  Write_85c30_register(
   outport_byte(ulCtrlPort, ucData);
 }
 
-/* 
+/*
  *  Read_85c30_data
  *
  *  Read a Z85c30 data register

@@ -28,6 +28,6 @@ void Shm_Cause_interrupt_unix(
 {
   Shm_Interrupt_information *intr;
   intr = &Shm_Interrupt_table[node];
- 
+
   _CPU_SHM_Send_interrupt( (pid_t) intr->address, intr->value );
 }
