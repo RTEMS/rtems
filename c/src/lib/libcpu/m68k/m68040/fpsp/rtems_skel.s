@@ -59,7 +59,7 @@ SYM(_fpspEntry_dz):
 	bclrb		#E1,E_BYTE(a6)
 	frestore	(sp)+
 	unlk		a6
-	jmp		([SYM(M68040FPSPUserExceptionHandlers)+3*4],za0)
+	jmp		([SYM(M68040FPSPUserExceptionHandlers)+3*4],%za0)
 
 //
 //	Inexact exception
@@ -143,7 +143,7 @@ inex_cke1:
 inex_done:
 	frestore	(sp)+
 	unlk		a6
-	jmp	([SYM(M68040FPSPUserExceptionHandlers)+2*4],za0)
+	jmp	([SYM(M68040FPSPUserExceptionHandlers)+2*4],%za0)
 	
 //
 //	Overflow exception
@@ -161,7 +161,7 @@ real_ovfl:
 ovfl_done:
 	frestore	(sp)+
 	unlk		a6
-	jmp	([SYM(M68040FPSPUserExceptionHandlers)+6*4],za0)
+	jmp	([SYM(M68040FPSPUserExceptionHandlers)+6*4],%za0)
 	
 //
 //	Underflow exception
@@ -179,7 +179,7 @@ real_unfl:
 unfl_done:
 	frestore	(sp)+
 	unlk		a6
-	jmp	([SYM(M68040FPSPUserExceptionHandlers)+4*4],za0)
+	jmp	([SYM(M68040FPSPUserExceptionHandlers)+4*4],%za0)
 	
 //
 //	Signalling NAN exception
@@ -195,7 +195,7 @@ real_snan:
 	bclrb		#E1,E_BYTE(a6)	//snan is always an E1 exception
 	frestore	(sp)+
 	unlk		a6
-	jmp	([SYM(M68040FPSPUserExceptionHandlers)+7*4],za0)
+	jmp	([SYM(M68040FPSPUserExceptionHandlers)+7*4],%za0)
 
 //
 //	Operand Error exception
@@ -210,7 +210,7 @@ real_operr:
 	bclrb		#E1,E_BYTE(a6)	//operr is always an E1 exception
 	frestore	(sp)+
 	unlk		a6
-	jmp	([SYM(M68040FPSPUserExceptionHandlers)+5*4],za0)
+	jmp	([SYM(M68040FPSPUserExceptionHandlers)+5*4],%za0)
 	
 //
 //	BSUN exception
@@ -230,7 +230,7 @@ real_bsun:
 	fmovel		(sp)+,fpsr
 	frestore	(sp)+
 	unlk		a6
-	jmp	([SYM(M68040FPSPUserExceptionHandlers)+1*4],za0)
+	jmp	([SYM(M68040FPSPUserExceptionHandlers)+1*4],%za0)
 
 //
 //	F-line exception
@@ -243,7 +243,7 @@ real_bsun:
 SYM(_fpspEntry_fline):
 	jmp	fpsp_fline
 real_fline:
-	jmp	([SYM(M68040FPSPUserExceptionHandlers)+0*4],za0)
+	jmp	([SYM(M68040FPSPUserExceptionHandlers)+0*4],%za0)
 
 //
 //	Unsupported data type exception
@@ -258,7 +258,7 @@ real_unsupp:
 	bclrb		#E1,E_BYTE(a6)	//unsupp is always an E1 exception
 	frestore	(sp)+
 	unlk		a6
-	jmp	([SYM(M68040FPSPUserExceptionHandlers)+8*4],za0)
+	jmp	([SYM(M68040FPSPUserExceptionHandlers)+8*4],%za0)
 
 //
 //	Trace exception
