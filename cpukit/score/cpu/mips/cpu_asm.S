@@ -455,6 +455,7 @@ FRAME(_CPU_Context_switch,sp,0,ra)
 	NOP
 	LDREG	t0,R_EPC*R_SZ(t1)		/* get the userspace EPC from the frame */
 	b	2f
+	nop
 		
 1:	la    t0,_Thread_Dispatch		/* if ==0, we're switched out */
 
@@ -878,7 +879,7 @@ _ISR_Handler_1:
         /* Then where did it come from??? */
 	
 	beq      t0,zero,_ISR_Handler_exit
-
+	nop
 	
 	
 		

@@ -1,3 +1,8 @@
+2005-01-03	Greg Menke <gregory.menke@gsfc.nasa.gov>
+	PR 737 
+	* cpu_asm.S: Fixes gcc warning about instructions in branch delay
+	slot when compiling cpu_asm.S
+
 2005-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Remove build-variant support.
