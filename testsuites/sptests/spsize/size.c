@@ -337,8 +337,7 @@ uninitialized =
 
 /*types.h*/     0                                         +
 
-/*userext.h*/   (sizeof _User_extensions_Initial)         +
-                (sizeof _User_extensions_List)            +
+/*userext.h*/   (sizeof _User_extensions_List)            +
 
 /*watchdog.h*/  (sizeof _Watchdog_Sync_level)             +
                 (sizeof _Watchdog_Sync_count)             +
