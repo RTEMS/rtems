@@ -13,9 +13,10 @@ RedHat Linux 5.1 as the host environment:
    a29k    a29k      port sw                      (note 2)
    arm     arm7      arm_bare_bsp                 (note 3)
    arm     arm7      armulator (in gdb)           (note 5 -- no tick)
+   arm     arm7      vegaplus (in gdb)            (note 1)
    c4x     c32       c4xsim (simulator in gdb)    (note 5)
    c4x     c41       c4xsim (simulator in gdb)    (note 5 -- needs debugging)
-   h8     h8300h     h8sim                        (note 5 -- under development)
+   h8     h8300h     h8sim                        (note 5)
    h8     h8300s     no BSP                       (note 9)
    h8     h8300      BUILDS - NEEDS WORK
    hppa   hppa7100   simhppa                      (note 1)
@@ -52,6 +53,7 @@ RedHat Linux 5.1 as the host environment:
    mips   idt4600    p4000                        (note 1)
    mips   idt4650    p4000                        (note 1)
    mips   tx3904     jmr3904                      (note 5 -- under development)
+   mips   mongoosev  genmongoosev                 (note 1)
  powerpc  ppc403     helas403                     (note 1, 6)
  powerpc  ppc403     Papyrus                      (note 1)
  powerpc  ppc5xx     BUILDS - NEEDS WORK

@@ -1,3 +1,8 @@
+2001-05-25	Joel Sherrill <joel@OARcorp.com>
+
+ 	* TESTED: Updated the list of BSPs.
+ 	* TOOLS_TARGETS: Updated the list of tools and object formats.
+
 2001-03-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Use ${MAKE} in message at the end of the

@@ -2,12 +2,21 @@
 #  $Id$
 #
 
-The following are targets for the GNU tools (egcs, binutils, newlib, and gdb)
+The following are targets for the GNU tools (gcc, binutils, newlib, and gdb)
 that are for RTEMS, their object format, and status notes
+
+arm:
+        arm-rtems               ELF
+
+c4x:
+        c4x-rtems               COFF           Requires patches
 
 hppa:
 	hppa1.1-rtems		ELF
 	
+
+h8300:
+        h8300-rtems             COFF
 
 i386:
 	i386-rtems		ELF
