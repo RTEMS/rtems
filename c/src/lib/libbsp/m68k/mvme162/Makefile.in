@@ -12,18 +12,14 @@ include $(PROJECT_ROOT)/make/directory.cfg
 
 SRCS=README
 
-# If the MVME162 is an LX model, then there are 2 z8530's to yield
-# four serial ports.  The application can choose this driver by
-# using "CONSOLEX_DRIVER_TABLE_ENTRY" in the driver table definition,
+# The MVME162 has 2 z8530's to yield four serial ports. 
+# The application can access these by referencing the consolex driver
+# with "CONSOLEX_DRIVER_TABLE_ENTRY" in the driver table definition,
 # in place of "CONSOLE_DRIVER_TABLE_ENTRY".  See consolex/cTest.c for
 # an example.
-
-ifeq ($(RTEMS_MVME162_MODEL),mvme162lx)
-CONSOLEX=consolex
-endif
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
 #
 # XXXX add tools
-SUB_DIRS=include startup clock console $(CONSOLEX) timer wrapup
+SUB_DIRS=include startup clock console consolex timer wrapup
