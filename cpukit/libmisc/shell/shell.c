@@ -17,6 +17,7 @@
 #endif
 
 #include <stdio.h>
+#include <time.h>
 
 #include <rtems.h>
 #include <rtems/error.h>
