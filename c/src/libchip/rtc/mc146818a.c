@@ -25,7 +25,6 @@
 #include <rtems.h>
 #include <libchip/rtc.h>
 #include <libchip/mc146818a.h>
-#include <bsp.h>
 
 #define From_BCD( _x ) ((((_x) >> 4) * 10) + ((_x) & 0x0F))
 #define To_BCD( _x )   ((((_x) / 10) << 4) + ((_x) % 10))

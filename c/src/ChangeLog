@@ -1,3 +1,8 @@
+2004-11-03	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* libchip/rtc/mc146818a.c: Don't include <bsp.h>
+	(Thanks to Lars Munch <lars@segv.dk> for catching this).
+
 2004-10-28	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	PR 707/make_build
