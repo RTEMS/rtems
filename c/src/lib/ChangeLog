@@ -1,4 +1,10 @@
 
+2000-11-25  Antti P Miettinen  <antti.p.miettinen@nokia.com>
+
+	* libc/termios.c, libc/termiostypes.h: Task driver driver model
+	and line discipline support from Thomas Doerfler
+	<Thomas.Doerfler@imd-systems.de>.
+
 2000-11-20	 Dmitry Kargapolov <dk@gentex.ru>
 
 	* libc/mount.c: Make sure there is space allocated for a device name

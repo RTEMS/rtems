@@ -81,6 +81,6 @@ $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 DOC_FILES = TODO CASES
 
 EXTRA_DIST = $(DOC_FILES) $(COMMON_C_FILES) $(EMBEDDED_C_FILES) \
-    $(UNIX_C_FILES)
+    $(UNIX_C_FILES) termiostypes.h
 
 include $(top_srcdir)/../../../automake/local.am

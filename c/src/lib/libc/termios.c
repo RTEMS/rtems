@@ -23,6 +23,9 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
+#include <sys/ttycom.h>
+
+#include "termiostypes.h"
 
 /*
  *  FreeBSD does not support a full POSIX termios so we have to help it out
@@ -60,82 +63,6 @@
 #define RAW_INPUT_BUFFER_SIZE	128
 #define RAW_OUTPUT_BUFFER_SIZE	64
 
-/*
- * Variables associated with each termios instance.
- * One structure for each hardware I/O device.
- */
-struct rtems_termios_tty {
-	/*
-	 * Linked-list of active TERMIOS devices
-	 */
-	struct rtems_termios_tty	*forw;
-	struct rtems_termios_tty	*back;
-
-	/*
-	 * How many times has this device been opened
-	 */
-	int		refcount;
-
-	/*
-	 * This device
-	 */
-	rtems_device_major_number	major;
-	rtems_device_major_number	minor;
-
-	/*
-	 * Mutual-exclusion semaphores
-	 */
-	rtems_id	isem;
-	rtems_id	osem;
-
-	/*
-	 * The canonical (cooked) character buffer
-	 */
-	char		cbuf[CBUFSIZE];
-	int		ccount;
-	int		cindex;
-
-	/*
-	 * Keep track of cursor (printhead) position
-	 */
-	int		column;
-	int		read_start_column;
-
-	/*
-	 * The ioctl settings
-	 */
-	struct termios	termios;
-	rtems_interval	vtimeTicks;
-
-	/*
-	 * Raw input character buffer
-	 */
-	volatile char		rawInBuf[RAW_INPUT_BUFFER_SIZE];
-	volatile unsigned int	rawInBufHead;
-	volatile unsigned int	rawInBufTail;
-	rtems_id		rawInBufSemaphore;
-	rtems_unsigned32	rawInBufSemaphoreOptions;
-	rtems_interval		rawInBufSemaphoreTimeout;
-	rtems_interval		rawInBufSemaphoreFirstTimeout;
-	unsigned int		rawInBufDropped;	/* Statistics */
-
-	/*
-	 * Raw output character buffer
-	 */
-	volatile char		rawOutBuf[RAW_OUTPUT_BUFFER_SIZE];
-	volatile unsigned int	rawOutBufHead;
-	volatile unsigned int	rawOutBufTail;
-	rtems_id		rawOutBufSemaphore;
-	volatile enum {rob_idle, rob_busy, rob_wait }	rawOutBufState;
-
-	/*
-	 * Callbacks to device-specific routines
-	 */
-	rtems_termios_callbacks	device;
-        volatile unsigned int   flow_ctrl;
-        unsigned int            lowwater,highwater;
-};
-
 /* fields for "flow_ctrl" status */
 #define FL_IREQXOF 1        /* input queue requests stop of incoming data */
 #define FL_ISNTXOF 2        /* XOFF has been sent to other side of line   */
@@ -148,9 +75,47 @@ struct rtems_termios_tty {
 #define FL_MDXON   0x200    /* input controlled with XON/XOFF protocol    */
 #define FL_MDXOF   0x400    /* output controlled with XON/XOFF protocol   */
 
+#define NODISC(n) \
+	{ NULL,	NULL,	NULL,	NULL, \
+	  NULL,	NULL,	NULL,	NULL }
+/*
+ * FIXME: change linesw entries consistant with linesw entry usage...
+ */
+struct	linesw linesw[MAXLDISC] =
+{
+	NODISC(0),		/* 0- termios-built-in */
+	NODISC(1),		/* 1- defunct */
+	NODISC(2),              /* 2- NTTYDISC */
+	NODISC(3),		/* TABLDISC */
+	NODISC(4),		/* SLIPDISC */
+	NODISC(5),		/* PPPDISC */
+	NODISC(6),		/* loadable */
+	NODISC(7),		/* loadable */
+};
+
+int	nlinesw = sizeof (linesw) / sizeof (linesw[0]);
+
 extern struct rtems_termios_tty *rtems_termios_ttyHead;
 extern struct rtems_termios_tty *rtems_termios_ttyTail;
 extern rtems_id rtems_termios_ttyMutex;
+
+static rtems_task rtems_termios_rxdaemon(rtems_task_argument argument);
+static rtems_task rtems_termios_txdaemon(rtems_task_argument argument);
+/*
+ * some constants for I/O daemon task creation
+ */
+#define TERMIOS_TXTASK_PRIO 10
+#define TERMIOS_RXTASK_PRIO 9
+#define TERMIOS_TXTASK_STACKSIZE 1024
+#define TERMIOS_RXTASK_STACKSIZE 1024
+/*
+ * some events to be sent to the I/O tasks
+ */
+#define TERMIOS_TX_START_EVENT     RTEMS_EVENT_1
+#define TERMIOS_TX_TERMINATE_EVENT RTEMS_EVENT_0
+
+#define TERMIOS_RX_PROC_EVENT      RTEMS_EVENT_1
+#define TERMIOS_RX_TERMINATE_EVENT RTEMS_EVENT_0
 
 /*
  * Open a termios device
@@ -170,7 +135,8 @@ rtems_termios_open (
 	/*
 	 * See if the device has already been opened
 	 */
-	sc = rtems_semaphore_obtain (rtems_termios_ttyMutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+	sc = rtems_semaphore_obtain (rtems_termios_ttyMutex,
+				     RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 	if (sc != RTEMS_SUCCESSFUL)
 		return sc;
 	for (tty = rtems_termios_ttyHead ; tty != NULL ; tty = tty->forw) {
@@ -188,6 +154,41 @@ rtems_termios_open (
 			rtems_semaphore_release (rtems_termios_ttyMutex);
 			return RTEMS_NO_MEMORY;
 		}
+		/*
+		 * allocate raw input buffer
+		 */
+		tty->rawInBuf.Size = RAW_INPUT_BUFFER_SIZE;
+		tty->rawInBuf.theBuf = malloc (tty->rawInBuf.Size);
+		if (tty->rawInBuf.theBuf == NULL) {
+		        free(tty);
+			rtems_semaphore_release (rtems_termios_ttyMutex);
+			return RTEMS_NO_MEMORY;
+		}
+		/*
+		 * allocate raw output buffer
+		 */
+		tty->rawOutBuf.Size = RAW_OUTPUT_BUFFER_SIZE;
+		tty->rawOutBuf.theBuf = malloc (tty->rawOutBuf.Size);
+		if (tty->rawInBuf.theBuf == NULL) {
+		        free((void *)(tty->rawInBuf.theBuf));
+		        free(tty);
+			rtems_semaphore_release (rtems_termios_ttyMutex);
+			return RTEMS_NO_MEMORY;
+		}
+		/*
+		 * allocate cooked buffer
+		 */
+		tty->cbuf  = malloc (CBUFSIZE);
+		if (tty->cbuf == NULL) {
+		        free((void *)(tty->rawOutBuf.theBuf));
+		        free((void *)(tty->rawInBuf.theBuf));
+		        free(tty);
+			rtems_semaphore_release (rtems_termios_ttyMutex);
+			return RTEMS_NO_MEMORY;
+		}
+		/*
+		 * link tty
+		 */
 		if (rtems_termios_ttyHead)
 			rtems_termios_ttyHead->back = tty;
 		tty->forw = rtems_termios_ttyHead;
@@ -221,7 +222,7 @@ rtems_termios_open (
 			0,
 			RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_FIFO,
 			RTEMS_NO_PRIORITY,
-			&tty->rawOutBufSemaphore);
+			&tty->rawOutBuf.Semaphore);
 		if (sc != RTEMS_SUCCESSFUL)
 			rtems_fatal_error_occurred (sc);
 		tty->rawOutBufState = rob_idle;
@@ -230,13 +231,41 @@ rtems_termios_open (
 		 * Set callbacks
 		 */
 		tty->device = *callbacks;
-		if (!tty->device.pollRead) {
+
+		/*
+		 * Create I/O tasks
+		 */
+		if (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN) {
+			sc = rtems_task_create (
+                                   rtems_build_name ('T', 'x', 'T', c),
+				   TERMIOS_TXTASK_PRIO,
+				   TERMIOS_TXTASK_STACKSIZE,
+				   RTEMS_NO_PREEMPT | RTEMS_NO_TIMESLICE | 
+				   RTEMS_NO_ASR,
+				   RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
+				   &tty->txTaskId);
+			if (sc != RTEMS_SUCCESSFUL)
+				rtems_fatal_error_occurred (sc);
+			sc = rtems_task_create (
+                                   rtems_build_name ('R', 'x', 'T', c),
+				   TERMIOS_RXTASK_PRIO,
+				   TERMIOS_RXTASK_STACKSIZE,
+				   RTEMS_NO_PREEMPT | RTEMS_NO_TIMESLICE | 
+				   RTEMS_NO_ASR,
+				   RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
+				   &tty->rxTaskId);
+			if (sc != RTEMS_SUCCESSFUL)
+				rtems_fatal_error_occurred (sc);
+				
+		}
+		if ((tty->device.pollRead == NULL) ||
+		    (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN)){
 			sc = rtems_semaphore_create (
 				rtems_build_name ('T', 'R', 'r', c),
 				0,
 				RTEMS_COUNTING_SEMAPHORE | RTEMS_PRIORITY,
 				RTEMS_NO_PRIORITY,
-				&tty->rawInBufSemaphore);
+				&tty->rawInBuf.Semaphore);
 			if (sc != RTEMS_SUCCESSFUL)
 				rtems_fatal_error_occurred (sc);
 		}
@@ -269,8 +298,8 @@ rtems_termios_open (
 		/*
 		 * set low/highwater mark for XON/XOFF support
 		 */
-		tty->lowwater  = RAW_INPUT_BUFFER_SIZE * 1/2;
-		tty->highwater = RAW_INPUT_BUFFER_SIZE * 3/4;
+		tty->lowwater  = tty->rawInBuf.Size * 1/2;
+		tty->highwater = tty->rawInBuf.Size * 3/4;
 		/*
 		 * Bump name characer
 		 */
@@ -279,8 +308,26 @@ rtems_termios_open (
 
 	}
 	args->iop->data1 = tty;
-	if (!tty->refcount++ && tty->device.firstOpen)
+	if (!tty->refcount++) {
+	  if (tty->device.firstOpen)
 		(*tty->device.firstOpen)(major, minor, arg);
+	  /*
+	   * start I/O tasks, if needed
+	   */
+	  if (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN) {
+	    sc = rtems_task_start(tty->rxTaskId,
+				  rtems_termios_rxdaemon,
+				  (rtems_task_argument)tty);
+	    if (sc != RTEMS_SUCCESSFUL)
+	      rtems_fatal_error_occurred (sc);
+	    
+	    sc = rtems_task_start(tty->txTaskId,
+				  rtems_termios_txdaemon,
+				  (rtems_task_argument)tty);
+	    if (sc != RTEMS_SUCCESSFUL)
+	      rtems_fatal_error_occurred (sc);
+	  }
+	}
 	rtems_semaphore_release (rtems_termios_ttyMutex);
 	return RTEMS_SUCCESSFUL;
 }
@@ -294,12 +341,12 @@ drainOutput (struct rtems_termios_tty *tty)
 	rtems_interrupt_level level;
 	rtems_status_code sc;
 
-	if (tty->device.outputUsesInterrupts) {
+	if (tty->device.outputUsesInterrupts != TERMIOS_POLLED) {
 		rtems_interrupt_disable (level);
-		while (tty->rawOutBufTail != tty->rawOutBufHead) {
+		while (tty->rawOutBuf.Tail != tty->rawOutBuf.Head) {
 			tty->rawOutBufState = rob_wait;
 			rtems_interrupt_enable (level);
-			sc = rtems_semaphore_obtain (tty->rawOutBufSemaphore,
+			sc = rtems_semaphore_obtain (tty->rawOutBuf.Semaphore,
 							RTEMS_WAIT,
 							RTEMS_NO_TIMEOUT);
 			if (sc != RTEMS_SUCCESSFUL)
@@ -321,7 +368,35 @@ rtems_termios_close (void *arg)
 	if (sc != RTEMS_SUCCESSFUL)
 		rtems_fatal_error_occurred (sc);
 	if (--tty->refcount == 0) {
-		drainOutput (tty);
+                if (linesw[tty->t_line].l_close != NULL) {
+			/*
+			 * call discipline-specific close
+			 */
+			sc = linesw[tty->t_line].l_close(tty);
+		}
+		else {
+			/*
+			 * default: just flush output buffer
+			 */
+		        drainOutput (tty);
+		}
+	  
+		if (tty->device.outputUsesInterrupts 
+		    == TERMIOS_TASK_DRIVEN) {
+			/*
+			 * send "terminate" to I/O tasks
+			 */
+			sc = rtems_event_send(
+                                  tty->rxTaskId,
+				  TERMIOS_RX_TERMINATE_EVENT);
+			if (sc != RTEMS_SUCCESSFUL)
+				rtems_fatal_error_occurred (sc);
+			sc = rtems_event_send(
+                                  tty->txTaskId,
+				  TERMIOS_TX_TERMINATE_EVENT);
+			if (sc != RTEMS_SUCCESSFUL)
+				rtems_fatal_error_occurred (sc);
+		}
 		if (tty->device.lastClose)
 			 (*tty->device.lastClose)(tty->major, tty->minor, arg);
 		if (tty->forw == NULL)
@@ -334,9 +409,10 @@ rtems_termios_close (void *arg)
 			tty->back->forw = tty->forw;
 		rtems_semaphore_delete (tty->isem);
 		rtems_semaphore_delete (tty->osem);
-		rtems_semaphore_delete (tty->rawOutBufSemaphore);
-		if (!tty->device.pollRead)
-			rtems_semaphore_delete (tty->rawInBufSemaphore);
+		rtems_semaphore_delete (tty->rawOutBuf.Semaphore);
+		if ((tty->device.pollRead == NULL) ||
+		    (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN))
+			rtems_semaphore_delete (tty->rawInBuf.Semaphore);
 		free (tty);
 	}
 	rtems_semaphore_release (rtems_termios_ttyMutex);
@@ -366,7 +442,7 @@ termios_set_flowctrl(struct rtems_termios_tty *tty)
       if (tty->rawOutBufState != rob_idle) {
 	/* if chars available, call write function... */
 	(*tty->device.write)(tty->minor,
-			     (char *)&tty->rawOutBuf[tty->rawOutBufTail], 1);
+		     (char *)&tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail],1);
       }
       /* reenable interrupts */
       rtems_interrupt_enable(level);
@@ -427,7 +503,12 @@ rtems_termios_ioctl (void *arg)
 	}
 	switch (args->command) {
 	default:
-		sc = RTEMS_INVALID_NUMBER;
+		if (linesw[tty->t_line].l_ioctl != NULL) {
+			sc = linesw[tty->t_line].l_ioctl(tty,args);
+		}
+		else {
+			sc = RTEMS_INVALID_NUMBER;
+		}
 		break;
 
 	case RTEMS_IO_GET_ATTRIBUTES:
@@ -476,6 +557,31 @@ rtems_termios_ioctl (void *arg)
 		drainOutput (tty);
 		break;
 
+		/*
+		 * FIXME: add various ioctl code handlers
+		 */
+
+#if 1 /* FIXME */
+	case TIOCSETD:
+		/*
+		 * close old line discipline
+		 */
+		if (linesw[tty->t_line].l_close != NULL) {
+			sc = linesw[tty->t_line].l_close(tty);
+		}
+		tty->t_line=*(int*)(args->buffer);
+		tty->t_sc = NULL; /* ensure that no more valid data */
+		/*
+		 * open new line discipline
+		 */
+		if (linesw[tty->t_line].l_open != NULL) {
+			sc = linesw[tty->t_line].l_open(tty);
+		}
+		break;
+	case TIOCGETD:	
+		*(int*)(args->buffer)=tty->t_line;
+		break;		
+#endif
  	case FIONREAD:
 		/* Half guess that this is the right operation */
 		*(int *)args->buffer = tty->ccount - tty->cindex;
@@ -489,18 +595,18 @@ rtems_termios_ioctl (void *arg)
 /*
  * Send characters to device-specific code
  */
-static void
-osend (const char *buf, int len, struct rtems_termios_tty *tty)
+void
+rtems_termios_puts (const char *buf, int len, struct rtems_termios_tty *tty)
 {
 	unsigned int newHead;
 	rtems_interrupt_level level;
 	rtems_status_code sc;
 
-	if (!tty->device.outputUsesInterrupts) {
+	if (tty->device.outputUsesInterrupts == TERMIOS_POLLED) {
 		(*tty->device.write)(tty->minor, buf, len);
 		return;
 	}
-	newHead = tty->rawOutBufHead;
+	newHead = tty->rawOutBuf.Head;
 	while (len) {
 		/*
 		 * Performance improvement could be made here.
@@ -514,25 +620,25 @@ osend (const char *buf, int len, struct rtems_termios_tty *tty)
 		 * To minimize latency, the memcpy should be done
 		 * with interrupts enabled.
 		 */
-		newHead = (newHead + 1) % RAW_OUTPUT_BUFFER_SIZE;
+		newHead = (newHead + 1) % tty->rawOutBuf.Size;
 		rtems_interrupt_disable (level);
-		while (newHead == tty->rawOutBufTail) {
+		while (newHead == tty->rawOutBuf.Tail) {
 			tty->rawOutBufState = rob_wait;
 			rtems_interrupt_enable (level);
-			sc = rtems_semaphore_obtain (tty->rawOutBufSemaphore,
+			sc = rtems_semaphore_obtain (tty->rawOutBuf.Semaphore,
 							RTEMS_WAIT,
 							RTEMS_NO_TIMEOUT);
 			if (sc != RTEMS_SUCCESSFUL)
 				rtems_fatal_error_occurred (sc);
 			rtems_interrupt_disable (level);
 		}
-		tty->rawOutBuf[tty->rawOutBufHead] = *buf++;
-		tty->rawOutBufHead = newHead;
+		tty->rawOutBuf.theBuf[tty->rawOutBuf.Head] = *buf++;
+		tty->rawOutBuf.Head = newHead;
 		if (tty->rawOutBufState == rob_idle) {
 		  /* check, whether XOFF has been received */
 		  if (!(tty->flow_ctrl & FL_ORCVXOF)) {
 		    (*tty->device.write)(tty->minor,
-				(char *)&tty->rawOutBuf[tty->rawOutBufTail],1);
+			(char *)&tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail],1);
 		  }
 		  else {
 		    /* remember that output has been stopped due to flow ctrl*/
@@ -559,7 +665,7 @@ oproc (unsigned char c, struct rtems_termios_tty *tty)
 			if (tty->termios.c_oflag & ONLRET)
 				tty->column = 0;
 			if (tty->termios.c_oflag & ONLCR) {
-				osend ("\r", 1, tty);
+				rtems_termios_puts ("\r", 1, tty);
 				tty->column = 0;
 			}
 			break;
@@ -580,7 +686,7 @@ oproc (unsigned char c, struct rtems_termios_tty *tty)
 			i = 8 - (tty->column & 7);
 			if ((tty->termios.c_oflag & TABDLY) == XTABS) {
 				tty->column += i;
-				osend ( "        ",  i, tty);
+				rtems_termios_puts ( "        ",  i, tty);
 				return;
 			}
 			tty->column += i;
@@ -599,7 +705,7 @@ oproc (unsigned char c, struct rtems_termios_tty *tty)
 			break;
 		}
 	}
-	osend (&c, 1, tty);
+	rtems_termios_puts (&c, 1, tty);
 }
 
 rtems_status_code
@@ -612,6 +718,11 @@ rtems_termios_write (void *arg)
 	sc = rtems_semaphore_obtain (tty->osem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 	if (sc != RTEMS_SUCCESSFUL)
 		return sc;
+	if (linesw[tty->t_line].l_write != NULL) {
+		sc = linesw[tty->t_line].l_write(tty,args);
+		rtems_semaphore_release (tty->osem);
+		return sc;
+	}
 	if (tty->termios.c_oflag & OPOST) {
 		unsigned32 count = args->count;
 		unsigned8 *buffer = args->buffer;
@@ -620,7 +731,7 @@ rtems_termios_write (void *arg)
 		args->bytes_moved = args->count;
 	}
 	else {
-		osend (args->buffer, args->count, tty);
+		rtems_termios_puts (args->buffer, args->count, tty);
 		args->bytes_moved = args->count;
 	}
 	rtems_semaphore_release (tty->osem);
@@ -638,7 +749,7 @@ echo (unsigned char c, struct rtems_termios_tty *tty)
 
 		echobuf[0] = '^';
 		echobuf[1] = c ^ 0x40;
-		osend (echobuf, 2, tty);
+		rtems_termios_puts (echobuf, 2, tty);
 		tty->column += 2;
 	}
 	else {
@@ -701,18 +812,18 @@ erase (struct rtems_termios_tty *tty, int lineFlag)
 				 * Back up over the tab
 				 */
 				while (tty->column > col) {
-					osend ("\b", 1, tty);
+					rtems_termios_puts ("\b", 1, tty);
 					tty->column--;
 				}
 			}
 			else {
 				if (iscntrl (c) && (tty->termios.c_lflag & ECHOCTL)) {
-					osend ("\b \b", 3, tty);
+					rtems_termios_puts ("\b \b", 3, tty);
 					if (tty->column)
 						tty->column--;
 				}
 				if (!iscntrl (c) || (tty->termios.c_lflag & ECHOCTL)) {
-					osend ("\b \b", 3, tty);
+					rtems_termios_puts ("\b \b", 3, tty);
 					if (tty->column)
 						tty->column--;
 				}
@@ -872,15 +983,15 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 		/*
 		 * Process characters read from raw queue
 		 */
-		while (tty->rawInBufHead != tty->rawInBufTail) {
+		while (tty->rawInBuf.Head != tty->rawInBuf.Tail) {
 			unsigned char c;
 			unsigned int newHead;
 
-			newHead = (tty->rawInBufHead + 1) % RAW_INPUT_BUFFER_SIZE;
-			c = tty->rawInBuf[newHead];
-			tty->rawInBufHead = newHead;
-			if(((tty->rawInBufTail-newHead+RAW_INPUT_BUFFER_SIZE)
-			    % RAW_INPUT_BUFFER_SIZE) 
+			newHead = (tty->rawInBuf.Head + 1) % tty->rawInBuf.Size;
+			c = tty->rawInBuf.theBuf[newHead];
+			tty->rawInBuf.Head = newHead;
+			if(((tty->rawInBuf.Tail-newHead+tty->rawInBuf.Size)
+			    % tty->rawInBuf.Size)
 			   < tty->lowwater) {
 			  tty->flow_ctrl &= ~FL_IREQXOF;
 			  /* if tx stopped and XON should be sent... */
@@ -918,7 +1029,7 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 		/*
 		 * Wait for characters
 		 */
-		sc = rtems_semaphore_obtain (tty->rawInBufSemaphore,
+		sc = rtems_semaphore_obtain (tty->rawInBuf.Semaphore,
 						tty->rawInBufSemaphoreOptions,
 						timeout);
 		if (sc != RTEMS_SUCCESSFUL)
@@ -939,10 +1050,16 @@ rtems_termios_read (void *arg)
 	sc = rtems_semaphore_obtain (tty->isem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 	if (sc != RTEMS_SUCCESSFUL)
 		return sc;
+	if (linesw[tty->t_line].l_read != NULL) {
+		sc = linesw[tty->t_line].l_read(tty,args);
+		rtems_semaphore_release (tty->isem);
+		return sc;
+	}
 	if (tty->cindex == tty->ccount) {
 		tty->cindex = tty->ccount = 0;
 		tty->read_start_column = tty->column;
-		if (tty->device.pollRead)
+		if (tty->device.pollRead != NULL
+		    && tty->device.outputUsesInterrupts == TERMIOS_POLLED)
 			sc = fillBufferPoll (tty);
 		else
 			sc = fillBufferQueue (tty);
@@ -956,6 +1073,19 @@ rtems_termios_read (void *arg)
 	args->bytes_moved = args->count - count;
 	rtems_semaphore_release (tty->isem);
 	return sc;
+}
+
+/*
+ * signal receive interrupt to rx daemon
+ * NOTE: This routine runs in the context of the
+ *       device receive interrupt handler.
+ */
+void rtems_termios_rxirq_occured(struct rtems_termios_tty *tty)
+{
+	/*
+	 * send event to rx daemon task
+	 */
+	rtems_event_send(tty->rxTaskId,TERMIOS_RX_PROC_EVENT);
 }
 
 /*
@@ -973,6 +1103,14 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 	int dropped = 0;
 	boolean flow_rcv = FALSE; /* TRUE, if flow control char received */
 	rtems_interrupt_level level;
+
+	if (linesw[tty->t_line].l_rint != NULL) {
+	  while (len--) {
+	    c = *buf++;
+	    linesw[tty->t_line].l_rint(c,tty);
+	  }
+	  return 0;
+	}
 
 	while (len--) {
 	  c = *buf++;
@@ -1010,18 +1148,18 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 	      if (tty->rawOutBufState != rob_idle) {
 	      /* if chars available, call write function... */
 		(*tty->device.write)(tty->minor,
-				     (char *)&tty->rawOutBuf[tty->rawOutBufTail], 1);
+		     (char *)&tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail], 1);
 	      }
 	      /* reenable interrupts */
 	      rtems_interrupt_enable(level);
 	    }
 	  }	
 	  else {
-		newTail = (tty->rawInBufTail + 1) % RAW_INPUT_BUFFER_SIZE;
+		newTail = (tty->rawInBuf.Tail + 1) % tty->rawInBuf.Size;
 		/* if chars_in_buffer > highwater                */
 		rtems_interrupt_disable(level);
-		if ((((newTail - tty->rawInBufHead + RAW_INPUT_BUFFER_SIZE) 
-		      % RAW_INPUT_BUFFER_SIZE)
+		if ((((newTail - tty->rawInBuf.Head + tty->rawInBuf.Size)
+		      % tty->rawInBuf.Size)
 		     > tty->highwater) && 
 		    !(tty->flow_ctrl & FL_IREQXOF)) {
 		  /* incoming data stream should be stopped */
@@ -1050,18 +1188,133 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 		/* reenable interrupts */
 		rtems_interrupt_enable(level);
 
-		if (newTail == tty->rawInBufHead) {
+		if (newTail == tty->rawInBuf.Head) {
 		        dropped++;
 		}
 		else {
-		        tty->rawInBuf[newTail] = c;
-		        tty->rawInBufTail = newTail;
+		        tty->rawInBuf.theBuf[newTail] = c;
+		        tty->rawInBuf.Tail = newTail;
 		}		
 	  }
 	}
 	tty->rawInBufDropped += dropped;
-	rtems_semaphore_release (tty->rawInBufSemaphore);
+	rtems_semaphore_release (tty->rawInBuf.Semaphore);
 	return dropped;
+}
+
+/*
+ * in task-driven mode, this function is called in Tx task context
+ * in interrupt-driven mode, this function is called in TxIRQ context
+ */
+int
+rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
+{
+	unsigned int newTail;
+	int nToSend;
+	rtems_interrupt_level level;
+	int len;
+
+	/* check for XOF/XON to send */
+	if ((tty->flow_ctrl & (FL_MDXOF | FL_IREQXOF | FL_ISNTXOF))
+	    == (FL_MDXOF | FL_IREQXOF)) {
+	  /* XOFF should be sent now... */
+	  (*tty->device.write)(tty->minor, 
+			       &(tty->termios.c_cc[VSTOP]), 1);
+
+	  rtems_interrupt_disable(level);
+	  tty->t_dqlen--;
+	  tty->flow_ctrl |= FL_ISNTXOF;
+	  rtems_interrupt_enable(level);
+
+	  nToSend = 1;
+	}
+	else if ((tty->flow_ctrl & (FL_IREQXOF | FL_ISNTXOF))
+		 == FL_ISNTXOF) {
+	  /* NOTE: send XON even, if no longer in XON/XOFF mode... */
+	  /* XON should be sent now... */
+		/*
+		 * FIXME: this .write call will generate another 
+		 * dequeue callback. This will advance the "Tail" in the data
+		 * buffer, although the corresponding data is not yet out!
+		 * Therefore the dequeue "length" should be reduced by 1
+		 */
+	  (*tty->device.write)(tty->minor, 
+			       &(tty->termios.c_cc[VSTART]), 1);
+
+	  rtems_interrupt_disable(level);
+	  tty->t_dqlen--;
+	  tty->flow_ctrl &= ~FL_ISNTXOF;
+	  rtems_interrupt_enable(level);
+
+	  nToSend = 1;
+	}
+	else {
+	  if ( tty->rawOutBuf.Head == tty->rawOutBuf.Tail ) {
+	    /*
+	     * buffer was empty
+	     */
+	    if (tty->rawOutBufState == rob_wait) {
+	      /* 
+	       * this should never happen... 
+	       */
+	      rtems_semaphore_release (tty->rawOutBuf.Semaphore);
+	    }
+	    return 0;	
+	  }
+
+	  rtems_interrupt_disable(level);
+	  len = tty->t_dqlen;
+	  tty->t_dqlen = 0;
+	  rtems_interrupt_enable(level);
+
+	  newTail = (tty->rawOutBuf.Tail + len) % tty->rawOutBuf.Size;
+	  tty->rawOutBuf.Tail = newTail;
+	  if (tty->rawOutBufState == rob_wait) {
+	    /* 
+	     * wake up any pending writer task
+	     */
+	    rtems_semaphore_release (tty->rawOutBuf.Semaphore);
+	  }
+	  if (newTail == tty->rawOutBuf.Head) {
+	    /*
+	     * Buffer has become empty
+	     */
+	    tty->rawOutBufState = rob_idle;
+	    nToSend = 0;
+	  }
+	  /* check, whether output should stop due to received XOFF */
+	  else if ((tty->flow_ctrl & (FL_MDXON | FL_ORCVXOF)) 
+		   ==                (FL_MDXON | FL_ORCVXOF)) {
+		  /* Buffer not empty, but output stops due to XOFF */
+		  /* set flag, that output has been stopped */
+		  rtems_interrupt_disable(level);
+		  tty->flow_ctrl |= FL_OSTOP;
+		  tty->rawOutBufState = rob_busy; /*apm*/
+		  rtems_interrupt_enable(level);
+		  nToSend = 0;
+	  }
+	  else {
+	    /*
+	     * Buffer not empty, start tranmitter
+	     */
+	    if (newTail > tty->rawOutBuf.Head)
+		    nToSend = tty->rawOutBuf.Size - newTail;
+	    else
+		    nToSend = tty->rawOutBuf.Head - newTail;
+	    /* when flow control XON or XOF, don't send blocks of data     */
+	    /* to allow fast reaction on incoming flow ctrl and low latency*/
+	    /* for outgoing flow control                                   */
+	    if (tty->flow_ctrl & (FL_MDXON | FL_MDXOF)) {
+		    nToSend = 1;
+	    }
+	    tty->rawOutBufState = rob_busy; /*apm*/
+	    (*tty->device.write)(tty->minor, 
+				 (char *)&tty->rawOutBuf.theBuf[newTail], 
+				 nToSend);
+	  }
+	  tty->rawOutBuf.Tail = newTail; /*apm*/
+	}
+	return nToSend;
 }
 
 /*
@@ -1077,68 +1330,99 @@ int
 rtems_termios_dequeue_characters (void *ttyp, int len)
 {
 	struct rtems_termios_tty *tty = ttyp;
-	unsigned int newTail;
-	int nToSend;
+	rtems_status_code sc;
 
-	/* check for XOF/XON to send */
-	if ((tty->flow_ctrl & (FL_MDXOF | FL_IREQXOF | FL_ISNTXOF))
-	    == (FL_MDXOF | FL_IREQXOF)) {
-	  /* XOFF should be sent now... */
-	  (*tty->device.write)(tty->minor, 
-			       &(tty->termios.c_cc[VSTOP]), 1);
-	  tty->flow_ctrl |= FL_ISNTXOF;
-	  nToSend = 1;
-	}
-	else if ((tty->flow_ctrl & (FL_IREQXOF | FL_ISNTXOF))
-		 == FL_ISNTXOF) {
-	  /* NOTE: send XON even, if no longer in XON/XOFF mode... */
-	  /* XON should be sent now... */
-	  (*tty->device.write)(tty->minor, 
-			       &(tty->termios.c_cc[VSTART]), 1);
-	  tty->flow_ctrl &= ~FL_ISNTXOF;
-	  nToSend = 1;
+	/*
+	 * sum up character count already sent
+	 */
+	tty->t_dqlen += len;
+
+	if (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN) {
+		/*
+		 * send wake up to transmitter task
+		 */
+		sc = rtems_event_send(tty->txTaskId,
+				      TERMIOS_TX_START_EVENT);
+		if (sc != RTEMS_SUCCESSFUL)
+			rtems_fatal_error_occurred (sc);
+		return 0; /* nothing to output in IRQ... */
 	}
 	else {
-	  if (tty->rawOutBufState == rob_wait)
-	    rtems_semaphore_release (tty->rawOutBufSemaphore);
-	  if ( tty->rawOutBufHead == tty->rawOutBufTail ) {
-	    tty->rawOutBufState = rob_idle;
-	    return 0;	
-	  }
-	  newTail = (tty->rawOutBufTail + len) % RAW_OUTPUT_BUFFER_SIZE;
-	  if (newTail == tty->rawOutBufHead) {
-	    /*
-	     * Buffer empty
-	     */
-	    tty->rawOutBufState = rob_idle;
-	    nToSend = 0;
-	  }
-	  /* check, whether output should stop due to received XOFF */
-	  else if ((tty->flow_ctrl & (FL_MDXON | FL_ORCVXOF)) 
-		   ==                (FL_MDXON | FL_ORCVXOF)) {
-            /* Buffer not empty, but output stops due to XOFF */
-	    /* set flag, that output has been stopped */
-	    tty->flow_ctrl |= FL_OSTOP;
-	    tty->rawOutBufState = rob_busy;
-	    nToSend = 0;
-	  }
-	  else {
-	    /*
-	     * Buffer not empty, start tranmitter
-	     */
-	    if (newTail > tty->rawOutBufHead)
-	      nToSend = RAW_OUTPUT_BUFFER_SIZE - newTail;
-	    else
-	      nToSend = tty->rawOutBufHead - newTail;
-	    /* when flow control XON or XOF, don't send blocks of data     */
-	    /* to allow fast reaction on incoming flow ctrl and low latency*/
-	    /* for outgoing flow control                                   */
-	    if (tty->flow_ctrl & (FL_MDXON | FL_MDXOF))
-	      nToSend = 1;
-	    tty->rawOutBufState = rob_busy;
-	    (*tty->device.write)(tty->minor, (char *)&tty->rawOutBuf[newTail], nToSend);
-	  }
-	  tty->rawOutBufTail = newTail;
+		return rtems_termios_refill_transmitter(tty);
 	}
-	return nToSend;
+}
+
+/*
+ * this task actually processes any transmit events
+ */
+static rtems_task rtems_termios_txdaemon(rtems_task_argument argument)
+{
+	struct rtems_termios_tty *tty = (struct rtems_termios_tty *)argument;
+	rtems_event_set the_event;
+
+	while (1) {
+		/*
+		 * wait for rtems event
+		 */
+		rtems_event_receive((TERMIOS_TX_START_EVENT | 
+				     TERMIOS_TX_TERMINATE_EVENT),
+				    RTEMS_EVENT_ANY | RTEMS_WAIT,
+				    RTEMS_NO_TIMEOUT,
+				    &the_event);
+		if ((the_event & TERMIOS_TX_TERMINATE_EVENT) != 0) {
+			tty->txTaskId = 0;
+			rtems_task_delete(RTEMS_SELF);
+		}
+		else {
+			/*
+			 * call any line discipline start function
+			 */
+			if (linesw[tty->t_line].l_start != NULL) {
+				linesw[tty->t_line].l_start(tty);
+			}
+			/*
+			 * try to push further characters to device
+			 */
+			rtems_termios_refill_transmitter(tty);
+		}
+	}
+}
+
+/*
+ * this task actually processes any receive events
+ */
+static rtems_task rtems_termios_rxdaemon(rtems_task_argument argument)
+{
+	struct rtems_termios_tty *tty = (struct rtems_termios_tty *)argument;
+	rtems_event_set the_event;
+	int c;
+	char c_buf;
+	while (1) {
+		/*
+		 * wait for rtems event
+		 */
+		rtems_event_receive((TERMIOS_RX_PROC_EVENT | 
+				     TERMIOS_RX_TERMINATE_EVENT),
+				    RTEMS_EVENT_ANY | RTEMS_WAIT,
+				    RTEMS_NO_TIMEOUT,
+				    &the_event);
+		if ((the_event & TERMIOS_RX_TERMINATE_EVENT) != 0) {
+			tty->rxTaskId = 0;
+			rtems_task_delete(RTEMS_SELF);
+		}
+		else {
+			/*
+			 * do something
+			 */
+			c = tty->device.pollRead(tty->minor);
+			if (c != EOF) {
+				/*
+				 * pollRead did call enqueue on its own
+				 */
+				c_buf = c;
+				rtems_termios_enqueue_raw_characters (
+				      tty,&c_buf,1);
+			}
+		}
+	}
 }
