@@ -1,5 +1,9 @@
 2002-11-13	Joel Sherrill <joel@OARcorp.com>
 
+	* Makefile.am: Corrected link.
+
+2002-11-13	Joel Sherrill <joel@OARcorp.com>
+
 	* stamp-vti, version.texi: Regenerated.
 
 2002-10-24	Joel Sherrill <joel@OARcorp.com>

@@ -45,7 +45,7 @@ $(srcdir)/buildrt.texi: ../started/buildrt.t tversions.texi
 	    -n "Building the Sample Application" < $< > $@
 
 $(srcdir)/sample.texi: sample.t tversions.texi
-	$(BMENU2) -c -p "Using the bit_rtems Script" \
+	$(BMENU2) -c -p "Using the RTEMS configure Script Directly" \
 	    -u "Top" \
 	    -n "Building the GNU Debugger" < $< > $@
 
