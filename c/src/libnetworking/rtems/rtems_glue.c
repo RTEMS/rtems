@@ -697,6 +697,36 @@ kmem_malloc (vm_map_t *map, vm_size_t size, boolean_t waitflag)
 /*
  * IP header checksum routine for processors which don't have an inline version
  */
+
+#ifdef (defined(__GNUC__) && defined(sparc))
+
+	asm("
+	.text
+	.global _in_cksum_hdr
+_in_cksum_hdr:
+
+	ld [%o0], %o1
+	ld [%o0+4], %o2
+	addcc %o1, %o2, %o1
+	ld [%o0+8], %o2
+	addxcc %o1, %o2, %o1
+	ld [%o0+12], %o2
+	addxcc %o1, %o2, %o1
+	ld [%o0+16], %o2
+	addxcc %o1, %o2, %o1
+	set 0x0ffff, %o3
+	srl %o1, 16, %o2
+	and %o1, %o3, %o1
+	addx %o1, %o2, %o1
+	srl %o1, 16, %o1
+	add %o1, %g0, %o1
+	neg %o1
+	retl
+	and %o1, %o3, %o0
+
+	");
+#else
+
 u_int
 in_cksum_hdr (const void *ip)
 {
@@ -712,6 +742,8 @@ in_cksum_hdr (const void *ip)
 		sum = (sum & 0xffff) + (sum >> 16);
 	return ~sum & 0xFFFF;
 }
+
+#endif
 
 /*
  * Manipulate routing tables
