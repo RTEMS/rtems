@@ -46,6 +46,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_stdio.c,v 1.7 1999/08/28 00
 #include <rpc/types.h>
 #include <stdio.h>
 #include <rpc/xdr.h>
+#include <netinet/in.h>
 
 static bool_t	xdrstdio_getlong();
 static bool_t	xdrstdio_putlong();
