@@ -164,7 +164,7 @@ BSP_uart_set_baud(int uart, int baud)
   
   /* 
    * This function may be called whenever TERMIOS parameters
-   * are changed, so we have to make sire that baud change is 
+   * are changed, so we have to make sure that baud change is 
    * indeed required
    */
 
