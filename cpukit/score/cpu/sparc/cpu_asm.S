@@ -684,6 +684,17 @@ SYM(_ISR_Dispatch):
         call    SYM(_Thread_Dispatch), 0
         nop
 
+	/*
+	 *  We invoked _Thread_Dispatch in a state similar to the interrupted
+	 *  task.  In order to safely be able to tinker with the register
+	 *  windows and get the task back to its pre-interrupt state, 
+	 *  we need to disable interrupts disabled so we can safely tinker
+	 *  with the register windowing.  In particular, the CWP in the PSR
+	 *  is fragile during this period. (See PR578.)
+	 */
+	mov	2,%g1				! syscall (disable interrupts)
+	ta	0				! syscall (disable interrupts)
+
         /*
          *  The CWP in place at this point may be different from
          *  that which was in effect at the beginning of the ISR if we
