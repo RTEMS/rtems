@@ -22,7 +22,7 @@ INSTALL_CHANGE = @INSTALL_CHANGE@
 #  from the individual .rel files built in other directories
 # include subdir must be first, otherwise the header files will not
 #  be installed when the other files are compiled.
-SUB_DIRS = include clock console fatal startup timer wrapup
+SUB_DIRS = include start startup clock console fatal timer wrapup
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
