@@ -29,7 +29,7 @@
 extern "C" {
 #endif
 
-#include <rtems/score/shtypes.h>
+#include <rtems/score/types.h>
 
 extern void __ISR_Handler( unsigned32 vector );
 

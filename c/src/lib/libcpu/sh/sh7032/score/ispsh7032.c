@@ -28,7 +28,7 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/score/shtypes.h>
+#include <rtems/score/types.h>
 #include <rtems/score/ispsh7032.h>
 
 /*
