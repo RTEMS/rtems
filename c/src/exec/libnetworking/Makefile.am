@@ -5,7 +5,6 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = arpa kern machine sys vm lib libc net netinet nfs rtems
-# SUBDIRS += rtems_servers pppd rtems_telnetd rtems_webserver 
 SUBDIRS += wrapup
 
 include_HEADERS = \
