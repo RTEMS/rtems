@@ -49,7 +49,7 @@ done
 #
 # Compose the configuration arguments to be passed to c/src/configure
 #
-##
+ ##
 ## Partially borrowed from autoconf-2.13
 ##
 

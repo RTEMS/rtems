@@ -1,3 +1,8 @@
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Cosmetics.
+	* Makefile.am: Cosmetics.
+
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: Fix underquoting to silence automake-1.8.

@@ -36,5 +36,6 @@ EXTRA_DIST += TOOL_TARGETS
 
 DIST_SUBDIRS = ${RTEMS_BSP}
 ## -------------------------------------------------------
-include $(top_srcdir)/../automake/subdirs.am
+
 include $(top_srcdir)/../automake/host.am
+include $(top_srcdir)/../automake/subdirs.am
