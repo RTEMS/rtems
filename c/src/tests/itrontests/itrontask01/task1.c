@@ -41,7 +41,7 @@ void Task_2_through_4()
     directive_failed( status, "rtems_clock_get" );
 
     if ( time.second >= 35 ) {
-      puts( "*** END OF ITRON TEST 3 ***" );
+      puts( "*** END OF ITRON TASK TEST 1 ***" );
       exit( 0 );
     }
 

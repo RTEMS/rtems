@@ -1,4 +1,4 @@
-*** ITRON TEST 3 ***
+*** ITRON TASK TEST 1 ***
 TA1 - rtems_clock_get - 09:00:00   12/31/1988
 TA2 - rtems_clock_get - 09:00:00   12/31/1988
 TA3 - rtems_clock_get - 09:00:00   12/31/1988
@@ -13,4 +13,4 @@ TA1 - rtems_clock_get - 09:00:25   12/31/1988
 TA3 - rtems_clock_get - 09:00:30   12/31/1988
 TA2 - rtems_clock_get - 09:00:30   12/31/1988
 TA1 - rtems_clock_get - 09:00:30   12/31/1988
-*** END OF ITRON TEST 3 ***
+*** END OF ITRON TASK TEST 1 ***

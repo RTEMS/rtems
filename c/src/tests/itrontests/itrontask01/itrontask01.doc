@@ -38,6 +38,10 @@ concepts:  XXX verify
 
   g.  Verifies that a task can get the task identification number of itself.
 
+  a.  Verifies exd_tsk
+
+  b.  Verifies get_tid
+
 notes:
 
   rtems clock directives should change to itron clock directives when

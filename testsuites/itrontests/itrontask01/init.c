@@ -27,7 +27,7 @@ void ITRON_Init( void )
   ER                status;
   T_CTSK            pk_ctsk;
 
-  puts( "\n\n*** ITRON TEST 3 ***" );
+  puts( "\n\n*** ITRON TASK TEST 1 ***" );
 
   /*
    * XXX - Change this to an itron clock !!
@@ -42,7 +42,7 @@ void ITRON_Init( void )
   pk_ctsk.itskpri  = 1; 
   pk_ctsk.task     = Task_2_through_4;
 
-  pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE; 
+  pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE * 2; 
   status = cre_tsk( 2, &pk_ctsk );
   directive_failed( status, "cre_tsk of TA1" );
 
