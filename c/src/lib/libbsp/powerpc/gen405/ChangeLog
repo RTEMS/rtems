@@ -1,3 +1,8 @@
+2002-07-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Eliminate TMPINSTALL_FILES.
+	Remove $(OBJS) from all-local.
+
 2002-06-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Remove preinstallation of libbsp.a,
