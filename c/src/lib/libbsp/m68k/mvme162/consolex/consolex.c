@@ -601,7 +601,7 @@ rtems_device_driver consolex_read(rtems_device_major_number major,
 	    *buffer = '\r';
 	if((mode&LOCAL_ICRNL) && (*buffer == '\r'))
 	    *buffer = '\n';
-	if((mode&LOCAL_IUCLC) && isupper(*buffer))
+	if((mode&LOCAL_IUCLC) && isupper((int)*buffer))
 	    *buffer = tolower(*buffer);
 	if(mode&LOCAL_ISTRIP)
 	    *buffer &= 0x7f;
@@ -695,7 +695,7 @@ rtems_device_driver consolex_write(rtems_device_major_number major,
 	}
 	if((mode&LOCAL_OCRNL) && (ch == '\r'))
 	    ch = '\n';
-	if((mode&OLCUC) && (islower(ch)))
+	if((mode&OLCUC) && (islower((int)ch)))
 	    ch = toupper(ch);
 	if(rw_args->flags & LIBIO_FLAGS_NO_DELAY){
 	    /* Non blocking write */
