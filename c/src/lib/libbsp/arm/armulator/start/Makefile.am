@@ -2,9 +2,6 @@
 ## $Id$
 ##
 
-
-PGM = $(ARCH)/start.o
-
 S_FILES = start.S
 S_O_FILES = $(S_FILES:%.c=$(ARCH)/%.o)
 
