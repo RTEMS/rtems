@@ -43,11 +43,20 @@ extern "C" {
 /*
  *  Use the m68k's hardware interrupt stack support and have the
  *  interrupt manager allocate the memory for it.
+ *
+ *  NOTE:  The definitions when M68K_HAS_SEPARATE_STACKS is 0 should
+ *         change when the software interrupt stack support is implemented.
  */
 
+#if ( M68K_HAS_SEPARATE_STACKS == 1)
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK FALSE
 #define CPU_HAS_HARDWARE_INTERRUPT_STACK TRUE
 #define CPU_ALLOCATE_INTERRUPT_STACK     TRUE
+#else
+#define CPU_HAS_SOFTWARE_INTERRUPT_STACK FALSE
+#define CPU_HAS_HARDWARE_INTERRUPT_STACK FALSE
+#define CPU_ALLOCATE_INTERRUPT_STACK     FALSE
+#endif
 
 /*
  *  Some family members have no FP, some have an FPU such as the
@@ -316,10 +325,24 @@ EXTERN void               *_CPU_Interrupt_stack_high;
 #else
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
-  (_output) = 0   /* avoids warnings */
-
-#warning "FIX ME... NEEDS A SOFTWARE BFFFO IMPLEMENTATION"
-#warning "SEE no_cpu/cpu.h FOR POSSIBLE ALGORITHMS"
+  { \
+    extern const unsigned char __log2table[256]; \
+    \
+    (_output) = 0;  /* avoids warnings */ \
+    asm         (  "move.w     %1,%0\n"\
+     "\tandi.w     #0xff00,%0\n"\
+     "\tjbne       0f\n"\
+     "\tmoveq.l    #0,%0\n"\
+     "\tmove.b     (%2,%1.w),%0\n"\
+     "\tjbra       1f\n"\
+     "0:\tmoveq.l    #8,%0\n"\
+     "\tlsr.w      #8,%1\n"\
+     "\tadd.b      (%2,%1.w),%0\n"\
+     "1:"\
+     : "=&d" ((_output)) \
+     : "d" ((_value)), "ao" (__log2table) \
+     : "cc" ) ; \
+  }
 
 #endif
 
@@ -338,8 +361,13 @@ EXTERN void               *_CPU_Interrupt_stack_high;
 #define _CPU_Priority_Mask( _bit_number ) \
   ( 0x8000 >> (_bit_number) )
 
+#if ( M68K_HAS_BFFFO == 1 )
 #define _CPU_Priority_Bits_index( _priority ) \
   (_priority)
+#else
+#define _CPU_Priority_Bits_index( _priority ) \
+  (15 - (_priority))
+#endif
 
 /* end of Priority handler macros */
 

@@ -132,15 +132,25 @@ SYM (_ISR_Handler):
         jbsr    a0@                     | invoke the user ISR
         addql   #4,a7                   | remove vector number
 
+/*
+ *   The following entry should be unnecessary once the support is
+ *   in place to know what vector we got on a 68000 core.
+ */
+
+        .global SYM (_ISR_Exit)
+SYM (_ISR_Exit):
+
         subql   #1,SYM (_ISR_Nest_level)       | one less nest level
         subql   #1,SYM (_Thread_Dispatch_disable_level)
                                          | unnest multitasking
         bne     exit                     | If dispatch disabled, exit
 
+#if ( M68K_HAS_SEPARATE_STACKS == 1 )
         movew   #0xf000,d0              | isolate format nibble
         andw    a7@(SAVED+FVO_OFFSET),d0 | get F/VO
         cmpiw   #0x1000,d0              | is it a throwaway isf?
         bne     exit                     | NOT outer level, so branch
+#endif
 
         tstl    SYM (_Context_Switch_necessary)
                                          | Is thread switch necessary?
@@ -155,17 +165,19 @@ SYM (_ISR_Handler):
 bframe: clrl    SYM (_ISR_Signals_to_thread_executing)
                                          | If sent, will be processed
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
-        movec   msp,a0                 | a0 = master stack pointer
-        movew   #0,a0@-                 | push format word
+        movec   msp,a0                   | a0 = master stack pointer
+        movew   #0,a0@-                  | push format word
         movel   # SYM (_ISR_Dispatch),a0@-    | push return addr
-        movew   a0@(6+SR_OFFSET),a0@-  | push thread sr
-        movec   a0,msp                 | set master stack pointer
+        movew   a0@(6+SR_OFFSET),a0@-    | push thread sr
+        movec   a0,msp                   | set master stack pointer
 #else
-#warning "FIX ME ... HOW DO I DISPATCH FROM AN INTERRUPT?"
-/* probably will simply need to push the _ISR_Dispatch frame */
+
+        movew   a7@(16+SR_OFFSET),sr
+        jsr     SYM (_Thread_Dispatch)
+
 #endif
 
-exit:   moveml  a7@+,d0-d1/a0-a1    | restore d0-d1,a0-a1
+exit:   moveml  a7@+,d0-d1/a0-a1         | restore d0-d1,a0-a1
         rte                              | return to thread
                                          |   OR _Isr_dispatch
 

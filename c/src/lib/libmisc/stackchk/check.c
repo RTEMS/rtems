@@ -329,7 +329,7 @@ void *Stack_check_find_high_water_mark(
    * match pattern
    */
 
-  base += 4;
+  base += PATTERN_SIZE_WORDS;
   for (ebase = base + length; base < ebase; base++)
       if (*base != U32_PATTERN)
           return (void *) base;
