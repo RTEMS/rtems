@@ -31,7 +31,7 @@
 |  $Id$
 +--------------------------------------------------------------------------*/
 
-
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
@@ -57,6 +57,7 @@ static int conSetAttr(int minor, const struct termios *);
 extern rtems_isr _IBMPC_keyboard_isr(rtems_vector_number);
        /* keyboard (IRQ 0x01) Interrupt Service Routine (defined in 'inch.c') */
 
+extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
 
 void console_reserve_resources(rtems_configuration_table *conf)
 {
@@ -69,14 +70,80 @@ void console_reserve_resources(rtems_configuration_table *conf)
 
 void __assert(const char *file, int line, const char *msg)
 {
-  printk("assert failed: %s: ", file);
-  printk("%d: ", line);
-  printk("%s\n", msg);
+  static   char buf[20];
+  static   char exit_msg[] = "EXECUTIVE SHUTDOWN! Any key to reboot...";
+  static   char assert_msg[] = "assert failed: ";
+  unsigned char  ch;
+  const    unsigned char *cp;
+	
+ 
+  /*
+   * Note we cannot call exit or printf from here, 
+   * assert can fail inside ISR too
+   */
+  if(PC386ConsolePort == PC386_CONSOLE_PORT_CONSOLE)
+    {
+      printk("\nassert failed: %s: ", file);
+      printk("%d: ", line);
+      printk("%s\n\n", msg);
+      printk(exit_msg);
+      while(!_IBMPC_scankey(&ch));
+      printk("\n\n");
+    }
+  else
+    {
+      PC386_uart_intr_ctrl(PC386ConsolePort, PC386_UART_INTR_CTRL_DISABLE);
+      
+      PC386_uart_polled_write(PC386ConsolePort, '\r');
+      PC386_uart_polled_write(PC386ConsolePort, '\n');
+      
+      for(cp=assert_msg; *cp!=0; cp++)
+	{
+	  PC386_uart_polled_write(PC386ConsolePort, *cp);
+	}
 
-  exit(1);
+      for(cp=file; *cp!=0; cp++)
+	{
+	  PC386_uart_polled_write(PC386ConsolePort, *cp);
+	}
+      
+      PC386_uart_polled_write(PC386ConsolePort, ':');
+      PC386_uart_polled_write(PC386ConsolePort, ' ');
 
-  return;
+      sprintf(buf, "%d: ", line);
+
+      for(cp=buf; *cp!=0; cp++)
+	{
+	  PC386_uart_polled_write(PC386ConsolePort, *cp);
+	}
+
+      for(cp=msg; *cp!=0; cp++)
+	{
+	  PC386_uart_polled_write(PC386ConsolePort, *cp);
+	}
+
+      PC386_uart_polled_write(PC386ConsolePort, '\r');
+      PC386_uart_polled_write(PC386ConsolePort, '\n');
+      PC386_uart_polled_write(PC386ConsolePort, '\r');
+      PC386_uart_polled_write(PC386ConsolePort, '\n');
+	  
+      for(cp=exit_msg; *cp != 0; cp++)
+	{
+	  PC386_uart_polled_write(PC386ConsolePort, *cp);
+	}
+
+      PC386_uart_polled_read(PC386ConsolePort);
+
+      PC386_uart_polled_write(PC386ConsolePort, '\r');
+      PC386_uart_polled_write(PC386ConsolePort, '\n');
+      PC386_uart_polled_write(PC386ConsolePort, '\r');
+      PC386_uart_polled_write(PC386ConsolePort, '\n');
+
+    }
+
+  rtemsReboot();
 }
+
 
 /*-------------------------------------------------------------------------+
 | Console device driver INITIALIZE entry point.

@@ -34,6 +34,7 @@
 
 #include <stdio.h>
 #include <bsp.h>
+#include <rtems/libio.h>
 #include <pc386uart.h>
 
 /*-------------------------------------------------------------------------+
@@ -70,6 +71,11 @@ void _exit(int status)
     }
   else
     {
+      /* Close console */
+      __rtems_close(2);
+      __rtems_close(1);
+      __rtems_close(0);
+
       PC386_uart_intr_ctrl(PC386ConsolePort, PC386_UART_INTR_CTRL_DISABLE);
       
       PC386_uart_polled_write(PC386ConsolePort, '\r');

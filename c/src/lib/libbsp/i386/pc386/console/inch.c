@@ -292,11 +292,10 @@ _IBMPC_inch(void)
 char
 _IBMPC_inch_sleep(void)
 {
-    char c;
-    extern rtems_interval _TOD_Ticks_per_second; /* XXX should not do this */ 
-    rtems_interval ticks_to_delay;
+    char           c;
+    rtems_interval ticks_per_second;
 
-    ticks_to_delay = (_TOD_Ticks_per_second + 24) / 25; 
+    ticks_per_second = 0;
 
     for(;;)
       {
@@ -304,7 +303,13 @@ _IBMPC_inch_sleep(void)
 	  {
 	    return c;
 	  }
-	rtems_task_wake_after(ticks_to_delay);
+ 
+        if(ticks_per_second == 0)
+          {
+            rtems_clock_get(RTEMS_CLOCK_GET_TICKS_PER_SECOND, 
+                            &ticks_per_second);
+          }
+	rtems_task_wake_after((ticks_per_second+24)/25);
       }
 	
     return c;
