@@ -1,3 +1,7 @@
+2003-04-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* develenv.texi: Fix @setfilename to develenv.info.
+
 2003-04-16	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, develenv.texi: Remove unused file.
