@@ -86,7 +86,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
     }
   }
 
-  _Thread_Executing->resource_count--;
+  holder->resource_count--;
   the_mutex->holder    = NULL;
   the_mutex->holder_id = 0;
 

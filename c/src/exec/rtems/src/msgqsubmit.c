@@ -132,6 +132,11 @@ rtems_status_code _Message_queue_Submit(
       }
 
       _Thread_Enable_dispatch();
+      /*
+       *  Since this API does not allow for blocking sends, we can directly
+       *  return the returned msg_status.
+       */
+
       return
         _Message_queue_Translate_core_message_queue_return_code( msg_status );
           

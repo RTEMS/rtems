@@ -100,8 +100,6 @@ rtems_task Task_2(
 
   Fill_buffer( "BUFFER 2 TO Q 2", (long *)buffer );
   puts( "TA2 - rtems_message_queue_send - BUFFER 2 TO Q 2" );
-  directive_failed( status, "rtems_message_queue_send" );
-
   status = rtems_message_queue_send( Queue_id[ 2 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
