@@ -92,7 +92,7 @@ libbsp_g_a_LIBADD = $(libbsp_a_LIBADD)
 
 noinst_DATA += libbsp$(LIB_VARIANT).a
 
-all-local: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 PREINSTALL_DIRS =
 TMPINSTALL_FILES =

@@ -1,5 +1,9 @@
 2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Cosmetics.
+
+2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am,
 	start/Makefile.am, startup/Makefile.am, timer/Makefile.am,
 	wrapup/Makefile.am. Use automake compilation rules.
