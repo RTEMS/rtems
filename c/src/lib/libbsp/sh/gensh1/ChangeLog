@@ -1,3 +1,7 @@
+2001-11-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Replace RTEMS_BSPOPTS_BSP with RTEMS_BSPOPTS_SET (typo).
+
 2001-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Apply RTEMS_BSPOPTS_*(CPU_CLOCK_RATE_HZ).
