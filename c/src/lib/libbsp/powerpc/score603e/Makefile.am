@@ -16,16 +16,16 @@ include_HEADERS += include/tod.h
 
 all-local: $(PREINSTALL_FILES)
 
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
-$(PROJECT_INCLUDE)/gen2.h: include/gen2.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/gen2.h: include/gen2.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/gen2.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/gen2.h
 
-$(PROJECT_INCLUDE)/tod.h: include/tod.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/tod.h: include/tod.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tod.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am

@@ -1,3 +1,15 @@
+2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add preinstallation dirstamp support.
+	* PCI_bus/Makefile.am: Cosmetics.
+	* clock/Makefile.am: Cosmetics.
+	* console/Makefile.am: Cosmetics.
+	* startup/Makefile.am: Cosmetics.
+	* timer/Makefile.am: Cosmetics.
+	* tod/Makefile.am: Cosmetics.
+	* vectors/Makefile.am: Cosmetics.
+	* wrapup/Makefile.am: Cosmetics.
+
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* PCI_bus/Makefile.am: Remove all-local: $(ARCH).

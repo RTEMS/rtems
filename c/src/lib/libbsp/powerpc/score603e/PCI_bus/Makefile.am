@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/PCI_bus.rel
 
 C_FILES = universe.c PCI.c flash.c

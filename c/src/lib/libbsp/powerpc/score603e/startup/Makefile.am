@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel
@@ -41,7 +40,7 @@ all-local: $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = FPGA.c Hwr_init.c bspclean.c bspstart.c genpvec.c \
-    linkcmds setvec.c spurious.c vmeintr.c
+EXTRA_DIST = FPGA.c Hwr_init.c bspclean.c bspstart.c genpvec.c linkcmds \
+    setvec.c spurious.c vmeintr.c
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/vectors.rel
 
 S_FILES = vectors.S

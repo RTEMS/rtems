@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/tod.rel
 
 include $(top_srcdir)/../../../../automake/compile.am

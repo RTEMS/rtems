@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/console.rel
 
 C_FILES = 85c30.c console.c consolereserveresources.c tbl85c30.c
