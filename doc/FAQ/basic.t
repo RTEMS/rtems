@@ -156,9 +156,30 @@ training, and custom development.
 
 @section Are there any mailing lists?
 
-The primary RTEMS mailing list is @code{rtems-list@@oarcorp.com}.  You 
-can subscribe by sending a message with the word @b{subscribe rtems-list}
-as the body to @code{majordomo@@oarcorp.com}.
+The primary RTEMS mailing list is @code{rtems-users@@oarcorp.com}.  This
+list is for general RTEMS discussions, questions, design help, advice,
+etc..  Subscribe by sending an empty mail
+message to @code{rtems-users-subscribe@@OARcorp.com}.  This
+mailing list is archived at:
+
+@example
+http://www.oarcorp.com/rtems/maillistArchives/rtems-users
+@end example
+
+The @code{rtems-snapshots@@oarcorp.com} mailing list is for those
+interested in taking a more active role in the design, development,
+and maintenance of RTEMS.  Discussions on this list tend to focus
+on problems in the development source, design of new features, problem
+reports, etc..  Subscribe by sending an empty mail
+message to @code{rtems-snapshots-subscribe@@OARcorp.com}.
+mailing list is archived at:
+
+@example
+http://www.oarcorp.com/rtems/maillistArchives/rtems-snapshots
+@end example
+
+The archives for both mailing lists include discussions back 
+to 1997.
 
 @section Are there any license restrictions?
 
@@ -173,18 +194,5 @@ place restrictions on the application.
 @section Are there any export restrictions?
 
 No.
-
-@section RTEMS Mailing List
-
-@example
-rtems-users@@OARcorp.com
-@end example
-
-This mailing list is dedicated to the discussion of issues related
-to RTEMS, including GNAT/RTEMS.  If you have questions about RTEMS,
-wish to make suggestions, or just want to pick up hints, this is a
-good list to subscribe to.  Subscribe by sending an empty mail
-message to rtems-users-subscribe@@OARcorp.com.  Messages sent
-to rtems-users@@OARcorp.com are posted to the list.
 
 
