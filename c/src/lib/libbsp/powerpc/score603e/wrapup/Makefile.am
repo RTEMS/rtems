@@ -2,11 +2,12 @@
 ## $Id$
 ##
 
-BSP_PIECES = startup clock console timer tod vectors PCI_bus
+OBJS = ../startup$(LIB_VARIANT).rel ../clock$(LIB_VARIANT).rel \
+    ../console$(LIB_VARIANT).rel ../timer$(LIB_VARIANT).rel \
+    ../tod$(LIB_VARIANT).rel ../vectors$(LIB_VARIANT).rel \
+    ../PCI_bus$(LIB_VARIANT).rel
 
-# bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    ../@exceptions@/$(ARCH)/*.rel
+OBJS += ../@exceptions@/$(ARCH)/*.rel
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am

@@ -67,17 +67,8 @@ RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
 [This defines the base address of the exception table.
  NOTE: Vectors are actually at 0xFFF00000 but file starts at offset.])
 
-
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-PCI_bus/Makefile
-clock/Makefile
-console/Makefile
-startup/Makefile
-timer/Makefile
-tod/Makefile
-vectors/Makefile
 wrapup/Makefile])
 
 RTEMS_PPC_EXCEPTIONS([old])
