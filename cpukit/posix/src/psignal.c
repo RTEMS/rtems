@@ -140,7 +140,7 @@ boolean _POSIX_signals_Unblock_thread(
     if ( (the_thread->Wait.option & mask) || (~api->signals_blocked & mask) ) {
       the_thread->Wait.return_code = EINTR;
 
-      the_info = (siginfo_t *) _Thread_Executing->Wait.return_argument;
+      the_info = (siginfo_t *) the_thread->Wait.return_argument;
 
       if ( !info ) {
         the_info->si_signo = signo;
@@ -343,6 +343,7 @@ restart:
      _ISR_Enable( level );
      return;
    }
+  _ISR_Enable( level );
 
   for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
 
@@ -801,7 +802,10 @@ int sigtimedwait(
     the_info->si_value.sival_int = 0;
   }
 
+  the_info->si_signo = -1;
+
   _Thread_Disable_dispatch();
+    the_thread->Wait.queue           = &_POSIX_signals_Wait_queue;
     the_thread->Wait.return_code     = EINTR;
     the_thread->Wait.option          = *set;
     the_thread->Wait.return_argument = (void *) the_info;
