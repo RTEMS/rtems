@@ -1,3 +1,8 @@
+2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* network/if_hdlcsubr.c: Use memcopy instead of bcmp,
+	Use memcmp instead of bcmp.
+
 2003-07-18	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 288/rtems

@@ -232,7 +232,7 @@ hdlc_input(ifp, m)
 	}
 	ifp->if_ibytes += m->m_pkthdr.len;
 /*	
-	if (bcmp((caddr_t)etherbroadcastaddr, (caddr_t)eh->ether_dhost,
+	if (memcmp((caddr_t)etherbroadcastaddr, (caddr_t)eh->ether_dhost,
 	    sizeof(etherbroadcastaddr)) == 0)
 		m->m_flags |= M_BCAST;
 	else if (eh->ether_dhost[0] & 1)
@@ -286,8 +286,9 @@ hdlc_ifattach(ifp)
 			sdl->sdl_type = IFT_ETHER;
 			sdl->sdl_alen = ifp->if_addrlen;
 /*			
-			bcopy((caddr_t)((struct arpcom *)ifp)->ac_enaddr,
-			      LLADDR(sdl), ifp->if_addrlen);
+			memcpy(LLADDR(sdl),
+			      (caddr_t)((struct arpcom *)ifp)->ac_enaddr,
+			      ifp->if_addrlen);
 */			
 			break;
 		}
@@ -329,8 +330,9 @@ hdlc_ioctl(struct ifnet *ifp, int command, caddr_t data)
 
 			sa = (struct sockaddr *) & ifr->ifr_data;
 /*			
-			bcopy(((struct arpcom *)ifp->if_softc)->ac_enaddr,
-			      (caddr_t) sa->sa_data, ETHER_ADDR_LEN);
+			memcpy((caddr_t) sa->sa_data,
+			      ((struct arpcom *)ifp->if_softc)->ac_enaddr,
+			      ETHER_ADDR_LEN);
 */			
 		}
 		break;
