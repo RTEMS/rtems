@@ -18,7 +18,6 @@ ENTRY(_start)
  /*SEARCH_DIR(/usr1/gnu/cross/powerpc-unknown-eabi//powerpc-unknown-eabi/lib); */
 /* Do we need any of these for elf?
    __DYNAMIC = 0;    */
-PROVIDE (__stack = 0);
 PROVIDE (PSIM_INSTRUCTIONS_PER_MICROSECOND = 100);
 MEMORY
   {
@@ -158,7 +157,7 @@ SECTIONS
    *(COMMON)
   } >RAM
   . =  ALIGN(8) + 0x8000;
-  __stack = .;
+  PROVIDE(__stack = .);
   _end = . ;
   PROVIDE (end = .);
 
