@@ -138,7 +138,7 @@ rtems_status_code rtems_termios_open (
   void                      *arg,
   int                       (*deviceFirstOpen)(int major, int minor, void *arg),
   int                       (*deviceLastClose)(int major, int minor, void *arg),
-  int                       (*deviceRead)(int minor, char *buf),
+  int                       (*deviceRead)(int minor),
   int                       (*deviceWrite)(int minor, char *buf, int len)
   );
 

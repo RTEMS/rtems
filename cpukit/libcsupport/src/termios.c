@@ -97,7 +97,7 @@ struct rtems_termios_tty {
 	 * Callbacks to device-specific routines
 	 */
 	int		(*lastClose)(int major, int minor, void *arg);
-	int		(*read)(int minor, char *buf);
+	int		(*read)(int minor);
 	int		(*write)(int minor, char *buf, int len);
 };
 static struct rtems_termios_tty *ttyHead, *ttyTail;
@@ -133,7 +133,7 @@ rtems_termios_open (
   void                      *arg,
   int                      (*deviceFirstOpen)(int major, int minor, void *arg),
   int                      (*deviceLastClose)(int major, int minor, void *arg),
-  int                      (*deviceRead)(int minor, char *buf),
+  int                      (*deviceRead)(int minor),
   int                      (*deviceWrite)(int minor, char *buf, int len)
   )
 {
@@ -603,20 +603,16 @@ siproc (unsigned char c, struct rtems_termios_tty *tty)
 static rtems_status_code
 fillBufferPoll (struct rtems_termios_tty *tty)
 {
-	unsigned char c;
 	int n;
 
 	if (tty->termios.c_lflag & ICANON) {
 		for (;;) {
-			n = (*tty->read)(tty->minor, &c);
+			n = (*tty->read)(tty->minor);
 			if (n < 0) {
-				return RTEMS_UNSATISFIED;
-			}
-			else if (n == 0) {
 				rtems_task_wake_after (1);
 			}
 			else {
-				if  (siproc (c, tty))
+				if  (siproc (n, tty))
 					break;
 			}
 		}
@@ -626,11 +622,8 @@ fillBufferPoll (struct rtems_termios_tty *tty)
 		if (!tty->termios.c_cc[VMIN] && tty->termios.c_cc[VTIME])
 			rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &then);
 		for (;;) {
-			n = (*tty->read)(tty->minor, &c);
+			n = (*tty->read)(tty->minor);
 			if (n < 0) {
-				return RTEMS_UNSATISFIED;
-			}
-			else if (n == 0) {
 				if (tty->termios.c_cc[VMIN]) {
 					if (tty->termios.c_cc[VTIME] && tty->ccount) {
 						rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
@@ -650,7 +643,7 @@ fillBufferPoll (struct rtems_termios_tty *tty)
 				rtems_task_wake_after (1);
 			}
 			else {
-				siproc (c, tty);
+				siproc (n, tty);
 				if (tty->ccount >= tty->termios.c_cc[VMIN])
 					break;
 				if (tty->termios.c_cc[VMIN] && tty->termios.c_cc[VTIME])
