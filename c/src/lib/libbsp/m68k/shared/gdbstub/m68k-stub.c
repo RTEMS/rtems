@@ -417,7 +417,7 @@ a7saveDone:\n\
         jbsr    (%a0)             /* and call it */\n\
         clr.l   (%sp)            /* replace exception num parm with frame ptr */\n\
         jbsr     _returnFromException   /* jbsr, but never returns */\n\
-");\n\
+");
 #else /* mc68000 */
 /* This function is called when an exception occurs.  It translates the
  * return address found on the stack into an exception vector # which
@@ -666,8 +666,8 @@ static short error;
 
 
 void debug_error(
-char * format,
-char * parm
+  char * format,
+  char * parm
 )
 {
   if (remote_debug) fprintf (stderr,format,parm);
@@ -996,7 +996,7 @@ void handle_exception(int exceptionVector)
 		else {
 		  m68k_exceptionHandler(2,_catchException);   
 		  strcpy(remcomOutBuffer,"E03");
-		  debug_error("bus error");
+		  debug_error("bus error", 0);
 		  }     
                 
 		/* restore handler for bus error */
@@ -1037,7 +1037,7 @@ void handle_exception(int exceptionVector)
 		else {
 		  m68k_exceptionHandler(2,_catchException);   
 		  strcpy(remcomOutBuffer,"E03");
-		  debug_error("bus error");
+		  debug_error("bus error", 0);
 		  }     
 
                 /* restore handler for bus error */

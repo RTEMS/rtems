@@ -1,3 +1,7 @@
+2002-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* m68k-stub.c: Corrected typos.
+
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
 	* m68k-stub.c: Fixed warnings about multi-line strings in asm.
