@@ -228,7 +228,9 @@ tcpip_mk="c/src/lib/libka9q/Makefile"
 
 tests_mk="c/src/tests/Makefile \
 c/src/tests/libtests/Makefile \
+c/src/tests/libtests/cpuuse/Makefile \
 c/src/tests/libtests/malloctest/Makefile \
+c/src/tests/libtests/rtmonuse/Makefile \
 c/src/tests/libtests/stackchk/Makefile \
 c/src/tests/mptests/Makefile \
 c/src/tests/mptests/mp01/Makefile \
@@ -560,8 +562,10 @@ c/src/lib/libc/Makefile \
 c/src/lib/libcpu/Makefile \
 c/src/lib/libmisc/Makefile \
 c/src/lib/libmisc/assoc/Makefile \
+c/src/lib/libmisc/cpuuse/Makefile \
 c/src/lib/libmisc/error/Makefile \
 c/src/lib/libmisc/monitor/Makefile \
+c/src/lib/libmisc/rtmonuse/Makefile \
 c/src/lib/libmisc/stackchk/Makefile \
 c/src/lib/libmisc/wrapup/Makefile \
 c/src/lib/start/Makefile \
