@@ -274,7 +274,7 @@ SCORE_EXTERN _CPU_ISR_handler_entry _CPU_ISR_jump_table[256];
  *  Minimum size of a thread's stack.
  */
 
-#define CPU_STACK_MINIMUM_SIZE           2048
+#define CPU_STACK_MINIMUM_SIZE           4096
 
 /*
  *  m68k is pretty tolerant of alignment.  Just put things on 4 byte boundaries.
