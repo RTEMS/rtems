@@ -4,6 +4,8 @@
 
 2003-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	PR 444/bsps
+	PR 445/bsps
 	* bsp_specs: Remove -D__embedded__ -Asystem(embedded)
 	-DUSE_ENHANCED_INTR_API from cpp.
 	Remove cpp, old_cpp (now unused).

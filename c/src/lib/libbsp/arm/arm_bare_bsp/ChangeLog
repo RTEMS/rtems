@@ -1,5 +1,6 @@
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	PR 452/bsps
 	* startup/Makefile.am: Remove USE_INIT_FINI.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -8,11 +9,13 @@
 
 2003-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	PR 445/bsps
 	* bsp_specs: Remove -D__embedded__ -Asystem(embedded) from cpp.
 	Remove cpp, old_cpp (now unused).
 
 2003-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	PR 444/bsps
 	* bsp_specs: Remove -DUSE_ENHANCED_INTR_API.
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
