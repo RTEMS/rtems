@@ -1,3 +1,14 @@
+2001-02-27	Joel Sherrill <joel@OARcorp.com>
+
+	* Significant modifications including adding thread support, the 'X'
+	command, and reorganizing so that target CPU independent routines
+	could be reused.
+	* gdb_if.h: Added numerous prototypes.
+	* mips-stub.c: Added thread support as well as 'X' command.
+	Also noticed that the 'P' command was from the mips protocol.
+	* rtems-stub-glue.c: New file.  This file contains all generic
+	support which should be able to be reused on another target CPU.
+
 2002-02-08	Joel Sherrill <joel@OARcorp.com>
 
 	* mips-stub.c (handle_exception): Prototype changed to be an RTEMS 

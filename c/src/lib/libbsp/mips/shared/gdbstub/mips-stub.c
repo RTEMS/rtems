@@ -1,3 +1,4 @@
+#define  GDB_STUB_ENABLE_THREAD_SUPPORT 1
 /*******************************************************************************
 
                      THIS SOFTWARE IS NOT COPYRIGHTED
@@ -126,6 +127,12 @@
 #include <rtems.h>
 #include "gdb_if.h"
 
+extern int printk(const char *fmt, ...);
+
+/* Change it to something meaningful when debugging */
+#undef ASSERT
+#define ASSERT(x) if(!(x)) printk("ASSERT: stub: %d\n", __LINE__)
+
 /***************/
 /* Exception Codes */
 #define	EXC_INT		0		/* External interrupt */
@@ -184,13 +191,18 @@
  */
 #if (__mips == 3)
 typedef long long mips_register_t;
+#define R_SZ 8
 #elif (__mips == 1)
 typedef unsigned int mips_register_t;
+#define R_SZ 4
 #else
 #error "unknown MIPS ISA"
 #endif
 static mips_register_t *registers;
 
+#if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
+static char do_threads;      /* != 0 means we are supporting threads */
+#endif
 
 /*
  * The following external functions provide character input and output.
@@ -210,14 +222,31 @@ extern void putDebugChar (char);
 static char inBuffer[BUFMAX];
 static char outBuffer[BUFMAX];
 
+/* Structure to keep info on a z-breaks */
+#define BREAKNUM 32
+struct z0break
+{
+  /* List support */
+  struct z0break *next;
+  struct z0break *prev;
+
+  /* Location, preserved data */
+  unsigned char *address;
+  char     buf[2];
+};
+
+static struct z0break z0break_arr[BREAKNUM];
+static struct z0break *z0break_avail = NULL;
+static struct z0break *z0break_list  = NULL;
+
 
 /*
  * Convert an int to hex.
  */
-static const char hexchars[] = "0123456789abcdef";
+const char gdb_hexchars[] = "0123456789abcdef";
 
-#define highhex(x) hexchars [(x >> 4) & 0xf]
-#define lowhex(x) hexchars [x & 0xf]
+#define highhex(x) gdb_hexchars [(x >> 4) & 0xf]
+#define lowhex(x) gdb_hexchars [x & 0xf]
 
 
 /*
@@ -225,8 +254,10 @@ static const char hexchars[] = "0123456789abcdef";
  * result in buf.  Return a pointer to the last (null) char in buf.
  */
 static char *
-mem2hex (int addr, int length, char *buf)
+mem2hex (void *_addr, int length, char *buf)
 {
+  unsigned int addr = (unsigned int) _addr;
+
   if (((addr & 0x7) == 0) && ((length & 0x7) == 0))      /* dword aligned */
     {
       long long *source = (long long *) (addr);
@@ -238,7 +269,7 @@ mem2hex (int addr, int length, char *buf)
           long long k = *source++;
 
           for (i = 15; i >= 0; i--)
-            *buf++ = hexchars [(k >> (i*4)) & 0xf];
+            *buf++ = gdb_hexchars [(k >> (i*4)) & 0xf];
         }
     }
   else if (((addr & 0x3) == 0) && ((length & 0x3) == 0)) /* word aligned */
@@ -252,7 +283,7 @@ mem2hex (int addr, int length, char *buf)
           int k = *source++;
 
           for (i = 7; i >= 0; i--)
-            *buf++ = hexchars [(k >> (i*4)) & 0xf];
+            *buf++ = gdb_hexchars [(k >> (i*4)) & 0xf];
         }
     }
   else if (((addr & 0x1) == 0) && ((length & 0x1) == 0)) /* halfword aligned */
@@ -266,7 +297,7 @@ mem2hex (int addr, int length, char *buf)
           short k = *source++;
 
           for (i = 3; i >= 0; i--)
-            *buf++ = hexchars [(k >> (i*4)) & 0xf];
+            *buf++ = gdb_hexchars [(k >> (i*4)) & 0xf];
         }
     }
   else                                                   /* byte aligned */
@@ -280,7 +311,7 @@ mem2hex (int addr, int length, char *buf)
           char k = *source++;
 
           for (i = 1; i >= 0; i--)
-            *buf++ = hexchars [(k >> (i*4)) & 0xf];
+            *buf++ = gdb_hexchars [(k >> (i*4)) & 0xf];
         }
     }
 
@@ -372,8 +403,9 @@ hexToLongLong (char **ptr, long long *intValue)
  * then return 0;  otherwise return 1.
  */
 static int
-hex2mem (char *buf, int addr, int length)
+hex2mem (char *buf, void *_addr, int length)
 {
+  unsigned int addr = (unsigned int) _addr;
   if (((addr & 0x7) == 0) && ((length & 0x7) == 0))      /* dword aligned */
     {
       long long *target = (long long *) (addr);
@@ -449,6 +481,45 @@ hex2mem (char *buf, int addr, int length)
 
   return 1;
 }
+
+
+/* Convert the binary stream in BUF to memory.
+
+   Gdb will escape $, #, and the escape char (0x7d).
+   COUNT is the total number of bytes to write into
+   memory. */
+static unsigned char *
+bin2mem (
+  unsigned char *buf,
+  unsigned char *mem,
+  int   count
+)
+{
+  int i;
+
+  for (i = 0; i < count; i++) {
+      /* Check for any escaped characters. Be paranoid and
+         only unescape chars that should be escaped. */
+      if (*buf == 0x7d) {
+          switch (*(buf+1)) {
+            case 0x3:  /* # */
+            case 0x4:  /* $ */
+            case 0x5d: /* escape char */
+              buf++;
+              *buf |= 0x20;
+              break;
+            default:
+              /* nothing */
+              break;
+            }
+        }
+
+      *mem++ = *buf++;
+    }
+
+  return mem;
+}
+
 
 
 /*
@@ -773,30 +844,88 @@ computeSignal (void)
     }
 }
 
+/*
+ *  This support function prepares and sends the message containing the
+ *  basic information about this exception.
+ */
+
+void gdb_stub_report_exception_info(
+  rtems_vector_number vector,
+  CPU_Interrupt_frame *frame,
+  int                  thread
+)
+{
+  char *optr;
+  int sigval;
+
+  optr = outBuffer;
+  *optr++ = 'T';
+  sigval = computeSignal ();
+  *optr++ = highhex (sigval);
+  *optr++ = lowhex (sigval);
+
+  *optr++ = gdb_hexchars[SP];
+  *optr++ = ':';
+  optr    = mem2hstr(optr, (unsigned char *)&frame->sp, R_SZ );
+  *optr++ = ';';
+  
+  *optr++ = gdb_hexchars[PC];
+  *optr++ = ':';
+  optr    = mem2hstr(optr, (unsigned char *)&frame->sp, R_SZ );
+  *optr++ = ';';
+
+#if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
+  if (do_threads) {
+    *optr++ = 't';
+    *optr++ = 'h';
+    *optr++ = 'r';
+    *optr++ = 'e';
+    *optr++ = 'a';
+    *optr++ = 'd';
+    *optr++ = ':';
+    optr   = thread2vhstr(optr, thread);
+    *optr++ = ';';
+  }
+#endif
+  putpacket (outBuffer);
+  
+  *optr++ = '\0';
+}
+
+
 
 /*
  * This function handles all exceptions.  It only does two things:
  * it figures out why it was activated and tells gdb, and then it
  * reacts to gdb's requests.
  */
+
+CPU_Interrupt_frame current_thread_registers;
+
 void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
 {
   int host_has_detached = 0;
-  int sigval;
   int regno, addr, length;
   long long regval;
   char *ptr;
+  int  current_thread;  /* current generic thread */
+  int  thread;          /* stopped thread: context exception happened in */
+  void *regptr;
+  int  binary;
 
   registers = (mips_register_t *)frame;
 
-  /* reply to host that an exception has occurred */
-  sigval = computeSignal ();
-  outBuffer[0] = 'S';
-  outBuffer[1] = highhex (sigval);
-  outBuffer[2] = lowhex (sigval);
-  outBuffer[3] = '\0';
+  thread = 0;
+#if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
+  if (do_threads) {
+    thread = rtems_gdb_stub_get_current_thread();
+  }
+#endif
+  current_thread = thread;
 
-  putpacket (outBuffer);
+  /* reply to host that an exception has occurred with some basic info */
+  gdb_stub_report_exception_info(vector, frame, thread);
+
 
   /*
    * Restore the saved instruction at
@@ -804,32 +933,43 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
    */
   undoSStep ();
 
-  while (!(host_has_detached))
-    {
+  while (!(host_has_detached)) {
       outBuffer[0] = '\0';
       getpacket (inBuffer);
+      binary = 0;
 
-      switch (inBuffer[0])
-        {
+      switch (inBuffer[0]) {
         case '?':
-          outBuffer[0] = 'S';
-          outBuffer[1] = highhex (sigval);
-          outBuffer[2] = lowhex (sigval);
-          outBuffer[3] = '\0';
+          gdb_stub_report_exception_info(vector, frame, thread);
           break;
 
-        case 'd':
-          /* toggle debug flag */
+        case 'd': /* toggle debug flag */
+          /* can print ill-formed commands in valid packets & checksum errors */
           break;
 
-        case 'g':
-          /* return the values of the CPU registers */
-          mem2hex ((int) registers, sizeof registers, outBuffer);
+        case 'D':
+          /* remote system is detaching - return OK and exit from debugger */
+          strcpy (outBuffer, "OK");
+          host_has_detached = 1;
           break;
 
-        case 'G':
-          /* set the values of the CPU registers - return OK */
-          if (hex2mem (&inBuffer[1], (int) registers, sizeof registers))
+        case 'g':               /* return the values of the CPU registers */
+          regptr = registers;
+#if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
+          if (do_threads && current_thread != thread )
+             regptr = &current_thread_registers;
+#endif
+          mem2hex (regptr, NUM_REGS * (sizeof registers), outBuffer);
+
+          break;
+
+        case 'G':       /* set the values of the CPU registers - return OK */
+          regptr = registers;
+#if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
+          if (do_threads && current_thread != thread )
+             regptr = &current_thread_registers;
+#endif
+          if (hex2mem (&inBuffer[1], regptr, NUM_REGS * (sizeof registers)))
               strcpy (outBuffer, "OK");
           else
               strcpy (outBuffer, "E00"); /* E00 = bad "set register" command */
@@ -857,11 +997,13 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
               && hexToInt (&ptr, &length)
               && is_readable (addr, length)
               && (length < (BUFMAX - 4)/2))
-            mem2hex (addr, length, outBuffer);
+            mem2hex ((void *)addr, length, outBuffer);
           else
             strcpy (outBuffer, "E01"); /* E01 = bad 'm' command */
           break;
 
+        case 'X':  /* XAA..AA,LLLL:<binary data>#cs */
+          binary = 1;
         case 'M':
           /* MAA..AA,LLLL:  Write LLLL bytes at address AA..AA - return OK */
           ptr = &inBuffer[1];
@@ -869,9 +1011,13 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
               && *ptr++ == ','
               && hexToInt (&ptr, &length)
               && *ptr++ == ':'
-              && is_writeable (addr, length)
-              && hex2mem (ptr, addr, length))
-            strcpy (outBuffer, "OK");
+              && is_writeable (addr, length) ) {
+              if ( binary )
+		hex2mem (ptr, (void *)addr, length);
+	      else
+		bin2mem (ptr, (void *)addr, length);
+              strcpy (outBuffer, "OK");
+          }
           else
             strcpy (outBuffer, "E02"); /* E02 = bad 'M' command */
           break;
@@ -891,16 +1037,256 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
           }
           return;
 
-        case 'D':
-          /* remote system is detaching - return OK and exit from debugger */
-          strcpy (outBuffer, "OK");
-          host_has_detached = 1;
+        case 'k':  /* remove all zbreaks if any */
+          {
+            int ret;
+            struct z0break *z0, *z0last;
+
+            ret = 1;
+            z0last = NULL;
+
+            for (z0=z0break_list; z0!=NULL; z0=z0->next) {
+                if (!hstr2mem(z0->address, z0->buf, 1)) {
+                   ret = 0;
+                }
+
+                z0last = z0;
+            }
+
+            /* Free entries if any */
+            if (z0last != NULL) {
+              z0last->next  = z0break_avail;
+              z0break_avail = z0break_list;
+              z0break_list  = NULL;
+            }
+          }
+
           break;
 
-        default:
-          /* do nothing */
+        case 'q':   /* queries */
+#if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
+          rtems_gdb_process_query( inBuffer, outBuffer, do_threads, thread );
+#endif
           break;
-        }                       /* switch */
+        
+        case 'H':  /* set new thread */
+#if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
+	  if (inBuffer[1] != 'g') {
+	    break;
+	  }
+	  
+	  if (!do_threads) {
+	    break;
+	  }
+	  
+	  {
+	    int tmp, ret;
+	    
+	    /* Set new generic thread */
+	    if (vhstr2thread(&inBuffer[2], &tmp) == NULL) {
+	      strcpy(outBuffer, "E01");
+	      break;
+	    }
+
+	    /* 0 means `thread' */
+	    if (tmp == 0) {
+	      tmp = thread;
+	    }
+
+            if (tmp == current_thread) {
+              /* No changes */
+	      strcpy(outBuffer, "OK");
+	      break;
+	    }
+
+            /* Save current thread registers if necessary */ 
+            if (current_thread != thread) {
+              ret = rtems_gdb_stub_set_thread_regs(
+                   current_thread, (unsigned int *) &current_thread_registers);
+	      ASSERT(ret);
+	    }
+
+	    /* Read new registers if necessary */
+	    if (tmp != thread) {
+		ret = rtems_gdb_stub_get_thread_regs(
+                    tmp, (unsigned int *) &current_thread_registers);
+
+		if (!ret) {
+		  /* Thread does not exist */
+		  strcpy(outBuffer, "E02");
+		  break;
+		}
+	    }
+	    
+	    current_thread = tmp;
+	    strcpy(outBuffer, "OK");
+	  }
+
+#endif
+          break;
+
+        case 'Z':  /* Add breakpoint */
+          { 
+            int ret, type, len;
+            unsigned char *address;
+            struct z0break *z0;
+
+            ret = parse_zbreak(inBuffer, &type, &address, &len);
+            if (!ret) {
+              strcpy(outBuffer, "E01");
+              break;
+            }
+
+            if (type != 0) {
+              /* We support only software break points so far */
+              break;
+            }
+
+            if (len != 1) {
+               strcpy(outBuffer, "E02");
+               break;
+            }
+
+            /* Let us check whether this break point already set */
+            for (z0=z0break_list; z0!=NULL; z0=z0->next) {
+                if (z0->address == address) {
+                  break;
+                }
+            }
+
+            if (z0 != NULL) {
+              /* Repeated packet */
+              strcpy(outBuffer, "OK");
+              break;
+            }
+
+            /* Let us allocate new break point */
+            if (z0break_avail == NULL) {
+              strcpy(outBuffer, "E03");
+              break;
+            }
+
+            /* Get entry */
+            z0 = z0break_avail;
+            z0break_avail = z0break_avail->next;
+
+            /* Let us copy memory from address add stuff the break point in */
+            if (mem2hstr(z0->buf, address, 1) == NULL ||
+                !hstr2mem(address, "cc" , 1)) {
+              /* Memory error */
+              z0->next = z0break_avail;
+              z0break_avail = z0;
+              strcpy(outBuffer, "E03");
+              break;
+            }
+
+            /* Fill it */
+            z0->address = address;
+
+            /* Add to the list */
+            z0->next = z0break_list;
+            z0->prev = NULL;
+
+            if (z0break_list != NULL) {
+              z0break_list->prev = z0;
+            }
+
+            z0break_list = z0;
+
+            strcpy(outBuffer, "OK");
+          }
+
+        case 'z': /* remove breakpoint */
+	  {
+	    int ret, type, len;
+	    unsigned char  *address;
+	    struct z0break *z0, *z0last;
+
+            if (inBuffer[1] == 'z') {
+                /* zz packet - remove all breaks */
+                ret = 1;
+                z0last = NULL;
+	        for (z0=z0break_list; z0!=NULL; z0=z0->next) {
+	            if(!hstr2mem(z0->address, z0->buf, 1)) {
+                        ret = 0;
+                      }
+                     
+                     z0last = z0;
+                   }
+
+                /* Free entries if any */
+                if (z0last != NULL) {
+                    z0last->next  = z0break_avail;
+                    z0break_avail = z0break_list;
+                    z0break_list  = NULL;
+                  }
+
+                if (ret) {
+	          strcpy(outBuffer, "OK");
+                } else {
+	          strcpy(outBuffer, "E04");
+	        }
+
+                break;
+              }
+              
+	    ret = parse_zbreak(inBuffer, &type, &address, &len);
+	    if (!ret) {
+		strcpy(outBuffer, "E01");
+		break;
+	      }
+	    
+	    if (type != 0) {
+	      /* We support only software break points so far */
+	      break;
+	    }
+
+            if (len != 1) {
+              strcpy(outBuffer, "E02");
+              break;
+            }
+	   
+	    /* Let us check whether this break point set */
+	    for (z0=z0break_list; z0!=NULL; z0=z0->next) {
+	      if (z0->address == address) {
+		break;
+	      }
+	    }
+              
+	    if (z0 == NULL) {
+	      /* Unknown breakpoint */
+	      strcpy(outBuffer, "E03");
+	      break;
+	    }
+	    
+	    if (!hstr2mem(z0->address, z0->buf, 1)) {
+	      strcpy(outBuffer, "E04");
+	      break;
+	    }
+   
+	    /* Unlink entry */
+	    if (z0->prev == NULL) {
+	      z0break_list = z0->next;
+	      if (z0break_list != NULL) {
+	        z0break_list->prev = NULL;
+	      }
+	    } else if (z0->next == NULL) {
+	      z0->prev->next = NULL;
+            } else {
+	      z0->prev->next = z0->next;
+	      z0->next->prev = z0->prev;
+	   }
+
+	   z0->next = z0break_avail;
+	   z0break_avail = z0;
+	    
+	   strcpy(outBuffer, "OK");
+	 }
+
+          break;
+        default: /* do nothing */
+          break;
+      }
 
       /* reply to the request */
       putpacket (outBuffer);
@@ -919,13 +1305,33 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
   return;
 }
 
+static char initialized;   /* 0 means we are not initialized */
+
 void mips_gdb_stub_install(void) 
 {
   rtems_isr_entry old;
+  int i;
+
+  if (initialized) {
+    ASSERT(0);
+    return;
+  }
+
+  /* z0breaks */
+  for (i=0; i<(sizeof(z0break_arr)/sizeof(z0break_arr[0]))-1; i++) {
+    z0break_arr[i].next = &z0break_arr[i+1];
+  }
+
+  z0break_arr[i].next = NULL;
+  z0break_avail       = &z0break_arr[0];
+  z0break_list        = NULL;
+
 
   rtems_interrupt_catch( (rtems_isr_entry) handle_exception, MIPS_EXCEPTION_SYSCALL, &old );
   /* rtems_interrupt_catch( handle_exception, MIPS_EXCEPTION_BREAK, &old ); */
 
+  initialized = 1;
   /* get the attention of gdb */
-  mips_break();
+  mips_break(1);
 }
+

@@ -17,6 +17,61 @@
 #ifndef _GDB_IF_H
 #define _GDB_IF_H
 
+/* Max number of threads in qM response */
+#define QM_MAX_THREADS (20)
+
+struct rtems_gdb_stub_thread_info {
+  char display[256];
+  char name[256];
+  char more_display[256];
+};
+
+/*
+ *  Prototypes
+ */
+
+int parse_zbreak(const char *in, int *type, unsigned char **addr, int *len);
+
+
+char* mem2hstr(char *buf, const unsigned char *mem, int count);
+int   hstr2mem(unsigned char *mem, const char *buf, int count);
+void  set_mem_err(void);
+unsigned char get_byte(const unsigned char *ptr);
+void  set_byte(unsigned char *ptr, int val);
+char* thread2vhstr(char *buf, int thread);
+char* thread2fhstr(char *buf, int thread);
+const char* fhstr2thread(const char *buf, int *thread);
+const char* vhstr2thread(const char *buf, int *thread);
+char* int2fhstr(char *buf, int val);
+char* int2vhstr(char *buf, int vali);
+const char* fhstr2int(const char *buf, int *ival);
+const char* vhstr2int(const char *buf, int *ival);
+int   hstr2byte(const char *buf, int *bval);
+int   hstr2nibble(const char *buf, int *nibble);
+
+int rtems_gdb_stub_thread_support_ok(void);
+int rtems_gdb_stub_get_current_thread(void);
+int rtems_gdb_stub_get_next_thread(int);
+int rtems_gdb_stub_get_offsets(
+  unsigned char **text_addr,
+  unsigned char **data_addr, 
+  unsigned char **bss_addr
+);
+int rtems_gdb_stub_get_thread_regs(
+  int thread,
+  unsigned int *registers
+);
+int rtems_gdb_stub_set_thread_regs(
+  int thread,
+  unsigned int *registers
+);
+void rtems_gdb_process_query( 
+  char *inbuffer,
+  char *outbuffer,
+  int   do_threads,
+  int   thread
+);
+
 /*
  * MIPS registers, numbered in the order in which gdb expects to see them.
  */
