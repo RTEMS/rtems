@@ -64,6 +64,8 @@ struct _reent    libc_global_reent = _REENT_INIT(libc_global_reent);
 extern void _wrapup_reent(struct _reent *);
 extern void _reclaim_reent(struct _reent *);
 
+#include <stdio.h>
+
 void
 libc_wrapup(void)
 {
@@ -86,6 +88,16 @@ libc_wrapup(void)
 #endif
         _REENT = &libc_global_reent;
     }
+    
+    /*
+     * Try to drain output buffers.
+     *
+     * Should this be changed to do *all* file streams?
+     *	_fwalk (_REENT, fclose);
+     */
+    fclose (stdin);
+    fclose (stdout);
+    fclose (stderr);
 }
 
 
