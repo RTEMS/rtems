@@ -126,8 +126,8 @@ Board description
 -----------------
 Clock rate:	50MHz Entry level boards, 40 MHz others.
 Bus width:	8/32 bit Flash, 32 bit DRAM
-FLASH:		2-4MB, 120ns
-RAM:		4-16MB EDO, 60ns DRAM DIMM
+FLASH:		  2-4MB, 120ns
+RAM:		    4-16MB EDO, 60ns DRAM DIMM
 
 
 Installation
@@ -146,10 +146,10 @@ will build for a MBX860-002. Look at rtems/make/custom/mbx8xx.cfg for the
 specific list of boards supported and their corresponding names. An
 example build command is:
 
-	make RTEMS_BSP=mbx821_001 all debug
+	make RTEMS_BSP=mbx821_001 VARIANT=DEBUG
 
-This will build the optimized and debug versions of all RTEMS libraries,
-samples and tests (if the latter are enabled).
+This will build the debug version of all RTEMS libraries, samples and tests
+(if the latter are enabled).
 
 The Software Engineering Group of the Institute for Information Technology
 only owns an MBX821-001 and MBX86-002. The only provided config files are
@@ -157,7 +157,7 @@ mbx821_001.cfg and mbx860_002.cfg. A SPECIFIC CONFIG FILE IS REQUIRED. Use
 one of the provided files as a template to create a specific config file for
 another model.
  
-We rely on EPPC-BUG to download to the targets. We use the 'PLH" command.
+We rely on EPPC-BUG to download to the targets. We use the "PLH" command.
 We enabled a TFTP deamon on our development host.
 
 
@@ -165,38 +165,108 @@ Port Description
 Console driver
 ---------------
 
-This BSP includes an termios-capable console driver that supports SMC1,
-SMC2, SCC2, and SCC3 and SCC4 if present. The RTEMS console is selected
-in rtems/make/custom/mbx8xx.cfg with the CONSOLE_MINOR variable. We
-normally run with the RTEMS application console on SMC1.
+This BSP includes an termios-capable asynchronous serial line driver
+that supports SMC1, SMC2, SCC2, and SCC3 and SCC4 if present. The RTEMS
+console is selected in rtems/make/custom/mbx8xx.cfg with the
+CONSOLE_MINOR variable. We normally run with the RTEMS application
+console on SMC2. SMC1 is used by the debugger.
 
-Support is provided for polled and interrupt-driven terminal I/O. Interrupt-
-driven I/O is selected by setting the UARTS_USE_INTERRUPTS variable in
-rtems/make/custom/mbx8xx.cfg. If the variable is not set, or if it is set
-to zero, polled I/O is used. If the EPPCBUG_SMC1 variable is set in
-rtems/make/custom/mbx8xx.cfg, SMC1 will be used in polled mode with all
-I/O done by EPPC-Bug rather than the supplied device driver. This mode
-should be used if the application console is shared with EPPC-Bug. 
+Support is provided for five different modes of operation:
+
+  1. polled I/O done by EPPC-Bug with termios support,
+  2. polled I/O done by EPPC-Bug without termios support,
+  3. polled I/O done by the supplied device driver with termios support,
+  4. polled I/O done by the supplied device driver without termios support,
+  5. interrupt-driven I/O done by the supplied device driver with termios
+     support.
+     
+The mode of operation of the serial driver is determined at build time
+by the value of the UARTS_IO_MODE constant in rtems/make/custom/mbx8xx.cfg.
+Edit the file to select the type of I/O desired before building RTEMS.
+The choices are:
+
+  0 - polled I/O done by the supplied device driver,
+  1 - interrupt-driven I/O done by the supplied device driver,
+  2 - polled I/O done by EPPC-Bug.
+  
+Also set the value of UARTS_USE_TERMIOS to select whether termios should
+be used to perform buffering and input/output processing. Without termios
+support, input processing is limited to the substitution of LF for a
+received CR, and output processing is limited to the transmission of a
+CR following the transmission of a LF. The choices for UARTS_USE_TERMIOS are:
+
+  0 - do not use termios
+  1 - use termios
+
+In most real-time applications, the driver should be configured to use
+termios and interrupt-driven I/O. Special requirements may dictate otherwise.
 
 Polled I/O must be used when running the timing tests. It must also be used
-to run some other tests and some samples, such as the cdtest. Applications
-would normally use interrupt-driven I/O.
+to run some other tests and some samples, such as the cdtest. Some tests
+change the interrupt mask and will hang interrupt-driven I/O indefinitely.
+Others, such as cdtest, perform console output from the static constructors
+before the console is opened, causing the test to hang. Still other tests
+produce output that is supposed to be in some specific order. For these
+tests, termios should not be used, as termios buffers output and the
+transmission of the buffers occur at somewhat unpredictable times.
+
+The real solution is to fix the tests so that they work with interrupt-driven
+I/O and termios.
+
+
+printk() and debug output
+-----------------------
+
+The implementation of printk() in RTEMS is mostly independent of most system
+services. The printk() function can therefore be used to print messages to a
+debug console, particularly when debugging startup code or device drivers,
+i.e. code that runs before the console driver is opened or that runs with
+interrupts disabled.
+
+Support is provided to send printk output to any port. Specify the desired
+port at build time in rtems/make/custom/mbx8xx.cfg by setting the value
+of PRINTK_MINOR to one of SMC1_MINOR, SMC2_MINOR, SCC2_MINOR, SCC3_MINOR,
+or SCC4_MINOR.
+
+Select the type of output desired for printk() by setting the value of
+PRINTK_IO_MODE in rtems/make/custom/mbx8xx.cfg. The choices are:
+
+  0 - polled I/O done by the supplied device driver,
+  1 - interrupt-driven I/O done by the supplied device driver,
+  2 - polled I/O done by EPPC-Bug.
+  
+printk() does not use termios.
+
+If the printk() port is opened by RTEMS, then PRINK_IO_MODE mode must have
+the same value as UARTS_IO_MODE, otherwise the I/O functions will be in
+conflict. Interrupt-driven printk() output is only possible if the port is
+opened before hand by an RTEMS application, and is of dubious value...
 
 
 EPPC-Bug and I/O
 ----------------
 
+IMPORTANT: When using EPPC-Bug 1.1 for polled I/O, only the SMC1 port is
+usable. This is a deficiency of the firmware which may be fixed in later
+revision. When using this monitor with UARTS_IO_MODE set to 2, CONSOLE_MINOR
+must be set to SMC1_MINOR. Similarly, if PRINTK_IO_MODE set to 2,
+PRINTK_MINOR must be set to SMC1_MINOR. When UARTS_IO_MODE is set to 2,
+only SMC1 is usable.
+
 Be warned that when EPPC-Bug does I/O through a serial port, all interrupts
 get turned off in the SIMASK register! This is a definite bug in release 1.1
-of the firmware. It may have been fixed in later releases.
+of the firmware. It may have been fixed in later releases. EPPB-Bug does
+I/O through its debug port whenever it is given control, e.g. after a
+breakpoint is hit, not just when it is used to perform polled I/O on behalf
+of RTEMS applications. In particular, in our configuration, we have gdb
+communication with EPPC-Bug through SMC1.
 
-To solve this problem that occurs when GDB communicates with EPPC-Bug, 
-whenever the BSP manipulates the SIMASK, it makes copy of the written
-in a global variable called 'simask_copy'. That value must be restored by
-GDB before execution resumes. The following commands placed in the .gdbinit
-file takes care of this:
+To solve this problem, whenever the BSP manipulates the SIMASK, it makes a
+copy of the written value in a global variable called 'simask_copy'. That
+value must be restored by GDB before execution resumes. The following commands
+placed in the .gdbinit file takes care of this:
 
-# GDB Initialization file for EPPCBug.
+# GDB Initialization file for EPPC-Bug.
 
 define hook-stepi
 set language c
@@ -234,6 +304,12 @@ set *(int *)0xFA200014=simask_copy
 set language auto
 end
 
+IMPORTANT: When using EPPC-Bug on SMC1, either for debugging or for polled I/O,
+EPPCBUG_SMC1 must be defined in rtems/make/custom/mbx8xx.cfg. Defining this
+constant prevents the device driver from re-initializing SMC1. It also causes
+the network driver, the clock driver, and the asynchronous serial line driver
+to maintain simask_copy for use by gdb.
+
 
 Floating-point
 --------------
@@ -252,12 +328,11 @@ All development was based on the eth_comm port.
 Host System
 -----------
 
-12345678901234567890123456789012345678901234567890123456789012345678901234567890
 The port was developed on Pentiums II and III running RedHat Linux 6.0 and
 6.1. The following tools were used:
 
-    - GNU gcc snapshot dated 19991208 configured for powerpc-rtems;
-    - GNU binutils 2.9.1 configured for powerpc-rtems;
+    - GNU gcc snapshot dated 20000214 configured for powerpc-rtems;
+    - GNU binutils 2.10 configured for powerpc-rtems;
 
 Gcc 2.95.2 also worked. Gcc 2.95.1 will not compile the console driver with
 -O4 or -O3. Compile it manually with -O2.
@@ -293,11 +368,6 @@ to be transmitted.
 The first raw buffer to be transmitted after the console is re-initialized
 with tcsetattr() is garbled. At this time, it does not seem worth while to
 track this problem down.
-
-In the stackchk test, an access fault exception is raised after the stack is
-blown. This is one case were overwritting the first or last 16 bytes of the
-stack does cause problems (but hey, an exception occurred, which is better
-than propagating the error).
 
 In the stackchk test, an access fault exception is raised after the stack is
 blown. This is one case were overwritting the first or last 16 bytes of the
@@ -346,10 +416,6 @@ Test Results
 ------------
 
 Single processor tests:  All tests passed, except the following ones:
-
-  - paranoia required the FPSP and the default variants of libm (and libc and
-    libgcc) for us. It may work with the msoft-float variants for you, but it
-    does require the FPSP.
   
   - cpuuse and malloctest did not work.
   
@@ -357,16 +423,16 @@ Single processor tests:  All tests passed, except the following ones:
     checker had had a chance to detect the corrupted stack.
                          
                          
-Multi-processort tests:  not applicable -- No MPCI layer yet.
+Multi-processort tests:  not applicable.
 
 
 Timing tests:
-	See the times-mbx821 and times-860 files for the results of the
+	See the times-mbx821 and times-mbx860 files for the results of the
 	timing tests.
 
 
 Network tests:
-       Network driver is being implemented.
+       Worked.
 
 
 

@@ -14,21 +14,51 @@
  *    SCC3      /dev/tty3      4
  *    SCC4      /dev/tty4      5
  *
- *  All ports support termios. All I/O is interrupt-driven, unless EPPCBug
- *  is used to do the I/O. To use EPPCBug, define the EPPCBUG_SMC1
- *  manifest constant in the configuration file (mbx8xx.cfg). EPPCBug I/O
- *  is currently limited to the EPPCBug debug console. This is a limitation
- *  of firmware revision 1.1. Later firmware should be able to do I/O
- *  through any port.This code assumes that the EPPCBug console is the
- *  default: SMC1.
+ *  All ports support termios. The use of termios is recommended for real-time
+ *  applications. Termios provides buffering and input processing. When not
+ *  using termios, processing is limited to the substitution of LF for CR on
+ *  input, and the output of a CR following the output of a LF character.
+ *  Note that the terminal should not send CR/LF pairs when the return key
+ *  is pressed, and that output lines are terminated with LF/CR, not CR/LF
+ *  (although that would be easy to change).
+ *
+ *  I/O may be interrupt-driven (recommended for real-time applications) or
+ *  polled. Polled I/O may be performed by this device driver entirely, or
+ *  in part by EPPCBug. With EPPCBug 1.1, polled I/O is limited to the
+ *  EPPCBug debug console. This is a limitation of the firmware. Later
+ *  firmware may be able to do I/O through any port. This code assumes
+ *  that the EPPCBug console is the default: SMC1. If the console and
+ *  printk ports are set to anything else with EPPCBug polled I/O, the
+ *  system will hang. Only port SMC1 is usable with EPPCBug polled I/O.
+ *
+ *  LIMITATIONS:
+ *
+ *  It is not possible to use different I/O modes on the different ports. The
+ *  exception is with printk. The printk port can use a different mode from
+ *  the other ports. If this is done, it is important not to open the printk
+ *  port from an RTEMS application.
+ *
+ *  Currently, the I/O modes are determined at build time. It would be much
+ *  better to have the mode selected at boot time based on parameters in
+ *  NVRAM.
+ *
+ *  Interrupt-driven I/O requires termios.
+ *
+ *  TESTS:
  * 
- *  TO RUN THE TESTS, USE POLLED I/O THROUGH EPPCBUG. Some tests play with
- *  the interrupt masks and turn off I/O. Those tests will hang with when
- *  interrupt-driven I/O is used.
+ *  TO RUN THE TESTS, USE POLLED I/O WITHOUT TERMIOS SUPPORT. Some tests
+ *  play with the interrupt masks and turn off I/O. Those tests will hang
+ *  when interrupt-driven I/O is used. Other tests, such as cdtest, do I/O
+ *  from the static constructors before the console is open. This test
+ *  will not work with interrupt-driven I/O. Because of the buffering
+ *  performed in termios, test output may not be in sequence.The tests
+ *  should all be fixed to work with interrupt-driven I/O and to
+ *  produce output in the expected sequence. Obviously, the termios test
+ *  requires termios support in the driver.
  *  
  *  Set CONSOLE_MINOR to the appropriate device minor number in the
  *  config file. This allows the RTEMS application console to be different
- *  from the EPPBug debug console or the GDB stup I/O port.
+ *  from the EPPBug debug console or the GDB port.
  * 
  *  This driver handles all five available serial ports: it distinguishes
  *  the sub-devices using minor device numbers. It is not possible to have
@@ -41,17 +71,31 @@
  *
  *  Modifications by Darlene Stewart <Darlene.Stewart@iit.nrc.ca>
  *  and Charles-Antoine Gauthier <charles.gauthier@iit.nrc.ca>.
- *  Copyright (c) 1999, National Research Council of Canada
+ *  Copyright (c) 2000, National Research Council of Canada
  *
  */
 #include <stdarg.h>
 #include <stdio.h>
 #include <bsp.h>                /* Must be before libio.h */
+#include <bspIo.h>
 #include <rtems/libio.h>
 #include <termios.h>
 
+#if UARTS_IO_MODE == 0
+#define BSP_WRITE m8xx_uart_pollWrite
+#define BSP_READ  m8xx_uart_pollRead
+#elif UARTS_IO_MODE == 1
+#define BSP_WRITE m8xx_uart_write
+#elif UARTS_IO_MODE == 2
+#define BSP_WRITE _EPPCBug_pollWrite
+#define BSP_READ  _EPPCBug_pollRead
+#endif
+
 static int _EPPCBug_pollRead( int minor );
 static int _EPPCBug_pollWrite( int minor, const char *buf, int len );
+static void _BSP_output_char( char c );
+
+BSP_output_char_function_type BSP_output_char = _BSP_output_char;
 
 
 /*
@@ -104,10 +148,31 @@ int _EPPCBug_pollRead(
 
   retval = -1;
 
-  /* Input through EPPCBug console  */
   input_params.clun = 0;
   input_params.dlun = 0;
-  input_params.reserved = 0;
+  
+  switch( minor ) {
+    case SMC1_MINOR:    
+      input_params.dlun = 0;  /* Should be 4, but doesn't work with EPPCBug 1.1 */
+      break;
+    case SMC2_MINOR:    
+      input_params.dlun = 5;
+      break;
+    case SCC2_MINOR:    
+      input_params.dlun = 1;
+      break;
+#ifdef mpc860
+    case SCC3_MINOR:    
+      input_params.dlun = 2;
+      break;
+    case SCC4_MINOR:    
+      input_params.dlun = 3;
+      break;
+#endif
+    default:    
+      input_params.dlun = 0;
+      break;
+  }
   
   _ISR_Disable( level );
   simask = m8xx.simask;
@@ -193,10 +258,31 @@ int _EPPCBug_pollWrite(
 
   retval = -1;
 
-  /* Output through EPPCBug console  */
   input_params.clun = 0;
-  input_params.dlun = 0;
   input_params.reserved = 0;
+  
+  switch( minor ) {
+    case SMC1_MINOR:    
+      input_params.dlun = 0;  /* Should be 4, but doesn't work with EPPCBug 1.1 */
+      break;
+    case SMC2_MINOR:    
+      input_params.dlun = 5;
+      break;
+    case SCC2_MINOR:    
+      input_params.dlun = 1;
+      break;
+#ifdef mpc860
+    case SCC3_MINOR:    
+      input_params.dlun = 2;
+      break;
+    case SCC4_MINOR:    
+      input_params.dlun = 3;
+      break;
+#endif
+    default:    
+      input_params.dlun = 0;
+      break;
+  }
 
   i = 0;
 
@@ -224,7 +310,7 @@ int _EPPCBug_pollWrite(
     asm volatile( "li 10,0x201          /* Code for .CIO_WRITE */
                    mr 3, %0             /* Address of input_params */
                    mr 4, %1             /* Address of output_params */
-                   sc"          /* Call EPPCBUG */ 
+                   sc"                  /* Call EPPCBUG */ 
       :: "g" (&input_params), "g" (&output_params) : "3", "4", "10" );
 
     if (output_params.status)
@@ -246,37 +332,16 @@ error:
 
 
 /*
- *  Print functions: prototyped in bsp.h
- *  Debug printing on Channel 1
+ *  Print functions prototyped in bspIo.h
  */
- 
-void printk( char *fmt, ... )
+
+void _BSP_output_char( char c )
 {
-  va_list  ap;                  /* points to each unnamed argument in turn */
-  static char buf[256];
-  unsigned int level;
+  char cr = '\r';
   
-  _CPU_ISR_Disable(level);
-  
-  va_start(ap, fmt);            /* make ap point to 1st unnamed arg */
-  vsprintf(buf, fmt, ap);       /* send output to buffer */
-  
-  BSP_output_string(buf);       /* print buffer -- Channel 1 */
-  
-  va_end(ap);               /* clean up and re-enable interrupts */
-  _CPU_ISR_Enable(level);
-}
-
-
-void BSP_output_string( char * buf )
-{
-  int len = strlen(buf);
-  int minor;                /* will be ignored */
-  rtems_status_code sc;
-
-  sc = _EPPCBug_pollWrite(minor, buf, len);
-  if (sc != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred (sc);
+  BSP_WRITE( PRINTK_MINOR, &c, 1 );
+  if( c == '\n' )
+    BSP_WRITE( PRINTK_MINOR, &cr, 1 );
 }
 
 
@@ -302,8 +367,9 @@ rtems_device_driver console_initialize(
   /*
    * Set up TERMIOS
    */
+#if UARTS_USE_TERMIOS == 1
   rtems_termios_initialize();
-
+#endif
   /*
    *  Do common initialization.
    */
@@ -312,16 +378,28 @@ rtems_device_driver console_initialize(
   /*
    * Do device-specific initialization
    */
-#ifndef EPPCBUG_SMC1
+#if !defined(EPPCBUG_SMC1) && ( PRINTK_IO_MODE != 2 || PRINTK_MINOR != SMC1_MINOR )
   m8xx_uart_smc_initialize(SMC1_MINOR); /* /dev/tty0 */
-#endif /* EPPCBUG_SMC1 */
+#endif
 
+#if PRINTK_IO_MODE != 2 || PRINTK_MINOR != SMC2_MINOR
   m8xx_uart_smc_initialize(SMC2_MINOR); /* /dev/tty1 */                             
+#endif
+
+  #if PRINTK_IO_MODE != 2 || PRINTK_MINOR != SCC2_MINOR
   m8xx_uart_scc_initialize(SCC2_MINOR); /* /dev/tty2    */
-                              
+   #endif
+                           
 #ifdef mpc860
+
+#if PRINTK_IO_MODE != 2 || PRINTK_MINOR != SCC3_MINOR
   m8xx_uart_scc_initialize(SCC3_MINOR); /* /dev/tty3    */
+#endif
+
+#if PRINTK_IO_MODE != 2 || PRINTK_MINOR != SCC4_MINOR
   m8xx_uart_scc_initialize(SCC4_MINOR); /* /dev/tty4    */
+#endif
+
 #endif /* mpc860 */
 
   /*
@@ -371,13 +449,14 @@ rtems_device_driver console_open(
 )
 {
   /* Used to track termios private data for callbacks */
+#if UARTS_IO_MODE == 1
   extern struct rtems_termios_tty *ttyp[];
-
-  volatile m8xxSCCRegisters_t *sccregs;
-  rtems_status_code sc;
   rtems_libio_open_close_args_t *args = arg;
-  
-#ifdef EPPCBUG_SMC1
+#endif
+
+  rtems_status_code sc;
+
+#if UARTS_USE_TERMIOS == 1
   static const rtems_termios_callbacks sccEPPCBugCallbacks = {
     NULL,                       	/* firstOpen */
     NULL,                       	/* lastClose */
@@ -386,47 +465,55 @@ rtems_device_driver console_open(
     NULL,                       	/* stopRemoteTx */
     NULL,                       	/* startRemoteTx */
     0                           	/* outputUsesInterrupts */
-  };  
-#endif
-
-#ifdef UARTS_USE_INTERRUPTS  
+  };
   static const rtems_termios_callbacks intrCallbacks = {
     NULL,                       	/* firstOpen */
     NULL,                       	/* lastClose */
-    NULL,                               /* pollRead */
-    m8xx_uart_write,       	        /* write */
+    NULL,                         /* pollRead */
+    m8xx_uart_write,       	      /* write */
     m8xx_uart_setAttributes,    	/* setAttributes */
     NULL,                       	/* stopRemoteTx */
     NULL,                       	/* startRemoteTx */
     1                           	/* outputUsesInterrupts */
   };
-#else
   static const rtems_termios_callbacks pollCallbacks = {
     NULL,                       	/* firstOpen */
     NULL,                       	/* lastClose */
-    m8xx_uart_pollRead,        	        /* pollRead */
-    m8xx_uart_pollWrite,       	        /* write */
-    m8xx_uart_setAttributes,      	/* setAttributes */
+    m8xx_uart_pollRead,        	  /* pollRead */
+    m8xx_uart_pollWrite,       	  /* write */
+    m8xx_uart_setAttributes,      /* setAttributes */
     NULL,                       	/* stopRemoteTx */
     NULL,                       	/* startRemoteTx */
     0                           	/* outputUsesInterrupts */
   };
 #endif
-
-  if ( (minor < SMC1_MINOR) || (minor > NUM_PORTS-1) )
+   
+  if ( minor > NUM_PORTS-1 ) 
     return RTEMS_INVALID_NUMBER;
-    
-#ifdef EPPCBUG_SMC1
-  if (minor == SMC1_MINOR)
-    return rtems_termios_open (major, minor, arg, &sccEPPCBugCallbacks);
-#endif /* EPPCBUG_SMC1 */
 
-#ifdef UARTS_USE_INTERRUPTS  
+#if UARTS_USE_TERMIOS == 1
+
+#if UARTS_IO_MODE == 2    /* EPPCBug polled I/O with termios */
+
+  sc = rtems_termios_open (major, minor, arg, &sccEPPCBugCallbacks);
+  
+#elif UARTS_IO_MODE == 1  /* RTEMS interrupt-driven I/O with termios */
+
   sc = rtems_termios_open (major, minor, arg, &intrCallbacks);
   ttyp[minor] = args->iop->data1;        /* Keep cookie returned by termios_open */
-#else
+  
+#else                     /* RTEMS polled I/O with termios */
+
   sc = rtems_termios_open (major, minor, arg, &pollCallbacks);
+  
 #endif
+
+#else                     /* Nothing to do if termios is not used */
+
+  sc = RTEMS_SUCCESSFUL;
+  
+#endif
+
   return sc;
 }
 
@@ -440,7 +527,14 @@ rtems_device_driver console_close(
   void *arg
 )
 {
+  if ( minor > NUM_PORTS-1 )
+    return RTEMS_INVALID_NUMBER;
+
+#if UARTS_USE_TERMIOS == 1
   return rtems_termios_close (arg);
+#else
+  return RTEMS_SUCCESSFUL;
+#endif
 }
 
 
@@ -453,7 +547,37 @@ rtems_device_driver console_read(
   void *arg
 )
 {
+#if UARTS_USE_TERMIOS != 1
+  rtems_libio_rw_args_t *rw_args = arg;
+  int i;
+#endif
+  
+  if ( minor > NUM_PORTS-1 )
+    return RTEMS_INVALID_NUMBER;
+
+#if UARTS_USE_TERMIOS == 1
+
   return rtems_termios_read(arg);
+  
+#else
+
+#if UARTS_IO_MODE != 1    /* Polled I/O without termios */
+
+  for( i = 0; i < rw_args->count; i++ ) {
+    rw_args->buffer[i] = BSP_READ( minor );
+    if( rw_args->buffer[i] == '\r' )
+      rw_args->buffer[i] = '\n';
+  }
+  rw_args->bytes_moved = i;
+  return RTEMS_SUCCESSFUL;
+  
+#else                     /* RTEMS interrupt-driven I/O without termios */
+
+  #error "Interrupt-driven input without termios is not yet supported"
+  
+#endif
+
+#endif
 }
 
 
@@ -466,7 +590,39 @@ rtems_device_driver console_write(
   void *arg
 )
 {
+#if UARTS_USE_TERMIOS != 1
+  rtems_libio_rw_args_t *rw_args = arg;
+  int i;
+  char cr = '\r';
+#endif
+
+  if ( minor > NUM_PORTS-1 )
+    return RTEMS_INVALID_NUMBER;
+
+#if UARTS_USE_TERMIOS == 1
+
   return rtems_termios_write(arg);
+  
+#else
+
+#if UARTS_IO_MODE != 1     /* Polled I/O without termios*/
+
+  /* Must add carriage return to line feeds */
+  for( i = 0; i < rw_args->count; i++ ) {
+    BSP_WRITE( minor, &(rw_args->buffer[i]), 1 );
+    if( rw_args->buffer[i] == '\n' )
+      BSP_WRITE( minor, &cr, 1 );
+  }
+  rw_args->bytes_moved = rw_args->count;
+  return RTEMS_SUCCESSFUL;
+    
+#else                     /* RTEMS interrupt-driven I/O without termios */
+
+  #error "Interrupt-driven output without termios is not yet supported"
+  
+#endif
+
+#endif
 }
 
 
@@ -479,6 +635,13 @@ rtems_device_driver console_control(
   void *arg
 )
 { 
+  if ( minor > NUM_PORTS-1 )
+    return RTEMS_INVALID_NUMBER;
+
+#if UARTS_USE_TERMIOS == 1
   return rtems_termios_ioctl (arg);
+#else
+  return RTEMS_SUCCESSFUL;
+#endif
 }
 

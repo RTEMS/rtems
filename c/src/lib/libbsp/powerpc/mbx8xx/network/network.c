@@ -1685,7 +1685,7 @@ rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
 
 
 int
-rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config)
+rtems_enet_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 {
   
 #ifdef MPC860T

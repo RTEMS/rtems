@@ -34,7 +34,7 @@ extern "C" {
  * Network driver configuration
  */
 struct rtems_bsdnet_ifconfig;
-extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config);
+extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config, int attaching);
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"scc1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_enet_driver_attach
 
@@ -106,12 +106,6 @@ rtems_isr_entry set_vector(                    /* returns old vector */
   rtems_vector_number vector,                   /* vector number      */
   int                 type                      /* RTEMS or RAW intr  */
 );
-
-/* 
- *  Debug print functions: implemented in console.c
- */
-void printk( char *fmt, ... );
-void BSP_output_string( char * buf );
 
 #ifdef __cplusplus
 }

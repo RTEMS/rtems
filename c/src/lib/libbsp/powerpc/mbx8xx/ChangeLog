@@ -1,3 +1,14 @@
+2000-08-10	Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
+
+	* README: Updated.
+	* console/console.c: Addition of support for shared printk and
+	no termios.
+	* include/bsp.h: Addition of second parameter to
+	rtems_enet_driver_attach. Removed prototypes for printk and
+	BSP_output_string.
+	* network/network.c(rtems_enet_driver_attach): Addition of second
+	parameter to function.
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
