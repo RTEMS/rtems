@@ -19,8 +19,6 @@
 #ifndef __RTEMS_RTEMS_GENERIC_h
 #define __RTEMS_RTEMS_GENERIC_h
 
-#define NO_IMPLICIT_EXTERN_C 1
-
 #ifdef __cplusplus
 extern "C" {
 #endif
