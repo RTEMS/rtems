@@ -292,16 +292,16 @@ if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
     # The bare bsp is a special case as it is not under the target_cpu path
     case $i in
       bare)    bspcpudir= ;;
-      *)       bspcpudir=$target_cpu ;;
+      *)       bspcpudir=$target_cpu/ ;;
     esac
      
-    if test -d "$srcdir/c/src/lib/libbsp/$bspcpudir/$bspdir"; then
+    if test -d "$srcdir/c/src/lib/libbsp/$bspcpudir$bspdir"; then
       RTEMS_BSP_LIST="$RTEMS_BSP_LIST $i"
       # make sure the Makefiles in a bsp directory are only done once
       echo $bspdirs | grep $bspdir >/dev/null 2>&1
       if test $? -ne 0 ; then
         bspdirs="$bspdirs $bspdir"
-        RTEMS_CHECK_MAKEFILE(c/src/lib/libbsp/$bspcpudir/$bspdir)
+        RTEMS_CHECK_MAKEFILE(c/src/lib/libbsp/$bspcpudir$bspdir)
       fi
     else
       AC_MSG_ERROR([unable to find libbsp directory ($bspdir) for  $i])

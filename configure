@@ -2331,22 +2331,22 @@ echo "configure:2291: checking for bsps" >&5
     # The bare bsp is a special case as it is not under the target_cpu path
     case $i in
       bare)    bspcpudir= ;;
-      *)       bspcpudir=$target_cpu ;;
+      *)       bspcpudir=$target_cpu/ ;;
     esac
      
-    if test -d "$srcdir/c/src/lib/libbsp/$bspcpudir/$bspdir"; then
+    if test -d "$srcdir/c/src/lib/libbsp/$bspcpudir$bspdir"; then
       RTEMS_BSP_LIST="$RTEMS_BSP_LIST $i"
       # make sure the Makefiles in a bsp directory are only done once
       echo $bspdirs | grep $bspdir >/dev/null 2>&1
       if test $? -ne 0 ; then
         bspdirs="$bspdirs $bspdir"
         
-echo $ac_n "checking for Makefile.in in c/src/lib/libbsp/$bspcpudir/$bspdir""... $ac_c" 1>&6
-echo "configure:2346: checking for Makefile.in in c/src/lib/libbsp/$bspcpudir/$bspdir" >&5
-if test -d $srcdir/c/src/lib/libbsp/$bspcpudir/$bspdir; then
+echo $ac_n "checking for Makefile.in in c/src/lib/libbsp/$bspcpudir$bspdir""... $ac_c" 1>&6
+echo "configure:2346: checking for Makefile.in in c/src/lib/libbsp/$bspcpudir$bspdir" >&5
+if test -d $srcdir/c/src/lib/libbsp/$bspcpudir$bspdir; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/lib/libbsp/$bspcpudir/$bspdir -name "Makefile.in" -print | sed "s/Makefile\.in/%/" | sort | sed "s/%/Makefile/"`
+  rtems_av_tmp=`find c/src/lib/libbsp/$bspcpudir$bspdir -name "Makefile.in" -print | sed "s/Makefile\.in/%/" | sort | sed "s/%/Makefile/"`
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
