@@ -63,7 +63,6 @@ int IMFS_initialize(
    return IMFS_initialize_support(
      temp_mt_entry,
      &IMFS_ops,
-     &IMFS_linearfile_handlers,
      &IMFS_memfile_handlers,
      &IMFS_directory_handlers
    );

@@ -52,7 +52,7 @@ int IMFS_Set_handlers(
       loc->handlers = &IMFS_link_handlers;
       break;
     case IMFS_LINEAR_FILE:
-      loc->handlers = fs_info->linearfile_handlers;
+      loc->handlers = fs_info->memfile_handlers;
       break;
     case IMFS_MEMORY_FILE:
       loc->handlers = fs_info->memfile_handlers;

@@ -23,23 +23,6 @@
  *  Set of operations handlers for operations on memfile entities.
  */
 
-rtems_filesystem_file_handlers_r IMFS_linearfile_handlers = {
-  memfile_open,
-  memfile_close,
-  memfile_read,
-  NULL,                /* write */
-  memfile_ioctl,
-  memfile_lseek,
-  IMFS_stat,
-  IMFS_fchmod,
-  NULL,                /* ftruncate */
-  NULL,                /* fpathconf */
-  IMFS_fdatasync,      /* fsync */
-  IMFS_fdatasync,
-  IMFS_fcntl,
-  memfile_rmnod
-};
-
 rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   memfile_open,
   memfile_close,

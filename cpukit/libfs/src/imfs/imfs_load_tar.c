@@ -25,6 +25,7 @@
 #include <rtems/chain.h>
 #include <rtems/imfs.h>
 #include <rtems/untar.h>
+#include <rtems/tar.h>
 
 /**************************************************************************
  * TAR file format:
@@ -141,10 +142,9 @@ rtems_tarfs_load(char *mountpoint,
          mkdir(full_filename, S_IRWXU | S_IRWXG | S_IRWXO);
       }
       /******************************************************************
-       * Create a LINEAR_FILE node if no user write permission.
+       * Create a LINEAR_FILE node
        *****************************************************************/
-      else if ((linkflag == REGTYPE) &&
-               ((file_mode & 0200) == 0000))
+      else if (linkflag == REGTYPE)
       {
          const char  *name;
 
@@ -152,41 +152,11 @@ rtems_tarfs_load(char *mountpoint,
          if (IMFS_evaluate_for_make(filename, &loc, &name) == 0)
          {
             node = IMFS_create_node(&loc,
-                                    IMFS_LINEAR_FILE, (char *)name,
-                                    (S_IRUSR | S_IRGRP | S_IROTH) | S_IFREG,
-                                    NULL);
+                        IMFS_LINEAR_FILE, (char *)name,
+                        (file_mode & (S_IRWXU | S_IRWXG | S_IRWXO)) | S_IFREG,
+                        NULL);
             node->info.linearfile.size   = file_size;
             node->info.linearfile.direct = &tar_image[offset];
-         }
-
-         nblocks = (((file_size) + 511) & ~511) / 512;
-         offset += 512 * nblocks;
-      }
-      /******************************************************************
-       * Create a regular MEMORY_FILE if write permission exists.
-       *****************************************************************/
-      else if ((linkflag == REGTYPE) &&
-               ((file_mode & 0200) == 0200))
-      {
-         int fd;
-         int n, left, ptr;
-
-         strcpy(full_filename, mountpoint);
-         if (full_filename[strlen(full_filename)-1] != '/')
-            strcat(full_filename, "/");
-         strcat(full_filename, filename);
-
-         fd = creat(full_filename, S_IRUSR|S_IWUSR | S_IRGRP|S_IWGRP);
-         if (fd != -1)
-         {
-            left = file_size;
-            ptr  = offset;
-            while ((n = write(fd, &tar_image[ptr], left)) > 0)
-            {
-               left -= n;
-               ptr += n;
-            }
-            close(fd);
          }
 
          nblocks = (((file_size) + 511) & ~511) / 512;

@@ -99,6 +99,23 @@ int memfile_open(
 
   the_jnode = iop->file_info;
 
+  /*
+   * Perform 'copy on write' for linear files
+   */
+  if ((iop->flags & (LIBIO_FLAGS_WRITE | LIBIO_FLAGS_APPEND))
+   && (the_jnode->type == IMFS_LINEAR_FILE)) {
+    uint32_t   count = the_jnode->info.linearfile.size;
+    const unsigned char *buffer = the_jnode->info.linearfile.direct;
+
+    the_jnode->type = IMFS_MEMORY_FILE;
+    the_jnode->info.file.size            = 0;
+    the_jnode->info.file.indirect        = 0;
+    the_jnode->info.file.doubly_indirect = 0;
+    the_jnode->info.file.triply_indirect = 0;
+    if ((count != 0)
+     && (IMFS_memfile_write(the_jnode, 0, buffer, count) == -1))
+        return -1;
+  }
   if (iop->flags & LIBIO_FLAGS_APPEND)
     iop->offset = the_jnode->info.file.size;
 

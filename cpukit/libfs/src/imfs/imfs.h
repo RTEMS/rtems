@@ -202,7 +202,6 @@ struct IMFS_jnode_tt {
 
 typedef struct {
   ino_t                             ino_count;
-  rtems_filesystem_file_handlers_r *linearfile_handlers;
   rtems_filesystem_file_handlers_r *memfile_handlers;
   rtems_filesystem_file_handlers_r *directory_handlers;
 } IMFS_fs_info_t;
@@ -237,7 +236,6 @@ typedef enum {
 extern rtems_filesystem_file_handlers_r       IMFS_directory_handlers;
 extern rtems_filesystem_file_handlers_r       IMFS_device_handlers;
 extern rtems_filesystem_file_handlers_r       IMFS_link_handlers;
-extern rtems_filesystem_file_handlers_r       IMFS_linearfile_handlers;
 extern rtems_filesystem_file_handlers_r       IMFS_memfile_handlers;
 extern rtems_filesystem_operations_table      IMFS_ops;
 extern rtems_filesystem_operations_table      miniIMFS_ops;
@@ -258,7 +256,6 @@ int miniIMFS_initialize(
 int IMFS_initialize_support(
    rtems_filesystem_mount_table_entry_t *mt_entry,
    rtems_filesystem_operations_table    *op_table,
-   rtems_filesystem_file_handlers_r     *linearfile_handlers,
    rtems_filesystem_file_handlers_r     *memfile_handlers,
    rtems_filesystem_file_handlers_r     *directory_handlers
 );
@@ -414,18 +411,6 @@ int imfs_dir_fstat(
 
 int imfs_dir_rmnod(
   rtems_filesystem_location_info_t      *pathloc       /* IN */
-);
-
-int linearfile_read(
-  rtems_libio_t *iop,             /* IN  */
-  void          *buffer,          /* IN  */
-  uint32_t       count            /* IN  */
-);
-
-int linearfile_lseek(
-  rtems_libio_t        *iop,        /* IN  */
-  off_t                 offset,     /* IN  */
-  int                   whence      /* IN  */
 );
 
 int memfile_open(

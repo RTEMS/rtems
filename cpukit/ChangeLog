@@ -1,3 +1,12 @@
+2005-02-09	Eric Norum <norum@aps.anl.gov>
+
+	* libfs/Makefile.am, libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_eval.c,
+	libfs/src/imfs/imfs_fchmod.c, libfs/src/imfs/imfs_handlers_memfile.c,
+	libfs/src/imfs/imfs_init.c, libfs/src/imfs/imfs_initsupp.c,
+	libfs/src/imfs/imfs_load_tar.c, libfs/src/imfs/linearfile.c,
+	libfs/src/imfs/memfile.c, libfs/src/imfs/miniimfs_init.c: Add
+	'copy-on-write' semantics to rtems_tarfs_load().
+
 2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* httpd/Makefile.am: Split preinstallation rules in to separate
