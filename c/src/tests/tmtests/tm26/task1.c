@@ -589,6 +589,6 @@ void complete_test( void )
   );
 
   puts( "*** END OF TEST 26 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 

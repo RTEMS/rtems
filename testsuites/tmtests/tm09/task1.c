@@ -86,7 +86,7 @@ rtems_task Test_task (
   );
 
   puts( "*** END OF TEST 9 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 
 void queue_test()

@@ -233,7 +233,7 @@ rtems_task test_task(
   );
 
   puts( "*** END OF TEST 8 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 
 rtems_task test_task1(

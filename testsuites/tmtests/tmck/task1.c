@@ -136,7 +136,7 @@ rtems_test_pause();
   );
 
   puts( "*** END OF TIME CHECKER ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 
 void check_read_timer()
@@ -160,7 +160,7 @@ void check_read_timer()
       index--; 
       continue;
 #else
-      exit( 1 );
+      rtems_test_exit( 1 );
 #endif
     }
     else

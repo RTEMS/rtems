@@ -152,5 +152,5 @@ rtems_task High_task(
   );
 
   puts( "*** END OF TEST 11 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

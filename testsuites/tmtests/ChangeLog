@@ -1,3 +1,19 @@
+2002-08-01	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR47 add support for buffered test output.  This involved
+	adding defines to redirect output to a buffer and dump it when
+	full, at "test pause", and at exit.  To avoid problems when redefining
+	exit(), all tests were modified to call rtems_test_exit().
+	Some tests, notable psxtests, had to be modified to include 
+	the standard test macro .h file (pmacros.h or tmacros.h) to
+	enable this support.
+	* include/timesys.h, tm01/task1.c, tm02/task1.c, tm03/task1.c,
+	tm04/task1.c, tm05/task1.c, tm06/task1.c, tm07/task1.c, tm08/task1.c,
+	tm09/task1.c, tm10/task1.c, tm11/task1.c, tm12/task1.c, tm13/task1.c,
+	tm14/task1.c, tm15/task1.c, tm16/task1.c, tm17/task1.c, tm18/task1.c,
+	tm19/task1.c, tm20/task1.c, tm21/task1.c, tm22/task1.c, tm23/task1.c,
+	tm24/task1.c, tm25/task1.c, tm26/task1.c, tm27/task1.c, tm28/task1.c,
+	tm29/task1.c, tmck/task1.c, tmoverhd/testtask.c: Modified.
 2002-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove ENABLE_GCC28.

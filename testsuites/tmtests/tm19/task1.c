@@ -203,5 +203,5 @@ rtems_task Task_3(
   );
 
   puts( "*** END OF TEST 19 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

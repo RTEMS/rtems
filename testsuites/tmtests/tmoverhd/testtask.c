@@ -1274,5 +1274,5 @@ rtems_test_pause();
 
   puts( "*** END OF TIME OVERHEAD ***" );
 
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

@@ -149,7 +149,7 @@ rtems_task Task_1(
   );
 
   puts( "*** END OF TEST 6 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 
 rtems_task null_task(

@@ -297,5 +297,5 @@ rtems_task Low_task(
   );
 
   puts( "*** END OF TEST 23 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }

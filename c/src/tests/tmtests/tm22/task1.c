@@ -180,7 +180,7 @@ rtems_task Low_task(
   );
 
   puts( "*** END OF TEST 22 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 
 rtems_task Preempt_task(

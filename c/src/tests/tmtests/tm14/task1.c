@@ -127,7 +127,7 @@ rtems_task High_task(
   );
 
   puts( "*** END OF TEST 14 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 
 rtems_task Low_tasks(

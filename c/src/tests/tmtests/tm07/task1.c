@@ -93,7 +93,7 @@ rtems_task High_task(
     (void) rtems_task_suspend( RTEMS_SELF );
 
   puts( "*** END OF TEST 7 ***" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
 
 rtems_task Middle_tasks(

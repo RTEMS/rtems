@@ -117,7 +117,7 @@ rtems_task Tasks(
     );
 
   puts( "*** END OF TEST 24 ***" );
-    exit( 0 );
+    rtems_test_exit( 0 );
   }
   (void) rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
 }
