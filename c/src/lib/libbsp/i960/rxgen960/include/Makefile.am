@@ -18,7 +18,7 @@ $(PROJECT_INCLUDE)/coverhd.h: ../../../shared/include/coverhd.h
 TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp.h \
     $(PROJECT_INCLUDE)/coverhd.h
 
-all-local: $(TMPINSTALL_FILES)
+all: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bsp.h rxgen960_config.h
 

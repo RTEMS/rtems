@@ -34,7 +34,7 @@ $(PROJECT_RELEASE)/lib/romlink: romlink
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/ramlink \
     $(PROJECT_RELEASE)/lib/romlink
 
-all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 

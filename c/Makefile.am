@@ -49,4 +49,4 @@ UPDATE_HELP
 DIST_SUBDIRS = ${RTEMS_BSP}
 ## -------------------------------------------------------
 include $(top_srcdir)/../automake/subdirs.am
-include $(top_srcdir)/../automake/local.am
+include $(top_srcdir)/../automake/host.am

@@ -26,7 +26,7 @@ AM_CFLAGS = $(CFLAGS_OS_V)
 $(PGM): $(vectors_rel_OBJECTS)
 	$(make-rel)
 
-all-local: ${ARCH} $(PGM)
+all: ${ARCH} $(PGM)
 
 EXTRA_DIST = vectors.S
 

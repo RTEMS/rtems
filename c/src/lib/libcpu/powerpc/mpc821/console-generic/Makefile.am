@@ -22,7 +22,7 @@ AM_CFLAGS = $(CFLAGS_OS_V)
 $(PGM): $(console_generic_rel_OBJECTS)
 	$(make-rel)
 
-all-local: $(ARCH) $(console_generic_rel_OBJECTS) $(PGM)
+all: $(ARCH) $(console_generic_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

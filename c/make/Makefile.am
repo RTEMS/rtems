@@ -13,4 +13,4 @@ rtems_make_DATA = $(GENERIC_FILES)
 
 EXTRA_DIST = target.cfg.in
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/../../automake/host.am

@@ -37,9 +37,9 @@ if HAS_CXX
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
-all-local: $(ARCH) $(TMPINSTALL_FILES)
+all: $(ARCH) $(TMPINSTALL_FILES)
 else
-all-local:
+all:
 endif
 
 EXTRA_DIST = $(CC_FILES) $(DOCS)

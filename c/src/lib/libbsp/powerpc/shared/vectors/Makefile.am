@@ -19,7 +19,7 @@ $(PROJECT_INCLUDE)/bsp/%.h: %.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp \
     $(H_FILES:%.h=$(PROJECT_INCLUDE)/bsp/%.h)
 
-all-local: $(PREINSTALL_FILES)
+all: $(PREINSTALL_FILES)
 
 EXTRA_DIST = vectors.S vectors.h vectors_init.c
 

@@ -23,7 +23,7 @@ $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(PGMS)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
 
-all-local: $(ARCH) $(OBJS) $(TMPINSTALL_FILES)
+all: $(ARCH) $(OBJS) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = start.S start.ram start.rom
 

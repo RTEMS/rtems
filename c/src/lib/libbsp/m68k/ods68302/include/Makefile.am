@@ -32,7 +32,7 @@ TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bare.h \
     $(PROJECT_INCLUDE)/crc.h $(PROJECT_INCLUDE)/debugport.h \
     $(PROJECT_INCLUDE)/m68302scc.h
 
-all-local: $(TMPINSTALL_FILES)
+all: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bare.h bsp.h coverhd.h crc.h debugport.h m68302scc.h
 

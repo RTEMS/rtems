@@ -21,7 +21,7 @@ $(PROJECT_INCLUDE)/leds.h: leds.h
 TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp.h \
     $(PROJECT_INCLUDE)/coverhd.h $(PROJECT_INCLUDE)/leds.h
 
-all-local: $(TMPINSTALL_FILES)
+all: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = README bsp.h leds.h
 

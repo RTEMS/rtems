@@ -29,7 +29,7 @@ $(PROJECT_INCLUDE)/concntl.h: concntl.h
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/concntl.h
 
-all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 

@@ -35,7 +35,7 @@ $(PGM): $(exceptions_rel_OBJECTS)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
     $(PROJECT_INCLUDE)/libcpu/raw_exception.h
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(exceptions_rel_OBJECTS) $(PGM)
+all: $(ARCH) $(PREINSTALL_FILES) $(exceptions_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

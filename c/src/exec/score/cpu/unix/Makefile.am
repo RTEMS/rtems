@@ -22,7 +22,7 @@ rtems_cpu_rel_OBJECTS = $(C_O_FILES)
 $(REL): $(rtems_cpu_rel_OBJECTS)
 	$(make-rel)
 
-all-local: $(ARCH) $(rtems_cpu_rel_OBJECTS) $(REL)
+all: $(ARCH) $(rtems_cpu_rel_OBJECTS) $(REL)
 
 .PRECIOUS: $(REL)
 

@@ -28,7 +28,7 @@ $(PGM): $(syscall_rel_OBJECTS)
 # the .rel file built here will be put into libbsp.a by
 #    libbsp/sparc/BSP/wrapup/Makefile
 
-all-local: $(ARCH) $(syscall_rel_OBJECTS) $(PGM)
+all: $(ARCH) $(syscall_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

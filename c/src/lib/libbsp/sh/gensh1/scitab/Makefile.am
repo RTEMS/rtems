@@ -28,7 +28,7 @@ $(PGM): $(OBJS)
 scitab.c: $(SHGEN)
 	$(SHGEN) -H $(HZ) sci > $@
 
-all-local: $(ARCH) $(OBJS) $(PGM)
+all: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

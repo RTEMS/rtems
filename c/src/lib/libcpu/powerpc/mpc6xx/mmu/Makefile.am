@@ -34,7 +34,7 @@ $(PGM): $(mmu_rel_OBJECTS)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
     $(PROJECT_INCLUDE)/libcpu/bat.h
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(mmu_rel_OBJECTS) $(PGM)
+all: $(ARCH) $(PREINSTALL_FILES) $(mmu_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

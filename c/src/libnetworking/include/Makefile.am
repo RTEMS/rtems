@@ -448,6 +448,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bpfilter.h \
     $(PROJECT_INCLUDE)/nfs/rpcv2.h $(PROJECT_INCLUDE)/nfs/xdr_subs.h \
     $(PROJECT_INCLUDE)/ftpd.h $(PROJECT_INCLUDE)/rtems_webserver.h
 
-all-local: $(PREINSTALL_FILES)
+all: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

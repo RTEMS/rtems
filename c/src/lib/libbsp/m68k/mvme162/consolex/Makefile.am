@@ -31,7 +31,7 @@ $(PROJECT_INCLUDE)/consolex.h: consolex.h
 
 TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/consolex.h
 
-all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 

@@ -17,6 +17,6 @@ $(PROJECT_INCLUDE)/mpc821:
 $(PROJECT_INCLUDE)/mpc821/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-all-local: $(TMPINSTALL_FILES) 
+all: $(TMPINSTALL_FILES) 
 
 include $(top_srcdir)/../../../../../automake/local.am

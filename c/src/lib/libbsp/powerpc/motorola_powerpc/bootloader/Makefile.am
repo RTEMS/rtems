@@ -16,6 +16,7 @@ S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
 OBJS = $(S_O_FILES) $(C_O_FILES)
 
+
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/lib.am
 
@@ -23,12 +24,13 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CPPFLAGS += -D__BOOT__ -DDEBUG
-AM_CFLAGS += -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple \
-    -mstring -O2 -fomit-frame-pointer -mrelocatable -ffixed-r13 -mno-sdata \
-    -D__BOOT__ -DDEBUG
+## FIXME: 
+## ASFLAGS = -mrelocatable
+CFLAGS_DEBUG_V = $(CFLAGS_OPTIMIZE_V)
 
-ASFLAGS += -mrelocatable
+AM_CPPFLAGS += -D__BOOT__ -DDEBUG -mrelocatable
+AM_CFLAGS += -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple \
+    -mstring -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata
 
 IMAGES = rtems.gz
 
@@ -47,7 +49,7 @@ DISTCLEANFILES += $(IMAGES)
 bootloader : $(OBJS) $(IMAGES) $(BINARY_LOADED) ppcboot.lds
 	$(LD) -o bootloader $(OBJS) --just-symbols=$(BINARY_LOADED) \
 	-b binary $(IMAGES) -T @srcdir@/../../shared/bootloader/ppcboot.lds \
-	-Map bootloader.map
+	-Map $(ARCH)/bootloader.map
 
 check_unresolved : $(OBJS)
 	$(LD) -r -o reloc.O $(OBJS)
@@ -60,6 +62,6 @@ rtems: $(BINARY_LOADED)
 rtems.gz: rtems
 	gzip -vf9 rtems
 
-all-local: $(ARCH) $(OBJS)
+all: $(ARCH) $(OBJS)
 
 include $(top_srcdir)/../../../../../../automake/local.am

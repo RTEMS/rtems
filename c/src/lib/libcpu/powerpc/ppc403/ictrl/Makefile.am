@@ -31,7 +31,7 @@ $(PGM): $(ictrl_rel_OBJECTS)
 
 TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/ictrl.h
 
-all-local: $(ARCH) $(ictrl_rel_OBJECTS) $(PGM) $(TMPINSTALL_FILES)
+all: $(ARCH) $(ictrl_rel_OBJECTS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 

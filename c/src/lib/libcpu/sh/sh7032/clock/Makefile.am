@@ -23,7 +23,7 @@ AM_CFLAGS += $(CFLAGS_OS_V)
 $(PGM): $(OBJS)
 	$(make-rel)
 
-all-local: $(ARCH) $(OBJS) $(PGM)
+all: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

@@ -23,6 +23,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 AM_CPPFLAGS += -DSTATIC_LOG_ALLOC
 
-all-local: $(ARCH) $(OBJS)
+all: $(ARCH) $(OBJS)
 
 include $(top_srcdir)/../../../../../../automake/local.am

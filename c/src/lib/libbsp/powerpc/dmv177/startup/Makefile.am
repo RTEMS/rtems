@@ -29,7 +29,7 @@ $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
 
-all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 

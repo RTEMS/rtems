@@ -29,7 +29,7 @@ TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp.h \
     $(PROJECT_INCLUDE)/gen1.h $(PROJECT_INCLUDE)/gen2.h \
     $(PROJECT_INCLUDE)/tod.h
 
-all-local: $(TMPINSTALL_FILES)
+all: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bsp.h chain.h coverhd.h gen1.h gen2.h tod.h
 

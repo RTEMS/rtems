@@ -27,6 +27,6 @@ $(PROJECT_INCLUDE)/bsp/openpic.h: ../../shared/openpic/openpic.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/openpic.h
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
+all: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
 
 include $(top_srcdir)/../../../../../../automake/local.am

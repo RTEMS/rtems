@@ -43,6 +43,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp \
     $(PROJECT_INCLUDE)/bsp/uart.h $(PROJECT_INCLUDE)/bsp/irq.h \
     $(PROJECT_INCLUDE)/bsp/motorola.h
 
-all-local: $(PREINSTALL_FILES)
+all: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../../../automake/local.am

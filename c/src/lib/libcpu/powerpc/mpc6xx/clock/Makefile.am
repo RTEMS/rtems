@@ -27,7 +27,7 @@ AM_CFLAGS = $(CFLAGS_OS_V)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
     $(PROJECT_INCLUDE)/libcpu/c_clock.h
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(c_clock_rel_OBJECTS)
+all: $(ARCH) $(PREINSTALL_FILES) $(c_clock_rel_OBJECTS)
 
 EXTRA_DIST = c_clock.c c_clock.h
 

@@ -23,6 +23,6 @@ $(PROJECT_INCLUDE)/%.h: %.h
 $(PROJECT_INCLUDE)/mpc860/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-all-local: $(PREINSTALL_FILES) 
+all: $(PREINSTALL_FILES) 
 
 include $(top_srcdir)/../../../../../automake/local.am

@@ -36,7 +36,7 @@ AM_CPPFLAGS += -U__STRICT_ANSI__
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(OBJS) $(LIB)
+all: $(ARCH) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 

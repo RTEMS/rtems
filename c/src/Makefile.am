@@ -18,4 +18,4 @@ install-data-local:
           tar cf - @RTEMS_BSP@/[bilsuM]* | (cd $(DESTDIR)$(prefix); tar xpBf - );
 
 include $(top_srcdir)/../../automake/subdirs.am
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/../../automake/host.am

@@ -31,7 +31,7 @@ $(PGM): $(OBJS)
 
 PREINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(PGM)
+all: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

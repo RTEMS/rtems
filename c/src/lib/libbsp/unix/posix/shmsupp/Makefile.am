@@ -22,7 +22,7 @@ $(PGM): $(OBJS)
 	$(make-rel)
 
 if HAS_MP
-all-local: $(ARCH) $(OBJS) $(PGM)
+all: $(ARCH) $(OBJS) $(PGM)
 endif
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile

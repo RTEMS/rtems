@@ -29,7 +29,7 @@ $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(ARCH)/start.o
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
 
-all-local: $(ARCH) $(OBJS) $(TMPINSTALL_FILES)
+all: $(ARCH) $(OBJS) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = 80386ex.h 80386ex.inc macros.inc start.S
 

@@ -23,7 +23,7 @@ AM_CFLAGS = $(CFLAGS_OS_V)
 $(PGM): $(vectors_rel_OBJECTS)
 	$(make-rel)
 
-all-local: ${ARCH} $(PGM)
+all: ${ARCH} $(PGM)
 
 EXTRA_DIST = $(S_FILES) README
 
