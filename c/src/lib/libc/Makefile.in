@@ -32,13 +32,13 @@ IMFS_C_PIECES = imfs_chown imfs_creat imfs_directory imfs_eval imfs_free \
     imfs_fcntl miniimfs_init
 
 TERMIOS_C_PIECES = cfgetispeed cfgetospeed cfsetispeed cfsetospeed tcgetattr \
-    tcsetattr tcdrain tcflow tcflush termios \
-    termiosinitialize termiosreserveresources
+    tcsetattr tcdrain tcflow tcflush tcgetprgrp tcsendbreak tcsetpgrp \
+    termios termiosinitialize termiosreserveresources
 
 SYSTEM_CALL_C_PIECES = open close read write lseek ioctl mkdir mknod mkfifo \
     rmdir chdir chmod fchmod chown link unlink umask ftruncate utime fstat \
     fcntl fpathconf getdents fsync fdatasync pipe dup dup2 symlink readlink \
-    creat isatty
+    creat 
 
 DIRECTORY_SCAN_C_PIECES = opendir closedir readdir rewinddir scandir seekdir \
     telldir getcwd
@@ -47,6 +47,7 @@ MALLOC_C_PIECES = malloc __brk __sbrk
 
 PASSWORD_GROUP_C_PIECES = getpwent getgrent
 
+TERMINAL_IDENTIFICATION = ctermid isatty ttyname ttyname_r 
 LIBC_GLUE_C_PIECES = __getpid __gettod __times truncate access stat \
     lstat pathconf newlibc no_posix no_libc
 
