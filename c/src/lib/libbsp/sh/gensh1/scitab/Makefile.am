@@ -27,7 +27,7 @@ $(PGM): $(OBJS)
 scitab.c: $(SHGEN)
 	$(SHGEN) -H @CPU_CLOCK_RATE_HZ@ sci > $@
 
-all-local: $(ARCH) $(OBJS) $(PGM)
+all-local: $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
