@@ -1,3 +1,7 @@
+2000-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* src/regiongetinfo.c: Removed unused variable to eliminate warning.
+
 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 
 	* src/msgqsubmit.c: Modified multiprocessing conditional so

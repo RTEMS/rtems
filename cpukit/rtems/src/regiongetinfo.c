@@ -44,7 +44,6 @@ rtems_status_code rtems_region_get_information(
 {
   register Region_Control *the_region;
   Objects_Locations        location;
-  Thread_Control          *executing;
 
   if ( !the_info )
     return RTEMS_INVALID_ADDRESS;
