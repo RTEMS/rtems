@@ -23,6 +23,7 @@
 
 2004-02-26	Andreas Karlsson <andreas.karlsson@space.se>
 
+	604/bsps
 	* cpu_asm.S: Close window while restoring interrupted task state which
 	resulted in CWP corruption.
 
