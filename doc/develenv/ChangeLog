@@ -1,3 +1,7 @@
+2003-04-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* develenv.texi: Fix @setfilename to develenv.info.
+
 2003-04-17	Joel Sherrill <joel@OARcorp.com>
 
 	* .cvsignore, ChangeLog, Makefile.am, develenv.texi: Merged from head.
