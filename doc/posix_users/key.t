@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Key Manager, Key Manager Introduction, pthread_cond_timedwait, Top
-@end ifinfo
 @chapter Key Manager
-@ifinfo
-@menu
-* Key Manager Introduction::
-* Key Manager Background::
-* Key Manager Operations::
-* Key Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Key Manager Introduction, Key Manager Background, Key Manager, Key Manager
-@end ifinfo
 @section Introduction
 
 The key manager ...
@@ -35,28 +21,15 @@ The directives provided by the key manager are:
 @item @code{pthread_getspecific} -
 @end itemize
 
-@ifinfo
-@node Key Manager Background, Key Manager Operations, Key Manager Introduction, Key Manager
-@end ifinfo
 @section Background
 
-@ifinfo
-@node Key Manager Operations, Key Manager Directives, Key Manager Background, Key Manager
-@end ifinfo
+There is currently no text in this section.
+
 @section Operations
 
-@ifinfo
-@node Key Manager Directives, pthread_key_create, Key Manager Operations, Key Manager
-@end ifinfo
+There is currently no text in this section.
+
 @section Directives
-@ifinfo
-@menu
-* pthread_key_create::
-* pthread_key_delete::
-* pthread_setspecific::
-* pthread_getspecific::
-@end menu
-@end ifinfo
 
 This section details the key manager's directives.
 A subsection is dedicated to each of this manager's directives
@@ -64,9 +37,6 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@ifinfo
-@node pthread_key_create, pthread_key_delete, Key Manager Directives, Key Manager Directives
-@end ifinfo
 @subsection pthread_key_create
 
 @subheading CALLING SEQUENCE:
@@ -92,9 +62,6 @@ Insufficient memory exists to create the key.
 @end table
 
 @page
-@ifinfo
-@node pthread_key_delete, pthread_setspecific, pthread_key_create, Key Manager Directives
-@end ifinfo
 @subsection pthread_key_delete
  
 @subheading CALLING SEQUENCE:
@@ -120,9 +87,6 @@ The key was invalid
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_setspecific, pthread_getspecific, pthread_key_delete, Key Manager Directives
-@end ifinfo
 @subsection pthread_setspecific
 
 @subheading CALLING SEQUENCE:
@@ -148,9 +112,6 @@ The specified key is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_getspecific, Clock Manager, pthread_setspecific, Key Manager Directives
-@end ifinfo
 @subsection pthread_getspecific
 
 @subheading CALLING SEQUENCE:

@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Thread Manager, Thread Manager Introduction, Preface, Top
-@end ifinfo
 @chapter Thread Manager
-@ifinfo
-@menu
-* Thread Manager Introduction::
-* Thread Manager Background::
-* Thread Manager Operations::
-* Thread Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Thread Manager Introduction, Thread Manager Background, Thread Manager, Thread Manager
-@end ifinfo
 @section Introduction
 
 The thread manager ...
@@ -56,19 +42,8 @@ The directives provided by the thread manager are:
 @item @code{pthread_getschedparam} - 
 @end itemize
 
-@ifinfo
-@node Thread Manager Background, Thread Attributes, Thread Manager Introduction, Thread Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Thread Attributes::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Thread Attributes, Thread Manager Operations, Thread Manager Background, Thread Manager Background
-@end ifinfo
 @subsection Thread Attributes
 
 Thread attributes are utilized only at thread creation time.
@@ -107,44 +82,11 @@ All policies utilize the thread priority parameter.
 
 @end table
 
-@ifinfo
-@node Thread Manager Operations, Thread Manager Directives, Thread Attributes, Thread Manager
-@end ifinfo
 @section Operations
 
-@ifinfo
-@node Thread Manager Directives, pthread_attr_init, Thread Manager Operations, Thread Manager
-@end ifinfo
+There is currently no text in this section.
+
 @section Directives
-@ifinfo
-@menu
-* pthread_attr_init::
-* pthread_attr_destroy::
-* pthread_attr_setdetachstate::
-* pthread_attr_getdetachstate::
-* pthread_attr_setstacksize::
-* pthread_attr_getstacksize::
-* pthread_attr_setstackaddr::
-* pthread_attr_getstackaddr::
-* pthread_attr_setscope::
-* pthread_attr_getscope::
-* pthread_attr_setinheritsched::
-* pthread_attr_getinheritsched::
-* pthread_attr_setschedpolicy::
-* pthread_attr_getschedpolicy::
-* pthread_attr_setschedparam::
-* pthread_attr_getschedparam::
-* pthread_create::
-* pthread_exit::
-* pthread_detach::
-* pthread_join::
-* pthread_self::
-* pthread_equal::
-* pthread_once::
-* pthread_setschedparam::
-* pthread_getschedparam::
-@end menu
-@end ifinfo
 
 This section details the thread manager's directives.
 A subsection is dedicated to each of this manager's directives
@@ -152,9 +94,6 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@ifinfo
-@node pthread_attr_init, pthread_attr_destroy, Thread Manager Directives, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_init
 
 @subheading CALLING SEQUENCE:
@@ -181,9 +120,6 @@ The attribute pointer argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_destroy, pthread_attr_setdetachstate, pthread_attr_init, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_destroy
 
 @subheading CALLING SEQUENCE:
@@ -212,9 +148,6 @@ The attribute set is not initialized.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_setdetachstate, pthread_attr_getdetachstate, pthread_attr_destroy, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_setdetachstate
 
 @subheading CALLING SEQUENCE:
@@ -247,9 +180,6 @@ The detachstate argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_getdetachstate, pthread_attr_setstacksize, pthread_attr_setdetachstate, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_getdetachstate
 
 @subheading CALLING SEQUENCE:
@@ -282,9 +212,6 @@ The detatchstate pointer argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_setstacksize, pthread_attr_getstacksize, pthread_attr_getdetachstate, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_setstacksize
 
 @subheading CALLING SEQUENCE:
@@ -317,9 +244,6 @@ If the specified stacksize is below the minimum required for this CPU, then
 the stacksize will be set to the minimum for this CPU.
 
 @page
-@ifinfo
-@node pthread_attr_getstacksize, pthread_attr_setstackaddr, pthread_attr_setstacksize, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_getstacksize
 
 @subheading CALLING SEQUENCE:
@@ -352,9 +276,6 @@ The stacksize pointer argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_setstackaddr, pthread_attr_getstackaddr, pthread_attr_getstacksize, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_setstackaddr
 
 @subheading CALLING SEQUENCE:
@@ -384,9 +305,6 @@ The attribute set is not initialized.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_getstackaddr, pthread_attr_setscope, pthread_attr_setstackaddr, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_getstackaddr
 
 @subheading CALLING SEQUENCE:
@@ -419,9 +337,6 @@ The stackaddr pointer argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_setscope, pthread_attr_getscope, pthread_attr_getstackaddr, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_setscope
 
 @subheading CALLING SEQUENCE:
@@ -457,9 +372,6 @@ The contention scope specified (PTHREAD_SCOPE_SYSTEM) is not supported.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_getscope, pthread_attr_setinheritsched, pthread_attr_setscope, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_getscope
 
 @subheading CALLING SEQUENCE:
@@ -492,9 +404,6 @@ The contentionscope pointer argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_setinheritsched, pthread_attr_getinheritsched, pthread_attr_getscope, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_setinheritsched
 
 @subheading CALLING SEQUENCE:
@@ -527,9 +436,6 @@ The specified scheduler inheritance argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_getinheritsched, pthread_attr_setschedpolicy, pthread_attr_setinheritsched, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_getinheritsched
 
 @subheading CALLING SEQUENCE:
@@ -561,9 +467,6 @@ The inheritsched pointer argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_setschedpolicy, pthread_attr_getschedpolicy, pthread_attr_getinheritsched, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_setschedpolicy
 
 @subheading CALLING SEQUENCE:
@@ -595,9 +498,6 @@ The specified scheduler policy argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_getschedpolicy, pthread_attr_setschedparam, pthread_attr_setschedpolicy, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_getschedpolicy
 
 @subheading CALLING SEQUENCE:
@@ -629,9 +529,6 @@ The specified scheduler policy argument pointer is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_setschedparam, pthread_attr_getschedparam, pthread_attr_getschedpolicy, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_setschedparam
 
 @subheading CALLING SEQUENCE:
@@ -663,9 +560,6 @@ The specified scheduler parameter argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_attr_getschedparam, pthread_create, pthread_attr_setschedparam, Thread Manager Directives
-@end ifinfo
 @subsection pthread_attr_getschedparam
 
 @subheading CALLING SEQUENCE:
@@ -697,9 +591,6 @@ The specified scheduler parameter argument pointer is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_create, pthread_exit, pthread_attr_getschedparam, Thread Manager Directives
-@end ifinfo
 @subsection pthread_create
 
 @subheading CALLING SEQUENCE:
@@ -761,9 +652,6 @@ Invalid argument passed.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_exit, pthread_detach, pthread_create, Thread Manager Directives
-@end ifinfo
 @subsection pthread_exit
 
 @subheading CALLING SEQUENCE:
@@ -787,9 +675,6 @@ void pthread_exit(
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_detach, pthread_join, pthread_exit, Thread Manager Directives
-@end ifinfo
 @subsection pthread_detach
 
 @subheading CALLING SEQUENCE:
@@ -821,9 +706,6 @@ will remain joined with that thread.  Any subsequent calls to pthread_join
 on the specified thread will fail.
 
 @page
-@ifinfo
-@node pthread_join, pthread_self, pthread_detach, Thread Manager Directives
-@end ifinfo
 @subsection pthread_join
 
 @subheading CALLING SEQUENCE:
@@ -861,9 +743,6 @@ on the specified thread will fail.
 If value_ptr is NULL, then no value is returned.
 
 @page
-@ifinfo
-@node pthread_self, pthread_equal, pthread_join, Thread Manager Directives
-@end ifinfo
 @subsection pthread_self
 
 @subheading CALLING SEQUENCE:
@@ -883,9 +762,6 @@ This routine returns the id of the calling thread.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_equal, pthread_once, pthread_self, Thread Manager Directives
-@end ifinfo
 @subsection pthread_equal
 
 @subheading CALLING SEQUENCE:
@@ -917,9 +793,6 @@ The thread ids are equal.
 The behavior is undefined if the thread IDs are not valid.
 
 @page
-@ifinfo
-@node pthread_once, pthread_setschedparam, pthread_equal, Thread Manager Directives
-@end ifinfo
 @subsection pthread_once
 
 @subheading CALLING SEQUENCE:
@@ -944,9 +817,6 @@ NONE
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_setschedparam, pthread_getschedparam, pthread_once, Thread Manager Directives
-@end ifinfo
 @subsection pthread_setschedparam
 
 @subheading CALLING SEQUENCE:
@@ -988,9 +858,6 @@ The thread indicated was invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_getschedparam, Signal Manager, pthread_setschedparam, Thread Manager Directives
-@end ifinfo
 @subsection pthread_getschedparam
 
 @subheading CALLING SEQUENCE:

@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Scheduler Manager, Scheduler Manager Introduction, time, Top
-@end ifinfo
 @chapter Scheduler Manager
-@ifinfo
-@menu
-* Scheduler Manager Introduction::
-* Scheduler Manager Background::
-* Scheduler Manager Operations::
-* Scheduler Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Scheduler Manager Introduction, Scheduler Manager Background, Scheduler Manager, Scheduler Manager
-@end ifinfo
 @section Introduction
 
 The scheduler manager ...
@@ -35,20 +21,8 @@ The directives provided by the scheduler manager are:
 @item @code{sched_yield} - 
 @end itemize
 
-@ifinfo
-@node Scheduler Manager Background, Priority, Scheduler Manager Introduction, Scheduler Manager
-@end ifinfo
 @section Background
-@ifinfo
-@menu
-* Priority::
-* Scheduling Policies::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Priority, Scheduling Policies, Scheduler Manager Background, Scheduler Manager Background
-@end ifinfo
 @subsection Priority
 
 In the RTEMS implementation of the POSIX API, the priorities range from
@@ -56,9 +30,6 @@ the low priority of sched_get_priority_min() to the highest priority of
 sched_get_priority_max().  Numerically higher values represent higher
 priorities.
 
-@ifinfo
-@node Scheduling Policies, Scheduler Manager Operations, Priority, Scheduler Manager Background
-@end ifinfo
 @subsection Scheduling Policies
 
 The following scheduling policies are available:
@@ -87,23 +58,11 @@ the thread resumes its initial priority and has its budget replenished.
 
 @end table
 
-@ifinfo
-@node Scheduler Manager Operations, Scheduler Manager Directives, Scheduling Policies, Scheduler Manager
-@end ifinfo
 @section Operations
 
-@ifinfo
-@node Scheduler Manager Directives, sched_get_priority_min, Scheduler Manager Operations, Scheduler Manager
-@end ifinfo
+There is currently no text in this section.
+
 @section Directives
-@ifinfo
-@menu
-* sched_get_priority_min::
-* sched_get_priority_max::
-* sched_rr_get_interval::
-* sched_yield::
-@end menu
-@end ifinfo
 
 This section details the scheduler manager's directives.
 A subsection is dedicated to each of this manager's directives
@@ -111,9 +70,6 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@ifinfo
-@node sched_get_priority_min, sched_get_priority_max, Scheduler Manager Directives, Scheduler Manager Directives
-@end ifinfo
 @subsection sched_get_priority_min
 
 @subheading CALLING SEQUENCE:
@@ -141,9 +97,6 @@ The indicated policy is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node sched_get_priority_max, sched_rr_get_interval, sched_get_priority_min, Scheduler Manager Directives
-@end ifinfo
 @subsection sched_get_priority_max
 
 @subheading CALLING SEQUENCE:
@@ -171,9 +124,6 @@ The indicated policy is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node sched_rr_get_interval, sched_yield, sched_get_priority_max, Scheduler Manager Directives
-@end ifinfo
 @subsection sched_rr_get_interval
 
 @subheading CALLING SEQUENCE:
@@ -205,9 +155,6 @@ The specified interval pointer parameter is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node sched_yield, Command and Variable Index, sched_rr_get_interval, Scheduler Manager Directives
-@end ifinfo
 @subsection sched_yield
 
 @subheading CALLING SEQUENCE:

@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Mutex Manager, Mutex Manager Introduction, alarm, Top
-@end ifinfo
 @chapter Mutex Manager
-@ifinfo
-@menu
-* Mutex Manager Introduction::
-* Mutex Manager Background::
-* Mutex Manager Operations::
-* Mutex Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Mutex Manager Introduction, Mutex Manager Background, Mutex Manager, Mutex Manager
-@end ifinfo
 @section Introduction
 
 The mutex manager ...
@@ -47,40 +33,15 @@ The directives provided by the mutex manager are:
 @item @code{pthread_mutex_getprioceiling} - 
 @end itemize
 
-@ifinfo
-@node Mutex Manager Background, Mutex Manager Operations, Mutex Manager Introduction, Mutex Manager
-@end ifinfo
 @section Background
 
-@ifinfo
-@node Mutex Manager Operations, Mutex Manager Directives, Mutex Manager Background, Mutex Manager
-@end ifinfo
+There is currently no text in this section.
+
 @section Operations
 
-@ifinfo
-@node Mutex Manager Directives, pthread_mutexattr_init, Mutex Manager Operations, Mutex Manager
-@end ifinfo
+There is currently no text in this section.
+
 @section Directives
-@ifinfo
-@menu
-* pthread_mutexattr_init::
-* pthread_mutexattr_destroy::
-* pthread_mutexattr_setprotocol::
-* pthread_mutexattr_getprotocol::
-* pthread_mutexattr_setprioceiling::
-* pthread_mutexattr_getprioceiling::
-* pthread_mutexattr_setpshared::
-* pthread_mutexattr_getpshared::
-* pthread_mutex_init::
-* pthread_mutex_destroy::
-* pthread_mutex_lock::
-* pthread_mutex_trylock::
-* pthread_mutex_timedlock::
-* pthread_mutex_unlock::
-* pthread_mutex_setprioceiling::
-* pthread_mutex_getprioceiling::
-@end menu
-@end ifinfo
 
 This section details the mutex manager's directives.
 A subsection is dedicated to each of this manager's directives
@@ -88,9 +49,6 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@ifinfo
-@node pthread_mutexattr_init, pthread_mutexattr_destroy, Mutex Manager Directives, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutexattr_init
 
 @subheading CALLING SEQUENCE:
@@ -116,9 +74,6 @@ The attribute pointer argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_mutexattr_destroy, pthread_mutexattr_setprotocol, pthread_mutexattr_init, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutexattr_destroy
 
 @subheading CALLING SEQUENCE:
@@ -147,9 +102,6 @@ The attribute set is not initialized.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_mutexattr_setprotocol, pthread_mutexattr_getprotocol, pthread_mutexattr_destroy, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutexattr_setprotocol
 
 @subheading CALLING SEQUENCE:
@@ -182,9 +134,6 @@ The protocol argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_mutexattr_getprotocol, pthread_mutexattr_setprioceiling, pthread_mutexattr_setprotocol, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutexattr_getprotocol
  
 @subheading CALLING SEQUENCE:
@@ -217,9 +166,6 @@ The protocol pointer argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_mutexattr_setprioceiling, pthread_mutexattr_getprioceiling, pthread_mutexattr_getprotocol, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutexattr_setprioceiling
 
 @subheading CALLING SEQUENCE:
@@ -252,9 +198,6 @@ The prioceiling argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_mutexattr_getprioceiling, pthread_mutexattr_setpshared, pthread_mutexattr_setprioceiling, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutexattr_getprioceiling
 
 @subheading CALLING SEQUENCE:
@@ -287,9 +230,6 @@ The prioceiling pointer argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_mutexattr_setpshared, pthread_mutexattr_getpshared, pthread_mutexattr_getprioceiling, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutexattr_setpshared
 
 @subheading CALLING SEQUENCE:
@@ -322,9 +262,6 @@ The pshared argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_mutexattr_getpshared, pthread_mutex_init, pthread_mutexattr_setpshared, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutexattr_getpshared
 
 @subheading CALLING SEQUENCE:
@@ -357,9 +294,6 @@ The pshared pointer argument is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_mutex_init, pthread_mutex_destroy, pthread_mutexattr_getpshared, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutex_init
 
 @subheading CALLING SEQUENCE:
@@ -399,9 +333,6 @@ initialized, but not yet destroyed.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_mutex_destroy, pthread_mutex_lock, pthread_mutex_init, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutex_destroy
 
 @subheading CALLING SEQUENCE:
@@ -431,9 +362,6 @@ referenced by another thread.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_mutex_lock, pthread_mutex_trylock, pthread_mutex_destroy, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutex_lock
 
 @subheading CALLING SEQUENCE:
@@ -467,9 +395,6 @@ The current thread already owns the mutex.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_mutex_trylock, pthread_mutex_timedlock, pthread_mutex_lock, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutex_trylock
  
 @subheading CALLING SEQUENCE:
@@ -503,9 +428,6 @@ The current thread already owns the mutex.
 @subheading NOTES:
  
 @page
-@ifinfo
-@node pthread_mutex_timedlock, pthread_mutex_unlock, pthread_mutex_trylock, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutex_timedlock
  
 @subheading CALLING SEQUENCE:
@@ -545,9 +467,6 @@ The current thread already owns the mutex.
  
 
 @page
-@ifinfo
-@node pthread_mutex_unlock,  pthread_mutex_setprioceiling, pthread_mutex_timedlock, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutex_unlock
 
 @subheading CALLING SEQUENCE:
@@ -573,9 +492,6 @@ The specified mutex is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_mutex_setprioceiling, pthread_mutex_getprioceiling, pthread_mutex_unlock, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutex_setprioceiling
 
 @subheading CALLING SEQUENCE:
@@ -609,9 +525,6 @@ The specified mutex is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_mutex_getprioceiling, Condition Variable Manager, pthread_mutex_setprioceiling, Mutex Manager Directives
-@end ifinfo
 @subsection pthread_mutex_getprioceiling
 
 @subheading CALLING SEQUENCE:

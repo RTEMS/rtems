@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Clock Manager, Clock Manager Introduction, pthread_getspecific, Top
-@end ifinfo
 @chapter Clock Manager
-@ifinfo
-@menu
-* Clock Manager Introduction::
-* Clock Manager Background::
-* Clock Manager Operations::
-* Clock Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Clock Manager Introduction, Clock Manager Background, Clock Manager, Clock Manager
-@end ifinfo
 @section Introduction
 
 The clock manager ...
@@ -32,45 +18,28 @@ The directives provided by the clock manager are:
 @item @code{clock_gettime} - 
 @item @code{clock_settime} -
 @item @code{clock_getres} -
+@item @code{sleep} - Delay Process Execution
 @item @code{nanosleep} -
-@item @code{time} -
+@item @code{gettimeofday} - Get the Time of Day
+@item @code{time} - Get time in seconds
 @end itemize
 
-@ifinfo
-@node Clock Manager Background, Clock Manager Operations, Clock Manager Introduction, Clock Manager
-@end ifinfo
 @section Background
 
-@ifinfo
-@node Clock Manager Operations, Clock Manager Directives, Clock Manager Background, Clock Manager
-@end ifinfo
+There is currently no text in this section.
+
 @section Operations
 
-@ifinfo
-@node Clock Manager Directives, clock_gettime, Clock Manager Operations, Clock Manager
-@end ifinfo
+There is currently no text in this section.
+
 @section Directives
-@ifinfo
-@menu
-* clock_gettime::
-* clock_settime::
-* clock_getres::
-* sleep::
-* nanosleep::
-* time::
-@end menu
-@end ifinfo
 
 This section details the clock manager's directives.
 A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
-@page
-@ifinfo
-@node clock_gettime, clock_settime, Clock Manager Directives, Clock Manager Directives
-@end ifinfo
-@subsection clock_gettime
+@subsection clock_gettime -
 
 @subheading CALLING SEQUENCE:
 
@@ -99,11 +68,10 @@ The clock_id specified is invalid.
 
 @subheading NOTES:
 
+NONE
+
 @page
-@ifinfo
-@node clock_settime, clock_getres, clock_gettime, Clock Manager Directives
-@end ifinfo
-@subsection clock_settime
+@subsection clock_settime -
  
 @subheading CALLING SEQUENCE:
  
@@ -135,12 +103,11 @@ The contents of the tp structure are invalid.
 @subheading DESCRIPTION:
  
 @subheading NOTES:
+
+NONE
  
 @page
-@ifinfo
-@node clock_getres, sleep, clock_settime, Clock Manager Directives
-@end ifinfo
-@subsection clock_getres
+@subsection clock_getres -
  
 @subheading CALLING SEQUENCE:
  
@@ -173,10 +140,7 @@ The clock_id specified is invalid.
 If res is NULL, then the resolution is not returned.
 
 @page
-@ifinfo
-@node sleep, nanosleep, clock_getres, Clock Manager Directives
-@end ifinfo
-@subsection sleep
+@subsection sleep - Delay Process Execution
  
 @subheading CALLING SEQUENCE:
  
@@ -194,15 +158,15 @@ This routine returns the number of unslept seconds.
 
 @subheading DESCRIPTION:
  
+The @code{sleep()} function delays the calling thread by the specified
+number of @code{seconds}.
+
 @subheading NOTES:
 
 This call is interruptible by a signal.
  
 @page
-@ifinfo
-@node nanosleep, time, sleep, Clock Manager Directives
-@end ifinfo
-@subsection nanosleep
+@subsection nanosleep -
  
 @subheading CALLING SEQUENCE:
  
@@ -239,10 +203,48 @@ field.
 This call is interruptible by a signal.
 
 @page
-@ifinfo
-@node time, Scheduler Manager, nanosleep, Clock Manager Directives
-@end ifinfo
-@subsection nanosleep
+@subsection gettimeofday - Get the Time of Day
+
+@subheading CALLING SEQUENCE:
+
+@example
+#include <sys/time.h>
+#include <unistd.h>
+
+int gettimeofday(
+  struct timeval  *tp,
+  struct timezone *tzp
+);
+@end example
+
+@subheading STATUS CODES:
+
+On error, this routine returns -1 and sets @code{errno} as appropriate.
+
+@table @b
+@item EPERM
+@code{settimeofdat} is called by someone other than the superuser.
+
+@item EINVAL
+Timezone (or something else) is invalid.
+
+@item EFAULT
+One of @code{tv} or @code{tz} pointed outside your accessible address 
+space
+
+@end table
+
+@subheading DESCRIPTION:
+
+This routine returns the current time of day in the @code{tp} structure.
+
+@subheading NOTES:
+
+Currently, the timezone information is not supported.  The @code{tzp}
+argument is ignored.
+
+@page
+@subsection time - Get time in seconds
  
 @subheading CALLING SEQUENCE:
  
@@ -259,6 +261,14 @@ int time(
 This routine returns the number of seconds since the Epoch.
 
 @subheading DESCRIPTION:
+
+@code{time} returns the time since 00:00:00 GMT, January 1, 1970, 
+measured in seconds
+
+If @code{tloc} in non null, the return value is also stored in the 
+memory pointed to by @code{t}.
  
 @subheading NOTES:
+
+NONE
  

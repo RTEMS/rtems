@@ -6,22 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Condition Variable Manager, Condition Variable Manager Introduction, pthread_mutex_getprioceiling, Top
-@end ifinfo
 @chapter Condition Variable Manager
-@ifinfo
-@menu
-* Condition Variable Manager Introduction::
-* Condition Variable Manager Background::
-* Condition Variable Manager Operations::
-* Condition Variable Manager Directives::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Condition Variable Manager Introduction, Condition Variable Manager Background, Condition Variable Manager, Condition Variable Manager
-@end ifinfo
 @section Introduction
 
 The condition variable manager ...
@@ -41,34 +27,15 @@ The directives provided by the condition variable manager are:
 @item @code{pthread_cond_timedwait} - 
 @end itemize
 
-@ifinfo
-@node Condition Variable Manager Background, Condition Variable Manager Operations, Condition Variable Manager Introduction, Condition Variable Manager
-@end ifinfo
 @section Background
 
-@ifinfo
-@node Condition Variable Manager Operations, Condition Variable Manager Directives, Condition Variable Manager Background, Condition Variable Manager
-@end ifinfo
+There is currently no text in this section.
+
 @section Operations
 
-@ifinfo
-@node Condition Variable Manager Directives, pthread_condattr_init, Condition Variable Manager Operations, Condition Variable Manager
-@end ifinfo
+There is currently no text in this section.
+
 @section Directives
-@ifinfo
-@menu
-* pthread_condattr_init::
-* pthread_condattr_destroy::
-* pthread_condattr_setpshared::
-* pthread_condattr_getpshared::
-* pthread_cond_init::
-* pthread_cond_destroy::
-* pthread_cond_signal::
-* pthread_cond_broadcast::
-* pthread_cond_wait::
-* pthread_cond_timedwait::
-@end menu
-@end ifinfo
 
 This section details the condition variable manager's directives.
 A subsection is dedicated to each of this manager's directives
@@ -76,9 +43,6 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@ifinfo
-@node pthread_condattr_init, pthread_condattr_destroy, Condition Variable Manager Directives, Condition Variable Manager Directives
-@end ifinfo
 @subsection pthread_condattr_init
 
 @subheading CALLING SEQUENCE:
@@ -104,9 +68,6 @@ attributes object.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_condattr_destroy, pthread_condattr_setpshared, pthread_condattr_init, Condition Variable Manager Directives
-@end ifinfo
 @subsection pthread_condattr_destroy
 
 @subheading CALLING SEQUENCE:
@@ -131,9 +92,6 @@ The attribute object specified is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_condattr_setpshared, pthread_condattr_getpshared, pthread_condattr_destroy, Condition Variable Manager Directives
-@end ifinfo
 @subsection pthread_condattr_setpshared
 
 @subheading CALLING SEQUENCE:
@@ -160,9 +118,6 @@ Invalid argument passed.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_condattr_getpshared, pthread_cond_init, pthread_condattr_setpshared, Condition Variable Manager Directives
-@end ifinfo
 @subsection pthread_condattr_getpshared
 
 @subheading CALLING SEQUENCE:
@@ -190,9 +145,6 @@ Invalid argument passed.
 
 
 @page
-@ifinfo
-@node pthread_cond_init, pthread_cond_destroy, pthread_condattr_getpshared, Condition Variable Manager Directives
-@end ifinfo
 @subsection pthread_cond_init
 
 @subheading CALLING SEQUENCE:
@@ -228,9 +180,6 @@ The specified attribute value is invalid.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_cond_destroy, pthread_cond_signal, pthread_cond_init, Condition Variable Manager Directives
-@end ifinfo
 @subsection pthread_cond_destroy
 
 @subheading CALLING SEQUENCE:
@@ -258,9 +207,6 @@ The specified condition variable is currently in use.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_cond_signal, pthread_cond_broadcast, pthread_cond_destroy, Condition Variable Manager Directives
-@end ifinfo
 @subsection pthread_cond_signal
 
 @subheading CALLING SEQUENCE:
@@ -288,9 +234,6 @@ This routine should not be invoked from a handler from an asynchronous signal
 handler or an interrupt service routine.
 
 @page
-@ifinfo
-@node pthread_cond_broadcast, pthread_cond_wait, pthread_cond_signal, Condition Variable Manager Directives
-@end ifinfo
 @subsection pthread_cond_broadcast
 
 @subheading CALLING SEQUENCE:
@@ -318,9 +261,6 @@ This routine should not be invoked from a handler from an asynchronous signal
 handler or an interrupt service routine.
 
 @page
-@ifinfo
-@node pthread_cond_wait, pthread_cond_timedwait, pthread_cond_broadcast, Condition Variable Manager Directives
-@end ifinfo
 @subsection pthread_cond_wait
 
 @subheading CALLING SEQUENCE:
@@ -349,9 +289,6 @@ the mutex was not owned by the current thread at the time of the call.
 @subheading NOTES:
 
 @page
-@ifinfo
-@node pthread_cond_timedwait, Key Manager, pthread_cond_wait, Condition Variable Manager Directives
-@end ifinfo
 @subsection pthread_cond_timedwait
 
 @subheading CALLING SEQUENCE:
