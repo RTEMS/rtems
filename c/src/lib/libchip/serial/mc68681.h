@@ -20,10 +20,16 @@ extern "C" {
 
 /*
  *  These are just used in the interface between this driver and
- *  the read/write register routines.
+ *  the read/write register routines when accessing the first
+ *  control port.
  */
 
-#define MC68681_STATUS_REG      0xFF
+#define MC68681_STATUS          1
+#define MC68681_RX_BUFFER       2
+
+#define MC68681_CLOCK_SELECT    1
+#define MC68681_COMMAND         2
+#define MC68681_TX_BUFFER       3
 
 /*
  * Driver function table

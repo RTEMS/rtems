@@ -84,6 +84,7 @@ static boolean mc68681_probe(int minor)
 static void mc68681_init(int minor)
 {
 /* XXX */
+  unsigned32              pMC68681_port;
   unsigned32              pMC68681;
   unsigned8               ucTrash;
   unsigned8               ucDataByte;
@@ -102,11 +103,32 @@ ulBaudDivisor = ucDataByte = ucTrash =  0;
   pmc68681Context->ucModemCtrl = SP_MODEM_IRQ;
 #endif
 
-  pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
-  setReg   = Console_Port_Tbl[minor].setRegister;
-  getReg   = Console_Port_Tbl[minor].getRegister;
+  pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMC68681      = Console_Port_Tbl[minor].ulCtrlPort2;
+  setReg        = Console_Port_Tbl[minor].setRegister;
+  getReg        = Console_Port_Tbl[minor].getRegister;
 
+
+  /*
+   *  Reset Receiver
+   */
+
+  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_RX );
+  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_RX );
+
+  /*
+   *  Reset Transmitter
+   */
+
+  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_TX );
+  (*setReg)( pMC68681, MC68681_COMMAND, MC68681_MODE_REG_RESET_TX );
+
+  (*setReg)( pMC68681, MC68681_MODE_REG_1A, 0x00 );
+  (*setReg)( pMC68681, MC68681_MODE_REG_2A, 0x02 );
+
+  
 #if 0
+  /* FOM NS16550 */
   /* Clear the divisor latch, clear all interrupt enables,
    * and reset and
    * disable the FIFO's.
@@ -208,7 +230,7 @@ static void mc68681_write_polled(
    * wait for transmitter holding register to be empty
    */
   iTimeout = 1000;
-  ucLineStatus = (*getReg)(pMC68681, MC68681_STATUS_REG);
+  ucLineStatus = (*getReg)(pMC68681, MC68681_STATUS);
   while ((ucLineStatus & MC68681_TX_READY) == 0) {
 
     /*
@@ -218,7 +240,7 @@ static void mc68681_write_polled(
      if(_System_state_Is_up(_System_state_Get())) {
        rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
      }
-     ucLineStatus = (*getReg)(pMC68681, MC68681_STATUS_REG);
+     ucLineStatus = (*getReg)(pMC68681, MC68681_STATUS);
      if(!--iTimeout) {
        break;
      }
@@ -644,7 +666,7 @@ static int mc68681_inbyte_nonblocking_polled(
   getReg   = Console_Port_Tbl[minor].getRegister;
   getData  = Console_Port_Tbl[minor].getData;
 
-  ucLineStatus = (*getReg)(pMC68681, MC68681_STATUS_REG);
+  ucLineStatus = (*getReg)(pMC68681, MC68681_STATUS);
   if(ucLineStatus & MC68681_RX_READY) {
     cChar = (*getData)(pMC68681);
     return (int)cChar;
