@@ -13,6 +13,11 @@
 // MODIFICATION/HISTORY:
 //
 // $Log$
+// Revision 1.4  2002/01/04 18:32:48  joel
+// 2002-01-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+//
+// 	* mw-fb/mw_uid.c: Apply rtems_set_errno_and_return_minus_one.
+//
 // Revision 1.3  2000/11/30 14:36:46  joel
 // 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 //
@@ -45,6 +50,11 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
