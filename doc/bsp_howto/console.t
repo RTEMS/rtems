@@ -68,12 +68,7 @@ At this time, RTEMS documentation does not include a thorough discussion
 of the Termios functionality.  For more information on Termios,
 type @code{man termios} on a Unix box or point a web browser
 at
-@ifset use-html
-@href{http://www.freebsd.org/cgi/man.cgi,,,http://www.freebsd.org/cgi/man.cgi}.
-@end ifset
-@ifclear use-html
-@code{http://www.freebsd.org/cgi/man.cgi}.
-@end ifclear
+@uref{http://www.freebsd.org/cgi/man.cgi}.
 
 @section Driver Functioning Modes
 
@@ -163,6 +158,7 @@ int pollWrite (int minor, const char *buf, int len)
      wait for the character to be transmitted
      on the serial line
   @}
+  return 0
 @}
 @end group
 @end example
@@ -232,7 +228,8 @@ that the @code{len} characters at @code{buf} are to be transmitted.
 @example
 static int InterruptWrite(int minor, const char *buf, int len)
 @{
-   tell the UART to transmit len characters from buf
+  tell the UART to transmit len characters from buf
+  return 0
 @}
 @end example
 
