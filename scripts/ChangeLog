@@ -1,3 +1,7 @@
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Updating version numbers for gcc/newlib RPM release 10.
+
 2000-08-30	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Updated gcc and newlib patches and bumped RPM revision.
