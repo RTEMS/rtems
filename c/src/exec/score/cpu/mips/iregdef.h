@@ -225,39 +225,42 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define R_FCSR		70
 #define R_FEIR		71
 #define	R_TLBHI		72
+
 #if __mips == 1
 #define	R_TLBLO		73
 #endif
 #if  __mips == 3
-#define	R_TLBLO0	74
+#define	R_TLBLO0	73
 #endif
+
 #define	R_INX		74
 #define	R_RAND		75
 #define	R_CTXT		76
 #define	R_EXCTYPE	77
 #define R_MODE		78
 #define	R_PRID		79
+#define R_TAR           80
 #if __mips == 1
-#define NREGS		80
+#define NREGS		81
 #endif
 #if  __mips == 3
-#define	R_TLBLO1	80
-#define R_PAGEMASK	81
-#define R_WIRED		82
-#define R_COUNT		83
-#define R_COMPARE	84
-#define R_CONFIG	85
-#define R_LLADDR	86
-#define R_WATCHLO	87
-#define R_WATCHHI	88
-#define R_ECC		89
-#define R_CACHEERR	90
-#define R_TAGLO		91
-#define R_TAGHI		92
-#define R_ERRPC		93
-#define R_XCTXT         94  /* Ketan added from SIM64bit */
+#define	R_TLBLO1	81
+#define R_PAGEMASK	82
+#define R_WIRED		83
+#define R_COUNT		84
+#define R_COMPARE	85
+#define R_CONFIG	86
+#define R_LLADDR	87
+#define R_WATCHLO	88
+#define R_WATCHHI	89
+#define R_ECC		90
+#define R_CACHEERR	91
+#define R_TAGLO		92
+#define R_TAGHI		93
+#define R_ERRPC		94
+#define R_XCTXT         95  /* Ketan added from SIM64bit */
 
-#define	NREGS		95
+#define	NREGS		96
 #endif
 
 /*

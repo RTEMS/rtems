@@ -47,13 +47,17 @@
 #include "iregdef.h"
 #include "idtcpu.h"
 
+#define ASSEMBLY_ONLY
+#include <rtems/score/cpu.h>
+
+		
 /* enable debugging shadow writes to misc ram, this is a vestigal
 * Mongoose-ism debug tool- but may be handy in the future so we
 * left it in...
 */
 
 #define INSTRUMENT_ISR_VECTORING
-//#define INSTRUMENT_EXECUTING_THREAD
+/* #define INSTRUMENT_EXECUTING_THREAD */
 
 
 	
@@ -175,29 +179,41 @@
  * );
  */
 
-#if ( CPU_HARDWARE_FP == FALSE )
+#if ( CPU_HARDWARE_FP == TRUE )
 FRAME(_CPU_Context_save_fp,sp,0,ra)
+        .set noreorder
         .set noat
 
-#if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
 	/* 
-	** Make sure the FPU is on before we save state.  This code is here
-	** because the FPU context switch might occur when an integer
-	** task is switching out w/ an FP task switching in, but the current 
-	** FPU state was left by a sometime previously scheduled FP task.
-	**
-	** In non-deferred FP context switch, if the exiting task is FP, then
-	** the FPU is already on so we don't need to do this.
+	** Make sure the FPU is on before we save state.  This code 
+	** is here because the FPU context switch might occur when an 
+	** integer task is switching out with a FP task switching in.
 	*/
-	
-	MFC0	t0,C0_SR	
-	li	k0,SR_CU1	
-	or	t0,k0
-	MTC0	t0,C0_SR	
+	MFC0	t0,C0_SR
+	li	t2,SR_CU1	
+	move	t1,t0
+	or	t0,t2		/* turn on the fpu */
+#if __mips == 3
+	li	t2,SR_EXL | SR_IE
+#elif __mips == 1
+	li	t2,SR_IEC
 #endif
+	not	t2
+	and	t0,t2		/* turn off interrupts */	
+	MTC0	t0,C0_SR	
 		
-	ld   a1,(a0)
+	ld	a1,(a0)
+	move	t0,ra
+	jal	_CPU_Context_save_fp_from_exception
 	NOP
+	
+	/* 
+	** Reassert the task's state because we've not saved it yet.
+	*/
+	MTC0	t1,C0_SR	
+	j	t0	
+	NOP
+	
 	.globl _CPU_Context_save_fp_from_exception
 _CPU_Context_save_fp_from_exception:
         swc1 $f0,FP0_OFFSET*F_SZ(a1)
@@ -233,7 +249,7 @@ _CPU_Context_save_fp_from_exception:
         swc1 $f30,FP30_OFFSET*F_SZ(a1)
         swc1 $f31,FP31_OFFSET*F_SZ(a1)
         j ra
-        nop
+        NOP
         .set at
 ENDFRAME(_CPU_Context_save_fp)
 #endif
@@ -256,23 +272,42 @@ ENDFRAME(_CPU_Context_save_fp)
  * )
  */
 
-#if ( CPU_HARDWARE_FP == FALSE )
+#if ( CPU_HARDWARE_FP == TRUE )
 FRAME(_CPU_Context_restore_fp,sp,0,ra)
         .set noat
+        .set noreorder
 	
 	/* 
 	** Make sure the FPU is on before we retrieve state.  This code 
 	** is here because the FPU context switch might occur when an 
 	** integer task is switching out with a FP task switching in.
 	*/
-	
-	MFC0	t0,C0_SR	
-	li	k0,SR_CU1	
-	or	t0,k0
+	MFC0	t0,C0_SR
+	li	t2,SR_CU1	
+	move	t1,t0
+	or	t0,t2		/* turn on the fpu */
+#if __mips == 3
+	li	t2,SR_EXL | SR_IE
+#elif __mips == 1
+	li	t2,SR_IEC
+#endif
+	not	t2
+	and	t0,t2		/* turn off interrupts */	
 	MTC0	t0,C0_SR	
 
-	ld a1,(a0)
+	ld	a1,(a0)
+	move	t0,ra
+	jal	_CPU_Context_restore_fp_from_exception
 	NOP
+
+	/* 
+	** Reassert the old task's state because we've not restored the
+	** new one yet.
+	*/
+	MTC0	t1,C0_SR	
+	j	t0
+	NOP
+	
 	.globl _CPU_Context_restore_fp_from_exception
 _CPU_Context_restore_fp_from_exception:
         lwc1 $f0,FP0_OFFSET*4(a1)
@@ -308,7 +343,7 @@ _CPU_Context_restore_fp_from_exception:
         lwc1 $f30,FP30_OFFSET*4(a1)
         lwc1 $f31,FP31_OFFSET*4(a1)
         j ra
-        nop
+        NOP
         .set at
 ENDFRAME(_CPU_Context_restore_fp)
 #endif
@@ -325,17 +360,21 @@ ENDFRAME(_CPU_Context_restore_fp)
  */
 
 FRAME(_CPU_Context_switch,sp,0,ra)
+        .set noreorder
 
-        MFC0  t0,C0_SR
-        li    t1,~(SR_INTERRUPT_ENABLE_BITS)
-	STREG t0,C0_SR_OFFSET*R_SZ(a0)
-        and   t0,t1
+        MFC0	t0,C0_SR
 #if __mips == 3
-        ori   t0,(SR_EXL|SR_IE)		/* enable exception level to disable interrupts */
+	li	t1,SR_EXL | SR_IE
+#elif __mips == 1
+	li	t1,SR_IEC
 #endif
-        MTC0  t0,C0_SR
+	STREG	t0,C0_SR_OFFSET*R_SZ(a0)	/* save the task's SR */
+	not	t1
+        and	t0,t1				/* mask off interrupts while we context switch */
+        MTC0	t0,C0_SR
+	NOP
 
-        STREG ra,RA_OFFSET*R_SZ(a0)	/* save current context */
+        STREG ra,RA_OFFSET*R_SZ(a0)		/* save current context */
         STREG sp,SP_OFFSET*R_SZ(a0)
         STREG fp,FP_OFFSET*R_SZ(a0)
         STREG s0,S0_OFFSET*R_SZ(a0)
@@ -347,14 +386,9 @@ FRAME(_CPU_Context_switch,sp,0,ra)
         STREG s6,S6_OFFSET*R_SZ(a0)
         STREG s7,S7_OFFSET*R_SZ(a0)
 
-	/*  EPC is readonly...
-        MFC0  t0,C0_EPC
-	NOP
-        STREG t0,C0_EPC_OFFSET*R_SZ(a0)
-	*/
 
 _CPU_Context_switch_restore:
-        LDREG ra,RA_OFFSET*R_SZ(a1)	    /* restore context */
+	LDREG ra,RA_OFFSET*R_SZ(a1)		/* restore context */
         LDREG sp,SP_OFFSET*R_SZ(a1)
         LDREG fp,FP_OFFSET*R_SZ(a1)
         LDREG s0,S0_OFFSET*R_SZ(a1)
@@ -365,12 +399,6 @@ _CPU_Context_switch_restore:
         LDREG s5,S5_OFFSET*R_SZ(a1)
         LDREG s6,S6_OFFSET*R_SZ(a1)
         LDREG s7,S7_OFFSET*R_SZ(a1)
-
-	/*  EPC is readonly...
-        LDREG t0,C0_EPC_OFFSET*R_SZ(a1)
-	NOP
-        MTC0  t0,C0_EPC
-	*/
 
         LDREG t0, C0_SR_OFFSET*R_SZ(a1)
 	
@@ -394,9 +422,9 @@ _CPU_Context_switch_restore:
 //        MTC0  t0,C0_SR                      /* set with enabled */
 //	  NOP
 
-	
+
 /*
-** Incorporate the new thread's FP coprocessor state and interrupt mask/enable
+** Incorporate the new task's FP coprocessor state and interrupt mask/enable
 ** into the status register.  We jump thru the requisite hoops to ensure we 
 ** maintain all other SR bits as global values.
 **
@@ -404,30 +432,45 @@ _CPU_Context_switch_restore:
 ** software int enables on a per-task basis, the rtems_task_create
 ** Interrupt Level & int level manipulation functions cannot enable/disable them, 
 ** so they are automatically enabled for all tasks.  To turn them off, a thread  
-** must itself manipulate the SR register.
+** must itself manipulate the SR register.  
+**
+** Although something of a hack on this processor, we treat the SR register
+** int enables as the RTEMS interrupt level.  We use the int level
+** value as a bitmask, not as any sort of greater than/less than metric.
+** Manipulation of a task's interrupt level directly corresponds to manipulation
+** of that task's SR bits, as seen in cpu.c
+**
+** Note, interrupts are disabled before context is saved, though the thread's
+** interrupt enable state is recorded.  The task swapping in will apply its
+** specific SR bits, including interrupt enable.  If further task-specific
+** SR bits are arranged, it is this code, the cpu.c interrupt level stuff and
+** cpu.h task initialization code that will be affected.  
 */
 
+	li	t2,SR_CU1
+	or	t2,SR_IMASK
+
+	/* int enable bits */
 #if __mips == 3
-	li	k0,(SR_CU1 | SR_IMASK | SR_EXL | SR_IE)
+	or	t2,SR_EXL + SR_IE
 #elif __mips == 1
-	li	k0,(SR_CU1 | SR_IMASK | SR_IEC)
+	or	t2,SR_IEC + SR_IEP	/* save current & previous int enable */
 #endif
-	and	t0,k0		
+	and	t0,t2		/* keep only the per-task bits */
 		
 	MFC0	t1,C0_SR	/* grab the current SR */
-	not	k0		/* invert k0 so we can clear out the SR bits */
-	and	t1,k0
-
-	or	t0,t1		/* setup the new task's SR value */
-
-        MTC0	t0,C0_SR	/* and load the new SR */
+	not	t2		
+	and	t1,t2		/* mask off the old task's bits */
+	or	t1,t0		/* or in the new task's bits */
+        MTC0	t1,C0_SR	/* and load the new SR */
 	NOP
 	
 /* _CPU_Context_1: */
-        j ra
+        j	ra
         NOP
 ENDFRAME(_CPU_Context_switch)
 
+	
 /*
  *  _CPU_Context_restore
  *
@@ -442,16 +485,20 @@ ENDFRAME(_CPU_Context_switch)
  */
 
 FRAME(_CPU_Context_restore,sp,0,ra)
-        ADD a1,a0,zero
-        j   _CPU_Context_switch_restore
+        .set noreorder
+        move	a1,a0
+        j	_CPU_Context_switch_restore
         NOP
+
 ENDFRAME(_CPU_Context_restore)
 
+	
 ASM_EXTERN(_ISR_Nest_level, SZ_INT)
 ASM_EXTERN(_Thread_Dispatch_disable_level,SZ_INT)
 ASM_EXTERN(_Context_Switch_necessary,SZ_INT)
 ASM_EXTERN(_ISR_Signals_to_thread_executing,SZ_INT)
 ASM_EXTERN(_Thread_Executing,SZ_INT)
+	
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
 
@@ -526,7 +573,7 @@ FRAME(_ISR_Handler,sp,0,ra)
 
 #ifdef INSTRUMENT_EXECUTING_THREAD
 	lw t2, _Thread_Executing
-	nop
+	NOP
 	sw t2, 0x8001FFF0
 #endif
 	
@@ -540,6 +587,11 @@ FRAME(_ISR_Handler,sp,0,ra)
 
 _ISR_Handler_Exception:
 
+	/*
+	sw	k0,0x8001FF00
+	sw	t1,0x8001FF04
+	*/
+	
 	/*  If we return from the exception, it is assumed nothing
          *  bad is going on and we can continue to run normally.
          *  But we want to save the entire CPU context so exception
@@ -547,6 +599,9 @@ _ISR_Handler_Exception:
          *
          *  NOTE: This is the path the debugger stub will take.
          */
+
+	/* already got k0 = cause in the interrupt test above */
+        STREG    k0,R_CAUSE*R_SZ(sp)
 
         STREG    sp,SP_OFFSET*R_SZ(sp)     /* save sp */
 
@@ -559,26 +614,24 @@ _ISR_Handler_Exception:
         STREG    s6,S6_OFFSET*R_SZ(sp)
         STREG    s7,S7_OFFSET*R_SZ(sp)
 
-        MFC0     k0,C0_CAUSE               /* save cause */
-	NOP
-        STREG    k0,R_CAUSE*R_SZ(sp)
-
         /* CP0 special registers */
 
-        MFC0     t0,C0_BADVADDR
-        nop
-        STREG    t0,R_BADVADDR*R_SZ(sp)
-
+	MFC0	 t0,C0_TAR
+        MFC0     t1,C0_BADVADDR
+        STREG	 t0,R_TAR*R_SZ(sp)
+        STREG    t1,R_BADVADDR*R_SZ(sp)
+	
 #if ( CPU_HARDWARE_FP == TRUE )
         MFC0     t0,C0_SR                 /* FPU is enabled, save state */
+	NOP
         srl      t0,t0,16
         andi     t0,t0,(SR_CU1 >> 16)
         beqz     t0, 1f
-        nop
+        NOP
         
         la       a1,R_F0*R_SZ(sp)
         jal      _CPU_Context_save_fp_from_exception 
-        nop
+        NOP
         MFC1     t0,C1_REVISION
         MFC1     t1,C1_STATUS
         STREG    t0,R_FEIR*R_SZ(sp)
@@ -586,20 +639,55 @@ _ISR_Handler_Exception:
         
 1:      
 #endif
+	
 	move	 a0,sp
         jal	 mips_vector_exceptions
-	nop
+	NOP
 
+	/* since we're returning, compute the address of the instruction we'll return to */
+
+	LDREG	t1, R_CAUSE*R_SZ(sp)
+	LDREG	t0, R_EPC*R_SZ(sp)
+
+	/* first see if the exception happened in the delay slot */
+	li	t3,CAUSE_BD
+	AND	t4,t1,t3
+	beqz	t4,excnodelay
+	NOP
+	
+	/* it did, now see if the branch occured or not */
+	li	t3,CAUSE_BT
+	AND	t4,t1,t3
+	beqz	t4,excnobranch
+	NOP
+	
+	/* branch was taken, we resume at the branch target */
+	LDREG	t0, R_TAR*R_SZ(sp)
+	j	excreturn
+	NOP
+
+excnobranch:
+	ADDU	t0,R_SZ
+
+excnodelay:	
+	ADDU	t0,R_SZ
+		
+excreturn:	
+	STREG	t0, R_EPC*R_SZ(sp)
+	NOP
+	
+	
 #if ( CPU_HARDWARE_FP == TRUE )
         MFC0     t0,C0_SR               /* FPU is enabled, restore state */
+	NOP
         srl      t0,t0,16
         andi     t0,t0,(SR_CU1 >> 16)
         beqz     t0, 2f
-        nop
+        NOP
         
         la       a1,R_F0*R_SZ(sp)
         jal      _CPU_Context_restore_fp_from_exception
-        nop
+        NOP
         LDREG    t0,R_FEIR*R_SZ(sp)
         LDREG    t1,R_FCSR*R_SZ(sp)
         MTC1     t0,C1_REVISION
@@ -619,7 +707,7 @@ _ISR_Handler_Exception:
         /* do NOT restore the cause as this could mess up the world */
 
 	j	 _ISR_Handler_exit
-	nop
+	NOP
 
 _ISR_Handler_1:
 
@@ -633,7 +721,6 @@ _ISR_Handler_1:
 	
 	beq      k0,zero,_ISR_Handler_exit
 
-	
 	
 	
 		
@@ -668,19 +755,19 @@ _ISR_Handler_1:
    */
 	
 #ifdef INSTRUMENT_ISR_VECTORING
-	nop
+	NOP
 	li	t1, 1
 	sw	t1, 0x8001e000
 #endif
 
 	move	 a0,sp
         jal      mips_vector_isr_handlers
-        nop
+        NOP
 	
 #ifdef INSTRUMENT_ISR_VECTORING
 	li	t1, 0
 	sw	t1, 0x8001e000
-	nop
+	NOP
 #endif
 		
   /*
@@ -703,7 +790,7 @@ _ISR_Handler_1:
    */
         or  t0,t2,t1
         bne t0,zero,_ISR_Handler_exit
-        nop
+        NOP
 
 
 
@@ -725,13 +812,13 @@ _ISR_Handler_1:
 	NOP
         or    t0,t0,t1
         beq   t0,zero,_ISR_Handler_exit
-        nop
+        NOP
 
 	
 	
 #ifdef INSTRUMENT_EXECUTING_THREAD
 	lw	t0,_Thread_Executing
-	nop
+	NOP
 	sw	t0,0x8001FFF4
 #endif
 
@@ -743,17 +830,36 @@ _ISR_Handler_1:
 */
 
         MFC0    t0, C0_SR
-	NOP
-	or	t0, SR_INTERRUPT_ENABLE_BITS
+#if __mips == 3
+	li	t1,SR_EXL | SR_IE
+#elif __mips == 1
+	li	t1,SR_IEC
+#endif
+	or	t0, t1
         MTC0    t0, C0_SR
 	NOP
-		
+			
         jal     _Thread_Dispatch
         NOP
 
+/* 
+** turn interrupts back off while we restore context so
+** a badly timed interrupt won't accidentally mess up k0
+*/
+        MFC0    t0, C0_SR
+#if __mips == 3
+	li	t1,SR_EXL | SR_IE
+#elif __mips == 1
+	li	t1,SR_IEC | SR_KUC	/* ints off, kernel mode on (kernel mode enabled is bit clear..argh!) */
+#endif
+	not	t1
+	and	t0, t1
+        MTC0    t0, C0_SR
+	NOP
+	
 #ifdef INSTRUMENT_EXECUTING_THREAD
 	lw	t0,_Thread_Executing
-	nop
+	NOP
 	sw	t0,0x8001FFF8
 #endif
 
@@ -771,15 +877,14 @@ _ISR_Handler_exit:
 /*
 ** Skip the SR restore because its a global register. _CPU_Context_switch_restore
 ** adjusts it according to each task's configuration.  If we didn't dispatch, the
-** SR value isn't changing, so all we need to do is return.
+** SR value isn't changed, so all we need to do is return.
 **
 */
-
 	/* restore context from stack */
 	
 #ifdef INSTRUMENT_EXECUTING_THREAD
 	lw	t0,_Thread_Executing
-	nop
+	NOP
 	sw	t0, 0x8001FFFC
 #endif
 
@@ -816,19 +921,19 @@ _ISR_Handler_exit:
         ADDIU     sp,sp,EXCP_STACK_SIZE
 	j         k0
 	rfe
-        nop
+        NOP
 
        .set    reorder
 ENDFRAME(_ISR_Handler)
 
+
 	
+		
 FRAME(mips_break,sp,0,ra)
-#if 1
-        break 0x0 
-        j mips_break
-#else
-        j ra
-#endif
-        nop
+        .set noreorder
+	break	0x0
+        j	ra
+        NOP
+       .set    reorder
 ENDFRAME(mips_break)
 

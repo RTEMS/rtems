@@ -314,7 +314,7 @@ extern "C" {
  *  CPU interrupt levels is defined by the routine _CPU_ISR_Set_level().
  */
 
-#define CPU_MODES_INTERRUPT_MASK   0x00000001
+#define CPU_MODES_INTERRUPT_MASK   0x000000ff
 
 /*
  *  Processor defined structures
@@ -359,6 +359,8 @@ extern "C" {
  *  this is enough information for RTEMS, it is probably not enough for
  *  a debugger such as gdb.  But that is another problem.
  */
+
+#ifndef ASSEMBLY_ONLY
 
 /* WARNING: If this structure is modified, the constants in cpu.h must be updated. */
 #if __mips == 1
@@ -595,6 +597,7 @@ typedef struct {
   unsigned32   clicks_per_microsecond;
 }   rtems_cpu_table;
 
+
 /*
  *  Macros to access required entires in the CPU Table are in
  *  the file rtems/system.h.
@@ -647,6 +650,8 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  NOTE: Not needed on this port.
  */
 
+
+
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.
  */
@@ -685,6 +690,7 @@ extern unsigned int mips_interrupt_number_of_vectors;
  */
 
 #define CPU_STACK_MINIMUM_SIZE          (2048*sizeof(unsigned32))
+
 
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
@@ -845,9 +851,11 @@ void _CPU_ISR_Set_level( unsigned32 );  /* in cpu.c */
 
 #if __mips == 3
 #define _INTON	(SR_EXL | SR_IE)
+#define _EXTRABITS      0
 #endif
 #if __mips == 1
-#define _INTON  SR_IEC
+#define _INTON          SR_IEC
+#define _EXTRABITS      0  /* make sure we're in user mode on MIPS1 processors */
 #endif
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, _isr, _entry_point, _is_fp ) \
@@ -862,7 +870,7 @@ void _CPU_ISR_Set_level( unsigned32 );  /* in cpu.c */
 	(_the_context)->c0_sr = ((_intlvl==0)?(0xFF00 | _INTON):( ((_intlvl<<9) & 0xfc00) | \
 						       0x300 | \
 						       ((_intlvl & 1)?_INTON:0)) ) | \
-				SR_CU0 | ((_is_fp)?SR_CU1:0); \
+				SR_CU0 | ((_is_fp)?SR_CU1:0) | _EXTRABITS; \
   }
 
 
@@ -1177,6 +1185,11 @@ static inline unsigned int CPU_swap_u32(
 
 #define CPU_swap_u16( value ) \
   (((value&0xff) << 8) | ((value >> 8)&0xff))
+
+
+#endif
+
+
 
 #ifdef __cplusplus
 }

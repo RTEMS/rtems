@@ -1,6 +1,12 @@
 /*
  *  Mips CPU Dependent Source
  *
+ *  2002:       Greg Menke (gregory.menke@gsfc.nasa.gov)
+ *      Overhauled interrupt level and interrupt enable/disable code
+ *      to more exactly support MIPS.  Our mods were for MIPS1 processors
+ *      MIPS3 ports are affected, though apps written to the old behavior
+ *      should still work OK.
+ *
  *  Conversion to MIPS port by Alan Cudmore <alanc@linuxstart.com> and
  *           Joel Sherrill <joel@OARcorp.com>. 
  *
@@ -74,24 +80,28 @@ void _CPU_Initialize(
  *
  *  This routine returns the current interrupt level.
  */
-   
+
 unsigned32 _CPU_ISR_Get_level( void )
 {
   unsigned int sr;
 
   mips_get_sr(sr);
 
+  //printf("current sr=%08X, ",sr);
+
 #if __mips == 3
 /* EXL bit and shift down hardware ints into bits 1 thru 6 */
-  return ((sr & SR_EXL) >> 1) + ((sr & 0xfc00) >> 9);
+  sr = ((sr & SR_EXL) >> 1) | ((sr & 0xfc00) >> 9);
 
 #elif __mips == 1
 /* IEC bit and shift down hardware ints into bits 1 thru 6 */
-  return (sr & SR_IEC) + ((sr & 0xfc00) >> 9);
+  sr = (sr & SR_IEC) | ((sr & 0xfc00) >> 9);
 
 #else
 #error "CPU ISR level: unknown MIPS level for SR handling"
 #endif
+  //printf("intlevel=%02X\n",sr);
+  return sr;
 }
 
 
@@ -108,16 +118,17 @@ void _CPU_ISR_Set_level( unsigned32 new_level )
   ** off since, so we'll just leave them alone.
   */
 
+  new_level &= 0xff;
 
   mips_get_sr(sr);
 
 #if __mips == 3
-  mips_set_sr(sr & ~SR_IE);                 /* first disable ie bit (recommended) */
+  mips_set_sr( (sr & ~SR_IE) );                 /* first disable ie bit (recommended) */
 
   srbits = sr & ~(0xfc00 | SR_EXL | SR_IE);
 
   sr = srbits | ((new_level==0)? (0xfc00 | SR_EXL | SR_IE): \
-		 (((new_level<<9) & 0xfc000) | \
+		 (((new_level<<9) & 0xfc00) | \
 		  (new_level & 1)?(SR_EXL | SR_IE):0));
 /*
   if ( (new_level & SR_EXL) == (sr & SR_EXL) )
@@ -134,15 +145,19 @@ void _CPU_ISR_Set_level( unsigned32 new_level )
 */
  
 #elif __mips == 1
-  mips_set_sr( (sr & ~SR_IEC) );	
-
+  mips_set_sr( (sr & ~SR_IEC) );
   srbits = sr & ~(0xfc00 | SR_IEC);
-  sr = srbits | ((new_level==0)?0xfc01:( ((new_level<<9) & 0xfc000) | (new_level & 1)));
+  //printf("current sr=%08X, newlevel=%02X, srbits=%08X, ",sr,new_level,srbits);
+  sr = srbits | ((new_level==0)?0xfc01:( ((new_level<<9) & 0xfc00) | \
+                                         (new_level & SR_IEC)));
+  //printf("new sr=%08X\n",sr);
 #else
 #error "CPU ISR level: unknown MIPS level for SR handling"
 #endif
   mips_set_sr( sr );
 }
+
+
 
 /*PAGE
  *

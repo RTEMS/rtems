@@ -362,6 +362,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
  * Cause Register
  */
 #define	CAUSE_BD	0x80000000	/* Branch delay slot */
+#define	CAUSE_BT	0x40000000	/* Branch Taken */
 #define	CAUSE_CEMASK	0x30000000	/* coprocessor error */
 #define	CAUSE_CESHIFT	28
 
@@ -391,6 +392,10 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #if  __mips == 3
 #define C0_PAGEMASK	$5		/* tlb page mask */
 #define C0_WIRED	$6		/* number of wired tlb entries */
+#endif
+
+#if  __mips == 1
+#define C0_TAR          $6
 #endif
 
 #define	C0_BADVADDR	$8		/* bad virtual address */
