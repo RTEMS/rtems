@@ -1,6 +1,10 @@
 
 2000-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
+	* libc/fs_null_handlers.c: Added missing rmnod entry.
+
+2000-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
 	* libc/isatty.c, libc/imfs_handlers_directory.c, libc/creat.c,
 	libc/imfs_directory.c: Fixed style issues.
 

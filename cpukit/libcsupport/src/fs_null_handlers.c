@@ -32,5 +32,6 @@ rtems_filesystem_file_handlers_r rtems_filesystem_null_handlers = {
   NULL,       /* fpathconf */
   NULL,       /* fsync */
   NULL,       /* fdatasync */
-  NULL        /* fcntl */
+  NULL,       /* fcntl */
+  NULL        /* rmnod */
 };
