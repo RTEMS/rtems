@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-GENSIZE = $(PROJECT_ROOT)/tools/cpu/unix/gensize
+GENSIZE = $(PROJECT_TOPdir)/tools/cpu/unix/gensize
 
 GENERIC_H_FILES = unixsize.h
 STATIC_H_FILES = cpu.h unixtypes.h unix.h
