@@ -18,10 +18,10 @@
  */
 
 #include <rtems.h>
+#include <rtems/error.h>
+
 #include <mpc8260.h>
 #include <mpc8260/cpm.h>
-
-void rtems_panic(char *, int);
 
 /*
  * Allocation order:
@@ -31,9 +31,9 @@ void rtems_panic(char *, int);
  *      - Dual-Port RAM section 3
  */
 static struct {
-  uint8_t       *base;
-  unsigned int  size;
-  unsigned int  used;
+  char		*base;
+  size_t         size;
+  unsigned int   used;
 } dpram_regions[] = {
 /*  { (char *)&m8260.dpram0[0],    sizeof m8260.dpram0,     0 },*/
   { (char *)&m8260.dpram1[0],    sizeof m8260.dpram1,     0 },

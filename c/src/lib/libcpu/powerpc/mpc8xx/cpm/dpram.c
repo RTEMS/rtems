@@ -14,10 +14,10 @@
  */
 
 #include <rtems.h>
+#include <rtems/error.h>
+
 #include <mpc8xx.h>
 #include <mpc8xx/cpm.h>
-
-extern void rtems_panic(char *, int);
 
 /*
  * Allocation order:
@@ -28,9 +28,9 @@ extern void rtems_panic(char *, int);
  *      - Dual-Port RAM section 4
  */
 static struct {
-  uint8_t       *base;
-  unsigned int  size;
-  unsigned int  used;
+  char	 	*base;
+  size_t	 size;
+  unsigned int   used;
 } dpram_regions[] = {
   { (char *)&m8xx.dpram0[0],    sizeof m8xx.dpram0,     0 },
   { (char *)&m8xx.dpram1[0],    sizeof m8xx.dpram1,     0 },
