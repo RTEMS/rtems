@@ -73,8 +73,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
    */
       
   the_thread = _Thread_queue_Dequeue( &the_message_queue->Wait_queue );
-  if ( the_thread )
-  {
+  if ( the_thread ) {
     _CORE_message_queue_Copy_buffer(
       buffer,
       the_thread->Wait.return_argument,
@@ -102,7 +101,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
   }
 
   the_message = _CORE_message_queue_Allocate_message_buffer(the_message_queue);
-  if ( the_message == 0)
+  if ( the_message == 0 )
     return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED;
 
   _CORE_message_queue_Copy_buffer( buffer, the_message->Contents.buffer, size );
