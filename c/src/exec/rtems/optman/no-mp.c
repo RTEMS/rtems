@@ -42,6 +42,10 @@ void _MPCI_Handler_initialization(
 {
 }
 
+void _MPCI_Create_server( void )
+{
+}
+
 void _MPCI_Initialization ( void )
 {
 }
@@ -108,6 +112,24 @@ Thread _MPCI_Receive_server(
 
 void _MPCI_Announce ( void )
 {
+}
+
+
+void _MPCI_Internal_packets_Send_process_packet (
+   MPCI_Internal_Remote_operations operation
+)
+{
+}
+ 
+void _MPCI_Internal_packets_Process_packet (
+  MP_packet_Prefix  *the_packet_prefix
+)
+{
+}
+ 
+MPCI_Internal_packet *_MPCI_Internal_packets_Get_packet ( void )
+{
+  return NULL;
 }
 
 /* end of file */
