@@ -73,7 +73,9 @@ rtems_status_code rtems_signal_send(
   rtems_signal_set signal_set
 );
 
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/signalmp.h>
+#endif
 
 #ifdef __cplusplus
 }

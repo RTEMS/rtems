@@ -316,15 +316,19 @@ rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
  *  Output parameters: NONE
  */
  
+#if defined(RTEMS_MULTIPROCESSING)
 void  _Message_queue_Core_message_queue_mp_support (
   Thread_Control *the_thread,
   Objects_Id      id
 );
+#endif
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/message.inl>
 #endif
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/msgmp.h>
+#endif
 
 #ifdef __cplusplus
 }

@@ -15,6 +15,10 @@ SRCS=README
 
 all: $(SRCS)
 
+# We only build the multiprocessing support if HAS_MP was defined
+MP_SUPPORT_yes_V = shmsupp
+MP_SUPPORT = $(MP_SUPPORT_$(HAS_MP)_V)
+
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUB_DIRS=include startup clock console shmsupp timer wrapup
+SUB_DIRS=include startup clock console $(MP_SUPPORT) timer wrapup

@@ -200,6 +200,7 @@ typedef struct {
  * MPCI config
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
 typedef struct {
     unsigned32  node;                   /* local node number */
     unsigned32  maximum_nodes;          /* maximum # nodes in system */
@@ -214,6 +215,7 @@ typedef struct {
     rtems_monitor_symbol_t   send_packet;
     rtems_monitor_symbol_t   receive_packet;
 } rtems_monitor_mpci_t;
+#endif
 
 /*
  * The generic canonical information union
@@ -227,7 +229,9 @@ typedef union {
     rtems_monitor_driver_t     driver;
     rtems_monitor_dname_t      dname;
     rtems_monitor_config_t     config;
+#if defined(RTEMS_MULTIPROCESSING)
     rtems_monitor_mpci_t       mpci;
+#endif
     rtems_monitor_init_task_t  itask;
 } rtems_monitor_union_t;
 
@@ -370,10 +374,12 @@ void       rtems_monitor_config_dump_header(boolean);
 void       rtems_monitor_config_dump(rtems_monitor_config_t *, boolean verbose);
 
 /* mpci.c */
+#if defined(RTEMS_MULTIPROCESSING)
 void       rtems_monitor_mpci_canonical(rtems_monitor_mpci_t *, void *);
 void      *rtems_monitor_mpci_next(void *, rtems_monitor_mpci_t *, rtems_id *);
 void       rtems_monitor_mpci_dump_header(boolean);
 void       rtems_monitor_mpci_dump(rtems_monitor_mpci_t *, boolean verbose);
+#endif
 
 /* itask.c */
 void       rtems_monitor_init_task_canonical(rtems_monitor_init_task_t *, void *);

@@ -9,7 +9,9 @@
 #include <rtems/system.h>
 #include <rtems/score/coremutex.h>
 #include <rtems/score/watchdog.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
+#endif
 #include <rtems/posix/mutex.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/time.h>
@@ -18,6 +20,7 @@
  *  TEMPORARY
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
 void _POSIX_Mutex_MP_Send_process_packet (
   POSIX_Mutex_MP_Remote_operations  operation,
   Objects_Id                        mutex_id,
@@ -52,6 +55,7 @@ void POSIX_Threads_mutex_MP_support(
 {
   (void) POSIX_MP_NOT_IMPLEMENTED();   /* XXX: should never get here */
 }
+#endif
 
 /*
  *  END OF TEMPORARY
@@ -238,9 +242,9 @@ int pthread_mutex_init(
 
     mutex_in_use = _POSIX_Mutex_Get( mutex, &location );
     switch ( location ) {
+      case OBJECTS_REMOTE:
       case OBJECTS_ERROR:
         break;
-      case OBJECTS_REMOTE:
       case OBJECTS_LOCAL:
         _Thread_Enable_dispatch();
         return EBUSY;
@@ -256,8 +260,10 @@ int pthread_mutex_init(
 
   assert( the_attr->process_shared == PTHREAD_PROCESS_PRIVATE );
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
     return POSIX_MP_NOT_IMPLEMENTED();
+#endif
  
   /*
    *  Determine the discipline of the mutex
@@ -289,6 +295,7 @@ int pthread_mutex_init(
     return EAGAIN;
   }
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED && 
        !( _Objects_MP_Allocate_and_open( &_POSIX_Mutex_Information, 0,
                             the_mutex->Object.id, FALSE ) ) ) {
@@ -296,6 +303,7 @@ int pthread_mutex_init(
     _Thread_Enable_dispatch();
     return EAGAIN;
   }
+#endif
 
   the_mutex->process_shared = the_attr->process_shared;
 
@@ -322,6 +330,7 @@ int pthread_mutex_init(
 
   *mutex = the_mutex->Object.id;
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
     _POSIX_Mutex_MP_Send_process_packet(
       POSIX_MUTEX_MP_ANNOUNCE_CREATE,
@@ -329,6 +338,7 @@ int pthread_mutex_init(
       0,                         /* Name not used */
       0                          /* Not used */
     );
+#endif
 
   _Thread_Enable_dispatch();
   return 0;
@@ -348,11 +358,13 @@ int pthread_mutex_destroy(
  
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return EINVAL;
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
+      return EINVAL;
+#endif
+    case OBJECTS_ERROR:
       return EINVAL;
     case OBJECTS_LOCAL:
        /*
@@ -369,12 +381,17 @@ int pthread_mutex_destroy(
  
       _CORE_mutex_Flush(
         &the_mutex->Mutex,
+#if defined(RTEMS_MULTIPROCESSING)
         _POSIX_Mutex_MP_Send_object_was_deleted,
+#else
+        NULL,
+#endif
         EINVAL
       );
  
       _POSIX_Mutex_Free( the_mutex );
  
+#if defined(RTEMS_MULTIPROCESSING)
       if ( the_mutex->process_shared == PTHREAD_PROCESS_SHARED ) {
  
         _Objects_MP_Close( &_POSIX_Mutex_Information, the_mutex->Object.id );
@@ -386,6 +403,7 @@ int pthread_mutex_destroy(
           0                          /* Not used */
         );
       }
+#endif
       _Thread_Enable_dispatch();
       return 0;
   }
@@ -411,15 +429,17 @@ int _POSIX_Mutex_Lock_support(
  
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return EINVAL;
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       return _POSIX_Mutex_MP_Send_request_packet(
           POSIX_MUTEX_MP_OBTAIN_REQUEST,
           *mutex,
           0,   /* must define the option set */
           WATCHDOG_NO_TIMEOUT
       );
+#endif
+    case OBJECTS_ERROR:
+      return EINVAL;
     case OBJECTS_LOCAL:
       _CORE_mutex_Seize(
         &the_mutex->Mutex,
@@ -480,20 +500,26 @@ int pthread_mutex_unlock(
  
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return EINVAL;
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       return _POSIX_Mutex_MP_Send_request_packet(
           POSIX_MUTEX_MP_RELEASE_REQUEST,
           *mutex,
           0,                    /* Not used */
           MPCI_DEFAULT_TIMEOUT
       );
+#endif
+    case OBJECTS_ERROR:
+      return EINVAL;
     case OBJECTS_LOCAL:
       status = _CORE_mutex_Surrender(
         &the_mutex->Mutex,
         the_mutex->Object.id, 
+#if defined(RTEMS_MULTIPROCESSING)
         POSIX_Threads_mutex_MP_support
+#else
+        NULL
+#endif
       );
       _Thread_Enable_dispatch();
       return _POSIX_Mutex_From_core_mutex_status( status );
@@ -634,11 +660,13 @@ int pthread_mutex_setprioceiling(
 
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return EINVAL;        /* impossible to get here */
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       /*  XXX It feels questionable to set the ceiling on a remote mutex. */
       return EINVAL;
+#endif
+    case OBJECTS_ERROR:
+      return EINVAL;        /* impossible to get here */
     case OBJECTS_LOCAL:
       *old_ceiling = _POSIX_Priority_From_core(
         the_mutex->Mutex.Attributes.priority_ceiling
@@ -647,7 +675,11 @@ int pthread_mutex_setprioceiling(
       _CORE_mutex_Surrender(
         &the_mutex->Mutex,
         the_mutex->Object.id, 
+#if defined(RTEMS_MULTIPROCESSING)
         POSIX_Threads_mutex_MP_support
+#else
+        NULL
+#endif
       );
       _Thread_Enable_dispatch();
       return 0;
@@ -673,10 +705,12 @@ int pthread_mutex_getprioceiling(
 
   the_mutex = _POSIX_Mutex_Get( mutex, &location );
   switch ( location ) {
+    case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
+      return POSIX_MP_NOT_IMPLEMENTED();   /* XXX feels questionable */
+#endif
     case OBJECTS_ERROR:
       return EINVAL;
-    case OBJECTS_REMOTE:
-      return POSIX_MP_NOT_IMPLEMENTED();   /* XXX feels questionable */
     case OBJECTS_LOCAL:
       *prioceiling = _POSIX_Priority_From_core(
         the_mutex->Mutex.Attributes.priority_ceiling

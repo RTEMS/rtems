@@ -43,7 +43,9 @@ typedef void *posix_api_configuration_table;
 
 #include <rtems/extension.h>
 #include <rtems/io.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
+#endif
 
 /*
  *  The following records define the Multiprocessor Configuration
@@ -57,7 +59,11 @@ typedef struct {
   unsigned32    maximum_nodes;          /* maximum # nodes in system */
   unsigned32    maximum_global_objects; /* maximum # global objects */
   unsigned32    maximum_proxies;        /* maximum # proxies */
+#if defined(RTEMS_MULTIPROCESSING)
   MPCI_Control *User_mpci_table;        /* pointer to MPCI table */
+#else
+  void         *User_mpci_table;        /* pointer to MPCI table */
+#endif
 } rtems_multiprocessing_table;
 
 /*

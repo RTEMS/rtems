@@ -39,7 +39,9 @@ void _Event_Manager_initialization( void )
    *  Register the MP Process Packet routine.
    */
  
+#if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Register_packet_processor( MP_PACKET_EVENT, _Event_MP_Process_packet );
+#endif
 }
 
 /*PAGE
@@ -68,9 +70,8 @@ rtems_status_code rtems_event_send(
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       return(
         _Event_MP_Send_request_packet(
           EVENT_MP_SEND_REQUEST,
@@ -78,6 +79,9 @@ rtems_status_code rtems_event_send(
           event_in
         )
       );
+#endif
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
       _Event_sets_Post( event_in, &api->pending_events );
@@ -352,8 +356,8 @@ void _Event_Timeout(
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
     case OBJECTS_REMOTE:  /* impossible */
+    case OBJECTS_ERROR:
       break;
     case OBJECTS_LOCAL:
  

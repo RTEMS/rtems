@@ -31,7 +31,9 @@
 #include <rtems/rtems/dpmem.h>
 #include <rtems/rtems/event.h>
 #include <rtems/rtems/message.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/mp.h>
+#endif
 #include <rtems/rtems/part.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/rtems/region.h>
@@ -58,7 +60,9 @@ void _RTEMS_API_Initialize(
  
   _Interrupt_Manager_initialization();
  
+#if defined(RTEMS_MULTIPROCESSING)
   _Multiprocessing_Manager_initialization();
+#endif
  
   _RTEMS_tasks_Manager_initialization(
     api_configuration->maximum_tasks,

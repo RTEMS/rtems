@@ -387,7 +387,9 @@ Objects_Information *_Objects_Get_information(
  */
 
 #include <rtems/score/object.inl>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/objectmp.h>
+#endif
 
 #ifdef __cplusplus
 }

@@ -201,7 +201,9 @@ rtems_status_code rtems_region_return_segment(
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/region.inl>
 #endif
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/regionmp.h>
+#endif
 
 /*
  *  _Region_Debug_Walk

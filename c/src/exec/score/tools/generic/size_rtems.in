@@ -130,17 +130,22 @@ ${SAPIOBJ}/exinit.o \
 ${SAPIOBJ}/io.o \
 ${SAPIOBJ}/rtemsapi.o \
 "
-MPLIST="\
-${RTEMSOBJ}/mp.o ${RTEMSOBJ}/eventmp.o \
-${COREOBJ}/mpci.o ${RTEMSOBJ}/msgmp.o ${COREOBJ}/objectmp.o \
-${RTEMSOBJ}/partmp.o ${RTEMSOBJ}/regionmp.o ${RTEMSOBJ}/semmp.o \
-${RTEMSOBJ}/signalmp.o ${RTEMSOBJ}/taskmp.o ${COREOBJ}/threadmp.o \
-"
+
+if [ -r ${RTEMSOBJ}/mp.o ] ; then
+  MPLIST="\
+  ${RTEMSOBJ}/mp.o ${RTEMSOBJ}/eventmp.o \
+  ${COREOBJ}/mpci.o ${RTEMSOBJ}/msgmp.o ${COREOBJ}/objectmp.o \
+  ${RTEMSOBJ}/partmp.o ${RTEMSOBJ}/regionmp.o ${RTEMSOBJ}/semmp.o \
+  ${RTEMSOBJ}/signalmp.o ${RTEMSOBJ}/taskmp.o ${COREOBJ}/threadmp.o \
+  "
+
+  MPOBJLIST=${OPTOBJ}/no-msg.rel
+fi
 
 OPTMANLIST="\
 ${OPTOBJ}/no-dpmem.rel \
 ${OPTOBJ}/no-event.rel \
-${OPTOBJ}/no-mp.rel \
+${MPOBJLIST} \
 ${OPTOBJ}/no-msg.rel \
 ${OPTOBJ}/no-part.rel \
 ${OPTOBJ}/no-region.rel \

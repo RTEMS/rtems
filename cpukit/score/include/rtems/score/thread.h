@@ -23,7 +23,9 @@ extern "C" {
 
 #include <rtems/score/context.h>
 #include <rtems/score/cpu.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mppkt.h>
+#endif
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/stack.h>
@@ -141,7 +143,9 @@ typedef struct {
   unsigned32               resource_count;
   Thread_Wait_information  Wait;
   Watchdog_Control         Timer;
+#if defined(RTEMS_MULTIPROCESSING)
   MP_packet_Prefix        *receive_packet;
+#endif
      /****************** end of common block ********************/
   Chain_Node               Active;
 }   Thread_Proxy_control;
@@ -171,7 +175,9 @@ struct Thread_Control_struct {
   unsigned32                            resource_count;
   Thread_Wait_information               Wait;
   Watchdog_Control                      Timer;
+#if defined(RTEMS_MULTIPROCESSING)
   MP_packet_Prefix                     *receive_packet;
+#endif
      /****************** end of common block ********************/
   boolean                               is_global;
   boolean                               do_post_task_switch_extension;
@@ -619,7 +625,9 @@ Thread _Thread_Idle_body(
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/thread.inl>
 #endif
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/threadmp.h>
+#endif
 
 #ifdef __cplusplus
 }

@@ -8,7 +8,7 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-C_FILES= no-dpmem.c no-event.c no-mp.c no-msg.c \
+C_FILES= no-dpmem.c no-event.c no-msg.c no-mp.c \
          no-part.c no-region.c no-rtmon.c no-sem.c no-signal.c no-timer.c
 
 S_FILES=

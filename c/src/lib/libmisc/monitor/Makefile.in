@@ -9,10 +9,15 @@ RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 LIB=${ARCH}/libmonitor-tmp.a
+
 # C source names, if any, go here -- minus the .c
+# We only build multiprocessing related files if HAS_MP was defined
+MP_PIECES_yes_V = mon-mpci
+MP_PIECES = $(MP_PIECES_$(HAS_MP)_V)
+
 C_PIECES=mon-command mon-symbols mon-prmisc mon-monitor mon-object mon-server \
 	 mon-task mon-queue mon-driver mon-dname mon-itask \
-	 mon-extension mon-manager mon-config mon-mpci
+	 mon-extension mon-manager mon-config $(MP_PIECES)
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 

@@ -34,7 +34,9 @@
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
+#endif
 #include <rtems/score/priority.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
@@ -107,11 +109,18 @@ rtems_interrupt_level rtems_initialize_executive_early(
    *  Initialize the system state based on whether this is an MP system.
    */
 
+#if defined(RTEMS_MULTIPROCESSING)
   multiprocessing_table = configuration_table->User_multiprocessing_table;
 
   _System_state_Handler_initialization(
     (multiprocessing_table) ? TRUE : FALSE
   );
+#else
+  multiprocessing_table = NULL;
+
+  _System_state_Handler_initialization( FALSE );
+
+#endif
 
   /*
    *  Provided just for user convenience.
@@ -179,10 +188,12 @@ rtems_interrupt_level rtems_initialize_executive_early(
     multiprocessing_table->maximum_proxies
   );
 
+#if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Handler_initialization(
     multiprocessing_table->User_mpci_table,
     RTEMS_TIMEOUT
   );
+#endif
 
 /* MANAGERS */
 
@@ -215,7 +226,9 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _Thread_Create_idle();
 
+#if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Create_server();
+#endif
 
   /*
    *  Run the API and BSPs predriver hook.
@@ -234,12 +247,14 @@ rtems_interrupt_level rtems_initialize_executive_early(
  
   _IO_Initialize_all_drivers();
  
+#if defined(RTEMS_MULTIPROCESSING)
   if ( _System_state_Is_multiprocessing ) {
     _MPCI_Initialization();
     _MPCI_Internal_packets_Send_process_packet(
       MPCI_PACKETS_SYSTEM_VERIFY
     );
   }
+#endif
  
   /*
    *  Run the APIs and BSPs postdriver hooks.

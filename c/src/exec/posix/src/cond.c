@@ -17,6 +17,8 @@
  *  TEMPORARY
  */
 
+
+#if defined(RTEMS_MULTIPROCESSING)
 void _POSIX_Condition_variables_MP_Send_process_packet (
   POSIX_Condition_variables_MP_Remote_operations  operation,
   Objects_Id                        condition_variables_id,
@@ -33,6 +35,7 @@ void _POSIX_Condition_variables_MP_Send_extract_proxy(
 {
   (void) POSIX_MP_NOT_IMPLEMENTED();
 }
+#endif
 
 /*
  *  END OF TEMPORARY
@@ -190,6 +193,7 @@ int pthread_cond_init(
     return ENOMEM;
   }
  
+#if defined(RTEMS_MULTIPROCESSING)
   if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED &&
      !( _Objects_MP_Allocate_and_open( &_POSIX_Condition_variables_Information,
                 0, the_cond->Object.id, FALSE ) ) ) {
@@ -197,6 +201,7 @@ int pthread_cond_init(
     _Thread_Enable_dispatch();
     return EAGAIN;
   }
+#endif
  
   the_cond->process_shared  = the_attr->process_shared;
 
@@ -208,7 +213,11 @@ int pthread_cond_init(
     OBJECTS_POSIX_CONDITION_VARIABLES,
     THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_CONDITION_VARIABLE,
+#if defined(RTEMS_MULTIPROCESSING)
     _POSIX_Condition_variables_MP_Send_extract_proxy,
+#else
+    NULL,
+#endif
     ETIMEDOUT
   );
 
@@ -220,6 +229,7 @@ int pthread_cond_init(
  
   *cond = the_cond->Object.id;
  
+#if defined(RTEMS_MULTIPROCESSING)
   if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
     _POSIX_Condition_variables_MP_Send_process_packet(
       POSIX_CONDITION_VARIABLES_MP_ANNOUNCE_CREATE,
@@ -227,6 +237,7 @@ int pthread_cond_init(
       0,                         /* Name not used */
       0                          /* Not used */
     );
+#endif
  
   _Thread_Enable_dispatch();
 
@@ -248,12 +259,17 @@ int pthread_cond_destroy(
  
   the_cond = _POSIX_Condition_variables_Get( cond, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return EINVAL;
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
       return EINVAL;
+#endif
+
+    case OBJECTS_ERROR:
+      return EINVAL;
+
+
     case OBJECTS_LOCAL:
  
       if ( _Thread_queue_First( &the_cond->Wait_queue ) ) {
@@ -268,6 +284,7 @@ int pthread_cond_destroy(
  
       _POSIX_Condition_variables_Free( the_cond );
  
+#if defined(RTEMS_MULTIPROCESSING)
       if ( the_cond->process_shared == PTHREAD_PROCESS_SHARED ) {
  
         _Objects_MP_Close(
@@ -282,6 +299,7 @@ int pthread_cond_destroy(
           0                          /* Not used */
         );
       }
+#endif
       _Thread_Enable_dispatch();
       return 0;
   }
@@ -307,11 +325,14 @@ int _POSIX_Condition_variables_Signal_support(
  
   the_cond = _POSIX_Condition_variables_Get( cond, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return EINVAL;
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
+      return EINVAL;
+#endif
+
+    case OBJECTS_ERROR:
       return EINVAL;
     case OBJECTS_LOCAL:
  
@@ -380,11 +401,13 @@ int _POSIX_Condition_variables_Wait_support(
 
   the_cond = _POSIX_Condition_variables_Get( cond, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return EINVAL;
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
+      return EINVAL;
+#endif
+    case OBJECTS_ERROR:
       return EINVAL;
     case OBJECTS_LOCAL:
  

@@ -168,10 +168,12 @@ rtems_status_code rtems_port_delete(
 
   the_port = _Dual_ported_memory_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       _Objects_Close( &_Dual_ported_memory_Information, &the_port->Object );
       _Dual_ported_memory_Free( the_port );
@@ -213,10 +215,12 @@ rtems_status_code rtems_port_internal_to_external(
 
   the_port = _Dual_ported_memory_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       ending = _Addresses_Subtract( internal, the_port->internal_base );
       if ( ending > the_port->length )
@@ -262,10 +266,12 @@ rtems_status_code rtems_port_external_to_internal(
 
   the_port = _Dual_ported_memory_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       ending = _Addresses_Subtract( external, the_port->external_base );
       if ( ending > the_port->length )

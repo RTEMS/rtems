@@ -13,14 +13,12 @@ include $(RTEMS_ROOT)/make/directory.cfg
 
 SRCS=README
 
-# MP_PARTS are the pieces of the BSP required in a MP environment
-# We only build them if HAS_MP was defined
- 
-MP_PARTS_yes_V = shmsupp
-MP_PARTS = $(MP_PARTS_$(HAS_MP)_V)
+# We only build the multiprocessing support if HAS_MP was defined
+MP_SUPPORT_yes_V = shmsupp
+MP_SUPPORT = $(MP_SUPPORT_$(HAS_MP)_V)
 
 all: $(SRCS)
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUB_DIRS=include startup clock console timer $(MP_PARTS) wrapup tools
+SUB_DIRS=include startup clock console timer $(MP_SUPPORT) wrapup tools

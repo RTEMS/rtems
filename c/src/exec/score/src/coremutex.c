@@ -293,6 +293,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
   if ( ( the_thread = _Thread_queue_Dequeue( &the_mutex->Wait_queue ) ) ) {
 
+#if defined(RTEMS_MULTIPROCESSING)
     if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
       
       the_mutex->holder     = NULL;
@@ -301,7 +302,9 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
       ( *api_mutex_mp_support)( the_thread, id );
 
-    } else {
+    } else 
+#endif
+    {
 
       the_mutex->holder     = the_thread;
       the_mutex->holder_id  = the_thread->Object.id;

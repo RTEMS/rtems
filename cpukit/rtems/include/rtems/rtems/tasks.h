@@ -411,7 +411,9 @@ void _RTEMS_tasks_Initialize_user_tasks( void );
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/tasks.inl>
 #endif
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/taskmp.h>
+#endif
 
 #ifdef __cplusplus
 }

@@ -42,11 +42,19 @@ rtems_monitor_object_info_t rtems_monitor_object_info[] =
     },
     { RTEMS_MONITOR_OBJECT_MPCI,
       (void *) 0,
+#if defined(RTEMS_MULTIPROCESSING)
       sizeof(rtems_monitor_mpci_t),
       (rtems_monitor_object_next_fn)        rtems_monitor_mpci_next,
       (rtems_monitor_object_canonical_fn)   rtems_monitor_mpci_canonical,
       (rtems_monitor_object_dump_header_fn) rtems_monitor_mpci_dump_header,
       (rtems_monitor_object_dump_fn)        rtems_monitor_mpci_dump,
+#else
+      0,
+      (rtems_monitor_object_next_fn)        0,
+      (rtems_monitor_object_canonical_fn)   0,
+      (rtems_monitor_object_dump_header_fn) 0,
+      (rtems_monitor_object_dump_fn)        0,
+#endif
     },
     { RTEMS_MONITOR_OBJECT_INIT_TASK,
       (void *) 0,

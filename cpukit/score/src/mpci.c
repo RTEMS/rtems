@@ -16,8 +16,10 @@
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/interr.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
 #include <rtems/score/mppkt.h>
+#endif
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>

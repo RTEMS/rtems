@@ -124,7 +124,9 @@ int _POSIX_Semaphore_Name_to_id(
 );
 
 #include <rtems/posix/semaphore.inl>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/posix/semaphoremp.h>
+#endif
 
 #ifdef __cplusplus
 }

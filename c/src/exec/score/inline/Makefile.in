@@ -8,9 +8,13 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+# We only build multiprocessing related files if HAS_MP was defined
+MP_PIECES_yes_V = mppkt objectmp threadmp
+MP_PIECES = $(MP_PIECES_$(HAS_MP)_V)
+
 I_PIECES= address chain coremsg coremutex coresem heap \
-    isr mppkt object objectmp priority stack states sysstate thread \
-    threadmp tod tqdata userext watchdog wkspace
+    isr object priority stack states sysstate thread \
+    tod tqdata userext watchdog wkspace $(MP_PIECES)
 I_FILES=$(I_PIECES:%=$(srcdir)/%.inl)
 
 SRCS=$(I_FILES)

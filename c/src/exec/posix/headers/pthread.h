@@ -112,7 +112,9 @@ RTEMS_INLINE_ROUTINE boolean _POSIX_Threads_Is_null(
 );
 
 #include <rtems/posix/pthread.inl>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/posix/pthreadmp.h>
+#endif
 
 #ifdef __cplusplus
 }

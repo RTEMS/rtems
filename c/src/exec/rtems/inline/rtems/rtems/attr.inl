@@ -80,12 +80,14 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_floating_point(
  *  enabled in the attribute_set and FALSE otherwise.
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
 RTEMS_INLINE_ROUTINE boolean _Attributes_Is_global(
   rtems_attribute attribute_set
 )
 {
    return ( attribute_set & RTEMS_GLOBAL );
 }
+#endif
 
 /*PAGE
  *

@@ -11,7 +11,11 @@ PROJECT_ROOT = @PROJECT_ROOT@
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
+# We only build the multiprocessing support if HAS_MP was defined
+MP_SUPPORT_yes_V = shmsupp
+MP_SUPPORT = $(MP_SUPPORT_$(HAS_MP)_V)
+
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
 # NOTE: we pick up HPPA clock and timer from libcpu/hppa
-SUB_DIRS=tools include start startup tty shmsupp wrapup
+SUB_DIRS=tools include start startup tty $(MP_SUPPORT) wrapup

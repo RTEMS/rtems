@@ -22,7 +22,9 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
+#endif
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/message.h>
@@ -61,10 +63,12 @@ void _Message_queue_Manager_initialization(
    *  Register the MP Process Packet routine.
    */
 
+#if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Register_packet_processor(
     MP_PACKET_MESSAGE_QUEUE,
     _Message_queue_MP_Process_packet
   );
+#endif
 
 }
 
@@ -123,14 +127,19 @@ rtems_status_code rtems_message_queue_create(
 {
   register Message_queue_Control *the_message_queue;
   CORE_message_queue_Attributes   the_message_queue_attributes;
+  void                           *handler;
+#if defined(RTEMS_MULTIPROCESSING)
   boolean                         is_global;
+#endif
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( (is_global = _Attributes_Is_global( attribute_set ) ) && 
        !_System_state_Is_multiprocessing )
     return RTEMS_MP_NOT_CONFIGURED;
+#endif
 
   if (count == 0)
       return RTEMS_INVALID_NUMBER;
@@ -138,6 +147,7 @@ rtems_status_code rtems_message_queue_create(
   if (max_message_size == 0)
       return RTEMS_INVALID_SIZE;
 
+#if defined(RTEMS_MULTIPROCESSING)
 #if 1
   /*
    * I am not 100% sure this should be an error.
@@ -147,7 +157,7 @@ rtems_status_code rtems_message_queue_create(
   
   if ( is_global && (_MPCI_table->maximum_packet_size < max_message_size) )
     return RTEMS_INVALID_SIZE;
-
+#endif
 #endif
        
   _Thread_Disable_dispatch();              /* protects object pointer */
@@ -159,6 +169,7 @@ rtems_status_code rtems_message_queue_create(
     return RTEMS_TOO_MANY;
   }
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( is_global &&
     !( _Objects_MP_Allocate_and_open( &_Message_queue_Information,
                               name, the_message_queue->Object.id, FALSE ) ) ) {
@@ -166,6 +177,7 @@ rtems_status_code rtems_message_queue_create(
     _Thread_Enable_dispatch();
     return RTEMS_TOO_MANY;
   }
+#endif
 
   the_message_queue->attribute_set = attribute_set;
 
@@ -176,16 +188,23 @@ rtems_status_code rtems_message_queue_create(
     the_message_queue_attributes.discipline =
                                       CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
 
+  handler = NULL;
+#if defined(RTEMS_MULTIPROCESSING)
+  handler = _Message_queue_MP_Send_extract_proxy;
+#endif
+
   if ( ! _CORE_message_queue_Initialize(
            &the_message_queue->message_queue,
            OBJECTS_RTEMS_MESSAGE_QUEUES,
            &the_message_queue_attributes,
            count,
            max_message_size,
-           _Message_queue_MP_Send_extract_proxy ) ) {
+           handler ) ) {
+#if defined(RTEMS_MULTIPROCESSING)
     if ( is_global )
         _Objects_MP_Close(
           &_Message_queue_Information, the_message_queue->Object.id);
+#endif
 
     _Message_queue_Free( the_message_queue );
     _Thread_Enable_dispatch();
@@ -200,6 +219,7 @@ rtems_status_code rtems_message_queue_create(
 
   *id = the_message_queue->Object.id;
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( is_global )
     _Message_queue_MP_Send_process_packet(
       MESSAGE_QUEUE_MP_ANNOUNCE_CREATE,
@@ -207,6 +227,7 @@ rtems_status_code rtems_message_queue_create(
       name,
       0
     );
+#endif
 
   _Thread_Enable_dispatch();
   return RTEMS_SUCCESSFUL;
@@ -272,23 +293,31 @@ rtems_status_code rtems_message_queue_delete(
 
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Dispatch();
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       _Objects_Close( &_Message_queue_Information,
                       &the_message_queue->Object );
 
+#if defined(RTEMS_MULTIPROCESSING)
       _CORE_message_queue_Close(
         &the_message_queue->message_queue,
         _Message_queue_MP_Send_object_was_deleted,
         CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED
       );
+#endif
 
       _Message_queue_Free( the_message_queue );
 
+#if defined(RTEMS_MULTIPROCESSING)
       if ( _Attributes_Is_global( the_message_queue->attribute_set ) ) {
         _Objects_MP_Close(
           &_Message_queue_Information,
@@ -302,6 +331,7 @@ rtems_status_code rtems_message_queue_delete(
           0
         );
       }
+#endif
 
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
@@ -394,9 +424,8 @@ rtems_status_code rtems_message_queue_broadcast(
 
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Executing->Wait.return_argument = count;
 
       return
@@ -408,6 +437,10 @@ rtems_status_code rtems_message_queue_broadcast(
           0,                               /* option_set not used */
           MPCI_DEFAULT_TIMEOUT
         );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
       core_status = _CORE_message_queue_Broadcast(
@@ -415,7 +448,11 @@ rtems_status_code rtems_message_queue_broadcast(
                       buffer,
                       size,
                       id,
+#if defined(RTEMS_MULTIPROCESSING)
                       _Message_queue_Core_message_queue_mp_support,
+#else
+                      NULL,
+#endif
                       count
                     );
                       
@@ -461,10 +498,8 @@ rtems_status_code rtems_message_queue_receive(
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
 
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       return _Message_queue_MP_Send_request_packet(
           MESSAGE_QUEUE_MP_RECEIVE_REQUEST,
           id,
@@ -473,6 +508,10 @@ rtems_status_code rtems_message_queue_receive(
           option_set,
           timeout
         );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
       if ( _Options_Is_no_wait( option_set ) )
@@ -525,9 +564,8 @@ rtems_status_code rtems_message_queue_flush(
 
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Executing->Wait.return_argument = count;
 
       return
@@ -539,6 +577,10 @@ rtems_status_code rtems_message_queue_flush(
           0,                               /* option_set not used */
           MPCI_DEFAULT_TIMEOUT
         );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
       *count = _CORE_message_queue_Flush( &the_message_queue->message_queue );
@@ -575,13 +617,11 @@ rtems_status_code rtems_message_queue_get_number_pending(
 
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Executing->Wait.return_argument = count;
 
-      return
-        _Message_queue_MP_Send_request_packet(
+      return _Message_queue_MP_Send_request_packet(
           MESSAGE_QUEUE_MP_GET_NUMBER_PENDING_REQUEST,
           id,
           0,                               /* buffer not used */
@@ -589,6 +629,10 @@ rtems_status_code rtems_message_queue_get_number_pending(
           0,                               /* option_set not used */
           MPCI_DEFAULT_TIMEOUT
         );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
       *count = the_message_queue->message_queue.number_of_pending_messages;
@@ -635,14 +679,11 @@ rtems_status_code _Message_queue_Submit(
   the_message_queue = _Message_queue_Get( id, &location );
   switch ( location )
   {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
-
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       switch ( submit_type ) {
         case MESSAGE_QUEUE_SEND_REQUEST:
-          return
-            _Message_queue_MP_Send_request_packet(
+          return _Message_queue_MP_Send_request_packet(
               MESSAGE_QUEUE_MP_SEND_REQUEST,
               id,
               buffer,
@@ -652,8 +693,7 @@ rtems_status_code _Message_queue_Submit(
             );
 
         case MESSAGE_QUEUE_URGENT_REQUEST:
-          return
-            _Message_queue_MP_Send_request_packet(
+          return _Message_queue_MP_Send_request_packet(
               MESSAGE_QUEUE_MP_URGENT_REQUEST,
               id,
               buffer,
@@ -662,6 +702,11 @@ rtems_status_code _Message_queue_Submit(
               MPCI_DEFAULT_TIMEOUT
             );
       }
+      break;
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
       switch ( submit_type ) {
@@ -671,7 +716,11 @@ rtems_status_code _Message_queue_Submit(
                           buffer,
                           size,
                           id,
+#if defined(RTEMS_MULTIPROCESSING)
                           _Message_queue_Core_message_queue_mp_support
+#else
+                          NULL
+#endif
                         );
           break;
         case MESSAGE_QUEUE_URGENT_REQUEST:
@@ -680,7 +729,11 @@ rtems_status_code _Message_queue_Submit(
                           buffer,
                           size,
                           id,
+#if defined(RTEMS_MULTIPROCESSING)
                           _Message_queue_Core_message_queue_mp_support
+#else
+                          NULL
+#endif
                         );
           break;
         default:
@@ -749,6 +802,7 @@ rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
  *  Output parameters: NONE
  */
  
+#if defined(RTEMS_MULTIPROCESSING)
 void  _Message_queue_Core_message_queue_mp_support (
   Thread_Control *the_thread,
   Objects_Id      id
@@ -762,3 +816,4 @@ void  _Message_queue_Core_message_queue_mp_support (
     the_thread
   );
 }
+#endif

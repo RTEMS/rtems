@@ -82,19 +82,27 @@
 #define PER_FPTASK    (long) (CONTEXT_FP_SIZE)
 #define PER_GOBTBL    (long) (sizeof (Chain_Control)*4)
 #define PER_NODE      (long) PER_GOBTBL
+#if defined(RTEMS_MULTIPROCESSING)
 #define PER_GOBJECT   (long) (sizeof (Objects_MP_Control))
+#else
+#define PER_GOBJECT   (long) 0
+#endif
 #define PER_PROXY     (long) (sizeof (Thread_Proxy_control))
 
-#if (CPU_ALL_TASKS_ARE_FP == TRUE)
-#define MPCI_RECEIVE_SERVER_FP (long) (sizeof( Context_Control_fp ))
-#else
+#if !defined(RTEMS_MULTIPROCESSING) || (CPU_ALL_TASKS_ARE_FP != TRUE)
 #define MPCI_RECEIVE_SERVER_FP (long) 0
+#else
+#define MPCI_RECEIVE_SERVER_FP (long) (sizeof( Context_Control_fp ))
 #endif
 
 #if (CPU_IDLE_TASK_IS_FP == TRUE)
 #define SYSTEM_IDLE_FP (long) (sizeof( Context_Control_fp ))
 #else
 #define SYSTEM_IDLE_FP (long) 0
+#endif
+
+#if defined(RTEMS_MULTIPROCESSING)
+#define MPCI_RECEIVE_SERVER_STACK_SIZE 0
 #endif
 
 #define SYSTEM_TASKS  \
@@ -215,7 +223,9 @@ uninitialized =
 
 /*event.h*/     (sizeof _Event_Sync_state)                +
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*eventmp.h*/   0                                         +
+#endif
 
 /*eventset.h*/  0                                         +
 
@@ -244,32 +254,46 @@ uninitialized =
 
 /*modes.h*/     0                                         +
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*mp.h*/        0                                         +
+#endif
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*mpci.h*/      (sizeof _MPCI_Remote_blocked_threads)     +
                 (sizeof _MPCI_Semaphore)                  +
                 (sizeof _MPCI_table)                      +
                 (sizeof _MPCI_Receive_server_tcb)         +
                 (sizeof _MPCI_Packet_processors)          +
+#endif
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*mppkt.h*/     0                                         +
+#endif
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*mptables.h*/  0                                         +
+#endif
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*msgmp.h*/     0                                         +
+#endif
 
 /*object.h*/    (sizeof _Objects_Local_node)              +
                 (sizeof _Objects_Maximum_nodes)           +
                 (sizeof _Objects_Information_table)       +
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*objectmp.h*/  (sizeof _Objects_MP_Maximum_global_objects) +
                 (sizeof _Objects_MP_Inactive_global_objects) +
+#endif
 
 /*options.h*/   0                                         +
 
 /*part.h*/      (sizeof _Partition_Information)           +
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*partmp.h*/    0                                         +
+#endif
 
 /*priority.h*/  (sizeof _Priority_Major_bit_map)          +
                 (sizeof _Priority_Bit_map)                +
@@ -278,13 +302,17 @@ uninitialized =
 
 /*region.h*/    (sizeof _Region_Information)              +
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*regionmp.h*/  0                                         +
+#endif
 
 /*rtems.h*/     /* Not applicable */
 
 /*sem.h*/       (sizeof _Semaphore_Information)           +
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*semmp.h*/     0                                         +
+#endif
 
 /*signal.h*/    0                                         +
 
@@ -301,7 +329,9 @@ uninitialized =
 
 /*system.h*/    (sizeof _CPU_Table)                       +
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*taskmp.h*/    0                                         +
+#endif
 
 /*tasks.h*/     (sizeof _RTEMS_tasks_Information)         +
                 (sizeof _RTEMS_tasks_User_initialization_tasks) +
@@ -319,9 +349,11 @@ uninitialized =
                 (sizeof _Thread_Internal_information)     +
                 (sizeof _Thread_Idle)                     +
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*threadmp.h*/  (sizeof _Thread_MP_Receive)               +
                 (sizeof _Thread_MP_Active_proxies)        +
                 (sizeof _Thread_MP_Inactive_proxies)      +
+#endif
 
 /*threadq.h*/   (sizeof _Thread_queue_Extract_table)      +
 

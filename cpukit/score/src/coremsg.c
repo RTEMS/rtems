@@ -26,7 +26,9 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
+#endif
 
 /*PAGE
  *
@@ -217,8 +219,10 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
 
     *(unsigned32 *)the_thread->Wait.return_argument_1 = size;
 
+#if defined(RTEMS_MULTIPROCESSING)
     if ( !_Objects_Is_local_id( the_thread->Object.id ) )
       (*api_message_queue_mp_support) ( the_thread, id );
+#endif
 
   }
   *count = number_broadcasted;
@@ -394,8 +398,10 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     );
     *(unsigned32 *)the_thread->Wait.return_argument_1 = size;
     
+#if defined(RTEMS_MULTIPROCESSING)
     if ( !_Objects_Is_local_id( the_thread->Object.id ) )
       (*api_message_queue_mp_support) ( the_thread, id );
+#endif
 
     return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
   }

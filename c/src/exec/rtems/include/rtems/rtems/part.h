@@ -158,7 +158,9 @@ rtems_status_code rtems_partition_return_buffer(
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/part.inl>
 #endif
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/partmp.h>
+#endif
 
 #ifdef __cplusplus
 }

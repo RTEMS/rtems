@@ -54,10 +54,12 @@ void _Partition_Manager_initialization(
    *  Register the MP Process Packet routine.
    */
 
+#if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Register_packet_processor(
     MP_PACKET_PARTITION,
     _Partition_MP_Process_packet
   );
+#endif
 
 }
 
@@ -103,9 +105,11 @@ rtems_status_code rtems_partition_create(
   if ( !_Addresses_Is_aligned( starting_address ) )
      return RTEMS_INVALID_ADDRESS;
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( _Attributes_Is_global( attribute_set ) && 
        !_System_state_Is_multiprocessing )
     return RTEMS_MP_NOT_CONFIGURED;
+#endif
 
   _Thread_Disable_dispatch();               /* prevents deletion */
 
@@ -116,6 +120,7 @@ rtems_status_code rtems_partition_create(
     return RTEMS_TOO_MANY;
   }
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( _Attributes_Is_global( attribute_set ) &&
        !( _Objects_MP_Allocate_and_open( &_Partition_Information, name,
                             the_partition->Object.id, FALSE ) ) ) {
@@ -123,6 +128,8 @@ rtems_status_code rtems_partition_create(
     _Thread_Enable_dispatch();
     return RTEMS_TOO_MANY;
   }
+#endif
+
   the_partition->starting_address      = starting_address;
   the_partition->length                = length;
   the_partition->buffer_size           = buffer_size;
@@ -135,6 +142,7 @@ rtems_status_code rtems_partition_create(
   _Objects_Open( &_Partition_Information, &the_partition->Object, &name );
 
   *id = the_partition->Object.id;
+#if defined(RTEMS_MULTIPROCESSING)
   if ( _Attributes_Is_global( attribute_set ) )
     _Partition_MP_Send_process_packet(
       PARTITION_MP_ANNOUNCE_CREATE,
@@ -142,6 +150,7 @@ rtems_status_code rtems_partition_create(
       name,
       0                  /* Not used */
     );
+#endif
 
   _Thread_Enable_dispatch();
   return RTEMS_SUCCESSFUL;
@@ -203,15 +212,20 @@ rtems_status_code rtems_partition_delete(
 
   the_partition = _Partition_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Dispatch();
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( the_partition->number_of_used_blocks == 0 ) {
         _Objects_Close( &_Partition_Information, &the_partition->Object );
         _Partition_Free( the_partition );
+#if defined(RTEMS_MULTIPROCESSING)
         if ( _Attributes_Is_global( the_partition->attribute_set ) ) {
 
           _Objects_MP_Close(
@@ -226,6 +240,7 @@ rtems_status_code rtems_partition_delete(
             0                          /* Not used */
           );
         }
+#endif
 
         _Thread_Enable_dispatch();
         return RTEMS_SUCCESSFUL;
@@ -264,9 +279,8 @@ rtems_status_code rtems_partition_get_buffer(
 
   the_partition = _Partition_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Executing->Wait.return_argument = buffer;
       return(
         _Partition_MP_Send_request_packet(
@@ -275,6 +289,11 @@ rtems_status_code rtems_partition_get_buffer(
           0           /* Not used */
         )
       );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       the_buffer = _Partition_Allocate_buffer( the_partition );
       if ( the_buffer ) {
@@ -316,16 +335,19 @@ rtems_status_code rtems_partition_return_buffer(
 
   the_partition = _Partition_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:
-      return(
-        _Partition_MP_Send_request_packet(
+#if defined(RTEMS_MULTIPROCESSING)
+      return _Partition_MP_Send_request_packet(
           PARTITION_MP_RETURN_BUFFER_REQUEST,
           id,
           buffer
-        )
-      );
+        );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( _Partition_Is_buffer_valid( buffer, the_partition ) ) {
         _Partition_Free_buffer( the_partition, buffer );

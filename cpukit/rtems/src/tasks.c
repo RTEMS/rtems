@@ -206,10 +206,12 @@ void _RTEMS_tasks_Manager_initialization(
    *  Register the MP Process Packet routine.
    */
 
+#if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Register_packet_processor(
     MP_PACKET_TASKS,
     _RTEMS_tasks_MP_Process_packet
   );
+#endif
 
 }
 
@@ -245,9 +247,11 @@ rtems_status_code rtems_task_create(
 )
 {
   register Thread_Control *the_thread;
-  Objects_MP_Control      *the_global_object = NULL;
   boolean                  is_fp;
+#if defined(RTEMS_MULTIPROCESSING)
+  Objects_MP_Control      *the_global_object = NULL;
   boolean                  is_global;
+#endif
   boolean                  status;
   rtems_attribute          the_attribute_set;
   Priority_Control         core_priority;
@@ -297,6 +301,7 @@ rtems_status_code rtems_task_create(
 
   core_priority = _RTEMS_tasks_Priority_to_Core( initial_priority );
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( _Attributes_Is_global( the_attribute_set ) ) {
 
     is_global = TRUE;
@@ -306,6 +311,7 @@ rtems_status_code rtems_task_create(
 
   } else
     is_global = FALSE;
+#endif
 
   /*
    *  Make sure system is MP if this task is global
@@ -334,6 +340,7 @@ rtems_status_code rtems_task_create(
     return RTEMS_TOO_MANY;
   }
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( is_global ) {
     the_global_object = _Objects_MP_Allocate_global_object();
 
@@ -343,6 +350,7 @@ rtems_status_code rtems_task_create(
       return RTEMS_TOO_MANY;
     }
   }
+#endif
 
   /*
    *  Initialize the core thread for this task.
@@ -365,8 +373,10 @@ rtems_status_code rtems_task_create(
   );
 
   if ( !status ) {
+#if defined(RTEMS_MULTIPROCESSING)
     if ( is_global )
       _Objects_MP_Free_global_object( the_global_object );
+#endif
     _RTEMS_tasks_Free( the_thread );
     _Thread_Enable_dispatch();
     return RTEMS_UNSATISFIED;
@@ -379,6 +389,7 @@ rtems_status_code rtems_task_create(
 
   *id = the_thread->Object.id;
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( is_global ) {
 
     the_thread->is_global = TRUE;
@@ -397,6 +408,7 @@ rtems_status_code rtems_task_create(
     );
 
    }
+#endif
 
   _Thread_Enable_dispatch();
   return RTEMS_SUCCESSFUL;
@@ -470,11 +482,16 @@ rtems_status_code rtems_task_start(
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Dispatch();
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( _Thread_Start(
              the_thread, THREAD_START_NUMERIC, entry_point, NULL, argument ) ) {
@@ -516,11 +533,16 @@ rtems_status_code rtems_task_restart(
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Dispatch();
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( _Thread_Restart( the_thread, NULL, argument ) ) {
         _Thread_Enable_dispatch();
@@ -561,11 +583,16 @@ rtems_status_code rtems_task_delete(
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Dispatch();
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       the_information = _Objects_Get_information( the_thread->Object.id );
 
@@ -579,6 +606,7 @@ rtems_status_code rtems_task_delete(
 
       _RTEMS_tasks_Free( the_thread );
 
+#if defined(RTEMS_MULTIPROCESSING)
       if ( the_thread->is_global ) {
 
         _Objects_MP_Close( &_RTEMS_tasks_Information, the_thread->Object.id );
@@ -589,6 +617,7 @@ rtems_status_code rtems_task_delete(
           0                                /* Not used */
         );
       }
+#endif
 
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
@@ -622,9 +651,9 @@ rtems_status_code rtems_task_suspend(
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       return _RTEMS_tasks_MP_Send_request_packet(
         RTEMS_TASKS_MP_SUSPEND_REQUEST,
         id,
@@ -632,6 +661,11 @@ rtems_status_code rtems_task_suspend(
         0,          /* Not used */
         0           /* Not used */
       );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( !_States_Is_suspended( the_thread->current_state ) ) {
         _Thread_Set_state( the_thread, STATES_SUSPENDED );
@@ -669,18 +703,21 @@ rtems_status_code rtems_task_resume(
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:
-      return(
-        _RTEMS_tasks_MP_Send_request_packet(
+#if defined(RTEMS_MULTIPROCESSING)
+      return _RTEMS_tasks_MP_Send_request_packet(
           RTEMS_TASKS_MP_RESUME_REQUEST,
           id,
           0,          /* Not used */
           0,          /* Not used */
           0           /* Not used */
-        )
-      );
+        );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( _States_Is_suspended( the_thread->current_state ) ) {
         _Thread_Resume( the_thread );
@@ -728,19 +765,22 @@ rtems_status_code rtems_task_set_priority(
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Executing->Wait.return_argument = old_priority;
-      return(
-        _RTEMS_tasks_MP_Send_request_packet(
+      return _RTEMS_tasks_MP_Send_request_packet(
           RTEMS_TASKS_MP_SET_PRIORITY_REQUEST,
           id,
           new_priority,
           0,          /* Not used */
           0           /* Not used */
-        )
       );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       *old_priority = the_thread->current_priority;
       if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
@@ -897,9 +937,9 @@ rtems_status_code rtems_task_get_note(
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Executing->Wait.return_argument = note;
 
       return _RTEMS_tasks_MP_Send_request_packet(
@@ -909,6 +949,11 @@ rtems_status_code rtems_task_get_note(
         notepad,
         0           /* Not used */
       );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
       *note = api->Notepads[ notepad ];
@@ -967,9 +1012,9 @@ rtems_status_code rtems_task_set_note(
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       return _RTEMS_tasks_MP_Send_request_packet(
         RTEMS_TASKS_MP_SET_NOTE_REQUEST,
         id,
@@ -977,6 +1022,10 @@ rtems_status_code rtems_task_set_note(
         notepad,
         note
       );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
 
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_RTEMS ];

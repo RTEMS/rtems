@@ -175,7 +175,9 @@ RTEMS_INLINE_ROUTINE Priority_Control _POSIX_Message_queue_Priority_to_core(
 );
 
 #include <rtems/posix/mqueue.inl>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/posix/mqueuemp.h>
+#endif
 
 #ifdef __cplusplus
 }

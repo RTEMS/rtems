@@ -151,10 +151,12 @@ rtems_status_code rtems_timer_cancel(
 
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( !_Timer_Is_dormant_class( the_timer->the_class ) ) 
         (void) _Watchdog_Remove( &the_timer->Ticker );
@@ -188,10 +190,12 @@ rtems_status_code rtems_timer_delete(
 
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       _Objects_Close( &_Timer_Information, &the_timer->Object );
       (void) _Watchdog_Remove( &the_timer->Ticker );
@@ -234,10 +238,12 @@ rtems_status_code rtems_timer_fire_after(
 
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       (void) _Watchdog_Remove( &the_timer->Ticker );
       the_timer->the_class = TIMER_INTERVAL;
@@ -289,10 +295,12 @@ rtems_status_code rtems_timer_fire_when(
 
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       (void) _Watchdog_Remove( &the_timer->Ticker );
       the_timer->the_class = TIMER_TIME_OF_DAY;
@@ -331,10 +339,12 @@ rtems_status_code rtems_timer_reset(
 
   the_timer = _Timer_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( _Timer_Is_interval_class( the_timer->the_class ) ) {
         _Watchdog_Reset( &the_timer->Ticker );

@@ -109,7 +109,9 @@ RTEMS_INLINE_ROUTINE boolean _POSIX_Mutex_Is_null (
 );
 
 #include <rtems/posix/mutex.inl>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/posix/mutexmp.h>
+#endif
 
 #ifdef __cplusplus
 }

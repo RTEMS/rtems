@@ -156,10 +156,12 @@ rtems_status_code rtems_rate_monotonic_cancel(
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            
       return RTEMS_INTERNAL_ERROR;  /* should never return this */ 
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( !_Thread_Is_executing( the_period->owner ) ) {
         _Thread_Enable_dispatch();
@@ -197,10 +199,12 @@ rtems_status_code rtems_rate_monotonic_delete(
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       _Objects_Close( &_Rate_monotonic_Information, &the_period->Object );
       (void) _Watchdog_Remove( &the_period->Timer );
@@ -243,10 +247,12 @@ rtems_status_code rtems_rate_monotonic_get_status(
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       status->state = the_period->state;
 
@@ -298,10 +304,12 @@ rtems_status_code rtems_rate_monotonic_period(
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:            /* should never return this */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( !_Thread_Is_executing( the_period->owner ) ) {
         _Thread_Enable_dispatch();
@@ -431,9 +439,10 @@ void _Rate_monotonic_Timeout(
 
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
     case OBJECTS_REMOTE:  /* impossible */
+    case OBJECTS_ERROR:
       break;
+
     case OBJECTS_LOCAL:
       the_thread = the_period->owner;
       if ( _States_Is_waiting_for_period( the_thread->current_state ) &&

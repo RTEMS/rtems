@@ -39,7 +39,9 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
+#endif
 #include <rtems/score/sysstate.h>
 
 #include <rtems/score/interr.h>
@@ -75,10 +77,12 @@ void _Semaphore_Manager_initialization(
    *  Register the MP Process Packet routine.
    */
  
+#if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Register_packet_processor(
     MP_PACKET_SEMAPHORE,
     _Semaphore_MP_Process_packet
   );
+#endif
 
 }
 
@@ -118,6 +122,7 @@ rtems_status_code rtems_semaphore_create(
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( _Attributes_Is_global( attribute_set ) ) {
 
     if ( !_System_state_Is_multiprocessing )
@@ -126,7 +131,9 @@ rtems_status_code rtems_semaphore_create(
     if ( _Attributes_Is_inherit_priority( attribute_set ) )
       return RTEMS_NOT_DEFINED;
 
-  } else if ( _Attributes_Is_inherit_priority( attribute_set ) || 
+  } else 
+#endif
+  if ( _Attributes_Is_inherit_priority( attribute_set ) || 
               _Attributes_Is_priority_ceiling( attribute_set ) ) {
 
     if ( ! ( _Attributes_Is_binary_semaphore( attribute_set ) &&
@@ -147,6 +154,7 @@ rtems_status_code rtems_semaphore_create(
     return RTEMS_TOO_MANY;
   }
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( _Attributes_Is_global( attribute_set ) &&
        ! ( _Objects_MP_Allocate_and_open( &_Semaphore_Information, name,
                             the_semaphore->Object.id, FALSE ) ) ) {
@@ -154,6 +162,7 @@ rtems_status_code rtems_semaphore_create(
     _Thread_Enable_dispatch();
     return RTEMS_TOO_MANY;
   }
+#endif
 
   the_semaphore->attribute_set = attribute_set;
 
@@ -183,7 +192,11 @@ rtems_status_code rtems_semaphore_create(
       OBJECTS_RTEMS_SEMAPHORES,
       &the_mutex_attributes,
       lock,
+#if defined(RTEMS_MULTIPROCESSING)
       _Semaphore_MP_Send_extract_proxy
+#else
+      NULL
+#endif
     );
   }
   else {
@@ -204,7 +217,11 @@ rtems_status_code rtems_semaphore_create(
       OBJECTS_RTEMS_SEMAPHORES,
       &the_semaphore_attributes,
       count,
+#if defined(RTEMS_MULTIPROCESSING)
       _Semaphore_MP_Send_extract_proxy
+#else
+      NULL
+#endif
     );
   }
 
@@ -212,6 +229,7 @@ rtems_status_code rtems_semaphore_create(
 
   *id = the_semaphore->Object.id;
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( _Attributes_Is_global( attribute_set ) )
     _Semaphore_MP_Send_process_packet(
       SEMAPHORE_MP_ANNOUNCE_CREATE,
@@ -219,6 +237,7 @@ rtems_status_code rtems_semaphore_create(
       name,
       0                          /* Not used */
     );
+#endif
   _Thread_Enable_dispatch();
   return RTEMS_SUCCESSFUL;
 }
@@ -279,11 +298,16 @@ rtems_status_code rtems_semaphore_delete(
 
   the_semaphore = _Semaphore_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       _Thread_Dispatch();
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( _Attributes_Is_binary_semaphore( the_semaphore->attribute_set) ) { 
         if ( _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex ) ) {
@@ -293,14 +317,22 @@ rtems_status_code rtems_semaphore_delete(
         else
           _CORE_mutex_Flush(
             &the_semaphore->Core_control.mutex, 
+#if defined(RTEMS_MULTIPROCESSING)
             _Semaphore_MP_Send_object_was_deleted,
+#else
+            NULL,
+#endif
             CORE_MUTEX_WAS_DELETED
           );
       }
       else
         _CORE_semaphore_Flush(
           &the_semaphore->Core_control.semaphore, 
+#if defined(RTEMS_MULTIPROCESSING)
           _Semaphore_MP_Send_object_was_deleted,
+#else
+          NULL,
+#endif
           CORE_SEMAPHORE_WAS_DELETED
         );
 
@@ -308,6 +340,7 @@ rtems_status_code rtems_semaphore_delete(
 
       _Semaphore_Free( the_semaphore );
 
+#if defined(RTEMS_MULTIPROCESSING)
       if ( _Attributes_Is_global( the_semaphore->attribute_set ) ) {
 
         _Objects_MP_Close( &_Semaphore_Information, the_semaphore->Object.id );
@@ -319,6 +352,7 @@ rtems_status_code rtems_semaphore_delete(
           0                          /* Not used */
         );
       }
+#endif
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;
   }
@@ -354,15 +388,19 @@ rtems_status_code rtems_semaphore_obtain(
 
   the_semaphore = _Semaphore_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       return _Semaphore_MP_Send_request_packet(
           SEMAPHORE_MP_OBTAIN_REQUEST,
           id,
           option_set,
           timeout
       );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( _Options_Is_no_wait( option_set ) )
         wait = FALSE;
@@ -420,21 +458,30 @@ rtems_status_code rtems_semaphore_release(
 
   the_semaphore = _Semaphore_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       return _Semaphore_MP_Send_request_packet(
         SEMAPHORE_MP_RELEASE_REQUEST,
         id,
         0,                               /* Not used */
         MPCI_DEFAULT_TIMEOUT
       );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( _Attributes_Is_binary_semaphore( the_semaphore->attribute_set ) ) {
         mutex_status = _CORE_mutex_Surrender(
                          &the_semaphore->Core_control.mutex,
                          id,
+#if defined(RTEMS_MULTIPROCESSING)
                          _Semaphore_Core_mutex_mp_support
+#else
+                         NULL
+#endif
                        );
         _Thread_Enable_dispatch();
         return _Semaphore_Translate_core_mutex_return_code( mutex_status );
@@ -443,7 +490,11 @@ rtems_status_code rtems_semaphore_release(
         semaphore_status = _CORE_semaphore_Surrender(
                              &the_semaphore->Core_control.semaphore,
                              id,
+#if defined(RTEMS_MULTIPROCESSING)
                              _Semaphore_Core_semaphore_mp_support
+#else
+                             NULL
+#endif
                            );
         _Thread_Enable_dispatch();
         return
@@ -530,6 +581,7 @@ rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
  *  Output parameters: NONE
  */
  
+#if defined(RTEMS_MULTIPROCESSING)
 void  _Semaphore_Core_mutex_mp_support (
   Thread_Control *the_thread,
   Objects_Id      id
@@ -543,6 +595,7 @@ void  _Semaphore_Core_mutex_mp_support (
      the_thread
    );
 }
+#endif
 
 
 /*PAGE
@@ -556,6 +609,7 @@ void  _Semaphore_Core_mutex_mp_support (
  *  Output parameters: NONE
  */
  
+#if defined(RTEMS_MULTIPROCESSING)
 void  _Semaphore_Core_semaphore_mp_support (
   Thread_Control *the_thread,
   Objects_Id      id
@@ -569,3 +623,4 @@ void  _Semaphore_Core_semaphore_mp_support (
      the_thread
    );
 }
+#endif

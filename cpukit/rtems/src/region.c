@@ -53,10 +53,12 @@ void _Region_Manager_initialization(
    *  Register the MP Process Packet routine.
    */
 
+#if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Register_packet_processor(
     MP_PACKET_REGION,
     0  /* XXX _Region_MP_Process_packet */
   );
+#endif
 
 }
 
@@ -128,7 +130,11 @@ rtems_status_code rtems_region_create(
     _Attributes_Is_priority( attribute_set ) ? 
        THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_SEGMENT,
+#if defined(RTEMS_MULTIPROCESSING)
     _Region_MP_Send_extract_proxy,
+#else
+    NULL,
+#endif
     RTEMS_TIMEOUT
   );
 
@@ -198,10 +204,12 @@ rtems_status_code rtems_region_delete(
 
   the_region = _Region_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       _Region_Debug_Walk( the_region, 5 );
       if ( the_region->number_of_used_blocks == 0 ) {
@@ -250,10 +258,12 @@ rtems_status_code rtems_region_extend(
 
   the_region = _Region_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
 
       heap_status = _Heap_Extend(
@@ -322,10 +332,12 @@ rtems_status_code rtems_region_get_segment(
   executing  = _Thread_Executing;
   the_region = _Region_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       if ( size > the_region->maximum_segment_size ) {
         _Thread_Enable_dispatch();
@@ -395,10 +407,12 @@ rtems_status_code rtems_region_get_segment_size(
   executing  = _Thread_Executing;
   the_region = _Region_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:        /* this error cannot be returned */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
 
       if ( _Heap_Size_of_user_area( &the_region->Memory, segment, size ) ) {
@@ -440,10 +454,13 @@ rtems_status_code rtems_region_return_segment(
 
   the_region = _Region_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:        /* this error cannot be returned */
       return RTEMS_INTERNAL_ERROR;
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
 
       _Region_Debug_Walk( the_region, 3 );

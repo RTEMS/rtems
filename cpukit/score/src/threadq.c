@@ -97,9 +97,11 @@ void _Thread_queue_Enqueue(
 
   the_thread = _Thread_Executing;
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet )
     the_thread = _Thread_MP_Allocate_proxy( the_thread_queue->state );
   else
+#endif
     _Thread_Set_state( the_thread, the_thread_queue->state );
 
   if ( timeout ) {
@@ -255,10 +257,12 @@ void _Thread_queue_Flush(
   Thread_Control *the_thread;
 
   while ( (the_thread = _Thread_queue_Dequeue( the_thread_queue )) ) {
-    if ( _Objects_Is_local_id( the_thread->Object.id ) )
-      the_thread->Wait.return_code = status;
-    else
+#if defined(RTEMS_MULTIPROCESSING)
+    if ( !_Objects_Is_local_id( the_thread->Object.id ) )
       ( *remote_extract_callout )( the_thread );
+    else
+#endif
+      the_thread->Wait.return_code = status;
   }
 }
 
@@ -423,8 +427,10 @@ void _Thread_queue_Enqueue_fifo (
 
   _Thread_Unblock( the_thread );
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( !_Objects_Is_local_id( the_thread->Object.id ) )
     _Thread_MP_Free_proxy( the_thread );
+#endif
 
 }
 
@@ -468,8 +474,10 @@ Thread_Control *_Thread_queue_Dequeue_fifo(
       _Thread_Unblock( the_thread );
     }
 
+#if defined(RTEMS_MULTIPROCESSING)
     if ( !_Objects_Is_local_id( the_thread->Object.id ) )
       _Thread_MP_Free_proxy( the_thread );
+#endif
 
     return the_thread;
   } 
@@ -532,8 +540,10 @@ void _Thread_queue_Extract_fifo(
 
   _Thread_Unblock( the_thread );
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( !_Objects_Is_local_id( the_thread->Object.id ) )
     _Thread_MP_Free_proxy( the_thread );
+#endif
  
 }
 
@@ -753,8 +763,10 @@ synchronize:
  
   _Thread_Unblock( the_thread );
  
+#if defined(RTEMS_MULTIPROCESSING)
   if ( !_Objects_Is_local_id( the_thread->Object.id ) )
     _Thread_MP_Free_proxy( the_thread );
+#endif
 }
 
 /*PAGE
@@ -852,8 +864,10 @@ dequeue:
     _Thread_Unblock( the_thread );
   }
 
+#if defined(RTEMS_MULTIPROCESSING)
   if ( !_Objects_Is_local_id( the_thread->Object.id ) )
     _Thread_MP_Free_proxy( the_thread );
+#endif
   return( the_thread );
 }
 
@@ -929,8 +943,10 @@ void _Thread_queue_Extract_priority(
       _Thread_Unblock( the_thread );
     }
 
+#if defined(RTEMS_MULTIPROCESSING)
     if ( !_Objects_Is_local_id( the_thread->Object.id ) )
       _Thread_MP_Free_proxy( the_thread );
+#endif
   }
   else
     _ISR_Enable( level );

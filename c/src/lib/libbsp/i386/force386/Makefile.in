@@ -11,6 +11,10 @@ PROJECT_ROOT = @PROJECT_ROOT@
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
+# We only build the multiprocessing support if HAS_MP was defined
+MP_SUPPORT_yes_V = shmsupp
+MP_SUPPORT = $(MP_SUPPORT_$(HAS_MP)_V)
+
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUB_DIRS=include start startup clock console shmsupp timer wrapup
+SUB_DIRS=include start startup clock console $(MP_SUPPORT) timer wrapup

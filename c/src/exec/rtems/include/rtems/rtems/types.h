@@ -22,9 +22,13 @@ extern "C" {
 
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/tod.h>
+#include <rtems/score/watchdog.h>
 #include <rtems/rtems/modes.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
 #include <rtems/score/mppkt.h>
+#endif
 
 /*
  *  RTEMS basic type definitions
@@ -75,6 +79,7 @@ typedef Modes_Control rtems_mode;
  *  MPCI related entries
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
 typedef MP_packet_Classes          rtems_mp_packet_classes;
 typedef MP_packet_Prefix           rtems_packet_prefix;
 
@@ -87,6 +92,7 @@ typedef MPCI_receive_entry         rtems_mpci_receive_packet_entry;
 typedef MPCI_Entry rtems_mpci_entry;
 
 typedef MPCI_Control rtems_mpci_table;
+#endif
 
 #ifdef __cplusplus
 }

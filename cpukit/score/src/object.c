@@ -16,7 +16,9 @@
 #include <rtems/system.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/object.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/objectmp.h>
+#endif
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/sysstate.h>
@@ -51,11 +53,13 @@ void _Objects_Handler_initialization(
   _Objects_Local_node    = node;
   _Objects_Maximum_nodes = maximum_nodes;
 
+#if defined(RTEMS_MULTIPROCESSING)
   _Objects_MP_Handler_initialization(
     node,
     maximum_nodes,
     maximum_global_objects
   );
+#endif
 }
 
 /*PAGE
@@ -378,7 +382,11 @@ Objects_Name_to_id_errors _Objects_Name_to_id(
   if ( _Objects_Is_local_node( node ) || node == OBJECTS_SEARCH_LOCAL_NODE )
     return OBJECTS_INVALID_NAME;
 
+#if defined(RTEMS_MULTIPROCESSING)
   return ( _Objects_MP_Global_name_search( information, name, node, id ) );
+#else
+  return OBJECTS_INVALID_NAME;
+#endif
 }
 
 /*PAGE
@@ -423,8 +431,12 @@ Objects_Control *_Objects_Get(
     return( NULL );
   }
   *location = OBJECTS_ERROR;
+#if defined(RTEMS_MULTIPROCESSING)
   _Objects_MP_Is_remote( information, id, location, &the_object );
   return the_object;
+#else
+  return NULL;
+#endif
 }
 
 

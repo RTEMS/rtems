@@ -57,7 +57,9 @@ extern "C" {
 #include <rtems/io.h>
 #include <rtems/fatal.h>
 #include <rtems/rtems/ratemon.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/mp.h>
+#endif
 
 #include <rtems/rtems/support.h>
 #include <rtems/score/sysstate.h>

@@ -39,10 +39,12 @@ void _Signal_Manager_initialization( void )
    *  Register the MP Process Packet routine.
    */
  
+#if defined(RTEMS_MULTIPROCESSING)
   _MPCI_Register_packet_processor(
     MP_PACKET_SIGNAL,
     _Signal_MP_Process_packet
   );
+#endif
 }
  
 /*PAGE
@@ -115,14 +117,19 @@ rtems_status_code rtems_signal_send(
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
-    case OBJECTS_ERROR:
-      return RTEMS_INVALID_ID;
+
     case OBJECTS_REMOTE:
+#if defined(RTEMS_MULTIPROCESSING)
       return _Signal_MP_Send_request_packet(
         SIGNAL_MP_SEND_REQUEST,
         id,
         signal_set
       );
+#endif
+
+    case OBJECTS_ERROR:
+      return RTEMS_INVALID_ID;
+
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
       asr = &api->Signal;

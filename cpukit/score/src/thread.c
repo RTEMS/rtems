@@ -81,7 +81,9 @@ void _Thread_Handler_initialization(
   for ( index=0; index <= PRIORITY_MAXIMUM ; index++ )
     _Chain_Initialize_empty( &_Thread_Ready_chain[ index ] );
 
+#if defined(RTEMS_MULTIPROCESSING)
   _Thread_MP_Handler_initialization( maximum_proxies );
+#endif
 
   /*
    *  Initialize this class of objects.

@@ -48,8 +48,10 @@
  *
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
 #define _Attributes_Is_global( _attribute_set ) \
   ( (_attribute_set) & RTEMS_GLOBAL )
+#endif
 
 /*PAGE
  *

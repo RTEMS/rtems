@@ -161,7 +161,9 @@ void _Event_Timeout (
 
 RTEMS_EXTERN volatile Event_Sync_states _Event_Sync_state;
 
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/eventmp.h>
+#endif
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/event.inl>
 #endif

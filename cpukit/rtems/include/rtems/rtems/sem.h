@@ -214,10 +214,12 @@ rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
  *  is called by the core.
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
 void  _Semaphore_Core_mutex_mp_support (
   Thread_Control *the_thread,
   rtems_id        id
 );
+#endif
 
 /*PAGE
  *
@@ -238,7 +240,9 @@ void  _Semaphore_Core_semaphore_mp_support (
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/sem.inl>
 #endif
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/semmp.h>
+#endif
 
 #ifdef __cplusplus
 }

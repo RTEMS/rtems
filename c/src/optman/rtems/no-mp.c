@@ -14,6 +14,9 @@
  */
 
 #include <rtems/system.h>
+#if !defined(RTEMS_MULTIPROCESSING)
+char rtems_no_multiprocessing;
+#else
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/mp.h>
 #include <rtems/score/cpu.h>
@@ -197,5 +200,5 @@ MPCI_Internal_packet *_MPCI_Internal_packets_Get_packet ( void )
   );
   return NULL;
 }
-
+#endif
 /* end of file */

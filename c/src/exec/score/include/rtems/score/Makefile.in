@@ -8,10 +8,14 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+# We only build multiprocessing related files if HAS_MP was defined
+MP_PIECES_yes_V = mpci mppkt objectmp threadmp 
+MP_PIECES = $(MP_PIECES_$(HAS_MP)_V)
+
 # H_FILES that get installed in the rtems/score subdirectoy
 H_PIECES= address apiext bitfield chain context copyrt coremsg coremutex \
-    coresem heap interr isr mpci mppkt object objectmp \
-    priority stack states sysstate thread threadmp threadq \
+    coresem heap interr isr object \
+    priority stack states sysstate thread threadq \
     tod tqdata userext watchdog wkspace
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 

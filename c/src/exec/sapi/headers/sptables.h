@@ -35,7 +35,9 @@ extern "C" {
 #include <rtems/rtems/dpmem.h>
 #include <rtems/rtems/event.h>
 #include <rtems/rtems/message.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/mp.h>
+#endif
 #include <rtems/rtems/part.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/rtems/region.h>
@@ -152,7 +154,11 @@ const void * _Entry_points[ RTEMS_NUMBER_OF_ENTRY_POINTS ] = {
   (void *) rtems_rate_monotonic_delete,                     /* 76 */
   (void *) rtems_rate_monotonic_cancel,                     /* 77 */
   (void *) rtems_rate_monotonic_period,                     /* 78 */
+#if defined(RTEMS_MULTIPROCESSING)
   (void *) rtems_multiprocessing_announce,                  /* 79 */
+#else
+  (void *) NULL,                                            /* 79 */
+#endif
   (void *) rtems_debug_enable,                              /* 80 */
   (void *) rtems_debug_disable                              /* 81 */
 };

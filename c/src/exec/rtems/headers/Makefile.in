@@ -8,10 +8,14 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-H_PIECES=asr attr clock config dpmem event eventmp eventset \
-   intr message modes mp msgmp options part partmp \
-   ratemon region regionmp rtemsapi sem semmp signal signalmp status \
-   support taskmp tasks timer types 
+# We only build multiprocessing related files if HAS_MP was defined
+MP_PIECES_yes_V = eventmp mp msgmp partmp regionmp semmp signalmp taskmp
+MP_PIECES = $(MP_PIECES_$(HAS_MP)_V)
+
+H_PIECES=asr attr clock config dpmem event eventset \
+   intr message modes options part \
+   ratemon region rtemsapi sem signal status \
+   support tasks timer types $(MP_PIECES)
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 
 # H_FILES that get installed externally

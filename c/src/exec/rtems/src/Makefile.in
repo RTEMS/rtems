@@ -8,9 +8,13 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-C_PIECES=attr clock dpmem event eventmp intr intrbody mp msg msgmp \
-   part partmp ratemon region regionmp sem semmp signal signalmp \
-   taskmp tasks timer
+# We only build multiprocessing related files if HAS_MP was defined
+MP_PIECES_yes_V = eventmp mp msgmp partmp regionmp semmp signalmp taskmp
+MP_PIECES = $(MP_PIECES_$(HAS_MP)_V)
+
+C_PIECES=attr clock dpmem event intr intrbody msg \
+   part ratemon region sem signal \
+   tasks timer $(MP_PIECES)
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 

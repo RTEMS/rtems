@@ -8,9 +8,13 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-H_PIECES= cond condmp config key mutex mutexmp posixapi \
-    priority psignal pthread pthreadmp seterr threadsup time
-#H_PIECES= cancel cond condmp intr key mqueue mqueuemp mutex \
+# We only build multiprocessing related files if HAS_MP was defined
+MP_PIECES_yes_V = condmp mutexmp pthreadmp 
+MP_PIECES = $(MP_PIECES_$(HAS_MP)_V)
+
+H_PIECES= cond config key mutex posixapi \
+    priority psignal pthread seterr threadsup time
+#H_PIECES= cancel cond intr key mqueue mqueuemp mutex \
 #    mutexmp pthread pthreadmp priority semaphore semaphoremp threadsup \
 #    time
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)

@@ -8,10 +8,14 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
+# We only build multiprocessing related files if HAS_MP was defined
+MP_PIECES_yes_V = mpci objectmp threadmp
+MP_PIECES = $(MP_PIECES_$(HAS_MP)_V)
+
 # C and C++ source names, if any, go here -- minus the .c or .cc
 C_PIECES=apiext chain coremsg coremutex coresem heap interr \
-    isr mpci object objectmp thread threadmp threadq tod userext \
-    watchdog wkspace
+    isr object thread threadq tod userext \
+    watchdog wkspace $(MP_PIECES)
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
