@@ -30,10 +30,10 @@ the original 10 Megabit per second (Mbps) system, the 100 Mbps
 Fast Ethernet system (802.3u), and the Gigabit Ethernet system (802.3z)."
 The URL is:
 @ifset use-html
-(@uref{http://wwwhost.ots.utexas.edu/ethernet/index.html,http://wwwhost.ots.utexas.edu/ethernet/index.html})
+(@uref{http://www.ethermanage.com/ethernet/ethernet.html,http://www.ethermanage.com/ethernet/ethernet.html})
 @end ifset
 @ifclear use-html
-(http://wwwhost.ots.utexas.edu/ethernet/index.html)
+(http://www.ethermanage.com/ethernet/ethernet.html)
 @end ifclear
 
 @item @cite{TCP/IP Illustrated, Volume 1 : The Protocols} by
@@ -42,11 +42,17 @@ by W. Richard Stevens (ISBN: 0201633469)
 This book provides detailed introduction to TCP/IP and includes diagnostic
 programs which are publicly available.
 
-@item @cite{TCP/IP Illustrated : The Implementation} by W. Richard
+@item @cite{TCP/IP Illustrated, Volume 2 : The Implementation} by W. Richard
 Stevens and Gary Wright (ISBN: 020163354X)
 
 This book focuses on implementation issues regarding TCP/IP.  The
 treat for RTEMS users is that the implementation covered is the BSD
-stack.
+stack with most of the source code described in detail.
+
+@item @cite{UNIX Network Programming, Volume 1 : 2nd Edition} by W. Richard
+Stevens (ISBN: 0-13-490012-X)
+
+This book describes how to write basic TCP/IP applications, again with primary
+focus on the BSD stack.
 
 @end itemize

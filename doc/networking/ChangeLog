@@ -1,3 +1,8 @@
+2003-10-02	Gene Smith <gene.smith@siemens.com>
+
+	* networkapp.t, preface.texi: Improve documentation for SO_RCVWAKEUP
+	and SO_SNDWAKEUP and update the references in the preface.
+
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merger from rtems-4-6-branch.

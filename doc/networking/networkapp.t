@@ -393,7 +393,8 @@ structure has the following fields:
 @end group
 @end example
 
-These options are used to set a function to be called when there is
+These options are used to set a callback function to be called when, for
+example, there is
 data available from the socket (@code{SO_RCVWAKEUP}) and when there is space
 available to accept data written to the socket (@code{SO_SNDWAKEUP}).
 
@@ -412,14 +413,51 @@ the function pointed to by the @code{sw_pfn} field
 will be called.  The arguments passed to the function will be as with
 @code{SO_SNDWAKEUP}.
 
-When the function is called, the network semaphore will be locked.
+When the function is called, the network semaphore will be locked and 
+the callback function runs in the context of the networking task.
 The function must be careful not to call any networking functions.  It
 is OK to call an RTEMS function; for example, it is OK to send an
 RTEMS event.
 
-The purpose of these functions is to permit a more efficient
+The purpose of these callback functions is to permit a more efficient
 alternative to the select call when dealing with a large number of
 sockets.
+
+The callbacks are called by the same criteria that the select
+function uses for indicating "ready" sockets. In Stevens @cite{Unix
+Network Programming} on page 153-154 in the section "Under what Conditions
+Is a Descriptor Ready?" you will find the definitive list of conditions
+for readable and writable that also determine when the functions are
+called.
+
+When the number of received bytes equals or exceeds the socket receive
+buffer "low water mark" (default 1 byte) you get a readable callback. If
+there are 100 bytes in the receive buffer and you only read 1, you will
+not immediately get another callback. However, you will get another
+callback after you read the remaining 99 bytes and at least 1 more byte
+arrives. Using a non-blocking socket you should probably read until it
+produces error  EWOULDBLOCK and then allow the readable callback to tell
+you when more data has arrived.  (Condition 1.a.)
+
+For sending, when the socket is connected and the free space becomes at
+or above the "low water mark" for the send buffer (default 4096 bytes)
+you will receive a writable callback. You don't get continuous callbacks
+if you don't write anything. Using a non-blocking write socket, you can
+then call write until it returns a value less than the amount of data
+requested to be sent or it produces error EWOULDBLOCK (indicating buffer
+full and no longer writable). When this happens you can
+try the write again, but it is often better to go do other things and
+let the writable callback tell you when space is available to send
+again. You only get a writable callback when the free space transitions
+to above the "low water mark" and not every time you
+write to a non-full send buffer. (Condition 2.a.) 
+
+The remaining conditions enumerated by Stevens handle the fact that
+sockets become readable and/or writable when connects, disconnects and
+errors occur, not just when data is received or sent. For example, when
+a server "listening" socket becomes readable it indicates that a client
+has connected and accept can be called without blocking, not that
+network data was received (Condition 1.c).
 
 @subsection Adding an IP Alias
 
