@@ -1,3 +1,9 @@
+2002-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c: Currently only the mpc8260 BSP supports interrupt nesting.
+	NOTE: These needs to be generalized as the patch is applied to other
+	BSPs.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

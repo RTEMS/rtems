@@ -130,11 +130,19 @@ void _CPU_Install_interrupt_stack( void )
 
 boolean _ISR_Is_in_progress( void )
 {
+  /* 
+   *  Until the patch on PR288 is in all new exception BSPs, this is
+   *  the safest thing to do.
+   */
+#ifdef mpc8260
+  return (_ISR_Nest_level != 0);
+#else
   register unsigned int isr_nesting_level;
   /*
    * Move from special purpose register 0 (mfspr SPRG0, r3)
    */
   asm volatile ("mfspr	%0, 272" : "=r" (isr_nesting_level));
   return isr_nesting_level;
+#endif
 }
 
