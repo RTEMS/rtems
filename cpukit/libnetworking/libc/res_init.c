@@ -90,6 +90,11 @@ static char rcsid[] = "$Id$";
 
 #include "res_config.h"
 
+/*
+ * RTEMS -- set up name servers from global variable
+ */
+include <rtems/rtems_bsdnet_internal.h>
+
 static void res_setoptions __P((char *, char *));
 
 #ifdef RESOLVSORT
@@ -200,7 +205,6 @@ res_init()
 	 * RTEMS -- Set up name servers
 	 */
 	{
-#include <rtems/rtems_bsdnet_internal.h>
 	int n = 0;
 	while ((n < rtems_bsdnet_nameserver_count) && (nserv < MAXNS)) {
 		_res.nsaddr_list[nserv].sin_addr = rtems_bsdnet_nameserver[n];
