@@ -43,21 +43,25 @@ This is the base for binutils regardless of target CPU.
 %doc %{_prefix}/info/binutils.info-?.gz
 %doc %{_prefix}/info/ld.info.gz
 %doc %{_prefix}/info/ld.info-?.gz
-%doc %{_prefix}/info/gasp.info.gz
+# deleted as of 2.13
+# %doc %{_prefix}/info/gasp.info.gz
 %doc %{_prefix}/info/standards.info.gz
 
 %dir %{_prefix}/man
 %dir %{_prefix}/man/man1
 
-%dir %{_prefix}/include
-%{_prefix}/include/bfd.h
-%{_prefix}/include/ansidecl.h
-%{_prefix}/include/bfdlink.h
+# deleted as of 2.13
+# %dir %{_prefix}/include
+# %{_prefix}/include/bfd.h
+# %{_prefix}/include/ansidecl.h
+# %{_prefix}/include/bfdlink.h
 
 %dir %{_prefix}/lib
-%{_prefix}/lib/libbfd*
+# deleted as of 2.13
 %{_prefix}/lib/libiberty*
-%{_prefix}/lib/libopcodes*
+# deleted as of 2.13
+# %{_prefix}/lib/libbfd*
+# %{_prefix}/lib/libopcodes*
 
 %dir %{_prefix}/share
 %dir %{_prefix}/share/locale
