@@ -8,12 +8,7 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-# someday
-# We only build the ka9q device driver if HAS_KA9Q was defined
-#KA9Q_DRIVER_yes_V = network
-#KA9Q_DRIVER = $(KA9Q_DRIVER_$(HAS_KA9Q)_V)
-
-BSP_PIECES=startup clock console timer $(KA9Q_DRIVER)
+BSP_PIECES=startup clock console timer
 CPU_PIECES=
 GENERIC_PIECES=
 

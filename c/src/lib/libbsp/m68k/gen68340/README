@@ -22,7 +22,8 @@
 # 
 # The type of the board is automatically recognised in the initialization sequence.
 #
-# WARNING: there's still no KA9Q driver! I hope it will come in the next RTEMS version!
+# WARNING: there's still no network driver!
+#   I hope it will come in the next RTEMS version!
 #
 
 BSP NAME:	    gen68340
