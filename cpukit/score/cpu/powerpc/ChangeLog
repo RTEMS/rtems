@@ -1,3 +1,8 @@
+2003-09-26	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h: Obsoleting HP
+	PA-RISC port and removing all references.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h,
