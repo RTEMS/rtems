@@ -25,7 +25,7 @@ RM=@RM@ -f
 CP=@CP@
 MV=@MV@
 LN=@LN@
-MKDIR=@MKDIR@
+MKDIR=mkdir
 CHMOD=@CHMOD@
 SED=@SED@
 M4=@M4@
@@ -34,7 +34,7 @@ M4=@M4@
 PACKHEX=$(PROJECT_TOOLS)/packhex
 
 INSTALL_CHANGE=$(PROJECT_TOOLS)/install-if-change
-INSTALL_VARIANT=$(PROJECT_TOOLS)/install-if-change -V "$(LIB_VARIANT)"
+INSTALL_VARIANT=$(INSTALL_CHANGE) -V "$(LIB_VARIANT)"
 
 # FIXME: HACK for a bug in cygwin-hosted egcs which returns a mixture
 #        of '\\' and '/' as path separators.

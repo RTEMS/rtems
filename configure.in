@@ -39,18 +39,6 @@ AC_PATH_PROG(SORT,sort)
 AC_PROG_INSTALL
 RTEMS_PATH_PERL
 
-dnl check mkdir behaviour, try to get mkdir -p -m 0755
-dnl NOTE: This is considered obsolete
-dnl MKDIR is not used anywhere in the source tree anymore.
-dnl In Makefile.ins/Makefile.ams, use 
-dnl "mkinstalldirs" for recursive mkdir and 
-dnl "mkdir" for non-recursive mkdir, instead
-RTEMS_PATH_MKDIR
-RTEMS_PROG_MKDIR_M
-RTEMS_PROG_MKDIR_P
-test "$rtems_cv_prog_MKDIR_P" = "yes" && MKDIR="$MKDIR -p"
-#test "$rtems_cv_prog_MKDIR_M" = "yes" && MKDIR="$MKDIR -m 0755"
-
 AC_PATH_PROG(TOUCH,touch)
 AC_PATH_PROG(CMP,cmp)
 
