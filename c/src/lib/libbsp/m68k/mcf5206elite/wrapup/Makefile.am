@@ -4,16 +4,14 @@
 
 BSP_PIECES = startup console i2c tod nvram
 
-CPU_PIECES = clock console timer mbus
-
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    $(wildcard \
-    ../../../../libcpu/$(RTEMS_CPU)/shared/misc/$(ARCH)/*.$(OBJEXT)) \
-    $(foreach piece, $(CPU_PIECES), \
-    ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(piece)/$(ARCH)/$(piece).rel) \
-    $(wildcard \
-    ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/fpsp/$(ARCH)/fpsp.rel)
+    ../../../../libcpu/$(RTEMS_CPU)/shared/cache$(LIB_VARIANT).rel \
+    ../../../../libcpu/$(RTEMS_CPU)/shared/misc$(LIB_VARIANT).rel \
+    ../../../../libcpu/m68k/mcf5206/clock$(LIB_VARIANT).rel \
+    ../../../../libcpu/m68k/mcf5206/console$(LIB_VARIANT).rel \
+    ../../../../libcpu/m68k/mcf5206/timer$(LIB_VARIANT).rel \
+    ../../../../libcpu/m68k/mcf5206/mbus$(LIB_VARIANT).rel
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
