@@ -1,3 +1,15 @@
+2003-02-14	Joel Sherrill <joel@OARcorp.com>
+
+	AMD a29k declared obsolete.
+	* cpu/Makefile.am: Removed reference.
+	* cpu/a29k/.cvsignore, cpu/a29k/ChangeLog, cpu/a29k/Makefile.am,
+	cpu/a29k/amd.ah, cpu/a29k/asm.h, cpu/a29k/configure.ac,
+	cpu/a29k/cpu.c, cpu/a29k/cpu_asm.S, cpu/a29k/pswmacro.ah,
+	cpu/a29k/register.ah, cpu/a29k/sig.S, cpu/a29k/rtems/.cvsignore,
+	cpu/a29k/rtems/score/.cvsignore, cpu/a29k/rtems/score/a29k.h,
+	cpu/a29k/rtems/score/cpu.h, cpu/a29k/rtems/score/cpu_asm.h,
+	cpu/a29k/rtems/score/types.h: Removed.
+
 2003-01-10	Joel Sherrill <joel@OARcorp.com>
 
 	* src/objectmp.c: Corrected use of name parameter to reflect that it
