@@ -64,9 +64,6 @@
 @end html
 @end ifset
 
-@ifinfo
-@node RTEMS_BSP Timing Data Directive Times, RTEMS_BSP Timing Data Task Manager, RTEMS_BSP Timing Data Context Switch, RTEMS_BSP Timing Data
-@end ifinfo
 @section Directive Times
 
 This sections is divided into a number of
@@ -74,9 +71,6 @@ subsections, each of which contains a table listing the
 execution times of that manager's directives.
 
 @page
-@ifinfo
-@node RTEMS_BSP Timing Data Task Manager, RTEMS_BSP Timing Data Interrupt Manager, RTEMS_BSP Timing Data Directive Times, RTEMS_BSP Timing Data
-@end ifinfo
 @section Task Manager
 
 @ifset use-tex
@@ -305,9 +299,6 @@ execution times of that manager's directives.
 @end ifset
 
 @page
-@ifinfo
-@node RTEMS_BSP Timing Data Interrupt Manager, RTEMS_BSP Timing Data Clock Manager, RTEMS_BSP Timing Data Task Manager, RTEMS_BSP Timing Data
-@end ifinfo
 @section Interrupt Manager
 
 It should be noted that the interrupt entry times
@@ -381,9 +372,6 @@ include vectoring the interrupt handler.
 @end ifset
 
 
-@ifinfo
-@node RTEMS_BSP Timing Data Clock Manager, RTEMS_BSP Timing Data Timer Manager, RTEMS_BSP Timing Data Interrupt Manager, RTEMS_BSP Timing Data
-@end ifinfo
 @section Clock Manager
 
 @ifset use-tex
@@ -436,9 +424,6 @@ include vectoring the interrupt handler.
 @end html
 @end ifset
 
-@ifinfo
-@node RTEMS_BSP Timing Data Timer Manager, RTEMS_BSP Timing Data Semaphore Manager, RTEMS_BSP Timing Data Clock Manager, RTEMS_BSP Timing Data
-@end ifinfo
 @section Timer Manager
 
 @ifset use-tex
@@ -554,9 +539,6 @@ include vectoring the interrupt handler.
 @end ifset
 
 @page
-@ifinfo
-@node RTEMS_BSP Timing Data Semaphore Manager, RTEMS_BSP Timing Data Message Manager, RTEMS_BSP Timing Data Timer Manager, RTEMS_BSP Timing Data
-@end ifinfo
 @section Semaphore Manager
 
 @ifset use-tex
@@ -649,9 +631,6 @@ include vectoring the interrupt handler.
 @end html
 @end ifset
 
-@ifinfo
-@node RTEMS_BSP Timing Data Message Manager, RTEMS_BSP Timing Data Event Manager, RTEMS_BSP Timing Data Semaphore Manager, RTEMS_BSP Timing Data
-@end ifinfo
 @section Message Manager
 
 @ifset use-tex
@@ -801,9 +780,6 @@ include vectoring the interrupt handler.
 @end ifset
 
 @page
-@ifinfo
-@node RTEMS_BSP Timing Data Event Manager, RTEMS_BSP Timing Data Signal Manager, RTEMS_BSP Timing Data Message Manager, RTEMS_BSP Timing Data
-@end ifinfo
 @section Event Manager
 
 @ifset use-tex
@@ -875,9 +851,6 @@ include vectoring the interrupt handler.
 </CENTER>
 @end html
 @end ifset
-@ifinfo
-@node RTEMS_BSP Timing Data Signal Manager, RTEMS_BSP Timing Data Partition Manager, RTEMS_BSP Timing Data Event Manager, RTEMS_BSP Timing Data
-@end ifinfo
 @section Signal Manager
 
 @ifset use-tex
@@ -945,9 +918,6 @@ include vectoring the interrupt handler.
 @end html
 @end ifset
 
-@ifinfo
-@node RTEMS_BSP Timing Data Partition Manager, RTEMS_BSP Timing Data Region Manager, RTEMS_BSP Timing Data Signal Manager, RTEMS_BSP Timing Data
-@end ifinfo
 @section Partition Manager
 
 @ifset use-tex
@@ -1024,9 +994,6 @@ include vectoring the interrupt handler.
 @end ifset
 
 @page
-@ifinfo
-@node RTEMS_BSP Timing Data Region Manager, RTEMS_BSP Timing Data Dual-Ported Memory Manager, RTEMS_BSP Timing Data Partition Manager, RTEMS_BSP Timing Data
-@end ifinfo
 @section Region Manager
 
 @ifset use-tex
@@ -1123,9 +1090,6 @@ include vectoring the interrupt handler.
 @end html
 @end ifset
 
-@ifinfo
-@node RTEMS_BSP Timing Data Dual-Ported Memory Manager, RTEMS_BSP Timing Data I/O Manager, RTEMS_BSP Timing Data Region Manager, RTEMS_BSP Timing Data
-@end ifinfo
 @section Dual-Ported Memory Manager
 
 @ifset use-tex
@@ -1197,9 +1161,6 @@ include vectoring the interrupt handler.
 @end html
 @end ifset
 
-@ifinfo
-@node RTEMS_BSP Timing Data I/O Manager, RTEMS_BSP Timing Data Rate Monotonic Manager, RTEMS_BSP Timing Data Dual-Ported Memory Manager, RTEMS_BSP Timing Data
-@end ifinfo
 @section I/O Manager
 
 @ifset use-tex
@@ -1276,9 +1237,6 @@ include vectoring the interrupt handler.
 @end html
 @end ifset
 
-@ifinfo
-@node RTEMS_BSP Timing Data Rate Monotonic Manager, TIMETABLE_NEXT_LINK, RTEMS_BSP Timing Data I/O Manager, RTEMS_BSP Timing Data
-@end ifinfo
 @section Rate Monotonic Manager
 
 @ifset use-tex
