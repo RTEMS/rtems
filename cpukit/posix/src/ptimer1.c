@@ -271,6 +271,9 @@ int timer_create(
   rtems_id          timer_id;  /* created timer identifier         */
   int               timer_pos; /* Position in the table of timers  */
 
+  if ( clock_id != CLOCK_REALTIME )
+    rtems_set_errno_and_return_minus_one( EINVAL );
+
  /*
   *  The data of the structure evp are checked in order to verify if they
   *  are coherent.
@@ -283,6 +286,12 @@ int timer_create(
        /* The value of the field sigev_notify is not valid */
        rtems_set_errno_and_return_minus_one( EINVAL );
      }
+
+     if ( !evp->sigev_signo )
+       rtems_set_errno_and_return_minus_one( EINVAL );
+
+     if ( !is_valid_signo(evp->sigev_signo) )
+       rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
  /*

@@ -1,5 +1,14 @@
 2004-05-21  Joel Sherrill <joel@OARcorp.com>
 
+	PR 628/rtems
+	* posix/src/killinfo.c, posix/src/pthreadkill.c, posix/src/ptimer1.c,
+	posix/src/sigaction.c, posix/src/sigaddset.c, posix/src/sigsuspend.c:
+	Signal set of 0 is supposed to return EINVAL.  In addition
+	timer_create needed to return an error if the clock was not
+	CLOCK_REALTIME.
+
+2004-05-21  Joel Sherrill <joel@OARcorp.com>
+
 	PR 629/rtems
 	* cpukit/src/mqueuecreatesupp.c: Return EINVAL is mq_maxmsg is
 	<= 0, not <.
