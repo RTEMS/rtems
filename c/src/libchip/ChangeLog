@@ -1,3 +1,8 @@
+2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* network/Makefile.am, rtc/Makefile.am, serial/Makefile.am: 
+	Apply include_*HEADERS instead of H_FILES, replace ${..} with $(..). 
+
 2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
 	* network/sonic.c: Added ipalign() routine to align the
