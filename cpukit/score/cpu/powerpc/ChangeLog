@@ -1,3 +1,7 @@
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/new-exceptions/cpu.h: Removed warnings.
+
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.

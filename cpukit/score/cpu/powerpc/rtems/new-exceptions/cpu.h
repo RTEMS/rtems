@@ -676,7 +676,9 @@ static inline void _CPU_ISR_Set_level( unsigned32 level )
   _CPU_MSR_SET(msr);
 }
   
-#define _CPU_ISR_install_vector(irq, new, old) {BSP_panic("_CPU_ISR_install_vector called\n");}
+void BSP_panic(char *);
+#define _CPU_ISR_install_vector(irq, new, old) \
+   {BSP_panic("_CPU_ISR_install_vector called\n");}
 
 /* Context handler macros */
 
@@ -763,6 +765,8 @@ void _CPU_Context_Initialize(
  *  location or a register, optionally disables interrupts, and
  *  halts/stops the CPU.
  */
+
+void _BSP_Fatal_error(unsigned int);
 
 #define _CPU_Fatal_halt( _error ) \
   _BSP_Fatal_error(_error)
