@@ -84,7 +84,7 @@ SCORE_EXTERN Internal_errors_Information Internal_errors_What_happened;
  *  This routine is invoked when the application or the executive itself
  *  determines that a fatal error has occurred.
  */
-void volatile _Internal_error_Occurred(
+void _Internal_error_Occurred(
   Internal_errors_Source  the_source,
   boolean                 is_internal,
   uint32_t                the_error

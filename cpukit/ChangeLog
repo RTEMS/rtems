@@ -1,5 +1,10 @@
 2005-01-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* sapi/include/rtems/fatal.h, score/include/rtems/score/interr.h:
+	Remove volatile on return type.
+
+2005-01-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* itron/inline/rtems/itron/task.inl (_ITRON_Task_Priority_to_Core, 
 	_ITRON_tasks_Core_to_Priority): Correct return types.
 
