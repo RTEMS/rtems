@@ -53,15 +53,8 @@ AM_CONFIG_HEADER(src/config.h)
 AC_CONFIG_FILES([Makefile
 src/Makefile
 include/Makefile
-include/sys/Makefile
-include/rtems/Makefile
-include/rtems/posix/Makefile
 optman/Makefile
 inline/Makefile
-inline/rtems/Makefile
-inline/rtems/posix/Makefile
 macros/Makefile
-macros/rtems/Makefile
-macros/rtems/posix/Makefile
 ])
 AC_OUTPUT

@@ -1,3 +1,17 @@
+2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/sys/Makefile.am: Remove.
+	* include/rtems/Makefile.am: Remove.
+	* include/rtems/posix/Makefile.am: Remove.
+	* include/Makefile.am: Handle subdirs.
+	* inline/rtems/Makefile.am: Remove.
+	* inline/rtems/posix/Makefile.am: Remove.
+	* inline/Makefile.am: Handle subdirs.
+	* macros/rtems/Makefile.am: Remove.
+	* macros/rtems/posix/Makefile.am: Remove.
+	* macros/Makefile.am: Handle subdirs.
+	* configure.ac: Reflect changes above.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
