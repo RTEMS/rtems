@@ -1,3 +1,7 @@
+2001-03-01	Joel Sherrill <joel@OARcorp.com>
+
+	* src/imfs/.cvsignore: Added stamp-h1.in
+
 2002-02-28	Victor V. Vengerov <vvv@oktet.ru>
 
 	* DOS filesystem including FAT12, FAT16, and FAT32 support submitted.
