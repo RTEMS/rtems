@@ -1,3 +1,8 @@
+2003-09-11	Joel Sherrill <joel@OARcorp.com>
+
+	PR 488/rtems
+	* src/taskcreate.c, src/tasks.c: Ensure notepads are zeroed.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems.h, include/rtems/rtems/asr.h,
