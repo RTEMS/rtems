@@ -39,9 +39,10 @@ END-INFO-DIR-ENTRY
 @c
 @clear is-C
 @set is-Ada
-@set RTEMS-LANGUAGE Ada
-@set RTEMS-STRUCTURE record
-@set RTEMS-ROUTINE subprogram
+@set LANGUAGE Ada
+@set STRUCTURE record
+@set ROUTINE subprogram
+@set OR or
 @c the language is @value{RTEMS-LANGUAGE}
 @c NOTE:  don't use underscore in the name
 @c
@@ -51,8 +52,8 @@ END-INFO-DIR-ENTRY
 @c
 
 @set edition 4.1.0a
-@set update-date 1 June 97
-@set update-month June 97
+@set update-date 1 June 1997
+@set update-month June 1997
 
 @c
 @c  I don't really like having a short title page.  --joel
