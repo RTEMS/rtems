@@ -18,7 +18,8 @@ dirs:
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
 GENERATED_FILES= \
-    basic.texi tools.texi concepts.texi debug.texi freesw.texi hwdebugaids.texi
+    basic.texi tools.texi concepts.texi debug.texi freesw.texi \
+    embeddedinfo.texi hwdebugaids.texi
 
 FILES=$(PROJECT).texi $(GENERATED_FILES)
 
@@ -80,6 +81,11 @@ debug.texi: debug.t Makefile
 	    -n "" ${*}.t
 
 freesw.texi: freesw.t Makefile
+	$(BMENU) -c -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+embeddedinfo.texi: embeddedinfo.t Makefile
 	$(BMENU) -c -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t

@@ -67,6 +67,7 @@ END-INFO-DIR-ENTRY
 @include concepts.texi
 @include debug.texi
 @include freesw.texi
+@include embeddedinfo.texi
 @include hwdebugaids.texi
 
 @ifinfo
@@ -86,6 +87,7 @@ Common questions have been divided into the following categories.
 * RTEMS Concepts::
 * Debugging Hints::
 * Free Software that Works with RTEMS::
+* Resources for Embedded Information::
 * Hardware to Ease Debugging::
 @end menu
 
