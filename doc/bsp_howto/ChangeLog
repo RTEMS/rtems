@@ -1,3 +1,8 @@
+2003-01-28	Joel Sherrill <joel@OARcorp.com>
+
+	* makefiles.t, support.t: Updated to reflect use of automake in
+	addition to autoconf.
+
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bsp_howto.texi: Set @setfilename bsp_howto.info.

@@ -189,11 +189,11 @@ There is a default implementation which returns an error to indicate
 that the heap can not be extended.  This implementation can be
 found in @code{c/src/lib/libbsp/shared/sbrk.c}.  Many of the BSPs
 use this shared implementation.  In order to use this implementation,
-the file @code{Makefile.in} in the BSP's @code{startup} directory
+the file @code{Makefile.am} in the BSP's @code{startup} directory
 must be modified so that the @code{$VPATH} variable searches
 both the @code{startup} directory and the shared directory.  The following
 illustates the @code{VPATH} setting in the PowerPC psim BSP's 
-@code{startup/Makefile.in}:
+@code{startup/Makefile.am}:
 
 @example
 VPATH = @@srcdir@@:@@srcdir@@/../../../shared

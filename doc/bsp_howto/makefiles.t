@@ -35,19 +35,30 @@ phases may be removed.
 
 @section Makefiles Used During The BSP Building Process
 
-There is a file named @code{Makefile.in} in each directory of a BSP.
-RTEMS uses the @b{GNU autoconf} automatic configuration package. 
-This tool specializes the @code{Makefile.in} files at the time that RTEMS
+RTEMS uses the @b{GNU automake} and @b{GNU autoconf} automatic
+configuration package.  Consequently, there are a number of
+automatically generated files in each directory in the RTEMS
+source tree.  The @code{bootstrap} script found in the top level
+directory of the RTEMS source tree is executed to produce the
+automatically generated files.  That script must be run from
+a directory with a @code{configure.ac} file in it.
+
+There is a file named @code{Makefile.am} in each directory of a BSP.
+This file is used by @b{automake} to produce the file 
+named @code{Makefile.in} which is also found in each directory of a BSP.
+The configure process specializes the @code{Makefile.in} files at
+the time that RTEMS
 is configured for a specific development host and target.  Makefiles
 are automatically generated from the @code{Makefile.in} files.  It is
-necessary for the BSP developer to provide these files.  Most of the
-time, it is possible to copy the @code{Makefile.in} from another
+necessary for the BSP developer to provide the @code{Makefile.am}
+files and generate the @code{Makefile.in} files.  Most of the
+time, it is possible to copy the @code{Makefile.am} from another
 similar directory and edit it.
 
-The @code{Makefile} files generated are processed when building
-RTEMS for a given BSP.
+The @code{Makefile} files generated are processed when configuring
+and building RTEMS for a given BSP.
 
-The BSP developer is responsible for generating @code{Makefile.in} 
+The BSP developer is responsible for generating @code{Makefile.am} 
 files which properly build all the files associated with their BSP.
 There are generally three types of Makefiles in a BSP source tree:
 
@@ -63,45 +74,37 @@ There are generally three types of Makefiles in a BSP source tree:
 The Directory class of Makefiles directs the build process through
 a set of subdirectories in a particular order.  This order is usually
 chosen to insure that build dependencies are properly processed. 
-Most BSPs only have one Directory class Makefile.  The @code{Makefile.in}
+Most BSPs only have one Directory class Makefile.  The @code{Makefile.am}
 in the BSP root directory (@code{c/src/lib/libbsp/CPU/BSP}) specifies
-which directories are to be built for this BSP. For example, the
-following Makefile fragment shows how a BSP would only build the
-networking device driver if HAS_NETWORKING was defined:
+following Makefile fragment shows how a BSP would specify the
+directories to be built and their order:
 
 @example
-NETWORKING_DRIVER_yes_V = network
-NETWORKING_DRIVER = $(NETWORKING_DRIVER_$(HAS_NETWORKING)_V) 
-
-[...]
-
 SUB_DIRS=include start340 startup clock console timer \
-    $(NETWORKING_DRIVER) wrapup
+    network wrapup
 @end example
-
-This fragment states that all the directories have to be processed,
-except for the @code{network} directory which is included only if the
-user configured networking.
 
 @subsection Source Directory Makefiles
 
-There is a @code{Makefile.in} in most of the directories in a BSP. This
+There is a @code{Makefile.am} in most of the directories in a BSP. This
 class of Makefile lists the files to be built as part of the driver.
 When adding new files to an existing directory, Do not forget to add
-the new files to the list of files to be built in the @code{Makefile.in}.
+the new files to the list of files to be built in the @code{Makefile.am}
+and run @code{bootstrap}.
 
-@b{NOTE:} The @code{Makefile.in} files are ONLY processed during the configure
+@b{NOTE:} The @code{Makefile.am} files are ONLY processed by
+@code{bootstrap} and the resulting @code{Makefile.in} files are
+only processed during the configure
 process of a RTEMS build. Therefore, when developing 
-a BSP and adding a new file to a @code{Makefile.in}, the 
-already generated @code{Makefile} will not include the new references.
-This results in the new file not being be taken into account! 
-The @code{configure} script must be run again or the @code{Makefile}
-(the result of the configure process) modified by hand.  This file will
-be in a directory such as the following:
+a BSP and adding a new file to a @code{Makefile.am}, the 
+already generated @code{Makefile} will not automatically
+include the new references unless you configured RTEMS with the
+@code{--enable-maintainer-mode} option.
+Otherwise, the new file not being be taken into account! 
 
-@example
-MY_BUILD_DIR/c/src/lib/libbsp/CPU/BSP/DRIVER
-@end example
+If adding a new directory, be sure to add it to the list of
+automatically generated files in the BSP's @code{configure.ac}
+script.
 
 @subsection Wrapup Makefile
 
@@ -192,22 +195,10 @@ CFLAGS_OPTIMIZE_V=-O4 -fomit-frame-pointer
 # part of the BSP which executes.
 START_BASE=start340
 
-[...]
-
 # This make-exe macro is used in template makefiles to build the
 # final executable. Any other commands to follow, just as using
 # objcopy to build a PROM image or converting the executable to binary. 
 
-ifeq ($(RTEMS_USE_GCC272),yes)
-# This has rules to link an application if an older version of GCC is 
-# to be used with this BSP.  It is not required for a BSP to support
-# older versions of GCC.  This option is supported in some of the
-# BSPs which already had this support.
-[...]
-else
-# This has rules to link an application using gcc 2.8 or newer.
-# All BSPs should support this.  This version is required to support
-# GNAT/RTEMS.
 define make-exe
 	$(CC) $(CFLAGS) $(CFLAGS_LD) -o $(basename $@@).exe $(LINK_OBJS)
 	$(NM) -g -n $(basename $@@).exe > $(basename $@@).num
