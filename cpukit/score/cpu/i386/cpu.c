@@ -106,7 +106,7 @@ void _defaultExcHandler (CPU_Exception_frame *ctx)
   printk("Error code pushed by processor itself (if not 0) = %x\n",
 	 ctx->faultCode);
   printk("----------------------------------------------------------\n");
-  if (ctx->idtIndex == PAGE_FAULT){
+  if (ctx->idtIndex == I386_EXCEPTION_PAGE_FAULT){
     faultAddr = i386_get_cr2();
     printk("Page fault linear address (CR2) = %x\n",
 	   faultAddr);
