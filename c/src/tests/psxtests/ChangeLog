@@ -1,3 +1,7 @@
+2001-01-25	Joel Sherrill <joel@OARcorp.com>
+
+	* psx01/psx01.scn: Corrected to reflect clock_getres() now working.
+
 2000-11-17	Jennifer Averett <jennifer@OARcorp.com>
 
 	* psxstat/test.c, psxstat/psxstat.scn: Forced inode numbers

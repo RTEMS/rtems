@@ -5,16 +5,14 @@ Init: uts.nodename: Node 1
 Init: uts.release: rtems-VERSION
 NOTE: VERSION will vary. 
 Init: uts.version: 
-Init: uts.machine: CPU/BSP
-NOTE: CPU/BSP will vary. 
-
+Init: uts.machine: CPU/CPU Model
+NOTE: CPU/CPU Model will vary. 
 Init: clock_gettime - EINVAL (invalid clockid)
 Init: clock_settime - EINVAL (invalid clockid)
 Init: clock_getres - EINVAL (invalid clockid)
 Init: clock_getres - EINVAL (NULL resolution)
 Init: clock_getres - SUCCESSFUL
-Init: resolution = sec (100), nsec (0)
- 
+Init: resolution = sec (0), nsec (10000000)
 Fri May 24 11:05:00 1996
 Init: clock_settime - SUCCESSFUL
 Fri May 24 11:05:00 1996
