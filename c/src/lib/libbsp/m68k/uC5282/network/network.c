@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <stdarg.h>
 #include <string.h>
+#include <rtems.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 
@@ -122,20 +123,19 @@ mcf5282_fec_tx_interrupt_handler( rtems_vector_number v )
 }
 
 /*
- * Allocate buffer descriptors from SRAM
- * Ensure 128-bit (16-byte)alignment
+ * Allocate buffer descriptors
+ * Ensure 128-bit (16-byte) alignment
  */
-static void *
+static mcf5282BufferDescriptor_t *
 mcf5282_bd_allocate(unsigned int count)
 {
-    char *p;
-    
+    mcf5282BufferDescriptor_t *p;
+
     p = malloc((count * sizeof(mcf5282BufferDescriptor_t)) + 15, 0, M_NOWAIT);
     if (!p)
         rtems_panic("FEC BD");
     if ((int)p & 0xF)
-        p += 16 - ((int)p & 0xF);
-printf("Allocate %d at %p\n", count, p);
+        p = (mcf5282BufferDescriptor_t *)((char *)p + (16 - ((int)p & 0xF)));
     return p;
 }
 
@@ -171,7 +171,7 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
      * Issue reset to FEC
      */
     MCF5282_FEC_ECR = MCF5282_FEC_ECR_RESET;
-    rtems_task_wake_after( 1 );
+    rtems_task_wake_after(1);
     /*
      * Configuration of I/O ports is done outside of this function
      */
@@ -302,9 +302,15 @@ static void
 fec_retire_tx_bd(volatile struct mcf5282_enet_struct *sc )
 {
     struct mbuf *m, *n;
+    volatile mcf5282BufferDescriptor_t *txBd;
 
-    while ((sc->txBdActiveCount != 0)
-        && ((sc->txBdBase[sc->txBdTail].status & MCF5282_FEC_TxBD_R) == 0)) {
+    for (;;) {
+        if (sc->txBdActiveCount == 0)
+            return;
+        txBd = sc->txBdBase + sc->txBdTail;
+        rtems_cache_invalidate_multiple_data_lines(txBd, sizeof *txBd);
+        if ((txBd->status & MCF5282_FEC_TxBD_R) != 0)
+            return;
         m = sc->txMbuf[sc->txBdTail];
         MFREE(m, n);
         if (++sc->txBdTail == sc->txBdCount)
@@ -353,7 +359,9 @@ fec_rxDaemon (void *arg)
         /*
          * Wait for packet if there's not one ready
          */
+        rtems_cache_invalidate_multiple_data_lines(rxBd, sizeof *rxBd);
         if ((status = rxBd->status) & MCF5282_FEC_RxBD_E) {
+int chkCount=0 ;
             /*
              * Clear old events.
              */
@@ -365,10 +373,15 @@ fec_rxDaemon (void *arg)
              * This catches the case when a packet arrives between the
              * `if' above, and the clearing of the RXF bit in the EIR.
              */
-            while ((status = rxBd->status) & MCF5282_FEC_RxBD_E) {
+            for (;;) {
                 rtems_event_set events;
                 int level;
 
+                rtems_cache_invalidate_multiple_data_lines(rxBd, sizeof *rxBd);
+                if (((status = rxBd->status) & MCF5282_FEC_RxBD_E) == 0)
+                    break;
+
+if(chkCount++)printf("ACK -- CACHE WOES\n");
                 rtems_interrupt_disable(level);
                 MCF5282_FEC_EIMR |= MCF5282_FEC_EIMR_RXF;
                 rtems_interrupt_enable(level);
@@ -388,14 +401,19 @@ fec_rxDaemon (void *arg)
              * FIXME: Packet filtering hook could be done here.
              */
             struct ether_header *eh;
+            int len = rxBd->length - sizeof(rtems_unsigned32);;
 
             /*
-             * Invalidate the buffer for this descriptor
+             * Invalidate the cache and push the packet up
+             * The cache is so small that it's more efficient to just
+             * invalidate the whole thing unless the packet is very small.
              */
             m = sc->rxMbuf[rxBdIndex];
-            m->m_len = m->m_pkthdr.len = rxBd->length -
-                       sizeof(rtems_unsigned32) -
-                       sizeof(struct ether_header);
+            if (len < 128)
+                rtems_cache_invalidate_multiple_data_lines(m->m_data, len);
+            else
+                rtems_cache_invalidate_entire_data();
+            m->m_len = m->m_pkthdr.len = len - sizeof(struct ether_header);
             eh = mtod(m, struct ether_header *);
             m->m_data += sizeof(struct ether_header);
             ether_input(ifp, eh, m);
@@ -763,7 +781,6 @@ rtems_fec_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching )
     char *unitName;
     unsigned char *hwaddr;
 
-printf("attaching\n"); rtems_task_wake_after(10);
     /*
      * Parse driver name
      */

@@ -109,7 +109,11 @@ void _CPU_cache_invalidate_entire_instruction(void)
 
 void _CPU_cache_invalidate_1_instruction_line(const void *addr)
 {
-  asm volatile ("cpushl %%ic,(%0)" :: "a" (addr));
+    /*
+     * Top half of cache is I-space
+     */
+    addr = (void *)((int)addr | 0x400);
+    asm volatile ("cpushl %%bc,(%0)" :: "a" (addr));
 }
 
 void _CPU_cache_enable_data(void)
@@ -127,6 +131,7 @@ void _CPU_cache_disable_data(void)
     rtems_interrupt_level level;
 
     rtems_interrupt_disable(level);
+    rtems_interrupt_disable(level);
     cacr_mode |= MCF5XXX_CACR_DISD;
     m68k_set_cacr(cacr_mode);
     rtems_interrupt_enable(level);
@@ -139,7 +144,11 @@ void _CPU_cache_invalidate_entire_data(void)
 
 void _CPU_cache_invalidate_1_data_line(const void *addr)
 {
-  asm volatile ("cpushl %%dc,(%0)" :: "a" (addr));
+    /*
+     * Bottom half of cache is D-space
+     */
+    addr = (void *)((int)addr & ~0x400);
+    asm volatile ("cpushl %%bc,(%0)" :: "a" (addr));
 }
 
 /*
