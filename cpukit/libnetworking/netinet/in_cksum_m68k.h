@@ -125,8 +125,8 @@ in_cksum(m, len)
 #else
 		"andi    #0xf,%%cc   | Clear X (extended carry flag)\n\t"
 #endif
-		"jmp     %%pc@(lcsum2_lbl-.-2:b,%3)  | Jump into loop\n"
-		"lcsum1_lbl:         | Begin inner loop...\n\t"
+		"jmp     %%pc@(2f-.-2:b,%3)  | Jump into loop\n"
+		"1:                  | Begin inner loop...\n\t"
 		"movel   %1@+,%3     |  0: Fetch 32-bit word\n\t"
 		"addxl   %3,%0       |    Add word + previous carry\n\t"
 		"movel   %1@+,%3     |  1: Fetch 32-bit word\n\t"
@@ -159,12 +159,12 @@ in_cksum(m, len)
 		"addxl   %3,%0       |    Add word + previous carry\n\t"
 		"movel   %1@+,%3     |  F: Fetch 32-bit word\n\t"
 		"addxl   %3,%0       |    Add word + previous carry\n"
-		"lcsum2_lbl:         |  End of unrolled loop\n\t"
+		"2:                  |  End of unrolled loop\n\t"
 #if IS_COLDFIRE
 		"moveq   #0,%3       | Add in last carry\n\t"
 		"addxl   %3,%0       |\n\t"
 		"subql 	 #1,%2       | Update loop count\n\t"
-		"bplb    lcsum1_lbl  | Loop (with X clear) if not done\n\t"
+		"bplb    1b          | Loop (with X clear) if not done\n\t"
 		"movel   #0xffff,%2  | Get word mask\n\t"
 		"movel   %0,%3       | Fold 32 bit sum to 16 bits\n\t"
 		"swap    %3          |\n\t"
@@ -176,7 +176,7 @@ in_cksum(m, len)
 		"addl    %3,%0       |\n\t"
 		"andl    %2,%0       | Mask to 16-bit sum\n\t"
 #else
-		"dbf     %2,lcsum1_lbl | (NB- dbf doesn't affect X)\n\t"
+		"dbf     %2,1b       | (NB- dbf doesn't affect X)\n\t"
 		"movel   %0,%3       | Fold 32 bit sum to 16 bits\n\t"
 		"swap    %3          | (NB- swap doesn't affect X)\n\t"
 		"addxw   %3,%0       |\n\t"
