@@ -204,7 +204,9 @@ if test "$no_recursion" != yes; then
   case "$$1_subdir" in
   "." ) ;;
   * )
-    ac_sub_configure_args="$ac_sub_configure_args '--with-target-subdir=$$1_subdir' '--exec-prefix=${prefix}/$$1_subdir'"
+    ac_sub_configure_args="$ac_sub_configure_args '--with-target-subdir=$$1_subdir'"
+    ac_sub_configure_args="$ac_sub_configure_args '--exec-prefix=${prefix}/$$1_subdir'"
+    ac_sub_configure_args="$ac_sub_configure_args '--includedir=${prefix}/$$1_subdir/include'"
     ;;
   esac
 
