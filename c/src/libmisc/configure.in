@@ -4,12 +4,12 @@ dnl $Id$
 
 AC_PREREQ(2.13)
 AC_INIT(dumpbuf)
-RTEMS_TOP(../../../..)
-AC_CONFIG_AUX_DIR(../../../..)
+RTEMS_TOP(../../..)
+AC_CONFIG_AUX_DIR(../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE(rtems-c-src-lib-libmisc,$RTEMS_VERSION,no)
+AM_INIT_AUTOMAKE(rtems-c-src-libmisc,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_MULTIPROCESSING

@@ -9,7 +9,7 @@ if HAS_LIBCHIP
 LIBCHIP = libchip
 endif
 
-SUBDIRS = start include libmisc libc libcpu libbsp \
+SUBDIRS = start include libc libcpu libbsp \
     $(LIBCHIP) $(LIBHWAPI)
 
 include $(top_srcdir)/../../../automake/subdirs.am
