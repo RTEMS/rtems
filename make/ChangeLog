@@ -1,3 +1,7 @@
+2004-04-12	David Querbach <querbach@realtime.bc.ca>
+
+	* custom/ss555.cfg: New file.
+
 2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* make/Cygwin-posix.cfg: Remove DEFINES + LIBC_DEFINES (Meaningless
