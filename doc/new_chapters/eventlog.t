@@ -23,7 +23,7 @@ The directives provided by the event logging manager are:
 @item @code{log_write_any} - Write to any log file
 @item @code{log_write_entry} - Write entry to any log file
 @item @code{log_open} - Open a log file
-@item @code{log_read} - Read from the system Log
+@item @code{log_read} - Read from a log file
 @item @code{log_notify} - Notify Process of writes to the system log
 @item @code{log_close} - Close log descriptor
 @item @code{log_seek} - Reposition log file offset
@@ -462,7 +462,7 @@ should actually be detected by @code{open} and passed back by the
 and @code{ENOTDIR} are detected in this manner.
 
 @page
-@subsection log_read - Read from the system Log
+@subsection log_read - Read from a log file
 
 @subheading CALLING SEQUENCE:
 
@@ -486,13 +486,22 @@ int log_read(
 @subheading STATUS CODES:
 
 @table @b
+@item E2BIG
+This error indicates an inconsistency in the implementation.
+Report this as a bug.
+
 @item EBADF
-The logdes argument is not a valid log file descriptor.
+The @code{logdes} argument is not a valid log file descriptor.
+
+@item EFAULT
+The @code{entry} argument is not a valid pointer to a log entry structure.
+
+@item EFAULT
+The @code{log_sizeread} argument is not a valid pointer to a size_t.
 
 @item EBUSY
-No data available.  The open log file descriptor references
-the current system log.  and there are no unread event records
-remaining.
+No data available.  There are no unread event records remaining
+in this log file.
 
 @item EINTR
 A signal interrupted the call to log_read().
@@ -500,36 +509,47 @@ A signal interrupted the call to log_read().
 @item EIO
 An I/O error occurred in reading from the event log.
 
+@item EINVAL
+The matching event record has data associated with it and
+@code{log_buf} was not a valid pointer.
+
+@item EINVAL
+The matching event record has data associated with it which is
+longer than @code{log_len}.
+
 @end table
 
 @subheading DESCRIPTION:
 
-The @code{log_read} function shall attempt to read the @code{log_entry}
-structure and @code{log_len} bytes of data from the next event record 
-of the log file associated with the open log file descriptor @code{logdes},
-placing the @code{log_entry} structure into the buffer pointed to by
-@code{entry}, and the data into the buffer pointed to by @code{log_buf}.
-The log record ID of the returned event record shall be stored in the 
+The @code{log_read} function reads the @code{log_entry}
+structure and up to @code{log_len} bytes of data from the next
+event record of the log file associated with the open log file
+descriptor @code{logdes}.  The event record read is placed
+into the @code{log_entry} structure pointed to by
+@code{entry} and any data into the buffer pointed to by @code{log_buf}.
+The log record ID of the returned event record is be stored in the 
 @code{log_recid} member of the @code{log_entry} structure for the event
 record.
 
 If the query attribute of the open log file description associated with
-the @code{logdes} is set, the event record read shall match that query.
-If the @code{entry} argument is not NULL it will point to a @code{log_entry}
-structure which shall be filled with the creation information for this log
-entry.  If the argument @code{log_buf} is not NULL the data written with the
-log entry will be placed in the buffer.  The size of the buffer is specified
-by the argument @code{log_len}.
+the @code{logdes} is set, the event record read will match that query.
 
-If the @code{log_read} is successful the call shall store the actual length
+If the @code{log_read} is successful the call stores the actual length
 of the data associated with the event record into the location specified by
-@code{log_sizeread}.  This number may be smaller or greater than 
+@code{log_sizeread}.  This number will be less than or equal to
 @code{log_len}.
 
 @subheading NOTES:
 
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
+
+When @code{EINVAL} is returned, then no data is returned although the
+event record is returned.  This is an extension to the POSIX specification.
+
+The POSIX specification specifically allows @code{log_read} to write
+greater than @code{log_len} bytes into @code{log_buf}.  This is highly
+undesirable and this implementation will NOT do this.
 
 @page
 @subsection log_notify - Notify Process of writes to the system log.
