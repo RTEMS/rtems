@@ -7,8 +7,8 @@ PGM = $(ARCH)/scitab.rel
 C_FILES = scitab.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 SHGEN = $(PROJECT_TOPdir)/tools/cpu/sh/shgen
 
@@ -28,4 +28,4 @@ all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
