@@ -1,5 +1,10 @@
 2001-04-16	Joel Sherrill <joel@OARcorp.com>
 
+	* start/start.S, startup/bspstart.c, startup/linkcmds:
+	Cleanup that was not merged from the simple non-RTEMS program.
+
+2001-04-16	Joel Sherrill <joel@OARcorp.com>
+
 	* start/start.S, startup/bspstart.c, startup/linkcmds: 
 	Modifications made with Gregory Menke <gregory.menke@gsfc.nasa.gov>
 	as he debugged this BSP using a logic analyzer.

@@ -117,11 +117,9 @@ data segment after the exception vectors and below 0x80020000,
     __stack = .;
     _stack_init = .;
     _clear_end = .;
-    WorkspaceBase = .;
-     /* HACK -- tied to value bspstart */
-    . += 4096K;    /* reserve some memory for workspace */
     HeapBase = .;
     . += HeapSize;    /* reserve some memory for heap */
+    WorkspaceBase = .;
   }
  end = .;
  _end = .;

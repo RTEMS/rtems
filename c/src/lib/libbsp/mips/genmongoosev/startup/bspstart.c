@@ -57,18 +57,16 @@ void bsp_libc_init( void *, unsigned32, int );
  
 void bsp_pretasking_hook(void)
 {
-    extern int HeapBase;
-    extern int HeapSize;
+    extern int   HeapBase;
+    extern int   HeapSize;
     void         *heapStart = &HeapBase;
     unsigned long heapSize = (unsigned long)&HeapSize;
-    unsigned long ramSpace;
 
     bsp_libc_init(heapStart, (unsigned32) heapSize, 0);
 
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
-
 }
  
 /*
@@ -81,54 +79,33 @@ void bsp_start( void )
 {
   extern int _end;
   extern int WorkspaceBase;
-  /* Configure Number of Register Caches */
+  extern int _RamSize, _RamBase;
+  int ram_left;
+
+  ram_left = (unsigned32) &_RamSize - 
+             (unsigned32)&WorkspaceBase - (unsigned32) &_RamBase;
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = 4096;
 
-  /* HACK -- tied to value linkcmds */
-  if ( BSP_Configuration.work_space_size >(4096*1024) )
-   _sys_exit( 1 );
+  if ( BSP_Configuration.work_space_size >  ram_left )
+    _sys_exit( 1 );
 
   BSP_Configuration.work_space_start = (void *) &WorkspaceBase;
 
-  /*mips_set_sr( 0xff00 );   all interrupts unmasked but globally off */
-                          /* depend on the IRC to take care of things */
-
+  /* Clear all pending peripheral interrupts and mask them. */
+   
   MONGOOSEV_WRITE( MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_CAUSE_REGISTER, 0 );
   MONGOOSEV_WRITE( MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_MASK_REGISTER, 0 );
 
   /*
-  mips_set_sr( (SR_CU0 | SR_CU1 | SR_IBIT1 | SR_IBIT2 | SR_IBIT3 | SR_IBIT4 | SR_IBIT6 | SR_IBIT8) );
-  */
+   *  Enable coprocessors.
+   *  Disable external interrupts.
+   *  Enable software interrupts.
+   */
+
   mips_set_sr( (SR_CU0 | SR_CU1 | SR_IBIT1 | SR_IBIT2) );
 
   mips_install_isr_entries();
-
-  MONGOOSEV_WRITE( MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_CAUSE_REGISTER, 0 );
 }
-
-/* XXX */
-void clear_cache( void *address, size_t n )
-{
-}
-
-/* Structure filled in by get_mem_info.  Only the size field is
-   actually used (to clear bss), so the others aren't even filled in.  */
-
-struct s_mem
-{
-  unsigned int size;
-  unsigned int icsize;
-  unsigned int dcsize;
-};
-
-
-void
-get_mem_info (mem)
-     struct s_mem *mem;
-{
-  mem->size = 0x1000000;        /* XXX figure out something here */
-}
-

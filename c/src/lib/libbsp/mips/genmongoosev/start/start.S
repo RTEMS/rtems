@@ -1,12 +1,7 @@
 /*
- * start.S -- startup file for GENMONGOOSE-V BSP.  
- * It is based on the JMR3904 BSP which is in turn based upon
- * support in newlib-1.8.2/libgloss/mips and adapted for RTEMS.
+ * start.S -- startup file for JMR3904 BSP based upon crt0.S from
+ * newlib-1.8.2/libgloss/mips and adapted for RTEMS.
  *
- *  COPYRIGHT (c) 2001.
- *  On-Line Applications Research Corporation (OAR).
- *  Mongoose-V Modifications
- * 
  * crt0.S -- startup file for MIPS.
  *
  * Copyright (c) 1995, 1996, 1997 Cygnus Support
@@ -22,12 +17,13 @@
  * they apply.
  */
 
+#include <asm.h>
+#include "regs.S"
+
 #ifdef __mips16
 /* This file contains 32 bit assembly code.  */
 	.set nomips16
 #endif
-
-#include "regs.S"
 
 /* This is for referencing addresses that are not in the .sdata or
    .sbss section under embedded-pic, or before we've set up gp.  */
@@ -41,43 +37,6 @@
 # define LA(t,x) la t,x
 #endif /* __mips_embedded_pic */ 
 
-#define zero		$0
-#define	AT		$1		/* assembler temporaries */
-#define	v0		$2		/* value holders */
-#define	v1		$3
-#define	a0		$4		/* arguments */
-#define	a1		$5
-#define	a2		$6
-#define	a3		$7
-#define	t0		$8		/* temporaries */
-#define	t1		$9
-#define	t2		$10
-#define	t3		$11
-#define	t4		$12
-#define	t5		$13
-#define	t6		$14
-#define	t7		$15
-#define	s0		$16		/* saved registers */
-#define	s1		$17
-#define	s2		$18
-#define	s3		$19
-#define	s4		$20
-#define	s5		$21
-#define	s6		$22
-#define	s7		$23
-#define	t8		$24		/* temporaries */
-#define	t9		$25
-#define	k0		$26		/* kernel registers */
-#define	k1		$27
-#define	gp		$28		/* global pointer */
-#define	sp		$29		/* stack pointer */
-#define	s8		$30		/* saved register */
-#define	fp		$30		/* frame pointer (old usage) */
-#define	ra		$31		/* return address */
-
-
-
-	
 	.text
 	.align	2
 
@@ -86,7 +45,7 @@
  * start of the .text section.
  */
 	nop
-	
+
 	.globl	_start
 	.ent	_start
 _start:
@@ -99,7 +58,8 @@ _start:
 	nop
 _branch:
 	move	$5, $31				# $5 == where are we
-	li	$6, 0x8002000c			# $6 == where we want to be
+	li	$6, 0x8800000c			# $6 == where we want to be
+	#la      $6,_branch
 	beq	$5, $6, _start_in_ram
 	nop
 	# relocate the code from EEPROM to RAM
@@ -111,7 +71,6 @@ relocate:
 	addu	$6, $6, 4			# RAM++
 	bne	$6, $7, relocate		# copied all the way to edata?
 	nop
-
 	la	$6, _start_in_ram
 	jr	$6
 	nop
@@ -233,43 +192,5 @@ _sys_exit:
 	b	7b				# but loop back just in-case
 	nop
 	.end _sys_exit
-
-#define FRAME(name,frm_reg,offset,ret_reg)      \
-        .globl  name;                           \
-        .ent    name;                           \
-name:;                                          \
-        .frame  frm_reg,offset,ret_reg
-#define ENDFRAME(name)                          \
-        .end name
-
-FRAME(mips_enable_interrupts,sp,0,ra)
-        mfc0 t0,C0_SR           /* get status reg */
-        nop
-        or t0,t0,a0
-        mtc0 t0,C0_SR           /* save updated status reg */
-        j ra
-        nop
-ENDFRAME(mips_enable_interrupts)
-#define SR_IEC          0x00000001      /* cur interrupt enable, 1 => enable */
-#define C0_SR           $12             /* status register */
-
-/*
-FRAME(_CPU_ISR_Set_level,sp,0,ra)
-        nop
-        mfc0 t0,C0_SR
-        andi a0, SR_IEC
-        or   t0, a0
-        mtc0 t0,C0_SR
-        nop
-        j ra
-ENDFRAME(_CPU_ISR_Set_level)
-*/
-
-	.section vectors
-	.align	2
-
-FRAME(__ISR_MAIN,sp,0,ra)
-	
-ENDFRAME(__ISR_MAIN)
 
 /* EOF crt0.S */
