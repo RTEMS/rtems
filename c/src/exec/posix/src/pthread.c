@@ -24,7 +24,7 @@
  
 const pthread_attr_t _POSIX_Threads_Default_attributes = {
   TRUE,                    /* is_initialized */
-  0,                       /* stackaddr */
+  NULL,                    /* stackaddr */
   STACK_MINIMUM_SIZE,      /* stacksize */
   PTHREAD_SCOPE_PROCESS,   /* contentionscope */
   PTHREAD_INHERIT_SCHED,   /* inheritsched */
@@ -35,7 +35,7 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
     { 0L, 0 },             /* ss_replenish_period */
     { 0L, 0 }              /* ss_initial_budget */
   },
-  PTHREAD_CREATE_DETACHED, /* detachstate */
+  PTHREAD_CREATE_JOINABLE, /* detachstate */
   1                        /* cputime_clock_allowed */
 };
 
@@ -399,7 +399,7 @@ int pthread_getschedparam(
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
       *policy = api->schedpolicy;
-      *param  = api->Schedule;
+      *param  = api->schedparam;
       _Thread_Enable_dispatch();
       return 0;
   }
@@ -453,7 +453,7 @@ int pthread_setschedparam(
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
       api->schedpolicy = policy;
-      api->Schedule    = *param;
+      api->schedparam  = *param;
       _Thread_Enable_dispatch();
       return 0;
   }
@@ -625,7 +625,7 @@ int pthread_create(
   char                  *default_name = "psx";
   POSIX_API_Control     *api;
   int                    schedpolicy = SCHED_RR;
-  struct sched_param     schedparams;
+  struct sched_param     schedparam;
 
   the_attr = (attr) ? attr : &_POSIX_Threads_Default_attributes;
 
@@ -634,8 +634,11 @@ int pthread_create(
 
   /*
    *  Core Thread Initialize insures we get the minimum amount of
-   *  stack space.
+   *  stack space if it is allowed to allocate it itself.
    */
+
+  if ( the_attr->stackaddr && !_Stack_Is_enough( the_attr->stacksize ) )
+    return EINVAL;
 
 #if 0
   int schedpolicy;
@@ -659,12 +662,16 @@ int pthread_create(
     case PTHREAD_INHERIT_SCHED:
       api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
       schedpolicy = api->schedpolicy;
-      schedparams = api->Schedule;
+      schedparam  = api->schedparam;
       break; 
+
     case PTHREAD_EXPLICIT_SCHED:
       schedpolicy = the_attr->schedpolicy;
-      schedparams = the_attr->schedparam;
+      schedparam  = the_attr->schedparam;
       break; 
+
+    default:
+      return EINVAL;
   }
 
   /*
@@ -759,8 +766,10 @@ int pthread_create(
   
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-  api->Attributes = *the_attr;
+  api->Attributes  = *the_attr;
   api->detachstate = attr->detachstate;
+  api->schedpolicy = schedpolicy;
+  api->schedparam  = schedparam;
 
   _Thread_queue_Initialize(
     &api->Join_List,
@@ -770,6 +779,10 @@ int pthread_create(
     NULL,                             /* no extract proxy handler */
     0
   );
+
+  /*
+   *  POSIX threads are allocated and started in one operation.
+   */
 
   status = _Thread_Start(
     the_thread,
@@ -789,7 +802,6 @@ int pthread_create(
     return EINVAL;
   }
 
-
   /*
    *  Return the id and indicate we successfully created the thread
    */
@@ -799,7 +811,6 @@ int pthread_create(
  _Thread_Enable_dispatch();
 
  return 0;
-
 }
 
 /*PAGE
