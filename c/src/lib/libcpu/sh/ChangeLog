@@ -1,4 +1,4 @@
-2003-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Unconditionally build subdirs sh7032, sh7045, sh7750.
 	* configure.ac: Merge-in sh7032/configure.ac, sh7045/configure.ac,
