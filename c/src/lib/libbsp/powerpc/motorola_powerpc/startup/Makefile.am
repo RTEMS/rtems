@@ -2,22 +2,33 @@
 ## $Id$
 ##
 
-VPATH = @srcdir@:@srcdir@/../console:@srcdir@/../../shared/startup:@srcdir@/../../../shared
-
 PGM = $(ARCH)/startup.rel
-
-C_FILES = bootcard.c main.c bspstart.c bsppost.c bsplibc.c sbrk.c bspclean.c \
-    gnatinstallhandler.c pgtbl_setup.c pgtbl_activate.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES)
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+powerpc_shared_startup_C_FILES = \
+    $(top_srcdir)/../../powerpc/shared/startup/bspstart.c \
+    $(top_srcdir)/../../powerpc/shared/startup/pgtbl_setup.c \
+    $(top_srcdir)/../../powerpc/shared/startup/pgtbl_activate.c \
+    $(top_srcdir)/../../powerpc/shared/startup/sbrk.c
+OBJS = \
+    $(powerpc_shared_startup_C_FILES:$(top_srcdir)/../../powerpc/shared/startup/%.c=$(ARCH)/%.$(OBJEXT))
+
+$(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../powerpc/shared/startup/%.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
+
+shared_C_FILES = $(top_srcdir)/../../shared/bootcard.c
+shared_C_FILES += $(top_srcdir)/../../shared/bspclean.c
+shared_C_FILES += $(top_srcdir)/../../shared/bsplibc.c
+shared_C_FILES += $(top_srcdir)/../../shared/bsppost.c
+shared_C_FILES += $(top_srcdir)/../../shared/main.c
+shared_C_FILES += $(top_srcdir)/../../shared/gnatinstallhandler.c
+OBJS += \
+    $(shared_C_FILES:$(top_srcdir)/../../shared/%.c=$(ARCH)/%.$(OBJEXT))
+
+$(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../shared/%.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
 
 $(PGM): $(OBJS)
 	$(make-rel)

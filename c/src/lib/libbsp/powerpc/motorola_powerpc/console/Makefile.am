@@ -2,22 +2,27 @@
 ## $Id$
 ##
 
-VPATH = @srcdir@:@srcdir@/../../shared/console:@srcdir@/../../../shared
-
-C_FILES = polled_io.c uart.c console.c inch.c reboot.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-H_FILES = ../../shared/console/consoleIo.h ../../shared/console/keyboard.h \
-    ../../shared/console/uart.h
-
-OBJS = $(C_O_FILES)
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+powerpc_shared_console_C_FILES = \
+    $(top_srcdir)/../../powerpc/shared/console/polled_io.c \
+    $(top_srcdir)/../../powerpc/shared/console/uart.c \
+    $(top_srcdir)/../../powerpc/shared/console/console.c \
+    $(top_srcdir)/../../powerpc/shared/console/inch.c \
+    $(top_srcdir)/../../powerpc/shared/console/reboot.c
+OBJS = \
+    $(powerpc_shared_console_C_FILES:$(top_srcdir)/../../powerpc/shared/console/%.c=$(ARCH)/%.$(OBJEXT))
+
+$(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../powerpc/shared/console/%.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
+
+# FIXME: This is nonsense.
+noinst_HEADERS = $(top_srcdir)/../../powerpc/shared/console/consoleIo.h \
+    $(top_srcdir)/../../powerpc/shared/console/keyboard.h \
+    $(top_srcdir)/../../powerpc/shared/console/uart.h
+
+noinst_DATA = $(OBJS)
 
 AM_CPPFLAGS += -DSTATIC_LOG_ALLOC
 

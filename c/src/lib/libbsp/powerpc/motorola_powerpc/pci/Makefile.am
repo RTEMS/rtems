@@ -2,24 +2,22 @@
 ## $Id$
 ##
 
-VPATH = @srcdir@:@srcdir@/../../shared/pci
-
-C_FILES = pci.c detect_raven_bridge.c pcifinddevice.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-include_bspdir = $(includedir)/bsp
-nodist_include_bsp_HEADERS = $(top_srcdir)/../shared/pci/pci.h
-
-OBJS = $(C_O_FILES)
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-AM_CFLAGS += -O2
+include_bspdir = $(includedir)/bsp
+nodist_include_bsp_HEADERS = $(top_srcdir)/../../powerpc/shared/pci/pci.h
 
-# the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
+power_shared_pci_C_FILES = $(top_srcdir)/../../powerpc/shared/pci/pci.c \
+    $(top_srcdir)/../../powerpc/shared/pci/detect_raven_bridge.c \
+    $(top_srcdir)/../../powerpc/shared/pci/pcifinddevice.c
+OBJS = \
+    $(power_shared_pci_C_FILES:$(top_srcdir)/../../powerpc/shared/pci/%.c=$(ARCH)/%.$(OBJEXT))
 
-all-local: $(PREINSTALL_FILES) $(OBJS)
+$(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../powerpc/shared/pci/%.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
+
+noinst_DATA = $(OBJS)
 
 PREINSTALL_FILES =
 
@@ -27,7 +25,7 @@ $(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
-$(PROJECT_INCLUDE)/bsp/pci.h: $(top_srcdir)/../shared/pci/pci.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/pci.h: $(top_srcdir)/../../powerpc/shared/pci/pci.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pci.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pci.h
 

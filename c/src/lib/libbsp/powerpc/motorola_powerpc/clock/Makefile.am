@@ -2,22 +2,17 @@
 ## $Id$
 ##
 
-VPATH = @srcdir@:@srcdir@/../../shared/clock
-
-C_FILES = p_clock.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES)
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+powerpc_shared_clock_C_FILES = \
+    $(top_srcdir)/../../powerpc/shared/clock/p_clock.c
+OBJS = \
+    $(powerpc_shared_clock_C_FILES:$(top_srcdir)/../../powerpc/shared/clock/%.c=$(ARCH)/%.$(OBJEXT))
 
-# the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
+$(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../powerpc/shared/clock/%.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
 
-all-local: $(OBJS)
+noinst_DATA = $(OBJS)
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -2,27 +2,24 @@
 ## $Id$
 ##
 
-VPATH = @srcdir@:@srcdir@/../../shared/motorola
-
-C_FILES = motorola.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-# FIXME: This doesn't give any sense here
-include_bspdir = $(includedir)/bsp
-nodist_include_bsp_HEADERS = $(top_srcdir)/../shared/motorola/motorola.h
-
-OBJS = $(C_O_FILES)
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+include_bspdir = $(includedir)/bsp
+nodist_include_bsp_HEADERS = \
+    $(top_srcdir)/../../powerpc/shared/motorola/motorola.h
 
-# the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
+powerpc_shared_motorola_C_FILES = \
+    $(top_srcdir)/../../powerpc/shared/motorola/motorola.c
+OBJS = \
+    $(powerpc_shared_motorola_C_FILES:$(top_srcdir)/../../powerpc/shared/motorola/%.c=$(ARCH)/%.$(OBJEXT))
 
-all-local: $(OBJS)
+$(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../powerpc/shared/motorola/%.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
+
+noinst_DATA = $(OBJS)
+
+all-local: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
 
@@ -30,7 +27,7 @@ $(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
-$(PROJECT_INCLUDE)/bsp/motorola.h: $(top_srcdir)/../shared/motorola/motorola.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/motorola.h: $(top_srcdir)/../../powerpc/shared/motorola/motorola.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/motorola.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/motorola.h
 

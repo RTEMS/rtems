@@ -7,14 +7,23 @@
 
 AUTOMAKE_OPTIONS = no-exeext
 
-VPATH = @srcdir@:@srcdir@/../../shared/bootloader:@srcdir@/../../shared/console
-
 noinst_PROGRAMS = bootloader
 
 ## IMPORTANT: head.S must be first, T. Straumann 12/17/2001
-bootloader_SOURCES = head.S exception.S em86real.S
-bootloader_SOURCES += misc.c pci.c zlib.c mm.c em86.c polled_io.c lib.c
-bootloader_SOURCES += bootldr.h zlib.h pci.h keyboard.h
+bootloader_SOURCES = $(top_srcdir)/../../powerpc/shared/bootloader/head.S \
+    $(top_srcdir)/../../powerpc/shared/bootloader/exception.S \
+    $(top_srcdir)/../../powerpc/shared/bootloader/em86real.S \
+    $(top_srcdir)/../../powerpc/shared/bootloader/misc.c \
+    $(top_srcdir)/../../powerpc/shared/bootloader/pci.c \
+    $(top_srcdir)/../../powerpc/shared/bootloader/zlib.c \
+    $(top_srcdir)/../../powerpc/shared/bootloader/mm.c \
+    $(top_srcdir)/../../powerpc/shared/bootloader/em86.c \
+    $(top_srcdir)/../../powerpc/shared/console/polled_io.c \
+    $(top_srcdir)/../../powerpc/shared/bootloader/lib.c \
+    $(top_srcdir)/../../powerpc/shared/bootloader/bootldr.h \
+    $(top_srcdir)/../../powerpc/shared/bootloader/zlib.h \
+    $(top_srcdir)/../../powerpc/shared/bootloader/pci.h \
+    $(top_srcdir)/../../powerpc/shared/console/keyboard.h
 
 NM = @NM@
 LD = @LD@

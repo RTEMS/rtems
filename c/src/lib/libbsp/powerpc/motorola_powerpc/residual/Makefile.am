@@ -2,24 +2,21 @@
 ## $Id$
 ##
 
-VPATH = @srcdir@:@srcdir@/../../shared/residual
-
-C_FILES = residual.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-H_FILES = ../../shared/residual/pnp.h ../../shared/residual/residual.h
-
-OBJS = $(C_O_FILES)
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+# FIXME: This does not make much sense
+noinst_HEADERS = $(top_srcdir)/../../powerpc/shared/residual/pnp.h \
+    $(top_srcdir)/../../powerpc/shared/residual/residual.h
 
-# the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
+powerpc_shared_residual_C_FILES = \
+    $(top_srcdir)/../../powerpc/shared/residual/residual.c
+OBJS = \
+    $(powerpc_shared_residual_C_FILES:$(top_srcdir)/../../powerpc/shared/residual/%.c=$(ARCH)/%.$(OBJEXT))
 
-all-local: $(PREINSTALL_FILES) $(OBJS)
+$(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../powerpc/shared/residual/%.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
+
+noinst_DATA = $(OBJS)
 
 include $(top_srcdir)/../../../../automake/local.am
