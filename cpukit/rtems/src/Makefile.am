@@ -2,6 +2,7 @@
 ##  $Id$
 ##
 
+LIB = $(ARCH)/librtems.a
 
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
@@ -72,7 +73,11 @@ OBJS = $(C_O_FILES)
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-all-local: ${ARCH} ${OBJS}
+all-local: ${ARCH} $(LIB)
+
+$(LIB): ${OBJS}
+	$(make-library)
+
 
 EXTRA_DIST = $(STD_C_FILES) $(MP_C_FILES)
 
