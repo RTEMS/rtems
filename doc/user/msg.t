@@ -36,6 +36,7 @@ directives provided by the message manager are:
 @item @code{message_queue_urgent} - Put message at front of a queue
 @item @code{message_queue_broadcast} - Broadcast N messages to a queue
 @item @code{message_queue_receive} - Receive message from a queue
+@item @code{rtems_message_queue_get_number_pending} - Get number of messages pending on a queue
 @item @code{message_queue_flush} - Flush all messages on a queue
 @end itemize
 
@@ -279,6 +280,7 @@ at the message queue are also deleted and deallocated.
 * MESSAGE_QUEUE_URGENT - Put message at front of a queue::
 * MESSAGE_QUEUE_BROADCAST - Broadcast N messages to a queue::
 * MESSAGE_QUEUE_RECEIVE - Receive message from a queue::
+* MESSAGE_QUEUE_GET_NUMBER_PENDING - Get number of messages pending on a queue::
 * MESSAGE_QUEUE_FLUSH - Flush all messages on a queue::
 @end menu
 @end ifinfo
@@ -691,7 +693,7 @@ proxy used to represent the task is reclaimed.
 
 @page
 @ifinfo
-@node MESSAGE_QUEUE_RECEIVE - Receive message from a queue, MESSAGE_QUEUE_FLUSH - Flush all messages on a queue, MESSAGE_QUEUE_BROADCAST - Broadcast N messages to a queue, Message Manager Directives
+@node MESSAGE_QUEUE_RECEIVE - Receive message from a queue, MESSAGE_QUEUE_GET_NUMBER_PENDING - Get number of messages pending on a queue, MESSAGE_QUEUE_BROADCAST - Broadcast N messages to a queue, Message Manager Directives
 @end ifinfo
 @subsection MESSAGE_QUEUE_RECEIVE - Receive message from a queue
 
@@ -777,7 +779,52 @@ message is posted.
 
 @page
 @ifinfo
-@node MESSAGE_QUEUE_FLUSH - Flush all messages on a queue, Event Manager, MESSAGE_QUEUE_RECEIVE - Receive message from a queue, Message Manager Directives
+@node MESSAGE_QUEUE_GET_NUMBER_PENDING - Get number of messages pending on a queue, MESSAGE_QUEUE_FLUSH - Flush all messages on a queue, MESSAGE_QUEUE_RECEIVE - Receive message from a queue, Message Manager Directives
+@end ifinfo
+@subsection MESSAGE_QUEUE_GET_NUMBER_PENDING - Get number of messages pending on a queue
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+rtems_status_code rtems_message_queue_get_number_pending(
+  rtems_id          id,
+  rtems_unsigned32 *count
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Message_Queue_Get_Number_Pending (
+   ID     : in     RTEMS.ID;
+   Count  :    out RTEMS.Unsigned32;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{SUCCESSFUL} - number of messages pending returned successfully@*
+@code{INVALID_ID} - invalid queue id
+
+@subheading DESCRIPTION:
+
+This directive returns the number of messages pending on this
+message queue in count.  If no messages are present
+on the queue, count is set to zero.
+
+@subheading NOTES:
+
+Getting the number of pending messages on a global message queue which
+does not reside on the local node will generate a request to the
+remote node to actually obtain the pending message count for
+the specified message queue.
+
+
+@page
+@ifinfo
+@node MESSAGE_QUEUE_FLUSH - Flush all messages on a queue, Event Manager, MESSAGE_QUEUE_GET_NUMBER_PENDING - Get number of messages pending on a queue, Message Manager Directives
 @end ifinfo
 @subsection MESSAGE_QUEUE_FLUSH - Flush all messages on a queue
 
@@ -803,7 +850,7 @@ procedure Message_Queue_Flush (
 @end ifset
 
 @subheading DIRECTIVE STATUS CODES:
-@code{SUCCESSFUL} - message received successfully@*
+@code{SUCCESSFUL} - message queue flushed successfully@*
 @code{INVALID_ID} - invalid queue id
 
 @subheading DESCRIPTION:
@@ -818,6 +865,4 @@ to zero.
 Flushing all messages on a global message queue which
 does not reside on the local node will generate a request to the
 remote node to actually flush the specified message queue.
-
-
 
