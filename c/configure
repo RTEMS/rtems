@@ -845,6 +845,7 @@ else
 fi
 
 
+
 PACKAGE=rtems-c
 
 VERSION=$RTEMS_VERSION
@@ -857,7 +858,7 @@ fi
 
 missing_dir=`cd $ac_aux_dir && pwd`
 echo $ac_n "checking for working aclocal""... $ac_c" 1>&6
-echo "configure:861: checking for working aclocal" >&5
+echo "configure:862: checking for working aclocal" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -870,7 +871,7 @@ else
 fi
 
 echo $ac_n "checking for working autoconf""... $ac_c" 1>&6
-echo "configure:874: checking for working autoconf" >&5
+echo "configure:875: checking for working autoconf" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -883,7 +884,7 @@ else
 fi
 
 echo $ac_n "checking for working automake""... $ac_c" 1>&6
-echo "configure:887: checking for working automake" >&5
+echo "configure:888: checking for working automake" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -896,7 +897,7 @@ else
 fi
 
 echo $ac_n "checking for working autoheader""... $ac_c" 1>&6
-echo "configure:900: checking for working autoheader" >&5
+echo "configure:901: checking for working autoheader" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -909,7 +910,7 @@ else
 fi
 
 echo $ac_n "checking for working makeinfo""... $ac_c" 1>&6
-echo "configure:913: checking for working makeinfo" >&5
+echo "configure:914: checking for working makeinfo" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -923,7 +924,7 @@ fi
 
 
 echo $ac_n "checking whether to enable maintainer-specific portions of Makefiles""... $ac_c" 1>&6
-echo "configure:927: checking whether to enable maintainer-specific portions of Makefiles" >&5
+echo "configure:928: checking whether to enable maintainer-specific portions of Makefiles" >&5
     # Check whether --enable-maintainer-mode or --disable-maintainer-mode was given.
 if test "${enable_maintainer_mode+set}" = set; then
   enableval="$enable_maintainer_mode"
@@ -989,7 +990,7 @@ fi
 
 # Is this a supported CPU?
 echo $ac_n "checking if cpu $RTEMS_CPU is supported""... $ac_c" 1>&6
-echo "configure:993: checking if cpu $RTEMS_CPU is supported" >&5
+echo "configure:994: checking if cpu $RTEMS_CPU is supported" >&5
 if test -d "$srcdir/$RTEMS_TOPdir/c/src/exec/score/cpu/$RTEMS_CPU"; then
   echo "$ac_t""yes" 1>&6
 else
@@ -1018,7 +1019,7 @@ esac
 if test -z "$rtems_bsp"; then
   
 echo $ac_n "checking for bsps""... $ac_c" 1>&6
-echo "configure:1022: checking for bsps" >&5
+echo "configure:1023: checking for bsps" >&5
 case "${target}" in
   i[3456]86-go32-rtems*)
     rtems_bsp="go32 go32_p5"
@@ -1050,7 +1051,7 @@ for i in $rtems_bsp; do
 
     # make sure there is a make/custom file for the bsp
     echo $ac_n "checking for make/custom/$i.cfg""... $ac_c" 1>&6
-echo "configure:1054: checking for make/custom/$i.cfg" >&5
+echo "configure:1055: checking for make/custom/$i.cfg" >&5
 if test -r "$srcdir/$RTEMS_TOPdir/make/custom/$i.cfg"; then
   echo "$ac_t""yes" 1>&6
 else
