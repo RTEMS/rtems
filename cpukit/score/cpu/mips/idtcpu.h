@@ -462,7 +462,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define C1_REVISION     $0
 #define C1_STATUS       $31
 
-#endif XDS
+#endif / * XDS */
 
 #ifdef R4650
 #define IWATCH $18

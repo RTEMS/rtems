@@ -1,3 +1,8 @@
+2002-10-28	Joel Sherrill <joel@OARcorp.com>
+
+	* idtcpu.h: Removed warning by turning extra token at the end of
+	an endif into a comment.
+
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
