@@ -1,3 +1,9 @@
+2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 452/bsps
+	* bsp_specs: Remove -D__USE_INIT_FINI__.
+	Remove *.cpp (Now unused).
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
