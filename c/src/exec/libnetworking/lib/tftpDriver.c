@@ -51,6 +51,13 @@ int rtems_tftp_driver_debug = 1;
 #define TFTP_PATHNAME_PREFIX "/TFTP/"
 
 /*
+ * Root node_access value
+ * By using the address of a local static variable
+ * we ensure a unique value for this identifier.
+ */
+#define ROOT_NODE_ACCESS    (&tftp_mutex)
+
+/*
  * Default limits
  */
 #define PACKET_FIRST_TIMEOUT_MILLISECONDS  400
@@ -149,7 +156,6 @@ struct tftpStream {
 /*
  * Number of streams open at the same time
  */
-
 static rtems_id tftp_mutex;
 static int nStreams;
 static struct tftpStream ** volatile tftpStreams;
@@ -194,7 +200,7 @@ static int rtems_tftp_mount_me(
    */
 
   temp_mt_entry->fs_info                = NULL;
-  temp_mt_entry->mt_fs_root.node_access = NULL;
+  temp_mt_entry->mt_fs_root.node_access = ROOT_NODE_ACCESS;
 
   /*
    *  These need to be looked at for full POSIX semantics.
@@ -424,9 +430,63 @@ static int rtems_tftp_evaluate_for_make(
    const char                        **name        /* OUT    */
 )
 {  
+  pathloc->node_access = NULL;
   set_errno_and_return_minus_one( EIO );    
 }
 
+/*
+ * Convert a path to canonical form
+ */
+static void
+fixPath (char *path)
+{
+    char *inp, *outp, *base;
+
+    outp = inp = path;
+    base = NULL;
+    for (;;) {
+        if (inp[0] == '.') {
+            if (inp[1] == '\0')
+                break;
+            if (inp[1] == '/') {
+                inp += 2;
+                continue;
+            }
+            if (inp[1] == '.') {
+                if (inp[2] == '\0') {
+                    if ((base != NULL) && (outp > base)) {
+                        outp--;
+                        while ((outp > base) && (outp[-1] != '/'))
+                            outp--;
+                    }
+                    break;
+                }
+                if (inp[2] == '/') {
+                    inp += 3;
+                    if (base == NULL)
+                        continue;
+                    if (outp > base) {
+                        outp--;
+                        while ((outp > base) && (outp[-1] != '/'))
+                            outp--;
+                    }
+                    continue;
+                }
+            }
+        }
+        if (base == NULL)
+            base = inp;
+        while (inp[0] != '/') {
+            if ((*outp++ = *inp++) == '\0')
+                return;
+        }
+        *outp++ = '/';
+        while (inp[0] == '/')
+            inp++;
+    }
+    *outp = '\0';
+    return;
+}
 
 static int rtems_tftp_eval_path(  
   const char                        *pathname,     /* IN     */
@@ -441,6 +501,7 @@ static int rtems_tftp_eval_path(
      * Paths ending in a / are assumed to be directories.
      */
     if (pathname[strlen(pathname)-1] == '/') {
+        int isRelative = (pathloc->node_access != ROOT_NODE_ACCESS);
         char *cp;
         
         /*
@@ -448,12 +509,24 @@ static int rtems_tftp_eval_path(
          */
         if (flags)
             set_errno_and_return_minus_one( EISDIR );
-        cp = strdup (pathname);
-        if (cp == NULL)
-            set_errno_and_return_minus_one( ENOMEM );
+        if (isRelative) {
+            cp = malloc (strlen(pathloc->node_access)+strlen(pathname)+1);
+            if (cp == NULL)
+                set_errno_and_return_minus_one( ENOMEM );
+            strcpy (cp, pathloc->node_access);
+            strcat (cp, pathname);
+        }
+        else {
+            cp = strdup (pathname);
+            if (cp == NULL)
+                set_errno_and_return_minus_one( ENOMEM );
+        }
+        fixPath (cp);
         pathloc->node_access = cp;
         return 0;
     }
+    if (pathloc->node_access != ROOT_NODE_ACCESS)
+        pathloc->node_access = 0;
 
     /*
      * Reject it if it's not read-only or write-only.
@@ -461,7 +534,6 @@ static int rtems_tftp_eval_path(
     flags &= RTEMS_LIBIO_PERMS_READ | RTEMS_LIBIO_PERMS_WRITE;
     if ((flags != RTEMS_LIBIO_PERMS_READ) && (flags != RTEMS_LIBIO_PERMS_WRITE) )
         set_errno_and_return_minus_one( EINVAL );
-    pathloc->node_access = NULL;
     return 0;
 }
 
@@ -707,22 +779,6 @@ static int rtems_tftp_open(
         s1 = "";
     }
     else {
-        /*
-         * Skip any leading ./ or ../ components.
-         */
-        for (;;) {
-            while (*new_name == '/')
-                new_name++;
-            if ((new_name[0] == '.') && (new_name[1] == '/')) {
-                new_name += 2;
-                continue;
-            }
-            if ((new_name[0] == '.') && (new_name[1] == '.') && (new_name[2] == '/')) {
-                new_name += 3;
-                continue;
-            }
-            break;
-        }
         s1 = rtems_filesystem_current.node_access;
     }
     full_path_name = malloc (strlen (s1) + strlen (new_name) + 1);
@@ -730,6 +786,7 @@ static int rtems_tftp_open(
         return ENOMEM;
     strcpy (full_path_name, s1);
     strcat (full_path_name, new_name);
+    fixPath (full_path_name);
     err = rtems_tftp_open_worker (iop, full_path_name, flags, mode);
     free (full_path_name);
     return err;
@@ -945,7 +1002,7 @@ static int rtems_tftp_free_node_info(
      rtems_filesystem_location_info_t        *pathloc                 /* IN */
 )
 {
-    if (pathloc->node_access) {
+    if (pathloc->node_access && (pathloc->node_access != ROOT_NODE_ACCESS)) {
         free (pathloc->node_access);
         pathloc->node_access = NULL;
     }

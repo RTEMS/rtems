@@ -1,3 +1,8 @@
+2001-10-18	Eric Norum <eric.norum@usask.ca>
+
+	* lib/tftpDriver.c: Properly handles ../ components in chdir() and
+	open() operations within the TFTP file system.
+
 2001-10-12	Mike Siers <mikes@poliac.com>
 
 	* Update to stable working state.  Congratulations Mike! :)
