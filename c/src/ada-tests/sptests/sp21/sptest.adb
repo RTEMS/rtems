@@ -86,7 +86,6 @@ package body SPTEST is
          SPTEST.NO_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RESULT,
          STATUS 
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "IO_INITIALIZE" );
@@ -224,7 +223,6 @@ package body SPTEST is
          SPTEST.INVALID_DRIVER_MAJOR,
          0,
          RTEMS.NULL_ADDRESS,
-         RESULT,
          STATUS 
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS( 
