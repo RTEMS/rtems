@@ -12,7 +12,7 @@ PGM = ${ARCH}/$(TEST)-node$(NODE).exe
 MANAGERS = io mp message
 
 C_FILES = init.c task1.c recvmsg.c sendmsg.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h
 

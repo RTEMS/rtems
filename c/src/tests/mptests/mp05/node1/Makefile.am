@@ -12,7 +12,7 @@ PGM = ${ARCH}/$(TEST)-node$(NODE).exe
 MANAGERS = io mp signal timer
 
 C_FILES = init.c asr.c task1.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h
 

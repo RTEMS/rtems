@@ -1,3 +1,34 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mp01/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp01/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp02/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp02/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp03/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp03/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp04/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp04/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp05/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp05/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp06/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp06/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp07/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp07/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp08/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp08/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp09/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp09/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp10/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp10/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp11/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp11/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp12/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp12/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp13/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp13/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp14/node1/Makefile.am: Use $(OBJEXT) instead of .o.
+	* mp14/node2/Makefile.am: Use $(OBJEXT) instead of .o.
+
 2002-08-01	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR47 add support for buffered test output.  This involved

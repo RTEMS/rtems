@@ -12,7 +12,7 @@ PGM = ${ARCH}/$(TEST)-node$(NODE).exe
 MANAGERS = io mp timer event
 
 C_FILES = init.c delay.c task1.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h
 
