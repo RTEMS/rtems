@@ -79,7 +79,7 @@ int rsvp_on = 0;
 static int ip_rsvp_on;
 struct socket *ip_rsvpd;
 
-static int	ipforwarding = 0;
+int	ipforwarding = 0;
 SYSCTL_INT(_net_inet_ip, IPCTL_FORWARDING, forwarding, CTLFLAG_RW,
 	&ipforwarding, 0, "");
 

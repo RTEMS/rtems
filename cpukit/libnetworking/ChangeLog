@@ -1,5 +1,11 @@
 2002-10-04	Jay Monkman <jtm@smoothsmoothie.com>
 
+	* netinet/in_cksum.c, netinet/ip_icmp.h, netinet/ip_input.c,
+	netinet/tcp_input.c, netinet/tcp_subr.c, netinet/tcp_var.h,
+	sys/queue.h: Address alignment requirements for the ARM.
+
+2002-10-04	Jay Monkman <jtm@smoothsmoothie.com>
+
 	* rtems/rtems_glue.c: Add IP aliasing ioctls SIOCAIFADDR and
 	SIOCDIFADDR.
 

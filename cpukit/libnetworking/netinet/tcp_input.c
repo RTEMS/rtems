@@ -155,7 +155,6 @@ tcp_reass(tp, ti, m)
 	register struct tcpiphdr *q;
 	struct socket *so = tp->t_inpcb->inp_socket;
 	int flags;
-
 	/*
 	 * Call with ti==0 after become established to
 	 * force pre-ESTABLISHED data up to user socket.
@@ -202,8 +201,11 @@ tcp_reass(tp, ti, m)
 	}
 	tcpstat.tcps_rcvoopack++;
 	tcpstat.tcps_rcvoobyte += ti->ti_len;
+#if (defined(__GNUC__) && defined(__arm__))
+    STR32_UNALGN(ti,m);
+#else
 	REASS_MBUF(ti) = m;		/* XXX */
-
+#endif
 	/*
 	 * While we overlap succeeding segments trim them or,
 	 * if they are completely covered, dequeue them.
@@ -215,13 +217,22 @@ tcp_reass(tp, ti, m)
 		if (i < q->ti_len) {
 			q->ti_seq += i;
 			q->ti_len -= i;
+#if (defined(__GNUC__) && defined(__arm__))
+            LD32_UNALGN(q,m);
+            m_adj(m, i);
+#else
 			m_adj(REASS_MBUF(q), i);
+#endif
 			break;
 		}
 		q = (struct tcpiphdr *)q->ti_next;
+#if (defined(__GNUC__) && defined(__arm__))
+        LD32_UNALGN((struct tcpiphdr *)q->ti_prev,m);
+#else
 		m = REASS_MBUF((struct tcpiphdr *)q->ti_prev);
+#endif
 		remque(q->ti_prev);
-		m_freem(m);
+        m_freem(m);
 	}
 
 	/*
@@ -243,7 +254,11 @@ present:
 		tp->rcv_nxt += ti->ti_len;
 		flags = ti->ti_flags & TH_FIN;
 		remque(ti);
+#if (defined(__GNUC__) && defined(__arm__))
+        LD32_UNALGN(ti,m);
+#else
 		m = REASS_MBUF(ti);
+#endif
 		ti = (struct tcpiphdr *)ti->ti_next;
 		if (so->so_state & SS_CANTRCVMORE)
 			m_freem(m);

@@ -57,6 +57,10 @@
 
 #include "in_cksum_powerpc.c"
 
+#elif (defined(__GNUC__) && defined(__arm__))
+
+#include "in_cksum_arm.c"
+
 #else
 
 #include <stdio.h> /* for puts */

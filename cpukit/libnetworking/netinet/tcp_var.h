@@ -225,7 +225,16 @@ struct rmxp_tao {
  * port numbers (which are no longer needed once we've located the
  * tcpcb) are overlayed with an mbuf pointer.
  */
-#define REASS_MBUF(ti) (*(struct mbuf **)&((ti)->ti_t))
+#if (defined(__GNUC__) && defined(__arm__))
+#define STR32_UNALGN(ti,m) \
+        (ti)->ti_sport = (unsigned short)(((unsigned int) m & 0xffff0000) >> 16); \
+         (ti)->ti_dport = (unsigned short) ((unsigned int) m & 0x0000ffff);
+#define LD32_UNALGN(ti,m) \
+        m = (struct mbuf *)((((unsigned int) (ti)->ti_sport) << 16) | ( (unsigned int)(ti)->ti_dport));
+
+#else
+#define REASS_MBUF(ti) (*(mbuf_packed **)&((ti)->ti_t))
+#endif
 
 /*
  * TCP statistics.

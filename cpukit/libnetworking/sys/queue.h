@@ -413,6 +413,35 @@ struct quehead {
 
 #ifdef	__GNUC__
 
+#if (defined(__GNUC__) && defined(__arm__))
+static __inline void
+insque(void *a, void *b)
+{
+	struct quehead *element;
+	struct quehead *head;
+    element = (struct quehead *) (((unsigned int) a + 0x3) & ~0x3);
+    head = (struct quehead *) (((unsigned int) b + 0x3) & ~0x3);
+
+	element->qh_link = head->qh_link;
+	element->qh_rlink = head;
+	head->qh_link = element;
+	element->qh_link->qh_rlink = element;
+}
+
+static __inline void
+remque(void *a)
+{
+	struct quehead *element;
+
+    element = (struct quehead *) (((unsigned int) a + 0x3) & ~0x3);
+
+	element->qh_link->qh_rlink = element->qh_rlink;
+	element->qh_rlink->qh_link = element->qh_link;
+	element->qh_rlink = 0;
+}
+
+#else /*if (defined(__GNUC__) && defined(__arm__))*/
+
 static __inline void
 insque(void *a, void *b)
 {
@@ -433,6 +462,7 @@ remque(void *a)
 	element->qh_rlink->qh_link = element->qh_link;
 	element->qh_rlink = 0;
 }
+#endif /*if-else (defined(__GNUC__) && defined(__arm__))*/
 
 #else /* !__GNUC__ */
 
