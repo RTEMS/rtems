@@ -120,7 +120,8 @@ The following persons/organizations have made contributions:
 + Ralf Corsepius (corsepiu@faw.uni-ulm.de) of the Research Institute for
   Applied Knowledge Processing at the University of Ulm (FAW), Germany,
   for numerous enhancements to the RTEMS autoconf support as well as
-  for the Hitachi SH port.
+  for the Hitachi SH port.  His contributions are too many to list but
+  also include work on RPMs for RTEMS tools.
 
 + Dario Alcocer <alcocer@connectnet.com> submitted a port of the
   RTEMS port to FreeBSD.
@@ -159,7 +160,10 @@ The following persons/organizations have made contributions:
   of Canon CRF - Communication Dept for numerous submissions including
   remote debugging on the i386 and PowerPC, port of RPC, port of the
   GoAhead web server, BSP for the Motorola MCP750 PowerPC board, and
-  numerous improvements to the i386 and PowerPC ports of RTEMS.
+  numerous improvements to the i386 and PowerPC ports of RTEMS
+  including a new enhanced interrupt management API that reduces
+  interrupt latency while making it easier to support external interrupt
+  controllers.
 
 + Mark Bronson <mark@ramix.com> of RAMIX for submitting i960RP
   support and the rxgen960 board support package.
