@@ -1,0 +1,45 @@
+#
+#  $Id$
+#
+
+These tests are brought to you by the letter `q'.
+
+VMIN=0, VTIME=0
+        Each letter you type should produce a line of output.
+        The `count' should be quite large, since (as you correctly
+        pointed out) the read is non-blocking.  The time should be
+        the interval between typing characters.
+        Type a `q' to finish the test.
+VMIN=0, VTIME=20
+        Again, each letter should produce a line of output.  The
+        `count' should be much smaller -- the read is non-blocking
+        but has a timeout of 2 seconds, so the count should be about
+        half the `interval'.
+        Type a `q' to finish the test.
+VMIN=5, VTIME=0
+        A line should be produced for every 5 characters typed.  The
+        count should be 1.  This is a blocking read.
+        Type a `q' as the first character of a group of 5 to finish
+        the test.
+VMIN=5, VTIME=20
+        Type a character.  Two seconds later a line should be printed.
+        Count should be 1.  Type a character, and another within 2  
+seconds.
+        Two seconds after last character (or right after the 5th  
+character)
+        a line should be printed.
+        Type a `q' as the first character of a group to finish the test.
+        
+Clear???
+
+Also, when testing the cooked mode input, try typing some tabs  
+and/or control characters and make sure that you can backspace over  
+them properly.
+
+---
+Eric Norum
+eric@skatter.usask.ca
+Saskatchewan Accelerator Laboratory
+University of Saskatchewan
+Saskatoon, Canada.
+
