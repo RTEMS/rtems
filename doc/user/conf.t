@@ -934,22 +934,46 @@ the workspace area will result in the
 directive being invoked with the
 @code{@value{RPREFIX}INVALID_ADDRESS} error code.
 
-A worksheet is provided in the Memory Requirements
+A worksheet is provided in the @b{Memory Requirements}
 chapter of the Applications Supplement document for a specific
 target processor to assist the user in calculating the minimum
 size of the RTEMS RAM Workspace for each application.  The value
 calculated with this worksheet is the minimum value that should
-be specified as the work_space_size parameter of the
-Configuration Table.  The user is cautioned that future versions
-of RTEMS may not have the same memory requirements per object.
-Although the value calculated is sufficient for a particular
-target processor and release of RTEMS, memory usage is subject
-to change across versions and target processors.  The user is
-advised to allocate somewhat more memory than the worksheet
-recommends to insure compatibility with future releases for a
-specific target processor and other target processors.  To avoid
-problems, the user should recalculate the memory requirements
-each time one of the following events occurs:
+be specified as the @code{work_space_size} parameter of the
+Configuration Table.  
+
+The allocation of objects can operate in two modes. The default mode
+has an object number ceiling. No more than the specified number of
+objects can be allocated from the RTEMS RAM Workspace. The number of objects
+specified in the particular API Configuration table fields are
+allocated at initialisation. The second mode allows the number of
+objects to grow to use the available free memory in the RTEMS RAM Workspace.
+
+The auto-extending mode can be enabled individually for each object
+type by using the macro @code{rtems_resource_unlimited}. This takes a value
+as a parameter, and is used to set the object maximum number field in
+an API Configuration table. The value is an allocation unit size. When
+RTEMS is required to grow the object table it is grown by this
+size. The kernel will return the object memory back to the RTEMS RAM Workspace
+when an object is destroyed. The kernel will only return an allocated
+block of objects to the RTEMS RAM Workspace if at least half the allocation
+size of free objects remain allocated. RTEMS always keeps one
+allocation block of objects allocated. Here is an example of using 
+@code{rtems_resource_unlimited}:
+
+@example
+#define CONFIGURE_MAXIMUM_TASKS rtems_resource_unlimited(5)
+@end example
+
+The user is cautioned that future versions of RTEMS may not have the
+same memory requirements per object. Although the value calculated is
+suficient for a particular target processor and release of RTEMS,
+memory usage is subject to change across versions and target
+processors.  The user is advised to allocate somewhat more memory than
+the worksheet recommends to insure compatibility with future releases
+for a specific target processor and other target processors. To avoid
+problems, the user should recalculate the memory requirements each
+time one of the following events occurs:
 
 @itemize @bullet
 @item a configuration parameter is modified,
