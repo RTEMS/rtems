@@ -46,6 +46,10 @@ EXTRA_DIST = asmfault.S asmfault.h asmstub.S asmstub.h bspstart.c cntrltbl.c \
     rommon.h rxgen_romld.S sctns.c sctns.h setvec.c systbl.c systbl.h \
     time.h
 
+${PROJECT_RELEASE}/lib/$(dirstamp):
+	@$(mkdir_p) ${PROJECT_RELEASE}/lib
+	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+
 ${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
 	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
 TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds

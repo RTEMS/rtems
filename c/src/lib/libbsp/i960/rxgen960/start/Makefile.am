@@ -21,6 +21,10 @@ all-local: $(ARCH)/rxgen_romld.$(OBJEXT) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = rxgen_romld.S
 
+${PROJECT_RELEASE}/lib/$(dirstamp):
+	@$(mkdir_p) ${PROJECT_RELEASE}/lib
+	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+
 ${PROJECT_RELEASE}/lib/rxgen_romld$(LIB_VARIANT).$(OBJEXT): $(ARCH)/rxgen_romld$(LIB_VARIANT).$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
 	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/rxgen_romld$(LIB_VARIANT).$(OBJEXT)
 TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/rxgen_romld$(LIB_VARIANT).$(OBJEXT)

@@ -36,6 +36,10 @@ all-local: $(PGM) $(TMPINSTALL_FILES)
 EXTRA_DIST = FPGA.c Hwr_init.c bspclean.c bspstart.c genpvec.c linkcmds \
     setvec.c spurious.c vmeintr.c
 
+${PROJECT_RELEASE}/lib/$(dirstamp):
+	@$(mkdir_p) ${PROJECT_RELEASE}/lib
+	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+
 ${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
 	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
 TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds

@@ -29,6 +29,10 @@ all-local: $(PREINSTALL_FILES) $(PGM) $(TMPINSTALL_FILES)
 EXTRA_DIST = bspclean.c bspstart.c hw_init.c linkcmds linkcmds.ram \
     linkcmds.rom
 
+${PROJECT_RELEASE}/lib/$(dirstamp):
+	@$(mkdir_p) ${PROJECT_RELEASE}/lib
+	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+
 ${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
 	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
 TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
