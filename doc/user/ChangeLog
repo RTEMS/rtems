@@ -1,3 +1,7 @@
+2003-08-22	Joel Sherrill <joel@OARcorp.com>
+
+	* preface.texi: Reconcile differences between CVS trunk and 4.6 branch.
+
 2003-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* fatal.t: Reflect c/src/exec having moved to cpukit.
