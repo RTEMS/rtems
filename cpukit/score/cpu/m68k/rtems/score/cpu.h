@@ -84,7 +84,7 @@ extern "C" {
 #define CPU_IDLE_TASK_IS_FP              FALSE
 #define CPU_USE_DEFERRED_FP_SWITCH       TRUE
 
-#define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
+#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
 #define CPU_STACK_GROWS_UP               FALSE
 #define CPU_STRUCTURE_ALIGNMENT
 
@@ -415,6 +415,17 @@ unsigned32 _CPU_ISR_Get_level( void );
 #endif
 
 /* end of Context handler macros */
+
+/*
+ *  _CPU_Thread_Idle_body
+ *
+ *  This routine is the CPU dependent IDLE thread body.
+ *
+ *  NOTE:  It need only be provided if CPU_PROVIDES_IDLE_THREAD_BODY
+ *         is TRUE.
+ */
+
+void _CPU_Thread_Idle_body( void );
 
 /*
  *  Fatal Error manager macros
