@@ -95,7 +95,7 @@ and status codes.
 #include <dirent.h>
 
 int opendir(
-const char *dirname
+  const char *dirname
 );
 @end example
 @end ifset
@@ -154,7 +154,7 @@ The routine is implemented in Cygnus newlib.
 #include <dirent.h>
 
 int readdir(
-DIR *dirp
+  DIR *dirp
 );
 @end example
 @end ifset
@@ -208,7 +208,7 @@ The routine is implemented in Cygnus newlib.
 #include <dirent.h>
 
 void rewinddir(
-DIR *dirp
+  DIR *dirp
 );
 @end example
 @end ifset
@@ -251,10 +251,10 @@ The routine is implemented in Cygnus newlib.
 #include <dirent.h>
 
 int scandir(
-const char *dir,
-struct direct ***namelist,
-int (*select)(const struct dirent *),
-int (*compar)(const struct dirent **, const struct dirent **)
+  const char *dir,
+  struct dirent ***namelist,
+  int (*select)(const struct dirent *),
+  int (*compar)(const struct dirent **, const struct dirent **)
 );
 @end example
 @end ifset
@@ -299,7 +299,7 @@ The routine is implemented in Cygnus newlib.
 #include <dirent.h>
 
 off_t telldir(
-DIR *dir
+  DIR *dir
 );
 @end example
 @end ifset
@@ -341,7 +341,7 @@ The routine is implemented in Cygnus newlib.
 #include <dirent.h>
 
 int closedir(
-DIR *dirp
+  DIR *dirp
 );
 @end example
 @end ifset
@@ -389,7 +389,7 @@ The routine is implemented in Cygnus newlib.
 #include <unistd.h>
 
 int chdir(
-const char *path
+  const char *path
 );
 @end example
 @end ifset
@@ -501,9 +501,9 @@ parameter.
 #include <fcntl.h>
 
 int open(
-const char *path,
-int oflag,
-mode_t mode
+  const char *path,
+  int         oflag,
+  mode_t      mode
 );
 @end example
 @end ifset
@@ -635,8 +635,8 @@ NONE
 #include <fcntl.h>
 
 int creat(
-const char *path,
-mode_t mode
+  const char *path,
+  mode_t      mode
 );
 @end example
 @end ifset
@@ -720,7 +720,7 @@ The routine is implemented in Cygnus newlib.
 #include <sys/stat.h>
 
 mode_t umask(
-mode_t cmask
+  mode_t cmask
 );
 @end example
 @end ifset
@@ -766,8 +766,8 @@ so this behavior is not possible.
 #include <unistd.h>
 
 int link(
-const char *existing,
-const char *new
+  const char *existing,
+  const char *new
 );
 @end example
 @end ifset
@@ -915,9 +915,9 @@ NONE
 #include <unistd.h>
 
 int readlink(
-const char *path,
-char *buf,
-size_t bufsize
+  const char *path,
+  char       *buf,
+  size_t      bufsize
 );
 
 @end example
@@ -984,8 +984,8 @@ NONE
 #include <sys/stat.h>
 
 int mkdir(
-const char *path,
-mode_t mode
+  const char *path,
+  mode_t      mode
 );
 @end example
 @end ifset
@@ -1056,8 +1056,8 @@ NONE
 
 
 int mkfifo(
-const char *path,
-mode_t mode
+  const char *path,
+  mode_t      mode
 );
 @end example
 @end ifset
@@ -1116,7 +1116,7 @@ NONE
 #include <unistd.h>
 
 int unlink(
-const char path
+  const char path
 );
 @end example
 @end ifset
@@ -1180,7 +1180,7 @@ NONE
 #include <unistd.h>
 
 int rmdir(
-const char *pathname
+  const char *pathname
 );
 @end example
 @end ifset
@@ -1266,8 +1266,8 @@ NONE
 #include <unistd.h>
 
 int rename(
-const char *old,
-const char *new
+  const char *old,
+  const char *new
 );
 @end example
 @end ifset
@@ -1360,8 +1360,8 @@ The routine is implemented in Cygnus newlib using @code{link()} and
 #include <sys/stat.h>
 
 int stat(
-const char *path,
-struct stat *buf
+  const char  *path,
+  struct stat *buf
 );
 @end example
 @end ifset
@@ -1516,8 +1516,8 @@ and not included in POSIX 1003.1b-1996.
 #include <unistd.h>
 
 int access(
-const char *pathname,
-int mode
+  const char *pathname,
+  int         mode
 );
 @end example
 @end ifset
@@ -1584,8 +1584,8 @@ NONE
 #include <sys/stat.h>
 
 int chmod(
-const char *path,
-mode_t mode
+  const char *path,
+  mode_t      mode
 );
 @end example
 @end ifset
@@ -1648,8 +1648,8 @@ NONE
 #include <sys/stat.h>
 
 int fchmod(
-int fildes,
-mode_t mode
+  int    fildes,
+  mode_t mode
 );
 @end example
 @end ifset
@@ -1724,9 +1724,9 @@ NONE
 #include <linux/unistd.h>
 
 long getdents(
-int dd_fd,
-char *dd_buf,
-int dd_len
+  int   dd_fd,
+  char *dd_buf,
+  int   dd_len
 );
 @end example
 @end ifset
@@ -1785,9 +1785,9 @@ NONE
 #include <unistd.h>
 
 int chown(
-const char *path,
-uid_t owner,
-gid_t group
+  const char *path,
+  uid_t       owner,
+  gid_t       group
 );
 @end example
 @end ifset
@@ -1861,8 +1861,8 @@ can be used to test the @code{_PC_CHOWN_RESTRICTED} flag.
 #include <sys/types.h>
 
 int utime(
-const char *filename,
-struct utimbuf *buf
+  const char     *filename,
+  struct utimbuf *buf
 );
 @end example
 @end ifset
@@ -1908,8 +1908,8 @@ NONE
 #include <unistd.h>
 
 int ftrunctate(
-int fd,
-size_t length
+  int    fd,
+  size_t length
 );
 @end example
 @end ifset
@@ -1991,8 +1991,8 @@ NONE
 #include <unistd.h>
 
 int trunctate(
-const char *path,
-size_t length
+  const char *path,
+  size_t      length
 );
 @end example
 @end ifset
@@ -2074,8 +2074,8 @@ NONE
 #include <unistd.h>
 
 int pathconf(
-const char *path,
-int name
+  const char *path,
+  int         name
 );
 @end example
 @end ifset
@@ -2172,8 +2172,8 @@ Files with name lengths longer than the value returned for @code{name} equal
 #include <unistd.h>
 
 int fpathconf(
-int filedes,
-int name
+  int filedes,
+  int name
 );
 @end example
 @end ifset
@@ -2273,9 +2273,9 @@ NONE
 #include <sys/stat.h>
 
 long mknod(
-const char *pathname,
-mode_t mode,
-dev_t dev
+  const char *pathname,
+  mode_t      mode,
+  dev_t       dev
 );
 @end example
 @end ifset
