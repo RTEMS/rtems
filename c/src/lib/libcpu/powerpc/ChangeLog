@@ -1,3 +1,12 @@
+2000-10-20	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.in, Makefile.am: Explicitly specify whether an
+	RTEMS_CPU_MODEL is using old or new exception processing.  This
+	is important because when building multilib, you do not know 
+	the RTEMS_CPU_MODEL.  So everything built in a multilib'ed RTEMS
+	must be independent of the exception model and allow for late
+	binding to the exception code.
+
 2000-10-18	  Sergei Organov <osv@javad.ru>
 
 	* Added full support for MPC505.

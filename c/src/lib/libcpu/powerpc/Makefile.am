@@ -10,9 +10,12 @@ if shared
 SHARED_LIB = shared
 endif
 
+## Use new or old exception processing based on the CPU
 if new_exception_processing
 EXCEPTION_SUBDIR = new_exception_processing
-else
+endif
+
+if old_exception_processing
 EXCEPTION_SUBDIR = old_exception_processing
 endif
 
