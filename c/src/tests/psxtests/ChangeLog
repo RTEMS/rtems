@@ -1,3 +1,12 @@
+2000-08-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+	* psx01/Makefile.am, psx02/Makefile.am, psx03/Makefile.am,
+	psx04/Makefile.am, psx05/Makefile.am, psx06/Makefile.am,
+	psx07/Makefile.am, psx08/Makefile.am, psx09/Makefile.am,
+	psx10/Makefile.am, psx11/Makefile.am, psx11/Makefile.am,
+	psx12/Makefile.am, psxcancel/Makefile.am, psxmsgq01/Makefile.am,
+	psxsem01/Makefile.am, psxsem01/Makefile.am, psxtimer/Makefile.am:
+	Use AM_CPPFLAGS += instead of AM_CPPFLAGS =
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
