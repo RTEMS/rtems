@@ -204,36 +204,56 @@ typedef volatile struct {
  *  Representation of 82596CA LAN controller: Memory Map
  */
 typedef volatile struct i82596_regs_ {
-  unsigned short	port_lower;             /* 0xFFF46000 */
-  unsigned short	port_upper;             /* 0xFFF46002 */
-  unsigned long		chan_attn;              /* 0xFFF46004 */
+  unsigned short  port_lower;             /* 0xFFF46000 */
+  unsigned short  port_upper;             /* 0xFFF46002 */
+  unsigned long   chan_attn;              /* 0xFFF46004 */
 } i82596_regs;
 
 /*
  *  Base address of the 82596.
  */
+
 #define i82596    ((i82596_regs * const) 0xFFF46000)
 
 /*
  *  Representation of initialization data in NVRAM
  */
+
+#if defined(mvme167)
 typedef volatile struct nvram_config_ {
-  unsigned char	 dcache_enable;				/* 0xFFFC0000 */
-  unsigned char	 icache_enable;				/* 0xFFFC0001 */
-  unsigned short cache_mode;				/* 0xFFFC0002 */
-  unsigned long	 ipaddr;					/* 0xFFFC0004 */
-  unsigned long	 netmask;					/* 0xFFFC0008 */
-  unsigned char	 enaddr[6];					/* 0xFFFC000C */
-  unsigned short processor_id;				/* 0xFFFC0012 */
-  unsigned long	 rma_start;					/* 0xFFFC0014 */
-  unsigned long	 vma_start;					/* 0xFFFC0018 */
-  unsigned long	 ramsize;					/* 0xFFFC001C */
+  unsigned char   cache_mode;          /* 0xFFFC0000 */
+  unsigned char   console_mode;        /* 0xFFFC0001 */
+  unsigned char   console_printk_port; /* 0xFFFC0002 */
+  unsigned char   pad1;                /* 0xFFFC0003 */
+  unsigned long   ipaddr;              /* 0xFFFC0004 */
+  unsigned long   netmask;             /* 0xFFFC0008 */
+  unsigned char   enaddr[6];           /* 0xFFFC000C */
+  unsigned short  processor_id;        /* 0xFFFC0012 */
+  unsigned long   rma_start;           /* 0xFFFC0014 */
+  unsigned long   vma_start;           /* 0xFFFC0018 */
+  unsigned long   ramsize;             /* 0xFFFC001C */
 } nvram_config;
 
 /*
  *  Pointer to the base of User Area NVRAM
  */
-#define nvram			((nvram_config * const) 0xFFFC0000)
+
+#define nvram      ((nvram_config * const) 0xFFFC0000)
+
+#endif
+
+
+/*
+ *  Flag to indicate if J1-4 is on (and parameters should be
+ *  sought in User Area NVRAM)
+ */
+
+#if defined(mvme167)
+#define NVRAM_CONFIGURE \
+  ( !( ( (unsigned char)(lcsr->vector_base & 0xFF) ) & 0x10 ) )
+#else
+#define NVRAM_CONFIGURE 0
+#endif
 
 
 #ifdef __cplusplus
