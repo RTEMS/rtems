@@ -518,6 +518,7 @@ boolean _Thread_Initialize(
   the_thread->resource_count         = 0;
   the_thread->real_priority          = priority;
   the_thread->Start.initial_priority = priority;
+  the_thread->ticks_executed         = 0;
  
   _Thread_Set_priority( the_thread, priority );
 
@@ -945,11 +946,26 @@ void _Thread_Tickle_timeslice( void )
 
   executing = _Thread_Executing;
 
+  /*
+   *  Increment the number of ticks this thread has been executing
+   */
+
+  executing->ticks_executed++;
+
+  /*
+   *  If the thread is not preemptible or is not ready, then 
+   *  just return.
+   */
+
   if ( !executing->is_preemptible )
     return;
 
   if ( !_States_Is_ready( executing->current_state ) )
     return;
+
+  /*
+   *  The cpu budget algorithm determines what happens next.
+   */
 
   switch ( executing->budget_algorithm ) {
     case THREAD_CPU_BUDGET_ALGORITHM_NONE:
