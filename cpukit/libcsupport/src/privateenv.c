@@ -67,7 +67,7 @@ rtems_status_code rtems_libio_set_private_env(void) {
    tmp->refcnt = 1;
 #endif
 
-   sc = rtems_task_variable_add(RTEMS_SELF,(void*)&rtems_current_user_env,free_user_env);
+   sc = rtems_task_variable_add(RTEMS_SELF,(void*)&rtems_current_user_env,(void(*)(void *))free_user_env);
    if (sc != RTEMS_SUCCESSFUL) {
 	 /* don't use free_user_env because the pathlocs are
 	  * not initialized yet
