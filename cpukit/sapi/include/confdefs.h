@@ -214,6 +214,7 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 
 #define CONFIGURE_INIT_TASK_TABLE      NULL
 #define CONFIGURE_INIT_TASK_TABLE_SIZE 0
+#define CONFIGURE_INIT_TASK_STACK_SIZE 0
 
 #endif
 

@@ -1,5 +1,10 @@
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
+	* include/confdefs.h: Set CONFIGURE_INIT_TASK_STACK_SIZE to 0
+	if there is no Classic API Initialization Tasks Table defined.
+
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
 	* include/confdefs.h: Modified code that accounts for initialization
 	task/threads with greater than minimum stack sizes so it would
 	compile even if optional APIs are disabled.
