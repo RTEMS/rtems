@@ -125,6 +125,14 @@ BuildPreReq:	zlib-devel
 %endif
 %endif
 
+%if "%{gcc_version}" >= "3.4"
+%define gcclib %{_libdir}/gcc
+%define gccexec %{_libexecdir}/gcc
+%else
+%define gcclib %{_libdir}/gcc-lib
+%define gccexec %{_libdir}/gcc-lib
+%endif
+
 %description
 RTEMS is an open source operating system for embedded systems.
 
@@ -148,7 +156,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 @PATCH4@
 
   cd gcc-%{gcc_version}
-    sed -e 's/\(version_string = \"[^\"]*\)/\1 (OAR Corporation gcc-%{gcc_version}-@gcc_patch_version@\/newlib-%{newlib_version}-@newlib_patch_version@-@Release@)/' \
+    sed -e 's/\(version_string = \"[^\"]*\)/\1 (RTEMS gcc-%{gcc_version}-@gcc_patch_version@\/newlib-%{newlib_version}-@newlib_patch_version@-@Release@)/' \
     gcc/version.c > gcc/version.c~
     mv gcc/version.c~  gcc/version.c 
 
@@ -288,10 +296,15 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   # We don't ship info/dir
   rm -f $RPM_BUILD_ROOT%{_prefix}/info/dir
 
+%if "%{gcc_version}" >= "3.4"
+  # Bug in gcc-3.4.0pre
+  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/%{gcc_target}-%{gcc_target}-gcjh%{_exeext}
+%endif
+
 %if "%{gcc_version}" >= "3.3"
   # Bug in gcc-3.3.x: Despite we don't need fixincludes, it installs
   # the fixinclude-install-tools
-  rm -rf ${RPM_BUILD_ROOT}%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/install-tools
+  rm -rf ${RPM_BUILD_ROOT}%{gccexec}/%{gcc_target}/%{gcc_version}/install-tools
 %endif
 
 %if "%{gcc_version}" < "3.0"
@@ -315,13 +328,13 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   rm -f dirs ;
   echo "%defattr(-,root,root)" >> dirs
   echo "%dir %{_prefix}/lib" >> dirs ;
-  echo "%dir %{_prefix}/lib/gcc-lib" >> dirs ;
-  echo "%dir %{_prefix}/lib/gcc-lib/%{gcc_target}" >> dirs ;
+  echo "%dir %{gcclib}" >> dirs ;
+  echo "%dir %{gcclib}/%{gcc_target}" >> dirs ;
 
   # Collect multilib subdirectories
   f=`gcc/xgcc -Bgcc/ --print-multi-lib | sed -e 's,;.*$,,'`
 
-  TGTDIR="%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}"
+  TGTDIR="%{gcclib}/%{gcc_target}/%{gcc_version}"
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
@@ -348,13 +361,15 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   cp dirs files.gcj
   cp dirs files.g++
 
-  TGTDIR="%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}"
+  TGTDIR="%{gcclib}/%{gcc_target}/%{gcc_version}"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in
     *lib*.la) rm ${RPM_BUILD_ROOT}/$i ;; # ignore: gcc produces bogus libtool libs
     *f771) ;;
+    *cc1) ;;
     *cc1obj) ;;
+    *collect2) ;;
     *libobjc*) echo "$i" >> files.objc ;;
     *include/objc*) ;;
     *include/g++*);;
