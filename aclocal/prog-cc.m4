@@ -63,24 +63,7 @@ AC_DEFUN(RTEMS_PROG_CC_WORKS,
 AC_LANG_SAVE
 AC_LANG_C
 AC_TRY_COMPILER(
-[
-#if defined(__PPC__)
-  int __SDATA_START__;  int __SDATA2_START__;
-  int __GOT_START__;    int __GOT_END__;
-  int __GOT2_START__;   int __GOT2_END__;
-  int __SBSS_END__;     int __SBSS2_END__;
-  int __FIXUP_START__;  int __FIXUP_END__;
-  int __EXCEPT_START__; int __EXCEPT_END__;
-  int __init;           int __fini;
-#endif
-#if defined(__hppa__)
-  asm ( ".subspa \$GLOBAL\$,QUAD=1,ALIGN=8,ACCESS=0x1f,SORT=40");
-  asm ( ".export \$global\$" );
-  asm ( "\$global\$:");
-#endif
- int atexit() { return 0; }
- void *malloc() { return 0; } 
- main(){return(0);}], 
+[main(){return(0);}], 
 rtems_cv_prog_cc_works, rtems_cv_prog_cc_cross)
 AC_LANG_RESTORE
 AC_MSG_RESULT($rtems_cv_prog_cc_works)
