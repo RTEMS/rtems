@@ -1,3 +1,7 @@
+2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* monitor/mon-monitor.c: Replace done with return (gcc3).
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:

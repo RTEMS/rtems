@@ -577,7 +577,7 @@ rtems_monitor_init(
     if (status != RTEMS_SUCCESSFUL)
     {
         rtems_error(status, "could not create monitor task");
-        goto done;
+        return;
     }
 
     rtems_monitor_node = rtems_get_node(rtems_monitor_task_id);
@@ -598,8 +598,6 @@ rtems_monitor_init(
     if (status != RTEMS_SUCCESSFUL)
     {
         rtems_error(status, "could not start monitor");
-        goto done;
+        return;
     }
-
-done:
 }
