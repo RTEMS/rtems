@@ -1,3 +1,8 @@
+2004-02-26	Thomas Rauscher <trauscher@loytec.com.
+
+	PR 584/RTEMS
+	* rtems/src/eventtimeout.c: Fix critical section window.
+
 2004-02-26	Joel Sherrill <joel@OARcorp.com>
 
 	PR 582/core
