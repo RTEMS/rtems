@@ -31,20 +31,20 @@ clock_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += clock$(LIB_VARIANT).rel
 
-## console
-EXTRA_PROGRAMS += console.rel
-CLEANFILES += console.rel
-console_rel_SOURCES = console/mcfuart.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+## mcfuart
+EXTRA_PROGRAMS += mcfuart.rel
+CLEANFILES += mcfuart.rel
+mcfuart_rel_SOURCES = console/mcfuart.c
+mcfuart_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+mcfuart_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += console_g.rel
-CLEANFILES += console_g.rel
-console_g_rel_SOURCES = $(console_rel_SOURCES)
-console_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-console_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+EXTRA_PROGRAMS += mcfuart_g.rel
+CLEANFILES += mcfuart_g.rel
+mcfuart_g_rel_SOURCES = $(mcfuart_rel_SOURCES)
+mcfuart_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+mcfuart_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-noinst_DATA += console$(LIB_VARIANT).rel
+noinst_DATA += mcfuart$(LIB_VARIANT).rel
 
 ## mbus
 EXTRA_PROGRAMS += mbus.rel

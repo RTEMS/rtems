@@ -1,3 +1,7 @@
+2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mcf5206/Makefile.am: Rename console.rel to mcfuart.rel.
+
 2004-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ChangeLog: Merge-in mcf5206/ChangeLog.
