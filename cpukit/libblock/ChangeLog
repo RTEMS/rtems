@@ -1,3 +1,17 @@
+2002-04-10      Victor V. Vengerov <vvv@oktet.ru>
+
+	PR 385/filesystem
+	* src/ramdisk.c: The "from" and "to" locations are calculated as
+	the start of the block within the ram that data is to be transferred
+	from/to for reads and writes respectively.  However, within
+	the loops, the "from" and "to" locations are never updated.  The loop
+	should have been updated as:
+	    from += rd->block_size;
+	and
+	    to += rd->block_size;
+	within the for loops in the ramdisk_read and ramdisk_write routines,
+	respectively.
+
 2003-03-27	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: ATA code depends upon libchip/ide which is not allowed

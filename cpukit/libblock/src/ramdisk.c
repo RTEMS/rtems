@@ -61,6 +61,7 @@ ramdisk_read(struct ramdisk *rd, blkdev_request *req)
             count = remains;
         memcpy(sg->buffer, from, count);
         remains -= count;
+        from += count;
     }
     req->req_done(req->done_arg, RTEMS_SUCCESSFUL, 0);
     return 0;
@@ -95,6 +96,7 @@ ramdisk_write(struct ramdisk *rd, blkdev_request *req)
             count = remains;
         memcpy(to, sg->buffer, count);
         remains -= count;
+        to += count;
     }
     req->req_done(req->done_arg, RTEMS_SUCCESSFUL, 0);
     return 0;
