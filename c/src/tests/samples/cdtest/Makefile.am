@@ -9,10 +9,10 @@ PGM = ${ARCH}/$(SAMPLE).exe
 MANAGERS = all
 
 C_FILES = init.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 CC_FILES = main.cc
-CC_O_FILES = $(CC_FILES:%.cc=${ARCH}/%.o)
+CC_O_FILES = $(CC_FILES:%.cc=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h
 noinst_HEADERS = $(H_FILES)

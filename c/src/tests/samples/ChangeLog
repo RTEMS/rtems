@@ -1,3 +1,15 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* base_mp/node1/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* base_mp/node2/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* base_sp/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* cdtest/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* hello/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* minimum/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* paranoia/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* ticker/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* unlimited/Makefile.am: Use .$(OBJEXT) instead of .o.
+
 2002-08-01	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR47 add support for buffered test output.  This involved

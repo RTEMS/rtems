@@ -9,7 +9,7 @@ PGM = ${ARCH}/$(SAMPLE).exe
 MANAGERS = all
 
 C_FILES = init.c paranoia.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h
 noinst_HEADERS = $(H_FILES)

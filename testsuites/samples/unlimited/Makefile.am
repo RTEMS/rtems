@@ -9,7 +9,7 @@ PGM = ${ARCH}/$(SAMPLE).exe
 MANAGERS = io event
 
 C_FILES = init.c test1.c test2.c test3.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h
 noinst_HEADERS = $(H_FILES)
