@@ -39,7 +39,7 @@
   #define DEC21140_SUPPORTED
 #endif
 
-#if defined(__PPC) && (defined(mpc604) || defined(mpc750))
+#if defined(__PPC__) && (defined(mpc604) || defined(mpc750))
   #define DEC21140_SUPPORTED
 #endif
 
@@ -48,7 +48,7 @@
 #if defined(__i386__)
 #include <pcibios.h>
 #endif
-#if defined(__PPC)
+#if defined(__PPC__)
 #include <bsp/pci.h>
 #include <libcpu/byteorder.h>
 #include <libcpu/io.h>
@@ -59,8 +59,6 @@
 #include <stdarg.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
-
-#include <libcpu/cpu.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>
