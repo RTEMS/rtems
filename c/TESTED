@@ -13,7 +13,7 @@ RedHat Linux 4.2 as the host environment:
   FAMILY   MODEL             TARGET               SUITES
  ========  ========= =======================   ===============
    m68k    m68000    efi68k                       (note 1)
-   m68k    m68020    Motorola MVME136             (note 1)
+   m68k    m68020    Motorola MVME136             (note 1, 6)
    m68k    m68030    Motorola MVME147             (note 1)
    m68k    m68030    Motorola MVME147s            (note 1)
    m68k   m68lc040   Motorola MVME162             (note 1)
