@@ -31,6 +31,8 @@
 
 #ifndef ASM
 
+#include <rtems/stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
