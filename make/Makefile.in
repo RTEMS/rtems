@@ -60,32 +60,38 @@ all:
 $(prefix)/rtems:
 	@INSTALL@ $(INSTDIRFLAGS) $@
 
-install: $(prefix)/rtems install_files
+install: $(prefix)/rtems \
+	$(prefix)/rtems/make \
+	$(prefix)/rtems/make/compilers \
+	$(prefix)/rtems/make/custom \
+	$(prefix)/rtems/make/Templates \
+	install_files
 
 $(prefix)/rtems/make:
 	@INSTALL@ $(INSTDIRFLAGS) $@
 
-install_files::	$(GENERIC_FILES) $(MAKEFILES) $(prefix)/rtems/make
-	@INSTALL@ $(INSTDATAFLAGS) $(GENERIC_FILES) $(MAKEFILES) \
+install_files::	$(GENERIC_FILES) $(MAKEFILES)
+	@INSTALL@ $(INSTDATAFLAGS) $^ \
 	$(prefix)/rtems/make
 
 $(prefix)/rtems/make/compilers:
 	@INSTALL@ $(INSTDIRFLAGS) $@
 
-install_files:: $(COMPILER_FILES) $(prefix)/rtems/make/compilers
-	@INSTALL@ $(INSTDATAFLAGS) $(COMPILER_FILES) \
+install_files:: $(COMPILER_FILES)
+	@INSTALL@ $(INSTDATAFLAGS) $^ \
 	$(prefix)/rtems/make/compilers
 
 $(prefix)/rtems/make/custom:
 	@INSTALL@ $(INSTDIRFLAGS) $@
 
-install_files:: $(CUSTOM_FILES) $(prefix)/rtems/make/custom
-	@INSTALL@ $(INSTDATAFLAGS) $(CUSTOM_FILES) \
+install_files:: $(CUSTOM_FILES) 
+	@INSTALL@ $(INSTDATAFLAGS) $^ \
 	$(prefix)/rtems/make/custom
 
 $(prefix)/rtems/make/Templates:
 	@INSTALL@ $(INSTDIRFLAGS) $@
 
-install_files:: $(TEMPLATE_FILES) $(prefix)/rtems/make/Templates
-	@INSTALL@ $(INSTDATAFLAGS) $(TEMPLATE_FILES) \
+
+install_files:: $(TEMPLATE_FILES)
+	@INSTALL@ $(INSTDATAFLAGS) $^ \
 	$(prefix)/rtems/make/Templates
