@@ -30,12 +30,7 @@ package DUMMY_RTEMS is
 
    procedure INITIALIZE_EXECUTIVE (
       CONFIGURATION_TABLE   : in     RTEMS.CONFIGURATION_TABLE_POINTER;
-      CPU_TABLE             : in     RTEMS.CPU_TABLE_POINTER;
-      TASK_TABLE            : in     RTEMS.INITIALIZATION_TASKS_TABLE_POINTER;
-      DRIVER_TABLE          : in     RTEMS.DRIVER_ADDRESS_TABLE_POINTER;
-      EXTENSION_TABLE       : in     RTEMS.EXTENSIONS_TABLE_POINTER;
-      MULTIPROCESSING_TABLE : in     RTEMS.MULTIPROCESSING_TABLE_POINTER;
-      MPCI_TABLE            : in     RTEMS.MPCI_TABLE_POINTER
+      CPU_TABLE             : in     RTEMS.CPU_TABLE_POINTER
    );
 
    procedure SHUTDOWN_EXECUTIVE (
@@ -63,7 +58,7 @@ package DUMMY_RTEMS is
 
    procedure TASK_START (
       ID          : in     RTEMS.ID;
-      ENTRY_POINT : in     RTEMS.TASK_ENTRY_POINT;
+      ENTRY_POINT : in     RTEMS.TASK_ENTRY;
       ARGUMENT    : in     RTEMS.UNSIGNED32;
       RESULT      :    out RTEMS.STATUS_CODES
    );
@@ -201,11 +196,12 @@ package DUMMY_RTEMS is
 -- Semaphore Manager
 
    procedure SEMAPHORE_CREATE (
-      NAME          : in     RTEMS.NAME;
-      COUNT         : in     RTEMS.UNSIGNED32;
-      ATTRIBUTE_SET : in     RTEMS.ATTRIBUTE;
-      ID            :    out RTEMS.ID;
-      RESULT        :    out RTEMS.STATUS_CODES
+      NAME             : in     RTEMS.NAME;
+      COUNT            : in     RTEMS.UNSIGNED32;
+      ATTRIBUTE_SET    : in     RTEMS.ATTRIBUTE;
+      PRIORITY_CEILING : in     RTEMS.TASK_PRIORITY;
+      ID               :    out RTEMS.ID;
+      RESULT           :    out RTEMS.STATUS_CODES
    );
 
    procedure SEMAPHORE_DELETE (
@@ -235,11 +231,12 @@ package DUMMY_RTEMS is
 -- Message Queue Manager
 
    procedure MESSAGE_QUEUE_CREATE (
-      NAME          : in     RTEMS.NAME;
-      COUNT         : in     RTEMS.UNSIGNED32;
-      ATTRIBUTE_SET : in     RTEMS.ATTRIBUTE;
-      ID            :    out RTEMS.ID;
-      RESULT        :    out RTEMS.STATUS_CODES
+      Name             : in     RTEMS.Name;
+      Count            : in     RTEMS.Unsigned32;
+      Max_Message_Size : in     RTEMS.Unsigned32;
+      Attribute_Set    : in     RTEMS.Attribute;
+      ID               :    out RTEMS.ID;
+      Result           :    out RTEMS.Status_Codes
    );
 
    procedure MESSAGE_QUEUE_IDENT (
@@ -256,28 +253,32 @@ package DUMMY_RTEMS is
 
    procedure MESSAGE_QUEUE_SEND (
       ID     : in     RTEMS.ID;
-      BUFFER : in     RTEMS.BUFFER_POINTER;
+      BUFFER : in     RTEMS.ADDRESS;
+      SIZE   : in     RTEMS.UNSIGNED32;
       RESULT :    out RTEMS.STATUS_CODES
    );
 
    procedure MESSAGE_QUEUE_URGENT (
       ID     : in     RTEMS.ID;
-      BUFFER : in     RTEMS.BUFFER_POINTER;
+      BUFFER : in     RTEMS.ADDRESS;
+      SIZE   : in     RTEMS.UNSIGNED32;
       RESULT :    out RTEMS.STATUS_CODES
    );
 
    procedure MESSAGE_QUEUE_BROADCAST (
       ID     : in     RTEMS.ID;
-      BUFFER : in     RTEMS.BUFFER_POINTER;
+      BUFFER : in     RTEMS.ADDRESS;
+      SIZE   : in     RTEMS.UNSIGNED32;
       COUNT  :    out RTEMS.UNSIGNED32;
       RESULT :    out RTEMS.STATUS_CODES
    );
 
    procedure MESSAGE_QUEUE_RECEIVE (
       ID         : in     RTEMS.ID;
-      BUFFER     : in     RTEMS.BUFFER_POINTER;
+      BUFFER     : in     RTEMS.ADDRESS;
       OPTION_SET : in     RTEMS.OPTION;
       TIMEOUT    : in     RTEMS.INTERVAL;
+      SIZE       :    out RTEMS.UNSIGNED32;
       RESULT     :    out RTEMS.STATUS_CODES
    );
 

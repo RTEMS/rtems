@@ -21,7 +21,6 @@
 --  $Id$
 --
 
-with BSP;
 with DUMMY_RTEMS;
 with INTERFACES; use INTERFACES;
 with RTEMS;
@@ -163,13 +162,8 @@ package body TMTEST is
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
             DUMMY_RTEMS.INITIALIZE_EXECUTIVE( 
-               BSP.CONFIGURATION'ACCESS,
-               CPU_TABLE'ACCESS,
-               TMTEST.INITIALIZATION_TASKS'ACCESS,
-               RTEMS.NO_DEVICE_DRIVERS,
-               RTEMS.NO_USER_EXTENSIONS,
-               RTEMS.NO_MULTIPROCESSING_TABLE,
-               RTEMS.NO_MPCI_TABLE
+               RTEMS.CONFIGURATION,
+               CPU_TABLE'ACCESS
             );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
