@@ -23,14 +23,10 @@
 ##
 ## Automake conditionals in use:
 ## RTEMS_USE_GCC     .. if we are using GCC
-## RTEMS_USE_GCC272  .. if using gcc and if requested not to apply
-##                      gcc <= 2.7.2 incompatible rules
 
 ## NOTES: 
 ## * The gcc-2.8 building scheme is the nominal building scheme and
 ##   is actively supported.
-## * The gcc-2.7.2 building scheme is not supported by all BSPs and
-##   is not extensively tested.
 ## * The non-gcc building scheme requires manually setting up environment 
 ##   variables and is hardly tested at all
 
@@ -48,26 +44,8 @@ if RTEMS_USE_GCC
 ## All the stuff below is specific to gcc
 
 CFLAGS_DEFAULT=-g -Wall
-
-if RTEMS_USE_GCC272
-## gcc <= 2.7.2
-RTEMS_CPPFLAGS = -isystem $(PROJECT_INCLUDE)
-
-# default location of Standard C Library
-LIBC_LIBC = `$(CC) $(CPU_CFLAGS) -print-file-name=libc.a $(GCCSED)`
-LIBC_LIBM = `$(CC) $(CPU_CFLAGS) -print-file-name=libm.a $(GCCSED)`
-LIBC_LIBGCC = `$(CC) $(CPU_CFLAGS) -print-libgcc-file-name $(GCCSED)`
-
-### FIXME: False if using multilibbed RTEMS
-LINK_LIBS_RTEMS = $(PROJECT_RELEASE)/lib/librtemsbsp$(LIBSUFFIX_VA) \
-   $(PROJECT_RELEASE)/lib/librtemscpu$(LIBSUFFIX_VA)
-
-LINK_LIBS_GCC272 = $(LINK_LIBS_RTEMS) $(LIBC_LIBC) $(LIBC_LIBGCC)
-GCCSPECS =
-else
 ## gcc >= 2.8.x
 GCCSPECS = $(GCC_SPECS) $(RTEMS_BSP_SPECS)
-endif
 else
 ## fall back to the old style compilers/*.cfg
 ## CONFIG.CC is supposed to be provided by <BSP>.cfg
@@ -82,7 +60,7 @@ CFLAGS   = $(CFLAGS_DEFAULT) $(CPU_CFLAGS) $(XCFLAGS)
 CXXFLAGS = $(CFLAGS_DEFAULT) $(CPU_CFLAGS) $(XCXXFLAGS)
 ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
 
-LINK_LIBS = $(LINK_LIBS_GCC272) $(LD_LIBS)
+LINK_LIBS = $(LD_LIBS)
 
 ## FIXME: This doesn't seem to be correct
 # when debugging, optimize flag: typically empty
@@ -150,12 +128,6 @@ ${ARCH}/%.o: %.S
 ${ARCH}/%.rel: ${ARCH}/%.o
 	${make-rel}
 
-# create $(ARCH)/pgm from pgm.sh
-${ARCH}/%: %.sh
-	$(RM) $@
-	$(CP) $< $@
-	$(CHMOD) +x $@
-
 # Dependency files for use by gmake
 # NOTE: we don't put them into $(ARCH)
 #       so that 'make clean' doesn't blow it away
@@ -201,21 +173,11 @@ LINK_FILES =\
     $(OBJS) \
     $(MANAGERS_NOT_WANTED:%=$(PROJECT_RELEASE)/lib/no-%$(LIB_VARIANT).rel)
 
-# FIXME: Do we want this? Only useful below tests/.
-#    $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/librtemcpu$(LIBSUFFIX_VA)
-#    $(PROJECT_RELEASE)/lib/librtembsp$(LIBSUFFIX_VA)
-
 if RTEMS_USE_GCC
-if RTEMS_USE_GCC272
-define make-rel
-	$(LINK) -nostdlib -Wl,-r $(XLDFLAGS) $^
-endef
-else
 ## gcc >= 2.8
 define make-rel
 	$(LINK) -qnolinkcmds -nostdlib -Wl,-r $(XLDFLAGS) $^
 endef
-endif
 else
 ## non-gcc
 define make-rel
@@ -263,17 +225,11 @@ CFLAGS__V = $(CFLAGS_OPTIMIZE_V)
 ## ------------------------------------------------------------------------
 ## Setup hard-coded flags
 if RTEMS_USE_GCC
-if RTEMS_USE_GCC272
-## gcc < gcc-2.8
-RTEMS_CFLAGS_OPTIMIZE_V =
-RTEMS_CFLAGS_DEBUG_V = -Wno-unused
-RTEMS_CFLAGS_PROFILE_V =
-else
 ## gcc >= gcc-2.8
 RTEMS_CFLAGS_OPTIMIZE_V =
 RTEMS_CFLAGS_DEBUG_V = -qrtems_debug -Wno-unused
 RTEMS_CFLAGS_PROFILE_V =
-endif
+
 ## non-gcc
 ## We can't guess what flags might be required here.
 ## Pass the values from the environment if you want to apply them.

@@ -1,3 +1,10 @@
+2002-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/compile.am: Remove GCC272 support. 
+	Remove *.sh rule (unused).
+	* configure.ac: Remove ENABLE_GCC28.
+	Remove ENABLE_LIBCDIR.
+
 2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Added mdate-sh and texinfo.tex.
