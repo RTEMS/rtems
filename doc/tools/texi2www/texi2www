@@ -26,6 +26,8 @@ where options are:
   -footer path      -- Specifies the path to a file containing HTML;
                        this files gets inserted near the bottom of each
                        generated HTML file.
+  -I path           -- Append path to the directories being searched for
+                       texi files.
   -icons path       -- Specifies the path, relative to the output directory,
                        to the arrow files.  Default is `..'.
   -base             -- Specify the base part fo the genrated short file names
@@ -45,6 +47,8 @@ $outcount = 0;                     # count for the nnnnn part of short names
 $icons = "..";                     # where are the icons
 $dir = ".";                        # where are the generated files to go
 $dirfile = "../dir.html";          # "up" node pointer
+@include_path = () ;	           # list of include directories
+
 while ($ARGV[0] =~ /^-/) {
     $_ = shift;
     if (/-base/) {$base = shift; next;}
@@ -55,9 +59,11 @@ while ($ARGV[0] =~ /^-/) {
     if (/-icons/) {$_ = shift; s!\/$!!; $icons = $_; next;}
     if (/-uselongnames/) {$uselongnames = 1; next;}
     if (/-verbose/) {$verbose = 1; next;}
+    if (/-I/) { push @include_path, shift; next;}
     die $usage;
 }
 
+print STDERR "include-path:@include_path\n" if $verbose ;
 &initialize_tables();
 
 #
@@ -1239,9 +1245,17 @@ sub initialize_tables
 ########################################################################
 sub open_input_file
 {
-    unshift(@texinfo_file,$_[0]);
-    print "opening $_[0] ...\n" if $debug{open_input_file};
-    open($texinfo_file[0],$_[0]) || die "Couldn't open $_[0]: $!\n";
+    my $file = "$_[0]" ;
+    if ( not -f "$file" )
+    {
+      foreach $i ( @include_path )
+      {
+        if ( -f "$i/$_[0]" ) { $file = "$i/$_[0]"; last ; }
+      }
+    }
+    unshift(@texinfo_file,$file);
+    print "opening $file ...\n" if $debug{open_input_file};
+    open($texinfo_file[0],$file) || die "Couldn't open $file: $!\n";
 } # open_input_file
 
 ########################################################################
