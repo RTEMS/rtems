@@ -79,6 +79,8 @@ SECTIONS {
 		LONG(0)
 		__DTOR_END__ = .;
 
+                . = ALIGN (16);
+
                 etext = .;
                 _etext = .;
         } >rom 

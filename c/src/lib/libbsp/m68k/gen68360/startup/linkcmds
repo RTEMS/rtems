@@ -83,8 +83,8 @@ SECTIONS {
 		_rodata_start = . ;
 		*(.rodata)
 		*(.gnu.linkonce.r*)
-		_erodata = ALIGN( 0x10 ) ;
 
+                 . = ALIGN (16);
                 etext = .;
                 _etext = .;
         } >ram 
