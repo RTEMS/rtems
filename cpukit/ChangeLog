@@ -1,5 +1,9 @@
 2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* automake/compile.am: Remove RTEMS_CPPFLAGS.
+
+2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/net/if_pppvar.h: Ansify.
 
 2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
