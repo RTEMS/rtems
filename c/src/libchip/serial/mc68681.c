@@ -23,6 +23,7 @@
 #include <ringbuf.h>
 
 #include <libchip/serial.h>
+#include "sersupp.h"
 #include "mc68681_p.h"
 #include "mc68681.h"
 
@@ -68,7 +69,7 @@ extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
  *  Default probe routine which simply say the port is present.
  */
 
-static boolean mc68681_probe(int minor)
+MC68681_STATIC boolean mc68681_probe(int minor)
 {
   /*
    * If the configuration dependent probe has located the device then
@@ -85,96 +86,110 @@ static boolean mc68681_probe(int minor)
  *  must be configured by the user.
  */
 
-static int mc68681_baud_rate(
+/* major index of 0 : ACR[7] = 0, X = 0 -- 68c681 only has these */
+/* major index of 1 : ACR[7] = 1, X = 0 -- 68c681 only has these */
+/* major index of 2 : ACR[7] = 0, X = 1 */
+/* major index of 3 : ACR[7] = 1, X = 1 */
+
+/* mc68681_baud_table_t mc68681_baud_rate_table[4] = { */
+mc68681_baud_t mc68681_baud_rate_table[4][RTEMS_TERMIOS_NUMBER_BAUD_RATES] = {
+  { /* ACR[7] = 0, X = 0 */
+    MC68681_BAUD_NOT_VALID,    /* B0 */
+    0x00,                      /* B50 */
+    MC68681_BAUD_NOT_VALID,    /* B75 */
+    0x01,                      /* B110 */
+    0x02,                      /* B134 */
+    MC68681_BAUD_NOT_VALID,    /* B150 */
+    0x03,                      /* B200 */
+    0x04,                      /* B300 */
+    0x05,                      /* B600 */
+    0x06,                      /* B1200 */
+    MC68681_BAUD_NOT_VALID,    /* B1800 */
+    0x08,                      /* B2400 */
+    0x09,                      /* B4800 */
+    0x0B,                      /* B9600 */
+    MC68681_BAUD_NOT_VALID,    /* B19200 */
+    0x0C,                      /* B38400 */
+    MC68681_BAUD_NOT_VALID,    /* B57600 */
+    MC68681_BAUD_NOT_VALID,    /* B115200 */
+    MC68681_BAUD_NOT_VALID,    /* B230400 */
+    MC68681_BAUD_NOT_VALID     /* B460800 */
+  },
+  { /* ACR[7] = 1, X = 0 */
+    MC68681_BAUD_NOT_VALID,    /* B0 */
+    MC68681_BAUD_NOT_VALID,    /* B50 */
+    0x00,                      /* B75 */
+    0x01,                      /* B110 */
+    0x02,                      /* B134 */
+    0x03,                      /* B150 */
+    MC68681_BAUD_NOT_VALID,    /* B200 */
+    0x04,                      /* B300 */
+    0x05,                      /* B600 */
+    0x06,                      /* B1200 */
+    0x0A,                      /* B1800 */
+    0x08,                      /* B2400 */
+    0x09,                      /* B4800 */
+    0x0B,                      /* B9600 */
+    0x0C,                      /* B19200 */
+    MC68681_BAUD_NOT_VALID,    /* B38400 */
+    MC68681_BAUD_NOT_VALID,    /* B57600 */
+    MC68681_BAUD_NOT_VALID,    /* B115200 */
+    MC68681_BAUD_NOT_VALID,    /* B230400 */
+    MC68681_BAUD_NOT_VALID     /* B460800 */
+  },
+  { /* ACR[7] = 0, X = 1 */
+    MC68681_BAUD_NOT_VALID,    /* B0 */
+    MC68681_BAUD_NOT_VALID,    /* B50 */
+    0x00,                      /* B75 */
+    0x01,                      /* B110 */
+    0x02,                      /* B134 */
+    0x03,                      /* B150 */
+    MC68681_BAUD_NOT_VALID,    /* B200 */
+    MC68681_BAUD_NOT_VALID,    /* B300 */
+    MC68681_BAUD_NOT_VALID,    /* B600 */
+    MC68681_BAUD_NOT_VALID,    /* B1200 */
+    0x0A,                      /* B1800 */
+    MC68681_BAUD_NOT_VALID,    /* B2400 */
+    0x08,                      /* B4800 */
+    0x0B,                      /* B9600 */
+    0x0C,                      /* B19200 */
+    MC68681_BAUD_NOT_VALID,    /* B38400 */
+    0x07,                      /* B57600 */
+    0x08,                      /* B115200 */
+    MC68681_BAUD_NOT_VALID,    /* B230400 */
+    MC68681_BAUD_NOT_VALID     /* B460800 */
+  },
+  { /* ACR[7] = 1, X = 1 */
+    MC68681_BAUD_NOT_VALID,    /* B0 */
+    0x00,                      /* B50 */
+    MC68681_BAUD_NOT_VALID,    /* B75 */
+    0x01,                      /* B110 */
+    0x02,                      /* B134 */
+    MC68681_BAUD_NOT_VALID,    /* B150 */
+    0x03,                      /* B200 */
+    MC68681_BAUD_NOT_VALID,    /* B300 */
+    MC68681_BAUD_NOT_VALID,    /* B600 */
+    MC68681_BAUD_NOT_VALID,    /* B1200 */
+    MC68681_BAUD_NOT_VALID,    /* B1800 */
+    MC68681_BAUD_NOT_VALID,    /* B2400 */
+    0x09,                      /* B4800 */
+    0x0B,                      /* B9600 */
+    MC68681_BAUD_NOT_VALID,    /* B19200 */
+    0x0C,                      /* B38400 */
+    0x07,                      /* B57600 */
+    0x08,                      /* B115200 */
+    MC68681_BAUD_NOT_VALID,    /* B230400 */
+    MC68681_BAUD_NOT_VALID     /* B460800 */
+  },
+};
+
+MC68681_STATIC int mc68681_baud_rate(
   int           minor,
   int           baud,
   unsigned int *baud_mask_p,
-  unsigned int *acr_bit_p
-)
-{
-  unsigned int baud_mask;
-  unsigned int acr_bit;
-  int          status;
-
-  baud_mask = 0;
-  acr_bit = 0;
-  status = 0;
-
-  if ( !(Console_Port_Tbl[minor].ulDataPort & MC68681_DATA_BAUD_RATE_SET_1) )
-    acr_bit = 1;
-
-  if (!(baud & CBAUD)) {
-    *baud_mask_p = 0x0B;     /* default to 9600 baud */
-    *acr_bit_p   = acr_bit;
-    return status;
-  }
-
-  if ( !acr_bit ) {
-    /*
-     *  Baud Rate Set 1 
-     */
-
-    switch (baud & CBAUD) {
-      case B50:    baud_mask = 0x00; break;
-      case B110:   baud_mask = 0x01; break;
-      case B134:   baud_mask = 0x02; break;
-      case B200:   baud_mask = 0x03; break;
-      case B300:   baud_mask = 0x04; break;
-      case B600:   baud_mask = 0x05; break;
-      case B1200:  baud_mask = 0x06; break;
-      case B2400:  baud_mask = 0x08; break;
-      case B4800:  baud_mask = 0x09; break;
-      case B9600:  baud_mask = 0x0B; break;
-      case B38400: baud_mask = 0x0C; break;
-
-      case B0:
-      case B75:
-      case B150:
-      case B1800:
-      case B19200:
-      case B57600:
-      case B115200:
-      case B230400:
-      case B460800:
-        status = -1;
-        break;
-    }
-  } else {
-    /*
-     *  Baud Rate Set 2
-     */
-
-    switch (baud & CBAUD) {
-      case B75:    baud_mask = 0x00; break;
-      case B110:   baud_mask = 0x01; break;
-      case B134:   baud_mask = 0x02; break;
-      case B150:   baud_mask = 0x03; break;
-      case B300:   baud_mask = 0x04; break;
-      case B600:   baud_mask = 0x05; break;
-      case B1200:  baud_mask = 0x06; break;
-      case B1800:  baud_mask = 0x0A; break;
-      case B2400:  baud_mask = 0x08; break;
-      case B4800:  baud_mask = 0x09; break;
-      case B9600:  baud_mask = 0x0B; break;
-      case B19200: baud_mask = 0x0C; break;
-
-      case B0:
-      case B50:
-      case B200:
-      case B38400:
-      case B57600:
-      case B115200:
-      case B230400:
-      case B460800:
-        status = -1;
-        break;
-    }
-  }
-
-  *baud_mask_p = baud_mask;
-  *acr_bit_p   = acr_bit;
-  return status;
-}
+  unsigned int *acr_bit_p,
+  unsigned int *command
+);
 
 /*
  *  mc68681_set_attributes
@@ -183,7 +198,7 @@ static int mc68681_baud_rate(
  *  port settings.
  */
 
-static int mc68681_set_attributes( 
+MC68681_STATIC int mc68681_set_attributes( 
   int minor,
   const struct termios *t
 )
@@ -194,6 +209,7 @@ static int mc68681_set_attributes(
   unsigned int           mode2;
   unsigned int           baud_mask;
   unsigned int           acr_bit;
+  unsigned int           cmd;
   setRegister_f          setReg;
   rtems_interrupt_level  Irql;
 
@@ -205,7 +221,7 @@ static int mc68681_set_attributes(
    *  Set the baud rate
    */
 
-  if ( mc68681_baud_rate( minor, t->c_cflag, &baud_mask, &acr_bit ) == -1 )
+  if (mc68681_baud_rate( minor, t->c_cflag, &baud_mask, &acr_bit, &cmd ) == -1)
     return -1;
 
   baud_mask |=  baud_mask << 4;
@@ -257,6 +273,7 @@ static int mc68681_set_attributes(
   rtems_interrupt_disable(Irql);
     (*setReg)( pMC68681, MC68681_AUX_CTRL_REG, acr_bit );
     (*setReg)( pMC68681_port, MC68681_CLOCK_SELECT, baud_mask );
+    (*setReg)( pMC68681_port, MC68681_COMMAND, cmd );
     (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_RESET_MR_PTR );
     (*setReg)( pMC68681_port, MC68681_MODE, mode1 );
     (*setReg)( pMC68681_port, MC68681_MODE, mode2 );
@@ -270,7 +287,7 @@ static int mc68681_set_attributes(
  *  This function sets the default values of the per port context structure.
  */
 
-static void mc68681_initialize_context(
+MC68681_STATIC void mc68681_initialize_context(
   int               minor,
   mc68681_context  *pmc68681Context
 )
@@ -299,7 +316,7 @@ static void mc68681_initialize_context(
  *  on this chip to determine whether or not it is using interrupts.
  */
 
-static unsigned int mc68681_build_imr(
+MC68681_STATIC unsigned int mc68681_build_imr(
   int  minor,
   int  enable_flag
 )
@@ -357,7 +374,7 @@ static unsigned int mc68681_build_imr(
  *  This function initializes the DUART to a quiecsent state.
  */
 
-static void mc68681_init(int minor)
+MC68681_STATIC void mc68681_init(int minor)
 {
   unsigned32              pMC68681_port;
   unsigned32              pMC68681;
@@ -407,7 +424,7 @@ static void mc68681_init(int minor)
  *  Default state is 9600 baud, 8 bits, No parity, and 1 stop bit.
  */
 
-static int mc68681_open(
+MC68681_STATIC int mc68681_open(
   int      major,
   int      minor,
   void    *arg
@@ -418,6 +435,7 @@ static int mc68681_open(
   unsigned int           baud;
   unsigned int           acr;
   unsigned int           vector;
+  unsigned int           command;
   rtems_interrupt_level  Irql;
   setRegister_f          setReg;
 
@@ -426,7 +444,7 @@ static int mc68681_open(
   setReg        = Console_Port_Tbl[minor].setRegister;
   vector        = Console_Port_Tbl[minor].ulIntVector;
 
-  (void) mc68681_baud_rate( minor, B9600, &baud, &acr );
+  (void) mc68681_baud_rate( minor, B9600, &baud, &acr, &command );
 
   /*
    *  Set the DUART channel to a default useable state
@@ -436,6 +454,7 @@ static int mc68681_open(
     (*setReg)( pMC68681, MC68681_AUX_CTRL_REG, acr );
     (*setReg)( pMC68681_port, MC68681_CLOCK_SELECT, baud );
     (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_RESET_MR_PTR );
+    (*setReg)( pMC68681, MC68681_COMMAND, command );
     (*setReg)( pMC68681_port, MC68681_MODE, 0x13 );
     (*setReg)( pMC68681_port, MC68681_MODE, 0x07 );
   rtems_interrupt_enable(Irql);
@@ -454,7 +473,7 @@ static int mc68681_open(
  *  This function shuts down the requested port.
  */
 
-static int mc68681_close(
+MC68681_STATIC int mc68681_close(
   int      major,
   int      minor,
   void    *arg
@@ -484,7 +503,7 @@ static int mc68681_close(
  *  This routine polls out the requested character.
  */
 
-static void mc68681_write_polled(
+MC68681_STATIC void mc68681_write_polled(
   int   minor, 
   char  cChar
 )
@@ -532,7 +551,7 @@ static void mc68681_write_polled(
  *  This routine is the per port console interrupt handler.
  */
 
-static void mc68681_process(
+MC68681_STATIC void mc68681_process(
   int  minor
 )
 {
@@ -612,7 +631,7 @@ static void mc68681_process(
  *  out to the various ports.
  */
 
-static rtems_isr mc68681_isr(
+MC68681_STATIC rtems_isr mc68681_isr(
   rtems_vector_number vector
 )
 {
@@ -634,7 +653,7 @@ static rtems_isr mc68681_isr(
  *  NOTE:  This is the "interrupt mode" close entry point.
  */
 
-static int mc68681_flush(int major, int minor, void *arg)
+MC68681_STATIC int mc68681_flush(int major, int minor, void *arg)
 {
   while(!Ring_buffer_Is_empty(&Console_Port_Data[minor].TxBuffer)) {
     /*
@@ -656,7 +675,7 @@ static int mc68681_flush(int major, int minor, void *arg)
  *  This function initializes the hardware for this port to use interrupts.
  */
 
-static void mc68681_enable_interrupts(
+MC68681_STATIC void mc68681_enable_interrupts(
   int minor
 )
 {
@@ -680,7 +699,7 @@ static void mc68681_enable_interrupts(
  *  ring buffers and loads the appropriate vectors to handle the interrupts.
  */
 
-static void mc68681_initialize_interrupts(int minor)
+MC68681_STATIC void mc68681_initialize_interrupts(int minor)
 {
   mc68681_init(minor);
 
@@ -699,7 +718,7 @@ static void mc68681_initialize_interrupts(int minor)
  *  Console Termios output entry point when using interrupt driven output.
  */
 
-static int mc68681_write_support_int(
+MC68681_STATIC int mc68681_write_support_int(
   int   minor, 
   const char *buf, 
   int   len
@@ -760,7 +779,7 @@ static int mc68681_write_support_int(
  *
  */
 
-static int mc68681_write_support_polled(
+MC68681_STATIC int mc68681_write_support_polled(
   int         minor, 
   const char *buf, 
   int         len
@@ -791,7 +810,7 @@ static int mc68681_write_support_polled(
  *  Console Termios polling input entry point.
  */
 
-static int mc68681_inbyte_nonblocking_polled( 
+MC68681_STATIC int mc68681_inbyte_nonblocking_polled( 
   int minor 
 )
 {
@@ -811,3 +830,71 @@ static int mc68681_inbyte_nonblocking_polled(
     return -1;
   }
 }
+
+MC68681_STATIC int mc68681_baud_rate(
+  int           minor,
+  int           baud,
+  unsigned int *baud_mask_p,
+  unsigned int *acr_bit_p,
+  unsigned int *command
+)
+{
+  unsigned int     baud_mask;
+  unsigned int     acr_bit;
+  int              status;
+  int              is_a;
+  int              is_extended;
+  int              baud_requested;
+  mc68681_baud_table_t  *baud_tbl;
+
+  baud_mask = 0;
+  acr_bit = 0;
+  status = 0;
+
+  if (Console_Port_Tbl[minor].ulCtrlPort1 ==
+      Console_Port_Tbl[minor].ulCtrlPort2)
+    is_a = 1;
+  else
+    is_a = 0;
+    
+  if ( !(Console_Port_Tbl[minor].ulDataPort & MC68681_DATA_BAUD_RATE_SET_1) )
+    acr_bit = 1;
+
+  is_extended = 0;
+
+  switch (Console_Port_Tbl[minor].ulDataPort & MC68681_XBRG_MASK) {
+    case MC68681_XBRG_IGNORED:
+      *command = 0x00;
+      break;
+    case MC68681_XBRG_ENABLED:
+      *command = (is_a) ? 0x08 : 0x09;
+      is_extended = 1;
+      break;
+    case MC68681_XBRG_DISABLED:
+      *command = (is_a) ? 0x0A : 0x0B;
+      break;
+  }
+
+  baud_requested = baud & CBAUD;
+  if (!baud_requested)
+    baud_requested = B9600;
+  
+  baud_requested = termios_baud_to_index( baud_requested );
+
+  baud_tbl = (mc68681_baud_table_t *) Console_Port_Tbl[minor].ulClock;
+  if (!baud_tbl)
+    baud_tbl = (mc68681_baud_table_t *)mc68681_baud_rate_table;
+
+  if ( is_extended )
+    baud_mask = (unsigned int)baud_tbl[ acr_bit + 2 ][ baud_requested ];
+  else
+    baud_mask = baud_tbl[ acr_bit ][ baud_requested ];
+
+  if ( baud_mask == MC68681_BAUD_NOT_VALID )
+    status = -1;
+
+  *baud_mask_p = baud_mask;     /* default to 9600 baud */
+  *acr_bit_p   = acr_bit;
+  return status;
+}
+
