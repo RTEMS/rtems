@@ -1,3 +1,9 @@
+2001-05-07	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/interrupts/vectorexceptions.c: New file to decode
+	exception code and vector appropriate NON-interrupt exception.	
+	* shared/interrupts/Makefile.am: Modified to reflect above.
+
 2001-04-20	Joel Sherrill <joel@OARcorp.com>
 
 	* mongoosev/duart/mg5uart.c (mg5uart_enable_interrupts): Honor
