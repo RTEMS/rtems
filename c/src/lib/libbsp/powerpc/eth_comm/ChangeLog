@@ -1,3 +1,9 @@
+2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* irq/irq.c: Define loopCounter iff DISPATCH_HANDLER_STAT is set.
+	* startup/bspstart.c: include <bsp/irq.h>, <libcpu/cpuIdent.h>,
+	<rtems/bspIo.h>
+
 2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add BSPOPTS_*(DISPATCH_HANDLER_STAT).

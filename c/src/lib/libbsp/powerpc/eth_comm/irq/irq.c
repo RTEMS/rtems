@@ -401,8 +401,9 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   register unsigned oldMask;		      /* old siu pic masks */
   register unsigned msr;
   register unsigned new_msr;
+#ifdef DISPATCH_HANDLER_STAT
   unsigned loopCounter;
-
+#endif
   /*
    * Handle decrementer interrupt
    */
