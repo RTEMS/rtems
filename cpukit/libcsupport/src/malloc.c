@@ -36,6 +36,7 @@
 rtems_id RTEMS_Malloc_Heap;
 size_t RTEMS_Malloc_Sbrk_amount;
 
+extern rtems_cpu_table   Cpu_table;
 #ifdef RTEMS_DEBUG
 #define MALLOC_STATS
 #define MALLOC_DIRTY
@@ -100,6 +101,20 @@ void RTEMS_Malloc_Initialize(
 
     starting_address = (void *)u32_address;
   }
+
+  /*
+   *  If the BSP is not clearing out the workspace, then it is most likely
+   *  not clearing out the initial memory for the heap.  There is no 
+   *  standard supporting zeroing out the heap memory.  But much code
+   *  with UNIX history seems to assume that memory malloc'ed during
+   *  initialization (before any free's) is zero'ed.  This is true most
+   *  of the time under UNIX because zero'ing memory when it is first
+   *  given to a process eliminates the chance of a process seeing data
+   *  left over from another process.  This would be a security violation.
+   */
+
+  if ( Cpu_table.do_zero_of_workspace )
+     memset( starting_address, 0, length );
 
   /*
    *  Unfortunately we cannot use assert if this fails because if this
