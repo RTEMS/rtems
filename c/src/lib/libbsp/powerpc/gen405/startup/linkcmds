@@ -145,7 +145,6 @@ SECTIONS
   PROVIDE(_heap_end = heap.end);
   /* reserve 64KByte for stack... */
   stack.end = heap.end + 64K;
-  PROVIDE(_end = stack.end);
 
   .line 0 : { *(.line) }
   .debug 0 : { *(.debug) }

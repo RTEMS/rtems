@@ -1,3 +1,8 @@
+2004-10-15	Gene Smith <gene.smith@seimens.com>
+
+	PR 691/bsps
+	* startup/linkcmds: Correct bug in linker script.
+
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 533/bsps
