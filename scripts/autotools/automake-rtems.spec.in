@@ -2,8 +2,8 @@
 # spec file for automake 
 #
 
-%define rpmvers 1.8.3
-%define srcvers	1.8.3
+%define rpmvers 1.8.4
+%define srcvers	1.8.4
 %define amvers  1.8
 
 %define _defaultbuildroot	%{_tmppath}/%{name}-%{srcvers}-root
@@ -22,7 +22,7 @@
 
 Vendor:       http://www.rtems.com
 Name:         %{name}
-Packager:     Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+Packager:     Ralf Corsepius <ralf_corsepius@rtems.org>
 URL: 	      http://sources.redhat.com/automake
 
 Copyright:    GPL
