@@ -19,7 +19,6 @@ _RTEMS_CPU_SUBDIR([i386],[$1]);;
 _RTEMS_CPU_SUBDIR([i960],[$1]);;
 _RTEMS_CPU_SUBDIR([m68k],[$1]);;
 _RTEMS_CPU_SUBDIR([mips],[$1]);;
-_RTEMS_CPU_SUBDIR([mips64orion],[$1]);;
 _RTEMS_CPU_SUBDIR([no_cpu],[$1]);;
 _RTEMS_CPU_SUBDIR([or32],[$1]);;
 _RTEMS_CPU_SUBDIR([powerpc],[$1]);;
