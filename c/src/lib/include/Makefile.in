@@ -19,7 +19,10 @@ H_PIECES=chain console clockdrv iosupp ringbuf \
    spurious timerdrv vmeintr
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 
-SYS_H_PIECES=ioctl termios utime
+SYS_H_PIECES=termios utime
+ifeq ($(HAS_NETWORKING),yes)
+SYS_H_PIECES+=ioctl
+endif
 SYS_H_FILES=$(SYS_H_PIECES:%=$(srcdir)/sys/%.h)
 
 MOTOROLA_H_PIECES=mc68230 mc68681
