@@ -1,3 +1,7 @@
+2002-05-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* config-ml.in: Take out arm and sh variants RTEMS does not support.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
