@@ -15,6 +15,9 @@ env: tools dirs headers
 dirs:
 	-mkdir $(DOC_INSTALL_BASE)
 	-mkdir $(WWW_INSTALL)
+	-mkdir $(WWW_INSTALL)/partners
+	-mkdir $(WWW_INSTALL)/support
+	-mkdir $(WWW_INSTALL)/internal
 	-mkdir $(INFO_INSTALL)
 	-mkdir $(PS_INSTALL)
 
