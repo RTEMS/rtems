@@ -14,7 +14,7 @@ LIB=${ARCH}/${LIBNAME}
 # define TARGET_PIECES later based on RTEMS_CPU definition
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES=__times _execve getdents malloc syscalls \
+C_PIECES=__times _execve malloc syscalls \
     no_libc support libio hosterr tcattr tcdrain \
     cfiospeed termios $(TARGET_PIECES)
 C_FILES=$(C_PIECES:%=%.c)
@@ -35,7 +35,8 @@ include $(RTEMS_ROOT)/make/lib.cfg
 ifeq ($(RTEMS_CPU),unix)
 TARGET_PIECES=unixlibc
 else
-TARGET_PIECES=__brk __gettod newlibc newlibif newlibifr readdir opendir
+TARGET_PIECES=__brk __gettod newlibc newlibif newlibifr \
+  getdents readdir opendir closedir rewinddir scandir seekdir telldir
 endif
 
 #
