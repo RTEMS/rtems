@@ -10,10 +10,7 @@ CC=gcc
 #CFLAGS=-O4 -fomit-frame-pointer
 CFLAGS=-g 
 
-PROJECT=afcc
 TEXINPUTS=/home/gnu/work/binutils-2.6/texinfo:.  
-BASE=Drive
-FILES=afcc.texi $(BASE).txt
 PROG=pdl2texi
 
 all:  $(PROG)
