@@ -265,7 +265,27 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #define CONFIGURE_MAXIMUM_POSIX_KEYS         0
 #endif
 
+#ifndef CONFIGURE_POSIX_HAS_OWN_INIT_TASK_TABLE
+
+#ifndef CONFIGURE_POSIX_INIT_TASK_ENTRY_POINT
+#define CONFIGURE_POSIX_INIT_TASK_ENTRY_POINT   Init 
 #endif
+
+#ifdef CONFIGURE_INIT
+posix_initialization_tasks_table POSIX_Initialization_tasks[] = {
+  { CONFIGURE_POSIX_INIT_TASK_ENTRY_POINT }
+};
+#endif
+
+#define CONFIGURE_POSIX_INIT_TASK_TABLE POSIX_Initialization_tasks
+ 
+#define CONFIGURE_POSIX_INIT_TASK_TABLE_SIZE \
+  sizeof(CONFIGURE_POSIX_INIT_TASK_TABLE) / \
+      sizeof(posix_initialization_tasks_table)
+
+#endif    /* CONFIGURE_POSIX_HAS_OWN_INIT_TASK_TABLE */
+
+#endif    /* RTEMS_POSIX_API */
 
 /* 
  *  Calculate the RAM size based on the maximum number of objects configured.
@@ -392,8 +412,8 @@ posix_api_configuration_table Configuration_POSIX_API = {
   CONFIGURE_MAXIMUM_POSIX_MUTEXES,
   CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES,
   CONFIGURE_MAXIMUM_POSIX_KEYS,
-  0,
-  NULL
+  CONFIGURE_POSIX_INIT_TASK_TABLE_SIZE,
+  CONFIGURE_POSIX_INIT_TASK_TABLE
 };
 #endif
 
