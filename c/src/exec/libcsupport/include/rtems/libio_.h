@@ -165,8 +165,9 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
 
 #define rtems_filesystem_freenode( _node ) \
   do { \
-    if ( (_node)->ops->freenod_h ) \
-      (*(_node)->ops->freenod_h)( (_node) ); \
+    if ( (_node)->ops )\
+      if ( (_node)->ops->freenod_h ) \
+        (*(_node)->ops->freenod_h)( (_node) ); \
   } while (0)
 
 /*

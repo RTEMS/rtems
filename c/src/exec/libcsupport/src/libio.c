@@ -206,10 +206,20 @@ rtems_libio_t *rtems_libio_allocate( void )
     if (rc != RTEMS_SUCCESSFUL)
       goto failed;
     rtems_libio_iop_freelist = iop->data1;
-    iop->data1 = 0;
-    iop->flags = LIBIO_FLAGS_OPEN;
-    iop->size = 0;
-    iop->offset = 0;
+
+    iop->driver               = NULL;
+    iop->size                 = 0;
+    iop->offset               = 0;
+    iop->flags                = LIBIO_FLAGS_OPEN;
+    iop->pathinfo.node_access = NULL;
+    iop->pathinfo.handlers    = NULL;
+    iop->pathinfo.ops         = NULL;
+    iop->pathinfo.mt_entry    = NULL;
+    iop->data0                = 0;
+    iop->data1                = NULL;
+    iop->file_info            = NULL;
+    iop->handlers             = NULL;
+    
     goto done;
   }
   

@@ -1,3 +1,10 @@
+2001-10-25	Jennifer Averett <jennifer@OARcorp.com>
+
+	* libc/libio.c: Initialize more fields to NULL/0 during initialiation.
+	* include/rtems/libio_.h: Fix freenode macro so it works for sockets
+	which do not have the full set of filesystem operations and are 
+	initialized via something other than open().
+
 2001-10-18	Till Straumann <strauman@SLAC.Stanford.EDU>
 
 	* libc/open.c, libc/close.c:  Moved freenode from open to
