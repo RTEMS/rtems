@@ -1,4 +1,24 @@
-2003-06-02	Joel Sherrill <joel@OARcorp.com>
-
-	* setup.def: Updated for RPM revision 3 of gcc3.2.3 and newlib1.11.0.
-
+#
+# RTEMS tools setup
+#
+# $Id$
+#
+binutils_version=2.13.2.1
+binutils_patch_version=
+binutils_rpm_release=1
+newlib_version=1.10.0
+newlib_patch_version=20020322
+gcc_version=2.95.3
+gcc_patch_version=20020328
+gccnewlib_rpm_release=3
+gdb_version=5.2
+gdb_patch_version=20030211
+gdb_rpm_release=2
+rtems_version=ss-20000726
+rtems_rpm_release=1
+rpm_build_root=%{_tmppath}
+gcc3newlib_version=1.11.0
+gcc3newlib_patch_version=20030605
+gcc3_version=3.2.3
+gcc3_patch_version=20030507a
+gcc3newlib_rpm_release=4

@@ -1,3 +1,7 @@
+2003-08-28	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Recovery effort.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
