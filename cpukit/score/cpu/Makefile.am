@@ -4,7 +4,8 @@
 
 SUBDIRS = @RTEMS_CPU@
 
-DIST_SUBDIRS = arm c4x h8300 i386 i960 m68k mips no_cpu or32 powerpc sh sparc
+DIST_SUBDIRS = arm c4x h8300 i386 i960 m68k mips no_cpu or32 powerpc sh \
+    sparc unix
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am
