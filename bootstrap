@@ -1,4 +1,4 @@
-#!/bin/sh
+#! /bin/sh
 #
 # helps bootstrapping, when checked out from CVS
 # requires GNU autoconf and GNU automake
@@ -34,6 +34,37 @@ usage()
   echo "	-c .. clean, remove all aclocal/autoconf/automake generated files"
   echo
   exit 1;
+}
+
+generate_bspdir_acinclude()
+{
+cat << EOF > acinclude.m4~
+# RTEMS_CHECK_BSPDIR(RTEMS_BSP)
+AC_DEFUN([RTEMS_CHECK_BSPDIR],
+[
+  RTEMS_BSP_ALIAS(ifelse([\$1],,[\${RTEMS_BSP}],[\$1]),bspdir)
+  case "\$bspdir" in
+EOF
+
+for i in */bsp_specs; do
+  d=`dirname $i`
+cat << EOF >> acinclude.m4~
+  $d )
+    AC_CONFIG_SUBDIRS([$d]);;
+EOF
+done
+cat << EOF >> acinclude.m4~
+  *)
+    AC_MSG_ERROR([Invalid BSP]);;
+  esac
+])
+EOF
+if cmp -s acinclude.m4 acinclude.m4~ 2>/dev/null; then
+  echo "acinclude.m4 is unchanged";
+else
+  cp acinclude.m4~ acinclude.m4
+fi
+rm -f acinclude.m4~
 }
 
 if test ! -f $top_srcdir/aclocal/version.m4; then
@@ -105,6 +136,8 @@ EOF
   configure=`basename $i`;
   ( test "$quiet" = "true" || echo "$dir";
     cd $dir;
+    test -n "`grep RTEMS_CHECK_BSPDIR ${configure}`" && \
+      generate_bspdir_acinclude;
     pat="s,\$(RTEMS_TOPdir),${aclocal_dir},g"
     aclocal_args=`grep '^[ ]*ACLOCAL_AMFLAGS' Makefile.am | \
       sed -e 's%.*ACLOCAL_AMFLAGS.*\=[ ]*%%g' -e $pat ` ;
@@ -158,5 +191,6 @@ clean)
   find . -name '.deps' -print | xargs rm -rf
   find . -name '.libs' -print | xargs rm -rf
   find . -name 'stamp-h.in' | xargs rm -rf
+  find . -name 'autom4te*.cache' | xargs rm -rf
   ;;
 esac

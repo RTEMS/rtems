@@ -1,3 +1,10 @@
+2002-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bootstrap: Add generate_bspdir_acinclude to automatically update
+	c/src/lib/libbsp/<cpu>/acinclude.m4.
+	Use #! /bin/sh instead of #!/bin/sh.
+	Remove autom4te*.cache during ./bootstrap --clean.
+
 2002-10-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/enable-bare.m4: Improve quoting of AC_HELP_STRING.
