@@ -91,7 +91,6 @@ The following targets are supported:
 	(none)			will build the host-based version on Linux,
 				Solaris and HPUX.
 
-	a29k-rtems		only standalone, uses non-gnu compiler
         arm-rtems
         h8300-rtems
 	i386-rtems
@@ -218,8 +217,6 @@ any             : bare
 The following ports are considered deprecated and will be removed in
 a future release:
 
-a29k		: portsw
-
 hppa1.1		: simhppa
 
 mips64orion 	: (deprecated)
@@ -261,7 +258,6 @@ The native (posix) ports have been built and run only on Linux.
 The following configurations have NOT been tested:
 
     + Anything on Nextstep, HPUX and Irix.
-    + The a29k port
     + The C4x and OR32 ports (requires specially patched toolchain)
 
 8. Prerequisites
