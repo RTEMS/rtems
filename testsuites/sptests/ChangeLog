@@ -1,3 +1,7 @@
+2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sptests.am: Use TMPINSTALL_FILES = to make automake-1.5 happy.
+
 2001-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* sp20/Makefile.am: include leaf.am instead of leaf.cfg.
