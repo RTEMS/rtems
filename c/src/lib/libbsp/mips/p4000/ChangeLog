@@ -1,3 +1,7 @@
+2003-01-20	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds*: Add FreeBSD sysctl() sections.
+
 2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* console/Makefile.am: Don't include @RTEMS_BSP@.cfg.

@@ -1,5 +1,9 @@
 2003-01-20	Joel Sherrill <joel@OARcorp.com>
 
+	* startup/linkcmds*: Add FreeBSD sysctl() sections.
+
+2003-01-20	Joel Sherrill <joel@OARcorp.com>
+
 	* startup/linkcmds-le, startup/linkcmds-le.coff: Add FreeBSD sysctl()
 	sections.
 
