@@ -38,7 +38,7 @@ FRAME(exc_utlb_code,sp,0,ra)
         la      k0, (R_VEC+((48)*8))
         j       k0
 	nop
-ENDFRAME(exc_tlb_code)
+ENDFRAME(exc_utlb_code)
 
 /* 
  * MIPS ISA Level 3
