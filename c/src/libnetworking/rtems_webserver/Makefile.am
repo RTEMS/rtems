@@ -7,14 +7,15 @@ AUTOMAKE_OPTIONS = foreign 1.4
 LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
-C_FILES = asp.c balloc.c wbase64.c default.c ejlex.c ejparse.c form.c h.c \
-    handler.c mime.c misc.c webpage.c ringq.c rom.c security.c socket.c \
-    sym.c uemf.c url.c value.c webrom.c webs.c websuemf.c webmain.c
+C_FILES = asp.c balloc.c base64.c default.c ejlex.c ejparse.c emfdb.c \
+    form.c h.c handler.c md5c.c mime.c misc.c webpage.c ringq.c rom.c \
+    security.c socket.c sym.c uemf.c um.c url.c value.c webrom.c webs.c \
+    websuemf.c webmain.c 
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
-H_FILES = ej.h uemf.h webs.h wsIntrn.h
+H_FILES = ej.h ejIntrn.h emfdb.h md5.h uemf.h um.h webs.h wsIntrn.h
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/lib.am
@@ -52,7 +53,7 @@ endif
 
 EXTRA_DIST = asp.c balloc.c default.c ej.h ejlex.c ejparse.c form.c h.c \
     handler.c mime.c misc.c ringq.c rom.c rtems_webserver.h security.c \
-    socket.c sym.c uemf.c uemf.h url.c value.c wbase64.c webcomp.c webmain.c \
-    webpage.c webrom.c webs.c webs.h websuemf.c wsIntrn.h
+    socket.c sym.c uemf.c uemf.h um.h url.c value.c base64.c webcomp.c \
+    webmain.c webpage.c webrom.c webs.c webs.h websuemf.c wsIntrn.h
 
 include $(top_srcdir)/../../../automake/local.am

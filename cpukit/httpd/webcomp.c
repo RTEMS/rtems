@@ -1,7 +1,7 @@
 /*
  * webcomp -- Compile web pages into C source
  *
- * Copyright (c) Go Ahead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */
@@ -71,10 +71,10 @@ static int compile(char_t *fileList, char_t *prefix)
 	FILE			*lp;
 	time_t			now;
 	char_t			file[FNAMESIZE];
-	char_t			*cp;
+	char_t			*cp, *sl;
 	char			buf[512];
-	char			*p;
-	int			j, i, len, fd, nFile;
+	unsigned char	*p;
+	int				j, i, len, fd, nFile;
 
 /*
  *	Open list of files
@@ -87,7 +87,7 @@ static int compile(char_t *fileList, char_t *prefix)
 	time(&now);
 	fprintf(stdout, "/*\n * webrom.c -- Compiled Web Pages\n *\n");
 	fprintf(stdout, " * Compiled by GoAhead WebCompile: %s */\n\n", 
-		ctime(&now));
+		gctime(&now));
 	fprintf(stdout, "#include \"wsIntrn.h\"\n\n");
 	fprintf(stdout, "#ifndef WEBS_PAGE_ROM\n");
 	fprintf(stdout, "websRomPageIndexType websRomPageIndex[] = {\n");
@@ -102,6 +102,9 @@ static int compile(char_t *fileList, char_t *prefix)
 		if ((p = strchr(file, '\n')) || (p = strchr(file, '\r'))) {
 			*p = '\0';
 		}
+		if (*file == '\0') {
+			continue;
+		}
 		if (gstat(file, &sbuf) == 0 && sbuf.st_mode & S_IFDIR) {
 			continue;
 		} 
@@ -109,7 +112,7 @@ static int compile(char_t *fileList, char_t *prefix)
 			fprintf(stderr, "Can't open file %s\n", file);
 			return -1;
 		}
-		fprintf(stdout, "static unsigned char page_%d[] = {\n", nFile);
+		fprintf(stdout, "static const unsigned char page_%d[] = {\n", nFile);
 
 		while ((len = read(fd, buf, sizeof(buf))) > 0) {
 			p = buf;
@@ -143,6 +146,9 @@ static int compile(char_t *fileList, char_t *prefix)
 		if ((p = strchr(file, '\n')) || (p = strchr(file, '\r'))) {
 			*p = '\0';
 		}
+		if (*file == '\0') {
+			continue;
+		}
 /*
  *		Remove the prefix and add a leading "/" when we print the path
  */
@@ -150,6 +156,9 @@ static int compile(char_t *fileList, char_t *prefix)
 			cp = &file[gstrlen(prefix)];
 		} else {
 			cp = file;
+		}
+		while((sl = strchr(file, '\\')) != NULL) {
+			*sl = '/';
 		}
 		if (*cp == '/') {
 			cp++;
@@ -159,8 +168,8 @@ static int compile(char_t *fileList, char_t *prefix)
 			fprintf(stdout, "    { T(\"/%s\"), 0, 0 },\n", cp);
 			continue;
 		}
-		fprintf(stdout, "    { T(\"/%s\"), page_%d, %ld },\n", cp, nFile, 
-			(long) sbuf.st_size);
+		fprintf(stdout, "    { T(\"/%s\"), page_%d, %d },\n", cp, nFile, 
+			sbuf.st_size);
 		nFile++;
 	}
 	fclose(lp); 

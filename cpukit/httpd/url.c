@@ -1,7 +1,7 @@
 /*
  * url.c -- Parse URLs
  *
- * Copyright (c) Go Ahead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */
@@ -83,7 +83,7 @@ int websUrlParse(char_t *url, char_t **pbuf, char_t **phost, char_t **ppath,
 
 	ulen = gstrlen(url);
 /*
- *	We allocate enough to store a separate hostname and port number fields.
+ *	We allocate enough to store separate hostname and port number fields.
  *	As there are 3 strings in the one buffer, we need room for 3 null chars.
  *	We allocate MAX_PORT_LEN char_t's for the port number.
  */
@@ -146,16 +146,23 @@ int websUrlParse(char_t *url, char_t **pbuf, char_t **phost, char_t **ppath,
 	}
 
 /*
- *	Parse the tag and the query
+ *	Parse the query string
  */
-	if ((cp = gstrchr(tok, '#')) != NULL) {
-		*cp++ = '\0';
-		path = tok;
-		tok = cp;
-	}
 	if ((cp = gstrchr(tok, '?')) != NULL) {
 		*cp++ = '\0';
 		query = cp;
+		path = tok;
+		tok = query;
+	} 
+
+/*
+ *	Parse the fragment identifier
+ */
+	if ((cp = gstrchr(tok, '#')) != NULL) {
+		*cp++ = '\0';
+		if (*query == 0) {
+			path = tok;
+		}
 	}
 
 /*

@@ -1,15 +1,15 @@
 /*
  * sym.c -- Symbol Table module
  *
- * Copyright (c) GoAhead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */
 
 /******************************** Description *********************************/
 /*
- *	This module implements a highly efficient generic symbol table with 
- *	update and access routines.  Symbols are simple character strings and 
+ *	This module implements a highly efficient generic symbol table with
+ *	update and access routines. Symbols are simple character strings and
  *	the values they take can be flexible types as defined by value_t.
  *	This modules allows multiple symbol tables to be created.
  */
@@ -32,24 +32,51 @@ typedef struct {						/* Symbol table descriptor */
 
 /********************************* Globals ************************************/
 
-static sym_tabent_t		**sym;			/* List of symbol tables */
-static int 				sym_max;		/* One past the max symbol table */
+static sym_tabent_t	**sym;				/* List of symbol tables */
+static int			symMax;				/* One past the max symbol table */
+static int			symOpenCount = 0;	/* Count of apps using sym */
 
-static int		htIndex;				/* Current location in table */
-static sym_t*	next;					/* Next symbol in iteration */
+static int			htIndex;			/* Current location in table */
+static sym_t*		next;				/* Next symbol in iteration */
 
 /**************************** Forward Declarations ****************************/
 
-static int 		hashIndex(sym_tabent_t *tp, char_t *name);
-static sym_t 	*hash(sym_tabent_t *tp, char_t *name);
-static int 		calc_prime(int size);
+static int		hashIndex(sym_tabent_t *tp, char_t *name);
+static sym_t	*hash(sym_tabent_t *tp, char_t *name);
+static int		calcPrime(int size);
 
 /*********************************** Code *************************************/
+/*
+ *	Open the symbol table subSystem.
+ */
+
+int symSubOpen()
+{
+	if (++symOpenCount == 1) {
+		symMax = 0;
+		sym = NULL;
+	}
+	return 0;
+}
+
+/******************************************************************************/
+/*
+ *	Close the symbol table subSystem.
+ */
+
+void symSubClose()
+{
+	if (--symOpenCount <= 0) {
+		symOpenCount = 0;
+	}
+}
+
+/******************************************************************************/
 /*
  *	Create a symbol table.
  */
 
-sym_fd_t symOpen(int hash_size) 
+sym_fd_t symOpen(int hash_size)
 {
 	sym_fd_t		sd;
 	sym_tabent_t	*tp;
@@ -67,20 +94,20 @@ sym_fd_t symOpen(int hash_size)
  *	Create a new symbol table structure and zero
  */
 	if ((tp = (sym_tabent_t*) balloc(B_L, sizeof(sym_tabent_t))) == NULL) {
-		sym_max = hFree((void***) &sym, sd);
+		symMax = hFree((void***) &sym, sd);
 		return -1;
 	}
 	memset(tp, 0, sizeof(sym_tabent_t));
-	if (sd >= sym_max) {
-		sym_max = sd + 1;
+	if (sd >= symMax) {
+		symMax = sd + 1;
 	}
-	a_assert(0 <= sd && sd < sym_max);
+	a_assert(0 <= sd && sd < symMax);
 	sym[sd] = tp;
 
 /*
  *	Now create the hash table for fast indexing.
  */
-	tp->hash_size = calc_prime(hash_size);
+	tp->hash_size = calcPrime(hash_size);
 	tp->hash_table = (sym_t**) balloc(B_L, tp->hash_size * sizeof(sym_t*));
 	a_assert(tp->hash_table);
 	memset(tp->hash_table, 0, tp->hash_size * sizeof(sym_t*));
@@ -94,13 +121,13 @@ sym_fd_t symOpen(int hash_size)
  *	to free resources associated with each symbol table entry.
  */
 
-void symClose(sym_fd_t sd, void (*cleanup)(sym_t *symp)) 
+void symClose(sym_fd_t sd)
 {
 	sym_tabent_t	*tp;
 	sym_t			*sp, *forw;
-	int 			i;
+	int				i;
 
-	a_assert(0 <= sd && sd < sym_max);
+	a_assert(0 <= sd && sd < symMax);
 	tp = sym[sd];
 	a_assert(tp);
 
@@ -110,28 +137,16 @@ void symClose(sym_fd_t sd, void (*cleanup)(sym_t *symp))
 	for (i = 0; i < tp->hash_size; i++) {
 		for (sp = tp->hash_table[i]; sp; sp = forw) {
 			forw = sp->forw;
-			if (cleanup) {
-				(*cleanup)(sp);
-			}
 			valueFree(&sp->name);
+			valueFree(&sp->content);
 			bfree(B_L, (void*) sp);
 			sp = forw;
 		}
 	}
 	bfree(B_L, (void*) tp->hash_table);
 
-	sym_max = hFree((void***) &sym, sd);
+	symMax = hFree((void***) &sym, sd);
 	bfree(B_L, (void*) tp);
-}
-
-/******************************************************************************/
-/*
- *	Default callback for freeing the value.
- */
-
-void symFreeVar(sym_t* sp)
-{
-	valueFree(&sp->content);
 }
 
 /******************************************************************************/
@@ -145,9 +160,9 @@ sym_t* symFirst(sym_fd_t sd)
 {
 	sym_tabent_t	*tp;
 	sym_t			*sp, *forw;
-	int 			i;
+	int				i;
 
-	a_assert(0 <= sd && sd < sym_max);
+	a_assert(0 <= sd && sd < symMax);
 	tp = sym[sd];
 	a_assert(tp);
 
@@ -180,9 +195,9 @@ sym_t* symNext(sym_fd_t sd)
 {
 	sym_tabent_t	*tp;
 	sym_t			*sp, *forw;
-	int 			i;
+	int				i;
 
-	a_assert(0 <= sd && sd < sym_max);
+	a_assert(0 <= sd && sd < symMax);
 	tp = sym[sd];
 	a_assert(tp);
 
@@ -219,9 +234,10 @@ sym_t *symLookup(sym_fd_t sd, char_t *name)
 	sym_t			*sp;
 	char_t			*cp;
 
-	a_assert(0 <= sd && sd < sym_max);
-	tp = sym[sd];
-	a_assert(tp);
+	a_assert(0 <= sd && sd < symMax);
+	if ((tp = sym[sd]) == NULL) {
+		return NULL;
+	}
 
 	if (name == NULL || *name == '\0') {
 		return NULL;
@@ -241,8 +257,10 @@ sym_t *symLookup(sym_fd_t sd, char_t *name)
 
 /******************************************************************************/
 /*
- *	Enter a symbol into the table.  If already there, update its value.
- *	Always succeeds if memory available.
+ *	Enter a symbol into the table. If already there, update its value.
+ *	Always succeeds if memory available. We allocate a copy of "name" here
+ *	so it can be a volatile variable. The value "v" is just a copy of the
+ *	passed in value, so it MUST be persistent.
  */
 
 sym_t *symEnter(sym_fd_t sd, char_t *name, value_t v, int arg)
@@ -252,13 +270,13 @@ sym_t *symEnter(sym_fd_t sd, char_t *name, value_t v, int arg)
 	char_t			*cp;
 	int				hindex;
 
-	a_assert(name && *name);
-	a_assert(0 <= sd && sd < sym_max);
+	a_assert(name);
+	a_assert(0 <= sd && sd < symMax);
 	tp = sym[sd];
 	a_assert(tp);
 
 /*
- *	Calculate the first daisy-chain from the hash table.  If non-zero, then
+ *	Calculate the first daisy-chain from the hash table. If non-zero, then
  *	we have daisy-chain, so scan it and look for the symbol.
  */
 	last = NULL;
@@ -333,12 +351,12 @@ int symDelete(sym_fd_t sd, char_t *name)
 	int				hindex;
 
 	a_assert(name && *name);
-	a_assert(0 <= sd && sd < sym_max);
+	a_assert(0 <= sd && sd < symMax);
 	tp = sym[sd];
 	a_assert(tp);
 
 /*
- *	Calculate the first daisy-chain from the hash table.  If non-zero, then
+ *	Calculate the first daisy-chain from the hash table. If non-zero, then
  *	we have daisy-chain, so scan it and look for the symbol.
  */
 	last = NULL;
@@ -355,7 +373,7 @@ int symDelete(sym_fd_t sd, char_t *name)
 	if (sp == (sym_t*) NULL) {				/* Not Found */
 		return -1;
 	}
-	
+
 /*
  *	Unlink and free the symbol. Last will be set if the element to be deleted
  *	is not first in the chain.
@@ -366,6 +384,7 @@ int symDelete(sym_fd_t sd, char_t *name)
 		tp->hash_table[hindex] = sp->forw;
 	}
 	valueFree(&sp->name);
+	valueFree(&sp->content);
 	bfree(B_L, (void*) sp);
 
 	return 0;
@@ -393,13 +412,13 @@ static sym_t *hash(sym_tabent_t *tp, char_t *name)
 
 static int hashIndex(sym_tabent_t *tp, char_t *name)
 {
-	unsigned int 	sum;
-	int 			i;
+	unsigned int	sum;
+	int				i;
 
 	a_assert(tp);
 /*
  *	Add in each character shifted up progressively by 7 bits. The shift
- *	amount is rounded so as to not shift too far.  It thus cycles with each 
+ *	amount is rounded so as to not shift too far. It thus cycles with each
  *	new cycle placing character shifted up by one bit.
  */
 	i = 0;
@@ -416,13 +435,14 @@ static int hashIndex(sym_tabent_t *tp, char_t *name)
  *	Check if this number is a prime
  */
 
-static int is_prime(int n)
+static int isPrime(int n)
 {
-	int 	i;
+	int		i, max;
 
 	a_assert(n > 0);
 
-	for (i = 2; i < n; i++) {
+	max = n / 2;
+	for (i = 2; i <= max; i++) {
 		if (n % i == 0) {
 			return 0;
 		}
@@ -435,14 +455,14 @@ static int is_prime(int n)
  *	Calculate the largest prime smaller than size.
  */
 
-static int calc_prime(int size)
+static int calcPrime(int size)
 {
 	int count;
 
 	a_assert(size > 0);
 
 	for (count = size; count > 0; count--) {
-		if (is_prime(count)) {
+		if (isPrime(count)) {
 			return count;
 		}
 	}
@@ -450,3 +470,4 @@ static int calc_prime(int size)
 }
 
 /******************************************************************************/
+

@@ -1,7 +1,7 @@
 /*
  * uemf.c -- GoAhead Micro Embedded Management Framework
  *
- * Copyright (c) Go Ahead Software, Inc., 1995-1999
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */
@@ -22,31 +22,62 @@
 
 int emfInst;							/* Application instance handle */
 
+/****************************** Forward Declarations **************************/
+
+extern void defaultErrorHandler(int etype, char_t *buf);
+static void (*errorHandler)(int etype, char_t *msg) = defaultErrorHandler;
+
+extern void	defaultTraceHandler(int level, char_t *buf);
+static void (*traceHandler)(int level, char_t *buf) = defaultTraceHandler;
+
 /************************************* Code ***********************************/
 /*
  *	Error message that doesn't need user attention. Customize this code
- *	to direct error messages to whereever the developer wishes
+ *	to direct error messages to wherever the developer wishes
  */
 
-void error(E_ARGS_DEC, int flags, char_t *fmt, ...)
+void error(E_ARGS_DEC, int etype, char_t *fmt, ...)
 {
-  va_list arglist;
-  
-  va_start(arglist, fmt);
-  
-	if (flags & E_LOG) {
-		/* Log error message */
+	va_list 	args;
+	char_t		*fmtBuf, *buf;
 
-	} else if (flags & E_ASSERT) {
-		/* Assert message */
+	va_start(args, fmt);
+	fmtValloc(&fmtBuf, E_MAX_ERROR, fmt, args);
 
-	} else if (flags & E_USER) {
-		/* Display message to the user */
+	if (etype == E_LOG) {
+		fmtAlloc(&buf, E_MAX_ERROR, T("%s\n"), fmtBuf);
+#if DEV
+	} else if (etype == E_ASSERT) {
+		fmtAlloc(&buf, E_MAX_ERROR, 
+			T("Assertion %s, failed at %s %d\n"), fmtBuf, E_ARGS); 
+#endif
+	} else if (etype == E_USER) {
+		fmtAlloc(&buf, E_MAX_ERROR, T("%s\n"), fmtBuf);
+	}
+	va_end(args);
 
+	bfree(B_L, fmtBuf);
+
+	if (errorHandler) {
+		errorHandler(etype, buf);
 	}
 
-  vprintf (fmt, arglist);
-  va_end(arglist);
+	bfreeSafe(B_L, buf);
+}
+
+/******************************************************************************/
+/*
+ *	Replace the default error handler. Return pointer to old error handler.
+ */
+
+void (*errorSetHandler(void (*function)(int etype, char_t *msg))) \
+	(int etype, char_t *msg)
+{
+	void (*oldHandler)(int etype, char_t *buf);
+
+	oldHandler = errorHandler;
+	errorHandler = function;
+	return oldHandler;
 }
 
 /******************************************************************************/
@@ -54,21 +85,48 @@ void error(E_ARGS_DEC, int flags, char_t *fmt, ...)
  *	Trace log. Customize this function to log trace output
  */
 
-void goahead_trace(int level, char_t *afmt, ...)
+void trace(int level, char_t *fmt, ...)
 {
-#if DEBUG
 	va_list 	args;
 	char_t		*buf;
 
-	va_start(args, afmt);
-	buf = NULL;
-	gvsnprintf(&buf, VALUE_MAX_STRING, afmt, args);
-	if (buf) {
-		gprintf(buf);
-		bfree(B_L, buf);
+	va_start(args, fmt);
+	fmtValloc(&buf, VALUE_MAX_STRING, fmt, args);
+
+	if (traceHandler) {
+		traceHandler(level, buf);
 	}
+	bfreeSafe(B_L, buf);
 	va_end(args);
-#endif
+}
+
+/******************************************************************************/
+/*
+ *	Trace log. Customize this function to log trace output
+ */
+
+void traceRaw(char_t *buf)
+{
+	if (traceHandler) {
+		traceHandler(0, buf);
+	}
+}
+
+/******************************************************************************/
+/*
+ *	Replace the default trace handler. Return a pointer to the old handler.
+ */
+
+void (*traceSetHandler(void (*function)(int level, char_t *buf))) 
+	(int level, char *buf)
+{
+	void (*oldHandler)(int level, char_t *buf);
+
+	oldHandler = traceHandler;
+	if (function) {
+		traceHandler = function;
+	}
+	return oldHandler;
 }
 
 /******************************************************************************/
@@ -197,4 +255,27 @@ char_t *stritoa(int n, char_t *string, int width)
 }
 
 /******************************************************************************/
+/*
+ *	Stubs
+ */
 
+char_t *basicGetProduct()
+{
+	return T("uemf");
+}
+
+char_t *basicGetAddress()
+{
+	return T("localhost");
+}
+
+int errorOpen(char_t *pname)
+{
+	return 0;
+}
+
+void errorClose()
+{
+}
+
+/******************************************************************************/

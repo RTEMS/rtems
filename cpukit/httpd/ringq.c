@@ -1,7 +1,7 @@
 /*
  * ringq.c -- Ring queue buffering module
  *
- * Copyright (c) GoAhead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */
@@ -10,7 +10,7 @@
 
 /*
  *	A ring queue allows maximum utilization of memory for data storage and is
- *	ideal for input/output buffering.  This module provides a highly effecient
+ *	ideal for input/output buffering.  This module provides a highly efficient
  *	implementation and a vehicle for dynamic strings.
  *
  *	WARNING:  This is a public implementation and callers have full access to
@@ -36,10 +36,10 @@
  *  rq->buf                    rq->servp               rq->endp      rq->enduf
  *     
  *	The queue is empty when servp == endp.  This means that the queue will hold
- *	at most rq->buflen -1 bytes.  It is the fillers responsibility to ensure
+ *	at most rq->buflen -1 bytes.  It is the filler's responsibility to ensure
  *	the ringq is never filled such that servp == endp.
  *
- *	It is the fillers responsibility to "wrap" the endp back to point to
+ *	It is the filler's responsibility to "wrap" the endp back to point to
  *	rq->buf when the pointer steps past the end.  Correspondingly it is the
  *	consumers responsibility to "wrap" the servp when it steps to rq->endbuf.
  *	The ringqPutc and ringqGetc routines will do this automatically.
@@ -65,7 +65,10 @@
 
 /***************************** Forward Declarations ***************************/
 
-static int ringq_grow(ringq_t *rq);
+static int	ringqGrow(ringq_t *rq);
+static int	getBinBlockSize(int size);
+
+int			ringqGrowCalls = 0;
 
 /*********************************** Code *************************************/
 /*
@@ -76,12 +79,15 @@ static int ringq_grow(ringq_t *rq);
  *	dynamically allocated. Set maxsize
  */
 
-int ringqOpen(ringq_t *rq, int increment, int maxsize)
+int ringqOpen(ringq_t *rq, int initSize, int maxsize)
 {
-	a_assert(rq);
-	a_assert(increment >= 0);
+	int	increment;
 
-	if ((rq->buf = balloc(B_L, increment)) == NULL) {
+	a_assert(rq);
+	a_assert(initSize >= 0);
+
+	increment = getBinBlockSize(initSize);
+	if ((rq->buf = balloc(B_L, (increment))) == NULL) {
 		return -1;
 	}
 	rq->maxsize = maxsize;
@@ -115,8 +121,8 @@ void ringqClose(ringq_t *rq)
 
 /******************************************************************************/
 /*
- *	Return the length of the ringq. Users must fill the queue to a high 
- *	water mark of at most one less than the queue size.
+ *	Return the length of the data in the ringq. Users must fill the queue to 
+ *	a high water mark of at most one less than the queue size.
  */
 
 int ringqLen(ringq_t *rq)
@@ -126,8 +132,7 @@ int ringqLen(ringq_t *rq)
 
 	if (rq->servp > rq->endp) {
 		return rq->buflen + rq->endp - rq->servp;
-	}
-	else {
+	} else {
 		return rq->endp - rq->servp;
 	}
 }
@@ -166,12 +171,12 @@ int ringqGetc(ringq_t *rq)
 
 int ringqPutc(ringq_t *rq, char_t c)
 {
-	char_t*	cp;
+	char_t *cp;
 
 	a_assert(rq);
 	a_assert(rq->buflen == (rq->endbuf - rq->buf));
 
-	if (ringqPutBlkMax(rq) < (int) sizeof(char_t) && !ringq_grow(rq)) {
+	if ((ringqPutBlkMax(rq) < (int) sizeof(char_t)) && !ringqGrow(rq)) {
 		return -1;
 	}
 
@@ -191,12 +196,12 @@ int ringqPutc(ringq_t *rq, char_t c)
 
 int ringqInsertc(ringq_t *rq, char_t c)
 {
-	char_t*	cp;
+	char_t *cp;
 
 	a_assert(rq);
 	a_assert(rq->buflen == (rq->endbuf - rq->buf));
 
-	if (ringqPutBlkMax(rq) < (int) sizeof(char_t) && !ringq_grow(rq)) {
+	if (ringqPutBlkMax(rq) < (int) sizeof(char_t) && !ringqGrow(rq)) {
 		return -1;
 	}
 	if (rq->servp <= rq->buf) {
@@ -210,10 +215,10 @@ int ringqInsertc(ringq_t *rq, char_t c)
 
 /******************************************************************************/
 /*
- *	Add a string to the queue. Add a trailing wide null (two nulls)
+ *	Add a string to the queue. Add a trailing null (maybe two nulls)
  */
 
-int ringqPutstr(ringq_t *rq, char_t *str)
+int ringqPutStr(ringq_t *rq, char_t *str)
 {
 	int		rc;
 
@@ -224,6 +229,19 @@ int ringqPutstr(ringq_t *rq, char_t *str)
 	rc = ringqPutBlk(rq, (unsigned char*) str, gstrlen(str) * sizeof(char_t));
 	*((char_t*) rq->endp) = (char_t) '\0';
 	return rc;
+}
+
+/******************************************************************************/
+/*
+ *	Add a null terminator. This does NOT increase the size of the queue
+ */
+
+void ringqAddNull(ringq_t *rq)
+{
+	a_assert(rq);
+	a_assert(rq->buflen == (rq->endbuf - rq->buf));
+
+	*((char_t*) rq->endp) = (char_t) '\0';
 }
 
 /******************************************************************************/
@@ -261,7 +279,7 @@ int ringqPutcA(ringq_t *rq, char c)
 	a_assert(rq);
 	a_assert(rq->buflen == (rq->endbuf - rq->buf));
 
-	if (ringqPutBlkMax(rq) == 0 && !ringq_grow(rq)) {
+	if (ringqPutBlkMax(rq) == 0 && !ringqGrow(rq)) {
 		return -1;
 	}
 
@@ -282,7 +300,7 @@ int ringqInsertcA(ringq_t *rq, char c)
 	a_assert(rq);
 	a_assert(rq->buflen == (rq->endbuf - rq->buf));
 
-	if (ringqPutBlkMax(rq) == 0 && !ringq_grow(rq)) {
+	if (ringqPutBlkMax(rq) == 0 && !ringqGrow(rq)) {
 		return -1;
 	}
 	if (rq->servp <= rq->buf) {
@@ -298,7 +316,7 @@ int ringqInsertcA(ringq_t *rq, char c)
  *	ie. beyond the last valid byte.
  */
 
-int ringqPutstrA(ringq_t *rq, char *str)
+int ringqPutStrA(ringq_t *rq, char *str)
 {
 	int		rc;
 
@@ -334,7 +352,7 @@ int ringqPutBlk(ringq_t *rq, unsigned char *buf, int size)
 	while (size > 0) {
 		this = min(ringqPutBlkMax(rq), size);
 		if (this <= 0) {
-			if (! ringq_grow(rq)) {
+			if (! ringqGrow(rq)) {
 				break;
 			}
 			this = min(ringqPutBlkMax(rq), size);
@@ -485,10 +503,13 @@ void ringqGetBlkAdj(ringq_t *rq, int size)
 void ringqFlush(ringq_t *rq)
 {
 	a_assert(rq);
+	a_assert(rq->servp);
 
 	rq->servp = rq->buf;
 	rq->endp = rq->buf;
-	*rq->servp = '\0';
+	if (rq->servp) {
+		*rq->servp = '\0';
+	}
 }
 
 /******************************************************************************/
@@ -498,7 +519,7 @@ void ringqFlush(ringq_t *rq)
  *	the maximum possible size.
  */
 
-static int ringq_grow(ringq_t *rq)
+static int ringqGrow(ringq_t *rq)
 {
 	unsigned char	*newbuf;
 	int 			len;
@@ -531,7 +552,31 @@ static int ringq_grow(ringq_t *rq)
 	rq->endbuf = &rq->buf[rq->buflen];
 
 	ringqPutBlk(rq, newbuf, len);
+
+/*
+ *	Double the increment so the next grow will line up with balloc'ed memory
+ */
+	rq->increment = getBinBlockSize(2 * rq->increment);
+
 	return 1;
+}
+
+/******************************************************************************/
+/*
+ *	Find the smallest binary memory size that "size" will fit into.  This
+ *	makes the ringq and ringqGrow routines much more efficient.  The balloc
+ *	routine likes powers of 2 minus 1.
+ */
+
+static int	getBinBlockSize(int size)
+{
+	int	q;
+
+	size = size >> B_SHIFT;
+	for (q = 0; size; size >>= 1) {
+		q++;
+	}
+	return (1 << (B_SHIFT + q));
 }
 
 /******************************************************************************/

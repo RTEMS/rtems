@@ -1,7 +1,7 @@
 /*
  * mime.c -- Web server mime types
  *
- * Copyright (c) Go Ahead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */

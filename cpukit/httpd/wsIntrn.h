@@ -1,18 +1,18 @@
 /* 
- *	wsIntrn.h -- Internal Go Ahead Web server header
+ *	wsIntrn.h -- Internal GoAhead Web server header
  *
- *	Copyright (c) Go Ahead Software Inc., 1992-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1992-2000. All Rights Reserved.
  *
  *	See the file "license.txt" for information on usage and redistribution
  */
-
+ 
 #ifndef _h_WEBS_INTERNAL
 #define _h_WEBS_INTERNAL 1
 
 /******************************** Description *********************************/
 
 /* 
- *	Internal Go Ahead Web Server header. This defines the Web private APIs
+ *	Internal GoAhead Web Server header. This defines the Web private APIs
  *	Include this header when you want to create URL handlers.
  */
 
@@ -33,7 +33,6 @@
  *		#define WEBS_PROXY_SUPPORT 1
  *
  *	Define this to support reading pages from ROM
- *		Note: this is not yet fully implemented.
  *		#define WEBS_PAGE_ROM 1
  *
  *	Define this to enable memory allocation and stack usage tracking
@@ -64,6 +63,13 @@
 	#include	<sys/stat.h>
 #endif
 
+#if SCOV5
+	#include	<fcntl.h>
+	#include	<sys/stat.h>
+	#include	<signal.h>
+	#include	<unistd.h>
+#endif
+
 #if LYNX
 	#include	<fcntl.h>
 	#include	<sys/stat.h>
@@ -91,17 +97,24 @@
 	#include	<sys/stat.h>
 #endif
 
-#if VXW486
+#if VXWORKS
 	#include	<vxWorks.h>
+	#include	<fcntl.h>
+	#include	<sys/stat.h>
+#endif
+
+#if SOLARIS
+	#include	<macros.h>
 	#include	<fcntl.h>
 	#include	<sys/stat.h>
 #endif
 
 #if UEMF
 	#include	"uemf.h"
-	#include	"ej.h"
+	#include	"ejIntrn.h"
 #else
 	#include	"emf/emfInternal.h"
+	#include	"ej/ejIntrn.h"
 #endif
 
 #include	"webs.h"
@@ -110,16 +123,18 @@
 /* 
  *	Read handler flags and state
  */
-#define WEBS_BEGIN				0x1			/* Beginning state */
-#define WEBS_HEADER				0x2			/* Ready to read first line */
-#define WEBS_POST				0x4			/* POST without content */
-#define WEBS_POST_CLEN			0x8			/* Ready to read content for POST */
-#define WEBS_PROCESSING			0x10		/* Processing request */
-#define WEBS_KEEP_TIMEOUT		15000		/* Keep-alive timeout (15 secs) */
-#define WEBS_TIMEOUT			60000		/* General request timeout (60) */
+#define WEBS_BEGIN			0x1			/* Beginning state */
+#define WEBS_HEADER			0x2			/* Ready to read first line */
+#define WEBS_POST			0x4			/* POST without content */
+#define WEBS_POST_CLEN		0x8			/* Ready to read content for POST */
+#define WEBS_PROCESSING		0x10		/* Processing request */
+#define WEBS_KEEP_TIMEOUT	15000		/* Keep-alive timeout (15 secs) */
+#define WEBS_TIMEOUT		60000		/* General request timeout (60) */
 
-#define PAGE_READ_BUFSIZE		512			/* bytes read from page files */
-#define MAX_PORT_LEN			10			/* max digits in port number */
+#define PAGE_READ_BUFSIZE	512			/* bytes read from page files */
+#define MAX_PORT_LEN		10			/* max digits in port number */
+#define WEBS_SYM_INIT		64			/* initial # of sym table entries */
+#define	WEBS_VERSION_STR	T("2.1.3")	/* version of web server s/w */	
 
 /*
  *	URL handler structure. Stores the leading URL path and the handler
@@ -150,6 +165,7 @@ typedef struct {
 	long 			localHits;
 	long 			remoteHits;
 	long 			formHits;
+	long 			cgiHits;
 	long 			handlerHits;
 } websStatsType;
 
@@ -185,7 +201,7 @@ typedef struct {
  */
 typedef struct {
 	char_t			*path;					/* Web page URL path */
-	unsigned char	*page;					/* Web page data */
+	const unsigned char	*page;					/* Web page data */
 	int				size;					/* Size of web page in bytes */
 	int				pos;					/* Current read position */
 } websRomPageIndexType;
@@ -209,6 +225,7 @@ extern int				websMax;			/* List size */
 extern char_t			websHost[64];		/* Name of this host */
 extern char_t			websIpaddr[64];		/* IP address of this host */
 extern char_t			*websHostUrl;		/* URL for this host */
+extern char_t			*websIpaddrUrl;		/* URL for this host */
 extern int				websPort;			/* Port number */
 
 /******************************** Prototypes **********************************/
@@ -224,12 +241,21 @@ extern int 		 websDefaultHandler(webs_t wp, char_t *urlPrefix,
 					char_t *query);
 extern int 		 websFormHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
 					int arg, char_t *url, char_t *path, char_t *query);
+extern int 		 websCgiHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
+					int arg, char_t *url, char_t *path, char_t *query);
+extern void		 websCgiCleanup();
+extern int		 websCheckCgiProc(int handle);
+extern char_t	 *websGetCgiCommName();
+
+extern int		 websLaunchCgiProc(char_t *cgiPath, char_t **argp,
+					char_t **envp, char_t *stdIn, char_t *stdOut);
 extern int 		 websOpen(int sid);
 extern void 	 websResponse(webs_t wp, int code, char_t *msg, 
 					char_t *redirect);
 extern int 		 websJavaScriptEval(webs_t wp, char_t *script);
 extern int 		 websPageReadData(webs_t wp, char *buf, int nBytes);
-extern int		 websPageOpen(webs_t wp, char_t *lpath, char_t *path, int mode, int perm);
+extern int		 websPageOpen(webs_t wp, char_t *lpath, char_t *path, int mode,
+					int perm);
 extern void		 websPageClose(webs_t wp);
 extern void		 websPageSeek(webs_t wp, long offset);
 extern int 	 	 websPageStat(webs_t wp, char_t *lpath, char_t *path,
@@ -253,6 +279,8 @@ extern int 		 websOpenServer(int port, int retries);
 extern void 	 websCloseServer();
 extern char_t*	 websGetDateString(websStatType* sbuf);
 
+extern int		strcmpci(char_t* s1, char_t* s2);
+
 /*
  *	Prototypes for functions available when running as part of the 
  *	GoAhead Embedded Management Framework (EMF)
@@ -261,6 +289,11 @@ extern char_t*	 websGetDateString(websStatType* sbuf);
 extern int 		 websEmfOpen();
 extern void 	 websEmfClose();
 extern void 	 websSetEmfEnvironment(webs_t wp);
+#endif
+
+#if CE
+extern int writeUniToAsc(int fid, void *buf, unsigned int len);
+extern int readAscToUni(int fid, void **buf, unsigned int len);
 #endif
 
 #endif /* _h_WEBS_INTERNAL */

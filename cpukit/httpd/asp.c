@@ -1,7 +1,7 @@
 /*
  * asp.c -- Active Server Page Support
  *
- * Copyright (c) Go Ahead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */
@@ -20,11 +20,12 @@
 
 /********************************** Locals ************************************/
 
-static sym_fd_t	 websAspFunctions = -1;	/* Symbol table of functions */
+static sym_fd_t	websAspFunctions = -1;	/* Symbol table of functions */
+static int		aspOpenCount = 0;		/* count of apps using this module */
 
 /***************************** Forward Declarations ***************************/
 
-static char_t	*strtokcmp(char_t* s1, char_t* s2);
+static char_t	*strtokcmp(char_t *s1, char_t *s2);
 static char_t	*skipWhite(char_t *s);
 
 /************************************* Code ***********************************/
@@ -34,15 +35,17 @@ static char_t	*skipWhite(char_t *s);
 
 int websAspOpen()
 {
+	if (++aspOpenCount == 1) {
 /*
  *	Create the table for ASP functions
  */
-	websAspFunctions = symOpen(128);
+		websAspFunctions = symOpen(WEBS_SYM_INIT * 2);
 
 /*
  *	Create standard ASP commands
  */
-	websAspDefine(T("write"), websAspWrite);
+		websAspDefine(T("write"), websAspWrite);
+	}
 	return 0;
 }
 
@@ -53,8 +56,11 @@ int websAspOpen()
 
 void websAspClose()
 {
-	if (websAspFunctions != -1) {
-		symClose(websAspFunctions, NULL);
+	if (--aspOpenCount <= 0) {
+		if (websAspFunctions != -1) {
+			symClose(websAspFunctions);
+			websAspFunctions = -1;
+		}
 	}
 }
 
@@ -65,7 +71,7 @@ void websAspClose()
  *	documents, it is better to make them plain HTML files rather than ASPs.
  */
 
-int websAspRequest(webs_t wp, char_t* lpath)
+int websAspRequest(webs_t wp, char_t *lpath)
 {
 	websStatType	sbuf;
 	char			*rbuf;
@@ -84,7 +90,7 @@ int websAspRequest(webs_t wp, char_t* lpath)
 	path = websGetRequestPath(wp);
 
 /*
- *	Create Ejscript instance incase it is needed
+ *	Create Ejscript instance in case it is needed
  */
 	ejid = ejOpenEngine(wp->cgiVars, websAspFunctions);
 	if (ejid < 0) {
@@ -112,12 +118,12 @@ int websAspRequest(webs_t wp, char_t* lpath)
 		websError(wp, 200, T("Cant read %s"), lpath);
 		goto done;
 	}
-	websCloseFileHandle(wp);
+	websPageClose(wp);
 
 /*
  *	Convert to UNICODE if necessary.
  */
-	if ((buf = ballocAscToUni(rbuf)) == NULL) {
+	if ((buf = ballocAscToUni(rbuf, len)) == NULL) {
 		websError(wp, 200, T("Can't get memory"));
 		goto done;
 	}
@@ -220,7 +226,7 @@ int websAspRequest(webs_t wp, char_t* lpath)
  */
 done:
 	if (websValid(wp)) {
-		websCloseFileHandle(wp);
+		websPageClose(wp);
 		if (ejid >= 0) {
 			ejCloseEngine(ejid);
 		}
@@ -252,9 +258,9 @@ int websAspWrite(int ejid, webs_t wp, int argc, char_t **argv)
 	int		i;
 
 	a_assert(websValid(wp));
-	a_assert(argv);
-
+	
 	for (i = 0; i < argc; ) {
+		a_assert(argv);
 		if (websWriteBlock(wp, argv[i], gstrlen(argv[i])) < 0) {
 			return -1;
 		}
@@ -273,7 +279,7 @@ int websAspWrite(int ejid, webs_t wp, int argc, char_t **argv)
  *	Return a pointer to the location in s1 after s2 ends.
  */
 
-static char_t* strtokcmp(char_t* s1, char_t* s2)
+static char_t *strtokcmp(char_t *s1, char_t *s2)
 {
 	int		len;
 

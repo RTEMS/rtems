@@ -1,7 +1,7 @@
 /*
  * form.c -- Form processing (in-memory CGI) for the GoAhead Web server
  *
- * Copyright (c) Go Ahead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */
@@ -29,12 +29,12 @@ static sym_fd_t	formSymtab = -1;			/* Symbol table for form handlers */
  */
 
 int websFormHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg, 
-	char_t *url, char_t *path, char_t* query)
+	char_t *url, char_t *path, char_t *query)
 {
 	sym_t		*sp;
 	char_t		formBuf[FNAMESIZE];
 	char_t		*cp, *formName;
-	int			(*fn)(void *sock, char_t* path, char_t *args);
+	int			(*fn)(void *sock, char_t *path, char_t *args);
 
 	a_assert(websValid(wp));
 	a_assert(url && *url);
@@ -63,16 +63,23 @@ int websFormHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 	if (sp == NULL) {
 		websError(wp, 200, T("Form %s is not defined"), formName);
 	} else {
-		fn = (int (*)(void*, char_t*, char_t*)) sp->content.value.integer;
+		fn = (int (*)(void *, char_t *, char_t *)) sp->content.value.integer;
 		a_assert(fn);
 		if (fn) {
 /*
  *			For good practice, forms must call websDone()
  */
 			(*fn)((void*) wp, formName, query);
+
+/*
+ *			Remove the test to force websDone, since this prevents
+ *			the server "push" from a form>
+ */
+#if 0 /* push */
 			if (websValid(wp)) {
 				websError(wp, 200, T("Form didn't call websDone"));
 			}
+#endif /* push */
 		}
 	}
 	return 1;
@@ -86,8 +93,6 @@ int websFormHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 int websFormDefine(char_t *name, void (*fn)(webs_t wp, char_t *path, 
 	char_t *query))
 {
-	static int once = 0;
-
 	a_assert(name && *name);
 	a_assert(fn);
 
@@ -95,9 +100,6 @@ int websFormDefine(char_t *name, void (*fn)(webs_t wp, char_t *path,
 		return -1;
 	}
 
-	if (once++ == 0) {
-		websFormOpen();
-	}
 	symEnter(formSymtab, name, valueInteger((int) fn), (int) NULL);
 	return 0;
 }
@@ -109,7 +111,7 @@ int websFormDefine(char_t *name, void (*fn)(webs_t wp, char_t *path,
 
 void websFormOpen()
 {
-	formSymtab = symOpen(64);
+	formSymtab = symOpen(WEBS_SYM_INIT);
 }
 
 /******************************************************************************/
@@ -120,7 +122,8 @@ void websFormOpen()
 void websFormClose()
 {
 	if (formSymtab != -1) {
-		symClose(formSymtab, NULL);
+		symClose(formSymtab);
+		formSymtab = -1;
 	}
 }
 
@@ -139,7 +142,7 @@ void websHeader(webs_t wp)
 /*
  *	By license terms the following line of code must not be modified
  */
-	websWrite(wp, T("Server: GoAhead-Webs\r\n"));
+	websWrite(wp, T("Server: %s\r\n"), WEBS_NAME);
 
 	websWrite(wp, T("Pragma: no-cache\n"));
 	websWrite(wp, T("Cache-control: no-cache\n"));

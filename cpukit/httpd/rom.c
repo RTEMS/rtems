@@ -1,7 +1,7 @@
 /*
  * rom.c -- Support for ROMed page retrieval.
  *
- * Copyright (c) Go Ahead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */
@@ -19,13 +19,6 @@
 /********************************* Includes ***********************************/
 
 #include	<stdlib.h>
-
-#if CE
-#define		EINVAL	22
-#define		EBADF	9
-#else
-#include	<errno.h>
-#endif
 
 #include	"wsIntrn.h"
 
@@ -46,7 +39,7 @@ int websRomOpen()
 	int						nchars;
 	char_t					name[SYM_MAX];
 
-	romTab = symOpen(64);
+	romTab = symOpen(WEBS_SYM_INIT);
 
 	for (wip = websRomPageIndex; wip->path; wip++) {
 		gstrncpy(name, wip->path, SYM_MAX);
@@ -67,7 +60,7 @@ int websRomOpen()
 
 void websRomClose()
 {
-	symClose(romTab, NULL);
+	symClose(romTab);
 }
 
 /******************************************************************************/
@@ -105,7 +98,7 @@ void websRomPageClose(int fd)
  *	Stat a web page
  */
 
-int websRomPageStat(char_t *path, websStatType* sbuf)
+int websRomPageStat(char_t *path, websStatType *sbuf)
 {
 	websRomPageIndexType	*wip;
 	sym_t					*sp;
@@ -193,6 +186,6 @@ long websRomPageSeek(webs_t wp, long offset, int origin)
 	return (wip->pos = pos);
 }
 
-#endif
+#endif /* WEBS_PAGE_ROM */
 
 /******************************************************************************/

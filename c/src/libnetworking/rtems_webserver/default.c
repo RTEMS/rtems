@@ -1,9 +1,11 @@
 /*
  * default.c -- Default URL handler. Includes support for ASP.
  *
- * Copyright (c) Go Ahead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
@@ -38,16 +40,15 @@ static void websDefaultWriteEvent(webs_t wp);
  */
 
 int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
-						char_t *url, char_t *path, char_t* query)
+						char_t *url, char_t *path, char_t *query)
 {
 	websStatType	sbuf;
-	char_t			*lpath, *tmp;
-	char_t			*date;
+	char_t			*lpath, *tmp, *date;
 	int				bytes, flags, nchars;
 
 	a_assert(websValid(wp));
 	a_assert(url && *url);
-	a_assert(path && *path);
+	a_assert(path);
 	a_assert(query);
 
 /*
@@ -74,8 +75,7 @@ int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 			path[--nchars] = '\0';
 		}
 		nchars += gstrlen(websDefaultPage) + 2;
-		tmp = NULL;
-		gsnprintf(&tmp, nchars, T("%s/%s"), path, websDefaultPage);
+		fmtAlloc(&tmp, nchars, T("%s/%s"), path, websDefaultPage);
 		websRedirect(wp, tmp);
 		bfreeSafe(B_L, tmp);
 		return 1;
@@ -87,13 +87,13 @@ int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 	if (websPageOpen(wp, lpath, path, SOCKET_RDONLY | SOCKET_BINARY,
 				0666) < 0) {
 			websError(wp, 400, 
-				T("Can't open document <b>%s</b><br>for URL <b>%s</b>"), 
-					lpath, url);
+				T("Cannot open URL <b>%s</b>"), url);
 			return 1;
 		} 
 		if (websPageStat(wp, lpath, path, &sbuf) < 0) {
-			websError(wp, 400, T("Can't stat page <b>%s</b><br>for URL <b>%s</b>"), 
-				lpath, url);
+			websError(wp, 400, T("Cannot stat page for URL <b>%s</b>"),
+				url);
+			return 1;
 		}
 
 /*
@@ -107,12 +107,13 @@ int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 		if (sbuf.mtime <= wp->since) {
 			websWrite(wp, T("HTTP/1.0 304 Use local copy\r\n"));
 
-			/* by license terms the following line of code must
-			 * not be modified.
-			 */
-			websWrite(wp, T("Server: GoAhead-Webs\r\n"));
+/*
+ *			by license terms the following line of code must
+ *			not be modified.
+ */
+			websWrite(wp, T("Server: %s\r\n"), WEBS_NAME);
 
-			if (flags && WEBS_KEEP_ALIVE) {
+			if (flags & WEBS_KEEP_ALIVE) {
 				websWrite(wp, T("Connection: keep-alive\r\n"));
 			}
 			websWrite(wp, T("\r\n"));
@@ -131,8 +132,8 @@ int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 
 /*
  *		By license terms the following line of code must not be modified.
-*/
-		websWrite(wp, T("Server: GoAhead-Webs\r\n"));
+ */
+		websWrite(wp, T("Server: %s\r\n"), WEBS_NAME);
 		bfree(B_L, date);
 	}
 	flags |= WEBS_HEADER_DONE;
@@ -165,6 +166,14 @@ int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 	websWrite(wp, T("\r\n"));
 
 /*
+ *	All done if the browser did a HEAD request
+ */
+	if (flags & WEBS_HEAD_REQUEST) {
+		websDone(wp, 200);
+		return 1;
+	}
+
+/*
  *	Evaluate ASP requests
  */
 	if (flags & WEBS_ASP) {
@@ -175,17 +184,18 @@ int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 		return 1;
 	}
 
-/*
- *	All done if the browser did a HEAD request
- */
-	if (flags & WEBS_HEAD_REQUEST) {
-		websDone(wp, 200);
-		return 1;
+#ifdef WEBS_SSL_SUPPORT
+	if (wp->flags & WEBS_SECURE) {
+		websDefaultWriteEvent(wp);
+	} else {
+		websSetRequestSocketHandler(wp, SOCKET_WRITABLE, websDefaultWriteEvent);
 	}
+#else
 /*
  *	For normal web documents, return the data via background write
  */
 	websSetRequestSocketHandler(wp, SOCKET_WRITABLE, websDefaultWriteEvent);
+#endif
 	return 1;
 }
 
@@ -240,7 +250,7 @@ int websValidateUrl(webs_t wp, char_t *path)
 /*
  *	Create local path for document. Need extra space all "/" and null.
  */
-	if (npart) {
+	if (npart || (gstrcmp(path, T("/")) == 0) || (path[0] == '\0')) {
 		lpath = balloc(B_L, (gstrlen(dir) + 1 + len + 1) * sizeof(char_t));
 		gstrcpy(lpath, dir);
 
@@ -267,15 +277,16 @@ int websValidateUrl(webs_t wp, char_t *path)
 
 static void websDefaultWriteEvent(webs_t wp)
 {
-	int			len, wrote, flags, bytes, written;
-	char *		buf;
+	int		len, wrote, flags, bytes, written;
+	char	*buf;
 
 	a_assert(websValid(wp));
 
 	flags = websGetRequestFlags(wp);
 
-	wrote = 0;
-	bytes = 0;
+	websMarkTime(wp);
+
+	wrote = bytes = 0;
 	written = websGetRequestWritten(wp);
 
 /*
@@ -284,20 +295,20 @@ static void websDefaultWriteEvent(webs_t wp)
 	if ( !(flags & WEBS_ASP)) {
 		bytes = websGetRequestBytes(wp);
 /*
- *		Note: websWriteBlock may return less than we wanted. It will return
- *		-1 on a socket error
+ *		Note: websWriteDataNonBlock may return less than we wanted. It will
+ *		return -1 on a socket error
  */
 		if ((buf = balloc(B_L, PAGE_READ_BUFSIZE)) == NULL) {
 			websError(wp, 200, T("Can't get memory"));
 		}
 		else {
 			while ((len = websPageReadData(wp, buf, PAGE_READ_BUFSIZE)) > 0) {
-				if ((wrote = websWriteBlockData(wp, buf, len)) < 0) {
+				if ((wrote = websWriteDataNonBlock(wp, buf, len)) < 0) {
 					break;
 				}
 				written += wrote;
 				if (wrote != len) {
-					websPageSeek(wp, - (wrote - len));
+					websPageSeek(wp, - (len - wrote));
 					break;
 				}
 			}
@@ -330,9 +341,11 @@ void websDefaultClose()
 {
 	if (websDefaultPage) {
 		bfree(B_L, websDefaultPage);
+		websDefaultPage = NULL;
 	}
 	if (websDefaultDir) {
 		bfree(B_L, websDefaultDir);
+		websDefaultDir = NULL;
 	}
 }
 

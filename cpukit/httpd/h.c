@@ -1,15 +1,15 @@
 /*
  * h.c -- Handle allocation module
  *
- * Copyright (c) GoAhead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  * See the file "license.txt" for usage and redistribution license requirements
  */
 
 /******************************** Description *********************************/
 
 /*
- * 	This module provides a simple API to allocate and free handles
- *	It maintains a dynamic array of pointers. These usually point to 
+ *	This module provides a simple API to allocate and free handles
+ *	It maintains a dynamic array of pointers. These usually point to
  *	per-handle structures.
  */
 
@@ -36,12 +36,16 @@
 
 /*********************************** Code *************************************/
 /*
- *	Allocate a new file handle.  On the first call, the caller must set the 
+ *	Allocate a new file handle.  On the first call, the caller must set the
  *	handle map to be a pointer to a null pointer.  *map points to the second
  *	element in the handle array.
  */
 
+#if B_STATS
+int HALLOC(B_ARGS_DEC, void ***map)
+#else
 int hAlloc(void ***map)
+#endif
 {
 	int		*mp;
 	int		handle, len, memsize, incr;
@@ -51,7 +55,11 @@ int hAlloc(void ***map)
 	if (*map == NULL) {
 		incr = H_INCR;
 		memsize = (incr + H_OFFSET) * sizeof(void**);
+#if B_STATS
+		if ((mp = (int*) balloc(B_ARGS, memsize)) == NULL) {
+#else
 		if ((mp = (int*) balloc(B_L, memsize)) == NULL) {
+#endif
 			return -1;
 		}
 		memset(mp, 0, memsize);
@@ -68,11 +76,12 @@ int hAlloc(void ***map)
  *	Find the first null handle
  */
 	if (mp[H_USED] < mp[H_LEN]) {
-		for (handle = 0; handle < len; handle++)
+		for (handle = 0; handle < len; handle++) {
 			if (mp[handle+H_OFFSET] == 0) {
 				mp[H_USED]++;
 				return handle;
 			}
+		}
 	} else {
 		handle = len;
 	}
@@ -139,7 +148,11 @@ int hFree(void ***map, int handle)
  *	Allocate an entry in the halloc array.
  */
 
+#if B_STATS
+int HALLOCENTRY(B_ARGS_DEC, void ***list, int *max, int size)
+#else
 int hAllocEntry(void ***list, int *max, int size)
+#endif
 {
 	char_t	*cp;
 	int		id;
@@ -147,12 +160,20 @@ int hAllocEntry(void ***list, int *max, int size)
 	a_assert(list);
 	a_assert(max);
 
+#if B_STATS
+	if ((id = HALLOC(B_ARGS, (void***) list)) < 0) {
+#else
 	if ((id = hAlloc((void***) list)) < 0) {
+#endif
 		return -1;
 	}
-	
+
 	if (size > 0) {
+#if B_STATS
+		if ((cp = balloc(B_ARGS, size)) == NULL) {
+#else
 		if ((cp = balloc(B_L, size)) == NULL) {
+#endif
 			hFree(list, id);
 			return -1;
 		}
@@ -169,3 +190,4 @@ int hAllocEntry(void ***list, int *max, int size)
 }
 
 /******************************************************************************/
+

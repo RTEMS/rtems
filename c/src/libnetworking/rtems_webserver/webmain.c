@@ -25,12 +25,22 @@
 
 #include	<rtems/error.h>
 
+#ifdef WEBS_SSL_SUPPORT
+#include	"websSSL.h"
+#endif
+
+#ifdef USER_MANAGEMENT_SUPPORT
+#include	"um.h"
+void	formDefineUserMgmt(void);
+#endif
+
 /*********************************** Locals ***********************************/
 /*
  *	Change configuration here
  */
 
-static char_t		*rootWeb = T("web");			/* Root web directory */
+extern const char *tftpServer;
+static char_t		*rootWeb = T("goahead");			/* Root web directory */
 static char_t		*password = T("");				/* Security password */
 static int			port = 80;						/* Server port */
 static int			retries = 5;					/* Server port retries */
@@ -113,11 +123,13 @@ rtems_httpd_daemon()
 /*
  *	Initialize the web server
  */
-	while (initWebs() < 0) {
-		printf("\nUnable to initialize Web server !!\n"
-			" Suspending the task. Resume to try again.\n");
-		rtems_task_suspend( RTEMS_SELF);
+	if (initWebs() < 0) {
+	  rtems_panic("Unable to initialize Web server !!\n");
 	}
+
+#ifdef WEBS_SSL_SUPPORT
+	websSSLOpen();
+#endif
 
 /*
  *	Basic event loop. SocketReady returns true when a socket is ready for
@@ -125,21 +137,33 @@ rtems_httpd_daemon()
  *	will actually do the servicing.
  */
 	while (!finished) {
-	  if (socketReady() || socketSelect()) {
-			socketProcess();
+	  if (socketReady(-1) || socketSelect(-1, 2000)) {
+			socketProcess(-1);
 	  }
+	  /*websCgiCleanup();*/
+	  emfSchedProcess();
 	}
+
+#ifdef WEBS_SSL_SUPPORT
+	websSSLClose();
+#endif
+
+#ifdef USER_MANAGEMENT_SUPPORT
+	umClose();
+#endif
 
 /*
  *	Close the socket module, report memory leaks and close the memory allocator
  */
 	websCloseServer();
+	websDefaultClose();
 	socketClose();
+	symSubClose();
 #if B_STATS
 	memLeaks();
 #endif
 	bclose();
-	rtems_task_delete( RTEMS_SELF );
+        rtems_task_delete( RTEMS_SELF );
 }
 
 /******************************************************************************/
@@ -177,15 +201,14 @@ static int initWebs()
 	memcpy((char *) &intaddr, (char *) hp->h_addr_list[0],
 		(size_t) hp->h_length);
 
+#if 0
 /*
- *	Set ../web as the root web. Modify this to suit your needs
+ *	Set /TFTP/x.y.z.w/goahead as the root web. Modify to suit your needs
  */
-	getcwd(dir, sizeof(dir)); 
-	if ((cp = strrchr(dir, '/'))) {
-		*cp = '\0';
-	}
-	sprintf(webdir, "%s/%s", dir, rootWeb);
-
+	sprintf(webdir, "/TFTP/%s/%s", tftpServer, rootWeb);
+#else
+	sprintf(webdir, "/");
+#endif
 /*
  *	Configure the web server options before opening the web server
  */
@@ -198,7 +221,11 @@ static int initWebs()
 /*
  *	Configure the web server options before opening the web server
  */
+#if 0
 	websSetDefaultPage(T("default.asp"));
+#else
+	websSetDefaultPage(T("index.html"));
+#endif
 	websSetPassword(password);
 
 /* 
@@ -380,7 +407,11 @@ static int websHomePageHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
  *	If the empty or "/" URL is invoked, redirect default URLs to the home page
  */
 	if (*url == '\0' || gstrcmp(url, T("/")) == 0) {
+#if 0
 		websRedirect(wp, T("home.asp"));
+#else
+		websRedirect(wp, T("index.html"));
+#endif
 		return 1;
 	}
 	return 0;
@@ -391,12 +422,14 @@ static int websHomePageHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
 #if B_STATS
 static void memLeaks() 
 {
-	int		fd;
+	int		fd=1;
 
-	if ((fd = gopen(T("leak.txt"), O_CREAT | O_TRUNC | O_WRONLY)) >= 0) {
+	/* if ((fd = gopen(T("leak.txt"), O_CREAT | O_TRUNC | O_WRONLY)) >= 0) { */
 		bstats(fd, printMemStats);
+		/*
 		close(fd);
 	}
+		*/
 }
 
 /******************************************************************************/
@@ -416,4 +449,51 @@ static void printMemStats(int handle, char_t *fmt, ...)
 }
 #endif
 
-/******************************************************************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/*
+ *	Default error handler.  The developer should insert code to handle
+ *	error messages in the desired manner.
+ */
+
+void defaultErrorHandler(int etype, char_t *msg)
+{
+#if 1
+	write(1, msg, gstrlen(msg));
+#endif
+}
+
+/*****************************************************************************/
+/*
+ *	Trace log. Customize this function to log trace output
+ */
+
+void defaultTraceHandler(int level, char_t *buf)
+{
+/*
+ *	The following code would write all trace regardless of level
+ *	to stdout.
+ */
+#if 1
+	if (buf) {
+		write(1, buf, gstrlen(buf));
+	}
+#endif
+}
+
+/*****************************************************************************/
+/*
+ *	Returns a pointer to an allocated qualified unique temporary file name.
+ *	This filename must eventually be deleted with bfree();
+ */
+
+char_t *websGetCgiCommName()
+{
+	char_t	*pname1, *pname2;
+
+	pname1 = tempnam(NULL, T("cgi"));
+	pname2 = bstrdup(B_L, pname1);
+	free(pname1);
+	return pname2;
+}

@@ -1,7 +1,7 @@
 /*
  * handler.c -- URL handler support
  *
- * Copyright (c) Go Ahead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */
@@ -19,14 +19,16 @@
 
 /*********************************** Locals ***********************************/
 
-static websUrlHandlerType*	websUrlHandler;				/* URL handler list */
+static websUrlHandlerType	*websUrlHandler;			/* URL handler list */
 static int					websUrlHandlerMax;			/* Number of entries */
+static int					urlHandlerOpenCount = 0;	/* count of apps */
 
 /**************************** Forward Declarations ****************************/
 
-static int 	websUrlHandlerSort(const void* p1, const void* p2);
+static int 	websUrlHandlerSort(const void *p1, const void *p2);
 static int 	websPublishHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, 
 				int sid, char_t *url, char_t *path, char_t *query);
+static int	websTidyUrl(webs_t wp);
 
 /*********************************** Code *************************************/
 /*
@@ -35,7 +37,11 @@ static int 	websPublishHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
 
 int websUrlHandlerOpen()
 {
-	websAspOpen();
+	if (++urlHandlerOpenCount == 1) {
+		websAspOpen();
+		websUrlHandler = NULL;
+		websUrlHandlerMax = 0;
+	}
 	return 0;
 }
 
@@ -46,17 +52,20 @@ int websUrlHandlerOpen()
 
 void websUrlHandlerClose()
 {
-	websUrlHandlerType*	sp;
+	websUrlHandlerType *sp;
 
-	websAspClose();
-	for (sp = websUrlHandler; sp < &websUrlHandler[websUrlHandlerMax]; sp++) {
-		bfree(B_L, sp->urlPrefix);
-		if (sp->webDir) {
-			bfree(B_L, sp->webDir);
+	if (--urlHandlerOpenCount <= 0) {
+		websAspClose();
+		for (sp = websUrlHandler; sp < &websUrlHandler[websUrlHandlerMax];
+			sp++) {
+			bfree(B_L, sp->urlPrefix);
+			if (sp->webDir) {
+				bfree(B_L, sp->webDir);
+			}
 		}
+		bfree(B_L, websUrlHandler);
+		websUrlHandlerMax = 0;
 	}
-	bfree(B_L, websUrlHandler);
-	websUrlHandlerMax = 0;
 }
 
 /******************************************************************************/
@@ -135,7 +144,7 @@ int websUrlHandlerDelete(int (*handler)(webs_t wp, char_t *urlPrefix,
  *	Sort in decreasing URL length order observing the flags for first and last
  */
 
-static int websUrlHandlerSort(const void* p1, const void* p2)
+static int websUrlHandlerSort(const void *p1, const void *p2)
 {
 	websUrlHandlerType	*s1, *s2;
 	int					rc;
@@ -247,6 +256,8 @@ int websUrlHandlerRequest(webs_t wp)
 	
 	websSetRequestPath(wp, websGetDefaultDir(), NULL);
 
+	websTidyUrl(wp);
+
 /*
  *	We loop over each handler in order till one accepts the request. 
  *	The security handler will handle the request if access is NOT allowed.
@@ -264,7 +275,7 @@ int websUrlHandlerRequest(webs_t wp)
 				return 1;
 			}
 			if (!websValid(wp)) {
-				goahead_trace(0, 
+				trace(0, 
 				T("webs: handler %s called websDone, but didn't return 1\n"),
 					sp->urlPrefix);
 				return 1;
@@ -272,13 +283,79 @@ int websUrlHandlerRequest(webs_t wp)
 		}
 	}
 /*
- *	If no handler processed the request, then return an error. Note: It was 
+ *	If no handler processed the request, then return an error. Note: It is 
  *	the handlers responsibility to call websDone
  */
 	if (i >= websUrlHandlerMax) {
 		websError(wp, 200, T("No handler for this URL %s"), wp->url);
 	}
 	return 0;
+}
+
+
+/******************************************************************************/
+/*
+ *	Tidy up the URL path. Return -1 if the URL is bad.
+ *  Used to eliminate repeated directory delimiters ('/').
+ */
+
+static int websTidyUrl(webs_t wp)
+{
+	char_t	*parts[64];					/* Array of ptr's to URL parts */
+	char_t	*token, *url, *tidyurl;
+	int		i, len, npart;
+
+	a_assert(websValid(wp));
+
+/*
+ *	Copy the string so we don't destroy the original (yet)
+ */
+	url = bstrdup(B_L, wp->url);
+	websDecodeUrl(url, url, gstrlen(url));
+
+	len = npart = 0;
+	parts[0] = NULL;
+	token = gstrtok(url, T("/"));
+
+/*
+ *	Look at each directory segment and process "." and ".." segments
+ *	Don't allow the browser to pop outside the root web. 
+ */
+	while (token != NULL) {
+		if (gstrcmp(token, T("..")) == 0) {
+			if (npart > 0) {
+				npart--;
+			}
+
+		} else if (gstrcmp(token, T(".")) != 0) {
+			parts[npart] = token;
+			len += gstrlen(token) + 1;
+			npart++;
+		}
+		token = gstrtok(NULL, T("/"));
+	}
+
+/*
+ *	Re-construct URL. Need extra space all "/" and null.
+ */
+	if (npart || (gstrcmp(url, T("/")) == 0) || (url[0] == '\0')) {
+		tidyurl = balloc(B_L, (len + 2) * sizeof(char_t));
+		*tidyurl = '\0';
+
+		for (i = 0; i < npart; i++) {
+			gstrcat(tidyurl, T("/"));
+			gstrcat(tidyurl, parts[i]);
+		}
+
+		bfree(B_L, url);
+
+		bfree(B_L, wp->url);
+		wp->url = tidyurl;
+		return 0;
+	} else {
+		bfree(B_L, url);
+		return -1;
+	}
 }
 
 /******************************************************************************/

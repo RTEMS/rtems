@@ -1,7 +1,7 @@
 /*
  * ejlex.c -- Ejscript(TM) Lexical Analyser
  *
- * Copyright (c) Go Ahead Software, Inc., 1995-1999
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */
@@ -15,7 +15,7 @@
 
 /********************************** Includes **********************************/
 
-#include	"ej.h"
+#include	"ejIntrn.h"
 
 #if UEMF
 	#include "uemf.h"
@@ -23,12 +23,16 @@
 	#include "basic/basicInternal.h"
 #endif
 
+/********************************** Defines ***********************************/
+#define		OCTAL	8
+#define		HEX		16
 /****************************** Forward Declarations **************************/
 
 static int 		getLexicalToken(ej_t* ep, int state);
 static int 		tokenAddChar(ej_t *ep, int c);
 static int 		inputGetc(ej_t* ep);
 static void		inputPutback(ej_t* ep, int c);
+static int		charConvert(ej_t* ep, int base, int maxDig);
 
 /************************************* Code ***********************************/
 /*
@@ -77,13 +81,13 @@ int ejLexOpenScript(ej_t* ep, char_t *script)
 	if (ringqOpen(&ip->tokbuf, EJ_INC, -1) < 0) {
 		return -1;
 	}
-	if (ringqOpen(&ip->script, EJ_INC, -1) < 0) {
+	if (ringqOpen(&ip->script, EJ_SCRIPT_INC, -1) < 0) {
 		return -1;
 	}
 /*
  *	Put the Ejscript into a ring queue for easy parsing
  */
-	ringqPutstr(&ip->script, script);
+	ringqPutStr(&ip->script, script);
 
 	ip->lineNumber = 1;
 	ip->lineLength = 0;
@@ -178,6 +182,7 @@ void ejLexFreeInputState(ej_t* ep, ejinput_t* state)
 {
 	if (state->putBackToken) {
 		bfree(B_L, state->putBackToken);
+		state->putBackToken = NULL;
 	}
 }
 
@@ -189,7 +194,7 @@ void ejLexFreeInputState(ej_t* ep, ejinput_t* state)
 int ejLexGetToken(ej_t* ep, int state)
 {
 	ep->tid = getLexicalToken(ep, state);
-	goahead_trace(7, T("ejGetToken: %d, \"%s\"\n"), ep->tid, ep->token);
+	trace(9, T("ejGetToken: %d, \"%s\"\n"), ep->tid, ep->token);
 	return ep->tid;
 }
 
@@ -202,7 +207,7 @@ static int getLexicalToken(ej_t* ep, int state)
 {
 	ringq_t		*inq, *tokq;
 	ejinput_t*	ip;
-	int			done, tid, c, quote, style, back_quoted, lval, i;
+	int			done, tid, c, quote, style;
 
 	a_assert(ep);
 	ip = ep->input;
@@ -218,7 +223,7 @@ static int getLexicalToken(ej_t* ep, int state)
 	ringqFlush(tokq);
 
 	if (ip->putBackTokenId > 0) {
-		ringqPutstr(tokq, ip->putBackToken);
+		ringqPutStr(tokq, ip->putBackToken);
 		tid = ip->putBackTokenId;
 		ip->putBackTokenId = 0;
 		ep->token = (char_t*) tokq->servp;
@@ -385,7 +390,7 @@ static int getLexicalToken(ej_t* ep, int state)
 			inputPutback(ep, c);
 			return TOK_ASSIGNMENT;
 
-		case '!':									/* "!=" */
+		case '!':									/* "!=" or "!"*/
 			if ((c = inputGetc(ep)) < 0) {
 				ejError(ep, T("Syntax Error"));
 				return TOK_ERR;
@@ -394,8 +399,9 @@ static int getLexicalToken(ej_t* ep, int state)
 				tokenAddChar(ep, EXPR_NOTEQ);
 				return TOK_EXPR;
 			}
-			tokenAddChar(ep, COND_NOT);
-			return TOK_LOGICAL;
+			inputPutback(ep, c);
+			tokenAddChar(ep, EXPR_BOOL_COMP);
+			return TOK_EXPR;
 
 		case ';':
 			tokenAddChar(ep, c);
@@ -428,25 +434,23 @@ static int getLexicalToken(ej_t* ep, int state)
 				ejError(ep, T("Syntax Error"));
 				return TOK_ERR;
 			}
-			back_quoted = 0;
-			while (c != quote) {
-				if (c == '\\' && !back_quoted) {
-					back_quoted++;
-				} else if (back_quoted) {
-					if (gisdigit((char_t) c)) {
-						lval = 0;
-						for (i = 0; i < 3; i++) {
-							if ('0' <= c && c <= '7') {
-								break;
-							}
-							lval = lval * 8 + c;
-							if ((c = inputGetc(ep)) < 0) {
-								break;
-							}
-						}
-						c = (int) lval;
 
-					} else if (back_quoted) {
+			while (c != quote) {
+/*
+ *				check for escape sequence characters
+ */
+				if (c == '\\') {
+					c = inputGetc(ep);
+
+					if (gisdigit(c)) {
+/*
+ *						octal support, \101 maps to 65 = 'A'. put first char
+ *						back so converter will work properly.
+ */
+						inputPutback(ep, c);
+						c = charConvert(ep, OCTAL, 3);
+
+					} else {
 						switch (c) {
 						case 'n':
 							c = '\n'; break;
@@ -459,37 +463,28 @@ static int getLexicalToken(ej_t* ep, int state)
 						case 't':
 							c = '\t'; break;
 						case 'x':
-							lval = 0;
-							for (i = 0; i < 2; i++) {
-								if (! gisxdigit((char_t) c)) {
-									break;
-								}
-								lval = lval * 16 + c;
-								if ((c = inputGetc(ep)) < 0) {
-									break;
-								}
-							}
-							c = (int) lval;
+/*
+ *							hex support, \x41 maps to 65 = 'A'
+ */
+							c = charConvert(ep, HEX, 2);
 							break;
 						case 'u':
-							lval = 0;
-							for (i = 0; i < 4; i++) {
-								if (! gisxdigit((char_t) c)) {
-									break;
-								}
-								lval = lval * 16 + c;
-								if ((c = inputGetc(ep)) < 0) {
-									break;
-								}
-							}
-							c = (int) lval;
+/*
+ *							unicode support, \x0401 maps to 65 = 'A'
+ */
+							c = charConvert(ep, HEX, 2);
+							c = c*16 + charConvert(ep, HEX, 2);
+
 							break;
 						case '\'':
 						case '\"':
+						case '\\':
 							break;
+						default:
+							ejError(ep, T("Invalid Escape Sequence"));
+							return TOK_ERR;
 						}
 					}
-					back_quoted = 0;
 					if (tokenAddChar(ep, c) < 0) {
 						return TOK_ERR;
 					}
@@ -513,7 +508,7 @@ static int getLexicalToken(ej_t* ep, int state)
 				}
 				if ((c = inputGetc(ep)) < 0)
 					break;
-			} while (gisdigit((char_t) c));
+			} while (gisdigit(c));
 			inputPutback(ep, c);
 			return TOK_LITERAL;
 
@@ -521,21 +516,19 @@ static int getLexicalToken(ej_t* ep, int state)
 /*
  *			Identifiers or a function names
  */
-			back_quoted = 0;
 			while (1) {
-				if (c == '\\' && !back_quoted) {
-					back_quoted++;
-				} else {
-					back_quoted = 0;
-					if (tokenAddChar(ep, c) < 0) {
+				if (c == '\\') {
+/*
+ *					just ignore any \ characters.
+ */
+				} else if (tokenAddChar(ep, c) < 0) {
 						break;
-					}
 				}
 				if ((c = inputGetc(ep)) < 0) {
 					break;
 				}
-				if (!back_quoted && (!gisalnum((char_t) c) && c != '$' &&
-						c != '_')) {
+				if (!gisalnum(c) && c != '$' && c != '_' &&
+					c != '\\') {
 					break;
 				}
 			}
@@ -558,13 +551,16 @@ static int getLexicalToken(ej_t* ep, int state)
 				} else if (gstrcmp(ep->token, T("for")) == 0) {
 					return TOK_FOR;
 				} else if (gstrcmp(ep->token, T("return")) == 0) {
+					if ((c == ';') || (c == '(')) {
+						inputPutback(ep, c);
+					}
 					return TOK_RETURN;
 				}
 			}
 
-/*
- *			skip white space after token to find out whether this is
- *			a function or not.
+/* 
+ * 			Skip white space after token to find out whether this is
+ * 			a function or not.
  */ 
 			while (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
 				if ((c = inputGetc(ep)) < 0)
@@ -674,6 +670,44 @@ static void inputPutback(ej_t* ep, int c)
 	ringqInsertc(&ip->script, (char_t) c);
 	ip->lineColumn--;
 	ip->line[ip->lineColumn] = '\0';
+}
+
+/******************************************************************************/
+/*
+ *	Convert a hex or octal character back to binary, return original char if 
+ *	not a hex digit
+ */
+
+static int charConvert(ej_t* ep, int base, int maxDig)
+{
+	int		i, c, lval, convChar;
+
+	lval = 0;
+	for (i = 0; i < maxDig; i++) {
+		if ((c = inputGetc(ep)) < 0) {
+			break;
+		}
+/*
+ *		Initialize to out of range value
+ */
+		convChar = base;
+		if (gisdigit(c)) {
+			convChar = c - '0';
+		} else if (c >= 'a' && c <= 'f') {
+			convChar = c - 'a' + 10;
+		} else if (c >= 'A' && c <= 'F') {
+			convChar = c - 'A' + 10;
+		}
+/*
+ *		if unexpected character then return it to buffer.
+ */
+		if (convChar >= base) {
+			inputPutback(ep, c);
+			break;
+		}
+		lval = (lval * base) + convChar;
+	}
+	return lval;
 }
 
 /******************************************************************************/

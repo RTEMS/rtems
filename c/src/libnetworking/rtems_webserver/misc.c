@@ -1,7 +1,7 @@
 /*
  * misc.c -- Miscellaneous routines.
  *
- * Copyright (c) GoAhead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */
@@ -16,12 +16,12 @@
 
 /********************************* Defines ************************************/
 /*
- *	Sprintf buffer structure. Make the increment 8 less than 64 so that
+ *	Sprintf buffer structure. Make the increment 64 so that
  *	a balloc can use a 64 byte block.
  */
 
 #define STR_REALLOC		0x1				/* Reallocate the buffer as required */
-#define STR_INC			58				/* Growth increment */
+#define STR_INC			64				/* Growth increment */
 
 typedef struct {
 	char_t	*s;							/* Pointer to buffer */
@@ -59,11 +59,11 @@ static void	put_ulong(strbuf_t *buf, unsigned long int value, int base,
 /************************************ Code ************************************/
 /*
  *	"basename" returns a pointer to the last component of a pathname
- *  LINUX, RTEMS, and LynxOS have their own basename function
+ *  LINUX and LynxOS have their own basename function
  */
 
-#if ! LINUX & ! __rtems__ & ! LYNX
-char_t *basename(char_t* name)
+#if ! LINUX && ! LYNX && ! __rtems__
+char_t *basename(char_t *name)
 {
 	char_t	*cp;
 
@@ -83,7 +83,7 @@ char_t *basename(char_t* name)
 		return ++cp;
 	}
 }
-#endif /* ! LINUX && ! __rtems__ && ! LYNX */
+#endif /* ! LINUX & ! LYNX */
 
 /******************************************************************************/
 /*
@@ -91,9 +91,9 @@ char_t *basename(char_t* name)
  *	the size of the buffer in BYTES!
  */
 
-char_t *dirname(char_t* buf, char_t* name, int bufsize)
+char_t *dirname(char_t *buf, char_t *name, int bufsize)
 {
-	char_t*	cp;
+	char_t *cp;
 	int		len;
 
 	a_assert(name);
@@ -130,14 +130,15 @@ char_t *dirname(char_t* buf, char_t* name, int bufsize)
 	return buf;
 }
 
+
 /******************************************************************************/
 /*
  *	sprintf and vsprintf are bad, ok. You can easily clobber memory. Use
- *	gsnprintf and gvsnprintf instead! These functions do _not_ support floating
+ *	fmtAlloc and fmtValloc instead! These functions do _not_ support floating
  *	point, like %e, %f, %g...
  */
 
-int gsnprintf(char_t **s, int n, char_t *fmt, ...)
+int fmtAlloc(char_t **s, int n, char_t *fmt, ...)
 {
 	va_list	ap;
 	int		result;
@@ -147,7 +148,30 @@ int gsnprintf(char_t **s, int n, char_t *fmt, ...)
 
 	*s = NULL;
 	va_start(ap, fmt);
-	result = gvsnprintf(s, n, fmt, ap);
+	result = dsnprintf(s, n, fmt, ap, 0);
+	va_end(ap);
+	return result;
+}
+
+/******************************************************************************/
+/*
+ *	Support a static buffer version for small buffers only!
+ */
+
+int fmtStatic(char_t *s, int n, char_t *fmt, ...)
+{
+	va_list	ap;
+	int		result;
+
+	a_assert(s);
+	a_assert(fmt);
+	a_assert(n <= 256);
+
+	if (n <= 0) {
+		return -1;
+	}
+	va_start(ap, fmt);
+	result = dsnprintf(&s, n, fmt, ap, 0);
 	va_end(ap);
 	return result;
 }
@@ -158,7 +182,7 @@ int gsnprintf(char_t **s, int n, char_t *fmt, ...)
  *	reallocing if required.
  */
 
-int gsprintfRealloc(char_t **s, int n, int msize, char_t *fmt, ...)
+int fmtRealloc(char_t **s, int n, int msize, char_t *fmt, ...)
 {
 	va_list	ap;
 	int		result;
@@ -180,17 +204,18 @@ int gsprintfRealloc(char_t **s, int n, int msize, char_t *fmt, ...)
  *	A vsprintf replacement.
  */
 
-int gvsnprintf(char_t **s, int n, char_t *fmt, va_list arg)
+int fmtValloc(char_t **s, int n, char_t *fmt, va_list arg)
 {
 	a_assert(s);
 	a_assert(fmt);
 
+	*s = NULL;
 	return dsnprintf(s, n, fmt, arg, 0);
 }
 
 /******************************************************************************/
 /*
- *	Dynamic sprintf implementation. Supports dynamic buffer allocation also.
+ *	Dynamic sprintf implementation. Supports dynamic buffer allocation.
  *	This function can be called multiple times to grow an existing allocated
  *	buffer. In this case, msize is set to the size of the previously allocated
  *	buffer. The buffer will be realloced, as required. If msize is set, we
@@ -252,7 +277,7 @@ static int dsnprintf(char_t **s, int size, char_t *fmt, va_list arg, int msize)
 				}
 				c = *fmt++;
 			} else {
-				for ( ; gisdigit(c); c = *fmt++) {
+				for ( ; gisdigit((int)c); c = *fmt++) {
 					width = width * 10 + (c - '0');
 				}
 			}
@@ -263,7 +288,7 @@ static int dsnprintf(char_t **s, int size, char_t *fmt, va_list arg, int msize)
 					prec = va_arg(arg, int);
 					c = *fmt++;
 				} else {
-					for (prec = 0; gisdigit(c); c = *fmt++) {
+					for (prec = 0; gisdigit((int)c); c = *fmt++) {
 						prec = prec * 10 + (c - '0');
 					}
 				}
@@ -402,24 +427,28 @@ static int strnlen(char_t *s, unsigned int n)
 
 static void put_char(strbuf_t *buf, char_t c)
 {
-	if (buf->count >= buf->size) {
+	if (buf->count >= (buf->size - 1)) {
 		if (! (buf->flags & STR_REALLOC)) {
 			return;
 		}
 		buf->size += STR_INC;
 		if (buf->size > buf->max && buf->size > STR_INC) {
-			a_assert(buf->size <= buf->max);
+/*
+ *			Caller should increase the size of the calling buffer
+ */
 			buf->size -= STR_INC;
 			return;
 		}
 		if (buf->s == NULL) {
-			buf->s = balloc(B_L, buf->size * sizeof(char_t*));
+			buf->s = balloc(B_L, buf->size * sizeof(char_t));
 		} else {
-			buf->s = brealloc(B_L, buf->s, buf->size * sizeof(char_t*));
+			buf->s = brealloc(B_L, buf->s, buf->size * sizeof(char_t));
 		}
 	}
 	buf->s[buf->count] = c;
-	++buf->count;
+	if (c != '\0') {
+		++buf->count;
+	}
 }
 
 /******************************************************************************/
@@ -428,7 +457,7 @@ static void put_char(strbuf_t *buf, char_t c)
  */
 
 static void put_string(strbuf_t *buf, char_t *s, int len, int width,
-	int prec, enum flag f)
+		int prec, enum flag f)
 {
 	int		i;
 
@@ -458,7 +487,7 @@ static void put_string(strbuf_t *buf, char_t *s, int len, int width,
  */
 
 static void put_ulong(strbuf_t *buf, unsigned long int value, int base,
-	int upper, char_t *prefix, int width, int prec, enum flag f)
+		int upper, char_t *prefix, int width, int prec, enum flag f)
 {
 	unsigned long	x, x2;
 	int				len, zeros, i;
@@ -475,8 +504,14 @@ static void put_ulong(strbuf_t *buf, unsigned long int value, int base,
 		width -= strnlen(prefix, ULONG_MAX); 
 	}
 	if (!(f & flag_minus)) {
-		for (i = 0; i < width; ++i) { 
-			put_char(buf, ' '); 
+		if (f & flag_zero) {
+			for (i = 0; i < width; ++i) { 
+				put_char(buf, '0'); 
+			}
+		} else {
+			for (i = 0; i < width; ++i) { 
+				put_char(buf, ' '); 
+			}
 		}
 	}
 	if (prefix != NULL) { 
@@ -524,7 +559,7 @@ char_t *ascToUni(char_t *ubuf, char *str, int nBytes)
  *	N.B. nBytes is the number of _bytes_ in the destination buffer, buf.
  */
 
-char *uniToAsc(char *buf, char_t* ustr, int nBytes)
+char *uniToAsc(char *buf, char_t *ustr, int nBytes)
 {
 #if UNICODE
 	if (WideCharToMultiByte(CP_ACP, 0, ustr, nBytes, buf, nBytes, NULL,
@@ -537,24 +572,26 @@ char *uniToAsc(char *buf, char_t* ustr, int nBytes)
 	return (char*) buf;
 }
 
-
 /******************************************************************************/
 /*
  *	allocate (balloc) a buffer and do ascii to unicode conversion into it.
- *	cp points to the ascii string which must be NULL terminated.
- *	Return a pointer to the unicode buffer which must be bfree'd later.
- *	Return NULL on failure to get buffer.
+ *	cp points to the ascii buffer.  alen is the length of the buffer to be
+ *	converted not including a terminating NULL.  Return a pointer to the
+ *	unicode buffer which must be bfree'd later.  Return NULL on failure to
+ *	get buffer.  The buffer returned is NULL terminated.
  */
-char_t *ballocAscToUni(char * cp)
+
+char_t *ballocAscToUni(char *cp, int alen)
 {
-	char_t * unip;
+	char_t *unip;
 	int ulen;
 
-	ulen = (strlen(cp) + 1) * sizeof(char_t);
+	ulen = (alen + 1) * sizeof(char_t);
 	if ((unip = balloc(B_L, ulen)) == NULL) {
 		return NULL;
 	}
 	ascToUni(unip, cp, ulen);
+	unip[alen] = 0;
 	return unip;
 }
 
@@ -562,19 +599,67 @@ char_t *ballocAscToUni(char * cp)
 /*
  *	allocate (balloc) a buffer and do unicode to ascii conversion into it.
  *	unip points to the unicoded string. ulen is the number of characters
- *	in the unicode string including teminating null, if there is one.
- *	Return a pointer to the ascii buffer which must be bfree'd later.
- *	Return NULL on failure to get buffer.
+ *	in the unicode string not including a teminating null.  Return a pointer
+ *	to the ascii buffer which must be bfree'd later.  Return NULL on failure
+ *	to get buffer.  The buffer returned is NULL terminated.
  */
-char *ballocUniToAsc(char_t * unip, int ulen)
+
+char *ballocUniToAsc(char_t *unip, int ulen)
 {
 	char * cp;
 
-	if ((cp = balloc(B_L, ulen)) == NULL) {
+	if ((cp = balloc(B_L, ulen+1)) == NULL) {
 		return NULL;
 	}
 	uniToAsc(cp, unip, ulen);
+	cp[ulen] = '\0';
 	return cp;
+}
+
+/******************************************************************************/
+/*
+ *	convert a hex string to an integer. The end of the string or a non-hex
+ *	character will indicate the end of the hex specification.
+ */
+
+unsigned int hextoi(char_t *hexstring)
+{
+	register char_t			*h;
+	register unsigned int	c, v;
+
+	v = 0;
+	h = hexstring;
+	if (*h == '0' && (*(h+1) == 'x' || *(h+1) == 'X')) {
+		h += 2;
+	}
+	while ((c = (unsigned int)*h++) != 0) {
+		if (c >= '0' && c <= '9') {
+			c -= '0';
+		} else if (c >= 'a' && c <= 'f') {
+			c = (c - 'a') + 10;
+		} else if (c >=  'A' && c <= 'F') {
+			c = (c - 'A') + 10;
+		} else {
+			break;
+		}
+		v = (v * 0x10) + c;
+	}
+	return v;
+}
+
+/******************************************************************************/
+/*
+ *	convert a string to an integer. If the string starts with "0x" or "0X"
+ *	a hexidecimal conversion is done.
+ */
+
+unsigned int gstrtoi(char_t *s)
+{
+	if (*s == '0' && (*(s+1) == 'x' || *(s+1) == 'X')) {
+		s += 2;
+		return hextoi(s);
+	}
+	return gatoi(s);
 }
 
 /******************************************************************************/

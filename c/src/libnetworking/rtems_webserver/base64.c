@@ -1,7 +1,7 @@
 /*
  * base64.c -- Base64 Mime encoding
  *
- * Copyright (c) Go Ahead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */
@@ -60,11 +60,10 @@ static char_t	alphabet64[] = {
  *	Decode a buffer from "string" and into "outbuf"
  */
 
-int websDecode64(char_t* outbuf, char_t* string, int outlen)
+int websDecode64(char_t *outbuf, char_t *string, int outlen)
 {
 	unsigned long	shiftbuf;
-	char_t*			cp;
-	char_t*			op;
+	char_t			*cp, *op;
 	int				c, i, j, shift;
 
 	op = outbuf;
@@ -109,11 +108,10 @@ int websDecode64(char_t* outbuf, char_t* string, int outlen)
  *	Encode a buffer from "string" into "outbuf"
  */
 
-void websEncode64(char_t* outbuf, char_t* string, int outlen)
+void websEncode64(char_t *outbuf, char_t *string, int outlen)
 {
 	unsigned long	shiftbuf;
-	char_t*			cp;
-	char_t*			op;
+	char_t			*cp, *op;
 	int				x, i, j, shift;
 
 	op = outbuf;

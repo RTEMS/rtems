@@ -1,32 +1,38 @@
 /*
  * webs.c -- GoAhead Embedded HTTP webs server
  *
- * Copyright (c) Go Ahead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ * $Id$
  */
 
 /******************************** Description *********************************/
 
 /*
- *	This module implements an embedded HTTP/1.1 webs server. It supports
+ *	This module implements an embedded HTTP/1.1 web server. It supports
  *	loadable URL handlers that define the nature of URL processing performed.
  */
 
 /********************************* Includes ***********************************/
 
 #include	"wsIntrn.h"
+#ifdef DIGEST_ACCESS_SUPPORT
+#include	"websda.h"
+#endif
 
 /******************************** Global Data *********************************/
 
-websStatsType	 websStats;				/* Web access stats */
+websStatsType	websStats;				/* Web access stats */
 webs_t			*webs;					/* Open connection list head */
-sym_fd_t		 websMime;				/* Set of mime types */
-int				 websMax;				/* List size */
-int				 websPort;				/* Listen port for server */
-char_t			 websHost[64];			/* Host name for the server */
-char_t			 websIpaddr[64];		/* IP address for the server */
+sym_fd_t		websMime;				/* Set of mime types */
+int				websMax;				/* List size */
+int				websPort;				/* Listen port for server */
+char_t			websHost[64];			/* Host name for the server */
+char_t			websIpaddr[64];			/* IP address for the server */
 char_t			*websHostUrl = NULL;	/* URL to access server */
+char_t			*websIpaddrUrl = NULL;	/* URL to access server */
 
 /*********************************** Locals ***********************************/
 /*
@@ -40,11 +46,13 @@ websErrorType websErrors[] = {
 	{ 302, T("Redirect") },
 	{ 304, T("User local copy") },
 	{ 400, T("Page not found") },
-	{ 401, T("Password Required") },
+	{ 401, T("Unauthorized") },
+	{ 403, T("Forbidden") },
 	{ 404, T("Site or Page Not Found") },
 	{ 405, T("Access Denied") },
 	{ 500, T("Web Error") },
-	{ 503, T("Site Temporarily Unavailable. Try again") },
+	{ 501, T("Not Implemented") },
+	{ 503, T("Site Temporarily Unavailable. Try again.") },
 	{ 0, NULL }
 };
 
@@ -54,29 +62,25 @@ static int 		websLogFd;						/* Log file handle */
 #endif
 
 static int		websListenSock;					/* Listen socket */
+static char_t	websRealm[64] = T("GoAhead");	/* Realm name */
+
+static int		websOpenCount = 0;		/* count of apps using this module */
 
 /**************************** Forward Declarations ****************************/
 
-static int 		 websAccept(int sid, char *ipaddr, int port);
-static int 		 websAlloc(int sid);
+
 static char_t 	*websErrorMsg(int code);
-static void 	 websFree(webs_t wp);
-static void		 websFreeVar(sym_t* sp);
-static int 		 websGetInput(webs_t wp, char_t **ptext, int *nbytes);
-static int 		 websParseFirst(webs_t wp, char_t *text);
-static void 	 websParseRequest(webs_t wp);
-static void 	 websReadEvent(webs_t wp);
-static void		 websSocketEvent(int sid, int mask, int data);
-static void 	 websTimeout(long wp);
-static void 	 websTimeoutCancel(webs_t wp);
-static void		 websMarkTime(webs_t wp);
-static int		 websGetTimeSinceMark(webs_t wp);
+static int 		websGetInput(webs_t wp, char_t **ptext, int *nbytes);
+static int 		websParseFirst(webs_t wp, char_t *text);
+static void 	websParseRequest(webs_t wp);
+static void		websSocketEvent(int sid, int mask, int data);
+static int		websGetTimeSinceMark(webs_t wp);
 
 #if WEBS_LOG_SUPPORT
-static void 	 websLog(webs_t wp, int code);
+static void 	websLog(webs_t wp, int code);
 #endif
 #if WEBS_IF_MODIFIED_SUPPORT
-static time_t dateParse(time_t tip, char_t *cmd);
+static time_t	dateParse(time_t tip, char_t *cmd);
 #endif
 
 /*********************************** Code *************************************/
@@ -88,6 +92,10 @@ int websOpenServer(int port, int retries)
 {
 	websMimeType	*mt;
 
+	if (++websOpenCount != 1) {
+		return websPort;
+	}
+
 	a_assert(port > 0);
 	a_assert(retries >= 0);
 
@@ -95,10 +103,12 @@ int websOpenServer(int port, int retries)
 	websRomOpen();
 #endif
 
+	webs = NULL;
+	websMax = 0;
 /*
  *	Create a mime type lookup table for quickly determining the content type
  */
-	websMime = symOpen(256);
+	websMime = symOpen(WEBS_SYM_INIT * 4);
 	a_assert(websMime >= 0);
 	for (mt = websMimeList; mt->type; mt++) {
 		symEnter(websMime, mt->ext, valueString(mt->type, 0), 0);
@@ -111,6 +121,7 @@ int websOpenServer(int port, int retries)
 	if (websUrlHandlerOpen() < 0) {
 		return -1;
 	}
+	websFormOpen();
 
 #if WEBS_LOG_SUPPORT
 /*
@@ -133,6 +144,10 @@ void websCloseServer()
 {
 	webs_t	wp;
 	int		wid;
+
+	if (--websOpenCount > 0) {
+		return;
+	}
 
 /*
  *	Close the listen handle first then all open connections.
@@ -160,7 +175,7 @@ void websCloseServer()
 #if WEBS_PAGE_ROM
 	websRomClose();
 #endif
-	symClose(websMime, NULL);
+	symClose(websMime);
 	websFormClose();
 	websUrlHandlerClose();
 }
@@ -193,19 +208,26 @@ int websOpenListen(int port, int retries)
 			orig, port - 1);
 		return -1;
 	} 
-	goahead_trace(0, T("webs: Listening for HTTP requests on port %d\n"), port);
 
 /*
  *	Determine the full URL address to access the home page for this web server
  */
 	websPort = port;
 	bfreeSafe(B_L, websHostUrl);
-	websHostUrl = NULL;
+	bfreeSafe(B_L, websIpaddrUrl);
+	websIpaddrUrl = websHostUrl = NULL;
+
 	if (port == 80) {
 		websHostUrl = bstrdup(B_L, websHost);
+		websIpaddrUrl = bstrdup(B_L, websIpaddr);
 	} else {
-		gsnprintf(&websHostUrl, WEBS_MAX_URL + 80, T("%s:%d"), websHost, port);
+		fmtAlloc(&websHostUrl, WEBS_MAX_URL + 80, T("%s:%d"), websHost, port);
+		fmtAlloc(&websIpaddrUrl, WEBS_MAX_URL + 80, T("%s:%d"), 
+			websIpaddr, port);
 	}
+	trace(0, T("webs: Listening for HTTP requests at address %s\n"),
+		websIpaddrUrl);
+
 	return port;
 }
 
@@ -221,7 +243,8 @@ void websCloseListen()
 		websListenSock = -1;
 	}
 	bfreeSafe(B_L, websHostUrl);
-	websHostUrl = NULL;
+	bfreeSafe(B_L, websIpaddrUrl);
+	websIpaddrUrl = websHostUrl = NULL;
 }
 
 /******************************************************************************/
@@ -229,7 +252,7 @@ void websCloseListen()
  *	Accept a connection
  */
 
-static int websAccept(int sid, char *ipaddr, int port)
+int websAccept(int sid, char *ipaddr, int port, int listenSid)
 {
 	webs_t	wp;
 	int		wid;
@@ -247,6 +270,7 @@ static int websAccept(int sid, char *ipaddr, int port)
 	}
 	wp = webs[wid];
 	a_assert(wp);
+	wp->listenSid = listenSid;
 
 	ascToUni(wp->ipaddr, ipaddr, sizeof(wp->ipaddr));
 
@@ -263,13 +287,13 @@ static int websAccept(int sid, char *ipaddr, int port)
 /*
  *	Arrange for websSocketEvent to be called when read data is available
  */
-	socketCreateHandler(sid, SOCKET_READABLE , websSocketEvent, (int) wp);
+	socketCreateHandler(sid, SOCKET_READABLE, websSocketEvent, (int) wp);
 
 /*
  *	Arrange for a timeout to kill hung requests
  */
-	wp->timeout = emfCreateTimer(WEBS_TIMEOUT, websTimeout, (long) wp);
-	goahead_trace(5, T("webs: accept request\n"));
+	wp->timeout = emfSchedCallback(WEBS_TIMEOUT, websTimeout, (void *) wp);
+	trace(8, T("webs: accept request\n"));
 	return 0;
 }
 
@@ -308,10 +332,10 @@ static void websSocketEvent(int sid, int mask, int iwp)
  *	Note: we never block as the socket is always in non-blocking mode.
  */
 
-static void websReadEvent(webs_t wp)
+void websReadEvent(webs_t wp)
 {
 	char_t 	*text;
-	int		rc, nbytes, len, done;
+	int		rc, nbytes, len, done, fd;
 
 	a_assert(wp);
 	a_assert(websValid(wp));
@@ -323,6 +347,7 @@ static void websReadEvent(webs_t wp)
  *	and socketRead is called to read posted data.
  */
 	text = NULL;
+	fd = -1;
 	for (done = 0; !done; ) {
 		if (text) {
 			bfree(B_L, text);
@@ -366,15 +391,29 @@ static void websReadEvent(webs_t wp)
  *			need to separate the lines with '\n'
  */
 			if (ringqLen(&wp->header) > 0) {
-				ringqPutstr(&wp->header, T("\n"));
+				ringqPutStr(&wp->header, T("\n"));
 			}
-			ringqPutstr(&wp->header, text);
+			ringqPutStr(&wp->header, text);
 			break;
 
 		case WEBS_POST_CLEN:
 /*
- *			POST request with content specified by a content length
+ *			POST request with content specified by a content length.
+ *			If this is a CGI request, write the data to the cgi stdin.
+ *			socketGets was used to get the data and it strips \n's so
+ *			add them back in here.
  */
+#ifndef __NO_CGI_BIN
+			if (wp->flags & WEBS_CGI_REQUEST) {
+				if (fd == -1) {
+					fd = gopen(wp->cgiStdin, O_CREAT | O_WRONLY | O_BINARY,
+						0666);
+				}
+				gwrite(fd, text, gstrlen(text));
+				gwrite(fd, T("\n"), sizeof(char_t));
+				nbytes += 1;
+			} else 
+#endif
 			if (wp->query) {
 				if (wp->query[0] && !(wp->flags & WEBS_POST_DATA)) {
 /*
@@ -412,7 +451,6 @@ static void websReadEvent(webs_t wp)
 			wp->clen -= nbytes;
 			if (wp->clen > 0) {
 				if (nbytes > 0) {
-					done++;
 					break;
 				}
 				done++;
@@ -428,7 +466,21 @@ static void websReadEvent(webs_t wp)
 		case WEBS_POST:
 /*
  *			POST without content-length specification
+ *			If this is a CGI request, write the data to the cgi stdin.
+ *			socketGets was used to get the data and it strips \n's so
+ *			add them back in here.
  */
+
+#ifndef __NO_CGI_BIN
+			if (wp->flags & WEBS_CGI_REQUEST) {
+				if (fd == -1) {
+					fd = gopen(wp->cgiStdin, O_CREAT | O_WRONLY | O_BINARY,
+						0666);
+				}
+				gwrite(fd, text, gstrlen(text));
+				gwrite(fd, T("\n"), sizeof(char_t));
+			} else
+#endif
 			if (wp->query && *wp->query && !(wp->flags & WEBS_POST_DATA)) {
 				len = gstrlen(wp->query);
 				wp->query = brealloc(B_L, wp->query, (len + gstrlen(text) +
@@ -451,6 +503,11 @@ static void websReadEvent(webs_t wp)
 			break;
 		}
 	}
+
+	if (fd != -1) {
+		fd = gclose (fd);
+	}
+
 	if (text) {
 		bfree(B_L, text);
 	}
@@ -459,8 +516,8 @@ static void websReadEvent(webs_t wp)
 /******************************************************************************/
 /*
  *	Get input from the browser. Return TRUE (!0) if the request has been 
- *	handled. Return -1 on errors, 1 if input read, and 0 to instruct the 
- *	caller to call again for more input.
+ *	handled. Return -1 on errors or if the request has been processed, 
+ *	1 if input read, and 0 to instruct the caller to call again for more input.
  *
  *	Note: socketRead will Return the number of bytes read if successful. This
  *	may be less than the requested "bufsize" and may be zero. It returns -1 for
@@ -493,8 +550,16 @@ static int websGetInput(webs_t wp, char_t **ptext, int *pnbytes)
 	}
 
 	if (len > 0) {
-		nbytes = socketRead(wp->sid, buf, len);
 
+#ifdef WEBS_SSL_SUPPORT
+		if (wp->flags & WEBS_SECURE) {
+			nbytes = websSSLRead(wp->wsp, buf, len);
+		} else {
+			nbytes = socketRead(wp->sid, buf, len);
+		}
+#else
+		nbytes = socketRead(wp->sid, buf, len);
+#endif
 		if (nbytes < 0) {						/* Error */
 			websDone(wp, 0);
 			return -1;
@@ -508,20 +573,47 @@ static int websGetInput(webs_t wp, char_t **ptext, int *pnbytes)
  *			is NULL terminated.
  */
 			buf[nbytes] = '\0';
-			if ((text = ballocAscToUni(buf)) == NULL) {
+			if ((text = ballocAscToUni(buf, nbytes)) == NULL) {
 				websError(wp, 503, T("Insufficient memory"));
 				return -1;
 			}
 		}
 
 	} else {
+#ifdef WEBS_SSL_SUPPORT
+		if (wp->flags & WEBS_SECURE) {
+			nbytes = websSSLGets(wp->wsp, &text);
+		} else {
+			nbytes = socketGets(wp->sid, &text);
+		}
+#else
 		nbytes = socketGets(wp->sid, &text);
+#endif
 
 		if (nbytes < 0) {
+			int eof;
 /*
  *			Error, EOF or incomplete
  */
-			if (socketEof(wp->sid)) {
+#ifdef WEBS_SSL_SUPPORT
+			if (wp->flags & WEBS_SECURE) {
+/*
+ *				If state is WEBS_BEGIN and the request is secure, a -1 will 
+ *				usually	indicate SSL negotiation
+ */
+				if (wp->state == WEBS_BEGIN) {
+					eof = 1;
+				} else {
+					eof = websSSLEof(wp->wsp);
+				}
+			} else {
+				eof = socketEof(wp->sid);
+			}
+#else
+			eof = socketEof(wp->sid);
+#endif
+
+			if (eof) {
 /*
  *				If this is a post request without content length, process 
  *				the request as we now have all the data. Otherwise just 
@@ -559,10 +651,12 @@ static int websGetInput(webs_t wp, char_t **ptext, int *pnbytes)
 						clen = 1;
 					}
 					if (clen > 0) {
-						return 0;							/* Get more data */
+/*
+ *						Return 0 to get more data.
+ */
+						return 0;
 					}
 					return 1;
-
 				}
 /*
  *				We've read the header so go and handle the request
@@ -570,7 +664,6 @@ static int websGetInput(webs_t wp, char_t **ptext, int *pnbytes)
 				websUrlHandlerRequest(wp);
 			}
 			return -1;
-
 		}
 	}
 	a_assert(text);
@@ -587,7 +680,9 @@ static int websGetInput(webs_t wp, char_t **ptext, int *pnbytes)
 
 static int websParseFirst(webs_t wp, char_t *text)
 {
-	char_t 	*op, *proto, *url, *host, *query, *path, *port, *ext, *buf;
+	char_t 	*op, *proto, *protoVer, *url, *host, *query, *path, *port, *ext;
+	char_t	*buf;
+	int		testPort;
 
 	a_assert(websValid(wp));
 	a_assert(text && *text);
@@ -621,6 +716,7 @@ static int websParseFirst(webs_t wp, char_t *text)
 		websError(wp, 400, T("Bad HTTP request"));
 		return -1;
 	}
+	protoVer = gstrtok(NULL, T(" \t\n"));
 
 /*
  *	Parse the URL and store all the various URL components. websUrlParse
@@ -636,10 +732,28 @@ static int websParseFirst(webs_t wp, char_t *text)
 	}
 
 	wp->url = bstrdup(B_L, url);
+
+#ifndef __NO_CGI_BIN
+	if (gstrstr(url, CGI_BIN) != NULL) {
+		wp->flags |= WEBS_CGI_REQUEST;
+		if (wp->flags & WEBS_POST_REQUEST) {
+			wp->cgiStdin = websGetCgiCommName();
+		}
+	}
+#endif
+
 	wp->query = bstrdup(B_L, query);
 	wp->host = bstrdup(B_L, host);
 	wp->path = bstrdup(B_L, path);
-	wp->port = gatoi(port);
+	wp->protocol = bstrdup(B_L, proto);
+	wp->protoVersion = bstrdup(B_L, protoVer);
+	
+	if ((testPort = socketGetPort(wp->listenSid)) >= 0) {
+		wp->port = testPort;
+	} else {
+		wp->port = gatoi(port);
+	}
+
 	if (gstrcmp(ext, T(".asp")) == 0) {
 		wp->flags |= WEBS_ASP;
 	}
@@ -673,9 +787,12 @@ static int websParseFirst(webs_t wp, char_t *text)
  *	Parse a full request
  */
 
+#define isgoodchar(s) (gisalnum((s)) || ((s) == '/') || ((s) == '_') || \
+						((s) == '.')  || ((s) == '-') )
+
 static void websParseRequest(webs_t wp)
 {
-	char_t	*upperKey, *cp, *browser, *lp, *key, *value;
+	char_t	*authType, *upperKey, *cp, *browser, *lp, *key, *value;
 
 	a_assert(websValid(wp));
 
@@ -712,7 +829,7 @@ static void websParseRequest(webs_t wp)
 /*
  *		Create a variable (CGI) for each line in the header
  */
-		gsnprintf(&upperKey, (gstrlen(key) + 6), T("HTTP_%s"), key);
+		fmtAlloc(&upperKey, (gstrlen(key) + 6), T("HTTP_%s"), key);
 		for (cp = upperKey; *cp; cp++) {
 			if (*cp == '-')
 				*cp = '_';
@@ -730,26 +847,155 @@ static void websParseRequest(webs_t wp)
 /*
  *		Parse the user authorization. ie. password
  */
-		} else if (gstrcmp(key, T("authorization")) == 0) {
-			char_t	password[FNAMESIZE];
+		} else if (gstricmp(key, T("authorization")) == 0) {
+/*
+ *			Determine the type of Authorization Request
+ */
+			authType = bstrdup (B_L, value);
+			a_assert (authType);
+/*			
+ *			Truncate authType at the next non-alpha character
+ */
+			cp = authType;
+			while (gisalpha(*cp)) {
+				cp++;
+			}
+			*cp = '\0';
+
+			wp->authType = bstrdup(B_L, authType);
+			bfree(B_L, authType);
+
+			if (gstricmp(wp->authType, T("basic")) == 0) {
+				char_t	userAuth[FNAMESIZE];
+/*
+ *				The incoming value is username:password (Basic authentication)
+ */
+				if ((cp = gstrchr(value, ' ')) != NULL) {
+					*cp = '\0';
+					wp->authType = bstrdup(B_L, value);
+					websDecode64(userAuth, ++cp, sizeof(userAuth));
+				} else {
+					websDecode64(userAuth, value, sizeof(userAuth));
+				}
+/*
+ *				Split userAuth into userid and password
+ */
+				if ((cp = gstrchr(userAuth, ':')) != NULL) {
+					*cp++ = '\0';
+				}
+				if (cp) {
+					wp->userName = bstrdup(B_L, userAuth);
+					wp->password = bstrdup(B_L, cp);
+				} else {
+					wp->userName = bstrdup(B_L, T(""));
+					wp->password = bstrdup(B_L, T(""));
+				}
+/*
+ *				Set the flags to indicate digest authentication
+ */
+				wp->flags |= WEBS_AUTH_BASIC;
+			} else {
+#ifdef DIGEST_ACCESS_SUPPORT
+/*
+ *				The incoming value is slightly more complicated (Digest)
+ */
+				char_t *np;		/* pointer to end of tag name */
+				char_t tp;		/* temporary character holding space */
+				char_t *vp;		/* pointer to value */
+				char_t *npv;	/* pointer to end of value, "next" pointer */
+				char_t tpv;		/* temporary character holding space */
+/*
+ *				Set the flags to indicate digest authentication
+ */
+				wp->flags |= WEBS_AUTH_DIGEST;
+/*
+ *				Move cp to Next word beyond "Digest",
+ *				vp to first char after '='.
+ */
+ 				cp = value;
+				while (isgoodchar(*cp)) {
+					cp++;
+				}
+				while (!isgoodchar(*cp)) {
+					cp++;
+				}
 
 /*
- *			The incoming value is password:username
+ *				Find beginning of value
  */
-			if ((cp = gstrchr(value, ' ')) != NULL) {
-				websDecode64(password, ++cp, sizeof(password));
-			} else {
-				websDecode64(password, value, sizeof(password));
-			}
-			if ((cp = gstrchr(password, ':')) != NULL) {
-				*cp++ = '\0';
-			}
-			if (cp) {
-				wp->password = bstrdup(B_L, cp);
-			} else {
-				wp->password = bstrdup(B_L, T(""));
-			}
+				vp = gstrchr(cp, '=');
+				while (vp) {
+/*
+ *					Zero-terminate tag name
+ */
+					np = cp;
+					while (isgoodchar(*np)) {
+						np++;
+					}
+					tp = *np;
+					*np = 0;
+/*
+ *					Advance value pointer to first legit character
+ */
+					vp++;
+					while (!isgoodchar(*vp)) {
+						vp++;
+					}
+/*
+ *					Zero-terminate value
+ */
+					npv = vp;
+					while (isgoodchar(*npv)) {
+						npv++;
+					}
+					tpv = *npv;
+					*npv = 0;
+/*
+ *					Extract the fields
+ */
+					if (gstricmp(cp, T("username")) == 0) {
+						wp->userName = bstrdup(B_L, vp);
+					} else if (gstricmp(cp, T("response")) == 0) {
+						wp->digest = bstrdup(B_L, vp);
+					} else if (gstricmp(cp, T("opaque")) == 0) {
+						wp->opaque = bstrdup(B_L, vp);
+					} else if (gstricmp(cp, T("uri")) == 0) {
+						wp->uri = bstrdup(B_L, vp);
+					} else if (gstricmp(cp, T("realm")) == 0) {
+						wp->realm = bstrdup(B_L, vp);
+					} else if (gstricmp(cp, T("nonce")) == 0) {
+						wp->nonce = bstrdup(B_L, vp);
+					} else if (gstricmp(cp, T("nc")) == 0) {
+						wp->nc = bstrdup(B_L, vp);
+					} else if (gstricmp(cp, T("cnonce")) == 0) {
+						wp->cnonce = bstrdup(B_L, vp);
+					} else if (gstricmp(cp, T("qop")) == 0) {
+						wp->qop = bstrdup(B_L, vp);
+					}
+/*
+ *					Restore tag name and value zero-terminations
+ */
+					*np = tp;
+					*npv = tpv;
+/*
+ *					Advance tag name and value pointers
+ */
+ 					cp = npv;
+					while (*cp && isgoodchar(*cp)) {
+						cp++;
+					}
+					while (*cp && !isgoodchar(*cp)) {
+						cp++;
+					}
 
+					if (*cp) {
+						vp = gstrchr(cp, '=');
+					} else {
+						vp = NULL;
+					}
+				}
+#endif /* DIGEST_ACCESS_SUPPORT */
+			} /* if (gstrcmp(wp->authType)) */
 /*
  *		Parse the content length
  */
@@ -757,6 +1003,12 @@ static void websParseRequest(webs_t wp)
 			wp->flags |= WEBS_CLEN;
 			wp->clen = gatoi(value);
 			websSetVar(wp, T("CONTENT_LENGTH"), value);
+
+/*
+ *		Parse the content type
+ */
+		} else if (gstrcmp(key, T("content-type")) == 0) {
+			websSetVar(wp, T("CONTENT_TYPE"), value);
 
 #if WEBS_KEEP_ALIVE_SUPPORT
 		} else if (gstrcmp(key, T("connection")) == 0) {
@@ -778,7 +1030,7 @@ static void websParseRequest(webs_t wp)
 			if (gstrstr(tmp, T("no-cache"))) {
 				wp->flags |= WEBS_DONT_USE_CACHE;
 			}
-#endif
+#endif /* WEBS_PROXY_SUPPORT */
 
 /*
  *		Store the cookie
@@ -796,41 +1048,21 @@ static void websParseRequest(webs_t wp)
 			char_t *cmd;
 			time_t tip = 0;
 
-			if (cp = gstrchr(value, ';')) {
+			if ((cp = gstrchr(value, ';')) != NULL) {
 				*cp = '\0';
 			}
 
-			if (cp = gstrstr(value, T(", "))) {
-				cp += 2;
-			}
+			fmtAlloc(&cmd, 64, T("%s"), value);
 
-			if (gstrstr(cp, T("GMT"))) {
-				gsnprintf(&cmd, 64, T("clock scan %s -gmt 1"), cp);
-			} else {
-				gsnprintf(&cmd, 64, T("clock scan %s"), cp);
-			}
-			if (wp->since = dateParse(tip, cmd)) {
+			if ((wp->since = dateParse(tip, cmd)) != 0) {
 				wp->flags |= WEBS_IF_MODIFIED;
 			}
+
 			bfreeSafe(B_L, cmd);
-#endif
+#endif /* WEBS_IF_MODIFIED_SUPPORT */
 		}
 	}
 }
-
-
-#if WEBS_IF_MODIFIED_SUPPORT
-/******************************************************************************/
-/*
- *		Parse the date and time string.
- */
-
-static time_t dateParse(time_t tip, char_t *cmd)
-{
-	return (time_t)0;
-}
-#endif
-
 
 /******************************************************************************/
 /*
@@ -842,20 +1074,26 @@ static time_t dateParse(time_t tip, char_t *cmd)
 void websSetEnv(webs_t wp)
 {
 	char_t	portBuf[8];
-	char_t	*keyword, *value;
+	char_t	*keyword, *value, *valCheck, *valNew;
 
 	a_assert(websValid(wp));
 
 	websSetVar(wp, T("QUERY_STRING"), wp->query);
 	websSetVar(wp, T("GATEWAY_INTERFACE"), T("CGI/1.1"));
 	websSetVar(wp, T("SERVER_HOST"), websHost);
+	websSetVar(wp, T("SERVER_NAME"), websHost);
 	websSetVar(wp, T("SERVER_URL"), websHostUrl);
 	websSetVar(wp, T("REMOTE_HOST"), wp->ipaddr);
 	websSetVar(wp, T("REMOTE_ADDR"), wp->ipaddr);
 	websSetVar(wp, T("PATH_INFO"), wp->path);
 	stritoa(websPort, portBuf, sizeof(portBuf));
 	websSetVar(wp, T("SERVER_PORT"), portBuf);
-	
+	websSetVar(wp, T("SERVER_ADDR"), websIpaddr);
+	fmtAlloc(&value, FNAMESIZE, T("%s/%s"), WEBS_NAME, WEBS_VERSION);
+	websSetVar(wp, T("SERVER_SOFTWARE"), value);
+	bfreeSafe(B_L, value);
+	websSetVar(wp, T("SERVER_PROTOCOL"), wp->protoVersion);
+
 /*
  *	Decode and create an environment query variable for each query keyword.
  *	We split into pairs at each '&', then split pairs at the '='.
@@ -869,13 +1107,22 @@ void websSetEnv(webs_t wp)
 			*value++ = '\0';
 			websDecodeUrl(keyword, keyword, gstrlen(keyword));
 			websDecodeUrl(value, value, gstrlen(value));
-
 		} else {
 			value = T("");
 		}
 
 		if (*keyword) {
-			websSetVar(wp, keyword, value);
+/*
+ *			If keyword has already been set, append the new value to what has 
+ *			been stored.
+ */
+			if ((valCheck = websGetVar(wp, keyword, NULL)) != 0) {
+				fmtAlloc(&valNew, 256, T("%s %s"), valCheck, value);
+				websSetVar(wp, keyword, valNew);
+				bfreeSafe(B_L, valNew);
+			} else {
+				websSetVar(wp, keyword, value);
+			}
 		}
 		keyword = gstrtok(NULL, T("&"));
 	}
@@ -935,7 +1182,7 @@ int websTestVar(webs_t wp, char_t *var)
 /******************************************************************************/
 /*
  *	Get a webs variable but return a default value if string not found.
- *	Note, defaultGetValue can be NULL to permit testing existance.
+ *	Note, defaultGetValue can be NULL to permit testing existence.
  */
 
 char_t *websGetVar(webs_t wp, char_t *var, char_t *defaultGetValue)
@@ -958,16 +1205,32 @@ char_t *websGetVar(webs_t wp, char_t *var, char_t *defaultGetValue)
 
 /******************************************************************************/
 /*
+ *	Return TRUE if a webs variable is set to a given value
+ */
+
+int websCompareVar(webs_t wp, char_t *var, char_t *value)
+{
+	a_assert(websValid(wp));
+	a_assert(var && *var);
+ 
+	if (gstrcmp(value, websGetVar(wp, var, T(" __UNDEF__ "))) == 0) {
+		return 1;
+	}
+	return 0;
+}
+
+/******************************************************************************/
+/*
  *	Cancel the request timeout. Note may be called multiple times.
  */
 
-static void websTimeoutCancel(webs_t wp)
+void websTimeoutCancel(webs_t wp)
 {
 	a_assert(websValid(wp));
 
-	if (wp->timeout) {
-		emfDeleteTimer(wp->timeout);
-		wp->timeout = NULL;
+	if (wp->timeout >= 0) {
+		emfUnschedCallback(wp->timeout);
+		wp->timeout = -1;
 	}
 }
 
@@ -993,24 +1256,53 @@ void websResponse(webs_t wp, int code, char_t *message, char_t *redirect)
  */
 	if ( !(wp->flags & WEBS_HEADER_DONE)) {
 		wp->flags |= WEBS_HEADER_DONE;
-		websWrite(wp, T("HTTP/1.0 %d %s\r\n"), code, websErrorMsg(code));
+		websWrite(wp, T("HTTP/1.1 %d %s\r\n"), code, websErrorMsg(code));
+/*		
+ *		By license terms the following line of code must not be modified.
+ */
+		websWrite(wp, T("Server: %s\r\n"), WEBS_NAME);
 
-		/* by license terms the following line of code must
-		 * not be modified.
-		 */
-		websWrite(wp, T("Server: GoAhead-Webs\r\n"));
-
-		if (wp->flags & WEBS_KEEP_ALIVE) {
-			websWrite(wp, T("Connection: keep-alive\r\n"));
-		}
-		websWrite(wp, T("Pragma: no-cache\r\nCache-Control: no-cache\r\n"));
-
+/*		
+ *		Timestamp/Date is usually the next to go
+ */
 		if ((date = websGetDateString(NULL)) != NULL) {
 			websWrite(wp, T("Date: %s\r\n"), date);
 			bfree(B_L, date);
 		}
-		websWrite(wp, T("Content-Type: text/html\r\n"));
+/*
+ *		If authentication is required, send the auth header info
+ */
+		if (code == 401) {
+			if (!(wp->flags & WEBS_AUTH_DIGEST)) {
+				websWrite(wp, T("WWW-Authenticate: Basic realm=\"%s\"\r\n"), 
+					websGetRealm());
+#ifdef DIGEST_ACCESS_SUPPORT
+			} else {
+				char_t *nonce, *opaque;
 
+				nonce = websCalcNonce(wp), 
+				opaque = websCalcOpaque(wp), 
+				websWrite(wp, 
+					T("WWW-Authenticate: Digest realm=\"%s\", domain=\"%s\",")
+					T("qop=\"%s\", nonce=\"%s\", opaque=\"%s\",")
+					T("algorithm=\"%s\", stale=\"%s\"\r\n"), 
+					websGetRealm(),
+					websGetHostUrl(),
+					T("auth"),
+					nonce,
+					opaque, T("MD5"), T("FALSE"));
+				bfree(B_L, nonce);
+				bfree(B_L, opaque);
+#endif
+			}
+		}
+
+		if (wp->flags & WEBS_KEEP_ALIVE) {
+			websWrite(wp, T("Connection: keep-alive\r\n"));
+		}
+
+		websWrite(wp, T("Pragma: no-cache\r\nCache-Control: no-cache\r\n"));
+		websWrite(wp, T("Content-Type: text/html\r\n"));
 /*
  *		We don't do a string length here as the message may be multi-line. 
  *		Ie. <CR><LF> will count as only one and we will have a content-length 
@@ -1024,7 +1316,10 @@ void websResponse(webs_t wp, int code, char_t *message, char_t *redirect)
 		websWrite(wp, T("\r\n"));
 	}
 
-	if (message && *message) {
+/*
+ *	If the browser didn't do a HEAD only request, send the message as well.
+ */
+	if ((wp->flags & WEBS_HEAD_REQUEST) == 0 && message && *message) {
 		websWrite(wp, T("%s\r\n"), message);
 	}
 	websDone(wp, code);
@@ -1037,7 +1332,7 @@ void websResponse(webs_t wp, int code, char_t *message, char_t *redirect)
 
 void websRedirect(webs_t wp, char_t *url)
 {
-	char_t	*msgbuf, *urlbuf;
+	char_t	*msgbuf, *urlbuf, *redirectFmt;
 
 	a_assert(websValid(wp));
 	a_assert(url);
@@ -1052,7 +1347,16 @@ void websRedirect(webs_t wp, char_t *url)
 		if (*url == '/') {
 			url++;
 		}
-		gsnprintf(&urlbuf, WEBS_MAX_URL + 80, T("http://%s/%s"),
+
+		redirectFmt = T("http://%s/%s");
+
+#ifdef WEBS_SSL_SUPPORT
+		if (wp->flags & WEBS_SECURE) {
+			redirectFmt = T("https://%s/%s");
+		}
+#endif
+
+		fmtAlloc(&urlbuf, WEBS_MAX_URL + 80, redirectFmt,
 			websGetVar(wp, T("HTTP_HOST"), 	websHostUrl), url);
 		url = urlbuf;
 	}
@@ -1060,7 +1364,7 @@ void websRedirect(webs_t wp, char_t *url)
 /*
  *	Add human readable message for completeness. Should not be required.
  */
-	gsnprintf(&msgbuf, WEBS_MAX_URL + 80, 
+	fmtAlloc(&msgbuf, WEBS_MAX_URL + 80, 
 		T("<html><head></head><body>\r\n\
 		This document has moved to a new <a href=\"%s\">location</a>.\r\n\
 		Please update your documents to reflect the new location.\r\n\
@@ -1089,7 +1393,7 @@ void websError(webs_t wp, int code, char_t *fmt, ...)
 
 	va_start(args, fmt);
 	userMsg = NULL;
-	gvsnprintf(&userMsg, WEBS_BUFSIZE, fmt, args);
+	fmtValloc(&userMsg, WEBS_BUFSIZE, fmt, args);
 	va_end(args);
 
 	msg = T("<html><head><title>Document Error: %s</title></head>\r\n\
@@ -1099,7 +1403,7 @@ void websError(webs_t wp, int code, char_t *fmt, ...)
  *	Ensure we have plenty of room
  */
 	buf = NULL;
-	gsnprintf(&buf, WEBS_BUFSIZE, msg, websErrorMsg(code), 
+	fmtAlloc(&buf, WEBS_BUFSIZE, msg, websErrorMsg(code), 
 		websErrorMsg(code), wp->url, userMsg);
 
 	websResponse(wp, code, buf, NULL);
@@ -1114,7 +1418,7 @@ void websError(webs_t wp, int code, char_t *fmt, ...)
 
 static char_t *websErrorMsg(int code)
 {
-	websErrorType*	ep;
+	websErrorType	*ep;
 
 	for (ep = websErrors; ep->code; ep++) {
 		if (code == ep->code) {
@@ -1131,7 +1435,7 @@ static char_t *websErrorMsg(int code)
  *	write procedure.
  */
 
-int websWrite(webs_t wp, char_t* fmt, ...)
+int websWrite(webs_t wp, char_t *fmt, ...)
 {
 	va_list		 vargs;
 	char_t		*buf;
@@ -1143,8 +1447,8 @@ int websWrite(webs_t wp, char_t* fmt, ...)
 
 	buf = NULL;
 	rc = 0;
-	if (gvsnprintf(&buf, WEBS_BUFSIZE, fmt, vargs) >= WEBS_BUFSIZE) {
-		goahead_trace(0, T("webs: websWrite lost data, buffer overflow\n"));
+	if (fmtValloc(&buf, WEBS_BUFSIZE, fmt, vargs) >= WEBS_BUFSIZE) {
+		trace(0, T("webs: websWrite lost data, buffer overflow\n"));
 	}
 	va_end(vargs);
 	a_assert(buf);
@@ -1160,41 +1464,16 @@ int websWrite(webs_t wp, char_t* fmt, ...)
  *	Write a block of data of length "nChars" to the user's browser. Public
  *	write block procedure.  If unicode is turned on this function expects 
  *	buf to be a unicode string and it converts it to ASCII before writing.
- *	See websWriteBlockData to always write binary or ASCII data with no 
+ *	See websWriteDataNonBlock to always write binary or ASCII data with no 
  *	unicode conversion.  This returns the number of char_t's processed.
+ *	It spins until nChars are flushed to the socket.  For non-blocking
+ *	behavior, use websWriteDataNonBlock.
  */
 
 int websWriteBlock(webs_t wp, char_t *buf, int nChars)
 {
-#if ! UNICODE
-	return websWriteBlockData(wp, buf, nChars);
-#else
-	int		r;
-	char	*charBuf;
-
-	a_assert(buf);
-	a_assert(nChars >= 0);
-
-	if ((charBuf = ballocUniToAsc(buf, nChars)) == NULL) {
-		return -1;
-	}
-	r = websWriteBlockData(wp, charBuf, nChars);
-	bfree(B_L, charBuf);
-	return r;
-#endif
-}
-
-/******************************************************************************/
-/*
- *	Write a block of data of length "nChars" to the user's browser. Same as
- *	websWriteBlock except that it expects straight ASCII or binary and does no
- *	unicode conversion before writing the data.
- *	This returns the number of chars processed.
- */
-
-int websWriteBlockData(webs_t wp, char *buf, int nChars)
-{
 	int		len, done;
+	char	*asciiBuf, *pBuf;
 
 	a_assert(wp);
 	a_assert(websValid(wp));
@@ -1202,19 +1481,77 @@ int websWriteBlockData(webs_t wp, char *buf, int nChars)
 	a_assert(nChars >= 0);
 
 	done = len = 0;
-	while (nChars > 0) {
-		if ((len = socketWrite(wp->sid, buf, nChars)) < 0) {
+
+/*
+ *	ballocUniToAsc will convert Unicode to strings to Ascii.  If Unicode is
+ *	not turned on then ballocUniToAsc will not do the conversion.
+ */
+	pBuf = asciiBuf = ballocUniToAsc(buf, nChars);
+
+	while (nChars > 0) {  
+#ifdef WEBS_SSL_SUPPORT
+		if (wp->flags & WEBS_SECURE) {
+			if ((len = websSSLWrite(wp->wsp, pBuf, nChars)) < 0) {
+				bfree(B_L, asciiBuf);
+				return -1;
+			}
+			websSSLFlush(wp->wsp);
+		} else {
+			if ((len = socketWrite(wp->sid, pBuf, nChars)) < 0) {
+				bfree(B_L, asciiBuf);
+				return -1;
+			}
+			socketFlush(wp->sid);
+		}
+#else /* ! WEBS_SSL_SUPPORT */
+		if ((len = socketWrite(wp->sid, pBuf, nChars)) < 0) {
+			bfree(B_L, asciiBuf);
 			return -1;
 		}
-/*
- *		Block in flush if the last write could not take any more data
- */
-		socketFlush(wp->sid, len == 0);
+		socketFlush(wp->sid);
+#endif /* WEBS_SSL_SUPPORT */
 		nChars -= len;
-		buf += len;
+		pBuf += len;
 		done += len;
 	}
+
+	bfree(B_L, asciiBuf);
 	return done;
+}
+
+/******************************************************************************/
+/*
+ *	Write a block of data of length "nChars" to the user's browser. Same as
+ *	websWriteBlock except that it expects straight ASCII or binary and does no
+ *	unicode conversion before writing the data.  If the socket cannot hold all
+ *	the data, it will return the number of bytes flushed to the socket before
+ *	it would have blocked.  This returns the number of chars processed or -1
+ *	if socketWrite fails.
+ */
+
+int websWriteDataNonBlock(webs_t wp, char *buf, int nChars)
+{
+	int r;
+
+	a_assert(wp);
+	a_assert(websValid(wp));
+	a_assert(buf);
+	a_assert(nChars >= 0);
+
+#ifdef WEBS_SSL_SUPPORT
+	if (wp->flags & WEBS_SECURE) {
+		r = websSSLWrite(wp->wsp, buf, nChars);
+		websSSLFlush(wp->wsp);
+	} else {
+		r = socketWrite(wp->sid, buf, nChars);
+		socketFlush(wp->sid);
+	}
+#else
+	r = socketWrite(wp->sid, buf, nChars);
+	socketFlush(wp->sid);
+#endif
+
+	return r;
 }
 
 /******************************************************************************/
@@ -1229,7 +1566,6 @@ void websDecodeUrl(char_t *decoded, char_t *token, int len)
 	
 	a_assert(decoded);
 	a_assert(token);
-	num = 0;
 
 	op = decoded;
 	for (ip = token; *ip && len > 0; ip++, op++) {
@@ -1241,7 +1577,7 @@ void websDecodeUrl(char_t *decoded, char_t *token, int len)
  *			Convert %nn to a single character
  */
 			ip++;
-			for (i = 0; i < 2; i++, ip++) {
+			for (i = 0, num = 0; i < 2; i++, ip++) {
 				c = tolower(*ip);
 				if (c >= 'a' && c <= 'f') {
 					num = (num * 16) + 10 + c - 'a';
@@ -1275,7 +1611,7 @@ static void websLog(webs_t wp, int code)
 	a_assert(websValid(wp));
 
 	buf = NULL;
-	gsnprintf(&buf, WEBS_MAX_URL + 80, T("%d %s %d %d\n"), time(0), 
+	fmtAlloc(&buf, WEBS_MAX_URL + 80, T("%d %s %d %d\n"), time(0), 
 		wp->url, code, wp->written);
 	len = gstrlen(buf);
 	abuf = ballocUniToAsc(buf, len+1);
@@ -1293,24 +1629,29 @@ static void websLog(webs_t wp, int code)
  *	the browser, simply re-issue the timeout.
  */
 
-static void websTimeout(long iwp)
+void websTimeout(void *arg, int id)
 {
 	webs_t		wp;
 	int			delay, tm;
 
-	wp = (webs_t) iwp;
+	wp = (webs_t) arg;
 	a_assert(websValid(wp));
 
 	tm = websGetTimeSinceMark(wp) * 1000;
 	if (tm >= WEBS_TIMEOUT) {
 		websStats.timeouts++;
-		wp->timeout = NULL;
+		emfUnschedCallback(id);
+
+/*
+ *		Clear the timeout id
+ */
+		wp->timeout = -1;
 		websDone(wp, 404);
 
 	} else {
 		delay = WEBS_TIMEOUT - tm;
 		a_assert(delay > 0);
-		wp->timeout = emfCreateTimer(delay, websTimeout, (long) wp);
+		emfReschedCallback(id, delay);
 	}
 }
 
@@ -1350,11 +1691,24 @@ void websDone(webs_t wp, int code)
 	websPageClose(wp);
 
 /*
+ *	Exit if secure.
+ */
+#ifdef WEBS_SSL_SUPPORT
+	if (wp->flags & WEBS_SECURE) {
+		websTimeoutCancel(wp);
+		websSSLFlush(wp->wsp);
+		socketCloseConnection(wp->sid);
+		websFree(wp);
+		return;
+	}
+#endif
+
+/*
  *	If using Keep Alive (HTTP/1.1) we keep the socket open for a period
  *	while waiting for another request on the socket. 
  */
 	if (wp->flags & WEBS_KEEP_ALIVE) {
-		if (socketFlush(wp->sid, 0) == 0) {
+		if (socketFlush(wp->sid) == 0) {
 			wp->state = WEBS_BEGIN;
 			wp->flags |= WEBS_REQUEST_DONE;
 			if (wp->header.buf) {
@@ -1363,11 +1717,14 @@ void websDone(webs_t wp, int code)
 			socketCreateHandler(wp->sid, SOCKET_READABLE, websSocketEvent, 
 				(int) wp);
 			websTimeoutCancel(wp);
-			wp->timeout = emfCreateTimer(WEBS_TIMEOUT, websTimeout, (long) wp);
+			wp->timeout = emfSchedCallback(WEBS_TIMEOUT, websTimeout,
+				(void *) wp);
 			return;
 		}
 	} else {
 		websTimeoutCancel(wp);
+		socketSetBlock(wp->sid, 1);
+		socketFlush(wp->sid);
 		socketCloseConnection(wp->sid);
 	}
 	websFree(wp);
@@ -1378,7 +1735,7 @@ void websDone(webs_t wp, int code)
  *	Allocate a new webs structure
  */
 
-static int websAlloc(int sid)
+int websAlloc(int sid)
 {
 	webs_t		wp;
 	int			wid;
@@ -1396,7 +1753,26 @@ static int websAlloc(int sid)
 	wp->sid = sid;
 	wp->state = WEBS_BEGIN;
 	wp->docfd = -1;
+	wp->timeout = -1;
 	wp->dir = NULL;
+	wp->authType = NULL;
+	wp->protocol = NULL;
+	wp->protoVersion = NULL;
+	wp->password = NULL;
+	wp->userName = NULL;
+#ifdef DIGEST_ACCESS_SUPPORT
+	wp->realm = NULL;
+	wp->nonce = NULL;
+	wp->digest = NULL;
+	wp->uri = NULL;
+	wp->opaque = NULL;
+	wp->nc = NULL;
+	wp->cnonce = NULL;
+	wp->qop = NULL;
+#endif
+#ifdef WEBS_SSL_SUPPORT
+	wp->wsp = NULL;
+#endif
 
 	ringqOpen(&wp->header, WEBS_HEADER_BUFINC, WEBS_MAX_HEADER);
 
@@ -1405,7 +1781,7 @@ static int websAlloc(int sid)
  *	both the CGI variables and for the global functions. The function table
  *	is common to all webs instances (ie. all browsers)
  */
-	wp->cgiVars = symOpen(64);
+	wp->cgiVars = symOpen(WEBS_SYM_INIT);
 
 	return wid;
 }
@@ -1415,7 +1791,7 @@ static int websAlloc(int sid)
  *	Free a webs structure
  */
 
-static void websFree(webs_t wp)
+void websFree(webs_t wp)
 {
 	a_assert(websValid(wp));
 
@@ -1431,6 +1807,8 @@ static void websFree(webs_t wp)
 		bfree(B_L, wp->query);
 	if (wp->decodedQuery)
 		bfree(B_L, wp->decodedQuery);
+	if (wp->authType)
+		bfree(B_L, wp->authType);
 	if (wp->password)
 		bfree(B_L, wp->password);
 	if (wp->userName)
@@ -1441,8 +1819,36 @@ static void websFree(webs_t wp)
 		bfree(B_L, wp->userAgent);
 	if (wp->dir)
 		bfree(B_L, wp->dir);
+	if (wp->protocol)
+		bfree(B_L, wp->protocol);
+	if (wp->protoVersion)
+		bfree(B_L, wp->protoVersion);
+	if (wp->cgiStdin)
+		bfree(B_L, wp->cgiStdin);
 
-	symClose(wp->cgiVars, websFreeVar);
+
+#ifdef DIGEST_ACCESS_SUPPORT
+	if (wp->realm)
+		bfree(B_L, wp->realm);
+	if (wp->uri)
+		bfree(B_L, wp->uri);
+	if (wp->digest)
+		bfree(B_L, wp->digest);
+	if (wp->opaque)
+		bfree(B_L, wp->opaque);
+	if (wp->nonce)
+		bfree(B_L, wp->nonce);
+	if (wp->nc)
+		bfree(B_L, wp->nc);
+	if (wp->cnonce)
+		bfree(B_L, wp->cnonce);
+	if (wp->qop)
+		bfree(B_L, wp->qop);
+#endif
+#ifdef WEBS_SSL_SUPPORT
+	websSSLFree(wp->wsp);
+#endif
+	symClose(wp->cgiVars);
 
 	if (wp->header.buf) {
 		ringqClose(&wp->header);
@@ -1455,30 +1861,30 @@ static void websFree(webs_t wp)
 
 /******************************************************************************/
 /*
- *	Callback from symClose. Free the variable.
- */
-
-static void websFreeVar(sym_t* sp)
-{
-	valueFree(&sp->content);
-}
-
-/******************************************************************************/
-/*
  *	Return the server address
  */
 
-char_t* websGetHost()
+char_t *websGetHost()
 {
 	return websHost;
 }
 
 /******************************************************************************/
 /*
+ *	Return the the url to access the server. (ip address)
+ */
+
+char_t *websGetIpaddrUrl()
+{
+	return websIpaddrUrl;
+}
+
+/******************************************************************************/
+/*
  *	Return the server address
  */
 
-char_t* websGetHostUrl()
+char_t *websGetHostUrl()
 {
 	return websHostUrl;
 }
@@ -1582,7 +1988,7 @@ char_t *websGetRequestPath(webs_t wp)
  *	Return the password
  */
 
-char_t* websGetRequestPassword(webs_t wp)
+char_t *websGetRequestPassword(webs_t wp)
 {
 	a_assert(websValid(wp));
 
@@ -1594,7 +2000,7 @@ char_t* websGetRequestPassword(webs_t wp)
  *	Return the request type
  */
 
-char_t* websGetRequestType(webs_t wp)
+char_t *websGetRequestType(webs_t wp)
 {
 	a_assert(websValid(wp));
 
@@ -1606,7 +2012,7 @@ char_t* websGetRequestType(webs_t wp)
  *	Return the username
  */
 
-char_t* websGetRequestUserName(webs_t wp)
+char_t *websGetRequestUserName(webs_t wp)
 {
 	a_assert(websValid(wp));
 
@@ -1774,33 +2180,13 @@ int websValid(webs_t wp)
 
 /******************************************************************************/
 /*
- *	Close the document handle.
- */
-
-int websCloseFileHandle(webs_t wp)
-{
-	a_assert(websValid(wp));
-
-#ifndef WEBS_PAGE_ROM
-	if (wp->docfd >= 0) {
-		close(wp->docfd);
-		wp->docfd = -1;
-	}
-#endif
-
-	return 0;
-}
-
-/******************************************************************************/
-/*
  *	Build an ASCII time string.  If sbuf is NULL we use the current time,
  *	else we use the last modified time of sbuf;
  */
 
-char_t* websGetDateString(websStatType* sbuf)
+char_t *websGetDateString(websStatType *sbuf)
 {
-	char_t*	cp;
-	char_t*	r;
+	char_t*	cp, *r;
 	time_t	now;
 
 	if (sbuf == NULL) {
@@ -1823,7 +2209,7 @@ char_t* websGetDateString(websStatType* sbuf)
  *	"real" time, but rather a relative marker.
  */
 
-static void websMarkTime(webs_t wp)
+void websMarkTime(webs_t wp)
 {
 	wp->timestamp = time(0);
 }
@@ -1837,5 +2223,616 @@ static int websGetTimeSinceMark(webs_t wp)
 {
 	return time(0) - wp->timestamp;
 }
+
+/******************************************************************************/
+/*
+ *	Store the new realm name
+ */
+
+void websSetRealm(char_t *realmName)
+{
+	a_assert(realmName);
+
+	gstrncpy(websRealm, realmName, TSZ(websRealm));
+}
+
+/******************************************************************************/
+/*
+ *	Return the realm name (used for authorization)
+ */
+
+char_t *websGetRealm()
+{
+	return websRealm;
+}
+
+
+#if WEBS_IF_MODIFIED_SUPPORT
+/******************************************************************************/
+/*	
+ *	These functions are intended to closely mirror the syntax for HTTP-date 
+ *	from RFC 2616 (HTTP/1.1 spec).  This code was submitted by Pete Bergstrom.
+ */
+
+/*	
+ *	RFC1123Date	= wkday "," SP date1 SP time SP "GMT"
+ *	RFC850Date	= weekday "," SP date2 SP time SP "GMT"
+ *	ASCTimeDate	= wkday SP date3 SP time SP 4DIGIT
+ *
+ *	Each of these functions tries to parse the value and update the index to 
+ *	the point it leaves off parsing.
+ */
+
+typedef enum { JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC } MonthEnumeration;
+typedef enum { SUN, MON, TUE, WED, THU, FRI, SAT } WeekdayEnumeration;
+
+/******************************************************************************/
+/*	
+ *	Parse an N-digit value
+ */
+
+static int parseNDIGIT(char_t *buf, int digits, int *index) 
+{
+	int tmpIndex, returnValue;
+
+	returnValue = 0;
+
+	for (tmpIndex = *index; tmpIndex < *index+digits; tmpIndex++) {
+		if (gisdigit(buf[tmpIndex])) {
+			returnValue = returnValue * 10 + (buf[tmpIndex] - T('0'));
+		}
+	}
+	*index = tmpIndex;
+	
+	return returnValue;
+}
+
+/******************************************************************************/
+/*
+ *	Return an index into the month array
+ */
+
+static int parseMonth(char_t *buf, int *index) 
+{
+/*	
+ *	"Jan" | "Feb" | "Mar" | "Apr" | "May" | "Jun" | 
+ *	"Jul" | "Aug" | "Sep" | "Oct" | "Nov" | "Dec"
+ */
+	int tmpIndex, returnValue;
+
+	returnValue = -1;
+	tmpIndex = *index;
+
+	switch (buf[tmpIndex]) {
+		case 'A':
+			switch (buf[tmpIndex+1]) {
+				case 'p':
+					returnValue = APR;
+					break;
+				case 'u':
+					returnValue = AUG;
+					break;
+			}
+			break;
+		case 'D':
+			returnValue = DEC;
+			break;
+		case 'F':
+			returnValue = FEB;
+			break;
+		case 'J':
+			switch (buf[tmpIndex+1]) {
+				case 'a':
+					returnValue = JAN;
+					break;
+				case 'u':
+					switch (buf[tmpIndex+2]) {
+						case 'l':
+							returnValue = JUL;
+							break;
+						case 'n':
+							returnValue = JUN;
+							break;
+					}
+					break;
+			}
+			break;
+		case 'M':
+			switch (buf[tmpIndex+1]) {
+				case 'a':
+					switch (buf[tmpIndex+2]) {
+						case 'r':
+							returnValue = MAR;
+							break;
+						case 'y':
+							returnValue = MAY;
+							break;
+					}
+					break;
+			}
+			break;
+		case 'N':
+			returnValue = NOV;
+			break;
+		case 'O':
+			returnValue = OCT;
+			break;
+		case 'S':
+			returnValue = SEP;
+			break;
+	}
+
+	if (returnValue >= 0) {
+		*index += 3;
+	}
+
+	return returnValue;
+}
+
+/******************************************************************************/
+/* 
+ *	Parse a year value (either 2 or 4 digits)
+ */
+
+static int parseYear(char_t *buf, int *index) 
+{
+	int tmpIndex, returnValue;
+
+	tmpIndex = *index;
+	returnValue = parseNDIGIT(buf, 4, &tmpIndex);
+
+	if (returnValue >= 0) {
+		*index = tmpIndex;
+	} else {
+		returnValue = parseNDIGIT(buf, 2, &tmpIndex);
+		if (returnValue >= 0) {
+/*
+ *			Assume that any year earlier than the start of the 
+ *			epoch for time_t (1970) specifies 20xx
+ */
+			if (returnValue < 70) {
+				returnValue += 2000;
+			} else {
+				returnValue += 1900;
+			}
+
+			*index = tmpIndex;
+		}
+	}
+
+	return returnValue;
+}
+
+/******************************************************************************/
+/* 
+ *	The formulas used to build these functions are from "Calendrical Calculations", 
+ *	by Nachum Dershowitz, Edward M. Reingold, Cambridge University Press, 1997.
+ */
+
+#include <math.h>
+
+const int GregorianEpoch = 1;
+
+/******************************************************************************/
+/*
+ *  Determine if year is a leap year
+ */
+
+int GregorianLeapYearP(long year) 
+{
+	int		result;
+	long	tmp;
+	
+	tmp = year % 400;
+
+	if ((year % 4 == 0) &&
+		(tmp != 100) &&
+		(tmp != 200) &&
+		(tmp != 300)) {
+		result = TRUE;
+	} else {
+		result = FALSE;
+	}
+
+	return result;
+}
+
+/******************************************************************************/
+/*
+ *  Return the fixed date from the gregorian date
+ */
+
+long FixedFromGregorian(long month, long day, long year) 
+{
+	long fixedDate;
+
+	fixedDate = (long)(GregorianEpoch - 1 + 365 * (year - 1) + 
+		floor((year - 1) / 4.0) -
+		floor((double)(year - 1) / 100.0) + 
+		floor((double)(year - 1) / 400.0) + 
+		floor((367.0 * ((double)month) - 362.0) / 12.0));
+
+	if (month <= 2) {
+		fixedDate += 0;
+	} else if (TRUE == GregorianLeapYearP(year)) {
+		fixedDate += -1;
+	} else {
+		fixedDate += -2;
+	}
+
+	fixedDate += day;
+
+	return fixedDate;
+}
+
+/******************************************************************************/
+/*
+ *  Return the gregorian year from a fixed date
+ */
+
+long GregorianYearFromFixed(long fixedDate) 
+{
+	long result, d0, n400, d1, n100, d2, n4, d3, n1, d4, year;
+
+	d0 =	fixedDate - GregorianEpoch;
+	n400 =	(long)(floor((double)d0 / (double)146097));
+	d1 =	d0 % 146097;
+	n100 =	(long)(floor((double)d1 / (double)36524));
+	d2 =	d1 % 36524;
+	n4 =	(long)(floor((double)d2 / (double)1461));
+	d3 =	d2 % 1461;
+	n1 =	(long)(floor((double)d3 / (double)365));
+	d4 =	(d3 % 365) + 1;
+	year =	400 * n400 + 100 * n100 + 4 * n4 + n1;
+
+	if ((n100 == 4) || (n1 == 4)) {
+		result = year;
+	} else {
+		result = year + 1;
+	}
+
+	return result;
+}
+
+/******************************************************************************/
+/* 
+ *	Returns the Gregorian date from a fixed date
+ *	(not needed for this use, but included for completeness
+ */
+
+#if 0
+GregorianFromFixed(long fixedDate, long *month, long *day, long *year) 
+{
+	long priorDays, correction;
+
+	*year =			GregorianYearFromFixed(fixedDate);
+	priorDays =		fixedDate - FixedFromGregorian(1, 1, *year);
+
+	if (fixedDate < FixedFromGregorian(3,1,*year)) {
+		correction = 0;
+	} else if (true == GregorianLeapYearP(*year)) {
+		correction = 1;
+	} else {
+		correction = 2;
+	}
+
+	*month = (long)(floor((12.0 * (double)(priorDays + correction) + 373.0) / 367.0));
+	*day = fixedDate - FixedFromGregorian(*month, 1, *year);
+}
+#endif
+
+/******************************************************************************/
+/* 
+ *	Returns the difference between two Gregorian dates
+ */
+
+long GregorianDateDifference(	long month1, long day1, long year1,
+								long month2, long day2, long year2) 
+{
+	return FixedFromGregorian(month2, day2, year2) - 
+		FixedFromGregorian(month1, day1, year1);
+}
+
+
+/******************************************************************************/
+/*
+ *	Return the number of seconds into the current day
+ */
+
+#define SECONDS_PER_DAY 24*60*60
+
+static int parseTime(char_t *buf, int *index) 
+{
+/*	
+ *	Format of buf is - 2DIGIT ":" 2DIGIT ":" 2DIGIT
+ */
+	int returnValue, tmpIndex, hourValue, minuteValue, secondValue;
+
+	hourValue = minuteValue = secondValue = -1;
+	returnValue = -1;
+	tmpIndex = *index;
+
+	hourValue = parseNDIGIT(buf, 2, &tmpIndex);
+
+	if (hourValue >= 0) {
+		tmpIndex++;
+		minuteValue = parseNDIGIT(buf, 2, &tmpIndex);
+		if (minuteValue >= 0) {
+			tmpIndex++;
+			secondValue = parseNDIGIT(buf, 2, &tmpIndex);
+		}
+	}
+
+	if ((hourValue >= 0) &&
+		(minuteValue >= 0) &&
+		(secondValue >= 0)) {
+		returnValue = (((hourValue * 60) + minuteValue) * 60) + secondValue;
+		*index = tmpIndex;
+	}
+
+	return returnValue;
+}
+
+/******************************************************************************/
+/*
+ *	Return the equivalent of time() given a gregorian date
+ */
+
+static time_t dateToTimet(int year, int month, int day) 
+{
+	long dayDifference;
+
+	dayDifference = FixedFromGregorian(month, day, year) - 
+		FixedFromGregorian(1, 1, 1970);
+
+	return dayDifference * SECONDS_PER_DAY;
+}
+
+/******************************************************************************/
+/*
+ *	Return the number of seconds between Jan 1, 1970 and the parsed date
+ *	(corresponds to documentation for time() function)
+ */
+
+static time_t parseDate1or2(char_t *buf, int *index) 
+{
+/*	
+ *	Format of buf is either
+ *	2DIGIT SP month SP 4DIGIT
+ *	or
+ *	2DIGIT "-" month "-" 2DIGIT
+ */
+	int		dayValue, monthValue, yearValue, tmpIndex;
+	time_t	returnValue;
+
+	returnValue = (time_t) -1;
+	tmpIndex = *index;
+
+	dayValue = monthValue = yearValue = -1;
+
+	if (buf[tmpIndex] == T(',')) {
+/* 
+ *		Skip over the ", " 
+ */
+		tmpIndex += 2; 
+
+		dayValue = parseNDIGIT(buf, 2, &tmpIndex);
+		if (dayValue >= 0) {
+/*
+ *			Skip over the space or hyphen
+ */
+			tmpIndex++; 
+			monthValue = parseMonth(buf, &tmpIndex);
+			if (monthValue >= 0) {
+/*
+ *				Skip over the space or hyphen
+ */
+				tmpIndex++; 
+				yearValue = parseYear(buf, &tmpIndex);
+			}
+		}
+
+		if ((dayValue >= 0) &&
+			(monthValue >= 0) &&
+			(yearValue >= 0)) {
+			if (yearValue < 1970) {
+/*				
+ *				Allow for Microsoft IE's year 1601 dates 
+ */
+				returnValue = 0; 
+			} else {
+				returnValue = dateToTimet(yearValue, monthValue, dayValue);
+			}
+			*index = tmpIndex;
+		}
+	}
+	
+	return returnValue;
+}
+
+/******************************************************************************/
+/*
+ *	Return the number of seconds between Jan 1, 1970 and the parsed date
+ */
+
+static time_t parseDate3Time(char_t *buf, int *index) 
+{
+/*
+ *	Format of buf is month SP ( 2DIGIT | ( SP 1DIGIT ))
+ */
+	int		dayValue, monthValue, yearValue, timeValue, tmpIndex;
+	time_t	returnValue;
+
+	returnValue = (time_t) -1;
+	tmpIndex = *index;
+
+	dayValue = monthValue = yearValue = timeValue = -1;
+
+	monthValue = parseMonth(buf, &tmpIndex);
+	if (monthValue >= 0) {
+/*		
+ *		Skip over the space 
+ */
+		tmpIndex++; 
+		if (buf[tmpIndex] == T(' ')) {
+/*
+ *			Skip over this space too 
+ */
+			tmpIndex++; 
+			dayValue = parseNDIGIT(buf, 1, &tmpIndex);
+		} else {
+			dayValue = parseNDIGIT(buf, 2, &tmpIndex);
+		}
+/*		
+ *		Now get the time and time SP 4DIGIT
+ */
+		timeValue = parseTime(buf, &tmpIndex);
+		if (timeValue >= 0) {
+/*			
+ *			Now grab the 4DIGIT year value
+ */
+			yearValue = parseYear(buf, &tmpIndex);
+		}
+	}
+
+	if ((dayValue >= 0) &&
+		(monthValue >= 0) &&
+		(yearValue >= 0)) {
+		returnValue = dateToTimet(yearValue, monthValue, dayValue);
+		returnValue += timeValue;
+		*index = tmpIndex;
+	}
+	
+	return returnValue;
+}
+
+
+/******************************************************************************/
+/*
+ *	Although this looks like a trivial function, I found I was replicating the implementation
+ *	seven times in the parseWeekday function. In the interests of minimizing code size
+ *	and redundancy, it is broken out into a separate function. The cost of an extra 
+ *	function call I can live with given that it should only be called once per HTTP request.
+ */
+
+static int bufferIndexIncrementGivenNTest(char_t *buf, int testIndex, char_t testChar, 
+										  int foundIncrement, int notfoundIncrement) 
+{
+	if (buf[testIndex] == testChar) {
+		return foundIncrement;
+	}
+
+	return notfoundIncrement;
+}
+
+/******************************************************************************/
+/*
+ *	Return an index into a logical weekday array
+ */
+
+static int parseWeekday(char_t *buf, int *index) 
+{
+/*	
+ *	Format of buf is either
+ *	"Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun"
+ *	or
+ *	"Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday"
+ */
+	int tmpIndex, returnValue;
+
+	returnValue = -1;
+	tmpIndex = *index;
+
+	switch (buf[tmpIndex]) {
+		case 'F':
+			returnValue = FRI;
+			*index += bufferIndexIncrementGivenNTest(buf, tmpIndex+3, 'd', sizeof("Friday"), 3);
+			break;
+		case 'M':
+			returnValue = MON;
+			*index += bufferIndexIncrementGivenNTest(buf, tmpIndex+3, 'd', sizeof("Monday"), 3);
+			break;
+		case 'S':
+			switch (buf[tmpIndex+1]) {
+				case 'a':
+					returnValue = SAT;
+					*index += bufferIndexIncrementGivenNTest(buf, tmpIndex+3, 'u', sizeof("Saturday"), 3);
+					break;
+				case 'u':
+					returnValue = SUN;
+					*index += bufferIndexIncrementGivenNTest(buf, tmpIndex+3, 'd', sizeof("Sunday"), 3);
+					break;
+			}
+			break;
+		case 'T':
+			switch (buf[tmpIndex+1]) {
+				case 'h':
+					returnValue = THU;
+					*index += bufferIndexIncrementGivenNTest(buf, tmpIndex+3, 'r', sizeof("Thursday"), 3);
+					break;
+				case 'u':
+					returnValue = TUE;
+					*index += bufferIndexIncrementGivenNTest(buf, tmpIndex+3, 's', sizeof("Tuesday"), 3);
+					break;
+			}
+			break;
+		case 'W':
+			returnValue = WED;
+			*index += bufferIndexIncrementGivenNTest(buf, tmpIndex+3, 'n', sizeof("Wednesday"), 3);
+			break;
+	}
+	return returnValue;
+}
+
+/******************************************************************************/
+/*
+ *		Parse the date and time string.
+ */
+
+static time_t dateParse(time_t tip, char_t *cmd)
+{
+	int index, tmpIndex, weekday, timeValue;
+	time_t parsedValue, dateValue;
+
+	parsedValue = (time_t) 0;
+	index =	timeValue = 0;
+	weekday = parseWeekday(cmd, &index);
+
+	if (weekday >= 0) {
+		tmpIndex = index;
+		dateValue = parseDate1or2(cmd, &tmpIndex);
+		if (dateValue >= 0) {
+			index = tmpIndex + 1;
+/*
+ *			One of these two forms is being used
+ *			wkday "," SP date1 SP time SP "GMT"
+ *			weekday "," SP date2 SP time SP "GMT"
+ */
+			timeValue = parseTime(cmd, &index);
+			if (timeValue >= 0) {
+/*				
+ *				Now match up that "GMT" string for completeness
+ *				Compute the final value if there were no problems in the parse
+ */
+				if ((weekday >= 0) &&
+					(dateValue >= 0) &&
+					(timeValue >= 0)) {
+					parsedValue = dateValue + timeValue;
+				}
+			}
+		} else {
+/* 
+ *			Try the other form - wkday SP date3 SP time SP 4DIGIT
+ */
+			tmpIndex = index;
+			parsedValue = parseDate3Time(cmd, &tmpIndex);
+		}
+	}
+
+	return parsedValue;
+}
+
+#endif /* WEBS_IF_MODIFIED_SUPPORT */
+
 
 /******************************************************************************/

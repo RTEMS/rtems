@@ -1,3 +1,15 @@
+2000-08-31	Joel Sherrill <joel@OARcorp.com>
+
+	* Merged version 2.1 of GoAhead webserver.  This update
+	was submitted by Antti P Miettinen <antti.p.miettinen@nokia.com>.
+	* NOTES, base64.c, ejIntrn.h, emfdb.c, emfdb.h, md5.h, md5c.c, 
+	um.c, um.h: New files.
+	* wbase64.c: Removed.
+	* Makefile.am, asp.c, balloc.c, default.c, ej.h, ejlex.c, ejparse.c, 
+	form.c, h.c, handler.c, mime.c, misc.c, ringq.c, rom.c, security.c, 
+	socket.c, sym.c, uemf.c, uemf.h, url.c, value.c, webcomp.c, webmain.c, 
+	webpage.c, webrom.c, webs.c, webs.h, websuemf.c, wsIntrn.h: Modified.
+
 2000-08-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* netinet/tcp_input.c: Spelling corrections.

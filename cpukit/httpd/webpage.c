@@ -1,7 +1,7 @@
 /*
  * Page.c -- Support for page retrieval.
  *
- * Copyright (c) Go Ahead Software Inc., 1995-1999. All Rights Reserved.
+ * Copyright (c) GoAhead Software Inc., 1995-2000. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
  */
@@ -41,6 +41,8 @@ int websPageOpen(webs_t wp, char_t *lpath, char_t *path, int mode, int perm)
 
 void websPageClose(webs_t wp)
 {
+	a_assert(websValid(wp));
+
 #if WEBS_PAGE_ROM
 	websRomPageClose(wp->docfd);
 #else
