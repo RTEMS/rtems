@@ -16,6 +16,6 @@ all: README
 # sp10 is not included for now
 SUB_DIRS=sp01 sp02 sp03 sp04 sp05 sp06 sp07 sp08 sp09 \
          sp11 sp12 sp13 sp14 sp15 sp16 sp17 sp19 \
-         sp20 sp21 sp22 sp23 sp24 sp25 spfatal spsize
+         sp20 sp21 sp22 sp23 sp24 sp25 spsize
 
 
