@@ -33,7 +33,11 @@
  *
  *  _RTEMS_tasks_Create_extension
  *
- *  XXX
+ *  This routine is an extension routine that is invoked as part
+ *  of creating any type of task or thread in the system.  If the
+ *  task is created via another API, then this routine is invoked
+ *  and this API given the opportunity to initialize its extension
+ *  area.
  */
 
 boolean _RTEMS_tasks_Create_extension(
@@ -59,7 +63,8 @@ boolean _RTEMS_tasks_Create_extension(
  *
  *  _RTEMS_tasks_Start_extension
  *
- *  XXX
+ *  This extension routine is invoked when a task is started for the
+ *  first time.
  */
  
 User_extensions_routine _RTEMS_tasks_Start_extension(
@@ -80,7 +85,7 @@ User_extensions_routine _RTEMS_tasks_Start_extension(
  *
  *  _RTEMS_tasks_Delete_extension
  *
- *  XXX
+ *  This extension routine is invoked when a task is deleted.
  */
  
 User_extensions_routine _RTEMS_tasks_Delete_extension(
@@ -97,7 +102,7 @@ User_extensions_routine _RTEMS_tasks_Delete_extension(
  *
  *  _RTEMS_tasks_Switch_extension
  *
- *  XXX
+ *  This extension routine is invoked at each context switch.
  */
  
 void _RTEMS_tasks_Switch_extension(
