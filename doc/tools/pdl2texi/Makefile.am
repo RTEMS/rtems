@@ -6,7 +6,7 @@
 #  $Id$
 #
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 PROG = pdl2texi
 noinst_PROGRAMS = $(PROG)
