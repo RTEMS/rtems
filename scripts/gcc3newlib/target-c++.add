@@ -14,7 +14,7 @@ This is the gcc/g++ compiler for %{gcc_target}
 
 %files -n %{rpmprefix}%{gcc_target}-c++ -f build/files.g++
 %defattr(-,root,root)
-%doc %{_prefix}/man/man1/%{gcc_target}-g++.1*
+%doc %{_mandir}/man1/%{gcc_target}-g++.1*
 
 %dir %{_prefix}/bin
 %{_prefix}/bin/%{gcc_target}-c++%{_exeext}

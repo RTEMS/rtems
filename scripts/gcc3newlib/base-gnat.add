@@ -16,27 +16,27 @@ This is the gcc/gnat tools for the gcc/gnat compiler
 %dir %{_prefix}/bin
 
 %if "%{gcc_version}" >= "3.3"
-%{_prefix}/info/gnat*
+%{_infodir}/gnat*
 %endif
 
 %if "%{gcc_version}" >= "3.3"
 %post -n %{rpmprefix}rtems@osversion@-base-gnat
-  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
+  if test -d $RPM_INSTALL_PREFIX%{_infodir}; 
   then
-    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
-    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
+    rm -f $RPM_INSTALL_PREFIX%{_infodir}/dir
+    f=`find $RPM_INSTALL_PREFIX%{_infodir} -name '*.info.gz'`
     test -n "$f" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+      install-info $i $RPM_INSTALL_PREFIX%{_infodir}/dir
     done
   fi
 
 %postun -n %{rpmprefix}rtems@osversion@-base-gnat
-  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
+  if test -d $RPM_INSTALL_PREFIX%{_infodir}; 
   then
-    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
-    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
+    rm -f $RPM_INSTALL_PREFIX%{_infodir}/dir
+    f=`find $RPM_INSTALL_PREFIX%{_infodir} -name '*.info.gz'`
     test -n "$f" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+      install-info $i $RPM_INSTALL_PREFIX%{_infodir}/dir
     done
   fi
 %endif

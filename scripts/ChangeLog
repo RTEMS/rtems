@@ -1,5 +1,12 @@
 2004-03-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Index: base-g77.add, base-gcc.add, base-gcj.add, base-gnat.add,
+	gccnewlib.add, target-c++.add, target-gcc.add, target-gcj.add:
+	Apply _infodir, _mandir. Gzip man pages. 
+	Reflect gcc having fixed gccinstall.info.
+
+2004-03-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* binutils/base-binutils.add: Apply _infodir.
 	Don't install libiberty. Misc. cleanups.
 	* binutils/binutils.add: Apply _infodir, _mandir.
