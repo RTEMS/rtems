@@ -82,7 +82,7 @@ END-INFO-DIR-ENTRY
 @node Top, Introduction, (dir), (dir)
 @top bsp_howto
 
-This is the online version of the Getting Started with RTEMS for C/C++ Users.
+This is the online version of the RTEMS BSP and Device Driver Development Guide.
 
 @menu
 * Introduction::
