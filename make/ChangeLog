@@ -1,4 +1,8 @@
 
+2000-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/Cygwin-posix.cfg: Add -U__STRICT_ANSI__ to LIBC_DEFINES.
+
 2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/bare.cfg: Add @ to make-exe, make make-exe more verbose.
