@@ -1626,10 +1626,15 @@ rtems_status_code rtems_task_variable_add(
 
 @ifset is-Ada
 @example
+type Task_Variable_Dtor is access procedure (
+   Argument : in     RTEMS.Address;
+);
+
 procedure Task_Variable_Add (
-   Id          : in     RTEMS.ID;
-   Ptr         : in     RTEMS.Address;
-   Result      :    out RTEMS.Status_Codes
+   ID            : in     RTEMS.ID;
+   Task_Variable : in     RTEMS.Address;
+   Dtor          : in     RTEMS.Task_Variable_Dtor;
+   Result        :    out RTEMS.Status_Codes
 );
 @end example
 @end ifset
@@ -1684,10 +1689,10 @@ rtems_status_code rtems_task_variable_get(
 @ifset is-Ada
 @example
 procedure Task_Variable_Get (
-   Id          : in     RTEMS.ID;
-   Ptr         : in     RTEMS.Address;
-   Value       :    out RTEMS.Address;
-   Result      :    out RTEMS.Status_Codes
+   ID                  : in     RTEMS.ID;
+   Task_Variable       :    out RTEMS.Address;
+   Task_Variable_Value :    out RTEMS.Address;
+   Result              :    out RTEMS.Status_Codes
 );
 @end example
 @end ifset
@@ -1734,9 +1739,9 @@ rtems_status_code rtems_task_variable_delete(
 @ifset is-Ada
 @example
 procedure Task_Variable_Delete (
-   Id          : in     RTEMS.ID;
-   Ptr         : in     RTEMS.Address;
-   Result      :    out RTEMS.Status_Codes
+   ID                  : in     RTEMS.ID;
+   Task_Variable       :    out RTEMS.Address;
+   Result              :    out RTEMS.Status_Codes
 );
 @end example
 @end ifset
