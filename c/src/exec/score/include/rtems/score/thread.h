@@ -53,7 +53,12 @@ typedef enum {
   THREAD_START_BOTH_NUMERIC_FIRST
 } Thread_Start_types;
 
-typedef Thread ( *Thread_Entry )( );
+typedef Thread ( *Thread_Entry )();   /* basic type */
+
+typedef Thread ( *Thread_Entry_numeric )( unsigned32 );
+typedef Thread ( *Thread_Entry_pointer )( void * );
+typedef Thread ( *Thread_Entry_both_pointer_first )( void *, unsigned32 );
+typedef Thread ( *Thread_Entry_both_numeric_first )( unsigned32, void * );
 
 /*
  *  The following lists the algorithms used to manage the thread cpu budget.
