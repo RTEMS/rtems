@@ -24,7 +24,7 @@
         PUBLIC (RTEMS)
 
 SYM (RTEMS):
-        jmpl      SYM (_Entry_points)(,eax,4)
+        jmpl      *SYM (_Entry_points)(,eax,4)
 
         END_CODE
 
