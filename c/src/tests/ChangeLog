@@ -1,5 +1,9 @@
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	Makefile.am: Reflect having moved automake.
+
+2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/compile.am, automake/host.am, automake/leaf.am
 	automake/local.am, automake/subdirs.am: New (copied from
 	../../../automake).

@@ -22,4 +22,4 @@ CLEANFILES = $(project_bspdir)/lib/include/tmacros.h \
 
 all-local: $(TMPINSTALLFILES)
 
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/local.am
