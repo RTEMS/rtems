@@ -2,6 +2,8 @@
  *  $Id$
  */
 
+#include <rtems.h>
+
 #if defined(RTEMS_UNIXLIB)
 
 void libc_init(int reentrant)
