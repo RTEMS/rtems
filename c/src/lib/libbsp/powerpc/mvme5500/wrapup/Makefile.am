@@ -13,7 +13,7 @@ ___libbsp_a_LIBADD = ../pclock$(LIB_VARIANT).rel \
     ../tod$(LIB_VARIANT).rel ../vectors$(LIB_VARIANT).rel \
     ../GT64260$(LIB_VARIANT).rel
 if HAS_NETWORKING
-    ../network$(LIB_VARIANT).rel
+___libbsp_a_LIBADD += ../network$(LIB_VARIANT).rel
 endif
 ___libbsp_a_LIBADD += ../vme$(LIB_VARIANT).rel
 ___libbsp_a_LIBADD += \
