@@ -50,7 +50,7 @@ intro.texi: intro.t versions.texi
 	    -n "Requirements" ${*}.t
 
 require.texi: require.t versions.texi
-	$(BMENU) -c -p "Cross Development" \
+	$(BMENU) -c -p "Resources on the Internet" \
 	    -u "Top" \
 	    -n "Building the GNU C/C++ Cross Compiler Toolset" ${*}.t
 

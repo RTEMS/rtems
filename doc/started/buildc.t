@@ -66,7 +66,6 @@ approximately 20 megabytes.
     File:        hello_world_c.tgz
 @end example
 
-
 @section Create the tools Directory
 
 Create a directory called tools that will serve as a working directory to
@@ -275,10 +274,10 @@ was generated and for which target system the tools are to produce code for.
 
 @item BINUTILS
 is the directory under tools that contains @value{BINUTILS-UNTAR}. 
-For example,
+For example:
 
 @example
-BINUTILS=@value{BINUTILS-UNTAR}.
+BINUTILS=@value{BINUTILS-UNTAR}
 @end example
 
 @item GCC
@@ -286,20 +285,20 @@ is the directory under tools that contains @value{GCC-UNTAR}.
 For example,
 
 @example
-GCC=@value{GCC-UNTAR}.
+GCC=@value{GCC-UNTAR}
 @end example
 
 @item NEWLIB
 is the directory under tools that contains @value{NEWLIB-UNTAR}.
-For example,
+For example:
 
 @example
-NEWLIB=@value{NEWLIB-UNTAR}.
+NEWLIB=@value{NEWLIB-UNTAR}
 @end example
 
 @item BUILD_DOCS
 is set to "yes" if you want to install documentation.
-For example, 
+For example:
 
 @example
 BUILD_DOCS=yes
@@ -308,7 +307,7 @@ BUILD_DOCS=yes
 @item BUILD_OTHER_LANGUAGES
 is set to "yes" if you want to build languages other than C and C++.  At
 the current time, this enables Fortan and Objective-C.
-For example,
+For example:
 
 @example
 BUILD_OTHER_LANGUAGES=yes

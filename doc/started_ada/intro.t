@@ -22,8 +22,10 @@ essentials for performing a setup of the following items:
 @end itemize
 
 The remainder of this chapter provides background information on real-time
-embedded systems and cross development.  If you are not familiar with either
-of these areas, please read them.  This will help familiarize you with the
+embedded systems and cross development and an overview of other 
+resources of interest on the Internet.  If you are not familiar with 
+real-time embedded systems, of these areas, please read those sections.  
+These sections will help familiarize you with the
 types of systems RTEMS is designed to be used in and the cross development
 process used when developing RTEMS applications.
 
@@ -118,5 +120,42 @@ systems.  For example, many of the processors targeting the embedded market
 do not include hardware floating point units, but do include peripherals such
 as timers, serial controllers, or network interfaces. 
 
+@section Resources on the Internet
+
+This section describes various resources on the Internet which are of
+use to GNAT/RTEMS users.
+
+@subsection RTEMS Mailing List
+
+rtems-list@@OARcorp.com
+
+This mailing list is dedicated to discussion of issues related
+to RTEMS.  If you have questions about RTEMS, which to make
+suggestions, or just want to pick up hints, this is a good
+list to subscribe to.  Subscribe by sending a message with
+the one line "subscribe" to rtems-list-request@@OARcorp.com.
+
+@subsection CrossGCC Mailing List
+
+crossgcc@@cygnus.com
+
+This mailing list is dedicated to the use of the GNU tools in
+cross development environments.  Most of the discussions
+focus on embedded issues.  Subscribe by sending a message with
+the one line "subscribe" to crossgcc-request@@cygnus.com.
+
+The crossgcc FAQ as well as a number of patches and utiliities
+of interest to cross development system users are available
+at ftp://ftp.cygnus.com/pub/embedded/crossgcc.
+
+@subsection GNAT Chat Mailing List
+
+chat@@gnat.com
+
+This mailing list is dedicated to the general discussion
+of GNAT specific issues.  The discussions try to avoid
+more general Ada95 language issues which have other
+forums.  Subscribe by sending a message with
+the one line "subscribe" to chat-request@@gnat.com.
 
 
