@@ -1,3 +1,9 @@
+2002-05-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/i386/any/remdeb_svc.c, src/m68k/any/remdeb_svc.c, 
+	src/powerpc/new_exception_processing/remdeb_svc.c: Per PR220 remove
+	these files from CVS.
+
 2001-04-19	Joel Sherrill <joel@OARcorp.com>
 
 	* src/powerpc/rdbg_f.c: Always include <rtems.h> instead of 
