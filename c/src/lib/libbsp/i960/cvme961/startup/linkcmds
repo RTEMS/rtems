@@ -26,7 +26,7 @@ SECTIONS
             _text_start = . ;
             *(.text)
             etext = ALIGN( 0x10 ) ;
-/*            _etext = .; */
+/*            _etext = .; -- conflicts */
         }
         .data ADDR( .text ) + SIZEOF( .text ):
         {
@@ -34,12 +34,12 @@ SECTIONS
             _data_start = .;
             *(.data)
             edata = ALIGN( 0x10 ) ;
-/*            _edata = .; */
+/*            _edata = .; -- conflicts */
         }
         .bss ADDR( .data ) + SIZEOF( .data ):
         {
             bss_start = . ;
-/*            _bss_start = . ; */
+            _bss_start = . ;
             *(.bss)
             *(COMMON)
             end = . ;
