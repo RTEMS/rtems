@@ -6,6 +6,5 @@ dnl at path and append an entry for Makefile to global variable
 dnl "makefiles" (from configure.in) for each Makefile.in found
 dnl 
 AC_DEFUN(RTEMS_CHECK_MAKEFILE,
-[RTEMS_CHECK_FILES_IN($1,Makefile.in,makefiles)
+[RTEMS_CHECK_FILES_IN($1,Makefile,makefiles)
 ])
-
