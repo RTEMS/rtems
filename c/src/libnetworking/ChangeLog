@@ -1,3 +1,10 @@
+2003-04-11	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems_webserver/cgi.c, rtems_webserver/sockGen.c,
+	rtems_webserver/umui.c, rtems_webserver/websSSL.c,
+	rtems_webserver/websSSL.h, rtems_webserver/websda.c,
+	rtems_webserver/websda.h: New files. Not included in previous commit.
+
 2002-04-10	Mike Siers <mikes@poliac.com>
 
 	* rtems_webserver/NOTES, rtems_webserver/asp.c,
