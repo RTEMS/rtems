@@ -232,7 +232,11 @@ console_initialize(rtems_device_major_number major,
 	  printk("Initialized console on port COM2 9600-8-N-1\n\n");
 	}
     }
- 
+#define  DISPLAY_CPU_INFO 
+#ifdef DISPLAY_CPU_INFO
+  printCpuInfo();
+#endif
+  
   return RTEMS_SUCCESSFUL;
 } /* console_initialize */
 

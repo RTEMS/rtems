@@ -32,7 +32,7 @@ i386_isr_entry set_vector(                      /* returns old vector */
 )
 {
   i386_isr_entry previous_isr;
-  i386_IDT_slot  idt;
+  interrupt_gate_descriptor  idt;
 
   if ( type )
     rtems_interrupt_catch( handler, vector, (rtems_isr_entry *) &previous_isr );
@@ -45,11 +45,7 @@ i386_isr_entry set_vector(                      /* returns old vector */
                       ((idt.offset_16_31 << 16) | idt.offset_0_15);
 
     /* build the IDT entry */
-    idt.offset_0_15      = ((rtems_unsigned32) handler) & 0xffff;
-    idt.segment_selector = get_cs();
-    idt.reserved         = 0x00;
-    idt.p_dpl            = 0x8e;         /* present, ISR */
-    idt.offset_16_31     = ((rtems_unsigned32) handler) >> 16;
+    create_interrupt_gate_descriptor( &idt, handler );
 
     /* install the IDT entry */
     Interrupt_descriptor_table[ vector ] = idt;

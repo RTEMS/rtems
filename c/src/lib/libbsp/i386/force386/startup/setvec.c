@@ -32,7 +32,7 @@ i386_isr_entry set_vector(                      /* returns old vector */
 )
 {
   i386_isr_entry previous_isr;
-  i386_IDT_slot  idt;
+  interrupt_gate_descriptor idt;
 
   if ( type )
     rtems_interrupt_catch( handler, vector, (rtems_isr_entry *) &previous_isr );

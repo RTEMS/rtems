@@ -50,12 +50,14 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all:	${ARCH} $(SRCS) preinstall $(PGMS)
-	$(INSTALL) $(INSTBINFLAGS) ${PGMS} ${PROJECT_RELEASE}/bin
 
 # Hack
 # we are #including files that haven't been installed yet.
 # Make sure they are available.
-preinstall: FORCEIT
+preinstall: ${ARCH} headers $(SRCS) $(PGMS)
+	$(INSTALL) $(INSTBINFLAGS) ${PGMS} ${PROJECT_RELEASE}/bin
+
+headers: FORCE
 	cd $(CPU_DIR);   $(MAKE) install-headers
 
 # Install the program(s), appending _g or _p as appropriate.

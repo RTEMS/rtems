@@ -92,6 +92,7 @@
 #define edi REG (edi)
 #define esp REG (esp)
 #define ebp REG (ebp)
+#define cr0 REG (cr0)
 
 #define ax REG (ax)
 #define bx REG (bx)

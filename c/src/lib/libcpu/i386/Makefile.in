@@ -11,14 +11,14 @@ PROJECT_ROOT = @PROJECT_ROOT@
 PGM=${ARCH}/libcpu.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=cpu
+C_PIECES=cpu displayCpu
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES=$(srcdir)/cpu.h
+H_FILES=$(srcdir)/cpu.h $(srcdir)/registers.h $(srcdir)/cpuModel.h
 
 # Assembly source names, if any, go here -- minus the .s
-S_PIECES=cpu_asm
+S_PIECES=cpu_asm cpuModel
 S_FILES=$(S_PIECES:%=%.S)
 S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
 

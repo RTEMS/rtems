@@ -37,7 +37,8 @@
 #include <bsp.h>
 #include <libcsupport.h>
 #include <rtems/libio.h>
- 
+#include <libcpu/cpuModel.h>
+
 /*-------------------------------------------------------------------------+
 | Global Variables
 +--------------------------------------------------------------------------*/
@@ -58,6 +59,7 @@ extern rtems_configuration_table  Configuration;
 rtems_cpu_table Cpu_table;                     /* CPU configuration table.    */
 char            *rtems_progname;               /* Program name - from main(). */
 
+extern void debugPollingGetChar();
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
@@ -130,7 +132,7 @@ void bsp_start( void )
   console_reserve_resources(&BSP_Configuration);
 
   /*
-   * Init trems_interrupt_management
+   * Init rtems_interrupt_management
    */
   rtems_irq_mngt_init();
   

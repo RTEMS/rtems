@@ -146,8 +146,11 @@ extern "C" {
 
 extern rtems_configuration_table BSP_Configuration;
 
-extern i386_IDT_slot Interrupt_descriptor_table[ 256 ];
-extern i386_GDT_slot Global_descriptor_table[ 8192 ];
+#define IDT_SIZE 256
+#define GDT_SIZE 8192
+
+extern interrupt_gate_descriptor Interrupt_descriptor_table[IDT_SIZE];
+extern segment_descriptors Global_descriptor_table   [GDT_SIZE];
 
 BSP_EXTERN unsigned short Idt[3];  /* Interrupt Descriptor Table Address */
 BSP_EXTERN unsigned short Gdt[3];  /* Global Descriptor Table Address */

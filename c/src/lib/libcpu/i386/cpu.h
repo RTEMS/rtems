@@ -18,8 +18,11 @@
  * $Id$
  */
 
-#ifndef _i386_CPU_H
-#define _i386_CPU_H
+#ifndef _LIBCPU_i386_CPU_H
+#define _LIBCPU_i386_CPU_H
+
+#include <libcpu/registers.h>
+
 
 #ifndef ASM
 
@@ -63,7 +66,7 @@
                     : "=r" ((_eflags)) : "0" ((_eflags)) \
     ); \
     \
-    _level = (_eflags & 0x0200) ? 0 : 1; \
+    _level = (_eflags &  EFLAGS_INTR_ENABLE) ? 0 : 1; \
   } while (0)
 
 #define _CPU_ISR_Disable( _level ) i386_disable_interrupts( _level )

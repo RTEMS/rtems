@@ -64,6 +64,8 @@ BEGIN_CODE
 	EXTERN (_return_to_monitor)
 	EXTERN (_IBMPC_initVideo)
 	EXTERN (debugPollingGetChar)
+	EXTERN (checkCPUtypeSetCr0)
+	
 
 /*
  * In case this crashes on your machine and this is not due
@@ -87,8 +89,8 @@ speakl:	jmp	speakl             # and SPIN!!!
 
         nop
         cli			# DISABLE INTERRUPTS!!!
-#ifdef DEBUG_EARLY_START
 	cld
+#ifdef DEBUG_EARLY_START
 	/*
 	 * Must get video attribute to have a working printk.
 	 * Note that the following code assume we already have 
@@ -149,14 +151,9 @@ SYM (zero_bss):
 	stosl				#   clear a long in the bss
 
 /*---------------------------------------------------------------------+
-| Initialize the i387.
-|
-| Using the NO WAIT form of the instruction insures that if it is not
-| present the board will not lock up or get an exception.
+| Check CPU type. Enable Cache and init coprocessor if needed.
 +---------------------------------------------------------------------*/
-
-	fninit				# MUST USE NO-WAIT FORM
-
+	call checkCPUtypeSetCr0
 /*---------------------------------------------------------------------+
 | Transfer control to User's Board Support Package
 +---------------------------------------------------------------------*/
