@@ -26,6 +26,38 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 
+AC_MSG_NOTICE([setting up make/custom])
+
+AS_MKDIR_P([make/custom])
+
+# Collect and copy the BSP's make/custom/*.cfg files from the toplevel make 
+# directory into the build tree's <bsp>/make/custom subdirectories
+cfg_dir="${RTEMS_TOPdir}/make"
+CUSTOM_CFG_FILES=""
+f="${RTEMS_BSP}.cfg"
+while test -n "$f"; do
+  if test -r "${srcdir}/${cfg_dir}/custom/$f"; then
+    cp ${srcdir}/${cfg_dir}/custom/$f make/custom/$f
+    CUSTOM_CFG_FILES="$CUSTOM_CFG_FILES make/custom/$f"
+    f=`grep "^include.*make/custom" ${srcdir}/${cfg_dir}/custom/$f \
+    | sed \
+      -e 's%^.*custom\/%%' \
+      -e s%\$\(RTEMS_HOST\)%${RTEMS_HOST}% \
+      -e 's%default\.cfg%%'`;
+  else break; fi;
+done
+cp ${srcdir}/make/custom/default.cfg.in make/custom/default.cfg
+
+AC_MSG_NOTICE([creating make/${RTEMS_BSP}.cache])
+${MAKE-make} -f ${srcdir}/make/bsp.mak RTEMS_BSP=${RTEMS_BSP} \
+RTEMS_ROOT=. make/${RTEMS_BSP}.cache
+
+# Read back the cache
+RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
+
+AC_SUBST(CUSTOM_CFG_FILES)
+AC_SUBST(cfg_dir)
+
 ## Note: the order of the directories below is essential
 AC_CONFIG_SUBDIRS([make])
 
@@ -68,5 +100,9 @@ AC_CONFIG_SUBDIRS(wrapup tests)
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile],
+[${MAKE} make/${RTEMS_BSP}.cache],
+[RTEMS_BSP=${RTEMS_BSP}
+ MAKE=${MAKE}])
+
 AC_OUTPUT
