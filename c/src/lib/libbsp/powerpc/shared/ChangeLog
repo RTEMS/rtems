@@ -1,6 +1,13 @@
 2003-02-20	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 349/bsps
+	* vme/.cvsignore, vme/Makefile.am, vme/VME.h, vme/VMEConfig.h,
+	vme/vmeconfig.c: Add glue to the powerpc/shared BSP to use
+	the vmeUniverse VME-PCI bridge driver.
+
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 349/bsps
 	* console/console.c, console/uart.c, console/uart.h: implement
 	IOCTLs for the serial (UART) console to install/retrieve a BREAK-IRQ
 	callback.  The callback routine (if installed) is invoked from the
