@@ -70,16 +70,11 @@ $(ARCH)/rtems-cpu.rel: $(OBJS)
 # for include files, just use $(INSTALL)
 install:  all
 
-preinstall: $(ARCH) $(PROJECT_INCLUDE)/rtems/score/targopts.h \
+preinstall: $(ARCH) \
             ${PROJECT_RELEASE}/lib/bsp_specs
 	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
 # we will share the basic cpu file
 	$(INSTALL) -m 444 ${EXTERNAL_H_FILES} $(PROJECT_INCLUDE)
-
-$(PROJECT_INCLUDE)/rtems/score/targopts.h: $(ARCH)/targopts.h-tmp
-	$(INSTALL) -m 444 $(ARCH)/targopts.h-tmp $@
-
-# $(ARCH)/targopts.h-tmp rule is in leaf.cfg
 
 ${PROJECT_RELEASE}/lib/bsp_specs: $(ARCH)/bsp_specs.tmp
 	$(INSTALL) -m 444 $(ARCH)/bsp_specs.tmp $@

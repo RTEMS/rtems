@@ -17,7 +17,7 @@ H_PIECES= address apiext bitfield chain context copyrt coremsg coremutex \
     coresem heap interr isr object \
     priority stack states sysstate thread threadq \
     tod tqdata userext watchdog wkspace
-H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
+H_FILES=$(H_PIECES:%=$(srcdir)/%.h) targopts.h
 
 SRCS=$(H_FILES)
 
@@ -31,8 +31,60 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 #  'make clobber' already includes 'make clean'
 #
 
-CLEAN_ADDITIONS +=
+CLEAN_ADDITIONS += targopts.h
 CLOBBER_ADDITIONS +=
+
+# Until RTEMS_CPU is removed from all the make configuration files,
+# this will need to be here to transform hppa1.1 into hppa1_1 to
+# make it a valid cpp symbol.  At some point in the near future,
+# targopts.h should not define RTEMS_CPU.  As best I can tell,
+# gcc cpp predefines eliminate the need for RTEMS_CPU_MODEL
+# on some families but not on others.  For example, the i386
+# family does not give us enough information from the predefines.
+RTEMS_CPU_DEFINED=$(subst .,_,$(RTEMS_CPU))
+
+# make the target dependent options file
+targopts.h:
+	@echo "/* target board dependent options file */"       >$@
+	@echo "/* automatically generated -- DO NOT EDIT!! */" >>$@
+	@echo                                                  >>$@
+	@echo "#ifndef __TARGET_OPTIONS_h"                     >>$@
+	@echo "#define __TARGET_OPTIONS_h"                     >>$@
+	@echo                                                  >>$@
+	@echo "#ifdef $(RTEMS_CPU_DEFINED)"                    >>$@
+	@echo "#undef $(RTEMS_CPU_DEFINED)"                    >>$@
+	@echo "#endif"                                         >>$@
+	@echo "#define $(RTEMS_CPU_DEFINED) 1"                 >>$@
+	@echo                                                  >>$@
+	@echo "#ifdef $(RTEMS_CPU_MODEL)"                      >>$@
+	@echo "#undef $(RTEMS_CPU_MODEL)"                      >>$@
+	@echo "#endif"                                         >>$@
+	@echo "#define $(RTEMS_CPU_MODEL) 1"                   >>$@
+	@echo                                                  >>$@
+	@echo "#ifdef $(RTEMS_BSP)"                            >>$@
+	@echo "#undef $(RTEMS_BSP)"                            >>$@
+	@echo "#endif"                                         >>$@
+	@echo "#define $(RTEMS_BSP) 1"                         >>$@
+	@echo                                                  >>$@
+	@$(make-target-options)
+ifeq (${RTEMS_USE_MACROS},yes)
+	@echo "#define USE_MACROS 1"                           >>$@
+else
+	@echo "#define USE_INLINES 1"                          >>$@
+endif
+ifeq ($(RTEMS_HAS_MULTIPROCESSING),yes)
+	@echo "#define RTEMS_MULTIPROCESSING 1"                >>$@
+endif
+ifeq ($(RTEMS_HAS_POSIX_API),yes)
+	@echo "#define RTEMS_POSIX_API 1"                      >>$@
+endif
+ifeq ($(RTEMS_USE_NEWLIB),yes)
+	@echo "#define RTEMS_NEWLIB 1"                         >>$@
+	@echo "#define MALLOC_PROVIDED 1"                      >>$@
+endif
+	@echo                                                  >>$@
+	@echo "#endif"                                         >>$@
+
 
 all:	$(SRCS)
 	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
