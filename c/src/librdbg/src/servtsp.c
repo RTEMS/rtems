@@ -46,7 +46,7 @@ TspInit (int id)
     return;                     /* failed to open socket, let caller deal with */
   }
 
-  bzero ((void *) (&addr), sizeof (addr));
+  memset ((void *) (&addr), 0, sizeof (addr));
   addr.sin_family = AF_INET;
   addr.sin_port = htons (BackPort);
   if (bind (out_sock, (struct sockaddr *) &addr, sizeof (addr)) < 0) {
