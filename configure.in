@@ -135,9 +135,6 @@ case "${target}" in
        	skip_startfiles="yes"
 	RTEMS_HAS_POSIX_API=no
 	;;
-  i[[3456]]86-rtems*)
-	target_cpu=i386
-	;;
   i[[3456]]86-pc-linux*)         # unix "simulator" port
 	target_cpu=unix
 	RTEMS_HAS_POSIX_API=no
