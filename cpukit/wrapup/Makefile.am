@@ -66,9 +66,11 @@ LIBS += ../librpc/src/rpc/$(ARCH)/librpc.a
 LIBS += ../librpc/src/xdr/$(ARCH)/libxdr.a
 endif
 
+$(LIBS): $(ARCH)/$(dirstamp)
+
 $(LIB): ${LIBS}
 	rm -f $@
-	rm -rf $(ARCH)/*
+	rm -rf $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
 	for f in $(LIBS); do \
 	  case $$f in \
 	  *.$(OBJEXT) | *.rel) \
@@ -94,12 +96,12 @@ $(LIB): ${LIBS}
 	done
 	test -d $(project_libdir) || $(mkinstalldirs) $(project_libdir)
 	$(AR) rc $@ $(ARCH)/*
-	rm -f $(ARCH)/*.$(OBJEXT)
+	rm -f $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
 	$(RANLIB) $@
 
 TMPINSTALL_FILES += $(project_libdir)/librtemscpu$(LIB_VARIANT).a
 
-all-am: $(ARCH) $(LIB) $(TMPINSTALL_FILES)
+all-am: $(LIB) $(TMPINSTALL_FILES)
 
 install-data-hook: $(LIB)
 	@$(mkinstalldirs) $(DESTDIR)$(libdir)

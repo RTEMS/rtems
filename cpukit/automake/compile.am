@@ -56,10 +56,10 @@ CCLD = $(CC)
 
 CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
 
-${ARCH}/%.$(OBJEXT): %.c
+${ARCH}/%.$(OBJEXT): %.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 
-${ARCH}/%.$(OBJEXT): %.S
+${ARCH}/%.$(OBJEXT): %.S $(ARCH)/$(dirstamp)
 	${CCASCOMPILE} -o $@ -c $<
 
 # Make foo.rel from foo.$(OBJEXT)
@@ -116,8 +116,9 @@ ARCH_DEBUG_V = o-debug
 ARCH__V = $(ARCH_OPTIMIZE_V)
 ARCH = $(ARCH_$(VARIANT_V)_V)
 
-${ARCH}:
-	mkdir ${ARCH}
+${ARCH}/$(dirstamp):
+	@$(mkinstalldirs) $(ARCH)
+	@: > $(ARCH)/$(dirstamp)
 
 ## Setup the library suffix
 LIBSUFFIX_OPTIMIZE_V =
