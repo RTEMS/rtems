@@ -1,3 +1,7 @@
+2001-03-08	Joel Sherrill <joel@OARcorp.com>
+
+	* mips-stub.c: Removed warnings.
+
 2001-03-05	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* mips-stub.c: Debugged & tweaked the gdb command processing,
