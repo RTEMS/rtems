@@ -56,9 +56,9 @@ console_tbl Console_Port_Tbl[] = {
         16,                               /* ulMargin */
         8,                                /* ulHysteresis */
         NULL,                             /* pDeviceParams */
-        (unsigned32)EP7312_UARTCR1,       /* ulCtrlPort1 */
-        (unsigned32)EP7312_SYSFLG1,       /* ulCtrlPort2 */
-        (unsigned32)EP7312_UARTDR1,       /* ulDataPort */
+        (uint32_t)EP7312_UARTCR1,       /* ulCtrlPort1 */
+        (uint32_t)EP7312_SYSFLG1,       /* ulCtrlPort2 */
+        (uint32_t)EP7312_UARTDR1,       /* ulDataPort */
         0,                                /* getRegister */
         0,                                /* setRegister */
         0,                                /* getData */
@@ -86,15 +86,15 @@ static int     uart_set_attributes(int minor, const struct termios *t)
 
 int uart_poll_read(int minor)
 {
-    volatile unsigned32 *data_reg;
-    volatile unsigned32 *ctrl_reg1;
-    volatile unsigned32 *ctrl_reg2;
+    volatile uint32_t   *data_reg;
+    volatile uint32_t   *ctrl_reg1;
+    volatile uint32_t   *ctrl_reg2;
     char        c;
     int         err;
 
-    data_reg = (unsigned32*)Console_Port_Tbl[minor].ulDataPort;
-    ctrl_reg1 = (unsigned32*)Console_Port_Tbl[minor].ulCtrlPort1;
-    ctrl_reg2 = (unsigned32*)Console_Port_Tbl[minor].ulCtrlPort2;
+    data_reg = (uint32_t*)Console_Port_Tbl[minor].ulDataPort;
+    ctrl_reg1 = (uint32_t*)Console_Port_Tbl[minor].ulCtrlPort1;
+    ctrl_reg2 = (uint32_t*)Console_Port_Tbl[minor].ulCtrlPort2;
 
     if ((*ctrl_reg2 & EP7312_UART_URXFE1) != 0) {
         return -1;
@@ -114,15 +114,15 @@ BSP_output_char_function_type BSP_output_char = _BSP_null_char;
 
 static int uart_write(int minor, const char *buf, int len)
 {
-    volatile unsigned32 *data_reg;
-    volatile unsigned32 *ctrl_reg1;
-    volatile unsigned32 *ctrl_reg2;
+    volatile uint32_t   *data_reg;
+    volatile uint32_t   *ctrl_reg1;
+    volatile uint32_t   *ctrl_reg2;
     int i;
     char c;
 
-    data_reg = (unsigned32*)Console_Port_Tbl[minor].ulDataPort;
-    ctrl_reg1 = (unsigned32*)Console_Port_Tbl[minor].ulCtrlPort1;
-    ctrl_reg2 = (unsigned32*)Console_Port_Tbl[minor].ulCtrlPort2;
+    data_reg = (uint32_t*)Console_Port_Tbl[minor].ulDataPort;
+    ctrl_reg1 = (uint32_t*)Console_Port_Tbl[minor].ulCtrlPort1;
+    ctrl_reg2 = (uint32_t*)Console_Port_Tbl[minor].ulCtrlPort2;
 
     for (i = 0; i < len; i++) {
         /* Wait for fifo to have room */
@@ -139,13 +139,13 @@ static int uart_write(int minor, const char *buf, int len)
 
 static void uart_init(int minor)
 {
-    volatile unsigned32 *data_reg;
-    volatile unsigned32 *ctrl_reg1;
-    volatile unsigned32 *ctrl_reg2;
+    volatile uint32_t   *data_reg;
+    volatile uint32_t   *ctrl_reg1;
+    volatile uint32_t   *ctrl_reg2;
     
-    data_reg = (unsigned32*)Console_Port_Tbl[minor].ulDataPort;
-    ctrl_reg1 = (unsigned32*)Console_Port_Tbl[minor].ulCtrlPort1;
-    ctrl_reg2 = (unsigned32*)Console_Port_Tbl[minor].ulCtrlPort2;
+    data_reg = (uint32_t*)Console_Port_Tbl[minor].ulDataPort;
+    ctrl_reg1 = (uint32_t*)Console_Port_Tbl[minor].ulCtrlPort1;
+    ctrl_reg2 = (uint32_t*)Console_Port_Tbl[minor].ulCtrlPort2;
 
     /*   *ctrl_reg = (BSP_UART_DATA8       |
                  BSP_UART_STOP1       |

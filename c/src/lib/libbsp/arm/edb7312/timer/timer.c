@@ -24,7 +24,7 @@
 #include <bsp.h>
 #include <ep7312.h>
 
-rtems_unsigned16 tstart;
+uint16_t         tstart;
 rtems_boolean Timer_driver_Find_average_overhead;
 
 void Timer_initialize( void )
@@ -50,8 +50,8 @@ void Timer_initialize( void )
 
 int Read_timer( void )
 {
-  rtems_unsigned16 t;
-  rtems_unsigned32 total;
+  uint16_t         t;
+  uint32_t         total;
   t = *EP7312_TC2D;
 
   /*
@@ -60,7 +60,7 @@ int Read_timer( void )
    *  interrupts.
    */
 
-  total = (unsigned32)0x0000ffff - t;  /* result is 1/512000 = ~2 uS */
+  total = (uint32_t)0x0000ffff - t;  /* result is 1/512000 = ~2 uS */
   total = (total * 1953) / 1000;   /* convert to uS */
   if ( Timer_driver_Find_average_overhead == 1 )
     return total;          /* in XXX microsecond units */
