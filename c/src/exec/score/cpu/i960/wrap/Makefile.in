@@ -27,7 +27,7 @@ C_PIECES = cpu
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_PIECES = asm.h
+H_PIECES = asm.h i960RP.h
 H_FILES = $(H_PIECES:%=$(srcdir)/../%)
 
 # Assembly source names, if any, go here -- minus the .S

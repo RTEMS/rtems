@@ -12,10 +12,14 @@
  *
  *  $Id$
  */
+/*
+ * 1999/04/26: added support for Intel i960RP
+ */
 
 #if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
+#elif defined(__i960RP__)
 #else
-#warning "***    ENTIRE FILE IMPLEMENTED & TESTED FOR CA ONLY     ***"
+#warning "***  ENTIRE FILE IMPLEMENTED & TESTED FOR CA & RP ONLY  ***"
 #warning "*** THIS FILE WILL NOT COMPILE ON ANOTHER FAMILY MEMBER ***"
 #endif
 
@@ -61,9 +65,14 @@ unsigned32 _CPU_ISR_Get_level( void )
  *
  *  _CPU_ISR_install_raw_handler
  */
- 
+
+#if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
 #define _Is_vector_caching_enabled( _prcb ) \
    ((_prcb)->control_tbl->icon & 0x2000)
+#elif defined(__i960RP__)
+#define _Is_vector_caching_enabled( _prcb ) \
+   ((*((unsigned int *) ICON_ADDR)) & 0x2000)
+#endif
 
 void _CPU_ISR_install_raw_handler(
   unsigned32  vector,
@@ -71,7 +80,7 @@ void _CPU_ISR_install_raw_handler(
   proc_ptr   *old_handler
 )
 {
-  i960ca_PRCB *prcb = _CPU_Table.Prcb;
+  i960_PRCB   *prcb = _CPU_Table.Prcb;
   proc_ptr    *cached_intr_tbl = NULL;
 
   /*  The i80960CA does not support vectors 0-7.  The first 9 entries
@@ -124,8 +133,9 @@ void _CPU_ISR_install_vector(
  *  _CPU_Install_interrupt_stack
  */
 
+#if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
 #define soft_reset( prcb ) \
- { register i960ca_PRCB *_prcb = (prcb); \
+ { register i960_PRCB *_prcb = (prcb); \
    register unsigned32  *_next=0; \
    register unsigned32   _cmd  = 0x30000; \
    asm volatile( "lda    next,%1; \
@@ -134,11 +144,28 @@ void _CPU_ISR_install_vector(
                   : "=d" (_cmd), "=d" (_next), "=d" (_prcb) \
                   : "0"  (_cmd), "1"  (_next), "2"  (_prcb) ); \
  }
+#else
+#if defined(__i960RP__) || defined(__i960_RP__) || defined(__i960RP)
+#define soft_reset( prcb ) \
+ { register i960_PRCB *_prcb = (prcb); \
+   register unsigned32  *_next=0; \
+   register unsigned32   _cmd  = 0x300; \
+   asm volatile( "lda    next,%1; \
+                  sysctl %0,%1,%2; \
+            next: mov    g0,g0" \
+                  : "=d" (_cmd), "=d" (_next), "=d" (_prcb) \
+                  : "0"  (_cmd), "1"  (_next), "2"  (_prcb) ); \
+ }
+#endif
+#endif
 
 void _CPU_Install_interrupt_stack( void )
 {
-  i960ca_PRCB *prcb = _CPU_Table.Prcb;
+  i960_PRCB *prcb = _CPU_Table.Prcb;
   unsigned32   level;
+#if defined(__i960RP__) || defined(__i960_RP__)
+  int *isp = (int *) ISP_ADDR;
+#endif
 
   /*
    *  Set the Interrupt Stack in the PRCB and force a reload of it.
@@ -149,7 +176,11 @@ void _CPU_Install_interrupt_stack( void )
 
     prcb->intr_stack = _CPU_Interrupt_stack_low;
 
+#if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
     soft_reset( prcb );
+#elif defined(__i960RP__) || defined(__i960_RP__) || defined(__i960RP)
+    *isp = prcb->intr_stack;
+#endif
 
   _CPU_ISR_Enable( level );
 }

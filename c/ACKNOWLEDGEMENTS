@@ -161,6 +161,9 @@ The following persons/organizations have made contributions:
   GoAhead web server, BSP for the Motorola MCP750 PowerPC board, and
   numerous improvements to the i386 and PowerPC ports of RTEMS.
 
++ Mark Bronson <mark@ramix.com> of RAMIX for submitting i960RP
+  support and the rxgen960 board support package.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU

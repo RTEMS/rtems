@@ -215,10 +215,12 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 #define CPU_STACK_MINIMUM_SIZE          2048
 
 /*
- *  i960 is pretty tolerant of alignment.  Just put things on 4 byte boundaries.
+ *  i960 is pretty tolerant of alignment but some CPU models do
+ *  better with different default aligments so we use what the
+ *  CPU model selected in rtems/score/i960.h.
  */
 
-#define CPU_ALIGNMENT                   4
+#define CPU_ALIGNMENT                   I960_CPU_ALIGNMENT
 #define CPU_HEAP_ALIGNMENT              CPU_ALIGNMENT
 #define CPU_PARTITION_ALIGNMENT         CPU_ALIGNMENT
 

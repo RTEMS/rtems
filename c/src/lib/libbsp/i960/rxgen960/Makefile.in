@@ -1,0 +1,16 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH = @srcdir@
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/directory.cfg
+
+# wrapup is the one that actually builds and installs the library
+#  from the individual .rel files built in other directories
+SUB_DIRS=include startup clock console shmsupp timer wrapup

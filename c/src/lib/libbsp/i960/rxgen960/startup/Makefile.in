@@ -1,0 +1,82 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH = @srcdir@:@srcdir@/../../../shared
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+PGM=${ARCH}/startup.rel
+IPGM=${ARCH}/startup.indv
+
+
+# C source names, if any, go here -- minus the .c
+# OLD:C_PIECES=bspclean bsplibc bsppost bspstart main sbrk setvec
+# we assume to get the following sources from bsplib/shared
+C_PIECES=bspstart bsppost bspclean bsplibc main sbrk setvec kkprintf frmstr nmi XtInt
+C_FILES=$(C_PIECES:%=%.c)
+C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+
+# C individual source names, if any, go here -- minus the .c
+CI_PIECES=cntrltbl flttbl intrtbl prcb sctns fault nulsystbl systbl rom_cntrltbl rom_prcb rom_ibr
+CI_FILES=$(CI_PIECES:%=%.c)
+CI_O_FILES=$(CI_PIECES:%=${ARCH}/%.o)
+
+H_FILES=
+
+# Assembly source names, if any, go here -- minus the .s
+S_PIECES=
+S_FILES=$(S_PIECES:%=%.s)
+S_O_FILES=$(S_FILES:%.s=${ARCH}/%.o)
+
+# Assembly individual source names, if any, go here -- minus the .s
+SI_PIECES=rxgen_romld asmfault asmstub ihandler
+SI_FILES=$(SI_PIECES:%=%.s)
+SI_O_FILES=$(SI_FILES:%.s=${ARCH}/%.o)
+
+SRCS=$(C_FILES) $(H_FILES) $(S_FILES)
+OBJS=$(C_O_FILES) $(S_O_FILES)
+
+ISRCS=$(CI_FILES) $(H_FILES) $(SI_FILES)
+IOBJS=$(CI_O_FILES) $(SI_O_FILES)
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS +=
+CFLAGS   +=
+
+LD_PATHS  +=
+LD_LIBS   +=
+LDFLAGS   +=
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+${PGM}: ${SRCS} ${OBJS}
+	$(make-rel)
+
+${IPGM}: ${ISRCS} ${IOBJS}
+	touch ${IPGM}
+
+all:    ${ARCH} $(SRCS) $(PGM) $(ISRCS) $(IPGM)
+	$(INSTALL) $(srcdir)/linkcmds ${PROJECT_RELEASE}/lib
+	i960-rtems-strip --strip-debug ${ARCH}/rom_ibr.o
+
+# the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
+install:  all
+
+
