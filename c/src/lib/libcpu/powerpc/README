@@ -2,12 +2,23 @@
 #  $Id$
 #
 
-This hierarchy contains support routines for the various
-PowerPC processors.
+This hierarchy contains support routines for some of
+the varied and quite numerous PowerPC processors
+available from IBM and Motorola.
 
 Since these routines can differ amongst different members
 of the PowerPC family, an entry per CPU type is provided.
 
-Currently only the PPC403 is supported.
+Initially, (4/December/1995), only the PPC403 was supported.
+At this time, support is included for the following PowerPC
+family members:
 
-Andrew Bray 4/December/1995
+  + mpc505
+  + mpc750
+  + mpc821
+  + mpc860
+  + ppc403
+
+Note that because of similarities in various family members,
+the mpc823 should be able to use the mpc821 code and the
+mpc850 should be able to use the mpc850 code.
