@@ -28,9 +28,6 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
 
-    $(top_srcdir)/../shared/mvme/mvme16x_hw.h
-	$(INSTALL_DATA) $< $@
-
 $(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h

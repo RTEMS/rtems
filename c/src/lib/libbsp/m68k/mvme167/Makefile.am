@@ -17,7 +17,7 @@ include_HEADERS += include/fatal.h
 
 nodist_include_HEADERS += $(top_srcdir)/../shared/mvme/mvme16x_hw.h
 
-all: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
 
