@@ -44,7 +44,7 @@ This is the files for gcc and newlib that are shared by all targets.
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
   then
     rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
-    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info&gz'`
+    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
     test -n "$f" && for i in $f; do
       install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
     done
