@@ -1,3 +1,38 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* tm01/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* tm02/Makefile.am: Ditto.
+	* tm03/Makefile.am: Ditto.
+	* tm04/Makefile.am: Ditto.
+	* tm05/Makefile.am: Ditto.
+	* tm06/Makefile.am: Ditto.
+	* tm07/Makefile.am: Ditto.
+	* tm08/Makefile.am: Ditto.
+	* tm09/Makefile.am: Ditto.
+	* tm10/Makefile.am: Ditto.
+	* tm11/Makefile.am: Ditto.
+	* tm12/Makefile.am: Ditto.
+	* tm13/Makefile.am: Ditto.
+	* tm14/Makefile.am: Ditto.
+	* tm15/Makefile.am: Ditto.
+	* tm16/Makefile.am: Ditto.
+	* tm17/Makefile.am: Ditto.
+	* tm18/Makefile.am: Ditto.
+	* tm19/Makefile.am: Ditto.
+	* tm20/Makefile.am: Ditto.
+	* tm21/Makefile.am: Ditto.
+	* tm22/Makefile.am: Ditto.
+	* tm23/Makefile.am: Ditto.
+	* tm24/Makefile.am: Ditto.
+	* tm25/Makefile.am: Ditto.
+	* tm26/Makefile.am: Ditto.
+	* tm27/Makefile.am: Ditto.
+	* tm28/Makefile.am: Ditto.
+	* tm29/Makefile.am: Ditto.
+	* tmck/Makefile.am: Ditto.
+	* tmoverhd/Makefile.am: Ditto.
+
 2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* tmtests.am: Add dirstamp support.
