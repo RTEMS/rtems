@@ -53,9 +53,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <termios.h>
-#include <bsp.h>            /* for nvram interface to board */
 
 extern rtems_cpu_table Cpu_table;
+
+/* BSP supplied routine */
+extern int mbx8xx_console_use_maximum_buffer_size(void);
 
 #ifdef EPPCBUG_SMC1
 extern unsigned32 simask_copy;
@@ -703,18 +705,10 @@ m8xx_uart_scc_initialize (int minor)
 
   sccparms->rfcr = M8xx_RFCR_MOT | M8xx_RFCR_DMA_SPACE(0);
   sccparms->tfcr = M8xx_TFCR_MOT | M8xx_TFCR_DMA_SPACE(0);
-#if NVRAM_CONFIGURE == 1
-  if ( (nvram->console_mode & 0x06) == 0x02 )
+  if ( mbx8xx_console_use_maximum_buffer_size() )
     sccparms->mrblr = RXBUFSIZE;    /* Maximum Rx buffer size */
   else
     sccparms->mrblr = 1;            /* Maximum Rx buffer size */
-#else
-#if UARTS_IO_MODE == 1
-  sccparms->mrblr = RXBUFSIZE;      /* Maximum Rx buffer size */
-#else
-  sccparms->mrblr = 1;              /* Maximum Rx buffer size */
-#endif
-#endif
   sccparms->un.uart.max_idl = 10;   /* Set nb of idle chars to close buffer */
   sccparms->un.uart.brkcr = 0;      /* Set nb of breaks to send for STOP Tx */
 

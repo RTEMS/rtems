@@ -1,5 +1,12 @@
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
+	* mpc8xx/console-generic/console-generic.c: Removed include of
+	<bsp.h> by adding BSP dependent routine
+	mbx8xx_console_use_maximum_buffer_size() which can be hard coded
+	or check non-volatile memory for configuration.
+
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
 	* mpc8xx/console-generic/console-generic.c: Removed warnings.
 
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
