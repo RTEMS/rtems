@@ -92,6 +92,7 @@ console_poll_write(int minor, const char *buf, int len)
         rc = __trap34(SYS_write, 1, (char *)buf, len);
         return 0;
     }
+    return -1;
 }
 
 /* console_set_attributes --
