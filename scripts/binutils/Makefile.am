@@ -38,6 +38,10 @@ mips-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache mips-rtems@osversion@ > $@
 RPM_SPECS_DATA += mips-rtems@osversion@-$(BINUTILSVERS).spec
 
+mips64-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache mips64-rtems@osversion@ > $@
+RPM_SPECS_DATA += mips64-rtems@osversion@-$(BINUTILSVERS).spec
+
 or32-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache or32-rtems@osversion@ > $@
 RPM_SPECS_DATA += or32-rtems@osversion@-$(BINUTILSVERS).spec

@@ -48,6 +48,10 @@ mips-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache mips-rtems@osversion@ > $@
 RPM_SPECS_DATA += mips-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
+mips64-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache mips64-rtems@osversion@ > $@
+RPM_SPECS_DATA += mips64-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+
 powerpc-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache powerpc-rtems@osversion@ > $@
 RPM_SPECS_DATA += powerpc-rtems@osversion@-$(GCC3NEWLIBVERS).spec

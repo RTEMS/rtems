@@ -1,3 +1,10 @@
+2004-10-29	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Update gcc to 3.3.5 and binutils to 2.15.
+	* autotools/autoconf-rtems.spec.in: Temporarily do not include
+	some of the documentation since it causes the RPM build to fail.
+	* binutils/Makefile.am, gcc3newlib/Makefile.am: Add mips64-rtems.
+
 2004-09-29	Joel Sherrill <joel@OARcorp.com>
 
 	* buildall.in, buildalltar.in, binutils/Makefile.am,
