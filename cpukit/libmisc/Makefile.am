@@ -17,18 +17,19 @@ noinst_HEADERS =
 ## capture
 
 libcapture_C_FILES = capture/capture.c capture/capture-cli.c
-libcapture_OBJS = $(C_FILES:capture/%.c=capture/$(ARCH)/%.$(OBJEXT))
+libcapture_OBJS = $(libcapture_C_FILES:capture/%.c=capture/$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS += capture/capture.h capture/capture-cli.h
 
-capture/$(ARCH):
-	@$(mkinstalldirs) $@
-capture/$(ARCH)/%.$(OBJEXT): capture/%.c
+capture/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) capture/$(ARCH)
+	@: > capture/$(ARCH)/$(dirstamp)
+capture/$(ARCH)/%.$(OBJEXT): capture/%.c capture/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 capture/$(ARCH)/libcapture.a: $(libcapture_OBJS)
 	$(make-library)
 
-LIBS += capture/$(ARCH) capture/$(ARCH)/libcapture.a
+LIBS += capture/$(ARCH)/libcapture.a
 
 EXTRA_DIST += capture/README capture/capture.c capture/capture-cli.c
 
@@ -39,14 +40,15 @@ libcpuuse_OBJS = $(libcpuuse_C_FILES:cpuuse/%.c=cpuuse/$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS += cpuuse/cpuuse.h
 
-cpuuse/$(ARCH):
-	@$(mkinstalldirs) $@
-cpuuse/$(ARCH)/%.$(OBJEXT): cpuuse/%.c
+cpuuse/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) cpuuse/$(ARCH)
+	@: > cpuuse/$(ARCH)/$(dirstamp)
+cpuuse/$(ARCH)/%.$(OBJEXT): cpuuse/%.c cpuuse/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 cpuuse/$(ARCH)/libcpuuse.a: $(libcpuuse_OBJS)
 	$(make-library)
 
-LIBS += cpuuse/$(ARCH) cpuuse/$(ARCH)/libcpuuse.a
+LIBS += cpuuse/$(ARCH)/libcpuuse.a
 EXTRA_DIST += cpuuse/README cpuuse/cpuuse.c
 
 ## devnull
@@ -57,14 +59,15 @@ libdevnull_OBJS = \
 
 include_rtems_HEADERS += devnull/devnull.h
 
-devnull/$(ARCH):
-	@$(mkinstalldirs) $@
-devnull/$(ARCH)/%.$(OBJEXT): devnull/%.c
+devnull/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) devnull/$(ARCH)
+	@: > devnull/$(ARCH)/$(dirstamp)
+devnull/$(ARCH)/%.$(OBJEXT): devnull/%.c devnull/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 devnull/$(ARCH)/libdevnull.a: $(libdevnull_OBJS)
 	$(make-library)
 
-LIBS += devnull/$(ARCH) devnull/$(ARCH)/libdevnull.a
+LIBS +=  devnull/$(ARCH)/libdevnull.a
 
 EXTRA_DIST += devnull/devnull.c
 
@@ -73,14 +76,15 @@ EXTRA_DIST += devnull/devnull.c
 libdummy_C_FILES = dummy/dummy.c
 libdummy_OBJS = $(libdummy_C_FILES:dummy/%.c=dummy/$(ARCH)/%.$(OBJEXT))
 
-dummy/$(ARCH):
-	@$(mkinstalldirs) $@
-dummy/$(ARCH)/%.$(OBJEXT): dummy/%.c
+dummy/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) dummy/$(ARCH)
+	@: > dummy/$(ARCH)/$(dirstamp)
+dummy/$(ARCH)/%.$(OBJEXT): dummy/%.c dummy/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 dummy/$(ARCH)/libdummy.a: $(libdummy_OBJS)
 	$(make-library)
 
-LIBS += dummy/$(ARCH) dummy/$(ARCH)/libdummy.a
+LIBS +=  dummy/$(ARCH)/libdummy.a
 
 EXTRA_DIST += dummy/README dummy/dummy.c
 
@@ -92,14 +96,15 @@ libdumpbuf_OBJS = \
 
 include_rtems_HEADERS += dumpbuf/dumpbuf.h
 
-dumpbuf/$(ARCH):
-	@$(mkinstalldirs) $@
-dumpbuf/$(ARCH)/%.$(OBJEXT): dumpbuf/%.c
+dumpbuf/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) dumpbuf/$(ARCH)
+	@: > dumpbuf/$(ARCH)/$(dirstamp)
+dumpbuf/$(ARCH)/%.$(OBJEXT): dumpbuf/%.c dumpbuf/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 dumpbuf/$(ARCH)/libdumpbuf.a: $(libdumpbuf_OBJS)
 	$(make-library)
 
-LIBS += dumpbuf/$(ARCH) dumpbuf/$(ARCH)/libdumpbuf.a
+LIBS +=  dumpbuf/$(ARCH)/libdumpbuf.a
 
 EXTRA_DIST += dumpbuf/dumpbuf.c
 
@@ -125,14 +130,15 @@ include_rtems_HEADERS += monitor/monitor.h
 
 noinst_HEADERS += monitor/symbols.h
 
-monitor/$(ARCH):
-	@$(mkinstalldirs) $@
-monitor/$(ARCH)/%.$(OBJEXT): monitor/%.c
+monitor/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) monitor/$(ARCH)
+	@: > monitor/$(ARCH)/$(dirstamp)
+monitor/$(ARCH)/%.$(OBJEXT): monitor/%.c monitor/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 monitor/$(ARCH)/libmonitor.a: $(libmonitor_OBJS)
 	$(make-library)
 
-LIBS += monitor/$(ARCH) monitor/$(ARCH)/libmonitor.a
+LIBS +=  monitor/$(ARCH)/libmonitor.a
 
 EXTRA_DIST += monitor/README monitor/mon-command.c monitor/mon-config.c \
     monitor/mon-dname.c monitor/mon-driver.c monitor/mon-extension.c \
@@ -148,14 +154,15 @@ libmw_fb_OBJS = $(libmw_fb_C_FILES:mw-fb/%.c=mw-fb/${ARCH}/%.$(OBJEXT))
 
 include_rtems_HEADERS += mw-fb/mw_fb.h mw-fb/mw_uid.h
 
-mw-fb/$(ARCH):
-	@$(mkinstalldirs) $@
-mw-fb/$(ARCH)/%.$(OBJEXT): mw-fb/%.c
+mw-fb/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) mw-fb/$(ARCH)
+	@: > mw-fb/$(ARCH)/$(dirstamp)
+mw-fb/$(ARCH)/%.$(OBJEXT): mw-fb/%.c mw-fb/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 mw-fb/$(ARCH)/libmw-fb.a: $(libmw_fb_OBJS)
 	$(make-library)
 
-LIBS += mw-fb/$(ARCH) mw-fb/$(ARCH)/libmw-fb.a
+LIBS +=  mw-fb/$(ARCH)/libmw-fb.a
 
 EXTRA_DIST += $(libmw_fb_C_FILES)
 
@@ -168,15 +175,16 @@ if LIBSHELL
 include_rtems_HEADERS += shell/shell.h
 endif
 
-shell/$(ARCH):
-	@$(mkinstalldirs) $@
-shell/$(ARCH)/%.$(OBJEXT): shell/%.c
+shell/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) shell/$(ARCH)
+	@: > shell/$(ARCH)/$(dirstamp)
+shell/$(ARCH)/%.$(OBJEXT): shell/%.c shell/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 shell/$(ARCH)/libshell.a: $(libshell_OBJS)
 	$(make-library)
 
 if LIBSHELL
-LIBS += shell/$(ARCH) shell/$(ARCH)/libshell.a
+LIBS +=  shell/$(ARCH)/libshell.a
 endif
 
 EXTRA_DIST += shell/README shell/shell.c shell/cmds.c
@@ -189,14 +197,15 @@ librtmonuse_OBJS = \
 
 include_rtems_HEADERS += rtmonuse/rtmonuse.h
 
-rtmonuse/$(ARCH):
-	@$(mkinstalldirs) $@
-rtmonuse/$(ARCH)/%.$(OBJEXT): rtmonuse/%.c
+rtmonuse/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) rtmonuse/$(ARCH)
+	@: > rtmonuse/$(ARCH)/$(dirstamp)
+rtmonuse/$(ARCH)/%.$(OBJEXT): rtmonuse/%.c rtmonuse/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 rtmonuse/$(ARCH)/librtmonuse.a: $(librtmonuse_OBJS)
 	$(make-library)
 
-LIBS += rtmonuse/$(ARCH) rtmonuse/$(ARCH)/librtmonuse.a
+LIBS +=  rtmonuse/$(ARCH)/librtmonuse.a
 
 EXTRA_DIST += rtmonuse/rtmonuse.c
 
@@ -211,15 +220,16 @@ include_HEADERS += serdbg/serdbgcnf.h serdbg/serdbg.h \
     serdbg/termios_printk_cnf.h serdbg/termios_printk.h
 endif
 
-serdbg/$(ARCH):
-	@$(mkinstalldirs) $@
-serdbg/$(ARCH)/%.$(OBJEXT): serdbg/%.c
+serdbg/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) serdbg/$(ARCH)
+	@: > serdbg/$(ARCH)/$(dirstamp)
+serdbg/$(ARCH)/%.$(OBJEXT): serdbg/%.c serdbg/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 serdbg/$(ARCH)/libserdbg.a: $(libserdbg_OBJS)
 	$(make-library)
 
 if LIBSERDBG
-LIBS += serdbg/$(ARCH) serdbg/$(ARCH)/libserdbg.a
+LIBS +=  serdbg/$(ARCH)/libserdbg.a
 endif
 
 EXTRA_DIST += serdbg/README serdbg/serdbg.c serdbg/serdbgio.c \
@@ -236,14 +246,15 @@ include_rtems_HEADERS += stackchk/stackchk.h
 
 noinst_HEADERS += stackchk/internal.h
 
-stackchk/$(ARCH):
-	@$(mkinstalldirs) $@
-stackchk/$(ARCH)/%.$(OBJEXT): stackchk/%.c
+stackchk/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) stackchk/$(ARCH)
+	@: > stackchk/$(ARCH)/$(dirstamp)
+stackchk/$(ARCH)/%.$(OBJEXT): stackchk/%.c stackchk/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 stackchk/$(ARCH)/libstackchk.a: $(libstackchk_OBJS)
 	$(make-library)
 
-LIBS += stackchk/$(ARCH) stackchk/$(ARCH)/libstackchk.a
+LIBS +=  stackchk/$(ARCH)/libstackchk.a
 
 EXTRA_DIST += stackchk/README stackchk/check.c
 
@@ -254,14 +265,15 @@ libuntar_OBJS = $(libuntar_C_FILES:untar/%.c=untar/$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS += untar/untar.h
 
-untar/$(ARCH):
-	@$(mkinstalldirs) $@
-untar/$(ARCH)/%.$(OBJEXT): untar/%.c
+untar/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) untar/$(ARCH)
+	@: > untar/$(ARCH)/$(dirstamp)
+untar/$(ARCH)/%.$(OBJEXT): untar/%.c untar/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 untar/$(ARCH)/libuntar.a: $(libuntar_OBJS)
 	$(make-library)
 
-LIBS += untar/$(ARCH) untar/$(ARCH)/libuntar.a
+LIBS +=  untar/$(ARCH)/libuntar.a
 
 EXTRA_DIST += untar/README untar/untar.c
 
@@ -273,14 +285,15 @@ libfsmount_OBJS = \
 
 include_rtems_HEADERS += fsmount/fsmount.h
 
-fsmount/$(ARCH):
-	@$(mkinstalldirs) $@
-fsmount/$(ARCH)/%.$(OBJEXT): fsmount/%.c
+fsmount/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) fsmount/$(ARCH)
+	@: > fsmount/$(ARCH)/$(dirstamp)
+fsmount/$(ARCH)/%.$(OBJEXT): fsmount/%.c fsmount/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 fsmount/$(ARCH)/libfsmount.a: $(libfsmount_OBJS)
 	$(make-library)
 
-LIBS += fsmount/$(ARCH) fsmount/$(ARCH)/libfsmount.a
+LIBS += fsmount/$(ARCH)/libfsmount.a
 
 EXTRA_DIST += fsmount/README fsmount/fsmount.c
 
