@@ -673,7 +673,6 @@ SONIC_STATIC int sonic_raw (struct iface *iface, struct mbuf **bpp)
   dp->tdaActiveCount++;
   dp->tdaHead = tdp;
 
-  sonic_enable_interrupts( rp, (IMR_PINTEN | IMR_PTXEN | IMR_TXEREN) );
   sonic_write_register( rp, SONIC_REG_CR, CR_TXP );
 
   /*
