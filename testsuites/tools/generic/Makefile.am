@@ -16,6 +16,7 @@ TMPINSTALL_FILES =
 $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_ROOT)/@RTEMS_BSP@/tests
 	@: > $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
 
 $(PROJECT_ROOT)/@RTEMS_BSP@/tests/difftest: difftest $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
 	$(INSTALL_SCRIPT) $< $(PROJECT_ROOT)/@RTEMS_BSP@/tests/difftest
@@ -24,5 +25,7 @@ TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/tests/difftest
 $(PROJECT_ROOT)/@RTEMS_BSP@/tests/sorttimes: sorttimes $(PROJECT_ROOT)/@RTEMS_BSP@/tests/$(dirstamp)
 	$(INSTALL_SCRIPT) $< $(PROJECT_ROOT)/@RTEMS_BSP@/tests/sorttimes
 TMPINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/tests/sorttimes
+
+CLEANFILES = $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../automake/local.am
