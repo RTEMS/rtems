@@ -69,4 +69,4 @@ extern "C" {
 }
 #endif
 
-#endif /* ! _INCLUDE_NO_CPU_h */
+#endif /* _RTEMS_SCORE_OR32_H */

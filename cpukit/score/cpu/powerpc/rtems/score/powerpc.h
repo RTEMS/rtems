@@ -755,4 +755,4 @@ extern "C" {
 }
 #endif
 
-#endif /* ! _INCLUDE_PPC_h */
+#endif /* _RTEMS_SCORE_POWERPC_H */

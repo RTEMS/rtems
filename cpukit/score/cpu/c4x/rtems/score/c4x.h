@@ -364,4 +364,4 @@ static inline void c4x_set_ittp(void *_ittp_value)
 }
 #endif
 
-#endif /* ! _INCLUDE_C4X_h */
+#endif /* _RTEMS_SCORE_C4X_H */

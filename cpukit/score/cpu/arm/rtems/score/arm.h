@@ -80,4 +80,4 @@ extern "C" {
 }
 #endif
 
-#endif /* ! _INCLUDE_ARM_h */
+#endif /* _RTEMS_SCORE_ARM_H */

@@ -265,4 +265,4 @@ extern "C" {
 }
 #endif
 
-#endif /* ! _INCLUDE_SPARC_h */
+#endif /* _RTEMS_SCORE_SPARC_H */

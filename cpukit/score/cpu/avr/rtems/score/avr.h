@@ -87,4 +87,4 @@ extern "C" {
 }
 #endif
 
-#endif /* ! _rtems_score_avr_h */
+#endif /* _RTEMS_SCORE_AVR_H */

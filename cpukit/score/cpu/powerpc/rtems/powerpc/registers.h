@@ -382,4 +382,4 @@ static inline  void PPC_Set_timebase_register (unsigned long long tbr)
 }
 #endif
 
-#endif /* __rtems_powerpc_registers_h */
+#endif /* _RTEMS_POWERPC_REGISTERS_H */
