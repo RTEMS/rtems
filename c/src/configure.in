@@ -33,6 +33,7 @@ if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
 cfg_subdirs="$cfg_subdirs librtems++";
 fi 
 AC_CONFIG_SUBDIRS($cfg_subdirs)
+AC_CONFIG_SUBDIRS(wrapup)
 AC_SUBST(cfg_subdirs)
 AC_CONFIG_SUBDIRS(tests)
 
