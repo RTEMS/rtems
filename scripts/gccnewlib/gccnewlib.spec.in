@@ -309,8 +309,8 @@ This is the gcc/java compiler for @target_alias@
 %dir /opt/rtems/bin
 /opt/rtems/bin/@target_alias@-gcj@exe_ext@
 
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jc1
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jvgenmain
+/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jc1@exe_ext@
+/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jvgenmain@exe_ext@
 
 # ==============================================================
 # rtems-base-g77
