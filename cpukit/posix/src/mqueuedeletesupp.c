@@ -40,8 +40,10 @@ void _POSIX_Message_queue_Delete(
   if ( !the_mq->linked && !the_mq->open_count ) {
       _Objects_Close( &_POSIX_Message_queue_Information, &the_mq->Object );
  
-      _CORE_message_queue_Flush(
-        &the_mq->Message_queue
+      _CORE_message_queue_Close(
+        &the_mq->Message_queue,
+        NULL,        /* no MP support */
+        CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED
       );
 
     _POSIX_Message_queue_Free( the_mq );
