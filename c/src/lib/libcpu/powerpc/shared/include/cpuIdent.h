@@ -34,6 +34,7 @@ typedef enum
   PPC_8260 = 0x81,
   PPC_8240 = PPC_8260,
   PPC_8245 = 0x8081,
+  PPC_PSIM = 0xfffe,  /* GDB PowerPC simulator -- fake version */
   PPC_UNKNOWN = 0xffff
 } ppc_cpu_id_t;
 
