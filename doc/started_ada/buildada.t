@@ -50,14 +50,14 @@ This section lists the components of an RTEMS cross development system.
 Included are the locations of each component as well as any required RTEMS
 specific patches.
 
-@subheading @value{GCC-VERSION}
+@subheading @value{GCCVERSION}
 @example
-    FTP Site:    @value{GCC-FTPSITE}
-    Directory:   @value{GCC-FTPDIR}
-    File:        @value{GCC-TAR}
+    FTP Site:    @value{GCCFTPSITE}
+    Directory:   @value{GCCFTPDIR}
+    File:        @value{GCCTAR}
 @ifset use-html
-@c    URL:         @uref{ftp://@value{GCC-FTPSITE}@value{GCC-FTPDIR}/@value{GCC-TAR},Download @value{GCC-VERSION}}
-    URL:         ftp://@value{GCC-FTPSITE}@value{GCC-FTPDIR}/@value{GCC-TAR}
+@c    URL:         @uref{ftp://@value{GCCFTPSITE}@value{GCCFTPDIR}/@value{GCCTAR},Download @value{GCCVERSION}}
+    URL:         ftp://@value{GCCFTPSITE}@value{GCCFTPDIR}/@value{GCCTAR}
 @end ifset
 @end example
 
@@ -72,70 +72,70 @@ specific patches.
 @end ifset
 @end example
 
-@subheading @value{BINUTILS-VERSION}
+@subheading @value{BINUTILSVERSION}
 @example
-    FTP Site:    @value{BINUTILS-FTPSITE}
-    Directory:   @value{BINUTILS-FTPDIR}
-    File:        @value{BINUTILS-TAR}
+    FTP Site:    @value{BINUTILSFTPSITE}
+    Directory:   @value{BINUTILSFTPDIR}
+    File:        @value{BINUTILSTAR}
 @ifset use-html
-@c    URL:         @uref{ftp://@value{BINUTILS-FTPSITE}@value{BINUTILS-FTPDIR}/@value{BINUTILS-TAR}, Download @value{BINUTILS-VERSION}}
-    URL:         ftp://@value{BINUTILS-FTPSITE}@value{BINUTILS-FTPDIR}/@value{BINUTILS-TAR}
+@c    URL:         @uref{ftp://@value{BINUTILSFTPSITE}@value{BINUTILSFTPDIR}/@value{BINUTILSTAR}, Download @value{BINUTILSVERSION}}
+    URL:         ftp://@value{BINUTILSFTPSITE}@value{BINUTILSFTPDIR}/@value{BINUTILSTAR}
 @end ifset
 @end example
 
-@subheading @value{NEWLIB-VERSION}
+@subheading @value{NEWLIBVERSION}
 @example
-    FTP Site:    @value{NEWLIB-FTPSITE}
-    Directory:   @value{NEWLIB-FTPDIR}
-    File:        @value{NEWLIB-TAR}
+    FTP Site:    @value{NEWLIBFTPSITE}
+    Directory:   @value{NEWLIBFTPDIR}
+    File:        @value{NEWLIBTAR}
 @ifset use-html
-@c    URL:         @uref{ftp://@value{NEWLIB-FTPSITE}@value{NEWLIB-FTPDIR}/@value{NEWLIB-TAR}, Download @value{NEWLIB-VERSION}}
-    URL:         ftp://@value{NEWLIB-FTPSITE}@value{NEWLIB-FTPDIR}/@value{NEWLIB-TAR}
+@c    URL:         @uref{ftp://@value{NEWLIBFTPSITE}@value{NEWLIBFTPDIR}/@value{NEWLIBTAR}, Download @value{NEWLIBVERSION}}
+    URL:         ftp://@value{NEWLIBFTPSITE}@value{NEWLIBFTPDIR}/@value{NEWLIBTAR}
 @end ifset
 @end example
 
-@subheading @value{RTEMS-VERSION}
+@subheading @value{RTEMSVERSION}
 @example
-    FTP Site:    @value{RTEMS-FTPSITE}
-    Directory:   @value{RTEMS-FTPDIR}
-    File:        @value{RTEMS-TAR}
+    FTP Site:    @value{RTEMSFTPSITE}
+    Directory:   @value{RTEMSFTPDIR}
+    File:        @value{RTEMSTAR}
 @ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}, Download RTEMS components}
-    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}
+@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}, Download RTEMS components}
+    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}
 @end ifset
 @end example
 
 @subheading RTEMS Hello World
 @example
-    FTP Site:    @value{RTEMS-FTPSITE}
-    Directory:   @value{RTEMS-FTPDIR}
+    FTP Site:    @value{RTEMSFTPSITE}
+    Directory:   @value{RTEMSFTPDIR}
     File:        hello_world_ada.tgz
 @ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools/hello_world_ada.tgz, Download RTEMS Hello World}
-    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools/hello_world_ada.tgz
+@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/ada_tools/hello_world_ada.tgz, Download RTEMS Hello World}
+    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/ada_tools/hello_world_ada.tgz
 @end ifset       
 @end example
 
 @subheading RTEMS Specific Tool Patches and Scripts
 @example
-    FTP Site:    @value{RTEMS-FTPSITE}
-    Directory:   @value{RTEMS-FTPDIR}/ada_tools/source
-    File:        @value{BUILDTOOLS-TAR}
-@ifset BINUTILS-RTEMSPATCH
-    File:        @value{BINUTILS-RTEMSPATCH}
+    FTP Site:    @value{RTEMSFTPSITE}
+    Directory:   @value{RTEMSFTPDIR}/ada_tools/source
+    File:        @value{BUILDTOOLSTAR}
+@ifset BINUTILSRTEMSPATCH
+    File:        @value{BINUTILSRTEMSPATCH}
 @end ifset
-@ifset NEWLIB-RTEMSPATCH
-    File:        @value{NEWLIB-RTEMSPATCH}
+@ifset NEWLIBRTEMSPATCH
+    File:        @value{NEWLIBRTEMSPATCH}
 @end ifset
-@ifset GCC-RTEMSPATCH
-    File:        @value{GCC-RTEMSPATCH}
+@ifset GCCRTEMSPATCH
+    File:        @value{GCCRTEMSPATCH}
 @end ifset
 @ifset GNAT-RTEMSPATCH
     File:        @value{GNAT-RTEMSPATCH}
 @end ifset
 @ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools/source, Download RTEMS patches}
-    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools/source
+@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/ada_tools/source, Download RTEMS patches}
+    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/ada_tools/source
 @end ifset
 @end example
 
@@ -146,21 +146,21 @@ tar files using the following command sequence:
 
 @example
 cd tools
-tar xzf ../archive/@value{GCC-TAR}
+tar xzf ../archive/@value{GCCTAR}
 tar xzf ../archive/@value{GNAT-TAR}
-tar xzf ../archive/@value{BINUTILS-TAR}
-tar xzf ../archive/@value{NEWLIB-TAR}
-tar xzf ../archive/@value{BUILDTOOLS-TAR}
+tar xzf ../archive/@value{BINUTILSTAR}
+tar xzf ../archive/@value{NEWLIBTAR}
+tar xzf ../archive/@value{BUILDTOOLSTAR}
 @end example
 
 After the compressed tar files have been unpacked, the following
 directories will have been created under tools. 
 
 @itemize @bullet
-@item @value{BINUTILS-UNTAR}
-@item @value{GCC-UNTAR}
+@item @value{BINUTILSUNTAR}
+@item @value{GCCUNTAR}
 @item @value{GNAT-UNTAR}
-@item @value{NEWLIB-UNTAR}
+@item @value{NEWLIBUNTAR}
 @end itemize
 
 There will also be a set of scripts in the current directory
@@ -193,20 +193,20 @@ The directory tree should look something like the following figure:
 @group
 /whatever/prefix/you/choose/
         archive/
-            @value{GCC-TAR}
+            @value{GCCTAR}
             @value{GNAT-TAR}
-            @value{BINUTILS-TAR}
-            @value{NEWLIB-TAR}
-            @value{RTEMS-TAR}
-            @value{BUILDTOOLS-TAR}
-@ifset GCC-RTEMSPATCH
-            @value{GCC-RTEMSPATCH}
+            @value{BINUTILSTAR}
+            @value{NEWLIBTAR}
+            @value{RTEMSTAR}
+            @value{BUILDTOOLSTAR}
+@ifset GCCRTEMSPATCH
+            @value{GCCRTEMSPATCH}
 @end ifset
-@ifset BINUTILS-RTEMSPATCH
-            @value{BINUTILS-RTEMSPATCH}
+@ifset BINUTILSRTEMSPATCH
+            @value{BINUTILSRTEMSPATCH}
 @end ifset
-@ifset NEWLIB-RTEMSPATCH
-            @value{NEWLIB-RTEMSPATCH}
+@ifset NEWLIBRTEMSPATCH
+            @value{NEWLIBRTEMSPATCH}
 @end ifset
 @ifset GNAT-RTEMSPATCH
             @value{GNAT-RTEMSPATCH}
@@ -214,10 +214,10 @@ The directory tree should look something like the following figure:
             hello_world_ada.tgz
             bit_ada
         tools/
-            @value{BINUTILS-UNTAR}/
-            @value{GCC-UNTAR}/
+            @value{BINUTILSUNTAR}/
+            @value{GCCUNTAR}/
             @value{GNAT-UNTAR}/
-            @value{NEWLIB-UNTAR}/
+            @value{NEWLIBUNTAR}/
             bit_ada
             bit_gdb
             bit_rtems
@@ -263,25 +263,25 @@ documentation before posting a problem to a mailing list or news group.
 
 @section Apply RTEMS Patch to GCC
 
-@ifclear GCC-RTEMSPATCH
-No RTEMS specific patches are required for @value{GCC-VERSION} to
-support @value{RTEMS-VERSION}.
+@ifclear GCCRTEMSPATCH
+No RTEMS specific patches are required for @value{GCCVERSION} to
+support @value{RTEMSVERSION}.
 @end ifclear
 
-@ifset GCC-RTEMSPATCH
+@ifset GCCRTEMSPATCH
 
 Apply the patch using the following command sequence:
 
 @example
-cd tools/@value{GCC-UNTAR}
-zcat ../../archive/@value{GCC-RTEMSPATCH} | patch -p1
+cd tools/@value{GCCUNTAR}
+zcat ../../archive/@value{GCCRTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
 sequence:
 
 @example
-cd tools/@value{GCC-UNTAR}
+cd tools/@value{GCCUNTAR}
 find . -name "*.rej" -print
 @end example
 
@@ -296,24 +296,24 @@ This should not happen with a good patch file which is properly applied.
 
 @section Apply RTEMS Patch to binutils
 
-@ifclear BINUTILS-RTEMSPATCH
-No RTEMS specific patches are required for @value{BINUTILS-VERSION} to
-support @value{RTEMS-VERSION}.
+@ifclear BINUTILSRTEMSPATCH
+No RTEMS specific patches are required for @value{BINUTILSVERSION} to
+support @value{RTEMSVERSION}.
 @end ifclear
 
-@ifset BINUTILS-RTEMSPATCH
+@ifset BINUTILSRTEMSPATCH
 Apply the patch using the following command sequence:
 
 @example
-cd tools/@value{BINUTILS-UNTAR}
-zcat ../../archive/@value{BINUTILS-RTEMSPATCH} | patch -p1
+cd tools/@value{BINUTILSUNTAR}
+zcat ../../archive/@value{BINUTILSRTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
 sequence: 
 
 @example
-cd tools/@value{BINUTILS-UNTAR}
+cd tools/@value{BINUTILSUNTAR}
 find . -name "*.rej" -print
 @end example
 
@@ -328,25 +328,25 @@ This should not happen with a good patch file which is properly applied.
 
 @section Apply RTEMS Patch to newlib
 
-@ifclear NEWLIB-RTEMSPATCH
-No RTEMS specific patches are required for @value{NEWLIB-VERSION} to
-support @value{RTEMS-VERSION}.
+@ifclear NEWLIBRTEMSPATCH
+No RTEMS specific patches are required for @value{NEWLIBVERSION} to
+support @value{RTEMSVERSION}.
 @end ifclear
 
-@ifset NEWLIB-RTEMSPATCH
+@ifset NEWLIBRTEMSPATCH
 
 Apply the patch using the following command sequence:
 
 @example
-cd tools/@value{NEWLIB-UNTAR}
-zcat ../../archive/@value{NEWLIB-RTEMSPATCH} | patch -p1
+cd tools/@value{NEWLIBUNTAR}
+zcat ../../archive/@value{NEWLIBRTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
 sequence: 
 
 @example
-cd tools/@value{NEWLIB-UNTAR}
+cd tools/@value{NEWLIBUNTAR}
 find . -name "*.rej" -print
 @end example
 
@@ -363,7 +363,7 @@ This should not happen with a good patch file which is properly applied.
 
 @ifclear GNAT-RTEMSPATCH
 No RTEMS specific patches are required for @value{GNAT-VERSION} to
-support @value{RTEMS-VERSION}.
+support @value{RTEMSVERSION}.
 @end ifclear
 
 @ifset GNAT-RTEMSPATCH
@@ -397,11 +397,11 @@ This should not happen with a good patch file which is properly applied.
 
 Copy the ada subtree in the patched subtree of
 tools/@value{GNAT-UNTAR}/src to the
-tools/@value{GCC-UNTAR} directory:
+tools/@value{GCCUNTAR} directory:
 
 @example
 cd tools/@value{GNAT-UNTAR}/src
-cp -r ada ../../@value{GCC-UNTAR}
+cp -r ada ../../@value{GCCUNTAR}
 @end example
 
 
@@ -428,30 +428,30 @@ under the build directory.  The build directory will be removed
 automatically upon successful completion of the build procedure.
 
 @item BINUTILS
-is the directory under tools that contains @value{BINUTILS-UNTAR}. 
+is the directory under tools that contains @value{BINUTILSUNTAR}. 
 For example:
 
 @example
-BINUTILS=@value{BINUTILS-UNTAR}
+BINUTILS=@value{BINUTILSUNTAR}
 @end example
 
 @item GCC
-is the directory under tools that contains @value{GCC-UNTAR}.
+is the directory under tools that contains @value{GCCUNTAR}.
 For example,
 
 @example
-GCC=@value{GCC-UNTAR}
+GCC=@value{GCCUNTAR}
 @end example
 
 Note that the gnat version is not needed because the gnat source 
 is built as part of building gcc.
 
 @item NEWLIB
-is the directory under tools that contains @value{NEWLIB-UNTAR}.
+is the directory under tools that contains @value{NEWLIBUNTAR}.
 For example:
 
 @example
-NEWLIB=@value{NEWLIB-UNTAR}
+NEWLIB=@value{NEWLIBUNTAR}
 @end example
 
 @item BUILD_DOCS
@@ -483,7 +483,7 @@ executable code in these libraries will be for the default compiler settings
 and not necessarily be correct for your CPU model.
 
 @item RTEMS
-is the directory under tools that contails @value{RTEMS-UNTAR}.
+is the directory under tools that contails @value{RTEMSUNTAR}.
 
 @item ENABLE_RTEMS_POSIX
 is set to "yes" if you want to enable the RTEMS POSIX API support.
@@ -674,7 +674,7 @@ in the various tool source trees.  The following command
 does this for the binutils source:
 
 @example
-find @value{BINUTILS-UNTAR} -name config.status -print
+find @value{BINUTILSUNTAR} -name config.status -print
 @end example
 
 The solution for this is to execute the command 
@@ -691,7 +691,7 @@ configuration.  The include path used is something like
 this:
 
 @example
--I../../@value{BINUTILS-UNTAR}/gcc -I/@value{BINUTILS-UNTAR}/gcc/include -I.
+-I../../@value{BINUTILSUNTAR}/gcc -I/@value{BINUTILSUNTAR}/gcc/include -I.
 @end example
 
 Note that the tool source directory is searched before the 

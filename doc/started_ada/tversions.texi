@@ -21,12 +21,12 @@
 @c  GCC Version
 @c
 
-@set GCC-VERSION     gcc 2.8.1
-@set GCC-TAR         gcc-2.8.1.tar.gz
-@set GCC-UNTAR       gcc-2.8.1
-@set GCC-FTPSITE     ftp.gnu.org
-@set GCC-FTPDIR      /pub/gnu/gcc
-@set GCC-RTEMSPATCH  gcc-2.8.1-rtems-gnat-3.13p-20000429.diff.gz
+@set GCCVERSION     gcc 2.8.1
+@set GCCTAR         gcc-2.8.1.tar.gz
+@set GCCUNTAR       gcc-2.8.1
+@set GCCFTPSITE     ftp.gnu.org
+@set GCCFTPDIR      /pub/gnu/gcc
+@set GCCRTEMSPATCH  gcc-2.8.1-rtems-gnat-3.13p-20000429.diff.gz
 
 @c
 @c  GNAT Version
@@ -44,53 +44,53 @@
 @c
 
 @c The "official" binutils
-@set BINUTILS-VERSION     binutils 2.10
-@set BINUTILS-TAR         binutils-2.10.tar.gz
-@set BINUTILS-UNTAR       binutils-2.10
-@set BINUTILS-FTPSITE     ftp.gnu.org
-@set BINUTILS-FTPDIR      /pub/gnu/binutils
-@set BINUTILS-RTEMSPATCH  binutils-2.10-rtems-gnat-3.13p-20001107.diff
+@set BINUTILSVERSION     binutils 2.10
+@set BINUTILSTAR         binutils-2.10.tar.gz
+@set BINUTILSUNTAR       binutils-2.10
+@set BINUTILSFTPSITE     ftp.gnu.org
+@set BINUTILSFTPDIR      /pub/gnu/binutils
+@set BINUTILSRTEMSPATCH  binutils-2.10-rtems-gnat-3.13p-20001107.diff
 
 @c When forced to use a snapshot
-@c @set BINUTILS-VERSION     gas 980314
-@c @set BINUTILS-TAR         gas-980314.tgz
-@c @set BINUTILS-UNTAR       gas-980314
-@c @set BINUTILS-FTPSITE     ftp.OARcorp.com
-@c @set BINUTILS-FTPDIR      /oarcorp/private/beta3/ada_tools
-@c @set BINUTILS-RTEMSPATCH  binutils-2.8.1-rtems-diff-980321.gz
+@c @set BINUTILSVERSION     gas 980314
+@c @set BINUTILSTAR         gas-980314.tgz
+@c @set BINUTILSUNTAR       gas-980314
+@c @set BINUTILSFTPSITE     ftp.OARcorp.com
+@c @set BINUTILSFTPDIR      /oarcorp/private/beta3/ada_tools
+@c @set BINUTILSRTEMSPATCH  binutils-2.8.1-rtems-diff-980321.gz
 
 @c
 @c  NEWLIB Version
 @c
 
-@set NEWLIB-VERSION     newlib 1.8.2
-@set NEWLIB-TAR         newlib-1.8.2.tar.gz
-@set NEWLIB-UNTAR       newlib-1.8.2
-@set NEWLIB-FTPSITE     sources.redhat.com
-@set NEWLIB-FTPDIR      /pub/newlib
-@set NEWLIB-RTEMSPATCH  newlib-1.8.2-rtems-20000606.diff.gz
+@set NEWLIBVERSION     newlib 1.8.2
+@set NEWLIBTAR         newlib-1.8.2.tar.gz
+@set NEWLIBUNTAR       newlib-1.8.2
+@set NEWLIBFTPSITE     sources.redhat.com
+@set NEWLIBFTPDIR      /pub/newlib
+@set NEWLIBRTEMSPATCH  newlib-1.8.2-rtems-20000606.diff.gz
 
 @c
 @c  GDB Version
 @c
 
-@set GDB-VERSION     gdb 4.17
-@set GDB-TAR         gdb-4.17.tar.gz
-@set GDB-UNTAR       gdb-4.17
-@set GDB-FTPSITE     ftp.gnu.org
-@set GDB-FTPDIR      /pub/gnu/gdb/
-@set GDB-RTEMSPATCH  gdb-4.17-rtems-gnat-3.13p-20000918.diff
+@set GDBVERSION     gdb 4.17
+@set GDBTAR         gdb-4.17.tar.gz
+@set GDBUNTAR       gdb-4.17
+@set GDBFTPSITE     ftp.gnu.org
+@set GDBFTPDIR      /pub/gnu/gdb/
+@set GDBRTEMSPATCH  gdb-4.17-rtems-gnat-3.13p-20000918.diff
 @c @set GDB-GNATPATCH   gdb-ada-patch-1.17.8.gz
 
 @c
 @c  RTEMS Version
 @c
 
-@set RTEMS-VERSION   RTEMS 4.5.1
-@set RTEMS-TAR       rtems-4.5.1.tgz
-@set RTEMS-UNTAR     rtems-4.5.1
-@set RTEMS-FTPSITE   ftp.OARcorp.com
-@set RTEMS-FTPDIR    /pub/rtems/releases/4.5.1
-@set BUILDTOOLS-TAR  c_build_scripts-4.5.1.tgz 
+@set RTEMSVERSION   RTEMS 4.5.1
+@set RTEMSTAR       rtems-4.5.1.tgz
+@set RTEMSUNTAR     rtems-4.5.1
+@set RTEMSFTPSITE   ftp.OARcorp.com
+@set RTEMSFTPDIR    /pub/rtems/releases/4.5.1
+@set BUILDTOOLSTAR  c_build_scripts-4.5.1.tgz 
 
 
