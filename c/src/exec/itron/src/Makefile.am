@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-INCLUDES += -I.
+INCLUDES = -I.
 
 TASK_C_FILES = task.c cre_tsk.c del_tsk.c sta_tsk.c ext_tsk.c exd_tsk.c \
     ter_tsk.c dis_dsp.c ena_dsp.c chg_pri.c rot_rdq.c rel_wai.c get_tid.c \

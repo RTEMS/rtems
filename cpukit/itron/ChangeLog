@@ -1,3 +1,8 @@
+2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/Makefile.am: Revamp INCLUDES handling to make automake-1.5
+	happy.
+
 2001-08-09	Joel Sherrill <joel@OARcorp.com>
 
 	* src/snd_mbx.c, src/tsnd_mbf.c: Unblocking message queue operations
