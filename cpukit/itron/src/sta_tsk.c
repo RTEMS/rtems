@@ -31,18 +31,16 @@ ER sta_tsk(
   boolean                  status;
 
   the_thread = _ITRON_Task_Get( tskid, &location );
-  if (!the_thread)
-    _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
-
-  if ( !_States_Is_dormant( the_thread->current_state ) )
-    _ITRON_return_errorno( E_OBJ );
-
   switch ( location ) {
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
       _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
 
     case OBJECTS_LOCAL:
+
+      if ( !_States_Is_dormant( the_thread->current_state ) )
+        _ITRON_return_errorno( E_OBJ );
+
       status = _Thread_Start(
         the_thread,
         THREAD_START_NUMERIC, /* XXX should be able to say we have no arg */
@@ -51,14 +49,16 @@ ER sta_tsk(
         0                     /* unused */
       );
 
-      if ( !status )
-        _ITRON_return_errorno(  E_OBJ );
+      /* 
+       * This error can not happen entry_point is checked in create. 
+         if ( !status )           
+           _ITRON_return_errorno(  E_OBJ );
+       */
 
-      _Thread_Enable_dispatch();
-      return E_OK;
+      _ITRON_return_errorno( E_OK );
   }
 
-  return E_OBJ;   /* unreached - only to remove warnings */
+  _ITRON_return_errorno( E_OBJ );   /* unreached - only to remove warnings */
 }
 
 
