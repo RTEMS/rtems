@@ -65,7 +65,7 @@ operations may only be performed on a subset of the cpu registers,
 these same registers may be used for normal integer operations.
 as a result of this, this port of rtems makes no distinction 
 between integer and floating point contexts.  The routine
-@code{_CPU_Context_switch) saves all of the registers that
+@code{_CPU_Context_switch} saves all of the registers that
 comprise a task's context.  the routines that initialize,
 save, and restore floating point contexts are not present
 in this port.

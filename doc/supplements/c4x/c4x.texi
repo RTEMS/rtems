@@ -1,6 +1,7 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename c_c4x
+@setfilename c4x
+@setcontentsaftertitlepage
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
@@ -19,26 +20,19 @@
 @c   Master file for the TI C3x/C4x Applications Supplement
 @c
 
-@include ../../common/setup.texi
+@include version.texi
+@include common/setup.texi
 
-@ignore
-@ifinfo
-@format
-START-INFO-DIR-ENTRY
-* RTEMS TI C3x/C4x Applications Supplement (c4x):
-END-INFO-DIR-ENTRY
-@end format
-@end ifinfo
-@end ignore
+@ifset use-ascii
+@dircategory RTEMS Target Supplements
+@direntry
+* RTEMS TI C3x/C4x Applications Supplement: (c4x).
+@end direntry
+@end ifset
 
 @c
 @c  Title Page Stuff
 @c
-
-@set edition @value{RTEMS-EDITION}
-@set version @value{RTEMS-VERSION}
-@set update-date @value{RTEMS-UPDATE-DATE}
-@set update-month @value{RTEMS-UPDATE-MONTH}
 
 @c
 @c  I don't really like having a short title page.  --joel
@@ -51,13 +45,13 @@ END-INFO-DIR-ENTRY
 @finalout
 
 @title RTEMS TI C3x/C4x Applications Supplement 
-@subtitle Edition @value{edition}, for RTEMS @value{version}
+@subtitle Edition @value{EDITION}, for RTEMS @value{VERSION}
 @sp 1
-@subtitle @value{update-month}
+@subtitle @value{UPDATED}
 @author On-Line Applications Research Corporation
 @page
 
-@include ../../common/cpright.texi
+@include common/cpright.texi
 @end titlepage
 
 @c  This prevents a black box from being printed on "overflow" lines.
@@ -76,7 +70,7 @@ END-INFO-DIR-ENTRY
 @include timeBSP.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
-@top c_c4x
+@top c4x
 
 This is the online version of the RTEMS TI C3x/C4x
 Applications Supplement.
@@ -103,7 +97,7 @@ Applications Supplement.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, BSP_FOR_TIMES Timing Data Context Switch, Top
+@node Command and Variable Index, Concept Index, BSP_FOR_TIMES Timing Data Rate Monotonic Manager, Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.
