@@ -1,3 +1,9 @@
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* asm.h, cpu.c, rtems.c, rtems/score/cpu.h, rtems/score/sh.h,
+	rtems/score/sh_io.h, rtems/score/shtypes.h: Consistency changes
+	and made sure there were no includes from the libcpu tree.
+
 2001-10-12	Alexandra Kossovsky <sasha@oktet.ru>
 
 	* cpu.c, rtems/score/cpu.h, rtems/score/sh.h: Modified to

@@ -12,9 +12,8 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * 
  *
- *  COPYRIGHT (c) 1998.
+ *  COPYRIGHT (c) 1998-2001.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -135,8 +134,8 @@ extern "C" {
  */
 
 #if SH_HAS_FPU
-/* FIXME: What about CPU_SOFTWARE_FP ? */
 #define CPU_HARDWARE_FP	TRUE
+#define CPU_SOFTWARE_FP	FALSE
 #else
 #define CPU_SOFTWARE_FP	FALSE
 #define CPU_HARDWARE_FP	FALSE
@@ -211,9 +210,6 @@ extern "C" {
 #if SH_HAS_FPU
 #define CPU_USE_DEFERRED_FP_SWITCH	FALSE
 #else
-/* FIXME: Is this needed? 
- * Only here for backward compatibility with previous versions
- */
 #define CPU_USE_DEFERRED_FP_SWITCH	TRUE
 #endif
 

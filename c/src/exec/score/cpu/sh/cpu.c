@@ -12,9 +12,8 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * 
  *
- *  COPYRIGHT (c) 1998.
+ *  COPYRIGHT (c) 1998-2001.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -28,11 +27,6 @@
 #include <rtems/score/sh_io.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/sh.h>
-
-/* FIXME: This should not be here */
-#if defined(__SH4__)
-#include <rtems/score/sh4_regs.h>
-#endif
 
 /* referenced in start.S */
 extern proc_ptr vectab[] ;
