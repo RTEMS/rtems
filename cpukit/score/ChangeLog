@@ -1,3 +1,9 @@
+2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/coremsgseize.c, src/coremsgsubmit.c:
+	Remove unnecessary typecasts in assignments to 
+	thread->Wait.return_argument.
+
 2003-10-02	Phil Torre <ptorre@zetron.com>
 
 	PR 504/rtems

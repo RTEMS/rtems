@@ -163,7 +163,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     _Thread_queue_Enter_critical_section( &the_message_queue->Wait_queue );
     executing->Wait.queue              = &the_message_queue->Wait_queue;
     executing->Wait.id                 = id;
-    executing->Wait.return_argument    = (void *)buffer;
+    executing->Wait.return_argument    = buffer;
     executing->Wait.return_argument_1  = (void *)size;
     executing->Wait.count              = submit_type;
     _ISR_Enable( level );
