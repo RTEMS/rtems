@@ -1,3 +1,8 @@
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove -Wall -ansi to work-around non-portability of 
+	with cdtest.
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* base_mp/node1/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
