@@ -37,6 +37,23 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "config.h"
+
+#ifndef VMS
+#ifndef HAVE_STRERROR
+extern int sys_nerr;
+extern char *sys_errlist[];
+
+#define strerror( _err ) \
+  ((_err) < sys_nerr) ? sys_errlist [(_err)] : "unknown error"
+
+#else   /* HAVE_STRERROR */
+char *strerror ();
+#endif
+#else   /* VMS */
+char *strerror (int,...);
+#endif
+
 #if defined(__unix__) && !defined(EXIT_FAILURE)
 #define EXIT_FAILURE -1
 #define EXIT_SUCCESS  0

@@ -38,6 +38,24 @@ usage:    unhex [-va] [ -o file ] [ file [file ... ] ]\n\
 #include <stdlib.h>
 #include <stdarg.h>
 
+#include "config.h"
+
+#ifndef VMS
+#ifndef HAVE_STRERROR
+extern int sys_nerr;
+extern char *sys_errlist[];
+
+#define strerror( _err ) \
+  ((_err) < sys_nerr) ? sys_errlist [(_err)] : "unknown error"
+
+#else   /* HAVE_STRERROR */
+char *strerror ();
+#endif
+#else   /* VMS */
+char *strerror (int,...);
+#endif
+
+
 #define OK      0
 #define FAILURE (-1)
 #define Failed(x)       ((x) == FAILURE)
@@ -119,10 +137,10 @@ char *MISCSUM = "Checksum mismatch";
 char *BADTYPE = "Unrecognized record type";
 char *MISTYPE = "Incompatible record types";
 
-int
-main(argc, argv)
-int argc;
-char **argv;
+int main(
+  int argc,
+  char **argv
+)
 {
     register int c;
     bool showusage = FALSE;                     /* usage error? */
@@ -680,8 +698,6 @@ error(int error_flag, ...)
 {
     va_list arglist;
     register char *format;
-    extern char *sys_errlist[];
-    extern int sys_nerr;
     int local_errno;
 
     extern int errno;
@@ -699,12 +715,9 @@ error(int error_flag, ...)
     va_end(arglist);
 
     if (local_errno)
-        if ((local_errno > 0) && (local_errno < sys_nerr))
-            (void) fprintf(stderr, " (%s)\n", sys_errlist[local_errno]);
-        else
-            (void) fprintf(stderr, " (unknown errno=%d)\n", local_errno);
+      (void) fprintf(stderr, " (%s)\n", strerror(local_errno));
     else
-        (void) fprintf(stderr, "\n");
+      (void) fprintf(stderr, "\n");
 
     (void) fflush(stderr);
 

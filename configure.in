@@ -76,6 +76,7 @@ AC_PATH_PROG(LN,ln)
 AC_PROG_LN_S
 AC_PATH_PROG(CHMOD,chmod)
 AC_PATH_PROG(SORT,sort)
+AC_CHECK_FUNCS(strerror)
 
 dnl check mkdir behaviour, try to get mkdir -p -m 0755
 RTEMS_PATH_MKDIR
@@ -396,6 +397,7 @@ $makefiles
 make/host.cfg
 make/target.cfg
 make/Templates/Makefile.inc
+c/build-tools/src/config.h
 c/update-tools/Makefile)
 
 echo

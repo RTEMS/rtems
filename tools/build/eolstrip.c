@@ -30,6 +30,24 @@ Strip the white space from the end of every line on the list of files.\n\
 #include <memory.h>
 #include <stdarg.h>
 
+#include "config.h"
+
+#ifndef VMS
+#ifndef HAVE_STRERROR
+extern int sys_nerr;
+extern char *sys_errlist[];
+
+#define strerror( _err ) \
+  ((_err) < sys_nerr) ? sys_errlist [(_err)] : "unknown error"
+
+#else   /* HAVE_STRERROR */
+char *strerror ();
+#endif
+#else   /* VMS */
+char *strerror (int,...);
+#endif
+
+
 #define BUFFER_SIZE     2048
 #define MAX_PATH        2048
 
@@ -218,8 +236,6 @@ error(int error_flag, ...)
 {
     va_list arglist;
     register char *format;
-    extern char *sys_errlist[];
-    extern int sys_nerr;
     int local_errno;
 
     extern int errno;
@@ -237,12 +253,9 @@ error(int error_flag, ...)
     va_end(arglist);
 
     if (local_errno)
-        if ((local_errno > 0) && (local_errno < sys_nerr))
-            (void) fprintf(stderr, " (%s)\n", sys_errlist[local_errno]);
-        else
-            (void) fprintf(stderr, " (unknown errno=%d)\n", local_errno);
+      (void) fprintf(stderr, " (%s)\n", strerror(local_errno));
     else
-        (void) fprintf(stderr, "\n");
+      (void) fprintf(stderr, "\n");
 
     (void) fflush(stderr);
 
