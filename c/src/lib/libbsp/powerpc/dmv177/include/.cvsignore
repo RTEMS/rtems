@@ -1,5 +1,3 @@
-Makefile
-Makefile.in
 coverhd.h
 tod.h
 bspopts.h
