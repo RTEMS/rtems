@@ -6,8 +6,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_POSIX_TIMERS_h
-#define __RTEMS_POSIX_TIMERS_h
+#ifndef _RTEMS_POSIX_TIMER_H
+#define _RTEMS_POSIX_TIMER_H
 
 /* ************
  * Constants

@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __POSIX_API_h
-#define __POSIX_API_h
+#ifndef _RTEMS_POSIX_POSIXAPI_H
+#define _RTEMS_POSIX_POSIXAPI_H
 
 #include <rtems/config.h>
 

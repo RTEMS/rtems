@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_POSIX_THREADS_h
-#define __RTEMS_POSIX_THREADS_h
+#ifndef _RTEMS_POSIX_PTHREAD_H
+#define _RTEMS_POSIX_PTHREAD_H
 
 #ifdef __cplusplus
 extern "C" {

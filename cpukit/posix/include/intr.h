@@ -10,8 +10,8 @@
  *  $Id$
  */
 
-#ifndef __POSIX_INTERRUPTS_h
-#define __POSIX_INTERRUPTS_h
+#ifndef _INTR_H
+#define _INTR_H
 
 #ifdef __cplusplus
 extern "C" {

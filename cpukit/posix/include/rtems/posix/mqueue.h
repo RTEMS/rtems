@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_POSIX_MESSAGE_QUEUE_h
-#define __RTEMS_POSIX_MESSAGE_QUEUE_h
+#ifndef _RTEMS_POSIX_MQUEUE_H
+#define _RTEMS_POSIX_MQUEUE_H
 
 #ifdef __cplusplus
 extern "C" {

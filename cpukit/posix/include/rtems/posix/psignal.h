@@ -6,8 +6,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_POSIX_SIGNALS_h
-#define __RTEMS_POSIX_SIGNALS_h
+#ifndef _RTEMS_POSIX_PSIGNAL_H
+#define _RTEMS_POSIX_PSIGNAL_H
 
 #include <rtems/posix/pthread.h>
 

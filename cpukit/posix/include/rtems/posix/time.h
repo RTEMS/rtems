@@ -8,8 +8,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_POSIX_TIME_h
-#define __RTEMS_POSIX_TIME_h
+#ifndef _RTEMS_POSIX_TIME_H
+#define _RTEMS_POSIX_TIME_H
 
 #include <rtems/score/tod.h>
 

@@ -6,8 +6,8 @@
  *  $Id$
  */
 
-#ifndef __POSIX_DEVICE_CONTROL_h
-#define __POSIX_DEVICE_CONTROL_h
+#ifndef _DEVCTL_H
+#define _DEVCTL_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -7,8 +7,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_POSIX_CANCEL_h
-#define __RTEMS_POSIX_CANCEL_h
+#ifndef _RTEMS_POSIX_CANCEL_H
+#define _RTEMS_POSIX_CANCEL_H
 
 typedef struct {
   Chain_Node  Node;

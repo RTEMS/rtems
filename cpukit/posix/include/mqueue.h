@@ -6,8 +6,8 @@
  *  $Id$
  */
 
-#ifndef __POSIX_MESSAGE_QUEUE_h
-#define __POSIX_MESSAGE_QUEUE_h
+#ifndef _MQUEUE_H
+#define _MQUEUE_H
 
 #ifdef __cplusplus
 extern "C" {

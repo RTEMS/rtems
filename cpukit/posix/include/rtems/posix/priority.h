@@ -8,8 +8,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_POSIX_PRIORITY_h
-#define __RTEMS_POSIX_PRIORITY_h
+#ifndef _RTEMS_POSIX_PRIORITY_H
+#define _RTEMS_POSIX_PRIORITY_H
 
 #include <rtems/score/priority.h>
 

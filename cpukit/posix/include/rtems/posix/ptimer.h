@@ -17,8 +17,8 @@
  *  ptimer.h,v 1.0 1998/03/31 16:21:16
  */
 
-#ifndef __RTEMS_POSIX_TIMERS_h
-#define __RTEMS_POSIX_TIMERS_h
+#ifndef _RTEMS_POSIX_PTIMER_H
+#define _RTEMS_POSIX_PTIMER_H
 
 #ifdef __cplusplus
 extern "C" {

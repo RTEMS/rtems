@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_POSIX_CONDITION_VARIABLES_MP_h
-#define __RTEMS_POSIX_CONDITION_VARIABLES_MP_h
+#ifndef _RTEMS_POSIX_CONDMP_H
+#define _RTEMS_POSIX_CONDMP_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -6,8 +6,8 @@
  *  $Id$
  */
 
-#ifndef __POSIX_SEMAPHORE_h
-#define __POSIX_SEMAPHORE_h
+#ifndef _SEMAPHORE_H
+#define _SEMAPHORE_H
 
 #ifdef __cplusplus
 extern "C" {

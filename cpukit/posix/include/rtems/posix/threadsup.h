@@ -7,8 +7,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_POSIX_THREAD_SUPPORT_h
-#define __RTEMS_POSIX_THREAD_SUPPORT_h
+#ifndef _RTEMS_POSIX_THREADSUP_H
+#define _RTEMS_POSIX_THREADSUP_H
 
 #include <sys/signal.h>
 #include <rtems/score/coresem.h>

@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __POSIX_SCHEDULING_h
-#define __POSIX_SCHEDULING_h
+#ifndef _SCHED_H
+#define _SCHED_H
 
 #ifdef __cplusplus
 extern "C" {

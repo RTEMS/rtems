@@ -17,8 +17,8 @@
  *  $Id$
  */
 
-#ifndef __RTEMS_POSIX_KEY_h
-#define __RTEMS_POSIX_KEY_h
+#ifndef _RTEMS_POSIX_INTR_H
+#define _RTEMS_POSIX_INTR_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -6,8 +6,8 @@
  *  $Id$
  */
 
-#ifndef __POSIX_ASYNCHRONOUS_IO_h
-#define __POSIX_ASYNCHRONOUS_IO_h
+#ifndef _AIO_H
+#define _AIO_H
 
 #ifdef __cplusplus
 extern "C" {
