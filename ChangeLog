@@ -1,3 +1,7 @@
+2004-01-08	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: Add compile.
+
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
 	* README.configure: Remove efi68k and efi332 references as they are no
