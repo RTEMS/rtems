@@ -13,8 +13,6 @@ OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS = untar.h
 
-noinst_HEADERS = config.h
-
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
@@ -22,6 +20,8 @@ $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
 $(PROJECT_INCLUDE)/rtems/%.h: %.h
 	$(INSTALL_DATA) $< $@
+
+AM_CPPFLAGS += -I$(top_builddir)
 
 #
 # (OPTIONAL) Add local stuff here using +=

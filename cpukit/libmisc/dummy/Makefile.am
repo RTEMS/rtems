@@ -9,10 +9,10 @@ LIB = $(ARCH)/$(LIBNAME).a
 C_FILES = dummy.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-noinst_HEADERS = config.h
-
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
+
+AM_CPPFLAGS += -I$(top_builddir)
 
 #
 # (OPTIONAL) Add local stuff here using +=

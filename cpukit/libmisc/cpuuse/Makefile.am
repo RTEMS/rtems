@@ -13,10 +13,10 @@ OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS = cpuuse.h
 
-noinst_HEADERS = config.h
-
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
+
+AM_CPPFLAGS += -I$(top_builddir)
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@

@@ -15,10 +15,10 @@ if LIBSHELL
 include_rtems_HEADERS = shell.h
 endif
 
-noinst_HEADERS = config.h
-
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
+
+AM_CPPFLAGS += -I$(top_builddir)
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@

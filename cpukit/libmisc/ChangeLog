@@ -1,3 +1,42 @@
+2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* capture/config.h: Remove.
+	* capture/Makefile.am: Remove config.h.
+	AM_CPPFLAGS += -I$(top_builddir).
+	* cpuuse/config.h: Remove.
+	* cpuuse/Makefile.am: Remove config.h.
+	AM_CPPFLAGS += -I$(top_builddir).
+	* devnull/config.h: Remove.
+	* devnull/Makefile.am: Remove config.h.
+	AM_CPPFLAGS += -I$(top_builddir).
+	* dummy/config.h: Remove.
+	* dummy/Makefile.am: Remove config.h.
+	AM_CPPFLAGS += -I$(top_builddir).
+	* dumpbuf/config.h: Remove.
+	* dumpbuf/Makefile.am: Remove config.h.
+	AM_CPPFLAGS += -I$(top_builddir).
+	* monitor/config.h: Remove.
+	* monitor/Makefile.am: Remove config.h.
+	AM_CPPFLAGS += -I$(top_builddir).
+	* mw-fb/config.h: Remove.
+	* mw-fb/Makefile.am: Remove config.h.
+	AM_CPPFLAGS += -I$(top_builddir).
+	* rtmonuse/config.h: Remove.
+	* rtmonuse/Makefile.am: Remove config.h.
+	AM_CPPFLAGS += -I$(top_builddir).
+	* serdbg/config.h: Remove.
+	* serdbg/Makefile.am: Remove config.h.
+	AM_CPPFLAGS += -I$(top_builddir).
+	* shell/config.h: Remove.
+	* shell/Makefile.am: Remove config.h.
+	AM_CPPFLAGS += -I$(top_builddir).
+	* stackchk/config.h: Remove.
+	* stackchk/Makefile.am: Remove config.h.
+	AM_CPPFLAGS += -I$(top_builddir).
+	* untar/config.h: Remove.
+	* untar/Makefile.am: Remove config.h.
+	AM_CPPFLAGS += -I$(top_builddir).
+
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* capture/capture-cli.c: Reflect new rtems_monitor_command_arg_t.
