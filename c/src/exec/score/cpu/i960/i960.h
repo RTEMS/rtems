@@ -32,7 +32,7 @@ extern "C" {
  *        to put in at least support for FPU.
  */
 
-#if defined(i960ca)
+#if defined(__i960CA__)
 
 #define CPU_MODEL_NAME  "i960ca"
 #define I960_HAS_FPU 0
@@ -56,7 +56,7 @@ extern "C" {
  * XXX    family members...
  */
  
-#if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
+#if defined(__i960CA__)
  
 /* i960CA control structures */
  
