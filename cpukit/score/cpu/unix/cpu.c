@@ -86,7 +86,7 @@ sigset_t  posix_empty_mask;
 
 void _CPU_Initialize_vectors(void)
 {
-  unsigned32        i;
+  uint32_t          i;
   proc_ptr          old_handler;
 
   /*
@@ -194,7 +194,7 @@ void _CPU_Context_From_CPU_Init()
      */
 
     {
-      extern unsigned32 _SYSTEM_ID;
+      extern uint32_t   _SYSTEM_ID;
 
       _SYSTEM_ID = 0x20c;
     }
@@ -254,7 +254,7 @@ void _CPU_Sync_io_Init()
  *  _CPU_ISR_Get_level
  */
 
-unsigned32 _CPU_ISR_Get_level( void )
+uint32_t   _CPU_ISR_Get_level( void )
 {
   sigset_t old_mask;
 
@@ -327,7 +327,7 @@ void _CPU_Initialize(
  */
 
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
@@ -353,7 +353,7 @@ void _CPU_ISR_install_raw_handler(
 
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
@@ -460,20 +460,20 @@ void _CPU_Thread_Idle_body( void )
 
 void _CPU_Context_Initialize(
   Context_Control  *_the_context,
-  unsigned32       *_stack_base,
-  unsigned32        _size,
-  unsigned32        _new_level,
+  uint32_t         *_stack_base,
+  uint32_t          _size,
+  uint32_t          _new_level,
   void             *_entry_point,
   boolean           _is_fp
 )
 {
-  unsigned32  *addr;
-  unsigned32   jmp_addr;
-  unsigned32   _stack_low;   /* lowest "stack aligned" address */
-  unsigned32   _stack_high;  /* highest "stack aligned" address */
-  unsigned32   _the_size;
+  uint32_t    *addr;
+  uint32_t     jmp_addr;
+  uint32_t     _stack_low;   /* lowest "stack aligned" address */
+  uint32_t     _stack_high;  /* highest "stack aligned" address */
+  uint32_t     _the_size;
 
-  jmp_addr = (unsigned32) _entry_point;
+  jmp_addr = (uint32_t  ) _entry_point;
 
   /*
    *  On CPUs with stacks which grow down, we build the stack
@@ -481,10 +481,10 @@ void _CPU_Context_Initialize(
    *  grow up, we build the stack based on the _stack_low address.
    */
 
-  _stack_low = (unsigned32)(_stack_base) + CPU_STACK_ALIGNMENT - 1;
+  _stack_low = (uint32_t  )(_stack_base) + CPU_STACK_ALIGNMENT - 1;
   _stack_low &= ~(CPU_STACK_ALIGNMENT - 1);
 
-  _stack_high = (unsigned32)(_stack_base) + _size;
+  _stack_high = (uint32_t  )(_stack_base) + _size;
   _stack_high &= ~(CPU_STACK_ALIGNMENT - 1);
 
   if (_stack_high > _stack_low)
@@ -503,11 +503,11 @@ void _CPU_Context_Initialize(
       *(Context_Control_overlay *)_the_context = 
                          _CPU_Context_Default_with_ISRs_disabled;
 
-  addr = (unsigned32 *)_the_context;
+  addr = (uint32_t   *)_the_context;
 
 #if defined(__hppa__)
   *(addr + RP_OFF) = jmp_addr;
-  *(addr + SP_OFF) = (unsigned32)(_stack_low + CPU_FRAME_SIZE);
+  *(addr + SP_OFF) = (uint32_t  )(_stack_low + CPU_FRAME_SIZE);
 
   /*
    * See if we are using shared libraries by checking
@@ -518,7 +518,7 @@ void _CPU_Context_Initialize(
 
   if (jmp_addr & 0x40000000) {
     jmp_addr &= 0xfffffffc;
-     *(addr + RP_OFF) = *(unsigned32 *)jmp_addr;
+     *(addr + RP_OFF) = *(uint32_t   *)jmp_addr;
   }
 #elif defined(__sparc__)
 
@@ -530,8 +530,8 @@ void _CPU_Context_Initialize(
   asm ("ta  0x03");            /* flush registers */
 
   *(addr + RP_OFF) = jmp_addr + ADDR_ADJ_OFFSET;
-  *(addr + SP_OFF) = (unsigned32)(_stack_high - CPU_FRAME_SIZE);
-  *(addr + FP_OFF) = (unsigned32)(_stack_high);
+  *(addr + SP_OFF) = (uint32_t  )(_stack_high - CPU_FRAME_SIZE);
+  *(addr + FP_OFF) = (uint32_t  )(_stack_high);
 
 #elif defined(__i386__)
 
@@ -540,7 +540,7 @@ void _CPU_Context_Initialize(
      */
 
     {
-      unsigned32 stack_ptr;
+      uint32_t   stack_ptr;
 
       stack_ptr = _stack_high - CPU_FRAME_SIZE;
 
@@ -551,11 +551,11 @@ void _CPU_Context_Initialize(
       *(addr + ESP_OFF) = stack_ptr;
       *(addr + RET_OFF) = jmp_addr;
 
-      addr = (unsigned32 *) stack_ptr;
+      addr = (uint32_t   *) stack_ptr;
 
       addr[ 0 ] = jmp_addr;
-      addr[ 1 ] = (unsigned32) stack_ptr;
-      addr[ 2 ] = (unsigned32) stack_ptr;
+      addr[ 1 ] = (uint32_t  ) stack_ptr;
+      addr[ 2 ] = (uint32_t  ) stack_ptr;
     }
 
 #else
@@ -667,7 +667,7 @@ void _CPU_Restore_float_context(
  *  _CPU_ISR_Disable_support
  */
 
-unsigned32 _CPU_ISR_Disable_support(void)
+uint32_t   _CPU_ISR_Disable_support(void)
 {
   int status;
   sigset_t  old_mask;
@@ -693,7 +693,7 @@ unsigned32 _CPU_ISR_Disable_support(void)
  */
 
 void _CPU_ISR_Enable(
-  unsigned32 level
+  uint32_t   level
 )
 {
   int status;
@@ -723,7 +723,7 @@ void _CPU_ISR_Enable(
 void _CPU_ISR_Handler(int vector)
 {
   extern void        _Thread_Dispatch(void);
-  extern unsigned32  _Thread_Dispatch_disable_level;
+  extern uint32_t    _Thread_Dispatch_disable_level;
   extern boolean     _Context_Switch_necessary;
 
   if (_ISR_Nest_level++ == 0) {
@@ -833,7 +833,7 @@ void _CPU_Stray_signal(int sig_num)
  *  _CPU_Fatal_error
  */
 
-void _CPU_Fatal_error(unsigned32 error)
+void _CPU_Fatal_error(uint32_t   error)
 {
   setitimer(ITIMER_REAL, 0, 0);
 
@@ -950,10 +950,10 @@ extern void fix_syscall_errno( void );
 int  _CPU_SHM_Semid;
 
 void _CPU_SHM_Init(
-  unsigned32   maximum_nodes,
+  uint32_t     maximum_nodes,
   boolean      is_master_node,
   void       **shm_address,
-  unsigned32  *shm_length
+  uint32_t    *shm_length
 )
 {
   int          i;

@@ -357,11 +357,11 @@ extern "C" {
 
 /* WARNING: If this structure is modified, the constants in cpu.h must be updated. */
 #if __mips == 1
-#define __MIPS_REGISTER_TYPE     unsigned32
-#define __MIPS_FPU_REGISTER_TYPE unsigned32
+#define __MIPS_REGISTER_TYPE     uint32_t  
+#define __MIPS_FPU_REGISTER_TYPE uint32_t  
 #elif __mips == 3
-#define __MIPS_REGISTER_TYPE     unsigned64
-#define __MIPS_FPU_REGISTER_TYPE unsigned64
+#define __MIPS_REGISTER_TYPE     uint64_t  
+#define __MIPS_FPU_REGISTER_TYPE uint64_t  
 #else
 #error "mips register size: unknown architecture level!!"
 #endif
@@ -581,14 +581,14 @@ typedef struct {
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
-  unsigned32   idle_task_stack_size;
-  unsigned32   interrupt_stack_size;
-  unsigned32   extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( unsigned32 );
+  uint32_t     idle_task_stack_size;
+  uint32_t     interrupt_stack_size;
+  uint32_t     extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
-  unsigned32   clicks_per_microsecond;
+  uint32_t     clicks_per_microsecond;
 }   rtems_cpu_table;
 
 
@@ -683,7 +683,7 @@ extern unsigned int mips_interrupt_number_of_vectors;
  *  that a "reasonable" small application should not have any problems.
  */
 
-#define CPU_STACK_MINIMUM_SIZE          (2048*sizeof(unsigned32))
+#define CPU_STACK_MINIMUM_SIZE          (2048*sizeof(uint32_t  ))
 
 
 /*
@@ -797,9 +797,9 @@ extern unsigned int mips_interrupt_number_of_vectors;
  *  manipulates the IEC.
  */
 
-unsigned32 _CPU_ISR_Get_level( void );  /* in cpu.c */
+uint32_t   _CPU_ISR_Get_level( void );  /* in cpu.c */
 
-void _CPU_ISR_Set_level( unsigned32 );  /* in cpu.c */
+void _CPU_ISR_Set_level( uint32_t   );  /* in cpu.c */
 
 /* end of ISR handler macros */
 
@@ -857,13 +857,13 @@ void _CPU_ISR_Set_level( unsigned32 );  /* in cpu.c */
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, _isr, _entry_point, _is_fp ) \
   { \
- 	unsigned32 _stack_tmp = \
-           (unsigned32)(_stack_base) + (_size) - CPU_STACK_ALIGNMENT; \
-        unsigned32 _intlvl = _isr & 0xff; \
+ 	uint32_t   _stack_tmp = \
+           (uint32_t  )(_stack_base) + (_size) - CPU_STACK_ALIGNMENT; \
+        uint32_t   _intlvl = _isr & 0xff; \
   	_stack_tmp &= ~(CPU_STACK_ALIGNMENT - 1); \
   	(_the_context)->sp = _stack_tmp; \
   	(_the_context)->fp = _stack_tmp; \
-	(_the_context)->ra = (unsigned64)_entry_point; \
+	(_the_context)->ra = (uint64_t  )_entry_point; \
 	(_the_context)->c0_sr = ((_intlvl==0)?(0xFF00 | _INTON):( ((_intlvl<<9) & 0xfc00) | \
 						       0x300 | \
 						       ((_intlvl & 1)?_INTON:0)) ) | \
@@ -1062,7 +1062,7 @@ void _CPU_Initialize(
  */
 
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -1074,7 +1074,7 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -1169,7 +1169,7 @@ static inline unsigned int CPU_swap_u32(
   unsigned int value
 )
 {
-  unsigned32 byte1, byte2, byte3, byte4, swapped;
+  uint32_t   byte1, byte2, byte3, byte4, swapped;
 
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;

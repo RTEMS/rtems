@@ -69,7 +69,7 @@ void _CPU_Initialize(
  *  XXX document implementation including references if appropriate
  */
  
-unsigned32 _CPU_ISR_Get_level( void )
+uint32_t   _CPU_ISR_Get_level( void )
 {
   /*
    *  This routine returns the current interrupt level.
@@ -88,7 +88,7 @@ unsigned32 _CPU_ISR_Get_level( void )
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
@@ -120,7 +120,7 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )

@@ -87,14 +87,14 @@ extern "C" {
 typedef struct {
   void       *r0_pfp;                 /* (r0)  Previous Frame Pointer */
   void       *r1_sp;                  /* (r1)  Stack Pointer */
-  unsigned32  pc;                     /* (pc)  Processor Control */
+  uint32_t    pc;                     /* (pc)  Processor Control */
   void       *g8;                     /* (g8)  Global Register 8 */
   void       *g9;                     /* (g9)  Global Register 9 */
   void       *g10;                    /* (g10) Global Register 10 */
   void       *g11;                    /* (g11) Global Register 11 */
   void       *g12;                    /* (g12) Global Register 12 */
   void       *g13;                    /* (g13) Global Register 13 */
-  unsigned32  g14;                    /* (g14) Global Register 14 */
+  uint32_t    g14;                    /* (g14) Global Register 14 */
   void       *g15_fp;                 /* (g15) Frame Pointer */
 }   Context_Control;
 
@@ -103,18 +103,18 @@ typedef struct {
  */
 
 typedef struct {
-   unsigned32  fp0_1;                 /* (fp0) first word  */
-   unsigned32  fp0_2;                 /* (fp0) second word */
-   unsigned32  fp0_3;                 /* (fp0) third word  */
-   unsigned32  fp1_1;                 /* (fp1) first word  */
-   unsigned32  fp1_2;                 /* (fp1) second word */
-   unsigned32  fp1_3;                 /* (fp1) third word  */
-   unsigned32  fp2_1;                 /* (fp2) first word  */
-   unsigned32  fp2_2;                 /* (fp2) second word */
-   unsigned32  fp2_3;                 /* (fp2) third word  */
-   unsigned32  fp3_1;                 /* (fp3) first word  */
-   unsigned32  fp3_2;                 /* (fp3) second word */
-   unsigned32  fp3_3;                 /* (fp3) third word  */
+   uint32_t    fp0_1;                 /* (fp0) first word  */
+   uint32_t    fp0_2;                 /* (fp0) second word */
+   uint32_t    fp0_3;                 /* (fp0) third word  */
+   uint32_t    fp1_1;                 /* (fp1) first word  */
+   uint32_t    fp1_2;                 /* (fp1) second word */
+   uint32_t    fp1_3;                 /* (fp1) third word  */
+   uint32_t    fp2_1;                 /* (fp2) first word  */
+   uint32_t    fp2_2;                 /* (fp2) second word */
+   uint32_t    fp2_3;                 /* (fp2) third word  */
+   uint32_t    fp3_1;                 /* (fp3) first word  */
+   uint32_t    fp3_2;                 /* (fp3) second word */
+   uint32_t    fp3_3;                 /* (fp3) third word  */
 } Context_Control_fp;
 
 /*
@@ -123,7 +123,7 @@ typedef struct {
  */
 
 typedef struct {
-  unsigned32   TBD;   /* XXX Fix for this CPU */
+  uint32_t     TBD;   /* XXX Fix for this CPU */
 } CPU_Interrupt_frame;
 
 /*
@@ -161,10 +161,10 @@ typedef struct {
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
-  unsigned32   idle_task_stack_size;
-  unsigned32   interrupt_stack_size;
-  unsigned32   extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( unsigned32 );
+  uint32_t     idle_task_stack_size;
+  uint32_t     interrupt_stack_size;
+  uint32_t     extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 }   rtems_cpu_table;
@@ -267,8 +267,8 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 #define _CPU_ISR_Set_level( newlevel ) \
   { \
-    unsigned32 _mask = 0; \
-    unsigned32 _level = (newlevel); \
+    uint32_t   _mask = 0; \
+    uint32_t   _level = (newlevel); \
     \
     __asm__ volatile ( "ldconst 0x1f0000,%0; \
                     modpc   0,%0,%1"     : "=d" (_mask), "=d" (_level) \
@@ -276,7 +276,7 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
     ); \
   }
 
-unsigned32 _CPU_ISR_Get_level( void );
+uint32_t   _CPU_ISR_Get_level( void );
 
 /* ISR handler section macros */
 
@@ -293,12 +293,12 @@ unsigned32 _CPU_ISR_Get_level( void );
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
                                   _isr, _entry, _is_fp ) \
  { CPU_Call_frame *_texit_frame; \
-   unsigned32 _mask; \
-   unsigned32 _base_pc; \
-   unsigned32  _stack_tmp; \
+   uint32_t   _mask; \
+   uint32_t   _base_pc; \
+   uint32_t    _stack_tmp; \
    void       *_stack; \
    \
-  _stack_tmp = (unsigned32)(_stack_base) + CPU_STACK_ALIGNMENT; \
+  _stack_tmp = (uint32_t  )(_stack_base) + CPU_STACK_ALIGNMENT; \
   _stack_tmp &= ~(CPU_STACK_ALIGNMENT - 1); \
   _stack = (void *) _stack_tmp; \
    \
@@ -337,8 +337,8 @@ unsigned32 _CPU_ISR_Get_level( void );
  */
 
 #define _CPU_Fatal_halt( _errorcode ) \
-  { unsigned32 _mask, _level; \
-    unsigned32 _error = (_errorcode); \
+  { uint32_t   _mask, _level; \
+    uint32_t   _error = (_errorcode); \
     \
     __asm__ volatile ( "ldconst 0x1f0000,%0 ; \
                     mov     %0,%1 ; \
@@ -361,7 +361,7 @@ unsigned32 _CPU_ISR_Get_level( void );
 #define CPU_USE_GENERIC_BITFIELD_DATA FALSE
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
-  { unsigned32 _search = (_value); \
+  { uint32_t   _search = (_value); \
     \
     (_output) = 0; /* to prevent warnings */ \
     __asm__ volatile ( "scanbit   %0,%1  " \
@@ -410,7 +410,7 @@ void _CPU_Initialize(
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -422,7 +422,7 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );

@@ -466,7 +466,7 @@ extern "C" {
  *  This is really just the area for the following fields.
  *
  *    jmp_buf    regs;
- *    unsigned32 isr_level;
+ *    uint32_t   isr_level;
  *
  *  Doing it this way avoids conflicts between the native stuff and the
  *  RTEMS stuff.
@@ -506,10 +506,10 @@ typedef struct {
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
-  unsigned32   idle_task_stack_size;
-  unsigned32   interrupt_stack_size;
-  unsigned32   extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( unsigned32 );
+  uint32_t     idle_task_stack_size;
+  uint32_t     interrupt_stack_size;
+  uint32_t     extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
   /* end of required fields */
 }   rtems_cpu_table;
@@ -682,7 +682,7 @@ void _CPU_Initialize_vectors(void);
  *  level is returned in _level.
  */
 
-extern unsigned32 _CPU_ISR_Disable_support(void);
+extern uint32_t   _CPU_ISR_Disable_support(void);
 
 #define _CPU_ISR_Disable( _level ) \
     do { \
@@ -695,7 +695,7 @@ extern unsigned32 _CPU_ISR_Disable_support(void);
  *  _level is not modified.
  */
 
-void _CPU_ISR_Enable(unsigned32 level);
+void _CPU_ISR_Enable(uint32_t   level);
 
 /*
  *  This temporarily restores the interrupt to _level before immediately
@@ -706,7 +706,7 @@ void _CPU_ISR_Enable(unsigned32 level);
 
 #define _CPU_ISR_Flash( _level ) \
   do { \
-      register unsigned32 _ignored = 0; \
+      register uint32_t   _ignored = 0; \
       _CPU_ISR_Enable( (_level) ); \
       _CPU_ISR_Disable( _ignored ); \
   } while ( 0 )
@@ -728,7 +728,7 @@ void _CPU_ISR_Enable(unsigned32 level);
     else                  _CPU_ISR_Enable( 1 ); \
   }
 
-unsigned32 _CPU_ISR_Get_level( void );
+uint32_t   _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
@@ -789,9 +789,9 @@ unsigned32 _CPU_ISR_Get_level( void );
 
 extern void _CPU_Context_Initialize(
   Context_Control  *_the_context,
-  unsigned32       *_stack_base,
-  unsigned32        _size,
-  unsigned32        _new_level,
+  uint32_t         *_stack_base,
+  uint32_t          _size,
+  uint32_t          _new_level,
   void             *_entry_point,
   boolean           _is_fp
 );
@@ -910,7 +910,7 @@ void _CPU_Initialize(
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -922,7 +922,7 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -995,11 +995,11 @@ void _CPU_Restore_float_context(
 
 
 void _CPU_ISR_Set_signal_level(
-  unsigned32 level
+  uint32_t   level
 );
 
 void _CPU_Fatal_error(
-  unsigned32 _error
+  uint32_t   _error
 );
 
 /*  The following routine swaps the endian format of an unsigned int.
@@ -1026,7 +1026,7 @@ static inline unsigned int CPU_swap_u32(
   unsigned int value
 )
 {
-  unsigned32 byte1, byte2, byte3, byte4, swapped;
+  uint32_t   byte1, byte2, byte3, byte4, swapped;
  
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;
@@ -1081,10 +1081,10 @@ void _CPU_Stop_clock( void );
 #if defined(RTEMS_MULTIPROCESSING)
 
 void _CPU_SHM_Init( 
-  unsigned32   maximum_nodes,
+  uint32_t     maximum_nodes,
   boolean      is_master_node,
   void       **shm_address,
-  unsigned32  *shm_length
+  uint32_t    *shm_length
 );
 
 int _CPU_Get_pid( void );

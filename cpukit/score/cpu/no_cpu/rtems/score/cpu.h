@@ -408,8 +408,8 @@ extern "C" {
  */
 
 typedef struct {
-    unsigned32 some_integer_register;
-    unsigned32 some_system_register;
+    uint32_t   some_integer_register;
+    uint32_t   some_system_register;
 } Context_Control;
 
 typedef struct {
@@ -417,7 +417,7 @@ typedef struct {
 } Context_Control_fp;
 
 typedef struct {
-    unsigned32 special_interrupt_register;
+    uint32_t   special_interrupt_register;
 } CPU_Interrupt_frame;
 
 
@@ -436,10 +436,10 @@ typedef struct {
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
-  unsigned32   idle_task_stack_size;
-  unsigned32   interrupt_stack_size;
-  unsigned32   extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( unsigned32 );
+  uint32_t     idle_task_stack_size;
+  uint32_t     interrupt_stack_size;
+  uint32_t     extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
@@ -726,7 +726,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
   { \
   }
 
-unsigned32 _CPU_ISR_Get_level( void );
+uint32_t   _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
@@ -982,7 +982,7 @@ void _CPU_Initialize(
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -998,7 +998,7 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -1121,7 +1121,7 @@ static inline unsigned int CPU_swap_u32(
   unsigned int value
 )
 {
-  unsigned32 byte1, byte2, byte3, byte4, swapped;
+  uint32_t   byte1, byte2, byte3, byte4, swapped;
  
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;

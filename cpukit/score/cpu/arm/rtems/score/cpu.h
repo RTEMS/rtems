@@ -334,18 +334,18 @@ extern "C" {
  *  a debugger such as gdb.  But that is another problem.
  */
 typedef struct {
-    unsigned32 register_cpsr;
-    unsigned32 register_r4;
-    unsigned32 register_r5;
-    unsigned32 register_r6;
-    unsigned32 register_r7;
-    unsigned32 register_r8;
-    unsigned32 register_r9;
-    unsigned32 register_r10;
-    unsigned32 register_fp;
-    unsigned32 register_sp;
-    unsigned32 register_lr;
-    unsigned32 register_pc;
+    uint32_t   register_cpsr;
+    uint32_t   register_r4;
+    uint32_t   register_r5;
+    uint32_t   register_r6;
+    uint32_t   register_r7;
+    uint32_t   register_r8;
+    uint32_t   register_r9;
+    uint32_t   register_r10;
+    uint32_t   register_fp;
+    uint32_t   register_sp;
+    uint32_t   register_lr;
+    uint32_t   register_pc;
 } Context_Control;
 
 typedef struct {
@@ -353,12 +353,12 @@ typedef struct {
 } Context_Control_fp;
 
 typedef struct {
-    unsigned32 register_r0;
-    unsigned32 register_r1;
-    unsigned32 register_r2;
-    unsigned32 register_r3;
-    unsigned32 register_ip;
-    unsigned32 register_lr;
+    uint32_t   register_r0;
+    uint32_t   register_r1;
+    uint32_t   register_r2;
+    uint32_t   register_r3;
+    uint32_t   register_ip;
+    uint32_t   register_lr;
 } CPU_Exception_frame;
 
 typedef void (*cpuExcHandlerType) (CPU_Exception_frame*);
@@ -384,10 +384,10 @@ typedef struct {
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
-  unsigned32   idle_task_stack_size;
-  unsigned32   interrupt_stack_size;
-  unsigned32   extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( unsigned32 );
+  uint32_t     idle_task_stack_size;
+  uint32_t     interrupt_stack_size;
+  uint32_t     extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
@@ -576,7 +576,7 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
   }
 
 
-unsigned32 _CPU_ISR_Get_level( void );
+uint32_t   _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
@@ -605,9 +605,9 @@ unsigned32 _CPU_ISR_Get_level( void );
 
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
-  unsigned32       *stack_base,
-  unsigned32        size,
-  unsigned32        new_level,
+  uint32_t         *stack_base,
+  uint32_t          size,
+  uint32_t          new_level,
   void             *entry_point,
   boolean           is_fp
 );
@@ -812,7 +812,7 @@ typedef enum {
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -898,7 +898,7 @@ static inline unsigned int CPU_swap_u32(
   unsigned int value
 )
 {
-    unsigned32 tmp = value; /* make compiler warnings go away */
+    uint32_t   tmp = value; /* make compiler warnings go away */
     asm volatile ("EOR   %1, %0, %0, ROR #16\n" 
                   "BIC   %1, %1, #0xff0000\n"   
                   "MOV   %0, %0, ROR #8\n"      
@@ -909,12 +909,12 @@ static inline unsigned int CPU_swap_u32(
     return value;
 }
 
-static inline unsigned16 CPU_swap_u16(unsigned16 value)
+static inline uint16_t   CPU_swap_u16(uint16_t   value)
 {
-    unsigned16 lower;
-    unsigned16 upper;
+    uint16_t   lower;
+    uint16_t   upper;
 
-    value = value & (unsigned16) 0xffff;
+    value = value & (uint16_t  ) 0xffff;
     lower = (value >> 8) ;
     upper = (value << 8) ;
 

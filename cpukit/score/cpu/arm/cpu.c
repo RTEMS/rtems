@@ -32,8 +32,8 @@
  *    
  */
 
-unsigned32 g_data_abort_cnt = 0;
-unsigned32 g_data_abort_insn_list[1024];
+uint32_t   g_data_abort_cnt = 0;
+uint32_t   g_data_abort_insn_list[1024];
 
 void _CPU_Initialize(
   rtems_cpu_table  *cpu_table,
@@ -48,9 +48,9 @@ void _CPU_Initialize(
  *  _CPU_ISR_Get_level - returns the current interrupt level
  */
  
-unsigned32 _CPU_ISR_Get_level( void )
+uint32_t   _CPU_ISR_Get_level( void )
 {
-    unsigned32 reg = 0; /* to avoid warning */
+    uint32_t   reg = 0; /* to avoid warning */
     
     asm volatile ("mrs  %0, cpsr \n"           \
                   "and  %0,  %0, #0xc0 \n"     \
@@ -80,7 +80,7 @@ unsigned32 _CPU_ISR_Get_level( void )
  *
  */
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
@@ -98,15 +98,15 @@ void _CPU_ISR_install_vector(
 
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
-  unsigned32       *stack_base,
-  unsigned32        size,
-  unsigned32        new_level,
+  uint32_t         *stack_base,
+  uint32_t          size,
+  uint32_t          new_level,
   void             *entry_point,
   boolean           is_fp
 )
 {
-    the_context->register_sp = (unsigned32)stack_base + size ;
-    the_context->register_lr = (unsigned32)entry_point;
+    the_context->register_sp = (uint32_t  )stack_base + size ;
+    the_context->register_lr = (uint32_t  )entry_point;
     the_context->register_cpsr = new_level | 0x13;
 }
 
@@ -217,8 +217,8 @@ void rtems_exception_init_mngt()
 #define GET_U(x)              ((x & 0x00800000) >> 23)
 #define GET_I(x)              ((x & 0x02000000) >> 25)
 
-#define GET_REG(r, ctx)      (((unsigned32 *)ctx)[r])
-#define SET_REG(r, ctx, v)   (((unsigned32 *)ctx)[r] = v)
+#define GET_REG(r, ctx)      (((uint32_t   *)ctx)[r])
+#define SET_REG(r, ctx, v)   (((uint32_t   *)ctx)[r] = v)
 #define GET_OFFSET(insn)     (insn & 0xfff)
 
 
@@ -228,17 +228,17 @@ void rtems_exception_init_mngt()
  * All unhandled instructions cause the system to hang.
  */
 
-void do_data_abort(unsigned32 insn, unsigned32 spsr, 
+void do_data_abort(uint32_t   insn, uint32_t   spsr, 
                    CPU_Exception_frame *ctx)
 {
-    unsigned8  decode;
-    unsigned8  insn_type;
+    uint8_t    decode;
+    uint8_t    insn_type;
 
-    unsigned32 rn;
-    unsigned32 rd;
+    uint32_t   rn;
+    uint32_t   rd;
 
-    unsigned8  *src_addr;
-    unsigned32  tmp;
+    uint8_t    *src_addr;
+    uint32_t    tmp;
 
     g_data_abort_insn_list[g_data_abort_cnt & 0x3ff] = ctx->register_lr - 8;
     g_data_abort_cnt++;
@@ -281,7 +281,7 @@ void do_data_abort(unsigned32 insn, unsigned32 spsr,
                 printk("\tUser mode\n");
                 break;
             case 0x10:  /* P=1, W=0 -> base not updated */
-                src_addr = (unsigned8 *)GET_REG(rn, ctx);
+                src_addr = (uint8_t   *)GET_REG(rn, ctx);
                 if (GET_U(insn) == 0) {
                     src_addr -= GET_OFFSET(insn);
                 } else {

@@ -378,16 +378,16 @@ extern "C" {
 #define nogap __attribute__ ((packed))
 
 typedef struct {
-    unsigned16  ccr nogap;
+    uint16_t    ccr nogap;
     void	*er7 nogap;
     void 	*er6 nogap;
-    unsigned32  er5 nogap;
-    unsigned32	er4 nogap;
-    unsigned32  er3 nogap;
-    unsigned32	er2 nogap;
-    unsigned32  er1 nogap;
-    unsigned32	er0 nogap;
-    unsigned32  xxx nogap;
+    uint32_t    er5 nogap;
+    uint32_t  	er4 nogap;
+    uint32_t    er3 nogap;
+    uint32_t  	er2 nogap;
+    uint32_t    er1 nogap;
+    uint32_t  	er0 nogap;
+    uint32_t    xxx nogap;
 } Context_Control;
 
 typedef struct {
@@ -395,7 +395,7 @@ typedef struct {
 } Context_Control_fp;
 
 typedef struct {
-    unsigned32 special_interrupt_register;
+    uint32_t   special_interrupt_register;
 } CPU_Interrupt_frame;
 
 
@@ -420,10 +420,10 @@ typedef struct {
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
-  unsigned32   idle_task_stack_size;
-  unsigned32   interrupt_stack_size;
-  unsigned32   extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( unsigned32 );
+  uint32_t     idle_task_stack_size;
+  uint32_t     interrupt_stack_size;
+  uint32_t     extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
 }   rtems_cpu_table;
 
@@ -614,7 +614,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 #define _CPU_Initialize_vectors()
 
 /* COPE With Brain dead version of GCC distributed with Hitachi HIView Tools.
-   Note requires ISR_Level be unsigned16 or assembler croaks.
+   Note requires ISR_Level be uint16_t   or assembler croaks.
 */
 
 #if (__GNUC__ == 2 && __GNUC_MINOR__ == 7 )
@@ -748,7 +748,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
     else              asm volatile ( "andc #0x7f,ccr\n" ); \
   }
 
-unsigned32 _CPU_ISR_Get_level( void );
+uint32_t   _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
@@ -787,12 +787,12 @@ unsigned32 _CPU_ISR_Get_level( void );
                                    _isr, _entry_point, _is_fp ) \
   /* Locate Me */ \
   do { \
-    unsigned32 _stack; \
+    uint32_t   _stack; \
     \
     if ( (_isr) ) (_the_context)->ccr = CPU_CCR_INTERRUPTS_OFF; \
     else          (_the_context)->ccr = CPU_CCR_INTERRUPTS_ON; \
     \
-    _stack = ((unsigned32)(_stack_base)) + (_size) - 4; \
+    _stack = ((uint32_t  )(_stack_base)) + (_size) - 4; \
     *((proc_ptr *)(_stack)) = (_entry_point); \
      (_the_context)->er7     = (void *) _stack; \
      (_the_context)->er6     = (void *) _stack; \
@@ -1023,7 +1023,7 @@ void _CPU_Initialize(
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -1039,7 +1039,7 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -1158,11 +1158,11 @@ void _CPU_Context_restore_fp(
  *  This is the generic implementation.
  */
  
-static inline unsigned32 CPU_swap_u32(
-  unsigned32 value
+static inline uint32_t   CPU_swap_u32(
+  uint32_t   value
 )
 {
-  unsigned32 byte1, byte2, byte3, byte4, swapped;
+  uint32_t   byte1, byte2, byte3, byte4, swapped;
  
   byte4 = (value >> 24) & 0xff;
   byte3 = (value >> 16) & 0xff;
@@ -1178,7 +1178,7 @@ static inline unsigned32 CPU_swap_u32(
 
 /* to be provided by the BSP */
 extern void H8BD_Install_IRQ(
-  unsigned32	vector,
+  uint32_t  	vector,
   proc_ptr	new_handler,
   proc_ptr	*old_handler );
 
