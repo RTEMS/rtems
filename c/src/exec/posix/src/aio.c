@@ -5,6 +5,9 @@
 #include <aio.h>
 
 #include <rtems/system.h>
+#include <rtems/posix/seterr.h>
+
+int POSIX_NOT_IMPLEMENTED();
 
 /*PAGE
  *

@@ -27,7 +27,7 @@ void POSIX_Thread_cancel_run(
   int                                old_cancel_state;
   POSIX_Cancel_Handler_control      *handler;
   Chain_Control                     *handler_stack;
-  POSIX_API_Thread_Support_Control  *thread_support;
+  POSIX_API_Control                 *thread_support;
   ISR_Level                          level;
  
   thread_support = the_thread->API_Extensions[ THREAD_API_POSIX ];
@@ -64,10 +64,10 @@ int pthread_cancel(
 )
 {
   Thread_Control                    *the_thread;
-  POSIX_API_Thread_Support_Control  *thread_support;
+  POSIX_API_Control                 *thread_support;
   Objects_Locations                  location;
 
-  the_thread = _POSIX_Threads_Get( &thread, &location );
+  the_thread = _POSIX_Threads_Get( thread, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
       return EINVAL;
@@ -95,7 +95,7 @@ int pthread_setcancelstate(
   int *oldstate
 )
 {
-  POSIX_API_Thread_Support_Control  *thread_support;
+  POSIX_API_Control                 *thread_support;
 
   if ( !oldstate )
     return EINVAL;
@@ -126,7 +126,7 @@ int pthread_setcanceltype(
   int *oldtype
 )
 {
-  POSIX_API_Thread_Support_Control  *thread_support;
+  POSIX_API_Control                 *thread_support;
  
   if ( !oldtype )
     return EINVAL;
@@ -154,7 +154,7 @@ int pthread_setcanceltype(
 
 void pthread_testcancel( void )
 {
-  POSIX_API_Thread_Support_Control  *thread_support;
+  POSIX_API_Control                 *thread_support;
 
   thread_support = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
  
@@ -175,7 +175,7 @@ void pthread_cleanup_push(
 {
   POSIX_Cancel_Handler_control      *handler;
   Chain_Control                     *handler_stack;
-  POSIX_API_Thread_Support_Control  *thread_support;
+  POSIX_API_Control                 *thread_support;
   
   if ( !routine )
     return;          /* XXX what to do really? */ 
@@ -206,7 +206,7 @@ void pthread_cleanup_pop(
 {
   POSIX_Cancel_Handler_control      *handler;
   Chain_Control                     *handler_stack;
-  POSIX_API_Thread_Support_Control  *thread_support;
+  POSIX_API_Control                 *thread_support;
   ISR_Level                          level;
  
   thread_support = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
