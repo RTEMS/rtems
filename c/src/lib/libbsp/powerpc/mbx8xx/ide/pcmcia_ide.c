@@ -356,8 +356,8 @@ rtems_status_code mbx8xx_pcmciaide_config_io_speed
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
- int       minor,                   /* controller minor number       */
- uint8_t   modes_avail              /* optional argument             */
+ int        minor,                   /* controller minor number       */
+ uint16_t   modes_avail              /* optional argument             */
  )
 /*-------------------------------------------------------------------------*\
 | Return Value:                                                             |
