@@ -15,7 +15,7 @@
  * embodied.
  *
  */
-#include <rtems/score/targopts.h>
+
 #include "ppc-asm.h"
 
 	.file	"bsptrap.s"
