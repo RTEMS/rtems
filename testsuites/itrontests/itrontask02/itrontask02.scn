@@ -1,4 +1,4 @@
-*** ITRON04 -- ITRON TASK TEST 4 ***
+*** ITRON TASK TEST 2 ***
 
 
 *** Create Task Errors ***
@@ -9,7 +9,8 @@ Init - cre_tsk - cannot create self (0) - E_ID
 Init - cre_tsk - invalid id; id already exists  - E_OBJ
 Init - cre_tsk - tskatr is invalid - E_RSATR
 Init - cre_tsk - pk_ctsk is invalid - E_PAR
-Init - cre_tsk - itskpri is invalid - E_PAR
+Init - cre_tsk - itskpri is 0 - E_PAR
+Init - cre_tsk - itskpri is 257 - E_PAR
 Init - cre_tsk - stksz is invalid - E_PAR
 Init - cre_tsk - task is invalid - E_PAR
 
@@ -78,4 +79,4 @@ Init - frsm_tsk - cannot forcibly resume SELF - E_OBJ
 Init - frsm_tsk - task is DORMANT - E_OBJ
 Init - frsm_tsk - task does not exist - E_NOEXS
 
-*** END OF ITRON TEST 4 ***
+*** END OF ITRON TASK TEST 2 ***

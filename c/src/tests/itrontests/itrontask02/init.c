@@ -81,7 +81,7 @@ void ITRON_Init( void )
   T_RTSK             pk_rtsk;   /* Reference Task Packet */ 
 
 
-  puts( "\n\n*** ITRON04 -- ITRON TASK TEST 4 ***\n" );
+  puts( "\n\n*** ITRON TASK TEST 2 ***\n" );
   puts( "\n*** Create Task Errors ***" );
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
@@ -133,7 +133,11 @@ void ITRON_Init( void )
 
   pk_ctsk.tskatr = TA_HLNG;
   pk_ctsk.itskpri = 0;
-  puts( "Init - cre_tsk - itskpri is invalid - E_PAR" );
+  puts( "Init - cre_tsk - itskpri is 0 - E_PAR" );
+  status = cre_tsk( 5, &pk_ctsk );
+  assert( status == E_PAR );
+  pk_ctsk.itskpri = 257;         /* XXX Design parameter not requirement. */
+  puts( "Init - cre_tsk - itskpri is 257 - E_PAR" );
   status = cre_tsk( 5, &pk_ctsk );
   assert( status == E_PAR );
 
@@ -513,6 +517,6 @@ void ITRON_Init( void )
   assert( status == EN_RPAR );
 #endif
 
-  puts( "*** END OF ITRON TEST 4 ***" );
+  puts( "*** ITRON TASK TEST 2 ***" );
   exit( 0 );
 }
