@@ -1,3 +1,7 @@
+2003-12-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp.am: Use $(mkdir_p) instead of $(mkinstalldirs).
+
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bsp.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
