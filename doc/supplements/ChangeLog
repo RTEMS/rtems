@@ -1,3 +1,7 @@
+2001-02-14	Joel Sherrill <joel@OARcorp.com>
+
+	* mips: New supplement.
+
 2002-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* supplement.am: Replace TEXI_COMMON with AM_MAKEINFOFLAGS.
