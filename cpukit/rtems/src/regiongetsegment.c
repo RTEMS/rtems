@@ -98,6 +98,14 @@ rtems_status_code rtems_region_get_segment(
         return RTEMS_UNSATISFIED;
       }
 
+      /*
+       *  Switch from using the memory allocation mutex to using a
+       *  dispatching disabled critical section.  We have to do this
+       *  because this thread is going to block.
+       */
+      _Thread_Disable_dispatch();
+      _RTEMS_Unlock_allocator();
+
       executing->Wait.queue           = &the_region->Wait_queue;
       executing->Wait.id              = id;
       executing->Wait.count           = size;
@@ -107,7 +115,8 @@ rtems_status_code rtems_region_get_segment(
 
       _Thread_queue_Enqueue( &the_region->Wait_queue, timeout );
 
-      _RTEMS_Unlock_allocator();
+      _Thread_Enable_dispatch();
+
       return (rtems_status_code) executing->Wait.return_code;
   }
 
