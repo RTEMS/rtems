@@ -56,15 +56,14 @@ following @value{STRUCTURE}:
 @example
 @group
 typedef struct @{
-  User_extensions_thread_create_extension      thread_create;
-  User_extensions_thread_start_extension       thread_start;
-  User_extensions_thread_restart_extension     thread_restart;
-  User_extensions_thread_delete_extension      thread_delete;
-  User_extensions_thread_switch_extension      thread_switch;
-  User_extensions_thread_post_switch_extension thread_post_switch;
-  User_extensions_thread_begin_extension       thread_begin;
-  User_extensions_thread_exitted_extension     thread_exitted;
-  User_extensions_fatal_error_extension        fatal;
+  rtems_task_create_extension      thread_create;
+  rtems_task_start_extension       thread_start;
+  rtems_task_restart_extension     thread_restart;
+  rtems_task_delete_extension      thread_delete;
+  rtems_task_switch_extension      thread_switch;
+  rtems_task_begin_extension       thread_begin;
+  rtems_task_exitted_extension     thread_exitted;
+  rtems_fatal_extension            fatal;
 @} User_extensions_Table;
 @end group
 @end example
@@ -335,38 +334,6 @@ invoked from RTEMS' dispatcher routine after the current_task
 context has been saved, but before the heir_task context has
 been restored.  This extension should not call any RTEMS
 directives.
-
-@subsection TASK_POST_SWITCH Extension
-
-The TASK_POST_SWITCH extension corresponds to a task
-context switch.  If this extension is defined in any static or
-dynamic extension set and a raw task context switch has been
-completed, then the extension routine will automatically be
-invoked by RTEMS.  The extension should have a prototype similar
-to the following:
-
-@ifset is-C
-@example
-rtems_extension user_task_post_switch(
-  rtems_tcb *current_task
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@example
-procedure User_Task_Post_Switch (
-   Current_Task : in     RTEMS.TCB_Pointer
-);
-@end example
-@end ifset
-
-where current_task can be used to access the TCB for
-the task that is being swapped out, and heir_task can be used to
-access the TCB for the task being swapped in.  This extension is
-invoked from RTEMS' dispatcher routine after the current_task
-context has been restored and the extension runs in the context
-of the current_task.
 
 @subsection TASK_BEGIN Extension
 
