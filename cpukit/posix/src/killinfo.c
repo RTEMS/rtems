@@ -67,15 +67,17 @@ int killinfo(
    *  Validate the signal passed if not 0.
    */
  
-  if ( sig && !is_valid_signo(sig) )
+  if ( sig && !is_valid_signo(sig) ) {
     set_errno_and_return_minus_one( EINVAL );
+  }
 
   /*
    *  If the signal is being ignored, then we are out of here.
    */
 
-  if ( !sig || _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN )
+  if ( !sig || _POSIX_signals_Vectors[ sig ].sa_handler == SIG_IGN ) {
     return 0;
+  }
 
   /*
    *  P1003.1c/Draft 10, p. 33 says that certain signals should always 
@@ -315,8 +317,9 @@ post_process_signal:
 
     psiginfo = (POSIX_signals_Siginfo_node *)
                _Chain_Get( &_POSIX_signals_Inactive_siginfo );
-    if ( !psiginfo )
+    if ( !psiginfo ) {
       set_errno_and_return_minus_one( EAGAIN );
+    }
 
     psiginfo->Info = *siginfo;
 
