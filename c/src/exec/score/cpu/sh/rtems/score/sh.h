@@ -77,7 +77,7 @@ extern "C" {
   asm volatile ( \
     "stc sr,%0\n\t" \
     "ldc %1,sr\n\t"\
-  : "=r" (_level ) \
+  : "=&r" (_level ) \
   : "r" (SH_IRQDIS_VALUE) ); 
 
 #define sh_enable_interrupts( _level ) \
