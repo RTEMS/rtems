@@ -8,28 +8,22 @@
 
 @chapter Building the Sample Application
 
-@section Unpack the sample application 
+@section Unpack the Sample Application 
 
 Use the following command to unarchive the sample application:
 
 @example
 cd tools
-tar xzf ../arc/hello_world_c.tgz
+tar xzf ../arc/hello_world_ada.tgz
 @end example
 
-@section Set the environment variable RTEMS_MAKEFILE_PATH 
+@section Create a BSP Specific Makefile
 
-It must point to the appropriate directory containing RTEMS build for our
-target and board support package combination. 
+Provided are example Makefiles for multiple BSPs.  Copy one of these to
+the file Makefile.<BOARD_SUPPORT_PACKAGE> and edit it as appropriate for
+your local configuration.
 
-@example
-export RTEMS_MAKEFILE_PATH = \
-<INSTALLATION_POINT>/rtems/<BOARD_SUPPORT_PACKAGE>
-@end example
-
-Where:
-
-<INSTALLATION_POINT> and <BOARD_SUPPORT_PACKAGE> are those used when
+Use the  <INSTALLATION_POINT> and <BOARD_SUPPORT_PACKAGE> specified when
 configuring and installing RTEMS.
 
 @section Build the Sample Application
@@ -37,22 +31,23 @@ configuring and installing RTEMS.
 Use the following command to start the build of the sample application: 
 
 @example
-cd tools/hello_world_c
-gmake
+cd tools/hello_world_ada
+gmake -f Makefile.<BOARD_SUPPORT_PACKAGE>
 @end example
 
-If no errors are detected during the sample application build, it is
-reasonable to assume that the build of the GNU C/C++ Cross Compiler Tools
+If the BSP specific modifications to the Makefile were correct and
+no errors are detected during the sample application build, it is
+reasonable to assume that the build of the GNAT/RTEMS Cross Compiler Tools
 for RTEMS and RTEMS itself for the selected host and target
 combination was done properly. 
 
-@section Application executable 
+@section Application Executable 
 
 If the sample application has successfully been build, then the application
 executable is placed in the following directory: 
 
 @example
-tools/simple_app/o-<BOARD_SUPPORT_PACKAGE>/<filename>.exe
+tools/hello_world_ada/o-<BOARD_SUPPORT_PACKAGE>/<filename>.exe
 @end example
 
 How this executable is downloaded to the target board is very dependent

@@ -9,7 +9,7 @@
 
 @chapter Building RTEMS
 
-@section Unpack the RTEMS source
+@section Unpack the RTEMS Source
 
 Use the following command sequence to unpack the RTEMS source into the
 tools directory: 
@@ -19,7 +19,7 @@ cd tools
 tar xzf ../arc/@value{RTEMS-TAR}
 @end example
 
-@section Add the bin directory under the install point to the default PATH
+@section Add <INSTALL_POINT>/bin to Executable PATH
 
 In order to compile RTEMS, you must have the cross compilation toolset
 in your search patch.  The following command appends the directory
@@ -29,11 +29,11 @@ where the tools were installed in the previous chapter:
 export PATH=$PATH:<INSTALL_POINT>/bin
 @end example
 
-NOTE:  The above command is in Bourne shell (@code{sh}) syntax and should work with
-the Korn (@code{ksh}) and GNU Bourne Again Shell (@code{bash}).  It will not
-work with the C Shell (@code{csh})or derivatives of the C Shell.
+NOTE:  The above command is in Bourne shell (@code{sh}) syntax and should
+work with the Korn (@code{ksh}) and GNU Bourne Again Shell (@code{bash}).  
+It will not work with the C Shell (@code{csh})or derivatives of the C Shell.
 
-@section Generate RTEMS for a specific target and board support package
+@section Generate RTEMS for a Specific Target and BSP
 
 Make a build directory under tools and build the RTEMS product in this
 directory. The ../@value{RTEMS-UNTAR}/configure
@@ -43,28 +43,29 @@ comes with the RTEMS distribution. In the installation described in the
 section "Unpack the RTEMS source", these configuration options can be found
 in file tools/@value{RTEMS-UNTAR}/README.configure.
 
+The GNAT/RTEMS run-time implementation is based on the POSIX API.  Thus
+the RTEMS configuration for a GNAT/RTEMS environment MUST include the
+@code{--enable-posix} flag.
+
 The following shows the command sequence required to configure,
-compile, and install RTEMS with the POSIX API, KA9Q TCP/IP,
-and C++ support disabled.  RTEMS will be built to target 
-the @code{BOARD_SUPPORT_PACKAGE} board.
+compile, and install RTEMS with the POSIX API enabled.
+RTEMS will be built to target the @code{BOARD_SUPPORT_PACKAGE} board.
 
 @example
 mkdir build-rtems
 cd build-rtems
 ../@value{RTEMS-UNTAR}/configure --target=<TARGET_CONFIGURATION> \
-    --disable-posix --disable-ka9q --disable-cxx \
+    --enable-posix \
     --enable-rtemsbsp=<BOARD_SUPPORT_PACKAGE>\
     --prefix=<INSTALL_POINT>
 gmake all install
 @end example
 
-Where:
-
-The list of currently supported of <TARGET_CONFIGURATION>'s and
+Where the list of currently supported of <TARGET_CONFIGURATION>'s and
 <BOARD_SUPPORT_PACKAGE>'s can be found in
 tools/@value{RTEMS-UNTAR}/README.configure.
 
 <INSTALL_POINT> is the installation point from the previous step
-"Modify the bit script" in the build of the tools. 
+"Modify the bit_ada Script" in the build of the tools. 
 
 

@@ -21,12 +21,23 @@
 @c  GCC/EGCS Version
 @c
 
-@set GCC-VERSION     egcs 1.0.2
-@set GCC-TAR         egcs-1.0.2.tar.gz
-@set GCC-UNTAR       egcs-1.0.2
-@set GCC-FTPSITE     egcs.cygnus.com
-@set GCC-FTPDIR      /pub/egcs/releases/egcs-1.0.2
-@set GCC-RTEMSPATCH  egcs-1.0.2-rtems-diff-980331.gz
+@set GCC-VERSION     gcc 2.8.1
+@set GCC-TAR         gcc-2.8.1.tar.gz
+@set GCC-UNTAR       gcc-2.8.1
+@set GCC-FTPSITE     ftp.gnu.oar
+@set GCC-FTPDIR      /pub/GNU
+@set GCC-RTEMSPATCH  gcc-2.8.1-rtems-diff-980323.gz
+
+@c
+@c  GNAT Version
+@c
+
+@set GNAT-VERSION     gnat 3.10p
+@set GNAT-TAR         gnat-3.10p.tar.gz
+@set GNAT-UNTAR       gnat-3.10p-src
+@set GNAT-FTPSITE     cs.nyu.edu
+@set GNAT-FTPDIR      /pub/gnat
+@set GNAT-RTEMSPATCH  gnat-3.10p-rtems-diff.971106.gz
 
 @c
 @c  BINUTILS Version
@@ -68,7 +79,8 @@
 @set GDB-UNTAR       gdb-4.16.86
 @set GDB-FTPSITE     ftp.cygnus.com
 @set GDB-FTPDIR      /private/gdb
-@set GDB-RTEMSPATCH  TBD
+@set GDB-RTEMSPATCH  GDB-RTEMS-PATCH-TBD
+@set GDB-GNATPATCH   GDB-GNAT-PATCH-TBD
 
 @c
 @c  RTEMS Version

@@ -50,27 +50,27 @@ intro.texi: intro.t versions.texi
 	    -n "Requirements" ${*}.t
 
 require.texi: require.t versions.texi
-	$(BMENU) -c -p "Introduction" \
+	$(BMENU) -c -p "Cross Development" \
 	    -u "Top" \
 	    -n "Building the GNAT Cross Compiler Toolset" ${*}.t
 
 buildada.texi: buildada.t versions.texi
-	$(BMENU) -c -p "Requirements" \
+	$(BMENU) -c -p "Insure GCC and GNAT Environment Variables Are Not Set" \
 	    -u "Top" \
 	    -n "Building RTEMS" ${*}.t
 
 buildrt.texi: buildrt.t versions.texi
-	$(BMENU) -c -p "Running the bit Script" \
+	$(BMENU) -c -p "Running the bit_ada Script" \
 	    -u "Top" \
 	    -n "Building the Sample Application" ${*}.t
 
 sample.texi: sample.t versions.texi
-	$(BMENU) -c -p "Generate RTEMS for a specific target and board support package" \
+	$(BMENU) -c -p "Generate RTEMS for a Specific Target and BSP" \
 	    -u "Top" \
 	    -n "Building the GNU Debugger" ${*}.t
 
 gdb.texi: gdb.t versions.texi
-	$(BMENU) -c -p "Application executable" \
+	$(BMENU) -c -p "Application Executable" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
