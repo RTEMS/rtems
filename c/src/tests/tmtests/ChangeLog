@@ -1,3 +1,7 @@
+2003-10-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:Remove RTEMS_CHECK_CPU.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* include/timesys.h, tm01/system.h, tm01/task1.c, tm01/tm01.doc,

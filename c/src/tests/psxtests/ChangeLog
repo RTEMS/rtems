@@ -1,3 +1,7 @@
+2003-10-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:Remove RTEMS_CHECK_CPU.
+
 2003-09-15	Jennifer Averett <jennifer@OARcorp.com>
 
 	* psxhdrs/sync01.c, psxhdrs/sync02.c: Correct fd creation
