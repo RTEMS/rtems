@@ -4,7 +4,6 @@ AC_DEFUN(RTEMS_ENV_RTEMSCPU,
 [AC_REQUIRE([RTEMS_ENABLE_MULTILIB])
 
 if test x"$multilib" = x"yes"; then
-## FIXME: There is no multilib BSP
   AS_IF([test -n "$with_multisubdir"],
     [MULTIBUILDTOP=`echo "/$with_multisubdir" | sed 's,/[[^\\/]]*,../,g'`])
   AC_SUBST(MULTIBUILDTOP)
@@ -16,7 +15,7 @@ if test x"$multilib" = x"yes"; then
   PROJECT_INCLUDE="\$(PROJECT_ROOT)/lib/include"
   AC_SUBST(PROJECT_INCLUDE)
 
-  project_libdir="\$(PROJECT_ROOT)/lib"
+  project_libdir="\$(PROJECT_ROOT)/lib/\$(MULTISUBDIR)"
   AC_SUBST(project_libdir)
 
   includedir="\${exec_prefix}/lib/include"

@@ -1,5 +1,10 @@
 2003-03-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/env-rtemscpu.m4: Remove obsolete comment.
+	Add MULTISUBDIR to probject_libdir.
+
+2003-03-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/env-rtemscpu.m4: Remove RTEMS_ROOT (Unused).
 	* aclocal/env-rtemsbsp.m4: Remove RTEMS_ROOT (Unused).
 	Remove RTEMS_PROJECT_ROOT (Unused).
