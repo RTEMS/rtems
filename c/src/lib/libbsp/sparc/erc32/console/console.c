@@ -103,7 +103,7 @@ int console_inbyte_nonblocking( int port )
  *  Interrupt driven console IO
  */
 
-#ifdef CONSOLE_USE_INTERRUPTS
+#if (CONSOLE_USE_INTERRUPTS)
 
 /*
  *  Buffers between task and ISRs
@@ -359,7 +359,7 @@ int console_write_support (int minor, const char *buf, int len)
   int nwrite = 0;
 
   while (nwrite < len) {
-#if defined(CONSOLE_USE_INTERRUPTS)
+#if (CONSOLE_USE_INTERRUPTS)
     console_outbyte_interrupt( minor, *buf++ );
 #else
     console_outbyte_polled( minor, *buf++ );
@@ -407,7 +407,7 @@ rtems_device_driver console_initialize(
    *  Initialize Hardware
    */
  
-#ifdef CONSOLE_USE_INTERRUPTS
+#if (CONSOLE_USE_INTERRUPTS)
   console_initialize_interrupts();
 #endif
 
@@ -421,7 +421,7 @@ rtems_device_driver console_open(
 )
 {
   rtems_status_code sc;
-#if defined(CONSOLE_USE_INTERRUPTS)
+#if (CONSOLE_USE_INTERRUPTS)
   rtems_libio_open_close_args_t *args = arg;
   static const rtems_termios_callbacks intrCallbacks = {
     NULL,                        /* firstOpen */
@@ -450,7 +450,7 @@ rtems_device_driver console_open(
   if ( minor > 2 )
     return RTEMS_INVALID_NUMBER;
  
-#if defined(CONSOLE_USE_INTERRUPTS)
+#if (CONSOLE_USE_INTERRUPTS)
   sc = rtems_termios_open (major, minor, arg, &intrCallbacks);
 
   console_termios_data[ minor ] = args->iop->data1;
