@@ -48,33 +48,6 @@ rtems_device_driver console_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
-/*  is_character_ready
- *
- *  This routine returns TRUE if a character is available.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- */
-
-rtems_boolean is_character_ready(
-  char *ch
-)
-{
-  rtems_unsigned8 rr_0;
-
-  for ( ; ; ) {
-    Z8x30_READ_CONTROL( CONSOLE_CONTROL, RR_0, rr_0 );
-    if ( !(rr_0 & RR_0_RX_DATA_AVAILABLE) )
-      return( FALSE );
-
-    Z8x30_READ_DATA( CONSOLE_DATA, *ch );
-    return( TRUE );
-  }
-}
-
 /*  inbyte
  *
  *  This routine reads a character from the SCC.
