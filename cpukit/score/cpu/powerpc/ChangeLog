@@ -1,5 +1,11 @@
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/new-exceptions/cpu.h (CPU_swap_u32, CPU_swap_u16): Remove.
+	* rtems/old-exceptions/cpu.h (CPU_swap_u32, CPU_swap_u16): Remove.
+	* rtems/score/cpu.h (CPU_swap_u32, CPU_swap_u16): New.
+
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/old-exceptions/cpu.h: Add _CPU_MSG_GET
 	(old/new exception processing ABI compatibility).
 	* rtems/powerpc/registers.h: Use C99 fixed size types.
