@@ -116,7 +116,7 @@ the exception. This implies:
 we need to,
 @item When we enter the high level exception handler code, a normalized exception
 context has been pushed on the system stack and a pointer to this context is
-available as the first argument (cf c/src/exec/score/cpu/i386/cpu.c for more
+available as the first argument (cf cpukit/score/cpu/i386/cpu.c for more
 details),
 @end itemize
 First the exception handler wakeup the EVENT_MNGT task. Then it will
@@ -365,19 +365,19 @@ Id.       Name   Detached   Suspended
 134283273 Rini   No         No <= current target thread 
 0x230715 in enterRdbg () 
 134283272 Evnt   No         No 
-_Thread_Dispatch () at /rtems/c/src/exec/score/src/thread.c:315 
+_Thread_Dispatch () at /rtems/cpukit/score/src/thread.c:315 
 134283271 SPE2   No         No 
-_Thread_Dispatch () at /rtems/c/src/exec/score/src/thread.c:315 
+_Thread_Dispatch () at /rtems/cpukit/score/src/thread.c:315 
 134283270 SPE1   No         No 
-_Thread_Handler  () at /rtems/c/src/exec/score/src/thread.c:1107 
+_Thread_Handler  () at /rtems/cpukit/score/src/thread.c:1107 
 134283269 RDBG   No         No 
 0x230715 in enterRdbg () 
 134283268 SCrx   No         No 
-_Thread_Dispatch () at /rtems/c/src/exec/score/src/thread.c:315 
+_Thread_Dispatch () at /rtems/cpukit/score/src/thread.c:315 
 134283267 SCtx   No         No 
-_Thread_Dispatch () at /rtems/c/src/exec/score/src/thread.c:315 
+_Thread_Dispatch () at /rtems/cpukit/score/src/thread.c:315 
 134283266 ntwk   No         No 
-_Thread_Dispatch () at /rtems/c/src/exec/score/src/thread.c:315 
+_Thread_Dispatch () at /rtems/cpukit/score/src/thread.c:315 
 (gdb) b init.c:89 
 Breakpoint 1 at 0x200180: file \
     /rtems/c/src/tests/samples/debug/init.c, line 89.
@@ -419,7 +419,7 @@ Breakpoint 1, example2 (argument=4) at \
 #1  0xf0009bd0 in ?? () 
 (gdb) thread target 134283270
 thread 134283270 [SPE1], _Thread_Dispatch () at \
-    /rtems/c/src/exec/score/src/thread.c:315 
+    /rtems/cpukit/score/src/thread.c:315 
 315         executing = _Thread_Executing; 
 (gdb) c 
 Continuing.
