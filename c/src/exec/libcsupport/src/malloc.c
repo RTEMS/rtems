@@ -27,10 +27,6 @@
 #include <errno.h>
 #include <string.h>
 
-/* for sbrk prototype in linux */
-#if defined(__linux__)
-#define __USE_MISC
-#endif
 #include <unistd.h>    /* sbrk(2) */
 
 rtems_id RTEMS_Malloc_Heap;

@@ -13,7 +13,6 @@ dnl It is called after running config.status.
 dnl AC_OUTPUT_SUBDIRS(DIRECTORY...)
 AC_DEFUN(RTEMS_OUTPUT_SUBDIRS,
 [
-# bla
 if test "$no_recursion" != yes; then
   if test $target_alias != $host_alias; then 
     target_subdir="$target_alias"

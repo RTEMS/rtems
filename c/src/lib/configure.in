@@ -124,7 +124,7 @@ if test "$HAS_NETWORKING" = "yes"; then
   RTEMS_CHECK_MAKEFILE(libnetworking)
   RTEMS_CHECK_MAKEFILE(librpc)
 
-  if test "$HAS_RDBG" = "yes"; then
+  if test "$RTEMS_HAS_RDBG" = "yes"; then
     RTEMS_CHECK_RDBG(RTEMS_BSP)
 
     if test "$HAS_RDBG" = "yes"; then

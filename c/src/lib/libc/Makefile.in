@@ -43,18 +43,6 @@ LIBC_GLUE_C_PIECES = __gettod __times truncate access stat lstat pathconf \
 
 UNIX_LIBC_C_PIECES = unixlibc hosterr
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/lib.cfg
-
-INSTALL_CHANGE = @INSTALL_CHANGE@
-mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
-
-INSTALLDIRS = $(PROJECT_INCLUDE)/rtems $(PROJECT_INCLUDE)/sys \
-    $(PROJECT_INCLUDE)
-
-$(INSTALLDIRS):
-	@$(mkinstalldirs) $(INSTALLDIRS)
-
 # C and C++ source names, if any, go here -- minus the .c or .cc
 UNIX_C_PIECES = $(UNIX_LIBC_C_PIECES) $(BASE_FS_C_PIECES) $(MALLOC_C_PIECES) \
     $(TERMIOS_C_PIECES)
@@ -71,6 +59,18 @@ C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 H_FILES = $(srcdir)/libcsupport.h
 SYS_H_FILES =
 RTEMS_H_FILES = $(srcdir)/libio.h
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(RTEMS_ROOT)/make/lib.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
+mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
+
+INSTALLDIRS = $(PROJECT_INCLUDE)/rtems $(PROJECT_INCLUDE)/sys \
+    $(PROJECT_INCLUDE)
+
+$(INSTALLDIRS):
+	@$(mkinstalldirs) $(INSTALLDIRS)
 
 SRCS = $(C_FILES) $(H_FILES) $(SYS_H_FILES) $(RTEMS_H_FILES)
 OBJS = $(C_O_FILES)

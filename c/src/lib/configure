@@ -2442,7 +2442,7 @@ fi
 
 
 
-  if test "$HAS_RDBG" = "yes"; then
+  if test "$RTEMS_HAS_RDBG" = "yes"; then
     echo $ac_n "checking whether BSP supports librdbg""... $ac_c" 1>&6
 echo "configure:2448: checking whether BSP supports librdbg" >&5
 if eval "test \"`echo '$''{'rtems_cv_HAS_RDBG'+set}'`\" = set"; then

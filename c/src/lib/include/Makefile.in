@@ -31,7 +31,8 @@ H_FILES = $(H_PIECES:%=$(srcdir)/%.h)
 
 SYS_H_PIECES_no_V = ioctl
 SYS_H_PIECES_yes_V =
-SYS_H_PIECES = termios utime $(SYS_H_PIECES_$(HAS_NETWORKING)_V)
+@UNIX_FALSE@SYS_H_PIECES = termios
+SYS_H_PIECES += utime $(SYS_H_PIECES_$(HAS_NETWORKING)_V)
 SYS_H_FILES = $(SYS_H_PIECES:%=$(srcdir)/sys/%.h)
 
 MOTOROLA_H_PIECES = mc68230 mc68681

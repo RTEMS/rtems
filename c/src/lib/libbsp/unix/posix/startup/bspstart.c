@@ -20,10 +20,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* for sbrk prototype in linux */
-#if defined(__linux__)
-#define __USE_MISC
-#endif
 #include <unistd.h>
 
 #include <bsp.h>

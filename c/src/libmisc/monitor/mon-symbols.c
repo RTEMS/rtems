@@ -12,10 +12,6 @@
  */
 
 /* for strcasecmp in linux and solaris */
-#if defined(__linux__)
-#include <features.h>
-#define __USE_BSD
-#endif
 #include <string.h>
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
