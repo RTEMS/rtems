@@ -1,3 +1,8 @@
+2004-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 553/bsps
+	* custom/mrm332.cfg: Comment out objdump.
+
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove obsolete custom/portsw.cfg, custom/simhppa.cfg.
