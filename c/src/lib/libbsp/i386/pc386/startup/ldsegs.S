@@ -139,8 +139,6 @@ next_step:
 	outb	al, $0x21		/* is cascaded                      */
 	call	SYM(delay)
 
-	movw	$0xFFFB, SYM(i8259s_cache) /* set up same values in cache */
-	
 	jmp	SYM (_establish_stack)	# return to the bsp entry code
 
 /*-------------------------------------------------------------------------+

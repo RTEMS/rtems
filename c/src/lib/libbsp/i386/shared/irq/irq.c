@@ -53,7 +53,7 @@ static rtems_irq_connect_data*		rtems_hdl_tbl;
  * while upper bits are interrupt on the slave PIC.
  * This cache is initialized in ldseg.s
  */
-rtems_i8259_masks i8259s_cache;
+rtems_i8259_masks i8259s_cache = 0xffbf;
 
 /*-------------------------------------------------------------------------+
 |         Function:  BSP_irq_disable_at_i8259s
@@ -83,7 +83,7 @@ int BSP_irq_disable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
   }
   else
   {
-    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) > 8));
+    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) >> 8));
   }
   _CPU_ISR_Enable (level);
 
@@ -118,7 +118,7 @@ int BSP_irq_enable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
   }
   else
   {
-    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) > 8));
+    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) >> 8));
   }
   _CPU_ISR_Enable (level);
 
