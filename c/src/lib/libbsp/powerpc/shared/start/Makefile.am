@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 S_FILES = start.S rtems_crti.S
 
 EXTRA_DIST = start.S rtems_crti.S

@@ -1,5 +1,6 @@
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* start/Makefile.am: Remove empty lines.
 	* bootloader/Makefile.am: Put all files into EXTRA_DIST.
 	* vme/Makefile.am: Ditto.
 	* console/Makefile.am: Move H_FILES to include_bsp_HEADERS.
