@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel
@@ -36,9 +35,9 @@ $(PROJECT_RELEASE)/lib/romlink: romlink
 	$(INSTALL_DATA) $< $@
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/ramlink \
-    $(PROJECT_RELEASE)/lib/linkcmds \
-    $(PROJECT_RELEASE)/lib/romlink
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/ramlink
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/romlink
 
 all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
