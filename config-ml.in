@@ -217,7 +217,8 @@ arm-*-rtems*)
 	  multidirs=""
 	  for x in ${old_multidirs}; do
 	    case "${x}" in
-	      *thumb*) : ;;
+	      *thumb* ) : ;;
+	      *fpu* ) : ;;
 	      *) multidirs="${multidirs} ${x}" ;;
 	    esac
 	  done
