@@ -13,15 +13,15 @@
 @subsection Lock/Unlock the Address Space of a Process
 
 @example
-mlockall()
-munlockall()
+mlockall(), Function
+munlockall(), Function
 @end example
 
 @subsection Lock/Unlock a Rand of Process Address Space
 
 @example
-mlock()
-munlock()
+mlock(), Function
+munlock(), Function
 @end example
 
 @section Memory Mapping Functions
@@ -29,25 +29,25 @@ munlock()
 @subsection Map Process Addresses to a Memory Object
 
 @example
-mmap()
+mmap(), Function
 @end example
 
 @subsection Unmap Previously Mapped Addresses
 
 @example
-munmap()
+munmap(), Function
 @end example
 
 @subsection Change Memory Protection
 
 @example
-mprotect()
+mprotect(), Function
 @end example
 
 @subsection Memory Object Synchronization
 
 @example
-msync()
+msync(), Function
 @end example
 
 @section Shared Memory Functions
@@ -55,11 +55,11 @@ msync()
 @subsection Open a Shared Memory Object
 
 @example
-shm_open()
+shm_open(), Function
 @end example
 
 @subsection Remove a Shared Memory Object
 
 @example
-shm_unlink()
+shm_unlink(), Function
 @end example

@@ -13,8 +13,8 @@
 @subsection Get Process and Parent Process IDs
 
 @example
-getpid()
-getppid()
+getpid(), Function
+getppid(), Function
 @end example
 
 @section User Identification
@@ -22,30 +22,30 @@ getppid()
 @subsection Get Real User Effective User Real Group and Effective Group IDs
 
 @example
-getuid()
-geteuid()
-getgid()
-getegid()
+getuid(), Function
+geteuid(), Function
+getgid(), Function
+getegid(), Function
 @end example
 
 @subsection Set User and Group IDs
 
 @example
-setuid()
-setgid()
+setuid(), Function
+setgid(), Function
 @end example
 
 @subsection Get Supplementary Group IDs
 
 @example
-getgroups()
+getgroups(), Function
 @end example
 
 @subsection Get User Name
 
 @example
-getlogin()
-getlogin_r()
+getlogin(), Function
+getlogin_r(), Function
 @end example
 
 @section Process Groups
@@ -53,19 +53,19 @@ getlogin_r()
 @subsection Get Process Group ID
 
 @example
-getpgrp()
+getpgrp(), Function
 @end example
 
 @subsection Create Session and Set Process Group ID
 
 @example
-setsid()
+setsid(), Function
 @end example
 
 @subsection Set Process Group ID for Job Control
 
 @example
-setpgid()
+setpgid(), Function
 @end example
 
 @section System Identification
@@ -73,7 +73,7 @@ setpgid()
 @subsection Get System Name
 
 @example
-uname()
+uname(), Function
 @end example
 
 @section Time
@@ -81,13 +81,13 @@ uname()
 @subsection Get System Time
 
 @example
-time()
+time(), Function
 @end example
 
 @subsection Get Process Times
 
 @example
-times()
+times(), Function
 @end example
 
 @section Environment Variables
@@ -95,7 +95,7 @@ times()
 @subsection Environment Access
 
 @example
-getenv()
+getenv(), Function
 @end example
 
 @section Terminal Identification
@@ -103,15 +103,15 @@ getenv()
 @subsection Generate Terminal Pathname
 
 @example
-ctermid()
+ctermid(), Function
 @end example
 
 @subsection Determine Terminal Device Name
 
 @example
-ttyname()
-ttyname_r()
-isatty()
+ttyname(), Function
+ttyname_r(), Function
+isatty(), Function
 @end example
 
 @section Configurable System Variables
@@ -119,5 +119,5 @@ isatty()
 @subsection Get Configurable System Variables
 
 @example
-sysconf()
+sysconf(), Function
 @end example

@@ -23,34 +23,34 @@
 @subsection Clocks
 
 @example
-clock_settime()
-clock_gettime()
-clock_getres()
+clock_settime(), Function
+clock_gettime(), Function
+clock_getres(), Function
 @end example
 
 @subsection Create a Per-Process Timer
 
 @example
-timer_create()
+timer_create(), Function
 @end example
 
 @subsection Delete a Per-Process Timer
 
 @example
-timer_delete()
+timer_delete(), Function
 @end example
 
 @subsection Per-Process Timers
 
 @example
-timer_settime()
-timer_gettime()
-timer_getoverrun()
+timer_settime(), Function
+timer_gettime(), Function
+timer_getoverrun(), Function
 @end example
 
 @subsection High Resolution Sleep
 
 @example
-nanosleep()
+nanosleep(), Function
 @end example
 

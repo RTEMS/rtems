@@ -13,25 +13,25 @@
 @subsection Process Creation
 
 @example
-fork(), Unimplementable
+fork(), Function, Unimplementable
 @end example
 
 
 @subsection Execute a File
 
 @example
-execl(), Unimplementable, Requires Processes
-execv(), Unimplementable, Requires Processes
-execle(), Unimplementable, Requires Processes
-execve(), Unimplementable, Requires Processes
-execlp(), Unimplementable, Requires Processes
-execvp(), Unimplementable, Requires Processes
+execl(), Function, Unimplementable, Requires Processes
+execv(), Function, Unimplementable, Requires Processes
+execle(), Function, Unimplementable, Requires Processes
+execve(), Function, Unimplementable, Requires Processes
+execlp(), Function, Unimplementable, Requires Processes
+execvp(), Function, Unimplementable, Requires Processes
 @end example
 
 @subsection Register Fork Handlers
 
 @example
-pthread_atfork(), Unimplementable, Requires Processes
+pthread_atfork(), Function, Unimplementable, Requires Processes
 @end example
 
 @section Process Termination
@@ -39,14 +39,14 @@ pthread_atfork(), Unimplementable, Requires Processes
 @subsection Wait for Process Termination
 
 @example
-wait(), Unimplementable, Requires Processes
-waitpid(), Unimplementable, Requires Processes
+wait(), Function, Unimplementable, Requires Processes
+waitpid(), Function, Unimplementable, Requires Processes
 @end example
 
 @subsection Terminate a Process
 
 @example
-_exit(), Unimplemented
+_exit(), Function, Unimplemented
 @end example
 
 @section Signals
@@ -56,62 +56,62 @@ _exit(), Unimplemented
 @subsection Send a Signal to a Process
 
 @example
-kill(), Implemented
+kill(), Function, Implemented
 @end example
 
 @subsection Manipulate Signal Sets
 
 @example
-sigemptyset(), Implemented
-sigfillset(), Implemented
-sigaddset(), Implemented
-sigdelset(), Implemented
-sigismember(), Implemented
+sigemptyset(), Function, Implemented
+sigfillset(), Function, Implemented
+sigaddset(), Function, Implemented
+sigdelset(), Function, Implemented
+sigismember(), Function, Implemented
 @end example
 
 @subsection Examine and Change Signal Action
 
 @example
-sigaction(), Implemented
+sigaction(), Function, Implemented
 @end example
 
 @subsection Examine and Change Blocked Signals
 
 @example
-pthread_sigmask(), Implemented
-sigprocmask(), Implemented
+pthread_sigmask(), Function, Implemented
+sigprocmask(), Function, Implemented
 @end example
 
 @subsection Examine Pending Signals
 
 @example
-sigpending(), Implemented
+sigpending(), Function, Implemented
 @end example
 
 @subsection Wait for a Signal
 
 @example
-sigsuspend(), Implemented
+sigsuspend(), Function, Implemented
 @end example
 
 @subsection Synchronously Accept a Signal
 
 @example
-sigwait(), Implemented
-sigwaitinfo(), Implemented
-sigtimedwait(), Implemented
+sigwait(), Function, Implemented
+sigwaitinfo(), Function, Implemented
+sigtimedwait(), Function, Implemented
 @end example
 
 @subsection Queue a Signal to a Process
 
 @example
-sigqueue(), Implemented
+sigqueue(), Function, Implemented
 @end example
 
 @subsection Send a Signal to a Thread
 
 @example
-pthread_kill(), Implemented
+pthread_kill(), Function, Implemented
 @end example
 
 @section Timer Operations
@@ -119,17 +119,17 @@ pthread_kill(), Implemented
 @subsection Schedule Alarm
 
 @example
-alarm(), Implemented
+alarm(), Function, Implemented
 @end example
 
 @subsection Suspend Process Execution
 
 @example
-pause(), Implemented
+pause(), Function, Implemented
 @end example
 
 @subsection Delay Process Execution
 
 @example
-sleep(), Implemented
+sleep(), Function, Implemented
 @end example

@@ -15,18 +15,18 @@
 @subsection Group Database Access
 
 @example
-getgrgid()
-getgrgid_r()
-getgrname()
-getgrnam_r()
+getgrgid(), Function
+getgrgid_r(), Function
+getgrname(), Function
+getgrnam_r(), Function
 @end example
 
 @subsection User Database Access
 
 @example
-getpwuid()
-getpwuid_r()
-getpwnam()
-getpwnam_r()
+getpwuid(), Function
+getpwuid_r(), Function
+getpwnam(), Function
+getpwnam_r(), Function
 @end example
 

@@ -23,22 +23,22 @@
 @subsection Canceling Execution of a Thread
 
 @example
-pthread_cancel()
+pthread_cancel(), Function
 @end example
 
 @subsection Setting Cancelability State
 
 @example
-pthread_setcancelstate()
-pthread_setcanceltype()
-pthread_testcancel()
+pthread_setcancelstate(), Function
+pthread_setcanceltype(), Function
+pthread_testcancel(), Function
 @end example
 
 @subsection Establishing Cancellation Handlers
 
 @example
-pthread_cleanup_push()
-pthread_cleanup_pop()
+pthread_cleanup_push(), Function
+pthread_cleanup_pop(), Function
 @end example
 
 @section Language-Independent Cancellation Functionality

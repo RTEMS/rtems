@@ -13,7 +13,7 @@
 @subsection Create an Inter-Process Channel
 
 @example
-pipe()
+pipe(), Function
 @end example
 
 @section File Descriptor Manipulation
@@ -21,8 +21,8 @@ pipe()
 @subsection Duplicate an Open File Descriptor
 
 @example
-dup()
-dup2()
+dup(), Function
+dup2(), Function
 @end example
 
 @section File Descriptor Deassignment
@@ -30,7 +30,7 @@ dup2()
 @subsection Close a File
 
 @example
-close()
+close(), Function
 @end example
 
 @section Input and Output
@@ -38,13 +38,13 @@ close()
 @subsection Read from a File
 
 @example
-read()
+read(), Function
 @end example
 
 @subsection Write to a File
 
 @example
-write()
+write(), Function
 @end example
 
 @section Control Operations on Files
@@ -54,13 +54,13 @@ write()
 @subsection File Control
 
 @example
-fcntl()
+fcntl(), Function
 @end example
 
 @subsection Reposition Read/Write File Offset
 
 @example
-lseek()
+lseek(), Function
 @end example
 
 @section File Synchronization
@@ -68,13 +68,13 @@ lseek()
 @subsection Synchronize the State of a File
 
 @example
-fsync()
+fsync(), Function
 @end example
 
 @subsection Synchronize the Data of a File
 
 @example
-fdatasync()
+fdatasync(), Function
 @end example
 
 @section Asynchronous Input and Output
@@ -84,48 +84,48 @@ fdatasync()
 @subsection Asynchronous Read
 
 @example
-aio_read()
+aio_read(), Function
 @end example
 
 @subsection Asynchronous Write
 
 @example
-aio_write()
+aio_write(), Function
 @end example
 
 @subsection List Directed I/O
 
 @example
-aio_listio()
+aio_listio(), Function
 @end example
 
 @subsection Retrieve Error Status of Asynchronous I/O Operation
 
 @example
-aio_error()
+aio_error(), Function
 @end example
 
 @subsection Retrieve Return Status of Asynchronous I/O Operation
 
 @example
-aio_return()
+aio_return(), Function
 @end example
 
 @subsection Cancel Asynchronous I/O Request
 
 @example
-aio_cancel()
+aio_cancel(), Function
 @end example
 
 @subsection Wait for Asynchronous I/O Request
 
 @example
-aio_suspend()
+aio_suspend(), Function
 @end example
 
 @subsection Asynchronous File Synchronization
 
 @example
-aio_fsync()
+aio_fsync(), Function
 @end example
 

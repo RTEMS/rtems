@@ -13,156 +13,156 @@
 ANSI C Section 4.2 --- Diagnostics
 
 @example
-assert()
+assert(), Function
 @end example
 
 ANSI C Section 4.3 --- Character Handling
 
 @example
-isalnum()
-isalpha()
-iscntrl()
-isdigit()
-isgraph()
-islower()
-isprint()
-ispunct()
-isspace()
-isupper()
-isxdigit()
-tolower()
-toupper()
+isalnum(), Function
+isalpha(), Function
+iscntrl(), Function
+isdigit(), Function
+isgraph(), Function
+islower(), Function
+isprint(), Function
+ispunct(), Function
+isspace(), Function
+isupper(), Function
+isxdigit(), Function
+tolower(), Function
+toupper(), Function
 @end example
 
 ANSI C Section 4.4 --- Localization
 
 @example
-setlocale()
+setlocale(), Function
 @end example
 
 ANSI C Section 4.5 --- Mathematics
 
 @example
-acos()
-asin()
-atan()
-atan2()
-cos()
-sin()
-tan()
-cosh()
-sinh()
-tanh()
-exp()
-frexp()
-ldexp()
-log()
-log10()
-modf()
-pow()
-sqrt()
-ceil()
-fabs()
-floor()
-fmod()
+acos(), Function
+asin(), Function
+atan(), Function
+atan2(), Function
+cos(), Function
+sin(), Function
+tan(), Function
+cosh(), Function
+sinh(), Function
+tanh(), Function
+exp(), Function
+frexp(), Function
+ldexp(), Function
+log(), Function
+log10(), Function
+modf(), Function
+pow(), Function
+sqrt(), Function
+ceil(), Function
+fabs(), Function
+floor(), Function
+fmod(), Function
 @end example
 
 ANSI C Section 4.6 --- Non-Local Jumps
 
 @example
-setjmp()
-longjmp()
+setjmp(), Function
+longjmp(), Function
 @end example
 
 ANSI C Section 4.9 --- Input/Output
 
 @example
-clearerr()
-fclose()
-feof()
-ferror()
-fflush()
-fgetc()
-fgets()
-fopen()
-fputc()
-fputs()
-fread()
-freopen()
-fseek()
-ftell()
-fwrite()
-getc()
-getchar()
-gets()
-perror()
-printf()
-fprintf()
-sprintf()
-putc()
-putchar()
-puts()
-remove()
-rename()
-rewind()
-scanf()
-fscanf()
-sscanf()
-setbuf()
-tmpfile()
-tmpnam()
-ungetc()
+clearerr(), Function
+fclose(), Function
+feof(), Function
+ferror(), Function
+fflush(), Function
+fgetc(), Function
+fgets(), Function
+fopen(), Function
+fputc(), Function
+fputs(), Function
+fread(), Function
+freopen(), Function
+fseek(), Function
+ftell(), Function
+fwrite(), Function
+getc(), Function
+getchar(), Function
+gets(), Function
+perror(), Function
+printf(), Function
+fprintf(), Function
+sprintf(), Function
+putc(), Function
+putchar(), Function
+puts(), Function
+remove(), Function
+rename(), Function
+rewind(), Function
+scanf(), Function
+fscanf(), Function
+sscanf(), Function
+setbuf(), Function
+tmpfile(), Function
+tmpnam(), Function
+ungetc(), Function
 @end example
 
 ANSI C Section 4.10 --- General Utilities
 
 @example
-abs()
-atof()
-atoi()
-atol()
-rand()
-srand()
-calloc()
-free()
-malloc()
-realloc()
-abort()
-exit()
-getenv()
-bsearch()
-qsort()
+abs(), Function
+atof(), Function
+atoi(), Function
+atol(), Function
+rand(), Function
+srand(), Function
+calloc(), Function
+free(), Function
+malloc(), Function
+realloc(), Function
+abort(), Function
+exit(), Function
+getenv(), Function
+bsearch(), Function
+qsort(), Function
 @end example
 
 ANSI C Section 4.11 --- String Handling
 
 @example
-strcpy()
-strncpy()
-strcat()
-strncat()
-strcmp()
-strncmp()
-strchr()
-strcspn()
-strpbrk()
-strrchr()
-strspn()
-strstr()
-strtok()
-strlen()
+strcpy(), Function
+strncpy(), Function
+strcat(), Function
+strncat(), Function
+strcmp(), Function
+strncmp(), Function
+strchr(), Function
+strcspn(), Function
+strpbrk(), Function
+strrchr(), Function
+strspn(), Function
+strstr(), Function
+strtok(), Function
+strlen(), Function
 @end example
 
 ANSI C Section 4.12 --- Date and Time Handling
 
 @example
-time()
-asctime()
-ctime()
-gmtime()
-localtime()
-mktime()
-strftime()
+time(), Function
+asctime(), Function
+ctime(), Function
+gmtime(), Function
+localtime(), Function
+mktime(), Function
+strftime(), Function
 @end example
 
 @subsection Extensions to Time Functions
@@ -174,13 +174,13 @@ strftime()
 @subsection Map a Stream Pointer to a File Descriptor
 
 @example
-fileno()
+fileno(), Function
 @end example
 
 @subsection Open a Stream on a File Descriptor
 
 @example
-fdopen()
+fdopen(), Function
 @end example
 
 @subsection Interactions of Other FILE-Type C Functions
@@ -192,18 +192,18 @@ fdopen()
 @subsection Stdio Locking Functions
 
 @example
-flockfile()
-ftrylockfile()
-funlockfile()
+flockfile(), Function
+ftrylockfile(), Function
+funlockfile(), Function
 @end example
 
 @subsection Stdio With Explicit Client Locking
 
 @example
-getc_unlocked()
-getchar_unlocked()
-putc_unlocked()
-putchar_unlocked()
+getc_unlocked(), Function
+getchar_unlocked(), Function
+putc_unlocked(), Function
+putchar_unlocked(), Function
 @end example
 
 @section Other C Language Functions
@@ -211,50 +211,50 @@ putchar_unlocked()
 @subsection Nonlocal Jumps
 
 @example
-sigsetjmp()
-siglongjmp()
+sigsetjmp(), Function
+siglongjmp(), Function
 @end example
 
 @subsection Set Time Zone
 
 @example
-tzset()
+tzset(), Function
 @end example
 
 @subsection Find String Token
 
 @example
-strtok_r()
+strtok_r(), Function
 @end example
 
 @subsection ASCII Time Representation
 
 @example
-asctime_r()
+asctime_r(), Function
 @end example
 
 @subsection Current Time Representation
 
 @example
-ctime_r()
+ctime_r(), Function
 @end example
 
 @subsection Coordinated Universal Time
 
 @example
-gmtime_r()
+gmtime_r(), Function
 @end example
 
 @subsection Local Time
 
 @example
-localtime_r()
+localtime_r(), Function
 @end example
 
 @subsection Pseudo-Random Sequence Generation Functions
 
 @example
-rand_r()
+rand_r(), Function
 @end example
 
 

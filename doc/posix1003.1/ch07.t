@@ -67,28 +67,28 @@
 @subsection Get and Set State
 
 @example
-tcgetattr()
-tcsetattr()
+tcgetattr(), Function
+tcsetattr(), Function
 @end example
 
 @subsection Line Control Functions
 
 @example
-tcsendbreak()
-tcdrain()
-tcflush()
-tcflow()
+tcsendbreak(), Function
+tcdrain(), Function
+tcflush(), Function
+tcflow(), Function
 @end example
 
 @subsection Get Foreground Process Group ID
 
 @example
-tcgetprgrp()
+tcgetprgrp(), Function
 @end example
 
 @subsection Set Foreground Process Group ID
 
 @example
-tcsetprgrp()
+tcsetprgrp(), Function
 @end example
 
