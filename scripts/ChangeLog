@@ -1,3 +1,9 @@
+2001-03-19	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Updated version numbers and patches for binutils
+	and gdb.  binutils was to get correct patch in field.  gdb
+	was to add mipstx39-rtems configurery support.
+
 2001-03-14	Joel Sherrill <joel@OARcorp.com>
 
 	* gdb/Makefile.am, mkgdbspec.in: Added mipstx39-rtems
