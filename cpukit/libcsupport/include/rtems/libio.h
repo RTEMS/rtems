@@ -562,7 +562,7 @@ int unmount(
 int mount(
   rtems_filesystem_mount_table_entry_t **mt_entry,
   rtems_filesystem_operations_table    *fs_ops,
-  char                                 *fsoptions,
+  rtems_filesystem_options_t            fsoptions,
   char                                 *device,
   char                                 *mount_point
 );

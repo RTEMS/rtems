@@ -60,11 +60,6 @@ int search_mt_for_mount_point(
   rtems_filesystem_location_info_t *location_of_mount_point
 );
 
-
-rtems_filesystem_options_t get_file_system_options(
-  char *fsoptions
-);
-
 int init_fs_mount_table( void );
 
 
@@ -93,7 +88,7 @@ int init_fs_mount_table( void );
 int mount(
   rtems_filesystem_mount_table_entry_t **mt_entry,
   rtems_filesystem_operations_table    *fs_ops,
-  char                                 *fsoptions,
+  rtems_filesystem_options_t            fsoptions,
   char                                 *device,
   char                                 *mount_point
 )
@@ -117,13 +112,8 @@ int mount(
    *  Are the file system options valid?
    */
 
-  if ( fsoptions == NULL ) {
-    errno = EINVAL;
-    return -1;
-  }
-
-  options = get_file_system_options( fsoptions );
-  if ( options == RTEMS_FILESYSTEM_BAD_OPTIONS ) {
+  if ( fsoptions != RTEMS_FILESYSTEM_READ_ONLY && 
+       fsoptions != RTEMS_FILESYSTEM_READ_WRITE ) {
     errno = EINVAL;
     return -1;
   }
@@ -256,28 +246,6 @@ int init_fs_mount_table()
   Chain_Initialize_empty ( &rtems_filesystem_mount_table_control );
   return 0;
 }
-
-/*
- *  get_file_system_options
- *
- *  This routine will determine is the text string that represents the options
- *  that are to be used to mount the file system are actually valid. If the
- *  options are valid the appropriate file system options type will be returned
- *  to the calling routine.
- */
-
-rtems_filesystem_options_t get_file_system_options(
-  char *fsoptions
-)
-{
-  if ( strcasecmp( "RO", fsoptions ) == 0 )
-    return RTEMS_FILESYSTEM_READ_ONLY;
-  if ( strcasecmp( "RW", fsoptions ) == 0 )
-    return RTEMS_FILESYSTEM_READ_WRITE;
-  else
-    return RTEMS_FILESYSTEM_BAD_OPTIONS;
-}
-
 
 
 /*

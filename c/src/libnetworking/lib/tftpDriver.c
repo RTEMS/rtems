@@ -234,7 +234,7 @@ int rtems_bsdnet_initialize_tftp_filesystem ()
   status = mount( 
      &entry,
      &rtems_tftp_ops,
-     "RO",
+     RTEMS_FILESYSTEM_READ_ONLY,
      NULL,
      TFTP_PATHNAME_PREFIX
   );

@@ -55,7 +55,7 @@ void rtems_filesystem_initialize( void )
   status = mount( 
      &first_entry,
      &IMFS_ops,
-     "RW",
+     RTEMS_FILESYSTEM_READ_WRITE,
      NULL,
      NULL );
   if( status == -1 ){
