@@ -195,7 +195,8 @@ before running diff to cut a patch.
 
 If you don't understand what this is all about, try start getting familiar
 with auto* tools by reading autoconf.info and automake.info, or feel free
-to ask for assistance on the RTEMS Mailing List (See @ref{RTEMS Mailing List}.
+to ask for assistance on the RTEMS Mailing List
+(See @ref{Are there any mailing lists?}.
 
 @section Host Operating Systems and RTEMS
 
