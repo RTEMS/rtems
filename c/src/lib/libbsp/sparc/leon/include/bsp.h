@@ -131,7 +131,7 @@ extern int rtems_leon_open_eth_driver_attach (struct rtems_bsdnet_ifconfig *conf
  *  This is very dependent on the clock speed of the target.
  */
 
-extern void Clock_delay(rtems_unsigned32 microseconds);
+extern void Clock_delay(uint32_t         microseconds);
 
 #define delay( microseconds ) Clock_delay(microseconds)
 

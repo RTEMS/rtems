@@ -298,7 +298,7 @@ extern LEON_Register_Map LEON_REG;
  
 #define LEON_Mask_interrupt( _source ) \
   do { \
-    unsigned32 _level; \
+    uint32_t   _level; \
     \
     _level = sparc_disable_interrupts(); \
       LEON_REG.Interrupt_Mask &= ~(1 << (_source)); \
@@ -307,7 +307,7 @@ extern LEON_Register_Map LEON_REG;
  
 #define LEON_Unmask_interrupt( _source ) \
   do { \
-    unsigned32 _level; \
+    uint32_t   _level; \
     \
     _level = sparc_disable_interrupts(); \
       LEON_REG.Interrupt_Mask |= (1 << (_source)); \
@@ -316,8 +316,8 @@ extern LEON_Register_Map LEON_REG;
 
 #define LEON_Disable_interrupt( _source, _previous ) \
   do { \
-    unsigned32 _level; \
-    unsigned32 _mask = 1 << (_source); \
+    uint32_t   _level; \
+    uint32_t   _mask = 1 << (_source); \
     \
     _level = sparc_disable_interrupts(); \
       (_previous) = LEON_REG.Interrupt_Mask; \
@@ -328,8 +328,8 @@ extern LEON_Register_Map LEON_REG;
  
 #define LEON_Restore_interrupt( _source, _previous ) \
   do { \
-    unsigned32 _level; \
-    unsigned32 _mask = 1 << (_source); \
+    uint32_t   _level; \
+    uint32_t   _mask = 1 << (_source); \
     \
     _level = sparc_disable_interrupts(); \
       LEON_REG.Interrupt_Mask = \

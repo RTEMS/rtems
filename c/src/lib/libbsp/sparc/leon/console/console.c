@@ -107,7 +107,7 @@ rtems_isr console_isr_a(
   if ( LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_THE ) {
     if ( !Ring_buffer_Is_empty( &TX_Buffer[ 0 ] ) ) {
       Ring_buffer_Remove_character( &TX_Buffer[ 0 ], ch );
-      LEON_REG.UART_Channel_1 = (unsigned32) ch;
+      LEON_REG.UART_Channel_1 = (uint32_t) ch;
     } else
      Is_TX_active[ 0 ] = FALSE;
   }
@@ -147,7 +147,7 @@ rtems_isr console_isr_b(
   if ( LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_THE ) {
     if ( !Ring_buffer_Is_empty( &TX_Buffer[ 1 ] ) ) {
       Ring_buffer_Remove_character( &TX_Buffer[ 1 ], ch );
-      LEON_REG.UART_Channel_2 = (unsigned32) ch;
+      LEON_REG.UART_Channel_2 = (uint32_t) ch;
     } else
      Is_TX_active[ 1 ] = FALSE;
   }
@@ -170,8 +170,8 @@ rtems_isr console_isr_b(
 
 void console_exit()
 {
-  rtems_unsigned32 port;
-  rtems_unsigned32 ch;
+  uint32_t         port;
+  uint32_t         ch;
 
   /*
    *  Although the interrupts for the UART are unmasked, the PIL is set to
@@ -224,7 +224,7 @@ void console_exit()
  */
 
 #ifdef RDB_BREAK_IN
-  extern unsigned32 trap_table[];
+  extern uint32_t   trap_table[];
 #endif
 
 void console_initialize_interrupts( void )

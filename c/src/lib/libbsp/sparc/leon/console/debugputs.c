@@ -96,7 +96,7 @@ void DEBUG_puts(
 )
 {
   char *s;
-  unsigned32 old_level;
+  uint32_t   old_level;
 
   LEON_Disable_interrupt( LEON_INTERRUPT_UART_1_RX_TX, old_level );
   LEON_REG.UART_Control_1 = LEON_REG_UART_CTRL_TE;
