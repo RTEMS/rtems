@@ -146,17 +146,17 @@ endif
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-EXTRA_LIBRARIES = o-optimize/libscore.a
-o_optimize_libscore_a_SOURCES = $(C_FILES)
-o_optimize_libscore_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+EXTRA_LIBRARIES = libscore.a
+libscore_a_SOURCES = $(C_FILES)
+libscore_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-EXTRA_LIBRARIES += o-debug/libscore.a
-o_debug_libscore_a_SOURCES = $(C_FILES)
-o_debug_libscore_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+EXTRA_LIBRARIES += libscore_g.a
+libscore_g_a_SOURCES = $(C_FILES)
+libscore_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 EXTRA_DIST += $(STD_C_FILES) $(MP_C_FILES) src/Unlimited.txt
 
-all-local: $(PREINSTALL_FILES) $(ARCH)/libscore.a
+all-local: $(PREINSTALL_FILES) libscore$(LIB_VARIANT).a
 
 PREINSTALL_FILES =
 
