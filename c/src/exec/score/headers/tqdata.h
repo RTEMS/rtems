@@ -36,6 +36,17 @@ typedef enum {
 }   Thread_queue_Disciplines;
 
 /*
+ *  The following enumerated types indicate what happened while the thread
+ *  queue was in the synchronization window.
+ */
+ 
+typedef enum {
+  THREAD_QUEUE_NOTHING_HAPPENED,
+  THREAD_QUEUE_TIMEOUT,
+  THREAD_QUEUE_SATISFIED
+}  Thread_queue_states;
+
+/*
  *  The following record defines the control block used
  *  to manage each thread.
  */
@@ -49,6 +60,7 @@ typedef struct {
                                        /* priority discipline list       */
   } Queues;
   boolean                  sync;       /* alloc/dealloc critical section */
+  Thread_queue_states      sync_state; /* what happened while in sync    */
   Thread_queue_Disciplines discipline; /* queue discipline               */
   States_Control           state;      /* state of threads on Thread_q   */
   unsigned32               timeout_status;
@@ -80,6 +92,19 @@ STATIC INLINE unsigned32 _Thread_queue_Header_number (
 
 STATIC INLINE boolean _Thread_queue_Is_reverse_search (
   Priority_Control the_priority
+);
+
+/*
+ *  _Thread_queue_Enter_critical_section
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine is invoked to indicate that the specified thread queue is
+ *  entering a critical section.
+ */
+ 
+STATIC INLINE void _Thread_queue_Enter_critical_section (
+  Thread_queue_Control *the_thread_queue
 );
 
 #include <rtems/score/tqdata.inl>
