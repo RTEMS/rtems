@@ -98,7 +98,7 @@ typedef struct {
   boolean              core_allocated_stack;
   Stack_Control        Initial_stack;    /* stack information               */
   void                *fp_context;       /* initial FP context area address */
-  void                *stack;            /* initial FP context area address */
+  void                *stack;            /* initial stack area address      */
 }   Thread_Start_information;
 
 /*
