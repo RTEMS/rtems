@@ -63,9 +63,9 @@ void _CPU_Initialize(
   int i;
 #endif
 #if (PPC_ABI != PPC_ABI_POWEROPEN)
-  register unsigned32 r2 = 0;
+  register uint32_t   r2 = 0;
 #if (PPC_ABI != PPC_ABI_GCC27)
-  register unsigned32 r13 = 0;
+  register uint32_t   r13 = 0;
 
   asm ("mr %0,13" : "=r" ((r13)) : "0" ((r13)));
   _CPU_IRQ_info.Default_r13 = r13;
@@ -79,7 +79,7 @@ void _CPU_Initialize(
   _CPU_IRQ_info.Disable_level = &_Thread_Dispatch_disable_level;
   /* fill in _CPU_IRQ_info.Vector_table later */
 #if (PPC_ABI == PPC_ABI_POWEROPEN)
-  _CPU_IRQ_info.Dispatch_r2 = ((unsigned32 *)_Thread_Dispatch)[1];
+  _CPU_IRQ_info.Dispatch_r2 = ((uint32_t*)_Thread_Dispatch)[1];
 #endif
   _CPU_IRQ_info.Switch_necessary = &_Context_Switch_necessary;
   _CPU_IRQ_info.Signal = &_ISR_Signals_to_thread_executing;
@@ -138,11 +138,11 @@ void _CPU_Initialize_vectors(void)
  *  to specify specifically which interrupt sources were enabled.
  */
  
-unsigned32 _CPU_ISR_Calculate_level(
-  unsigned32 new_level
+uint32_t   _CPU_ISR_Calculate_level(
+  uint32_t   new_level
 )
 {
-  register unsigned32 new_msr = 0;
+  register uint32_t   new_msr = 0;
 
   /*
    *  Set the critical interrupt enable bit
@@ -170,11 +170,11 @@ unsigned32 _CPU_ISR_Calculate_level(
  */
 
 void _CPU_ISR_Set_level(
-  unsigned32 new_level
+  uint32_t   new_level
 )
 {
-  register unsigned32 tmp = 0;
-  register unsigned32 new_msr;
+  register uint32_t   tmp = 0;
+  register uint32_t   new_msr;
 
   new_msr = _CPU_ISR_Calculate_level( new_level );
 
@@ -193,10 +193,10 @@ void _CPU_ISR_Set_level(
  *  converts it to an RTEMS interrupt level.
  */
 
-unsigned32 _CPU_ISR_Get_level( void )
+uint32_t   _CPU_ISR_Get_level( void )
 {
-  unsigned32 level = 0;
-  unsigned32 msr;
+  uint32_t   level = 0;
+  uint32_t   msr;
  
   asm volatile("mfmsr %0" : "=r" ((msr)));
  
@@ -233,18 +233,18 @@ unsigned32 _CPU_ISR_Get_level( void )
 
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
-  unsigned32       *stack_base,
-  unsigned32        size,
-  unsigned32        new_level,
+  uint32_t         *stack_base,
+  uint32_t          size,
+  uint32_t          new_level,
   void             *entry_point,
   boolean           is_fp
 )
 {
-  unsigned32 msr_value;
-  unsigned32 sp;
+  uint32_t   msr_value;
+  uint32_t   sp;
 
-  sp = (unsigned32)stack_base + size - CPU_MINIMUM_STACK_FRAME_SIZE;
-  *((unsigned32 *)sp) = 0;
+  sp = (uint32_t)stack_base + size - CPU_MINIMUM_STACK_FRAME_SIZE;
+  *((uint32_t*)sp) = 0;
   the_context->gpr1 = sp;
    
   the_context->msr = _CPU_ISR_Calculate_level( new_level );
@@ -274,7 +274,7 @@ void _CPU_Context_Initialize(
   the_context->msr |= msr_value & (PPC_MSR_DR|PPC_MSR_IR);
 
 #if (PPC_ABI == PPC_ABI_POWEROPEN)
-  { unsigned32 *desc = (unsigned32 *)entry_point;
+  { uint32_t   *desc = (uint32_t*)entry_point;
 
     the_context->pc = desc[0];
     the_context->gpr2 = desc[1];
@@ -285,17 +285,17 @@ void _CPU_Context_Initialize(
   { unsigned    r13 = 0;
     asm volatile ("mr %0, 13" : "=r" ((r13)));
    
-    the_context->pc = (unsigned32)entry_point;
+    the_context->pc = (uint32_t)entry_point;
     the_context->gpr13 = r13;
   }
 #endif
 
 #if (PPC_ABI == PPC_ABI_EABI)
-  { unsigned32  r2 = 0;
+  { uint32_t    r2 = 0;
     unsigned    r13 = 0;
     asm volatile ("mr %0,2; mr %1,13" : "=r" ((r2)), "=r" ((r13)));
  
-    the_context->pc = (unsigned32)entry_point;
+    the_context->pc = (uint32_t)entry_point;
     the_context->gpr2 = r2;
     the_context->gpr13 = r13;
   }
@@ -318,7 +318,7 @@ void _CPU_Context_Initialize(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
@@ -397,7 +397,7 @@ static void ppc_spurious(int v, CPU_Interrupt_frame *i)
     _CPU_last_spurious = v;
 }
 
-void _CPU_Fatal_error(unsigned32 _error)
+void _CPU_Fatal_error(uint32_t   _error)
 {
   asm volatile ("mr 3, %0" : : "r" ((_error)));
   asm volatile ("tweq 5,5");
@@ -440,8 +440,8 @@ const CPU_Trap_table_entry _CPU_Trap_slot_template_m860 = {
 };
 #endif /* mpc860 */
 
-unsigned32  ppc_exception_vector_addr( 
-  unsigned32 vector
+uint32_t    ppc_exception_vector_addr( 
+  uint32_t   vector
 );
 
 
@@ -472,14 +472,14 @@ unsigned32  ppc_exception_vector_addr(
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
 {
-  unsigned32             real_vector;
+  uint32_t               real_vector;
   CPU_Trap_table_entry  *slot;
-  unsigned32             u32_handler=0;
+  uint32_t               u32_handler=0;
 
   /*
    *  Get the "real" trap number for this vector ignoring the synchronous
@@ -545,7 +545,7 @@ void _CPU_ISR_install_raw_handler(
 #endif /* mpc860 */
   *slot = _CPU_Trap_slot_template;
 
-  u32_handler = (unsigned32) new_handler;
+  u32_handler = (uint32_t) new_handler;
 
   /* 
    * IMD FIX: insert address fragment only (bits 6..29) 
@@ -568,15 +568,15 @@ void _CPU_ISR_install_raw_handler(
   _CPU_Data_Cache_Block_Flush( slot );
 }
 
-unsigned32  ppc_exception_vector_addr( 
-  unsigned32 vector
+uint32_t    ppc_exception_vector_addr( 
+  uint32_t   vector
 )
 {
 #if (!PPC_HAS_EVPR)
-  unsigned32 Msr;
+  uint32_t   Msr;
 #endif
-  unsigned32 Top = 0;
-  unsigned32 Offset = 0x000;
+  uint32_t   Top = 0;
+  uint32_t   Offset = 0x000;
 
 #if (PPC_HAS_EXCEPTION_PREFIX)
   _CPU_MSR_Value ( Msr );

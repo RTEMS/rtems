@@ -31,7 +31,7 @@
 
 void powerpc_instruction_cache_enable ()
 {
-  unsigned32 value;
+  uint32_t   value;
 
   /*
    * Enable the instruction cache
@@ -46,7 +46,7 @@ void powerpc_instruction_cache_enable ()
 
 void powerpc_data_cache_enable ()
 {
-  unsigned32 value;
+  uint32_t   value;
 
   /*
    * enable data cache
