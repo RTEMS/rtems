@@ -208,6 +208,8 @@ rtems_libio_t *rtems_libio_allocate( void )
     rtems_libio_iop_freelist = iop->data1;
     iop->data1 = 0;
     iop->flags = LIBIO_FLAGS_OPEN;
+    iop->size = 0;
+    iop->offset = 0;
     goto done;
   }
   

@@ -146,7 +146,6 @@ int open(
    *  returned by successful path evaluation.
    */
 
-  iop->offset     = 0;
   iop->handlers   = loc.handlers;
   iop->file_info  = loc.node_access;
   iop->flags     |= rtems_libio_fcntl_flags( flags );

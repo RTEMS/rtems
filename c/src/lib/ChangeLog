@@ -1,3 +1,12 @@
+2001-04-24	Joel Sherrill <joel@OARcorp.com>
+
+ 	* libc/libio.c (rtems_libio_allocate): Make sure size and offset
+	fields are cleared on each file open.  Before this field was cleared,
+	this resulted in the value from the last time that IOP was used
+	being still in place.  Discovered by  Andrew Bythell
+	<abythell@nortelnetworks.com>.
+	* libc/open.c: Remove redundant setting of iop->offset.
+
 2001-04-20  Correo Fernando-ruiz <correo@fernando-ruiz.com>
 
 	* include/rtems/libio_.h, libc/chroot.c, libc/privateenv.c:
