@@ -34,7 +34,6 @@
  *	$Id$
  */
 
-
 #include <sys/param.h>
 #include <sys/queue.h>
 #include <sys/systm.h>
@@ -50,7 +49,6 @@
 #include <sys/syslog.h>
 
 #include <net/if.h>
-#include <net/pf.h>
 #include <net/route.h>
 
 #include <netinet/in.h>
@@ -62,10 +60,6 @@
 #include <netinet/ip_icmp.h>
 #include <netinet/udp.h>
 #include <netinet/udp_var.h>
-#include <time.h>
-
-#undef malloc
-#undef free
 
 /*
  * UDP protocol implementation.
@@ -77,57 +71,11 @@ static int	udpcksum = 1;
 static int	udpcksum = 0;		/* XXX */
 #endif
 SYSCTL_INT(_net_inet_udp, UDPCTL_CHECKSUM, checksum, CTLFLAG_RW,
-		&udpcksum, 0, "Calculate UDP checksum");
-		
+		&udpcksum, 0, "");
 
-#ifdef FORWARD_PROTOCOL
-
-static int
-udp_store(struct mbuf *m);
-
-static int
-udp_doutput(struct in_addr dst);
-
-
-/*
- * To implement udp broadcast forwarding we should check ``broadcast storm''
- * condition that can be caused if there is alternate ways between two subnets
- * and efficiently cut such loops. This can be done by caching sensetive packet
- * information and performing tests on it:
- * 1. If we got packet that is not in our cache we pass this packet and
- *    add it into cache. If there is no room in cache - LRU packet is discarded
- * 2. If we got packet that already in our cache we make it MRU and:          
- *    We check ttl of ip packet - if it same or greater as in cache we just 
- *    pass it. If it less - just drop this packet.
- */
-
-#define MAXUDPCACHE  10  /* Seems to be reasonable size */
-#define UDPMAXEXPIRE 30  /* 30 sec expire cache         */
-
-struct packet_cache {
-    unsigned8      pc_ttl;   /* IP packet TTL */
-    unsigned16     pc_sum;   /* UDP packet checksum */
-    struct in_addr pc_src;   /* IP packet source address*/
-    struct udphdr  pc_uh;    /* UDP packet header */
-    time_t  pc_time;         /* Expiry value */
-    struct packet_cache *next , *prev;
-    
-};
-
-static struct packet_cache *udp_cache = NULL;
-
-#endif
-
-	
-static u_long	udp_sendspace = 9216;		/* really max datagram size */
-					/* 40 1K datagrams */
-SYSCTL_INT(_net_inet_udp, UDPCTL_MAXDGRAM, maxdgram, CTLFLAG_RW,
-	&udp_sendspace, 0, "Maximum UDP datagram size");
-
-static u_long	udp_recvspace = 40 * (1024 + sizeof(struct sockaddr_in));
-SYSCTL_INT(_net_inet_udp, UDPCTL_RECVSPACE, recvspace, CTLFLAG_RW,
-	&udp_recvspace, 0, "Maximum UDP receive buffer size");
-	
+static int log_in_vain = 0;
+SYSCTL_INT(_net_inet_udp, OID_AUTO, log_in_vain, CTLFLAG_RW, 
+	&log_in_vain, 0, "");
 
 static struct	inpcbhead udb;		/* from udp_var.h */
 static struct	inpcbinfo udbinfo;
@@ -136,13 +84,9 @@ static struct	inpcbinfo udbinfo;
 #define UDBHASHSIZE 64
 #endif
 
-/*
- * UDP statistics
- */
-struct udpstat udpstat;
-
-SYSCTL_STRUCT(_net_inet_udp, UDPCTL_STATS, stats, CTLFLAG_RW,
-	&udpstat, udpstat, "UDP statistic");
+       struct	udpstat udpstat;	/* from udp_var.h */
+SYSCTL_STRUCT(_net_inet_udp, UDPCTL_STATS, stats, CTLFLAG_RD,
+	&udpstat, udpstat, "");
 
 static struct	sockaddr_in udp_in = { sizeof(udp_in), AF_INET };
 
@@ -151,225 +95,13 @@ static	int udp_output __P((struct inpcb *, struct mbuf *, struct mbuf *,
 			    struct mbuf *));
 static	void udp_notify __P((struct inpcb *, int));
 
-
-/* Added by Vasilkov. This system call is used by snmp agent code.
- *
- */
-void udp_get_struct_udb (struct inpcbhead * strudb)
-{
-	memcpy ((char*)strudb, (char*)&udb, sizeof(struct inpcbhead));
-}
-
-
-/*
- * Register sysctl's
- */
-void 
-sysctl_register_udp_usrreq() {
-
-	sysctl_register(_net_inet_udp,checksum);
-	sysctl_register(_net_inet_udp,maxdgram);
-	sysctl_register(_net_inet_udp,stats);
-	sysctl_register(_net_inet_udp,recvspace);
-}
-
 void
 udp_init()
 {
 	LIST_INIT(&udb);
 	udbinfo.listhead = &udb;
 	udbinfo.hashbase = hashinit(UDBHASHSIZE, M_PCB, &udbinfo.hashmask);
-	
 }
-
-#ifdef FORWARD_PROTOCOL
-static unsigned char udp_ports[65536/8];
-
-/*
- * Enable/Disable udp port forwarding
- */
-int udp_forward_port(int port,int forward) {
-
-    int byte = port/8;
-    int offset = port%8;
-    
-    if (forward)
-	udp_ports[byte] |= (0x80 >> offset);
-    else
-	udp_ports[byte] &= ~(0x80 >> offset);
-	
-    return 0;
-}
-
-/*
- * Check if port should be forwarded
- */
-static int udp_if_forward(int port) {
-
-    int byte = port/8;
-    int offset = port%8;
-    
-    return (udp_ports[byte] & (0x80 >> offset));
-
-}
-
-/*
- * Get packet_cache from mbuf
- */
-static int udp_pc_from_m(struct packet_cache *pc, struct mbuf *m) {
-
-    struct ip *iph = mtod(m,struct ip *);
-    struct udphdr *uh = (struct udphdr *)((char *)iph + sizeof(struct ip));
-    
-    pc->pc_ttl  = iph->ip_ttl;
-    pc->pc_sum  = uh->uh_sum;
-    pc->pc_src  = iph->ip_src;
-    pc->pc_uh   = *uh;
-    pc->pc_time = time(NULL) + UDPMAXEXPIRE;
-    
-    return 0;
-}
-
-/*
- * Make cache entry MRU
- */
-static void udp_make_mru(struct packet_cache *pc) {
-
-    if (pc == udp_cache)
-	return ;
-    
-    /* MRU it */
-    if (pc->prev) pc->prev->next = pc->next;
-    if (pc->next) pc->next->prev = pc->prev;
-    
-    pc->prev = NULL;
-    pc->next = udp_cache;
-    udp_cache->prev = pc;
-    udp_cache = pc;
-    
-    pc->pc_time = time(NULL) + UDPMAXEXPIRE;
-    
-    /*
-     * HUGE FIXME: pc_sum should be strong checksum of udp data. md5 seems 
-     * to be ok.
-     */
-    
-}
-
-
-/*
- * 
- */
-#define UDP_PASS 0
-#define UDP_DROP 1
-
-static int udp_analyze(struct mbuf *m) {
-
-    time_t now;
-    struct packet_cache *pc,my,*empty = NULL;
-    
-    
-    /*
-     * If still no cache allocated - allocate it
-     */
-    if (!udp_cache) {
-	int i;
-	
-	for (i=0;i<MAXUDPCACHE;i++) {
-	    struct packet_cache *pc = malloc(sizeof(struct packet_cache));
-	    if (pc) {
-		memset(pc,0,sizeof(struct packet_cache));
-		pc->next = udp_cache;
-		if (udp_cache) udp_cache->prev = pc;
-		udp_cache = pc;
-	    }
-	}
-    }
-    
-    /*
-     * If no memory - just drop packet
-     */
-    if (!udp_cache)
-	return UDP_DROP;
-    
-    pc = udp_cache;
-    now = time(NULL);
-    
-    udp_pc_from_m(&my,m);
-    
-    if (my.pc_ttl <= IPTTLDEC) 
-	return UDP_DROP;
-    
-    while( pc ) {
-    
-	if (pc->pc_ttl)	{ /*Non-empty entry*/
-	    if (pc->pc_time < now) {
-		pc->pc_ttl = 0;
-		empty = pc;
-#ifdef FORWARD_DEBUG		
-/*		printf("Entry expired :%s, sum %lu\n",inet_ntoa(pc->pc_src),pc->pc_sum);*/
-#endif		
-	    }
-	    else {
-		if ((pc->pc_sum == my.pc_sum) &&
-		    (pc->pc_src.s_addr == my.pc_src.s_addr) &&
-		    (pc->pc_uh.uh_dport == my.pc_uh.uh_dport) &&
-		    (pc->pc_uh.uh_ulen == my.pc_uh.uh_ulen)) {
-		    
-#ifdef FORWARD_DEBUG		    
-/*			printf("Cache HIT\n");*/
-#endif			
-		    
-			udp_make_mru(pc);
-			if (pc->pc_ttl <= my.pc_ttl) 
-			    return UDP_PASS;
-			
-#ifdef FORWARD_DEBUG			
-/*			printf("Loop detected!\n");*/
-#endif			
-			return UDP_DROP;
-		    }
-		    
-	    }
-	}
-	else
-	    empty = pc;
-    
-	pc = pc->next;
-    }
-    
-    /*
-     * If no free entry in cache - remove LRU entry
-     */
-    if (!empty) {
-    
-#ifdef FORWARD_DEBUG    
-/*	printf("Cache full, removing LRU\n");*/
-#endif	
-	empty = udp_cache;
-	while(empty->next) 
-	    empty = empty->next;
-	
-    }
-    
-    /* Cache it and make MRU */
-#ifdef FORWARD_DEBUG    
-/*    printf("Caching packet\n");*/
-#endif    
-    udp_make_mru(empty);
-    
-    empty->pc_ttl  = my.pc_ttl;
-    empty->pc_sum  = my.pc_sum;
-    empty->pc_src  = my.pc_src;
-    empty->pc_uh   = my.pc_uh;
-    empty->pc_time = my.pc_time;
-
-    return UDP_PASS;
-}
-
-
-
-#endif /* FORWARD_PROTOCOL */
 
 void
 udp_input(m, iphlen)
@@ -382,22 +114,6 @@ udp_input(m, iphlen)
 	struct mbuf *opts = 0;
 	int len;
 	struct ip save_ip;
-	struct ifnet *ifp = m->m_pkthdr.rcvif;
-	int log_in_vain = 0;
-	int blackhole = 0;
-
-
-	/*
-	 * Fetch logging flag from interface
-	 */	
-	if (ifp->if_ip.ifi_udp & IFNET_UDP_LOG_IN_VAIN)
-	    log_in_vain = 1;
-	    
-	/*
-	 * Check if we should silently discard refused connects
-	 */
-	if (ifp->if_ip.ifi_udp & IFNET_UDP_BLACKHOLE)
-	    blackhole = 1;
 
 	udpstat.udps_ipackets++;
 
@@ -423,15 +139,7 @@ udp_input(m, iphlen)
 		}
 		ip = mtod(m, struct ip *);
 	}
-        uh = (struct udphdr *)((caddr_t)ip + iphlen);
-
-#ifdef FORWARD_PROTOCOL    
-        if (udp_if_forward(ntohs(uh->uh_dport))) {
-            if (in_broadcast(ip->ip_dst, m->m_pkthdr.rcvif))
-                udp_store(m);
-        }
-#endif	
-
+	uh = (struct udphdr *)((caddr_t)ip + iphlen);
 
 	/*
 	 * Make mbuf data length reflect UDP length.
@@ -455,9 +163,7 @@ udp_input(m, iphlen)
 	/*
 	 * Checksum extended UDP header and data.
 	 */
-
 	if (uh->uh_sum) {
-		
 		((struct ipovly *)ip)->ih_next = 0;
 		((struct ipovly *)ip)->ih_prev = 0;
 		((struct ipovly *)ip)->ih_x1 = 0;
@@ -473,105 +179,6 @@ udp_input(m, iphlen)
 	if (IN_MULTICAST(ntohl(ip->ip_dst.s_addr)) ||
 	    in_broadcast(ip->ip_dst, m->m_pkthdr.rcvif)) {
 		struct inpcb *last;
-		
-#ifdef FORWARD_PROTOCOL		
-		/*
-		 * If our router configured to route broadcasts (this may
-		 * be required to enable NetBIOS thru router) 
-                 */
-
-                if (udp_if_forward(ntohs(uh->uh_dport))) {
-                    /*
-                     * For each interface that allow directed broadcast
-                     * we should reflect this packet with destanation address
-                     * equal to interface subnet broadcast address
-                     */
-                    struct ifnet *ifp = ifnet;
-		    
-		    /*
-		     * Checksum udp data + header without address information
-		     */
-		    m->m_len  -= sizeof(struct ip);
-		    m->m_data += sizeof(struct ip);
-		    uh->uh_sum = in_cksum(m, len/* + sizeof (struct ip)*/);
-		    m->m_len  += sizeof(struct ip);
-		    m->m_data -= sizeof(struct ip);
-		    
-		    *ip = save_ip;
-		    
-		    if (udp_analyze(m) == UDP_DROP) {
-#ifdef FORWARD_DEBUG
-			printf("UDP DROP <%s:%d>, ttl=%d, sum=%lu\n",inet_ntoa(ip->ip_src),uh->uh_sport,ip->ip_ttl,uh->uh_sum);
-#endif		    			
-			goto bad;
-
-		    }
-		    
-#ifdef FORWARD_DEBUG		    
-		    printf("UDP PASS <%s:%d>, ttl=%d, sum=%lu\n",inet_ntoa(ip->ip_src),uh->uh_sport,ip->ip_ttl,uh->uh_sum);
-#endif		    
-
-		    
-                    while (ifp) {
-		    
-                        if ((ifp != m->m_pkthdr.rcvif) &&
-			    !(ifp->if_flags & IFF_LOOPBACK) /*&& 
-			    (ifp->if_ip.ifi_udp & IFNET_UDP_FORWARD_PROTOCOL)*/) {
-			    
-                            struct ifaddr *ifa = ifp->if_addrlist;
-			    
-#ifdef FORWARD_DEBUG			    
-			    /*printf("\tForwarding through %s%d\n",ifp->if_name,ifp->if_unit);*/
-#endif			    
-			    
-                            while(ifa) {
-
-				
-				if  (ifa->ifa_addr->sa_family == AF_INET) {
-		    
-
-				
-				    if (ifp->if_flags | IFF_BROADCAST) {
-				    	    if (ifa->ifa_dstaddr)
-					    ip->ip_dst.s_addr = ((struct sockaddr_in *)(ifa->ifa_dstaddr))->sin_addr.s_addr;
-					else {
-					    ip->ip_dst.s_addr = ((struct sockaddr_in *)(ifa->ifa_addr))->sin_addr.s_addr;
-					    ip->ip_dst.s_addr &= ((struct sockaddr_in *)(ifa->ifa_netmask))->sin_addr.s_addr;
-					    ip->ip_dst.s_addr |= ~(((struct sockaddr_in *)(ifa->ifa_netmask))->sin_addr.s_addr);
-					}
-				    }
-				    else
-					goto bad;
-					
-				    /*Calculate correct UDP checksum*/
-				    
-				    
-#ifdef FORWARD_DEBUG
-				    printf("\t\tForwarding to %s\n",inet_ntoa(ip->ip_dst));
-#endif
-                                    udp_doutput(ip->ip_dst);
-
-				}
-
-                            	ifa = ifa->ifa_next;
-                    	    }
-                    	}
-                        ifp = ifp->if_next;
-            	    }
-		    
-		    if (opts)
-			m_freem(opts);
-		    if (m)
-			m_freem(m);
-			
-		    /*
-		     * FIXME: should I also pass udp packet to socket?
-		     */
-
-                    return ;
-                }
-#endif /* FORWARD_PROTOCOL */		
-		
 		/*
 		 * Deliver a multicast or broadcast datagram to *all* sockets
 		 * for which the local and remote addresses and ports match
@@ -653,7 +260,6 @@ udp_input(m, iphlen)
 			 * (No need to send an ICMP Port Unreachable
 			 * for a broadcast or multicast datgram.)
 			 */
-			udpstat.udps_noport++;
 			udpstat.udps_noportbcast++;
 			goto bad;
 		}
@@ -676,16 +282,13 @@ udp_input(m, iphlen)
 	    ip->ip_dst, uh->uh_dport, 1);
 	if (inp == NULL) {
 		if (log_in_vain) {
-			char bufdst[20];
-			char bufsrc[20];
-			
-			inet_ntop(AF_INET,&(ip->ip_dst),bufdst,sizeof(bufdst));
-			inet_ntop(AF_INET,&(ip->ip_src),bufdst,sizeof(bufsrc));
+			char buf[4*sizeof "123"];
 
+			strcpy(buf, inet_ntoa(ip->ip_dst));
 			log(LOG_INFO, "Connection attempt to UDP %s:%d"
 			    " from %s:%d\n",
-				bufdst, ntohs(uh->uh_dport),
-				bufsrc, ntohs(uh->uh_sport));
+				buf, ntohs(uh->uh_dport),
+				inet_ntoa(ip->ip_src), ntohs(uh->uh_sport));
 		}
 		udpstat.udps_noport++;
 		if (m->m_flags & (M_BCAST | M_MCAST)) {
@@ -693,13 +296,6 @@ udp_input(m, iphlen)
 			goto bad;
 		}
 		*ip = save_ip;
-		
-		/*
-		 * If we forced to be silent as much as possible..
-		 */
-		if (blackhole)
-		    goto bad;
-		    
 		icmp_error(m, ICMP_UNREACH, ICMP_UNREACH_PORT, 0, 0);
 		return;
 	}
@@ -727,7 +323,7 @@ udp_input(m, iphlen)
 bad:
 	m_freem(m);
 	if (opts)
-	    m_freem(opts);
+		m_freem(opts);
 }
 
 /*
@@ -835,7 +431,7 @@ udp_output(inp, m, addr, control)
 	 * Stuff checksum and output datagram.
 	 */
 	ui->ui_sum = 0;
-	if (udpcksum) { /*FIXME: should be taken from ouput interface */
+	if (udpcksum) {
 	    if ((ui->ui_sum = in_cksum(m, sizeof (struct udpiphdr) + len)) == 0)
 		ui->ui_sum = 0xffff;
 	}
@@ -845,7 +441,7 @@ udp_output(inp, m, addr, control)
 	udpstat.udps_opackets++;
 	error = ip_output(m, inp->inp_options, &inp->inp_route,
 	    inp->inp_socket->so_options & (SO_DONTROUTE | SO_BROADCAST),
-	    inp->inp_moptions,0);
+	    inp->inp_moptions);
 
 	if (addr) {
 		in_pcbdisconnect(inp);
@@ -859,6 +455,14 @@ release:
 	return (error);
 }
 
+static u_long	udp_sendspace = 9216;		/* really max datagram size */
+					/* 40 1K datagrams */
+SYSCTL_INT(_net_inet_udp, UDPCTL_MAXDGRAM, maxdgram, CTLFLAG_RW,
+	&udp_sendspace, 0, "");
+
+static u_long	udp_recvspace = 40 * (1024 + sizeof(struct sockaddr_in));
+SYSCTL_INT(_net_inet_udp, UDPCTL_RECVSPACE, recvspace, CTLFLAG_RW,
+	&udp_recvspace, 0, "");
 
 /*ARGSUSED*/
 int
@@ -897,7 +501,7 @@ udp_usrreq(so, req, m, addr, control)
 		error = soreserve(so, udp_sendspace, udp_recvspace);
 		if (error)
 			break;
-		((struct inpcb *) so->so_pcb)->inp_ip_ttl = ip_defttl; /*FIXME: fetch ttl from interface first*/
+		((struct inpcb *) so->so_pcb)->inp_ip_ttl = ip_defttl;
 		break;
 
 	case PRU_DETACH:
@@ -1007,137 +611,3 @@ udp_detach(inp)
 	in_pcbdetach(inp);
 	splx(s);
 }
-
-#ifdef FORWARD_PROTOCOL
-
-static int ttl;
-static struct in_addr src;
-static int sport,dport;
-static char buf[8096];
-static int len;
-
-/*
- * Store packet
- */
-static int
-udp_store(struct mbuf *m) {
-
-    struct ip *iph = mtod(m,struct ip *);
-    struct udphdr *uh = iph + 1;
-
-#ifdef FORWARD_DEBUG
-    printf("Storing %d bytes at offset %d of total packet len %d\n",uh->uh_ulen - sizeof(struct udphdr),sizeof(struct ip) + sizeof(struct udphdr),m->m_pkthdr.len);
-#endif    
-    
-    if (m_copydata(m,sizeof(struct ip) + sizeof(struct udphdr),
-                 uh->uh_ulen - sizeof(struct udphdr),
-		 buf)<0) {
-	ttl = 0;
-	return -1;
-    }
-		 
-
-    ttl = iph->ip_ttl;
-    src = iph->ip_src;
-    sport = uh->uh_sport;
-    dport = uh->uh_dport;
-    len = uh->uh_ulen - sizeof(struct udphdr);
-
-    return 0;
-}
-
-/*
- * Pull packet to network 
- */
-static int
-udp_doutput(struct in_addr dst) {
-
-
-    struct udpiphdr *ui;
-    struct mbuf *m;
-    int error;
-    struct route ro;
-    
-    if (ttl <= 1)
-	return -1;
-    
-    m = m_gethdr(M_DONTWAIT,MT_DATA);
-        
-    if (!m) {
-#ifdef FORWARD_DEBUG    
-	printf("udp_doutput() : No buffers available\n");
-#endif	
-	return -1;
-    }
-
-    m->m_pkthdr.len = 0;
-    m->m_pkthdr.rcvif = NULL;    
-    m->m_len = MHLEN;
-    
-    if (m_copyback(m,0,len,buf)<0) {
-	m_freem(m);
-	return -1;
-    }
-    
-    M_PREPEND(m, sizeof(struct udpiphdr), M_DONTWAIT);
-    
-    if (!m) {
-#ifdef FORWARD_DEBUG    
-	printf("udp_douptut() : No buffers available\n");
-#endif	
-	return -1;
-    }
-
-    /*
-     * Fill in mbuf with extended UDP header
-     * and addresses and length put into network format.
-     */
-    ui = mtod(m, struct udpiphdr *);
-    ui->ui_next = ui->ui_prev = 0;
-    ui->ui_x1 = 0;
-    ui->ui_pr = IPPROTO_UDP;
-    ui->ui_len = htons((u_short)len + sizeof (struct udphdr));
-    ui->ui_src = src;
-    ui->ui_dst = dst;
-    ui->ui_sport = sport;
-    ui->ui_dport = dport;
-    ui->ui_ulen = ui->ui_len;
-
-    /*
-     * Stuff checksum and output datagram.
-     */
-    ui->ui_sum = 0;
-    if ((ui->ui_sum = in_cksum(m, sizeof (struct udpiphdr) + len)) == 0)
-	ui->ui_sum = 0xffff;
-	
-	
-    ((struct ip *)ui)->ip_len = sizeof (struct udpiphdr) + len;
-    ((struct ip *)ui)->ip_ttl = ttl - 1;
-    ((struct ip *)ui)->ip_tos = 0;
-    
-    bzero(&ro, sizeof ro);
-    
-    udpstat.udps_opackets++;
-
-#ifdef FORWARD_DEBUG   
-    {
-	struct mbuf *n = m;
-	printf("Sending buffer chain: ");
-	while (n) {
-	    printf("[%d] ",n->m_len);
-	    n = n->m_next;
-	}
-	printf("\n");
-	
-    }
-#endif    
-    
-    error = ip_output(m, NULL, &ro,IP_ALLOWBROADCAST,NULL,0);
-
-    if (ro.ro_rt)
-    	RTFREE(ro.ro_rt);
-	
-    return error;
-}
-
-#endif /* FORWARD_PROTOCOL */

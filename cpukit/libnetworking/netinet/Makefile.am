@@ -22,8 +22,9 @@ include $(top_srcdir)/../automake/lib.am
 # Add local stuff here using +=
 #
 
+# Add -DFORWARD_PROTOCOL to enable UDP forwarding -- requires missing net/pf.h
 AM_CPPFLAGS += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC \
-    -DBOOTP_COMPAT -DFORWARD_PROTOCOL
+    -DBOOTP_COMPAT
 
 $(LIB): $(OBJS)
 	$(make-library)
