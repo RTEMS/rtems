@@ -1,10 +1,17 @@
 2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.in: add tests to the GNU canonicalized subdirectories, 
+	* configure.in: add lib/libbsp to the GNU canonicalized
+	subdirectories, remove cfg_subdirs, cfg_subdirs1, hst_subdirs1.
+	* Makefile.am: remove cfg_subdirs, cfg_subdirs1, hst_subdirs1.
+	* ChangeLog: Fix typos.
+
+2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: add tests to the GNU canonicalized subdirectories.
 
 2000-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.in: add lib/libcpu to the GNU canonicalized subdirectories, 
+	* configure.in: add lib/libcpu to the GNU canonicalized subdirectories. 
 
 2000-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

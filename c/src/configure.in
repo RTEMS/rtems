@@ -25,15 +25,16 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 
 ## Note: the order of the directories below is essential
-cfg_subdirs1="make"
+AC_CONFIG_SUBDIRS(make)
 
 ## Exclude exec from building if multilibs are enabled
 if test x"$multilib" = x"no"; then
-hst_subdirs1="$hst_subdirs1 exec"
+hst_subdirs="$hst_subdirs exec"
 fi
-hst_subdirs1="$hst_subdirs1 lib lib/libcpu"
-cfg_subdirs="$cfg_subdirs lib/libbsp"
-hst_subdirs="libfs"
+hst_subdirs="$hst_subdirs lib"
+hst_subdirs="$hst_subdirs lib/libcpu"
+hst_subdirs="$hst_subdirs lib/libbsp"
+hst_subdirs="$hst_subdirs libfs"
 hst_subdirs="$hst_subdirs libmisc"
 
 if test "$RTEMS_CPU" != "unix"; then
@@ -58,15 +59,8 @@ if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
   hst_subdirs="$hst_subdirs librtems++";
 fi 
 
-RTEMS_CONFIG_HOST_SUBDIRS($hst_subdirs1)
-AC_SUBST(hst_subdirs1)
 RTEMS_CONFIG_HOST_SUBDIRS($hst_subdirs)
 AC_SUBST(hst_subdirs)
-
-AC_CONFIG_SUBDIRS($cfg_subdirs1)
-AC_SUBST(cfg_subdirs1)
-AC_CONFIG_SUBDIRS($cfg_subdirs)
-AC_SUBST(cfg_subdirs)
 
 RTEMS_CONFIG_HOST_SUBDIRS(tests)
 
