@@ -34,6 +34,7 @@ AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
 AM_CONDITIONAL(HAS_CXX,test "$HAS_CPLUSPLUS" = "yes")
 
+AM_CONFIG_HEADER(include/bspopts.h)
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
