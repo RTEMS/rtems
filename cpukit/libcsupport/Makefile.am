@@ -87,10 +87,9 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog \
 ##  General stuff
 all-local: $(PREINSTALL_FILES)
 
-LIBNAME = libcsupport
-LIB = ${ARCH}/${LIBNAME}.a
+LIB = ${ARCH}/libcsupport.a
 
-INCLUDES = -Isrc
+AM_CPPFLAGS += -Isrc
 
 ERROR_C_FILES = src/error.c
 

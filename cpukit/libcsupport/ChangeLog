@@ -1,4 +1,9 @@
 
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Eliminate LIBNAME. Use AM_CPPFLAGS instead of
+	INCLUDES (Upcoming automake standard).
+
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_TOP(../..).
