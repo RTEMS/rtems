@@ -27,6 +27,8 @@
 #include <libcpu/c_clock.h>
 #include <rtems/bspIo.h>                     /* for printk() */
 
+extern int BSP_connect_clock_handler (void);
+
 /*
  *  Clock ticks since initialization
  */

@@ -35,6 +35,7 @@ typedef struct batrange {		/* stores address ranges mapped by BATs */
 
 batrange bat_addrs[4];
 
+void asm_setdbat0(unsigned int, unsigned int);
 void setdbat(int bat_index, unsigned long virt, unsigned long phys,
        unsigned int size, int flags)
 {
