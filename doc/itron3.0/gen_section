@@ -169,8 +169,6 @@ do
   echo ""
   echo "@code{EXXX} - "
   echo ""
-  echo "@end table"
-  echo ""
   echo "@subheading DESCRIPTION:"
   echo ""
   echo "@subheading NOTES:"

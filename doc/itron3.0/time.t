@@ -62,8 +62,6 @@ int get_tim(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -91,8 +89,6 @@ int set_tim(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 
@@ -122,8 +118,6 @@ int dly_tsk(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -151,8 +145,6 @@ int def_cyc(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 
@@ -182,8 +174,6 @@ int act_cyc(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -211,8 +201,6 @@ int ref_cyc(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 
@@ -242,8 +230,6 @@ int def_alm(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -272,8 +258,6 @@ int ref_alm(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -301,8 +285,6 @@ int ret_tmr(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 

@@ -62,8 +62,6 @@ int cre_mbf(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -91,8 +89,6 @@ int del_mbf(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 
@@ -122,8 +118,6 @@ int snd_mbf(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -151,8 +145,6 @@ int psnd_mbf(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 
@@ -182,8 +174,6 @@ int tsnd_mbf(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -211,8 +201,6 @@ int rcv_mbf(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 
@@ -242,8 +230,6 @@ int prcv_mbf(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -272,8 +258,6 @@ int trcv_mbf(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -301,8 +285,6 @@ int ref_mbf(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 

@@ -60,8 +60,6 @@ int cre_mpl(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -89,8 +87,6 @@ int del_mpl(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 
@@ -120,8 +116,6 @@ int get_blk(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -149,8 +143,6 @@ int pget_blk(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 
@@ -180,8 +172,6 @@ int tget_blk(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -210,8 +200,6 @@ int rel_blk(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -239,8 +227,6 @@ int ref_mpl(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 

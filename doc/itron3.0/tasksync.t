@@ -60,8 +60,6 @@ int sus_tsk(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -89,8 +87,6 @@ int rsm_tsk(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 
@@ -120,8 +116,6 @@ int frsm_tsk(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -149,8 +143,6 @@ int slp_tsk(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 This system call puts the issuing task (which was in RUN state) into WAIT state, causing the issuing task to sleep until wup_tsk is invoked.
@@ -180,8 +172,6 @@ int tslp_tsk(
 @subheading STATUS CODES:
 @code{EXXX} - 
 @code{E_CTX} - Context error (issued from task-independent portions or a task in dispatch disabled state)
-@end table
-
 
 The tslp_tsk system call is the same as slp_tsk but with an additional timeout feature.  If a wup_tsk is issued before the period of time specified by tmout elapses, tslp_tsk will complete normally.  An E_TMOUT error will result if no wup_tsk is issued before the time specified by tmout expires.  Specifying tmout = TMO_FEVR = -1 can be used to set the timeout period to forever (no timeout).  In this case, tslp_tsk will function exactly the same as slp_tsk causing the issuing task to wait forever for wup_tsk to be issued.
 
@@ -210,8 +200,6 @@ int wup_tsk(
 @subheading STATUS CODES:
 @code{EXXX} - 
 @code{EN_CTXID} - Specified an object on another node when the system call was issued from a task in dispatch disabled state or from a task-independent portion
-@end table
-
 
 If the specified task is not in the WAIT state caused by a slp_tsk or tslp_tsk, the wakeup request based on the wup_tsk call will be queued. In other words, a record will be kept that a wup_tsk has been issued for the specified task and no WAIT state will result even if slp_tsk or tslp_tsk is executed by the task later.  This is called queuing for wakeup request.
 
@@ -239,8 +227,6 @@ int can_wup(
 
 @subheading STATUS CODES:
 @code{EXXX} - 
-
-@end table
 @code{EN_RPAR} - A value outside the range supported by the issuing node and/or transmission packet format was returned as a return parameter (a value outside supported range was returned for wupcnt)
 
 A task may specify itself by specifying tskid = TSK_SELF = 0.  Note, however, that an E_ID error will result if tskid = TSK_SELF = 0 is specified when this system call is issued from a task-independent portion.

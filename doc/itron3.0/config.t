@@ -58,8 +58,6 @@ int get_ver(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -87,8 +85,6 @@ int ref_sys(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 
@@ -118,8 +114,6 @@ int ref_cfg(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -148,8 +142,6 @@ int def_svc(
 
 @code{EXXX} - 
 
-@end table
-
 @subheading DESCRIPTION:
 
 @subheading NOTES:
@@ -177,8 +169,6 @@ int def_exc(
 @subheading STATUS CODES:
 
 @code{EXXX} - 
-
-@end table
 
 @subheading DESCRIPTION:
 
