@@ -9,7 +9,7 @@ LIB = $(ARCH)/$(LIBNAME)
 
 C_FILES = asp.c balloc.c wbase64.c default.c ejlex.c ejparse.c form.c h.c \
     handler.c mime.c misc.c webpage.c ringq.c rom.c security.c socket.c \
-    sym.c uemf.c url.c value.c webcomp.c webrom.c webs.c websuemf.c \
+    sym.c uemf.c url.c value.c webrom.c webs.c websuemf.c \
     webmain.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
