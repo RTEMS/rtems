@@ -214,7 +214,7 @@ uninitialized =
 
 /*dpmem.h*/     (sizeof _Dual_ported_memory_Information)  +
 
-/*event.h*/     (sizeof _Event_Sync)                      +
+/*event.h*/     (sizeof _Event_Sync_state)                +
 
 /*eventmp.h*/   0                                         +
 
