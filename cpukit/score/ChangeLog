@@ -1,5 +1,9 @@
 2001-04-26	Joel Sherrill <joel@OARcorp.com>
 
+	* src/objectcomparenamestring.c: Fix typos.
+ 
+2001-04-26	Joel Sherrill <joel@OARcorp.com>
+
 	* include/rtems/score/object.h, inline/rtems/score/object.inl, 
 	src/objectcomparenamestring.c: Address PR81 that
 	reworked POSIX message queues to add a descriptor separate from

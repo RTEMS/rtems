@@ -24,6 +24,8 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
 
+#include <string.h>
+
 /*PAGE
  *
  *  _Objects_Compare_name_string
@@ -45,7 +47,7 @@ boolean _Objects_Compare_name_string(
   unsigned32  length
 )
 {
-  if ( !strncmp( name_1_p, name_2_p, length ) )
+  if ( !strncmp( name_1, name_2, length ) )
     return TRUE;
   return FALSE;
 }
