@@ -44,8 +44,8 @@
 **************************************************************************
 */
 
-#ifndef __MPC8260_h
-#define __MPC8260_h
+#ifndef _MPC8260_H
+#define _MPC8260_H
 
 #ifndef ASM
 /*
@@ -1507,4 +1507,4 @@ typedef struct m8260_ {
 extern volatile m8260_t m8260;
 #endif /* ASM */
 
-#endif /* __MPC8260_h */
+#endif /* _MPC8260_H */

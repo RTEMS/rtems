@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef _PPC_PGTABLE_H
-#define _PPC_PGTABLE_H
+#ifndef _LIBCPU_PGTABLE_H
+#define _LIBCPU_PGTABLE_H
 
 /*
  * The PowerPC MMU uses a hash table containing PTEs, together with
@@ -143,4 +143,4 @@
 #define __S101	PAGE_READONLY
 #define __S110	PAGE_SHARED
 #define __S111	PAGE_SHARED
-#endif /* _PPC_PGTABLE_H */
+#endif /* _LIBCPU_PGTABLE_H */

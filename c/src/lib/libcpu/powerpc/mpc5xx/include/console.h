@@ -12,8 +12,8 @@
  *  $Id$
  */
 
-#ifndef _M5xx_CONSOLE_H_
-#define _M5xx_CONSOLE_H_
+#ifndef _MPC5XX_CONSOLE_H
+#define _MPC5XX_CONSOLE_H
 
 #include <rtems/libio.h>
 #include <rtems/termiostypes.h>
@@ -34,4 +34,4 @@ int m5xx_uart_setAttributes(int, const struct termios* t);
 #define SCI1_MINOR	0
 #define SCI2_MINOR	1
 
-#endif /* _M5xx_CONSOLE_H_ */
+#endif /* _MPC5XX_CONSOLE_H */

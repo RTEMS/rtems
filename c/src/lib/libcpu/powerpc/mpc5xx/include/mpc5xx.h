@@ -55,8 +55,8 @@
  *  $Id$
  */
 
-#ifndef _MPC5xx_h
-#define _MPC5xx_h
+#ifndef _MPC5XX_H
+#define _MPC5XX_H
 
 #include <libcpu/spr.h>
 
@@ -617,4 +617,4 @@ extern volatile imb_t imb;		/* defined in linkcmds */
 
 #endif /* ASM */
 
-#endif /* _MPC5xx_h */
+#endif /* _MPC5XX_H */

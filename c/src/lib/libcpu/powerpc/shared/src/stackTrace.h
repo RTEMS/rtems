@@ -1,5 +1,5 @@
-#ifndef CPU_STACK_UTIL_H
-#define CPU_STACK_UTIL_H
+#ifndef _LIBCPU_STACKTRACE_H
+#define _LIBCPU_STACKTRACE_H
 
 void CPU_stack_take_snapshot(void **stack, int size, void *pc, void *lr, void *r1);
 

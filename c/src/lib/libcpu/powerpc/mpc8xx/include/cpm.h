@@ -11,8 +11,8 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef __M8xx_CPM_h
-#define __M8xx_CPM_h
+#ifndef _MPC8XX_CPM_H
+#define _MPC8XX_CPM_H
 
 #ifdef __cplusplus
 extern "C" {

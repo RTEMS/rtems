@@ -2,8 +2,8 @@
  *  $Id$
  */
 
-#ifndef _M8xx_CONSOLE_H_
-#define _M8xx_CONSOLE_H_
+#ifndef _MPC8XX_CONSOLE_H
+#define _MPC8XX_CONSOLE_H
 
 #include <rtems/libio.h>
 

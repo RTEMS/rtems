@@ -24,8 +24,8 @@
  */
 
 
-#ifndef _INCLUDE_ICTRL_h
-#define _INCLUDE_ICTRL_h
+#ifndef _ICTRL_H
+#define _ICTRL_H
 
 #include <rtems.h>
 #include <rtems/system.h>
@@ -91,5 +91,5 @@ ictrl_init(void);
 }
 #endif
 
-#endif /* ! _INCLUDE_ICTRL_h */
+#endif /* _ICTRL_H */
 /* end of include file */

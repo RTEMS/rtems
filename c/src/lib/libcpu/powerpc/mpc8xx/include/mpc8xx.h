@@ -46,8 +46,8 @@
 **************************************************************************
 */
 
-#ifndef __MPC8xx_h
-#define __MPC8xx_h
+#ifndef _MPC8XX_H
+#define _MPC8XX_H
 
 #ifndef ASM
 
@@ -1480,4 +1480,4 @@ extern volatile m8xx_t m8xx;
 
 #endif /* ASM */
 
-#endif /* __MPC8xx_h */
+#endif /* _MPC8XX_H */

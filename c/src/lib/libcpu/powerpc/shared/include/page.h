@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef _PPC_PAGE_H
-#define _PPC_PAGE_H
+#ifndef _LIBCPU_PAGE_H
+#define _LIBCPU_PAGE_H
 
 /* PAGE_SHIFT determines the page size */
 #define PAGE_SHIFT	12
@@ -65,4 +65,4 @@ typedef unsigned long pgprot_t;
 
 extern unsigned long get_zero_page_fast(void);
 #endif /* ASM */
-#endif /* _PPC_PAGE_H */
+#endif /* _LIBCPU_PAGE_H */

@@ -11,8 +11,8 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
-#ifndef __M8260_MMU_h
-#define __M8260_MMU_h
+#ifndef _MPC8260_MMU_H
+#define _MPC8260_MMU_H
 
 #ifdef __cplusplus
 extern "C" {

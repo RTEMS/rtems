@@ -19,8 +19,8 @@
  *  $Id$
  */
 
-#ifndef _LIB_LIBCPU_C_CLOCK_H
-#define _LIB_LIBCPU_C_CLOCK_H
+#ifndef _LIBCPU_C_CLOCK_H
+#define _LIBCPU_C_CLOCK_H
 
 #include <rtems.h>
 

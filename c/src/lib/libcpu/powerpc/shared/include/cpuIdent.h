@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef _libcpu_cpuIdent_h
-#define _libcpu_cpuIdent_h
+#ifndef _LIBCPU_CPUIDENT_H
+#define _LIBCPU_CPUIDENT_H
 
 #ifndef ASM
 typedef enum

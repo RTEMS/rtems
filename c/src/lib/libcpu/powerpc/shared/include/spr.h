@@ -17,8 +17,8 @@
  */
 
 
-#ifndef _PPC_SPR_H
-#define _PPC_SPR_H
+#ifndef _LIBCPU_SPR_H
+#define _LIBCPU_SPR_H
 
 #include <rtems/powerpc/registers.h>
 

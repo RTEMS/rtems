@@ -1,5 +1,5 @@
-#ifndef PPC_TRIVIAL_PTE_MAPPING_H
-#define PPC_TRIVIAL_PTE_MAPPING_H
+#ifndef _LIBCPU_PTE121_H
+#define _LIBCPU_PTE121_H
 /* $Id$ */
 
 /* Rudimentary page/hash table support for Powerpc

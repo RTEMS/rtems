@@ -15,8 +15,8 @@
  *
  *  $Id$
  */
-#ifndef _LIBCPU_IO_H_
-#define _LIBCPU_IO_H_
+#ifndef _LIBCPU_IO_H
+#define _LIBCPU_IO_H
 
 
 #define PREP_ISA_IO_BASE 	0x80000000
@@ -137,4 +137,4 @@ extern inline void out_be32(volatile unsigned *addr, int val)
 }
 
 #endif /* ASM */
-#endif /* _LIBCPU_IO_H_ */
+#endif /* _LIBCPU_IO_H */

@@ -24,8 +24,8 @@
  * $Id$
  */
 
-#ifndef _LIBCPU_MPC8XX_EXCEPTION_RAW_EXCEPTION_H
-#define _LIBCPU_MPC8XX_EXCEPTION_RAW_EXCEPTION_H
+#ifndef _LIBCPU_RAW_EXCEPTION_H
+#define _LIBCPU_RAW_EXCEPTION_H
 
 /*
  * Exception Vectors as defined in the MCP750 manual

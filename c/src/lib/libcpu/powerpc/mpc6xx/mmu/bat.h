@@ -20,8 +20,8 @@
  * $Id$
  */
 
-#ifndef LIBCPU_MCP750_MMU_BAT_H
-#define LIBCPU_MCP750_MMU_BAT_H
+#ifndef _LIBCPU_BAT_H
+#define _LIBCPU_BAT_H
 
 #include <libcpu/mmu.h>
 #include <libcpu/pgtable.h>
@@ -37,4 +37,4 @@ extern void asm_setdbat2(unsigned int uperPart, unsigned int lowerPart);
 extern void asm_setdbat3(unsigned int uperPart, unsigned int lowerPart);
 extern void asm_setdbat4(unsigned int uperPart, unsigned int lowerPart);
 
-#endif /* LIBCPU_MCP750_MMU_BAT_H */
+#endif /* _LIBCPU_BAT_H */

@@ -15,8 +15,8 @@
  *  $Id$
  */
 
-#ifndef _PPC_MMU_H_
-#define _PPC_MMU_H_
+#ifndef _LIBCPU_MMU_H
+#define _LIBCPU_MMU_H
 
 #ifndef ASM
 /* Hardware Page Table Entry */
@@ -303,4 +303,4 @@ extern void _tlbia(void);		/* invalidate all TLB entries */
  * a processor working register during a tablewalk.
  */
 #define M_TW		799
-#endif /* _PPC_MMU_H_ */
+#endif /* _LIBCPU_MMU_H */

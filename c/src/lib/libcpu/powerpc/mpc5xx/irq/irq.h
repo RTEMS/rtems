@@ -25,8 +25,8 @@
  *  $Id$
  */
 
-#ifndef LIBCPU_POWERPC_MBX8XX_IRQ_IRQ_H
-#define LIBCPU_POWERPC_MBX8XX_IRQ_IRQ_H
+#ifndef _LIBCPU_IRQ_H
+#define _LIBCPU_IRQ_H
 
 
 #define CPU_ASM_IRQ_VECTOR_BASE 0x0

@@ -18,8 +18,8 @@
  *
  *  $Id$
  */
-#ifndef LIBCPU_POWERPC_MBX5XX_VECTORS_H
-#define LIBCPU_POWERPC_MBX5XX_VECTORS_H
+#ifndef _LIBCPU_VECTORS_H
+#define _LIBCPU_VECTORS_H
 
 
 /*
@@ -153,4 +153,4 @@ extern rtems_exception_handler_t* exception_handler_table[NUM_EXCEPTIONS];
 
 #endif /* ASM */
 
-#endif /* LIBCPU_POWERPC_MPC5XX_VECTORS_H */
+#endif /* _LIBCPU_VECTORS_H */

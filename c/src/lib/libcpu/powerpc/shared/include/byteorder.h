@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef _PPC_BYTEORDER_H
-#define _PPC_BYTEORDER_H
+#ifndef _LIBCPU_BYTEORDER_H
+#define _LIBCPU_BYTEORDER_H
 
 #ifdef __GNUC__
 
@@ -92,4 +92,4 @@ static __inline__ __const__ unsigned int ___arch__swab32(unsigned int value)
 
 #endif /* __GNUC__ */
 
-#endif /* _PPC_BYTEORDER_H */
+#endif /* _LIBCPU_BYTEORDER_H */

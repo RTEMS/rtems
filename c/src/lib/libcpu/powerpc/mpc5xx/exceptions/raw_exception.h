@@ -25,8 +25,8 @@
  *  $Id$
  */
 
-#ifndef _LIBCPU_MPC5XX_EXCEPTION_RAW_EXCEPTION_H
-#define _LIBCPU_MPC5XX_EXCEPTION_RAW_EXCEPTION_H
+#ifndef _LIBCPU_RAW_EXCEPTION_H
+#define _LIBCPU_RAW_EXCEPTION_H
 
 #include <libcpu/vectors.h>
 
