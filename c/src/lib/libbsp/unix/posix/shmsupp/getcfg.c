@@ -25,7 +25,7 @@
  */
 
 #include <bsp.h>
-#include <shm.h>
+#include <shm_driver.h>
 #include <sys/types.h>    /* pid_t */
 
 shm_config_table BSP_shm_cfgtbl;

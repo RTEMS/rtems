@@ -22,7 +22,7 @@
  */
 
 #include <rtems.h>
-#include "shm.h"
+#include "shm_driver.h"
 
 struct pkt_cpy {
   rtems_unsigned32 packet[MAX_PACKET_SIZE/4];

@@ -15,7 +15,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include <shm.h>
+#include <shm_driver.h>
 
 
 /*  void _Shm_setvec( )

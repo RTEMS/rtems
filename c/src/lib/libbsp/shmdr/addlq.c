@@ -19,7 +19,7 @@
  */
 
 #include <rtems.h>
-#include "shm.h"
+#include "shm_driver.h"
 
 void Shm_Locked_queue_Add(
   Shm_Locked_queue_Control *lq_cb,

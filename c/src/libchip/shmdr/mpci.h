@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-#include <shm.h>
+#include <shm_driver.h>
 
 #define MPCI_Initialization( _configuration ) \
   Shm_Initialization( _configuration )
@@ -38,7 +38,7 @@ extern "C" {
 #define MPCI_Send_packet( _destination, _the_packet ) \
   Shm_Send_packet( _destination, _the_packet )
 
-/* Unnecessary... mapped in shm.h
+/* Unnecessary... mapped in shm_driver.h
 #define MPCI_Fatal( _the_error ) \
   Shm_Fatal( _the_error )
 */

@@ -23,7 +23,7 @@
  */
 
 #include <rtems.h>
-#include "shm.h"
+#include "shm_driver.h"
 
 #define INTERRUPT 0                   /* PSIM target supports only */
 #define POLLING   1                   /* polling mode. */

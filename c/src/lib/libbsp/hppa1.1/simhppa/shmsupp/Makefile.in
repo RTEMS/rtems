@@ -16,7 +16,7 @@ VPATH = @srcdir@
 PGM = ${ARCH}/shmsupp.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = addrconv getcfg intr lock mpisr
+C_PIECES = addrconv getcfg cause_intr lock mpisr
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 

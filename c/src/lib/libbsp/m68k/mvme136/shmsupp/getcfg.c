@@ -33,7 +33,7 @@
  */
 
 #include <rtems.h>
-#include "shm.h"
+#include "shm_driver.h"
 
 #define INTERRUPT 1                   /* MVME136 target supports both */
 #define POLLING   0                   /* polling and interrupt modes  */

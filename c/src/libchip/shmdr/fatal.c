@@ -18,7 +18,7 @@
  */
 
 #include <rtems.h>
-#include "shm.h"
+#include "shm_driver.h"
 
 void MPCI_Fatal(
   Internal_errors_Source  source,

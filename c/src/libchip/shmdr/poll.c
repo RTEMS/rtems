@@ -22,7 +22,7 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/libio.h>
 
-#include "shm.h"
+#include "shm_driver.h"
 
 void Shm_Poll()
 {

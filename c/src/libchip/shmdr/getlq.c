@@ -21,7 +21,7 @@
  */
 
 #include <rtems.h>
-#include <shm.h>
+#include <shm_driver.h>
 
 Shm_Envelope_control *Shm_Locked_queue_Get(
   Shm_Locked_queue_Control *lq_cb

@@ -19,7 +19,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include "shm.h"
+#include "shm_driver.h"
 
 rtems_isr Shm_isr_rxgen960(
   rtems_vector_number vector

@@ -19,7 +19,7 @@
  */
 
 #include <bsp.h>
-#include <shm.h>
+#include <shm_driver.h>
 #include <sys/types.h>      /* pid_t */
 
 void Shm_Cause_interrupt_unix(

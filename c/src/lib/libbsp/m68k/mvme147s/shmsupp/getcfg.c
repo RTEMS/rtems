@@ -29,7 +29,7 @@
 
 #include <bsp.h>
 #include <rtems.h>
-#include "shm.h"
+#include "shm_driver.h"
 
 #define INTERRUPT 1                   /* MVME147 target supports both */
 #define POLLING   0                   /* polling and interrupt modes  */

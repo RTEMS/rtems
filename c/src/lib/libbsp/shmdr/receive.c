@@ -22,7 +22,7 @@
  */
 
 #include <rtems.h>
-#include "shm.h"
+#include "shm_driver.h"
 
 rtems_mpci_entry Shm_Receive_packet(
   rtems_packet_prefix **packet

@@ -20,7 +20,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 
-#include "shm.h"
+#include "shm_driver.h"
 
 rtems_isr Shm_setclockvec()
 {

@@ -23,7 +23,7 @@
 #include <rtems.h>
 #include <rtems/error.h>
 
-#include <shm.h>
+#include <shm_driver.h>
 
 void Shm_Cause_interrupt_pxfl(
   rtems_unsigned32 node

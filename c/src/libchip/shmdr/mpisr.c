@@ -11,7 +11,7 @@
  */
 
 #include <rtems.h>
-#include "shm.h"
+#include "shm_driver.h"
 
 rtems_isr Shm_isr(
   rtems_vector_number vector

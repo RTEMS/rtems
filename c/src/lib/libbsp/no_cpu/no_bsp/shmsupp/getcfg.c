@@ -33,7 +33,7 @@ XXX: FIX THE COMMENTS BELOW WHEN THE CPU IS KNOWN
 
 #include <rtems.h>
 #include <bsp.h>
-#include <shm.h>
+#include <shm_driver.h>
 
 /*
  *  configured if currently polling of interrupt driven

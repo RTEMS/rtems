@@ -1,4 +1,4 @@
-/*  shm.h
+/*  shm_driver.h
  *
  *  This include file contains all the constants, structures,
  *  and global variables for this RTEMS based shared memory
@@ -145,7 +145,7 @@ extern "C" {
 #define SHM_LOCK_VALUE    1
 #define SHM_UNLOCK_VALUE  0
 #else
-#error "shm.h - no SHM_LOCK_VALUE defined for this CPU architecture"
+#error "shm_driver.h - no SHM_LOCK_VALUE defined for this CPU architecture"
 #endif
 
 #define Shm_Convert( value ) \

@@ -19,7 +19,7 @@
 #include <rtems.h>
 #include <stdio.h>
 
-#include "shm.h"
+#include "shm_driver.h"
 
 void
 Shm_Print_statistics(void)

@@ -20,7 +20,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include <shm.h>
+#include <shm_driver.h>
 
 #ifndef lint
 static char _sccsid[] = "@(#)addrconv.c 04/08/96     1.1\n";

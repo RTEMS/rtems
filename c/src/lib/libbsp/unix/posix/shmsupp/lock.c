@@ -17,7 +17,7 @@
  */
 
 #include <bsp.h>
-#include <shm.h>
+#include <shm_driver.h>
 
 /*
  *  Shm_Initialize_lock

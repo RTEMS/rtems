@@ -23,7 +23,7 @@
  */
 
 #include <rtems.h>
-#include "shm.h"
+#include "shm_driver.h"
 
 void Shm_Cause_interrupt(
   rtems_unsigned32 node

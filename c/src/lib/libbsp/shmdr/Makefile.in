@@ -21,7 +21,7 @@ C_PIECES = addlq cnvpkt getlq dump fatal getpkt init initlq intr mpisr poll \
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_PIECES = shm mpci
+H_PIECES = shm_driver mpci
 H_FILES = $(H_PIECES:%=$(srcdir)/%.h)
 
 SRCS = $(C_FILES) $(H_FILES)

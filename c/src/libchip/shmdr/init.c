@@ -20,7 +20,7 @@
 #define _SHM_INIT
 
 #include <rtems.h>
-#include <shm.h>
+#include <shm_driver.h>
 
 #include <string.h>    /* memset() */
 #include <stdlib.h>    /* malloc() */

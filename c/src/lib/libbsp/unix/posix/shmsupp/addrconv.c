@@ -19,7 +19,7 @@
  */
 
 #include <bsp.h>
-#include <shm.h>
+#include <shm_driver.h>
 
 void *Shm_Convert_address(
   void *addr

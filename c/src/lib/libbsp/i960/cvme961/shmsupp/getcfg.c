@@ -42,7 +42,7 @@
  */
 
 #include <rtems.h>
-#include "shm.h"
+#include "shm_driver.h"
 
 #define USE_ONBOARD_RAM 0             /* use onboard (1) or VME RAM   */
                                       /*   for SHM communications     */

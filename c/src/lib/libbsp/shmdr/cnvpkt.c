@@ -24,7 +24,7 @@
  */
 
 #include <rtems.h>
-#include "shm.h"
+#include "shm_driver.h"
 
 void Shm_Convert_packet(
   rtems_packet_prefix *packet

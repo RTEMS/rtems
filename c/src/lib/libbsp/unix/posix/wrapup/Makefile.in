@@ -27,7 +27,7 @@ BSP_PIECES = startup clock console timer $(BSP_MP_O_PIECES)
 CPU_PIECES =
 
 GENERIC_MP_REL_PIECES_yes_V = shmdr
-GENERIC_MP_REL_PIECES = $(GENERIC_MP_REL_$(HAS_MP)_V)
+GENERIC_MP_REL_PIECES = $(GENERIC_MP_REL_PIECES_$(HAS_MP)_V)
 GENERIC_PIECES = $(GENERIC_MP_REL_PIECES)
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x

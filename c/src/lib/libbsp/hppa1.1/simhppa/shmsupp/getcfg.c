@@ -35,7 +35,7 @@
 
 #include <bsp.h>
 
-#include <shm.h>
+#include <shm_driver.h>
 
 #define INTERRUPT 0        /* can be interrupt or polling */
 #define POLLING   1
