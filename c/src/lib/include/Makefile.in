@@ -22,7 +22,7 @@ KA9Q_H_PIECES= arp asy ax25 ax25mail bootp cmdparse commands config \
 KA9Q_H_FILES=$(KA9Q_H_PIECES:%=$(srcdir)/ka9q/%.h)
 
 MOTOROLA_H_PIECES=mc68230 mc68681
-MOTOROLA_H_FILES=$(MOTO_H_PIECES:%=$(srcdir)/motorola/%.h)
+MOTOROLA_H_FILES=$(MOTOROLA_H_PIECES:%=$(srcdir)/motorola/%.h)
 
 ZILOG_H_PIECES=z8036 z8530 z8536
 ZILOG_H_FILES=$(ZILOG_H_PIECES:%=$(srcdir)/zilog/%.h)
