@@ -1,3 +1,15 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* cpuuse/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* malloctest/Makefile.am: Ditto.
+	* monitor/Makefile.am: Ditto.
+	* putenvtest/Makefile.am: Ditto.
+	* rtems++/Makefile.am: Ditto.
+	* rtmonuse/Makefile.am: Ditto.
+	* stackchk/Makefile.am: Ditto.
+	* termios/Makefile.am: Ditto.
+
 2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libtests.am: Add dirstamp support.
