@@ -21,6 +21,9 @@ case "${target}" in
   i[3456]86-*freebsd2*) 	# unix "simulator" port
 	RTEMS_CPU=unix
 	;;
+  i[3456]86-pc-cygwin*) 	# Cygwin is just enough unix like :)
+	RTEMS_CPU=unix
+	;;
   no_cpu-*rtems*)
         RTEMS_CPU=no_cpu
 	;;
