@@ -1,3 +1,7 @@
+2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* monitor/mon-commands.c: Removed warnings for RTEMS_UNIX.
+
 2002-11-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* capture/Makefile.am: Remove AUTOMAKE_OPTIONS.

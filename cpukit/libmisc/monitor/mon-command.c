@@ -54,20 +54,23 @@
 #define RTEMS_COMMAND_BUFFER_SIZE (75)
 
 static char monitor_prompt[32];
+#ifndef RTEMS_UNIX
 static char buffer[RTEMS_COMMAND_BUFFER_SIZE];
 static int  pos;
 static int  logged_in;
-
+#endif
 /*
  * History data.
  */
 
 #define RTEMS_COMMAND_HISTORIES (20)
 
+#ifndef RTEMS_UNIX
 static char history_buffer[RTEMS_COMMAND_HISTORIES][RTEMS_COMMAND_BUFFER_SIZE];
 static int  history_pos[RTEMS_COMMAND_HISTORIES];
 static int  history;
 static int  history_next;
+#endif
 
 /*
  * Translation tables. Not sure if this is the best way to
