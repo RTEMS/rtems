@@ -1,5 +1,9 @@
 2004-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* rtems-apt-conf.spec.in: Add @VERSION@ to Source0.
+
+2004-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am, gpg/gpg-pubkey-eac29b6f-3fe1f458, ChangeLog,
 	vendors.list.d/rtems.list, sources.list.d/rtems-4.6.list,
 	sources.list.d/rtems-4.7.list, configure.ac, .cvsignore, COPYING,
