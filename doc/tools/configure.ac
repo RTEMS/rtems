@@ -5,7 +5,7 @@ AC_PREREQ(2.57)
 AC_INIT([rtems-doc-tools],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([word-replace2])
 
-AM_INIT_AUTOMAKE([no-define foreign 1.6])
+AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
 dnl Checks for programs.
 AC_PROG_CC
 

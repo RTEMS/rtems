@@ -10,7 +10,7 @@ AC_CONFIG_AUX_DIR(../..)
 
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE([no-define foreign 1.6])
+AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
 AM_MAINTAINER_MODE
 
 RTEMS_PATH_KSH
