@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 LIBNAME = librtcio
 LIB = $(ARCH)/$(LIBNAME).a
 
@@ -12,18 +11,8 @@ C_FILES = rtcprobe.c icm7170.c icm7170_reg.c icm7170_reg2.c icm7170_reg4.c \
 
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
-
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/libchip \
-    $(include_libchip_HEADERS:%=$(PROJECT_INCLUDE)/libchip/%)
-
-$(PROJECT_INCLUDE)/libchip:
-	@$(mkinstalldirs) $@
-$(PROJECT_INCLUDE)/libchip/%.h: %.h
-	$(INSTALL_DATA) $< $@
 
 #
 # Add local stuff here using +=
@@ -41,5 +30,26 @@ endif
 DOC_FILES = README.ds1643 README.icm7170 README.m48t08 README.m48t18 STATUS
 
 EXTRA_DIST = $(C_FILES) $(DOC_FILES)
+
+PREINSTALL_FILES =
+
+if LIBCHIP
+$(PROJECT_INCLUDE)/libchip/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/libchip
+	@: > $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+
+$(PROJECT_INCLUDE)/libchip/rtc.h: rtc.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/rtc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/rtc.h
+
+$(PROJECT_INCLUDE)/libchip/icm7170.h: icm7170.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/icm7170.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/icm7170.h
+
+$(PROJECT_INCLUDE)/libchip/m48t08.h: m48t08.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/m48t08.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/m48t08.h
+endif
 
 include $(top_srcdir)/automake/local.am

@@ -15,14 +15,6 @@ OBJS = $(C_O_FILES)
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/libchip \
-    $(include_ide_HEADERS:%=$(PROJECT_INCLUDE)/libchip/%)
-
-$(PROJECT_INCLUDE)/libchip:
-	@$(mkinstalldirs) $@
-$(PROJECT_INCLUDE)/libchip/%.h: %.h
-	$(INSTALL_DATA) $< $@
-
 if LIBCHIP
 include_idedir = $(includedir)/libchip
 include_ide_HEADERS = ata.h ide_ctrl_cfg.h ide_ctrl.h ide_ctrl_io.h
@@ -34,6 +26,31 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
 endif
 
 EXTRA_DIST = $(C_FILES)
+
+PREINSTALL_FILES =
+
+if LIBCHIP
+$(PROJECT_INCLUDE)/libchip/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/libchip
+	@: > $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+
+$(PROJECT_INCLUDE)/libchip/ata.h: ata.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/ata.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/ata.h
+
+$(PROJECT_INCLUDE)/libchip/ide_ctrl_cfg.h: ide_ctrl_cfg.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/ide_ctrl_cfg.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/ide_ctrl_cfg.h
+
+$(PROJECT_INCLUDE)/libchip/ide_ctrl.h: ide_ctrl.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/ide_ctrl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/ide_ctrl.h
+
+$(PROJECT_INCLUDE)/libchip/ide_ctrl_io.h: ide_ctrl_io.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/ide_ctrl_io.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/ide_ctrl_io.h
+endif
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am

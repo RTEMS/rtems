@@ -2,7 +2,6 @@
 #  $Id$
 #
 
-
 LIBNAME = libserialio
 LIB = $(ARCH)/$(LIBNAME).a
 
@@ -15,14 +14,6 @@ noinst_HEADERS = mc68681_p.h ns16550_p.h z85c30_p.h
 
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/libchip \
-    $(include_libchip_HEADERS:%=$(PROJECT_INCLUDE)/libchip/%)
-
-$(PROJECT_INCLUDE)/libchip:
-	@$(mkinstalldirs) $@
-$(PROJECT_INCLUDE)/libchip/%.h: %.h
-	$(INSTALL_DATA) $< $@
 
 #
 # Add local stuff here using +=
@@ -41,5 +32,34 @@ DOC_FILES = README.mc68681 README.ns16550 README.xr88681 README.z85c30 \
     STATUS
 
 EXTRA_DIST = $(C_FILES) $(DOC_FILES)
+
+PREINSTALL_FILES =
+
+if LIBCHIP
+$(PROJECT_INCLUDE)/libchip/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/libchip
+	@: > $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+
+$(PROJECT_INCLUDE)/libchip/mc68681.h: mc68681.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/mc68681.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/mc68681.h
+
+$(PROJECT_INCLUDE)/libchip/ns16550.h: ns16550.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/ns16550.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/ns16550.h
+
+$(PROJECT_INCLUDE)/libchip/z85c30.h: z85c30.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/z85c30.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/z85c30.h
+
+$(PROJECT_INCLUDE)/libchip/serial.h: serial.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/serial.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/serial.h
+
+$(PROJECT_INCLUDE)/libchip/sersupp.h: sersupp.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/sersupp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/sersupp.h
+endif
 
 include $(top_srcdir)/automake/local.am

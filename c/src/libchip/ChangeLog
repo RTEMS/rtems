@@ -1,3 +1,10 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ide/Makefile.am: Use dirstamps for preinstallation. Reformat.
+	* network/Makefile.am: Ditto.
+	* rtc/Makefile.am: Ditto.
+	* serial/Makefile.am: Ditto.
+
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* network/open_eth.c: Remove #define OPEN_ETH_SUPPORTED (Unused).
