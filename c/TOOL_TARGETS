@@ -13,7 +13,7 @@ i386:
 	i386-rtems		ELF
 	i386-rtemself		ELF
 	i386-rtemscoff		COFF		Obsoleted
-	i386-go32-rtems		COFF		Obsoleted
+	i386-go32-rtems		COFF		Obsoleted - no supporting BSP 
 
 i960:
 	i960-rtems		COFF		Switch to ELF when possible
