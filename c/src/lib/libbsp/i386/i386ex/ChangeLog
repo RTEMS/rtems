@@ -5,7 +5,7 @@
 
 2003-08-11	Joel Sherrill <joel@OARcorp.com>
 
-	PR 453/make_build
+	PR 450/make_build
 	* startup/linkcmds: Added .eh_frame
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
