@@ -4,11 +4,6 @@ dnl
 dnl Set target tools
 dnl
 
-AC_DEFUN(RTEMS_GCC_PRINT,
-[
-    $1=`$CC --print-prog-name=$2`
-])
-
 AC_DEFUN(RTEMS_CANONICALIZE_TOOLS,
 [AC_REQUIRE([RTEMS_PROG_CC])dnl
 
