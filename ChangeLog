@@ -1,5 +1,11 @@
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/compile.am: Remove LD_PATHS (Unused).
+	* aclocal/check-newlib.m4: Adaptation to autoconf-2.5x (AC_TRY_LINK
+	is announced obsolete).
+
+2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Reflect having removed aclocal/sysv-ipc.m4.
 
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
