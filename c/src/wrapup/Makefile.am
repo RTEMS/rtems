@@ -23,7 +23,6 @@ endif
 
 if HAS_NETWORKING
 SRCS += ../libnetworking/pppd/libpppd.a
-SRCS += ../libnetworking/rtems_servers/libftpd.a
 SRCS += ../libnetworking/rtems_telnetd/libtelnetd.a
 endif
 

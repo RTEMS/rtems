@@ -1,3 +1,12 @@
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/rtems_servers/ftp.c, 
+	libnetworking/rtems_servers/ftp.h,
+	libnetworking/rtems_servers/Makefile.am: 
+	Remove (relocated to cpukit/ftpd).
+	* configure.ac, Makefile.am, wrapup/Makefile.am: Reflect having
+	removed move libnetworking/rtems_servers.
+
 2005-02-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/rtems_servers/ftpd.h: Warning fixes.
