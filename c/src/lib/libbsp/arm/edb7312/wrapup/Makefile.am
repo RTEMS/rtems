@@ -5,9 +5,10 @@
 BSP_FILES = clock console startup irq timer network start
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_FILES), $(wildcard ../$(piece)/$(ARCH)/*.$(OBJEXT))) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT)) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/*/$(ARCH)/*.$(OBJEXT))
+OBJS = $(foreach piece, $(BSP_FILES), $(wildcard \
+    ../$(piece)/$(ARCH)/*.$(OBJEXT))) $(wildcard \
+    ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT)) $(wildcard \
+    ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/*/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libbsp.a
 
 include $(top_srcdir)/../../../../automake/compile.am

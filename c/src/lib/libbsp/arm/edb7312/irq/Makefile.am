@@ -25,14 +25,6 @@ include $(top_srcdir)/../../../../automake/lib.am
 
 AM_CPPFLAGS += -I$(srcdir)
 
-$(PROJECT_INCLUDE):
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/%.h: %.h
-	$(INSTALL_DATA) $< $@
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
-
 $(PGM): $(OBJS)
 	$(make-rel)
 
@@ -43,5 +35,16 @@ all-local: $(OBJS) $(PGM)
 .PRECIOUS: $(PGM)
 
 EXTRA_DIST = bsp_irq_asm.S bsp_irq_init.c irq.c
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_INCLUDE)/irq.h: irq.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
 
 include $(top_srcdir)/../../../../automake/local.am
