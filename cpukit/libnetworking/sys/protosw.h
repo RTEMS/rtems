@@ -31,7 +31,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)protosw.h	8.1 (Berkeley) 6/2/93
- * $Id$
+ * $FreeBSD: src/sys/sys/protosw.h,v 1.42 2003/11/18 00:39:07 rwatson Exp $
  */
 
 #ifndef _SYS_PROTOSW_H_
@@ -155,7 +155,7 @@ struct protosw {
 #define PRU_NREQ		22
 
 #ifdef PRUREQUESTS
-char *prurequests[] = {
+const char *prurequests[] = {
 	"ATTACH",	"DETACH",	"BIND",		"LISTEN",
 	"CONNECT",	"ACCEPT",	"DISCONNECT",	"SHUTDOWN",
 	"RCVD",		"SEND",		"ABORT",	"CONTROL",
@@ -233,6 +233,7 @@ extern	struct pr_usrreqs pru_oldstyle;
  */
 #define	PRC_IFDOWN		0	/* interface transition */
 #define	PRC_ROUTEDEAD		1	/* select new route if possible ??? */
+#define	PRC_IFUP		2 	/* interface has come back up */
 #define	PRC_QUENCH2		3	/* DEC congestion bit says slow down */
 #define	PRC_QUENCH		4	/* some one said to slow down */
 #define	PRC_MSGSIZE		5	/* message size forced drop */
@@ -251,20 +252,21 @@ extern	struct pr_usrreqs pru_oldstyle;
 #define	PRC_TIMXCEED_INTRANS	18	/* packet lifetime expired in transit */
 #define	PRC_TIMXCEED_REASS	19	/* lifetime expired on reass q */
 #define	PRC_PARAMPROB		20	/* header incorrect */
+#define	PRC_UNREACH_ADMIN_PROHIB	21	/* packet administrativly prohibited */
 
-#define	PRC_NCMDS		21
+#define	PRC_NCMDS		22
 
 #define	PRC_IS_REDIRECT(cmd)	\
 	((cmd) >= PRC_REDIRECT_NET && (cmd) <= PRC_REDIRECT_TOSHOST)
 
 #ifdef PRCREQUESTS
 char	*prcrequests[] = {
-	"IFDOWN", "ROUTEDEAD", "#2", "DEC-BIT-QUENCH2",
+	"IFDOWN", "ROUTEDEAD", "IFUP", "DEC-BIT-QUENCH2",
 	"QUENCH", "MSGSIZE", "HOSTDEAD", "#7",
 	"NET-UNREACH", "HOST-UNREACH", "PROTO-UNREACH", "PORT-UNREACH",
 	"#12", "SRCFAIL-UNREACH", "NET-REDIRECT", "HOST-REDIRECT",
 	"TOSNET-REDIRECT", "TOSHOST-REDIRECT", "TX-INTRANS", "TX-REASS",
-	"PARAMPROB"
+	"PARAMPROB", "ADMIN-UNREACH"
 };
 #endif
 
@@ -293,8 +295,9 @@ char	*prcorequests[] = {
 #endif
 
 #ifdef _KERNEL
-struct protosw *pffindproto __P((int family, int protocol, int type));
-struct protosw *pffindtype __P((int family, int type));
+void   pfctlinput(int, struct sockaddr *);
+struct protosw *pffindproto(int family, int protocol, int type);
+struct protosw *pffindtype(int family, int type);
 #endif
 
 #endif

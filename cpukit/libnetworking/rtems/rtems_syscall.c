@@ -439,12 +439,12 @@ recvmsg (int s, struct msghdr *mp, int flags)
 		}
 		if (mp->msg_control) {
 			struct mbuf *m;
-			caddr_t ctlbuf;
+			void *ctlbuf;
 
 			len = mp->msg_controllen;
 			m = control;
 			mp->msg_controllen = 0;
-			ctlbuf = (caddr_t) mp->msg_control;
+			ctlbuf = mp->msg_control;
 
 			while (m && (len > 0)) {
 				unsigned int tocopy;

@@ -31,13 +31,18 @@
  * SUCH DAMAGE.
  *
  *	@(#)socket.h	8.4 (Berkeley) 2/21/94
- * $Id$
+ * $FreeBSD: src/sys/sys/socket.h,v 1.77 2004/03/14 00:49:09 mdodd Exp $
  */
 
 #ifndef _SYS_SOCKET_H_
 #define	_SYS_SOCKET_H_
 
 #include <sys/cdefs.h>
+
+#if defined(__rtems__)
+/* RTEMS doesn't have FreeBSD's sys/_types.h machinery. */
+typedef int socklen_t;
+#endif
 
 /*
  * Definitions related to sockets: types, address families, options.
@@ -151,7 +156,7 @@ struct	sockwakeup {
  * addresses.
  */
 struct sockaddr {
-	u_char	sa_len;			/* total length */
+	unsigned char	sa_len;			/* total length */
 	u_char	sa_family;		/* address family */
 	char	sa_data[14];		/* actually longer; address value */
 };
@@ -161,8 +166,8 @@ struct sockaddr {
  * information in raw sockets.
  */
 struct sockproto {
-	u_short	sp_family;		/* address family */
-	u_short	sp_protocol;		/* protocol */
+	unsigned short	sp_family;		/* address family */
+	uusigned short	sp_protocol;		/* protocol */
 };
 
 /*
@@ -193,7 +198,7 @@ struct sockproto {
 #define	PF_COIP		AF_COIP
 #define	PF_CNT		AF_CNT
 #define	PF_SIP		AF_SIP
-#define	PF_IPX		AF_IPX		/* same format as AF_NS */
+#define	PF_IPX		AF_IPX
 #define PF_RTIP		pseudo_AF_RTIP	/* same format as AF_INET */
 #define PF_PIP		pseudo_AF_PIP
 #define	PF_ISDN		AF_ISDN
@@ -273,11 +278,11 @@ struct sockproto {
  * Used value-result for recvmsg, value only for sendmsg.
  */
 struct msghdr {
-	caddr_t	msg_name;		/* optional address */
+	void	*msg_name;		/* optional address */
 	u_int	msg_namelen;		/* size of address */
 	struct	iovec *msg_iov;		/* scatter/gather array */
-	u_int	msg_iovlen;		/* # elements in msg_iov */
-	caddr_t	msg_control;		/* ancillary data, see below */
+	int	msg_iovlen;		/* # elements in msg_iov */
+	void 	*msg_control;		/* ancillary data, see below */
 	u_int	msg_controllen;		/* ancillary data buffer len */
 	int	msg_flags;		/* flags on received message */
 };
@@ -326,7 +331,7 @@ struct cmsghdr {
  * 4.3 compat sockaddr, move to compat file later
  */
 struct osockaddr {
-	u_short	sa_family;		/* address family */
+	unsigned short	sa_family;		/* address family */
 	char	sa_data[14];		/* up to 14 bytes of direct address */
 };
 
@@ -334,38 +339,44 @@ struct osockaddr {
  * 4.3-compat message header (move to compat file later).
  */
 struct omsghdr {
-	caddr_t	msg_name;		/* optional address */
+	char	*msg_name;		/* optional address */
 	int	msg_namelen;		/* size of address */
 	struct	iovec *msg_iov;		/* scatter/gather array */
 	int	msg_iovlen;		/* # elements in msg_iov */
-	caddr_t	msg_accrights;		/* access rights sent/received */
+	void	*msg_accrights;		/* access rights sent/received */
 	int	msg_accrightslen;
 };
+
+/*
+ * howto arguments for shutdown(2), specified by Posix.1g.
+ */
+#define	SHUT_RD		0		/* shut down the reading side */
+#define	SHUT_WR		1		/* shut down the writing side */
+#define	SHUT_RDWR	2		/* shut down both sides */
 
 #ifndef	_KERNEL
 
 __BEGIN_DECLS
-int	accept __P((int, struct sockaddr *, int *));
-int	bind __P((int, const struct sockaddr *, int));
-int	connect __P((int, const struct sockaddr *, int));
-int	getpeername __P((int, struct sockaddr *, int *));
-int	getsockname __P((int, struct sockaddr *, int *));
-int	getsockopt __P((int, int, int, void *, int *));
-int	listen __P((int, int));
-ssize_t	recv __P((int, void *, size_t, int));
-ssize_t	recvfrom __P((int, void *, size_t, int, struct sockaddr *, int *));
-ssize_t	recvmsg __P((int, struct msghdr *, int));
-ssize_t	send __P((int, const void *, size_t, int));
-ssize_t	sendto __P((int, const void *,
-	    size_t, int, const struct sockaddr *, int));
-ssize_t	sendmsg __P((int, const struct msghdr *, int));
-int	setsockopt __P((int, int, int, const void *, int));
-int	shutdown __P((int, int));
-int	socket __P((int, int, int));
-int	socketpair __P((int, int, int, int *));
+int	accept(int, struct sockaddr * __restrict, socklen_t * __restrict);
+int	bind(int, const struct sockaddr *, socklen_t);
+int	connect(int, const struct sockaddr *, socklen_t);
+int	getpeername(int, struct sockaddr * __restrict, socklen_t * __restrict);
+int	getsockname(int, struct sockaddr * __restrict, socklen_t * __restrict);
+int	getsockopt(int, int, int, void * __restrict, socklen_t * __restrict);
+int	listen(int, int);
+ssize_t	recv(int, void *, size_t, int);
+ssize_t	recvfrom(int, void *, size_t, int, struct sockaddr * __restrict, socklen_t * __restrict);
+ssize_t	recvmsg(int, struct msghdr *, int);
+ssize_t	send(int, const void *, size_t, int);
+ssize_t	sendto(int, const void *,
+	    size_t, int, const struct sockaddr *, socklen_t);
+ssize_t	sendmsg(int, const struct msghdr *, int);
+int	setsockopt(int, int, int, const void *, socklen_t);
+int	shutdown(int, int);
+int	socket(int, int, int);
+int	socketpair(int, int, int, int *);
 __END_DECLS
 
-#else /* _KERNEL */
-void	pfctlinput __P((int, struct sockaddr *));
 #endif /* !_KERNEL */
+
 #endif /* !_SYS_SOCKET_H_ */

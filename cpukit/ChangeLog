@@ -1,5 +1,11 @@
 2004-04-22	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libnetworking/sys/protosw.h: Partial update from FreeBSD.
+	* libnetworking/sys/socket.h: Partial update from FreeBSD.
+	* libnetworking/rtems/rtems_syscall.c: Reflect changes to socket.h.
+
+2004-04-22	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libnetworking/kern/uipc_socket.c: Partial update from FreeBSD
 	(Remove adv-clause from copyright notice).
 	* libnetworking/netinet/igmp_var.h: Partial update from FreeBSD.
