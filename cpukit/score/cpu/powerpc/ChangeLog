@@ -1,5 +1,10 @@
 2004-01-28	Ralf Corsepius <ralf.corsepiu@rtems.org>
 
+	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h,
+	rtems/powerpc/registers.h: New header guards.
+
+2004-01-28	Ralf Corsepius <ralf.corsepiu@rtems.org>
+
 	* asm.h, rtems/score/cpu.h, rtems/score/powerpc.h,
 	rtems/score/ppc.h, rtems/score/types.h: New header guards.
 
