@@ -463,7 +463,7 @@ termios_set_flowctrl(struct rtems_termios_tty *tty)
       if (tty->rawOutBufState != rob_idle) {
 	/* if chars available, call write function... */
 	(*tty->device.write)(tty->minor,
-		     (char *)&tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail],1);
+		     &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail],1);
       }
       /* reenable interrupts */
       rtems_interrupt_enable(level);
@@ -1191,7 +1191,7 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 	      if (tty->rawOutBufState != rob_idle) {
 	      /* if chars available, call write function... */
 		(*tty->device.write)(tty->minor,
-		     (char *)&tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail], 1);
+		     &tty->rawOutBuf.theBuf[tty->rawOutBuf.Tail], 1);
 	      }
 	      /* reenable interrupts */
 	      rtems_interrupt_enable(level);
@@ -1367,7 +1367,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 	    }
 	    tty->rawOutBufState = rob_busy; /*apm*/
 	    (*tty->device.write)(tty->minor,
-				 (char *)&tty->rawOutBuf.theBuf[newTail],
+				 &tty->rawOutBuf.theBuf[newTail],
 				 nToSend);
 	  }
 	  tty->rawOutBuf.Tail = newTail; /*apm*/

@@ -1,5 +1,9 @@
 2005-01-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/termios.c: Remove unnecessary type casts.
+
+2005-01-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* sapi/include/rtems/io.h : size_t device_name_length.
 
 2005-01-18	Ralf Corsepius <ralf.corsepius@rtems.org>
