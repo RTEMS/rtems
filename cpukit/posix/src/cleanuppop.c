@@ -28,6 +28,7 @@ void pthread_cleanup_pop(
 )
 {
   POSIX_Cancel_Handler_control      *handler;
+  POSIX_Cancel_Handler_control      tmp_handler;
   Chain_Control                     *handler_stack;
   POSIX_API_Control                 *thread_support;
   ISR_Level                          level;
@@ -36,17 +37,24 @@ void pthread_cleanup_pop(
  
   handler_stack = &thread_support->Cancellation_Handlers;
 
-  if ( _Chain_Is_empty( handler_stack ) )
-    return;
- 
   _ISR_Disable( level );
+    if ( _Chain_Is_empty( handler_stack ) ) {
+      _ISR_Enable( level );
+      return;
+    }
+ 
     handler = (POSIX_Cancel_Handler_control *) 
         _Chain_Tail( handler_stack )->previous;
     _Chain_Extract_unprotected( &handler->Node );
+   
   _ISR_Enable( level );
 
+  tmp_handler = *handler;
+
+  _Thread_Disable_dispatch();
+    _Workspace_Free( handler );
+  _Thread_Enable_dispatch();
+
   if ( execute )
-    (*handler->routine)( handler->arg );
- 
-  _Workspace_Free( handler );
+    (*tmp_handler.routine)( tmp_handler.arg );
 }

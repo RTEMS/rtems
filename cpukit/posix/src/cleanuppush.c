@@ -35,10 +35,13 @@ void pthread_cleanup_push(
   if ( !routine )
     return;          /* XXX what to do really? */ 
 
+  _Thread_Disable_dispatch();
   handler = _Workspace_Allocate( sizeof( POSIX_Cancel_Handler_control ) );
 
-  if ( !handler )
+  if ( !handler ) {
+    _Thread_Enable_dispatch();
     return;          /* XXX what to do really? */ 
+  }
 
   thread_support = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
 
@@ -48,4 +51,6 @@ void pthread_cleanup_push(
   handler->arg = arg;
 
   _Chain_Append( handler_stack, &handler->Node );
+
+  _Thread_Enable_dispatch();
 }
