@@ -17,7 +17,7 @@ $(project_bspdir)/tests/screens/itrontests:
 $(project_bspdir)/tests/screens/itrontests/$(TEST).scn: $(TEST).scn
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += \
+TMPINSTALL_FILES = \
 $(project_bspdir)/tests \
 $(project_bspdir)/tests/$(TEST)$(LIB_VARIANT).exe \
 $(project_bspdir)/tests/screens \
