@@ -1,5 +1,9 @@
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/version.m4: 4.6.99.0.
+
+2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Don't include host.am.
 	* automake/compile.am: Further cleanups.
 

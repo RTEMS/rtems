@@ -1,3 +1,7 @@
+2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/version.m4: 4.6.99.0.
+
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/rtems-cpu-subdirs.m4: mips64orion port removed as mips port
