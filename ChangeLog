@@ -1,3 +1,8 @@
+2003-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* README.configure: Reflect requireing autoconf-2.59 and
+	automake-1.8.
+
 2003-12-17	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: Updated to rtems-20031217-test.

@@ -11,7 +11,7 @@ tools in the Cygnus one-tree structure. Using autoconf also means
 that RTEMS now can be built in a separate build directory.
 
 To re-generate auto*tool generated files (configure, Makefile.in etc),
-autoconf-2.57 and automake-1.7.2 are required.
+autoconf-2.59 and automake-1.8 are required.
 
 2. Installation
 ===============
