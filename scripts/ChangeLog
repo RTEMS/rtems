@@ -1,3 +1,16 @@
+2002-11-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* binutils/binutils.add: Add BuildPreReq: /sbin/install-info.
+	Disable nls.
+	Apply gzip -9qf to compress *infos and *mans.
+	Apply /sbin/install-info.
+	Remove  *c++-filt.
+	* binutils/base-binutils.add: Add PreReq: /sbin/install-info.
+	Apply /sbin/install-info.
+	Package as.info-*.gz.
+	* binutils/target-binutils.add: 
+	Package man1/*.1*.
+
 2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* autotool/autoconf-rtems.spec.in: Fix @prefix@.

@@ -20,6 +20,7 @@ Autoreqprov:  	off
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 Prefix:		%{_prefix}
 BuildRoot:	%{_tmppath}/@target_alias@-binutils
+BuildPreReq:	/sbin/install-info
 
 Version:      	@binutils_version@
 Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-@binutils_version@.tar.bz2
@@ -57,7 +58,7 @@ This is binutils sources with patches for RTEMS.
 
   cd build
   ../binutils-@binutils_version@/configure ${CONFIGURE_ARGS} --target=@target_alias@ \
-    --verbose --prefix=%{_prefix}
+    --verbose --prefix=%{_prefix} --disable-nls
 
   make all
   make info
@@ -72,9 +73,10 @@ This is binutils sources with patches for RTEMS.
   ../binutils-@binutils_version@/mkinstalldirs \
     $RPM_BUILD_ROOT%{_prefix}/share/locale
 
+  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/@target_alias@-c++filt
 # gzip info files
-  gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
-  gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-? 2>/dev/null
+  gzip -9qf $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
+  gzip -9qf $RPM_BUILD_ROOT%{_prefix}/info/*.info-* 2>/dev/null
 
   if test -f $RPM_BUILD_ROOT%{_prefix}/info/configure.info.gz;
   then
@@ -89,7 +91,7 @@ This is binutils sources with patches for RTEMS.
   rm -f $RPM_BUILD_ROOT%{_prefix}/info/dir
   f=`find $RPM_BUILD_ROOT%{_prefix}/info -name '*.info.gz'`
   test x"$f" != x"" && for i in $f; do
-    install-info $i $RPM_BUILD_ROOT%{_prefix}/info/dir
+    /sbin/install-info $i $RPM_BUILD_ROOT%{_prefix}/info/dir
   done
 
 %clean

@@ -5,6 +5,7 @@
 Provides:	rtems-base-binutils
 Summary:      base package for rtems binutils
 Group: rtems
+PreReq:		/sbin/install-info
 
 %description -n rtems-base-binutils
 
@@ -18,7 +19,7 @@ This is the base for binutils regardless of target CPU.
     rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
     f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
     test x"$f" != x"" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+      /sbin/install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
     done
   fi
 
@@ -28,7 +29,7 @@ This is the base for binutils regardless of target CPU.
     rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
     f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
     test x"$f" != x"" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+      /sbin/install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
     done
   fi
 
@@ -36,7 +37,7 @@ This is the base for binutils regardless of target CPU.
 %dir %{_prefix}/info
 %doc %{_prefix}/info/dir
 %doc %{_prefix}/info/as.info.gz
-%doc %{_prefix}/info/as.info-?.gz
+%doc %{_prefix}/info/as.info-*.gz
 %doc %{_prefix}/info/bfd.info.gz
 %doc %{_prefix}/info/bfd.info-?.gz
 %doc %{_prefix}/info/binutils.info.gz
