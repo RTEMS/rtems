@@ -25,6 +25,18 @@
  * look for the 21140 first. If the 21140 is not found the driver will
  * look for the 21143.
  * ------------------------------------------------------------------------
+ *
+ * 2003-03-13, Greg Menke, gregory.menke@gsfc.nasa.gov
+ *
+ * Added support for up to 8 units (which is an arbitrary limit now),
+ * consolidating their support into a single pair of rx/tx daemons and a
+ * single ISR for all vectors servicing the DEC units.  The driver now
+ * simply uses whatever INTERRUPT_LINE the card supplies, requiring it
+ * be configured either by the boot monitor or bspstart() hackery.
+ * Tested on a MCP750 PPC based system with 2 DEC21140 boards.
+ *
+ * Also fixed a few bugs related to board configuration, start and stop.
+ *
  */
 
 #include <rtems.h>
@@ -39,7 +51,7 @@
   #define DEC21140_SUPPORTED
 #endif
 
-#if defined(__PPC__) && (defined(mpc604) || defined(mpc750))
+#if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(mpc603e))
   #define DEC21140_SUPPORTED
 #endif
 
@@ -57,6 +69,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 #include <rtems/error.h>
 #include <rtems/bspIo.h>
 #include <rtems/rtems_bsdnet.h>
@@ -88,9 +101,11 @@
 
 /* note: the 21143 isn't really a DEC, it's an Intel chip */
 #define PCI_INVALID_VENDORDEVICEID	0xffffffff
-#define PCI_VENDOR_ID_DEC 0x1011
-#define PCI_DEVICE_ID_DEC_21140 0x0009
-#define PCI_DEVICE_ID_DEC_21143 0x0019
+#define PCI_VENDOR_ID_DEC               0x1011
+#define PCI_DEVICE_ID_DEC_21140         0x0009
+#define PCI_DEVICE_ID_DEC_21143         0x0019
+
+#define DRIVER_PREFIX   "dc"
 
 #define IO_MASK  0x3
 #define MEM_MASK  0xF
@@ -133,6 +148,9 @@
 
 #define DEC_REGISTER_SIZE    0x100   /* to reserve virtual memory */
 
+
+
+
 #define RESET_CHIP   0x00000001
 #if defined(__PPC)
 #define CSR0_MODE    0x0030e002   /* 01b08000 */
@@ -147,43 +165,72 @@
 #define CLEAR_IT     0xFFFFFFFF   
 #define NO_IT        0x00000000   
 
-#define NRXBUFS 32	/* number of receive buffers */
-#define NTXBUFS 16	/* number of transmit buffers */
+
 
 /* message descriptor entry */
 struct MD {
     /* used by hardware */
     volatile unsigned32 status;
     volatile unsigned32 counts;
-    unsigned32 buf1, buf2;  
+    volatile unsigned32 buf1, buf2;  
     /* used by software */
     volatile struct mbuf *m;
     volatile struct MD *next;
-};
+} __attribute__ ((packed));
+
+
+
 
 /*
- * Number of DECs supported by this driver
+** These buffers allocated for each unit, so ensure
+**
+**   rtems_bsdnet_config.mbuf_bytecount
+**   rtems_bsdnet_config.mbuf_cluster_bytecount
+**
+** are adequately sized to provide enough clusters and mbufs for all the
+** units.  The default bsdnet configuration is sufficient for one dec
+** unit, but will be nearing exhaustion with 2 or more.  Although a
+** little expensive in memory, the following configuration should
+** eliminate all mbuf/cluster issues;
+**
+**   rtems_bsdnet_config.mbuf_bytecount           = 128*1024;
+**   rtems_bsdnet_config.mbuf_cluster_bytecount   = 256*1024;
+*/
+
+#define NRXBUFS 16	/* number of receive buffers */
+#define NTXBUFS 16	/* number of transmit buffers */
+
+
+/*
+ * Number of DEC boards supported by this driver
  */
-#define NDECDRIVER	1
+#define NDECDRIVER	8
+
 
 /*
  * Receive buffer size -- Allow for a full ethernet packet including CRC
  */
 #define RBUF_SIZE	1536
 
-#define	ET_MINLEN 60		/* minimum message length */
+#define	ET_MINLEN       60	/* minimum message length */
+
 
 /*
- * RTEMS event used by interrupt handler to signal driver tasks.
- * This must not be any of the events used by the network task synchronization.
- */
-#define INTERRUPT_EVENT	RTEMS_EVENT_1
+** Events, one per unit.  The event is sent to the rx task from the isr
+** or from the stack to the tx task whenever a unit needs service.  The
+** rx/tx tasks identify the requesting unit(s) by their particular
+** events so only requesting units are serviced.
+*/
 
-/*
- * RTEMS event used to start transmit daemon.
- * This must not be the same as INTERRUPT_EVENT.
- */
-#define START_TRANSMIT_EVENT	RTEMS_EVENT_2
+static rtems_event_set unit_signals[NDECDRIVER]= { RTEMS_EVENT_1,  
+                                                   RTEMS_EVENT_2,
+                                                   RTEMS_EVENT_3,  
+                                                   RTEMS_EVENT_4,
+                                                   RTEMS_EVENT_5,  
+                                                   RTEMS_EVENT_6,
+                                                   RTEMS_EVENT_7,  
+                                                   RTEMS_EVENT_8 };
+
 
 #if defined(__PPC)
 #define phys_to_bus(address) ((unsigned int)((address)) + PCI_DRAM_OFFSET)
@@ -212,94 +259,75 @@ inline unsigned32 ld_le32(volatile unsigned32 *addr)
 # error "Driver must have MCLBYTES > RBUF_SIZE"
 #endif
 
+
+
+
+
 /*
  * Per-device data
  */
- struct dec21140_softc {
+struct dec21140_softc {
 
-   struct arpcom			arpcom;
+      struct arpcom		arpcom;
 
-   rtems_irq_connect_data	irqInfo;
+      rtems_irq_connect_data    irqInfo;
 
-   volatile struct MD		*MDbase;
-   volatile unsigned char	*bufferBase;
-   int				acceptBroadcast;
-   rtems_id			rxDaemonTid;
-   rtems_id			txDaemonTid;
+      rtems_event_set           ioevent;
+
+      volatile struct MD	*MDbase;
+      volatile struct MD        *nextRxMD;
+      volatile unsigned char	*bufferBase;
+      int			acceptBroadcast;
    
-   volatile struct MD   *TxMD;
-   volatile struct MD   *SentTxMD;
-   int         PendingTxCount;
-   int         TxSuspended;
+      volatile struct MD   *TxMD;
+      volatile struct MD   *SentTxMD;
+      int         PendingTxCount;
+      int         TxSuspended;
 
-  unsigned int 			port;
-  volatile unsigned int		*base;
-   
-  /*
-   * Statistics
-   */
-  unsigned long	rxInterrupts;
-  unsigned long	rxNotFirst;
-  unsigned long	rxNotLast;
-  unsigned long	rxGiant;
-  unsigned long	rxNonOctet;
-  unsigned long	rxRunt;
-  unsigned long	rxBadCRC;
-  unsigned long	rxOverrun;
-  unsigned long	rxCollision;
+      unsigned int 			port;
+      volatile unsigned int		*base;
+
+      /*
+       * Statistics
+       */
+      unsigned long	rxInterrupts;
+      unsigned long	rxNotFirst;
+      unsigned long	rxNotLast;
+      unsigned long	rxGiant;
+      unsigned long	rxNonOctet;
+      unsigned long	rxRunt;
+      unsigned long	rxBadCRC;
+      unsigned long	rxOverrun;
+      unsigned long	rxCollision;
   
-  unsigned long	txInterrupts;
-  unsigned long	txDeferred;
-  unsigned long	txHeartbeat;
-  unsigned long	txLateCollision;
-  unsigned long	txRetryLimit;
-  unsigned long	txUnderrun;
-  unsigned long	txLostCarrier;
-  unsigned long	txRawWait;
+      unsigned long	txInterrupts;
+      unsigned long	txDeferred;
+      unsigned long	txHeartbeat;
+      unsigned long	txLateCollision;
+      unsigned long	txRetryLimit;
+      unsigned long	txUnderrun;
+      unsigned long	txLostCarrier;
+      unsigned long	txRawWait;
 };
 
 static struct dec21140_softc dec21140_softc[NDECDRIVER];
+static rtems_id	rxDaemonTid;
+static rtems_id	txDaemonTid;
 
-/*
- * DEC21140 interrupt handler
- */
-static rtems_isr
-dec21140Enet_interrupt_handler (rtems_vector_number v)
-{
-    volatile unsigned32 *tbase;
-    unsigned32 status;
-    struct dec21140_softc *sc;
 
-    sc = &dec21140_softc[0];
-    tbase = (unsigned32 *)(sc->base) ;
 
-    /*
-     * Read status
-     */
-    status = ld_le32(tbase+memCSR5);
-    st_le32((tbase+memCSR5), status); /* clear the bits we've read */
 
-    /*
-     * Frame received?
-     */
-    if (status & 0x000000c0){
-      sc->rxInterrupts++;
-      rtems_event_send (sc->rxDaemonTid, INTERRUPT_EVENT);
-    }
-}
 
-static void nopOn(const rtems_irq_connect_data* notUsed)
-{
-  /*
-   * code should be moved from dec21140Enet_initialize_hardware
-   * to this location
-   */
-}
 
-static int dec21140IsOn(const rtems_irq_connect_data* irq)
-{
-  return BSP_irq_enabled_at_i8259s (irq->name);
-}
+
+
+
+
+
+
+
+
+
 
 
 /*
@@ -321,37 +349,128 @@ static int dec21140IsOn(const rtems_irq_connect_data* irq)
 
 static int eeget16(volatile unsigned int *ioaddr, int location)
 {
-	int i;
-	unsigned short retval = 0;
-	int read_cmd = location | EE_READ_CMD;
+   int i;
+   unsigned short retval = 0;
+   int read_cmd = location | EE_READ_CMD;
 	
-	st_le32(ioaddr, EE_ENB & ~EE_CS);
-	st_le32(ioaddr, EE_ENB);
+   st_le32(ioaddr, EE_ENB & ~EE_CS);
+   st_le32(ioaddr, EE_ENB);
 	
-	/* Shift the read command bits out. */
-	for (i = 10; i >= 0; i--) {
-		short dataval = (read_cmd & (1 << i)) ? EE_DATA_WRITE : 0;
-		st_le32(ioaddr, EE_ENB | dataval);
-		rtems_bsp_delay_in_bus_cycles(200);
-		st_le32(ioaddr, EE_ENB | dataval | EE_SHIFT_CLK);
-		rtems_bsp_delay_in_bus_cycles(200);
-		st_le32(ioaddr, EE_ENB | dataval); /* Finish EEPROM a clock tick. */
-		rtems_bsp_delay_in_bus_cycles(200);
-	}
-	st_le32(ioaddr, EE_ENB);
+   /* Shift the read command bits out. */
+   for (i = 10; i >= 0; i--) {
+      short dataval = (read_cmd & (1 << i)) ? EE_DATA_WRITE : 0;
+      st_le32(ioaddr, EE_ENB | dataval);
+      rtems_bsp_delay_in_bus_cycles(200);
+      st_le32(ioaddr, EE_ENB | dataval | EE_SHIFT_CLK);
+      rtems_bsp_delay_in_bus_cycles(200);
+      st_le32(ioaddr, EE_ENB | dataval); /* Finish EEPROM a clock tick. */
+      rtems_bsp_delay_in_bus_cycles(200);
+   }
+   st_le32(ioaddr, EE_ENB);
 	
-	for (i = 16; i > 0; i--) {
-		st_le32(ioaddr, EE_ENB | EE_SHIFT_CLK);
-		rtems_bsp_delay_in_bus_cycles(200);
-		retval = (retval << 1) | ((ld_le32(ioaddr) & EE_DATA_READ) ? 1 : 0);
-		st_le32(ioaddr, EE_ENB);
-		rtems_bsp_delay_in_bus_cycles(200);
-	}
+   for (i = 16; i > 0; i--) {
+      st_le32(ioaddr, EE_ENB | EE_SHIFT_CLK);
+      rtems_bsp_delay_in_bus_cycles(200);
+      retval = (retval << 1) | ((ld_le32(ioaddr) & EE_DATA_READ) ? 1 : 0);
+      st_le32(ioaddr, EE_ENB);
+      rtems_bsp_delay_in_bus_cycles(200);
+   }
 
-	/* Terminate the EEPROM access. */
-	st_le32(ioaddr, EE_ENB & ~EE_CS);
-	return ( ((retval<<8)&0xff00) | ((retval>>8)&0xff) );
+   /* Terminate the EEPROM access. */
+   st_le32(ioaddr, EE_ENB & ~EE_CS);
+   return ( ((retval<<8)&0xff00) | ((retval>>8)&0xff) );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+static void no_op(const rtems_irq_connect_data* irq)
+{
+   return;
+}
+
+
+
+
+static int dec21140IsOn(const rtems_irq_connect_data* irq)
+{
+  return BSP_irq_enabled_at_i8259s (irq->name);
+}
+
+
+
+
+/*
+ * DEC21140 interrupt handler
+ */
+static rtems_isr
+dec21140Enet_interrupt_handler ( struct dec21140_softc *sc )
+{
+   volatile unsigned32    *tbase;
+   unsigned32             status;
+
+   tbase = (unsigned32 *)(sc->base);
+
+   /*
+    * Read status
+    */
+   status = ld_le32(tbase+memCSR5);
+   st_le32((tbase+memCSR5), status);
+
+   /*
+    * Frame received?
+    */
+   if( status & 0x000000c0 )
+   {
+      sc->rxInterrupts++;
+      rtems_event_send(rxDaemonTid, sc->ioevent);
+   }
+}
+
+
+
+static rtems_isr
+dec21140Enet_interrupt_handler_entry()
+{
+   int i;
+
+   /*
+   ** Check all the initialized dec units for interrupt service
+   */
+
+   for(i=0; i< NDECDRIVER; i++ )
+   {
+      if( dec21140_softc[i].base )
+         dec21140Enet_interrupt_handler( &dec21140_softc[i] );
+   }
+}
+
+
+
+
+
+
+
+
+
 
 /*
  * Initialize the ethernet hardware
@@ -359,238 +478,292 @@ static int eeget16(volatile unsigned int *ioaddr, int location)
 static void
 dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
 {
-  rtems_status_code st;
-  volatile unsigned int *tbase;
-  int i;
-  volatile unsigned char *cp, *setup_frm, *eaddrs; 
-  volatile unsigned char *buffer;
-  volatile struct MD *rmd;
+   int i,st;
+   volatile unsigned int  *tbase;
+   volatile unsigned char *cp, *setup_frm, *eaddrs; 
+   volatile unsigned char *buffer;
+   volatile struct MD     *rmd;
 
-  tbase = sc->base;
-
-  /*
-   * WARNING : First write in CSR6
-   *           Then Reset the chip ( 1 in CSR0)
-   */
-  st_le32( (tbase+memCSR6), CSR6_INIT);  
-  st_le32( (tbase+memCSR0), RESET_CHIP);  
-  rtems_bsp_delay_in_bus_cycles(200);
-
-  /*
-   * Init CSR0
-   */
-  st_le32( (tbase+memCSR0), CSR0_MODE);  
 
 #ifdef DEC_DEBUG
-  printk("DC2114x %x:%x:%x:%x:%x:%x IRQ %d IO %x M %x .........\n",
-	 sc->arpcom.ac_enaddr[0], sc->arpcom.ac_enaddr[1],
-	 sc->arpcom.ac_enaddr[2], sc->arpcom.ac_enaddr[3],
-	 sc->arpcom.ac_enaddr[4], sc->arpcom.ac_enaddr[5],
-	 sc->irqInfo.name, sc->port, (unsigned) sc->base);
+   printk("dec2114x : %02x:%02x:%02x:%02x:%02x:%02x   name '%s%d', io %x, mem %x, int %d\n",
+          sc->arpcom.ac_enaddr[0], sc->arpcom.ac_enaddr[1],
+          sc->arpcom.ac_enaddr[2], sc->arpcom.ac_enaddr[3],
+          sc->arpcom.ac_enaddr[4], sc->arpcom.ac_enaddr[5],
+          sc->arpcom.ac_if.if_name, sc->arpcom.ac_if.if_unit,
+          sc->port, (unsigned) sc->base, sc->irqInfo.name );
 #endif
-  
-  /*
-   * Init RX ring
-   */
-  cp = (volatile unsigned char *)malloc(((NRXBUFS+NTXBUFS)*sizeof(struct MD))
-					+ (NTXBUFS*RBUF_SIZE)
-					+ CPU_CACHE_ALIGNMENT_FOR_BUFFER);
-  sc->bufferBase = cp;
-  cp += (CPU_CACHE_ALIGNMENT_FOR_BUFFER - (int)cp)
-         & (CPU_CACHE_ALIGNMENT_FOR_BUFFER - 1);
+
+
+
+   tbase = sc->base;
+
+   /*
+    * WARNING : First write in CSR6
+    *           Then Reset the chip ( 1 in CSR0)
+    */
+   st_le32( (tbase+memCSR6), CSR6_INIT);  
+   st_le32( (tbase+memCSR0), RESET_CHIP);  
+   rtems_bsp_delay_in_bus_cycles(200);
+
+   st_le32( (tbase+memCSR7), NO_IT); 
+
+   /*
+    * Init CSR0
+    */
+   st_le32( (tbase+memCSR0), CSR0_MODE);  
+
+   /*
+    * Init RX ring
+    */
+   cp = (volatile unsigned char *)malloc(((NRXBUFS+NTXBUFS)*sizeof(struct MD))
+                                         + (NTXBUFS*RBUF_SIZE)
+                                         + CPU_CACHE_ALIGNMENT_FOR_BUFFER);
+   sc->bufferBase = cp;
+   cp += (CPU_CACHE_ALIGNMENT_FOR_BUFFER - (int)cp) & (CPU_CACHE_ALIGNMENT_FOR_BUFFER - 1);
 #if defined(__i386__)
 #ifdef PCI_BRIDGE_DOES_NOT_ENSURE_CACHE_COHERENCY_FOR_DMA 
-  if (_CPU_is_paging_enabled())
-    _CPU_change_memory_mapping_attribute
-                   (NULL, cp,
-		    ((NRXBUFS+NTXBUFS)*sizeof(struct MD))
-		    + (NTXBUFS*RBUF_SIZE),
-		    PTE_CACHE_DISABLE | PTE_WRITABLE);
+   if (_CPU_is_paging_enabled())
+      _CPU_change_memory_mapping_attribute
+         (NULL, cp,
+          ((NRXBUFS+NTXBUFS)*sizeof(struct MD))
+          + (NTXBUFS*RBUF_SIZE),
+          PTE_CACHE_DISABLE | PTE_WRITABLE);
 #endif
 #endif
-  rmd = (volatile struct MD*)cp;
-  sc->MDbase = rmd;
-  buffer = cp + ((NRXBUFS+NTXBUFS)*sizeof(struct MD));
-  st_le32( (tbase+memCSR3), (long)(phys_to_bus((long)(sc->MDbase))));
-  for (i=0 ; i<NRXBUFS; i++){
-    struct mbuf *m;
+   rmd = (volatile struct MD*)cp;
+   sc->MDbase = rmd;
+   sc->nextRxMD = sc->MDbase;
+
+   buffer = cp + ((NRXBUFS+NTXBUFS)*sizeof(struct MD));
+   st_le32( (tbase+memCSR3), (long)(phys_to_bus((long)(sc->MDbase))));
+
+   for (i=0 ; i<NRXBUFS; i++)
+   {
+      struct mbuf *m;
     
-    /* allocate an mbuf for each receive descriptor */
-    MGETHDR (m, M_WAIT, MT_DATA);
-    MCLGET (m, M_WAIT);
-    m->m_pkthdr.rcvif = &sc->arpcom.ac_if;
-    rmd->m = m;
+      /* allocate an mbuf for each receive descriptor */
+      MGETHDR (m, M_WAIT, MT_DATA);
+      MCLGET (m, M_WAIT);
+      m->m_pkthdr.rcvif = &sc->arpcom.ac_if;
+      rmd->m = m;
 
-    rmd->buf2   = phys_to_bus(rmd+1);
-    rmd->buf1   = phys_to_bus(mtod(m, void *));  
-    rmd->counts = 0xfdc00000 | (RBUF_SIZE);
-    rmd->status = 0x80000000;
-    rmd->next   = rmd + 1;
-    rmd++;
-  }
-  /*
-   * mark last RX buffer.
-   */
-  sc->MDbase [NRXBUFS-1].counts = 0xfec00000 | (RBUF_SIZE);
-  sc->MDbase [NRXBUFS-1].next   = sc->MDbase;
+      rmd->buf2   = phys_to_bus(rmd+1);
+      rmd->buf1   = phys_to_bus(mtod(m, void *));  
+      rmd->status = 0x80000000;
+      rmd->counts = 0xfdc00000 | (RBUF_SIZE);
+      rmd->next   = rmd+1;
+      rmd++;
+   }
+   /*
+    * mark last RX buffer.
+    */
+   sc->MDbase [NRXBUFS-1].buf2   = 0;
+   sc->MDbase [NRXBUFS-1].counts = 0xfec00000 | (RBUF_SIZE);
+   sc->MDbase [NRXBUFS-1].next   = sc->MDbase;
 
-  /*
-   * Init TX ring
-   */
-  st_le32( (tbase+memCSR4), (long)(phys_to_bus((long)(rmd))) );
-  for (i=0 ; i<NTXBUFS; i++){
-    (rmd+i)->buf2   = phys_to_bus(rmd+i+1);
-    (rmd+i)->buf1   = phys_to_bus(buffer + (i*RBUF_SIZE));
-    (rmd+i)->counts = 0x01000000;
-    (rmd+i)->status = 0x0;
-    (rmd+i)->next   = rmd+i+1;
-    (rmd+i)->m      = 0;
-  } 
 
-  /*
-   * mark last TX buffer.
-   */
-  (rmd+NTXBUFS-1)->buf2   = phys_to_bus(rmd);
-  (rmd+NTXBUFS-1)->next   = rmd;
-  
-  /*
-   * Set up interrupts
-   */
-  sc->irqInfo.hdl = (rtems_irq_hdl)dec21140Enet_interrupt_handler;
-  sc->irqInfo.on  = nopOn;
-  sc->irqInfo.off = nopOn;
-  sc->irqInfo.isOn = dec21140IsOn;  
-  st = BSP_install_rtems_irq_handler (&sc->irqInfo);
-  if (!st)
-    rtems_panic ("Can't attach DEC21140 interrupt handler for irq %d\n",
-		  sc->irqInfo.name);
 
-  st_le32( (tbase+memCSR7), NO_IT); 
+   /*
+    * Init TX ring
+    */
+   st_le32( (tbase+memCSR4), (long)(phys_to_bus((long)(rmd))) );
+   for (i=0 ; i<NTXBUFS; i++){
+      (rmd+i)->buf2   = phys_to_bus(rmd+i+1);
+      (rmd+i)->buf1   = phys_to_bus(buffer + (i*RBUF_SIZE));
+      (rmd+i)->counts = 0x01000000;
+      (rmd+i)->status = 0x0;
+      (rmd+i)->next   = rmd+i+1;
+      (rmd+i)->m      = 0;
+   } 
 
-  /*
-   * Build setup frame
-   */
-  setup_frm = (volatile unsigned char *)(bus_to_phys(rmd->buf1));
-  eaddrs = (char *)(sc->arpcom.ac_enaddr);
-  /* Fill the buffer with our physical address. */
-  for (i = 1; i < 16; i++) {
-	*setup_frm++ = eaddrs[0];
-	*setup_frm++ = eaddrs[1];
-	*setup_frm++ = eaddrs[0];
-	*setup_frm++ = eaddrs[1];
-	*setup_frm++ = eaddrs[2];
-	*setup_frm++ = eaddrs[3];
-	*setup_frm++ = eaddrs[2];
-	*setup_frm++ = eaddrs[3];
-	*setup_frm++ = eaddrs[4];
-	*setup_frm++ = eaddrs[5];
-	*setup_frm++ = eaddrs[4];
-	*setup_frm++ = eaddrs[5];
-  }
-  /* Add the broadcast address when doing perfect filtering */
-  memset((void*) setup_frm, 0xff, 12);
-  rmd->counts = 0x09000000 | 192 ;
-  rmd->status = 0x80000000;
-  st_le32( (tbase+memCSR6), CSR6_INIT | CSR6_TX);
-  st_le32( (tbase+memCSR1), 1);
-  while (rmd->status != 0x7fffffff);
-  rmd->counts = 0x01000000;    
-  sc->TxMD = rmd+1;
-  
-  /*
-   * Enable RX and TX
-   */
-  st_le32( (tbase+memCSR5), IT_SETUP);
-  st_le32( (tbase+memCSR7), IT_SETUP); 
-  st_le32( (unsigned int*)(tbase+memCSR6), CSR6_INIT | CSR6_TXRX);
+   /*
+    * mark last TX buffer.
+    */
+   (rmd+NTXBUFS-1)->buf2   = phys_to_bus(rmd);
+   (rmd+NTXBUFS-1)->next   = rmd;
+
+
+   /*
+    * Build setup frame
+    */
+   setup_frm = (volatile unsigned char *)(bus_to_phys(rmd->buf1));
+   eaddrs = (char *)(sc->arpcom.ac_enaddr);
+   /* Fill the buffer with our physical address. */
+   for (i = 1; i < 16; i++) {
+      *setup_frm++ = eaddrs[0];
+      *setup_frm++ = eaddrs[1];
+      *setup_frm++ = eaddrs[0];
+      *setup_frm++ = eaddrs[1];
+      *setup_frm++ = eaddrs[2];
+      *setup_frm++ = eaddrs[3];
+      *setup_frm++ = eaddrs[2];
+      *setup_frm++ = eaddrs[3];
+      *setup_frm++ = eaddrs[4];
+      *setup_frm++ = eaddrs[5];
+      *setup_frm++ = eaddrs[4];
+      *setup_frm++ = eaddrs[5];
+   }
+
+   /* Add the broadcast address when doing perfect filtering */
+   memset((void*) setup_frm, 0xff, 12);
+   rmd->counts = 0x09000000 | 192 ;
+   rmd->status = 0x80000000;
+   st_le32( (tbase+memCSR6), CSR6_INIT | CSR6_TX);
+   st_le32( (tbase+memCSR1), 1);
+
+   while (rmd->status != 0x7fffffff);
+   rmd->counts = 0x01000000;    
+
+   sc->TxMD = rmd+1;
+
+
+
+
+
+   sc->irqInfo.hdl  = (rtems_irq_hdl)dec21140Enet_interrupt_handler_entry;
+   sc->irqInfo.on   = no_op;
+   sc->irqInfo.off  = no_op;
+   sc->irqInfo.isOn = dec21140IsOn;
+
+#ifdef BSP_SHARED_HANDLER_SUPPORT
+   st = BSP_install_rtems_shared_irq_handler( &sc->irqInfo );
+#else
+   st = BSP_install_rtems_irq_handler( &sc->irqInfo );
+#endif
+
+   if (!st)
+      rtems_panic ("dec2114x : Interrupt name %d already in use\n", sc->irqInfo.name );
 }
+
+
+
+
+
+
 
 static void
 dec21140_rxDaemon (void *arg)
 {
-  volatile unsigned int *tbase;
-  struct ether_header *eh;
-  struct dec21140_softc *dp = (struct dec21140_softc *)&dec21140_softc[0];
-  struct ifnet *ifp = &dp->arpcom.ac_if;
-  struct mbuf *m;
-  volatile struct MD *rmd;
-  unsigned int len;
-  rtems_event_set events;
-  
-  tbase = dec21140_softc[0].base ;
-  rmd = dec21140_softc[0].MDbase;
+   volatile unsigned int *tbase;
+   volatile struct MD    *rmd;
+   struct dec21140_softc *sc;
+   volatile struct ifnet *ifp;
+   struct ether_header   *eh;
+   struct mbuf           *m;
+   unsigned int          i,len;
+   rtems_event_set       events;
 
-  for (;;){
+   for (;;)
+   {
 
-    rtems_bsdnet_event_receive (INTERRUPT_EVENT,
-				RTEMS_WAIT|RTEMS_EVENT_ANY,
-				RTEMS_NO_TIMEOUT,
-				&events);
-    
-    while((rmd->status & 0x80000000) == 0){
-      /* pass on the packet in the mbuf */
-      len = (rmd->status >> 16) & 0x7ff;
-      m = (struct mbuf *)(rmd->m);
-      m->m_len = m->m_pkthdr.len = len - sizeof(struct ether_header);
-      eh = mtod (m, struct ether_header *);
-      m->m_data += sizeof(struct ether_header);
-      ether_input (ifp, eh, m);
-       
-      /* get a new mbuf for the 21140 */
-      MGETHDR (m, M_WAIT, MT_DATA);
-      MCLGET (m, M_WAIT);
-      m->m_pkthdr.rcvif = ifp;
-      rmd->m = m;
-      rmd->buf1 = phys_to_bus(mtod(m, void *));  
+      rtems_bsdnet_event_receive( RTEMS_ALL_EVENTS,
+                                  RTEMS_WAIT|RTEMS_EVENT_ANY,
+                                  RTEMS_NO_TIMEOUT,
+                                  &events);
 
-      rmd->status = 0x80000000;
+      for(i=0; i< NDECDRIVER; i++ )
+      {
+         sc = &dec21140_softc[i];
+         if( sc->base )
+         {
+            if( events & sc->ioevent )
+            {
+               ifp   = &sc->arpcom.ac_if;
+               tbase = sc->base;
+               rmd   = sc->nextRxMD;
+
+               /*
+               ** Read off all the packets we've received on this unit
+               */
+               while((rmd->status & 0x80000000) == 0)
+               {
+                  /* printk("unit %i rx\n", ifp->if_unit ); */
+               
+                  /* pass on the packet in the mbuf */
+                  len = (rmd->status >> 16) & 0x7ff;
+                  m = (struct mbuf *)(rmd->m);
+                  m->m_len = m->m_pkthdr.len = len - sizeof(struct ether_header);
+                  eh = mtod (m, struct ether_header *);
+                  m->m_data += sizeof(struct ether_header);
+                  ether_input (ifp, eh, m);
+
+                  /* get a new mbuf for the 21140 */
+                  MGETHDR (m, M_WAIT, MT_DATA);
+                  MCLGET (m, M_WAIT);
+                  m->m_pkthdr.rcvif = ifp;
+                  rmd->m = m;
+                  rmd->buf1 = phys_to_bus(mtod(m, void *));
+
+                  /* mark the descriptor as ready to receive */
+                  rmd->status = 0x80000000;
       
-      rmd=rmd->next;
-    }
-  }	
+                  rmd=rmd->next;
+               }
+
+               sc->nextRxMD = rmd;
+            }
+         }
+      }
+
+   }
 }
+
+
+
+
+
+
 
 static void
 sendpacket (struct ifnet *ifp, struct mbuf *m)
 {
-  struct dec21140_softc *dp = ifp->if_softc;
-  volatile struct MD *tmd;
-  volatile unsigned char *temp;
-  struct mbuf *n;
-  unsigned int len;
-  volatile unsigned int *tbase;
+   struct dec21140_softc   *dp = ifp->if_softc;
+   volatile struct MD      *tmd;
+   volatile unsigned char  *temp;
+   struct mbuf             *n;
+   unsigned int            len;
+   volatile unsigned int   *tbase;
 
-  tbase = dp->base;
-  /*
-   * Waiting for Transmitter ready
-   */	
-  tmd = dec21140_softc[0].TxMD;
-  n = m;
+   tbase = dp->base;
+   /*
+    * Waiting for Transmitter ready
+    */	
 
-  while ((tmd->status & 0x80000000) != 0){
-    tmd=tmd->next;
-    }
+   tmd = dp->TxMD;
+   n = m;
 
-  len = 0;
-  temp = (volatile unsigned char *)(bus_to_phys(tmd->buf1));
+   while ((tmd->status & 0x80000000) != 0)
+   {
+      tmd=tmd->next;
+   }
+
+   len = 0;
+   temp = (volatile unsigned char *)(bus_to_phys(tmd->buf1));
   
-  for (;;){
-    len += m->m_len;
-    memcpy((void*) temp, (char *)m->m_data, m->m_len);
-    temp += m->m_len ;
-    if ((m = m->m_next) == NULL)
-      break;
-  }
+   for (;;)
+   {
+      len += m->m_len;
+      memcpy((void*) temp, (char *)m->m_data, m->m_len);
+      temp += m->m_len ;
+      if ((m = m->m_next) == NULL)
+         break;
+   }
 
-  if (len < ET_MINLEN) len = ET_MINLEN;
-  tmd->counts =  0xe1000000 | (len & 0x7ff);  
-  tmd->status = 0x80000000;
+   if (len < ET_MINLEN) len = ET_MINLEN;
+   tmd->counts =  0xe1000000 | (len & 0x7ff);  
+   tmd->status = 0x80000000;
 
-  st_le32( (tbase+memCSR1), 0x1);
+   st_le32( (tbase+memCSR1), 0x1);
 
-  m_freem(n);
-  dec21140_softc[0].TxMD = tmd->next;
+   m_freem(n);
+
+   dp->TxMD = tmd->next;
 }
+
+
+
+
 
 /*
  * Driver transmit daemon
@@ -598,43 +771,63 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 void
 dec21140_txDaemon (void *arg)
 {
-  struct dec21140_softc *sc = (struct dec21140_softc *)arg;
-  struct ifnet *ifp = &sc->arpcom.ac_if;
-  struct mbuf *m;
-  rtems_event_set events;
+   struct dec21140_softc *sc;
+   struct ifnet          *ifp;
+   struct mbuf           *m;
+   int i;
+   rtems_event_set       events;
 
-  for (;;) {
-    /*
-     * Wait for packet
-     */
-
-    rtems_bsdnet_event_receive (START_TRANSMIT_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, RTEMS_NO_TIMEOUT, &events);
-
-    /*
-     * Send packets till queue is empty
-     */
-    for (;;) {
+   for (;;) 
+   {
       /*
-       * Get the next mbuf chain to transmit.
+       * Wait for packets bound for any of the dec units
        */
-      IF_DEQUEUE(&ifp->if_snd, m);
-      if (!m)
-	break;
-      sendpacket (ifp, m);
-    }
-    ifp->if_flags &= ~IFF_OACTIVE;
-  }
-}	
+      rtems_bsdnet_event_receive( RTEMS_ALL_EVENTS,
+                                  RTEMS_EVENT_ANY | RTEMS_WAIT, 
+                                  RTEMS_NO_TIMEOUT, &events);
+
+      for(i=0; i< NDECDRIVER; i++ )
+      {
+         sc  = &dec21140_softc[i];
+         if( sc->base )
+         {
+            if( events & sc->ioevent )
+            {
+               ifp = &sc->arpcom.ac_if;
+
+               /*
+                * Send packets till queue is empty
+                */
+               for(;;) 
+               {
+                  IF_DEQUEUE(&ifp->if_snd, m);
+                  if( !m ) break;
+                  /* printk("unit %i tx\n", ifp->if_unit ); */
+                  sendpacket (ifp, m);
+               }
+
+               ifp->if_flags &= ~IFF_OACTIVE;
+            }
+         }
+      }
+
+   }
+}
+
+
 
 
 static void
 dec21140_start (struct ifnet *ifp)
 {
-	struct dec21140_softc *sc = ifp->if_softc;
-
-	rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
-	ifp->if_flags |= IFF_OACTIVE;
+   struct dec21140_softc *sc = ifp->if_softc;
+   rtems_event_send( txDaemonTid, sc->ioevent );
+   ifp->if_flags |= IFF_OACTIVE;
 }
+
+
+
+
 
 /*
  * Initialize and start the device
@@ -642,31 +835,37 @@ dec21140_start (struct ifnet *ifp)
 static void
 dec21140_init (void *arg)
 {
-  struct dec21140_softc *sc = arg;
-  struct ifnet *ifp = &sc->arpcom.ac_if;
+   struct dec21140_softc *sc = arg;
+   struct ifnet *ifp = &sc->arpcom.ac_if;
+   volatile unsigned int *tbase;
 
-  if (sc->txDaemonTid == 0) {
-    
-    /*
-     * Set up DEC21140 hardware
-     */
-    dec21140Enet_initialize_hardware (sc);
-    
-    /*
-     * Start driver tasks
-     */
-    sc->rxDaemonTid = rtems_bsdnet_newproc ("DCrx", 4096,
-					    dec21140_rxDaemon, sc);
-    sc->txDaemonTid = rtems_bsdnet_newproc ("DCtx", 4096,
-					    dec21140_txDaemon, sc);
-  }
+   /*
+    * Set up DEC21140 hardware if its not already been done
+    */
+   if( !sc->irqInfo.hdl )
+   {
+      dec21140Enet_initialize_hardware (sc);
+   }
 
-  /*
-   * Tell the world that we're running.
-   */
-  ifp->if_flags |= IFF_RUNNING;
+   /*
+    * Enable RX and TX
+    */
+   tbase = sc->base;
+   st_le32( (tbase+memCSR5), IT_SETUP);
+   st_le32( (tbase+memCSR7), IT_SETUP); 
+   st_le32( (unsigned int*)(tbase+memCSR6), CSR6_INIT | CSR6_TXRX);
 
+   /*
+    * Tell the world that we're running.
+    */
+   ifp->if_flags |= IFF_RUNNING;
 }
+
+
+
+
+
+
 
 /*
  * Stop the device
@@ -682,10 +881,11 @@ dec21140_stop (struct dec21140_softc *sc)
   /*
    * Stop the transmitter
    */
-  tbase=dec21140_softc[0].base ;
+  tbase = sc->base;
   st_le32( (tbase+memCSR7), NO_IT);
   st_le32( (tbase+memCSR6), CSR6_INIT);
-  free((void*)sc->bufferBase);
+
+  /*  free((void*)sc->bufferBase); */
 }
 
 
@@ -715,55 +915,85 @@ dec21140_stats (struct dec21140_softc *sc)
 	printf (" Raw output wait:%-8lu\n", sc->txRawWait);
 }
 
+
+
+
 /*
  * Driver ioctl handler
  */
 static int
 dec21140_ioctl (struct ifnet *ifp, int command, caddr_t data)
 {
-	struct dec21140_softc *sc = ifp->if_softc;
-	int error = 0;
+   struct dec21140_softc *sc = ifp->if_softc;
+   int error = 0;
 
-	switch (command) {
-	case SIOCGIFADDR:
-	case SIOCSIFADDR:
-		ether_ioctl (ifp, command, data);
-		break;
+   switch (command) {
+      case SIOCGIFADDR:
+      case SIOCSIFADDR:
+         ether_ioctl (ifp, command, data);
+         break;
 
-	case SIOCSIFFLAGS:
-		switch (ifp->if_flags & (IFF_UP | IFF_RUNNING)) {
-		case IFF_RUNNING:
-			dec21140_stop (sc);
-			break;
+      case SIOCSIFFLAGS:
+         switch (ifp->if_flags & (IFF_UP | IFF_RUNNING)) {
+            case IFF_RUNNING:
+               dec21140_stop (sc);
+               break;
 
-		case IFF_UP:
-			dec21140_init (sc);
-			break;
+            case IFF_UP:
+               dec21140_init (sc);
+               break;
 
-		case IFF_UP | IFF_RUNNING:
-			dec21140_stop (sc);
-			dec21140_init (sc);
-			break;
+            case IFF_UP | IFF_RUNNING:
+               dec21140_stop (sc);
+               dec21140_init (sc);
+               break;
 
-		default:
-			break;
-		}
-		break;
+            default:
+               break;
+         }
+         break;
 
-	case SIO_RTEMS_SHOW_STATS:
-		dec21140_stats (sc);
-		break;
+      case SIO_RTEMS_SHOW_STATS:
+         dec21140_stats (sc);
+         break;
 		
-	/*
-	 * FIXME: All sorts of multicast commands need to be added here!
-	 */
-	default:
-		error = EINVAL;
-		break;
-	}
+         /*
+          * FIXME: All sorts of multicast commands need to be added here!
+          */
+      default:
+         error = EINVAL;
+         break;
+   }
 
-	return error;
+   return error;
 }
+
+
+
+
+
+
+
+/*
+int iftap(struct ifnet *ifp, struct ether_header *eh, struct mbuf *m )
+{
+   int i;
+
+   if(  ifp->if_unit == 1 ) return 0;
+
+   printf("unit %i, src ", ifp->if_unit );
+   for(i=0; i< ETHER_ADDR_LEN; i++) printf("%02x", (char) eh->ether_shost[i] );
+   printf(" dest ");
+   for(i=0; i< ETHER_ADDR_LEN; i++) printf("%02x", (char) eh->ether_dhost[i] );
+   printf("\n");
+
+   return -1;
+}
+*/
+
+
+
+
 
 /*
  * Attach an DEC21140 driver to the system
@@ -771,193 +1001,283 @@ dec21140_ioctl (struct ifnet *ifp, int command, caddr_t data)
 int
 rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 {
-	struct dec21140_softc *sc;
-	struct ifnet *ifp;
-	int mtu;
-	int i;
+   struct dec21140_softc *sc;
+   struct ifnet *ifp;
+   char         *unitName;
+   int          unitNumber;
+   int          mtu;
+   unsigned char cvalue;
 #if defined(__i386__)
-    int deviceId = PCI_DEVICE_ID_DEC_21140; /* network card device ID */
+   int          signature;
+   int          value;
+   char         interrupt;
+   int          diag;
+   unsigned int deviceId;
 #endif
-	
-	/*
-	 * First, find a DEC board
-	 */
-#if defined(__i386__)
-	int signature;
-	int value;
-	char interrupt;
-	int diag;
+#if defined(__PPC)
+   int          pbus, pdev, pfun;
+   int          tmp;
+   unsigned int lvalue;
+#endif
 
-	if (pcib_init() == PCIB_ERR_NOTPRESENT)
-	  rtems_panic("PCI BIOS not found !!");
+
+   /*
+    * Get the instance number for the board we're going to configure
+    * from the user.
+    */
+   if( (unitNumber = rtems_bsdnet_parse_driver_name( config, &unitName)) == -1 )
+   {
+      return 0;
+   }
+   if( strcmp(unitName, DRIVER_PREFIX) )
+   {
+      printk("dec2114x : unit name '%s' not %s\n", unitName, DRIVER_PREFIX );
+      return 0;
+   }
+
+
+#if defined(__i386__)
+   /*
+    * First, find a DEC board
+    */
+
+   if (pcib_init() == PCIB_ERR_NOTPRESENT)
+      rtems_panic("PCI BIOS not found !!");
 	
-	/*
-	 * Try to find the network card on the PCI bus. Probe for a DEC 21140
-     * card first. If not found probe the bus for a DEC/Intel 21143 card.
-	 */
-    deviceId = PCI_DEVICE_ID_DEC_21140;
-    diag = pcib_find_by_devid( PCI_VENDOR_ID_DEC, deviceId,
-                               0, &signature);
-    if ( diag == PCIB_ERR_SUCCESS)
+   /*
+    * Try to find the network card on the PCI bus. Probe for a DEC 21140
+    * card first. If not found probe the bus for a DEC/Intel 21143 card.
+    */
+   deviceId = PCI_DEVICE_ID_DEC_21140;
+   diag = pcib_find_by_devid( PCI_VENDOR_ID_DEC, deviceId, unitNumber-1, &signature);
+
+   if ( diag == PCIB_ERR_SUCCESS)
       printk( "DEC 21140 PCI network card found\n" );
-    else
-    {
+   else
+   {
       deviceId = PCI_DEVICE_ID_DEC_21143;
-      diag = pcib_find_by_devid( PCI_VENDOR_ID_DEC, deviceId,
-                                 0, &signature);
+      diag = pcib_find_by_devid( PCI_VENDOR_ID_DEC, deviceId, unitNumber-1, &signature);
       if ( diag == PCIB_ERR_SUCCESS)
-        printk( "DEC/Intel 21143 PCI network card found\n" );
+         printk( "DEC/Intel 21143 PCI network card found\n" );
       else
-        rtems_panic("DEC PCI network card not found !!\n");
-    }
+         rtems_panic("DEC PCI network card not found !!\n");
+   }
 #endif	
 #if defined(__PPC)
-	unsigned char ucSlotNumber, ucFnNumber;
-	unsigned int  ulDeviceID, lvalue, tmp;	
-	unsigned char cvalue;
+   /*
+    * Find the board
+    */
+   if( BSP_pciFindDevice( PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_21140,
+                          unitNumber-1, &pbus, &pdev, &pfun) == -1 )
+   {
+      if( BSP_pciFindDevice( PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_21143,
+                             unitNumber-1, &pbus, &pdev, &pfun) != -1 )
+      {
+         printk("dec21143 : found device '%s', PPC support has not been tested.  Using it anyway.\n", 
+                config->name );
 
-	for(ucSlotNumber=0;ucSlotNumber<PCI_MAX_DEVICES;ucSlotNumber++) {
-	  for(ucFnNumber=0;ucFnNumber<PCI_MAX_FUNCTIONS;ucFnNumber++) {
-	    (void)pci_read_config_dword(0,
-					ucSlotNumber,
-					ucFnNumber,
-					PCI_VENDOR_ID,
-					&ulDeviceID);
-	    if(ulDeviceID==PCI_INVALID_VENDORDEVICEID) {
-	      /*
-	       * This slot is empty
-	       */
-	      continue;
-	    }
-	    if (ulDeviceID == ((PCI_DEVICE_ID_DEC_21140<<16) + PCI_VENDOR_ID_DEC))
-	      break;
-	  }
-	  if (ulDeviceID == ((PCI_DEVICE_ID_DEC_21140<<16) + PCI_VENDOR_ID_DEC)){
-	    printk("DEC Adapter found !!\n");
-	    break;
-	  }
-	}
-	
-	if(ulDeviceID==PCI_INVALID_VENDORDEVICEID)
-	  rtems_panic("DEC PCI board not found !!\n");
-#endif  
-	/*
-	 * Find a free driver
-	 */
-	for (i = 0 ; i < NDECDRIVER ; i++) {
-		sc = &dec21140_softc[i];
-		ifp = &sc->arpcom.ac_if;
-		if (ifp->if_softc == NULL)
-			break;
-	}
-	if (i >= NDECDRIVER) {
-		printk ("Too many DEC drivers.\n");
-		return 0;
-	}
+         pci_write_config_dword(pbus,
+                                pdev,
+                                pfun,
+                                0x40,
+                                PCI_DEVICE_ID_DEC_21143 );
 
-	/*
-	 * Process options
-	 */
+      }
+      else
+      {
+         printk("dec2114x : device '%s' not found on PCI bus\n", config->name );
+         return 0;
+      }
+   }
+
+#ifdef DEC_DEBUG
+   else 
+   {
+      printk("dec21140 : found device '%s', bus 0x%02x, dev 0x%02x, func 0x%02x\n", 
+             config->name, pbus, pdev, pfun);
+   }
+#endif
+
+#endif
+
+
+
+
+   if ((unitNumber < 1) || (unitNumber > NDECDRIVER))
+   {
+      printk("dec2114x : unit %i is invalid, must be (1 <= n <= %d)\n", unitNumber);
+      return 0;
+   }
+
+   sc = &dec21140_softc[unitNumber - 1];
+   ifp = &sc->arpcom.ac_if;
+   if (ifp->if_softc != NULL) 
+   {
+      printk("dec2114x : unit %i already in use.\n", unitNumber );
+      return 0;
+   }
+
+
+   /*
+   ** Get this unit's rx/tx event
+   */
+   sc->ioevent = unit_signals[unitNumber-1];
+
+
+   /*
+    * Get card address spaces & retrieve its isr vector
+    */
 #if defined(__i386__)
 
-    /* the 21143 chip must be enabled before it can be accessed */
-    if ( deviceId == PCI_DEVICE_ID_DEC_21143 )
+   /* the 21143 chip must be enabled before it can be accessed */
+   if ( deviceId == PCI_DEVICE_ID_DEC_21143 )
       pcib_conf_write32( signature, 0x40, 0 );
 
-	pcib_conf_read32(signature, 16, &value);
-	sc->port = value & ~IO_MASK;
+   pcib_conf_read32(signature, 16, &value);
+   sc->port = value & ~IO_MASK;
         
-	pcib_conf_read32(signature, 20, &value);
-	if (_CPU_is_paging_enabled())
-	  _CPU_map_phys_address((void **) &(sc->base),
-				(void *)(value & ~MEM_MASK),
-				DEC_REGISTER_SIZE ,
-				PTE_CACHE_DISABLE | PTE_WRITABLE);
-	else
-	  sc->base = (unsigned int *)(value & ~MEM_MASK);
+   pcib_conf_read32(signature, 20, &value);
+   if (_CPU_is_paging_enabled())
+      _CPU_map_phys_address((void **) &(sc->base),
+                            (void *)(value & ~MEM_MASK),
+                            DEC_REGISTER_SIZE ,
+                            PTE_CACHE_DISABLE | PTE_WRITABLE);
+   else
+      sc->base = (unsigned int *)(value & ~MEM_MASK);
 	
-	pcib_conf_read8(signature, 60, &interrupt);
-	  sc->irqInfo.name = (rtems_irq_symbolic_name)interrupt;
+   pcib_conf_read8(signature, 60, &interrupt);
+   cvalue = interrupt;
 #endif
 #if defined(__PPC)
-	(void)pci_read_config_dword(0,
-				    ucSlotNumber,
-				    ucFnNumber,
-				    PCI_BASE_ADDRESS_0,
-				    &lvalue);
+   (void)pci_read_config_dword(pbus,
+                               pdev,
+                               pfun,
+                               PCI_BASE_ADDRESS_0,
+                               &lvalue);
 
-	sc->port = lvalue & (unsigned int)(~IO_MASK);
+   sc->port = lvalue & (unsigned int)(~IO_MASK);
         
-	(void)pci_read_config_dword(0,
-				    ucSlotNumber,
-				    ucFnNumber,
-				    PCI_BASE_ADDRESS_1  ,
-				    &lvalue);
+   (void)pci_read_config_dword(pbus,
+                               pdev,
+                               pfun,
+                               PCI_BASE_ADDRESS_1,
+                               &lvalue);
 
+   tmp = (unsigned int)(lvalue & (unsigned int)(~MEM_MASK)) 
+      + (unsigned int)PCI_MEM_BASE;
 
-	tmp = (unsigned int)(lvalue & (unsigned int)(~MEM_MASK)) 
-	  + (unsigned int)PCI_MEM_BASE;
-	sc->base = (unsigned int *)(tmp);
+   sc->base = (unsigned int *)(tmp);
 
-	(void)pci_read_config_byte(0,
-				   ucSlotNumber,
-				   ucFnNumber,
-				   PCI_INTERRUPT_LINE,
-				   &cvalue);
-	sc->irqInfo.name = (rtems_irq_symbolic_name)cvalue;
+   pci_read_config_byte(pbus,
+                        pdev,
+                        pfun,
+                        PCI_INTERRUPT_LINE,
+                        &cvalue);
+
 #endif
- 	if (config->hardware_address) {
-	  memcpy (sc->arpcom.ac_enaddr, config->hardware_address,
-		  ETHER_ADDR_LEN);
-	}
-	else {
-	  union {char c[64]; unsigned short s[32];} rombuf;
-	  int i;
 
-	  for (i=0; i<32; i++){
-	    rombuf.s[i] = eeget16(sc->base+memCSR9, i);
-	  }
+   /*
+   ** Prep the board
+   */
+   pci_write_config_word(pbus, pdev, pfun,
+                         PCI_COMMAND,
+                         (unsigned16)( PCI_COMMAND_MEMORY |
+                                       PCI_COMMAND_MASTER | 
+                                       PCI_COMMAND_INVALIDATE | 
+                                       PCI_COMMAND_WAIT |
+                                       PCI_COMMAND_FAST_BACK ) );
+
+   /*
+   ** Store the interrupt name, we'll use it later when we initialize
+   ** the board.
+   */
+   memset(&sc->irqInfo,0,sizeof(rtems_irq_connect_data));
+   sc->irqInfo.name = cvalue;
+
+
+   /* printk("dec2114x : unit %d base address %08x.\n", unitNumber, sc->base ); */
+
+
+   /*
+   ** Setup ethernet address
+   */
+   if (config->hardware_address) {
+      memcpy (sc->arpcom.ac_enaddr, config->hardware_address,
+              ETHER_ADDR_LEN);
+   }
+   else {
+      union {char c[64]; unsigned short s[32];} rombuf;
+      int i;
+
+      for (i=0; i<32; i++){
+         rombuf.s[i] = eeget16( sc->base + memCSR9, i);
+      }
 #if defined(__i386__)
-	  for (i=0 ; i<(ETHER_ADDR_LEN/2); i++){
-	    sc->arpcom.ac_enaddr[2*i]   = rombuf.c[20+2*i+1];
-	    sc->arpcom.ac_enaddr[2*i+1] = rombuf.c[20+2*i];
-	  }  
+      for (i=0 ; i<(ETHER_ADDR_LEN/2); i++){
+         sc->arpcom.ac_enaddr[2*i]   = rombuf.c[20+2*i+1];
+         sc->arpcom.ac_enaddr[2*i+1] = rombuf.c[20+2*i];
+      }  
 #endif
 #if defined(__PPC)
-	  memcpy (sc->arpcom.ac_enaddr, rombuf.c+20, ETHER_ADDR_LEN);
+      memcpy (sc->arpcom.ac_enaddr, rombuf.c+20, ETHER_ADDR_LEN);
 #endif
-	}
+   }
 
-	if (config->mtu)
-		mtu = config->mtu;
-	else
-		mtu = ETHERMTU;
+   if (config->mtu)
+      mtu = config->mtu;
+   else
+      mtu = ETHERMTU;
 
-	sc->acceptBroadcast = !config->ignore_broadcast;
+   sc->acceptBroadcast = !config->ignore_broadcast;
 
-	/*
-	 * Set up network interface values
-	 */
-	ifp->if_softc = sc;
-	ifp->if_unit = i + 1;
-	ifp->if_name = "dc";
-	ifp->if_mtu = mtu;
-	ifp->if_init = dec21140_init;
-	ifp->if_ioctl = dec21140_ioctl;
-	ifp->if_start = dec21140_start;
-	ifp->if_output = ether_output;
-	ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX;
-	if (ifp->if_snd.ifq_maxlen == 0)
-		ifp->if_snd.ifq_maxlen = ifqmaxlen;
+   /*
+    * Set up network interface values
+    */
 
- 	/*
-	 * Attach the interface
-	 */
-	if_attach (ifp);
-	ether_ifattach (ifp);
+/*   ifp->if_tap = iftap; */
 
-        printk( "DC2114x : driver has been attached\n" );
-	return 1;
+   ifp->if_softc = sc;
+   ifp->if_unit = unitNumber;
+   ifp->if_name = unitName;
+   ifp->if_mtu = mtu;
+   ifp->if_init = dec21140_init;
+   ifp->if_ioctl = dec21140_ioctl;
+   ifp->if_start = dec21140_start;
+   ifp->if_output = ether_output;
+   ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX;
+   if (ifp->if_snd.ifq_maxlen == 0)
+      ifp->if_snd.ifq_maxlen = ifqmaxlen;
+
+   /*
+    * Attach the interface
+    */
+   if_attach (ifp);
+   ether_ifattach (ifp);
+
+#ifdef DEC_DEBUG
+   printk( "dec2114x : driver attached\n" );
+#endif
+
+
+   /*
+    * Start driver tasks if this is the first dec unit initialized
+    */
+   if (txDaemonTid == 0) 
+   {
+      rxDaemonTid = rtems_bsdnet_newproc( "DCrx", 4096,
+                                          dec21140_rxDaemon, NULL);
+      
+      txDaemonTid = rtems_bsdnet_newproc( "DCtx", 4096,
+                                          dec21140_txDaemon, NULL);
+#ifdef DEC_DEBUG
+      printk( "dec2114x : driver tasks created\n" );
+#endif
+   }
+
+   return 1;
 };
+
 #endif /* DEC21140_SUPPORTED */
 
+
+/* eof */
