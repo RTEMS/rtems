@@ -20,6 +20,11 @@
 +--------------------------------------------------------------------------+
 | This code is base on:
 |   timer.c,v 1.7 1995/12/19 20:07:43 joel Exp - go32 BSP
+|
+| Rosimildo daSilva -ConnectTel, Inc - Fixed infinite loop in the Calibration
+| routine. I've seen this problems with faster machines ( pentiums ). Sometimes
+| RTEMS just hangs at startup.
+|
 | With the following copyright notice:
 | **************************************************************************
 | *  COPYRIGHT (c) 1989-1998.
@@ -301,6 +306,87 @@ Set_find_average_overhead(rtems_boolean find_flag)
   Timer_driver_Find_average_overhead = find_flag;
 } /* Set_find_average_overhead */
 
+
+
+/*-------------------------------------------------------------------------+
+| Description: Loads timer 0 with value passed as arguemnt.
+| Returns: Nothing. 
++--------------------------------------------------------------------------*/
+inline void loadTimerValue( unsigned short loadedValue )
+{
+  outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
+  outport_byte(TIMER_CNTR0, loadedValue >> 0 & 0xff);
+  outport_byte(TIMER_CNTR0, loadedValue >> 8 & 0xff);
+}
+
+
+/*-------------------------------------------------------------------------+
+| Description: Waits until the counter on timer 0 reaches 0.
+| Returns: Nothing. 
++--------------------------------------------------------------------------*/
+inline void waitTimerStatus( void )
+{
+  unsigned char status;
+  outport_byte(TIMER_MODE, CMD_READ_BACK_STATUS); /* read Status counter 0 */
+  inport_byte(TIMER_CNTR0, status);
+  while (status & MSK_NULL_COUNT){ 	/* wait for counter ready */ 	
+    outport_byte(TIMER_MODE, CMD_READ_BACK_STATUS);
+    inport_byte(TIMER_CNTR0, status);
+  }
+}
+
+
+/*-------------------------------------------------------------------------+
+| Description: Reads the current value of the timer, and converts the 
+|			   number of ticks to micro-seconds.	
+| Returns: current number of microseconds since last value loaded.. 
++--------------------------------------------------------------------------*/
+inline unsigned short readCurrentTimer()
+{
+  unsigned short lsb, msb;
+  outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_LATCH);
+  inport_byte(TIMER_CNTR0, lsb);
+  inport_byte(TIMER_CNTR0, msb);
+  return TICK_TO_US( ( msb << 8 ) | lsb );
+}
+
+
+/*-------------------------------------------------------------------------+
+ * clockbits - Read low order bits of timer 0 (the TOD clock)
+ * This works only for the 8254 chips used in ATs and 386s.
+ *
+ * The timer runs in mode 3 (square wave mode), counting down
+ * by twos, twice for each cycle. So it is necessary to read back the
+ * OUTPUT pin to see which half of the cycle we're in. I.e., the OUTPUT
+ * pin forms the most significant bit of the count. Unfortunately,
+ * the 8253 in the PC/XT lacks a command to read the OUTPUT pin...
+ *
+ * The PC's clock design is soooo brain damaged...
+ *
+ * Rosimildo - I've got this routine from the KA9Q32 distribution and
+ *			   have updated it for the RTEMS environment.
+ +--------------------------------------------------------------------------*/
+unsigned int clockbits(void)
+{
+	int i_state;
+	unsigned int stat,count1, count;
+
+	do 
+	{
+	  outport_byte( 0x43, 0xc2 );	 /* latch timer 0 count and status for reading */
+	  inport_byte( 0x40, stat );	 /* get status of timer 0 */
+	  inport_byte( 0x40, count1 ); /* lsb of count */
+	  inport_byte( 0x40, count ); /* msb of count */
+	  count = count1 | ( count << 8 );
+	} while(stat & 0x40);		 /* reread if NULL COUNT bit set */
+	stat = (stat & 0x80) << 8;	 /* Shift OUTPUT to msb of 16-bit word */
+	if(count == 0)
+		return stat ^ 0x8000;	/* return complement of OUTPUT bit */
+	else
+		return count | stat;	/* Combine OUTPUT with counter */
+}
+
+
 /*-------------------------------------------------------------------------+
 |         Function: Calibrate_loop_1ms
 |      Description: Set loop variable to calibrate a 1ms loop
@@ -309,66 +395,50 @@ Set_find_average_overhead(rtems_boolean find_flag)
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
 void
-Calibrate_loop_1ms(void){
+Calibrate_loop_1ms(void)
+{
   unsigned int i;
   unsigned short loadedValue, offset;
-  unsigned int timerValue;
+  unsigned int timerValue, t1_ref, t2_ref;
   rtems_interrupt_level  level;
   unsigned short lsb, msb;
   unsigned char status;
   
-  
-  loop1ms = 100 ;
-  timerValue = 2000;
-  loadedValue = US_TO_TICK(2000);
+
+  printk( "Calibrate_loop_1ms is starting,  please wait ( but not too loooong. )\n" ); 
+ 
+  loop1ms = 200;
+  timerValue = 0;
+
+  /* Let's load the timer with 2ms, initially */
+  loadedValue = US_TO_TICK( 2000 );
   
   rtems_interrupt_disable(level);
-
   /*
    * Compute the offset to apply due to read counter register
    */
-  outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
-  outport_byte(TIMER_CNTR0, loadedValue >> 0 & 0xff);
-  outport_byte(TIMER_CNTR0, loadedValue >> 8 & 0xff);
-
-  outport_byte(TIMER_MODE, CMD_READ_BACK_STATUS); /* read Status counter 0 */
-  inport_byte(TIMER_CNTR0, status);
-  while (status & MSK_NULL_COUNT){ 	/* wait for counter ready */ 	
-    outport_byte(TIMER_MODE, CMD_READ_BACK_STATUS);
-    inport_byte(TIMER_CNTR0, status);
-  }
-  
-  outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_LATCH);
-  inport_byte(TIMER_CNTR0, lsb);
-  inport_byte(TIMER_CNTR0, msb);
-  offset = loadedValue - (unsigned short)((msb << 8) | lsb);
-
-  while (timerValue > 1000){
+  offset = 0;
+  loadTimerValue( loadedValue + offset );
+  waitTimerStatus();
+  t1_ref = clockbits();
+  offset = loadedValue - readCurrentTimer();
+  while( timerValue < 1000 )
+  {
     loop1ms++;
-
-    /* load timer for 2ms+offset period */
-    outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
-    outport_byte(TIMER_CNTR0, (loadedValue+offset) >> 0 & 0xff);
-    outport_byte(TIMER_CNTR0, (loadedValue+offset) >> 8 & 0xff);
-
-    outport_byte(TIMER_MODE, CMD_READ_BACK_STATUS); /* read Status counter 0 */
-    inport_byte(TIMER_CNTR0, status);
-    while (status & MSK_NULL_COUNT) {	/* wait for counter ready */ 
-      outport_byte(TIMER_MODE, CMD_READ_BACK_STATUS);
-      inport_byte(TIMER_CNTR0, status);
-    }
-    
-    for (i=0; i<loop1ms; i++)
-      outport_byte(SLOW_DOWN_IO, 0);	/* write is # 1us */
-
-    outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_LATCH);
-    inport_byte(TIMER_CNTR0, lsb);
-    inport_byte(TIMER_CNTR0, msb);
-    timerValue = TICK_TO_US((msb << 8) | lsb);
+    loadTimerValue( loadedValue + offset );
+    waitTimerStatus();
+    t1_ref = clockbits();
+    for( i=0; i < loop1ms; i++ )
+       outport_byte( SLOW_DOWN_IO, 0 );	/* write is # 1us */
+    t2_ref = clockbits();
+    timerValue = TICK_TO_US( t1_ref - t2_ref );  /* timer0 is decrementing number of ticks  */
   }
-
+  printk( "Calibrate_loop_1ms timerValue=%d, loop1ms=%d, t1_ref=%x, clockbits=%x, delta=%d\n", 
+		   timerValue, loop1ms, t1_ref, t2_ref, t1_ref - t2_ref );
   rtems_interrupt_enable(level);
 }
+
+
 
 /*-------------------------------------------------------------------------+
 |         Function: Wait_X_1ms
