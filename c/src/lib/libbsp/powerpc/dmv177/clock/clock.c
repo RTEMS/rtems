@@ -173,7 +173,7 @@ rtems_device_driver Clock_initialize(
   Clock_Decrementer_value = Cpu_table.clicks_per_usec *
                        BSP_Configuration.microseconds_per_tick;
 
-  Install_clock( Clock_isr );
+  Install_clock( (rtems_isr_entry) Clock_isr );
  
   /*
    * make major/minor avail to others such as shared memory driver
