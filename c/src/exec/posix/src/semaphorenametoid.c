@@ -31,12 +31,18 @@ int _POSIX_Semaphore_Name_to_id(
 {
   Objects_Name_to_id_errors  status;
 
+   if ( !name )
+     return EINVAL;
+
+  if ( !name[0] )
+    return EINVAL;
+
   status = _Objects_Name_to_id( 
     &_POSIX_Semaphore_Information, (char *)name, 0, id );
 
   if ( status == OBJECTS_SUCCESSFUL )
     return 0;
 
-  return EINVAL;
+  return ENOENT;
 }
 
