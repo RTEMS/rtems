@@ -19,12 +19,12 @@ include $(top_srcdir)/../../bspstart.am
 LINKCMDS = $(top_srcdir)/startup/linkcmds
 
 project_lib_DATA = $(ARCH)/start$(LIB_VARIANT).$(OBJEXT)
-project_lib_DATA += ${PROJECT_RELEASE}/lib/start16$(LIB_VARIANT).bin
+project_lib_DATA += $(ARCH)/start16$(LIB_VARIANT).bin
 
 $(ARCH)/start16.$(OBJEXT): start16.S $(ARCH)/$(dirstamp)
 	$(COMPILE.S) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ $<
 
-$(ARCH)/start16.bin: $(ARCH)/start16.$(OBJEXT) $(ARCH)/$(dirstamp)
+$(ARCH)/start16$(LIB_VARIANT).bin: $(ARCH)/start16.$(OBJEXT) $(ARCH)/$(dirstamp)
 	$(LD) -N -T $(LINKCMDS) -Ttext $(START16ADDR) -e start16 -nostdlib \
 	  --oformat=elf32-i386 \
 	-o $(basename $@)-elf32.$(OBJEXT) $(basename $@).$(OBJEXT)
@@ -42,7 +42,7 @@ $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start$(LIB_VARIANT).$(OBJE
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT)
 
-$(PROJECT_LIB)/start16$(LIB_VARIANT).bin: ${PROJECT_RELEASE}/lib/start16$(LIB_VARIANT).bin $(PROJECT_LIB)/$(dirstamp)
+$(PROJECT_LIB)/start16$(LIB_VARIANT).bin: $(ARCH)/start16$(LIB_VARIANT).bin $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start16$(LIB_VARIANT).bin
 TMPINSTALL_FILES += $(PROJECT_LIB)/start16$(LIB_VARIANT).bin
 

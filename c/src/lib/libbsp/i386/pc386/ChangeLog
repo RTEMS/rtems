@@ -1,3 +1,7 @@
+2003-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* start/Makefile.am: Build $(ARCH)/start16$(LIB_VARIANT).bin.
+
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
