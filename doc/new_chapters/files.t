@@ -734,7 +734,7 @@ If the @code{link()} function fails, no directories are modified.
 
 The @code{existing} argument should not be a directory.
 
-The callder may (or may not) need permission to access the existing file.
+The caller may (or may not) need permission to access the existing file.
 
 @subheading NOTES:
 
@@ -962,7 +962,7 @@ be delected nor that of the director containing it.
 
 @item ENOENT
 A dirctory component in @code{pathname} does not exist or is a 
-dangling sybolic link.
+dangling symbolic link.
 
 @item ENOTDIR
 @code{pathname}, or a component used as a directory in @code{pathname},
@@ -992,7 +992,7 @@ Insufficient kernel memory was available
 
 @subheading DESCRIPTION:
 
-@code{rmdir} deletes a directory, whic must be empty
+@code{rmdir} deletes a directory, which must be empty
 
 
 @subheading NOTES:
@@ -1134,7 +1134,7 @@ The @code{path} argument points to a pathname for a file.  Read, write, or
 execute permission for the file is not required, but all directories listed
 in @code{path} must be searchable.  The @code{stat()} function obtains 
 information about the named file and writes it to the area pointed to by
-@code{but}.
+@code{buf}.
 
 @subheading NOTES:
 
@@ -1390,9 +1390,9 @@ long getdents(
 
 @subheading STATUS CODES:
 
-on sucess, the number of bytes read is returned.  On end of directory,
-0 is returned.  On error, -1 is returned, and @code{errno} is set
-appropriately.
+A successful call to @code{getdents} returns th the number of bytes read.  
+On end of directory, 0 is returned.  When an error occurs, -1 is returned, 
+and @code{errno} is set appropriately.
 
 @table @b
 @item EBADF
