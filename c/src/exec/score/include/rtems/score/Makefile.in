@@ -100,7 +100,7 @@ endif
 	@chmod 755 $@
 
 all:	$(SRCS)
-	$(INSTALL_DATA) ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
+	$(INSTALL_CHANGE) ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
