@@ -1,3 +1,11 @@
+2001-08-16	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/clock.c: Ensure that clock ticks are long enough to
+	make forward progress.  This was modified to improve results
+	on the RTEMS tests and the ACATS.
+	* startup/linkcmds: Modified to work better with gcc 2.8.1 and
+	gnat 3.13p.
+
 2001-05-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add bspopts.h.
