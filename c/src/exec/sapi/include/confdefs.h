@@ -326,6 +326,13 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 
 #ifdef RTEMS_POSIX_API
 
+#include <sys/types.h>
+#include <rtems/posix/cond.h>
+#include <rtems/posix/mutex.h>
+#include <rtems/posix/key.h>
+#include <rtems/posix/psignal.h>
+#include <rtems/posix/threadsup.h>
+
 #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
 #define CONFIGURE_MAXIMUM_POSIX_THREADS      10
 #endif
@@ -382,6 +389,47 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 
 #endif
 
+#define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API \
+  ( \
+    sizeof (POSIX_API_Control) + \
+   (sizeof (void *) * (CONFIGURE_GNAT_KEYS + CONFIGURE_MAXIMUM_POSIX_KEYS)) \
+  )
+
+#define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) \
+  ((_mutexes) * \
+   ( sizeof(POSIX_Mutex_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condition_variables) \
+  ((_condition_variables) * \
+   ( sizeof(POSIX_Condition_variables_Control) + \
+        CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) \
+  ((_keys) * \
+   ( sizeof(POSIX_Keys_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) \
+  ((_queued_signals) * \
+   ( sizeof(POSIX_signals_Siginfo_node) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+  
+
+#define CONFIGURE_MEMORY_FOR_POSIX \
+  ( \
+    CONFIGURE_MEMORY_FOR_POSIX_MUTEXES( CONFIGURE_MAXIMUM_POSIX_MUTEXES ) + \
+    CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES( \
+        CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES ) + \
+    CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS ) + \
+    CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS( \
+        CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ) \
+   )
+
+
+#else
+
+#define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API 0
+#define CONFIGURE_MEMORY_FOR_POSIX              0
+
 #endif    /* RTEMS_POSIX_API */
 
 /* 
@@ -413,6 +461,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
   (((_tasks) + 1 ) * \
    ((sizeof(Thread_Control) + CONTEXT_FP_SIZE + \
       STACK_MINIMUM_SIZE + sizeof( RTEMS_API_Control ) + \
+      CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API + \
       CONFIGURE_OBJECT_TABLE_STUFF)) \
   )
 
@@ -478,6 +527,10 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #define CONFIGURE_MEMORY_OVERHEAD 0
 #endif
 
+#ifndef CONFIGURE_EXTRA_TASK_STACKS
+#define CONFIGURE_EXTRA_TASK_STACKS 0
+#endif
+
 #define CONFIGURE_MEMORY_FOR_SYSTEM_OVEREHAD \
   ( CONFIGURE_MEMORY_FOR_TASKS(1) +    /* IDLE */ \
     (256 * 12) +                       /* Ready chains */ \
@@ -486,7 +539,9 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
   )
 
 #define CONFIGURE_EXECUTIVE_RAM_SIZE \
-(( CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS) + \
+(( CONFIGURE_MEMORY_FOR_POSIX + \
+   CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS + \
+      CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_ADA_TASKS ) + \
    CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS) + \
    CONFIGURE_MEMORY_FOR_SEMAPHORES(CONFIGURE_MAXIMUM_SEMAPHORES + \
      CONFIGURE_LIBIO_SEMAPHORES) + \
@@ -503,6 +558,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
    CONFIGURE_MEMORY_FOR_MP + \
    CONFIGURE_MEMORY_FOR_SYSTEM_OVEREHAD + \
    (((CONFIGURE_MEMORY_OVERHEAD)+1) * 1024) \
+   (((CONFIGURE_EXTRA_TASK_STACKS)+1) * 1024) \
 ) & 0xfffffc00)
 #endif
 
@@ -515,11 +571,21 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #define CONFIGURE_MAXIMUM_ADA_TASKS  20
 #endif
 
+/* This is the number of non-Ada tasks which invoked Ada code. */
+#ifndef CONFIGURE_MAXIMUM_FAKE_ADA_TASKS
+#define CONFIGURE_MAXIMUM_FAKE_ADA_TASKS 0
+#endif
+
+/* Ada tasks are allocated twice the minimum stack space */
+#define CONFIGURE_ADA_TASKS_STACK \
+  (CONFIGURE_MAXIMUM_ADA_TASKS * RTEMS_MINIMUM_STACK_SIZE)
+
 #else
 #define CONFIGURE_GNAT_MUTEXES           0
 #define CONFIGURE_GNAT_KEYS              0
 #define CONFIGURE_MAXIMUM_ADA_TASKS      0
 #define CONFIGURE_MAXIMUM_FAKE_ADA_TASKS 0
+#define CONFIGURE_ADA_TASKS_STACK        0
 #endif
 
 
