@@ -37,12 +37,6 @@ rtems_timer_service_routine Delayed_routine(
 class Task1
   : public rtemsTask
 {
-  rtemsEvent end_init;
-  
-  rtemsEvent end_init;
-  
-  rtemsEvent end_init;
-  
   void print_mode(rtems_mode mode, rtems_mode mask);
   
   void screen1(void);
@@ -52,13 +46,10 @@ class Task1
   void screen5(void);
   void screen6(void);
 
-  void set_end_event(rtemsEvent& end_event) { end_init = end_event; }
 protected:
   virtual void body(rtems_task_argument argument);
-  void set_end_event(rtemsEvent& end_event) { end_init = end_event; }
 
 public:
-  void set_end_event(rtemsEvent& end_event) { end_init = end_event; }
 };
 
 class Task2
@@ -78,6 +69,15 @@ public:
 class Task3
   : public rtemsTask
 {
+  void screen6(void);
+
+protected:
+  virtual void body(rtems_task_argument argument);
+
+public:  
+  Task3(const char* name,
+        const rtems_task_priority initial_priority,
+        const rtems_unsigned32 stack_size);
 };
 
 class EndTask
@@ -90,15 +90,6 @@ public:
   EndTask(const char* name,
           const rtems_task_priority initial_priority,
           const rtems_unsigned32 stack_size);
-  void screen6(void);
-
-protected:
-  virtual void body(rtems_task_argument argument);
-
-public:  
-  Task3(const char* name,
-        const rtems_task_priority initial_priority,
-        const rtems_unsigned32 stack_size);
 };
 
 #ifdef 0
