@@ -19,8 +19,6 @@ include $(top_srcdir)/../automake/lib.am
 $(LIB): $(OBJS)
 	$(make-library)
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(PGMNAME)$(LIB_VARIANT).rel
-
 all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
 
 .PRECIOUS: $(LIB)

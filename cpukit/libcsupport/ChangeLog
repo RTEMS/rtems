@@ -1,3 +1,7 @@
+2003-04-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/no_posix.c: include <reent.h> instead of <sys/reent.h>
+
 2003-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 389/rtems

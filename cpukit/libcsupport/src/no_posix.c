@@ -35,7 +35,7 @@ pid_t getpid(void)
 }
 
 #if defined(RTEMS_NEWLIB)
-#include <sys/reent.h>
+#include <reent.h>
 
 pid_t _getpid_r(
   struct _reent *ptr
@@ -54,7 +54,7 @@ int kill( pid_t pid, int sig )
 }
 
 #if defined(RTEMS_NEWLIB)
-#include <sys/reent.h>
+#include <reent.h>
 
 int _kill_r( struct _reent *ptr, pid_t pid, int sig )
 {
