@@ -33,6 +33,9 @@ ac_help="$ac_help
   --disable-tests 	     	    disable tests"
 ac_help="$ac_help
 \
+  --enable-hwapi		    enable hardware API library"
+ac_help="$ac_help
+\
   --enable-rtemsbsp=bsp1 bsp2 ..   prefix for cross-tools"
 
 # Initialize some variables set by options.
@@ -766,6 +769,47 @@ c/src/lib/libbsp/unix/posix/wrapup/Makefile"
 
 tcpip_mk="c/src/lib/libka9q/Makefile"
 
+hwapi_mk="\
+c/src/lib/libhwapi/Makefile \
+c/src/lib/libhwapi/eeprom/Makefile \
+c/src/lib/libhwapi/eeprom/wrapup/Makefile \
+c/src/lib/libhwapi/eeprom/eeprom/Makefile \
+c/src/lib/libhwapi/drivers/Makefile \
+c/src/lib/libhwapi/drivers/vmebus/Makefile \
+c/src/lib/libhwapi/drivers/vmebus/dmv202/Makefile \
+c/src/lib/libhwapi/drivers/vmebus/dmv536/Makefile \
+c/src/lib/libhwapi/drivers/vmebus/dmv666/Makefile \
+c/src/lib/libhwapi/drivers/vmebus/wrapup/Makefile \
+c/src/lib/libhwapi/serial/Makefile \
+c/src/lib/libhwapi/serial/default/Makefile \
+c/src/lib/libhwapi/serial/stream/Makefile \
+c/src/lib/libhwapi/serial/template/Makefile \
+c/src/lib/libhwapi/serial/wrapup/Makefile \
+c/src/lib/libhwapi/serial/channel/Makefile \
+c/src/lib/libhwapi/discrete/Makefile \
+c/src/lib/libhwapi/discrete/tools/Makefile \
+c/src/lib/libhwapi/discrete/relay/Makefile \
+c/src/lib/libhwapi/discrete/wrapup/Makefile \
+c/src/lib/libhwapi/discrete/greycode/Makefile \
+c/src/lib/libhwapi/discrete/discrete_in/Makefile \
+c/src/lib/libhwapi/discrete/discrete_out/Makefile \
+c/src/lib/libhwapi/discrete/discrete_input/Makefile \
+c/src/lib/libhwapi/discrete/discrete_output/Makefile \
+c/src/lib/libhwapi/discrete/discrete_flag/Makefile \
+c/src/lib/libhwapi/discrete/discrete_bitfield/Makefile \
+c/src/lib/libhwapi/analog/Makefile \
+c/src/lib/libhwapi/analog/dac/Makefile \
+c/src/lib/libhwapi/analog/wrapup/Makefile \
+c/src/lib/libhwapi/analog/linear_dac/Makefile \
+c/src/lib/libhwapi/analog/linear_adc/Makefile \
+c/src/lib/libhwapi/analog/adc/Makefile \
+c/src/lib/libhwapi/wrapup/Makefile \
+c/src/lib/libhwapi/support/Makefile \
+c/src/lib/libhwapi/support/chain/Makefile \
+c/src/lib/libhwapi/support/checksum/Makefile \
+c/src/lib/libhwapi/support/wrapup/Makefile \
+c/src/lib/libhwapi/support/dumpbuf/Makefile"
+
 tests_mk="c/src/tests/Makefile \
 c/src/tests/libtests/Makefile \
 c/src/tests/libtests/cpuuse/Makefile \
@@ -913,7 +957,7 @@ c/src/tests/tools/unix/Makefile \
 c/src/tests/tools/unix/posix/Makefile"
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:917: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:961: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -986,7 +1030,7 @@ else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
 fi
 
 echo $ac_n "checking host system type""... $ac_c" 1>&6
-echo "configure:990: checking host system type" >&5
+echo "configure:1034: checking host system type" >&5
 
 host_alias=$host
 case "$host_alias" in
@@ -1007,7 +1051,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$host" 1>&6
 
 echo $ac_n "checking target system type""... $ac_c" 1>&6
-echo "configure:1011: checking target system type" >&5
+echo "configure:1055: checking target system type" >&5
 
 target_alias=$target
 case "$target_alias" in
@@ -1025,7 +1069,7 @@ target_os=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$target" 1>&6
 
 echo $ac_n "checking build system type""... $ac_c" 1>&6
-echo "configure:1029: checking build system type" >&5
+echo "configure:1073: checking build system type" >&5
 
 build_alias=$build
 case "$build_alias" in
@@ -1102,7 +1146,6 @@ if test "${enable_libcdir+set}" = set; then
  RTEMS_LIBC_DIR="${enableval}" ; \
 test -d ${enableval} || { echo "configure: error: "$enableval is not a directory" " 1>&2; exit 1; }  
 fi
-
 
 
 RTEMS_PREFIX=${target_cpu}-${target_vendor}
@@ -1204,7 +1247,7 @@ do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1208: checking for $ac_word" >&5
+echo "configure:1251: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_AWK'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1233,7 +1276,7 @@ test -n "$AWK" && break
 done
 
 echo $ac_n "checking whether ln -s works""... $ac_c" 1>&6
-echo "configure:1237: checking whether ln -s works" >&5
+echo "configure:1280: checking whether ln -s works" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_LN_S'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1266,6 +1309,16 @@ if test "${enable_tests+set}" = set; then
 tests_mk=
 else
   makefiles="${makefiles} ${tests_mk}"
+fi
+
+
+# Check whether --enable-hwapi or --disable-hwapi was given.
+if test "${enable_hwapi+set}" = set; then
+  enableval="$enable_hwapi"
+  \
+makefiles="${makefiles} ${hwapi_mk}"
+else
+  hwapi_mk=
 fi
 
 
