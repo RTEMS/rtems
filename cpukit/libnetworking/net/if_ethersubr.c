@@ -34,6 +34,14 @@
  * $Id$
  */
 
+#include "opt_atalk.h"
+#include "opt_inet.h"
+#include "opt_inet6.h"
+#include "opt_ipx.h"
+#include "opt_bdg.h"
+#include "opt_mac.h"
+#include "opt_netgraph.h"
+
 #include <sys/param.h>
 #include <sys/systm.h>
 #include <sys/kernel.h>
@@ -47,6 +55,7 @@
 #include <sys/sysctl.h>
 
 #include <net/if.h>
+#include <net/if_arp.h>
 #include <net/netisr.h>
 #include <net/route.h>
 #include <net/if_llc.h>
@@ -54,39 +63,22 @@
 #include <net/if_types.h>
 #include <net/ethernet.h>
 
-#ifdef INET
+#if defined(INET) || defined(INET6)
 #include <netinet/in.h>
 #include <netinet/in_var.h>
-#endif
 #include <netinet/if_ether.h>
+#include <netinet/ip_fw.h>
+#ifndef __rtems__
+#include <netinet/ip_dummynet.h>
+#endif
+#endif
+#ifdef INET6
+#include <netinet6/nd6.h>
+#endif
 
 #ifdef IPX
 #include <netipx/ipx.h>
 #include <netipx/ipx_if.h>
-#endif
-
-#ifdef NS
-#include <netns/ns.h>
-#include <netns/ns_if.h>
-ushort ns_nettype;
-int ether_outputdebug = 0;
-int ether_inputdebug = 0;
-#endif
-
-#ifdef ISO
-#include <netiso/argo_debug.h>
-#include <netiso/iso.h>
-#include <netiso/iso_var.h>
-#include <netiso/iso_snpac.h>
-#endif
-
-/*#ifdef LLC
-#include <netccitt/dll.h>
-#include <netccitt/llc_var.h>
-#endif*/
-
-#if defined(LLC) && defined(CCITT)
-extern struct ifqueue pkintrq;
 #endif
 
 #ifdef NETATALK
@@ -117,11 +109,6 @@ ether_output(struct ifnet *ifp, struct mbuf *m,
 {
 	short type;
 	int s, error = 0;
-#ifdef NS
- 	u_char *cp
-	register struct ifqueue *inq;
-	register struct mbuf *m2;
-#endif
 	u_char  edst[6];
 	register struct rtentry *rt;
 	struct mbuf *mcopy = (struct mbuf *)0;
@@ -131,6 +118,7 @@ ether_output(struct ifnet *ifp, struct mbuf *m,
 #ifdef NETATALK
 	struct at_ifaddr *aa;
 #endif /* NETATALK */
+	int hlen;	/* link layer header length */
 
 	if ((ifp->if_flags & (IFF_UP|IFF_RUNNING)) != (IFF_UP|IFF_RUNNING))
 		senderr(ENETDOWN);
@@ -159,6 +147,7 @@ ether_output(struct ifnet *ifp, struct mbuf *m,
 			    rtems_bsdnet_seconds_since_boot() < rt->rt_rmx.rmx_expire)
 				senderr(rt == rt0 ? EHOSTDOWN : EHOSTUNREACH);
 	}
+	hlen = ETHER_HDR_LEN;
 	switch (dst->sa_family) {
 
 #ifdef INET
@@ -255,146 +244,10 @@ ether_output(struct ifnet *ifp, struct mbuf *m,
 	    }
 	    break;
 #endif /* NETATALK */
-#ifdef NS
-	case AF_NS:
-		switch(ns_nettype){
-		default:
-		case 0x8137: /* Novell Ethernet_II Ethernet TYPE II */
-			type = 0x8137;
-			break;
-		case 0x0: /* Novell 802.3 */
-			type = htons( m->m_pkthdr.len);
-			break;
-		case 0xe0e0: /* Novell 802.2 and Token-Ring */
-			M_PREPEND(m, 3, M_WAIT);
-			type = htons( m->m_pkthdr.len);
-			cp = mtod(m, u_char *);
-			*cp++ = 0xE0;
-			*cp++ = 0xE0;
-			*cp++ = 0x03;
-			break;
-		}
- 		bcopy((caddr_t)&(((struct sockaddr_ns *)dst)->sns_addr.x_host),
-		    (caddr_t)edst, sizeof (edst));
-		if (!bcmp((caddr_t)edst, (caddr_t)&ns_thishost, sizeof(edst))){
-			m->m_pkthdr.rcvif = ifp;
-			schednetisr(NETISR_NS);
-			inq = &nsintrq;
-			s = splimp();
-			if (IF_QFULL(inq)) {
-				IF_DROP(inq);
-				m_freem(m);
-			} else
-				IF_ENQUEUE(inq, m);
-			splx(s);
-			return (error);
-		}
-		if (!bcmp((caddr_t)edst, (caddr_t)&ns_broadhost, sizeof(edst))){
-			m2 = m_copy(m, 0, (int)M_COPYALL);
-			m2->m_pkthdr.rcvif = ifp;
-			schednetisr(NETISR_NS);
-			inq = &nsintrq;
-			s = splimp();
-			if (IF_QFULL(inq)) {
-				IF_DROP(inq);
-				m_freem(m2);
-			} else
-				IF_ENQUEUE(inq, m2);
-			splx(s);
-		}
-		/* If broadcasting on a simplex interface, loopback a copy */
-		if ((m->m_flags & M_BCAST) && (ifp->if_flags & IFF_SIMPLEX)){
-			mcopy = m_copy(m, 0, (int)M_COPYALL);
-		}
-		break;
-#endif /* NS */
-#ifdef	ISO
-	case AF_ISO: {
-		int	snpalen;
-		struct	llc *l;
-		register struct sockaddr_dl *sdl;
-
-		if (rt && (sdl = (struct sockaddr_dl *)rt->rt_gateway) &&
-		    sdl->sdl_family == AF_LINK && sdl->sdl_alen > 0) {
-			bcopy(LLADDR(sdl), (caddr_t)edst, sizeof(edst));
-		} else if (error =
-			    iso_snparesolve(ifp, (struct sockaddr_iso *)dst,
-					    (char *)edst, &snpalen))
-			goto bad; /* Not Resolved */
-		/* If broadcasting on a simplex interface, loopback a copy */
-		if (*edst & 1)
-			m->m_flags |= (M_BCAST|M_MCAST);
-		if ((m->m_flags & M_BCAST) && (ifp->if_flags & IFF_SIMPLEX) &&
-		    (mcopy = m_copy(m, 0, (int)M_COPYALL))) {
-			M_PREPEND(mcopy, sizeof (*eh), M_DONTWAIT);
-			if (mcopy) {
-				eh = mtod(mcopy, struct ether_header *);
-				bcopy((caddr_t)edst,
-				      (caddr_t)eh->ether_dhost, sizeof (edst));
-				bcopy((caddr_t)ac->ac_enaddr,
-				      (caddr_t)eh->ether_shost, sizeof (edst));
-			}
-		}
-		M_PREPEND(m, 3, M_DONTWAIT);
-		if (m == NULL)
-			return (0);
-		type = htons(m->m_pkthdr.len);
-		l = mtod(m, struct llc *);
-		l->llc_dsap = l->llc_ssap = LLC_ISO_LSAP;
-		l->llc_control = LLC_UI;
-		len += 3;
-		IFDEBUG(D_ETHER)
-			int i;
-			printf("unoutput: sending pkt to: ");
-			for (i=0; i<6; i++)
-				printf("%x ", edst[i] & 0xff);
-			printf("\n");
-		ENDDEBUG
-		} break;
-#endif /* ISO */
-#ifdef	LLC
-/*	case AF_NSAP: */
-	case AF_CCITT: {
-		register struct sockaddr_dl *sdl =
-			(struct sockaddr_dl *) rt -> rt_gateway;
-
-		if (sdl && sdl->sdl_family == AF_LINK
-		    && sdl->sdl_alen > 0) {
-			bcopy(LLADDR(sdl), (char *)edst,
-				sizeof(edst));
-		} else goto bad; /* Not a link interface ? Funny ... */
-		if ((ifp->if_flags & IFF_SIMPLEX) && (*edst & 1) &&
-		    (mcopy = m_copy(m, 0, (int)M_COPYALL))) {
-			M_PREPEND(mcopy, sizeof (*eh), M_DONTWAIT);
-			if (mcopy) {
-				eh = mtod(mcopy, struct ether_header *);
-				bcopy((caddr_t)edst,
-				      (caddr_t)eh->ether_dhost, sizeof (edst));
-				bcopy((caddr_t)ac->ac_enaddr,
-				      (caddr_t)eh->ether_shost, sizeof (edst));
-			}
-		}
-		type = htons(m->m_pkthdr.len);
-#ifdef LLC_DEBUG
-		{
-			int i;
-			register struct llc *l = mtod(m, struct llc *);
-
-			printf("ether_output: sending LLC2 pkt to: ");
-			for (i=0; i<6; i++)
-				printf("%x ", edst[i] & 0xff);
-			printf(" len 0x%x dsap 0x%x ssap 0x%x control 0x%x\n",
-			       type & 0xff, l->llc_dsap & 0xff, l->llc_ssap &0xff,
-			       l->llc_control & 0xff);
-
-		}
-#endif /* LLC_DEBUG */
-		} break;
-#endif /* LLC */
 
 	case AF_UNSPEC:
 		eh = (struct ether_header *)dst->sa_data;
- 		(void)memcpy(edst, eh->ether_dhost, sizeof (edst));
+		(void)memcpy(edst, eh->ether_dhost, sizeof (edst));
 		type = eh->ether_type;
 		break;
 
@@ -412,7 +265,7 @@ ether_output(struct ifnet *ifp, struct mbuf *m,
 	 * allocate another.
 	 */
 	M_PREPEND(m, sizeof (struct ether_header), M_DONTWAIT);
-	if (m == 0)
+	if (m == NULL)
 		senderr(ENOBUFS);
 	eh = mtod(m, struct ether_header *);
 	(void)memcpy(&eh->ether_type, &type,
@@ -458,12 +311,9 @@ ether_input(ifp, eh, m)
 {
 	register struct ifqueue *inq;
 	u_short ether_type;
-#ifdef NS
-	u_short *checksum;
-#endif
 	int s;
-#if defined (ISO) || defined (LLC) || defined(NETATALK)
-	register struct llc *l;
+#if defined(NETATALK)
+	struct llc *l;
 #endif
 
 	if ((ifp->if_flags & IFF_UP) == 0) {
@@ -508,13 +358,6 @@ ether_input(ifp, eh, m)
 		inq = &ipxintrq;
 		break;
 #endif
-#ifdef NS
-	case 0x8137: /* Novell Ethernet_II Ethernet TYPE II */
-		schednetisr(NETISR_NS);
-		inq = &nsintrq;
-		break;
-
-#endif /* NS */
 #ifdef NETATALK
         case ETHERTYPE_AT:
                 schednetisr(NETISR_ATALK);
@@ -526,21 +369,6 @@ ether_input(ifp, eh, m)
                 return;
 #endif /* NETATALK */
 	default:
-#ifdef NS
-		checksum = mtod(m, ushort *);
-		/* Novell 802.3 */
-		if ((ether_type <= ETHERMTU) &&
-			((*checksum == 0xffff) || (*checksum == 0xE0E0))){
-			if(*checksum == 0xE0E0) {
-				m->m_pkthdr.len -= 3;
-				m->m_len -= 3;
-				m->m_data += 3;
-			}
-				schednetisr(NETISR_NS);
-				inq = &nsintrq;
-				break;
-		}
-#endif /* NS */
 #if defined (ISO) || defined (LLC) || defined(NETATALK)
 		if (ether_type > ETHERMTU)
 			goto dropanyway;
@@ -702,15 +530,14 @@ ether_sprintf(const u_char *ap)
  * Perform common duties while attaching to interface list
  */
 void
-ether_ifattach(ifp)
-	register struct ifnet *ifp;
+ether_ifattach(struct ifnet *ifp)
 {
-	register struct ifaddr *ifa;
-	register struct sockaddr_dl *sdl;
+	struct ifaddr *ifa;
+	struct sockaddr_dl *sdl;
 
 	ifp->if_type = IFT_ETHER;
-	ifp->if_addrlen = 6;
-	ifp->if_hdrlen = 14;
+	ifp->if_addrlen = ETHER_ADDR_LEN;
+	ifp->if_hdrlen = ETHER_HDR_LEN;
 	ifp->if_mtu = ETHERMTU;
 	if (ifp->if_baudrate == 0)
 	    ifp->if_baudrate = 10000000;
@@ -910,6 +737,79 @@ ether_delmulti(ifr, ac)
 SYSCTL_DECL(_net_link);
 SYSCTL_NODE(_net_link, IFT_ETHER, ether, CTLFLAG_RW, 0, "Ethernet");
 
+#if 0
+/*
+ * This is for reference.  We have a table-driven version
+ * of the little-endian crc32 generator, which is faster
+ * than the double-loop.
+ */
+uint32_t
+ether_crc32_le(const uint8_t *buf, size_t len)
+{
+	size_t i;
+	uint32_t crc;
+	int bit;
+	uint8_t data;
+
+	crc = 0xffffffff;	/* initial value */
+
+	for (i = 0; i < len; i++) {
+		for (data = *buf++, bit = 0; bit < 8; bit++, data >>= 1)
+			carry = (crc ^ data) & 1;
+			crc >>= 1;
+			if (carry)
+				crc = (crc ^ ETHER_CRC_POLY_LE);
+	}
+
+	return (crc);
+}
+#else
+uint32_t
+ether_crc32_le(const uint8_t *buf, size_t len)
+{
+	static const uint32_t crctab[] = {
+		0x00000000, 0x1db71064, 0x3b6e20c8, 0x26d930ac,
+		0x76dc4190, 0x6b6b51f4, 0x4db26158, 0x5005713c,
+		0xedb88320, 0xf00f9344, 0xd6d6a3e8, 0xcb61b38c,
+		0x9b64c2b0, 0x86d3d2d4, 0xa00ae278, 0xbdbdf21c
+	};
+	size_t i;
+	uint32_t crc;
+
+	crc = 0xffffffff;	/* initial value */
+
+	for (i = 0; i < len; i++) {
+		crc ^= buf[i];
+		crc = (crc >> 4) ^ crctab[crc & 0xf];
+		crc = (crc >> 4) ^ crctab[crc & 0xf];
+	}
+
+	return (crc);
+}
+#endif
+
+uint32_t
+ether_crc32_be(const uint8_t *buf, size_t len)
+{
+	size_t i;
+	uint32_t crc, carry;
+	int bit;
+	uint8_t data;
+
+	crc = 0xffffffff;	/* initial value */
+
+	for (i = 0; i < len; i++) {
+		for (data = *buf++, bit = 0; bit < 8; bit++, data >>= 1) {
+			carry = ((crc & 0x80000000) ? 1 : 0) ^ (data & 0x01);
+			crc <<= 1;
+			if (carry)
+				crc = (crc ^ ETHER_CRC_POLY_BE) | carry;
+		}
+	}
+
+	return (crc);
+}
+
 int
 ether_ioctl(struct ifnet *ifp, int command, caddr_t data)
 {
@@ -953,31 +853,6 @@ ether_ioctl(struct ifnet *ifp, int command, caddr_t data)
 			ifp->if_init(ifp->if_softc);
 			break;
 			}
-#endif
-#ifdef NS
-		/*
-		 * XXX - This code is probably wrong
-		 */
-		case AF_NS:
-		{
-			register struct ns_addr *ina = &(IA_SNS(ifa)->sns_addr);
-			struct arpcom *ac = (struct arpcom *) (ifp->if_softc);
-
-			if (ns_nullhost(*ina))
-				ina->x_host =
-				    *(union ns_host *) (ac->ac_enaddr);
-			else {
-				bcopy((caddr_t) ina->x_host.c_host,
-				      (caddr_t) ac->ac_enaddr,
-				      sizeof(ac->ac_enaddr));
-			}
-
-			/*
-			 * Set new address
-			 */
-			ifp->if_init(ifp->if_softc);
-			break;
-		}
 #endif
 		default:
 			ifp->if_init(ifp->if_softc);
