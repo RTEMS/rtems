@@ -9,7 +9,7 @@ RTEMS_TOP(../../../../../..)
 AC_CONFIG_AUX_DIR(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
-AM_INIT_AUTOMAKE(rtems-c-src-lib-libbsp-sh-gensh4,$RTEMS_VERSION,no)
+AM_INIT_AUTOMAKE(rtems-c-src-lib-libbsp-mips64orion-p4000,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
@@ -20,23 +20,15 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 RTEMS_CANONICAL_HOST
 
-## bsp-specific options
-CPU_CLOCK_RATE_HZ=${CPU_CLOCK_RATE_HZ-96000000}
-AC_SUBST(CPU_CLOCK_RATE_HZ)
-AC_DEFINE_UNQUOTED(
-  [CPU_CLOCK_RATE_HZ],
-  [$CPU_CLOCK_RATE_HZ],
-  [cpu clock rate in HZ])
-
 AM_CONFIG_HEADER(include/bspopts.h)
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+console/Makefile
 include/Makefile
+liblnk/Makefile
 start/Makefile
 startup/Makefile
-hw_init/Makefile
-wrapup/Makefile
-])
+wrapup/Makefile])
 AC_OUTPUT

@@ -10,7 +10,7 @@ AC_CONFIG_AUX_DIR(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE(rtems-c-src-lib-libcpu-sh-sh7750,$RTEMS_VERSION,no)
+AM_INIT_AUTOMAKE(rtems-c-src-lib-libcpu-sh-sh7032,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_BARE
@@ -30,8 +30,9 @@ RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 clock/Makefile
+delay/Makefile
 include/Makefile
 score/Makefile
-sci/Makefile
-timer/Makefile])
+timer/Makefile
+sci/Makefile])
 AC_OUTPUT

@@ -4,13 +4,13 @@
 
 AC_PREREQ(2.52)
 AC_INIT
-AC_CONFIG_SRCDIR([include])
-RTEMS_TOP(../../../../../..)
-AC_CONFIG_AUX_DIR(../../../../../..)
+AC_CONFIG_SRCDIR([i960ca])
+RTEMS_TOP(../../../../..)
+AC_CONFIG_AUX_DIR(../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE(rtems-c-src-lib-libcpu-sh-sh7750,$RTEMS_VERSION,no)
+AM_INIT_AUTOMAKE(rtems-c-src-lib-libcpu-i960,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_BARE
@@ -27,11 +27,15 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 
+AM_CONDITIONAL(i960ca, test "$RTEMS_CPU_MODEL" = "i960ca")
+AM_CONDITIONAL(i960ka, test "$RTEMS_CPU_MODEL" = "i960ka")
+AM_CONDITIONAL(i960rp, test "$RTEMS_CPU_MODEL" = "i960rp")
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-clock/Makefile
-include/Makefile
-score/Makefile
-sci/Makefile
-timer/Makefile])
+i960ca/Makefile
+i960ka/Makefile
+i960rp/Makefile
+include/Makefile])
 AC_OUTPUT
+

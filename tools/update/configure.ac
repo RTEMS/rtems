@@ -1,0 +1,25 @@
+#
+# $Id$
+#
+
+AC_PREREQ(2.52)
+AC_INIT
+AC_CONFIG_SRCDIR([rtems-polish.sh])
+RTEMS_TOP(../..)
+AC_CONFIG_AUX_DIR(../..)
+
+AC_CANONICAL_HOST
+
+AM_INIT_AUTOMAKE(rtems-tools-update,$RTEMS_VERSION,no)
+AM_MAINTAINER_MODE
+
+RTEMS_PATH_KSH
+RTEMS_PATH_PERL
+
+AM_CONDITIONAL(PERL,test -n "$PERL")
+
+RTEMS_TOOLPATHS
+# Explicitly list all Makefiles here
+AC_CONFIG_FILES([Makefile
+])
+AC_OUTPUT

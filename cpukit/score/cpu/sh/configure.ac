@@ -4,17 +4,16 @@
 
 AC_PREREQ(2.52)
 AC_INIT
-AC_CONFIG_SRCDIR([include])
+AC_CONFIG_SRCDIR([asm.h])
 RTEMS_TOP(../../../../../..)
 AC_CONFIG_AUX_DIR(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE(rtems-c-src-lib-libcpu-sh-sh7750,$RTEMS_VERSION,no)
+AM_INIT_AUTOMAKE(rtems-c-src-exec-score-cpu-sh,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
-RTEMS_ENABLE_BARE
-RTEMS_ENV_RTEMSBSP
+RTEMS_ENV_RTEMSCPU
 
 RTEMS_CHECK_CPU
 RTEMS_CANONICAL_HOST
@@ -24,14 +23,10 @@ RTEMS_PROJECT_ROOT
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
-RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
-RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
+RTEMS_CHECK_NEWLIB
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-clock/Makefile
-include/Makefile
-score/Makefile
-sci/Makefile
-timer/Makefile])
+rtems/Makefile
+rtems/score/Makefile])
 AC_OUTPUT

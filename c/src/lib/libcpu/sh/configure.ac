@@ -4,13 +4,13 @@
 
 AC_PREREQ(2.52)
 AC_INIT
-AC_CONFIG_SRCDIR([include])
-RTEMS_TOP(../../../../../..)
-AC_CONFIG_AUX_DIR(../../../../../..)
+AC_CONFIG_SRCDIR([sh7032])
+RTEMS_TOP(../../../../..)
+AC_CONFIG_AUX_DIR(../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE(rtems-c-src-lib-libcpu-sh-sh7750,$RTEMS_VERSION,no)
+AM_INIT_AUTOMAKE(rtems-c-src-lib-libcpu-sh,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_BARE
@@ -21,17 +21,15 @@ RTEMS_CANONICAL_HOST
 
 RTEMS_PROJECT_ROOT
 
-RTEMS_PROG_CC_FOR_TARGET
-RTEMS_CANONICALIZE_TOOLS
-
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 
+case "$RTEMS_CPU_MODEL" in
+sh7032 ) AC_CONFIG_SUBDIRS([sh7032]);;
+sh7045 ) AC_CONFIG_SUBDIRS([sh7045]);;
+*) AC_MSG_ERROR([Invalid RTEMS_CPU_MODEL]);
+esac
+
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-include/Makefile
-score/Makefile
-sci/Makefile
-timer/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

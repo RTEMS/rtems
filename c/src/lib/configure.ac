@@ -1,0 +1,47 @@
+## Process this file with autoconf to produce a configure script.
+## 
+## $Id$
+
+AC_PREREQ(2.52)
+AC_INIT
+AC_CONFIG_SRCDIR([libc])
+RTEMS_TOP(../../..)
+AC_CONFIG_AUX_DIR(../../..)
+
+RTEMS_CANONICAL_TARGET_CPU
+AM_INIT_AUTOMAKE(rtems-c-src-lib,$RTEMS_VERSION,no)
+AM_MAINTAINER_MODE
+
+RTEMS_ENABLE_NETWORKING
+RTEMS_ENABLE_BARE
+
+RTEMS_ENV_RTEMSBSP
+
+RTEMS_CHECK_CPU
+RTEMS_CANONICAL_HOST
+
+RTEMS_PROJECT_ROOT
+
+RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
+RTEMS_CANONICALIZE_TOOLS
+
+RTEMS_CHECK_NEWLIB
+RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
+RTEMS_CHECK_NETWORKING(RTEMS_BSP)
+
+AM_CONDITIONAL(UNIX,test x"$RTEMS_CPU" = x"unix")
+AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
+AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
+
+AM_CONFIG_HEADER(libc/config.h)
+
+# Explicitly list all Makefiles here
+AC_CONFIG_FILES([Makefile
+include/Makefile
+include/rtems/Makefile
+include/sys/Makefile
+include/motorola/Makefile
+include/zilog/Makefile
+libc/Makefile])
+AC_OUTPUT
