@@ -42,7 +42,8 @@ rtems_extension Task_switch(
       Run_count[ index ] += 1;
 
       status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-      directive_failed( status, "rtems_clock_get" );
+      fatal_directive_status_with_level( status, RTEMS_SUCCESSFUL,
+                                         "rtems_clock_get", 1 );
 
       put_name( Task_name[ index ], FALSE );
       print_time( "- ", &time, "\n" );
