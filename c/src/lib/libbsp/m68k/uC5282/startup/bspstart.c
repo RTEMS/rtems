@@ -361,7 +361,7 @@ BSP_installVME_isr(unsigned long vector, BSP_VME_ISR_t handler, void *usrArg)
             for (p = 0 ; p < 7 ; p++) {
                 if ((source < 8)
                  || (bsp_allocate_interrupt(l,p) == RTEMS_SUCCESSFUL)) {
-                    if (source < 8)
+                    if (source >= 8)
                         *(&MCF5282_INTC0_ICR1 + (source - 1)) = 
                                                        MCF5282_INTC_ICR_IL(l) |
                                                        MCF5282_INTC_ICR_IP(p);
