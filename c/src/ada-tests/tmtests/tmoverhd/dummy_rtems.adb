@@ -83,7 +83,7 @@ package body DUMMY_RTEMS is
 
    procedure TASK_START (
       ID          : in     RTEMS.ID;
-      ENTRY_POINT : in     RTEMS.TASK_ENTRY_POINT;
+      ENTRY_POINT : in     RTEMS.TASK_ENTRY;
       ARGUMENT    : in     RTEMS.UNSIGNED32;
       RESULT      :    out RTEMS.STATUS_CODES
    ) is

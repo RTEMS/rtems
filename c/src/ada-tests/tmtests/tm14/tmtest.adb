@@ -79,7 +79,7 @@ package body TMTEST is
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
       INDEX          : RTEMS.UNSIGNED32;
-      TASK_ENTRY     : RTEMS.TASK_ENTRY_POINT;
+      TASK_ENTRY     : RTEMS.TASK_ENTRY;
       PRIORITY       : RTEMS.TASK_PRIORITY;
       TASK_ID        : RTEMS.ID;
       BUFFER         : RTEMS.BUFFER;

@@ -60,7 +60,7 @@ package body TMTEST is
    procedure TEST_INIT
    is
       ID         : RTEMS.ID;
-      TASK_ENTRY : RTEMS.TASK_ENTRY_POINT;
+      TASK_ENTRY : RTEMS.TASK_ENTRY;
       INDEX      : RTEMS.UNSIGNED32;
       STATUS     : RTEMS.STATUS_CODES;
    begin
