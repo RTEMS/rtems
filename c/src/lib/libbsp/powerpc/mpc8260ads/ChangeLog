@@ -1,3 +1,7 @@
+2001-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Introduce RTEMS_BSP_CONFIGURE.
+
 2001-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add RTEMS_BSPOPTS_*(DATA_CACHE_ENABLE),

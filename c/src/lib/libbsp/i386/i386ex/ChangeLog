@@ -1,3 +1,7 @@
+2001-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Introduce RTEMS_BSP_CONFIGURE.
+
 2001-10-25	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Added _init and _fini.

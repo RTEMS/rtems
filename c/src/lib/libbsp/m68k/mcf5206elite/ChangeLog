@@ -1,3 +1,7 @@
+2001-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Introduce RTEMS_BSP_CONFIGURE.
+
 2001-11-20	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bspopts.h.in: Automatically generated file that should not

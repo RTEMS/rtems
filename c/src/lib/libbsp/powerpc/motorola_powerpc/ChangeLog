@@ -1,3 +1,7 @@
+	* residual/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* start/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* startup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* vectors/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2001-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

@@ -10,16 +10,12 @@ AC_CONFIG_AUX_DIR(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE(rtems-c-src-lib-libbsp-hppa1.1-simhppa,$RTEMS_VERSION,no)
-AM_MAINTAINER_MODE
+RTEMS_BSP_CONFIGURE
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 
-RTEMS_ENV_RTEMSBSP
-RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
-RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
-RTEMS_CANONICAL_HOST
 
 AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
@@ -31,8 +27,6 @@ RTEMS_BSPOPTS_HELP([SIMHPPA_FAST_IDLE],
  time spent in the idle task is minimized.  This significantly reduces 
  the wall time required to execute the RTEMS test suites.])
 
-AM_CONFIG_HEADER(include/bspopts.h)
-RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile

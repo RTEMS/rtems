@@ -10,16 +10,12 @@ AC_CONFIG_AUX_DIR(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE(rtems-c-src-lib-libbsp-powerpc-psim,$RTEMS_VERSION,no)
-AM_MAINTAINER_MODE
+RTEMS_BSP_CONFIGURE
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 
-RTEMS_ENV_RTEMSBSP
-RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
-RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
-RTEMS_CANONICAL_HOST
 
 AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
@@ -37,8 +33,6 @@ RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
 [This defines the base address of the exception table.
  NOTE: Vectors are actually at 0xFFF00000 but file starts at offset.])
 
-AM_CONFIG_HEADER(include/bspopts.h)
-RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
