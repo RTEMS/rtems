@@ -216,6 +216,7 @@ SYM (gdtdesc):
 /*---------------------------------------------------------------------------+
 | IDT itself
 +---------------------------------------------------------------------------*/
+BEGIN_DATA
 	.p2align 4
 	
 	PUBLIC(Interrupt_descriptor_table)
@@ -223,10 +224,13 @@ SYM(Interrupt_descriptor_table):
 	.rept 256
 	.word 0,0,0,0
 	.endr
-	
+END_DATA
+		
 /*---------------------------------------------------------------------------+
 | Descriptor of IDT
 +--------------------------------------------------------------------------*/
+BEGIN_CODE
+	.p2align 4
 SYM(idtdesc):	
 	.word  (256*8 - 1)
 	.long  SYM (Interrupt_descriptor_table)

@@ -37,5 +37,6 @@ timer/Makefile
 3c509/Makefile
 ne2000/Makefile
 wd8003/Makefile
+ide/Makefile
 wrapup/Makefile])
 AC_OUTPUT

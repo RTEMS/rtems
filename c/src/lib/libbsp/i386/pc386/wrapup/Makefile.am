@@ -8,7 +8,7 @@ if HAS_NETWORKING
 NETWORK = ne2000 wd8003 3c509
 endif
 
-BSP_FILES = startup clock console timer $(NETWORK)
+BSP_FILES = startup clock console timer $(NETWORK) ide
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_FILES), $(wildcard ../$(piece)/$(ARCH)/*.$(OBJEXT))) \

@@ -1,3 +1,12 @@
+2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 368/filesystems
+	* startup/ldsegs.S: Increase alignment.
+	* Makefile.am, configure.ac, include/bsp.h, wrapup/Makefile.am:
+	Added IDE supporting infrastructure.
+	* ide/Makefile.am, ide/ide.c, ide/idecfg.c: New files.  Added
+	BSP support for libchip standard ide driver.
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.
