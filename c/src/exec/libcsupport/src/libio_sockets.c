@@ -51,8 +51,8 @@ int rtems_bsdnet_makeFdForSocket(
   if (iop == 0) {
       errno = ENFILE;
       return -1;
- }
-  iop->flags |= LIBIO_FLAGS_HANDLER_SOCK;
+  }
+  iop->flags |= LIBIO_FLAGS_HANDLER_SOCK | LIBIO_FLAGS_WRITE | LIBIO_FLAGS_READ;
   iop->data1 = so;
   return iop - rtems_libio_iops;
 }
