@@ -89,7 +89,7 @@ using_print_buffer="yes"
 #simulator=/usr1/rtems/work/ada/4.00/ppc_src/b-gdb/sim/ppc/run
 simulator=powerpc-rtems-run 
 instruction_limit=1000000000
-sizeof_ram=4194304
+sizeof_ram=8388608
 
 while getopts vdl:o:s: OPT
 do
