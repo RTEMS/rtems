@@ -18,7 +18,7 @@
  *  $Id$
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 #define __asm__
 
         .globl _ISR_Handler

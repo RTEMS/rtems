@@ -19,7 +19,7 @@
 #include <rtems/score/cpuopts.h>  /* for PPC_HAS_FPU */
 #include <rtems/score/cpu.h>
 #include <libcpu/raw_exception.h>
-#include "asm.h"
+#include <rtems/asm.h>
 
 #define SYNC \
 	sync; \
