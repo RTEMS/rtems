@@ -1,3 +1,7 @@
+2005-03-11	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/init68360.c: Add _RomBase declaration.
+
 2005-02-11	Joel Sherrill <joel@OARcorp.com>
 
 	* include/bsp.h, startup/init68360.c: Correct type of symbols from

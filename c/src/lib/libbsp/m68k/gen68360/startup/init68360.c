@@ -39,6 +39,7 @@ void _Init68360 (void)
 	unsigned long ramSize;
 	extern void _CopyDataClearBSSAndStart (unsigned long ramSize);
 	extern char _RamBase[];
+	extern void *_RomBase;	/* From linkcmds */
 
 #if (defined (__mc68040__))
 	/*
