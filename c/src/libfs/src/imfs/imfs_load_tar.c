@@ -65,54 +65,8 @@
 
 #define MIN(a,b)   ((a)>(b)?(b):(a))
 
-
-/**************************************************************************
- * This converts octal ASCII number representations into an
- * unsigned long.  Only support 32-bit numbers for now.
- *************************************************************************/
-static unsigned long
-octal2ulong(char *octascii, int len)
-{
-   int           i;
-   unsigned long num;
-   unsigned long mult;
-
-   num = 0;
-   mult = 1;
-   for (i=len-1; i>=0; i--)
-   {
-      if ((octascii[i] < '0') || (octascii[i] > '9'))
-         continue;
-
-      num  += mult*((unsigned long)(octascii[i] - '0'));
-      mult *= 8;
-   }
-   return(num);
-}
-
-
-/************************************************************************
- * Compute the TAR checksum and check with the value in 
- * the archive.  The checksum is computed over the entire
- * header, but the checksum field is substituted with blanks.
- ************************************************************************/
-static int
-compute_tar_header_checksum(char *bufr)
-{
-   int  i, sum;
-
-
-   sum = 0;
-   for (i=0; i<512; i++)
-   {
-      if ((i >= 148) && (i < 156))
-         sum += 0xff & ' ';
-      else
-         sum += 0xff & bufr[i];
-   }
-   return(sum);
-}
-
+static unsigned long octal2ulong(char *octascii, int len);
+static int compute_tar_header_checksum(char *bufr);
 
 /**************************************************************************
  * rtems_tarfs_load
@@ -251,3 +205,49 @@ rtems_tarfs_load(char *mountpoint,
    return(status);
 }
 
+/**************************************************************************
+ * This converts octal ASCII number representations into an
+ * unsigned long.  Only support 32-bit numbers for now.
+ *************************************************************************/
+static unsigned long
+octal2ulong(char *octascii, int len)
+{
+   int           i;
+   unsigned long num;
+   unsigned long mult;
+
+   num = 0;
+   mult = 1;
+   for (i=len-1; i>=0; i--)
+   {
+      if ((octascii[i] < '0') || (octascii[i] > '9'))
+         continue;
+
+      num  += mult*((unsigned long)(octascii[i] - '0'));
+      mult *= 8;
+   }
+   return(num);
+}
+
+
+/************************************************************************
+ * Compute the TAR checksum and check with the value in 
+ * the archive.  The checksum is computed over the entire
+ * header, but the checksum field is substituted with blanks.
+ ************************************************************************/
+static int
+compute_tar_header_checksum(char *bufr)
+{
+   int  i, sum;
+
+
+   sum = 0;
+   for (i=0; i<512; i++)
+   {
+      if ((i >= 148) && (i < 156))
+         sum += 0xff & ' ';
+      else
+         sum += 0xff & bufr[i];
+   }
+   return(sum);
+}

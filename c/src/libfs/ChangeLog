@@ -1,3 +1,8 @@
+2001-10-16	Chris Johns <ccj@acm.org>
+
+	* imfs/imfs_load_tar.c: Changed the code around to remove an
+	internal compiler error on the Coldfire target.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
