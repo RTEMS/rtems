@@ -21,10 +21,6 @@ $(LIB): $(OBJS)
 $(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a
-
-all-local: $(ARCH) $(OBJS) $(LIB) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(LIB)
+all-local: $(ARCH) $(OBJS) $(LIB)
 
 include $(top_srcdir)/../automake/local.am
