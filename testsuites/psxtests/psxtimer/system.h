@@ -48,7 +48,7 @@ void *task_c(
 #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES 2
 
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 

@@ -47,7 +47,7 @@ rtems_task Init( rtems_task_argument argument);
 #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES 5
 
 #include <rtems/console.h>
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 #endif /* __rtems__ */
 

@@ -1,5 +1,31 @@
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* psx01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psx02/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psx03/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psx04/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psx05/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psx06/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psx07/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psx08/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psx09/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psx10/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psx11/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psx12/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psx13/main.c: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psxcancel/init.c: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psxchroot01/main.c: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psxfile01/main.c: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psxmount/main.c: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psxmsgq01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psxreaddir/main.c: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psxsem01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psxstat/main.c: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psxtime/main.c: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* psxtimer/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* psxcancel/init.c: Include <rtems/console.h> instead of <console.h>.
 	* psxmount/test.c: Include <rtems/imfs.h> instead of <imfs.h>.
 	* psxreaddir/test.c: Include <rtems/imfs.h> instead of <imfs.h>.

@@ -44,7 +44,7 @@ void *Task_1_through_3(
 #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
         (RTEMS_MINIMUM_STACK_SIZE * 4)
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 

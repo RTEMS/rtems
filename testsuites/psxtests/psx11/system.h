@@ -34,7 +34,7 @@ void *Task_1(
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 
