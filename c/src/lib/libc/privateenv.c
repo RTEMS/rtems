@@ -17,6 +17,8 @@
 #include "config.h"
 #endif
 
+#include <stdlib.h>	/* free */
+
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/libio_.h>

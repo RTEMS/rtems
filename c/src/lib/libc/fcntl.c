@@ -15,6 +15,7 @@
 #include "config.h"
 #endif
 
+#include <stdarg.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
