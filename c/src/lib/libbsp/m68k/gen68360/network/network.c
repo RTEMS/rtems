@@ -11,10 +11,7 @@
  */
 #include <bsp.h>
 #include <m68360.h>
-#include <m68360.h>
 #include <stdio.h>
-#include <stdarg.h>
-#include <stdarg.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 
