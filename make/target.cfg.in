@@ -1,4 +1,5 @@
 #
+# $Id$
 #
 # Target specific settings. 
 #
@@ -10,15 +11,15 @@ CPPFLAGS = @CPPFLAGS@
 DEFS = @DEFS@
 LDFLAGS =
 LIBS = @LIBS@
-CC_FOR_BUILD = gcc
+CC_FOR_BUILD = @CC@
 
-CC_FOR_TARGET = @program_prefix@gcc
-AS_FOR_TARGET = @program_prefix@as
-AR_FOR_TARGET = @program_prefix@ar
-NM_FOR_TARGET = @program_prefix@nm
-LD_FOR_TARGET = @program_prefix@ld
-SIZE_FOR_TARGET = @program_prefix@size
-OBJCOPY_FOR_TARGET = @program_prefix@objcopy
+CC_FOR_TARGET = @CC_FOR_TARGET@
+AS_FOR_TARGET = @AS_FOR_TARGET@
+AR_FOR_TARGET = @AR_FOR_TARGET@
+NM_FOR_TARGET = @NM_FOR_TARGET@
+LD_FOR_TARGET = @LD_FOR_TARGET@
+SIZE_FOR_TARGET = @SIZE_FOR_TARGET@
+OBJCOPY_FOR_TARGET = @OBJCOPY_FOR_TARGET@
 
 CC= $(CC_FOR_TARGET)
 AS= $(AS_FOR_TARGET)
@@ -27,6 +28,9 @@ NM= $(NM_FOR_TARGET)
 AR= $(AR_FOR_TARGET)
 SIZE= $(SIZE_FOR_TARGET)
 OBJCOPY= $(OBJCOPY_FOR_TARGET)
+
+CXX_FOR_TARGET = @CXX_FOR_TARGET@
+CXX=$(CXX_FOR_TARGET)
 
 export CC
 export AS
@@ -51,3 +55,17 @@ XCFLAGS=$(CFLAGS_FOR_TARGET)
 export RTEMS_BSP
 export RTEMS_CUSTOM
 export PROJECT_ROOT
+
+# List (possibly empty) of required managers
+# We require:
+#    region  -- used by lib/libcsupport for malloc()
+#    ext     -- used by libc for libc reentrancy hooks
+
+MANAGERS_REQUIRED=region ext sem
+
+# Create a RTEMS executable based on MANAGERS which was set in
+#  app's Makefile
+
+MANAGERS_NOT_WANTED=$(filter-out $(MANAGERS), $(MANAGER_LIST))
+MANAGERS_NOT_WANTED:=$(filter-out $(MANAGERS_REQUIRED), $(MANAGERS_NOT_WANTED))
+
