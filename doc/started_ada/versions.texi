@@ -86,9 +86,9 @@
 @c  RTEMS Version
 @c
 
-@set RTEMS-VERSION     RTEMS 4.0.0-beta4
-@set RTEMS-TAR         rtems-4.0.0-beta4.tgz
-@set RTEMS-UNTAR       rtems-4.0.0-beta4
+@set RTEMS-VERSION     RTEMS 4.0.0-beta4b
+@set RTEMS-TAR         rtems-4.0.0-beta4b.tgz
+@set RTEMS-UNTAR       rtems-4.0.0-beta4b
 @set RTEMS-FTPSITE     ftp.OARcorp.com
 @set RTEMS-FTPDIR      /oarcorp/private/beta4
 @set BUILDTOOLS-TAR    ada_build_scripts-19981012.tgz
