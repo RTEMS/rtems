@@ -28,6 +28,16 @@ SECTIONS
         _erodata = ALIGN( 0x10 ) ;
 	 _etext = .;
 	
+	/*
+	 * Special FreeBSD sysctl sections.
+	 */
+	. = ALIGN (16);
+	__start_set_sysctl_set = .;
+	*(set_sysctl_*);
+	__stop_set_sysctl_set = ABSOLUTE(.);
+	*(set_domain_*);
+	*(set_pseudo_*);
+
 	___CTOR_LIST__ = .;
 	LONG((___CTOR_END__ - ___CTOR_LIST__) / 4 - 2)
 	*(.ctors)

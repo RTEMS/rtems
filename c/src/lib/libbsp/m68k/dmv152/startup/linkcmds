@@ -2,7 +2,7 @@
  *  This file contains directives for the GNU linker which are specific
  *  to the DY-4 DMV152/SVME153 boards.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2003.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -65,6 +65,16 @@ SECTIONS
 		*crti.o(.fini)
 		*(.fini)
 		*crtn.o(.fini)
+
+		/*
+		 * Special FreeBSD sysctl sections.
+		 */
+		. = ALIGN (16);
+		__start_set_sysctl_set = .;
+		*(set_sysctl_*);
+		__stop_set_sysctl_set = ABSOLUTE(.);
+		*(set_domain_*);
+		*(set_pseudo_*);
 
 		/*
 		 * C++ constructors/destructors

@@ -73,8 +73,8 @@ SECTIONS
    * Text, data and bss segments
    */
    .text : {
-           CREATE_OBJECT_SYMBOLS
-           *(.text)
+	   CREATE_OBJECT_SYMBOLS
+	   *(.text)
 
 	   /*
 	    * C++ constructors/destructors
@@ -84,16 +84,26 @@ SECTIONS
 	   /*
 	    * Initialization and finalization code.
 	    */
-           . = ALIGN (16);
+	   . = ALIGN (16);
 	   PROVIDE (_init = .);
 	   *crti.o(.init)
 	   *(.init)
 	   *crtn.o(.init)
-           . = ALIGN (16);
+	   . = ALIGN (16);
 	   PROVIDE (_fini = .);
 	   *crti.o(.fini)
 	   *(.fini)
 	   *crtn.o(.fini)
+
+	   /*
+	    * Special FreeBSD sysctl sections.
+	    */
+	   . = ALIGN (16);
+	   __start_set_sysctl_set = .;
+	   *(set_sysctl_*);
+	   __stop_set_sysctl_set = ABSOLUTE(.);
+	   *(set_domain_*);
+	   *(set_pseudo_*);
 
 	   /*
 	    * C++ constructors/destructors
@@ -120,7 +130,7 @@ SECTIONS
 	   *(.rodata*)
 	   *(.gnu.linkonce.r*)
 
-           . = ALIGN (16);
+	   . = ALIGN (16);
            PROVIDE (etext = .);
 
    } > ram

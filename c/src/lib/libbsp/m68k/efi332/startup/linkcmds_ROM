@@ -102,6 +102,16 @@ SECTIONS
 		*crtn.o(.fini)
 
 		/*
+		 * Special FreeBSD sysctl sections.
+		 */
+		. = ALIGN (16);
+		__start_set_sysctl_set = .;
+		*(set_sysctl_*);
+		__stop_set_sysctl_set = ABSOLUTE(.);
+		*(set_domain_*);
+		*(set_pseudo_*);
+
+		/*
 		 * C++ constructors/destructors
      		 *
      		 * gcc uses crtbegin.o to find the start of the constructors
@@ -115,10 +125,10 @@ SECTIONS
 		 */
 		. = ALIGN (16);
 		*crtbegin.o(.ctors)
-    *(.ctors)
+		*(.ctors)
 		*crtend.o(.ctors)
 		*crtbegin.o(.dtors)
-    *(.dtors)
+		*(.dtors)
 		*crtend.o(.dtors)
 
 		/*
@@ -142,7 +152,7 @@ SECTIONS
 	AT ( ADDR(.text) + SIZEOF( .text ) )
   {
                 PROVIDE (_copy_start = .);
-    *(.data)
+		*(.data)
 		*(.gnu.linkonce.d*)
 		*(.gcc_except_table)
                 . = ALIGN (16);
@@ -151,8 +161,8 @@ SECTIONS
         } >ram
         .bss : {
                 _clear_start = .;
-    *(.bss)
-    *(COMMON)
+		*(.bss)
+		*(COMMON)
                 . = ALIGN (16);
                 PROVIDE (end = .);
 
