@@ -84,7 +84,7 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
 
 /*PAGE
  *
- *  _POSIX_Threads_Initialize_user_tasks
+ *  _POSIX_Threads_Initialize_user_threads
  *
  *  This routine creates and starts all configured user
  *  initialzation threads.
@@ -94,26 +94,27 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
  *  Output parameters:  NONE
  */
  
-void _POSIX_Threads_Initialize_user_tasks( void )
+void _POSIX_Threads_Initialize_user_threads( void )
 {
-  int                               status;
-  unsigned32                        index;
-  unsigned32                        maximum;
-  posix_initialization_tasks_table *user_tasks;
-  pthread_t                         thread_id;
+  int                                 status;
+  unsigned32                          index;
+  unsigned32                          maximum;
+  posix_initialization_threads_table *user_threads;
+  pthread_t                           thread_id;
  
-  /*
-   *  NOTE:  This is slightly different from the Ada implementation.
-   */
- 
-  user_tasks = _POSIX_Threads_User_initialization_tasks;
-  maximum    = _POSIX_Threads_Number_of_initialization_tasks;
+  user_threads = _POSIX_Threads_User_initialization_threads;
+  maximum      = _POSIX_Threads_Number_of_initialization_threads;
 
-  if ( !user_tasks || maximum == 0 )
+  if ( !user_threads || maximum == 0 )
     return;
  
   for ( index=0 ; index < maximum ; index++ ) {
-    status = pthread_create(&thread_id,  NULL, user_tasks[ index ].entry, NULL);
+    status = pthread_create(
+      &thread_id,
+      NULL,
+      user_threads[ index ].entry,
+      NULL
+    );
     assert( !status );
   }
 }
@@ -121,7 +122,7 @@ void _POSIX_Threads_Initialize_user_tasks( void )
 API_extensions_Control _POSIX_Threads_API_extensions = {
   { NULL, NULL },
   NULL,                                     /* predriver */
-  _POSIX_Threads_Initialize_user_tasks,     /* postdriver */
+  _POSIX_Threads_Initialize_user_threads,   /* postdriver */
   NULL,                                     /* post switch */
 };
  
@@ -151,22 +152,22 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
  */
  
 void _POSIX_Threads_Manager_initialization(
-  unsigned32                        maximum_pthreads,
-  unsigned32                        number_of_initialization_tasks,
-  posix_initialization_tasks_table *user_tasks
+  unsigned32                          maximum_pthreads,
+  unsigned32                          number_of_initialization_threads,
+  posix_initialization_threads_table *user_threads
   
 )
 {
-  _POSIX_Threads_Number_of_initialization_tasks = 
-                                                 number_of_initialization_tasks;
-  _POSIX_Threads_User_initialization_tasks = user_tasks;
+  _POSIX_Threads_Number_of_initialization_threads = 
+                                           number_of_initialization_threads;
+  _POSIX_Threads_User_initialization_threads = user_threads;
 
   /*
    *  There may not be any POSIX initialization threads configured.
    */
 
 #if 0
-  if ( user_tasks == NULL || number_of_initialization_tasks == 0 )
+  if ( user_threads == NULL || number_of_initialization_threads == 0 )
     _Internal_error_Occurred( INTERNAL_ERROR_POSIX_API, TRUE, EINVAL );
 #endif
 

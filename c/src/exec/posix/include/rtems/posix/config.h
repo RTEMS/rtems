@@ -39,15 +39,15 @@ extern "C" {
 
 typedef struct {
   void       *(*entry)(void *);
-} posix_initialization_tasks_table;
+} posix_initialization_threads_table;
 
 typedef struct {
-  int                               maximum_threads;
-  int                               maximum_mutexes;
-  int                               maximum_condition_variables;
-  int                               maximum_keys;
-  int                               number_of_initialization_tasks;
-  posix_initialization_tasks_table *User_initialization_tasks_table;
+  int                                 maximum_threads;
+  int                                 maximum_mutexes;
+  int                                 maximum_condition_variables;
+  int                                 maximum_keys;
+  int                                 number_of_initialization_tasks;
+  posix_initialization_threads_table *User_initialization_tasks_table;
 } posix_api_configuration_table;
 
 #ifdef __cplusplus

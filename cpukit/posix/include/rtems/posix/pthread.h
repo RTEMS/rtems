@@ -38,12 +38,12 @@ typedef Thread_Control POSIX_Threads_Control;
 POSIX_EXTERN Objects_Information  _POSIX_Threads_Information;
 
 /*
- *  These are used to manage the user initialization tasks.
+ *  These are used to manage the user initialization threads.
  */
  
-POSIX_EXTERN posix_initialization_tasks_table 
-                   *_POSIX_Threads_User_initialization_tasks;
-POSIX_EXTERN unsigned32   _POSIX_Threads_Number_of_initialization_tasks;
+POSIX_EXTERN posix_initialization_threads_table 
+                   *_POSIX_Threads_User_initialization_threads;
+POSIX_EXTERN unsigned32   _POSIX_Threads_Number_of_initialization_threads;
 
  
 /*
@@ -55,9 +55,9 @@ POSIX_EXTERN unsigned32   _POSIX_Threads_Number_of_initialization_tasks;
  */
  
 void _POSIX_Threads_Manager_initialization(
-  unsigned32                        maximum_pthreads,
-  unsigned32                        number_of_initialization_tasks,
-  posix_initialization_tasks_table *user_tasks
+  unsigned32                          maximum_pthreads,
+  unsigned32                          number_of_initialization_threads,
+  posix_initialization_threads_table *user_threads
 );
  
 /*
