@@ -585,7 +585,7 @@ dont_fix_pil2:
          */
 
         sethi    %hi(SYM(_ISR_Vector_table)), %g4
-        or       %g4, %lo(SYM(_ISR_Vector_table)), %g4
+        ld       [%g4+%lo(SYM(_ISR_Vector_table))], %g4
         and      %l3, 0xFF, %g5         ! remove synchronous trap indicator
         sll      %g5, 2, %g5            ! g5 = offset into table
         ld       [%g4 + %g5], %g4       ! g4 = _ISR_Vector_table[ vector ]

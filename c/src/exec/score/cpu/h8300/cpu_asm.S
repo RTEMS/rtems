@@ -128,7 +128,7 @@ nested:
 	
 /* Vector to ISR */
 
-	mov.l	#__ISR_Vector_table,er1
+	mov.l	@__ISR_Vector_table,er1
 	mov		er0,er2	; copy vector
 	shll.l	er2
 	shll.l	er2		; vector = vector * 4 (sizeof(int))

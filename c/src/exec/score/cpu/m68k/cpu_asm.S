@@ -177,10 +177,10 @@ SYM (_ISR_Handler):
 	addql   #1,SYM (_ISR_Nest_level) | one nest level deeper
 #endif /* CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 */
 
+        movel   SYM (_ISR_Vector_table),a0 | a0= base of RTEMS table
 #if ( M68K_HAS_PREINDEXING == 1 )
-        movel   @( SYM (_ISR_Vector_table),d0:w:1),a0| fetch the ISR
+        movel   (a0,d0:w:1),a0           | a0 = address of user routine
 #else
-        movel   # SYM (_ISR_Vector_table),a0   | a0 = base of RTEMS table
         addal   d0,a0                    | a0 = address of vector
         movel   (a0),a0                  | a0 = address of user routine
 #endif

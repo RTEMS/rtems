@@ -718,7 +718,15 @@ SCORE_EXTERN unsigned8 _CPU_Trap_Table_area[ 8192 ]
 extern unsigned int sparc_disable_interrupts();
 extern void sparc_enable_interrupts();
 
-/* ISR handler macros */
+/*
+ *  ISR handler macros
+ */
+
+/*
+ *  Support routine to initialize the RTEMS vector table after it is allocated.
+ */
+
+#define _CPU_Initialize_vectors()
 
 /*
  *  Disable all interrupts for a critical section.  The previous

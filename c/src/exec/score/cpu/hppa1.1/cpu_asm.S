@@ -311,6 +311,7 @@ stack_done:
         .import   _ISR_Vector_table,data
 	ldil	  L%_ISR_Vector_table,%r8
 	ldo	  R%_ISR_Vector_table(%r8),%r8
+        ldw       (%r8),%r8
         ldwx,s    %r9(%r8),%r8
 
 /*

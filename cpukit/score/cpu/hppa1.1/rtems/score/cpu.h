@@ -338,13 +338,21 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  ISR handler macros
  *
  *  These macros perform the following functions:
+ *     + initialize the RTEMS vector table
  *     + disable all maskable CPU interrupts
  *     + restore previous interrupt level (enable)
  *     + temporarily restore interrupts (flash)
  *     + set a particular level
  */
 
+/*
+ *  Support routine to initialize the RTEMS vector table after it is allocated.
+ */
+
+#define _CPU_Initialize_vectors()
+
 /* Disable interrupts; returning previous psw bits in _isr_level */
+
 #define _CPU_ISR_Disable( _isr_level ) \
   do { \
          HPPA_ASM_RSM(HPPA_PSW_I, _isr_level);         \
@@ -353,7 +361,9 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
   } while(0)
 
 /* Enable interrupts to previous level from _CPU_ISR_Disable
- * does not change 'level' */
+ * does not change 'level'
+ */
+
 #define _CPU_ISR_Enable( _isr_level )  \
   { \
         register int _ignore; \

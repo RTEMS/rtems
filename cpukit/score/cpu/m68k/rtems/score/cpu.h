@@ -309,11 +309,14 @@ SCORE_EXTERN _CPU_ISR_handler_entry _CPU_ISR_jump_table[256];
  *  ISR handler macros
  *
  *  These macros perform the following functions:
+ *     + initialize the RTEMS vector table
  *     + disable all maskable CPU interrupts
  *     + restore previous interrupt level (enable)
  *     + temporarily restore interrupts (flash)
  *     + set a particular level
  */
+
+#define _CPU_Initialize_vectors()
 
 #define _CPU_ISR_Disable( _level ) \
   m68k_disable_interrupts( _level )
