@@ -23,22 +23,38 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-int
-__fstat(int _fd, struct stat* _sbuf)
+/*
+ *  check this newlib bug?:
+ *
+ *  newlib/libc/stdio/makebuf.c:
+ *
+ *  2nd ifdef uses 1024 instead of BUFSIZ
+ *  2nd check lets fp blksize be 0
+ *  finally look at the malloc
+ */
+
+/*
+ *  fstat, stat, and isatty must lie consistently and report that everything
+ *  is a tty or stdout will not be line buffered.
+ */
+
+int __fstat(int _fd, struct stat* _sbuf)
 {
-  return -1;
+  _sbuf->st_mode = S_IFCHR;
+#ifdef HAVE_BLKSIZE
+  _sbuf->st_blksize = 0;
+#endif
+  return 0;
 }
 
-int
-__isatty(int _fd)
+int __isatty(int _fd)
 {
   return 1;
 }
 
 int stat( const char *path, struct stat *buf )
 {
-  /* always fail */
-  return -1;
+  return __fstat( 0, buf );
 }
 
 int link( const char *existing, const char *new )
