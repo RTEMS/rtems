@@ -1,3 +1,8 @@
+2004-01-21	Joel Sherrill <joel@OARcorp.com>
+
+	PR 557/bsps
+	* cpu.c: Removed. File appears to have been orphaned around June 2000
+
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Split the blob of *.o into cache.rel, page.rel and
