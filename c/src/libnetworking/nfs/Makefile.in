@@ -26,7 +26,8 @@ include $(RTEMS_ROOT)/make/lib.cfg
 # Add local stuff here using +=
 #
 
-DEFINES  +=
+DEFINES  += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
+    -DDIAGNOSTIC -DBOOTP_COMPAT
 CPPFLAGS +=
 CFLAGS   +=
 

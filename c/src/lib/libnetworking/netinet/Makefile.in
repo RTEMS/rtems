@@ -16,7 +16,7 @@ C_PIECES=if_ether \
         igmp \
         in in_cksum in_pcb in_proto in_rmx \
         ip_divert ip_fw ip_icmp ip_input ip_mroute ip_output \
-        raw_ip \ 
+        raw_ip \
         tcp_debug tcp_input tcp_output tcp_subr tcp_timer tcp_usrreq \
         udp_usrreq
 C_FILES=$(C_PIECES:%=%.c)
@@ -32,7 +32,8 @@ include $(RTEMS_ROOT)/make/lib.cfg
 # Add local stuff here using +=
 #
 
-DEFINES  +=
+DEFINES  += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
+    -DDIAGNOSTIC -DBOOTP_COMPAT
 CPPFLAGS +=
 CFLAGS   +=
 

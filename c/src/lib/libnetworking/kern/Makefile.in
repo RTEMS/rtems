@@ -8,7 +8,7 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-LIBNAME=kern.a
+LIBNAME=lib.a
 LIB=${ARCH}/${LIBNAME}
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
@@ -26,7 +26,8 @@ include $(RTEMS_ROOT)/make/lib.cfg
 # Add local stuff here using +=
 #
 
-DEFINES  +=
+DEFINES  += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
+     -DDIAGNOSTIC -DBOOTP_COMPAT
 CPPFLAGS +=
 CFLAGS   +=
 

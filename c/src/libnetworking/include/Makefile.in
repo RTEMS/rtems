@@ -1,0 +1,65 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH = @srcdir@
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+H_PIECES=bpfilter loop netdb networkconfig opt_ipfw opt_mrouting \
+    opt_tcpdebug poll resolv syslog
+H_FILES=$(H_PIECES:%=$(srcdir)/../%.h)
+
+SYS_H_PIECES=buf callout cdefs conf domain filio ioccom ioctl kernel \
+    libkern malloc mbuf mount param proc protosw queue reboot \
+    resourcevar rtprio select signalvar socket socketvar \
+    sockio sysctl syslimits syslog systm ttycom ttydefaults \
+    ucred uio
+SYS_H_FILES=$(SYS_H_PIECES:%=$(srcdir)/../sys/%.h)
+
+RTEMS_H_PIECES= rtems_bsdnet 
+RTEMS_H_FILES=$(RTEMS_H_PIECES:%=$(srcdir)/../rtems/%.h)
+
+MACHINE_H_PIECES= conf cpu cpufunc endian in_cksum limits param types vmparam
+MACHINE_H_FILES=$(MACHINE_H_PIECES:%=$(srcdir)/../machine/%.h)
+
+VM_H_PIECES= vm vm_extern vm_kern vm_param
+VM_H_FILES=$(VM_H_PIECES:%=$(srcdir)/../vm/%.h)
+
+NET_H_PIECES= bpf ethernet if if_arp if_dl if_llc if_types netisr \
+    radix raw_cb route
+NET_H_FILES=$(NET_H_PIECES:%=$(srcdir)/../net/%.h)
+
+NETINET_H_PIECES= icmp_var if_ether igmp igmp_var in in_pcb in_systm in_var \
+    ip ip_fw ip_icmp ip_mroute ip_var tcp tcp_debug tcp_fsm \
+    tcp_seq tcp_timer tcp_var tcpip udp udp_var
+NETINET_H_FILES=$(NETINET_H_PIECES:%=$(srcdir)/../netinet/%.h)
+
+ARPA_H_PIECES= ftp inet nameser nameser_compat telnet
+ARPA_H_FILES=$(ARPA_H_PIECES:%=$(srcdir)/../arpa/%.h)
+
+NFS_H_PIECES= krpc nfs nfsdiskless nfsproto rpcv2 xdr_subs
+NFS_H_FILES=$(NFS_H_PIECES:%=$(srcdir)/../nfs/%.h)
+
+SRCS=$(H_FILES) $(SYS_H_FILES) $(RTEMS_H_FILES) $(MACHINE_H_FILES) \
+     $(VM_H_FILES) $(NET_H_FILES) $(NETINET_H_FILES) $(ARPA_H_FILES) \
+     $(NFS_H_FILES)
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+all:	$(SRCS)
+	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/networking
+	$(INSTALL) -m 444 $(SYS_H_FILES) $(PROJECT_INCLUDE)/networking/sys
+	$(INSTALL) -m 444 $(RTEMS_H_FILES) $(PROJECT_INCLUDE)/networking/rtems
+	$(INSTALL) -m 444 $(MACHINE_H_FILES) $(PROJECT_INCLUDE)/networking/machine
+	$(INSTALL) -m 444 $(VM_H_FILES) $(PROJECT_INCLUDE)/networking/vm
+	$(INSTALL) -m 444 $(NET_H_FILES) $(PROJECT_INCLUDE)/networking/net
+	$(INSTALL) -m 444 $(NETINET_H_FILES) $(PROJECT_INCLUDE)/networking/netinet
+	$(INSTALL) -m 444 $(ARPA_H_FILES) $(PROJECT_INCLUDE)/networking/arpa
+	$(INSTALL) -m 444 $(NFS_H_FILES) $(PROJECT_INCLUDE)/networking/nfs
