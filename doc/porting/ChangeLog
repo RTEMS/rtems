@@ -1,3 +1,7 @@
+2003-04-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sourcecode.t: cpukit/score/cpu.
+
 2003-02-11	Joel Sherrill <joel@OARcorp.com>
 
 	* interrupts.t: Rework logic that decides when to call
