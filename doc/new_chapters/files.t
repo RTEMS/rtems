@@ -17,7 +17,6 @@ The directives provided by the files and directories manager are:
 @itemize @bullet
 @item @code{opendir} - Open a Directory
 @item @code{readdir} - Reads a directory
-@item @code{readdir_r} - 
 @item @code{rewinddir} - Resets the @code{readdir()} pointer 
 @item @code{scandir} - Scan a directory for matching entries
 @item @code{telldir} - Return current location in directory stream
@@ -41,7 +40,7 @@ The directives provided by the files and directories manager are:
 @item @code{fchmod} - Changes permissions of a file
 @item @code{chown} - Changes the owner and/ or group of a file
 @item @code{utime} - Change access and/or modification times of an inode
-@item @code{ftrunctate} - 
+@item @code{ftruncate} - Truncate a file to a specified length
 @item @code{pathconf} - Gets configuration values for files
 @item @code{fpathconf} - Get configuration values for files
 @end itemize
@@ -82,10 +81,21 @@ int opendir(
 @item EACCES
 Search permission was denied on a component of the path
 prefix of @code{dirname}, or read permission is denied
-for the directory itself.
 
-@item E
-The
+@item EMFILE
+Too many file descriptors in use by process
+
+@item ENFILE
+Too many files are currently open in the system.
+
+@item ENOENT
+Directory does not exist, or @code{name} is an empty string.
+
+@item ENOMEM
+Insufficient memory to complete the operation.
+
+@item ENOTDIR
+@item{Name} is not a directory.
 
 @end table
 
@@ -148,36 +158,7 @@ the results are not portable and are probably disastrous.
 The routine is implemented in Cygnus newlib.
 
 @page
-@subsection readdir_r - 
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int readdir_r(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@table @b
-@item E
-The
-
-@end table
-
-@subheading DESCRIPTION:
-
-@subheading NOTES:
-
-XXX must be implemented in RTEMS.
-
-@page
-@subsection rewinddir - Resets the @code{readdir()} pointer
+@subsection rewinddir - Resets the readdir() pointer
 
 @subheading CALLING SEQUENCE:
 
@@ -186,7 +167,8 @@ XXX must be implemented in RTEMS.
 #include <sys/types.h>
 #include <dirent.h>
 
-void rewinddir(DIR *dirp
+void rewinddir(
+  DIR *dirp
 );
 @end example
 @end ifset
@@ -218,10 +200,11 @@ The routine is implemented in Cygnus newlib.
 @example
 #include <dirent.h>
 
-int scandir(const char      *dir,
-            struct direct ***namelist,
-            int (*select)(const struct dirent *),
-            int (*compar)(const struct dirent **, const struct dirent **)
+int scandir(
+  const char      *dir,
+  struct direct ***namelist,
+  int (*select)(const struct dirent *),
+  int (*compar)(const struct dirent **, const struct dirent **)
 );
 @end example
 @end ifset
@@ -259,7 +242,8 @@ The routine is implemented in Cygnus newlib.
 @example
 #include <dirent.h>
 
-off_t telldir( DIR *dir
+off_t telldir(
+  DIR *dir
 );
 @end example
 @end ifset
@@ -295,7 +279,8 @@ The routine is implemented in Cygnus newlib.
 #include <sys/types.h>
 #include <dirent.h>
 
-int closedir(DIR *dirp
+int closedir(
+  DIR *dirp
 );
 @end example
 @end ifset
@@ -334,7 +319,8 @@ The routine is implemented in Cygnus newlib.
 @example
 #include <unistd.h>
 
-int chdir( const char  *path
+int chdir(
+  const char  *path
 );
 @end example
 @end ifset
@@ -370,7 +356,9 @@ searches of pathnames not beginning with a slash.
 If @code{chdir()} detects an error, the current working directory is not 
 changed.
 
-@subheading NOTES: None
+@subheading NOTES:
+
+None
 
 @page
 @subsection getcwd - Gets current working directory 
@@ -381,8 +369,7 @@ changed.
 @example
 #include <unistd.h>
 
-int getcwd(
-);
+int getcwd( void );
 @end example
 @end ifset
 
@@ -547,8 +534,9 @@ descriptor.
 #include <sys/stat.h>
 #include <fcntl.h>
 
-int creat(const char *path, 
-          mode_t      mode
+int creat(
+  const char *path, 
+  mode_t      mode
 );
 @end example
 @end ifset
@@ -560,20 +548,20 @@ int creat(const char *path,
 
 @table @b
 @item EEXIST
-@code{Path} already exists and O_CREAT and O_EXCL were used.
+@code{path} already exists and O_CREAT and O_EXCL were used.
 @item EISDIR
-@code{Path} refers to a directory and the access requested involved
+@code{path} refers to a directory and the access requested involved
 writing
 @item ETXTBSY
-@code{Path} refers to an executable image which is currently being
+@code{path} refers to an executable image which is currently being
 executed and write access was requested
 @item EFAULT
-@code{Path} points outside your accessible address space
+@code{path} points outside your accessible address space
 @item EACCES
 The requested access to the file is not allowed, or one of the 
 directories in @code{path} did not allow search (execute) permission.
 @item ENAMETOOLONG
-@code{Path} was too long.
+@code{path} was too long.
 @item ENOENT
 A directory component in @code{path} does not exist or is a dangling
 symbolic link.
@@ -588,7 +576,7 @@ reached.
 @item ENOMEM
 Insufficient kernel memory was available.
 @item EROFS
-@code{Path} refers to a file on a read-only filesystem and write access
+@code{path} refers to a file on a read-only filesystem and write access
 was requested
 
 @end table
@@ -598,7 +586,9 @@ was requested
 @code{creat} attempts to create a file and return a file descriptor for
 use in read, write, etc.
 
-@subheading NOTES: None
+@subheading NOTES:
+
+None
 
 The routine is implemented in Cygnus newlib.
 
@@ -631,7 +621,9 @@ The file creation mask is used during @code{open()}, @code{creat()}, @code{mkdir
 Bit positions that are set in @code{cmask} are cleared in the mode of the
 created file.
 
-@subheading NOTES: None
+@subheading NOTES:
+
+None
 
 The @code{cmask} argument should have only permission bits set.  All other 
 bits should be zero.
@@ -700,7 +692,9 @@ The @code{existing} argument should not be a directory.
 
 The callder may (or may not) need permission to access the existing file.
 
-@subheading NOTES: None
+@subheading NOTES:
+
+None
 
 @page
 @subsection mkdir - Makes a directory
@@ -756,7 +750,9 @@ and group ID.
 The new directory may (or may not) contain entries for.. and .. but is otherwise
 empty.
 
-@subheading NOTES: None
+@subheading NOTES:
+
+None
 
 @page
 @subsection mkfifo - Makes a FIFO special file
@@ -769,8 +765,9 @@ empty.
 #include <sys/stat.h>
 
 
-int mkfifo(const char *path,
-           mode_t      mode
+int mkfifo(
+  const char *path,
+  mode_t      mode
 );
 @end example
 @end ifset
@@ -804,7 +801,9 @@ The permission bits (modified by the file creation mask) are set from
 @code{mode}.  The owner and group IDs for the FIFO are set from the efective
 user ID and group ID.
 
-@subheading NOTES: None
+@subheading NOTES:
+
+None
 
 @page
 @subsection unlink - Removes a directory entry
@@ -854,7 +853,9 @@ link count of the file referenced by the link.  When the link count goes to zero
 and no process has the file open, the space occupied by the file is freed and the
 file is no longer accessible. 
 
-@subheading NOTES: None
+@subheading NOTES:
+
+None
 
 @page
 @subsection rmdir - Delete a directory 
@@ -865,7 +866,8 @@ file is no longer accessible.
 @example
 #include <unistd.h>
 
-int rmdir(const char *pathname
+int rmdir(
+  const char *pathname
 );
 @end example
 @end ifset
@@ -880,7 +882,7 @@ int rmdir(const char *pathname
 The filesystem containing @code{pathname} does not support the removal
 of directories.
 @item EFAULT
-@cdoe{Pathname} points ouside your accessible address space.
+@code{pathname} points ouside your accessible address space.
 @item EACCES
 Write access to the directory containing @code{pathname} was not
 allowed for the process's effective uid, or one of the directories in 
@@ -890,27 +892,27 @@ The directory containing @code{pathname} has the stickybit (S_ISVTX)
 set and the process's effective uid is neither the uid of the file to 
 be delected nor that of the director containing it.
 @item ENAMETOOLONG
-@code{Pathname} was too long.
+@code{pathname} was too long.
 @item ENOENT
 A dirctory component in @code{pathname} does not exist or is a 
 dangling sybolic link.
 @item ENOTDIR
-@code{Pathname}, or a component used as a directory in @code{pathname},
+@code{pathname}, or a component used as a directory in @code{pathname},
 is not, in fact, a directory.
 @item ENOTEMPTY
-@code{Pathname} contains entries other than . and .. .
+@code{pathname} contains entries other than . and .. .
 @item EBUSY
-@code{Pathname} is the current working directory or root directory of 
+@code{pathname} is the current working directory or root directory of 
 some process
 @item EBUSY
-@code{Pathname} is the current directory or root directory of some 
+@code{pathname} is the current directory or root directory of some 
 process.
 @item ENOMEM
 Insufficient kernel memory was available
 @item EROGS
-@code{Pathname} refers to a file on a read-only filesystem.
-@itemELOOP
-@code{Pathname} contains a reference to a circular symbolic link
+@code{pathname} refers to a file on a read-only filesystem.
+@item ELOOP
+@code{pathname} contains a reference to a circular symbolic link
 
 @end table
 
@@ -919,7 +921,9 @@ Insufficient kernel memory was available
 @code{rmdir} deletes a directory, whic must be empty
 
 
-@subheading NOTES: None
+@subheading NOTES:
+
+None
 
 @page
 @subsection rename - Renames a file 
@@ -930,8 +934,9 @@ Insufficient kernel memory was available
 @example
 #include <unistd.h>
 
-int rename(const char *old, 
-           const char *new
+int rename(
+  const char *old, 
+  const char *new
 );
 @end example
 @end ifset
@@ -1005,8 +1010,9 @@ The routine is implemented in Cygnus newlib using @code{link()} and
 #include <sys/types.h>
 #include <sys/stat.h>
 
-int stat(const char  *path, 
-         struct stat *buf
+int stat(
+  const char  *path, 
+  struct stat *buf
 );
 @end example
 @end ifset
@@ -1040,7 +1046,9 @@ in @code{path} must be searchable.  The @code{stat()} function obtains
 information about the named file and writes it to the area pointed to by
 @code{but}.
 
-@subheading NOTES: None
+@subheading NOTES:
+
+None
 
 @page
 @subsection fstat - Gets file status 
@@ -1052,8 +1060,9 @@ information about the named file and writes it to the area pointed to by
 #include <sys/types.h>
 #include <sys/stat.h>
 
-int fstat(int fildes,
-          struct stat *buf
+int fstat(
+  int fildes,
+  struct stat *buf
 );
 @end example
 @end ifset
@@ -1086,8 +1095,9 @@ to by the @code{buf} argument.
 @example
 #include <unistd.h>
 
-int access(const char *pathname,
-           int         mode
+int access(
+  const char *pathname,
+  int         mode
 );
 @end example
 @end ifset
@@ -1102,11 +1112,11 @@ int access(const char *pathname,
 The requested access would be denied, either to the file itself or
 one of the directories in @code{pathname}.
 @item EFAULT
-@code{Pathname} points outside your accessible address space.
+@code{pathname} points outside your accessible address space.
 @item EINVAL
 @code{Mode} was incorrectly specified.
 @item ENAMETOOLONG
-@code{Pathname} is too long.
+@code{pathname} is too long.
 @item ENOENT
 A directory component in @code{pathname} would have been accessible but
 does not exist or was a dangling symbolic link.
@@ -1127,7 +1137,9 @@ file referred by this symbolic link are tested.
 
 @code{Mode} is a mask consisting of one or more of R_OK, W_OK, X_OK and F_OK.
 
-@subheading NOTES: None
+@subheading NOTES:
+
+None
 
 @page
 @subsection chmod - Changes file mode.
@@ -1190,8 +1202,9 @@ the appropriate privileges, @code{chmod()} returns -1 and sets @code{errno} to
 #include <sys/types.h>
 #include <sys/stat.h>
 
-int fchmod(int    fildes, 
-           mote_t mode
+int fchmod(
+  int    fildes, 
+  mode_t mode
 );
 @end example
 @end ifset
@@ -1207,11 +1220,11 @@ Search permission is denied for a directory in a file's path prefix.
 @item EBADF
 The descriptor is not valid.
 @item EFAULT
-@code{Path} points outside your accessible address space.
+@code{path} points outside your accessible address space.
 @item EIO
 A low-level I/o error occurred while modifying the inode.
 @item ELOOP
-@code{Path} contains a circular reference
+@code{path} contains a circular reference
 @item ENAMETOOLONG
 Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is
 in effect.
@@ -1234,7 +1247,9 @@ Read-only file system
 The mode of the file given by @code{path} or referenced by 
 @code{filedes} is changed. 
 
-@subheading NOTES: None
+@subheading NOTES:
+
+None
 
 @page
 @subsection getdents - Get directory entries
@@ -1247,9 +1262,10 @@ The mode of the file given by @code{path} or referenced by
 #include <linux/dirent.h>
 #include <linux/unistd.h>
 
-long getdents(int   dd_fd,
-              char *dd_buf,
-              int   dd_len
+long getdents(
+  int   dd_fd,
+  char *dd_buf,
+  int   dd_len
 );
 @end example
 @end ifset
@@ -1330,7 +1346,7 @@ still be changed to one of the supplementary group IDs.
 @subheading NOTES:
 
 This function may be restricted for some file.  The @code{pathconf} function
-can be used to test the _PC_CHOWN_RESTRICTED flag.
+can be used to test the @code{_PC_CHOWN_RESTRICTED} flag.
 
 
 
@@ -1343,8 +1359,9 @@ can be used to test the _PC_CHOWN_RESTRICTED flag.
 @example
 #include <sys/types.h>
 
-int utime(const char     *filename,
-          struct utimbuf *buf
+int utime(
+  const char     *filename,
+  struct utimbuf *buf
 );
 @end example
 @end ifset
@@ -1369,16 +1386,20 @@ specified by @code{filename} to the @code{actime} and @code{modtime}
 fields of @code{buf} respectively.  If @code{buf} is NULL, then the 
 access and modification times of the file are set to the current time.  
 
-@subheading NOTES:
+@subheading NOTES: None
 
 @page
-@subsection ftrunctate - 
+@subsection ftruncate - truncate a file to a specified length
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
+#include <unistd.h>
+
 int ftrunctate(
+  const char *path,
+  size_t      length
 );
 @end example
 @end ifset
@@ -1389,14 +1410,58 @@ int ftrunctate(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item ENOTDIR
+A component of the path prefix is not a directory.
+
+@item EINVAL
+The pathname contains a character with the high-order bit set.
+
+@item ENAMETOOLONG
+A component of a pathname exceeded 255 characters, or an entire
+path name exceeded 1023 characters.
+
+@item ENOENT
+The named file does not exist.
+
+@item EACCES
+The named file is not writable by the user.
+
+@item EACCES
+Search permission is denied for a component of the path prefix.
+
+@item ELOOP
+Too many symbolic links were encountered in translating the 
+pathname
+
+@item EISDIR
+The named file is a directory.
+
+@item EROFS
+The named file resides on a read-only file system
+
+@item ETXTBSY
+The file is a pure procedure (shared text) file that is being 
+executed
+
+@item EIO
+An I/O error occurred updating the inode.
+
+@item EFAULT
+@code{Path} points outside the process's allocated address space.
+
+@item EBADF
+The @code{fd} is not a valid descriptor.
 
 @end table
 
 @subheading DESCRIPTION:
 
-@subheading NOTES:
+2code{Truncate} causes the file named by @code{path} or referenced by 
+@code{fd} to be truncated to at most @code{length} bytes in size.  If the  
+file previously was larger than this size, the extra data is lost.  With 
+@code{ftruncate}, the file must be open for writing.
+
+@subheading NOTES: None
 
 @page
 @subsection pathconf - Gets configuration values for files
@@ -1407,8 +1472,9 @@ The
 @example
 #include <unistd.h>
 
-int pathconf(const char *path,
-             int         name
+int pathconf(
+  const char *path,
+  int         name
 );
 @end example
 @end ifset
@@ -1421,13 +1487,17 @@ int pathconf(const char *path,
 @table @b
 @item EINVAL
 Invalid argument
+
 @item EACCES
 Permission to write the file is denied
+
 @item ENAMETOOLONG
 Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC
 is in effect.
+
 @item ENOENT
 A file or directory does not exist
+
 @item ENOTDIR
 A component of the specified @code{path} was not a directory whan a 
 directory was expected.
@@ -1442,37 +1512,37 @@ for the open file descriptor @code{filedes}.
 The possible values for name are:
 
 @table @b
-@item_PC_LINK_MAX
+@item _PC_LINK_MAX
 returns the maximum number of links to the file.  If @code{filedes} or 
 @code{path} refer to a directory, then the value applies to the whole
 directory.  The corresponding macro is _POSIX_LINK_MAX.
 
-@item_PC_MAX_CANON
+@item _PC_MAX_CANON
 returns  the maximum length of a formatted input line, where @code{filedes}
 or @code{path} must refer to a terminal.  The corresponding macro is 
 _POSIX_MAX_CANON.
 
-@item_PC_MAX_INPUT
+@item _PC_MAX_INPUT
 returns the maximum length of an input line, where @code{filedes} or 
 @code{path} must refer to a terminal.  The corresponding macro is 
 _POSIX_MAX_INPUT.
 
-@item_PC_NAME_MAX
+@item _PC_NAME_MAX
 returns the maximum length of a filename in the directory @code{path} or 
 @code{filedes}.  The process is allowed to create. The corresponding macro 
 is _POSIX_NAME_MAX.
 
-@item_PC_PATH_MAX
+@item _PC_PATH_MAX
 returns the maximum length of a relative pathname when @code{path} or 
 @code{filedes} is the current working directory.  The corresponding macro 
 is _POSIX_PATH_MAX.
 
-@item_PC_PIPE_BUF
+@item _PC_PIPE_BUF
 returns the size of the pipe buffer, where @code{filedes} must refer to a 
 pipe or FIFO and @code{path} must refer to a FIFO.  The corresponding macro 
 is _POSIX_PIPE_BUF.
 
-@item_PC_CHOWN_RESTRICTED
+@item _PC_CHOWN_RESTRICTED
 returns nonzero if the chown(2) call may not be used on this file.  If 
 @code{filedes} or @code{path} refer to a directory, then this applies to all 
 files in that directory.  The corresponding macro is _POSIX_CHOWN_RESTRICTED.
@@ -1493,8 +1563,9 @@ _PC_NAME_MAX may exist in the given directory.
 @example
 #include <unistd.h>
 
-int fpathconf(int filedes, 
-              int name
+int fpathconf(
+  int filedes, 
+  int name
 );
 @end example
 @end ifset
@@ -1507,16 +1578,21 @@ int fpathconf(int filedes,
 @table @b
 @item EINVAL
 Invalid argument
+
 @item EACCES
 Permission to write the file is denied
 @item ENAMETOOLONG
+
 Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC
 is in effect.
+
 @item ENOENT
 A file or directory does not exist
+
 @item ENOTDIR
 A component of the specified @code{path} was not a directory whan a 
 directory was expected.
+
 @end table
 
 
@@ -1528,43 +1604,43 @@ for the open file descriptor @code{filedes}.
 The possible values for name are:
 
 @table @b
-@item_PC_LINK_MAX
+@item _PC_LINK_MAX
 returns the maximum number of links to the file.  If @code{filedes} or 
 @code{path} refer to a directory, then the value applies to the whole
 directory.  The corresponding macro is _POSIX_LINK_MAX.
 
-@item_PC_MAX_CANON
+@item _PC_MAX_CANON
 returns  the maximum length of a formatted input line, where @code{filedes}
 or @code{path} must refer to a terminal.  The corresponding macro is 
 _POSIX_MAX_CANON.
 
-@item_PC_MAX_INPUT
+@item _PC_MAX_INPUT
 returns the maximum length of an input line, where @code{filedes} or 
 @code{path} must refer to a terminal.  The corresponding macro is 
 _POSIX_MAX_INPUT.
 
-@item_PC_NAME_MAX
+@item _PC_NAME_MAX
 returns the maximum length of a filename in the directory @code{path} or 
 @code{filedes}.  The process is allowed to create. The corresponding macro 
 is _POSIX_NAME_MAX.
 
-@item_PC_PATH_MAX
+@item _PC_PATH_MAX
 returns the maximum length of a relative pathname when @code{path} or 
 @code{filedes} is the current working directory.  The corresponding macro 
 is _POSIX_PATH_MAX.
 
-@item_PC_PIPE_BUF
+@item _PC_PIPE_BUF
 returns the size of the pipe buffer, where @code{filedes} must refer to a 
 pipe or FIFO and @code{path} must refer to a FIFO.  The corresponding macro 
 is _POSIX_PIPE_BUF.
 
-@item_PC_CHOWN_RESTRICTED
-returns nonzero if the chown(2) call may not be used on this file.  If 
+@item _PC_CHOWN_RESTRICTED
+returns nonzero if the @code{chown()} call may not be used on this file.  If 
 @code{filedes} or @code{path} refer to a directory, then this applies to all 
 files in that directory.  The corresponding macro is _POSIX_CHOWN_RESTRICTED.
 
 @end table
 
-
 @subheading NOTES:
 
+NONE
