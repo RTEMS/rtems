@@ -1,3 +1,10 @@
+2002-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* kern/uipc_socket.c: Fix case on SO_RCVTIMEO and SO_SNDTIMEO where
+	conversion into ticks can result in a 0 ticks timeout which is 
+	the same as requesting no timeout.  Reported by Sergei Organov
+	<osv@javad.ru>.
+
 2002-09-14	Vyacheslav V. Burdjanadze <wr@zelax.ru>
 
 	* kern/uipc_mbuf.c, sys/mbuf.h, netinet/udp_usrreq.c: Add 
