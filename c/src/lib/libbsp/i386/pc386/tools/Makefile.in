@@ -51,7 +51,7 @@ CXXFLAGS +=
 
 LD_PATHS  +=
 LD_LIBS   +=
-LDFLAGS   += -g
+LDFLAGS   +=
 
 #
 # Add your list of files to delete here.  The config files
