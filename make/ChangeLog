@@ -1,3 +1,9 @@
+2004-02-26	Joel Sherrill <joel@OARcorp.com>
+
+	PR 570/bsps
+	* custom/mvme2307.cfg: Do not use -msdata=eabi since
+	it breaks the linking of the vectors.
+
 2004-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.
