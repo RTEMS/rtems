@@ -111,26 +111,24 @@ int mpc604_vector_is_valid(rtems_vector vector)
   return 0;
 }
 
-int mpc60x_set_exception  (const rtems_raw_except_connect_data* except)
+int mpc60x_vector_is_valid(rtems_vector vector)
 {
-    unsigned int level;
-
-    switch (current_ppc_cpu) {
+     switch (current_ppc_cpu) {
         case PPC_750:
-            if (!mpc750_vector_is_valid(except->exceptIndex)) {
+            if (!mpc750_vector_is_valid(vector)) {
                 return 0;
             }
             break;
         case PPC_604:
         case PPC_604e:
         case PPC_604r:
-            if (!mpc604_vector_is_valid(except->exceptIndex)) {
+            if (!mpc604_vector_is_valid(vector)) {
                 return 0;
             }
             break;
         case PPC_603:
         case PPC_603e:
-            if (!mpc603_vector_is_valid(except->exceptIndex)) {
+            if (!mpc603_vector_is_valid(vector)) {
                 return 0;
             }
             break;
@@ -138,8 +136,17 @@ int mpc60x_set_exception  (const rtems_raw_except_connect_data* except)
             printk("Please complete libcpu/powerpc/mpc6xx/raw_exception.c\n");
             printk("current_ppc_cpu = %x\n", current_ppc_cpu);
             return 0;
-    }
+     }
+     return 1;
+}
 
+int mpc60x_set_exception  (const rtems_raw_except_connect_data* except)
+{
+    unsigned int level;
+
+    if (!mpc60x_vector_is_valid(except->exceptIndex)) {
+      return 0;
+    }
     /*
      * Check if default handler is actually connected. If not issue an error.
      * You must first get the current handler via mpc60x_get_current_exception
@@ -166,7 +173,7 @@ int mpc60x_set_exception  (const rtems_raw_except_connect_data* except)
 
 int mpc60x_get_current_exception (rtems_raw_except_connect_data* except)
 {
-  if (!mpc750_vector_is_valid(except->exceptIndex)){
+  if (!mpc60x_vector_is_valid(except->exceptIndex)){
     return 0;
   }
     
@@ -179,7 +186,7 @@ int mpc60x_delete_exception (const rtems_raw_except_connect_data* except)
 {
   unsigned int level;
   
-  if (!mpc750_vector_is_valid(except->exceptIndex)){
+  if (!mpc60x_vector_is_valid(except->exceptIndex)){
     return 0;
   }
   /*
@@ -229,7 +236,7 @@ int mpc60x_init_exceptions (rtems_raw_except_global_settings* config)
     _CPU_ISR_Disable(level);
 
     for (i=0; i <= LAST_VALID_EXC; i++) {
-      if (!mpc750_vector_is_valid(i)){
+      if (!mpc60x_vector_is_valid(i)){
 	continue;
       }
       codemove((void*)mpc60x_get_vector_addr(i),
