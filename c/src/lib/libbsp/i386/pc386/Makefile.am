@@ -65,7 +65,8 @@ console_rel_SOURCES = console/console.c console/inch.c console/outch.c \
     console/defkeymap.c console/fb_vga.c console/keyboard.c \
     console/mouse_parser.c console/pc_keyb.c console/ps2_mouse.c \
     console/serial_mouse.c console/vgainit.c console/vt.c \
-    console/videoAsm.S
+    console/videoAsm.S ../../i386/shared/comm/uart.c \
+    ../../i386/shared/comm/tty_drv.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -77,16 +78,55 @@ console_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 project_lib_DATA += console$(LIB_VARIANT).rel
 
+EXTRA_PROGRAMS += gdb.rel
+CLEANFILES += gdb.rel
+gdb_rel_SOURCES = ../../i386/shared/comm/i386-stub.c \
+    ../../i386/shared/comm/i386-stub-glue.c ../../i386/shared/comm/gdb_glue.c
+gdb_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+gdb_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+EXTRA_PROGRAMS += gdb_g.rel
+CLEANFILES += gdb_g.rel
+gdb_g_rel_SOURCES = $(gdb_rel_SOURCES)
+gdb_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+gdb_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+project_lib_DATA += gdb$(LIB_VARIANT).rel
+
+EXTRA_PROGRAMS += gnat.rel
+CLEANFILES += gnat.rel
+gnat_rel_SOURCES = ../../shared/gnatinstallhandler.c
+gnat_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+gnat_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+EXTRA_PROGRAMS += gnat_g.rel
+CLEANFILES += gnat_g.rel
+gnat_g_rel_SOURCES = $(gnat_rel_SOURCES)
+gnat_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+gnat_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+project_lib_DATA += gnat$(LIB_VARIANT).rel
+
+EXTRA_PROGRAMS += pci.rel
+CLEANFILES += pci.rel
+pci_rel_SOURCES = ../../i386/shared/pci/pcibios.c
+pci_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+EXTRA_PROGRAMS += pci_g.rel
+CLEANFILES += pci_g.rel
+pci_g_rel_SOURCES = $(pci_rel_SOURCES)
+pci_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+pci_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+project_lib_DATA += pci$(LIB_VARIANT).rel
+
 EXTRA_PROGRAMS += startup.rel
 CLEANFILES += startup.rel
 startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     startup/bspstart.c startup/exit.c ../../i386/shared/irq/idt.c \
     ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \
     ../../shared/bootcard.c ../../shared/main.c ../../shared/sbrk.c \
-    ../../i386/shared/comm/i386-stub.c \
-    ../../i386/shared/comm/i386-stub-glue.c ../../i386/shared/comm/uart.c \
-    ../../i386/shared/pci/pcibios.c ../../shared/gnatinstallhandler.c \
-    ../../i386/shared/comm/gdb_glue.c ../../i386/shared/comm/tty_drv.c \
     startup/ldsegs.S ../../i386/shared/irq/irq_asm.S
 startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
@@ -188,7 +228,8 @@ EXTRA_LIBRARIES = libbsp.a
 CLEANFILES += libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup$(LIB_VARIANT).rel clock$(LIB_VARIANT).rel \
-    console$(LIB_VARIANT).rel timer$(LIB_VARIANT).rel ide$(LIB_VARIANT).rel
+    console$(LIB_VARIANT).rel timer$(LIB_VARIANT).rel ide$(LIB_VARIANT).rel \
+    gdb$(LIB_VARIANT).rel gnat$(LIB_VARIANT).rel pci$(LIB_VARIANT).rel
 # We only build the Network library if HAS_NETWORKING was defined
 # dec21140 is supported via libchip
 if HAS_NETWORKING
@@ -265,6 +306,18 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fb_vga.h
 $(PROJECT_LIB)/console$(LIB_VARIANT).rel: console$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/console$(LIB_VARIANT).rel
 TMPINSTALL_FILES += $(PROJECT_LIB)/console$(LIB_VARIANT).rel
+
+$(PROJECT_LIB)/gdb$(LIB_VARIANT).rel: gdb$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/gdb$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/gdb$(LIB_VARIANT).rel
+
+$(PROJECT_LIB)/gnat$(LIB_VARIANT).rel: gnat$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/gnat$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/gnat$(LIB_VARIANT).rel
+
+$(PROJECT_LIB)/pci$(LIB_VARIANT).rel: pci$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/pci$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/pci$(LIB_VARIANT).rel
 
 $(PROJECT_LIB)/startup$(LIB_VARIANT).rel: startup$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/startup$(LIB_VARIANT).rel
