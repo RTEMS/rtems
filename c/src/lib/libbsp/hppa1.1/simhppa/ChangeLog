@@ -1,3 +1,10 @@
+2000-09-25	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h: tty_* renamed to console_*.
+	* tty/tty.c: Ditto.
+	* shmsupp/addrconv.c: Typo fixed.
+	* wrapup/Makefile.am: Merge startup not start directory.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* shmsupp/Makefile.am, start/Makefile.am, startup/Makefile.am,

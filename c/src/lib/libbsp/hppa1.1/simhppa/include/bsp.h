@@ -92,14 +92,6 @@ rtems_device_driver Clock_control(
 
 extern int use_print_buffer;
 
-/*
- * When not doing printf to a buffer, we do printf thru RTEMS libio
- * and our tty driver.  Set it up so that console is right.
- */
-
-#define CONSOLE_DRIVER_TABLE_ENTRY \
-  { tty_initialize, tty_open, tty_close, tty_read, tty_write, tty_control }
-
 #define HPPA_INTERRUPT_EXTERNAL_MPCI        HPPA_INTERRUPT_EXTERNAL_10
 
 rtems_isr_entry set_vector(rtems_isr_entry, rtems_vector_number, int);

@@ -38,7 +38,7 @@ static int host_read_syscall(int fd, char *buffer, int count);
 static int host_write_syscall(int fd, char *buffer, int count);
 
 rtems_device_driver
-tty_initialize(
+console_initialize(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
     void                    * arg
@@ -56,7 +56,7 @@ tty_initialize(
 }
 
 rtems_device_driver
-tty_open(
+console_open(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
     void                    * arg
@@ -66,7 +66,7 @@ tty_open(
 }
 
 rtems_device_driver
-tty_close(
+console_close(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
     void                    * arg
@@ -76,7 +76,7 @@ tty_close(
 }
 
 rtems_device_driver
-tty_control(
+console_control(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
     void                    * arg
@@ -87,7 +87,7 @@ tty_control(
 
 
 rtems_device_driver
-tty_read(
+console_read(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
     void                    * arg
@@ -123,7 +123,7 @@ tty_read(
 }
 
 rtems_device_driver
-tty_write(
+console_write(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
     void                    * arg
