@@ -1,12 +1,12 @@
-Makefile
-Makefile.in
 aclocal.m4
-autom4te.cache
+autom4te*.cache
 config.*
 configure
 depcomp
 index.html
 install-sh
+Makefile
+Makefile.in
 mdate-sh
 missing
 mkinstalldirs

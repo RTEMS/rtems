@@ -1,9 +1,9 @@
-Makefile
-Makefile.in
 aclocal.m4
-autom4te.cache
+autom4te*.cache
 config.*
 configure
+Makefile
+Makefile.in
 setup.cache
 sparc-solaris-binutils.spec
 sparc-solaris-gcc.spec

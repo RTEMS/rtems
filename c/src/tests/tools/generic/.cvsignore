@@ -1,7 +1,5 @@
-Makefile
-Makefile.in
 aclocal.m4
-autom4te.cache
+autom4te*.cache
 config.cache
 config.guess
 config.log
@@ -11,6 +9,8 @@ configure
 depcomp
 difftest
 install-sh
+Makefile
+Makefile.in
 missing
 mkinstalldirs
 sorttimes

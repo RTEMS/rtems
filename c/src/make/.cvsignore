@@ -1,8 +1,5 @@
-Makefile
-Makefile.in
-Makefile.inc
 aclocal.m4
-autom4te.cache
+autom4te*.cache
 bsp.cfg
 config.cache
 config.guess
@@ -14,5 +11,8 @@ depcomp
 host.cfg
 install-sh
 main.cfg
+Makefile
+Makefile.in
+Makefile.inc
 missing
 mkinstalldirs
