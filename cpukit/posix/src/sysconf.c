@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include <rtems/system.h>
+#include <rtems/score/tod.h>
 
 /*PAGE
  *
@@ -16,5 +17,19 @@ long sysconf(
   int name
 )
 {
+
+  switch (name) {
+    case _SC_CLK_TCK:
+      return _TOD_Ticks_per_second;
+
+    case _SC_OPEN_MAX: {
+        extern unsigned32 rtems_libio_number_iops;
+        return rtems_libio_number_iops;
+      }
+
+    default:
+      break;
+  }
+
   return POSIX_NOT_IMPLEMENTED();
 }
