@@ -729,18 +729,18 @@ returns immediately with a timeout error status.
 @subsection Obtaining a Period's Status
 
 If the rate_monotonic_period directive is invoked
-with a period of PERIOD_STATUS ticks, the current state of the
+with a period of @code{PERIOD_STATUS} ticks, the current state of the
 specified rate monotonic period will be returned.  The following
 table details the relationship between the period's status and
 the directive status code returned by the rate_monotonic_period
 directive:
 
 @itemize @bullet
-@item SUCCESSFUL - period is running
+@item @code{SUCCESSFUL} - period is running
 
-@item TIMEOUT - period has expired
+@item @code{TIMEOUT} - period has expired
 
-@item NOT_DEFINED - period has never been initiated
+@item @code{NOT_DEFINED} - period has never been initiated
 @end itemize
 
 Obtaining the status of a rate monotonic period does
@@ -1149,7 +1149,7 @@ reinitiating the period with the specified period.  If id was
 not running (either expired or never initiated), the period is
 immediately initiated and the directive returns immediately.
 
-If invoked with a period of PERIOD_STATUS ticks, the
+If invoked with a period of @code{PERIOD_STATUS} ticks, the
 current state of id will be returned.  The directive status
 indicates the current state of the period.  This does not alter
 the state or period of the period.
@@ -1217,7 +1217,7 @@ type Rate_Monotonic_Period_Status is
 @end example
 @end ifset
 
-If the period's state is RATE_MONOTONIC_INACTIVE, both
+If the period's state is @code{RATE_MONOTONIC_INACTIVE}, both
 ticks_since_last_period and ticks_executed_since_last_period 
 will be set to 0.  Otherwise, ticks_since_last_period will
 contain the number of clock ticks which have occurred since

@@ -74,7 +74,7 @@ sometimes referred to as a "keep alive" or a "deadman" timer.
 @end ifinfo
 @subsection Timer Service Routines
 
-The timer service routine should adhere to @value{RTEMS-LANGUAGE} calling
+The timer service routine should adhere to @value{LANGUAGE} calling
 conventions and have a prototype similar to the following::
 
 @ifset is-C

@@ -165,7 +165,7 @@ entire timeslice.
 The final mechanism for altering the RTEMS scheduling
 algorithm is called manual round-robin.  Manual round-robin is
 invoked by using the task_wake_after directive with a time
-interval of YIELD_PROCESSOR.  This allows a task to give up the
+interval of @code{YIELD_PROCESSOR}.  This allows a task to give up the
 processor and be immediately returned to the ready chain at the
 end of its priority group.  If no other tasks of the same
 priority are ready to run, then the task does not lose control
@@ -193,12 +193,12 @@ saved or restored for a context switch is located either in the
 TCB or on the task's stacks.
 
 Tasks that utilize a numeric coprocessor and are
-created with the FLOATING_POINT attribute require additional
+created with the @code{FLOATING_POINT} attribute require additional
 operations during a context switch.  These additional operations
 are necessary to save and restore the floating point context of
-FLOATING_POINT tasks.  To avoid unnecessary save and restore
+@code{FLOATING_POINT} tasks.  To avoid unnecessary save and restore
 operations, the state of the numeric coprocessor is only saved
-when a FLOATING_POINT task is dispatched and that task was not
+when a @code{FLOATING_POINT} task is dispatched and that task was not
 the last task to utilize the coprocessor.
 
 @ifinfo

@@ -35,7 +35,7 @@ configure the number of device drivers or which APIs may be used.
 THe address of the user-defined Configuration Table is passed as an
 argument to the initialize_executive directive, which MUST be
 the first RTEMS directive called.  The RTEMS Configuration Table
-is defined in the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
+is defined in the following @value{LANGUAGE} @value{STRUCTURE}:
 
 @ifset is-C
 @example
@@ -151,7 +151,7 @@ The RTEMS API Configuration Table is used to configure the
 managers which constitute the RTEMS API for a particular application.  
 For example, the user can configure the maximum number of tasks for 
 this application. The RTEMS API Configuration Table is defined in 
-the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
+the following @value{LANGUAGE} @value{STRUCTURE}:
 
 @ifset is-C
 @example
@@ -244,7 +244,7 @@ The POSIX API Configuration Table is used to configure the
 managers which constitute the POSIX API for a particular application.
 For example, the user can configure the maximum number of threads for
 this application. The POSIX API Configuration Table is defined in
-the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
+the following @value{LANGUAGE} @value{STRUCTURE}:
  
 @ifset is-C
 @example
@@ -486,7 +486,7 @@ device driver required by the application.  The number of
 entries is defined in the number_of_device_drivers entry in the
 Configuration Table.  The format of each entry in the Device
 Driver Table is defined in 
-the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
+the following @value{LANGUAGE} @value{STRUCTURE}:
 
 @ifset is-C
 @example
@@ -543,7 +543,7 @@ is the address of the entry point called by io_control.
 @end table
 
 Driver entry points configured as NULL will always
-return a status code of SUCCESSFUL.  No user code will be
+return a status code of @code{SUCCESSFUL}.  No user code will be
 executed in this situation.
 
 A typical declaration for a Device Driver Table might appear as follows:
@@ -754,7 +754,7 @@ Table.  Further details regarding many of the entries in the
 Multiprocessor Configuration Table will be provided in the
 Multiprocessing chapter.  The format of the Multiprocessor
 Configuration Table is defined in 
-the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
+the following @value{LANGUAGE} @value{STRUCTURE}:
 
 @ifset is-C
 @example
@@ -829,7 +829,7 @@ regarding its entries can be found in the next section.
 @section Multiprocessor Communications Interface Table
 
 The format of this table is defined in 
-the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
+the following @value{LANGUAGE} @value{STRUCTURE}:
 
 @ifset is-C
 @example
@@ -970,7 +970,7 @@ the RTEMS RAM Workspace.
 The starting address of the RTEMS RAM Workspace must
 be aligned on a four-byte boundary.  Failure to properly align
 the workspace area will result in the fatal_error_occurred
-directive being invoked with the INVALID_ADDRESS error code.
+directive being invoked with the @code{INVALID_ADDRESS} error code.
 
 A worksheet is provided in the Memory Requirements
 chapter of the Applications Supplement document for a specific

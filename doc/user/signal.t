@@ -98,17 +98,18 @@ result, does not have a task mode.
 @subsection Building a Signal Set
 
 A signal set is built by a bitwise OR of the desired
-signals.  The set of valid signals is SIGNAL_0 through
-SIGNAL_31.  If a signal is not explicitly specified in the
+signals.  The set of valid signals is @code{SIGNAL_0} through
+@code{SIGNAL_31}.  If a signal is not explicitly specified in the
 signal set, then it is not present.  Signal values are
 specifically designed to be mutually exclusive, therefore
 bitwise OR and addition operations are equivalent as long as
 each signal appears exactly once in the component list.
 
 This example demonstrates the signal parameter used
-when sending the signal set consisting of SIGNAL_6, SIGNAL_15,
-and SIGNAL_31.  The signal parameter provided to the signal_send
-directive should be SIGNAL_6 | SIGNAL_15 | SIGNAL_31.
+when sending the signal set consisting of 
+@code{SIGNAL_6}, @code{SIGNAL_15}, and @code{SIGNAL_31}.  
+The signal parameter provided to the signal_send directive should be
+@code{SIGNAL_6 @value{OR} SIGNAL_15 @value{OR} SIGNAL_31}.
 
 @ifinfo
 @node Building an ASR's Mode, Signal Manager Operations, Building a Signal Set, Signal Manager Background
@@ -144,7 +145,8 @@ on this call.
 This example demonstrates the mode parameter used
 with the signal_catch to establish an ASR which executes at
 interrupt level three and is non-preemptible.  The mode should
-be set to INTERRUPT_LEVEL(3) | NO_PREEMPT to indicate the
+be set to
+@code{INTERRUPT_LEVEL(3) @value{OR} NO_PREEMPT} to indicate the
 desired processor mode and interrupt level.
 
 @ifinfo
@@ -231,7 +233,7 @@ software interrupts parallels that of hardware interrupts.  As a
 result, the differences between the formats of ASRs and ISRs is
 limited to the meaning of the single argument passed to an ASR.
 The ASR should have the following calling sequence and adhere to
-@value{RTEMS-LANGUAGE} calling conventions:
+@value{LANGUAGE} calling conventions:
 
 @ifset is-C
 @example

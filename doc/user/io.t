@@ -77,7 +77,7 @@ entry points:
 
 If the device driver does not support a particular
 entry point, then that entry in the Configuration Table should
-be NULL.  RTEMS will return SUCCESSFUL as the executive's and
+be NULL.  RTEMS will return @code{SUCCESSFUL} as the executive's and
 zero (0) as the device driver's return code for these device
 driver entry points.
 
@@ -383,6 +383,7 @@ rtems_status_code rtems_io_lookup_name(
 procedure IO_Lookup_Name (
    Name         : in     String;
    Device_Info  :    out RTEMS.Driver_Name_t;
+   Result       :    out RTEMS.Status_Codes
 );
 @end example
 @end ifset

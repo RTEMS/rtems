@@ -278,12 +278,12 @@ single argument as an index into an array of parameter blocks.
 @end ifinfo
 @subsection Floating Point Considerations
 
-Creating a task with the FLOATING_POINT flag results in
+Creating a task with the @code{FLOATING_POINT} flag results in
 additional memory being allocated for the TCB to store the state
 of the numeric coprocessor during task switches.  This
-additional memory is NOT allocated for NO_FLOATING_POINT tasks. 
-Saving and restoring the context of a FLOATING_POINT task takes
-longer than that of a NO_FLOATING_POINT task because of the
+additional memory is @b{NOT} allocated for @code{NO_FLOATING_POINT} tasks. 
+Saving and restoring the context of a @code{FLOATING_POINT} task takes
+longer than that of a @code{NO_FLOATING_POINT} task because of the
 relatively large amount of time required for the numeric
 coprocessor to save or restore its computational state.
 
@@ -291,41 +291,41 @@ Since RTEMS was designed specifically for embedded military
 applications which are floating point intensive, the executive
 is optimized to avoid unnecessarily saving and restoring the
 state of the numeric coprocessor.  The state of the numeric
-coprocessor is only saved when a FLOATING_POINT task is
+coprocessor is only saved when a @code{FLOATING_POINT} task is
 dispatched and that task was not the last task to utilize the
-coprocessor.  In a system with only one FLOATING_POINT task, the
+coprocessor.  In a system with only one @code{FLOATING_POINT} task, the
 state of the numeric coprocessor will never be saved or
 restored.  
 
-Although the overhead imposed by FLOATING_POINT tasks is
+Although the overhead imposed by @code{FLOATING_POINT} tasks is
 minimal, some applications may wish to completely avoid the
-overhead associated with FLOATING_POINT tasks and still utilize
+overhead associated with @code{FLOATING_POINT} tasks and still utilize
 a numeric coprocessor.  By preventing a task from being
 preempted while performing a sequence of floating point
-operations, a NO_FLOATING_POINT task can utilize the numeric
-coprocessor without incurring the overhead of a FLOATING_POINT
+operations, a @code{NO_FLOATING_POINT} task can utilize the numeric
+coprocessor without incurring the overhead of a @code{FLOATING_POINT}
 context switch.  This approach also avoids the allocation of a
 floating point context area.  However, if this approach is taken
 by the application designer, NO tasks should be created as
-FLOATING_POINT tasks.  Otherwise, the floating point context
+@code{FLOATING_POINT} tasks.  Otherwise, the floating point context
 will not be correctly maintained because RTEMS assumes that the
 state of the numeric coprocessor will not be altered by
-NO_FLOATING_POINT tasks.
+@code{NO_FLOATING_POINT} tasks.
 
 If the supported processor type does not have hardware floating
 capabilities or a standard numeric coprocessor, RTEMS will not
 provide built-in support for hardware floating point on that
 processor.  In this case, all tasks are considered
-NO_FLOATING_POINT whether created as FLOATING_POINT or
-NO_FLOATING_POINT tasks.  A floating point emulation software
+@code{NO_FLOATING_POINT} whether created as @code{FLOATING_POINT} or
+@code{NO_FLOATING_POINT} tasks.  A floating point emulation software
 library must be utilized for floating point operations.
 
 On some processors, it is possible to disable the floating point
 unit dynamically.  If this capability is supported by the target
 processor, then RTEMS will utilize this capability to enable the
 floating point unit only for tasks which are created with the
-FLOATING_POINT attribute.  The consequence of a
-NO_FLOATING_POINT task attempting to access the floating point
+@code{FLOATING_POINT} attribute.  The consequence of a
+@code{NO_FLOATING_POINT} task attempting to access the floating point
 unit is CPU dependent but will i general result in an exception
 condition.
 
@@ -351,16 +351,17 @@ equivalent as long as each attribute appears exactly once in the
 component list.  A component listed as a default is not required
 to appear in the component list, although it is a good
 programming practice to specify default components.  If all
-defaults are desired, then DEFAULT_ATTRIBUTES should be used.
+defaults are desired, then @code{DEFAULT_ATTRIBUTES} should be used.
 
 This example demonstrates the attribute_set parameter needed to
 create a local task which utilizes the numeric coprocessor.  The
-attribute_set parameter could be FLOATING_POINT or LOCAL |
-FLOATING_POINT.  The attribute_set parameter can be set to
-FLOATING_POINT because LOCAL is the default for all created
+attribute_set parameter could be @code{FLOATING_POINT} or
+@code{LOCAL @value{OR} FLOATING_POINT}.  
+The attribute_set parameter can be set to
+@code{FLOATING_POINT} because @code{LOCAL} is the default for all created
 tasks.  If the task were global and used the numeric
-coprocessor, then the attribute_set parameter would be GLOBAL |
-FLOATING_POINT. 
+coprocessor, then the attribute_set parameter would be
+@code{GLOBAL @value{OR} FLOATING_POINT}. 
 
 @ifinfo
 @node Building a Mode and Mask, Task Manager Operations, Building a Task's Attribute Set, Task Manager Background
@@ -449,16 +450,16 @@ long as each mode appears exactly once in the component list.  A
 mode component listed as a default is not required to appear in
 the mode component list, although it is a good programming
 practice to specify default components.  If all defaults are
-desired, the mode DEFAULT_MODES and the mask ALL_MODE_MASKS
+desired, the mode @code{DEFAULT_MODES} and the mask @code{ALL_MODE_MASKS}
 should be used.
 
 The following example demonstrates the mode and mask parameters
 used with the task_mode directive to place a task at interrupt
 level 3 and make it non-preemptible.  The mode should be set to
-INTERRUPT_LEVEL(3) | NO_PREEMPT to indicate the desired
+@code{INTERRUPT_LEVEL(3) @value{RTEMSOR} NO_PREEMPT} to indicate the desired
 preemption mode and interrupt level, while the mask parameter
-should be set to INTERRUPT_MASK | NO_PREEMPT_MASK to indicate
-that the calling task's interrupt level and preemption mode are
+should be set to @code{INTERRUPT_MASK @value{RTEMSOR} NO_PREEMPT_MASK}
+to indicate that the calling task's interrupt level and preemption mode are
 being altered. 
 
 @ifinfo
@@ -566,7 +567,7 @@ The task_wake_after directive creates a sleep timer which allows
 a task to go to sleep for a specified interval.  The task is
 blocked until the delay interval has elapsed, at which time the
 task is unblocked.  A task calling the task_wake_after directive
-with a delay interval of YIELD_PROCESSOR ticks will yield the
+with a delay interval of @code{YIELD_PROCESSOR} ticks will yield the
 processor to any other ready task of equal or greater priority
 and remain ready to execute.
 
@@ -725,10 +726,10 @@ This directive creates a task which resides on the local node.
 It  allocates and initializes a TCB, a stack, and an optional
 floating point context area.  The mode parameter contains values
 which sets the task's initial execution mode.  The
-FLOATING_POINT attribute should be specified if the created task
+@code{FLOATING_POINT} attribute should be specified if the created task
 is to use a numeric coprocessor.  For performance reasons, it is
 recommended that tasks not using the numeric coprocessor should
-specify the NO_FLOATING_POINT attribute.  If the GLOBAL
+specify the @code{NO_FLOATING_POINT} attribute.  If the GLOBAL
 attribute is specified, the task can be accessed from remote
 nodes.  The task id, returned in id, is used in other task
 related directives to access the task.  When created, a task is
@@ -744,8 +745,8 @@ RTEMS supports a maximum of 256 interrupt levels which are
 mapped onto the interrupt levels actually supported by the
 target processor.
 
-The requested stack size should be at least MINIMUM_STACK_SIZE
-bytes.  The value of MINIMUM_STACK_SIZE is processor dependent. 
+The requested stack size should be at least @code{MINIMUM_STACK_SIZE}
+bytes.  The value of @code{MINIMUM_STACK_SIZE} is processor dependent. 
 Application developers should consider the stack usage of the
 device drivers when calculating the stack size required for
 tasks which utilize the driver.
@@ -820,7 +821,7 @@ procedure Task_Ident (
 @subheading DESCRIPTION:
 This directive obtains the task id associated with the task name
 specified in name.  A task may obtain its own id by specifying
-SELF or its own task name in name.  If the task name is not
+@code{SELF} or its own task name in name.  If the task name is not
 unique, then the task id returned will match one of the tasks
 with that name.  However, this task id is not guaranteed to
 correspond to the desired task.  The task id, returned in id, is
@@ -829,7 +830,7 @@ used in other task related directives to access the task.
 @subheading NOTES:
 This directive will not cause the running task to be preempted.
 
-If node is SEARCH_ALL_NODES, all nodes are searched with the
+If node is @code{SEARCH_ALL_NODES}, all nodes are searched with the
 local node being searched first.  All other nodes are searched
 with the lowest numbered node searched first.
 
@@ -944,7 +945,7 @@ task, and allowing that task to release resources back to RTEMS
 and then delete itself.
 
 @subheading NOTES:
-If id is SELF, the calling task will be restarted and will not
+If id is @code{SELF}, the calling task will be restarted and will not
 return from this directive.
 
 The calling task will be preempted if its preemption mode is
@@ -987,7 +988,7 @@ procedure Task_Delete (
 This directive deletes a task, either the calling task or
 another task, as specified by id.  RTEMS stops the execution of
 the task and reclaims the stack memory, any allocated delay or
-timeout timers, the TCB, and, if the task is FLOATING_POINT, its
+timeout timers, the TCB, and, if the task is @code{FLOATING_POINT}, its
 floating point context area.  RTEMS does not reclaim the
 following resources: region segments, partition buffers,
 semaphores, timers, or rate monotonic periods.
@@ -1002,7 +1003,7 @@ resources before deletion.  A task can be directed to release
 its resources and delete itself by restarting it with a special
 argument or by sending it a message, an event, or a signal.
 
-Deletion of the current task (SELF) will force RTEMS to select
+Deletion of the current task (@code{SELF}) will force RTEMS to select
 another task to execute.
 
 When a global task is deleted, the task id must be transmitted
@@ -1051,7 +1052,7 @@ the task_resume directive for this task and any blocked state
 has been removed.
 
 @subheading NOTES:
-The requesting task can suspend itself by specifying SELF as id.
+The requesting task can suspend itself by specifying @code{SELF} as id.
 In this case, the task will be suspended and a successful
 return code will be returned when the task is resumed.
 
@@ -1140,7 +1141,7 @@ procedure Task_Set_Priority (
 
 @subheading DESCRIPTION:
 This directive manipulates the priority of the task specified by
-id.  An id of SELF is used to indicate the calling task.  When
+id.  An id of @code{SELF} is used to indicate the calling task.  When
 new_priority is not equal to CURRENT_PRIORITY, the specified
 task's previous priority is returned in old_priority.  When
 new_priority is CURRENT_PRIORITY, the specified task's current
@@ -1333,14 +1334,14 @@ location of the task specified by id.
 @subheading NOTES:
 This directive will not cause the running task to be preempted.
 
-If id is set to SELF, the calling task accesses its own notepad.
+If id is set to @code{SELF}, the calling task accesses its own notepad.
 
 @c This version of the paragraph avoids the overfull hbox error.
 @c The constants NOTEPAD_0 through NOTEPAD_15 can be used to access the
 @c sixteen notepad locations.
 
 The sixteen notepad locations can be accessed using the constants
-NOTEPAD_0 through NOTEPAD_15.
+@code{NOTEPAD_0} through @code{NOTEPAD_15}.
 
 Getting a note of a global task which does not reside on the
 local node will generate a request to the remote node to obtain
@@ -1385,7 +1386,7 @@ This directive sets the notepad entry for the task specified by
 id to the value note.
 
 @subheading NOTES:
-If id is set to SELF, the calling task accesses its own notepad
+If id is set to @code{SELF}, the calling task accesses its own notepad
 locations.
 
 This directive will not cause the running task to be preempted.
@@ -1395,7 +1396,7 @@ This directive will not cause the running task to be preempted.
 @c sixteen notepad locations.
 
 The sixteen notepad locations can be accessed using the constants
-NOTEPAD_0 through NOTEPAD_15.
+@code{NOTEPAD_0} through @code{NOTEPAD_15}.
 
 Setting a notepad location of a global task which does not
 reside on the local node will generate a request to the remote
@@ -1440,7 +1441,7 @@ Setting the system date and time with the clock_set directive
 has no effect on a task_wake_after blocked task.
 
 A task may give up the processor and remain in the ready state
-by specifying a value of YIELD_PROCESSOR in ticks.
+by specifying a value of @code{YIELD_PROCESSOR} in ticks.
 
 The maximum timer interval that can be specified is the maximum
 value which can be represented by the rtems_unsigned32 type.

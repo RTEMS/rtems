@@ -56,7 +56,7 @@ The interrupt manager allows the application to
 connect a function to a hardware interrupt vector.  When an
 interrupt occurs, the processor will automatically vector to
 RTEMS.  RTEMS saves and restores all registers which are not
-preserved by the normal @value{RTEMS-LANGUAGE} calling convention
+preserved by the normal @value{LANGUAGE} calling convention
 for the target
 processor and invokes the user's ISR.  The user's ISR is
 responsible for processing the interrupt, clearing the interrupt
@@ -265,6 +265,10 @@ made from an ISR:
 @ifinfo
 @menu
 * INTERRUPT_CATCH - Establish an ISR::
+* INTERRUPT_DISABLE - Disable Interrupts::
+* INTERRUPT_ENABLE - Enable Interrupts::
+* INTERRUPT_FLASH - Flash Interrupts::
+* INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress::
 @end menu
 @end ifinfo
 
@@ -275,7 +279,7 @@ constants, usage, and status codes.
 
 @page
 @ifinfo
-@node INTERRUPT_CATCH - Establish an ISR, Clock Manager, Interrupt Manager Directives, Interrupt Manager Directives
+@node INTERRUPT_CATCH - Establish an ISR, INTERRUPT_DISABLE - Disable Interrupts, Interrupt Manager Directives, Interrupt Manager Directives
 @end ifinfo
 @subsection INTERRUPT_CATCH - Establish an ISR
 
@@ -317,6 +321,166 @@ returned in old_isr_handler.
 
 @subheading NOTES:
 
-This directive will not cause the calling task to be
-preempted.
+This directive will not cause the calling task to be preempted.
+
+@page
+@ifinfo
+@node INTERRUPT_DISABLE - Disable Interrupts, INTERRUPT_ENABLE - Enable Interrupts, INTERRUPT_CATCH - Establish an ISR, Interrupt Manager Directives
+@end ifinfo
+@subsection INTERRUPT_DISABLE - Disable Interrupts
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+void rtems_interrupt_disable(
+  rtems_isr_level  level
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+function Interrupt_Disable
+return RTEMS.ISR_Level;
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+This directive disables all maskable interrupts and returns
+the previous @code{level}.  A later invocation of the
+@code{rtems_interrupt_enable} directive should be used to
+restore the interrupt level.
+
+@subheading NOTES:
+
+This directive will not cause the calling task to be preempted.
+
+@ifset is-C
+@b{This directive is implemented as a macro which modifies the @code{level}
+parameter.}
+@end ifset
+
+@page
+@ifinfo
+@node INTERRUPT_ENABLE - Enable Interrupts, INTERRUPT_FLASH - Flash Interrupts, INTERRUPT_DISABLE - Disable Interrupts, Interrupt Manager Directives
+@end ifinfo
+@subsection INTERRUPT_ENABLE - Enable Interrupts
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+void rtems_interrupt_enable(
+  rtems_isr_level  level
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example 
+procedure Interrupt_Enable (
+   Level : in     RTEMS.ISR_Level
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+This directive enables maskable interrupts to the @code{level}
+which was returned by a previous call to @code{rtems_interrupt_disable}.
+Immediately prior to invoking this directive, maskable interrupts should
+be disabled by a call to @code{rtems_interrupt_disable} and will be enabled
+when this directive returns to the caller.
+
+@subheading NOTES:
+
+This directive will not cause the calling task to be preempted.
+
+
+@page
+@ifinfo
+@node INTERRUPT_FLASH - Flash Interrupts, INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress, INTERRUPT_ENABLE - Enable Interrupts, Interrupt Manager Directives
+@end ifinfo
+@subsection INTERRUPT_FLASH - Flash Interrupts
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C 
+@example
+void rtems_interrupt_flash(
+  rtems_isr_level level
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Interrupt_Flash (
+   Level : in     RTEMS.ISR_Level
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+This directive temporarily enables maskable interrupts to the @code{level}
+which was returned by a previous call to @code{rtems_interrupt_disable}.  
+Immediately prior to invoking this directive, maskable interrupts should
+be disabled by a call to @code{rtems_interrupt_disable} and will be redisabled
+when this directive returns to the caller.
+
+@subheading NOTES:
+
+This directive will not cause the calling task to be preempted.
+
+@page
+@ifinfo
+@node INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress, Clock Manager, INTERRUPT_FLASH - Flash Interrupts, Interrupt Manager Directives
+@end ifinfo
+@subsection INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+rtems_boolean rtems_interrupt_is_in_progress( void );
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+function Interrupt_Is_In_Progress
+return RTEMS.Boolean;
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+
+NONE
+
+@subheading DESCRIPTION:
+
+This directive returns @code{TRUE} if the processor is currently
+servicing an interrupt and @code{FALSE} otherwise.  A return value
+of @code{TRUE} indicates that the caller is an interrupt service
+routine, @b{NOT} a task.  The directives available to an interrupt
+service routine are restricted.
+
+@subheading NOTES:
+
+This directive will not cause the calling task to be preempted.
 

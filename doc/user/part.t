@@ -86,7 +86,7 @@ are equivalent as long as each attribute appears exactly once in
 the component list.  An attribute listed as a default is not
 required to appear in the attribute list, although it is a good
 programming practice to specify default attributes.  If all
-defaults are desired, the attribute DEFAULT_ATTRIBUTES should be
+defaults are desired, the attribute @code{DEFAULT_ATTRIBUTES} should be
 specified on this call.  The attribute_set parameter should be
 GLOBAL to indicate that the partition is to be known globally.
 
@@ -323,7 +323,7 @@ with other partition related directives to access the partition.
 This directive will not cause the running task to be
 preempted.
 
-If node is SEARCH_ALL_NODES, all nodes are searched
+If node is @code{SEARCH_ALL_NODES}, all nodes are searched
 with the local node being searched first.  All other nodes are
 searched with the lowest numbered node searched first.
 

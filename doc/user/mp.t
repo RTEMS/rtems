@@ -599,7 +599,7 @@ must be aware of the following:
 
 @item Packets are composed of both RTEMS and application data.
 All RTEMS data is treated as thirty-two (32) bit unsigned
-quantities and is in the first MINIMUM_UNSIGNED32S_TO_CONVERT
+quantities and is in the first @code{MINIMUM_UNSIGNED32S_TO_CONVERT}
 thirty-two (32) quantities of the packet.
 
 @item The RTEMS data component of the packet must be in native

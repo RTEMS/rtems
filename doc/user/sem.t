@@ -228,17 +228,18 @@ are equivalent as long as each attribute appears exactly once in
 the component list.  An attribute listed as a default is not
 required to appear in the attribute list, although it is a good
 programming practice to specify default attributes.  If all
-defaults are desired, the attribute DEFAULT_ATTRIBUTES should be
+defaults are desired, the attribute @code{DEFAULT_ATTRIBUTES} should be
 specified on this call.
 
 This example demonstrates the attribute_set parameter
 needed to create a local semaphore with the task priority
 waiting queue discipline.  The attribute_set parameter passed to
-the semaphore_create directive could be either PRIORITY or LOCAL
-| PRIORITY.  The attribute_set parameter can be set to PRIORITY
-because LOCAL is the default for all created tasks.  If a
+the semaphore_create directive could be either
+@code{PRIORITY} or @code{LOCAL @value{OR} PRIORITY}.  
+The attribute_set parameter can be set to @code{PRIORITY}
+because @code{LOCAL} is the default for all created tasks.  If a
 similar semaphore were to be known globally, then the
-attribute_set parameter would be GLOBAL | PRIORITY.
+attribute_set parameter would be @code{GLOBAL @value{OR} PRIORITY}.
 
 @ifinfo
 @node Building a SEMAPHORE_OBTAIN Option Set, Semaphore Manager Operations, Building a Semaphore's Attribute Set, Semaphore Manager Background
@@ -250,8 +251,8 @@ desired option components.  The set of valid options for the
 semaphore_obtain directive are listed in the following table:
 
 @itemize @bullet
-@item WAIT - task will wait for semaphore (default)
-@item NO_WAIT - task should not wait
+@item @code{WAIT} - task will wait for semaphore (default)
+@item @code{NO_WAIT} - task should not wait
 @end itemize
 
 Option values are specifically designed to be
@@ -260,12 +261,12 @@ are equivalent as long as each attribute appears exactly once in
 the component list.  An option listed as a default is not
 required to appear in the list, although it is a good
 programming practice to specify default options.  If all
-defaults are desired, the option DEFAULT_OPTIONS should be
+defaults are desired, the option @code{DEFAULT_OPTIONS} should be
 specified on this call.
 
 This example demonstrates the option parameter needed
 to poll for a semaphore.  The option parameter passed to the
-semaphore_obtain directive should be NO_WAIT.
+semaphore_obtain directive should be @code{NO_WAIT}.
 
 @ifinfo
 @node Semaphore Manager Operations, Creating a Semaphore, Building a SEMAPHORE_OBTAIN Option Set, Semaphore Manager
@@ -342,7 +343,7 @@ one of the following situations applies:
 @item By default, the calling task will wait forever to
 acquire the semaphore.
 
-@item Specifying NO_WAIT forces an immediate return with an
+@item Specifying @code{NO_WAIT} forces an immediate return with an
 error status code.
 
 @item Specifying a timeout limits the interval the task will
@@ -560,7 +561,7 @@ by other semaphore related directives to access the semaphore.
 This directive will not cause the running task to be
 preempted.
 
-If node is SEARCH_ALL_NODES, all nodes are searched
+If node is @code{SEARCH_ALL_NODES}, all nodes are searched
 with the local node being searched first.  All other nodes are
 searched with the lowest numbered node searched first.
 
@@ -672,11 +673,11 @@ procedure Semaphore_Obtain (
 @subheading DESCRIPTION:
 
 This directive acquires the semaphore specified by
-id.  The WAIT and NO_WAIT components of the options parameter
+id.  The @code{WAIT} and @code{NO_WAIT} components of the options parameter
 indicate whether the calling task wants to wait for the
 semaphore to become available or return immediately if the
-semaphore is not currently available.  With either WAIT or
-NO_WAIT, if the current semaphore count is positive, then it is
+semaphore is not currently available.  With either @code{WAIT} or
+@code{NO_WAIT}, if the current semaphore count is positive, then it is
 decremented by one and the semaphore is successfully acquired by
 returning immediately with a successful return code.
 
@@ -702,8 +703,8 @@ task obtaining the semaphore is elevated to that of the ceiling.
 
 The timeout parameter specifies the maximum interval
 the calling task is willing to be blocked waiting for the
-semaphore.  If it is set to NO_TIMEOUT, then the calling task
-will wait forever.  If the semaphore is available or the NO_WAIT
+semaphore.  If it is set to @code{NO_TIMEOUT}, then the calling task
+will wait forever.  If the semaphore is available or the @code{NO_WAIT}
 option component is set, then timeout is ignored.
 
 @subheading NOTES:
@@ -711,14 +712,14 @@ The following semaphore acquisition option constants
 are defined by RTEMS:
 
 @itemize @bullet
-@item WAIT - task will wait for semaphore (default)
-@item NO_WAIT - task should not wait
+@item @code{WAIT} - task will wait for semaphore (default)
+@item @code{NO_WAIT} - task should not wait
 @end itemize
 
 Attempting to obtain a global semaphore which does not reside on
 the local node will generate a request to the remote node to
 access the semaphore.  If the semaphore is not available and
-NO_WAIT was not specified, then the task must be blocked until
+@code{NO_WAIT} was not specified, then the task must be blocked until
 the semaphore is released.  A proxy is allocated on the remote
 node to represent the task until the semaphore is released.
 

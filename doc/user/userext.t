@@ -198,8 +198,8 @@ directives to obtain and release the extension buffers.
 The sections that follow will contain a description
 of each extension.  Each section will contain a prototype of a
 function with the appropriate calling sequence for the
-corresponding extension.  The names given for the @value{RTEMS-LANGUAGE} 
-@value{RTEMS-ROUTINE} and
+corresponding extension.  The names given for the @value{LANGUAGE} 
+@value{ROUTINE} and
 its arguments are all defined by the user.  The names used in
 the examples were arbitrarily chosen and impose no naming
 conventions on the user.
@@ -496,7 +496,7 @@ recover, then a fatal error may be reported.  If the user does
 not provide a TASK_EXITTED extension or the provided handler
 returns control to RTEMS, then the RTEMS default handler will be
 used.  This default handler invokes the directive
-fatal_error_occurred with the TASK_EXITTED directive status.
+fatal_error_occurred with the @code{TASK_EXITTED} directive status.
 
 @lowersections
 

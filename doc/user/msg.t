@@ -100,17 +100,18 @@ queue attributes is provided in the following table:
 An attribute listed as a default is not required to
 appear in the attribute list, although it is a good programming
 practice to specify default attributes.  If all defaults are
-desired, the attribute DEFAULT_ATTRIBUTES should be specified on
+desired, the attribute @code{DEFAULT_ATTRIBUTES} should be specified on
 this call.
 
 This example demonstrates the attribute_set parameter
 needed to create a local message queue with the task priority
 waiting queue discipline.  The attribute_set parameter to the
-message_queue_create directive could be either PRIORITY or LOCAL
-| PRIORITY.  The attribute_set parameter can be set to PRIORITY
-because LOCAL is the default for all created message queues.  If
+message_queue_create directive could be either 
+@code{PRIORITY} or @code{LOCAL @value{OR} PRIORITY}.  
+The attribute_set parameter can be set to @code{PRIORITY}
+because @code{LOCAL} is the default for all created message queues.  If
 a similar message queue were to be known globally, then the
-attribute_set parameter would be GLOBAL | PRIORITY.
+attribute_set parameter would be @code{GLOBAL @value{OR} PRIORITY}.
 
 @ifinfo
 @node Building a MESSAGE_QUEUE_RECEIVE Option Set, Message Manager Operations, Building a Message Queue's Attribute Set, Message Manager Background
@@ -123,19 +124,19 @@ message_queue_receive directive are listed in the following
 table:
 
 @itemize @bullet
-@item WAIT - task will wait for a message (default)
-@item NO_WAIT - task should not wait
+@item @code{WAIT} - task will wait for a message (default)
+@item @code{NO_WAIT} - task should not wait
 @end itemize
 
 An option listed as a default is not required to
 appear in the option OR list, although it is a good programming
 practice to specify default options.  If all defaults are
-desired, the option DEFAULT_OPTIONS should be specified on this
+desired, the option @code{DEFAULT_OPTIONS} should be specified on this
 call.
 
 This example demonstrates the option parameter needed
 to poll for a message to arrive.  The option parameter passed to
-the message_queue_receive directive should be NO_WAIT.
+the message_queue_receive directive should be @code{NO_WAIT}.
 
 @ifinfo
 @node Message Manager Operations, Creating a Message Queue, Building a MESSAGE_QUEUE_RECEIVE Option Set, Message Manager
@@ -203,7 +204,7 @@ applies:
 @item By default, the calling task will wait forever for the
 message to arrive.
 
-@item Specifying the NO_WAIT option forces an immediate return
+@item Specifying the @code{NO_WAIT} option forces an immediate return
 with an error status code.
 
 @item Specifying a timeout limits the period the task will
@@ -421,7 +422,7 @@ related directives to access the message queue.
 This directive will not cause the running task to be
 preempted.
 
-If node is SEARCH_ALL_NODES, all nodes are searched
+If node is @code{SEARCH_ALL_NODES}, all nodes are searched
 with the local node being searched first.  All other nodes are
 searched with the lowest numbered node searched first.
 
@@ -729,7 +730,7 @@ procedure Message_Queue_Receive (
 @subheading DESCRIPTION:
 
 This directive receives a message from the message
-queue specified in id.  The WAIT and NO_WAIT options of the
+queue specified in id.  The @code{WAIT} and @code{NO_WAIT} options of the
 options parameter allow the calling task to specify whether to
 wait for a message to become available or return immediately.
 For either option, if there is at least one message in the
@@ -751,7 +752,7 @@ A task choosing to wait at the queue can optionally
 specify a timeout value in the timeout parameter.  The timeout
 parameter specifies the maximum interval to wait before the
 calling task desires to be unblocked.  If it is set to
-NO_TIMEOUT, then the calling task will wait forever.
+@code{NO_TIMEOUT}, then the calling task will wait forever.
 
 @subheading NOTES:
 
@@ -759,15 +760,15 @@ The following message receive option constants are
 defined by RTEMS:
 
 @itemize @bullet
-@item WAIT - task will wait for a message (default)
-@item NO_WAIT - task should not wait
+@item @code{WAIT} - task will wait for a message (default)
+@item @code{NO_WAIT} - task should not wait
 @end itemize
 
 
 Receiving a message from a global message queue which
 does not reside on the local node will generate a request to the
 remote node to obtain a message from the specified message
-queue.  If no message is available and WAIT was specified, then
+queue.  If no message is available and @code{WAIT} was specified, then
 the task must be blocked until a message is posted.  A proxy is
 allocated on the remote node to represent the task until the
 message is posted.

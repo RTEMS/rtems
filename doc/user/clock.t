@@ -5,7 +5,7 @@
 @c
 
 @ifinfo
-@node Clock Manager, Clock Manager Introduction, INTERRUPT_CATCH - Establish an ISR, Top
+@node Clock Manager, Clock Manager Introduction, INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress, Top
 @end ifinfo
 @chapter Clock Manager
 @ifinfo
@@ -239,11 +239,19 @@ dependent on the option selected by the caller.  The following
 options are available:
 
 @itemize @bullet
-@item CLOCK_GET_TOD - obtain native style date and time
-@item CLOCK_GET_TIME_VALUE - obtain UNIX-style date and time
-@item CLOCK_GET_TICKS_SINCE_BOOT - obtain number of ticks since RTEMS was initialized
-@item CLOCK_GET_SECONDS_SINCE_EPOCH - obtain number of seconds since RTEMS epoch
-@item CLOCK_GET_TICKS_PER_SECOND - obtain number of clock ticks per second
+@item @code{CLOCK_GET_TOD} - obtain native style date and time
+
+@item @code{CLOCK_GET_TIME_VALUE} - obtain UNIX-style date and time
+
+@item @code{CLOCK_GET_TICKS_SINCE_BOOT} - obtain number of ticks
+since RTEMS was initialized
+
+@item @code{CLOCK_GET_SECONDS_SINCE_EPOCH} - obtain number of seconds
+since RTEMS epoch
+
+@item @code{CLOCK_GET_TICKS_PER_SECOND} - obtain number of clock ticks
+per second
+
 @end itemize
 
 Calendar time operations will return an error code if
@@ -354,13 +362,13 @@ procedure Clock_Get (
 
 This directive obtains the system date and time.  If
 the caller is attempting to obtain the date and time (i.e.
-option is set to either CLOCK_GET_SECONDS_SINCE_EPOCH,
-CLOCK_GET_TOD, or CLOCK_GET_TIME_VALUE) and the date and time
+option is set to either @code{CLOCK_GET_SECONDS_SINCE_EPOCH},
+@code{CLOCK_GET_TOD}, or @code{CLOCK_GET_TIME_VALUE}) and the date and time
 has not been set with a previous call to clock_set, then the
-NOT_DEFINED status code is returned.  The caller can always
+@code{NOT_DEFINED} status code is returned.  The caller can always
 obtain the number of ticks per second (option is
-CLOCK_GET_TICKS_PER_SECOND) and the number of ticks since the
-executive was initialized option is CLOCK_GET_TICKS_SINCE_BOOT).
+@code{CLOCK_GET_TICKS_PER_SECOND}) and the number of ticks since the
+executive was initialized option is @code{CLOCK_GET_TICKS_SINCE_BOOT}).
 
 @subheading NOTES:
 

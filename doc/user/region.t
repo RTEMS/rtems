@@ -98,7 +98,7 @@ are equivalent as long as each attribute appears exactly once in
 the component list.  An attribute listed as a default is not
 required to appear in the attribute list, although it is a good
 programming practice to specify default attributes.  If all
-defaults are desired, the attribute DEFAULT_ATTRIBUTES should be
+defaults are desired, the attribute @code{DEFAULT_ATTRIBUTES} should be
 specified on this call.
 
 This example demonstrates the attribute_set parameter
@@ -116,8 +116,8 @@ desired option components.  The set of valid options for the
 region_get_segment directive are listed in the following table:
 
 @itemize @bullet
-@item WAIT - task will wait for semaphore (default)
-@item NO_WAIT - task should not wait
+@item @code{WAIT} - task will wait for semaphore (default)
+@item @code{NO_WAIT} - task should not wait
 @end itemize
 
 Option values are specifically designed to be
@@ -126,12 +126,12 @@ are equivalent as long as each option appears exactly once in
 the component list.  An option listed as a default is not
 required to appear in the option list, although it is a good
 programming practice to specify default options.  If all
-defaults are desired, the option DEFAULT_OPTIONS should be
+defaults are desired, the option @code{DEFAULT_OPTIONS} should be
 specified on this call.
 
 This example demonstrates the option parameter needed
 to poll for a segment.  The option parameter passed to the
-region_get_segment directive should be NO_WAIT.
+region_get_segment directive should be @code{NO_WAIT}.
 
 @ifinfo
 @node Region Manager Operations, Creating a Region, Building an Option Set, Region Manager
@@ -216,7 +216,7 @@ following situations applies:
 @itemize @bullet
 @item By default, the calling task will wait forever to acquire the segment.
 
-@item Specifying the NO_WAIT option forces an immediate return
+@item Specifying the @code{NO_WAIT} option forces an immediate return
 with an error status code.
 
 @item Specifying a timeout limits the interval the task will
@@ -347,7 +347,7 @@ segment is constructed in the region.
 Specifying PRIORITY in attribute_set causes tasks
 waiting for a segment to be serviced according to task priority.
 Specifying FIFO in attribute_set or selecting
-DEFAULT_ATTRIBUTES will cause waiting tasks to be serviced in
+@code{DEFAULT_ATTRIBUTES} will cause waiting tasks to be serviced in
 First In-First Out order.
 
 The starting_address parameter must be aligned on a
@@ -553,13 +553,13 @@ the size of maximum segment which is possible for this region@*
 
 This directive obtains a variable size segment from
 the region specified by id.  The address of the allocated
-segment is returned in segment.  The WAIT and NO_WAIT components
+segment is returned in segment.  The @code{WAIT} and @code{NO_WAIT} components
 of the options parameter are used to specify whether the calling
 tasks wish to wait for a segment to become available or return
 immediately if no segment is available.  For either option, if a
 sufficiently sized segment is available, then the segment is
 successfully acquired by returning immediately with  the
-SUCCESSFUL status code.
+@code{SUCCESSFUL} status code.
 
 If the calling task chooses to return immediately and
 a segment large enough is not available, then an error code
@@ -574,7 +574,7 @@ placed at the rear of the wait queue.
 
 The timeout parameter specifies the maximum interval
 that a task is willing to wait to obtain a segment.  If timeout
-is set to NO_TIMEOUT, then the calling task will wait forever.
+is set to @code{NO_TIMEOUT}, then the calling task will wait forever.
 
 @subheading NOTES:
 
@@ -586,8 +586,8 @@ The following segment acquisition option constants
 are defined by RTEMS:
 
 @itemize @bullet
-@item WAIT - task will wait for semaphore (default)
-@item NO_WAIT - task should not wait
+@item @code{WAIT} - task will wait for semaphore (default)
+@item @code{NO_WAIT} - task should not wait
 @end itemize
 
 @page

@@ -54,7 +54,7 @@ following features:
 @end itemize
 
 This manual describes the usage of RTEMS for
-applications written in the @value{RTEMS-LANGUAGE} programming language.  Those
+applications written in the @value{LANGUAGE} programming language.  Those
 implementation details that are processor dependent are provided
 in the Applications Supplement documents.  A supplement
 document which addresses specific architectural issues that
@@ -409,8 +409,8 @@ software developers.  Although some background is provided, it
 is assumed that the reader is familiar with the concepts of task
 management as well as intertask communication and
 synchronization.  Since directives, user related data
-structures, and examples are presented in @value{RTEMS-LANGUAGE}, a basic
-understanding of the @value{RTEMS-LANGUAGE} programming language
+structures, and examples are presented in @value{LANGUAGE}, a basic
+understanding of the @value{LANGUAGE} programming language
 is required to fully
 understand the material presented.  However, because of the
 similarity of the Ada and C RTEMS implementations, users will
