@@ -21,8 +21,8 @@ GENERATED_FILES= \
    cancel.texi clock.texi cond.texi \
    cspecific.texi device.texi files.texi \
    io.texi key.texi memorymgmt.texi message.texi mutex.texi procenv.texi \
-   process.texi sched.texi semaphores.texi signal.texi systemdb.texi \
-   thread.texi
+   process.texi sched.texi semaphores.texi signal.texi status.texi \
+   systemdb.texi thread.texi
 
 FILES= posix_users.texi preface.texi \
   $(COMMON_FILES) $(GENERATED_FILES)
@@ -150,6 +150,11 @@ cancel.texi: cancel.t Makefile
 	    -n "" ${*}.t
 
 systemdb.texi: systemdb.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+status.texi: status.t Makefile
 	 $(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
