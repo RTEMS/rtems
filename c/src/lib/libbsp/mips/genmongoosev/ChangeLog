@@ -1,3 +1,10 @@
+2004-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove times from EXTRA_DIST (Non-existant).
+	* startup/Makefile.am: Remove bspclean.c, exit.c, setvec.c from
+	EXTRA_DIST.
+	* wrapup/Makefile.am: Reflect changes to libcpu.
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.

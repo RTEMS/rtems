@@ -22,8 +22,6 @@ project_lib_DATA = $(ARCH)/start$(LIB_VARIANT).$(OBJEXT)
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
-EXTRA_DIST += times
-
 TMPINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
