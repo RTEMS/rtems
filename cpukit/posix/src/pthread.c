@@ -538,16 +538,16 @@ int pthread_create(
   void                   *arg
 )
 {
-  const pthread_attr_t  *local_attr;
+  const pthread_attr_t  *attrp;
   Priority_Control       core_priority;
   boolean                is_fp;
   boolean                status;
   Thread_Control        *the_thread;
   char                  *default_name = "psx";
 
-  local_attr = (attr) ? attr : &_POSIX_Threads_Default_attributes;
+  attrp = (attr) ? attr : &_POSIX_Threads_Default_attributes;
 
-  if ( !local_attr->is_initialized )
+  if ( !attrp->is_initialized )
     return EINVAL;
 
   /*
@@ -571,10 +571,10 @@ int pthread_create(
    *  Validate the RTEMS API priority and convert it to the core priority range.
    */
  
-  if ( !_POSIX_Priority_Is_valid( attr->schedparam.sched_priority ) )
+  if ( !_POSIX_Priority_Is_valid( attrp->schedparam.sched_priority ) )
     return EINVAL;
  
-  core_priority = _POSIX_Priority_To_core( attr->schedparam.sched_priority );
+  core_priority = _POSIX_Priority_To_core( attrp->schedparam.sched_priority );
  
   /*
    *  Currently all POSIX threads are floating point.
@@ -608,8 +608,8 @@ int pthread_create(
   status = _Thread_Initialize(
     &_POSIX_Threads_Information,
     the_thread,
-    attr->stackaddr,
-    attr->stacksize,
+    attrp->stackaddr,
+    attrp->stacksize,
     is_fp,
     core_priority,
     TRUE,                 /* preemptible */
@@ -623,6 +623,29 @@ int pthread_create(
     _Thread_Enable_dispatch();
     return EINVAL;
   }
+
+  status = _Thread_Start(
+    the_thread,
+    THREAD_START_POINTER,
+    start_routine,
+    arg,
+    0                     /* unused */
+  );
+
+  /*
+   *  _Thread_Start only fails if the thread was in the incorrect state
+   */
+
+  if ( !status ) {
+    _POSIX_Threads_Free( the_thread );
+    _Thread_Enable_dispatch();
+    return EINVAL;
+  }
+
+
+  /*
+   *  Return the id and indicate we successfully created the thread
+   */
 
   *thread = the_thread->Object.id;
 
@@ -666,7 +689,21 @@ void pthread_exit(
   void  *value_ptr
 )
 {
-  POSIX_NOT_IMPLEMENTED();
+  register Thread_Control *the_thread;
+
+  the_thread = _Thread_Executing;
+
+  _Thread_Disable_dispatch();
+
+  /*
+   *  XXX Will need to deal with join/detach
+   */
+
+  _Thread_Close( &_POSIX_Threads_Information, the_thread );
+ 
+  _POSIX_Threads_Free( the_thread );
+
+  _Thread_Enable_dispatch();
 }
 
 /*PAGE
