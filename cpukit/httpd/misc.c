@@ -59,10 +59,10 @@ static void	put_ulong(strbuf_t *buf, unsigned long int value, int base,
 /************************************ Code ************************************/
 /*
  *	"basename" returns a pointer to the last component of a pathname
- *  LINUX and LynxOS have their own basename function
+ *  LINUX, RTEMS, and LynxOS have their own basename function
  */
 
-#if ! LINUX & ! LYNX
+#if ! LINUX & ! __rtems__ & ! LYNX
 char_t *basename(char_t* name)
 {
 	char_t	*cp;
@@ -83,7 +83,7 @@ char_t *basename(char_t* name)
 		return ++cp;
 	}
 }
-#endif /* ! LINUX & ! LYNX */
+#endif /* ! LINUX && ! __rtems__ && ! LYNX */
 
 /******************************************************************************/
 /*

@@ -47,7 +47,7 @@
 	#include	<stdio.h>
 #endif
 
-#if LINUX
+#if LINUX || __rtems__
 	#include	<sys/types.h>
 	#include	<sys/stat.h>
 	#include	<sys/param.h>
@@ -513,7 +513,7 @@ typedef int		(*socketAccept_t)(int sid, char *ipaddr, int port);
 
 /******************************* Per O/S Defines ******************************/
 
-#if VXW486 || LINUX || LYNX
+#if VXW486 || LINUX || __rtems__ || LYNX
 #ifndef O_BINARY
 #define O_BINARY 		0
 #endif
@@ -569,7 +569,7 @@ extern char *bstrdupA(B_ARGS_DEC, char *s);
 #endif /* UNICODE */
 #endif /* BALLOC */
 
-#if !LINUX
+#if !LINUX && !__rtems__
 extern char_t*	basename(char_t* name);
 #endif
 
