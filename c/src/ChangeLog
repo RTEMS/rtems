@@ -1,5 +1,9 @@
 2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* make/bsp.mak: Remove CFLAGS_DEBUG_V.
+
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* optman/rtems/no-sem.c: Semaphores are rtems_id not Object_id.
 
 2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>

@@ -12,4 +12,3 @@ make/${RTEMS_BSP}.cache:
 	@echo ac_cv_env_RTEMS_BSP_FAMILY=\"$(RTEMS_BSP_FAMILY)\" >> $@
 	@echo ac_cv_env_CPU_CFLAGS=\"$(CPU_CFLAGS)\" >> $@
 	@echo ac_cv_env_CFLAGS_OPTIMIZE_V=\"$(CFLAGS_OPTIMIZE_V)\" >> $@
-	@echo ac_cv_env_CFLAGS_DEBUG_V=\"$(CFLAGS_DEBUG_V)\" >> $@
