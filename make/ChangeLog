@@ -1,3 +1,10 @@
+2003-08-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 470/bsps
+	* custom/mcp750.cfg, custom/mtx603e.cfg, custem/mvme2307.cfg (make-exe): 
+	Rearrange arguments in calls to OBJCOPY to $(OBJCOPY) options infile outfile.
+	(Reported for mcp750.cfg by Andrew Harris <Andrew.Harris@jhuapl.edu>).
+
 2003-08-20 	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/mvme167.cfg: Remove PRINTK_MINOR, CONSOLE_MINOR (move to
