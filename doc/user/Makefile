@@ -59,7 +59,7 @@ html: dirs $(FILES)
  	    $(PROJECT).texi
 
 clean:
-	rm -f *.o $(PROG) *.txt core *.html *.pdf
+	rm -f *.o $(PROG) *.txt core *.html $(PROJECT).pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f c_user c_user-* _* $(GENERATED_FILES)
 
@@ -185,3 +185,4 @@ mp.texi: mp.t
 
 convert:
 	/usr/bin/gs -dMaxBitmap=300000000 -g5500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER  -sOutputFile=rtemspie.pdf -- rtemspie.eps -c -quit
+	/usr/bin/gs -dMaxBitmap=300000000 -g5500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER  -sOutputFile=states.pdf -- states.eps -c -quit
