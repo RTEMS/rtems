@@ -1,0 +1,9 @@
+/*
+ *  This file is editted automatically by autoconf.
+ *
+ *  $Id$
+ */
+
+/* Define if you have the strerror function.  */
+#undef HAVE_STRERROR
+
