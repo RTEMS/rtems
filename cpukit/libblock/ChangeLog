@@ -1,3 +1,8 @@
+2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Eliminate C_O_FILES.
+	Eliminate SRCS.
+
 2002-12-02	Joel Sherrill <joel@OARcorp.com>
 
 	* src/bdbuf.c: Added cast to remove warning.

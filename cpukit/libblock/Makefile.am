@@ -26,11 +26,7 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
 LIB = ${ARCH}/libblock.a
 
 C_FILES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/ramdisk.c
-
-C_O_FILES = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
-
-SRCS = $(C_FILES)
-OBJS = $(C_O_FILES)
+OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
 
 AM_CFLAGS += $(LIBC_DEFINES)
 
