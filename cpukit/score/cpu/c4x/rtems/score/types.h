@@ -1,7 +1,7 @@
 /*  c4xtypes.h
  *
- *  This include file contains type definitions pertaining to the Intel
- *  C4x processor family.
+ *  This include file contains type definitions pertaining to the
+ *  Texas Instruments C4x processor family.
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
