@@ -267,56 +267,56 @@
  * PCI access functions
  */
 extern rtems_status_code PCIConfigWrite8(
-    unsigned8 ucBusNumber,
-    unsigned8 ucSlotNumber,
-    unsigned8 ucFunctionNumber,
-    unsigned8 ucOffset,
-    unsigned8 ucValue
+    uint8_t   ucBusNumber,
+    uint8_t   ucSlotNumber,
+    uint8_t   ucFunctionNumber,
+    uint8_t   ucOffset,
+    uint8_t   ucValue
 );
 
 extern rtems_status_code PCIConfigWrite16(
-    unsigned8 ucBusNumber,
-    unsigned8 ucSlotNumber,
-    unsigned8 ucFunctionNumber,
-    unsigned8 ucOffset,
-    unsigned16 usValue
+    uint8_t   ucBusNumber,
+    uint8_t   ucSlotNumber,
+    uint8_t   ucFunctionNumber,
+    uint8_t   ucOffset,
+    uint16_t   usValue
 );
 
 extern rtems_status_code PCIConfigWrite32(
-    unsigned8 ucBusNumber,
-    unsigned8 ucSlotNumber,
-    unsigned8 ucFunctionNumber,
-    unsigned8 ucOffset,
-    unsigned32 ulValue
+    uint8_t   ucBusNumber,
+    uint8_t   ucSlotNumber,
+    uint8_t   ucFunctionNumber,
+    uint8_t   ucOffset,
+    uint32_t   ulValue
 );
 
 extern rtems_status_code PCIConfigRead8(
-    unsigned8 ucBusNumber,
-    unsigned8 ucSlotNumber,
-    unsigned8 ucFunctionNumber,
-    unsigned8 ucOffset,
-    unsigned8 *pucValue
+    uint8_t   ucBusNumber,
+    uint8_t   ucSlotNumber,
+    uint8_t   ucFunctionNumber,
+    uint8_t   ucOffset,
+    uint8_t   *pucValue
 );
 
 extern rtems_status_code PCIConfigRead16(
-    unsigned8 ucBusNumber,
-    unsigned8 ucSlotNumber,
-    unsigned8 ucFunctionNumber,
-    unsigned8 ucOffset,
-    unsigned16 *pusValue
+    uint8_t   ucBusNumber,
+    uint8_t   ucSlotNumber,
+    uint8_t   ucFunctionNumber,
+    uint8_t   ucOffset,
+    uint16_t   *pusValue
 );
 
 extern rtems_status_code PCIConfigRead32(
-    unsigned8 ucBusNumber,
-    unsigned8 ucSlotNumber,
-    unsigned8 ucFunctionNumber,
-    unsigned8 ucOffset,
-    unsigned32 *pulValue
+    uint8_t   ucBusNumber,
+    uint8_t   ucSlotNumber,
+    uint8_t   ucFunctionNumber,
+    uint8_t   ucOffset,
+    uint32_t   *pulValue
 );
 
 /*
  * Return the number of PCI busses in the system
  */
-extern unsigned8 BusCountPCI();
+extern uint8_t   BusCountPCI();
 
 #endif /* _PCI_H_ */

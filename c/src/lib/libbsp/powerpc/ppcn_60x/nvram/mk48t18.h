@@ -33,35 +33,35 @@
  */
  
 typedef struct _MK48T18_CMOS_MAP {
-    unsigned8 SystemDependentArea2[8];
-    unsigned8 FeatureByte0[1];
-    unsigned8 FeatureByte1[1];
-    unsigned8 Century;	     /* century byte in BCD */
-    unsigned8 FeatureByte3[1];
-    unsigned8 FeatureByte4[1];
-    unsigned8 FeatureByte5[1];
-    unsigned8 FeatureByte6[1];
-    unsigned8 FeatureByte7[1];
-    unsigned8 BootPW[14];
-    rtems_unsigned16 BootCrc; /* CRC on BootPW */
-    unsigned8 ConfigPW[14];
-    rtems_unsigned16 ConfigCrc; /* CRC on ConfigPW */
-    unsigned8 SystemDependentArea1[8];
+    uint8_t   SystemDependentArea2[8];
+    uint8_t   FeatureByte0[1];
+    uint8_t   FeatureByte1[1];
+    uint8_t   Century;	     /* century byte in BCD */
+    uint8_t   FeatureByte3[1];
+    uint8_t   FeatureByte4[1];
+    uint8_t   FeatureByte5[1];
+    uint8_t   FeatureByte6[1];
+    uint8_t   FeatureByte7[1];
+    uint8_t   BootPW[14];
+    uint16_t         BootCrc; /* CRC on BootPW */
+    uint8_t   ConfigPW[14];
+    uint16_t         ConfigCrc; /* CRC on ConfigPW */
+    uint8_t   SystemDependentArea1[8];
     /*
      * The following are the RTC registers
      */
-    volatile unsigned8 Control;
-    volatile unsigned8 Second:7;	/* 0-59 */
-    volatile unsigned8 Stop:1;
-    volatile unsigned8 Minute;	/* 0-59 */
-    volatile unsigned8 Hour;	/* 0-23 */
-    volatile unsigned8 Day:3;	/* 1-7 */
-    volatile unsigned8 Resvd1:3;	/* 0 */
-    volatile unsigned8 FT:1;	/* Frequency test bit - must be 0 */
-    volatile unsigned8 Resvd2:1;	/* 0 */
-    volatile unsigned8 Date;	/* 1-31 */
-    volatile unsigned8 Month;	/* 1-12 */
-    volatile unsigned8 Year;	/* 0-99 */
+    volatile uint8_t   Control;
+    volatile uint8_t   Second:7;	/* 0-59 */
+    volatile uint8_t   Stop:1;
+    volatile uint8_t   Minute;	/* 0-59 */
+    volatile uint8_t   Hour;	/* 0-23 */
+    volatile uint8_t   Day:3;	/* 1-7 */
+    volatile uint8_t   Resvd1:3;	/* 0 */
+    volatile uint8_t   FT:1;	/* Frequency test bit - must be 0 */
+    volatile uint8_t   Resvd2:1;	/* 0 */
+    volatile uint8_t   Date;	/* 1-31 */
+    volatile uint8_t   Month;	/* 1-12 */
+    volatile uint8_t   Year;	/* 0-99 */
 } MK48T18_CMOS_MAP, *PMK48T18_CMOS_MAP;
 
 /*
@@ -73,14 +73,14 @@ typedef struct _MK48T18_CMOS_MAP {
 
 #define MK48T18_NVSIZE 8192-sizeof(MK48T18_CMOS_MAP)
 #define MK48T18_GESIZE (MK48T18_NVSIZE-CONFSIZE-OSAREASIZE-sizeof(HEADER))
-#define MK48T18_BASE (PMK48T18_NVRAM_MAP)((unsigned8 *)PCI_MEM_BASE+0x00800000)
+#define MK48T18_BASE (PMK48T18_NVRAM_MAP)((uint8_t*)PCI_MEM_BASE+0x00800000)
 
 /* Here is the whole map of the MK48T18 NVRAM */
 typedef struct _MK48T18_NVRAM_MAP {
     HEADER	Header;
-    unsigned8	GEArea[MK48T18_GESIZE];
-    unsigned8	OSArea[OSAREASIZE];
-    unsigned8	ConfigArea[CONFSIZE];
+    uint8_t  	GEArea[MK48T18_GESIZE];
+    uint8_t  	OSArea[OSAREASIZE];
+    uint8_t  	ConfigArea[CONFSIZE];
     MK48T18_CMOS_MAP	CMOS;
 } MK48T18_NVRAM_MAP, *PMK48T18_NVRAM_MAP;
 

@@ -83,7 +83,7 @@ static void i8042_process(
 
 static void i8042_scan_code(
 	int minor,
-	unsigned8   ucScan
+	uint8_t     ucScan
 );
 #endif
 
@@ -107,8 +107,8 @@ void i8042_polled_off(
 )
 {
 #if CONSOLE_USE_INTERRUPTS
-	unsigned32	Irql;
-	unsigned8	ucScan;
+	uint32_t  	Irql;
+	uint8_t  	ucScan;
 
 	/*
 	 * Make sure we have processed everything outstanding
@@ -133,14 +133,14 @@ void i8042_polled_off(
 static rtems_status_code
 i8042_outbyte_raw(
 	int minor,
-	unsigned8 ucData
+	uint8_t   ucData
 )
 {
-	unsigned32 i;
-	unsigned8 Status;
+	uint32_t   i;
+	uint8_t   Status;
 
 #if CONSOLE_USE_INTERRUPTS
-	unsigned32	Irql;
+	uint32_t  	Irql;
 
 	if(bInterruptsEnabled)
 	{
@@ -179,10 +179,10 @@ i8042_outbyte_raw(
 static rtems_status_code
 i8042_inbyte_polled(
 	int minor,
-	unsigned8 *pucData
+	uint8_t   *pucData
 )
 {
-	unsigned8 Status;
+	uint8_t   Status;
 
 	inport_byte(Console_Port_Tbl[minor].ulCtrlPort1, Status);
 	if(Status & KBD_OBF_MASK)
@@ -200,7 +200,7 @@ i8042_inbyte_polled(
 static rtems_status_code
 i8042_inbyte_raw(
 	int minor,
-	unsigned8 *pucData
+	uint8_t   *pucData
 )
 {
 	int i;
@@ -249,11 +249,11 @@ i8042_inbyte_raw(
 static rtems_status_code
 i8042_outbyte_cmd_polled(
 	int minor,
-	unsigned8 ucCommand
+	uint8_t   ucCommand
 )
 {
-	unsigned32 i;
-	unsigned8 Status;
+	uint32_t   i;
+	uint8_t   Status;
 
 	/*
 	 * This routine may be called when no clock driver is available
@@ -293,7 +293,7 @@ void EnqueueKbdChar(
  */
 static void i8042_process_two_code(
 	int minor,
-	unsigned8 ucScan,
+	uint8_t   ucScan,
 	boolean bMakenBreak
 )
 {
@@ -416,7 +416,7 @@ static void i8042_process_two_code(
 }
 
 static boolean i8042_process_qualifiers(
-	unsigned8 ucScan,
+	uint8_t   ucScan,
 	boolean	bMakenBreak
 )
 {
@@ -468,13 +468,13 @@ static boolean i8042_process_qualifiers(
 
 static boolean i8042_process_top_row(
 	int		minor,
-	unsigned8	ucScan
+	uint8_t  	ucScan
 )
 {
 	boolean	bProcessed;
 	char	cASCIIFnCode;
 #if CONSOLE_USE_INTERRUPTS==0
-	unsigned8	ucKeyboardAck;
+	uint8_t  	ucKeyboardAck;
 #endif
 
 	/*
@@ -633,7 +633,7 @@ static boolean i8042_process_top_row(
 
 static boolean i8042_process_keypad(
 	int	minor,
-	unsigned8 ucScan
+	uint8_t   ucScan
 )
 {
 	char cASCIICtrlCode;
@@ -735,7 +735,7 @@ static boolean i8042_process_keypad(
  */
 static void i8042_scan_code(
 	int minor,
-	unsigned8   ucScan
+	uint8_t     ucScan
 )
 {
 	char cChar;
@@ -870,8 +870,8 @@ static void i8042_scan_code(
  */
 boolean i8042_probe(int minor)
 {
-	unsigned8 ucKeyboardAck;
-	unsigned8 ucKeyboardID1, ucKeyboardID2;
+	uint8_t   ucKeyboardAck;
+	uint8_t   ucKeyboardID1, ucKeyboardID2;
 
 	if(!vga_probe(minor))
 	{
@@ -920,7 +920,7 @@ boolean i8042_probe(int minor)
 
 void i8042_init(int minor)
 {
-	unsigned8 ucKeyboardAck;
+	uint8_t   ucKeyboardAck;
 
 	vga_init(minor);
 
@@ -953,7 +953,7 @@ int i8042_inbyte_nonblocking_polled(
 	int minor 
 )
 {
-	unsigned8	ucScan;
+	uint8_t  	ucScan;
 	char	ucData;
 
 	if(i8042_inbyte_polled(minor, &ucScan)==RTEMS_SUCCESSFUL)
@@ -988,8 +988,8 @@ static void i8042_process(
 	int	minor
 )
 {
-	unsigned8	Status;
-	unsigned8	ucData;
+	uint8_t  	Status;
+	uint8_t  	ucData;
 
 	inport_byte(Console_Port_Tbl[minor].ulCtrlPort1, Status);
 

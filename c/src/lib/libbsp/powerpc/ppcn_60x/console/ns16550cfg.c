@@ -28,9 +28,9 @@
 #include <rtems.h>
 #include <bsp.h>
 
-unsigned8 Read_ns16550_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum
+uint8_t   Read_ns16550_register(
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum
 )
 {
   unsigned char *p = (unsigned char *)ulCtrlPort;
@@ -41,9 +41,9 @@ unsigned8 Read_ns16550_register(
 }
 
 void  Write_ns16550_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned8   ucData
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum,
+  uint8_t     ucData
 )
 {
   unsigned char *p = (unsigned char *)ulCtrlPort;

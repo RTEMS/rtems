@@ -48,17 +48,17 @@
 /*
  * Private data
  */
-static unsigned8 ucMaxPCIBus;
+static uint8_t   ucMaxPCIBus;
 
 /*
  * Public routines
  */
 rtems_status_code PCIConfigWrite8(
-	unsigned8 ucBusNumber,
-	unsigned8 ucSlotNumber,
-	unsigned8 ucFunctionNumber,
-	unsigned8 ucOffset,
-	unsigned8 ucValue
+	uint8_t   ucBusNumber,
+	uint8_t   ucSlotNumber,
+	uint8_t   ucFunctionNumber,
+	uint8_t   ucOffset,
+	uint8_t   ucValue
 )
 {
 	ISR_Level Irql;
@@ -86,11 +86,11 @@ rtems_status_code PCIConfigWrite8(
 }
 
 rtems_status_code PCIConfigWrite16(
-	unsigned8 ucBusNumber,
-	unsigned8 ucSlotNumber,
-	unsigned8 ucFunctionNumber,
-	unsigned8 ucOffset,
-	unsigned16 usValue
+	uint8_t   ucBusNumber,
+	uint8_t   ucSlotNumber,
+	uint8_t   ucFunctionNumber,
+	uint8_t   ucOffset,
+	uint16_t   usValue
 )
 {
 	ISR_Level Irql;
@@ -118,11 +118,11 @@ rtems_status_code PCIConfigWrite16(
 }
 
 rtems_status_code PCIConfigWrite32(
-	unsigned8 ucBusNumber,
-	unsigned8 ucSlotNumber,
-	unsigned8 ucFunctionNumber,
-	unsigned8 ucOffset,
-	unsigned32 ulValue
+	uint8_t   ucBusNumber,
+	uint8_t   ucSlotNumber,
+	uint8_t   ucFunctionNumber,
+	uint8_t   ucOffset,
+	uint32_t   ulValue
 )
 {
 	ISR_Level Irql;
@@ -150,11 +150,11 @@ rtems_status_code PCIConfigWrite32(
 }
 
 rtems_status_code PCIConfigRead8(
-	unsigned8 ucBusNumber,
-	unsigned8 ucSlotNumber,
-	unsigned8 ucFunctionNumber,
-	unsigned8 ucOffset,
-	unsigned8 *pucValue
+	uint8_t   ucBusNumber,
+	uint8_t   ucSlotNumber,
+	uint8_t   ucFunctionNumber,
+	uint8_t   ucOffset,
+	uint8_t   *pucValue
 )
 {
 	ISR_Level Irql;
@@ -182,11 +182,11 @@ rtems_status_code PCIConfigRead8(
 }
 
 rtems_status_code PCIConfigRead16(
-	unsigned8 ucBusNumber,
-	unsigned8 ucSlotNumber,
-	unsigned8 ucFunctionNumber,
-	unsigned8 ucOffset,
-	unsigned16 *pusValue
+	uint8_t   ucBusNumber,
+	uint8_t   ucSlotNumber,
+	uint8_t   ucFunctionNumber,
+	uint8_t   ucOffset,
+	uint16_t   *pusValue
 )
 {
 	ISR_Level Irql;
@@ -214,11 +214,11 @@ rtems_status_code PCIConfigRead16(
 }
 
 rtems_status_code PCIConfigRead32(
-	unsigned8 ucBusNumber,
-	unsigned8 ucSlotNumber,
-	unsigned8 ucFunctionNumber,
-	unsigned8 ucOffset,
-	unsigned32 *pulValue
+	uint8_t   ucBusNumber,
+	uint8_t   ucSlotNumber,
+	uint8_t   ucFunctionNumber,
+	uint8_t   ucOffset,
+	uint32_t   *pulValue
 )
 {
 	ISR_Level Irql;
@@ -250,10 +250,10 @@ rtems_status_code PCIConfigRead32(
  */
 void InitializePCI()
 {
-	unsigned8 ucSlotNumber, ucFnNumber, ucNumFuncs;
-	unsigned8 ucHeader;
-	unsigned8 ucBaseClass, ucSubClass, ucMaxSubordinate;
-	unsigned32 ulDeviceID;
+	uint8_t   ucSlotNumber, ucFnNumber, ucNumFuncs;
+	uint8_t   ucHeader;
+	uint8_t   ucBaseClass, ucSubClass, ucMaxSubordinate;
+	uint32_t   ulDeviceID;
 
 	/*
 	 * Scan PCI bus 0 looking for PCI-PCI bridges
@@ -336,7 +336,7 @@ void InitializePCI()
 /*
  * Return the number of PCI busses in the system
  */
-unsigned8 BusCountPCI()
+uint8_t   BusCountPCI()
 {
 	return(ucMaxPCIBus+1);
 }

@@ -46,8 +46,8 @@ rtems_isr external_exception_ISR (
 /*
  * Current 8259 masks
  */
-unsigned8	ucMaster8259Mask;
-unsigned8	ucSlave8259Mask;
+uint8_t  	ucMaster8259Mask;
+uint8_t  	ucSlave8259Mask;
 
 /* 
  * Structure to for one of possible multiple interrupt handlers for 
@@ -65,7 +65,7 @@ typedef struct
  *        handlers at a later time.
  */
   EE_ISR_Type       ISR_Nodes [NUM_LIRQ_HANDLERS];
-  rtems_unsigned16  Nodes_Used; 
+  uint16_t          Nodes_Used; 
   Chain_Control     ISR_Array  [NUM_LIRQ];
 
 void initialize_external_exception_vector()
@@ -177,8 +177,8 @@ void set_EE_vector(
   rtems_vector_number vector        /* vector number      */
 )
 {
-	rtems_unsigned16 vec_idx  = vector - PPCN_60X_8259_IRQ_BASE;
-	rtems_unsigned32 index;
+	uint16_t         vec_idx  = vector - PPCN_60X_8259_IRQ_BASE;
+	uint32_t         index;
 
 	assert  (Nodes_Used < NUM_LIRQ_HANDLERS);
 
@@ -222,11 +222,11 @@ rtems_isr external_exception_ISR (
   rtems_vector_number   vector             /* IN  */
 )
 { 
-	unsigned16	index;
-	unsigned8	ucISr;
+	uint16_t  	index;
+	uint8_t  	ucISr;
 	EE_ISR_Type	*node;
 
-	index = *((volatile unsigned8 *)IRQ_VECTOR_BASE);
+	index = *((volatile uint8_t*)IRQ_VECTOR_BASE);
 
 	/*
 	 * check for spurious interrupt

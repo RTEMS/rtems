@@ -28,7 +28,7 @@
  */
 #define STK11C68_NVSIZE 8192
 #define STK11C68_GESIZE (STK11C68_NVSIZE-CONFSIZE-OSAREASIZE-sizeof(HEADER))
-#define STK11C68_BASE (PSTK11C68_NVRAM_MAP)((unsigned8 *)PCI_MEM_BASE+0x00800000)
+#define STK11C68_BASE (PSTK11C68_NVRAM_MAP)((uint8_t*)PCI_MEM_BASE+0x00800000)
 
 /*
  * STK11C88 definitions
@@ -38,9 +38,9 @@
 /* Here is the whole map of the STK11C68 NVRAM */
 typedef struct _STK11C68_NVRAM_MAP {
 	HEADER		Header;
-	unsigned8	GEArea[STK11C68_GESIZE];
-	unsigned8	OSArea[OSAREASIZE];
-	unsigned8	ConfigArea[CONFSIZE];
+	uint8_t  	GEArea[STK11C68_GESIZE];
+	uint8_t  	OSArea[OSAREASIZE];
+	uint8_t  	ConfigArea[CONFSIZE];
 } STK11C68_NVRAM_MAP, *PSTK11C68_NVRAM_MAP;
 
 #endif /* _STK11C68_H */

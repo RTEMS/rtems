@@ -175,7 +175,7 @@ rtems_isr bsp_spurious_handler(
 
 void bsp_spurious_initialize()
 {
-  rtems_unsigned32 trap;
+  uint32_t         trap;
 
   for ( trap=0 ; trap < PPC_IRQ_LAST ; trap++ ) {
 

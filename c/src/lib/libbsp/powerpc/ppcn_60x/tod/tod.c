@@ -88,7 +88,7 @@ static rtems_id	semRTC;
 /*
  * This only works for the Gregorian calendar - i.e. after 1752 (in the UK)
  */
-rtems_unsigned8 
+uint8_t         
 GregorianDay(rtems_time_of_day *pTOD)
 {
 	boolean isLeap;
@@ -126,13 +126,13 @@ GregorianDay(rtems_time_of_day *pTOD)
 	day += lastYear*365 + leapsToDate + MonthOffset[pTOD->month-1] +
 		   pTOD->day;
 
-	return((rtems_unsigned8)(day%7));
+	return((uint8_t)(day%7));
 }
 
 void
 DsWriteRawClockRegister (
-	rtems_unsigned8 Register,
-	rtems_unsigned8 Value
+	uint8_t         Register,
+	uint8_t         Value
 )
 
 /*++
@@ -156,17 +156,17 @@ Return Value:
 --*/
 
 {
-	outport_byte((rtems_unsigned8 *)RTC_PORT, Register & 0x7f);
+	outport_byte((uint8_t*)RTC_PORT, Register & 0x7f);
 
 	/* Read the realtime clock register value. */
 
-	outport_byte((rtems_unsigned8 *)(RTC_PORT + 1), Value);
+	outport_byte((uint8_t*)(RTC_PORT + 1), Value);
 	return;
 }
 
-rtems_unsigned8
+uint8_t        
 DsReadRawClockRegister (
-	rtems_unsigned8 Register
+	uint8_t         Register
 )
 
 /*++
@@ -190,20 +190,20 @@ Return Value:
 --*/
 
 {
-	rtems_unsigned8 ucDataByte;
+	uint8_t         ucDataByte;
 
-	outport_byte((rtems_unsigned8 *)RTC_PORT, Register & 0x7f);
+	outport_byte((uint8_t*)RTC_PORT, Register & 0x7f);
 
 	/* Read the realtime clock register value. */
 
-	inport_byte((rtems_unsigned8 *)(RTC_PORT + 1), ucDataByte);
+	inport_byte((uint8_t*)(RTC_PORT + 1), ucDataByte);
 	return ucDataByte;
 }
 
 void
 DsWriteClockRegister (
-	rtems_unsigned8 Register,
-	rtems_unsigned8 Value
+	uint8_t         Register,
+	uint8_t         Value
 )
 
 /*++
@@ -226,16 +226,16 @@ Return Value:
 --*/
 
 {
-	rtems_unsigned8 BcdValue;
+	uint8_t         BcdValue;
 
 	BcdValue = Bin2BCD(Value);
 	DsWriteRawClockRegister(Register, BcdValue);
 	return;
 }
 
-rtems_unsigned8
+uint8_t        
 DsReadClockRegister (
-	rtems_unsigned8 Register
+	uint8_t         Register
 )
 
 /*++
@@ -255,7 +255,7 @@ Return Value:
 --*/
 
 {
-	rtems_unsigned8 BcdValue;
+	uint8_t         BcdValue;
 
 	BcdValue =  DsReadRawClockRegister(Register);
 	return BCD2Bin(BcdValue);
@@ -289,7 +289,7 @@ Return Value:
 --*/
 
 {
-	rtems_unsigned8 ucDataByte;
+	uint8_t         ucDataByte;
 	PCMOS_MAP pCMOS = (PCMOS_MAP)0;
 
 	/* If the realtime clock battery is still functioning, then write */
@@ -307,26 +307,26 @@ Return Value:
 		/* Write the realtime clock values. */
 
 		DsWriteClockRegister(RTC_YEAR,
-				     (rtems_unsigned8)(pTOD->year%100));
+				     (uint8_t)(pTOD->year%100));
 		if(pTOD->year>=100)
 		{
-			DsWriteClockRegister((rtems_unsigned8)
+			DsWriteClockRegister((uint8_t)
 					     ((unsigned long)&pCMOS->Century),
 					     pTOD->year/100);
 		}
 		DsWriteClockRegister(RTC_MONTH,
-				     (rtems_unsigned8)pTOD->month);
+				     (uint8_t)pTOD->month);
 		DsWriteClockRegister(RTC_DAY_OF_MONTH,
-				     (rtems_unsigned8)pTOD->day);
+				     (uint8_t)pTOD->day);
 		DsWriteClockRegister(RTC_DAY_OF_WEEK,
-				     (rtems_unsigned8)
+				     (uint8_t)
 				     (GregorianDay(pTOD) + 1));
 		DsWriteClockRegister(RTC_HOUR,
-				     (rtems_unsigned8)pTOD->hour);
+				     (uint8_t)pTOD->hour);
 		DsWriteClockRegister(RTC_MINUTE,
-				     (rtems_unsigned8)pTOD->minute);
+				     (uint8_t)pTOD->minute);
 		DsWriteClockRegister(RTC_SECOND,
-				     (rtems_unsigned8)pTOD->second);
+				     (uint8_t)pTOD->second);
 
 		/* Set the realtime clock control to update the time. */
 
@@ -366,7 +366,7 @@ Return Value:
 --*/
 
 {
-	rtems_unsigned8 ucDataByte;
+	uint8_t         ucDataByte;
 	PCMOS_MAP pCMOS = (PCMOS_MAP)0;
 
 	/* If the realtime clock battery is still functioning, then read */
@@ -385,9 +385,9 @@ Return Value:
 
 		/* Read the realtime clock values. */
 
-		pTOD->year=(rtems_unsigned16)
+		pTOD->year=(uint16_t)
 				  (DsReadClockRegister(
-				   (rtems_unsigned8)
+				   (uint8_t)
 				   (unsigned long)&pCMOS->Century)
 				  *100 + DsReadClockRegister(RTC_YEAR));
 		pTOD->month=DsReadClockRegister(RTC_MONTH);
@@ -443,18 +443,18 @@ Return Value:
 	 * Write the realtime clock values.
 	 */
 
-	pNvRAM->CMOS.Year = (rtems_unsigned8)Bin2BCD(pTOD->year%100);
+	pNvRAM->CMOS.Year = (uint8_t)Bin2BCD(pTOD->year%100);
 	if(pTOD->year>=100)
 	{
-	    pNvRAM->CMOS.Century=(rtems_unsigned8)
+	    pNvRAM->CMOS.Century=(uint8_t)
 	    			 Bin2BCD(pTOD->year/100);
 	}
-	pNvRAM->CMOS.Month  = (rtems_unsigned8)Bin2BCD(pTOD->month);
-	pNvRAM->CMOS.Date   = (rtems_unsigned8)Bin2BCD(pTOD->day);
-	pNvRAM->CMOS.Day    = (rtems_unsigned8)(GregorianDay(pTOD) + 1);
-	pNvRAM->CMOS.Hour   = (rtems_unsigned8)Bin2BCD(pTOD->hour);
-	pNvRAM->CMOS.Minute = (rtems_unsigned8)Bin2BCD(pTOD->minute);
-	pNvRAM->CMOS.Second = (rtems_unsigned8)Bin2BCD(pTOD->second);
+	pNvRAM->CMOS.Month  = (uint8_t)Bin2BCD(pTOD->month);
+	pNvRAM->CMOS.Date   = (uint8_t)Bin2BCD(pTOD->day);
+	pNvRAM->CMOS.Day    = (uint8_t)(GregorianDay(pTOD) + 1);
+	pNvRAM->CMOS.Hour   = (uint8_t)Bin2BCD(pTOD->hour);
+	pNvRAM->CMOS.Minute = (uint8_t)Bin2BCD(pTOD->minute);
+	pNvRAM->CMOS.Second = (uint8_t)Bin2BCD(pTOD->second);
 
 	/*
 	 * Set the realtime clock control to update the time.
@@ -504,13 +504,13 @@ Return Value:
 	 * Read the realtime clock values.
 	 */
 
-	pTOD->year = (rtems_unsigned16)(100*BCD2Bin(pNvRAM->CMOS.Century)+
+	pTOD->year = (uint16_t)(100*BCD2Bin(pNvRAM->CMOS.Century)+
 					      BCD2Bin(pNvRAM->CMOS.Year));
-	pTOD->month = (rtems_unsigned8)BCD2Bin(pNvRAM->CMOS.Month);
-	pTOD->day = (rtems_unsigned8)BCD2Bin(pNvRAM->CMOS.Date);
-	pTOD->hour = (rtems_unsigned8)BCD2Bin(pNvRAM->CMOS.Hour);
-	pTOD->minute = (rtems_unsigned8)BCD2Bin(pNvRAM->CMOS.Minute);
-	pTOD->second = (rtems_unsigned8)BCD2Bin(pNvRAM->CMOS.Second);
+	pTOD->month = (uint8_t)BCD2Bin(pNvRAM->CMOS.Month);
+	pTOD->day = (uint8_t)BCD2Bin(pNvRAM->CMOS.Date);
+	pTOD->hour = (uint8_t)BCD2Bin(pNvRAM->CMOS.Hour);
+	pTOD->minute = (uint8_t)BCD2Bin(pNvRAM->CMOS.Minute);
+	pTOD->second = (uint8_t)BCD2Bin(pNvRAM->CMOS.Second);
 
 	/*
 	 * Set the realtime clock control to normal mode.

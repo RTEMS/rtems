@@ -237,68 +237,68 @@ extern void Dis_Ext_Interrupt(int level);
  * As ports are all little endian we will perform swaps here on 16 and 32
  * bit transfers
  */
-extern unsigned16 Swap16(unsigned16 usVal);
-extern unsigned32 Swap32(unsigned32 ulVal);
+extern uint16_t   Swap16(uint16_t   usVal);
+extern uint32_t   Swap32(uint32_t   ulVal);
 
 #define outport_byte(port, val)			\
 	EIEIO;					\
-	*(volatile unsigned8 *)(PCI_IO_BASE+	\
+	*(volatile uint8_t*)(PCI_IO_BASE+	\
 				(unsigned long)(port))=(val)
 
 #define outport_16(port, val) 			\
 	EIEIO;					\
-	*(volatile unsigned16 *)(PCI_IO_BASE+	\
+	*(volatile uint16_t*)(PCI_IO_BASE+	\
 				 (unsigned long)(port))=Swap16(val)
 
 #define outport_32(port, val) 			\
 	EIEIO;					\
-	*(volatile unsigned32 *)(PCI_IO_BASE+	\
+	*(volatile uint32_t*)(PCI_IO_BASE+	\
 				 (unsigned long)(port))=Swap32(val)
 
 #define inport_byte(port, val)				\
 	EIEIO;						\
-	(val)=*(volatile unsigned8 *)(PCI_IO_BASE+	\
+	(val)=*(volatile uint8_t*)(PCI_IO_BASE+	\
 				      (unsigned long)(port))
 
 #define inport_16(port, val)					\
 	EIEIO;							\
-	(val)=Swap16(*(volatile unsigned16 *)(PCI_IO_BASE+	\
+	(val)=Swap16(*(volatile uint16_t*)(PCI_IO_BASE+	\
 					      (unsigned long)(port)))
 
 #define inport_32(port, val)					\
 	EIEIO;							\
-	(val)=Swap32(*(volatile unsigned32 *)(PCI_IO_BASE+	\
+	(val)=Swap32(*(volatile uint32_t*)(PCI_IO_BASE+	\
 					      (unsigned long)(port)))
 
 /*
  *  System Planar Board Registers
  */
 typedef volatile struct _PLANARREGISTERS{
-    unsigned8 Reserved0[0x803];     /* Offset 0x000 */
-    unsigned8 SimmId;               /* Offset 0x803 */
-    unsigned8 SimmPresent;          /* Offset 0x804 */
-    unsigned8 Reserved1[3];
-    unsigned8 HardfileLight;        /* Offset 0x808 */
-    unsigned8 Reserved2[3];
-    unsigned8 EquipmentPresent1;    /* Offset 0x80C */
-    unsigned8 Reserved3;
-    unsigned8 EquipmentPresent2;    /* Offset 0x80e */
-    unsigned8 Reserved4;
-    unsigned8 PasswordProtect1;     /* Offset 0x810 */
-    unsigned8 Reserved5;
-    unsigned8 PasswordProtect2;     /* Offset 0x812 */
-    unsigned8 Reserved6;
-    unsigned8 L2Flush;              /* Offset 0x814 */
-    unsigned8 Reserved7[3];
-    unsigned8 Keylock;              /* Offset 0x818 */
-    unsigned8 Reserved8[0x3c];
-    unsigned8 BoardRevision;		/* Offset 0x854 */
-    unsigned8 Reserved9[0xf];
-    unsigned8 BoardID;				/* Offset 0x864 */
-    unsigned8 Reserved10;
-    unsigned8 MotherboardMemoryType; /* Offset 0x866 */
-    unsigned8 Reserved11;
-    unsigned8 MezzanineMemoryType;  /* Offset 0x868 */
+    uint8_t   Reserved0[0x803];     /* Offset 0x000 */
+    uint8_t   SimmId;               /* Offset 0x803 */
+    uint8_t   SimmPresent;          /* Offset 0x804 */
+    uint8_t   Reserved1[3];
+    uint8_t   HardfileLight;        /* Offset 0x808 */
+    uint8_t   Reserved2[3];
+    uint8_t   EquipmentPresent1;    /* Offset 0x80C */
+    uint8_t   Reserved3;
+    uint8_t   EquipmentPresent2;    /* Offset 0x80e */
+    uint8_t   Reserved4;
+    uint8_t   PasswordProtect1;     /* Offset 0x810 */
+    uint8_t   Reserved5;
+    uint8_t   PasswordProtect2;     /* Offset 0x812 */
+    uint8_t   Reserved6;
+    uint8_t   L2Flush;              /* Offset 0x814 */
+    uint8_t   Reserved7[3];
+    uint8_t   Keylock;              /* Offset 0x818 */
+    uint8_t   Reserved8[0x3c];
+    uint8_t   BoardRevision;		/* Offset 0x854 */
+    uint8_t   Reserved9[0xf];
+    uint8_t   BoardID;				/* Offset 0x864 */
+    uint8_t   Reserved10;
+    uint8_t   MotherboardMemoryType; /* Offset 0x866 */
+    uint8_t   Reserved11;
+    uint8_t   MezzanineMemoryType;  /* Offset 0x868 */
 } PLANARREGISTERS, *PPLANARREGISTERS;
 
 extern unsigned char ucSystemType;
@@ -378,20 +378,20 @@ void InitializeNvRAM(void);
 
 #define Cause_tm27_intr()  \
   do { \
-    unsigned32 _clicks = 8; \
+    uint32_t   _clicks = 8; \
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
 
 #define Clear_tm27_intr() \
   do { \
-    unsigned32 _clicks = 0xffffffff; \
+    uint32_t   _clicks = 0xffffffff; \
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
 #define Lower_tm27_intr() \
   do { \
-    unsigned32 _msr = 0; \
+    uint32_t   _msr = 0; \
     _ISR_Set_level( 0 ); \
     asm volatile( "mfmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
     _msr |=  0x8002; \
@@ -455,7 +455,7 @@ void initialize_external_exception_vector();
  * console.c
  */
 void DEBUG_puts( char *string );
-void DEBUG_puth( unsigned32 ulHexNum );
+void DEBUG_puth( uint32_t   ulHexNum );
 
 void BSP_fatal_return( void );
 
@@ -463,7 +463,7 @@ extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
 
 extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 
-extern unsigned32          bsp_isr_level;
+extern uint32_t            bsp_isr_level;
 
 #endif /* ASM */
 

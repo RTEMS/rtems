@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-#define VGA_FB		((unsigned32)PCI_MEM_BASE+0xb8000)
+#define VGA_FB		((uint32_t)PCI_MEM_BASE+0xb8000)
 #define VGA_NUM_ROWS	25
 #define VGA_NUM_COLS	80
 
@@ -39,7 +39,7 @@ extern "C" {
 	outport_byte(0x3cf, val)
 #define VGA_WRITE_ATT(reg, val) \
 	{ \
-		volatile unsigned8 ucDummy; \
+		volatile uint8_t   ucDummy; \
 		inport_byte(0x3da, ucDummy); \
 		outport_byte(0x3c0, reg); \
 		outport_byte(0x3c0, val); \

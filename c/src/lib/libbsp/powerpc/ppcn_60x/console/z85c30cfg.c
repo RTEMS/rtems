@@ -34,12 +34,12 @@
  *  Read a Z85c30 register
  */
 
-unsigned8 Read_85c30_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum
+uint8_t   Read_85c30_register(
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum
 )
 {
-  unsigned8 ucData;
+  uint8_t   ucData;
 
   outport_byte(ulCtrlPort, ucRegNum);
   inport_byte(ulCtrlPort, ucData);
@@ -53,9 +53,9 @@ unsigned8 Read_85c30_register(
  */
 
 void  Write_85c30_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned8   ucData
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum,
+  uint8_t     ucData
 )
 {
   if(ucRegNum) {
@@ -70,11 +70,11 @@ void  Write_85c30_register(
  *  Read a Z85c30 data register
  */
 
-unsigned8 Read_85c30_data(
-  unsigned32  ulDataPort
+uint8_t   Read_85c30_data(
+  uint32_t    ulDataPort
 )
 {
-  unsigned8 ucData;
+  uint8_t   ucData;
 
   inport_byte(ulDataPort, ucData);
   return ucData;
@@ -87,8 +87,8 @@ unsigned8 Read_85c30_data(
  */
 
 void  Write_85c30_data(
-  unsigned32  ulDataPort,
-  unsigned8   ucData
+  uint32_t    ulDataPort,
+  uint8_t     ucData
 )
 {
   outport_byte(ulDataPort, ucData);

@@ -279,10 +279,10 @@ typedef volatile struct _SP_WRITE_REGISTERS {
 
 static boolean config_PMX1553_probe(int minor)
 {
-	unsigned8 ucBusNumber, ucSlotNumber, ucChannel;
-	unsigned8 ucIntLine;
-	unsigned32 ulPortBase, ulMemBase, ulDeviceID;
-	unsigned8 *pucSIO_cir, *pucUart_int_sr, *pucUartDevIntReg;
+	uint8_t   ucBusNumber, ucSlotNumber, ucChannel;
+	uint8_t   ucIntLine;
+	uint32_t   ulPortBase, ulMemBase, ulDeviceID;
+	uint8_t   *pucSIO_cir, *pucUart_int_sr, *pucUartDevIntReg;
 	PSP_WRITE_REGISTERS     pNS16550Write;
 
 	/*
@@ -329,9 +329,9 @@ static boolean config_PMX1553_probe(int minor)
 			PCI_CONFIG_BAR_2,
 			&ulMemBase);
 
-	pucUartDevIntReg=(unsigned8 *)(PCI_MEM_BASE+ulMemBase);
-	pucUart_int_sr=(unsigned8 *)(PCI_MEM_BASE+ulMemBase+0x10);
-	pucSIO_cir=(unsigned8 *)(PCI_MEM_BASE+ulMemBase+0x18);
+	pucUartDevIntReg=(uint8_t*)(PCI_MEM_BASE+ulMemBase);
+	pucUart_int_sr=(uint8_t*)(PCI_MEM_BASE+ulMemBase+0x10);
+	pucSIO_cir=(uint8_t*)(PCI_MEM_BASE+ulMemBase+0x18);
 
 	/*
 	 * Use ulIntVector field to select RS232/RS422
@@ -440,19 +440,19 @@ static boolean config_PMX1553_probe(int minor)
 	/*
 	 * Scale requested baud rate for 16 MHz clock
 	 */
-	(unsigned32)Console_Port_Tbl[minor].pDeviceParams*=7373;
-	(unsigned32)Console_Port_Tbl[minor].pDeviceParams/=16000;
+	(uint32_t)Console_Port_Tbl[minor].pDeviceParams*=7373;
+	(uint32_t)Console_Port_Tbl[minor].pDeviceParams/=16000;
 #else
 	/*
 	 * Scale requested baud rate for 22.1184 MHz clock
 	 */
-	(unsigned32)Console_Port_Tbl[minor].pDeviceParams/=3;
+	(uint32_t)Console_Port_Tbl[minor].pDeviceParams/=3;
 #endif
 	/*
 	 * In order to maintain maximum data rate accuracy, we will
 	 * apply a div 4 here rather than in hardware (using MCR bit 7).
 	 */
-	(unsigned32)Console_Port_Tbl[minor].pDeviceParams/=4;
+	(uint32_t)Console_Port_Tbl[minor].pDeviceParams/=4;
 
 	return(TRUE);
 }

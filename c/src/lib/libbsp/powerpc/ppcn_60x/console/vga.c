@@ -64,13 +64,13 @@ extern volatile boolean bScrollLock;
 | Global Variables
 +--------------------------------------------------------------------------*/
 /* Physical address of start of video text memory. */
-static unsigned16 *videoRam    = (unsigned16 *)VGA_FB;
+static uint16_t   *videoRam    = (uint16_t*)VGA_FB;
 /* Pointer for current output position in display. */
-static unsigned16 *videoRamPtr = (unsigned16 *)VGA_FB;
-static unsigned8  videoRows = VGA_NUM_ROWS; /* Number of rows in display.    */
-static unsigned8  videoCols = VGA_NUM_COLS; /* Number of columns in display. */
-static unsigned8  cursRow   = 0;       /* Current cursor row.           */
-static unsigned8  cursCol   = 0;       /* Current cursor column.        */
+static uint16_t   *videoRamPtr = (uint16_t*)VGA_FB;
+static uint8_t    videoRows = VGA_NUM_ROWS; /* Number of rows in display.    */
+static uint8_t    videoCols = VGA_NUM_COLS; /* Number of columns in display. */
+static uint8_t    cursRow   = 0;       /* Current cursor row.           */
+static uint8_t    cursCol   = 0;       /* Current cursor column.        */
 
 
 /*-------------------------------------------------------------------------+
@@ -81,7 +81,7 @@ static unsigned8  cursCol   = 0;       /* Current cursor column.        */
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
 static inline void
-setHardwareCursorPos(unsigned16 videoCursor)
+setHardwareCursorPos(uint16_t   videoCursor)
 {
 	VGA_WRITE_CRTC(0x0e, (videoCursor >> 8) & 0xff);
 	VGA_WRITE_CRTC(0x0f, videoCursor & 0xff);
@@ -111,13 +111,13 @@ updateVideoRamPtr(void)
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
 static void
-scrollUp(unsigned8 lines)
+scrollUp(uint8_t   lines)
 {
 	/* Number of blank display cells on bottom of window. */
-	unsigned16 blankCount;
+	uint16_t   blankCount;
 
        /* Source and destination pointers for memory copy operations. */
-	unsigned16 *ptrDst, *ptrSrc;
+	uint16_t   *ptrDst, *ptrSrc;
 
 	if(lines<videoRows)  /* Move window's contents up. */
 	{
@@ -125,7 +125,7 @@ scrollUp(unsigned8 lines)
 		 * Number of non-blank cells on upper part
 		 * of display (total - blank).
 		 */
-		unsigned16 nonBlankCount;
+		uint16_t   nonBlankCount;
 
 		blankCount = lines * videoCols;
 		nonBlankCount = DISPLAY_CELL_COUNT - blankCount;
@@ -336,7 +336,7 @@ int vga_write_support(
 
 boolean vga_probe(int minor)
 {
-	unsigned8 ucMiscIn;
+	uint8_t   ucMiscIn;
 
 	/*
 	 * Check for presence of VGA adaptor

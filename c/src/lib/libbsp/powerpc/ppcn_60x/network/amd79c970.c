@@ -100,7 +100,7 @@ typedef struct amd79c970Context {
 	tmde_t		txBdBase[TX_RING_SIZE];
 	initblk_t		initBlk;
 	pc_net_t		*pPCNet;
-	unsigned32		ulIntVector;
+	uint32_t  		ulIntVector;
 	struct mbuf		**rxMbuf;
 	struct mbuf		**txMbuf;
 	int			rxBdCount;
@@ -142,7 +142,7 @@ static amd79c970Context_t *pAmd79c970Context[NPCNETDRIVER];
 static rtems_isr
 amd79c970_isr (rtems_vector_number v)
 {
-	unsigned32 ulCSR0, ulCSR4, ulCSR5;
+	uint32_t   ulCSR0, ulCSR4, ulCSR5;
 	amd79c970Context_t *dp;
 	int i;
 
@@ -220,15 +220,15 @@ amd79c970_initialize_hardware (int instance, int broadcastFlag)
 	amd79c970Context_t *dp;
 	struct mbuf 	*bp;
 	int		i;
-	unsigned8	ucPCIBusCount;
-	unsigned8	ucBusNumber;
-	unsigned8	ucSlotNumber;
-	unsigned32	ulDeviceID;
-	unsigned32	ulBAR0;
-	unsigned8	ucIntVector;
-	unsigned32	ulInitClkPCIAddr;
-	unsigned32	ulAPROM;
-	unsigned32	ulCSR0;
+	uint8_t  	ucPCIBusCount;
+	uint8_t  	ucBusNumber;
+	uint8_t  	ucSlotNumber;
+	uint32_t  	ulDeviceID;
+	uint32_t  	ulBAR0;
+	uint8_t  	ucIntVector;
+	uint32_t  	ulInitClkPCIAddr;
+	uint32_t  	ulAPROM;
+	uint32_t  	ulCSR0;
 
 	ucPCIBusCount=BusCountPCI();
 
@@ -334,7 +334,7 @@ amd79c970_initialize_hardware (int instance, int broadcastFlag)
 		dp->rxMbuf[i]=bp=ambufw (RBUF_SIZE);
 		bp->data += sizeof (struct iface *);
                 dp->rxBdBase[i].rmde_addr=
-			Swap32((unsigned32)bp->data+PCI_SYS_MEM_BASE);
+			Swap32((uint32_t)bp->data+PCI_SYS_MEM_BASE);
                 dp->rxBdBase[i].rmde_bcnt=
 			Swap16(-(bp->size-sizeof (struct iface *)));
                 dp->rxBdBase[i].rmde_flags=Swap16(RFLG_OWN);
@@ -369,7 +369,7 @@ amd79c970_initialize_hardware (int instance, int broadcastFlag)
 	/*
 	 * Set the receive descriptor ring address 
 	 */
-	dp->initBlk.ib_rdra=Swap32((unsigned32)&dp->rxBdBase[0]+
+	dp->initBlk.ib_rdra=Swap32((uint32_t)&dp->rxBdBase[0]+
 				     PCI_SYS_MEM_BASE);
 
 	/*
@@ -379,7 +379,7 @@ amd79c970_initialize_hardware (int instance, int broadcastFlag)
 	/*
 	 * Set the tranmit descriptor ring address 
 	 */
-	dp->initBlk.ib_tdra=Swap32((unsigned32)&dp->txBdBase[0]+
+	dp->initBlk.ib_tdra=Swap32((uint32_t)&dp->txBdBase[0]+
 				     PCI_SYS_MEM_BASE);
 
 	for(i=0;i<6;i++)
@@ -403,7 +403,7 @@ amd79c970_initialize_hardware (int instance, int broadcastFlag)
 
 	WR_CSR32(dp, CSR5, 0);
 
-	ulInitClkPCIAddr=(unsigned32)&dp->initBlk+PCI_SYS_MEM_BASE;
+	ulInitClkPCIAddr=(uint32_t)&dp->initBlk+PCI_SYS_MEM_BASE;
 	/*
 	 * CSR2 must contain the high order 16 bits of the first word in 
 	 * the initialization block 
@@ -461,8 +461,8 @@ amd79c970_initialize_hardware (int instance, int broadcastFlag)
 static void
 amd79c970_retire_tx_bd (amd79c970Context_t *dp)
 {
-	unsigned16 status;
-	unsigned32 error;
+	uint16_t   status;
+	uint32_t   error;
 	int i;
 	int nRetired;
 
@@ -525,7 +525,7 @@ amd79c970_raw (struct iface *iface, struct mbuf **bpp)
 	amd79c970Context_t *dp;
 	struct mbuf *bp;
 	tmde_t *firstTxBd, *txBd;
-	unsigned16 status;
+	uint16_t   status;
 	int nAdded;
 
 	dp = pAmd79c970Context[iface->dev];
@@ -607,7 +607,7 @@ amd79c970_raw (struct iface *iface, struct mbuf **bpp)
 		/*
 		 * Fill in the buffer descriptor
 		 */
-		txBd->tmde_addr=Swap32((unsigned32)bp->data+PCI_SYS_MEM_BASE);
+		txBd->tmde_addr=Swap32((uint32_t)bp->data+PCI_SYS_MEM_BASE);
 		txBd->tmde_bcnt=Swap16(-bp->cnt);
 		dp->txMbuf[dp->txBdHead] = bp;
 
@@ -676,7 +676,7 @@ amd79c970_rx (int dev, void *p1, void *p2)
 	struct iface *iface=(struct iface *)p1;
 	amd79c970Context_t *dp=(amd79c970Context_t *)p2;
 	struct mbuf *bp;
-	rtems_unsigned16 status;
+	uint16_t         status;
 	rmde_t *rxBd;
 	int rxBdIndex;
 	int continuousCount;
@@ -770,7 +770,7 @@ amd79c970_rx (int dev, void *p1, void *p2)
 			dp->rxMbuf[rxBdIndex]=bp=ambufw (RBUF_SIZE);
 			bp->data += sizeof (struct iface *);
 			rxBd->rmde_addr=Swap32(
-				(unsigned32)bp->data+PCI_SYS_MEM_BASE);
+				(uint32_t)bp->data+PCI_SYS_MEM_BASE);
 			rxBd->rmde_bcnt=Swap16(
 				-(bp->size-sizeof (struct iface *)));
 		}
@@ -797,7 +797,7 @@ static int
 amd79c970_stop (struct iface *iface)
 {
 	amd79c970Context_t *dp;
-	unsigned32	ulCSR0;
+	uint32_t  	ulCSR0;
 	int		i;
 
 	dp=pAmd79c970Context[iface->dev];
@@ -913,7 +913,7 @@ rtems_ka9q_driver_attach (int argc, char *argv[], void *p)
 	 * Note that this structure must be aligned to a 16 byte boundary
 	 */
 	pAmd79c970Context[i]=(amd79c970Context_t *)
-		(((unsigned32)callocw(1,
+		(((uint32_t)callocw(1,
 				      sizeof(amd79c970Context_t)+16)+16) & ~15);
 	dp=pAmd79c970Context[i];
 

@@ -67,29 +67,29 @@
 #define DS1385_REGD_VALID	0x80
  
 typedef struct _CMOS_MAP {
-    volatile rtems_unsigned8 DateAndTime[14];
+    volatile uint8_t         DateAndTime[14];
 
-    rtems_unsigned8 SystemDependentArea1[2];
-    rtems_unsigned8 SystemDependentArea2[8];
-    rtems_unsigned8 FeatureByte0[1];
-    rtems_unsigned8 FeatureByte1[1]; /* 19 = PW Flag;
+    uint8_t         SystemDependentArea1[2];
+    uint8_t         SystemDependentArea2[8];
+    uint8_t         FeatureByte0[1];
+    uint8_t         FeatureByte1[1]; /* 19 = PW Flag;
     attribute = write protect */
-    rtems_unsigned8 Century[1]; /* century byte in BCD, e.g. 0x19 currently */
-    rtems_unsigned8 FeatureByte3[1];
-    rtems_unsigned8 FeatureByte4[1];
-    rtems_unsigned8 FeatureByte5[1];
-    rtems_unsigned8 FeatureByte6[1];
-    rtems_unsigned8 FeatureByte7[1]; /* 1F = Alternate PW Flag;
+    uint8_t         Century[1]; /* century byte in BCD, e.g. 0x19 currently */
+    uint8_t         FeatureByte3[1];
+    uint8_t         FeatureByte4[1];
+    uint8_t         FeatureByte5[1];
+    uint8_t         FeatureByte6[1];
+    uint8_t         FeatureByte7[1]; /* 1F = Alternate PW Flag;
     attribute = write protect */
-    rtems_unsigned8 BootPW[14]; /* Power-on password needed to boot system;
+    uint8_t         BootPW[14]; /* Power-on password needed to boot system;
     reset value = 0x00000000000000005a5a5a5a5a5a);
     attribute = lock */
-    rtems_unsigned8 BootCrc[2]; /* CRC on BootPW */
-    rtems_unsigned8 ConfigPW[14]; /* Configuration Password needed to
+    uint8_t         BootCrc[2]; /* CRC on BootPW */
+    uint8_t         ConfigPW[14]; /* Configuration Password needed to
     change configuration of system;
     reset value = 0x00000000000000005a5a5a5a5a5a);
     attribute = lock */
-    rtems_unsigned8 ConfigCrc[2]; /* CRC on ConfigPW */
+    uint8_t         ConfigCrc[2]; /* CRC on ConfigPW */
 } CMOS_MAP, *PCMOS_MAP;
  
 #endif /* _CMOS_ */

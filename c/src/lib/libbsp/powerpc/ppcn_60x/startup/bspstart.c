@@ -66,7 +66,7 @@ extern rtems_configuration_table  Configuration;
 rtems_configuration_table         BSP_Configuration;
 
 rtems_cpu_table   Cpu_table;
-rtems_unsigned32  bsp_isr_level;
+uint32_t          bsp_isr_level;
 
 static int stdin_fd, stdout_fd, stderr_fd;
 
@@ -80,7 +80,7 @@ extern int end;
  */
 
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 /*
  *  bsp_pretasking_hook
@@ -91,10 +91,10 @@ void bsp_libc_init( void *, unsigned32, int );
 
 void bsp_pretasking_hook(void)
 {
-        rtems_unsigned32 heap_start;
-        rtems_unsigned32 heap_size;
+        uint32_t         heap_start;
+        uint32_t         heap_size;
 
-        heap_start = (rtems_unsigned32) &end;
+        heap_start = (uint32_t) &end;
         if (heap_start & (CPU_ALIGNMENT-1))
           heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
@@ -165,11 +165,11 @@ void bsp_start( void )
 {
 	unsigned char *work_space_start;
 	unsigned char ucBoardRev, ucMothMemType, ucEquipPres1, ucEquipPres2;
-	unsigned16	usPVR=0;
-	unsigned8	ucTempl, ucTemph;
-	unsigned8	ucBanksPresent;
-	unsigned8	ucSimmPresent;
-	unsigned32	ulCurBank, ulTopBank;
+	uint16_t  	usPVR=0;
+	uint8_t  	ucTempl, ucTemph;
+	uint8_t  	ucBanksPresent;
+	uint8_t  	ucSimmPresent;
+	uint32_t  	ulCurBank, ulTopBank;
 
 	/*
 	 * Determine system type

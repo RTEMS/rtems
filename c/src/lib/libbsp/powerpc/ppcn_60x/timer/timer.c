@@ -21,7 +21,7 @@
 
 #include <bsp.h>
 
-rtems_unsigned64 Timer_driver_Start_time;
+uint64_t         Timer_driver_Start_time;
 
 rtems_boolean Timer_driver_Find_average_overhead;
 
@@ -43,9 +43,9 @@ void Timer_initialize()
  */
 int Read_timer()
 {
-  rtems_unsigned64  clicks;
-  rtems_unsigned64  total64;
-  rtems_unsigned32  total;
+  uint64_t          clicks;
+  uint64_t          total64;
+  uint32_t          total;
 
   /* approximately CLOCK_SPEED clicks per microsecond */
 
@@ -55,9 +55,9 @@ int Read_timer()
 
   total64 = clicks - Timer_driver_Start_time;
 
-  assert( total64 <= 0xffffffff );  /* fits into a unsigned32 */
+  assert( total64 <= 0xffffffff );  /* fits into a uint32_t   */
 
-  total = (rtems_unsigned32) total64;
+  total = (uint32_t) total64;
 
   if ( Timer_driver_Find_average_overhead == 1 )
     return total;          /* in "clicks" of the decrementer units */

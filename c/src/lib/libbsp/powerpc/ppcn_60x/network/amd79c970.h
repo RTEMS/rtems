@@ -25,18 +25,18 @@ typedef volatile struct pc_net
 	union
 	{
 		struct {
-			unsigned16	aprom[8];  /* 0x00 */
-			unsigned16	rdp;	   /* 0x10 */
-			unsigned16	rap;	   /* 0x14 */
-			unsigned16	reset;	   /* 0x18 */
-			unsigned16	bdp;	   /* 0x1C */
+			uint16_t  	aprom[8];  /* 0x00 */
+			uint16_t  	rdp;	   /* 0x10 */
+			uint16_t  	rap;	   /* 0x14 */
+			uint16_t  	reset;	   /* 0x18 */
+			uint16_t  	bdp;	   /* 0x1C */
 		} wio;
 		struct {
-			unsigned32	aprom[4];  /* 0x00 */
-			unsigned32	rdp;	   /* 0x10 */
-			unsigned32	rap;	   /* 0x12 */
-			unsigned32	reset;	   /* 0x14 */
-			unsigned32	bdp;	   /* 0x16 */
+			uint32_t  	aprom[4];  /* 0x00 */
+			uint32_t  	rdp;	   /* 0x10 */
+			uint32_t  	rap;	   /* 0x12 */
+			uint32_t  	reset;	   /* 0x14 */
+			uint32_t  	bdp;	   /* 0x16 */
 		} dwio;
 	} u;
 } pc_net_t;
@@ -48,24 +48,24 @@ typedef volatile struct pc_net
 #define EEPROM_HEAD_SIZE 36
 
 typedef struct pc_net_eeprom {
-	unsigned8	EthNumber[6];
-	unsigned16	Reserved1;	/* Must be 0x0000 */
-	unsigned16	Reserved2;	/* Must be 0x1000 */
-	unsigned16	User1;
-	unsigned16	checksum;
-	unsigned16	Reserved3;	/* Must be 0x5757 */
-	unsigned16	bcr16;
-	unsigned16	bcr17;
-	unsigned16	bcr18;
-	unsigned16	bcr2;
-	unsigned16	bcr21;
-	unsigned16	Reserved4;	/* Must be 0x0000 */
-	unsigned16	Reserved5;	/* Must be 0x0000 */
-	unsigned8	Reserved6;	/* Must be 0x00 */
-	unsigned8	checksumAdjust;
-	unsigned16	Reserved7;	/* Must be 0x0000 */
-	unsigned16	crc;		/* CCITT checksum from Serial[] onwards */
-	unsigned8	Serial[16];	/* Radstone Serial Number */
+	uint8_t  	EthNumber[6];
+	uint16_t  	Reserved1;	/* Must be 0x0000 */
+	uint16_t  	Reserved2;	/* Must be 0x1000 */
+	uint16_t  	User1;
+	uint16_t  	checksum;
+	uint16_t  	Reserved3;	/* Must be 0x5757 */
+	uint16_t  	bcr16;
+	uint16_t  	bcr17;
+	uint16_t  	bcr18;
+	uint16_t  	bcr2;
+	uint16_t  	bcr21;
+	uint16_t  	Reserved4;	/* Must be 0x0000 */
+	uint16_t  	Reserved5;	/* Must be 0x0000 */
+	uint8_t  	Reserved6;	/* Must be 0x00 */
+	uint8_t  	checksumAdjust;
+	uint16_t  	Reserved7;	/* Must be 0x0000 */
+	uint16_t  	crc;		/* CCITT checksum from Serial[] onwards */
+	uint8_t  	Serial[16];	/* Radstone Serial Number */
 } pc_net_eeprom_t;
 
 /*
@@ -219,9 +219,9 @@ typedef struct pc_net_eeprom {
 
 typedef volatile struct initblk {
 	/* mode can be set in csr15 */
-	unsigned16	ib_mode;	/* Chip's operating parameters */
-	unsigned8	ib_rlen;	/* rx ring length (power of 2) */
-	unsigned8	ib_tlen;	/* tx ring length (power of 2) */
+	uint16_t  	ib_mode;	/* Chip's operating parameters */
+	uint8_t  	ib_rlen;	/* rx ring length (power of 2) */
+	uint8_t  	ib_tlen;	/* tx ring length (power of 2) */
 /*
  * The bytes must be swapped within the word, so that, for example,
  * the address 8:0:20:1:25:5a is written in the order
@@ -229,10 +229,10 @@ typedef volatile struct initblk {
  * For PCI970 that is long word swapped: so no swapping needed, since 
  * the bus will swap.
  */
-	unsigned8	ib_padr[8];	/* physical address */
-	unsigned16	ib_ladrf[4];	/* logical address filter */
-	unsigned32	ib_rdra;	/* rcv ring desc addr */
-	unsigned32	ib_tdra;	/* xmit ring desc addr */
+	uint8_t  	ib_padr[8];	/* physical address */
+	uint16_t  	ib_ladrf[4];	/* logical address filter */
+	uint32_t  	ib_rdra;	/* rcv ring desc addr */
+	uint32_t  	ib_tdra;	/* xmit ring desc addr */
 } initblk_t;
 
 
@@ -275,15 +275,15 @@ typedef volatile struct initblk {
  */
 
 typedef volatile struct rmde {
-	unsigned32	rmde_addr;	/* buf addr */
+	uint32_t  	rmde_addr;	/* buf addr */
 
-	unsigned16	rmde_bcnt; 
-	unsigned16	rmde_flags;
+	uint16_t  	rmde_bcnt; 
+	uint16_t  	rmde_flags;
 
-	unsigned16	rmde_mcnt;
-	unsigned16	rmde_misc;
+	uint16_t  	rmde_mcnt;
+	uint16_t  	rmde_misc;
 
-	unsigned32	align;
+	uint32_t  	align;
 } rmde_t;
 
 
@@ -319,14 +319,14 @@ typedef volatile struct rmde {
  * 16 and 32 byte field will require swapping.
  */
 typedef volatile struct tmde {
-    	unsigned32	tmde_addr;	/* buf addr */
+    	uint32_t  	tmde_addr;	/* buf addr */
 
-	unsigned16	tmde_bcnt; 
-	unsigned16	tmde_status;	/* misc error and status bits */
+	uint16_t  	tmde_bcnt; 
+	uint16_t  	tmde_status;	/* misc error and status bits */
 
-	unsigned32	tmde_error;
+	uint32_t  	tmde_error;
 
-	unsigned32	align;
+	uint32_t  	align;
 } tmde_t;
 
 /*
@@ -414,13 +414,13 @@ typedef volatile struct tmde {
 /*
  * Bit definitions for BCR19 
  */
-#define	prom_EDI	(unsigned16)0x0001
-#define	prom_EDO	(unsigned16)0x0001
-#define	prom_ESK	(unsigned16)0x0002
-#define	prom_ECS	(unsigned16)0x0004
-#define	prom_EEN	(unsigned16)0x0010
-#define	prom_EEDET	(unsigned16)0x2000
-#define	prom_PVALID	(unsigned16)0x8000
-#define	prom_PREAD	(unsigned16)0x4000
+#define	prom_EDI	(uint16_t)0x0001
+#define	prom_EDO	(uint16_t)0x0001
+#define	prom_ESK	(uint16_t)0x0002
+#define	prom_ECS	(uint16_t)0x0004
+#define	prom_EEN	(uint16_t)0x0010
+#define	prom_EEDET	(uint16_t)0x2000
+#define	prom_PVALID	(uint16_t)0x8000
+#define	prom_PREAD	(uint16_t)0x4000
 
 #endif

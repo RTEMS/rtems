@@ -1,3 +1,16 @@
+2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* clock/clock.c, console/config.c, console/console.c,
+	console/debugio.c, console/i8042.c, console/ns16550cfg.c,
+	console/ns16550cfg.h, console/vga.c, console/vga_p.h,
+	console/z85c30cfg.c, console/z85c30cfg.h, include/bsp.h,
+	include/nvram.h, include/pci.h, network/amd79c970.c,
+	network/amd79c970.h, nvram/mk48t18.h, nvram/nvram.c,
+	nvram/stk11c68.h, pci/pci.c, startup/bspstart.c, startup/genpvec.c,
+	startup/spurious.c, startup/swap.c, timer/timer.c, tod/cmos.h,
+	tod/tod.c, universe/universe.c: Convert to using c99 fixed size
+	types.
+
 2004-02-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect changes to bsp.am. 

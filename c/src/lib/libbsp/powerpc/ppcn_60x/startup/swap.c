@@ -27,10 +27,10 @@
  */
 
 inline unsigned int Swap32(
-        unsigned32 ulValue
+        uint32_t   ulValue
 )
 {
-        unsigned32 ulSwapped;
+        uint32_t   ulSwapped;
 
         asm volatile(
 		"rlwimi %0,%1,8,24,31;"
@@ -46,10 +46,10 @@ inline unsigned int Swap32(
 }
 
 inline unsigned int Swap16(
-        unsigned16 usValue
+        uint16_t   usValue
 )
 {
-        unsigned16 usSwapped;
+        uint16_t   usSwapped;
 
         asm volatile(
 		"rlwimi %0,%1,24,24,31;"

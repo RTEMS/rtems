@@ -28,15 +28,15 @@ typedef
 void
 (*PNVRAMWRITE)
 (
-	unsigned32 ulOffset,
-	unsigned8 ucByte
+	uint32_t   ulOffset,
+	uint8_t   ucByte
 );
 
 typedef
-unsigned8
+uint8_t  
 (*PNVRAMREAD)
 (
-	unsigned32 ulOffset
+	uint32_t   ulOffset
 );
 
 typedef
@@ -50,7 +50,7 @@ typedef struct _NVRAM_ENTRY_TABLE
 	PNVRAMWRITE	nvramWrite;
 	PNVRAMREAD	nvramRead;
 	PNVRAMCOMMIT	nvramCommit;
-	unsigned32	nvramSize;
+	uint32_t  	nvramSize;
 } NVRAM_ENTRY_TABLE, *PNVRAM_ENTRY_TABLE;
 
 /*
@@ -66,14 +66,14 @@ static void nvramCommitStub();
 /*
  * DS1385 specific routines
  */
-static void nvramDsWrite(unsigned32 ulOffset, unsigned8 ucByte);
-static unsigned8 nvramDsRead(unsigned32 ulOffset);
+static void nvramDsWrite(uint32_t   ulOffset, uint8_t   ucByte);
+static uint8_t   nvramDsRead(uint32_t   ulOffset);
 
 /*
  * MK48T18 specific routines
  */
-static void nvramMkWrite(unsigned32 ulOffset, unsigned8 ucByte);
-static unsigned8 nvramMkRead(unsigned32 ulOffset);
+static void nvramMkWrite(uint32_t   ulOffset, uint8_t   ucByte);
+static uint8_t   nvramMkRead(uint32_t   ulOffset);
 
 /*
  * STK11C68 specific routines
@@ -128,8 +128,8 @@ NVRAM_ENTRY_TABLE nvramStk88Table =
  */
 static PNVRAM_ENTRY_TABLE pNvRAMFunc;
 static boolean		bNvRAMChanged=FALSE;
-static unsigned32	ulPRePOSAreaLength;
-static unsigned32	ulPRePOSAreaOffset;
+static uint32_t  	ulPRePOSAreaLength;
+static uint32_t  	ulPRePOSAreaOffset;
 
 /*
  * Mutual-exclusion semaphore
@@ -139,9 +139,9 @@ static rtems_id semNvRAM;
 /*
  * These routines support the ds1385
  */
-static unsigned8 nvramDsRead(unsigned32 ulOffset)
+static uint8_t   nvramDsRead(uint32_t   ulOffset)
 {
-	unsigned8 ucTemp;
+	uint8_t   ucTemp;
 
 	ucTemp = ulOffset & 0xff;
 	outport_byte(DS1385_PORT_BASE, ucTemp);
@@ -153,15 +153,15 @@ static unsigned8 nvramDsRead(unsigned32 ulOffset)
 	return(ucTemp);
 }
 
-static void nvramDsWrite(unsigned32 ulOffset, unsigned8 ucData)
+static void nvramDsWrite(uint32_t   ulOffset, uint8_t   ucData)
 {
-	unsigned8 ucTemp;
+	uint8_t   ucTemp;
 
-	ucTemp = (unsigned8)(ulOffset & 0xff);
-	outport_byte(DS1385_PORT_BASE, (unsigned8) ucTemp);
+	ucTemp = (uint8_t)(ulOffset & 0xff);
+	outport_byte(DS1385_PORT_BASE, (uint8_t) ucTemp);
 
-	ucTemp = (unsigned8)((ulOffset >> 8) & 0xf);
-	outport_byte((DS1385_PORT_BASE + 1) , (unsigned8)ucTemp);
+	ucTemp = (uint8_t)((ulOffset >> 8) & 0xf);
+	outport_byte((DS1385_PORT_BASE + 1) , (uint8_t)ucTemp);
 
 	outport_byte((DS1385_PORT_BASE+3), ucData);
 }
@@ -169,16 +169,16 @@ static void nvramDsWrite(unsigned32 ulOffset, unsigned8 ucData)
 /*
  * These routines support the MK48T18 and STK11C68
  */
-static unsigned8 nvramMkRead(unsigned32 ulOffset)
+static uint8_t   nvramMkRead(uint32_t   ulOffset)
 {
-	unsigned8 *pNvRAM = (unsigned8 *)MK48T18_BASE;
+	uint8_t   *pNvRAM = (uint8_t*)MK48T18_BASE;
 
 	return(pNvRAM[ulOffset]);
 }
 
-static void nvramMkWrite(unsigned32 ulOffset, unsigned8 ucData)
+static void nvramMkWrite(uint32_t   ulOffset, uint8_t   ucData)
 {
-	unsigned8 *pNvRAM = (unsigned8 *)MK48T18_BASE;
+	uint8_t   *pNvRAM = (uint8_t*)MK48T18_BASE;
 
 	pNvRAM[ulOffset]=ucData;
 }
@@ -287,7 +287,7 @@ static void nvramStk11C88Commit()
 /*
  * This routine returns the size of the NvRAM
  */
-unsigned32 SizeNvRAM()
+uint32_t   SizeNvRAM()
 {
 	return(ulPRePOSAreaLength);
 }
@@ -306,7 +306,7 @@ void CommitNvRAM()
 /*
  * This routine reads a byte from the NvRAM
  */
-rtems_status_code ReadNvRAM8(unsigned32 ulOffset, unsigned8 *pucData)
+rtems_status_code ReadNvRAM8(uint32_t   ulOffset, uint8_t   *pucData)
 {
 	if(ulOffset>ulPRePOSAreaLength)
 	{
@@ -321,7 +321,7 @@ rtems_status_code ReadNvRAM8(unsigned32 ulOffset, unsigned8 *pucData)
 /*
  * This routine writes a byte to the NvRAM
  */
-rtems_status_code WriteNvRAM8(unsigned32 ulOffset, unsigned8 ucValue)
+rtems_status_code WriteNvRAM8(uint32_t   ulOffset, uint8_t   ucValue)
 {
 	if(ulOffset>ulPRePOSAreaLength)
 	{
@@ -338,9 +338,9 @@ rtems_status_code WriteNvRAM8(unsigned32 ulOffset, unsigned8 ucValue)
  * This routine reads a block of bytes from the NvRAM
  */
 rtems_status_code ReadNvRAMBlock(
-  unsigned32 ulOffset, unsigned8 *pucData, unsigned32 length)
+  uint32_t   ulOffset, uint8_t   *pucData, uint32_t   length)
 {
-	unsigned32 i;
+	uint32_t   i;
 
 	if((ulOffset + length) > ulPRePOSAreaLength)
 	{
@@ -358,9 +358,9 @@ rtems_status_code ReadNvRAMBlock(
  * This routine writes a block of bytes to the NvRAM
  */
 rtems_status_code WriteNvRAMBlock(
-  unsigned32 ulOffset, unsigned8 *ucValue, unsigned32 length)
+  uint32_t   ulOffset, uint8_t   *ucValue, uint32_t   length)
 {
-	unsigned32 i;
+	uint32_t   i;
 
 	if((ulOffset + length) > ulPRePOSAreaLength)
 	{
@@ -379,9 +379,9 @@ rtems_status_code WriteNvRAMBlock(
 /*
  * The NVRAM holds data in Big-Endian format
  */
-rtems_status_code ReadNvRAM16 (unsigned32 ulOffset, unsigned16 *pusData)
+rtems_status_code ReadNvRAM16 (uint32_t   ulOffset, uint16_t   *pusData)
 {
-	unsigned32 ulTrueOffset=ulPRePOSAreaOffset+ulOffset;
+	uint32_t   ulTrueOffset=ulPRePOSAreaOffset+ulOffset;
 
 	if(ulOffset>ulPRePOSAreaLength)
 	{
@@ -394,25 +394,25 @@ rtems_status_code ReadNvRAM16 (unsigned32 ulOffset, unsigned16 *pusData)
 	return(RTEMS_SUCCESSFUL);
 }
 
-rtems_status_code WriteNvRAM16 (unsigned32 ulOffset, unsigned16 usValue)
+rtems_status_code WriteNvRAM16 (uint32_t   ulOffset, uint16_t   usValue)
 {
-	unsigned32 ulTrueOffset=ulPRePOSAreaOffset+ulOffset;
+	uint32_t   ulTrueOffset=ulPRePOSAreaOffset+ulOffset;
 
 	if(ulOffset>ulPRePOSAreaLength)
 	{
 		return RTEMS_INVALID_ADDRESS;
 	}
 	rtems_semaphore_obtain(semNvRAM, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-        pNvRAMFunc->nvramWrite(ulTrueOffset, (unsigned8) (usValue >> 8));
-        pNvRAMFunc->nvramWrite(ulTrueOffset + 1, (unsigned8) usValue);
+        pNvRAMFunc->nvramWrite(ulTrueOffset, (uint8_t) (usValue >> 8));
+        pNvRAMFunc->nvramWrite(ulTrueOffset + 1, (uint8_t) usValue);
 	bNvRAMChanged=TRUE;
 	rtems_semaphore_release(semNvRAM);
 	return(RTEMS_SUCCESSFUL);
 }
 
-rtems_status_code ReadNvRAM32 (unsigned32 ulOffset, unsigned32 *pulData)
+rtems_status_code ReadNvRAM32 (uint32_t   ulOffset, uint32_t   *pulData)
 {
-	unsigned32 ulTrueOffset=ulPRePOSAreaOffset+ulOffset;
+	uint32_t   ulTrueOffset=ulPRePOSAreaOffset+ulOffset;
 
 	if(ulOffset>ulPRePOSAreaLength)
 	{
@@ -427,19 +427,19 @@ rtems_status_code ReadNvRAM32 (unsigned32 ulOffset, unsigned32 *pulData)
 	return(RTEMS_SUCCESSFUL);
 }
 
-rtems_status_code WriteNvRAM32 (unsigned32 ulOffset, unsigned32 ulValue)
+rtems_status_code WriteNvRAM32 (uint32_t   ulOffset, uint32_t   ulValue)
 {
-	unsigned32 ulTrueOffset=ulPRePOSAreaOffset+ulOffset;
+	uint32_t   ulTrueOffset=ulPRePOSAreaOffset+ulOffset;
 
 	if(ulOffset>ulPRePOSAreaLength)
 	{
 		return RTEMS_INVALID_ADDRESS;
 	}
 	rtems_semaphore_obtain(semNvRAM, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-        pNvRAMFunc->nvramWrite(ulTrueOffset, (unsigned8) (ulValue >> 24));
-        pNvRAMFunc->nvramWrite(ulTrueOffset + 1, (unsigned8) (ulValue >> 16));
-        pNvRAMFunc->nvramWrite(ulTrueOffset + 2, (unsigned8) (ulValue >> 8));
-        pNvRAMFunc->nvramWrite(ulTrueOffset + 3, (unsigned8) ulValue);
+        pNvRAMFunc->nvramWrite(ulTrueOffset, (uint8_t) (ulValue >> 24));
+        pNvRAMFunc->nvramWrite(ulTrueOffset + 1, (uint8_t) (ulValue >> 16));
+        pNvRAMFunc->nvramWrite(ulTrueOffset + 2, (uint8_t) (ulValue >> 8));
+        pNvRAMFunc->nvramWrite(ulTrueOffset + 3, (uint8_t) ulValue);
 	bNvRAMChanged=TRUE;
 	rtems_semaphore_release(semNvRAM);
 	return(RTEMS_SUCCESSFUL);
@@ -450,7 +450,7 @@ InitializeNvRAM(void)
 {
 	PHEADER pNvHeader = (PHEADER)0;
 	rtems_status_code sc;
-	unsigned32 ulLength, ulOffset;
+	uint32_t   ulLength, ulOffset;
 
 	if(ucSystemType==SYS_TYPE_PPC1)
 	{
@@ -502,8 +502,8 @@ InitializeNvRAM(void)
 	/*
 	 * Access the header at the start of NvRAM
 	 */
-	ReadNvRAM32((unsigned32)(&pNvHeader->OSAreaLength), &ulLength);
-	ReadNvRAM32((unsigned32)(&pNvHeader->OSAreaAddress), &ulOffset);
+	ReadNvRAM32((uint32_t)(&pNvHeader->OSAreaLength), &ulLength);
+	ReadNvRAM32((uint32_t)(&pNvHeader->OSAreaAddress), &ulOffset);
 
 	/*
 	 * Now set limits for future accesses

@@ -36,24 +36,24 @@ extern "C" {
  *  Board specific register access routines
  */
 
-unsigned8 Read_85c30_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum
+uint8_t   Read_85c30_register(
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum
 );
 
 void  Write_85c30_register(
-  unsigned32  ulCtrlPort,
-  unsigned8   ucRegNum,
-  unsigned8   ucData
+  uint32_t    ulCtrlPort,
+  uint8_t     ucRegNum,
+  uint8_t     ucData
 );
 
-unsigned8 Read_85c30_data(
-  unsigned32  ulDataPort
+uint8_t   Read_85c30_data(
+  uint32_t    ulDataPort
 );
 
 void  Write_85c30_data(
-  unsigned32  ulDataPort,
-  unsigned8   ucData
+  uint32_t    ulDataPort,
+  uint8_t     ucData
 );
 
 #ifdef __cplusplus
