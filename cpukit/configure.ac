@@ -45,11 +45,6 @@ RTEMS_CHECK_POSIX_API
 RTEMS_CHECK_ITRON_API
 RTEMS_CHECK_NETWORKING
 
-# If RTEMS macros are enabled, then use them.  Otherwise, use inlines.
-AS_IF([test "$RTEMS_USE_MACROS" = "yes"],
-  [INLINEdir="macros"],
-  [INLINEdir="inline"])
-AC_SUBST(INLINEdir)
 AC_DEFINE(RTEMS_VERSION,["][_RTEMS_VERSION]["],[RTEMS version string])
 
 RTEMS_CPU_SUBDIRS([score/cpu])
@@ -102,8 +97,8 @@ RTEMS_CPUOPT([RTEMS_DEBUG],
   [1],
   [if RTEMS_DEBUG is enabled])
 
-RTEMS_CPUOPT([USE_INLINES],
-  [! test x"${RTEMS_USE_MACROS}" = x"yes"],
+RTEMS_CPUOPT([RTEMS_INLINES],
+  [test x"${enable_rtems_inlines}" = x"yes"],
   [1],
   [if using inlines])
 
@@ -255,8 +250,8 @@ AM_CONDITIONAL(LIBRPC,[test "$LIBRPC" = "yes"])
 AM_CONDITIONAL(UNIX,[test x"${RTEMS_CPU}" = x"unix"])
 AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
 
-AM_CONDITIONAL(INLINE,test x"$INLINEdir" = x"inline" )
-AM_CONDITIONAL(MACROS,test x"$INLINEdir" = x"macros" )
+AM_CONDITIONAL(INLINE,test x"$enable_rtems_inlines" = x"yes" )
+AM_CONDITIONAL(MACROS,test x"$enable_rtems_inlines" = x"no" )
 AM_CONDITIONAL(HAS_MP,test x"$HAS_MP" = x"yes" )
 
 AM_CONDITIONAL(HAS_POSIX,test x"$HAS_POSIX_API" = x"yes")

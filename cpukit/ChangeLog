@@ -1,3 +1,10 @@
+2003-11-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use RTEMS_INLINES instead of USE_INLINES.
+	Elimimate INLINESdir.
+	* aclocal/enable-inlines.m4: Ditto. Remove RTEMS_USE_MACROS.
+	* .cvsignore: Add config.h.in.
+
 2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Make RTEMS_DEBUG an RTEMS_CPUOPT.
