@@ -156,20 +156,26 @@ case $basic_machine in
 		| powerpc | powerpcle | 1750a | dsp16xx | mips64 | mipsel \
 		| pdp11 | mips64el | mips64orion | mips64orionel \
 		| sparc | sparclet | sparclite | sparc64 | no_cpu)
-		if [ $os !=  -rtems ]
-		then
-			basic_machine=$basic_machine-unknown
-		fi
+		case $os in
+			-rtems*)
+				;;
+			*)
+				basic_machine=$basic_machine-unknown
+				;;
+		esac
 		;;
 	# We use `pc' rather than `unknown'
 	# because (1) that's what they normally are, and
 	# (2) the word "unknown" tends to confuse beginning users.
 	i[3456]86)
-		if [ $os !=  -rtems ]
-		then
-	  		basic_machine=$basic_machine-pc
-		fi
-	  ;;
+		case $os in
+			-rtems*)
+				;;
+			*)
+	  			basic_machine=$basic_machine-pc
+				;;
+		esac
+		;;
 	# Object if more than one company name word.
 	*-*-*)
 		echo Invalid configuration \`$1\': machine \`$basic_machine\' not recognized 1>&2
