@@ -56,19 +56,20 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
 
 include_sysdir = $(includedir)/sys
 
-if !HAS_NETWORKING
-NETWORKING_H_FILES = include/sys/ioctl.h
-endif
 
 if NEWLIB
 NEWLIB_H_FILES = include/sys/termios.h include/sys/cdefs.h include/sys/utsname.h
 endif
 
 include_sys_HEADERS = \
+include/sys/filio.h \
 include/sys/ioccom.h \
+include/sys/ioctl.h \
+include/sys/sockio.h \
+include/sys/termios.h \
 include/sys/ttycom.h \
 include/sys/utime.h \
-$(NEWLIB_H_FILES) $(NETWORKING_H_FILES)
+$(NEWLIB_H_FILES)
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys \
     $(include_sys_HEADERS:include/%=$(PROJECT_INCLUDE)/%)
