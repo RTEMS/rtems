@@ -1,3 +1,7 @@
+2002-11-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/compile.am: Remove rel rule.
+
 2002-11-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bootstrap: Allow autoconf > 2.52, automake > 1.6.

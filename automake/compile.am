@@ -130,11 +130,6 @@ ${ARCH}/%.o: %.S
 	test -d $(ARCH) || mkdir $(ARCH)
 	${ASCOMPILE} -DASM -o $@ -c $<
 
-# Make foo.rel from foo.o
-${ARCH}/%.rel: ${ARCH}/%.o
-	test -d $(ARCH) || mkdir $(ARCH)
-	${make-rel}
-
 # Dependency files for use by gmake
 # NOTE: we don't put them into $(ARCH)
 #       so that 'make clean' doesn't blow it away
