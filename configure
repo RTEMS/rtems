@@ -1345,7 +1345,7 @@ echo "configure:1345: checking for Makefile.in in c/src/exec/score/tools/$target
 if test -d $srcdir/c/src/exec/score/tools/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/exec/score/tools/$target_cpu -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/exec/score/tools/$target_cpu -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1360,7 +1360,7 @@ echo "configure:1360: checking for Makefile.in in c/src/exec/rtems" >&5
 if test -d $srcdir/c/src/exec/rtems; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/exec/rtems -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/exec/rtems -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1375,7 +1375,7 @@ echo "configure:1375: checking for Makefile.in in c/src/exec/sapi" >&5
 if test -d $srcdir/c/src/exec/sapi; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/exec/sapi -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/exec/sapi -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1392,7 +1392,7 @@ echo "configure:1392: checking for Makefile.in in c/src/exec/posix" >&5
 if test -d $srcdir/c/src/exec/posix; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/exec/posix -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/exec/posix -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1455,7 +1455,7 @@ echo "configure:1455: checking for Makefile.in in c/src/lib/libbsp/$target_cpu/$
 if test -d $srcdir/c/src/lib/libbsp/$target_cpu/$bspdir; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/lib/libbsp/$target_cpu/$bspdir -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/lib/libbsp/$target_cpu/$bspdir -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1478,7 +1478,7 @@ echo "configure:1478: checking for Makefile.in in c/src/lib/libcpu/$target_cpu" 
 if test -d $srcdir/c/src/lib/libcpu/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/lib/libcpu/$target_cpu -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/lib/libcpu/$target_cpu -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1495,7 +1495,7 @@ echo "configure:1495: checking for Makefile.in in c/src/lib/start/$target_cpu" >
 if test -d $srcdir/c/src/lib/start/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/lib/start/$target_cpu -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/lib/start/$target_cpu -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1526,15 +1526,19 @@ fi
 RTEMS_ROOT=`cd $srcdir/c; pwd`
 PROJECT_ROOT=`pwd;`
 
-# For now always generate the KA9Q TCP/IP Makefiles
-makefiles="$makefiles c/src/lib/libka9q/Makefile"
+# If the KA9Q TCP/IP stack is enabled, then find all KA9Q Makefiles
+if test "$RTEMS_HAS_KA9Q" = "yes"; then
+  makefiles="$makefiles c/src/lib/libka9q/Makefile"
+fi
 
-# For now always generate the C++ Makefiles
-makefiles="$makefiles c/src/lib/librtems++/Makefile"
+# If the C++ support is enabled, then include the Makefiles
+if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
+  makefiles="$makefiles c/src/lib/librtems++/Makefile"
+fi
 
 # If the tests are enabled, then find all the test suite Makefiles
 echo $ac_n "checking Are the test suites enabled? ""... $ac_c" 1>&6
-echo "configure:1538: checking Are the test suites enabled? " >&5
+echo "configure:1542: checking Are the test suites enabled? " >&5
 tests_enabled=yes
 # Check whether --enable-tests or --disable-tests was given.
 if test "${enable_tests+set}" = set; then
@@ -1554,11 +1558,11 @@ fi
 if test "$tests_enabled" = "yes"; then
    
 echo $ac_n "checking for Makefile.in in c/src/tests/tools/$target_cpu""... $ac_c" 1>&6
-echo "configure:1558: checking for Makefile.in in c/src/tests/tools/$target_cpu" >&5
+echo "configure:1562: checking for Makefile.in in c/src/tests/tools/$target_cpu" >&5
 if test -d $srcdir/c/src/tests/tools/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/tests/tools/$target_cpu -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/tests/tools/$target_cpu -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1569,11 +1573,11 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/libtests""... $ac_c" 1>&6
-echo "configure:1573: checking for Makefile.in in c/src/tests/libtests" >&5
+echo "configure:1577: checking for Makefile.in in c/src/tests/libtests" >&5
 if test -d $srcdir/c/src/tests/libtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/tests/libtests -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/tests/libtests -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1584,11 +1588,11 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/sptests""... $ac_c" 1>&6
-echo "configure:1588: checking for Makefile.in in c/src/tests/sptests" >&5
+echo "configure:1592: checking for Makefile.in in c/src/tests/sptests" >&5
 if test -d $srcdir/c/src/tests/sptests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/tests/sptests -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/tests/sptests -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1599,11 +1603,11 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/tmtests""... $ac_c" 1>&6
-echo "configure:1603: checking for Makefile.in in c/src/tests/tmtests" >&5
+echo "configure:1607: checking for Makefile.in in c/src/tests/tmtests" >&5
 if test -d $srcdir/c/src/tests/tmtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/tests/tmtests -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/tests/tmtests -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1614,11 +1618,11 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/mptests""... $ac_c" 1>&6
-echo "configure:1618: checking for Makefile.in in c/src/tests/mptests" >&5
+echo "configure:1622: checking for Makefile.in in c/src/tests/mptests" >&5
 if test -d $srcdir/c/src/tests/mptests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/tests/mptests -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/tests/mptests -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1630,11 +1634,11 @@ fi
    if test "$RTEMS_HAS_POSIX" = "yes"; then
      
 echo $ac_n "checking for Makefile.in in c/src/tests/psxtests""... $ac_c" 1>&6
-echo "configure:1634: checking for Makefile.in in c/src/tests/psxtests" >&5
+echo "configure:1638: checking for Makefile.in in c/src/tests/psxtests" >&5
 if test -d $srcdir/c/src/tests/psxtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/tests/psxtests -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/tests/psxtests -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1648,20 +1652,22 @@ fi
 
 # If the HWAPI is enabled, the find the HWAPI Makefiles
 echo $ac_n "checking Is the HWAPI enabled? ""... $ac_c" 1>&6
-echo "configure:1652: checking Is the HWAPI enabled? " >&5
+echo "configure:1656: checking Is the HWAPI enabled? " >&5
 # Check whether --enable-hwapi or --disable-hwapi was given.
 if test "${enable_hwapi+set}" = set; then
   enableval="$enable_hwapi"
   \
   case "${enableval}" in
     yes) echo "$ac_t""yes" 1>&6 
-         
-echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi""... $ac_c" 1>&6
-echo "configure:1661: checking for Makefile.in in c/src/lib/libhwapi" >&5
-if test -d $srcdir/c/src/lib/libhwapi; then
+         if test -f ${srcdir}/c/src/lib/libhwapi/Makefile.in ; then
+            makefiles="$makefiles c/src/lib/libhwapi/Makefile"
+            
+echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/analog""... $ac_c" 1>&6
+echo "configure:1667: checking for Makefile.in in c/src/lib/libhwapi/analog" >&5
+if test -d $srcdir/c/src/lib/libhwapi/analog; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/lib/libhwapi -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/lib/libhwapi/analog -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1669,7 +1675,101 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
-;;
+
+            
+echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/discrete""... $ac_c" 1>&6
+echo "configure:1682: checking for Makefile.in in c/src/lib/libhwapi/discrete" >&5
+if test -d $srcdir/c/src/lib/libhwapi/discrete; then
+  rtems_av_save_dir=`pwd`;
+  cd $srcdir;
+  rtems_av_tmp=`find c/src/lib/libhwapi/discrete -name Makefile.in -print | sed 's%\.in%%' | sort`;
+  makefiles="$makefiles $rtems_av_tmp";
+  cd $rtems_av_save_dir;
+  echo "$ac_t""done" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+            
+echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/drivers""... $ac_c" 1>&6
+echo "configure:1697: checking for Makefile.in in c/src/lib/libhwapi/drivers" >&5
+if test -d $srcdir/c/src/lib/libhwapi/drivers; then
+  rtems_av_save_dir=`pwd`;
+  cd $srcdir;
+  rtems_av_tmp=`find c/src/lib/libhwapi/drivers -name Makefile.in -print | sed 's%\.in%%' | sort`;
+  makefiles="$makefiles $rtems_av_tmp";
+  cd $rtems_av_save_dir;
+  echo "$ac_t""done" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+            
+echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/eeprom""... $ac_c" 1>&6
+echo "configure:1712: checking for Makefile.in in c/src/lib/libhwapi/eeprom" >&5
+if test -d $srcdir/c/src/lib/libhwapi/eeprom; then
+  rtems_av_save_dir=`pwd`;
+  cd $srcdir;
+  rtems_av_tmp=`find c/src/lib/libhwapi/eeprom -name Makefile.in -print | sed 's%\.in%%' | sort`;
+  makefiles="$makefiles $rtems_av_tmp";
+  cd $rtems_av_save_dir;
+  echo "$ac_t""done" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+            
+echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/serial""... $ac_c" 1>&6
+echo "configure:1727: checking for Makefile.in in c/src/lib/libhwapi/serial" >&5
+if test -d $srcdir/c/src/lib/libhwapi/serial; then
+  rtems_av_save_dir=`pwd`;
+  cd $srcdir;
+  rtems_av_tmp=`find c/src/lib/libhwapi/serial -name Makefile.in -print | sed 's%\.in%%' | sort`;
+  makefiles="$makefiles $rtems_av_tmp";
+  cd $rtems_av_save_dir;
+  echo "$ac_t""done" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+            
+echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/support""... $ac_c" 1>&6
+echo "configure:1742: checking for Makefile.in in c/src/lib/libhwapi/support" >&5
+if test -d $srcdir/c/src/lib/libhwapi/support; then
+  rtems_av_save_dir=`pwd`;
+  cd $srcdir;
+  rtems_av_tmp=`find c/src/lib/libhwapi/support -name Makefile.in -print | sed 's%\.in%%' | sort`;
+  makefiles="$makefiles $rtems_av_tmp";
+  cd $rtems_av_save_dir;
+  echo "$ac_t""done" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+            
+echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/wrapup""... $ac_c" 1>&6
+echo "configure:1757: checking for Makefile.in in c/src/lib/libhwapi/wrapup" >&5
+if test -d $srcdir/c/src/lib/libhwapi/wrapup; then
+  rtems_av_save_dir=`pwd`;
+  cd $srcdir;
+  rtems_av_tmp=`find c/src/lib/libhwapi/wrapup -name Makefile.in -print | sed 's%\.in%%' | sort`;
+  makefiles="$makefiles $rtems_av_tmp";
+  cd $rtems_av_save_dir;
+  echo "$ac_t""done" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+         else
+            { echo "configure: error: No source code found for the HWAPI" 1>&2; exit 1; }
+         fi
+         ;;
     no)  echo "$ac_t""no" 1>&6 ;;
     *)  { echo "configure: error: bad value ${enableval} for hwapi option" 1>&2; exit 1; } ;;
   esac
@@ -1696,11 +1796,11 @@ fi
 # pick up all the Makefiles in required parts of the tree
 
 echo $ac_n "checking for Makefile.in in c/build-tools""... $ac_c" 1>&6
-echo "configure:1700: checking for Makefile.in in c/build-tools" >&5
+echo "configure:1800: checking for Makefile.in in c/build-tools" >&5
 if test -d $srcdir/c/build-tools; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/build-tools -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/build-tools -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1711,11 +1811,11 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/make""... $ac_c" 1>&6
-echo "configure:1715: checking for Makefile.in in c/make" >&5
+echo "configure:1815: checking for Makefile.in in c/make" >&5
 if test -d $srcdir/c/make; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/make -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/make -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1726,11 +1826,11 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/lib/libmisc""... $ac_c" 1>&6
-echo "configure:1730: checking for Makefile.in in c/src/lib/libmisc" >&5
+echo "configure:1830: checking for Makefile.in in c/src/lib/libmisc" >&5
 if test -d $srcdir/c/src/lib/libmisc; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/lib/libmisc -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/lib/libmisc -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
@@ -1741,11 +1841,11 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/tests/samples""... $ac_c" 1>&6
-echo "configure:1745: checking for Makefile.in in c/src/tests/samples" >&5
+echo "configure:1845: checking for Makefile.in in c/src/tests/samples" >&5
 if test -d $srcdir/c/src/tests/samples; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
-  rtems_av_tmp=`find c/src/tests/samples -name Makefile.in -follow -print | sed 's%\.in%%' | sort`;
+  rtems_av_tmp=`find c/src/tests/samples -name Makefile.in -print | sed 's%\.in%%' | sort`;
   makefiles="$makefiles $rtems_av_tmp";
   cd $rtems_av_save_dir;
   echo "$ac_t""done" 1>&6
