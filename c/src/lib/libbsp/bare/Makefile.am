@@ -9,6 +9,7 @@ include $(top_srcdir)/../bsp.am
 dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
+include_HEADERS += include/tm27.h
 nodist_include_HEADERS = include/bspopts.h
 
 nodist_include_HEADERS += $(top_srcdir)/../shared/include/coverhd.h
