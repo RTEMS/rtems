@@ -43,10 +43,10 @@ void CPU_delay( unsigned32 microseconds )
   register unsigned32 _delay = 
     (microseconds) * (clicks_per_usec);
   asm volatile (
-"0:	add  #-4,%0\n
-	nop\n
-	cmp/pl %0\n
-	bt 0b
+"0:	add  #-4,%0\n\
+	nop\n\
+	cmp/pl %0\n\
+	bt 0b\n\
 	nop"
      :: "r" (_delay) );
 }

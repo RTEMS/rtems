@@ -122,14 +122,14 @@ asm (".global _"Str(name)"\n\t" \
  * Dummy interrupt service procedure for 
  * interrupts being not allowed --> Trap 34 
  ************************************************/
-asm(" .section .text
-.global __dummy_isp
-__dummy_isp:
-      mov.l r14,@-r15
-      mov   r15, r14
-      trapa #34
-      mov.l @r15+,r14
-      rte
+asm(" .section .text\n\
+.global __dummy_isp\n\
+__dummy_isp:\n\
+      mov.l r14,@-r15\n\
+      mov   r15, r14\n\
+      trapa #34\n\
+      mov.l @r15+,r14\n\
+      rte\n\
       nop");
 
 /*****************************
