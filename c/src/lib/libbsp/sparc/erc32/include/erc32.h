@@ -448,7 +448,7 @@ extern ERC32_Register_Map ERC32_MEC;
 #define ERC32_MEC_TIMER_COUNTER_DEFINED_MASK       0x0000000F
 #define ERC32_MEC_TIMER_COUNTER_CURRENT_MODE_MASK  0x00000005
 
-SCORE_EXTERN unsigned32 _ERC32_MEC_Timer_Control_Mirror;
+extern unsigned32 _ERC32_MEC_Timer_Control_Mirror;
 
 /*
  *  This macros manipulate the General Purpose Timer portion of the 

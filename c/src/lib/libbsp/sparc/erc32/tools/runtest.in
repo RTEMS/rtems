@@ -76,7 +76,7 @@ stdio_setup="yes"
 run_to_completion="yes"
 logdir=log
 update_on_tick="no"
-max_run_time=$((5 * 60))
+max_run_time=$((10 * 60))
 using_print_buffer="yes"
 
 while getopts vhr12o:c:sl:t OPT

@@ -8,7 +8,7 @@ VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 PGM = $(ARCH)/startup.rel
 
 C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c main.c bootcard.c sbrk.c \
-    setvec.c spurious.c
+    setvec.c spurious.c erc32mec.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 S_FILES = boardinit.S
