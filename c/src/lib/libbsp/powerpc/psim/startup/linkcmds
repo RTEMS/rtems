@@ -89,7 +89,7 @@ SECTIONS
      important than losing a page of the virtual address space (note
      that no actual memory is lost; the page which is skipped can not
      be referenced).  */
-  . =  ALIGN(8) + 0x40000;
+  /* . =  ALIGN(8) + 0x40000; */
   .data    :
   {
     *(.data)
@@ -161,8 +161,8 @@ SECTIONS
   } >RAM
   . =  ALIGN(8) + 0x8000;
   PROVIDE(__stack = .);
-  _end = . ;
-  PROVIDE (end = .);
+  PROVIDE(_end = .);
+  PROVIDE(end = .);
 
   /* These are needed for ELF backends which have not yet been
      converted to the new style linker.  */
