@@ -1,3 +1,9 @@
+2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in comm/Makefile.am, irq/Makefile.am
+	* comm/Makefile.am: Remove.
+	* irq/Makefile.am: Remove.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* comm/console.c, comm/uart.c, comm/uart.h, irq/irq_asm.S,
