@@ -1,3 +1,30 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* psx01/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* psx02/Makefile.am: Ditto.
+	* psx03/Makefile.am: Ditto.
+	* psx04/Makefile.am: Ditto.
+	* psx05/Makefile.am: Ditto.
+	* psx06/Makefile.am: Ditto.
+	* psx07/Makefile.am: Ditto.
+	* psx08/Makefile.am: Ditto.
+	* psx09/Makefile.am: Ditto.
+	* psx10/Makefile.am: Ditto.
+	* psx11/Makefile.am: Ditto.
+	* psx12/Makefile.am: Ditto.
+	* psx13/Makefile.am: Ditto.
+	* psxcancel/Makefile.am: Ditto.
+	* psxchroot01/Makefile.am: Ditto.
+	* psxfile01/Makefile.am: Ditto.
+	* psxmount/Makefile.am: Ditto.
+	* psxmsgq01/Makefile.am: Ditto.
+	* psxreaddir/Makefile.am: Ditto.
+	* psxsem01/Makefile.am: Ditto.
+	* psxstat/Makefile.am: Ditto.
+	* psxtime/Makefile.am: Ditto.
+	* psxtimer/Makefile.am: Ditto.
+
 2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* psxtests.am: Add dirstamp support.
