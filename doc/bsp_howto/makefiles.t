@@ -20,15 +20,16 @@ process.
 @item the makefile.in at the BSP root specifies which folders have to be
 included. For instance,
 
-@item We only build the ka9q device driver if HAS_KA9Q was defined
+@item We only build the networking device driver if HAS_NETWORKING was defined
 
 @example
-KA9Q_DRIVER_yes_V = network
-KA9Q_DRIVER = $(KA9Q_DRIVER_$(HAS_KA9Q)_V) 
+NETWORKING_DRIVER_yes_V = network
+NETWORKING_DRIVER = $(NETWORKING_DRIVER_$(HAS_NETWORKING)_V) 
 
 [...]
 
-SUB_DIRS=include start340 startup clock console timer $(KA9Q_DRIVER) wrapup
+SUB_DIRS=include start340 startup clock console timer \
+    $(NETWORKING_DRIVER) wrapup
 @end example
 
 states that all the directories have to be processed, except for the
@@ -60,79 +61,54 @@ into account when building one's application using the template makefiles
 templates for calling recursively the makefiles in the directories beneath
 the current one, building a library or an executable.
 
-Let's see what it looks like :
+The following is a hevaily commented version of the make customization
+file for the gen68340 BSP.  It can be found in the $RTEMS_ROOT/make/custom
+directory.
 
 @example
-RTEMS_CPU=m68k
 
-TARGET_ARCH=o-gen68340
+# The RTEMS CPU Family and Model
+RTEMS_CPU=m68k
 RTEMS_CPU_MODEL=mcpu32
 
 include $(RTEMS_ROOT)/make/custom/default.cfg
 
+# The name of the BSP directory used for the actual source code.
+# This allows for build variants of the same BSP source.
 RTEMS_BSP_FAMILY=gen68340
 
-## Target compiler config file, if any
-CONFIG.$(TARGET_ARCH).CC = $(RTEMS_ROOT)/make/compilers/gcc-target-default.cfg
-
-RTEMS_BSP=gen68340
-
+# CPU flag to pass to GCC
 CPU_CFLAGS = -mcpu32
 
-# optimize flag: 
+# optimisation flag to pass to GCC
 CFLAGS_OPTIMIZE_V=-O4 -fomit-frame-pointer
 
-# Override default start file
+# The name of the start file to be linked with.  This file is the first
+# part of the BSP which executes.
 START_BASE=start340
 
 [...]
 
+# This make-exe macro is used in template makefiles to build the
+# final executable. Any other commands to follow, just as using
+# objcopy to build a PROM image or converting the executable to binary. 
+
 ifeq ($(RTEMS_USE_GCC272),yes)
+# This has rules to link an application if an older version of GCC is 
+# to be used with this BSP.  It is not required for a BSP to support
+# older versions of GCC.  This option is supported in some of the
+# BSPs which already had this support.
 [...]
 else
-
+# This has rules to link an application using gcc 2.8 or newer or any
+# egcs version.  All BSPs should support this.  This version is required
+# to support GNAT/RTEMS.
 define make-exe
 	$(CC) $(CFLAGS) $(CFLAGS_LD) -o $(basename $@@).exe $(LINK_OBJS)
 	$(NM) -g -n $(basename $@@).exe > $(basename $@@).num
 	$(SIZE) $(basename $@@).exe
 endif
 @end example
-
-the main board CPU family
-
-directory where you want the objects to go
-
-the main board CPU name for GCC
-
-include standard definitions
-
-bsp directory used during the build process 
-
-cross-compiler options
-
-
-
-
-the name of your bsp directory
-
-CPU flag to pass to GCC
-
-optimisation flag to pass to GCC
-
-
-name of your BSP function to be called immediately after reboot
-
-
-
-if an older version of GCC is used...
-
-
-
-this macro is used in template makefiles to build the final executable.
-Any other commands to follow, just as using objcopy to build a PROM image
-or converting the executable to binary. 
-
-Figure 1 : custom file for gen68340 BSP ($RTEMS_ROOT/make/custom/gen68340.cfg)
 
 
 
