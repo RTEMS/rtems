@@ -44,14 +44,6 @@ char *rtems_progname;
 #define VME_TWO_BASE    0x31000000
 
 /*
- * Cacheable areas
- */
-#define SDRAM_BASE      0
-#define SDRAM_SIZE      (16*1024*1024)
-#define FLASH_BASE      0x10000000
-#define FLASH_SIZE      (4*1024*1024)
-
-/*
  * CPU-space access
  */
 #define m68k_set_cacr(_cacr) asm volatile ("movec %0,%%cacr" : : "d" (_cacr))
@@ -167,7 +159,8 @@ void bsp_pretasking_hook(void);         /* m68k version */
 void bsp_start( void )
 {
   extern char _WorkspaceBase[];
-  extern char _RamSize[];
+  extern char _RamBase[], _RamSize[];
+  extern char _FlashBase[], _FlashSize[];
   extern unsigned long  _M68k_Ramsize;
 
   _M68k_Ramsize = (unsigned long)_RamSize;      /* RAM size set in linker script */
@@ -208,15 +201,14 @@ void bsp_start( void )
     /*
      * Cache SDRAM and FLASH
      */
-    m68k_set_acr0(MCF5XXX_ACR_AB(SDRAM_BASE)    |
-                  MCF5XXX_ACR_AM(SDRAM_SIZE-1)  |
-                  MCF5XXX_ACR_EN                |
-                  MCF5XXX_ACR_BWE               |
+    m68k_set_acr0(MCF5XXX_ACR_AB((uint32_t)_RamBase)     |
+                  MCF5XXX_ACR_AM((uint32_t)_RamSize-1)   |
+                  MCF5XXX_ACR_EN                         |
+                  MCF5XXX_ACR_BWE                        |
                   MCF5XXX_ACR_SM_IGNORE);
-    m68k_set_acr1(MCF5XXX_ACR_AB(FLASH_BASE)    |
-                  MCF5XXX_ACR_AM(FLASH_SIZE-1)  |
-                  MCF5XXX_ACR_EN                |
-                  MCF5XXX_ACR_BWE               |
+    m68k_set_acr1(MCF5XXX_ACR_AB((uint32_t)_FlashBase)   |
+                  MCF5XXX_ACR_AM((uint32_t)_FlashSize-1) |
+                  MCF5XXX_ACR_EN                         |
                   MCF5XXX_ACR_SM_IGNORE);
 
     /*
