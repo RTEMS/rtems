@@ -69,6 +69,9 @@ package RTEMS is
    Null_Address     : constant RTEMS.Address :=
       System.Storage_Elements.To_Address(0);
 
+   True  : constant RTEMS.Boolean := 1;
+   False : constant RTEMS.Boolean := 0;
+
    --  More Types
    --
 
