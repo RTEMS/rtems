@@ -1,0 +1,65 @@
+format=man
+#format=list
+
+case ${format} in
+  man)  
+    ;;
+  list)
+    echo "@itemize @bullet"
+    ;;
+  *)
+    echo "unknown format -- ${format}"
+    exit 1
+    ;;
+esac
+
+
+while read routine
+do
+  case ${format} in
+    man)
+      echo "@page"
+      echo "@subsection sigaddset"
+      echo ""
+      echo "@subheading CALLING SEQUENCE:"
+      echo ""
+      echo "@example"
+      echo "int ${routine}("
+      echo "@end example"
+      echo ""
+      echo "@subheading STATUS CODES:"
+      echo ""
+      echo "@subheading DESCRIPTION:"
+      echo ""
+      echo "@subheading NOTES:"
+      echo ""
+      ;;
+    list)
+      ;;
+    *)
+      echo "unknown format -- ${format}"
+      exit 1
+      ;;
+  esac
+      
+done <<EOF
+execl
+execv
+execle
+execve
+execlp
+execvp
+EOF
+
+case ${format} in
+  man)
+    ;;
+  list)
+    echo "@end itemize"
+    ;;
+  *)
+    echo "unknown format -- ${format}"
+    exit 1
+    ;;
+esac
+
