@@ -155,51 +155,63 @@ directories will have been created under tools.
 @item @value{NEWLIB-UNTAR}
 @end itemize
 
-The @code{bit_ada} script will automatically create two other
-subdirectories:
+Copy the @code{bit_ada} script from the @code{archive} directory
+to the @code{tools} directory as shown below:
+
+@example
+cp ../archive/bit_ada .
+@end example
+
+When the @code{bit_ada} script is executed later in this process, 
+it will automatically create two other subdirectories:
 
 @itemize @bullet
 @item src
 @item build-$@{CPU@}-tools
 @end itemize
 
-Ignoring version numbers, this will look something like the following figure:
+The directory tree should look something like the following figure:
 
-@ifset use-ascii
 @example
 @group
-                       tools
-                         |    bit_ada (script)
-                         +
- +---------+-------------+-----------+----------------+
- |         |             |           |                |
-src   binutils-2.9   gcc-2.8.1  newlib-1.8.0  build-$@{CPU@}-tools
+/whatever/prefix/you/choose/
+        bit
+        archive/
+            @value{GCC-TAR}
+            @value{GNAT-TAR}
+            @value{BINUTILS-TAR}
+            @value{NEWLIB-TAR}
+            @value{RTEMS-TAR}
+@ifset GCC-RTEMSPATCH
+            @value{GCC-RTEMSPATCH}
+@end ifset
+@ifset BINUTILS-RTEMSPATCH
+            @value{BINUTILS-RTEMSPATCH}
+@end ifset
+@ifset NEWLIB-RTEMSPATCH
+            @value{NEWLIB-RTEMSPATCH}
+@end ifset
+@ifset GNAT-RTEMSPATCH
+            @value{GNAT-RTEMSPATCH}
+@end ifset
+            hello_world_c.tgz
+            bit
+        tools/
+            @value{BINUTILS-UNTAR}/
+            @value{GCC-UNTAR}/
+            @value{GNAT-UNTAR}/
+            @value{NEWLIB-UNTAR}/
+            @value{RTEMS-UNTAR}/
+            bit
+
 @end group
 @end example
-@end ifset
 
-
-@ifset use-tex
-@c for now use the ascii version
-@example
-@group
-                       tools
-                         |    bit_ada (script)
-                         +
- +---------+-------------+-----------+----------------+
- |         |             |           |                |
-src   binutils-2.9   gcc-2.8.1  newlib-1.8.0  build-${CPU}-tools
-@end group
-@end example
-@tex
-@end tex
-@end ifset
-
-@ifset use-html
-@html
-<IMG SRC="bit_ada.jpg" WIDTH=816 HEIGHT=267 ALT="Directory Organization">
-@end html
-@end ifset
+@c @ifset use-html
+@c @html
+@c <IMG SRC="bit_ada.jpg" WIDTH=816 HEIGHT=267 ALT="Directory Organization">
+@c @end html
+@c @end ifset
 
 @c
 @c  Reading the Documentation
