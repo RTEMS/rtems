@@ -1,6 +1,16 @@
 
 2000-09-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* custom/erc32.cfg: Add comment on -mno-v8, -mcypress.
+	* custom/gen68302.cfg: Comment out LIBC_LIB[C|M].
+	* custom/gen68340.cfg: Comment out LIBC_LIB[C|M].
+	* custom/gen68360.cfg: Comment out LIBC_LIB[C|M].
+	* custom/idp.cfg: Comment out LIBC_LIB[C|M].
+	* custom/mvme162.cfg: Comment out LIBC_LIB[C|M].
+	* custom/ods68302.cfg: Comment out LIBC_LIB[C|M].
+
+2000-09-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* custom/gensh2.cfg: Fix comments.
 
 2000-09-12	Joel Sherrill <joel@OARcorp.com>
