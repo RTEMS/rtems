@@ -31,6 +31,10 @@ nm=${cpu}-rtems-nm
 size=${cpu}-rtems-size
 ar=${cpu}-rtems-ar
 
+#
+#  All customization should be above this point
+#
+
 check_objs()
 {
   for i in *.o
