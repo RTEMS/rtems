@@ -2,6 +2,8 @@
 # BSP specific settings. To be included in application Makefiles
 #
 
+RTEMS_BSP = @RTEMS_BSP@
+
 prefix = @prefix@
 
 CC_FOR_TARGET = @CC_FOR_TARGET@
