@@ -39,7 +39,7 @@ REL = $(ARCH)/rtems-cpu.rel
 $(REL): $(C_O_FILES) $(S_O_FILES)
 	$(make-rel)
 
-all-local: $(ARCH) $(TMPINSTALL_FILES) $(REL)
+all-local: $(TMPINSTALL_FILES) $(REL)
 
 EXTRA_DIST = $(C_FILES) $(S_FILES)
 

@@ -37,7 +37,7 @@ REL = $(ARCH)/rtems-cpu.rel
 $(REL): $(C_O_FILES) $(S_O_FILES)
 	$(make-rel)
 
-all-local: $(ARCH) $(TMPINSTALL_FILES) $(REL)
+all-local: $(TMPINSTALL_FILES) $(REL)
 
 UNUSED_FILES = irq_stub.S
 
