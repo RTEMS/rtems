@@ -18,7 +18,7 @@ VPATH = @srcdir@
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
-SUB_DIRS=exec lib tests/tools tests/support tests/samples
+SUB_DIRS=exec lib tests
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
