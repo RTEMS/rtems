@@ -334,6 +334,7 @@ void _Init68360 (void)
 	 *	Disable timers during FREEZE
 	 *	Enable bus monitor during FREEZE
 	 *	BCLRO* arbitration level 3
+         */
 
 #elif (defined (GEN68360_WITH_SRAM))
    /*
