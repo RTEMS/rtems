@@ -20,12 +20,9 @@ preinstall-am: $(PREINSTALL_FILES)
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am
 
-depend-am:
+depend-am: depend-gcc
 depend: depend-am
-.PHONY: depend depend-am
-
-${ARCH}:
-	mkdir ${ARCH}
+.PHONY: depend depend-am depend-gcc
 
 clean-local:
 	$(RM) -r o-optimize o-debug o-profile $(CLEANDIRS)
