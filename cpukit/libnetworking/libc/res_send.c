@@ -78,11 +78,6 @@ static char rcsid[] = "$Id$";
  * Send query to name server and wait for reply.
  */
 
-/* Since we compile with strict ANSI we need to undef it to get
- * prototypes for extensions
- */
-#undef __STRICT_ANSI__
-
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/time.h>

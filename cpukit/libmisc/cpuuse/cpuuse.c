@@ -101,8 +101,7 @@ void CPU_usage_Dump( void )
         if ( !isprint(name[2]) ) name[2] = '*';
         if ( !isprint(name[3]) ) name[3] = '*';
 
-#if defined(unix) || \
-  ( (CPU_HARDWARE_FP == TRUE) && !defined(__mips_single_float) )
+#if defined(unix) || ( CPU_HARDWARE_FP == TRUE )
         printf( "0x%08x   %4s    %8d     %5.3f\n",
           the_thread->Object.id,
           name,

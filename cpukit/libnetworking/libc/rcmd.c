@@ -44,11 +44,6 @@ static char sccsid[] = "@(#)rcmd.c	8.3 (Berkeley) 3/26/94";
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-/* Since we compile with strict ANSI we need to undef it to get
- * prototypes for extensions
- */
-#undef __STRICT_ANSI__
-
 #include <signal.h>
 #include <fcntl.h>
 #include <netdb.h>

@@ -636,8 +636,8 @@ int rtems_ftp_open(
       
       hent = gethostbyname(hostname);
       if (hent != NULL) {
-	memcpy((char *)(&(fsp->farCtrlAddress.sin_addr)), 
-  	      hent->h_addr, 
+	bcopy(hent->h_addr, 
+	      (char *)(&(fsp->farCtrlAddress.sin_addr)), 
 	      sizeof(fsp->farCtrlAddress.sin_addr));
       }
       else {

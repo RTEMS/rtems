@@ -46,7 +46,7 @@
  */
 
 #define _Chain_Head( _the_chain ) \
-   ((Chain_Node *) ((void *)(_the_chain)))
+   ((Chain_Node *) (_the_chain))
 
 /*PAGE
  *
@@ -54,7 +54,7 @@
  */
 
 #define _Chain_Tail( _the_chain ) \
-   ((Chain_Node *) ((void *)&(_the_chain)->permanent_null))
+   ((Chain_Node *) &(_the_chain)->permanent_null)
 
 /*PAGE
  *

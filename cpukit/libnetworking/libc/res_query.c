@@ -74,11 +74,6 @@ static char orig_rcsid = "From: Id: res_query.c,v 8.14 1997/06/09 17:47:05 halle
 static char rcsid[] = "$Id$";
 #endif /* LIBC_SCCS and not lint */
 
-/* Since we compile with strict ANSI we need to undef it to get
- * prototypes for extensions
- */
-#undef __STRICT_ANSI__
-
 #include <sys/types.h>
 #include <sys/param.h>
 #include <netinet/in.h>

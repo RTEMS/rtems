@@ -22,12 +22,6 @@
 
 #if defined(RTEMS_NEWLIB)
 #include <rtems/libcsupport.h>
-
-/* Since we compile with strict ANSI we need to undef it to get
- * prototypes for extensions
- */
-#undef __STRICT_ANSI__
-
 #include <stdlib.h>             /* for free() */
 #include <string.h>             /* for memset() */
 
@@ -132,26 +126,26 @@ rtems_boolean libc_create_hook(
   {   
  
 #ifdef __GNUC__
-      /* GCC extension: structure constants */
-      _REENT_INIT_PTR((ptr));
+	  /* GCC extension: structure constants */
+	  _REENT_INIT_PTR((ptr));
 #else
-      /* 
-       *  WARNING: THIS IS VERY DEPENDENT ON NEWLIB!!! 
-       *           Last visual check was against newlib 1.8.2 but last known
-       *           use was against 1.7.0.  This is basically an exansion of
-       *           REENT_INIT() in <sys/reent.h>.
-       */
-      memset(ptr, 0, sizeof(*ptr));
-      ptr->_stdin = &ptr->__sf[0];
-      ptr->_stdout = &ptr->__sf[1];
-      ptr->_stderr = &ptr->__sf[2];
-      ptr->_current_locale = "C";
-      ptr->_new._reent._rand_next = 1;
+	  /* 
+	   *  WARNING: THIS IS VERY DEPENDENT ON NEWLIB!!! 
+	   *           Last visual check was against newlib 1.8.2 but last known
+	   *           use was against 1.7.0.  This is basically an exansion of
+	   *           REENT_INIT() in <sys/reent.h>.
+	   */
+	  memset(ptr, 0, sizeof(*ptr));
+	  ptr->_stdin = &ptr->__sf[0];
+	  ptr->_stdout = &ptr->__sf[1];
+	  ptr->_stderr = &ptr->__sf[2];
+	  ptr->_current_locale = "C";
+	  ptr->_new._reent._rand_next = 1;
 #endif
 
-      creating_task->libc_reent = ptr;
-      return TRUE;
-  }
+	  creating_task->libc_reent = ptr;
+	  return TRUE;
+  }	  
   else
       return FALSE;
 
@@ -241,6 +235,7 @@ rtems_extension libc_delete_hook(
     ptr = deleted_task->libc_reent;
   }
 
+  /* if (ptr) */
   if (ptr && ptr != &libc_global_reent) {
 /*
     _wrapup_reent(ptr);
@@ -253,7 +248,7 @@ rtems_extension libc_delete_hook(
 #if REENT_MALLOCED
     free(ptr);
 #else
-    _Workspace_Free(ptr);
+	_Workspace_Free(ptr);
 #endif
   }
 

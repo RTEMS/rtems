@@ -39,11 +39,6 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_perror.c,v 1.11 1999/08/28
  * Copyright (C) 1984, Sun Microsystems, Inc.
  *
  */
-/* Since we compile with strict ANSI we need to undef it to get
- * prototypes for extensions
- */
-#undef __STRICT_ANSI__
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

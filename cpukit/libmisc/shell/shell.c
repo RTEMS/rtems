@@ -16,11 +16,6 @@
 #include "config.h"
 #endif
 
-/* Since we compile with strict ANSI we need to undef it to get
- * prototypes for extensions
- */
-#undef __STRICT_ANSI__
-
 #include <stdio.h>
 #include <time.h>
 
