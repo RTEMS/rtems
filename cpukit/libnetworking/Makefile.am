@@ -12,7 +12,7 @@ include_HEADERS = \
     bpfilter.h loop.h netdb.h opt_ipfw.h opt_mrouting.h \
     opt_tcpdebug.h poll.h resolv.h syslog.h memory.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) \
+PREINSTALL_FILES = $(PROJECT_INCLUDE) \
   $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 $(PROJECT_INCLUDE):
