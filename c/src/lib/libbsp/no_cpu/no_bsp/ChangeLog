@@ -1,3 +1,8 @@
+2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove AM_CONDITIONAL(HAS_MP).
+	Remove RTEMS_CHECK_MULTIPROCESSING.
+
 2004-02-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am,
