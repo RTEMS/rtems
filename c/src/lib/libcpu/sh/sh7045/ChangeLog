@@ -1,3 +1,8 @@
+2001-01-22  Radzislaw Galler  <rgaller@et.put.poznan.pl>
+
+	* clock/ckinit.c (Install_clock): Modified MTU timer 0 initialization
+	to generate an interrupt exactly every 1us
+
 2001-01-05	Joel Sherrill <joel@OARcorp.com>
 
 	* /dev/null moved to libmisc.

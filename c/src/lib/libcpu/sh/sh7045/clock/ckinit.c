@@ -44,7 +44,7 @@
 #include <rtems/score/ispsh7045.h>
 #include <rtems/score/iosh7045.h>
 
-#define _MTU_COUNTER0_MICROSECOND (Clock_MHZ/4)
+#define _MTU_COUNTER0_MICROSECOND (Clock_MHZ/16)
 
 #ifndef CLOCKPRIO
 #define CLOCKPRIO 10
@@ -53,7 +53,7 @@
 #define MTU0_STARTMASK 	0xfe
 #define MTU0_SYNCMASK 	0xfe
 #define MTU0_MODEMASK 	0xc0
-#define MTU0_TCRMASK 	0x01 /* bit 7 also used, vs 703x */
+#define MTU0_TCRMASK 	0x22 /* bit 7 also used, vs 703x */
 #define MTU0_STAT_MASK 	0xc0
 #define MTU0_IRQMASK 	0xfe
 #define MTU0_TIERMASK 	0x01
@@ -150,6 +150,8 @@ void Install_clock(
 )
 {
   unsigned8 temp8 = 0;
+  unsigned32 factor = 1000000;
+  
   
   /*
    *  Initialize the clock tick device driver variables
@@ -158,8 +160,9 @@ void Install_clock(
   Clock_driver_ticks = 0;
   Clock_isrs_const = rtems_configuration_get_microseconds_per_tick() / 10000;
   Clock_isrs = Clock_isrs_const;
-
-  Clock_MHZ = rtems_cpu_configuration_get_clicks_per_second() / 1000000 ;
+  
+  factor /= rtems_configuration_get_microseconds_per_tick(); /* minimalization of integer division error */
+  Clock_MHZ = rtems_cpu_configuration_get_clicks_per_second() / factor ;
 
   rtems_interrupt_catch( Clock_isr, CLOCK_VECTOR, &Old_ticker );
 
@@ -182,7 +185,7 @@ void Install_clock(
   temp8 = read8( MTU_TMDR0) & MTU0_MODEMASK;
   write8( temp8, MTU_TMDR0);
 
-  /* TCNT is cleared by GRA ; internal clock /4 */
+  /* TCNT is cleared by GRA ; internal clock /16 */
   write8( MTU0_TCRMASK , MTU_TCR0);
 
   /* use GRA without I/O - pins  */
@@ -201,8 +204,7 @@ void Install_clock(
     rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED);
 
   /* set counter limits */
-  write16( _MTU_COUNTER0_MICROSECOND * 
-    rtems_configuration_get_microseconds_per_tick(), MTU_GR0A);
+  write16( _MTU_COUNTER0_MICROSECOND, MTU_GR0A);
    
   /* start counter */
   temp8 = read8( MTU_TSTR) |~MTU0_STARTMASK;
