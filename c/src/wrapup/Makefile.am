@@ -29,7 +29,7 @@ SRCS = $(LIBBSP) $(LIBNETWORKING) $(LIBRDBG) \
     $(wildcard $(PROJECT_RELEASE)/lib/librtcio$(LIB_VARIANT).a) \
     $(wildcard $(PROJECT_RELEASE)/lib/libserialio$(LIB_VARIANT).a) \
     $(wildcard $(PROJECT_RELEASE)/lib/libnetchip$(LIB_VARIANT).a) \
-    $(PROJECT_RELEASE)/lib/libmisc$(LIB_VARIANT).a \
+    ../libmisc/wrapup/$(ARCH)/libmisc.a \
     $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/librtemsbsp${LIB_VARIANT}.a

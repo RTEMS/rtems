@@ -1,3 +1,8 @@
+2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Pickup libmisc.a from build directory.
+	Remove libxdr.a.
+
 2002-05-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect moving libnetworking. Use libnetapps instead.
