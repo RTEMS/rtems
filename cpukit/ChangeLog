@@ -1,3 +1,12 @@
+2004-02-26	Joel Sherrill <joel@OARcorp.com>
+
+	PR 582/core
+	* posix/src/mqueue.c, posix/src/mqueuecreatesupp.c,
+	posix/src/mqueuedeletesupp.c, posix/src/mqueueunlink.c: Use memory
+	from workspace to avoid use of mutex during dispatch disable critical
+	section. Besides memory for object names should come from the
+	Workspace anyway.
+
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/version.m4: 4.6.99.0.
