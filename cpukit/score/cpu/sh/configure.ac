@@ -6,7 +6,7 @@ AC_PREREQ(2.52)
 AC_INIT([rtems-c-src-exec-score-cpu-sh],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([asm.h])
 RTEMS_TOP(../../../../../..)
-AC_CONFIG_AUX_DIR(../../../../../..)
+AC_CONFIG_AUX_DIR(../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
@@ -22,6 +22,7 @@ RTEMS_PROJECT_ROOT
 
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
+AC_PROG_RANLIB
 
 RTEMS_CHECK_NEWLIB
 
