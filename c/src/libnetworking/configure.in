@@ -42,5 +42,6 @@ netinet/Makefile
 nfs/Makefile
 rtems/Makefile
 rtems_servers/Makefile
+rtems_webserver/Makefile
 wrapup/Makefile
 )

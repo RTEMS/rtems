@@ -5,7 +5,8 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-SUBDIRS = include kern lib libc net netinet nfs rtems rtems_servers wrapup
+SUBDIRS = include kern lib libc net netinet nfs rtems rtems_servers \
+rtems_webserver wrapup
 
 EXTRA_DIST = \
 CHANGELOG \

@@ -6,16 +6,25 @@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 top_builddir = ..
-subdir = wrapup
+subdir = rtems_servers
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-NET_O_PIECES = kern lib libc net netinet nfs rtems rtems_servers rtems_webserver
-OBJS = $(foreach piece, $(NET_O_PIECES), ../$(piece)/$(ARCH)/*.o)
-LIB = $(ARCH)/libnetworking.a
+LIBNAME = lib.a
+LIB = ${ARCH}/${LIBNAME}
+
+# C and C++ source names, if any, go here -- minus the .c or .cc
+C_PIECES=asp balloc wbase64 default ejlex ejparse form h handler mime \
+	 misc webpage ringq rom security socket sym uemf url value webcomp \
+	 webrom webs websuemf webmain
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
+
+SRCS = $(C_FILES)
+OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
@@ -23,16 +32,12 @@ include $(RTEMS_ROOT)/make/lib.cfg
 INSTALL_CHANGE = @INSTALL_CHANGE@
 
 #
-# (OPTIONAL) Add local stuff here using +=
+# Add local stuff here using +=
 #
 
-DEFINES +=
+DEFINES += -DWEBS -DUEMF -DOS="LINUX" -DLINUX
 CPPFLAGS +=
 CFLAGS +=
-
-LD_PATHS +=
-LD_LIBS +=
-LDFLAGS +=
 
 #
 # Add your list of files to delete here.  The config files
@@ -41,14 +46,13 @@ LDFLAGS +=
 #  'make clobber' already includes 'make clean'
 #
 
-CLEAN_ADDITIONS +=
+CLEAN_ADDITIONS += $(LIB)
 CLOBBER_ADDITIONS +=
 
-$(LIB): ${OBJS}
-	$(make-library)
+all: ${ARCH} $(LIB)
 
-all: ${ARCH} $(SRCS) $(LIB)
-	$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
+$(LIB): $(SRCS) ${OBJS}
+	$(make-library)
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
