@@ -116,6 +116,7 @@ constants, usage, and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_fatal_error_occurred
 @example
 void volatile rtems_fatal_error_occurred(
   rtems_unsigned32        the_error

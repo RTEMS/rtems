@@ -564,6 +564,7 @@ constants, usage, and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_extension_create
 @example
 rtems_status_code rtems_extension_create(
   rtems_name              name,
@@ -609,6 +610,7 @@ preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_extension_ident
 @example
 rtems_status_code rtems_extension_ident(
   rtems_name  name,
@@ -652,6 +654,7 @@ preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_extension_delete
 @example
 rtems_status_code rtems_extension_delete(
   rtems_id id

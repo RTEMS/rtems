@@ -220,6 +220,7 @@ and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_region_create
 @example
 rtems_status_code rtems_region_create(
   rtems_name        name,
@@ -298,6 +299,7 @@ by RTEMS:
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_region_ident
 @example
 rtems_status_code rtems_region_ident(
   rtems_name  name,
@@ -340,6 +342,7 @@ This directive will not cause the running task to be preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_region_delete
 @example
 rtems_status_code rtems_region_delete(
   rtems_id id
@@ -383,6 +386,7 @@ delete the region.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_region_extend
 @example
 rtems_status_code rtems_region_extend(
   rtems_id            id,
@@ -428,6 +432,7 @@ extend the region.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_region_get_segment
 @example
 rtems_status_code rtems_region_get_segment(
   rtems_id            id,
@@ -515,6 +520,7 @@ this directive.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_region_return_segment
 @example
 rtems_status_code rtems_region_return_segment(
   rtems_id  id,
@@ -568,6 +574,7 @@ is less than or equal to the size of the segment returned.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_region_get_segment_size
 @example
 rtems_status_code rtems_region_get_segment_size(
   rtems_id            id,

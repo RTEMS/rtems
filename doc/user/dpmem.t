@@ -98,6 +98,7 @@ constants, usage, and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_port_create
 @example
 rtems_status_code rtems_port_create(
   rtems_name        name,
@@ -155,6 +156,7 @@ preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_port_ident
 @example
 rtems_status_code rtems_port_ident(
   rtems_name  name,
@@ -197,6 +199,7 @@ preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_port_delete
 @example
 rtems_status_code rtems_port_delete(
   rtems_id id
@@ -238,6 +241,7 @@ delete the port.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_port_external_to_internal
 @example
 rtems_status_code rtems_port_external_to_internal(
   rtems_id   id,
@@ -282,6 +286,7 @@ preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_port_internal_to_external
 @example
 rtems_status_code rtems_port_internal_to_external(
   rtems_id   id,

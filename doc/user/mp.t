@@ -560,6 +560,7 @@ status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_multiprocessing_announce
 @example
 void rtems_multiprocessing_announce( void );
 @end example

@@ -834,6 +834,7 @@ constants, usage, and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_rate_monotonic_create
 @example
 rtems_status_code rtems_rate_monotonic_create(
   rtems_name  name,
@@ -877,6 +878,7 @@ preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_rate_monotonic_ident
 @example
 rtems_status_code rtems_rate_monotonic_ident(
   rtems_name  name,
@@ -919,6 +921,7 @@ preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_rate_monotonic_cancel
 @example
 rtems_status_code rtems_rate_monotonic_cancel(
   rtems_id id
@@ -960,6 +963,7 @@ been created by the calling task.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_rate_monotonic_delete
 @example
 rtems_status_code rtems_rate_monotonic_delete(
   rtems_id id
@@ -1000,6 +1004,7 @@ other than the task which created the period.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_rate_monotonic_period
 @example
 rtems_status_code rtems_rate_monotonic_period(
   rtems_id       id,
@@ -1051,6 +1056,7 @@ This directive will not cause the running task to be preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_rate_monotonic_get_status
 @example
 rtems_status_code rtems_rate_monotonic_get_status(
   rtems_id                            id,

@@ -217,6 +217,7 @@ constants, usage, and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_message_queue_create
 @example
 rtems_status_code rtems_message_queue_create(
   rtems_name        name,
@@ -302,6 +303,7 @@ configuration table.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_message_queue_ident
 @example
 rtems_status_code rtems_message_queue_ident(
   rtems_name        name,
@@ -359,6 +361,7 @@ table.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_message_queue_delete
 @example
 rtems_status_code rtems_message_queue_delete(
   rtems_id id
@@ -420,6 +423,7 @@ reclaimed when the message queue is deleted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_message_queue_send
 @example
 rtems_status_code rtems_message_queue_send(
   rtems_id           id,
@@ -478,6 +482,7 @@ proxy used to represent the task is reclaimed.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_message_queue_urgent
 @example
 rtems_status_code rtems_message_queue_urgent(
   rtems_id           id,
@@ -537,6 +542,7 @@ proxy used to represent the task is reclaimed.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_message_queue_broadcast
 @example
 rtems_status_code rtems_message_queue_broadcast(
   rtems_id           id,
@@ -600,6 +606,7 @@ proxy used to represent the task is reclaimed.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_message_queue_receive
 @example
 rtems_status_code rtems_message_queue_receive(
   rtems_id           id,
@@ -686,6 +693,7 @@ this directive.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_message_queue_get_number_pending
 @example
 rtems_status_code rtems_message_queue_get_number_pending(
   rtems_id          id,
@@ -728,6 +736,7 @@ the specified message queue.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_message_queue_flush
 @example
 rtems_status_code rtems_message_queue_flush(
   rtems_id          id,

@@ -203,6 +203,7 @@ status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_io_initialize
 @example
 rtems_status_code rtems_io_initialize(
   rtems_device_major_number  major,
@@ -253,6 +254,7 @@ initialized.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_io_register_name
 @example
 rtems_status_code rtems_io_register_name(
   char                      *name,
@@ -293,6 +295,7 @@ preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_io_lookup_name
 @example
 rtems_status_code rtems_io_lookup_name(
   const char                *name,
@@ -331,6 +334,7 @@ preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_io_open
 @example
 rtems_status_code rtems_io_open(
   rtems_device_major_number  major,
@@ -375,6 +379,7 @@ invoked.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_io_close
 @example
 rtems_status_code rtems_io_close(
   rtems_device_major_number  major,
@@ -419,6 +424,7 @@ invoked.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_io_read
 @example
 rtems_status_code rtems_io_read(
   rtems_device_major_number  major,
@@ -464,6 +470,7 @@ invoked.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_io_write
 @example
 rtems_status_code rtems_io_write(
   rtems_device_major_number  major,
@@ -509,6 +516,7 @@ invoked.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_io_control
 @example
 rtems_status_code rtems_io_control(
   rtems_device_major_number  major,

@@ -190,6 +190,7 @@ and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_event_send
 @example
 rtems_status_code rtems_event_send (
   rtems_id         id,
@@ -246,7 +247,8 @@ remote node to send the event set to the appropriate task.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@example
+@c @findex rtems_event_receive
+@example 
 rtems_status_code rtems_event_receive (
   rtems_event_set  event_in,
   rtems_option     option_set,

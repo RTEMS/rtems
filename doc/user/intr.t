@@ -231,6 +231,7 @@ constants, usage, and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_interrupt_catch
 @example
 rtems_status_code rtems_interrupt_catch(
   rtems_isr_entry      new_isr_handler,
@@ -274,6 +275,7 @@ This directive will not cause the calling task to be preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_interrupt_disable
 @example
 void rtems_interrupt_disable(
   rtems_isr_level  level
@@ -314,6 +316,7 @@ parameter.}
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_interrupt_enable
 @example
 void rtems_interrupt_enable(
   rtems_isr_level  level
@@ -353,6 +356,7 @@ This directive will not cause the calling task to be preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C 
+@c @findex rtems_interrupt_flash
 @example
 void rtems_interrupt_flash(
   rtems_isr_level level
@@ -391,6 +395,7 @@ This directive will not cause the calling task to be preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_interrupt_is_in_progress
 @example
 rtems_boolean rtems_interrupt_is_in_progress( void );
 @end example

@@ -236,6 +236,7 @@ and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_signal_catch
 @example
 rtems_status_code rtems_signal_catch(
   rtems_asr_entry  asr_handler,
@@ -307,6 +308,7 @@ The following task mode constants are defined by RTEMS:
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_signal_send
 @example
 rtems_status_code rtems_signal_send(
   rtems_id         id,

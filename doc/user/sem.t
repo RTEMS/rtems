@@ -366,6 +366,7 @@ constants, usage, and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_semaphore_create
 @example
 rtems_status_code rtems_semaphore_create(
   rtems_name           name,
@@ -467,6 +468,7 @@ the Configuration Table.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_semaphore_ident
 @example
 rtems_status_code rtems_semaphore_ident(
   rtems_name        name,
@@ -524,6 +526,7 @@ table.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_semaphore_delete
 @example
 rtems_status_code rtems_semaphore_delete(
   rtems_id id
@@ -582,6 +585,7 @@ reclaimed when the semaphore is deleted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_semaphore_obtain
 @example
 rtems_status_code rtems_semaphore_obtain(
   rtems_id         id,
@@ -671,6 +675,7 @@ this directive.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_semaphore_release
 @example
 rtems_status_code rtems_semaphore_release(
   rtems_id id

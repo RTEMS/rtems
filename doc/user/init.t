@@ -193,6 +193,7 @@ constants, usage, and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_initialize_executive
 @example
 void rtems_initialize_executive(
   rtems_configuration_table *configuration_table,
@@ -256,6 +257,7 @@ with no intervening actions.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_initialize_executive_early
 @example
 rtems_interrupt_level rtems_initialize_executive_early(
   rtems_configuration_table *configuration_table,
@@ -308,6 +310,7 @@ initialization sequences:
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_initialize_executive_late
 @example
 void rtems_initialize_executive_late(
   rtems_interrupt_level  bsp_level
@@ -365,6 +368,7 @@ initialization sequences:
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_shutdown_executive
 @example
 void rtems_shutdown_executive(
   rtems_unsigned32 result

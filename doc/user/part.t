@@ -129,6 +129,7 @@ constants, usage, and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_partition_create
 @example
 rtems_status_code rtems_partition_create(
   rtems_name        name,
@@ -215,6 +216,7 @@ the Configuration Table.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_partition_ident
 @example
 rtems_status_code rtems_partition_ident(
   rtems_name        name,
@@ -272,6 +274,7 @@ table.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_partition_delete
 @example
 rtems_status_code rtems_partition_delete(
   rtems_id id
@@ -323,6 +326,7 @@ the partition was created with the @code{@value{RPREFIX}GLOBAL} option.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_partition_get_buffer
 @example
 rtems_status_code rtems_partition_get_buffer(
   rtems_id   id,
@@ -371,6 +375,7 @@ remote node to allocate a buffer from the specified partition.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_partition_return_buffer
 @example
 rtems_status_code rtems_partition_return_buffer(
   rtems_id  id,

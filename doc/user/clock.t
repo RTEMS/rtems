@@ -224,6 +224,7 @@ and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_clock_set
 @example
 rtems_status_code rtems_clock_set(
   rtems_time_of_day *time_buffer
@@ -274,6 +275,7 @@ the system date and time to application specific specifications.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_clock_get
 @example
 rtems_status_code rtems_clock_get(
   rtems_clock_get_options  option,
@@ -364,6 +366,7 @@ system date and time to application specific specifications.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_clock_tick
 @example
 rtems_status_code rtems_clock_tick( void );
 @end example

@@ -598,6 +598,7 @@ status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_task_create
 @example
 rtems_status_code rtems_task_create(
   rtems_name           name,
@@ -707,6 +708,7 @@ by the maximum_global_objects field in the Configuration Table.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_task_ident
 @example
 rtems_status_code rtems_task_ident(
   rtems_name        name,
@@ -760,7 +762,9 @@ accesses only the local copy of the global object table.
 @subsection TASK_START - Start a task
 
 @subheading CALLING SEQUENCE:
+
 @ifset is-C
+@c @findex rtems_task_start
 @example
 rtems_status_code rtems_task_start(
   rtems_id            id,
@@ -809,7 +813,9 @@ the @code{@value{DIRPREFIX}task_start} directive.
 @subsection TASK_RESTART - Restart a task
 
 @subheading CALLING SEQUENCE:
+
 @ifset is-C
+@c @findex rtems_task_restart
 @example
 rtems_status_code rtems_task_restart(
   rtems_id            id,
@@ -870,7 +876,9 @@ created with the @code{@value{RPREFIX}GLOBAL} option.
 @subsection TASK_DELETE - Delete a task
 
 @subheading CALLING SEQUENCE:
+
 @ifset is-C
+@c @findex rtems_task_delete
 @example
 rtems_status_code rtems_task_delete(
   rtems_id id
@@ -926,7 +934,9 @@ created with the @code{@value{RPREFIX}GLOBAL} option.
 @subsection TASK_SUSPEND - Suspend a task
 
 @subheading CALLING SEQUENCE:
+
 @ifset is-C
+@c @findex rtems_task_suspend
 @example
 rtems_status_code rtems_task_suspend(
   rtems_id id
@@ -974,7 +984,9 @@ If the task specified by id is already suspended, then the
 @subsection TASK_RESUME - Resume a task
 
 @subheading CALLING SEQUENCE:
+
 @ifset is-C
+@c @findex rtems_task_resume
 @example
 rtems_status_code rtems_task_resume(
   rtems_id id
@@ -1019,7 +1031,9 @@ If the task specified by id is not suspended, then the
 @subsection TASK_SET_PRIORITY - Set task priority
 
 @subheading CALLING SEQUENCE:
+
 @ifset is-C
+@c @findex rtems_task_set_priority
 @example
 rtems_status_code rtems_task_set_priority(
   rtems_id             id,
@@ -1080,7 +1094,9 @@ binary semaphores.
 @subsection TASK_MODE - Change current task's mode
 
 @subheading CALLING SEQUENCE:
+
 @ifset is-C
+@c @findex rtems_task_mode
 @example
 rtems_status_code rtems_task_mode(
   rtems_mode  mode_set,
@@ -1234,7 +1250,9 @@ mask constant is provided in the following table:
 @subsection TASK_GET_NOTE - Get task notepad entry
 
 @subheading CALLING SEQUENCE:
+
 @ifset is-C
+@c @findex rtems_task_get_note
 @example
 rtems_status_code rtems_task_get_note(
   rtems_id          id,
@@ -1286,7 +1304,9 @@ the notepad entry of the specified task.
 @subsection TASK_SET_NOTE - Set task notepad entry
 
 @subheading CALLING SEQUENCE:
+
 @ifset is-C
+@c @findex rtems_task_set_note
 @example
 rtems_status_code rtems_task_set_note(
   rtems_id         id,
@@ -1338,7 +1358,9 @@ node to set the specified notepad entry.
 @subsection TASK_WAKE_AFTER - Wake up after interval
 
 @subheading CALLING SEQUENCE:
+
 @ifset is-C
+@c @findex rtems_task_wake_after
 @example
 rtems_status_code rtems_task_wake_after(
   rtems_interval ticks
@@ -1384,6 +1406,7 @@ A clock tick is required to support the functionality of this directive.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_task_wake_when
 @example
 rtems_status_code rtems_task_wake_when(
   rtems_time_of_day *time_buffer

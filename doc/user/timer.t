@@ -158,6 +158,7 @@ and status codes.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_timer_create
 @example
 rtems_status_code rtems_timer_create(
   rtems_name  name,
@@ -200,6 +201,7 @@ preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_timer_ident
 @example
 rtems_status_code rtems_timer_ident(
   rtems_name  name,
@@ -242,6 +244,7 @@ preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_timer_cancel
 @example
 rtems_status_code rtems_timer_cancel(
   rtems_id id
@@ -279,6 +282,7 @@ This directive will not cause the running task to be preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_timer_delete
 @example
 rtems_status_code rtems_timer_delete(
   rtems_id id
@@ -319,6 +323,7 @@ which created the timer.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_timer_fire_after
 @example
 rtems_status_code rtems_timer_fire_after(
   rtems_id                           id,
@@ -366,6 +371,7 @@ preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_timer_fire_when
 @example
 rtems_status_code rtems_timer_fire_when(
   rtems_id                           id,
@@ -414,6 +420,7 @@ preempted.
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
+@c @findex rtems_timer_reset
 @example
 rtems_status_code rtems_timer_reset(
   rtems_id   id
