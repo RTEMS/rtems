@@ -298,6 +298,10 @@ STRIP = $(STRIP_FOR_TARGET)
 else
 CC = @CC@ $(GCCSPECS)
 CXX = @CXX@ $(GCCSPECS)
+OBJCOPY = @OBJCOPY@
+NM = @NM@
+SIZE = @SIZE@
+STRIP = @STRIP@
 endif
 
 ##
