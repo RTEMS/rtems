@@ -30,6 +30,9 @@ CONDITION_VARIABLE_C_PIECES= cond condattrdestroy condattrgetpshared \
     conddestroy condinit condmp condsignal condsignalsupp condtimedwait \
     condwait condwaitsupp
 
+ID_C_PIECES= getegid geteuid getgid getgroups getlogin getpgrp getpid getppid \
+    getuid setpgid setsid
+
 KEY_C_PIECES= key keycreate keydelete keygetspecific keyrundestructors \
     keysetspecific
 
@@ -78,7 +81,7 @@ TIME_C_PIECES= time posixtimespecsubtract posixtimespectointerval \
 TIMER_C_PIECES=ptimer ptimer1
 
 C_PIECES = adasupp $(CANCEL_C_PIECES) $(CONDITION_VARIABLE_C_PIECES) \
-    getpid $(KEY_C_PIECES) $(MESSAGE_QUEUE_C_PIECES) \
+    $(ID_C_PIECES) $(KEY_C_PIECES) $(MESSAGE_QUEUE_C_PIECES) \
     $(MUTEX_C_PIECES) $(PTHREAD_C_PIECES) \
     $(PSIGNAL_C_PIECES) sched $(SEMAPHORE_C_PIECES) \
     $(TIME_C_PIECES) $(TIMER_C_PIECES) types unistd $(ENOSYS_C_PIECES) \
