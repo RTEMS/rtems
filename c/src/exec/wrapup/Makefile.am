@@ -35,7 +35,7 @@ if HAS_NETWORKING
 NETWORKING_OBJS = \
     ../libnetworking/wrapup/$(ARCH)/libnetworking.a \
     ../librpc/src/rpc/$(ARCH)/librpc.a \
-    ../librpc/src/rpc/$(ARCH)/libxdr.a
+    ../librpc/src/xdr/$(ARCH)/libxdr.a
 endif
 
 OBJS = $(CPU_OBJS) $(CORE_OBJS) $(RTEMS_OBJS) $(SAPI_OBJS) \

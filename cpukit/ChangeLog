@@ -1,5 +1,9 @@
 2002-06-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Fix stupid typo in previous patch.
+
+2002-06-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Add librpc. AC_PROG_RANLIB.
 	* wrapup/Makefile.am: Add librpc.
 	Use relative path to lib*.a for
