@@ -67,11 +67,11 @@ bsp_pretasking_hook(void)
 {
 
     extern int end;
-    rtems_unsigned32        heap_start;
+    uint32_t                heap_start;
 
 *(unsigned char *)(0x120f) = 0xd;
-/*     heap_start = (rtems_unsigned32) &end; */
-    heap_start = (rtems_unsigned32) top_of_used_memory;
+/*     heap_start = (uint32_t) &end; */
+    heap_start = (uint32_t) top_of_used_memory;
     if (heap_start & (CPU_ALIGNMENT-1))
         heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
@@ -91,7 +91,7 @@ bsp_pretasking_hook(void)
 int rx_boot_card( int argc, char **argv, char **environp)
 {
     extern int end;
-    top_of_used_memory = (rtems_unsigned32) &end + 0x1000;
+    top_of_used_memory = (uint32_t) &end + 0x1000;
   if ((argc > 0) && argv && argv[0])
     rtems_progname = argv[0];
   else

@@ -12,5 +12,5 @@ typedef enum
 typedef struct
 {
         console_ioctl_t ioctl_type;
-   unsigned32 param;
+   uint32_t   param;
 } console_ioctl_request_t;

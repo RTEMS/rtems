@@ -95,7 +95,7 @@ int Read_timer()
 {
   volatile unsigned int *tcr1 = (unsigned int *) TCR1_ADDR;
   volatile unsigned int *trr1 = (unsigned int *) TRR1_ADDR;
-  rtems_unsigned32 remaining, total;
+  uint32_t         remaining, total;
 
   /* this routine is supposed to count in 1/2 uSec units */
   /* pretty funny when using a 33MHz clock for the counter */

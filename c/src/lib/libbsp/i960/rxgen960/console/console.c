@@ -39,7 +39,7 @@ rtems_device_driver console_initialize(
 {
   rtems_status_code status;
  
-     if ( console_pmr_init(*(unsigned32*)arg) )
+     if ( console_pmr_init(*(uint32_t*)arg) )
         return RTEMS_INVALID_NUMBER;
 
  
@@ -158,9 +158,9 @@ rtems_device_driver console_read(
 )
 {
   rtems_libio_rw_args_t *rw_args;
-  unsigned8 *buffer;
-  unsigned32 maximum;
-  unsigned32 count = 0;
+  uint8_t   *buffer;
+  uint32_t   maximum;
+  uint32_t   count = 0;
  
   rw_args = (rtems_libio_rw_args_t *) arg;
 
@@ -203,7 +203,7 @@ rtems_device_driver console_write(
   int count;
   int maximum;
   rtems_libio_rw_args_t *rw_args;
-  unsigned8 *buffer;
+  uint8_t   *buffer;
 
   rw_args = (rtems_libio_rw_args_t *) arg;
 

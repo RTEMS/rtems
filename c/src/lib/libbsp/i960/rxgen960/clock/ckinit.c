@@ -25,11 +25,11 @@
 
 #define CLOCK_VECTOR 0x92
 
-rtems_unsigned32 Clock_isrs;              /* ISRs until next tick */
-rtems_unsigned32 Reload_Clock_isrs;
+uint32_t         Clock_isrs;              /* ISRs until next tick */
+uint32_t         Reload_Clock_isrs;
 
 i960_isr_entry   Old_ticker;
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t         Clock_driver_ticks;
                                           /* ticks since initialization */
 unsigned int clock_isr_global[16];  /* place to store global regs */
 
@@ -124,7 +124,7 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
-    rtems_unsigned32 isrlevel;
+    uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
  
     if (args == 0)
