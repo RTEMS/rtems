@@ -42,12 +42,6 @@
 #define jnode_get_first_child( jnode ) \
     ((IMFS_jnode_t *)( Chain_Head( jnode_get_control( jnode ) )->next))
 
-/* XXX should be in a more public place */
-
-extern int IMFS_Set_handlers(  
-  rtems_filesystem_location_info_t   *loc 
-);
-
 int IMFS_fsunmount(
   rtems_filesystem_mount_table_entry_t *temp_mt_entry
 )

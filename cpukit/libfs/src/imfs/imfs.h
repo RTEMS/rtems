@@ -277,6 +277,10 @@ int IMFS_stat(
   struct stat                      *buf            /* OUT */
 );
 
+int IMFS_Set_handlers(  
+  rtems_filesystem_location_info_t   *loc 
+);
+
 int IMFS_evaluate_link(
   rtems_filesystem_location_info_t *node,        /* IN/OUT */
   int                               flags        /* IN     */
