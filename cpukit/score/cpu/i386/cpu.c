@@ -76,13 +76,13 @@ void _CPU_Initialize(
  *
  *  _CPU_ISR_Get_level
  */
- 
+
 uint32_t   _CPU_ISR_Get_level( void )
 {
   uint32_t   level;
- 
+
   i386_get_interrupt_level( level );
- 
+
   return level;
 }
 
@@ -184,7 +184,7 @@ void rtems_exception_init_mngt()
       interrupt_gate_descriptor	 *currentIdtEntry;
       unsigned			 limit;
       unsigned			 level;
-      
+
       i = sizeof(tbl) / sizeof (rtems_raw_irq_hdl);
 
       i386_get_info_from_IDTR (&currentIdtEntry, &limit);

@@ -8,7 +8,7 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- * 
+ *
  *  $Id$
  *
  *  Applications must not include this file directly.
@@ -70,6 +70,6 @@ typedef int  (*rtems_raw_irq_is_enabled)	(const struct __rtems_raw_irq_connect_d
 
 #define _CPU_ISR_Disable( _level ) i386_disable_interrupts( _level )
 #define _CPU_ISR_Enable( _level ) i386_enable_interrupts( _level )
-     
+
 #endif
 #endif

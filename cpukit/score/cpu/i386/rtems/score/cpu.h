@@ -43,7 +43,7 @@ extern "C" {
 
 /*
  *  Does the RTEMS invoke the user's ISR with the vector number and
- *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  a pointer to the saved interrupt frame (1) or just the vector
  *  number (0)?
  */
 
@@ -70,7 +70,7 @@ extern "C" {
 
 /*
  *  Does this port provide a CPU dependent IDLE task implementation?
- *  
+ *
  *  If TRUE, then the routine _CPU_Thread_Idle_body
  *  must be provided and is the default IDLE thread body instead of
  *  _CPU_Thread_Idle_body.
@@ -78,7 +78,7 @@ extern "C" {
  *  If FALSE, then use the generic IDLE thread body if the BSP does
  *  not provide one.
  */
- 
+
 #define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
 
 /*
@@ -174,7 +174,7 @@ typedef enum {
   I386_EXCEPTION_ENTER_RDBG          = 50     /* to enter manually RDBG */
 
 } Intel_symbolic_exception_name;
-  
+
 
 /*
  *  The following table contains the information required to configure
@@ -199,7 +199,7 @@ typedef struct {
 }   rtems_cpu_table;
 
 /*
- *  Macros to access required entires in the CPU Table are in 
+ *  Macros to access required entires in the CPU Table are in
  *  the file rtems/system.h.
  */
 
@@ -429,10 +429,10 @@ void _CPU_Initialize(
 /*
  *  _CPU_ISR_install_raw_handler
  *
- *  This routine installs a "raw" interrupt handler directly into the 
+ *  This routine installs a "raw" interrupt handler directly into the
  *  processor's vector table.
  */
- 
+
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,

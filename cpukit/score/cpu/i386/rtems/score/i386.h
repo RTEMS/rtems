@@ -38,7 +38,7 @@ extern "C" {
  *
  *  CPU Model Feature Flags:
  *
- *  I386_HAS_BSWAP:  Defined to "1" if the instruction for endian swapping 
+ *  I386_HAS_BSWAP:  Defined to "1" if the instruction for endian swapping
  *                   (bswap) should be used.  This instruction appears to
  *                   be present in all i486's and above.
  *
@@ -145,7 +145,7 @@ static inline unsigned int i386_swap_u16(
 /*
  * Added for pagination management
  */
- 
+
 static inline unsigned int i386_get_cr0()
 {
   register unsigned int segment = 0;
@@ -213,26 +213,26 @@ void *i386_Physical_to_logical(
  */
 
 /* segment access routines */
- 
+
 #define get_cs()   i386_get_cs()
 #define get_ds()   i386_get_ds()
 #define get_es()   i386_get_es()
 #define get_ss()   i386_get_ss()
 #define get_fs()   i386_get_fs()
 #define get_gs()   i386_get_gs()
- 
+
 #define CPU_swap_u32( _value )  i386_swap_u32( _value )
 #define CPU_swap_u16( _value )  i386_swap_u16( _value )
- 
+
 /* i80x86 I/O instructions */
- 
+
 #define outport_byte( _port, _value ) i386_outport_byte( _port, _value )
 #define outport_word( _port, _value ) i386_outport_word( _port, _value )
 #define outport_long( _port, _value ) i386_outport_long( _port, _value )
 #define inport_byte( _port, _value )  i386_inport_byte( _port, _value )
 #define inport_word( _port, _value )  i386_inport_word( _port, _value )
 #define inport_long( _port, _value )  i386_inport_long( _port, _value )
- 
+
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,5 @@
 /* registers.h
- *  
+ *
  *  This file contains definition and constants related to Intel Cpu
  *
  *  COPYRIGHT (c) 1998 valette@crf.canon.fr
@@ -106,7 +106,7 @@ typedef struct {
   unsigned int virtual_intr_pending	: 1;
   unsigned int id 			: 1;
   unsigned int				: 2;
-  
+
   /*
    * fourth byte : bits 24->31 : UNUSED
    */
@@ -128,7 +128,7 @@ typedef struct {
   unsigned int monitor_coproc		: 1;
   unsigned int coproc_soft_emul		: 1;
   unsigned int floating_instr_except	: 1;
-  
+
   unsigned int extension_type		: 1;
   unsigned int numeric_error		: 1;
   unsigned int 				: 2;
@@ -149,7 +149,7 @@ typedef struct {
    * fourth byte 24->31
    */
   unsigned int 				: 4;
-  
+
   unsigned int 				: 1;
   unsigned int no_write_through		: 1;
   unsigned int page_level_cache_disable	: 1;
