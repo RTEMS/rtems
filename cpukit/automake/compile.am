@@ -45,7 +45,7 @@ if RTEMS_USE_GCC
 
 CFLAGS_DEFAULT=-g -Wall
 ## gcc >= 2.8.x
-GCCSPECS = $(GCC_SPECS) $(RTEMS_BSP_SPECS)
+GCCSPECS = $(GCC_SPECS)
 else
 ## fall back to the old style compilers/*.cfg
 ## CONFIG.CC is supposed to be provided by <BSP>.cfg
@@ -63,20 +63,9 @@ ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
 # when debugging, optimize flag: typically empty
 # some compilers do allow optimization with their "-g"
 CFLAGS_DEBUG_OPTIMIZE_V=-g
-LDFLAGS_DEBUG_V =
 
 # profile flag; use gprof(1)
 CFLAGS_PROFILE_V=-pg
-LDFLAGS_PROFILE_V =
-
-# List of library paths without -L
-LD_PATHS= $(PROJECT_RELEASE)/lib
-
-# ld flag for incomplete link
-LDFLAGS_INCOMPLETE = -r
-
-# ld flags for profiling, debugging
-LDFLAGS=$(LDFLAGS_PROFILE) $(LDFLAGS_DEBUG) $(LD_PATHS:%=-L %)
 
 #
 # How to compile stuff into ${ARCH} subdirectory
@@ -85,8 +74,6 @@ LDFLAGS=$(LDFLAGS_PROFILE) $(LDFLAGS_DEBUG) $(LD_PATHS:%=-L %)
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-        $(AM_LDFLAGS) $(LDFLAGS) -o $@
 
 CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
 
@@ -132,18 +119,6 @@ ifeq (${DEPEND},$(wildcard ${DEPEND}))
 include ${DEPEND}
 @ENDIF@
 
-if RTEMS_USE_GCC
-## gcc >= 2.8
-define make-rel
-	$(LINK) -qnolinkcmds -nostdlib -Wl,-r $(XLDFLAGS) $^
-endef
-else
-## non-gcc
-define make-rel
-	$(LINK) $(XLDFLAGS) $^
-endef
-endif
-
 ## -------------------------------------------------------------------------
 
 ## translate VARIANT into VARIANT_V
@@ -186,7 +161,7 @@ CFLAGS__V = $(CFLAGS_OPTIMIZE_V)
 if RTEMS_USE_GCC
 ## gcc >= gcc-2.8
 RTEMS_CFLAGS_OPTIMIZE_V =
-RTEMS_CFLAGS_DEBUG_V = -qrtems_debug -Wno-unused
+RTEMS_CFLAGS_DEBUG_V = -Wno-unused
 RTEMS_CFLAGS_PROFILE_V =
 
 ## non-gcc

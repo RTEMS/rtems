@@ -1,3 +1,14 @@
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/env-rtemsbsp.m4: Remove RTEMS_BSP_SPECS, PROJECT_RELEASE.
+	Add project_libdir, libdir. New GCC_SPECS. Various cleanups.
+	* aclocal/env-rtemscpu.m4: Remove RTEMS_BSP_SPECS, PROJECT_RELEASE.
+	Add project_libdir, libdir. New GCC_SPECS. Various cleanups.
+	* aclocal/rtems-top.m4: New PROJECT_ROOT handling.
+	* automake/compile.am: Remove RTEMS_BSP_SPECS, LD* flags, LINK,
+	references to bsp_specs. Use project_libdir instead of
+	$(PROJECT_RELEASE)/lib.
+
 2002-07-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/rtems-top.m4: Reflect relocation of c/src/exec to cpukit.

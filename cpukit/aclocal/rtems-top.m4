@@ -35,9 +35,7 @@ PROJECT_TOPdir=${dots}${RTEMS_TOPdir}/'$(top_builddir)'
 fi
 AC_SUBST(PROJECT_TOPdir)
 
-AS_IF([test "${with_project_root+set}" = set],
-  [PROJECT_ROOT="${with_project_root}${RTEMS_TOPdir}/\$(top_builddir)"],
-  [PROJECT_ROOT="${RTEMS_TOPdir}/\$(top_builddir)"])
+PROJECT_ROOT="${with_project_root}${RTEMS_TOPdir}/\$(MULTIBUILDTOP)\$(top_builddir)"
 AC_SUBST(PROJECT_ROOT)
 
 AC_MSG_CHECKING([for RTEMS Version])

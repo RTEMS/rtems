@@ -5,9 +5,6 @@ AC_DEFUN(RTEMS_ENV_RTEMSCPU,
 
 if test x"$multilib" = x"yes"; then
 ## FIXME: There is no multilib BSP
-  RTEMS_BSP_SPECS=""
-  AC_SUBST(RTEMS_BSP_SPECS)
-
   if test -n "$with_multisubdir"; then
     MULTIBUILDTOP=`echo "/$with_multisubdir" | sed 's,/[[^\\/]]*,../,g'`
   fi
@@ -18,17 +15,16 @@ if test x"$multilib" = x"yes"; then
   fi
   AC_SUBST(MULTISUBDIR)
 
-  PROJECT_ROOT="../../${RTEMS_TOPdir}/\$(MULTIBUILDTOP)\$(top_builddir)"
-  GCC_SPECS="-isystem \$(PROJECT_ROOT)/lib/include"
+  GCC_SPECS="-isystem \$(PROJECT_INCLUDE)"
   AC_SUBST(GCC_SPECS)
 
   PROJECT_INCLUDE="\$(PROJECT_ROOT)/lib/include"
   AC_SUBST(PROJECT_INCLUDE)
 
-  PROJECT_RELEASE="\$(PROJECT_ROOT)"
-  AC_SUBST(PROJECT_RELEASE)
+  project_libdir="\$(PROJECT_ROOT)/lib"
+  AC_SUBST(project_libdir)
 
-  RTEMS_ROOT=${PROJECT_ROOT}
+  RTEMS_ROOT="${PROJECT_ROOT}"
   AC_SUBST(RTEMS_ROOT)
 
   includedir="\${exec_prefix}/lib/include"
