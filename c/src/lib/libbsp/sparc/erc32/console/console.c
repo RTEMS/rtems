@@ -434,7 +434,8 @@ rtems_device_driver console_open(
                         NULL,
                         NULL,
                         NULL,
-                        console_write_support);
+                        console_write_support,
+                        0);
 
         console_termios_data[ minor ] = args->iop->data1;
 #else
@@ -442,7 +443,8 @@ rtems_device_driver console_open(
                         NULL,
                         NULL,
                         console_inbyte_nonblocking,
-                        console_write_support);
+                        console_write_support,
+                        0);
 #endif
 
   return RTEMS_SUCCESSFUL;
