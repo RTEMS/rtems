@@ -29,6 +29,7 @@
 #include <rtems/libio.h>
 #include "imfs.h"
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 #define MEMFILE_STATIC 
 
@@ -208,7 +209,7 @@ int memfile_lseek(
   }
   else {  /* Must be a block file (IMFS_MEMORY_FILE). */
     if (IMFS_memfile_extend( the_jnode, iop->offset ))
-      set_errno_and_return_minus_one( ENOSPC );
+      rtems_set_errno_and_return_minus_one( ENOSPC );
 
     iop->size = the_jnode->info.file.size;
   }
@@ -282,14 +283,14 @@ MEMFILE_STATIC int IMFS_memfile_extend(
 
   assert( the_jnode );
   if ( !the_jnode )
-    set_errno_and_return_minus_one( EIO );
+    rtems_set_errno_and_return_minus_one( EIO );
 
   assert( the_jnode->type == IMFS_MEMORY_FILE );
   if ( the_jnode->type != IMFS_MEMORY_FILE )
-    set_errno_and_return_minus_one( EIO );
+    rtems_set_errno_and_return_minus_one( EIO );
 
   if ( new_length >= IMFS_MEMFILE_MAXIMUM_SIZE )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   if ( new_length <= the_jnode->info.file.size )
     return 0;
@@ -310,7 +311,7 @@ MEMFILE_STATIC int IMFS_memfile_extend(
        for ( ; block>=old_blocks ; block-- ) {
           IMFS_memfile_remove_block( the_jnode, block );
        }
-       set_errno_and_return_minus_one( ENOSPC );
+       rtems_set_errno_and_return_minus_one( ENOSPC );
     }
   }
 
@@ -338,11 +339,11 @@ MEMFILE_STATIC int IMFS_memfile_addblock(
 
   assert( the_jnode );
   if ( !the_jnode )
-    set_errno_and_return_minus_one( EIO );
+    rtems_set_errno_and_return_minus_one( EIO );
 
   assert( the_jnode->type == IMFS_MEMORY_FILE );
   if ( the_jnode->type != IMFS_MEMORY_FILE )
-    set_errno_and_return_minus_one( EIO );
+    rtems_set_errno_and_return_minus_one( EIO );
 
   block_entry_ptr = IMFS_memfile_get_block_pointer( the_jnode, block, 1 );
   if ( *block_entry_ptr )
@@ -469,11 +470,11 @@ int IMFS_memfile_remove(
 
   assert( the_jnode );
   if ( !the_jnode )
-    set_errno_and_return_minus_one( EIO );
+    rtems_set_errno_and_return_minus_one( EIO );
 
   assert( the_jnode->type == IMFS_MEMORY_FILE );
   if ( the_jnode->type != IMFS_MEMORY_FILE )
-    set_errno_and_return_minus_one( EIO );
+    rtems_set_errno_and_return_minus_one( EIO );
 
   /*
    *  Eventually this could be set smarter at each call to
@@ -563,13 +564,13 @@ MEMFILE_STATIC int IMFS_memfile_read(
 
   assert( the_jnode );
   if ( !the_jnode )
-    set_errno_and_return_minus_one( EIO );
+    rtems_set_errno_and_return_minus_one( EIO );
 
   assert( the_jnode->type == IMFS_MEMORY_FILE ||
           the_jnode->type == IMFS_LINEAR_FILE );
   if ( the_jnode->type != IMFS_MEMORY_FILE &&
        the_jnode->type != IMFS_LINEAR_FILE )
-    set_errno_and_return_minus_one( EIO );
+    rtems_set_errno_and_return_minus_one( EIO );
 
   /*
    *  Error checks on arguments
@@ -577,7 +578,7 @@ MEMFILE_STATIC int IMFS_memfile_read(
 
   assert( dest );
   if ( !dest )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   /*
    *  If there is nothing to read, then quick exit.
@@ -585,7 +586,7 @@ MEMFILE_STATIC int IMFS_memfile_read(
 
   my_length = length;
   if ( !my_length )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   /*
    *  Linear files (as created from a tar file are easier to handle
@@ -714,11 +715,11 @@ MEMFILE_STATIC int IMFS_memfile_write(
 
   assert( the_jnode );
   if ( !the_jnode )
-    set_errno_and_return_minus_one( EIO );
+    rtems_set_errno_and_return_minus_one( EIO );
 
   assert( the_jnode->type == IMFS_MEMORY_FILE );
   if ( the_jnode->type != IMFS_MEMORY_FILE )
-    set_errno_and_return_minus_one( EIO );
+    rtems_set_errno_and_return_minus_one( EIO );
 
   /*
    *  Error check arguments
@@ -726,7 +727,7 @@ MEMFILE_STATIC int IMFS_memfile_write(
 
   assert( source );
   if ( !source )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
 
   /*
@@ -735,7 +736,7 @@ MEMFILE_STATIC int IMFS_memfile_write(
 
   my_length = length;
   if ( !my_length )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   /*
    *  If the last byte we are supposed to write is past the end of this
@@ -746,7 +747,7 @@ MEMFILE_STATIC int IMFS_memfile_write(
   if ( last_byte > the_jnode->info.file.size ) {
     status = IMFS_memfile_extend( the_jnode, last_byte );
     if ( status )
-      set_errno_and_return_minus_one( ENOSPC );
+      rtems_set_errno_and_return_minus_one( ENOSPC );
   }
 
   copied = 0;

@@ -26,6 +26,7 @@
 
 #include "imfs.h"
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int IMFS_mknod(
   const char                        *token,      /* IN */
@@ -54,7 +55,7 @@ int IMFS_mknod(
     type = IMFS_DEVICE;
     rtems_filesystem_split_dev_t( dev, info.device.major, info.device.minor );
   } else  {
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
   }
  
   /*
@@ -70,7 +71,7 @@ int IMFS_mknod(
   );
 
   if ( !new_node )
-    set_errno_and_return_minus_one( ENOMEM );
+    rtems_set_errno_and_return_minus_one( ENOMEM );
 
   return 0;
 }

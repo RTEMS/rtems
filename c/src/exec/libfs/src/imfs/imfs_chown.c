@@ -20,6 +20,7 @@
 
 #include <errno.h>
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 #include "imfs.h"
 
 int IMFS_chown(
@@ -43,7 +44,7 @@ int IMFS_chown(
   st_uid = geteuid();
 
   if ( ( st_uid != jnode->st_uid ) && ( st_uid != 0 ) )
-    set_errno_and_return_minus_one( EPERM );
+    rtems_set_errno_and_return_minus_one( EPERM );
 #endif
 
   jnode->st_uid = owner;

@@ -25,6 +25,7 @@
 
 #include "imfs.h"
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 #define RTEMS_LIBIO_PERMS_RX (RTEMS_LIBIO_PERMS_SEARCH | RTEMS_LIBIO_PERMS_READ)
 #define RTEMS_LIBIO_PERMS_WX (RTEMS_LIBIO_PERMS_SEARCH | RTEMS_LIBIO_PERMS_WRITE)
@@ -80,7 +81,7 @@ int IMFS_evaluate_permission(
 
   if ( !rtems_libio_is_valid_perms( flags ) ) {
     assert( 0 );
-    set_errno_and_return_minus_one( EIO );    
+    rtems_set_errno_and_return_minus_one( EIO );    
   }
 
   jnode = node->node_access;
@@ -150,7 +151,7 @@ int IMFS_evaluate_hard_link(
    */
 
   if ( !IMFS_evaluate_permission( node, flags ) )
-    set_errno_and_return_minus_one( EACCES );
+    rtems_set_errno_and_return_minus_one( EACCES );
 
   return result;
 }
@@ -212,7 +213,7 @@ int IMFS_evaluate_sym_link(
    */
 
   if ( !IMFS_evaluate_permission( node, flags ) )
-    set_errno_and_return_minus_one( EACCES );
+    rtems_set_errno_and_return_minus_one( EACCES );
 
   return result;
 }
@@ -241,7 +242,7 @@ int IMFS_evaluate_link(
     rtems_filesystem_link_counts ++;
     if ( rtems_filesystem_link_counts > MAXSYMLINK ) {
       rtems_filesystem_link_counts = 0;
-      set_errno_and_return_minus_one( ELOOP );
+      rtems_set_errno_and_return_minus_one( ELOOP );
     }
 
     /*
@@ -307,7 +308,7 @@ int IMFS_evaluate_for_make(
     i +=  len;
     
     if ( !pathloc->node_access )
-      set_errno_and_return_minus_one( ENOENT );
+      rtems_set_errno_and_return_minus_one( ENOENT );
 
     /*
      * I cannot move out of this directory without execute permission.
@@ -316,7 +317,7 @@ int IMFS_evaluate_for_make(
     if ( type != IMFS_NO_MORE_PATH )
       if ( node->type == IMFS_DIRECTORY )
         if ( !IMFS_evaluate_permission( pathloc, RTEMS_LIBIO_PERMS_SEARCH ) )
-           set_errno_and_return_minus_one( EACCES );
+           rtems_set_errno_and_return_minus_one( EACCES );
 
     node = pathloc->node_access;
 
@@ -352,7 +353,7 @@ int IMFS_evaluate_for_make(
 	} else {
 
           if ( !node->Parent )
-            set_errno_and_return_minus_one( ENOENT );
+            rtems_set_errno_and_return_minus_one( ENOENT );
 
           node = node->Parent;
 	}
@@ -378,14 +379,14 @@ int IMFS_evaluate_for_make(
 
         node = pathloc->node_access;
         if ( !node )
-          set_errno_and_return_minus_one( ENOTDIR ); 
+          rtems_set_errno_and_return_minus_one( ENOTDIR ); 
 
         /*
          * Only a directory can be decended into.
 	 */
 
         if ( node->type != IMFS_DIRECTORY )
-          set_errno_and_return_minus_one( ENOTDIR );
+          rtems_set_errno_and_return_minus_one( ENOTDIR );
 
 	/*
 	 * If we are at a node that is a mount point. Set loc to the
@@ -417,11 +418,11 @@ int IMFS_evaluate_for_make(
         break;
  
       case IMFS_NO_MORE_PATH:
-        set_errno_and_return_minus_one( EEXIST );
+        rtems_set_errno_and_return_minus_one( EEXIST );
         break;
 
       case IMFS_INVALID_TOKEN:
-        set_errno_and_return_minus_one( ENAMETOOLONG );
+        rtems_set_errno_and_return_minus_one( ENAMETOOLONG );
         break;
 
       case IMFS_CURRENT_DIR:
@@ -438,7 +439,7 @@ int IMFS_evaluate_for_make(
 
   for( ; path[i] != '\0'; i++) {
     if ( !IMFS_is_separator( path[ i ] ) ) 
-      set_errno_and_return_minus_one( ENOENT );
+      rtems_set_errno_and_return_minus_one( ENOENT );
   }
 
   /* 
@@ -452,14 +453,14 @@ int IMFS_evaluate_for_make(
    */
   node = pathloc->node_access;
   if ( node->type != IMFS_DIRECTORY )
-    set_errno_and_return_minus_one( ENOTDIR );
+    rtems_set_errno_and_return_minus_one( ENOTDIR );
 
   /*
    * We must have Write and execute permission on the returned node.
    */
 
   if ( !IMFS_evaluate_permission( pathloc, RTEMS_LIBIO_PERMS_WX ) )
-    set_errno_and_return_minus_one( EACCES );
+    rtems_set_errno_and_return_minus_one( EACCES );
   
   return result;
 }
@@ -489,7 +490,7 @@ int IMFS_eval_path(
 
   if ( !rtems_libio_is_valid_perms( flags ) ) {
     assert( 0 );
-    set_errno_and_return_minus_one( EIO );    
+    rtems_set_errno_and_return_minus_one( EIO );    
   }
 
   /*
@@ -509,7 +510,7 @@ int IMFS_eval_path(
     i +=  len;
     
     if ( !pathloc->node_access )
-      set_errno_and_return_minus_one( ENOENT );
+      rtems_set_errno_and_return_minus_one( ENOENT );
 
     /*
      * I cannot move out of this directory without execute permission.
@@ -517,7 +518,7 @@ int IMFS_eval_path(
     if ( type != IMFS_NO_MORE_PATH )
       if ( node->type == IMFS_DIRECTORY )
         if ( !IMFS_evaluate_permission( pathloc, RTEMS_LIBIO_PERMS_SEARCH ) )
-           set_errno_and_return_minus_one( EACCES );
+           rtems_set_errno_and_return_minus_one( EACCES );
 
     node = pathloc->node_access;
 
@@ -551,7 +552,7 @@ int IMFS_eval_path(
 	} else {
 
           if ( !node->Parent )
-            set_errno_and_return_minus_one( ENOENT );
+            rtems_set_errno_and_return_minus_one( ENOENT );
 
           node = node->Parent;
           pathloc->node_access = node;
@@ -572,7 +573,7 @@ int IMFS_eval_path(
 
           node = pathloc->node_access;
           if ( !node )
-            set_errno_and_return_minus_one( ENOTDIR );
+            rtems_set_errno_and_return_minus_one( ENOTDIR );
 
 	} else if ( node->type == IMFS_SYM_LINK ) {
 
@@ -588,7 +589,7 @@ int IMFS_eval_path(
         */
 
        if ( node->type != IMFS_DIRECTORY )
-          set_errno_and_return_minus_one( ENOTDIR );
+          rtems_set_errno_and_return_minus_one( ENOTDIR );
 
 	/*
 	 *  If we are at a node that is a mount point. Set loc to the
@@ -607,7 +608,7 @@ int IMFS_eval_path(
 
         node = IMFS_find_match_in_dir( node, token );
         if ( !node )
-          set_errno_and_return_minus_one( ENOENT );
+          rtems_set_errno_and_return_minus_one( ENOENT );
 
 	/*
 	 *  Set the node access to the point we have found.
@@ -621,7 +622,7 @@ int IMFS_eval_path(
         break;
 
       case IMFS_INVALID_TOKEN:
-        set_errno_and_return_minus_one( ENAMETOOLONG );
+        rtems_set_errno_and_return_minus_one( ENAMETOOLONG );
         break;
 
     }
@@ -653,7 +654,7 @@ int IMFS_eval_path(
    */
 
   if ( !IMFS_evaluate_permission( pathloc, flags ) )
-    set_errno_and_return_minus_one( EACCES );
+    rtems_set_errno_and_return_minus_one( EACCES );
 
   return result;
 }

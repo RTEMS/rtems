@@ -22,6 +22,7 @@
 #include <errno.h>
 #include "imfs.h"
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int IMFS_symlink(
   rtems_filesystem_location_info_t  *parent_loc,
@@ -55,7 +56,7 @@ int IMFS_symlink(
   );
 
   if ( !new_node )
-    set_errno_and_return_minus_one( ENOMEM );
+    rtems_set_errno_and_return_minus_one( ENOMEM );
 
   return 0;
 }

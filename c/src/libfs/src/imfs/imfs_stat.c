@@ -20,6 +20,7 @@
 #include <errno.h>
 #include "imfs.h"
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int IMFS_stat(
   rtems_filesystem_location_info_t *loc,
@@ -49,7 +50,7 @@ int IMFS_stat(
       break;
    
     default:
-      set_errno_and_return_minus_one( ENOTSUP );
+      rtems_set_errno_and_return_minus_one( ENOTSUP );
       break;
   }
 

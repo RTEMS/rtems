@@ -27,6 +27,7 @@
 
 #include "imfs.h"
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int IMFS_unmount(
   rtems_filesystem_mount_table_entry_t *mt_entry
@@ -41,14 +42,14 @@ int IMFS_unmount(
    */
 
   if ( node->type != IMFS_DIRECTORY )
-    set_errno_and_return_minus_one( ENOTDIR );
+    rtems_set_errno_and_return_minus_one( ENOTDIR );
 
   /* 
    * Did the node indicate that there was a directory mounted here? 
    */
 
   if ( node->info.directory.mt_fs == NULL )
-    set_errno_and_return_minus_one( EINVAL );  /* XXX */
+    rtems_set_errno_and_return_minus_one( EINVAL );  /* XXX */
 
   /* 
    * Set the mt_fs pointer to indicate that there is no longer 

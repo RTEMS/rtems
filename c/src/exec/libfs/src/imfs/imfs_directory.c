@@ -28,6 +28,7 @@
 
 #include "imfs.h"
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 /*
  *  imfs_dir_open
@@ -197,7 +198,7 @@ int imfs_dir_lseek(
      case SEEK_END:   /* Movement past the end of the directory via lseek */
                       /* is not a permitted operation                     */
       default:
-        set_errno_and_return_minus_one( EINVAL );
+        rtems_set_errno_and_return_minus_one( EINVAL );
         break;
   }
 
@@ -293,21 +294,21 @@ int imfs_dir_rmnod(
    */
 
   if ( ! Chain_Is_empty( &the_jnode->info.directory.Entries ) )
-     set_errno_and_return_minus_one( ENOTEMPTY );
+     rtems_set_errno_and_return_minus_one( ENOTEMPTY );
 
   /* 
    * You cannot remove the file system root node.
    */
 
   if ( pathloc->mt_entry->mt_fs_root.node_access == pathloc->node_access )
-     set_errno_and_return_minus_one( EBUSY );
+     rtems_set_errno_and_return_minus_one( EBUSY );
 
   /* 
    * You cannot remove a mountpoint.
    */
 
    if ( the_jnode->info.directory.mt_fs != NULL )
-     set_errno_and_return_minus_one( EBUSY );          
+     rtems_set_errno_and_return_minus_one( EBUSY );          
  
   /* 
    * Take the node out of the parent's chain that contains this node 

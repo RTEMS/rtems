@@ -21,6 +21,7 @@
 #include <errno.h>
 #include "imfs.h"
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int IMFS_readlink(
   rtems_filesystem_location_info_t  *loc,
@@ -34,7 +35,7 @@ int IMFS_readlink(
   node = loc->node_access;
 
   if ( node->type != IMFS_SYM_LINK )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   for( i=0; ((i<bufsize) && (node->info.sym_link.name[i] != '\0')); i++ )
     buf[i] = node->info.sym_link.name[i];

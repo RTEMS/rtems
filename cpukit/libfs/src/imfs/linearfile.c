@@ -28,6 +28,7 @@
 #include <rtems/libio.h>
 #include "imfs.h"
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 /*
  * linearfile_read
@@ -55,11 +56,11 @@ int linearfile_read(
 
   assert( the_jnode );
   if ( !the_jnode )
-    set_errno_and_return_minus_one( EIO );
+    rtems_set_errno_and_return_minus_one( EIO );
 
   assert( the_jnode->type == IMFS_LINEAR_FILE );
   if ( the_jnode->type != IMFS_LINEAR_FILE )
-    set_errno_and_return_minus_one( EIO );
+    rtems_set_errno_and_return_minus_one( EIO );
 
   /*
    *  Error checks on arguments
@@ -68,7 +69,7 @@ int linearfile_read(
   dest = (unsigned char *)buffer;
   assert( dest );
   if ( !dest )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   /*
    *  Perform a simple memory copy.

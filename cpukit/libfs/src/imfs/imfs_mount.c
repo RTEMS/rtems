@@ -26,6 +26,7 @@
 
 #include "imfs.h"
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int IMFS_mount(
   rtems_filesystem_mount_table_entry_t *mt_entry
@@ -40,7 +41,7 @@ int IMFS_mount(
    */
   
   if ( node->type != IMFS_DIRECTORY )
-    set_errno_and_return_minus_one( ENOTDIR );
+    rtems_set_errno_and_return_minus_one( ENOTDIR );
 
   /*
    *  Set mt_fs pointer to point to the mount table entry for

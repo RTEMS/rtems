@@ -22,6 +22,7 @@
 #include <errno.h>
 #include "imfs.h"
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int IMFS_link(
   rtems_filesystem_location_info_t  *to_loc,      /* IN */
@@ -40,7 +41,7 @@ int IMFS_link(
 
   info.hard_link.link_node = to_loc->node_access;
   if ( info.hard_link.link_node->st_nlink >= LINK_MAX )
-    set_errno_and_return_minus_one( EMLINK );
+    rtems_set_errno_and_return_minus_one( EMLINK );
  
   /*
    * Remove any separators at the end of the string.
@@ -61,7 +62,7 @@ int IMFS_link(
   );
 
   if ( !new_node )
-    set_errno_and_return_minus_one( ENOMEM );
+    rtems_set_errno_and_return_minus_one( ENOMEM );
 
   /*
    * Increment the link count of the node being pointed to.

@@ -1,3 +1,38 @@
+2002-01-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/imfs/imfs_eval.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/memfile.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/imfs_readlink.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/imfs_unlink.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/imfs_link.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/imfs_chown.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/ioman.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/imfs_mount.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/imfs_directory.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/imfs_stat.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/imfs_fchmod.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/imfs_symlink.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/imfs_mknod.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/linearfile.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/imfs_unmount.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* src/imfs/imfs.h: Apply rtems_set_errno_and_return_minus_one.
+	Comment out increment_and_check_linkcounts.
+
 2001-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Remove HAS_IMFS.

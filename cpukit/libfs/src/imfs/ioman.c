@@ -25,6 +25,7 @@
 
 #include <rtems.h>
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 #include "imfs.h"
 
 #if defined(__linux__)
@@ -84,7 +85,7 @@ rtems_status_code rtems_io_lookup_name(
 
   if ( !loc.ops->node_type_h ) {
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   node_type = (*loc.ops->node_type_h)( &loc );
