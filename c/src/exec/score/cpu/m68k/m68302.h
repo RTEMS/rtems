@@ -275,9 +275,9 @@ typedef struct {
  * Section 4.5.5
  */
 typedef struct m302_SCC_bd {
-    rtems_unsigned16 status;		/* status and control */
-    rtems_unsigned16 length;		/* data length */
-    rtems_unsigned8  *buffer;		/* data buffer pointer */
+    rtems_unsigned16 status;			/* status and control */
+    rtems_unsigned16 length;			/* data length */
+    volatile rtems_unsigned8  *buffer;		/* data buffer pointer */
 } m302_SCC_bd_t;
 
 typedef struct {

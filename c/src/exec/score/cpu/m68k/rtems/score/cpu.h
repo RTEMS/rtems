@@ -165,13 +165,23 @@ typedef struct {
 #endif
 
 /*
- *  The following structure defines the set of information saved
- *  on the current stack by RTEMS upon receipt of each interrupt.
+ *  The following structures define the set of information saved
+ *  on the current stack by RTEMS upon receipt of each exc/interrupt.
+ *  These are not used by m68k handlers.
+ *  The exception frame is for rdbg.
  */
 
 typedef struct {
-  unsigned32   TBD;   /* XXX Fix for this CPU */
+  unsigned32 vecnum; /* vector number */
 } CPU_Interrupt_frame;
+
+typedef struct {
+  unsigned32 vecnum; /* vector number */
+  unsigned32 sr; /* status register */
+  unsigned32 pc; /* program counter */
+  unsigned32 d0, d1, d2, d3, d4, d5, d6, d7;
+  unsigned32 a0, a1, a2, a3, a4, a5, a6, a7;
+} CPU_Exception_frame;
 
 /*
  *  The following table contains the information required to configure

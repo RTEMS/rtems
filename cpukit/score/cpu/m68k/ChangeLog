@@ -1,3 +1,8 @@
+2000-10-19  Antti P Miettinen  <anmietti@trshp.ntc.nokia.com>
+
+	* rtems/score/cpu.h: define CPU_Exception_frame for rdbg.
+	* m68302.h: Make buffer pointer in m302_SCC_bd volatile.
+
 2000-10-12	John S Gwynne <jgwynne@mrcday.com>
 
 	* sim.h: These changes enable RTEMS to automatically generate
