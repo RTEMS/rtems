@@ -20,26 +20,27 @@
 #include <rtems/posix/key.h>
 #include <rtems/posix/time.h>
 
+#define PTHREAD_MINIMUM_STACK_SIZE (STACK_MINIMUM_SIZE * 2)
 /*PAGE
  *
  *  The default pthreads attributes structure.
  */
  
 const pthread_attr_t _POSIX_Threads_Default_attributes = {
-  TRUE,                    /* is_initialized */
-  NULL,                    /* stackaddr */
-  STACK_MINIMUM_SIZE * 2,  /* stacksize */
-  PTHREAD_SCOPE_PROCESS,   /* contentionscope */
-  PTHREAD_EXPLICIT_SCHED,  /* inheritsched */
-  SCHED_FIFO,              /* schedpolicy */
-  {                        /* schedparam */
-    128,                   /* sched_priority */
-    0,                     /* ss_low_priority */
-    { 0L, 0 },             /* ss_replenish_period */
-    { 0L, 0 }              /* ss_initial_budget */
+  TRUE,                       /* is_initialized */
+  NULL,                       /* stackaddr */
+  PTHREAD_MINIMUM_STACK_SIZE, /* stacksize */
+  PTHREAD_SCOPE_PROCESS,      /* contentionscope */
+  PTHREAD_EXPLICIT_SCHED,     /* inheritsched */
+  SCHED_FIFO,                 /* schedpolicy */
+  {                           /* schedparam */
+    2,                        /* sched_priority */
+    0,                        /* ss_low_priority */
+    { 0L, 0 },                /* ss_replenish_period */
+    { 0L, 0 }                 /* ss_initial_budget */
   },
-  PTHREAD_CREATE_JOINABLE, /* detachstate */
-  1                        /* cputime_clock_allowed */
+  PTHREAD_CREATE_JOINABLE,    /* detachstate */
+  1                           /* cputime_clock_allowed */
 };
 
 /*PAGE
@@ -630,10 +631,10 @@ int pthread_setschedparam(
         case SCHED_RR:
           the_thread->cpu_time_budget = _Thread_Ticks_per_timeslice;
 
-          _Thread_Change_priority(
-            the_thread, 
-            _POSIX_Priority_To_core( api->schedparam.sched_priority )
-          );
+          the_thread->real_priority =
+            _POSIX_Priority_To_core( api->schedparam.sched_priority );
+
+          _Thread_Change_priority( the_thread, the_thread->real_priority );
           break;
  
         case SCHED_SPORADIC:
@@ -710,8 +711,8 @@ int pthread_attr_setstacksize(
   if ( !attr || !attr->is_initialized )
     return EINVAL;
 
-  if (stacksize < STACK_MINIMUM_SIZE)
-    attr->stacksize = STACK_MINIMUM_SIZE;
+  if (stacksize < PTHREAD_MINIMUM_STACK_SIZE)
+    attr->stacksize = PTHREAD_MINIMUM_STACK_SIZE;
   else
     attr->stacksize = stacksize;
   return 0;
@@ -936,7 +937,7 @@ int pthread_create(
 
   if ( !the_thread ) {
     _Thread_Enable_dispatch();
-    return EINVAL;
+    return EAGAIN;
   }
 
   /*
