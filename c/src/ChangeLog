@@ -1,5 +1,16 @@
 2004-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* acinclude.m4: Fix loosing arguments when configuring cpukit and
+	testsuites (Was exposed with --enable-multilib, only).
+	Remove RTEMS_SUBCONFIGURE_ARGS_QUOTE. RTEMS_CONFIG_SUBDIR.
+	 Add RTEMS_BSP_CONFIG_SUBDIR.
+	* configure.ac: Reflect changes to acinclude.m4. Reflect new args to
+	testsuites's configure.
+	* aclocal/rtems-top.m4: Remove ENDIF hack. 
+	Rework and fix setting up PROJECT_TOPdir (PACKHEX wasn't found).
+
+2004-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* libchip/Makefile.am, librdbg/Makefile.am, optman/Makefile.am, 
 	wrapup/Makefile.am: Fix automake problems having been introduced 
 	in previous patch.

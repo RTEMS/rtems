@@ -17,26 +17,17 @@ AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
 
 AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
 
-## HACK to allow gnu-make conditionals in automake-Makefiles.
-ENDIF=endif
-AC_SUBST(ENDIF)
-
-RTEMS_TOPdir="$1";
-AC_SUBST(RTEMS_TOPdir)
+AC_SUBST([RTEMS_TOPdir],["$1"])
 
 ## with_target_subdirs is handled implicitly by autoconf
-test -n "$with_target_subdir" || with_target_subdir="."
-
-if test "$with_target_subdir" = "." ; then
-# Native
-PROJECT_TOPdir=${RTEMS_TOPdir}/'$(top_builddir)'
-else
-# Cross
 dots=`echo $with_target_subdir|\
-sed -e 's%^\./%%' -e 's%[[^/]]$%&/%' -e 's%[[^/]]*/%../%g'`
+sed -e 's,^\.$,,' -e 's%^\./%%' -e 's%[[^/]]$%&/%' -e 's%[[^/]]*/%../%g'`
+
 PROJECT_TOPdir=${dots}${RTEMS_TOPdir}/'$(top_builddir)'
-fi
-AC_SUBST(PROJECT_TOPdir)
+AC_SUBST([PROJECT_TOPdir])
+
+RTEMS_ROOT=`echo "$1/" | sed -e 's,^../../,,'`'$(top_builddir)'
+AC_SUBST([RTEMS_ROOT])
 
 PROJECT_ROOT="${RTEMS_TOPdir}/\$(top_builddir)"
 AC_SUBST(PROJECT_ROOT)

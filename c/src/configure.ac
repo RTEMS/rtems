@@ -117,16 +117,12 @@ AC_SUBST(cfg_dir)
 
 RTEMS_CHECK_MULTIPROCESSING
 
+BSP_SUBDIRS=
 ## Configure ${srcdir}/../../cpukit as cpukit/ if multilibs are disabled
-AS_IF([test x"$multilib" = x"no"],[
-  AC_CONFIG_COMMANDS_POST([
-    if test x"$multilib" = x"no"; then
-    RTEMS_CONFIG_SUBDIR([cpukit],[../../cpukit],
-      ['--with-project-root=../../..' '--enable-rtemsbsp=$RTEMS_BSP'])
-    fi
-  ])
-  BSP_SUBDIRS="cpukit"
-])
+RTEMS_BSP_CONFIG_SUBDIR(
+  [cpukit],[../../cpukit],
+  ['--with-project-root=../../..' '--enable-rtemsbsp=$RTEMS_BSP'],
+  [test x"$multilib" = x"no"])
 
 ## Note: the order of the directories below is essential
 AC_CONFIG_SUBDIRS([make])
@@ -179,14 +175,14 @@ AS_IF([test x"$enable_ada" = x"yes"],[
   ])
 ])
 
-AS_IF([test -d ${srcdir}/../../testsuites],[
-  BSP_SUBDIRS="$BSP_SUBDIRS testsuites"
-])
-
-  AC_CONFIG_COMMANDS_POST([
-    RTEMS_CONFIG_SUBDIR([testsuites],[../../testsuites],
-      ['--with-project-root=../../' '--enable-rtemsbsp=$RTEMS_BSP'])
-  ])
+RTEMS_BSP_CONFIG_SUBDIR(
+  [testsuites],[../../testsuites],
+  ['--with-target-subdir=$with_target_subdir/c/$RTEMS_BSP' \
+   '--with-rtems-root=../' \
+   '--with-project-root=../../../' \
+   '--enable-rtemsbsp=$RTEMS_BSP' \
+   ],
+  [test x"$enable_tests" != x"no"])
 
 AC_SUBST([BSP_SUBDIRS],[$BSP_SUBDIRS])
 

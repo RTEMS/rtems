@@ -5,13 +5,8 @@
 # Note: Consider this file a temporary band-aid until a better, more general
 # subdirectory handling solution is introduced to RTEMS.
 
-AC_DEFUN([RTEMS_SUBCONFIGURE_ARGS_QUOTE],
+AC_DEFUN([_RTEMS_CONFIG_SUBDIR],
 [
-   RTEMS_CONFIGURE_ARGS_QUOTE([ac_sub_configure_args])
-])
-
-AC_DEFUN([RTEMS_CONFIG_SUBDIR],
-[AC_REQUIRE([RTEMS_SUBCONFIGURE_ARGS_QUOTE])
 if test "$no_recursion" != yes; then
   ac_sub_sourcedir=$2
   ac_sub_builddir=$1
@@ -80,4 +75,12 @@ if test "$no_recursion" != yes; then
     cd $ac_popdir
   done
 fi
+])
+
+## RTEMS_BSP_CONFIG_SUBDIR(builddir,srcdir,configargs,condition)
+AC_DEFUN([RTEMS_BSP_CONFIG_SUBDIR],[
+m4_expand_once([RTEMS_CONFIGURE_ARGS_QUOTE([ac_sub_configure_args])])
+AS_IF([$4],[BSP_SUBDIRS="$BSP_SUBDIRS $1"])
+AC_CONFIG_COMMANDS_POST([
+AS_IF([$4],[_RTEMS_CONFIG_SUBDIR([$1],[$2],[$3])])])
 ])
