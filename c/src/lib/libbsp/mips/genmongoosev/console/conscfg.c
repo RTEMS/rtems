@@ -29,7 +29,7 @@ extern int ClockRate;
 
 console_tbl     Console_Port_Tbl[] = {
 {
-  "/dev/com0",                            /* sDeviceName */
+  "/dev/com0",                             /* sDeviceName */
    SERIAL_MG5UART,                         /* deviceType */
    MG5UART_FUNCTIONS,                      /* pDeviceFns */
    NULL,                                   /* deviceProbe, assume it is there */
@@ -46,7 +46,26 @@ console_tbl     Console_Port_Tbl[] = {
    NULL, /* unused */                      /* setData */
    CLOCK_RATE,                             /* ulClock */
    MONGOOSEV_IRQ_UART0_RX_FRAME_ERROR      /* ulIntVector -- base for port */
-}
+},
+{
+  "/dev/com1",                             /* sDeviceName */
+   SERIAL_MG5UART,                         /* deviceType */
+   MG5UART_FUNCTIONS,                      /* pDeviceFns */
+   NULL,                                   /* deviceProbe, assume it is there */
+   NULL,                                   /* pDeviceFlow */
+   16,                                     /* ulMargin */
+   8,                                      /* ulHysteresis */
+   (void *) NULL,               /* NULL */ /* pDeviceParams */
+   MONGOOSEV_PERIPHERAL_COMMAND_REGISTER,  /* ulCtrlPort1 */
+   MONGOOSEV_UART1_BASE,                   /* ulCtrlPort2 */
+   MG5UART_UART1,                          /* ulDataPort */
+   NULL,                                   /* getRegister */
+   NULL,                                   /* setRegister */
+   NULL, /* unused */                      /* getData */
+   NULL, /* unused */                      /* setData */
+   CLOCK_RATE,                             /* ulClock */
+   MONGOOSEV_IRQ_UART1_RX_FRAME_ERROR      /* ulIntVector -- base for port */
+},
 };
 
 /*

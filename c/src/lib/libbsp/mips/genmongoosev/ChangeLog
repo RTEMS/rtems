@@ -1,3 +1,8 @@
+2001-05-07	Joel Sherrill <joel@OARcorp.com>
+
+	* console/conscfg.c: Added an entry for the second
+	serial port.
+
 2001-04-20	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/clockdrv.c: Account for the fact that ClockRate is
