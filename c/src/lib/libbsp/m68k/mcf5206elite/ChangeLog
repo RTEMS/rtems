@@ -1,3 +1,9 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console.c, start/start.S, startup/bspclean.c,
+	startup/bspstart.c, startup/init5206e.c: Removed incorrect statement
+	about copyright assignment.
+
 2003-08-22	Joel Sherrill <joel@OARcorp.com>
 
 	PR 445/bsps
