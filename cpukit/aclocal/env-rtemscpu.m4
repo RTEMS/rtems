@@ -14,9 +14,8 @@ AC_DEFUN([RTEMS_ENV_RTEMSCPU],
       [MULTISUBDIR="/$with_multisubdir"])
     AC_SUBST(MULTISUBDIR)
  
-    AC_SUBST([PROJECT_INCLUDE],["\$(PROJECT_ROOT)/lib/include"])
-    AC_SUBST([PROJECT_LIB],["\$(PROJECT_ROOT)/lib\$(MULTISUBDIR)"])
-    AC_SUBST([PROJECT_RELEASE],["\$(PROJECT_ROOT)"])
+    AC_SUBST([PROJECT_INCLUDE],["${PROJECT_ROOT}/lib/include"])
+    AC_SUBST([PROJECT_LIB],["${PROJECT_ROOT}/lib\$(MULTISUBDIR)"])
 
     includedir="\${exec_prefix}/include"
     libdir="${libdir}\$(MULTISUBDIR)"
@@ -38,18 +37,12 @@ AC_DEFUN([RTEMS_ENV_RTEMSCPU],
     ])
     RTEMS_BSP="$rtems_cv_RTEMS_BSP"
     AC_MSG_RESULT(${RTEMS_BSP})
-    AC_SUBST(RTEMS_BSP)
  
     includedir="\${exec_prefix}/${RTEMS_BSP}/lib/include"
     libdir="\${exec_prefix}/${RTEMS_BSP}/lib"
 
-    AC_SUBST([PROJECT_INCLUDE],["\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"])
-    AC_SUBST([PROJECT_LIB],["\$(PROJECT_ROOT)/$RTEMS_BSP/lib"])
-    AC_SUBST([PROJECT_RELEASE],["\$(PROJECT_ROOT)/$RTEMS_BSP"])
-
-    RTEMS_ENABLE_BARE
-    AC_SUBST(BARE_CPU_MODEL)
-    AC_SUBST(BARE_CPU_CFLAGS)
+    AC_SUBST([PROJECT_INCLUDE],["${PROJECT_ROOT}/$RTEMS_BSP/lib/include"])
+    AC_SUBST([PROJECT_LIB],["${PROJECT_ROOT}/$RTEMS_BSP/lib"])
   ])
 
   AC_SUBST([project_libdir],["\$(libdir)"])

@@ -1,5 +1,15 @@
 2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/rtems-top.m4: Don't AC_SUBST PROJECT_ROOT.
+	Remove PROJECT_TOPdir (Unused).
+	* aclocal/env-rtemscpu.m4: Remove PROJECT_RELEASE.
+	Expand ${PROJECT_ROOT}.
+	Remove RTEMS_ENABLE_BARE (Unused).
+	Don't AC_SUBST RTEMS_BSP.
+	* aclocal/enable-bare.m4: Remove (Unused).
+
+2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/rtems-top.m4: Remove check for cpukit/aclocal/version.m4.
 	Remove gnu-make endif HACK (Unused).
 
