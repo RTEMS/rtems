@@ -1,3 +1,8 @@
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/xdr/Makefile.am: Eliminate LIBNAME.
+	* src/rpc/Makefile.am: Eliminate LIBNAME.
+
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_TOP(../..).
