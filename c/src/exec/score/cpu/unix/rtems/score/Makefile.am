@@ -21,7 +21,7 @@ unixsize.h: $(GENSIZE) cpu.h
 
 CLEANFILES = unixsize.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/score \
     $(GENERIC_H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h) \
     $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
 
