@@ -1,3 +1,8 @@
+2005-02-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/prog-cc.m4: Remove refs to gcc-isystem.m4.
+	* aclocal/gcc-isystem.m4: Remove (Unused).
+
 2005-01-28	Eric Norum <norume@aps.anl.gov>
 
 	* libnetworking/rtems/rtems_glue.c: Remove dead variable.
