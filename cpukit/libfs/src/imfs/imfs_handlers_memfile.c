@@ -34,5 +34,5 @@ rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   NULL,                /* fsync */
   IMFS_fdatasync,
   IMFS_fcntl,
-  IMFS_rmnod
+  memfile_rmnod
 };

@@ -25,7 +25,7 @@ BASE_FS_C_PIECES = base_fs mount unmount ioman libio libio_sockets eval \
 
 IMFS_C_PIECES = imfs_chown imfs_creat imfs_directory imfs_eval imfs_free \
     imfs_fsunmount imfs_gtkn imfs_init imfs_initsupp imfs_link imfs_mknod \
-    imfs_mount imfs_fchmod imfs_rmnod imfs_unlink imfs_unmount imfs_utime \
+    imfs_mount imfs_fchmod imfs_unlink imfs_unmount imfs_utime \
     imfs_ntype imfs_stat imfs_getchild memfile deviceio imfs_handlers_device \
     imfs_handlers_directory imfs_handlers_memfile imfs_debug imfs_symlink \
     imfs_readlink imfs_fdatasync imfs_fcntl miniimfs_init

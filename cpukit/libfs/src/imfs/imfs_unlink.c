@@ -55,13 +55,13 @@ int IMFS_unlink(
     node->info.hard_link.link_node->st_nlink --;
     IMFS_update_ctime( node->info.hard_link.link_node );
     if ( node->info.hard_link.link_node->st_nlink < 1) {
-      result = IMFS_rmnod( &the_link );
+      result = (*loc->handlers->rmnod)( &the_link );
       if ( result != 0 )
         return -1;
     }
   }
 
-  result = IMFS_rmnod( loc );
+  result = (*loc->handlers->rmnod)( &the_link );
 
   return result;
 }

@@ -17,6 +17,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+#include "libio_.h"
 
 #include "imfs.h"
 
@@ -213,3 +214,58 @@ int device_lseek(
  *
  *  This IMFS_stat() is used.
  */
+
+/*
+ *  device_rmnod
+ */
+
+int device_rmnod(
+  rtems_filesystem_location_info_t      *pathloc       /* IN */
+)
+{
+  IMFS_jnode_t *the_jnode;  
+
+  the_jnode = (IMFS_jnode_t *) pathloc->node_access;
+
+  /* 
+   * Take the node out of the parent's chain that contains this node 
+   */
+
+  if ( the_jnode->Parent != NULL ) {
+    Chain_Extract( (Chain_Node *) the_jnode );
+    the_jnode->Parent = NULL;
+  }
+
+  /*
+   * Decrement the link counter and see if we can free the space.
+   */
+
+  the_jnode->st_nlink--;
+  IMFS_update_ctime( the_jnode );
+
+  /*
+   * The file cannot be open and the link must be less than 1 to free.
+   */
+
+  if ( !rtems_libio_is_file_open( the_jnode ) && (the_jnode->st_nlink < 1) ) {
+
+    /* 
+     * Is the rtems_filesystem_current is this node?
+     */
+
+    if ( rtems_filesystem_current.node_access == pathloc->node_access )
+       rtems_filesystem_current.node_access = NULL;
+
+    /*
+     * Free memory associated with a memory file.
+     */
+
+    free( the_jnode );
+  }
+
+  return 0;
+
+}
+
+
+

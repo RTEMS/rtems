@@ -37,7 +37,6 @@ rtems_filesystem_operations_table  miniIMFS_ops = {
   NULL, /* XXX IMFS_unlink, */
   IMFS_node_type,
   IMFS_mknod,
-  NULL, /* XXX IMFS_rmnod, */
   NULL, /* XXX IMFS_chown, */
   NULL, /* XXX IMFS_freenodinfo, */
   NULL, /* XXX IMFS_mount, */

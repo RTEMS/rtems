@@ -30,26 +30,6 @@
 #define MEMFILE_STATIC 
 
 /*
- *  Set of operations handlers for operations on memfile entities.
- */
-
-rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
-  memfile_open,
-  memfile_close,
-  memfile_read,
-  memfile_write,
-  memfile_ioctl,
-  memfile_lseek,
-  IMFS_stat,
-  IMFS_fchmod,
-  memfile_ftruncate,
-  NULL,                /* fpathconf */
-  NULL,                /* fsync */
-  IMFS_fdatasync,
-  IMFS_fcntl
-};
-
-/*
  *  Prototypes of private routines 
  */
 
@@ -1055,4 +1035,63 @@ fflush(stdout);
   free(memory);
   memfile_blocks_allocated--;
 }
+
+
+/*
+ *  memfile_rmnod
+ *
+ *  This routine is available from the optable to remove a node 
+ *  from the IMFS file system.
+ */
+
+int memfile_rmnod(
+  rtems_filesystem_location_info_t      *pathloc       /* IN */
+)
+{
+  IMFS_jnode_t *the_jnode;  
+
+  the_jnode = (IMFS_jnode_t *) pathloc->node_access;
+
+  /* 
+   * Take the node out of the parent's chain that contains this node 
+   */
+
+  if ( the_jnode->Parent != NULL ) {
+    Chain_Extract( (Chain_Node *) the_jnode );
+    the_jnode->Parent = NULL;
+  }
+
+  /*
+   * Decrement the link counter and see if we can free the space.
+   */
+
+  the_jnode->st_nlink--;
+  IMFS_update_ctime( the_jnode );
+
+  /*
+   * The file cannot be open and the link must be less than 1 to free.
+   */
+
+  if ( !rtems_libio_is_file_open( the_jnode ) && (the_jnode->st_nlink < 1) ) {
+
+    /* 
+     * Is the rtems_filesystem_current is this node?
+     */
+
+    if ( rtems_filesystem_current.node_access == pathloc->node_access )
+       rtems_filesystem_current.node_access = NULL;
+
+    /*
+     * Free memory associated with a memory file.
+     */
+
+    IMFS_memfile_remove( the_jnode );
+
+    free( the_jnode );
+  }
+
+  return 0;
+
+}
+
 

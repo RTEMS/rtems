@@ -308,10 +308,6 @@ int IMFS_freenodinfo(
   rtems_filesystem_location_info_t  *pathloc       /* IN */
 );
 
-int IMFS_rmnod(
-  rtems_filesystem_location_info_t  *pathloc       /* IN */
-);
-
 int IMFS_mknod(
   const char                        *path,         /* IN */
   mode_t                             mode,         /* IN */
@@ -353,92 +349,123 @@ int memfile_ftruncate(
   rtems_libio_t *iop,               /* IN  */
   off_t          length             /* IN  */
 );
+
 int imfs_dir_open(
   rtems_libio_t *iop,             /* IN  */
   const char    *pathname,        /* IN  */
   unsigned32     flag,            /* IN  */
   unsigned32     mode             /* IN  */
 );
+
 int imfs_dir_close(
   rtems_libio_t *iop             /* IN  */
 );
+
 int imfs_dir_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
   unsigned32     count             /* IN  */
 );
+
 int imfs_dir_lseek(
   rtems_libio_t        *iop,              /* IN  */
   off_t                 offset,           /* IN  */
   int                   whence            /* IN  */
 );
+
 int imfs_dir_fstat(
   rtems_filesystem_location_info_t *loc,         /* IN  */
   struct stat                      *buf          /* OUT */
 );
+
+int imfs_dir_rmnod(
+  rtems_filesystem_location_info_t      *pathloc       /* IN */
+);
+
 int memfile_open(
   rtems_libio_t *iop,             /* IN  */
   const char    *pathname,        /* IN  */
   unsigned32     flag,            /* IN  */
   unsigned32     mode             /* IN  */
 );
+
 int memfile_close(
   rtems_libio_t *iop             /* IN  */
 );
+
 int memfile_read(
   rtems_libio_t *iop,             /* IN  */
   void          *buffer,          /* IN  */
   unsigned32     count            /* IN  */
 );
+
 int memfile_write(
   rtems_libio_t *iop,             /* IN  */
   const void    *buffer,          /* IN  */
   unsigned32     count            /* IN  */
 );
+
 int memfile_ioctl(
   rtems_libio_t *iop,             /* IN  */
   unsigned32     command,         /* IN  */
   void          *buffer           /* IN  */
 );
+
 int memfile_lseek(
   rtems_libio_t        *iop,        /* IN  */
   off_t                 offset,     /* IN  */
   int                   whence      /* IN  */
 );
+
+int memfile_rmnod(
+  rtems_filesystem_location_info_t      *pathloc       /* IN */
+);
+
 int device_open(
   rtems_libio_t *iop,            /* IN  */
   const char    *pathname,       /* IN  */
   unsigned32     flag,           /* IN  */
   unsigned32     mode            /* IN  */
 );
+
 int device_close(
   rtems_libio_t *iop             /* IN  */
 );
+
 int device_read(
   rtems_libio_t *iop,            /* IN  */
   void          *buffer,         /* IN  */
   unsigned32     count           /* IN  */
 );
+
 int device_write(
   rtems_libio_t *iop,               /* IN  */
   const void    *buffer,            /* IN  */
   unsigned32     count              /* IN  */
 );
+
 int device_ioctl(
   rtems_libio_t *iop,               /* IN  */
   unsigned32     command,           /* IN  */
   void          *buffer             /* IN  */
 );
+
 int device_lseek(
   rtems_libio_t *iop,               /* IN  */
   off_t          offset,            /* IN  */
   int            whence             /* IN  */
 );
+
+int device_rmnod(
+  rtems_filesystem_location_info_t      *pathloc       /* IN */
+);
+
 int IMFS_utime(
   rtems_filesystem_location_info_t  *pathloc,       /* IN */
   time_t                             actime,        /* IN */
   time_t                             modtime        /* IN */
 );
+
 int IMFS_fchmod(
   rtems_filesystem_location_info_t *loc,
   mode_t                            mode
