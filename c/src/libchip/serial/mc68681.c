@@ -166,9 +166,6 @@ static int mc68681_baud_rate(
   return status;
 }
 
-#define MC68681_PORT_MASK( _port, _bits ) \
-  ((_port) ? ((_bits) << 4) : (_bits))
-
 static int mc68681_set_attributes( 
   int minor,
   const struct termios *t
@@ -250,28 +247,96 @@ static int mc68681_set_attributes(
   return 0;
 }
 
+static void mc68681_initialize_context(
+  int               minor,
+  mc68681_context  *pmc68681Context
+)
+{
+  int          port;
+  unsigned int pMC68681;
+  
+  pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
+
+  pmc68681Context->mate = -1;
+
+  for (port=0 ; port<Console_Port_Count ; port++ ) {
+    if ( Console_Port_Tbl[port].ulCtrlPort1 == pMC68681 ) {
+      pmc68681Context->mate = port;
+      break;
+    }
+  }
+
+  pmc68681Context->ucModemCtrl = 0x00;   /* XXX */
+}
+
+static unsigned int mc68681_build_imr(
+  int minor
+)
+{
+  int              mate;
+  unsigned int     mask;
+  unsigned int     mate_mask;
+  unsigned int     pMC68681;
+  unsigned int     pMC68681_port;
+  mc68681_context *pmc68681Context;
+  
+  pMC68681       = Console_Port_Tbl[minor].ulCtrlPort1;
+  pMC68681_port  = Console_Port_Tbl[minor].ulCtrlPort2;
+  pmc68681Context = (mc68681_context *) Console_Port_Data[minor].pDeviceContext;
+  mate            = pmc68681Context->mate;
+
+  mate_mask = 0;
+
+  /*
+   *  Decide if the other port on this DUART is using interrupts
+   */
+
+  if ( mate != -1 ) {
+    if ( Console_Port_Tbl[mate].pDeviceFns->deviceOutputUsesInterrupts )
+      mate_mask = 0x03;
+
+    /*
+     *  If equal, then minor is A so the mate must be B
+     */
+
+    if ( pMC68681 == pMC68681_port )
+      mate_mask <<= 4;
+  }
+
+
+  /*
+   *  Add in minor's mask
+   */
+
+  mask = 0;
+  if ( Console_Port_Tbl[minor].pDeviceFns->deviceOutputUsesInterrupts ) {
+    if ( pMC68681 == pMC68681_port )
+       mask = 0x03;
+    else
+       mask = 0x30;
+  }
+
+  return mask | mate_mask;
+}
+
 static void mc68681_init(int minor)
 {
-/* XXX */
   unsigned32              pMC68681_port;
   unsigned32              pMC68681;
   mc68681_context        *pmc68681Context;
   setRegister_f           setReg;
   getRegister_f           getReg;
-  unsigned int            port;
 
   pmc68681Context = (mc68681_context *) malloc(sizeof(mc68681_context));
 
   Console_Port_Data[minor].pDeviceContext = (void *)pmc68681Context;
-#if 0
-  pmc68681Context->ucModemCtrl = SP_MODEM_IRQ;
-#endif
+
+  mc68681_initialize_context( minor, pmc68681Context );
 
   pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort1;
   pMC68681      = Console_Port_Tbl[minor].ulCtrlPort2;
   setReg        = Console_Port_Tbl[minor].setRegister;
   getReg        = Console_Port_Tbl[minor].getRegister;
-  port          = Console_Port_Tbl[minor].ulDataPort;
 
   /*
    *  Reset everything and leave this port disabled.
@@ -304,7 +369,6 @@ static int mc68681_open(
   unsigned32             pMC68681_port;
   unsigned int           baud;
   unsigned int           acr;
-  unsigned int           port;
   unsigned int           vector;
   rtems_interrupt_level  Irql;
   setRegister_f          setReg;
@@ -312,7 +376,6 @@ static int mc68681_open(
   pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
   pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
   setReg        = Console_Port_Tbl[minor].setRegister;
-  port          = Console_Port_Tbl[minor].ulDataPort;
   vector        = Console_Port_Tbl[minor].ulIntVector;
 
   (void) mc68681_baud_rate( minor, B9600, &baud, &acr );
@@ -328,12 +391,6 @@ static int mc68681_open(
     (*setReg)( pMC68681_port, MC68681_MODE, 0x13 );
     (*setReg)( pMC68681_port, MC68681_MODE, 0x07 );
   rtems_interrupt_enable(Irql);
-
-  (*setReg)(
-     pMC68681,
-     MC68681_INTERRUPT_MASK_REG,
-     MC68681_PORT_MASK( port, 0x03 )  /* intr on RX and TX -- not break */
-  );
 
   (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_ENABLE_TX );
   (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_ENABLE_RX );
@@ -359,23 +416,15 @@ static int mc68681_close(
 {
   unsigned32      pMC68681;
   unsigned32      pMC68681_port;
-  unsigned int    port;
   setRegister_f   setReg;
 
   pMC68681      = Console_Port_Tbl[minor].ulCtrlPort1;
   pMC68681_port = Console_Port_Tbl[minor].ulCtrlPort2;
   setReg        = Console_Port_Tbl[minor].setRegister;
-  port          = Console_Port_Tbl[minor].ulDataPort;
 
   /*
    *  Disable interrupts from this channel and then disable it totally.
    */
-
-  (*setReg)(
-     pMC68681,
-     MC68681_INTERRUPT_MASK_REG,
-     MC68681_PORT_MASK( port, 0x03 )  /* intr on RX and TX -- not break */
-  );
 
   (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_TX );
   (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_DISABLE_RX );
@@ -687,36 +736,23 @@ static int mc68681_flush(int major, int minor, void *arg)
  *
  *  This routine initializes the console's receive and transmit
  *  ring buffers and loads the appropriate vectors to handle the interrupts.
- *
- *  Input parameters:  NONE
- *
- *  Output parameters: NONE
- *
- *  Return values:     NONE
  */
 
 static void mc68681_enable_interrupts(
   int minor
 )
 {
-/* XXX */
   unsigned32            pMC68681;
-  unsigned8             ucDataByte;
   setRegister_f         setReg;
 
-#if 1
-ucDataByte = 0;
-#endif
   pMC68681 = Console_Port_Tbl[minor].ulCtrlPort1;
   setReg   = Console_Port_Tbl[minor].setRegister;
 
-#if 0
   /*
-   * Enable interrupts
+   *  Enable interrupts on RX and TX -- not break
    */
-  ucDataByte = SP_INT_RX_ENABLE | SP_INT_TX_ENABLE;
-  (*setReg)(pMC68681, MC68681_INTERRUPT_ENABLE, ucDataByte);
-#endif
+
+  (*setReg)( pMC68681, MC68681_INTERRUPT_MASK_REG, mc68681_build_imr( minor ));
 }
 
 static void mc68681_initialize_interrupts(int minor)

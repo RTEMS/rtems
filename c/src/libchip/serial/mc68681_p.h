@@ -224,7 +224,8 @@ extern "C" {
 
 typedef struct _mc68681_context
 {
-        unsigned8       ucModemCtrl;
+  int        mate;
+  unsigned8  ucModemCtrl;
 } mc68681_context;
 
 /*

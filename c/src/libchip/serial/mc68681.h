@@ -36,11 +36,8 @@ extern "C" {
  *  Data Port bit map configuration
  */
 
-#define MC68681_DATA_PORT_A               0
-#define MC68681_DATA_PORT_B               1
-  
 #define MC68681_DATA_BAUD_RATE_SET_1      0
-#define MC68681_DATA_BAUD_RATE_SET_2      2
+#define MC68681_DATA_BAUD_RATE_SET_2      1
 
 /*
  * Driver function table
