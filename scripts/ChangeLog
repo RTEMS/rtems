@@ -1,3 +1,9 @@
+2001-07-03	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def, binutils.add, gccnewlib.add: Updated to build
+	binutils 2.11.2 (rtems patch 20010622), gcc 2.95.3 (rtems
+	patch a20010622), and newlib 1.9.0 (rtems patch 10020622).
+
 2001-05-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Remove AC_EXEEXT, treat .exe manually.

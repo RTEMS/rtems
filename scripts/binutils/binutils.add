@@ -20,7 +20,7 @@ Prefix:		/opt
 BuildRoot:	/tmp/@target_alias@-binutils
 
 Version:      	@binutils_version@
-Source0:      	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-@binutils_version@.tar.bz2
+Source0:      	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-@binutils_version@.tar.gz
 Patch0:		binutils-@binutils_version@-rtems-@binutils_patch_version@.diff
 #
 # The original sources are not included in the source RPM.
