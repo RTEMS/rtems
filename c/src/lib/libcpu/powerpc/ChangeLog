@@ -1,3 +1,7 @@
+2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* exceptions/raw_exception.c: Include <libcpu/cpuIdent.h>.
+
 2002-04-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* shared/include/cpuIdent.h: New.
