@@ -53,9 +53,8 @@ void _CPU_Initialize(
   void            (*thread_dispatch)      /* ignored on this CPU */
 )
 {
-  void                  *pointer;
-
 #if (SPARC_HAS_FPU == 1)
+  void                  *pointer;
 
   /*
    *  This seems to be the most appropriate way to obtain an initial
