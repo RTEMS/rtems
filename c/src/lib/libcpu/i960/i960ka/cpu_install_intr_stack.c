@@ -12,7 +12,7 @@ extern i960_PRCB *Prcb;
 void _CPU_Install_interrupt_stack( void )
 {
   i960_PRCB *prcb = Prcb;
-  unsigned32   level;
+  uint32_t     level;
   
   /*  
    *  Set the Interrupt Stack in the PRCB and force a reload of it.

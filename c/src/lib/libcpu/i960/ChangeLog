@@ -1,3 +1,10 @@
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* i960ca/cpu_install_intr_stack.c, i960ca/cpu_install_raw_isr.c,
+	i960ka/cpu_install_intr_stack.c, i960ka/cpu_install_raw_isr.c,
+	i960rp/cpu_install_intr_stack.c, i960rp/cpu_install_raw_isr.c:
+	Convert to using c99 fixed size types.
+
 2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Add 2nd argument (rtems_updir) to RTEMS_TOP.

@@ -14,7 +14,7 @@
 extern i960_PRCB *Prcb;
 
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
