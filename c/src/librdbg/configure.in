@@ -1,0 +1,65 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl
+dnl $Id$
+
+AC_PREREQ(2.13)
+AC_INIT(src/awk.svc)
+RTEMS_TOP(../../..)
+AC_CONFIG_AUX_DIR(../../..)
+
+RTEMS_CANONICAL_TARGET_CPU
+
+AM_INIT_AUTOMAKE(rtems-c-src-librdbg,$RTEMS_VERSION,no)
+AM_MAINTAINER_MODE
+
+RTEMS_ENABLE_NETWORKING
+RTEMS_ENABLE_RDBG
+RTEMS_ENABLE_LIBCDIR
+RTEMS_ENABLE_BARE
+
+RTEMS_ENV_RTEMSBSP
+
+RTEMS_CHECK_CPU
+RTEMS_CANONICAL_HOST
+
+RTEMS_PROJECT_ROOT
+
+dnl check target cc
+RTEMS_PROG_CC_FOR_TARGET
+RTEMS_CANONICALIZE_TOOLS
+
+AC_CHECK_PROG(RPCGEN,rpcgen,rpcgen)
+AC_PROG_AWK
+
+if test "$RPCGEN" = "no"; then
+  AC_MSG_ERROR([missing rpcgen, required to build librdbg])
+fi
+if test "$AWK" = "no"; then
+  AC_MSG_ERROR([missing awk, required to build librdbg])
+fi
+
+RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
+RTEMS_CHECK_NETWORKING(RTEMS_BSP)
+RTEMS_CHECK_RDBG(bspdir)
+
+AM_CONDITIONAL(HAS_RDBG,test "$HAS_RDBG" = "yes")
+
+PROJECT_INCLUDE="\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"
+AC_SUBST(PROJECT_INCLUDE)
+
+RTEMS_PROJECT_ROOT
+
+# Try to explicitly list a Makefile here 
+AC_OUTPUT( 
+Makefile
+include/Makefile
+include/rdbg/Makefile
+include/rdbg/i386/Makefile
+include/rdbg/powerpc/Makefile
+src/Makefile
+src/i386/Makefile
+src/i386/pc386/Makefile
+src/powerpc/Makefile
+src/powerpc/mcp750/Makefile
+)
