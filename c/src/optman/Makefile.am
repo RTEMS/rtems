@@ -8,18 +8,18 @@ include $(top_srcdir)/automake/lib.am
 sapi_C_FILES = sapi/no-ext.c sapi/no-io.c
 OBJS = $(sapi_C_FILES:sapi/%.c=$(ARCH)/%.$(OBJEXT))
 
-rtems_C_FILES = rtems/no-dpmem.c rtems/no-event.c rtems/no-msg.c rtems/no-mp.c \
-    rtems/no-part.c rtems/no-region.c \
-    rtems/no-rtmon.c rtems/no-sem.c rtems/no-signal.c rtems/no-timer.c
+rtems_C_FILES = rtems/no-dpmem.c rtems/no-event.c rtems/no-msg.c \
+    rtems/no-mp.c rtems/no-part.c rtems/no-region.c rtems/no-rtmon.c \
+    rtems/no-sem.c rtems/no-signal.c rtems/no-timer.c
 OBJS += $(rtems_C_FILES:rtems/%.c=${ARCH}/%.$(OBJEXT))
 
 PGMS = $(rtems_C_FILES:rtems/%.c=$(ARCH)/%$(LIB_VARIANT).rel)
 PGMS += $(sapi_C_FILES:sapi/%.c=$(ARCH)/%$(LIB_VARIANT).rel)
 
-${ARCH}/%.$(OBJEXT): sapi/%.c
+${ARCH}/%.$(OBJEXT): sapi/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 
-${ARCH}/%.$(OBJEXT): rtems/%.c
+${ARCH}/%.$(OBJEXT): rtems/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 
 # Make foo.rel from foo.o
