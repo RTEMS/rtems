@@ -145,8 +145,6 @@ typedef struct _console_tbl {
 typedef struct _console_data {
   void                   *termios_data;
   volatile boolean        bActive;
-  volatile Ring_buffer_t  TxBuffer;  /* XXX remove usage from drivers */
-                                     /* XXX only the ns16550 uses this now */
   /*
    * This field may be used for any purpose required by the driver
    */
