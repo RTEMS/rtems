@@ -1,3 +1,8 @@
+2004-03-04	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/canonicalize-tools.m4: Add SIZE, NM, and OBJCOPY so
+	they can be used in application level makefiles.
+
 2004-03-05	Joel Sherrill <joel@OARcorp.com>
 
 	* libnetworking/rtems_webserver/ejparse.c,
