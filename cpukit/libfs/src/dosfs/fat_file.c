@@ -44,7 +44,7 @@ _hash_search(
     Chain_Control                         *hash, 
     unsigned32                             key1, 
     unsigned32                             key2, 
-    void                                 **ret
+    fat_file_fd_t			   **ret
 );
 
 static int 
@@ -98,7 +98,7 @@ fat_file_open(
     key = fat_construct_key(mt_entry, cln, ofs);
   
     /* access "valid" hash table */
-    rc = _hash_search(mt_entry, fs_info->vhash, key, 0, (void **)&lfat_fd);
+    rc = _hash_search(mt_entry, fs_info->vhash, key, 0, &lfat_fd);
     if ( rc == RC_OK )  
     {
         /* return pointer to fat_file_descriptor allocated before */
@@ -108,7 +108,7 @@ fat_file_open(
     }
 
     /* access "removed-but-still-open" hash table */
-    rc = _hash_search(mt_entry, fs_info->rhash, key, key, (void **)&lfat_fd);
+    rc = _hash_search(mt_entry, fs_info->rhash, key, key, &lfat_fd);
 
     lfat_fd = (*fat_fd) = (fat_file_fd_t*)malloc(sizeof(fat_file_fd_t));
     if ( lfat_fd == NULL )
@@ -913,7 +913,7 @@ _hash_search(
     Chain_Control                         *hash, 
     unsigned32                             key1, 
     unsigned32                             key2, 
-    void                                 **ret
+    fat_file_fd_t                          **ret
     )
 {                          
     unsigned32 mod = (key1) % FAT_HASH_MODULE;

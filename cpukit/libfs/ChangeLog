@@ -1,3 +1,8 @@
+2003-09-09	Ralf Corsepius <ralf_corsepius@rtems.com>
+
+	PR 487/filesystem
+	* src/dosfs/fat_file.c: Correct typing per gcc 3.3 warnings.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* src/dosfs/dosfs.h, src/dosfs/fat.h, src/dosfs/fat_fat_operations.h,
