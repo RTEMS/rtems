@@ -16,6 +16,7 @@ Makefile
 Makefile.in
 basic.texi
 bsp.texi
+build45.texi
 concepts.texi
 debug.texi
 embeddedinfo.texi
