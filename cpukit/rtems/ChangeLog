@@ -1,5 +1,10 @@
 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 
+	* src/msgqsubmit.c: Modified multiprocessing conditional so
+	this would compile with both macros and inlines.
+
+2000-11-30	Joel Sherrill <joel@OARcorp.com>
+
 	* macros/rtems/rtems/sem.inl: Added macro implementation of
 	_Semaphore_Get_interrupt_disable().
 

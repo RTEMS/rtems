@@ -52,6 +52,12 @@
  *    error code       - if unsuccessful
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
+#define MESSAGE_QUEUE_MP_HANDLER _Message_queue_Core_message_queue_mp_support
+#else
+#define MESSAGE_QUEUE_MP_HANDLER NULL
+#endif
+
 rtems_status_code _Message_queue_Submit(
   Objects_Id                  id,
   void                       *buffer,
@@ -102,11 +108,7 @@ rtems_status_code _Message_queue_Submit(
             buffer,
             size,
             id,
-#if defined(RTEMS_MULTIPROCESSING)
-            _Message_queue_Core_message_queue_mp_support,
-#else
-            NULL,
-#endif
+            MESSAGE_QUEUE_MP_HANDLER,
             FALSE,   /* sender does not block */
             0        /* no timeout */
           );
@@ -117,11 +119,7 @@ rtems_status_code _Message_queue_Submit(
             buffer,
             size,
             id,
-#if defined(RTEMS_MULTIPROCESSING)
-            _Message_queue_Core_message_queue_mp_support,
-#else
-            NULL,
-#endif
+            MESSAGE_QUEUE_MP_HANDLER,
             FALSE,   /* sender does not block */
             0        /* no timeout */
           );
