@@ -1,3 +1,7 @@
+2004-11-22	Jennifer Averett <jennifer@OARcorp.com>
+
+	* sp07/buffered_io.c: Remove warning.
+
 2004-03-30	David Querbach <querbach@realtime.bc.ca>
 
 	PR 595/tests
