@@ -451,6 +451,8 @@ MC68681_STATIC int mc68681_open(
   setReg        = Console_Port_Tbl[minor].setRegister;
   vector        = Console_Port_Tbl[minor].ulIntVector;
 
+  /* XXX default baud rate should be from configuration table */
+
   (void) mc68681_baud_rate( minor, B9600, &baud, &acr, &command );
 
   /*
@@ -458,9 +460,12 @@ MC68681_STATIC int mc68681_open(
    */
 
   rtems_interrupt_disable(Irql);
-    (*setReg)( pMC68681, MC68681_COMMAND, command );
     (*setReg)( pMC68681, MC68681_AUX_CTRL_REG, acr );
     (*setReg)( pMC68681_port, MC68681_CLOCK_SELECT, baud );
+    if ( command ) {
+      (*setReg)( pMC68681_port, MC68681_COMMAND, command );         /* RX */
+      (*setReg)( pMC68681_port, MC68681_COMMAND, command | 0x20 );  /* TX */
+    }
     (*setReg)( pMC68681_port, MC68681_COMMAND, MC68681_MODE_REG_RESET_MR_PTR );
     (*setReg)( pMC68681_port, MC68681_MODE, 0x13 );
     (*setReg)( pMC68681_port, MC68681_MODE, 0x07 );
