@@ -6,8 +6,9 @@ dnl
 dnl This script configures the configuration files below make/
 dnl
 
-AC_PREREQ(2.13)
-AC_INIT(bsp.cfg.in)
+AC_PREREQ(2.52)
+AC_INIT
+AC_CONFIG_SRCDIR([bsp.cfg.in])
 RTEMS_TOP(../../..)
 AC_CONFIG_AUX_DIR(../../..)
 
@@ -88,14 +89,11 @@ AC_SUBST(CC_LDFLAGS_PROFILE_V)
 
 # Collect the files needed to build a BSP
 cfg_dir="${RTEMS_TOPdir}/make"
-cfg_srcs=""
-cfg_dsts=""
 CUSTOM_CFG_FILES=""
 f="${RTEMS_BSP}.cfg"
 while test -n "$f"; do
   if test -r "${srcdir}/${cfg_dir}/custom/$f"; then
-    cfg_srcs="$cfg_srcs ${cfg_dir}/custom/$f"
-    cfg_dsts="$cfg_dsts custom/$f"
+    AC_CONFIG_LINKS([custom/$f:${cfg_dir}/custom/$f])
     CUSTOM_CFG_FILES="$CUSTOM_CFG_FILES $f"
     f=`grep "^include.*make/custom" ${srcdir}/${cfg_dir}/custom/$f \
     | sed \
@@ -105,29 +103,35 @@ while test -n "$f"; do
   else break; fi;
 done
 AC_SUBST(CUSTOM_CFG_FILES)
+AC_SUBST(cfg_dir)
 
 # Symlink the *.cfg files from the toplevel make directory into the build
 # trees c/<bsp>/make subdirectories
-AC_LINK_FILES($cfg_srcs,$cfg_dsts)
-AC_LINK_FILES($cfg_dir/Templates/Makefile.lib,Templates/Makefile.lib)
-AC_LINK_FILES($cfg_dir/Templates/Makefile.leaf,Templates/Makefile.leaf)
-AC_LINK_FILES($cfg_dir/Templates/Makefile.dir,Templates/Makefile.dir)
-AC_LINK_FILES($cfg_dir/compilers/gcc-target-default.cfg,compilers/gcc-target-default.cfg)
-AC_LINK_FILES($cfg_dir/directory.cfg,directory.cfg)
-AC_LINK_FILES(leaf.cfg,leaf.cfg)
-AC_LINK_FILES($cfg_dir/lib.cfg,lib.cfg)
-AC_LINK_FILES($cfg_dir/README,README)
+
+AC_CONFIG_LINKS([
+  Templates/Makefile.lib:${cfg_dir}/Templates/Makefile.lib
+  Templates/Makefile.leaf:${cfg_dir}/Templates/Makefile.leaf
+  Templates/Makefile.dir:${cfg_dir}/Templates/Makefile.dir
+  compilers/gcc-target-default.cfg:${cfg_dir}/compilers/gcc-target-default.cfg
+  directory.cfg:${cfg_dir}/directory.cfg
+  lib.cfg:${cfg_dir}/lib.cfg
+  README:${cfg_dir}/README
+  leaf.cfg:leaf.cfg
+],,[
+  RTEMS_TOPdir=${RTEMS_TOPdir}
+  cfg_dir=${cfg_dir}
+  test -d Templates || mkdir Templates
+])
 
 # Explicitly list all Makefiles here
-AC_OUTPUT( 
-Makefile
+AC_CONFIG_FILES([Makefile
 Makefile.inc
 host.cfg
 bsp.cfg
 custom/Makefile
 custom/default.cfg
-compilers/Makefile,
-${MAKE} $RTEMS_BSP.cache,
-MAKE=${MAKE-make}
+compilers/Makefile])
+AC_CONFIG_COMMANDS([default],[[${MAKE} $RTEMS_BSP.cache]],[[MAKE=${MAKE-make}
 RTEMS_BSP=${RTEMS_BSP}
-)
+]])
+AC_OUTPUT

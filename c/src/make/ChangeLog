@@ -1,3 +1,7 @@
+2001-10-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Reworked for autoconf-2.52.
+
 2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use exec_prefix not prefix.
