@@ -119,17 +119,23 @@ using the procedures described in @ref{Using configure and make}
 or @ref{Using the bit Script}.  It is @b{NOT} required if using the procedure
 described in @ref{Using RPM to Build BINUTILS GCC and NEWLIB}.
 
+GNU source distributions are archived using @code{tar} and
+compressed using either @code{gzip} or @code{bzip}.  
+If compressed with @code{gzip}, the extension @code{.gz} is used.
+If compressed with @code{bzip}, the extension @code{.bz2} is used.
+
 While in the @code{tools} directory, unpack the compressed
-tar files using the following command sequence: 
+tar files for BINUTILS, GCC, and NEWLIB using the appropriate
+command based upon the compression program used.
 
 @example
 cd tools
-tar xzf ../archive/@value{GCC-TAR}
-tar xzf ../archive/@value{BINUTILS-TAR}
-tar xzf ../archive/@value{NEWLIB-TAR}
+tar xzf ../archive/TOOLNAME.tar.gz  # for gzip'ed tools
+tar xIf ../archive/TOOLNAME.tar.bz2 # for bzip'ed tools
 @end example
 
-After the compressed tar files have been unpacked, the following
+After the compressed tar files have been unpacked using
+the appropriate commands, the following
 directories will have been created under tools. 
 
 @itemize @bullet

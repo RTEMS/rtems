@@ -1,3 +1,8 @@
+2001-06-28	Joel Sherrill <joel@OARcorp.com>
+
+	* buildc.t, gdb.t: Per PR54, updated to reflect multiple compression
+	schemes including bzip2.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* pictures/Makefile.am: Remove AUTOMAKE_OPTIONS.

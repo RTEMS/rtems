@@ -52,7 +52,16 @@ using RPM to build tool binaries.
 @c
 @subsection Unarchive the GDB Distribution
 
-Use the following commands to unarchive the GDB distribution:
+Unarchive the compressed tar files for GDB using the appropriate
+command based upon the compression program used for the source
+distribution you downloaded.
+
+@example
+cd tools
+tar xzf ../archive/@{GDB-UNTAR}.tar.gz  # for gzip'ed gdb
+tar xIf ../archive/@{GDB-UNTAR}.tar.bz2 # for bzip'ed gdb
+@endif
+
 
 @example
 cd tools
