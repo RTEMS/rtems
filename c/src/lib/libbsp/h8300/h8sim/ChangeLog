@@ -1,3 +1,7 @@
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add PREINSTALL_DIRS.
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
