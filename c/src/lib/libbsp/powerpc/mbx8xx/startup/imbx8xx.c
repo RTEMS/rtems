@@ -11,6 +11,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/mbx.h>
 
 /*
  *  EPPCBug rev 1.1 is stupid. It clears the interrupt mask register
@@ -156,11 +157,6 @@ void _InitMBX8xx (void)
   register unsigned32 r1, i;
   extern unsigned32 simask_copy;
 
-  /*
-   *  Get the SIU interrupt mask.
-   */
-   simask_copy = m8xx.simask;
-  
   /*			
    *  Initialize the Debug Enable Register (DER) to an appropriate
    *  value for EPPCBug debugging. 
@@ -213,6 +209,12 @@ void _InitMBX8xx (void)
   r1 = 0xFA200000;
   _mtspr( M8xx_IMMR, r1 );
 
+  /*
+   *  Get the SIU interrupt mask.
+   *  imd: accessing m8xx.* should not occure before setting up the immr !
+   */
+   simask_copy = m8xx.simask;
+  
   /* 
    * Initialize the SIU Module Configuration Register (SIUMCR) 
    * m8xx.siumcr = 0x00602900, the default MBX and firmware value.
@@ -274,7 +276,16 @@ void _InitMBX8xx (void)
   m8xx.plprck = M8xx_UNLOCK_KEY;	/* unlock PLPRCR */
 #if ( defined(mbx821_001) || defined(mbx821_001b) || defined(mbx860_001b) )
   m8xx.plprcr = 0x5F500000;
-#elif ( defined(mbx860_005b) )
+#elif ( defined(mbx860_005b) || \
+        defined(mbx860_002b) || \
+        defined(mbx860_003b) || \
+        defined(mbx860_004b) || \
+        defined(mbx860_006b) || \
+        defined(mbx821_002b) || \
+        defined(mbx821_003b) || \
+        defined(mbx821_004b) || \
+        defined(mbx821_005b) || \
+        defined(mbx821_006b) )
   /* Set the multiplication factor to 0 and clear the timer interrupt status*/
   m8xx.plprcr = 0x00005000;
 #elif ( defined(mbx860_001) || \
@@ -282,19 +293,10 @@ void _InitMBX8xx (void)
         defined(mbx860_003) || \
         defined(mbx860_004) || \
         defined(mbx860_005) || \
-        defined(mbx860_002b) || \
-        defined(mbx860_003b) || \
-        defined(mbx860_004b) || \
-        defined(mbx860_006b) || \
         defined(mbx821_002) || \
         defined(mbx821_003) || \
         defined(mbx821_004) || \
-        defined(mbx821_005) || \
-        defined(mbx821_002b) || \
-        defined(mbx821_003b) || \
-        defined(mbx821_004b) || \
-        defined(mbx821_005b) || \
-        defined(mbx821_006b) )
+        defined(mbx821_005))
   m8xx.plprcr = 0x4C400000;
 #else
 #error "MBX board not defined"  
@@ -582,4 +584,52 @@ void _InitMBX8xx (void)
 #endif
   m8xx.memc[7]._br = M8xx_BR_BA(0xFC000000) | M8xx_BR_AT(0) | M8xx_BR_PS8 |
 		M8xx_BR_MS_GPCM | M8xx_MEMC_BR_V;
+  /*
+   * PCMCIA initialization
+   */
+  /*
+   * PCMCIA region 0: common memory
+   */
+  m8xx.pbr0 = PCMCIA_MEM_ADDR;
+  m8xx.por0 = (M8xx_PCMCIA_POR_BSIZE_64MB 
+	       | M8xx_PCMCIA_POR_PSHT(15) | M8xx_PCMCIA_POR_PSST(15) 
+	       | M8xx_PCMCIA_POR_PSL(32)  
+	       | M8xx_PCMCIA_POR_PPS_16   | M8xx_PCMCIA_POR_PRS_MEM 
+	       |M8xx_PCMCIA_POR_PSLOT_A   |  M8xx_PCMCIA_POR_VALID);
+  /*
+   * PCMCIA region 1: dma memory
+   */
+  m8xx.pbr1 = PCMCIA_DMA_ADDR;
+  m8xx.por1 = (M8xx_PCMCIA_POR_BSIZE_64MB 
+	       | M8xx_PCMCIA_POR_PSHT(15) | M8xx_PCMCIA_POR_PSST(15) 
+	       | M8xx_PCMCIA_POR_PSL(32)  
+	       | M8xx_PCMCIA_POR_PPS_16   | M8xx_PCMCIA_POR_PRS_DMA 
+	       |M8xx_PCMCIA_POR_PSLOT_A   |  M8xx_PCMCIA_POR_VALID);
+  /*
+   * PCMCIA region 2: attribute memory
+   */
+  m8xx.pbr2 = PCMCIA_ATTRB_ADDR;
+  m8xx.por2 = (M8xx_PCMCIA_POR_BSIZE_64MB 
+	       | M8xx_PCMCIA_POR_PSHT(15) | M8xx_PCMCIA_POR_PSST(15) 
+	       | M8xx_PCMCIA_POR_PSL(32)  
+	       | M8xx_PCMCIA_POR_PPS_16   | M8xx_PCMCIA_POR_PRS_ATT
+	       |M8xx_PCMCIA_POR_PSLOT_A   |  M8xx_PCMCIA_POR_VALID);
+  /*
+   * PCMCIA region 3: I/O access
+   */
+  m8xx.pbr3 = PCMCIA_IO_ADDR;
+  m8xx.por3 = (M8xx_PCMCIA_POR_BSIZE_64MB 
+	       | M8xx_PCMCIA_POR_PSHT(15) | M8xx_PCMCIA_POR_PSST(15) 
+	       | M8xx_PCMCIA_POR_PSL(32)  
+	       | M8xx_PCMCIA_POR_PPS_16   | M8xx_PCMCIA_POR_PRS_IO
+	       |M8xx_PCMCIA_POR_PSLOT_A   |  M8xx_PCMCIA_POR_VALID);
+
+  /*
+   * PCMCIA interface general control reg
+   */
+  m8xx.pgcra = 0; /* no special options set */
+  /*
+   * PCMCIA interface enable reg
+   */
+  m8xx.per   =0; /* no interrupts enabled now */
 }

@@ -122,6 +122,7 @@ clock/Makefile
 console/Makefile
 include/Makefile
 irq/Makefile
+ide/Makefile
 network/Makefile
 startup/Makefile
 vectors/Makefile

@@ -59,4 +59,6 @@ typedef struct bd_info {
 #define IMAP_SIZE		((unsigned int)(64 * 1024))
 #define PCI_CSR_ADDR		((unsigned int)0xfa210000)
 #define PCI_CSR_SIZE		((unsigned int)(64 * 1024))
+
+#define MBX_CSR2 	        (MBX_CSR_ADDR+1)
 #endif
