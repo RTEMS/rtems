@@ -21,6 +21,7 @@
 
 
 #include <bsp.h>
+#include <DP8570A.h>
 
 rtems_boolean Timer_driver_Find_average_overhead;
 
