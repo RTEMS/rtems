@@ -27,6 +27,8 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 $(PGM): $(OBJS)
 	$(make-rel)
 
+bsplib_DATA = linkcmds ghlinkcmds
+
 $(PROJECT_RELEASE)/lib/ghlinkcmds: ghlinkcmds
 	$(INSTALL_DATA) $< $@
 
