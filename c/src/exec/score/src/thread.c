@@ -93,7 +93,7 @@ void _Thread_Handler_initialization(
 
 void _Thread_Create_idle( void )
 {
-  Thread (*idle);
+  void *idle;
 
   /*
    *  The entire workspace is zeroed during its initialization.  Thus, all
@@ -1114,7 +1114,7 @@ boolean _Thread_Evaluate_mode( void )
 
 #ifndef USE_INLINES
 
-STATIC INLINE Thread_Control *_Thread_Get (
+Thread_Control *_Thread_Get (
   Objects_Id           id,
   Objects_Locations   *location
 )
@@ -1145,6 +1145,8 @@ STATIC INLINE Thread_Control *_Thread_Get (
   return (Thread_Control *) _Objects_Get( information, id, location );
 }
 
+#endif
+
 /*PAGE
  *
  *  _Thread_Idle_body
@@ -1166,6 +1168,4 @@ Thread _Thread_Idle_body(
 {
   for( ; ; ) ;
 }
-#endif
-
 #endif

@@ -21,9 +21,7 @@
 extern "C" {
 #endif
 
-#ifndef __RTEMS_APPLICATION__
 #include <rtems/score/address.inl>
-#endif
 
 #ifdef __cplusplus
 }
