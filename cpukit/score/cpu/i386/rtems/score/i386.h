@@ -118,11 +118,11 @@ extern "C" {
  *  It must be static so it can be referenced indirectly.
  */
 
-static inline unsigned int i386_swap_u32(
-  unsigned int value
+static inline uint32_t i386_swap_u32(
+  uint32_t value
 )
 {
-  unsigned long lout;
+  uint32_t lout;
 
 #if (I386_HAS_BSWAP == 0)
   asm volatile( "rorw  $8,%%ax;"
