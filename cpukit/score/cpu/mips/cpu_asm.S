@@ -481,7 +481,7 @@ ENDFRAME(_CPU_Context_restore)
 
 FRAME(_CPU_Context_restore,sp,0,ra)
 	add  a1,a0,zero
-	j _CPU_Ccontext_switch_restore
+	j _CPU_Context_switch_restore
 	nop
 ENDFRAME(_CPU_Context_restore)
 
@@ -867,7 +867,7 @@ _ISR_Handler_1:
    *  }
    */
         /* k0 has the SR interrupt bits */
-        la t3, _ISR_vector_table
+        la t3, _ISR_Vector_table
 
         /* The bits you look at can be prioritized here just by */
         /*  changing what bit is looked at. I.E. SR_IBITx */
@@ -1326,6 +1326,12 @@ FRAME(init_exc_vecs,sp,0,ra)
 #endif
 
 ENDFRAME(init_exc_vecs)
+
+FRAME(exc_utlb_code,sp,0,ra)
+	la	k0, _ISR_Handler /* XXX not right -- but need to link*/
+	j	k0
+	nop
+ENDFRAME(exc_utlb_code)
 
 FRAME(exc_norm_code,sp,0,ra)
 	la	k0, _ISR_Handler /* generic external int hndlr */
