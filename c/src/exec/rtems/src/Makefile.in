@@ -32,7 +32,7 @@ INTR_PIECES=\
   intr intrbody intrcatch
 
 CLOCK_PIECES=\
-  clock clockget clockset clocktick
+  rtclock clockget clockset clocktick
 
 TIMER_PIECES=\
   rtemstimer timercancel timercreate timerdelete timerfireafter \
