@@ -31,10 +31,11 @@
 /*PAGE
  *
  *  _POSIX_Message_queue_Receive_support
+ *
+ *  NOTE: XXX Document how size, priority, length, and the buffer go
+ *        through the layers.
  */
  
-/* XXX be careful ... watch the size going through all the layers ... */
-
 ssize_t _POSIX_Message_queue_Receive_support(
   mqd_t               mqdes,
   char               *msg_ptr,
@@ -45,14 +46,12 @@ ssize_t _POSIX_Message_queue_Receive_support(
 {
   register POSIX_Message_queue_Control *the_mq;
   Objects_Locations                     location;
-  unsigned32                            status = 0;
   unsigned32                            length_out;
-  CORE_message_queue_Submit_types       core_priority;
  
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EINVAL );
+      set_errno_and_return_minus_one( EBADF );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
@@ -63,27 +62,39 @@ ssize_t _POSIX_Message_queue_Receive_support(
         set_errno_and_return_minus_one( EBADF );
       }
 
-      /* XXX need to define the options argument to this */
-      length_out = msg_len;
+      if ( msg_len < the_mq->Message_queue.maximum_message_size ) {
+        _Thread_Enable_dispatch();
+        set_errno_and_return_minus_one( EMSGSIZE );
+      }
+ 
+      /*
+       *  Now if something goes wrong, we return a "length" of -1
+       *  to indicate an error.
+       */
+
+      length_out = -1;
+
       _CORE_message_queue_Seize(
         &the_mq->Message_queue,
         mqdes,
         msg_ptr,
         &length_out,
-        the_mq->blocking,
-        &core_priority,
+        (the_mq->oflag & O_NONBLOCK) ? FALSE : TRUE,
         timeout
       );
       
-      *msg_prio = _POSIX_Message_queue_Priority_from_core( core_priority );
-
-      /* XXX convert message priority from core to POSIX */
       _Thread_Enable_dispatch();
-      *msg_prio = _Thread_Executing->Wait.count;
-      if ( !status )
+      *msg_prio =
+        _POSIX_Message_queue_Priority_from_core(_Thread_Executing->Wait.count);
+
+      if ( !_Thread_Executing->Wait.return_code )
         return length_out;
-      /* XXX --- the return codes gotta be looked at .. fix this */
-      return _Thread_Executing->Wait.return_code;
+
+      set_errno_and_return_minus_one(
+        _POSIX_Message_queue_Translate_core_message_queue_return_code(
+          _Thread_Executing->Wait.return_code
+        )
+      );
   }
   return POSIX_BOTTOM_REACHED();
 }
