@@ -131,8 +131,7 @@ _SDA2_BASE_ = __SDATA2_START__ + 0x8000;
     *       an invalid mapping may result!!!
     */
 	PROVIDE(__DATA_START__ = ABSOLUTE(.) );
-    *(.data)
-    *(.gnu.linkonce.d*)	
+    *(.data .data.* .gnu.linkonce.d*)	
     SORT(CONSTRUCTORS)
   } > CODE
   .data1   : { *(.data1) }	> CODE

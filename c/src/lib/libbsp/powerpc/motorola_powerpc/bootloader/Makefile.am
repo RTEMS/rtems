@@ -47,20 +47,24 @@ bootloader$(EXEEXT): $(bootloader_OBJECTS)
 bootloader.$(OBJEXT): bootloader$(EXEEXT)
 	cp $< $@
 
-ppcbootdir = $(bsplibdir)
-ppcboot_DATA = bootloader.$(OBJEXT)
-ppcboot_DATA += ../../shared/bootloader/ppcboot.lds
+project_lib_DATA = bootloader.$(OBJEXT)
+project_lib_DATA += ../../shared/bootloader/ppcboot.lds
 
 # FIXME: Tmp-install stuff to make mcp750.cfg's make-exe happy.
 # As mcp750.cfg's make-exe doesn't work outside of the source-tree.
 # We might consider to use this directory directly for in-source-tree
 # building, instead.
-$(PROJECT_RELEASE)/lib/%: %
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES = $(PROJECT_RELEASE)/lib/bootloader.$(OBJEXT) \
-    $(PROJECT_RELEASE)/lib/ppcboot.lds
 
 all-local: $(TMPINSTALL_FILES)
+
+TMPINSTALL_FILES =
+
+${PROJECT_RELEASE}/lib/bootloader.$(OBJEXT): bootloader.$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/bootloader.$(OBJEXT)
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/bootloader.$(OBJEXT)
+
+${PROJECT_RELEASE}/lib/ppcboot.lds: ../../shared/bootloader/ppcboot.lds ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/ppcboot.lds
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/ppcboot.lds
 
 include $(top_srcdir)/../../../../automake/local.am

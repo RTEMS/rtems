@@ -24,9 +24,6 @@ include $(top_srcdir)/../../../../automake/lib.am
 
 all-local: $(OBJS)
 
-    $(top_srcdir)/../shared/motorola/motorola.h
-	$(INSTALL_DATA) $< $@
-
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/bsp/$(dirstamp):

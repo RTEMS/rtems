@@ -11,26 +11,22 @@ OBJS = $(S_O_FILES)
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
+include $(top_srcdir)/../../bspstart.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
-bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-bsplib_DATA += $(PROJECT_RELEASE)/lib/rtems_crti.$(OBJEXT)
+project_lib_DATA = $(ARCH)/start$(LIB_VARIANT).$(OBJEXT)
+project_lib_DATA += $(ARCH)/rtems_crti$(LIB_VARIANT).$(OBJEXT)
 
-$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)
-	$(INSTALL_DATA) $< $@
+all-local: $(TMPINSTALL_FILES)
 
-$(PROJECT_RELEASE)/lib/rtems_crti.$(OBJEXT): $(ARCH)/rtems_crti.$(OBJEXT)
-	$(INSTALL_DATA) $< $@
+${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start$(LIB_VARIANT).$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems_crti.$(OBJEXT)
-
-all-local: $(OBJS) $(ARCH)/start.$(OBJEXT) $(ARCH)/rtems_crti.$(OBJEXT) $(TMPINSTALL_FILES)
-
-$(OBJS): $(ARCH)
-
-.PRECIOUS: $(ARCH)/start.$(OBJEXT) $(ARCH)/rtems_crti.$(OBJEXT)
+${PROJECT_RELEASE}/lib/rtems_crti$(LIB_VARIANT).$(OBJEXT): $(ARCH)/rtems_crti$(LIB_VARIANT).$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/rtems_crti$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/rtems_crti$(LIB_VARIANT).$(OBJEXT)
 
 include $(top_srcdir)/../../../../automake/local.am

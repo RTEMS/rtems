@@ -1,3 +1,11 @@
+2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bootloader/Makefile.am: Misc cleanups and fixes.
+	* motorola/Makefile.am: Misc cleanups and fixes.
+	* start/Makefile.am: Misc cleanups and fixes.
+	* startup/Makefile.am: Misc cleanups and fixes.
+	* startup/linkcmds: Preparations for gcc-3.3.x.
+
 2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.
