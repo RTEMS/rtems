@@ -12,8 +12,8 @@
  *  $Id$
  */
 
-#ifndef __FORCE386_h
-#define __FORCE386_h
+#ifndef __I386EX_BSP_h
+#define __I386EX_BSP_h
 
 #ifdef __cplusplus
 extern "C" {
