@@ -1,0 +1,145 @@
+\input ../tools/texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename itron
+@syncodeindex vr fn
+@synindex ky cp
+@paragraphindent 0
+@c @smallbook
+@c %**end of header
+
+@c
+@c  COPYRIGHT (c) 1988-1998.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
+@c
+@c   Master file for the ITRON C User's Guide
+@c
+
+@c Joel's Questions
+@c
+@c  1.  Why does paragraphindent only impact makeinfo?
+@c  2.  Why does paragraphindent show up in HTML?
+@c
+
+@include ../tools/setup.texi
+
+@ignore
+@ifinfo
+@format
+START-INFO-DIR-ENTRY
+* RTEMS ITRON User's Guide: (itron).   ITRON Guide
+END-INFO-DIR-ENTRY
+@end format
+@end ifinfo
+@end ignore
+
+@c variable substitution info:
+@c
+@c Note: At the moment there is not an Ada interface to ITRON.
+@set is-C
+@clear is-Ada
+@set LANGUAGE C 
+@set STRUCTURE structure
+@set ROUTINE function
+@set OR |
+@set RPREFIX RTEMS_
+@set DIRPREFIX rtems_
+@c the language is @value{LANGUAGE}
+@c NOTE:  don't use underscore in the name
+@c
+
+@c
+@c  Title Page Stuff
+@c
+
+@set edition @value{RTEMS-EDITION}
+@set version @value{RTEMS-VERSION}
+@c @set update-date @value{RTEMS-UPDATE-DATE}
+@c @set update-month @value{RTEMS-UPDATE-MONTH}
+@set update-date 17 May 1999
+@set update-month May 1999
+
+@c
+@c  I don't really like having a short title page.  --joel
+@c
+@c @shorttitlepage ITRON User's Guide
+
+@setchapternewpage odd
+@settitle ITRON API User's Guide
+@titlepage
+@finalout
+
+@title RTEMS ITRON User's Guide
+@subtitle Edition @value{edition}, for RTEMS @value{version}
+@sp 1
+@subtitle @value{update-month}
+@author UAH CS595
+@page
+@end titlepage
+
+@c  This prevents a black box from being printed on "overflow" lines.
+@c  The alternative is to rework a sentence to avoid this problem.
+
+@include task.texi
+@include tasksync.texi
+@include semaphore.texi
+@include eventflags.texi
+@include mailbox.texi
+@include msgbuffer.texi
+@include rendezvous.texi
+@include interrupt.texi
+@include memorypool.texi
+@include fixedblock.texi
+@include time.texi
+@include config.texi
+@include network.texi
+@ifinfo
+@node Top, , (dir), (dir)
+@top itron
+
+This is the online version of the RTEMS ITRON API User's Guide
+
+@menu
+* Task Manager::
+* Task-Dependent Synchronization Manager::
+* Semaphore Manager::
+* Eventflags Manager::
+* Mailbox Manager::
+* Message Buffer Manager::
+* Rendezvous Manager::
+* Interrupt Manager::
+* Memory Pool Manager::
+* Fixed Block Manager::
+* Time Manager::
+* System Manager::
+* Network Support Manager::
+* Command and Variable Index::
+* Concept Index::
+@end menu
+
+@end ifinfo
+@c 
+@c 
+@c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
+@c
+
+@node Command and Variable Index, Concept Index, , Top
+@unnumbered Command and Variable Index
+
+There are currently no Command and Variable Index entries.
+
+@c @printindex fn
+
+@node Concept Index, , Command and Variable Index, Top
+@unnumbered Concept Index
+
+There are currently no Concept Index entries.
+@c @printindex cp
+
+@contents
+@bye
+
