@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 EXTRA_DIST = Makefile.ts_386ex ts1325-button.adb ts1325-parallel.adb \
     i386_ports.adb ts1325-button.ads ts1325-parallel.ads i386_ports.ads \

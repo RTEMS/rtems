@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 EXTRA_DIST = AUTHORS COPYING NEWS README sockets-constants.ads \
     sockets-link.ads sockets-multicast.adb sockets-multicast.ads \

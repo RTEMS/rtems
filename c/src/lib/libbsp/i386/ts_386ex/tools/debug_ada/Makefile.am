@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 EXTRA_DIST = Makefile.ts_386ex cmds ddd-rtems debug.adb init.c \
     serial_debug.adb serial_debug.ads

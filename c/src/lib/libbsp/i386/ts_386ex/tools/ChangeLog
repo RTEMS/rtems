@@ -1,3 +1,18 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* debug_ada/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* debug_c/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* dos_sup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* network_ada/adasockets/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* network_ada/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* network_ada/listener/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* network_ada/tcprelay/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* ts_1325_ada/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* debug_ada/init.c, network_ada/listener/init.c,
