@@ -33,6 +33,8 @@ STARTUP_C_PIECES = bspstart bspclean sbrk setvec spurious genpvec swap main \
 $(PGM): $(OBJS)
 	$(make-rel)
 
+bsplib_DATA = linkcmds
+
 $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 	$(INSTALL_DATA) $< $@
 
