@@ -110,7 +110,8 @@ m68k_isr_entry set_vector(
 /*
  * Values assigned by link editor
  */
-extern void *_RomBase, *_RamBase;
+extern char _RamBase[];
+extern char _HeapSize[];
 
 /*
  * Definitions for Atlas Computer Equipment Inc. High Speed Bridge (HSB)

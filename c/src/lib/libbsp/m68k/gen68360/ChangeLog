@@ -1,3 +1,8 @@
+2005-02-11	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h, startup/init68360.c: Correct type of symbols from
+	linkcmds to compile with gcc 4.x.
+
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.

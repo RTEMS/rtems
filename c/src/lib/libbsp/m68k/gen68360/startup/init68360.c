@@ -38,6 +38,7 @@ void _Init68360 (void)
 	m68k_isr_entry *vbr;
 	unsigned long ramSize;
 	extern void _CopyDataClearBSSAndStart (unsigned long ramSize);
+	extern char _RamBase[];
 
 #if (defined (__mc68040__))
 	/*
