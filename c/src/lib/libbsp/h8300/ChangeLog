@@ -1,6 +1,6 @@
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
-	* console/console-io.c: Added console_initialize_hardware().
+	* ChangeLog: Removed bad entry.
 
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
