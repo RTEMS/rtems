@@ -57,7 +57,7 @@ SECTIONS
 	.gcc_exc : {
 		. = ALIGN (16);
 		*(.gcc_exc)
-	}
+	} >ram
 
         .data ADDR( .text ) + SIZEOF( .text ):
         {
