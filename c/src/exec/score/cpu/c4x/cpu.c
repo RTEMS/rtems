@@ -1,5 +1,5 @@
 /*
- *  XXX CPU Dependent Source
+ *  C4x CPU Dependent Source
  *
  *
  *  COPYRIGHT (c) 1989-1999.

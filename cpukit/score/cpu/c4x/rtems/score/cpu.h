@@ -1,6 +1,6 @@
 /*  cpu.h
  *
- *  This include file contains information pertaining to the XXX
+ *  This include file contains information pertaining to the C4x
  *  processor.
  *
  *  COPYRIGHT (c) 1989-1999.
@@ -100,9 +100,8 @@ extern "C" {
  *
  *  C4x Specific Information:
  *
- *  XXXanswer
- *
  *  Initial investigation indicates a software managed stack will be needed.
+ *  But the implementation does not currently include support for one.
  */
 
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK FALSE

@@ -1,3 +1,8 @@
+2002-07-05	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c, irq.c, rtems/score/cpu.h: Filled in something that was
+	marked XXX.
+
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_TOP(../../../..).
