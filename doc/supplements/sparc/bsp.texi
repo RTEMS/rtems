@@ -79,7 +79,7 @@ and this is to be utilized, then it should be enabled during the
 reset application initialization code.
 
 In addition to the requirements described in the
-Board Support Packages chapter of the @value{RTEMS-LANGUAGE}
+Board Support Packages chapter of the @value{LANGUAGE}
 Applications User's Manual for the reset code
 which is executed before the call to
 rtems_initialize executive, the SPARC version has the following

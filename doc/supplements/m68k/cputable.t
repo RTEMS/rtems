@@ -42,7 +42,7 @@ here:
 
 @example
 @group
-struct cpu_configuration_table @{
+typedef struct @{
   void       (*pretasking_hook)( void );
   void       (*predriver_hook)( void );
   void       (*postdriver_hook)( void );
@@ -55,7 +55,7 @@ struct cpu_configuration_table @{
   /* end of fields required on all CPUs */
 
   m68k_isr    *interrupt_vector_table;
-@};
+@} rtems_cpu_table;
 @end group
 @end example
 

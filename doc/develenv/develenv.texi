@@ -39,8 +39,8 @@ END-INFO-DIR-ENTRY
 
 @c variable substitution info:
 @c
-@c @set RTEMS-LANGUAGE C
-@c the language is @value{RTEMS-LANGUAGE}
+@c @set LANGUAGE C
+@c the language is @value{LANGUAGE}
 @c NOTE:  don't use underscore in the name
 @c
 

@@ -141,7 +141,7 @@ The code required to enter low power mode is CPU model specific.
 @end ifinfo
 @section CPU Model Implementation Notes 
 
-The ERC is a custom SPARC V7 implementation based on the Cypress 601/602
+The ERC32 is a custom SPARC V7 implementation based on the Cypress 601/602
 chipset.  This CPU has a number of on-board peripherals and was developed by
 the European Space Agency to target space applications.  RTEMS currently
 provides support for the following peripherals:

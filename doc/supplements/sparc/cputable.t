@@ -38,7 +38,8 @@ Information Table is given by the C structure definition is
 shown below:
 
 @example
-struct cpu_configuration_table @{
+@group
+typedef struct @{
   void       (*pretasking_hook)( void );
   void       (*predriver_hook)( void );
   void       (*postdriver_hook)( void );
@@ -50,7 +51,8 @@ struct cpu_configuration_table @{
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
-@};
+@} rtems_cpu_table;
+@end group
 @end example
 
 @table @code

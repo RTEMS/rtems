@@ -41,7 +41,8 @@ effectively with the BSP.  The C structure definition is given
 here:
 
 @example
-struct cpu_configuration_table @{
+@group
+typedef struct @{
   void        (*pretasking_hook)( void );
   void        (*predriver_hook)( void );
   void        (*postdriver_hook)( void );
@@ -56,7 +57,8 @@ struct cpu_configuration_table @{
   i960ca_PRCB *Prcb;
 #endif
 
-@};
+@} rtems_cpu_table;
+@end group
 @end example
 
 The contents of the i960CA Processor Control Block

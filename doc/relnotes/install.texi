@@ -46,9 +46,9 @@ Throughout the rest of this manual
 within the RTEMS distribution.  For persons using the ftp
 distribution found on the primary ftp site for RTEMS,
 <RTEMS_distribution> is
-ftp://ftp.OARcorp.com/oarcorp/rtems/@value{RTEMS-RELEASE}.
+ftp://ftp.OARcorp.com/oarcorp/rtems/@value{RELEASE}.
 
-The archive files for RTEMS Release @value{RTEMS-RELEASE} are found
+The archive files for RTEMS Release @value{RELEASE} are found
 under the directory <RTEMS_distribution>.  This directory
 contains the files which comprise this relase as well as any
 patches which may be required for other tools.
@@ -116,7 +116,7 @@ NOTE: gunzip -c is equivalent to gzcat, while gtar is GNU tar.
 Given that the necessary utility programs are
 installed, any of the above commands will extract the contents
 of <file>.tar.gz into the current directory.  All of the RTEMS
-components will be extracted into the subdirectory rtems-@value{RTEMS-RELEASE}.
+components will be extracted into the subdirectory rtems-@value{RELEASE}.
 To view the contents of a component without restoring any files,
 use a command similar to the following:
 

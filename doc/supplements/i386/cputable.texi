@@ -40,7 +40,8 @@ is provided to allow RTEMS to interoperate effectively with the
 BSP.  The C structure definition is given here:
 
 @example
-struct cpu_configuration_table @{
+@group
+typedef struct @{
   void       (*pretasking_hook)( void );
   void       (*predriver_hook)( void );
   void       (*idle_task)( void );
@@ -53,7 +54,8 @@ struct cpu_configuration_table @{
  
   unsigned32   interrupt_segment;
   void        *interrupt_vector_table;
-@};
+@} rtems_cpu_table;
+@end group
 @end example
 
 @table @code

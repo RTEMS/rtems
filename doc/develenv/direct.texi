@@ -426,7 +426,7 @@ the supercore modules.  Within the "score" directory the CPU
 dependent modules are found.
 
 The "cpu" directory contains a subdirectory for each
-target CPU supported by the @value{RTEMS-RELEASE} release of the RTEMS
+target CPU supported by the @value{RELEASE} release of the RTEMS
 executive.  Each processor directory contains the CPU dependent
 code necessary to host RTEMS.  The "no_cpu" directory provides a
 starting point for developing a new port to an unsupported
@@ -459,7 +459,7 @@ processor family.
 @c  Tree 7 - C BSP Library
 @c
 
-Th "libbsp" directory provides all the BSPs provided with this
+The "libbsp" directory provides all the BSPs provided with this
 release of the RTEMS executive.  The subdirectories are
 divided,  as discussed previously, based on specific processor
 family, then further breaking down into specific target board

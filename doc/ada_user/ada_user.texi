@@ -45,7 +45,7 @@ END-INFO-DIR-ENTRY
 @set STRUCTURE record
 @set ROUTINE subprogram
 @set OR or
-@c the language is @value{RTEMS-LANGUAGE}
+@c the language is @value{LANGUAGE}
 @c NOTE:  don't use underscore in the name
 @c
 
