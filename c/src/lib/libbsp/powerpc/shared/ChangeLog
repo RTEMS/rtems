@@ -1,6 +1,27 @@
 2003-02-20	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 349/bsps
+	* console/polled_io.c, console/reboot.c, irq/irq.c, irq/irq_asm.S,
+	irq/irq_init.c, openpic/Makefile.am, startup/linkcmds,
+	vectors/vectors.S, vectors/vectors_init.c:
+	  - install the 'openpic.h' and 'pci.h' headers 
+	  - avoid a name clash by renaming 'vsprintf' & friends
+	    to 'k_vsprintf' etc.
+	  - let 'rtemsReboot' print a stack trace (in case an 'assert' failed)
+	  - irq.c:
+	     * fix: remove implicit assumption that ISA interrupt vectors start
+	            at 0
+	     * add BSP hook to let a VME interrupt acknowledge the PCI/openpic
+	       IRQ. (SEE ALSO THE ppc-sharedbsp-vme.diff patch)
+	  - fix: EABI compliance; isr/exception lowlevel handlers must not
+	         clobber R2 or R13
+	  - fix: openpic_init was called with the polarity/senses tables
+	         swapped (fixed wrong order of arguments)
+	  - cosmetics: use new _read_SPRXX() _write_SPRXX() macros
+
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 349/bsps
 	* startup/pgtbl_setup.c, startup/pgtbl_activate.c: New files
 	* startup/Makefile.am, startup/bspstart.c, startup/linkcmds:
 	Let the powerpc/shared (+derived) BSPs use pagetable support

@@ -5,8 +5,7 @@
 
 C_FILES = openpic.c
 
-include_bspdir = $(includedir)/bsp
-include_bsp_HEADERS = openpic.h
+H_FILES = openpic.h
 
 $(PROJECT_INCLUDE)/bsp:
 	$(mkinstalldirs) $@

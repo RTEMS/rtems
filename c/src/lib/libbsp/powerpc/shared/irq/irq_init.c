@@ -237,7 +237,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 #ifdef TRACE_IRQ_INIT  
   printk("Going to initialize raven interrupt controller (openpic compliant)\n");
 #endif       
-  openpic_init(1, mcp750_openpic_initsenses, mcp750_openpic_initpolarities);
+  openpic_init(1, mcp750_openpic_initpolarities, mcp750_openpic_initsenses);
 #ifdef TRACE_IRQ_INIT  
   printk("Going to initialize the PCI/ISA bridge IRQ related setting (VIA 82C586)\n");
 #endif

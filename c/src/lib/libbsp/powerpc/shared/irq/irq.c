@@ -14,6 +14,7 @@
 #include <rtems/system.h>
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <bsp/VME.h>
 #include <bsp/openpic.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/apiext.h>
@@ -86,14 +87,14 @@ static inline int is_processor_irq(const rtems_irq_symbolic_name irqLine)
  */
 static void compute_i8259_masks_from_prio ()
 {
-  unsigned int i;
-  unsigned int j;
+  int i;
+  int j;
   /*
    * Always mask at least current interrupt to prevent re-entrance
    */
-  for (i=BSP_ISA_IRQ_LOWEST_OFFSET; i < BSP_ISA_IRQ_NUMBER; i++) {
+  for (i=BSP_ISA_IRQ_LOWEST_OFFSET; i < BSP_ISA_IRQ_LOWEST_OFFSET + BSP_ISA_IRQ_NUMBER; i++) {
     * ((unsigned short*) &irq_mask_or_tbl[i]) = (1 << i);
-    for (j = BSP_ISA_IRQ_LOWEST_OFFSET; j < BSP_ISA_IRQ_NUMBER; j++) {
+    for (j = BSP_ISA_IRQ_LOWEST_OFFSET; j < BSP_ISA_IRQ_LOWEST_OFFSET + BSP_ISA_IRQ_NUMBER; j++) {
       /*
        * Mask interrupts at i8259 level that have a lower priority
        */
@@ -261,7 +262,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
      */
     compute_i8259_masks_from_prio ();
 
-    for (i=BSP_ISA_IRQ_LOWEST_OFFSET; i < BSP_ISA_IRQ_NUMBER; i++) {
+    for (i=BSP_ISA_IRQ_LOWEST_OFFSET; i < BSP_ISA_IRQ_LOWEST_OFFSET + BSP_ISA_IRQ_NUMBER; i++) {
       if (rtems_hdl_tbl[i].hdl != default_rtems_entry.hdl) {
 	BSP_irq_enable_at_i8259s (i);
 	rtems_hdl_tbl[i].on(&rtems_hdl_tbl[i]);
@@ -375,10 +376,10 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) >> 8));
   }
   else {
-#ifdef BSP_PCI_VME_BRIDGE_DOES_EOI
-	/* leave it to the VME bridge to do EOI, so
-         * it can re-enable the openpic while handling
-         * VME interrupts (-> VME priorities in software)
+#ifdef BSP_PCI_VME_DRIVER_DOES_EOI
+	/* leave it to the VME bridge driver to do EOI, so
+     * it can re-enable the openpic while handling
+     * VME interrupts (-> VME priorities in software)
 	 */
 	if (BSP_PCI_VME_BRIDGE_IRQ!=irq)
 #endif

@@ -73,15 +73,19 @@ SYM (shared_raw_irq_code_entry):
 	 * to reenable exception processing
 	 */
 	stw	r0, GPR0_OFFSET(r1)
+	/* PPC EABI: R2 is reserved (pointer to short data .sdata2) - we won't touch it
+	 * but we still save/restore it, just in case...
+	 */
 	stw	r2, GPR2_OFFSET(r1)
 	stw	r3, GPR3_OFFSET(r1)
 	
 	mfsrr0  r0
-	mfsrr1  r2
-	mfmsr	r3
+	mfsrr1  r3
 	
 	stw	r0, SRR0_FRAME_OFFSET(r1)
-	stw	r2, SRR1_FRAME_OFFSET(r1)
+	stw	r3, SRR1_FRAME_OFFSET(r1)
+
+	mfmsr	r3
 	/*
 	 * Enable data and instruction address translation, exception recovery
      *
@@ -137,21 +141,21 @@ SYM (shared_raw_irq_code_entry):
 	 */
 	addis r15,0, _Thread_Dispatch_disable_level@ha
 	/*
-	 * Get current nesting level in R2
+	 * Get current nesting level in R3
 	 */
-	mfspr	r2, SPRG0
+	mfspr	r3, SPRG0
 	/*
 	 * Check if stack switch is necessary
 	 */
-	cmpwi	r2,0
+	cmpwi	r3,0
 	bne	nested
 	mfspr	r1, SPRG1
 	
 nested:	
 	/* 
-	 * Start Incrementing nesting level in R2
+	 * Start Incrementing nesting level in R3
 	 */
-	addi	r2,r2,1
+	addi	r3,r3,1
 	/*
 	 * Start Incrementing _Thread_Dispatch_disable_level R4 = _Thread_Dispatch_disable_level
 	 */
@@ -159,7 +163,7 @@ nested:
 	/*
 	 * store new nesting level in SPRG0
 	 */
-	mtspr	SPRG0, r2
+	mtspr	SPRG0, r3
 	
 	addi	r6, r6, 1
 	mfmsr	r5
@@ -183,14 +187,14 @@ nested:
 	 * value as an easy exit condition because if interrupt nesting level > 1
 	 * then _Thread_Dispatch_disable_level > 1
 	 */
-	mfspr	r2, SPRG0
+	mfspr	r4, SPRG0
 	/*
 	 * start decrementing _Thread_Dispatch_disable_level
 	 */
 	lwz	r3,_Thread_Dispatch_disable_level@l(r15)
-	addi	r2, r2, -1	/* Continue decrementing nesting level */
+	addi	r4, r4, -1	/* Continue decrementing nesting level */
 	addi	r3, r3, -1	/* Continue decrementing _Thread_Dispatch_disable_level */
-	mtspr	SPRG0, r2	/* End decrementing nesting level */
+	mtspr	SPRG0, r4	/* End decrementing nesting level */
 	stw	r3,_Thread_Dispatch_disable_level@l(r15) /* End decrementing _Thread_Dispatch_disable_level */
 	cmpwi	r3, 0
 	/*
@@ -222,14 +226,14 @@ nested:
 	 */
 	stmw	r16, GPR16_OFFSET(r1)
 	addi	r3, r1, 0x8
-        /*
-         * compute SP at exception entry
-         */
-        addi    r2, r1, EXCEPTION_FRAME_END
-        /*
-         * store it at the right place
-         */
-        stw     r2, GPR1_OFFSET(r1)
+	/*
+	 * compute SP at exception entry
+	 */
+	addi    r4, r1, EXCEPTION_FRAME_END
+	/*
+	 * store it at the right place
+	 */
+	stw     r4, GPR1_OFFSET(r1)
 	/*
 	 * Call High Level signal handling code
 	 */
@@ -314,14 +318,14 @@ easy_exit:
 	 */
 		 
 	lwz	r4, SRR1_FRAME_OFFSET(r1)
-	lwz	r2, SRR0_FRAME_OFFSET(r1)
-	lwz	r3, GPR3_OFFSET(r1)
+	lwz	r3, SRR0_FRAME_OFFSET(r1)
+	lwz	r2, GPR2_OFFSET(r1)
 	lwz	r0, GPR0_OFFSET(r1)
 
 	mtsrr1	r4
-	mtsrr0	r2
+	mtsrr0	r3
 	lwz	r4, GPR4_OFFSET(r1)
-	lwz	r2, GPR2_OFFSET(r1)
+	lwz	r3, GPR3_OFFSET(r1)
 	addi 	r1,r1, EXCEPTION_FRAME_END
 	SYNC
 	rfi

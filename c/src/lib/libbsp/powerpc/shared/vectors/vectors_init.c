@@ -16,6 +16,7 @@
 
 #include <bsp/vectors.h>
 #include <libcpu/raw_exception.h>
+#include <libcpu/spr.h>
 #include <bsp.h>
 
 static rtems_raw_except_global_settings exception_config;
@@ -33,16 +34,28 @@ typedef struct LRFrameRec_ {
 
 #define STACK_CLAMP 50	/* in case we have a corrupted bottom */
 
+SPR_RO(LR)
+
 void
 BSP_printStackTrace(BSP_Exception_frame* excPtr)
 {
-LRFrame f;
-int	i;
+LRFrame	f;
+int		i;
+LRFrame	sp;
+void	*lr;
 
-	printk("Stack Trace: ");
-	printk("  IP: 0x%08x, LR: 0x%08x\n",
-			excPtr->EXC_SRR0, excPtr->EXC_LR);
-	for (f=(LRFrame)excPtr->GPR1, i=0; f->frameLink && i<STACK_CLAMP; f=f->frameLink) {
+	printk("Stack Trace: \n  ");
+	if (excPtr) {
+		printk("IP: 0x%08x, ",excPtr->EXC_SRR0);
+		sp=(LRFrame)excPtr->GPR1;
+		lr=(void*)excPtr->EXC_LR;
+	} else {
+		/* there's no macro for this */
+		__asm__ __volatile__("mr %0, 1":"=r"(sp));
+		lr=(LRFrame)_read_LR();
+	}
+	printk("LR: 0x%08x\n",lr);
+	for (f=(LRFrame)sp, i=0; f->frameLink && i<STACK_CLAMP; f=f->frameLink) {
 		printk("--^ 0x%08x", (long)(f->frameLink->lr));
 		if (!(++i%5))
 			printk("\n");
