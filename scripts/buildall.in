@@ -63,9 +63,9 @@ newlib=${newlib_version}
 buildroot=/tmp
 
 testing=no
-do_binutils=no
-do_gdb=no
-do_gccnewlib=no
+do_binutils=yes
+do_gccnewlib=yes
+do_gdb=yes
 
 #
 #  Now get started
@@ -148,7 +148,6 @@ do
     echo "rpm -ba ${specfile} >${logfile} 2>&1"
     if [ ${testing} = no ] ; then
       rpm -ba ${specfile} >${logfile} 2>&1
-exit 0
     fi
     ${ECHO} rm -rf ${dst}/../BUILD/${target}-gcc*
     ${ECHO} rm -rf ${buildroot}/opt/rtems
@@ -156,6 +155,7 @@ exit 0
     echo uninstalling binutils for ${target} 
     if [ ${testing} = no ] ; then
       rpm -e `rpm -qa | grep rtems`
+      rm -rf /opt/rtems/*
     fi
   else
     echo Skipping gcc/newlib for ${target}
