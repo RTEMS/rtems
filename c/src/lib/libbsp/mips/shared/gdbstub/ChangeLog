@@ -1,3 +1,25 @@
+2003-07-17	Joel Sherrill <joel@OARcorp.com>
+
+	PR 433/tools
+	* mips-stub.c: Patch from C. M. Heard <heard@pobox.com> described as:
+
+	The purpose of the patch is to make the stub ignore all
+	characters except '+' (ack) or '-' (nak) when it has transmitted a
+	packet and expects an acknowledgment. Without the patch,
+	putpacket() will retransmit each time it receives anything other
+	than '+' when expecting an ack, and that, bitter experience has
+	found, frequently results in the stub failing to sync up when
+	initially attaching to gdb.
+
+	I think that rtems users will notice significant improvement in
+	the of the mips stub if this patch is incorporated in the
+	distribution; certainly I did in my stand-aline environment. I
+	should hasten to add that it is only an improvement and not a 100%
+	cure for synchronization problems because '+' characters can (and
+	do) during as message data, and it's still possible for these to
+	be mistaken as acks. I have no idea how to fix that short of
+	redesigning the gdb-remote protocol.
+
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* mips-stub.c: Removed warnings.

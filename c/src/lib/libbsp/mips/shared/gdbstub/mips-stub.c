@@ -599,6 +599,24 @@ getpacket (char *buffer)
 
 
 /*
+ * Get a positive/negative acknowledgment for a transmitted packet.
+ */
+static char
+getAck (void)
+{
+  char c;
+
+  do
+    {
+      c = getDebugChar ();
+    }
+  while ((c != '+') && (c != '-'));
+
+  return c;
+}
+
+
+/*
  * Send the packet in buffer and wait for a positive acknowledgement.
  */
 static void
@@ -644,7 +662,7 @@ putpacket (char *buffer)
       putDebugChar (highhex (checksum));
       putDebugChar (lowhex (checksum));
     }
-  while  (getDebugChar () != '+');
+  while  (getAck () != '+');
 }
 
 
