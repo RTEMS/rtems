@@ -6,7 +6,7 @@ include Make.config
 
 BASEDIR=$(shell pwd)
 
-all: env info html ps #pdf
+all: env info html ps pdf
 #	find $(WWW_INSTALL) -type f | xargs -e chmod 444
 #	find $(WWW_INSTALL) -type d | xargs -e chmod 555
 
