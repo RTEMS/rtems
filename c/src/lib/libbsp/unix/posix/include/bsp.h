@@ -1,6 +1,6 @@
 /*  bsp.h
  *
- *  This include file contains all Solaris 2.3 UNIX definitions.
+ *  This include file contains all POSIX BSP definitions.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -13,15 +13,18 @@
  *  $Id$
  */
 
-#ifndef __SOLARIS23_h
-#define __SOLARIS23_h
+#ifndef __POSIX_BSP_h
+#define __POSIX_BSP_h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <rtems.h>
+#include <clockdrv.h>
 #include <iosupp.h>
+#include <libcsupport.h>
+#include <signal.h>
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
@@ -58,10 +61,27 @@ extern "C" {
 
 extern rtems_configuration_table BSP_Configuration;
 
-#define INTERRUPT_EXTERNAL_MPCI        0
-
+/*
+ * Define this to use signals for MPCI shared memory driver.
+ * If undefined, the shared memory driver will poll from the
+ * clock interrupt.
+ * Ref: ../shmsupp/getcfg.c
+ *
+ * BEWARE:: many UN*X kernels and debuggers become severely confused when
+ *          debugging programs which use signals.  The problem is *much*
+ *          worse when using multiple signals, since ptrace(2) tends to
+ *          drop all signals except 1 in the case of multiples.
+ *          On hpux9, this problem was so bad, we couldn't use interrupts
+ *          with the shared memory driver if we ever hoped to debug
+ *          RTEMS programs.
+ *          Maybe systems that use /proc don't have this problem...
+ */
+ 
+/* #define INTERRUPT_EXTERNAL_MPCI        SIGUSR1 */
+ 
 /* functions */
 
+rtems_isr_entry set_vector(rtems_isr_entry, rtems_vector_number, int);
 void bsp_start( void );
 void bsp_cleanup( void );
 
