@@ -75,7 +75,7 @@ endif # RTEMS_USE_GCC
 
 DEFS = @DEFS@
 
-CPPFLAGS += @CPPFLAGS@ $(CPU_DEFINES) $(CPU_CFLAGS) \
+CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(CPU_CFLAGS) \
    $(DEFINES) $(XCPPFLAGS) $(CPPFLAGS_GCC)
 CFLAGS   = $(CFLAGS_DEFAULT) $(XCFLAGS)
 CXXFLAGS = $(CFLAGS_DEFAULT) $(XCXXFLAGS)
@@ -114,20 +114,26 @@ ARFLAGS=ruv
 # How to compile stuff into ${ARCH} subdirectory
 #
 
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+
 ${ARCH}/%.o: %.c
-	${COMPILE.c} $(AM_CPPFLAGS) $(AM_CFLAGS) -o $@ $<
+	${COMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.cc
-	${COMPILE.cc} $(AM_CPPFLAGS) $(AM_CXXFLAGS) -o $@ $<
+	${CXXCOMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.cpp
-	${COMPILE.cc} $(AM_CPPFLAGS) $(AM_CXXFLAGS) -o $@ $<
+	${CXXCOMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.cxx
-	${COMPILE.cc} $(AM_CPPFLAGS) $(AM_CXXFLAGS) -o $@ $<
+	${CXXCOMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.C
-	${COMPILE.cc} $(AM_CPPFLAGS) $(AM_CXXFLAGS) -o $@ $<
+	${CXXCOMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.S
 	${COMPILE.S} $(AM_CPPFLAGS) -DASM -o $@ $<
@@ -163,7 +169,7 @@ depend-am: $(C_FILES) $(CC_FILES) $(S_FILES)
 ##       Replace foo.o with $(ARCH)/foo.o
 ##       Replace $(ARCH) value with string $(ARCH)
 ##           so that it will for debug and profile cases
-	$(COMPILE.c) $(AM_CPPFLAGS) $(AM_CFLAGS) -M   $^    |  \
+	$(COMPILE) $(AM_CPPFLAGS) $(AM_CFLAGS) -M   $^    |  \
 	sed -e 's?^\(.*\)\.o[ ]*:?$$(ARCH)/\1.o:?' \
 	    -e 's?$(ARCH)/?$$(ARCH)/?'   >$(DEPEND).tmp
 	mv $(DEPEND).tmp $(DEPEND)
@@ -277,9 +283,9 @@ NM = @NM@
 SIZE = @SIZE@
 STRIP = @STRIP@
 
-##
-## FIXME: DEFS and INCLUDES should not be passed as AM_CPPFLAGS
-AM_CPPFLAGS += $(DEFS) $(INCLUDES) $(RTEMS_CPPFLAGS)
 
-AM_CFLAGS += $(RTEMS_CFLAGS_$(VARIANT_V)_V) $(CFLAGS_$(VARIANT_V)_V)
-AM_CXXFLAGS += $(RTEMS_CFLAGS_$(VARIANT_V)_V) $(CFLAGS_$(VARIANT_V)_V)
+##
+AM_CPPFLAGS = $(RTEMS_CPPFLAGS)
+
+AM_CFLAGS = $(RTEMS_CFLAGS_$(VARIANT_V)_V) $(CFLAGS_$(VARIANT_V)_V)
+AM_CXXFLAGS = $(RTEMS_CFLAGS_$(VARIANT_V)_V) $(CFLAGS_$(VARIANT_V)_V)

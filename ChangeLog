@@ -1,3 +1,8 @@
+2001-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/compile.am: Fundamentally reworked compilation rules for 
+	closer adaptation to automake's behavior.
+
 2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/lib.am: Comment out LD.
