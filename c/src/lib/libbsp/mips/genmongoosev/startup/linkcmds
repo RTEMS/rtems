@@ -33,6 +33,7 @@ SECTIONS
        eprol  =  .;
       *(.text)
       *(.text.*)
+      *(.eh_frame)
       *(.gnu.linkonce.t*)
       *(.mips16.fn.*)
       *(.mips16.call.*)

@@ -18,6 +18,8 @@
 
 #include <rtems/libio.h>
 
+#include <stdio.h>
+#include <string.h>
 
 
 /*
