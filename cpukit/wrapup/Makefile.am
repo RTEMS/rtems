@@ -3,7 +3,7 @@
 ##
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/amcompile.am
+include $(top_srcdir)/automake/compile.am
 
 ## Setup the variant build subdirectory
 ARCH_OPTIMIZE_V = o-optimize
@@ -17,71 +17,71 @@ ${ARCH}/$(dirstamp):
 	@: > $(ARCH)/$(dirstamp)
 
 project_lib_DATA = $(ARCH)/librtemscpu$(LIB_VARIANT).a
+CLEANFILES = o-optimize/librtemscpu.a
+CLEANFILES += o-debug/librtemscpu_g.a
 
-LIBS =
+TMP_LIBS =
 if LIBSCORECPU
-LIBS += ../score/cpu/$(RTEMS_CPU)/$(ARCH)/libscorecpu.a
+TMP_LIBS += ../score/cpu/@RTEMS_CPU@/libscorecpu$(LIB_VARIANT).a
 endif
-LIBS += ../score/libscore$(LIB_VARIANT).a
-LIBS += ../sapi/libsapi$(LIB_VARIANT).a
-LIBS += ../rtems/librtems$(LIB_VARIANT).a
+TMP_LIBS += ../score/libscore$(LIB_VARIANT).a
+TMP_LIBS += ../sapi/libsapi$(LIB_VARIANT).a
+TMP_LIBS += ../rtems/librtems$(LIB_VARIANT).a
 
 if HAS_POSIX
-LIBS += ../posix/libposix$(LIB_VARIANT).a
+TMP_LIBS += ../posix/libposix$(LIB_VARIANT).a
 endif
 
 if HAS_ITRON
-LIBS += ../itron/libitron$(LIB_VARIANT).a
+TMP_LIBS += ../itron/libitron$(LIB_VARIANT).a
 endif
 
-LIBS += ../libcsupport/libcsupport$(LIB_VARIANT).a
+TMP_LIBS += ../libcsupport/libcsupport$(LIB_VARIANT).a
 
-LIBS += ../libblock/libblock$(LIB_VARIANT).a
+TMP_LIBS += ../libblock/libblock$(LIB_VARIANT).a
 if !UNIX
-LIBS += ../libfs/libdosfs$(LIB_VARIANT).a
+TMP_LIBS += ../libfs/libdosfs$(LIB_VARIANT).a
 endif
-LIBS += ../libfs/libimfs$(LIB_VARIANT).a
+TMP_LIBS += ../libfs/libimfs$(LIB_VARIANT).a
 
-LIBS += ../libmisc/libmonitor$(LIB_VARIANT).a
-LIBS += ../libmisc/libuntar$(LIB_VARIANT).a
-LIBS += ../libmisc/libstackchk$(LIB_VARIANT).a
-LIBS += ../libmisc/libcpuuse$(LIB_VARIANT).a
-LIBS += ../libmisc/librtmonuse$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libmonitor$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libuntar$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libstackchk$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libcpuuse$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/librtmonuse$(LIB_VARIANT).a
 
 ## XXX temporarily removed because it causes a
 ## XXX number of BSPs to not link "main(){}" used by autoconf
 # if LIBSERDBG
-# LIBS += ../libmisc/libserdbg$(LIB_VARIANT).a
+# TMP_LIBS += ../libmisc/libserdbg$(LIB_VARIANT).a
 # endif
 
 if LIBSHELL
-LIBS += ../libmisc/libshell$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libshell$(LIB_VARIANT).a
 endif
 
-LIBS += ../libmisc/libdumpbuf$(LIB_VARIANT).a
-LIBS += ../libmisc/libdevnull$(LIB_VARIANT).a
-LIBS += ../libmisc/libdummy$(LIB_VARIANT).a
-LIBS += ../libmisc/libmw-fb$(LIB_VARIANT).a
-LIBS += ../libmisc/libcapture$(LIB_VARIANT).a
-LIBS += ../libmisc/libfsmount$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libdumpbuf$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libdevnull$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libdummy$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libmw-fb$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libcapture$(LIB_VARIANT).a
+TMP_LIBS += ../libmisc/libfsmount$(LIB_VARIANT).a
 
 if HAS_NETWORKING
-LIBS += ../libnetworking/libnetworking$(LIB_VARIANT).a
-LIBS += ../libnetworking/libc$(LIB_VARIANT).a
-LIBS += ../libnetworking/lib$(LIB_VARIANT).a
+TMP_LIBS += ../libnetworking/libnetworking$(LIB_VARIANT).a
+TMP_LIBS += ../libnetworking/libc$(LIB_VARIANT).a
+TMP_LIBS += ../libnetworking/lib$(LIB_VARIANT).a
 endif
 
 if LIBRPC
-LIBS += ../librpc/librpc$(LIB_VARIANT).a
-LIBS += ../librpc/libxdr$(LIB_VARIANT).a
+TMP_LIBS += ../librpc/librpc$(LIB_VARIANT).a
+TMP_LIBS += ../librpc/libxdr$(LIB_VARIANT).a
 endif
 
-$(LIBS): $(ARCH)/$(dirstamp)
-
-$(ARCH)/librtemscpu$(LIB_VARIANT).a: ${LIBS}
+$(ARCH)/librtemscpu$(LIB_VARIANT).a: $(TMP_LIBS) $(ARCH)/$(dirstamp)
 	rm -f $@
 	rm -rf $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
-	for f in $(LIBS); do \
+	for f in $(TMP_LIBS); do \
 	  case $$f in \
 	  *.$(OBJEXT) | *.rel) \
 	    if test -f $(ARCH)/`basename $$f`; then \

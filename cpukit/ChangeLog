@@ -1,5 +1,12 @@
 2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Include compile.am.
+	Use TMP_LIBS instead of LIBS to avoid potential conflicts with
+	auto*tools' LIBS.
+	Reflect new locations of libscorecpu*.a
+
+2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Remove AUTOMAKE_FILES.
 	* automake/compile.am: Replace contents with contents of
 	automake/amcompile.am.
