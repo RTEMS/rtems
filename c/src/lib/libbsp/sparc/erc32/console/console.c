@@ -348,7 +348,6 @@ void DEBUG_puts(
   ERC32_Restore_interrupt( ERC32_INTERRUPT_UART_A_RX_TX, old_level );
 }
 
-
 /*
  *  Console Termios Support Entry Points
  *
