@@ -30,21 +30,27 @@ CLEANFILES += libhttpd_g.a
 libhttpd_g_a_SOURCES = $(libhttpd_a_SOURCES)
 libhttpd_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-noinst_DATA = libhttpd$(LIB_VARIANT).a
+project_lib_DATA = libhttpd$(LIB_VARIANT).a
 endif
 endif
 
-all-local: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = webcomp.c webpage.c
 
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
+TMPINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
+
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 if HAS_NETWORKING
 if HAS_POSIX
@@ -88,10 +94,15 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/webs.h
 $(PROJECT_INCLUDE)/goahead/wsIntrn.h: wsIntrn.h $(PROJECT_INCLUDE)/goahead/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/goahead/wsIntrn.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/goahead/wsIntrn.h
+
+$(PROJECT_LIB)/libhttpd$(LIB_VARIANT).a: libhttpd$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libhttpd$(LIB_VARIANT).a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libhttpd$(LIB_VARIANT).a
 endif
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
+CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am
