@@ -860,7 +860,6 @@ rtems_device_driver console_open(
   /* Used to track termios private data for callbacks */
   extern struct rtems_termios_tty *ttyp[];
   rtems_libio_open_close_args_t *args = arg;
-#endif
   static const rtems_termios_callbacks sccEPPCBugCallbacks = {
     NULL,                       	/* firstOpen */
     NULL,                       	/* lastClose */
@@ -870,6 +869,7 @@ rtems_device_driver console_open(
     NULL,                       	/* startRemoteTx */
     0                           	/* outputUsesInterrupts */
   };
+#endif
   static const rtems_termios_callbacks pollCallbacks = {
     NULL,                       	/* firstOpen */
     NULL,                       	/* lastClose */

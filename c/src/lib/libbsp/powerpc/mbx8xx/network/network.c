@@ -39,6 +39,10 @@
 #include <netinet/if_ether.h>
 #include <bsp/irq.h>
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+
 /*
  * Number of interfaces supported by this driver
  */
@@ -756,7 +760,7 @@ scc_rxDaemon (void *arg)
    	/*
 	 * Invalidate the buffer for this descriptor
 	 */
-	rtems_cache_invalidate_multiple_data_lines(rxBd->buffer, rxBd->length);
+	rtems_cache_invalidate_multiple_data_lines((const void *)rxBd->buffer, rxBd->length);
       
       m = sc->rxMbuf[rxBdIndex];
       m->m_len = m->m_pkthdr.len = rxBd->length -
@@ -892,7 +896,7 @@ fec_rxDaemon (void *arg)
     	/*
 			 * Invalidate the buffer for this descriptor
 			 */
-			rtems_cache_invalidate_multiple_data_lines(rxBd->buffer, rxBd->length);
+			rtems_cache_invalidate_multiple_data_lines((const void *)rxBd->buffer, rxBd->length);
       
       m = sc->rxMbuf[rxBdIndex];
       m->m_len = m->m_pkthdr.len = rxBd->length -
@@ -1032,7 +1036,7 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
       /*
        * Flush the buffer for this descriptor
        */
-      rtems_cache_flush_multiple_data_lines(txBd->buffer, txBd->length);
+      rtems_cache_flush_multiple_data_lines((const void *)txBd->buffer, txBd->length);
       
       sc->txMbuf[sc->txBdHead] = m;
       nAdded++;
@@ -1547,8 +1551,10 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
   int mtu;
   int unitNumber;
   char *unitName;
+#if NVRAM_CONFIGURE == 1
   char *pAddr;
   unsigned long addr;
+#endif
 
 	/*
 	 * Parse driver name
