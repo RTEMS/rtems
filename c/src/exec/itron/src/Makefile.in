@@ -19,7 +19,8 @@ TASK_C_PIECES = task cre_tsk del_tsk sta_tsk ext_tsk exd_tsk ter_tsk \
 TASKSYNC_C_PIECES = sus_tsk rsm_tsk frsm_tsk slp_tsk tslp_tsk wup_tsk \
     can_wup
 
-SEMAPHORE_C_PIECES = itronsem
+SEMAPHORE_C_PIECES = itronsem cre_sem del_sem preq_sem ref_sem sig_sem \
+    twai_sem wai_sem
 
 EVENTFLAGS_C_PIECES = eventflags
 
