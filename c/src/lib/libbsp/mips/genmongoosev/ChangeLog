@@ -1,0 +1,14 @@
+2001-02-22	Joel Sherrill <joel@OARcorp.com>
+
+	* The Generic Mongoose-V BSP uses only the peripherals found on
+	the Synova Mongoose-V CPU.  This is a radiation hardened CPU 
+	based on the LSI Logic 33K.
+	* .cvsignore, ChangeLog, Makefile.am, README, bsp_specs, configure.in,
+	clock/.cvsignore, clock/Makefile.am, clock/clockdrv.c,
+	console/.cvsignore, console/Makefile.am, console/conscfg.c,
+	include/.cvsignore, include/Makefile.am, include/bsp.h,
+	start/.cvsignore, start/Makefile.am, start/regs.S, start/start.S,
+	startup/.cvsignore, startup/Makefile.am, startup/bspstart.c,
+	startup/linkcmds, timer/.cvsignore, timer/Makefile.am, timer/timer.c,
+	wrapup/.cvsignore, wrapup/Makefile.am: New files.
+

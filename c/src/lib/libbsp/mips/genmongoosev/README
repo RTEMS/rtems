@@ -1,0 +1,65 @@
+#
+#  $Id$
+#
+
+BSP supporting the on-CPU capabilities of the Synova Mongoose-V.
+This BSP assumes that basic HW initialization is performed by
+PMON.
+
+Address Map
+===========
+This is the generic address map of the Mongoose-V prototyping board
+this BSP was tested on.
+
+0x8000_0000 - 0x8FFF_FFFF   - RAM (KSEG0 cached)
+0xA000_0000 - 0xAFFF_FFFF   - RAM (KSEG1, same memory uncached)
+0xBFC0_0000 - 0xBFFF_FFFF   - EEPROM
+0xFFFE_xxxx                 - on-CPU peripherals
+
+This is the hardware address map of the board used as it was
+actually populated.
+
+0x8000_0000 - 0x83FF_FFFF   - 32 MB RAM (KSEG0 cached)
+0xA000_0000 - 0xA3FF_FFFF   - 32 MB RAM (KSEG1, same memory uncached)
+0xBFC0_0000 - 0xBFDF_FFFF   - 2 MB EEPROM
+0xFFFE_xxxx                 - on-CPU peripherals
+
+This is the organization of the EEPROM when fully populated.  Since
+the board used to develop this BSP only had the first bank of EEPROM
+populated, only the first program image area was used.
+
+0xBFC0_0000 - 0xBFC3_FFFF   - PMON
+0xBFC4_0000 - 0xBFC4_FFFF   - reserved for boot loader
+0xBFC5_0000 - 0xBFDF_FFFF   - reserved for program 1 image
+0xBFE0_0000 - 0xBFFF_FFFF   - reserved for program 2 image
+
+The Mongoose-V on this board is at 12 Mhz.
+
+Downloading
+===========
+
+At startup, PMON looks for a <space> to be pressed.  If it is pressed,
+then a PMON prompt is displayed.  Otherwise, PMON automatically jumps
+to the code at 0xBFC4_0000.  This code may be a boot manager or
+simply a collection of noop's that fall into the code at 
+0xBFC5_0000.  If the code at 0xBFC4_0000 is a boot manager, then it
+can determine which program image to load.  This layout allows for the
+possible compression of program images.  Given that there is much
+more RAM than EEPROM, compression could be desirable for certain
+applications.
+
+Questions
+=========
+
++  XXX
+ 
+Status
+======
+
++ untested
+
++ no mkeeprom script
+
++ start code must copy from EEPROM to RAM and then run.
+
++ XXX
