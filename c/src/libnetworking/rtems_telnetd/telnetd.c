@@ -36,7 +36,7 @@
 #include <stdio.h>
 /***********************************************************/
 rtems_id            telnetd_task_id      =0;
-rtems_unsigned32    telnetd_stack_size   =16384;
+uint32_t            telnetd_stack_size   =16384;
 rtems_task_priority telnetd_task_priority=100;
 /***********************************************************/
 rtems_task rtems_task_telnetd(rtems_task_argument task_argument) {

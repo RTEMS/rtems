@@ -1,5 +1,10 @@
 2004-10-19	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libnetworking/pppd/rtemspppd.c: rtems_task_priority priority.
+	* libnetworking/rtems_telnetd/telnetd.c: Eliminate rtems_unsigned32.
+
+2004-10-19	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libchip/Makefile.am: Reflect addtion of rtc/mc146818*. 
 
 2004-10-19	Ralf Corsepius <ralf_corsepius@rtems.org>

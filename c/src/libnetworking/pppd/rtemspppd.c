@@ -67,7 +67,7 @@ static rtems_task pppTask(rtems_task_argument arg)
 int rtems_pppd_initialize(void)
 {
   int                 iReturn  = (int)-1;
-  rtems_unsigned32    priority = 100;
+  rtems_task_priority priority = 100;
   rtems_status_code   status;
   rtems_name          taskName;
 
