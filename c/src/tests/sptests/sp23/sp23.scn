@@ -1,9 +1,0 @@
-*** TEST 23 ***
-INIT - rtems_port_create - DP1 - int = 0x1000   ext = 0x2000
-TA1 - rtems_port_ident - 0x3a010001
-TA1 - rtems_port_external_to_internal - 0x200e  =>  0x100e
-TA1 - rtems_port_internal_to_external - 0x100e  =>  0x200e
-TA1 - rtems_port_external_to_internal - 0x300e  =>  0x300e
-TA1 - rtems_port_internal_to_external - 0x50e  =>  0x50e
-TA1 - rtems_port_delete - DP1
-*** END OF TEST 23 ***
