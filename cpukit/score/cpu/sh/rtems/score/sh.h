@@ -201,11 +201,11 @@ static inline unsigned int sh_swap_u32(
   return( swapped );
 }
 
-static inline unsigned int sh_swap_u16(
-  unsigned int value
+static inline uint16_t sh_swap_u16(
+  uint16_t value
 )
 {
-  register unsigned int swapped ;
+  register uint16_t swapped ;
 
   asm volatile ( "swap.b %1,%0" : "=r" (swapped) : "r"  (value) );
 
