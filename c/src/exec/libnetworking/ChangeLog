@@ -1,3 +1,7 @@
+2002-05-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems_telnetd/pty.c: Remove bsp.h. Include <rtems/bspIo.h>.
+
 2002-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/mkrootfs.c: Add (relocated from libmisc/rootfs).

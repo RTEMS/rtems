@@ -19,8 +19,8 @@
 #include <termios.h>
 #include <rtems.h>
 #include <rtems/libio.h>
-#include <bsp.h>
 #include <rtems/pty.h>
+#include <rtems/bspIo.h>
 /*-----------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
