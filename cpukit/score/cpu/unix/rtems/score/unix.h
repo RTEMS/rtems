@@ -1,5 +1,8 @@
-/*  unix.h
- *
+/**
+ * @file rtems/score/unix.h
+ */
+
+/*
  *  This include file contains the definitions required by RTEMS
  *  which are typical for a modern UNIX computer using GCC.
  *

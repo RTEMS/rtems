@@ -1,5 +1,8 @@
-/*  unixtypes.h
- *
+/**
+ * @file rtems/score/types.h
+ */
+
+/*
  *  This include file contains type definitions which are appropriate
  *  for a typical modern UNIX box using GNU C for the RTEMS simulator.
  *
