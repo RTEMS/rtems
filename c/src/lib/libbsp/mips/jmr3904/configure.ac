@@ -20,7 +20,6 @@ RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 start/Makefile
 startup/Makefile
 timer/Makefile
