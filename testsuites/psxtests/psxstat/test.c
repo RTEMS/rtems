@@ -26,6 +26,7 @@
 #include <imfs.h>
 
 #define MAXSYMLINK 5   /* There needs to be a better way of getting this. */
+#define TIMEOUT_VALUE  ( 5 * TICKS_PER_SECOND )
 
 
 /*
@@ -33,12 +34,12 @@
  */
 
 char *Files[] = {
-  "////dir1/\\//file1\\\\//",
-  "/dir1/file2",
-  "/dir1/file3",
-  "/dir1/file4",
-  "/dir1/dir1/file1",
-  "../../..//dir1/./././dir1/ file1",
+  "/////my_mount_point/dir1/\\//file1\\\\//",
+  "/my_mount_point/dir1/file2",
+  "/my_mount_point/dir1/file3",
+  "/my_mount_point/dir1/file4",
+  "/my_mount_point/dir1/dir1/file1",
+  "../../..//my_mount_point/dir1/./././dir1/ file1",
   "main.c",
   0
 };
@@ -48,14 +49,14 @@ char *Files[] = {
  */
 
 char *Directories[] = {
-  "/dir1",
-  "/dir2",
-  "/dir3",
-  "/dir4",
-  "/dir1/dir1",
-  "/./././dir1/ dir1",
-  "/./././links",  
-  "///dir1/dir1/../../dir1/../symlinks/////",
+  "/my_mount_point/dir1",
+  "/my_mount_point/dir2",
+  "/my_mount_point/dir3",
+  "/my_mount_point/dir4",
+  "/my_mount_point/dir1/dir1",
+  "/./././my_mount_point/dir1/ dir1",
+  "/./././my_mount_point/links",  
+  "///my_mount_point/dir1/dir1/../../dir1/../symlinks/////",
   0
 };
 
@@ -102,11 +103,11 @@ char *Links_to_filelinks[]= {
 };
 
 char *SymLinks[]= {
-  "/symlinks/a_file_symlink",
-  "/symlinks/a_dir_symlink",
-  "/symlinks/a_link_symlink",
+  "/my_mount_point/symlinks/a_file_symlink",
+  "/my_mount_point/symlinks/a_dir_symlink",
+  "/my_mount_point/symlinks/a_link_symlink",
   "../symlinks/no_file",
-  "/symlinks/a_dir_symlink/a_file_symlink",
+  "/my_mount_point/symlinks/a_dir_symlink/a_file_symlink",
   0
 };
 
@@ -115,28 +116,28 @@ char *SymLinks[]= {
  */
 
 char *Good_absolute_paths[] = {
-  "/dev",
-  "////dir1/\\//file1\\\\//",
-  "/dir1/\\\\/file2",
-  "/dir1/file3/////\\\\\\",
-  "/dir1/file4",
-  "/dir1/dir1/file1",
-  "/dir1/dir1/ file1",
-  "/dir1",
-  "/dir2//////\\",
-  "/dir3",
-  "/dir4",
-  "/dir1/dir1",
-  "/dir1/ dir1///\\\\",
-  "/\\/\\/\\/\\/\\/\\/links\\/\\/\\/\\/\\/\\",
+  "/my_mount_point/dev",
+  "////my_mount_point/dir1/\\//file1\\\\//",
+  "/my_mount_point/dir1/\\\\/file2",
+  "/my_mount_point/dir1/file3/////\\\\\\",
+  "/my_mount_point/dir1/file4",
+  "/my_mount_point/dir1/dir1/file1",
+  "/my_mount_point/dir1/dir1/ file1",
+  "/my_mount_point/dir1",
+  "/my_mount_point/dir2//////\\",
+  "/my_mount_point/dir3",
+  "/my_mount_point/dir4",
+  "/my_mount_point/dir1/dir1",
+  "/my_mount_point/dir1/ dir1///\\\\",
+  "/my_mount_point/\\/\\/\\/\\/\\/\\/links\\/\\/\\/\\/\\/\\",
   0
 };
 
 
 char *Bad_paths[] = {
-  "/links/ENAMETOOLONG__________________________",
-  "/dir1/file4/NOTADIR",
-  "/dir1/dir1/EACCES__",
+  "/my_mount_point/links/ENAMETOOLONG__________________________",
+  "/my_mount_point/dir1/file4/NOTADIR",
+  "/my_mount_point/dir1/dir1/EACCES__",
   0
 };
 
@@ -386,7 +387,7 @@ void make_multiple_symlinks()
  make_a_symlink( Links_to_dirlinks[0], SymLinks[2] );
  make_a_symlink( "No_File",            SymLinks[3] );
  make_a_symlink( SymLinks[1],          SymLinks[4] );
- make_a_symlink( "//links",            "/symlinks/links"  );
+ make_a_symlink( "//my_mount_point/links","/my_mount_point/symlinks/links" );
 
  stat_a_file( SymLinks[0] );
  stat_a_file( SymLinks[1] );
@@ -560,8 +561,8 @@ void Cause_faults()
   status = chmod( Directories[0], S_IRWXU );
   assert( status == 0 );
 
-  printf("chdir to / \n");
-  status = chdir( "/" );
+  printf("chdir to /my_mount_point \n");
+  status = chdir( "/my_mount_point" );
   assert( status == 0 );
 
   /*
@@ -609,8 +610,8 @@ void Cause_faults()
   status = mkdir( "t" , S_IRWXU );
   assert( status == 0 );
 
-  printf("chdir to / \n");
-  status = chdir( "/" );
+  printf("chdir to /my_mount_point\n");
+  status = chdir( "/my_mount_point" );
   assert( status == 0 );
 
   /*
@@ -651,16 +652,16 @@ void Cause_faults()
      &IMFS_ops,
      RTEMS_FILESYSTEM_READ_WRITE,
      NULL,
-     "/dir1/my_mount_point" );
+     "/my_mount_point/dir1/my_mount_point" );
   assert( status == 0 );
 
   printf("rmdir /dir1/my_mount_point should fail with EBUSY\n");
-  status = rmdir ("/dir1/my_mount_point" );
+  status = rmdir ("/my_mount_point/dir1/my_mount_point" );
   assert( status == -1 );
   assert( errno == EBUSY );
 
-  printf( "Unmount /dir1/my_mount_point\n");
-  status = unmount( "/dir1/my_mount_point" );
+  printf( "Unmount /my_mount_point/dir1/my_mount_point\n");
+  status = unmount( "/my_mount_point/dir1/my_mount_point" );
   assert( status == 0 );
 
   /*
@@ -698,8 +699,8 @@ void Cause_faults()
    * The current directory MUST be restored at the end of this test.
    */
 
-  printf("chdir to / \n");
-  status = chdir( "/" );
+  printf("chdir to /my_mount_point \n");
+  status = chdir( "/my_mount_point" );
   assert( status == 0 );
 
 }
@@ -727,30 +728,52 @@ int main(
 )
 #endif
 {
-  rtems_status_code status;
-  rtems_time_of_day time;
+  rtems_status_code                    status;
+  rtems_time_of_day                    time;
+  rtems_filesystem_mount_table_entry_t *mt_entry;
 
   puts( "\n\n*** STAT TEST 01 ***" );
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   status = rtems_clock_set( &time );
+  Show_Time();
+
+  /*
+   * Create and mount another version of the filesyste.
+   * This allows expected node id's to be consistant across
+   * platforms and bsp's.
+   */
+
+  status = mkdir("/my_mount_point",  S_IRWXU );
+  assert( status == 0 );
+  status = mount(
+     &mt_entry,
+     &IMFS_ops,
+     RTEMS_FILESYSTEM_READ_WRITE,
+     NULL,
+     "my_mount_point" );
+  assert( status == 0 );
+  status = chdir( "/my_mount_point" );
+  assert( status == 0 );
+  status = mkdir("dev",  S_IRWXU );
+  assert( status == 0 );
+
 
   /*
    *  Create the files and directories for the test.
    */
-  Show_Time();
 
   make_multiple_directories( Directories );
   make_multiple_files( Files );
   make_multiple_links( Directories,    Links_to_Dirs );
   make_multiple_links( Files,          Links_to_Files );
 
-  status = rtems_task_wake_after( 5 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( TIMEOUT_VALUE );
   make_multiple_links( Links_to_Dirs,  Links_to_dirlinks );
-  status = rtems_task_wake_after( 5 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( TIMEOUT_VALUE );
   make_multiple_links( Links_to_Files, Links_to_filelinks );
 
-  status = rtems_task_wake_after( 5 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( TIMEOUT_VALUE );
 
   /*
    *  Now go through all the absolute path.
@@ -809,13 +832,13 @@ int main(
   make_multiple_symlinks();
   make_many_symlinks( "/symlinks", 10 );
 
-  status = rtems_task_wake_after( 5 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( TIMEOUT_VALUE );
   Cause_faults();
 
-  status = rtems_task_wake_after( 5 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( TIMEOUT_VALUE );
   chown_multiple_files( Files );
 
-  status = rtems_task_wake_after( 5 * TICKS_PER_SECOND );
+  status = rtems_task_wake_after( TIMEOUT_VALUE );
   chown_multiple_files( Links_to_Dirs );
  
   puts( "\n\n*** END OF STAT TEST 01 ***" );
