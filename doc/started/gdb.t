@@ -73,8 +73,40 @@ The files that are found, have been modified by the patch file.
 
 @end ifset
 
+@section Using the bit_gdb script
 
-@section GDB with Sparc Instruction Simulation (SIS)
+The simplest way to build gdb for RTEMS is to use the @code{bit_gdb} script.
+This script interprets the settings in the @code{user.cfg} file to
+produce the gdb configuration most appropriate for the target CPU.
+
+This script is invoked as follows:
+
+@example
+./bit_gdb CPU
+@end example
+
+Where CPU is one of the RTEMS supported CPU families from the following
+list:
+
+@itemize @bullet
+@item hppa1.1
+@item i386
+@item i386-elf
+@item i386-go32
+@item i960
+@item m68k
+@item mips64orion
+@item powerpc
+@item sh
+@item sparc
+@end itemize
+
+If gdb supports a CPU instruction simulator for this configuration, then
+it is included in the build.
+
+@section Using the gdb configure Script Directly
+
+@subsection GDB with Sparc Instruction Simulation (SIS)
 
 @subheading Make the Build Directory
 
@@ -111,7 +143,7 @@ gmake all install
 @end example
 
 
-@section GDB with PowerPC Instruction Simulator
+@subsection GDB with PowerPC Instruction Simulator
 
 @subheading Make the Build Directory
 
@@ -153,7 +185,7 @@ gmake all install
 @end example
 
 
-@section GDB for DINK32
+@subsection GDB for DINK32
 
 @subheading Make the Build Directory
 
