@@ -67,7 +67,7 @@ void _Chain_Initialize(
  *  _Chain_Get_first_unprotected
  */
 
-#ifndef USE_INLINES
+#ifndef RTEMS_INLINES
 Chain_Node *_Chain_Get_first_unprotected(
   Chain_Control *the_chain
 )
@@ -82,7 +82,7 @@ Chain_Node *_Chain_Get_first_unprotected(
 
   return return_node;
 }
-#endif   /* USE_INLINES */
+#endif   /* RTEMS_INLINES */
 
 /*PAGE
  *

@@ -91,7 +91,7 @@ extern "C" {
  *  type checking with no cost in code size or execution speed.
  */
 
-#ifdef USE_INLINES
+#ifdef RTEMS_INLINES
 # ifdef __GNUC__
 #  define RTEMS_INLINE_ROUTINE static __inline__
 # else

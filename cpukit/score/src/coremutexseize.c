@@ -75,7 +75,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
   _Thread_Enable_dispatch();
 }
 
-#if !defined(USE_INLINES)
+#if !defined(RTEMS_INLINES)
 int _CORE_mutex_Seize_interrupt_trylock(
   CORE_mutex_Control  *the_mutex,
   ISR_Level           *level_p

@@ -36,7 +36,7 @@
  *  NOTE:  XXX... This routine may be able to be optimized.
  */
 
-#ifndef USE_INLINES
+#ifndef RTEMS_INLINES
 
 Thread_Control *_Thread_Get (
   Objects_Id           id,

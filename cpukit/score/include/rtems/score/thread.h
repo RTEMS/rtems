@@ -741,7 +741,7 @@ boolean _Thread_Evaluate_mode( void );
  *         subroutine call.
  */
  
-#ifndef USE_INLINES
+#ifndef RTEMS_INLINES
 Thread_Control *_Thread_Get (
   Objects_Id           id,
   Objects_Locations   *location

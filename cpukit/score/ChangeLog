@@ -1,5 +1,15 @@
 2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	PR 525/rtems
+	* include/rtems/system.h: Use RTEMS_INLINES instead of USE_INLINES.
+	* include/rtems/score/chain.h: Ditto.
+	* include/rtems/score/thread.h: Ditto.
+	* src/chain.c: Ditto.
+	* src/coremutexseize.c: Ditto.
+	* src/threadget.c: Ditto.
+
+2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Don't use gmake to preinstall.
 
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
