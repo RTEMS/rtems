@@ -90,8 +90,9 @@ rtems_libio_config(
      * tweak config to reflect # of semaphores we will need
      */
 
-    config->maximum_semaphores += 1;            /* one for iop table */
-    config->maximum_semaphores += max_fds;
+    /* one for iop table */
+    config->RTEMS_api_configuration->maximum_semaphores += 1; 
+    config->RTEMS_api_configuration->maximum_semaphores += max_fds;
 }
 
 /*

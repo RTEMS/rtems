@@ -45,6 +45,7 @@ extern "C" {
 #include <rtems/rtems/eventset.h>
 #include <rtems/rtems/asr.h>
 #include <rtems/rtems/attr.h>
+#include <rtems/rtems/status.h>
 
 /*
  *  Constant to be used as the ID of current task

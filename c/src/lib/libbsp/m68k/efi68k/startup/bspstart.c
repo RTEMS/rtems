@@ -199,7 +199,7 @@ int main(
    * Add 1 region for Malloc in libc_low
    */
 
-  BSP_Configuration.maximum_regions++;
+  BSP_Configuration.RTEMS_api_configuration->maximum_regions++;
 
   /*
    * Add 1 extension for newlib libc

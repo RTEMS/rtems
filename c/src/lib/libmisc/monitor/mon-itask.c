@@ -42,12 +42,12 @@ rtems_monitor_init_task_next(
     rtems_initialization_tasks_table *itask;
     int n = rtems_get_index(*next_id);
 
-    if (n >= c->number_of_initialization_tasks)
+    if (n >= c->RTEMS_api_configuration->number_of_initialization_tasks)
         goto failed;
     
     _Thread_Disable_dispatch();
 
-    itask = c->User_initialization_tasks_table + n;
+    itask = c->RTEMS_api_configuration->User_initialization_tasks_table + n;
 
     /*
      * dummy up a fake id and name for this item

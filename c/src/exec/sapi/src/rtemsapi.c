@@ -45,6 +45,10 @@ void _RTEMS_API_Initialize(
   rtems_configuration_table *configuration_table
 )
 {
+  rtems_api_configuration_table *api_configuration;
+
+  api_configuration = configuration_table->RTEMS_api_configuration;
+
   _Attributes_Handler_initialization();
  
   _Interrupt_Manager_initialization();
@@ -52,38 +56,30 @@ void _RTEMS_API_Initialize(
   _Multiprocessing_Manager_initialization();
  
   _RTEMS_tasks_Manager_initialization(
-    configuration_table->maximum_tasks,
-    configuration_table->number_of_initialization_tasks,
-    configuration_table->User_initialization_tasks_table
+    api_configuration->maximum_tasks,
+    api_configuration->number_of_initialization_tasks,
+    api_configuration->User_initialization_tasks_table
   );
  
-  _Timer_Manager_initialization( configuration_table->maximum_timers );
+  _Timer_Manager_initialization( api_configuration->maximum_timers );
  
   _Signal_Manager_initialization();
  
   _Event_Manager_initialization();
  
   _Message_queue_Manager_initialization(
-    configuration_table->maximum_message_queues
+    api_configuration->maximum_message_queues
   );
  
-  _Semaphore_Manager_initialization(
-    configuration_table->maximum_semaphores
-  );
+  _Semaphore_Manager_initialization( api_configuration->maximum_semaphores );
  
-  _Partition_Manager_initialization(
-    configuration_table->maximum_partitions
-  );
+  _Partition_Manager_initialization( api_configuration->maximum_partitions );
  
-  _Region_Manager_initialization( configuration_table->maximum_regions );
+  _Region_Manager_initialization( api_configuration->maximum_regions );
  
-  _Dual_ported_memory_Manager_initialization(
-    configuration_table->maximum_ports
-  );
+  _Dual_ported_memory_Manager_initialization( api_configuration->maximum_ports);
  
-  _Rate_monotonic_Manager_initialization(
-    configuration_table->maximum_periods
-  );
+  _Rate_monotonic_Manager_initialization( api_configuration->maximum_periods );
 }
 
 /* end of file */

@@ -21,12 +21,18 @@
 extern "C" {
 #endif
 
+#include <rtems/posix/config.h>
+#include <rtems/rtems/config.h>
+
+/*  XXX <rtems/rtems/config.h> should cover these
 #include <rtems/rtems/status.h>
+#include <rtems/rtems/types.h>
+#include <rtems/rtems/tasks.h>
+*/
+
 #include <rtems/extension.h>
 #include <rtems/io.h>
 #include <rtems/score/mpci.h>
-#include <rtems/rtems/types.h>
-#include <rtems/rtems/tasks.h>
 
 /*
  *  The following records define the Multiprocessor Configuration
@@ -50,32 +56,24 @@ typedef struct {
  *  table primarily defines the following:
  *
  *     + location and size of the RTEMS Workspace
- *     + required number of each object type
  *     + microseconds per clock tick
  *     + clock ticks per task timeslice
+ *     + required number of each object type for each API configured
  */
 
 typedef struct {
   void                             *work_space_start;
   unsigned32                        work_space_size;
-  unsigned32                        maximum_tasks;
-  unsigned32                        maximum_timers;
-  unsigned32                        maximum_semaphores;
-  unsigned32                        maximum_message_queues;
-  unsigned32                        maximum_partitions;
-  unsigned32                        maximum_regions;
-  unsigned32                        maximum_ports;
-  unsigned32                        maximum_periods;
   unsigned32                        maximum_extensions;
   unsigned32                        microseconds_per_tick;
   unsigned32                        ticks_per_timeslice;
-  unsigned32                        number_of_initialization_tasks;
-  rtems_initialization_tasks_table *User_initialization_tasks_table;
-  unsigned32                        number_of_device_drivers;
   unsigned32                        maximum_devices;
+  unsigned32                        number_of_device_drivers;
   rtems_driver_address_table       *Device_driver_table;
   rtems_extensions_table           *User_extension_table;
   rtems_multiprocessing_table      *User_multiprocessing_table;
+  rtems_api_configuration_table    *RTEMS_api_configuration;
+  posix_api_configuration_table    *Posix_api_configuration;
 } rtems_configuration_table;
 
 /*

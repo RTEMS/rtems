@@ -22,7 +22,6 @@
 extern "C" {
 #endif
  
-
 extern rtems_initialization_tasks_table Initialization_tasks[];
 extern rtems_driver_address_table       Device_drivers[];
 extern rtems_configuration_table        Configuration;
@@ -341,9 +340,8 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #endif
 
 #ifdef CONFIGURE_INIT
-rtems_configuration_table Configuration = {
-  CONFIGURE_EXECUTIVE_RAM_WORK_AREA,
-  CONFIGURE_EXECUTIVE_RAM_SIZE,
+
+rtems_api_configuration_table Configuration_RTEMS_API = {
   CONFIGURE_MAXIMUM_TASKS,
   CONFIGURE_MAXIMUM_TIMERS,
   CONFIGURE_MAXIMUM_SEMAPHORES,
@@ -352,18 +350,25 @@ rtems_configuration_table Configuration = {
   CONFIGURE_MAXIMUM_REGIONS,
   CONFIGURE_MAXIMUM_PORTS,
   CONFIGURE_MAXIMUM_PERIODS,
+  sizeof (Initialization_tasks)/
+   sizeof(rtems_initialization_tasks_table), /* number of init tasks */
+  Initialization_tasks                       /* init task(s) table */
+};
+
+rtems_configuration_table Configuration = {
+  CONFIGURE_EXECUTIVE_RAM_WORK_AREA,
+  CONFIGURE_EXECUTIVE_RAM_SIZE,
   CONFIGURE_MAXIMUM_USER_EXTENSIONS,
   CONFIGURE_MICROSECONDS_PER_TICK,
   CONFIGURE_TICKS_PER_TIMESLICE,
-  sizeof (Initialization_tasks)/
-   sizeof(rtems_initialization_tasks_table), /* number of init tasks */
-  Initialization_tasks,                      /* init task(s) table */
+  CONFIGURE_MAXIMUM_DEVICES,
   sizeof (Device_drivers)/
     sizeof(rtems_driver_address_table),      /* number of device drivers */
-  CONFIGURE_MAXIMUM_DEVICES,
   Device_drivers,                            /* pointer to driver table */
   CONFIGURE_INITIAL_EXTENSIONS,              /* pointer to initial extensions */
-  CONFIGURE_MULTIPROCESSING_TABLE            /* ptr to MP config table */
+  CONFIGURE_MULTIPROCESSING_TABLE,           /* pointer to MP config table */
+  &Configuration_RTEMS_API,                  /* pointer to RTEMS API config */
+  NULL                                       /* pointer to RTEMS API config */
 };
 #endif
 

@@ -212,7 +212,7 @@ int main(
    * Add 1 region for the RTEMS Malloc
    */
 
-  BSP_Configuration.maximum_regions++;
+  BSP_Configuration.RTEMS_api_configuration->maximum_regions++;
 
   /*
    * Add 1 extension for newlib libc

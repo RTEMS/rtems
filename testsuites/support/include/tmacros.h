@@ -109,7 +109,8 @@ extern "C" {
     (TB)->ticks  = TK; }
 
 #define task_number( tid ) \
-  ( rtems_get_index( tid ) - BSP_Configuration.number_of_initialization_tasks )
+  ( rtems_get_index( tid ) - \
+     BSP_Configuration.RTEMS_api_configuration->number_of_initialization_tasks )
 
 static inline rtems_unsigned32 get_ticks_per_second( void )
 {
