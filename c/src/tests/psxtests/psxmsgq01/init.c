@@ -675,7 +675,9 @@ void validate_mq_receive_error_codes( )
 
 void verify_open_functionality()
 {
+#if 0
   mqd_t           n_mq;
+#endif
 
   Start_Test( "mq_open functionality" );
 
@@ -765,7 +767,7 @@ void verify_timed_send_queue(
     fatal_posix_service_status( errno, ETIMEDOUT,  "errno ETIMEDOUT");
   }
 
-  printf("Init: %d sec %d us\n", tv3.tv_sec, tv3.tv_usec );
+  printf("Init: %ld sec %ld us\n", (long)tv3.tv_sec, (long)tv3.tv_usec );
 
   if ( is_blocking ) /* non-blocking queue */
     assert( tv3.tv_sec == 1 );
@@ -817,7 +819,7 @@ void verify_timed_receive_queue(
   fatal_int_service_status( status, -1, "mq_timedreceive status");
   if ( is_blocking )
     fatal_posix_service_status( errno, ETIMEDOUT,  "errno ETIMEDOUT");
-  printf( "Init: %d sec %d us\n", tv3.tv_sec, tv3.tv_usec );
+  printf( "Init: %ld sec %ld us\n", (long)tv3.tv_sec, (long)tv3.tv_usec );
 
   if ( is_blocking )
     assert( tv3.tv_sec == 1 );
