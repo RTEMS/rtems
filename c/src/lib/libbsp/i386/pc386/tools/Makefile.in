@@ -59,6 +59,6 @@ CLEAN_ADDITIONS += $(HOST_ARCH)
 CLOBBER_ADDITIONS +=
 
 all:	$(ARCH) $(SRCS) $(PGMS)
-	$(INSTALL_VARIANT) -m 555 $(PGMS) ${PROJECT_RELEASE}/build-tools
+	$(INSTALL) -m 555 $(PGMS) ${PROJECT_RELEASE}/build-tools
 	uudecode < $(srcdir)/diskboot.uue \
 	    > $(PROJECT_RELEASE)/build-tools/diskboot.exe
