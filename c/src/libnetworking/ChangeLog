@@ -1,3 +1,8 @@
+2000-11-30	Joel Sherrill <joel@OARcorp.com>
+
+	* sys/ttycom.h: Moved to lib/include/sys.
+	* Makefile.am: Modified to reflect above.
+
 2000-11-27	Joel Sherrill <joel@OARcorp.com>
 
 	* libc/res_init.c: Fix typo - adding missing # on include.
