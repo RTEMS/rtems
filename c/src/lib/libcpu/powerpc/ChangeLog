@@ -1,3 +1,7 @@
+2001-05-14	Joel Sherrill <joel@OARcorp.com>
+
+	* shared/include/cpuIdent.c: Account for duplicate numbers.
+
 2002-05-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/powerpc/debugmod.h: New file (extracted from
