@@ -61,6 +61,9 @@ rtems_status_code rtems_task_set_priority(
        !_RTEMS_tasks_Priority_is_valid( new_priority ) )
     return RTEMS_INVALID_PRIORITY;
 
+  if ( !old_priority )
+    return RTEMS_INVALID_ADDRESS;
+
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
 
