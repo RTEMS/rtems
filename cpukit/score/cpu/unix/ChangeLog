@@ -1,3 +1,8 @@
+2003-04-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add PREINSTALL_FILES and TMPINSTALL_FILES to
+	all-local (Sync with other Makefile.ams).
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.

@@ -39,7 +39,8 @@ LIB = $(ARCH)/libscorecpu.a
 $(LIB): $(OBJS)
 	$(make-library)
 
-all-local: $(ARCH) $(LIB)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB) \
+	$(TMPINSTALL_FILES)
 
 EXTRA_DIST = cpu.c
 
