@@ -63,7 +63,6 @@
 @include bsp.texi
 @include debug.texi
 @include freesw.texi
-@include embeddedinfo.texi
 @include hwdebugaids.texi
 @include projects.texi
 @include endoftime.texi
@@ -87,7 +86,6 @@ Common questions have been divided into the following categories.
 * BSP Questions::
 * Debugging Hints::
 * Free Software that Works with RTEMS::
-* Resources for Embedded Information::
 * Hardware to Ease Debugging::
 * RTEMS Projects::
 * Date/Time Issues in Systems Using RTEMS::

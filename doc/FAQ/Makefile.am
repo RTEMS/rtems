@@ -13,7 +13,7 @@ include $(top_srcdir)/project.am
 include $(top_srcdir)/main.am
 
 GENERATED_FILES = basic.texi tools.texi concepts.texi build45.texi bsp.texi \
-    debug.texi freesw.texi embeddedinfo.texi hwdebugaids.texi projects.texi \
+    debug.texi freesw.texi hwdebugaids.texi projects.texi \
     endoftime.texi
 
 COMMON_FILES += $(top_srcdir)/common/cpright.texi
@@ -62,11 +62,6 @@ freesw.texi: freesw.t
 	    -u "Top" \
 	    -n "" < $< > $@
 
-embeddedinfo.texi: embeddedinfo.t
-	$(BMENU2) -c -p "" \
-	    -u "Top" \
-	    -n "" < $< > $@
-
 hwdebugaids.texi: hwdebugaids.t
 	$(BMENU2) -c -p "" \
 	    -u "Top" \
@@ -84,5 +79,5 @@ endoftime.texi: endoftime.t
 
 CLEANFILES += FAQ.info FAQ.info-?
 
-EXTRA_DIST = entry basic.t bsp.t build45.t concepts.t debug.t embeddedinfo.t \
+EXTRA_DIST = entry basic.t bsp.t build45.t concepts.t debug.t \
     endoftime.t freesw.t hwdebugaids.t projects.t tools.t
