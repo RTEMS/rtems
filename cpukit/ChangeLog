@@ -1,5 +1,7 @@
 2004-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ChangeLog: Merge-in libcsupport/ChangeLog.
+	* libcsupport/ChangeLog: Remove.
 	* ChangeLog: Merge-in libblock/ChangeLog, libfs/ChangeLog.
 	* libblock/ChangeLog, libfs/ChangeLog: Remove.
 	* ChangeLog: Merge-in libmisc/ChangeLog, librpc/ChangeLog.
@@ -27,6 +29,7 @@
 	* librpc/Makefile.am: Add PREINSTALL_DIRS.
 	* libblock/Makefile.am: Add PREINSTALL_DIRS.
 	* libfs/Makefile.am: Add PREINSTALL_DIRS.
+	* libcsupport/Makefile.am: Add PREINSTALL_DIRS.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -54,11 +57,15 @@
 	PREINSTALL_FILES to CLEANFILES.
 	* libfs/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
 	PREINSTALL_FILES to CLEANFILES.
+	* libcsupport/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
+	PREINSTALL_FILES to CLEANFILES.
 
 2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Requires automake >= 1.8.1.
 	* score/cpu/Makefile.am: Use @RTEMS_CPU@ instead of $(RTEMS_CPU).
+	PR 548/rtems
+	* libcsupport/Makefile.am: Add src/envlock.c.
 
 2004-01-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -97,6 +104,9 @@
 	* libblock/Makefile.am: Include compile.am, again. Eliminate C_FILES.
 	Reformat.
 	* libfs/Makefile.am: Include compile.am, again. Reformat/Cleanup.
+	* libcsupport/Makefile.am: Reformat, add UNUSED_FILES.
+	* libcsupport/Makefile.am: Include compile.am, again. Eliminate
+	DOC_FILES.
 
 2004-01-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -150,6 +160,10 @@
 	lib*_a_SOURCES.
 	* libfs/Makefile.am: Build lib*$(LIB_VARIANT).a instead of
 	$(ARCH)/lib*.a.
+	* libcsupport/Makefile.am: Add libs to CLEANFILES Set lib*_g_a_SOURCES =
+	lib*_a_SOURCES.
+	* libcsupport/Makefile.am: Build libcsupport$(LIB_VARIANT).a instead of
+	$(ARCH)/libcsupport.a.
 
 2004-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -174,6 +188,8 @@
 	rules.
 	* libfs/Makefile.am: Build library using EXTRA_LIBRARIES and automake
 	rules.
+	* libcsupport/Makefile.am: Build library using EXTRA_LIBRARIES and
+	automake rules.
 
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
@@ -210,6 +226,9 @@
 	PR 543/rtems
 	* score/src/threadclose.c: Make the task delete extension run outside a
 	dispatch disabled critical section so extensions can free resources.
+	PR 542/filesystem
+	* libcsupport/include/rtems/libio_.h: Add rtems_libio_iop_to_descriptor
+	macro to convert iop to the corresponding integer file descriptor.
 
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -240,6 +259,9 @@
 	* libblock/Makefile.am: Use mkdir_p. Remove dirs from
 	PRE/TMPINSTALL_FILES.
 	* libfs/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* libcsupport/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
+	* libcsupport/Makefile.am: Remove BUILT_SOURCES.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -292,6 +314,8 @@
 	* libblock/Makefile.am: Add $(dirstamp) to preinstallation rules.
 	* libfs/Makefile.am: Add $(dirstamp) to compilation rules.
 	* libfs/Makefile.am: Add $(dirstamp) to preinstallation rules.
+	* libcsupport/Makefile.am: Add $(dirstamp) to compilation rules.
+	* libcsupport/Makefile.am: Add $(dirstamp) to preinstallation rules.
 
 2003-11-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -362,11 +386,28 @@
 	aclocal/rtems-top.m4, aclocal/sysv-ipc.m4: Fix underquoting to silence
 	automake-1.8.
 
+2003-11-26	Joel Sherrill <joel@OARcorp.com>
+
+	PR 524/filesystem
+	* libcsupport/src/newlibc.c: Address 1K buffer leak from incomplete
+	cleanup of newlib reentrancy handler.
+	PR 523/filesystem
+	* libcsupport/src/malloc.c: Make malloc family safer for use from ISRs
+	and dispatching critical sections. If in a critical section while doing
+	a free(), then the free is deferred until the next malloc() attempt.
+
 2003-11-25	Joel Sherrill <joel@OARcorp.com>
 
 	PR 526/rtems
 	* score/src/threadcreateidle.c: Idle task name should be a string and
 	PR484 broke this.
+
+2003-11-25	Jennifer Averett <jennifer@OARcorp.com>
+
+	PR 519/filesystem
+	* libcsupport/include/rtems/libio_.h, libcsupport/src/eval.c,
+	libcsupport/src/rmdir.c, libcsupport/src/unlink.c: Check write
+	permissions in parent directory for file or directory delete.
 
 2003-11-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -396,6 +437,9 @@
 	* posix/Makefile.am: Reworked.
 	* rtems/Makefile.am: Reworked.
 	* libblock/Makefile.am: Reworked.
+	* libcsupport/include/rtems/cdefs.h: Use _RTEMS_CDEFS_H guards.
+	* libcsupport/include/rtems/cdefs.h: New.
+	* libcsupport/Makefile.am: Completely reworked.
 
 2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -460,6 +504,8 @@
 	* libfs/src/imfs/config.h: Remove.
 	* libfs/src/imfs/Makefile.am: Remove config.h AM_CPPFLAGS +=
 	-I$(top_builddir).
+	* libcsupport/src/config.h: Remove.
+	* libcsupport/src/Makefile.am: AM_CPPFLAGS += -I$(top_builddir).
 
 2003-11-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -491,6 +537,10 @@
 	* libfs/src/dosfs/fat_fat_operations.c: Improve write speed with FAT12
 	and FAT16 filesystems. Previously merged on 4.6 branch.
 	* libfs/ChangeLog: Correct line length.
+	PR 511/filesystem
+	* libcsupport/src/malloc.c: Add deferred free and protect against C
+	Program Heap operations while in a dispatch disable critical section or
+	ISR.
 
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -544,6 +594,16 @@
 	PR 504/rtems
 	* score/include/rtems/score/coremutex.h: Add fatal error check for a
 	task blocking on a mutex when thread dispatching is disabled.
+	PR 504/rtems
+	* libcsupport/src/newlibc.c: Fix memory allocation of libc extension so
+	it is dispatch disabled safe See PR for detailed explanation.
+
+2003-09-26	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 498/rtems
+	* libcsupport/src/printk.c: RTEMS printk() does not support the %i
+	format which is used by a lot of driver/BSP etc. code. The trivial patch
+	allows %i/%I as an alias for %d/%D.
 
 2003-09-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -606,6 +666,17 @@
 	* score/include/rtems/score/thread.h: Change struct 
 	Thread_Control_struct.libc_reent to using struct _reent*.
 	* score/inline/rtems/score/thread.inl: Reflect change above.
+	PR 489/rtems
+	* libcsupport/src/newlibc.c: Reflect struct
+	Thread_Control_struct.libc_reent  having changed from void * to struct
+	_reent*.
+
+2003-09-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libcsupport/src/sync.c: Don't undef __STRICT_ANSI__. Use struct _reent
+	(struct reent doesn't exist).
+	PR 486/rtems
+	* libcsupport/src/newlib.c: Unconditionally include <stdio.h>.
 
 2003-09-11	Joel Sherrill <joel@OARcorp.com>
 
@@ -976,10 +1047,73 @@
 	libfs/src/imfs/imfs_utime.c, libfs/src/imfs/ioman.c,
 	libfs/src/imfs/linearfile.c, libfs/src/imfs/memfile.c,
 	libfs/src/imfs/miniimfs_init.c: URL for license changed.
+	* libcsupport/include/chain.h, libcsupport/include/clockdrv.h,
+	libcsupport/include/console.h, libcsupport/include/iosupp.h,
+	libcsupport/include/rtc.h, libcsupport/include/spurious.h,
+	libcsupport/include/timerdrv.h, libcsupport/include/vmeintr.h,
+	libcsupport/include/motorola/mc68230.h,
+	libcsupport/include/rtems/libcsupport.h,
+	libcsupport/include/rtems/libio.h, libcsupport/include/rtems/libio_.h,
+	libcsupport/include/rtems/termiostypes.h,
+	libcsupport/include/sys/termios.h, libcsupport/include/zilog/z8036.h,
+	libcsupport/include/zilog/z8530.h, libcsupport/include/zilog/z8536.h,
+	libcsupport/src/__brk.c, libcsupport/src/__gettod.c,
+	libcsupport/src/__sbrk.c, libcsupport/src/__times.c,
+	libcsupport/src/access.c, libcsupport/src/base_fs.c,
+	libcsupport/src/cfgetispeed.c, libcsupport/src/cfgetospeed.c,
+	libcsupport/src/cfsetispeed.c, libcsupport/src/cfsetospeed.c,
+	libcsupport/src/chdir.c, libcsupport/src/chmod.c,
+	libcsupport/src/chown.c, libcsupport/src/chroot.c,
+	libcsupport/src/close.c, libcsupport/src/ctermid.c,
+	libcsupport/src/dup.c, libcsupport/src/dup2.c, libcsupport/src/eval.c,
+	libcsupport/src/fchdir.c, libcsupport/src/fchmod.c,
+	libcsupport/src/fcntl.c, libcsupport/src/fdatasync.c,
+	libcsupport/src/fpathconf.c, libcsupport/src/fs_null_handlers.c,
+	libcsupport/src/fstat.c, libcsupport/src/fsync.c,
+	libcsupport/src/ftruncate.c, libcsupport/src/getdents.c,
+	libcsupport/src/getpwent.c, libcsupport/src/hosterr.c,
+	libcsupport/src/ioctl.c, libcsupport/src/isatty.c,
+	libcsupport/src/libio.c, libcsupport/src/libio_sockets.c,
+	libcsupport/src/link.c, libcsupport/src/lseek.c,
+	libcsupport/src/lstat.c, libcsupport/src/malloc.c,
+	libcsupport/src/mallocfreespace.c, libcsupport/src/mkdir.c,
+	libcsupport/src/mkfifo.c, libcsupport/src/mknod.c,
+	libcsupport/src/mount.c, libcsupport/src/newlibc.c,
+	libcsupport/src/no_libc.c, libcsupport/src/no_posix.c,
+	libcsupport/src/open.c, libcsupport/src/pathconf.c,
+	libcsupport/src/pipe.c, libcsupport/src/privateenv.c,
+	libcsupport/src/read.c, libcsupport/src/readlink.c,
+	libcsupport/src/rewinddir.c, libcsupport/src/rmdir.c,
+	libcsupport/src/seekdir.c, libcsupport/src/stat.c,
+	libcsupport/src/symlink.c, libcsupport/src/sync.c,
+	libcsupport/src/tcdrain.c, libcsupport/src/tcflow.c,
+	libcsupport/src/tcflush.c, libcsupport/src/tcgetattr.c,
+	libcsupport/src/tcgetprgrp.c, libcsupport/src/tcsendbreak.c,
+	libcsupport/src/tcsetattr.c, libcsupport/src/tcsetpgrp.c,
+	libcsupport/src/telldir.c, libcsupport/src/termios.c,
+	libcsupport/src/termiosinitialize.c, libcsupport/src/truncate.c,
+	libcsupport/src/umask.c, libcsupport/src/unixlibc.c,
+	libcsupport/src/unlink.c, libcsupport/src/unmount.c,
+	libcsupport/src/utime.c, libcsupport/src/write.c: URL for license
+	changed.
+	PR 479/rtems_misc
+	* libcsupport/src/malloc.c: Per multiple standards realloc does not free
+	the original memory if the allocation of the requested larger block
+	fails.
 
 2003-09-03	Joel Sherrill <joel@OARcorp.com>
 
 	* libfs/msdos_create.c: Remove unused variable warning.
+
+2003-09-02	Joel Sherrill <joel@OARcorp.com>
+
+	* libcsupport/src/open.c: Fix typo.
+	* libcsupport/src/malloc.c: Remove test define left in.
+
+2003-09-02	Ilya Alexeev <ilya@continuum.ru>
+
+	PR 472/filesystem
+	src/malloc.c: Need to include apimutex.h when MALLOC_STATS is defined.
 
 2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1005,6 +1139,20 @@
 	* posix/src/setpgid.c: Remove (Moved to ../libcsupport/src).
 	* posix/src/setsid.c: Remove (Moved to ../libcsupport/src).
 	* posix/Makefile.am: Reflect changes above.
+	PR 449/rtems:
+	* libcsupport/src/getegid.c: New (Copied from ../posix/src).
+	* libcsupport/src/geteuid.c: New (Copied from ../posix/src).
+	* libcsupport/src/getgid.c: New (Copied from ../posix/src).
+	* libcsupport/src/getgroups.c: New (Copied from ../posix/src).
+	* libcsupport/src/getlogin.c: New (Copied from ../posix/src).
+	* libcsupport/src/getpgrp.c: New (Copied from ../posix/src).
+	* libcsupport/src/getpid.c: New (Copied from ../posix/src).
+	* libcsupport/src/getppid.c: New (Copied from ../posix/src).
+	* libcsupport/src/getuid.c: New (Copied from ../posix/src).
+	* libcsupport/src/setpgid.c: New (Copied from ../posix/src).
+	* libcsupport/src/setsid.c: New (Copied from ../posix/src).
+	* libcsupport/src/no_posix: Remove getpid and _getpid_r.
+	* libcsupport/Makefile.am: Reflect changes above.
 
 2003-08-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1051,6 +1199,8 @@
 	added. This new service makes it easier to iterate over all the
 	tasks/threads in a system and perform an action on them. This change is
 	to use the new thread iteration service.
+	* libcsupport/Makefile.am: Add fileio to list of interactive tests.
+	* libcsupport/src/sync.c: New (Copied from ../posix/src). New file.
 
 2003-08-13	Joel Sherrill <joel@OARcorp.com>
 
@@ -1081,6 +1231,9 @@
 	PR 436/rtems_misc
 	* libmisc/monitor/mon-monitor.c: monitor registered commands list
 	manipulation bugs.
+	PR 442/filesystem
+	* libcsupport/src/open.c: file never closed if ftruncate() fails in
+	open().
 
 2003-08-05	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
@@ -1264,6 +1417,15 @@
 	* libfs/src/dosfs/fat_fat_operations.c: Ditto.
 	* libfs/src/dosfs/fat_file.c: Ditto.
 	* libfs/src/dosfs/msdos_conv.c: Ditto.
+	* libcsupport/configure.ac: Remove (Merged-in into ../configure.ac).
+	* libcsupport/Makefile.am: DOC_FILES = src/TODO src/CASES, Reflect
+	having merged configure.ac into ../configure.ac.
+	* libcsupport/src/config.h: New.
+
+2003-07-08	Joel Sherrill <joel@OARcorp.com>
+
+	PR 419/rtems
+	* libcsupport/src/termios.c: Removed warning.
 
 2003-07-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1288,6 +1450,8 @@
 	Victor V. Vengerov <vvv@oktet.ru> to remove Linux code.
 	* libfs/src/dosfs/fat.c, libfs/src/dosfs/fat.h: Comment have been
 	updated.
+	* libcsupport/include/rtems/libio.h, libcsupport/src/termios.c: Add the
+	rtems_termios_bufsize call.
 
 2003-06-13	Joel Sherrill <joel@OARcorp.com>
 
@@ -1315,6 +1479,8 @@
 2003-05-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/include/rtems/rtems/types.h: Include stdint.h.
+	* libcsupport/Makefile.am: Conditionally install stdint.h/inttypes.h.
+	* libcsupport/configure.ac: Check for system-stdint.h/inttypes.h.
 
 2003-05-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1328,6 +1494,8 @@
 	PR 409:
 	* rtems/include/rtems/rtems/types.h: Include rtems/stdint.h. Apply
 	c99-types to typedef rtems_[un]signed[8|16|32|64].
+	PR 409:
+	* libcsupport/include/stdint.h: Include rtems/stdint.h.
 
 2003-05-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1341,18 +1509,40 @@
 	* aclocal/env-rtemscpu.m4: Remove stray '/' in setting up 
 	project_libdir.
 
+2003-04-17	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 399/rtems_misc
+	* libcsupport/src/termios.c: In canonical mode, when input is present in
+	the input buffer that contains an EOL character and some following
+	characters, a read call read data behind the EOL character, although it
+	should stop reading with the EOL character.
+
 2003-04-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libmisc/dummy/Makefile.am: Remove stray dummy.rel.
+	* libcsupport/src/no_posix.c: include <reent.h> instead of <sys/reent.h>.
 
 2003-04-17	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-ss-20030417.
 
+2003-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 389/rtems
+	* libcsupport/src/no_posix.c: Correct _kill_r() prototype and make it
+	conditional on newlib.
+
 2003-04-11	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/version.m4: Updated to rtems-ss-20030411.
 	* aclocal/version.m4: Updated to rtems-ss-20020411.
+
+2003-04-03	Eri Valette <eric.valette@free.fr>
+
+	PR 381/core
+	* libcsupport/src/newlibc.c: Switch from using _REENT_INIT to
+	_REEINT_INIT_PTR to fix strange run-time problem where EIP was corrupted
+	on pc386 BSP.
 
 2003-03-27	Joel Sherrill <joel@OARcorp.com>
 
@@ -1386,6 +1576,13 @@
 	compliant. Let Thread_Handler verify that _init/_main are non-NULL
 	before calling them (gives the linker script/user more freedom to handle
 	special cases).
+
+2003-03-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libcsupport/configure.ac: AC_CHECK_FUNCS(strlcpy strlcat).
+	* libcsupport/src/strlcat.c: New (extracted from pppd/utils.c).
+	* libcsupport/src/strlcpy.c: New (extracted from pppd/utils.c).
+	* libcsupport/Makefile.am: Add BSD_C_FILES, strlcat.c, strlcpy.c.
 
 2003-03-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1422,6 +1619,7 @@
 	* libmisc/configure.ac: Remove AC_CONFIG_AUX_DIR.
 	* libblock/configure.ac: Remove AC_CONFIG_AUX_DIR.
 	* libfs/configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* libcsupport/configure.ac: Remove AC_CONFIG_AUX_DIR.
 
 2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1433,6 +1631,12 @@
 2003-02-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AC_SUBST(RTEMS_VERSION,_RTEMS_VERSION).
+
+2003-02-20	Wolfram Wadepohl <W.Wadepohl@indumat.de>
+
+	PR 357/rtems_misc
+	* libcsupport/src/termios.c (rtems_termios_open):  Fixed code the
+	incorrectly checked that the wrong pointer during allocation was NULL.
 
 2003-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1447,6 +1651,7 @@
 	* aclocal/env-rtemscpu.m4: Remove GCC_SPECS.
 	* aclocal/env-rtemsbsp.m4: Remove GCC_SPECS. capture/capture-cli.c: Add
 	proper definition to avoid compiler warnings. Apply int = getchar().
+	* libcsupport/src/privateenv.c: Fix prototype for free_user_env.
 
 2003-02-14	Till Straumann <strauman@slac.stanford.edu>
 
@@ -1483,6 +1688,30 @@
 	* libblock/configure.ac: AC_PREREQ(2.57).
 	* libfs/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
 	* libfs/configure.ac: AC_PREREQ(2.57).
+	* libcsupport/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* libcsupport/configure.ac: AC_PREREQ(2.57).
+
+2003-02-06	Joel Sherrill <joel@OARcorp.com>
+
+	* libcsupport/include/sys/ioccom.h: Include <sys/types.h> not
+	<machine/types.h> so Linux port builds.
+
+2003-02-05	Till Straumann  <strauman@slac.stanford.edu>
+
+	PR 340/filesystem
+	* libcsupport/src/fcntl.c: Add missing _fcntl_r assumed to exist by
+	newlib.
+
+2003-02-05	Joel Sherrill <joel@OARcorp.com>
+
+	* libcsupport/include/sys/ioccom.h: Fix so not using internal RTEMS
+	types in libc code.
+
+2003-02-03	Till Straumann  <strauman@slac.stanford.edu>
+
+	PR 339/filesystem
+	* libcsupport/src/chroot.c: Fix violation of FS node object copy
+	semantics.
 
 2003-02-03	Steven Johnson <sjohnson@neurizon.net>
 
@@ -1495,6 +1724,9 @@
 	PR 338/filesystem
 	* sapi/include/rtems/io.h, sapi/src/io.c: Side-effect of fixing
 	reentrancy problem with rtems_io_lookup_name() (API change).
+	PR 338/filesystem
+	* libcsupport/src/unixlibc.c: Side-effect of fixing reentrancy problem
+	with  rtems_io_lookup_name() (API change).
 
 2003-01-28	Joel Sherrill <joel@OARcorp.com>
 
@@ -1526,6 +1758,10 @@
 	* automake/compile.am: Remove CLEAN_DEPEND (Unused).  Remove
 	CLOBBER_DEPEND (Unused).
 
+2003-01-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libcsupport/Makefile.am: Eliminate OBJS.
+
 2003-01-10	Joel Sherrill <joel@OARcorp.com>
 
 	* score/src/objectmp.c: Corrected use of name parameter to reflect that
@@ -1533,6 +1769,12 @@
 	* rtems/src/msg.c, rtems/src/part.c, rtems/src/sem.c, rtems/src/tasks.c:
 	Correct object class control structure initialization for
 	multiprocessing configurations.
+	* libcsupport/include/rtems/libio.h: Rename __dev_t to __rtems_dev_t to
+	avoid conflict with GNU/Linux header files.
+
+2003-01-03	Till Straumann  <strauman@slac.stanford.edu>
+
+	* ChangeLog, base_fs.c, getpwent.c, privateenv.c  Per PR303, Fix violation of node_access copy syemantics 
 
 2003-01-03	Joel Sherrill <joel@OARcorp.com>
 
@@ -1551,6 +1793,11 @@
 	maintained.
 	* libfs/src/dosfs/msdos_initsupp.c: Specify inherited priority as 0
 	since this is a FIFO queuing semaphore.
+
+2002-12-26	Till Straumann  <strauman@slac.stanford.edu
+
+	* libcsupport/src/fchdir.c: PR302 fix violation of FS node object copy
+	semantics.
 
 2002-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1698,6 +1945,13 @@
 	* aclocal/env-rtemsbsp.m4: Add AC_ARG_VAR for CPU_CFLAGS,
 	CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V, CFLAGS_PROFILE_V.
 	* aclocal/rtems-flags.m4: New.
+	* libcsupport/configure.ac: Add various checks to enhance portability.
+	* libcsupport/src/termios.c: Reflect changes to configure.ac.
+
+2002-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* libcsupport/src/malloc.c: Fixed code that incorrected did a disable
+	dispatch instead of locking and unlocking the allocator mutex.
 
 2002-12-02	Joel Sherrill <joel@OARcorp.com>
 
@@ -1713,6 +1967,12 @@
 	* libblock/src/bdbuf.c: Added cast to remove warning.
 	* libfs/src/dosfs/fat.h, libfs/src/dosfs/msdos.h: Added casts to remove
 	warnings on 16 bit targets like the h8300.
+	* libcsupport/include/rtems/libio.h: Internally use a union of an
+	unsigned64 and major/minor device so we don't get into trouble shifting.
+	The h8300 seemed to be impossible to remove warnings otherwise.
+	Eventually the structure definition of a dev_t might be better anyway.
+	* libcsupport/include/sys/ioccom.h: Added casts to remove warnings on 16
+	bit targets.
 
 2002-11-29	Eric Norum <eric.norum@usask.ca>
 
@@ -1733,10 +1993,19 @@
 	* libblock/configure.ac: Fix package name.
 	* libfs/configure.ac: Cosmetical fixes.
 	* libfs/configure.ac: Fix package name.
+	* libcsupport/configure.ac: Cosmetical fixes.
+	* libcsupport/configure.ac: Fix package name.
 
 2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/libio_.h: Remove.
+	* libcsupport/configure.ac: Check for sys/cdefs.h, Add NEED_SYS_CDEFS_H.
+	Add check for CHAR_BIT.
+	* libcsupport/Makefile.am: Conditionally install sys/cdefs.h iff using
+	newlib or if the host does not provide sys/cdefs.h (Fixes Linux/posix).
+	* libcsupport/configure.ac: Remove -ansi -fasm. Add checks to diagnose
+	potential system header conflicts.
+	* libcsupport/Makefile.am: Unconditionally install sys/cdefs.h.
 
 2002-11-18	Joel Sherrill <joel@OARcorp.com>
 
@@ -1777,6 +2046,10 @@
 	* aclocal/version.m4: Updated to rtems-ss-20021111.
 	* aclocal/version.m4: Updated to rtems-ss-20021111.
 
+2002-11-07	<strauman@slac.stanford.edu>
+
+	* libcsupport/src/mount.c: Per PR297, correct fs_mountme failure paths.
+
 2002-11-04	Joel Sherrill <joel@OARcorp.com>
 
 	* librpc/src/rpc/pmap_rmt.c: Removed warnings.
@@ -1786,6 +2059,7 @@
 	* ChangeLog: Corrected.
 	* posix/ChangeLog: Corrected.
 	* libmisc/stackchk/check.c: Removed warnings.
+	* libcsupport/ChangeLog: Corrected.
 
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
@@ -1794,6 +2068,9 @@
 	* rtems/src/regiongetinfo.c: Corrected return value check.
 	* libmisc/stackchk/check.c: Removed warning.
 	* librpc/src/rpc/svc_run.c: Remove warning.
+	* libcsupport/src/mallocfreespace.c: Corrected sense of status check to 
+	match change inside RTEMS.
+	* libcsupport/src/newlibc.c: Removed warning.
 
 2002-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1806,6 +2083,8 @@
 	* posix/src/psignal.c: Fix counting problem which resulted in too many
 	entries being in the POSIX signals default behavior table.
 	* posix/src/psignal.c: Reflect changes to signal names in newlib.
+	* libcsupport/src/printk.c: Add vprintk function for kernel printing
+	from routines which have already obtained the va_list pointer.
 
 2002-10-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1822,6 +2101,9 @@
 	warning.
 	* librpc/src/rpc/rpcdname.c: Add prototype of getdomainname() to
 	eliminate warning.
+	* libcsupport/include/rtems/libio.h: Change
+	rtems_filesystem_node_types_t from enumeration to int to eliminate
+	warnings when values are overridden.
 
 2002-10-28	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
@@ -1844,12 +2126,23 @@
 	* librpc/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
 	* libblock/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
 	* libfs/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
+	* libcsupport/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
 
 2002-10-24	Fabrizio Pirovano <pirovano.thysys@tiscalinet.it>
 
 	* libmisc/capture/capture.c, libmisc/monitor/mon-manager.c,
 	libmisc/stackchk/check.c: Patch to remove problems introduced by object
 	name rework.
+
+2002-10-24	<strauman@slac.stanford.edu>
+
+	* libcsupport/src/eval.c: Per PR293, added freenode calls for evaluate
+	link failures.
+
+2002-10-23	<strauman@slac.stanford.edu>
+
+	* src/mount.c per PR290, add check for ops->node_type_h
+	* src/mknod.c per PR291, remove erroneous call to freenod
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1862,6 +2155,8 @@
 	* libblock/.cvsignore: Reformat. Add autom4te*cache. Remove
 	autom4te.cache.
 	* libfs/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
+	* libcsupport/.cvsignore: Reformat. Add autom4te*cache. Remove
+	autom4te.cache.
 
 2002-10-21	Joel Sherrill <joel@OARcorp.com>
 
@@ -1882,6 +2177,14 @@
 	did not remove the resources associated with that file.  Reported by
 	Till Straumann <strauman@slac.stanford.edu> on the mailing list.
 
+2002-10-02	Eric Norum <eric.norum@usask.ca>
+
+	* libcsupport/src/getpwent.c: Per PR283, reimplement to address
+	reentrancy problems.
+	* libcsupport/src/getgrent.c: Removed as functionality is now just a
+	wrapper for  common routines in src/getpwent.c.
+	* libcsupport/Makefile.am: Reflect file removal.
+
 2002-09-14	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/src/psignal.c: Remove duplication from rtems/posix/psignal.h.
@@ -1898,6 +2201,14 @@
 	libfs/src/imfs/imfs_fchmod.c, libfs/src/imfs/memfile.c: Eliminated
 	warnings.  A lot of this focus was on changing read and write entry
 	points to return ssize_t as read(2) and write(2) now do.
+	* libcsupport/include/rtems/libio.h: Change rtems_filesystem_read_t and
+	rtems_filesystem_write_t to return ssize_t to match read(2) and write(2)
+	respectively.
+
+2002-09-14	Eric Norum <eric.norum@usask.ca>
+
+	* libcsupport/src/readdir_r.c: New file.
+	* libcsupport/Makefile.am: Reflect above.
 
 2002-09-07	Joel Sherrill <joel@OARcorp.com>
 
@@ -1946,6 +2257,11 @@
 
 	* score/macros/rtems/score/coremsg.inl: Add <string.h> to remove warning.
 	* score/src/threadidlebody.c: Add return 0 to avoid warning.
+
+2002-08-12	Eric Norum <eric.norum@usask.ca>
+
+	* libcsupport/src/write.c (_write_r): Change prototype to match newlib's
+	reent.h.
 
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2042,6 +2358,10 @@
 
 	* libmisc/stackchk/check.c: Don't reference the RTEMS allocated
 	interrupt stack if the port doesn't configure using it.
+	* libcsupport/include/sys/utime.h: Removed as file is now part of the
+	RTEMS newlib support.
+	* libcsupport/Makefile.am: Reflect above.
+	* libcsupport/include/rtems/termiostypes.h: Avoid use of __P.
 
 2002-07-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2096,6 +2416,9 @@
 	* librpc/src/rpc/Makefile.am: Eliminate LIBNAME.
 	* libblock/src/Makefile.am: Use .$(OBJEXT) instead of .o.
 	* libblock/src/Makefile.am: Eliminate LIBNAME. Cosmetical cleanups.
+	* libcsupport/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libcsupport/Makefile.am: Eliminate LIBNAME. Use AM_CPPFLAGS instead of
+	INCLUDES (Upcoming automake standard).
 
 2002-07-22	Joel Sherrill <joel@OARcorp.com>
 
@@ -2134,6 +2457,7 @@
 	* librpc/configure.ac: RTEMS_TOP(../..).
 	* libblock/configure.ac: RTEMS_TOP(../..).
 	* libfs/configure.ac: RTEMS_TOP(../..).
+	* libcsupport/configure.ac: RTEMS_TOP(../..).
 
 2002-07-05	Joel Sherrill <joel@OARcorp.com>
 
@@ -2172,6 +2496,7 @@
 	* librpc/configure.ac: Remove RTEMS_PROJECT_ROOT.
 	* libblock/configure.ac: Remove RTEMS_PROJECT_ROOT.
 	* libfs/configure.ac: Remove RTEMS_PROJECT_ROOT.
+	* libcsupport/configure.ac: Remove RTEMS_PROJECT_ROOT.
 
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
@@ -2310,6 +2635,13 @@
 	routine not inlined. As part of this patch a lot of MP code for
 	thread/proxy blocking was made conditional and cleaned up.
 	* libblock/src/bdbuf.c:  Modified as part of above.
+	* libcsupport/src/__times.c: Corrected from previous attempt to cleanup.
+
+2002-06-28	Joel Sherrill <joel@OARcorp.com>
+
+	* libcsupport/src/__times.c: Cleaned up comments, return more
+	information, and eliminated the fatal error on clock not set since it
+	cannot occur.
 
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2326,6 +2658,8 @@
 	* libblock/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add
 	AC_PROG_RANLIB.
 	* libfs/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
+	* libcsupport/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add
+	AC_PROG_RANLIB.
 
 2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2467,6 +2801,12 @@
 	* libfs/Makefile.am: Include $(top_srcdir)/../automake/*.am. Use
 	../aclocal.
 	* libfs/wrapup/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* libcsupport/Makefile.am: Merge src/Makefile.am.
+	* libcsupport/configure.ac: Reflect changes above.
+	* libcsupport/src/Makefile.am: Remove.
+	* libcsupport/Makefile.am: Include $(top_srcdir)/../automake/*.am. Use
+	../aclocal.
+	* libcsupport/src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 
 2002-06-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2493,8 +2833,7 @@
 	* libblock/configure.ac, libblock/Makefile.am,
 	libblock/include/Makefile.am, libblock/src/Makefile.am: Reflect move
 	from c/src/libblock to c/src/exec/libblock.
-	Move from c/src/libfs to c/src/exec/libfs
-	* libfs/configure.ac: Reflect move.
+	* libfs/configure.ac: Reflect move from c/src/libfs to c/src/exec/libfs.
 	* libfs/Makefile.am: Ditto.
 	* libfs/src/Makefile.am: Ditto.
 	* libfs/src/dosfs/Makefile.am: Ditto.
@@ -3379,6 +3718,10 @@
 	permissions.  Nodes should be created with the right permissions because
 	chmod() is not supported by the miniIMFS so changing after creation is
 	not possible.
+
+2001-05-24	Joel Sherrill <joel@OARcorp.com>
+
+	* libcsupport/src/.cvsignore: New file.
 
 2001-05-24	Fernando Ruiz Casas <fernando.ruiz@ctv.es>
 
