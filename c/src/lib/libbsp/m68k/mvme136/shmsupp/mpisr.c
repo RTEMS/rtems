@@ -21,7 +21,7 @@ rtems_isr Shm_isr_mvme136()
 {
   Shm_Interrupt_count += 1;
   rtems_multiprocessing_announce();
-  (*(volatile rtems_unsigned8 *)0xfffb006b) = 0; /* clear MPCSR intr */
+  (*(volatile uint8_t*)0xfffb006b) = 0; /* clear MPCSR intr */
 }
 
 /*  void _Shm_setvec( )

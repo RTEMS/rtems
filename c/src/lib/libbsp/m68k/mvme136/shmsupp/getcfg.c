@@ -40,22 +40,22 @@
 
 shm_config_table BSP_shm_cfgtbl;
 
-rtems_unsigned32 *BSP_int_address()
+uint32_t         *BSP_int_address()
 {
-  rtems_unsigned32 id, offset;
+  uint32_t         id, offset;
 
-  id      = (rtems_unsigned32) *(rtems_unsigned8 *)0xfffb0061;
+  id      = (uint32_t) *(uint8_t*)0xfffb0061;
   offset  = ((id & 0x1f) << 5) | ((id & 0xe0) << 8);
   offset |= 0xffff000b;
-  return( (rtems_unsigned32 * ) offset );
+  return( (uint32_t         * ) offset );
 }
 
 void Shm_Get_configuration(
-  rtems_unsigned32   localnode,
+  uint32_t           localnode,
   shm_config_table **shmcfg
 )
 {
-   BSP_shm_cfgtbl.base         = (rtems_unsigned32 *)0x20000000;
+   BSP_shm_cfgtbl.base         = (uint32_t*)0x20000000;
    BSP_shm_cfgtbl.length       = 1 * MEGABYTE;
    BSP_shm_cfgtbl.format       = SHM_BIG;
 

@@ -47,7 +47,7 @@ void Timer_initialize()
   Z8x36_WRITE( TIMER, CT1_MODE_SPEC,  0x80 ); /* T1 continuous, and   */
                                               /* cycle/pulse output   */
 
-  *((rtems_unsigned16 *)0xfffb0016) = 0x0000; /* write countdown value */
+  *((uint16_t*)0xfffb0016) = 0x0000; /* write countdown value */
 /*
   Z8x36_WRITE( TIMER, CT1_TIME_CONST_MSB, 0x00 );
   Z8x36_WRITE( TIMER, CT1_TIME_CONST_LSB, 0x00 );
@@ -58,7 +58,7 @@ void Timer_initialize()
                                                  /*  trigger command      */
                                                  /*  (TCB) and gate       */
                                                  /* command (GCB) bits    */
-  *((rtems_unsigned8 *)0xfffb0038) &= 0xfd;      /* enable timer INTR on  */
+  *((uint8_t*)0xfffb0038) &= 0xfd;      /* enable timer INTR on  */
                                                  /*    VME controller     */
 }
 
@@ -69,12 +69,12 @@ void Timer_initialize()
 int Read_timer()
 {
 /*
-  rtems_unsigned8  msb, lsb;
+  uint8_t          msb, lsb;
 */
-  rtems_unsigned32 remaining, total;
+  uint32_t         remaining, total;
 
   Z8x36_WRITE( TIMER, CT1_CMD_STATUS,  0xce ); /* read the counter value */
-remaining = 0xffff - *((rtems_unsigned16 *) 0xfffb0010);
+remaining = 0xffff - *((uint16_t*) 0xfffb0010);
 /*
   Z8x36_READ(  TIMER, CT1_CUR_CNT_MSB, msb );
   Z8x36_READ(  TIMER, CT1_CUR_CNT_LSB, lsb );

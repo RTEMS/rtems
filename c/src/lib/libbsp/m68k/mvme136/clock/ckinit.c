@@ -38,9 +38,9 @@
  
 #define CLOCK_VECTOR 66
 
-rtems_unsigned32 Clock_isrs;        /* ISRs until next tick */
+uint32_t         Clock_isrs;        /* ISRs until next tick */
 
-volatile rtems_unsigned32 Clock_driver_ticks; /* ticks since initialization */
+volatile uint32_t         Clock_driver_ticks; /* ticks since initialization */
 
 rtems_isr_entry  Old_ticker;
 
@@ -86,7 +86,7 @@ void Install_clock(
   timer->MASTER_INTR        = MICRVAL;
   timer->CT1_MODE_SPEC      = T1MSRVAL;
 
-  *((rtems_unsigned16 *)0xfffb0016) = MS_COUNT;  /* write countdown value */
+  *((uint16_t*)0xfffb0016) = MS_COUNT;  /* write countdown value */
 
   /*
    *  timer->CT1_TIME_CONST_MSB = (MS_COUNT >> 8);
@@ -99,7 +99,7 @@ void Install_clock(
   /*
    * Enable interrupt via VME interrupt mask register
    */
-  (*(rtems_unsigned8 *)0xfffb0038) &= 0xfd;
+  (*(uint8_t*)0xfffb0038) &= 0xfd;
 
   atexit( Clock_exit );
 }
@@ -140,7 +140,7 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
-    rtems_unsigned32 isrlevel;
+    uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
  
     if (args == 0)

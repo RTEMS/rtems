@@ -56,9 +56,9 @@ extern "C" {
 
 #define Install_tm27_vector( handler ) set_vector( (handler), 75, 1 )
 
-#define Cause_tm27_intr()  (*(volatile rtems_unsigned8 *)0xfffb006b) = 0x80
+#define Cause_tm27_intr()  (*(volatile uint8_t*)0xfffb006b) = 0x80
 
-#define Clear_tm27_intr()  (*(volatile rtems_unsigned8 *)0xfffb006b) = 0x00
+#define Clear_tm27_intr()  (*(volatile uint8_t*)0xfffb006b) = 0x00
 
 #define Lower_tm27_intr()
 
@@ -68,8 +68,8 @@ extern "C" {
  */
 
 #define rtems_bsp_delay( microseconds ) \
-  { register rtems_unsigned32 _delay=(microseconds); \
-    register rtems_unsigned32 _tmp=123; \
+  { register uint32_t         _delay=(microseconds); \
+    register uint32_t         _tmp=123; \
     asm volatile( "0: \
                      nbcd      %0 ; \
                      nbcd      %0 ; \

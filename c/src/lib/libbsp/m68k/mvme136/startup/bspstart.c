@@ -38,7 +38,7 @@ char *rtems_progname;
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void);               /* m68k version */
 
 /*
@@ -70,7 +70,7 @@ void bsp_start( void )
 
   m68k_set_vbr( &M68Kvec );
 
-  (*(rtems_unsigned8 *)0xfffb0067) = 0x7f; /* make VME access round-robin */
+  (*(uint8_t*)0xfffb0067) = 0x7f; /* make VME access round-robin */
 
   rtems_cache_enable_instruction();
 
