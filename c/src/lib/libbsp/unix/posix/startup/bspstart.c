@@ -302,20 +302,6 @@ bsp_start(void)
 
     Cpu_table.extra_mpci_receive_server_stack = 0;
 
-    /*
-     * Add 1 region for RTEMS Malloc
-     */
-
-    BSP_Configuration.RTEMS_api_configuration->maximum_regions++;
-
-#ifdef RTEMS_NEWLIB
-    /*
-     * Add 1 extension for newlib libc
-     */
-
-    BSP_Configuration.maximum_extensions++;
-#endif
-
 #ifdef STACK_CHECKER_ON
   /*
    * Add 1 extension for stack checker

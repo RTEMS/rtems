@@ -169,28 +169,6 @@ int bsp_start(
 
   BSP_Configuration = Configuration;
 
-  /*
-   * Add 1 region for the RTEMS Malloc
-   */
-
-  BSP_Configuration.RTEMS_api_configuration->maximum_regions++;
-
-  /*
-   * Add 1 extension for newlib libc
-   */
-
-#ifdef RTEMS_NEWLIB
-    BSP_Configuration.maximum_extensions++;
-#endif
-
-  /*
-   * Add 1 extension for newlib libc
-   */
-
-#ifdef RTEMS_NEWLIB
-    BSP_Configuration.maximum_extensions++;
-#endif
-
 #ifdef STACK_CHECKER_ON
     /*
      * Add 1 extension for stack checker

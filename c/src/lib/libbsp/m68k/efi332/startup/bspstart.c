@@ -158,20 +158,6 @@ void bsp_start( void )
     (((unsigned int)_end + STACK_SIZE + 0x100) & 0xffffff00);
 
   /*
-   * Add 1 region for Malloc in libc_low
-   */
-
-  BSP_Configuration.RTEMS_api_configuration->maximum_regions++;
-
-  /*
-   * Add 1 extension for newlib libc
-   */
-
-#ifdef RTEMS_NEWLIB
-    BSP_Configuration.maximum_extensions++;
-#endif
-
-  /*
    * Add another extension if using the stack checker
    */
 

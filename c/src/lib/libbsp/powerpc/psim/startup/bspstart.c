@@ -293,20 +293,6 @@ void bsp_start( void )
 
   BSP_Configuration.work_space_start = work_space_start;
 
-  /*
-   * Add 1 region for RTEMS Malloc
-   */
-
-  BSP_Configuration.RTEMS_api_configuration->maximum_regions++;
-
-#ifdef RTEMS_NEWLIB
-  /*
-   * Add 1 extension for newlib libc
-   */
-
-  BSP_Configuration.maximum_extensions++;
-#endif
-
 #ifdef STACK_CHECKER_ON
   /*
    * Add 1 extension for stack checker
