@@ -18,6 +18,8 @@
 #include "config.h"
 #endif
 
+#include <stdlib.h>
+
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/libio_.h>

@@ -14,9 +14,14 @@
  * pointing to addresses in the TAR image.
  *************************************************************************/
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#include <string.h>
+
 #include <rtems.h>
 #include <rtems/libio_.h>
-#include <string.h>
 #include <chain.h>
 #include <imfs.h>
 

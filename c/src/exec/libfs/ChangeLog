@@ -1,3 +1,9 @@
+2002-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/imfs/imfs_load_tar.c: Add include <sys/types.h>.
+	Add include <sys/stat.h>. Add include <fcntl.h>.
+	* src/imfs/imfs_rmnod.c: Add include <stdlib.h>.
+
 2002-01-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/imfs/imfs_eval.c: Include <rtems/seterr.h>.
