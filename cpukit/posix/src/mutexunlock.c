@@ -49,7 +49,7 @@ int pthread_mutex_unlock(
         &the_mutex->Mutex,
         the_mutex->Object.id, 
 #if defined(RTEMS_MULTIPROCESSING)
-        POSIX_Threads_mutex_MP_support
+        _POSIX_Threads_mutex_MP_support
 #else
         NULL
 #endif

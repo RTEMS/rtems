@@ -41,7 +41,7 @@ int sem_post(
         &the_semaphore->Semaphore,
         the_semaphore->Object.id,
 #if defined(RTEMS_MULTIPROCESSING)
-        POSIX_Semaphore_MP_support
+        NULL         /* XXX need to define a routine to handle this case */
 #else
         NULL
 #endif

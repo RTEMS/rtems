@@ -33,7 +33,6 @@ int sem_unlink(
   int  status;
   register POSIX_Semaphore_Control *the_semaphore;
   Objects_Id                        the_semaphore_id;
-  Objects_Locations                 location;
  
   _Thread_Disable_dispatch();
 
@@ -52,7 +51,7 @@ int sem_unlink(
     set_errno_and_return_minus_one( ENOSYS );
   }
 
-  the_semaphore = _Objects_Get_local_object(
+  the_semaphore = (POSIX_Semaphore_Control *) _Objects_Get_local_object(
     &_POSIX_Semaphore_Information,
     _Objects_Get_index( the_semaphore_id )
   );

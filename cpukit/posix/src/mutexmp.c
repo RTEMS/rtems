@@ -48,7 +48,7 @@ int _POSIX_Mutex_MP_Send_request_packet (
   return POSIX_MP_NOT_IMPLEMENTED();
 }
 
-void POSIX_Threads_mutex_MP_support(
+void _POSIX_Threads_mutex_MP_support(
   Thread_Control *the_thread,
   Objects_Id      id
 )
