@@ -61,7 +61,7 @@ pwd=`pwd`;
 
 case $mode in
 generate)
-  confs=`find $pwd -name 'configure.in' -print`
+  confs=`find . -name 'configure.in' -print`
   aclocal_dir=$pwd/aclocal
   for i in $confs; do
   dir=`dirname $i`;

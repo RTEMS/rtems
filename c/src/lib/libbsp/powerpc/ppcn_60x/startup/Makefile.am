@@ -1,5 +1,5 @@
 ## 
-## $Id: 
+## $Id$
 ## 
 
 AUTOMAKE_OPTIONS = foreign 1.4

@@ -4,8 +4,6 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-VPATH = @srcdir@
-
 TEST = psxfile01
 
 MANAGERS = all

@@ -4,15 +4,14 @@
 #
 #   Make(1) configuration file include'd by all Makefile's
 #
+# NOTE: This file does not get exported from the source tree
+#
 
 #
 # where things are relative to PROJECT_ROOT; shouldn't need to change,
 # but could be overridden in custom files.
 #
 
-PROJECT_RELEASE=$(PROJECT_ROOT)/@RTEMS_BSP@
-PROJECT_BIN=$(PROJECT_RELEASE)/bin
-PROJECT_INCLUDE=$(PROJECT_RELEASE)/lib/include
 PROJECT_TOOLS = $(PROJECT_RELEASE)/build-tools
 
 #
@@ -25,21 +24,6 @@ ARCH=o-optimize
 VARIANT=
 
 #
-# Initial target for make(1)
-#  Once this is established we can safely include other targets
-#  within this make-include file.
-#
-
-default_target: all
-
-#
-# Default makefile name
-# May be overridden by command line macro assignment
-#
-
-MAKEFILE=Makefile
-
-#
 # Target variant names
 #
 TARGET_VARIANTS = optimize debug profile
@@ -49,27 +33,5 @@ TARGET_VARIANTS = optimize debug profile
 #
 VARIANTS=${TARGET_VARIANTS:%=o-%}
 
-#
-# List of "recursion-able" targets for directory Makefiles
-#
-
-RECURSE_TARGETS=all depend install \
-preinstall-recursive \
-$(TARGET_VARIANTS)
-
 ${ARCH}:
 	test -d ${ARCH} || mkdir ${ARCH}
-
-ifndef AUTOMAKE
-distclean-generic:
-	-$(RM) .#* $(CONFIG_CLEAN_FILES)
-	-$(RM) -r $(CLOBBER_ADDITIONS)
-
-clean-generic:
-	-$(RM) a.out core mon.out gmon.out
-	-$(RM) -r $(CLEAN_ADDITIONS)
-endif
-
-.PHONY:	$(RECURSE_TARGETS) 
-.PHONY: clean-generic
-.PHONY: distclean-generic

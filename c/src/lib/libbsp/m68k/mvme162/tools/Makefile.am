@@ -14,4 +14,4 @@ install-exec-local: $(PROGRAMS)
 	$(mkinstalldirs) $(PROJECT_ROOT)/mvme162/bin
 	$(INSTALL_PROGRAM) $(PROGRAMS) $(PROJECT_ROOT)/mvme162/bin
 
-include $(top_srcdir)/../../../../../../../automake/local.am
+include $(top_srcdir)/../../../../../../../automake/host.am
