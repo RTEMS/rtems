@@ -13,7 +13,7 @@
  */
 #include <bsp/irq.h>
 #include <bsp.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 #include <libcpu/raw_exception.h>
 /*
 #include <bsp/8xx_immap.h>

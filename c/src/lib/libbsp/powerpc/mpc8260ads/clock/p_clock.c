@@ -16,7 +16,7 @@
  */
 
 #include <bsp.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 #include <bsp/irq.h>
 
 extern void clockOn(void*);
