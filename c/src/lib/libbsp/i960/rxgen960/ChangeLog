@@ -1,3 +1,9 @@
+2002-04-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* startup/nulsystbl.c: Fix braces.
+	* startup/Makefile.am: Remove types.h.
+	* startup/types.h: Remove.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:

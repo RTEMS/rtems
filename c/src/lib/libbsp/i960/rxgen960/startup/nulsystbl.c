@@ -15,9 +15,10 @@
    * to ram
    */
 SystemTbl nulsystemTbl = {
-  0, 0, 0,				/* Reserved */
+  { 0, 0, 0 },				/* Reserved */
   svrStackPtr,				/* Supervisor Stack Pointer Base */
-  0, 0, 0, 0, 0, 0, 0, 0,		/* Preserved */
+  { 0, 0, 0, 0, 0, 0, 0, 0 },		/* Preserved */
+  {
   0, 0, 0, 0, 0, 0, 0, 0,		        /* 0 - 7 */
   0, 0, 0, 0, 0, 0, 0, 0,                       /* 8 - 15 */
   0, 0,                                         /* 16 - 17 */
@@ -76,6 +77,7 @@ SystemTbl nulsystemTbl = {
   0,						/* 112 */
   0,						/* 113 */
   0,						/* 114 */
+  }
 };
 /*-------------*/
 /* End of file */

@@ -16,7 +16,7 @@ C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c cntrltbl.c \
 
 noinst_HEADERS = asmfault.h asmstub.h cntrltbl.h fault.h faultret.h flttbl.h \
     frmstr.h i960.h ihandler.h intrtbl.h main.h memchnl.h pmc901_memmap.h \
-    prcb.h rom_ibr.h rommon.h sctns.h systbl.h time.h types.h
+    prcb.h rom_ibr.h rommon.h sctns.h systbl.h time.h
 
 S_FILES = asmfault.S asmstub.S ihandler.S
 
@@ -49,7 +49,6 @@ EXTRA_DIST = asmfault.S asmfault.h asmstub.S asmstub.h bspstart.c cntrltbl.c \
     frmstr.c frmstr.h i960.h ihandler.S ihandler.h intrtbl.c intrtbl.h \
     kkprintf.c linkcmds main.h memchnl.h nmi.c nulsystbl.c pmc901_memmap.h \
     prcb.c prcb.h rom.ld rom_cntrltbl.c rom_ibr.c rom_ibr.h rom_prcb.c \
-    rommon.h rxgen_romld.S sctns.c sctns.h setvec.c systbl.c systbl.h time.h \
-    types.h
+    rommon.h rxgen_romld.S sctns.c sctns.h setvec.c systbl.c systbl.h time.h
 
 include $(top_srcdir)/../../../../../../automake/local.am
