@@ -13,9 +13,9 @@
  *  $Id$
  */
 
-#include <rtems.h>
 #include <bsp.h>
-#include <libcsupport.h>
+#include <rtems/libio.h>
+#include <rtems/libcsupport.h>
 
 /*
  *  Function:   bsp_pretasking_hook
