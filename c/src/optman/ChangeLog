@@ -1,5 +1,9 @@
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Remove project_libdir.
 
 2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

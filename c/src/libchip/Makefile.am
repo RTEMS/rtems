@@ -25,7 +25,7 @@ include_libchip_HEADERS += ide/ata.h ide/ide_ctrl_cfg.h ide/ide_ctrl.h \
     ide/ide_ctrl_io.h
 
 ide/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) ide/$(ARCH)
+	@$(mkdir_p) ide/$(ARCH)
 	@: > ide/$(ARCH)/$(dirstamp)
 ide/$(ARCH)/%.$(OBJEXT): ide/%.c ide/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -52,7 +52,7 @@ include_libchip_HEADERS += network/cs8900.h network/i82586var.h \
     network/open_eth.h
 
 network/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) network/$(ARCH)
+	@$(mkdir_p) network/$(ARCH)
 	@: > network/$(ARCH)/$(dirstamp)
 network/$(ARCH)/%.$(OBJEXT): network/%.c network/$(ARCH)/$(dirstamp)
 	${COMPILE} $(libnetchip_CPPFLAGS) -o $@ -c $<
@@ -81,7 +81,7 @@ if LIBCHIP
 include_libchip_HEADERS += rtc/rtc.h rtc/icm7170.h rtc/m48t08.h
 
 rtc/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) rtc/$(ARCH)
+	@$(mkdir_p) rtc/$(ARCH)
 	@: > rtc/$(ARCH)/$(dirstamp)
 rtc/$(ARCH)/%.$(OBJEXT): rtc/%.c rtc/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -111,7 +111,7 @@ include_libchip_HEADERS += serial/mc68681.h serial/ns16550.h serial/z85c30.h \
     serial/serial.h serial/sersupp.h
 
 serial/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) serial/$(ARCH)
+	@$(mkdir_p) serial/$(ARCH)
 	@: > serial/$(ARCH)/$(dirstamp)
 serial/$(ARCH)/%.$(OBJEXT): serial/%.c serial/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -131,11 +131,14 @@ CLEANDIRS = */$(ARCH)
 
 PREINSTALL_FILES =
 
+${PROJECT_RELEASE}/lib/$(dirstamp):
+	@$(mkdir_p) ${PROJECT_RELEASE}/lib
+	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+
 if LIBCHIP
 $(PROJECT_INCLUDE)/libchip/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/libchip
+	@$(mkdir_p) $(PROJECT_INCLUDE)/libchip
 	@: > $(PROJECT_INCLUDE)/libchip/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 endif
 
 if LIBCHIP

@@ -40,6 +40,10 @@ all-local: $(PGMS) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(rtems_C_FILES) $(sapi_C_FILES)
 
+${PROJECT_RELEASE}/lib/$(dirstamp):
+	@$(mkdir_p) ${PROJECT_RELEASE}/lib
+	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+
 ${PROJECT_RELEASE}/lib/no-ext$(LIB_VARIANT).rel: $(ARCH)/no-ext$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
 	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/no-ext$(LIB_VARIANT).rel
 TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/no-ext$(LIB_VARIANT).rel
