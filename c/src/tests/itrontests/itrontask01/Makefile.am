@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 TEST = itrontask01
 PGM = ${ARCH}/$(TEST).exe
