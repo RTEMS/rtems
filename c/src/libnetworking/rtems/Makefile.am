@@ -19,7 +19,8 @@ H_FILES = rtems_bsdnet.h rtems_bsdnet_internal.h tftp.h
 
 noinst_HEADERS = $(H_FILES)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+    $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
@@ -27,8 +28,8 @@ $(PROJECT_INCLUDE)/rtems:
 $(PROJECT_INCLUDE)/rtems/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
 #
@@ -45,8 +46,9 @@ all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 
-EXTRA_DIST = issetugid.c rtems_bootp.c rtems_glue.c rtems_select.c rtems_showicmpstat.c \
-    rtems_showifstat.c rtems_showipstat.c rtems_showmbuf.c rtems_showroute.c \
-    rtems_showtcpstat.c rtems_showudpstat.c rtems_syscall.c sghostname.c
+EXTRA_DIST = issetugid.c rtems_bootp.c rtems_glue.c rtems_select.c \
+    rtems_showicmpstat.c rtems_showifstat.c rtems_showipstat.c \
+    rtems_showmbuf.c rtems_showroute.c rtems_showtcpstat.c \
+    rtems_showudpstat.c rtems_syscall.c sghostname.c
 
 include $(top_srcdir)/../../../automake/local.am

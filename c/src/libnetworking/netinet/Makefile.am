@@ -16,6 +16,7 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
 #
@@ -36,12 +37,11 @@ EXTRA_DIST = if_ether.c igmp.c igmp_var.h in.c in_cksum.c in_cksum_i386.c \
     in_cksum_m68k.c in_cksum_powerpc.c in_pcb.c in_proto.c in_rmx.c \
     ip_divert.c ip_fw.c ip_icmp.c ip_input.c ip_mroute.c ip_output.c \
     raw_ip.c tcp_debug.c tcp_input.c tcp_output.c tcp_subr.c tcp_timer.c \
-    tcp_usrreq.c udp_usrreq.c 
+    tcp_usrreq.c udp_usrreq.c
 
-H_FILES = icmp_var.h if_ether.h igmp.h igmp_var.h in.h \
-    in_pcb.h in_systm.h in_var.h ip.h ip_fw.h ip_icmp.h \
-    ip_mroute.h ip_var.h tcp.h tcp_debug.h tcp_fsm.h tcp_seq.h \
-    tcp_timer.h tcp_var.h tcpip.h udp.h udp_var.h
+H_FILES = icmp_var.h if_ether.h igmp.h igmp_var.h in.h in_pcb.h in_systm.h \
+    in_var.h ip.h ip_fw.h ip_icmp.h ip_mroute.h ip_var.h tcp.h tcp_debug.h \
+    tcp_fsm.h tcp_seq.h tcp_timer.h tcp_var.h tcpip.h udp.h udp_var.h
 
 noinst_HEADERS = $(H_FILES)
 

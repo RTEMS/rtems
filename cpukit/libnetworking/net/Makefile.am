@@ -14,6 +14,7 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
 #
@@ -30,15 +31,16 @@ all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 
-EXTRA_DIST = if.c if_ethersubr.c if_loop.c \
-    radix.c raw_cb.c raw_usrreq.c route.c rtsock.c
+EXTRA_DIST = if.c if_ethersubr.c if_loop.c radix.c raw_cb.c raw_usrreq.c \
+    route.c rtsock.c
 
-H_FILES = bpf.h ethernet.h if.h if_arp.h if_dl.h if_llc.h if_ppp.h if_types.h \
-    netisr.h ppp-comp.h ppp_defs.h radix.h raw_cb.h route.h
+H_FILES = bpf.h ethernet.h if.h if_arp.h if_dl.h if_llc.h if_ppp.h \
+    if_types.h netisr.h ppp-comp.h ppp_defs.h radix.h raw_cb.h route.h
 
 noinst_HEADERS = $(H_FILES)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/net $(H_FILES:%=$(PROJECT_INCLUDE)/net/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/net \
+    $(H_FILES:%=$(PROJECT_INCLUDE)/net/%)
 
 $(PROJECT_INCLUDE)/net:
 	@$(mkinstalldirs) $@

@@ -8,7 +8,8 @@ H_FILES = ftp.h inet.h nameser.h nameser_compat.h telnet.h
 
 noinst_HEADERS = $(H_FILES)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa $(H_FILES:%=$(PROJECT_INCLUDE)/arpa/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa \
+    $(H_FILES:%=$(PROJECT_INCLUDE)/arpa/%)
 
 $(PROJECT_INCLUDE)/arpa:
 	@$(mkinstalldirs) $@
