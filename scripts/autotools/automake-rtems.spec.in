@@ -2,9 +2,9 @@
 # spec file for automake 
 #
 
-%define rpmvers 1.8.5
-%define srcvers	1.8.5
-%define amvers  1.8
+%define rpmvers 1.9
+%define srcvers	1.9
+%define amvers  1.9
 
 %define _defaultbuildroot	%{_tmppath}/%{name}-%{srcvers}-root
 %define _prefix			@prefix@
@@ -53,11 +53,12 @@ standards.
 
 %build
 PATH=%{_prefix}/bin:$PATH
-./configure --prefix=%{_prefix} --infodir=%{_infodir} --mandir=%{_mandir}
+./configure --prefix=%{_prefix} --infodir=%{_infodir} --mandir=%{_mandir} \
+  --bindir=%{_bindir} --datadir=%{_datadir}
 make
 
 %install
-%makeinstall
+make DESTDIR=${RPM_BUILD_ROOT} install
 
 install -m 755 -d $RPM_BUILD_ROOT/%{_mandir}/man1
 for i in $RPM_BUILD_ROOT%{_bindir}/aclocal \
@@ -88,8 +89,8 @@ fi
 %doc AUTHORS COPYING ChangeLog NEWS README THANKS
 %{_bindir}/aclocal*
 %{_bindir}/automake*
-%doc %{_infodir}/automake.info*.gz
-%doc %{_mandir}/man?/*
+%{_infodir}/automake.info*.gz
+%{_mandir}/man?/*
 %{_datadir}/aclocal-%{amvers}
 %{_datadir}/automake-%{amvers}
 
