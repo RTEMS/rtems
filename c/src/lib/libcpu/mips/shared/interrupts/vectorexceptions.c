@@ -10,8 +10,8 @@
 #include <rtems.h>
 #include <stdlib.h>
 #include <string.h>
-#include "iregdef.h"
-#include "idtcpu.h"
+#include <rtems/mips/iregdef.h>
+#include <rtems/mips/idtcpu.h>
 #include <rtems/bspIo.h>
 
 char *cause_strings[32] =

@@ -22,8 +22,8 @@
 
 /* @(#)gettime.S       08/20/96     1.2 */
 
-#include <iregdef.h>
-#include <idtcpu.h>
+#include <rtems/mips/iregdef.h>
+#include <rtems/mips/idtcpu.h>
 #include <rtems/asm.h>
 
 FRAME(mips_read_timer,sp,0,ra)

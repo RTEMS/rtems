@@ -12,8 +12,8 @@
  */
 
 #include <rtems/asm.h>
-#include "iregdef.h"
-#include "idtcpu.h"
+#include <rtems/mips/iregdef.h>
+#include <rtems/mips/idtcpu.h>
 
 /*
  *  MIPS ISA Level 1 entries

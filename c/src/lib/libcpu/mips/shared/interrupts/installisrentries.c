@@ -3,7 +3,7 @@
  */
 
 #include <rtems.h>
-#include <idtcpu.h>
+#include <rtems/mips/idtcpu.h>
 #include <stdlib.h>
 #include <string.h>
 

@@ -15,8 +15,8 @@
 #include <stdlib.h>
 #include <libcpu/mongoose-v.h>
 
-#include "iregdef.h"
-#include "idtcpu.h"
+#include <rtems/mips/iregdef.h>
+#include <rtems/mips/idtcpu.h>
 
 
 #include <rtems/bspIo.h>  /* for printk */

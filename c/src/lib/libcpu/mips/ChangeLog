@@ -1,3 +1,15 @@
+2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* clock/clock.S, mongoosev/vectorisrs/vectorisrs.c,
+	shared/interrupts/isr_entries.S,
+	shared/interrupts/vectorexceptions.c, timer/gettime.S: Include
+	<rtems/mips/iregdef.h> instead of <iregdef.h>.
+	* clock/clock.S, mongoosev/vectorisrs/vectorisrs.c,
+	shared/interrupts/installisrentries.c,
+	shared/interrupts/isr_entries.S,
+	shared/interrupts/vectorexceptions.c, timer/gettime.S: Include
+	<rtems/mips/idtcpu.h> instead of <idtcpu.h>.
+
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* clock/clock.S: Include <rtems/asm.h> instead of <asm.h>.
