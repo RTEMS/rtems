@@ -30,12 +30,9 @@ RTEMSCPLUSPLUS_H_FILES=$(RTEMSCPLUSPLUS_H_PIECES:%=$(srcdir)/rtems++/%.h)
 RPC_H_PIECES=  auth clnt rpc rpc_msg svc svc_auth types xdr
 RPC_H_FILES=$(RPC_H_PIECES:%=$(srcdir)/rpc/%.h)
 
-RDBG_H_PIECES=  servrpc rdbg $(RTEMS_CPU)/rdbg_f $(RTEMS_CPU)/reg 
-RDBG_H_FILES=$(RDBG_H_PIECES:%=$(srcdir)/rdbg/%.h)
-
 # We only build the rdbg library if HAS_NETWORKING and HAS_RDBG was defined
 RDBG_H_PIECES_yes_yes_V = servrpc rdbg $(RTEMS_CPU)/rdbg_f $(RTEMS_CPU)/reg
-RDBG_H_FILES=$($(LIBRDBG_$(HAS_NETWORKING)_$(HAS_RDBG)_V):%=$(srcdir)/rdbg/%.h)
+RDBG_H_FILES=$(RDBG_H_PIECES_$(HAS_NETWORKING)_$(HAS_RDBG)_V:%=$(srcdir)/rdbg/%.h)
 
 SRCS=$(H_FILES) $(SYS_H_FILES) \
      $(MOTOROLA_H_FILES) $(RTEMSCPLUSPLUS_H_FILES) \
