@@ -4,7 +4,7 @@
 @c  Written by: Eric Valette <valette@crf.canon.fr>
 @c              Emmanuel Raguet <raguet@crf.canon.fr>
 @c
-@C
+@c
 @c  $Id$
 @c
 

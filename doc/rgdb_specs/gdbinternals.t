@@ -119,7 +119,7 @@ Note that in the case of natives debugger, the choice of the target is implicitl
 performed by commands like @b{run}, @b{attach}, @b{detach}. Several
 figures will now be described showing the main steps of a debug session. 
 
-@C XXX figure reference
+@c XXX figure reference
 Figure @b{Debug session initialization} explains how the debugger connects to the target
 :
 
@@ -136,7 +136,7 @@ and waits for command,
 or perform some action like setting breakpoints, ...
 @end enumerate
 
-@C XXX figure reference
+@c XXX figure reference
 Figure @b{Breakpoint and process execution} explains how the debugger manages the
 breakpoints and controls the execution of a process :
 
@@ -157,7 +157,7 @@ the connection will be closed by the target).
 ''DEBUG'' opcode and then can ask information
 @end enumerate
 
-@C XXX figure reference
+@c XXX figure reference
 Figure @b{Breakpoint and process execution} also shows the case of other ``CONTINUE''
 commands (remember that the ``DEBUG'' opcode has been replaced by the right
 instruction): 
@@ -174,7 +174,7 @@ trap) instead of the debugged one.
 resume the process execution to the next breakpoint.
 @end enumerate
 
-@C XXX figure reference
+@c XXX figure reference
 Figure @b{Detach a process and close a connection} explains how the debugger disconnects from
 a target :
 
@@ -188,7 +188,7 @@ and resumes the process execution.
 These 3 examples show that the mains actions that are performed by
 the host debugger on the target are only simple actions which look like :
 
-@itemize @b
+@itemize @bullet
 @item read/write code,
 @item read/write data,
 @item read/write registers,

@@ -10,7 +10,7 @@
 
 @chapter Interfacing GDB with RTEMS as a Target
 
-@C XXX figure reference
+@c XXX figure reference
 So, basically, porting GDB to RTEMS environment requires implementing
 the functions contained in the target_ops structure. The native debugger implementation
 (where the host machine is also the target one) uses direct function calls.
@@ -29,7 +29,7 @@ for the debug like @b{waitpid}, @b{ptrace}, ... Due to the GDB working
 mode and due to our requirements, we can establish here a non-exhaustive list
 of some commands required to implement the previously described functions :
 
-@itemize @b
+@itemize @bullet
 @item set up a connection with a target,
 @item close a connection,
 @item send a signal to the specified process,
@@ -45,7 +45,7 @@ process. The ``ptrace'' function has some sub-functions which are described
 below (some of these actions and standardized, the others are added due to our
 needs) :
 
-@itemize @b
+@itemize @bullet
 @item PTRACE_PEEKTEXT, PTRACE_PEEKDATA : read word at address,
 @item PTRACE_POKETEXT, PTRACE_POKEDATA :write word at address,
 @item PTRACE_CONT : restart after signal,
@@ -59,7 +59,7 @@ Unix manpage. For some specific needs (debug of one task among several ones,
 register read/write,...), it is possible to create some special ptrace commands
 as described after :
 
-@itemize @b
+@itemize @bullet
 @item get current task registers,
 @item set current task registers,
 @item list of the threads,

@@ -10,7 +10,7 @@
 
 @chapter Objectives
 
-@C XXX reference
+@c XXX reference
 This section is intended to clearly define the current objectives of our work.
 First, we will try here to list some ambitious requirements for the debugger
 in section @b{List of Requirements}. These requirements will deliberately be much more
@@ -25,7 +25,7 @@ chose to implement and the ones we will not. We will then clearly identify the
 limits of our solution in section @b{Implied Restrictions}.
 
 
-@subsection List of Requirements
+@section List of Requirements
 
 We will identify here possible requirements for the type of debug that may be
 provided :
@@ -72,7 +72,7 @@ so that debugging a particular portion of code does not prevent another part
 from functioning,
 @end table
 
-@subsection Requirements Analysis
+@section Requirements Analysis
 
 @table @b
 
@@ -80,7 +80,7 @@ from functioning,
 Worth recalling it. It mainly imposes few restrictions on the binary
 files type, target processor type as :
 
-@itemize @b
+@itemize @bullet
 
 @item the binary format must be understood by GDB (to find debugging information).
 Elf, Coff and A.out are the main formats currently supported. Elf/Dwarf 2.0
@@ -214,10 +214,10 @@ This requirement heavily depends on the @b{(R7)} and @b{(R8)}
 requirements.
 @end table
 
-@subsection Requirements Selection
+@section Requirements Selection
 
 
-@subsubsection Requirement We Will Take Into Account For the First Implementation
+@subsection Requirement We Will Take Into Account For the First Implementation
 
 @table @b
 
@@ -244,7 +244,7 @@ once we have the RGDBSD code,
 We will try to provide the multi-thread target system presentation,
 @end table
 
-@subsubsection Requirements We Will Not Implement
+@subsection Requirements We Will Not Implement
 
 @table @b
 
@@ -276,11 +276,11 @@ Without a separate TCP/IP stack it will be hard to freeze the system
 as some interrupts must occur in order to enable the FreeBSD stack to function,
 @end table
 
-@subsection Implied Restrictions
+@section Implied Restrictions
 
 High priority level must be used for these features :
 
-@itemize @b
+@itemize @bullet
 
 @item FreeBSD interrupt handling thread,
 
@@ -293,7 +293,7 @@ in debug mode
 If we don't want to use a ``specific'' priority level, we must affect
 priority to each of these tasks as follow :
 
-@itemize @b
+@itemize @bullet
 
 @item FreeBSD stack (high priority)
 

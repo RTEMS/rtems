@@ -61,42 +61,42 @@ clean:
 #
 
 intro.texi: intro.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -c -p "Top" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Document Revision History" ${*}.t
 
 revision.texi: revision.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -c -p "Introduction" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Objectives" ${*}.t
 
 objectives.texi: objectives.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -c -p "Document Revision History" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "A Rapid Tour of GDB Internals" ${*}.t
 
 gdbinternals.texi: gdbinternals.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -c -p "Implied Restrictions" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Interfacing GDB with RTEMS as a Target" ${*}.t
 
 interfacing.texi: interfacing.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -c -p "A Rapid Tour of GDB Internals" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Communication with GDB" ${*}.t
 
 comm.texi: comm.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -c -p "Interfacing GDB with RTEMS as a Target" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "RTEMS Debugger Server Daemon" ${*}.t
 
 daemon.texi: daemon.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -c -p "Communication with GDB" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Conclusion" ${*}.t
 
 conclusion.texi: conclusion.t Makefile
-	$(BMENU) -p "Top" \
+	$(BMENU) -c -p "Output of a Debug Session with the Prototype" \
 	    -u "Top" \
 	    -n "" ${*}.t
 

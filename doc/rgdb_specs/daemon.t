@@ -17,7 +17,7 @@ and we will use an Ethernet link to communicate between the host and the target.
 The RTEMS remote debugger will be composed by several tasks and exception
 handlers :
 
-@itemize @b
+@itemize @bullet
 @item an initialization task which opens the sockets and runs the SUN RPC
 server. This task will also connect the interrupt handlers and launch the communication
 task
@@ -47,12 +47,12 @@ in the section @b{Open Issues}. The temporary workaround we chose are described
 in chapter @b{Workarounds for Open Issues in Prototype}.
 
 
-@subsection The INITIALIZATION task
+@section The INITIALIZATION task
 
 This is the task that must be executed at the boot phase of RTEMS.
 It initializes the debug context. It must :
 
-@itemize @b
+@itemize @bullet
 @item open the UDP sockets,
 @item run the SUN RPC server main loop,
 @item create the COMMAND MANAGEMENT task,
@@ -64,7 +64,7 @@ If an error occurs at any step of the execution, the connections established
 before the error will be closed, before the initialization task deletes itself.
 
 
-@subsection The COMMAND_MNGT task
+@section The COMMAND_MNGT task
 
 This task is in charge of receiving the SUN RPC messages and executing
 the associated commands. This task must have an important priority because it
@@ -86,7 +86,7 @@ case the COMMAND_MNGT task creates the EVENT_MNGT task described below before
 going to wait on UDP socket again.
 
 
-@subsection The EVENT_MNGT task
+@section The EVENT_MNGT task
 
 This task is in charge of managing events happening on the debuggee such as
 breakpoint, exceptions. This task does a basic simple loop waiting for event
@@ -95,12 +95,12 @@ then signals GDB that an event occurred and then go sleeping again as further
 requests will be processed by the COMMAND_MNGT task.
 
 
-@subsection The DEBUG EXCEPTION handler
+@section The DEBUG EXCEPTION handler
 
 This handler is connected to the DEBUG exception (INT 1 on Intel ix86).
 This exception is entered when :
 
-@itemize @b
+@itemize @bullet
 @item executing a single-step instruction,
 @item hardware breakpoint condition is true,
 @end itemize
@@ -110,7 +110,7 @@ cases, the DEBUG EXCEPTION handler code is executed. Please note that the execut
 context of the exception handler is the supervisor stack of the task that generated
 the exception . This implies :
 
-@itemize @b
+@itemize @bullet
 @item We may sleep in this context,
 @item We have as many possible execution context for the DEBUG EXCEPTION handler as
 we need to,
@@ -128,7 +128,7 @@ receive a PTRACE_CONT command it will resume the execution of the task that
 caused the exception by doing a V on the synchronization object. 
 
 
-@subsection The BREAKPOINT EXCEPTION handler
+@section The BREAKPOINT EXCEPTION handler
 
 This handler is connected to the BREAKPOINT exception (INT3 on Intel
 Ix86). Each time the debugger wants to place a software breakpoint in the debuggee,
@@ -138,14 +138,14 @@ the BREAKPOINT handler is executed. Otherwise, the exception processing is the
 same than the one described in previous section.
 
 
-@subsection Synchronization Among Tasks and Exception Handlers
+@section Synchronization Among Tasks and Exception Handlers
 
 The previous chapters have presented a simplified and static view of the various
 tasks and exceptions handlers. This chapter is more focussed on synchronization
 requirements about the various pieces of code executed when RGDBSD is operating.
 
 
-@subsubsection Implicit Synchronization Using Task Priorities
+@subsection Implicit Synchronization Using Task Priorities
 
 This chapter is relevant on Uniprocessor System (UP) only. However, it will
 also list the requirements for explicit synchronization on Multi-processor Systems
@@ -170,7 +170,7 @@ queues, task to processor binding for non symmetric IO, use a different implemen
 for @emph{task_disable_preemption}, ...
 
 
-@subsubsection Explicit Synchronization
+@subsection Explicit Synchronization
 
 This chapter will describe the synchronization variables that need to be implemented
 in order to sequence debug events in a way that is compatible with what GDB
@@ -190,12 +190,12 @@ requirements. Here is the list of synchronization variables we plan to use and
 their usage. They are all regular semaphores. They are not binary semaphores
 because the task that does V is not the task that has done the P.
 
-@itemize @b
+@itemize @bullet
 @item @emph{WakeUpEventTask} : used by exception handler code to wake up the EVENT_MNGT
 task by doing a V operation on this object. When target code is running normally
 the EVENT_MNGT task sleeps due to a P operation on this semaphore,
 @item @emph{SerializeDebugEvent} : used to serialize events in a way compatible to
-what GDB expects. Before doing a V operation on @emph{WakeUpEventTask,} the
+what GDB expects. Before doing a V operation on @emph{WakeUpEventTask}, the
 exception handler does a P on this semaphore to be sure processing of another
 exception is not in progress. Upon reception of a CONTINUE command, the COMMAND_MNGT
 task will issue a V operation so that the exception code can wake up EVENT_MNGT
@@ -211,7 +211,7 @@ the program avoiding any loop. So not special analysis of cause of exception
 is foreseen as far as RGDBSD code is concerned,
 @end itemize
 
-@subsection Open Issues
+@section Open Issues
 
 Here are some problems we have faced while implementing our prototype :
 
@@ -223,7 +223,7 @@ task. It shall not enter the default exception handler set by RGDBSD or it will
 cause a dead lock in the RGDBSD code. Replacing the default exception vector
 before calling @b{readMem/writeMem} can be temporarily sufficient but :
 
-@itemize @b
+@itemize @bullet
 @item It will never work on MP system as it will rely on task priorities to insure
 that other task will not cause exceptions while we have removed the default
 exception handler,
@@ -248,7 +248,7 @@ that the target task is in a stopped state and that it can restart it using
 the regular CONTINUE command. In RTEMS there is a way to get force a thread
 to become inactive via @emph{rtems_task_suspend} but no way to get the full
 registers set for the thread. A partial context can be retrieved from the task
-@emph{Registers} data structure. On the other hand, relying on @emph{rtems_task_suspend
+@emph{Registers} data structure. On the other hand, relying on @emph{rtems_task_suspend}
 will be a problem for the nano-kernel implementation.
 
 @item [Stopping Target System (I3)]:
@@ -301,7 +301,7 @@ gracefully terminate as GDB does not find some backtrace termination condition
 it expects.
 @end table
 
-@subsection Workarounds for Open Issues in Prototype
+@section Workarounds for Open Issues in Prototype
 
 @table @b
 
@@ -337,7 +337,7 @@ in the path to really starts the task for the first time. The processor/system
 specific stop condition can be found as macros in the GDB source tree.
 @end table
 
-@subsection Output of a Debug Session with the Prototype
+@section Output of a Debug Session with the Prototype
 
 @example
 GNU gdb 4.17
@@ -391,7 +391,7 @@ Breakpoint 1, example2 (argument=4) at /rtems/c/src/tests/samples/debug/init.c:8
 Breakpoint 2 at 0x200128: file /rtems/c/src/tests/samples/debug/init.c, line 66.
 (gdb) c
 Continuing. 
-{Switching to Rtems thread 134283270 (Not suspended) ( <= current target thread )]
+Switching to Rtems thread 134283270 (Not suspended) ( <= current target thread )]
 Breakpoint 2, example1 (argument=4) at /rtems/c/src/tests/samples/debug/init.c:66 
 66          toto += titi; 
 (gdb) c 
