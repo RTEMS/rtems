@@ -17,8 +17,7 @@ GENERATED_FILES = adminiface.texi confspace.texi dumpcontrol.texi \
     eventlog.texi stackchk.texi rtmonuse.texi cpuuse.texi error.texi \
     monitor.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 FILES =
 

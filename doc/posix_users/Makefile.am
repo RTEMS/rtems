@@ -19,8 +19,7 @@ GENERATED_FILES = cancel.texi clock.texi cond.texi cspecific.texi \
     signal.texi status.texi systemdb.texi thread.texi timer.texi libc.texi \
     libm.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 FILES = preface.texi
 info_TEXINFOS = posix_users.texi

@@ -18,8 +18,7 @@ BMENU2 += -c
 GENERATED_FILES = networkapp.texi driver.texi networktasks.texi testing.texi \
     servers.texi decdriver.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 FILES = networktasks.texi preface.texi
 

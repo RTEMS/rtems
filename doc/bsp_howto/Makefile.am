@@ -18,8 +18,7 @@ GENERATED_FILES = intro.texi target.texi makefiles.texi linkcmds.texi \
     rtc.texi ata.texi ide-ctrl.texi nvmem.texi network.texi shmsupp.texi \
     analog.texi discrete.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 FILES =
 

@@ -16,8 +16,7 @@ include $(top_srcdir)/main.am
 GENERATED_FILES = buildada.texi buildrt.texi gdb.texi intro.texi \
     require.texi sample.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 FILES = tversions.texi
 

@@ -16,8 +16,7 @@ include $(top_srcdir)/main.am
 GENERATED_FILES = intro.texi swarch.texi started.texi commands.texi \
     trouble.texi example.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 FILES =
 

@@ -13,12 +13,12 @@ EDITION = 1
 include $(top_srcdir)/project.am
 include $(top_srcdir)/main.am
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi
-
 GENERATED_FILES = status.texi task.texi tasksync.texi semaphore.texi \
     eventflags.texi mailbox.texi msgbuffer.texi rendezvous.texi \
     interrupt.texi memorypool.texi fixedblock.texi time.texi config.texi \
     network.texi
+
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 FILES = preface.texi
 

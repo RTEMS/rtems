@@ -15,8 +15,7 @@ include $(top_srcdir)/main.am
 
 GENERATED_FILES = intro.texi revision.texi objectives.texi gdbinternals.texi \
     interfacing.texi comm.texi daemon.texi conclusion.texi
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 FILES =
 

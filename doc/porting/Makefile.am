@@ -21,8 +21,7 @@ GENERATED_FILES = developtools.texi sourcecode.texi cpumodels.texi \
     cpuinit.texi interrupts.texi taskcontext.texi idlethread.texi \
     prioritybitmap.texi codetuning.texi miscellaneous.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 info_TEXINFOS = porting.texi
 porting_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)

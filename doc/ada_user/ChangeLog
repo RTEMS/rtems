@@ -1,3 +1,7 @@
+2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merger from rtems-4-6-branch.
+
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ada_user.texi: Set @setfilename ada_user.info.

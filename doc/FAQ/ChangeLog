@@ -1,3 +1,7 @@
+2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merger from rtems-4-6-branch.
+
 2003-09-19	Joel Sherrill <joel@OARcorp.com>
 
 	* FAQ.texi, basic.t, build45.t, entry, tools.t: Merge from branch.

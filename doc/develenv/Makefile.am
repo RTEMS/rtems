@@ -17,8 +17,7 @@ FILES = direct.texi intro.texi sample.texi utils.texi
 
 GENERATED_FILES = direct.texi sample.texi utils.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 info_TEXINFOS = develenv.texi
 develenv_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)

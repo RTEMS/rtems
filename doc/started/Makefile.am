@@ -16,10 +16,9 @@ include $(top_srcdir)/main.am
 GENERATED_FILES = binaries.texi buildc.texi buildrt.texi intro.texi \
     nt.texi require.texi nextstep.texi sample.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
-FILES = tversions.texi
+FILES =
 
 info_TEXINFOS = started.texi
 started_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
@@ -81,3 +80,8 @@ PICTURES = pictures/bit_ada.jpg pictures/bit_ada.vsd pictures/bit_c.jpg pictures
     pictures/sfile12c.jpg pictures/sfile12c.vsd
 
 EXTRA_DIST += $(PICTURES)
+
+tversions.texi: tversions.texi.in tversions.sed
+	sed -f tversions.sed $(srcdir)/tversions.texi.in > tversions.texi
+CLEANFILES += tversions.texi
+DISTCLEANFILES = tversions.sed

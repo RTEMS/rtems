@@ -17,8 +17,7 @@ GENERATED_FILES = ch01.texi ch02.texi ch03.texi ch04.texi ch05.texi \
     ch06.texi ch07.texi ch08.texi ch09.texi ch10.texi ch11.texi ch12.texi \
     ch13.texi ch14.texi ch15.texi ch16.texi ch17.texi ch18.texi ch19.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 FILES = preface.texi
 
