@@ -728,7 +728,7 @@
 
 	* ChangeLog: New file.
 
-2000-05-25	Sergei Organov <osv@javad.ru>
+2001-05-25	Sergei Organov <osv@javad.ru>
 
 	* macros/rtems/score/coresem.inl, inline/rtems/score/coresem.inl: Cut
 	and paste problem incorrectly enabled interrupts twice with the first
