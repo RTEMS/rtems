@@ -1,3 +1,21 @@
+2004-10-27	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* Makefile.am, configure.ac: Add httpd.
+	* httpd/asp.c, httpd/balloc.c, httpd/cgi.c, httpd/default.c,
+	httpd/ej.h, httpd/ejIntrn.h, httpd/ejlex.c, httpd/ejparse.c,
+	httpd/emfdb.c, httpd/emfdb.h, httpd/form.c, httpd/handler.c,
+	httpd/h.c, httpd/license.txt, httpd/Makefile.am, httpd/md5c.c,
+	httpd/md5.h, httpd/mime.c, httpd/misc.c, httpd/NOTES, httpd/ringq.c,
+	httpd/rom.c, httpd/rtems_webserver.h, httpd/security.c,
+	httpd/sock.c, httpd/socket.c, httpd/sockGen.c, httpd/sym.c,
+	httpd/uemf.c, httpd/uemf.h, httpd/um.c, httpd/um.h, httpd/umui.c,
+	httpd/url.c, httpd/value.c, httpd/wbase64.c, httpd/webcomp.c,
+	httpd/webmain.c, httpd/webpage.c, httpd/webrom.c, httpd/webs.c,
+	httpd/websda.c, httpd/websda.h, httpd/webs.h, httpd/websSSL.c,
+	httpd/websSSL.h, httpd/websuemf.c, httpd/wsIntrn.h: New (Moved from
+	c/src/libnetworking/rtems_webserver).
+	* httpd/Makefile.am: Install libhttpd.a.
+
 2004-10-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* libcsupport/include/rtems/_inttypes.h: Undefine __PRIN defines.
