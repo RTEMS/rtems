@@ -238,6 +238,9 @@ rtems_status_code rtems_rate_monotonic_get_status(
   Objects_Locations              location;
   Rate_monotonic_Control        *the_period;
 
+  if ( status == NULL )
+    return RTEMS_INVALID_ADDRESS;
+
   the_period = _Rate_monotonic_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
