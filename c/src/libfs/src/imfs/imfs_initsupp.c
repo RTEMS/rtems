@@ -70,9 +70,9 @@ int IMFS_initialize_support(
    * Set st_ino for the root to 1.
    */
 
-  fs_info->ino_count        = 1;
-  fs_info->memfile_handlers = memfile_handlers;
-  fs_info->memfile_handlers = directory_handlers;
+  fs_info->ino_count          = 1;
+  fs_info->memfile_handlers   = memfile_handlers;
+  fs_info->directory_handlers = directory_handlers;
 
   jnode = temp_mt_entry->mt_fs_root.node_access;
   jnode->st_ino = fs_info->ino_count;
