@@ -36,10 +36,16 @@ THREAD_C_PIECES = thread threadchangepriority threadclearstate threadclose \
     threadstart threadstartmultitasking threadtickletimeslice \
     threadyieldprocessor
 
+THREADQ_C_PIECES= threadq threadqdequeue threadqdequeuefifo \
+    threadqdequeuepriority threadqenqueue threadqenqueuefifo \
+    threadqenqueuepriority threadqextract threadqextractfifo \
+    threadqextractpriority threadqextractwithproxy threadqfirst \
+    threadqfirstfifo threadqfirstpriority threadqflush threadqtimeout
+
 # C and C++ source names, if any, go here -- minus the .c or .cc
 C_PIECES = apiext chain coremsg coremutex coresem coretod heap interr isr \
-    $(OBJECT_C_PIECES) $(THREAD_C_PIECES) threadq userext watchdog wkspace \
-    $(MP_C_PIECES)
+    $(OBJECT_C_PIECES) $(THREAD_C_PIECES) $(THREADQ_C_PIECES) userext \
+    watchdog wkspace $(MP_C_PIECES)
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 

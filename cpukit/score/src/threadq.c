@@ -70,6 +70,7 @@ void _Thread_queue_Initialize(
   }
 
 }
+#if 0
 
 /*PAGE
  *
@@ -981,3 +982,4 @@ Thread_Control *_Thread_queue_First_priority (
   }
   return NULL;
 }
+#endif
