@@ -115,16 +115,16 @@ RTEMS_CANONICALIZE_TOOLS
 AC_SUBST(CUSTOM_CFG_FILES)
 AC_SUBST(cfg_dir)
 
-## Configure ${srcdir}/../../cpukit as exec/ if multilibs are disabled
+## Configure ${srcdir}/../../cpukit as cpukit/ if multilibs are disabled
 AS_IF([test x"$multilib" = x"no"],[
   RTEMS_CHECK_MULTIPROCESSING
   AC_CONFIG_COMMANDS_POST([
     if test x"$multilib" = x"no"; then
-    RTEMS_CONFIG_SUBDIR([exec],[../../cpukit],
+    RTEMS_CONFIG_SUBDIR([cpukit],[../../cpukit],
       ['--with-project-root=../../..' '--enable-rtemsbsp=$RTEMS_BSP'])
     fi
   ])
-  BSP_SUBDIRS="exec"
+  BSP_SUBDIRS="cpukit"
 ])
 
 ## Note: the order of the directories below is essential
@@ -164,7 +164,7 @@ BSP_SUBDIRS="$BSP_SUBDIRS support"
 BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
 
 AC_ARG_ENABLE([ada],
-[AC_HELP_STRING([--enable-ada],[enable ada support])],
+[AS_HELP_STRING(--enable-ada,enable ada support)],
 [case "${enable_ada}" in
   yes) ;;
   no) ;;

@@ -1,5 +1,9 @@
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Use AS_HELP_STRING(ada).
+
+2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/bspopts.m4: Use AS_HELP_STRING.
 	* aclocal/bsp-configure.m4: Require autoconf-2.59.
 	Use AC_CONFIG_HEADERS.
