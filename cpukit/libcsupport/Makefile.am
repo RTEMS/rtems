@@ -149,8 +149,7 @@ else
 C_FILES = $(COMMON_C_FILES) $(EMBEDDED_C_FILES)
 endif
 
-C_O_FILES = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
-OBJS = $(C_O_FILES)
+OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
 
 #
 # Add local stuff here using +=

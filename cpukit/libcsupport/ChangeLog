@@ -1,3 +1,7 @@
+2003-01-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Eliminate OBJS.
+
 2003-01-10	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/libio.h: Rename __dev_t to __rtems_dev_t to avoid
