@@ -53,7 +53,7 @@ static rtems_irq_connect_data*		rtems_hdl_tbl;
  * while upper bits are interrupt on the slave PIC.
  * This cache is initialized in ldseg.s
  */
-rtems_i8259_masks i8259s_cache = 0xffbf;
+rtems_i8259_masks i8259s_cache = 0xFFFB;
 
 /*-------------------------------------------------------------------------+
 |         Function:  BSP_irq_disable_at_i8259s
