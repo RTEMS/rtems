@@ -32,27 +32,27 @@ SYM (start):
 	mov.l	edata_k,r0
 	mov.l	end_k,r1
 	mov	#0,r2
-start_l:
+0:
 	mov.l	r2,@r0
 	add	#4,r0
 	cmp/ge	r0,r1
-	bt	start_l
+	bt	0b
 
 	! copy the vector table from rom to ram
-	mov.l   vects_k,r7   	! vectab
-	mov	#0,r2		! address of boot vector table
-	mov     #0,r3		| number of bytes copied
-	mov.w   vects_size,r6   ! size of entries in vectab
-0:
-	mov.l   @r2+,r1
-	mov.l   r1,@r7
-	add     #4,r7
-	add     #1,r3
-	cmp/hi  r6,r3
-	bf      0b
+	mov.l   vects_k,r0   	! vectab
+	mov	#0,r1		! address of boot vector table
+	mov     #0,r2		| number of bytes copied
+	mov.w   vects_size,r3   ! size of entries in vectab
+1:
+	mov.l   @r1+,r4
+	mov.l   r4,@r0
+	add     #4,r0
+	add     #1,r2
+	cmp/hi  r3,r2
+	bf      1b
 
-	mov.l   vects_k,r8   	! update vbr to point to vectab
-	ldc     r8,vbr
+	mov.l   vects_k,r0   	! update vbr to point to vectab
+	ldc     r0,vbr
 
 	! call the mainline	
 	mov #0,r4		! argc
@@ -70,18 +70,18 @@ start_l:
 
 	.align 2
 stack_k:
-	.long	_stack	
+	.long	SYM(stack)	
 edata_k:
-	.long	_edata
+	.long	SYM(edata)
 end_k:
-	.long	_end
+	.long	SYM(end)
 main_k:
-	.long	_boot_card
+	.long	SYM(boot_card)
 exit_k:
-	.long	_exit
+	.long	SYM(exit)
 
 vects_k:
-	.long	_vectab
+	.long	SYM(vectab)
 vects_size:
 	.word	255
 
@@ -90,4 +90,5 @@ vects_size:
 #else
 	.section .stack
 #endif
-_stack:	.long	0xdeaddead
+SYM(stack):
+	.long	0xdeaddead
