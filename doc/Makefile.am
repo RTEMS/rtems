@@ -4,7 +4,8 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-# NOTE: The order of the directories is essential
+# NOTE: The order of the directories is essential.
+#       + tools, common and images are shared across many documents
 SUBDIRS = \
 tools \
 common \
