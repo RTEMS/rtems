@@ -1,5 +1,9 @@
 2003-07-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Remove '/' after $(DESTDIR).
+
+2003-07-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Remove bogus $(MULTISUBDIR).
 
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
