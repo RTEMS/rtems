@@ -1,3 +1,11 @@
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Require automake >= 1.8.2.
+	* Makefile.am, mpc505/Makefile.am, mpc6xx/Makefile.am, 
+	mpc8260/Makefile.am, mpc8xx/Makefile.am, ppc403/Makefile.am, 
+	shared/Makefile.am: Use automake compilation rules.
+	Add PREINSTALL_DIRS.
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.

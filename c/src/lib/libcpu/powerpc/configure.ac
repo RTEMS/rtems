@@ -9,12 +9,11 @@ RTEMS_TOP(../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define foreign 1.8])
+AM_INIT_AUTOMAKE([no-define foreign 1.8.2])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_BARE
 RTEMS_ENV_RTEMSBSP
-
 
 RTEMS_PROJECT_ROOT
 
@@ -42,7 +41,10 @@ AM_CONDITIONAL(mpc8xx, test "$RTEMS_CPU_MODEL" = "mpc8xx" \
 || test "$RTEMS_CPU_MODEL" = "mpc821" \
 || test "$RTEMS_CPU_MODEL" = "mpc860" )
 AM_CONDITIONAL(mpc8260, test "$RTEMS_CPU_MODEL" = "mpc8260")
-AM_CONDITIONAL(ppc403, test "$RTEMS_CPU_MODEL" = "ppc403")
+
+# the ppc405 shares files with the ppc403
+AM_CONDITIONAL(ppc403,[test "$RTEMS_CPU_MODEL" = "ppc403" \
+|| test "$RTEMS_CPU_MODEL" = "ppc405"])
 AM_CONDITIONAL(ppc405, test "$RTEMS_CPU_MODEL" = "ppc405")
 
 # Explicitly list all Makefiles here

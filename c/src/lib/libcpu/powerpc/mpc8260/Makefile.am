@@ -3,160 +3,171 @@
 ##
 
 EXTRA_DIST =
-CLEANDIRS =
+EXTRA_PROGRAMS =
+CLEANFILES =
 noinst_DATA =
 
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
+if mpc8260
 include_mpc8260dir = $(includedir)/mpc8260
 
 include_HEADERS = include/mpc8260.h
-include_mpc8260_HEADERS = include/console.h include/mmu.h include/cpm.h
 
 include_libcpudir = $(includedir)/libcpu
 include_libcpu_HEADERS = exceptions/raw_exception.h
 
 ## console-generic
-console_C_FILES = console-generic/console-generic.c
-EXTRA_DIST += $(console_C_FILES)
+include_mpc8260_HEADERS = include/console.h
 
-console_rel_OBJECTS = \
-    $(console_C_FILES:console-generic/%.c=console-generic/${ARCH}/%.$(OBJEXT))
+EXTRA_PROGRAMS += console-generic.rel
+CLEANFILES += console-generic.rel
+console_generic_rel_SOURCES = console-generic/console-generic.c \
+    include/console.h
+console_generic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+console_generic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-console-generic/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) console-generic/$(ARCH)
-	@: > console-generic/$(ARCH)/$(dirstamp)
-console-generic/$(ARCH)/%.$(OBJEXT): console-generic/%.c console-generic/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-console-generic/$(ARCH)/console-generic.rel: $(console_rel_OBJECTS)
-	$(make-rel)
-CLEANDIRS += console-generic/o-optimize console-generic/o-debug
-noinst_DATA += console-generic/$(ARCH)/console-generic.rel
+EXTRA_PROGRAMS += console-generic_g.rel
+CLEANFILES += console-generic_g.rel
+console_generic_g_rel_SOURCES = $(console_generic_rel_SOURCES)
+console_generic_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+console_generic_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_DATA += console-generic$(LIB_VARIANT).rel
 
 ## clock
-clock_C_FILES = clock/clock.c
-EXTRA_DIST += $(clock_C_FILES)
+EXTRA_PROGRAMS += clock.rel
+CLEANFILES += clock.rel
+clock_rel_SOURCES = clock/clock.c
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-clock_rel_OBJECTS = $(clock_C_FILES:clock/%.c=clock/${ARCH}/%.$(OBJEXT))
+EXTRA_PROGRAMS += clock_g.rel
+CLEANFILES += clock_g.rel
+clock_g_rel_SOURCES = $(clock_rel_SOURCES)
+clock_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+clock_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-clock/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) clock/$(ARCH)
-	@: > clock/$(ARCH)/$(dirstamp)
-clock/$(ARCH)/%.$(OBJEXT): clock/%.c clock/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-clock/$(ARCH)/clock.rel: $(clock_rel_OBJECTS)
-	$(make-rel)
-CLEANDIRS += clock/o-optimize clock/o-debug
-noinst_DATA += clock/$(ARCH)/clock.rel
+noinst_DATA += clock$(LIB_VARIANT).rel
 
 ## cpm
-cpm_C_FILES = cpm/cp.c cpm/dpram.c cpm/brg.c
-EXTRA_DIST += $(cpm_C_FILES)
+include_mpc8260_HEADERS += include/cpm.h
 
-cpm_rel_OBJECTS = $(cpm_C_FILES:cpm/%.c=cpm/${ARCH}/%.$(OBJEXT))
+EXTRA_PROGRAMS += cpm.rel
+CLEANFILES += cpm.rel
+cpm_rel_SOURCES = cpm/cp.c cpm/dpram.c cpm/brg.c include/cpm.h
+cpm_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+cpm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-cpm/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) cpm/$(ARCH)
-	@: > cpm/$(ARCH)/$(dirstamp)
-cpm/$(ARCH)/%.$(OBJEXT): cpm/%.c cpm/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-cpm/$(ARCH)/cp.rel: $(cpm_rel_OBJECTS)
-	$(make-rel)
-CLEANDIRS += cpm/o-optimize cpm/o-debug
-noinst_DATA += cpm/$(ARCH)/cp.rel
+EXTRA_PROGRAMS += cpm_g.rel
+CLEANFILES += cpm_g.rel
+cpm_g_rel_SOURCES = $(cpm_rel_SOURCES)
+cpm_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+cpm_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_DATA += cpm$(LIB_VARIANT).rel
 
 ## exceptions
-exceptions_C_FILES = exceptions/raw_exception.c
-exceptions_S_FILES = exceptions/asm_utils.S
+include_libcpu_HEADERS += exceptions/raw_exception.h
 
-exceptions_rel_OBJECTS = \
-    $(exceptions_C_FILES:exceptions/%.c=exceptions/$(ARCH)/%.$(OBJEXT)) \
-    $(exceptions_S_FILES:exceptions/%.S=exceptions/$(ARCH)/%.$(OBJEXT))
+EXTRA_PROGRAMS += exceptions.rel
+CLEANFILES += exceptions.rel
+exceptions_rel_SOURCES = exceptions/raw_exception.c exceptions/asm_utils.S \
+    exceptions/raw_exception.h
+exceptions_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+exceptions_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-exceptions/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) exceptions/$(ARCH)
-	@: > exceptions/$(ARCH)/$(dirstamp)
-exceptions/$(ARCH)/%.$(OBJEXT): exceptions/%.c exceptions/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-exceptions/$(ARCH)/%.$(OBJEXT): exceptions/%.S exceptions/$(ARCH)/$(dirstamp)
-	${CCASCOMPILE} -o $@ -c $<
-exceptions/$(ARCH)/exceptions.rel: $(exceptions_rel_OBJECTS)
-	$(make-rel)
-CLEANDIRS += exceptions/o-optimize exceptions/o-debug
-noinst_DATA += exceptions/$(ARCH)/exceptions.rel
+EXTRA_PROGRAMS += exceptions_g.rel
+CLEANFILES += exceptions_g.rel
+exceptions_g_rel_SOURCES = $(exceptions_rel_SOURCES)
+exceptions_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+exceptions_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_DATA += exceptions$(LIB_VARIANT).rel
 
 ## mmu
-mmu_C_FILES = mmu/mmu.c
-EXTRA_DIST += $(mmu_C_FILES)
+include_mpc8260_HEADERS += include/mmu.h
 
-mmu_rel_OBJECTS = $(mmu_C_FILES:mmu/%.c=mmu/${ARCH}/%.$(OBJEXT))
+EXTRA_PROGRAMS += mmu.rel
+CLEANFILES += mmu.rel
+mmu_rel_SOURCES = mmu/mmu.c include/mmu.h
+mmu_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-mmu/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) mmu/$(ARCH)
-	@: > mmu/$(ARCH)/$(dirstamp)
-mmu/$(ARCH)/%.$(OBJEXT): mmu/%.c mmu/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-mmu/$(ARCH)/mmu.rel: $(mmu_rel_OBJECTS)
-	$(make-rel)
-CLEANDIRS += mmu/o-optimize mmu/o-debug
-noinst_DATA += mmu/$(ARCH)/mmu.rel
+EXTRA_PROGRAMS += mmu_g.rel
+CLEANFILES += mmu_g.rel
+mmu_g_rel_SOURCES = $(mmu_rel_SOURCES)
+mmu_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+mmu_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_DATA += mmu$(LIB_VARIANT).rel
 
 ## timer
-timer_C_FILES = timer/timer.c
-EXTRA_DIST += $(timer_C_FILES)
+EXTRA_PROGRAMS += timer.rel
+CLEANFILES += timer.rel
+timer_rel_SOURCES = timer/timer.c
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-timer_rel_OBJECTS = $(timer_C_FILES:timer/%.c=timer/${ARCH}/%.$(OBJEXT))
+EXTRA_PROGRAMS += timer_g.rel
+CLEANFILES += timer_g.rel
+timer_g_rel_SOURCES = $(timer_rel_SOURCES)
+timer_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+timer_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-timer/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) timer/$(ARCH)
-	@: > timer/$(ARCH)/$(dirstamp)
-timer/$(ARCH)/%.$(OBJEXT): timer/%.c timer/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-timer/$(ARCH)/timer.rel: $(timer_rel_OBJECTS)
-	$(make-rel)
-CLEANDIRS += timer/o-optimize timer/o-debug
-noinst_DATA += timer/$(ARCH)/timer.rel
+noinst_DATA += timer$(LIB_VARIANT).rel
+endif
+
+all-local: $(PREINSTALL_FILES)
 
 ## --
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
+if mpc8260
 $(PROJECT_INCLUDE)/mpc8260/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/mpc8260
 	@: > $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
 
 $(PROJECT_INCLUDE)/mpc8260.h: include/mpc8260.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8260.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260.h
 
-$(PROJECT_INCLUDE)/mpc8260/console.h: include/console.h $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8260/console.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/console.h
-
-$(PROJECT_INCLUDE)/mpc8260/mmu.h: include/mmu.h $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8260/mmu.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/mmu.h
-
-$(PROJECT_INCLUDE)/mpc8260/cpm.h: include/cpm.h $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8260/cpm.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/cpm.h
-
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
 $(PROJECT_INCLUDE)/libcpu/raw_exception.h: exceptions/raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/raw_exception.h
 
-CLEANFILES = $(PREINSTALL_FILES)
+$(PROJECT_INCLUDE)/mpc8260/console.h: include/console.h $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8260/console.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/console.h
+
+$(PROJECT_INCLUDE)/mpc8260/cpm.h: include/cpm.h $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8260/cpm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/cpm.h
+
+$(PROJECT_INCLUDE)/libcpu/raw_exception.h: exceptions/raw_exception.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/raw_exception.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/raw_exception.h
+
+$(PROJECT_INCLUDE)/mpc8260/mmu.h: include/mmu.h $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8260/mmu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/mmu.h
+endif
+
+CLEANFILES += $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/../../../automake/local.am
