@@ -25,7 +25,7 @@
             <A HREF="../dvi/started.dvi">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="started/index.html">
-               Getting Started with RTEMS for C/C++ Users</A>
+               Getting Started with RTEMS</A>
             </LI>
 
         <LI><A HREF="../pdf/c_user.pdf">
@@ -70,19 +70,6 @@
     </MENU>
     <LI>Ada Manuals</LI>
     <MENU>
-        <LI><A HREF="../pdf/started.pdf">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/started_ada.ps">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/started_ada.dvi">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="started_ada/index.html">
-               Getting Started with GNAT/RTEMS</A> (NOTE: Build procedures
-               apply only to gnat 3.13p not the GNAT in gcc 3.2.  The 
-               hello world and testing the native GNAT are applicable though.
-               The relevant portions of this manual need to be merged into
-               the Getting Started for C/C++ Users document.) 
-            </LI>
         <LI><A HREF="../pdf/ada_user.pdf">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../ps/ada_user.ps">
