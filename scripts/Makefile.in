@@ -59,6 +59,7 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 BINUTILSVERS = @BINUTILSVERS@
+BSPVERS = @BSPVERS@
 GCCNEWLIBVERS = @GCCNEWLIBVERS@
 GDBVERS = @GDBVERS@
 MAKEINFO = @MAKEINFO@
@@ -68,7 +69,7 @@ VERSION = @VERSION@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = . binutils gccnewlib gdb
+SUBDIRS = . binutils gccnewlib gdb rtems
 
 noinst_SCRIPTS =  setup buildall mkbinutils_subpackage_version mkbinutilspec mkbspspec mkgccnewlibspec mkgdbspec mkrpms mkspec
 
@@ -88,14 +89,15 @@ DISTCLEANFILES = setup.cache
 CLEANFILES = buildall
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_CLEAN_FILES =  buildall mkbinutilspec mkgccnewlibspec mkgdbspec
+CONFIG_CLEAN_FILES =  buildall mkbinutilspec mkgccnewlibspec mkgdbspec \
+mkbspspec
 SCRIPTS =  $(noinst_SCRIPTS)
 
 DATA =  $(noinst_DATA)
 
 DIST_COMMON =  README Makefile.am Makefile.in TODO aclocal.m4 \
 buildall.in configure configure.in install-sh missing mkbinutilspec.in \
-mkgccnewlibspec.in mkgdbspec.in mkinstalldirs
+mkbspspec.in mkgccnewlibspec.in mkgdbspec.in mkinstalldirs
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -125,6 +127,8 @@ mkbinutilspec: $(top_builddir)/config.status mkbinutilspec.in
 mkgccnewlibspec: $(top_builddir)/config.status mkgccnewlibspec.in
 	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 mkgdbspec: $(top_builddir)/config.status mkgdbspec.in
+	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
+mkbspspec: $(top_builddir)/config.status mkbspspec.in
 	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 # This directory's subdirectories are mostly independent; you can cd

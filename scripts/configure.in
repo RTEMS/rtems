@@ -30,6 +30,8 @@ BINUTILSVERS="binutils-${binutils_version}"
 AC_SUBST(BINUTILSVERS)
 GDBVERS="gdb-${gdb_version}"
 AC_SUBST(GDBVERS)
+BSPVERS="RTEMS-no_version_yet"
+AC_SUBST(BSPVERS)
 
 AC_OUTPUT(
 Makefile
@@ -37,6 +39,7 @@ buildall
 mkbinutilspec
 mkgccnewlibspec
 mkgdbspec
+mkbspspec
 binutils/Makefile
 gccnewlib/Makefile
 gdb/Makefile

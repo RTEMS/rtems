@@ -62,7 +62,7 @@ newlib=${newlib_version}
 # also use binutils_rpm_release
 buildroot=/opt/tmp
 
-testing=yes
+testing=no
 do_binutils=yes
 do_gdb=yes
 do_gccnewlib=yes
@@ -124,19 +124,9 @@ do
     echo Skipping binutils for ${target}
   fi
 
-  if [ ${do_gdb} = yes ] ; then
-    # now build gdb
-    logfile=log/${target}-gdb
-    specfile=${dst}/${target}-gdb-${gdb}.spec
-    echo "rpm -ba ${specfile} >${logfile} 2>&1"
-    if [ ${testing} = no ] ; then
-      rpm -ba ${specfile} >${logfile} 2>&1
-    fi
-    ${ECHO} rm -rf ${dst}/../BUILD/${target}-gdb*
-    ${ECHO} rm -rf ${buildroot}/opt
-  else
-    echo Skipping gdb for ${target}
-  fi
+  #
+  #  build gcc/newlib
+  #
 
   if [ ${do_gccnewlib} = yes ] ; then
     # now build gcc/newlib
@@ -165,6 +155,25 @@ do
   else
     echo Skipping gcc/newlib for ${target}
   fi
+
+  #
+  # build gdb
+  #
+
+  if [ ${do_gdb} = yes ] ; then
+    # now build gdb
+    logfile=log/${target}-gdb
+    specfile=${dst}/${target}-gdb-${gdb}.spec
+    echo "rpm -ba ${specfile} >${logfile} 2>&1"
+    if [ ${testing} = no ] ; then
+      rpm -ba ${specfile} >${logfile} 2>&1
+    fi
+    ${ECHO} rm -rf ${dst}/../BUILD/${target}-gdb*
+    ${ECHO} rm -rf ${buildroot}/opt
+  else
+    echo Skipping gdb for ${target}
+  fi
+
 done
 
 # Now we are done

@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = . binutils gccnewlib gdb
+SUBDIRS = . binutils gccnewlib gdb rtems
 
 noinst_SCRIPTS = \
 setup \

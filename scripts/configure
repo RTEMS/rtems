@@ -692,7 +692,7 @@ fi
 
 PACKAGE=scripts
 
-VERSION=19991020-0
+VERSION=19991020-1
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -797,6 +797,8 @@ GCCNEWLIBVERS="gcc-${gcc_version}-newlib-${newlib_version}"
 BINUTILSVERS="binutils-${binutils_version}"
 
 GDBVERS="gdb-${gdb_version}"
+
+BSPVERS="RTEMS-no_version_yet"
 
 
 trap '' 1 2 15
@@ -917,6 +919,7 @@ buildall
 mkbinutilspec
 mkgccnewlibspec
 mkgdbspec
+mkbspspec
 binutils/Makefile
 gccnewlib/Makefile
 gdb/Makefile
@@ -968,6 +971,7 @@ s%@RPM_SPECSdir@%$RPM_SPECSdir%g
 s%@GCCNEWLIBVERS@%$GCCNEWLIBVERS%g
 s%@BINUTILSVERS@%$BINUTILSVERS%g
 s%@GDBVERS@%$GDBVERS%g
+s%@BSPVERS@%$BSPVERS%g
 
 CEOF
 EOF
@@ -1014,6 +1018,7 @@ buildall
 mkbinutilspec
 mkgccnewlibspec
 mkgdbspec
+mkbspspec
 binutils/Makefile
 gccnewlib/Makefile
 gdb/Makefile
