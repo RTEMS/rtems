@@ -1,9 +1,10 @@
 --
---  MAIN / BODY
+--  SPTEST / BODY
 --
 --  DESCRIPTION:
 --
---  This is the entry point for Test SP19 of the Single Processor Test Suite.
+--  This package is the implementation of Test 19 of the RTEMS
+--  Single Processor Test Suite.
 --
 --  DEPENDENCIES: 
 --
@@ -20,38 +21,30 @@
 --  $Id$
 --
 
+with INTERFACES; use INTERFACES;
 with RTEMS;
-with SPTEST;
 with TEST_SUPPORT;
+with TEXT_IO;
 
-procedure SP19 is
-  INIT_ID : RTEMS.ID;
-  STATUS  : RTEMS.STATUS_CODES;
-begin
+package body SPTEST is
 
-   RTEMS.TASK_CREATE(
-      RTEMS.BUILD_NAME(  'I', 'N', 'I', 'T' ),
-      1,
-      RTEMS.MINIMUM_STACK_SIZE,
-      RTEMS.NO_PREEMPT,
-      RTEMS.FLOATING_POINT,
-      INIT_ID,
-      STATUS
-   );
-   TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_CREATE OF INIT" );
+--PAGE
+-- 
+--  INIT
+--
 
+   procedure INIT (
+      ARGUMENT : in     RTEMS.TASK_ARGUMENT
+   ) is
+      TIME   : RTEMS.TIME_OF_DAY;
+      STATUS : RTEMS.STATUS_CODES;
+   begin
 
-   RTEMS.TASK_START(
-      INIT_ID,
-      SPTEST.INIT'ACCESS,
-      0,
-      STATUS
-   );
-   TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_START OF INIT" );
+      TEXT_IO.NEW_LINE( 2 );
+      TEXT_IO.PUT_LINE( "*** TEST 19***" );
+      TEXT_IO.PUT_LINE( "Not currently implemented" );
+      TEXT_IO.PUT_LINE( "*** END OF TEST 19***" );
 
-   loop
-      delay 120.0;
-   end loop;
+   end INIT;
 
-end SP19;
-
+end SPTEST;

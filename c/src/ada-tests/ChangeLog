@@ -1,5 +1,11 @@
 2002-08-26	Joel Sherrill <joel@OARcorp.com>
 
+	* sptests/sp19/sptest.adb: Modified to follow pattern of SP01
+	even though this test is not supported.
+	* sptests/sp19/sp19.adb: New file.
+
+2002-08-26	Joel Sherrill <joel@OARcorp.com>
+
 	* mptests/mp01/mptest.ads, mptests/mp02/mptest.ads,
 	mptests/mp03/mptest.ads, mptests/mp04/mptest.ads,
 	mptests/mp05/mptest.ads, mptests/mp06/mptest.ads,
