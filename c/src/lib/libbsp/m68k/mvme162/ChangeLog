@@ -1,3 +1,8 @@
+2004-01-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add AM_CONDITIONAL(HAS_FPSP).
+	* wrapup/Makefile.am: Reflect changes to libcpu.
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
