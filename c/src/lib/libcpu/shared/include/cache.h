@@ -1,5 +1,21 @@
 /*
  *  libcpu Cache Manager Support
+ *  
+ *  COPYRIGHT (c) 1989-1999.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  The functions declared in this file are implemented for
+ *  each processor in the cache.c file under libcpu/CPU/.
+ *  They provide the processor specific actions to take for
+ *  implementing most of the RTEMS Cache Manager directives,
+ *  and should only ever be called by these directives.
+ *  
+ *  The API for the RTEMS Cache Manager can be found in
+ *  c/src/exec/rtems/include/rtems/rtems/cache.h
  *
  *  $Id$
  */

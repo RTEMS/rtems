@@ -1,3 +1,7 @@
+2000-10-18	  John Cotton <john.cotton@nrc.ca>
+
+	* shared/include/cache.h: Improved file header.
+
 2000-10-12	Nick Simon <Nick.SIMON@syntegra.bt.co.uk>
 
 	* shared/src/cache_manager.c: Minor bug fix -- changed > to >= so the
