@@ -1262,9 +1262,15 @@ ie_readframe(struct ie_softc *sc, int num) /* frame number to read */
     return (0);
   }
 
+  /*
+   * Remove the mac header. This is different from the NetBSD
+   * stack.
+   */
   eh = mtod(m, struct ether_header *);
   m->m_data += sizeof (struct ether_header);
-  
+  m->m_len -= sizeof (struct ether_header);
+  m->m_pkthdr.len -= sizeof (struct ether_header);
+
 #if I82586_DEBUG
   if (sc->sc_debug & IED_READFRAME) {
 
