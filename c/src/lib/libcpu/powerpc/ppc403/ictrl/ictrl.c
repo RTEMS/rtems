@@ -108,7 +108,7 @@ disable_ext_irq( unsigned32 mask)
  *  this function is called, when a external interrupt is present and 
  *  enabled but there is no handler installed. It will clear
  *  the corresponding enable bits and call the spurious handler
- *  present in the _CPU_Table, if any.
+ *  present in the CPU Configuration Table, if any.
  *
  */
 void 
@@ -125,8 +125,8 @@ ictrl_spurious_handler(unsigned32 spurious_mask,
       printf("spurious external interrupt: %d at pc 0x%x; disabling\n",
 	     vector, cpu_frame->Interrupt.pcoqfront);
 #endif
-      if (_CPU_Table.spurious_handler) {
-	_CPU_Table.spurious_handler(v + PPC_IRQ_EXT_BASE,cpu_frame);
+      if (rtems_cpu_configuration_get_spurious_handler()) {
+	rtems_cpu_configuration_get_spurious_handler()(v + PPC_IRQ_EXT_BASE,cpu_frame);
       }
     }
   }

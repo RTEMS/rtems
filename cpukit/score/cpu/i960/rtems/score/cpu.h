@@ -172,6 +172,18 @@ typedef struct {
   i960_PRCB *Prcb;
 }   rtems_cpu_table;
 
+/*
+ *  Macros to access required entires in the CPU Table are in 
+ *  the file rtems/system.h.
+ */
+
+/*
+ *  Macros to access i960 specific additions to the CPU Table
+ */
+
+#define rtems_cpu_configuration_get_prcb() \
+   (_CPU_Table.Prcb)
+
 /* variables */
 
 SCORE_EXTERN void               *_CPU_Interrupt_stack_low;

@@ -19,9 +19,6 @@
 
 #include "system.h"
 
-extern rtems_configuration_table BSP_Configuration;
-extern rtems_cpu_table           _CPU_Table;
-
 void Screen3()
 {
   rtems_name        task_name;
@@ -48,16 +45,13 @@ void Screen3()
    * skip the test that tries to allocate a stack that is too big.
    */
 
-  if (_CPU_Table.stack_allocate_hook)
-  {
+  if (rtems_cpu_configuration_get_stack_allocate_hook()) {
       puts( "TA1 - rtems_task_create - stack size - RTEMS_UNSATISFIED  -- SKIPPED" );
-  }
-  else
-  {
+  } else {
       status = rtems_task_create(
         task_name,
         1,
-        BSP_Configuration.work_space_size,
+        rtems_configuration_get_work_space_size(),
         RTEMS_DEFAULT_MODES,
         RTEMS_DEFAULT_ATTRIBUTES,
         &Junk_id

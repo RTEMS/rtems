@@ -15,8 +15,6 @@
 
 #include <rtems.h>
 
-extern rtems_configuration_table BSP_Configuration;
-
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>

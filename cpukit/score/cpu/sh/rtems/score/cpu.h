@@ -380,6 +380,17 @@ typedef struct {
 }   rtems_cpu_table;
 
 /*
+ *  Macros to access required entires in the CPU Table are in 
+ *  the file rtems/system.h.
+ */
+
+/*
+ *  Macros to access SH specific additions to the CPU Table
+ */
+
+/* There are no CPU specific additions to the CPU Table for this port. */
+
+/*
  *  This variable is optional.  It is used on CPUs on which it is difficult
  *  to generate an "uninitialized" FP context.  It is filled in by
  *  _CPU_Initialize and copied into the task's FP context area during

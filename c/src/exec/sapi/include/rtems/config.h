@@ -121,6 +121,9 @@ SAPI_EXTERN rtems_multiprocessing_table  *_Configuration_MP_table;
  *  or the exact format of the configuration table.
  */
 
+#define rtems_configuration_get_table() \
+        (&_Configuration_Table)
+
 #define rtems_configuration_get_work_space_start() \
         (_Configuration_Table->work_space_start)
 

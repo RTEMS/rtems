@@ -33,8 +33,6 @@ void print_schedparam(
 #endif
 }
  
-extern rtems_configuration_table BSP_Configuration;
-
 void *POSIX_Init(
   void *argument
 )
@@ -107,7 +105,7 @@ void *POSIX_Init(
   status = pthread_attr_init( &attr );
   assert( !status );
 
-  attr.stacksize = BSP_Configuration.work_space_size * 10;
+  attr.stacksize = rtems_configuration_get_work_space_size() * 10;
   puts( "Init: pthread_create - EAGAIN (stacksize too large)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   assert( status == EAGAIN );

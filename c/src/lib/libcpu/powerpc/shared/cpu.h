@@ -247,7 +247,7 @@ n:
   do { \
     unsigned32 start, ticks, now; \
     CPU_Get_timebase_low( start ) ; \
-    ticks = (_microseconds) * Cpu_table.clicks_per_usec; \
+    ticks = (_microseconds) * rtems_cpu_configuration_get_clicks_per_usec(); \
     do \
       CPU_Get_timebase_low( now ) ; \
     while (now - start < ticks); \

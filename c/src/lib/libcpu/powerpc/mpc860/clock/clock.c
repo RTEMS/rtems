@@ -43,8 +43,6 @@
 #include <stdlib.h>                     /* for atexit() */
 #include <mpc860.h>
 
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
-
 volatile rtems_unsigned32 Clock_driver_ticks;
 extern volatile m860_t m860;
 
@@ -75,7 +73,7 @@ void Install_clock(rtems_isr_entry clock_isr)
   Clock_driver_ticks = 0;
   
   pit_value = rtems_configuration_get_microseconds_per_tick() /
-               Cpu_table.clicks_per_usec;
+               rtems_cpu_configuration_get_clicks_per_usec();
   if (pit_value == 0) {
     pit_value = 0xffff;
   } else {

@@ -360,8 +360,18 @@ typedef struct {
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
-  unsigned32   some_other_cpu_dependent_info;
 }   rtems_cpu_table;
+
+/*
+ *  Macros to access required entires in the CPU Table are in 
+ *  the file rtems/system.h.
+ */
+
+/*
+ *  Macros to access NO_CPU specific additions to the CPU Table
+ */
+
+/* There are no CPU specific additions to the CPU Table for this port. */
 
 /*
  *  This variable is optional.  It is used on CPUs on which it is difficult

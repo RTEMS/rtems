@@ -50,14 +50,13 @@ rtems_monitor_command_read(char *command,
                            int  *argc,
                            char **argv)
 {
-    extern rtems_configuration_table  BSP_Configuration;
     static char monitor_prompt[32];
     
     /*
      * put node number in the prompt if we are multiprocessing
      */
 
-    if (BSP_Configuration.User_multiprocessing_table == 0)
+    if (!rtems_configuration_get_user_multiprocessing_table())
         sprintf(monitor_prompt, "%s", MONITOR_PROMPT);
     else if (rtems_monitor_default_node != rtems_monitor_node)
         sprintf(monitor_prompt, "%d-%s-%d", rtems_monitor_node, MONITOR_PROMPT, rtems_monitor_default_node);

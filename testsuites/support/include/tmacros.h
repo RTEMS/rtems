@@ -122,7 +122,7 @@ extern "C" {
 
 #define task_number( tid ) \
   ( rtems_get_index( tid ) - \
-     BSP_Configuration.RTEMS_api_configuration->number_of_initialization_tasks )
+     rtems_configuration_get_rtems_api_configuration()->number_of_initialization_tasks )
 
 static inline rtems_unsigned32 get_ticks_per_second( void )
 {

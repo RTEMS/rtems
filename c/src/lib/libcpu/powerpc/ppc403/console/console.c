@@ -60,7 +60,6 @@
 #include <rtems/libio.h>
 #include "../ictrl/ictrl.h"
 #include <stdlib.h>                                     /* for atexit() */
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 
 struct async {
 /*---------------------------------------------------------------------------+
@@ -215,7 +214,7 @@ void
 spiBaudSet(unsigned32 baudrate)
 {
   unsigned32 tmp;
-  tmp = Cpu_table.serial_per_sec / baudrate;
+  tmp = rtems_cpu_configuration_get_serial_per_sec() / baudrate;
   tmp = ((tmp) >> 4) - 1;
   port->BRDL = tmp & 0xff;
   port->BRDH = tmp >> 8;
@@ -314,7 +313,7 @@ spiDeInit(void)
    */
 
   /* set up baud rate to original state */
-  spiBaudSet(Cpu_table.serial_rate);
+  spiBaudSet(rtems_cpu_configuration_get_serial_rate());
 
   /* clear any receive (error) status */
   port->SPLS = (LSRDataReady   | LSRFramingError | LSROverrunError |
@@ -356,7 +355,7 @@ spiInitialize(void)
   asm volatile ("mfdcr %0, 0xa0" : "=r" (tmp)); /* IOCR */
 
   tmp &= ~3;
-  tmp |= (Cpu_table.serial_external_clock ? 2 : 0) | 1;
+  tmp |= (rtems_cpu_configuration_get_serial_external_clock() ? 2 : 0) | 1;
 
   asm volatile ("mtdcr 0xa0, %0" : "=r" (tmp) : "0" (tmp)); /* IOCR */
 
@@ -365,7 +364,7 @@ spiInitialize(void)
 		LSRParityError | LSRBreakInterrupt);
 
   /* set up baud rate */
-  spiBaudSet(Cpu_table.serial_rate);
+  spiBaudSet(rtems_cpu_configuration_get_serial_rate());
 
   /* set up port control: DTR/RTS active,8 bit,1 stop,no parity */
   port->SPCTL = (CRNormal | 

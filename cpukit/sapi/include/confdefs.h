@@ -80,6 +80,8 @@ int rtems_filesystem_mount_table_size = 1;
 
 /*
  *  Stack Checker Requirements
+ *
+ *  NOTE: This does not automatically enable reporting at program exit.
  */
 
 #ifdef STACK_CHECKER_ON

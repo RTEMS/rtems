@@ -32,7 +32,6 @@
 rtems_id RTEMS_Malloc_Heap;
 size_t RTEMS_Malloc_Sbrk_amount;
 
-extern rtems_cpu_table   Cpu_table;
 #ifdef RTEMS_DEBUG
 #define MALLOC_STATS
 #define MALLOC_DIRTY
@@ -109,7 +108,7 @@ void RTEMS_Malloc_Initialize(
    *  left over from another process.  This would be a security violation.
    */
 
-  if ( Cpu_table.do_zero_of_workspace )
+  if ( rtems_cpu_configuration_get_do_zero_of_workspace() )
      memset( starting_address, 0, length );
 
   /*

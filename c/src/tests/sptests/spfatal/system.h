@@ -73,7 +73,5 @@ TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
 TEST_EXTERN rtems_configuration_table        New_Configuration;
 
 extern rtems_extensions_table           Extensions;
-extern rtems_configuration_table        BSP_Configuration;
-extern rtems_cpu_table                  Cpu_table;
 
 /* end of include file */

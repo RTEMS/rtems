@@ -96,7 +96,7 @@ rtems_task Task_1(
 /* rtems_initialize_executive */
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_initialize_executive( &BSP_Configuration, &cpu_table );
+      (void) rtems_initialize_executive( rtems_configuration_get_table(), &cpu_table );
   end_time = Read_timer();
 
   put_time(

@@ -21,8 +21,6 @@
 #include "system.h"
 #include <string.h>             /* for memcmp */
 
-extern rtems_configuration_table BSP_Configuration;
-
 char    big_send_buffer[2048];
 char    big_receive_buffer[2048];
 

@@ -34,8 +34,6 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
-
 struct async {
 /*-----------------------------------------------------------------------------+
 | Line Status Register.
@@ -147,12 +145,13 @@ rtems_device_driver console_initialize(
   /* Initialise the serial port */
   asm volatile ("mfdcr %0, 0xa0" : "=r" (tmp)); /* IOCR */
   tmp &= ~3;
-  tmp |= (Cpu_table.serial_external_clock ? 2 : 0) |
-      (Cpu_table.serial_cts_rts ? 1 : 0);
+  tmp |= (rtems_cpu_configuration_get_serial_external_clock() ? 2 : 0) |
+      (rtems_cpu_configuration_get_serial_cts_rts() ? 1 : 0);
   asm volatile ("mtdcr 0xa0, %0" : "=r" (tmp) : "0" (tmp)); /* IOCR */
   port->SPLS = (LSRDataReady | LSRFramingError | LSROverrunError |
          LSRParityError | LSRBreakInterrupt);
-  tmp = Cpu_table.serial_per_sec / Cpu_table.serial_rate;
+  tmp = rtems_cpu_configuration_get_serial_per_sec() /
+          rtems_cpu_configuration_get_serial_rate();
 #if 0 /* replaced by IMD... */
   tmp = ((tmp + 8) >> 4) - 1;
   port->BRDL = tmp & 0x255;
@@ -278,7 +277,7 @@ void outbyte(
 	      break;
     }
 
-  if (Cpu_table.serial_xon_xoff)
+  if (rtems_cpu_configuration_get_serial_xon_xoff())
     while (is_character_ready(&status))
     {
 	    if (status == XOFFchar)

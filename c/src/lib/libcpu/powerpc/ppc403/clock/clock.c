@@ -43,8 +43,6 @@
 
 #include <stdlib.h>                     /* for atexit() */
 
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
-
 volatile rtems_unsigned32 Clock_driver_ticks;
 static rtems_unsigned32 pit_value, tick_time;
 static rtems_boolean auto_restart;
@@ -140,7 +138,7 @@ void Install_clock(rtems_isr_entry clock_isr)
  
     asm volatile ("mfdcr %0, 0xa0" : "=r" (iocr)); /* IOCR */
 
-    if (Cpu_table.timer_internal_clock) {
+    if (rtems_cpu_configuration_get_timer_internal_clock()) {
 	iocr &= ~4; /* timer clocked from system clock */
     }
     else {
@@ -165,7 +163,7 @@ void Install_clock(rtems_isr_entry clock_isr)
       auto_restart = 1;
  
     pit_value = rtems_configuration_get_microseconds_per_tick() *
-      Cpu_table.clicks_per_usec;
+      rtems_cpu_configuration_get_clicks_per_usec();
  
     if ( rtems_configuration_get_ticks_per_timeslice() ) {
       register rtems_unsigned32 tcr;

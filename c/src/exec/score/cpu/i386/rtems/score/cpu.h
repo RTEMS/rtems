@@ -198,6 +198,21 @@ typedef struct {
 }   rtems_cpu_table;
 
 /*
+ *  Macros to access required entires in the CPU Table are in 
+ *  the file rtems/system.h.
+ */
+
+/*
+ *  Macros to access i386 specific additions to the CPU Table
+ */
+
+#define rtems_cpu_configuration_get_interrupt_table_segment() \
+   (_CPU_Table.interrupt_table_segment)
+
+#define rtems_cpu_configuration_get_interrupt_table_offset() \
+   (_CPU_Table.interrupt_table_offset)
+
+/*
  *  context size area for floating point
  *
  *  NOTE:  This is out of place on the i386 to avoid a forward reference.

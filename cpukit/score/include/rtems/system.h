@@ -140,6 +140,46 @@ extern const char _Copyright_Notice[];      /* RTEMS copyright string */
 SCORE_EXTERN rtems_cpu_table _CPU_Table;               /* CPU dependent info */
 
 /*
+ *  Macros to access CPU Table fields required by ALL ports.
+ *
+ *  NOTE: Similar macros to access port specific fields in in the
+ *        appropriate cpu.h file.
+ */
+
+#define rtems_cpu_configuration_get_table() \
+   (&_CPU_Table)
+
+#define rtems_cpu_configuration_get_pretasking_hook() \
+   (_CPU_Table.pretasking_hook)
+
+#define rtems_cpu_configuration_get_predriver_hook() \
+   (_CPU_Table.predriver_hook)
+
+#define rtems_cpu_configuration_get_postdriver_hook() \
+   (_CPU_Table.postdriver_hook)
+
+#define rtems_cpu_configuration_get_idle_task() \
+   (_CPU_Table.idle_task)
+
+#define rtems_cpu_configuration_get_do_zero_of_workspace() \
+   (_CPU_Table.do_zero_of_workspace)
+
+#define rtems_cpu_configuration_get_idle_task_stack_size() \
+   (_CPU_Table.idle_task_stack_size)
+
+#define rtems_cpu_configuration_get_interrupt_stack_size() \
+   (_CPU_Table.interrupt_stack_size)
+
+#define rtems_cpu_configuration_get_extra_mpci_receive_server_stack() \
+   (_CPU_Table.extra_mpci_receive_server_stack)
+
+#define rtems_cpu_configuration_get_stack_allocate_hook() \
+   (_CPU_Table.stack_allocate_hook)
+
+#define rtems_cpu_configuration_get_stack_free_hook() \
+   (_CPU_Table.stack_free_hook)
+
+/*
  *  XXX weird RTEMS stuff
  */
 

@@ -438,6 +438,15 @@ typedef struct {
   unsigned32   clicks_per_microsecond;
 }   rtems_cpu_table;
 
+/*
+ *  Macros to access required entires in the CPU Table are in 
+ *  the file rtems/system.h.
+ */
+
+/*
+ *  Macros to access MIPS64ORION specific additions to the CPU Table
+ */
+
 #define rtems_cpu_configuration_get_clicks_per_microsecond() \
    (_CPU_Table.clicks_per_microsecond)
 

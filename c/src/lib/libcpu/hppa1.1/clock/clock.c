@@ -22,8 +22,6 @@ rtems_isr_entry set_vector(rtems_isr_entry, rtems_vector_number, int);
 
 #include <stdlib.h>                     /* for atexit() */
 
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
-
 typedef unsigned long long hppa_click_count_t;
 
 /*
@@ -207,7 +205,7 @@ Clock_delay(rtems_unsigned32 microseconds)
     (void) Clock_read_itimer();
     future_time = Clock_clicks +
       ((rtems_unsigned64) microseconds) *
-        Cpu_table.itimer_clicks_per_microsecond;
+        rtems_cpu_configuration_get_itimer_clicks_per_microsecond();
 
     for (;;)
     {

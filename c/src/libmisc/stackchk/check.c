@@ -32,9 +32,6 @@
  */
 #define DONT_USE_FATAL_EXTENSION
 
-
-extern rtems_configuration_table BSP_Configuration;
-
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -318,11 +315,11 @@ void Stack_check_report_blown_task(void)
     );
     fflush(stderr);
 
-    if (BSP_Configuration.User_multiprocessing_table)
+    if (rtems_configuration_get_user_multiprocessing_table())
         fprintf(
           stderr,
           "; node=%d\n",
-          BSP_Configuration.User_multiprocessing_table->node
+          rtems_configuration_get_user_multiprocessing_table()->node
        );
     else
         fprintf(stderr, "\n");

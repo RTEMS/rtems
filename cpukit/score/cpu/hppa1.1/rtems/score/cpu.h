@@ -238,6 +238,21 @@ typedef struct {
   unsigned32   itimer_clicks_per_microsecond; /* for use by Clock driver */
 }   rtems_cpu_table;
 
+/*
+ *  Macros to access required entires in the CPU Table are in 
+ *  the file rtems/system.h.
+ */
+
+/*
+ *  Macros to access HPPA specific additions to the CPU Table
+ */
+
+#define rtems_cpu_configuration_get_spurious_handler() \
+   (_CPU_Table.spurious_handler)
+
+#define rtems_cpu_configuration_get_itimer_clicks_per_microsecond() \
+   (_CPU_Table.itimer_clicks_per_microsecond)
+
 /* variables */
 
 SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;

@@ -103,7 +103,7 @@ void Process_case()
 {
   switch ( Case_in_switch ) {
     case FATAL_WORKSPACE_OF_ZERO:
-      New_Configuration = BSP_Configuration;
+      New_Configuration = rtems_configuration_get_table();
       New_Configuration.work_space_start = NULL;
       Case_in_switch = FATAL_NULL_WORKSPACE;
       break;
@@ -131,6 +131,7 @@ void Process_case()
       Initialization_tasks[ 0 ].entry_point = Init;
       break;
   }
-  rtems_initialize_executive( &New_Configuration, &Cpu_table );
+  rtems_initialize_executive(
+    &New_Configuration, rtems_cpu_configuration_get_table() );
 }
 

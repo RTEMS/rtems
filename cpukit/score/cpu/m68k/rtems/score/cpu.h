@@ -195,6 +195,18 @@ typedef struct {
   m68k_isr    *interrupt_vector_table;
 }   rtems_cpu_table;
 
+/*
+ *  Macros to access required entires in the CPU Table are in 
+ *  the file rtems/system.h.
+ */
+
+/*
+ *  Macros to access M68K specific additions to the CPU Table
+ */
+
+#define rtems_cpu_configuration_get_interrupt_vector_table() \
+   (_CPU_Table.interrupt_vector_table)
+
 /* variables */
 
 SCORE_EXTERN void                   *_CPU_Interrupt_stack_low;

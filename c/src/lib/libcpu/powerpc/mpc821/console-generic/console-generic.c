@@ -51,8 +51,6 @@
 
 #define NIFACES 4        /* number of console devices (serial ports) */
 
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
-
 static Buf_t *rxBufList[NIFACES];
 static Buf_t *rxBufListTail[NIFACES];
 
@@ -87,7 +85,8 @@ m821_get_brg_cd (int baud)
   int divisor;
   int div16 = 0;
   
-  divisor = ((Cpu_table.clock_speed / 16) + (baud / 2)) / baud;
+  divisor = ((rtems_cpu_configuration_get_clock_speed() / 16) + 
+              (baud / 2)) / baud;
   if (divisor > 4096) {
     div16 = 1;
     divisor = (divisor + 8) / 16;

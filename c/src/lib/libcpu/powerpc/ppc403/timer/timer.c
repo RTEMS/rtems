@@ -36,8 +36,6 @@
 
 #include <rtems.h>
 
-extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
-
 static volatile rtems_unsigned32 Timer_starting;
 static rtems_boolean Timer_driver_Find_average_overhead;
 
@@ -78,9 +76,9 @@ int Read_timer()
     return total;          /* in XXX microsecond units */
 
   else {
-    if ( total < Cpu_table.timer_least_valid )
+    if ( total < rtems_cpu_configuration_get_timer_least_valid() )
       return 0;            /* below timer resolution */
-    return (total - Cpu_table.timer_average_overhead);
+    return (total - rtems_cpu_configuration_get_timer_average_overhead());
   }
 }
 
