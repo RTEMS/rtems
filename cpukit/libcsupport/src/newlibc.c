@@ -360,13 +360,11 @@ int get_errno()
 
 /* #if !defined(RTEMS_UNIX) && !defined(__GO32__) && !defined(_AM29K) */
 #if !defined(RTEMS_UNIX) && !defined(_AM29K)
-#if !defined(pc386)
 void _exit(int status)
 {
     libc_wrapup(); /* Why? XXX */
     rtems_shutdown_executive(status);
 }
-#endif
 
 #else
 
