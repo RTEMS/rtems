@@ -1,6 +1,11 @@
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
+	* ChangeLog: Corrected comment.
+
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
 	* clock/ckinit.c: Removed commented out include of bsp.h.
+	* timer/timer.c: Removed commented out include of bsp.h.
 
 2000-09-25	Joel Sherrill <joel@OARcorp.com>
 
