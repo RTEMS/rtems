@@ -14,7 +14,7 @@ include_libcpu_HEADERS = $(top_srcdir)/../shared/include/cache.h
 noinst_PROGRAMS += cache.rel
 cache_rel_SOURCES = cache/cache.c cache/cache_.h \
     ../shared/src/cache_aligned_malloc.c ../shared/src/cache_manager.c
-cache_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) -I$(srcdir)/cache
+cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/cache
 cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 if has_instruction_cache
@@ -23,12 +23,12 @@ endif
 
 noinst_PROGRAMS += syscall.rel
 syscall_rel_SOURCES = syscall/syscall.S syscall/syscall.h
-syscall_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+syscall_rel_CPPFLAGS = $(AM_CPPFLAGS)
 syscall_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += reg_win.rel
 reg_win_rel_SOURCES = reg_win/window.S
-reg_win_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+reg_win_rel_CPPFLAGS = $(AM_CPPFLAGS)
 reg_win_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 all-local: $(PREINSTALL_FILES)
