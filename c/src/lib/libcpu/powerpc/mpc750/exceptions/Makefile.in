@@ -57,7 +57,6 @@ ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 
 preinstall:
-	$(MKDIR) $(PROJECT_INCLUDE)/libcpu
 	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/libcpu
 
 all:	${ARCH} $(SRCS) preinstall $(PGM)
