@@ -42,20 +42,6 @@
 extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
 
 /*-------------------------------------------------------------------------+
-|         Function: rtemsReboot
-|      Description: Reboot the PC.
-| Global Variables: None.
-|        Arguments: None.
-|          Returns: Nothing.
-+--------------------------------------------------------------------------*/
-inline void rtemsReboot(void)
-{
-  /* shutdown and reboot */
-  outport_byte(0x64, 0xFE);        /* use keyboard controler to do the job... */
-} /* rtemsReboot */
-
-
-/*-------------------------------------------------------------------------+
 |         Function: _exit
 |      Description: Shutdown the PC. Called from libc's 'exit'. 
 | Global Variables: None.
