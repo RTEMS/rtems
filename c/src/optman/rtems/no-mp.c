@@ -45,7 +45,7 @@ void rtems_multiprocessing_announce ( void )
 
 void _MPCI_Handler_initialization( 
   MPCI_Control            *users_mpci_table,
-  unsigned32               timeout_status
+  uint32_t                 timeout_status
 )
 {
 }
@@ -88,7 +88,7 @@ void _MPCI_Return_packet (
 }
 
 void _MPCI_Send_process_packet (
-  unsigned32          destination,
+  uint32_t            destination,
   MP_packet_Prefix   *the_packet
 )
 {
@@ -99,8 +99,8 @@ void _MPCI_Send_process_packet (
   );
 }
 
-unsigned32 _MPCI_Send_request_packet (
-  unsigned32          destination,
+uint32_t   _MPCI_Send_request_packet (
+  uint32_t            destination,
   MP_packet_Prefix   *the_packet,
   States_Control      extra_state
 )
@@ -114,7 +114,7 @@ unsigned32 _MPCI_Send_request_packet (
 }
 
 void _MPCI_Send_response_packet (
-  unsigned32          destination,
+  uint32_t            destination,
   MP_packet_Prefix   *the_packet
 )
 {
@@ -148,7 +148,7 @@ Thread_Control *_MPCI_Process_response (
 }
 
 Thread _MPCI_Receive_server(
-  unsigned32 ignore
+  uint32_t   ignore
 )
 {
   _Internal_error_Occurred(

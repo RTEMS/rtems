@@ -22,7 +22,7 @@
 #include <rtems/score/interr.h>
 
 void _Region_Manager_initialization(
-  unsigned32 maximum_regions
+  uint32_t   maximum_regions
 )
 {
 }
@@ -30,8 +30,8 @@ void _Region_Manager_initialization(
 rtems_status_code rtems_region_create(
   rtems_name          name,
   void               *starting_address,
-  unsigned32          length,
-  unsigned32          page_size,
+  uint32_t            length,
+  uint32_t            page_size,
   rtems_attribute  attribute_set,
   Objects_Id         *id
 )
@@ -71,7 +71,7 @@ rtems_status_code rtems_region_delete(
 
 rtems_status_code rtems_region_get_segment(
   Objects_Id         id,
-  unsigned32         size,
+  uint32_t           size,
   rtems_option    option_set,
   rtems_interval  timeout,
   void              **segment
@@ -88,7 +88,7 @@ rtems_status_code rtems_region_get_segment(
 rtems_status_code rtems_region_get_segment_size(
   Objects_Id         id,
   void              *segment,
-  unsigned32        *size
+  uint32_t          *size
 )
 {
   _Internal_error_Occurred(

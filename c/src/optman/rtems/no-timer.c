@@ -24,7 +24,7 @@
 #include <rtems/rtems/timer.h>
 
 void _Timer_Manager_initialization(
-  unsigned32 maximum_timers
+  uint32_t   maximum_timers
 )
 {
 }

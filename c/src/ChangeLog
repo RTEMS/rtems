@@ -1,5 +1,14 @@
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* optman/rtems/no-dpmem.c, optman/rtems/no-mp.c,
+	optman/rtems/no-msg.c, optman/rtems/no-part.c,
+	optman/rtems/no-region.c, optman/rtems/no-rtmon.c,
+	optman/rtems/no-sem.c, optman/rtems/no-timer.c,
+	optman/sapi/no-ext.c, optman/sapi/no-io.c: Convert to using c99
+	fixed size types.
+
+2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* configure.ac: Explicitly pass --includedir and --libdir to
 	cpukit/configure.
 

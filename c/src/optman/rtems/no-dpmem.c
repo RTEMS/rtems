@@ -22,7 +22,7 @@
 #include <rtems/rtems/dpmem.h>
 
 void _Dual_ported_memory_Manager_initialization(
-  unsigned32 maximum_ports
+  uint32_t   maximum_ports
 )
 {
 }
@@ -31,7 +31,7 @@ rtems_status_code rtems_port_create(
   rtems_name    name,
   void         *internal_start,
   void         *external_start,
-  unsigned32    length,
+  uint32_t      length,
   Objects_Id   *id
 )
 {

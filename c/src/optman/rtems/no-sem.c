@@ -25,14 +25,14 @@
 #include <rtems/score/interr.h>
 
 void _Semaphore_Manager_initialization(
-  unsigned32 maximum_semaphores
+  uint32_t   maximum_semaphores
 )
 {
 }
 
 rtems_status_code rtems_semaphore_create(
   rtems_name            name,
-  unsigned32            count,
+  uint32_t              count,
   rtems_attribute       attribute_set,
   rtems_task_priority   priority_ceiling,
   Objects_Id           *id
@@ -48,7 +48,7 @@ rtems_status_code rtems_semaphore_create(
 
 rtems_status_code rtems_semaphore_ident(
   rtems_name    name,
-  unsigned32    node,
+  uint32_t      node,
   Objects_Id   *id
 )
 {
@@ -74,7 +74,7 @@ rtems_status_code rtems_semaphore_delete(
 
 rtems_status_code rtems_semaphore_obtain(
   Objects_Id        id,
-  unsigned32        option_set,
+  uint32_t          option_set,
   rtems_interval timeout
 )
 {

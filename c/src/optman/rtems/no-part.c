@@ -21,7 +21,7 @@
 #include <rtems/score/interr.h>
 
 void _Partition_Manager_initialization(
-  unsigned32 maximum_partitions
+  uint32_t   maximum_partitions
 )
 {
 }
@@ -29,8 +29,8 @@ void _Partition_Manager_initialization(
 rtems_status_code rtems_partition_create(
   rtems_name          name,
   void               *starting_address,
-  unsigned32          length,
-  unsigned32          buffer_size,
+  uint32_t            length,
+  uint32_t            buffer_size,
   rtems_attribute  attribute_set,
   Objects_Id         *id
 )
@@ -45,7 +45,7 @@ rtems_status_code rtems_partition_create(
 
 rtems_status_code rtems_partition_ident(
   rtems_name    name,
-  unsigned32    node,
+  uint32_t      node,
   Objects_Id   *id
 )
 {
