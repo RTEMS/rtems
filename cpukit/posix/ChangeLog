@@ -1,3 +1,9 @@
+2001-01-12	Joel Sherrill <joel@OARcorp.com>
+
+	* src/clockgetres.c: Fixed match problem.  We are not converting
+	an interval to a timespec -- it is actually a real number of
+	microseconds.
+
 2001-01-22	Michael Hamel <mhamel@adi.co.nz>
 
 	* include/rtems/posix/semaphore.h, inline/rtems/posix/semaphore.inl, 
