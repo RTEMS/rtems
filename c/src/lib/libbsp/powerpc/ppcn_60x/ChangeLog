@@ -1,5 +1,13 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* clock/clock.c, console/console.c, console/debugio.c,
+	console/ns16550cfg.c, console/ns16550cfg.h, console/z85c30cfg.c,
+	console/z85c30cfg.h, include/tod.h, startup/bspstart.c,
+	startup/genpvec.c, startup/rtems-ctor.cc, startup/setvec.c,
+	timer/timer.c: URL for license changed.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	* console/vga.c, universe/universe.c: Removed incorrect statement about
 	copyright assignment.
 
