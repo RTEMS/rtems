@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 # We only build the network device driver if HAS_NETWORK was defined
 if HAS_NETWORKING
 NETWORK = network
@@ -28,13 +27,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 $(LIB): $(OBJS)
 	$(make-library)
 
-$(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a: $(LIB)
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a
-
 all-local: $(ARCH) $(OBJS) $(LIB) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(LIB)
 
 include $(top_srcdir)/../../../../../../automake/local.am

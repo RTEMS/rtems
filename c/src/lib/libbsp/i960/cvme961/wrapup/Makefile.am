@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 if HAS_MP
 GENERIC_MP_REL_FILES = shmdr
 endif
@@ -30,11 +29,6 @@ LIB = $(ARCH)/libbsp.a
 
 $(LIB): ${OBJS}
 	$(make-library)
-
-$(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a: $(LIB)
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a
 
 all-local: ${ARCH} $(TMPINSTALL_FILES)
 

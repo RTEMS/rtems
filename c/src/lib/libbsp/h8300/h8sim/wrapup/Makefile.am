@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 BSP_FILES = startup clock console
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
@@ -21,11 +20,6 @@ LIB = $(ARCH)/libbsp.a
 
 $(LIB): ${OBJS}
 	$(make-library)
-
-$(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a: $(LIB)
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a
 
 all-local: ${ARCH} $(TMPINSTALL_FILES)
 

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 if HAS_MP
 GENERIC_MP_REL_FILES = shmdr
 endif
@@ -30,13 +29,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 $(LIB): $(OBJS)
 	$(make-library)
 
-$(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a: $(LIB)
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a
-
 all-local: $(ARCH) $(OBJS) $(LIB) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(LIB)
 
 include $(top_srcdir)/../../../../../../automake/local.am

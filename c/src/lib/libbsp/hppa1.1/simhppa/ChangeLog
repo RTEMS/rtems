@@ -1,3 +1,7 @@
+2002-06-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Remove preinstallation of libbsp.a,
+
 2002-06-27	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, bsp_specs: Now this target almost compiles again.

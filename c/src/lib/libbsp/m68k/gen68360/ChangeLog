@@ -1,3 +1,7 @@
+2002-06-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Remove preinstallation of libbsp.a,
+
 2002-06-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	* startup/Makefile.am: Compile the m68k gdb stub and glue.

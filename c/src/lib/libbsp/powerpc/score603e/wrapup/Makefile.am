@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 BSP_PIECES = startup clock console timer tod vectors PCI_bus
 # pieces to pick up out of libcpu/$(RTEMS_CPU)
 
@@ -22,13 +21,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 $(LIB): $(OBJS)
 	$(make-library)
 
-$(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a: $(LIB)
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a
-
 all-local: $(ARCH) $(OBJS) $(LIB) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(LIB)
 
 include $(top_srcdir)/../../../../../../automake/local.am

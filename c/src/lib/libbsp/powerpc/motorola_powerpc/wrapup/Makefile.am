@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 BSP_PIECES = clock console irq openpic pci residual startup vectors motorola
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
@@ -24,13 +23,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 $(LIB): $(OBJS)
 	$(make-library)
 
-$(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a: $(LIB)
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a
-
 all-local: $(ARCH) $(OBJS) $(LIB) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(LIB)
 
 include $(top_srcdir)/../../../../../../automake/local.am
