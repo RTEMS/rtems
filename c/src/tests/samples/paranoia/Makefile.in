@@ -43,7 +43,7 @@ CPPFLAGS +=
 CFLAGS   +=
 
 LD_PATHS  +=
-LD_LIBS   += -lm
+LD_LIBS   += 
 LDFLAGS   +=
 
 #
