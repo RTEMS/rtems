@@ -55,7 +55,7 @@ html: dirs $(FILES)
 	    $(PROJECT).texi
 
 clean:
-	rm -f *.o $(PROG) *.txt core *.html *.pdf
+	rm -f *.o $(PROG) *.txt core *.html $(PROJECT).pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* _* $(GENERATED_FILES)
 

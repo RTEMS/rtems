@@ -78,7 +78,7 @@ avdas:
 	    -u "Magic Subsystem" test_cases/avdas.d
 	
 clean:
-	rm -f *.o $(PROG) *.txt core *.html $(PROJECT) Drive.texi *.pdf
+	rm -f *.o $(PROG) *.txt core *.html $(PROJECT) Drive.texi $(PROJECT).pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f test_cases/*.txt test_cases/*.texi
 
