@@ -1,4 +1,3 @@
-TEXINFO_TEX = ../texinfo/texinfo.tex
 AM_MAKEINFOFLAGS = -I ..
 
 html_projectdir = $(htmldir)/$(PROJECT)

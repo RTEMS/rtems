@@ -20,6 +20,6 @@ AUTOMAKE_FILES = project.am main.am
 
 noinst_SCRIPTS = bootstrap
 
-EXTRA_DIST = $(AUTOMAKE_FILES) HELP.html texinfo/texinfo.tex \
+EXTRA_DIST = $(AUTOMAKE_FILES) HELP.html \
     $(noinst_SCRIPTS) rtems_header.html.in rtems_footer.html.in
 

@@ -1,3 +1,13 @@
+2002-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* .cvsignore: Reworked.
+	* Makefile.am: Remove texinfo/texinfo.tex
+	* bootstrap: Removed.
+	* configure.ac: Add pkgdocdir. Let htmldir be rooted at pkgdocdir.
+	* main.am: Remove TEXINFO_TEX.
+	* project.am: Let dvidir, psdir, pdfdir be rooted at pkgdocdir.
+	Remove commented out make-variables.
+
 2002-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache, install-sh, mdate-sh, missing,

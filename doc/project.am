@@ -10,18 +10,15 @@ MAINTAINERCLEANFILES += $(PROJECT) $(PROJECT)-[0-9] $(PROJECT)-[0-9][0-9]
 MAINTAINERCLEANFILES += $(GENERATED_FILES)
 
 ## DVI support
-dvidir = $(pkgdatadir)/dvi
-## dvi_projectdir = $(dvidir)/$(PROJECT)
+dvidir = $(pkgdocdir)/dvi
 
 ## PS support
-psdir = $(pkgdatadir)/ps
-## ps_projectdir = $(psdir)/$(PROJECT)
+psdir = $(pkgdocdir)/ps
 
 ## PDF support
 SUFFIXES += .pdf
 
-pdfdir = $(pkgdatadir)/pdf
-## pdf_projectdir = $(pdfdir)/$(PROJECT)
+pdfdir = $(pkgdocdir)/pdf
 
 SUFFIXES += .eps
 

@@ -64,7 +64,10 @@ esac],
 [papersize=]
 )
 
-htmldir='$(pkgdatadir)/html'
+pkgdocdir="\$(datadir)/rtems"
+AC_SUBST(pkgdocdir)
+
+htmldir="\$(pkgdocdir)/html"
 AC_SUBST(htmldir)
 
 dnl Checks for programs.

@@ -1,2 +1,16 @@
 Makefile
 Makefile.in
+aclocal.m4
+autom4te.cache
+config.*
+configure
+depcomp
+index.html
+install-sh
+mdate-sh
+missing
+mkinstalldirs
+rtems_footer.html
+rtems_header.html
+rtems_support.html
+texinfo.tex
