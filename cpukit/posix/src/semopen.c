@@ -18,6 +18,11 @@
 
 /*PAGE
  *
+ *  sem_open
+ *  
+ *  Opens a named semaphore.  Used in conjunction with the sem_close
+ *  and sem_unlink commands.
+ *
  *  11.2.3 Initialize/Open a Named Semaphore, P1003.1b-1993, p.221
  *
  *  NOTE: When oflag is O_CREAT, then optional third and fourth 
@@ -39,7 +44,8 @@ sem_t *sem_open(
   Objects_Id                 the_semaphore_id;
   POSIX_Semaphore_Control   *the_semaphore;
   Objects_Locations          location;
- 
+   
+  _Thread_Disable_dispatch();
 
   if ( oflag & O_CREAT ) {
     va_start(arg, oflag);
@@ -60,16 +66,14 @@ sem_t *sem_open(
   if ( status ) {
 
     /*
-     * Unless we are willing to create name -> ID translation failure is
-     * an error.
+     * Unless provided a valid name that did not already exist
+     * and we are willing to create then it is an error.
      */
 
-    if ( status == EINVAL ) { 
-      if ( !(oflag & O_CREAT) ) {
-        set_errno_and_return_minus_one_cast( ENOENT, sem_t * );
-      }
+    if ( !( status == ENOENT && (oflag & O_CREAT) ) ) {
+      _Thread_Enable_dispatch();
+      set_errno_and_return_minus_one_cast( status, sem_t * );
     }
-
   } else { 
 
     /*
@@ -77,11 +81,14 @@ sem_t *sem_open(
      */
 
     if ( (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL) ) {
+      _Thread_Enable_dispatch();
       set_errno_and_return_minus_one_cast( EEXIST, sem_t * );
     }
 
     the_semaphore = _POSIX_Semaphore_Get( &the_semaphore_id, &location );
     the_semaphore->open_count += 1;
+    _Thread_Enable_dispatch();
+    _Thread_Enable_dispatch();
     return (sem_t *)&the_semaphore->Object.id;
 
   } 
@@ -91,7 +98,7 @@ sem_t *sem_open(
    *  checked. We should go ahead and create a semaphore.
    */
 
-  status = _POSIX_Semaphore_Create_support(
+  status =_POSIX_Semaphore_Create_support(
     name,
     FALSE,         /* not shared across processes */
     value,
@@ -102,8 +109,12 @@ sem_t *sem_open(
    * errno was set by Create_support, so don't set it again.
    */
 
+  _Thread_Enable_dispatch();
+
   if ( status == -1 )
     return SEM_FAILED;
 
   return (sem_t *) &the_semaphore->Object.id;
 }
+
+
