@@ -35,5 +35,7 @@ $(PROJECT_INCLUDE)/pci.h: include/pci.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pci.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/pci.h
 
+CLEANFILES = $(PREINSTALL_FILES)
+
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am
