@@ -1,3 +1,8 @@
+2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wksheets.texi: Remove from CVS.
+	* timing.texi: Remove from CVS.
+
 2003-01-21	Joel Sherrill <joel@OARcorp.com>
 
 	* stamp-vti, version.texi: Regenerated.
