@@ -1,6 +1,59 @@
 2004-10-27	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	PR 700/rtems_misc
+	* libnetworking/rtems_webserver/asp.c,
+	libnetworking/rtems_webserver/balloc.c,
+	libnetworking/rtems_webserver/cgi.c,
+	libnetworking/rtems_webserver/default.c,
+	libnetworking/rtems_webserver/ej.h,
+	libnetworking/rtems_webserver/ejIntrn.h,
+	libnetworking/rtems_webserver/ejlex.c,
+	libnetworking/rtems_webserver/ejparse.c,
+	libnetworking/rtems_webserver/emfdb.c,
+	libnetworking/rtems_webserver/emfdb.h,
+	libnetworking/rtems_webserver/form.c,
+	libnetworking/rtems_webserver/handler.c,
+	libnetworking/rtems_webserver/h.c,
+	libnetworking/rtems_webserver/license.txt,
+	libnetworking/rtems_webserver/Makefile.am,
+	libnetworking/rtems_webserver/md5c.c,
+	libnetworking/rtems_webserver/md5.h,
+	libnetworking/rtems_webserver/mime.c,
+	libnetworking/rtems_webserver/misc.c,
+	libnetworking/rtems_webserver/NOTES,
+	libnetworking/rtems_webserver/ringq.c,
+	libnetworking/rtems_webserver/rom.c,
+	libnetworking/rtems_webserver/rtems_webserver.h,
+	libnetworking/rtems_webserver/security.c,
+	libnetworking/rtems_webserver/sock.c,
+	libnetworking/rtems_webserver/socket.c,
+	libnetworking/rtems_webserver/sockGen.c,
+	libnetworking/rtems_webserver/sym.c,
+	libnetworking/rtems_webserver/uemf.c,
+	libnetworking/rtems_webserver/uemf.h,
+	libnetworking/rtems_webserver/um.c,
+	libnetworking/rtems_webserver/um.h,
+	libnetworking/rtems_webserver/umui.c,
+	libnetworking/rtems_webserver/url.c,
+	libnetworking/rtems_webserver/value.c,
+	libnetworking/rtems_webserver/wbase64.c,
+	libnetworking/rtems_webserver/webcomp.c,
+	libnetworking/rtems_webserver/webmain.c,
+	libnetworking/rtems_webserver/webpage.c,
+	libnetworking/rtems_webserver/webrom.c,
+	libnetworking/rtems_webserver/webs.c,
+	libnetworking/rtems_webserver/websda.c,
+	libnetworking/rtems_webserver/websda.h,
+	libnetworking/rtems_webserver/webs.h,
+	libnetworking/rtems_webserver/websSSL.c,
+	libnetworking/rtems_webserver/websSSL.h,
+	libnetworking/rtems_webserver/websuemf.c,
+	libnetworking/rtems_webserver/wsIntrn.h:
+	Remove (Moved to cpukit/http).
+
+2004-10-27	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	PR 700/rtems_misc
 	* configure.ac, libnetworking/Makefile.am, wrapup/Makefile.am:
 	Remove libnetworking/rtems_webserver.
 
