@@ -10,7 +10,7 @@ AC_REQUIRE([AC_CANONICAL_HOST])
 AC_CACHE_CHECK(whether $CC accepts --pipe,rtems_cv_gcc_pipe,
 [
 rtems_cv_gcc_pipe=no
-if test "$ac_cv_prog_gcc" = "yes"; then
+if test x"$GCC" = x"yes"; then
     echo 'void f(){}' >conftest.c
     if test -z "`${CC} --pipe -c conftest.c 2>&1`";then
       rtems_cv_gcc_pipe=yes

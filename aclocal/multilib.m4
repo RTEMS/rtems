@@ -40,10 +40,10 @@ else
 fi
 
 AC_OUTPUT_COMMANDS(
-  if test -n "$CONFIG_FILES"; then
-    ac_file=[]ifelse([$1],,Makefile,[$1]) \
-    . ${multilib_basedir}/../config-ml.in
-  fi,[
+[if test -n "$CONFIG_FILES"; then
+    ac_file=]ifelse([$1],,Makefile,[$1])[ \
+      . ${multilib_basedir}/../config-ml.in
+fi],[
   srcdir=${srcdir}
   host=${host}
   target=${target}

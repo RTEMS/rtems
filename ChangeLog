@@ -1,5 +1,16 @@
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/gcc-pipe.m4: Use $GCC instead of ac_cv_prog_gcc (autoconf
+	standard).
+	* aclocal/gcc-specs.m4: Use $GCC instead of ac_cv_prog_gcc (autoconf
+	standard).
+	* aclocal/multilib.m4: Fix m4-quoting (BUG-FIX).
+	* aclocal/check-bsp-cache.m4: Fix m4-quoting (autoconf-2.49b).
+	* aclocal/prog-cc.m4: Use $GCC instead of ac_cv_prog_gcc (autoconf
+	standard), replace CC_FOR_TARGET with CC (BUG-FIX).
+
+2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/enable-itron.m4: Remove changequotes (autoconf-2.49b).
 	* aclocal/enable-posix.m4: Remove changequotes (autoconf-2.49b), use
 	$host instead of $target (BUG-FIX).

@@ -17,7 +17,7 @@ test -z "$CC" && \
   AC_MSG_ERROR([no acceptable cc found in \$PATH])
 AC_PROG_CC
 
-AM_CONDITIONAL(RTEMS_USE_GCC,test x"$ac_cv_prog_gcc" = x"yes")
+AM_CONDITIONAL(RTEMS_USE_GCC,test x"$GCC" = x"yes")
 ])
 
 AC_DEFUN(RTEMS_PROG_CC_FOR_TARGET,
@@ -35,7 +35,7 @@ if test "$RTEMS_USE_GCC272" != "yes" ; then
       RTEMS_USE_GCC272=yes
   fi
 fi
-test "$rtems_cv_gcc_pipe" = "yes" && CC_FOR_TARGET="$CC_FOR_TARGET --pipe"
+test "$rtems_cv_gcc_pipe" = "yes" && CC="$CC --pipe"
 
 ## Conditional for automake files
 AM_CONDITIONAL(RTEMS_USE_GCC272, test x"$RTEMS_USE_GCC272" = x"yes")
