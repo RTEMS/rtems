@@ -210,18 +210,6 @@ _IBMPC_scankey(char *outChar)
   return TRUE;
 } /* _IBMPC_scankey */
 
-void _IBMPC_keyboard_isr_on(const rtems_irq_connect_data* unused)
-{}
-void _IBMPC_keyboard_isr_off(const rtems_irq_connect_data* unused)
-{}
-
-int _IBMPC_keyboard_isr_is_on(const rtems_irq_connect_data* irq)
-{
-  return pc386_irq_enabled_at_i8259s (irq->name);
-}
-
-
-
 /*-------------------------------------------------------------------------+
 |         Function: _IBMPC_keyboard_isr
 |      Description: Interrupt Service Routine for keyboard (0x01) IRQ.

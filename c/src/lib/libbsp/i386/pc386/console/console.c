@@ -58,27 +58,45 @@
 
 int PC386ConsolePort = PC386_CONSOLE_PORT_CONSOLE;
 
-static int conSetAttr(int minor, const struct termios *);
 extern BSP_polling_getchar_function_type BSP_poll_char;
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
-extern void 	_IBMPC_keyboard_isr(void);
-extern void 	_IBMPC_keyboard_isr_on(const rtems_irq_connect_data*);
-extern void 	_IBMPC_keyboard_isr_off(const rtems_irq_connect_data*);
-extern int 	_IBMPC_keyboard_isr_is_on(const rtems_irq_connect_data*);
-
-static rtems_irq_connect_data console_isr_data = {PC_386_KEYBOARD,
-						   _IBMPC_keyboard_isr,
-						   _IBMPC_keyboard_isr_on,
-						   _IBMPC_keyboard_isr_off,
-						   _IBMPC_keyboard_isr_is_on};
-						   
-
+extern void _IBMPC_keyboard_isr(void);
 extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
 extern char BSP_wait_polled_input(void);
 extern void _IBMPC_initVideo(void);
+
+static int  conSetAttr(int minor, const struct termios *);
+static void isr_on(const rtems_irq_connect_data *);
+static void isr_off(const rtems_irq_connect_data *);
+static int  isr_is_on(const rtems_irq_connect_data *);
+
+
+static rtems_irq_connect_data console_isr_data = {PC_386_KEYBOARD,
+						   _IBMPC_keyboard_isr,
+						   isr_on,
+						   isr_off,
+						   isr_is_on};
+
+static void
+isr_on(const rtems_irq_connect_data *unused)
+{
+  return;
+}
+						   
+static void
+isr_off(const rtems_irq_connect_data *unused)
+{
+  return;
+}
+
+static int
+isr_is_on(const rtems_irq_connect_data *irq)
+{
+  return pc386_irq_enabled_at_i8259s(irq->name);
+}
 
 void console_reserve_resources(rtems_configuration_table *conf)
 {
@@ -203,7 +221,7 @@ console_initialize(rtems_device_major_number major,
 	{
 	  printk("Initialized console on port COM2 9600-8-N-1\n\n");
 	}
-#define  PRINTK_ON_SERIAL     
+#define  PRINTK_ON_SERIAL
 #ifdef PRINTK_ON_SERIAL
       /*
        * You can remove the follwoing tree lines if you want to have printk
@@ -221,9 +239,11 @@ console_initialize(rtems_device_major_number major,
 
 static int console_open_count = 0;
 
-static void console_last_close()
+static int console_last_close(int major, int minor, void *arg)
 {
   pc386_remove_rtems_irq_handler (&console_isr_data);
+
+  return 0;
 }
 
 /*-------------------------------------------------------------------------+
@@ -294,7 +314,7 @@ console_close(rtems_device_major_number major,
     }
   else {
     if (--console_open_count == 0) { 
-      console_last_close();
+      console_last_close(major, minor, arg);
     }
   }
   
@@ -473,10 +493,5 @@ BSP_output_char_function_type BSP_output_char =
                        (BSP_output_char_function_type) _IBMPC_outch;
 
 BSP_polling_getchar_function_type BSP_poll_char = BSP_wait_polled_input;
-
-void BSP_emergency_output_init()
-{
-  _IBMPC_initVideo();
-}
 
 

@@ -894,9 +894,10 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
  *       device transmit interrupt handler.
  * The second argument is the number of characters transmitted so far.
  * This value will always be 1 for devices which generate an interrupt
- * for each transmitted character.
+ * for each transmitted character. 
+ * It returns number of characters left to transmit
  */
-void
+int
 rtems_termios_dequeue_characters (void *ttyp, int len)
 {
 	struct rtems_termios_tty *tty = ttyp;
@@ -906,13 +907,14 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
 	if (tty->rawOutBufState == rob_wait)
 		rtems_semaphore_release (tty->rawOutBufSemaphore);
 	if ( tty->rawOutBufHead == tty->rawOutBufTail )
-		return;
+		return 0;
 	newTail = (tty->rawOutBufTail + len) % RAW_OUTPUT_BUFFER_SIZE;
 	if (newTail == tty->rawOutBufHead) {
 		/*
 		 * Buffer empty
 		 */
 		tty->rawOutBufState = rob_idle;
+		nToSend = 0;
 	}
 	else {
 		/*
@@ -926,4 +928,8 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
 		tty->rawOutBufState = rob_busy;
 	}
 	tty->rawOutBufTail = newTail;
+
+	return nToSend;
 }
+
+

@@ -116,22 +116,30 @@ void  rtems_irq_mngt_init()
 {
     int 			i;
     interrupt_gate_descriptor* 	idt_entry_tbl;
-    unsigned			limit;
+    unsigned int                limit;
     unsigned int 		level;
 
-    i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
-    /* Convert limit into number of entries */
-    limit = (limit + 1) / sizeof(interrupt_gate_descriptor);    
+    i386_get_info_from_IDTR(&idt_entry_tbl, &limit);
+
+    /* Convert into number of entries */
+    limit = (limit + 1)/sizeof(interrupt_gate_descriptor);
+
+    if(limit != IDT_SIZE) {
+       printk("IDT table size mismatch !!! System locked\n");
+       while(1);
+    }
+    
 
     _CPU_ISR_Disable(level);
 
     /*
      * Init the complete IDT vector table with defaultRawIrq value
      */
-    for (i = 0; i < limit; i++) {
+    for (i = 0; i < IDT_SIZE ; i++) {
       idtHdl[i] 	 = defaultRawIrq;
       idtHdl[i].idtIndex = i;
     }
+
     raw_initial_config.idtSize = IDT_SIZE;
     raw_initial_config.defaultRawEntry = defaultRawIrq;
     raw_initial_config.rawIrqHdlTbl = idtHdl;

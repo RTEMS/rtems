@@ -37,7 +37,7 @@
 #include <rtems/libio.h>
 #include <pc386uart.h>
 
-void bsp_cleanup()
+void bsp_cleanup(void)
 {
   unsigned char ch;
   static   char line[]="EXECUTIVE SHUTDOWN! Any key to reboot...";
@@ -51,6 +51,9 @@ void bsp_cleanup()
   ch = BSP_poll_char();
   rtemsReboot();
 }
+
+
+
 
 
 

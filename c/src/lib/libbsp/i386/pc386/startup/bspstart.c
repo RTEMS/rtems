@@ -36,7 +36,6 @@
 #include <libcsupport.h>
 #include <rtems/libio.h>
 #include <libcpu/cpuModel.h>
-#include <pc386uart.h>
 
 /*-------------------------------------------------------------------------+
 | Global Variables
@@ -64,17 +63,12 @@ extern rtems_configuration_table  Configuration;
 rtems_cpu_table Cpu_table;                     /* CPU configuration table.    */
 char            *rtems_progname;               /* Program name - from main(). */
 
-extern void debugPollingGetChar();
-
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
-extern void _exit(int);  /* define in exit.c */
-extern void _IBMPC_initVideo(void); 
-extern void rtems_irq_mngt_init();
+extern void rtems_irq_mngt_init(void);
 void bsp_libc_init( void *, unsigned32, int );
 void bsp_postdriver_hook(void);
-extern void _IBMPC_initVideo(void);
 
 /*-------------------------------------------------------------------------+
 |         Function: bsp_pretasking_hook
@@ -107,8 +101,6 @@ void bsp_pretasking_hook(void)
 	  topAddr = i*1024*1024 - 4;
 	  *(volatile rtems_unsigned32 *)topAddr = topAddr;
 	}
-
-      printk("\n");
 
       for(i=2; i<=2048; i++)
 	{
@@ -145,14 +137,12 @@ void bsp_pretasking_hook(void)
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
 void bsp_start( void )
-  /* Initialize printk channel */
-  _IBMPC_initVideo();
 {
-
   /*
    * Calibrate variable for 1ms-loop (see timer.c)
    */
   Calibrate_loop_1ms();
+
   /*
    * Initialize printk channel
    */

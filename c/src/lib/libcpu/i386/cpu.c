@@ -47,13 +47,6 @@ rtems_raw_irq_hdl get_hdl_from_vector(rtems_vector_offset index)
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 	
     /* Convert limit into number of entries */
-    limit = (limit + 1) >> 3;
-
-    if(index >= limit) {
-        return 0;
-    }
-	
-    /* Convert limit into number of entries */
     limit = (limit + 1) / sizeof(interrupt_gate_descriptor);
   
     if(index >= limit) {
@@ -279,7 +272,7 @@ int i386_set_gdt_entry (unsigned short segment_selector, unsigned base,
     gdt_entry_tbl[segment_selector].present 		= 1; 	/* not present */
 
     /*
-    return 1;
+     * Now, reload all segment registers so the limit takes effect.
      */
 
     asm volatile( "movw %%ds,%0 ; movw %0,%%ds
