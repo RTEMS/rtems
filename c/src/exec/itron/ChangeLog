@@ -1,3 +1,10 @@
+2001-01-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Add src/config.h
+	* src/Makefile.am: Add INCLUDES += -I. to pickup config.h
+	* src/.cvsignore: Add config.h and stamp-h
+	* src/*.c: Add config.h support.
+
 2000-12-01	Joel Sherrill <joel@OARcorp.com>
 
 	* Added macro support to ITRON API.  This is known to compile.

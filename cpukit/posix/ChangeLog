@@ -1,3 +1,10 @@
+2001-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Add src/config.h
+	* src/Makefile.am: Add INCLUDES += -I. to pickup config.h
+	* src/.cvsignore: Add config.h and stamp-h
+	* src/*.c: Add config.h support.
+
 2001-01-23	Joel Sherrill <joel@OARcorp.com>
 
 	* src/alarm.c: Eliminated use of C++ style comments.

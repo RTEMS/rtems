@@ -1,6 +1,10 @@
 /*
  *  ptimer.c,v 1.1 1996/06/03 16:29:58 joel Exp
  */
+
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
  
 #include <assert.h>
 #include <time.h>

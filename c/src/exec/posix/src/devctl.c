@@ -2,6 +2,10 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <devctl.h>
 
 #include <rtems/system.h>

@@ -12,6 +12,10 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <pthread.h>
 #include <limits.h>
 #include <errno.h>
