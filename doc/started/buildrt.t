@@ -4,7 +4,7 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
-@c  $Id$
+@c  buildrt.t,v 1.15.2.5 2004/09/27 22:26:31 joel Exp
 @c
 
 @chapter Building RTEMS
@@ -57,7 +57,7 @@ tools.  The following command prepends the directory
 where the tools were installed in a previous step:
 
 @example
-export PATH=<INSTALL_POINT>/bin:${PATH}
+export PATH=<INSTALL_POINT>/bin:$@{PATH@}
 @end example
 
 NOTE:  The above command is in Bourne shell (@code{sh}) syntax and

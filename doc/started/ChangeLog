@@ -1,3 +1,7 @@
+2004-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* buildc.t, buildrt.t: Fix typo which keeps this from building.
+
 2004-09-27	Joel Sherrill <joel@OARcorp.com>
 
 	PR 682/doc

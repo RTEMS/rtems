@@ -3,7 +3,7 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
-@c  $Id$
+@c  buildc.t,v 1.31.2.9 2004/09/27 22:26:31 joel Exp
 @c
 
 @chapter Building the GNU Cross Compiler Toolset
@@ -503,7 +503,7 @@ containing the executables is the prefix used above with
 @file{bin} post-fixed.
 
 @example
-export PATH=@value{RTEMSPREFIX}/bin:${PATH}
+export PATH=@value{RTEMSPREFIX}/bin:$@{PATH@}
 @end example
 
 Failure to have the binutils in the path will cause the GCC and NEWLIB
