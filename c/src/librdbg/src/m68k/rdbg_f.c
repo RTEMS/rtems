@@ -73,9 +73,6 @@ RegsToCtx (const xdr_regs * regs, CPU_Exception_frame * ctx)
   void
 get_ctx_thread (Thread_Control * thread, CPU_Exception_frame * ctx)
 {
-  unsigned int *ptr;
-  unsigned int i;
-
   /*
    * ISR stores d0-d1/a0-a1, calls _Thread_Dispatch
    * _Thread_Dispatch calls _Context_Switch == _CPU_Context_switch

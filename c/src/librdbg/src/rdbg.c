@@ -20,6 +20,7 @@
 #include <rpc/pmap_clnt.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <rtems/bspIo.h>
 
 u_short rtemsPort = RTEMS_PORT;
 int BackPort = RTEMS_BACK_PORT;
@@ -71,7 +72,7 @@ rdbgInit (void)
   }
   rtemsSock = sock;
   if (!svc_register (rtemsXprt, REMOTEDEB, REMOTEVERS, remotedeb_2, 0)) {
-    printf (stderr, "unable to register (REMOTEDEB, REMOTEVERS, udp).");
+    fprintf (stderr, "unable to register (REMOTEDEB, REMOTEVERS, udp).");
     return -4;
   }
   connect_rdbg_exception ();

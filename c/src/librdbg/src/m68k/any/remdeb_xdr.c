@@ -10,7 +10,6 @@
 bool_t
 xdr_rpc_type (XDR *xdrs, rpc_type *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
 		 return FALSE;
@@ -20,7 +19,6 @@ xdr_rpc_type (XDR *xdrs, rpc_type *objp)
 bool_t
 xdr_UDP_MSG (XDR *xdrs, UDP_MSG *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_u_char (xdrs, &objp->type))
 		 return FALSE;
@@ -42,7 +40,6 @@ xdr_UDP_MSG (XDR *xdrs, UDP_MSG *objp)
 bool_t
 xdr_ptracereq (XDR *xdrs, ptracereq *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
 		 return FALSE;
@@ -169,7 +166,6 @@ bool_t xdr_xdr_mem(xdrs, objp)
 bool_t
 xdr_break_type (XDR *xdrs, break_type *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
 		 return FALSE;
@@ -294,7 +290,6 @@ xdr_xdr_break (XDR *xdrs, xdr_break *objp)
 bool_t
 xdr_thread_name (XDR *xdrs, thread_name *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_string (xdrs, objp, THREADNAMEMAX))
 		 return FALSE;
@@ -304,7 +299,6 @@ xdr_thread_name (XDR *xdrs, thread_name *objp)
 bool_t
 xdr_KernThread (XDR *xdrs, KernThread *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_u_int (xdrs, &objp->threadLi))
 		 return FALSE;
@@ -321,7 +315,6 @@ bool_t xdr_thread_list(xdrs, objp)
 bool_t
 xdr_ptrace_addr_data_in (XDR *xdrs, ptrace_addr_data_in *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_ptracereq (xdrs, &objp->req))
 		 return FALSE;
@@ -371,7 +364,6 @@ xdr_ptrace_addr_data_in (XDR *xdrs, ptrace_addr_data_in *objp)
 bool_t
 xdr_ptrace_addr_data_out (XDR *xdrs, ptrace_addr_data_out *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_ptracereq (xdrs, &objp->req))
 		 return FALSE;
@@ -429,7 +421,6 @@ xdr_ptrace_addr_data_out (XDR *xdrs, ptrace_addr_data_out *objp)
 bool_t
 xdr_CHAR_DATA (XDR *xdrs, CHAR_DATA *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_bytes (xdrs, (char **)&objp->CHAR_DATA_val, (u_int *) &objp->CHAR_DATA_len, NET_SAFE))
 		 return FALSE;
@@ -439,7 +430,6 @@ xdr_CHAR_DATA (XDR *xdrs, CHAR_DATA *objp)
 bool_t
 xdr_one_arg (XDR *xdrs, one_arg *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_string (xdrs, objp, NET_SAFE))
 		 return FALSE;
@@ -450,7 +440,6 @@ xdr_one_arg (XDR *xdrs, one_arg *objp)
 bool_t
 xdr_debug_type (XDR *xdrs, debug_type *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
 		 return FALSE;
@@ -461,9 +450,7 @@ xdr_debug_type (XDR *xdrs, debug_type *objp)
 bool_t
 xdr_open_in (XDR *xdrs, open_in *objp)
 {
-	register int32_t *buf;
 
-	int i;
 	 if (!xdr_vector (xdrs, (char *)objp->back_port, 16,
 		sizeof (u_char), (xdrproc_t) xdr_u_char))
 		 return FALSE;
@@ -568,7 +555,6 @@ xdr_open_out (XDR *xdrs, open_out *objp)
 bool_t
 xdr_close_control (XDR *xdrs, close_control *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
 		 return FALSE;
@@ -578,7 +564,6 @@ xdr_close_control (XDR *xdrs, close_control *objp)
 bool_t
 xdr_close_in (XDR *xdrs, close_in *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_close_control (xdrs, &objp->control))
 		 return FALSE;
@@ -589,7 +574,6 @@ xdr_close_in (XDR *xdrs, close_in *objp)
 bool_t
 xdr_signal_in (XDR *xdrs, signal_in *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_int (xdrs, &objp->pid))
 		 return FALSE;
@@ -601,7 +585,6 @@ xdr_signal_in (XDR *xdrs, signal_in *objp)
 bool_t
 xdr_signal_out (XDR *xdrs, signal_out *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_int (xdrs, &objp->kill_return))
 		 return FALSE;
@@ -615,7 +598,6 @@ xdr_signal_out (XDR *xdrs, signal_out *objp)
 bool_t
 xdr_stop_code (XDR *xdrs, stop_code *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
 		 return FALSE;
@@ -625,7 +607,6 @@ xdr_stop_code (XDR *xdrs, stop_code *objp)
 bool_t
 xdr_wait_in (XDR *xdrs, wait_in *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_int (xdrs, &objp->pid))
 		 return FALSE;
@@ -740,7 +721,6 @@ xdr_wait_out (XDR *xdrs, wait_out *objp)
 bool_t
 xdr_ptrace_in (XDR *xdrs, ptrace_in *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_int (xdrs, &objp->pid))
 		 return FALSE;
@@ -756,7 +736,6 @@ xdr_ptrace_in (XDR *xdrs, ptrace_in *objp)
 bool_t
 xdr_ptrace_out (XDR *xdrs, ptrace_out *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_ptrace_addr_data_out (xdrs, &objp->addr))
 		 return FALSE;
@@ -770,7 +749,6 @@ xdr_ptrace_out (XDR *xdrs, ptrace_out *objp)
 bool_t
 xdr_one_symbol (XDR *xdrs, one_symbol *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_string (xdrs, &objp->symbolName, ~0))
 		 return FALSE;
@@ -782,7 +760,6 @@ xdr_one_symbol (XDR *xdrs, one_symbol *objp)
 bool_t
 xdr_all_symbols (XDR *xdrs, all_symbols *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_array (xdrs, (char **)&objp->all_symbols_val, (u_int *) &objp->all_symbols_len, ~0,
 		sizeof (one_symbol), (xdrproc_t) xdr_one_symbol))
@@ -793,7 +770,6 @@ xdr_all_symbols (XDR *xdrs, all_symbols *objp)
 bool_t
 xdr_get_global_symbols_out (XDR *xdrs, get_global_symbols_out *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_all_symbols (xdrs, &objp->symbols))
 		 return FALSE;
@@ -803,7 +779,6 @@ xdr_get_global_symbols_out (XDR *xdrs, get_global_symbols_out *objp)
 bool_t
 xdr_get_text_data_in (XDR *xdrs, get_text_data_in *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_int (xdrs, &objp->pid))
 		 return FALSE;
@@ -886,7 +861,6 @@ xdr_get_text_data_out (XDR *xdrs, get_text_data_out *objp)
 bool_t
 xdr_one_signal (XDR *xdrs, one_signal *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_u_int (xdrs, &objp->number))
 		 return FALSE;
@@ -898,7 +872,6 @@ xdr_one_signal (XDR *xdrs, one_signal *objp)
 bool_t
 xdr_all_signals (XDR *xdrs, all_signals *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_array (xdrs, (char **)&objp->all_signals_val, (u_int *) &objp->all_signals_len, ~0,
 		sizeof (one_signal), (xdrproc_t) xdr_one_signal))
@@ -909,7 +882,6 @@ xdr_all_signals (XDR *xdrs, all_signals *objp)
 bool_t
 xdr_get_signal_names_out (XDR *xdrs, get_signal_names_out *objp)
 {
-	register int32_t *buf;
 
 	 if (!xdr_all_signals (xdrs, &objp->signals))
 		 return FALSE;

@@ -258,8 +258,8 @@ TspSendMessage (int conn, Boolean resend)
   cnt = sendto (out_sock, &msg, sizeof (msg), 0, (struct sockaddr *) &addr,
                 sizeof (addr));
   if (cnt != sizeof (msg)) {      /* failed on send */
-    printf ("%s: Failed to send msg %d to conn %d (%d vs. %d)\n",
-            taskName, msg.type, conn, cnt, sizeof (msg));
+    printf ("%s: Failed to send msg %d to conn %d (%d vs. %ld)\n",
+            taskName, msg.type, conn, cnt, (long int) sizeof (msg));
   }
 }
 
