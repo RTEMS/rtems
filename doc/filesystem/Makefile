@@ -22,7 +22,8 @@ dirs:
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
 GENERATED_FILES=basefs.texi applayering.texi patheval.texi \
-    init.texi mounting.texi lifecycle.texi syscalls.texi
+    init.texi mounting.texi lifecycle.texi imfs.texi \
+    syscalls.texi basefs.texi
 
 FILES= $(PROJECT).texi \
   preface.texi $(GENERATED_FILES)
@@ -78,6 +79,11 @@ mounting.texi: mounting.t Makefile
 	   -n "" ${*}.t
 
 lifecycle.texi: lifecycle.t Makefile
+	$(BMENU) -p "" \
+	   -u "Top" \
+	   -n "" ${*}.t
+
+imfs.texi: imfs.t Makefile
 	$(BMENU) -p "" \
 	   -u "Top" \
 	   -n "" ${*}.t
