@@ -13,7 +13,7 @@ supplements="supplements/hppa1_1 supplements/i386 \
 
 # Division by access level
 public_docs="user develenv networking posix_users started started_ada"
-support_docs="${supplements} ${gnu_tools}"
+support_docs="${supplements}"
 partners_docs="posix1003.1 posix1003.1h"
 oar_manuals="ada_user hwapi tools/texi2www \
   browseable_rtems posix_users_new bsp_howto"
