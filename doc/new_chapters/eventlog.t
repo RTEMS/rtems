@@ -20,10 +20,12 @@ The directives provided by the event logging manager are:
 
 @itemize @bullet
 @item @code{log_write} - Write to the Log
+@item @code{log_write_any} - Write to any log file
 @item @code{log_open} - Open a log file
 @item @code{log_read} - Read from the system Log
 @item @code{log_notify} - Notify Process of writes to the system log
 @item @code{log_close} - Close log descriptor
+@item @code{log_copy} - 
 @item @code{log_seek} - Reposition log file offset
 @item @code{log_severity_before} - Compare event record severities
 @item @code{log_facilityemptyset} - Manipulate log facility sets
@@ -124,6 +126,93 @@ An I/O error occurred in writing to the system event log.
 The @code{log_write} function writes an event record, consisting 
 of event attributes, and the data identified by the @code{buf} 
 argument, to the system log.  The @code{len} argument specifies
+the length in bytes of the buffer pointed to by @code{buf}.  The
+@code{len} argument shall specify the value of the event record
+length attribute.  The value of @code{len} shall be less than or 
+equal to @code{LOG_ENTRY_MAXLEN} or the @code{log_write} shall fail.
+
+The @code{event_id} argument identifies the type of event record
+being written.  The @code{event_id} argument shall specify the value
+of the event ID attribute of the event record.
+
+The argument @code{facility} indicates the facility from which the
+event type is drawn.  The @code{facility} argument shall specify the
+value of the event record facility attribute.  The value of the
+@code{facility} argument shall be a valid log facility or the 
+@code{log_write} function shall fail.
+
+The @code{severity} argument indicates the severity level of the
+event record.  The @code{severity} argument shall specify the value
+of the event record severity attribute.  The value of the 
+@code{severity} argument shall be less than or equal to 
+@code{LOG_SEVERITY_MAX} or the @code{log_write} function shall fail.  
+
+The effective_UID of the calling process shall specify the event
+record UID attribute.  The effective-GID of the calling process 
+shall specify the event record GID attribute.  The process ID
+of the calling process shall specify the event record process ID
+attribute.  The process group ID of the calling process shall
+specify the event record process group ID attribute.  The current
+value of the system clock shall specify the event record timestamp
+attribute.
+
+@subheading NOTES:
+
+The @code{_POSIX_LOGGING} feature flag is defined to indicate
+this service is available.
+
+@page
+@subsection log_write_any - Write to the any log file
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <evlog.h>
+
+int log_write_any(
+  const logd_t          logdes,
+  const log_facility_t  facility,
+  const int             event_id,
+  const log_severity_t  severity,
+  const void           *buf,
+  const size_t          len
+);
+@end example
+@end ifset
+ 
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EINVAL
+The facility argument is not a valid log_facility.
+
+@item EINVAL
+The severity argument exceeds @code{LOG_SEVERITY_MAX}
+
+@item EINVAL
+The len argument exceeds @code{LOG_ENTRY_MAXLEN}
+
+@item ENOSPC
+The log file has run out of space on the device.
+
+@item EPERM
+The caller does not have appropriate permission for writing to
+the given facility.
+
+@item EIO
+An I/O error occurred in writing to the system event log.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{log_write} function writes an event record, consisting 
+of event attributes, and the data identified by the @code{buf} 
+argument, to a log file.  The @code{len} argument specifies
 the length in bytes of the buffer pointed to by @code{buf}.  The
 @code{len} argument shall specify the value of the event record
 length attribute.  The value of @code{len} shall be less than or 
@@ -415,14 +504,14 @@ The @code{log_close} function deallocates the open log file descriptor
 indicated by @code{log_des}.
 
 When all log file descriptors associated with an open log file description
-have been closed, the open log file description shall be freed.
+have been closed, the open log file description is freed.
 
 If the link count of the log file is zero, when all log file descriptors
-have been closed, the space occupied by the log file shall be freed and the
+have been closed, the space occupied by the log file is freed and the
 log file shall no longer be accessible.
 
 If the process has successfully registered a notification request for the 
-log file descriptor, the registration shall be removed. 
+log file descriptor, the registration is removed. 
 
 @subheading NOTES:
 
