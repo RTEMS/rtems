@@ -41,7 +41,7 @@ INSTALL_CHANGE = @INSTALL_CHANGE@
 PACKHEX = @PACKHEX@
 mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
 
-INSTALLDIRS = $(PROJECT_RELEASE)/tests/screens/sptests//$(TEST).scn
+INSTALLDIRS = $(PROJECT_RELEASE)/tests/screens/sptests
 
 $(INSTALLDIRS):
 	@$(mkinstalldirs) $(INSTALLDIRS)
@@ -71,7 +71,7 @@ CLOBBER_ADDITIONS +=
 all: ${ARCH} $(SRCS) $(PGM)
 	$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/tests
 	$(INSTALL_CHANGE) $(srcdir)/$(TEST).scn \
-	    $(PROJECT_RELEASE)/tests/screens/sptests//$(TEST).scn
+	    $(PROJECT_RELEASE)/tests/screens/sptests/$(TEST).scn
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)

@@ -42,7 +42,7 @@ INSTALL_CHANGE = @INSTALL_CHANGE@
 PACKHEX = @PACKHEX@
 mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
 
-INSTALLDIRS = $(PROJECT_RELEASE)/tests/screens/sptests/$(TEST).scn
+INSTALLDIRS = $(PROJECT_RELEASE)/tests/screens/sptests
 
 $(INSTALLDIRS):
 	@$(mkinstalldirs) $(INSTALLDIRS)

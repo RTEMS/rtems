@@ -251,8 +251,14 @@ sub subst_line
         {
           push @installdirs, "$1" ;
         }
+        elsif ( /^.*\$\(INSTALL_CHANGE\).*\s([^\s]+)(\/[^\.\s]+\.[^\s\/]+)$/o )
+        {
+#            print STDERR "WARNING - DIR1: $1 <$2> " ;
+            push @installdirs, "$1" ; 
+        }
         elsif ( /^.*\$\(INSTALL_CHANGE\).*\s([^\s]+)$/o )
         {
+#          print STDERR "DIR2 $1\n" ;
           push @installdirs, "$1" ;
         }
       }
@@ -441,6 +447,11 @@ sub subst_line
       # Most of them are removed, but we still have some :-
       push @tbuf, "$1 $2\n" ;
     }
+    elsif ( /^\@.*_(TRUE|FALSE)\@.*$/o )
+    { # automake conditionals
+      # HACK: Don't know how to handle them, so let's pass them through
+      push @tbuf, "$_" ;
+    }
     elsif ( /^[\s]*([^:]+)[\s]*(:[:]*)[\s]*(.*)$/o )
     {
       if ( "$2" eq "::" )
@@ -482,6 +493,20 @@ sub subst_line
     }
   }
   @buffer = @tbuf ;
+  @tbuf = @installdirs ;
+  @installdirs = () ;
+  foreach ( @tbuf )
+  {
+    if ( /^([^\s]+)(\/[^\.\s]+\.[^\s\/]+)$/o )
+    {
+       print STDERR "WARNING - stripping of file: $1 <$2> " if ( $verbose > 1 );
+       push @installdirs, "$1" ; 
+    }
+    else
+    {
+       push @installdirs, "$_" ;
+    }
+  }
   purge \@installdirs ;
   purge \@pieces ;
 }
