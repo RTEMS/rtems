@@ -9,6 +9,7 @@
 #include <rtems/score/coresem.h>
 
 typedef struct {
+  pthread_attr_t          Attributes;
 #if 0
   /*
    *  POSIX Interrupts 
@@ -17,6 +18,7 @@ typedef struct {
   CORE_semaphore_Control  Interrupt_Semaphore;
 #endif
 
+#if 0
   /*
    *  POSIX Cancelability 
    */
@@ -24,6 +26,7 @@ typedef struct {
   int                     cancelability_type;
   int                     cancelation_requested;
   Chain_Control           Cancellation_Handlers;
+#endif
 
 } POSIX_API_Control;
 
