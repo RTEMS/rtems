@@ -19,10 +19,10 @@
  *  $Id$
  */
 
-#include "stdio.h"
+#include <stdio.h>
 
 #include <rtems.h>
-#include "shm.h"
+#include <shm.h>
 
 void Shm_Cause_interrupt_simhppa(
   rtems_unsigned32 node

@@ -37,10 +37,18 @@
 #include <bsp.h>
 #include <runway.h>
 
-#include "shm.h"
+#include <shm.h>
 
 #define INTERRUPT 0        /* can be interrupt or polling */
 #define POLLING   1
+
+#define HPPA_RUNWAY_PROC_HPA_BASE  ((void *) 0xFFFA0000)
+ 
+/* given a processor number, where is its HPA? */
+#define HPPA_RUNWAY_HPA(cpu)   \
+  ((rtems_unsigned32) (HPPA_RUNWAY_PROC_HPA_BASE + ((cpu) * 0x2000)))
+ 
+#define HPPA_RUNWAY_REG_IO_EIR_OFFSET   0x000
 
 shm_config_table BSP_shm_cfgtbl;
 
