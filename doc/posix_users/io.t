@@ -26,7 +26,7 @@ The directives provided by the input and output primitives manager are:
 @item @code{fsync} - Synchronize file complete in-core state with that on disk
 @item @code{fdatasync} - Synchronize file in-core data with that on disk
 @item @code{mount} - Mount a file system
-@item @code{umount} - Unmount file systems
+@item @code{unmount} - Unmount file systems
 @item @code{aio_read} - Asynchronous Read
 @item @code{aio_write} - Asynchronous Write
 @item @code{lio_listio} - List Directed I/O
@@ -741,15 +741,14 @@ NONE
 
 @ifset is-C
 @example
-#include <sys/mount.h>
-#include <linux/fs.h>
+#include <libio.h>
 
 int mount(
-  const char   *specialfile,
-  const char    dir,
-  const char    filesystemtype,
-  unsigned long rwflag,
-  const void    data
+  rtems_filesystem_mount_table_entry_t **mt_entry,
+  rtems_filesystem_operations_table    *fs_ops,
+  rtems_filesystem_options_t            fsoptions,
+  char                                 *device,
+  char                                 *mount_point
 );
 @end example
 @end ifset
@@ -760,70 +759,21 @@ int mount(
 @subheading STATUS CODES:
 
 @table @b
-@item EPERM
-The user is not the super-user.
-
-@item ENODEV
-@code{filesystemtype} not configured in the kernel.
-
-@item ENOTBLK
-@code{specialfile} is not a block device (if a device was required).
-
-@item EBUSY
-@code{specialfile} is already mounted. Or, it cannot be remounted
-read-only, because it still holds files open for writing. Or, it
-cannot be mounted on @code{dir} because @code{dir} is still busy
-(it is the working directory of some task, the mount point of another
-device, has open files, etc.).
-
-@item EINVAL
-@code{specialfile} had an invalid superblock. Or, a remount was
-attempted, while @code{specialfile} was not already mounted on @code{dir}.
-Or, an umount was attempted, while @code{dir} was not a mount point.
-
-@item EFAULT
-One of the pointer arguments points outside the user address space.
-
-@item ENOMEM
-The kernel could not allocate a free page to copy filenames or data into.
-
-@item ENAMETOOLONG
-A pathname was longer than MAXPATHLEN.
-
-@item ENOTDIR
-A pathname was empty or had a nonexistent component.
-
-@item EACCES
-A component of a path was not searchable. Or, mounting a read-only
-filesystem was attempted without giving the MS_RDONLY flag. Or, the
-block device @code{specialfile} is located on a filesystem mounted with
-the MS_NODEV option.
-
-@item ENXIO
-The major number of the block device @code{specialfile} is out of
-range.
-
-@item EMFILE
-(In case no block device is required:) Table of dummy devices is full.
+@item EXXX
 
 @end table
 
 @subheading DESCRIPTION:
 
-@code{Mount} attaches the filesystem specified by @code{specialfile}
-(which is often a device name) to the directory specified by @code{dir}.
+The @code{mount} routines mounts the filesystem class
+which uses the filesystem operations specified by @code{fs_ops}
+and @code{fsoptions}.  The filesystem is mounted at the directory
+@code{mount_point} and the mode of the mounted filesystem is
+specified by @code{fsoptions}.  If this filesystem class requires
+a device, then the name of the device must be specified by @code{device}.
 
-Only the super-user may mount filesystems.
-
-The @code{filesystemtype} argument may take one of the values listed in
-/proc/filesystems (link "minix", "ext2", "msdos", "proc", "nfs",
-"iso9660" etc.).
-
-The @code{rwflag} argument has the magic number 0xCOED in the top 16 bits,
-and various mount flags in the low order 16 bits. If the magic number is
-absent, then the last two arguments are not used.
-
-The @code{data} argument is interpreted by the different file systems.
+If this operation succeeds, the mount table entry for the mounted
+filesystem is returned in @code{mt_entry}.
 
 @subheading NOTES:
 
@@ -833,20 +783,19 @@ NONE
 @c
 @c
 @page
-@subsection umount - Umount file systems
+@subsection unmount - Unmount file systems
 
-@findex umount
-@cindex  umount file systems
+@findex unmount
+@cindex  unmount file systems
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-#include <sys/mount.h>
-#include <linux/fs.h>
+#include <libio.h>
 
-int umount(
-  const char *specialfile
+int unmount(
+  const char *mount_path
 );
 @end example
 @end ifset
@@ -857,60 +806,12 @@ int umount(
 @subheading STATUS CODES:
 
 @table @b
-@item EPERM
-The user is not the super-user.
-
-@item ENODEV
-@code{Filesystemtype} not configured in the kernel.
-
-@item ENOTBLK
-@code{Specialfile} is not a block device (if a device was required).
-
-@item EBUSY
-@code{Specialfile} is already mounted. Or, it cannot be remounted
-read-only, because it still holds files open for writing. Or, it
-cannot be mounted on @code{dir} because @code{dir} is still busy
-(it is the working directory of some task, the mount point of another
-device, has open files, etc.).
-
-@item EINVAL
-@code{specialfile} had an invalid superblock. Or, a remount was
-attempted, while @code{specialfile} was not already mounted on @code{dir}.
-Or, an umount was attempted, while @code{dir} was not a mount point.
-
-@item EFAULT
-One of the pointer arguments points outside the user address space.
-
-@item ENOMEM
-The kernel could not allocate a free page to copy filenames or data into.
-
-@item ENAMETOOLONG
-A pathname was longer than MAXPATHLEN.
-
-@item ENOTDIR
-A pathname was empty or had a nonexistent component.
-
-@item EACCES
-A component of a path was not searchable. Or, mounting a read-only
-filesystem was attempted without giving the MS_RDONLY flag. Or, the
-block device @code{specialfile} is located on a filesystem mounted with
-the MS_NODEV option.
-
-@item ENXIO
-The major number of the block device @code{specialfile} is out of
-range.
-
-@item EMFILE
-(In case no block device is required:) Table of dummy devices is full.
-
-@end table
+@item EXXX
 
 @subheading DESCRIPTION:
 
-@code{Umount} removes the attachment of the filesystem specified
-by @code{specialfile} or @code{dir}.
-
-Only the super-user may umount filesystems.
+The @code{unmount} routine removes the attachment of the filesystem specified
+by @code{mount_path}.
 
 @subheading NOTES:
 
