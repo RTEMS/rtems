@@ -6,12 +6,13 @@
 @c  $Id$
 @c
 
+
 @chapter Mailbox Manager
 
 @section Introduction
 
-The 
-mailbox manager is ...
+The
+mailbox manager is basically a linked list, hidden by the super core message queue and consists of a control block, a private structure. The control block comprises of the create mailbox structure, the message structure and the reference mailbox structure.
 
 The services provided by the mailbox manager are:
 
@@ -24,6 +25,7 @@ The services provided by the mailbox manager are:
 @item @code{trcv_msg} - Receive Message from Mailbox with Timeout
 @item @code{ref_mbx} - Reference Mailbox Status
 @end itemize
+
 
 @section Background
 
@@ -42,6 +44,7 @@ and status codes.
 @c
 
 @page
+
 @subsection cre_mbx - Create Mailbox
 
 @subheading CALLING SEQUENCE:
@@ -60,9 +63,21 @@ ER cre_mbx(
 
 @subheading STATUS CODES:
 
-@code{EXXX} - 
+@code{E_OK} - Normal completion
+@code{E_NOMEM} - Insufficient memory
+@code{E_ID} - Invalid ID number
+@code{E_RSATR} - Reserved attribute
+@code{E_OBJ} - Invalid object state
+@code{E_OACV} - Object access violation
+@code{E_PAR} - Parameter error
 
-@subheading DESCRIPTION:
+
+@subheading DESCRIPTION: Allocated a control area/buffer space for mailbox with some ID.
+		User area: 	+ve ids
+		System area: 	-ve ids
+User may specify if its FIFO or priority level queue.
+Assumes shared memory b/w communicating processes.
+Initializes core message queue for this mbox.
 
 @subheading NOTES:
 
@@ -72,6 +87,7 @@ ER cre_mbx(
 @c
 
 @page
+
 @subsection del_mbx - Delete Mailbox
 
 @subheading CALLING SEQUENCE:
@@ -89,9 +105,12 @@ ER del_mbx(
 
 @subheading STATUS CODES:
 
-@code{EXXX} - 
+@code{E_OK} - Normal completion
+@code{E_ID} - Invalid ID number
+@code{E_NOEXS} - Object does not exist
+@code{E_OACV} - Object access violation
 
-@subheading DESCRIPTION:
+@subheading DESCRIPTION: Specified by the ID, cleans up all data structures and control blocks.
 
 @subheading NOTES:
 
@@ -101,6 +120,7 @@ ER del_mbx(
 @c
 
 @page
+
 @subsection snd_msg - Send Message to Mailbox
 
 @subheading CALLING SEQUENCE:
@@ -119,9 +139,13 @@ ER snd_msg(
 
 @subheading STATUS CODES:
 
-@code{EXXX} - 
+@code{E_OK} - Normal completion
+@code{E_ID} - Invalid ID number
+@code{E_NOEXS} - Object does not exist
+@code{E_OACV} - Object access violation
+@code{E_QOVR} - Queueing or nesting overflow
 
-@subheading DESCRIPTION:
+@subheading DESCRIPTION: Sends the address of message to mbox having a given id, any waiting tasks (blocked tasks) will be woken up. It supports non-blocking send.
 
 @subheading NOTES:
 
@@ -131,7 +155,8 @@ ER snd_msg(
 @c
 
 @page
-@subsection rcv_msg - Receive Message from Mailbox 
+
+@subsection rcv_msg - Receive Message from Mailbox
 
 @subheading CALLING SEQUENCE:
 
@@ -149,9 +174,16 @@ ER rcv_msg(
 
 @subheading STATUS CODES:
 
-@code{EXXX} - 
+@code{E_OK} - Normal completion
+@code{E_ID} - Invalid ID number
+@code{E_NOEXS} - Object does not exist
+@code{E_OACV} - Object access violation
+@code{E_PAR} - Parameter error
+@code{E_DLT} - The object being waited for was deleted
+@code{E_RLWAI} - WAIT state was forcibly released
+@code{E_CTX} - Context error
 
-@subheading DESCRIPTION:
+@subheading DESCRIPTION: If there is no message then receiver blocks, if not empty then it takes the first message of the queue.
 
 @subheading NOTES:
 
@@ -161,13 +193,14 @@ ER rcv_msg(
 @c
 
 @page
+
 @subsection prcv_msg - Poll and Receive Message from Mailbox
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =prcv_msg(
+ER prcv_msg(
   T_MSG **ppk_msg,
   ID mbxid
 );
@@ -179,9 +212,16 @@ ER ercd =prcv_msg(
 
 @subheading STATUS CODES:
 
-@code{EXXX} - 
+@code{E_OK} - Normal completion
+@code{E_ID} - Invalid ID number
+@code{E_NOEXS} - Object does not exist
+@code{E_OACV} - Object access violation
+@code{E_PAR} - Parameter error
+@code{E_DLT} - The object being waited for was deleted
+@code{E_RLWAI} - WAIT state was forcibly released
+@code{E_CTX} - Context error
 
-@subheading DESCRIPTION:
+@subheading DESCRIPTION: Poll and receive message from mailbox.
 
 @subheading NOTES:
 
@@ -191,13 +231,14 @@ ER ercd =prcv_msg(
 @c
 
 @page
+
 @subsection trcv_msg - Receive Message from Mailbox with Timeout
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-ER ercd =trcv_msg(
+ER trcv_msg(
   T_MSG **ppk_msg,
   ID mbxid,
   TMO tmout
@@ -210,9 +251,16 @@ ER ercd =trcv_msg(
 
 @subheading STATUS CODES:
 
-@code{EXXX} - 
+@code{E_OK} - Normal completion
+@code{E_ID} - Invalid ID number
+@code{E_NOEXS} - Object does not exist
+@code{E_OACV} - Object access violation
+@code{E_PAR} - Parameter error
+@code{E_DLT} - The object being waited for was deleted
+@code{E_RLWAI} - WAIT state was forcibly released
+@code{E_CTX} - Context error
 
-@subheading DESCRIPTION:
+@subheading DESCRIPTION: Blocking receive with a maximum timeout.
 
 @subheading NOTES:
 
@@ -222,6 +270,7 @@ ER ercd =trcv_msg(
 @c
 
 @page
+
 @subsection ref_mbx - Reference Mailbox Status
 
 @subheading CALLING SEQUENCE:
@@ -240,9 +289,14 @@ ER ref_mbx(
 
 @subheading STATUS CODES:
 
-@code{EXXX} - 
+@code{E_OK} - Normal completion
+@code{E_ID} - Invalid ID number
+@code{E_NOEXS} - Object does not exist
+@code{E_OACV} - Object access violation
+@code{E_PAR} - Parameter error
 
-@subheading DESCRIPTION:
+@subheading DESCRIPTION: Supports non-blocking receive. If there are no messages, it returns -1. Also returns id of the next process waiting on a message.
 
 @subheading NOTES:
+
 
