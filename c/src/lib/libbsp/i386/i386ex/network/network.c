@@ -59,7 +59,7 @@ int count_rx = 0;
 #include "uti596.h"
 #include "netexterns.h"
 
-#include <asm.h>
+#include <rtems/asm.h>
 #include <string.h>
 
 
