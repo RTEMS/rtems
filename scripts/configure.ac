@@ -70,8 +70,8 @@ AC_SUBST(BSPVERS)
 AC_SUBST(RPM_CPU)
 AC_SUBST(rpmprefix,$rpmprefix)
 AC_SUBST(rpmgroup,[RTEMS/][RTEMS_API])
+AC_SUBST(RTEMS_RPM_RELEASE,$rtems_rpm_release)
 AC_SUBST(osversion,$osversion)
-
 AC_CONFIG_FILES([Makefile
 binutils/Makefile
 gccnewlib/Makefile
@@ -94,7 +94,6 @@ AC_CONFIG_FILES([mkgccnewlibspec],[chmod +x mkgccnewlibspec])
 AC_CONFIG_FILES([mkbspspec],[chmod +x mkbspspec])
 AC_CONFIG_FILES([gcc3newlib/mkspec],[chmod +x gcc3newlib/mkspec])
 AC_CONFIG_FILES([cpukit/mkspec],[chmod +x cpukit/mkspec])
-AC_CONFIG_FILES([rtemsdoc/mkspec],[chmod +x rtemsdoc/mkspec])
 
 AC_CONFIG_COMMANDS([default],[[chmod 755 buildall
 chmod 755 buildalltar

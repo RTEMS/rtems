@@ -1,6 +1,6 @@
 Name:           %{rpmprefix}rtems-source
 Version:        @rtems_version@
-Release:        1
+Release:        @RTEMS_RPM_RELEASE@
 Epoch:          0
 Summary:        RTEMS source code
 

@@ -6,14 +6,10 @@ include ${top_srcdir}/common/common.am
 
 CLEANFILES =
 
-MKSPEC = $(SHELL) ./mkspec
-
-MKSPEC_DEPS = mkspec rtemsdoc.spec.in $(top_builddir)/setup.cache
-
 SUPPLEMENTS = arm c4x i386 i960 m68k mips powerpc sh sparc
 
 DOCS = ada_user posix1003_1 bsp_howto
-DOCS += c_user
+DOCS += c_user posix_users
 DOCS += develenv
 DOCS += FAQ filesystem itron
 DOCS += networking porting new_chapters
@@ -39,22 +35,13 @@ SUFFIXES = -supplement.add -docs.add
 	t=`echo $@ | sed -e 's,-docs.add,,'`; \
 	sed -e s/@target\@/$$t/g < $< >$@
 
-rtemsdoc.spec.in: $(SUBPACKAGES)
-	cat $^ > $@
-CLEANFILES += rtemsdoc.spec.in
-
-rtemsdoc.spec: $(MKSPEC_DEPS) $(SUBPACKAGES)
-	$(MKSPEC) -cfg $(top_builddir)/setup.cache > $@
+rtemsdoc.spec: $(SUBPACKAGES) Makefile
+	cat $(SUBPACKAGES) | sed \
+    	-e 's,[@]rtems_version[@],$(RTEMS_VERSION),g' \
+	-e 's,[@]rtems_rpm_release[@],$(RTEMS_RPM_RELEASE),g' \
+	 > $@
 CLEANFILES += rtemsdoc.spec
 
-RPM_SPECS_DATA = rtemsdoc.spec
-
-TEMPLATES = rtemsdoc.spec.in
-
-noinst_DATA = $(TEMPLATES)
-
-EXTRA_DIST = $(TEMPLATES)
-
-CLEANFILES += $(RPM_SPECS_DATA)
+noinst_DATA = rtemsdoc.spec
 
 include $(top_srcdir)/../automake/local.am

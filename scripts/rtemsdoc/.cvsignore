@@ -13,11 +13,11 @@ m68k-supplement.add
 Makefile
 Makefile.in
 mips-supplement.add
-mkspec
 networking-docs.add
 new_chapters-docs.add
 porting-docs.add
 posix1003_1-docs.add
+posix_users-docs.add
 powerpc-supplement.add
 relnotes-docs.add
 rgdb_specs-docs.add
@@ -25,6 +25,6 @@ rtems_gdb-docs.add
 sh-supplement.add
 sparc-supplement.add
 *.spec
+*.spec.in
 started_ada-docs.add
 started-docs.add
-*.spec.in

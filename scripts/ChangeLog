@@ -1,3 +1,19 @@
+2004-02-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove rtemsdoc/mkspec. Add RTEMS_RPM_RELEASE.
+	* rtemsdoc/.cvsignore: Reformat.
+	* Makefile.am: Reformat. Add RTEMS_RPM_RELEASE support to
+	rtems-source.add, Use rtems_source_spec_DEPS instead of
+	rtems_source_spec_DEPENDENCIES (Conflicts with automake internals).
+	* rtems/rtems-source.add: Add RTEMS_RPM_RELEASE.
+	* rtemsdoc/mkspec.in: Remove.
+	* rtemsdoc/Makefile.am: Reworked.
+	* rtemsdoc/header.add: Update Copyright notice.
+	* rtemsdoc/rtemsdoc.add: Add RTEMS_RPM_RELEASE.
+	Add %{rpmgroup}. Remove bzip-ing *.ps.
+	* rtemsdoc/supplement.add.in: Add %{rpmgroup}.
+	* rtemsdoc/templ.add.in: Add %{rpmgroup}.
+
 2004-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/rtems-source.add: Require automake-1.8.2, autoconf-2.59.
