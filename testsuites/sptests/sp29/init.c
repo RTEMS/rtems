@@ -67,6 +67,9 @@ rtems_task Init (rtems_task_argument ignored)
 	rtems_status_code sc;
 	rtems_interval then, now;
 
+	puts( "*** SP29 - SIMPLE SEMAPHORE TEST ***" );
+	puts( "This test only prints on errors." );
+ 
 	sc = rtems_clock_get (RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticksPerSecond);
 	if (sc != RTEMS_SUCCESSFUL) {
 		printf ("Can't get ticks per second: %s\n", rtems_status_text (sc));
@@ -83,7 +86,7 @@ rtems_task Init (rtems_task_argument ignored)
 	}
 	sc = rtems_semaphore_create (rtems_build_name ('S', 'M', 'n', 'c'),
 		1,
-		RTEMS_PRIORITY|RTEMS_BINARY_SEMAPHORE|RTEMS_NO_NESTING_ALLOWED|RTEMS_INHERIT_PRIORITY |RTEMS_NO_PRIORITY_CEILING|RTEMS_LOCAL,
+		RTEMS_PRIORITY|RTEMS_SIMPLE_BINARY_SEMAPHORE|RTEMS_INHERIT_PRIORITY |RTEMS_NO_PRIORITY_CEILING|RTEMS_LOCAL,
 		0,
 		&semnorec);
 	if (sc != RTEMS_SUCCESSFUL) {
@@ -151,8 +154,8 @@ rtems_task Init (rtems_task_argument ignored)
 	if (sc == RTEMS_SUCCESSFUL) {
 		printf ("%d: Reobtain non-recursive-lock semaphore -- and should not have.\n", __LINE__);
 	}
-	else if (sc != RTEMS_UNSATISFIED) {
-		printf ("%d: Reobtain non-recursive-lock semaphore failed, but error is %d (%s), not RTEMS_UNSATISFIED.\n", __LINE__, sc, rtems_status_text (sc));
+	else if (sc != RTEMS_TIMEOUT) {
+		printf ("%d: Reobtain non-recursive-lock semaphore failed, but error is %d (%s), not RTEMS_TIMEOUT.\n", __LINE__, sc, rtems_status_text (sc));
 	}
 	if ((then - now) < 4)
 		printf ("%d: Reobtain non-recursive-lock semaphore failed without timeout.\n", __LINE__);
@@ -168,9 +171,10 @@ rtems_task Init (rtems_task_argument ignored)
 		then = now;
 		if (sc != RTEMS_SUCCESSFUL)
 			printf ("%d: Failed to obtain non-recursive-lock semaphore: %s\n", __LINE__, rtems_status_text (sc));
-		else if (diff < (2 * ticksPerSecond + 1))
-			printf ("%d: Obtained obtain non-recursive-lock semaphore too quickly -- %d ticks\n", __LINE__, diff);
+		else if (diff < (2 * ticksPerSecond))
+			printf ("%d: Obtained obtain non-recursive-lock semaphore too quickly -- %d ticks not %d ticks\n", __LINE__, diff, (2 * ticksPerSecond) );
 	}
 		
+	puts( "*** END OF SP29 ***" );
 	exit (0);
 }
