@@ -293,7 +293,7 @@ static inline  void PPC_Set_timebase_register (unsigned long long tbr)
 #define CPU_Get_timebase_low( _value ) \
     asm volatile( "mftb  %0" : "=r" (_value) )
 
-#define delay( _microseconds ) \
+#define rtems_bsp_delay( _microseconds ) \
   do { \
     unsigned32 start, ticks, now; \
     CPU_Get_timebase_low( start ) ; \
@@ -303,7 +303,7 @@ static inline  void PPC_Set_timebase_register (unsigned long long tbr)
     while (now - start < ticks); \
   } while (0)
 
-#define delay_in_bus_cycles( _cycles ) \
+#define rtems_bsp_delay_in_bus_cycles( _cycles ) \
   do { \
     unsigned32 start, now; \
     CPU_Get_timebase_low( start ); \

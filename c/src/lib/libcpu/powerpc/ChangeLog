@@ -1,3 +1,10 @@
+2001-09-27	Joel Sherrill <joel@OARcorp.com>
+
+	* old_exception_processing/cpu.h: Renamed delay() to rtems_bsp_delay().
+	Renamed delay_in_bus_cycles() to rtems_bsp_delay_in_bus_cycles().
+	* shared/include/cpu.h: Renamed delay() to rtems_bsp_delay().
+	Renamed delay_in_bus_cycles() to rtems_bsp_delay_in_bus_cycles().
+
 2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* new_exception_processing/Makefile.am: Use 'PREINSTALL_FILES ='.
