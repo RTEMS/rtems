@@ -308,7 +308,7 @@ int main(
   status = chdir( "/c/y/my_mount_point/mydir" );
   assert( status == 0 );
 
-  printf(" unmount of /c/y/my_mount_point should fail with EBUSY\n");
+  printf("unmount of /c/y/my_mount_point should fail with EBUSY\n");
   status = unmount( "/c/y/my_mount_point" );
   assert( status == -1 );
   assert( errno == EBUSY );
@@ -321,7 +321,7 @@ int main(
   status = chdir( "/" );
   assert( status == 0 );
 
-  printf(" unmount /c/y/my_mount_point \n");
+  printf("unmount /c/y/my_mount_point \n");
   status = unmount( "/c/y/my_mount_point" );
   assert( status == 0 );
 
