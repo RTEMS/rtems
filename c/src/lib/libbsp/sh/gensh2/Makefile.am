@@ -4,6 +4,8 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
+CLEANFILES =
+
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
@@ -112,7 +114,7 @@ $(PROJECT_LIB)/linkcmds.rom: startup/linkcmds.rom $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.rom
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.rom
 
-CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES += $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
