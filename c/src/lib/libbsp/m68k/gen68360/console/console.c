@@ -279,13 +279,9 @@ smc1PollWrite (int minor, const char *buf, int len)
 
 /*
  * Reserve resources consumed by this driver
+ *
+ * NOTE: This is in another file to reduce dependencies on the minimum size.
  */
-void console_reserve_resources(
-  rtems_configuration_table *configuration
-)
-{
-	rtems_termios_reserve_resources (configuration, 1);
-}
 
 /*
  * Initialize and register the device
