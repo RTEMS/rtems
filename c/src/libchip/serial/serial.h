@@ -22,6 +22,7 @@
 #ifndef __LIBCHIP_SERIAL_h
 #define __LIBCHIP_SERIAL_h
 
+#include <termios.h>
 #include <ringbuf.h>
 
 /*
@@ -50,6 +51,64 @@ typedef struct _console_flow {
   int (*deviceStopRemoteTx)(int minor);
   int (*deviceStartRemoteTx)(int minor);
 } console_flow;
+
+/*
+ * Each field is interpreted thus:
+ * 
+ * sDeviceName  This is the name of the device. 
+ *
+ * pDeviceFns   This is a pointer to the set of driver routines to use.
+ *
+ * pDeviceFlow  This is a pointer to the set of flow control routines to
+ *              use. Serial device drivers will typically supply RTSCTS
+ *              and DTRCTS handshake routines for DCE to DCE communication,
+ *              however for DCE to DTE communication, no such routines
+ *              should be necessary as RTS will be driven automatically
+ *              when the transmitter is active.
+ *
+ * ulMargin     The high water mark in the input buffer is set to the buffer
+ *              size less ulMargin. Once this level is reached, the driver's
+ *              flow control routine used to stop the remote transmitter will
+ *              be called. This figure should be greater than or equal to
+ *              the number of stages of FIFO between the transmitter and
+ *              receiver. 
+ *
+ *              NOTE: At the current time, this parameter is hard coded
+ *                    in termios and this number is ignored.
+ *
+ * ulHysteresis After the high water mark specified by ulMargin has been
+ *              reached, the driver's routine to re-start the remote
+ *              transmitter will be called once the level in the input
+ *              buffer has fallen by ulHysteresis bytes.
+ *
+ *              NOTE: At the current time, this parameter is hard coded
+ *                    in termios and this number is ignored.
+ *
+ * pDeviceParams This contains either device specific data or a pointer to a
+ *              device specific structure containing additional information
+ *              not provided in this table. 
+ *
+ * ulCtrlPort1  This is the primary control port number for the device. This
+ *              may be used to specify different instances of the same device
+ *              type.
+ *
+ * ulCtrlPort2  This is the secondary control port number, of use when a given
+ *              device has more than one available channel.
+ *
+ * ulDataPort   This is the port number for the data port of the device
+ *
+ * getRegister  This is the routine used to read register values.
+ *
+ * setRegister  This is the routine used to write register values.
+ *
+ * getData      This is the routine used to read the data register (RX).
+ *
+ * setData      This is the routine used to write the data register (TX).
+ *
+ * ulClock      This is the baud rate clock speed.
+ *
+ * ulIntVector  This encodes the interrupt vector of the device.
+ */
 
 typedef struct _console_tbl {
   char          *sDeviceName;
