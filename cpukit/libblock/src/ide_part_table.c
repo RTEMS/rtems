@@ -51,7 +51,7 @@ get_sector(dev_t dev, uint32_t sector_num, sector_data_t **sector)
     sector_data_t      *s;
     bdbuf_buffer       *buf;
     rtems_status_code   rc;
-    
+
     if (sector == NULL)
     {
         return RTEMS_INTERNAL_ERROR;
@@ -62,21 +62,21 @@ get_sector(dev_t dev, uint32_t sector_num, sector_data_t **sector)
     {
         return RTEMS_NO_MEMORY;
     }
-    
+
     rc = rtems_bdbuf_read(dev, sector_num, &buf);
     if (rc != RTEMS_SUCCESSFUL)
     {
         free(s);
         return rc;
     }
-    
+
     memcpy(s->data, buf->buffer, RTEMS_IDE_SECTOR_SIZE);
     s->sector_num = sector_num;
 
     *sector = s;
-    
+
     rtems_bdbuf_release(buf);
-    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -165,7 +165,7 @@ data_to_part_desc(uint8_t *data, part_desc_t **new_part_desc)
     {
         return RTEMS_INTERNAL_ERROR;
     }
-    
+
     *new_part_desc = NULL;
 
     if ((part_desc = calloc(1, sizeof(part_desc_t))) == NULL)
@@ -233,7 +233,7 @@ read_extended_partition(uint32_t start, part_desc_t *ext_part)
     {
         return RTEMS_INTERNAL_ERROR;
     }
-    
+
     dev = ext_part->disk_desc->dev;
 
     /* get start sector of current extended partition */
@@ -267,7 +267,7 @@ read_extended_partition(uint32_t start, part_desc_t *ext_part)
             free(sector);
             return rc;
         }
-        
+
         if (new_part_desc == NULL)
         {
             data += RTEMS_IDE_PARTITION_DESCRIPTOR_SIZE;
@@ -296,7 +296,7 @@ read_extended_partition(uint32_t start, part_desc_t *ext_part)
     }
 
     free(sector);
-    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -367,7 +367,7 @@ read_mbr(disk_desc_t *disk_desc)
     }
 
     free(sector);
-    
+
     disk_desc->last_log_id = RTEMS_IDE_PARTITION_MAX_SUB_PARTITION_NUMBER;
 
     /* There cannot be more than one extended partition,
@@ -404,7 +404,7 @@ partition_free(part_desc_t *part_desc)
 
     if (part_desc == NULL)
         return;
-    
+
     if (is_extended(part_desc->sys_type))
     {
         for (part_num = 0;
@@ -414,7 +414,7 @@ partition_free(part_desc_t *part_desc)
             partition_free(part_desc->sub_part[part_num]);
         }
     }
-    
+
     free(part_desc);
 }
 
@@ -437,7 +437,7 @@ rtems_ide_part_table_free(disk_desc_t *disk_desc)
     {
         partition_free(disk_desc->partitions[part_num]);
     }
-    
+
     free(disk_desc);
 }
 
@@ -508,7 +508,7 @@ rtems_ide_part_table_initialize(char *dev_name)
     {
         return RTEMS_NO_MEMORY;
     }
-    
+
     /* get partition table */
     rc = rtems_ide_part_table_get(dev_name, disk_desc);
     if (rc != RTEMS_SUCCESSFUL)

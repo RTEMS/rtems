@@ -54,7 +54,7 @@ ramdisk_read(struct ramdisk *rd, blkdev_request *req)
     uint32_t   i;
     blkdev_sg_buffer *sg;
     uint32_t   remains;
-    
+
     from = (char *)rd->area + (req->start * rd->block_size);
     remains = rd->block_size * req->count;
     sg = req->bufs;
@@ -89,7 +89,7 @@ ramdisk_write(struct ramdisk *rd, blkdev_request *req)
     uint32_t   i;
     blkdev_sg_buffer *sg;
     uint32_t   remains;
-    
+
     to = (char *)rd->area + (req->start * rd->block_size);
     remains = rd->block_size * req->count;
     sg = req->bufs;
@@ -134,9 +134,9 @@ ramdisk_ioctl(dev_t dev, int req, void *argp)
                 errno = ENODEV;
                 return -1;
             }
-            
+
             rd = ramdisk + minor;
-            
+
             switch (r->req)
             {
                 case BLKDEV_REQ_READ:
@@ -144,14 +144,14 @@ ramdisk_ioctl(dev_t dev, int req, void *argp)
 
                 case BLKDEV_REQ_WRITE:
                     return ramdisk_write(rd, r);
-                    
+
                 default:
                     errno = EBADRQC;
                     return -1;
             }
             break;
         }
-        
+
         default:
             errno = EBADRQC;
             return -1;
@@ -184,10 +184,10 @@ ramdisk_initialize(
     rc = rtems_disk_io_initialize();
     if (rc != RTEMS_SUCCESSFUL)
         return rc;
-        
+
     r = ramdisk = calloc(rtems_ramdisk_configuration_size, 
                          sizeof(struct ramdisk));
-    
+
     for (i = 0; i < rtems_ramdisk_configuration_size; i++, c++, r++)
     {
         dev_t dev = rtems_filesystem_make_dev_t(major, i);

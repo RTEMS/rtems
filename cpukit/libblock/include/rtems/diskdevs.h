@@ -157,7 +157,7 @@ rtems_disk_lookup(dev_t dev);
  */
 rtems_status_code
 rtems_disk_release(disk_device *dd);
- 
+
 /* rtems_disk_next --
  *     Disk device enumerator. Looking for device having device number larger
  *     than dev and return disk device descriptor for it. If there are no

@@ -72,7 +72,7 @@ create_disk_entry(dev_t dev)
     struct disk_device **d;
 
     rtems_filesystem_split_dev_t (dev, major, minor);
-    
+
     if (major >= disktab_size)
     {
         struct disk_device_table *p;
@@ -92,7 +92,7 @@ create_disk_entry(dev_t dev)
         }
         disktab_size = newsize;
     }
-    
+
     if ((disktab[major].minor == NULL) ||
         (minor >= disktab[major].size))
     {
@@ -100,14 +100,14 @@ create_disk_entry(dev_t dev)
         disk_device **p;
         int i;
         int s = disktab[major].size;
-        
+
         if (s == 0)
             newsize = DISKTAB_INITIAL_SIZE;
         else
             newsize = s * 2;
         if (minor >= newsize)
             newsize = minor + 1;
-        
+
         p = realloc(disktab[major].minor, sizeof(disk_device *) * newsize);
         if (p == NULL)
             return NULL;
@@ -117,7 +117,7 @@ create_disk_entry(dev_t dev)
             *p = NULL;
         disktab[major].size = newsize;
     }
-    
+
     d = disktab[major].minor + minor;
     if (*d == NULL)
     {
@@ -144,15 +144,15 @@ get_disk_entry(dev_t dev)
     struct disk_device_table *dtab;
 
     rtems_filesystem_split_dev_t (dev, major, minor);
-    
+
     if ((major >= disktab_size) || (disktab == NULL))
         return NULL;
-        
+
     dtab = disktab + major;
-    
+
     if ((minor >= dtab->size) || (dtab->minor == NULL))
         return NULL;
-    
+
     return dtab->minor[minor];
 }
 
@@ -175,13 +175,13 @@ create_disk(dev_t dev, char *name, disk_device **diskdev)
 {
     disk_device *dd;
     char *n;
-    
+
     dd = get_disk_entry(dev);
     if (dd != NULL)
     {
         return RTEMS_RESOURCE_IN_USE;
     }
-    
+
     if (name == NULL)
     {
         n = NULL;
@@ -194,19 +194,19 @@ create_disk(dev_t dev, char *name, disk_device **diskdev)
             return RTEMS_NO_MEMORY;
         strncpy(n, name, nlen);
     }
-    
+
     dd = create_disk_entry(dev);
     if (dd == NULL)
     {
         free(n);
         return RTEMS_NO_MEMORY;
     }
-    
+
     dd->dev = dev;
     dd->name = n;
-    
+
     *diskdev = dd;
-    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -247,11 +247,11 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
 
     rtems_filesystem_split_dev_t (dev, major, minor);
 
-    
+
     for (bs_log2 = 0, i = block_size; (i & 1) == 0; i >>= 1, bs_log2++);
     if ((bs_log2 < 9) || (i != 1)) /* block size < 512 or not power of 2 */
         return RTEMS_INVALID_NUMBER;
-    
+
     rc = rtems_semaphore_obtain(diskdevs_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
     if (rc != RTEMS_SUCCESSFUL)
         return rc;
@@ -264,7 +264,7 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
         rtems_semaphore_release(diskdevs_mutex);
         return rc;
     }
-    
+
     rc = create_disk(dev, name, &dd);
     if (rc != RTEMS_SUCCESSFUL)
     {
@@ -272,7 +272,7 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
         rtems_semaphore_release(diskdevs_mutex);
         return rc;
     }
-    
+
     dd->phys_dev = dd;
     dd->uses = 0;
     dd->start = 0;
@@ -283,7 +283,7 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
     dd->pool = pool;
 
     rc = rtems_io_register_name(name, major, minor);
-    
+
     diskdevs_protected = FALSE;
     rtems_semaphore_release(diskdevs_mutex);
 
@@ -337,7 +337,7 @@ rtems_disk_create_log(dev_t dev, dev_t phys, int start, int size, char *name)
         rtems_semaphore_release(diskdevs_mutex);
         return RTEMS_INVALID_NUMBER;
     }
-    
+
     rc = create_disk(dev, name, &dd);
     if (rc != RTEMS_SUCCESSFUL)
     {
@@ -345,7 +345,7 @@ rtems_disk_create_log(dev_t dev, dev_t phys, int start, int size, char *name)
         rtems_semaphore_release(diskdevs_mutex);
         return rc;
     }
-    
+
     dd->phys_dev = pdd;
     dd->uses = 0;
     dd->start = start;
@@ -358,7 +358,7 @@ rtems_disk_create_log(dev_t dev, dev_t phys, int start, int size, char *name)
 
     diskdevs_protected = FALSE;
     rc = rtems_semaphore_release(diskdevs_mutex);
-    
+
     return rc;
 }
 
@@ -383,7 +383,7 @@ rtems_disk_delete(dev_t dev)
     int used;
     rtems_device_major_number maj;
     rtems_device_minor_number min;
-    
+
     rc = rtems_semaphore_obtain(diskdevs_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
     if (rc != RTEMS_SUCCESSFUL)
         return rc;
@@ -404,7 +404,7 @@ rtems_disk_delete(dev_t dev)
             }
         }
     }
-    
+
     if (used != 0)
     {
         diskdevs_protected = FALSE;
@@ -431,7 +431,7 @@ rtems_disk_delete(dev_t dev)
             }
         }
     }
-    
+
     diskdevs_protected = FALSE;
     rc = rtems_semaphore_release(diskdevs_mutex);
     return rc;
@@ -453,7 +453,7 @@ rtems_disk_lookup(dev_t dev)
     rtems_interrupt_level level;
     disk_device *dd;
     rtems_status_code rc;
-    
+
     rtems_interrupt_disable(level);
     if (diskdevs_protected)
     {
@@ -522,7 +522,7 @@ rtems_disk_next(dev_t dev)
 
     if (major >= disktab_size)
         return NULL;
-    
+
     dtab = disktab + major;
     while (TRUE) 
     {
@@ -560,7 +560,7 @@ rtems_disk_io_initialize(void)
 
     if (disk_io_initialized)
         return RTEMS_SUCCESSFUL;
-    
+
     disktab_size = DISKTAB_INITIAL_SIZE;
     disktab = calloc(disktab_size, sizeof(struct disk_device_table));
     if (disktab == NULL)
@@ -571,23 +571,23 @@ rtems_disk_io_initialize(void)
         rtems_build_name('D', 'D', 'E', 'V'), 1,
         RTEMS_FIFO | RTEMS_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY | 
         RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL, 0, &diskdevs_mutex);
-    
+
     if (rc != RTEMS_SUCCESSFUL)
     {
         free(disktab);
         return rc;
     }
-    
+
     rc = rtems_bdbuf_init(rtems_bdbuf_configuration,
                           rtems_bdbuf_configuration_size);
-    
+
     if (rc != RTEMS_SUCCESSFUL)
     {
         rtems_semaphore_delete(diskdevs_mutex);
         free(disktab);
         return rc;
     }
-    
+
     disk_io_initialized = 1;
     return RTEMS_SUCCESSFUL;
 }
@@ -628,7 +628,7 @@ rtems_disk_io_done(void)
     free(disktab);
 
     rc = rtems_semaphore_release(diskdevs_mutex);
-    
+
     /* XXX bdbuf should be released too! */
     disk_io_initialized = 0;
     return rc;

@@ -48,7 +48,7 @@ typedef struct bdbuf_buffer {
 
     dev_t       dev;     /* device number */
     blkdev_bnum block;   /* block number on the device */
-    
+
     char       *buffer;  /* Pointer to the buffer memory area */
     rtems_status_code status; /* Last I/O operation completion status */
     int         error;   /* If status != RTEMS_SUCCESSFUL, this field contains

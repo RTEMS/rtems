@@ -69,7 +69,7 @@ typedef struct blkdev_request {
     blkdev_bnum       start;    /* Start block number */
     uint32_t    count;    /* Number of blocks to be exchanged */
     uint32_t    bufnum;   /* Number of buffers provided */    
-    
+
     blkdev_sg_buffer  bufs[0];/* List of scatter/gather buffers */
 } blkdev_request;
 

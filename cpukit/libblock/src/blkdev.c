@@ -39,28 +39,28 @@ rtems_blkdev_generic_read(
     unsigned int blkofs;
     dev_t dev;
     disk_device *dd;
-    
+
     dev = rtems_filesystem_make_dev_t(major, minor);
     dd = rtems_disk_lookup(dev);
     if (dd == NULL)
         return RTEMS_INVALID_NUMBER;
-    
+
     block_size_log2 = dd->block_size_log2;
     block_size = dd->block_size;
-    
+
     buf = args->buffer;
     count = args->count;
     args->bytes_moved = 0;
-    
+
     block = args->offset >> block_size_log2;
     blkofs = args->offset & (block_size - 1);
-    
+
     while (count > 0)
     {
         bdbuf_buffer *diskbuf;
         int copy;
         rtems_status_code rc;
-        
+
         rc = rtems_bdbuf_read(dev, block, &diskbuf);
         if (rc != RTEMS_SUCCESSFUL)
             return rc;
@@ -100,44 +100,44 @@ rtems_blkdev_generic_write(
     dev_t dev;
     rtems_status_code rc;
     disk_device *dd;
-    
+
     dev = rtems_filesystem_make_dev_t(major, minor);
     dd = rtems_disk_lookup(dev);
     if (dd == NULL)
         return RTEMS_INVALID_NUMBER;
-    
+
     block_size_log2 = dd->block_size_log2;
     block_size = dd->block_size;
-    
+
     buf = args->buffer;
     count = args->count;
     args->bytes_moved = 0;
-    
+
     block = args->offset >> block_size_log2;
     blkofs = args->offset & (block_size - 1);
-    
+
     while (count > 0)
     {
         bdbuf_buffer *diskbuf;
         int copy;
-        
+
         if ((blkofs == 0) && (count >= block_size))
             rc = rtems_bdbuf_get(dev, block, &diskbuf);
         else
             rc = rtems_bdbuf_read(dev, block, &diskbuf);
         if (rc != RTEMS_SUCCESSFUL)
             return rc;
-            
+
         copy = block_size - blkofs;
         if (copy > count)
             copy = count;
         memcpy((char *)diskbuf->buffer + blkofs, buf, copy);
         args->bytes_moved += copy;
-        
+
         rc = rtems_bdbuf_release_modified(diskbuf);
         if (rc != RTEMS_SUCCESSFUL)
             return rc;
-        
+
         count -= copy;
         buf += copy;
         blkofs = 0;
@@ -157,16 +157,16 @@ rtems_blkdev_generic_open(
 {
     dev_t dev;
     disk_device *dd;
-    
+
     dev = rtems_filesystem_make_dev_t(major, minor);
     dd = rtems_disk_lookup(dev);
     if (dd == NULL)
         return RTEMS_INVALID_NUMBER;
-        
+
     dd->uses++;
-    
+
     rtems_disk_release(dd);
-    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -182,16 +182,16 @@ rtems_blkdev_generic_close(
 {
     dev_t dev;
     disk_device *dd;
-    
+
     dev = rtems_filesystem_make_dev_t(major, minor);
     dd = rtems_disk_lookup(dev);
     if (dd == NULL)
         return RTEMS_INVALID_NUMBER;
-        
+
     dd->uses--;
-    
+
     rtems_disk_release(dd);
-    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -208,18 +208,18 @@ rtems_blkdev_generic_ioctl(
     dev_t dev;
     disk_device *dd;
     int rc;
-    
+
     dev = rtems_filesystem_make_dev_t(major, minor);
     dd = rtems_disk_lookup(dev);
     if (dd == NULL)
         return RTEMS_INVALID_NUMBER;
-    
+
     switch (args->command)
     {
         case BLKIO_GETBLKSIZE:
             args->ioctl_return = dd->block_size;
             break;
-        
+
         case BLKIO_GETSIZE:
             args->ioctl_return = dd->size;
             break;
@@ -228,7 +228,7 @@ rtems_blkdev_generic_ioctl(
             rc = rtems_bdbuf_syncdev(dd->dev);
             args->ioctl_return = (rc == RTEMS_SUCCESSFUL ? 0 : -1);
             break;
-            
+
         case BLKIO_REQUEST:
         {
             blkdev_request *req = args->buffer;
@@ -237,13 +237,13 @@ rtems_blkdev_generic_ioctl(
                                            req);
             break;
         }
-        
+
         default:
             args->ioctl_return = dd->ioctl(dd->phys_dev->dev, args->command, 
                                            args->buffer);
             break;
     }
     rtems_disk_release(dd);
-    
+
     return RTEMS_SUCCESSFUL;
 }
