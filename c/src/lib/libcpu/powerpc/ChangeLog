@@ -1,3 +1,7 @@
+2002-07-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mpc6xx/mmu/pte121.c: Include <string.h> for gcc-3.1.
+
 2002-07-22	Till Straumann <strauman@slac.stanford.edu>
 
 	* mpc6xx/mmu/bat.c: Per PR241, fix a tiny bug introduced by the

@@ -31,6 +31,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 
 #include "pte121.h"
 
