@@ -1,3 +1,12 @@
+2002-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* .cvsignore: Add autom4te.cache, install-sh, mdate-sh, missing,
+	mkinstalldirs, texinfo.tex.
+	* Makefile.am: Add main.am to AUTOMAKE_FILES.
+	* configure.ac: Add AC_CONFIG_AUX_DIR([.]).
+	* project.am: Remove custom .texi and stamp-vti rules.
+	* main.am: Replace TEXI_COMMON with AM_MAKEINFOFLAGS.
+
 2002-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Require automake-1.5.

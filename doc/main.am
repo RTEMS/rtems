@@ -1,5 +1,5 @@
 TEXINFO_TEX = ../texinfo/texinfo.tex
-TEXI_COMMON = -I ..
+AM_MAKEINFOFLAGS = -I ..
 
 html_projectdir = $(htmldir)/$(PROJECT)
 

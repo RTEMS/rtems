@@ -16,7 +16,7 @@ if USE_HTML
 html_DATA = index.html HELP.html
 endif
 
-AUTOMAKE_FILES = project.am
+AUTOMAKE_FILES = project.am main.am
 
 noinst_SCRIPTS = bootstrap
 

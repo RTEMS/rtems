@@ -6,24 +6,6 @@ MAINTAINERCLEANFILES =
 MOSTLYCLEANFILES =
 CLEANFILES =
 
-## Texinfo support
-
-.texi:
-	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
-	cd $(srcdir) && \
-	  $(MAKEINFO) $(TEXI_COMMON) `echo $< | sed 's,.*/,,'`
-
-$(srcdir)/stamp-vti: $(PROJECT).texi $(top_srcdir)/configure.ac
-	@echo "@set UPDATED `$(SHELL) $(srcdir)/mdate-sh \
-	  $(srcdir)/$(PROJECT).texi`" > vti.tmp
-	@echo "@set EDITION $(EDITION)" >> vti.tmp
-	@echo "@set VERSION $(VERSION)" >> vti.tmp
-	@cmp -s vti.tmp $(srcdir)/version.texi \
-	  || (echo "Updating $(srcdir)/version.texi"; \
-	      cp vti.tmp $(srcdir)/version.texi)
-	-@rm -f vti.tmp
-	@cp $(srcdir)/version.texi $@
-
 MAINTAINERCLEANFILES += $(PROJECT) $(PROJECT)-[0-9] $(PROJECT)-[0-9][0-9]
 MAINTAINERCLEANFILES += $(GENERATED_FILES)
 
