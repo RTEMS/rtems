@@ -7,7 +7,7 @@
 #ifndef __POSIX_SCHEDULING_h
 #define __POSIX_SCHEDULING_h
 
-#include <rtems/posix/features.h>
+#include <sys/features.h>
 
 #if defined(_POSIX_PRIORITY_SCHEDULING)
 

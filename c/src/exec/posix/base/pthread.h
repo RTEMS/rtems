@@ -6,7 +6,7 @@
 #ifndef __PTHREAD_h
 #define __PTHREAD_h
 
-#include <rtems/posix/features.h>
+#include <sys/features.h>
 
 #if defined(_POSIX_THREADS)
 
@@ -211,7 +211,7 @@ int pthread_attr_getschedpolicy(
 
 int pthread_attr_setschedparam(
   pthread_attr_t            *attr,
-  const struct sched_param   param
+  const struct sched_param  *param
 );
 
 int pthread_attr_getschedparam(
@@ -342,10 +342,10 @@ int pthread_attr_setdetachstate(
  */
 
 int pthread_create(
-  pthread_t             *thread,
-  const pthread_attr_t  *attr,
-  void                 (*start_routine)( void * ),
-  void                  *arg
+  pthread_t              *thread,
+  const pthread_attr_t   *attr,
+  void                 *(*start_routine)( void * ),
+  void                   *arg
 );
 
 /*
@@ -363,6 +363,14 @@ int pthread_join(
 
 int pthread_detach(
   pthread_t   thread
+);
+
+/*
+ * 16.1.5.1 Thread Termination, p1003.1c/Draft 10, p. 150
+ */
+
+void pthread_exit(
+  void  *value_ptr
 );
 
 /*

@@ -11,8 +11,13 @@
  *  $Id$
  */
 
+#include_next <limits.h>
+
 #ifndef __POSIX_LIMITS_h
 #define __POSIX_LIMITS_h
+
+/* really only to get min stack size from <rtems/score/cpu.h> */
+#include <rtems/system.h>
 
 /****************************************************************************
  ****************************************************************************
@@ -113,14 +118,19 @@
  *  minimum but is indeterminate.
  */
 
-#define LOGIN_NAME_MAX                      9
-#define PTHREAD_DESTRUCTOR_ITERATIONS       4
+#define LOGIN_NAME_MAX                      _POSIX_LOGIN_NAME_MAX
+#define TTY_NAME_MAX                        _POSIX_TTY_NAME_MAX
+#define PTHREAD_DESTRUCTOR_ITERATIONS       _POSIX_THREAD_DESTRUCTOR_ITERATIONS
+#define PTHREAD_STACK_MIN                   CPU_STACK_MINIMUM_SIZE
+
 /*
  *  The maximum number of keys (PTHREAD_KEYS_MAX) and threads
  *  (PTHREAD_THREADS_MAX) are configurable and may exceed the minimum.
- */
+ *
+#define PTHREAD_KEYS_MAX                    _POSIX_THREAD_KEYS_MAX
+#define PTHREAD_THREADS_MAX                 _POSIX_THREAD_THREADS_MAX
+*/
 
-#define TTY_NAME_MAX                        9
 
 /****************************************************************************
  ****************************************************************************
