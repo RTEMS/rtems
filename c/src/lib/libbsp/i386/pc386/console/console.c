@@ -44,6 +44,9 @@ void __assert (const char *file, int line, const char *msg);
 #include <uart.h>
 #include <libcpu/cpuModel.h>
 
+#include <rtems/mw_uid.h>
+#include "mouse_parser.h"
+
 /*
  * Possible value for console input/output :
  *	BSP_CONSOLE_PORT_CONSOLE
@@ -65,12 +68,13 @@ int BSPPrintkPort  = BSP_CONSOLE_PORT_CONSOLE;
 int BSPBaseBaud    = 115200;
 
 extern BSP_polling_getchar_function_type BSP_poll_char;
+extern int getch( void );
+extern void kbd_init( void );
 
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
-extern void _IBMPC_keyboard_isr(void);
-extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
+extern void keyboard_interrupt(void);
 extern char BSP_wait_polled_input(void);
 extern void _IBMPC_initVideo(void);
 
@@ -79,9 +83,10 @@ static void isr_on(const rtems_irq_connect_data *);
 static void isr_off(const rtems_irq_connect_data *);
 static int  isr_is_on(const rtems_irq_connect_data *);
 
+extern int rtems_kbpoll( void );
 
 static rtems_irq_connect_data console_isr_data = {BSP_KEYBOARD,
-						   _IBMPC_keyboard_isr,
+                     keyboard_interrupt,
 						   isr_on,
 						   isr_off,
 						   isr_is_on};
@@ -103,6 +108,44 @@ isr_is_on(const rtems_irq_connect_data *irq)
 {
   return BSP_irq_enabled_at_i8259s(irq->name);
 }
+
+extern char _IBMPC_inch(void);
+extern int  rtems_kbpoll( void );
+
+static int
+ibmpc_console_write(int minor, const char *buf, int len)
+{
+  int count;
+  for (count = 0; count < len; count++)
+  {
+    _IBMPC_outch( buf[ count ] );
+    if( buf[ count ] == '\n')
+      _IBMPC_outch( '\r' );            /* LF = LF + CR */
+  }
+  return 0;
+}
+
+
+int kbd_poll_read( int minor )
+{
+  if( rtems_kbpoll() )
+  {
+     int c = getch();
+     return c;
+  }
+  return -1;
+}
+
+/*
+static void*	     termios_ttyp_console         = NULL;
+void enq_key( char key )
+{
+  if( termios_ttyp_console )
+  {
+	  rtems_termios_enqueue_raw_characters(termios_ttyp_console, &key,1 );
+  }
+}
+*/
 
 void __assert (const char *file, int line, const char *msg)
 {
@@ -144,18 +187,26 @@ console_initialize(rtems_device_major_number major,
 {
   rtems_status_code status;
 
+
+  /* Initialize the KBD interface */
+  kbd_init();
+
+  /*
+   * Set up TERMIOS
+   */
+  rtems_termios_initialize ();
+
   /*
    *  The video was initialized in the start.s code and does not need
    *  to be reinitialized.
    */
-
 
   if(BSPConsolePort == BSP_CONSOLE_PORT_CONSOLE)
     {
       /* Install keyboard interrupt handler */
       status = BSP_install_rtems_irq_handler(&console_isr_data);
   
-      if (!status)
+    if (!status)
 	{
 	  printk("Error installing keyboard interrupt handler!\n");
 	  rtems_fatal_error_occurred(status);
@@ -172,32 +223,25 @@ console_initialize(rtems_device_major_number major,
   else
     {
       /*
-       * Set up TERMIOS
-       */
-      rtems_termios_initialize ();
-      
-      /*
        * Do device-specific initialization
        */
-      
       /* 9600-8-N-1 */
       BSP_uart_init(BSPConsolePort, 9600, 0);
       
       
       /* Set interrupt handler */
       if(BSPConsolePort == BSP_UART_COM1)
-	{
-	  console_isr_data.name = BSP_UART_COM1_IRQ;
-	  console_isr_data.hdl  = BSP_uart_termios_isr_com1;
+   	{
+	     console_isr_data.name = BSP_UART_COM1_IRQ;
+        console_isr_data.hdl  = BSP_uart_termios_isr_com1;
 	  
-	}
+   	}
       else
-	{
+	   {
           assert(BSPConsolePort == BSP_UART_COM2);
-	  console_isr_data.name = BSP_UART_COM2_IRQ;
-	  console_isr_data.hdl  = BSP_uart_termios_isr_com2;
-	}
-
+          console_isr_data.name = BSP_UART_COM2_IRQ;
+          console_isr_data.hdl  = BSP_uart_termios_isr_com2;
+    	}
       status = BSP_install_rtems_irq_handler(&console_isr_data);
 
       if (!status){
@@ -269,7 +313,7 @@ console_open(rtems_device_major_number major,
   {
     NULL,	              /* firstOpen */
     console_last_close,       /* lastClose */
-    NULL,	              /* pollRead */
+    NULL,          /* pollRead */
     BSP_uart_termios_write_com1, /* write */
     conSetAttr,	              /* setAttributes */
     NULL,	              /* stopRemoteTx */
@@ -279,8 +323,23 @@ console_open(rtems_device_major_number major,
 
   if(BSPConsolePort == BSP_CONSOLE_PORT_CONSOLE)
     {
+
+      /* Let's set the routines for termios to poll the
+       * Kbd queue for data 
+       */
+      cb.pollRead = kbd_poll_read;
+      cb.outputUsesInterrupts = 0;
+      /* write the "echo" if it is on */
+      cb.write = ibmpc_console_write;
+
+      cb.setAttributes = NULL;
       ++console_open_count;
-      return RTEMS_SUCCESSFUL;
+      status = rtems_termios_open (major, minor, arg, &cb);
+      if(status != RTEMS_SUCCESSFUL)
+      {
+         printk("Error openning console device\n");
+      }
+      return status;
     }
 
   if(BSPConsolePort == BSP_UART_COM2)
@@ -316,19 +375,7 @@ console_close(rtems_device_major_number major,
               rtems_device_minor_number minor,
               void                      *arg)
 {
-  rtems_device_driver res = RTEMS_SUCCESSFUL;
-
-  if(BSPConsolePort != BSP_CONSOLE_PORT_CONSOLE)
-    {
-      res =  rtems_termios_close (arg);
-    }
-  else {
-    if (--console_open_count == 0) { 
-      console_last_close(major, minor, arg);
-    }
-  }
-  
-  return res;
+   return rtems_termios_close (arg);
 } /* console_close */
 
  
@@ -342,38 +389,7 @@ console_read(rtems_device_major_number major,
              rtems_device_minor_number minor,
              void                      *arg)
 {
-  rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
-  char                  *buffer  = rw_args->buffer;
-  int            count, maximum  = rw_args->count;
-
-  if(BSPConsolePort != BSP_CONSOLE_PORT_CONSOLE)
-    {
-      return rtems_termios_read (arg);
-    }
- 
-  for (count = 0; count < maximum; count++)
-  {
-    /* Get character */
-    buffer[count] = _IBMPC_inch_sleep();
-
-    /* Echo character to screen */
-    _IBMPC_outch(buffer[count]);
-    if (buffer[count] == '\r')
-      {
-	_IBMPC_outch('\n');  /* CR = CR + LF */
-      }
-
-    if (buffer[count] == '\n' || buffer[count] == '\r')
-    {
-      /* What if this goes past the end of the buffer?  We're hosed. [bhc] */
-      buffer[count++]  = '\n';
-      buffer[count]    = '\0';
-      break;
-    }
-  }
- 
-  rw_args->bytes_moved = count;
-  return ((count >= 0) ? RTEMS_SUCCESSFUL : RTEMS_UNSATISFIED);
+ return rtems_termios_read( arg );
 } /* console_read */
  
 
@@ -389,25 +405,21 @@ console_write(rtems_device_major_number major,
 {
   rtems_libio_rw_args_t *rw_args = (rtems_libio_rw_args_t *)arg;
   char                  *buffer  = rw_args->buffer;
-  int            count, maximum  = rw_args->count;
+  int                    maximum  = rw_args->count;
 
   if(BSPConsolePort != BSP_CONSOLE_PORT_CONSOLE)
     {
       return rtems_termios_write (arg);
     }
  
-  for (count = 0; count < maximum; count++)
-  {
-    _IBMPC_outch(buffer[count]);
-    if (buffer[count] == '\n')
-      _IBMPC_outch('\r');            /* LF = LF + CR */
-  }
-
+  /* write data to VGA */
+  ibmpc_console_write( minor, buffer, maximum );
   rw_args->bytes_moved = maximum;
   return RTEMS_SUCCESSFUL;
 } /* console_write */
 
 
+extern int vt_ioctl( unsigned int cmd, unsigned long arg);
  
 /*
  * Handle ioctl request.
@@ -418,12 +430,25 @@ console_control(rtems_device_major_number major,
 		void                      * arg
 )
 { 
-  if(BSPConsolePort != BSP_CONSOLE_PORT_CONSOLE)
-    {
-      return rtems_termios_ioctl (arg);
-    }
+	rtems_libio_ioctl_args_t *args = arg;
+	switch (args->command) 
+	{
+	   default:
+      if( vt_ioctl( args->command, (unsigned long)args->buffer ) != 0 )
+          return rtems_termios_ioctl (arg);
+		break;
 
-  return RTEMS_SUCCESSFUL;
+      case MW_UID_REGISTER_DEVICE:
+      printk( "SerialMouse: reg=%s\n", args->buffer );
+      register_kbd_msg_queue( args->buffer, 0 );
+		break;
+
+      case MW_UID_UNREGISTER_DEVICE:
+      unregister_kbd_msg_queue( 0 );
+		break;
+   }
+ 	args->ioctl_return = 0;
+   return RTEMS_SUCCESSFUL;
 }
 
 static int

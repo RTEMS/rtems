@@ -8,13 +8,20 @@ VPATH = @srcdir@:@srcdir@/../../shared/io
 
 PGM = $(ARCH)/console.rel
 
-C_FILES = console.c inch.c outch.c
+RTEMS_H_FILES = keyboard.h kd.h serial_mouse.h ps2_drv.h fb_vga.h
+
+C_FILES = console.c inch.c outch.c defkeymap.c fb_vga.c keyboard.c \
+    mouse_parser.c pc_keyb.c ps2_mouse.c serial_mouse.c vgainit.c vt.c
 S_FILES = videoAsm.S
 
 console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o) $(S_FILES:%.S=$(ARCH)/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/lib.am
+
+
+PREINSTALL_FILES = $(PROJECT_INCLUDE) \
+    $(RTEMS_H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/%.h)
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -23,13 +30,19 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 $(PGM): $(console_rel_OBJECTS)
 	$(make-rel)
 
+$(PROJECT_INCLUDE)/rtems:
+	$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/rtems/%.h: %.h
+	$(INSTALL_DATA) $< $@
+
 # the .rel file built here will be put into libbsp.a by
 # 	../wrapup/Makefile
 
-all-local: $(ARCH) $(console_rel_OBJECTS) $(PGM)
+all-local: $(PREINSTALL_FILES) $(ARCH) $(console_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = console.c inch.c outch.c videoAsm.S
+EXTRA_DIST = $(C_FILES) $(RTEMS_H_FILES) $(S_FILES)
 
 include $(top_srcdir)/../../../../../../automake/local.am

@@ -179,3 +179,24 @@ _IBMPC_initVideo(void)
     videoPrintf("maxCol = %d, maxRow = %d\n", (unsigned) maxCol, (unsigned) maxRow);
 #endif
 } /* _IBMPC_initVideo */
+
+
+/* for old DOS compatibility n-curses type of applications */
+void gotoxy( int x, int y )
+{
+  row = x;
+  column = y;
+  wr_cursor(row * maxCol + column, ioCrtBaseAddr);
+}
+
+
+int whereX( void )
+{
+  return row;
+}
+
+int whereY( void )
+{
+  return column;
+}
+
