@@ -270,8 +270,17 @@ void a29k_ISR_Handler(unsigned32 vector)
       (*_ISR_Vector_table[ vector ])( vector );
    --_Thread_Dispatch_disable_level;
    --_ISR_Nest_level;
-   if ( !_Thread_Dispatch_disable_level && !_ISR_Nest_level &&
-    (_Context_Switch_necessary || _ISR_Signals_to_thread_executing ))
-      _Thread_Dispatch();
-   return;
+
+   if ( _ISR_Nest_level )
+     return;
+
+   if ( _Thread_Dispatch_disable_level ) {
+     _ISR_Signals_to_thread_executing = FALSE;
+     return;
+   }
+
+   if ( _Context_Switch_necessary || _ISR_Signals_to_thread_executing ) {
+     _ISR_Signals_to_thread_executing = FALSE;
+     _Thread_Dispatch();
+   }
 }
