@@ -1,3 +1,9 @@
+2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use AC_CONFIG_SUBDIRS for posix and itron.
+	Reflect changes to configuration of rtems, score and sapi subdirs.
+	* Makefile.am: require automake-1.5.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.

@@ -54,12 +54,11 @@ AM_CONDITIONAL(HAS_POSIX,test "$HAS_POSIX_API" = "yes")
 AM_CONDITIONAL(HAS_ITRON,test "$HAS_ITRON_API" = "yes")
 
 if test "$HAS_POSIX_API" = "yes"; then
-  cfg_subdirs="posix"
+  AC_CONFIG_SUBDIRS(posix)
 fi
 if test "$HAS_ITRON_API" = "yes"; then
-  cfg_subdirs="$cfg_subdirs itron"
+  AC_CONFIG_SUBDIRS(itron)
 fi
-AC_CONFIG_SUBDIRS($cfg_subdirs)
 AC_CONFIG_SUBDIRS(score/cpu/$RTEMS_CPU)
 
 RTEMS_DEFINE_POSIX_API
@@ -78,36 +77,21 @@ AC_CONFIG_FILES([Makefile
 rtems/Makefile
 rtems/src/Makefile
 rtems/include/Makefile
-rtems/include/rtems/Makefile
-rtems/include/rtems/rtems/Makefile
 rtems/optman/Makefile
 rtems/inline/Makefile
-rtems/inline/rtems/Makefile
-rtems/inline/rtems/rtems/Makefile
 rtems/macros/Makefile
-rtems/macros/rtems/Makefile
-rtems/macros/rtems/rtems/Makefile
 sapi/Makefile
 sapi/src/Makefile
 sapi/include/Makefile
-sapi/include/rtems/Makefile
 sapi/include/rtems/sptables.h
 sapi/inline/Makefile
-sapi/inline/rtems/Makefile
 sapi/macros/Makefile
-sapi/macros/rtems/Makefile
 sapi/optman/Makefile
 score/Makefile
 score/cpu/Makefile
 score/include/Makefile
-score/include/rtems/Makefile
-score/include/rtems/score/Makefile
 score/inline/Makefile
-score/inline/rtems/Makefile
-score/inline/rtems/score/Makefile
 score/macros/Makefile
-score/macros/rtems/Makefile
-score/macros/rtems/score/Makefile
 score/src/Makefile
 wrapup/Makefile
 wrapup/rtems/Makefile
