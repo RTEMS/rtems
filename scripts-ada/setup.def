@@ -1,9 +1,9 @@
 # RTEMS tools setup
-binutils_version=2.9.1
-binutils_patch_version=20000429
+binutils_version=2.10
+binutils_patch_version=20001107
 binutils_rpm_release=3
-newlib_version=1.8.2
-newlib_patch_version=20001027
+newlib_version=1.9.0
+newlib_patch_version=20010622
 gcc_version=2.8.1
 gcc_patch_version=20000429
 gnat_version=3.13p

@@ -1,3 +1,38 @@
+2001-08-16	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def, gnatnewlib/gnatnewlib.spec.in: Modified to properly
+	build gnat 3.13p-2 RPMs.  These were used to run the ACATS with
+	the following results on the powepc-rtems/psim:
+		acats4gnat results cz 3 /       4
+		acats4gnat results a 75 /      75
+		acats4gnat results c2 35 /      35
+		acats4gnat results c3 347 /     349
+		acats4gnat results c4 333 /     338
+		acats4gnat results c5 95 /      95
+		acats4gnat results c6 81 /      81
+		acats4gnat results c7 47 /      50
+		acats4gnat results c8 140 /     140
+		acats4gnat results c9 246 /     255
+		acats4gnat results ca 73 /      74
+		acats4gnat results cb 43 /      43
+		acats4gnat results cc 117 /     117
+		acats4gnat results cd 172 /     172
+		acats4gnat results ce 262 /     268
+		acats4gnat results cxa 85 /      85
+		acats4gnat results cxb 29 /      30
+		acats4gnat results cxc 9 /      16
+		acats4gnat results cxd 27 /      39
+		acats4gnat results cxe 1 /       1
+		acats4gnat results cxf 20 /      20
+		acats4gnat results cxg 28 /      29
+		acats4gnat results cxh 4 /       4
+		acats4gnat results d 4 /       4
+		acats4gnat results e 11 /      11
+		acats4gnat results l 26 /      26
+	This compares favorably with the results on Linux.  Laurent
+	Guerby's <guerby@acm.org> acats4gnat-0.2 scripts were used
+	with minor modifications to support cross testing.
+
 2000-12-08	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def, gnatnewlib/gnatnewlib.in: Modified to pick up

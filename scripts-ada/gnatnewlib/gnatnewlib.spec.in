@@ -76,7 +76,7 @@ with appropriate patches.
 
 %package -n rtems-base-gnat
 Summary:      base package for rtems gnat, gcc, and newlib C Library
-Group: rtems
+Group: gnatrtems
 
 %description -n rtems-base-gnat
 
@@ -86,7 +86,7 @@ This is the files for gnat, gcc, and newlib that are shared by all targets.
 
 %package -n rtems-base-gnat-binutils
 Summary:      base package for rtems binutils
-Group: rtems
+Group: gnatrtems
 
 %description -n rtems-base-gnat-binutils
 
@@ -96,7 +96,7 @@ This is the base for binutils regardless of target CPU.
 
 %package -n @target_alias@-gnat-binutils
 Summary:      rtems binutils for @target_alias@
-Group: rtems
+Group: gnatrtems
 Requires: rtems-base-gnat-binutils
 
 %description -n @target_alias@-gnat-binutils
@@ -107,7 +107,7 @@ This is the GNU binutils for RTEMS targetting @target_alias@.
 
 %package -n @target_alias@-gnat
 Summary:      rtems gnat, gcc, and newlib C Library for @target_alias@
-Group: rtems
+Group: gnatrtems
 Requires: @target_alias@-gnat-binutils rtems-base-gnat
 
 %description -n @target_alias@-gnat
@@ -217,23 +217,19 @@ cd ..
     pwd
     cd gcc
     echo "Starting build of GNAT proper."
-    make prefix=$RPM_BUILD_ROOT/opt/gnatrtems \
-     CC=gcc CFLAGS="-O2" LANGUAGES="c ada gcov"
+    make CC=gcc CFLAGS="-O2" LANGUAGES="c ada gcov"
 
     echo "Starting build of cross GNAT tools"
-    make prefix=$RPM_BUILD_ROOT/opt/gnatrtems \
-     CC=gcc CFLAGS="-O2 -g" LANGUAGES="c ada gcov" cross-gnattools
+    make CC=gcc CFLAGS="-O2 -g" LANGUAGES="c ada gcov" cross-gnattools
 
     echo "Starting build of ada.all.cross"
-    make prefix=$RPM_BUILD_ROOT/opt/gnatrtems \
-     CC=gcc CFLAGS="-O2" LANGUAGES="c ada gcov" ada.all.cross
+    make CC=gcc CFLAGS="-O2" LANGUAGES="c ada gcov" ada.all.cross
 
     # must have -gnato to pass validation
     # may want CC=gcc GNATLIBCFLAGS="-O3" GNATLIBFLAGS="-gnatpgn" gnatliy
     # NOTE:  gnatlib is not multilib'ed -- serious embedded flaw
     echo "Starting build of gnatlib"
-    make prefix=$RPM_BUILD_ROOT/opt/gnatrtems \
-     CC=gcc GNATLIBCFLAGS="-O2 -g" gnatlib
+    make CC=gcc GNATLIBCFLAGS="-O2 -g" gnatlib
 
 %install
   cd build
