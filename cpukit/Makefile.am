@@ -30,9 +30,8 @@ EXTRA_DIST = $(AUTOMAKE_FILES)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/bspIo.h: include/rtems/bspIo.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bspIo.h

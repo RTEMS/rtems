@@ -101,9 +101,8 @@ $(ARCH)/librtemscpu$(LIB_VARIANT).a: ${LIBS}
 all-local: $(TMPINSTALL_FILES)
 
 ${PROJECT_RELEASE}/lib/$(dirstamp):
-	@$(mkinstalldirs) ${PROJECT_RELEASE}/lib
+	@$(mkdir_p) ${PROJECT_RELEASE}/lib
 	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/$(dirstamp)
 
 ${PROJECT_RELEASE}/lib/librtemscpu$(LIB_VARIANT).a: $(ARCH)/librtemscpu$(LIB_VARIANT).a ${PROJECT_RELEASE}/lib/$(dirstamp)
 	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/librtemscpu$(LIB_VARIANT).a
