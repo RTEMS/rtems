@@ -20,8 +20,8 @@ ACLOCAL_FILES = aclocal/bsp-alias.m4 aclocal/canonical-host.m4 \
     aclocal/check-cxx.m4 aclocal/check-itron.m4 \
     aclocal/check-multiprocessing.m4 aclocal/check-networking.m4 \
     aclocal/check-newlib.m4 aclocal/check-posix.m4 aclocal/check-rdbg.m4 \
-    aclocal/enable-bare.m4 aclocal/enable-cxx.m4 aclocal/enable-gcc28.m4 \
-    aclocal/enable-inlines.m4 aclocal/enable-itron.m4 aclocal/enable-libcdir.m4 \
+    aclocal/enable-bare.m4 aclocal/enable-cxx.m4 \
+    aclocal/enable-inlines.m4 aclocal/enable-itron.m4 \
     aclocal/enable-multiprocessing.m4 aclocal/enable-networking.m4 \
     aclocal/enable-posix.m4 aclocal/enable-rdbg.m4 aclocal/enable-rtemsbsp.m4 \
     aclocal/enable-tests.m4 aclocal/gcc-pipe.m4 aclocal/gcc-specs.m4 \
