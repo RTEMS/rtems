@@ -428,22 +428,16 @@ rtems_monitor_insert_cmd (
     rtems_monitor_command_entry_t *command
 )
 {
-    rtems_monitor_command_entry_t *p = rtems_registered_commands.next;
+    rtems_monitor_command_entry_t **p =  &rtems_registered_commands.next;
 
     command->next = 0;
 
-    if (rtems_registered_commands.next)
-    {
-        for (; p->next; p = p->next)
-        {
-            if (STREQ(command->command, p->command))
-                return 0;
-        }
-        p->next = command;
+    while (*p) {
+        if ( STREQ(command->command, (*p)->command) )
+            return 0;
+        p = & (*p)->next;
     }
-    else
-        rtems_registered_commands.next = command;
-  
+    *p = command;
     return 1;
 }
 
@@ -452,22 +446,18 @@ rtems_monitor_erase_cmd (
     rtems_monitor_command_entry_t *command
 )
 {
-    rtems_monitor_command_entry_t *p;
-    rtems_monitor_command_entry_t **p_prev = &rtems_registered_commands.next;
-
-    if (rtems_registered_commands.next)
-    {
-        for (p = rtems_registered_commands.next; p->next; p = p->next)
-        {
-            if (STREQ(command->command, p->command))
-            {
-                *p_prev = p->next;
-                return 1;
-            }
-            p_prev = &p->next;
+    rtems_monitor_command_entry_t **p = & rtems_registered_commands.next;
+                                                                                
+    while (*p) {
+        if ( STREQ(command->command, (*p)->command) ) {
+            *p = (*p)->next;
+            command->next = 0;
+            return 1;
         }
+        p = & (*p)->next;
     }
     return 0;
+
 }
 
 /*
