@@ -4,6 +4,8 @@ AUTOMAKE_OPTIONS = foreign
 
 MKGCCNEWLIBSPEC = $(SHELL) $(top_builddir)/mkgccnewlibspec
 
+C_ONLY_ARG = -a $(top_builddir)/gccnewlib/gccnewlib_c_only.spec.in
+
 MKGCCNEWLIBSPEC_DEPS = \
   $(top_builddir)/mkgccnewlibspec gccnewlib.spec.in $(top_builddir)/setup.cache
 
@@ -14,7 +16,7 @@ i386-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . i386-rtems
 
 i960-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
-	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . i960-rtems
+	$(MKGCCNEWLIBSPEC) $(C_ONLY_ARG) -cfg $(top_builddir)/setup.cache -o . i960-rtems
 
 m68k-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtems
@@ -38,7 +40,8 @@ sparc-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems
 
 TEMPLATES = \
-gccnewlib.spec.in
+gccnewlib.spec.in \
+gccnewlib_c_only.spec.in
 
 RPM_SPECS_DATA = \
 hppa1.1-rtems-$(GCCNEWLIBVERS).spec \

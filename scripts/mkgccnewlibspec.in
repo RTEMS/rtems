@@ -17,6 +17,8 @@ usage()
   exit 1 ;
 }
 
+specsrc=${RTEMS_DIR}/gccnewlib/gccnewlib.spec.in
+
 while test $# -ge 2; do
 case $1 in
 -cfg) 
@@ -27,6 +29,10 @@ case $1 in
 -o)
   shift
   dst=$1
+  shift
+-a)        # alternate specs file
+  shift
+  specsrc=$1
   shift
   ;;
 -*)
@@ -56,7 +62,7 @@ sed -e "s%@Release@%${gccnewlib_rpm_release}%g" \
     -e "s%@gcc_patch_version@%${gcc_patch_version}%g" \
     -e "s%@newlib_version@%${newlib_version}%g" \
     -e "s%@newlib_patch_version@%${newlib_patch_version}%g" \
-< ${RTEMS_DIR}/gccnewlib/gccnewlib.spec.in \
+< ${specsrc} \
 > ${specfile}
 
 echo Generated ${specfile}.

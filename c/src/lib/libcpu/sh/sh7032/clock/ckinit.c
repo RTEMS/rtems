@@ -22,7 +22,7 @@
  *  $Id$
  */
 
-#include <bsp.h>
+#include <rtems.h>
 
 #include <stdlib.h>
 
@@ -143,7 +143,7 @@ void Install_clock(
    */
 
   Clock_driver_ticks = 0;
-  Clock_isrs_const = BSP_Configuration.microseconds_per_tick / 10000;
+  Clock_isrs_const = rtems_configuration_get_microseconds_per_tick() / 10000;
   Clock_isrs = Clock_isrs_const;
 
   /*
@@ -151,7 +151,7 @@ void Install_clock(
    *  wants a clock tick.
    */
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
+  if ( rtems_configuration_get_ticks_per_timeslice() ) {
     rtems_interrupt_catch( Clock_isr, CLOCK_VECTOR, &Old_ticker );
     /*
      *  Hardware specific initialize goes here
@@ -191,7 +191,7 @@ void Install_clock(
       rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED);
 
     /* set counter limits */
-    write16( _ITU_COUNTER0_MICROSECOND * BSP_Configuration.microseconds_per_tick,
+    write16( _ITU_COUNTER0_MICROSECOND * rtems_configuration_get_microseconds_per_tick(),
 	     ITU_GRA0);
    
     /* start counter */
@@ -214,7 +214,7 @@ void Install_clock(
 void Clock_exit( void )
 {
   unsigned8 temp8 = 0;
-  if ( BSP_Configuration.ticks_per_timeslice ) {
+  if ( rtems_configuration_get_ticks_per_timeslice() ) {
 
     /* turn off the timer interrupts */
     /* set interrupt priority to 0 */

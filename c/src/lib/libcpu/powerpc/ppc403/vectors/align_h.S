@@ -44,7 +44,7 @@
  */
 
 #include "asm.h"
-#include "bsp.h"
+#include "rtems.h"
 
 .set    CACHE_SIZE,16           # cache line size of 32 bytes
 .set    CACHE_SIZE_L2,4         # cache line size, log 2

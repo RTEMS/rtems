@@ -29,7 +29,7 @@
  *  $Id$
  */
 
-#include <bsp.h>
+#include <rtems.h>
 
 #include <rtems/score/sh_io.h>
 #include <rtems/score/iosh7030.h>

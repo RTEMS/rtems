@@ -116,6 +116,52 @@ typedef struct {
 SAPI_EXTERN rtems_configuration_table    *_Configuration_Table;
 SAPI_EXTERN rtems_multiprocessing_table  *_Configuration_MP_table;
 
+/*
+ *  Some handy macros to avoid dependencies on either the BSP
+ *  or the exact format of the configuration table.
+ */
+
+#define rtems_configuration_get_work_space_start() \
+        (_Configuration_Table->work_space_start)
+
+#define rtems_configuration_get_work_space_size() \
+        (_Configuration_Table->work_space_size)
+
+#define rtems_configuration_get_maximum_extensions() \
+        (_Configuration_Table->maximum_extensions)
+
+#define rtems_configuration_get_microseconds_per_tick() \
+        (_Configuration_Table->microseconds_per_tick)
+#define rtems_configuration_get_milliseconds_per_tick() \
+        (_Configuration_Table->microseconds_per_tick / 1000)
+
+#define rtems_configuration_get_ticks_per_timeslice() \
+        (_Configuration_Table->ticks_per_timeslice)
+
+#define rtems_configuration_get_maximum_devices() \
+        (_Configuration_Table->maximum_devices)
+
+#define rtems_configuration_get_number_of_device_drivers() \
+        (_Configuration_Table->number_of_device_drivers)
+
+#define rtems_configuration_get_device_driver_table() \
+        (_Configuration_Table->device_driver_table)
+
+#define rtems_configuration_get_number_of_initial_extensions() \
+        (_Configuration_Table->number_of_initial_extensions)
+
+#define rtems_configuration_get_user_extension_table() \
+        (_Configuration_Table->user_extension_table)
+
+#define rtems_configuration_get_user_multiprocessing_table() \
+        (_Configuration_Table->user_multiprocessing_table)
+
+#define rtems_configuration_get_rtems_api_configuration() \
+        (_Configuration_Table->rtems_api_configuration)
+
+#define rtems_configuration_get_posix_api_configuration() \
+        (_Configuration_Table->posix_api_configuration)
+
 #ifdef __cplusplus
 }
 #endif

@@ -22,10 +22,14 @@ SRCS = README
 
 all: $(SRCS)
 
+# We only build the Network library if HAS_NETWORKING was defined
+NETWORK_yes_V = dec21140 
+NETWORK = $(NETWORK_$(HAS_NETWORKING)_V)
+
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUB_DIRS = console include pci residual openpic irq vectors start startup \
-    bootloader dec21140 wrapup
+SUB_DIRS = clock console include pci residual openpic irq vectors \
+    start startup bootloader $(NETWORK) wrapup
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

@@ -1,5 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
+# add gnatnewlib once that one works. :)
 SUBDIRS = . binutils gccnewlib gdb rtems
 
 noinst_SCRIPTS = \

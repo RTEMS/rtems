@@ -34,7 +34,6 @@
  *  $Id$
  */
 
-#include <bsp.h>
 #include <rtems.h>
 
 extern rtems_cpu_table           Cpu_table;             /* owned by BSP */

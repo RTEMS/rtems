@@ -47,7 +47,6 @@
 
 
 #include <rtems.h>
-#include <bsp.h>
 
 #define CLOCKS_PER_MICROSECOND ( CPU_CLOCK_RATE_MHZ )
 #define TIMER_MAX_VALUE 0xffffffff

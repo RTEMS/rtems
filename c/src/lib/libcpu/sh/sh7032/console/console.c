@@ -30,6 +30,7 @@
  */
 
 #include <bsp.h>
+#include <rtems.h>
 #include <rtems/libio.h>
 #include <iosupp.h>
 

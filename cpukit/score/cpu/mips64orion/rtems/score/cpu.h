@@ -435,8 +435,11 @@ typedef struct {
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
-  unsigned32   some_other_cpu_dependent_info;
+  unsigned32   clicks_per_microsecond;
 }   rtems_cpu_table;
+
+#define rtems_cpu_configuration_get_clicks_per_microsecond() \
+   (_CPU_Table.clicks_per_microsecond)
 
 /*
  *  This variable is optional.  It is used on CPUs on which it is difficult

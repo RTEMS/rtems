@@ -9,22 +9,22 @@
 Vendor:       OAR Corporation
 Distribution: Linux
 Name:         @target_alias@-gcc-newlib
-Summary:      gcc and newlib C Library for @target_alias@.
+Summary:      gnat, gcc, and newlib C Library for @target_alias@.
 Group:	      rtems
 Release:      @Release@
 Copyright:    1999 OARCorp
 
-Provides:     	@target_alias@-gcc @target_alias@-chill @target_alias@-gcj
-Provides:	@target_alias@-g77 @target_alias@-objc
+Provides:     	@target_alias@-gcc 
 Requires:     	@target_alias@-binutils
 
 Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
-Version:      	gcc@gcc_version@newlib@newlib_version@
+Version:      	gnat@gnat_version@newlib@newlib_version@
 Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.gz
 Source1:	ftp://sourceware.cygnus/com/pub/newlib/newlib-@newlib_version@.tar.gz
-Patch0:		gcc-@gcc_version@-rtems-@gcc_patch_version@.diff
+Source2:	ftp://cs.nyu.edu/pub/gnat/gnat-@gnat_version@.tar.gz
+Patch0:		gcc-@gcc_version@-gnatrtems-@gcc_patch_version@.diff
 Patch1:		newlib-@newlib_version@-rtems-@newlib_patch_version@.diff
 Buildroot:	/tmp
 
@@ -39,7 +39,7 @@ Buildroot:	/tmp
 # your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
 # Or you can try the ftp options of rpm :-)
 #
-NoSource:      0, 1
+NoSource:      0, 1, 2
 
 %description
 RTEMS is an open source operating system for embedded systems.
@@ -55,44 +55,6 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
  You can get them yourself from the Internet and copy them to
  your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
  Or you can try the ftp options of rpm :-)
-
-%package -n @target_alias@-gcc
-Summary:      rtems gcc and newlib C Library for @target_alias@
-Group: rtems
-Requires: @target_alias@-binutils
-
-%description -n @target_alias@-gcc
-RTEMS is an open source operating system for embedded systems.
-
-This is gcc and newlib C Library for @target_alias@.
-
-%package -n @target_alias@-chill
-Summary:      gcc/chill compiler for @target_alias@
-Group: rtems
-Requires: @target_alias@-gcc
-
-%description -n @target_alias@-chill
-RTEMS is an open source operating system for embedded systems.
-
-This is the gcc/chill compiler and support files for @target_alias@
-
-%package -n @target_alias@-gcj
-Summary:      gcc/java compiler (gcj) for @target_alias@
-Group: rtems
-Requires: @target_alias@-gcc
-
-%description -n @target_alias@-gcj
-RTEMS is an open source operating system for embedded systems.
-
-This is the gcc/java compiler for @target_alias@
-
-%package -n @target_alias@-g77
-Summary:      gcc/g77 compiler for @target_alias@
-Group: rtems
-Requires: @target_alias@-gcc
-
-%description -n @target_alias@-g77
-RTEMS is an open source operating system for embedded systems.
 
 This is the gcc/g77 compiler for @target_alias@
 

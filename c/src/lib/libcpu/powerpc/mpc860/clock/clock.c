@@ -36,7 +36,7 @@
  *  $Id$
  */
 
-#include <bsp.h>
+#include <rtems.h>
 #include <clockdrv.h>
 #include <rtems/libio.h>
 
@@ -74,7 +74,7 @@ void Install_clock(rtems_isr_entry clock_isr)
   
   Clock_driver_ticks = 0;
   
-  pit_value = BSP_Configuration.microseconds_per_tick /
+  pit_value = rtems_configuration_get_microseconds_per_tick() /
                Cpu_table.clicks_per_usec;
   if (pit_value == 0) {
     pit_value = 0xffff;
@@ -85,7 +85,7 @@ void Install_clock(rtems_isr_entry clock_isr)
   if (pit_value > 0xffff) {           /* pit is only 16 bits long */
     rtems_fatal_error_occurred(-1);
   }  
-  if (BSP_Configuration.ticks_per_timeslice) {
+  if ( rtems_configuration_get_ticks_per_timeslice() ) {
     
     /*
      * initialize the interval here
@@ -131,7 +131,7 @@ ReInstall_clock(rtems_isr_entry new_clock_isr)
 void
 Clock_exit(void)
 {
-  if ( BSP_Configuration.ticks_per_timeslice ) {
+  if ( rtems_configuration_get_ticks_per_timeslice() ) {
     /* disable PIT and PIT interrupts */
     m860.piscr &= ~(M860_PISCR_PTE | M860_PISCR_PIE); 
     

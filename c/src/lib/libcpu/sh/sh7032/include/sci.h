@@ -26,7 +26,7 @@
 #define _sh_sci_h
 
 #ifdef __cplusplus
-extern"C" {
+extern "C" {
 #endif
 
 /*

@@ -1,10 +1,6 @@
 #
 #  $Id$
 #
-# Install any include files needed by libcpu.
-# Mainly this just means bsp.h which would normally be installed
-# after libcpu is built.
-# This is a bit of a hack.
 
 @SET_MAKE@
 srcdir = @srcdir@

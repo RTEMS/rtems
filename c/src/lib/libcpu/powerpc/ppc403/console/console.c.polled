@@ -31,7 +31,7 @@
 
 #define NO_BSP_INIT
 
-#include <bsp.h>
+#include <rtems.h>
 #include <rtems/libio.h>
 
 extern rtems_cpu_table           Cpu_table;             /* owned by BSP */

@@ -114,7 +114,6 @@ extern "C" {
  
 #define RTEMS_MINIMUN_HETERO_CONVERSION  MP_PACKET_MINIMUN_HETERO_CONVERSION
 
-
 #ifdef __cplusplus
 }
 #endif

@@ -44,7 +44,6 @@
  */
 
 #include "asm.h"
-/*#include "bsp.h"*/
 #define ALIGN_REGS 0x0140
 
 .set    CACHE_SIZE,16           # cache line size of 32 bytes

@@ -44,7 +44,7 @@
  *  $Id$
  */
 
-#include <bsp.h>
+#include <rtems.h>
 #include <rtems/libio.h>
 #include <mpc860.h>
 #include <mpc860/console.h>

@@ -13,7 +13,8 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-PROC_SPECIFIC_O_PIECES = exceptions mmu clock
+# PROC_SPECIFIC_O_PIECES = exceptions mmu clock
+PROC_SPECIFIC_O_PIECES = exceptions mmu 
 GENERIC_PIECES =
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x

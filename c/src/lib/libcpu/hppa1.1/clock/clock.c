@@ -19,7 +19,6 @@
 
 /* should get this from bsp.h, but it is not installed yet */
 rtems_isr_entry set_vector(rtems_isr_entry, rtems_vector_number, int);
-extern rtems_configuration_table BSP_Configuration;
 
 #include <stdlib.h>                     /* for atexit() */
 
@@ -103,10 +102,9 @@ void Install_clock(rtems_isr_entry clock_isr)
     Clock_clicks_interrupt = 0;
     Clock_clicks = 0;
 
-    Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
+    Clock_isrs = rtems_configuration_get_milliseconds_per_tick();
 
-    if (BSP_Configuration.ticks_per_timeslice)
-    {
+    if ( rtems_configuration_get_ticks_per_timeslice() ) {
         /*
          * initialize the interval here
          * First tick is set to right amount of time in the future
@@ -175,7 +173,7 @@ Clock_isr(rtems_vector_number vector)
     if (Clock_isrs == 1)
     {
         rtems_clock_tick();
-        Clock_isrs = BSP_Configuration.microseconds_per_tick / 10000;
+        Clock_isrs = rtems_configuration_get_milliseconds_per_tick();
         if (Clock_isrs == 0)
             Clock_isrs = 1;
     }
@@ -191,8 +189,7 @@ Clock_isr(rtems_vector_number vector)
 void
 Clock_exit(void)
 {
-    if ( BSP_Configuration.ticks_per_timeslice )
-    {
+    if ( rtems_configuration_get_ticks_per_timeslice() ) {
         (void) set_vector(0, HPPA_INTERRUPT_EXTERNAL_INTERVAL_TIMER, 1);
     }
 }

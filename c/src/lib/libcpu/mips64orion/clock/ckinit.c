@@ -43,13 +43,20 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
-#include <bsp.h>
 
 #define EXT_INT5    0x8000  /* external interrupt 5 */
 
 #include "clock.h"
 
+/* formerly in the BSP */
+#if 0
 #define CLOCKS_PER_MICROSECOND ( CPU_CLOCK_RATE_MHZ ) /* equivalent to CPU clock speed in MHz */
+#endif
+
+#define CLOCKS_PER_MICROSECOND \
+  rtems_cpu_configuration_get_clicks_per_microsecond()
+/* to avoid including the bsp */
+mips_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
 
 void Clock_exit( void );
 rtems_isr Clock_isr( rtems_vector_number vector );
@@ -152,20 +159,20 @@ void Install_clock(
    */
 
   Clock_driver_ticks = 0;
-  Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
+  Clock_isrs = rtems_configuration_get_milliseconds_per_tick();
 
   /*
    *  If ticks_per_timeslice is configured as non-zero, then the user
    *  wants a clock tick.
    */
 
-  if ( BSP_Configuration.ticks_per_timeslice ) {
+  if ( rtems_configuration_get_ticks_per_timeslice() ) {
     Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
     /*
      *  Hardware specific initialize goes here
      */
 
-    mips_timer_rate = BSP_Configuration.microseconds_per_tick * CLOCKS_PER_MICROSECOND;
+    mips_timer_rate = rtems_configuration_get_microseconds_per_tick() * CLOCKS_PER_MICROSECOND;
     mips_set_timer( mips_timer_rate );
     enable_int(CLOCK_VECTOR_MASK);
   }
@@ -183,11 +190,9 @@ void Install_clock(
 
 void Clock_exit( void )
 {
-  if ( BSP_Configuration.ticks_per_timeslice ) {
-
+  if ( rtems_configuration_get_ticks_per_timeslice() ) {
     /* mips: turn off the timer interrupts */
     disable_int(CLOCK_VECTOR_MASK);
-
   }
 }
 

@@ -42,7 +42,6 @@
  *  $Id$
  */
 
-#include <bsp.h>
 #include <rtems/libio.h>
 #include <mpc821.h>
 #include <mpc821/console.h>

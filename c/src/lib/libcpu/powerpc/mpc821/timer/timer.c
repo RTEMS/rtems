@@ -43,7 +43,6 @@
  *  $Id$
  */
 
-#include <bsp.h>
 #include <rtems.h>
 #include <mpc821.h>
 

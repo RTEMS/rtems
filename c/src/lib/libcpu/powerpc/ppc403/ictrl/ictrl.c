@@ -21,7 +21,7 @@
  */
 
 #include "ictrl.h"
-#include <bsp.h>
+#include <rtems.h>
 #include <rtems/libio.h>
 
 #include <stdlib.h>                     /* for atexit() */

@@ -56,7 +56,7 @@
 
 #define NO_BSP_INIT
 
-#include <bsp.h>
+#include <rtems.h>
 #include <rtems/libio.h>
 #include "../ictrl/ictrl.h"
 #include <stdlib.h>                                     /* for atexit() */

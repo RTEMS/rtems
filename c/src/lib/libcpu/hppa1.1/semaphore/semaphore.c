@@ -16,7 +16,7 @@
  *  $Id$
  */
 
-#include <bsp.h>
+#include <rtems.h>
 
 #include "semaphore.h"
 
@@ -123,7 +123,11 @@ hppa_semaphore_pool_initialize(void *pool_base,
      * If we are node0, then init all in the pool
      */
 
+#if 0
     if (cpu_number == 0)
+#else
+    if (_Configuration_Table->User_multiprocessing_table->node == 1)
+#endif
     {
         /*
          * Tell other cpus we are not done, jic
@@ -139,7 +143,11 @@ hppa_semaphore_pool_initialize(void *pool_base,
      * Tell other cpus we are done, or wait for it to be done if on another cpu
      */
 
+#if 0
     if (cpu_number == 0)
+#else
+    if (_Configuration_Table->User_multiprocessing_table->node == 1)
+#endif
         SEM_CONTROL->user = rtems_build_name('D', 'O', 'N', 'E');
     else
         while (SEM_CONTROL->user != rtems_build_name('D', 'O', 'N', 'E'))
