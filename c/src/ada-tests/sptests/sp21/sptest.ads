@@ -22,7 +22,6 @@
 --
 
 with RTEMS;
-with STUB_DRIVER;
 
 package SPTEST is
 
