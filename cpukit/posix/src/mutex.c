@@ -57,7 +57,7 @@ int _POSIX_Mutex_MP_Send_request_packet (
 const pthread_mutexattr_t _POSIX_Mutex_Default_attributes = {
   TRUE,                                    /* is_initialized */
   PTHREAD_PROCESS_PRIVATE,                 /* process_shared */
-  POSIX_SCHEDULER_MINIMUM_PRIORITY,        /* prio_ceiling   */
+  POSIX_SCHEDULER_MAXIMUM_PRIORITY,        /* prio_ceiling   */
   PTHREAD_PRIO_NONE,                       /* protocol       */
   FALSE                                    /* recursive      */
 };
@@ -611,6 +611,7 @@ int pthread_mutex_setprioceiling(
       return POSIX_MP_NOT_IMPLEMENTED();
       return EINVAL;
     case OBJECTS_LOCAL:
+      *old_ceiling = the_mutex->Mutex.Attributes.priority_ceiling;
       the_mutex->Mutex.Attributes.priority_ceiling = the_priority;
       _CORE_mutex_Surrender(
         &the_mutex->Mutex,
