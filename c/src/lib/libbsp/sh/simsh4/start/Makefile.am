@@ -9,22 +9,20 @@ OBJS = $(S_O_FILES)
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
+include $(top_srcdir)/../../bspstart.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-install-data-local: $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
-	$(INSTALL_DATA) $< $(DESTDIR)$(bsplibdir)
+project_lib_DATA = $(ARCH)/start$(LIB_VARIANT).$(OBJEXT)
 
-$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-
-all-local: $(OBJS) $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = start.S trap.S
+
+${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start$(LIB_VARIANT).$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
 
 include $(top_srcdir)/../../../../automake/local.am
