@@ -32,6 +32,15 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
+  /*
+   *  Install whatever optional floating point assistance package
+   *  is required by this CPU.
+   */
+
+#if (defined (m68040))
+  M68KFPSPInstallExceptionHandlers ();
+#endif
+
   printf( "\n\n*** PARANOIA TEST ***\n" );
   paranoia(1, args);
   printf( "*** END OF PARANOIA TEST ***\n" );
