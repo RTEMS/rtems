@@ -111,8 +111,6 @@ extern "C" {
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_HAS_RFCI    	1
 #define PPC_USE_MULTIPLE	1
-#define PPC_I_CACHE		2048
-#define PPC_D_CACHE		1024
 
 #define PPC_HAS_EXCEPTION_PREFIX 0
 #define PPC_HAS_EVPR             1
@@ -128,10 +126,6 @@ extern "C" {
 /* Added by querbach@realtime.bc.ca */
 #define PPC_LOW_POWER_MODE	PPC_LOW_POWER_MODE_STANDARD
 
-/* Based on comments by Sergei Organov <osv@Javad.RU> */
-#define PPC_I_CACHE        	0 
-#define PPC_D_CACHE        	0 
-
 #elif defined(mpc505) || defined(mpc509)
 /*
  *  Submitted by Sergei Organov <osv@Javad.RU> as a patch against
@@ -143,9 +137,6 @@ extern "C" {
 
 #define PPC_ALIGNMENT           4
 #define PPC_CACHE_ALIGNMENT     16
-#define PPC_I_CACHE             4096
-#define PPC_D_CACHE             0
-
 
 #elif defined(ppc601)
 
@@ -157,8 +148,6 @@ extern "C" {
 
 #define PPC_ALIGNMENT		8
 #define PPC_USE_MULTIPLE	1
-#define PPC_I_CACHE		0
-#define PPC_D_CACHE		32768
 
 #elif defined(ppc602)
 /*
@@ -169,8 +158,6 @@ extern "C" {
 
 #define PPC_ALIGNMENT		4
 #define PPC_HAS_DOUBLE		0
-#define PPC_I_CACHE		4096
-#define PPC_D_CACHE		4096
 
 #elif defined(ppc603)
 /*
@@ -180,8 +167,6 @@ extern "C" {
 #define CPU_MODEL_NAME  "PowerPC 603"
 
 #define PPC_ALIGNMENT		8
-#define PPC_I_CACHE		8192
-#define PPC_D_CACHE		8192
 
 #elif defined(ppc603e)
  
@@ -193,8 +178,6 @@ extern "C" {
  */
 
 #define PPC_ALIGNMENT		8
-#define PPC_I_CACHE		16384
-#define PPC_D_CACHE		16384
 
 #define PPC_LOW_POWER_MODE PPC_LOW_POWER_MODE_STANDARD
 
@@ -206,8 +189,6 @@ extern "C" {
 #define CPU_MODEL_NAME  "PowerPC 604"
 
 #define PPC_ALIGNMENT		8
-#define PPC_I_CACHE		16384
-#define PPC_D_CACHE		16384
  
 #elif defined(mpc860)
 /* 
@@ -217,8 +198,6 @@ extern "C" {
 #define CPU_MODEL_NAME  "PowerPC MPC860"
 
 #define PPC_ALIGNMENT		4
-#define PPC_I_CACHE             4096
-#define PPC_D_CACHE             4096
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_INTERRUPT_MAX       71
 #define PPC_USE_MULTIPLE	1
@@ -230,8 +209,6 @@ extern "C" {
 #define CPU_MODEL_NAME  "PowerPC MPC821"
 
 #define PPC_ALIGNMENT		4
-#define PPC_I_CACHE             4096
-#define PPC_D_CACHE             4096
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_INTERRUPT_MAX       71
 
@@ -240,16 +217,12 @@ extern "C" {
 #define CPU_MODEL_NAME  "PowerPC 750"
 
 #define PPC_ALIGNMENT		8
-#define PPC_I_CACHE		16384
-#define PPC_D_CACHE		16384
 
 #elif defined(mpc7400)
 
 #define CPU_MODEL_NAME  "PowerPC 7400"
 
 #define PPC_ALIGNMENT		8
-#define PPC_I_CACHE		32768
-#define PPC_D_CACHE		32768
 
 #elif defined(mpc7455)
 /*
@@ -260,8 +233,6 @@ extern "C" {
 
 #define PPC_ALIGNMENT		8
 #define PPC_CACHE_ALIGNMENT     32
-#define PPC_I_CACHE		32768
-#define PPC_D_CACHE		32768
 
 #elif defined(mpc8260)
 /*
@@ -270,8 +241,6 @@ extern "C" {
 #define CPU_MODEL_NAME  "PowerPC MPC8260"
 
 #define PPC_ALIGNMENT		4
-#define PPC_I_CACHE         	16384
-#define PPC_D_CACHE         	16384
 #define PPC_CACHE_ALIGNMENT	32
 #define PPC_INTERRUPT_MAX       125
 #define PPC_USE_MULTIPLE	1

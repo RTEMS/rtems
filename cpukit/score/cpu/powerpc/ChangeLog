@@ -1,5 +1,9 @@
 2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/score/powerpc.h: Remove PPC_D_CACHE, PPC_I_CACHE defines.
+
+2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/score/powerpc.h: Remove PPC_MSR_* defines.
 
 2005-02-13	Ralf Corsepius <ralf.corsepius@rtems.org>
