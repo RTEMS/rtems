@@ -1,3 +1,7 @@
+2002-06-27	Joel Sherrill <joel@OARcorp.com>
+
+	* tools/Makefile.am: Build the cpu dependent tools as well.
+
 2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/env-rtemscpu.m4: Remove.
