@@ -129,6 +129,18 @@ int _POSIX_Semaphore_Create_support(
 );
 
 /*
+ *  _POSIX_Semaphore_Delete
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine supports the sem_close and sem_unlink routines.
+ */
+
+void _POSIX_Semaphore_Delete(
+  POSIX_Semaphore_Control *the_semaphore
+);
+
+/*
  *  _POSIX_Semaphore_Wait_support
  *
  *  DESCRIPTION:
