@@ -1,3 +1,12 @@
+2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add @exceptions@ to SUBDIRS.
+	* configure.ac: Apply RTEMS_BSPOPTS_*(*) to merge-in settings from
+	make/custom/ppcn_60x.cfg;
+	Add RTEMS_PPC_EXCEPTIONS([old]).
+	* include/Makefile.am: include force-preinstall.am.
+	* wrapup/Makefile.am: Apply @exceptions@.
+
 2001-11-08	Dennis Ehlin (ECS) <Dennis.Ehlin@ecs.ericsson.se>
 
 	This modification is part of the submitted modifications necessary to

@@ -27,6 +27,41 @@ RTEMS_CANONICAL_HOST
 AM_CONDITIONAL(HAS_NETWORKING,false)
 # AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
+RTEMS_BSPOPTS_SET([PPC_USE_SPRG],[*],[0])
+RTEMS_BSPOPTS_HELP([PPC_USE_SPRG],
+[If defined, then the PowerPC specific code in RTEMS will use some
+of the special purpose registers to slightly optimize interrupt
+response time.  The use of these registers can conflict with
+other tools like debuggers.])
+
+RTEMS_BSPOPTS_SET([PPC_USE_DATA_CACHE],[*],[1])
+RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
+[If defined, then the PowerPC specific code in RTEMS will use
+ data cache instructions to optimize the context switch code.
+ This code can conflict with debuggers or emulators.  It is known
+ to break the Corelis PowerPC emulator with at least some combinations
+ of PowerPC 603e revisions and emulator versions.
+ The BSP actually contains the call that enables this.])
+
+# FIXME: This should be a 1 out of 2 (3??) selection.
+RTEMS_BSPOPTS_SET([PPCN_60X_USE_DINK],[*],[1])
+RTEMS_BSPOPTS_HELP([PPCN_60X_USE_DINK],
+[The Score603e board can be configured with 3 ROM monitors.  Only two
+ are appropriate for use with RTEMS.  Set exactly one of these to "1"
+ to indicate which ROM monitor is on the board you are using. Corresponds to
+PPCN_60X_USE_NONE])
+
+RTEMS_BSPOPTS_SET([PPCN_60X_USE_NONE],[*],[0])
+RTEMS_BSPOPTS_HELP([PPCN_60X_USE_NONE],
+[The Score603e board can be configured with 3 ROM monitors.  Only two
+ are appropriate for use with RTEMS.  Set exactly one of these to "1"
+ to indicate which ROM monitor is on the board you are using. Corresponds to
+PPCN_60X_USE_DINK])
+
+RTEMS_BSPOPTS_SET([PPC_VECTOR_FILE_BASE],[*],[0x0100])
+RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
+[This defines the base address of the exception table.
+ NOTE: Vectors are actually at 0xFFF00000 but file starts at offset.])
 
 RTEMS_PROJECT_ROOT
 AM_CONFIG_HEADER(include/bspopts.h)
@@ -46,5 +81,7 @@ tod/Makefile
 universe/Makefile
 vectors/Makefile
 wrapup/Makefile])
-AC_OUTPUT
 
+RTEMS_PPC_EXCEPTIONS([old])
+
+AC_OUTPUT

@@ -15,7 +15,7 @@ BSP_PIECES = startup clock console timer tod $(NETWORK) nvram universe pci \
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
-    $(wildcard ../../../../libcpu/powerpc/old_exception_processing/$(ARCH)/*.rel)
+    ../@exceptions@/$(ARCH)/rtems-cpu.rel
 LIB = $(ARCH)/libbsp.a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
