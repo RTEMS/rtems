@@ -1,3 +1,7 @@
+2001-10-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* cpu.c: Fix #ifdefs, add missing #endif.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* asm.h, cpu.c, rtems.c, rtems/score/cpu.h, rtems/score/sh.h,

@@ -157,7 +157,7 @@ void _CPU_ISR_install_raw_handler(
  *
  */
 
-#if defined(sh1) || defined(sh2)
+#if defined(__sh1__) || defined(__sh2__)
 void _CPU_ISR_install_vector(
   unsigned32  vector,
   proc_ptr    new_handler,
@@ -190,6 +190,7 @@ void _CPU_ISR_install_vector(
      }
 #endif
 }
+#endif /* _CPU_ISR_install_vector */
 
 /*PAGE
  *
