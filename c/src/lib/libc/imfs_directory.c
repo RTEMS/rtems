@@ -240,17 +240,17 @@ int imfs_dir_fstat(
    the_jnode = (IMFS_jnode_t *) loc->node_access;
 
    buf->st_dev = 0ll;
-   buf->st_ino   = the_jnode->stat_ino;
-   buf->st_mode  = the_jnode->stat_mode;
-   buf->st_nlink = the_jnode->stat_nlink;
-   buf->st_uid   = the_jnode->stat_uid;
-   buf->st_gid   = the_jnode->stat_gid;
+   buf->st_ino   = the_jnode->st_ino;
+   buf->st_mode  = the_jnode->st_mode;
+   buf->st_nlink = the_jnode->st_nlink;
+   buf->st_uid   = the_jnode->st_uid;
+   buf->st_gid   = the_jnode->st_gid;
    buf->st_rdev = 0ll;
    buf->st_blksize = 0;
    buf->st_blocks = 0;
-   buf->st_atime = the_jnode->stat_atime;
-   buf->st_mtime = the_jnode->stat_mtime;
-   buf->st_ctime = the_jnode->stat_ctime;
+   buf->st_atime = the_jnode->st_atime;
+   buf->st_mtime = the_jnode->st_mtime;
+   buf->st_ctime = the_jnode->st_ctime;
 
    buf->st_size = 0;
 
@@ -317,14 +317,14 @@ int imfs_dir_rmnod(
    * Decrement the link counter and see if we can free the space.
    */
 
-  the_jnode->stat_nlink--;
+  the_jnode->st_nlink--;
   IMFS_update_ctime( the_jnode );
 
   /*
    * The file cannot be open and the link must be less than 1 to free.
    */
 
-  if ( !rtems_libio_is_file_open( the_jnode ) && (the_jnode->stat_nlink < 1) ) {
+  if ( !rtems_libio_is_file_open( the_jnode ) && (the_jnode->st_nlink < 1) ) {
 
     /* 
      * Is the rtems_filesystem_current is this node?

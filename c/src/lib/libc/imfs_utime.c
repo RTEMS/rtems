@@ -30,8 +30,8 @@ int IMFS_utime(
 
   the_jnode = (IMFS_jnode_t *) pathloc->node_access;
 
-  the_jnode->stat_atime = actime;
-  the_jnode->stat_mtime = modtime;
+  the_jnode->st_atime = actime;
+  the_jnode->st_mtime = modtime;
 
   return 0;
 }

@@ -48,7 +48,7 @@ IMFS_jnode_t *IMFS_create_node(
    *  Fill in the basic information
    */
 
-  node->stat_nlink = 1;
+  node->st_nlink = 1;
   node->type     = type;
   strncpy( node->name, name, IMFS_NAME_MAX );
 
@@ -56,14 +56,14 @@ IMFS_jnode_t *IMFS_create_node(
    *  Fill in the mode and permission information for the jnode structure.
    */
 
-  node->stat_mode = mode & ~rtems_filesystem_umask;
+  node->st_mode = mode & ~rtems_filesystem_umask;
   
 #if defined(RTEMS_POSIX_API)
-  node->stat_uid = geteuid();
-  node->stat_gid = getegid();
+  node->st_uid = geteuid();
+  node->st_gid = getegid();
 #else
-  node->stat_uid = 0;
-  node->stat_gid = 0;
+  node->st_uid = 0;
+  node->st_gid = 0;
 #endif
 
   /*
@@ -72,9 +72,9 @@ IMFS_jnode_t *IMFS_create_node(
 
   gettimeofday( &tv, 0 );
 
-  node->stat_atime  = (time_t) tv.tv_sec;
-  node->stat_mtime  = (time_t) tv.tv_sec;
-  node->stat_ctime  = (time_t) tv.tv_sec;
+  node->st_atime  = (time_t) tv.tv_sec;
+  node->st_mtime  = (time_t) tv.tv_sec;
+  node->st_ctime  = (time_t) tv.tv_sec;
 
   /*
    *  Set the type specific information
@@ -121,7 +121,7 @@ IMFS_jnode_t *IMFS_create_node(
     node->Parent = parent;
 
     fs_info = parent_loc->mt_entry->fs_info;
-    node->stat_ino = ++fs_info->ino_count;
+    node->st_ino = ++fs_info->ino_count;
   }
 
 

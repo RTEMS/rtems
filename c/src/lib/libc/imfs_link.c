@@ -35,7 +35,7 @@ int IMFS_link(
    */
 
   info.hard_link.link_node = to_loc->node_access;
-  if ( info.hard_link.link_node->stat_nlink >= LINK_MAX )
+  if ( info.hard_link.link_node->st_nlink >= LINK_MAX )
     set_errno_and_return_minus_one( EMLINK );
  
   /*
@@ -63,7 +63,7 @@ int IMFS_link(
    * Increment the link count of the node being pointed to.
    */
 
-  info.hard_link.link_node->stat_nlink++;
+  info.hard_link.link_node->st_nlink++;
   IMFS_update_ctime( info.hard_link.link_node );
 
   return 0;

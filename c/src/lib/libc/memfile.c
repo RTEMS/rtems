@@ -1064,14 +1064,14 @@ int memfile_rmnod(
    * Decrement the link counter and see if we can free the space.
    */
 
-  the_jnode->stat_nlink--;
+  the_jnode->st_nlink--;
   IMFS_update_ctime( the_jnode );
 
   /*
    * The file cannot be open and the link must be less than 1 to free.
    */
 
-  if ( !rtems_libio_is_file_open( the_jnode ) && (the_jnode->stat_nlink < 1) ) {
+  if ( !rtems_libio_is_file_open( the_jnode ) && (the_jnode->st_nlink < 1) ) {
 
     /* 
      * Is the rtems_filesystem_current is this node?

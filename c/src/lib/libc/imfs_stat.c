@@ -44,15 +44,15 @@ int IMFS_stat(
       break;
   }
 
-  buf->st_mode  = the_jnode->stat_mode;
-  buf->st_nlink = the_jnode->stat_nlink;
-  buf->st_ino   = the_jnode->stat_ino;
-  buf->st_uid   = the_jnode->stat_uid;
-  buf->st_gid   = the_jnode->stat_gid;
+  buf->st_mode  = the_jnode->st_mode;
+  buf->st_nlink = the_jnode->st_nlink;
+  buf->st_ino   = the_jnode->st_ino;
+  buf->st_uid   = the_jnode->st_uid;
+  buf->st_gid   = the_jnode->st_gid;
 
-  buf->st_atime = the_jnode->stat_atime;
-  buf->st_mtime = the_jnode->stat_mtime;
-  buf->st_ctime = the_jnode->stat_ctime;
+  buf->st_atime = the_jnode->st_atime;
+  buf->st_mtime = the_jnode->st_mtime;
+  buf->st_ctime = the_jnode->st_ctime;
 
   return 0;
 }
