@@ -11,7 +11,7 @@ subdir = mpc860/vectors
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-VPATH = @srcdir@
+VPATH = @srcdir@:@srcdir@/../../ppc403/vectors
 
 PGM = ${ARCH}/vectors.rel
 
