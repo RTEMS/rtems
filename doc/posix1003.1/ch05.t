@@ -43,19 +43,22 @@ getcwd(), Function, Untested Implementation, assumes directory services
 
 @example
 open(), Function, Implemented, requires rework for directory services
-O_RDONLY, Constant, 
-O_WRONLY, Constant, 
-O_RDWR, Constant, 
-O_APPEND, Constant, 
-O_CREAT, Constant, 
-O_DSYNC, Constant, 
-O_EXCL, Constant, 
-O_NOCTTY, Constant, 
-O_NONBLOCK, Constant, 
-O_RSYNC, Constant, 
-O_SYNC, Constant, 
-O_TRUNC, Constant, 
+O_RDONLY, Constant, Implemented
+O_WRONLY, Constant, Implemented
+O_RDWR, Constant, Implemented
+O_APPEND, Constant, Implemented
+O_CREAT, Constant, Implemented
+O_DSYNC, Constant, Unimplemented
+O_EXCL, Constant, Implemented
+O_NOCTTY, Constant, Implemented
+O_NONBLOCK, Constant, Implemented
+O_RSYNC, Constant, Unimplemented
+O_SYNC, Constant, Implemented
+O_TRUNC, Constant, Implemented
 @end example
+
+NOTE: In the newlib fcntl.h, O_SYNC is defined only if _POSIX_SOURCE is
+not defined.  This seems wrong.
 
 @subsection Create a New File or Rewrite an Existing One
 
@@ -120,33 +123,33 @@ struct stat, Type, Untested Implementation
 @subsubsection <sys/stat.h> File Types
 
 @example
-S_ISDIR(), Function, 
-S_ISCHR(), Function, 
-S_ISBLK(), Function, 
-S_ISREG(), Function, 
-S_ISFIFO(), Function, 
-S_TYPEISMQ(), Function, 
-S_TYPEISSEM(), Function, 
-S_TYPEISSHM(), Function, 
+S_ISBLK(), Function, Implemented
+S_ISCHR(), Function, Implemented
+S_ISDIR(), Function, Implemented
+S_ISFIFO(), Function, Implemented
+S_ISREG(), Function, Implemented
+S_TYPEISMQ(), Function, Unimplemented
+S_TYPEISSEM(), Function, Unimplemented
+S_TYPEISSHM(), Function, Unimplemented
 @end example
 
 @subsubsection <sys/stat.h> File Modes
 
 @example
-S_IRWXU, Constant, 
-S_IRUSR, Constant, 
-S_IWUSR, Constant, 
-S_IXUSR, Constant, 
-S_IRWXG, Constant, 
-S_IRGRP, Constant, 
-S_IWGRP, Constant, 
-S_IXGRP, Constant, 
-S_IRWXO, Constant, 
-S_IROTH, Constant, 
-S_IWOTH, Constant, 
-S_IXOTH, Constant, 
-S_ISUID, Constant, 
-S_ISGID, Constant, 
+S_IRWXU, Constant, Implemented
+S_IRUSR, Constant, Implemented
+S_IWUSR, Constant, Implemented
+S_IXUSR, Constant, Implemented
+S_IRWXG, Constant, Implemented
+S_IRGRP, Constant, Implemented
+S_IWGRP, Constant, Implemented
+S_IXGRP, Constant, Implemented
+S_IRWXO, Constant, Implemented
+S_IROTH, Constant, Implemented
+S_IWOTH, Constant, Implemented
+S_IXOTH, Constant, Implemented
+S_ISUID, Constant, Implemented
+S_ISGID, Constant, Implemented
 @end example
 
 @subsubsection <sys/stat.h> Time Entries
@@ -197,18 +200,21 @@ ftruncate(), Function, Unimplemented
 @example
 pathconf(), Function, Unimplemented
 fpathconf(), Function, Unimplemented
-_PC_LINK_MAX, Constant, 
-_PC_MAX_CANON, Constant, 
-_PC_MAX_INPUT, Constant, 
-_PC_MAX_INPUT, Constant, 
-_PC_NAME_MAX, Constant, 
-_PC_PATH_MAX, Constant, 
-_PC_PIPE_BUF, Constant, 
-_PC_ASYNC_IO, Constant, 
-_PC_CHOWN_RESTRICTED, Constant, 
-_PC_NO_TRUNC, Constant, 
-_PC_PRIO_IO, Constant, 
-_PC_SYNC_IO, Constant, 
-_PC_VDISABLE, Constant, 
+_PC_LINK_MAX, Constant, Unimplemented
+_PC_MAX_CANON, Constant, Unimplemented
+_PC_MAX_INPUT, Constant, Unimplemented
+_PC_MAX_INPUT, Constant, Unimplemented
+_PC_NAME_MAX, Constant, Unimplemented
+_PC_PATH_MAX, Constant, Unimplemented
+_PC_PIPE_BUF, Constant, Unimplemented
+_PC_ASYNC_IO, Constant, Unimplemented
+_PC_CHOWN_RESTRICTED, Constant, Unimplemented
+_PC_NO_TRUNC, Constant, Unimplemented
+_PC_PRIO_IO, Constant, Unimplemented
+_PC_SYNC_IO, Constant, Unimplemented
+_PC_VDISABLE, Constant, Unimplemented
 @end example
 
+NOTE: The newlib unistd.h and sys/unistd.h are installed and the
+include search patch is used to get the right one.  There are 
+conflicts between the newlib unistd.h and RTEMS' version.' version.

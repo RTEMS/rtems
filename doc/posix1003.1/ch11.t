@@ -20,7 +20,7 @@ sem_t, Type, Untested Implementation
 
 @example
 sem_init(), Function, Untested Implementation
-SEM_FAILED, Constant, 
+SEM_FAILED, Constant, Unimplemented
 @end example
 
 @subsection Destroy an Unnamed Semaphore
@@ -75,8 +75,8 @@ pthread_mutexattr_init(), Function, Implemented
 pthread_mutexattr_destroy(), Function, Implemented
 pthread_mutexattr_getpshared(), Function, Implemented
 pthread_mutexattr_setpshared(), Function, Implemented
-PTHREAD_PROCESS_SHARED, Constant, 
-PTHREAD_PROCESS_PRIVATE, Constant, 
+PTHREAD_PROCESS_SHARED, Constant, Implemented
+PTHREAD_PROCESS_PRIVATE, Constant, Implemented
 @end example
 
 @subsection Initializing and Destroying a Mutex
@@ -84,7 +84,7 @@ PTHREAD_PROCESS_PRIVATE, Constant,
 @example
 pthread_mutex_init(), Function, Implemented
 pthread_mutex_destroy(), Function, Implemented
-PTHREAD_MUTEX_INITIALIZER, Constant, 
+PTHREAD_MUTEX_INITIALIZER, Constant, Implemented
 @end example
 
 @subsection Locking and Unlocking a Mutex
@@ -111,7 +111,7 @@ pthread_condattr_setpshared(), Function, Implemented
 @example
 pthread_cond_init(), Function, Implemented
 pthread_cond_destroy(), Function, Implemented
-PTHREAD_COND_INITIALIZER, Constant, 
+PTHREAD_COND_INITIALIZER, Constant, Implemented
 @end example
 
 @subsection Broadcasting and Signaling a Condition

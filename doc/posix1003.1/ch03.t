@@ -65,51 +65,54 @@ _exit(), Function, Unimplemented
 
 @example
 sigset_t, Type, Implemented
-SIG_DFL, Constant, 
-SIG_IGN, Constant, 
-SIGABRT, Constant, 
-SIGALRM, Constant, 
-SIGFPE, Constant, 
-SIGHUP, Constant, 
-SIGILL, Constant, 
-SIGINT, Constant, 
-SIGKILL, Constant, 
-SIGPIPE, Constant, 
-SIGQUIT, Constant, 
-SIGSEGV, Constant, 
-SIGTERM, Constant, 
-SIGUSR1, Constant, 
-SIGUSR2, Constant, 
-SIGCHLD, Constant, 
-SIGCONT, Constant, 
-SIGSTOP, Constant, 
-SIGTSTP, Constant, 
-SIGTTIN, Constant, 
-SIGTTOU, Constant, 
-SIGBUS, Constant, 
-SIGRTMIN, Constant, 
-SIGRTMAX, Constant, 
+SIG_DFL, Constant, Implemented
+SIG_IGN, Constant, Implemented
+SIG_ERR, Constant, Implemented
+SIGABRT, Constant, Implemented
+SIGALRM, Constant, Implemented
+SIGFPE, Constant, Implemented
+SIGHUP, Constant, Implemented
+SIGILL, Constant, Implemented
+SIGINT, Constant, Implemented
+SIGKILL, Constant, Implemented
+SIGPIPE, Constant, Implemented
+SIGQUIT, Constant, Implemented
+SIGSEGV, Constant, Implemented
+SIGTERM, Constant, Implemented
+SIGUSR1, Constant, Implemented
+SIGUSR2, Constant, Implemented
+SIGCHLD, Constant, Unimplemented
+SIGCONT, Constant, Unimplemented
+SIGSTOP, Constant, Unimplemented
+SIGTSTP, Constant, Unimplemented
+SIGTTIN, Constant, Unimplemented
+SIGTTOU, Constant, Unimplemented
+SIGBUS, Constant, Implemented
+SIGRTMIN, Constant, Implemented
+SIGRTMAX, Constant, Implemented
 @end example
 
+NOTE: SIG_ERR is technically an extension to the C Library which is
+not documented anywhere else according to the index.
 @subsubsection Signal Generation and Delivery
 
 @example
 struct sigevent, Type, Implemented
 union sigval, Type, Implemented
-SIGEV_NONE, Constant, 
-SIGEV_SIGNAL, Constant, 
-SIGEV_THREAD, Constant, 
+SIGEV_NONE, Constant, Implemented
+SIGEV_SIGNAL, Constant, Implemented
+SIGEV_THREAD, Constant, Implemented
 @end example
 
 @subsubsection Signal Actions
 
 @example
 siginfo_t, Type, Implemented
-SI_USER, Constant, 
-SI_QUEUE, Constant, 
-SI_TIMER, Constant, 
-SI_ASYNCIO, Constant, 
-SI_MESGQ, Constant, 
+SI_USER, Constant, Implemented
+SI_QUEUE, Constant, Implemented
+SI_TIMER, Constant, Implemented
+SI_ASYNCIO, Constant, Implemented
+SI_MESGQ, Constant, Implemented
 @end example
 
 @subsection Send a Signal to a Process
@@ -133,8 +136,8 @@ sigismember(), Function, Implemented
 @example
 sigaction(), Function, Implemented
 sigaction, Type, Implemented
-SA_NOCLDSTOP, Constant, 
-SA_SIGINFO, Constant, 
+SA_NOCLDSTOP, Constant, Implemented
+SA_SIGINFO, Constant, Implemented
 @end example
 
 @subsection Examine and Change Blocked Signals
@@ -142,9 +145,9 @@ SA_SIGINFO, Constant,
 @example
 pthread_sigmask(), Function, Implemented
 sigprocmask(), Function, Implemented
-SIG_BLOCK, Constant, 
-SIG_UNBLOCK, Constant, 
-SIG_SETMASK, Constant, 
+SIG_BLOCK, Constant, Implemented
+SIG_UNBLOCK, Constant, Implemented
+SIG_SETMASK, Constant, Implemented
 @end example
 
 @subsection Examine Pending Signals

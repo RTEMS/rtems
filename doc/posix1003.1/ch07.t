@@ -43,17 +43,17 @@
 @subsubsection Special Characters
 
 @example
-INTR, Constant, 
-QUIT, Constant, 
-ERASE, Constant, 
-KILL, Constant, 
-EOF, Constant, 
-NL, Constant, 
-EOL, Constant, 
-SUSP, Constant, 
-STOP, Constant, 
-START, Constant, 
-CR, Constant, 
+INTR, Constant, Unimplemented
+QUIT, Constant, Unimplemented
+ERASE, Constant, Unimplemented
+KILL, Constant, Unimplemented
+EOF, Constant, Unimplemented
+NL, Constant, Unimplemented
+EOL, Constant, Unimplemented
+SUSP, Constant, Unimplemented
+STOP, Constant, Unimplemented
+START, Constant, Unimplemented
+CR, Constant, Unimplemented
 @end example
 
 @subsubsection Modem Disconnect
@@ -65,98 +65,98 @@ CR, Constant,
 @subsubsection @code{termios} Structure
 
 @example
-tcflag_t, Type, 
-cc_t, Type, 
+tcflag_t, Type, Implemented
+cc_t, Type, Implemented
 struct termios, Type, Partial Implementation
 @end example
 
 @subsubsection Input Modes
 
 @example
-BRKINT, Constant, 
-ICRNL, Constant, 
-IGNBREAK, Constant, 
-IGNCR, Constant, 
-IGNPAR, Constant, 
-INLCR, Constant, 
-INPCK, Constant, 
-ISTRIP, Constant, 
-IXOFF, Constant, 
-IXON, Constant, 
-PARMRK, Constant, 
+BRKINT, Constant, Implemented
+ICRNL, Constant, Implemented
+IGNBREAK, Constant, Unimplemented
+IGNCR, Constant, Implemented
+IGNPAR, Constant, Implemented
+INLCR, Constant, Implemented
+INPCK, Constant, Implemented
+ISTRIP, Constant, Implemented
+IXOFF, Constant, Implemented
+IXON, Constant, Implemented
+PARMRK, Constant, Implemented
 @end example
 
 @subsubsection Output Modes
 
 @example
-OPOST, Constant, 
+OPOST, Constant, Implemented
 @end example
 
 @subsubsection Control Modes
 
 @example
-CLOCKAL, Constant, 
-CREAD, Constant, 
-CSIZE, Constant, 
-CS5, Constant, 
-CS6, Constant, 
-CS7, Constant, 
-CS8, Constant, 
-CSTOPB, Constant, 
-HUPCL, Constant, 
-PARENB, Constant, 
-PARODD, Constant, 
+CLOCAL, Constant, Implemented
+CREAD, Constant, Implemented
+CSIZE, Constant, Implemented
+CS5, Constant, Implemented
+CS6, Constant, Implemented
+CS7, Constant, Implemented
+CS8, Constant, Implemented
+CSTOPB, Constant, Implemented
+HUPCL, Constant, Implemented
+PARENB, Constant, Implemented
+PARODD, Constant, Implemented
 @end example
 
 @subsubsection Local Modes
 
 @example
-ECHO, Constant, 
-ECHOE, Constant, 
-ECHOK, Constant, 
-ECHONL, Constant, 
-ICANON, Constant, 
-IEXTEN, Constant, 
-ISIG, Constant, 
-NOFLSH, Constant, 
-TOSTOP, Constant, 
+ECHO, Constant, Implemented
+ECHOE, Constant, Implemented
+ECHOK, Constant, Implemented
+ECHONL, Constant, Implemented
+ICANON, Constant, Implemented
+IEXTEN, Constant, Implemented
+ISIG, Constant, Implemented
+NOFLSH, Constant, Implemented
+TOSTOP, Constant, Implemented
 @end example
 
 @subsubsection Special Control Characters
 
 @example
-VEOF, Constant, 
-VEOL, Constant, 
-VERASE, Constant, 
-VINTR, Constant, 
-VKILL, Constant, 
-VQUIT, Constant, 
-VSUSP, Constant, 
-VSTART, Constant, 
-VSTOP, Constant, 
-VMIN, Constant, 
-VTIME, Constant, 
+VEOF, Constant, Implemented
+VEOL, Constant, Implemented
+VERASE, Constant, Implemented
+VINTR, Constant, Implemented
+VKILL, Constant, Implemented
+VQUIT, Constant, Implemented
+VSUSP, Constant, Implemented
+VSTART, Constant, Implemented
+VSTOP, Constant, Implemented
+VMIN, Constant, Implemented
+VTIME, Constant, Implemented
 @end example
 
 @subsection Baud Rate Values
 
 @example
-B0, Constant, 
-B50, Constant, 
-B75, Constant, 
-B110, Constant, 
-B134, Constant, 
-B150, Constant, 
-B200, Constant, 
-B300, Constant, 
-B600, Constant, 
-B1200, Constant, 
-B1800, Constant, 
-B2400, Constant, 
-B4800, Constant, 
-B9600, Constant, 
-B19200, Constant, 
-B38400, Constant, 
+B0, Constant, Implemented
+B50, Constant, Implemented
+B75, Constant, Implemented
+B110, Constant, Implemented
+B134, Constant, Implemented
+B150, Constant, Implemented
+B200, Constant, Implemented
+B300, Constant, Implemented
+B600, Constant, Implemented
+B1200, Constant, Implemented
+B1800, Constant, Implemented
+B2400, Constant, Implemented
+B4800, Constant, Implemented
+B9600, Constant, Implemented
+B19200, Constant, Implemented
+B38400, Constant, Implemented
 @end example
 
 @subsubsection Baud Rate Functions
@@ -166,13 +166,13 @@ cfgetospeed(), Function, Unimplemented
 cfsetospeed(), Function, Unimplemented
 cfgetispeed(), Function, Unimplemented
 cfsetispeed(), Function, Unimplemented
-TCIFLUSH, Constant, 
-TCOFLUSH, Constant, 
-TCIOFLUSH, Constant, 
-TCOOFF, Constant, 
-TCOON, Constant, 
-TCIOOFF, Constant, 
-TCIOON, Constant, 
+TCIFLUSH, Constant, Implemented
+TCOFLUSH, Constant, Implemented
+TCIOFLUSH, Constant, Implemented
+TCOOFF, Constant, Implemented
+TCOON, Constant, Implemented
+TCIOOFF, Constant, Implemented
+TCIOON, Constant, Implemented
 @end example
 
 @section General Terminal Interface Control Functions

@@ -17,49 +17,49 @@
 @section Error Numbers
 
 @example
-E2BIG, Constant, 
-EACCES, Constant, 
-EAGAIN, Constant, 
-EBADF, Constant, 
-EBADMSG, Constant, 
-EBUSY, Constant, 
-ECANCELED, Constant, 
-ECHILD, Constant, 
-EDEADLK, Constant, 
-EDOM, Constant, 
-EEXIST, Constant, 
-EFAULT, Constant, 
-EFBIG, Constant, 
-EINPROGRESS, Constant, 
-EINTR, Constant, 
-EINVAL, Constant, 
-EIO, Constant, 
-EISDIR, Constant, 
-EMFILE, Constant, 
-EMLINK, Constant, 
-EMSGSIZE, Constant, 
-ENAMETOOLONG, Constant, 
-ENFILE, Constant, 
-ENODEV, Constant, 
-ENOENT, Constant, 
-ENOEXEC, Constant, 
-ENOLCK, Constant, 
-ENOMEM, Constant, 
-ENOSPC, Constant, 
-ENOSYS, Constant, 
-ENOTDIR, Constant, 
-ENOTEMPTY, Constant, 
-ENOTSUP, Constant, 
-ENOTTY, Constant, 
-ENXIO, Constant, 
-EPERM, Constant, 
-EPIPE, Constant, 
-ERANGE, Constant, 
-EROFS, Constant, 
-ESPIPE, Constant, 
-ESRCH, Constant, 
-ETIMEDOUT, Constant, 
-EXDEV, Constant, 
+E2BIG, Constant, Implemented
+EACCES, Constant, Implemented
+EAGAIN, Constant, Implemented
+EBADF, Constant, Implemented
+EBADMSG, Constant, Implemented
+EBUSY, Constant, Implemented
+ECANCELED, Constant, Unimplemented
+ECHILD, Constant, Implemented
+EDEADLK, Constant, Implemented
+EDOM, Constant, Implemented
+EEXIST, Constant, Implemented
+EFAULT, Constant, Implemented
+EFBIG, Constant, Implemented
+EINPROGRESS, Constant, Implemented
+EINTR, Constant, Implemented
+EINVAL, Constant, Implemented
+EIO, Constant, Implemented
+EISDIR, Constant, Implemented
+EMFILE, Constant, Implemented
+EMLINK, Constant, Implemented
+EMSGSIZE, Constant, Implemented
+ENAMETOOLONG, Constant, Implemented
+ENFILE, Constant, Implemented
+ENODEV, Constant, Implemented
+ENOENT, Constant, Implemented
+ENOEXEC, Constant, Implemented
+ENOLCK, Constant, Implemented
+ENOMEM, Constant, Implemented
+ENOSPC, Constant, Implemented
+ENOSYS, Constant, Implemented
+ENOTDIR, Constant, Implemented
+ENOTEMPTY, Constant, Implemented
+ENOTSUP, Constant, Implemented
+ENOTTY, Constant, Implemented
+ENXIO, Constant, Implemented
+EPERM, Constant, Implemented
+EPIPE, Constant, Implemented
+ERANGE, Constant, Implemented
+EROFS, Constant, Implemented
+ESPIPE, Constant, Implemented
+ESRCH, Constant, Implemented
+ETIMEDOUT, Constant, Implemented
+EXDEV, Constant, Implemented
 @end example
 
 @section Primitive System Types
@@ -95,7 +95,7 @@ NOTE: time_t is not listed in this section but is used by many functions.
 @subsection Symbols From the C Standard
 
 @example
-NULL, Constant, 
+NULL, Constant, Implemented
 @end example
 
 @subsection POSIX.1 Symbols
@@ -109,111 +109,113 @@ _POSIX_C_SOURCE, Feature Flag,
 @section C Language Limits
 
 @example
-CHAR_BIT, Constant, 
-CHAR_MAX, Constant, 
-CHAR_MIN, Constant, 
-INT_MAX, Constant, 
-INT_MIN, Constant, 
-LONG_MAX, Constant, 
-LONG_MIN, Constant, 
-MB_LEN_MAX, Constant, 
-SCHAR_MAX, Constant, 
-SCHAR_MIN, Constant, 
-SHRT_MAX, Constant, 
-SHRT_MIN, Constant, 
-UCHAR_MAX, Constant, 
-UINT_MAX, Constant, 
-ULONG_MAX, Constant, 
-USHRT_MAX, Constant, 
+CHAR_BIT, Constant, Implemented
+CHAR_MAX, Constant, Implemented
+CHAR_MIN, Constant, Implemented
+INT_MAX, Constant, Implemented
+INT_MIN, Constant, Implemented
+LONG_MAX, Constant, Implemented
+LONG_MIN, Constant, Implemented
+MB_LEN_MAX, Constant, Implemented
+SCHAR_MAX, Constant, Implemented
+SCHAR_MIN, Constant, Implemented
+SHRT_MAX, Constant, Implemented
+SHRT_MIN, Constant, Implemented
+UCHAR_MAX, Constant, Implemented
+UINT_MAX, Constant, Implemented
+ULONG_MAX, Constant, Implemented
+USHRT_MAX, Constant, Implemented
 @end example
+
+NOTE: These are implemented in GCC's limits.h file.
 
 @subsection Minimum Values
 
 @example
-_POSIX_AIO_LISTIO_MAX, Constant, 
-_POSIX_AIO_MAX, Constant, 
-_POSIX_ARG_MAX, Constant, 
-_POSIX_CHILD_MAX, Constant, 
-_POSIX_DELAYTIMER_MAX, Constant, 
-_POSIX_LINK_MAX, Constant, 
-_POSIX_LOGIN_NAME_MAX, Constant, 
-_POSIX_MAX_CANON, Constant, 
-_POSIX_MAX_INPUT, Constant, 
-_POSIX_MQ_OPEN_MAX, Constant, 
-_POSIX_MQ_PRIO_MAX, Constant, 
-_POSIX_NAME_MAX, Constant, 
-_POSIX_NGROUPS_MAX, Constant, 
-_POSIX_OPEN_MAX, Constant, 
-_POSIX_PATH_MAX, Constant, 
-_POSIX_PIPE_BUF, Constant, 
-_POSIX_RTSIG_MAX, Constant, 
-_POSIX_SEM_NSEMS_MAX, Constant, 
-_POSIX_SEM_VALUE_MAX, Constant, 
-_POSIX_SIGQUEUE_MAX, Constant, 
-_POSIX_SSIZE_MAX, Constant, 
-_POSIX_STREAM_MAX, Constant, 
-_POSIX_THREAD_DESTRUCTOR_ITERATIONS, Constant, 
-_POSIX_THREAD_KEYS_MAX, Constant, 
-_POSIX_THREAD_THREADS_MAX, Constant, 
-_POSIX_TTY_NAME_MAX, Constant, 
-_POSIX_TIME_MAX, Constant, 
-_POSIX_TZNAME_MAX, Constant, 
+_POSIX_AIO_LISTIO_MAX, Constant, Implemented
+_POSIX_AIO_MAX, Constant, Implemented
+_POSIX_ARG_MAX, Constant, Implemented
+_POSIX_CHILD_MAX, Constant, Implemented
+_POSIX_DELAYTIMER_MAX, Constant, Implemented
+_POSIX_LINK_MAX, Constant, Implemented
+_POSIX_LOGIN_NAME_MAX, Constant, Implemented
+_POSIX_MAX_CANON, Constant, Implemented
+_POSIX_MAX_INPUT, Constant, Implemented
+_POSIX_MQ_OPEN_MAX, Constant, Implemented
+_POSIX_MQ_PRIO_MAX, Constant, Implemented
+_POSIX_NAME_MAX, Constant, Implemented
+_POSIX_NGROUPS_MAX, Constant, Implemented
+_POSIX_OPEN_MAX, Constant, Implemented
+_POSIX_PATH_MAX, Constant, Implemented
+_POSIX_PIPE_BUF, Constant, Implemented
+_POSIX_RTSIG_MAX, Constant, Implemented
+_POSIX_SEM_NSEMS_MAX, Constant, Implemented
+_POSIX_SEM_VALUE_MAX, Constant, Implemented
+_POSIX_SIGQUEUE_MAX, Constant, Implemented
+_POSIX_SSIZE_MAX, Constant, Implemented
+_POSIX_STREAM_MAX, Constant, Implemented
+_POSIX_THREAD_DESTRUCTOR_ITERATIONS, Constant, Implemented
+_POSIX_THREAD_KEYS_MAX, Constant, Implemented
+_POSIX_THREAD_THREADS_MAX, Constant, Implemented
+_POSIX_TTY_NAME_MAX, Constant, Implemented
+_POSIX_TIME_MAX, Constant, Unimplemented
+_POSIX_TZNAME_MAX, Constant, Implemented
 @end example
 
 @subsection Run-Time Increasable Values
 
 @example
-_POSIX_NGROUPS_MAX, Constant, 
+_POSIX_NGROUPS_MAX, Constant, Implemented
 @end example
 
 @subsection Run-Time Invariant Values (Possible Indeterminate)
 
 @example
-AIO_LISTIO_MAX, Constant, 
-AIO_MAX, Constant, 
-AIO_PRIO_DELTA_MAX, Constant, 
-ARG_MAX, Constant, 
-CHILD_MAX, Constant, 
-DELAYTIMER_MAX, Constant, 
-LOGIN_NAME_MAX, Constant, 
-MQ_OPEN_MAX, Constant, 
-OPEN_MAX, Constant, 
-PAGESIZE, Constant, 
-PTHREAD_DESTRUCTOR_ITERATIONS, Constant, 
-PTHREAD_KEYS_MAX, Constant, 
-PTHREAD_STACK_MIN, Constant, 
-PTHJREAD_THREADS_MAX, Constant, 
-RTSIG_MAX, Constant, 
-SEM_NSEMS_MAX, Constant, 
-SEM_VALUE_MAX, Constant, 
-SIGQUEUE_MAX, Constant, 
-STREAM_MAX, Constant, 
-TIMER_MAX, Constant, 
-TTY_NAME_MAX, Constant, 
-TZNAME_MAX, Constant, 
+AIO_LISTIO_MAX, Constant, Implemented
+AIO_MAX, Constant, Implemented
+AIO_PRIO_DELTA_MAX, Constant, Implemented
+ARG_MAX, Constant, Implemented
+CHILD_MAX, Constant, Implemented
+DELAYTIMER_MAX, Constant, Implemented
+LOGIN_NAME_MAX, Constant, Implemented
+MQ_OPEN_MAX, Constant, Implemented
+OPEN_MAX, Constant, Implemented
+PAGESIZE, Constant, Implemented
+PTHREAD_DESTRUCTOR_ITERATIONS, Constant, Implemented
+PTHREAD_KEYS_MAX, Constant, Implemented
+PTHREAD_STACK_MIN, Constant, Implemented
+PTHJREAD_THREADS_MAX, Constant, Implemented
+RTSIG_MAX, Constant, Implemented
+SEM_NSEMS_MAX, Constant, Implemented
+SEM_VALUE_MAX, Constant, Implemented
+SIGQUEUE_MAX, Constant, Implemented
+STREAM_MAX, Constant, Implemented
+TIMER_MAX, Constant, Implemented
+TTY_NAME_MAX, Constant, Implemented
+TZNAME_MAX, Constant, Implemented
 @end example
 
 @subsection Pathname Variable Values
 
 @example
-LINK_MAX, Constant, 
-MAX_CANON, Constant, 
-MAX_INPUT, Constant, 
-NAME_MAX, Constant, 
-PATH_MAX, Constant, 
-PIPE_BUF, Constant, 
+LINK_MAX, Constant, Implemented
+MAX_CANON, Constant, Implemented
+MAX_INPUT, Constant, Implemented
+NAME_MAX, Constant, Implemented
+PATH_MAX, Constant, Implemented
+PIPE_BUF, Constant, Implemented
 @end example
 
 @subsection Invariant Values
 
 @example
-SSIZE_MAX, Constant, 
+SSIZE_MAX, Constant, Implemented
 @end example
 
 @subsection Maximum Values
 
 @example
-_POSIX_CLOCKRES_MIN, Constant, 
+_POSIX_CLOCKRES_MIN, Constant, Implemented
 @end example
 
 @section Symbolic Constants
@@ -221,18 +223,18 @@ _POSIX_CLOCKRES_MIN, Constant,
 @subsection Symbolic Constants for the @code{access} Function
 
 @example
-R_OK, Constant, 
-W_OK, Constant, 
-X_OK, Constant, 
-F_OK, Constant, 
+R_OK, Constant, Implemented
+W_OK, Constant, Implemented
+X_OK, Constant, Implemented
+F_OK, Constant, Implemented
 @end example
 
 @subsection Symbolic Constants for the @code{lseek} Function
 
 @example
-SEEK_SET, Constant, 
-SEEK_CUR, Constant, 
-SEEK_END, Constant, 
+SEEK_SET, Constant, Implemented
+SEEK_CUR, Constant, Implemented
+SEEK_END, Constant, Implemented
 @end example
 
 @subsection Compile-Time Symbolic Constants for Portability Specifications

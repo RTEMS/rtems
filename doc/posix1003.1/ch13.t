@@ -17,10 +17,12 @@ struct sched_param, Type, Implemented
 @section Scheduling Policies
 
 @example
-SCHED_FIFO, Constant, 
-SCHED_RR, Constant, 
-SCHED_OTHER, Constant, 
+SCHED_FIFO, Constant, Implemented
+SCHED_RR, Constant, Implemented
+SCHED_OTHER, Constant, Implemented
 @end example
+
+NOTE: RTEMS adds SCHED_SPORADIC.
 
 @subsection SCHED_FIFO
 
@@ -73,8 +75,8 @@ sched_get_priority_rr_get_interval(), Function, Implemented
 @subsection Thread Scheduling Attributes
 
 @example
-PTHREAD_SCOPE_PROCESS, Constant, 
-PTHREAD_SCOPE_SYSTEM, Constant, 
+PTHREAD_SCOPE_PROCESS, Constant, Implemented
+PTHREAD_SCOPE_SYSTEM, Constant, Implemented
 @end example
 
 @subsection Scheduling Contention Scope
@@ -96,8 +98,8 @@ pthread_attr_setschedpolicy(), Function, Implemented
 pthread_attr_getschedpolicy(), Function, Implemented
 pthread_attr_setschedparam(), Function, Implemented
 pthread_attr_getschedparam(), Function, Implemented
-PTHREAD_INHERIT_SCHED, Constant, 
-PTHREAD_EXPLICIT_SCHED, Constant, 
+PTHREAD_INHERIT_SCHED, Constant, Implemented
+PTHREAD_EXPLICIT_SCHED, Constant, Implemented
 @end example
 
 @subsection Dynamic Thread Scheduling Parameters Access
@@ -116,9 +118,9 @@ pthread_mutexattr_setprotocol(), Function, Implemented
 pthread_mutexattr_getprotocol(), Function, Implemented
 pthread_mutexattr_setprioceiling(), Function, Implemented
 pthread_mutexattr_getprioceiling(), Function, Implemented
-PTHREAD_PRIO_NONE, Constant, 
-PTHREAD_PRIO_INHERIT, Constant, 
-PTHREAD_PRIO_PROTECT, Constant, 
+PTHREAD_PRIO_NONE, Constant, Implemented
+PTHREAD_PRIO_INHERIT, Constant, Implemented
+PTHREAD_PRIO_PROTECT, Constant, Implemented
 @end example
 
 @subsection Change the Priority Ceiling of a Mutex

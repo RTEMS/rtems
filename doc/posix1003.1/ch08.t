@@ -176,8 +176,8 @@ NOTE: @code{time} is also included in another section.
 From Surrounding Text
 
 @example
-EXIT_SUCCESS, Constant, 
-EXIT_FAILURE, Constant, 
+EXIT_SUCCESS, Constant, Implemented
+EXIT_FAILURE, Constant, Implemented
 @end example
 
 
@@ -186,12 +186,12 @@ EXIT_FAILURE, Constant,
 @subsection Extensions to @code{setlocale} Function
 
 @example
-LC_CTYPE, Constant, 
-LC_COLLATE, Constant, 
-LC_TIME, Constant, 
-LC_NUMERIC, Constant, 
-LC_MONETARY, Constant, 
-LC_ALL, Constant, 
+LC_CTYPE, Constant, Implemented
+LC_COLLATE, Constant, Implemented
+LC_TIME, Constant, Implemented
+LC_NUMERIC, Constant, Implemented
+LC_MONETARY, Constant, Implemented
+LC_ALL, Constant, Implemented
 @end example
 
 @section C Language Input/Output Functions
@@ -200,9 +200,9 @@ LC_ALL, Constant,
 
 @example
 fileno(), Function, Implemented
-STDIN_FILENO, Constant, 
-STDOUT_FILENO, Constant, 
-STDERR_FILENO, Constant, 
+STDIN_FILENO, Constant, Implemented
+STDOUT_FILENO, Constant, Implemented
+STDERR_FILENO, Constant, ImplementeD
 @end example
 
 @subsection Open a Stream on a File Descriptor

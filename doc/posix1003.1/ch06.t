@@ -56,19 +56,19 @@ write(), Function, Partial Implementation
 @example
 struct flock, Type, Unimplemented
 fcntl(), Function, Unimplemented
-F_DUPFD, Constant, 
-F_GETFD, Constant, 
-F_GETLK, Constant, 
-F_SETFD, Constant, 
-F_GETFL, Constant, 
-F_SETFL, Constant, 
-F_SETLK, Constant, 
-F_SETLKW, Constant, 
-FD_CLOEXEC, Constant, 
-F_RDLCK, Constant, 
-F_UNLCK, Constant, 
-F_WRLCK, Constant, 
-O_ACCMODE, Constant, 
+F_DUPFD, Constant, Implemented
+F_GETFD, Constant, Implemented
+F_GETLK, Constant, Implemented
+F_SETFD, Constant, Implemented
+F_GETFL, Constant, Implemented
+F_SETFL, Constant, Implemented
+F_SETLK, Constant, Implemented
+F_SETLKW, Constant, Implemented
+FD_CLOEXEC, Constant, Implemented
+F_RDLCK, Constant, Implemented
+F_UNLCK, Constant, Implemented
+F_WRLCK, Constant, Implemented
+O_ACCMODE, Constant, Implemented
 @end example
 
 NOTE: A number of constants are used by both @code{open} and @code{fcntl}.
@@ -81,9 +81,9 @@ are also included in another section.  @xref{Open a File}.
 
 @example
 lseek(), Function, Partial Implementation
-SEEK_SET, Constant, 
-SEEK_CUR, Constant, 
-SEEK_END, Constant, 
+SEEK_SET, Constant, Implemented
+SEEK_CUR, Constant, Implemented
+SEEK_END, Constant, Implemented
 @end example
 
 @section File Synchronization
@@ -113,14 +113,14 @@ struct aiocb, Type, Untested Implementation
 @subsubsection Asynchronous I/O Manifest Constants
 
 @example
-AIO_CANCELED, Constant, 
-AIO_NOTCANCELED, Constant, 
-AIO_ALLDONE, Constant, 
-LIO_WAIT, Constant, 
-LIO_NOWAIT, Constant, 
-LIO_READ, Constant, 
-LIO_WRITE, Constant, 
-LIO_NOP, Constant, 
+AIO_CANCELED, Constant, Implemented
+AIO_NOTCANCELED, Constant, Implemented
+AIO_ALLDONE, Constant, Implemented
+LIO_WAIT, Constant, Implemented
+LIO_NOWAIT, Constant, Implemented
+LIO_READ, Constant, Implemented
+LIO_WRITE, Constant, Implemented
+LIO_NOP, Constant, Implemented
 @end example
 
 @subsection Asynchronous Read

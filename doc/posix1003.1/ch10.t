@@ -14,31 +14,31 @@
 
 @example
 tar format, Type, Unimplemented
-TMAGIC, Constant, 
-TMAGLEN, Constant, 
-TVERSION, Constant, 
-TVERSLEN, Constant, 
-REGTYPE, Constant, 
-AREGTYPE, Constant, 
-LNKTYPE, Constant, 
-SYMTYPE, Constant, 
-CHRTYPE, Constant, 
-BLKTYPE, Constant, 
-DIRTYPE, Constant, 
-FIFOTYPE, Constant, 
-CONTTYPE, Constant, 
-TSUID, Constant, 
-TSGID, Constant, 
-TSVTX, Constant, 
-TUREAD, Constant, 
-TUWRITE, Constant, 
-TUEXEC, Constant, 
-TGREAD, Constant, 
-TGWRITE, Constant, 
-TGEXEC, Constant, 
-TOREAD, Constant, 
-TOWRITE, Constant, 
-TOEXEC, Constant, 
+TMAGIC, Constant, Unimplemented
+TMAGLEN, Constant, Unimplemented
+TVERSION, Constant, Unimplemented
+TVERSLEN, Constant, Unimplemented
+REGTYPE, Constant, Unimplemented
+AREGTYPE, Constant, Unimplemented
+LNKTYPE, Constant, Unimplemented
+SYMTYPE, Constant, Unimplemented
+CHRTYPE, Constant, Unimplemented
+BLKTYPE, Constant, Unimplemented
+DIRTYPE, Constant, Unimplemented
+FIFOTYPE, Constant, Unimplemented
+CONTTYPE, Constant, Unimplemented
+TSUID, Constant, Unimplemented
+TSGID, Constant, Unimplemented
+TSVTX, Constant, Unimplemented
+TUREAD, Constant, Unimplemented
+TUWRITE, Constant, Unimplemented
+TUEXEC, Constant, Unimplemented
+TGREAD, Constant, Unimplemented
+TGWRITE, Constant, Unimplemented
+TGEXEC, Constant, Unimplemented
+TOREAD, Constant, Unimplemented
+TOWRITE, Constant, Unimplemented
+TOEXEC, Constant, Unimplemented
 @end example
 
 NOTE: Requires <tar.h> which is not in newlib.
@@ -47,18 +47,18 @@ NOTE: Requires <tar.h> which is not in newlib.
 
 @example
 cpio format, Type, Unimplemented
-C_IRUSER, Constant, 
-C_IWUSER, Constant, 
-C_IXUSER, Constant, 
-C_IRGRP, Constant, 
-C_IWGRP, Constant, 
-C_IXGRP, Constant, 
-C_IROTH, Constant, 
-C_IWOTH, Constant, 
-C_IXOTH, Constant, 
-C_ISUID, Constant, 
-C_ISGID, Constant, 
-C_ISVTX, Constant, 
+C_IRUSER, Constant, Unimplemented
+C_IWUSER, Constant, Unimplemented
+C_IXUSER, Constant, Unimplemented
+C_IRGRP, Constant, Unimplemented
+C_IWGRP, Constant, Unimplemented
+C_IXGRP, Constant, Unimplemented
+C_IROTH, Constant, Unimplemented
+C_IWOTH, Constant, Unimplemented
+C_IXOTH, Constant, Unimplemented
+C_ISUID, Constant, Unimplemented
+C_ISGID, Constant, Unimplemented
+C_ISVTX, Constant, Unimplemented
 @end example
 
 NOTE: POSIX does not require a header file or structure.  RedHat Linux

@@ -125,57 +125,57 @@ isatty(), Function, Partial Implementation
 
 @example
 sysconf(), Function, Not Implemented
-_SC_AIO_LISTIO_MAX, Constant, 
-_SC_AIO_MAX, Constant, 
-_SC_AIO_PRIO_DELTA_MAX, Constant, 
-_SC_ARG_MAX, Constant, 
-_SC_CHILD_MAX, Constant, 
-_SC_CLK_TCK, Constant, 
-_SC_DELAYTIMER_MAX, Constant, 
-_SC_GETGR_R_SIZE_MAX, Constant, 
-_SC_GETPW_R_SIZE_MAX, Constant, 
-_SC_LOGIN_NAME_MAX, Constant, 
-_SC_MQ_OPEN_MAX, Constant, 
-_SC_MQ_PRIO_MAX, Constant, 
-_SC_NGROUPS_MAX, Constant, 
-_SC_OPEN_MAX, Constant, 
-_SC_PAGESIZE, Constant, 
-_SC_RTSIG_MAX, Constant, 
-_SC_SEM_NSEMS_MAX, Constant, 
-_SC_SEM_VALUE_MAX, Constant, 
-_SC_SIGQUEUE_MAX, Constant, 
-_SC_STREAM_MAX, Constant, 
-_SC_THREAD_DESTRUCTOR_ITERATIONS, Constant, 
-_SC_THREAD_KEYS_MAX, Constant, 
-_SC_THREAD_STACK_MIN, Constant, 
-_SC_THREAD_THREADS_MAX, Constant, 
-_SC_TIMER_MAX, Constant, 
-_SC_TTY_NAME_MAX, Constant, 
-_SC_TZNAME_MAX, Constant, 
-_SC_ASYNCHRONOUS_IO, Constant, 
-_SC_FSYNC, Constant, 
-_SC_JOB_CONROL, Constant, 
-_SC_MAPPED_FILES, Constant, 
-_SC_MEMLOCK, Constant, 
-_SC_MEMLOCK_RANGE, Constant, 
-_SC_MEMORY_PROTECTION, Constant, 
-_SC_MESSAGE_PASSING, Constant, 
-_SC_PRIORITIZED_IO, Constant, 
-_SC_PRIORITY_SCHEDULING, Constant, 
-_SC_REALTIME_SIGNALS, Constant, 
-_SC_SAVED_IDS, Constant, 
-_SC_SEMAPHORES, Constant, 
-_SC_SHARED_MEMORY_OBJECTS, Constant, 
-_SC_SYNCHRONIZED_IO, Constant, 
-_SC_TIMERS, Constant, 
-_SC_THREADS, Constant, 
-_SC_THREAD_ATTR_STACKADDR, Constant, 
-_SC_THREAD_ATTR_STACKSIZE, Constant, 
-_SC_THREAD_PRIORITY_SCHEDULING, Constant, 
-_SC_THREAD_PRIO_INHERIT, Constant, 
-_SC_THREAD_PRIO_PROTECT, Constant, 
-_SC_THREAD_PROCESS_SHARED, Constant, 
-_SC_THREAD_SAFE_FUNCTIONS, Constant, 
-_SC_VERSION, Constant, 
-_CLK_TCK, Constant, 
+_SC_AIO_LISTIO_MAX, Constant, Implemented
+_SC_AIO_MAX, Constant, Implemented
+_SC_AIO_PRIO_DELTA_MAX, Constant, Implemented
+_SC_ARG_MAX, Constant, Implemented
+_SC_CHILD_MAX, Constant, Implemented
+_SC_CLK_TCK, Constant, Implemented
+CLK_TCK, Constant, Implemented
+_SC_DELAYTIMER_MAX, Constant, Implemented
+_SC_GETGR_R_SIZE_MAX, Constant, Implemented
+_SC_GETPW_R_SIZE_MAX, Constant, Implemented
+_SC_LOGIN_NAME_MAX, Constant, Implemented
+_SC_MQ_OPEN_MAX, Constant, Implemented
+_SC_MQ_PRIO_MAX, Constant, Implemented
+_SC_NGROUPS_MAX, Constant, Implemented
+_SC_OPEN_MAX, Constant, Implemented
+_SC_PAGESIZE, Constant, Implemented
+_SC_RTSIG_MAX, Constant, Implemented
+_SC_SEM_NSEMS_MAX, Constant, Implemented
+_SC_SEM_VALUE_MAX, Constant, Implemented
+_SC_SIGQUEUE_MAX, Constant, Implemented
+_SC_STREAM_MAX, Constant, Implemented
+_SC_THREAD_DESTRUCTOR_ITERATIONS, Constant, Implemented
+_SC_THREAD_KEYS_MAX, Constant, Implemented
+_SC_THREAD_STACK_MIN, Constant, Implemented
+_SC_THREAD_THREADS_MAX, Constant, Implemented
+_SC_TIMER_MAX, Constant, Implemented
+_SC_TTY_NAME_MAX, Constant, Implemented
+_SC_TZNAME_MAX, Constant, Implemented
+_SC_ASYNCHRONOUS_IO, Constant, Implemented
+_SC_FSYNC, Constant, Implemented
+_SC_JOB_CONROL, Constant, Implemented
+_SC_MAPPED_FILES, Constant, Implemented
+_SC_MEMLOCK, Constant, Implemented
+_SC_MEMLOCK_RANGE, Constant, Implemented
+_SC_MEMORY_PROTECTION, Constant, Implemented
+_SC_MESSAGE_PASSING, Constant, Implemented
+_SC_PRIORITIZED_IO, Constant, Implemented
+_SC_PRIORITY_SCHEDULING, Constant, Unimplemented
+_SC_REALTIME_SIGNALS, Constant, Implemented
+_SC_SAVED_IDS, Constant, Implemented
+_SC_SEMAPHORES, Constant, Implemented
+_SC_SHARED_MEMORY_OBJECTS, Constant, Implemented
+_SC_SYNCHRONIZED_IO, Constant, Implemented
+_SC_TIMERS, Constant, Implemented
+_SC_THREADS, Constant, Implemented
+_SC_THREAD_ATTR_STACKADDR, Constant, Implemented
+_SC_THREAD_ATTR_STACKSIZE, Constant, Implemented
+_SC_THREAD_PRIORITY_SCHEDULING, Constant, Implemented
+_SC_THREAD_PRIO_INHERIT, Constant, Implemented
+_SC_THREAD_PRIO_PROTECT, Constant, Unimplemented
+_SC_THREAD_PROCESS_SHARED, Constant, Implemented
+_SC_THREAD_SAFE_FUNCTIONS, Constant, Implemented
+_SC_VERSION, Constant, Implemented
 @end example
