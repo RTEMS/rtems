@@ -54,16 +54,6 @@ close(int fd)
 }
 
 /*
- * isatty -- returns 1 if connected to a terminal device,
- *           returns 0 if not.
- */
-int
-isatty(int fd)
-{
-    return __rtems_isatty(fd);
-}
-
-/*
  * lseek -- move read/write pointer. Since a serial port
  *          is non-seekable, we return an error.
  */

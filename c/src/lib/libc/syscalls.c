@@ -71,15 +71,6 @@ int __rtems_fstat(int _fd, struct stat* _sbuf)
   return 0;
 }
 
-int __rtems_isatty(int _fd)
-{
-  struct stat st;
-
-  if (__rtems_fstat(_fd, &st) < 0)
-    return 0;
-  return S_ISCHR (st.st_mode);
-}
-
 #if !defined(RTEMS_UNIX)
 int stat( const char *path, struct stat *buf )
 {

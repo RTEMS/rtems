@@ -97,7 +97,6 @@ int __rtems_write(int fd, const void *buffer, unsigned32 count);
 int __rtems_ioctl(int fd, unsigned32  command, void *buffer);
 int __rtems_lseek(int fd, rtems_libio_offset_t offset, int whence);
 int __rtems_fstat(int _fd, struct stat* _sbuf);
-int __rtems_isatty(int _fd);
 
 /*
  * External I/O handlers
