@@ -1,3 +1,7 @@
+	* irq/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* motorola/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* openpic/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* pci/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* residual/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* start/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* startup/Makefile.am: Remove AUTOMAKE_OPTIONS.
