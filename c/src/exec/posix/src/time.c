@@ -247,6 +247,9 @@ int nanosleep(
 {
   Watchdog_Interval ticks;
 
+  if ( !rqtp )
+    set_errno_and_return_minus_one( EINVAL );
+
   /*
    *  Return EAGAIN if the delay interval is negative.  
    *
@@ -272,6 +275,10 @@ int nanosleep(
   if ( !ticks ) {
     _Thread_Yield_processor();
     _Thread_Dispatch();
+    if ( rmtp ) {
+       rmtp->tv_sec = 0; 
+       rmtp->tv_nsec = 0; 
+    }
     return 0;
   }
   
