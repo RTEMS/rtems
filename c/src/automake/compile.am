@@ -100,7 +100,7 @@ ${ARCH}/%.o: %.S $(ARCH)/$(dirstamp)
 	${CCASCOMPILE} -DASM -o $@ -c $<
 
 ${ARCH}/$(dirstamp):
-	@$(mkinstalldirs) $(ARCH)
+	@$(mkdir_p) $(ARCH)
 	@: > $(ARCH)/$(dirstamp)
 
 # Dependency files for use by gmake

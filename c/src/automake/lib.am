@@ -9,16 +9,10 @@ RANLIB = @RANLIB@
 ARFLAGS = ruv
 
 define make-library
-test -d $(ARCH) || mkdir $(ARCH)
+@$(mkdir_p) $(ARCH)
 $(RM) $@
 $(AR) $(ARFLAGS) $@ $^
 $(RANLIB) $@
 endef
 
-$(PROJECT_RELEASE)/lib/$(dirstamp):
-	@$(mkinstalldirs) $@
-	@: > $(PROJECT_RELEASE)/lib/$(dirstamp)
-
-TMPINSTALL_FILES = $(PROJECT_RELEASE)/lib
-
-.PRECIOUS: $(LIB)
+TMPINSTALL_FILES =

@@ -33,12 +33,6 @@ AC_SUBST(RTEMS_BSP_SPECS)
 GCC_SPECS="-B\$(PROJECT_ROOT)/lib/ -B\$(PROJECT_ROOT)/$RTEMS_BSP/lib/"
 AC_SUBST(GCC_SPECS)
 
-PROJECT_INCLUDE="\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"
-AC_SUBST(PROJECT_INCLUDE)
-
-PROJECT_RELEASE="\$(PROJECT_ROOT)/$RTEMS_BSP"   
-AC_SUBST(PROJECT_RELEASE)
-
 RTEMS_ROOT="\$(PROJECT_ROOT)/c/$RTEMS_BSP"
 AC_SUBST(RTEMS_ROOT)
 
@@ -51,6 +45,9 @@ AM_CONDITIONAL([MULTILIB],[false])
 includedir="\${exec_prefix}/${RTEMS_BSP}/lib/include"
 libdir="\${exec_prefix}/${RTEMS_BSP}/lib"
 
-AC_SUBST([bsplibdir],["\${exec_prefix}/${RTEMS_BSP}/lib"])
+AC_SUBST([PROJECT_INCLUDE],["\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"])
+AC_SUBST([PROJECT_RELEASE],["\$(PROJECT_ROOT)/$RTEMS_BSP"])
+
 AC_SUBST([project_libdir],["\$(libdir)"])
+AC_SUBST([project_includedir],["\$(includedir)"])
 ])
