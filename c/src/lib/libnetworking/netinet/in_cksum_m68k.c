@@ -37,7 +37,7 @@
 #include <sys/param.h>
 #include <sys/mbuf.h>
 
-#if (defined(__GNUC__) && (defined(__mc68000__) || defined(__m68k__)))
+#if (defined(__GNUC__) && (defined(__mc68000__) || defined(__m68k__)) && (!__mcf5200__))
 
 #define REDUCE { sum = (sum & 0xFFFF) + (sum >> 16); if (sum > 0xFFFF) sum -= 0xFFFF; }
 
