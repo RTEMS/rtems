@@ -79,7 +79,7 @@ if test "$no_recursion" != yes; then
         AC_MSG_ERROR([$ac_sub_configure failed for $ac_subdir])
     fi
 
-    cd $ac_popdir
+    cd "$ac_popdir"
   done
 fi
 fi
