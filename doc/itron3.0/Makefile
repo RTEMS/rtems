@@ -7,17 +7,13 @@
 #
 
 PROJECT=itron
-TEXI2DVI=../tools/texi2dvi
-MAKEINFO=makeinfo
-TEXI2WWW=../tools/texi2www
-BMENU=../tools/bmenu
-TEXI2WWW_ARGS=-dirfile ../../../index.html \
-          -header ../tools/rtems_header.html \
-          -footer ../tools/rtems_footer.html \
-          -icons  .
 
+include ../Make.config
 
-all: html info ps
+all: html info ps pdf
+
+dirs:
+	$(make-dirs)
 
 COMMON_FILES=
 
@@ -25,8 +21,7 @@ GENERATED_FILES= \
     status.texi \
     task.texi tasksync.texi semaphore.texi eventflags.texi mailbox.texi \
     msgbuffer.texi rendezvous.texi interrupt.texi memorypool.texi \
-    fixedblock.texi time.texi config.texi network.texi \
-    psxmsg.texi psxsem.texi
+    fixedblock.texi time.texi config.texi network.texi
 
 FILES= $(PROJECT).texi \
   $(COMMON_FILES) $(GENERATED_FILES)
@@ -42,19 +37,23 @@ dvi: $(PROJECT).dvi
 ps: $(PROJECT).ps
 pdf: $(PROJECT).pdf
 	
+$(PROJECT).pdf: $(FILES)
+	$(TEXI2PDF) $(PROJECT).texi
+	cp $(PROJECT).pdf $(WWW_INSTALL)/$(PROJECT)
+
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
+	cp $(PROJECT).ps $(WWW_INSTALL)/$(PROJECT)
 
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
-
-$(PROJECT).pdf: $(FILES)
-	$(TEXI2DVI) $(PROJECT).texi
+	cp $(PROJECT).dvi $(WWW_INSTALL)/$(PROJECT)
 
 html: $(FILES)
 	-mkdir -p html
-	cp $(wildcard ../tools/*.gif) html
-	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir html $(PROJECT).texi
+	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
+	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
+ 	    $(PROJECT).texi
 
 clean:
 	rm -f *.o $(PROG) *.txt core *.html 
@@ -128,16 +127,6 @@ config.texi: config.t Makefile
 	    -n "" ${*}.t
 
 network.texi: network.t Makefile
-	$(BMENU) -p "" \
-	    -u "Top" \
-	    -n "" ${*}.t
-
-psxmsg.texi: psxmsg.t Makefile
-	$(BMENU) -p "" \
-	    -u "Top" \
-	    -n "" ${*}.t
-
-psxsem.texi: psxsem.t Makefile
 	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
