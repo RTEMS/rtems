@@ -62,7 +62,6 @@ int unmount(
   int                                   status;
   rtems_filesystem_location_info_t      temp_loc;
   rtems_filesystem_mount_table_entry_t  temp_mt_entry;
-  int                                   result;
 
   /*
    *  Are there any file systems below the mount_path specified
@@ -101,7 +100,7 @@ int unmount(
   /*
    * Allow the file system being mounted on to do its cleanup.
    * XXX - Did I change these correctly ??? It looks like either I did
-   * XXX   this backwards or the IMFS_unmount and IMFS_fsumount are swaped.
+   * XXX   this backwards or the IMFS_unmount and IMFS_fsumount are swapped.
    * XXX   Add to the mt_point_node unmount to set the mt_entry back to null
    * XXX   I will step off in space when evaluating past the end of the node.
    */
@@ -121,12 +120,6 @@ int unmount(
   }
 
   /*
-   * Allow the file system to clean up.
-   */
-
-  result = (*temp_loc.ops->fsunmount_me)( temp_loc.mt_entry );
-
-  /*
    *  Extract the mount table entry from the chain
    */
 
@@ -139,8 +132,6 @@ int unmount(
   rtems_filesystem_freenode( &temp_loc.mt_entry->mt_point_node );
   free( temp_loc.mt_entry );
   rtems_filesystem_freenode( &temp_loc );
-
-  return result;
 
 }
 
