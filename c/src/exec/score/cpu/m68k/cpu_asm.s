@@ -133,8 +133,8 @@ norst:  frestore a0@+                     | restore the fp state frame
         .global SYM (_ISR_Handler)
 
 SYM (_ISR_Handler):
-        addql   #1,SYM (_ISR_Nest_level) | one nest level deeper
         addql   #1,SYM (_Thread_Dispatch_disable_level) | disable multitasking
+        addql   #1,SYM (_ISR_Nest_level) | one nest level deeper
         moveml  d0-d1/a0-a1,a7@-         | save d0-d1,a0-a1
 
 /*
