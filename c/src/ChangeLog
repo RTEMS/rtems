@@ -1,5 +1,10 @@
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
+
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/lead-dot.m4: Remove (Provided by automake-1.8).
 	* automake/compile.am: Use mkdir_p instead of mkinstalldirs.
 	* automake/lib.am: Use mkdir_p instead of mkdir.

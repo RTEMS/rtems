@@ -68,6 +68,10 @@ $(ARCH)/librtemsbsp$(LIB_VARIANT).a: $(SRCS) $(ARCH)/$(dirstamp)
 	$(AR) rc $@ $(ARCH)/*
 	$(RANLIB) $@
 
+${PROJECT_RELEASE}/lib/$(dirstamp):
+	@$(mkdir_p) ${PROJECT_RELEASE}/lib
+	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+
 ${PROJECT_RELEASE}/lib/librtemsbsp$(LIB_VARIANT).a: $(ARCH)/librtemsbsp$(LIB_VARIANT).a ${PROJECT_RELEASE}/lib/$(dirstamp)
 	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/librtemsbsp$(LIB_VARIANT).a
 TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/librtemsbsp$(LIB_VARIANT).a
