@@ -1,3 +1,8 @@
+2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/env-rtemsbsp.m4: Add PROJECT_LIB.
+	* wrapup/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Use mkdir_p. Remove dirs from
