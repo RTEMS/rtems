@@ -81,6 +81,8 @@ void TestCre()
     puts( "Init - cre_mbf - negative values for bufsz returns E_PAR" );
     pk_cmbf.bufsz = -1;
     pk_cmbf.maxmsz  = 100;
+    pk_cmbf.mbfatr  = 0;
+    pk_cmbf.exinf   = NULL;
     status = cre_mbf( 1, &pk_cmbf );
     assert( status == E_PAR );
 
