@@ -2,7 +2,7 @@
 
 	* gcc3newlib/base-gnat.add: Don't use %{%prefix}/bin/gnat*.
 	* gcc3newlib/Makefile.am: Use mkspec for c4x.
-	* gcc3newlib/target-gnat.add: Rework processing of %if %build_XXX.
+	* gcc3newlib/gccnewlib.add: Rework processing of %if %build_XXX.
 	Rework handing Ada.
 	Don't put adalib and adainclude into files.gcc.
 	* gcc3newlib/target-gnat.add: Add adalib.
