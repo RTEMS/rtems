@@ -775,10 +775,17 @@ rtems_fec_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching )
     /*
      * Process options
      */
-    if (config->hardware_address)
+    if (config->hardware_address) {
         hwaddr = config->hardware_address;
-    else
-        hwaddr = uC5282_gethwaddr(unitNumber - 1);
+    }
+    else if ((hwaddr = uC5282_gethwaddr(unitNumber - 1)) == NULL) {
+        /* Locally-administered address */
+        static const char defaultAddress[ETHER_ADDR_LEN] = {
+                                            0x06, 'R', 'T', 'E', 'M', 'S'};
+        printf ("WARNING -- No %s%d Ethernet address specified -- Using default address.\n",
+                                                        unitName, unitNumber);
+        hwaddr = defaultAddress;
+    }
     printf("%s%d: Ethernet address: %02x:%02x:%02x:%02x:%02x:%02x\n",
                                             unitName, unitNumber,
                                             hwaddr[0], hwaddr[1], hwaddr[2],
