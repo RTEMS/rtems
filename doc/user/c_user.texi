@@ -86,6 +86,7 @@ END-INFO-DIR-ENTRY
 @include preface.texi
 @include overview.texi
 @include concepts.texi
+@include datatypes.texi
 @include init.texi
 @include task.texi
 @include intr.texi
@@ -119,6 +120,7 @@ This is the online version of the RTEMS C User's Guide.
 * Preface::
 * Overview::
 * Key Concepts::
+* RTEMS Data Types::
 * Initialization Manager::
 * Task Manager::
 * Interrupt Manager::

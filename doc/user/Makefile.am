@@ -16,8 +16,8 @@ COMMON_FILES=$(top_srcdir)/common/cpright.texi
 
 FILES= bsp.texi dirstat.texi example.texi glossary.texi preface.texi
 
-GENERATED_FILES=overview.texi concepts.texi init.texi task.texi \
-    intr.texi clock.texi timer.texi sem.texi msg.texi \
+GENERATED_FILES=overview.texi concepts.texi datatypes.texi init.texi \
+    task.texi intr.texi clock.texi timer.texi sem.texi msg.texi \
     event.texi signal.texi part.texi region.texi \
     dpmem.texi io.texi fatal.texi schedule.texi rtmon.texi \
     bsp.texi userext.texi conf.texi mp.texi 
@@ -49,10 +49,15 @@ overview.texi: overview.t
 concepts.texi: concepts.t
 	$(BMENU) -p "Overview Manual Organization" \
 	    -u "Top" \
+	    -n "RTEMS Data Types" $<
+
+datatypes.texi: datatypes.t
+	$(BMENU) -p "Key Concepts Memory Management" \
+	    -u "Top" \
 	    -n "Initialization Manager" $<
 
 init.texi: init.t
-	$(BMENU) -p "Key Concepts Memory Management" \
+	$(BMENU) -p "RTEMS Data Types List of Data Types" \
 	    -u "Top" \
 	    -n "Task Manager" $<
 
