@@ -1,3 +1,14 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* include/rtems/score/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* include/rtems/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* shmdr/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bsp.am: Add line break, remove comment.
