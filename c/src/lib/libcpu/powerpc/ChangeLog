@@ -1,3 +1,12 @@
+2003-07-08	Joel Sherrill <joel@OARcorp.com>
+
+	PR 416/bsps
+	* ppc403/ictrl/ictrl.c (ictrl_isr): We acknolwegde the interrupt in
+	interrupt controller (clr_exisr(mask)) before calling the interrupt
+	handler that will acnowledge the interrupt source. This results in
+	the interrupt beeing seen a second time by the interrupt controller.
+	Reported and fixed by El Kolli Yacine <yacine.elkolli@crf.canon.fr>.
+
 2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	PR 368/filesystems
