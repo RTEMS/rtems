@@ -76,7 +76,7 @@ transfers.
 @end ifinfo
 @subsection Creating a Port
 
-The port_create directive creates a port into a DPMA
+The @code{@value{DIRPREFIX}port_create} directive creates a port into a DPMA
 with the user-defined name.  The user specifies the association
 between internal and external representations for the port being
 created.  RTEMS allocates a Dual-Ported Memory Control Block
@@ -94,9 +94,11 @@ within it.
 When a port is created, RTEMS generates a unique port
 ID and assigns it to the created port until it is deleted.  The
 port ID may be obtained by either of two methods.  First, as the
-result of an invocation of the port_create directive, the task
+result of an invocation of the
+@code{@value{DIRPREFIX}port_create} directive, the task
 ID is stored in a user provided location.  Second, the port ID
-may be obtained later using the port_ident directive.  The port
+may be obtained later using the
+@code{@value{DIRPREFIX}port_ident} directive.  The port
 ID is used by other dual-ported memory manager directives to
 access this port.
 
@@ -105,9 +107,10 @@ access this port.
 @end ifinfo
 @subsection Converting an Address
 
-The port_external_to_internal directive is used to
+The @code{@value{DIRPREFIX}port_external_to_internal} directive is used to
 convert an address from external to internal representation for
-the specified port.  The port_internal_to_external directive is
+the specified port.  
+The @code{@value{DIRPREFIX}port_internal_to_external} directive is
 used to convert an address from internal to external
 representation for the specified port.  If an attempt is made to
 convert an address which lies outside the specified DPMA, then
@@ -119,7 +122,7 @@ the address to be converted will be returned.
 @subsection Deleting a DPMA Port
 
 A port can be removed from the system and returned to
-RTEMS with the port_delete directive.  When a port is deleted,
+RTEMS with the @code{@value{DIRPREFIX}port_delete} directive.  When a port is deleted,
 its control block is returned to the DPCB free list.
 
 @ifinfo

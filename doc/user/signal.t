@@ -108,9 +108,11 @@ bitwise OR and addition operations are equivalent as long as
 each signal appears exactly once in the component list.
 
 This example demonstrates the signal parameter used
-when sending the signal set consisting of 
-@code{@value{RPREFIX}SIGNAL_6}, @code{@value{RPREFIX}SIGNAL_15}, and @code{@value{RPREFIX}SIGNAL_31}.  
-The signal parameter provided to the signal_send directive should be
+when sending the signal set consisting of
+@code{@value{RPREFIX}SIGNAL_6},
+@code{@value{RPREFIX}SIGNAL_15}, and
+@code{@value{RPREFIX}SIGNAL_31}.  The signal parameter provided
+to the @code{@value{DIRPREFIX}signal_send} directive should be
 @code{@value{RPREFIX}SIGNAL_6 @value{OR} 
 @value{RPREFIX}SIGNAL_15 @value{OR} @value{RPREFIX}SIGNAL_31}.
 
@@ -161,7 +163,8 @@ defaults are desired, the mode DEFAULT_MODES should be specified
 on this call.
 
 This example demonstrates the mode parameter used
-with the signal_catch to establish an ASR which executes at
+with the @code{@value{DIRPREFIX}signal_catch}
+to establish an ASR which executes at
 interrupt level three and is non-preemptible.  The mode should
 be set to
 @code{@value{RPREFIX}INTERRUPT_LEVEL(3) @value{OR} @value{RPREFIX}NO_PREEMPT}
@@ -185,27 +188,28 @@ desired processor mode and interrupt level.
 @end ifinfo
 @subsection Establishing an ASR
 
-The signal_catch directive establishes an ASR for the
+The @code{@value{DIRPREFIX}signal_catch} directive establishes an ASR for the
 calling task.  The address of the ASR and its execution mode are
 specified to this directive.  The ASR's mode is distinct from
 the task's mode.  For example, the task may allow preemption,
 while that task's ASR may have preemption disabled.  Until a
-task calls signal_catch the first time, its ASR is invalid, and
-no signal sets can be sent to the task.
+task calls @code{@value{DIRPREFIX}signal_catch} the first time,
+its ASR is invalid, and no signal sets can be sent to the task.
 
 A task may invalidate its ASR and discard all pending
-signals by calling signal_catch with a value of NULL for the
-ASR's address.  When a task's ASR is invalid, new signal sets
-sent to this task are discarded.
+signals by calling @code{@value{DIRPREFIX}signal_catch}
+with a value of NULL for the ASR's address.  When a task's
+ASR is invalid, new signal sets sent to this task are discarded.
 
-A task may disable ASR processing (NO_ASR) via the
+A task may disable ASR processing (@code{@value{RPREFIX}NO_ASR}) via the
 task_mode directive.  When a task's ASR is disabled, the signals
 sent to it are left pending to be processed later when the ASR
 is enabled.
 
 Any directive that can be called from a task can also
 be called from an ASR.  A task is only allowed one active ASR.
-Thus, each call to signal_catch replaces the previous one.
+Thus, each call to @code{@value{DIRPREFIX}signal_catch}
+replaces the previous one.
 
 Normally, signal processing is disabled for the ASR's
 execution mode, but if signal processing is enabled for the ASR,
@@ -216,9 +220,10 @@ the ASR must be reentrant.
 @end ifinfo
 @subsection Sending a Signal Set
 
-The signal_send directive allows both tasks and ISRs
-to send signals to a target task.  The target task and a set of
-signals are specified to the signal_send directive.  The sending
+The @code{@value{DIRPREFIX}signal_send} directive allows both
+tasks and ISRs to send signals to a target task.  The target task and
+a set of signals are specified to the
+@code{@value{DIRPREFIX}signal_send} directive.  The sending
 of a signal to a task has no effect on the execution state of
 that task.  If the task is not the currently running task, then
 the signals are left pending and processed by the task's ASR the

@@ -79,7 +79,8 @@ entry points:
 
 If the device driver does not support a particular
 entry point, then that entry in the Configuration Table should
-be NULL.  RTEMS will return @code{@value{RPREFIX}SUCCESSFUL} as the executive's and
+be NULL.  RTEMS will return
+@code{@value{RPREFIX}SUCCESSFUL} as the executive's and
 zero (0) as the device driver's return code for these device
 driver entry points.
 
@@ -223,10 +224,11 @@ the fatal_error_occurred directive.
 @end ifinfo
 @subsection Register and Lookup Name
 
-The io_register directive associates a name with the
+The @code{@value{DIRPREFIX}io_register} directive associates a name with the
 specified device (i.e. major/minor number pair).  Device names
 are typically registered as part of the device driver
-initialization sequence.  The io_lookup directive is used to
+initialization sequence.  The @code{@value{DIRPREFIX}io_lookup}
+directive is used to
 determine the major/minor number pair associated with the
 specified device name.  The use of these directives frees the
 application from being dependent on the arbitrary assignment of
@@ -241,9 +243,14 @@ conventions are dictated by RTEMS.
 The I/O manager provides directives which enable the
 application program to utilize device drivers in a standard
 manner.  There is a direct correlation between the RTEMS I/O
-manager directives io_initialize, io_open, io_close, io_read,
-io_write, and io_control and the underlying device driver entry
-points.
+manager directives
+@code{@value{DIRPREFIX}io_initialize},
+@code{@value{DIRPREFIX}io_open},
+@code{@value{DIRPREFIX}io_close},
+@code{@value{DIRPREFIX}io_read},
+@code{@value{DIRPREFIX}io_write}, and
+@code{@value{DIRPREFIX}io_control}
+and the underlying device driver entry points.
 
 @ifinfo
 @node I/O Manager Directives, IO_INITIALIZE - Initialize a device driver, Accessing an Device Driver, I/O Manager

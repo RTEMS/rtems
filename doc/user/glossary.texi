@@ -573,7 +573,8 @@ access must be controlled.
 
 @item resume
 Removing a task from the suspend state.  If
-the task's state is ready following a call to the task_resume
+the task's state is ready following a call to the 
+@code{@value{DIRPREFIX}task_resume}
 directive, then the task is available for scheduling.
 
 @item return code
@@ -657,8 +658,8 @@ value.
 
 @item suspend
 A term used to describe a task that is not
-competing for the CPU because it has had a task_suspend
-directive.
+competing for the CPU because it has had a 
+@code{@value{DIRPREFIX}task_suspend} directive.
 
 @item synchronous
 Related in order or timing to other
@@ -691,7 +692,8 @@ An acronym for Task Control Block.
 @item tick
 The basic unit of time used by RTEMS.  It is a
 user-configurable number of microseconds.  The current tick
-expires when the clock_tick directive is invoked.
+expires when the @code{@value{DIRPREFIX}clock_tick}
+directive is invoked.
 
 @item tightly-coupled
 A multiprocessor configuration

@@ -123,7 +123,8 @@ other task is made ready to execute.
 @subsection Initialization Manager Failure
 
 The fatal_error_occurred directive will be called
-from initialize_executive for any of the following reasons:
+from @code{@value{DIRPREFIX}initialize_executive}
+for any of the following reasons:
 
 @itemize @bullet
 @item If either the Configuration Table or the CPU Dependent
@@ -170,11 +171,13 @@ created or started successfully.
 @end ifinfo
 @subsection Initializing RTEMS
 
-The initialize_executive directive is called by the
+The @code{@value{DIRPREFIX}initialize_executive}
+directive is called by the
 board support package at the completion of its initialization
 sequence.  RTEMS assumes that the board support package
 successfully completed its initialization activities.  The
-initialize_executive directive completes the initialization
+@code{@value{DIRPREFIX}initialize_executive}
+directive completes the initialization
 sequence by performing the following actions:
 
 @itemize @bullet
@@ -188,7 +191,8 @@ sequence by performing the following actions:
 
 This directive MUST be called before any other RTEMS
 directives.  The effect of calling any RTEMS directives before
-initialize_executive is unpredictable.  Many of RTEMS actions
+@code{@value{DIRPREFIX}initialize_executive}
+is unpredictable.  Many of RTEMS actions
 during initialization are based upon the contents of the
 Configuration Table and CPU Dependent Information Table.  For
 more information regarding the format and contents of these
@@ -198,17 +202,22 @@ The final step in the initialization sequence is the
 initiation of multitasking.  When the scheduler and dispatcher
 are enabled, the highest priority, ready task will be dispatched
 to run.  Control will not be returned to the board support
-package after multitasking is enabled until shutdown_executive
+package after multitasking is enabled until
+@code{@value{DIRPREFIX}shutdown_executive}
 the directive is called.
 
-The initialize_executive directive provides a
+The @code{@value{DIRPREFIX}initialize_executive}
+directive provides a
 conceptually simple way to initialize RTEMS.  However, in
 certain cases, this mechanism cannot be used.  The
-initialize_executive_early and initialize_executive_late
+@code{@value{DIRPREFIX}initialize_executive_early}
+and @code{@value{DIRPREFIX}initialize_executive_late}
 directives are provided as an alternative mechanism for
-initializing RTEMS.  The initialize_executive_early directive
+initializing RTEMS.  The
+@code{@value{DIRPREFIX}initialize_executive_early} directive
 returns to the caller BEFORE initiating multitasking.  The
-initialize_executive_late directive is invoked to start
+@code{@value{DIRPREFIX}initialize_executive_late}
+directive is invoked to start
 multitasking.  It is critical that only one of the RTEMS
 initialization sequences be used in an application.
 
@@ -217,11 +226,11 @@ initialization sequences be used in an application.
 @end ifinfo
 @subsection Shutting Down RTEMS
 
-The shutdown_executive directive is invoked by the
+The @code{@value{DIRPREFIX}shutdown_executive} directive is invoked by the
 application to end multitasking and return control to the board
 support package.  The board support package resumes execution at
 the code immediately following the invocation of the
-initialize_executive directive.
+@code{@value{DIRPREFIX}initialize_executive} directive.
 
 @ifinfo
 @node Initialization Manager Directives, INITIALIZE_EXECUTIVE - Initialize RTEMS, Shutting Down RTEMS, Initialization Manager
@@ -281,13 +290,15 @@ Information Table, User Initialization Tasks Table, Device
 Driver Table, User Extension Table, Multiprocessor Configuration
 Table, and the Multiprocessor Communications Interface (MPCI)
 Table.  This directive starts multitasking and does not return
-to the caller until the shutdown_executive directive is invoked.
+to the caller until the @code{@value{DIRPREFIX}shutdown_executive}
+directive is invoked.
 
 @subheading NOTES:
 
 This directive MUST be the first RTEMS directive
 called and it DOES NOT RETURN to the caller until the
-shutdown_executive is invoked.
+@code{@value{DIRPREFIX}shutdown_executive}
+is invoked.
 
 This directive causes all nodes in the system to
 verify that certain configuration parameters are the same as
@@ -295,11 +306,15 @@ those of the local node.  If an inconsistency is detected, then
 a fatal error is generated.
 
 The application must use only one of the two
-initialization sequences: initialize_executive or
-initialize_executive_early and initialize_executive_late.  The
-initialize_executive directive is logically equivalent to
-invoking initialize_executive_early and
-initialize_executive_late with no intervening actions.
+initialization sequences: 
+@code{@value{DIRPREFIX}initialize_executive} or
+@code{@value{DIRPREFIX}initialize_executive_early} and 
+@code{@value{DIRPREFIX}initialize_executive_late}.  The
+@code{@value{DIRPREFIX}initialize_executive}
+directive is logically equivalent to invoking 
+@code{@value{DIRPREFIX}initialize_executive_early} and
+@code{@value{DIRPREFIX}initialize_executive_late}
+with no intervening actions.
 
 @page
 @ifinfo
@@ -345,13 +360,16 @@ Table.  This directive returns to the caller after completing
 the basic RTEMS initialization but before multitasking is
 initiated.  The interrupt level in place when the directive is
 invoked is returned to the caller.  This interrupt level should
-be the same one passed to initialize_executive_late.
+be the same one passed to
+@code{@value{DIRPREFIX}initialize_executive_late}.
 
 @subheading NOTES:
 
 The application must use only one of the two
-initialization sequences: initialize_executive or
-initialize_executive_early and initialize_executive_late.
+initialization sequences:
+@code{@value{DIRPREFIX}initialize_executive} or
+@code{@value{DIRPREFIX}nitialize_executive_early} and 
+@code{@value{DIRPREFIX}nitialize_executive_late}.
 
 @page
 @ifinfo
@@ -384,18 +402,21 @@ NONE
 @subheading DESCRIPTION:
 
 This directive is called after the
-initialize_executive_early directive has been called to complete
+@code{@value{DIRPREFIX}initialize_executive_early}
+directive has been called to complete
 the RTEMS initialization sequence and initiate multitasking.
-The interrupt level returned by the initialize_executive_early
+The interrupt level returned by the
+@code{@value{DIRPREFIX}initialize_executive_early}
 directive should be in bsp_level and this value is restored as
 part of this directive returning to the caller after the
-shutdown_executive directive is invoked.
+@code{@value{DIRPREFIX}shutdown_executive}
+directive is invoked.
 
 @subheading NOTES:
 
 This directive MUST be the second RTEMS directive
 called and it DOES NOT RETURN to the caller until the
-shutdown_executive is invoked.
+@code{@value{DIRPREFIX}shutdown_executive} is invoked.
 
 This directive causes all nodes in the system to
 verify that certain configuration parameters are the same as
@@ -403,8 +424,10 @@ those of the local node.  If an inconsistency is detected, then
 a fatal error is generated.
 
 The application must use only one of the two
-initialization sequences: initialize_executive or
-initialize_executive_early and initialize_executive_late.
+initialization sequences:
+@code{@value{DIRPREFIX}initialize_executive} or
+@code{@value{DIRPREFIX}nitialize_executive_early} and
+@code{@value{DIRPREFIX}initialize_executive_late}.
 
 
 
@@ -442,7 +465,7 @@ This directive is called when the application wishes
 to shutdown RTEMS and return control to the board support
 package.  The board support package resumes execution at the
 code immediately following the invocation of the
-initialize_executive directive.
+@code{@value{DIRPREFIX}initialize_executive} directive.
 
 @subheading NOTES:
 

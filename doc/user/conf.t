@@ -35,8 +35,9 @@ The RTEMS Configuration Table is used to tailor an
 application for its specific needs.  For example, the user can
 configure the number of device drivers or which APIs may be used.
 THe address of the user-defined Configuration Table is passed as an
-argument to the initialize_executive directive, which MUST be
-the first RTEMS directive called.  The RTEMS Configuration Table
+argument to the @code{@value{DIRPREFIX}initialize_executive}
+directive, which MUST be the first RTEMS directive called.  
+The RTEMS Configuration Table
 is defined in the following @value{LANGUAGE} @value{STRUCTURE}:
 
 @ifset is-C
@@ -90,7 +91,7 @@ This area contains items such as the
 various object control blocks (TCBs, QCBs, ...) and task stacks.
 If the address is not aligned on a four-word boundary, then
 RTEMS will invoke the fatal error handler during
-initialize_executive.
+@code{@value{DIRPREFIX}initialize_executive}.
 
 @item work_space_size
 is the calculated size of the
@@ -524,23 +525,24 @@ type Driver_Address_Table_Pointer is access all Driver_Address_Table;
 
 @table @b
 @item initialization
-is the address of the entry point called by io_initialize
+is the address of the entry point called by
+@code{@value{DIRPREFIX}io_initialize}
 to initialize a device driver and its associated devices.
 
 @item open
-is the address of the entry point called by io_open.
+is the address of the entry point called by @code{@value{DIRPREFIX}io_open}.
 
 @item close
-is the address of the entry point called by io_close.
+is the address of the entry point called by @code{@value{DIRPREFIX}io_close}.
 
 @item read
-is the address of the entry point called by io_read.
+is the address of the entry point called by @code{@value{DIRPREFIX}io_read}.
 
 @item write
-is the address of the entry point called by io_write.
+is the address of the entry point called by @code{@value{DIRPREFIX}io_write}.
 
 @item control
-is the address of the entry point called by io_control.
+is the address of the entry point called by @code{@value{DIRPREFIX}io_control}.
 
 @end table
 
@@ -690,12 +692,13 @@ subroutine which is invoked when a task exits.  This procedure
 is responsible for some action which will allow the system to
 continue execution (i.e. delete or restart the task) or to
 terminate with a fatal error.  If this field is set to NULL, the
-default RTEMS task_exitted handler will be invoked.
+default RTEMS TASK_EXITTED handler will be invoked.
 
 @item fatal
 is the address of the user-supplied
 subroutine for the FATAL extension.  This RTEMS extension of
-fatal error handling is called from the fatal_error_occurred
+fatal error handling is called from the 
+@code{@value{DIRPREFIX}fatal_error_occurred}
 directive.  If the user's fatal error handler returns or if this
 entry is NULL then the default RTEMS fatal error handler will be
 executed.
@@ -971,8 +974,10 @@ the RTEMS RAM Workspace.
 
 The starting address of the RTEMS RAM Workspace must
 be aligned on a four-byte boundary.  Failure to properly align
-the workspace area will result in the fatal_error_occurred
-directive being invoked with the @code{@value{RPREFIX}INVALID_ADDRESS} error code.
+the workspace area will result in the 
+@code{@value{DIRPREFIX}fatal_error_occurred}
+directive being invoked with the
+@code{@value{RPREFIX}INVALID_ADDRESS} error code.
 
 A worksheet is provided in the Memory Requirements
 chapter of the Applications Supplement document for a specific
@@ -1000,5 +1005,6 @@ each time one of the following events occurs:
 @end itemize
 
 Failure to provide enough space in the RTEMS RAM
-Workspace will result in the fatal_error_occurred directive
+Workspace will result in the 
+@code{@value{DIRPREFIX}fatal_error_occurred} directive
 being invoked with the appropriate error code.

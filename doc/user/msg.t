@@ -37,7 +37,7 @@ directives provided by the message manager are:
 @item @code{@value{DIRPREFIX}message_queue_broadcast} - Broadcast N messages to a queue
 @item @code{@value{DIRPREFIX}message_queue_receive} - Receive message from a queue
 @item @code{@value{DIRPREFIX}message_queue_get_number_pending} - Get number of messages pending on a queue
-@item @code{message_queue_flush} - Flush all messages on a queue
+@item @code{@value{DIRPREFIX}message_queue_flush} - Flush all messages on a queue
 @end itemize
 
 @ifinfo
@@ -71,8 +71,9 @@ user-defined and can be actual data, pointer(s), or empty.
 A message queue permits the passing of messages among
 tasks and ISRs.  Message queues can contain a variable number of
 messages.  Normally messages are sent to and received from the
-queue in FIFO order using the message_queue_send directive.
-However, the message_queue_urgent directive can be used to place
+queue in FIFO order using the @code{@value{DIRPREFIX}message_queue_send}
+directive.  However, the @code{@value{DIRPREFIX}message_queue_urgent}
+directive can be used to place
 messages at the head of a queue in LIFO order.
 
 Synchronization can be accomplished when a task can
@@ -99,22 +100,21 @@ queue attributes is provided in the following table:
 @end itemize
 
 
-
 An attribute listed as a default is not required to
 appear in the attribute list, although it is a good programming
 practice to specify default attributes.  If all defaults are
-desired, the attribute @code{@value{RPREFIX}DEFAULT_ATTRIBUTES} should be specified on
-this call.
+desired, the attribute @code{@value{RPREFIX}DEFAULT_ATTRIBUTES}
+should be specified on this call.
 
 This example demonstrates the attribute_set parameter
 needed to create a local message queue with the task priority
 waiting queue discipline.  The attribute_set parameter to the
-message_queue_create directive could be either 
+@code{@value{DIRPREFIX}message_queue_create} directive could be either 
 @code{@value{RPREFIX}PRIORITY} or
 @code{@value{RPREFIX}LOCAL @value{OR} @value{RPREFIX}PRIORITY}.  
 The attribute_set parameter can be set to @code{@value{RPREFIX}PRIORITY}
-because @code{@value{RPREFIX}LOCAL} is the default for all created message queues.  If
-a similar message queue were to be known globally, then the
+because @code{@value{RPREFIX}LOCAL} is the default for all created
+message queues.  If a similar message queue were to be known globally, then the
 attribute_set parameter would be
 @code{@value{RPREFIX}GLOBAL @value{OR} @value{RPREFIX}PRIORITY}.
 
@@ -125,8 +125,8 @@ attribute_set parameter would be
 
 In general, an option is built by a bitwise OR of the
 desired option components.  The set of valid options for the
-message_queue_receive directive are listed in the following
-table:
+@code{@value{DIRPREFIX}message_queue_receive} directive are
+listed in the following table:
 
 @itemize @bullet
 @item @code{@value{RPREFIX}WAIT} - task will wait for a message (default)
@@ -136,12 +136,13 @@ table:
 An option listed as a default is not required to
 appear in the option OR list, although it is a good programming
 practice to specify default options.  If all defaults are
-desired, the option @code{@value{RPREFIX}DEFAULT_OPTIONS} should be specified on this
-call.
+desired, the option @code{@value{RPREFIX}DEFAULT_OPTIONS} should
+be specified on this call.
 
 This example demonstrates the option parameter needed
 to poll for a message to arrive.  The option parameter passed to
-the message_queue_receive directive should be @code{@value{RPREFIX}NO_WAIT}.
+the @code{@value{DIRPREFIX}message_queue_receive} directive should
+be @code{@value{RPREFIX}NO_WAIT}.
 
 @ifinfo
 @node Message Manager Operations, Creating a Message Queue, Building a MESSAGE_QUEUE_RECEIVE Option Set, Message Manager
@@ -163,7 +164,7 @@ the message_queue_receive directive should be @code{@value{RPREFIX}NO_WAIT}.
 @end ifinfo
 @subsection Creating a Message Queue
 
-The message_queue_create directive creates a message
+The @code{@value{DIRPREFIX}message_queue_create} directive creates a message
 queue with the user-defined name.  The user specifies the
 maximum message size and maximum number of messages which can be
 placed in the message queue at one time.  The user may select
@@ -186,18 +187,18 @@ capable of transmitting.
 When a message queue is created, RTEMS generates a
 unique message queue ID.  The message queue ID may be obtained
 by either of two methods.  First, as the result of an invocation
-of the message_queue_create directive, the queue ID is stored in
-a user provided location.  Second, the queue ID may be obtained
-later using the message_queue_ident directive.  The queue ID is
-used by other message manager directives to access this message
-queue.
+of the @code{@value{DIRPREFIX}message_queue_create} directive, the
+queue ID is stored in a user provided location.  Second, the queue
+ID may be obtained later using the @code{@value{DIRPREFIX}message_queue_ident}
+directive.  The queue ID is used by other message manager
+directives to access this message queue.
 
 @ifinfo
 @node Receiving a Message, Sending a Message, Obtaining Message Queue IDs, Message Manager Operations
 @end ifinfo
 @subsection Receiving a Message
 
-The message_queue_receive directive attempts to
+The @code{@value{DIRPREFIX}message_queue_receive} directive attempts to
 retrieve a message from the specified message queue.  If at
 least one message is in the queue, then the message is removed
 from the queue, copied to the caller's message buffer, and
@@ -227,15 +228,17 @@ returned an error code when the message queue is deleted.
 @subsection Sending a Message
 
 Messages can be sent to a queue with the
-message_queue_send and message_queue_urgent directives.  These
+@code{@value{DIRPREFIX}message_queue_send} and
+@code{@value{DIRPREFIX}message_queue_urgent} directives.  These
 directives work identically when tasks are waiting to receive a
 message.  A task is removed from the task waiting queue,
 unblocked,  and the message is copied to a waiting task's
 message buffer.
 
 When no tasks are waiting at the queue,
-message_queue_send places the message at the rear of the message
-queue, while message_queue_urgent places the message at the
+@code{@value{DIRPREFIX}message_queue_send} places the
+message at the rear of the message queue, while
+@code{@value{DIRPREFIX}message_queue_urgent} places the message at the
 front of the queue.  The message is copied to a message buffer
 from this message queue's buffer pool and then placed in the
 message queue.  Neither directive can successfully send a
@@ -247,7 +250,7 @@ messages.
 @end ifinfo
 @subsection Broadcasting a Message
 
-The message_queue_broadcast directive sends the same
+The @code{@value{DIRPREFIX}message_queue_broadcast} directive sends the same
 message to every task waiting on the specified message queue as
 an atomic operation.  The message is copied to each waiting
 task's message buffer and each task is unblocked.  The number of
@@ -258,7 +261,7 @@ tasks which were unblocked is returned to the caller.
 @end ifinfo
 @subsection Deleting a Message Queue
 
-The message_queue_delete directive removes a message
+The @code{@value{DIRPREFIX}message_queue_delete} directive removes a message
 queue from the system and frees its control block as well as the
 memory associated with this message queue's message buffer pool.
 A message queue can be deleted by any local task that knows the
@@ -681,7 +684,7 @@ the result of this directive.
 The execution time of this directive is directly
 related to the number of tasks waiting on the message queue,
 although it is more efficient than the equivalent number of
-invocations of message_queue_send.
+invocations of @code{@value{DIRPREFIX}message_queue_send}.
 
 Broadcasting a message to a global message queue
 which does not reside on the local node will generate a request
@@ -749,9 +752,10 @@ the queue is empty, then a status code indicating this condition
 is returned.  If the calling task chooses to wait at the message
 queue and the queue is empty, then the calling task is placed on
 the message wait queue and blocked.  If the queue was created
-with the @code{@value{RPREFIX}PRIORITY} option specified, then the calling task is
-inserted into the wait queue according to its priority.  But, if
-the queue was created with the @code{@value{RPREFIX}FIFO} option specified, then the
+with the @code{@value{RPREFIX}PRIORITY} option specified, then
+the calling task is inserted into the wait queue according to
+its priority.  But, if the queue was created with the
+@code{@value{RPREFIX}FIFO} option specified, then the
 calling task is placed at the rear of the wait queue.
 
 A task choosing to wait at the queue can optionally

@@ -138,7 +138,8 @@ optional and may be configured as NULL if no static extension
 set is required.
 
 Second, the user can install dynamic extensions using
-the extension_create directive.  These extensions are RTEMS
+the @code{@value{DIRPREFIX}extension_create}
+directive.  These extensions are RTEMS
 objects in that they have a name, an ID, and can be dynamically
 created and deleted.  In contrast to the static extension set,
 these extensions can only be created and installed after the
@@ -607,7 +608,7 @@ extension is invoked after that of the other extensions.
 @end ifinfo
 @subsection Creating an Extension Set
 
-The extension_create directive creates and installs
+The @code{@value{DIRPREFIX}extension_create} directive creates and installs
 an extension set by allocating a Extension Set Control Block
 (ESCB), assigning the extension set a user-specified name, and
 assigning it an extension set ID.  Newly created extension sets
@@ -623,18 +624,19 @@ When an extension set is created, RTEMS generates a
 unique extension set ID and assigns it to the created extension
 set until it is deleted.  The extension ID may be obtained by
 either of two methods.  First, as the result of an invocation of
-the extension_create directive, the extension set ID is stored
+the @code{@value{DIRPREFIX}extension_create}
+directive, the extension set ID is stored
 in a user provided location.  Second, the extension set ID may
-be obtained later using the extension_ident directive.  The
-extension set ID is used by other directives to manipulate this
-extension set.
+be obtained later using the @code{@value{DIRPREFIX}extension_ident}
+directive.  The extension set ID is used by other directives
+to manipulate this extension set.
 
 @ifinfo
 @node Deleting an Extension Set, User Extensions Manager Directives, Obtaining Extension Set IDs, User Extensions Manager Operations
 @end ifinfo
 @subsection Deleting an Extension Set
 
-The extension_delete directive is used to delete an
+The @code{@value{DIRPREFIX}extension_delete} directive is used to delete an
 extension set.  The extension set's control block is returned to
 the ESCB free list when it is deleted.  An extension set can be
 deleted by a task other than the task which created the

@@ -56,7 +56,8 @@ the clock manager are:
 For the features provided by the clock manager to be
 utilized, periodic timer interrupts are required.  Therefore, a
 real-time clock or hardware timer is necessary to create the
-timer interrupts.  The clock_tick directive is normally called
+timer interrupts.  The @code{@value{DIRPREFIX}clock_tick}
+directive is normally called
 by the timer ISR to announce to RTEMS that a system clock tick
 has occurred.  Elapsed time is measured in ticks.  A tick is
 defined to be an integral number of microseconds which is
@@ -105,9 +106,10 @@ type Time_Of_Day is
 
 The native date and time format is the only format
 supported when setting the system date and time using the
-clock_get directive.  Some applications expect to operate on a
-"UNIX-style" date and time data structure.  The clock_get
-directive can optionally return the current date and time in the
+@code{@value{DIRPREFIX}clock_get} directive.  Some applications
+expect to operate on a "UNIX-style" date and time data structure.  The 
+@code{@value{DIRPREFIX}clock_get} directive can optionally return
+the current date and time in the
 following @value{STRUCTURE}:
 
 @ifset is-C
@@ -151,7 +153,8 @@ number of ticks, and is specified in the Configuration Table.
 The timeslice is defined for the entire system of tasks, but
 timeslicing is enabled and disabled on a per task basis.
 
-The clock_tick directive implements timeslicing by
+The @code{@value{DIRPREFIX}clock_tick}
+directive implements timeslicing by
 decrementing the running task's time-remaining counter when both
 timeslicing and preemption are enabled.  If the task's timeslice
 has expired, then that task will be preempted if there exists a
@@ -165,7 +168,8 @@ ready task of equal priority.
 A sleep timer allows a task to delay for a given
 interval or up until a given time, and then wake and continue
 execution.  This type of timer is created automatically by the
-task_wake_after and task_wake_when directives and, as a result,
+@code{@value{DIRPREFIX}task_wake_after}
+and @code{@value{DIRPREFIX}task_wake_when} directives and, as a result,
 does not have an RTEMS ID.  Once activated, a sleep timer cannot
 be explicitly deleted.  Each task may activate one and only one
 sleep timer at a time.
@@ -177,10 +181,12 @@ sleep timer at a time.
 
 Timeouts are a special type of timer automatically
 created when the timeout option is used on the
-message_queue_receive, event_receive, semaphore_obtain and
-region_get_segment directives.  Each task may have one and only
-one timeout active at a time.  When a timeout expires, it
-unblocks the task with a timeout status code.
+@code{@value{DIRPREFIX}message_queue_receive},
+@code{@value{DIRPREFIX}event_receive},
+@code{@value{DIRPREFIX}semaphore_obtain} and
+@code{@value{DIRPREFIX}region_get_segment} directives.  
+Each task may have one and only one timeout active at a time.  
+When a timeout expires, it unblocks the task with a timeout status code.
 
 @ifinfo
 @node Clock Manager Operations, Announcing a Tick, Timeouts, Clock Manager
@@ -199,18 +205,22 @@ unblocks the task with a timeout status code.
 @end ifinfo
 @subsection Announcing a Tick
 
-RTEMS provides the clock_tick directive which is
+RTEMS provides the @code{@value{DIRPREFIX}clock_tick} directive which is
 called from the user's real-time clock ISR to inform RTEMS that
 a tick has elapsed.  The tick frequency value, defined in
 microseconds, is a configuration parameter found in the
 Configuration Table.  RTEMS divides one million microseconds
 (one second) by the number of microseconds per tick to determine
-the number of calls to the clock_tick directive per second.  The
-frequency of clock_tick calls determines the resolution
+the number of calls to the
+@code{@value{DIRPREFIX}clock_tick} directive per second.  The
+frequency of @code{@value{DIRPREFIX}clock_tick}
+calls determines the resolution
 (granularity) for all time dependent RTEMS actions.  For
-example, calling clock_tick ten times per second yields a higher
-resolution than calling clock_tick two times per second.  The
-clock_tick directive is responsible for maintaining both
+example, calling @code{@value{DIRPREFIX}clock_tick}
+ten times per second yields a higher
+resolution than calling @code{@value{DIRPREFIX}clock_tick}
+two times per second.  The @code{@value{DIRPREFIX}clock_tick}
+directive is responsible for maintaining both
 calendar time and the dynamic set of timers.
 
 @ifinfo
@@ -218,41 +228,43 @@ calendar time and the dynamic set of timers.
 @end ifinfo
 @subsection Setting the Time
 
-The clock_set directive allows a task or an ISR to
+The @code{@value{DIRPREFIX}clock_set} directive allows a task or an ISR to
 set the date and time maintained by RTEMS.  If setting the date
 and time causes any outstanding timers to pass their deadline,
 then the expired timers will be fired during the invocation of
-the clock_set directive.
+the @code{@value{DIRPREFIX}clock_set} directive.
 
 @ifinfo
 @node Obtaining the Time, Clock Manager Directives, Setting the Time, Clock Manager Operations
 @end ifinfo
 @subsection Obtaining the Time
 
-The clock_get directive allows a task or an ISR to
+The @code{@value{DIRPREFIX}clock_get} directive allows a task or an ISR to
 obtain the current date and time or date and time related
 information.  The current date and time can be returned in
 either native or UNIX-style format.  Additionally, the
 application can obtain date and time related information such as
 the number of seconds since the RTEMS epoch, the number of ticks
 since the executive was initialized, and the number of ticks per
-second.  The information returned by the clock_get directive is
+second.  The information returned by the
+@code{@value{DIRPREFIX}clock_get} directive is
 dependent on the option selected by the caller.  The following
 options are available:
 
 @itemize @bullet
 @item @code{@value{RPREFIX}CLOCK_GET_TOD} - obtain native style date and time
 
-@item @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE} - obtain UNIX-style date and time
+@item @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE} - obtain UNIX-style
+date and time
 
 @item @code{@value{RPREFIX}CLOCK_GET_TICKS_SINCE_BOOT} - obtain number of ticks
 since RTEMS was initialized
 
-@item @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH} - obtain number of seconds
-since RTEMS epoch
+@item @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH} - obtain number
+of seconds since RTEMS epoch
 
-@item @code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND} - obtain number of clock ticks
-per second
+@item @code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND} - obtain number of clock
+ticks per second
 
 @end itemize
 
@@ -326,8 +338,8 @@ clock tick.
 
 Re-initializing RTEMS causes the system date and time
 to be reset to an uninitialized state.  Another call to
-clock_set is required to re-initialize the system date and time
-to application specific specifications.
+@code{@value{DIRPREFIX}clock_set} is required to re-initialize
+the system date and time to application specific specifications.
 
 @page
 @ifinfo
@@ -365,12 +377,15 @@ procedure Clock_Get (
 This directive obtains the system date and time.  If
 the caller is attempting to obtain the date and time (i.e.
 option is set to either @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH},
-@code{@value{RPREFIX}CLOCK_GET_TOD}, or @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE}) and the date and time
-has not been set with a previous call to clock_set, then the
-@code{@value{RPREFIX}NOT_DEFINED} status code is returned.  The caller can always
-obtain the number of ticks per second (option is
-@code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND}) and the number of ticks since the
-executive was initialized option is @code{@value{RPREFIX}CLOCK_GET_TICKS_SINCE_BOOT}).
+@code{@value{RPREFIX}CLOCK_GET_TOD}, or
+@code{@value{RPREFIX}CLOCK_GET_TIME_VALUE}) and the date and time
+has not been set with a previous call to
+@code{@value{DIRPREFIX}clock_set}, then the
+@code{@value{RPREFIX}NOT_DEFINED} status code is returned. 
+The caller can always obtain the number of ticks per second (option is
+@code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND}) and the number of
+ticks since the executive was initialized option is
+@code{@value{RPREFIX}CLOCK_GET_TICKS_SINCE_BOOT}).
 
 The data type expected for time_buffer is indicated below:
 
@@ -391,19 +406,20 @@ The data type expected for time_buffer is indicated below:
 
 @ifset is-Ada
 @itemize @bullet
-@item @code{@value{RPREFIX}CLOCK_GET_TOD} - Address of an variable of type RTEMS.Time_Of_Day
+@item @code{@value{RPREFIX}CLOCK_GET_TOD} - Address of an variable of
+type RTEMS.Time_Of_Day
 
 @item @code{@value{RPREFIX}CLOCK_GET_TIME_VALUE} - Address of an variable of
 type RTEMS.Clock_Time_Value
 
-@item @code{@value{RPREFIX}CLOCK_GET_TICKS_SINCE_BOOT} - Address of an variable of
-type RTEMS.Interval
+@item @code{@value{RPREFIX}CLOCK_GET_TICKS_SINCE_BOOT} - Address of an
+variable of type RTEMS.Interval
 
-@item @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH} - Address of an variable of
-type RTEMS.Interval
+@item @code{@value{RPREFIX}CLOCK_GET_SECONDS_SINCE_EPOCH} - Address of an
+variable of type RTEMS.Interval
 
-@item @code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND} - Address of an variable of
-type RTEMS.Interval
+@item @code{@value{RPREFIX}CLOCK_GET_TICKS_PER_SECOND} - Address of an
+variable of type RTEMS.Interval
 
 @end itemize
 @end ifset
@@ -415,8 +431,8 @@ This directive is callable from an ISR.
 This directive will not cause the running task to be
 preempted.  Re-initializing RTEMS causes the system date and
 time to be reset to an uninitialized state.  Another call to
-clock_set is required to re-initialize the system date and time
-to application specific specifications.
+@code{@value{DIRPREFIX}clock_set} is required to re-initialize the
+system date and time to application specific specifications.
 
 @page
 @ifinfo

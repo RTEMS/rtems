@@ -100,8 +100,8 @@ exactly once in the event set list.
 
 For example, when sending the event set consisting of
 @code{@value{RPREFIX}EVENT_6}, @code{@value{RPREFIX}EVENT_15}, and @code{@value{RPREFIX}EVENT_31},
-the event parameter to the event_send directive should be 
-@code{@value{RPREFIX}EVENT_6 @value{OR}
+the event parameter to the @code{@value{DIRPREFIX}event_send}
+directive should be @code{@value{RPREFIX}EVENT_6 @value{OR}
 @value{RPREFIX}EVENT_15 @value{OR} @value{RPREFIX}EVENT_31}.
 
 @ifinfo
@@ -111,7 +111,8 @@ the event parameter to the event_send directive should be
 
 In general, an option is built by a bitwise OR of the
 desired option components.  The set of valid options for the
-event_receive directive are listed in the following table:
+@code{@value{DIRPREFIX}event_receive} directive are listed
+in the following table:
 
 @itemize @bullet
 @item @code{@value{RPREFIX}WAIT} - task will wait for event (default)
@@ -131,12 +132,12 @@ specified on this call.
 
 This example demonstrates the option parameter needed
 to poll for all events in a particular event condition to
-arrive.  The option parameter passed to the event_receive
-directive should be either
+arrive.  The option parameter passed to the
+@code{@value{DIRPREFIX}event_receive} directive should be either
 @code{@value{RPREFIX}EVENT_ALL @value{OR} @value{RPREFIX}NO_WAIT}
 or @code{@value{RPREFIX}NO_WAIT}.  The option parameter can be set to
 @code{@value{RPREFIX}NO_WAIT} because @code{@value{RPREFIX}EVENT_ALL} is the
-default condition for event_receive.
+default condition for @code{@value{DIRPREFIX}event_receive}.
 
 @ifinfo
 @node Event Manager Operations, Sending an Event Set, Building an EVENT_RECEIVE Option Set, Event Manager
@@ -156,7 +157,7 @@ default condition for event_receive.
 @end ifinfo
 @subsection Sending an Event Set
 
-The event_send directive allows a task (or an ISR) to
+The @code{@value{DIRPREFIX}event_send} directive allows a task (or an ISR) to
 direct an event set to a target task.  Based upon the state of
 the target task, one of the following situations applies:
 
@@ -187,7 +188,7 @@ task remains blocked.
 @end ifinfo
 @subsection Receiving an Event Set
 
-The event_receive directive is used by tasks to
+The @code{@value{DIRPREFIX}event_receive} directive is used by tasks to
 accept a specific input event condition.  The task also
 specifies whether the request is satisfied when all requested
 events are available or any single requested event is available.
@@ -213,9 +214,10 @@ wait before returning with an error status code.
 @subsection Determining the Pending Event Set
 
 A task can determine the pending event set by calling
-the event_receive directive with a value of PENDING_EVENTS for
-the input event condition.  The pending events are returned to
-the calling task but the event set is left unaltered.
+the @code{@value{DIRPREFIX}event_receive} directive with a value of
+@code{@value{RPREFIX}PENDING_EVENTS} for the input event condition.  
+The pending events are returned to the calling task but the event
+set is left unaltered.
 
 @ifinfo
 @node Receiving all Pending Events, Event Manager Directives, Determining the Pending Event Set, Event Manager Operations
@@ -223,8 +225,9 @@ the calling task but the event set is left unaltered.
 @subsection Receiving all Pending Events
 
 A task can receive all of the currently pending
-events by calling the event_receive directive with a value of
-@code{@value{RPREFIX}ALL_EVENTS} for the input event condition and
+events by calling the @code{@value{DIRPREFIX}event_receive}
+directive with a value of @code{@value{RPREFIX}ALL_EVENTS}
+for the input event condition and
 @code{@value{RPREFIX}NO_WAIT @value{OR} @value{RPREFIX}EVENT_ANY}
 for the option set.  The pending events are returned to the
 calling task and the event set is cleared.  If no events are
@@ -294,7 +297,8 @@ sent to the calling task.
 
 Identical events sent to a task are not queued.  In
 other words, the second, and subsequent, posting of an event to
-a task before it can perform an event_receive has no effect.
+a task before it can perform an @code{@value{DIRPREFIX}event_receive}
+has no effect.
 
 The calling task will be preempted if it has
 preemption enabled and a higher priority task is unblocked as

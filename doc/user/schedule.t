@@ -166,8 +166,9 @@ entire timeslice.
 
 The final mechanism for altering the RTEMS scheduling
 algorithm is called manual round-robin.  Manual round-robin is
-invoked by using the task_wake_after directive with a time
-interval of @code{@value{RPREFIX}YIELD_PROCESSOR}.  This allows a task to give up the
+invoked by using the @code{@value{DIRPREFIX}task_wake_after}
+directive with a time interval of @code{@value{RPREFIX}YIELD_PROCESSOR}.  
+This allows a task to give up the
 processor and be immediately returned to the ready chain at the
 end of its priority group.  If no other tasks of the same
 priority are ready to run, then the task does not lose control
@@ -195,8 +196,9 @@ saved or restored for a context switch is located either in the
 TCB or on the task's stacks.
 
 Tasks that utilize a numeric coprocessor and are
-created with the @code{@value{RPREFIX}FLOATING_POINT} attribute require additional
-operations during a context switch.  These additional operations
+created with the @code{@value{RPREFIX}FLOATING_POINT} attribute
+require additional operations during a context switch.  These
+additional operations
 are necessary to save and restore the floating point context of
 @code{@value{RPREFIX}FLOATING_POINT} tasks.  To avoid unnecessary save and restore
 operations, the state of the numeric coprocessor is only saved
@@ -288,17 +290,19 @@ blocked, dormant, and non-existent.
 @end ifset
 
 A task occupies the non-existent state before a
-task_create has been issued on its behalf.  A task enters the
+@code{@value{DIRPREFIX}task_create} has been
+issued on its behalf.  A task enters the
 non-existent state from any other state in the system when it is
-deleted with the task_delete directive.  While a task occupies
+deleted with the @code{@value{DIRPREFIX}task_delete}
+directive.  While a task occupies
 this state it does not have a TCB or a task ID assigned to it;
 therefore, no other tasks in the system may reference this task.
 
-When a task is created via the task_create directive
+When a task is created via the @code{@value{DIRPREFIX}task_create} directive
 it enters the dormant state.  This state is not entered through
 any other means.  Although the task exists in the system, it
 cannot actively compete for system resources.  It will remain in
-the dormant state until it is started via the task_start
+the dormant state until it is started via the @code{@value{DIRPREFIX}task_start}
 directive, at which time it enters the ready state.  The task is
 now permitted to be scheduled for the processor and to compete
 for other system resources.
@@ -308,36 +312,36 @@ unable to be scheduled to run.  A running task may block itself
 or be blocked by other tasks in the system.  The running task
 blocks itself through voluntary operations that cause the task
 to wait.  The only way a task can block a task other than itself
-is with the task_suspend directive.  A task enters the blocked
-state due to any of the following conditions:
+is with the @code{@value{DIRPREFIX}task_suspend} directive.  
+A task enters the blocked state due to any of the following conditions:
 
 @itemize @bullet
-@item A task issues a task_suspend directive which blocks
-either itself or another task in the system.
+@item A task issues a @code{@value{DIRPREFIX}task_suspend} directive
+which blocks either itself or another task in the system.
 
-@item The running task issues a message_queue_receive
+@item The running task issues a @code{@value{DIRPREFIX}message_queue_receive}
 directive with the wait option and the message queue is empty.
 
-@item The running task issues an event_receive directive with
-the wait option and the currently pending events do not satisfy
-the request.
+@item The running task issues an @code{@value{DIRPREFIX}event_receive}
+directive with the wait option and the currently pending events do not
+satisfy the request.
 
-@item The running task issues a semaphore_obtain directive
-with the wait option and the requested semaphore is unavailable.
+@item The running task issues a @code{@value{DIRPREFIX}semaphore_obtain}
+directive with the wait option and the requested semaphore is unavailable.
 
-@item The running task issues a task_wake_after directive
-which blocks the task for the given time interval.  If the time
+@item The running task issues a @code{@value{DIRPREFIX}task_wake_after}
+directive which blocks the task for the given time interval.  If the time
 interval specified is zero, the task yields the processor and
 remains in the ready state.
 
-@item The running task issues a task_wake_when directive which
-blocks the task until the requested date and time arrives.
+@item The running task issues a @code{@value{DIRPREFIX}task_wake_when}
+directive which blocks the task until the requested date and time arrives.
 
-@item The running task issues a region_get_segment directive
-with the wait option and there is not an available segment large
+@item The running task issues a @code{@value{DIRPREFIX}region_get_segment}
+directive with the wait option and there is not an available segment large
 enough to satisfy the task's request.
 
-@item The running task issues a rate_monotonic_period
+@item The running task issues a @code{@value{DIRPREFIX}rate_monotonic_period}
 directive and must wait for the specified rate monotonic period
 to conclude.
 @end itemize
@@ -356,36 +360,37 @@ to any of the following conditions:
 
 @itemize @bullet
 
-@item A running task issues a task_resume directive for a task
-that is suspended and the task is not blocked waiting on any
-resource.
+@item A running task issues a @code{@value{DIRPREFIX}task_resume}
+directive for a task that is suspended and the task is not blocked
+waiting on any resource.
 
-@item A running task issues a message_queue_send,
-message_queue_broadcast, or a message_queue_urgent directive
+@item A running task issues a @code{@value{DIRPREFIX}message_queue_send},
+@code{@value{DIRPREFIX}message_queue_broadcast}, or a
+@code{@value{DIRPREFIX}message_queue_urgent} directive
 which posts a message to the queue on which the blocked task is
 waiting.
 
-@item A running task issues an event_send directive which
-sends an event condition to a task which is blocked waiting on
-that event condition.
+@item A running task issues an @code{@value{DIRPREFIX}event_send}
+directive which sends an event condition to a task which is blocked
+waiting on that event condition.
 
-@item A running task issues a semaphore_release directive
-which releases the semaphore on which the blocked task is
+@item A running task issues a @code{@value{DIRPREFIX}semaphore_release}
+directive which releases the semaphore on which the blocked task is
 waiting.
 
 @item A timeout interval expires for a task which was blocked
-by a call to the task_wake_after directive.
+by a call to the @code{@value{DIRPREFIX}task_wake_after} directive.
 
 @item A timeout period expires for a task which blocked by a
-call to the task_wake_when directive.
+call to the @code{@value{DIRPREFIX}task_wake_when} directive.
 
-@item A running task issues a region_return_segment directive
-which releases a segment to the region on which the blocked task
+@item A running task issues a @code{@value{DIRPREFIX}region_return_segment}
+directive which releases a segment to the region on which the blocked task
 is waiting and a resulting segment is large enough to satisfy
 the task's request.
 
 @item A rate monotonic period expires for a task which blocked
-by a call to the rate_monotonic_period directive.
+by a call to the @code{@value{DIRPREFIX}rate_monotonic_period} directive.
 
 @item A timeout interval expires for a task which was blocked
 waiting on a message, event, semaphore, or segment with a
@@ -395,8 +400,8 @@ timeout specified.
 message queue, a semaphore, or a region on which the blocked
 task is waiting.
 
-@item A running task issues a task_restart directive for the
-blocked task.
+@item A running task issues a @code{@value{DIRPREFIX}task_restart}
+directive for the blocked task.
 
 @item The running task, with its preemption mode enabled, may
 be made ready by issuing any of the directives that may unblock

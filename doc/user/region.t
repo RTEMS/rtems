@@ -100,12 +100,14 @@ are equivalent as long as each attribute appears exactly once in
 the component list.  An attribute listed as a default is not
 required to appear in the attribute list, although it is a good
 programming practice to specify default attributes.  If all
-defaults are desired, the attribute @code{@value{RPREFIX}DEFAULT_ATTRIBUTES} should be
+defaults are desired, the attribute
+@code{@value{RPREFIX}DEFAULT_ATTRIBUTES} should be
 specified on this call.
 
 This example demonstrates the attribute_set parameter
 needed to create a region with the task priority waiting queue
-discipline.  The attribute_set parameter to the region_create
+discipline.  The attribute_set parameter to the
+@code{@value{DIRPREFIX}region_create}
 directive should be @code{@value{RPREFIX}PRIORITY}.
 
 @ifinfo
@@ -115,7 +117,8 @@ directive should be @code{@value{RPREFIX}PRIORITY}.
 
 In general, an option is built by a bitwise OR of the
 desired option components.  The set of valid options for the
-region_get_segment directive are listed in the following table:
+@code{@value{DIRPREFIX}region_get_segment} directive are
+listed in the following table:
 
 @itemize @bullet
 @item @code{@value{RPREFIX}WAIT} - task will wait for semaphore (default)
@@ -128,12 +131,14 @@ are equivalent as long as each option appears exactly once in
 the component list.  An option listed as a default is not
 required to appear in the option list, although it is a good
 programming practice to specify default options.  If all
-defaults are desired, the option @code{@value{RPREFIX}DEFAULT_OPTIONS} should be
+defaults are desired, the option
+@code{@value{RPREFIX}DEFAULT_OPTIONS} should be
 specified on this call.
 
 This example demonstrates the option parameter needed
 to poll for a segment.  The option parameter passed to the
-region_get_segment directive should be @code{@value{RPREFIX}NO_WAIT}.
+@code{@value{DIRPREFIX}region_get_segment} directive should
+be @code{@value{RPREFIX}NO_WAIT}.
 
 @ifinfo
 @node Region Manager Operations, Creating a Region, Building an Option Set, Region Manager
@@ -156,7 +161,7 @@ region_get_segment directive should be @code{@value{RPREFIX}NO_WAIT}.
 @end ifinfo
 @subsection Creating a Region
 
-The region_create directive creates a region with the
+The @code{@value{DIRPREFIX}region_create} directive creates a region with the
 user-defined name.  The user may select FIFO or task priority as
 the method for placing waiting tasks in the task wait queue.
 RTEMS allocates a Region Control Block (RNCB) from the RNCB free
@@ -185,17 +190,19 @@ When a region is created, RTEMS generates a unique
 region ID and assigns it to the created region until it is
 deleted.  The region ID may be obtained by either of two
 methods.  First, as the result of an invocation of the
-region_create directive, the region ID is stored in a user
+@code{@value{DIRPREFIX}region_create} directive,
+the region ID is stored in a user
 provided location.  Second, the region ID may be obtained later
-using the region_ident directive.  The region ID is used by
-other region manager directives to access this region.
+using the @code{@value{DIRPREFIX}region_ident} directive.  
+The region ID is used by other region manager directives to
+access this region.
 
 @ifinfo
 @node Adding Memory to a Region, Acquiring a Segment, Obtaining Region IDs, Region Manager Operations
 @end ifinfo
 @subsection Adding Memory to a Region
 
-The region_extend directive may be used to add memory
+The @code{@value{DIRPREFIX}region_extend} directive may be used to add memory
 to an existing region.  The caller specifies the size in bytes
 and starting address of the memory being added.
 
@@ -209,7 +216,7 @@ region.
 @end ifinfo
 @subsection Acquiring a Segment
 
-The region_get_segment directive attempts to acquire
+The @code{@value{DIRPREFIX}region_get_segment} directive attempts to acquire
 a segment from a specified region.  If the region has enough
 available free memory, then a segment is returned successfully
 to the caller.  When the segment cannot be allocated, one of the
@@ -218,8 +225,8 @@ following situations applies:
 @itemize @bullet
 @item By default, the calling task will wait forever to acquire the segment.
 
-@item Specifying the @code{@value{RPREFIX}NO_WAIT} option forces an immediate return
-with an error status code.
+@item Specifying the @code{@value{RPREFIX}NO_WAIT} option forces
+an immediate return with an error status code.
 
 @item Specifying a timeout limits the interval the task will
 wait before returning with an error status code.
@@ -236,7 +243,7 @@ the message queue is deleted.
 @subsection Releasing a Segment
 
 When a segment is returned to a region by the
-region_return_segment directive, it is merged with its
+@code{@value{DIRPREFIX}region_return_segment} directive, it is merged with its
 unallocated neighbors to form the largest possible segment.  The
 first task on the wait queue is examined to determine if its
 segment request can now be satisfied.  If so, it is given a
@@ -248,7 +255,7 @@ task's segment request cannot be satisfied.
 @end ifinfo
 @subsection Obtaining the Size of a Segment
 
-The region_get_segment_size directive returns the
+The @code{@value{DIRPREFIX}region_get_segment_size} directive returns the
 size in bytes of the specified segment.  The size returned
 includes any "extra" memory included in the segment because of
 rounding up to a page size boundary.
@@ -259,7 +266,8 @@ rounding up to a page size boundary.
 @subsection Deleting a Region
 
 A region can be removed from the system and returned
-to RTEMS with the region_delete directive.  When a region is
+to RTEMS with the @code{@value{DIRPREFIX}region_delete}
+directive.  When a region is
 deleted, its control block is returned to the RNCB free list.  A
 region with segments still allocated is not allowed to be
 deleted.  Any task attempting to do so will be returned an
@@ -349,8 +357,8 @@ segment is constructed in the region.
 Specifying @code{@value{RPREFIX}PRIORITY} in attribute_set causes tasks
 waiting for a segment to be serviced according to task priority.
 Specifying @code{@value{RPREFIX}FIFO} in attribute_set or selecting
-@code{@value{RPREFIX}DEFAULT_ATTRIBUTES} will cause waiting tasks to be serviced in
-First In-First Out order.
+@code{@value{RPREFIX}DEFAULT_ATTRIBUTES} will cause waiting tasks to
+be serviced in First In-First Out order.
 
 The starting_address parameter must be aligned on a
 four byte boundary.  The page_size parameter must be a multiple
@@ -365,8 +373,8 @@ The following region attribute constants are defined
 by RTEMS:
 
 @itemize @bullet
-@item FIFO - tasks wait by FIFO (default)
-@item PRIORITY - tasks wait by priority
+@item @code{@value{RPREFIX}FIFO} - tasks wait by FIFO (default)
+@item @code{@value{RPREFIX}PRIORITY} - tasks wait by priority
 @end itemize
 
 @page
@@ -555,7 +563,8 @@ the size of maximum segment which is possible for this region@*
 
 This directive obtains a variable size segment from
 the region specified by id.  The address of the allocated
-segment is returned in segment.  The @code{@value{RPREFIX}WAIT} and @code{@value{RPREFIX}NO_WAIT} components
+segment is returned in segment.  The @code{@value{RPREFIX}WAIT}
+and @code{@value{RPREFIX}NO_WAIT} components
 of the options parameter are used to specify whether the calling
 tasks wish to wait for a segment to become available or return
 immediately if no segment is available.  For either option, if a
@@ -569,14 +578,16 @@ indicating this fact is returned.  If the calling task chooses
 to wait for the segment and a segment large enough is not
 available, then the calling task is placed on the region's
 segment wait queue and blocked.  If the region was created with
-the @code{@value{RPREFIX}PRIORITY} option, then the calling task is inserted into the
+the @code{@value{RPREFIX}PRIORITY} option, then the calling
+task is inserted into the
 wait queue according to its priority.  However, if the region
-was created with the @code{@value{RPREFIX}FIFO} option, then the calling task is
-placed at the rear of the wait queue.
+was created with the @code{@value{RPREFIX}FIFO} option, then the calling
+task is placed at the rear of the wait queue.
 
 The timeout parameter specifies the maximum interval
 that a task is willing to wait to obtain a segment.  If timeout
-is set to @code{@value{RPREFIX}NO_TIMEOUT}, then the calling task will wait forever.
+is set to @code{@value{RPREFIX}NO_TIMEOUT}, then the
+calling task will wait forever.
 
 @subheading NOTES:
 

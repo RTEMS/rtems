@@ -26,7 +26,7 @@
 
 rtems_task init_task();
 
-#define INIT_NAME      build_name( 'A', 'B', 'C', ' ' ' )
+#define INIT_NAME      rtems_build_name( 'A', 'B', 'C', ' ' ' )
 
 rtems_initialization_tasks_table init_task = @{
   @{ INIT_NAME,          /* init task name  "ABC" */

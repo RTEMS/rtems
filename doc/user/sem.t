@@ -53,8 +53,10 @@ semaphore manager are:
 @end ifinfo
 
 A semaphore can be viewed as a protected variable
-whose value can be modified only with the semaphore_create,
-semaphore_obtain, and semaphore_release directives.  RTEMS
+whose value can be modified only with the
+@code{@value{DIRPREFIX}semaphore_create},
+@code{@value{DIRPREFIX}semaphore_obtain}, and
+@code{@value{DIRPREFIX}semaphore_release} directives.  RTEMS
 supports both binary and counting semaphores. A binary semaphore
 is restricted to values of zero or one, while a counting
 semaphore can assume any non-negative integer value.
@@ -65,29 +67,30 @@ mutual exclusion for a critical section in user code.  In this
 instance, the semaphore would be created with an initial count
 of one to indicate that no task is executing the critical
 section of code.  Upon entry to the critical section, a task
-must issue the semaphore_obtain directive to prevent other tasks
-from entering the critical section.  Upon exit from the critical
-section, the task must issue the semaphore_release directive to
+must issue the @code{@value{DIRPREFIX}semaphore_obtain}
+directive to prevent other tasks from entering the critical section.  
+Upon exit from the critical section, the task must issue the
+@code{@value{DIRPREFIX}semaphore_release} directive to
 allow another task to execute the critical section.
 
 A counting semaphore can be used to control access to
 a pool of two or more resources.  For example, access to three
 printers could be administered by a semaphore created with an
 initial count of three.  When a task requires access to one of
-the printers, it issues the semaphore_obtain directive to obtain
-access to a printer.  If a printer is not currently available,
-the task can wait for a printer to become available or return
+the printers, it issues the @code{@value{DIRPREFIX}semaphore_obtain}
+directive to obtain access to a printer.  If a printer is not currently
+available, the task can wait for a printer to become available or return
 immediately.  When the task has completed printing, it should
-issue the semaphore_release directive to allow other tasks
-access to the printer.
+issue the @code{@value{DIRPREFIX}semaphore_release}
+directive to allow other tasks access to the printer.
 
 Task synchronization may be achieved by creating a
 semaphore with an initial count of zero.  One task waits for the
-arrival of another task by issuing a semaphore_obtain directive
-when it reaches a synchronization point.  The other task
-performs a corresponding semaphore_release operation when it
-reaches its synchronization point, thus unblocking the pending
-task.
+arrival of another task by issuing a @code{@value{DIRPREFIX}semaphore_obtain}
+directive when it reaches a synchronization point.  The other task
+performs a corresponding @code{@value{DIRPREFIX}semaphore_release}
+operation when it reaches its synchronization point, thus unblocking
+the pending task.
 
 @ifinfo
 @node Nested Resource Access, Priority Inversion, Semaphore Manager Background, Semaphore Manager Background
@@ -103,10 +106,12 @@ execute again.
 
 RTEMS addresses this problem by allowing the task
 holding the binary semaphore to obtain the same binary semaphore
-multiple times in a nested manner.  Each semaphore_obtain must
-be accompanied with a semaphore_release.  The semaphore will
+multiple times in a nested manner.  Each
+@code{@value{DIRPREFIX}semaphore_obtain} must be accompanied with a
+@code{@value{DIRPREFIX}semaphore_release}.  The semaphore will
 only be made available for acquisition by other tasks when the
-outermost semaphore_obtain is matched with a semaphore_release.
+outermost @code{@value{DIRPREFIX}semaphore_obtain} is matched with
+a @code{@value{DIRPREFIX}semaphore_release}.
 
 
 @ifinfo
@@ -212,16 +217,28 @@ of the desired attribute components.  The following table lists
 the set of valid semaphore attributes:
 
 @itemize @bullet
-@item FIFO - tasks wait by FIFO (default)
-@item PRIORITY - tasks wait by priority
-@item BINARY_SEMAPHORE - restrict values to 0 and 1 (default)
-@item COUNTING_SEMAPHORE - no restriction on values
-@item NO_INHERIT_PRIORITY - do not use priority inheritance (default)
-@item INHERIT_PRIORITY - use priority inheritance
-@item PRIORITY_CEILING - use priority ceiling
-@item NO_PRIORITY_CEILING - do not use priority ceiling (default)
-@item LOCAL - local task (default)
-@item GLOBAL - global task
+@item @code{@value{RPREFIX}FIFO} - tasks wait by FIFO (default)
+
+@item @code{@value{RPREFIX}PRIORITY} - tasks wait by priority
+
+@item @code{@value{RPREFIX}BINARY_SEMAPHORE} - restrict values to
+0 and 1 (default)
+
+@item @code{@value{RPREFIX}COUNTING_SEMAPHORE} - no restriction on values
+
+@item @code{@value{RPREFIX}NO_INHERIT_PRIORITY} - do not use priority
+inheritance (default)
+
+@item @code{@value{RPREFIX}INHERIT_PRIORITY} - use priority inheritance
+
+@item @code{@value{RPREFIX}PRIORITY_CEILING} - use priority ceiling
+
+@item @code{@value{RPREFIX}NO_PRIORITY_CEILING} - do not use priority
+ceiling (default)
+
+@item @code{@value{RPREFIX}LOCAL} - local task (default)
+
+@item @code{@value{RPREFIX}GLOBAL} - global task
 @end itemize
 
 Attribute values are specifically designed to be
@@ -230,13 +247,14 @@ are equivalent as long as each attribute appears exactly once in
 the component list.  An attribute listed as a default is not
 required to appear in the attribute list, although it is a good
 programming practice to specify default attributes.  If all
-defaults are desired, the attribute @code{@value{RPREFIX}DEFAULT_ATTRIBUTES} should be
+defaults are desired, the attribute
+@code{@value{RPREFIX}DEFAULT_ATTRIBUTES} should be
 specified on this call.
 
 This example demonstrates the attribute_set parameter
 needed to create a local semaphore with the task priority
 waiting queue discipline.  The attribute_set parameter passed to
-the semaphore_create directive could be either
+the @code{@value{DIRPREFIX}semaphore_create} directive could be either
 @code{@value{RPREFIX}PRIORITY} or
 @code{@value{RPREFIX}LOCAL @value{OR} @value{RPREFIX}PRIORITY}.  
 The attribute_set parameter can be set to @code{@value{RPREFIX}PRIORITY}
@@ -252,7 +270,8 @@ attribute_set parameter would be
 
 In general, an option is built by a bitwise OR of the
 desired option components.  The set of valid options for the
-semaphore_obtain directive are listed in the following table:
+@code{@value{DIRPREFIX}semaphore_obtain} directive are listed
+in the following table:
 
 @itemize @bullet
 @item @code{@value{RPREFIX}WAIT} - task will wait for semaphore (default)
@@ -270,7 +289,8 @@ specified on this call.
 
 This example demonstrates the option parameter needed
 to poll for a semaphore.  The option parameter passed to the
-semaphore_obtain directive should be @code{@value{RPREFIX}NO_WAIT}.
+@code{@value{DIRPREFIX}semaphore_obtain}
+directive should be @code{@value{RPREFIX}NO_WAIT}.
 
 @ifinfo
 @node Semaphore Manager Operations, Creating a Semaphore, Building a SEMAPHORE_OBTAIN Option Set, Semaphore Manager
@@ -291,7 +311,7 @@ semaphore_obtain directive should be @code{@value{RPREFIX}NO_WAIT}.
 @end ifinfo
 @subsection Creating a Semaphore
 
-The semaphore_create directive creates a binary or
+The @code{@value{DIRPREFIX}semaphore_create} directive creates a binary or
 counting semaphore with a user-specified name as well as an
 initial count.  If a binary semaphore is created with a count of
 zero (0) to indicate that it has been allocated, then the task
@@ -317,9 +337,10 @@ When a semaphore is created, RTEMS generates a unique
 semaphore ID and assigns it to the created semaphore until it is
 deleted.  The semaphore ID may be obtained by either of two
 methods.  First, as the result of an invocation of the
-semaphore_create directive, the semaphore ID is stored in a user
-provided location.  Second, the semaphore ID may be obtained
-later using the semaphore_ident directive.  The semaphore ID is
+@code{@value{DIRPREFIX}semaphore_create} directive, the
+semaphore ID is stored in a user provided location.  Second,
+the semaphore ID may be obtained later using the
+@code{@value{DIRPREFIX}semaphore_ident} directive.  The semaphore ID is
 used by other semaphore manager directives to access this
 semaphore.
 
@@ -328,9 +349,9 @@ semaphore.
 @end ifinfo
 @subsection Acquiring a Semaphore
 
-The semaphore_obtain directive is used to acquire the
+The @code{@value{DIRPREFIX}semaphore_obtain} directive is used to acquire the
 specified semaphore.  A simplified version of the
-semaphore_obtain directive can be described as follows:
+@code{@value{DIRPREFIX}semaphore_obtain} directive can be described as follows:
 
 @example
 if semaphore's count is greater than zero
@@ -373,9 +394,9 @@ be elevated.
 @end ifinfo
 @subsection Releasing a Semaphore
 
-The semaphore_release directive is used to release
+The @code{@value{DIRPREFIX}semaphore_release} directive is used to release
 the specified semaphore.  A simplified version of the
-semaphore_release directive can be described as follows:
+@code{@value{DIRPREFIX}semaphore_release} directive can be described as follows:
 
 @example
 if no tasks are waiting on this semaphore
@@ -388,15 +409,15 @@ return SUCCESSFUL
 If this is the outermost release of a binary
 semaphore that uses priority inheritance or priority ceiling and
 the task does not currently hold any other binary semaphores,
-then the task performing the semaphore_release will have its
-priority restored to its normal value.
+then the task performing the @code{@value{DIRPREFIX}semaphore_release}
+will have its priority restored to its normal value.
 
 @ifinfo
 @node Deleting a Semaphore, Semaphore Manager Directives, Releasing a Semaphore, Semaphore Manager Operations
 @end ifinfo
 @subsection Deleting a Semaphore
 
-The semaphore_delete directive removes a semaphore
+The @code{@value{DIRPREFIX}semaphore_delete} directive removes a semaphore
 from the system and frees its control block.  A semaphore can be
 deleted by any local task that knows the semaphore's ID.  As a
 result of this directive, all tasks blocked waiting to acquire
@@ -492,16 +513,28 @@ The following semaphore attribute constants are
 defined by RTEMS:
 
 @itemize @bullet
-@item FIFO - tasks wait by FIFO (default)
-@item PRIORITY - tasks wait by priority
-@item BINARY_SEMAPHORE - restrict values to 0 and 1 (default)
-@item COUNTING_SEMAPHORE - no restriction on values
-@item NO_INHERIT_PRIORITY - do not use priority inheritance (default)
-@item INHERIT_PRIORITY - use priority inheritance
-@item PRIORITY_CEILING - use priority ceiling
-@item NO_PRIORITY_CEILING - do not use priority ceiling (default)
-@item LOCAL - local task (default)
-@item GLOBAL - global task
+@item @code{@value{RPREFIX}FIFO} - tasks wait by FIFO (default)
+
+@item @code{@value{RPREFIX}PRIORITY} - tasks wait by priority
+
+@item @code{@value{RPREFIX}BINARY_SEMAPHORE} - restrict values to
+0 and 1 (default)
+
+@item @code{@value{RPREFIX}COUNTING_SEMAPHORE} - no restriction on values
+
+@item @code{@value{RPREFIX}NO_INHERIT_PRIORITY} - do not use priority
+inheritance (default)
+
+@item @code{@value{RPREFIX}INHERIT_PRIORITY} - use priority inheritance
+
+@item @code{@value{RPREFIX}PRIORITY_CEILING} - use priority ceiling
+
+@item @code{@value{RPREFIX}NO_PRIORITY_CEILING} - do not use priority
+ceiling (default)
+
+@item @code{@value{RPREFIX}LOCAL} - local task (default)
+
+@item @code{@value{RPREFIX}GLOBAL} - global task
 @end itemize
 
 Semaphores should not be made global unless remote
@@ -631,7 +664,7 @@ must be transmitted to every node in the system for deletion
 from the local copy of the global object table.
 
 The semaphore must reside on the local node, even if
-the semaphore was created with the GLOBAL option.
+the semaphore was created with the @code{@value{RPREFIX}GLOBAL} option.
 
 Proxies, used to represent remote tasks, are
 reclaimed when the semaphore is deleted.

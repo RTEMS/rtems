@@ -55,14 +55,16 @@ variety of processors and target platforms.
 
 Normally, the application's initialization is
 performed at two separate times:  before the call to
-initialize_executive (reset application initialization) and
-after initialize_executive in the user's initialization tasks
+@code{@value{DIRPREFIX}initialize_executive}
+(reset application initialization) and
+after @code{@value{DIRPREFIX}initialize_executive}
+in the user's initialization tasks
 (local and global application initialization).  The order of the
 startup procedure is as follows:
 
 @enumerate
 @item Reset application initialization.
-@item Call to initialize_executive
+@item Call to @code{@value{DIRPREFIX}initialize_executive}
 @item Local and global application initialization.
 @end enumerate
 
@@ -79,15 +81,17 @@ The processor's Interrupt Vector Table which will be
 used by the application may need to be set to the required value
 by the reset application initialization code.  Because
 interrupts are enabled automatically by RTEMS as part of the
-initialize_executive directive, the Interrupt Vector Table MUST
+@code{@value{DIRPREFIX}initialize_executive} directive,
+the Interrupt Vector Table MUST
 be set before this directive is invoked to insure correct
 interrupt vectoring.  The processor's Interrupt Vector Table
 must be accessible by RTEMS as it will be modified by the
-interrupt_catch directive.  On some CPUs, RTEMS installs it's
+@code{@value{DIRPREFIX}interrupt_catch} directive.  
+On some CPUs, RTEMS installs it's
 own Interrupt Vector Table as part of initialization and thus
 these requirements are met automatically.  The reset code which
-is executed before the call to initialize_executive has the
-following requirements:
+is executed before the call to @code{@value{DIRPREFIX}initialize_executive}
+has the following requirements:
 
 @itemize @bullet
 @item Must not make any RTEMS directive calls.
@@ -98,7 +102,7 @@ state.
 
 @item Must allocate a stack of at least @code{@value{RPREFIX}MINIMUM_STACK_SIZE}
 bytes and initialize the stack pointer for the
-initialize_executive directive.
+@code{@value{DIRPREFIX}initialize_executive} directive.
 
 @item Must initialize the processor's Interrupt Vector Table.
 
@@ -109,7 +113,7 @@ must allocate the interrupt stack and initialize the interrupt
 stack pointer.
 @end itemize
 
-The initialize_executive directive does not return to
+The @code{@value{DIRPREFIX}initialize_executive} directive does not return to
 the initialization code, but causes the highest priority
 initialization task to begin execution.  Initialization tasks
 are used to perform both local and global application
@@ -208,10 +212,10 @@ I/O Manager chapter.
 @subsection Clock Tick Device Driver
 
 Most RTEMS applications will include a clock tick
-device driver which invokes the clock_tick directive at regular
-intervals.  The clock tick is necessary if the application is to
-utilize timeslicing, the clock manager, the timer manager, the
-rate monotonic manager, or the timeout option on blocking
+device driver which invokes the @code{@value{DIRPREFIX}clock_tick}
+directive at regular intervals.  The clock tick is necessary if
+the application is to utilize timeslicing, the clock manager, the
+timer manager, the rate monotonic manager, or the timeout option on blocking
 directives.
 
 The clock tick is usually provided as an interrupt
@@ -226,7 +230,8 @@ accuracy of tick occurrences.  The initial count can be based on
 the microseconds_per_tick field in the RTEMS Configuration
 Table.  An alternate approach is to set the initial count for a
 fixed time period (such as one millisecond) and have the ISR
-invoke clock_tick on the microseconds_per_tick boundaries.
+invoke @code{@value{DIRPREFIX}clock_tick}
+on the microseconds_per_tick boundaries.
 Obviously, this can induce some error if the configured
 microseconds_per_tick is not evenly divisible by the chosen
 clock interrupt quantum.

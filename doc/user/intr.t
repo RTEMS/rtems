@@ -68,7 +68,8 @@ processor and invokes the user's ISR.  The user's ISR is
 responsible for processing the interrupt, clearing the interrupt
 if necessary, and device specific manipulation.
 
-The interrupt_catch directive connects a procedure to
+The @code{@value{DIRPREFIX}interrupt_catch}
+directive connects a procedure to
 an interrupt vector.  The interrupt service routine is assumed
 to abide by these conventions and have a prototype similar to
 the following:
@@ -190,7 +191,8 @@ execute as non-maskable interrupts.
 @end ifinfo
 @subsection Establishing an ISR
 
-The interrupt_catch directive establishes an ISR for
+The @code{@value{DIRPREFIX}interrupt_catch}
+directive establishes an ISR for
 the system.  The address of the ISR and its associated CPU
 vector number are specified to this directive.  This directive
 installs the RTEMS interrupt wrapper in the processor's
@@ -403,10 +405,11 @@ NONE
 @subheading DESCRIPTION:
 
 This directive enables maskable interrupts to the @code{level}
-which was returned by a previous call to @code{@value{DIRPREFIX}interrupt_disable}.
+which was returned by a previous call to
+@code{@value{DIRPREFIX}interrupt_disable}.
 Immediately prior to invoking this directive, maskable interrupts should
-be disabled by a call to @code{@value{DIRPREFIX}interrupt_disable} and will be enabled
-when this directive returns to the caller.
+be disabled by a call to @code{@value{DIRPREFIX}interrupt_disable}
+and will be enabled when this directive returns to the caller.
 
 @subheading NOTES:
 
@@ -444,10 +447,11 @@ NONE
 @subheading DESCRIPTION:
 
 This directive temporarily enables maskable interrupts to the @code{level}
-which was returned by a previous call to @code{@value{DIRPREFIX}interrupt_disable}.  
+which was returned by a previous call to
+@code{@value{DIRPREFIX}interrupt_disable}.  
 Immediately prior to invoking this directive, maskable interrupts should
-be disabled by a call to @code{@value{DIRPREFIX}interrupt_disable} and will be redisabled
-when this directive returns to the caller.
+be disabled by a call to @code{@value{DIRPREFIX}interrupt_disable}
+and will be redisabled when this directive returns to the caller.
 
 @subheading NOTES:
 

@@ -204,16 +204,16 @@ task.
 
 @item The MPCI layer on the destination node senses the
 arrival of a packet (commonly in an ISR), and calls the
-multiprocessing_announce directive.  This directive readies the
-Multiprocessing Server.
+@code{@value{DIRPREFIX}multiprocessing_announce}
+directive.  This directive readies the Multiprocessing Server.
 
 @item The Multiprocessing Server calls the user-provided
 MPCI routine RECEIVE_PACKET, performs the requested operation,
 builds an RR message, and returns it to the originating node.
 
 @item The MPCI layer on the originating node senses the
-arrival of a packet (typically via an interrupt), and calls the
-RTEMS multiprocessing_announce directive.  This directive
+arrival of a packet (typically via an interrupt), and calls the RTEMS
+@code{@value{DIRPREFIX}multiprocessing_announce} directive.  This directive
 readies the Multiprocessing Server.
 
 @item The Multiprocessing Server calls the user-provided
@@ -237,7 +237,8 @@ the MPCI and makes no attempt to detect or correct errors.
 A proxy is an RTEMS data structure which resides on a
 remote node and is used to represent a task which must block as
 part of a remote operation. This action can occur as part of the
-semaphore_obtain and message_queue_receive directives.  If the
+@code{@value{DIRPREFIX}semaphore_obtain} and
+@code{@value{DIRPREFIX}message_queue_receive} directives.  If the
 object were local, the task's control block would be available
 for modification to indicate it was blocking on a message queue
 or semaphore.  However, the task's control block resides only on
@@ -323,7 +324,8 @@ situations:
 If the target hardware supports it, the arrival of a
 packet at a node may generate an interrupt.  Otherwise, the
 real-time clock ISR can check for the arrival of a packet.  In
-any case, the multiprocessing_announce directive must be called
+any case, the 
+@code{@value{DIRPREFIX}multiprocessing_announce} directive must be called
 to announce the arrival of a packet.  After exiting the ISR,
 control will be passed to the Multiprocessing Server to process
 the packet.  The Multiprocessing Server will call the get_packet
@@ -336,7 +338,7 @@ copy the message into the buffer obtained.
 @subsection INITIALIZATION
 
 The INITIALIZATION component of the user-provided
-MPCI layer is called as part of the initialize_executive
+MPCI layer is called as part of the @code{@value{DIRPREFIX}initialize_executive}
 directive to initialize the MPCI layer and associated hardware.
 It is invoked immediately after all of the device drivers have
 been initialized.  This component should be adhere to the
@@ -627,7 +629,7 @@ data component of the packet.
 @end ifinfo
 @subsection Announcing a Packet
 
-The multiprocessing_announce directive is called by
+The @code{@value{DIRPREFIX}multiprocessing_announce} directive is called by
 the MPCI layer to inform RTEMS that a packet has arrived from
 another node.  This directive can be called from an interrupt
 service routine or from within a polling routine.

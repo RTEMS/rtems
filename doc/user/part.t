@@ -76,10 +76,9 @@ of the desired attribute components.  The set of valid partition
 attributes is provided in the following table:
 
 @itemize @bullet
-@item LOCAL - local task (default)
-@item GLOBAL - global task
+@item @code{@value{RPREFIX}LOCAL} - local task (default)
+@item @code{@value{RPREFIX}GLOBAL} - global task
 @end itemize
-
 
 
 Attribute values are specifically designed to be
@@ -88,9 +87,11 @@ are equivalent as long as each attribute appears exactly once in
 the component list.  An attribute listed as a default is not
 required to appear in the attribute list, although it is a good
 programming practice to specify default attributes.  If all
-defaults are desired, the attribute @code{@value{RPREFIX}DEFAULT_ATTRIBUTES} should be
+defaults are desired, the attribute
+@code{@value{RPREFIX}DEFAULT_ATTRIBUTES} should be
 specified on this call.  The attribute_set parameter should be
-GLOBAL to indicate that the partition is to be known globally.
+@code{@value{RPREFIX}GLOBAL} to indicate that the partition
+is to be known globally.
 
 @ifinfo
 @node Partition Manager Operations, Creating a Partition, Building a Partition's Attribute Set, Partition Manager
@@ -111,10 +112,11 @@ GLOBAL to indicate that the partition is to be known globally.
 @end ifinfo
 @subsection Creating a Partition
 
-The partition_create directive creates a partition
+The @code{@value{DIRPREFIX}partition_create} directive creates a partition
 with a user-specified name.  The partition's name, starting
 address, length and buffer size are all specified to the
-partition_create directive.  RTEMS allocates a Partition Control
+@code{@value{DIRPREFIX}partition_create} directive.  
+RTEMS allocates a Partition Control
 Block (PTCB) from the PTCB free list.  This data structure is
 used by RTEMS to manage the newly created partition.  The number
 of buffers in the partition is calculated based upon the
@@ -130,11 +132,11 @@ When a partition is created, RTEMS generates a unique
 partition ID and assigned it to the created partition until it
 is deleted.  The partition ID may be obtained by either of two
 methods.  First, as the result of an invocation of the
-partition_create directive, the partition ID is stored in a user
-provided location.  Second, the partition ID may be obtained
-later using the partition_ident directive.  The partition ID is
-used by other partition manager directives to access this
-partition.
+@code{@value{DIRPREFIX}partition_create} directive, the partition
+ID is stored in a user provided location.  Second, the partition
+ID may be obtained later using the @code{@value{DIRPREFIX}partition_ident}
+directive.  The partition ID is used by other partition manager directives
+to access this partition.
 
 @ifinfo
 @node Acquiring a Buffer, Releasing a Buffer, Obtaining Partition IDs, Partition Manager Operations
@@ -142,7 +144,8 @@ partition.
 @subsection Acquiring a Buffer
 
 A buffer can be obtained by calling the
-partition_get_buffer directive.  If a buffer is available, then
+@code{@value{DIRPREFIX}partition_get_buffer} directive.  
+If a buffer is available, then
 it is returned immediately with a successful return code.
 Otherwise, an unsuccessful return code is returned immediately
 to the caller.  Tasks cannot block to wait for a buffer to
@@ -154,7 +157,7 @@ become available.
 @subsection Releasing a Buffer
 
 Buffers are returned to a partition's free buffer
-chain with the partition_return_buffer directive.  This
+chain with the @code{@value{DIRPREFIX}partition_return_buffer} directive.  This
 directive returns an error status code if the returned buffer
 was not previously allocated from this partition.
 
@@ -163,7 +166,7 @@ was not previously allocated from this partition.
 @end ifinfo
 @subsection Deleting a Partition
 
-The partition_delete directive allows a partition to
+The @code{@value{DIRPREFIX}partition_delete} directive allows a partition to
 be removed and returned to RTEMS.  When a partition is deleted,
 the PTCB for that partition is returned to the PTCB free list.
 A partition with buffers still allocated cannot be deleted.  Any
@@ -260,8 +263,8 @@ The following partition attribute constants are
 defined by RTEMS:
 
 @itemize @bullet
-@item LOCAL - local task (default)
-@item GLOBAL - global task
+@item @code{@value{RPREFIX}LOCAL} - local task (default)
+@item @code{@value{RPREFIX}GLOBAL} - global task
 @end itemize
 
 The PTCB for a global partition is allocated on the
@@ -389,7 +392,7 @@ must be transmitted to every node in the system for deletion
 from the local copy of the global object table.
 
 The partition must reside on the local node, even if
-the partition was created with the GLOBAL option.
+the partition was created with the @code{@value{RPREFIX}GLOBAL} option.
 
 @page
 @ifinfo

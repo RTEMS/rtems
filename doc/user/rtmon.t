@@ -696,7 +696,7 @@ review."  @b{Software Engineering Journal}. May 1991. pp. 116-128.}
 @end ifinfo
 @subsection Creating a Rate Monotonic Period
 
-The rate_monotonic_create directive creates a rate
+The @code{@value{DIRPREFIX}rate_monotonic_create} directive creates a rate
 monotonic period which is to be used by the calling task to
 delineate a period.  RTEMS allocates a Period Control Block
 (PCB) from the PCB free list.  This data structure is used by
@@ -710,11 +710,11 @@ monotonic period.
 @end ifinfo
 @subsection Manipulating a Period
 
-The rate_monotonic_period directive is used to
+The @code{@value{DIRPREFIX}rate_monotonic_period} directive is used to
 establish and maintain periodic execution utilizing a previously
 created rate monotonic period.   Once initiated by the
-rate_monotonic_period directive, the period is said to run until
-it either expires or is reinitiated.  The state of the rate
+@code{@value{DIRPREFIX}rate_monotonic_period} directive, the period is
+said to run until it either expires or is reinitiated.  The state of the rate
 monotonic period results in one of the following scenarios:
 
 @itemize @bullet
@@ -728,9 +728,10 @@ and has not expired, it is initiated with a length of period
 ticks and the calling task returns immediately.
 
 @item If the rate monotonic period has expired before the task
-invokes the rate_monotonic_period directive, the period will be
-initiated with a length of period ticks and the calling task
+invokes the @code{@value{DIRPREFIX}rate_monotonic_period} directive,
+the period will be initiated with a length of period ticks and the calling task
 returns immediately with a timeout error status.
+
 @end itemize
 
 @ifinfo
@@ -738,11 +739,12 @@ returns immediately with a timeout error status.
 @end ifinfo
 @subsection Obtaining a Period's Status
 
-If the rate_monotonic_period directive is invoked
-with a period of @code{@value{RPREFIX}PERIOD_STATUS} ticks, the current state of the
-specified rate monotonic period will be returned.  The following
+If the @code{@value{DIRPREFIX}rate_monotonic_period} directive is invoked
+with a period of @code{@value{RPREFIX}PERIOD_STATUS} ticks, the current
+state of the specified rate monotonic period will be returned.  The following
 table details the relationship between the period's status and
-the directive status code returned by the rate_monotonic_period
+the directive status code returned by the
+@code{@value{DIRPREFIX}rate_monotonic_period}
 directive:
 
 @itemize @bullet
@@ -761,17 +763,17 @@ not alter the state or length of that period.
 @end ifinfo
 @subsection Canceling a Period
 
-The rate_monotonic_cancel directive is used to stop
+The @code{@value{DIRPREFIX}rate_monotonic_cancel} directive is used to stop
 the period maintained by the specified rate monotonic period.
 The period is stopped and the rate monotonic period can be
-reinitiated using the rate_monotonic_period directive.
+reinitiated using the @code{@value{DIRPREFIX}rate_monotonic_period} directive.
 
 @ifinfo
 @node Deleting a Rate Monotonic Period, Examples, Canceling a Period, Rate Monotonic Manager Operations
 @end ifinfo
 @subsection Deleting a Rate Monotonic Period
 
-The rate_monotonic_delete directive is used to delete
+The @code{@value{DIRPREFIX}rate_monotonic_delete} directive is used to delete
 a rate monotonic period.  If the period is running and has not
 expired, the period is automatically canceled.  The rate
 monotonic period's control block is returned to the PCB free
@@ -802,7 +804,7 @@ rtems_task Periodic_task()
   rtems_id          period;
   rtems_status_code status;
 
-  name = build_name( 'P', 'E', 'R', 'D' );
+  name = rtems_build_name( 'P', 'E', 'R', 'D' );
 
   (void) rate_monotonic_create( name, &period );
 
@@ -823,14 +825,16 @@ rtems_task Periodic_task()
 
 The above task creates a rate monotonic period as
 part of its initialization.  The first time the loop is
-executed, the rate_monotonic_period directive will initiate the
-period for 100 ticks and return immediately.  Subsequent
-invocations of the rate_monotonic_period directive will result
+executed, the @code{@value{DIRPREFIX}rate_monotonic_period}
+directive will initiate the period for 100 ticks and return
+immediately.  Subsequent invocations of the
+@code{@value{DIRPREFIX}rate_monotonic_period} directive will result
 in the task blocking for the remainder of the 100 tick period.
 If, for any reason, the body of the loop takes more than 100
-ticks to execute, the rate_monotonic_period directive will
-return the TIMEOUT status.  If the above task misses its
-deadline, it will delete the rate monotonic period and itself.
+ticks to execute, the @code{@value{DIRPREFIX}rate_monotonic_period}
+directive will return the @code{@value{RPREFIX}TIMEOUT} status.  
+If the above task misses its deadline, it will delete the rate
+monotonic period and itself.
 
 @ifinfo
 @node Task with Multiple Periods, Rate Monotonic Manager Directives, Simple Periodic Task, Rate Monotonic Manager Operations
@@ -853,8 +857,8 @@ task Periodic_task()
   rtems_id          period_1, period_2;
   rtems_status_code status;
 
-  name_1 = build_name( 'P', 'E', 'R', '1' );
-  name_2 = build_name( 'P', 'E', 'R', '2' );
+  name_1 = rtems_build_name( 'P', 'E', 'R', '1' );
+  name_2 = rtems_build_name( 'P', 'E', 'R', '2' );
 
   (void ) rate_monotonic_create( name_1, &period_1 );
   (void ) rate_monotonic_create( name_2, &period_2 );
@@ -897,24 +901,27 @@ task Periodic_task()
 
 The above task creates two rate monotonic periods as
 part of its initialization.  The first time the loop is
-executed, the rate_monotonic_period directive will initiate the
-period_1 period for 100 ticks and return immediately.
-Subsequent invocations of the rate_monotonic_period directive
+executed, the @code{@value{DIRPREFIX}rate_monotonic_period}
+directive will initiate the period_1 period for 100 ticks
+and return immediately.  Subsequent invocations of the
+@code{@value{DIRPREFIX}rate_monotonic_period} directive
 for period_1 will result in the task blocking for the remainder
 of the 100 tick period.  The period_2 period is used to control
 the execution time of the two sets of actions within each 100
-tick period established by period_1.  The rate_monotonic_cancel(
-period_2 ) call is performed to insure that the period_2 period
+tick period established by period_1.  The
+@code{@value{DIRPREFIX}rate_monotonic_cancel( period_2 )}
+call is performed to insure that the period_2 period
 does not expire while the task is blocked on the period_1
 period.  If this cancel operation were not performed, every time
-the rate_monotonic_period( period_1, 40 ) call is executed,
-except for the initial one, a directive status of TIMEOUT is
-returned.  It is important to note that every time this call is
-made, the period_1 period will be initiated immediately and the
-task will not block.
+the @code{@value{DIRPREFIX}rate_monotonic_period( period_1, 40 )}
+call is executed, except for the initial one, a directive status
+of @code{@value{RPREFIX}TIMEOUT} is returned.  It is important to
+note that every time this call is made, the period_1 period will be
+initiated immediately and the task will not block.
 
 If, for any reason, the task misses any deadline, the
-rate_monotonic_period directive will return the TIMEOUT
+@code{@value{DIRPREFIX}rate_monotonic_period} directive will
+return the @code{@value{RPREFIX}TIMEOUT}
 directive status.  If the above task misses its deadline, it
 will delete the rate monotonic periods and itself.
 
@@ -1063,7 +1070,7 @@ procedure Rate_Monotonic_Cancel (
 
 This directive cancels the rate monotonic period id.
 This period will be reinitiated by the next invocation of
-rate_monotonic_period with id.
+@code{@value{DIRPREFIX}rate_monotonic_period} with id.
 
 @subheading NOTES:
 
@@ -1228,14 +1235,17 @@ type Rate_Monotonic_Period_Status is
 @end example
 @end ifset
 
+@c RATE_MONOTONIC_INACTIVE does not have RTEMS_ in front of it.
+
 If the period's state is @code{RATE_MONOTONIC_INACTIVE}, both
 ticks_since_last_period and ticks_executed_since_last_period 
 will be set to 0.  Otherwise, ticks_since_last_period will
 contain the number of clock ticks which have occurred since
-the last invocation of the rtems_rate_monotonic_period directive.
+the last invocation of the
+@code{@value{DIRPREFIX}rate_monotonic_period} directive.
 Also in this case, the ticks_executed_since_last_period will indicate
 how much processor time the owning task has consumed since the invocation
-of the rtems_rate_monotonic_period directive.
+of the @code{@value{DIRPREFIX}rate_monotonic_period} directive.
 
 @subheading NOTES:
 
