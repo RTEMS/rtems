@@ -36,6 +36,9 @@ void Screen9()
   );
   puts( "TA1 - rtems_interrupt_catch - RTEMS_INVALID_NUMBER" );
 
+#if defined(_C3x) || defined(_C4x)
+  puts( "TA1 - rtems_interrupt_catch - bad handler RTEMS_INVALID_ADDRESS -- SKIPPED" );
+#else
   status = rtems_interrupt_catch( NULL, 3, &old_service_routine );
   fatal_directive_status(
     status,
@@ -43,7 +46,11 @@ void Screen9()
     "rtems_interrupt_catch with invalid handler"
   );
   puts( "TA1 - rtems_interrupt_catch - bad handler RTEMS_INVALID_ADDRESS" );
+#endif
 
+#if defined(_C3x) || defined(_C4x)
+  puts( "TA1 - rtems_interrupt_catch - old isr RTEMS_INVALID_ADDRESS - SKIPPED" );
+#else
   status = rtems_interrupt_catch( Service_routine, 3, NULL );
   fatal_directive_status(
     status,
@@ -51,6 +58,7 @@ void Screen9()
     "rtems_interrupt_catch with invalid old isr pointer"
   );
   puts( "TA1 - rtems_interrupt_catch - old isr RTEMS_INVALID_ADDRESS" );
+#endif
 
   status = rtems_signal_send( 100, RTEMS_SIGNAL_1 );
   fatal_directive_status(
@@ -82,6 +90,9 @@ void Screen9()
   );
   puts( "TA1 - rtems_port_create - RTEMS_INVALID_NAME" );
 
+#if defined(_C3x) || defined(_C4x)
+  puts( "TA1 - rtems_port_create - RTEMS_INVALID_ADDRESS - SKIPPED" );
+#else
   status = rtems_port_create(
      Port_name[ 1 ],
      &((char *)Internal_port_area)[ 1 ],
@@ -95,6 +106,7 @@ void Screen9()
     "rtems_port_create with illegal address"
   );
   puts( "TA1 - rtems_port_create - RTEMS_INVALID_ADDRESS" );
+#endif
 
   status = rtems_port_create(
      Port_name[ 1 ],

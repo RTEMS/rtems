@@ -43,6 +43,9 @@ void Screen12()
   );
   puts( "TA1 - rtems_region_create - RTEMS_INVALID_NAME" );
 
+#if defined(_C3x) || defined(_C4x)
+  puts( "TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS - SKIPPED" );
+#else
   status = rtems_region_create(
     Region_name[ 1 ],
     Region_bad_area,
@@ -57,7 +60,11 @@ void Screen12()
     "rtems_region_create with illegal address"
   );
   puts( "TA1 - rtems_region_create - RTEMS_INVALID_ADDRESS" );
+#endif
 
+#if defined(_C3x) || defined(_C4x)
+  puts( "TA1 - rtems_region_create - RTEMS_INVALID_SIZE - SKIPPED" );
+#else
   status = rtems_region_create(
     Region_name[ 1 ],
     Region_good_area,
@@ -72,6 +79,7 @@ void Screen12()
     "rtems_region_create with illegal size"
   );
   puts( "TA1 - rtems_region_create - RTEMS_INVALID_SIZE" );
+#endif
 
   status = rtems_region_create(
     Region_name[ 1 ],

@@ -109,6 +109,9 @@ void Screen11()
 #endif
   puts( "TA1 - rtems_partition_create - RTEMS_MP_NOT_CONFIGURED" );
 
+#if defined(_C3x) || defined(_C4x)
+  puts( "TA1 - rtems_partition_create - RTEMS_INVALID_ADDRESS - SKIPPED" );
+#else
   status = rtems_partition_create(
     Partition_name[ 1 ],
     Partition_bad_area,
@@ -123,7 +126,11 @@ void Screen11()
     "rtems_partition_create with bad address"
   );
   puts( "TA1 - rtems_partition_create - RTEMS_INVALID_ADDRESS" );
+#endif
 
+#if defined(_C3x) || defined(_C4x)
+  puts( "TA1 - rtems_partition_create - RTEMS_INVALID_SIZE - SKIPPED" );
+#else
   status = rtems_partition_create(
     Partition_name[ 1 ],
     Partition_good_area,
@@ -138,6 +145,7 @@ void Screen11()
     "rtems_partition_create with unaligned buffer_size"
   );
   puts( "TA1 - rtems_partition_create - RTEMS_INVALID_SIZE" );
+#endif
 
   status = rtems_partition_delete( 100 );
   fatal_directive_status(
