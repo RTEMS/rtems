@@ -1,5 +1,13 @@
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* mpc505/ictrl/Makefile.am: Remove.
+	* mpc505/timer/Makefile.am: Remove.
+	* mpc505/vectors/Makefile.am: Remove.
+	* mpc505/Makefile.am: Merge-in Makefile.ams above.
+	* configure.ac: Reflect changes to mpc8xx/Makefile.ams.
+
+2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* mpc8xx/clock/Makefile.am: Remove.
 	* mpc8xx/console-generic/Makefile.am: Remove.
 	* mpc8xx/cpm/Makefile.am: Remove.
