@@ -1,3 +1,7 @@
+2002-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* .cvsignore: Add autom4te.cache.
+
 2002-09-14	Ivan Guzvinec <ivang@opencores.org>
 
 	* include/bsp.h, startup/Makefile.am, startup/bspclean.c:

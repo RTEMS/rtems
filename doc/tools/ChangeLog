@@ -1,3 +1,7 @@
+2002-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* .cvsignore: Add autom4te.cache.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:

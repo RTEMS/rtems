@@ -1,3 +1,7 @@
+2002-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* .cvsignore: Add autom4te.cache.
+
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/Makefile.am: Use .$(OBJEXT) instead of .o.

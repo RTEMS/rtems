@@ -3,3 +3,4 @@ Makefile
 configure
 aclocal*
 config.*
+autom4te.*

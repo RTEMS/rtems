@@ -2,3 +2,4 @@ aclocal.m4
 configure
 Makefile
 Makefile.in
+autom4te.cache
