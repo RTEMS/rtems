@@ -29,7 +29,7 @@ StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
  */
 MEMORY {
           ram : ORIGIN = 0x00000000, LENGTH = 64M
-        myram : ORIGIN = 4M-512k,    LENGTH = 512k
+        myram : ORIGIN = 16M-400k,   LENGTH = 400k
           rom : ORIGIN = 0x0F000000, LENGTH = 1M
         dpram : ORIGIN = 0x0E000000, LENGTH = 8k
 }
@@ -61,6 +61,9 @@ SECTIONS {
                 CREATE_OBJECT_SYMBOLS
                 *(.text)
                 . = ALIGN (16);
+
+		*(.eh_fram)
+		. = ALIGN (16);
 
 		/*
 		 * C++ constructors

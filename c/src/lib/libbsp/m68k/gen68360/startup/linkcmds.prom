@@ -3,24 +3,17 @@
  * Variations in hardware type and dynamic memory size can be made
  * by overriding some values with linker command-line arguments.
  *
- * These linker directives are for producing a BOOTP PROM.
- * To create the PROM image from the linker output you must use objcopy
- * (--adjust-section-vma) to place the data segment at the end of the text
- * segment in the PROM.  The start-up code takes care of copying this region
- * to RAM.
+ * These linker directives are for producing a PROM version.
+ * The data segment is placed at the end of the text segment in the PROM.
+ * The start-up code takes care of copying this region to RAM.
  *
  * Saskatchewan Accelerator Laboratory
  * University of Saskatchewan
  * Saskatoon, Saskatchewan, CANADA
  * eric@skatter.usask.ca
- * 
+ *
  *  $Id$
  */
-
-/*
- * a.out format doesn't handle prom images very well
- */
-OUTPUT_FORMAT(coff-m68k)
 
 /*
  * Declare some sizes.
@@ -36,8 +29,8 @@ StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
  */
 MEMORY {
           ram : ORIGIN = 0x00000000, LENGTH = 64M
-          rom : ORIGIN = 0xFF000000, LENGTH = 1M
-        dpram : ORIGIN = 0xFE000000, LENGTH = 8k
+          rom : ORIGIN = 0x0F000000, LENGTH = 1M
+        dpram : ORIGIN = 0x0E000000, LENGTH = 8k
 }
 
 /*
@@ -63,10 +56,13 @@ SECTIONS {
         /*
          * Text, data and bss segments
          */
-        .text : {
+        .text : AT (0x00000000) {
                 CREATE_OBJECT_SYMBOLS
                 *(.text)
                 . = ALIGN (16);
+
+		*(.eh_fram)
+		. = ALIGN (16);
 
 		/*
 		 * C++ constructors
@@ -85,7 +81,7 @@ SECTIONS {
                 etext = .;
                 _etext = .;
         } >rom 
-        .data : {
+        .data : AT(SIZEOF(.text)) {
                 copy_start = .;
                 *(.data)
                 . = ALIGN (16);
