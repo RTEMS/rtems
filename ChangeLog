@@ -3,12 +3,6 @@
 	* README.configure, aclocal/rtems-cpu-subdirs.m4: Remove a29k
 	references.
 
-2003-02-14	Till Straumann <strauman@slac.stanford.edu>
-
-	PR 347/rtems
-	* rtems/powerpc/registers.h (PPC_Set_decrementer): Correct inline
-	assembly so it correctly generates on newer gcc's.
-
 2003-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/canonical-target-name.m4: Transform tic4x -> RTEMS_CPU=c4x.
