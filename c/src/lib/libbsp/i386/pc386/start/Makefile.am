@@ -19,10 +19,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-if RTEMS_GAS_CODE16
-AM_CPPFLAGS += -DNEW_GAS
-endif
-
 LINKCMDS = $(top_srcdir)/startup/linkcmds
 
 $(ARCH)/start16.o: start16.S
