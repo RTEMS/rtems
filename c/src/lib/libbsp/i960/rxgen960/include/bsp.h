@@ -160,7 +160,5 @@ i960_isr_entry set_tmr_vector( rtems_isr_entry, unsigned int, unsigned int );
 }
 #endif
 
-#else
-#error "Did not get any definitions from here!"
 #endif
 /* end of include file */
