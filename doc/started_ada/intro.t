@@ -12,7 +12,7 @@ The purpose of this document is to guide you through the process of
 installing a GNU cross development environment to use with RTEMS.
 
 If you are already familiar with the concepts behind a cross compiler and
-have a background in Unix these instructions should provide the bare
+have a background in Unix, these instructions should provide the bare
 essentials for performing a setup of the following items: 
 
 @itemize @bullet
@@ -24,7 +24,7 @@ essentials for performing a setup of the following items:
 The remainder of this chapter provides background information on real-time
 embedded systems and cross development and an overview of other 
 resources of interest on the Internet.  If you are not familiar with 
-real-time embedded systems, of these areas, please read those sections.  
+real-time embedded systems or the other areas, please read those sections.  
 These sections will help familiarize you with the
 types of systems RTEMS is designed to be used in and the cross development
 process used when developing RTEMS applications.
