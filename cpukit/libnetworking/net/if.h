@@ -62,11 +62,33 @@
  * interfaces.  These routines live in the files if.c and route.c
  */
 
-#ifndef _TIME_ /*  XXX fast fix for SNMP, going away soon */
+#include <sys/cdefs.h>
+
+#if defined(__rtems__)
+/*
+ * FIXME - HACK: BSD defines __BSD_VISIBLE in sys/cdefs.h
+ * RTEMS sys/cdefs.h doesn't, so we enforce it here.
+ */
+#ifndef __BSD_VISIBLE
+#define __BSD_VISIBLE 1
+#endif
+#endif
+
+#ifdef _KERNEL
+#include <sys/queue.h>
+#endif
+
+#if __BSD_VISIBLE
+/*
+ * <net/if.h> does not depend on <sys/time.h> on most other systems.  This
+ * helps userland compatibility.  (struct timeval ifi_lastchange)
+ */
+#ifndef _KERNEL
 #include <sys/time.h>
 #endif
 
-#ifdef __STDC__
+struct ifnet;
+
 /*
  * Forward structure declarations for function prototypes [sic].
  */
@@ -76,6 +98,27 @@ struct	rtentry;
 struct	socket;
 struct	ether_header;
 #endif
+
+/*
+ * Length of interface external name, including terminating '\0'.
+ * Note: this is the same size as a generic device's external name.
+ */
+#define		IF_NAMESIZE	16
+#if __BSD_VISIBLE
+#define		IFNAMSIZ	IF_NAMESIZE
+#define		IF_MAXUNIT	0x7fff	/* historical value */
+#endif
+#if __BSD_VISIBLE
+
+/*
+ * Structure used to query names of interface cloners.
+ */
+
+struct if_clonereq {
+	int	ifcr_total;		/* total cloners (out) */
+	int	ifcr_count;		/* room for this many in user buffer */
+	char	*ifcr_buffer;		/* buffer for cloner names */
+};
 
 /*
  * Structure describing information about an interface
@@ -197,7 +240,7 @@ typedef void if_init_f_t __P((void *));
 #define	IFF_DEBUG	0x4		/* turn on debugging */
 #define	IFF_LOOPBACK	0x8		/* is a loopback net */
 #define	IFF_POINTOPOINT	0x10		/* interface is point-to-point link */
-/*#define IFF_NOTRAILERS 0x20		 * obsolete: avoid use of trailers */
+#define	IFF_SMART	0x20		/* interface manages own routes */
 #define	IFF_RUNNING	0x40		/* resources allocated */
 #define	IFF_NOARP	0x80		/* no address resolution protocol */
 #define	IFF_PROMISC	0x100		/* receive all packets */
@@ -209,11 +252,17 @@ typedef void if_init_f_t __P((void *));
 #define	IFF_LINK2	0x4000		/* per link layer defined bit */
 #define	IFF_ALTPHYS	IFF_LINK2	/* use alternate physical connection */
 #define	IFF_MULTICAST	0x8000		/* supports multicast */
+#define	IFF_POLLING	0x10000		/* Interface is in polling mode. */
+#define	IFF_PPROMISC	0x20000		/* user-requested promisc mode */
+#define	IFF_MONITOR	0x40000		/* user-requested monitor mode */
+#define	IFF_STATICARP	0x80000		/* static ARP */
+#define	IFF_NEEDSGIANT	0x100000	/* hold Giant over if_start calls */
 
 /* flags set internally only: */
 #define	IFF_CANTCHANGE \
 	(IFF_BROADCAST|IFF_POINTOPOINT|IFF_RUNNING|IFF_OACTIVE|\
-	    IFF_SIMPLEX|IFF_MULTICAST|IFF_ALLMULTI)
+	    IFF_SIMPLEX|IFF_MULTICAST|IFF_ALLMULTI|IFF_SMART|IFF_PROMISC|\
+	    IFF_POLLING)
 
 
 /*
@@ -362,7 +411,6 @@ struct ifa_msghdr {
  * remainder may be interface specific.
  */
 struct	ifreq {
-#define	IFNAMSIZ	16
 	char	ifr_name[IFNAMSIZ];		/* if name, e.g. "en0" */
 	union {
 		struct	sockaddr ifru_addr;
@@ -404,6 +452,20 @@ struct ifmediareq {
 	int	ifm_count;		/* # entries in ifm_ulist array */
 	int	*ifm_ulist;		/* media words */
 };
+
+/* 
+ * Structure used to retrieve aux status data from interfaces.
+ * Kernel suppliers to this interface should respect the formatting
+ * needed by ifconfig(8): each line starts with a TAB and ends with
+ * a newline.  The canonical example to copy and paste is in if_tun.c.
+ */
+
+#define	IFSTATMAX	800		/* 10 lines of text */
+struct ifstat {
+	char	ifs_name[IFNAMSIZ];	/* if name, e.g. "en0" */
+	char	ascii[IFSTATMAX + 1];
+};
+
 /*
  * Structure used in SIOCGIFCONF request.
  * Used to retrieve interface configuration
@@ -419,6 +481,7 @@ struct	ifconf {
 #define	ifc_buf	ifc_ifcu.ifcu_buf	/* buffer address */
 #define	ifc_req	ifc_ifcu.ifcu_req	/* array of structures returned */
 };
+#endif /* __BSD_VISIBLE */
 
 #include <net/if_arp.h>
 

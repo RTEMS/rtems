@@ -6,6 +6,7 @@
 	libnetworking/opt_netgraph.h: New (Stubs).
 	* libnetworking/net/if_loop.c: Cosmetical update from FreeBSD.
 	* libnetworking/net/if_ethersubr.c: Update from FreeBSD.
+	* libnetworking/net/if.h: Update from FreeBSD.
 
 2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
 
