@@ -1,3 +1,7 @@
+2003-05-29	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/rtems_syscall.c: Removed warnings.
+
 2003-05-15  cjohns@cybertec.com.au  <cjohns@cybertec.com.au>
 
 	* netinet/in.h:
