@@ -1,3 +1,16 @@
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sp01/Makefile.am, sp02/Makefile.am, sp03/Makefile.am,
+	sp04/Makefile.am, sp05/Makefile.am, sp06/Makefile.am,
+	sp07/Makefile.am, sp08/Makefile.am, sp09/Makefile.am,
+	sp11/Makefile.am, sp12/Makefile.am, sp13/Makefile.am,
+	sp14/Makefile.am, sp15/Makefile.am, sp16/Makefile.am,
+	sp17/Makefile.am, sp19/Makefile.am, sp20/Makefile.am,
+	sp21/Makefile.am, sp22/Makefile.am, sp23/Makefile.am,
+	sp24/Makefile.am, sp25/Makefile.am, sp26/Makefile.am,
+	sp27/Makefile.am, sp28/Makefile.am, sp29/Makefile.am,
+	spfatal/Makefile.am, spsize/Makefile.am: Include compile.am
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
