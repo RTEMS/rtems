@@ -123,8 +123,8 @@ rtems_bsdnet_free (void *addr, int type)
 /*
  * Do the initializations required by the BSD code
  */
-static void
-bsd_init ()
+static int
+bsd_init (void)
 {
 	int i;
 	char *p;
@@ -134,8 +134,10 @@ bsd_init ()
 	 */
 	p = malloc ((nmbclusters*MCLBYTES)+MCLBYTES-1);
 	p = (char *)(((unsigned long)p + (MCLBYTES-1)) & ~(MCLBYTES-1));
-	if (p == NULL)
-		rtems_panic ("Can't get network cluster memory.");
+	if (p == NULL) {
+		printf ("Can't get network cluster memory.\n");
+		return -1;
+	}
 	mbutl = (struct mbuf *)p;
 	for (i = 0; i < nmbclusters; i++) {
 		((union mcluster *)p)->mcl_next = mclfree;
@@ -145,8 +147,10 @@ bsd_init ()
 	}
 	mbstat.m_clusters = nmbclusters;
 	mclrefcnt = malloc (nmbclusters);
-	if (mclrefcnt == NULL)
-		rtems_panic ("Can't get mbuf cluster reference counts memory.");
+	if (mclrefcnt == NULL) {
+		printf ("Can't get mbuf cluster reference counts memory.\n");
+		return -1;
+	}
 	memset (mclrefcnt, '\0', nmbclusters);
 
 	/*
@@ -155,8 +159,10 @@ bsd_init ()
 
 	p = malloc(nmbuf * MSIZE + MSIZE - 1);
 	p = (char *)(((unsigned int)p + MSIZE - 1) & ~(MSIZE - 1));
-	if (p == NULL)
-		rtems_panic ("Can't get network memory.");
+	if (p == NULL) {
+		printf ("Can't get network memory.\n");
+		return -1;
+	}
 	for (i = 0; i < nmbuf; i++) {
 		((struct mbuf *)p)->m_next = mmbfree;
 		mmbfree = (struct mbuf *)p;
@@ -183,12 +189,13 @@ bsd_init ()
 	 * Set up interfaces
 	 */
 	ifinit (NULL);
+	return 0;
 }
 
 /*
  * Initialize and start network operations
  */
-static void
+static int
 rtems_bsdnet_initialize (void)
 {
 	rtems_status_code sc;
@@ -221,8 +228,10 @@ rtems_bsdnet_initialize (void)
 						RTEMS_LOCAL,
 					0,
 					&networkSemaphore);
-	if (sc != RTEMS_SUCCESSFUL)
-		rtems_panic ("Can't create network seamphore: `%s'\n", rtems_status_text (sc));
+	if (sc != RTEMS_SUCCESSFUL) {
+		printf ("Can't create network seamphore: `%s'\n", rtems_status_text (sc));
+		return -1;
+	}
 
 	/*
 	 * Compute clock tick conversion factors
@@ -240,7 +249,8 @@ rtems_bsdnet_initialize (void)
 	/*
 	 * Set up BSD-style sockets
 	 */
-	bsd_init ();
+	if (bsd_init () < 0)
+		return -1;
 
 	/*
 	 * Start network daemon
@@ -251,9 +261,9 @@ rtems_bsdnet_initialize (void)
 	 * Let other network tasks begin
 	 */
 	rtems_bsdnet_semaphore_release ();
+	return 0;
 }
 
-rtems_id TaskWithSemaphore;
 /*
  * Obtain network mutex
  */
@@ -263,7 +273,6 @@ rtems_bsdnet_semaphore_obtain (void)
 	rtems_status_code sc;
 
 	sc = rtems_semaphore_obtain (networkSemaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-rtems_task_ident (RTEMS_SELF, 0, &TaskWithSemaphore);
 	if (sc != RTEMS_SUCCESSFUL)
 		rtems_panic ("Can't obtain network semaphore: `%s'\n", rtems_status_text (sc));
 }
@@ -276,7 +285,6 @@ rtems_bsdnet_semaphore_release (void)
 {
 	rtems_status_code sc;
 
-TaskWithSemaphore = 0;
 	sc = rtems_semaphore_release (networkSemaphore);
 	if (sc != RTEMS_SUCCESSFUL)
 		rtems_panic ("Can't release network semaphore: `%s'\n", rtems_status_text (sc));
@@ -726,7 +734,7 @@ int rtems_bsdnet_rtrequest (
 	return 0;
 }
 
-static void
+static int
 rtems_bsdnet_setup (void)
 {
 	struct rtems_bsdnet_ifconfig *ifp;
@@ -770,8 +778,10 @@ rtems_bsdnet_setup (void)
 	 * Configure interfaces
 	 */
 	s = socket (AF_INET, SOCK_DGRAM, 0);
-	if (s < 0)
-		rtems_panic ("Can't create initial socket: %s", strerror (errno));
+	if (s < 0) {
+		printf ("Can't create initial socket: %s\n", strerror (errno));
+		return -1;
+	}
 	for (ifp = rtems_bsdnet_config.ifconfig ; ifp ; ifp = ifp->next) {
 		if (ifp->ip_address == NULL)
 			continue;
@@ -780,15 +790,19 @@ rtems_bsdnet_setup (void)
 		 * Get the interface flags
 		 */
 		strcpy (ifreq.ifr_name, ifp->name);
-		if (ioctl (s, SIOCGIFFLAGS, &ifreq) < 0)
-			rtems_panic ("Can't get %s flags: %s", ifp->name, strerror (errno));
+		if (ioctl (s, SIOCGIFFLAGS, &ifreq) < 0) {
+			printf ("Can't get %s flags: %s\n", ifp->name, strerror (errno));
+			return -1;
+		}
 
 		/*
 		 * Bring interface up
 		 */
 		ifreq.ifr_flags |= IFF_UP;
-		if (ioctl (s, SIOCSIFFLAGS, &ifreq) < 0)
-			rtems_panic ("Can't bring %s up: %s", ifp->name, strerror (errno));
+		if (ioctl (s, SIOCSIFFLAGS, &ifreq) < 0) {
+			printf ("Can't bring %s up: %s\n", ifp->name, strerror (errno));
+			return -1;
+		}
 
 		/*
 		 * Set interface netmask
@@ -798,8 +812,10 @@ rtems_bsdnet_setup (void)
 		netmask.sin_family = AF_INET;
 		netmask.sin_addr.s_addr = inet_addr (ifp->ip_netmask);
 		memcpy (&ifreq.ifr_addr, &netmask, sizeof netmask);
-		if (ioctl (s, SIOCSIFNETMASK, &ifreq) < 0)
-			rtems_panic ("Can't set %s netmask: %s", ifp->name, strerror (errno));
+		if (ioctl (s, SIOCSIFNETMASK, &ifreq) < 0) {
+			printf ("Can't set %s netmask: %s\n", ifp->name, strerror (errno));
+			return -1;
+		}
 
 		/*
 		 * Set interface address
@@ -809,8 +825,10 @@ rtems_bsdnet_setup (void)
 		address.sin_family = AF_INET;
 		address.sin_addr.s_addr = inet_addr (ifp->ip_address);
 		memcpy (&ifreq.ifr_addr, &address, sizeof address);
-		if (ioctl (s, SIOCSIFADDR, &ifreq) < 0)
-			rtems_panic ("Can't set %s address: %s", ifp->name, strerror (errno));
+		if (ioctl (s, SIOCSIFADDR, &ifreq) < 0) {
+			printf ("Can't set %s address: %s\n", ifp->name, strerror (errno));
+			return -1;
+		}
 
 		/*
 		 * Set interface broadcast address
@@ -844,9 +862,12 @@ rtems_bsdnet_setup (void)
 				(struct sockaddr *)&address,
 				(struct sockaddr *)&gateway,
 				(struct sockaddr *)&netmask,
-				(RTF_UP | RTF_GATEWAY | RTF_STATIC), NULL) < 0)
-			rtems_panic ("Can't set default route: %s", strerror (errno));
+				(RTF_UP | RTF_GATEWAY | RTF_STATIC), NULL) < 0) {
+			printf ("Can't set default route: %s\n", strerror (errno));
+			return -1;
+		}
 	}
+	return 0;
 }
 
 /*
@@ -861,7 +882,8 @@ rtems_bsdnet_initialize_network (void)
 	 * Start network tasks.
 	 * Initialize BSD network data structures.
 	 */
-	rtems_bsdnet_initialize ();
+	if (rtems_bsdnet_initialize () < 0)
+		return -1;
 
 	/*
 	 * Attach interfaces
@@ -875,7 +897,8 @@ rtems_bsdnet_initialize_network (void)
 	/*
 	 * Bring up the network
 	 */
-	rtems_bsdnet_setup ();
+	if (rtems_bsdnet_setup () < 0)
+		return -1;
 	if (rtems_bsdnet_config.bootp)
 		(*rtems_bsdnet_config.bootp)();
 	return 0;
@@ -892,7 +915,7 @@ rtems_bsdnet_parse_driver_name (const struct rtems_bsdnet_ifconfig *config, char
 	int unitNumber = 0;
 
 	if (cp == NULL) {
-		printf ("No network driver name");
+		printf ("No network driver name.\n");
 		return -1;
 	}
 	while ((c = *cp++) != '\0') {
@@ -906,7 +929,7 @@ rtems_bsdnet_parse_driver_name (const struct rtems_bsdnet_ifconfig *config, char
 				if (c == '\0') {
 					char *unitName = malloc (len);
 					if (unitName == NULL) {
-						printf ("No memory");
+						printf ("No memory.\n");
 						return -1;
 					}
 					strncpy (unitName, config->name, len - 1);
@@ -920,7 +943,7 @@ rtems_bsdnet_parse_driver_name (const struct rtems_bsdnet_ifconfig *config, char
 			break;
 		}
 	}
-	printf ("Bad network driver name `%s'", config->name);
+	printf ("Bad network driver name `%s'.\n", config->name);
 	return -1;
 }
 
