@@ -30,6 +30,7 @@ void task1(void);
 
 #define CONFIGURE_MAXIMUM_TASKS               5
 #define CONFIGURE_MAXIMUM_REGIONS             1
+#define CONFIGURE_EXTRA_TASK_STACKS          (RTEMS_MINIMUM_STACK_SIZE * 4)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
