@@ -14,9 +14,9 @@ $(PROJECT_INCLUDE)/%.h: %.h
 
 coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h
 	cp $< $@
-CLEANFILES += coverhd.h
+CLEANFILES = coverhd.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) \
+PREINSTALL_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all-local: $(PREINSTALL_FILES)
