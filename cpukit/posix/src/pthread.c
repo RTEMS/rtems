@@ -226,9 +226,11 @@ int pthread_attr_setscope(
 
   switch ( contentionscope ) {
     case PTHREAD_SCOPE_PROCESS:
-    case PTHREAD_SCOPE_SYSTEM:
       attr->contentionscope = contentionscope;
       return 0;
+
+    case PTHREAD_SCOPE_SYSTEM:
+      return ENOSYS;
 
     default:
       return EINVAL;
@@ -636,7 +638,6 @@ int pthread_create(
    */
 
 #if 0
-  int contentionscope;
   int schedpolicy;
   struct sched_param schedparam;
 
@@ -665,6 +666,14 @@ int pthread_create(
       schedparams = the_attr->schedparam;
       break; 
   }
+
+  /*
+   *  Check the contentionscope since rtems only supports PROCESS wide 
+   *  contention (i.e. no system wide contention).
+   */
+
+  if ( the_attr->contentionscope != PTHREAD_SCOPE_PROCESS )
+    return ENOSYS;
 
   /*
    *  Interpret the scheduling parameters.
