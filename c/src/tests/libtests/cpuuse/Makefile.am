@@ -7,7 +7,6 @@ TEST = cpuuse
 
 MANAGERS = io rate_monotonic
 
-# C source names, if any, go here -- minus the .c
 C_FILES = init.c task1.c task2.c task3.c tswitch.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 

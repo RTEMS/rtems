@@ -9,7 +9,6 @@ PGM = ${ARCH}/$(SAMPLE).exe
 
 MANAGERS = io event
 
-# C source names, if any, go here -- minus the .c
 C_FILES = init.c test1.c test2.c test3.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 

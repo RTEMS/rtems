@@ -6,7 +6,6 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 PGM = ${ARCH}/stubdr.rel
 
-# C source names, if any, go here
 C_FILES = open.c close.c read.c write.c init.c cntrl.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 

@@ -7,7 +7,6 @@ TEST = tm28
 
 MANAGERS = io dpmem
 
-# C source names, if any, go here -- minus the .c
 C_FILES = task1.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 

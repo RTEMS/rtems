@@ -7,7 +7,6 @@ TEST = psxmount
 
 MANAGERS = all
 
-# C source names, if any, go here -- minus the .c
 C_FILES = main.c test.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 

@@ -12,7 +12,6 @@ PGM = ${ARCH}/$(TEST)-node$(NODE).exe
 
 MANAGERS = io mp event partition semaphore timer message
 
-# C source names, if any, go here -- minus the .c
 C_FILES = exit.c init.c delay.c evtask1.c evtmtask.c pttask1.c smtask1.c \
     msgtask1.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)

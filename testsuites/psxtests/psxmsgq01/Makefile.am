@@ -7,7 +7,6 @@ TEST = psxmsgq01
 
 MANAGERS = all
 
-# C source names, if any, go here -- minus the .c
 C_FILES = init.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 

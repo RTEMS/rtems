@@ -7,7 +7,6 @@ TEST = rtems++
 
 MANAGERS = event io msg sem signal timer rate_monotonic
 
-# C++ source names, if any, go here -- minus the .cc
 CC_FILES = Init.cc Task1.cc Task2.cc Task3.cc
 CC_O_FILES = $(CC_FILES:%.cc=${ARCH}/%.o)
 

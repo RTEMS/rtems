@@ -9,11 +9,9 @@ PGM = ${ARCH}/$(SAMPLE).exe
 
 MANAGERS = all
 
-# C source names, if any, go here -- minus the .c
 C_FILES = init.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-# C++ source names, if any, go here -- minus the .cc
 CC_FILES = main.cc
 CC_O_FILES = $(CC_FILES:%.cc=${ARCH}/%.o)
 

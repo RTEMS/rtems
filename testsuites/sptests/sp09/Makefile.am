@@ -9,7 +9,6 @@ TEST = sp09
 MANAGERS = io message dual_ported_memory event multi_processor region \
     semaphore signal rate_monotonic timer partition
 
-# C source names, if any, go here -- minus the .c
 C_FILES = init.c delay.c isr.c screen01.c screen02.c screen03.c screen04.c \
     screen05.c screen06.c screen07.c screen08.c screen09.c screen10.c \
     screen11.c screen12.c screen13.c screen14.c task1.c task2.c task3.c \

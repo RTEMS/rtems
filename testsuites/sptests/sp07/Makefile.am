@@ -8,7 +8,6 @@ TEST = sp07
 
 MANAGERS = io
 
-# C source names, if any, go here -- minus the .c
 C_FILES = init.c task1.c task2.c task3.c task4.c taskexit.c tcreate.c \
     tdelete.c trestart.c tstart.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)

@@ -7,7 +7,6 @@ TEST = tm21
 
 MANAGERS = io dpmem message partition region semaphore rate_monotonic timer
 
-# C source names, if any, go here -- minus the .c
 C_FILES = task1.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
