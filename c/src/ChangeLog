@@ -1,5 +1,9 @@
 2002-06-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Remove libxdr.a.
+
+2002-06-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Remove librpc.
 
 2002-06-25	Joel Sherrill <joel@OARcorp.com>
