@@ -1,5 +1,20 @@
 2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* itron/Makefile.am, libcsupport/Makefile.am,
+	libnetworking/Makefile.am, posix/Makefile.am,
+	rtems/Makefile.am, sapi/Makefile.am,
+	score/Makefile.am, wrapup/Makefile.am,
+	Makefile.am: Split preinstallation rules in to separate
+	preinstall.am-files.
+	* itron/preinstall.am, libcsupport/preinstall.am,
+	libnetworking/preinstall.am, posix/preinstall.am,
+	rtems/preinstall.am, sapi/preinstall.am,
+	score/preinstall.am, wrapup/preinstall.am,
+	preinstall.am: New (Generated from corresponding Makefile.ams).
+	* configure.ac: Add AM_CONDITIONAL(AMPOLISH3)-stub.
+
+2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* configure.ac: Add new header guard to cpuopts.h.
 	* Makefile.am: Add libfs, libblock, ftpd header install rules.
 	* libfs/Makefile.am, libblock/Makefile.am, ftpd/Makefile.am: Remove
