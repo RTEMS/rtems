@@ -1,3 +1,13 @@
+2002-08-07	Joel Sherrill <joel@OARcorp.com>
+
+	* start/Makefile.am: Pick up rest of Ralf'f changes and use 
+	cp not make-rel since there is no point in this case.
+	* start/debugreset.S: Rights were not assigned.
+	* start/reset.S: Add ifdef to avoid core dump until Chris can
+	track it down.
+	* start/cpuboot.c: Moved to startup.
+	* startup/Makefile.am: Account for above.
+
 2002-08-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* startup/Makefile.am: Remove -DGDB_MONITOR_ACTIVE (Not used

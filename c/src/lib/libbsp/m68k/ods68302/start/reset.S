@@ -18,7 +18,6 @@
  *        
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
- *  All rights assigned to U.S. Government, 1994.
  *
  *  This material may be reproduced by or for the U.S. Government pursuant
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
@@ -494,6 +493,7 @@ zerobss_loop:
 unhandled_exception:
                 
 EXCEPTION_HANDLER(#, 0)
+#if 0
 EXCEPTION_HANDLER(#, 1)
 EXCEPTION_HANDLER(#, 2)
 EXCEPTION_HANDLER(#, 3)
@@ -775,9 +775,13 @@ EXCEPTION_HANDLER(#, 253)
 EXCEPTION_HANDLER(#, 254)
 EXCEPTION_HANDLER(#, 255)                                
 
+#endif
+
+
 
 common_exception_handler: 
 
+#if 0
         |
         | Need to put the format/vector above the PC and status register
         |
@@ -839,6 +843,7 @@ ceh_30:
 | The RAM based vector table
 |
 
+#endif
         .sect   .vtable
 
         .global vector_table

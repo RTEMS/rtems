@@ -2,17 +2,12 @@
 ## $Id$
 ##
 
-RESET_S_FILES_yes_V = debugreset.S
-RESET_S_FILES_no_V = reset.S
-RESET_S_FILES__V = $(RESET_S_FILES_no_V)
-RESET_S_FILES = $(RESET_S_FILES_$(RTEMS_DEBUGGER)_V)
-
-CFLAGS_no_V = -DGDB_MONITOR_ACTIVE
-CFLAGS__V = $(CFLAGS_no_V)
-CFLAGS_V = $(CFLAGS_$(RTEMS_DEBUGGER)_V)
-
-C_FILES = cpuboot.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+# FIXME: Better merge both files into one and use #ifdef GDB_MONITOR_ACTIVE
+if ODS68302_DEBUG
+RESET_S_FILES = debugreset.S
+else
+RESET_S_FILES = reset.S
+endif
 
 S_FILES = $(RESET_S_FILES)
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
@@ -32,7 +27,7 @@ AM_CFLAGS += $(CFLAGS_V)
 bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
 
 $(ARCH)/start.o: $(OBJS)
-	$(make-rel)
+	cp $(S_O_FILES) $(ARCH)/start.o
 
 $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(ARCH)/start.o
 	$(INSTALL_DATA) $< $@

@@ -7,9 +7,10 @@ VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel
 
-C_FILES = crc.c debugport.c gdb-hooks.c bootcard.c main.c m68302scc.c \
-    m68k-stub.c m68kpretaskinghook.c memcheck.c trace.c gnatinstallhandler.c \
-    bsplibc.c bsppost.c bspstart.c bspclean.c sbrk.c setvec.c
+C_FILES = cpuboot.c crc.c debugport.c gdb-hooks.c bootcard.c main.c \
+    m68302scc.c m68k-stub.c m68kpretaskinghook.c memcheck.c trace.c \
+    gnatinstallhandler.c bsplibc.c bsppost.c bspstart.c bspclean.c sbrk.c \
+    setvec.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
