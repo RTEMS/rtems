@@ -1,3 +1,10 @@
+2000-11-14	Jiri Gaisler <jgais@ws.estec.esa.nl>
+
+	* shared/src/cache_manager.c
+	(rtems_cache_invalidate_multiple_instruction_lines): If 
+	CPU_INSTRUCTION_CACHE_ALIGNMENT is defined but 0, then there is 
+	an instruction cache but no notion of line size.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

@@ -207,7 +207,7 @@ rtems_cache_disable_data( void )
 void
 rtems_cache_invalidate_multiple_instruction_lines( const void * i_addr, size_t n_bytes )
 {
-#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
+#if CPU_INSTRUCTION_CACHE_ALIGNMENT
   const void * final_address;
 
  /*
