@@ -1,3 +1,7 @@
+2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Reflect changes to librdbg.
+
 2003-12-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.

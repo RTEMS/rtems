@@ -230,11 +230,8 @@ librdbg/include/rdbg/powerpc/Makefile
 librdbg/include/rdbg/m68k/Makefile
 librdbg/src/Makefile
 librdbg/src/i386/Makefile
-librdbg/src/i386/any/Makefile
 librdbg/src/powerpc/Makefile
-librdbg/src/powerpc/new_exception_processing/Makefile
 librdbg/src/m68k/Makefile
-librdbg/src/m68k/any/Makefile
 
 libchip/Makefile
 
