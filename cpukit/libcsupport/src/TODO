@@ -9,3 +9,6 @@
   See device_lseek() for an example of where this would be nice.
 
 + Fix strerror() so it prints all error numbers.
+
++ Check the node allocation coment in the fchdir call.
++ Add an interface somewhere for this call.

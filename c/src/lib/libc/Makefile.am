@@ -29,7 +29,7 @@ TERMIOS_C_FILES = cfgetispeed.c cfgetospeed.c cfsetispeed.c cfsetospeed.c \
     termiosreserveresources.c
 
 SYSTEM_CALL_C_FILES = open.c close.c read.c write.c lseek.c ioctl.c mkdir.c \
-    mknod.c mkfifo.c rmdir.c chdir.c chmod.c fchmod.c chown.c link.c \
+    mknod.c mkfifo.c rmdir.c chdir.c chmod.c fchdir.c fchmod.c chown.c link.c \
     unlink.c umask.c ftruncate.c utime.c fstat.c fcntl.c fpathconf.c \
     getdents.c fsync.c fdatasync.c pipe.c dup.c dup2.c symlink.c readlink.c \
     creat.c
