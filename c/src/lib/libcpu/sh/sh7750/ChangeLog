@@ -1,6 +1,6 @@
 2002-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* clock/Makefile.am: Eliminate @RTEMS_BSP@.cfg, $(OBJS).
+	* clock/Makefile.am: Eliminate @RTEMS_BSP@.cfg, $(C_O_FILES).
 	* sci/Makefile.am: Likewise.
 	* score/Makefile.am: Likewise.
 	* timer/Makefile.am: Likewise.
