@@ -1,3 +1,10 @@
+2001-03-15	Joel Sherrill <joel@OARcorp.com>
+
+	* src/extension.c: Split to reduce minimum code size per PR134.
+	* src/extensioncreate.c, src/extensiondelete.c, src/extensionident.c:
+	New files.
+	src/Makefile.am: Modified to reflect above.
+
 2002-01-07	Joel Sherrill <joel@OARcorp.com>
 
 	* optman/, optman/.cvsignore, optman/Makefile.am, optman/no-ext.c,
