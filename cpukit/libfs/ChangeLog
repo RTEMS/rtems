@@ -1,0 +1,21 @@
+2000-10-18	Chris Johns <ccj@acm.org>
+
+	* libfs created.
+	* src, src/imfs, wrapup: New directories.
+	* ChangeLog, Makefile.am, README, configure.in, src/Makefile.am,
+	wrapup/Makefile.am: New files.
+	* src/imfs/deviceio.c, src/imfs/imfs_getchild.c,
+	src/imfs/imfs_readlink.c, src/imfs/imfs.h, src/imfs/imfs_gtkn.c,
+	src/imfs/imfs_rmnod.c, src/imfs/imfs_chown.c,
+	src/imfs/imfs_handlers_device.c, src/imfs/imfs_stat.c,
+	src/imfs/imfs_creat.c, src/imfs/imfs_handlers_directory.c,
+	src/imfs/imfs_symlink.c, src/imfs/imfs_debug.c,
+	src/imfs/imfs_handlers_link.c, src/imfs/imfs_unixstub.c,
+	src/imfs/imfs_directory.c, src/imfs/imfs_handlers_memfile.c,
+	src/imfs/imfs_unlink.c, src/imfs/imfs_eval.c, src/imfs/imfs_init.c,
+	src/imfs/imfs_unmount.c, src/imfs/imfs_fchmod.c,
+	src/imfs/imfs_initsupp.c, src/imfs/imfs_utime.c, src/imfs/imfs_fcntl.c,
+	src/imfs/imfs_link.c, src/imfs/memfile.c, src/imfs/imfs_fdatasync.c,
+	src/imfs/imfs_mknod.c, src/imfs/miniimfs_init.c, src/imfs/imfs_free.c,
+	src/imfs/imfs_mount.c, src/imfs/imfs_fsunmount.c, src/imfs/imfs_ntype.c:
+	New files. Moved from libc.
