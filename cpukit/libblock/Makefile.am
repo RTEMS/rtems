@@ -3,29 +3,28 @@
 ##
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/amcompile.am
+include $(top_srcdir)/automake/compile.am
+
+AM_CPPFLAGS += -I$(top_builddir)
 
 include_rtemsdir = $(includedir)/rtems
+
+EXTRA_LIBRARIES = libblock.a
+CLEANFILES = libblock.a
+libblock_a_CPPFLAGS = $(AM_CPPFLAGS) $(LIBC_DEFINES) $(CFLAGS_OPTIMIZE_V)
+
+EXTRA_LIBRARIES += libblock_g.a
+CLEANFILES += libblock_g.a
+libblock_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(LIBC_DEFINES) $(CFLAGS_DEBUG_V)
 
 include_rtems_HEADERS = include/rtems/bdbuf.h include/rtems/blkdev.h \
     include/rtems/diskdevs.h include/rtems/ramdisk.h \
     include/rtems/ide_part_table.h
 
-C_FILES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/ramdisk.c \
+libblock_a_SOURCES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/ramdisk.c \
     src/ide_part_table.c
 
-EXTRA_LIBRARIES = libblock.a
-CLEANFILES = libblock.a
-libblock_a_SOURCES = $(C_FILES)
-libblock_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += libblock_g.a
-CLEANFILES += libblock_g.a
 libblock_g_a_SOURCES = $(libblock_a_SOURCES)
-libblock_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-
-AM_CPPFLAGS += -I$(top_builddir)
-AM_CPPFLAGS += $(LIBC_DEFINES)
 
 all-local: $(PREINSTALL_FILES) libblock$(LIB_VARIANT).a
 
