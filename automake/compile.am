@@ -30,11 +30,11 @@
 ## * The non-gcc building scheme requires manually setting up environment 
 ##   variables and is hardly tested at all
 
-## CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V, CFLAGS_PROFILE_V are the values we
+## CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V are the values we
 ## would want the corresponding macros to be set to.
 ##
-## CFLAGS_OPTIMIZE, CFLAGS_DEBUG, CFLAGS_PROFILE are set by the 
-## 'VARIANT=<OPTIMIZE|DEBUG|PROFILE>' targets to their _V values.
+## CFLAGS_OPTIMIZE, CFLAGS_DEBUG are set by the 
+## 'VARIANT=<OPTIMIZE|DEBUG>' targets to their _V values.
 
 ## XCPPFLAGS, XCFLAGS, XCXXFLAGS, XASFLAGS 
 ## are used to add flags from the shell
@@ -117,7 +117,7 @@ depend-gcc: $(C_FILES) $(CC_FILES) $(S_FILES)
 ##       Use gcc -M to generate dependencies
 ##       Replace foo.o with $(ARCH)/foo.o
 ##       Replace $(ARCH) value with string $(ARCH)
-##           so that it will for debug and profile cases
+##           so that it will for debug cases
 	$(COMPILE) -M   $^    |  \
 	sed -e 's?^\(.*\)\.o[ ]*:?$$(ARCH)/\1.o:?' \
 	    -e 's?$(ARCH)/?$$(ARCH)/?'   >$(DEPEND).tmp
@@ -161,17 +161,14 @@ VARIANT = OPTIMIZE
 
 VARIANT_OPTIMIZE_V = OPTIMIZE
 VARIANT_DEBUG_V = DEBUG
-VARIANT_PROFILE_V = PROFILE
 VARIANT_optimize_V = OPTIMIZE
 VARIANT_debug_V = DEBUG
-VARIANT_profile_V = PROFILE
 
 VARIANT_V = $(VARIANT_$(VARIANT)_V)
 
 ## Setup the variant build subdirectory
 ARCH_OPTIMIZE_V = o-optimize
 ARCH_DEBUG_V = o-debug
-ARCH_PROFILE_V = o-profile
 
 ARCH__V = $(ARCH_OPTIMIZE_V)
 ARCH = $(ARCH_$(VARIANT_V)_V)
@@ -179,7 +176,6 @@ ARCH = $(ARCH_$(VARIANT_V)_V)
 ## Setup the library suffix
 LIBSUFFIX_OPTIMIZE_V =
 LIBSUFFIX_DEBUG_V = _g
-LIBSUFFIX_PROFILE_V = _p
 LIBSUFFIX__V = $(LIBSUFFIX_OPTIMIZE_V)
 
 LIB_VARIANT = $(LIBSUFFIX_$(VARIANT_V)_V)
@@ -188,7 +184,6 @@ LIB_VARIANT = $(LIBSUFFIX_$(VARIANT_V)_V)
 CPU_CFLAGS = @CPU_CFLAGS@
 CFLAGS_OPTIMIZE_V = @CFLAGS_OPTIMIZE_V@
 CFLAGS_DEBUG_V = @CFLAGS_DEBUG_V@
-CFLAGS_PROFILE_V = @CFLAGS_PROFILE_V@
 CFLAGS__V = $(CFLAGS_OPTIMIZE_V)
 
 ## ------------------------------------------------------------------------
@@ -197,7 +192,6 @@ if RTEMS_USE_GCC
 ## gcc >= gcc-2.8
 RTEMS_CFLAGS_OPTIMIZE_V =
 RTEMS_CFLAGS_DEBUG_V = -qrtems_debug -Wno-unused
-RTEMS_CFLAGS_PROFILE_V = -pg
 
 ## non-gcc
 ## We can't guess what flags might be required here.
@@ -227,5 +221,5 @@ ${ARCH}:
 	mkdir ${ARCH}
 
 clean-local:
-	$(RM) -r o-optimize o-debug o-profile $(CLEANDIRS)
-	$(RM) Depends-o-optimize.tmp Depends-o-debug.tmp Depends-o-profile.tmp
+	$(RM) -r o-optimize o-debug $(CLEANDIRS)
+	$(RM) Depends-o-optimize.tmp Depends-o-debug.tmp

@@ -13,12 +13,6 @@ debug:
 
 .PHONY: debug
 
-profile:
-	@echo
-	@echo "\"make profile\" is obsolete, instead use:"
-	@echo "	make VARIANT=PROFILE"
-	@echo
-
 preinstall-am: $(PREINSTALL_FILES)
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am

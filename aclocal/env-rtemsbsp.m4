@@ -11,7 +11,6 @@ AC_BEFORE([$0], [RTEMS_CHECK_CUSTOM_BSP])dnl
 AC_ARG_VAR([CPU_CFLAGS],[CFLAGS specifying CPU-dependent features])
 AC_ARG_VAR([CFLAGS_OPTIMIZE_V],[CFLAGS for building the OPTIMIZE variant])
 AC_ARG_VAR([CFLAGS_DEBUG_V],[CFLAGS for building the DEBUG variant])
-AC_ARG_VAR([CFLAGS_PROFILE_V],[CFLAGS for building the PROFILE variant])
 AC_ARG_VAR([RTEMS_BSP_FAMILY],[RTEMS's BSP directory])
 AC_ARG_VAR([RTEMS_CPU_MODEL],[RTEMS's cpu model])
 

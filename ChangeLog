@@ -1,3 +1,12 @@
+2003-05-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 321:
+	* aclocal/check-bsp-cache.m4: Remove support for profile-variant.
+	* aclocal/env-rtemsbsp.m4
+	* automake/compile.am
+	* automake/host.am
+	* automake/local.am
+
 2003-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/check-cxx.m4: Remove LIBSUFFIX_VA.
