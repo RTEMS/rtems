@@ -1,3 +1,7 @@
+2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/gen405.cfg: Remove -D__powerpc__.
+
 2002-04-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/erc32nfp.cfg: Remove CPU_U32_FIX.
