@@ -36,6 +36,7 @@
 #include <rtems/posix/priority.h>
 #include <rtems/posix/psignal.h>
 #include <rtems/posix/pthread.h>
+#include <rtems/posix/ptimer.h>
 #include <rtems/posix/time.h>
 
 /*PAGE
@@ -50,6 +51,7 @@ posix_api_configuration_table _POSIX_Default_configuration = {
   0,                             /* maximum_mutexes */
   0,                             /* maximum_condition_variables */
   0,                             /* maximum_keys */
+  0,                             /* maximum_timers */
   0,                             /* maximum_queued_signals */
   0,                             /* number_of_initialization_threads */
   NULL                           /* User_initialization_threads_table */
@@ -90,6 +92,7 @@ void _POSIX_API_Initialize(
     api_configuration->maximum_mutexes
   );
 
+  _POSIX_Timer_Manager_initialization ( api_configuration->maximum_timers );
 }
 
 #endif

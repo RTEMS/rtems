@@ -46,6 +46,7 @@ typedef struct {
   int                                 maximum_mutexes;
   int                                 maximum_condition_variables;
   int                                 maximum_keys;
+  int                                 maximum_timers;
   int                                 maximum_queued_signals;
   int                                 number_of_initialization_threads;
   posix_initialization_threads_table *User_initialization_threads_table;

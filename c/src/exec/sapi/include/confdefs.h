@@ -353,6 +353,10 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 #define CONFIGURE_MAXIMUM_POSIX_KEYS         0
 #endif
 
+#ifndef CONFIGURE_MAXIMUM_POSIX_TIMERS
+#define CONFIGURE_MAXIMUM_POSIX_TIMERS 0
+#endif
+
 #ifndef CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
 #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 0
 #endif
@@ -411,6 +415,10 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys) \
   ((_keys) * \
    ( sizeof(POSIX_Keys_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_POSIX_TIMERS(_timers) \
+  ((_timers) * \
+   ( 0 ) )
 
 #define CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) \
   ((_queued_signals) * \
@@ -617,6 +625,7 @@ posix_api_configuration_table Configuration_POSIX_API = {
   CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES +
     CONFIGURE_MAXIMUM_ADA_TASKS + CONFIGURE_MAXIMUM_FAKE_ADA_TASKS,
   CONFIGURE_MAXIMUM_POSIX_KEYS + CONFIGURE_GNAT_KEYS,
+  CONFIGURE_MAXIMUM_POSIX_TIMERS,
   CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
   CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE,
   CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME
