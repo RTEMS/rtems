@@ -3,7 +3,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 EXTRA_DIST = \
-update word-replace word-replace2
+word-replace2
 
 SUBDIRS = \
 bmenu \
