@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include "iregdef.h"
 #include "idtcpu.h"
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 char *cause_strings[32] =
 {

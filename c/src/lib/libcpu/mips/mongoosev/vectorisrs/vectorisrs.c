@@ -27,7 +27,7 @@
       mips_default_isr(_vector); \
   } while (0)
 
-#include <bspIo.h>  /* for printk */
+#include <rtems/bspIo.h>  /* for printk */
 
 void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
 {

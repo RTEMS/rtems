@@ -1,3 +1,10 @@
+2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mongoosev/vectorisrs/vectorisrs.c: Include rtems/bspIo.h instead of bspIo.h.
+	* r46xx/vectorisrs/vectorisrs.c: Include rtems/bspIo.h instead of bspIo.h.
+	* shared/interrupts/vectorexceptions.c: Include rtems/bspIo.h instead of bspIo.h.
+	* tx39/vectorisrs/vectorisrs.c: Include rtems/bspIo.h instead of bspIo.h.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
