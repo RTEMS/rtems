@@ -25,7 +25,7 @@ VPATH = @srcdir@/..
 RELS=../$(ARCH)/rtems-cpu.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = cpu rtems
+C_PIECES = cpu 
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
@@ -65,15 +65,18 @@ LDFLAGS   +=
 CLEAN_ADDITIONS += ../$(ARCH)
 CLOBBER_ADDITIONS +=
 
+all:    ${ARCH} $(SRCS) preinstall $(OBJS) ../$(ARCH)/rtems.o  $(RELS)
+
 ../$(ARCH)/rtems-cpu.rel: $(OBJS)
 	test -d ../$(ARCH) || mkdir ../$(ARCH)
 	$(make-rel)
 
-all:    ${ARCH} $(SRCS) preinstall $(OBJS) $(RELS)
+../$(ARCH)/rtems.o: $(srcdir)/../rtems.c
 
 # Install the program(s), appending _g or _p as appropriate.
 # for include files, just use $(INSTALL_CHANGE)
 install:  all
+	$(INSTALL_VARIANT) -m 644 ../$(ARCH)/rtems.o ${PROJECT_RELEASE}/lib
 
 preinstall: ${ARCH}
 	$(INSTALL_CHANGE) -m 444 ${H_FILES} $(PROJECT_INCLUDE)

@@ -65,11 +65,11 @@ LDFLAGS   +=
 CLEAN_ADDITIONS += ../$(ARCH)
 CLOBBER_ADDITIONS +=
 
+all:    ${ARCH} $(SRCS) preinstall $(OBJS) $(RELS)
+
 ../$(ARCH)/rtems-cpu.rel: $(OBJS)
 	test -d ../$(ARCH) || mkdir ../$(ARCH)
 	$(make-rel)
-
-all:    ${ARCH} $(SRCS) preinstall $(OBJS) $(RELS)
 
 # Install the program(s), appending _g or _p as appropriate.
 # for include files, just use $(INSTALL_CHANGE)
