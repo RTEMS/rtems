@@ -39,20 +39,6 @@ extern "C" {
 
 extern void WriteDisplay( char * string );
 
-/*
- *  Stuff for Time Test 27
- */
-
-#define MUST_WAIT_FOR_INTERRUPT 0
-
-#define Install_tm27_vector( handler ) set_vector( (handler), 0, 1 )
-
-#define Cause_tm27_intr()
-
-#define Clear_tm27_intr()
-
-#define Lower_tm27_intr()
-
 extern uint32_t   mips_get_timer( void );
 
 #define CPU_CLOCK_RATE_MHZ     (50)

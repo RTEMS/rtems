@@ -48,41 +48,7 @@ extern "C" {
 
 extern void assertSoftwareInterrupt(uint32_t);
 
-/*
- *  Define the interrupt mechanism for Time Test 27
- *
- *  NOTE: Following are for XXX and are board independent
- *
- */
-
 #define CLOCK_VECTOR	MONGOOSEV_IRQ_TIMER1
-
-#define MUST_WAIT_FOR_INTERRUPT 1
-
-#if 1
-
-#define Install_tm27_vector( handler ) \
-    (void) set_vector( handler, MONGOOSEV_IRQ_SOFTWARE_1, 1 );
-
-#define Cause_tm27_intr()   assertSoftwareInterrupt(0);
-
-#define Clear_tm27_intr()
-#define Lower_tm27_intr()
-
-#else
-
-#define Install_tm27_vector( handler ) \
-    (void) set_vector( handler, MONGOOSEV_IRQ_TIMER1, 1 );
-
-#define Cause_tm27_intr() \
-  do { \
-    ; \
-  } while(0)
-
-#define Clear_tm27_intr()
-#define Lower_tm27_intr()
-
-#endif
 
 /* Constants */
 
