@@ -1,4 +1,11 @@
 
+2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* include/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* inline/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* macros/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-09-27	Eric Norum <eric.norum@usask.ca>
 
 	* src/threadhandler.c: Now process C++ global constructors

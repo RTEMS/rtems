@@ -23,7 +23,7 @@ else
 include_rtems_score_HEADERS = $(STD_I_FILES)
 endif
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%=$(PROJECT_INCLUDE)/rtems/score/%)
 
 $(PROJECT_INCLUDE)/rtems/score:

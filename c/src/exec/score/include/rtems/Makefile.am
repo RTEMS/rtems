@@ -8,7 +8,7 @@ include_rtemsdir = $(includedir)/rtems
 
 include_rtems_HEADERS = debug.h system.h seterr.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
     $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems:
