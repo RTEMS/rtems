@@ -104,12 +104,13 @@ if [ ! -d ${board} ] ; then
 fi
 
 #DIRLIST -- so greps for DIRLIST will find this file
-CPUOBJ=c/src/exec/score/cpu/${rtems_cpu}/${ARCH}
+CPUOBJ=c/src/exec/score/cpu/${rtems_cpu}/wrap/${ARCH}
 COREOBJ=c/src/exec/score/src/${ARCH}
 RTEMSOBJ=c/src/exec/rtems/src/${ARCH}
 SAPIOBJ=c/src/exec/sapi/src/${ARCH}
 OPTOBJ=c/src/exec/rtems/optman/${ARCH}
 
+# XXX These have been split up
 MANLIST=" \
 ${RTEMSOBJ}/clock.o \
 ${RTEMSOBJ}/dpmem.o \
@@ -139,7 +140,7 @@ if [ -r ${RTEMSOBJ}/mp.o ] ; then
   ${RTEMSOBJ}/signalmp.o ${RTEMSOBJ}/taskmp.o ${COREOBJ}/threadmp.o \
   "
 
-  MPOBJLIST=${OPTOBJ}/no-msg.rel
+  MPOBJLIST=${OPTOBJ}/no-mp.rel
 fi
 
 OPTMANLIST="\
@@ -160,6 +161,7 @@ ${RTEMSOBJ}/tasks.o \
 ${RTEMSOBJ}/intr.o \
 ${SAPIOBJ}/fatal.o \
 "
+# XXX parts of these have been split up
 CORELIST=" \
 ${COREOBJ}/apiext.o ${COREOBJ}/chain.o \
 ${COREOBJ}/coremsg.o   ${COREOBJ}/coremutex.o ${COREOBJ}/coresem.o \
