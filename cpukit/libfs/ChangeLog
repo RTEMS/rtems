@@ -1,5 +1,17 @@
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove (Merged-in into ../configure.ac)
+	* Makefile.am, src/Makefile.am, src/dosfs/Makefile.am,
+	src/imfs/Makefile.am: Reflect having merged configure.ac into
+	../configure.ac.
+	* src/dosfs/config.h: New.
+	* src/dosfs/Makefile.am: Add config.h.
+	* src/imfsfs/config.h: New.
+	* src/imfs/Makefile.am: Add config.h. 
+	Remove COMMON_C_FILES, DOC_FILES (Unused).
+
+2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* src/dosfs/fat.c: include config-header "config.h".
 	* src/dosfs/fat_fat_operations.c: Ditto.
 	* src/dosfs/fat_file.c: Ditto.

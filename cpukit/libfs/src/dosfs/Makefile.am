@@ -3,11 +3,13 @@
 ##
 
 
-include $(top_srcdir)/../automake/multilib.am
-include $(top_srcdir)/../automake/compile.am
-include $(top_srcdir)/../automake/lib.am
+include $(top_srcdir)/automake/multilib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
-AM_CPPFLAGS += -I../.. $(LIBC_DEFINES) 
+noinst_HEADERS = config.h
+
+AM_CPPFLAGS += $(LIBC_DEFINES) 
 
 FATFS_C_FILES = fat.c fat_fat_operations.c fat_file.c
 
@@ -50,4 +52,4 @@ TMPINSTALL_FILES += $(H_FILES)
 
 EXTRA_DIST = $(DOSFS_C_FILES) $(FATFS_C_FILES)
 
-include $(top_srcdir)/../automake/local.am
+include $(top_srcdir)/automake/local.am
