@@ -119,7 +119,7 @@ specific patches.
 @subheading RTEMS Specific Tool Patches and Scripts
 @example
     FTP Site:    @value{RTEMS-FTPSITE}
-    Directory:   @value{RTEMS-FTPDIR}/ada_tools
+    Directory:   @value{RTEMS-FTPDIR}/ada_tools/source
     File:        @value{BUILDTOOLS-TAR}
 @ifset BINUTILS-RTEMSPATCH
     File:        @value{BINUTILS-RTEMSPATCH}
@@ -134,8 +134,8 @@ specific patches.
     File:        @value{GNAT-RTEMSPATCH}
 @end ifset
 @ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools, Download RTEMS patches}
-    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools
+@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools/source, Download RTEMS patches}
+    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/ada_tools/source
 @end ifset
 @end example
 

@@ -88,7 +88,7 @@
 @set RTEMS-TAR       rtems-4.5.0-beta3.tgz
 @set RTEMS-UNTAR     rtems-4.5.0-beta3
 @set RTEMS-FTPSITE   ftp.OARcorp.com
-@set RTEMS-FTPDIR    /pub/rtems/betas/4.5.0-beta
+@set RTEMS-FTPDIR    /pub/rtems/betas/rtems-4.5.0-beta
 @set BUILDTOOLS-TAR  c_build_scripts-4.5.0-beta3.tgz 
 
 

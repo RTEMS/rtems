@@ -112,7 +112,7 @@ specific patches.
 @subheading RTEMS Specific Tool Patches and Scripts
 @example
     FTP Site:    @value{RTEMS-FTPSITE}
-    Directory:   @value{RTEMS-FTPDIR}/c_tools
+    Directory:   @value{RTEMS-FTPDIR}/c_tools/source
     File:        @value{BUILDTOOLS-TAR}
 @ifset BINUTILS-RTEMSPATCH
     File:        @value{BINUTILS-RTEMSPATCH}
@@ -124,8 +124,8 @@ specific patches.
     File:        @value{GCC-RTEMSPATCH}
 @end ifset
 @ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/c_tools,Download RTEMS Patches and Scripts}
-    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/c_tools
+@c    URL:         @uref{ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/c_tools/source,Download RTEMS Patches and Scripts}
+    URL:         ftp://@value{RTEMS-FTPSITE}@value{RTEMS-FTPDIR}/c_tools/source
 @end ifset
 @end example
 
