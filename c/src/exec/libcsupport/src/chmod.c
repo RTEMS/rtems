@@ -28,13 +28,22 @@ int chmod(
 {
   int                              status;
   rtems_filesystem_location_info_t loc;
+  int                              result;
 
   status = rtems_filesystem_evaluate_path( path, 0, &loc, TRUE );
   if ( status != 0 )
     return -1;
   
-  if ( !loc.handlers->fchmod )
+  if ( !loc.handlers->fchmod ){
+    if ( loc.ops->freenod )
+      (*loc.ops->freenod)( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
+  }
 
-  return (*loc.handlers->fchmod)( &loc, mode );
+  result = (*loc.handlers->fchmod)( &loc, mode );
+
+  if ( loc.ops->freenod )
+    (*loc.ops->freenod)( &loc );
+  
+  return result;
 }

@@ -26,13 +26,22 @@ int chown(
   gid_t       group
 )
 {
-  rtems_filesystem_location_info_t   temp_loc;
+  rtems_filesystem_location_info_t   loc;
+  int                                result;
 
-  if ( rtems_filesystem_evaluate_path( path, 0x00, &temp_loc, TRUE ) )
+  if ( rtems_filesystem_evaluate_path( path, 0x00, &loc, TRUE ) )
     return -1;
   
-  if ( !temp_loc.ops->chown )
+  if ( !loc.ops->chown ) {
+    if ( loc.ops->freenod )
+      (*loc.ops->freenod)( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
+  }
 
-  return (*temp_loc.ops->chown)( &temp_loc, owner, group );
+  result = (*loc.ops->chown)( &loc, owner, group );
+
+  if ( loc.ops->freenod )
+    (*loc.ops->freenod)( &loc );
+  
+  return result;
 }

@@ -61,6 +61,9 @@ rtems_status_code rtems_io_register_name(
  *  rtems_io_lookup_name
  *
  *  This version is not reentrant.
+ *
+ *  XXX - This is dependent upon IMFS and should not be.  
+ *        Suggest adding a filesystem routine to fill in the device_info.
  */
 
 rtems_status_code rtems_io_lookup_name(
@@ -70,15 +73,20 @@ rtems_status_code rtems_io_lookup_name(
 {
 #if !defined(RTEMS_UNIX)
   IMFS_jnode_t                      *the_jnode;
-  rtems_filesystem_location_info_t   temp_loc;
+  rtems_filesystem_location_info_t   loc;
   static rtems_driver_name_t         device;
   int                                result;
+  rtems_filesystem_node_types_t      node_type;
 
-  result = rtems_filesystem_evaluate_path( name, 0x00, &temp_loc, TRUE );
-  the_jnode = temp_loc.node_access;
+  result = rtems_filesystem_evaluate_path( name, 0x00, &loc, TRUE );
+  the_jnode = loc.node_access;
 
-  if ( (result != 0) || the_jnode->type != IMFS_DEVICE ) {
+  node_type = (*loc.ops->node_type)( &loc );
+
+  if ( (result != 0) || node_type != RTEMS_FILESYSTEM_DEVICE ) {
     *device_info = 0;
+    if ( loc.ops->freenod )
+      (*loc.ops->freenod)( &loc );
     return RTEMS_UNSATISFIED;
   }
 
@@ -87,6 +95,10 @@ rtems_status_code rtems_io_lookup_name(
   device.major              = the_jnode->info.device.major;
   device.minor              = the_jnode->info.device.minor;
   *device_info              = &device;
+
+  if ( loc.ops->freenod )
+    (*loc.ops->freenod)( &loc );
+   
 #endif
   return RTEMS_SUCCESSFUL;
 }

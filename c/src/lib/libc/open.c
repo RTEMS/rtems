@@ -62,7 +62,7 @@ int open(
   int                                 rc;
   rtems_libio_t                      *iop = 0;
   int                                 status;
-  rtems_filesystem_location_info_t    temp_loc;
+  rtems_filesystem_location_info_t    loc;
   int                                 eval_flags;
 
 
@@ -104,7 +104,7 @@ int open(
    */
 
   status = rtems_filesystem_evaluate_path(
-     pathname, eval_flags, &temp_loc, TRUE );
+     pathname, eval_flags, &loc, TRUE );
 
   if ( status == -1 ) {
     if ( errno != ENOENT ) {
@@ -126,7 +126,7 @@ int open(
     }
 
     /* Sanity check to see if the file name exists after the mknod() */
-    status = rtems_filesystem_evaluate_path( pathname, 0x0, &temp_loc, TRUE );
+    status = rtems_filesystem_evaluate_path( pathname, 0x0, &loc, TRUE );
     if ( status != 0 ) {   /* The file did not exist */
       rc = EACCES;
       goto done;
@@ -139,15 +139,15 @@ int open(
   }
 
   /*
-   *  Fill in the file control block based on the temp_loc structure
+   *  Fill in the file control block based on the loc structure
    *  returned by successful path evaluation.
    */
 
   iop->offset     = 0;
-  iop->handlers   = temp_loc.handlers;
-  iop->file_info  = temp_loc.node_access;
+  iop->handlers   = loc.handlers;
+  iop->file_info  = loc.node_access;
   iop->flags     |= rtems_libio_fcntl_flags( flags );
-  iop->pathinfo   = temp_loc;
+  iop->pathinfo   = loc;
 
   if ( !iop->handlers->open ) {
     rc = ENOTSUP;
@@ -178,6 +178,10 @@ done:
       rtems_libio_free( iop );
     set_errno_and_return_minus_one( rc );
   }
+
+  if ( loc.ops->freenod )
+    (*loc.ops->freenod)( &loc );
+    
   return iop - rtems_libio_iops;
 }
 

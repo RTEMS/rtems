@@ -29,6 +29,11 @@ int symlink(
   if ( result != 0 )
     return -1;
 
-  return (*loc.ops->symlink)( &loc, actualpath, name_start);
+  result = (*loc.ops->symlink)( &loc, actualpath, name_start);
+
+  if ( loc.ops->freenod )
+    (*loc.ops->freenod)( &loc );
+
+  return result;
 }
 

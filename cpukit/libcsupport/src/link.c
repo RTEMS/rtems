@@ -32,6 +32,7 @@ int link(
   /*
    * Get the node we are linking to.
    */
+
   result = rtems_filesystem_evaluate_path( existing, 0, &existing_loc, TRUE );
   if ( result != 0 )
      return -1;
@@ -42,21 +43,47 @@ int link(
 
   rtems_filesystem_get_start_loc( new, &i, &parent_loc );
   result = (*parent_loc.ops->evalformake)( &new[i], &parent_loc, &name_start );
-  if ( result != 0 )
-     set_errno_and_return_minus_one( result );
+  if ( result != 0 ) {
+    if ( existing_loc.ops->freenod )
+      (*existing_loc.ops->freenod)( &parent_loc );
+    set_errno_and_return_minus_one( result );
+  }
 
   /*
    *  Check to see if the caller is trying to link across file system
    *  boundaries.
    */
 
-  if ( parent_loc.mt_entry != existing_loc.mt_entry )
+  if ( parent_loc.mt_entry != existing_loc.mt_entry ) {
+    if ( existing_loc.ops->freenod )
+      (*existing_loc.ops->freenod)( &existing_loc );
+
+    if ( parent_loc.ops->freenod )
+      (*parent_loc.ops->freenod)( &parent_loc );
+
     set_errno_and_return_minus_one( EXDEV );
+  }
 
-  if ( !parent_loc.ops->link )
+  if ( !parent_loc.ops->link ) {
+
+    if ( existing_loc.ops->freenod )
+      (*existing_loc.ops->freenod)( &existing_loc );
+
+    if ( parent_loc.ops->freenod )
+      (*parent_loc.ops->freenod)( &parent_loc );
+
     set_errno_and_return_minus_one( ENOTSUP );
+  }
 
-  return (*parent_loc.ops->link)( &existing_loc, &parent_loc, name_start );
+  result = (*parent_loc.ops->link)( &existing_loc, &parent_loc, name_start );
+  
+  if ( existing_loc.ops->freenod )
+    (*existing_loc.ops->freenod)( &existing_loc );
+
+  if ( parent_loc.ops->freenod )
+    (*parent_loc.ops->freenod)( &parent_loc );
+
+  return result;
 }
 
 /*

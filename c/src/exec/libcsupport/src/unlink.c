@@ -31,16 +31,30 @@ int unlink(
   if ( result != 0 )
      return -1;
   
-  if ( !loc.ops->node_type )
+  if ( !loc.ops->node_type ) {
+    if ( loc.ops->freenod )
+      (*loc.ops->freenod)( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
+  }
 
-  if (  (*loc.ops->node_type)( &loc ) == RTEMS_FILESYSTEM_DIRECTORY )
+  if (  (*loc.ops->node_type)( &loc ) == RTEMS_FILESYSTEM_DIRECTORY ) {
+    if ( loc.ops->freenod )
+      (*loc.ops->freenod)( &loc );
     set_errno_and_return_minus_one( EISDIR );
-  
-  if ( !loc.ops->unlink )
-    set_errno_and_return_minus_one( ENOTSUP );
+  }
 
-  return (*loc.ops->unlink)( &loc );
+  if ( !loc.ops->unlink ) {
+    if ( loc.ops->freenod )
+      (*loc.ops->freenod)( &loc );
+    set_errno_and_return_minus_one( ENOTSUP );
+  }
+
+  result = (*loc.ops->unlink)( &loc );
+
+  if ( loc.ops->freenod )
+    (*loc.ops->freenod)( &loc );
+  
+  return result;
 }
 
 /*

@@ -88,13 +88,12 @@ int init_fs_mount_table( void );
 int mount(
   rtems_filesystem_mount_table_entry_t **mt_entry,
   rtems_filesystem_operations_table    *fs_ops,
-  rtems_filesystem_options_t            fsoptions,
+  rtems_filesystem_options_t            options,
   char                                 *device,
   char                                 *mount_point
 )
 {
-  rtems_filesystem_location_info_t      temp_loc;
-  rtems_filesystem_options_t            options;
+  rtems_filesystem_location_info_t      loc;
   rtems_filesystem_mount_table_entry_t *temp_mt_entry;
 
 /* XXX add code to check for required operations */
@@ -112,8 +111,8 @@ int mount(
    *  Are the file system options valid?
    */
 
-  if ( fsoptions != RTEMS_FILESYSTEM_READ_ONLY && 
-       fsoptions != RTEMS_FILESYSTEM_READ_WRITE ) {
+  if ( options != RTEMS_FILESYSTEM_READ_ONLY && 
+       options != RTEMS_FILESYSTEM_READ_WRITE ) {
     errno = EINVAL;
     return -1;
   }
@@ -145,7 +144,7 @@ int mount(
      if ( rtems_filesystem_evaluate_path( 
        mount_point, 
        RTEMS_LIBIO_PERMS_RWX,
-       &temp_loc ,
+       &loc,
        TRUE ) == -1 )
        goto cleanup_and_bail;
 
@@ -153,7 +152,7 @@ int mount(
       * Test to see if it is a directory
       */
 
-     if ( temp_loc.ops->node_type( &temp_loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
+     if ( loc.ops->node_type( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
        errno = ENOTDIR;
        goto cleanup_and_bail;
      }
@@ -162,7 +161,7 @@ int mount(
       *  You can only mount one file system onto a single mount point.
       */
 
-     if ( search_mt_for_mount_point( &temp_loc ) == FOUND ) {
+     if ( search_mt_for_mount_point( &loc ) == FOUND ) {
        errno = EBUSY;
        goto cleanup_and_bail;
      }
@@ -172,22 +171,22 @@ int mount(
       * into the allocated mount entry
       */
 
-     temp_mt_entry->mt_point_node.node_access = temp_loc.node_access;
-     temp_mt_entry->mt_point_node.handlers = temp_loc.handlers;
-     temp_mt_entry->mt_point_node.ops = temp_loc.ops;
-     temp_mt_entry->mt_point_node.mt_entry = temp_loc.mt_entry;
+     temp_mt_entry->mt_point_node.node_access = loc.node_access;
+     temp_mt_entry->mt_point_node.handlers = loc.handlers;
+     temp_mt_entry->mt_point_node.ops = loc.ops;
+     temp_mt_entry->mt_point_node.mt_entry = loc.mt_entry;
 
      /* 
       * This link to the parent is only done when we are dealing with system 
       * below the base file system 
       */
 
-     if ( !temp_loc.ops->mount ){
+     if ( !loc.ops->mount ){
        errno = ENOTSUP;
        goto cleanup_and_bail;
      }
 
-     if ( temp_loc.ops->mount( temp_mt_entry ) ) {
+     if ( loc.ops->mount( temp_mt_entry ) ) {
         goto cleanup_and_bail;
      }
   }
@@ -224,11 +223,19 @@ int mount(
   Chain_Append( &rtems_filesystem_mount_table_control, &temp_mt_entry->Node );
 
   *mt_entry = temp_mt_entry;
+
+  if ( loc.ops->freenod )
+    (*loc.ops->freenod)( &loc );
+  
   return 0;
 
 cleanup_and_bail:
 
   free( temp_mt_entry );
+
+  if ( loc.ops->freenod )
+    (*loc.ops->freenod)( &loc );
+  
   return -1;
 }
 

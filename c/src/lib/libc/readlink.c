@@ -23,21 +23,35 @@ int readlink(
   rtems_filesystem_location_info_t  loc;
   int                               result;
 
+  if (!buf)
+    set_errno_and_return_minus_one( EFAULT );
+
   result = rtems_filesystem_evaluate_path( pathname, 0, &loc, FALSE );
   if ( result != 0 )
      return -1;
   
-  if (!buf)
-    set_errno_and_return_minus_one( EFAULT );
-
-  if ( !loc.ops->node_type )
+  if ( !loc.ops->node_type ){
+    if ( loc.ops->freenod )
+      (*loc.ops->freenod)( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
+  }
 
-  if (  (*loc.ops->node_type)( &loc ) != RTEMS_FILESYSTEM_SYM_LINK )
+  if (  (*loc.ops->node_type)( &loc ) != RTEMS_FILESYSTEM_SYM_LINK ){
+    if ( loc.ops->freenod )
+      (*loc.ops->freenod)( &loc );
     set_errno_and_return_minus_one( EINVAL );
+  }
 
-  if ( !loc.ops->readlink )
+  if ( !loc.ops->readlink ){
+    if ( loc.ops->freenod )
+      (*loc.ops->freenod)( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
+  }
 
-  return (*loc.ops->readlink)( &loc, buf, bufsize );
+  result =  (*loc.ops->readlink)( &loc, buf, bufsize );
+
+  if ( loc.ops->freenod )
+    (*loc.ops->freenod)( &loc );
+  
+  return result;
 }

@@ -83,8 +83,11 @@ int unmount(
    *  we are attempting to unmount ?
    */
 
-  if ( rtems_filesystem_current.mt_entry == temp_loc.mt_entry )
+  if ( rtems_filesystem_current.mt_entry == temp_loc.mt_entry ) {
+    if ( temp_loc.ops->freenod )
+      (*temp_loc.ops->freenod)( &temp_loc );
     set_errno_and_return_minus_one( EBUSY );
+  }
 
   /*
    *  Run the file descriptor table to determine if there are any file
@@ -92,8 +95,11 @@ int unmount(
    *  file system that we are trying to unmount 
    */
 
-  if ( rtems_libio_is_open_files_in_fs( temp_loc.mt_entry ) == 1 )
+  if ( rtems_libio_is_open_files_in_fs( temp_loc.mt_entry ) == 1 ) {
+    if ( temp_loc.ops->freenod )
+      (*temp_loc.ops->freenod)( &temp_loc );
     set_errno_and_return_minus_one( EBUSY );
+  }
   
   /*
    * Allow the file system being mounted on to do its cleanup.
@@ -103,15 +109,21 @@ int unmount(
    * XXX   I will step off in space when evaluating past the end of the node.
    */
 
-  if ( ( temp_mt_entry.mt_point_node.ops->unmount )( temp_loc.mt_entry ) != 0 )
-     return -1;
+  if ((temp_mt_entry.mt_point_node.ops->unmount )( temp_loc.mt_entry ) != 0 ) {
+    if ( temp_loc.ops->freenod )
+      (*temp_loc.ops->freenod)( &temp_loc );
+    return -1;
+  }
 
   /*
    * Run the unmount function for the subordinate file system.
    */
 
-  if ( ( temp_mt_entry.mt_fs_root.ops->fsunmount_me )( temp_loc.mt_entry ) != 0 )
+  if ((temp_mt_entry.mt_fs_root.ops->fsunmount_me )( temp_loc.mt_entry ) != 0){
+    if ( temp_loc.ops->freenod )
+      (*temp_loc.ops->freenod)( &temp_loc );
      return -1;
+  }
 
   /*
    * Allow the file system to clean up.
@@ -130,6 +142,8 @@ int unmount(
    */
 
   free( temp_loc.mt_entry );
+  if ( temp_loc.ops->freenod )
+    (*temp_loc.ops->freenod)( &temp_loc );
 
   return result;
 

@@ -58,8 +58,11 @@ int _STAT_NAME(
   if ( status != 0 )
     return -1;
   
-  if ( !loc.handlers->fstat )
+  if ( !loc.handlers->fstat ){
+    if ( loc.ops->freenod )
+      (*loc.ops->freenod)( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
+  }
 
   /*
    *  Zero out the stat structure so the various support
@@ -68,7 +71,12 @@ int _STAT_NAME(
 
   memset( buf, 0, sizeof(struct stat) );
 
-  return (*loc.handlers->fstat)( &loc, buf );
+  status =  (*loc.handlers->fstat)( &loc, buf );
+
+  if ( loc.ops->freenod )
+    (*loc.ops->freenod)( &loc );
+  
+  return status;
 }
 #endif
 

@@ -39,18 +39,32 @@ int rmdir(
    * Verify you can remove this node as a directory.
    */
 
-  if ( !loc.ops->node_type )
+  if ( !loc.ops->node_type ){
+    if ( loc.ops->freenod )
+      (*loc.ops->freenod)( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
+  }
 
-  if (  (*loc.ops->node_type)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY )
+  if (  (*loc.ops->node_type)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ){
+    if ( loc.ops->freenod )
+      (*loc.ops->freenod)( &loc );
     set_errno_and_return_minus_one( ENOTDIR );
+  }
 
   /*
    * Use the filesystems rmnod to remove the node.
    */
 
-  if ( !loc.ops->rmnod )
+  if ( !loc.ops->rmnod ){
+    if ( loc.ops->freenod )
+      (*loc.ops->freenod)( &loc );
     set_errno_and_return_minus_one( ENOTSUP );
+  }
 
-  return (*loc.ops->rmnod)( &loc );  
+  result =  (*loc.ops->rmnod)( &loc );  
+
+  if ( loc.ops->freenod )
+    (*loc.ops->freenod)( &loc );
+  
+  return result;
 }
