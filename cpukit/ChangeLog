@@ -1,5 +1,10 @@
 2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	PR/589 rtems
+	* include/rtems/pci.h: New (Moved from c/src/libchip/network/pci.h).
+
+2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libcsupport/src/malloc.c: Remove lvalue casts.
 
 2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
