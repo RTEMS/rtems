@@ -1,6 +1,8 @@
 /*
  * RTEMS versions of hostname functions
  * FIXME: Not thread-safe
+ *
+ *  $Id$
  */
 
 #include <string.h>

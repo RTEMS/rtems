@@ -27,6 +27,8 @@
  * SUCH DAMAGE.
  *
  *	$ANA: addr2ascii.c,v 1.1 1996/06/13 18:41:46 wollman Exp $
+ *
+ *  $Id$
  */
 
 #include <sys/types.h>

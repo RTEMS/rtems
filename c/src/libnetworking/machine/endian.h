@@ -1,3 +1,7 @@
+/*
+ *  $Id$
+ */
+
 #ifndef _MACHINE_ENDIAN_H_
 #define _MACHINE_ENDIAN_H_
 

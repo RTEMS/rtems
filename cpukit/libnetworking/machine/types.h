@@ -3,6 +3,8 @@
  * tree (probably in the existing <machine/types.h> so that these
  * contents are included when an application source file includes
  * <sys/types.h>.
+ *
+ *  $Id$
  */
 
 #ifndef _MACHINE_TYPES_H_

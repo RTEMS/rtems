@@ -1,3 +1,7 @@
+/*
+ *  $Id$
+ */
+
 #ifndef _MACHINE_PARAM_H_
 #define	_MACHINE_PARAM_H_
 

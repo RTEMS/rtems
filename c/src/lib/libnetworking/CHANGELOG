@@ -1,3 +1,7 @@
+#
+#  $Id$
+#
+
 19-AUG-1998 snapshot
 	- Pulled BOOTP initialization out of rtems_glue.  Applications which
 	  don't used BOOTP are now about 5k smaller.
