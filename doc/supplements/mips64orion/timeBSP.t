@@ -27,7 +27,8 @@ times as they pertain to the XXX version of RTEMS.
 
 All times reported except for the maximum period
 interrupts are disabled by RTEMS were measured using a Motorola
-BSP_FOR_TIMES CPU board.  The BSP_FOR_TIMES is a 20Mhz board with one wait
+BSP_FOR_TIMES CPU board.  The BSP_FOR_TIMES is a RTEMS_MAXIMUM_DISABLE_PERIOD_MHZ
+Mhz board with one wait
 state dynamic memory and a XXX numeric coprocessor.  The
 Zilog 8036 countdown timer on this board was used to measure
 elapsed time with a one-half microsecond resolution.  All
@@ -41,7 +42,8 @@ disabled.  The worst case times of the XXX microprocessor
 were used for each instruction.  Zero wait state memory was
 assumed.  The total CPU cycles executed with interrupts
 disabled, including the instructions to disable and enable
-interrupts, was divided by 20 to simulate a 20Mhz XXX.  It
+interrupts, was divided by 20 to simulate a RTEMS_MAXIMUM_DISABLE_PERIOD_MHZ
+Mhz processor.  It
 should be noted that the worst case instruction times for the
 XXX assume that the internal cache is disabled and that no
 instructions overlap.
@@ -52,20 +54,22 @@ The maximum period with interrupts disabled within
 RTEMS is less than RTEMS_MAXIMUM_DISABLE_PERIOD 
 microseconds including the instructions
 which disable and re-enable interrupts.  The time required for
-the XXX to vector an interrupt and for the RTEMS entry
+the mips64orion to vector an interrupt and for the RTEMS entry
 overhead before invoking the user's interrupt handler are a
 total of RTEMS_INTR_ENTRY_RETURNS_TO_PREEMPTING_TASK 
 microseconds.  These combine to yield a worst case
 interrupt latency of less than 
 RTEMS_MAXIMUM_DISABLE_PERIOD + RTEMS_INTR_ENTRY_RETURNS_TO_PREEMPTING_TASK 
-microseconds at 20Mhz.  [NOTE:  The maximum period with interrupts
+microseconds at RTEMS_MAXIMUM_DISABLE_PERIOD_MHZ
+Mhz.  [NOTE:  The maximum period with interrupts
 disabled was last determined for Release 
 RTEMS_RELEASE_FOR_MAXIMUM_DISABLE_PERIOD.]
 
 It should be noted again that the maximum period with
 interrupts disabled within RTEMS is hand-timed and based upon
 worst case (i.e. CPU cache disabled and no instruction overlap)
-times for a 20Mhz XXX.  The interrupt vector and entry
+times for a RTEMS_MAXIMUM_DISABLE_PERIOD_MHZ
+Mhz processor.  The interrupt vector and entry
 overhead time was generated on an BSP_FOR_TIMES benchmark platform
 using the Multiprocessing Communications registers to generate
 as the interrupt source.

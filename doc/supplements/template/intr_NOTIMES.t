@@ -23,7 +23,7 @@ special control mechanisms to return to the normal processing
 stream.  Although RTEMS hides many of the processor dependent
 details of interrupt processing, it is important to understand
 how the RTEMS interrupt manager is mapped onto the processor's
-unique architecture. Discussed in this chapter are the XXX's
+unique architecture. Discussed in this chapter are the processor's
 interrupt response and control mechanisms as they pertain to
 RTEMS.
 

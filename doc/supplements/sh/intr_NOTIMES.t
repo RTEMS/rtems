@@ -23,19 +23,19 @@ special control mechanisms to return to the normal processing
 stream.  Although RTEMS hides many of the processor dependent
 details of interrupt processing, it is important to understand
 how the RTEMS interrupt manager is mapped onto the processor's
-unique architecture. Discussed in this chapter are the XXX's
+unique architecture. Discussed in this chapter are the SH's
 interrupt response and control mechanisms as they pertain to
 RTEMS.
 
 @section Vectoring of an Interrupt Handler
 
 Depending on whether or not the particular CPU
-supports a separate interrupt stack, the XXX family has two
+supports a separate interrupt stack, the SH family has two
 different interrupt handling models.
 
 @subsection Models Without Separate Interrupt Stacks
 
-Upon receipt of an interrupt the XXX family
+Upon receipt of an interrupt the SH family
 members without separate interrupt stacks automatically perform
 the following actions:
 
@@ -45,7 +45,7 @@ the following actions:
 
 @subsection Models With Separate Interrupt Stacks
 
-Upon receipt of an interrupt the XXX family
+Upon receipt of an interrupt the SH family
 members with separate interrupt stacks automatically perform the
 following actions:
 
