@@ -16,6 +16,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>	/* memcpy, memset */
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 

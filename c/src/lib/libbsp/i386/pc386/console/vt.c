@@ -14,6 +14,7 @@
  * driver. Removed all stuff not required, such as VT_, Fonts, etc.
  */
 
+#include <string.h>	/* memcpy */
 #include <sys/types.h>
 #include <errno.h>
 
