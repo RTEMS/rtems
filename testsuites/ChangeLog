@@ -1,5 +1,9 @@
 2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/prog-cxx.m4: Re-add am__fastdepCXX conditional.
+
+2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* aclocal/rtems-flags.m4: Remove (Unused).
 
 2004-01-06	Ralf Corsepius <ralf.corsepius@rtems.org>

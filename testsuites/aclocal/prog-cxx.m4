@@ -28,5 +28,8 @@ AC_PROG_CXX
      [must both either be cross compilers or native compilers]
      [Hint: If building a posix bsp: LD_LIBRARY_PATH?] )
   fi
+else
+## Work-around to a bug in automake
+AM_CONDITIONAL([am__fastdepCXX],[false])
 fi
 ])
