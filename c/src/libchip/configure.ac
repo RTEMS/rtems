@@ -46,5 +46,6 @@ AC_CONFIG_FILES([Makefile
 network/Makefile
 rtc/Makefile
 serial/Makefile
+ide/Makefile
 ])
 AC_OUTPUT

@@ -1,3 +1,9 @@
+2002-10-28	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
+
+	* New files: New directory ide/, ide/Makefile.am, ide/ide_ctrl_cfg.h,
+	ide/ide_ctrl_io.h, ide/ide_ctrl.h:
+	* configure.ac, Makefile.am: Modified to reflect changes above.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.
