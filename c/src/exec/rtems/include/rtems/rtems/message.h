@@ -148,7 +148,7 @@ rtems_status_code rtems_message_queue_delete(
  *  receive the message.  The task selected to receive the
  *  message is based on the task queue discipline algorithm in
  *  use by this particular message queue.  If no tasks are waiting,
- *  then the message buffer will be placed at the rear of the
+ *  then the message buffer will be placed at the REAR of the
  *  chain of pending messages for this message queue.
  */
 
@@ -163,15 +163,11 @@ rtems_status_code rtems_message_queue_send(
  *
  *  DESCRIPTION:
  *
- *  This routine implements the rtems_message_queue_send directive.
- *  This directive sends the message buffer to the message queue
- *  indicated by ID.  If one or more tasks is blocked waiting
- *  to receive a message from this message queue, then one will
- *  receive the message.  The task selected to receive the
- *  message is based on the task queue discipline algorithm in
- *  use by this particular message queue.  If no tasks are waiting,
- *  then the message buffer will be placed at the rear of the
- *  chain of pending messages for this message queue.
+ *  This routine implements the rtems_message_queue_urgent directive.
+ *  This directive has the same behavior as rtems_message_queue_send
+ *  except that if no tasks are waiting, the message buffer will
+ *  be placed at the FRONT of the chain of pending messages rather
+ *  than at the REAR.
  */
 
 rtems_status_code rtems_message_queue_urgent(
@@ -185,15 +181,10 @@ rtems_status_code rtems_message_queue_urgent(
  *
  *  DESCRIPTION:
  *
- *  This routine implements the rtems_message_queue_send directive.
- *  This directive sends the message buffer to the message queue
- *  indicated by ID.  If one or more tasks is blocked waiting
- *  to receive a message from this message queue, then one will
- *  receive the message.  The task selected to receive the
- *  message is based on the task queue discipline algorithm in
- *  use by this particular message queue.  If no tasks are waiting,
- *  then the message buffer will be placed at the rear of the
- *  chain of pending messages for this message queue.
+ *  This routine implements the rtems_message_queue_broadcast directive.
+ *  This directive sends the message buffer to all of the tasks blocked
+ *  waiting for a message on the message queue indicated by ID.  
+ *  If no tasks are waiting, then the message buffer will not be queued.
  */
 
 rtems_status_code rtems_message_queue_broadcast(
