@@ -37,7 +37,7 @@
  * We decide which based on the vector number
  */
 
-unix_isr_entry
+rtems_isr_entry
 set_vector(                                     /* returns old vector */
     rtems_isr_entry     handler,                /* isr routine        */
     rtems_vector_number vector,                 /* vector number      */
@@ -49,10 +49,10 @@ set_vector(                                     /* returns old vector */
 
     if ( type ) {
       rtems_interrupt_catch( handler, vector, &rtems_isr_ptr );
-      return (unix_isr_entry) rtems_isr_ptr;
+      return rtems_isr_ptr;
     } else {
       _CPU_ISR_install_vector( vector, (proc_ptr) handler, &raw_isr_ptr );
-      return (unix_isr_entry) raw_isr_ptr;
+      return raw_isr_ptr;
     }
    
 }

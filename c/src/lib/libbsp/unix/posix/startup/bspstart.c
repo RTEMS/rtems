@@ -33,7 +33,6 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <sys/stat.h>
 
 #include <bsp.h>
 #include <libcsupport.h>
@@ -58,11 +57,13 @@ int                          rtems_argc;
 char                       **rtems_argv;
 char                       **rtems_envp;
 
+/*
+ * May be overridden by RTEMS_WORKSPACE_SIZE and RTEMS_HEAPSPACE_SIZE
+ * environment variables; see below.
+ */
 
-#define WORKSPACE_SIZE (WORKSPACE_MB * (1024 * 1024))
-#define HEAPSPACE_SIZE (HEAPSPACE_MB * (1024 * 1024))
-
-rtems_unsigned8   MY_WORK_SPACE[ WORKSPACE_SIZE ] CPU_STRUCTURE_ALIGNMENT;
+#define DEFAULT_WORKSPACE_SIZE (WORKSPACE_MB * (1024 * 1024))
+#define DEFAULT_HEAPSPACE_SIZE (HEAPSPACE_MB * (1024 * 1024))
 
 /*
  * Amount to increment itimer by each pass
@@ -102,7 +103,11 @@ bsp_libc_init(void)
 {
     void *heap_start;
 
-    Heap_size = HEAPSPACE_SIZE;
+    if (getenv("RTEMS_HEAPSPACE_SIZE"))
+        Heap_size = strtol(getenv("RTEMS_HEAPSPACE_SIZE"), 0, 0);
+    else
+        Heap_size = DEFAULT_HEAPSPACE_SIZE;
+ 
     heap_start = 0;
 
     RTEMS_Malloc_Initialize((void *)heap_start, Heap_size, 1024 * 1024);
@@ -185,11 +190,7 @@ bsp_pretasking_hook(void)
 void
 bsp_start(void)
 {
-    struct stat  stat_buf;
-    char         buf[256];
-    char         node[6];
-    char        *home;
-    int          fd;
+    unsigned32 workspace_ptr;
 
     /*
      *  Copy the table
@@ -198,36 +199,30 @@ bsp_start(void)
     BSP_Configuration = Configuration;
  
     /*
-     * If the node number is -1 then the application better provide
-     * it through the file $HOME/rtems_node
+     *  If the node number is -1 then the application better provide
+     *  it through environment variables RTEMS_NODE.
+     *  Ditto for RTEMS_MAXIMUM_NODES
      */
 
-    BSP_Multiprocessing.node = -1;
-
     if (BSP_Configuration.User_multiprocessing_table) {
-      if (BSP_Configuration.User_multiprocessing_table->node == -1) {
-        home = getenv("HOME");
-        sprintf(buf, "%s/%s", home, "rtems_node");
-        if ((stat(buf, &stat_buf)) == 0) {
-          fd = open(buf, O_RDONLY);
-          read(fd, node, 5);
-          close(fd);
-          unlink(buf);
-          BSP_Multiprocessing = *BSP_Configuration.User_multiprocessing_table;
-          BSP_Multiprocessing.node = atoi(node);
-          BSP_Configuration.User_multiprocessing_table = &BSP_Multiprocessing;
+        char *p;
+ 
+        /* make a copy for possible editing */
+        BSP_Multiprocessing = *BSP_Configuration.User_multiprocessing_table;
+        BSP_Configuration.User_multiprocessing_table = &BSP_Multiprocessing;
+ 
+        if (BSP_Multiprocessing.node == -1)
+        {
+            p = getenv("RTEMS_NODE");
+            BSP_Multiprocessing.node = p ? atoi(p) : 1;
         }
-        if (BSP_Configuration.User_multiprocessing_table->maximum_nodes == -1) {
-          home = getenv("HOME");
-          sprintf(buf, "%s/%s", home, "rtems_max_node");
-          if ((stat(buf, &stat_buf)) == 0) {
-            fd = open(buf, O_RDONLY);
-            read(fd, node, 5);
-            close(fd);
-            BSP_Multiprocessing.maximum_nodes = atoi(node);
-          }
+ 
+        /* If needed provide maximum_nodes also */
+        if (BSP_Multiprocessing.maximum_nodes == -1)
+        {
+            p = getenv("RTEMS_MAXIMUM_NODES");
+            BSP_Multiprocessing.maximum_nodes = p ? atoi(p) : 1;
         }
-      }
     }
 
     /*
@@ -239,10 +234,23 @@ bsp_start(void)
     else
         cpu_number = 0;
 
-    BSP_Configuration.work_space_start = (void *)MY_WORK_SPACE;
-    if (BSP_Configuration.work_space_size)
-        BSP_Configuration.work_space_size = WORKSPACE_SIZE;
+    if (getenv("RTEMS_WORKSPACE_SIZE"))
+        BSP_Configuration.work_space_size = 
+           strtol(getenv("RTEMS_WORKSPACE_SIZE"), 0, 0);
+    else
+        BSP_Configuration.work_space_size = DEFAULT_WORKSPACE_SIZE;
+ 
+    /*
+     * Allocate workspace memory, ensuring it is properly aligned
+     */
+ 
+    workspace_ptr = 
+      (unsigned32) sbrk(BSP_Configuration.work_space_size + CPU_ALIGNMENT);
+    workspace_ptr += CPU_ALIGNMENT - 1;
+    workspace_ptr &= ~(CPU_ALIGNMENT - 1);
 
+    BSP_Configuration.work_space_start = (void *) workspace_ptr;
+ 
     /*
      * Set up our hooks
      * Make sure libc_init is done before drivers init'd so that

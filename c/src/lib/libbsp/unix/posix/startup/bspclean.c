@@ -22,6 +22,8 @@
 #include <rtems.h>
 #include <bsp.h>
 
+#include <stdio.h>
+
 /*
  * The app has "exited" (called rtems_shutdown_executive)
  */
@@ -32,6 +34,9 @@ void bsp_cleanup( void )
      * Invoke any fatal error extension and "halt"
      * By definition, rtems_fatal_error_occurred does not return.
      */
+
+fflush(stdout);
+fflush(stderr);
 
     rtems_fatal_error_occurred(0);
 }

@@ -1,12 +1,12 @@
 // 	@(#)rtems-ctor.cc	1.6 - 95/04/25
-// 	
+// 
 //
 
 /*
  *  rtems-ctor.cc
  *
  *  Description:
- *	This file exists solely to (try to) ensure RTEMS is initialized
+ *  This file exists solely to (try to) ensure RTEMS is initialized
  *      before any global constructors are run.
  *
  *  The problem:
@@ -49,6 +49,8 @@
  */
 
 #include <bsp.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 /*
  * RTEMS program name
@@ -61,7 +63,7 @@ char *rtems_progname;
 
 class RTEMS {
     public:
-	RTEMS();
+         RTEMS();
         ~RTEMS();
 };
 
@@ -83,9 +85,9 @@ extern "C" {
          char **argv,
          char **environp)
     {
-	rtems_argc = argc;
-	rtems_argv = argv;
-	rtems_envp = environp;
+        rtems_argc = argc;
+        rtems_argv = argv;
+        rtems_envp = environp;
 
         if ((argc > 0) && argv && argv[0])
             rtems_progname = argv[0];
@@ -103,6 +105,8 @@ extern "C" {
          * This allows our destructors to get run normally
          */
 
+        fflush( stdout );
+        fflush( stderr );
         return 0;
     }
 }
