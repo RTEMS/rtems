@@ -10,13 +10,13 @@ test -f ./setup.cache || cp ./setup.def ./setup.cache
 AC_MSG_CHECKING(for rpm SPECS directory)
 if test -d /usr/src/packages/SPECS;
 then
-RPM_SPECSdir=/usr/src/packages/SPECS;
+  RPM_SPECSdir=/usr/src/packages/SPECS;
 elif test -d /usr/src/redhat/SPECS;
 then
-RPM_SPECSdirs=/usr/src/redhat/SPECS;
+  RPM_SPECSdir=/usr/src/redhat/SPECS;
 elif test -d /usr/src/SPECS/;
 then
-RPM_SPECSdir=/usr/src/SPECS;
+  RPM_SPECSdir=/usr/src/SPECS;
 fi
 if test x"$RPM_SPECSdir" = x; then
 AC_MSG_ERROR(not found)
