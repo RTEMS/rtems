@@ -20,10 +20,7 @@ placed in your @code{archive} directory.
     FTP Site:    @value{RTEMSFTPSITE}
     Directory:   @value{RTEMSFTPDIR}/@value{VERSION}
     File:        @value{RTEMSTAR}
-@ifset use-html
-@c    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/@value{VERSION}, Download RTEMS components}
-    URL:         ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/@value{VERSION}
-@end ifset
+    URL:         @uref{ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/@value{VERSION}/@value{RTEMSTAR},,ftp://@value{RTEMSFTPSITE}@value{RTEMSFTPDIR}/@value{VERSION}/@value{RTEMSTAR}}
 @end example
 
 @subheading RTEMS Examples including Hello World
@@ -54,11 +51,13 @@ This creates the directory @value{RTEMSUNTAR}.
 @section Add <INSTALL_POINT>/bin to Executable PATH
 
 In order to compile RTEMS, you must have the cross compilation toolset
-in your search path.  The following command appends the directory
-where the tools were installed prior to this point:
+in your search path.  It is important to have the RTEMS toolset first
+in your path to ensure that you are using the intended version of all
+tools.  The following command prepends the directory
+where the tools were installed in a previous step:
 
 @example
-export PATH=$PATH:<INSTALL_POINT>/bin
+export PATH=<INSTALL_POINT>/bin:${PATH}
 @end example
 
 NOTE:  The above command is in Bourne shell (@code{sh}) syntax and

@@ -210,7 +210,7 @@ applications:
 
 @example
 cd tools
-tar xzf ../archive/hello_world_ada.tgz
+tar xjf ../archive/ada-examples-@value{VERSION}.tar.bz2
 @end example
 
 @subheading Create a BSP Specific Makefile

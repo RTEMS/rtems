@@ -498,11 +498,12 @@ invoke the @value{BINUTILSUNTAR} @code{configure} command with the
 @code{--help} option.
 
 NOTE: The shell PATH variable needs to be updated to include the path
-the binutils has been installed in. This the prefix used above with
+the binutils user executables have  been installed in.  The directory
+containing the executables is the prefix used above with
 @file{bin} post-fixed.
 
 @example
-export PATH=$PATH:@value{RTEMSPREFIX}/bin
+export PATH=@value{RTEMSPREFIX}/bin:${PATH}
 @end example
 
 Failure to have the binutils in the path will cause the GCC and NEWLIB
