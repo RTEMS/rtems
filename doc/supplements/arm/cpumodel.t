@@ -16,7 +16,7 @@ that family.  Within a processor family, there is a high level
 of binary compatibility.  This family may be based on either an
 architectural specification or on maintaining compatibility with
 a popular processor.  Recent microprocessor families such as the
-ARM, SPARC, and PA-RISC are based on an architectural specification
+ARM, SPARC, and PowerPC are based on an architectural specification
 which is independent or any particular CPU model or
 implementation.  Older families such as the M68xxx and the iX86
 evolved as the manufacturer strived to produce higher
