@@ -30,6 +30,32 @@ Thread_Control *Middle_tcb;   /* uses internal RTEMS type */
 
 Thread_Control *Low_tcb;      /* uses internal RTEMS type */
 
+/*
+ *  Variables to hold execution times until they are printed
+ *  at the end of the test.
+ */
+
+rtems_unsigned32 isr_disable_time;
+rtems_unsigned32 isr_flash_time;
+rtems_unsigned32 isr_enable_time;
+rtems_unsigned32 thread_disable_dispatch_time;
+rtems_unsigned32 thread_enable_dispatch_time;
+rtems_unsigned32 thread_set_state_time;
+rtems_unsigned32 thread_dispatch_no_fp_time;
+rtems_unsigned32 context_switch_no_fp_time;
+rtems_unsigned32 context_switch_self_time;
+rtems_unsigned32 context_switch_another_task_time;
+rtems_unsigned32 context_switch_restore_1st_fp_time;
+rtems_unsigned32 context_switch_save_idle_restore_initted_time;
+rtems_unsigned32 context_switch_save_restore_idle_time;
+rtems_unsigned32 context_switch_save_restore_initted_time;
+rtems_unsigned32 thread_resume_time;
+rtems_unsigned32 thread_unblock_time;
+rtems_unsigned32 thread_ready_time;
+rtems_unsigned32 thread_get_time;
+rtems_unsigned32 semaphore_get_time;
+rtems_unsigned32 thread_get_invalid_time;
+
 rtems_task High_task(
   rtems_task_argument argument
 );
@@ -171,75 +197,27 @@ rtems_task High_task(
 
   Timer_initialize();
     rtems_interrupt_disable( level );
-  end_time = Read_timer();
+  isr_disable_time = Read_timer();
  
-  put_time(
-    "_ISR_Disable",
-    end_time,
-    1,
-    0,
-    0
-  );
-
   Timer_initialize();
     rtems_interrupt_flash( level );
-  end_time = Read_timer();
- 
-  put_time(
-    "_ISR_Flash",
-    end_time,
-    1,
-    0,
-    0
-  );
+  isr_flash_time = Read_timer();
  
   Timer_initialize();
     rtems_interrupt_enable( level );
-  end_time = Read_timer();
- 
-  put_time(
-    "_ISR_Enable",
-    end_time,
-    1,
-    0,
-    0
-  );
+  isr_enable_time = Read_timer();
  
   Timer_initialize();
     _Thread_Disable_dispatch();
-  end_time = Read_timer();
-
-  put_time(
-    "_Thread_Disable_dispatch",
-    end_time,
-    1,
-    0,
-    0
-  );
+  thread_disable_dispatch_time = Read_timer();
 
   Timer_initialize();
     _Thread_Enable_dispatch();
-  end_time = Read_timer();
-
-  put_time(
-    "_Thread_Enable_dispatch",
-    end_time,
-    1,
-    0,
-    0
-  );
+  thread_enable_dispatch_time = Read_timer();
 
   Timer_initialize();
     _Thread_Set_state( _Thread_Executing, STATES_SUSPENDED );
-  end_time = Read_timer();
-
-  put_time(
-    "_Thread_Set_state",
-    end_time,
-    1,
-    0,
-    0
-  );
+  thread_set_state_time = Read_timer();
 
   _Context_Switch_necessary = TRUE;
 
@@ -251,15 +229,7 @@ rtems_task Middle_task(
   rtems_task_argument argument
 )
 {
-  end_time = Read_timer();
-
-  put_time(
-    "_Thread_Disptach (NO FP)",
-    end_time,
-    1,
-    0,
-    0
-  );
+  thread_dispatch_no_fp_time = Read_timer();
 
   _Thread_Set_state( _Thread_Executing, STATES_SUSPENDED );
 
@@ -287,15 +257,7 @@ rtems_task Low_task(
 {
   Thread_Control *executing;
 
-  end_time = Read_timer();
-
-  put_time(
-    "context switch: no floating point contexts",
-    end_time,
-    1,
-    0,
-    0
-  );
+  context_switch_no_fp_time = Read_timer();
 
   executing    = _Thread_Executing;
 
@@ -304,27 +266,11 @@ rtems_task Low_task(
   Timer_initialize();
     _Context_Switch( &executing->Registers, &executing->Registers );
 
-  end_time = Read_timer();
-
-  put_time(
-    "context switch: self",
-    end_time,
-    1,
-    0,
-    0
-  );
+  context_switch_self_time = Read_timer();
 
   _Context_Switch(&executing->Registers, &Middle_tcb->Registers);
 
-  end_time = Read_timer();
-
-  put_time(
-    "context switch: to another task",
-    end_time,
-    1,
-    0,
-    0
-  );
+  context_switch_another_task_time = Read_timer();
 
   _Thread_Executing =
         (Thread_Control *) _Thread_Ready_chain[201].first;
@@ -347,15 +293,7 @@ rtems_task Floating_point_task_1(
   Thread_Control *executing;
   FP_DECLARE;
 
-  end_time = Read_timer();
-
-  put_time(
-    "fp context switch: restore 1st FP task",
-    end_time,
-    1,
-    0,
-    0
-  );
+  context_switch_restore_1st_fp_time = Read_timer();
 
   executing = _Thread_Executing;
 
@@ -374,15 +312,7 @@ rtems_task Floating_point_task_1(
     _Context_Switch( &executing->Registers, &_Thread_Executing->Registers );
   /* switch to Floating_point_task_2 */
 
-  end_time = Read_timer();
-
-  put_time(
-    "fp context switch: save idle, restore initialized",
-    end_time,
-    1,
-    0,
-    0
-  );
+  context_switch_save_idle_restore_initted_time = Read_timer();
 
   FP_LOAD( 1.0 );
 
@@ -411,15 +341,7 @@ rtems_task Floating_point_task_2(
   Thread_Control *executing;
   FP_DECLARE;
 
-  end_time = Read_timer();
-
-  put_time(
-    "fp context switch: save idle, restore idle",
-    end_time,
-    1,
-    0,
-    0
-  );
+  context_switch_save_restore_idle_time = Read_timer();
 
   executing = _Thread_Executing;
 
@@ -440,15 +362,7 @@ rtems_task Floating_point_task_2(
     _Context_Switch( &executing->Registers, &_Thread_Executing->Registers );
   /* switch to Floating_point_task_1 */
 
-  end_time = Read_timer();
-
-  put_time(
-    "fp context switch: save initialized, restore initialized",
-    end_time,
-    1,
-    0,
-    0
-  );
+  context_switch_save_restore_initted_time = Read_timer();
 
   complete_test();
 }
@@ -460,43 +374,19 @@ void complete_test( void )
 
   Timer_initialize();
     _Thread_Resume( Middle_tcb );
-  end_time = Read_timer();
-
-  put_time(
-    "_Thread_Resume",
-    end_time,
-    1,
-    0,
-    0
-  );
+  thread_resume_time = Read_timer();
 
   _Thread_Set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
 
   Timer_initialize();
     _Thread_Unblock( Middle_tcb );
-  end_time = Read_timer();
-
-  put_time(
-    "_Thread_Unblock",
-    end_time,
-    1,
-    0,
-    0
-  );
+  thread_unblock_time = Read_timer();
 
   _Thread_Set_state( Middle_tcb, STATES_WAITING_FOR_MESSAGE );
 
   Timer_initialize();
     _Thread_Ready( Middle_tcb );
-  end_time = Read_timer();
-
-  put_time(
-    "_Thread_Ready",
-    end_time,
-    1,
-    0,
-    0
-  );
+  thread_ready_time = Read_timer();
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
@@ -508,37 +398,177 @@ void complete_test( void )
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) _Thread_Get( task_id, &location );
-  end_time = Read_timer();
-
-  put_time(
-    "_Thread_Get",
-    end_time,
-    OPERATION_COUNT,
-    0,
-    0
-  );
+  thread_get_time = Read_timer();
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
       (void) _Semaphore_Get( Semaphore_id, &location );
-  end_time = Read_timer();
+  semaphore_get_time = Read_timer();
+
+  Timer_initialize();
+    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
+      (void) _Thread_Get( 0x3, &location );
+  thread_get_invalid_time = Read_timer();
+
+  /*
+   *  Now dump all the times
+   */
 
   put_time(
-    "_Semaphore_Get",
-    end_time,
+    "_ISR_Disable",
+    isr_disable_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "_ISR_Flash",
+    isr_flash_time,
+    1,
+    0,
+    0
+  );
+ 
+  put_time(
+    "_ISR_Enable",
+    isr_enable_time,
+    1,
+    0,
+    0
+  );
+ 
+  put_time(
+    "_Thread_Disable_dispatch",
+    thread_disable_dispatch_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "_Thread_Enable_dispatch",
+    thread_enable_dispatch_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "_Thread_Set_state",
+    thread_set_state_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "_Thread_Disptach (NO FP)",
+    thread_dispatch_no_fp_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "context switch: no floating point contexts",
+    context_switch_no_fp_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "context switch: self",
+    context_switch_self_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "context switch: to another task",
+    context_switch_another_task_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "fp context switch: restore 1st FP task",
+    context_switch_restore_1st_fp_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "fp context switch: save idle, restore initialized",
+    context_switch_save_idle_restore_initted_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "fp context switch: save idle, restore idle",
+    context_switch_save_restore_idle_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "fp context switch: save initialized, restore initialized",
+    context_switch_save_restore_initted_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "_Thread_Resume",
+    thread_resume_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "_Thread_Unblock",
+    thread_unblock_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "_Thread_Ready",
+    thread_ready_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "_Thread_Get",
+    thread_get_time,
     OPERATION_COUNT,
     0,
     0
   );
 
-  Timer_initialize();
-    for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) _Thread_Get( 0x3, &location );
-  end_time = Read_timer();
+  put_time(
+    "_Semaphore_Get",
+    semaphore_get_time,
+    OPERATION_COUNT,
+    0,
+    0
+  );
 
   put_time(
     "_Thread_Get: invalid id",
-    end_time,
+    thread_get_invalid_time,
     OPERATION_COUNT,
     0,
     0
