@@ -85,22 +85,7 @@ AC_SUBST(CC_CFLAGS_DEBUG_V)
 AC_SUBST(CC_CFLAGS_PROFILE_V)
 AC_SUBST(CC_LDFLAGS_PROFILE_V)
 
-# Collect the files needed to build a BSP
 cfg_dir="${RTEMS_TOPdir}/make"
-CUSTOM_CFG_FILES=""
-f="${RTEMS_BSP}.cfg"
-while test -n "$f"; do
-  if test -r "${srcdir}/${cfg_dir}/custom/$f"; then
-    AC_CONFIG_LINKS([custom/$f:${cfg_dir}/custom/$f])
-    CUSTOM_CFG_FILES="$CUSTOM_CFG_FILES custom/$f"
-    f=`grep "^include.*make/custom" ${srcdir}/${cfg_dir}/custom/$f \
-    | sed \
-      -e 's%^.*custom\/%%' \
-      -e s%\$\(RTEMS_HOST\)%${RTEMS_HOST}% \
-      -e 's%default\.cfg%%'`;
-  else break; fi;
-done
-AC_SUBST(CUSTOM_CFG_FILES)
 AC_SUBST(cfg_dir)
 
 # Symlink the *.cfg files from the toplevel make directory into the build
@@ -125,14 +110,6 @@ AC_CONFIG_FILES([Makefile
 Makefile.inc
 host.cfg
 bsp.cfg
-custom/default.cfg
 ])
-
-AC_CONFIG_COMMANDS([default],
-[[${MAKE} $RTEMS_BSP.cache
-]],
-[[MAKE=${MAKE-make}
-  RTEMS_BSP=${RTEMS_BSP}
-]])
 
 AC_OUTPUT
