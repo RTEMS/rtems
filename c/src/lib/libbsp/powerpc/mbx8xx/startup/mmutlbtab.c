@@ -12,7 +12,7 @@
 
 #include <bsp.h>
 #include <mpc8xx/mmu.h>
-
+#include <bsp/mbx.h>
 /*
  * This MMU_TLB_table is used to statically initialize the Table Lookaside
  * Buffers in the MMU of the MBX8xx board.
@@ -166,7 +166,27 @@ MMU_TLB_table_t MMU_TLB_table[] = {
 	 *	R/W,X for all, no ASID comparison, cache-inhibited.
 	 * EPN		TWC	RPN
 	 */
-	{ 0xFA210200,	0x11,	0xFA2109F7 } 	/* QSPAN - PS=4K */
+	{ 0xFA210200,	0x11,	0xFA2109F7 },	/* QSPAN - PS=4K */
+	/*
+	 *
+	 * PCMCIA Spaces: Start address 0xE0000000, 256M?
+	 * For each space (MEM/DMA/ATTRIB/IO) only the first 8MB are mapped
+	 *	ASID=0x0, APG=0x0, guarded memory,
+	 *	R/W,X for all, no ASID comparison, cache-inhibited.
+	 * EPN		                           TWC	
+	 * RPN
+	 */
+	{ (PCMCIA_MEM_ADDR & 0xfffff000) | 0x200, 0x1D,	
+	  (PCMCIA_MEM_ADDR & 0xfffff000) | 0x9F7 },/* PCMCIA Memory - PS=8M */
+
+	{ (PCMCIA_DMA_ADDR & 0xfffff000) | 0x200, 0x1D,	
+	  (PCMCIA_DMA_ADDR & 0xfffff000) | 0x9F7 },/* PCMCIA DMA - PS=8M */
+
+	{ (PCMCIA_ATTRB_ADDR & 0xfffff000) | 0x200, 0x1D,	
+	  (PCMCIA_ATTRB_ADDR & 0xfffff000) | 0x9F7 },/* PCMCIA ATTRIB-PS=8M*/
+
+	{ (PCMCIA_IO_ADDR & 0xfffff000) | 0x200, 0x1D,	
+	  (PCMCIA_IO_ADDR & 0xfffff000) | 0x9F7 }     /* PCMCIA I/O - PS=8M */
 };
 
 /* 

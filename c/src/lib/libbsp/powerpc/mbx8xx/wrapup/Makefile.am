@@ -7,7 +7,7 @@ if HAS_NETWORKING
 NETWORKING = network
 endif
 
-BSP_PIECES = clock irq startup console vectors $(NETWORKING)
+BSP_PIECES = clock irq ide startup console vectors $(NETWORKING)
 # pieces to pick up out of libcpu/ppc
 # CPU_PIECES = mpc8xx/clock mpc8xx/console-generic mpc8xx/cpm \
 #              mpc8xx/mmu mpc8xx/timer mpc8xx/vectors

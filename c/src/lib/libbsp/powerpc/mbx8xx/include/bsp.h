@@ -113,6 +113,11 @@ extern rtems_configuration_table BSP_Configuration;
  */
 
 /*
+ * indicate, that BSP has IDE driver
+ */
+#define RTEMS_BSP_HAS_IDE_DRIVER
+
+/*
  * How many libio files we want
  */
 
