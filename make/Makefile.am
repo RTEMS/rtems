@@ -23,7 +23,7 @@ dist_rtems_make_custom_DATA = custom/default.cfg
 EXTRA_DIST += custom/Cygwin-posix.cfg custom/FreeBSD-posix.cfg \
     custom/HPUX9-posix.cfg custom/Linux-posix.cfg custom/Solaris-posix.cfg \
     custom/bare.cfg custom/cvme961.cfg custom/dmv152.cfg custom/dmv177.cfg \
-    custom/erc32.cfg custom/erc32nfp.cfg custom/eth_comm.cfg \
+    custom/erc32.cfg custom/erc32nfp.cfg \
     custom/gen68302.cfg custom/gen68340.cfg custom/gen68360.cfg \
     custom/gen68360_040.cfg custom/gensh1.cfg custom/helas403.cfg \
     custom/i386ex.cfg custom/idp.cfg custom/jmr3904.cfg custom/leon1.cfg \

@@ -1,3 +1,8 @@
+2004-11-23	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Remove eth_comm.
+	* custom/eth_comm.cfg: Removed.
+
 2004-11-22	Jennifer Averett <jennifer@OARcorp.com>
 
 	PR 581/bsps
