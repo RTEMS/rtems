@@ -45,8 +45,31 @@ char *rtems_progname;
 
 /*
  * CPU-space access
+ * The NOP after writing the CACR is there to address the following issue as
+ * described in "Device Errata MCF5282DE", Rev. 1.7, 09/2004:
+ *
+ * 6 Possible Cache Corruption after Setting  CACR[CINV]
+ * 6.1 Description
+ * The cache on the MCF5282 was enhanced to function as a unified data and
+ * instruction cache, an instruction cache, or an operand cache.  The cache
+ * function and organization is controlled by the cache control register (CACR).
+ * The CINV (Bit 24 = cache invalidate) bit in the CACR causes a cache clear.
+ * If the cache is configured as a unified cache and the CINV bit is set, the
+ * scope of the cache clear is controlled by two other bits in the CACR,
+ * INVI (BIT 21 = CINV instruction cache only) and INVD (BIT 20 = CINV data
+ * cache only).  These bits allow the entire cache, just the instruction
+ * portion of the cache, or just the data portion of the cache to be cleared.
+ * If a write to the CACR is performed to clear the cache (CINV = BIT 24 set)
+ * and only a partial clear will be done (INVI = BIT 21 or INVD = BIT 20 set),
+ * then cache corruption may  occur.
+ * 
+ * 6.2 Workaround
+ * All loads of the CACR that perform a cache clear operation (CINV = BIT 24)
+ * should be followed immediately by a NOP instruction.  This avoids the cache
+ * corruption problem.
+ * DATECODES AFFECTED: All
  */
-#define m68k_set_cacr(_cacr) asm volatile ("movec %0,%%cacr" : : "d" (_cacr))
+#define m68k_set_cacr(_cacr) asm volatile ("movec %0,%%cacr ; nop" : : "d" (_cacr))
 #define m68k_set_acr0(_acr0) asm volatile ("movec %0,%%acr0" : : "d" (_acr0))
 #define m68k_set_acr1(_acr1) asm volatile ("movec %0,%%acr1" : : "d" (_acr1))
 

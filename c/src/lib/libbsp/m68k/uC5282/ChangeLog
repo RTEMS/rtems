@@ -1,3 +1,7 @@
+2005-03-10  Eric Norum <norume@aps.anl.gov>
+
+	* startup/bspstart.c: Add NOP after CACR writes. (work around hardware bug)
+
 2005-02-14  Eric Norum <norume@aps.anl.gov>
 
 	* startup/bspstart.c: Don't cache flash -- it messes up programming.
