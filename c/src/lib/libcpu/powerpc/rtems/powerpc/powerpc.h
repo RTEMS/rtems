@@ -107,7 +107,6 @@ extern "C" {
 #elif defined (ppc405)
 #define CPU_MODEL_NAME "PowerPC 405"
 #endif
-#define PPC_ALIGNMENT		4  
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_HAS_RFCI    	1
 #define PPC_USE_MULTIPLE	1
@@ -122,7 +121,6 @@ extern "C" {
 #define CPU_MODEL_NAME  "PowerPC 555"
 
 /* Copied from mpc505 */
-#define PPC_ALIGNMENT		4
 #define PPC_CACHE_ALIGNMENT	16
 
 /* Added by querbach@realtime.bc.ca */
@@ -141,7 +139,6 @@ extern "C" {
 
 #define CPU_MODEL_NAME  "PowerPC 505/509"
 
-#define PPC_ALIGNMENT           4
 #define PPC_CACHE_ALIGNMENT     16
 #define PPC_I_CACHE             4096
 #define PPC_D_CACHE             0
@@ -155,7 +152,6 @@ extern "C" {
  
 #define CPU_MODEL_NAME  "PowerPC 601"
 
-#define PPC_ALIGNMENT		8
 #define PPC_USE_MULTIPLE	1
 #define PPC_I_CACHE		0
 #define PPC_D_CACHE		32768
@@ -167,7 +163,6 @@ extern "C" {
  
 #define CPU_MODEL_NAME  "PowerPC 602"
 
-#define PPC_ALIGNMENT		4
 #define PPC_HAS_DOUBLE		0
 #define PPC_I_CACHE		4096
 #define PPC_D_CACHE		4096
@@ -179,7 +174,6 @@ extern "C" {
  
 #define CPU_MODEL_NAME  "PowerPC 603"
 
-#define PPC_ALIGNMENT		8
 #define PPC_I_CACHE		8192
 #define PPC_D_CACHE		8192
 
@@ -192,7 +186,6 @@ extern "C" {
  *  Known to work on real hardware.
  */
 
-#define PPC_ALIGNMENT		8
 #define PPC_I_CACHE		16384
 #define PPC_D_CACHE		16384
 
@@ -205,7 +198,6 @@ extern "C" {
  
 #define CPU_MODEL_NAME  "PowerPC 604"
 
-#define PPC_ALIGNMENT		8
 #define PPC_I_CACHE		16384
 #define PPC_D_CACHE		16384
  
@@ -216,7 +208,6 @@ extern "C" {
  */ 
 #define CPU_MODEL_NAME  "PowerPC MPC860"
 
-#define PPC_ALIGNMENT		4
 #define PPC_I_CACHE             4096
 #define PPC_D_CACHE             4096
 #define PPC_CACHE_ALIGNMENT	16
@@ -234,7 +225,6 @@ extern "C" {
  */ 
 #define CPU_MODEL_NAME  "PowerPC MPC821"
 
-#define PPC_ALIGNMENT		4
 #define PPC_I_CACHE             4096
 #define PPC_D_CACHE             4096
 #define PPC_CACHE_ALIGNMENT	16
@@ -249,7 +239,6 @@ extern "C" {
 
 #define CPU_MODEL_NAME  "PowerPC 750"
 
-#define PPC_ALIGNMENT		8
 #define PPC_I_CACHE		16384
 #define PPC_D_CACHE		16384
 
@@ -257,7 +246,6 @@ extern "C" {
 
 #define CPU_MODEL_NAME  "PowerPC 7400"
 
-#define PPC_ALIGNMENT		8
 #define PPC_I_CACHE		32768
 #define PPC_D_CACHE		32768
 
@@ -268,7 +256,6 @@ extern "C" {
 
 #define CPU_MODEL_NAME  "PowerPC 7455"
 
-#define PPC_ALIGNMENT		8
 #define PPC_CACHE_ALIGNMENT     32
 #define PPC_I_CACHE		32768
 #define PPC_D_CACHE		32768
@@ -279,7 +266,6 @@ extern "C" {
  */
 #define CPU_MODEL_NAME  "PowerPC MPC8260"
 
-#define PPC_ALIGNMENT		4
 #define PPC_I_CACHE         	16384
 #define PPC_D_CACHE         	16384
 #define PPC_CACHE_ALIGNMENT	32
