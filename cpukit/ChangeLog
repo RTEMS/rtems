@@ -1,5 +1,10 @@
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* aclocal/rtems-top.m4: Add AC_CONFIG_AUX_DIR.
+
+2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: AC_PREREQ(2.57).
 
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
