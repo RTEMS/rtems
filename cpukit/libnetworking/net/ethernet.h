@@ -64,7 +64,7 @@
 struct	ether_header {
 	u_char	ether_dhost[ETHER_ADDR_LEN];
 	u_char	ether_shost[ETHER_ADDR_LEN];
-	u_short	ether_type BYTE_PACK;
+	u_short	ether_type;
 };
 
 /*
