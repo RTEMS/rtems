@@ -1,5 +1,9 @@
 2003-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Reflect changes to libfs Makefile.ams.
+
+2003-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Use here-documents to generate cpuopts.tmp.
 	Various fixes and changes to argument processing.
 	Reflect changes to librpc Makefile.ams.
