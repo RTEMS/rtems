@@ -1,4 +1,9 @@
 
+2001-01-09	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/pc386.cfg (make-exe): Removed commented out lines that
+	were displayed in build longs.
+
 2001-01-08	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/p4000.cfg, custom/p4600.cfg, custom/p4650.cfg: Remove
