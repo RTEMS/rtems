@@ -148,7 +148,7 @@ rtems_isr bsp_spurious_handler(
    *  What else can we do but stop ...
    */
 
-  asm volatile( "ta 0x0" );
+  asm volatile( "mov 1, %g1; ta 0x0" );
 }
 
 /*
@@ -177,8 +177,9 @@ void bsp_spurious_initialize()
      *  paramaters to the program.
      */
 
-    if (( trap == 5 || trap == 6 || trap == 0x83 ) ||
-    	(( trap >= 0x70 ) && ( trap <= 0x80 )))
+     if (( trap == 5 || trap == 6 ) ||
+     	(( trap >= 0x11 ) && ( trap <= 0x1f )) || 
+     	(( trap >= 0x70 ) && ( trap <= 0x83 )))
       continue;
 
     set_vector( bsp_spurious_handler, SPARC_SYNCHRONOUS_TRAP( trap ), 1 );

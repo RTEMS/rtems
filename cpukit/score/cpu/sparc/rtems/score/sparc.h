@@ -196,6 +196,7 @@ extern "C" {
  *
  */
 
+/*
 #define sparc_disable_interrupts( _level ) \
   do { \
     register unsigned int _newlevel; \
@@ -204,7 +205,7 @@ extern "C" {
     (_newlevel) = (_level) | SPARC_PSR_PIL_MASK; \
     sparc_set_psr( _newlevel ); \
   } while ( 0 )
- 
+
 #define sparc_enable_interrupts( _level ) \
   do { \
     unsigned int _tmp; \
@@ -214,6 +215,7 @@ extern "C" {
     _tmp |= (_level) & SPARC_PSR_PIL_MASK; \
     sparc_set_psr( _tmp ); \
   } while ( 0 ) 
+*/
   
 #define sparc_flash_interrupts( _level ) \
   do { \
@@ -223,6 +225,7 @@ extern "C" {
     sparc_disable_interrupts( _ignored ); \
   } while ( 0 )
 
+/*
 #define sparc_set_interrupt_level( _new_level ) \
   do { \
     register unsigned32 _new_psr_level = 0; \
@@ -233,6 +236,7 @@ extern "C" {
       (((_new_level) << SPARC_PSR_PIL_BIT_POSITION) & SPARC_PSR_PIL_MASK); \
     sparc_set_psr( _new_psr_level ); \
   } while ( 0 )
+*/
 
 #define sparc_get_interrupt_level( _level ) \
   do { \

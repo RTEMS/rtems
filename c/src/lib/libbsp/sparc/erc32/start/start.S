@@ -150,7 +150,8 @@ SYM(CLOCK_SPEED):
    *        installed before.
    */
 
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;              ! 80 - 82
+  TRAP( 0x80, SYM(syscall) ); 			! 80 syscall SW trap
+  SOFT_TRAP; SOFT_TRAP;  	            	! 81 - 82
   TRAP( 0x83, SYM(window_flush_trap_handler) ); ! 83 flush windows SW trap
 
   SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 84 - 87
@@ -212,20 +213,44 @@ SYM(hard_reset):
 	ld	[%g3], %g2		
 	set	0xfe080000, %g1
 	andcc	%g1, %g2, %g0
-	bne	1f
-	set	0x00101000, %g1		! 2M ROM, 4M RAM
-                                         ! set the Memory Configuration
-        st     %g1, [ %g3 + ERC32_MEC_MEMORY_CONFIGURATION_OFFSET ]
-        
-	set	SYM(RAM_END), %sp	   ! End of work-space area
-	st	%sp, [%g6]
+ 	bne	2f
+ 
+ /* Set the correct memory size in MEC memory config register */
+ 
+ 	set	SYM(PROM_SIZE), %l0	
+ 	set	0, %l1
+ 	srl	%l0, 18, %l0
+1:
+ 	tst	%l0
+ 	srl	%l0, 1, %l0
+ 	bne,a	1b
+ 	inc	%l1
+ 	sll	%l1, 8, %l1
+ 
+ 	set	SYM(RAM_SIZE), %l0	
+ 	srl	%l0, 19, %l0
+1:
+ 	tst	%l0
+ 	srl	%l0, 1, %l0
+ 	bne,a	1b
+ 	inc	%l1
+ 	sll	%l1, 10, %l1
+ 
+                                           ! set the Memory Configuration
+        st     %l1, [ %g3 + ERC32_MEC_MEMORY_CONFIGURATION_OFFSET ]
+          
+ 	set	SYM(RAM_START), %l1  ! Cannot use RAM_END due to bug in linker
+ 	set	SYM(RAM_SIZE), %l2
+ 	add	%l1, %l2, %sp
+ 	st	%sp, [%g6]	
+
 
 	set	SYM(CLOCK_SPEED), %g6	! Use 14 MHz in simulator
 	set	14, %g1
 	st	%g1, [%g6]
 
 /* Common initialisation */
-1:
+2:
         set     WIM_INIT, %g1           ! Initialize WIM
         mov     %g1, %wim               
 
@@ -298,6 +323,7 @@ zerobss:
 
         PUBLIC(BSP_fatal_return)
 SYM(BSP_fatal_return):
+	mov	1, %g1
         ta      0                       ! Halt if _main returns ...
         nop
 

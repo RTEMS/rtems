@@ -36,27 +36,35 @@ __DYNAMIC  =  0;
  *
  * _CLOCK_SPEED               in Mhz (used to program the counter/timers)
  *
- * _PROM_SIZE                 size of PROM (permissible values are 4K, 8K, 16K
- *                               32K, 64K, 128K, 256K, and 512K)
+ * _PROM_SIZE                 size of PROM (permissible values are 128K, 256K,
+ *                               512K, 1M, 2M, 4M, 8M and 16M)
  * _RAM_SIZE                  size of RAM (permissible values are 256K, 512K,
- *                               1MB, 2Mb, 4Mb, 8Mb, 16Mb, and 32Mb)
+ *                               1M, 2M, 4M, 8M, 16M, and 32M)
  *
- *  MAKE SURE THESE MATCH THE MEMORY DESCRIPTION SECTION!!!
  */
 
-/*
-_CLOCK_SPEED = 10;
-*/
+/* Default values, can be overridden */
 
-_PROM_SIZE = 512K;
-_RAM_SIZE = 2M;
+_PROM_SIZE = 2M;
+_RAM_SIZE = 4M;
 
 _RAM_START = 0x02000000;
 _RAM_END = _RAM_START + _RAM_SIZE;
-RAM_END = _RAM_END;
 
 _PROM_START = 0x00000000;
 _PROM_END = _PROM_START + _PROM_SIZE;
+
+/*
+ *  Alternate names without leading _.
+ */
+
+PROM_START = _PROM_START;
+PROM_SIZE = _PROM_SIZE;
+PROM_END = _PROM_END;
+
+RAM_START = _RAM_START;
+RAM_SIZE = _RAM_SIZE;
+RAM_END = _RAM_END;
 
 /*
  *  Base address of the on-CPU peripherals
@@ -65,10 +73,12 @@ _PROM_END = _PROM_START + _PROM_SIZE;
 _ERC32_MEC = 0x01f80000;
 ERC32_MEC = 0x01f80000;
 
+/* these are the maximum values */
+
 MEMORY
 {
-  rom     : ORIGIN = 0x00000000, LENGTH = 512K
-  ram     : ORIGIN = 0x02000000, LENGTH = 2M
+  rom     : ORIGIN = 0x00000000, LENGTH = 16
+  ram     : ORIGIN = 0x02000000, LENGTH = 32M
 }
 
 /*

@@ -30,8 +30,9 @@ void bsp_cleanup( void )
 {
     /*
      * "halt" by trapping to the simulator command line.
+     * set %g1 to 1 to detect clean exit.
      */
 
 
-  asm volatile( "ta 0" );
+  asm volatile( "mov 1, %g1; ta 0" );
 }

@@ -345,7 +345,7 @@ extern ERC32_Register_Map ERC32_MEC;
   do { \
     unsigned32 _level; \
     \
-    sparc_disable_interrupts( _level ); \
+    _level = sparc_disable_interrupts(); \
     ERC32_MEC.Test_Control = ERC32_MEC.Test_Control | 0x80000; \
     ERC32_MEC.Interrupt_Force = (1 << (_source)); \
     sparc_enable_interrupts( _level ); \
@@ -361,7 +361,7 @@ extern ERC32_Register_Map ERC32_MEC;
   do { \
     unsigned32 _level; \
     \
-    sparc_disable_interrupts( _level ); \
+    _level = sparc_disable_interrupts(); \
       ERC32_MEC.Interrupt_Mask |= (1 << (_source)); \
     sparc_enable_interrupts( _level ); \
   } while (0)
@@ -370,7 +370,7 @@ extern ERC32_Register_Map ERC32_MEC;
   do { \
     unsigned32 _level; \
     \
-    sparc_disable_interrupts( _level ); \
+    _level = sparc_disable_interrupts(); \
       ERC32_MEC.Interrupt_Mask &= ~(1 << (_source)); \
     sparc_enable_interrupts( _level ); \
   } while (0)
@@ -380,7 +380,7 @@ extern ERC32_Register_Map ERC32_MEC;
     unsigned32 _level; \
     unsigned32 _mask = 1 << (_source); \
     \
-    sparc_disable_interrupts( _level ); \
+    _level = sparc_disable_interrupts(); \
       (_previous) = ERC32_MEC.Interrupt_Mask; \
       ERC32_MEC.Interrupt_Mask = _previous | _mask; \
     sparc_enable_interrupts( _level ); \
@@ -392,7 +392,7 @@ extern ERC32_Register_Map ERC32_MEC;
     unsigned32 _level; \
     unsigned32 _mask = 1 << (_source); \
     \
-    sparc_disable_interrupts( _level ); \
+    _level = sparc_disable_interrupts(); \
       ERC32_MEC.Interrupt_Mask = \
         (ERC32_MEC.Interrupt_Mask & ~_mask) | (_previous); \
     sparc_enable_interrupts( _level ); \
@@ -464,7 +464,7 @@ extern unsigned32 _ERC32_MEC_Timer_Control_Mirror;
     unsigned32 __value; \
     \
     __value = ((_value) & 0x0f); \
-    sparc_disable_interrupts( _level ); \
+    _level = sparc_disable_interrupts(); \
       _control = _ERC32_MEC_Timer_Control_Mirror; \
       _control &= ERC32_MEC_TIMER_COUNTER_DEFINED_MASK << 8; \
       _ERC32_MEC_Timer_Control_Mirror = _control | _value; \
@@ -493,7 +493,7 @@ extern unsigned32 _ERC32_MEC_Timer_Control_Mirror;
     unsigned32 __value; \
     \
     __value = ((_value) & 0x0f) << 8; \
-    sparc_disable_interrupts( _level ); \
+    _level = sparc_disable_interrupts(); \
       _control = _ERC32_MEC_Timer_Control_Mirror; \
       _control &= ERC32_MEC_TIMER_COUNTER_DEFINED_MASK; \
       _ERC32_MEC_Timer_Control_Mirror = _control | __value; \

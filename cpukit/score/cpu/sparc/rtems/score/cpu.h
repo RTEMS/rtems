@@ -725,6 +725,9 @@ SCORE_EXTERN unsigned8 _CPU_Trap_Table_area[ 8192 ]
 
 #ifndef ASM
 
+extern unsigned int sparc_disable_interrupts();
+extern void sparc_enable_interrupts();
+
 /* ISR handler macros */
 
 /*
@@ -733,7 +736,7 @@ SCORE_EXTERN unsigned8 _CPU_Trap_Table_area[ 8192 ]
  */
 
 #define _CPU_ISR_Disable( _level ) \
-  sparc_disable_interrupts( _level )
+  (_level) = sparc_disable_interrupts()
  
 /*
  *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
@@ -743,7 +746,6 @@ SCORE_EXTERN unsigned8 _CPU_Trap_Table_area[ 8192 ]
 
 #define _CPU_ISR_Enable( _level ) \
   sparc_enable_interrupts( _level )
- 
 /*
  *  This temporarily restores the interrupt to _level before immediately
  *  disabling them again.  This is used to divide long critical
@@ -761,7 +763,7 @@ SCORE_EXTERN unsigned8 _CPU_Trap_Table_area[ 8192 ]
  */
 
 #define _CPU_ISR_Set_level( _newlevel ) \
-   sparc_set_interrupt_level( _newlevel )
+   sparc_enable_interrupts( _newlevel << 8)
  
 unsigned32 _CPU_ISR_Get_level( void );
  
@@ -840,7 +842,7 @@ void _CPU_Context_Initialize(
   do { \
     unsigned32 level; \
     \
-    sparc_disable_interrupts( level ); \
+    level = sparc_disable_interrupts(); \
     asm volatile ( "mov  %0, %%g1 " : "=r" (level) : "0" (level) ); \
     while (1); /* loop forever */ \
   } while (0)
