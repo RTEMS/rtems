@@ -103,7 +103,7 @@ typedef struct {
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
   unsigned32   interrupt_stack_size;
-  unsigned32   extra_system_initialization_stack;
+  unsigned32   extra_mpci_receive_server_stack;
 
   unsigned32   interrupt_table_segment;
   void        *interrupt_table_offset;
@@ -134,10 +134,10 @@ EXTERN void               *_CPU_Interrupt_stack_high;
 #define CPU_MODES_INTERRUPT_MASK   0x00000001 /* interrupt level in mode */
 
 /*
- *  extra stack required by system initialization thread
+ *  extra stack required by the MPCI receive server thread
  */
 
-#define CPU_SYSTEM_INITIALIZATION_THREAD_EXTRA_STACK 1024
+#define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 1024
 
 /*
  *  i386 family supports 256 distinct vectors.

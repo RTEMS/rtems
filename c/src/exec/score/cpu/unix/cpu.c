@@ -339,7 +339,7 @@ void _CPU_Install_interrupt_stack( void )
 
 /*PAGE
  *
- *  _CPU_Internal_threads_Idle_thread_body
+ *  _CPU_Thread_Idle_body
  *
  *  Stop until we get a signal which is the logically the same thing 
  *  entering low-power or sleep mode on a real processor and waiting for
@@ -347,7 +347,7 @@ void _CPU_Install_interrupt_stack( void )
  *  CPU cycles which is again similar to low power mode.
  */
 
-void _CPU_Internal_threads_Idle_thread_body( void )
+void _CPU_Thread_Idle_body( void )
 {
   while (1)
     pause();

@@ -376,7 +376,7 @@ void _CPU_Context_Initialize(
 
 /*PAGE
  *
- *  _CPU_Internal_threads_Idle_thread_body
+ *  _CPU_Thread_Idle_body
  *
  *  Some SPARC implementations have low power, sleep, or idle modes.  This
  *  tries to take advantage of those models.  
@@ -392,7 +392,7 @@ void _CPU_Context_Initialize(
 
 #if defined(erc32)
 
-void _CPU_Internal_threads_Idle_thread_body( void )
+void _CPU_Thread_Idle_body( void )
 {
   while (1) {
     ERC32_MEC.Power_Down = 0;   /* value is irrelevant */

@@ -207,9 +207,9 @@ extern "C" {
 /*
  *  Does this port provide a CPU dependent IDLE task implementation?
  *
- *  If TRUE, then the routine _CPU_Internal_threads_Idle_thread_body
+ *  If TRUE, then the routine _CPU_Thread_Idle_body
  *  must be provided and is the default IDLE thread body instead of
- *  _Internal_threads_Idle_thread_body.
+ *  _CPU_Thread_Idle_body.
  *
  *  If FALSE, then use the generic IDLE thread body if the BSP does
  *  not provide one.
@@ -343,7 +343,7 @@ typedef struct {
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
   unsigned32   interrupt_stack_size;
-  unsigned32   extra_system_initialization_stack;
+  unsigned32   extra_mpci_receive_server_stack;
   unsigned32   some_other_cpu_dependent_info;
 }   rtems_cpu_table;
 
@@ -401,11 +401,11 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 
 /*
  *  Amount of extra stack (above minimum stack size) required by
- *  system initialization thread.  Remember that in a multiprocessor
- *  system the system intialization thread becomes the MP server thread.
+ *  MPCI receive server thread.  Remember that in a multiprocessor
+ *  system this thread must exist and be able to process all directives.
  */
 
-#define CPU_SYSTEM_INITIALIZATION_THREAD_EXTRA_STACK 0
+#define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 
 /*
  *  This defines the number of entries in the ISR_Vector_table managed
@@ -759,7 +759,7 @@ void _CPU_ISR_install_vector(
 void _CPU_Install_interrupt_stack( void );
 
 /*
- *  _CPU_Internal_threads_Idle_thread_body
+ *  _CPU_Thread_Idle_body
  *
  *  This routine is the CPU dependent IDLE thread body.
  *
@@ -767,7 +767,7 @@ void _CPU_Install_interrupt_stack( void );
  *         is TRUE.
  */
 
-void _CPU_Internal_threads_Idle_thread_body( void );
+void _CPU_Thread_Idle_body( void );
 
 /*
  *  _CPU_Context_switch

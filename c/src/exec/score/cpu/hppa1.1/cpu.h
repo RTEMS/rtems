@@ -223,7 +223,7 @@ typedef struct {
   boolean      do_zero_of_workspace;
 
   unsigned32   interrupt_stack_size;
-  unsigned32   extra_system_initialization_stack;
+  unsigned32   extra_mpci_receive_server_stack;
 
   /*
    * Control of external interrupts.
@@ -278,10 +278,10 @@ void hppa_external_interrupt_spurious_handler(unsigned32, CPU_Interrupt_frame *)
 #define CPU_STACK_CHECK_SIZE    (CPU_FRAME_SIZE * 2)
 
 /*
- *  extra stack required by system initialization thread
+ *  extra stack required by the MPCI receive server thread
  */
 
-#define CPU_SYSTEM_INITIALIZATION_THREAD_EXTRA_STACK 0
+#define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 
 /*
  * HPPA has 32 interrupts, then 32 external interrupts

@@ -145,7 +145,7 @@ typedef struct {
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
   unsigned32   interrupt_stack_size;
-  unsigned32   extra_system_initialization_stack;
+  unsigned32   extra_mpci_receive_server_stack;
 #if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
   i960ca_PRCB *Prcb;
 #endif
@@ -173,13 +173,10 @@ EXTERN void               *_CPU_Interrupt_stack_high;
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 
 /*
- *  extra stack required by system initialization thread
- *
- *  NOTE: Make sure this stays positive ...
+ *  extra stack required by the MPCI receive server thread
  */
 
-#define CPU_SYSTEM_INITIALIZATION_THREAD_EXTRA_STACK \
-   (CPU_STACK_MINIMUM_SIZE)
+#define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK (CPU_STACK_MINIMUM_SIZE)
 
 /*
  *  i960 family supports 256 distinct vectors.
@@ -191,7 +188,7 @@ EXTERN void               *_CPU_Interrupt_stack_high;
 /*
  *  Minimum size of a thread's stack.
  *
- *  NOTE:  See CPU_SYSTEM_INITIALIZATION_THREAD_EXTRA_STACK
+ *  NOTE:  See CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK
  */
 
 #define CPU_STACK_MINIMUM_SIZE          2048

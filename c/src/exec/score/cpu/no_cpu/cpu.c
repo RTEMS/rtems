@@ -137,7 +137,7 @@ void _CPU_Install_interrupt_stack( void )
 
 /*PAGE
  *
- *  _CPU_Internal_threads_Idle_thread_body
+ *  _CPU_Thread_Idle_body
  *
  *  NOTES:
  *
@@ -152,7 +152,7 @@ void _CPU_Install_interrupt_stack( void )
  *     hook with caution.
  */
 
-void _CPU_Internal_threads_Idle_thread_body( void )
+void _CPU_Thread_Idle_body( void )
 {
 
   for( ; ; )

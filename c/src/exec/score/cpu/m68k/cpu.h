@@ -138,7 +138,7 @@ typedef struct {
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
   unsigned32   interrupt_stack_size;
-  unsigned32   extra_system_initialization_stack;
+  unsigned32   extra_mpci_receive_server_stack;
   m68k_isr    *interrupt_vector_table;
 }   rtems_cpu_table;
 
@@ -166,10 +166,10 @@ extern char               _VBR[];
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 
 /*
- *  extra stack required by system initialization thread
+ *  extra stack required by the MPCI receive server thread
  */
 
-#define CPU_SYSTEM_INITIALIZATION_THREAD_EXTRA_STACK 1024
+#define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 1024
 
 /*
  *  m68k family supports 256 distinct vectors.
