@@ -35,11 +35,4 @@ m4_if([$1],,[],[CPPFLAGS="$CPPFLAGS $1"])
 [
 CFLAGS=${CFLAGS--g -Wall}
 fi
-
-dnl FIXME: HACK for egcs/cygwin mixing '\\' and '/' in gcc -print-*
-case $build_os in
-*cygwin*)     GCCSED="| sed 's%\\\\%/%g'" ;;
-*) ;;
-esac
-AC_SUBST(GCCSED)
 ])

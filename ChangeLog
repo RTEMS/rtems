@@ -1,5 +1,9 @@
 2002-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/prog-cc.m4: Remove GCCSED.
+
+2002-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/compile.am: Remove LDFLAGS_INCOMPLETE.
 	Remove LDFLAGS.
 	Add CCAS, CCASCOMPILE.
