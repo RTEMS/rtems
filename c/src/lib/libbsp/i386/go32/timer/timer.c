@@ -34,58 +34,71 @@ static inline unsigned long long rdtsc( void )
     __asm __volatile( ".byte 0x0F, 0x31" : "=A" (result) );
     return result;
 }
-static void restore_timer( void )
+#else
+extern rtems_isr timerisr();
+static rtems_isr_entry Old_Ticker;
+#endif
+
+static void Timer_exit( void )
 {
+#if defined(pentium)
     CLOCK_ENABLE();
-}
 #else /* pentium */
-rtems_isr timerisr();
+    extern void rtc_set_dos_date( void );
 
-#define TIMER_ISR_US  10000
+    /* reset to DOS value: */
+    outport_byte( TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN );
+    outport_byte( TIMER_CNTR0, 0 );
+    outport_byte( TIMER_CNTR0, 0 );
 
+    /* reset time-of-day */
+    rtc_set_dos_date();
+        
+    /* re-enable old handler: assume it was one of ours */
+    set_vector( (rtems_isr_entry)Old_Ticker, 0x8, 0 );
 #endif /* pentium */
+}
 
 void Timer_initialize()
 {
+    extern int atexit( void (*)(void) );
+
     static int First = 1;
-#if defined(pentium)
+
     if ( First )  {
-        extern int atexit( void (*)(void) );
         First = 0;
-        /* Disable the programmable timer. */
-        CLOCK_DISABLE();
+
         /* Try not to hose the system on return to DOS. */
-        atexit( restore_timer );
-    }
-    Ttimer_val = rdtsc();
+        atexit( Timer_exit );
+
+#if defined(pentium)
+        /* Disable the programmable timer so ticks don't interfere. */
+        CLOCK_DISABLE();
 #else /* pentium */
+        /* install a timer ISR */
+        Old_Ticker = (rtems_isr_entry) set_vector( timerisr, 0x8, 0 );
 
-#define WAIT() \
-  { \
-    Ttimer_val = 0; \
-    while ( Ttimer_val == 0 ) \
-      continue; \
-    Ttimer_val = 0; \
-  }
+        /* Wait for ISR to be called at least once */
+        Ttimer_val = 0;
+        while ( Ttimer_val == 0 )
+            continue;
 
-    if ( First )  {
-        First = 0;
-
-        /* install ISR */
-        set_vector( timerisr, 0x8, 0 );
-
-       /* Wait for ISR to be called at least once */
-       WAIT();
-
-       /* load timer for TIMER_ISR_US microsecond period */
-       outport_byte( TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN );
-       outport_byte( TIMER_CNTR0, US_TO_TICK(TIMER_ISR_US) >> 0 & 0xff);
-       outport_byte( TIMER_CNTR0, US_TO_TICK(TIMER_ISR_US) >> 8 & 0xff);
-    }
-
-    /* Wait for ISR to be called at least once */
-    WAIT();
+        /* load timer for 250 microsecond period */
+        outport_byte( TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN );
+        outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 0 & 0xff );
+        outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 8 & 0xff );
 #endif /* PENTIUM */
+    }
+#if defined(pentium)
+    Ttimer_val = rdtsc();       /* read starting time */
+#else
+    /* Wait for ISR to be called at least once */
+    asm( "sti" );
+    Ttimer_val = 0;
+    while ( Ttimer_val == 0 )
+        continue;
+    Ttimer_val = 0;
+#endif
 }
 
 #define AVG_OVERHEAD       0  /* 0.1 microseconds to start/stop timer. */
@@ -104,7 +117,7 @@ int Read_timer()
     inport_byte( TIMER_CNTR0, lsb );
     inport_byte( TIMER_CNTR0, msb );
     clicks = msb << 8 | lsb;
-    total = (Ttimer_val * TIMER_ISR_US) + (TIMER_ISR_US - TICK_TO_US( clicks ));
+    total = Ttimer_val + 250 - TICK_TO_US( clicks );
 #endif /* pentium */
 
     if ( Timer_driver_Find_average_overhead == 1 )
