@@ -617,8 +617,8 @@ getsockopt (int s, int level, int name, void *aval, int *avalsize)
 	return 0;
 }
 
-int
-getpeername (int s, struct sockaddr *name, int *namelen)
+static int
+getpeersockname (int s, struct sockaddr *name, int *namelen, int pflag)
 {
 	struct socket *so;
 	struct mbuf *m;
@@ -636,7 +636,10 @@ getpeername (int s, struct sockaddr *name, int *namelen)
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
-	error = (*so->so_proto->pr_usrreqs->pru_peeraddr)(so, m);
+	if (pflag)
+		error = (*so->so_proto->pr_usrreqs->pru_peeraddr)(so, m);
+	else
+		error = (*so->so_proto->pr_usrreqs->pru_sockaddr)(so, m);
 	if (error) {
 		errno = error;
 		rtems_bsdnet_semaphore_release ();
@@ -650,6 +653,17 @@ getpeername (int s, struct sockaddr *name, int *namelen)
 	m_freem (m);
 	rtems_bsdnet_semaphore_release ();
 	return 0;
+}
+
+int
+getpeername (int s, struct sockaddr *name, int *namelen)
+{
+	return getpeersockname (s, name, namelen, 1);
+}
+int
+getsockname (int s, struct sockaddr *name, int *namelen)
+{
+	return getpeersockname (s, name, namelen, 0);
 }
 
 /*

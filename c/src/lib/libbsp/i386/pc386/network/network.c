@@ -1,4 +1,6 @@
 /*
+ * XXX This driver needs to be reworked to support the new BSD stack
+ *
  * RTEMS/KA9Q driver for WD8003 Ethernet Controller
  *
  *

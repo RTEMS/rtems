@@ -138,7 +138,7 @@ for cpu in ${CPUS}; do
     echo "Configuring RTEMS target bare-${rtems_target} ... "
     ../${RTEMS}/configure --target=${TARGET} --prefix=${RTEMS_PREFIX} \
       --enable-cxx --enable-gmake-print-directory \
-      --disable-tests --disable-posix --enable-ka9q \
+      --disable-tests --disable-posix --enable-networking \
       --enable-bare-cpu-cflags=-m${rtems_target} \
       --enable-bare-cpu-model=m${rtems_target} \
       --enable-rtemsbsp=bare

@@ -37,6 +37,14 @@ extern "C" {
 #include <clockdrv.h>
 
 /*
+ * Network driver configuration
+ */
+struct rtems_bsdnet_ifconfig;
+extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config);
+#define RTEMS_BSP_NETWORK_DRIVER_NAME	"scc1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_scc1_driver_attach
+
+/*
  *  Define the time limits for RTEMS Test Suite test durations.
  *  Long test and short test duration limits are provided.  These
  *  values are in seconds and need to be converted to ticks for the

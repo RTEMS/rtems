@@ -33,7 +33,7 @@
 #
 # Decisions to be made a link-edit time are:
 #     - The size of the memory allocator heap.  The default value is
-#       64 kbytes.  If the KA9Q network package is used the heap
+#       64 kbytes.  If the network package is used the heap
 #       should be at least 256 kbytes.  If your network is large, or
 #       busy, the heap should be even larger.
 #       To choose a heap size of 256 kbytes,

@@ -8,9 +8,9 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-# We only build the Network library if HAS_KA9Q was defined
+# We only build the Network library if HAS_NETWORKING was defined
 NETWORK_yes_V = network
-NETWORK = $(NETWORK_$(HAS_KA9Q)_V)
+NETWORK = $(NETWORK_$(HAS_NETWORKING)_V)
 
 BSP_PIECES=startup clock console timer pc386dev $(NETWORK) 
 GENERIC_PIECES=

@@ -64,9 +64,21 @@ extern "C" {
 #define CPU_IDLE_TASK_IS_FP              FALSE
 #define CPU_USE_DEFERRED_FP_SWITCH       TRUE
 
-#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
 #define CPU_STACK_GROWS_UP               FALSE
 #define CPU_STRUCTURE_ALIGNMENT
+
+/*
+ *  Does this port provide a CPU dependent IDLE task implementation?
+ *  
+ *  If TRUE, then the routine _CPU_Thread_Idle_body
+ *  must be provided and is the default IDLE thread body instead of
+ *  _CPU_Thread_Idle_body.
+ *
+ *  If FALSE, then use the generic IDLE thread body if the BSP does
+ *  not provide one.
+ */
+ 
+#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
 
 /*
  *  Define what is required to specify how the network to host conversion
@@ -383,6 +395,18 @@ void _CPU_ISR_install_vector(
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
+
+/*
+ *  _CPU_Thread_Idle_body
+ *
+ *  Use the halt instruction of low power mode of a particular i386 model.
+ */
+
+#if (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
+
+void _CPU_Thread_Idle_body( void );
+
+#endif /* CPU_PROVIDES_IDLE_THREAD_BODY */
 
 /*
  *  _CPU_Context_switch

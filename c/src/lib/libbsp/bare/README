@@ -82,7 +82,7 @@
 #                          --enable-gmake-print-directory \
 #                          --disable-tests \
 #                          --disable-posix \
-#                          --enable-ka9q \
+#                          --enable-networking \
 #                          --enable-bare-cpu-cflags=-mcpu32 \
 #                          --enable-bare-cpu-model=mcpu32 \
 #                          --enable-rtemsbsp=bare

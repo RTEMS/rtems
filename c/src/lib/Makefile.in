@@ -11,10 +11,6 @@ PROJECT_ROOT = @PROJECT_ROOT@
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
-# We only build the KA9Q library if HAS_KA9Q was defined
-LIBKA9Q_yes_V = libka9q
-LIBKA9Q = $(LIBKA9Q_$(HAS_KA9Q)_V)
-
 # We only build the networking library if HAS_NETWORKING was defined
 LIBNETWORKING_yes_V = libnetworking
 LIBNETWORKING = $(LIBNETWORKING_$(HAS_NETWORKING)_V)
@@ -29,4 +25,4 @@ LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
 LIBHWAPI=$(wildcard libhwapi)
 
 SUB_DIRS=start include $(NETWORKING_INCLUDE) libmisc libc libcpu libbsp \
-         $(LIBKA9Q) $(LIBNETWORKING) $(LIBHWAPI) $(LIBRTEMSCPLUSPLUS) wrapup
+         $(LIBNETWORKING) $(LIBHWAPI) $(LIBRTEMSCPLUSPLUS) wrapup

@@ -25,11 +25,7 @@ include $(RTEMS_ROOT)/make/directory.cfg
 
 SUB_DIRS=build-tools src
 
-# We only make the install point for the KA9Q header files if it is enabled.
-LIBKA9Q_yes_V = lib/include/ka9q
-LIBKA9Q = $(LIBKA9Q_$(HAS_KA9Q)_V)
-
-# We only make the install point for the KA9Q header files if it is enabled.
+# We only make the install point for the networking header files if needed.
 LIBNETWORKING_yes_V = lib/include/networking lib/include/networking/sys \
 	lib/include/networking/machine lib/include/networking/rtems \
 	lib/include/networking/vm lib/include/networking/net \
@@ -45,9 +41,8 @@ LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
 CREATE_DIRS = \
     lib lib/include lib/include/sys lib/include/rtems \
     lib/include/rtems/score lib/include/rtems/rtems lib/include/rtems/posix \
-    lib/include/netinet lib/include/libc lib/include/libc/sys \
+    lib/include/libc lib/include/libc/sys \
     lib/include/motorola lib/include/zilog \
-    $(LIBKA9Q) \
     $(LIBNETWORKING) \
     $(LIBRTEMSCPLUSPLUS) \
     bin samples \

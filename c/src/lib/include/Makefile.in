@@ -15,14 +15,6 @@ H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 SYS_H_PIECES=termios
 SYS_H_FILES=$(SYS_H_PIECES:%=$(srcdir)/sys/%.h)
 
-KA9Q_H_PIECES= arp asy ax25 ax25mail bootp cmdparse commands config \
-  daemon dialer domain enet ftp ftpcli global hardware icmp iface \
-  internet ip kiss lapb lzw mailbox mbuf netuser nospc nr4 nr4mail \
-  nrs ping pktdrvr ppp proc rip rtems_ka9q sb session slhc slip smtp \
-  sockaddr SyslogDaemon syslog socket tcp telnet tftp timer tipmail \
-  trace udp usock
-KA9Q_H_FILES=$(KA9Q_H_PIECES:%=$(srcdir)/ka9q/%.h)
-
 MOTOROLA_H_PIECES=mc68230 mc68681
 MOTOROLA_H_FILES=$(MOTOROLA_H_PIECES:%=$(srcdir)/motorola/%.h)
 
@@ -34,7 +26,7 @@ RTEMSCPLUSPLUS_H_PIECES= rtemsEvent rtemsInterrupt rtemsMessageQueue \
 RTEMSCPLUSPLUS_H_FILES=$(RTEMSCPLUSPLUS_H_PIECES:%=$(srcdir)/rtems++/%.h)
 
 SRCS=$(H_FILES) $(SYS_H_FILES) \
-     $(KA9Q_H_FILES) $(MOTOROLA_H_FILES) $(RTEMSCPLUSPLUS_H_FILES)
+     $(MOTOROLA_H_FILES) $(RTEMSCPLUSPLUS_H_FILES)
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
@@ -47,9 +39,6 @@ all:	$(SRCS)
 	$(INSTALL) -m 444 $(MOTOROLA_H_FILES) \
             $(PROJECT_INCLUDE)/motorola
 	$(INSTALL) -m 444 $(ZILOG_H_FILES) $(PROJECT_INCLUDE)/zilog
-ifeq ($(HAS_KA9Q),yes)
-	$(INSTALL) -m 444 $(KA9Q_H_FILES) $(PROJECT_INCLUDE)/ka9q
-endif
 ifeq ($(HAS_CPLUSPLUS),yes)
 	$(INSTALL) -m 444 $(RTEMSCPLUSPLUS_H_FILES) $(PROJECT_INCLUDE)/rtems++
 endif

@@ -8,9 +8,10 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-# We only install wd80x3.h if HAS_KA9Q was defined
-WD80X3_yes_V = $(srcdir)/wd80x3.h
-WD80X3 = $(WD80X3_$(HAS_KA9Q)_V)
+# This driver needs to be reworked for the BSD stack.
+# # We only install wd80x3.h if HAS_NETWORKING was defined
+# WD80X3_yes_V = $(srcdir)/wd80x3.h
+# WD80X3 = $(WD80X3_$(HAS_NETWORKING)_V)
 
 H_FILES = $(srcdir)/bsp.h $(srcdir)/coverhd.h  $(srcdir)/crt.h \
           $(srcdir)/pc386uart.h $(srcdir)/pcibios.h \

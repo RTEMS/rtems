@@ -65,6 +65,7 @@
 
 struct in_addr;
 
+#if 0	/* RTEMS -- Why rename these? */
 /* XXX all new diversions!! argh!! */
 #define	inet_addr	__inet_addr
 #define	inet_aton	__inet_aton
@@ -80,6 +81,7 @@ struct in_addr;
 #define	inet_ntop	__inet_ntop
 #define	inet_nsap_addr	__inet_nsap_addr
 #define	inet_nsap_ntoa	__inet_nsap_ntoa
+#endif
 
 __BEGIN_DECLS
 int		 ascii2addr __P((int, const char *, void *));
