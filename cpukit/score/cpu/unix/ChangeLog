@@ -1,3 +1,7 @@
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Move RTEMS_TOP one subdir down.
+
 2004-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add PREINSTALL_DIRS.

@@ -5,7 +5,7 @@
 AC_PREREQ(2.59)
 AC_INIT([rtems-cpukit-score-cpu-c4x],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([cpu_asm.S])
-RTEMS_TOP(../../../..)
+RTEMS_TOP([../../..])
 
 RTEMS_CANONICAL_TARGET_CPU
 
