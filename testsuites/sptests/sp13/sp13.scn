@@ -1,5 +1,5 @@
 *** TEST 13 ***
-TA1 - rtems_message_queue_ident - qid => 18010001
+TA1 - rtems_message_queue_ident - qid => 1c010001
 TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1
 TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1
 TA1 - rtems_task_wake_after - sleep 5 seconds

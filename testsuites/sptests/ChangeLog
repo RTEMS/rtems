@@ -1,3 +1,9 @@
+2001-08-16	Joel Sherrill <joel@OARcorp.com>
+
+	* sp13/sp13.scn: Id in screen had wrong class field value.
+	* sp13/system.h: Account for message buffer memory.
+	* sp13/task2.c: Remove unnecessary check for failure.
+
 2001-05-10	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Use RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm]).
