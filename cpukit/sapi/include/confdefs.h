@@ -46,6 +46,10 @@ extern posix_api_configuration_table    Configuration_POSIX_API;
 #define CONFIGURE_LIBIO_SEMAPHORES \
   (CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS + 1)
 
+#ifdef CONFIGURE_INIT
+unsigned32 rtems_libio_number_iops = CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS;
+#endif
+
 /*
  *  Stack Checker Requirements
  */
@@ -524,7 +528,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 rtems_api_configuration_table Configuration_RTEMS_API = {
   CONFIGURE_MAXIMUM_TASKS,
   CONFIGURE_MAXIMUM_TIMERS,
-  CONFIGURE_MAXIMUM_SEMAPHORES,
+  CONFIGURE_MAXIMUM_SEMAPHORES + CONFIGURE_LIBIO_SEMAPHORES,
   CONFIGURE_MAXIMUM_MESSAGE_QUEUES,
   CONFIGURE_MAXIMUM_PARTITIONS,
   CONFIGURE_MAXIMUM_REGIONS + CONFIGURE_MALLOC_REGION,
