@@ -1,3 +1,7 @@
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* flashentry/flashentry.S: #include <rtems/powerpc/powerpc.h>
+
 2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Merge-in wrapup/Makefile.am.

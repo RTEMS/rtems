@@ -33,7 +33,7 @@
  */
 
 #include <rtems/asm.h>
-#include <rtems/score/powerpc.h>
+#include <rtems/powerpc/powerpc.h>
 
 /*----------------------------------------------------------------------------
  * Reset_entry.
