@@ -32,15 +32,16 @@ libxdr_C_O_FILES = \
 
 libxdr_OBJS = $(libxdr_C_O_FILES)
 
-src/xdr/$(ARCH):
-	@$(mkinstalldirs) $@
-src/xdr/$(ARCH)/%.$(OBJEXT): src/xdr/%.c
+src/xdr/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) src/xdr/$(ARCH)
+	@: > src/xdr/$(ARCH)/$(dirstamp)
+src/xdr/$(ARCH)/%.$(OBJEXT): src/xdr/%.c src/xdr/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 src/xdr/$(ARCH)/libxdr.a: $(libxdr_OBJS)
 	$(make-library)
 
 man_MANS += src/xdr/xdr.3
-all-local: src/xdr/$(ARCH) src/xdr/$(ARCH)/libxdr.a
+all-local: src/xdr/$(ARCH)/libxdr.a
 endif
 
 librpc_C_FILES = src/rpc/auth_none.c src/rpc/auth_unix.c \
@@ -71,9 +72,10 @@ librpc_OBJS = $(librpc_C_O_FILES)
 librpc_a_CPPFLAGS = -D_RPC_read=read -D_RPC_write=write -D_RPC_close=close \
     -D_RTEMS_RPC_INTERNAL_
 
-src/rpc/$(ARCH):
-	@$(mkinstalldirs) $@
-src/rpc/$(ARCH)/%.$(OBJEXT): src/rpc/%.c
+src/rpc/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) src/rpc/$(ARCH)
+	@: > src/rpc/$(ARCH)/$(dirstamp)
+src/rpc/$(ARCH)/%.$(OBJEXT): src/rpc/%.c src/rpc/$(ARCH)/$(dirstamp)
 	${COMPILE} $(librpc_a_CPPFLAGS) -o $@ -c $<
 src/rpc/$(ARCH)/librpc.a: $(librpc_OBJS)
 	$(make-library)
@@ -83,7 +85,7 @@ man_MANS += src/rpc/bindresvport.3 src/rpc/getrpcent.3 src/rpc/publickey.3 \
     src/rpc/des_crypt.3 src/rpc/getrpcport.3 src/rpc/publickey.5 \
     src/rpc/rpc.5 src/rpc/rstat.1 src/rpc/rtime.3
 
-all-local: src/rpc/$(ARCH) src/rpc/$(ARCH)/librpc.a
+all-local: src/rpc/$(ARCH)/librpc.a
 endif
 
 CLEANDIRS += src/rpc

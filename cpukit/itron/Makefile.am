@@ -108,13 +108,13 @@ OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-all-local: $(PREINSTALL_FILES) ${ARCH} ${LIB}
+all-local: $(PREINSTALL_FILES) ${LIB}
 
 $(LIB): ${OBJS}
 	$(make-library)
 endif
 
-${ARCH}/%.$(OBJEXT): src/%.c
+${ARCH}/%.$(OBJEXT): src/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 
 UNUSED_C_FILES = src/cre_mbx.c src/del_mbx.c src/mboxtranslatereturncode.c \

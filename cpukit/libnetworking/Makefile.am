@@ -15,7 +15,7 @@ if HAS_NETWORKING
 libnetworking_CPPFLAGS = -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
     -DDIAGNOSTIC -DBOOTP_COMPAT
 
-TMP_LIBS = $(ARCH) $(ARCH)/libnetworking.a
+TMP_LIBS = $(ARCH)/libnetworking.a
 
 ## poll.h is not in the list because RTEMS does not have poll()
 ## and installing poll.h confuses autoconf.
@@ -36,7 +36,7 @@ kern_C_FILES = kern/kern_mib.c kern/kern_subr.c kern/kern_sysctl.c \
     kern/uipc_socket2.c
 libnetworking_OBJS = $(kern_C_FILES:kern/%.c=$(ARCH)/%.$(OBJEXT))
 
-$(ARCH)/%.$(OBJEXT): kern/%.c
+$(ARCH)/%.$(OBJEXT): kern/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} $(libnetworking_CPPFLAGS) -o $@ -c $<
 
 EXTRA_DIST = $(kern_C_FILES)
@@ -62,7 +62,7 @@ net_C_FILES = net/if.c net/if_ethersubr.c net/if_loop.c net/radix.c \
     net/ppp_tty.c net/pppcompress.c
 libnetworking_OBJS += $(net_C_FILES:net/%.c=$(ARCH)/%.$(OBJEXT))
 
-$(ARCH)/%.$(OBJEXT): net/%.c
+$(ARCH)/%.$(OBJEXT): net/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} $(libnetworking_CPPFLAGS) -o $@ -c $<
 
 EXTRA_DIST += $(net_C_FILES)
@@ -88,7 +88,7 @@ netinet_C_FILES = netinet/if_ether.c netinet/igmp.c netinet/in.c \
     netinet/udp_usrreq.c
 libnetworking_OBJS += $(netinet_C_FILES:netinet/%.c=$(ARCH)/%.$(OBJEXT))
 
-$(ARCH)/%.$(OBJEXT): netinet/%.c
+$(ARCH)/%.$(OBJEXT): netinet/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} $(libnetworking_CPPFLAGS) -o $@ -c $<
 
 EXTRA_DIST += $(netinet_C_FILES)
@@ -103,7 +103,7 @@ include_nfs_HEADERS = nfs/krpc.h nfs/nfs.h nfs/nfsdiskless.h nfs/nfsproto.h \
 nfs_C_FILES = nfs/bootp_subr.c
 libnetworking_OBJS += $(nfs_C_FILES:nfs/%.c=$(ARCH)/%.$(OBJEXT))
 
-$(ARCH)/%.$(OBJEXT): nfs/%.c
+$(ARCH)/%.$(OBJEXT): nfs/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} $(libnetworking_CPPFLAGS) -o $@ -c $<
 
 EXTRA_DIST += $(nfs_C_FILES)
@@ -123,7 +123,7 @@ rtems_C_FILES = rtems/sghostname.c rtems/issetugid.c rtems/rtems_glue.c \
     rtems/mkrootfs.c rtems/rtems_bsdnet_malloc_starvation.c
 libnetworking_OBJS += $(rtems_C_FILES:rtems/%.c=$(ARCH)/%.$(OBJEXT))
 
-$(ARCH)/%.$(OBJEXT): rtems/%.c
+$(ARCH)/%.$(OBJEXT): rtems/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} $(libnetworking_CPPFLAGS) -o $@ -c $<
 
 EXTRA_DIST += $(rtems_C_FILES)
@@ -169,14 +169,15 @@ man_MANS = libc/addr2ascii.3 libc/byteorder.3 libc/ethers.3 \
 
 libc_CPPFLAGS = -DNOPOLL -DNOSELECT
 
-libc/$(ARCH):
-	@$(mkinstalldirs) $@
-libc/$(ARCH)/%.$(OBJEXT): libc/%.c
+libc/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) libc/$(ARCH)
+	@: > libc/$(ARCH)/$(dirstamp)
+libc/$(ARCH)/%.$(OBJEXT): libc/%.c libc/$(ARCH)/$(dirstamp)
 	${COMPILE} $(libc_CPPFLAGS) -o $@ -c $<
 libc/$(ARCH)/lib.a: $(libc_OBJS)
 	$(make-library)
 
-TMP_LIBS += libc/$(ARCH) libc/$(ARCH)/lib.a
+TMP_LIBS += libc/$(ARCH)/lib.a
 
 CLEANDIRS = libc/o-optimize libc/o-debug
 
@@ -207,14 +208,15 @@ lib_OBJS = $(lib_C_FILES:lib/%.c=lib/$(ARCH)/%.$(OBJEXT))
 
 lib_CPPFLAGS = -DNOPOLL -DNOSELECT
 
-lib/$(ARCH):
-	@$(mkinstalldirs) $@
-lib/$(ARCH)/%.$(OBJEXT): lib/%.c
+lib/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) lib/$(ARCH)
+	@: > lib/$(ARCH)/$(dirstamp)
+lib/$(ARCH)/%.$(OBJEXT): lib/%.c lib/$(ARCH)/$(dirstamp)
 	${COMPILE} $(lib_CPPFLAGS) -o $@ -c $<
 lib/$(ARCH)/lib.a: $(lib_OBJS)
 	$(make-library)
 
-TMP_LIBS += lib/$(ARCH) lib/$(ARCH)/lib.a
+TMP_LIBS += lib/$(ARCH)/lib.a
 
 CLEANDIRS += lib/o-optimize lib/o-debug
 

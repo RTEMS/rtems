@@ -42,11 +42,12 @@ libimfs_OBJS = $(libimfs_C_FILES:src/imfs/%.c=src/imfs/$(ARCH)/%.$(OBJEXT))
 
 include_HEADERS += src/imfs/imfs.h
 
-IMFSLIB = src/imfs/$(ARCH) src/imfs/$(ARCH)/libimfs.a
+IMFSLIB = src/imfs/$(ARCH)/libimfs.a
 
-src/imfs/$(ARCH):
-	@$(mkinstalldirs) $@
-src/imfs/$(ARCH)/%.$(OBJEXT): src/imfs/%.c
+src/imfs/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) src/imfs/$(ARCH)
+	@: > src/imfs/$(ARCH)/$(dirstamp)
+src/imfs/$(ARCH)/%.$(OBJEXT): src/imfs/%.c src/imfs/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 src/imfs/$(ARCH)/libimfs.a: ${libimfs_OBJS}
 	$(make-library)
@@ -75,11 +76,12 @@ libdosfs_OBJS = \
 
 include_HEADERS += src/dosfs/dosfs.h
 
-DOSFSLIB = src/dosfs/${ARCH} src/dosfs/$(ARCH)/libdosfs.a
+DOSFSLIB = src/dosfs/$(ARCH)/libdosfs.a
 
-src/dosfs/$(ARCH):
-	@$(mkinstalldirs) $@
-src/dosfs/$(ARCH)/%.$(OBJEXT): src/dosfs/%.c
+src/dosfs/$(ARCH)/$(dirstamp):
+	@$(mkinstalldirs) src/dosfs/$(ARCH)
+	@: > src/dosfs/$(ARCH)/$(dirstamp)
+src/dosfs/$(ARCH)/%.$(OBJEXT): src/dosfs/%.c src/dosfs/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 src/dosfs/$(ARCH)/libdosfs.a: ${libdosfs_OBJS}
 	$(make-library)
