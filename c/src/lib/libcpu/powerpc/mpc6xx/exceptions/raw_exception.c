@@ -67,6 +67,37 @@ int mpc750_vector_is_valid(rtems_vector vector)
   }
 }
 
+int PSIM_vector_is_valid(rtems_vector vector)
+{
+  switch(vector) {
+  case ASM_RESET_VECTOR: /* fall through */
+  case ASM_MACH_VECTOR:
+  case ASM_PROT_VECTOR:
+  case ASM_ISI_VECTOR:
+  case ASM_EXT_VECTOR:
+  case ASM_ALIGN_VECTOR:
+  case ASM_PROG_VECTOR:
+  case ASM_FLOAT_VECTOR:
+  case ASM_DEC_VECTOR:
+    return 1;
+  case ASM_SYS_VECTOR:
+    return 0;
+  case ASM_TRACE_VECTOR:
+    return 1;
+  case ASM_PERFMON_VECTOR:
+    return 0;
+  case ASM_IMISS_VECTOR: /* fall through */
+  case ASM_DLMISS_VECTOR:
+  case ASM_DSMISS_VECTOR:
+  case ASM_ADDR_VECTOR:
+  case ASM_SYSMGMT_VECTOR:
+    return 1;
+  case ASM_ITM_VECTOR:
+    return 0;
+  }
+  return 0;
+}
+
 int mpc603_vector_is_valid(rtems_vector vector)
 {
   switch(vector) {
@@ -149,6 +180,11 @@ int mpc60x_vector_is_valid(rtems_vector vector)
         /* case PPC_8240: -- same value as 8260 */
         case PPC_8245:
             if (!mpc603_vector_is_valid(vector)) {
+                return 0;
+            }
+            break;
+        case PPC_PSIM:
+            if (!PSIM_vector_is_valid(vector)) {
                 return 0;
             }
             break;
