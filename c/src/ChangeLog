@@ -1,9 +1,6 @@
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Reflect changes to cpukit.
-
-2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* wrapup/Makefile.am: Reflect changes to librdbg.
 	* aclocal/enable-bare.m4: Convert to autoconf-2.59.
 
@@ -14,35 +11,20 @@
 
 2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* automake/compile.am: Add RTEMS_RELLDFLAGS.
-	Remove XLDFLAGS.
-
-2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* automake/compile.am: Add RTEMS_RELLDFLAGS. Remove XLDFLAGS.
 	* wrapup/Makefile.am: Reflect changes to libchip/*.
-
-2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* support/Makefile.am: Use automake compilation rules.
 	* wrapup/Makefile.am: Reflect changes to support/*.
-
-2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: Remove libnetworking/wrapup/Makefile.
-	* wrapup/Makefile.am: Reflect change to libnetworking/*.
-	Use libnetworking/*/lib*.a instead of libnetapps.a
-
-2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Add subdir-objects to AUTOMAKE_OPTIONS.
-	Require automake-1.8.2.
-	Add RTEMS_PROG_CCAS.
-	Add AM_PROG_CC_C_O.
+	* wrapup/Makefile.am: Reflect change to libnetworking/*. Use
+	libnetworking/*/lib*.a instead of libnetapps.a.
+	* configure.ac: Add subdir-objects to AUTOMAKE_OPTIONS. Require
+	automake-1.8.2. Add RTEMS_PROG_CCAS. Add AM_PROG_CC_C_O.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* wrapup/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
-	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* wrapup/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
 	* automake/lib.am: Remove TMPINSTALL_FILES.
 
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
@@ -54,17 +36,14 @@
 
 	* wrapup/Makefile.am: Reflect changes to shmdr.
 
-2003-12-17  Joel Sherrill <joel@OARcorp.com>
+2003-12-17	Joel Sherrill <joel@OARcorp.com>
 
-    * aclocal/version.m4: Updated to rtems-20031217-test.
+	* aclocal/version.m4: Updated to rtems-20031217-test.
 
-2003-12-17  
+2003-12-17	
 
-    * c/src/aclocal/version.m4: Updated to rtems-20031217-test.
-
-2003-12-17  
-
-    * c/src/aclocal/version.m4: Updated to rtems-20031217-test.
+	* c/src/aclocal/version.m4: Updated to rtems-20031217-test.
+	* c/src/aclocal/version.m4: Updated to rtems-20031217-test.
 
 2003-12-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -77,9 +56,6 @@
 	* wrapup/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
 	* acinclude.m4: Rework RTEMS_CONFIG_SUBDIR.
 	* Makefile.am: Reflect changes to RTEMS_CONFIG_SUBDIR.
-
-2003-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* support/Makefile.am: Pass @RTEMS_BSP@ to AM_CPPFLAGS.
 
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -89,20 +65,12 @@
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* wrapup/Makefile.am: Use mkdir_p. Remove dirs from
-	PRE/TMPINSTALL_FILES.
-
-2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* wrapup/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
 	* aclocal/lead-dot.m4: Remove (Provided by automake-1.8).
 	* automake/compile.am: Use mkdir_p instead of mkinstalldirs.
-	* automake/lib.am: Use mkdir_p instead of mkdir.
-	Remove $(PROJECT_RELEASE)/lib/$(dirstamp) handling.
-	* aclocal/env-rtemsbsp.m4: Remove bsplibdir.
-	Cleanups.
-
-2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* automake/lib.am: Use mkdir_p instead of mkdir. Remove
+	$(PROJECT_RELEASE)/lib/$(dirstamp) handling.
+	* aclocal/env-rtemsbsp.m4: Remove bsplibdir. Cleanups.
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -118,8 +86,8 @@
 2003-12-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.
-	* automake/lib.am: Add project_libdir.
-	Add preinstallation dirstamp support.
+	* automake/lib.am: Add project_libdir. Add preinstallation dirstamp
+	support.
 
 2003-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -134,40 +102,31 @@
 
 	* configure.ac: Remove libchip/ide/Makefile, libchip/network/Makefile,
 	libchip/serial/Makefile, libchip/rtc/Makefile.
-
-2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* support/Makefile.am: Remove all-local: $(ARCH).
 	* wrapup/Makefile.am: Remove all-local: $(ARCH).
-
-2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* automake/compile.am: Add $(ARCH)/$(dirstamp) rules.
 
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/lead-dot.m4: New (from automake-1.7f).
-	* aclocal/rtems-top.m4: Require AM_SET_LEADING_DOT.
-	Add AC_SUBST(dirstamp).
+	* aclocal/rtems-top.m4: Require AM_SET_LEADING_DOT. Add
+	AC_SUBST(dirstamp).
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/bsp-arg-enable.m4, aclocal/canonical-target-name.m4,
 	aclocal/canonicalize-tools.m4, aclocal/check-custom-bsp.m4,
-	aclocal/check-posix.m4, aclocal/check-rdbg.m4,
-	aclocal/check-tool.m4, aclocal/config-subdirs.m4,
-	aclocal/enable-bare.m4, aclocal/enable-cxx.m4,
-	aclocal/enable-itron.m4, aclocal/enable-multiprocessing.m4,
-	aclocal/enable-networking.m4, aclocal/enable-posix.m4,
-	aclocal/enable-rdbg.m4, aclocal/enable-rtemsbsp.m4,
-	aclocal/env-rtemsbsp.m4, aclocal/gcc-isystem.m4,
-	aclocal/gcc-pipe.m4, aclocal/gcc-specs.m4,
-	aclocal/i386-gas-code16.m4, aclocal/multilib.m4,
-	aclocal/path-ksh.m4, aclocal/prog-cc.m4,
-	aclocal/prog-cxx.m4, aclocal/project-root.m4,
-	aclocal/rtems-top.m4, aclocal/target.m4,
-	aclocal/tool-paths.m4:
-	Fix underquoting to silence automake-1.8.
+	aclocal/check-posix.m4, aclocal/check-rdbg.m4, aclocal/check-tool.m4,
+	aclocal/config-subdirs.m4, aclocal/enable-bare.m4,
+	aclocal/enable-cxx.m4, aclocal/enable-itron.m4,
+	aclocal/enable-multiprocessing.m4, aclocal/enable-networking.m4,
+	aclocal/enable-posix.m4, aclocal/enable-rdbg.m4,
+	aclocal/enable-rtemsbsp.m4, aclocal/env-rtemsbsp.m4,
+	aclocal/gcc-isystem.m4, aclocal/gcc-pipe.m4, aclocal/gcc-specs.m4,
+	aclocal/i386-gas-code16.m4, aclocal/multilib.m4, aclocal/path-ksh.m4,
+	aclocal/prog-cc.m4, aclocal/prog-cxx.m4, aclocal/project-root.m4,
+	aclocal/rtems-top.m4, aclocal/target.m4, aclocal/tool-paths.m4: Fix
+	underquoting to silence automake-1.8.
 
 2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -175,36 +134,25 @@
 
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* aclocal/bsp-configure.m4: AC_PREREQ(2.57).
-	Remove RTEMS_CANONICAL_HOST.
-
-2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* aclocal/bsp-configure.m4: AC_PREREQ(2.57). Remove RTEMS_CANONICAL_HOST.
 	* aclocal/canonical-host.m4: Remove.
 	* aclocal/canonical-target-name.m4: Merge-in aclocal/canonical-host.m4.
-
-2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: Remove RTEMS_CANONICAL_HOST.
 
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/check-cpu.m4: Remove.
 	* configure.ac: Merge-in former aclocal/check-cpu.m4.
-
-2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* aclocal/canonical-target-name.m4: Add m4-quotes.
-	* aclocal/check-cxx.m4: Add m4-quotes.
-	Don't require RTEMS_CHECK_CPU.
-	* aclocal/check-multiprocessing.m4: Add m4-quotes.
-	Require RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
-	* aclocal/check-networking.m4: Add m4-quotes.
-	Require RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
-	* aclocal/check-posix.m4: Add m4-quotes.
-	Require RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
-	* aclocal/check-rdbg.m4: Add m4-quotes.
-	Require RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
+	* aclocal/check-cxx.m4: Add m4-quotes. Don't require RTEMS_CHECK_CPU.
+	* aclocal/check-multiprocessing.m4: Add m4-quotes. Require
+	RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
+	* aclocal/check-networking.m4: Add m4-quotes. Require
+	RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
+	* aclocal/check-posix.m4: Add m4-quotes. Require
+	RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
+	* aclocal/check-rdbg.m4: Add m4-quotes. Require
+	RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
 
 2003-10-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -239,13 +187,7 @@
 
 	* aclocal/check-itron.m4: Remove.
 	* aclocal/enable-inlines.m4: Remove.
-
-2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* Makefile.am: Reflect having moved aclocal/.
-
-2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* aclocal/bsp-alias.m4: New (Copied from ../../aclocal).
 	* aclocal/bsp-arg-enable.m4: New (Copied from ../../aclocal).
 	* aclocal/bsp-configure.m4: New (Copied from ../../aclocal).
@@ -304,16 +246,13 @@
 	* lib/Makefile.am: Reflect having moved automake/.
 	* support/Makefile.am: Reflect having moved automake/.
 	* wrapup/Makefile.am: Reflect having moved automake/.
-
-2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* automake/compile.am, automake/force-preinstall.am,
-	automake/host.am, automake/lib.am, automake/local.am,
-	automake/subdirs.am: New (copied from ../../automake).
+	* automake/compile.am, automake/force-preinstall.am, automake/host.am,
+	automake/lib.am, automake/local.am, automake/subdirs.am: New (copied
+	from ../../automake).
 
 2003-08-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Add bsp.pc.in
+	* Makefile.am: Add bsp.pc.in.
 	* bsp.pc.in: New (pkgconfig support).
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -326,34 +265,24 @@
 	* lib/ChangeLog: Remove.
 	* lib/.cvsignore: Cleanup.
 	* configure.ac: Reflect having added lib/Makefile.am.
-
-2003-08-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Merge-in lib/libcpu/configure.ac.
-	Merge-in lib/libbsp/configure.ac.
+	* configure.ac: Merge-in lib/libcpu/configure.ac. Merge-in
+	lib/libbsp/configure.ac.
 
 2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use relative dir to make/${RTEMS_BSP}.cache.
-
-2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: Merge-in librdbg/configure.ac.
-
-2003-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Merge-in libnetworking/configure.ac.
-	Merge-in parts of librdbg/configure.ac.
+	* configure.ac: Merge-in libnetworking/configure.ac. Merge-in parts of
+	librdbg/configure.ac.
 
 2003-07-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Merge-in libchip/configure.ac.
-	Merge-in optman/configure.ac.
+	* configure.ac: Merge-in libchip/configure.ac. Merge-in
+	optman/configure.ac.
 
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* support/version.c: Reflect having remove "rtems-" from
-	RTEMS_VERSION.
+	* support/version.c: Reflect having remove "rtems-" from RTEMS_VERSION.
 
 2003-06-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -366,9 +295,6 @@
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.
-
-2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: Add support/.
 	* support/.cvsignore: New.
 	* support/Makefile.am: New.
@@ -382,9 +308,6 @@
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
-
-2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: AC_PREREQ(2.57).
 
 2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -395,29 +318,19 @@
 
 	* wrapup/Makefile.am: Use install-data-local to install librtemsbsp.a.
 	Let all-local: depend on $(LIB).
-
-2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* wrapup/Makefile.am: Remove libmisc.
-
-2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: Remove libmisc.
 
 2002-12-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Append RTEMS_CPU_MODEL to ac_configure_args.
-	Resort cache-checking.
+	* configure.ac: Append RTEMS_CPU_MODEL to ac_configure_args. Resort
+	cache-checking.
 
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Expand RTEMS_CHECK_BSP_CACHE.
-
-2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Append CPU_CFLAGS, CFLAGS_OPTIMIZE_V,
-	CFLAGS_DEBUG_V, CFLAGS_PROFILE_V, RTEMS_BSP_FAMILY to
-	ac_configure_args.
+	* configure.ac: Append CPU_CFLAGS, CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V,
+	CFLAGS_PROFILE_V, RTEMS_BSP_FAMILY to ac_configure_args.
 
 2002-11-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -427,15 +340,12 @@
 2002-11-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use "'"-quotes to pass args to bsp.mak.
-	* configure.ac: Use "'"-quotes for args to RTEMS_CONFIG_SUBDIRS.
-	Fix braino in comment on "exec".
-	Extend --enable-ada handling.
+	* configure.ac: Use "'"-quotes for args to RTEMS_CONFIG_SUBDIRS. Fix
+	braino in comment on "exec". Extend --enable-ada handling.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* .cvsignore: Reformat.
-	Add autom4te*cache.
-	Remove autom4te.cache.
+	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 	* wrapup/.cvsignore: Remove autom4te.cache.
 
 2002-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -452,57 +362,37 @@
 
 2002-08-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Posix-BSP-Hacks:
-	* configure.ac: Add AM_CONDITIONAL(LIBCHIP).
-	Pass RTEMS_HOST to make/bsp.mak
+	* configure.ac: Add AM_CONDITIONAL(LIBCHIP). Pass RTEMS_HOST to
+	make/bsp.mak.
 	* Makefile.am: Pass RTEMS_HOST to make/bsp.mak.
 	* wrapup/Makefile.am: Apply AM_CONDITIONAL(LIBCHIP).
 
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Use .$(OBJEXT) instead of .o.
-
-2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.ac: Add BSP_SUBDIRS.
 	* Makefile.am: Use BSP_SUBDIRS to setup SUBDIRS.
 
 2002-08-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Remove AC_CONFIG_SUBDIR(wrapup).
-	Cosmetic cleanups.
-
-2002-08-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* configure.ac: Remove AC_CONFIG_SUBDIR(wrapup). Cosmetic cleanups.
 	* wrapup/Makefile.am: Pick up ../libchip/rtc/$(ARCH)/librtcio.a and
-    	../libchip/serial/$(ARCH)/libserialio.a.
+	../libchip/serial/$(ARCH)/libserialio.a.
 
 2002-08-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add rtems_makedir.
-
-2002-08-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Merge wrapup/configure.ac.
-	Cosmetic cleanups.
+	* configure.ac: Merge wrapup/configure.ac. Cosmetic cleanups.
 	* Makefile.am: Add wrapup-SUBDIR.
 	* wrapup/ChangeLog: Remove.
 	* wrapup/configure.ac: Remove.
-
-2002-08-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Append BARE_CPU_MODEL to make/@RTEMS_BSP@.cache
-	creation (Make the bare BSP happy).
+	* Makefile.am: Append BARE_CPU_MODEL to make/@RTEMS_BSP@.cache creation
+	(Make the bare BSP happy).
 	* configure.ac: Ditto.
-
-2002-08-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Create make/@RTEMS_BSP@.cache.
-	Handle make/custom/*.cfgs.
+	* Makefile.am: Create make/@RTEMS_BSP@.cache. Handle make/custom/*.cfgs.
 	Create make/custom/default.cfg.
-	* configure.ac: Add creation of make/custon/*.cfg.
-	Create make/${RTEMS_BSP}.cache.
-	Read make/${RTEMS_BSP}.cache
+	* configure.ac: Add creation of make/custom/*.cfg. Create
+	make/${RTEMS_BSP}.cache. Read make/${RTEMS_BSP}.cache.
 
 2002-08-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -512,22 +402,16 @@
 
 	* acinclude.m4: Add test "$multilib" != "yes".
 	* config-ml.in: Remove.
-
-2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* acinclude.m4: Cleanups.
 	* configure.ac: Build ${srcdir}/../../cpukit/ as ./exec/ instead of
-	${srcdir}/exec/.
-	Further adaptations to autoconf >= 2.50.
+	${srcdir}/exec/. Further adaptations to autoconf >= 2.50.
 
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: New.
-	* Makefile.am: Remove tar-installation. 
-	Prepend @exec@ to SUBDIRS.
-	* configure.ac: Switch to AC_CONFIG_SRCDIR([optman]).
-	Add RTEMS_ENABLE_MULTIPROCESSING.
-	Add RTEMS_CONFIG_SUBDIR([exec]...).
+	* Makefile.am: Remove tar-installation.  Prepend @exec@ to SUBDIRS.
+	* configure.ac: Switch to AC_CONFIG_SRCDIR([optman]). Add
+	RTEMS_ENABLE_MULTIPROCESSING. Add RTEMS_CONFIG_SUBDIR([exec]...).
 
 2002-06-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -553,8 +437,7 @@
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac:
-	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
 
@@ -565,8 +448,7 @@
 
 2002-01-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.ac: Add AC_CONFIG_SUBDIRS(optman). Remove
-	AC_CONFIG_COMMANDS.
+	* configure.ac: Add AC_CONFIG_SUBDIRS(optman). Remove AC_CONFIG_COMMANDS.
 
 2001-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -604,65 +486,48 @@
 
 2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.in: add lib/libbsp to the GNU canonicalized
-	subdirectories, remove cfg_subdirs, cfg_subdirs1, hst_subdirs1.
+	* configure.in: add lib/libbsp to the GNU canonicalized subdirectories,
+	remove cfg_subdirs, cfg_subdirs1, hst_subdirs1.
 	* Makefile.am: remove cfg_subdirs, cfg_subdirs1, hst_subdirs1.
 	* ChangeLog: Fix typos.
-
-2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* configure.in: add tests to the GNU canonicalized subdirectories.
 
 2000-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.in: add lib/libcpu to the GNU canonicalized subdirectories. 
-
-2000-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.in: add lib to the GNU canonicalized subdirectories, 
-	make the lib directory before configuring lib/.
+	* configure.in: add lib/libcpu to the GNU canonicalized subdirectories.
+	* configure.in: add lib to the GNU canonicalized subdirectories,  make
+	the lib directory before configuring lib/.
 
 2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
- 	* configure.in, Makefile.am: add exec to the GNU canonicalized 
- 	subdirectories.
-
-2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
- 	* configure.in: add librtems++ to the GNU canonicalized subdirectories.
-
-2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
- 	* configure.in: add libnetworking, librpc and librdb to the GNU 
- 	canonicalized subdirectories.
- 
-2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* configure.in, Makefile.am: add exec to the GNU canonicalized 
+	subdirectories.
+	* configure.in: add librtems++ to the GNU canonicalized subdirectories.
+	* configure.in: add libnetworking, librpc and librdb to the GNU 
+	canonicalized subdirectories.
 	* configure.in: add libmisc and libchip to the GNU canonicalized
 	subdirectories.
 
 2000-10-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am, acinclude.m4, configure.in: Introduce GNU
-	canonicalization to libfs/.
-	The approach is currently a bit of a hack as GNU canonicalization
-	does not support the per-BSP build some of the other directories
-	require.  As more of the tree is converted, this will become less 
-	of an issue.
+	canonicalization to libfs/. The approach is currently a bit of a hack as
+	GNU canonicalization does not support the per-BSP build some of the
+	other directories require.  As more of the tree is converted, this will
+	become less  of an issue.
 
 2000-10-18	Joel Sherrill <joel@OARcorp.com>
 
 	* wrapup/Makefile.am: Added libfs.
 
-2000-10-18	 Chris Johns <ccj@acm.org>
+2000-10-18	Chris Johns <ccj@acm.org>
 
 	* libfs created.
 	* configure.in: Added libfs subdirectory.
 
 2000-09-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* configure.in: Add RTEMS_PROG_CC_FOR_TARGET,
-	RTEMS_CANONICALIZE_TOOLS.
+	* configure.in: Add RTEMS_PROG_CC_FOR_TARGET, RTEMS_CANONICALIZE_TOOLS.
 
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -675,3 +540,4 @@
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+
