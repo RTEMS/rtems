@@ -21,7 +21,6 @@
 --  $Id$
 --
 
-with STUB_DRIVER;
 with TIME_TEST_SUPPORT;
 with TIMER_DRIVER;
 with RTEMS;
