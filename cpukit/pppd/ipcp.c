@@ -38,6 +38,8 @@
 #include "ipcp.h"
 #include "pathnames.h"
 
+#include <rtems/bsdnet/servers.h>
+
 static const char rcsid[] = RCSID;
 
 /* global vars */
@@ -1571,11 +1573,8 @@ static void
 create_resolv(peerdns1, peerdns2)
     u_int32_t peerdns1, peerdns2;
 {
-  extern int              rtems_bsdnet_nameserver_count;
-  extern struct in_addr   rtems_bsdnet_nameserver[];
-
   /* initialize values */
-  rtems_bsdnet_nameserver_count = (int)0;
+  rtems_bsdnet_nameserver_count = 0;
 
   /* check to see if primary was specified */
   if ( peerdns1 ) {
