@@ -18,11 +18,12 @@ dirs:
 
 COMMON_FILES=../common/cpright.texi
 
-GENERATED_FILES= clock.texi cond.texi key.texi mutex.texi \
+GENERATED_FILES= process.texi procenv.texi clock.texi \
+  cond.texi key.texi mutex.texi \
   sched.texi signal.texi thread.texi
 
-FILES= clock.texi cond.texi key.texi mutex.texi $(PROJECT).texi preface.texi \
-  sched.texi signal.texi thread.texi $(COMMON_FILES)
+FILES= $(PROJECT).texi preface.texi \
+  $(COMMON_FILES) $(GENERATED_FILES)
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
@@ -55,10 +56,21 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* _* $(GENERATED_FILES)
 
+process.texi: process.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+procenv.texi: procenv.t Makefile
+	 $(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
 thread.texi: thread.t Makefile
 	 $(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
+
 signal.texi: signal.t Makefile
 	 $(BMENU) -p "" \
 	    -u "Top" \
