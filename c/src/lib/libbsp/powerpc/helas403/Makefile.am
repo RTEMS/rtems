@@ -20,9 +20,9 @@ EXTRA_DIST = times
 
 TMPINSTALL_FILES =
 
-${PROJECT_RELEASE}/lib/bsp_specs.dl: bsp_specs.dl ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/bsp_specs.dl
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/bsp_specs.dl
+$(PROJECT_LIB)/bsp_specs.dl: bsp_specs.dl $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs.dl
+TMPINSTALL_FILES += $(PROJECT_LIB)/bsp_specs.dl
 
 $(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
