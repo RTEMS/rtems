@@ -86,10 +86,17 @@ typedef struct sector_data_s
 
 /*
  * Enum partition types
+ * see list at http://ata-atapi.com/hiwtab.htm
  */
 enum {
-    EMPTY_PARTITION     = 0,
-    EXTENDED_PARTITION  = 5,
+    EMPTY_PARTITION     = 0x00,
+    DOS_FAT12_PARTITION = 0x01,
+    DOS_FAT16_PARTITION = 0x04,
+    EXTENDED_PARTITION  = 0x05,
+    DOS_P32MB_PARTITION = 0x06,
+    FAT32_PARTITION     = 0x0B,
+    FAT32_LBA_PARTITION = 0x0C,
+    FAT16_LBA_PARTITION = 0x0E,
     DM6_PARTITION       = 0x54,
     EZD_PARTITION       = 0x55,
     DM6_AUX1PARTITION   = 0x51,

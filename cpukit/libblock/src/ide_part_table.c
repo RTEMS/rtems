@@ -19,7 +19,7 @@
  *****************************************************************************/
 
 #include <rtems/ide_part_table.h>
-
+#include <string.h>
 
 /*
  * get_sector --
@@ -112,6 +112,29 @@ is_extended(unsigned8 type)
     return ((type == EXTENDED_PARTITION) || (type == LINUX_EXTENDED));
 }
 
+/*
+ * is_fat_partition --
+ *      checks if the partition type is defined for FAT
+ *
+ * PARAMETERS:
+ *      type - type of partition to check
+ *
+ * RETURNS:
+ *      TRUE if partition type is extended, FALSE otherwise
+ */
+static rtems_boolean
+is_fat_partition(unsigned8 type) 
+{
+  static const unsigned8 fat_part_types[] = {
+    DOS_FAT12_PARTITION,DOS_FAT16_PARTITION,
+    DOS_P32MB_PARTITION,
+    FAT32_PARTITION    ,FAT32_LBA_PARTITION,
+    FAT16_LBA_PARTITION
+  };
+
+  return (NULL != memchr(fat_part_types,type,sizeof(fat_part_types)));
+}
+
 
 /*
  * data_to_part_desc --
@@ -157,16 +180,20 @@ data_to_part_desc(unsigned8 *data, part_desc_t **new_part_desc)
     memcpy(&temp, data + RTEMS_IDE_PARTITION_SIZE_OFFSET, sizeof(unsigned32));
     part_desc->size = LE_TO_CPU_U32(temp);
 
-    if ((part_desc->sys_type == EMPTY_PARTITION) ||
-        ((part_desc->size == 0) && (!is_extended(part_desc->sys_type))))
-    {
-        /* empty partition */
-        free(part_desc);
-        return RTEMS_SUCCESSFUL;
+    /*
+     * use partitions that are 
+     * - extended
+     * or
+     * - FAT type and non-zero
+     */
+    if (is_extended(part_desc->sys_type) ||
+	(is_fat_partition(part_desc->sys_type)) && (part_desc->size != 0)) {
+      *new_part_desc = part_desc;
     }
-    
-    *new_part_desc = part_desc;
-
+    else {  
+      /* empty partition */
+      free(part_desc);
+    }
     return RTEMS_SUCCESSFUL;
 }
 
