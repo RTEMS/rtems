@@ -378,7 +378,7 @@ static void ppp_init(struct ppp_softc *sc)
   /* check to see if we need to start up daemons */
   if ( sc->sc_rxtask == 0 ) {
     /* start rx daemon task */
-    status = rtems_task_create(rtems_build_name('R','x','P','0'), priority, 2048,
+    status = rtems_task_create(rtems_build_name('R','x','P','0'+sc->sc_if.if_unit), priority, 2048,
                                RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
                                RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
                                &sc->sc_rxtask);
@@ -393,7 +393,7 @@ static void ppp_init(struct ppp_softc *sc)
     }
 
     /* start tx daemon task */
-    status = rtems_task_create(rtems_build_name('T','x','P','0'), priority, 2048,
+    status = rtems_task_create(rtems_build_name('T','x','P','0'+sc->sc_if.if_unit), priority, 2048,
                                RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
                                RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
                                &sc->sc_txtask);
@@ -409,7 +409,8 @@ static void ppp_init(struct ppp_softc *sc)
   }
 
   /* mark driver running and output inactive */
-  sc->sc_if.if_flags |= IFF_RUNNING;
+  /* ilya: IFF_RUNNING flag will be marked after the IPCP goes up */
+/*  sc->sc_if.if_flags |= IFF_RUNNING;	*/
 }
 
 /*
@@ -417,12 +418,25 @@ static void ppp_init(struct ppp_softc *sc)
  */
 int rtems_ppp_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 {
-    int                 i = (int)0;
+/*    int                 i = (int)0;	*/
     struct ppp_softc   *sc;
-
-    for (sc = ppp_softc; i < NPPP; sc++) {
-	sc->sc_if.if_name = "ppp";
-	sc->sc_if.if_unit = i++;
+    char               *name;
+    int                 number;
+    
+    
+    number = rtems_bsdnet_parse_driver_name (config, &name);
+    
+    if (!attaching || (number >= NPPP))
+        return 0;
+	
+    sc = &ppp_softc[number];
+    
+    if (sc->sc_if.if_name != NULL)
+	return 0;	/* interface is already attached */
+    
+/*    for (sc = ppp_softc; i < NPPP; sc++) {	*/
+	sc->sc_if.if_name = name /*"ppp"*/;
+	sc->sc_if.if_unit = number /*i++*/;
 	sc->sc_if.if_mtu = PPP_MTU;
 	sc->sc_if.if_flags = IFF_POINTOPOINT | IFF_MULTICAST;
 	sc->sc_if.if_type = IFT_PPP;
@@ -441,7 +455,7 @@ int rtems_ppp_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 #if NBPFILTER > 0
 	bpfattach(&sc->sc_bpf, &sc->sc_if, DLT_PPP, PPP_HDRLEN);
 #endif
-    }
+/*    }	*/
 
     return ( 1 );
 }

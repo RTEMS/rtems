@@ -192,6 +192,7 @@ pppopen(struct rtems_termios_tty *tty)
     int                        i;
     register struct ppp_softc *sc;
     struct mbuf *m = (struct mbuf *)0;
+    extern int termios_baud_to_number(int);
 
     if (tty->t_line == PPPDISC) {
 	sc = (struct ppp_softc *)tty->t_sc;
@@ -238,7 +239,8 @@ pppopen(struct rtems_termios_tty *tty)
 
     /* initialize values */
     sc->sc_if.if_flags |= IFF_RUNNING;
-    sc->sc_if.if_baudrate = 57600; /* FIX: get line speed from termios */
+    sc->sc_if.if_baudrate =
+	termios_baud_to_number(tty->termios.c_cflag & CBAUD);
 
     tty->t_sc = (void *)sc;
 
@@ -421,7 +423,7 @@ pppwrite(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args)
 int
 ppptioctl(struct rtems_termios_tty *tty, rtems_libio_ioctl_args_t *args)
 {
-    int                 i;
+/*    int                 i;	*/
     int                 error = RTEMS_SUCCESSFUL;
     int                 cmd   = args->command;
     caddr_t             data  = args->buffer;
@@ -561,6 +563,7 @@ int
 pppstart(struct rtems_termios_tty *tp)
 {
   char                c;
+  char               *sendBegin;
   char                cFrame  = (char         )PPP_FLAG;
   u_char              ioffset = (u_char       )0;
   struct mbuf        *m       = (struct mbuf *)0;
@@ -618,15 +621,20 @@ pppstart(struct rtems_termios_tty *tp)
           /* set the escape flag */
           sc->sc_outflag |= SC_TX_ESCAPE;
         }
+	sendBegin = &c;
       }
       else {
-        /* escape not needed - increment the offset */
-        ioffset++;
+        /* escape not needed - increment the offset as much as possible */
+	while ((!ESCAPE_P(c)) && ((sc->sc_outoff + ioffset) < sc->sc_outlen)) {
+	    ioffset++;
+	    c = sc->sc_outbuf[sc->sc_outoff + ioffset];
+	}
+	sendBegin = &sc->sc_outbuf[sc->sc_outoff];
       }
 
-      /* write out the character and update the stats */
-      (*tp->device.write)(tp->minor, &c, 1);
-      sc->sc_stats.ppp_obytes++;
+      /* write out the character(s) and update the stats */
+      (*tp->device.write)(tp->minor, sendBegin, (ioffset > 0) ? ioffset : 1);
+      sc->sc_stats.ppp_obytes += (ioffset > 0) ? ioffset : 1;
       sc->sc_outoff += ioffset;
     }
   }

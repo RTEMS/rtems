@@ -1,3 +1,8 @@
+2002-03-21      Ilya Alexeev <ilya@continuum.ru>
+
+        * net/if_ppp.c, net/ppp_tty.c: Initial preparations for multiple
+	PPPD connections.
+
 2001-03-20	Till Straumann <strauman@SLAC.Stanford.EDU>
 
 	* PR158
