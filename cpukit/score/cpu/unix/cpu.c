@@ -941,7 +941,10 @@ void _CPU_Stop_clock( void )
   setitimer(ITIMER_REAL, &new, 0);
 }
 
+#if 0
 extern void fix_syscall_errno( void );
+#endif
+#define fix_syscall_errno() 
 
 #if defined(RTEMS_MULTIPROCESSING)
 int  _CPU_SHM_Semid;

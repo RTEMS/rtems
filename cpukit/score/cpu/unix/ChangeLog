@@ -1,3 +1,7 @@
+2001-03-28	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c: Define fix_syscall_errno() to nothing so MP links.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
