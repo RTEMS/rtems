@@ -37,9 +37,16 @@
 
 #if ( RTEMS_HAS_HARDWARE_FP == FALSE )
 
-#define FP_DECLARE ;
-#define FP_LOAD( _factor )
-#define FP_CHECK( _factor ) 0
+/*
+ *  The following is useless except to avoid some warnings.
+ */
+
+#define FP_DECLARE unsigned int fp01 = 0;
+#define FP_LOAD( _factor ) fp01 = 2;
+#define FP_CHECK( _factor ) \
+   if ( fp01 != 2 ) \
+          printf("%d: single integer is wrong -- (%d != 2) \n", \
+             task_index, fp01 );  \
 
 #else
 
