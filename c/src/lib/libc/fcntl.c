@@ -30,6 +30,7 @@ int fcntl(
   rtems_libio_t *diop;
   int            fd2;
   int            flags;
+  int            mask;
   int            ret = 0;
   
   va_start( ap, cmd );
@@ -92,13 +93,13 @@ int fcntl(
 
     case F_SETFL:
       flags = rtems_libio_fcntl_flags( va_arg( ap, int ) );
+      mask = LIBIO_FLAGS_NO_DELAY | LIBIO_FLAGS_APPEND;
 
       /*
        *  XXX If we are turning on append, should we seek to the end?
        */
 
-      iop->flags = (iop->flags & ~(O_APPEND | O_NONBLOCK)) |
-                   (flags & (O_APPEND | O_NONBLOCK));
+      iop->flags = (iop->flags & ~mask) | (flags & mask);
       break;
 
     case F_GETLK:
