@@ -81,7 +81,7 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 
 /* 
  * Macros for fetching fields from 32 bytes long FAT Directory Entry 
- * Structure (see M$ White Paper)
+ * Structure
  */
 #define MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE    32 /* 32 bytes */
 
@@ -104,7 +104,7 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 
 /*
  * Fields offset in 32 bytes long FAT Directory Entry
- * Structure (see M$ White Paper)
+ * Structure
  */
 #define MSDOS_FILE_SIZE_OFFSET            28
 #define MSDOS_FILE_NAME_OFFSET             0
@@ -115,7 +115,7 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 
 /*
  * Possible values of DIR_Attr field of 32 bytes long FAT Directory Entry
- * Structure (see M$ White Paper)
+ * Structure
  */
 #define MSDOS_ATTR_READ_ONLY    0x01
 #define MSDOS_ATTR_HIDDEN       0x02
@@ -124,9 +124,24 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 #define MSDOS_ATTR_DIRECTORY    0x10
 #define MSDOS_ATTR_ARCHIVE      0x20
 
+#define MSDOS_DT_2SECONDS_MASK        0x1F    /* seconds divided by 2 */
+#define MSDOS_DT_2SECONDS_SHIFT       0
+#define MSDOS_DT_MINUTES_MASK         0x7E0   /* minutes */
+#define MSDOS_DT_MINUTES_SHIFT        5
+#define MSDOS_DT_HOURS_MASK           0xF800  /* hours */
+#define MSDOS_DT_HOURS_SHIFT          11
+
+#define MSDOS_DD_DAY_MASK             0x1F    /* day of month */
+#define MSDOS_DD_DAY_SHIFT            0
+#define MSDOS_DD_MONTH_MASK           0x1E0   /* month */
+#define MSDOS_DD_MONTH_SHIFT          5
+#define MSDOS_DD_YEAR_MASK            0xFE00  /* year - 1980 */
+#define MSDOS_DD_YEAR_SHIFT           9
+
+
 /*
  * Possible values of DIR_Name[0] field of 32 bytes long FAT Directory Entry
- * Structure (see M$ White Paper)
+ * Structure
  */
 #define MSDOS_THIS_DIR_ENTRY_EMPTY             0xE5
 #define MSDOS_THIS_DIR_ENTRY_AND_REST_EMPTY    0x00
@@ -171,7 +186,7 @@ typedef enum msdos_token_types_e
 #define DOT_NODE_P(p)     ((char *)(p))
 #define DOTDOT_NODE_P(p)  ((char *)((p) + MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE))
 
-/* Size limits for files and directories (see M$ White Paper) */
+/* Size limits for files and directories */
 #define MSDOS_MAX_DIR_LENGHT               0x200000   /* 2,097,152 bytes */
 #define MSDOS_MAX_FILE_SIZE                0xFFFFFFFF /* 4 Gb */
 
@@ -345,13 +360,15 @@ msdos_get_name_node(rtems_filesystem_location_info_t *parent_loc,
 int
 msdos_dir_info_remove(rtems_filesystem_location_info_t *pathloc);
 
-void 
-msdos_date_unix2dos(int             unix_date,
-                    unsigned short *time_val, 
-                    unsigned short *date);
+int
+msdos_filename_unix2dos(char *un, int unlen, char *dn);
 
-unsigned int  
-msdos_date_dos2unix(unsigned short time_val, unsigned short date);
+void
+msdos_date_unix2dos(unsigned int tsp, unsigned short *ddp, 
+                    unsigned short *dtp);
+
+unsigned int
+msdos_date_dos2unix(unsigned int dd, unsigned int dt);
 
 int
 msdos_set_first_cluster_num(rtems_filesystem_mount_table_entry_t *mt_entry,

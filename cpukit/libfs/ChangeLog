@@ -1,3 +1,10 @@
+2003-07-02	Chris Johns <cjohns@cybertec.com.au>
+	* src/dosfs/Makefile.am, src/dosfs/msdos.h,
+	src/dosfs/msdos_conv.c, src/dosfs/msdos_create.c,
+	src/dosfs/msdos_dir.c, src/dosfs/msdos_misc.c: Patch from Victor
+	V. Vengerov <vvv@oktet.ru> to remove Linux code.
+	* src/dosfs/fat.c, src/dosfs/fat.h: Comment have been updated.
+
 2003-06-10	Phil Torre <ptorre@zetron.com>
 
 	PR 411/filesystem

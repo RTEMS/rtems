@@ -14,7 +14,8 @@ FATFS_C_FILES = fat.c fat_fat_operations.c fat_file.c
 DOSFS_C_FILES = msdos_create.c msdos_dir.c msdos_eval.c msdos_file.c \
                 msdos_free.c msdos_fsunmount.c msdos_handlers_dir.c  \
                 msdos_handlers_file.c msdos_init.c msdos_initsupp.c  \
-                msdos_misc.c msdos_mknod.c msdos_node_type.c
+                msdos_misc.c msdos_mknod.c msdos_node_type.c \
+                msdos_conv.c
 
 if !UNIX
 LIB = ${ARCH}/libdosfs.a

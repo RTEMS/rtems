@@ -442,8 +442,8 @@ msdos_dir_stat(
 /* msdos_dir_sync --
  *     The following routine does a syncronization on a MSDOS directory node.
  *     DIR_WrtTime, DIR_WrtDate and DIR_fileSize fields of 32 Bytes Directory 
- *     Entry Structure(see M$ White Paper) should not be updated for 
- *     directories, so only call to corresponding fat-file routine.
+ *     Entry Structure should not be updated for directories, so only call 
+ *     to corresponding fat-file routine.
  *
  * PARAMETERS:
  *     iop - file control block
