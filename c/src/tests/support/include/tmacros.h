@@ -25,6 +25,7 @@ extern "C" {
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #define FOREVER 1                  /* infinite loop */
 
@@ -35,35 +36,58 @@ extern "C" {
 #define TEST_EXTERN extern
 #endif
 
-#define directive_failed( dirstat, failmsg )  \
-    fatal_directive_status( dirstat, RTEMS_SUCCESSFUL, failmsg )
+#define check_dispatch_disable_level( _expect ) \
+  do { \
+    extern volatile rtems_unsigned32 _Thread_Dispatch_disable_level; \
+    if ( _Thread_Dispatch_disable_level != (_expect) ) { \
+      printf( "\n_Thread_Dispatch_disable_level is (%d) not %d\n", \
+              _Thread_Dispatch_disable_level, (_expect) ); \
+      fflush(stdout); \
+      exit( 1 ); \
+    } \
+  } while ( 0 ) 
 
-#define fatal_directive_status( stat, desired, msg ) \
-     do { \
-       if ( (stat) != (desired) ) { \
-         printf( "\n%s FAILED -- expected (%d) got (%d)\n", \
-                 (msg), (desired), (stat) ); \
-         fflush(stdout); \
-         exit( stat ); \
-       } \
-     } while ( 0 ) 
+#define directive_failed( _dirstat, _failmsg )  \
+ fatal_directive_status( _dirstat, RTEMS_SUCCESSFUL, _failmsg )
 
-#define sprint_time(str,s1,tb,s2) \
+#define directive_failed_with_level( _dirstat, _failmsg, _level )  \
+ fatal_directive_status_with_level( \
+      _dirstat, RTEMS_SUCCESSFUL, _failmsg, _level )
+
+#define fatal_directive_status( _stat, _desired, _msg ) \
+  fatal_directive_status_with_level( _stat, _desired, _msg, 0 )
+
+#define fatal_directive_status_with_level( _stat, _desired, _msg, _level ) \
+  do { \
+    check_dispatch_disable_level( _level ); \
+    if ( (_stat) != (_desired) ) { \
+      printf( "\n%s FAILED -- expected (%d) got (%d)\n", \
+              (_msg), (_desired), (_stat) ); \
+      fflush(stdout); \
+      exit( _stat ); \
+    } \
+  } while ( 0 ) 
+
+#define sprint_time(_str, _s1, _tb, _s2) \
   do { \
     sprintf( (str), "%s%02d:%02d:%02d   %02d/%02d/%04d%s", \
-       s1, (tb)->hour, (tb)->minute, (tb)->second, \
-       (tb)->month, (tb)->day, (tb)->year, s2 ); \
+       _s1, (_tb)->hour, (_tb)->minute, (_tb)->second, \
+       (_tb)->month, (_tb)->day, (_tb)->year, _s2 ); \
   } while ( 0 )
 
-#define print_time(s1,tb,s2) \
+#define print_time(_s1, _tb, _s2) \
   do { \
     printf( "%s%02d:%02d:%02d   %02d/%02d/%04d%s", \
-       s1, (tb)->hour, (tb)->minute, (tb)->second, \
-       (tb)->month, (tb)->day, (tb)->year, s2 ); \
+       _s1, (_tb)->hour, (_tb)->minute, (_tb)->second, \
+       (_tb)->month, (_tb)->day, (_tb)->year, _s2 ); \
     fflush(stdout); \
   } while ( 0 )
 
-#define put_dot( c ) putchar( c ); fflush( stdout )
+#define put_dot( _c ) \
+  do { \
+    putchar( _c ); \
+    fflush( stdout ); \
+  } while ( 0 )
 
 #define new_line  puts( "" )
 
