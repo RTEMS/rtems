@@ -42,18 +42,11 @@ extern "C" {
 #define VARIANT bare
 #endif
 #if defined(VARIANT)
-
-#define __bsp_cat(x, y) x ## y
-#define __bsp_xcat(x, y) __bsp_cat(x,y)
-#define __bsp_str(s) #s
-#define __bsp_xstr(s) __bsp_str(s)
-
-#define __BSP_HEADER_FILE__ __bsp_xcat(VARIANT,.h)
-#define __BSP_HEADER_FILE_STR__ __bsp_xstr(__BSP_HEADER_FILE__)
-
-#include __BSP_HEADER_FILE_STR__
+#define HQUOTE(a) <a.h>
+#include HQUOTE(VARIANT)
+#undef HQUOTE
 #endif
-  
+
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
  *  Long test and short test duration limits are provided.  These

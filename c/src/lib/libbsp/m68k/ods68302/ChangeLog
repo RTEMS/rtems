@@ -1,3 +1,8 @@
+2003-10-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/bsp.h: Replace stringification madness to pick up bare.h
+	(Doesn't work with gcc >= 3.3) with a somewhat cleaner madness.
+
 2003-09-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in include/Makefile.am.
