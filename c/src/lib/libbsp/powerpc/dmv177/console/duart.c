@@ -120,12 +120,10 @@ void console_outbyte_polled(
 
   while ( !(MC68681_READ(DUART_ADDR, status) & MC68681_TX_READY) ){
     if (t == 0) {
-      Debug_Entry( 0x8000 );
       t++;
     }
   }
   
-  Debug_Entry( 0x9000 );
   MC68681_WRITE(DUART_ADDR, data, ch);
 }
 
@@ -180,22 +178,4 @@ int console_inbyte_nonblocking( int port )
 
   return MC68681_READ(DUART_ADDR, data);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
