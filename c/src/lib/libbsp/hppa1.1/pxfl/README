@@ -1,8 +1,0 @@
-#
-#  $Id$
-#
-
-This is included just to give rtems users an example of how a Makefile
-can "jump" out of the rtems source tree into another one.  This was
-used by the developer of the pxfl bsp to allow them to keep their bsp 
-outside the normal rtems tree.
