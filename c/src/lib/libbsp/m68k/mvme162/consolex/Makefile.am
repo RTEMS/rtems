@@ -6,7 +6,7 @@
 PGM = $(ARCH)/consolex.rel
 
 C_FILES = consolex.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_HEADERS = consolex.h
 

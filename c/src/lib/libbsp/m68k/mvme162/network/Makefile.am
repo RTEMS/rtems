@@ -8,7 +8,7 @@ VPATH = @srcdir@:@srcdir@/../../mvme167/network
 PGM = $(ARCH)/network.rel
 
 C_FILES = network.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
