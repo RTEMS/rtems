@@ -1,3 +1,9 @@
+2002-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* support/init.c: Included <unistd.h> for exit(2).
+	* support/test_support.adb: Eliminated warnings by commenting out 
+	unused variables.
+
 2002-09-13	Joel Sherrill <joel@OARcorp.com>
 
 	* samples/base_mp/node1/Makefile.am, samples/base_mp/node2/Makefile.am:

@@ -122,8 +122,8 @@ package body Test_Support is
 --
 
    procedure Pause is
-      Ignored_String : String( 1 .. 80 );
-      Ignored_Last   : Natural;
+      --  Ignored_String : String( 1 .. 80 );
+      --  Ignored_Last   : Natural;
       
    begin
 
@@ -149,8 +149,8 @@ package body Test_Support is
    procedure Pause_And_Screen_Number (
       SCREEN : in    RTEMS.Unsigned32
    ) is
-      Ignored_String : String( 1 .. 80 );
-      Ignored_Last   : Natural;
+      --  Ignored_String : String( 1 .. 80 );
+      --  Ignored_Last   : Natural;
    begin
  
       --
