@@ -220,16 +220,16 @@ allowed.
 
 @example
 struct rtems_libio_tt @{
-  rtems_driver_name_t               *driver;
-  off_t                              size;      /* size of file */
-  off_t                              offset;    /* current offset into file */
-  unsigned32                         flags;
-  rtems_filesystem_location_info_t   pathinfo;
-  Objects_Id                         sem;
-  unsigned32                         data0;     /* private to "driver" */
-  void                               data1;     / . */
-  void                               file_info; /used by file handlers/
-  rtems_filesystem_file_handlers_r   handlers;  /type specific handlers/
+  rtems_driver_name_t              *driver;
+  off_t                             size;
+  off_t                             offset;
+  unsigned32                        flags;
+  rtems_filesystem_location_info_t  pathinfo;
+  Objects_Id                        sem;
+  unsigned32                        data0;
+  void                              data1;
+  void                              file_info;
+  rtems_filesystem_file_handlers_r  handlers;
 @};
 @end example
 
@@ -332,10 +332,6 @@ XXX
 
 XXX
 
-@subheading File:
-
-XXX
-
 @subheading Description:
 
 XXX
@@ -353,10 +349,6 @@ XXX
 XXX
 
 @subheading Arguments:
-
-XXX
-
-@subheading File:
 
 XXX
 
@@ -385,10 +377,6 @@ rtems_filesystem_location_info_t    *parent_loc,  /* IN */
 const char                          *token        /* IN */
 @end example
 
-@subheading File:
-
-imfs_link.c
-
 @subheading Description:
 
 
@@ -415,10 +403,6 @@ XXX
 
 XXX
 
-@subheading File:
-
-XXX
-
 @subheading Description:
 
 XXX
@@ -440,10 +424,6 @@ node_type()
 @example
 rtems_filesystem_location_info_t    *pathloc        /* IN */
 @end example
-
-@subheading File:
-
-imfs_ntype.c
 
 @subheading Description:
 
@@ -469,10 +449,6 @@ dev_t                                dev,          /* IN */
 rtems_filesystem_location_info_t    *pathloc       /* IN/OUT */
 @end example
 
-@subheading File:
-
-mknod.c
-
 @subheading Description:
 
 XXX
@@ -489,10 +465,6 @@ XXX
 XXX
 
 @subheading Arguments:
-
-XXX
-
-@subheading File:
 
 XXX
 
@@ -520,10 +492,6 @@ uid_t                                owner          /* IN */
 gid_t                                group          /* IN */
 @end example
 
-@subheading File:
-
-imfs_chown.c
-
 @subheading Description:
 
 XXX
@@ -537,20 +505,22 @@ XXX
 
 @subheading Corresponding Structure Element:
 
-XXX
+freenod()
 
 @subheading Arguments:
 
-XXX
-
-@subheading File:
-
-XXX
+@example
+rtems_filesystem_location_info_t      *pathloc       /* IN */
+@end example
 
 @subheading Description:
 
-XXX 
+This routine is used by the generic code to allow memory to be allocated
+during the evaluate routines, and set free when the generic code is finished
+accessing a node.  If the evaluate routines allocate memory to identify
+a node this routine should be utilized to free that memory.
 
+This routine is not required and may be set to NULL.
 
 @c
 @c
@@ -568,10 +538,6 @@ mount()
 @example
 rtems_filesystem_mount_table_entry_t   *mt_entry
 @end example
-
-@subheading File:
-
-mount.c
 
 @subheading Description:
 
@@ -593,10 +559,6 @@ XXX
 @example
 rtems_filesystem_mount_table_entry_t   *mt_entry    
 @end example
-
-@subheading File:
-
-XXX
 
 @subheading Description:
 
@@ -728,10 +690,6 @@ XXX
 
 XXX
 
-@subheading File:
-
-XXX
-
 @subheading Description:
 
 XXX 
@@ -754,10 +712,6 @@ imfs_fsunmount_me()
 rtems_filesystem_mount_table_entry_t   *mt_entry    
 @end example
 
-@subheading File:
-
-imfs_fsunmount_me.c
-
 @subheading Description:
 
 XXX 
@@ -775,10 +729,6 @@ XXX
 XXX
 
 @subheading Arguments:
-
-XXX
-
-@subheading File:
 
 XXX
 
@@ -801,10 +751,6 @@ XXX
 
 XXX
 
-@subheading File:
-
-XXX
-
 @subheading Description:
 
 XXX
@@ -821,10 +767,6 @@ XXX
 XXX
 
 @subheading Arguments:
-
-XXX
-
-@subheading File:
 
 XXX
 
@@ -883,10 +825,6 @@ unsigned32       flag,
 unsigned32       mode
 @end example
 
-@subheading File:
-
-XXX
-
 @subheading Description:
 
 XXX
@@ -907,10 +845,6 @@ close()
 @example
 rtems_libio_t     *iop
 @end example
-
-@subheading File:
-
-XXX
 
 @subheading Description:
 
@@ -941,10 +875,6 @@ void              *buffer,
 unsigned32         count
 @end example
 
-@subheading File:
-
-XXX
-
 @subheading Description:
 
 XXX
@@ -968,10 +898,6 @@ XXX
 @subheading Arguments:
 
 XXX
-@subheading File:
-
-XXX
-
 @subheading Description:
 
 XXX
@@ -999,10 +925,6 @@ rtems_libio_t     *iop,
 unsigned32       command,
 void              *buffer
 @end example
-
-@subheading File:
-
-XXX
 
 @subheading Description:
 
@@ -1032,10 +954,6 @@ off_t              offset,
 int                whence
 @end example
 
-@subheading File:
-
-XXX
-
 @subheading Description:
 
 XXX
@@ -1062,10 +980,6 @@ fstat()
 rtems_filesystem_location_info_t   *loc,
 struct stat                        *buf
 @end example
-
-@subheading File:
-
-XXX
 
 @subheading Description:
 
@@ -1115,10 +1029,6 @@ rtems_libio_t     *iop
 mode_t              mode
 @end example
 
-@subheading File:
-
-imfs_fchmod.c
-
 @subheading Description:
 
 XXX
@@ -1142,10 +1052,6 @@ XXX
 @subheading Arguments:
 
 XXX
-@subheading File:
-
-XXX
-
 @subheading Description:
 
 XXX
@@ -1161,10 +1067,6 @@ XXX
 XXX
 
 @subheading Arguments:
-
-XXX
-
-@subheading File:
 
 XXX
 
@@ -1190,10 +1092,6 @@ XXX
 @subheading Arguments:
 
 XXX
-@subheading File:
-
-XXX
-
 @subheading Description:
 
 XXX
@@ -1217,10 +1115,6 @@ XXX
 
 XXX
 
-@subheading File:
-
-XXX
-
 @subheading Description:
 
 XXX
@@ -1241,10 +1135,6 @@ XXX
 XXX
 
 @subheading Arguments:
-
-XXX
-
-@subheading File:
 
 XXX
 
