@@ -44,8 +44,7 @@ extern "C" {
 /* Note:  Move address defs to the linker files. XXX */
 
 /* Real Time Clock Base Address */
-#define DMV170_RTC_BASE_ADDRESS   0xf2c00000
-#define DMV170_RTC_ADDRESS        0xf2c01ff8
+#define DMV170_RTC_ADDRESS   0xf2c00000
 
 /* base address of the DUART (68681) */
 #define MC68681_ADDR         0xf2800000
