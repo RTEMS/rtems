@@ -61,14 +61,9 @@ $(TARGET_VARIANTS)
 ${ARCH}:
 	test -d ${ARCH} || mkdir ${ARCH}
 
-# general purpose forcing dependency; try to use .PHONY instead
-FORCEIT:
-
-FORCE:
-
 ifndef AUTOMAKE
 distclean-generic:
-	-$(RM) Makefile .#* $(CONFIG_CLEAN_FILES)
+	-$(RM) .#* $(CONFIG_CLEAN_FILES)
 	-$(RM) -r $(CLOBBER_ADDITIONS)
 
 clean-generic:

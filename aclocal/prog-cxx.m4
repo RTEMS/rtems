@@ -64,6 +64,8 @@ unset ac_cv_prog_gxx
 unset ac_cv_prog_cc_g
 unset ac_cv_prog_cxx_works
 unset ac_cv_prog_cxx_cross
+dnl somehow autoconf macros leave this file 
+rm -f conftest.C
 ])
 
 AC_DEFUN(RTEMS_PROG_CXX_FOR_TARGET,
