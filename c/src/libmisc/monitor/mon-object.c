@@ -18,6 +18,7 @@
  *  $Id$
  */
 
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 #include "monitor.h"
 
