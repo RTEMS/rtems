@@ -1,3 +1,7 @@
+2003-09-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp_specs: Remove *lib:.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* console/console-io.c, include/bsp.h, startup/bspstart.c: URL for
