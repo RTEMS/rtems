@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/liblnk.rel
 
 S_FILES = lnklib.S
