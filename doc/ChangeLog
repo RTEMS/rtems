@@ -1,5 +1,10 @@
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* common/ChangeLog: Removed.
+	* ChangeLog: Merge common/ChangeLog.
+
+2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* common/.cvsignore: Add rtems.texi, rtems.sed.
 
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -18,6 +23,11 @@
 	* acinclude.m4, images/rtems_logo.jpg: New files.
 	* SUPPORT, tools/texi2www/archive/texi2www-960103.tgz: Removed.
 
+2003-09-19	Joel Sherrill <joel@OARcorp.com>
+
+	* common/cpright.texi, common/setup.texi: Merge from branch.
+	* common/rtems.texi.in: New file.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
@@ -25,6 +35,10 @@
 2003-04-11	Joel Sherrill <joel@OARcorp.com>
 
 	* index.html.in: Development Environment Guide should be updated now.
+
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* common/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2003-02-18	Joel Sherrill <joel@OARcorp.com>
 
@@ -160,6 +174,10 @@
 	* configure.ac: New.
 	* configure.in: Removed.
 	* bootstrap: Sync with RTEMS's toplevel bootstrap.sh.
+
+2002-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* common/Makefile.am: Require automake-1.5.
 
 2002-01-17	Joel Sherrill <joel@OARcorp.com>
 
