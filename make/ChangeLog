@@ -1,4 +1,10 @@
 
+2001-11-13	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/helas403.cfg, custom/gen405.cfg: Removed dependency on
+	the --srec-len argument to objcopy only supported in binutils 2.11
+	or newer.
+
 2001-11-08	Dennis Ehlin (ECS) <Dennis.Ehlin@ecs.ericsson.se>
 
 	This modification is part of the submitted modifications necessary to
