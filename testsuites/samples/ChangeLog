@@ -1,3 +1,19 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* base_mp/Makefile.am: Reformat.
+	* base_mp/node1/Makefile.am: Remove all-local: $(ARCH).
+	* base_mp/node2/Makefile.am: Remove all-local: $(ARCH).
+	* base_sp/Makefile.am: Remove all-local: $(ARCH).
+	* cdtest/Makefile.am: Remove all-local: $(ARCH).
+	* fileio/Makefile.am: Remove all-local: $(ARCH).
+	* hello/Makefile.am: Remove all-local: $(ARCH).
+	* loopback/Makefile.am: Remove all-local: $(ARCH).
+	* minimum/Makefile.am: Remove all-local: $(ARCH).
+	* paranoia/Makefile.am: Remove all-local: $(ARCH).
+	* pppd/Makefile.am: Remove all-local: $(ARCH).
+	* ticker/Makefile.am: Remove all-local: $(ARCH).
+	* unlimited/Makefile.am: Remove all-local: $(ARCH).
+
 2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Reflect having moved to testsuites/.
