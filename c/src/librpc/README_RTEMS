@@ -1,0 +1,25 @@
+#
+# $Id$
+#
+
+Most of the FreeBSD rpc library ports to RTEMS with little
+or no modification, but some of the library has not made it into
+the RTEMS implementation.  FreeBSD source files which have been
+left out include:
+- Files which provide RPC to the AF_UNIX address family:
+	clnt_unix.c
+	svc_unix.c
+- Files which need NIS:
+	auth_time.c
+- Files which provide DES authentication:
+	auth_des.c
+	authdes_prot.c
+	crypt_client.c
+	des_crypt.c
+	des_soft.c
+	getpublickey.c
+	key_call.c
+	key_prot_xdr.c
+	svc_auth_des.c
+
+The FreeBSD xdr source compiles and runs on RTEMS without modification.

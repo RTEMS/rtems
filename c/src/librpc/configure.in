@@ -35,4 +35,6 @@ Makefile
 include/Makefile
 include/rpc/Makefile
 src/Makefile
+src/xdr/Makefile
+src/rpc/Makefile
 )

@@ -1,7 +1,3 @@
-#ifndef RPC_H
-#define RPC_H
-
-/* @(#)rpc.h	2.4 89/07/11 4.0 RPCSRC; from 1.9 88/02/08 SMI */
 /*
  * Sun RPC is a product of Sun Microsystems, Inc. and is provided for
  * unrestricted use provided that this legend is included on all tape
@@ -9,11 +5,11 @@
  * may copy or modify Sun RPC without charge, but are not authorized
  * to license or distribute it to anyone else except as part of a product or
  * program developed by the user.
- * 
+ *
  * SUN RPC IS PROVIDED AS IS WITH NO WARRANTIES OF ANY KIND INCLUDING THE
- * WARRANTIES OF DESIGN, MERCHANTIBILITY AND FITNESS FOR A PARTICULAR
+ * WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE, OR ARISING FROM A COURSE OF DEALING, USAGE OR TRADE PRACTICE.
- * 
+ *
  * Sun RPC is provided with no support and without any obligation on the
  * part of Sun Microsystems, Inc. to assist in its use, correction,
  * modification or enhancement.
@@ -29,6 +25,10 @@
  * Sun Microsystems, Inc.
  * 2550 Garcia Avenue
  * Mountain View, California  94043
+ *
+ *	from: @(#)rpc.h 1.9 88/02/08 SMI
+ *	from: @(#)rpc.h	2.4 89/07/11 4.0 RPCSRC
+ * $FreeBSD: src/include/rpc/rpc.h,v 1.12 2000/01/26 09:02:40 shin Exp $
  */
 
 /*
@@ -37,12 +37,11 @@
  *
  * Copyright (C) 1984, Sun Microsystems, Inc.
  */
-#ifndef __RPC_HEADER__
-#define __RPC_HEADER__
+#ifndef _RPC_RPC_H
+#define _RPC_RPC_H
 
 #include <rpc/types.h>		/* some typedefs */
 #include <netinet/in.h>
-#include <sys/socket.h>
 
 /* external data representation interfaces */
 #include <rpc/xdr.h>		/* generic (de)serializer */
@@ -55,12 +54,12 @@
 
 /* semi-private protocol headers */
 #include <rpc/rpc_msg.h>	/* protocol for rpc messages */
-/*#include "auth_unix.h"	* protocol for unix style cred */
+#include <rpc/auth_unix.h>	/* protocol for unix style cred */
 /*
- *  Uncomment-out the next line if you are building the rpc library with    
+ *  Uncomment-out the next line if you are building the rpc library with
  *  DES Authentication (see the README file in the secure_rpc/ directory).
  */
-/*#include "auth_des.h"	 * protocol for des style cred */
+#include <rpc/auth_des.h>	/* protocol for des style cred */
 
 /* Server side only remote procedure callee */
 #include <rpc/svc.h>		/* service manager and multiplexer */
@@ -79,8 +78,17 @@ struct rpcent {
       int     r_number;       /* rpc program number */
 };
 
-struct rpcent *getrpcbyname(), *getrpcbynumber(), *getrpcent();
+__BEGIN_DECLS
+extern struct rpcent *getrpcbyname	__P((char *));
+extern struct rpcent *getrpcbynumber	__P((int));
+extern struct rpcent *getrpcent		__P((void));
+extern int getrpcport __P((char *host, int prognum, int versnum, int proto));
+extern void setrpcent __P((int));
+extern void endrpcent __P((void));
 
-#endif /* ndef __RPC_HEADER__ */
+extern int bindresvport __P((int, struct sockaddr_in *));
+extern int bindresvport_sa __P((int, struct sockaddr *));
+extern int get_myaddress __P((struct sockaddr_in *));
+__END_DECLS
 
-#endif /* RPC_H */
+#endif /* !_RPC_RPC_H */
