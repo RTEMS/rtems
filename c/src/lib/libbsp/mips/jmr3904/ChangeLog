@@ -1,5 +1,11 @@
 2000-12-19	Joel Sherrill <joel@OARcorp.com>
 
+	* timer: New subdirectory.
+	* timer/.cvsignore, timer/Makefile.am, timer/timer.c: New files.
+	* tools/ChangeLog: New file.
+
+2000-12-19	Joel Sherrill <joel@OARcorp.com>
+
 	* Makefile.am: Added tools subdirectory and removed commented out line.
 	* configure.in: Added tools subdirectory.
 	* tools: New subdirectory.
