@@ -817,28 +817,16 @@ rtems_ka9q_driver_attach (int argc, char *argv[], void *p)
 				 * pointer as part of the CPU32's hardware
 				 * reset exception handler.  The following
 				 * 4 bytes contain the value loaded into the
-				 * program counter.  The low order three
-				 * octets of the boards' Ethernet address are
-				 * stored in the three bytes immediately
-				 * preceding this initial program counter value.
+				 * program counter.  The boards' Ethernet
+				 * address is stored in the six bytes
+				 * immediately preceding this initial
+				 * program counter value.
 				 *
-				 * See startup/linkcmds and start360/start360.s
-				 * for details on how this is done.
-				 *
-				 * The high order three octets of the Ethernet
-				 * address are fixed and indicate that the
-				 * address is that of a Motorola device.
+				 * See start360/start360.s.
 				 */
 				extern void *_RomBase;	/* From linkcmds */
 				const unsigned long *ExceptionVectors;
 				const unsigned char *entryPoint;
-
-				/*
-				 * Set up the fixed portion of the address
-				 */
-				iface->hwaddr[0] = 0x08;
-				iface->hwaddr[1] = 0x00;
-				iface->hwaddr[2] = 0x3e;
 
 				/*
 				 * Sanity check -- assume entry point must be
@@ -849,14 +837,15 @@ rtems_ka9q_driver_attach (int argc, char *argv[], void *p)
 				if (((unsigned long)entryPoint - (unsigned long)ExceptionVectors)
 							>= (1 * 1024 * 1024)) {
 					printf ("Warning -- Ethernet address can not be found in bootstrap PROM.\n");
+					iface->hwaddr[0] = 0x08;
+					iface->hwaddr[1] = 0xF3;
+					iface->hwaddr[2] = 0x3E;
 					iface->hwaddr[3] = 0xC2;
 					iface->hwaddr[4] = 0xE7;
 					iface->hwaddr[5] = 0x08;
 				}
 				else {
-					iface->hwaddr[3] = entryPoint[-3];
-					iface->hwaddr[4] = entryPoint[-2];
-					iface->hwaddr[5] = entryPoint[-1];
+					memcpy (iface->hwaddr, entryPoint - 6, 6);
 				}
 			}
 			else {

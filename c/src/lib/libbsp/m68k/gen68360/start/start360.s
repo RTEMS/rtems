@@ -308,16 +308,14 @@ SYM(_spuriousInterrupt):
 
 /*
  * Place the low-order 3 octets of the board's ethernet address at
- * a `well-known' fixed location relative to the beginning of ROM.
+ * a `well-known' fixed location relative to the startup location.
  */
 	.align 2
-	.long	ETHERNET_ADDRESS	| Low-order 3 octets of ethernet address
-
-/*
- *  For some reason, the symbol start must not be global.
- *
- *       .global start
- */
+	.word	0			| Padding
+ethernet_address_buffer:
+	.word	0x08F3			| Default address
+	.word	0xDEAD
+	.word	0xCAFE
 
 /*
  * Initial PC

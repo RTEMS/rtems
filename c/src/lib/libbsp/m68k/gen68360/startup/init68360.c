@@ -38,7 +38,7 @@ void _Init68360 (void)
 	m68k_isr_entry *vbr;
 	extern void _CopyDataClearBSSAndStart (void);
 
-#if (defined (m68040) || defined (m68lc040) || defined (m68ec040))
+#if (defined (__mc68040__))
 	/*
 	 *******************************************
 	 * Motorola 68040 and companion-mode 68360 *
@@ -407,35 +407,19 @@ void _Init68360 (void)
 
 	/*
 	 * Step 11: Remap Chip Select 0 (CS0*), set up GMR
+	 *	32-bit DRAM
+	 *	Internal DRAM address multiplexing
+	 *	60 nsec DRAM
+	 *	180 nsec ROM (3 wait states)
+	 *	15.36 usec DRAM refresh interval
+	 *	The DRAM page size selection is not modified since this
+	 *	startup code may be running in a bootstrap PROM or in
+	 *	a program downloaded by the bootstrap PROM.
 	 */
-	/*
-	 * 1024/2048/4096 addresses per DRAM page (1M/4M/16M DRAM chips)
-	 * 60 nsec DRAM
-	 * 180 nsec ROM (3 wait states)
-	 */
-	switch ((unsigned long)&_RamSize) {
-	default:
-	case 4*1024*1024:
-		m360.gmr = M360_GMR_RCNT(23) | M360_GMR_RFEN | 
-					M360_GMR_RCYC(0) | M360_GMR_PGS(3) |
+	m360.gmr = (m360.gmr & 0x001C0000) | M360_GMR_RCNT(23) | 
+					M360_GMR_RFEN | M360_GMR_RCYC(0) | 
 					M360_GMR_DPS_32BIT | M360_GMR_NCS | 
 					M360_GMR_GAMX;
-		break;
-
-	case 16*1024*1024:
-		m360.gmr = M360_GMR_RCNT(23) | M360_GMR_RFEN | 
-					M360_GMR_RCYC(0) | M360_GMR_PGS(5) |
-					M360_GMR_DPS_32BIT | M360_GMR_NCS | 
-					M360_GMR_GAMX;
-		break;
-
-	case 64*1024*1024:
-		m360.gmr = M360_GMR_RCNT(23) | M360_GMR_RFEN | 
-					M360_GMR_RCYC(0) | M360_GMR_PGS(7) |
-					M360_GMR_DPS_32BIT | M360_GMR_NCS | 
-					M360_GMR_GAMX;
-		break;
-	}
 	m360.memc[0].br = (unsigned long)&_RomBase | M360_MEMC_BR_WP |
 								M360_MEMC_BR_V;
 	m360.memc[0].or = M360_MEMC_OR_WAITS(3) | M360_MEMC_OR_1MB |
@@ -443,48 +427,54 @@ void _Init68360 (void)
 
 	/*
 	 * Step 12: Initialize the system RAM
+	 * Do this only if the DRAM has not already been set up
 	 */
-	/*
-	 *	Set up option/base registers
-	 *		4M/16M/64M DRAM
-	 *		60 nsec DRAM
-	 *	Wait for chips to power up
-	 *	Perform 8 read cycles
-	 *	Set all parity bits to correct state
-	 *	Enable parity checking
-	 */
-	switch ((unsigned long)&_RamSize) {
-	default:
-	case 4*1024*1024:
+	if ((m360.memc[1].br & M360_MEMC_BR_V) == 0) {
+		/*
+		 * Set up GMR DRAM page size, option and  base registers
+		 *	Assume 16Mbytes of DRAM
+		 *	60 nsec DRAM
+		 */
+		m360.gmr = (m360.gmr & ~0x001C0000) | M360_GMR_PGS(5);
 		m360.memc[1].or = M360_MEMC_OR_TCYC(0) |
-					M360_MEMC_OR_4MB |
-					M360_MEMC_OR_DRAM;
-		break;
+						M360_MEMC_OR_16MB |
+						M360_MEMC_OR_DRAM;
+		m360.memc[1].br = (unsigned long)&_RamBase | M360_MEMC_BR_V;
 
-	case 16*1024*1024:
-		m360.memc[1].or = M360_MEMC_OR_TCYC(0) |
-					M360_MEMC_OR_16MB |
-					M360_MEMC_OR_DRAM;
-		break;
+		/*
+		 * Wait for chips to power up
+		 *	Perform 8 read cycles
+		 */
+		for (i = 0; i < 50000; i++)
+			continue;
+		for (i = 0; i < 8; ++i)
+			*((volatile unsigned long *)(unsigned long)&_RamBase);
 
-	case 64*1024*1024:
-		m360.memc[1].or = M360_MEMC_OR_TCYC(0) |
-					M360_MEMC_OR_64MB |
-					M360_MEMC_OR_DRAM;
-		break;
+		/*
+		 * Determine memory size (1, 4, or 16 Mbytes)
+		 * Set GMR DRAM page size appropriately.
+		 * The OR is left at 16 Mbytes.  The bootstrap PROM places its
+		 * .data and .bss segments at the top of the 16 Mbyte space.
+		 * A 1 Mbyte or 4 Mbyte DRAM will show up several times in
+		 * the memory map, but will work with the same bootstrap PROM.
+		 */
+		*(volatile char *)&_RamBase = 0;
+		*((volatile char *)&_RamBase+0x00C01800) = 1;
+		if (*(volatile char *)&_RamBase) {
+			m360.gmr = (m360.gmr & ~0x001C0000) | M360_GMR_PGS(1);
+		}
+		else {
+			*((volatile char *)&_RamBase+0x00801000) = 1;
+			if (*(volatile char *)&_RamBase) {
+				m360.gmr = (m360.gmr & ~0x001C0000) | M360_GMR_PGS(3);
+			}
+		}
+
+		/*
+		 * Enable parity checking
+		 */
+		m360.memc[1].br |= M360_MEMC_BR_PAREN;
 	}
-	m360.memc[1].br = (unsigned long)&_RamBase | M360_MEMC_BR_V;
-	for (i = 0; i < 50000; i++)
-		continue;
-	for (i = 0; i < 8; ++i)
-		*((volatile unsigned long *)(unsigned long)&_RamBase);
-	for (i = 0 ; i < (unsigned long)&_RamSize ; i += sizeof (unsigned long)) {
-		volatile unsigned long *lp;
-		lp = (unsigned long *)((unsigned char *)&_RamBase + i);
-		*lp = *lp;
-	}
-	m360.memc[1].br = (unsigned long)&_RamBase |
-				M360_MEMC_BR_PAREN | M360_MEMC_BR_V;
 
 	/*
 	 * Step 13: Copy  the exception vector table to system RAM

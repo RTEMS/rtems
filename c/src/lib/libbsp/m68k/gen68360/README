@@ -3,17 +3,7 @@
 #
 
 #
-# This package works best with a version of GCC that has been modified
-# to support the `-mcpu32' argument.  I have submitted the required
-# changes to the GCC maintainers.
-#
-
-#
-#  As of 1998/01/22, no gcc version (gcc 2.8.0 and egcs 1.0 are current)
-#  includes proper multilib support for the 68360.  This is basically
-#  a m68020 without bitfields from gcc's perspective and there is
-#  no multilib entry which corresponds to this.  See the tool build
-#  INSTRUCTIONS for information on how to address this.
+# This package requires a version of GCC that supports the `-mcpu32' option.
 #
 
 #
@@ -30,7 +20,7 @@
 #
 # This board support package works with several different versions of
 # MC68360 systems.  The choice of hardware is made at the final link-edit
-# phase by setting the Makefile LDFLAGS definition appropriately.
+# phase by setting the Makefile CLAGS_LD definition appropriately.
 #
 # Decisions made at compile time include:
 #	- If the CPU is a member of the 68040 family, the BSP is
@@ -42,19 +32,12 @@
 #	  as described in Chapter 9 of the MC68360 User's Manual.
 #
 # Decisions to be made a link-edit time are:
-#	- The amount of dynamic RAM in the system.  This value applies
-#	  only to hardware versions which support different sizes of RAM.
-#	  The default value is 4 Mbytes.  To specify 16 Mbytes of memory,
-#		--defsym RamSize=0x1000000
-#
 #     - The size of the memory allocator heap.  The default value is
 #       64 kbytes.  If the KA9Q network package is used the heap
 #       should be at least 256 kbytes.  If your network is large, or
 #       busy, the heap should be even larger.
 #       To choose a heap size of 256 kbytes,
-#             --defsym HeapSize=0x40000
-#	  
-#	- The Ethernet address for network boot proms.
+#	CFLAGS_LD += -Wl,--defsym -Wl,HeapSize=0x40000
 
 BSP NAME:	    gen68360 or gen68360_040
 BOARD:              Generic 68360 as described in Motorola MC68360 User's Manual
@@ -103,13 +86,11 @@ Board description
 clock rate:	25 MHz
 bus width:	8-bit PROM, 32-bit DRAM
 ROM:		To 1 MByte, 180 nsec (3 wait states), chip select 0
-RAM:		1 to 64 MByte DRAM SIMM, 60 nsec (0 wait states), parity or nonparity
+RAM:		1 to 16 MByte DRAM SIMM, 60 nsec (0 wait states), parity or nonparity
 
 Host System
 -----------
-NEXTSTEP 3.3 (Intel and Motorola), Solaris 2.5
-gcc-2.7.2
-binutils-2.6
+OPENSTEP 4.2 (Intel and Motorola), Solaris 2.5, Linux 2.0.29
 
 Verification (Standalone 68360)
 -------------------------------

@@ -21,15 +21,11 @@
  *      number used there is not constant.  If this happens to you, edit
  *      the lines marked XXX below to use a constant value.
  */
-RamSize = DEFINED(RamSize) ? RamSize : 4M;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
 StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
 
 /*
  * Declare on-board memory.
- * It would be nice if the ram length could be given as
- * LENGTH=RamSize, but gld doesn't allow non-constant
- * values in the LENGTH expression.  
  */
 MEMORY {
           ram : ORIGIN = 0x00000000, LENGTH = 64M
@@ -39,20 +35,9 @@ MEMORY {
 }
 
 /*
- * Declare low-order three octets of Ethernet address.
- */
-ETHERNET_ADDRESS = DEFINED(ETHERNET_ADDRESS) ? ETHERNET_ADDRESS : 0xDEAD12;
-
-/*
  * Load objects
  */
 SECTIONS {
-	/*
-	 * Hardware variations
-	 */
-	_RamSize = RamSize;
-	__RamSize = RamSize;
-
         /*
          * Boot PROM
          */
