@@ -25,6 +25,7 @@
 #include <rtems/libcsupport.h>
 #include <info.h>
 #include <libcpu/cpuIdent.h>
+#include <libcpu/spr.h>
 #include <rtems/bspIo.h>
 
 boardinfo_t M860_binfo;
@@ -108,6 +109,8 @@ bsp_pretasking_hook(void)
 #endif
 }
 
+SPR_RW(SPRG0)
+SPR_RW(SPRG1)
 
 void bsp_start(void)
 {
@@ -117,7 +120,6 @@ void bsp_start(void)
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
   register unsigned char* intrStack;
-  register unsigned int intrNestingLevel = 0;
   extern void cpu_init(void);
    
   /*
@@ -134,8 +136,11 @@ void bsp_start(void)
    */
    
   intrStack = (((unsigned char*)&intrStackPtr) - CPU_MINIMUM_STACK_FRAME_SIZE);
-  asm volatile ("mtspr	273, %0" : "=r" (intrStack) : "0" (intrStack));
-  asm volatile ("mtspr	272, %0" : "=r" (intrNestingLevel) : "0" (intrNestingLevel));
+
+  _write_SPRG1((unsigned int)intrStack);
+
+  /* Signal them that this BSP has fixed PR288 - eventually, this should go away */
+  _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
  
    /*
     * Install our own set of exception vectors
