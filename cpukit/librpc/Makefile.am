@@ -11,11 +11,12 @@ CLEANFILES =
 if LIBRPC
 include_rpcdir = $(includedir)/rpc
 include_rpc_HEADERS = include/rpc/auth.h include/rpc/auth_des.h \
-    include/rpc/auth_unix.h include/rpc/clnt.h include/rpc/des.h \
-    include/rpc/des_crypt.h include/rpc/pmap_clnt.h include/rpc/pmap_prot.h \
-    include/rpc/pmap_rmt.h include/rpc/rpc.h include/rpc/rpc_com.h \
-    include/rpc/rpc_msg.h include/rpc/svc.h include/rpc/svc_auth.h \
-    include/rpc/types.h include/rpc/xdr.h
+    include/rpc/auth_unix.h include/rpc/clnt.h include/rpc/clnt_stat.h \
+    include/rpc/des.h include/rpc/des_crypt.h include/rpc/pmap_clnt.h \
+    include/rpc/pmap_prot.h include/rpc/pmap_rmt.h include/rpc/rpc.h \
+    include/rpc/rpc_com.h include/rpc/rpc_msg.h include/rpc/rpcent.h \
+    include/rpc/svc.h include/rpc/svc_auth.h include/rpc/types.h \
+    include/rpc/xdr.h
 
 man_MANS =
 
@@ -116,6 +117,10 @@ $(PROJECT_INCLUDE)/rpc/clnt.h: include/rpc/clnt.h $(PROJECT_INCLUDE)/rpc/$(dirst
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/clnt.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/clnt.h
 
+$(PROJECT_INCLUDE)/rpc/clnt_stat.h: include/rpc/clnt_stat.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/clnt_stat.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/clnt_stat.h
+
 $(PROJECT_INCLUDE)/rpc/des.h: include/rpc/des.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/des.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/des.h
@@ -147,6 +152,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/rpc_com.h
 $(PROJECT_INCLUDE)/rpc/rpc_msg.h: include/rpc/rpc_msg.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/rpc_msg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/rpc_msg.h
+
+$(PROJECT_INCLUDE)/rpc/rpcent.h: include/rpc/rpcent.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/rpcent.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/rpcent.h
 
 $(PROJECT_INCLUDE)/rpc/svc.h: include/rpc/svc.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/svc.h

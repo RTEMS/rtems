@@ -1,3 +1,5 @@
+/*	$NetBSD: rpc.h,v 1.13 2000/06/02 22:57:56 fvdl Exp $	*/
+
 /*
  * Sun RPC is a product of Sun Microsystems, Inc. and is provided for
  * unrestricted use provided that this legend is included on all tape
@@ -28,7 +30,7 @@
  *
  *	from: @(#)rpc.h 1.9 88/02/08 SMI
  *	from: @(#)rpc.h	2.4 89/07/11 4.0 RPCSRC
- * $FreeBSD: src/include/rpc/rpc.h,v 1.12 2000/01/26 09:02:40 shin Exp $
+ * $FreeBSD: src/include/rpc/rpc.h,v 1.17 2002/03/23 17:24:55 imp Exp $
  */
 
 /*
@@ -65,30 +67,12 @@
 #include <rpc/svc.h>		/* service manager and multiplexer */
 #include <rpc/svc_auth.h>	/* service side authenticator */
 
-/*
- * COMMENT OUT THE NEXT INCLUDE (or add to the #ifndef) IF RUNNING ON
- * A VERSION OF UNIX THAT USES SUN'S NFS SOURCE.  These systems will
- * already have the structures defined by <rpc/netdb.h> included in <netdb.h>.
- */
-/* routines for parsing /etc/rpc */
-
-struct rpcent {
-      char    *r_name;        /* name of server for this rpc program */
-      char    **r_aliases;    /* alias list */
-      int     r_number;       /* rpc program number */
-};
+#include <rpc/rpcent.h>
 
 __BEGIN_DECLS
-extern struct rpcent *getrpcbyname	__P((char *));
-extern struct rpcent *getrpcbynumber	__P((int));
-extern struct rpcent *getrpcent		__P((void));
-extern int getrpcport __P((char *host, int prognum, int versnum, int proto));
-extern void setrpcent __P((int));
-extern void endrpcent __P((void));
-
-extern int bindresvport __P((int, struct sockaddr_in *));
-extern int bindresvport_sa __P((int, struct sockaddr *));
-extern int get_myaddress __P((struct sockaddr_in *));
+extern int get_myaddress(struct sockaddr_in *);
+extern int bindresvport(int, struct sockaddr_in *);
+extern int bindresvport_sa(int, struct sockaddr *);
 __END_DECLS
 
 int rtems_rpc_task_init (void);
