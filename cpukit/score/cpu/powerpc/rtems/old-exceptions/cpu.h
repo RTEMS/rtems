@@ -1066,29 +1066,6 @@ void _CPU_Fatal_error(
   uint32_t   _error
 );
 
-/*
- *  Routines to access the time base register
- */
-
-static inline uint64_t   PPC_Get_timebase_register( void )
-{
-  uint32_t   tbr_low;
-  uint32_t   tbr_high;
-  uint32_t   tbr_high_old;
-  uint64_t   tbr;
-
-  do {
-    asm volatile( "mftbu %0" : "=r" (tbr_high_old));
-    asm volatile( "mftb  %0" : "=r" (tbr_low));
-    asm volatile( "mftbu %0" : "=r" (tbr_high));
-  } while ( tbr_high_old != tbr_high );
-
-  tbr = tbr_high;
-  tbr <<= 32;
-  tbr |= tbr_low;
-  return tbr;
-}
-
 #endif /* ASM */
 
 #ifdef __cplusplus
