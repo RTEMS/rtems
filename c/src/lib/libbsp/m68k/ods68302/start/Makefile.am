@@ -2,9 +2,6 @@
 ## $Id$
 ##
 
-
-PGM = $(ARCH)/start.o
-
 RESET_S_FILES_yes_V = debugreset.S
 RESET_S_FILES_no_V = reset.S
 RESET_S_FILES__V = $(RESET_S_FILES_no_V)
@@ -32,17 +29,19 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 AM_CFLAGS += $(CFLAGS_V)
 
-$(PGM): $(OBJS)
+bsplib_DATA = $(ARCH)/start.o
+
+$(ARCH)/start.o: $(OBJS)
 	$(make-rel)
 
-$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(PGM)
+$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(ARCH)/start.o
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
 
-all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(OBJS) $(ARCH)/start.o $(TMPINSTALL_FILES)
 
-.PRECIOUS: $(PGM)
+.PRECIOUS: $(ARCH)/start.o
 
 EXTRA_DIST = cpuboot.c debugreset.S reset.S
 
