@@ -21,6 +21,7 @@ Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 Prefix:		%{_prefix}
 BuildRoot:	%{_tmppath}/@target_alias@-binutils
 BuildPreReq:	/sbin/install-info
+BuildPreReq:	texinfo >= 4.2
 
 Version:      	@binutils_version@
 Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-@binutils_version@.tar.bz2

@@ -5,7 +5,7 @@
 #
 binutils_version=2.13.2.1
 binutils_patch_version=
-binutils_rpm_release=1
+binutils_rpm_release=2
 newlib_version=1.10.0
 newlib_patch_version=20020322
 gcc_version=2.95.3

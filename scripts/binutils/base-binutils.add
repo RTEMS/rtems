@@ -34,6 +34,7 @@ This is the base for binutils regardless of target CPU.
   fi
 
 %files -n rtems-base-binutils -f files
+%defattr(-,root,root)
 %dir %{_prefix}/info
 %doc %{_prefix}/info/dir
 %doc %{_prefix}/info/as.info.gz

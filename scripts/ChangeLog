@@ -1,4 +1,11 @@
-2003-01-27	RTEMS
+2003-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* setup.def: binutils_rpm_release=2.
+	* binutils/base-binutils.add: %defattr(-,root,root).
+	* binutils/binutils.add: Ditto.
+	* binutils/target-binutils.add: Ditto.
+
+2003-01-27	Joel Sherrill <joel@OARcorp.com>
 
 	* buildalltar.in, setup.def: Tool update including binaries for Cygwin
 	with a special RTEMS user account.
