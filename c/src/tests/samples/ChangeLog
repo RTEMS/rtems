@@ -1,3 +1,8 @@
+2002-11-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Unconditionally check for CXX (Hack to bug in 
+	autoconf > 2.54).
+
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
 	* base_mp/apptask.c: Removed warning.
