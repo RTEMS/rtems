@@ -1,3 +1,8 @@
+2002-02-28	Victor V. Vengerov <vvv@oktet.ru>
+
+	* DOS filesystem including FAT12, FAT16, and FAT32 support submitted.
+	* Makefile.am: Modified to reflect addition.
+
 2001-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove references to POSIX, ITRON, MULTILIB.
