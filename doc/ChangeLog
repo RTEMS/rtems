@@ -1,3 +1,7 @@
+2003-02-14	Joel Sherrill <joel@OARcorp.com>
+
+	* index.html.in: Removed a29k reference.
+
 2003-01-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* index.html.in: Fix duplicate c4x entry.

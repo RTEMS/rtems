@@ -276,16 +276,6 @@
 <LI>CPU Supplements for Secondary Ports
 
   <MENU>
-        <LI><A HREF="HELP.html">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-               RTEMS AMD 29K Applications Supplement</A>
-            </LI>
-
         <LI><A HREF="../pdf/c4x.pdf">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../ps/c4x.ps">
