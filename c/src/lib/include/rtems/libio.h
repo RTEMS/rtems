@@ -452,6 +452,7 @@ typedef int (*rtems_libio_lseek_t)(
 #define       RTEMS_IO_GET_ATTRIBUTES 1
 #define       RTEMS_IO_SET_ATTRIBUTES 2
 #define       RTEMS_IO_TCDRAIN        3
+#define       FIONREAD                4
 
 /*
  *  The following macros are used to build up the permissions sets
