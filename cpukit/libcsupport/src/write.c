@@ -16,7 +16,7 @@
 #endif
 
 #include <rtems/libio_.h>
-
+#include <rtems/seterr.h>
 
 /*
  * write
@@ -46,7 +46,7 @@ ssize_t write(
    */
 
   if ( !iop->handlers->write_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   rc = (*iop->handlers->write_h)( iop, buffer, count );
 

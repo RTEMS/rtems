@@ -16,6 +16,7 @@
 #endif
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int symlink(
   const char *actualpath,
@@ -34,7 +35,7 @@ int symlink(
 
   if ( !loc.ops->symlink_h ) {
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result = (*loc.ops->symlink_h)( &loc, actualpath, name_start);

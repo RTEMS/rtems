@@ -19,7 +19,7 @@
 #include <errno.h>
 
 #include <rtems/libio_.h>
-
+#include <rtems/seterr.h>
 
 int ttyname_r(
   int   fd,
@@ -36,14 +36,14 @@ int ttyname_r(
 
   /* Must be a terminal. */
   if (tcgetattr (fd, &tty) < 0)
-    set_errno_and_return_minus_one(EBADF);
+    rtems_set_errno_and_return_minus_one(EBADF);
 
   /* Must be a character device. */
   if (fstat (fd, &sb) || !S_ISCHR (sb.st_mode))
-    set_errno_and_return_minus_one(EBADF);
+    rtems_set_errno_and_return_minus_one(EBADF);
 
   if ((dp = opendir (_PATH_DEV)) == NULL)
-    set_errno_and_return_minus_one(EBADF);
+    rtems_set_errno_and_return_minus_one(EBADF);
 
   for (rval = NULL; (dirp = readdir (dp)) != NULL ;)
     {

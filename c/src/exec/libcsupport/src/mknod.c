@@ -27,6 +27,7 @@
 #include <stdlib.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int mknod(
   const char *pathname,
@@ -40,16 +41,16 @@ int mknod(
   int                                 result;
 
   if ( !(mode & (S_IFREG|S_IFCHR|S_IFBLK|S_IFIFO) ) )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
   
   if ( S_ISFIFO(mode) )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   rtems_filesystem_get_start_loc( pathname, &i, &temp_loc );
 
   if ( !temp_loc.ops->evalformake_h ) {
     rtems_filesystem_freenode( &temp_loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result = (*temp_loc.ops->evalformake_h)( 
@@ -62,7 +63,7 @@ int mknod(
 
   if ( !temp_loc.ops->mknod_h ) {
     rtems_filesystem_freenode( &temp_loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result =  (*temp_loc.ops->mknod_h)( name_start, mode, dev, &temp_loc );

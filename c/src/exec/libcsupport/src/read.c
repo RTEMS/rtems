@@ -16,6 +16,7 @@
 #endif
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 ssize_t read(
   int         fd,
@@ -38,7 +39,7 @@ ssize_t read(
    */
 
   if ( !iop->handlers->read_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   rc = (*iop->handlers->read_h)( iop, buffer, count );
 

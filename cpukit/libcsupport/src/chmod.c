@@ -23,6 +23,7 @@
 #include <unistd.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int chmod(
   const char *path,
@@ -39,12 +40,12 @@ int chmod(
   
   if ( !loc.handlers ){
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( EBADF );
+    rtems_set_errno_and_return_minus_one( EBADF );
   }
 
   if ( !loc.handlers->fchmod_h ){
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result = (*loc.handlers->fchmod_h)( &loc, mode );

@@ -21,6 +21,7 @@
 #include <errno.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int chdir(
   const char *pathname
@@ -44,12 +45,12 @@ int chdir(
 
   if ( !loc.ops->node_type_h ) {
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   if (  (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( ENOTDIR );
+    rtems_set_errno_and_return_minus_one( ENOTDIR );
   }
   
   rtems_filesystem_freenode( &rtems_filesystem_current );

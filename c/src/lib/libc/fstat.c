@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int fstat(
   int          fd,
@@ -33,7 +34,7 @@ int fstat(
    */
 
   if ( !sbuf )
-    set_errno_and_return_minus_one( EFAULT );
+    rtems_set_errno_and_return_minus_one( EFAULT );
 
   /*
    *  Now process the stat() request.
@@ -44,10 +45,10 @@ int fstat(
   rtems_libio_check_is_open(iop);
 
   if ( !iop->handlers )
-    set_errno_and_return_minus_one( EBADF );
+    rtems_set_errno_and_return_minus_one( EBADF );
 
   if ( !iop->handlers->fstat_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   /*
    *  Zero out the stat structure so the various support

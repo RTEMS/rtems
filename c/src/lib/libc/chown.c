@@ -22,6 +22,7 @@
 #include <rtems/libio.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int chown(
   const char *path,
@@ -37,7 +38,7 @@ int chown(
   
   if ( !loc.ops->chown_h ) {
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result = (*loc.ops->chown_h)( &loc, owner, group );

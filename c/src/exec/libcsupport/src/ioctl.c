@@ -18,7 +18,10 @@
 #include "config.h"
 #endif
 
+#include <stdarg.h>
+
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 #include <unistd.h>
 
@@ -46,10 +49,10 @@ int ioctl(
    */
 
   if ( !iop->handlers )
-    set_errno_and_return_minus_one( EBADF );
+    rtems_set_errno_and_return_minus_one( EBADF );
 
   if ( !iop->handlers->ioctl_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   rc = (*iop->handlers->ioctl_h)( iop, command, buffer );
 

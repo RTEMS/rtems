@@ -18,6 +18,7 @@
 #include <errno.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int unlink( 
   const char *path 
@@ -36,17 +37,17 @@ int unlink(
   
   if ( !loc.ops->node_type_h ) {
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   if (  (*loc.ops->node_type_h)( &loc ) == RTEMS_FILESYSTEM_DIRECTORY ) {
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( EISDIR );
+    rtems_set_errno_and_return_minus_one( EISDIR );
   }
 
   if ( !loc.ops->unlink_h ) {
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result = (*loc.ops->unlink_h)( &loc );

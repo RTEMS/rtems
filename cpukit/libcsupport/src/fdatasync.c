@@ -18,6 +18,7 @@
 #include <unistd.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int fdatasync(
   int     fd
@@ -35,7 +36,7 @@ int fdatasync(
    */
 
   if ( !iop->handlers->fdatasync_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   return (*iop->handlers->fdatasync_h)( iop );
 }

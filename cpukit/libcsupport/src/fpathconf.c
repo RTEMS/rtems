@@ -16,6 +16,7 @@
 #endif
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 #include <unistd.h>
 #include <errno.h>
@@ -78,7 +79,7 @@ long fpathconf(
       return_value = the_limits->posix_sync_io;
       break;
     default:
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
       break;
   }
 

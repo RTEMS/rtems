@@ -20,6 +20,7 @@
 #include <errno.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int link(
   const char *existing,
@@ -48,13 +49,13 @@ int link(
 
   if ( !parent_loc.ops->evalformake_h ) {
     rtems_filesystem_freenode( &existing_loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result = (*parent_loc.ops->evalformake_h)( &new[i], &parent_loc, &name_start );
   if ( result != 0 ) {
     rtems_filesystem_freenode( &existing_loc );
-    set_errno_and_return_minus_one( result );
+    rtems_set_errno_and_return_minus_one( result );
   }
 
   /*
@@ -65,13 +66,13 @@ int link(
   if ( parent_loc.mt_entry != existing_loc.mt_entry ) {
     rtems_filesystem_freenode( &existing_loc );
     rtems_filesystem_freenode( &parent_loc );
-    set_errno_and_return_minus_one( EXDEV );
+    rtems_set_errno_and_return_minus_one( EXDEV );
   }
 
   if ( !parent_loc.ops->link_h ) {
     rtems_filesystem_freenode( &existing_loc );
     rtems_filesystem_freenode( &parent_loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result = (*parent_loc.ops->link_h)( &existing_loc, &parent_loc, name_start );

@@ -19,6 +19,7 @@
 #include <errno.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int ftruncate(
   int     fd,
@@ -42,15 +43,15 @@ int ftruncate(
 
   loc = iop->pathinfo;
   if ( !loc.ops->node_type_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
     
   if ( (*loc.ops->node_type_h)( &loc ) == RTEMS_FILESYSTEM_DIRECTORY )
-    set_errno_and_return_minus_one( EISDIR );
+    rtems_set_errno_and_return_minus_one( EISDIR );
 
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
 
   if ( !iop->handlers->ftruncate_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   return (*iop->handlers->ftruncate_h)( iop, length );
 }

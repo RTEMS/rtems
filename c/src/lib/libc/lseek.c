@@ -18,6 +18,7 @@
 #include <stdio.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 off_t lseek(
   int     fd,
@@ -38,7 +39,7 @@ off_t lseek(
    */
 
   if ( !iop->handlers->lseek_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   /*
    *  Now process the lseek().
@@ -59,7 +60,7 @@ off_t lseek(
       break;
 
     default:
-      set_errno_and_return_minus_one( EINVAL );
+      rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
   /*

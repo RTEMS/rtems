@@ -24,6 +24,7 @@
 #include <termios.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int cfsetispeed(
   struct termios *tp,
@@ -31,7 +32,7 @@ int cfsetispeed(
 )
 {
   if ( speed & ~CBAUD )
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
 
   tp->c_cflag = (tp->c_cflag & ~CIBAUD) | (speed * (CIBAUD / CBAUD));
   return 0;

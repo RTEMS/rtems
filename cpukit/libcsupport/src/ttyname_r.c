@@ -55,6 +55,7 @@ static char sccsid[] = "@(#)ttyname.c	5.10 (Berkeley) 5/6/91";
 #include <errno.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 /*
  *  ttyname_r() - POSIX 1003.1b 4.7.2 - Demetermine Terminal Device Name
@@ -75,14 +76,14 @@ int ttyname_r(
 
   /* Must be a terminal. */
   if (tcgetattr (fd, &tty) < 0)
-    set_errno_and_return_minus_one(EBADF);
+    rtems_set_errno_and_return_minus_one(EBADF);
 
   /* Must be a character device. */
   if (_fstat (fd, &sb) || !S_ISCHR (sb.st_mode))
-    set_errno_and_return_minus_one(EBADF);
+    rtems_set_errno_and_return_minus_one(EBADF);
 
   if ((dp = opendir (_PATH_DEV)) == NULL)
-    set_errno_and_return_minus_one(EBADF);
+    rtems_set_errno_and_return_minus_one(EBADF);
 
   for (rval = NULL; (dirp = readdir (dp)) != NULL ;)
     {

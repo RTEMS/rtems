@@ -26,6 +26,7 @@
 
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int tcsetattr(
   int             fd,
@@ -35,7 +36,7 @@ int tcsetattr(
 {
   switch (opt) {
   default:
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   case TCSADRAIN:
     if (ioctl( fd, RTEMS_IO_TCDRAIN, NULL ) < 0)

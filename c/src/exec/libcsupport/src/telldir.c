@@ -22,7 +22,7 @@
 #include <errno.h>
 
 #include <rtems/libio_.h>
-
+#include <rtems/seterr.h>
 
 long telldir(
   DIR *dirp
@@ -31,7 +31,7 @@ long telldir(
   rtems_libio_t  *iop;
 
   if ( !dirp )
-    set_errno_and_return_minus_one( EBADF ); 
+    rtems_set_errno_and_return_minus_one( EBADF ); 
 
   /*
    *  Get the file control block structure associated with the

@@ -16,6 +16,7 @@
 #endif
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int readlink(
   const char *pathname,
@@ -27,7 +28,7 @@ int readlink(
   int                               result;
 
   if (!buf)
-    set_errno_and_return_minus_one( EFAULT );
+    rtems_set_errno_and_return_minus_one( EFAULT );
 
   result = rtems_filesystem_evaluate_path( pathname, 0, &loc, FALSE );
   if ( result != 0 )
@@ -35,17 +36,17 @@ int readlink(
   
   if ( !loc.ops->node_type_h ){
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   if (  (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_SYM_LINK ){
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( EINVAL );
+    rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
   if ( !loc.ops->readlink_h ){
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result =  (*loc.ops->readlink_h)( &loc, buf, bufsize );

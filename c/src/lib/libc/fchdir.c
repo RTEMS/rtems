@@ -22,6 +22,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int fchdir(
   int       fd
@@ -44,16 +45,16 @@ int fchdir(
    */
 
   if ( !iop->pathinfo.ops ) {
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   if ( !iop->pathinfo.ops->node_type_h ) {
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   if (  (*iop->pathinfo.ops->node_type_h)( &iop->pathinfo ) !=
                                           RTEMS_FILESYSTEM_DIRECTORY ) {
-    set_errno_and_return_minus_one( ENOTDIR );
+    rtems_set_errno_and_return_minus_one( ENOTDIR );
   }
   
   rtems_filesystem_freenode( &rtems_filesystem_current );

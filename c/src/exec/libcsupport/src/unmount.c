@@ -31,6 +31,7 @@
 #include <assert.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 /*
  *  Data structures and routines private to mount/unmount pair.
@@ -125,7 +126,7 @@ int unmount(
 
   if ( !rtems_filesystem_nodes_equal( fs_root_loc, &loc) ){
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( EACCES );
+    rtems_set_errno_and_return_minus_one( EACCES );
   }
 
   /*
@@ -139,10 +140,10 @@ int unmount(
    */
 
   if ( !fs_mount_loc->ops->unmount_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   if ( !fs_root_loc->ops->fsunmount_me_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
 
   /*
@@ -154,14 +155,14 @@ int unmount(
    */
 
   if ( rtems_filesystem_current.mt_entry == mt_entry )
-    set_errno_and_return_minus_one( EBUSY );
+    rtems_set_errno_and_return_minus_one( EBUSY );
 
   /*
    *  Verify there are no file systems below the path specified
    */
 
   if ( file_systems_below_this_mountpoint( path, fs_root_loc, mt_entry ) != 0 )
-    set_errno_and_return_minus_one( EBUSY );
+    rtems_set_errno_and_return_minus_one( EBUSY );
 
   /*
    *  Run the file descriptor table to determine if there are any file
@@ -170,7 +171,7 @@ int unmount(
    */
 
   if ( rtems_libio_is_open_files_in_fs( mt_entry ) == 1 ) 
-    set_errno_and_return_minus_one( EBUSY );
+    rtems_set_errno_and_return_minus_one( EBUSY );
   
   /*
    * Allow the file system being unmounted on to do its cleanup.

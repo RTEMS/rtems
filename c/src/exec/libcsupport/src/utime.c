@@ -20,6 +20,7 @@
 #include <errno.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int utime(
   const char           *path,
@@ -34,7 +35,7 @@ int utime(
 
   if ( !temp_loc.ops->utime_h ){
     rtems_filesystem_freenode( &temp_loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result = (*temp_loc.ops->utime_h)( &temp_loc, times->actime, times->modtime );

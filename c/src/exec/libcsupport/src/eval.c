@@ -19,6 +19,7 @@
 
 #include <rtems.h>
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int rtems_filesystem_evaluate_path(
   const char                        *pathname,
@@ -36,10 +37,10 @@ int rtems_filesystem_evaluate_path(
    */
 
   if ( !pathname )
-    set_errno_and_return_minus_one( EFAULT );
+    rtems_set_errno_and_return_minus_one( EFAULT );
 
   if ( !pathloc )
-    set_errno_and_return_minus_one( EIO );       /* should never happen */
+    rtems_set_errno_and_return_minus_one( EIO );       /* should never happen */
   
   /*
    * Evaluate the path using the optable evalpath.
@@ -48,7 +49,7 @@ int rtems_filesystem_evaluate_path(
   rtems_filesystem_get_start_loc( pathname, &i, pathloc );
 
   if ( !pathloc->ops->evalpath_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   result = (*pathloc->ops->evalpath_h)( &pathname[i], flags, pathloc );
 
@@ -60,7 +61,7 @@ int rtems_filesystem_evaluate_path(
   if ( (result == 0) && follow_link ) {
 
     if ( !pathloc->ops->node_type_h )
-      set_errno_and_return_minus_one( ENOTSUP );
+      rtems_set_errno_and_return_minus_one( ENOTSUP );
 
     type = (*pathloc->ops->node_type_h)( pathloc );
 
@@ -68,7 +69,7 @@ int rtems_filesystem_evaluate_path(
          ( type == RTEMS_FILESYSTEM_SYM_LINK ) ) {
 
         if ( !pathloc->ops->eval_link_h )
-          set_errno_and_return_minus_one( ENOTSUP );
+          rtems_set_errno_and_return_minus_one( ENOTSUP );
 
          result =  (*pathloc->ops->eval_link_h)( pathloc, flags );
  

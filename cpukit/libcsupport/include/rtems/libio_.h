@@ -68,17 +68,6 @@ extern rtems_libio_t  *rtems_libio_last_iop;
 extern rtems_libio_t *rtems_libio_iop_freelist;
 
 /*
- *  set_errno_and_return_minus_one
- *
- *  Macro to ease common way to return an error.
- */
-
-#ifndef set_errno_and_return_minus_one
-#define set_errno_and_return_minus_one( _error ) \
-  do { errno = (_error); return -1; } while(0)
-#endif
-
-/*
  *  rtems_libio_iop
  *
  *  Macro to return the file descriptor pointer.
@@ -152,7 +141,7 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
 #define rtems_libio_check_permissions(_iop, _flag)    \
   do {                                                \
       if (((_iop)->flags & (_flag)) == 0) {           \
-            set_errno_and_return_minus_one( EINVAL ); \
+            rtems_set_errno_and_return_minus_one( EINVAL ); \
             return -1;                                \
       }                                               \
   } while (0)
@@ -250,7 +239,6 @@ extern rtems_user_env_t   rtems_global_user_env;
 #define _POSIX_types_Euid            (rtems_current_user_env->euid)
 #define _POSIX_types_Egid            (rtems_current_user_env->egid)
 #define _POSIX_types_Getlogin_buffer (rtems_current_user_env->login_buffer)
-
 
 /*
  *  Instantiate a private copy of the per user information for the calling task.

@@ -41,6 +41,7 @@
 #include <errno.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int _STAT_NAME(
   const char  *path,
@@ -55,7 +56,7 @@ int _STAT_NAME(
    */
 
   if ( !buf )
-    set_errno_and_return_minus_one( EFAULT );
+    rtems_set_errno_and_return_minus_one( EFAULT );
 
   status = rtems_filesystem_evaluate_path( path, 0, &loc, _STAT_FOLLOW_LINKS );
   if ( status != 0 )
@@ -63,7 +64,7 @@ int _STAT_NAME(
   
   if ( !loc.handlers->fstat_h ){
     rtems_filesystem_freenode( &loc );
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   /*

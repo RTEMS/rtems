@@ -22,6 +22,7 @@
 #include <errno.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int chroot(
   const char *pathname
@@ -34,7 +35,7 @@ int chroot(
   if (rtems_current_user_env == &rtems_global_user_env) {
    rtems_libio_set_private_env(); /* try to set a new private env*/
    if (rtems_current_user_env == &rtems_global_user_env) /* not ok */
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }; 
 
   loc = rtems_filesystem_root;     /* save the value */
@@ -42,7 +43,7 @@ int chroot(
   result = chdir(pathname);
   if (result) {
     rtems_filesystem_root = loc; /* restore the value */
-    set_errno_and_return_minus_one( errno );
+    rtems_set_errno_and_return_minus_one( errno );
   };
   rtems_filesystem_root = rtems_filesystem_current;
 

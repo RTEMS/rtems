@@ -24,6 +24,7 @@
 #include <errno.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int getdents(
   int   dd_fd,
@@ -45,10 +46,10 @@ int getdents(
    */
   loc = iop->pathinfo;
   if ( !loc.ops->node_type_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
     
   if ( (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY )
-    set_errno_and_return_minus_one( ENOTDIR );
+    rtems_set_errno_and_return_minus_one( ENOTDIR );
 
   /*
    *  Return the number of bytes that were actually transfered as a result
@@ -56,7 +57,7 @@ int getdents(
    */
 
   if ( !iop->handlers->read_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   return (*iop->handlers->read_h)( iop, dd_buf, dd_len  );
 }

@@ -18,6 +18,7 @@
 #include <unistd.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 int fsync(
   int     fd
@@ -35,10 +36,10 @@ int fsync(
    */
 
   if ( !iop->handlers )
-    set_errno_and_return_minus_one( EBADF );
+    rtems_set_errno_and_return_minus_one( EBADF );
 
   if ( !iop->handlers->fsync_h )
-    set_errno_and_return_minus_one( ENOTSUP );
+    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   return (*iop->handlers->fsync_h)( iop );
 }

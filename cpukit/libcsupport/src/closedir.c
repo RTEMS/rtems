@@ -51,6 +51,7 @@ static char sccsid[] = "@(#)closedir.c	5.9 (Berkeley) 2/23/91";
 #include <errno.h>
 
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 /*
  * close a directory.
@@ -62,7 +63,7 @@ closedir(dirp)
 	int fd;
 
         if ( !dirp )
-          set_errno_and_return_minus_one( EBADF );
+          rtems_set_errno_and_return_minus_one( EBADF );
 
 	fd = dirp->dd_fd;
 	dirp->dd_fd = -1;

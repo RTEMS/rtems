@@ -1,3 +1,75 @@
+2002-01-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/libio_.h: Remove set_errno_and_return_minus_one.
+	* libc/cfsetispeed.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/cfsetospeed.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/chdir.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/chmod.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/chown.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/chroot.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/closedir.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/eval.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/fchdir.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/fchmod.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/fdatasync.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/fpathconf.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/fstat.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/fsync.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/ftruncate.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/getdents.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/ioctl.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/link.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/lseek.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/mknod.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/open.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/read.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/readlink.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/rmdir.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/stat.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/symlink.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/tcsetattr.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/telldir.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/ttyname.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/ttyname_r.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/unlink.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/unmount.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/utime.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+	* libc/write.c: Include <rtems/seterr.h>.
+	Apply rtems_set_errno_and_return_minus_one.
+
 2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libc/printk.c: Include rtems/bspIo.h instead of bspIo.h.

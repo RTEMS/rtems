@@ -15,7 +15,10 @@
 #include "config.h"
 #endif
 
+#include <stdarg.h>
+#include <fcntl.h>
 #include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
 #include <unistd.h>
 
@@ -184,7 +187,7 @@ done:
       rtems_libio_free( iop );
     if ( loc_to_free )
       rtems_filesystem_freenode( loc_to_free );
-    set_errno_and_return_minus_one( rc );
+    rtems_set_errno_and_return_minus_one( rc );
   }
 
   return iop - rtems_libio_iops;
