@@ -7,6 +7,26 @@
  *  http://www.OARcorp.com/rtems/license.html.
  *
  *  $Id$
+ *
+ *  Both the ne2000 and the wd80x3 are based on the National Semiconductor
+ *  8390 chip, so there is a fair amount of overlap between the two
+ *  drivers.  It would be possible in principle to combine some code into
+ *  a separate set of subroutines called by both.  In fact, the drivers in
+ *  both OpenBSD and Linux work this way.  I didn't bother, because for
+ *  the relatively simple drivers used by RTEMS, the overlap is not
+ *  especially large, and any reasonable use of subroutines would lead to
+ *  slightly less efficient code.
+
+ *  This ne2000 driver uses two transmit buffers.  While one packet is
+ *  being transmitted over the Ethernet, RTEMS will upload another.  Since
+ *  uploading a packet to the ne2000 is rather slow, I don't think there
+ *  is any point to having more than two transmit buffers.  However, the
+ *  code does make it possible, by changing NE_TX_BUFS, although that
+ *  would of course reduce the number of receive buffers.
+ *  
+ *  I suspect that the wd80x3 driver would benefit slightly from copying
+ *  the multiple transmit buffer code.  However, I have no way to test
+ *  that.
  */
 
 #include <bsp.h>
