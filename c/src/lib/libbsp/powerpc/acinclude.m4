@@ -22,6 +22,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([psim]);;
   score603e )
     AC_CONFIG_SUBDIRS([score603e]);;
+  ss555 )
+    AC_CONFIG_SUBDIRS([ss555]);;
   *)
     AC_MSG_ERROR([Invalid BSP]);;
   esac
