@@ -117,6 +117,7 @@ boolean _POSIX_Threads_Create_extension(
  
   created->API_Extensions[ THREAD_API_POSIX ] = api;
  
+  /* XXX check all fields are touched */
   api->Attributes  = _POSIX_Threads_Default_attributes;
   api->detachstate = _POSIX_Threads_Default_attributes.detachstate;
   api->schedpolicy = _POSIX_Threads_Default_attributes.schedpolicy;
@@ -124,6 +125,18 @@ boolean _POSIX_Threads_Create_extension(
   api->schedparam.sched_priority = 
      _POSIX_Priority_From_core( created->current_priority );
  
+  /*
+   *  If the thread is not a posix thread, then all posix signals are blocked
+   *  by default.
+   */
+
+  /* XXX use signal constants */
+  api->signals_pending = 0;
+  if ( _Objects_Get_class( created->Object.id ) == OBJECTS_POSIX_THREADS )
+    api->signals_blocked = 0;
+  else
+    api->signals_blocked = 0xffffffff;
+
 /* XXX set signal parameters -- block all signals for non-posix threads */
 
   _Thread_queue_Initialize(

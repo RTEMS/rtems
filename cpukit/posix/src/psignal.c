@@ -173,6 +173,42 @@ void _POSIX_signals_Unblock_thread(
 
 /*PAGE
  *
+ *  _POSIX_signals_Set_process_signals
+ */
+ 
+void _POSIX_signals_Set_process_signals(
+  sigset_t   mask
+)
+{
+  ISR_Level  level;
+ 
+  _ISR_Disable( level );
+    if ( !_POSIX_signals_Pending )
+      _Thread_Do_post_task_switch_extension++;
+    _POSIX_signals_Pending |= mask;
+  _ISR_Enable( level );
+}
+
+/*PAGE
+ *
+ *  _POSIX_signals_Clear_process_signals
+ */
+
+void _POSIX_signals_Clear_process_signals(
+  sigset_t   mask
+)
+{
+  ISR_Level  level;
+
+  _ISR_Disable( level );
+    _POSIX_signals_Pending &= ~mask;
+    if ( !_POSIX_signals_Pending )
+      _Thread_Do_post_task_switch_extension--;
+  _ISR_Enable( level );
+}
+
+/*PAGE
+ *
  *  _POSIX_signals_Check_signal
  */
 
@@ -199,7 +235,7 @@ boolean _POSIX_signals_Check_signal(
   _ISR_Disable( level );
     if ( is_global ) {
        if ( mask & (_POSIX_signals_Pending & ~api->signals_blocked ) ) {
-         _POSIX_signals_Pending &= ~mask;
+         _POSIX_signals_Clear_process_signals( mask );
          do_callout = TRUE;
        }
     } else {
@@ -286,9 +322,10 @@ void _POSIX_signals_Post_switch_extension(
 restart:
   _ISR_Disable( level );
     if ( !(~api->signals_blocked & 
-          (api->signals_pending | _POSIX_signals_Pending)) )
-      return;
-  _ISR_Enable( level );
+          (api->signals_pending | _POSIX_signals_Pending)) ) {
+     _ISR_Enable( level );
+     return;
+   }
 
   for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
 
@@ -322,7 +359,11 @@ void _POSIX_signals_Alarm_TSR(
   void           *argument
 )
 {
-  kill( getpid(), SIGALRM );
+  int status;
+
+  status = kill( getpid(), SIGALRM );
+  /* XXX can't print from an ISR, should this be fatal? */
+  assert( !status );
 }
 
 /*PAGE
@@ -517,9 +558,9 @@ int sigaction(
       if ( act->sa_handler == SIG_DFL ) {
         _POSIX_signals_Vectors[ sig ] = _POSIX_signals_Default_vectors[ sig ];
       } else if ( act->sa_handler == SIG_DFL ) {
-        _POSIX_signals_Pending &= ~signo_to_mask( sig );
+         _POSIX_signals_Clear_process_signals( signo_to_mask(sig) );
       } else {
-        _POSIX_signals_Pending &= ~signo_to_mask( sig );
+         _POSIX_signals_Clear_process_signals( signo_to_mask(sig) );
         _POSIX_signals_Vectors[ sig ] = *act;
       }
     _ISR_Enable( level );
@@ -851,7 +892,7 @@ int kill(
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
   if ( _POSIX_signals_Is_interested( api, mask ) ) {
-    _POSIX_signals_Pending |= mask;
+    _POSIX_signals_Set_process_signals( mask );
     goto process_it;
   }
 
@@ -886,7 +927,7 @@ int kill(
    *  specific thread via sigwait() we will mark it as pending.
    */
 
-  _POSIX_signals_Pending |= mask;
+  _POSIX_signals_Set_process_signals( mask );
 
   /*
    *  Is any other thread interested?  The highest priority interested
@@ -923,8 +964,6 @@ int kill(
     object_table = the_info->local_table;
 
     assert( object_table );                 /* always at least 1 entry */
-
-    object_table++;                         /* skip entry 0 */
 
     for ( index = 1 ; index <= maximum ; index++ ) {
       the_thread = (Thread_Control *) object_table[ index ];
