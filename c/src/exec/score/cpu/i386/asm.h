@@ -130,9 +130,9 @@
 #define END_DATA_DCL
 #define BEGIN_CODE .text
 #define END_CODE
-#define BEGIN_DATA
+#define BEGIN_DATA .data
 #define END_DATA
-#define BEGIN_BSS
+#define BEGIN_BSS .bss
 #define END_BSS
 #define END
 
