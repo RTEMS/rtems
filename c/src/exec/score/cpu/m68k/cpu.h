@@ -39,12 +39,11 @@ extern "C" {
 #if ( M68K_HAS_SEPARATE_STACKS == 1)
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK 0
 #define CPU_HAS_HARDWARE_INTERRUPT_STACK 1
-#define CPU_ALLOCATE_INTERRUPT_STACK     1
 #else
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK 1
 #define CPU_HAS_HARDWARE_INTERRUPT_STACK 0
-#define CPU_ALLOCATE_INTERRUPT_STACK     1
 #endif
+#define CPU_ALLOCATE_INTERRUPT_STACK     1
 
 /*
  *  Does the RTEMS invoke the user's ISR with the vector number and
