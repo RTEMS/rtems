@@ -109,7 +109,12 @@ typedef signed long int64_t;
 typedef unsigned long uint64_t;
 #define __int64_t_defined 1
 #define __rtems_long64 1
-#elif  __EXP(LONG_LONG_MAX) > 0x7fffffff
+#elif  defined(__LONG_LONG_MAX__) && (__LONG_LONG_MAX__ > 0x7fffffff)
+typedef signed long long int64_t;
+typedef unsigned long long uint64_t;
+#define __int64_t_defined 1
+#define __rtems_longlong64 1
+#elif  defined(LLONG_MAX) && (LLONG_MAX > 0x7fffffff)
 typedef signed long long int64_t;
 typedef unsigned long long uint64_t;
 #define __int64_t_defined 1

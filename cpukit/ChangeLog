@@ -1,3 +1,9 @@
+2004-11-07	Ralf Corsepius <ralf.corsepiu@rtems.org>
+
+	* libcsupport/include/sys/_stdint.h: Special-case int64_t (GCC has
+	__LONG_LONG_MAX__, while POSIX mandates LLONG_MAX. This break 
+	__EXP(LONG_LONG_MAX)).
+
 2004-11-05	Joel Sherrill <joel@OARcorp.com>
 
 	* libnetworking/machine/endian.h: Protect BYTE_ORDER from double
