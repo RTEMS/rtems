@@ -54,7 +54,6 @@ void bsp_predriver_hook(void)
 
 void bsp_start( void )
 {
-  unsigned8 dummy;
   extern void          * _WorkspaceBase;
   extern void          *_RamSize;
   extern unsigned long  _M68k_Ramsize;
@@ -83,6 +82,6 @@ void bsp_start( void )
 
 #include <rtems/bspIo.h>
 
-int debug_putc( char c ) { write( 2, &c, 1 ); return 0; }
+void debug_putc( char c ) { write( 2, &c, 1 ); }
 BSP_output_char_function_type BSP_output_char =  debug_putc;
 BSP_polling_getchar_function_type BSP_poll_char = NULL;

@@ -56,7 +56,7 @@ console_tbl	Console_Port_Tbl[] = {
 		mc68681_set_register_2,		/* setRegister */
 		NULL, /* unused */		/* getData */
 		NULL, /* unused */		/* setData */
-                mc68681_baud_rate_table,	/* ulClock */
+                (unsigned32)mc68681_baud_rate_table,	/* ulClock */
 		MC68681_VECTOR			/* ulIntVector */
 	}
 };
