@@ -25,7 +25,7 @@ extern "C" {
 
 typedef struct {
   ITRON_Objects_Control       Object;
-  unsigned32                  count;
+  uint32_t                    count;
   boolean                     do_message_priority;
   CORE_message_queue_Control  message_queue;
 }   ITRON_Mailbox_Control;
@@ -46,7 +46,7 @@ ITRON_EXTERN Objects_Information  _ITRON_Mailbox_Information;
  */
 
 void _ITRON_Mailbox_Manager_initialization(
-  unsigned32 maximum_mailboxes
+  uint32_t   maximum_mailboxes
 );
 
 /*

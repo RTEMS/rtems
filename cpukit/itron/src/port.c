@@ -29,7 +29,7 @@
  */
 
 void _ITRON_Port_Manager_initialization(
-  unsigned32 maximum_ports
+  uint32_t   maximum_ports
 ) 
 {
   _Objects_Initialize_information(

@@ -32,7 +32,7 @@
  */
 
 void _ITRON_Mailbox_Manager_initialization(
-  unsigned32 maximum_mailboxes
+  uint32_t   maximum_mailboxes
 ) 
 {
   _Objects_Initialize_information(

@@ -25,7 +25,7 @@ extern "C" {
 
 typedef struct {
   ITRON_Objects_Control   Object;
-  unsigned32              XXX_more_stuff_goes_here;
+  uint32_t                XXX_more_stuff_goes_here;
 }   ITRON_Variable_memory_pool_Control;
 
 /*
@@ -44,7 +44,7 @@ ITRON_EXTERN Objects_Information  _ITRON_Variable_memory_pool_Information;
  */
 
 void _ITRON_Variable_memory_pool_Manager_initialization(
-  unsigned32 maximum_variable_memory_pools
+  uint32_t   maximum_variable_memory_pools
 );
 
 /*

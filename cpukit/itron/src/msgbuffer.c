@@ -33,7 +33,7 @@
  */
 
 void _ITRON_Message_buffer_Manager_initialization(
-  unsigned32 maximum_message_buffers
+  uint32_t   maximum_message_buffers
 ) 
 {
   _Objects_Initialize_information(

@@ -34,7 +34,7 @@ ER trcv_msg(
   Watchdog_Interval               interval;
   boolean                         wait;
   Objects_Locations               location;
-  unsigned32                      size;
+  uint32_t                        size;
 
   if (!ppk_msg)
     return E_PAR;

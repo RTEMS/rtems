@@ -79,8 +79,8 @@ User_extensions_routine _ITRON_Task_Delete_extension(
 
 void _ITRON_Task_Initialize_user_tasks( void )
 {
-  unsigned32                        index;
-  unsigned32                        maximum;
+  uint32_t                          index;
+  uint32_t                          maximum;
   ER                                return_value;
   itron_initialization_tasks_table *user_tasks;
 
@@ -178,8 +178,8 @@ User_extensions_Control _ITRON_Task_User_extensions = {
  */
 
 void _ITRON_Task_Manager_initialization(
-  unsigned32                        maximum_tasks,
-  unsigned32                        number_of_initialization_tasks,
+  uint32_t                          maximum_tasks,
+  uint32_t                          number_of_initialization_tasks,
   itron_initialization_tasks_table *user_tasks
 )
 {

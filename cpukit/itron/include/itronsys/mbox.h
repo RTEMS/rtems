@@ -47,7 +47,7 @@ typedef struct t_msg {
 
   INT       msgpri;   /* priority of each message */
   /* VB   msgcont[];  XXX */
-  unsigned8 msgcont[1];
+  uint8_t   msgcont[1];
 } T_MSG;
 
 /*

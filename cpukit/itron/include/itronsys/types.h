@@ -22,16 +22,16 @@ extern "C" {
  *       off the shell programs including paranoia.
  */
 
-typedef signed8      B;       /* signed 8-bit integer */
-typedef signed16     H;       /* signed 16-bit integer */
-typedef signed32     W;       /* signed 32-bit integer */
-typedef unsigned8    UB;      /* unsigned 8-bit integer */
-typedef unsigned16   UH;      /* unsigned 16-bit integer */
-typedef unsigned32   UW;      /* unsigned 32-bit integer */
+typedef int8_t        B;       /* signed 8-bit integer */
+typedef int16_t       H;       /* signed 16-bit integer */
+typedef int32_t       W;       /* signed 32-bit integer */
+typedef uint8_t      UB;      /* unsigned 8-bit integer */
+typedef uint16_t     UH;      /* unsigned 16-bit integer */
+typedef uint32_t     UW;      /* unsigned 32-bit integer */
 
-typedef unsigned32   VW;      /* unpredictable data type (32-bit size) */
-typedef unsigned16   VH;      /* unpredictable data type (16-bit size) */
-typedef unsigned8    VB;      /* unpredictable data type (8-bit size) */
+typedef uint32_t     VW;      /* unpredictable data type (32-bit size) */
+typedef uint16_t     VH;      /* unpredictable data type (16-bit size) */
+typedef uint8_t      VB;      /* unpredictable data type (8-bit size) */
 
 typedef void        *VP;      /* pointer to an unpredictable data type */
 
@@ -53,26 +53,26 @@ typedef void (*FP)();         /* program start address */
  *  and/or have special meanings.
  */
 
-typedef signed32   INT;    /* Signed integer (bit width of processor) */
-typedef unsigned32 UINT;   /* Unsigned integer (bit width of processor) */
+typedef int32_t     INT;    /* Signed integer (bit width of processor) */
+typedef uint32_t   UINT;   /* Unsigned integer (bit width of processor) */
 typedef boolean    BOOL;   /* Boolean value.  TRUE (1) or FALSE (0). */
-typedef signed16   FN;     /* Function code. Signed integer. Maximum 2 bytes. */
+typedef int16_t     FN;     /* Function code. Signed integer. Maximum 2 bytes. */
 typedef int        ID;     /* Object ID number (???id) */
                            /*   Value range depends on the system.  Usually */
                            /*   a signed integer.  Certain ID values may */
                            /*   represent objects on other nodes when the */
                            /*   connection function is supported. */
 
-typedef unsigned32 BOOL_ID;/* Boolean value or ID number */
+typedef uint32_t   BOOL_ID;/* Boolean value or ID number */
 
-typedef signed32 HNO;      /* Handler number */
-typedef signed32 RNO;      /* Rendezvous number */
-typedef signed32 NODE;     /* Node Number.  Usually a signed integer. */
-typedef signed32 ATR;      /* Object or handler attribute. */
+typedef int32_t   HNO;      /* Handler number */
+typedef int32_t   RNO;      /* Rendezvous number */
+typedef int32_t   NODE;     /* Node Number.  Usually a signed integer. */
+typedef int32_t   ATR;      /* Object or handler attribute. */
                            /*   An unsigned integer. */
-typedef signed32 ER;       /* Error code.  A signed integer. */
-typedef unsigned32 PRI;    /* Task priority.  A signed integer. */
-typedef signed32 TMO;      /* Timeout value.  A signed integer. */
+typedef int32_t   ER;       /* Error code.  A signed integer. */
+typedef uint32_t   PRI;    /* Task priority.  A signed integer. */
+typedef int32_t   TMO;      /* Timeout value.  A signed integer. */
                            /*   TMO_POL = 0 indicates polling, */
                            /*   while TMO_FEVR = -1 indicates wait forever. */
 

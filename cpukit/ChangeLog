@@ -1,5 +1,23 @@
 2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* itron/include/itronsys/mbox.h, itron/include/itronsys/types.h,
+	itron/include/rtems/itron/eventflags.h,
+	itron/include/rtems/itron/fmempool.h,
+	itron/include/rtems/itron/mbox.h,
+	itron/include/rtems/itron/msgbuffer.h,
+	itron/include/rtems/itron/port.h,
+	itron/include/rtems/itron/semaphore.h,
+	itron/include/rtems/itron/task.h,
+	itron/include/rtems/itron/vmempool.h,
+	itron/inline/rtems/itron/semaphore.inl,
+	itron/macros/rtems/itron/semaphore.inl, itron/src/eventflags.c,
+	itron/src/fmempool.c, itron/src/itronsem.c, itron/src/mbox.c,
+	itron/src/msgbuffer.c, itron/src/port.c, itron/src/snd_mbx.c,
+	itron/src/task.c, itron/src/trcv_mbx.c, itron/src/vmempool.c:
+	Convert to using c99 fixed size types.
+
+2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* posix/include/rtems/posix/cond.h,
 	posix/include/rtems/posix/intr.h, posix/include/rtems/posix/key.h,
 	posix/include/rtems/posix/mqueue.h,

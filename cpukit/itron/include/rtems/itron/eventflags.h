@@ -24,7 +24,7 @@ extern "C" {
 
 typedef struct {
   ITRON_Objects_Control   Object;
-  unsigned32              XXX_more_stuff_goes_here;
+  uint32_t                XXX_more_stuff_goes_here;
 }   ITRON_Eventflags_Control;
 
 /*
@@ -43,7 +43,7 @@ ITRON_EXTERN Objects_Information  _ITRON_Eventflags_Information;
  */
 
 void _ITRON_Eventflags_Manager_initialization(
-  unsigned32 maximum_eventflags
+  uint32_t   maximum_eventflags
 );
 
 /*

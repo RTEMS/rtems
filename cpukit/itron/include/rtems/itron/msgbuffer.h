@@ -46,7 +46,7 @@ ITRON_EXTERN Objects_Information  _ITRON_Message_buffer_Information;
  */
 
 void _ITRON_Message_buffer_Manager_initialization(
-  unsigned32 maximum_message_buffers
+  uint32_t   maximum_message_buffers
 );
 
 /*

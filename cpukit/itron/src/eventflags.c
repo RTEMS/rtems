@@ -29,7 +29,7 @@
  */
 
 void _ITRON_Eventflags_Manager_initialization(
-  unsigned32 maximum_eventflags
+  uint32_t   maximum_eventflags
 ) 
 {
   _Objects_Initialize_information(

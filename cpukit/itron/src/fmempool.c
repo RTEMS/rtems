@@ -30,7 +30,7 @@
  */
 
 void _ITRON_Fixed_memory_pool_Manager_initialization(
-  unsigned32 maximum_fixed_memory_pools
+  uint32_t   maximum_fixed_memory_pools
 ) 
 {
   _Objects_Initialize_information(

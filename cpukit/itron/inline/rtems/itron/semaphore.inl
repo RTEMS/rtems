@@ -153,7 +153,7 @@ RTEMS_INLINE_ROUTINE boolean _ITRON_Semaphore_Is_null (
  */
 
 RTEMS_INLINE_ROUTINE ER  _ITRON_Semaphore_Translate_core_semaphore_return_code (
-  unsigned32 the_semaphore_status
+  uint32_t   the_semaphore_status
 )
 {
 /* XXX need to be able to return "E_RLWAI" */

@@ -45,7 +45,7 @@ ITRON_EXTERN Objects_Information  _ITRON_Semaphore_Information;
  */
 
 void _ITRON_Semaphore_Manager_initialization(
-  unsigned32 maximum_semaphores
+  uint32_t   maximum_semaphores
 );
 
 #include <rtems/itron/semaphore.inl>

@@ -39,7 +39,7 @@ extern "C" {
 
 
 typedef struct {
-  unsigned32                unused;  /* no use for the API extension */
+  uint32_t                  unused;  /* no use for the API extension */
                                      /*   structure for ITRON identified yet */ 
 }  ITRON_API_Control;
 
@@ -56,7 +56,7 @@ ITRON_EXTERN Objects_Information _ITRON_Task_Information;
 
 ITRON_EXTERN itron_initialization_tasks_table
                *_ITRON_Task_User_initialization_tasks;
-ITRON_EXTERN unsigned32   _ITRON_Task_Number_of_initialization_tasks;
+ITRON_EXTERN uint32_t     _ITRON_Task_Number_of_initialization_tasks;
 
 
 /*
@@ -66,8 +66,8 @@ ITRON_EXTERN unsigned32   _ITRON_Task_Number_of_initialization_tasks;
  */
 
 void _ITRON_Task_Manager_initialization(
-  unsigned32                        maximum_tasks,
-  unsigned32                        number_of_initialization_tasks,
+  uint32_t                          maximum_tasks,
+  uint32_t                          number_of_initialization_tasks,
   itron_initialization_tasks_table *user_tasks
 );
 

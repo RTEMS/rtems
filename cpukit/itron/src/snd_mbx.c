@@ -31,7 +31,7 @@ ER snd_msg(
 {
   register ITRON_Mailbox_Control *the_mailbox;
   Objects_Locations                location;
-  unsigned32                       message_priority;
+  uint32_t                         message_priority;
   void                            *message_contents;
   CORE_message_queue_Status        msg_status;
 
