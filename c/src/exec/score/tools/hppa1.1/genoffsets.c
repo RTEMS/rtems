@@ -22,7 +22,9 @@
 
 #include <stdio.h>
 
+#if defined(__hpux__) && defined(__hppa__)
 #include <rtems/system.h>
+#endif
 
 void print_information( void );
 
