@@ -25,101 +25,24 @@
 
 /*PAGE
  *
- *  _CORE_mutex_Seize
+ *  _CORE_mutex_Seize (interrupt blocking support)
  *
- *  This routine attempts to allocate a mutex to the calling thread.
+ *  This routine blocks the caller thread after an attempt attempts to obtain
+ *  the specified mutex has failed.
  *
  *  Input parameters:
  *    the_mutex - pointer to mutex control block
- *    id        - id of object to wait on
- *    wait      - TRUE if wait is allowed, FALSE otherwise
  *    timeout   - number of ticks to wait (0 means forever)
- *
- *  Output parameters:  NONE
- *
- *  INTERRUPT LATENCY:
- *    available
- *    wait
  */
 
-void _CORE_mutex_Seize(
+void _CORE_mutex_Seize_interrupt_blocking(
   CORE_mutex_Control  *the_mutex,
-  Objects_Id           id,
-  boolean              wait,
   Watchdog_Interval    timeout
 )
 {
-  Thread_Control *executing;
-  ISR_Level       level;
+  Thread_Control   *executing;
 
   executing = _Thread_Executing;
-  switch ( the_mutex->Attributes.discipline ) {
-    case CORE_MUTEX_DISCIPLINES_FIFO:
-    case CORE_MUTEX_DISCIPLINES_PRIORITY:
-    case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-      break;
-    case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-      if ( executing->current_priority <
-                              the_mutex->Attributes.priority_ceiling) {
-        executing->Wait.return_code = CORE_MUTEX_STATUS_CEILING_VIOLATED;
-        return;
-      }
-  }
-  executing->Wait.return_code = CORE_MUTEX_STATUS_SUCCESSFUL;
-  _ISR_Disable( level );
-  if ( ! _CORE_mutex_Is_locked( the_mutex ) ) {
-    the_mutex->lock       = CORE_MUTEX_LOCKED;
-    the_mutex->holder     = executing;
-    the_mutex->holder_id  = executing->Object.id;
-    the_mutex->nest_count = 1;
-    executing->resource_count++;
-    _ISR_Enable( level );
-    switch ( the_mutex->Attributes.discipline ) {
-      case CORE_MUTEX_DISCIPLINES_FIFO:
-      case CORE_MUTEX_DISCIPLINES_PRIORITY:
-      case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-        /* already the highest priority */
-        break;
-      case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-      if ( the_mutex->Attributes.priority_ceiling <
-                                           executing->current_priority ) {
-        _Thread_Change_priority(
-          the_mutex->holder,
-          the_mutex->Attributes.priority_ceiling,
-          FALSE
-        );
-      }
-    }
-    executing->Wait.return_code = CORE_MUTEX_STATUS_SUCCESSFUL;
-    return;
-  }
-
-  if ( _Thread_Is_executing( the_mutex->holder ) ) {
-    switch ( the_mutex->Attributes.lock_nesting_behavior ) {
-      case CORE_MUTEX_NESTING_ACQUIRES:
-        the_mutex->nest_count++;
-        _ISR_Enable( level );
-        return;
-      case CORE_MUTEX_NESTING_IS_ERROR:
-        executing->Wait.return_code = CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
-        _ISR_Enable( level );
-        return;
-      case CORE_MUTEX_NESTING_BLOCKS:
-        break;
-    }
-  }
-
-  if ( !wait ) {
-    _ISR_Enable( level );
-    executing->Wait.return_code = CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT;
-    return;
-  }
-
-  _Thread_queue_Enter_critical_section( &the_mutex->Wait_queue );
-  executing->Wait.queue = &the_mutex->Wait_queue;
-  executing->Wait.id    = id;
-  _ISR_Enable( level );
-
   switch ( the_mutex->Attributes.discipline ) {
     case CORE_MUTEX_DISCIPLINES_FIFO:
     case CORE_MUTEX_DISCIPLINES_PRIORITY:
@@ -136,6 +59,7 @@ void _CORE_mutex_Seize(
       break;
   }
 
+  the_mutex->blocked_count++;
   _Thread_queue_Enqueue( &the_mutex->Wait_queue, timeout );
 
   if ( _Thread_Executing->Wait.return_code == CORE_MUTEX_STATUS_SUCCESSFUL ) {
@@ -156,5 +80,5 @@ void _CORE_mutex_Seize(
         break;
     }
   }
+  _Thread_Enable_dispatch();
 }
-
