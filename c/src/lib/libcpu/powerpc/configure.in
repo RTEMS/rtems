@@ -68,6 +68,7 @@ mpc6xx/Makefile
 mpc6xx/clock/Makefile
 mpc6xx/exceptions/Makefile
 mpc6xx/mmu/Makefile
+mpc6xx/timer/Makefile
 mpc6xx/wrapup/Makefile
 shared/Makefile
 wrapup/Makefile)
