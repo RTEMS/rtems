@@ -740,14 +740,14 @@ void BuildTexinfoNodes( void )
      */
 
     new_line = AllocateLine();
-    strcpy( new_line->Contents, "@ifinfo" );
+    strcpy( new_line->Contents, "" ); /*"@ifinfo" ); */
     _Chain_Insert( line->Node.previous, &new_line->Node );
 
     node_line = AllocateLine();
     _Chain_Insert( line->Node.previous, &node_line->Node );
 
     new_line = AllocateLine();
-    strcpy( new_line->Contents, "@end ifinfo" );
+    strcpy( new_line->Contents, "" ); /* "@end ifinfo" ); */
     _Chain_Insert( line->Node.previous, &new_line->Node );
 
     next_node = (Line_Control *) line->Node.next;
