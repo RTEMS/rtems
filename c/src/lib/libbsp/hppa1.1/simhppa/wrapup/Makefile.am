@@ -1,10 +1,9 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-BSP_FILES = startup tty
 # pieces to pick up out of libcpu/hppa
 CPU_FILES = clock milli timer
 
@@ -16,7 +15,7 @@ GENERIC_FILES = $(GENERIC_MP_REL_FILES)
 if HAS_MP
 BSP_MP_O_FILES = shmsupp
 endif
-BSP_FILES = $(BSP_MP_O_FILES)
+BSP_FILES = start tty $(BSP_MP_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/lib.am

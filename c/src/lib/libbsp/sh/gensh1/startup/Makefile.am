@@ -1,13 +1,13 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
+
 PGM = $(ARCH)/startup.rel
 
-VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
-   
 C_FILES = bsplibc.c bsppost.c bspstart.c bspclean.c sbrk.c bootcard.c main.c \
     gnatinstallhandler.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)

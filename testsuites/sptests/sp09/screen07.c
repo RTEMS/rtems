@@ -18,6 +18,8 @@
 
 #include "system.h"
 
+#define MESSAGE_SIZE (sizeof(long) * 4)
+
 void Screen7()
 {
   long              buffer[ 4 ];
@@ -25,7 +27,7 @@ void Screen7()
   rtems_unsigned32  count;
   rtems_status_code status;
 
-  status = rtems_message_queue_broadcast( 100, (long (*)[4]) buffer, 16, &count );
+  status = rtems_message_queue_broadcast( 100, buffer, MESSAGE_SIZE, &count );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
@@ -36,7 +38,7 @@ void Screen7()
   status = rtems_message_queue_create(
     0,
     3,
-    16,
+    MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
   );
@@ -56,7 +58,7 @@ void Screen7()
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
     1,
-    16,
+    MESSAGE_SIZE,
     RTEMS_GLOBAL,
     &Junk_id
   );
@@ -71,7 +73,7 @@ void Screen7()
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
     2,
-    16,
+    MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id[ 1 ]
   );
@@ -83,7 +85,7 @@ void Screen7()
   status = rtems_message_queue_create(
     Queue_name[ 2 ],
     1,
-    16,
+    MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
   );
@@ -180,7 +182,7 @@ void Screen7()
     "TA1 - rtems_message_queue_receive - Q 1 - woke up with RTEMS_TIMEOUT"
   );
 
-  status = rtems_message_queue_send( 100, (long (*)[4]) buffer, 16 );
+  status = rtems_message_queue_send( 100, buffer, MESSAGE_SIZE );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ID,
@@ -188,15 +190,15 @@ void Screen7()
   );
   puts( "TA1 - rtems_message_queue_send - RTEMS_INVALID_ID" );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4]) buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
   puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1 - RTEMS_SUCCESSFUL" );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4]) buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
   puts( "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1 - RTEMS_SUCCESSFUL" );
 
-  status = rtems_message_queue_send( Queue_id[ 1 ], (long (*)[4]) buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   fatal_directive_status(
     status,
     RTEMS_TOO_MANY,

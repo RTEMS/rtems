@@ -46,7 +46,17 @@ extern "C" {
  *
  */
 
-#if defined(i386_fp)
+#if defined(rtems_multilib)
+/*
+ *  Figure out all CPU Model Feature Flags based upon compiler 
+ *  predefines. 
+ */
+
+#define CPU_MODEL_NAME  "rtems_multilib"
+#define I386_HAS_FPU   0
+#define I386_HAS_BSWAP 0
+
+#elif defined(i386_fp)
 
 #define CPU_MODEL_NAME  "i386 with i387"
 #define I386_HAS_BSWAP 0

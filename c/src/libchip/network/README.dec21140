@@ -4,13 +4,16 @@
 
 This TULIP driver can be used on BSPs that support PCI bus.
 
-It can handle any DEC21140 based Ethernet controller. 
+It can handle any DEC21140 and DEC21143 based Ethernet controller
+although the DEC21143 support has only been tested on Intel.
   
 It works on big or little endian target.
 
-It has been tested with powerpc/mcp750 BSP (OnBoard Ethernet
+The DEC21140 has been tested with powerpc/mcp750 BSP (OnBoard Ethernet
 controller) and i386/pc386 BSP (D-Link DFE-500TX Ethernet board).
 
+The DEC21143 has been tested only on the i386/pc386 using
+the Kingston KNE100TX with 21143PD chip.
 
 *****************************************************************
 ********                                          ***************

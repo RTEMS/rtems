@@ -33,6 +33,24 @@ extern "C" {
 
 
 /*
+ *  confdefs.h overrides for this BSP:
+ *   - termios serial ports (defaults to 1)
+ *   - Interrupt stack space is not minimum if defined.
+ */
+
+#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 4
+#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
+  
+/*
+ * Network driver configuration
+ */
+ 
+struct rtems_bsdnet_ifconfig;
+extern int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig );
+#define RTEMS_BSP_NETWORK_DRIVER_NAME   "uti1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH uti596_attach
+
+/*
  *  This is NOT the base address of local RAM!
  *  This is the base local address of the VMEbus short I/O space. A local
  *  access to this space results in a A16 VMEbus I/O cycle. This base address
@@ -394,7 +412,27 @@ typedef volatile struct cd2401_regs_ {
 /* CD2401 is clocked at 20 MHz */
 #define CD2401_CLK_RATE 20000000
 
-void console_reserve_resources( rtems_configuration_table *configuration );
+/* 
+ *  Debug print functions: implemented in console.c
+ */
+void printk( char *fmt, ... );
+void BSP_output_string( char * buf );
+
+/*
+ *  Representation of 82596CA LAN controller: Memory Map
+ */
+typedef volatile struct i82596_regs_ {
+  unsigned short	port_lower;				  /* 0xFFF46000 */
+  unsigned short	port_upper;     		/* 0xFFF46002 */
+  unsigned long		chan_attn;				  /* 0xFFF46004 */
+} i82596_regs;
+
+/*
+ *  Base address of the 82596.
+ */
+#define i82596    ((i82596_regs * const) 0xFFF46000)
+
+
 
 /* BSP-wide functions */
 

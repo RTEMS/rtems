@@ -193,7 +193,7 @@ int websOpenListen(int port, int retries)
 			orig, port - 1);
 		return -1;
 	} 
-	trace(0, T("webs: Listening for HTTP requests on port %d\n"), port);
+	goahead_trace(0, T("webs: Listening for HTTP requests on port %d\n"), port);
 
 /*
  *	Determine the full URL address to access the home page for this web server
@@ -269,7 +269,7 @@ static int websAccept(int sid, char *ipaddr, int port)
  *	Arrange for a timeout to kill hung requests
  */
 	wp->timeout = emfCreateTimer(WEBS_TIMEOUT, websTimeout, (long) wp);
-	trace(5, T("webs: accept request\n"));
+	goahead_trace(5, T("webs: accept request\n"));
 	return 0;
 }
 
@@ -1144,7 +1144,7 @@ int websWrite(webs_t wp, char_t* fmt, ...)
 	buf = NULL;
 	rc = 0;
 	if (gvsnprintf(&buf, WEBS_BUFSIZE, fmt, vargs) >= WEBS_BUFSIZE) {
-		trace(0, T("webs: websWrite lost data, buffer overflow\n"));
+		goahead_trace(0, T("webs: websWrite lost data, buffer overflow\n"));
 	}
 	va_end(vargs);
 	a_assert(buf);

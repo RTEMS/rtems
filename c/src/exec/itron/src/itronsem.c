@@ -41,7 +41,7 @@ void _ITRON_Semaphore_Manager_initialization(
     sizeof( ITRON_Semaphore_Control ), /* size of this object's control block */
     FALSE,                             /* TRUE if names for this object */
                                        /*   are strings */
-    RTEMS_MAXIMUM_NAME_LENGTH,         /* maximum length of each object's */
+    ITRON_MAXIMUM_NAME_LENGTH,         /* maximum length of each object's */
                                        /*   name */
     FALSE                              /* TRUE if this class is threads */
   );

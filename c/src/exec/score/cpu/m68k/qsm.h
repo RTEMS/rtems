@@ -41,10 +41,6 @@
 #ifndef _QSM_H_
 #define _QSM_H_
 
-
-#include <efi332.h>
-
-
 /* SAM-- shift and mask */
 #undef  SAM
 #define SAM(a,b,c) ((a << b) & c)

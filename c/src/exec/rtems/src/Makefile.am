@@ -42,7 +42,7 @@ SIGNAL_C_FILES = signal.c signalcatch.c signalsend.c
 
 REGION_C_FILES = region.c regioncreate.c regiondelete.c regionextend.c \
     regiongetsegment.c regiongetsegmentsize.c regionident.c \
-    regionreturnsegment.c regionreturnsegment.c
+    regionreturnsegment.c
 
 PARTITION_C_FILES = part.c partcreate.c partdelete.c partgetbuffer.c \
     partident.c partreturnbuffer.c
@@ -70,9 +70,8 @@ OBJS = $(C_O_FILES)
 #
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
-AM_CFLAGS += $(CFLAGS_OS_V)
 
-all: ${ARCH} ${OBJS}
+all-local: ${ARCH} ${OBJS}
 
 EXTRA_DIST = $(STD_C_FILES) $(MP_C_FILES)
 

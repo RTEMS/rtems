@@ -15,8 +15,7 @@ FP_TESTS = paranoia
 SUBDIRS = hello ticker base_sp unlimited minimum $(MP_TESTS) \
     $(CPLUSPLUS_TESTS) $(FP_TESTS)
 
-AUTOMAKE_FILES = \
-sample.am
+AUTOMAKE_FILES = sample.am
 
 EXTRA_DIST = $(AUTOMAKE_FILES)
 

@@ -14,8 +14,8 @@
  *  $Id$
  */
 
-#ifndef __NO_BSP_h
-#define __NO_BSP_h
+#ifndef __PORTSW_h
+#define __PORTSW_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,6 +24,15 @@ extern "C" {
 #include <rtems.h>
 #include <console.h>
 #include <clockdrv.h>
+
+/*
+ *  confdefs.h overrides for this BSP:
+ *   - number of termios serial ports (defaults to 1)
+ *   - Interrupt stack space is not minimum if defined.
+ */
+
+/* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
+#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.

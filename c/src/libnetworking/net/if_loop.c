@@ -118,6 +118,7 @@ rtems_bsdnet_loopattach(dummy)
 	    ifp->if_type = IFT_LOOP;
 	    ifp->if_hdrlen = 0;
 	    ifp->if_addrlen = 0;
+	    ifp->if_snd.ifq_maxlen = ifqmaxlen;
 	    if_attach(ifp);
 #if NBPFILTER > 0
 	    bpfattach(ifp, DLT_NULL, sizeof(u_int));

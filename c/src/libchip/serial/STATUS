@@ -37,12 +37,6 @@ MC68681
 NS16650
 =======
 
-+ Not tested in libchip context.  Based on Radstone PPC2 driver which worked 
-  well.
-
-+ Interrupt code has been reworked to not use ring buffer and may be broken
-  as it has not been tested since this was done.
-
 + ns16550_set-attributes function is untested.
 
 + Hardware flow control included but is currently disabled in ISR.

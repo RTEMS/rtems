@@ -4,23 +4,14 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-rtems_makedir=$(prefix)/make
+rtems_makedir = $(prefix)/make
 
-rtems_make_DATA = \
-main.cfg
+rtems_make_DATA = main.cfg leaf.cfg
 
-EXTRA_DIST = \
-README \
-directory.cfg \
-host.cfg.in \
-leaf.cfg \
-lib.cfg
+EXTRA_DIST = README directory.cfg host.cfg.in leaf.cfg lib.cfg
 
-SUBDIRS = \
-Templates \
-custom \
-compilers
+SUBDIRS = Templates custom compilers
 
 ## -------------------------------------------------------
 include $(top_srcdir)/automake/subdirs.am
-include $(top_srcdir)/automake/local.am
+include $(top_srcdir)/automake/host.am

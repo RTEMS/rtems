@@ -16,8 +16,6 @@
 
 #include <rtems.h>
 
-#include <tmacros.h>
-
 /* functions */
 
 rtems_task Init(
@@ -43,7 +41,9 @@ void test3();
 
 /* configuration information */
 
-#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#include <bsp.h> /* for device driver prototypes */
+
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -53,10 +53,6 @@ void test3();
 
 
 #include <confdefs.h>
-
-/* global variables */
-
-TEST_EXTERN rtems_id Global_variable;   /* example global variable     */
 
 /*
  * Keep track of the task id's created, use a large array.

@@ -72,7 +72,7 @@ rtems_status_code rtems_task_variable_add(
       _Thread_Enable_dispatch();
       return RTEMS_NO_MEMORY;
     }
-    new->var = 0;
+    new->gval = *ptr;
     new->ptr = ptr;
     new->dtor = dtor;
 

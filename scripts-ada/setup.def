@@ -1,17 +1,17 @@
 # RTEMS tools setup
 binutils_version=2.9.1
-binutils_patch_version=20000126
-binutils_rpm_release=1
+binutils_patch_version=20000429
+binutils_rpm_release=2
 newlib_version=1.8.2
-newlib_patch_version=20000131
+newlib_patch_version=20000525
 gcc_version=2.8.1
-gcc_patch_version=20000126
+gcc_patch_version=20000429
 gnat_version=3.12p
-gnat_patch_version=20000126
-gnatnewlib_rpm_release=2
+gnat_patch_version=20000429
+gnatnewlib_rpm_release=4
 gdb_version=4.17
-gdb_patch_version=20000126
-gdb_rpm_release=1
-rtems_version=19991117
+gdb_patch_version=20000429
+gdb_rpm_release=2
+rtems_version=4.5.0-beta2a
 rtems_rpm_release=1
 rpm_build_root=/tmp

@@ -113,12 +113,6 @@ void bsp_start( void )
   BSP_Configuration.work_space_start = work_space_start;
 
   /*
-   *  Account for the console's resources
-   */
-
-  console_reserve_resources( &BSP_Configuration );
-
-  /*
    *  initialize the CPU table for this BSP
    */
 
@@ -130,7 +124,7 @@ void bsp_start( void )
   Cpu_table.clicks_per_usec   = 66666667 / 4000000 / 2;
 
   Cpu_table.do_zero_of_workspace = TRUE;
-  Cpu_table.interrupt_stack_size = (12 * 1024);
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   /*
    *  Enable whatever caching is desired

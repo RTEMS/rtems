@@ -523,19 +523,6 @@ SetAttributes (int minor, const struct termios *t)
 }
 
 /******************************************************
-  Name: console_reserve_resources
-  Input parameters: -
-  Output parameters: -
-  Description: Reserve resources consumed by this driver
- *****************************************************/
-void console_reserve_resources(
-  rtems_configuration_table *configuration
-)
-{
-	rtems_termios_reserve_resources (configuration, 1);
-}
-
-/******************************************************
   Name: console_initialize
   Input parameters: MAJOR # of console_driver,
 		    minor is always 0,

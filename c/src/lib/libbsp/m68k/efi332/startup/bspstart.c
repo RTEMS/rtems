@@ -50,6 +50,10 @@ void bsp_start( void )
 {
   void           *vbr;
   extern void    *_WorkspaceBase;
+  extern void    *_RamSize;
+  extern unsigned long _M68k_Ramsize;
+
+  _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
 
   /*
    *  we only use a hook to get the C library initialized.

@@ -24,10 +24,8 @@ the Timing Test Suite:
 
    /* configuration information */
  
-   #define CONFIGURE_TMTEST
- 
-   #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
-   #define CONFIGURE_TEST_NEEDS_TIMER_DRIVER
+   #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+   #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
  
    #define CONFIGURE_MAXIMUM_TASKS              102
    #define CONFIGURE_MAXIMUM_TIMERS             100
@@ -60,13 +58,13 @@ template by default.
  { NULL, NULL, NULL, NULL, NULL, NULL }
  
 rtems_driver_address_table Device_drivers[] = {
-#ifdef CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
+#ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
   CONSOLE_DRIVER_TABLE_ENTRY,
 #endif
-#ifdef CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+#ifdef CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
   CLOCK_DRIVER_TABLE_ENTRY,
 #endif
-#ifdef CONFIGURE_TEST_NEEDS_STUB_DRIVER
+#ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
   STUB_DRIVER_TABLE_ENTRY,
 #endif
   NULL_DRIVER_TABLE_ENTRY,
@@ -83,7 +81,7 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
   }
 };
 
-#ifdef CONFIGURE_MPTEST
+#ifdef CONFIGURE_MP_APPLICATION
 /*
  *  NODE_NUMBER is assumed to be set on the compile line.
  */
@@ -127,7 +125,7 @@ rtems_configuration_table Configuration = {
                              /* number of device drivers */
   Device_drivers,            /* pointer to driver address table */
   NULL,                      /* pointer to initial extensions */
-#ifdef CONFIGURE_MPTEST
+#ifdef CONFIGURE_MP_APPLICATION
   &Multiprocessing_configuration
 #else
   NULL                       /* ptr to MP config table */

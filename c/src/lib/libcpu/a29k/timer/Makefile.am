@@ -1,10 +1,10 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-PGM=$(ARCH)/timer.rel
+PGM = $(ARCH)/timer.rel
 
 # NOTE: timerisr is normally an assembly file!!!
 

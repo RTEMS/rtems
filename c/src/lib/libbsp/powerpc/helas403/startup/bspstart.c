@@ -156,9 +156,6 @@ void bsp_start( void )
    *  tell the RTEMS configuration where it is.  This memory is
    *  not malloc'ed.  It is just "pulled from the air".
    */
-  /* FIXME: this should be modified. work_space_size cannot be valid 
-   * now, since console_reserve_resources will modify something...
-   */
   /* FIME: plan usage of RAM better: 
      - make top of ram dynamic,
      - take out some part for persistant log
@@ -170,19 +167,13 @@ void bsp_start( void )
       ((char *)(bsp_ram_end)) - BSP_Configuration.work_space_size;
 
   /*
-   *  Account for the console's resources
-   */
-
-  console_reserve_resources( &BSP_Configuration );
-
-  /*
    *  initialize the CPU table for this BSP
    */
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.predriver_hook  = bsp_predriver_hook;
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-  Cpu_table.interrupt_stack_size = 4 * 1024;
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   Cpu_table.clicks_per_usec = 25;
   Cpu_table.serial_per_sec = 25000000;

@@ -50,9 +50,9 @@ int IMFS_stat(
   buf->st_uid   = the_jnode->st_uid;
   buf->st_gid   = the_jnode->st_gid;
 
-  buf->st_atime = the_jnode->st_atime;
-  buf->st_mtime = the_jnode->st_mtime;
-  buf->st_ctime = the_jnode->st_ctime;
+  buf->st_atime = the_jnode->stat_atime;
+  buf->st_mtime = the_jnode->stat_mtime;
+  buf->st_ctime = the_jnode->stat_ctime;
 
   return 0;
 }

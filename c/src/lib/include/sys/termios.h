@@ -14,6 +14,8 @@
 #ifndef	TERMIOS_H
 #define	TERMIOS_H
 
+#include <sys/types.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -174,9 +176,15 @@ struct termios {
 #define	TCSADRAIN	1
 #define	TCSAFLUSH	2
 
+int	tcdrain(int);
+int	tcflow(int, int);
+int	tcflush(int, int);
 int	tcgetattr(int, struct termios *);
 int	tcsetattr(int, int, struct termios *);
-int	tcdrain(int);
+pid_t	tcgetprgrp(int);
+int	tcsetprgrp(int, pid_t);
+int	tcsendbreak(int, int);
+
 speed_t	cfgetospeed(const struct termios *tp);
 int	cfsetospeed(struct termios *tp, speed_t speed);
 speed_t	cfgetispeed(const struct termios *tp);

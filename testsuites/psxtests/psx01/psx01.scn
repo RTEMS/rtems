@@ -2,9 +2,11 @@
 Init: uname - EFAULT (invalid uts pointer argument)
 Init: uts.sysname: RTEMS
 Init: uts.nodename: Node 1
-Init: uts.release: rtems-19991105
+Init: uts.release: rtems-VERSION
+NOTE: VERSION will vary. 
 Init: uts.version: 
-Init: uts.machine: SPARC/erc32
+Init: uts.machine: CPU/BSP
+NOTE: CPU/BSP will vary. 
 
 Init: clock_gettime - EINVAL (invalid clockid)
 Init: clock_settime - EINVAL (invalid clockid)

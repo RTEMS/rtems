@@ -4,10 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-EXTRA_DIST = \
-gcc-no_bsp.cfg \
-gcc-portsw.cfg \
-gcc-target-default.cfg
+EXTRA_DIST = gcc-no_bsp.cfg gcc-portsw.cfg gcc-target-default.cfg
 
 ## -------------------------------------------------------
-include $(top_srcdir)/automake/local.am
+include $(top_srcdir)/automake/host.am

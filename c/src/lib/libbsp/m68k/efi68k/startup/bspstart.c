@@ -53,8 +53,12 @@ void bsp_pretasking_hook(void);               /* m68k version */
 
 void bsp_start( void )
 {
-  void           *vbr;
-  extern void    *_WorkspaceBase;
+  void                 *vbr;
+  extern void          *_WorkspaceBase;
+  extern void          *_RamSize;
+  extern unsigned long  _M68k_Ramsize;
+
+  _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
 
 /*   set_debug_traps();    */
 /*   breakpoint(); */

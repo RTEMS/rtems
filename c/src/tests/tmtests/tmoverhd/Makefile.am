@@ -1,8 +1,9 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
+
 TEST = tmoverhd
 
 MANAGERS = io
@@ -11,7 +12,7 @@ C_FILES = testtask.c empty.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 H_FILES = system.h dumrtems.h
-noinst_HEADERS =$(H_FILES)
+noinst_HEADERS = $(H_FILES)
 
 DOCTYPES = doc
 DOCS = $(DOCTYPES:%=$(TEST).%)

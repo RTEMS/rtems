@@ -58,7 +58,11 @@ void bsp_start( void )
 {
   m68k_isr_entry *monitors_vector_table;
   int             index;
-  extern void    *_WorkspaceBase;
+  extern void          *_WorkspaceBase;
+  extern void          *_RamSize;
+  extern unsigned long  _M68k_Ramsize;
+
+  _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
 
   duart_base = (unsigned char *)DUART_ADDR;
 
@@ -95,7 +99,7 @@ void bsp_start( void )
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_vector_table = (m68k_isr_entry *) &M68Kvec;
-  Cpu_table.interrupt_stack_size = 4096;
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   BSP_Configuration.work_space_start = (void *) &_WorkspaceBase;
  

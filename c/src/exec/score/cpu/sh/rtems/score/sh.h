@@ -39,7 +39,17 @@ extern "C" {
  *  dependent features are present in a particular member of the family.
  */
  
-#if defined(sh7032)
+#if defined(rtems_multilib)
+/*
+ *  Figure out all CPU Model Feature Flags based upon compiler 
+ *  predefines. 
+ */
+
+#define CPU_MODEL_NAME  "rtems_multilib"
+#define SH_HAS_FPU 	0
+#define SH_HAS_SEPARATE_STACKS 1
+
+#elif defined(sh7032)
 #define CPU_MODEL_NAME  "SH7032"
 #define SH_HAS_FPU 	0
 

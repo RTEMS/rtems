@@ -6,18 +6,33 @@
 RTEMS_DIR=`dirname $0`
 CFG=./setup.cache
 dst=@RPM_SPECSdir@
+target=@target@
+rpm_cpu=@RPM_CPU@
 
 usage()
 {
   echo "$0 [options] <target_alias>"
   echo "  options:"
+  echo "    -b                  -- build binutils"
+  echo "    -g                  -- build gcc/newlib"
+  echo "    -d                  -- build gdb"
+  echo "    -t                  -- enable test/debug mode"
   echo "    -cfg <setup.cache>"
   echo "    -o <rpm-spec-dir>"
   exit 1 ;
 }
 
+testing=no
+do_binutils=no
+do_gccnewlib=no
+do_gdb=no
+
 while test $# -ge 1; do
   case $1 in
+    -b) do_binutils=yes  ; shift;;
+    -g) do_gccnewlib=yes ; shift;; 
+    -d) do_gdb=yes       ; shift;; 
+    -t) do_test=yes      ; shift;; 
     -cfg)
       test $# -ge 2 || usage
       shift
@@ -41,6 +56,12 @@ while test $# -ge 1; do
   esac
 done
 
+if test ${do_binutils} = no -a ${do_gccnewlib} = no -a ${do_gdb} = no ; then
+  echo "You must request building binutils, gcc/newlib, or gdb."
+  usage
+fi
+
+
 # This is the full list .. hppa1.1 does not build now.
 #ALL_TARGETS="hppa1.1-rtems i386-rtems i960-rtems m68k-rtems \
 #  m68k-rtemself mips64orion-rtems \
@@ -61,11 +82,6 @@ newlib=${newlib_version}
 # also use binutils_rpm_release
 buildroot=/tmp
 
-testing=no
-do_binutils=yes
-do_gccnewlib=yes
-do_gdb=yes
-
 #
 #  Now get started
 #
@@ -77,7 +93,7 @@ if [ ${testing} = yes ] ; then
   ECHO=echo
 fi
 
-installed_count=`rpm -qa | grep rtems | wc -l`
+installed_count=`rpm -q -g rtems | wc -l`
 if [ ${installed_count} -ne 0 ] ; then
   echo This script should be run with NO rtems RPMs installed.
   echo It appears that the following rtems RPMs are installed:
@@ -135,8 +151,8 @@ do
     # now build gcc/newlib
     #    NOTE: This requires having binutils installed and we immediately
     #          remove it once finished.
-    base_binutils_rpm=${dst}/../RPMS/i386/rtems-base-binutils-${binutils}-${binutils_rpm_release}.i386.rpm
-    binutils_rpm=${dst}/../RPMS/i386/${target}-binutils-${binutils}-${binutils_rpm_release}.i386.rpm
+    base_binutils_rpm=${dst}/../RPMS/${rpm_cpu}/rtems-base-binutils-${binutils}-${binutils_rpm_release}.${rpm_cpu}.rpm
+    binutils_rpm=${dst}/../RPMS/${rpm_cpu}/${target}-binutils-${binutils}-${binutils_rpm_release}.${rpm_cpu}.rpm
     if [ ! -f ${binutils_rpm} ] ; then
       echo There is no RPM for binutils for ${target}.
       echo Looked for ${binutils_rpm}.

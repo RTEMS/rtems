@@ -2,7 +2,9 @@
 #  $Id$
 #
 
-include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_MAKEFILE_PATH)/Makefile.inc
+
+include $(RTEMS_CUSTOM)
 include $(RTEMS_ROOT)/make/directory.cfg
 
 SUBDIRS=a b c your-directories-go-here

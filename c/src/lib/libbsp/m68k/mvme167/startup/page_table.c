@@ -79,7 +79,7 @@ void page_table_init(
    *  E = 0b1                     enable address translation
    *  S-Field = 0b1X              ignore FC2 when matching
    *  U1, U0 = 0b00               user page attributes not used
-   *  CM = 0b01                   cachable, writethrough
+   *  CM = 0b01                   cachable, copyback
    *  W = 0b0                     read/write access allowed
    */
   dtt0 = 0x007FC020;

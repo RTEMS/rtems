@@ -40,10 +40,8 @@ void Task_switch(
 
 /* configuration information */
 
-#define CONFIGURE_SPTEST
-
-#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS     1
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
@@ -51,6 +49,7 @@ void Task_switch(
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_MAXIMUM_TASKS             4
 
 #include <confdefs.h>
 
@@ -68,12 +67,15 @@ TEST_EXTERN volatile rtems_unsigned32 Run_count[ 4 ];
 /*
  * Keep track of task switches
  */
+
 struct taskSwitchLog {
   int               taskIndex;
   rtems_time_of_day when;
 };
+
 extern struct taskSwitchLog taskSwitchLog[];
 extern int taskSwitchLogIndex;
 volatile extern int testsFinished;
+
 
 /* end of include file */

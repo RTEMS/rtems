@@ -1,11 +1,12 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-## FIXME
 VPATH = @srcdir@:@srcdir@/../../ppc403/vectors
+
+## FIXME
 
 PGM = ${ARCH}/vectors.rel
 
@@ -20,8 +21,6 @@ include $(top_srcdir)/../../../../../automake/lib.am
 #
 # (OPTIONAL) Add local stuff here using +=
 #
-
-AM_CFLAGS = $(CFLAGS_OS_V)
 
 $(PGM): $(vectors_rel_OBJECTS)
 	$(make-rel)

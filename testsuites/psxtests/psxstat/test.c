@@ -239,14 +239,8 @@ void chown_multiple_files(
   uid_t  st_uid;
   gid_t  st_gid;
 
-#if defined(RTEMS_POSIX_API)
   st_uid = geteuid();
   st_gid = getegid();
-#else
-  st_uid = 100;
-e
-  st_gid = 0;
-#endif
 
   i = 0;
   while ( files[i] ) {

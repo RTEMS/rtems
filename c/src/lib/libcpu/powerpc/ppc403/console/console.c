@@ -404,16 +404,6 @@ spiInitialize(void)
  ***************
  */
 
-/*
- * Reserve resources consumed by this driver
- */
-void console_reserve_resources(
-  rtems_configuration_table *configuration
-)
-{
-	rtems_termios_reserve_resources (configuration, 1);
-}
-
 /*  console_initialize
  *
  *  This routine initializes the console IO driver.

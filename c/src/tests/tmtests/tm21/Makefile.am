@@ -1,8 +1,9 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
+
 TEST = tm21
 
 MANAGERS = io dpmem message partition region semaphore rate_monotonic timer
@@ -11,7 +12,7 @@ C_FILES = task1.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 H_FILES = system.h
-noinst_HEADERS =$(H_FILES)
+noinst_HEADERS = $(H_FILES)
 
 DOCTYPES = doc
 DOCS = $(DOCTYPES:%=$(TEST).%)

@@ -63,7 +63,7 @@ int mq_unlink(
     _Objects_Get_index( the_mq_id )
   );
   
-#if defined(RTEMS_MULTIPROCESSING)
+#if 0 && defined(RTEMS_MULTIPROCESSING)
   if ( the_mq->process_shared == PTHREAD_PROCESS_SHARED ) {
     _Objects_MP_Close( &_POSIX_Message_queue_Information, the_mq_id );
   }

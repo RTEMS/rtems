@@ -189,7 +189,7 @@ void ejLexFreeInputState(ej_t* ep, ejinput_t* state)
 int ejLexGetToken(ej_t* ep, int state)
 {
 	ep->tid = getLexicalToken(ep, state);
-	trace(7, T("ejGetToken: %d, \"%s\"\n"), ep->tid, ep->token);
+	goahead_trace(7, T("ejGetToken: %d, \"%s\"\n"), ep->tid, ep->token);
 	return ep->tid;
 }
 

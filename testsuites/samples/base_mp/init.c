@@ -20,8 +20,9 @@
  *  $Id$
  */
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 #include "system.h"
+#include <stdio.h>
 
 rtems_task Init(
   rtems_task_argument argument

@@ -30,7 +30,6 @@ ER cre_tsk(
 )
 {
   register Thread_Control     *the_thread;
-  char                        *name = "trn";
   boolean                      status;
   Priority_Control             core_priority;  
 
@@ -90,7 +89,7 @@ ER cre_tsk(
     THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE,
     NULL,        /* no budget algorithm callout */
     0,
-    &name
+    NULL
   );
 
   if ( !status ) {

@@ -1,10 +1,8 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-
-BSP_FILES = startup clock console timer
 
 if HAS_MP
 GENERIC_MP_REL_FILES = shmdr
@@ -14,7 +12,7 @@ GENERIC_FILES += $(GENERIC_MP_REL_FILES)
 if HAS_MP
 BSP_MP_O_FILES = shmsupp
 endif
-BSP_FILES += $(BSP_MP_O_FILES)
+BSP_FILES = startup clock console timer $(BSP_MP_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/lib.am

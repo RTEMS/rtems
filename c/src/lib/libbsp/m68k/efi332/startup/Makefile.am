@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -24,6 +24,9 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
+# USE_INIT_FINI tells main.c what C++ help we need.
+AM_CPPFLAGS += -DUSE_INIT_FINI
+
 $(PGM): $(OBJS)
 	$(make-rel)
 
@@ -33,7 +36,8 @@ $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 $(PROJECT_RELEASE)/lib/linkcmds_ROM: linkcmds_ROM
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).o: $(ARCH)/except_vect_332_ROM.o
+$(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).o: \
+    $(ARCH)/except_vect_332_ROM.o
 	$(INSTALL_DATA) $< $@
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile

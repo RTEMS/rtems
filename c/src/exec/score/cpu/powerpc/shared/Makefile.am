@@ -12,11 +12,9 @@ noinst_HEADERS = $(ROOT_H_FILES) $(RTEMS_SCORE_H_FILES)
 # (OPTIONAL) Add local stuff here using +=
 #
 
-PREINSTALL_FILES = \
-$(PROJECT_INCLUDE) \
-$(PROJECT_INCLUDE)/rtems/score \
-$(ROOT_H_FILES:%.h=$(PROJECT_INCLUDE)/%.h) \
-$(RTEMS_SCORE_H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
+    $(ROOT_H_FILES:%.h=$(PROJECT_INCLUDE)/%.h) \
+    $(RTEMS_SCORE_H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@

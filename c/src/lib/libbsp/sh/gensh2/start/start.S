@@ -44,7 +44,7 @@ SYM (start):
 	! Initialize minimal hardware
 	mov.l	hw_init_k, r0
 	jsr @r0
-	nop		!debug dead-slot target
+	nop		!dead slot
 #endif /* START_HW_INIT */
 
 	! zero out bss
@@ -56,7 +56,6 @@ SYM (start):
 	add	#4,r0
 	cmp/ge	r0,r1
 	bt	0b
-	nop		!debug dead-slot target
 
 	! copy the vector table from rom to ram
 	mov.l   vects_k,r0   	! vectab
@@ -70,8 +69,8 @@ SYM (start):
 	add     #1,r2
 	cmp/hi  r3,r2
 	bf      1b
-	nop		!debug dead-slot target
 
+#ifndef STANDALONE_EVB
 	! overlay monitor vectors onto RTEMS table template
 	! code adapted  from Hitachi EDK7045F User Manual: "Copyvect.s"
 	mova	vects_k,r0
@@ -135,20 +134,19 @@ SYM (start):
 	mov.l	r3, @r0
 	mov.l   vects_k,r0   	! point vbr to vectab
 	ldc     r0,vbr
+#endif  ! STANDALONE_EVB
 
 	! call the mainline	
 	mov #0,r4		! argc
-	mov #0,r5		! argv - can place in dead slot
 	mov.l main_k,r0
 	jsr @r0
-	nop		!debug dead-slot target
+	mov #0,r5		! argv - can place in dead slot
 
 	! call exit
 	mov	r0,r4
 	mov.l	exit_k,r0
-	or	r0,r0
 	jsr	@r0
-	nop		!debug dead-slot target
+	or	r0,r0
 
 	mov.l	vbrtemp_k,r0	! restore original vbr
 	mov.l	@r0,r3
@@ -171,7 +169,7 @@ exit_k:
 	.long	SYM(exit)
 #ifdef	START_HW_INIT	/* from $RTEMS_BSP.cfg */
 hw_init_k:
-	.long	SYM(hw_initialize)
+	.long	SYM(early_hw_init)
 #endif /* START_HW_INIT */
 vbrtemp_k:
 	.long	SYM(vbrtemp)

@@ -112,7 +112,7 @@ scandir(dirname, namelist, select, dcomp)
 		p->d_ino = d->d_ino;
 		p->d_reclen = d->d_reclen;
 		p->d_namlen = d->d_namlen;
-		strncpy(p->d_name, d->d_name, p->d_namlen + 1);
+		strncpy(d->d_name, p->d_name, p->d_namlen + 1);
 		/*
 		 * Check to make sure the array has space left and
 		 * realloc the maximum size.

@@ -102,7 +102,10 @@ NS16550_STATIC void ns16550_init(int minor)
 
   /* Set the divisor latch and set the baud rate. */
 
-  ulBaudDivisor=NS16550_Baud((unsigned32)Console_Port_Tbl[minor].pDeviceParams);
+  ulBaudDivisor = NS16550_Baud(
+    (unsigned32) Console_Port_Tbl[minor].ulClock,
+    (unsigned32) Console_Port_Tbl[minor].pDeviceParams
+  );
   ucDataByte = SP_LINE_DLAB;
   (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucDataByte);
 
@@ -363,7 +366,10 @@ NS16550_STATIC int ns16550_set_attributes(
   if (!baud_requested)
     baud_requested = B9600;              /* default to 9600 baud */
 
-  ulBaudDivisor = NS16550_Baud(termios_baud_to_number(baud_requested));
+  ulBaudDivisor = NS16550_Baud(
+    (unsigned32) Console_Port_Tbl[minor].ulClock,
+    termios_baud_to_number(baud_requested)
+  );
 
   ucLineControl = 0;
 

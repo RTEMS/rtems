@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -23,12 +23,12 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CPPFLAGS += -D__BOOT__ -DDEBUG
-AM_CFLAGS += -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple \
-    -mstring -O2 -fomit-frame-pointer -mrelocatable -ffixed-r13 -mno-sdata \
-    -D__BOOT__ -DDEBUG
+## FIXME:
+## ASFLAGS = -mrelocatable
+CFLAGS_DEBUG_V = $(CFLAGS_OPTIMIZE_V)
 
-ASFLAGS += -mrelocatable
+AM_CPPFLAGS += -D__BOOT__ -DDEBUG -mrelocatable
+AM_CFLAGS += -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple -mstring -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata
 
 IMAGES = rtems.gz
 
@@ -47,7 +47,7 @@ DISTCLEANFILES += $(IMAGES)
 bootloader : $(OBJS) $(IMAGES) $(BINARY_LOADED) ppcboot.lds
 	$(LD) -o bootloader $(OBJS) --just-symbols=$(BINARY_LOADED) \
 	-b binary $(IMAGES) -T @srcdir@/../../shared/bootloader/ppcboot.lds \
-	-Map bootloader.map
+	-Map $(ARCH)/bootloader.map
 
 check_unresolved : $(OBJS)
 	$(LD) -r -o reloc.O $(OBJS)
@@ -55,7 +55,7 @@ check_unresolved : $(OBJS)
 	echo "Every symbol listed should be defined in @srcdir@/ppcboot.lds"
 
 rtems: $(BINARY_LOADED)
-	$(OBJCOPY)  $(BINARY_LOADED) rtems -O binary -R .comment -S 
+	$(OBJCOPY)  $(BINARY_LOADED) rtems -O binary -R .comment -S
 
 rtems.gz: rtems
 	gzip -vf9 rtems

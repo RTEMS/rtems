@@ -63,10 +63,8 @@ rtems_extension Task_exit_extension(
 
 /* configuration information */
 
-#define CONFIGURE_SPTEST
-
-#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS     1
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
@@ -74,6 +72,7 @@ rtems_extension Task_exit_extension(
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_EXTRA_TASK_STACKS         (4 * RTEMS_MINIMUM_STACK_SIZE)
+#define CONFIGURE_MAXIMUM_TASKS             5
 
 #include <confdefs.h>
 

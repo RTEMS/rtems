@@ -20,6 +20,8 @@
 
 #include "system.h"
 
+#define MESSAGE_SIZE (sizeof(long) * 4)
+
 rtems_task Task_2(
   rtems_task_argument argument
 )
@@ -34,7 +36,7 @@ rtems_task Task_2(
   );
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
-    (long (*)[4])buffer,
+    buffer,
     &size,
     RTEMS_NO_WAIT,
     RTEMS_NO_TIMEOUT
@@ -50,7 +52,7 @@ rtems_task Task_2(
   );
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
-    (long (*)[4])buffer,
+    buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT
@@ -66,7 +68,7 @@ rtems_task Task_2(
  );
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
-    (long (*)[4])buffer,
+    buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT
@@ -86,7 +88,7 @@ rtems_task Task_2(
   );
   status = rtems_message_queue_receive(
     Queue_id[ 2 ],
-    (long (*)[4])buffer,
+    buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT
@@ -100,7 +102,7 @@ rtems_task Task_2(
   puts( "TA2 - rtems_message_queue_send - BUFFER 2 TO Q 2" );
   directive_failed( status, "rtems_message_queue_send" );
 
-  status = rtems_message_queue_send( Queue_id[ 2 ], (long (*)[4])buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 2 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
   puts(
@@ -109,7 +111,7 @@ rtems_task Task_2(
   );
   status = rtems_message_queue_receive(
     Queue_id[ 1 ],
-    (long (*)[4])buffer,
+    buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
     10 * TICKS_PER_SECOND
@@ -125,7 +127,7 @@ rtems_task Task_2(
   );
   status = rtems_message_queue_receive(
     Queue_id[ 3 ],
-    (long (*)[4])buffer,
+    buffer,
     &size,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT

@@ -24,10 +24,6 @@ extern "C" {
   { console_initialize, console_open, console_close, \
     console_read, console_write, console_control }
 
-void console_reserve_resources(
-  rtems_configuration_table *configuration
-);
-
 rtems_device_driver console_initialize(
   rtems_device_major_number,
   rtems_device_minor_number,

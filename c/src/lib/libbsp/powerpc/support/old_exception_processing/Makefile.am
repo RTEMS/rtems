@@ -19,14 +19,11 @@ S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/lib.am
 
-PREINSTALL_FILES = \
-$(PROJECT_INCLUDE) \
-$(PROJECT_INCLUDE)/rtems/score \
-$(ROOT_H_FILES:%=$(PROJECT_INCLUDE)/%) \
-$(RTEMS_SCORE_H_FILES:%=$(PROJECT_INCLUDE)/rtems/score/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
+    $(ROOT_H_FILES:%=$(PROJECT_INCLUDE)/%) \
+    $(RTEMS_SCORE_H_FILES:%=$(PROJECT_INCLUDE)/rtems/score/%)
 
-TMPINSTALL_FILES += \
-$(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
 
 $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
 	$(INSTALL_DATA) $< $@
@@ -49,18 +46,12 @@ $(REL): $(C_O_FILES) $(S_O_FILES)
 	test -d ../$(ARCH) || mkdir ../$(ARCH)
 	$(make-rel)
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(REL)
-all-local: $(ARCH)/rtems.o
-all-local: $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(REL) $(ARCH)/rtems.o $(TMPINSTALL_FILES)
 
-clean-local:
-	$(RM) -r ../o-optimize ../o-debug ../o-profile
+CLEANDIRS = ../o-optimize ../o-debug ../o-profile
 
 UNUSED_FILES = irq_stub.S
 
-EXTRA_DIST = \
-TODO \
-rtems.S \
-$(C_FILES) $(S_FILES) $(UNUSED_FILES)
+EXTRA_DIST = TODO rtems.S $(C_FILES) $(S_FILES) $(UNUSED_FILES)
 
 include $(top_srcdir)/../../../../../../automake/local.am

@@ -15,7 +15,7 @@
  *  $Id$
  */
 
-#include <rtems.h>
+#include <bsp.h>
 
 rtems_task Init(
   rtems_task_argument ignored
@@ -25,9 +25,13 @@ rtems_task Init(
 
 /* configuration information */
 
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
+
+#define CONFIGURE_MAXIMUM_TASKS            1
 
 #define CONFIGURE_INIT
 

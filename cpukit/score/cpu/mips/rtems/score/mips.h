@@ -44,7 +44,16 @@ extern "C" {
  *  of the family.
  */
  
-#if defined(R4650)
+#if defined(rtems_multilib)
+/*
+ *  Figure out all CPU Model Feature Flags based upon compiler 
+ *  predefines. 
+ */
+
+#define CPU_MODEL_NAME  "rtems_multilib"
+#define MIPS64ORION_HAS_FPU     1
+
+#elif defined(R4650)
  
 #define CPU_MODEL_NAME  "R4650"
 #define MIPS64ORION_HAS_FPU     1

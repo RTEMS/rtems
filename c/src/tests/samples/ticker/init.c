@@ -20,8 +20,16 @@
  *  $Id$
  */
 
-#define TEST_INIT
+#define CONFIGURE_INIT
 #include "system.h"
+#include <stdio.h>
+
+/*
+ *  Keep the names and IDs in global variables so another task can use them.
+ */
+
+rtems_id   Task_id[ 4 ];         /* array of task ids */
+rtems_name Task_name[ 4 ];       /* array of task names */
 
 rtems_task Init(
   rtems_task_argument argument
@@ -32,7 +40,14 @@ rtems_task Init(
 
   puts( "\n\n*** CLOCK TICK TEST ***" );
 
-  build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
+  time.year   = 1988;
+  time.month  = 12;
+  time.day    = 31;
+  time.hour   = 9;
+  time.minute = 0;
+  time.second = 0;
+  time.ticks  = 0;
+
   status = rtems_clock_set( &time );
 
   Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );

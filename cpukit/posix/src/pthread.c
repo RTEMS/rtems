@@ -356,8 +356,8 @@ void _POSIX_Threads_Manager_initialization(
     FALSE,                               /* does not support global */
     maximum_pthreads,
     sizeof( Thread_Control ),
-    TRUE,
-    5,                                   /* length is arbitrary for now */
+    FALSE,
+    0,                                   /* length is arbitrary for now */
     TRUE                                 /* this class is threads */
   );
 

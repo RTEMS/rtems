@@ -20,10 +20,5 @@
 
 #include "consolebsp.h"
 
-void console_reserve_resources(
-  rtems_configuration_table *configuration
-)
-{
-  rtems_termios_reserve_resources( configuration, NUM_Z85C30_PORTS );
-}
+int console_reserve_resources_removed;
 

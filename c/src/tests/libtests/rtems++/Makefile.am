@@ -1,8 +1,9 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
+
 TEST = rtems++
 
 MANAGERS = event io msg sem signal timer rate_monotonic
@@ -11,7 +12,7 @@ CC_FILES = Init.cc Task1.cc Task2.cc Task3.cc
 CC_O_FILES = $(CC_FILES:%.cc=${ARCH}/%.o)
 
 H_FILES = System.h
-noinst_HEADERS =$(H_FILES)
+noinst_HEADERS = $(H_FILES)
 
 DOCTYPES = scn doc
 DOCS = $(DOCTYPES:%=$(TEST).%)

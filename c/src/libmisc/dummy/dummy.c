@@ -26,6 +26,7 @@ rtems_task Init(
 /* configuration information */
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+#define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_INIT
 

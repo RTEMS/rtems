@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -27,8 +27,6 @@ OBJS = $(C_O_FILES) $(S_O_FILES)
 #
 # (OPTIONAL) Add local stuff here using +=
 #
-
-AM_CFLAGS += $(CFLAGS_OS_V)
 
 $(PGM): $(OBJS)
 	$(make-rel)

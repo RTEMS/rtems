@@ -39,7 +39,10 @@ void _Objects_Copy_name_string(
   unsigned8 *source_p = (unsigned8 *) source;
   unsigned8 *destination_p = (unsigned8 *) destination;
  
-  do {
-    *destination_p++ = *source_p;
-  } while ( *source_p++ );
+  *destination_p = '\0';
+  if ( source_p ) {
+    do {
+      *destination_p++ = *source_p;
+    } while ( *source_p++ );
+  }
 }

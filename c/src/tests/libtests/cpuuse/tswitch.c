@@ -22,7 +22,9 @@
 
 #include "system.h"
 
-#include <rtems/cpuuse.h>
+struct taskSwitchLog taskSwitchLog[1000];
+int taskSwitchLogIndex;
+volatile int testsFinished;;
 
 rtems_extension Task_switch( 
   rtems_tcb *unused,
@@ -42,16 +44,18 @@ rtems_extension Task_switch(
       Run_count[ index ] += 1;
 
       status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
-      directive_failed( status, "rtems_clock_get" );
+      fatal_directive_status_with_level( status, RTEMS_SUCCESSFUL,
+                                         "rtems_clock_get", 1 );
 
-      put_name( Task_name[ index ], FALSE );
-      print_time( "- ", &time, "\n" );
-
-      if ( time.second >= 16 ) {
-        CPU_usage_Dump();
-        puts( "*** END OF CPU USAGE LIBRARY TEST ***" );
-        exit( 0 );
+      if (taskSwitchLogIndex <
+          (sizeof taskSwitchLog / sizeof taskSwitchLog[0])) {
+        taskSwitchLog[taskSwitchLogIndex].taskIndex = index;
+        taskSwitchLog[taskSwitchLogIndex].when = time;
+        taskSwitchLogIndex++;
       }
+      if ( time.second >= 16 )
+        testsFinished = 1;
+
       break;
 
     case 0:

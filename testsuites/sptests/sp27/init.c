@@ -10,8 +10,10 @@ rtems_task Init (rtems_task_argument argument);
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS               6
 
 #define CONFIGURE_MICROSECONDS_PER_TICK       52429
 
@@ -52,7 +54,7 @@ starttask (int arg)
   rtems_task_set_priority (RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &priority);
   sc = rtems_task_create (rtems_build_name ('S', 'R', 'V', arg + 'A'),
     priority,
-    10000,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
     RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
     &tid);

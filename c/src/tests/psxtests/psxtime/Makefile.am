@@ -1,8 +1,9 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
+
 TEST = psxtime
 
 MANAGERS = all

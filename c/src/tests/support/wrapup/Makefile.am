@@ -1,10 +1,10 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-LIBNAME=libtest
+LIBNAME = libtest
 LIB = $(ARCH)/$(LIBNAME).a
 
 GENERIC_FILES = stubdr
@@ -19,8 +19,7 @@ include $(top_srcdir)/../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-TMPINSTALL_FILES += \
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
 $(LIB): ${OBJS}
 	$(make-library)
@@ -28,6 +27,6 @@ $(LIB): ${OBJS}
 $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
-all: ${ARCH} $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -23,7 +23,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 $(PGM): $(console_rel_OBJECTS)
 	$(make-rel)
 
-# the .rel file built here will be put into libbsp.a by 
+# the .rel file built here will be put into libbsp.a by
 # 	../wrapup/Makefile
 
 all-local: $(ARCH) $(console_rel_OBJECTS) $(PGM)

@@ -94,7 +94,28 @@ extern "C" {
 #define PPC_LOW_POWER_MODE_NONE      0
 #define PPC_LOW_POWER_MODE_STANDARD  1
 
-#if defined(ppc403)
+#if defined(rtems_multilib)
+/*
+ *  Figure out all CPU Model Feature Flags based upon compiler
+ *  predefines.
+ */
+
+#define CPU_MODEL_NAME           "rtems_multilib"
+#define PPC_ALIGNMENT		 4  
+#define PPC_CACHE_ALIGNMENT	 16
+#define PPC_HAS_RFCI    	 1
+#define PPC_HAS_FPU     	 0
+#define PPC_USE_MULTIPLE	 1
+#define PPC_I_CACHE		 2048
+#define PPC_D_CACHE		 1024
+#define PPC_DEBUG_MODEL          PPC_DEBUG_MODEL_STANDARD
+#define PPC_HAS_EXCEPTION_PREFIX 0
+#define PPC_HAS_EVPR             0
+#define PPC_INTERRUPT_MAX	 16
+#define PPC_LOW_POWER_MODE       PPC_LOW_POWER_MODE_STANDARD
+#define PPC_HAS_DOUBLE           0
+
+#elif defined(ppc403)
 /*
  *  IBM 403
  *
@@ -129,7 +150,7 @@ extern "C" {
 #define PPC_ALIGNMENT           4
 #define PPC_CACHE_ALIGNMENT     16
 #define PPC_I_CACHE             4096
-#define PPC_I_CACHE             0
+#define PPC_D_CACHE             0
 
 
 #elif defined(ppc601)
@@ -281,6 +302,14 @@ extern "C" {
  */
 #define PPC_ABI_EABI		3
 
+/*
+ *  Default to the EABI used by current GNU tools
+ */
+
+#ifndef PPC_ABI
+#define PPC_ABI PPC_ABI_EABI
+#endif
+
 #if (PPC_ABI == PPC_ABI_POWEROPEN)
 #define PPC_STACK_ALIGNMENT	8
 #elif (PPC_ABI == PPC_ABI_GCC27)
@@ -308,6 +337,14 @@ extern "C" {
 
 #define PPC_ASM_ELF   0
 #define PPC_ASM_XCOFF 1
+
+/*
+ *  Default to the assembler format used by the current GNU tools.
+ */
+
+#ifndef PPC_ASM
+#define PPC_ASM PPC_ASM_ELF
+#endif
 
 /*
  *  Use the default debug scheme defined in the architectural specification
@@ -449,7 +486,14 @@ extern "C" {
 #define PPC_IRQ_FIT	 (PPC_STD_IRQ_LAST+2) /*0x01010- Fixed int. timer  */
 #define PPC_IRQ_WATCHDOG (PPC_STD_IRQ_LAST+3) /*0x01020- Watchdog timer    */
 #define PPC_IRQ_DEBUG	 (PPC_STD_IRQ_LAST+4) /*0x02000- Debug exceptions  */
-#define PPC_IRQ_LAST     PPC_IRQ_DEBUG    
+#define PPC_IRQ_LAST     PPC_IRQ_DEBUG
+
+#elif defined(mpc505) || defined(mpc509)
+#define PPC_IRQ_SOFTEMU   (PPC_STD_IRQ_LAST+1)    /* Software emulation. */
+#define PPC_IRQ_DATA_BP   (PPC_STD_IRQ_LAST+ 2)
+#define PPC_IRQ_INST_BP   (PPC_STD_IRQ_LAST+ 3)
+#define PPC_IRQ_MEXT_BP   (PPC_STD_IRQ_LAST+ 4)
+#define PPC_IRQ_NMEXT_BP  (PPC_STD_IRQ_LAST+ 5)
 
 #elif defined(ppc601)
 #define PPC_IRQ_TRACE    (PPC_STD_IRQ_LAST+1) /*0x02000-Run/Trace Exception*/

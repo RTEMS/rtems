@@ -260,7 +260,7 @@ int rtems_libio_is_open_files_in_fs(
    *  Look for any active file descriptor entry.
    */         
      
-  for (iop=rtems_libio_iops,i=0; i <= rtems_libio_number_iops; iop++, i++){
+  for (iop=rtems_libio_iops,i=0; i < rtems_libio_number_iops; iop++, i++){
         
     if ((iop->flags & LIBIO_FLAGS_OPEN) != 0) {
         
@@ -304,7 +304,7 @@ int rtems_libio_is_file_open(
    *  Look for any active file descriptor entry.
    */
   
- for (iop=rtems_libio_iops,i=0; i <= rtems_libio_number_iops; iop++, i++){ 
+ for (iop=rtems_libio_iops,i=0; i < rtems_libio_number_iops; iop++, i++){ 
     if ((iop->flags & LIBIO_FLAGS_OPEN) != 0) {
   
        /*

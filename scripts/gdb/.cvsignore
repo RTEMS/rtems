@@ -1,3 +1,5 @@
+*.spec
 Makefile
 Makefile.in
 gdb.spec
+gdb.spec.in

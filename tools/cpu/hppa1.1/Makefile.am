@@ -5,17 +5,14 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-noinst_PROGRAMS=genoffsets
+noinst_PROGRAMS = genoffsets
 
-genoffsets_SOURCES = \
-genoffsets.c
+genoffsets_SOURCES = genoffsets.c
 
 ## We use files that have not been installed yet.
 
-CPU_DIR=../../cpu/$(RTEMS_CPU)
+CPU_DIR = ../../cpu/$(RTEMS_CPU)
 
-INCLUDES = \
--I$(PROJECT_INCLUDE) \
--I$(CPU_DIR)
+AM_CPPFLAGS = -I$(PROJECT_INCLUDE) -I$(CPU_DIR)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../../automake/host.am

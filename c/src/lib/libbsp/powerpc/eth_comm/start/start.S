@@ -133,7 +133,9 @@ cpy_b:  lwz     r5, 0(r3)                /* In with the old ...  */
         xor     r4, r4, r4
         
         .extern SYM (boot_card)
-        b       SYM (boot_card)                  /* call the first C routine */
+        bl      SYM (boot_card)                  /* call the first C routine */
+loopstop:
+        b       loopstop
 
 /*
  * bssclr - zero out bss

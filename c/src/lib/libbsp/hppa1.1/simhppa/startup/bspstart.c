@@ -189,7 +189,7 @@ void bsp_start(void)
      */
 
     Cpu_table.do_zero_of_workspace = FALSE;
-    Cpu_table.interrupt_stack_size = (12 * 1024);
+    Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
     /*
      * Set this artificially low for the simulator
@@ -229,13 +229,6 @@ void bsp_start(void)
 
     BSP_Configuration.maximum_extensions++;
 #endif
-
-    /*
-     * Add 1 extension for MPCI_fatal
-     */
-
-    if (BSP_Configuration.User_multiprocessing_table)
-        BSP_Configuration.maximum_extensions++;
 
     /*
      * Set the "clicks per tick" for the simulator

@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -21,7 +21,7 @@ AM_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 $(PGM): $(ne2000_rel_OBJECTS)
 	$(make-rel)
 
-# the .rel file built here will be put into libbsp.a by 
+# the .rel file built here will be put into libbsp.a by
 # 	../wrapup/Makefile
 
 if HAS_NETWORKING

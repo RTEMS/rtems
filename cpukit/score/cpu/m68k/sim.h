@@ -50,13 +50,6 @@
 #define _SIM_H_
 
 
-/*
- *  XXX Why is a generic file like this including a bsp specific file?
-
-#include <efi332.h>
- */
-
-
 /* SAM-- shift and mask */
 #undef  SAM
 #define SAM(a,b,c) ((a << b) & c)

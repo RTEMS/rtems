@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -19,8 +19,6 @@ include $(top_srcdir)/../../../../../automake/lib.am
 #
 # (OPTIONAL) Add local stuff here using +=
 #
-
-AM_CFLAGS = $(CFLAGS_OS_V)
 
 $(PGM): $(syscall_rel_OBJECTS)
 	$(make-rel)

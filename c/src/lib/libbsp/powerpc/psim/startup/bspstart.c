@@ -202,7 +202,7 @@ void bsp_start( void )
 
   Cpu_table.do_zero_of_workspace = FALSE;
 
-  Cpu_table.interrupt_stack_size = (12 * 1024);
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   /*
    *  The monitor likes the exception table to be at 0x0.
@@ -232,12 +232,6 @@ void bsp_start( void )
   }
 
   BSP_Configuration.work_space_start = work_space_start;
-
-  /*
-   *  Account for the console's resources
-   */
-
-  console_reserve_resources( &BSP_Configuration );
 
 #if PSIM_FAST_IDLE
   /*

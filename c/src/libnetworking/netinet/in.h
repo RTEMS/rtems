@@ -255,6 +255,9 @@ struct in_addr {
 #define	INADDR_MAX_LOCAL_GROUP	(u_long)0xe00000ff	/* 224.0.0.255 */
 
 #define	IN_LOOPBACKNET		127			/* official! */
+#ifndef INADDR_LOOPBACK
+#define	INADDR_LOOPBACK		(u_long)0x7F000001	/* 127.0.0.1 */
+#endif
 
 /*
  * Socket address, internet style.

@@ -55,7 +55,9 @@
 	lis     r11,_CPU_IRQ_info@ha
 	addi	r11,r11,_CPU_IRQ_info@l
 #endif
+#if ( PPC_USE_DATA_CACHE )
 	dcbt	r0, r11
+#endif
 	stw	r5, IP_CR(r1)
 	stw	r6, IP_CTR(r1)
 	stw	r7, IP_XER(r1)

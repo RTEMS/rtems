@@ -5,13 +5,25 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-noinst_SCRIPTS=psim runtest
+noinst_SCRIPTS = psim runtest
+
+TMPINSTALL_FILES += $(PROJECT_ROOT)/psim/tests \
+    $(PROJECT_ROOT)/psim/tests/runtest $(PROJECT_ROOT)/psim/tests/psim \
+    $(PROJECT_ROOT)/psim/tests/psim-gdb
+
+$(PROJECT_ROOT)/psim/tests:
+	$(mkinstalldirs) $@
+
+$(PROJECT_ROOT)/psim/tests/runtest: runtest
+	$(INSTALL_SCRIPT) $< $@
+
+$(PROJECT_ROOT)/psim/tests/psim: psim
+	$(INSTALL_SCRIPT) $< $@
+
+$(PROJECT_ROOT)/psim/tests/psim-gdb: psim
+	$(INSTALL_SCRIPT) $< $@
 
 ## HACK: install to build-tree
-all-local: $(SCRIPTS)
-	$(mkinstalldirs) $(PROJECT_ROOT)/psim/tests
-	$(INSTALL_SCRIPT) $(srcdir)/runtest $(PROJECT_ROOT)/psim/tests/runtest
-	$(INSTALL_SCRIPT) $(srcdir)/psim $(PROJECT_ROOT)/psim/tests/psim
-	$(INSTALL_SCRIPT) $(srcdir)/psim $(PROJECT_ROOT)/psim/tests/psim-gdb
+all-local: $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../../../../../automake/local.am
+include $(top_srcdir)/../../../../../../../automake/host.am

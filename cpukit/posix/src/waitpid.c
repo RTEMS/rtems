@@ -8,8 +8,10 @@
 #include <sys/wait.h>
 #include <errno.h>
 
-int wait(
-  int *stat_loc
+int waitpid(
+  pid_t pid,
+  int *stat_loc,
+  int options
 )
 {
   errno = ENOSYS;

@@ -157,9 +157,9 @@ struct IMFS_jnode_tt {
   uid_t               st_uid;                /* User ID of owner */
   gid_t               st_gid;                /* Group ID of owner */
 
-  time_t              st_atime;              /* Time of last access */
-  time_t              st_mtime;              /* Time of last modification */
-  time_t              st_ctime;              /* Time of last status change */
+  time_t              stat_atime;            /* Time of last access */
+  time_t              stat_mtime;            /* Time of last modification */
+  time_t              stat_ctime;            /* Time of last status change */
   IMFS_jnode_types_t  type;                  /* Type of this entry */
   IMFS_types_union    info;
 };
@@ -168,29 +168,29 @@ struct IMFS_jnode_tt {
   do {                                      \
     struct timeval tv;                      \
     gettimeofday( &tv, 0 );                 \
-    _jnode->st_atime  = (time_t) tv.tv_sec; \
+    _jnode->stat_atime  = (time_t) tv.tv_sec; \
   } while (0)
                 
 #define IMFS_update_mtime( _jnode )         \
   do {                                      \
     struct timeval tv;                      \
     gettimeofday( &tv, 0 );                 \
-    _jnode->st_mtime  = (time_t) tv.tv_sec; \
+    _jnode->stat_mtime  = (time_t) tv.tv_sec; \
   } while (0)
                 
 #define IMFS_update_ctime( _jnode )         \
   do {                                      \
     struct timeval tv;                      \
     gettimeofday( &tv, 0 );                 \
-    _jnode->st_ctime  = (time_t) tv.tv_sec; \
+    _jnode->stat_ctime  = (time_t) tv.tv_sec; \
   } while (0)
 
 #define IMFS_atime_mtime_update( _jnode )   \
   do {                                      \
     struct timeval tv;                      \
     gettimeofday( &tv, 0 );                 \
-    _jnode->st_mtime  = (time_t) tv.tv_sec; \
-    _jnode->st_atime  = (time_t) tv.tv_sec; \
+    _jnode->stat_mtime  = (time_t) tv.tv_sec; \
+    _jnode->stat_atime  = (time_t) tv.tv_sec; \
   } while (0)
 
 typedef struct {

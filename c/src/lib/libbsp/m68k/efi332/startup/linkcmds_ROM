@@ -43,6 +43,8 @@ MEMORY
   ram     : ORIGIN = 0x80000, LENGTH = 512K
 }
 
+_RamBase = DEFINED(_RamBase) ? _RamBase : 0x080000;
+
 __end_of_ram = 0x100000;
 _copy_data_from_rom = 1;
 

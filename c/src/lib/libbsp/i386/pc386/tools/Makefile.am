@@ -7,8 +7,7 @@ ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 EXTRA_DIST = Spec.doc
 
-noinst_PROGRAMS = \
-bin2boot
+noinst_PROGRAMS = bin2boot
 
 bin2boot_SOURCES = bin2boot.c
 
@@ -18,11 +17,10 @@ bin2boot_SOURCES = bin2boot.c
 @PROJECT_RELEASE@/build-tools/bin2boot$(EXEEXT): bin2boot$(EXEEXT)
 	$(INSTALL_PROGRAM) $< $@
 
-PREINSTALL_FILES = \
-@PROJECT_RELEASE@/build-tools \
-@PROJECT_RELEASE@/build-tools/bin2boot$(EXEEXT)
+PREINSTALL_FILES += @PROJECT_RELEASE@/build-tools \
+    @PROJECT_RELEASE@/build-tools/bin2boot$(EXEEXT)
 
 ## HACK: install into build-tree
 all-local: $(PREINSTALL_FILES)
 
-include $(top_srcdir)/../../../../../../../automake/local.am
+include $(top_srcdir)/../../../../../../../automake/host.am

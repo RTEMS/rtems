@@ -5,11 +5,17 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-noinst_SCRIPTS=runtest
+noinst_SCRIPTS = runtest
 
-#HACK: install to build-tree
-all-local: $(SCRIPTS)
-	$(mkinstalldirs) $(PROJECT_ROOT)/erc32/tests
-	$(INSTALL_SCRIPT) runtest $(PROJECT_ROOT)/erc32/tests/runtest
+TMPINSTALL_FILES += $(PROJECT_ROOT)/erc32/tests \
+    $(PROJECT_ROOT)/erc32/tests/runtest
 
-include $(top_srcdir)/../../../../../../../automake/local.am
+$(PROJECT_ROOT)/erc32/tests:
+	$(mkinstalldirs) $@
+
+$(PROJECT_ROOT)/erc32/tests/runtest: runtest
+	$(INSTALL_SCRIPT) $< $@
+
+all-local: $(TMPINSTALL_FILES)
+
+include $(top_srcdir)/../../../../../../../automake/host.am

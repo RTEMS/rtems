@@ -13,7 +13,7 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/lib.am
 
 TMPINSTALL_FILES += \
-$(C_FILES:%.c=$(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel)
+    $(C_FILES:%.c=$(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel)
 
 $(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel: $(ARCH)/%.rel
 	$(INSTALL_DATA) $< $@
@@ -22,7 +22,6 @@ $(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel: $(ARCH)/%.rel
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CFLAGS += $(CFLAGS_OS_V)
 ASM4FLAGS += -I $(PROJECT_INCLUDE)/rtems
 
 all-local: ${ARCH} $(PGMS) $(TMPINSTALL_FILES)

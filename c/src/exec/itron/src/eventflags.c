@@ -38,7 +38,7 @@ void _ITRON_Eventflags_Manager_initialization(
                                         /*   control block */
     FALSE,                              /* TRUE if names for this object */
                                         /*   are strings */
-    RTEMS_MAXIMUM_NAME_LENGTH,          /* maximum length of each object's */
+    ITRON_MAXIMUM_NAME_LENGTH,          /* maximum length of each object's */
                                         /*   name */
     FALSE                               /* TRUE if this class is threads */
   );

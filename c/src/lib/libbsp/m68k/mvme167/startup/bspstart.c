@@ -79,15 +79,18 @@ void bsp_pretasking_hook(void);               /* m68k version */
  */
 void bsp_start( void )
 {
-  extern void *_WorkspaceBase;
-  extern m68k_isr_entry M68Kvec[];
-  extern void    *_WorkspaceBase;
-  
   void M68KFPSPInstallExceptionHandlers (void);
   
+  extern m68k_isr_entry  M68Kvec[];
+  extern void           *_WorkspaceBase;
+  extern void           *_RamSize;
+  extern unsigned long   _M68k_Ramsize;
+
   m68k_isr_entry *rom_monitor_vector_table;
   int index;
 
+  _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
+  
   /*
    *  167Bug Vectors are at 0xFFE00000
    */
@@ -129,7 +132,8 @@ void bsp_start( void )
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_vector_table = (m68k_isr_entry *) &M68Kvec;
-  Cpu_table.interrupt_stack_size = 4096; /* Must match value in start.s */
+  /* Must match value in start.s */
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
   
   /* 
    *  If the application has not overriden the default User_extension_table,
@@ -147,19 +151,4 @@ void bsp_start( void )
    *  not malloc'ed.  It is just "pulled from the air".
    */
   BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
-
-  /*
-   *  Increase the number of semaphores that can be created on this node. The
-   *  termios package requires one semaphore to protect the list of termios-
-   *  capable terminals, and up to four semaphores per termios-capable
-   *  terminal (add calls here as required). The maximum number of semaphores
-   *  must be set before returning to boot_card(), which will call
-   *  rtems_initialize_executive_early(). This latter function eventually
-   *  calls _RTEMS_API_Initialize(), which in turn calls
-   *  _Semaphore_Manager_initialization(), which allocates the space for the
-   *  maximum number of semaphores in the object table. These calls occur
-   *  before the call to the predriver hook and the calls to the device
-   *  initialization callbacks. Hence, we must do this here.
-   */
-  console_reserve_resources( &BSP_Configuration );
 }

@@ -1,0 +1,64 @@
+USING RPC/XDR ON RTEMS
+======================
+For the most part, programmers using RPC/XDR routines on RTEMS
+can proceed as if they were to be using a POSIX/UNIX system.
+The only significant changes are those to start the portmapper
+and to allow use of RPC/XDR by multiple threads.
+
+Starting the portmapper
+=======================
+The SUN portmapper program has been modified to run as an RTEMS
+task.  Applications which need the portmapper can start this
+task by calling:
+	int rtems_rpc_start_portmapper (int priority);
+The return value is an RTEMS status code.
+
+Multi-threaded operation
+========================
+The RPC/XDR package has been modified to allow for multiple RTEMS
+tasks to use RPC/XDR routines.  If more than one task is to call
+an RPC/XDR routine, the additional tasks must call:
+	int rtems_rpc_task_init(void);
+before calling any RPC/XDR routines.  For example, the portmapper
+calls this routine since the portmapper uses RPC/XDR routines in
+a separate thread.
+The return value is an RTEMS status code.
+
+
+Porting Notes
+=============
+Most of the FreeBSD rpc library ports to RTEMS with little
+or no modification beyond that required to provide for operation
+in a multitasking environment.  Multitasking operation was
+provided by moving all `static persistence' variables into
+a single structure and using an RTEMS task variable to point
+to that structure.  
+
+Some of the library, however, has not made it into the RTEMS
+implementation.  FreeBSD source files which have been left out include:
+- Files which provide RPC to the AF_UNIX address family:
+	clnt_unix.c
+	svc_unix.c
+  An `ifndef __rtems__' was added to clnt_generic.c because clnt_unix.c
+  was omitted.
+- Files which need NIS:
+	auth_time.c
+- Files which provide DES authentication:
+	auth_des.c
+	authdes_prot.c
+	crypt_client.c
+	des_crypt.c
+	des_soft.c
+	getpublickey.c
+	key_call.c
+	key_prot_xdr.c
+	svc_auth_des.c
+
+The FreeBSD xdr source compiles and runs on RTEMS without modification.
+
+The original source was obtained from:
+	ftp://ftp.FreeBSD.org/pub/FreeBSD/
+		        branches/4.0-stable/src/lib/libc/rpc
+			branches/4.0-stable/src/lib/libc/xdr
+			branches/4.0-stable/src/include/rpc
+			branches/4.0-stable/src/include/rpcsvc

@@ -79,6 +79,15 @@ extern "C" {
  *    by having each model specify which core it uses and then go from there.
  */
 
+/*
+ *  Figure out all CPU Model Feature Flags based upon compiler 
+ *  predefines.   Notice the only exception to this is that 
+ *  gcc does not distinguish between CPU32 and CPU32+.  This
+ *  feature selection logic is setup such that if RTEMS__mcpu32p__
+ *  is defined, then CPU32+ rules are used.  Otherwise, the safe
+ *  but less efficient CPU32 rules are used for the CPU32+.
+ */
+
 #if defined(__mc68020__)
  
 #define CPU_MODEL_NAME          "m68020"

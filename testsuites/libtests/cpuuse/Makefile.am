@@ -1,8 +1,9 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
+
 TEST = cpuuse
 
 MANAGERS = io rate_monotonic
@@ -11,7 +12,7 @@ C_FILES = init.c task1.c task2.c task3.c tswitch.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 H_FILES = system.h
-noinst_HEADERS =$(H_FILES)
+noinst_HEADERS = $(H_FILES)
 
 DOCTYPES = scn
 DOCS = $(DOCTYPES:%=$(TEST).%)

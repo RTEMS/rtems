@@ -12,7 +12,8 @@ AC_REQUIRE([RTEMS_ENABLE_MULTIPROCESSING])dnl
 AC_CACHE_CHECK([whether BSP supports multiprocessing],
   rtems_cv_HAS_MP,
   [dnl
-    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/libbsp/${RTEMS_CPU}/${$1}/shmsupp"; then
+    RTEMS_BSP_ALIAS(${$1},bspdir) 
+    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/libbsp/${RTEMS_CPU}/${bspdir}/shmsupp"; then
       if test "$RTEMS_HAS_MULTIPROCESSING" = "yes"; then
         rtems_cv_HAS_MP="yes" ;
       else

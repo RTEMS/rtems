@@ -219,9 +219,9 @@ int imfs_dir_lseek(
  *			dirent structure
  *	st_blksize	0
  *   	st_blocks	0
- *	st_atime	time of last access
- *	st_mtime	time of last modification
- *	st_ctime	time of the last change
+ *	stat_atime	time of last access
+ *	stat_mtime	time of last modification
+ *	stat_ctime	time of the last change
  *
  * This information will be returned to the calling function in a -stat- struct
  *	
@@ -248,9 +248,9 @@ int imfs_dir_fstat(
    buf->st_rdev = 0ll;
    buf->st_blksize = 0;
    buf->st_blocks = 0;
-   buf->st_atime = the_jnode->st_atime;
-   buf->st_mtime = the_jnode->st_mtime;
-   buf->st_ctime = the_jnode->st_ctime;
+   buf->st_atime = the_jnode->stat_atime;
+   buf->st_mtime = the_jnode->stat_mtime;
+   buf->st_ctime = the_jnode->stat_ctime;
 
    buf->st_size = 0;
 

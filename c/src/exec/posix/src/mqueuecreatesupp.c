@@ -74,7 +74,7 @@ int _POSIX_Message_queue_Create_support(
     attr = *attr_ptr;
   }
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if 0 && defined(RTEMS_MULTIPROCESSING)
   if ( pshared == PTHREAD_PROCESS_SHARED &&
        !( _Objects_MP_Allocate_and_open( &_POSIX_Message_queue_Information, 0,
                             the_mq->Object.id, FALSE ) ) ) {
@@ -112,14 +112,14 @@ int _POSIX_Message_queue_Create_support(
            the_mq_attr,
            attr.mq_maxmsg,
            attr.mq_msgsize,
-#if defined(RTEMS_MULTIPROCESSING)
+#if 0 && defined(RTEMS_MULTIPROCESSING)
            _POSIX_Message_queue_MP_Send_extract_proxy
 #else
            NULL
 #endif
       ) ) {
 
-#if defined(RTEMS_MULTIPROCESSING)
+#if 0 && defined(RTEMS_MULTIPROCESSING)
     if ( pshared == PTHREAD_PROCESS_SHARED )
       _Objects_MP_Close( &_POSIX_Message_queue_Information, the_mq->Object.id );
 #endif
@@ -137,7 +137,7 @@ int _POSIX_Message_queue_Create_support(
  
   *message_queue = the_mq;
  
-#if defined(RTEMS_MULTIPROCESSING)
+#if 0 && defined(RTEMS_MULTIPROCESSING)
   if ( pshared == PTHREAD_PROCESS_SHARED )
     _POSIX_Message_queue_MP_Send_process_packet(
       POSIX_MESSAGE_QUEUE_MP_ANNOUNCE_CREATE,

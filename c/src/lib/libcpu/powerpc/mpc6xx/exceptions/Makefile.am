@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -26,8 +26,6 @@ $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 #
 # (OPTIONAL) Add local stuff here using +=
 #
-
-AM_CFLAGS = $(CFLAGS_OS_V)
 
 $(PGM): $(exceptions_rel_OBJECTS)
 	$(make-rel)

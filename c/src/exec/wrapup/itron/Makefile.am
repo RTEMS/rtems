@@ -21,13 +21,12 @@ OBJS = $(ITRON_OBJS)
 $(LIB): ${OBJS}
 	$(make-library)
 
-ITRON_LIB = \
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
+ITRON_LIB = $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
 $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
-all: ${ARCH} $(LIB) $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(LIB) $(TMPINSTALL_FILES)
 
 endif
 

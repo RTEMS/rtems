@@ -15,10 +15,10 @@ esac],[RTEMS_HAS_POSIX_API=yes])
 changequote(,)dnl
 case "${target}" in
   # hpux unix port should go here
-  i[3456]86-pc-linux*)         # unix "simulator" port
+  i[34567]86-pc-linux*)         # unix "simulator" port
 	RTEMS_HAS_POSIX_API=no
 	;;
-  i[3456]86-*freebsd2*) # unix "simulator" port
+  i[34567]86-*freebsd2*) # unix "simulator" port
 	RTEMS_HAS_POSIX_API=no
 	;;
   no_cpu-*rtems*)

@@ -56,6 +56,7 @@ fi
 
 binutils=${binutils_version}
 gcc=${gcc_version}
+gnat=${gnat_version}
 gdb=${gdb_version}
 newlib=${newlib_version}
 # also use binutils_rpm_release
@@ -77,7 +78,7 @@ if [ ${testing} = yes ] ; then
   ECHO=echo
 fi
 
-installed_count=`rpm -qa | grep rtems | wc -l`
+installed_count=`rpm -q -g gnatrtems | wc -l`
 if [ ${installed_count} -ne 0 ] ; then
   echo This script should be run with NO rtems RPMs installed.
   echo It appears that the following rtems RPMs are installed:
@@ -116,7 +117,7 @@ for target in ${TARGETS}
 do
   if [ ${do_binutils} = yes ] ; then
     logfile=log/${target}-binutils
-    specfile=${dst}/${target}-binutils-${binutils}.spec
+    specfile=${dst}/${target}-gnat-${gnat}-binutils-${binutils}.spec
     echo "rpm -ba ${specfile} >${logfile} 2>&1"
     if [ ${testing} = no ] ; then
       rpm -ba ${specfile} >${logfile} 2>&1
@@ -145,7 +146,7 @@ do
     # ${ECHO} rpm -i ${binutils_rpm}
 
     logfile=log/${target}-gnatnewlib
-    specfile=${dst}/${target}-gcc-${gcc}-newlib-${newlib}.spec
+    specfile=${dst}/${target}-gnat-${gnat}-newlib-${newlib}.spec
     echo "rpm -ba ${specfile} >${logfile} 2>&1"
     if [ ${testing} = no ] ; then
       rpm -ba ${specfile} >${logfile} 2>&1
@@ -169,7 +170,7 @@ do
   if [ ${do_gdb} = yes ] ; then
     # now build gdb
     logfile=log/${target}-gdb
-    specfile=${dst}/${target}-gdb-${gdb}.spec
+    specfile=${dst}/${target}-gnat-${gnat}-gdb-${gdb}.spec
     echo "rpm -ba ${specfile} >${logfile} 2>&1"
     if [ ${testing} = no ] ; then
       rpm -ba ${specfile} >${logfile} 2>&1

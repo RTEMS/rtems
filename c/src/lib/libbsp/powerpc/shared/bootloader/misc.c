@@ -238,7 +238,7 @@ setup_hw(void)
 	char *cp, ch;
 	register RESIDUAL * res;
 	/* PPC_DEVICE * nvram; */
-	struct pci_dev *p, *default_vga;
+	struct pci_dev *default_vga;
 	int timer, err;
 	u_short default_vga_cmd;
 	static unsigned int indic;
@@ -270,7 +270,7 @@ setup_hw(void)
 	printk("\nModel: %s\nSerial: %s\n"
 	       "Processor/Bus frequencies (Hz): %ld/%ld\n"
 	       "Time Base Divisor: %ld\n"
-	       "Memory Size: %x\n",
+	       "Memory Size: %lx\n",
  	       vpd.PrintableModel,
 	       vpd.Serial,
 	       vpd.ProcessorHz,

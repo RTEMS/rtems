@@ -50,7 +50,7 @@ BEGIN_CODE
 	EXTERN (clockOff)
 
 /*----------------------------------------------------------------------------+
-| delay
+| pc386_delay
 +------------------------------------------------------------------------------
 | Delay is needed after doing I/O. 
 |
@@ -64,17 +64,17 @@ BEGIN_CODE
 #define DELAY_USE_OUTB
 	
 	.p2align 4
-	.globl _delay
-	.globl delay
-delay:
-_delay:
+	.globl _pc386_delay
+	.globl pc386_delay
+pc386_delay:
+_pc386_delay:
 #ifdef 	DELAY_USE_OUTB
 	outb	al, $0x80	# about 1uS delay on most machines
 #else
 	movl	$0x200, eax
-delay1:
+pc386_delay1:
 	dec	eax
-	jnz	delay1
+	jnz	pc386_delay1
 #endif
 	ret
 
@@ -123,36 +123,36 @@ next_step:
 
 	movb	$0x11, al		/* initialization sequence          */
 	outb	al, $0x20		/* send it to 8259A-1               */
-	call	SYM(delay)
+	call	SYM(pc386_delay)
 	outb	al, $0xA0		/* and to 8259A-2                   */
-	call	SYM(delay)
+	call	SYM(pc386_delay)
 	
 	movb	$0x20, al		/* start of hardware int's (0x20)   */
 	outb	al, $0x21
-	call	SYM(delay)
+	call	SYM(pc386_delay)
 	movb	$0x28, al		/* start of hardware int's 2 (0x28) */
 	outb	al, $0xA1
-	call	SYM(delay)
+	call	SYM(pc386_delay)
 	
 	movb	$0x04, al		/* 8259-1 is master                 */
 	outb	al, $0x21
-	call	SYM(delay)
+	call	SYM(pc386_delay)
 	movb	$0x02, al		/* 8259-2 is slave                  */
 	outb	al, $0xA1
-	call	SYM(delay)
+	call	SYM(pc386_delay)
 	
 	movb	$0x01, al		/* 8086 mode for both               */
 	outb	al, $0x21
-	call	SYM(delay)
+	call	SYM(pc386_delay)
 	outb	al, $0xA1
-	call	SYM(delay)
+	call	SYM(pc386_delay)
 	
 	movb	$0xFF, al		/* mask off all interrupts for now  */
 	outb	al, $0xA1
-	call	SYM(delay)
+	call	SYM(pc386_delay)
 	movb	$0xFB, al		/* mask all irq's but irq2 which    */
 	outb	al, $0x21		/* is cascaded                      */
-	call	SYM(delay)
+	call	SYM(pc386_delay)
 
 	movw	$0xFFFB, SYM(i8259s_cache) /* set up same values in cache */
 	

@@ -224,7 +224,7 @@ void *balloc(B_ARGS_DEC, int size)
 #endif
 			bp = (bType*) malloc(memSize);
 			if (bp == NULL) {
-				trace(0, T("B: malloc failed for %s:%d, size %d\n"),
+				goahead_trace(0, T("B: malloc failed for %s:%d, size %d\n"),
 					B_ARGS, memSize);
 				return NULL;
 			}
@@ -236,7 +236,7 @@ void *balloc(B_ARGS_DEC, int size)
 #endif
 
 		} else {
-			trace(0, T("B: balloc failed for %s:%d, size %d\n"),
+			goahead_trace(0, T("B: balloc failed for %s:%d, size %d\n"),
 				B_ARGS, memSize);
 			return NULL;
 		}
@@ -286,7 +286,7 @@ void *balloc(B_ARGS_DEC, int size)
  *			Nothing left on the primary free list, so malloc a new block
  */
 			if ((bp = (bType*) malloc(memSize)) == NULL) {
-				trace(0, T("B: malloc failed for %s:%d size %d\n"),
+				goahead_trace(0, T("B: malloc failed for %s:%d size %d\n"),
 					B_ARGS, memSize);
 				return NULL;
 			}
@@ -300,7 +300,7 @@ void *balloc(B_ARGS_DEC, int size)
 			bp->flags = B_MALLOCED;
 
 		} else {
-			trace(0, T("B: alloc failed for %s:%d size %d\n"), B_ARGS, size);
+			goahead_trace(0, T("B: alloc failed for %s:%d size %d\n"), B_ARGS, size);
 			return NULL;
 		}
 	}
@@ -577,7 +577,7 @@ static void bstatsWrite(int handle, char_t *fmt, ...)
 	buf = NULL;
 	gvsnprintf(&buf, VALUE_MAX_STRING, fmt, args);
 	va_end(args);
-	trace(0, buf);
+	goahead_trace(0, buf);
 	if (buf) {
 		bfree(B_L, buf);
 	}

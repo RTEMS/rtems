@@ -347,6 +347,7 @@ void _Init68360 (void)
     * But uses SRAM instead of DRAM                   *
     *  CS0* - 512kx8 flash memory                     *
     *  CS1* - 512kx32 static RAM                      *
+    *  CS2* - 512kx32 static RAM                      *
     ***************************************************
     */
 
@@ -418,11 +419,15 @@ void _Init68360 (void)
    /*
     * Step 12: Set up main memory
     * 512Kx32 SRAM on CS1*
+    * 512Kx32 SRAM on CS2*
     * 0 wait states
     */
-   ramSize = 1 * 1024 * 1024;
+   ramSize = 4 * 1024 * 1024;
    m360.memc[1].br = (unsigned long)&_RamBase | M360_MEMC_BR_V;
    m360.memc[1].or = M360_MEMC_OR_WAITS(0) | M360_MEMC_OR_2MB |
+                                                   M360_MEMC_OR_32BIT; 
+   m360.memc[2].br = ((unsigned long)&_RamBase + 0x200000) | M360_MEMC_BR_V;
+   m360.memc[2].or = M360_MEMC_OR_WAITS(0) | M360_MEMC_OR_2MB |
                                                    M360_MEMC_OR_32BIT; 
    /*
     * Step 13: Copy  the exception vector table to system RAM
@@ -463,12 +468,6 @@ void _Init68360 (void)
     * SIM60 interrupt sources higher priority than CPM
     */
    m360.mcr = 0x4C7F;
-	 *	No show cycles
-	 *	User/supervisor access
-	 *	Bus clear interrupt service level 7
-	 *	SIM60 interrupt sources higher priority than CPM
-	 */
-	m360.mcr = 0x4C7F;
 
 #else
 	/*

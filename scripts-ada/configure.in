@@ -30,9 +30,9 @@ AC_SUBST(RPM_SPECSdir)
 
 GNATNEWLIBVERS="gnat-${gnat_version}-newlib-${newlib_version}"
 AC_SUBST(GNATNEWLIBVERS)
-BINUTILSVERS="gnat-binutils-${binutils_version}"
+BINUTILSVERS="gnat-${gnat_version}-binutils-${binutils_version}"
 AC_SUBST(BINUTILSVERS)
-GDBVERS="gnat-gdb-${gdb_version}"
+GDBVERS="gnat-${gnat_version}-gdb-${gdb_version}"
 AC_SUBST(GDBVERS)
 BSPVERS="${rtems_version}"
 AC_SUBST(RTEMS_VERSION)

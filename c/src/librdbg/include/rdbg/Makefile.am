@@ -9,9 +9,8 @@ H_FILES = rdbg.h servrpc.h
 
 noinst_HEADERS = $(H_FILES)
 
-PREINSTALL_FILES = \
-$(PROJECT_INCLUDE)/rdbg \
-$(noinst_HEADERS:%=$(PROJECT_INCLUDE)/rdbg/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg \
+    $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/rdbg/%)
 
 $(PROJECT_INCLUDE)/rdbg:
 	@$(mkinstalldirs) $@
@@ -19,9 +18,7 @@ $(PROJECT_INCLUDE)/rdbg/%.h: %.h
 	$(INSTALL_DATA) $< $@
 endif
 
-all-am: $(PREINSTALL_FILES)
-debug-am: $(PREINSTALL_FILES)
-profile-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 if HAS_RDBG
 SUBDIRS = $(RTEMS_CPU)

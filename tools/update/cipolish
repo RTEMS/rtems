@@ -12,14 +12,17 @@
 
 # $Id$
 
-# find relative up-path to configure.in
+use strict ;
+
+my @vars = () ;
+my @buffer = () ;
+
+# find relative up-path to VERSION
 my $rtems_cfg = &find_file(".","VERSION");
 my $rtems_root = &find_root() ;
 $rtems_root =~ tr/\//\-/ ;
 my $rtems_name = "rtems" ;
 $rtems_name .=  "-" . "$rtems_root" if (length($rtems_root) > 0 ) ;
-
-my @buffer = () ;
 
 while ( <> )
 {
@@ -126,8 +129,8 @@ while ( <> )
   {
     if ( /^[\s]*(RTEMS_ENABLE_LIBCDIR).*$/o )
     {
-      if (  ( not defined $var_RTEMS_PROG_CC_FOR_TARGET )
-        and ( not defined $var_RTEMS_PROG_CXX_FOR_TARGET )
+      if (  ( not defined $main::var_RTEMS_PROG_CC_FOR_TARGET )
+        and ( not defined $main::var_RTEMS_PROG_CXX_FOR_TARGET )
       ) 
       {
         push @tbuf, "$_" ;
@@ -165,7 +168,7 @@ sub find_file($$)
   my $top = "." ;
   if (not "$pre") { $pre = "." ; }
 
-  for ( $str = "$pre" . "/" . "$top" ;
+  for ( my $str = "$pre" . "/" . "$top" ;
     ( -d "$str" ) ;
     $str = "$pre" . "/" . "$top" )
   {

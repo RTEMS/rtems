@@ -111,7 +111,7 @@ rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority)
 		printf ("Can't set socket receive timeout: %s", strerror (errno));
 		return -1;
 	}
-	memset (&myAddr, sizeof myAddr, 0);
+	memset (&myAddr, 0, sizeof myAddr);
 	myAddr.sin_family = AF_INET;
 	myAddr.sin_port = htons (123);
 	myAddr.sin_addr.s_addr = htonl (INADDR_ANY);
@@ -126,14 +126,14 @@ rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority)
 		 * server out there somewhere.
 		 */
 		if (rtems_bsdnet_ntpserver_count > 0) {
-			memset (&farAddr, sizeof farAddr, 0);
+			memset (&farAddr, 0, sizeof farAddr);
 			farAddr.sin_family = AF_INET;
 			farAddr.sin_port = htons (123);
 			/*
 			 * For now, try only the first server.
 			 */
 			farAddr.sin_addr = rtems_bsdnet_ntpserver[0];
-			memset (&packet, sizeof packet, 0);
+			memset (&packet, 0, sizeof packet);
 			packet.li_vn_mode = (3 << 3) | 3; /* NTP version 3, client */
 			i = sendto (s, &packet, sizeof packet, 0, (struct sockaddr *)&farAddr, sizeof farAddr);
 			if (i != sizeof packet) {

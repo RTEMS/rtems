@@ -33,7 +33,18 @@ extern "C" {
  *  NOTE: RTEMS defines a canonical name for each cpu model.
  */
 
-#if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
+#if defined(rtems_multilib)
+/*
+ *  Figure out all CPU Model Feature Flags based upon compiler 
+ *  predefines. 
+ */
+
+#define CPU_MODEL_NAME  "rtems_multilib"
+#define I960_HAS_FPU 0
+#define I960_CPU_ALIGNMENT 4
+#define I960_SOFT_RESET_COMMAND 0x30000
+
+#elif defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
 
 #define CPU_MODEL_NAME  "i960ca"
 #define __RTEMS_I960CA__

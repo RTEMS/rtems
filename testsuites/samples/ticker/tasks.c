@@ -18,6 +18,7 @@
  */
 
 #include "system.h"
+#include <stdio.h>
 
 rtems_task Test_task(
   rtems_task_argument unused
@@ -30,7 +31,7 @@ rtems_task Test_task(
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
   task_index = task_number( tid );
-  while( FOREVER ) {
+  for ( ; ; ) {
     status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
     if ( time.second >= 35 ) {
       puts( "*** END OF CLOCK TICK TEST ***" );
@@ -38,6 +39,6 @@ rtems_task Test_task(
     }
     put_name( Task_name[ task_index ], FALSE );
     print_time( " - rtems_clock_get - ", &time, "\n" );
-    status = rtems_task_wake_after( task_index * 5 * TICKS_PER_SECOND );
+    status = rtems_task_wake_after( task_index * 5 * get_ticks_per_second() );
   }
 }

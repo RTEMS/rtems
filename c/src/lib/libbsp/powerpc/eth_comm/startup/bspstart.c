@@ -148,7 +148,7 @@ void bsp_start(void)
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-  Cpu_table.interrupt_stack_size = 4 * 1024;
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   Cpu_table.clicks_per_usec = 1;  /* for 4MHz extclk */
   Cpu_table.serial_per_sec = 10000000;
@@ -159,11 +159,6 @@ void bsp_start(void)
   Cpu_table.timer_average_overhead = 0;
   Cpu_table.timer_least_valid = 0;
   Cpu_table.clock_speed = 40000000;
-
-  /* 
-   * Call this in case we use TERMIOS for console I/O
-   */
-  m860_console_reserve_resources(&BSP_Configuration);
 
   /*
    * Since we are currently autodetecting whether to use SCC1 or

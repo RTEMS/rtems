@@ -1,14 +1,14 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-## Check configure.in for conditions to set the conditionals below 
+## Check configure.in for conditions to set the conditionals below
 if shared
 SHARED_LIB = shared
-endif 
+endif
 
 if mpc505
 CPU_SUBDIR = mpc505

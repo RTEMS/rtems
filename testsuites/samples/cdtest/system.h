@@ -13,7 +13,7 @@
  *  $Id$
  */
 
-#include <tmacros.h>
+#include <rtems.h>
 
 /* functions */
 
@@ -23,10 +23,12 @@ rtems_task main_task(
 
 /* configuration information */
 
-#define CONFIGURE_SPTEST
+#include <bsp.h> /* for device driver prototypes */
 
-#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
-#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS           1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 #define CONFIGURE_INIT_TASK_ENTRY_POINT   main_task
@@ -34,8 +36,4 @@ rtems_task main_task(
 
 #include <confdefs.h>
 
-/* global variables */
-
-TEST_EXTERN rtems_id Global_variable;   /* example global variable     */
- 
 /* end of include file */

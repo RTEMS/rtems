@@ -12,7 +12,7 @@ Vendor:       OAR Corporation
 Distribution: Linux
 Name:         @target_alias@-gnat-gdb-collection
 Release:      @Release@
-Copyright:    1999 OARCorp
+License:      GPL/LGPL
 Group:        gnatrtems
 Provides:     rtems-base-gnat-gdb @target_alias@-gnat-gdb
 
@@ -23,7 +23,7 @@ Version:      @gdb_version@
 Summary:      gdb for target @target_alias@
 Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-@gdb_version@.tar.gz
 Source1:	ftp://cs.nyu.edu/pub/gnat/gnat-@gnat_version@-src.tar.gz
-Patch0:	      gdb-@gdb_version@-rtems-@gdb_patch_version@.diff
+Patch0:	      gdb-@gdb_version@-rtems-gnat-@gnat_version@-@gdb_patch_version@.diff
 Buildroot:	/tmp
 
 #
@@ -127,7 +127,7 @@ test -d build || mkdir build
 %dir /opt/gnatrtems/info
 %doc /opt/gnatrtems/info/gdb.info*
 %doc /opt/gnatrtems/info/mmalloc.info*
-%doc /opt/gnatrtems/info/readline.info*
+# %doc /opt/gnatrtems/info/readline.info*
 
 %dir /opt/gnatrtems/man
 %dir /opt/gnatrtems/man/man1

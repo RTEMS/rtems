@@ -388,8 +388,13 @@ int main(
    *  triply indirect blocks.
    */
 
-  test_extend( "/tmp/joel", max_size - 1 );
-  test_cat( "/tmp/joel", max_size / 2, 1024 );
+  if ( max_size < 300 * 1024 ) {
+    test_extend( "/tmp/joel", max_size - 1 );
+    test_cat( "/tmp/joel", max_size / 2, 1024 );
+  } else {
+    printf( "Skipping maximum file size test since max_size is %d bytes\n", max_size );
+    puts("That is likely to be bigger than the available RAM on many targets." );
+  }
 
   stat_a_file( "/tmp/joel" );
 
@@ -429,7 +434,7 @@ int main(
   status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
   rewind( file );
   while ( fgets(buffer, 128, file) )
-    printf( buffer );
+    printf( "%s", buffer );
 
   /* 
    * Verify only atime changed for a read.

@@ -37,6 +37,10 @@
  *  the ** and a similarly named routine in this file is passed something
  *  like a (Context_Control_fp *).  The general rule on making this decision
  *  is to avoid writing assembly language.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Context_save_fp(
@@ -56,6 +60,10 @@ void _CPU_Context_save_fp(
  *  the ** and a similarly named routine in this file is passed something
  *  like a (Context_Control_fp *).  The general rule on making this decision
  *  is to avoid writing assembly language.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Context_restore_fp(
@@ -67,6 +75,10 @@ void _CPU_Context_restore_fp(
 /*  _CPU_Context_switch
  *
  *  This routine performs a normal non-FP context switch.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Context_switch(
@@ -83,6 +95,10 @@ void _CPU_Context_switch(
  *  efficient manner.  It may simply be a label in _CPU_Context_switch.
  *
  *  NOTE: May be unnecessary to reload some registers.
+ *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _CPU_Context_restore(
@@ -95,6 +111,9 @@ void _CPU_Context_restore(
  *
  *  This routine provides the RTEMS interrupt management.
  *
+ *  NO_CPU Specific Information:
+ *
+ *  XXX document implementation including references if appropriate
  */
 
 void _ISR_Handler()

@@ -18,5 +18,5 @@
 %{qrtems: %{qrtems_debug: start_g.o%s} %{!qrtems_debug: start.o%s}}
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e _start}
+%(old_link) %{qrtems: -dc -dp -N -e _start}
 

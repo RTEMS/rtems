@@ -54,7 +54,19 @@ extern "C" {
  *
  */
  
-#if defined(erc32)
+#if defined(rtems_multilib)
+/*
+ *  Figure out all CPU Model Feature Flags based upon compiler 
+ *  predefines. 
+ */
+
+#define CPU_MODEL_NAME                   "rtems_multilib"
+#define SPARC_HAS_FPU                    1
+#define SPARC_HAS_BITSCAN                0
+#define SPARC_NUMBER_OF_REGISTER_WINDOWS 8
+#define SPARC_HAS_LOW_POWER_MODE         1
+
+#elif defined(erc32)
  
 #define CPU_MODEL_NAME                   "erc32"
 #define SPARC_HAS_FPU                    1

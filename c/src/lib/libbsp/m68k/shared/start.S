@@ -91,8 +91,8 @@ loop:   movel   #0,a1@+                 | to zero out uninitialized
         lea     SYM (hiintstack),a0   | a0 = high end of intr stack
         movec   a0,isp                | set interrupt stack
 #endif
-        movel   #0,a7@-               | push environp
-        movel   #0,a7@-               | push argv
+        pea	env                   | push environp
+        pea	arg                   | push argv
         movel   #0,a7@-               | push argc
 
         jsr     SYM (boot_card)
@@ -115,6 +115,11 @@ END_CODE
 
 BEGIN_DATA
 
+	PUBLIC (environ)
+        .align 2
+SYM (environ):
+	.long	env
+
 	PUBLIC (start_frame)
 SYM (start_frame):
         .space  4,0
@@ -123,10 +128,8 @@ END_DATA
 
 BEGIN_BSS
 
-	PUBLIC (environ)
-        .align 2
-SYM (environ):
-        .long  0
+env: .long  0
+arg: .long  0
 
 	PUBLIC (initial_isp)
 SYM (initial_isp):

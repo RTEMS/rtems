@@ -21,9 +21,8 @@ endif
 noinst_HEADERS = $(STD_I_FILES) $(MP_I_FILES)
 
 if INLINE
-PREINSTALL_FILES = \
-$(PROJECT_INCLUDE)/rtems/score \
-$(I_FILES:%=$(PROJECT_INCLUDE)/rtems/score/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
+    $(I_FILES:%=$(PROJECT_INCLUDE)/rtems/score/%)
 
 $(PROJECT_INCLUDE)/rtems/score:
 	@$(mkinstalldirs) $@
@@ -31,8 +30,6 @@ $(PROJECT_INCLUDE)/rtems/score/%.inl: %.inl
 	$(INSTALL_DATA) $< $@
 endif
 
-all-am: $(PREINSTALL_FILES)
-debug-am: $(PREINSTALL_FILES)
-profile-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

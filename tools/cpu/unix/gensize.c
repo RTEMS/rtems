@@ -36,6 +36,7 @@
 typedef struct {
   jmp_buf     regs;
   int         isr_level;
+  int         pad[4]; /* just in case */
 } Context_Control;
 
 int main(

@@ -71,7 +71,6 @@ static volatile m821BufferDescriptor_t *RxBd[NIFACES], *TxBd[NIFACES];
  */
 static int m821_get_brg_cd(int);
 unsigned char m821_get_brg_clk(int);
-void m821_console_reserve_resources(rtems_configuration_table *);
 unsigned char m821_get_brg_clk(int);
 
 
@@ -99,7 +98,7 @@ m821_get_brg_cd (int baud)
 /*  at any time since the OS started. It needs to be fixed. FIXME */
 unsigned char m821_get_brg_clk(int baud)
 {
-  static short brg_spd[4];
+  static int   brg_spd[4];
   static char  brg_used[4];
   int i;
 
@@ -370,8 +369,8 @@ m821_smc_initialize (int port)  /* port is the SMC number (i.e. 1 or 2) */
   /*
    * Put SMC in NMSI mode, connect SMC to BRG
    */
-  m821.simode &= ~0x7000 << ((port-1) * 8);
-  m821.simode |= brg << (12 + ((port-1) * 8));
+  m860.simode &= ~(0x7000 << ((port-1) * 16));
+  m860.simode |= brg << (12 + ((port-1) * 16));
 
   /*
    * Set up SMC1 parameter RAM common to all protocols
@@ -675,14 +674,6 @@ m821_buf_poll_write (int minor, char *buf, int len)
   TxBd[minor]->length = len;
   TxBd[minor]->status = M821_BD_READY | M821_BD_WRAP;
   return 0;
-}
-
-/*
- * This is needed in case we use TERMIOS
- */
-void m821_console_reserve_resources(rtems_configuration_table *configuration)
-{
-  rtems_termios_reserve_resources (configuration, 1);
 }
 
 void m821_console_initialize(void)

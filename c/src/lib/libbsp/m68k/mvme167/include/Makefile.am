@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -25,7 +25,7 @@ TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp.h \
     $(PROJECT_INCLUDE)/coverhd.h $(PROJECT_INCLUDE)/page_table.h \
     $(PROJECT_INCLUDE)/fatal.h
 
-all-local: $(TMPINSTALL_FILES)
+all: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bsp.h coverhd.h fatal.h page_table.h
 

@@ -54,6 +54,15 @@ extern "C" {
 #include <bspIo.h>
   
 /*
+ *  confdefs.h overrides for this BSP:
+ *   - number of termios serial ports
+ *   - Interrupt stack space is not minimum if defined.
+ */
+
+#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
+#define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
+
+/*
  * Network driver configuration
  */
 
@@ -134,6 +143,8 @@ extern int rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config);
 #define Clear_tm27_intr()
 #define Lower_tm27_intr()
 
+/* does anyone need this? if so, report it so we can rename this macro */
+#if 0
 /*-------------------------------------------------------------------------+
 | Simple spin delay in microsecond units for device drivers.
 | This is very dependent on the clock speed of the target.
@@ -143,6 +154,7 @@ extern int rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config);
   rtems_unsigned32 _cnt = _microseconds; \
   asm volatile ("0: nop; mov %0,%0; loop 0b" : "=c"(_cnt) : "0"(_cnt)); \
 }
+#endif
 
 /*-------------------------------------------------------------------------+
 | Convert microseconds to ticks and ticks to microseconds.

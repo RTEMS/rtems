@@ -1,6 +1,6 @@
-
 +-----------------------------------------------------------------------------+
-| RTEMS 4.0.0 PC386 BSP HOWTO - 1998/04/21                                    |
+| RTEMS 4.5.0 PC386 BSP HOWTO - 1998/04/21                                    |
+|                                                                             |
 +-----------------------------------------------------------------------------+
 | (C) Copyright 1998 -                                                        |
 | - NavIST Group - Real-Time Distributed Systems and Industrial Automation    |
@@ -14,6 +14,11 @@
 | This file is provided "AS IS" without warranty of any kind, either          |
 | expressed or implied.                                                       |
 +-----------------------------------------------------------------------------+
+| History:                                                                    |
+|  12 June 2000 - Updated to 4.5 (Joel)                                       |
++-----------------------------------------------------------------------------+
+
+CVS Revision: $Id$
 
 
 1. Introduction
@@ -37,31 +42,24 @@ substituted by the real thing!
 ------------------------------------------------
 
     Obtaining, building and installing the tools for building the
-PC386 BSP of RTEMS is covered in detail in the 'RTEMS 4.0.0 On-Line
-Library' -> 'Getting Started with RTEMS for C/C++ Users' -> 'Building
-the GNU C/C++ Cross Compiler Toolset'.
+PC386 BSP of RTEMS is covered in detail in the 'RTEMS 4.5.0 On-Line
+Library' -> 'Getting Started with RTEMS for C/C++ Users'.  You can
+either use pre-built toolset executables or build your own from
+the instructions given there.
 
-    When running the 'bit' script you should specift the argumetn as
-either:
-
-   +  'i386-elf' to indicate an 'i386-rtemself' toolset, or
-   +  'i386' to indicate an 'i386-rtems' toolset.
+    This BSP is designed to work only with ELF toolset configurations.
+This is format used by the i386-rtems target.
 
 
 4. Building RTEMS
 -----------------
     Obtaining, building and installing the tools for building the
-PC386 BSP is covered in detail in the 'RTEMS 4.0.0 On-Line Library' ->
+PC386 BSP is covered in detail in the 'RTEMS 4.5.0 On-Line Library' ->
 'Getting Started with RTEMS for C/C++ Users' -> 'Building RTEMS'.
 
     When running configure, use the following values for the listed
-options:
+options with an i386-rtems toolset:
 
-      + with an i386-rtemself toolset
-          --target=i386-rtemself
-          --enable-rtemsbsp=pc386
-
-      + with an i386-rtems toolset
           --target=i386-rtems
           --enable-rtemsbsp=pc386
 
@@ -116,11 +114,10 @@ and run your PC386 BSP samples, tests and programs.
 
     You can get the latest release of GRUB from its homepage:
 
-    - http://www.uruk.org/grub/
+    - http://www.gnu.org/grub/
 
-or alternatively by ftp from:
-
-    - ftp://ftp.uruk.org/public/grub/
+NOTE: The former location was http://www.uruk.org/grub and ftp from
+      ftp://ftp.uruk.org/public/grub.
 
     Once you obtain the .tar.gz archive 'grub-0.4.tar.gz', change to a
 temporary directory (you won't need the grub files after this and can

@@ -12,7 +12,7 @@ Name:         @target_alias@-gnat-newlib
 Summary:      gnat, gcc, and newlib C Library for @target_alias@.
 Group:	      gnatrtems
 Release:      @Release@
-Copyright:    1999 OARCorp
+License:      gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 
 Provides:     	rtems-base-gnat @target_alias@-gnat 
 Provides:       rtems-base-gnat-binutils @target_alias@-gnat-binutils
@@ -26,10 +26,10 @@ Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.gz
 Source1:	ftp://sourceware.cygnus/com/pub/newlib/newlib-@newlib_version@.tar.gz
 Source2:	ftp://cs.nyu.edu/pub/gnat/gnat-@gnat_version@-src.tar.gz
 Source3:      	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-@binutils_version@.tar.gz
-Patch0:		gcc-@gcc_version@-rtems-@gcc_patch_version@.diff
+Patch0:		gcc-@gcc_version@-rtems-gnat-@gnat_version@-@gcc_patch_version@.diff
 Patch1:		newlib-@newlib_version@-rtems-@newlib_patch_version@.diff
-Patch2:		gnat-@gnat_version@-src-rtems-@gnat_patch_version@.diff
-Patch3:		binutils-@binutils_version@-rtems-@binutils_patch_version@.diff
+Patch2:		gnat-@gnat_version@-rtems-@gnat_patch_version@.diff
+Patch3:		binutils-@binutils_version@-rtems-gnat-@gnat_version@-@binutils_patch_version@.diff
 #
 Buildroot:	/tmp
 
@@ -44,7 +44,10 @@ Buildroot:	/tmp
 # your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
 # Or you can try the ftp options of rpm :-)
 #
-NoSource:      0, 1, 2, 3
+NoSource:	0
+NoSource:	1
+NoSource:	2
+NoSource:	3
 
 %description
 RTEMS is an open source operating system for embedded systems.

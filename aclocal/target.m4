@@ -54,7 +54,7 @@ if test "$no_recursion" != yes; then
     echo configuring in $target_subdir/$ac_config_dir
 
     case "$srcdir" in
-    .) ;;
+##    .) ;;
     *)
       if test -d $target_subdir/$ac_config_dir || mkdir $target_subdir/$ac_config_dir; then :;
       else
@@ -72,8 +72,8 @@ changequote(, )dnl
 changequote([, ])dnl
 
     case "$srcdir" in
-    .) # No --srcdir option.  We are building in place.
-      ac_sub_srcdir=$srcdir ;;
+##    .) # No --srcdir option.  We are building in place.
+##      ac_sub_srcdir=$srcdir ;;
     /*) # Absolute path.
       ac_sub_srcdir=$srcdir/$ac_config_dir ;;
     *) # Relative path.

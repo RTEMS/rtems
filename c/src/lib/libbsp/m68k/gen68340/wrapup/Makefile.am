@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -8,8 +8,7 @@ BSP_PIECES = startup clock console timer
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
-    $(wildcard \
-    ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/fpsp/$(ARCH)/fpsp.rel)
+    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/fpsp/$(ARCH)/fpsp.rel)
 LIB = $(ARCH)/libbsp.a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

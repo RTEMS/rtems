@@ -72,9 +72,9 @@ IMFS_jnode_t *IMFS_create_node(
 
   gettimeofday( &tv, 0 );
 
-  node->st_atime  = (time_t) tv.tv_sec;
-  node->st_mtime  = (time_t) tv.tv_sec;
-  node->st_ctime  = (time_t) tv.tv_sec;
+  node->stat_atime  = (time_t) tv.tv_sec;
+  node->stat_mtime  = (time_t) tv.tv_sec;
+  node->stat_ctime  = (time_t) tv.tv_sec;
 
   /*
    *  Set the type specific information

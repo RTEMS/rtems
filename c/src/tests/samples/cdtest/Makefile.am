@@ -26,8 +26,6 @@ OBJS = $(C_O_FILES) $(CC_O_FILES)
 
 PRINT_SRCS = $(DOCS)
 
-PGM = ${ARCH}/$(SAMPLE).exe
-
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 include $(top_srcdir)/sample.am

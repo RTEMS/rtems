@@ -58,6 +58,8 @@ void Init(
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
 }
 
+#define MESSAGE_SIZE (sizeof(long) * 4)
+
 rtems_task test_init(
   rtems_task_argument argument
 )
@@ -76,7 +78,7 @@ rtems_task test_init(
   status = rtems_message_queue_create(
     rtems_build_name( 'M', 'Q', '1', ' '  ),
     OPERATION_COUNT,
-    16,
+    MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id
   );
@@ -105,7 +107,7 @@ rtems_task test_init(
   }
 
   Timer_initialize();
-    (void) rtems_message_queue_send( Queue_id, (long (*)[4]) Buffer, 16 );
+    (void) rtems_message_queue_send( Queue_id, Buffer, MESSAGE_SIZE );
 }
 
 rtems_task Middle_tasks(

@@ -28,6 +28,15 @@ extern "C" {
 #include <qsm.h>
 
 /*
+ *  confdefs.h overrides for this BSP:
+ *   - number of termios serial ports (defaults to 1)
+ *   - Interrupt stack space is not minimum if defined.
+ */
+
+/* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
+/* #define CONFIGURE_INTERRUPT_STACK_MEMORY  (TBD * 1024) */
+
+/*
  *  Define the time limits for RTEMS Test Suite test durations.
  *  Long test and short test duration limits are provided.  These
  *  values are in seconds and need to be converted to ticks for the
@@ -78,11 +87,8 @@ extern char _edata[];
 extern char _clear_start[];
 extern char end[];
 extern char _copy_data_from_rom[];
-extern char __end_of_ram[];
 
 /* constants */
-
-#define RAM_END ((int)__end_of_ram)
 
 #ifdef __START_C__
 #define STACK_SIZE "#0x800"

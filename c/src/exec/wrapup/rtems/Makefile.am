@@ -25,12 +25,11 @@ $(LIB): ${OBJS}
 	 $(SIZE_RTEMS) @RTEMS_BSP@ $(ARCH) \
 	 >$(PROJECT_RELEASE)/lib/sizeinfo$(LIB_VARIANT).txt
 
-TMPINSTALL_FILES += \
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
 $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
-all: ${ARCH} $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

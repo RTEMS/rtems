@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -23,7 +23,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 #
 
 # USE_INIT_FINI tells main.c what C++ help we need.
-
 AM_CPPFLAGS += -DUSE_INIT_FINI
 
 $(PGM): $(OBJS)
@@ -32,16 +31,12 @@ $(PGM): $(OBJS)
 $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_RELEASE)/lib/elflinkcmds: elflinkcmds
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds \
-    $(PROJECT_RELEASE)/lib/elflinkcmds
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
 
 all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = bspclean.c bspstart.c elflinkcmds linkcmds page_table.c
+EXTRA_DIST = bspclean.c bspstart.c linkcmds page_table.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

@@ -37,7 +37,7 @@ usage()
   exit 1;
 }
 
-# Check for auxillary files
+# Check for auxiliary files
 aux_files="../../VERSION ampolish acpolish cipolish"
 for i in ${aux_files}; do
   if test ! -f ${perltools}/$i; then

@@ -18,17 +18,14 @@ H_FILES = utime.h $(NEWLIB_H_FILES) $(NETWORKING_H_FILES)
 
 noinst_HEADERS = utime.h termios.h ioctl.h
 
-PREINSTALL_FILES = \
-$(PROJECT_INCLUDE)/sys \
-$(H_FILES:%=$(PROJECT_INCLUDE)/sys/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys \
+    $(H_FILES:%=$(PROJECT_INCLUDE)/sys/%)
 
 $(PROJECT_INCLUDE)/sys:
 	@$(mkinstalldirs) $@
 $(PROJECT_INCLUDE)/sys/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-all-am: $(PREINSTALL_FILES)
-debug-am: $(PREINSTALL_FILES)
-profile-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -21,8 +21,6 @@ $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 #
 # (OPTIONAL) Add local stuff here using +=
 #
-
-AM_CFLAGS = $(CFLAGS_OS_V)
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
     $(PROJECT_INCLUDE)/libcpu/c_clock.h

@@ -1,0 +1,55 @@
+# =====================================================================
+# rtems-base-gdb
+# =====================================================================
+
+%package -n rtems-base-gdb
+Provides:	rtems-base-gdb
+Summary:      base package for rtems gdb
+Group: rtems
+
+%description -n rtems-base-gdb
+
+RTEMS is an open source operating system for embedded systems.
+
+This is the base for gdb regardless of target CPU.
+
+%files -n rtems-base-gdb
+
+%dir /opt/rtems/info
+%doc /opt/rtems/info/gdb.info*
+%doc /opt/rtems/info/mmalloc.info*
+%doc /opt/rtems/info/readline.info*
+
+%dir /opt/rtems/man
+%dir /opt/rtems/man/man1
+
+%dir /opt/rtems/include
+# We install libbfd from binutils
+# /opt/rtems/include/bfd.h
+# /opt/rtems/include/bfdlink.h
+
+%dir /opt/rtems/lib
+# We install libbfd from binutils
+# /opt/rtems/lib/libbfd*
+# We use libiberty from gcc
+# /opt/rtems/lib/libiberty*
+
+%post -n rtems-base-gdb
+  if test -d $RPM_INSTALL_PREFIX/rtems/info;
+  then
+    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
+    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+    done
+  fi
+
+%postun -n rtems-base-gdb
+  if test -d $RPM_INSTALL_PREFIX/rtems/info;
+  then
+    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
+    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+    done
+  fi

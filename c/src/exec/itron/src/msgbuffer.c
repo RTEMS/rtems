@@ -43,7 +43,7 @@ void _ITRON_Message_buffer_Manager_initialization(
                                                 block */ 
     FALSE,                         /* TRUE if names for this
                                       object are strings */ 
-    RTEMS_MAXIMUM_NAME_LENGTH,     /* maximum length of each
+    ITRON_MAXIMUM_NAME_LENGTH,     /* maximum length of each
                                       object's name */ 
     FALSE                          /* TRUE if this class is threads */
   );

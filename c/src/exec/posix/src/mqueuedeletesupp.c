@@ -48,7 +48,7 @@ void _POSIX_Message_queue_Delete(
 
     _POSIX_Message_queue_Free( the_mq );
  
-#if defined(RTEMS_MULTIPROCESSING)
+#if 0 && defined(RTEMS_MULTIPROCESSING)
     if ( the_mq->process_shared == PTHREAD_PROCESS_SHARED ) {
  
       _Objects_MP_Close(

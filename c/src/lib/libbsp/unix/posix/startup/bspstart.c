@@ -205,7 +205,7 @@ void bsp_start(void)
      * XXX; interrupt stack not currently used, so this doesn't matter
      */
 
-    Cpu_table.interrupt_stack_size = (12 * 1024);
+    Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
     Cpu_table.extra_mpci_receive_server_stack = 0;
 

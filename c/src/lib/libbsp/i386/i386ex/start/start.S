@@ -83,7 +83,7 @@ END_DATA
 */
 	
 	.code16
-	.section .reset                        
+	.section .reset, "ax"
 		PUBLIC ( SYM(reset) ) 
 SYM(reset):
 	nop
@@ -106,7 +106,7 @@ SYM(reset):
 	nop
 	nop
 	
-	.section .initial
+	.section .initial, "ax"
 	/* nop */		/* required for linker -- initial jump is to "label - 2"   */
 	/* nop */		/* ie. _initInternalRegisters -2 ( which now == .initial ) */ 	
 /*

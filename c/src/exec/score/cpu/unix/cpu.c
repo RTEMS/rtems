@@ -42,7 +42,7 @@
 
 typedef struct {
   jmp_buf   regs;
-  int  isr_level;
+  int       isr_level;
 } Context_Control_overlay;
 
 void  _CPU_Signal_initialize(void);
@@ -99,7 +99,9 @@ void _CPU_ISR_From_CPU_Init()
   (void) sigfillset(&_CPU_Signal_mask);
   (void) sigdelset(&_CPU_Signal_mask, SIGTRAP);
   (void) sigdelset(&_CPU_Signal_mask, SIGABRT);
+#if !defined(__CYGWIN__)
   (void) sigdelset(&_CPU_Signal_mask, SIGIOT);
+#endif
   (void) sigdelset(&_CPU_Signal_mask, SIGCONT);
   (void) sigdelset(&_CPU_Signal_mask, SIGSEGV);
   (void) sigdelset(&_CPU_Signal_mask, SIGBUS);
@@ -198,7 +200,9 @@ void _CPU_Context_From_CPU_Init()
    *  get default values to use in _CPU_Context_Initialize()
    */
 
-
+  if ( sizeof(Context_Control_overlay) < sizeof(Context_Control) )
+    _CPU_Fatal_halt( 0xdeadfood );
+  
   (void) memset(
     &_CPU_Context_Default_with_ISRs_enabled,
     0,
@@ -274,6 +278,15 @@ void _CPU_Initialize(
   void            (*thread_dispatch)      /* ignored on this CPU */
 )
 {
+  /*
+   *  If something happened where the public Context_Control is not
+   *  at least as large as the private Context_Control_overlay, then
+   *  we are in trouble.
+   */
+
+  if ( sizeof(Context_Control_overlay) > sizeof(Context_Control) )
+    _CPU_Fatal_error(0x100 + 1);
+
   /*
    *  The thread_dispatch argument is the address of the entry point
    *  for the routine called at the end of an ISR once it has been
@@ -482,11 +495,11 @@ void _CPU_Context_Initialize(
    */
 
   if ( _new_level == 0 )
-      *_the_context = *(Context_Control *)
-                         &_CPU_Context_Default_with_ISRs_enabled;
+      *(Context_Control_overlay *)_the_context =
+                         _CPU_Context_Default_with_ISRs_enabled;
   else
-      *_the_context = *(Context_Control *)
-                         &_CPU_Context_Default_with_ISRs_disabled;
+      *(Context_Control_overlay *)_the_context = 
+                         _CPU_Context_Default_with_ISRs_disabled;
 
   addr = (unsigned32 *)_the_context;
 
@@ -806,7 +819,9 @@ void _CPU_Stray_signal(int sig_num)
       case SIGBUS:
       case SIGSEGV:
       case SIGTERM:
+#if !defined(__CYGWIN__)
       case SIGIOT:
+#endif
         _CPU_Fatal_error(0x100 + sig_num);
   }
 }

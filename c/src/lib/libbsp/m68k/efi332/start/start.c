@@ -93,7 +93,7 @@ void  dumby_start() {
   *CSBAR3 = (unsigned short int)         
     (((0x0C0000 >> 8)&0xfff8) | BS_256K ); /* 256k bytes located at 0xC0000 */
   *CSBAR4 = (unsigned short int)
-    (((0x0C0000 >> 8)&0xfff8) | BS_256K ); /* 256 bytes located at 0xC0000 */
+    (((0x0C0000 >> 8)&0xfff8) | BS_256K ); /* 256k bytes located at 0xC0000 */
   *CSBAR5 = (unsigned short int)         
     (0xfff8 | BS_64K);	       	         /* AVEC interrupts */
 #ifdef EFI332_v040b
@@ -112,10 +112,10 @@ void  dumby_start() {
   /*    see section 7 of the SIM Reference Manual */
 #ifdef FLASHWRITE
   *CSORBT = (unsigned short int)
-    ( BothBytes | ReadWrite | SyncAS | WaitStates_2 | UserSupSpace );
+    ( BothBytes | ReadWrite | SyncAS | WaitStates_0 | UserSupSpace );
 #else /* FLASHWRITE */
   *CSORBT = (unsigned short int)
-    ( BothBytes | ReadOnly | SyncAS | WaitStates_2 | UserSupSpace );
+    ( BothBytes | ReadOnly | SyncAS | WaitStates_0 | UserSupSpace );
 #endif /* FLASHWRITE */
   *CSOR0 = (unsigned short int)
     ( BothBytes | ReadOnly | SyncAS | External | UserSupSpace );

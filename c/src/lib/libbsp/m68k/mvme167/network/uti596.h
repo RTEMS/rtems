@@ -3,7 +3,6 @@
 
 /*
  * EII: March 11: Created v. 0.0
- *      Jan 12/98 Added STAT bits, s11-=s5 and max_colls.
  *
  *  $Id$
  */
@@ -55,14 +54,11 @@ struct enet_statistics{
   int   nic_reset_count;      /* The number of times uti596reset() has been called. */
 };
 
-#define UTI596_MUTEX   1
-
-
 #define CMD_EOL						0x8000		/* The last command of the list, stop. */
 #define CMD_SUSP					0x4000		/* Suspend after doing cmd. 					 */
 #define CMD_INTR					0x2000		/* Interrupt after doing cmd. 				 */
 
-#define CMD_FLEX					0x0008		/* Enable flexible memory model */
+#define CMD_FLEX					0x0008		/* Enable flexible memory model   */
 
 #define SCB_STAT_CX    		0x8000  	/* Cmd completes with 'I' bit set */
 #define SCB_STAT_FR    		0x4000  	/* Frame Received                 */
@@ -71,7 +67,6 @@ struct enet_statistics{
 
 #define SCB_CUS_SUSPENDED 0x0100
 #define SCB_CUS_ACTIVE    0x0200
-
 
 #define STAT_C						0x8000		/* Set to 1 after execution              */
 #define STAT_B						0x4000		/* 1 : Cmd being executed, 0 : Cmd done. */
@@ -86,8 +81,6 @@ struct enet_statistics{
 #define STAT_S6         	0x0040
 #define STAT_S5         	0x0020
 #define STAT_MAX_COLLS  	0x000F
-
-
 
 #define RBD_STAT_P      	0x4000  	/* prefetch */
 #define RBD_STAT_F      	0x4000  	/* used */
@@ -105,17 +98,11 @@ struct enet_statistics{
 #define RU_NO_RESOURCES 	0x0020
 #define RU_READY        	0x0040
 
-
-#define IO_ADDR         	0x360
-#define PORT_ADDR       	IO_ADDR
-#define CHAN_ATTN       	PORT_ADDR + 4
-#define NIC_ADDR        	PORT_ADDR + 8
-
 #define I596_NULL ( ( void * ) 0xffffffff)
 #define UTI_596_END_OF_FRAME 0x8000
-#define SIZE_MASK	0x3fff
 
-struct i596_tbd;
+
+struct i596_tbd;  /* necessary forward declaration */
 
 enum commands {
   CmdNOp           = 0, 
@@ -128,14 +115,100 @@ enum commands {
   CmdDiagnose      = 7
 };
 
+/*
+ * 82596 Dump Command Result
+ */
+typedef volatile struct i596_dump_result {
+  unsigned char bf;
+  unsigned char config_bytes[11];
+  unsigned char reserved1[2];
+  unsigned char ia_bytes[6];
+  unsigned short last_tx_status;
+  unsigned short tx_crc_byte01;
+  unsigned short tx_crc_byte23;
+  unsigned short rx_crc_byte01;
+  unsigned short rx_crc_byte23;  
+  unsigned short rx_temp_mem01;
+  unsigned short rx_temp_mem23;
+  unsigned short rx_temp_mem45;
+  unsigned short last_rx_status;
+  unsigned short hash_reg01;
+  unsigned short hash_reg23;
+  unsigned short hash_reg45;
+  unsigned short hash_reg67;
+  unsigned short slot_time_counter;
+  unsigned short wait_time_counter;
+  unsigned short rx_frame_length;
+  unsigned long reserved2;
+  unsigned long cb_in3;
+  unsigned long cb_in2;
+  unsigned long cb_in1;
+  unsigned long la_cb_addr;
+  unsigned long rdb_pointer;
+  unsigned long int_memory;
+  unsigned long rfd_size;
+  unsigned long tbd_pointer;
+  unsigned long base_addr;
+  unsigned long ru_temp_reg;
+  unsigned long tcb_count;
+  unsigned long next_rb_size;
+  unsigned long next_rb_addr;
+  unsigned long curr_rb_size;
+  unsigned long la_rbd_addr;
+  unsigned long next_rbd_addr;
+  unsigned long curr_rbd_addr;
+  unsigned long curr_rb_count;
+  unsigned long next_fd_addr;
+  unsigned long curr_fd_add;
+  unsigned long temp_cu_reg;
+  unsigned long next_tb_count;
+  unsigned long buffer_addr;
+  unsigned long la_tbd_addr;
+  unsigned long next_tbd_addr;
+  unsigned long cb_command;
+  unsigned long next_cb_addr;
+  unsigned long curr_cb_addr;
+  unsigned long scb_cmd_word;
+  unsigned long scb_pointer;
+  unsigned long cb_stat_word;
+  unsigned long mm_lfsr;
+  unsigned char micro_machine_bit_array[28];
+  unsigned char cu_port[16];
+  unsigned long mm_alu;
+  unsigned long reserved3;
+  unsigned long mm_temp_a_rr;
+  unsigned long mm_temp_a;
+  unsigned long tx_dma_b_cnt;
+  unsigned long mm_input_port_addr_reg;
+  unsigned long tx_dma_addr;
+  unsigned long mm_port_reg1;
+  unsigned long rx_dma_b_cnt;
+  unsigned long mm_port_reg2;
+  unsigned long rx_dma_addr;
+  unsigned long reserved4;
+  unsigned long bus_t_timers;
+  unsigned long diu_cntrl_reg;
+  unsigned long reserved5;
+  unsigned long sysbus;
+  unsigned long biu_cntrl_reg;
+  unsigned long mm_disp_reg;
+  unsigned long mm_status_reg;
+  unsigned short dump_status;
+} i596_dump_result;
+
+typedef volatile struct i596_selftest {
+  unsigned long rom_signature;
+  unsigned long results;
+} i596_selftest;
+
 /* 
  * Action commands
  *   (big endian, linear mode)
- */
+ */ 
 typedef volatile struct i596_cmd {
-  volatile unsigned short status;
-  volatile unsigned short command;
-  volatile struct i596_cmd *next;
+  unsigned short status;
+  unsigned short command;
+  struct i596_cmd *next;
 } i596_cmd;
 
 typedef volatile struct i596_nop {
@@ -144,21 +217,21 @@ typedef volatile struct i596_nop {
 
 typedef volatile struct i596_set_add {
   i596_cmd cmd;
-  char   data[8];
+  char data[8];
 } i596_set_add;
 
 typedef volatile struct i596_configure {
   i596_cmd cmd;
-  char   data[16];
+  char data[16];
 } i596_configure;
 
 typedef volatile struct i596_tx {
-    i596_cmd cmd;
-    volatile struct i596_tbd *pTbd;
-    unsigned short count;
-    unsigned short pad;
-    char data[6];
-    unsigned short length;
+  i596_cmd cmd;
+  struct i596_tbd *pTbd;
+  unsigned short count;
+  unsigned short pad;
+  char data[6];
+  unsigned short length;
 } i596_tx;
 
 typedef volatile struct i596_tdr {
@@ -168,17 +241,17 @@ typedef volatile struct i596_tdr {
 
 typedef volatile struct i596_dump {
   i596_cmd cmd;
-  char   *pData;
+  char *pData;
 } i596_dump;
 
 /*
  * Transmit buffer descriptor
  */
 typedef volatile struct i596_tbd {
-    unsigned short size;
-    unsigned short pad;
-    volatile struct i596_tbd *next;
-    char *data; 
+	  unsigned short size;
+	  unsigned short pad;
+	  struct i596_tbd *next;
+	  char *data; 
 } i596_tbd;
 
 /*
@@ -186,113 +259,115 @@ typedef volatile struct i596_tbd {
  *   (flexible memory structure)
  */
 typedef volatile struct i596_rbd {
-    unsigned short count;
-    unsigned short offset;
-    volatile struct i596_rbd *next;
-    char *data; 
-    unsigned short size;
-    unsigned short pad;
+	  unsigned short count;
+	  unsigned short offset;
+	  struct i596_rbd *next;
+	  char *data; 
+	  unsigned short size;
+	  unsigned short pad;
 } i596_rbd;
 
 /*
  * Receive Frame Descriptor
  */
 typedef volatile struct i596_rfd {
-    volatile unsigned short stat;
-    volatile unsigned short cmd;
-    volatile struct i596_rfd *next;
-    i596_rbd *pRbd; 
-    unsigned short count;
-    unsigned short size;
-    char data [1532];    
+	  unsigned short stat;
+	  unsigned short cmd;
+	  struct i596_rfd *next;
+	  i596_rbd *pRbd; 
+	  unsigned short count;
+	  unsigned short size;
+	  char data [1532];    
 } i596_rfd;
-
-#define RX_RING_SIZE 8
 
 /*
  * System Control Block
  */
 typedef volatile struct i596_scb {
-    volatile unsigned short status;
-    volatile unsigned short command;
-    volatile unsigned long Cmd_val;
-    volatile unsigned long Rfd_val;
-    volatile unsigned long crc_err;
-    volatile unsigned long align_err;
-    volatile unsigned long resource_err;
-    volatile unsigned long over_err;
-    volatile unsigned long rcvdt_err;
-    volatile unsigned long short_err;
-    volatile unsigned short t_off;
-    volatile unsigned short t_on;
-    i596_cmd *pCmd;
-    i596_rfd *pRfd;
+	  unsigned short status;
+	  unsigned short command;
+	  unsigned long cmd_pointer;
+	  unsigned long rfd_pointer;
+	  unsigned long crc_err;
+	  unsigned long align_err;
+	  unsigned long resource_err;
+	  unsigned long over_err;
+	  unsigned long rcvdt_err;
+	  unsigned long short_err;
+	  unsigned short t_off;
+	  unsigned short t_on;
+	  i596_cmd *pCmd;
+	  i596_rfd *pRfd;
 } i596_scb;
 
 /* 
  * Intermediate System Configuration Pointer
  */
 typedef volatile struct i596_iscp {
-    volatile unsigned long stat;
-    volatile unsigned long scb_val;
-    i596_scb *scb;
+    unsigned8 null1;            			/* Always zero */
+    unsigned8 busy;										/* Busy byte */
+    unsigned short scb_offset;  			/* Not used in linear mode */
+    unsigned long scb_pointer;      	/* Swapped pointer to scb */
+    i596_scb *scb;										/* Real pointer to scb */
 } i596_iscp;
 
 /*
  * System Configuration Pointer
  */
 typedef volatile struct i596_scp {
-    unsigned long sysbus;
-    unsigned long pad;
-    unsigned long iscp_val;
-    i596_iscp *iscp;
+    unsigned long sysbus;							/* Only low 8 bits are used */
+    unsigned long pad;								/* Must be zero */
+    unsigned long iscp_pointer;       /* Swapped pointer to iscp */
+    i596_iscp *iscp;									/* Real pointer to iscp */
 } i596_scp;
 
+/*
+ * Device Dependent Data Structure
+ */
 typedef volatile struct uti596_softc {
-  struct arpcom          arpcom;
-  i596_scp              *pScp;
-  i596_iscp              iscp;
-  i596_scb               scb;
-  i596_set_add           set_add;
-  i596_configure         set_conf;
-  i596_tdr               tdr;
-  i596_nop               nop;               
-  unsigned long          stat;
-  i596_tx               *pTxCmd;
-  i596_tbd              *pTbd;
+  struct arpcom arpcom;
+  i596_scp *pScp;											/* Block aligned on 16 byte boundary */
+  i596_scp *base_scp;                 /* Unaligned block. Need for free() */
+  i596_iscp iscp;
+  i596_scb scb;
+  i596_set_add set_add;
+  i596_configure set_conf;
+  i596_tdr tdr;
+  i596_nop nop;               
+  i596_tx  *pTxCmd;
+  i596_tbd *pTbd;
 
-  int                   ioAddr;
+  i596_rfd *pBeginRFA;
+  i596_rfd *pEndRFA;
+  i596_rfd *pLastUnkRFD;
+  i596_rbd *pLastUnkRBD;
+  i596_rfd *pEndSavedQueue;
+  i596_cmd *pCmdHead;
+  i596_cmd *pCmdTail;  				/* unneeded, as chaining not used, but implemented */
 
-  i596_rfd     *pBeginRFA;
-  i596_rfd     *pEndRFA;
-  i596_rfd     *pLastUnkRFD;
-  i596_rbd     *pLastUnkRBD;
-  i596_rfd     *pEndSavedQueue;
-  i596_cmd     *pCmdHead;
-  i596_cmd     *pCmdTail;  /* unneeded, as chaining not used, but implemented */
-
-  rtems_id		rxDaemonTid;
-  rtems_id		txDaemonTid;
-  rtems_id		resetDaemonTid;
+  rtems_id rxDaemonTid;
+  rtems_id txDaemonTid;
+  rtems_id resetDaemonTid;
 
   struct enet_statistics stats;
-  int                  started;
-  unsigned long        rxInterrupts;
-  unsigned long        txInterrupts;
-  volatile int         cmdOk;
-  int                  resetDone;
-  unsigned long	       txRawWait;
-  i596_rfd            *pInboundFrameQueue;
-  short int            rxBdCount;
-  short int            txBdCount;
-  short int            countRFD;
-  short int            savedCount;
-  i596_rfd            *pSavedRfdQueue;
-  rtems_name           semaphore_name;
-  rtems_id             semaphore_id;
-  char                 zeroes[64];
-  unsigned long        rawsndcnt;
-  int                  nic_reset; /* flag is for requesting that ISR issue a reset quest */
+  int started;
+  unsigned long rxInterrupts;
+  unsigned long txInterrupts;
+  volatile int cmdOk;
+  unsigned short * pCurrent_command_status;
+  int resetDone;
+  unsigned long txRawWait;
+  i596_rfd *pInboundFrameQueue;
+  short int rxBdCount;
+  short int txBdCount;
+  short int countRFD;
+  short int savedCount;
+  i596_rfd *pSavedRfdQueue;
+  rtems_name semaphore_name;
+  rtems_id semaphore_id;
+  char zeroes[64];
+  unsigned long rawsndcnt;
+  int nic_reset;  /* flag for requesting that ISR issue a reset quest */
 } uti596_softc_;
 
 #endif /* UTI596_H */

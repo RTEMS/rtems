@@ -7,15 +7,11 @@
 *cpp:
 %(old_cpp) %{qrtems: -D__embedded__} -Asystem(embedded)
 
-*endfile:
-%{qelf: crtend.o%s crtn.o%s}
-
 *lib:
 %{!qrtems: %(old_lib)} %{qrtems: --start-group \
 %{!qrtems_debug: -lrtemsall} %{qrtems_debug: -lrtemsall_g} \
--lc -lgcc --end-group \
-%{!qelf: %{!qnolinkcmds: -T linkcmds%s}} %{qelf: %{!qnolinkcmd: -T
-linkcmds%s}}}
+%{qjava: -lffi -lzgcj -lgcj} %{qc++: -lstdc++} -lc -lgcc --end-group \
+%{!qnolinkcmds: -T linkcmds%s}}
 
 *startfile:
 %{!qrtems: %(old_startfile)} %{qrtems: \

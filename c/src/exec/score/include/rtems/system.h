@@ -187,10 +187,10 @@ SCORE_EXTERN rtems_cpu_table _CPU_Table;               /* CPU dependent info */
    (_CPU_Table.stack_free_hook)
 
 /*
- *  XXX weird RTEMS stuff
+ *  XXX weird RTEMS stuff that probably should be somewhere else.
  */
 
-#define RTEMS_MAXIMUM_NAME_LENGTH 4
+#define RTEMS_MAXIMUM_NAME_LENGTH sizeof(rtems_name)
 
 #ifdef __cplusplus
 }

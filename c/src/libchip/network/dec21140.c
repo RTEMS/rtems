@@ -8,6 +8,23 @@
  *  http://www.OARcorp.com/rtems/license.html.
  *
  * $Id$
+ *
+ * ------------------------------------------------------------------------
+ * [22.05.2000,StWi/CWA] added support for the DEC/Intel 21143 chip
+ *
+ * The 21143 support is (for now) only available for the __i386 target,
+ * because that's the only testing platform I have. It should (to my best
+ * knowledge) work in the same way for the "__PPC" target, but someone
+ * should test this first before it's put into the code. Thanks go to
+ * Andrew Klossner who provided the vital information about the
+ * Intel 21143 chip.
+ * (FWIW: I tested this driver using a Kingston KNE100TX with 21143PD chip)
+ *
+ * The driver will automatically detect whether there is a 21140 or 21143
+ * network card in the system and activate support accordingly. It will
+ * look for the 21140 first. If the 21140 is not found the driver will
+ * look for the 21143.
+ * ------------------------------------------------------------------------
  */
 
 #include <rtems.h>
@@ -19,11 +36,11 @@
  */
 
 #if defined(__i386)
-#define DEC21140_SUPPORTED
+  #define DEC21140_SUPPORTED
 #endif
 
 #if defined(__PPC) && (defined(mpc604) || defined(mpc750))
-#define DEC21140_SUPPORTED
+  #define DEC21140_SUPPORTED
 #endif
 
 #if defined(DEC21140_SUPPORTED)
@@ -70,9 +87,11 @@
 
 #define DEC_DEBUG
 
+/* note: the 21143 isn't really a DEC, it's an Intel chip */
 #define PCI_INVALID_VENDORDEVICEID	0xffffffff
 #define PCI_VENDOR_ID_DEC 0x1011
-#define PCI_DEVICE_ID_DEC_TULIP_FAST 0x0009
+#define PCI_DEVICE_ID_DEC_21140 0x0009
+#define PCI_DEVICE_ID_DEC_21143 0x0019
 
 #define IO_MASK  0x3
 #define MEM_MASK  0xF
@@ -364,7 +383,7 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
   st_le32( (tbase+memCSR0), CSR0_MODE);  
 
 #ifdef DEC_DEBUG
-  printk("DC21140 %x:%x:%x:%x:%x:%x IRQ %d IO %x M %x .........\n",
+  printk("DC2114x %x:%x:%x:%x:%x:%x IRQ %d IO %x M %x .........\n",
 	 sc->arpcom.ac_enaddr[0], sc->arpcom.ac_enaddr[1],
 	 sc->arpcom.ac_enaddr[2], sc->arpcom.ac_enaddr[3],
 	 sc->arpcom.ac_enaddr[4], sc->arpcom.ac_enaddr[5],
@@ -757,6 +776,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	struct ifnet *ifp;
 	int mtu;
 	int i;
+    int deviceId = PCI_DEVICE_ID_DEC_21140; /* network card device ID */
 	
 	/*
 	 * First, find a DEC board
@@ -771,16 +791,24 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	  rtems_panic("PCI BIOS not found !!");
 	
 	/*
-	 * First, find a DEC board
+	 * Try to find the network card on the PCI bus. Probe for a DEC 21140
+     * card first. If not found probe the bus for a DEC/Intel 21143 card.
 	 */
-	if ((diag = pcib_find_by_devid(PCI_VENDOR_ID_DEC,
-				       PCI_DEVICE_ID_DEC_TULIP_FAST,
-				       0,
-				       &signature)) != PCIB_ERR_SUCCESS)
-	  rtems_panic("DEC PCI board not found !! (%d)\n", diag);
-	else {
-	  printk("DEC PCI Device found\n");
-	}
+    deviceId = PCI_DEVICE_ID_DEC_21140;
+    diag = pcib_find_by_devid( PCI_VENDOR_ID_DEC, deviceId,
+                               0, &signature);
+    if ( diag == PCIB_ERR_SUCCESS)
+      printk( "DEC 21140 PCI network card found\n" );
+    else
+    {
+      deviceId = PCI_DEVICE_ID_DEC_21143;
+      diag = pcib_find_by_devid( PCI_VENDOR_ID_DEC, deviceId,
+                                 0, &signature);
+      if ( diag == PCIB_ERR_SUCCESS)
+        printk( "DEC/Intel 21143 PCI network card found\n" );
+      else
+        rtems_panic("DEC PCI network card not found !!\n");
+    }
 #endif	
 #if defined(__PPC)
 	unsigned char ucSlotNumber, ucFnNumber;
@@ -800,10 +828,10 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	       */
 	      continue;
 	    }
-	    if (ulDeviceID == ((PCI_DEVICE_ID_DEC_TULIP_FAST<<16) + PCI_VENDOR_ID_DEC))
+	    if (ulDeviceID == ((PCI_DEVICE_ID_DEC_21140<<16) + PCI_VENDOR_ID_DEC))
 	      break;
 	  }
-	  if (ulDeviceID == ((PCI_DEVICE_ID_DEC_TULIP_FAST<<16) + PCI_VENDOR_ID_DEC)){
+	  if (ulDeviceID == ((PCI_DEVICE_ID_DEC_21140<<16) + PCI_VENDOR_ID_DEC)){
 	    printk("DEC Adapter found !!\n");
 	    break;
 	  }
@@ -830,6 +858,11 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	 * Process options
 	 */
 #if defined(__i386)
+
+    /* the 21143 chip must be enabled before it can be accessed */
+    if ( deviceId == PCI_DEVICE_ID_DEC_21143 )
+      pcib_conf_write32( signature, 0x40, 0 );
+
 	pcib_conf_read32(signature, 16, &value);
 	sc->port = value & ~IO_MASK;
         
@@ -922,6 +955,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	if_attach (ifp);
 	ether_ifattach (ifp);
 
+        printk( "DC2114x : driver has been attached\n" );
 	return 1;
 };
 #endif /* DEC21140_SUPPORTED */

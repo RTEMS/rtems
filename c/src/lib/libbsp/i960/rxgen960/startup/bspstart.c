@@ -132,7 +132,7 @@ bsp_start(void)
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.do_zero_of_workspace = TRUE;
-  Cpu_table.interrupt_stack_size = 8192;
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
   Cpu_table.extra_mpci_receive_server_stack = 0;
   Cpu_table.Prcb = Prcb;
 
@@ -140,29 +140,6 @@ bsp_start(void)
   Cpu_table.stack_allocate_hook = 0;
   Cpu_table.stack_free_hook = 0;
   
-  /*
-   * Add 1 region for the RTEMS Malloc
-   */
-
-  BSP_Configuration.RTEMS_api_configuration->maximum_regions++;
-
-  /*
-   * Add 1 extension for newlib libc
-   */
-
-#ifdef RTEMS_NEWLIB
-    BSP_Configuration.maximum_extensions++;
-#endif
-
-  /*
-   * Add another extension if using the stack checker
-   */
-
-#ifdef STACK_CHECKER_ON
-    BSP_Configuration.maximum_extensions++;
-#endif
-
-
   /*
    * Tell libio how many fd's we want and allow it to tweak config
    */

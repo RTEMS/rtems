@@ -156,6 +156,7 @@ Thread _MPCI_Receive_server(
     FALSE,
     RTEMS_NOT_CONFIGURED
   );
+  return NULL;
 }
 
 void _MPCI_Announce ( void )

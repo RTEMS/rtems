@@ -7,6 +7,10 @@
 #ifndef __RTEMS_ERROR_h
 #define __RTEMS_ERROR_h
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * rtems_error() and rtems_panic() support
  */
@@ -33,6 +37,11 @@ void  rtems_panic(const char *printf_format, ...);
 #endif
 
 extern int rtems_panic_in_progress;
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif
 /* end of include file */

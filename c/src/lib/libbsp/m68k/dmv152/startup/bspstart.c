@@ -53,6 +53,10 @@ void bsp_start( void )
   int             index;
   void           *vbr;
   extern void    *_WorkspaceBase;
+  extern void    *_RamSize;
+  extern unsigned long _M68k_Ramsize;
+
+  _M68k_Ramsize = (unsigned long)&_RamSize;		/* RAM size set in linker script */
 
   monitors_vector_table = (m68k_isr_entry *)0;   /* Monitor Vectors are at 0 */
   m68k_set_vbr( monitors_vector_table );
@@ -89,18 +93,12 @@ void bsp_start( void )
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.do_zero_of_workspace = TRUE;
-  Cpu_table.interrupt_stack_size = 4096;
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   m68k_get_vbr( vbr );
   Cpu_table.interrupt_vector_table = vbr;
 
   BSP_Configuration.work_space_start = (void *) &_WorkspaceBase;
-
-  /*
-   *  Account for the console's resources
-   */
-
-  console_reserve_resources( &BSP_Configuration );
 
   /* Clock_exit is done as an atexit() function */
 }

@@ -212,13 +212,7 @@ void bsp_start( void )
    *  This should be enough interrupt stack.
    */
 
-  Cpu_table.interrupt_stack_size = (24 * 1024);
-
-/*
-#if defined(RTEMS_POSIX_API)
-  BSP_Configuration.work_space_size *= 3;
-#endif
-*/
+  Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
 
   work_space_start = 
     (unsigned char *)rdb_start - BSP_Configuration.work_space_size;
@@ -229,12 +223,6 @@ void bsp_start( void )
   }
 
   BSP_Configuration.work_space_start = work_space_start;
-
-  /*
-   *  Account for the console's resources
-   */
-
-  console_reserve_resources( &BSP_Configuration );
 
 #if SIMSPARC_FAST_IDLE
   /*

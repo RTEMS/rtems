@@ -54,6 +54,7 @@ void ITRON_Init( void )
   assert( status == E_PAR );
 
   puts( "Init - cre_sem - isemcnt > maxsem returns E_PAR" );
+  pk_csem.sematr = 0;
   pk_csem.isemcnt = 3;
   pk_csem.maxsem  = 2;
   status = cre_sem( 1, &pk_csem );

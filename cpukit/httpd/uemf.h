@@ -649,7 +649,7 @@ extern sym_t	*symEnter(sym_fd_t sd, char_t *name, value_t v, int arg);
 extern int		 symDelete(sym_fd_t sd, char_t *name);
 extern void 	 symWalk(sym_fd_t sd, void (*fn)(sym_t *symp));
 
-extern void		 trace(int lev, char_t *fmt, ...);
+extern void		 goahead_trace(int lev, char_t *fmt, ...);
  
 extern value_t 	 valueInteger(long value);
 extern value_t	 valueString(char_t *value, int flags);
