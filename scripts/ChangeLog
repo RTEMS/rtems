@@ -1,3 +1,14 @@
+2003-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add --enable-osversions (OS-versioned RPMS support).
+	* binutils/Makefile.am: Add osversion support.
+	* binutils/mkspec.in: Add osversion support.
+	* gcc3newlib/Makefile.am: Add osversion support.
+	* gcc3newlib/mkspec.in: Add osversion support.
+	* gdb/Makefile.am: Add osversion support.
+	* gdb/mkspec.in: Add osversion support.
+	Add rpmprefix, rpmgroup.
+
 2003-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am, configure.ac,
