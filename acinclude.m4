@@ -176,12 +176,12 @@ if test "$no_recursion" != yes; then
 
   # Always prepend --prefix to ensure using the same prefix
   # in subdir configurations.
-  ac_sub_configure_args="--prefix=$prefix $ac_sub_configure_args"
+  ac_sub_configure_args="'--prefix=$prefix' $ac_sub_configure_args"
 
   case "$$1_subdir" in
   "." ) ;;
   * )
-    ac_sub_configure_args="$ac_sub_configure_args --with-target-subdir=$$1_subdir --exec-prefix=${prefix}/$$1_subdir"
+    ac_sub_configure_args="$ac_sub_configure_args '--with-target-subdir=$$1_subdir' '--exec-prefix=${prefix}/$$1_subdir'"
     ;;
   esac
 
@@ -227,9 +227,9 @@ if test "$no_recursion" != yes; then
       # The eval makes quoting arguments work.
       ac_sub_configure_vars=
       test -n "[$]CC_FOR_$2" && \
-	ac_sub_configure_vars="CC='[$]CC_FOR_$2'"
+	ac_sub_configure_vars="'CC=[$]CC_FOR_$2'"
       test -n "[$]CFLAGS_FOR_$2" && \
-        ac_sub_configure_vars="$ac_sub_configure_vars CFLAGS='[$]CFLAGS_FOR_$2'"
+        ac_sub_configure_vars="$ac_sub_configure_vars 'CFLAGS=[$]CFLAGS_FOR_$2'"
       eval $ac_sub_configure_vars \
 	$ac_sub_configure $ac_sub_configure_args \
           --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir ||
@@ -255,19 +255,35 @@ m4_divert_text([DEFAULTS],
 m4_expand_once([_RTEMS_COMMANDS_POST_CONFIG_SUBDIRS])
 ])
 
+AC_DEFUN([_RTEMS_CONFIGURE_ARGS_PRUNE],
+[
+  for ac_arg in m4_if([$3],,[$ac_configure_args],[[$]$3]); do
+    if test -n "$ac_prev"; then
+      ac_prev=
+      configure
+    fi
+    # the eval casts away sh quotes
+    case `eval echo $ac_arg` in
+    -host* | --host* );;
+    -host ) ac_prev=host_alias;;
+    -target* | --target* );;
+    -target | --target ) ac_prev=target_alias;;
+    -build* | --build* );;
+    -build | --build ) ac_prev=build_alias;;
+    --cache* );;
+    *_alias=* );;
+    m4_if([$2],,,[$2])
+    *) $1="$$1 '$ac_arg'" ;;
+   esac
+  done
+])
+
 AC_DEFUN(_RTEMS_BUILD_CONFIG_PREPARE,[
 # Record the configure arguments in Makefile.
 m4_ifdef([_RTEMS_BUILD_CONFIGDIRS_LIST],
 [
-buildargs=`echo "${ac_configure_args}" | \
-        sed -e 's/--no[[^ 	]]*//' \
-            -e 's/--cache[[a-z-]]*=[[^ 	]]*//' \
-            -e 's/--ho[[a-z-]]*=[[^ 	]]*//' \
-            -e 's/--bu[[a-z-]]*=[[^ 	]]*//' \
-            -e 's/--ta[[a-z-]]*=[[^ 	]]*//' \
-	    -e 's/[[^ 	]]*alias=[[^ 	]]*//g'` ;
-
-buildargs="--host=${build} --build=${build} --target=${target_alias} ${buildargs}"
+_RTEMS_CONFIGURE_ARGS_PRUNE([buildargs])
+buildargs="'--host=${build}' '--build=${build}' '--target=${target_alias}' ${buildargs}"
 AC_SUBST(buildargs)
 
 build_subdir="."
@@ -310,15 +326,8 @@ AC_DEFUN(_RTEMS_HOST_CONFIG_PREPARE,[
 m4_ifdef([_RTEMS_HOST_CONFIGDIRS_LIST],
 [
 # Record configure arguments in Makefile.
-hostargs=`echo "${ac_configure_args}" | \
-        sed -e 's/--no[[^ 	]]*//' \
-            -e 's/--cache[[a-z-]]*=[[^ 	]]*//' \
-            -e 's/--ho[[a-z-]]*=[[^ 	]]*//' \
-            -e 's/--bu[[a-z-]]*=[[^ 	]]*//' \
-            -e 's/--ta[[a-z-]]*=[[^ 	]]*//' \
-	    -e 's/[[^ 	]]*alias=[[^ 	]]*//g'` ;
-
-hostargs="--host=${host_alias} --build=${build} --target=${target_alias} ${hostargs}"
+_RTEMS_CONFIGURE_ARGS_PRUNE([hostargs])
+hostargs="'--host=${host_alias}' '--build=${build}' '--target=${target_alias}' ${hostargs}"
 AC_SUBST(hostargs)
 
 host_subdir="${host_alias}"
@@ -361,15 +370,8 @@ AC_DEFUN(_RTEMS_TARGET_CONFIG_PREPARE,[
 m4_ifdef([_RTEMS_TARGET_CONFIGDIRS_LIST],
 [
 # Record the configure arguments in Makefile.
-targetargs=`echo "${ac_configure_args}" | \
-        sed -e 's/--no[[^ 	]]*//' \
-            -e 's/--cache[[a-z-]]*=[[^ 	]]*//' \
-            -e 's/--ho[[a-z-]]*=[[^ 	]]*//' \
-            -e 's/--bu[[a-z-]]*=[[^ 	]]*//' \
-            -e 's/--ta[[a-z-]]*=[[^ 	]]*//' \
-	    -e 's/[[^ 	]]*alias=[[^ 	]]*//g'` ;
-
-targetargs="--host=${target_alias} --build=${build} --target=${target_alias} ${targetargs}"
+_RTEMS_CONFIGURE_ARGS_PRUNE([targetargs])
+targetargs="'--host=${target_alias}' '--build=${build}' '--target=${target_alias}' ${targetargs}"
 AC_SUBST(targetargs)
 
 target_subdir="${target_alias}"
