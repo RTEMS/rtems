@@ -2,10 +2,11 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../aclocal
+ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-SUBDIRS = arpa kern machine sys vm lib libc net netinet nfs rtems \
-    rtems_servers pppd rtems_telnetd rtems_webserver wrapup
+SUBDIRS = arpa kern machine sys vm lib libc net netinet nfs rtems
+# SUBDIRS += rtems_servers pppd rtems_telnetd rtems_webserver 
+SUBDIRS += wrapup
 
 include_HEADERS = \
     bpfilter.h loop.h netdb.h opt_ipfw.h opt_mrouting.h \
@@ -23,5 +24,5 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = CHANGELOG
 
-include $(top_srcdir)/../../../automake/subdirs.am
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../../../automake/subdirs.am
+include $(top_srcdir)/../../../../automake/local.am

@@ -28,8 +28,8 @@ $(PROJECT_INCLUDE)/rtems/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # Add local stuff here using +=
@@ -50,4 +50,4 @@ EXTRA_DIST = issetugid.c rtems_bootp.c rtems_glue.c rtems_select.c \
     rtems_showmbuf.c rtems_showroute.c rtems_showtcpstat.c \
     rtems_showudpstat.c rtems_syscall.c sghostname.c
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

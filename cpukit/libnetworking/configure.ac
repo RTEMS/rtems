@@ -5,8 +5,8 @@
 AC_PREREQ(2.52)
 AC_INIT([rtems-c-src-libnetworking],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([arpa])
-RTEMS_TOP(../../..)
-AC_CONFIG_AUX_DIR(../../..)
+RTEMS_TOP(../../../..)
+AC_CONFIG_AUX_DIR(../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
@@ -17,7 +17,7 @@ RTEMS_ENABLE_NETWORKING
 RTEMS_ENABLE_BARE
 RTEMS_ENABLE_POSIX
 
-RTEMS_ENV_RTEMSBSP
+RTEMS_ENV_RTEMSCPU
 
 RTEMS_CHECK_CPU
 RTEMS_CANONICAL_HOST
@@ -45,11 +45,7 @@ libc/Makefile
 net/Makefile
 netinet/Makefile
 nfs/Makefile
-pppd/Makefile
 rtems/Makefile
-rtems_servers/Makefile
-rtems_telnetd/Makefile
-rtems_webserver/Makefile
 wrapup/Makefile
 ])
 AC_OUTPUT

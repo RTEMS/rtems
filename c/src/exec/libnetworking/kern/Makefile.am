@@ -11,9 +11,9 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/multilib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # Add local stuff here using +=
@@ -32,4 +32,4 @@ all-local: $(ARCH) $(OBJS) $(LIB)
 EXTRA_DIST = kern_subr.c uipc_domain.c uipc_mbuf.c uipc_socket.c \
     uipc_socket2.c
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
