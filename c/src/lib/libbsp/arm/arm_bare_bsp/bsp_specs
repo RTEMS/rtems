@@ -3,9 +3,6 @@
 %rename startfile old_startfile
 %rename link old_link
 
-*cpp:
-%(old_cpp) %{qrtems: -D__embedded__ -Asystem(embedded)
-
 *lib:
 %{!qrtems: %(old_lib)} %{!nostdlib: %{qrtems: --start-group \
 %{!qrtems_debug: -lrtemsbsp -lrtemscpu} %{qrtems_debug: -lrtemsbsp_g -lrtemscpu_g} \

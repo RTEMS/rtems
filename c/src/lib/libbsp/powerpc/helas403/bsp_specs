@@ -1,11 +1,7 @@
-%rename cpp old_cpp
 %rename lib old_lib
 %rename endfile old_endfile
 %rename startfile old_startfile
 %rename link old_link
-
-*cpp:
-%(old_cpp) %{qrtems: -D__embedded__} -Asystem(embedded)
 
 *lib:
 %{!qrtems: %(old_lib)} %{!nostdlib: %{qrtems: ecrti%O%s --start-group \

@@ -1,5 +1,11 @@
 2003-08-22	Joel Sherrill <joel@OARcorp.com>
 
+	PR 445/bsps
+	* bsp_specs: Hand edited to duplicate change Ralf applied to the CVS
+	trunk.
+
+2003-08-22	Joel Sherrill <joel@OARcorp.com>
+
 	PR 444/bsps
 	* bsp_specs: Remove USE_ENHANCED_INTR_API.
 
