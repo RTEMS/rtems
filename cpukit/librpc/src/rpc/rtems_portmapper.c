@@ -124,18 +124,18 @@ find_service(
   u_long vers,
   int prot )
 {
-register struct pmaplist *hit = NULL;
-register struct pmaplist *pml;
+  register struct pmaplist *hit = NULL;
+  register struct pmaplist *pml;
 
-for (pml = pmaplist; pml != NULL; pml = pml->pml_next) {
+  for (pml = pmaplist; pml != NULL; pml = pml->pml_next) {
 	if ((pml->pml_map.pm_prog != prog) ||
 		(pml->pml_map.pm_prot != prot))
 		continue;
 	hit = pml;
 	if (pml->pml_map.pm_vers == vers)
 	    break;
-}
-	return (hit);
+  }
+  return (hit);
 }
 
 /* 
