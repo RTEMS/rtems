@@ -243,7 +243,11 @@ void _CPU_Sync_io_Init()
 unsigned32 _CPU_ISR_Get_level( void )
 {
   sigset_t old_mask;
+  sigset_t new_mask;
 
+#if defined(__linux__)
+  sigemptyset( &old_mask );
+#endif
   sigprocmask(SIG_BLOCK, 0, &old_mask);
 
   if (memcmp((void *)&posix_empty_mask, (void *)&old_mask, sizeof(sigset_t)))
