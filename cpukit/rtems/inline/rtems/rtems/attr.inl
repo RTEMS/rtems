@@ -205,7 +205,7 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_system_task(
   rtems_attribute attribute_set
 )
 {
-   return ( attribute_set & RTEMS_PRIORITY_CEILING );
+   return ( attribute_set & RTEMS_SYSTEM_TASK );
 }
 
 #endif

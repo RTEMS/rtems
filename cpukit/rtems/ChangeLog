@@ -1,3 +1,8 @@
+2001-08-30	Joel Sherrill <joel@OARcorp.com>
+
+	* inline/rtems/rtems/attr.inl: Correct typo and use correct
+	attribute RTEMS_SYSTEM_TASK. Reported by Chris Johns <ccj@acm.org>.
+
 2001-08-16	Joel Sherrill <joel@OARcorp.com>
 
 	* src/msgqsubmit.c: Add a comment indicating that we do not have
