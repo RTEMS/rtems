@@ -37,6 +37,10 @@
 #ifndef _SYS_SELECT_H_
 #define	_SYS_SELECT_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Used to maintain information about processes that wish to be
  * notified when I/O becomes possible.
@@ -63,5 +67,9 @@ extern int select (int __nfds, fd_set *__readfds,
                    fd_set *__writefds,
                    fd_set *__exceptfds,
                    struct timeval *__timeout);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* !_SYS_SELECT_H_ */
