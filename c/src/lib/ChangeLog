@@ -1,4 +1,9 @@
 
+2000-11-28	 Sergei Organov <osv@javad.ru>
+
+	* libc/getcwd.c: Ensure _closedir(dir) is called even on
+	error exit from the routine.
+
 2000-11-25  Antti P Miettinen  <antti.p.miettinen@nokia.com>
 
 	* libc/termios.c, libc/termiostypes.h: Task driver driver model
