@@ -26,14 +26,20 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 $(PGM): $(OBJS)
 	$(make-rel)
 
+include_bspdir = $(includedir)/bsp
+include_bsp_HEADERS = ../../shared/vectors/vectors.h
+
 $(PROJECT_INCLUDE)/bsp:
 	$(mkinstalldirs) $@
 
 $(PROJECT_INCLUDE)/bsp/vectors.h: ../../shared/vectors/vectors.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/vectors.h
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)/bsp
+TMPINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
+all-local: $(ARCH) $(TMPINSTALL_FILES) $(OBJS)
 
+include $(top_srcdir)/../../../../../../automake/force-preinstall.am
 include $(top_srcdir)/../../../../../../automake/local.am
