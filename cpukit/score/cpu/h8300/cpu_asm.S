@@ -18,20 +18,20 @@
 ;.equ	RUNCONTEXT_ARG,	 er0
 ;.equ	HEIRCONTEXT_ARG, er1
 	
-
-/*
+/*      
  *  Make sure we tell the assembler what type of CPU model we are
  *  being compiled for.
- */
+ */ 
 
 #if defined(__H8300H__)
-	.h8300h
+        .h8300h
 #endif
-#if defined(__H8300S__)
-	.h8300s
+#if defined(__H8300S__) 
+        .h8300s
 #endif
-	.text
+        .text
 
+	.text
 /*
 	GCC Compiled with optimisations and Wimplicit decs to ensure
     that stack from doesn't change
@@ -43,11 +43,12 @@
 */
 
 	.align 2
+
 	.global	__CPU_Context_switch
+
 __CPU_Context_switch:
-#if defined(__H8300H__) || defined(__H8300S__)
 	/* Save Context */
-	stc	ccr,@(0:16,er0)
+	stc.w	ccr,@(0:16,er0)
 	mov.l	er7,@(2:16,er0)
 	mov.l	er6,@(6:16,er0)
 	mov.l	er5,@(10:16,er0)
@@ -64,19 +65,18 @@ restore:
 	mov.l	@(10:16,er1),er5
 	mov.l	@(6:16,er1),er6
 	mov.l	@(2:16,er1),er7
-	ldc	@(0:16,er1),ccr
-#endif
+	ldc.w	@(0:16,er1),ccr
+
 	rts
 
 	.align 2
+
 	.global	__CPU_Context_restore
+
 __CPU_Context_restore:
-#if defined(__H8300H__) || defined(__H8300S__)
-	mov.l	er0,er1
-	jmp	@restore:24
-#else
-	rts
-#endif
+	
+	Mov.l	er0,er1
+	jmp		@restore:24
 
 
 
@@ -96,7 +96,6 @@ __CPU_Context_restore:
 
 	
 __ISR_Handler:
-#if defined(__H8300H__) || defined(__H8300S__)
 	mov.l	er1,@-er7
 	mov.l	er2,@-er7
 	mov.l	er3,@-er7
@@ -105,7 +104,7 @@ __ISR_Handler:
 	mov.l	er6,@-er7
 	
 /*  Set IRQ Stack */
-	orc		#0x80,ccr
+	orc		#0xc0,ccr
 	mov.l	er7,er6		; save stack pointer
 	mov.l	@__ISR_Nest_level,er1
 	bne		nested
@@ -132,7 +131,7 @@ nested:
     mov.l	@er1,er1
 	jsr		@er1	; er0 = arg1 =vector
 	
-	orc		#0x80,ccr
+	orc		#0xc0,ccr
 	mov.l	@__ISR_Nest_level,er1
 	dec.l	#1,er1
 	mov.l	er1,@__ISR_Nest_level
@@ -150,7 +149,7 @@ nested:
 	/* Context switch here through ISR_Dispatch */
 	
 bframe:
-	orc		#0x80,ccr
+	orc		#0xc0,ccr
 /*	Pop Stack	*/
 	mov		@er7+,er6
 	mov		er6,er7
@@ -159,12 +158,7 @@ bframe:
 
 	/* Set up IRQ stack frame and dispatch to _ISR_Dispatch */
 	
-	stc		ccr,@er2
-	and.l	#0xff,er2	
-	rotr.l	er2
-	rotr.l	er2
-	rotr.l	er2
-	rotr.l	er2
+	mov.l	#0xc0000000,er2		/* Disable IRQ */
 	or.l	#_ISR_Dispatch,er2
 	mov.l	er2,@-er7
 	rte
@@ -175,7 +169,6 @@ exit:
 	orc		#0x80,ccr
 	mov		@er7+,er6
 	mov		er6,er7
-	andc	#0x7f,ccr
 	mov		@er7+,er6
 	mov		@er7+,er5
 	mov		@er7+,er4
@@ -183,23 +176,22 @@ exit:
 	mov		@er7+,er2
 	mov		@er7+,er1
 	mov		@er7+,er0
-	andc	#0x7f,ccr
 	rte
-#endif
 	
 /*
 	Called from ISR_Handler as a way of ending IRQ
 	but allowing dispatch to another task.
 	Must use RTE as CCR is still on stack but IRQ has been serviced.	
 	CCR and PC occupy same word so rte can be used.
+	now using task stack
 */
 
 	.align 2
 	.global _ISR_Dispatch
 
 _ISR_Dispatch:
-#if defined(__H8300H__) || defined(__H8300S__)
-	jsr		@__Thread_Dispatch
+	
+	Jsr		@__Thread_Dispatch
 	mov		@er7+,er6
 	mov		@er7+,er5
 	mov		@er7+,er4
@@ -208,7 +200,6 @@ _ISR_Dispatch:
 	mov		@er7+,er1
 	mov		@er7+,er0
 	rte
-#endif
 	
 
 	.align 2

@@ -603,13 +603,61 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 
 /* ISR handler macros */
 
+/* COPE With Brain dead version of GCC distributed with Hitachi HIView Tools.
+   Note requires ISR_Level be unsigned16 or assembler croaks.
+*/
+
+#if (__GNUC__ == 2 && __GNUC_MINOR__ == 7 )
+
+
+/*
+ *  Disable all interrupts for an RTEMS critical section.  The previous
+ *  level is returned in _level.
+ */
+
+#define _CPU_ISR_Disable( _isr_cookie ) \
+  do { \
+    asm volatile( "stc.w ccr, @-er7 ;\n orc #0xC0,ccr ;\n mov.w @er7+,%0" :  : "r" (_isr_cookie) ); \
+  } while (0)
+
+
+/*
+ *  Enable interrupts to the previois level (returned by _CPU_ISR_Disable).
+ *  This indicates the end of an RTEMS critical section.  The parameter
+ *  _level is not modified.
+ */
+
+
+#define _CPU_ISR_Enable( _isr_cookie )  \
+  do { \
+    asm volatile( "mov.w %0,@-er7 ;\n ldc.w @er7+, ccr" :  : "r" (_isr_cookie) ); \
+  } while (0)
+
+
+/*
+ *  This temporarily restores the interrupt to _level before immediately
+ *  disabling them again.  This is used to divide long RTEMS critical
+ *  sections into two or more parts.  The parameter _level is not
+ * modified.
+ */
+
+
+#define _CPU_ISR_Flash( _isr_cookie ) \
+  do { \
+    asm volatile( "mov.w %0,@-er7 ;\n ldc.w @er7+, ccr ;\n orc #0xC0,ccr" :  : "r" (_isr_cookie) ); \
+  } while (0)
+
+/* end of ISR handler macros */
+
+#else
+
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _level.
  *
  *  H8300 Specific Information:
  *
- *  XXX  FIXME this does not nest properly for the H8300.
+ *  XXX  
  */
 
 #if defined(__H8300__)
@@ -668,6 +716,8 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
     asm volatile( "ldc %0, ccr ; orc #0x80,ccr " :  : "m" (__ccr) ); \
   } while (0) 
 #endif
+
+#endif /* end of old gcc */
 
 
 /*
