@@ -43,6 +43,9 @@ include_rtems_HEADERS += include/rtems/assoc.h include/rtems/error.h \
 ## sys
 
 include_sysdir = $(includedir)/sys
+
+include_sys_HEADERS =
+
 if NEWLIB
 include_sys_HEADERS += include/sys/ioccom.h include/sys/filio.h \
     include/sys/ioctl.h include/sys/sockio.h include/sys/ttycom.h \
