@@ -92,19 +92,6 @@ void bsp_start( void )
   Cpu_table.interrupt_vector_table = (mc68000_isr *) 0/*&M68Kvec*/;
 #endif
 
-
-  /*
-   *  Copy the Configuration Table .. so we can change it
-   */
-
-  BSP_Configuration = Configuration;
-
-  /*
-   * Tell libio how many fd's we want and allow it to tweak config
-   */
-
-  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
-
   /*
    *  Need to "allocate" the memory for the RTEMS Workspace and
    *  tell the RTEMS configuration where it is.  This memory is
@@ -118,26 +105,7 @@ void bsp_start( void )
    *  initialize the CPU table for this BSP
    */
 
-  /*
-   *  we do not use the pretasking_hook
-   */
-
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-
-  Cpu_table.predriver_hook = NULL;
-
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-
-  Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
-
-  Cpu_table.do_zero_of_workspace = TRUE;
-
   Cpu_table.interrupt_stack_size = 4096;
-
-  Cpu_table.extra_mpci_receive_server_stack = 0;
-
-  /*
-   *  Don't forget the other CPU Table entries.
-   */
-
 }

@@ -142,12 +142,6 @@ extern int   end;        /* last address in the program */
  * NOTE: Use the standard Clock driver entry
  */
  
-/*
- * How many libio files we want
- */
- 
-#define BSP_LIBIO_MAX_FDS       20
- 
  
 /* miscellaneous stuff assumed to exist */
 

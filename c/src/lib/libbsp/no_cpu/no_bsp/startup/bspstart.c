@@ -78,17 +78,8 @@ void bsp_pretasking_hook(void)
  *  This routine does the bulk of the system initialization.
  */
 
-int bsp_start(
-  int argc,
-  char **argv,
-  char **environp
-)
+void bsp_start( void )
 {
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
-
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
    *  a variety of places: hard coded address, malloc'ed from outside
@@ -96,18 +87,6 @@ int bsp_start(
    *  typically done by stock BSPs) by subtracting the required amount
    *  of work space from the last physical address on the CPU board.
    */
-
-  /*
-   *  Copy the Configuration Table .. so we can change it
-   */
-
-  BSP_Configuration = Configuration;
-
-  /*
-   * Tell libio how many fd's we want and allow it to tweak config
-   */
-
-  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 
   /*
    *  Need to "allocate" the memory for the RTEMS Workspace and
@@ -121,35 +100,7 @@ int bsp_start(
    *  initialize the CPU table for this BSP
    */
 
-  /*
-   *  we do not use the pretasking_hook
-   */
-
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-
-  Cpu_table.predriver_hook = NULL;
-
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-
-  Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
-
-  Cpu_table.do_zero_of_workspace = TRUE;
-
   Cpu_table.interrupt_stack_size = 4096;
-
-  Cpu_table.extra_mpci_receive_server_stack = 0;
-
-  /*
-   *  Don't forget the other CPU Table entries.
-   */
-
-  /*
-   *  Start RTEMS
-   */
-
-  rtems_initialize_executive( &BSP_Configuration, &Cpu_table );
-
-  bsp_cleanup();
-
-  return 0;
 }

@@ -122,12 +122,6 @@ extern int   CLOCK_SPEED;
 
 extern int   end;        /* last address in the program */
 
-/*
- * How many libio files we want
- */
- 
-#define BSP_LIBIO_MAX_FDS       20
-
 /* functions */
 
 void bsp_start( void );

@@ -198,19 +198,13 @@ void bsp_start( void )
    */
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;    /* init libc, etc. */
-
-  Cpu_table.predriver_hook = NULL; /* bsp_spurious_initialize;*/
-
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-
-  Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
 
   /*
    *  SIS does zero out memory BUT only when IT begins execution.  Thus
    *  if we want to have a clean slate in the workspace each time we
    *  begin execution of OUR application, then we must zero the workspace.
    */
-
   Cpu_table.do_zero_of_workspace = TRUE;
 
   /*
@@ -218,19 +212,6 @@ void bsp_start( void )
    */
 
   Cpu_table.interrupt_stack_size = (24 * 1024);
-
-  /*
-   *  SIS does not support MP configurations so there is really no way
-   *  to check this out.
-   */
-
-  Cpu_table.extra_mpci_receive_server_stack = 0;
-
-  /*
-   *  Copy the table and allocate memory for the RTEMS Workspace
-   */
-
-  BSP_Configuration = Configuration;
 
 #if defined(RTEMS_POSIX_API)
   BSP_Configuration.work_space_size *= 3;
@@ -273,10 +254,4 @@ void bsp_start( void )
    */
 
   CPU_SPARC_CLICKS_PER_TICK = BSP_Configuration.microseconds_per_tick;
-
-  /*
-   *  Initialize RTEMS. main() will finish it up and start multitasking.
-   */
-
-  rtems_libio_config( &BSP_Configuration, BSP_LIBIO_MAX_FDS );
 }

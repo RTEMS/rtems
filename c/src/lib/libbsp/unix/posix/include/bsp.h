@@ -72,12 +72,6 @@ extern rtems_configuration_table BSP_Configuration;
  * NOTE: Use the standard Clock driver entry
  */
  
-/*
- * How many libio files we want
- */
-
-#define BSP_LIBIO_MAX_FDS       20
-
 /* functions */
 
 rtems_isr_entry set_vector(rtems_isr_entry, rtems_vector_number, int);

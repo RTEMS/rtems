@@ -172,12 +172,6 @@ void bsp_start(void)
         cpu_number = 0;
 #endif
 
-    /*
-     *  Copy the table
-     */
-
-    BSP_Configuration = Configuration;
-
     BSP_Configuration.work_space_start = (void *)MY_WORK_SPACE;
     if (BSP_Configuration.work_space_size)
         BSP_Configuration.work_space_size = WORKSPACE_SIZE;
@@ -189,22 +183,14 @@ void bsp_start(void)
      */
 
     Cpu_table.pretasking_hook = bsp_pretasking_hook;    /* init libc, etc. */
-
-    Cpu_table.predriver_hook = NULL;
-
     Cpu_table.postdriver_hook = bsp_postdriver_hook;    /* register drivers */
-
-    Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
 
     /*
      *  Don't zero out the workspace.  The simulator did it for us.
      */
 
     Cpu_table.do_zero_of_workspace = FALSE;
-
     Cpu_table.interrupt_stack_size = (12 * 1024);
-
-    Cpu_table.extra_mpci_receive_server_stack = 0;
 
     /*
      * Set this artificially low for the simulator
@@ -244,12 +230,6 @@ void bsp_start(void)
 
     BSP_Configuration.maximum_extensions++;
 #endif
-
-    /*
-     * Tell libio how many fd's we want and allow it to tweak config
-     */
-
-    rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 
     /*
      * Add 1 extension for MPCI_fatal

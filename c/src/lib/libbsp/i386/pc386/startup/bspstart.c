@@ -118,33 +118,8 @@ void bsp_start( void )
   Cpu_table.interrupt_stack_size    = 4096;
   Cpu_table.extra_mpci_receive_server_stack = 0;
 
-  /* Copy user's table and make necessary adjustments.              */
-
-  BSP_Configuration = Configuration;
-
   /* Place RTEMS workspace at top of physical RAM (RAM_END defined in 'bsp.h' */
 
   BSP_Configuration.work_space_start =
                           (void *)(RAM_END - BSP_Configuration.work_space_size);
-
-  /* Tell libio how many fd's we want and allow it to tweak config. */
-
-  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
-
-#if 0
-  rtems_initialize_executive(&BSP_Configuration, &Cpu_table);
-  /* does not return */
-
-  /*-------------------------------------------------------------------------+
-  | We only return here if the executive has finished. This happens when the
-  | task has called exit(). We will then call _exit() which is part of the bsp.
-  +--------------------------------------------------------------------------*/
-
-  for (;;)
-    _exit(0);
-
-  /* no cleanup necessary for PC386 */
-
-  return 0;
-#endif
 } /* bsp_start */

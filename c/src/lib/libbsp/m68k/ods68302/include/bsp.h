@@ -109,12 +109,6 @@ extern "C" {
  * NOTE: Use the standard Clock driver entry
  */
 
-/*
- * How many libio files we want
- */
-
-#define BSP_LIBIO_MAX_FDS       20
-
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;

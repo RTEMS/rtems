@@ -107,18 +107,6 @@ void bsp_start( void )
    */
 
   /*
-   *  Copy the Configuration Table .. so we can change it
-   */
-
-  BSP_Configuration = Configuration;
-
-  /*
-   * Tell libio how many fd's we want and allow it to tweak config
-   */
-
-  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
-
-  /*
    *  Need to "allocate" the memory for the RTEMS Workspace and
    *  tell the RTEMS configuration where it is.  This memory is
    *  not malloc'ed.  It is just "pulled from the air".
@@ -132,36 +120,15 @@ void bsp_start( void )
    */
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-
-  Cpu_table.predriver_hook = NULL;
-
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-
-  Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
-
-  Cpu_table.do_zero_of_workspace = TRUE;
-
   Cpu_table.interrupt_stack_size = 4 * 1024;
 
-  Cpu_table.extra_mpci_receive_server_stack = 0;
-
-  /*
-   *  Don't forget the other CPU Table entries.
-   */
-
   Cpu_table.clicks_per_usec = 10;
-
   Cpu_table.serial_per_sec = 10000000;
-
   Cpu_table.serial_external_clock = 1;
-
   Cpu_table.serial_xon_xoff = 0;
-
   Cpu_table.serial_cts_rts = 1;
-
   Cpu_table.serial_rate = 9600;
-
   Cpu_table.timer_average_overhead = 2;
-
   Cpu_table.timer_least_valid = 3;
 }

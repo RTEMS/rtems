@@ -105,19 +105,10 @@ int main(
     rtems_progname = "RTEMS";
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-  Cpu_table.predriver_hook = NULL;
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-  Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
-  Cpu_table.do_zero_of_workspace = TRUE;
   Cpu_table.interrupt_table_segment = 0;/* get_ds(); */
   Cpu_table.interrupt_table_offset = (void *)0;
   Cpu_table.interrupt_stack_size = 4096;
-  Cpu_table.extra_mpci_receive_server_stack = 0;
-
-  /*
-   *  Copy the table
-   */
-  BSP_Configuration = Configuration;
 
   BSP_Configuration.work_space_start = sbrk( Configuration.work_space_size );
   if ( BSP_Configuration.work_space_start == 0 )  {
@@ -127,12 +118,6 @@ int main(
     write( 2, msg, sizeof msg - 1 );
     _exit( 1 );
   }
-
-  /*
-   * Tell libio how many fd's we want and allow it to tweak config
-   */
-
-  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 
   rtems_initialize_executive( &BSP_Configuration, &Cpu_table );
   /* does not return */

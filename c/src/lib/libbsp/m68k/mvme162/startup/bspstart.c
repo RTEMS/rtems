@@ -129,32 +129,9 @@ void bsp_start( void )
    */
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-
-  Cpu_table.predriver_hook = NULL;
-
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-
-  Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
-
-  Cpu_table.do_zero_of_workspace = TRUE;
-
   Cpu_table.interrupt_vector_table = (m68k_isr_entry *) &M68Kvec;
-
   Cpu_table.interrupt_stack_size = 4096;
-
-  Cpu_table.extra_mpci_receive_server_stack = 0;
-
-  /*
-   *  Copy the table
-   */
-
-  BSP_Configuration = Configuration;
-
-  /*
-   * Tell libio how many fd's we want and allow it to tweak config
-   */
-
-  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 
   BSP_Configuration.work_space_start = (void *)
      (RAM_END - BSP_Configuration.work_space_size);

@@ -67,7 +67,7 @@ void bsp_libc_init( void *, unsigned32, int );
  
 void bsp_pretasking_hook(void)
 {
-    bsp_libc_init((&HeapStart, sizeof(unsigned32) * (&HeapEnd - &HeapStart), 0);
+    bsp_libc_init(&HeapStart, sizeof(unsigned32) * (&HeapEnd - &HeapStart), 0);
  
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
@@ -99,12 +99,6 @@ void bsp_start(void)
    */
 
   /*
-   *  Copy the Configuration Table .. so we can change it
-   */
-
-  BSP_Configuration = Configuration;
-
-  /*
    *  Need to "allocate" the memory for the RTEMS Workspace and
    *  tell the RTEMS configuration where it is.  This memory is
    *  not malloc'ed.  It is just "pulled from the air".
@@ -131,28 +125,10 @@ void bsp_start(void)
 
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
-
-  Cpu_table.predriver_hook = NULL;
-
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-
-  Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
-
-  Cpu_table.do_zero_of_workspace = TRUE;
 
 #if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
   Cpu_table.interrupt_stack_size = 4096;
 #endif
 
-  Cpu_table.extra_mpci_receive_server_stack = 0;
-
-  /*
-   *  Don't forget the other CPU Table entries.
-   */
-
-  /*
-   * Tell libio how many fd's we want and allow it to tweak config
-   */
-
-  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 }

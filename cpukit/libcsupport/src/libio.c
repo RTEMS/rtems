@@ -101,24 +101,6 @@ rtems_register_libio_handler(
   handlers[handler_index] = *handler;
 }
 
-
-void
-rtems_libio_config(
-    rtems_configuration_table *config,
-    unsigned32                 max_fds
-)
-{
-    rtems_libio_number_iops = max_fds;
-
-    /*
-     * tweak config to reflect # of semaphores we will need
-     */
-
-    /* one for iop table */
-    config->RTEMS_api_configuration->maximum_semaphores += 1; 
-    config->RTEMS_api_configuration->maximum_semaphores += max_fds;
-}
-
 /*
  * Called by bsp startup code to init the libio area.
  */

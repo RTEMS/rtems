@@ -87,19 +87,9 @@ void bsp_start( void )
 
   outport_byte( 0x00, 0x3f );      /* resets VMEbus request level */
 
-  /*
-   *  we do not use the pretasking_hook.
-   */
-
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
 
-  Cpu_table.predriver_hook = NULL;
-
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-
-  Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
-
-  Cpu_table.do_zero_of_workspace = TRUE;
 
   Cpu_table.interrupt_table_segment = get_ds();
 
@@ -107,20 +97,7 @@ void bsp_start( void )
 
   Cpu_table.interrupt_stack_size = 4096;
 
-  Cpu_table.extra_mpci_receive_server_stack = 0;
-
-  /*
-   *  Copy the table
-   */
-
-  BSP_Configuration = Configuration;
-
   BSP_Configuration.work_space_start = (void *)
      RAM_END - BSP_Configuration.work_space_size;
 
-  /*
-   * Tell libio how many fd's we want and allow it to tweak config
-   */
-
-  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
 }

@@ -138,12 +138,6 @@ extern "C" {
  * NOTE: Use the standard Clock driver entry
  */
 
-/*
- * How many libio files we want
- */
-
-#define BSP_LIBIO_MAX_FDS       20
-
 /* functions */
 
 int _IBMPC_chrdy( char * ch );

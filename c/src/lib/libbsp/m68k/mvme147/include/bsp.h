@@ -164,12 +164,6 @@ extern m68k_isr_entry M68Kvec[];   /* vector table address */
  * NOTE: Use the standard Clock driver entry
  */
 
-/*
- * How many libio files we want
- */
-
-#define BSP_LIBIO_MAX_FDS       20
-
 /* functions */
 
 void bsp_cleanup( void );

@@ -108,12 +108,6 @@ extern void bsp_cleanup( void );
  */
 
 /*
- * How many libio files we want
- */
-
-#define BSP_LIBIO_MAX_FDS       20
-
-/*
  * FIXME: Should this go to libcpu/sh/sh7032 ?
  */
 /* functions */

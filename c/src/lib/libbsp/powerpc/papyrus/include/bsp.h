@@ -107,12 +107,6 @@ extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
  * NOTE: Use the standard Clock driver entry
  */
  
-/*
- * How many libio files we want
- */
- 
-#define BSP_LIBIO_MAX_FDS       20
-
 /* functions */
 
 rtems_isr_entry set_vector(                    /* returns old vector */

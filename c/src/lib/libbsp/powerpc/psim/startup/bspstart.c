@@ -188,45 +188,27 @@ void bsp_start( void )
    */
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;    /* init libc, etc. */
-
-  Cpu_table.predriver_hook = NULL; /* bsp_spurious_initialize;*/
-
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
 
-  Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
-
   /*
+   *  Is this true?
+   *
    *  PSIM does zero out memory BUT only when IT begins execution.  Thus
    *  if we want to have a clean slate in the workspace each time we
    *  begin execution of OUR application, then we must zero the workspace.
+   *
+   *  It is true that it takes simulated time to clear the memory.
    */
 
   Cpu_table.do_zero_of_workspace = FALSE;
 
-  /*
-   *  This should be enough interrupt stack.
-   */
-
   Cpu_table.interrupt_stack_size = (12 * 1024);
-
-  /*
-   *  SIS does not support MP configurations so there is really no way
-   *  to check this out.
-   */
-
-  Cpu_table.extra_mpci_receive_server_stack = 0;
 
   /*
    *  The monitor likes the exception table to be at 0x0.
    */
 
   Cpu_table.exceptions_in_RAM = TRUE;
-
-  /*
-   *  Copy the table and allocate memory for the RTEMS Workspace
-   */
-
-  BSP_Configuration = Configuration;
 
 #if defined(RTEMS_POSIX_API)
   BSP_Configuration.work_space_size *= 3;
@@ -282,10 +264,4 @@ void bsp_start( void )
     CPU_PPC_CLICKS_PER_TICK = BSP_Configuration.microseconds_per_tick * 
       (int) &PSIM_INSTRUCTIONS_PER_MICROSECOND;
   }
-
-  /*
-   *  Initialize RTEMS. main() will finish it up and start multitasking.
-   */
-
-  rtems_libio_config( &BSP_Configuration, BSP_LIBIO_MAX_FDS );
 }

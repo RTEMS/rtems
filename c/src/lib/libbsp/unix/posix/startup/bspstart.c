@@ -128,7 +128,7 @@ void bsp_start(void)
     unsigned32 workspace_ptr;
 
     /*
-     *  Copy the table
+     *  Copy the table (normally done in shared main).
      */
 
     BSP_Configuration = Configuration;
@@ -214,28 +214,22 @@ void bsp_start(void)
 
     Cpu_table.extra_mpci_receive_server_stack = 0;
 
-  /*
-   * Tell libio how many fd's we want and allow it to tweak config
-   */
+    /*
+     * Add 1 extension for MPCI_fatal
+     */
 
-  rtems_libio_config(&BSP_Configuration, BSP_LIBIO_MAX_FDS);
+    if (BSP_Configuration.User_multiprocessing_table)
+        BSP_Configuration.maximum_extensions++;
 
-  /*
-   * Add 1 extension for MPCI_fatal
-   */
+    CPU_CLICKS_PER_TICK = 1;
 
-  if (BSP_Configuration.User_multiprocessing_table)
-      BSP_Configuration.maximum_extensions++;
+    /*
+     *  Start most of RTEMS
+     *  main() will start the rest
+     */
 
-  CPU_CLICKS_PER_TICK = 1;
-
-  /*
-   *  Start most of RTEMS
-   *  main() will start the rest
-   */
-
-  bsp_isr_level = rtems_initialize_executive_early(
-    &BSP_Configuration,
-    &Cpu_table
-  );
+    bsp_isr_level = rtems_initialize_executive_early(
+      &BSP_Configuration,
+      &Cpu_table
+    );
 }

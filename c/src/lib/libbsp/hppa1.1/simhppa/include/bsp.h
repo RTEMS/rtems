@@ -92,11 +92,6 @@ extern int use_print_buffer;
 #define CONSOLE_DRIVER_TABLE_ENTRY \
   { tty_initialize, tty_open, tty_close, tty_read, tty_write, tty_control }
 
-/*
- * How many libio files we want
- */
-#define BSP_LIBIO_MAX_FDS       20
-
 #define HPPA_INTERRUPT_EXTERNAL_MPCI        HPPA_INTERRUPT_EXTERNAL_10
 
 rtems_isr_entry set_vector(rtems_isr_entry, rtems_vector_number, int);
