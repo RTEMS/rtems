@@ -1,3 +1,8 @@
+2005-02-19	Joel Sherrill <joel@OARcorp.com>
+
+	PR doc/763
+	* score/Doxyfile: Fixed path to no_cpu.
+
 2005-02-19	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Check for external ampolish3.
