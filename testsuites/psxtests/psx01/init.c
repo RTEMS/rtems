@@ -39,6 +39,22 @@ void *POSIX_Init(
 
   tv.tv_nsec = 0;
 
+  /* error cases in clock_gettime and clock_settime */
+
+  puts( "Init: clock_gettime - EINVAL (invalid clockid)" );
+  status = clock_settime( -1, &tv );
+  assert( status == -1 );
+  assert( errno == EINVAL );
+
+  puts( "Init: clock_settime - EINVAL (invalid clockid)" );
+  status = clock_settime( -1, &tv );
+  assert( status == -1 );
+  assert( errno == EINVAL );
+
+  /* now set the time of day */
+
+  printf( asctime( &tm ) );
+  puts( "Init: clock_settime - SUCCESSFUL" );
   status = clock_settime( CLOCK_REALTIME, &tv );
   assert( !status );
 
@@ -70,11 +86,43 @@ void *POSIX_Init(
   printf( "Init: seconds remaining (%d)\n", (int)remaining );
   assert( !remaining );
 
+  /* error cases in nanosleep */
+
+  puts( "Init: nanosleep - EINVAL (NULL time)" );
+  status = nanosleep ( NULL, &tr );
+  assert( status == -1 );
+  assert( errno == EINVAL );
+
+  tv.tv_sec = -1;
+  puts( "Init: nanosleep - EAGAIN (negative seconds)" );
+  status = nanosleep ( &tv, &tr );
+  assert( status == -1 );
+  assert( errno == EAGAIN );
+
+  tv.tv_sec = 0;
+  tv.tv_nsec = TOD_NANOSECONDS_PER_SECOND * 2;
+  puts( "Init: nanosleep - EINVAL (too many nanoseconds)" );
+  status = nanosleep ( &tv, &tr );
+  assert( status == -1 );
+  assert( errno == EINVAL );
+
+  /* use nanosleep to yield */
+
+  tv.tv_sec = 0; 
+  tv.tv_nsec = 0; 
+
+  puts( "Init: nanosleep - yield" ); 
+  status = nanosleep ( &tv, &tr );
+  assert( !status );
+  assert( !tr.tv_sec );
+  assert( !tr.tv_nsec );
+
   /* use nanosleep to delay */
 
   tv.tv_sec = 3; 
   tv.tv_nsec = 500000; 
 
+  puts( "Init: nanosleep - 3.05 seconds" ); 
   status = nanosleep ( &tv, &tr );
   assert( !status );
 
