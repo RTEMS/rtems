@@ -23,15 +23,21 @@ COMMON_FILES=../common/cpright.texi ../user/bsp.texi ../user/clock.texi \
   ../user/timer.texi ../user/userext.texi 
 FILES= ada_user.texi example.texi $(COMMON_FILES)
 
-dirs:
+LINKFILES=../user/rtemspie.eps ../user/rtemspie.pdf \
+          ../user/states.eps ../user/states.pdf 
+
+dirs: links
 	$(make-dirs)
+
+links:
+	cp  $(LINKFILES) .
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
-info: dirs ada_user
+info: dirs $(PROJECT)
 	cp $(shell ls -1 $(PROJECT) $(PROJECT)-* 2>/dev/null) $(INFO_INSTALL)
 
-ada_user: $(FILES)
+$(PROJECT): $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
 
 dvi: $(PROJECT).dvi
@@ -50,14 +56,16 @@ $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
 html: dirs $(FILES)
-	-mkdir -p $(WWW_INSTALL)/ada_user
+	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
 	cp ../user/rtemsarc.gif ../user/rtemspie.gif ../user/states.gif \
-           $(WWW_INSTALL)/ada_user
+           $(WWW_INSTALL)/$(PROJECT)
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
 
+# This is one of the few document directories without its own eps and pdf
+# files.  Thus it can safely remove *.pdf and *.eps.
 clean:
-	rm -f *.o $(PROG) *.txt core *.html *.pdf
+	rm -f *.o $(PROG) *.txt core *.html *.pdf *.eps
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
-	rm -f ada_user ada_user-* _*
+	rm -f $(PROJECT) $(PROJECT)-* _*
 
