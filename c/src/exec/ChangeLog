@@ -1,3 +1,7 @@
+2002-06-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/subdirs.m4: Remove.
+
 2002-06-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Use relative path to lib*.a for
