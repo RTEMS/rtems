@@ -16,9 +16,6 @@ AC_SUBST(RTEMS_HAS_POSIX_API)
 changequote(,)dnl
 case "${target}" in
   # hpux unix port should go here
-  i[3456]86-go32-rtems*)
-	RTEMS_HAS_POSIX_API=no
-	;;
   i[3456]86-pc-linux*)         # unix "simulator" port
 	RTEMS_HAS_POSIX_API=no
 	;;

@@ -15,9 +15,6 @@ AC_MSG_CHECKING(rtems target cpu)
 changequote(,)dnl
 case "${target}" in
   # hpux unix port should go here
-  i[3456]86-go32-rtems*)
-	RTEMS_CPU=i386
-	;;
   i[3456]86-pc-linux*)		# unix "simulator" port
 	RTEMS_CPU=unix
 	;;
