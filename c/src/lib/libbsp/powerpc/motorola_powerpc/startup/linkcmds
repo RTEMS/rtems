@@ -201,14 +201,16 @@ _SDA_BASE_ = __SDATA_START__ + 0x8000;
     *(.sbss)
     *(.scommon)
     *(.dynsbss)
+    *(.gnu.linkonce.sb.*)
     PROVIDE (__sbss_end = .);
   } > CODE
   .plt   : { *(.plt) }	> CODE
   .bss       :
   {
    PROVIDE (__bss_start = .);
-   *(.dynbss)
    *(.bss)
+   *(.dynbss)
+    *(.gnu.linkonce.b.*)
    *(COMMON)
   . = ALIGN(16);
   } > CODE
