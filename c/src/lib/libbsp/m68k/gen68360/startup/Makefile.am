@@ -11,7 +11,7 @@ C_FILES = alloc360.c bspclean.c bsplibc.c bsppost.c m68kpretaskinghook.c \
     bspstart.c init68360.c bootcard.c main.c sbrk.c setvec.c \
     gnatinstallhandler.c m68k-stub.c rtems-stub-glue.c
 
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
