@@ -1,6 +1,6 @@
 2003-02-20	Till Straumann <strauman@slac.stanford.edu>
 
-	PR 354/networkign
+	PR 354/networking
 	* network/if_fxp.c (Intel eepro network driver): re-enabled the chip
 	against a table of supported chips. The untested
 	ones are still commented out, however.
