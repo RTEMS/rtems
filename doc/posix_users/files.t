@@ -23,6 +23,7 @@ The directives provided by the files and directories manager are:
 @item @code{closedir} - Ends directory read operation
 @item @code{getdents} - Get directory entries
 @item @code{chdir} - Changes the current working directory
+@item @code{fchdir} - Changes the current working directory
 @item @code{getcwd} - Gets current working directory
 @item @code{open} - Opens a file
 @item @code{creat} - Create a new file or rewrite an existing one
@@ -399,6 +400,9 @@ int chdir(
 
 @subheading STATUS CODES:
 
+On error, this routine returns -1 and sets @code{errno} to one of
+the following:
+
 @table @b
 @item EACCES
 Search permission is denied for a directory in a file's path prefix.
@@ -423,6 +427,65 @@ become the current working directory; that is, the starting point for
 searches of pathnames not beginning with a slash.
 
 If @code{chdir()} detects an error, the current working directory is not
+changed.
+
+@subheading NOTES:
+
+NONE
+
+@c
+@c
+@c
+@page
+@subsection fchdir - Changes the current working directory
+
+@findex fchdir
+@cindex  changes the current working directory
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <unistd.h>
+
+int fchdir(
+  int fd
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+On error, this routine returns -1 and sets @code{errno} to one of
+the following:
+
+@table @b
+@item EACCES
+Search permission is denied for a directory in a file's path prefix.
+
+@item ENAMETOOLONG
+Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is
+in effect.
+
+@item ENOENT
+A file or directory does not exist.
+
+@item ENOTDIR
+A component of the specified pathname was not a directory when directory
+was expected.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{fchdir()} function causes the directory named by @code{fd} to
+become the current working directory; that is, the starting point for
+searches of pathnames not beginning with a slash.
+
+If @code{fchdir()} detects an error, the current working directory is not
 changed.
 
 @subheading NOTES:
