@@ -21,7 +21,7 @@ COMMON_FILES=../common/cpright.texi ../common/setup.texi
 GENERATED_FILES= buildc.texi buildrt.texi gdb.texi intro.texi \
     require.texi sample.texi
 
-FILES= $(PROJECT).texi $(GENERATED_FILES)
+FILES= $(PROJECT).texi versions.texi $(GENERATED_FILES)
 
 INFOFILES=$(wildcard $(PROJECT) $(PROJECT)-*)
 
@@ -44,32 +44,32 @@ $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) -v $(PROJECT).texi
 	texi2dvi -v $(PROJECT).texi
 
-intro.texi: intro.t
+intro.texi: intro.t versions.texi
 	$(BMENU) -c -p "Top" \
 	    -u "Top" \
 	    -n "Requirements" ${*}.t
 
-require.texi: require.t
+require.texi: require.t versions.texi
 	$(BMENU) -c -p "Introduction" \
 	    -u "Top" \
 	    -n "Building the GNU C/C++ Cross Compiler Toolset" ${*}.t
 
-buildc.texi: buildc.t
+buildc.texi: buildc.t versions.texi
 	$(BMENU) -c -p "Requirements" \
 	    -u "Top" \
 	    -n "Building RTEMS" ${*}.t
 
-buildrt.texi: buildrt.t
+buildrt.texi: buildrt.t versions.texi
 	$(BMENU) -c -p "GNU C/C++ cross compiler toolset complete" \
 	    -u "Top" \
 	    -n "Building the Sample Application" ${*}.t
 
-sample.texi: sample.t
+sample.texi: sample.t versions.texi
 	$(BMENU) -c -p "Generate RTEMS for a specific target and board support package" \
 	    -u "Top" \
 	    -n "Building the GNU Debugger" ${*}.t
 
-gdb.texi: gdb.t
+gdb.texi: gdb.t versions.texi
 	$(BMENU) -c -p "Application executable" \
 	    -u "Top" \
 	    -n "Command and Variable Index" ${*}.t

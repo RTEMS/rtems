@@ -9,22 +9,74 @@
 @chapter Building the GNU Debugger
 
 GDB is not currently RTEMS aware. The following configurations have been
-successfully used with RTEMS applications. 
+successfully used with RTEMS applications:
 
-@section GDB with Sparc Instruction Simulation (SIS)
+@itemize bullet
+@item Sparc Instruction Simulator (SIS)
+@item PowerPC Instruction Simulator (PSIM)
+@item DINK32
+@end itemize
 
-@subsection Unarchive the gdb distribution (SIS)
+Other configurations of gdb have successfully been used by RTEMS users
+but are not documented here.
+
+@section Unarchive the gdb distribution
 
 Use the following commands to unarchive the gdb distribution:
 
 @example
 cd tools
-tar xzf ../arc/gdb-980122.tar.gz
+tar xzf ../arc/@value{GDB-TAR}
 @end example
 
-The directory gdb-980122 is created under the tools directory.
+@c
+@c  GDB Patch
+@c
 
-@subsection Make the build directory (SIS)
+@section Apply RTEMS Patch to GDB
+
+@ifclear GDB-RTEMSPATCH
+No RTEMS specific patches are required for @value{GDB-VERSION} to
+support @value{RTEMS-VERSION}.
+@end ifclear
+
+@ifset GDB-RTEMSPATCH
+
+Apply the patch using the following command sequence:
+
+@example
+cd tools/@value{GDB-UNTAR}
+zcat arc/@value{GDB-RTEMSPATCH} | patch -p1
+@end example
+
+Check to see if any of these patches have been rejected using the following
+sequence:
+
+@example
+cd tools/@value{GDB-UNTAR}
+find . -name "*.rej" -print
+@end example
+
+If any files are found with the .rej extension, a patch has been rejected.
+This should not happen with a good patch file.
+
+To see the files that have been modified use the sequence:
+
+@example
+cd tools/@value{GDB-UNTAR}
+find . -name "*.orig" -print
+@end example
+
+The files that are found, have been modified by the patch file.
+
+@end ifset
+
+
+@section GDB with Sparc Instruction Simulation (SIS)
+
+The directory @value{GDB-UNTAR} is created under the tools directory.
+
+@subheading Make the build directory
 
 Create a build directory for the SIS Debugger
 
@@ -33,48 +85,35 @@ cd tools
 mkdir build-sis
 @end example
 
-@subsection Configure for the build (SIS)
+@subheading Configure for the build
 
-Configure the general gdb distribution for Sparc Instruction Simulation
+Configure the GNU Debugger for the
+Sparc Instruction Simulator (SIS):
 
 @example
 cd tools/build-sis
-../gdb-980122/configure --target-sparc-erc32-aout \
---program-prefix=sparc-rtems- \
---disable-gdbtk \
---with-targets=all \
---prefix=<INSTALL_POINT_FOR_SIS>
+../@value{GDB-UNTAR}/configure --target-sparc-erc32-aout \
+    --program-prefix=sparc-rtems- \
+    --disable-gdbtk \
+    --enable-targets=all \
+    --prefix=<INSTALL_POINT_FOR_SIS>
 @end example
 
-Where:
+Where <INSTALL_POINT_FOR_SIS> is a unique location where the gdb
+with SIS will be created. 
 
-<INSTALL_POINT_FOR_SIS> is a unique location where the gdb with SIS will be
-created. 
+@subheading Make the debugger
 
-@subsection Make the debugger (SIS)
-
-From tools/build-sis run:
+From tools/build-sis execute the following command sequence:
 
 @example
-gmake
+gmake all install
 @end example
 
 
-@section GDB with PowerPC Instruction Simulator (PSIM)
+@section GDB with PowerPC Instruction Simulator
 
-@subsection Unarchive the gdb distribution (PSIM)
-
-Use the following commands to unarchive the gdb distribution:
-
-@example
-cd tools
-tar xzf ../arc/gdb-980122.tar.gz
-@end example
-
-The directory gdb-980122 is created under the tools directory.
-
-
-@subsection Make the build directory (PSIM)
+@subheading Make the build directory
 
 Create a build directory for the SIS Debugger
 
@@ -83,52 +122,44 @@ cd tools
 mkdir build-ppc
 @end example
 
-@subsection Configure for the build
+@subheading Configure for the build
 
-Configure the general gdb distribution for PowerPC Instruction Simulation
+Configure the GNU Debugger for the PowerPC
+Instruction Simulator (PSIM):
 
 @example
 cd tools/build-ppc
-../gdb-980122/configure --host=i486-linux \
+../@value{GDB-UNTAR}/configure \
       --target=powerpc-unknown-eabi \
       --program-prefix=powerpc-rtems- \
       --enable-sim-powerpc \
       --enable-sim-timebase \
       --enable-sim-inline \
       --enable-sim-hardware \
---prefix=<INSTALL_POINT_FOR_PPC>
+      --enable-targets=all \
+      --prefix=<INSTALL_POINT_FOR_PPC>
 @end example
 
-Where:
-
-<INSTALL_POINT_FOR_PPC> is a unique location where the gdb with PSIM will
-be created. 
+Where <INSTALL_POINT_FOR_PPC> is a unique location where the gdb
+with PSIM will be created. 
 
 
-@subsection Make the debugger (PSIM)
+@subheading Make the debugger
 
-From tools/build-ppc run:
+From tools/build-ppc execute the following command sequence:
 
 @example
-gmake
+gmake all install
 @end example
 
 
 @section GDB with Dink32
 
-@subsection Unarchive the gdb distribution (DINK32)
+@subheading Unarchive the gdb distribution
 
 Use the following commands to unarchive the gdb distribution:
 
-@example
-cd tools
-tar xzf ../arc/gdb-980122.tar.gz
-@end example
-
-The directory gdb-980122 is created under the tools directory.
-
-
-@subsection Make the build directory (DINK32)
+@subheading Make the build directory
 
 Create a build directory for the DINK32 Debugger
 
@@ -137,40 +168,27 @@ cd tools
 mkdir build-dink32
 @end example
 
-@subsection Replace dink32-rom.c
+@subheading Configure for the build
 
-Obtain a valid copy of dink32-rom.c from RTEMS site.
-
-Replace the copy of dink32-rom.c that came with the gdb-980122
-distribution. It is located in:
-
-@example
-tools/gdb-980122/gdb/dink32-rom.c
-@end example
-
-
-@subsection Configure for the build (DINK32)
-
-Configure the general gdb distribution for Sparc Instruction Simulation
+Configure the GNU Debugger to communicate with
+the DINK32 ROM monitor:
 
 @example
 cd tools/build-dink32
-../gdb-980122/configure --target-powerpc-elf \
---program-prefix=powerpc-rtems- \
---prefix=<INSTALL_POINT_FOR_DINK32>
---with-targets=all \
+../@value{GDB-UNTAR}/configure --target-powerpc-elf \
+    --program-prefix=powerpc-rtems- \
+    --enable-targets=all \
+    --prefix=<INSTALL_POINT_FOR_DINK32>
 @end example
 
-Where:
+Where <INSTALL_POINT_FOR_DINK32> is a unique location where the
+gdb Dink32 will be created. 
 
-<INSTALL_POINT_FOR_DINK32> is a unique location where the gdb Dink32 will
-be created. 
+@subheading Make the debugger
 
-@subsection Make the debugger (DINK32)
-
-From tools/build-dink32 run:
+From tools/build-dink32 execute the following command sequence:
 
 @example
-gmake
+gmake all install
 @end example
 

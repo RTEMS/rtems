@@ -23,3 +23,14 @@ assessing the amount of disk space required for your installation:
 +----------------------------------------+------------------------------+
 @end example
 
+The instructions in this manual should work on any computer running
+a UNIX variant.  Some native GNU tools are used by this procedure
+including:
+
+@itemize @bullet
+@item GCC
+@item GNU make
+@end itemize
+
+In addition, some native utilities may be deficient for building 
+the GNU tools.

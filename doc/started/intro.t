@@ -8,6 +8,9 @@
 
 @chapter Introduction
 
+The purpose of this document is to guide you through the process of 
+installing a GNU cross development environment to use with RTEMS.
+
 If you are already familiar with the concepts behind a cross compiler and
 have a background in Unix these instructions should provide the bare
 essentials for performing a setup of the following items: 

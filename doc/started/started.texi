@@ -21,11 +21,16 @@
 
 @include ../common/setup.texi
 
+@c
+@c  Now set all the tool version dependent information
+@c
+@include versions.texi
+
 @ignore
 @ifinfo
 @format
 START-INFO-DIR-ENTRY
-* RTEMS Getting Started Guide (started):
+* Getting Started with RTEMS for C/C++ Users (started):
 END-INFO-DIR-ENTRY
 @end format
 @end ifinfo
@@ -46,11 +51,11 @@ END-INFO-DIR-ENTRY
 @c @shorttitlepage Getting Started with RTEMS
 
 @setchapternewpage odd
-@settitle Getting Started with RTEMS
+@settitle Getting Started with RTEMS for C/C++ Users
 @titlepage
 @finalout
 
-@title Getting Started with RTEMS
+@title Getting Started with RTEMS for C/C++ Users
 @subtitle Edition @value{edition}, for RTEMS @value{version}
 @sp 1
 @subtitle @value{update-month}
@@ -73,8 +78,7 @@ END-INFO-DIR-ENTRY
 @node Top, Introduction, (dir), (dir)
 @top started
 
-This is the online version of the Getting Started with RTEMS for C/C++
-Developers.
+This is the online version of the Getting Started with RTEMS for C/C++ Users.
 
 @menu
 * Introduction::
