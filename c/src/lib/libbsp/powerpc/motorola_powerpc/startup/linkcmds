@@ -53,7 +53,7 @@ SECTIONS
   .rela.sdata2    : { *(.rela.sdata2)   }	> CODE
   .rela.sbss2     : { *(.rela.sbss2)    }	> CODE
 
-  .init		  : { _init = .; KEEP(*(.init))	} > CODE
+  .init		  : { KEEP(*(.init))		} > CODE
 
   .text      :	
   {
@@ -97,6 +97,7 @@ SECTIONS
   .fini_array     : { *(.fini_array) } >CODE
   PROVIDE (__fini_array_end = .);
 
+_SDA2_BASE_ = __SDATA2_START__ + 0x8000;
   .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >CODE
   .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >CODE
   .eh_frame	  : { *.(eh_frame)		} >CODE
@@ -191,6 +192,7 @@ SECTIONS
   /* We want the small data sections together, so single-instruction offsets
      can access them all, and initialized data all before uninitialized, so
      we can shorten the on-disk segment size.  */
+_SDA_BASE_ = __SDATA_START__ + 0x8000;
   .sdata	  : { *(.sdata) *(.gnu.linkonce.s.*)	} >CODE
   _edata  =  .;
   PROVIDE (edata = .);
