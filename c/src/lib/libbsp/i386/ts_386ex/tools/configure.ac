@@ -16,14 +16,5 @@ RTEMS_PROJECT_ROOT
 RTEMS_TOOLPATHS
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-dos_sup/Makefile
-ts_1325_ada/Makefile
-debug_ada/Makefile
-debug_c/Makefile
-network_ada/Makefile
-network_ada/adasockets/Makefile
-network_ada/listener/Makefile
-network_ada/tcprelay/Makefile
-])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

@@ -1,3 +1,16 @@
+2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in debug_ada/Makefile.am, debug_c/Makefile.am,
+	dos_sup/Makefile.am, network_ada/adasockets/Makefile.am,
+	network_ada/Makefile.am, network_ada/listener/Makefile.am,
+	network_ada/tcprelay/Makefile.am, ts_1325_ada/Makefile.am. Use automake
+	compilation rules.
+	* debug_ada/Makefile.am, debug_c/Makefile.am, dos_sup/Makefile.am,
+	network_ada/adasockets/Makefile.am, network_ada/Makefile.am,
+	network_ada/listener/Makefile.am, network_ada/tcprelay/Makefile.am,
+	ts_1325_ada/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
