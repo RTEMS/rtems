@@ -1,3 +1,8 @@
+2002-10-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove AC_ENABLE_MULTILIB.
+	* Makefile.am: Add CVS-Id.
+
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.

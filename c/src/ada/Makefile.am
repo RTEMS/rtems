@@ -1,3 +1,7 @@
+#
+# $Id$
+#
+
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 $(PROJECT_INCLUDE)/adainclude:
