@@ -1,3 +1,8 @@
+2003-09-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in include/Makefile.am.
+	* include/Makefile.am: Remove.
+
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove (Merged-in into ../configure.ac)
