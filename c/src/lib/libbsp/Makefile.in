@@ -45,7 +45,7 @@ preinstall:
 	    $(PROJECT_ROOT)/${RTEMS_BSP}/lib; \
 	else \
 	  $(INSTALL_DATA) \
-	    $(srcdir)/$(RTEMS_CPU)/${RTEMS_BSP}/bsp_specs \
+	    $(srcdir)/$(RTEMS_CPU)/${RTEMS_BSP_FAMILY}/bsp_specs \
 	    $(PROJECT_ROOT)/${RTEMS_BSP}/lib; \
 	fi
 
