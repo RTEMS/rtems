@@ -1162,7 +1162,7 @@ void _CPU_Context_restore_fp(
  *
  *  H8300 Specific Information:
  *
- *  XXX
+ *  This is the generic implementation.
  */
  
 static inline unsigned32 CPU_swap_u32(
@@ -1179,6 +1179,9 @@ static inline unsigned32 CPU_swap_u32(
   swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
   return( swapped );
 }
+
+#define CPU_swap_u16( value ) \
+  (((value&0xff) << 8) | ((value >> 8)&0xff))
 
 /* to be provided by the BSP */
 extern void H8BD_Install_IRQ(

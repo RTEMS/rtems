@@ -1,3 +1,8 @@
+2003-08-14	Joel Sherrill <joel@OARcorp.com>
+
+	PR 455/bsps
+	* rtems/score/cpu.h: Added missing CPU_swap_u16().
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
