@@ -8,68 +8,7 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-RELS=$(ARCH)/rtems-cpu.rel
-
-# C source names, if any, go here -- minus the .c
-#  Normally cpu_asm and rtems are assembly files
-C_PIECES=cpu ppccache
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
-
-H_FILES=$(srcdir)/cpu.h $(srcdir)/ppc.h $(srcdir)/ppctypes.h
-
-# H_FILES that get installed externally
-EXTERNAL_H_FILES = $(srcdir)/asm.h $(srcdir)/mpc860.h
-
-# Assembly source names, if any, go here -- minus the .S
-#  Normally cpu_asm and rtems are assembly files
-S_PIECES=cpu_asm rtems
-S_FILES=$(S_PIECES:%=%.S)
-S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
-
-SRCS=$(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES) $(EXTERNAL_H_FILES) 
-OBJS=$(C_O_FILES) $(CC_O_FILES) $(S_O_FILES)
-
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
-include $(RTEMS_ROOT)/make/leaf.cfg
+include $(RTEMS_ROOT)/make/directory.cfg
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
-
-DEFINES  +=
-CPPFLAGS +=
-CFLAGS   += $(CFLAGS_OS_V)
-
-LD_PATHS  +=
-LD_LIBS   +=
-LDFLAGS   +=
-
-#
-# Add your list of files to delete here.  The config files
-#  already know how to delete some stuff, so you may want
-#  to just run 'make clean' first to see what gets missed.
-#  'make clobber' already includes 'make clean'
-#
-
-CLEAN_ADDITIONS +=
-CLOBBER_ADDITIONS +=
-
-all:	${ARCH} $(SRCS) preinstall $(OBJS) $(RELS)
-
-$(ARCH)/rtems-cpu.rel: $(OBJS)
-	$(make-rel)
-
-$(ARCH)/cpu_asm.o: irq_stub.s
-
-# Install the program(s), appending _g or _p as appropriate.
-# for include files, just use $(INSTALL)
-install:  all
-
-preinstall: $(ARCH)
-	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
-# we will share the basic cpu file
-	$(INSTALL) -m 444 ${EXTERNAL_H_FILES} $(PROJECT_INCLUDE)
-# make a link in case we are not compiling in the source directory
-	#test -f irq_stub.s || $(LN) -s $(srcdir)/irq_stub.s irq_stub.s
-
+SUB_DIRS = rtems wrap

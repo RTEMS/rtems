@@ -8,62 +8,7 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-RELS=$(ARCH)/rtems-cpu.rel
-
-# C source names, if any, go here -- minus the .c
-C_PIECES=cpu
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
-
-H_FILES=$(srcdir)/cpu.h $(srcdir)/unix.h $(srcdir)/unixtypes.h
-
-# Assembly source names, if any, go here -- minus the .S
-S_PIECES=
-S_FILES=$(S_PIECES:%=%.S)
-S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
-
-SRCS=$(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES)
-OBJS=$(C_O_FILES) $(CC_O_FILES) $(S_O_FILES)
-
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
-include $(RTEMS_ROOT)/make/leaf.cfg
+include $(RTEMS_ROOT)/make/directory.cfg
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
-
-DEFINES  +=
-CPPFLAGS += 
-CFLAGS   += $(CFLAGS_OS_V) -DCPU_SYNC_IO $(LIBC_DEFINES)
-
-LD_PATHS  +=
-LD_LIBS   +=
-LDFLAGS   +=
-
-#
-# Add your list of files to delete here.  The config files
-#  already know how to delete some stuff, so you may want
-#  to just run 'make clean' first to see what gets missed.
-#  'make clobber' already includes 'make clean'
-#
-
-CLEAN_ADDITIONS +=
-CLOBBER_ADDITIONS +=
-
-$(ARCH)/unixsize.h: $(ARCH) cpu.h $(GENSIZE)
-	$(RM) $@
-	$(GENSIZE) > $@
-	$(CHMOD) -w $@
-
-$(ARCH)/rtems-cpu.rel: $(OBJS)
-	$(make-rel)
-
-all:  ${ARCH} $(SRCS) $(ARCH)/unixsize.h preinstall $(RELS)
-
-# Install the program(s), appending _g or _p as appropriate.
-# for include files, just use $(INSTALL)
-install:  all
-
-preinstall: $(ARCH) $(ARCH)/unixsize.h
-	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
-	$(INSTALL) -m 444 ${ARCH}/unixsize.h $(PROJECT_INCLUDE)/rtems/score
+SUB_DIRS = rtems wrap
