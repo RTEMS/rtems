@@ -2,16 +2,17 @@
 ## $Id$
 ##
 
-VPATH = @srcdir@:@srcdir@/..
-
 NODE = 1
 TEST = mp11
 PGM = ${ARCH}/$(TEST)-node$(NODE).exe
 
 MANAGERS = io mp message partition semaphore
 
-C_FILES = init.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
+C_FILES = ../init.c
+C_O_FILES = $(C_FILES:../%.c=${ARCH}/%.$(OBJEXT))
+
+$(ARCH)/%$(LIB_VARIANT).$(OBJEXT): ../%.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
 
 H_FILES = system.h
 
