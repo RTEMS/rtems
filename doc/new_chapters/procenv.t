@@ -31,7 +31,7 @@ The directives provided by the process environment manager are:
 @item @code{setsid} - 
 @item @code{setpgid} - 
 @item @code{uname} - 
-@item @code{times} - 
+@item @code{times} - Get process times
 @item @code{getenv} - 
 @item @code{ctermid} - 
 @item @code{ttyname} - 
@@ -461,31 +461,34 @@ The
 @subheading NOTES:
 
 @page
-@subsection times - 
+@subsection times - Get process times
 
 @subheading CALLING SEQUENCE:
 
-@ifset is-C
 @example
-int times(
+#include <sys/time.h>
+
+clock_t times(
+  struct tms *buf
 );
 @end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
-
-@end table
+This routine returns the process times
 
 @subheading DESCRIPTION:
 
+@code{times} stores the current process times in @code{buf}.
+
+@code{struct tms} is as defined in @code{/usr/include/sys/times.h}
+
+@code{times} returns the number of clock ticks that have elapsed
+since the systm has been up.
+
 @subheading NOTES:
+
+NONE
 
 @page
 @subsection getenv - 
