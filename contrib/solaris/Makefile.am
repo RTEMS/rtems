@@ -2,10 +2,7 @@
 ## $Id$
 ##
 
-
-RPM_SPECS_DATA = \
-    sparc-solaris-binutils.spec \
-    sparc-solaris-libs.spec \
+RPM_SPECS_DATA = sparc-solaris-binutils.spec sparc-solaris-libs.spec \
     sparc-solaris-gcc.spec
 
 CONFIGURE_DEPENDENCIES = setup.cache

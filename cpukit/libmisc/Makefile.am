@@ -17,7 +17,8 @@ noinst_HEADERS =
 ## capture
 
 libcapture_C_FILES = capture/capture.c capture/capture-cli.c
-libcapture_OBJS = $(libcapture_C_FILES:capture/%.c=capture/$(ARCH)/%.$(OBJEXT))
+libcapture_OBJS = \
+    $(libcapture_C_FILES:capture/%.c=capture/$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS += capture/capture.h capture/capture-cli.h
 
@@ -67,7 +68,7 @@ devnull/$(ARCH)/%.$(OBJEXT): devnull/%.c devnull/$(ARCH)/$(dirstamp)
 devnull/$(ARCH)/libdevnull.a: $(libdevnull_OBJS)
 	$(make-library)
 
-LIBS +=  devnull/$(ARCH)/libdevnull.a
+LIBS += devnull/$(ARCH)/libdevnull.a
 
 EXTRA_DIST += devnull/devnull.c
 
@@ -84,7 +85,7 @@ dummy/$(ARCH)/%.$(OBJEXT): dummy/%.c dummy/$(ARCH)/$(dirstamp)
 dummy/$(ARCH)/libdummy.a: $(libdummy_OBJS)
 	$(make-library)
 
-LIBS +=  dummy/$(ARCH)/libdummy.a
+LIBS += dummy/$(ARCH)/libdummy.a
 
 EXTRA_DIST += dummy/README dummy/dummy.c
 
@@ -104,7 +105,7 @@ dumpbuf/$(ARCH)/%.$(OBJEXT): dumpbuf/%.c dumpbuf/$(ARCH)/$(dirstamp)
 dumpbuf/$(ARCH)/libdumpbuf.a: $(libdumpbuf_OBJS)
 	$(make-library)
 
-LIBS +=  dumpbuf/$(ARCH)/libdumpbuf.a
+LIBS += dumpbuf/$(ARCH)/libdumpbuf.a
 
 EXTRA_DIST += dumpbuf/dumpbuf.c
 
@@ -138,7 +139,7 @@ monitor/$(ARCH)/%.$(OBJEXT): monitor/%.c monitor/$(ARCH)/$(dirstamp)
 monitor/$(ARCH)/libmonitor.a: $(libmonitor_OBJS)
 	$(make-library)
 
-LIBS +=  monitor/$(ARCH)/libmonitor.a
+LIBS += monitor/$(ARCH)/libmonitor.a
 
 EXTRA_DIST += monitor/README monitor/mon-command.c monitor/mon-config.c \
     monitor/mon-dname.c monitor/mon-driver.c monitor/mon-extension.c \
@@ -162,13 +163,13 @@ mw-fb/$(ARCH)/%.$(OBJEXT): mw-fb/%.c mw-fb/$(ARCH)/$(dirstamp)
 mw-fb/$(ARCH)/libmw-fb.a: $(libmw_fb_OBJS)
 	$(make-library)
 
-LIBS +=  mw-fb/$(ARCH)/libmw-fb.a
+LIBS += mw-fb/$(ARCH)/libmw-fb.a
 
 EXTRA_DIST += $(libmw_fb_C_FILES)
 
 ## shell
 
-libshell_C_FILES = shell/cmds.c shell/shell.c 
+libshell_C_FILES = shell/cmds.c shell/shell.c
 libshell_OBJS = $(libshell_C_FILES:shell/%.c=shell/$(ARCH)/%.$(OBJEXT))
 
 if LIBSHELL
@@ -184,7 +185,7 @@ shell/$(ARCH)/libshell.a: $(libshell_OBJS)
 	$(make-library)
 
 if LIBSHELL
-LIBS +=  shell/$(ARCH)/libshell.a
+LIBS += shell/$(ARCH)/libshell.a
 endif
 
 EXTRA_DIST += shell/README shell/shell.c shell/cmds.c
@@ -205,7 +206,7 @@ rtmonuse/$(ARCH)/%.$(OBJEXT): rtmonuse/%.c rtmonuse/$(ARCH)/$(dirstamp)
 rtmonuse/$(ARCH)/librtmonuse.a: $(librtmonuse_OBJS)
 	$(make-library)
 
-LIBS +=  rtmonuse/$(ARCH)/librtmonuse.a
+LIBS += rtmonuse/$(ARCH)/librtmonuse.a
 
 EXTRA_DIST += rtmonuse/rtmonuse.c
 
@@ -229,7 +230,7 @@ serdbg/$(ARCH)/libserdbg.a: $(libserdbg_OBJS)
 	$(make-library)
 
 if LIBSERDBG
-LIBS +=  serdbg/$(ARCH)/libserdbg.a
+LIBS += serdbg/$(ARCH)/libserdbg.a
 endif
 
 EXTRA_DIST += serdbg/README serdbg/serdbg.c serdbg/serdbgio.c \
@@ -254,7 +255,7 @@ stackchk/$(ARCH)/%.$(OBJEXT): stackchk/%.c stackchk/$(ARCH)/$(dirstamp)
 stackchk/$(ARCH)/libstackchk.a: $(libstackchk_OBJS)
 	$(make-library)
 
-LIBS +=  stackchk/$(ARCH)/libstackchk.a
+LIBS += stackchk/$(ARCH)/libstackchk.a
 
 EXTRA_DIST += stackchk/README stackchk/check.c
 
@@ -273,7 +274,7 @@ untar/$(ARCH)/%.$(OBJEXT): untar/%.c untar/$(ARCH)/$(dirstamp)
 untar/$(ARCH)/libuntar.a: $(libuntar_OBJS)
 	$(make-library)
 
-LIBS +=  untar/$(ARCH)/libuntar.a
+LIBS += untar/$(ARCH)/libuntar.a
 
 EXTRA_DIST += untar/README untar/untar.c
 
