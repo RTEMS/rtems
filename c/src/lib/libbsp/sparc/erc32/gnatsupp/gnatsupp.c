@@ -92,11 +92,12 @@ void __gnat_install_handler()
 	*  trap 0 which we will use as a shutdown. Also avoid trap 0x70 - 0x7f
 	*  which cannot happen and where some of the space is used to pass
 	*  paramaters to the program. Trap 0x1d is used by the clock tick
-	*  and 0x83 by the remote debugging stub.
+	*  and 0x83 by the remote debugging stub. Traps 0x14, 0x15, and 0x17
+        *  are used by the console device driver.
 	*/
 
 	if (( trap >= 0x11 ) && ( trap <= 0x1f )) {
-	   if ( trap != 0x1d )
+	   if ( trap != 0x1d && trap != 0x14 && trap != 0x15 && trap != 0x17 )
 	    	rtems_interrupt_catch( __gnat_interrupt_handler, 
 		    trap, &previous_isr );
 	} else if (( trap != 5 && trap != 6 && trap != 0x83 ) &&
