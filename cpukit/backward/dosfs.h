@@ -3,8 +3,8 @@
  * @deprecated
  */
 
-#ifndef __dosfs_h
-#define __dosfs_h
+#ifndef _DOSFS_H
+#define _DOSFS_H
 #ifndef RTEMS_NO_WARN_DEPRECATED
 #warning <dosfs.h> is deprecated, use <rtems/dosfs.h> instead
 #endif

@@ -3,8 +3,8 @@
  * @deprecated
  */
 
-#ifndef __itron_h
-#define __itron_h
+#ifndef _ITRON_H
+#define _ITRON_H
 #ifndef RTEMS_NO_WARN_DEPRECATED
 #warning <itron.h> is deprecated, use <rtems/itron.h> instead
 #endif

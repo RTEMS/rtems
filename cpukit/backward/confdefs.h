@@ -3,8 +3,8 @@
  * @deprecated
  */
 
-#ifndef __confdefs_h
-#define __confdefs_h
+#ifndef _CONFDEFS_H
+#define _CONFDEFS_H
 #ifndef RTEMS_NO_WARN_DEPRECATED
 #warning <confdefs.h> is deprecated, use <rtems/confdefs.h> instead
 #endif

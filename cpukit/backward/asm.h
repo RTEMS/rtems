@@ -3,8 +3,8 @@
  * @deprecated
  */
 
-#ifndef __asm_h
-#define __asm_h
+#ifndef _ASM_H
+#define _ASM_H
 #ifndef RTEMS_NO_WARN_DEPRECATED
 #warning <asm.h> is deprecated, use <rtems/asm.h> instead
 #endif

@@ -3,8 +3,8 @@
  * @deprecated
  */
 
-#ifndef __zilog_z8036_h
-#define __zilog_z8036_h
+#ifndef _ZILOG_Z8036_H
+#define _ZILOG_Z8036_H
 #ifndef RTEMS_NO_WARN_DEPRECATED
 #warning <zilog/z8036.h> is deprecated, use <rtems/zilog/z8036.h> instead
 #endif

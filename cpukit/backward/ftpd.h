@@ -3,8 +3,8 @@
  * @deprecated
  */
 
-#ifndef __ftpd_h
-#define __ftpd_h
+#ifndef _FTPD_H
+#define _FTPD_H
 #ifndef RTEMS_NO_WARN_DEPRECATED
 #warning <ftpd.h> is deprecated, use <rtems/ftpd.h> instead
 #endif

@@ -3,8 +3,8 @@
  * @deprecated
  */
 
-#ifndef __imfs_h
-#define __imfs_h
+#ifndef _IMFS_H
+#define _IMFS_H
 #ifndef RTEMS_NO_WARN_DEPRECATED
 #warning <imfs.h> is deprecated, use <rtems/imfs.h> instead
 #endif

@@ -3,8 +3,8 @@
  * @deprecated
  */
 
-#ifndef __console_h
-#define __console_h
+#ifndef _CONSOLE_H
+#define _CONSOLE_H
 #ifndef RTEMS_NO_WARN_DEPRECATED
 #warning <console.h> is deprecated, use <rtems/console.h> instead
 #endif

@@ -3,8 +3,8 @@
  * @deprecated
  */
 
-#ifndef __motorola_mc68230_h
-#define __motorola_mc68230_h
+#ifndef _MOTOROLA_MC68230_H
+#define _MOTOROLA_MC68230_H
 #ifndef RTEMS_NO_WARN_DEPRECATED
 #warning <motorola/mc68230.h> is deprecated, use <rtems/motorola/mc68230.h> instead
 #endif

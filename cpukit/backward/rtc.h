@@ -3,8 +3,8 @@
  * @deprecated
  */
 
-#ifndef __rtc_h
-#define __rtc_h
+#ifndef _RTC_H
+#define _RTC_H
 #ifndef RTEMS_NO_WARN_DEPRECATED
 #warning <rtc.h> is deprecated, use <rtems/rtc.h> instead
 #endif
