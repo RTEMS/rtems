@@ -39,8 +39,8 @@ Heap_Extend_status _Heap_Extend(
   uint32_t            *amount_extended
 )
 {
-  Heap_Block        *the_block;
-  uint32_t          *p;
+  uint32_t         the_size;
+  Heap_Statistics *const stats = &the_heap->stats;
 
   /*
    *  The overhead was taken from the original heap memory.
@@ -62,22 +62,13 @@ Heap_Extend_status _Heap_Extend(
    *  As noted, this code only supports (4).
    */
 
-  if ( starting_address >= (void *) the_heap->start &&        /* case 3 */
-       starting_address <= (void *) the_heap->final
+  if ( starting_address >= the_heap->begin &&        /* case 3 */
+       starting_address < the_heap->end
      )
     return HEAP_EXTEND_ERROR;
 
-  if ( starting_address < (void *) the_heap->start ) {  /* cases 1 and 2 */
-
-      return HEAP_EXTEND_NOT_IMPLEMENTED;               /* cases 1 and 2 */
-
-  } else {                                              /* cases 4 and 5 */
-
-    the_block = (Heap_Block *)
-       _Addresses_Subtract_offset( starting_address, HEAP_OVERHEAD );
-    if ( the_block != the_heap->final )
-      return HEAP_EXTEND_NOT_IMPLEMENTED;                   /* case 5 */
-  }
+  if ( starting_address != the_heap->end )
+    return HEAP_EXTEND_NOT_IMPLEMENTED;         /* cases 1, 2, and 5 */
 
   /*
    *  Currently only case 4 should make it to this point.
@@ -85,27 +76,26 @@ Heap_Extend_status _Heap_Extend(
    *  block and free it.
    */
 
+  old_final = the_heap->final;
+  the_heap->end = _Addresses_Add_offset( the_heap->end, size );
+  the_size = _Addresses_Subtract( the_heap->end, old_final ) - HEAP_OVERHEAD;
+  _Heap_Align_down( &the_size, the_heap->page_size );
+
   *amount_extended = size;
 
-  old_final = the_heap->final;
-  new_final = _Addresses_Add_offset( old_final, size );
-  /* SAME AS: _Addresses_Add_offset( starting_address, size-HEAP_OVERHEAD ); */
+  if( the_size < the_heap->min_block_size )
+    return HEAP_EXTEND_SUCCESSFUL;
 
+  old_final->size = the_size | (old_final->size & HEAP_PREV_USED);
+  new_final = _Heap_Block_at( old_final, the_size );
+  new_final->size = HEAP_PREV_USED;
   the_heap->final = new_final;
 
-  old_final->front_flag =
-  new_final->back_flag  = _Heap_Build_flag( size, HEAP_BLOCK_USED );
-  new_final->front_flag = HEAP_DUMMY_FLAG;
+  stats->size += size;
+  stats->used_blocks += 1;
+  stats->frees -= 1;    /* Don't count subsequent call as actual free() */
 
-  /*
-   *  Must pass in address of "user" area
-   *  So add in the offset field.
-   */
-
-  p = (uint32_t   *) &old_final->next;
-  *p = sizeof(uint32_t  );
-  p++;
-  _Heap_Free( the_heap, p );
+  _Heap_Free( the_heap, _Heap_User_area( old_final ) );
 
   return HEAP_EXTEND_SUCCESSFUL;
 }

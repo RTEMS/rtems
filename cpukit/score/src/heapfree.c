@@ -39,65 +39,90 @@ boolean _Heap_Free(
 {
   Heap_Block        *the_block;
   Heap_Block        *next_block;
-  Heap_Block        *new_next_block;
-  Heap_Block        *previous_block;
-  Heap_Block        *temporary_block;
-  uint32_t           the_size;
+  uint32_t         the_size;
+  uint32_t         next_size;
+  Heap_Statistics *const stats = &the_heap->stats;
+  boolean            next_is_free;
 
-  the_block = _Heap_User_block_at( starting_address );
+  _Heap_Start_of_block( the_heap, starting_address, &the_block );
 
-  if ( !_Heap_Is_block_in( the_heap, the_block ) ||
-        _Heap_Is_block_free( the_block ) ) {
-      return( FALSE );
+  if ( !_Heap_Is_block_in( the_heap, the_block ) ) {
+    _HAssert(starting_address == NULL);
+    return( FALSE );
   }
 
-  the_size   = _Heap_Block_size( the_block );
+  the_size = _Heap_Block_size( the_block );
   next_block = _Heap_Block_at( the_block, the_size );
 
-  if ( !_Heap_Is_block_in( the_heap, next_block ) ||
-       (the_block->front_flag != next_block->back_flag) ) {
+  if ( !_Heap_Is_prev_used( next_block ) ) {
+    _HAssert(FALSE);
+    return( FALSE );
+  }
+
+  if ( !_Heap_Is_block_in( the_heap, next_block ) ) {
+    _HAssert(FALSE);
+    return( FALSE );
+  }
+
+  next_size = _Heap_Block_size( next_block );
+  next_is_free = next_block < the_heap->final &&
+    !_Heap_Is_prev_used(_Heap_Block_at(next_block, next_size));
+
+  if ( !_Heap_Is_prev_used( the_block ) ) {
+    uint32_t const prev_size = the_block->prev_size;
+    Heap_Block *const prev_block = _Heap_Block_at( the_block, -prev_size );
+
+    if ( !_Heap_Is_block_in( the_heap, prev_block ) ) {
+      _HAssert(FALSE);
       return( FALSE );
-  }
-
-  if ( _Heap_Is_previous_block_free( the_block ) ) {
-    previous_block = _Heap_Previous_block( the_block );
-
-    if ( !_Heap_Is_block_in( the_heap, previous_block ) ) {
-        return( FALSE );
     }
 
-    if ( _Heap_Is_block_free( next_block ) ) {      /* coalesce both */
-      previous_block->front_flag += next_block->front_flag + the_size;
-      temporary_block             = _Heap_Next_block( previous_block );
-      temporary_block->back_flag  = previous_block->front_flag;
-      next_block->next->previous  = next_block->previous;
-      next_block->previous->next  = next_block->next;
+    /* As we always coalesce free blocks, the block that preceedes prev_block
+       must have been used. */
+    if ( !_Heap_Is_prev_used ( prev_block) ) {
+      _HAssert(FALSE);
+      return( FALSE );
     }
-    else {                     /* coalesce prev */
-      previous_block->front_flag =
-      next_block->back_flag      = previous_block->front_flag + the_size;
-    }
-  }
-  else if ( _Heap_Is_block_free( next_block ) ) { /* coalesce next */
-    the_block->front_flag     = the_size + next_block->front_flag;
-    new_next_block            = _Heap_Next_block( the_block );
-    new_next_block->back_flag = the_block->front_flag;
-    the_block->next           = next_block->next;
-    the_block->previous       = next_block->previous;
-    next_block->previous->next = the_block;
-    next_block->next->previous = the_block;
 
-    if (the_heap->first == next_block)
-        the_heap->first = the_block;
+    if ( next_is_free ) {       /* coalesce both */
+      uint32_t const size = the_size + prev_size + next_size;
+      _Heap_Block_remove( next_block );
+      stats->free_blocks -= 1;
+      prev_block->size = size | HEAP_PREV_USED;
+      next_block = _Heap_Block_at( prev_block, size );
+      _HAssert(!_Heap_Is_prev_used( next_block));
+      next_block->prev_size = size;
+    }
+    else {                      /* coalesce prev */
+      uint32_t const size = the_size + prev_size;
+      prev_block->size = size | HEAP_PREV_USED;
+      next_block->size &= ~HEAP_PREV_USED;
+      next_block->prev_size = size;
+    }
   }
-  else {                          /* no coalesce */
-    next_block->back_flag     =
-    the_block->front_flag     = the_size;
-    the_block->previous       = _Heap_Head( the_heap );
-    the_block->next           = the_heap->first;
-    the_heap->first           = the_block;
-    the_block->next->previous = the_block;
+  else if ( next_is_free ) {    /* coalesce next */
+    uint32_t const size = the_size + next_size;
+    _Heap_Block_replace( next_block, the_block );
+    the_block->size = size | HEAP_PREV_USED;
+    next_block  = _Heap_Block_at( the_block, size );
+    next_block->prev_size = size;
   }
+  else {                        /* no coalesce */
+    /* Add 'the_block' to the head of the free blocks list as it tends to
+       produce less fragmentation than adding to the tail. */
+    _Heap_Block_insert_after( _Heap_Head( the_heap), the_block );
+    the_block->size = the_size | HEAP_PREV_USED;
+    next_block->size &= ~HEAP_PREV_USED;
+    next_block->prev_size = the_size;
+
+    stats->free_blocks += 1;
+    if ( stats->max_free_blocks < stats->free_blocks )
+      stats->max_free_blocks = stats->free_blocks;
+  }
+
+  stats->used_blocks -= 1;
+  stats->free_size += the_size;
+  stats->frees += 1;
 
   return( TRUE );
 }

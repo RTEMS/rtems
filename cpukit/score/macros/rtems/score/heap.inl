@@ -16,6 +16,12 @@
 #ifndef __HEAP_inl
 #define __HEAP_inl
 
+/*
+ * WARNING: this file is only visually checked against
+ * '../../../inline/rtems/score/heap.inl'. Use those file for reference
+ * if encounter problems.
+ */
+
 #include <rtems/score/address.h>
 
 /*PAGE
@@ -23,40 +29,140 @@
  *  _Heap_Head
  */
 
-#define _Heap_Head( _the_heap ) \
-  ((Heap_Block *)&(_the_heap)->start)
+#define _Heap_Head( _the_heap ) (&(_the_heap)->free_list)
 
 /*PAGE
  *
  *  _Heap_Tail
  */
 
-#define _Heap_Tail( _the_heap ) \
-  ((Heap_Block *)&(_the_heap)->final)
+#define _Heap_Tail( _the_heap ) (&(_the_heap)->free_list)
 
 /*PAGE
  *
- *  _Heap_Previous_block
+ *  _Heap_First
  */
 
-#define _Heap_Previous_block( _the_block ) \
-  ( (Heap_Block *) _Addresses_Subtract_offset( \
-      (void *)(_the_block), \
-      (_the_block)->back_flag & ~ HEAP_BLOCK_USED \
-    ) \
-  )
+#define _Heap_First( _the_heap ) (_Heap_Head(_the_heap)->next)
 
 /*PAGE
  *
- *  _Heap_Next_block
+ *  _Heap_Last
  */
 
-#define _Heap_Next_block( _the_block ) \
-  ( (Heap_Block *) _Addresses_Add_offset( \
-      (void *)(_the_block), \
-      (_the_block)->front_flag & ~ HEAP_BLOCK_USED \
-    ) \
-  )
+#define _Heap_Last( _the_heap )  (_Heap_Tail(_the_heap)->prev)
+
+/*PAGE
+ *
+ *  _Heap_Block_remove
+ *
+ */
+
+#define _Heap_Block_remove( _the_block ) \
+  do { \
+    Heap_Block *block = (_the_block); \
+    Heap_Block *next = block->next; \
+    Heap_Block *prev = block->prev; \
+    prev->next = next; \
+    next->prev = prev; \
+  } while(0)
+
+/*PAGE
+ *
+ *  _Heap_Block_replace
+ *
+ */
+
+#define _Heap_Block_replace( _old_block,  _new_block ) \
+  do { \
+    Heap_Block *block = (_old_block); \
+    Heap_Block *next = block->next; \
+    Heap_Block *prev = block->prev; \
+    block = (_new_block); \
+    block->next = next; \
+    block->prev = prev; \
+    next->prev = prev->next = block; \
+  } while(0)
+
+/*PAGE
+ *
+ *  _Heap_Block_insert_after
+ *
+ */
+
+#define _Heap_Block_insert_after(  _prev_block, _the_block ) \
+  do { \
+    Heap_Block *prev = (_prev_block); \
+    Heap_Block *block = (_the_block); \
+    Heap_Block *next = prev->next; \
+    block->next  = next; \
+    block->prev  = prev; \
+    next->prev = prev->next = block; \
+  } while(0)
+
+/*PAGE
+ *
+ *  _Heap_Is_aligned
+ */
+
+#define _Heap_Is_aligned( _value, _alignment ) \
+  (((_value) % (_alignment)) == 0)
+
+/*PAGE
+ *
+ *  _Heap_Align_up
+ */
+
+#define _Heap_Align_up( _value, _alignment ) \
+  do { \
+    unsigned32 v = *(_value); \
+    unsigned32 a = (_alignment); \
+    unsigned32 r = v % a; \
+    *(_value) = r ? v - r + a : v; \
+  } while(0)
+
+/*PAGE
+ *
+ *  _Heap_Align_down
+ */
+
+#define _Heap_Align_down( _value, _alignment ) \
+  do { \
+    unsigned32 v = *(_value); \
+    *(_value) = v - (v % (_alignment)); \
+  } while(0)
+
+/*PAGE
+ *
+ *  _Heap_Is_aligned_ptr
+ */
+
+#define _Heap_Is_aligned_ptr( _ptr, _alignment ) \
+  ((_H_p2u(_ptr) % (_alignment)) == 0)
+
+/*PAGE
+ *
+ *  _Heap_Align_up_uptr
+ */
+
+#define _Heap_Align_up_uptr( _value, _alignment ) \
+  do { \
+    _H_uptr_t v = *(_value); \
+    unsigned32 a = (_alignment); \
+    _H_uptr_t r = v % a; \
+    *(_value) = r ? v - r + a : v; \
+  } while(0)
+
+/*PAGE
+ *
+ *  _Heap_Align_down_uptr
+ */
+
+#define _Heap_Align_down_uptr( _value, _alignment ) \
+  do { \
+    _H_uptr_t v = *(_value); \
+    *(_value) = v - (v % (_alignment)); \
+  } while(0)
 
 /*PAGE
  *
@@ -64,44 +170,35 @@
  */
 
 #define _Heap_Block_at( _base, _offset ) \
-  ( (Heap_Block *) \
-     _Addresses_Add_offset( (void *)(_base), (_offset) ) )
+  ( (Heap_Block *) _Addresses_Add_offset( (_base), (_offset) ) )
 
 /*PAGE
  *
- *  _Heap_User_block_at
+ *  _Heap_User_area
+ */
+
+#define _Heap_User_area( _the_block ) \
+  ((void *) _Addresses_Add_offset( (_the_block), HEAP_BLOCK_USER_OFFSET ))
+
+/*PAGE
  *
+ *  _Heap_Start_of_block
  */
  
-#define _Heap_User_block_at( _base ) \
-  _Heap_Block_at( \
-    (_base), \
-    -*(((uint32_t   *) (_base)) - 1) + -HEAP_BLOCK_USED_OVERHEAD \
-  )
+#define _Heap_Start_of_block( _the_heap, _base, _the_block_ptr ) \
+  do { \
+    _H_uptr_t addr = _H_p2u(_base); \
+    _Heap_Align_down( &addr, (_the_heap)->page_size ); \
+    *(_the_block_ptr) = (Heap_Block *)(addr - HEAP_BLOCK_USER_OFFSET); \
+  } while(0)
 
 /*PAGE
  *
- *  _Heap_Is_previous_block_free
+ *  _Heap_Is_prev_used
  */
 
-#define _Heap_Is_previous_block_free( _the_block ) \
-  ( !((_the_block)->back_flag & HEAP_BLOCK_USED) )
-
-/*PAGE
- *
- *  _Heap_Is_block_free
- */
-
-#define _Heap_Is_block_free( _the_block ) \
-  ( !((_the_block)->front_flag & HEAP_BLOCK_USED) )
-
-/*PAGE
- *
- *  _Heap_Is_block_used
- */
-
-#define _Heap_Is_block_used( _the_block ) \
-  ((_the_block)->front_flag & HEAP_BLOCK_USED)
+#define _Heap_Is_prev_used( _the_block ) \
+  ((_the_block)->size & HEAP_PREV_USED)
 
 /*PAGE
  *
@@ -109,15 +206,7 @@
  */
 
 #define _Heap_Block_size( _the_block )    \
-  ((_the_block)->front_flag & ~HEAP_BLOCK_USED)
-
-/*PAGE
- *
- *  _Heap_Start_of_user_area
- */
-
-#define _Heap_Start_of_user_area( _the_block ) \
-  ((void *) &(_the_block)->next)
+  ((_the_block)->size & ~HEAP_PREV_USED)
 
 /*PAGE
  *
@@ -125,25 +214,8 @@
  */
 
 #define _Heap_Is_block_in( _the_heap, _the_block ) \
-  ( ((_the_block) >= (_the_heap)->start) && \
-    ((_the_block) <= (_the_heap)->final) )
-
-/*PAGE
- *
- *  _Heap_Is_page_size_valid
- */
-
-#define _Heap_Is_page_size_valid( _page_size ) \
-  ( ((_page_size) != 0) && \
-    (((_page_size) % CPU_HEAP_ALIGNMENT) == 0) )
-
-/*PAGE
- *
- *  _Heap_Build_flag
- */
-
-#define _Heap_Build_flag( _size, _in_use_flag ) \
-  ( (_size) | (_in_use_flag))
+  ( _Addresses_Is_in_range( (_the_block), \
+    (_the_heap)->start, (_the_heap)->final ) )
 
 #endif
 /* end of include file */

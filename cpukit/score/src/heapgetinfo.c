@@ -8,6 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
+ *  $Id$
  */
 
 
@@ -37,11 +38,11 @@ Heap_Get_information_status _Heap_Get_information(
   Heap_Information_block  *the_info
 )
 {
-  Heap_Block *the_block  = 0;  /* avoid warnings */
-  Heap_Block *next_block = 0;  /* avoid warnings */
-  int         notdone = 1;
-  uint32_t    size;
+  Heap_Block *the_block = the_heap->start;
+  Heap_Block *const end = the_heap->final;
 
+  _HAssert(the_block->prev_size == HEAP_PREV_USED);
+  _HAssert(_Heap_Is_prev_used(the_block));
 
   the_info->Free.number  = 0;
   the_info->Free.total   = 0;
@@ -50,60 +51,31 @@ Heap_Get_information_status _Heap_Get_information(
   the_info->Used.total   = 0;
   the_info->Used.largest = 0;
 
-  /*
-   * We don't want to allow walking the heap until we have
-   * transferred control to the user task so we watch the
-   * system state.
-   */
+  while ( the_block != end ) {
+    uint32_t const the_size = _Heap_Block_size(the_block);
+    Heap_Block *const next_block = _Heap_Block_at(the_block, the_size);
 
-  if ( !_System_state_Is_up( _System_state_Get() ) )
-    return HEAP_GET_INFORMATION_SYSTEM_STATE_ERROR;
+    if ( _Heap_Is_prev_used(next_block) ) {
+      the_info->Used.number++;
+      the_info->Used.total += the_size;
+      if ( the_info->Used.largest < the_size )
+        the_info->Used.largest = the_size;
+    } else {
+      the_info->Free.number++;
+      the_info->Free.total += the_size;
+      if ( the_info->Free.largest < the_size )
+        the_info->Free.largest = the_size;
+      if ( the_size != next_block->prev_size )
+        return HEAP_GET_INFORMATION_BLOCK_ERROR;
+    }
 
-  the_block = the_heap->start;
-
-  /*
-   * Handle the 1st block
-   */
-
-  if ( the_block->back_flag != HEAP_DUMMY_FLAG ) {
-    return HEAP_GET_INFORMATION_BLOCK_ERROR;
+    the_block = next_block;
   }
 
-  while (notdone) {
-
-      /*
-       * Accumulate size
-       */
-
-      size = _Heap_Block_size(the_block);
-      if ( _Heap_Is_block_free(the_block) ) {
-        the_info->Free.number++;
-        the_info->Free.total += size;
-	if ( size > the_info->Free.largest )
-	  the_info->Free.largest = size;
-      } else {
-        the_info->Used.number++;
-        the_info->Used.total += size;
-	if ( size > the_info->Used.largest )
-	  the_info->Used.largest = size;
-      }
-
-      /*
-       * Handle the last block
-       */
-
-      if ( the_block->front_flag != HEAP_DUMMY_FLAG ) {
-        next_block = _Heap_Next_block(the_block);
-        if ( the_block->front_flag != next_block->back_flag ) {
-          return HEAP_GET_INFORMATION_BLOCK_ERROR;
-        }
-      }
-
-      if ( the_block->front_flag == HEAP_DUMMY_FLAG )
-        notdone = 0;
-      else
-        the_block = next_block;
-  }  /* while(notdone) */
+  /* Handle the last dummy block. Don't consider this block to be
+     "used" as client never allocated it. Make 'Used.total' contain this
+     blocks' overhead though. */
+  the_info->Used.total += HEAP_OVERHEAD;
 
   return HEAP_GET_INFORMATION_SUCCESSFUL;
 }

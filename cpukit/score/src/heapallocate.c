@@ -36,78 +36,43 @@ void *_Heap_Allocate(
   uint32_t             size
 )
 {
-  uint32_t    excess;
-  uint32_t    the_size;
+  uint32_t  the_size;
+  uint32_t  search_count;
   Heap_Block *the_block;
-  Heap_Block *next_block;
-  Heap_Block *temporary_block;
-  void       *ptr;
-  uint32_t    offset;
+  void       *ptr = NULL;
+  Heap_Statistics *const stats = &the_heap->stats;
+  Heap_Block *const tail = _Heap_Tail(the_heap);
 
-  /*
-   * Catch the case of a user allocating close to the limit of the
-   * uint32_t  .
-   */
+  the_size =
+    _Heap_Calc_block_size(size, the_heap->page_size, the_heap->min_block_size);
+  if(the_size == 0)
+    return NULL;
 
-  if ( size >= (-1 - HEAP_BLOCK_USED_OVERHEAD) )
-    return( NULL );
-
-  excess   = size % the_heap->page_size;
-  the_size = size + the_heap->page_size + HEAP_BLOCK_USED_OVERHEAD;
-
-  if ( excess )
-    the_size += the_heap->page_size - excess;
-
-  if ( the_size < sizeof( Heap_Block ) )
-    the_size = sizeof( Heap_Block );
-
-  for ( the_block = the_heap->first;
-        ;
-        the_block = the_block->next ) {
-    if ( the_block == _Heap_Tail( the_heap ) )
-      return( NULL );
-    if ( the_block->front_flag >= the_size )
-      break;
-  }
-
-  if ( (the_block->front_flag - the_size) >
-       (the_heap->page_size + HEAP_BLOCK_USED_OVERHEAD) ) {
-    the_block->front_flag -= the_size;
-    next_block             = _Heap_Next_block( the_block );
-    next_block->back_flag  = the_block->front_flag;
-
-    temporary_block            = _Heap_Block_at( next_block, the_size );
-    temporary_block->back_flag =
-    next_block->front_flag     = _Heap_Build_flag( the_size,
-                                    HEAP_BLOCK_USED );
-    ptr = _Heap_Start_of_user_area( next_block );
-  } else {
-    next_block                = _Heap_Next_block( the_block );
-    next_block->back_flag     = _Heap_Build_flag( the_block->front_flag,
-                                   HEAP_BLOCK_USED );
-    the_block->front_flag     = next_block->back_flag;
-    the_block->next->previous = the_block->previous;
-    the_block->previous->next = the_block->next;
-    ptr = _Heap_Start_of_user_area( the_block );
-  }
-
-  /*
-   * round ptr up to a multiple of page size
-   * Have to save the bump amount in the buffer so that free can figure it out
-   */
-
-  offset = the_heap->page_size - (((uint32_t  ) ptr) & (the_heap->page_size - 1));
-  ptr = _Addresses_Add_offset( ptr, offset );
-  *(((uint32_t   *) ptr) - 1) = offset;
-
-#ifdef RTEMS_DEBUG
+  /* Find large enough free block. */
+  for(the_block = _Heap_First(the_heap), search_count = 0;
+      the_block != tail;
+      the_block = the_block->next, ++search_count)
   {
-      uint32_t   ptr_u32;
-      ptr_u32 = (uint32_t  ) ptr;
-      if (ptr_u32 & (the_heap->page_size - 1))
-          abort();
+    /* As we always coalesce free blocks, prev block must have been used. */
+    _HAssert(_Heap_Is_prev_used(the_block));
+
+    /* Don't bother to mask out the HEAP_PREV_USED bit as it won't change the
+       result of the comparison. */
+    if(the_block->size >= the_size) {
+      the_block = _Heap_Block_allocate(the_heap, the_block, the_size );
+
+      ptr = _Heap_User_area(the_block);
+
+      stats->allocs += 1;
+      stats->searches += search_count + 1;
+
+      _HAssert(_Heap_Is_aligned_ptr(ptr, the_heap->page_size));
+      break;
+    }
   }
-#endif
+
+  if(stats->max_search < search_count)
+    stats->max_search = search_count;
 
   return ptr;
 }
