@@ -1,3 +1,8 @@
+2001-10-26	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/libio.c: Cleanup of initialization per suggestion from
+	Eric Norum.
+
 2001-10-25	Jennifer Averett <jennifer@OARcorp.com>
 
 	* libc/unmount.c: Primarily restructuring and clean up to address

@@ -189,13 +189,16 @@ unsigned32 rtems_libio_to_fcntl_flags(
 
 rtems_libio_t *rtems_libio_allocate( void )
 {
-  rtems_libio_t *iop;
+  rtems_libio_t *iop, *next;
   rtems_status_code rc;
   
   rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
 
   if (rtems_libio_iop_freelist) {
     iop = rtems_libio_iop_freelist;
+    next = iop->data1;
+    (void) memset( iop, 0, sizeof(rtems_libio_t) );
+    iop->flags = LIBIO_FLAGS_OPEN;
     rc = rtems_semaphore_create(
       RTEMS_LIBIO_IOP_SEM(iop - rtems_libio_iops),
       1,
@@ -205,21 +208,7 @@ rtems_libio_t *rtems_libio_allocate( void )
     );
     if (rc != RTEMS_SUCCESSFUL)
       goto failed;
-    rtems_libio_iop_freelist = iop->data1;
-
-    iop->driver               = NULL;
-    iop->size                 = 0;
-    iop->offset               = 0;
-    iop->flags                = LIBIO_FLAGS_OPEN;
-    iop->pathinfo.node_access = NULL;
-    iop->pathinfo.handlers    = NULL;
-    iop->pathinfo.ops         = NULL;
-    iop->pathinfo.mt_entry    = NULL;
-    iop->data0                = 0;
-    iop->data1                = NULL;
-    iop->file_info            = NULL;
-    iop->handlers             = NULL;
-    
+    rtems_libio_iop_freelist = next;
     goto done;
   }
   
