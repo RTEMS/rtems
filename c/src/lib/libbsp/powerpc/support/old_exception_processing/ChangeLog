@@ -1,3 +1,8 @@
+2004-10-20	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	PR 696/bsps
+	* cpu.c: Include bsp.h.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
