@@ -1,3 +1,15 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/ckinit.c, clock/rtc.c, console/console.c, include/bsp.h,
+	include/coverhd.h, network/ne2000.c, start/80386ex.h,
+	start/80386ex.inc, start/macros.inc, start/start.S,
+	startup/bspstart.c, startup/linkcmds, startup/setvec.c,
+	timer/timer.c, timer/timerisr.S, tools/debug_ada/init.c,
+	tools/debug_c/init.c, tools/debug_c/serial_gdb.c,
+	tools/debug_c/system.h, tools/network_ada/listener/init.c,
+	tools/network_ada/tcprelay/init.c, tools/ts_1325_ada/init.c: URL for
+	license changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
