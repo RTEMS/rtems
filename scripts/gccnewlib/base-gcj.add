@@ -13,8 +13,8 @@ RTEMS is an open source operating system for embedded systems.
 This is the files for gcc/java (gcj) that are shared by all targets.
 
 %files -n rtems-base-gcj
-%dir /opt/rtems/bin
-/opt/rtems/bin/jcf-dump@exe_ext@
-/opt/rtems/bin/jv-scan@exe_ext@
-/opt/rtems/bin/gcjh@exe_ext@
+%dir %{_prefix}/bin
+%{_prefix}/bin/jcf-dump@exe_ext@
+%{_prefix}/bin/jv-scan@exe_ext@
+%{_prefix}/bin/gcjh@exe_ext@
 

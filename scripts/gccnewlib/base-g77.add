@@ -13,30 +13,30 @@ RTEMS is an open source operating system for embedded systems.
 This is the files for gcc/g77 that are shared by all targets.
 
 %files -n rtems-base-g77
-%dir /opt/rtems/info
-%doc /opt/rtems/info/g77.info*.gz
+%dir %{_prefix}/info
+%doc %{_prefix}/info/g77.info*.gz
 
-%dir /opt/rtems/man
-%dir /opt/rtems/man/man1
-%doc /opt/rtems/man/man1/@target_alias@-g77.1
+%dir %{_prefix}/man
+%dir %{_prefix}/man/man1
+%doc %{_prefix}/man/man1/@target_alias@-g77.1
 
 %post -n rtems-base-g77
-  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
-    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
-    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
     test -n "$f" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
     done
   fi
 
 %postun -n rtems-base-g77
-  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
-    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
-    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
     test -n "$f" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
     done
   fi
 

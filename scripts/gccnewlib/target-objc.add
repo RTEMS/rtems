@@ -13,5 +13,5 @@ RTEMS is an open source operating system for embedded systems.
 This is the gcc/objc compiler for @target_alias@
 
 %files -n @target_alias@-objc -f build/files.objc
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/cc1obj@exe_ext@
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include/objc
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/cc1obj@exe_ext@
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/include/objc

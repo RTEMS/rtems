@@ -1,3 +1,13 @@
+2002-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mkbinutilspec.in, mkgccnewlibspec.in, gccnewlib/base-chill.add,
+	gccnewlib/base-g77.add, gccnewlib/base-gcc.add,
+	gccnewlib/base-gcj.add, gccnewlib/gccnewlib.add,
+	gccnewlib/target-chill.add, gccnewlib/target-g77.add,
+	gccnewlib/target-gcc.add, gccnewlib/target-gcj.add,
+	gccnewlib/target-objc.add: Added more support for Canadian Cross
+	building.
+
 2001-01-30	Joel Sherrill <joel@OARcorp.com>
 
 	* buildall.in: Corrected logic for detecting when no RPMs are installed.

@@ -13,17 +13,17 @@ RTEMS is an open source operating system for embedded systems.
 This is gcc and newlib C Library for @target_alias@.
 
 %files -n @target_alias@-gcc -f build/files.gcc
-%doc /opt/rtems/man/man1/@target_alias@-gcc.1
-%doc /opt/rtems/man/man1/@target_alias@-g++.1
+%doc %{_prefix}/man/man1/@target_alias@-gcc.1
+%doc %{_prefix}/man/man1/@target_alias@-g++.1
 
-/opt/rtems/bin/@target_alias@-cpp@exe_ext@
-/opt/rtems/bin/@target_alias@-c++@exe_ext@
-/opt/rtems/bin/@target_alias@-g++@exe_ext@
-/opt/rtems/bin/@target_alias@-gcc@exe_ext@
-/opt/rtems/bin/@target_alias@-protoize@exe_ext@
-/opt/rtems/bin/@target_alias@-unprotoize@exe_ext@
+%{_prefix}/bin/@target_alias@-cpp@exe_ext@
+%{_prefix}/bin/@target_alias@-c++@exe_ext@
+%{_prefix}/bin/@target_alias@-g++@exe_ext@
+%{_prefix}/bin/@target_alias@-gcc@exe_ext@
+%{_prefix}/bin/@target_alias@-protoize@exe_ext@
+%{_prefix}/bin/@target_alias@-unprotoize@exe_ext@
 
-%dir /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include
+%dir %{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/include
 
-/opt/rtems/@target_alias@
+%{_prefix}/@target_alias@
 

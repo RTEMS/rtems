@@ -13,26 +13,26 @@ RTEMS is an open source operating system for embedded systems.
 This is the files for gcc/chill that are shared by all targets.
 
 %files -n rtems-base-chill
-%dir /opt/rtems/info
-%doc /opt/rtems/info/chill.info*.gz
+%dir %{_prefix}/info
+%doc %{_prefix}/info/chill.info*.gz
 
 %post -n rtems-base-chill
-  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
-    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
-    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
     test -n "$f" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
     done
   fi
 
 %postun -n rtems-base-chill
-  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
-    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
-    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
     test -n "$f" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
     done
   fi
 

@@ -13,39 +13,39 @@ RTEMS is an open source operating system for embedded systems.
 This is the files for gcc and newlib that are shared by all targets.
 
 %files -n rtems-base-gcc
-%dir /opt/rtems/info
-%doc /opt/rtems/info/cpp.info*.gz
-%doc /opt/rtems/info/gcc.info*.gz
-%doc /opt/rtems/info/libc.info*.gz
-%doc /opt/rtems/info/libm.info*.gz
+%dir %{_prefix}/info
+%doc %{_prefix}/info/cpp.info*.gz
+%doc %{_prefix}/info/gcc.info*.gz
+%doc %{_prefix}/info/libc.info*.gz
+%doc %{_prefix}/info/libm.info*.gz
 
-%dir /opt/rtems/bin
-/opt/rtems/bin/gcov@exe_ext@
+%dir %{_prefix}/bin
+%{_prefix}/bin/gcov@exe_ext@
 
-%dir /opt/rtems/man
-%dir /opt/rtems/man/man1
-%doc /opt/rtems/man/man1/cccp.1
+%dir %{_prefix}/man
+%dir %{_prefix}/man/man1
+%doc %{_prefix}/man/man1/cccp.1
 
-%dir /opt/rtems/include
-/opt/rtems/include/g++-3
+%dir %{_prefix}/include
+%{_prefix}/include/g++-3
 
 %post -n rtems-base-gcc
-  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
-    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
-    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
     test -n "$f" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
     done
   fi
 
 %postun -n rtems-base-gcc
-  if test -d $RPM_INSTALL_PREFIX/rtems/info; 
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
-    rm -f $RPM_INSTALL_PREFIX/rtems/info/dir
-    f=`find $RPM_INSTALL_PREFIX/rtems/info -name '*.info.gz'`
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
     test -n "$f" && for i in $f; do
-      install-info $i $RPM_INSTALL_PREFIX/rtems/info/dir
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
     done
   fi
 
