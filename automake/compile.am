@@ -118,14 +118,14 @@ CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
         $(AM_LDFLAGS) $(LDFLAGS) -o $@
 
-CXXLD = $(CXX)
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 
 AS = $(CC)
-ASCOMPILE = $(AS) $(AM_ASFLAGS) $(ASFLAGS) -o $@
+ASCOMPILE = $(AS) $(AM_ASFLAGS) $(ASFLAGS)
 
 ${ARCH}/%.o: %.c
 	${COMPILE} -o $@ -c $<
@@ -143,7 +143,7 @@ ${ARCH}/%.o: %.C
 	${CXXCOMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.S
-	${ASCOMPILE} -DASM -c $<
+	${ASCOMPILE} -DASM -o $@ -c $<
 
 # Make foo.rel from foo.o
 ${ARCH}/%.rel: ${ARCH}/%.o
@@ -176,7 +176,7 @@ depend-am: $(C_FILES) $(CC_FILES) $(S_FILES)
 ##       Replace foo.o with $(ARCH)/foo.o
 ##       Replace $(ARCH) value with string $(ARCH)
 ##           so that it will for debug and profile cases
-	$(COMPILE) $(AM_CPPFLAGS) $(AM_CFLAGS) -M   $^    |  \
+	$(COMPILE) -M   $^    |  \
 	sed -e 's?^\(.*\)\.o[ ]*:?$$(ARCH)/\1.o:?' \
 	    -e 's?$(ARCH)/?$$(ARCH)/?'   >$(DEPEND).tmp
 	mv $(DEPEND).tmp $(DEPEND)
@@ -204,7 +204,7 @@ LINK_FILES =\
 if RTEMS_USE_GCC
 if RTEMS_USE_GCC272
 define make-rel
-	$(LINK) -nostdlib -Wl,-r $(XLDFLAGS) -o $@ $^
+	$(LINK) -nostdlib -Wl,-r $(XLDFLAGS) $^
 endef
 else
 ## gcc >= 2.8

@@ -36,10 +36,10 @@ AC_SUBST(PROJECT_TOPdir)
 
 if test "$with_target_subdir" = "." ; then
 # Native
-PROJECT_ROOT=${RTEMS_TOPdir}/'$(top_builddir)';
+PROJECT_ROOT="${RTEMS_TOPdir}/\$(top_builddir)"
 else
 # Cross
-PROJECT_ROOT=${RTEMS_TOPdir}/'$(top_builddir)'
+PROJECT_ROOT="${RTEMS_TOPdir}/\$(top_builddir)"
 fi
 AC_SUBST(PROJECT_ROOT)
 

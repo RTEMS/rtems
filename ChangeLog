@@ -1,3 +1,23 @@
+2001-12-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Reworked for multilibs, reflect changes to aclocal/*.m4.
+	* aclocal/subdirs.m4: New file.
+	* aclocal/multi.m4: New file, adopted from autoconf-2.52 w/
+	modifications.
+	* aclocal/check-posix.m4: Apply AS_IF.
+	* aclocal/config-subdirs.m4: Reflect changes to other m4-macros.
+	* aclocal/env-rtemsbsp.m4: Add PROJECT_INCLUDE, PROJECT_RELEASE.
+	Add AM_CONDITIONAL(MULTILIB). Adapt GCC_SPECS to multilibs.
+	* aclocal/env-rtemscpu.m4: Remove RTEMS_BSP. Add support for
+	MULTIBUILDTOP, MULTISUBDIR. Adapt GCC_SPECS to multilibs.
+	Add PROJECT_INCLUDE, PROJECT_RELEASE, includedir, libdir.
+	* aclocal/multilib.m4: Fix m4-quoting, adopt automake-1.5's
+	OUTPUT_COMMANDS.
+	* aclocal/project-root.m4: Remove PROJECT_INCLUDE, PROJECT_RELEASE.
+	* aclocal/rtems-debug.m4: Minor cleanups.
+	* aclocal/rtems-top.m4: Minor cleanups.
+	* automake/compile.am: Further steps towards automake's rules.
+
 2001-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/multilib.am: include @RTEMS_BSP@.cfg, cleanup.

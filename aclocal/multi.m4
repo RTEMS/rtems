@@ -1,8 +1,6 @@
-dnl This provides configure definitions used for multilib support
+#serial 99
 
-dnl parts of these macros are derived from newlib-1.8.2's multilib support
-
-AC_DEFUN(RTEMS_ENABLE_MULTILIB,
+AC_DEFUN(AC_ENABLE_MULTILIB,
 [
 AC_ARG_ENABLE(multilib,
 AC_HELP_STRING([--enable-multilib],
@@ -14,11 +12,6 @@ AC_HELP_STRING([--enable-multilib],
  esac], [multilib=no])dnl
 
 AM_CONDITIONAL(MULTILIB,test x"${multilib}" = x"yes")
-])
-
-AC_DEFUN([RTEMS_ENABLE_MULTILIB_MASTER],
-[
-AC_REQUIRE([RTEMS_ENABLE_MULTILIB])
 
 dnl We may get other options which we don't document:
 dnl --with-target-subdir, --with-multisrctop, --with-multisubdir
@@ -55,5 +48,6 @@ esac],
   ac_configure_args="${multilib_arg} ${ac_configure_args}"
   CONFIG_SHELL=${CONFIG_SHELL-/bin/sh}
   multilib_basedir=${multilib_basedir}
-  CC="${CC}"])
+  CC="${CC}"]
+)
 ])

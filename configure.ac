@@ -5,7 +5,7 @@
 AC_PREREQ(2.52)
 AC_INIT
 AC_CONFIG_SRCDIR([c])
-RTEMS_TOP(.)
+RTEMS_TOP([.])
 
 # Abort if trying to build inside of the source tree.
 if test -f VERSION; then
@@ -33,6 +33,7 @@ RTEMS_ENABLE_LIBCDIR
 RTEMS_ENABLE_TESTS  
 RTEMS_ENABLE_RTEMS_DEBUG
 RTEMS_ENABLE_RTEMSBSP(dummy)
+RTEMS_ENABLE_MULTILIB
 
 if test $host != $build; then
 AC_MSG_WARN([]
@@ -53,64 +54,18 @@ fi
 
 # these tools are built for the build environment
 #
-build_tools="tools/update"
+RTEMS_BUILD_CONFIG_SUBDIRS([tools/update])
 
-# these libraries are built for the host environment
-#
-host_libs=""
+RTEMS_HOST_CONFIG_SUBDIRS([tools/build])
+RTEMS_HOST_CONFIG_SUBDIRS([tools/cpu])
 
-# these tools are built for the host environment
-#
-host_tools="tools/build tools/cpu"
-
-# these libraries are built for the target environment, and are built after
-# the host libraries and the host tools (which may be a cross compiler)
-#
-target_libs="c"
-
-# these tools are built using the target libs, and are intended to run only
-# in the target environment
-#
-target_tools=""
-
-## All tools belong in one of the five categories, and are assigned above.
-## ${host_configdirs} is directories we build using the host tools.
-## ${target_configdirs} is directories we build using the target tools.
-#
-host_configdirs="${host_libs} ${host_tools}"
-AC_SUBST(host_configdirs)
-
-target_configdirs="${target_libs} ${target_tools}"
-AC_SUBST(target_configdirs)
-
-RTEMS_TARGET_CONFIG_PREPARE
-target_subdir=${target_alias}
-
-RTEMS_HOST_CONFIG_PREPARE
-host_subdir=${host_alias}
-
-if test $build = $host;
-then
-  BUILD_SUBDIRS="$build_tools $host_configdirs"
-
-  if test $build = $target;
-  then
-    BUILD_SUBDIRS="$BUILD_SUBDIRS $target_configdirs";
-  else
-    TARGET_SUBDIRS=`echo "$target_configdirs" | \
-      sed -e "s%\([[^ ]][[^ ]]*\)%$target_alias/\1%g"`
-  fi
-else
-## If building Canadian cross, disable the target directories
-  target_configdirs=""
-  BUILD_SUBDIRS="$build_tools"
-  TARGET_SUBDIRS=`echo "$host_configdirs" | \
-    sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
+RTEMS_TARGET_CONFIG_SUBDIRS([c/make])
+if test x"$enable_multilib" = x"yes"; then
+RTEMS_TARGET_CONFIG_SUBDIRS([c/src/exec])
+# FIXME: Not yet
+# RTEMS_TARGET_CONFIG_SUBDIRS([c/src/lib])
 fi
-
-AC_CONFIG_SUBDIRS($BUILD_SUBDIRS)
-AC_SUBST(TARGET_SUBDIRS)
-AC_SUBST(BUILD_SUBDIRS)
+RTEMS_TARGET_CONFIG_SUBDIRS([c])
 
 AC_CONFIG_FILES([Makefile
 tools/Makefile
@@ -119,7 +74,5 @@ make/custom/Makefile
 make/Templates/Makefile
 make/compilers/Makefile 
 doc/Makefile])
-AC_OUTPUT
 
-RTEMS_TARGET_CONFIG_SUBDIRS
-RTEMS_HOST_CONFIG_SUBDIRS
+AC_OUTPUT
