@@ -1,3 +1,9 @@
+2000-12-19	Joel Sherrill <joel@OARcorp.com>
+
+	* tx39/vectorisrs/vectorisrs.c: Modified to have default exception
+	vector handler.  This should be in a separate file so the BSP can
+	easily override it.
+
 2000-12-13	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.in: Added new directories.

@@ -12,7 +12,18 @@
   } while (0)
 
 #define CALL_ISR(_vector) \
-    (_ISR_Vector_table[_vector])(_vector);
+  do { \
+    if ( _ISR_Vector_table[_vector] ) \
+      (_ISR_Vector_table[_vector])(_vector); \
+    else \
+      mips_default_exception(_vector); \
+  } while (0)
+
+void mips_default_exception( int vector )
+{
+  printk( "Unhandled exception %d\n", vector );
+  rtems_fatal_error_occurred(1);
+}
 
 void mips_vector_isr_handlers( void )
 {
