@@ -119,8 +119,7 @@ libcsupport_a_SOURCES += src/unixlibc.c src/hosterr.c
 else
 libcsupport_a_SOURCES += $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(TERMINAL_IDENTIFICATION_C_FILES) $(SYSTEM_CALL_C_FILES) \
-    $(DIRECTORY_SCAN_C_FILES) $(ID_C_FILES) \
-    src/envlock.c
+    $(DIRECTORY_SCAN_C_FILES) $(ID_C_FILES) src/envlock.c
 endif
 
 libcsupport_g_a_SOURCES = $(libcsupport_a_SOURCES)
@@ -133,6 +132,7 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/chain.h: include/chain.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/chain.h
@@ -185,6 +185,7 @@ endif
 $(PROJECT_INCLUDE)/motorola/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/motorola
 	@: > $(PROJECT_INCLUDE)/motorola/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/$(dirstamp)
 
 $(PROJECT_INCLUDE)/motorola/mc68230.h: include/motorola/mc68230.h $(PROJECT_INCLUDE)/motorola/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/motorola/mc68230.h
@@ -197,6 +198,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/motorola/mc68681.h
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/assoc.h: include/rtems/assoc.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/assoc.h
@@ -229,6 +231,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cdefs.h
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
 $(PROJECT_INCLUDE)/sys/ioccom.h: include/sys/ioccom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioccom.h
@@ -269,6 +272,7 @@ endif
 $(PROJECT_INCLUDE)/zilog/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/zilog
 	@: > $(PROJECT_INCLUDE)/zilog/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/$(dirstamp)
 
 $(PROJECT_INCLUDE)/zilog/z8036.h: include/zilog/z8036.h $(PROJECT_INCLUDE)/zilog/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zilog/z8036.h
@@ -281,5 +285,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8530.h
 $(PROJECT_INCLUDE)/zilog/z8536.h: include/zilog/z8536.h $(PROJECT_INCLUDE)/zilog/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zilog/z8536.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog/z8536.h
+
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

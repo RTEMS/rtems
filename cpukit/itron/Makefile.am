@@ -6,6 +6,7 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST =
+CLEANFILES =
 
 if HAS_ITRON
 ## include
@@ -105,7 +106,7 @@ AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 EXTRA_LIBRARIES = libitron.a
-CLEANFILES = libitron.a
+CLEANFILES += libitron.a
 libitron_a_SOURCES = $(C_FILES)
 libitron_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
@@ -128,6 +129,7 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_ITRON
 $(PROJECT_INCLUDE)/itron.h: include/itron.h $(PROJECT_INCLUDE)/$(dirstamp)
@@ -137,6 +139,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/itron.h
 $(PROJECT_INCLUDE)/itronsys/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/itronsys
 	@: > $(PROJECT_INCLUDE)/itronsys/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/itronsys/$(dirstamp)
 
 $(PROJECT_INCLUDE)/itronsys/eventflags.h: include/itronsys/eventflags.h $(PROJECT_INCLUDE)/itronsys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/itronsys/eventflags.h
@@ -197,6 +200,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/itronsys/vmempool.h
 $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/itron
 	@: > $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/itron/config.h: include/rtems/itron/config.h $(PROJECT_INCLUDE)/rtems/itron/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/itron/config.h
@@ -357,5 +361,7 @@ $(PROJECT_INCLUDE)/rtems/itron/vmempool.inl: macros/rtems/itron/vmempool.inl $(P
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/itron/vmempool.inl
 endif
 endif
+
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

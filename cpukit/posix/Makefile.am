@@ -6,6 +6,7 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST =
+CLEANFILES =
 
 if HAS_POSIX
 
@@ -150,7 +151,7 @@ AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 EXTRA_LIBRARIES = libposix.a
-CLEANFILES = libposix.a
+CLEANFILES += libposix.a
 libposix_a_SOURCES = $(C_FILES)
 libposix_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
@@ -178,6 +179,7 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if HAS_POSIX
 $(PROJECT_INCLUDE)/sched.h: include/sched.h $(PROJECT_INCLUDE)/$(dirstamp)
@@ -199,6 +201,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/semaphore.h
 $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/posix
 	@: > $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/posix/cancel.h: include/rtems/posix/cancel.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cancel.h
@@ -349,5 +352,7 @@ $(PROJECT_INCLUDE)/rtems/posix/timer.inl: macros/rtems/posix/timer.inl $(PROJECT
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/timer.inl
 endif
 endif
+
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

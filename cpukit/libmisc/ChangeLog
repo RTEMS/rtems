@@ -1,3 +1,8 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES.
+	Add PREINSTALL_FILES to CLEANFILES.
+
 2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include compile.am again. Misc fixes.
