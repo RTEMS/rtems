@@ -1,3 +1,19 @@
+2002-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* capture/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* cpuuse/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* devnull/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* dummy/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* dumpbuf/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* monitor/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mw-fb/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* rtmonuse/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* serdbg/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* shell/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* stackchk/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* untar/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* wrapup/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+
 2002-12-02	Joel Sherrill <joel@OARcorp.com>
 
 	* stackchk/check.c: Better handling of task name.
