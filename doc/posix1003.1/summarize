@@ -53,6 +53,8 @@ summarize_chapter()
 
   echo
 
+  # functions
+
   functions_total=`wc2 "()" $*`
   functions_implemented=`   wc3 "()" "Implemented" $*`
   functions_unimplemented=` wc3 "()" "Unimplemented" $*`
@@ -65,6 +67,8 @@ summarize_chapter()
      ${functions_unimplemented} ${functions_unmplementable} \
      ${functions_partial}       ${functions_dummy} \
      ${functions_untested}`
+
+  # data types
 
   datatypes_total=`wc2 "Type," $*`
   datatypes_implemented=`   wc3 "Type," "Implemented" $*`
@@ -79,6 +83,38 @@ summarize_chapter()
      ${datatypes_partial}       ${datatypes_dummy} \
      ${datatypes_untested}`
 
+  # feature flags
+
+  features_total=`wc2 "Feature Flag," $*`
+  features_implemented=`   wc3 "Feature Flag," "Implemented" $*`
+  features_unimplemented=` wc3 "Feature Flag," "Unimplemented" $*`
+  features_unmplementable=`wc3 "Feature Flag," "Unimplementable" $*`
+  features_partial=`       wc3 "Feature Flag," "Partial Implementation" $*`
+  features_dummy=`         wc3 "Feature Flag," "Dummy Implementation" $*`
+  features_untested=`      wc3 "Feature Flag," "Untested Implementation" $*`
+
+  features_sum=`addit ${features_implemented} \
+     ${features_unimplemented} ${features_unmplementable} \
+     ${features_partial}       ${features_dummy} \
+     ${features_untested}`
+
+  # constants
+
+  constants_total=`wc2 "Constant," $*`
+  constants_implemented=`   wc3 "Constant," "Implemented" $*`
+  constants_unimplemented=` wc3 "Constant," "Unimplemented" $*`
+  constants_unmplementable=`wc3 "Constant," "Unimplementable" $*`
+  constants_partial=`       wc3 "Constant," "Partial Implementation" $*`
+  constants_dummy=`         wc3 "Constant," "Dummy Implementation" $*`
+  constants_untested=`      wc3 "Constant," "Untested Implementation" $*`
+
+  constants_sum=`addit ${constants_implemented} \
+     ${constants_unimplemented} ${constants_unmplementable} \
+     ${constants_partial}       ${constants_dummy} \
+     ${constants_untested}`
+
+  # Now print the reports
+
   echo "@example"
   echo "Functions:"
   echo "    Total Number    : ${functions_total}"
@@ -91,9 +127,9 @@ summarize_chapter()
   echo "@end example"
   echo
   if [ ${functions_sum} -ne ${functions_total} ] ; then
-    echo "@sp"
-    echo "@center{@b{FUNCTION COUNTS DO NOT ADD UP!!}}"
-    echo "@sp"
+    echo "@sp 1"
+    echo "@center @b{FUNCTION COUNTS DO NOT ADD UP!!}}"
+    echo "@sp 1"
   fi
 
   echo "@example"
@@ -108,9 +144,43 @@ summarize_chapter()
   echo "@end example"
   echo
   if [ ${datatypes_sum} -ne ${datatypes_total} ] ; then
-    echo "@sp"
-    echo "@center{@b{DATA TYPE COUNTS DO NOT ADD UP!!}}"
-    echo "@sp"
+    echo "@sp 1"
+    echo "@center @b{DATA TYPE COUNTS DO NOT ADD UP!!}"
+    echo "@sp 1"
+  fi
+
+  echo "@example"
+  echo "Feature Flags:"
+  echo "    Total Number    : ${features_total}"
+  echo "    Implemented     : ${features_implemented}"
+  echo "    Unimplemented   : ${features_unimplemented}"
+  echo "    Unimplementable : ${features_unmplementable}"
+  echo "    Partial         : ${features_partial}"
+  echo "    Dummy           : ${features_dummy}"
+  echo "    Untested        : ${features_untested}"
+  echo "@end example"
+  echo
+  if [ ${features_sum} -ne ${features_total} ] ; then
+    echo "@sp 1"
+    echo "@center @b{FEATURE FLAG COUNTS DO NOT ADD UP!!}"
+    echo "@sp 1"
+  fi
+
+  echo "@example"
+  echo "Constants:"
+  echo "    Total Number    : ${constants_total}"
+  echo "    Implemented     : ${constants_implemented}"
+  echo "    Unimplemented   : ${constants_unimplemented}"
+  echo "    Unimplementable : ${constants_unmplementable}"
+  echo "    Partial         : ${constants_partial}"
+  echo "    Dummy           : ${constants_dummy}"
+  echo "    Untested        : ${constants_untested}"
+  echo "@end example"
+  echo
+  if [ ${constants_sum} -ne ${constants_total} ] ; then
+    echo "@sp 1"
+    echo "@center @b{CONSTANT COUNTS DO NOT ADD UP!!}"
+    echo "@sp 1"
   fi
 }
 

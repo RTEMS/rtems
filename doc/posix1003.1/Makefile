@@ -63,7 +63,7 @@ ch02.texi: ch02.t
 	    -n "Process Primitives" ${*}.t
 
 ch03.texi: ch03.t
-	$(BMENU) -c -p "Symbolic Constants" \
+	$(BMENU) -c -p "Execution-Time Symbolic Constants for Portability Specifications" \
 	    -u "Top" \
 	    -n "Process Environment" ${*}.t
 

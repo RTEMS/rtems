@@ -104,7 +104,6 @@ putc(), Function, Implemented
 putchar(), Function, Implemented
 puts(), Function, Implemented
 remove(), Function, Implemented
-rename(), Function, Implemented
 rewind(), Function, Implemented
 scanf(), Function, Implemented
 fscanf(), Function, Implemented
@@ -114,6 +113,8 @@ tmpfile(), Function, Implemented
 tmpnam(), Function, Implemented
 ungetc(), Function, Implemented
 @end example
+
+NOTE: @code{rename} is also included in another section.  @ref{Rename a File}.
 
 ANSI C Section 4.10 --- General Utilities
 
@@ -130,10 +131,12 @@ malloc(), Function, Implemented
 realloc(), Function, Implemented
 abort(), Function, Implemented
 exit(), Function, Implemented
-getenv(), Function, Implemented
 bsearch(), Function, Implemented
 qsort(), Function, Implemented
 @end example
+
+NOTE: @code{getenv} is also included in another section.  
+@ref{Environment Access}.
 
 ANSI C Section 4.11 --- String Handling
 
@@ -157,7 +160,6 @@ strlen(), Function, Implemented
 ANSI C Section 4.12 --- Date and Time Handling
 
 @example
-time(), Function, Implemented
 asctime(), Function, Implemented
 ctime(), Function, Implemented
 gmtime(), Function, Implemented
@@ -167,6 +169,9 @@ strftime(), Function, Implemented
 @end example
 
 NOTE: RTEMS has no notion of time zones.
+
+NOTE: @code{time} is also included in another section.  
+@ref{Get System Time}.
 
 @subsection Extensions to Time Functions
 
