@@ -1,3 +1,21 @@
+2001-11-27	Joel Sherrill <joel@OARcorp.com>,
+
+	* new_exception_processing/Makefile.in,
+	new_exception_processing/.cvsignore,
+	new_exception_processing/Makefile.am,
+	new_exception_processing/c_isr.inl,
+	new_exception_processing/cpu.c, new_exception_processing/cpu.h,
+	new_exception_processing/cpu_asm.S,
+	old_exception_processing/Makefile.in,
+	old_exception_processing/.cvsignore,
+	old_exception_processing/Makefile.am, old_exception_processing/README,
+	old_exception_processing/TODO, old_exception_processing/c_isr.inl,
+	old_exception_processing/cpu.c, old_exception_processing/cpu.h,
+	old_exception_processing/cpu_asm.S, old_exception_processing/irq_stub.S,
+	old_exception_processing/ppc_offs.h,
+	old_exception_processing/ppccache.c, old_exception_processing/rtems.S:
+	Deleted since now under libbsp.
+
 2001-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove old_exception_processing,
