@@ -391,11 +391,12 @@ package body DUMMY_RTEMS is
 -- Message Queue Manager
 
    procedure MESSAGE_QUEUE_CREATE (
-      NAME          : in     RTEMS.NAME;
-      COUNT         : in     RTEMS.UNSIGNED32;
-      ATTRIBUTE_SET : in     RTEMS.ATTRIBUTE;
-      ID            :    out RTEMS.ID;
-      RESULT        :    out RTEMS.STATUS_CODES
+      Name             : in     RTEMS.Name;
+      Count            : in     RTEMS.Unsigned32;
+      Max_Message_Size : in     RTEMS.Unsigned32;
+      Attribute_Set    : in     RTEMS.Attribute;
+      ID               :    out RTEMS.ID;
+      Result           :    out RTEMS.Status_Codes
    ) is
    begin
 

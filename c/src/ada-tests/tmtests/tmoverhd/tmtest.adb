@@ -763,6 +763,7 @@ TEST_SUPPORT.PAUSE;
             DUMMY_RTEMS.MESSAGE_QUEUE_CREATE( 
                NAME, 
                128,
+               16,
                RTEMS.DEFAULT_ATTRIBUTES,
                ID, 
                STATUS 

@@ -106,6 +106,7 @@ package body TMTEST is
       RTEMS.MESSAGE_QUEUE_CREATE(
          1,
          TIME_TEST_SUPPORT.OPERATION_COUNT,
+         16,
          RTEMS.DEFAULT_OPTIONS,
          TMTEST.QUEUE_ID,
          STATUS
