@@ -3,7 +3,7 @@
 ## 
 
 AUTOMAKE_OPTIONS = foreign 1.4
-H_FILES = bsp.h coverhd.h
+H_FILES = bsp.h $(srcdir)/../../../shared/coverhd.h
 
 noinst_HEADERS = $(H_FILES)
 
