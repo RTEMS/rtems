@@ -18,7 +18,6 @@ include_libchip_HEADERS = mc68681.h ns16550.h z85c30.h serial.h sersupp.h
 
 OBJS = $(C_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
@@ -33,8 +32,6 @@ $(PROJECT_INCLUDE)/libchip/%.h: %.h
 #
 # Add local stuff here using +=
 #
-
-AM_CFLAGS += $(LIBC_DEFINES)
 
 $(LIB): $(OBJS)
 	$(make-library)

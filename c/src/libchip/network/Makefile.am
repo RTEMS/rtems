@@ -15,7 +15,6 @@ include_libchip_HEADERS = cs8900.h i82586var.h if_fxpvar.h sonic.h
 
 OBJS = $(C_O_FILES)
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
@@ -29,7 +28,6 @@ $(PROJECT_INCLUDE)/libchip/%.h: %.h
 #
 
 AM_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-AM_CFLAGS += $(LIBC_DEFINES)
 
 $(LIB): $(OBJS)
 	$(make-library)
