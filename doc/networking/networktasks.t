@@ -26,6 +26,8 @@ NO ASCII VERSION OF THE TASKING FIGURE IS AVAILABLE
 @c for now use the ascii version
 @example
 @group
+@c why does this not work?
+@c @image{networking}
 NO TEX VERSION OF THE TASKING FIGURE IS AVAILABLE
 @end group
 @end example
