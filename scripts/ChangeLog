@@ -1,5 +1,9 @@
 2001-08-30	Joel Sherrill <joel@OARcorp.com>
 
+	* .cvsignore: Add buildalltar.
+
+2001-08-30	Joel Sherrill <joel@OARcorp.com>
+
 	* buildalltar.in: New file.
 	* configure.in, Makefile.am: Modified to reflect addition of file.
 
