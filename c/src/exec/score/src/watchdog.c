@@ -58,7 +58,7 @@ Watchdog_States _Watchdog_Remove(
     case WATCHDOG_INACTIVE:
       break;
 
-    case WATCHDOG_REINSERT:  
+    case WATCHDOG_BEING_INSERTED:  
    
       /*
        *  It is not actually on the chain so just change the state and
@@ -151,7 +151,7 @@ void _Watchdog_Insert(
   
 
   insert_isr_nest_level   = _ISR_Nest_level;
-  the_watchdog->state = WATCHDOG_REINSERT;
+  the_watchdog->state = WATCHDOG_BEING_INSERTED;
 
   _Watchdog_Sync_count++;
 restart:
@@ -184,7 +184,7 @@ restart:
 
      _ISR_Flash( level );
 
-     if ( the_watchdog->state != WATCHDOG_REINSERT ) {
+     if ( the_watchdog->state != WATCHDOG_BEING_INSERTED ) {
        goto exit_insert;
      }
 
@@ -243,10 +243,23 @@ void _Watchdog_Tickle(
            the_watchdog->user_data
          );
          break;
-       case WATCHDOG_REINSERT:
-         _Watchdog_Insert( header, the_watchdog, WATCHDOG_ACTIVATE_NOW );
-         break;
+
        case WATCHDOG_INACTIVE:
+         /*
+          *  This state indicates that the watchdog is not on any chain.
+          *  Thus, it is NOT on a chain being tickled.  This case should 
+          *  never occur.
+          */
+         break;
+
+       case WATCHDOG_BEING_INSERTED:
+         /*
+          *  This state indicates that the watchdog is in the process of
+          *  BEING inserted on the chain.  Thus, it can NOT be on a chain
+          *  being tickled.  This case should never occur.
+          */
+         break;
+
        case WATCHDOG_REMOVE_IT:
          break;
      }

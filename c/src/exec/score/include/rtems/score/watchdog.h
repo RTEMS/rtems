@@ -66,10 +66,10 @@ typedef enum {
  */
 
 typedef enum {
-  WATCHDOG_INACTIVE,     /* off all chains */
-  WATCHDOG_ACTIVE,       /* on chain, allowed to fire */
-  WATCHDOG_REINSERT,     /* on chain, reset without firing if expires */
-  WATCHDOG_REMOVE_IT     /* on chain, remove without firing if expires */
+  WATCHDOG_INACTIVE,       /* off all chains */
+  WATCHDOG_BEING_INSERTED, /* off all chains, searching for insertion point */
+  WATCHDOG_ACTIVE,         /* on chain, allowed to fire */
+  WATCHDOG_REMOVE_IT       /* on chain, remove without firing if expires */
 } Watchdog_States;
 
 /*
