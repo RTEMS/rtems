@@ -1,6 +1,6 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename new_chapters
+@setfilename new_chapters.info
 @setcontentsaftertitlepage
 @syncodeindex vr fn
 @synindex ky cp
