@@ -10,10 +10,6 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-if HAS_NETWORKING
-NETLIBS=../rootfs/$(ARCH)/librootfs-tmp.a
-endif
-
 TMP_LIBS = ../monitor/$(ARCH)/libmonitor-tmp.a \
     ../untar/$(ARCH)/libuntar-tmp.a ../stackchk/$(ARCH)/libstackchk-tmp.a \
     ../cpuuse/$(ARCH)/libcpuuse-tmp.a ../rtmonuse/$(ARCH)/librtmonuse-tmp.a \

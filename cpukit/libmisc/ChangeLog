@@ -1,3 +1,12 @@
+2002-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rootfs/.cvsignore: Remove.
+	* rootfs/Makefile.am: Remove.
+	* rootfs/mkrootfs.h: Remove.
+	* rootfs/mkrootfs.c: Remove.
+	* configure.ac: Remove rootfs and NETWORKING macros.
+	* wrapup/Makefile.am: Remove rootfs and HAS_NETWORKING.
+
 2002-05-16	Chris Johns <ccj@acm.org>
 
 	* Per PR194, added the Capture engine.  
