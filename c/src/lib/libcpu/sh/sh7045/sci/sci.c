@@ -119,7 +119,9 @@ void sh_sci_outbyte_polled(
 		while (wrtSCI1(ch) != TRUE); /* SCI1*/
 } /* sh_sci_outbyte_polled */
 
-/* Initial version calls polled output driver and blocks */
+/*
+ * Initial version calls polled output driver and blocks
+ */
 void outbyte(
   rtems_device_minor_number  minor,
   char ch)
@@ -186,13 +188,16 @@ char inbyte(
 
 /*  sh_sci_initialize
  *
- *  This routine initializes the sh_sci IO driver.
+ *  This routine initializes (registers) the sh_sci IO drivers.
  *
- *  Input parameters: NONE
+ *  Input parameters: ignored
  *
  *  Output parameters:  NONE
  *
- *  Return values:
+ *  Return values: RTEMS_SUCCESSFUL
+ *   if all sci[...] register, else calls
+ *   rtems_fatal_error_occurred(status)
+ *
  */
 
 rtems_device_driver sh_sci_initialize(
@@ -200,39 +205,34 @@ rtems_device_driver sh_sci_initialize(
   rtems_device_minor_number  minor,
   void                      *arg )
 {
-  int a;
-  unsigned16 temp16;
   rtems_device_driver status ;
+  rtems_device_minor_number     i;
+  
+  /*
+   * register all possible devices.
+   * the initialization of the hardware is done by sci_open
+   */
 
-  /* register devices */  
-  for ( a = 0 ; a < 2 ; a++ )
+  for ( i = 0 ; i < SCI_MINOR_DEVICES ; i++ )
   {
     status = rtems_io_register_name(
-      sci_device[a].name,
+      sci_device[i].name,
       major,
-      sci_device[a].minor );
+      sci_device[i].minor );
     if (status != RTEMS_SUCCESSFUL)
       rtems_fatal_error_occurred(status);
   }
 
-  /* default hardware setup */
+  /* non-default hardware setup occurs in sh_sci_open() */
 
-  /* general setup */
-  temp16 = read16(PFC_PECR1) | 0x0800;	/* General I/O except pin 13 (reset) */
-  write16(temp16, PFC_PECR1);
-  write16(0x00, PFC_PECR2);	/* All I/O lines bits 7-0 */
-  temp16 = read16(PFC_PEIOR) | 0x0020;	/* P5 to out, all other pins in */
-  write16(temp16, PFC_PEIOR);
-
-  temp16 = read16(PFC_PACRL2) | 0x0145;  /* PFC - pins for Tx0-1, Rx0-1 */
-  write16(temp16, PFC_PACRL2);
-  
   return RTEMS_SUCCESSFUL;
 }
 
 
 /*
  *  Open entry point
+ *   Sets up port and pins for selected sci.
+ *   SCI0 setup is conditional on STANDALONE_EVB == 1
  */
 
 rtems_device_driver sh_sci_open(
@@ -241,46 +241,58 @@ rtems_device_driver sh_sci_open(
   void                    * arg )
 {
   unsigned8 temp8;
+  unsigned16 temp16;
   unsigned char	smr ;
   unsigned char brr ;
   
   unsigned 	a ;
   
+ /* check for valid minor number */
+   if(( minor > ( SCI_MINOR_DEVICES -1 )) || ( minor < 0 ))
+   {
+     return RTEMS_INVALID_NUMBER;
+   }
+ 
   /* device already opened */
   if ( sci_device[minor].opened > 0 )
   {
     sci_device[minor].opened++ ;
-
     return RTEMS_SUCCESSFUL ;
   }
     
-  /* retrieve brr and smr values */
-  _sci_get_brparms( sci_device[minor].cflags, &smr, &brr );
-  
-  if (minor == 0) {
-    write8(0x00, SCI_SCR0);	/* Clear SCR */
-    write8(smr, SCI_SMR0);	/* Clear SMR */
-    write8(brr, SCI_BRR0);	/* Default 9600 baud rate */
-#if 0
-    write8(0x1F, SCI_BRR0);    /* 28800 baud */
-#endif
-/* FIXME: Will get optimized away */
-    for(a=0;a<10000L;a++);	/* One bit delay */
-    write8(0x30, SCI_SCR0);	/* Enable clock output */
-    temp8 = read8(SCI_RDR0);      /* Clear out old input */
+  /* enable I/O pins */
 
-  } else {
-    write8(0x00, SCI_SCR1);	/* Clear SCR */
-    write8(smr, SCI_SMR1);	/* Clear SMR */
-    write8(brr, SCI_BRR1);	/* Default 9600 baud rate */
-#if 0
-    write8(0x1F, SCI_BRR1);    /* 28800 baud */
-#endif
-/* FIXME: Will get optimized away */
-    for(a=0;a<10000L;a++);	/* One bit delay */
-    write8(0x30, SCI_SCR1);	/* Enable clock output */
-    temp8 = read8(SCI_RDR1);      /* Clear out old input */
-  }  
+  if ((minor == 0) && (STANDALONE_EVB == 1)) {
+    temp16 = read16(PFC_PACRL2) &          /* disable SCK0, Tx0, Rx0 */
+      ~(PA2MD1 | PA2MD0 | PA1MD0 | PA0MD0);
+    temp16 |= (PA_TXD0 | PA_RXD0);       /* assign pins for Tx0, Rx0 */
+    write16(temp16, PFC_PACRL2);
+    
+  } else if (minor == 1) {  
+    temp16 = read16(PFC_PACRL2) &           /* disable SCK1, Tx1, Rx1 */
+      ~(PA5MD1 | PA5MD0 | PA4MD0 | PA3MD0);
+    temp16 |= (PA_TXD1 | PA_RXD1);        /* assign pins for Tx1, Rx1 */
+    write16(temp16, PFC_PACRL2);
+
+  } /* add other devices and pins as req'd. */
+
+  /* set up SCI registers */
+  if ((minor != 0) || (STANDALONE_EVB == 1)) {
+    write8(0x00, sci_device[minor].addr + SCI_SCR);	 /* Clear SCR */
+                                                   /* set SCR and BRR */
+    _sci_set_cflags( &sci_device[minor], sci_device[minor].cflags );
+
+    for(a=0; a < 10000L; a++) {                      /* One-bit delay */
+      asm volatile ("nop");
+    }
+
+    write8((SCI_RE | SCI_TE),              /* enable async. Tx and Rx */
+	   sci_device[minor].addr + SCI_SCR);
+    temp8 = read8(sci_device[minor].addr + SCI_RDR);   /* flush input */
+    
+    /* add interrupt setup if required */
+
+  }
 
   sci_device[minor].opened++ ;
 

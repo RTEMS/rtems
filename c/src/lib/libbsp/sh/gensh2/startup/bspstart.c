@@ -91,7 +91,11 @@ void bsp_start(void)
      Depending on the board this can ether be done from inside the rom 
      startup code, rtems startup code or here.
    */
+
+#ifndef START_HW_INIT
+  /* board hardware setup here, or from 'start.S' */
   hw_initialize();
+#endif
 
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from

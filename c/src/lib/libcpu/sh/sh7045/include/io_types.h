@@ -16,15 +16,15 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *	John M. Mills (jmills@tga.com)
- *	TGA Technologies, Inc.
- *  100 Pinnacle Way, Suite 140
- *	Norcross, GA 30071 U.S.A.
+ *      John M. Mills (jmills@tga.com)
+ *      TGA Technologies, Inc.
+ *      100 Pinnacle Way, Suite 140
+ *      Norcross, GA 30071 U.S.A.
  *
- *	This modified file may be copied and distributed in accordance
- *	the above-referenced license. It is provided for critique and
- *	developmental purposes without any warranty nor representation
- *	by the authors or by TGA Technologies.
+ *      This modified file may be copied and distributed in accordance
+ *      the above-referenced license. It is provided for critique and
+ *      developmental purposes without any warranty nor representation
+ *      by the authors or by TGA Technologies.
  *
  *  $Id$
  *
@@ -43,13 +43,13 @@ typedef enum {one, two} stopBits;
 typedef enum {even, odd} parity;
 
 typedef struct {
-	portNo		line;
-	int				speed_ix;
-	dataBits	dBits;
-	int				parEn;	
-	parity		par;
-	int				mulPro;
-	stopBits	sBits;
+  portNo   line;
+  int      speed_ix;
+  dataBits dBits;
+  int      parEn;	
+  parity   par;
+  int      mulPro;
+  stopBits sBits;
 } sci_setup_t;
 
 typedef union{

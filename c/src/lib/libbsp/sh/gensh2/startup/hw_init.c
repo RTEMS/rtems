@@ -1,5 +1,7 @@
 /*
  *  hw_init.c: set up sh7045F internal subunits
+ *             Pin and memory assignments assume
+ *             target is Hitachi SH7045F EVB ("lcevb")
  *
  *  Author: John M. Mills (jmills@tga.com)
  *  COPYRIGHT(c) 1999, TGA Technologies, Inc
@@ -69,6 +71,8 @@ void hw_initialize (void)
 	unsigned16 temp16;
 
 #ifdef STANDALONE_EVB
+	/* FIXME: replace 'magic numbers' */
+
 	write16(0x2020, BSC_BCR1);  /* Bus width access - 32-bit on CS1 */
 	write16(0xF3DD, BSC_BCR2);  /* Idle cycles CS3-CS0 - 0 idle cycles*/
 	write16(0xFF3F, BSC_WCR1);  /* Waits for CS3-CS0 - 3 waits on CS1 */
@@ -89,22 +93,11 @@ void hw_initialize (void)
 	write16(0x0000, PFC_IFCR);  /* Pin function controller - default */
 	write16(0x0005, PFC_PACRL2); /* Pin function controller - Tx0, Rx0 */
 
-	/* SCI0 */
-/* FIXME: This doesn't belong here */
-	write8(0x00, SCI_SCR0);     /* Clear SCR */
-	write8(0x00, SCI_SMR0);	    /* Clear SMR */
-	write8(0x5F, SCI_BRR0);	    /* Default 9600 baud rate */
-#if 0
-	write8(0x1F, SCI_BRR0);    /* 28800 baud */
-#endif
-/* FIXME: Will get optimized away */
-	for(a=0;a<00000L;a++);	    /* One bit delay */
-	write8(0x30, SCI_SCR0);	    /* Enable clock output */
-	temp8 = read8(SCI_RDR0);    /* Clear out old input */
-
+	write16(0x00, PFC_PACRL2); /* default disconnects all I/O */
+	                           /* pins; connected by DEVICE_open() */
 #endif
 
-	/* default hardware setup */
+	/* default hardware setup for SH7045F EVB */
 
 	/* PFC: General I/O except pin 13 (reset): */
 	temp16 = read16(PFC_PECR1) | 0x0800;
@@ -113,28 +106,8 @@ void hw_initialize (void)
 	/* All I/O lines bits 7-0: */
 	write16(0x00, PFC_PECR2);
 
-	/* P5 out, all other pins in: */
+	/* P5 (LED) out, all other pins in: */
 	temp16 = read16(PFC_PEIOR) | 0x0020;
 	write16(temp16, PFC_PEIOR);
 
-	/* PFC - pins for Tx0-1, Rx0-1: */
-	temp16 = read16(PFC_PACRL2) | 0x0145;
-	write16(temp16, PFC_PACRL2);
-
-	/* SCI1 - Default RTEMS console */
-#if FIXME
-	/* write8(0x00, SCI_SCR1);	/* Clear SCR */
-	/* write8(0x00, SCI_SMR1);	/* Clear SMR */
-	/* write8(0x5F, SCI_BRR1);	/* Default 9600 baud rate */
-	/* write8(0x1F, SCI_BRR1);    /* 28800 baud */
-/* FIXME: Will get optimized away */
-	/* for(a=0;a<10000L;a++);	/* One bit delay */
-	/* write8(0x30, SCI_SCR1);	/* Enable clock output */
-	/* temp8 = read8(SCI_RDR1);      /* Clear out old input */
-
-	/* INTC setup */
-	/* set_interrupt_mask(0);	/* enable interrupts */
-	/* INTC_IPRF &= ~(SCI1_IPMSK);	/* set SIO1 priority at INTC */
-	/* INTC_IPRF |= SCI1_LOWIP;	*/
-#endif
 }

@@ -307,7 +307,7 @@
 #define PFC_PEIOR  (REG_BASE + 0x03B4) /* Port E I/O Register */
 #define PFC_PECR1  (REG_BASE + 0x03B8) /* Port E Ctr. Reg. 1 */
 #define PFC_PECR2  (REG_BASE + 0x03BA) /* Port E Ctr. Reg. 2 */
-#define PFC_IFCR	(REG_BASE + 0x03C8) /* short */
+#define PFC_IFCR   (REG_BASE + 0x03C8) /* short */
 
 /*Compare/Match Timer*/
 #define CMT_CMSTR  (REG_BASE + 0x3D0) /* Start Reg. char, short, word */
