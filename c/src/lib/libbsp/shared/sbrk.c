@@ -23,7 +23,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-void * sbrk(size_t incr)
+void * sbrk(ptrdiff_t incr)
 {
   errno = ENOMEM;
   return (void *)-1;

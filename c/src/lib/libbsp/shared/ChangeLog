@@ -1,3 +1,10 @@
+2000-10-30	Joel Sherrill <joel@OARcorp.com>
+
+	* POSIX include files merged into newlib.  This resulted in
+	some definitions moving to other files and thus some secondary
+	effects in RTEMS source code.
+	* sbrk.c: Corrected prototype to match newlib.
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
