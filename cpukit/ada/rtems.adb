@@ -979,6 +979,20 @@ package body RTEMS is
 
    end Semaphore_Release;
  
+   procedure Semaphore_Flush (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   ) is
+      function Semaphore_Flush_Base (
+         ID : RTEMS.ID
+      )  return RTEMS.Status_Codes;
+      pragma Import (C, Semaphore_Flush_Base, "rtems_semaphore_flush");
+   begin
+ 
+      Result := Semaphore_Flush_Base ( ID );
+
+   end Semaphore_Release;
+ 
    --
    -- Message Queue Manager
    --

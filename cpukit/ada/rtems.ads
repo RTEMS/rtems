@@ -1058,6 +1058,10 @@ package RTEMS is
       Result :    out RTEMS.Status_Codes
    );
 
+   procedure Semaphore_Flush (
+      ID     : in     RTEMS.ID;
+      Result :    out RTEMS.Status_Codes
+   );
 
    --
    --  Message Queue Manager
