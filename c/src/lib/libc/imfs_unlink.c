@@ -47,6 +47,7 @@ int IMFS_unlink(
 
     the_link = *loc;
     the_link.node_access = node->info.hard_link.link_node;
+    IMFS_Set_handlers( &the_link );
 
     /*
      *  If removing the last hard link to a node, then we need
@@ -56,7 +57,7 @@ int IMFS_unlink(
     node->info.hard_link.link_node->st_nlink --;
     IMFS_update_ctime( node->info.hard_link.link_node );
     if ( node->info.hard_link.link_node->st_nlink < 1) {
-      result = (*loc->handlers->rmnod)( &the_link );
+      result = (*the_link.handlers->rmnod)( &the_link );
       if ( result != 0 )
         return -1;
     }
@@ -70,3 +71,4 @@ int IMFS_unlink(
 
   return result;
 }
+
