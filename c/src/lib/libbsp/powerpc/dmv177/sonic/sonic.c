@@ -309,7 +309,6 @@ SONIC_STATIC int sonic_stop (struct iface *iface)
   struct sonic *dp = &sonic[iface->dev];
   void *rp = dp->sonic;
 
-printf( "sonic_stop\n" );
   /*
    * Stop the transmitter and receiver.
    */
@@ -502,12 +501,11 @@ SONIC_STATIC void sonic_retire_tda (struct sonic *dp)
       dp->txLostCarrier++;
 
     /*
-     * Free the packet
+     *  Free the packet and reset a couple of fields
      */
     dp->tdaActiveCount--;
     free_p ((struct mbuf **)&dp->tdaTail->mbufp);
 
-/*  XXX this does not help when you wrap */
     dp->tdaTail->frag[0].frag_link = LSW(dp->tdaTail->link_pad);
     dp->tdaTail->frag_count        = 0;
 
@@ -560,7 +558,9 @@ SONIC_STATIC int sonic_raw (struct iface *iface, struct mbuf **bpp)
    * txWaitTid variable.
    */
   if (dp->txWaitTid) {
-printf( "TX: conflict delay\n" );
+#if (SONIC_DEBUG & SONIC_DEBUG_FRAGMENTS)
+    printf( "TX: conflict delay\n" );
+#endif
     dp->txRawWait++;
     while (dp->txWaitTid)
       rtems_ka9q_ppause (10);
@@ -575,7 +575,9 @@ printf( "TX: conflict delay\n" );
    * Wait for transmit descriptor to become available.
    */
   if (dp->tdaActiveCount == dp->tdaCount) {
-puts( "Wait for more TDAs" );
+#if (SONIC_DEBUG & SONIC_DEBUG_FRAGMENTS)
+    puts( "Wait for more TDAs" );
+#endif
     /*
      * Find out who we are
      */
@@ -852,8 +854,8 @@ SONIC_STATIC void sonic_rx (int dev, void *p1, void *p2)
   int continuousCount;
 
   rwp = dp->rsa;
-  rea = dp->rea; /* XXX was rwp; */
-  rdp = dp->rda; /* XXX was rdp_last */
+  rea = dp->rea;
+  rdp = dp->rda;
 
   /*
    * Start the receiver
@@ -887,7 +889,6 @@ SONIC_STATIC void sonic_rx (int dev, void *p1, void *p2)
       struct mbuf **mbp;
       void *p;
 
-/* printf( "Valid packet\n" ); */
       /*
        * Get the mbuf pointer
        */
@@ -904,7 +905,6 @@ SONIC_STATIC void sonic_rx (int dev, void *p1, void *p2)
        * Invalidate cache entries for this memory.
        */
       bp->cnt = rdp->byte_count - sizeof (uint32);
-/* printf( "Routing the packet\n" ); */
       net_route (iface, &bp);
 
       /*
@@ -983,7 +983,6 @@ SONIC_STATIC void sonic_rx (int dev, void *p1, void *p2)
     /*
      * Move to next receive descriptor
      */
-    /* rdp->link |= RDA_LINK_EOL; XXX */
     rdp->in_use = RDA_FREE;
     rdp = rdp->next;
     rdp->link &= ~RDA_LINK_EOL;
@@ -1048,7 +1047,7 @@ SONIC_STATIC void sonic_initialize_hardware(
      *  are set to zero by sonic_allocate.
      */
 
-/* XXX not used by other drivers we looked at
+/* XXX not used by the BSD drivers
     if (i & 1)
       tdp->pkt_config = TDA_CONFIG_PINT;
 */
