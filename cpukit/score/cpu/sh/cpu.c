@@ -50,7 +50,7 @@ void _CPU_Initialize(
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {
-  register unsigned32 level = 0;
+  register uint32_t   level = 0;
 
   /*
    *  The thread_dispatch argument is the address of the entry point
@@ -93,13 +93,13 @@ void _CPU_Initialize(
  *  _CPU_ISR_Get_level
  */
  
-unsigned32 _CPU_ISR_Get_level( void )
+uint32_t   _CPU_ISR_Get_level( void )
 {
   /*
    *  This routine returns the current interrupt level.
    */
 
-  register unsigned32 _mask ;
+  register uint32_t   _mask ;
   
   sh_get_interrupt_level( _mask );
   
@@ -112,7 +112,7 @@ unsigned32 _CPU_ISR_Get_level( void )
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
@@ -124,7 +124,7 @@ void _CPU_ISR_install_raw_handler(
   volatile proc_ptr	*vbr ;
 
 #if SH_PARANOID_ISR  
-  unsigned32		level ;
+  uint32_t  		level ;
 
   sh_disable_interrupts( level );
 #endif    
@@ -159,7 +159,7 @@ void _CPU_ISR_install_raw_handler(
 
 #if defined(__sh1__) || defined(__sh2__)
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
@@ -223,7 +223,7 @@ void _CPU_Thread_Idle_body( void )
 
 #if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
 
-unsigned8 _bit_set_table[16] = 
+uint8_t   _bit_set_table[16] = 
   { 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 2, 2, 1,0};
 
 
@@ -232,18 +232,18 @@ unsigned8 _bit_set_table[16] =
 void _CPU_Context_Initialize(
   Context_Control	*_the_context,
   void			*_stack_base,
-  unsigned32		_size,
-  unsigned32		_isr,
+  uint32_t  		_size,
+  uint32_t  		_isr,
   void 	(*_entry_point)(void),
   int			_is_fp )
 {
-  _the_context->r15 = (unsigned32*) ((unsigned32) (_stack_base) + (_size) );
+  _the_context->r15 = (uint32_t  *) ((uint32_t  ) (_stack_base) + (_size) );
 #if defined(__sh1__) || defined(__sh2__)
   _the_context->sr  = (_isr << 4) & 0x00f0 ;
 #else
   _the_context->sr  = SH4_SR_MD | ((_isr << 4) & 0x00f0);
 #endif
-  _the_context->pr  = (unsigned32*) _entry_point ;
+  _the_context->pr  = (uint32_t  *) _entry_point ;
 
 
 #if 0 && SH_HAS_FPU

@@ -162,7 +162,7 @@ extern "C" {
 
 #define sh_get_interrupt_level( _level ) \
 { \
-  register unsigned32 _tmpsr ; \
+  register uint32_t   _tmpsr ; \
   \
   asm volatile( "stc sr, %0" : "=r" (_tmpsr) ); \
   _level = (_tmpsr & 0xf0) >> 4 ; \
@@ -170,7 +170,7 @@ extern "C" {
 
 #define sh_set_interrupt_level( _newlevel ) \
 { \
-  register unsigned32 _tmpsr; \
+  register uint32_t   _tmpsr; \
   \
   asm volatile ( "stc sr, %0" : "=r" (_tmpsr) ); \
   _tmpsr = ( _tmpsr & ~0xf0 ) | ((_newlevel) << 4) ; \

@@ -332,37 +332,37 @@ extern "C" {
  */
 
 typedef struct {
-  unsigned32 *r15;	/* stack pointer */
+  uint32_t   *r15;	/* stack pointer */
 
-  unsigned32 macl;
-  unsigned32 mach;
-  unsigned32 *pr;
+  uint32_t   macl;
+  uint32_t   mach;
+  uint32_t   *pr;
 
-  unsigned32 *r14;	/* frame pointer/call saved */
+  uint32_t   *r14;	/* frame pointer/call saved */
 
-  unsigned32 r13;	/* call saved */
-  unsigned32 r12;	/* call saved */
-  unsigned32 r11;	/* call saved */
-  unsigned32 r10;	/* call saved */
-  unsigned32 r9;	/* call saved */
-  unsigned32 r8;	/* call saved */
+  uint32_t   r13;	/* call saved */
+  uint32_t   r12;	/* call saved */
+  uint32_t   r11;	/* call saved */
+  uint32_t   r10;	/* call saved */
+  uint32_t   r9;	/* call saved */
+  uint32_t   r8;	/* call saved */
 
-  unsigned32 *r7;	/* arg in */
-  unsigned32 *r6;	/* arg in */
+  uint32_t   *r7;	/* arg in */
+  uint32_t   *r6;	/* arg in */
 
 #if 0
-  unsigned32 *r5;	/* arg in */
-  unsigned32 *r4;	/* arg in */
+  uint32_t   *r5;	/* arg in */
+  uint32_t   *r4;	/* arg in */
 #endif
 
-  unsigned32 *r3;	/* scratch */
-  unsigned32 *r2;	/* scratch */
-  unsigned32 *r1;	/* scratch */
+  uint32_t   *r3;	/* scratch */
+  uint32_t   *r2;	/* scratch */
+  uint32_t   *r1;	/* scratch */
 
-  unsigned32 *r0;	/* arg return */
+  uint32_t   *r0;	/* arg return */
 
-  unsigned32 gbr;
-  unsigned32 sr; 
+  uint32_t   gbr;
+  uint32_t   sr; 
 
 } Context_Control;
 
@@ -379,7 +379,7 @@ typedef struct {
     double d[8];
   } r;
   float fpul;       /* fp communication register */
-  unsigned32 fpscr; /* fp control register */
+  uint32_t   fpscr; /* fp control register */
 #endif /* SH_HAS_FPU */
 } Context_Control_fp;
 
@@ -398,13 +398,13 @@ typedef struct {
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
-  unsigned32   idle_task_stack_size;
-  unsigned32   interrupt_stack_size;
-  unsigned32   extra_mpci_receive_server_stack;
-  void *     (*stack_allocate_hook)( unsigned32 );
+  uint32_t     idle_task_stack_size;
+  uint32_t     interrupt_stack_size;
+  uint32_t     extra_mpci_receive_server_stack;
+  void *     (*stack_allocate_hook)( uint32_t   );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
-  unsigned32	clicks_per_second ; /* cpu frequency in Hz */
+  uint32_t  	clicks_per_second ; /* cpu frequency in Hz */
 }   rtems_cpu_table;
 
 /*
@@ -463,7 +463,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  */
 
 /* XXX: if needed, put more variables here */
-SCORE_EXTERN void CPU_delay( unsigned32 microseconds );
+SCORE_EXTERN void CPU_delay( uint32_t   microseconds );
 
 /*
  *  The size of the floating point context area.  On some CPUs this
@@ -610,7 +610,7 @@ SCORE_EXTERN void CPU_delay( unsigned32 microseconds );
 #define _CPU_ISR_Set_level( _newlevel) \
   sh_set_interrupt_level(_newlevel)
 
-unsigned32 _CPU_ISR_Get_level( void );
+uint32_t   _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
@@ -643,8 +643,8 @@ unsigned32 _CPU_ISR_Get_level( void );
 SCORE_EXTERN void _CPU_Context_Initialize(
   Context_Control       *_the_context,
   void                  *_stack_base,
-  unsigned32            _size,
-  unsigned32            _isr,
+  uint32_t              _size,
+  uint32_t              _isr,
   void    (*_entry_point)(void),
   int                   _is_fp );
 
@@ -716,7 +716,7 @@ SCORE_EXTERN void _CPU_Context_Initialize(
 
 #ifdef BSP_FATAL_HALT
   /* we manage the fatal error in the board support package */
-  void bsp_fatal_halt( unsigned32 _error);
+  void bsp_fatal_halt( uint32_t   _error);
 #define _CPU_Fatal_halt( _error ) bsp_fatal_halt( _error)
 #else
 #define _CPU_Fatal_halt( _error)\
@@ -791,7 +791,7 @@ SCORE_EXTERN void _CPU_Context_Initialize(
 
 #if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
 
-extern unsigned8 _bit_set_table[];
+extern uint8_t   _bit_set_table[];
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
@@ -856,7 +856,7 @@ void _CPU_Initialize(
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
@@ -868,7 +868,7 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
