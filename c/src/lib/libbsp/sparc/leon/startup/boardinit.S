@@ -48,6 +48,7 @@ __bsp_board_init:
 	bne,a	1b
 	inc	%l2
 	sll	%l2, 9, %l2
+	or	%l2, 0x20, %l2	! set 32-bit ram width by default
 	st	%l2, [%l0 + LEON_REG_MEMCFG2_OFFSET] ! set ram size in memcfg2
 
 	set	SYM(RAM_START), %l1  ! Cannot use RAM_END due to bug in linker
