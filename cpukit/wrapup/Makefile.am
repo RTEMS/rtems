@@ -12,58 +12,58 @@ LIBS =
 if LIBSCORECPU
 LIBS += ../score/cpu/$(RTEMS_CPU)/$(ARCH)/libscorecpu.a
 endif
-LIBS += ../score/$(ARCH)/libscore.a
-LIBS += ../sapi/$(ARCH)/libsapi.a
-LIBS += ../rtems/$(ARCH)/librtems.a
+LIBS += ../score/libscore$(LIB_VARIANT).a
+LIBS += ../sapi/libsapi$(LIB_VARIANT).a
+LIBS += ../rtems/librtems$(LIB_VARIANT).a
 
 if HAS_POSIX
-LIBS += ../posix/$(ARCH)/libposix.a
+LIBS += ../posix/libposix$(LIB_VARIANT).a
 endif
 
 if HAS_ITRON
-LIBS += ../itron/$(ARCH)/libitron.a
+LIBS += ../itron/libitron$(LIB_VARIANT).a
 endif
 
 LIBS += ../libcsupport/libcsupport$(LIB_VARIANT).a
 
 LIBS += ../libblock/libblock$(LIB_VARIANT).a
 if !UNIX
-LIBS += ../libfs/$(ARCH)/libdosfs.a
+LIBS += ../libfs/libdosfs$(LIB_VARIANT).a
 endif
-LIBS += ../libfs/$(ARCH)/libimfs.a
+LIBS += ../libfs/libimfs$(LIB_VARIANT).a
 
-LIBS += ../libmisc/$(ARCH)/libmonitor.a
-LIBS += ../libmisc/$(ARCH)/libuntar.a
-LIBS += ../libmisc/$(ARCH)/libstackchk.a
-LIBS += ../libmisc/$(ARCH)/libcpuuse.a
-LIBS += ../libmisc/$(ARCH)/librtmonuse.a
+LIBS += ../libmisc/libmonitor$(LIB_VARIANT).a
+LIBS += ../libmisc/libuntar$(LIB_VARIANT).a
+LIBS += ../libmisc/libstackchk$(LIB_VARIANT).a
+LIBS += ../libmisc/libcpuuse$(LIB_VARIANT).a
+LIBS += ../libmisc/librtmonuse$(LIB_VARIANT).a
 
 ## XXX temporarily removed because it causes a
 ## XXX number of BSPs to not link "main(){}" used by autoconf
 # if LIBSERDBG
-# LIBS += ../libmisc/$(ARCH)/libserdbg.a
+# LIBS += ../libmisc/libserdbg$(LIB_VARIANT).a
 # endif
 
 if LIBSHELL
-LIBS += ../libmisc/$(ARCH)/libshell.a
+LIBS += ../libmisc/libshell$(LIB_VARIANT).a
 endif
 
-LIBS += ../libmisc/$(ARCH)/libdumpbuf.a
-LIBS += ../libmisc/$(ARCH)/libdevnull.a
-LIBS += ../libmisc/$(ARCH)/libdummy.a
-LIBS += ../libmisc/$(ARCH)/libmw-fb.a
-LIBS += ../libmisc/$(ARCH)/libcapture.a
-LIBS += ../libmisc/$(ARCH)/libfsmount.a
+LIBS += ../libmisc/libdumpbuf$(LIB_VARIANT).a
+LIBS += ../libmisc/libdevnull$(LIB_VARIANT).a
+LIBS += ../libmisc/libdummy$(LIB_VARIANT).a
+LIBS += ../libmisc/libmw-fb$(LIB_VARIANT).a
+LIBS += ../libmisc/libcapture$(LIB_VARIANT).a
+LIBS += ../libmisc/libfsmount$(LIB_VARIANT).a
 
 if HAS_NETWORKING
-LIBS += ../libnetworking/$(ARCH)/libnetworking.a
-LIBS += ../libnetworking/$(ARCH)/libc.a
-LIBS += ../libnetworking/$(ARCH)/lib.a
+LIBS += ../libnetworking/libnetworking$(LIB_VARIANT).a
+LIBS += ../libnetworking/libc$(LIB_VARIANT).a
+LIBS += ../libnetworking/lib$(LIB_VARIANT).a
 endif
 
 if LIBRPC
-LIBS += ../librpc/$(ARCH)/librpc.a
-LIBS += ../librpc/$(ARCH)/libxdr.a
+LIBS += ../librpc/librpc$(LIB_VARIANT).a
+LIBS += ../librpc/libxdr$(LIB_VARIANT).a
 endif
 
 $(LIBS): $(ARCH)/$(dirstamp)
