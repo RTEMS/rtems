@@ -19,7 +19,7 @@
  *  Note: Interprocessor Interrupt (IPI) and Timer support is incomplete
  */
 
-
+#include <rtems/bspIo.h>
 #include <bsp/openpic.h>
 #include <bsp/pci.h>
 #include <bsp/consoleIo.h>

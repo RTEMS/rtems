@@ -12,6 +12,8 @@
  *
  *  $Id$
  */
+#include <rtems/bspIo.h>
+
 #include <bsp/vectors.h>
 #include <libcpu/raw_exception.h>
 #include <bsp.h>

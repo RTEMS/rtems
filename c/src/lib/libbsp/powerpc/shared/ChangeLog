@@ -1,3 +1,12 @@
+	* vectors/vectors.S: Ditto.
+
+2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* startup/bspstart.c: Include <libcpu/cpuIdent.h>.
+
+2001-04-08	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Per PR170, PR171, and PR172 add .eh_frame 
  
 2002-04-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

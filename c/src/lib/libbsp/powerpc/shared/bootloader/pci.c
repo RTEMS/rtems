@@ -17,6 +17,7 @@
 
 
 #include <sys/types.h>
+#include <rtems/bspIo.h>
 #include <libcpu/spr.h>
 #include "bootldr.h"
 #include "pci.h"

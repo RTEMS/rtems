@@ -13,6 +13,8 @@
  *  $Id$
  */
 
+#include <string.h>
+
 #include <bsp/residual.h>
 #include <libcpu/io.h>
 #include <libcpu/byteorder.h>

@@ -37,6 +37,8 @@
  * 
  */
 
+#include <rtems/bspIo.h>
+
 #include <sys/types.h>
 #include <libcpu/spr.h>
 #include "bootldr.h"
