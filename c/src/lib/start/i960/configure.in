@@ -1,0 +1,37 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl
+dnl $Id$
+
+AC_PREREQ(2.13)
+AC_INIT(start.S)
+RTEMS_TOP(../../../../..)
+AC_CONFIG_AUX_DIR(../../../../..)
+
+RTEMS_CANONICAL_TARGET_CPU
+AC_PROG_MAKE_SET
+AC_PROG_INSTALL
+# AM_INIT_AUTOMAKE(rtems-c-src-lib-start-i960,$RTEMS_VERSION,no)
+AM_MAINTAINER_MODE
+
+RTEMS_ENABLE_LIBCDIR
+RTEMS_ENABLE_BARE
+
+RTEMS_ENV_RTEMSBSP
+
+RTEMS_CHECK_CPU
+RTEMS_CANONICAL_HOST
+
+RTEMS_PROJECT_ROOT
+
+dnl check target cc
+RTEMS_PROG_CC_FOR_TARGET
+RTEMS_CANONICALIZE_TOOLS
+
+RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+
+RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
+
+# try to explicitly list a Makefile here 
+AC_OUTPUT( 
+Makefile
+)

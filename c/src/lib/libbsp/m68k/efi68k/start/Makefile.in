@@ -5,8 +5,8 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../..
-subdir = libbsp/m68k/efi68k/start68k
+top_builddir = ../../..
+subdir = m68k/efi68k/start68k
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@

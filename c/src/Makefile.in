@@ -85,7 +85,7 @@ VERSION = @VERSION@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-SUBDIRS = make exec lib librtems++ tests
+SUBDIRS = @subdirs@
 
 rtems_bspdir = $(prefix)/@RTEMS_BSP@
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -389,7 +389,7 @@ profile-am:
 profile: profile-am
 .PHONY: profile profile-am
 
-preinstall-am:
+preinstall-am: $(TMPINSTALL_FILES)
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am
 

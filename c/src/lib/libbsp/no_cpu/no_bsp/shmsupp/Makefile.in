@@ -5,8 +5,8 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../../../..
-subdir = libbsp/no_cpu/no_bsp/shmsupp
+top_builddir = ../../..
+subdir = no_cpu/no_bsp/shmsupp
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@

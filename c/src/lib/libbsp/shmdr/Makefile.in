@@ -5,8 +5,8 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../..
-subdir = libbsp/shmdr
+top_builddir = ..
+subdir = shmdr
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
@@ -71,6 +71,8 @@ all: preinstall ${ARCH} $(SRCS) $(PGM)
 
 preinstall: 
 	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)
+
+EXTRA_DIST = README
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

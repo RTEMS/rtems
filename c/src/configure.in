@@ -7,6 +7,8 @@ AC_INIT(exec)
 RTEMS_TOP(../..)
 AC_CONFIG_AUX_DIR(../..)
 
+RTEMS_ENABLE_CXX
+
 RTEMS_CANONICAL_TARGET_CPU
 
 AM_INIT_AUTOMAKE(rtems-c-src,$RTEMS_VERSION,no)
@@ -20,10 +22,14 @@ RTEMS_PROJECT_ROOT
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
+## Note: the order of the directories below is essential
 AC_CONFIG_SUBDIRS(make)
 AC_CONFIG_SUBDIRS(exec)
 AC_CONFIG_SUBDIRS(lib)
-AC_CONFIG_SUBDIRS(librtems++)
+if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
+cfg_subdirs="librtems++";
+fi 
+AC_CONFIG_SUBDIRS($cfg_subdirs)
 AC_CONFIG_SUBDIRS(tests)
 
 AC_OUTPUT( 

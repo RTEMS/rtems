@@ -8,7 +8,7 @@
 %(old_cpp) %{qrtems: -D__embedded__} -Asystem(embedded)
 
 *endfile:
-crtend.o%s crtn.o%s
+%{qelf: crtend.o%s crtn.o%s}
 
 *lib:
 %{!qrtems: %(old_lib)} %{qrtems: --start-group \
@@ -20,7 +20,7 @@ elflinkcmds%s}}}
 *startfile:
 %{!qrtems: %(old_startfile)} %{qrtems: \
 %{!qrtems_debug: start.o%s} \
-%{qrtems_debug: start_g.o%s} crti.o%s crtbegin.o%s}
+%{qrtems_debug: start_g.o%s} %{qelf crti.o%s crtbegin.o%s}}
 
 *link:
 %{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e start}

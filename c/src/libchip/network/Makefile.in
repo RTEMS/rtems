@@ -1,12 +1,12 @@
 #
-#  $Id$
+# $Id$
 #
 
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../..
-subdir = libchip/network
+top_builddir = ..
+subdir = network
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
@@ -55,17 +55,19 @@ CFLAGS += $(LIBC_DEFINES)
 CLEAN_ADDITIONS += $(LIB)
 CLOBBER_ADDITIONS +=
 
-all: ${ARCH} preinstall $(LIB)
-	$(INSTALL_VARIANT) -m 644 ${LIB} $(PROJECT_RELEASE)/lib
+all: @HAS_NETWORKING_TRUE@${ARCH} preinstall $(LIB)
+@HAS_NETWORKING_TRUE@	$(INSTALL_VARIANT) -m 644 ${LIB} $(PROJECT_RELEASE)/lib
 
-$(LIB): $(SRCS) ${OBJS}
-	$(make-library)
+$(LIB): @HAS_NETWORKING_TRUE@$(SRCS) ${OBJS}
+@HAS_NETWORKING_TRUE@	$(make-library)
 
 # Install the library, appending _g or _p as appropriate.
 # for include files, just use $(INSTALL_CHANGE)
 preinstall: 
-	$(mkinstalldirs) $(PROJECT_INCLUDE)/libchip
-	@$(INSTALL_CHANGE) -m 644 $(INSTALLED_H_FILES) $(PROJECT_INCLUDE)/libchip
+@HAS_NETWORKING_TRUE@	$(mkinstalldirs) $(PROJECT_INCLUDE)/libchip
+@HAS_NETWORKING_TRUE@	@$(INSTALL_CHANGE) -m 644 $(INSTALLED_H_FILES) $(PROJECT_INCLUDE)/libchip
+
+EXTRA_DIST = README README.sonic
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

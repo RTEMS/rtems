@@ -837,7 +837,7 @@ else
 fi
 
 
-PACKAGE=rtems-cpu-tools
+PACKAGE=rtems-tools-cpu
 
 VERSION=$RTEMS_VERSION
 

@@ -85,6 +85,98 @@ AC_SUBST(RTEMS_CPU)
 AC_MSG_RESULT($RTEMS_CPU)
 ])
 
+# Do all the work for Automake.  This macro actually does too much --
+# some checks are only needed if your package does certain things.
+# But this isn't really a big deal.
+
+# serial 1
+
+dnl Usage:
+dnl AM_INIT_AUTOMAKE(package,version, [no-define])
+
+AC_DEFUN(AM_INIT_AUTOMAKE,
+[AC_REQUIRE([AC_PROG_INSTALL])
+PACKAGE=[$1]
+AC_SUBST(PACKAGE)
+VERSION=[$2]
+AC_SUBST(VERSION)
+dnl test to see if srcdir already configured
+if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
+  AC_MSG_ERROR([source directory already configured; run "make distclean" there first])
+fi
+ifelse([$3],,
+AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [Name of package])
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version number of package]))
+AC_REQUIRE([AM_SANITY_CHECK])
+AC_REQUIRE([AC_ARG_PROGRAM])
+dnl FIXME This is truly gross.
+missing_dir=`cd $ac_aux_dir && pwd`
+AM_MISSING_PROG(ACLOCAL, aclocal, $missing_dir)
+AM_MISSING_PROG(AUTOCONF, autoconf, $missing_dir)
+AM_MISSING_PROG(AUTOMAKE, automake, $missing_dir)
+AM_MISSING_PROG(AUTOHEADER, autoheader, $missing_dir)
+AM_MISSING_PROG(MAKEINFO, makeinfo, $missing_dir)
+AC_REQUIRE([AC_PROG_MAKE_SET])])
+
+#
+# Check to make sure that the build environment is sane.
+#
+
+AC_DEFUN(AM_SANITY_CHECK,
+[AC_MSG_CHECKING([whether build environment is sane])
+# Just in case
+sleep 1
+echo timestamp > conftestfile
+# Do `set' in a subshell so we don't clobber the current shell's
+# arguments.  Must try -L first in case configure is actually a
+# symlink; some systems play weird games with the mod time of symlinks
+# (eg FreeBSD returns the mod time of the symlink's containing
+# directory).
+if (
+   set X `ls -Lt $srcdir/configure conftestfile 2> /dev/null`
+   if test "[$]*" = "X"; then
+      # -L didn't work.
+      set X `ls -t $srcdir/configure conftestfile`
+   fi
+   if test "[$]*" != "X $srcdir/configure conftestfile" \
+      && test "[$]*" != "X conftestfile $srcdir/configure"; then
+
+      # If neither matched, then we have a broken ls.  This can happen
+      # if, for instance, CONFIG_SHELL is bash and it inherits a
+      # broken ls alias from the environment.  This has actually
+      # happened.  Such a system could not be considered "sane".
+      AC_MSG_ERROR([ls -t appears to fail.  Make sure there is not a broken
+alias in your environment])
+   fi
+
+   test "[$]2" = conftestfile
+   )
+then
+   # Ok.
+   :
+else
+   AC_MSG_ERROR([newly created file is older than distributed files!
+Check your system clock])
+fi
+rm -f conftest*
+AC_MSG_RESULT(yes)])
+
+dnl AM_MISSING_PROG(NAME, PROGRAM, DIRECTORY)
+dnl The program must properly implement --version.
+AC_DEFUN(AM_MISSING_PROG,
+[AC_MSG_CHECKING(for working $2)
+# Run test in a subshell; some versions of sh will print an error if
+# an executable is not found, even if stderr is redirected.
+# Redirect stdin to placate older versions of autoconf.  Sigh.
+if ($2 --version) < /dev/null > /dev/null 2>&1; then
+   $1=$2
+   AC_MSG_RESULT(found)
+else
+   $1="$3/missing $2"
+   AC_MSG_RESULT(missing)
+fi
+AC_SUBST($1)])
+
 # Add --enable-maintainer-mode option to configure.
 # From Jim Meyering
 
@@ -172,20 +264,6 @@ AC_SUBST(RTEMS_HAS_POSIX_API)
 
 dnl $Id$
 
-AC_DEFUN(RTEMS_ENABLE_NETWORKING,
-[
-AC_ARG_ENABLE(networking,
-[  --enable-networking                  enable TCP/IP stack],
-[case "${enableval}" in
-  yes) RTEMS_HAS_NETWORKING=yes ;;
-  no) RTEMS_HAS_NETWORKING=no ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for enable-networking option) ;;
-esac],[RTEMS_HAS_NETWORKING=yes])
-AC_SUBST(RTEMS_HAS_NETWORKING)dnl
-])
-
-dnl $Id$
-
 AC_DEFUN(RTEMS_ENABLE_INLINES,
 [AC_ARG_ENABLE(rtems-inlines,
 [  --enable-rtems-inlines               enable RTEMS inline functions]
@@ -196,20 +274,6 @@ AC_DEFUN(RTEMS_ENABLE_INLINES,
   *)  AC_MSG_ERROR(bad value ${enableval} for disable-rtems-inlines option) ;;
 esac],[RTEMS_USE_MACROS=no])
 AC_SUBST(RTEMS_USE_MACROS)dnl
-])
-
-dnl $Id$
-
-AC_DEFUN(RTEMS_ENABLE_CXX,
-[
-AC_ARG_ENABLE(cxx,
-[  --enable-cxx                         enable C++ support,]
-[                                       and build the rtems++ library],
-[case "${enableval}" in
-  yes) RTEMS_HAS_CPLUSPLUS=yes ;;
-  no) RTEMS_HAS_CPLUSPLUS=no   ;;
-  *)  AC_MSG_ERROR(bad value ${enableval} for enable-cxx option) ;;
-esac], [RTEMS_HAS_CPLUSPLUS=no])
 ])
 
 dnl $Id$
@@ -266,21 +330,6 @@ fi
 RTEMS_BSP="$rtems_cv_RTEMS_BSP"
 AC_MSG_RESULT(${RTEMS_BSP})
 AC_SUBST(RTEMS_BSP)
-])
-
-dnl $Id$
-
-AC_DEFUN(RTEMS_PATH_KSH,
-[
-dnl NOTE: prefer bash over ksh over sh
-AC_PATH_PROGS(KSH,bash ksh sh)
-if test -z "$KSH"; then
-dnl NOTE: This cannot happen -- /bin/sh must always exist
-AC_MSG_ERROR(
-[***]
-[    Cannot determine a usable shell bash/ksh/sh]
-[    Please contact your system administrator] );
-fi
 ])
 
 dnl $Id$
@@ -641,168 +690,6 @@ fi
 ])
 
 
-dnl
-dnl  $Id$
-dnl 
-
-dnl check for i386 gas supporting 16 bit mode
-dnl     - binutils 2.9.1.0.7 and higher
-
-AC_DEFUN(RTEMS_I386_GAS_CODE16,
-[ if test "${target_cpu}" = "i386"; then
-    AC_CACHE_CHECK([for 16 bit mode assembler support],
-      rtems_cv_prog_gas_code16,
-      [cat > conftest.s << EOF
-         .code16
-         data32
-         addr32
-         lgdt 0
-EOF
-      if AC_TRY_COMMAND($AS_FOR_TARGET -o conftest.o conftest.s); then
-        rtems_cv_prog_gas_code16=yes
-      else
-        rtems_cv_prog_gas_code16=no
-      fi])
-    RTEMS_GAS_CODE16="$rtems_cv_prog_gas_code16"
-  fi
-  AC_SUBST(RTEMS_GAS_CODE16)
-])
-
-
-dnl
-dnl $Id$
-dnl
-dnl Check for System V IPC calls used by Unix simulators
-dnl
-dnl 98/07/17 Dario Alcocer     alcocer@netcom.com
-dnl 	     Ralf Corsepius    corsepiu@faw.uni-ulm.de
-dnl
-dnl Note: $host_os should probably *not* ever be used here to
-dnl determine if host supports System V IPC calls, since some
-dnl (e.g. FreeBSD 2.x) are configured by default to include only
-dnl a subset of the System V IPC calls.  Therefore, to make sure
-dnl all of the required calls are found, test for each call explicitly.
-dnl
-dnl All of the calls use IPC_PRIVATE, so tests will not unintentionally
-dnl modify any existing key sets.  See the man pages for semget, shmget, 
-dnl msgget, semctl, shmctl and msgctl for details.
-
-AC_DEFUN(RTEMS_UNION_SEMUN,
-[
-AC_CACHE_CHECK([whether $RTEMS_HOST defines union semun],
-  rtems_cv_HAS_UNION_SEMUN,
-  [AC_TRY_COMPILE([
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/sem.h>],
-[union semun arg ;],
-[rtems_cv_HAS_UNION_SEMUN="yes"],
-[rtems_cv_HAS_UNION_SEMUN="no"])
-
-if test "$rtems_cv_HAS_UNION_SEMUN" = "yes"; then
-    AC_DEFINE(HAS_UNION_SEMUN)
-fi])
-])
-
-AC_DEFUN(RTEMS_SYSV_SEM,
-[AC_REQUIRE([AC_PROG_CC]) 
-AC_REQUIRE([RTEMS_CANONICAL_HOST])
-AC_CACHE_CHECK(whether $RTEMS_HOST supports System V semaphores,
-rtems_cv_sysv_sem,
-[
-AC_TRY_RUN(
-[
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/sem.h>
-#if !HAS_UNION_SEMUN
-  union semun {
-    int val;
-    struct semid_ds *buf;
-    ushort *array;
-  } ;
-#endif
-int main () {
-  union semun arg ;
-
-  int id=semget(IPC_PRIVATE,1,IPC_CREAT|0400);
-  if (id == -1)
-    exit(1);
-  arg.val = 0; /* avoid implicit type cast to union */
-  if (semctl(id, 0, IPC_RMID, arg) == -1)
-    exit(1);
-  exit(0);
-}
-],
-rtems_cv_sysv_sem="yes", rtems_cv_sysv_sem="no", :)
-])
-])
-
-AC_DEFUN(RTEMS_SYSV_SHM,
-[AC_REQUIRE([AC_PROG_CC]) 
-AC_REQUIRE([RTEMS_CANONICAL_HOST])
-AC_CACHE_CHECK(whether $RTEMS_HOST supports System V shared memory,
-rtems_cv_sysv_shm,
-[
-AC_TRY_RUN([
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-int main () {
-  int id=shmget(IPC_PRIVATE,1,IPC_CREAT|0400);
-  if (id == -1)
-    exit(1);
-  if (shmctl(id, IPC_RMID, 0) == -1)
-    exit(1);
-  exit(0);
-}
-],
-rtems_cv_sysv_shm="yes", rtems_cv_sysv_shm="no", :)
-])
-])
-
-AC_DEFUN(RTEMS_SYSV_MSG,
-[AC_REQUIRE([AC_PROG_CC]) 
-AC_REQUIRE([RTEMS_CANONICAL_HOST])
-AC_CACHE_CHECK(whether $RTEMS_HOST supports System V messages,
-rtems_cv_sysv_msg,
-[
-AC_TRY_RUN([
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/msg.h>
-int main () {
-  int id=msgget(IPC_PRIVATE,IPC_CREAT|0400);
-  if (id == -1)
-    exit(1);
-  if (msgctl(id, IPC_RMID, 0) == -1)
-    exit(1);
-  exit(0);
-}
-],
-rtems_cv_sysv_msg="yes", rtems_cv_sysv_msg="no", :)
-])
-])
-
-AC_DEFUN(RTEMS_CHECK_SYSV_UNIX,
-[AC_REQUIRE([RTEMS_CANONICAL_HOST])
-if test "$RTEMS_CPU" = "unix" ; then
-  RTEMS_UNION_SEMUN
-  RTEMS_SYSV_SEM
-  if test "$rtems_cv_sysv_sem" != "yes" ; then
-    AC_MSG_ERROR([System V semaphores don't work, required by simulator])
-  fi
-  RTEMS_SYSV_SHM
-  if test "$rtems_cv_sysv_shm" != "yes" ; then
-    AC_MSG_ERROR([System V shared memory doesn't work, required by simulator])
-  fi
-  RTEMS_SYSV_MSG
-  if test "$rtems_cv_sysv_msg" != "yes" ; then
-    AC_MSG_ERROR([System V messages don't work, required by simulator])
-  fi
-fi
-])
-
 dnl $Id$
 
 AC_DEFUN(RTEMS_CHECK_NEWLIB,
@@ -939,42 +826,4 @@ else
 fi
 AC_SUBST(HAS_POSIX_API)dnl
 ])
-
-dnl
-dnl $Id$
-dnl
-
-dnl RTEMS_CHECK_MAKEFILE(path)
-dnl Search for Makefile.in's within the directory starting
-dnl at path and append an entry for Makefile to global variable 
-dnl "makefiles" (from configure.in) for each Makefile.in found
-dnl 
-AC_DEFUN(RTEMS_CHECK_MAKEFILE,
-[RTEMS_CHECK_FILES_IN($1,Makefile,makefiles)
-])
-
-dnl
-dnl $Id$
-dnl
-
-dnl RTEMS_CHECK_FILES_IN(path,file,var)
-dnl path .. path relative to srcdir, where to start searching for files
-dnl file .. name of the files to search for
-dnl var  .. shell variable to append files found
-
-AC_DEFUN(RTEMS_CHECK_FILES_IN,
-[
-AC_MSG_CHECKING(for $2.in in $1)
-if test -d $srcdir/$1; then
-  rtems_av_save_dir=`pwd`;
-  cd $srcdir;
-  rtems_av_tmp=`find $1 -name "$2.in" -print | sed "s/$2\.in/%/" | sort | sed "s/%/$2/"`
-  $3="$$3 $rtems_av_tmp";
-  cd $rtems_av_save_dir;
-  AC_MSG_RESULT(done)
-else
-  AC_MSG_RESULT(no)
-fi
-])
-
 

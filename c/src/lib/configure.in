@@ -32,19 +32,11 @@ RTEMS_PROJECT_ROOT
 
 dnl check target cc
 RTEMS_PROG_CC_FOR_TARGET
-
 RTEMS_CANONICALIZE_TOOLS
 
 dnl if this is an i386, does gas have good code16 support?
 RTEMS_I386_GAS_CODE16
 AM_CONDITIONAL(RTEMS_GAS_CODE16,test "$RTEMS_GAS_CODE16" = "yes");
-
-# find all the Makefiles for the BSPs
-makefiles="$makefiles libbsp/$RTEMS_CPU/Makefile"
-
-if test "${RTEMS_BSP}" = "bare"; then
-makefiles="$makefiles libbsp/bare/Makefile"
-fi
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
@@ -52,137 +44,70 @@ RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 
 RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
 
-# Is there code where there should be for this BSP?
-# The bare bsp is a special case as it is not under the RTEMS_CPU path
-case ${RTEMS_BSP} in
-  bare)
-    bspcpudir=
-    if test "X${BARE_CPU_CFLAGS}" = "X" ; then
-      AC_MSG_ERROR([--enable-bare-cpu-cflags not specified for bare bsp])
-    fi
-    if test "X${BARE_CPU_MODEL}" = "X" ; then
-      AC_MSG_ERROR([--enable-bare-cpu-model not specified for bare bsp])
-    fi
-    ;;
-  *)
-    bspcpudir=$RTEMS_CPU/
-    ;;
-esac
-
-if test "$RTEMS_BSP" = "bare" ; then
-  RTEMS_LIBBSP_CPU_SUBDIR="bare"
-else
-  RTEMS_LIBBSP_CPU_SUBDIR='$(RTEMS_CPU)'
-fi
-AC_SUBST(RTEMS_LIBBSP_CPU_SUBDIR)
-     
-if test -d "$srcdir/libbsp/$bspcpudir$bspdir"; then
-  RTEMS_CHECK_MAKEFILE(libbsp/${bspcpudir}$bspdir)
-  RTEMS_CHECK_MAKEFILE(libbsp/${bspcpudir}shared)
-
-  # HACK: sed out bsp-tools from makefiles
-  t="libbsp/$bspcpudir$bspdir/tools"
-  if test -d "$srcdir/$t"; then
-    bsptools_cfgdirs="$bsptools_cfgdirs $t"
-    makefiles=`echo "$makefiles" | sed -e "s%$t/.*Makefile%%g"`
-  fi
-else
-  AC_MSG_ERROR([unable to find libbsp directory ($bspdir) for  ${RTEMS_BSP}])
-fi
-
-if test "$HAS_MP" = "yes"; then
-  makefiles="$makefiles libbsp/shmdr/Makefile"
-else
-  # HACK: sed out shmsupp/Makefile from makefiles
-  t="libbsp/$bspcpudir$bspdir/shmsupp"
-  makefiles=`echo "$makefiles" | sed -e "s%$t/.*Makefile%%g"`
-fi
-
 AM_CONDITIONAL(UNIX,test "$RTEMS_CPU" = "unix")
-# find all the CPU dependent library Makefiles
-RTEMS_CHECK_MAKEFILE(libcpu/$RTEMS_CPU)
 
-dnl Workaround for go32
-case "${target}" in
-changequote(,)dnl
-  i[3456]86-go32-rtems*)
-changequote([,])dnl
-    ;;
-  *)
-    RTEMS_CHECK_MAKEFILE(start/$RTEMS_CPU)
-    ;;
-esac
+# find all the CPU dependent library Makefiles
+AC_CONFIG_SUBDIRS(libcpu)
+AC_CONFIG_SUBDIRS(libbsp)
 
 # If the TCP/IP stack is enabled, then find all TCP/IP Makefiles
 if test "$HAS_NETWORKING" = "yes"; then
-  RTEMS_CHECK_MAKEFILE(libnetworking)
-  RTEMS_CHECK_MAKEFILE(librpc)
+  cfg_subdirs="$cfg_subdirs libnetworking"
+  cfg_subdirs="$cfg_subdirs librpc"
 
   if test "$RTEMS_HAS_RDBG" = "yes"; then
     RTEMS_CHECK_RDBG(RTEMS_BSP)
-
-    if test "$HAS_RDBG" = "yes"; then
-      AC_CHECK_PROG(RPCGEN,rpcgen,rpcgen)
-      AC_PROG_AWK
-      if test -z "$RPCGEN"; then
-        AC_MSG_ERROR([missing rpcgen, required to build librdbg])
-      fi
-      if test -z "$AWK"; then
-        AC_MSG_ERROR([missing awk, required to build librdbg])
-      fi
-    fi
-    if test "$HAS_RDBG" = "yes"; then
-      RTEMS_CHECK_MAKEFILE(librdbg)
-    fi
   fi
+fi
+
+
+if test "$HAS_RDBG" = "yes"; then
+  cfg_subdirs="$cfg_subdirs librdbg"
 fi
 
 # If the HWAPI is enabled, the find the HWAPI Makefiles
 RTEMS_ENABLE_HWAPI
 if test "$RTEMS_HAS_HWAPI" = "yes"; then
-  AC_MSG_CHECKING(whether libwapi is present)
-  if test -f ${srcdir}/libhwapi/Makefile.in ; then
-    AC_MSG_RESULT(yes)
-    makefiles="$makefiles libhwapi/Makefile"
-    RTEMS_CHECK_MAKEFILE(libhwapi/analog)
-    RTEMS_CHECK_MAKEFILE(libhwapi/discrete)
-    RTEMS_CHECK_MAKEFILE(libhwapi/drivers)
-    RTEMS_CHECK_MAKEFILE(libhwapi/non_volatile_memory)
-    RTEMS_CHECK_MAKEFILE(libhwapi/serial)
-    RTEMS_CHECK_MAKEFILE(libhwapi/support)
-    RTEMS_CHECK_MAKEFILE(libhwapi/wrapup)
-  else
-    AC_MSG_ERROR(No source code found for the HWAPI)
+  if test -d "${srcdir}/libhwapi"; then
+    cfg_subdirs="$cfg_subdirs libhwapi"
   fi
+  LIBHWAPI="libhwapi"
 fi
+AC_SUBST(LIBHWAPI)
 
-AC_SUBST(RTEMS_HAS_CPLUSPLUS)
-AC_SUBST(RTEMS_USE_GCC272)
-AC_SUBST(CC_CFLAGS_DEFAULT)
-AC_SUBST(CC_CFLAGS_DEBUG_V)
-AC_SUBST(CC_CFLAGS_PROFILE_V)
-AC_SUBST(CC_LDFLAGS_PROFILE_V)
+if test -d "${srcdir}/start/$RTEMS_CPU"; then
+cfg_subdirs="$cfg_subdirs start/$RTEMS_CPU"
+RTEMS_CPU_STARTdir="$RTEMS_CPU"
+fi
+AC_SUBST(RTEMS_CPU_STARTdir)
 
-# pick up all the Makefiles in required parts of the tree
 if test "$RTEMS_CPU" != "unix"; then
 ## HACK: Suppress libchip for unix
-RTEMS_CHECK_MAKEFILE(libchip)
+cfg_subdirs="$cfg_subdirs libchip"
 fi
 
-RTEMS_CHECK_MAKEFILE(libmisc)
+AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
+AM_CONDITIONAL(HAS_LIBCHIP,test "$RTEMS_CPU" != "unix")
+AM_CONDITIONAL(HAS_RDBG,test "$HAS_RDBG" = "yes")
 
-AC_CONFIG_SUBDIRS($bsptools_cfgdirs)
+AC_CONFIG_SUBDIRS(libmisc)
 
-# FIXME: libhwapi needs a separate configure.in in future ;-
-# AC_CONFIG_SUBDIRS(libhwapi)
+AC_CONFIG_SUBDIRS($cfg_subdirs)
+
+PROJECT_INCLUDE="\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"
+AC_SUBST(PROJECT_INCLUDE)
 
 # try to explicitly list a Makefile here 
 AC_OUTPUT( 
 Makefile
 include/Makefile
-libbsp/Makefile
+include/sys/Makefile
+include/motorola/Makefile
+include/zilog/Makefile
+include/rpc/Makefile
+include/rdbg/Makefile
+include/rdbg/i386/Makefile
+include/rdbg/powerpc/Makefile
 libc/Makefile
-libcpu/Makefile
 start/Makefile
-wrapup/Makefile
-$makefiles)
+wrapup/Makefile)

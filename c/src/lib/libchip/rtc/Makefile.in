@@ -5,8 +5,8 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ../..
-subdir = libchip/rtc
+top_builddir = ..
+subdir = rtc
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
@@ -66,7 +66,7 @@ $(LIB): $(SRCS) ${OBJS}
 # Install the library, appending _g or _p as appropriate.
 # for include files, just use $(INSTALL_CHANGE)
 preinstall: 
-	$(mkinstalldirs) $(PROJECT_INCLUDE)/libchip
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/libchip
 	@$(INSTALL_CHANGE) -m 644 $(INSTALLED_H_FILES) $(PROJECT_INCLUDE)/libchip
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status

@@ -1,50 +1,264 @@
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
+
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
 #
 #  $Id$
 #
 
-@SET_MAKE@
+
+
+SHELL = @SHELL@
+
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
+
+DESTDIR =
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
 top_builddir = ../../../..
+
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+transform = @program_transform_name@
+
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+build_alias = @build_alias@
+build_triplet = @build@
+host_alias = @host_alias@
+host_triplet = @host@
+target_alias = @target_alias@
+target_triplet = @target@
+CC = @CC@
+CC_FOR_TARGET = @CC_FOR_TARGET@
+CPP = @CPP@
+GCCSED = @GCCSED@
+HAS_MP = @HAS_MP@
+HAS_POSIX_API = @HAS_POSIX_API@
+INSTALL_CHANGE = @INSTALL_CHANGE@
+MAINT = @MAINT@
+MAKEINFO = @MAKEINFO@
+PACKAGE = @PACKAGE@
+PACKHEX = @PACKHEX@
+PROJECT_INCLUDE = @PROJECT_INCLUDE@
+PROJECT_ROOT = @PROJECT_ROOT@
+RTEMS_BSP = @RTEMS_BSP@
+RTEMS_CPU = @RTEMS_CPU@
+RTEMS_HAS_MULTIPROCESSING = @RTEMS_HAS_MULTIPROCESSING@
+RTEMS_HAS_POSIX_API = @RTEMS_HAS_POSIX_API@
+RTEMS_HOST = @RTEMS_HOST@
+RTEMS_LIBC_DIR = @RTEMS_LIBC_DIR@
+RTEMS_ROOT = @RTEMS_ROOT@
+RTEMS_TOPdir = @RTEMS_TOPdir@
+RTEMS_USE_MACROS = @RTEMS_USE_MACROS@
+RTEMS_USE_NEWLIB = @RTEMS_USE_NEWLIB@
+RTEMS_VERSION = @RTEMS_VERSION@
+VERSION = @VERSION@
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+@INLINE_TRUE@I_PIECES = asr.inl attr.inl dpmem.inl event.inl eventset.inl message.inl     modes.inl options.inl part.inl ratemon.inl     region.inl sem.inl status.inl support.inl tasks.inl timer.inl
+
+@INLINE_TRUE@noinst_HEADERS = $(I_PIECES)
+
+@INLINE_TRUE@TMPINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/rtems $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/rtems/rtems/%)
+mkinstalldirs = $(SHELL) $(top_srcdir)/../../../mkinstalldirs
+CONFIG_CLEAN_FILES = 
+HEADERS =  $(noinst_HEADERS)
+
+DIST_COMMON =  Makefile.am Makefile.in
+
+
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+
+TAR = tar
+GZIP_ENV = --best
+all: all-redirect
+.SUFFIXES:
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) $(top_srcdir)/../../../automake/local.am
+	cd $(top_srcdir) && $(AUTOMAKE) --foreign rtems/inline/rtems/rtems/Makefile
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+
+tags: TAGS
+
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $$unique $(LISP)
+
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+
+mostlyclean-tags:
+
+clean-tags:
+
+distclean-tags:
+	-rm -f TAGS ID
+
+maintainer-clean-tags:
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
 subdir = rtems/inline/rtems/rtems
 
-RTEMS_ROOT = @RTEMS_ROOT@
-PROJECT_ROOT = @PROJECT_ROOT@
+distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --foreign rtems/inline/rtems/rtems/Makefile
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
+	done
+info-am:
+info: info-am
+dvi-am:
+dvi: dvi-am
+check-am: all-am
+check: check-am
+installcheck-am:
+installcheck: installcheck-am
+install-exec-am:
+install-exec: install-exec-am
 
-VPATH = @srcdir@
+install-data-am:
+install-data: install-data-am
 
-I_PIECES = asr attr dpmem event eventset message modes options part ratemon \
-    region sem status support tasks timer
-I_FILES = $(I_PIECES:%=$(srcdir)/%.inl)
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-am
+uninstall-am:
+uninstall: uninstall-am
+all-am: Makefile $(HEADERS)
+all-redirect: all-am
+install-strip:
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+installdirs:
 
-SRCS = $(I_FILES)
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/lib.cfg
+mostlyclean-generic:
 
-INSTALL_CHANGE = @INSTALL_CHANGE@
-mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
+clean-generic:
 
-INSTALLDIRS = $(PROJECT_INCLUDE)/rtems/rtems
+distclean-generic:
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
-$(INSTALLDIRS):
-	@$(mkinstalldirs) $(INSTALLDIRS)
+maintainer-clean-generic:
+mostlyclean-am:  mostlyclean-tags mostlyclean-generic
 
-#
-# Add your list of files to delete here.  The config files
-#  already know how to delete some stuff, so you may want
-#  to just run 'make clean' first to see what gets missed.
-#  'make clobber' already includes 'make clean'
-#
+mostlyclean: mostlyclean-am
 
-CLEAN_ADDITIONS += $(LIB)
-CLOBBER_ADDITIONS +=
+clean-am:  clean-tags clean-generic mostlyclean-am
 
-all: preinstall
+clean: clean-am
 
-preinstall: $(INSTALLDIRS) $(I_FILES)
-	@$(INSTALL_CHANGE) -m 644 $(I_FILES) $(PROJECT_INCLUDE)/rtems/rtems
+distclean-am:  distclean-tags distclean-generic clean-am
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
-	cd $(top_builddir) \
-	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+distclean: distclean-am
+
+maintainer-clean-am:  maintainer-clean-tags maintainer-clean-generic \
+		distclean-am
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+maintainer-clean: maintainer-clean-am
+
+.PHONY: tags mostlyclean-tags distclean-tags clean-tags \
+maintainer-clean-tags distdir info-am info dvi-am dvi check check-am \
+installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
+
+
+@INLINE_TRUE@$(PROJECT_INCLUDE)/rtems/rtems:
+@INLINE_TRUE@	@$(mkinstalldirs) $@
+@INLINE_TRUE@$(PROJECT_INCLUDE)/rtems/rtems/%.inl: %.inl
+@INLINE_TRUE@	$(INSTALL_DATA) $< $@
+
+all-am: $(TMPINSTALL_FILES)
+debug-am: $(TMPINSTALL_FILES)
+profile-am: $(TMPINSTALL_FILES)
+
+debug-am:
+debug: debug-am
+.PHONY: debug debug-am
+
+profile-am:
+profile: profile-am
+.PHONY: profile profile-am
+
+preinstall-am: $(TMPINSTALL_FILES)
+preinstall: preinstall-am
+.PHONY: preinstall preinstall-am
+
+depend-am:
+depend: depend-am
+.PHONY: depend depend-am
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:

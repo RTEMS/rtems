@@ -22,7 +22,8 @@ VPATH = @srcdir@
 POSIX_OBJS = $(wildcard ../../posix/src/$(ARCH)/*.o)
 
 OBJS = $(CPU_OBJS) $(CORE_OBJS) $(POSIX_OBJS) $(SAPI_OBJS)
-LIB = $(ARCH)/libposix.a
+# HACK: AM_CONDITIONAL
+LIB = @HAS_POSIX_TRUE@$(ARCH)/libposix.a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
@@ -54,8 +55,9 @@ CLOBBER_ADDITIONS +=
 $(LIB): ${OBJS}
 	$(make-library)
 
-all: ${ARCH} $(SRCS) $(LIB)
-	@$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
+# HACK: AM_CONDITIONAL
+all: @HAS_POSIX_TRUE@${ARCH} $(SRCS) $(LIB)
+@HAS_POSIX_TRUE@	@$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

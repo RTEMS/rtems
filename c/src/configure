@@ -14,6 +14,9 @@ ac_default_prefix=/usr/local
 ac_help="$ac_help
   --with-target-subdir=DIR"
 ac_help="$ac_help
+  --enable-cxx                         enable C++ support,
+                                       and build the rtems++ library"
+ac_help="$ac_help
   --enable-maintainer-mode enable make rules and dependencies not useful
                           (and sometimes confusing) to the casual installer"
 
@@ -539,7 +542,7 @@ RTEMS_TOPdir="../..";
 
 
 echo $ac_n "checking for RTEMS Version""... $ac_c" 1>&6
-echo "configure:543: checking for RTEMS Version" >&5
+echo "configure:546: checking for RTEMS Version" >&5
 if test -r "${srcdir}/${RTEMS_TOPdir}/VERSION"; then
 RTEMS_VERSION=`grep Version ${srcdir}/${RTEMS_TOPdir}/VERSION | \
 sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
@@ -572,6 +575,21 @@ ac_configure=$ac_aux_dir/configure # This should be Cygnus configure.
 
 
 
+# Check whether --enable-cxx or --disable-cxx was given.
+if test "${enable_cxx+set}" = set; then
+  enableval="$enable_cxx"
+  case "${enableval}" in
+  yes) RTEMS_HAS_CPLUSPLUS=yes ;;
+  no) RTEMS_HAS_CPLUSPLUS=no   ;;
+  *)  { echo "configure: error: bad value ${enableval} for enable-cxx option" 1>&2; exit 1; } ;;
+esac
+else
+  RTEMS_HAS_CPLUSPLUS=no
+fi
+
+
+
+
 
 # Do some error checking and defaulting for the host and target type.
 # The inputs are:
@@ -600,7 +618,7 @@ else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
 fi
 
 echo $ac_n "checking host system type""... $ac_c" 1>&6
-echo "configure:604: checking host system type" >&5
+echo "configure:622: checking host system type" >&5
 
 host_alias=$host
 case "$host_alias" in
@@ -621,7 +639,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$host" 1>&6
 
 echo $ac_n "checking target system type""... $ac_c" 1>&6
-echo "configure:625: checking target system type" >&5
+echo "configure:643: checking target system type" >&5
 
 target_alias=$target
 case "$target_alias" in
@@ -639,7 +657,7 @@ target_os=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$target" 1>&6
 
 echo $ac_n "checking build system type""... $ac_c" 1>&6
-echo "configure:643: checking build system type" >&5
+echo "configure:661: checking build system type" >&5
 
 build_alias=$build
 case "$build_alias" in
@@ -662,7 +680,7 @@ test "$host_alias" != "$target_alias" &&
   program_prefix=${target_alias}-
 
 echo $ac_n "checking rtems target cpu""... $ac_c" 1>&6
-echo "configure:666: checking rtems target cpu" >&5
+echo "configure:684: checking rtems target cpu" >&5
 case "${target}" in
   # hpux unix port should go here
   i[3456]86-go32-rtems*)
@@ -700,7 +718,7 @@ echo "$ac_t""$RTEMS_CPU" 1>&6
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 echo $ac_n "checking for a BSD compatible install""... $ac_c" 1>&6
-echo "configure:704: checking for a BSD compatible install" >&5
+echo "configure:722: checking for a BSD compatible install" >&5
 if test -z "$INSTALL"; then
 if eval "test \"`echo '$''{'ac_cv_path_install'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -753,7 +771,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL_PROGRAM}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 echo $ac_n "checking whether build environment is sane""... $ac_c" 1>&6
-echo "configure:757: checking whether build environment is sane" >&5
+echo "configure:775: checking whether build environment is sane" >&5
 # Just in case
 sleep 1
 echo timestamp > conftestfile
@@ -810,7 +828,7 @@ test "$program_suffix" != NONE &&
 test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:814: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:832: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -849,7 +867,7 @@ fi
 
 missing_dir=`cd $ac_aux_dir && pwd`
 echo $ac_n "checking for working aclocal""... $ac_c" 1>&6
-echo "configure:853: checking for working aclocal" >&5
+echo "configure:871: checking for working aclocal" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -862,7 +880,7 @@ else
 fi
 
 echo $ac_n "checking for working autoconf""... $ac_c" 1>&6
-echo "configure:866: checking for working autoconf" >&5
+echo "configure:884: checking for working autoconf" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -875,7 +893,7 @@ else
 fi
 
 echo $ac_n "checking for working automake""... $ac_c" 1>&6
-echo "configure:879: checking for working automake" >&5
+echo "configure:897: checking for working automake" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -888,7 +906,7 @@ else
 fi
 
 echo $ac_n "checking for working autoheader""... $ac_c" 1>&6
-echo "configure:892: checking for working autoheader" >&5
+echo "configure:910: checking for working autoheader" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -901,7 +919,7 @@ else
 fi
 
 echo $ac_n "checking for working makeinfo""... $ac_c" 1>&6
-echo "configure:905: checking for working makeinfo" >&5
+echo "configure:923: checking for working makeinfo" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -915,7 +933,7 @@ fi
 
 
 echo $ac_n "checking whether to enable maintainer-specific portions of Makefiles""... $ac_c" 1>&6
-echo "configure:919: checking whether to enable maintainer-specific portions of Makefiles" >&5
+echo "configure:937: checking whether to enable maintainer-specific portions of Makefiles" >&5
     # Check whether --enable-maintainer-mode or --disable-maintainer-mode was given.
 if test "${enable_maintainer_mode+set}" = set; then
   enableval="$enable_maintainer_mode"
@@ -939,7 +957,7 @@ fi
 
 
 echo $ac_n "checking for RTEMS_BSP""... $ac_c" 1>&6
-echo "configure:943: checking for RTEMS_BSP" >&5
+echo "configure:961: checking for RTEMS_BSP" >&5
 if eval "test \"`echo '$''{'rtems_cv_RTEMS_BSP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -957,7 +975,7 @@ echo "$ac_t""${RTEMS_BSP}" 1>&6
 
 # Is this a supported CPU?
 echo $ac_n "checking if cpu $RTEMS_CPU is supported""... $ac_c" 1>&6
-echo "configure:961: checking if cpu $RTEMS_CPU is supported" >&5
+echo "configure:979: checking if cpu $RTEMS_CPU is supported" >&5
 if test -d "$srcdir/$RTEMS_TOPdir/c/src/exec/score/cpu/$RTEMS_CPU"; then
   echo "$ac_t""yes" 1>&6
 else
@@ -1002,7 +1020,7 @@ PACKHEX="\$(PROJECT_ROOT)/tools/build/packhex"
 
 
 echo $ac_n "checking for make/custom/$RTEMS_BSP.cfg""... $ac_c" 1>&6
-echo "configure:1006: checking for make/custom/$RTEMS_BSP.cfg" >&5
+echo "configure:1024: checking for make/custom/$RTEMS_BSP.cfg" >&5
 if test -r "$srcdir/$RTEMS_TOPdir/make/custom/$RTEMS_BSP.cfg"; then
   echo "$ac_t""yes" 1>&6
 else
@@ -1010,15 +1028,19 @@ else
 fi
 
 
+## Note: the order of the directories below is essential
 subdirs="make"
 
 subdirs="make exec"
 
 subdirs="make exec lib"
 
-subdirs="make exec lib librtems++"
+if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
+cfg_subdirs="librtems++";
+fi 
+subdirs="make exec lib $cfg_subdirs"
 
-subdirs="make exec lib librtems++ tests"
+subdirs="make exec lib $cfg_subdirs tests"
 
 
 trap '' 1 2 15
@@ -1343,7 +1365,7 @@ if test "$no_recursion" != yes; then
     esac
   done
 
-  for ac_config_dir in make exec lib librtems++ tests; do
+  for ac_config_dir in make exec lib $cfg_subdirs tests; do
 
     # Do not complain, so a configure script can configure whichever
     # parts of a large source tree are present.

@@ -92,6 +92,8 @@ AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 SUBDIRS = @subdirs@
+
+DIST_SUBDIRS = generic hppa1.1 sh unix
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/../../mkinstalldirs
 CONFIG_CLEAN_FILES = 
@@ -261,7 +263,7 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-	for subdir in $(SUBDIRS); do \
+	for subdir in $(DIST_SUBDIRS); do \
 	  if test "$$subdir" = .; then :; else \
 	    test -d $(distdir)/$$subdir \
 	    || mkdir $(distdir)/$$subdir \
@@ -384,7 +386,7 @@ profile-am:
 profile: profile-am
 .PHONY: profile profile-am
 
-preinstall-am:
+preinstall-am: $(TMPINSTALL_FILES)
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am
 

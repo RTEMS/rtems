@@ -748,7 +748,7 @@ else
 fi
 
 
-PACKAGE=rtems-update-tools
+PACKAGE=rtems-tools-update
 
 VERSION=$RTEMS_VERSION
 

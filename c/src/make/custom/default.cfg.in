@@ -20,21 +20,6 @@ endif
 include $(RTEMS_ROOT)/make/main.cfg
 include $(RTEMS_ROOT)/make/bsp.cfg
 
-# use the inline functions instead of the macros
-# ref: src/exec/generic/Makefile
-ifeq ($(RTEMS_USE_MACROS),yes)
-INLINE=macros
-INLINE_UPCASE=
-else
-INLINE=inline
-INLINE_UPCASE=INLINE
-endif
-
-# OBSOLETE: Not used inside the source tree anymore
-# HOST Compiler config file
-# You may also want to specify where the compiler resides here.
-# CONFIG.$(HOST_ARCH).CC	 = $(PROJECT_ROOT)/make/compilers/gcc.cfg
-
 ## Target compiler config file, if any
 CONFIG.$(TARGET_ARCH).CC = $(RTEMS_ROOT)/make/compilers/gcc-target-default.cfg
 
