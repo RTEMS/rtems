@@ -9,11 +9,11 @@ RTEMS_TOP(.)
 
 dnl Checks for programs.
 AC_PROG_MAKE_SET
-AC_CANONICAL_SYSTEM
 
 AC_ARG_WITH(cross-host,[  --with-cross-host=HOST      host (cygnus)], \
 host=$withval)
 
+RTEMS_CANONICAL_TARGET_CPU
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENABLE_POSIX
 RTEMS_ENABLE_NETWORKING
@@ -65,7 +65,7 @@ dnl imply all BSPs.  Eventually we would like to build a collection
 dnl of CPU model specific RTEMS libraries which in conjunction with
 dnl a BSP library would be used to link an application.
 
-RTEMS_CANONICAL_TARGET_CPU
+# RTEMS_CANONICAL_TARGET_CPU
 RTEMS_CHECK_CPU
 RTEMS_CANONICAL_HOST
 
@@ -150,7 +150,7 @@ dnl Add -g if the host compiler accepts -g, assume -g means debugging
 test "$ac_cv_prog_cc_g" = "yes" && CC_CFLAGS_DEBUG_V=${CC_CFLAGS_DEBUG_V-"-g"}
 
 dnl check for SysV IPC used by simulators
-if test "$target_cpu" = "unix" ; then
+if test "$RTEMS_CPU" = "unix" ; then
   RTEMS_SYSV_SEM
   if test "$rtems_cv_sysv_sem" != "yes" ; then
     AC_MSG_ERROR([System V semaphores don't work, required by simulator])
@@ -168,14 +168,14 @@ fi
 # Collect config subdirs for exec/score/tools
 t="c/src/exec/score/tools"
 scoretools_cfgdirs="$t/generic"
-if test -d $srcdir/$t/$target_cpu; then
-  scoretools_cfgdirs="$scoretools_cfgdirs $t/$target_cpu"
+if test -d $srcdir/$t/$RTEMS_CPU; then
+  scoretools_cfgdirs="$scoretools_cfgdirs $t/$RTEMS_CPU"
 fi
 
 # find all the Executive Makefiles
 RTEMS_CHECK_MAKEFILE(c/src/exec/rtems)
 RTEMS_CHECK_MAKEFILE(c/src/exec/sapi)
-RTEMS_CHECK_MAKEFILE(c/src/exec/score/cpu/$target_cpu)
+RTEMS_CHECK_MAKEFILE(c/src/exec/score/cpu/$RTEMS_CPU)
 
 if test "$RTEMS_HAS_POSIX_API" = "yes"; then
   RTEMS_CHECK_MAKEFILE(c/src/exec/posix)
@@ -183,12 +183,12 @@ if test "$RTEMS_HAS_POSIX_API" = "yes"; then
 fi
 
 # find all the Makefiles for the BSPs
-if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
-  makefiles="$makefiles c/src/lib/libbsp/$target_cpu/Makefile"
+if test -d "$srcdir/c/src/lib/libbsp/$RTEMS_CPU"; then
+  makefiles="$makefiles c/src/lib/libbsp/$RTEMS_CPU/Makefile"
 
   if test -z "$rtems_bsp"; then
     AC_MSG_CHECKING([for bsps])
-    files=`ls $srcdir/c/src/lib/libbsp/$target_cpu`
+    files=`ls $srcdir/c/src/lib/libbsp/$RTEMS_CPU`
     for file in $files; do
       case $file in
         shared*);;
@@ -228,7 +228,7 @@ if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
     esac
 
     # Is there code where there should be for this BSP?
-    # The bare bsp is a special case as it is not under the target_cpu path
+    # The bare bsp is a special case as it is not under the RTEMS_CPU path
     case $i in
       bare)
         bspcpudir=
@@ -240,7 +240,7 @@ if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
         fi
         ;;
       *)
-        bspcpudir=$target_cpu/
+        bspcpudir=$RTEMS_CPU/
         ;;
     esac
      
@@ -267,11 +267,11 @@ if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
 fi
 
 # find all the CPU dependent library Makefiles
-RTEMS_CHECK_MAKEFILE(c/src/lib/libcpu/$target_cpu)
+RTEMS_CHECK_MAKEFILE(c/src/lib/libcpu/$RTEMS_CPU)
 
 dnl Workaround for go32
 if test "$skip_startfiles" != "yes"; then
-  RTEMS_CHECK_MAKEFILE(c/src/lib/start/$target_cpu)
+  RTEMS_CHECK_MAKEFILE(c/src/lib/start/$RTEMS_CPU)
 fi
 
 dnl END configure.target.in
@@ -295,7 +295,7 @@ if test "$RTEMS_HAS_NETWORKING" = "yes"; then
   RTEMS_CHECK_MAKEFILE(c/src/lib/librpc)
   if test "$RTEMS_HAS_RDBG" = "yes"; then
     AC_MSG_CHECKING([whether cpu supports rdbg? ])
-    test ! -d "$srcdir/c/src/lib/librdbg/$target_cpu" && RTEMS_HAS_RDBG="no" ;
+    test ! -d "$srcdir/c/src/lib/librdbg/$RTEMS_CPU" && RTEMS_HAS_RDBG="no" ;
     AC_MSG_RESULT($RTEMS_HAS_RDBG)
     if test "$RTEMS_HAS_RDBG" = "yes"; then
       AC_PATH_PROG(RPCGEN,rpcgen)
@@ -332,8 +332,8 @@ if test "$tests_enabled" = "yes"; then
    if test "$RTEMS_HAS_POSIX_API" = "yes"; then
      RTEMS_CHECK_MAKEFILE(c/src/tests/psxtests)
    fi
-   if test -d "$srcdir/c/src/tests/tools/$target_cpu"; then
-     testtools_cfgdirs="$testtools_cfgdirs c/src/tests/tools/$target_cpu"
+   if test -d "$srcdir/c/src/tests/tools/$RTEMS_CPU"; then
+     testtools_cfgdirs="$testtools_cfgdirs c/src/tests/tools/$RTEMS_CPU"
    fi
 fi 
 
@@ -423,7 +423,7 @@ c/src/tests/tools/Makefile
 $makefiles)
 
 echo
-echo target architecture: $target_cpu.
+echo target architecture: $RTEMS_CPU.
 echo available BSPs: $rtems_bsp.
 echo \'make all\' will build the following BSPs: $RTEMS_BSP_LIST.
 echo other BSPs can be built with \'make RTEMS_BSP=\"bsp1 bsp2 ...\"\' 

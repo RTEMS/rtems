@@ -29,7 +29,7 @@ C_PIECES = cpu cpu_asm
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
-H_PIECES = asm.h cpu_asm.h
+H_PIECES = asm.h
 H_FILES=$(H_PIECES:%=$(srcdir)/../%)
 
 # Assembly source names, if any, go here -- minus the .S
@@ -65,8 +65,9 @@ LDFLAGS   +=
 CLEAN_ADDITIONS += ../$(ARCH)
 CLOBBER_ADDITIONS +=
 
-all:    ${ARCH} $(SRCS) preinstall $(OBJS) $(ARCH)/rtems.o $(RELS)
-	$(INSTALL_VARIANT) -m 644 $(ARCH)/rtems.o ${PROJECT_RELEASE}/lib
+all:    ${ARCH} $(SRCS) $(OBJS) $(ARCH)/rtems.o $(RELS)
+
+$(ARCH)/rtems.o: rtems.c
 
 ../$(ARCH)/rtems-cpu.rel: $(OBJS)
 	test -d ../$(ARCH) || mkdir ../$(ARCH)

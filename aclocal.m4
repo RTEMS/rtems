@@ -51,6 +51,51 @@ RTEMS_ROOT='$(top_srcdir)'/$RTEMS_TOPdir;
 AC_SUBST(RTEMS_ROOT)
 ])dnl
 
+dnl
+dnl $Id$
+dnl
+
+dnl canonicalize target cpu
+dnl NOTE: Most rtems targets do not fullfil autoconf's
+dnl target naming conventions "processor-vendor-os"
+dnl Therefore autoconf's AC_CANONICAL_TARGET will fail for them
+dnl and we have to fix it for rtems ourselves 
+
+AC_DEFUN(RTEMS_CANONICAL_TARGET_CPU,
+[
+rtems_target=$target;
+case "$target" in
+no_cpu*) target=$host;;
+*) ;;
+esac
+AC_CANONICAL_SYSTEM
+AC_MSG_CHECKING(rtems target cpu)
+changequote(,)dnl
+case "${rtems_target}" in
+  # hpux unix port should go here
+  i[3456]86-go32-rtems*)
+	RTEMS_CPU=i386
+	;;
+  i[3456]86-pc-linux*)		# unix "simulator" port
+	RTEMS_CPU=unix
+	;;
+  i[3456]86-*freebsd2*) 	# unix "simulator" port
+	RTEMS_CPU=unix
+	;;
+  no_cpu-*rtems*)
+        RTEMS_CPU=no_cpu
+	;;
+  sparc-sun-solaris*)           # unix "simulator" port
+	RTEMS_CPU=unix
+	;;
+  *) 
+	RTEMS_CPU=`echo $rtems_target | sed 's%^\([^-]*\)-\(.*\)$%\1%'`
+	;;
+esac
+changequote([,])dnl
+AC_MSG_RESULT($RTEMS_CPU)
+])
+
 dnl $Id$
 
 AC_DEFUN(RTEMS_ENABLE_MULTIPROCESSING,
@@ -233,49 +278,6 @@ AC_MSG_ERROR(
 fi
 ])
 
-dnl
-dnl $Id$
-dnl
-
-dnl canonicalize target cpu
-dnl NOTE: Most rtems targets do not fullfil autoconf's
-dnl target naming conventions "processor-vendor-os"
-dnl Therefore autoconf's AC_CANONICAL_TARGET will fail for them
-dnl and we have to fix it for rtems ourselves 
-
-AC_DEFUN(RTEMS_CANONICAL_TARGET_CPU,
-[
-AC_REQUIRE([AC_CANONICAL_SYSTEM])
-AC_MSG_CHECKING(rtems target cpu)
-changequote(,)dnl
-case "${target}" in
-  # hpux unix port should go here
-  i[3456]86-go32-rtems*)
-	target_cpu=i386
-	;;
-  i[3456]86-pc-linux*)		# unix "simulator" port
-	target_cpu=unix
-	;;
-  i[3456]86-*freebsd2*) 	# unix "simulator" port
-	target_cpu=unix
-	;;
-  no_cpu-*rtems*)
-        target_cpu=no_cpu
-	;;
-  ppc*-*rtems*)
-	target_cpu=powerpc
-	;;
-  sparc-sun-solaris*)           # unix "simulator" port
-	target_cpu=unix
-	;;
-  *) 
-	target_cpu=`echo $target | sed 's%^\([^-]*\)-\(.*\)$%\1%'`
-	;;
-esac
-changequote([,])dnl
-AC_MSG_RESULT($target_cpu)
-])
-
 dnl $Id$
 
 dnl check if RTEMS support a cpu
@@ -284,8 +286,8 @@ AC_DEFUN(RTEMS_CHECK_CPU,
 AC_REQUIRE([RTEMS_TOP])
 AC_REQUIRE([RTEMS_CANONICAL_TARGET_CPU])
 # Is this a supported CPU?
-AC_MSG_CHECKING([if cpu $target_cpu is supported])
-if test -d "$srcdir/$RTEMS_TOPdir/c/src/exec/score/cpu/$target_cpu"; then
+AC_MSG_CHECKING([if cpu $RTEMS_CPU is supported])
+if test -d "$srcdir/$RTEMS_TOPdir/c/src/exec/score/cpu/$RTEMS_CPU"; then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_ERROR(no)
