@@ -19,7 +19,7 @@ dirs:
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
 GENERATED_FILES= \
-    intro.texi 
+    basic.texi 
 
 FILES=$(PROJECT).texi $(GENERATED_FILES)
 
@@ -60,10 +60,10 @@ clean:
 #  Process Automatically Generated Files
 #
 
-intro.texi: intro.t Makefile
+basic.texi: basic.t Makefile
 	$(BMENU) -p "Top" \
 	    -u "Top" \
-	    -n "Target Dependent Files" ${*}.t
+	    -n "" ${*}.t
 
 #target.texi: target.t Makefile
 #	$(BMENU) -p "Introduction" \

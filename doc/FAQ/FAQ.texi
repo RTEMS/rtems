@@ -62,10 +62,10 @@ END-INFO-DIR-ENTRY
 @c  This prevents a black box from being printed on "overflow" lines.
 @c  The alternative is to rework a sentence to avoid this problem.
 
-@include history.texi
+@include basic.texi
 
 @ifinfo
-@node Top, Introduction, (dir), (dir)
+@node Top, Basic Information, (dir), (dir)
 @top FAQ
 
 This document is the RTEMS FAQ.  FAQ is an acronym for Frequently
