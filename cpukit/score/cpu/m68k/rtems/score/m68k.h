@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __M68k_h
-#define __M68k_h
+#ifndef _RTEMS_SCORE_M68K_H
+#define _RTEMS_SCORE_M68K_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -21,8 +21,8 @@
  */
 
 /* FIXME: finish commenting/cleaning up this file */
-#ifndef __CPU_h
-#define __CPU_h
+#ifndef _RTEMS_SCORE_CPU_H
+#define _RTEMS_SCORE_CPU_H
 
 #ifdef __cplusplus
 extern "C" {

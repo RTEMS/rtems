@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef _INCLUDE_NO_CPU_h
-#define _INCLUDE_NO_CPU_h
+#ifndef _RTEMS_SCORE_NO_CPU_H
+#define _RTEMS_SCORE_NO_CPU_H
 
 #ifdef __cplusplus
 extern "C" {

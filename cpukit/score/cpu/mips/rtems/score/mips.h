@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef _INCLUDE_MIPS_h
-#define _INCLUDE_MIPS_h
+#ifndef _RTEMS_SCORE_MIPS_H
+#define _RTEMS_SCORE_MIPS_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -14,8 +14,8 @@
  *  $Id$
  */
 
-#ifndef _rtems_score_registers_h
-#define _rtems_score_registers_h
+#ifndef _RTEMS_SCORE_REGISTERS_H
+#define _RTEMS_SCORE_REGISTERS_H
 
 /*
  * definition related to EFLAGS

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef _INCLUDE_SPARC_h
-#define _INCLUDE_SPARC_h
+#ifndef _RTEMS_SCORE_SPARC_H
+#define _RTEMS_SCORE_SPARC_H
 
 #ifdef __cplusplus
 extern "C" {

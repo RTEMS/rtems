@@ -10,8 +10,8 @@
  *  $Id$
  */
 
-#ifndef __rtems_score_ppc_h
-#define __rtems_score_ppc_h
+#ifndef _RTEMS_SCORE_PPC_H
+#define _RTEMS_SCORE_PPC_H
 #ifndef RTEMS_NO_WARN_DEPRECATED
 #warning <rtems/score/ppc.h> is deprecated, use <rtems/score/powerpc.h> instead
 #endif

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __i386_h
-#define __i386_h
+#ifndef _RTEMS_SCORE_I386_H
+#define _RTEMS_SCORE_I386_H
 
 #ifdef __cplusplus
 extern "C" {

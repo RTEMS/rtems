@@ -6,8 +6,8 @@
  * $Id$
  */
  
-#ifndef _rtems_score_cpu_h
-#define _rtems_score_cpu_h
+#ifndef _RTEMS_SCORE_CPU_H
+#define _RTEMS_SCORE_CPU_H
 
 #include <rtems/score/powerpc.h>              /* pick up machine definitions */
 #ifndef ASM

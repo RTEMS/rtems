@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef __CPU_ASM_h
-#define __CPU_ASM_h
+#ifndef _RTEMS_SCORE_CPU_ASM_H
+#define _RTEMS_SCORE_CPU_ASM_H
 
 /* pull in the generated offsets */
 

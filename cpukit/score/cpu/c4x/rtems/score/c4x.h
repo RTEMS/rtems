@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef _INCLUDE_C4X_h
-#define _INCLUDE_C4X_h
+#ifndef _RTEMS_SCORE_C4X_H
+#define _RTEMS_SCORE_C4X_H
 
 #ifdef __cplusplus
 extern "C" {

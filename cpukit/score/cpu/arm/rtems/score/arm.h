@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef _INCLUDE_ARM_h
-#define _INCLUDE_ARM_h
+#ifndef _RTEMS_SCORE_ARM_H
+#define _RTEMS_SCORE_ARM_H
 
 #ifdef __cplusplus
 extern "C" {

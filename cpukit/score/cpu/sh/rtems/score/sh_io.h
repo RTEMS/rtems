@@ -28,8 +28,8 @@
  *  $Id$
  */
 
-#ifndef _asm_io_h
-#define _asm_io_h
+#ifndef _RTEMS_SCORE_SH_IO_H
+#define _RTEMS_SCORE_SH_IO_H
  
 #define readb(addr) 	(*(volatile unsigned char *) (addr))
 #define readw(addr) 	(*(volatile unsigned short *) (addr))

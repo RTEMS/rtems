@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef _INCLUDE_H8300_h
-#define _INCLUDE_H8300_h
+#ifndef _RTEMS_SCORE_H8300_H
+#define _RTEMS_SCORE_H8300_H
 
 #ifdef __cplusplus
 extern "C" {

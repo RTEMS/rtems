@@ -26,8 +26,8 @@
  */
 /* @(#)asm.h       03/15/96     1.1 */
 
-#ifndef __NO_CPU_ASM_h
-#define __NO_CPU_ASM_h
+#ifndef _RTEMS_ASM_H
+#define _RTEMS_ASM_H
 
 /*
  *  Indicate we are in an assembly file and get the basic CPU definitions.

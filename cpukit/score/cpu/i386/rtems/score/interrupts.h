@@ -18,8 +18,8 @@
  *  Applications must not include this file directly.
  */
 
-#ifndef _rtems_score_interrupts_h
-#define _rtems_score_interrupts_h
+#ifndef _RTEMS_SCORE_INTERRUPTS_H
+#define _RTEMS_SCORE_INTERRUPTS_H
 
 #ifndef ASM
 

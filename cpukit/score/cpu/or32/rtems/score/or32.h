@@ -19,8 +19,8 @@
  *
  */
 
-#ifndef _OR1K_H
-#define _OR1K_H
+#ifndef _RTEMS_SCORE_OR32_H
+#define _RTEMS_SCORE_OR32_H
 
 #ifdef __cplusplus
 extern "C" {

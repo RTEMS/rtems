@@ -26,8 +26,8 @@
  *  $Id$
  */
 
-#ifndef _sh_h
-#define _sh_h
+#ifndef _RTEMS_SCORE_SH_H
+#define _RTEMS_SCORE_SH_H
 
 #ifdef __cplusplus
 extern "C" {

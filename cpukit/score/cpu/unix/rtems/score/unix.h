@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __UNIX_h
-#define __UNIX_h
+#ifndef _RTEMS_SCORE_UNIX_H
+#define _RTEMS_SCORE_UNIX_H
 
 #ifdef __cplusplus
 extern "C" {

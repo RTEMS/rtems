@@ -26,8 +26,8 @@
  *  Applications must not include this file directly.
  */
 
-#ifndef _rtems_score_idtr_h
-#define _rtems_score_idtr_h
+#ifndef _RTEMS_SCORE_IDTR_H
+#define _RTEMS_SCORE_IDTR_H
 
 /*
  * See page 14.9 Figure 14-2.

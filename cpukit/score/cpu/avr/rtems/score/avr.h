@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef _rtems_score_avr_h
-#define _rtems_score_avr_h
+#ifndef _RTEMS_SCORE_AVR_H
+#define _RTEMS_SCORE_AVR_H
 
 #ifdef __cplusplus
 extern "C" {

@@ -40,8 +40,8 @@
  *  $Id$
  */
 
-#ifndef __CPU_SH_ASM_h
-#define __CPU_SH_ASM_h
+#ifndef _RTEMS_ASM_H
+#define _RTEMS_ASM_H
 
 /*
  *  Indicate we are in an assembly file and get the basic CPU definitions.

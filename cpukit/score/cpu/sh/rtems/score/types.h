@@ -26,8 +26,8 @@
  *  $Id$
  */
 
-#ifndef __rtems_score_types_h
-#define __rtems_score_types_h
+#ifndef _RTEMS_SCORE_TYPES_H
+#define _RTEMS_SCORE_TYPES_H
 
 #ifndef ASM
 
