@@ -29,9 +29,9 @@ extern "C" {
 #include <bspopts.h>
 
 #include <rtems.h>
-#include <clockdrv.h>
-#include <console.h>
-#include <iosupp.h>
+#include <rtems/clockdrv.h>
+#include <rtems/console.h>
+#include <rtems/iosupp.h>
 #include <rtems/bspIo.h>
 
 

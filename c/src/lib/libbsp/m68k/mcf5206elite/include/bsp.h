@@ -133,9 +133,9 @@ extern "C" {
 
 #include <bspopts.h>
 #include <rtems.h>
-#include <console.h>
-#include <iosupp.h>
-#include <clockdrv.h>
+#include <rtems/console.h>
+#include <rtems/iosupp.h>
+#include <rtems/clockdrv.h>
 
 #include "i2c.h"
 

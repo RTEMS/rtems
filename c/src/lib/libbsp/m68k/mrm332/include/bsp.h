@@ -23,9 +23,9 @@ extern "C" {
 
 #include <rtems.h>
 #include <rtems/bspIo.h>
-#include <clockdrv.h>
-#include <console.h>
-#include <iosupp.h>
+#include <rtems/clockdrv.h>
+#include <rtems/console.h>
+#include <rtems/iosupp.h>
 #include <mrm332.h>
 #include <sim.h>
 #include <qsm.h>

@@ -24,9 +24,9 @@ extern "C" {
 
 #include <rtems.h>
 #include <libcpu/i960RP.h>
-#include <iosupp.h>
-#include <console.h>
-#include <clockdrv.h>
+#include <rtems/iosupp.h>
+#include <rtems/console.h>
+#include <rtems/clockdrv.h>
 
 /*
  *  confdefs.h overrides for this BSP:

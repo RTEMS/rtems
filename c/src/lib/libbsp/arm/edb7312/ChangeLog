@@ -1,3 +1,9 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* include/bsp.h: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
+	* include/bsp.h: Include <rtems/console.h> instead of <console.h>.
+	* include/bsp.h: Include <rtems/iosupp.h> instead of <iosupp.h>.
+
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* console/uart.c, include/ep7312.h, startup/bspstart.c,

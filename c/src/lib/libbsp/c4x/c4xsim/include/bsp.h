@@ -25,10 +25,10 @@ extern "C" {
 
 #else
 #include <rtems.h>
-#include <console.h>
-#include <clockdrv.h>
-#include <console.h>
-#include <iosupp.h>
+#include <rtems/console.h>
+#include <rtems/clockdrv.h>
+#include <rtems/console.h>
+#include <rtems/iosupp.h>
 
 
 /*
