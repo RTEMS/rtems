@@ -2,8 +2,8 @@
 # spec file for automake 
 #
 
-%define rpmvers 1.6
-%define srcvers	1.6
+%define rpmvers 1.6.1
+%define srcvers	1.6.1
 %define amvers  1.6
 
 %define _defaultbuildroot	%{_tmppath}/%{name}-%{srcvers}-root
@@ -37,7 +37,7 @@ BuildPreReq:  %{requirements} perl help2man
 Requires:     %{requirements}
 PreReq:	      /sbin/install-info
 
-Source: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.gz
+Source: ftp://ftp.gnu.org/gnu/automake/automake-%{srcvers}.tar.bz2
 
 %description
 Automake is a tool for automatically generating "Makefile.in"s from
