@@ -13,7 +13,7 @@ include $(top_srcdir)/../../../../../automake/lib.am
 C_FILES = rtems_fpsp.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = fpsp.defs
+noinst_HEADERS = fpsp.defs
 
 S_FILES = bindec.S binstr.S bugfix.S decbin.S do_func.S gen_except.S \
     get_op.S kernel_ex.S res_func.S round.S rtems_skel.S sacos.S sasin.S \
