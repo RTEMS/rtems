@@ -60,6 +60,10 @@ test1:
 	rm -f t1.txt
 	./$(PROG) -v t1.d
 
+wtest:
+	rm -f $(BASE).txt
+	./$(PROG) -w -v -p "Turret Subsystem" -u "Turret Subsystem" $(BASE).d
+
 clean:
 	rm -f *.o $(PROG) *.txt core *.html $(PROJECT) Drive.texi
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)

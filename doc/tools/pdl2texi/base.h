@@ -89,6 +89,8 @@ int RemoveExtraBlankLines();
 
 void FormatToTexinfo( void );
 
+void FormatToWord( void );
+
 void PrintFile(
    char *out
 );
@@ -101,6 +103,7 @@ void ReleaseFile();
 
 EXTERN boolean          Verbose;                 /* status/debug msgs */
 EXTERN boolean          Statistics;              /* statistics msgs */
+EXTERN boolean          OutputWord;              /* Output MS-Word */
 EXTERN boolean          IncompletesAreErrors;
 EXTERN boolean          InsertTBDs;
 EXTERN Chain_Control    Lines;

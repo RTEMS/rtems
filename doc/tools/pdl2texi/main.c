@@ -987,10 +987,11 @@ int main(
 
   Verbose = FALSE;
   Statistics = FALSE;
+  OutputWord = FALSE;
   IncompletesAreErrors = TRUE;
   InsertTBDs = FALSE;
 
-  while ((c = getopt(argc, argv, "istv?n:p:u:")) != EOF) {
+  while ((c = getopt(argc, argv, "istvw?n:p:u:")) != EOF) {
     switch (c) {
       case 'i':
         IncompletesAreErrors = FALSE;
@@ -1013,6 +1014,9 @@ int main(
       case 's':
          Statistics = TRUE;
          break;
+      case 'w':
+         OutputWord = TRUE;
+         break;
       case '?':
         usage();
         return 0;
@@ -1024,6 +1028,7 @@ int main(
     fprintf( stderr, "Next Node = (%s)\n", DocsNextNode );
     fprintf( stderr, "Previous Node = (%s)\n", DocsPreviousNode );
     fprintf( stderr, "Up Node = (%s)\n", DocsUpNode );
+    fprintf( stderr, "Output Format = (%s)\n", (OutputWord) ? "Word" : "Texi" );
   }
 
   FillLinePool();
@@ -1064,11 +1069,18 @@ void ProcessFile(
          out[ out_index++ ] = inname[ index ];
      }
 
-     out[ out_index++ ] = '.';
-     out[ out_index++ ] = 't';
-     out[ out_index++ ] = 'e';
-     out[ out_index++ ] = 'x';
-     out[ out_index++ ] = 'i';
+     if ( OutputWord ) {
+       out[ out_index++ ] = '.';
+       out[ out_index++ ] = 't';
+       out[ out_index++ ] = 'x';
+       out[ out_index++ ] = 't';
+     } else {
+       out[ out_index++ ] = '.';
+       out[ out_index++ ] = 't';
+       out[ out_index++ ] = 'e';
+       out[ out_index++ ] = 'x';
+       out[ out_index++ ] = 'i';
+     }
      out[ out_index ] = '\0';
 
    }
@@ -1190,10 +1202,15 @@ void ProcessFile(
     *  Formatting the file 
     */
 
-   FormatToTexinfo();
-
-   if ( Verbose ) 
-     fprintf( stderr, "-------->FILE FORMATTED TO TEXINFO\n" );
+   if ( OutputWord ) {
+     FormatToWord();
+     if ( Verbose ) 
+       fprintf( stderr, "-------->FILE FORMATTED TO WORD\n" );
+   } else {
+     FormatToTexinfo();
+     if ( Verbose ) 
+       fprintf( stderr, "-------->FILE FORMATTED TO TEXINFO\n" );
+   }
 
    /*
     *  Print the file 
@@ -2749,6 +2766,175 @@ bottom:
     fprintf( stderr, "-------->INSERTING TEXINFO MENUS\n" );
 
   BuildTexinfoNodes();
+}
+
+/*
+ *  FormatToWord
+ */
+
+void FormatToWord( void )
+{
+  Line_Control *line;
+  Line_Control *new_line;
+  char          Buffer[ PARAGRAPH_SIZE ];
+  int           i;
+  char          ChapterTitle[ PARAGRAPH_SIZE ];
+  char          InfoFile[ PARAGRAPH_SIZE ];
+  char         *p;
+  boolean       new_section; 
+  boolean       in_bullets; 
+
+  for ( line = (Line_Control *) Lines.first ;
+        !_Chain_Is_last( &line->Node ) ; 
+      ) {
+
+    switch ( line->keyword ) {
+      case UNUSED:
+        line = (Line_Control *) line->Node.next;
+        break;
+
+      case OBJECT:
+        LineCopyFromRight( line, ChapterTitle );
+        strcpy( InfoFile, ChapterTitle );
+
+        for ( p=InfoFile ; *p ; *p++ )   /* turn this into a file name */
+          if ( isspace( *p ) )
+            *p = '_';             
+
+        sprintf( Buffer, "@Chapter = %s", line->Contents );
+        strcpy( line->Contents, Buffer );
+        line = (Line_Control *) line->Node.next;
+        break;
+
+      case ATTRIBUTE_DESCRIPTIONS:
+      case ASSOCIATION_DESCRIPTIONS:
+      case ABSTRACT_TYPE_DESCRIPTIONS:
+      case DATA_ITEM_DESCRIPTIONS:
+      case METHOD_DESCRIPTIONS:
+      case TASK_DESCRIPTIONS:
+        sprintf( Buffer, "@Section = %s", line->Contents );
+        strcpy( line->Contents, Buffer );
+
+        new_line = AllocateLine();
+        strcpy( new_line->Contents, "@Page" );
+        _Chain_Insert( line->Node.previous, &new_line->Node );
+
+        line = (Line_Control *) line->Node.next;
+        new_section = TRUE;
+        break;
+
+      case END_OBJECT:
+        line->Contents[ 0 ] = '\0';
+        goto bottom;
+
+      case ATTRIBUTE:
+      case ASSOCIATION:
+      case ABSTRACT_TYPE:
+      case DATA_ITEM:
+        if ( !new_section ) {
+          /*
+           *  Do something with the style to keep subsection
+           *  contents together
+           */
+          ;
+        }
+        new_section = FALSE;
+        sprintf( Buffer, "@Subsection = %s", line->Contents );
+        strcpy( line->Contents, Buffer );
+        line = (Line_Control *) line->Node.next;
+        break;
+
+      case METHOD:
+      case TASK:
+        if ( !new_section ) {
+          new_line = AllocateLine();
+          strcpy( new_line->Contents, "@Page" );
+          _Chain_Insert( line->Node.previous, &new_line->Node );
+        }
+        new_section = FALSE;
+        sprintf( Buffer, "@Subsection = %s", line->Contents );
+        strcpy( line->Contents, Buffer );
+        line = (Line_Control *) line->Node.next;
+        break;
+
+      case DESCRIPTION:
+      case COPYRIGHT:
+      case PORTING:
+      case THEORY_OF_OPERATION:
+      case DEPENDENCIES:
+      case NOTES:
+        sprintf( Buffer, "@Subheading = %s\n", line->Contents );
+        strcpy( line->Contents, Buffer );
+        line = (Line_Control *) line->Node.next;
+
+        /* now take care of the paragraphs which are here */
+
+        in_bullets = FALSE;
+        do {
+          line = (Line_Control *) line->Node.next;
+          if ( line->format == BULLET_OUTPUT ) {
+            if ( !in_bullets ) {
+              in_bullets = TRUE;
+
+              new_line = AllocateLine();
+              _Chain_Insert( line->Node.previous, &new_line->Node );
+            }
+            sprintf( Buffer, "@Bullet = %s\n", line->Contents );
+            strcpy( line->Contents, Buffer );
+          } else if ( in_bullets ) {
+            in_bullets = FALSE;
+
+            new_line = AllocateLine();
+            _Chain_Insert( line->Node.previous, &new_line->Node );
+          } else {
+            new_line = AllocateLine();
+            _Chain_Insert( line->Node.previous, &new_line->Node );
+          }
+        } while ( !line->keyword );
+
+        break;
+
+      case DERIVATION:
+      case TYPE:
+      case RANGE:
+      case UNITS:
+      case SCALE_FACTOR:
+      case TOLERANCE:
+      case VISIBILITY:
+      case ASSOCIATED_WITH:
+      case MULTIPLICITY:
+      case TIMING:
+        sprintf( Buffer, "@Subheading = %s\n", line->Contents );
+        strcpy( line->Contents, Buffer );
+        line = (Line_Control *) line->Node.next;
+        break;
+
+      case MEMBERS:
+      case DEFAULT:
+      case REQUIREMENTS:
+      case REFERENCES:
+      case INPUTS:
+      case OUTPUTS:
+      case PDL:
+      case SYNCHRONIZATION:
+        sprintf( Buffer, "@Subheading = %s\n", line->Contents );
+        strcpy( line->Contents, Buffer );
+
+        /* now take care of the raw text which is here */
+
+         line = (Line_Control *) line->Node.next;
+        while ( !line->keyword ) {
+          sprintf( Buffer, "@Example = %s\n", line->Contents );
+          strcpy( line->Contents, Buffer );
+          line = (Line_Control *) line->Node.next;
+        }
+
+        /* at this point line points to the next keyword */
+        break;
+    }   
+  }
+
+bottom:
 }
 
 /*
