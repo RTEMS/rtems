@@ -64,6 +64,7 @@
 #include <rtems/rtems_bsdnet.h>
 #include <bsp.h>
 
+#include <sys/errno.h>
 #include <sys/param.h>
 #include <sys/mbuf.h>
 #include <sys/socket.h>
@@ -469,7 +470,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 		      i,sc->pci_signature);
         	if (PCIB_ERR_SUCCESS == i) {
 		  if ( UNTESTED == fxp_ident_table[j].warn ) {
-		  	device_printf(dev
+		  	device_printf(dev,
 "WARNING: this chip version has NOT been reported to work under RTEMS yet.\n");
 			device_printf(dev,
 "         If it works OK, report it as tested in 'c/src/libchip/network/if_fxp.c'\n");
