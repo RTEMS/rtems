@@ -1,3 +1,11 @@
+2002-11-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add compilers/*.
+	* compilers/Makefile.am: Remove.
+	* lib.cfg: Remove.
+	* directory.cfg: Remove.
+	* README: Remove.
+
 2002-11-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add Templates/*.
