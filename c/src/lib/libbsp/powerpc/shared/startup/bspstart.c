@@ -45,8 +45,8 @@ extern Triv121PgTbl BSP_pgtbl_setup();
 extern void			BSP_pgtbl_activate();
 extern void			BSP_vme_config();
 
-SPR_RW(SPR0)
-SPR_RW(SPR1)
+SPR_RW(SPRG0)
+SPR_RW(SPRG1)
 
 /*
  * Copy of residuals passed by firmware
@@ -179,7 +179,6 @@ void bsp_start( void )
   unsigned char *stack;
   unsigned l2cr;
   register unsigned char* intrStack;
-  register unsigned int intrNestingLevel = 0;
   unsigned char *work_space_start;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
@@ -219,7 +218,6 @@ void bsp_start( void )
 
   /*
    * Initialize the interrupt related settings
-   * SPRG0 = interrupt nesting level count
    * SPRG1 = software managed IRQ stack
    *
    * This could be done latter (e.g in IRQ_INIT) but it helps to understand
@@ -233,8 +231,11 @@ void bsp_start( void )
   /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
   *((unsigned32 *)intrStack) = 0;
 
-  _write_SPR1((unsigned int)intrStack);
-  _write_SPR0(intrNestingLevel);
+  _write_SPRG1((unsigned int)intrStack);
+
+  /* signal them that we have fixed PR288 - eventually, this should go away */
+  _write_SPRG0(PPC_BSP_HAS_FIXED_PR288);
+
   /*
    * Initialize default raw exception hanlders. See vectors/vectors_init.c
    */

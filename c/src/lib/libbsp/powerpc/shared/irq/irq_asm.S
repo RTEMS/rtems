@@ -9,6 +9,9 @@
  *  Modified to support the MCP750.
  *  Modifications Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
  *
+ *  Till Straumann <strauman@slac.stanford.edu>, 2003/7:
+ *    - store isr nesting level in _ISR_Nest_level rather than
+ *      SPRG0 - RTEMS relies on that variable.
  *
  * $Id$
  */
@@ -140,10 +143,18 @@ SYM (shared_raw_irq_code_entry):
 	 * store part of _Thread_Dispatch_disable_level address in R15
 	 */
 	addis r15,0, _Thread_Dispatch_disable_level@ha
+#if BROKEN_ISR_NEST_LEVEL
 	/*
 	 * Get current nesting level in R3
 	 */
 	mfspr	r3, SPRG0
+#else
+	/*
+	 * Retrieve current nesting level from _ISR_Nest_level
+	 */
+	lis		r7, _ISR_Nest_level@ha
+	lwz		r3, _ISR_Nest_level@l(r7)
+#endif
 	/*
 	 * Check if stack switch is necessary
 	 */
@@ -160,10 +171,15 @@ nested:
 	 * Start Incrementing _Thread_Dispatch_disable_level R4 = _Thread_Dispatch_disable_level
 	 */
 	lwz	r6,_Thread_Dispatch_disable_level@l(r15)
+#if BROKEN_ISR_NEST_LEVEL
 	/*
-	 * store new nesting level in SPRG0
+	 * Store new nesting level in SPRG0
 	 */
 	mtspr	SPRG0, r3
+#else
+	/* store new nesting level in _ISR_Nest_level */
+	stw		r3, _ISR_Nest_level@l(r7)
+#endif
 	
 	addi	r6, r6, 1
 	mfmsr	r5
@@ -187,14 +203,23 @@ nested:
 	 * value as an easy exit condition because if interrupt nesting level > 1
 	 * then _Thread_Dispatch_disable_level > 1
 	 */
+#if BROKEN_ISR_NEST_LEVEL
 	mfspr	r4, SPRG0
+#else
+	lis		r7, _ISR_Nest_level@ha
+	lwz		r4, _ISR_Nest_level@l(r7)
+#endif
 	/*
 	 * start decrementing _Thread_Dispatch_disable_level
 	 */
 	lwz	r3,_Thread_Dispatch_disable_level@l(r15)
 	addi	r4, r4, -1	/* Continue decrementing nesting level */
 	addi	r3, r3, -1	/* Continue decrementing _Thread_Dispatch_disable_level */
+#if BROKEN_ISR_NEST_LEVEL
 	mtspr	SPRG0, r4	/* End decrementing nesting level */
+#else
+	stw		r4, _ISR_Nest_level@l(r7) /* End decrementing nesting level */
+#endif
 	stw	r3,_Thread_Dispatch_disable_level@l(r15) /* End decrementing _Thread_Dispatch_disable_level */
 	cmpwi	r3, 0
 	/*
