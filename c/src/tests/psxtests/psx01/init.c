@@ -62,7 +62,7 @@ void *POSIX_Init(
 
   /* check the time remaining */
 
-  printf( "seconds remaining (%d)\n", (int)remaining );
+  printf( "Init: seconds remaining (%d)\n", (int)remaining );
   assert( !remaining );
 
   /* use nanosleep to delay */
@@ -82,33 +82,33 @@ void *POSIX_Init(
 
   /* check the time remaining */
 
-  printf( "sec (%d), nsec (%d) remaining\n", (int)tr.tv_sec, (int)tr.tv_nsec );
+  printf( "Init: sec (%ld), nsec (%ld) remaining\n", tr.tv_sec, tr.tv_nsec );
   assert( !tr.tv_sec && !tr.tv_nsec );
 
   /* get id of this thread */
 
   Init_id = pthread_self();
-  printf( "Init's ID is 0x%08x\n", Init_id );
+  printf( "Init: ID is 0x%08x\n", Init_id );
 
   /* print the minimum priority */
 
   priority = sched_get_priority_min( SCHED_FIFO );
-  printf( "Minimum priority for FIFO is %d\n", priority );
+  printf( "Init: Minimum priority for FIFO is %d\n", priority );
   assert( priority != -1 );
 
   /* print the maximum priority */
  
   priority = sched_get_priority_max( SCHED_FIFO );
-  printf( "Maximum priority for FIFO is %d\n", priority );
+  printf( "Init: Maximum priority for FIFO is %d\n", priority );
   assert( priority != -1 );
 
   /* print the round robin time quantum */
  
   status = sched_rr_get_interval( getpid(), &tr );
   printf(
-    "Round Robin quantum is %d seconds, %d nanoseconds\n",
-    (int) tr.tv_sec,
-    (int) tr.tv_nsec
+    "Init: Round Robin quantum is %ld seconds, %ld nanoseconds\n",
+    tr.tv_sec,
+    tr.tv_nsec
   );
   assert( !status );
   
