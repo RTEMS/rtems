@@ -53,7 +53,7 @@ Information in this section from:
 @itemize @bullet
 @item Brendan Simon <brendan@@dgs.monash.edu.au>
 @item W Gerald Hicks <wghicks@@bellsouth.net>
-@item Chris Johns <cjohns@@plessey.com.au>
+@item Chris Johns <ccj@@acm.org>
 @item Eric Norum <eric@@skatter.usask.ca>
 @item Gunter Magin <magin@@skil.camelot.de>
 
