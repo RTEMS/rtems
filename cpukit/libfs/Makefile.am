@@ -7,11 +7,7 @@ include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST = README
 
-include_rtemsdir = $(includedir)/rtems
-include_rtems_HEADERS =
-
 noinst_LIBRARIES = libimfs.a
-libimfs_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 libimfs_a_SOURCES =
 
@@ -30,16 +26,14 @@ libimfs_a_SOURCES += src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/imfs/imfs_handlers_link.c src/imfs/imfs_handlers_memfile.c \
     src/imfs/imfs_debug.c src/imfs/imfs_rmnod.c src/imfs/imfs_symlink.c \
     src/imfs/imfs_readlink.c src/imfs/imfs_fdatasync.c src/imfs/imfs_fcntl.c \
-    src/imfs/ioman.c src/imfs/miniimfs_init.c src/imfs/imfs_load_tar.c
+    src/imfs/ioman.c src/imfs/miniimfs_init.c src/imfs/imfs_load_tar.c \
+    src/imfs/imfs.h
 endif
-
-include_rtems_HEADERS += src/imfs/imfs.h
 
 # dosfs
 
 if !UNIX
 noinst_LIBRARIES += libdosfs.a
-libdosfs_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 # libdosfs_FATFS_C_FILES
 libdosfs_a_SOURCES = src/dosfs/fat.c src/dosfs/fat.h \
@@ -53,36 +47,12 @@ libdosfs_a_SOURCES += src/dosfs/msdos_create.c src/dosfs/msdos_dir.c \
     src/dosfs/msdos_handlers_file.c src/dosfs/msdos_init.c \
     src/dosfs/msdos_initsupp.c src/dosfs/msdos_misc.c \
     src/dosfs/msdos_mknod.c src/dosfs/msdos_node_type.c \
-    src/dosfs/msdos_conv.c src/dosfs/msdos.h src/dosfs/msdos_format.c
-
-include_rtems_HEADERS += src/dosfs/dosfs.h
+    src/dosfs/msdos_conv.c src/dosfs/msdos.h src/dosfs/msdos_format.c \
+    src/dosfs/dosfs.h
 endif
-
-EXTRA_DIST += $(UNUSED_FILES)
 
 all-local: $(PREINSTALL_FILES)
 
 # ---
-
-PREINSTALL_DIRS =
-PREINSTALL_FILES =
-
-$(PROJECT_INCLUDE)/rtems/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
-	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-
-$(PROJECT_INCLUDE)/rtems/imfs.h: src/imfs/imfs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/imfs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/imfs.h
-
-if !UNIX
-$(PROJECT_INCLUDE)/rtems/dosfs.h: src/dosfs/dosfs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/dosfs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dosfs.h
-endif
-
-CLEANFILES = $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/automake/local.am

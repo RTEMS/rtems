@@ -1,5 +1,12 @@
 2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Add new header guard to cpuopts.h.
+	* Makefile.am: Add libfs, libblock, ftpd header install rules.
+	* libfs/Makefile.am, libblock/Makefile.am, ftpd/Makefile.am: Remove
+	header install rules.
+
+2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* aclocal/rtems-top.m4 (rtems_updir): Quote sed args.
 
 2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>

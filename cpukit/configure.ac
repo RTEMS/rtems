@@ -132,8 +132,8 @@ cat >>cpuopts.tmp <<\_ACEOF
  */
 /* target cpu dependent options file */
 /* automatically generated -- DO NOT EDIT!! */
-#ifndef __CPU_OPTIONS_h
-#define __CPU_OPTIONS_h
+#ifndef _CPU_OPTIONS_H
+#define _CPU_OPTIONS_H
 _ACEOF
 
 RTEMS_CPUOPT([RTEMS_DEBUG],

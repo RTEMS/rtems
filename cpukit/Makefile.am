@@ -71,6 +71,26 @@ include_rtems_HEADERS = include/rtems/bspIo.h include/rtems/userenv.h \
     include/rtems/fs.h include/rtems/pci.h include/rtems/stdint.h \
     include/rtems/concat.h include/rtems/tar.h
 
+## libfs
+include_rtems_HEADERS += libfs/src/imfs/imfs.h
+
+if !UNIX
+include_rtems_HEADERS += libfs/src/dosfs/dosfs.h
+endif
+
+## libblock
+if !UNIX
+include_rtems_HEADERS += libblock/include/rtems/bdbuf.h \
+    libblock/include/rtems/blkdev.h libblock/include/rtems/diskdevs.h \
+    libblock/include/rtems/ramdisk.h \
+    libblock/include/rtems/ide_part_table.h
+endif
+
+## ftpd
+if HAS_NETWORKING
+include_rtems_HEADERS += ftpd/ftpd.h
+endif
+
 ## capture
 include_rtems_HEADERS += libmisc/capture/capture.h \
     libmisc/capture/capture-cli.h
@@ -303,6 +323,44 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/concat.h
 $(PROJECT_INCLUDE)/rtems/tar.h: include/rtems/tar.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/tar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/tar.h
+
+$(PROJECT_INCLUDE)/rtems/imfs.h: libfs/src/imfs/imfs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/imfs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/imfs.h
+
+if !UNIX
+$(PROJECT_INCLUDE)/rtems/dosfs.h: libfs/src/dosfs/dosfs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/dosfs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dosfs.h
+endif
+
+if !UNIX
+$(PROJECT_INCLUDE)/rtems/bdbuf.h: libblock/include/rtems/bdbuf.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bdbuf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bdbuf.h
+
+$(PROJECT_INCLUDE)/rtems/blkdev.h: libblock/include/rtems/blkdev.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/blkdev.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/blkdev.h
+
+$(PROJECT_INCLUDE)/rtems/diskdevs.h: libblock/include/rtems/diskdevs.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/diskdevs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/diskdevs.h
+
+$(PROJECT_INCLUDE)/rtems/ramdisk.h: libblock/include/rtems/ramdisk.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ramdisk.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ramdisk.h
+
+$(PROJECT_INCLUDE)/rtems/ide_part_table.h: libblock/include/rtems/ide_part_table.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ide_part_table.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ide_part_table.h
+endif
+
+if HAS_NETWORKING
+$(PROJECT_INCLUDE)/rtems/ftpd.h: ftpd/ftpd.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/ftpd.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/ftpd.h
+endif
 
 $(PROJECT_INCLUDE)/rtems/capture.h: libmisc/capture/capture.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/capture.h
