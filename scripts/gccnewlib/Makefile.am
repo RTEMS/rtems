@@ -5,8 +5,11 @@
 
 MKGCCNEWLIBSPEC = $(SHELL) $(top_builddir)/mkgccnewlibspec
 
-SUBPACKAGES = gccnewlib.add \
-    base-gcc.add target-gcc.add \
+SUBPACKAGES = header.add
+SUBPACKAGES += ../common/common.add
+SUBPACKAGES += gccnewlib.add
+SUBPACKAGES += ../common/clean.add
+SUBPACKAGES += base-gcc.add target-gcc.add \
     base-chill.add target-chill.add \
     base-g77.add target-g77.add \
     base-gcj.add target-gcj.add \
@@ -17,7 +20,8 @@ gccnewlib.spec.in: $(SUBPACKAGES)
 	| sed -e 's%@GCCLANGS@%%g' > $@
 CLEANFILES = gccnewlib.spec.in
 
-gccnewlib_c_only.spec.in: gccnewlib.add base-gcc.add target-gcc.add
+gccnewlib_c_only.spec.in: header.add ../common/common.add \
+   gccnewlib.add ../common/clean.add base-gcc.add target-gcc.add
 	cat $^ \
 	| sed -e "s%@GCCLANGS@%\'--enable-languages=c,c++\'%g" > $@
 CLEANFILES += gccnewlib_c_only.spec.in

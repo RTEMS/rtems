@@ -1,5 +1,23 @@
 2003-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* rtemsdoc/Makefile.am: Use $(top_builddir)/common/common.add,
+	$(top_builddir)/common/clean.add, header.add.
+	Generate rtemsdoc.spec.in.
+	* rtemsdoc/mkspec.in: Remove exe_ext.
+	* rtemsdoc/rtemsdoc.spec.in: Remove.
+	* gccnewlib/Makefile.am:  Use $(top_builddir)/common/common.add,
+        $(top_builddir)/common/clean.add, header.add.
+	* gccnewlib/base-gcc.m4: Replace @exe_ext@ with %{_exeext}.
+	* gccnewlib/base-gcj.add: Replace @exe_ext@ with %{_exeext}.
+	* gccnewlib/gccnewlib.add: Replace @exe_ext@ with %{_exeext}.
+	Remove header, broken cdn-X configuration, %clean.
+	* gccnewlib/target-g77.add: Replace @exe_ext@ with %{_exeext}.
+	* gccnewlib/target-gcc.add: Replace @exe_ext@ with %{_exeext}.
+	* gccnewlib/target-gcj.add: Replace @exe_ext@ with %{_exeext}.
+	* gccnewlib/target-objc.add: Replace @exe_ext@ with %{_exeext}.
+
+2003-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* gdb/gdb.add: Remove header, broken cdn-X configuration,
 	%clean, Replace @exe_ext@ with %{_exeext}.
 	* gdb/mkspec.in: Remove exe_ext.

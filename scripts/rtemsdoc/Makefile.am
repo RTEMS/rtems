@@ -30,7 +30,11 @@ DOCS += networking porting new_chapters
 DOCS += relnotes rgdb_specs rtems_gdb
 DOCS += started started_ada
 
-SUBPACKAGES = $(DOCS:%=%-docs.add)
+SUBPACKAGES = header.add
+SUBPACKAGES += ../common/common.add
+SUBPACKAGES += rtemsdoc.add
+SUBPACKAGES += ../common/clean.add
+SUBPACKAGES += $(DOCS:%=%-docs.add)
 CLEANFILES  += $(DOCS:%=%-docs.add)
 SUBPACKAGES += $(SUPPLEMENTS:%=%-supplement.add)
 CLEANFILES  += $(SUPPLEMENTS:%=%-supplement.add)
@@ -45,9 +49,13 @@ SUFFIXES = -supplement.add -docs.add
 	t=`echo $@ | sed -e 's,-docs.add,,'`; \
 	sed -e s/@target\@/$$t/g < $< >$@ 
 
+rtemsdoc.spec.in: $(SUBPACKAGES)
+	cat $^ > $@
+CLEANFILES += rtemsdoc.spec.in
+
 rtemsdoc.spec: $(MKSPEC_DEPS) $(SUBPACKAGES)
-	$(MKSPEC) -cfg $(top_builddir)/setup.cache -o . > $@
-	cat $(SUBPACKAGES) >> $@
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache > $@
+CLEANFILES += rtemsdoc.spec
 
 RPM_SPECS_DATA = rtemsdoc.spec
 

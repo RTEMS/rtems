@@ -14,6 +14,6 @@ This is the gcc/g77 compiler for @target_alias@
 
 %files -n @target_alias@-g77 -f build/files.g77
 %dir %{_prefix}/bin
-%{_prefix}/bin/@target_alias@-g77@exe_ext@
+%{_prefix}/bin/@target_alias@-g77%{_exeext}
 
-%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/f771@exe_ext@
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/f771%{_exeext}

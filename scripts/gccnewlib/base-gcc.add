@@ -20,7 +20,7 @@ This is the files for gcc and newlib that are shared by all targets.
 %doc %{_prefix}/info/libm.info*.gz
 
 %dir %{_prefix}/bin
-%{_prefix}/bin/gcov@exe_ext@
+%{_prefix}/bin/gcov%{_exeext}
 
 %dir %{_prefix}/man
 %dir %{_prefix}/man/man1

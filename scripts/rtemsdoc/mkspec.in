@@ -4,7 +4,6 @@ RTEMS_DIR=`dirname $0`/@top_srcdir@
 PACKAGE_BUGREPORT=@PACKAGE_BUGREPORT@
 
 CFG=../setup.cache
-exe_ext=@EXEEXT@
 
 usage()
 {
@@ -49,5 +48,4 @@ sed -e "s%@PACKAGE_BUGREPORT\@%@PACKAGE_BUGREPORT@%g" \
     -e "s%@rtems_version\@%${rtems_version}%g" \
     -e "s%@rtems_rpm_version\@%${rtems_rpm_version}%g" \
     -e "s,@rpm_build_root\@,${rpm_build_root},g" \
-    -e "s%@exe_ext\@%${exe_ext}%g" \
 < ${specsrc}
