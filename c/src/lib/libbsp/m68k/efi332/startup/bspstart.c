@@ -57,7 +57,7 @@ void bsp_libc_init()
   if (heap_start & (CPU_ALIGNMENT-1))
     heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
   
-  if (heap_start > RAM_END) {
+  if (heap_start > (rtems_unsigned32) RAM_END) {
     /* rtems_fatal_error_occurred can not be used before initalization */
     RAW_PUTS("\n\rRTEMS: Out of memory.\n\r");
     RAW_PUTS("RTEMS:    Check RAM_END and the size of the work space.\n\r");
