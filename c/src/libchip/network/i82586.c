@@ -263,22 +263,6 @@ char *bitmask_snprintf(unsigned long value, const char *format, char *buf, int b
   return buf;
 }
 
-char *ether_sprintf(unsigned char *addr)
-{
-  static char buf[32];
-  char *b = buf;
-  int i;
-
-  for (i = 0; i < ETHER_ADDR_LEN; i++)
-  {
-    sprintf(b, "%02x:", *addr++);
-    b += 3;
-  }
-  b--;
-  b = "\0";
-  return buf;
-}
-
 /*
  * Front-ends call this function to attach to the MI driver.
  *

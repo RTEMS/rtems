@@ -512,18 +512,20 @@ ether_input(ifp, eh, m)
 
 /*
  * Convert Ethernet address to printable (loggable) representation.
- * This routine is for compatibility; it's better to just use
- *
- *	printf("%6D", <pointer to address>, ":");
- *
- * since there's no static buffer involved.
+ * The static buffer isn't a really huge problem since this code
+ * is protected by the RTEMS network mutex.
  */
 char *
-ether_sprintf(const u_char *ap)
+ether_sprintf(const u_int8_t *addr)
 {
-	static char etherbuf[18];
-	snprintf(etherbuf, sizeof (etherbuf), "%6D", ap, ":");
-	return (etherbuf);
+	static char buf[32];
+	char *b = buf;
+	int i;
+
+	for (i = 0; i < ETHER_ADDR_LEN; i++, b+=3)
+		sprintf(b, "%02x:", *addr++);
+	*--b = '\0';
+	return buf;
 }
 
 /*
