@@ -1,5 +1,10 @@
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* src/dosfs/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* src/src/imfs/Makefile.am: Ditto.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* src/dosfs/Makefile.am: Use AM_CPPFLAGS instead of INCLUDES and
 	AM_CFLAGS. Eliminate LIBNAME.
 	* src/imfs/Makefile.am: Use AM_CPPFLAGS instead of INCLUDES and
