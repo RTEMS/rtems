@@ -10,4 +10,4 @@ VPATH=@srcdir@
 include $(RTEMS_CUSTOM)
 include $(PROJECT_ROOT)/make/directory.cfg
 
-SUB_DIRS=assoc error stackchk monitor wrapup
+SUB_DIRS=assoc error stackchk monitor cpuuse rtmonuse wrapup
