@@ -139,22 +139,36 @@ source code was available and royalties were paid.
 
 In other words, RTEMS was open source before open source was cool.
 
+Since the initial release to the world, the RTEMS Community has 
+grown enormously and contributed significantly to RTEMS.  Important
+additions such as the TCP/IP stack, FAT filesystem, multiple ports,
+device drivers, and most BSPs have come from users like yourself.
+
 @section Are there no similar commercial products?
 
 Yes, but not all are based on standards and the open source philosophy.
 
 @section How can I get RTEMS?
 
-RTEMS is distributed by @uref{http://www.OARcorp.com,OAR Corporation} via the
-Internet.  Point your
+RTEMS is distributed from @uref(http://www.rtems.com,http://www.rtems.com).
+This is a server dedicated to the RTEMS Project which was donated by and
+hosted by @uref{http://www.OARcorp.com,OAR Corporation} to provide
+a focal point for all RTEMS activities.  Point your
 favorite browser at the following URL and following the link:
 
 @uref{@value{RTEMSHTTPURL},@value{RTEMSHTTPURL}}
 
+But if you are already reading this, you probably already found it. :)
+
 @section What about support?
 
-OAR Corporation provides numerous services for RTEMS including support,
-training, and custom development.
+RTEMS development and support services are available from a number
+of firms.  See
+@uref(http://www.rtems.com/support.html,http://www.rtems.com/support.html)
+for the current list of RTEMS service providers.
+
+Remember that RTEMS maintenance is funded by users.  If you are
+using RTEMS on a commercial project, please get support.
 
 @section Are there any mailing lists?
 

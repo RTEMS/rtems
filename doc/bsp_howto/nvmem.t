@@ -25,12 +25,11 @@ by this class of device driver are:
 @end itemize
 
 There is currently only one non-volatile device driver included in the
-RTEMS source tree and it does not adhere to this device driver model.  
-The information provided in this chapter is based on drivers developed
-by OAR Corporation personnel for applications using RTEMS.   It is
-hoped that this driver model information can form the basis for a standard
-non-volatile memory driver model that can be supported in future RTEMS
-distribution.
+RTEMS source tree.  The information provided in this chapter
+is based on drivers developed for applications using RTEMS.
+It is hoped that this driver model information can form the
+basis for a standard non-volatile memory driver model that
+can be supported in future RTEMS distribution.
 
 @section Major and Minor Numbers
 

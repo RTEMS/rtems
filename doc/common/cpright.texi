@@ -17,7 +17,7 @@
 @end tex
 
 @vskip 0pt plus 1filll
-COPYRIGHT @copyright{} 1988 - 2002.@*
+COPYRIGHT @copyright{} 1988 - 2003.@*
 On-Line Applications Research Corporation (OAR).@*
 
 The authors have used their best efforts in preparing
@@ -31,17 +31,10 @@ assumed.  The authors reserve the right to revise this material
 and to make changes from time to time in the content hereof
 without obligation to notify anyone of such revision or changes.
 
+The RTEMS Project is hosted at @uref{http://www.rtems.com}.
 Any inquiries concerning RTEMS, its related support
 components, its documentation, or any custom services
-for RTEMS should be directed to:
-
-@example
-On-Line Applications Research Corporation
-4910-L Corporate Drive
-Huntsville, AL 35805
-VOICE: (256) 722-9985
-FAX:   (256) 722-0985
-EMAIL: rtems@@OARcorp.com
-URL:   http://www.oarcorp.com
-@end example
+for RTEMS should be directed to the contacts listed on
+that site.  A current list of RTEMS Support Providers
+is at @uref{http://www.rtems.com/support.html}.
 

@@ -1,3 +1,18 @@
+2003-08-29	Joel Sherrill <joel@OARcorp.com>
+
+	* HELP.html, index.html.in, rtems_footer.html.in, rtems_header.html.in,
+	rtems_support.html.in, FAQ/basic.t, FAQ/build45.t,
+	bsp_howto/analog.t, bsp_howto/discrete.t, bsp_howto/nvmem.t,
+	bsp_howto/target.t, common/cpright.texi, gnu_docs/gnu_footer.html,
+	gnu_docs/gnu_header.html, gnu_docs/index.html, gnu_docs/refcard.html,
+	gnu_docs/rtems_tools_index.html, relnotes/install.texi,
+	relnotes/intro.texi, relnotes/status.texi, started/nextstep.t,
+	started_ada/intro.t, started_ada/tversions.texi: Migrate many
+	obsolete references from oarcorp.com to rtems.com. Also send people
+	to the support.html page rather than duplicate information.
+	* images/rtems_logo.jpg: New file.
+	* SUPPORT: Removed.
+
 2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Extract toolversions from ../scripts/setup.def.

@@ -44,7 +44,7 @@ This RTEMS release package contains the following general components:
 
 There is a mailing list dedicated to RTEMS.  This is
 a Majordomo style mailing list and may be subscribed to
-by sending a message to rtems-list-request@@OARcorp.com with
+by sending a message to rtems-list-request@@rtems.com with
 the following line as the body:
 
 @example
@@ -191,27 +191,8 @@ The primary ftp site for this library is ftp.cygnus.com (205.180.83.42).
 @end ifinfo
 @section Documentation
 
-The RTEMS Documentation Set is provided online at http://www.OARcorp.com/
-as reference information for all levels of RTEMS users.  The set includes
-the following documents:
+The RTEMS Documentation Set is provided online at 
+@uref{http://www.rtems.com/onlinedocs.html}
+as reference information for all levels of RTEMS users.  
 
-@itemize @bullet
-@item C Applications User's Guide
-
-@item Intel i386 Applications Supplement
-
-@item Intel i960CA Applications Supplement
-
-@item Motorola MC68xxx Applications Supplement
-
-@item Hewlett Packard PA-RISC 1.1 Applications Supplement
-
-@item SPARC Applications Supplement
-
-@item Development Environment Guide
-
-@item Release Notes
-@end itemize
-
-The RTEMS documentation set is available in alternate formats to 
-support customers.
+The RTEMS documentation set is available in HTML, PostScript, PDF, and DVI.

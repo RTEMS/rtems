@@ -154,8 +154,8 @@ prefix, eg.  i386-rtems-gcc, m68k-rtems-ld are target tools.
 Host tools are supposed not to be prefixed.
 e.g.: cc, ld, gcc, autoconf, automake, aclocal etc.
 
-If using OAR Corporation's rpms for the toolchain, simply prepend
-@code{/opt/rtems/bin} to @code{$PATH}.
+If using the pre-built tool binaries provided by the RTEMS project,
+simply prepend @code{/opt/rtems/bin} to @code{$PATH}.
 
 @subsection Can I build RTEMS Canadian Cross?
 

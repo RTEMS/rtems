@@ -28,11 +28,10 @@ DACs or ADCs on a single card.
 
 There are currently no analog device drivers included in the 
 RTEMS source tree.  The information provided in this chapter
-is based on drivers developed by OAR Corporation personnel
-for applications using RTEMS.   It is hoped that this
-driver model information can form the basis for a standard
-analog driver model that can be supported in future RTEMS
-distribution.
+is based on drivers developed for applications using RTEMS.
+It is hoped that this driver model information can form the
+basis for a standard analog driver model that can be supported
+in future RTEMS distribution.
 
 @section Major and Minor Numbers
 

@@ -45,8 +45,9 @@ Throughout the rest of this manual
 <RTEMS_distribution> will be used as the parent of components
 within the RTEMS distribution.  For persons using the ftp
 distribution found on the primary ftp site for RTEMS,
-<RTEMS_distribution> is
-ftp://ftp.OARcorp.com/oarcorp/rtems/@value{VERSION}.
+<RTEMS_distribution> are found under this directory
+@uref{ftp://ftp.rtems.com/pub/rtems/}.  HTTP access to the
+ftp site is available via @uref{http://www.rtems.com/ftp/pub/rtems}.
 
 The archive files for RTEMS Release @value{VERSION} are found
 under the directory <RTEMS_distribution>.  This directory
@@ -55,9 +56,6 @@ patches which may be required for other tools.
 
 The complete source code and documentation set for
 the C language implementation of RTEMS is provided.
-
-Documentation other than this on-line version is available to
-OAR support customers.  Please contact OAR for more information.
 
 @ifinfo
 @node Installation Procedure Unarchiving the RTEMS and GNU Components, Installation Procedure Installing a Cross-Development GNU Toolset, Installation Procedure RTEMS FTP Site Organization, Installation Procedure
@@ -69,8 +67,8 @@ Many of the components of the RTEMS release are
 The GNU zip package is required to unarchives these files on the
 RTEMS ftp site.  If this package is not installed, the source
 can be found in the files
-ftp://prep.ai.mit.edu/pub/gnu/gzip-1.2.4.shar or
-ftp://prep.ai.mit.edu/pub/gnu/gzip-1.2.4.tar.  It may be
+@uref{ftp://ftp.gnu.org/pub/gnu/gzip/gzip-1.2.4.shar} or
+@uref{ftp://ftp.gnu.org/pub/gnu/gzip/gzip-1.2.4.tar}.  It may be
 restored using a command similar to the following:
 
 @example

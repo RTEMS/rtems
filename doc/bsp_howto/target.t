@@ -102,12 +102,10 @@ be augmented.  After this is done, development of the new BSP can proceed.
 
 Otherwise both CPU dependent code and the BSP will have to be written.
 
-Regardless of the amount of development required, OAR Corporation
-offers custom development services to assist RTEMS users.
-For more information on custom development, training courses, and
-support, contact OAR Corporation at
-@uref{http://www.oarcorp.com}.
-
+This type of development often requires specialized skills.  If
+you need help in making these modifications to RTEMS, please
+consider using one of the RTEMS Service Providers.  The current
+list of these is at @uref(http://www.rtems.com/support.html}.
 
 @section CPU Dependent Executive Files
 

@@ -55,8 +55,8 @@
 @c @set BINUTILSVERSION     gas 980314
 @c @set BINUTILSTAR         gas-980314.tgz
 @c @set BINUTILSUNTAR       gas-980314
-@c @set BINUTILSFTPSITE     ftp.OARcorp.com
-@c @set BINUTILSFTPDIR      /oarcorp/private/beta3/ada_tools
+@c @set BINUTILSFTPSITE     ftp.rtems.com
+@c @set BINUTILSFTPDIR      XXXX
 @c @set BINUTILSRTEMSPATCH  binutils-2.8.1-rtems-diff-980321.gz
 
 @c
@@ -89,7 +89,7 @@
 @set RTEMSVERSION   RTEMS 4.5.1
 @set RTEMSTAR       rtems-4.5.1.tgz
 @set RTEMSUNTAR     rtems-4.5.1
-@set RTEMSFTPSITE   ftp.OARcorp.com
+@set RTEMSFTPSITE   ftp.rtems.com
 @set RTEMSFTPDIR    /pub/rtems/releases/4.5.1
 @set BUILDTOOLSTAR  c_build_scripts-4.5.1.tgz 
 
