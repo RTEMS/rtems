@@ -8,12 +8,7 @@ VPATH=@srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-H_FILES = \
-	$(srcdir)/null.h \
-	$(srcdir)/sh7_pfc.h \
-	$(srcdir)/sh7_sci.h \
-	$(srcdir)/termbits.h \
-	$(srcdir)/ioqueue.h
+H_FILES = $(wildcard $(srcdir)/*.h)
 
 SRCS=$(H_FILES)
 
