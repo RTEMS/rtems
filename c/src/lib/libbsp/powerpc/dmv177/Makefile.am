@@ -13,5 +13,5 @@ include $(top_srcdir)/../../bsp.am
 
 EXTRA_DIST = QUIRKS README.net STATUS bsp_specs cable.doc times
 
-include $(top_srcdir)/../../../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/subdirs.am
+include $(top_srcdir)/../../../../automake/local.am
