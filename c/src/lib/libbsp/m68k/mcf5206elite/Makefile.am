@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 

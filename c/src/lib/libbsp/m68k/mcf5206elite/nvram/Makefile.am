@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 PGM = $(ARCH)/nvram.rel
 

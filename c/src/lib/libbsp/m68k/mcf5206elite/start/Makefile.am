@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 S_FILES = start.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))

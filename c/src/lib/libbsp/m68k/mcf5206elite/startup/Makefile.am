@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 

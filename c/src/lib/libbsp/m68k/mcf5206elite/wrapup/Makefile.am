@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 BSP_PIECES = startup console i2c tod nvram
 
