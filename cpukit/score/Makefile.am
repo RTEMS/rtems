@@ -142,7 +142,7 @@ THREAD_C_FILES = src/thread.c src/threadchangepriority.c src/threadclearstate.c 
     src/threadsetpriority.c src/threadsetstate.c src/threadsettransient.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
     src/threadstartmultitasking.c src/threadsuspend.c src/threadtickletimeslice.c \
-    src/threadyieldprocessor.c
+    src/threadyieldprocessor.c src/iterateoverthreads.c
 
 THREADQ_C_FILES = src/threadq.c src/threadqdequeue.c src/threadqdequeuefifo.c \
     src/threadqdequeuepriority.c src/threadqenqueue.c src/threadqenqueuefifo.c \

@@ -1,6 +1,13 @@
 2003-08-14	Joel Sherrill <joel@OARcorp.com>
 
-	* ChangeLog: Add fileio to list of interactive tests.
+	PR 408/filesystem
+	* score/Makefile.am, score/include/rtems/score/thread.h: Added
+	sync() service. As part of adding this service, the
+	new RTEMS service rtems_iterate_over_all_threads() was also added.
+	This new service makes it easier to iterate over all the
+	tasks/threads in a system and perform an action on them.
+	* score/src/iterateoverthreads.c: New file.
+	* ChangeLog: Fixed screwup.
 
 2003-07-18	Till Straumann <strauman@slac.stanford.edu>
 

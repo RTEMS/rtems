@@ -763,6 +763,21 @@ Thread _Thread_Idle_body(
 );
 #endif
 
+/*
+ *  rtems_iterate_over_all_tasks
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine iterates over all threads regardless of API and
+ *  invokes the specified routine.
+ */
+ 
+typedef void (*rtems_per_thread_routine)( Thread_Control * );
+
+void rtems_iterate_over_all_threads(
+  rtems_per_thread_routine routine
+);
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/thread.inl>
 #endif
