@@ -12,6 +12,8 @@
 
 void bsp_cleanup( void )
 {
+#if 0
   asm volatile( "li  10,99" );  /* 0x63 */
   asm volatile( "sc" );
+#endif
 }
