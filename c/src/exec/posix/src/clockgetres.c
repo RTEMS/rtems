@@ -36,8 +36,11 @@ int clock_getres(
     case CLOCK_REALTIME:
     case CLOCK_PROCESS_CPUTIME:
     case CLOCK_THREAD_CPUTIME:
-      if ( res )
-        _POSIX_Interval_to_timespec( _TOD_Microseconds_per_tick, res ); 
+      if ( res ) {
+        res->tv_sec = _TOD_Microseconds_per_tick / 1000000;
+        res->tv_nsec = _TOD_Microseconds_per_tick * 1000;
+        /* _POSIX_Interval_to_timespec( _TOD_Microseconds_per_tick, res );  */
+      }
       break;
  
     default:
