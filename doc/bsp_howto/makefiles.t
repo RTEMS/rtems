@@ -10,17 +10,39 @@
 
 @section Makefiles Used During The BSP Building Process
 
-There's a makefile template in each directory of a BSP. They are called
-"makefile.in" and are processed when building RTEMS for a given BSP. One
-should specify the needed files and directories before the building
-process. 
+There is a file named @code{Makefile.in} in each directory of a BSP.
+RTEMS uses the @b{GNU autoconf} automatic configuration package. 
+This tool specializes the @code{Makefile.in} files at the time that RTEMS
+is configured for a specific development host and target.  Makefiles
+are automatically generated from the @code{Makefile.in} files.  It is
+necessary for the BSP developer to provide these files.  Most of the
+time, it is possible to copy the @code{Makefile.in} from another
+similar directory and edit it.
+
+The @code{Makefile} files generated are processed when building
+RTEMS for a given BSP.
+
+The BSP developer is responsible for generating @code{Makefile.in} 
+files which properly build all the files associated with their BSP.
+There are generally three types of Makefiles in a BSP source tree:
+
 
 @itemize @bullet
+@item Directory Makefiles
+@item Source Directory Makefiles
+@item Wrapup Makefile
+@end itemize
 
-@item the makefile.in at the BSP root specifies which folders have to be
-included. For instance,
+@subsection Directory Makefiles
 
-@item We only build the networking device driver if HAS_NETWORKING was defined
+The Directory class of Makefiles directs the build process through
+a set of subdirectories in a particular order.  This order is usually
+chosen to insure that build dependencies are properly processed. 
+Most BSPs only have one Directory class Makefile.  The @code{Makefile.in}
+in the BSP root directory (@code{c/src/lib/libbsp/CPU/BSP}) specifies
+which directories are to be built for this BSP. For example, the
+following Makefile fragment shows how a BSP would only build the
+networking device driver if HAS_NETWORKING was defined:
 
 @example
 NETWORKING_DRIVER_yes_V = network
@@ -32,38 +54,93 @@ SUB_DIRS=include start340 startup clock console timer \
     $(NETWORKING_DRIVER) wrapup
 @end example
 
-states that all the directories have to be processed, except for the
-network directory which is included only if the user asked for it when
-building RTEMS. 
+This fragment states that all the directories have to be processed,
+except for the @code{network} directory which is included only if the
+user configured networking.
 
-@item the makefile.in in each driver directory. It lists the files to be
-included in the driver, so don't forget to add the reference to a new file
-in the makefile.in of a given driver when it is created! 
+@subsection Source Directory Makefiles
 
-@end itemize
+There is a @code{Makefile.in} in most of the directories in a BSP. This
+class of Makefile lists the files to be built as part of the driver.
+Do not forget to add the reference to a new file in the @code{Makefile.in}
+it is created! 
 
-
-Rem : the makefile.in files are ONLY processed during the configure
+@b{NOTE:} The @code{Makefile.in} files are ONLY processed during the configure
 process of a RTEMS build. It means that, when you're working on the design
 of your BSP, and that you're adding a file to a folder and to the
-corresponding makefile.in, it will not be take n into account! You have to
-run configure again or modify the makefile (result of the makefile.in
-process, usually in your <the RTEMS build
-directory>/c/src/lib/libbsp/<your BSP family>/<your BSP>/<your driver>
-directory) by hand. 
+corresponding makefile.in, it will not be taken into account! You have to
+run configure again or modify the @code{Makefile} (the result of the 
+configure process) by hand.  This file will be in a directory such as 
+the following:
+
+@example
+MY_BUILD_DIR/c/src/lib/libbsp/CPU/BSP/DRIVER
+@end example
+
+@subsection Wrapup Makefile
+
+This class of Makefiles produces a library.  The BSP wrapup Makefile
+is responsible for producing the library @code{libbsp.a} which is later
+merged into the @code{librtemsall.a} library.  This Makefile specifies
+which BSP components are to be placed into the library as well as which
+components from the CPU dependent support code library.  For example,
+this component may choose to use a default exception handler from the
+CPU dependent support code or provide its own.
+
+This Makefile makes use of a neat construct in @b{GNU make} to pick 
+up the required components:
+
+@example
+BSP_PIECES=startup clock console timer
+CPU_PIECES=
+GENERIC_PIECES=
+
+# bummer; have to use $foreach since % pattern subst rules only replace 1x
+OBJS=$(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
+   $(foreach piece, $(CPU_PIECES), \
+       ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/$(piece).rel) \
+   $(wildcard \
+  ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/fpsp/$(ARCH)/fpsp.rel) \
+   $(foreach piece, $(GENERIC_PIECES), ../../../$(piece)/$(ARCH)/$(piece).rel)
+@end example
+
+The variable @code{OBJS} is the list of "pieces" expanded to include
+path information to the appropriate object files.  The @code{wildcard}
+function is used on pieces of @code{libbsp.a} which are optional and
+may not be present based upon the configuration options.
 
 @section Makefiles Used Both During The BSP Design and its Use
 
-A BSP must go with his configuration file. The configuration files can be
-found under $RTEMS_ROOT/c/make/custom. The configuration file is taken
-into account when building one's application using the template makefiles
-($RTEMS_ROOT/c/make/templates), whic h is strongly advised. There are
-templates for calling recursively the makefiles in the directories beneath
-the current one, building a library or an executable.
+When building a BSP or an application using that BSP, it is necessary
+to tailor the compilation arguments to account for compiler flags, use
+custom linker scripts, include the RTEMS libraries, etc..  The BSP
+must be built using this information.  Later, once the BSP is installed
+with the toolset, this same information must be used when building the
+application.  So a BSP must include a build configuration file.  The
+configuration file is @code{make/custom/BSP.cfg}.
 
-The following is a hevaily commented version of the make customization
-file for the gen68340 BSP.  It can be found in the $RTEMS_ROOT/make/custom
-directory.
+The configuration file is taken into account when building one's
+application using the RTEMS template Makefiles (@code{make/templates}). 
+It is strongly advised to use these template Makefiles since they 
+encapsulate a number of build rules along with the compile and link
+time options necessary to execute on the target board.
+
+There are template Makefiles provided for each of the classes of RTEMS
+Makefiles.  This include Makefiles to:
+
+@itemize @bullet
+@item call recursively the makefiles in the directories beneath
+the current one,
+
+@item build a library, or
+
+@item build an executable.
+
+@end itemize
+
+The following is a shortened and heavily commented version of the
+make customization file for the gen68340 BSP.  The original source
+for this file can be found in the @code{make/custom} directory.
 
 @example
 
@@ -110,17 +187,21 @@ define make-exe
 endif
 @end example
 
+@subsection Creating a New BSP Make Customization File
 
-
-What you have to do:
+The basic steps for creating a @code{make/custom} file for a new BSP
+is as follows:
 
 @itemize @bullet
 
-@item copy any .cfg file to <your BSP>.cfg
+@item copy any @code{.cfg} file to @code{BSP.cfg}
 
-@item modify RTEMS_CPU, TARGET_ARCH, RTEMS_CPU_MODEL, RTEMS_BSP_FAMILY,
-RTEMS_BSP, CPU_CFLAGS, START_BASE accordingly. 
+@item modify RTEMS_CPU, RTEMS_CPU_MODEL, RTEMS_BSP_FAMILY,
+RTEMS_BSP, CPU_CFLAGS, START_BASE, and make-exe rules.
 
 @end itemize
+
+It is generally easier to copy a @code{make/custom} file which is for a
+BSP close to your own.
 
 

@@ -74,10 +74,10 @@ target.texi: target.t Makefile
 makefiles.texi: makefiles.t Makefile
 	$(BMENU) -p "Target Dependent Files Board Support Package Structure" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Linker Script" ${*}.t
 
 linkcmds.texi: linkcmds.t Makefile
-	$(BMENU) -p "" \
+	$(BMENU) -p "Makefiles Creating a New BSP Make Customization File" \
 	    -u "Top" \
 	    -n "" ${*}.t
 

@@ -26,7 +26,7 @@ into one of the following categories.
 This class of code includes the foundation
 routines for the executive proper such as as the context switch and
 the interrupt subroutine implementations.  Sources for the supported
-processor families can be found in @code{$RTEMS_ROOT/c/src/exec/score/cpu}.
+processor families can be found in @code{c/src/exec/score/cpu}.
 A good starting point for a new family of processors is the
 @code{no_cpu} directory, which holds both prototypes and
 descriptions of each needed CPU dependent function. 
@@ -191,13 +191,6 @@ bundles all the components necessary to construct the BSP library.
 The build order of the BSP is determined by the Makefile structure.
 This structure is discussed in more detail in the @ref{Makefiles}
 chapter.
-RTEMS uses the @b{GNU autoconf} automatic configuration package.  This
-tool specializes the @code{Makefile.in} files at the time that RTEMS
-is configured for a specific development host and target.  Makefiles
-are automatically generated from the @code{Makefile.in} files.  It is
-necessary for the BSP developer to provide these files.  Most of the
-time, it is possible to copy the @code{Makefile.in} from another
-similar directory and edit it.
 
 @b{NOTE:} This manual refers to the gen68340 BSP for numerous concrete
 examples.  You should have a copy of the gen68340 BSP available while
