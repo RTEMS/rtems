@@ -1,3 +1,10 @@
+2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add subdir-objects to AUTOMAKE_OPTIONS.
+	Require automake-1.8.2.
+	Add RTEMS_PROG_CCAS.
+	Add AM_PROG_CC_C_O.
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
