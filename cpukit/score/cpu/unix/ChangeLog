@@ -1,7 +1,11 @@
+2004-04-09	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* Makefile.am: Remove LIBC_DEFINES (Unsupported).
+
 2004-04-06	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* rtems/score/cpu.h: Remove unixsize.h.
-	* configure.ac: Remove (Merged into$(top_srcdir)/configure.ac).
+	* configure.ac: Remove (Merged into $(top_srcdir)/configure.ac).
 	* Makefile.am: Remove unixsize.h.
 	Don't include multilib.am.
 	Reflect merging configure.ac into $(top_srcdir)/configure.ac.

@@ -4,7 +4,7 @@
 
 include $(top_srcdir)/automake/compile.am
 
-AM_CPPFLAGS += -DCPU_SYNC_IO $(LIBC_DEFINES)
+AM_CPPFLAGS += -DCPU_SYNC_IO
 
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/types.h rtems/score/cpu.h \
