@@ -4,7 +4,7 @@
  *  The generic CPU dependent initialization has been performed
  *  before any of these are invoked.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2003.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -50,9 +50,6 @@ extern rtems_unsigned32  rdb_start;
  * Amount to increment itimer by each pass
  * It is a variable instead of a #define to allow the 'looptest'
  * script to bump it without recompiling rtems
- *
- *  NOTE:  This is based on the PA-RISC simulator.  I don't know if we
- *         can actually pull this trick on the SPARC simulator.
  */
 
 rtems_unsigned32 CPU_SPARC_CLICKS_PER_TICK;
@@ -134,7 +131,7 @@ void bsp_pretasking_hook(void)
    *  Install the fast idle task switch extension
    *
    *  On MP systems, might not want to do this; it confuses at least
-   *  one test (mp06) on the PA-RISC simulator
+   *  one test (mp06) if the simulators are running too far from real time.
    */
 
 #if 0
