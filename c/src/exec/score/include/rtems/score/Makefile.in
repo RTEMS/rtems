@@ -10,7 +10,7 @@ VPATH=@srcdir@
 # H_FILES that get installed in the rtems/score subdirectoy
 H_PIECES= address apiext bitfield chain context copyrt coremsg coremutex \
     coresem heap interr isr mpci mppkt object objectmp \
-    priority stack states sysstate system thread threadmp threadq \
+    priority stack states sysstate thread threadmp threadq \
     tod tqdata userext watchdog wkspace
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 
@@ -19,9 +19,11 @@ SAPI_H_PIECES=debug system
 SAPI_H_FILES=$(SAPI_H_PIECES:%=$(srcdir)/%.h)
 
 # H_FILES that get installed at the top level
-# system.h is handled specially
 EXTERNAL_H_PIECES = 
 EXTERNAL_H_FILES=$(EXTERNAL_H_PIECES:%=$(srcdir)/%.h)
+
+NET_H_PIECES = in
+NET_H_FILES=$(NET_H_PIECES:%=$(srcdir)/%.h)
 
 SRCS=$(H_FILES) $(SAPI_H_FILES) $(EXTERNAL_H_FILES)
 
@@ -41,4 +43,5 @@ CLOBBER_ADDITIONS +=
 all:	$(SRCS)
 	$(INSTALL) -m 444 ${H_FILES} ${PROJECT_RELEASE}/include/rtems/score
 	$(INSTALL) -m 444 ${SAPI_H_FILES} ${PROJECT_RELEASE}/include/rtems/
+	$(INSTALL) -m 444 ${NET_H_FILES} ${PROJECT_RELEASE}/include/netinet
 #	$(INSTALL) -m 444 ${EXTERNAL_H_FILES} ${PROJECT_RELEASE}/include

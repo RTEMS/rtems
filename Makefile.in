@@ -41,6 +41,7 @@ RTEMS_ROOT = @RTEMS_ROOT@
 RTEMS_HOST = @RTEMS_HOST@
 PROJECT_ROOT = @PROJECT_ROOT@
 RTEMS_HAS_POSIX_API = @RTEMS_HAS_POSIX_API@
+RTEMS_HAS_KA9Q = @RTEMS_HAS_KA9Q@
 RTEMS_USE_MACROS = @RTEMS_USE_MACROS@
 
 ifeq ($(RTEMSBSP),)
@@ -83,6 +84,7 @@ $(MTARGETS): mlink
             \"PROJECT_HOME=$(PROJECT_ROOT)/$$bsp\" \
             \"PROJECT_ROOT=$(PROJECT_ROOT)\" \
             \"RTEMS_HAS_POSIX_API=$(RTEMS_HAS_POSIX_API)\" \
+            \"RTEMS_HAS_KA9Q=$(RTEMS_HAS_KA9Q)\" \
             \"RTEMS_USE_MACROS=$(RTEMS_USE_MACROS)\" \
             \"AWK=$(AWK)\" $@" ; \
 	    eval $$cmd || $(EXIT_CMD); \

@@ -79,12 +79,34 @@ rtems_libio_t *rtems_libio_last_iop;
         } \
     } while (0)
 
+/*
+ * External I/O handlers
+ * 
+ * Space for all possible handlers is preallocated
+ * to speed up dispatch to external handlers.
+ */
+
+static rtems_libio_handler_t handlers[15];
+
+void
+rtems_register_libio_handler(
+    int                         handler_flag,
+    const rtems_libio_handler_t *handler
+)
+{
+  int handler_index = rtems_file_descriptor_type_index(handler_flag);
+
+  if ((handler_index < 0) || (handler_index >= 15))
+    rtems_fatal_error_occurred( RTEMS_INVALID_NUMBER );
+  handlers[handler_index] = *handler;
+}
+
 
 void
 rtems_libio_config(
     rtems_configuration_table *config,
     unsigned32                 max_fds
-  )
+)
 {
     rtems_libio_number_iops = max_fds;
 
@@ -253,15 +275,16 @@ __rtems_open(
     rtems_driver_name_t *np;
     rtems_libio_open_close_args_t args;
 
-    if ((rc = rtems_io_lookup_name(pathname, &np)) != RTEMS_SUCCESSFUL) {
-/*
-      if ( rc == RTEMS_UNSATISFIED ) {
-        puts( "open -- ENOSYS case" );
-        assert( 0 );
-      }
-*/
+    /*
+     * Additional external I/O handlers would be supported by
+     * adding code to pick apart the pathname appropriately.
+     * The networking code does not require changes here since
+     * network file descriptors are obtained using socket(), not
+     * open().
+     */
+
+    if ((rc = rtems_io_lookup_name(pathname, &np)) != RTEMS_SUCCESSFUL)
         goto done;
-    }
 
     iop = rtems_libio_allocate();
     if (iop == 0)
@@ -299,9 +322,20 @@ __rtems_close(
 {
     rtems_status_code rc;
     rtems_driver_name_t *np;
-    rtems_libio_t *iop = rtems_libio_iop(fd);
+    rtems_libio_t *iop;
     rtems_libio_open_close_args_t args;
 
+    if (rtems_file_descriptor_type(fd)) {
+        int (*fp)(int fd);
+
+        fp = handlers[rtems_file_descriptor_type_index(fd)].close;
+        if (fp == NULL) {
+            errno = EBADF;
+            return -1;
+        }
+        return (*fp)(fd);
+    }
+    iop = rtems_libio_iop(fd);
     rtems_libio_check_fd(fd);
 
     np = iop->driver;
@@ -326,9 +360,20 @@ __rtems_read(
 {
     rtems_status_code rc;
     rtems_driver_name_t *np;
-    rtems_libio_t *iop = rtems_libio_iop(fd);
+    rtems_libio_t *iop;
     rtems_libio_rw_args_t args;
 
+    if (rtems_file_descriptor_type(fd)) {
+        int (*fp)(int fd, void *buffer, unsigned32 count);
+
+        fp = handlers[rtems_file_descriptor_type_index(fd)].read;
+        if (fp == NULL) {
+            errno = EBADF;
+            return -1;
+        }
+        return (*fp)(fd, buffer, count);
+    }
+    iop = rtems_libio_iop(fd);
     rtems_libio_check_fd(fd);
     rtems_libio_check_buffer(buffer);
     rtems_libio_check_count(count);
@@ -362,9 +407,20 @@ __rtems_write(
 {
     rtems_status_code rc;
     rtems_driver_name_t *np;
-    rtems_libio_t *iop = rtems_libio_iop(fd);
+    rtems_libio_t *iop;
     rtems_libio_rw_args_t args;
 
+    if (rtems_file_descriptor_type(fd)) {
+        int (*fp)(int fd, const void *buffer, unsigned32 count);
+
+        fp = handlers[rtems_file_descriptor_type_index(fd)].write;
+        if (fp == NULL) {
+            errno = EBADF;
+            return -1;
+        }
+        return (*fp)(fd, buffer, count);
+    }
+    iop = rtems_libio_iop(fd);
     rtems_libio_check_fd(fd);
     rtems_libio_check_buffer(buffer);
     rtems_libio_check_count(count);
@@ -397,9 +453,20 @@ __rtems_ioctl(
 {
     rtems_status_code rc;
     rtems_driver_name_t *np;
-    rtems_libio_t *iop = rtems_libio_iop(fd);
+    rtems_libio_t *iop;
     rtems_libio_ioctl_args_t args;
 
+    if (rtems_file_descriptor_type(fd)) {
+        int (*fp)(int fd, unsigned32 command, void *buffer);
+
+        fp = handlers[rtems_file_descriptor_type_index(fd)].ioctl;
+        if (fp == NULL) {
+            errno = EBADF;
+            return -1;
+        }
+        return (*fp)(fd, command, buffer);
+    }
+    iop = rtems_libio_iop(fd);
     rtems_libio_check_fd(fd);
 
     np = iop->driver;
@@ -428,8 +495,19 @@ __rtems_lseek(
     int                  whence
   )    
 {
-    rtems_libio_t *iop = rtems_libio_iop(fd);
+    rtems_libio_t *iop;
 
+    if (rtems_file_descriptor_type(fd)) {
+        int (*fp)(int fd, rtems_libio_offset_t offset, int whence);
+
+        fp = handlers[rtems_file_descriptor_type_index(fd)].lseek;
+        if (fp == NULL) {
+            errno = EBADF;
+            return -1;
+        }
+        return (*fp)(fd, offset, whence);
+    }
+    iop = rtems_libio_iop(fd);
     rtems_libio_check_fd(fd);
 
     switch (whence)

@@ -1,5 +1,7 @@
 /*
- *  This file contains GNU linker directives for a generic MC68360 board.
+ * This file contains GNU linker directives for a generic MC68360 board.
+ * Variations in hardware type and dynamic memory size can be made
+ * by overriding some values with linker command-line arguments.
  *
  * Saskatchewan Accelerator Laboratory
  * University of Saskatchewan
@@ -10,32 +12,64 @@
  */
 
 /*
- * Declare on-board memory
+ * Declare some sizes.
+ * XXX: The assignment of ". += XyzSize;" fails in older gld's if the
+ *      number used there is not constant.  If this happens to you, edit
+ *      the lines marked XXX below to use a constant value.
+ */
+RamSize = DEFINED(RamSize) ? RamSize : 4M;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
+StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
+
+/*
+ * Declare hardware type
+ */
+MC68360HardwareTypeMotorolaGeneric = 0; 
+MC68360HardwareTypeAtlasHSB = 1; 
+MC68360HardwareType = DEFINED(MC68360HardwareType) ? MC68360HardwareType : 0;
+
+/*
+ * Declare on-board memory.
+ * It would be nice if the ram length could be given as
+ * LENGTH=RamSize, but gld doesn't allow non-constant
+ * values in the LENGTH expression.  
  */
 MEMORY {
-          ram : ORIGIN = 0x00000000, LENGTH = 4M
+          ram : ORIGIN = 0x00000000, LENGTH = 64M
           rom : ORIGIN = 0xFF000000, LENGTH = 1M
         dpram : ORIGIN = 0xFE000000, LENGTH = 8k
 }
 
 /*
- * Declare some sizes
- * XXX: The assignment of ". += XyzSize;" fails in older gld's if the
- *      number used there is not constant.  If this happens to you, edit
- *      the lines marked below to use a constant value.
- */
-HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
-StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
-
-/*
- * Declare low-order three octets of Ethernet address
+ * Declare low-order three octets of Ethernet address.
  */
 ETHERNET_ADDRESS = DEFINED(ETHERNET_ADDRESS) ? ETHERNET_ADDRESS : 0xDEAD12;
+
+/*
+ * Declare hardware type.
+ * Acceptable values are:
+ *	0 - Generic system as described in the MC68360 User's Manual
+ *	    (MC68360UM/AD Rev. 1).
+ *	1 - ATLAS Computer Equipment Incorporated ACE360/HSB.
+ */
+MC68360HardwareType = DEFINED(MC68360HardwareType) ? MC68360HardwareType : 0;
 
 /*
  * Load objects
  */
 SECTIONS {
+	/*
+	 * Hardware variations
+	 */
+	_RamSize = RamSize;
+	__RamSize = RamSize;
+	_MC68360HardwareType = MC68360HardwareType;
+	__MC68360HardwareType = MC68360HardwareType;
+	_MC68360HardwareTypeMotorolaGeneric = MC68360HardwareTypeMotorolaGeneric; 
+	__MC68360HardwareTypeMotorolaGeneric = MC68360HardwareTypeMotorolaGeneric; 
+	_MC68360HardwareTypeAtlasHSB = MC68360HardwareTypeAtlasHSB; 
+	__MC68360HardwareTypeAtlasHSB = MC68360HardwareTypeAtlasHSB; 
+
         /*
          * Boot PROM
          */

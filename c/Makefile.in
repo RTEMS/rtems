@@ -27,10 +27,15 @@ export PROJECT_HOME
 
 SUB_DIRS=build-tools src
 
+# We only make the ka9q install point if it is enabled.
+LIBKA9Q_yes_V = include/ka9q
+LIBKA9Q = $(LIBKA9Q_$(HAS_KA9Q)_V)
+
 # directories to be created in install point
 CREATE_DIRS = 	include include/sys \
     include/rtems include/rtems/score include/rtems/rtems include/rtems/posix \
-		include/libc include/libc/sys \
+                include/netinet include/libc include/libc/sys \
+                $(LIBKA9Q) \
 		lib \
 		bin \
 		samples tests \

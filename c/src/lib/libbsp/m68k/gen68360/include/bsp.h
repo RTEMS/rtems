@@ -119,12 +119,31 @@ extern m68k_isr_entry M68Kvec[];   /* vector table address */
 void bsp_cleanup( void );
 
 void M360ExecuteRISC( rtems_unsigned16 command );
+void *M360AllocateBufferDescriptors( int count );
+void *M360AllocateRiscTimers( int count );
 
 m68k_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,
   int                 type
 );
+
+/*
+ * Values assigned by link editor
+ */
+extern void *_RomBase, *_RamBase, *_RamSize;
+extern void *_MC68360HardwareType;
+extern void *_MC68360HardwareTypeMotorolaGeneric;
+extern void *_MC68360HardwareTypeAtlasHSB;
+
+/*
+ * Definitions for Atlas Computer Equipment Inc. High Speed Bridge (HSB)
+ */
+#define ATLASHSB_ESR    0x20010000L
+#define ATLASHSB_USICR  0x20010001L
+#define ATLASHSB_DSRR   0x20010002L
+#define ATLASHSB_LED4   0x20010004L
+#define ATLASHSB_ROM_U6 0xFF080000L	/* U6 flash ROM socket */
 
 #ifdef __cplusplus
 }

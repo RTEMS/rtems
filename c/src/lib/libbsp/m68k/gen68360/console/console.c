@@ -42,17 +42,10 @@
  */
 
 /*
- * Place buffer descriptors at end of User Data/BD space in dual-port RAM
- */
-#define consoleRxBd ((volatile m360BufferDescriptor_t *)((char *)m360.dpram1 + \
-		(sizeof(m360.dpram2) - 2*sizeof(m360BufferDescriptor_t))))
-#define consoleTxBd ((volatile m360BufferDescriptor_t *)((char *)m360.dpram1 + \
-		(sizeof(m360.dpram2) - sizeof(m360BufferDescriptor_t))))
-
-/*
  * I/O buffers can be in ordindary RAM
  */
 static volatile char rxBuf, txBuf;
+static volatile m360BufferDescriptor_t *consoleRxBd, *consoleTxBd;
 
 rtems_device_driver console_initialize(
   rtems_device_major_number  major,
@@ -61,6 +54,12 @@ rtems_device_driver console_initialize(
 )
 {
 	rtems_status_code status;
+
+	/*
+	 * Allocate buffer descriptors
+	 */
+	consoleRxBd = M360AllocateBufferDescriptors (1);
+	consoleTxBd = M360AllocateBufferDescriptors (1);
 
 	/*
 	 * Configure port B pins to enable SMTXD1 and SMRXD1 pins
@@ -121,9 +120,7 @@ rtems_device_driver console_initialize(
 	/*
 	 * Send "Init parameters" command
 	 */
-	m360.cr = M360_CR_OP_INIT_RX_TX | M360_CR_CHAN_SMC1 | M360_CR_FLG;
-	while (m360.cr & M360_CR_FLG)
-		continue;
+	M360ExecuteRISC (M360_CR_OP_INIT_RX_TX | M360_CR_CHAN_SMC1);
 
 	/*
 	 * Enable receiver and transmitter

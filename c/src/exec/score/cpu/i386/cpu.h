@@ -58,6 +58,15 @@ extern "C" {
 #define CPU_STACK_GROWS_UP               FALSE
 #define CPU_STRUCTURE_ALIGNMENT
 
+/*
+ *  Define what is required to specify how the network to host conversion
+ *  routines are handled.
+ */
+
+#define CPU_CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES FALSE
+#define CPU_BIG_ENDIAN                           FALSE
+#define CPU_LITTLE_ENDIAN                        TRUE
+
 /* structures */
 
 /*

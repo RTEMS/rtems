@@ -64,6 +64,15 @@ extern "C" {
 #define CPU_STACK_GROWS_UP               TRUE
 #define CPU_STRUCTURE_ALIGNMENT          __attribute__ ((__aligned__ (32)))
 
+/*
+ *  Define what is required to specify how the network to host conversion
+ *  routines are handled.
+ */
+
+#define CPU_CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES FALSE
+#define CPU_BIG_ENDIAN                           TRUE
+#define CPU_LITTLE_ENDIAN                        FALSE
+
 /* constants */
 
 #define CPU_MODES_INTERRUPT_LEVEL  0x00000001 /* interrupt level in mode */

@@ -10,13 +10,14 @@ VPATH=@srcdir@
 PGM=${ARCH}/startup.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=bspstart bspclean init68360 sbrk setvec
+C_PIECES=alloc360 bspstart bspclean init68360 sbrk setvec
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
 H_FILES=
 
-SRCS=$(srcdir)/linkcmds $(srcdir)/linkcmds.prom $(C_FILES) $(H_FILES)
+SRCS=$(srcdir)/linkcmds $(srcdir)/linkcmds.prom $(srcdir)/linkcmds.bootp \
+     $(C_FILES) $(H_FILES)
 OBJS=$(C_O_FILES) $(CC_O_FILES)
 
 include $(RTEMS_CUSTOM)

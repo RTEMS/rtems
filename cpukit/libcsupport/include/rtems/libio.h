@@ -99,4 +99,26 @@ int __rtems_lseek(int fd, rtems_libio_offset_t offset, int whence);
 int __rtems_fstat(int _fd, struct stat* _sbuf);
 int __rtems_isatty(int _fd);
 
+/*
+ * External I/O handlers
+ */
+typedef struct {
+    int (*open)(const char  *pathname, unsigned32 flag, unsigned32 mode);
+    int (*close)(int  fd);
+    int (*read)(int fd, void *buffer, unsigned32 count);
+    int (*write)(int fd, const void *buffer, unsigned32 count);
+    int (*ioctl)(int fd, unsigned32  command, void *buffer);
+    int (*lseek)(int fd, rtems_libio_offset_t offset, int whence);
+} rtems_libio_handler_t;
+
+void rtems_register_libio_handler(int handler_flag,
+                                 const rtems_libio_handler_t *handler);
+
+#define RTEMS_FILE_DESCRIPTOR_TYPE_FILE         0x0000
+#define RTEMS_FILE_DESCRIPTOR_TYPE_SOCKET       0x1000
+#define rtems_make_file_descriptor(fd,flags)    ((fd)|(flags))
+#define rtems_file_descriptor_base(fd)          ((fd) & 0x0FFF)
+#define rtems_file_descriptor_type(fd)          ((fd) & 0xF000)
+#define rtems_file_descriptor_type_index(fd)    ((((fd) & 0xF000) >> 12) - 1)
+
 #endif /* _RTEMS_LIBIO_H */

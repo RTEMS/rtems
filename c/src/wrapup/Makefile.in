@@ -17,6 +17,7 @@ LIB=$(PROJECT_HOME)/lib/librtemsall.a
 SRCS=$(wildcard $(PROJECT_HOME)/lib/libbsp$(LIB_VARIANT).a) \
      $(PROJECT_HOME)/lib/librtems$(LIB_VARIANT).a \
      $(wildcard $(PROJECT_HOME)/lib/libposix$(LIB_VARIANT).a) \
+     $(wildcard $(PROJECT_HOME)/lib/libka9q$(LIB_VARIANT).a) \
      $(PROJECT_HOME)/lib/libcsupport$(LIB_VARIANT).a \
      $(wildcard $(PROJECT_HOME)/lib/rtems-ctor$(LIB_VARIANT).o) \
      $(wildcard $(PROJECT_HOME)/lib/libno-ctor$(LIB_VARIANT).a)

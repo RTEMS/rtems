@@ -3,7 +3,7 @@
 #
 
 #
-# This package requires a version of GCC that has been modified
+# This package works best with a version of GCC that has been modified
 # to support the `-mcpu32' argument.  I have submitted the required
 # changes to the GCC maintainers.
 #
@@ -19,8 +19,37 @@
 # eric@skatter.usask.ca
 #
 
+#
+# This board support package works with several different versions of
+# MC68360 systems.  The choice of hardware is made at the final link-edit
+# phase by setting the Makefile LDFLAGS definition appropriately.
+#
+# Decisions to be made a link-edit time include:
+#	- The version of hardware on which the application is to run.
+#	  This is selected by defining the MC68360HardwareType variable.
+#	  Supported values are:
+#			MC68360HardwareTypeMotorolaGeneric (default)
+#			MC68360HardwareTypeAtlasHSB
+#	  To select the Atlas Computer Equipment HSB,
+#		--defsym MC68360HardwareType=MC68360HardwareTypeAtlasHSB
+#
+#	- The amount of dynamic RAM in the system.  This value applies
+#	  only to hardware versions which support different sizes of RAM.
+#	  The default value is 4 Mbytes.  To specify 16 Mbytes of memory,
+#		--defsym RamSize=0x1000000
+#
+#	- The size of the memory allocator heap.  The default value is
+#	  64 kbytes.  If the KA9Q network package is used the heap
+#	  should be at least 256 kbytes.  If your network is large, or
+#	  busy, the heap should be even larger.
+#	  To choose a heap size of 256 kbytes,
+#		--defsym HeapSize=0x40000
+#	  
+
 BSP NAME:	    gen68360
-BOARD:              home-built
+BOARD:              Generic 68360 as described in Motorola MC68360 User's Manual
+BOARD:              Atlas Computer Equipment Inc. High Speed Bridge (HSB)
+BOARD:              Atlas Computer Equipment Inc. Advanced Communication Engine (ACE)
 BUS:                none
 CPU FAMILY:         Motorola CPU32+
 COPROCESSORS:       none
@@ -63,7 +92,7 @@ Board description
 clock rate:	25 MHz
 bus width:	8-bit PROM, 32-bit DRAM
 ROM:		To 1 MByte, 180 nsec (3 wait states), chip select 0
-RAM:		4 MByte DRAM SIMM, 60 nsec (0 wait states), parity
+RAM:		1 to 64 MByte DRAM SIMM, 60 nsec (0 wait states), parity or nonparity
 
 Host System
 -----------
@@ -252,13 +281,14 @@ Porting
 -------
 This board support package is written for a 68360 system similar to that
 described in chapter 9 of the Motorola MC68360 Quad Integrated Communication
-Processor Users' Manual.  The salient details of this hardware are:
+Processor Users' Manual.  The salient features of this hardware are:
 
 	25 MHz external clock
 	DRAM address multiplexing provided by 68360
 	8-bit 180nsec PROM to CS0*
 	4 MBytes of 60 nsec parity DRAM (1Mx36) to RAS1*/CAS1*
 	Console serial port on SMC1
+	Ethernet interface on SCC1
 
 The board support package has been tested with a home-built board and with an
 ACE360A board produced by:

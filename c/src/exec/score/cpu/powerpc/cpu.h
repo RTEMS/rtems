@@ -284,7 +284,17 @@ struct CPU_Interrupt_frame;
  *         in the executive to justify turning this on.
  */
 
-#define CPU_STRUCTURE_ALIGNMENT    __attribute__ ((aligned (PPC_CACHE_ALIGNMENT)))
+#define CPU_STRUCTURE_ALIGNMENT \
+   __attribute__ ((aligned (PPC_CACHE_ALIGNMENT)))
+
+/*
+ *  Define what is required to specify how the network to host conversion
+ *  routines are handled.
+ */
+
+#define CPU_CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES FALSE
+#define CPU_BIG_ENDIAN                           TRUE
+#define CPU_LITTLE_ENDIAN                        FALSE
 
 /*
  *  The following defines the number of bits actually used in the

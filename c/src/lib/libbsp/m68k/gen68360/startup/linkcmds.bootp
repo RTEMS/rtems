@@ -3,7 +3,7 @@
  * Variations in hardware type and dynamic memory size can be made
  * by overriding some values with linker command-line arguments.
  *
- * These linker directives are for producing a BOOTP PROM.
+ * These linker directives are for producing a PROM version.
  * To create the PROM image from the linker output you must use objcopy
  * (--adjust-section-vma) to place the data segment at the end of the text
  * segment in the PROM.  The start-up code takes care of copying this region
@@ -16,11 +16,6 @@
  * 
  *  $Id$
  */
-
-/*
- * a.out format doesn't handle prom images very well
- */
-OUTPUT_FORMAT(coff-m68k)
 
 /*
  * Declare some sizes.
@@ -47,6 +42,7 @@ MC68360HardwareType = DEFINED(MC68360HardwareType) ? MC68360HardwareType : 0;
  */
 MEMORY {
           ram : ORIGIN = 0x00000000, LENGTH = 64M
+        myram : ORIGIN = 4M-512k,    LENGTH = 512k
           rom : ORIGIN = 0xFF000000, LENGTH = 1M
         dpram : ORIGIN = 0xFE000000, LENGTH = 8k
 }
@@ -100,20 +96,20 @@ SECTIONS {
         /*
          * Text, data and bss segments
          */
-        .text : {
+        .text : AT (0x00000000) {
                 CREATE_OBJECT_SYMBOLS
                 *(.text)
                 . = ALIGN (16);
                 etext = .;
                 _etext = .;
         } >rom 
-        .data : {
+        .data : AT(SIZEOF(.text)) {
                 copy_start = .;
                 *(.data)
                 . = ALIGN (16);
                 _edata = .;
                 copy_end = .;
-        } >ram
+        } >myram
         .bss : {
                 M68Kvec = .;
                 _M68Kvec = .;
@@ -136,7 +132,7 @@ SECTIONS {
 
                 _WorkspaceBase = .;
                 __WorkspaceBase = .;
-        } >ram
+        } >myram
 
         /*
          * On-chip memory/peripherals

@@ -84,6 +84,7 @@ c/src/lib/libbsp/m68k/gen68360/include/Makefile \
 c/src/lib/libbsp/m68k/gen68360/start360/Makefile \
 c/src/lib/libbsp/m68k/gen68360/startup/Makefile \
 c/src/lib/libbsp/m68k/gen68360/timer/Makefile \
+c/src/lib/libbsp/m68k/gen68360/network/Makefile \
 c/src/lib/libbsp/m68k/gen68360/wrapup/Makefile \
 c/src/lib/libbsp/m68k/idp/Makefile \
 c/src/lib/libbsp/m68k/idp/clock/Makefile \
@@ -222,6 +223,8 @@ c/src/lib/libbsp/unix/posix/shmsupp/Makefile \
 c/src/lib/libbsp/unix/posix/startup/Makefile \
 c/src/lib/libbsp/unix/posix/timer/Makefile \
 c/src/lib/libbsp/unix/posix/wrapup/Makefile"
+
+tcpip_mk="c/src/lib/libka9q/Makefile"
 
 tests_mk="c/src/tests/Makefile \
 c/src/tests/libtests/Makefile \
@@ -377,6 +380,10 @@ AC_ARG_ENABLE(posix, \
 [  --disable-posix 	     	    disable posix interface], \
 RTEMS_HAS_POSIX_API=no,RTEMS_HAS_POSIX_API=yes)
 
+AC_ARG_ENABLE(tcpip, \
+[  --disable-tcpip 	     	    disable KA9Q TCP/IP stack], \
+RTEMS_HAS_KA9Q=no,RTEMS_HAS_KA9Q=yes)
+
 AC_ARG_ENABLE(rtems-inlines, \
 [  --disable-rtems-inlines 	    disable RTEMS inline functions (use macros)], \
 RTEMS_USE_MACROS=yes,RTEMS_USE_MACROS=no)
@@ -451,6 +458,9 @@ case "${target}" in
 	;;
 esac
 
+# until the tcpip is made optional to build, just do this
+makefiles="$makefiles $tcpip_mk"
+
 case "${host}" in
   *-pc-linux*)		host_os=Linux ;;
   sparc-sun-sunos*)     host_os=SunOS ;;
@@ -495,6 +505,7 @@ AC_SUBST(RTEMS_HOST)
 AC_SUBST(RTEMS_LIBC_DIR)
 AC_SUBST(RTEMS_ROOT)
 AC_SUBST(RTEMS_HAS_POSIX_API)
+AC_SUBST(RTEMS_HAS_KA9Q)
 AC_SUBST(RTEMS_USE_MACROS)
 AC_SUBST(PROJECT_ROOT)
 AC_SUBST(program_prefix)

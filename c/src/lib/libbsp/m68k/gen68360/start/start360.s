@@ -56,7 +56,7 @@ Entry:
 	.long	uhoh			|  21:
 	.long	uhoh			|  22:
 	.long	uhoh			|  23:
-	.long	uhoh			|  24: Spurious interrupt
+	.long	spurious_interrupt	|  24: Spurious interrupt
 	.long	uhoh			|  25: Level 1 interrupt autovector
 	.long	uhoh			|  26: Level 2 interrupt autovector
 	.long	uhoh			|  27: Level 3 interrupt autovector
@@ -298,6 +298,13 @@ uhoh:	nop				| Leave spot for breakpoint
 	bra.s	uhoh			| Stuck forever
 
 /*
+ * Log, but otherwise ignore, spurious interrupts
+ */
+spurious_interrupt:
+	addql	#1,SYM(_M68kSpuriousInterruptCount)
+	rte
+
+/*
  * Place the low-order 3 octets of the board's ethernet address at
  * a `well-known' fixed location relative to the beginning of ROM.
  */
@@ -307,7 +314,7 @@ uhoh:	nop				| Leave spot for breakpoint
 /*
  * Initial PC
  */
-        .global start
+         .global start
 start:	
 	/*
 	 * Step 2: Stay in Supervisor Mode
@@ -386,6 +393,8 @@ ZEROLOOPTEST:
 
 					| Should this just force a reset?
 mainDone:	nop			| Leave spot for breakpoint
+	movew	#1,a7			| Force a double bus error
+	movel	d0,a7@-			| This should cause a RESET
 	stop	#0x2700			| Stop with interrupts disabled
 	bra.s	mainDone		| Stuck forever
 
@@ -398,9 +407,14 @@ SYM (_StackSize):
         .long  StackSize
 END_CODE
 
-BEGIN_BSS
+BEGIN_DATA_DCL
         .align 2
 	PUBLIC (environ)
 SYM (environ):
 	.long	0
+	PUBLIC (_M68kSpuriousInterruptCount)
+SYM (_M68kSpuriousInterruptCount):
+	.long	0
+END_DATA_DCL
+
 END
