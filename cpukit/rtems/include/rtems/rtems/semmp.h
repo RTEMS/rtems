@@ -141,7 +141,7 @@ void _Semaphore_MP_Send_object_was_deleted (
  */
 
 void _Semaphore_MP_Send_extract_proxy (
-  Thread_Control *the_thread
+  void           *argument
 );
 
 /*

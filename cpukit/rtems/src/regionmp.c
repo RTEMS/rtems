@@ -284,9 +284,11 @@ void _Region_MP_Process_packet (
  */
 
 void _Region_MP_Send_extract_proxy (
-  Thread_Control *the_thread
+  void           *argument
 )
 {
+  Thread_Control *the_thread = (Thread_Control *)argument;
+
   _Region_MP_Send_process_packet(
     REGION_MP_EXTRACT_PROXY,
     the_thread->Wait.id,
