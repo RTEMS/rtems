@@ -1,5 +1,9 @@
 2001-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/rtems-cpu-subdirs.m4: New file.
+
+2001-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/compile.am: Fundamentally reworked compilation rules for 
 	closer adaptation to automake's behavior.
 
