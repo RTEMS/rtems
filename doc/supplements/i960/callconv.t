@@ -38,22 +38,22 @@ branch-and-link and an integrated call and return mechanism.
 
 On a branch-and-link, the processor branches to the
 invoked procedure and saves the return address in a register,
-G14.  Typically, the invoked procedure will not invoke another
+@code{G14}.  Typically, the invoked procedure will not invoke another
 procedure and is referred to as a leaf procedure.  Many
 high-level language compilers for the i960 family recognize leaf
 procedures and automatically optimize them to utilize the
 branch-and-link mechanism.  Branch-and-link procedures are
-invoked using the bal and balx instructions and return control
-via the bx instruction.  By convention, G14 is zero when not in
+invoked using the @code{bal} and @code{balx} instructions and return control
+via the @code{bx} instruction.  By convention, @code{G14} is zero when not in
 a leaf procedure.  It is the responsibility of the leaf
-procedure to clear G14 before returning.
+procedure to clear @code{G14} before returning.
 
 The integrated call and return mechanism also
 branches to the invoked procedure and saves the return address
 as did the branch and link mechanism. However, the important
-difference is that the call, callx, and calls instructions save
-the local register set (R0 through R15) before transferring
-control to the invoked procedure.  The ret instruction
+difference is that the @code{call}, @code{callx}, and @code{calls} instructions save
+the local register set (@code{R0} through @code{R15}) before transferring
+control to the invoked procedure.  The @code{ret} instruction
 automatically restores the previous local register set.  The
 i960CA provides a register cache which can be configured to
 retain the last five to sixteen recent register caches.  When
@@ -62,23 +62,23 @@ written to the stack.
 
 @section Calling Mechanism
 
-All RTEMS directives are invoked using either a call
-or callx instruction and return to the user via the ret
+All RTEMS directives are invoked using either a @code{call}
+or @code{callx} instruction and return to the user via the @code{ret}
 instruction.
 
 @section Register Usage
 
-As discussed above, the call and callx instructions
+As discussed above, the @code{call} and @code{callx} instructions
 automatically save the current contents of the local register
-set (R0 through R15).  The contents of the local registers will
+set (@code{R0} through @code{R15}).  The contents of the local registers will
 be restored as part of returning to the application.  The
-contents of global registers G0 through G7 are not preserved by
+contents of global registers @code{G0} through @code{G7} are not preserved by
 RTEMS directives.
 
 @section Parameter Passing
 
 RTEMS uses the standard i960 family C parameter
-passing mechanism in which G0 contains the first parameter, G1
+passing mechanism in which @code{G0} contains the first parameter, @code{G1}
 the second,  and so on  for the remaining parameters.  No RTEMS
 directive requires more than six parameters.
 
