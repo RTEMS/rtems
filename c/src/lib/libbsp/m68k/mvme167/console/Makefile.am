@@ -2,17 +2,14 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/console.rel
 
 C_FILES = console.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
-AM_CPPFLAGS += $(BSP_CPPFLAGS)
 #
 # (OPTIONAL) Add local stuff here using +=
 #

@@ -34,6 +34,22 @@ RTEMS_BSPOPTS_SET([CD2401_USE_TERMIOS],[*],[0])
 RTEMS_BSPOPTS_HELP([CD2401_USE_TERMIOS],
 [1 for using termios based console.])
 
+RTEMS_BSPOPTS_SET([CONSOLE_MINOR],[*],[1])
+RTEMS_BSPOPTS_HELP([CONSOLE_MINOR],
+[Port to use for the RTEMS console.
+      0 - /dev/tty0, Serial Port 1/Console on the MVME712M.
+      1 - /dev/tty1, Serial Port 2/TTY01 on the MVME712M.
+      2 - /dev/tty2, Serial Port 3 on the MVME712M.
+      3 - /dev/tty3, Serial Port 4 on the MVME712M.])
+
+RTEMS_BSPOPTS_SET([PRINTK_MINOR],[*],[1])
+RTEMS_BSPOPTS_HELP([PRINTK_MINOR],
+[Port to use for printk debugging output.
+      0 - /dev/tty0, Serial Port 1/Console on the MVME712M.
+      1 - /dev/tty1, Serial Port 2/TTY01 on the MVME712M.
+      2 - /dev/tty2, Serial Port 3 on the MVME712M.
+      3 - /dev/tty3, Serial Port 4 on the MVME712M.])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 clock/Makefile
