@@ -7,20 +7,20 @@
 @c
 
 @set CYGWIN-VERSION B19
-@set CYGWIN-FTP http://www.cygnus.com/misc/gnu-win32
+@set CYGWIN-FTP http://www.cygnus.com/misc/gnu-win32/
+@set CYGWIN-COOLVIEW http://www.lexa.ru/sos/
 @set DOS2UNIX-FTP ftp://ftp.micros.hensa.ac.uk/platforms/ibm-pc/ms-dos/simtelnet/txtutl/dos2unix.zip
 @set PFE-FTP http://www.lancs.ac.uk/people/cpaap/pfe/
 
 @chapter Using MS-Windows as a Development Host
 
 This chapter discusses the installation of the GNU tool chain
-on a computer running either the Microsoft Windows95 
-or WindowsNT operating system.
+on a computer running the Microsoft Windows NT operating system.
 
 This chapter is based on a draft provided by 
 Geoffroy Montel <g_montel@@yahoo.com>.  Geoffroy's 
 procedure was based on information from 
-David Fiddes <D.J.Fiddes@@hw.ac.uk>.
+David Fiddes <D.J@@fiddes.surfaid.org>.
 Their input and feedback is greatly appreciated.
 
 @b{STATUS:}  This chapter should be considered preliminary.
@@ -29,9 +29,9 @@ Please be careful when following these instructions.
 @section Version Information
 
 This installation process works well under Windows NT. 
-It is said to also work under Windows95 (although it
-did not work with B18). Anyway, the resulting code works
-under both NT and 95.
+Using Windows 95 or 98 is not recommended although it 
+should be possible with version 3.77 of gmake and an updated
+cygwinb19.dll.
 
 This procedure should also work with newer version of 
 the tool versions listed in this chapter, but this has
@@ -49,7 +49,7 @@ and build a Windows hosted GNU cross development toolset.
 
 You will have to uncompress many archives during this
 process.  You must @b{NOT} use @code{WinZip} or
-@code{PKZip}.  Instead the un-achiving process uses
+@code{PKZip}.  Instead the un-archiving process uses
 the GNU @code{zip} and @code{tar} programs as shown below:
 
 @example
@@ -96,6 +96,8 @@ The dos2unix utility may be downloaded from:
 @value{DOS2UNIX-FTP}
 @end ifclear
 
+You @b{must} change the format of every patched file 
+for the toolset build to work correctly.
 
 @subsection Files Needed
 
@@ -117,15 +119,36 @@ Web browser or ftp client.
 @value{CYGWIN-FTP}
 @end ifclear
 
-@item usertools.exe
+@item coolview.tar.gz
 @ifset use-html
-@href{@value{CYGWIN-FTP},,@value{CYGWIN-FTP}}
+@href{@value{CYGWIN-COOLVIEW},,@value{CYGWIN-COOLVIEW}}
 @end ifset
 @ifclear use-html
-@value{CYGWIN-FTP}
+@value{CYGWIN-COOLVIEW}
 @end ifclear
 
 @end table
+
+@subsection System Requirements
+
+Although the finished cross-compiler is fairly easy on resources
+building it can take a significant amount of processing power and 
+disk space. The recommended build system spec is:
+
+@itemize @bullet
+
+@item An AMD K6-300, Pentium II-300 or better processor. GNU C and Cygwin32 are
+@b{very} CPU hungry.
+
+@item At least 64MB of RAM.
+
+@item At least 400MB of FAT16 disk space or 250MB if you have an NTFS partition. 
+
+@end itemize
+
+Even with this spec of machine expect the full suite to take over 2 hours to 
+build with a further hour for RTEMS itself.
+
 
 @section Installing Cygwin32 B19
 
@@ -137,13 +160,10 @@ referred to as @code{<RTOS>}.
 @enumerate
 
 @item Execute cdk.exe. These instructions assume that you 
-install Cygwin32 under the <RTOS>\GnuWin32\b19 directory.
-
-@item Execute usertools.exe.  These instructions assume that you 
-install Cygwin32 under the <RTOS>\GnuWin32\b19 directory.
+install Cygwin32 under the <RTOS>\cygnus\b19 directory.
 
 @item Execute Cygwin.bat (either on the start menu or 
-under <RTOS>\GnuWin32\b19).
+under <RTOS>\cygnus\b19).
 
 @item At this point, you are at the command line of @code{bash},
 a Unix-like shell. You have to mount the "/" directory. Type:
@@ -153,39 +173,45 @@ umount /
 mount -b <RTOS> /
 @end example
 
-For example, the following sequence creates an MS-DOS virtual
-drive @code{O:} using an MS-DOS command window and then mounts
-that virtual drive as the root directory for the Cygwin32 environment:
+For example, the following sequence mounts the @code{E:\unix} as the 
+root directory for the Cygwin32 environment. Note the use of two @code{\}s 
+when specifying DOS paths in bash:
 
 @example
-subst o: <RTOS>
 umount /
-mount -b o: /
+mount -b e:\\unix /
 @end example
 
-@item Create the /bin, /tmp, /build and /usr directories.
+@item Create the /bin, /tmp, /source and /build directories.
 
 @example
 mkdir /bin
 mkdir /tmp
+mkdir /source
 mkdir /build
-mkdir /usr
+mkdir /build/binutils
+mkdir /build/egcs
 @end example
 
 @item The light Bourne shell provided with Cygwin B19 is buggy.
 You should copy it to a fake name and copy @code{bash.exe} to @code{sh.exe}:
 
 @example
-cd <RTOS>/GnuWin32/b19/bin
+cd <RTOS>/cygnus/b19/H-i386-cygwin32/bin
 mv sh.exe old_sh.exe
 cp bash.exe sh.exe
 @end example
 
-The Bourne shell often has to be present in /bin directory when installing
-new packages.
+The Bourne shell has to be present in /bin directory to run shell scripts properly:
+
+@example
+cp <RTOS>/cygnus/b19/H-i386-cygwin32/bin/sh.exe /bin
+cp <RTOS>/cygnus/b19/H-i386-cygwin32/bin/bash.exe /bin
+@end example
+
 
 @item Open the file 
-@code{/gnuwin32/b19/H-i386-cygwin32/lib/gcc-lib/i386-cygwin32/2.7-b19/specs},
+@code{/cygnus/b19/H-i386-cygwin32/lib/gcc-lib/i386-cygwin32/2.7-b19/specs},
 and change the following line:
 
 @example
@@ -212,19 +238,18 @@ are ready to proceed to building a cross-compiler.
 @enumerate
 
 @item Unarchive @value{BINUTILS-TAR} following the 
-instructions in @ref{Unarchiving the Tools}.   Apply the
-appropriate RTEMS specific patch as detailed in
+instructions in @ref{Unarchiving the Tools} into the /source directory.
+Apply the appropriate RTEMS specific patch as detailed in
 @ref{Apply RTEMS Patch to binutils}.
 
 @b{NOTE}: See @ref{Bug in Patch Utility}.
 
-@item In the @code{/build} directory, execute the following
+@item In the @code{/build/binutils} directory, execute the following
 command to configure @value{BINUTILS-VERSION}:
 
 @example
-@value{BINUTILS-UNTAR}/configure --verbose --target=m68k-rtems \
-    --prefix=/gcc-m68k-rtems --with-gnu-as \
-    --with-gnu-ld --with-targets=all --with-newlib --with-multilib
+/source/@value{BINUTILS-UNTAR}/configure --verbose --target=m68k-rtems \
+    --prefix=/gcc-m68k-rtems --with-gnu-as --with-gnu-ld 
 @end example
 
 Replace @code{m68k-rtems} with the target configuration
@@ -237,47 +262,29 @@ list of the targets available.
 make
 @end example
 
-@item With B19, an error will occur. Remove the ".exe" suffix 
-from the tools by finding them all and renaming them
-as shown below:
-
-@example
-find . -name *.exe -print
-mv XXX/gas.exe XXX/gas
-       ....
-@end example
-
 @item Install the full package with the following command:
-
-@example
-make install
-@end example
-
-@item There is a problem with the gnu info package 
-which may prevent it from building correctly.  To
-get around this try again with:
 
 @example
 make -k install
 @end example
 
-@item Once the executables are installed, 
-you can restore the ".exe" suffix to the files in 
-the @code{/gcc-m68k-rtems/bin} and 
-@code{/gcc-m68k-rtems/m68k-rtems/bin} directories again.
+There is a problem with the gnu info package which will cause an 
+error during installation. Telling make to keep going with -k allows 
+the install to complete.
 
 @item In the @code{cygnus.bat} file, add the directory
-to the cross-compiler executables to your search path
-by adding the following line:
+containing the cross-compiler executables to your search path
+by inserting the following line:
 
 @example
-PATH=O:\gcc-m68k-rtems\bin;%PATH%
+PATH=E:\unix\gcc-m68k-rtems\bin;%PATH%
 @end example
 
-@item You can erase the /build directory content.
+@item You can erase the /build/binutils directory content if 
+disk space is tight.
 
 @item Exit bash and run @code{cygnus.bat} to restart
-the Cygwin32 environment.
+the Cygwin32 environment with the new path.
 
 @end enumerate
 
@@ -295,69 +302,36 @@ Apply the appropriate RTEMS specific patches as detailed in
 
 @b{NOTE}: See @ref{Bug in Patch Utility}.
 
-@item Remove the following directories (we do not need Fortran
-or Objective-C):
+@item Remove the following directories (we cannot use Fortran
+or Objective-C as Cygwin32 cross-compilers):
 
 @example
-· /build/@value{GCC-UNTAR}/libf2c
-· /build/@value{GCC-UNTAR}/gcc/objc
-· /build/@value{GCC-UNTAR}/gcc/f
+/source/@value{GCC-UNTAR}/libf2c
+/source/@value{GCC-UNTAR}/gcc/objc
+/source/@value{GCC-UNTAR}/gcc/f
 @end example
 
 @b{NOTE}: See @ref{Bug in Patch Utility}.
 
-@item Copy to /build/@value{GCC-UNTAR}/ the following directories:
+@item Link the following directories from Newlib to the main EGCS directory, 
+/source/@value{GCC-UNTAR}/ :
 
 @itemize @bullet
-@item /build/@value{NEWLIB-UNTAR}/newlib
-@item /build/@value{NEWLIB-UNTAR}/libgloss
+@item ln -s ../@value{NEWLIB-UNTAR}/newlib newlib
+@item ln -s ../@value{NEWLIB-UNTAR}/libgloss libgloss
 @end itemize
 
-@item Go under /build directory and run:
+@item Change to the /build/egcs directory to configure the compiler:
 
 @example
-../@value{GCC-UNTAR}/configure --verbose --target=m68k-rtems \
+/source/@value{GCC-UNTAR}/configure --verbose --target=m68k-rtems \
     --prefix=/gcc-m68k --with-gnu-as --with-gnu-ld \
-    --with-targets=all --with-newlib --with-multilib
+    --with-newlib
 @end example
 
 Replace @code{m68k-rtems} with the target configuration
 of your choice.  See @ref{Running the bit Script} for a
 list of the targets available.
-
-@item Then run your favourite Unix format compaatible file editor,
-and edit /build/@value{GCC-UNTAR}/gcc/Makefile
-Search for the section:
-
-@example
-# libgcc1-test target (must also be overridable for a target)
-LIBGCC1_TEST = libgcc1-test
-@end example
-
-and change it to read:
-
-@example
-LIBGCC1_TEST = 
-@end example
-
-@item Search for the section:
-
-@example
-# Set this to `ld' to enable use of collect2.
-USE_COLLECT2 = 
-MAYBE_USE_COLLECT2 = 
-# It is convenient for configure to add the assignment at the beginning,
-# so don't override it here.
-USE_COLLECT2 = ld
-@end example
-
-and change it to read:
-
-@example
-USE_COLLECT2 =
-@end example
-
-This changes are needed due to a @code{collect2} problem in B19.
 
 @item Compile the toolset as follows:
 
@@ -367,8 +341,8 @@ make cross
 
 You must do a @code{make cross} (not a simple @code{make})
 to insure that the different packages are built in the correct
-order.   This command could take a long time to run depending on
-the speed of the computer you are using.
+order.   Making the compiler can take several hours even on
+fairly fast machines, beware
 
 @item Install with the following command:
 
@@ -377,7 +351,8 @@ make -k install
 @end example
 
 @item Just as with binutils package, a problem with the gnu
-info package not building correctly may occur, so try again with:
+info package not building correctly requires that you use -k to 
+keep going.
 
 @example
 make -k install

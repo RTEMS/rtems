@@ -221,6 +221,22 @@ are on a Solaris 2.x host, then change the first line of the files
 @code{bit}, @code{bit_gdb}, and @code{bit_rtems} to use the
 @code{/bin/ksh} shell instead.
 
+@subsection Linux
+
+@subsubsection Broken install Program
+
+Certain versions of GNU fileutils include a version of @code{install} which
+does not work properly.  Please perform the following test to see if you
+need to upgrade:
+
+@example
+install -c -d /tmp/foo/bar
+@end example
+
+If this does not create the specified directories your install
+program will not install RTEMS properly.   You will need to upgrade
+to at least GNU fileutile version 3.16 to resolve this problem.
+
 @c
 @c  Reading the Documentation
 @c
