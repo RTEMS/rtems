@@ -91,17 +91,11 @@ AC_SUBST(cfg_dir)
 # trees c/<bsp>/make subdirectories
 
 AC_CONFIG_LINKS([
-  Templates/Makefile.lib:${cfg_dir}/Templates/Makefile.lib
-  Templates/Makefile.leaf:${cfg_dir}/Templates/Makefile.leaf
-  Templates/Makefile.dir:${cfg_dir}/Templates/Makefile.dir
-  compilers/gcc-target-default.cfg:${cfg_dir}/compilers/gcc-target-default.cfg
-  directory.cfg:${cfg_dir}/directory.cfg
-  lib.cfg:${cfg_dir}/lib.cfg
-  README:${cfg_dir}/README
+  compilers/gcc-target-default.cfg:compilers/gcc-target-default.cfg
+  directory.cfg:directory.cfg
+  lib.cfg:lib.cfg
+  README:README
   leaf.cfg:leaf.cfg
-],,[
-  RTEMS_TOPdir=${RTEMS_TOPdir}
-  cfg_dir=${cfg_dir}
 ])
 
 # Explicitly list all Makefiles here
