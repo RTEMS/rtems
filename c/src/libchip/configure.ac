@@ -34,6 +34,11 @@ if test "$RTEMS_CPU" = "unix"; then
 AC_MSG_ERROR(Can't build libchip for $RTEMS_CPU)
 fi
 
+AS_IF([test "$host_cpu" = "sparc"],[
+  AC_DEFINE_UNQUOTED([CPU_U32_FIX],[1],
+    [whether to enable ipalignment work-around])
+])
+
 AM_CONDITIONAL(HAS_NETWORKING, test "$HAS_NETWORKING" = "yes")
 
 # Explicitly list all Makefiles here
