@@ -64,7 +64,7 @@ ac_help="$ac_help
   --enable-rdbg                enable remote debugger"
 ac_help="$ac_help
 \
-  --enable-rtems-inlines 	    enable RTEMS inline functions (use macros)"
+  --enable-rtems-inlines 	    enable RTEMS inline functions, the default (disable to use macros)"
 ac_help="$ac_help
 \
   --enable-cxx            enable C++ support, and build the rtems++ library"
