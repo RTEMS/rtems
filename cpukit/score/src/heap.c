@@ -499,8 +499,8 @@ void _Heap_Walk(
       if ( the_block->front_flag != next_block->back_flag ) {
         error = 1;
         printf("PASS: %d  Front and back flags don't match\n", source);
-        printf("         Current Block:  Back - %d,  Front - %d",
-               the_block->back_flag, the_block->front_flag);
+        printf("         Current Block (%p):  Back - %d,  Front - %d",
+               the_block, the_block->back_flag, the_block->front_flag);
         if (do_dump == TRUE) {
           if (_Heap_Is_block_free(the_block)) {
             printf("      Prev 0x%p,   Next 0x%p\n",
@@ -511,8 +511,8 @@ void _Heap_Walk(
         } else {
           printf("\n");
         }
-        printf("         Next Block:     Back - %d,  Front - %d",
-               next_block->back_flag, next_block->front_flag);
+        printf("         Next Block (%p):     Back - %d,  Front - %d",
+               next_block, next_block->back_flag, next_block->front_flag);
         if (do_dump == TRUE) {
           if (_Heap_Is_block_free(next_block)) {
             printf("      Prev 0x%p,   Next 0x%p\n",
