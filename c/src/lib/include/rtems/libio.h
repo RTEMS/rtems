@@ -139,7 +139,7 @@ rtems_status_code rtems_termios_open (
   int                       (*deviceFirstOpen)(int major, int minor, void *arg),
   int                       (*deviceLastClose)(int major, int minor, void *arg),
   int                       (*deviceRead)(int minor),
-  int                       (*deviceWrite)(int minor, char *buf, int len),
+  int                       (*deviceWrite)(int minor, const char *buf, int len),
   int                         deviceOutputUsesInterrupts
   );
 
@@ -148,6 +148,7 @@ rtems_status_code rtems_termios_read (void *arg);
 rtems_status_code rtems_termios_write (void *arg);
 rtems_status_code rtems_termios_ioctl (void *arg);
 void rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len);
+void rtems_termios_dequeue_characters (void *ttyp, int len);
 void rtems_termios_reserve_resources(
   rtems_configuration_table *configuration,
   rtems_unsigned32           number_of_devices

@@ -118,7 +118,7 @@ void DEBUG_puts(
  *
  */
 
-int console_write_support (int minor, char *buf, int len)
+int console_write_support (int minor, const char *buf, int len)
 {
   int nwrite = 0;
 

@@ -111,7 +111,7 @@ struct rtems_termios_tty {
 	 */
 	int		(*lastClose)(int major, int minor, void *arg);
 	int		(*read)(int minor);
-	int		(*write)(int minor, char *buf, int len);
+	int		(*write)(int minor, const char *buf, int len);
 };
 static struct rtems_termios_tty *ttyHead, *ttyTail;
 static rtems_id ttyMutex;
@@ -170,7 +170,7 @@ rtems_termios_open (
   int                      (*deviceFirstOpen)(int major, int minor, void *arg),
   int                      (*deviceLastClose)(int major, int minor, void *arg),
   int                      (*deviceRead)(int minor),
-  int                      (*deviceWrite)(int minor, char *buf, int len),
+  int                      (*deviceWrite)(int minor, const char *buf, int len),
   int                        deviceOutputUsesInterrupts
   )
 {

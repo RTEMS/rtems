@@ -183,10 +183,10 @@ smc1Read (int minor)
  *	Transmit all characters.
  */
 static int
-smc1Write (int minor, char *buf, int len)
+smc1Write (int minor, const char *buf, int len)
 {
 #if (defined (M360_SMC1_INTERRUPT))
-	smcTxBd->buffer = buf;
+	smcTxBd->buffer = (char *)buf;
 	smcTxBd->length = len;
 	smcTxBd->status = M360_BD_READY | M360_BD_WRAP | M360_BD_INTERRUPT;
 #else
