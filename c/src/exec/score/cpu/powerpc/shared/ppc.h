@@ -94,7 +94,28 @@ extern "C" {
 #define PPC_LOW_POWER_MODE_NONE      0
 #define PPC_LOW_POWER_MODE_STANDARD  1
 
-#if defined(ppc403)
+#if defined(rtems_multilib)
+/*
+ *  Figure out all CPU Model Feature Flags based upon compiler
+ *  predefines.
+ */
+
+#define CPU_MODEL_NAME           "rtems_multilib"
+#define PPC_ALIGNMENT		 4  
+#define PPC_CACHE_ALIGNMENT	 16
+#define PPC_HAS_RFCI    	 1
+#define PPC_HAS_FPU     	 0
+#define PPC_USE_MULTIPLE	 1
+#define PPC_I_CACHE		 2048
+#define PPC_D_CACHE		 1024
+#define PPC_DEBUG_MODEL          PPC_DEBUG_MODEL_STANDARD
+#define PPC_HAS_EXCEPTION_PREFIX 0
+#define PPC_HAS_EVPR             0
+#define PPC_INTERRUPT_MAX	 16
+#define PPC_LOW_POWER_MODE       PPC_LOW_POWER_MODE_STANDARD
+#define PPC_HAS_DOUBLE           0
+
+#elif defined(ppc403)
 /*
  *  IBM 403
  *

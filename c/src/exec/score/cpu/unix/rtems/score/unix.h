@@ -29,7 +29,15 @@ extern "C" {
  *  of the family.
  */
  
-#if defined(hpux)
+#if defined(rtems_multilib)
+/*
+ *  Figure out all CPU Model Feature Flags based upon compiler 
+ *  predefines. 
+ */
+
+#define CPU_MODEL_NAME  "rtems_multilib"
+ 
+#elif defined(hpux)
  
 #define CPU_MODEL_NAME  "HP-UX"
  

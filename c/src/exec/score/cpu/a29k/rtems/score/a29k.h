@@ -28,7 +28,16 @@ extern "C" {
  *  of the family.
  */
  
-#if defined(a29205)
+#if defined(rtems_multilib)
+/*
+ *  Figure out all CPU Model Feature Flags based upon compiler 
+ *  predefines. 
+ */
+
+#define CPU_MODEL_NAME  "rtems_multilib"
+#define A29K_HAS_FPU 0
+
+#elif defined(a29205)
  
 #define CPU_MODEL_NAME  "a29205"
 #define A29K_HAS_FPU     0

@@ -35,7 +35,15 @@ extern "C" {
  *  present in a particular member of the family.
  */
 
-#if defined(hppa7100)
+#if defined(rtems_multilib)
+/*
+ *  Figure out all CPU Model Feature Flags based upon compiler 
+ *  predefines. 
+ */
+
+#define CPU_MODEL_NAME  "rtems_multilib"
+
+#elif defined(hppa7100)
 
 #define CPU_MODEL_NAME  "hppa 7100"
 

@@ -34,7 +34,16 @@ extern "C" {
  *  to.
  */
  
-#if defined(no_cpu)
+#if defined(rtems_multilib)
+/*
+ *  Figure out all CPU Model Feature Flags based upon compiler 
+ *  predefines. 
+ */
+
+#define CPU_MODEL_NAME  "rtems_multilib"
+#define NOCPU_HAS_FPU     1
+
+#elif defined(no_cpu)
  
 #define CPU_MODEL_NAME  "no_cpu_model"
 #define NOCPU_HAS_FPU     1
