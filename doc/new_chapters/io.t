@@ -23,8 +23,8 @@ The directives provided by the input and output primitives manager are:
 @item @code{write} - Writes to a file
 @item @code{fcntl} - Manipulates an open file descriptor
 @item @code{lseek} - Reposition read/write file offset
-@item @code{fsync} - XXX
-@item @code{fdatasync} - XXX
+@item @code{fsync} - Synchronize a file's complete in-core state with that on disk
+@item @code{fdatasync} - synchronize a file's in-core data with that on disk
 @item @code{mount} - Mount a file system
 @item @code{umount} - Unmount file systems
 @item @code{aio_read} - YYY
@@ -91,7 +91,8 @@ in a future version.
 @example
 #include <unistd.h>
 
-int dup(int fildes
+int dup(
+  int fildes
 );
 @end example
 @end ifset
@@ -177,7 +178,8 @@ NONE
 @example
 #include <unistd.h>
 
-int close(int fildes
+int close(
+  int fildes
 );
 @end example
 @end ifset
@@ -234,7 +236,8 @@ the following:
  
 @table @b
 @item EAGAIN
-The
+The O_NONBLOCK flag is set for a file descriptor and the process
+would be delayed in the I/O operation.
 
 @item EBADF
 Invalid file descriptor
@@ -310,9 +313,10 @@ NONE
 @example
 #include <unistd.h>
 
-int write(int         fildes,
-          const void *buf,
-          unsigned int nbytes
+int write(
+  int           fildes,
+  const void   *buf,
+  unsigned int  nbytes
 );
 @end example
 @end ifset
@@ -331,7 +335,8 @@ would be delayed in the I/O operation.
 Invalid file descriptor
 
 @item EFBIG
-The
+An attempt was made to write to a file that exceeds the maximum file 
+size
 
 @item EINTR
 The function was interrupted by a signal.
@@ -566,13 +571,14 @@ ciated with such a device is undefined.
 NONE
 
 @page
-@subsection fsync - 
+@subsection fsync - Synchronize a file's complete in-core state with that on disk
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int fsync(
+  int fd
 );
 @end example
 @end ifset
@@ -582,24 +588,41 @@ int fsync(
 
 @subheading STATUS CODES:
 
+On success, zero is returned.  On error, -1 is returned, and @code{errno}
+is set appropriately.
+
 @table @b
-@item E
-The
+@item EBADF
+@code{fd} is not a valid descriptor open for writing
+
+@item EINVAL
+@code{fd} is bound to a special file which does not support support synchronization
+
+@item EROFS
+@code{fd} is bound to a special file which does not support support synchronization
+
+@item EIO
+An error occurred during synchronization
 
 @end table
 
 @subheading DESCRIPTION:
 
+@code{fsync} copies all in-core parts of a file to disk.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection fdatasync - 
+@subsection fdatasync - synchronize a file's in-core data with that on disk. 
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int fdatasync(
+  int fd
 );
 @end example
 @end ifset
@@ -609,15 +632,41 @@ int fdatasync(
 
 @subheading STATUS CODES:
 
+On success, zeor is returned.  On error, -1 is returned, and @code{errno} is
+set appropriately.
+
 @table @b
-@item E
-The
+@item EBADF
+@code{fd} is not a valid file descriptor open for writing.
+
+@item EINVAL
+@code{fd} is bound to a special file which dows not support synchronization.
+
+@item EIO
+An error occurred during synchronization.
+
+@item EROFS
+@code{fd} is bound to a special file which dows not support synchronization.
 
 @end table
 
 @subheading DESCRIPTION:
 
+@code{fdatasync} flushes all data buffers of a file to disk (before the system call
+returns).  It resembles @code{fsync} but is not required to update the metadata such  
+as access time.
+
+Applications that access databases or log files often write a tiny data fragment
+(e.g., one line in a log file) and then call @code{fsync} immediately in order to  
+ensure that the written data is physically stored on the harddisk.  Unfortunately, 
+fsync will always initiate two write operations: one for the newly written data and 
+another one in order to update the modification time stored in the inode.  If the 
+modification time is not a part of the transaction concept @code{fdatasync} can be 
+used to avoid unnecessary inode disk write operations.
+
 @subheading NOTES:
+
+NONE
 
 @page
 @subsection mount - Mount a file system
