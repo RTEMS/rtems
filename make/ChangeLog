@@ -1,3 +1,8 @@
+2004-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/h8sim.cfg: i960 obsoleted.
+	* custom/cvme961.cfg, custom/i960sim.cfg, custom/rxgen960.cfg: Removed.
+
 2004-08-03	Jay Monkman <jtm@lopingdog.com>
 
 	* custom/csb360.cfg: New file.
