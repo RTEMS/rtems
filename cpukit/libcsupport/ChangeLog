@@ -1,3 +1,10 @@
+2003-09-26	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 498/rtems
+	* src/printk.c: RTEMS printk() does not support the %i format which is
+	used by a lot of driver/BSP etc. code. The trivial patch allows %i/%I
+	as an alias for %d/%D.
+
 2003-09-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 489/rtems
