@@ -33,7 +33,7 @@
 /*
  * See if chip is present
  */
-boolean rtc_probe(
+boolean mc146818a_probe(
   int minor
 )
 {

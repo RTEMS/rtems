@@ -18,7 +18,7 @@ rtc_tbl RTC_Table[] = {
         "/dev/rtc",                /* sDeviceName */
         RTC_MC146818A,             /* deviceType */
         &mc146818a_fns,            /* pDeviceFns */
-        rtc_probe,                 /* deviceProbe */
+        mc146818a_probe,           /* deviceProbe */
         NULL,                      /* pDeviceParams */
         0x70,                      /* ulCtrlPort1 */
         0x00,                      /* ulDataPort */
