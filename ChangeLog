@@ -1,3 +1,10 @@
+2001-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/config-subdirs.m4: Let CC default to $host_alias-gcc in
+	TARGET_CONFIG_SUBDIRS.
+	* aclocal/enable-bsp.m4: fix quoting.
+	* aclocal/check-bsps.m4, aclocal/bsp-alias.m4: Add pc386dx.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/config-subdirs.m4: New file.

@@ -230,7 +230,7 @@ if test "$no_recursion" != yes; then
       _RTEMS_GIVEN_INSTALL
 
       echo "[running ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file] --srcdir=$ac_sub_srcdir"
-      CC=${CC_FOR_HOST}; export CC;
+      CC=${CC_FOR_HOST-$host_alias-gcc}; export CC;
       # The eval makes quoting arguments work.
       if eval ${CONFIG_SHELL-/bin/sh} $ac_sub_configure \
 	$ac_sub_configure_args --srcdir=$ac_sub_srcdir \
