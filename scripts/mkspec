@@ -1,0 +1,14 @@
+#!/bin/sh 
+#
+
+RTEMS_DIR=`dirname $0`
+RTEMS_VERSION=`grep Version ${RTEMS_DIR}/../VERSION | \
+sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
+
+bsp=$1
+target_alias=$2
+release=0
+
+${RTEMS_DIR}/scripts/mkbspspec $bsp $target_alias
+${RTEMS_DIR}/scripts/mktoolspec $target_alias
+

@@ -1,0 +1,94 @@
+
+	RPM support for BSPs
+	====================
+
+Introduction
+------------
+
+Building an rpm requires to have a tar archive of the sources, and a
+rpm-spec files specifying the details of building.
+
+To support per bsp rpms, one rpm-spec is used per BSP. 
+Instead of writing one rpm-spec for each BSP, I have written a shell script
+(mkspec) which generates one *.spec (rtems-<target_alias>-<bsp>.spec) per BSP
+bsp from an rpm-spec template (rtems.spec.in).
+
+A second shell script (mkrpms) is a convienience script which invokes a
+sequence of building rpms for several bsps.
+
+mkspec
+------
+
+mkspec takes two arguments: 
+$1 ... the bsp to be built
+$2 ... the target_alias this bsp belongs to
+
+Invoking mkspecs will generate a rtems-<target_alias>-<bsp>.spec either in
+/usr/src/packages/SPECS (SuSE convention) or 
+/usr/src/redhat/SPECS (Redhat convention) or
+/usr/src/SPECS
+
+Eg. ./mkspec gensh1 sh-rtemself generates
+/usr/src/packages/SPECS/rtems-sh-rtemself-gensh1.spec on SuSE-6.2.
+
+Building BSP-rpms
+-----------------
+
+0. Login as root.
+
+1. Install a tarball of RTEMS's sources (with version number attached!) to
+/usr/src/[packages|redhat]/SOURCES
+Eg. 
+tar czvf /usr/src/packages/SOURCES/rtems-<VERSION>.tar.gz rtems-<VERSION>
+
+2. Generate and install the required rpm-spec file[s]
+cd rtems-<VERSION>/scripts/
+mkspec <bsp> <target_alias>
+
+3. Build the rpms
+Building a binary rpm:
+rpm -bb /usr/src/[packages|redhat]/SPECS/rtems-<target_alias>-<bsp>.spec
+
+Building a source and binary rpm
+rpm -ba /usr/src/[packages|redhat]/SPECS/rtems-<target_alias>-<bsp>.spec
+
+Note: a BSP's src.rpm contains its spec-file and the tar-archive of the
+sources (approx. 4-5MB per BSP). 
+
+Known Bugs/Deficiencies
+-----------------------
+
+* All files mentioned in here are in its early infancy ;-)
+
+* Building for a single bsp requires an own copy of the source tree inside
+rpm's build directory.
+* Building inside the RTEMS source tree doesn't work.
+* Dependencies on toolchain-rpms not yet supported in rtems.spec.in.
+* Installing multiple binary bsp rpms for the same target can cause 
+warnings from rpm, because these bsp-rpms share files.
+* rtems.spec.in is prepared for rpm relocation support, but RTEMS is not
+relocatible (yet?)
+* rtems.spec.in deserves to be extended (description, authors etc)
+* The final packaging stage to build a binary rpm takes an awful lot of
+time - deserves to be investigated.
+* Some RTEMS's cross executables (eg. hello.exe for sparc-rtems/erc32) cause 
+warnings from rpm and/or objdump. AFAIS, this is a bug in rpm.
+* Probably many more ...
+
+* Last but not least: RTEMS should be split.
+
+Remarks
+-------
+* It would make sense to split RTEMS host/cross-tools and files depending on
+the target only (<target_alias>/make/*.cfg -- Whow, RTEMS really has files 
+which depend on the target only :) into separate rpms.
+* Instead of using a single rpm-spec for each bsp, RTEMS could also use a
+single rpm-spec for all (or at least a given subset of all) bsps of a target.
+* rpm -b[b|a] leaves its built trees unpacked in 
+/usr/src/[packages|redhat]/BUILD. Therefore you will rather soon run out of disc
+space if not removing them. (Use rpm --clean -b[a|b] for cleaning them up 
+automatically after building) 
+* The size of binary rpms can differ up to one magnitude depending on the
+target/bsp (eg. sh-rtems/gensh1 ~10MB vs. sh-rtemself/gensh1 ~32MB) 
+
+Ralf Corsepius, 1999/10/14

@@ -1,0 +1,31 @@
+#!/bin/sh 
+#
+
+RTEMS_DIR=`dirname $0`
+RTEMS_VERSION=`grep Version ${RTEMS_DIR}/../VERSION | \
+sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
+
+bsp=$1
+target_alias=$2
+release=0
+
+# Some linux distributions use /usr/src/packages
+# redhat uses /usr/src/redhat
+# others might use /usr/src
+if test -d /usr/src/packages/SPECS; 
+then
+dst=/usr/src/packages/SPECS;
+elif test -d /usr/src/redhat/SPECS;
+ then
+dst=/usr/src/redhat/SPECS;
+elif test -d /usr/src/SPECS/; 
+then
+dst=/usr/src/SPECS;
+fi
+
+sed -e "s%@Version@%${RTEMS_VERSION}%g" \
+-e "s%@bsp@%${bsp}%g" \
+-e "s%@Release@%${release}%g" \
+-e "s%@target_alias@%${target_alias}%g" \
+< ${RTEMS_DIR}/rtems.spec.in \
+> ${dst}/rtems-$target_alias-$bsp.spec
