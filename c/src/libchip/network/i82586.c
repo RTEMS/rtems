@@ -317,8 +317,7 @@ i82586_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
   if ((unit = rtems_bsdnet_parse_driver_name (config, &name)) < 0)
     return 0;
   
-  sc  = 0; /* config->drv_ctrl; */
-#warning "undo this hack"
+  sc  = config->drv_ctrl; 
   ifp = &sc->arpcom.ac_if;
   
 #if I82586_DEBUG

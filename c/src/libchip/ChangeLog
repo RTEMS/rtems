@@ -1,3 +1,10 @@
+2002-04-11	Chris Johns <ccj@acm.org>
+
+	* network/rtems_bsdnet.h: To address PR59, added the drv_ctrl driver
+	control block field to the ifconfig network driver structure. This
+	field is needed by the i82586 driver which was ported from NetBSD
+	as it had better hardware abstraction.
+
 2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* network/i82586.c: Include <string.h>.
