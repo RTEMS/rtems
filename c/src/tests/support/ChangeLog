@@ -1,3 +1,9 @@
+2001-11-07	Joel Sherrill <joel@OARcorp.com>
+
+	Tracked as PR72 but related to the object id problem (PR36)
+	reported by Todor.Todorov@barco.com.
+	but discovered independently.
+	* include/tmacros.h: Added fatal_directive_check_status_only().
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
