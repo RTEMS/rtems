@@ -13,6 +13,11 @@ The questions in this category are hints that can ease debugging.
 @section How do I determine how much memory is left?
 
 First there are two types of memory: RTEMS Workspace and Program Heap.
+The RTEMS Workspace is the memory used by RTEMS to allocate control
+structures for system objects like tasks and semaphores, task 
+stacks, and some system data structures like the ready chains.
+The Program Heap is where "malloc'ed" memory comes from.
+
 Both are essentially managed as heaps based on the Heap Manager
 in the RTEMS SuperCore.  The RTEMS Workspace uses the Heap Manager
 directly while the Program Heap is actually based on an RTEMS Region 
