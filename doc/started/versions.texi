@@ -1,0 +1,85 @@
+@c
+@c  COPYRIGHT (c) 1988-1998.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
+@c
+@c This file contains all toolset version dependent information
+@c
+
+@c 
+@c Comment out setting the "XYZ-RTEMSPATCH" variable if there is no 
+@c patch required.  The documentation will detect this and print 
+@c an appropriate message in a short section.
+@c 
+
+
+@c
+@c  GCC/EGCS Version
+@c
+
+@set GCC-VERSION     egcs 1.0.3a
+@set GCC-TAR         egcs-1.0.3a.tar.gz
+@set GCC-UNTAR       egcs-1.0.3a
+@set GCC-FTPSITE     egcs.cygnus.com
+@set GCC-FTPDIR      /pub/egcs/releases/egcs-1.0.3a
+@set GCC-HTTPDIR     /pub/egcs/releases/index.html
+@set GCC-RTEMSPATCH  egcs-1.0.3-rtems-diff-19980527
+
+@c
+@c  BINUTILS Version
+@c
+
+@c The "official" binutils
+@set BINUTILS-VERSION     binutils 2.9.1
+@set BINUTILS-TAR         binutils-2.9.1.tar.gz
+@set BINUTILS-UNTAR       binutils-2.9.1
+@set BINUTILS-FTPSITE     ftp.gnu.org
+@set BINUTILS-FTPDIR      /pub/gnu
+@set BINUTILS-RTEMSPATCH  binutils-2.9.1-rtems-diff-19980515.gz
+
+@c When forced to use a snapshot
+@c @set BINUTILS-VERSION     gas 980314
+@c @set BINUTILS-TAR         gas-980314.tgz
+@c @set BINUTILS-UNTAR       gas-980314
+@c @set BINUTILS-FTPSITE     ftp.OARcorp.com
+@c @set BINUTILS-FTPDIR      /oarcorp/private/beta3/ada_tools
+@c @set BINUTILS-RTEMSPATCH  binutils-2.8.1-rtems-diff-980321.gz
+
+@c
+@c  NEWLIB Version
+@c
+
+@set NEWLIB-VERSION     newlib 1.8.0
+@set NEWLIB-TAR         newlib-1.8.0.tar.gz
+@set NEWLIB-UNTAR       newlib-1.8.0
+@set NEWLIB-FTPSITE     ftp.cygnus.com
+@set NEWLIB-FTPDIR      /pub/newlib
+@set NEWLIB-RTEMSPATCH   newlib-1.8.0-rtems-diff-19980707.gz
+
+@c
+@c  GDB Version
+@c
+
+@set GDB-VERSION     gdb 4.17
+@set GDB-TAR         gdb-4.17.tar.gz
+@set GDB-UNTAR       gdb-4.17
+@set GDB-FTPSITE     ftp.gnu.org
+@set GDB-FTPDIR      /pub/gnu
+@set GDB-RTEMSPATCH  gdb-4.17-rtems-diff-19980521.gz
+
+
+@c
+@c  RTEMS Version
+@c
+
+@set RTEMS-VERSION     RTEMS 980808
+@set RTEMS-TAR         rtems-980808.tgz
+@set RTEMS-UNTAR       rtems-980808
+@set RTEMS-FTPSITE     ftp.OARcorp.com
+@set RTEMS-FTPDIR      /OARcorp/private/beta3
+
+
