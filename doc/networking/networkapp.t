@@ -264,13 +264,22 @@ struct rtems_bsdnet_config rtems_bsdnet_config = @{
 
 
 @subsection Network initialization
-The networking tasks must be started before any
-network I/O operations can be performed.  This is done by calling:
+The networking tasks must be started before any network I/O operations
+can be performed. This is done by calling: 
+
+
 @example
 rtems_bsdnet_initialize_network ();
 @end example
 
 This function is declared in @code{rtems/rtems_bsdnet.h}.
+t returns 0 on success and -1 on failure with an error code
+in @code{errno}.  It is not possible to undo the effects of
+a partial initialization, though, so the function can be
+called only once irregardless of the return code.  Consequently,
+if the condition for the failure can be corrected, the
+system must be reset to permit another network initialization
+attempt.
 
 
 
