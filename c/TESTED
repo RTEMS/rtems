@@ -2,16 +2,15 @@
 #  $Id$
 #
 
-This file is current for the 4.0.0 release.
-
 The RTEMS project uses Intel x86 based computers running the RedHat
 distribution of the Linux operating system internally for development.  
 This release has been tested on the following Languages/CPUs/Targets using
-RedHat Linux 4.2 as the host environment:
+RedHat Linux 5.1 as the host environment:
 
    CPU      CPU
   FAMILY   MODEL             TARGET               SUITES
  ========  ========= =======================   ===============
+   m66k    mfc5200   no BSP                       (note 9)
    m68k    m68000    efi68k                       (note 1)
    m68k    m68020    Motorola MVME136             (note 1, 6)
    m68k    m68030    Motorola MVME147             (note 1)
@@ -32,6 +31,7 @@ RedHat Linux 4.2 as the host environment:
    i386    i486      DJGPP/PC-AT                  (note 7)
    i386   pentium    DJGPP/PC-AT                  (note 7)
    i960   i960ca     Cyclone CVME961              (note 4)
+   i960   i960ha     no BSP                       (note 9)
    hppa   hppa7100   simhppa                      (note 1)
    mips   idt4600    p4000                        (note 1)
    mips   idt4650    p4000                        (note 1)
@@ -41,6 +41,8 @@ RedHat Linux 4.2 as the host environment:
  powerpc  ppc603e    Radstone PPCn_60x            (note 1, 8)
  powerpc  ppc603e    DY-4 DMV-177                 (note 1)
  powerpc  ppc603e    Vista Score603e              (note 1)
+ powerpc  mpc821     no BSP                       (note 9)
+ powerpc  mpc823     no BSP                       (note 9)
  powerpc  mpc860     eth_comm (custom)            (note 1, 6)
    sh     sh7032     generic sh1                  (note 1)
   sparc    erc32     generic erc32               ALL TESTS (note 5)
@@ -63,7 +65,7 @@ immediately preceding the snapshot.
     "ALL TESTS" does not include the multiprocessor tests.
 
 (2) RTEMS Project cannot internally compile or test this target.
-    As of 4.0.0, the HP-UX is not recognized in the configure script
+    The HP-UX is not recognized in the configure script.
     The a29k does not use GNU tools and may suffer from bit rot.
 
 (3) Target is not intended to be executed.  It is only an example.
@@ -80,3 +82,6 @@ immediately preceding the snapshot.
 
 (8) The Radstone ppcn_60x BSP was written by Radstone and designed
     to support any Radstone PowerPC board with only minor modifications.
+
+(9) This CPU model is supported but there are no BSPs using this CPU
+    model included in the current distribution.
