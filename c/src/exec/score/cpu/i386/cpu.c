@@ -91,7 +91,7 @@ void _CPU_Thread_Idle_body ()
 
 void _defaultExcHandler (CPU_Exception_frame *ctx)
 {
-  unsigned int faultAddr;
+  unsigned int faultAddr = 0;
   printk("----------------------------------------------------------\n");
   printk("Exception %d caught at PC %x by thread %d\n",
 	 ctx->idtIndex,
@@ -110,9 +110,8 @@ void _defaultExcHandler (CPU_Exception_frame *ctx)
   printk("----------------------------------------------------------\n");
   if (ctx->idtIndex == I386_EXCEPTION_PAGE_FAULT){
     faultAddr = i386_get_cr2();
-    printk("Page fault linear address (CR2) = %x\n",
-	   faultAddr);
-  printk("----------------------------------------------------------\n\n");
+    printk("Page fault linear address (CR2) = %x\n", faultAddr);
+    printk("----------------------------------------------------------\n\n");
   }
  if (_ISR_Nest_level > 0) {
     /*
