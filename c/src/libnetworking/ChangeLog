@@ -1,3 +1,13 @@
+2000-09-22	Joel Sherrill <joel@OARcorp.com>
+
+	* machine/types.h, pppd/pppd.h, rtems/rtems_bsdnet_internal.h,
+	rtems_webserver/webmain.c: machine/types.h  should not have
+	included rtems.h.  It is now including precisely the 
+	least amount of low level, yet portable .h files to get
+	the basic RTEMS types defined.  This rippled into other 
+	files since rtems_bsdnet_internal.h used machine/types.h to include
+	rtems.h.
+
 2000-09-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ChangeLog: Cleanup.

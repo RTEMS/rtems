@@ -10,18 +10,19 @@
 #ifndef _MACHINE_TYPES_H_
 #define _MACHINE_TYPES_H_
 
-#include <rtems.h>
+#include <rtems/system.h>
+#include <rtems/score/cpu.h>
 #include <machine/endian.h>
 
-typedef rtems_signed64		int64_t;
-typedef rtems_signed32		int32_t;
-typedef rtems_signed16		int16_t;
-typedef rtems_signed8		int8_t;
+typedef signed64	int64_t;
+typedef signed32	int32_t;
+typedef signed16	int16_t;
+typedef signed8		int8_t;
 
-typedef rtems_unsigned64	u_int64_t;
-typedef rtems_unsigned32	u_int32_t;
-typedef rtems_unsigned16	u_int16_t;
-typedef rtems_unsigned8		u_int8_t;
+typedef unsigned64	u_int64_t;
+typedef unsigned32	u_int32_t;
+typedef unsigned16	u_int16_t;
+typedef unsigned8	u_int8_t;
 
 #define	_CLOCK_T_	unsigned long
 #define	_TIME_T_	long

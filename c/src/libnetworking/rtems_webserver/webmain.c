@@ -23,6 +23,7 @@
 #include	<sys/time.h>
 #include 	<pthread.h>
 
+#include	<rtems.h>
 #include	<rtems/error.h>
 
 #ifdef WEBS_SSL_SUPPORT

@@ -12,6 +12,8 @@
 #ifndef _RTEMS_BSDNET_INTERNAL_H_
 #define _RTEMS_BSDNET_INTERNAL_H_
 
+#include <rtems.h>
+
 typedef	unsigned int		vm_offset_t;
 typedef	long long		vm_ooffset_t;
 typedef	unsigned int		vm_pindex_t;
