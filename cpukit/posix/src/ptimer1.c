@@ -175,8 +175,8 @@ void ITIMERSPEC_TO_RTEMS_TIME_OF_DAY_S
 
    rtems_time->second = seconds;
 
-   rtems_time->ticks  = ( itimer->it_value.tv_nsec * SEC_TO_TICKS_C ) /
-                        NSEC_PER_SEC_C;
+   rtems_time->ticks  = itimer->it_value.tv_nsec/
+                        (NSEC_PER_SEC_C / SEC_TO_TICKS_C);
 
 }
 
@@ -573,8 +573,7 @@ int timer_settime(
 
         timer_struct[timer_pos].ticks = 
              ( SEC_TO_TICKS_C * value->it_value.tv_sec ) +
-             ( value->it_value.tv_nsec / 
-                 (1000L * (unsigned32)(1000 * 10) ));
+             ( value->it_value.tv_nsec / (NSEC_PER_SEC_C / SEC_TO_TICKS_C));
 
         return_v = rtems_timer_fire_after ( timerid, 
                                            timer_struct[timer_pos].ticks, 

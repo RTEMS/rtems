@@ -1,3 +1,8 @@
+2003-01-27	Juan Zamorano <jzamora@fi.upm.es>
+
+	* src/ptimer1.c: Correct problem which could lead to overflow in time
+	math.
+
 2003-01-03	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: Corrected entry for sysconf.c which did not include PR.
