@@ -15,7 +15,6 @@ OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
     ../../../../libcpu/sparc/reg_win$(LIB_VARIANT).rel \
     ../../../../libcpu/sparc/syscall$(LIB_VARIANT).rel
 
-
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 

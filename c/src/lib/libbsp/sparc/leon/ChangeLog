@@ -1,3 +1,8 @@
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add PREINSTALL_DIRS.
+	* wrapup/Makefile.am: Cosmetics.
+
 2004-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Reflect changes to libcpu.
