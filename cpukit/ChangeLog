@@ -1,7 +1,12 @@
 2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
-	* libblock/include/rtems/ramdisk.h: size_t
-	rtems_ramdisk_configuration_size.
+	* libblock/include/rtems/diskdevs.h: Use uint32_t for ictrl req
+	argument (16bit target compliance).
+
+2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libblock/include/rtems/ramdisk.h: 
+	size_t rtems_ramdisk_configuration_size.
 	* libblock/src/ramdisk.c: Adaptations for 16bit target compliance.
 
 2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>

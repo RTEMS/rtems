@@ -27,7 +27,7 @@ extern "C" {
 typedef int rtems_bdpool_id;
 
 /* Block device ioctl handler */
-typedef int (* block_device_ioctl) (dev_t dev, int req, void *argp);
+typedef int (* block_device_ioctl) (dev_t dev, uint32_t req, void *argp);
 
 /* disk_device: Entry of this type created for every disk device (both for
  * logical and physical disks).
