@@ -1,5 +1,7 @@
 /*
  *  Cache Management Support Routines for the MC68040
+ * Modified for MPC8260 Andy Dachs <a.dachs@sstl.co.uk>
+ * Surrey Satellite Technology Limited (SSTL), 2001
  *
  *  $Id$
  */
@@ -17,7 +19,7 @@
  * FIXME: Some functions simply have not been implemented.
  */
  
-#if defined(ppc603)			/* And possibly others */
+#if defined(ppc603) || defined(mpc8260)	   /* And possibly others */
 
 /* Helpful macros */
 #define PPC_Get_HID0( _value ) \

@@ -1,5 +1,11 @@
 2001-10-22	Andy Dachs <a.dachs@sstl.co.uk>
 
+	* Makefile.am, README, configure.ac, new_exception_processing/cpu.h,
+	shared/include/cpu.h, shared/include/cpuIdent.c, shared/src/cache.c:
+	Added mpc8260 support.
+
+2001-10-22	Andy Dachs <a.dachs@sstl.co.uk>
+
 	* Added mpc8260 directory.
 	* Modified Makefile.am and configure.in to build the contents
 	* mpc8260/Makefile.am, mpc8260/README, mpc8260/clock/Makefile.am,

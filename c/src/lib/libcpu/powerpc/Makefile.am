@@ -28,6 +28,9 @@ endif
 if mpc8xx
 CPU_SUBDIR = mpc8xx
 endif
+if mpc8260
+CPU_SUBDIR = mpc8260
+endif
 if ppc403
 CPU_SUBDIR = ppc403
 endif

@@ -3,6 +3,9 @@
  *
  *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
  *
+ *  Added MPC8260 Andy Dachs <a.dachs@sstl.co.uk>
+ *  Surrey Satellite Technology Limited
+ *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
@@ -37,6 +40,7 @@ ppc_cpu_id_t get_ppc_cpu_type()
     case PPC_604r:
     case PPC_620:
     case PPC_860:
+    case PPC_8260:
       current_ppc_cpu = (ppc_cpu_id_t) pvr;
       return current_ppc_cpu;
     default:

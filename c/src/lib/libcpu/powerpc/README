@@ -18,6 +18,7 @@ family members:
   + mpc821
   + mpc860
   + ppc403
+  + mpc8260
 
 Note that because of similarities in various family members,
 the mpc823 should be able to use the mpc821 code and the

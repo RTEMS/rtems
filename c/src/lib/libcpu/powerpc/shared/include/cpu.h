@@ -8,6 +8,10 @@
  * Copyright (C) 1999  Eric Valette (valette@crf.canon.fr)
  *                     Canon Centre Recherche France.
  *
+ *  Added MPC8260 Andy Dachs <a.dachs@sstl.co.uk>
+ *  Surrey Satellite Technology Limited
+ *
+ *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
@@ -184,6 +188,7 @@ typedef enum {
   PPC_620	= 0x16,
   PPC_860	= 0x50,
   PPC_821	= PPC_860,
+  PPC_8260	= 0x81,
   PPC_UNKNOWN	= 0xff
 } ppc_cpu_id_t;
 
@@ -317,6 +322,8 @@ static inline  void PPC_Set_timebase_register (unsigned long long tbr)
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
+#define PPC_Get_decrementer( _clicks ) \
+    asm volatile( "mfdec  %0" : "=r" (_clicks) )
 
 #ifdef __cplusplus
 }

@@ -3,6 +3,9 @@
  *  This include file contains information pertaining to the PowerPC
  *  processor.
  *
+ *  Modified for MPC8260 Andy Dachs <a.dachs@sstl.co.uk>
+ *  Surrey Satellite Technology Limited (SSTL), 2001
+ *
  *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
@@ -256,6 +259,7 @@ extern "C" {
 
 #define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
 
+
 /*
  *  Does the stack grow up (toward higher addresses) or down
  *  (toward lower addresses)?
@@ -439,7 +443,7 @@ typedef struct {
   unsigned32   clicks_per_usec;	       /* Timer clicks per microsecond */
   boolean      exceptions_in_RAM;     /* TRUE if in RAM */
 
-#if (defined(ppc403) || defined(mpc860) || defined(mpc821))
+#if (defined(ppc403) || defined(mpc860) || defined(mpc821) || defined(mpc8260))
   unsigned32   serial_per_sec;	       /* Serial clocks per second */
   boolean      serial_external_clock;
   boolean      serial_xon_xoff;
@@ -450,7 +454,7 @@ typedef struct {
   boolean      timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 #endif
 
-#if (defined(mpc860) || defined(mpc821))
+#if (defined(mpc860) || defined(mpc821) || defined( mpc8260))
   unsigned32   clock_speed;            /* Speed of CPU in Hz */
 #endif
 }   rtems_cpu_table;
