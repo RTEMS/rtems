@@ -1,5 +1,13 @@
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/old-exceptions/cpu.h (PPC_Get_timebase_register): Remove.
+	* rtems/powerpc/registers.h (PPC_Get_timebase_register,
+	PPC_Set_timebase_register): Remove.
+	* rtems/score/cpu.h (PPC_Get_timebase_register,
+	PPC_Set_timebase_register): New.
+
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/powerpc/registers.h (PPC_Set_decrementer,
 	PPC_Get_decrementer): Remove.
 	* rtems/old-exceptions/cpu.h (PPC_Set_decrementer): Remove.
