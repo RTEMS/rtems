@@ -1,3 +1,8 @@
+2003-10-02	Chris Caudle <chris@chriscaudle.org>
+
+	* nextstep.t: RTEMS applications can now use main() so correct the
+	discussion of this.
+
 2003-09-26	Joel Sherrill <joel@OARcorp.com>
 
 	* nt.t: Significant update of Windows information. Hopefully this is

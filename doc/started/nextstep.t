@@ -83,12 +83,29 @@ at @uref{@value{RTEMSHTTPURL}/support.html,@value{RTEMSHTTPURL}/support.html}.
 
 @section Writing an Application
 
-From an application author's perspective, RTEMS applications do not 
-start at @code{main()}.  They begin execution at one or more
-application initialization task or thread and @code{main()} is
-owned by the Board Support Package.   Each API supported
-by RTEMS (Classic, POSIX, and ITRON) allows the user to configure
-a set of tasks that are created and started automatically
+From an application author's perspective, the structure of
+an RTEMS application is very familiar.  In POSIX language,
+RTEMS provides a single process, multi-threaded run-time
+environment.  However there are two important things that are
+different from a standard UNIX hosted program.
+
+First, the application developer must provide configuration
+information for RTEMS.  This configuration information
+includes limits on the maximum number of various OS resources
+available and networking configuration among other things.
+See the @b{Configuring a System} in the
+@b{RTEMS Applications C User's Guide} for more details.
+
+Second, RTEMS applications may or may not start at
+@code{main()}.  Applications begin execution at
+one or more user configurable application
+initialization tasks or threads.  It is possible
+to configure an application to start with a 
+single thread that whose entry point is @code{main()}.
+
+Each API supported by RTEMS (Classic, POSIX, and ITRON)
+allows the user to configure a set of one or more tasks
+that are created and started automatically
 during RTEMS initialization.  The RTEMS Automatic
 Configuration Generation (@code{confdefs.h}) scheme can be
 used to easily generate the configuration information for
@@ -104,19 +121,18 @@ initialization task varies based up API.
 @item @code{ITRON_Init} - single ITRON API Initialization Task
 @end itemize
 
-See the Configuring a System chapter in the C User's Guide for
-more details.
-
 Regardless of the API used, when the initialization task executes,
-all non-networking device drivers are normally initialized and
-processor interrupts are enabled.  The initialization task then
-goes about its business of performing application specific 
-initialization.  This often involves creating tasks and other
-system resources such as semaphores or message queues and allocating
-memory.  In the RTEMS examples and tests, the file @code{init.c} usually
-contains the initialization task.  Although not required, in
-most of the examples, the initialization task completes by 
-deleting itself.
+all non-networking device drivers are normally initialized,
+processor interrupts are enabled, and any C++ global constructors
+have been run.  The initialization task then goes about its
+business of performing application specific initialization which
+will include initializing the networking subsystem if it is to be
+used.  The application initialization may also involve creating
+tasks and other system resources such as semaphores or message queues
+and allocating memory.  In the RTEMS examples and tests, the
+file @code{init.c} usually contains the initialization task.  Although
+not required, in most of the examples, the initialization task
+completes by deleting itself.
 
 As you begin to write RTEMS application code, you may be confused
 by the range of alternatives.  Supporting multiple tasking
