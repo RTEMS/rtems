@@ -4,7 +4,7 @@
 
 PGM = $(ARCH)/network.rel
 
-C_FILES = network.c 
+C_FILES = network.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
@@ -28,6 +28,6 @@ endif
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = network.c 
+EXTRA_DIST = network.c
 
 include $(top_srcdir)/../../../../automake/local.am
