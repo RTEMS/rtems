@@ -61,11 +61,17 @@ int _POSIX_Semaphore_Create_support(
 
   _Thread_Disable_dispatch();
  
+  /* Sharing semaphores among processes is not currently supported */
+  if (pshared != 0) {
+    _Thread_Enable_dispatch();
+    set_errno_and_return_minus_one( ENOSYS );
+  }
+
   the_semaphore = _POSIX_Semaphore_Allocate();
  
   if ( !the_semaphore ) {
     _Thread_Enable_dispatch();
-    set_errno_and_return_minus_one( ENOMEM );
+    set_errno_and_return_minus_one( ENOSPC );
   }
  
 #if defined(RTEMS_MULTIPROCESSING)
@@ -96,7 +102,13 @@ int _POSIX_Semaphore_Create_support(
    */
 
   the_sem_attr->discipline = CORE_SEMAPHORE_DISCIPLINES_FIFO;
- 
+
+  /*
+   *  This effectively disables limit checking.
+   */
+
+  the_sem_attr->maximum_count = 0xFFFFFFFF;
+
   _CORE_semaphore_Initialize(
     &the_semaphore->Semaphore,
     OBJECTS_POSIX_SEMAPHORES,
@@ -243,12 +255,15 @@ sem_t *sem_open(
   int                        status;
   Objects_Id                 the_semaphore_id;
   POSIX_Semaphore_Control   *the_semaphore;
+  Objects_Locations          location;
  
 
   if ( oflag & O_CREAT ) {
     va_start(arg, oflag);
-    mode = (mode_t) va_arg( arg, mode_t * );
-    value = (unsigned int) va_arg( arg, unsigned int * );
+    /*mode = (mode_t) va_arg( arg, mode_t * );*/
+    mode = va_arg( arg, mode_t );
+    /*value = (unsigned int) va_arg( arg, unsigned int * );*/
+    value = va_arg( arg, unsigned int );
     va_end(arg);
   }
 
@@ -270,7 +285,7 @@ sem_t *sem_open(
       /* we are willing to create it */
     }
     /* some type of error */
-    set_errno_and_return_minus_one_cast( status, sem_t * );
+    /*set_errno_and_return_minus_one_cast( status, sem_t * );*/
 
   } else {                /* name -> ID translation succeeded */
 
@@ -283,6 +298,7 @@ sem_t *sem_open(
      *     check the mode.   This is probably a good place for a subroutine.
      */
 
+    the_semaphore = _POSIX_Semaphore_Get( &the_semaphore_id, &location );
     the_semaphore->open_count += 1;
 
     return (sem_t *)&the_semaphore->Object.id;
@@ -297,7 +313,7 @@ sem_t *sem_open(
 
   status = _POSIX_Semaphore_Create_support(
     name,
-    TRUE,         /* shared across processes */
+    FALSE,         /* not shared across processes */
     value,
     &the_semaphore
   );
@@ -431,6 +447,7 @@ int _POSIX_Semaphore_Wait_support(
 {
   register POSIX_Semaphore_Control *the_semaphore;
   Objects_Locations                 location;
+  int                               code;
  
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
@@ -448,7 +465,20 @@ int _POSIX_Semaphore_Wait_support(
         timeout
       );
       _Thread_Enable_dispatch();
-      return _Thread_Executing->Wait.return_code;
+      code = _Thread_Executing->Wait.return_code;
+      switch (_Thread_Executing->Wait.return_code) {
+        case 1:
+	  errno = EAGAIN;
+	  code = -1;
+	  break;
+	case 3:
+	  errno = ETIMEDOUT;
+	  code = -1;
+	  break;
+      }
+
+      /*return _Thread_Executing->Wait.return_code;*/
+      return code;
   }
   return POSIX_BOTTOM_REACHED();
 }
@@ -573,3 +603,27 @@ int sem_getvalue(
   }
   return POSIX_BOTTOM_REACHED();
 }
+
+/*PAGE
+ *
+ *  _POSIX_Semaphore_Name_to_id
+ *
+ *  XXX
+ */
+
+int _POSIX_Semaphore_Name_to_id(
+  const char          *name,
+  Objects_Id          *id
+)
+{
+  Objects_Name_to_id_errors  status;
+
+  status = _Objects_Name_to_id( &_POSIX_Semaphore_Information, name, 0, id );
+
+  if ( status == OBJECTS_SUCCESSFUL ) {
+	  return 0;
+  } else {
+	  return EINVAL;
+  }
+}
+
