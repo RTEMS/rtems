@@ -1,6 +1,6 @@
 dnl $Id$
 
-AC_DEFUN(RTEMS_ENABLE_CXX,
+AC_DEFUN([RTEMS_ENABLE_CXX],
 [
 AC_ARG_ENABLE(cxx,
 [AC_HELP_STRING([--enable-cxx],

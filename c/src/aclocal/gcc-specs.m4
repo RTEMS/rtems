@@ -4,7 +4,7 @@ dnl
 dnl Check whether the target compiler accepts -specs
 dnl
 
-AC_DEFUN(RTEMS_GCC_SPECS,
+AC_DEFUN([RTEMS_GCC_SPECS],
 [AC_REQUIRE([RTEMS_PROG_CC])
 AC_CACHE_CHECK(whether $CC accepts -specs,rtems_cv_gcc_specs,
 [

@@ -9,7 +9,7 @@ dnl Configure scripts will receive <bsp-value> if <RTEMS_BSP> matches the
 dnl actual value of the shell variable RTEMS_BSP (cf. RTEMS_ENV_RTEMSBSP), 
 dnl and the raw value passed to --enable-FEATURE otherwise.
 dnl
-AC_DEFUN(RTEMS_BSP_ARG_ENABLE,
+AC_DEFUN([RTEMS_BSP_ARG_ENABLE],
 [AC_REQUIRE([RTEMS_ENV_RTEMSBSP])
 AC_ARG_ENABLE([$1],[$2],
 [enableval=`echo "[$enable_]patsubst([$1], -, _)" | sed -e "s%^${RTEMS_BSP}:%%"`
