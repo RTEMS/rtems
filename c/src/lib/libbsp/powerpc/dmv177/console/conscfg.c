@@ -13,8 +13,6 @@
 #include <libchip/serial.h>
 #include <libchip/mc68681.h>
 #include <libchip/z85c30.h>
-#include "mc68681cfg.h"
-#include "z85c30cfg.h"
 
 /*
  * Configuration specific probe routines
@@ -156,8 +154,8 @@ console_tbl	Console_Port_Tbl[] = {
 		MC68681_ADDR,			/* ulCtrlPort1 */
 		MC68681_PORT1_ADDR,		/* ulCtrlPort2 */
 		MC68681_PORT_CONFIG,		/* ulDataPort */
-		Read_mc68681_register,		/* getRegister */
-		Write_mc68681_register,		/* setRegister */
+		mc68681_get_register_8,         /* getRegister */
+		mc68681_set_register_8,		/* setRegister */
 		NULL, /* unused */		/* getData */
 		NULL, /* unused */		/* setData */
                 (unsigned32)dmv177_mc68681_baud_table, /* ulClock */
@@ -175,8 +173,8 @@ console_tbl	Console_Port_Tbl[] = {
 		MC68681_ADDR,			/* ulCtrlPort1 */
 		MC68681_PORT2_ADDR,		/* ulCtrlPort2 */
 		MC68681_PORT_CONFIG,		/* ulDataPort */
-		Read_mc68681_register,		/* getRegister */
-		Write_mc68681_register,		/* setRegister */
+		mc68681_get_register_8,         /* getRegister */
+		mc68681_set_register_8,		/* setRegister */
 		NULL, /* unused */		/* getData */
 		NULL, /* unused */		/* setData */
                 (unsigned32)dmv177_mc68681_baud_table, /* ulClock */
@@ -194,10 +192,10 @@ console_tbl	Console_Port_Tbl[] = {
 		Z85C30_CTRL_A,			/* ulCtrlPort1 */
 		Z85C30_CTRL_A,			/* ulCtrlPort2 */
 		Z85C30_DATA_A,			/* ulDataPort */
-		Read_z85c30_register,		/* getRegister */
-		Write_z85c30_register,		/* setRegister */
-		Read_z85c30_data,		/* getData */
-		Write_z85c30_data,		/* setData */
+		z85c30_get_register,		/* getRegister */
+		z85c30_set_register,		/* setRegister */
+		z85c30_get_data,		/* getData */
+		z85c30_set_data,		/* setData */
                 Z85C30_CLOCK,                   /* ulClock */
 		DMV170_SCC_IRQ			/* ulIntVector */
 	},
