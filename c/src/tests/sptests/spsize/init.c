@@ -25,6 +25,8 @@
 #define TEST_INIT
 #include "system.h"
 
+/* #define HAVE_MENU */
+
 rtems_task Test_task();
 void size_rtems( int mode );
 
@@ -32,7 +34,9 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  int choice;
+#if defined(HAVE_MENU)
+  int choice = 0;
+#endif
 
   setvbuf(stdout, 0, _IONBF, 0);
 
@@ -40,7 +44,7 @@ rtems_task Init(
   size_rtems( 1 );
   puts( "*** END OF RTEMS SIZE PROGRAM ***" );
   exit( 0 );
-#if 0
+#if defined(HAVE_MENU)
   do {
     printf( "\n\nPlease select program mode:\n" );
     printf( "  1) Print Formulas\n" );
