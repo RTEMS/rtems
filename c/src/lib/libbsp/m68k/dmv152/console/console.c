@@ -59,10 +59,7 @@ void console_outbyte_polled(
  *  This routine polls for a character.
  */
 
-int console_inbyte_nonblocking(
-  int port,
-  char *c
-)
+int console_inbyte_nonblocking(int port)
 {
   rtems_unsigned32 control;
   rtems_unsigned32 data;
@@ -79,10 +76,10 @@ int console_inbyte_nonblocking(
 
   Z8x30_READ_CONTROL( control, RR_0, rr_0 );
   if ( !(rr_0 & RR_0_RX_DATA_AVAILABLE) )
-    return 0;
+    return -1;
 
   Z8x30_READ_DATA( data, ch );
-  return ch;
+  return (int) ch;
 }
 
 /*
