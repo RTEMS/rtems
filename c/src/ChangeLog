@@ -1,5 +1,10 @@
 2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* support/Makefile.am: Use automake compilation rules.
+	* wrapup/Makefile.am: Reflect changes to support/*.
+
+2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Remove libnetworking/wrapup/Makefile.
 	* wrapup/Makefile.am: Reflect change to libnetworking/*.
 	Use libnetworking/*/lib*.a instead of libnetapps.a
