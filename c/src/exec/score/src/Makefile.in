@@ -22,6 +22,9 @@ INSTALL_CHANGE = @INSTALL_CHANGE@
 MP_C_PIECES_yes_V = mpci objectmp threadmp
 MP_C_PIECES = $(MP_C_PIECES_$(HAS_MP)_V)
 
+HEAP_C_PIECES = heap heapallocate heapextend heapfree \
+    heapsizeofuserarea heapwalk
+
 OBJECT_C_PIECES = object objectallocate objectallocatebyindex \
     objectclearname objectcomparenameraw objectcomparenamestring \
     objectcopynameraw objectcopynamestring objectextendinformation \
@@ -42,9 +45,13 @@ THREADQ_C_PIECES= threadq threadqdequeue threadqdequeuefifo \
     threadqextractpriority threadqextractwithproxy threadqfirst \
     threadqfirstfifo threadqfirstpriority threadqflush threadqtimeout
 
+TOD_C_PIECES= coretod coretodset coretodtickle coretodtoseconds \
+    coretodvalidate
+
 # C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES = apiext chain coremsg coremutex coresem coretod heap interr isr \
-    $(OBJECT_C_PIECES) $(THREAD_C_PIECES) $(THREADQ_C_PIECES) userext \
+C_PIECES = apiext chain coremsg coremutex coresem $(HEAP_C_PIECES) interr isr \
+    $(OBJECT_C_PIECES) $(THREAD_C_PIECES) $(THREADQ_C_PIECES) \
+    $(TOD_C_PIECES) userext \
     watchdog wkspace $(MP_C_PIECES)
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
