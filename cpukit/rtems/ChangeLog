@@ -1,3 +1,8 @@
+2002-12-02	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/rtems/support.h: Added casts to eliminate warnings
+	on 16 bit targets like the h8300.
+
 2002-11-13	Paul Whitfield <paulw@microsol.iinet.net.au>
 
 	* src/regionreturnsegment.c: When RTEMS_REGION_SHRED_ON_FREE is
