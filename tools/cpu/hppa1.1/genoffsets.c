@@ -11,7 +11,7 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
+ *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id$
  */
@@ -52,7 +52,7 @@ printf(
   " *\n"
   " *  The license and distribution terms for this file may be\n"
   " *  found in the file LICENSE in this distribution or at\n"
-  " *  http://www.OARcorp.com/rtems/license.html.\n"
+  " *  http://www.rtems.com/license/LICENSE.\n"
   " */\n"
   "\n"
   "#ifndef __OFFSETS_h\n"
