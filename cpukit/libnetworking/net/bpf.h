@@ -127,7 +127,7 @@ struct bpf_hdr {
  * will insist on inserting padding; hence, sizeof(struct bpf_hdr) won't work.
  * Only the kernel needs to know about it; applications use bh_hdrlen.
  */
-#ifdef KERNEL
+#ifdef _KERNEL
 #define SIZEOF_BPF_HDR 18
 #endif
 
@@ -219,13 +219,13 @@ struct bpf_insn {
 #define BPF_STMT(code, k) { (u_short)(code), 0, 0, k }
 #define BPF_JUMP(code, k, jt, jf) { (u_short)(code), jt, jf, k }
 
-#ifdef KERNEL
-int	 bpf_validate __P((struct bpf_insn *, int));
-void	 bpf_tap __P((struct ifnet *, u_char *, u_int));
-void	 bpf_mtap __P((struct ifnet *, struct mbuf *));
-void	 bpfattach __P((struct ifnet *, u_int, u_int));
-void	 bpfilterattach __P((int));
-u_int	 bpf_filter __P((struct bpf_insn *, u_char *, u_int, u_int));
+#ifdef _KERNEL
+int	 bpf_validate(struct bpf_insn *, int);
+void	 bpf_tap(struct ifnet *, u_char *, u_int);
+void	 bpf_mtap(struct ifnet *, struct mbuf *);
+void	 bpfattach(struct ifnet *, u_int, u_int);
+void	 bpfilterattach(int);
+u_int	 bpf_filter(const struct bpf_insn *, u_char *, u_int, u_int);
 #endif
 
 /*
@@ -233,4 +233,4 @@ u_int	 bpf_filter __P((struct bpf_insn *, u_char *, u_int, u_int));
  */
 #define BPF_MEMWORDS 16
 
-#endif
+#endif /* _NET_BPF_H_ */
