@@ -3,8 +3,7 @@
 ##
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/compile.am
-include $(top_srcdir)/automake/lib.am
+include $(top_srcdir)/automake/amcompile.am
 
 include_HEADERS = include/chain.h include/console.h include/clockdrv.h \
     include/iosupp.h include/ringbuf.h include/rtc.h include/spurious.h \
@@ -34,12 +33,12 @@ include_rtems_HEADERS = include/rtems/assoc.h include/rtems/error.h \
 ## sys
 
 include_sysdir = $(includedir)/sys
-
-# FIXME: We should not install to include/sys unless using newlib.
-include_sys_HEADERS = include/sys/filio.h include/sys/ioccom.h \
-    include/sys/ioctl.h include/sys/sockio.h include/sys/ttycom.h
+include_sys_HEADERS = include/sys/ioccom.h
 
 if NEWLIB
+# FIXME: We should not install to include/sys unless using newlib.
+include_sys_HEADERS += include/sys/filio.h include/sys/ioctl.h \
+    include/sys/sockio.h include/sys/ttycom.h
 include_sys_HEADERS += include/sys/termios.h include/sys/utsname.h
 endif
 
@@ -55,9 +54,7 @@ include_zilog_HEADERS = include/zilog/z8036.h include/zilog/z8530.h \
     include/zilog/z8536.h
 
 ##  General stuff
-all-local: $(PREINSTALL_FILES)
-
-LIB = ${ARCH}/libcsupport.a
+all-local: $(PREINSTALL_FILES) $(ARCH)/libcsupport.a
 
 AM_CPPFLAGS += -I$(top_builddir)
 
@@ -122,21 +119,15 @@ else
 C_FILES = $(COMMON_C_FILES) $(EMBEDDED_C_FILES)
 endif
 
-OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
-
-#
-# Add local stuff here using +=
-#
-
 AM_CFLAGS += $(LIBC_DEFINES)
 
-all-local: ${LIB}
+EXTRA_LIBRARIES = o-optimize/libcsupport.a
+o_optimize_libcsupport_a_SOURCES = $(C_FILES)
+o_optimize_libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-${ARCH}/%.$(OBJEXT): src/%.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-
-$(LIB): ${OBJS}
-	$(make-library)
+EXTRA_LIBRARIES += o-debug/libcsupport.a
+o_debug_libcsupport_a_SOURCES = $(C_FILES)
+o_debug_libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 DOC_FILES = src/TODO src/CASES
 
@@ -245,13 +236,14 @@ $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
-$(PROJECT_INCLUDE)/sys/filio.h: include/sys/filio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/filio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/filio.h
-
 $(PROJECT_INCLUDE)/sys/ioccom.h: include/sys/ioccom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioccom.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioccom.h
+
+if NEWLIB
+$(PROJECT_INCLUDE)/sys/filio.h: include/sys/filio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/filio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/filio.h
 
 $(PROJECT_INCLUDE)/sys/ioctl.h: include/sys/ioctl.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioctl.h
@@ -265,7 +257,6 @@ $(PROJECT_INCLUDE)/sys/ttycom.h: include/sys/ttycom.h $(PROJECT_INCLUDE)/sys/$(d
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttycom.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttycom.h
 
-if NEWLIB
 $(PROJECT_INCLUDE)/sys/termios.h: include/sys/termios.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/termios.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/termios.h

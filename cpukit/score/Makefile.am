@@ -3,8 +3,7 @@
 ##
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/compile.am
-include $(top_srcdir)/automake/lib.am
+include $(top_srcdir)/automake/amcompile.am
 
 SUBDIRS = . cpu
 
@@ -81,8 +80,6 @@ EXTRA_DIST = macros/README
 
 ## src
 
-LIB=$(ARCH)/libscore.a
-
 # We only build multiprocessing related files if HAS_MP was defined
 MP_C_FILES = src/mpci.c src/objectmp.c src/threadmp.c
 
@@ -146,23 +143,20 @@ C_FILES = $(STD_C_FILES)
 if HAS_MP
 C_FILES += $(MP_C_FILES)
 endif
-OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
-
-#
-# Add local stuff here using +=
-#
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-$(LIB): ${OBJS}
-	$(make-library)
+EXTRA_LIBRARIES = o-optimize/libscore.a
+o_optimize_libscore_a_SOURCES = $(C_FILES)
+o_optimize_libscore_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-${ARCH}/%.$(OBJEXT): src/%.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
+EXTRA_LIBRARIES += o-debug/libscore.a
+o_debug_libscore_a_SOURCES = $(C_FILES)
+o_debug_libscore_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 EXTRA_DIST += $(STD_C_FILES) $(MP_C_FILES) src/Unlimited.txt
 
-all-local: $(PREINSTALL_FILES) $(LIB)
+all-local: $(PREINSTALL_FILES) $(ARCH)/libscore.a
 
 PREINSTALL_FILES =
 

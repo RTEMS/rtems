@@ -3,8 +3,7 @@
 ##
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/compile.am
-include $(top_srcdir)/automake/lib.am
+include $(top_srcdir)/automake/amcompile.am
 
 EXTRA_DIST =
 
@@ -147,23 +146,21 @@ C_FILES = src/adasupp.c $(CANCEL_C_FILES) $(CONDITION_VARIABLE_C_FILES) \
     $(MUTEX_C_FILES) $(PTHREAD_C_FILES) $(PSIGNAL_C_FILES) src/sched.c \
     $(SEMAPHORE_C_FILES) src/sysconf.c $(TIME_C_FILES) $(TIMER_C_FILES) \
     src/types.c $(ENOSYS_C_FILES) $(BUILD_FOR_NOW_C_FILES)
-OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
-
-#
-# Add local stuff here using +=
-#
 
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
+EXTRA_LIBRARIES = o-optimize/libposix.a
+o_optimize_libposix_a_SOURCES = $(C_FILES)
+o_optimize_libposix_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+
+EXTRA_LIBRARIES += o-debug/libposix.a
+o_debug_libposix_a_SOURCES = $(C_FILES)
+o_debug_libposix_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+
 all-local: $(PREINSTALL_FILES) $(LIB)
 
-$(LIB): ${OBJS}
-	$(make-library)
 endif
-
-${ARCH}/%.$(OBJEXT): src/%.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
 
 # temporary so we can see how many things are left to implement
 not:

@@ -3,8 +3,7 @@
 ##
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/compile.am
-include $(top_srcdir)/automake/lib.am
+include $(top_srcdir)/automake/amcompile.am
 
 EXTRA_DIST =
 
@@ -64,8 +63,6 @@ endif
 
 ## Sources
 
-LIB=$(ARCH)/libitron.a
-
 TASK_C_FILES = src/task.c src/cre_tsk.c src/del_tsk.c src/sta_tsk.c \
     src/ext_tsk.c src/exd_tsk.c src/ter_tsk.c src/dis_dsp.c src/ena_dsp.c \
     src/chg_pri.c src/rot_rdq.c src/rel_wai.c src/get_tid.c src/ref_tsk.c
@@ -103,19 +100,20 @@ C_FILES = $(TASK_C_FILES) $(TASKSYNC_C_FILES) $(SEMAPHORE_C_FILES) \
     $(RENDEZVOUS_C_FILES) $(INTERRUPT_C_FILES) \
     $(VARIABLE_MEMORY_POOL_C_FILES) $(FIXED_MEMORY_POOL_C_FILES) \
     $(TIME_C_FILES)
-OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
 
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-all-local: $(PREINSTALL_FILES) ${LIB}
+EXTRA_LIBRARIES = o-optimize/libitron.a
+o_optimize_libitron_a_SOURCES = $(C_FILES)
+o_optimize_libitron_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-$(LIB): ${OBJS}
-	$(make-library)
+EXTRA_LIBRARIES += o-debug/libitron.a
+o_debug_libitron_a_SOURCES = $(C_FILES)
+o_debug_libitron_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+
+all-local: $(PREINSTALL_FILES) $(ARCH)/libitron.a
 endif
-
-${ARCH}/%.$(OBJEXT): src/%.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
 
 UNUSED_C_FILES = src/cre_mbx.c src/del_mbx.c src/mboxtranslatereturncode.c \
     src/network.c src/prcv_mbx.c src/rcv_mbx.c src/ref_mbx.c src/snd_mbx.c \

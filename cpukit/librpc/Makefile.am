@@ -3,8 +3,7 @@
 ##
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/compile.am
-include $(top_srcdir)/automake/lib.am
+include $(top_srcdir)/automake/amcompile.am
 
 if LIBRPC
 include_rpcdir = $(includedir)/rpc
@@ -22,26 +21,17 @@ libxdr_C_FILES = src/xdr/xdr.c src/xdr/xdr_array.c src/xdr/xdr_float.c \
     src/xdr/xdr_mem.c src/xdr/xdr_rec.c src/xdr/xdr_reference.c \
     src/xdr/xdr_sizeof.c src/xdr/xdr_stdio.c
 
-CLEANDIRS = src/xdr
-
-EXTRA_DIST = $(libxdr_C_FILES)
-
 if LIBRPC
-libxdr_C_O_FILES = \
-    $(libxdr_C_FILES:src/xdr/%.c=src/xdr/$(ARCH)/%.$(OBJEXT))
+EXTRA_LIBRARIES = o-optimize/libxdr.a
+o_optimize_libxdr_a_SOURCES = $(libxdr_C_FILES)
+o_optimize_libxdr_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-libxdr_OBJS = $(libxdr_C_O_FILES)
-
-src/xdr/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) src/xdr/$(ARCH)
-	@: > src/xdr/$(ARCH)/$(dirstamp)
-src/xdr/$(ARCH)/%.$(OBJEXT): src/xdr/%.c src/xdr/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-src/xdr/$(ARCH)/libxdr.a: $(libxdr_OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += o-debug/libxdr.a
+o_debug_libxdr_a_SOURCES = $(libxdr_C_FILES)
+o_debug_libxdr_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 man_MANS += src/xdr/xdr.3
-all-local: src/xdr/$(ARCH)/libxdr.a
+all-local: $(ARCH)/libxdr.a
 endif
 
 librpc_C_FILES = src/rpc/auth_none.c src/rpc/auth_unix.c \
@@ -64,33 +54,28 @@ librpc_UNUSED_C_FILES = src/rpc/auth_des.c src/rpc/auth_time.c \
     src/rpc/svc_unix.c
 
 if LIBRPC
-librpc_C_O_FILES = \
-    $(librpc_C_FILES:src/rpc/%.c=src/rpc/$(ARCH)/%.$(OBJEXT))
-
-librpc_OBJS = $(librpc_C_O_FILES)
-
 librpc_a_CPPFLAGS = -D_RPC_read=read -D_RPC_write=write -D_RPC_close=close \
     -D_RTEMS_RPC_INTERNAL_
 
-src/rpc/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) src/rpc/$(ARCH)
-	@: > src/rpc/$(ARCH)/$(dirstamp)
-src/rpc/$(ARCH)/%.$(OBJEXT): src/rpc/%.c src/rpc/$(ARCH)/$(dirstamp)
-	${COMPILE} $(librpc_a_CPPFLAGS) -o $@ -c $<
-src/rpc/$(ARCH)/librpc.a: $(librpc_OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += o-optimize/librpc.a
+o_optimize_librpc_a_SOURCES = $(librpc_C_FILES)
+o_optimize_librpc_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
+$(librpc_a_CPPFLAGS)
+
+EXTRA_LIBRARIES += o-debug/librpc.a
+o_debug_librpc_a_SOURCES = $(librpc_C_FILES)
+o_debug_librpc_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) \
+$(librpc_a_CPPFLAGS)
 
 man_MANS += src/rpc/bindresvport.3 src/rpc/getrpcent.3 src/rpc/publickey.3 \
     src/rpc/rpc.3 src/rpc/rpc_secure.3 src/rpc/rstat_svc.8 \
     src/rpc/des_crypt.3 src/rpc/getrpcport.3 src/rpc/publickey.5 \
     src/rpc/rpc.5 src/rpc/rstat.1 src/rpc/rtime.3
 
-all-local: src/rpc/$(ARCH)/librpc.a
+all-local: $(ARCH)/librpc.a
 endif
 
-CLEANDIRS += src/rpc
-
-EXTRA_DIST += $(librpc_C_FILES) src/rpc/DISCLAIMER $(librpc_UNUSED_C_FILES)
+EXTRA_DIST = $(librpc_C_FILES) src/rpc/DISCLAIMER $(librpc_UNUSED_C_FILES)
 
 EXTRA_DIST += src/rpc/PSD.doc/nfs.rfc.ms src/rpc/PSD.doc/rpc.prog.ms \
     src/rpc/PSD.doc/rpc.rfc.ms src/rpc/PSD.doc/rpcgen.ms \

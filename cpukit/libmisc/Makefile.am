@@ -2,8 +2,7 @@
 ##  $Id$
 ##
 
-include $(top_srcdir)/automake/compile.am
-include $(top_srcdir)/automake/lib.am
+include $(top_srcdir)/automake/amcompile.am
 
 EXTRA_DIST = README
 
@@ -12,298 +11,243 @@ AM_CPPFLAGS += -I$(top_builddir)
 include_rtemsdir = $(includedir)/rtems
 include_HEADERS =
 include_rtems_HEADERS =
-noinst_HEADERS =
+EXTRA_LIBRARIES =
+TMP_LIBS =
 
 ## capture
 
 libcapture_C_FILES = capture/capture.c capture/capture-cli.c
-libcapture_OBJS = \
-    $(libcapture_C_FILES:capture/%.c=capture/$(ARCH)/%.$(OBJEXT))
-
 include_rtems_HEADERS += capture/capture.h capture/capture-cli.h
 
-capture/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) capture/$(ARCH)
-	@: > capture/$(ARCH)/$(dirstamp)
-capture/$(ARCH)/%.$(OBJEXT): capture/%.c capture/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-capture/$(ARCH)/libcapture.a: $(libcapture_OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += o-optimize/libcapture.a
+o_optimize_libcapture_a_SOURCES = $(libcapture_C_FILES)
+o_optimize_libcapture_a_CPPFLAGS = $(AM_CPPFLAGS) \
+    $(CFLAGS_OPTIMIZE_V)
 
-LIBS += capture/$(ARCH)/libcapture.a
+EXTRA_LIBRARIES += o-debug/libcapture.a
+o_debug_libcapture_a_SOURCES = $(libcapture_C_FILES)
+o_debug_libcapture_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-EXTRA_DIST += capture/README capture/capture.c capture/capture-cli.c
+TMP_LIBS += $(ARCH)/libcapture.a
 
 ## cpuuse
 
 libcpuuse_C_FILES = cpuuse/cpuuse.c
-libcpuuse_OBJS = $(libcpuuse_C_FILES:cpuuse/%.c=cpuuse/$(ARCH)/%.$(OBJEXT))
-
 include_rtems_HEADERS += cpuuse/cpuuse.h
 
-cpuuse/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) cpuuse/$(ARCH)
-	@: > cpuuse/$(ARCH)/$(dirstamp)
-cpuuse/$(ARCH)/%.$(OBJEXT): cpuuse/%.c cpuuse/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-cpuuse/$(ARCH)/libcpuuse.a: $(libcpuuse_OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += o-optimize/libcpuuse.a
+o_optimize_libcpuuse_a_SOURCES = $(libcpuuse_C_FILES)
+o_optimize_libcpuuse_a_CPPFLAGS = $(AM_CPPFLAGS) \
+    $(CFLAGS_OPTIMIZE_V)
 
-LIBS += cpuuse/$(ARCH)/libcpuuse.a
-EXTRA_DIST += cpuuse/README cpuuse/cpuuse.c
+EXTRA_LIBRARIES += o-debug/libcpuuse.a
+o_debug_libcpuuse_a_SOURCES = $(libcpuuse_C_FILES)
+o_debug_libcpuuse_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+
+TMP_LIBS += $(ARCH)/libcpuuse.a
 
 ## devnull
 
 libdevnull_C_FILES = devnull/devnull.c
-libdevnull_OBJS = \
-    $(libdevnull_C_FILES:devnull/%.c=devnull/$(ARCH)/%.$(OBJEXT))
-
 include_rtems_HEADERS += devnull/devnull.h
 
-devnull/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) devnull/$(ARCH)
-	@: > devnull/$(ARCH)/$(dirstamp)
-devnull/$(ARCH)/%.$(OBJEXT): devnull/%.c devnull/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-devnull/$(ARCH)/libdevnull.a: $(libdevnull_OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += o-optimize/libdevnull.a
+o_optimize_libdevnull_a_SOURCES = $(libdevnull_C_FILES)
+o_optimize_libdevnull_a_CPPFLAGS = $(AM_CPPFLAGS) \
+    $(CFLAGS_OPTIMIZE_V)
 
-LIBS += devnull/$(ARCH)/libdevnull.a
+EXTRA_LIBRARIES += o-debug/libdevnull.a
+o_debug_libdevnull_a_SOURCES = $(libdevnull_C_FILES)
+o_debug_libdevnull_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-EXTRA_DIST += devnull/devnull.c
+TMP_LIBS += $(ARCH)/libdevnull.a
 
 ## dummy
 
 libdummy_C_FILES = dummy/dummy.c
-libdummy_OBJS = $(libdummy_C_FILES:dummy/%.c=dummy/$(ARCH)/%.$(OBJEXT))
+EXTRA_DIST += dummy/README
 
-dummy/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) dummy/$(ARCH)
-	@: > dummy/$(ARCH)/$(dirstamp)
-dummy/$(ARCH)/%.$(OBJEXT): dummy/%.c dummy/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-dummy/$(ARCH)/libdummy.a: $(libdummy_OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += o-optimize/libdummy.a
+o_optimize_libdummy_a_SOURCES = $(libdummy_C_FILES)
+o_optimize_libdummy_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-LIBS += dummy/$(ARCH)/libdummy.a
+EXTRA_LIBRARIES += o-debug/libdummy.a
+o_debug_libdummy_a_SOURCES = $(libdummy_C_FILES)
+o_debug_libdummy_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-EXTRA_DIST += dummy/README dummy/dummy.c
+TMP_LIBS += $(ARCH)/libdummy.a
 
 ## dumpbuf
 
 libdumpbuf_C_FILES = dumpbuf/dumpbuf.c
-libdumpbuf_OBJS = \
-    $(libdumpbuf_C_FILES:dumpbuf/%.c=dumpbuf/$(ARCH)/%.$(OBJEXT))
-
 include_rtems_HEADERS += dumpbuf/dumpbuf.h
 
-dumpbuf/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) dumpbuf/$(ARCH)
-	@: > dumpbuf/$(ARCH)/$(dirstamp)
-dumpbuf/$(ARCH)/%.$(OBJEXT): dumpbuf/%.c dumpbuf/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-dumpbuf/$(ARCH)/libdumpbuf.a: $(libdumpbuf_OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += o-optimize/libdumpbuf.a
+o_optimize_libdumpbuf_a_SOURCES = $(libdumpbuf_C_FILES)
+o_optimize_libdumpbuf_a_CPPFLAGS = $(AM_CPPFLAGS) \
+    $(CFLAGS_OPTIMIZE_V)
 
-LIBS += dumpbuf/$(ARCH)/libdumpbuf.a
+EXTRA_LIBRARIES += o-debug/libdumpbuf.a
+o_debug_libdumpbuf_a_SOURCES = $(libdumpbuf_C_FILES)
+o_debug_libdumpbuf_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-EXTRA_DIST += dumpbuf/dumpbuf.c
+TMP_LIBS += $(ARCH)/libdumpbuf.a
 
 ## monitor
 
-# We only build multiprocessing related files if HAS_MP was defined
-libmonitor_MP_C_FILES = monitor/mon-mpci.c
+include_rtems_HEADERS += monitor/monitor.h
 
 libmonitor_C_FILES = monitor/mon-command.c monitor/mon-symbols.c \
     monitor/mon-prmisc.c monitor/mon-monitor.c monitor/mon-object.c \
     monitor/mon-server.c monitor/mon-task.c monitor/mon-queue.c \
     monitor/mon-driver.c monitor/mon-dname.c monitor/mon-itask.c \
-    monitor/mon-extension.c monitor/mon-manager.c monitor/mon-config.c
-
-libmonitor_OBJS = \
-    $(libmonitor_C_FILES:monitor/%.c=monitor/$(ARCH)/%.$(OBJEXT))
+    monitor/mon-extension.c monitor/mon-manager.c monitor/mon-config.c \
+    monitor/symbols.h
 if HAS_MP
-libmonitor_OBJS += \
-    $(libmonitor_MP_C_FILES:monitor/%.c=monitor/$(ARCH)/%.$(OBJEXT))
+libmonitor_C_FILES += monitor/mon-mpci.c
 endif
 
-include_rtems_HEADERS += monitor/monitor.h
+EXTRA_LIBRARIES += o-optimize/libmonitor.a
+o_optimize_libmonitor_a_SOURCES = $(libmonitor_C_FILES)
+o_optimize_libmonitor_a_CPPFLAGS = $(AM_CPPFLAGS) \
+    $(CFLAGS_OPTIMIZE_V)
 
-noinst_HEADERS += monitor/symbols.h
+EXTRA_LIBRARIES += o-debug/libmonitor.a
+o_debug_libmonitor_a_SOURCES = $(libmonitor_C_FILES)
+o_debug_libmonitor_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-monitor/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) monitor/$(ARCH)
-	@: > monitor/$(ARCH)/$(dirstamp)
-monitor/$(ARCH)/%.$(OBJEXT): monitor/%.c monitor/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-monitor/$(ARCH)/libmonitor.a: $(libmonitor_OBJS)
-	$(make-library)
+EXTRA_DIST += monitor/README
 
-LIBS += monitor/$(ARCH)/libmonitor.a
-
-EXTRA_DIST += monitor/README monitor/mon-command.c monitor/mon-config.c \
-    monitor/mon-dname.c monitor/mon-driver.c monitor/mon-extension.c \
-    monitor/mon-itask.c monitor/mon-manager.c monitor/mon-monitor.c \
-    monitor/mon-mpci.c monitor/mon-object.c monitor/mon-prmisc.c \
-    monitor/mon-queue.c monitor/mon-server.c monitor/mon-symbols.c \
-    monitor/mon-task.c
+TMP_LIBS += $(ARCH)/libmonitor.a
 
 ## mw-fb
 
 libmw_fb_C_FILES = mw-fb/mw_fb.c mw-fb/mw_uid.c
-libmw_fb_OBJS = $(libmw_fb_C_FILES:mw-fb/%.c=mw-fb/${ARCH}/%.$(OBJEXT))
-
 include_rtems_HEADERS += mw-fb/mw_fb.h mw-fb/mw_uid.h
 
-mw-fb/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) mw-fb/$(ARCH)
-	@: > mw-fb/$(ARCH)/$(dirstamp)
-mw-fb/$(ARCH)/%.$(OBJEXT): mw-fb/%.c mw-fb/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-mw-fb/$(ARCH)/libmw-fb.a: $(libmw_fb_OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += o-optimize/libmw-fb.a
+o_optimize_libmw_fb_a_SOURCES = $(libmw_fb_C_FILES)
+o_optimize_libmw_fb_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-LIBS += mw-fb/$(ARCH)/libmw-fb.a
+EXTRA_LIBRARIES += o-debug/libmw-fb.a
+o_debug_libmw_fb_a_SOURCES = $(libmw_fb_C_FILES)
+o_debug_libmw_fb_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-EXTRA_DIST += $(libmw_fb_C_FILES)
+TMP_LIBS += $(ARCH)/libmw-fb.a
 
 ## shell
 
-libshell_C_FILES = shell/cmds.c shell/shell.c
-libshell_OBJS = $(libshell_C_FILES:shell/%.c=shell/$(ARCH)/%.$(OBJEXT))
-
 if LIBSHELL
 include_rtems_HEADERS += shell/shell.h
+libshell_C_FILES = shell/cmds.c shell/shell.c
+
+EXTRA_LIBRARIES += o-optimize/libshell.a
+o_optimize_libshell_a_SOURCES = $(libshell_C_FILES)
+o_optimize_libshell_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+
+EXTRA_LIBRARIES += o-debug/libshell.a
+o_debug_libshell_a_SOURCES = $(libshell_C_FILES)
+o_debug_libshell_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+
+TMP_LIBS += $(ARCH)/libshell.a
 endif
 
-shell/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) shell/$(ARCH)
-	@: > shell/$(ARCH)/$(dirstamp)
-shell/$(ARCH)/%.$(OBJEXT): shell/%.c shell/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-shell/$(ARCH)/libshell.a: $(libshell_OBJS)
-	$(make-library)
-
-if LIBSHELL
-LIBS += shell/$(ARCH)/libshell.a
-endif
-
-EXTRA_DIST += shell/README shell/shell.c shell/cmds.c
+EXTRA_DIST += shell/README
 
 ## rtmonuse
 
 librtmonuse_C_FILES = rtmonuse/rtmonuse.c
-librtmonuse_OBJS = \
-    $(librtmonuse_C_FILES:rtmonuse/%.c=rtmonuse/$(ARCH)/%.$(OBJEXT))
-
 include_rtems_HEADERS += rtmonuse/rtmonuse.h
 
-rtmonuse/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) rtmonuse/$(ARCH)
-	@: > rtmonuse/$(ARCH)/$(dirstamp)
-rtmonuse/$(ARCH)/%.$(OBJEXT): rtmonuse/%.c rtmonuse/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-rtmonuse/$(ARCH)/librtmonuse.a: $(librtmonuse_OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += o-optimize/librtmonuse.a
+o_optimize_librtmonuse_a_SOURCES = $(librtmonuse_C_FILES)
+o_optimize_librtmonuse_a_CPPFLAGS = $(AM_CPPFLAGS) \
+    $(CFLAGS_OPTIMIZE_V)
 
-LIBS += rtmonuse/$(ARCH)/librtmonuse.a
+EXTRA_LIBRARIES += o-debug/librtmonuse.a
+o_debug_librtmonuse_a_SOURCES = $(librtmonuse_C_FILES)
+o_debug_librtmonuse_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-EXTRA_DIST += rtmonuse/rtmonuse.c
+TMP_LIBS += $(ARCH)/librtmonuse.a
 
 ## serdbg
-
-libserdbg_C_FILES = serdbg/serdbg.c serdbg/serdbgio.c \
-    serdbg/termios_printk.c
-libserdbg_OBJS = $(libserdbg_C_FILES:serdbg/%.c=serdbg/$(ARCH)/%.$(OBJEXT))
 
 if LIBSERDBG
 include_HEADERS += serdbg/serdbgcnf.h serdbg/serdbg.h \
     serdbg/termios_printk_cnf.h serdbg/termios_printk.h
+
+libserdbg_C_FILES = serdbg/serdbg.c serdbg/serdbgio.c \
+    serdbg/termios_printk.c
+
+EXTRA_LIBRARIES += o-optimize/libserdbg.a
+o_optimize_libserdbg_a_SOURCES = $(libserdbg_C_FILES)
+o_optimize_libserdbg_a_CPPFLAGS = $(AM_CPPFLAGS) \
+    $(CFLAGS_OPTIMIZE_V)
+
+EXTRA_LIBRARIES += o-debug/libserdbg.a
+o_debug_libserdbg_a_SOURCES = $(libserdbg_C_FILES)
+o_debug_libserdbg_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+
+TMP_LIBS += $(ARCH)/libserdbg.a
 endif
 
-serdbg/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) serdbg/$(ARCH)
-	@: > serdbg/$(ARCH)/$(dirstamp)
-serdbg/$(ARCH)/%.$(OBJEXT): serdbg/%.c serdbg/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-serdbg/$(ARCH)/libserdbg.a: $(libserdbg_OBJS)
-	$(make-library)
-
-if LIBSERDBG
-LIBS += serdbg/$(ARCH)/libserdbg.a
-endif
-
-EXTRA_DIST += serdbg/README serdbg/serdbg.c serdbg/serdbgio.c \
-    serdbg/serdbgcnf.h serdbg/serdbg.h serdbg/termios_printk.c \
-    serdbg/termios_printk.h serdbg/termios_printk_cnf.h
+EXTRA_DIST += serdbg/README
 
 ## stackchk
 
-libstackchk_C_FILES = stackchk/check.c
-libstackchk_OBJS = \
-    $(libstackchk_C_FILES:stackchk/%.c=stackchk/$(ARCH)/%.$(OBJEXT))
-
 include_rtems_HEADERS += stackchk/stackchk.h
+libstackchk_C_FILES = stackchk/check.c stackchk/internal.h
 
-noinst_HEADERS += stackchk/internal.h
+EXTRA_LIBRARIES += o-optimize/libstackchk.a
+o_optimize_libstackchk_a_SOURCES = $(libstackchk_C_FILES)
+o_optimize_libstackchk_a_CPPFLAGS = $(AM_CPPFLAGS) \
+    $(CFLAGS_OPTIMIZE_V)
 
-stackchk/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) stackchk/$(ARCH)
-	@: > stackchk/$(ARCH)/$(dirstamp)
-stackchk/$(ARCH)/%.$(OBJEXT): stackchk/%.c stackchk/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-stackchk/$(ARCH)/libstackchk.a: $(libstackchk_OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += o-debug/libstackchk.a
+o_debug_libstackchk_a_SOURCES = $(libstackchk_C_FILES)
+o_debug_libstackchk_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-LIBS += stackchk/$(ARCH)/libstackchk.a
-
-EXTRA_DIST += stackchk/README stackchk/check.c
+TMP_LIBS += $(ARCH)/libstackchk.a
+EXTRA_DIST += stackchk/README
 
 ## libuntar
 
-libuntar_C_FILES = untar/untar.c
-libuntar_OBJS = $(libuntar_C_FILES:untar/%.c=untar/$(ARCH)/%.$(OBJEXT))
-
 include_rtems_HEADERS += untar/untar.h
+libuntar_C_FILES = untar/untar.c
 
-untar/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) untar/$(ARCH)
-	@: > untar/$(ARCH)/$(dirstamp)
-untar/$(ARCH)/%.$(OBJEXT): untar/%.c untar/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-untar/$(ARCH)/libuntar.a: $(libuntar_OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += o-optimize/libuntar.a
+o_optimize_libuntar_a_SOURCES = $(libuntar_C_FILES)
+o_optimize_libuntar_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-LIBS += untar/$(ARCH)/libuntar.a
+EXTRA_LIBRARIES += o-debug/libuntar.a
+o_debug_libuntar_a_SOURCES = $(libuntar_C_FILES)
+o_debug_libuntar_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-EXTRA_DIST += untar/README untar/untar.c
+TMP_LIBS += $(ARCH)/libuntar.a
+
+EXTRA_DIST += untar/README
 
 ## fsmount
 
 libfsmount_C_FILES = fsmount/fsmount.c
-libfsmount_OBJS = \
-    $(libfsmount_C_FILES:fsmount/%.c=fsmount/$(ARCH)/%.$(OBJEXT))
-
 include_rtems_HEADERS += fsmount/fsmount.h
 
-fsmount/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) fsmount/$(ARCH)
-	@: > fsmount/$(ARCH)/$(dirstamp)
-fsmount/$(ARCH)/%.$(OBJEXT): fsmount/%.c fsmount/$(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-fsmount/$(ARCH)/libfsmount.a: $(libfsmount_OBJS)
-	$(make-library)
+EXTRA_LIBRARIES += o-optimize/libfsmount.a
+o_optimize_libfsmount_a_SOURCES = $(libfsmount_C_FILES)
+o_optimize_libfsmount_a_CPPFLAGS = $(AM_CPPFLAGS) \
+    $(CFLAGS_OPTIMIZE_V)
 
-LIBS += fsmount/$(ARCH)/libfsmount.a
+EXTRA_LIBRARIES += o-debug/libfsmount.a
+o_debug_libfsmount_a_SOURCES = $(libfsmount_C_FILES)
+o_debug_libfsmount_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-EXTRA_DIST += fsmount/README fsmount/fsmount.c
+TMP_LIBS += $(ARCH)/libfsmount.a
+
+EXTRA_DIST += fsmount/README
 
 ## ---
 
-all-local: $(LIBS)
-.PRECIOUS: $(LIBS)
-
-CLEANDIRS = */$(ARCH)
+all-local: $(PREINSTALL_FILES) $(TMP_LIBS)
 
 PREINSTALL_FILES =
 

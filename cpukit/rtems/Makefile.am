@@ -3,8 +3,7 @@
 ##
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/compile.am
-include $(top_srcdir)/automake/lib.am
+include $(top_srcdir)/automake/amcompile.am
 
 # include
 
@@ -58,8 +57,6 @@ include_rtems_rtems_HEADERS += macros/rtems/rtems/asr.inl \
 endif
 
 ## src
-LIB = $(ARCH)/librtems.a
-
 # We only build multiprocessing related files if HAS_MP was defined
 MP_C_FILES = src/eventmp.c src/mp.c src/msgmp.c src/partmp.c src/regionmp.c \
     src/semmp.c src/signalmp.c src/taskmp.c
@@ -122,22 +119,18 @@ else
 C_FILES = $(STD_C_FILES)
 endif
 
-OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
-
-#
-# Add local stuff here using +=
-#
-
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-all-local: $(PREINSTALL_FILES) $(LIB)
+EXTRA_LIBRARIES = o-optimize/librtems.a
+o_optimize_librtems_a_SOURCES = $(C_FILES)
+o_optimize_librtems_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-${ARCH}/%.o: src/%.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
+EXTRA_LIBRARIES += o-debug/librtems.a
+o_debug_librtems_a_SOURCES = $(C_FILES)
+o_debug_librtems_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-$(LIB): ${OBJS}
-	$(make-library)
+all-local: $(PREINSTALL_FILES) $(ARCH)/librtems.a
 
 EXTRA_DIST = $(STD_C_FILES) $(MP_C_FILES)
 

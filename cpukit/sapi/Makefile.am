@@ -3,8 +3,7 @@
 ##
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/compile.am
-include $(top_srcdir)/automake/lib.am
+include $(top_srcdir)/automake/amcompile.am
 
 include_HEADERS = include/confdefs.h
 
@@ -24,28 +23,23 @@ endif
 
 ## src
 
-LIB=$(ARCH)/libsapi.a
-
 EXTENSION_FILES = src/extension.c src/extensioncreate.c \
     src/extensiondelete.c src/extensionident.c
 C_FILES = src/debug.c $(EXTENSION_FILES) src/fatal.c src/exinit.c src/io.c \
     src/itronapi.c src/posixapi.c src/rtemsapi.c
-OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
-
-#
-# Add local stuff here using +=
-#
 
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-all-local: $(PREINSTALL_FILES) $(LIB)
+EXTRA_LIBRARIES = o-optimize/libsapi.a
+o_optimize_libsapi_a_SOURCES = $(C_FILES)
+o_optimize_libsapi_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-$(LIB): ${OBJS}
-	$(make-library)
+EXTRA_LIBRARIES += o-debug/libsapi.a
+o_debug_libsapi_a_SOURCES = $(C_FILES)
+o_debug_libsapi_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-${ARCH}/%.$(OBJEXT): src/%.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
+all-local: $(PREINSTALL_FILES) $(ARCH)/libsapi.a
 
 EXTRA_DIST += $(C_FILES)
 
