@@ -1,3 +1,8 @@
+2001-05-09	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/jmr3904.cfg, custom/p4650.cfg: Add comments for gcc 3.1
+	compatable arguments.
+ 
 2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/dmv177.cfg: Add -D_OLD_EXCEPTIONS -Dppc603e to CPU_CFLAGS.
