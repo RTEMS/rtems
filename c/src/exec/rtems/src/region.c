@@ -314,6 +314,8 @@ rtems_status_code rtems_region_get_segment(
   Thread_Control          *executing;
   void                    *the_segment;
 
+  *segment = NULL;
+
   if ( size == 0 )
     return RTEMS_INVALID_SIZE;
 

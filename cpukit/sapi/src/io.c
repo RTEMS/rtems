@@ -46,8 +46,13 @@ void _IO_Initialize_all_drivers( void )
  *  Associate a name with a driver
  *
  *  Input Paramters:
+ *    device_name - pointer to name string to associate with device
+ *    major       - device major number to receive name
+ *    minor       - device minor number to receive name
  *
  *  Output Parameters: 
+ *    RTEMS_SUCCESSFUL - if successful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_io_register_name(
@@ -90,13 +95,17 @@ rtems_status_code rtems_io_register_name(
  *  Find what driver "owns" this name
  *
  *  Input Paramters:
+ *    name - name to lookup the associated device
  *
  *  Output Parameters: 
+ *    device_info      - device associate with name
+ *    RTEMS_SUCCESSFUL - if successful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_io_lookup_name(
-    const char           *pathname,
-    rtems_driver_name_t **rnp
+    const char           *name,
+    rtems_driver_name_t **device_info
 )
 {
     rtems_driver_name_t *np;
@@ -106,13 +115,13 @@ rtems_status_code rtems_io_lookup_name(
          index < _IO_Number_of_devices ; 
          index++, np++ )
         if (np->device_name)
-            if (strncmp(np->device_name, pathname, np->device_name_length) == 0)
+            if (strncmp(np->device_name, name, np->device_name_length) == 0)
             {                
-                *rnp = np;
+                *device_info = np;
                 return RTEMS_SUCCESSFUL;
             }
     
-    *rnp = 0;
+    *device_info = 0;
     return RTEMS_UNSATISFIED;
 }
 
@@ -165,7 +174,7 @@ rtems_status_code rtems_io_initialize(
 rtems_status_code rtems_io_open(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument
+  void                      *argument
 )
 {
     rtems_device_driver_entry callout;
@@ -195,7 +204,7 @@ rtems_status_code rtems_io_open(
 rtems_status_code rtems_io_close(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument
+  void                      *argument
 )
 {
     rtems_device_driver_entry callout;
@@ -225,7 +234,7 @@ rtems_status_code rtems_io_close(
 rtems_status_code rtems_io_read(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument
+  void                      *argument
 )
 {
     rtems_device_driver_entry callout;
@@ -255,7 +264,7 @@ rtems_status_code rtems_io_read(
 rtems_status_code rtems_io_write(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument
+  void                      *argument
 )
 {
     rtems_device_driver_entry callout;
@@ -285,7 +294,7 @@ rtems_status_code rtems_io_write(
 rtems_status_code rtems_io_control(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument
+  void                      *argument
 )
 {
     rtems_device_driver_entry callout;

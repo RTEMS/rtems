@@ -354,6 +354,8 @@ uninitialized =
 
 uninitialized = 0;
 
+#ifndef unix  /* make sure this is not a native compile */
+
 #ifdef i386
 
 /* cpu.h */
@@ -424,6 +426,7 @@ uninitialized += (sizeof _CPU_Interrupt_stack_low) +
                  (sizeof _CPU_IRQ_info);
 
 #endif
+#endif /* !unix */
 
 initialized +=
 /*copyrt.h*/    (strlen(_Copyright_Notice)+1)             +
@@ -437,11 +440,13 @@ initialized +=
                 (sizeof _TOD_Days_to_date)      +
                 (sizeof _TOD_Days_since_last_leap_year);
 
+#ifndef unix /* make sure this is not native */
 #ifdef sparc
 
 initialized +=  (sizeof _CPU_Trap_slot_template);
 
 #endif
+#endif /* !unix */
 
 puts( "" );
 

@@ -3,6 +3,21 @@
  *  This file contains the single entry point code for
  *  the SPARC port of RTEMS.
  *
+ *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
+ *  On-Line Applications Research Corporation (OAR).
+ *  All rights assigned to U.S. Government, 1994.
+ *
+ *  This material may be reproduced by or for the U.S. Government pursuant
+ *  to the copyright license under the clause at DFARS 252.227-7013.  This
+ *  notice must appear in all copies of this file and its derivatives.
+ *
+ *  Ported to ERC32 implementation of the SPARC by On-Line Applications
+ *  Research Corporation (OAR) under contract to the European Space 
+ *  Agency (ESA).
+ *
+ *  ERC32 modifications of respective RTEMS file: COPYRIGHT (c) 1995. 
+ *  European Space Agency.
+ *
  *  $Id$
  */
 

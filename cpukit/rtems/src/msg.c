@@ -109,7 +109,7 @@ Message_queue_Control *_Message_queue_Allocate (
  *
  *  Output parameters:
  *    id                - queue id
- *    RTEMS_SUCCESSFUL - if successful
+ *    RTEMS_SUCCESSFUL  - if successful
  *    error code        - if unsuccessful
  */
 

@@ -108,11 +108,3 @@ thus would be unable to restore the FP context of the incoming task.
 2. On a deferred FP context switch. In this case, the system might switch
 from FP Task A to non-FP Task B and then to FP Task C.  In this scenario, 
 the floating point state must technically be saved by a non-FP task. 
-
-
-
-
-
-
-
-

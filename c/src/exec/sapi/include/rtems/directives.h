@@ -62,7 +62,7 @@ extern "C" {
 #define RTEMS_MESSAGE_QUEUE_DELETE                      38
 #define RTEMS_MESSAGE_QUEUE_SEND                        39
 #define RTEMS_MESSAGE_QUEUE_URGENT                      40
-#define RTEMS_MESSAGE_QUEUE_BROADCAst                   41
+#define RTEMS_MESSAGE_QUEUE_BROADCAST                   41
 #define RTEMS_MESSAGE_QUEUE_RECEIVE                     42
 #define RTEMS_MESSAGE_QUEUE_FLUSH                       43
 #define RTEMS_EVENT_SEND                                44

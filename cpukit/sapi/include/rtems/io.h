@@ -115,9 +115,9 @@ STATIC INLINE void _IO_Manager_initialization(
  */
 
 rtems_status_code rtems_io_register_name(
-    char *device_name,
-    rtems_device_major_number major,
-    rtems_device_minor_number minor
+    char                      *device_name,
+    rtems_device_major_number  major,
+    rtems_device_minor_number  minor
 );
 
 
@@ -130,8 +130,8 @@ rtems_status_code rtems_io_register_name(
  */
 
 rtems_status_code rtems_io_lookup_name(
-    const char *pathname,
-    rtems_driver_name_t **rnp
+    const char           *name,
+    rtems_driver_name_t **device_info
 );
 
 
@@ -147,7 +147,7 @@ rtems_status_code rtems_io_lookup_name(
 rtems_status_code rtems_io_initialize(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument
+  void                      *argument
 );
 
 /*
@@ -162,7 +162,7 @@ rtems_status_code rtems_io_initialize(
 rtems_status_code rtems_io_open(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument
+  void                      *argument
 );
 
 /*
@@ -177,7 +177,7 @@ rtems_status_code rtems_io_open(
 rtems_status_code rtems_io_close(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument
+  void                      *argument
 );
 
 /*
@@ -192,7 +192,7 @@ rtems_status_code rtems_io_close(
 rtems_status_code rtems_io_read(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument
+  void                      *argument
 );
 
 /*
@@ -207,7 +207,7 @@ rtems_status_code rtems_io_read(
 rtems_status_code rtems_io_write(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument
+  void                      *argument
 );
 
 /*
@@ -222,7 +222,7 @@ rtems_status_code rtems_io_write(
 rtems_status_code rtems_io_control(
   rtems_device_major_number  major,
   rtems_device_minor_number  minor,
-  void             *argument
+  void                      *argument
 );
 
 /*
