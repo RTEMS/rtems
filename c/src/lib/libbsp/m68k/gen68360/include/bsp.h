@@ -118,6 +118,8 @@ extern m68k_isr_entry M68Kvec[];   /* vector table address */
 
 void bsp_cleanup( void );
 
+void M360ExecuteRISC( rtems_unsigned16 command );
+
 m68k_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,

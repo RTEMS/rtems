@@ -1,5 +1,10 @@
 /*
- *  This file contains GNU linker directives for a generic MC68360 board.
+ * This file contains GNU linker directives for a generic MC68360 board.
+ * These linker directives are for producing a PROM version..
+ * To create the PROM image from the linkter output you must use objcopy
+ * (--adjust-section-vma) to place the data segment at the end of the text
+ * segment in the PROM.  The start-up code takes care of copying this region
+ * to RAM.
  *
  * Saskatchewan Accelerator Laboratory
  * University of Saskatchewan
@@ -8,6 +13,11 @@
  * 
  *  $Id$
  */
+
+/*
+ * a.out format doesn't handle prom images very well
+ */
+OUTPUT_FORMAT(coff-m68k)
 
 /*
  * Declare on-board memory
@@ -20,9 +30,6 @@ MEMORY {
 
 /*
  * Declare some sizes
- * XXX: The assignment of ". += XyzSize;" fails in older gld's if the
- *      number used there is not constant.  If this happens to you, edit
- *      the lines marked below to use a constant value.
  */
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
 StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
@@ -61,7 +68,7 @@ SECTIONS {
                 . = ALIGN (16);
                 etext = .;
                 _etext = .;
-        } >ram 
+        } >rom 
         .data : {
                 copy_start = .;
                 *(.data)
@@ -81,10 +88,8 @@ SECTIONS {
 
                 _HeapStart = .;
                 __HeapStart = .;
-                /* . += HeapSize;  */ /* XXX -- Old gld can't handle this */
-                /* . += StackSize; */ /* XXX -- Old gld can't handle this */
-                . += 0x10000; /* HeapSize for old gld */
-                . += 0x1000;  /* StackSize for old gld */
+                . += HeapSize;
+                . += StackSize;
                 . = ALIGN (16);
                 stack_init = .;
                 clear_end = .;
@@ -102,4 +107,5 @@ SECTIONS {
                 . += (8 * 1024);
 
         } >dpram
+
 }

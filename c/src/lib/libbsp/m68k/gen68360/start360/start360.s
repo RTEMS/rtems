@@ -298,11 +298,11 @@ uhoh:	nop				| Leave spot for breakpoint
 	bra.s	uhoh			| Stuck forever
 
 /*
- * Place the low-order 3 octets of the board's
- * ethernet address at a `well-known' location.
+ * Place the low-order 3 octets of the board's ethernet address at
+ * a `well-known' fixed location relative to the beginning of ROM.
  */
 	.align 2
-|	.long	ETHERNET_ADDRESS	| 08: Low-order 3 octets
+	.long	ETHERNET_ADDRESS	| Low-order 3 octets of ethernet address
 
 /*
  * Initial PC
@@ -347,24 +347,36 @@ start:
 	 */
 	jmp	SYM(_Init68360)		| Start C code (which never returns)
 
-
 /*
- * Clear BSS, set up real stack, initialize heap, start C program
- * Assume that BSS size is a multiple of 4.
- * FIXME: The zero-loop should be changed to put the CPU into loop-mode.
- * FIXME: PROM-based systems will have to copy data segment to RAM here
+ * Copy DATA segment, clear BSS segment, set up real stack,
+ * initialize heap, start C program.
+ * Assume that DATA and BSS sizes are multiples of 4.
  */
-	PUBLIC (_ClearBSSAndStart)
-SYM(_ClearBSSAndStart):
-	movel	#clear_start,a0
-	movel	#clear_end,a1
-	clrl	d0
-	bras ZEROLOOPTEST
+	PUBLIC (_CopyDataClearBSSAndStart)
+SYM(_CopyDataClearBSSAndStart):
+	lea	copy_start,a0		| Get start of DATA in RAM
+	lea	SYM(etext),a2		| Get start of DATA in ROM
+	cmpl	a0,a2			| Are they the same?
+	beq.s	NOCOPY			| Yes, no copy necessary
+	lea	copy_end,a1		| Get end of DATA in RAM
+	bra.s	COPYLOOPTEST		| Branch into copy loop
+COPYLOOP:
+	movel	a2@+,a0@+		| Copy word from ROM to RAM
+COPYLOOPTEST:
+	cmpl	a1,a0			| Done?
+	bcs.s	COPYLOOP		| No, skip
+NOCOPY:
+
+	lea	clear_start,a0		| Get start of BSS
+	lea	clear_end,a1		| Get end of BSS
+	clrl	d0			| Value to set
+	bra.s	ZEROLOOPTEST		| Branch into clear loop
 ZEROLOOP:
-	movel	d0,a0@+
+	movel	d0,a0@+			| Clear a word
 ZEROLOOPTEST:
-	cmpl	a1,a0
-	bcs	ZEROLOOP
+	cmpl	a1,a0			| Done?
+	bcs.s	ZEROLOOP		| No, skip
+
 	movel	#stack_init,a7		| set master stack pointer
 	movel	d0,a7@-			| environp
 	movel	d0,a7@-			| argv

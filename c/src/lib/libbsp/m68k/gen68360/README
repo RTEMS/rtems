@@ -4,9 +4,8 @@
 
 #
 # This package requires a version of GCC that has been modified
-# to support the `-m68360' argument.  I have submitted the required changes
-# to the GCC maintainers.  Should they choose to use a different argument
-# (-mcpu32 perhaps) this board support package will have to be changed.
+# to support the `-mcpu32' argument.  I have submitted the required
+# changes to the GCC maintainers.
 #
 
 #

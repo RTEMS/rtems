@@ -1,5 +1,5 @@
 /*
- * Initialize 68360 hardware
+ * MC68360 support routines
  *
  * W. Eric Norum
  * Saskatchewan Accelerator Laboratory
@@ -12,15 +12,33 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include "m68360.h"
+#include <m68360.h>
 
-void
-_Init68360 (void)
+/*
+ * Send a command to the CPM RISC processer
+ */
+
+void M360ExecuteRISC(rtems_unsigned16 command)
+{
+	rtems_unsigned16 sr;
+
+	m68k_disable_interrupts (sr);
+	while (m360.cr & M360_CR_FLG)
+		continue;
+	m360.cr = command | M360_CR_FLG;
+	m68k_enable_interrupts (sr);
+}
+
+/*
+ * Initialize MC68360
+ */
+
+void _Init68360 (void)
 {
 	int i;
 	extern void *_RomBase, *_RamBase;
 	m68k_isr_entry *vbr;
-	extern void _ClearBSSAndStart (void);
+	extern void _CopyDataClearBSSAndStart (void);
 
 	/*
 	 * Step 6: Is this a power-up reset?
@@ -64,7 +82,7 @@ _Init68360 (void)
 		*((long *)((char *)&m360 + 0xE00 + i)) = 0;
 		*((long *)((char *)&m360 + 0xF00 + i)) = 0;
 	}
-	m360.cr = M360_CR_RST | M360_CR_FLG;
+	M360ExecuteRISC (M360_CR_RST);
 
 	/*
 	 * Step 10: Write PEPAR
@@ -129,11 +147,10 @@ _Init68360 (void)
 	/*
 	 * Step 13: Copy  the exception vector table to system RAM
 	 */
-  
-  m68k_get_vbr( vbr );
+	m68k_get_vbr (vbr);
 	for (i = 0; i < 256; ++i)
 		M68Kvec[i] = vbr[i];
-  m68k_set_vbr( M68Kvec );
+	m68k_set_vbr (M68Kvec);
 	
 	/*
 	 * Step 14: More system initialization
@@ -167,7 +184,7 @@ _Init68360 (void)
 	m360.mcr = 0x4C7F;
 
 	/*
-	 * Clear BSS, switch stacks and call main()
+	 * Copy data, clear BSS, switch stacks and call main()
 	 */
-	_ClearBSSAndStart ();
+	_CopyDataClearBSSAndStart ();
 }
