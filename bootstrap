@@ -12,6 +12,9 @@
 # to be run from the toplevel directory of RTEMS'
 # source tree
 
+AUTOCONF_VERS=2.52
+AUTOMAKE_VERS=1.6.[123]
+
 progname=`basename $0`
 top_srcdir=`dirname $0`
 
@@ -61,7 +64,34 @@ done
 
 case $mode in
 generate)
+  AUTOCONF=${AUTOCONF-`which autoconf`}
+  if test -z "$AUTOCONF"; then
+    echo "You must have autoconf installed to run $program"
+  fi
+  AUTOCONF_VER=`$AUTOCONF --version 2>/dev/null` 
+  if test -z "`echo $AUTOCONF_VER | grep \" $AUTOCONF_VERS\"`"; then
+cat << EOF
+RTEMS requires autoconf version $AUTOCONF_VERS.
 
+You are trying to use $AUTOCONF which does not seem to be sufficient
+EOF
+  exit 1
+  fi
+  
+  AUTOMAKE=${AUTOMAKE-`which automake`}
+  if test -z "$AUTOMAKE"; then
+    echo "You must have automake installed to run $program"
+  fi
+  AUTOMAKE_VER=`$AUTOMAKE --version 2>/dev/null` 
+  if test -z "`echo $AUTOMAKE_VER | grep \" $AUTOMAKE_VERS\"`"; then
+cat << EOF
+RTEMS requires automake version $AUTOMAKE_VERS.
+
+You are trying to use $AUTOMAKE which does not seem to be sufficient
+EOF
+  exit 1
+  fi
+  
   case $top_srcdir in
   /* ) aclocal_dir=$top_srcdir
     ;;
