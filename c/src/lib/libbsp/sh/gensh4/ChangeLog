@@ -1,3 +1,8 @@
+2003-01-20	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds.rom, startup/linkcmds.rom2ram: Add FreeBSD sysctl()
+	sections.
+
 2003-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Reflect changes to libcpu/sh/*.
