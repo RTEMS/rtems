@@ -27,10 +27,6 @@
  
 #include <string.h>
  
-#ifdef STACK_CHECKER_ON
-#include <stackchk.h>
-#endif
-
 unsigned char *duart_base;
 extern struct duart_regs duart_info;
 
@@ -102,15 +98,6 @@ void
 bsp_pretasking_hook(void)
 {
     bsp_libc_init();
- 
-#ifdef STACK_CHECKER_ON
-    /*
-     *  Initialize the stack bounds checker
-     *  We can either turn it on here or from the app.
-     */
- 
-    Stack_check_Initialize();
-#endif
  
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );

@@ -32,10 +32,6 @@
 
 #include <string.h>
 
-#ifdef STACK_CHECKER_ON
-#include <stackchk.h>
-#endif
-
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
@@ -184,16 +180,6 @@ void bsp_pretasking_hook(void)
     if (rc != RTEMS_SUCCESSFUL)
       rtems_fatal_error_occurred(rc);
   }
-#endif
-
-
-#ifdef STACK_CHECKER_ON
-  /*
-   *  Initialize the stack bounds checker
-   *  We can either turn it on here or from the app.
-   */
-
-  Stack_check_Initialize();
 #endif
 
 #ifdef RTEMS_DEBUG

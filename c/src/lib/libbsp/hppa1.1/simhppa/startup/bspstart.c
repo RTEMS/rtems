@@ -30,10 +30,6 @@
 
 #include <string.h>
 
-#ifdef STACK_CHECKER_ON
-#include <stackchk.h>
-#endif
-
 extern rtems_configuration_table  Configuration;
 
 rtems_configuration_table BSP_Configuration;
@@ -214,16 +210,6 @@ bsp_pretasking_hook(void)
         if (rc != RTEMS_SUCCESSFUL)
             rtems_fatal_error_occurred(rc);
     }
-#endif
-
-
-#ifdef STACK_CHECKER_ON
-    /*
-     *  Initialize the stack bounds checker
-     *  We can either turn it on here or from the app.
-     */
-
-    Stack_check_Initialize();
 #endif
 }
 

@@ -31,6 +31,7 @@ typedef struct @{
   rtems_unsigned32                  maximum_devices;
   rtems_unsigned32                  number_of_device_drivers;
   rtems_driver_address_table       *Device_driver_table;
+  rtems_unsigned32                  number_of_initial_extensions;
   rtems_extensions_table           *User_extension_table;
   rtems_multiprocessing_table      *User_multiprocessing_table;
   rtems_api_configuration_table    *RTEMS_api_configuration;
@@ -44,18 +45,19 @@ typedef struct @{
 @example
 type Configuration_Table is
    record
-       Work_Space_Start           : RTEMS.Address;
-       Work_Space_Size            : RTEMS.Unsigned32;
-       Maximum_Extensions         : RTEMS.Unsigned32;
-       Microseconds_Per_Tick      : RTEMS.Unsigned32;
-       Ticks_Per_Timeslice        : RTEMS.Unsigned32;
-       Maximum_Devices            : RTEMS.Unsigned32;
-       Number_Of_Device_Drivers   : RTEMS.Unsigned32;
-       Device_Driver_Table        : RTEMS.Driver_Address_Table_Pointer;
-       User_Extension_Table       : RTEMS.Extensions_Table_Pointer;
-       User_Multiprocessing_Table : RTEMS.Multiprocessing_Table_Pointer;
-       RTEMS_API_Configuration    : RTEMS.API_Configuration_Table_Pointer;
-       POSIX_API_Configuration    :
+       Work_Space_Start             : RTEMS.Address;
+       Work_Space_Size              : RTEMS.Unsigned32;
+       Maximum_Extensions           : RTEMS.Unsigned32;
+       Microseconds_Per_Tick        : RTEMS.Unsigned32;
+       Ticks_Per_Timeslice          : RTEMS.Unsigned32;
+       Maximum_Devices              : RTEMS.Unsigned32;
+       Number_Of_Device_Drivers     : RTEMS.Unsigned32;
+       Device_Driver_Table          : RTEMS.Driver_Address_Table_Pointer;
+       Number_Of_Initial_Extensions : RTEMS.Unsigned32;
+       User_Extension_Table         : RTEMS.Extensions_Table_Pointer;
+       User_Multiprocessing_Table   : RTEMS.Multiprocessing_Table_Pointer;
+       RTEMS_API_Configuration      : RTEMS.API_Configuration_Table_Pointer;
+       POSIX_API_Configuration      :
                        RTEMS.POSIX_API_Configuration_Table_Pointer;
    end record;
 
@@ -96,6 +98,11 @@ is the address of the Device Driver Table.  This table contains the entry
 points for each device driver.  If the number_of_device_drivers field is zero,
 then this entry should be NULL. The format of this table will be
 discussed below.
+
+@item number_of_initial_extensions
+is the number of initial user extensions.  There should be
+the same number of entries as in the User_extension_table.  If this field
+is zero, then the User_driver_address_table entry should be NULL.
 
 @item User_extension_table
 is the address of the User
