@@ -29,19 +29,17 @@ extern "C" {
  *  a particular member of the family.
  *
  *  Currently recognized:
- *     m68000        (no FP)
- *     m68020        (implies FP)
- *     m68020_nofp   (no FP)
- *     m68030        (implies FP)
- *     m68040        (implies FP)
- *     m68lc040      (no FP)
- *     m68ec040      (no FP)
- *     m68302        (no FP)
- *     m68332        (no FP)
- *     mcpu32        (no FP)  (includes m68360)
- *
- *  Primary difference (for RTEMS) between m68040, m680lc040, and 
- *  m68ec040 is the presence or absence of the FPU.
+ *     -m68000
+ *     -m68000 -msoft-float
+ *     -m68020
+ *     -m68020 -msoft-float
+ *     -m68030
+ *     -m68040 -msoft-float
+ *     -m68040
+ *     -m68040 -msoft-float
+ *     -m68302        (no FP)
+ *     -m68332        (no FP)
+ *     -mcpu32        (no FP)
  *
  *  Here is some information on the 040 variants (courtesy of Doug McBride,
  *  mcbride@rodin.colorado.edu):
@@ -61,124 +59,120 @@ extern "C" {
  *  68010, 68302, 68306, 68307).  This instruction is available on the 68020
  *  up and the cpu32 based models.  
  *
+ *  M68K_HAS_MISALIGNED is non-zero if the CPU allows byte-misaligned
+ *  data access (68020, 68030, 68040, 68060, CPU32+).
+ *
  *  NOTE:
  *    Eventually it would be nice to evaluate doing a lot of this section
  *    by having each model specify which core it uses and then go from there.
  */
 
-#if defined(m68000)
+#if defined(__mc68020__)
  
-#define CPU_MODEL_NAME         "m68000"
+#define CPU_MODEL_NAME          "m68020"
+#define M68K_HAS_VBR             1
+#define M68K_HAS_SEPARATE_STACKS 1
+#define M68K_HAS_BFFFO           1
+#define M68K_HAS_PREINDEXING     1
+#define M68K_HAS_EXTB_L          1
+#define M68K_HAS_MISALIGNED      1
+# if defined (__HAVE_68881__)
+# define M68K_HAS_FPU            1
+# define M68K_HAS_FPSP_PACKAGE   0
+# else
+# define M68K_HAS_FPU            0
+# define M68K_HAS_FPSP_PACKAGE   0
+# endif
+ 
+#elif defined(__mc68030__)
+ 
+#define CPU_MODEL_NAME          "m68030"
+#define M68K_HAS_VBR             1
+#define M68K_HAS_SEPARATE_STACKS 1
+#define M68K_HAS_BFFFO           1
+#define M68K_HAS_PREINDEXING     1
+#define M68K_HAS_EXTB_L          1
+#define M68K_HAS_MISALIGNED      1
+# if defined (__HAVE_68881__)
+# define M68K_HAS_FPU            1
+# define M68K_HAS_FPSP_PACKAGE   0
+# else
+# define M68K_HAS_FPU            0
+# define M68K_HAS_FPSP_PACKAGE   0
+# endif
+ 
+#elif defined(__mc68040__)
+
+#define CPU_MODEL_NAME          "m68040"
+#define M68K_HAS_VBR             1
+#define M68K_HAS_SEPARATE_STACKS 1
+#define M68K_HAS_BFFFO           1
+#define M68K_HAS_PREINDEXING     1
+#define M68K_HAS_EXTB_L          1
+#define M68K_HAS_MISALIGNED      1
+# if defined (__HAVE_68881__)
+# define M68K_HAS_FPU            1
+# define M68K_HAS_FPSP_PACKAGE   1
+# else
+# define M68K_HAS_FPU            0
+# define M68K_HAS_FPSP_PACKAGE   0
+# endif
+ 
+#elif defined(__mc68302__)
+#define CPU_MODEL_NAME          "m68302"
 #define M68K_HAS_VBR             0
 #define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_FPU             0
 #define M68K_HAS_BFFFO           0
 #define M68K_HAS_PREINDEXING     0
 #define M68K_HAS_EXTB_L          0
-#define M68K_HAS_FPSP_PACKAGE    0
-
-#elif defined(m68020)
- 
-#define CPU_MODEL_NAME         "m68020"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 1
-#define M68K_HAS_FPU             1
-#define M68K_HAS_BFFFO           1
-#define M68K_HAS_PREINDEXING     1
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_FPSP_PACKAGE    0
- 
-#elif defined(m68020_nofp)
- 
-#define CPU_MODEL_NAME         "m68020 w/o fp"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 1
+#define M68K_HAS_MISALIGNED      0
 #define M68K_HAS_FPU             0
-#define M68K_HAS_BFFFO           1
-#define M68K_HAS_PREINDEXING     1
-#define M68K_HAS_EXTB_L          1
 #define M68K_HAS_FPSP_PACKAGE    0
+
+#elif defined(__mc68332__)
  
-#elif defined(m68030)
- 
-#define CPU_MODEL_NAME         "m68030"
+#define CPU_MODEL_NAME          "mcpu32"
 #define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 1
-#define M68K_HAS_FPU             1
-#define M68K_HAS_BFFFO           1
+#define M68K_HAS_SEPARATE_STACKS 0
+#define M68K_HAS_BFFFO           0
 #define M68K_HAS_PREINDEXING     1
 #define M68K_HAS_EXTB_L          1
-#define M68K_HAS_FPSP_PACKAGE    0
- 
-#elif defined(m68040)
-
-#define CPU_MODEL_NAME         "m68040"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 1
-#define M68K_HAS_FPU             1
-#define M68K_HAS_BFFFO           1
-#define M68K_HAS_PREINDEXING     1
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_FPSP_PACKAGE    1
- 
-#elif defined(m68lc040)
-
-#define CPU_MODEL_NAME         "m68lc040"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 1
+#define M68K_HAS_MISALIGNED      0
 #define M68K_HAS_FPU             0
-#define M68K_HAS_BFFFO           1
-#define M68K_HAS_PREINDEXING     1
-#define M68K_HAS_EXTB_L          1
 #define M68K_HAS_FPSP_PACKAGE    0
+
+#elif defined(__mcpu32__)
  
-#elif defined(m68ec040)
-
-#define CPU_MODEL_NAME         "m68ec040"
+#define CPU_MODEL_NAME          "mcpu32+"
 #define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 1
-#define M68K_HAS_FPU             0
-#define M68K_HAS_BFFFO           1
+#define M68K_HAS_SEPARATE_STACKS 0
+#define M68K_HAS_BFFFO           0
 #define M68K_HAS_PREINDEXING     1
 #define M68K_HAS_EXTB_L          1
+#define M68K_HAS_MISALIGNED      1
+#define M68K_HAS_FPU             0
 #define M68K_HAS_FPSP_PACKAGE    0
 
-#elif defined(m68302)
- /* essentially a m68000 with onboard peripherals */
-#define CPU_MODEL_NAME         "m68302"
+#elif defined(__mc68000__)
+ 
+#define CPU_MODEL_NAME          "m68000"
 #define M68K_HAS_VBR             0
 #define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_FPU             0
 #define M68K_HAS_BFFFO           0
 #define M68K_HAS_PREINDEXING     0
 #define M68K_HAS_EXTB_L          0
-#define M68K_HAS_FPSP_PACKAGE    0
-
-#elif defined(m68332)
- 
-#define CPU_MODEL_NAME         "m68332"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_FPU             0
-#define M68K_HAS_BFFFO           0
-#define M68K_HAS_PREINDEXING     0
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_FPSP_PACKAGE    0
-
-#elif defined(mcpu32)
- 
-#define CPU_MODEL_NAME         "mcpu32"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_FPU             0
-#define M68K_HAS_BFFFO           0
-#define M68K_HAS_PREINDEXING     1
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_FPSP_PACKAGE    0
+#define M68K_HAS_MISALIGNED      0
+# if defined (__HAVE_68881__)
+# define M68K_HAS_FPU            1
+# define M68K_HAS_FPSP_PACKAGE   0
+# else
+# define M68K_HAS_FPU            0
+# define M68K_HAS_FPSP_PACKAGE   0
+# endif
 
 #else
 
-#error "Unsupported CPU Model"
+#error "Unsupported CPU model -- are you sure you're running a 68k compiler?"
 
 #endif
 
