@@ -1,5 +1,9 @@
 2003-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* gdb/.cvsignore: Add mkspec.
+
+2003-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* ChangeLog: Fix yesterday's entry.
 	* gdb/target-gdb.add: %defattr(-,root,root).
 	Use %{_prefix} instead of /opt/rtems.
