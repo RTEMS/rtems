@@ -17,7 +17,7 @@ $(PROJECT_INCLUDE)/hppa1.1:
 $(PROJECT_INCLUDE)/hppa1.1/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/hppa1.1 \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/hppa1.1 \
     $(include_hppa1_1_HEADERS:%=$(PROJECT_INCLUDE)/hppa1.1/%)
 
 all-local: $(TMPINSTALL_FILES)
