@@ -38,6 +38,10 @@ endif
 SRCS += $(wildcard \
     $(PROJECT_LIB)/lib/rtems-ctor$(LIB_VARIANT).$(OBJEXT))
 
+if HAS_MP
+SRCS += ../libchip/shmdr/$(ARCH)/shmdr.rel
+endif
+
 all-local: $(TMPINSTALL_FILES)
 
 $(ARCH)/librtemsbsp$(LIB_VARIANT).a: $(SRCS) $(ARCH)/$(dirstamp)
