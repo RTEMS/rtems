@@ -1,3 +1,8 @@
+2004-12-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* score/include/rtems/system.h: Don't define NULL, include 
+	<stddef.h>.
+
 2004-12-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/net/if_ethersubr.c,

@@ -124,13 +124,7 @@ int POSIX_BOTTOM_REACHED( void );
 
 typedef void * proc_ptr;
 
-/*
- *  Define NULL
- */
-
-#ifndef NULL
-#define NULL      0          /* NULL value */
-#endif
+#include <stddef.h>
 
 /*
  *  Boolean constants
