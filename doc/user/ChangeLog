@@ -2,6 +2,8 @@
 
 	* c_user.texi: include common/rtems.texi.
 	* Makefile.am: Reflect changes to $(top_srcdir)/project.am.
+	* rtmon.t: Eliminate @lowersections/@raisesections (texi2www is too
+	broken to deal with them).
 
 2003-08-22	Joel Sherrill <joel@OARcorp.com>
 

@@ -215,9 +215,7 @@ can meet all deadlines, even under transient overload, without
 knowing exactly when any given task will execute by applying
 proven schedulability analysis rules.
 
-@lowersections
-
-@subsection Assumptions
+@subsubsection Assumptions
 
 The schedulability analysis rules for RMS were
 developed based on the following assumptions:
@@ -245,7 +243,7 @@ Once the basic schedulability analysis is understood,
 some of the above assumptions can be relaxed and the
 side-effects accounted for.
 
-@subsection Processor Utilization Rule
+@subsubsection Processor Utilization Rule
 
 @cindex RMS Processor Utilization Rule
 
@@ -279,7 +277,7 @@ greater utilization factor.  In fact, the average processor
 utilization threshold for a randomly generated task set is
 approximately 0.88.
 
-@subsection Processor Utilization Rule Example
+@subsubsection Processor Utilization Rule Example
 
 This example illustrates the application of the
 Processor Utilization Rule to an application with three critical
@@ -361,7 +359,7 @@ The total processor utilization for this task set is
 0.779, imposed by the Processor Utilization Rule.  Therefore,
 this task set is guaranteed to be schedulable using RMS.
 
-@subsection First Deadline Rule
+@subsubsection First Deadline Rule
 
 @cindex RMS First Deadline Rule
 
@@ -386,7 +384,7 @@ deletes itself.  This technique ensures that all tasks begin to
 compete for execution time at the same instant -- when the user
 initialization task deletes itself.
 
-@subsection First Deadline Rule Example
+@subsubsection First Deadline Rule Example
 
 The First Deadline Rule can ensure schedulability
 even when the Processor Utilization Rule fails.  The example
@@ -565,7 +563,7 @@ time 200.  Thus, all of the tasks have met their first deadlines
 at time 200, and the task set is schedulable using the First
 Deadline Rule.
 
-@subsection Relaxation of Assumptions
+@subsubsection Relaxation of Assumptions
 
 The assumptions used to develop the RMS
 schedulability rules are uncommon in most real-time systems.
@@ -603,7 +601,7 @@ Every hardware and software factor which impacts the execution
 time of each task must be accounted for in the schedulability
 analysis.
 
-@subsection Further Reading
+@subsubsection Further Reading
 
 For more information on Rate Monotonic Scheduling and
 its schedulability analysis, the reader is referred to the
@@ -624,8 +622,6 @@ Theory and Ada."  @b{IEEE Computer}. April 1990. pp. 53-62.}
 @item @cite{Alan Burns. "Scheduling hard real-time systems: a
 review."  @b{Software Engineering Journal}. May 1991. pp. 116-128.}
 @end itemize
-
-@raisesections
 
 @section Operations
 
