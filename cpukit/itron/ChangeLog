@@ -1,3 +1,9 @@
+2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/config.h: Remove.
+	* Makefile.am: Remove src/config.h
+	AM_CPPFLAGS += -I$(top_builddir).
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* include/itron.h, include/itronsys/eventflags.h,

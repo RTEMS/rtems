@@ -26,7 +26,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix
 # include
 
 noinst_HEADERS = include/devctl.h include/intr.h
-noinst_HEADERS += src/config.h
 
 include_HEADERS = include/sched.h include/aio.h include/mqueue.h include/semaphore.h
 
@@ -168,7 +167,8 @@ OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
 # Add local stuff here using +=
 #
 
-AM_CPPFLAGS += -I$(srcdir)/src -D__RTEMS_INSIDE__
+AM_CPPFLAGS += -I$(top_builddir)
+AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 all-local: ${ARCH} $(PREINSTALL_FILES) $(LIB)
 

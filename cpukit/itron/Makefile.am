@@ -24,7 +24,6 @@ if HAS_ITRON
 ## include
 
 noinst_HEADERS =
-noinst_HEADERS += src/config.h
 
 include_HEADERS = include/itron.h
 
@@ -131,7 +130,8 @@ C_FILES = $(TASK_C_FILES) $(TASKSYNC_C_FILES) $(SEMAPHORE_C_FILES) \
     $(TIME_C_FILES)
 OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
 
-AM_CPPFLAGS += -I$(srcdir)/src  -D__RTEMS_INSIDE__
+AM_CPPFLAGS += -I$(top_builddir)
+AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 all-local: $(PREINSTALL_FILES) ${ARCH} ${LIB}
 

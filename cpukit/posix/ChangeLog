@@ -1,3 +1,9 @@
+2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/config.h: Remove.
+	* Makefile.am: Remove src/config.h
+	AM_CPPFLAGS += -I$(top_builddir).
+
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/cancelrun.c, src/pthreadexit.c, src/pthreadjoin.c, 
