@@ -1,3 +1,8 @@
+2002-08-06	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.ac: Be more specific about looking at CPU32 and CPU32+
+	CPU model names so we can turn on the best compile of memcpy.c.
+
 2002-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Replace mcpu32 by mcpu32p conditional.
