@@ -148,6 +148,14 @@ boolean _POSIX_Threads_Create_extension(
   api->schedparam.sched_priority = 
      _POSIX_Priority_From_core( created->current_priority );
  
+  /*  
+   *  POSIX 1003.1 1996, 18.2.2.2
+   */
+  api->cancelation_requested = 0;
+  api->cancelability_state = PTHREAD_CANCEL_ENABLE;
+  api->cancelability_type = PTHREAD_CANCEL_DEFERRED;
+  _Chain_Initialize_empty (&api->Cancellation_Handlers);
+
   /*
    *  If the thread is not a posix thread, then all posix signals are blocked
    *  by default.
