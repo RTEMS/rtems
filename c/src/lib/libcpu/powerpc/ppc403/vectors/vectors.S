@@ -49,7 +49,7 @@
 	/* Offset to store reg 0 */
 
 	.set	IP_LINK, 0
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 	.set	IP_0, (IP_LINK + 56)
 #else
 	.set	IP_0, (IP_LINK + 8)
@@ -110,7 +110,7 @@ SYM (__vectors):
 	
 /* Critical error handling */
 	.org	crit_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
 #else
@@ -126,7 +126,7 @@ SYM (__vectors):
 	
 /* Machine check exception */
 	.org	mach_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
 #else
@@ -142,7 +142,7 @@ SYM (__vectors):
 	
 /* Protection exception */
 	.org	prot_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
 #else
@@ -158,7 +158,7 @@ SYM (__vectors):
 
 /* External interrupt */
 	.org	ext_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
 #else
@@ -179,7 +179,7 @@ SYM (__vectors):
 	
 /* Program exception */
 	.org	prog_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
 #else
@@ -195,7 +195,7 @@ SYM (__vectors):
 	
 /* Decrementer exception */
 	.org	dec_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
 #else
@@ -211,7 +211,7 @@ SYM (__vectors):
 	
 /* System call */
 	.org	sys_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
 #else
@@ -227,7 +227,7 @@ SYM (__vectors):
 			
 /* PIT interrupt */
 	.org	pit_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
 #else
@@ -243,7 +243,7 @@ SYM (__vectors):
 			
 /* FIT interrupt */
 	.org	fit_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
 #else
@@ -259,7 +259,7 @@ SYM (__vectors):
 			
 /* Watchdog interrupt */
 	.org	wadt_vector - file_base
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
 #else
@@ -275,7 +275,7 @@ SYM (__vectors):
 	
 /* Debug exception */
 debug:
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
 #else

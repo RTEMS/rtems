@@ -1,5 +1,10 @@
 2005-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* mpc505/vectors/vectors.S, ppc403/vectors/vectors.S:
+	Remove PPC_ABI_GCC27.
+
+2005-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* ppc403/vectors/vectors.S: Remove XCOFF support.
 
 2005-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>

@@ -43,7 +43,7 @@
 	.set	m_extern_bp,    	0x1E00 # PPC_IRQ_MEXT_BP
 	.set    nm_extern_bp,		0x1F00 # PPC_IRQ_NMEXT_BP
 
-#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_ABI == PPC_ABI_POWEROPEN)
 #define ABI_ADD 20*4
 #else
 #define ABI_ADD 0
