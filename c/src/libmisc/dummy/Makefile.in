@@ -62,7 +62,7 @@ ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 
 all: ${ARCH} $(SRCS) $(PGM)
-	$(INSTALL_VARIANT) -m 755 ${PGMS} $(PROJECT_RELEASE)/lib
+	$(INSTALL_VARIANT) -m 755 ${PGM} $(PROJECT_RELEASE)/lib
 
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
