@@ -1,33 +1,28 @@
-/*-------------------------------------------------------------------------+
-| outch.c v1.1 - PC386 BSP - 1997/08/07
-+--------------------------------------------------------------------------+
-| (C) Copyright 1997 -
-| - NavIST Group - Real-Time Distributed Systems and Industrial Automation
-|
-| http://pandora.ist.utl.pt
-|
-| Instituto Superior Tecnico * Lisboa * PORTUGAL
-+--------------------------------------------------------------------------+
-| Disclaimer:
-|
-| This file is provided "AS IS" without warranty of any kind, either
-| expressed or implied.
-+--------------------------------------------------------------------------+
-| This code is based on:
-|   outch.c,v 1.4 1995/12/19 20:07:27 joel Exp - go32 BSP
-| With the following copyright notice:
-| **************************************************************************
-| *  COPYRIGHT (c) 1989-1998.
-| *  On-Line Applications Research Corporation (OAR).
-| *  Copyright assigned to U.S. Government, 1994. 
-| *
-| *  The license and distribution terms for this file may be
-| *  found in found in the file LICENSE in this distribution or at
-| *  http://www.OARcorp.com/rtems/license.html.
-| **************************************************************************
-|
-|  $Id$
-+--------------------------------------------------------------------------*/
+/*
+ * outch.c  - This file contains code for displaying characters
+ *	      on the console uisng information that should be
+ *	      maintained by the BIOS in its data Area.
+ *
+ * Copyright (C) 1998  valette@crf.canon.fr 
+ *
+ * Canon Centre Recherche France.
+ *
+ * This code is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this file; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * $Header$
+ */
 
 
 #include <bsp.h>
@@ -35,227 +30,117 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*-------------------------------------------------------------------------+
-| Constants
-+--------------------------------------------------------------------------*/
-#define DISPLAY_CELL_COUNT (MAX_ROW * MAX_COL)
-                                       /* Number of display cells.            */
-#define TABSIZE 4                      /* Number of spaces for TAB (\t) char. */
-#define	WHITE	0x0700                 /* White on Black background colour.   */
-#define BLANK   (WHITE | ' ')          /* Blank character.                    */
+#include <crt.h>
 
+extern void wr_cursor(int, unsigned short);
 
-/*-------------------------------------------------------------------------+
-| Global Variables
-+--------------------------------------------------------------------------*/
-static rtems_unsigned16 *videoRam    = TVRAM;
-                           /* Physical address of start of video text memory. */
-static rtems_unsigned16 *videoRamPtr = TVRAM;
-                           /* Pointer for current output position in display. */
-static rtems_unsigned8  videoRows = MAX_ROW; /* Number of rows in display.    */
-static rtems_unsigned8  videoCols = MAX_COL; /* Number of columns in display. */
-static rtems_unsigned8  cursRow   = 0;       /* Current cursor row.           */
-static rtems_unsigned8  cursCol   = 0;       /* Current cursor column.        */
+#define TAB_SPACE 4
+static unsigned short *bitMapBaseAddr;
+static unsigned short ioCrtBaseAddr;
+static unsigned short maxCol;
+static unsigned short maxRow;
+static unsigned char  row;
+static unsigned char  column;
+static unsigned short attribute;
+static unsigned int   nLines;
 
-
-/*-------------------------------------------------------------------------+
-|         Function: setHardwareCursorPos
-|      Description: Set hardware video cursor at given offset into video RAM. 
-| Global Variables: None.
-|        Arguments: videoCursor - Offset into video memory.
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-static inline void
-setHardwareCursorPos(rtems_unsigned16 videoCursor)
+    static void 
+scroll()
 {
-  outport_byte(GDC_REG_PORT, 0xe);
-  outport_byte(GDC_VAL_PORT, (videoCursor >> 8) & 0xff);
-  outport_byte(GDC_REG_PORT, 0xf);
-  outport_byte(GDC_VAL_PORT, videoCursor & 0xff);
-} /* setHardwareCursorPos */
-
-
-/*-------------------------------------------------------------------------+
-|         Function: updateVideoRamPtr
-|      Description: Updates value of global variable "videoRamPtr" based on
-|                   current window's cursor position. 
-| Global Variables: videoRamPtr, cursRow, cursCol.
-|        Arguments: None.
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-static inline void
-updateVideoRamPtr(void)
-{
-  videoRamPtr = videoRam + cursRow * videoCols + cursCol;
-} /* updateVideoRamPtr */
-
-
-/*-------------------------------------------------------------------------+
-|         Function: scrollUp
-|      Description: Scrolls display up n lines.
-| Global Variables: None.
-|        Arguments: lines - number of lines to scroll.
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-static void
-scrollUp(rtems_unsigned8 lines)
-{
-  rtems_unsigned16 blankCount;
-                        /* Number of blank display cells on bottom of window. */
-  rtems_unsigned16 *ptrDst, *ptrSrc;
-               /* Source and destination pointers for memory copy operations. */
-
-  if (lines < videoRows)  /* Move window's contents up. */
-  {
-    rtems_unsigned16 nonBlankCount;
-       /* Number of non-blank cells on upper part of display (total - blank). */
-
-    blankCount = lines * videoCols;
-    nonBlankCount = DISPLAY_CELL_COUNT - blankCount;
-    ptrSrc = videoRam + blankCount;
-    ptrDst = videoRam; 
-
-    while(nonBlankCount--)
-      *ptrDst++ = *ptrSrc++;
-  }
-  else                    /* Clear the whole display.   */
-  {
-    blankCount = DISPLAY_CELL_COUNT;
-    ptrDst = videoRam;
-  }
-
-  /* Fill bottom with blanks. */
-  while (blankCount-- > 0)
-    *ptrDst++ = BLANK;
-} /* scrollUp */
-
-
-/*-------------------------------------------------------------------------+
-|         Function: printCHAR
-|      Description: Print printable character to display.
-| Global Variables: videoRamPtr, cursRow, cursCol.
-|        Arguments: c - character to write to display.
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-static void
-printCHAR(char c)
-{
-  *videoRamPtr++ = c | WHITE;
-  cursCol++;
-  if (cursCol == videoCols)
-  {
-    cursCol = 0;
-    cursRow++;
-    if (cursRow == videoRows)
-    {
-      cursRow--;
-      scrollUp(1);
-      videoRamPtr -= videoCols;
+    int i, j;				    /* Counters	*/
+    unsigned short *pt_scroll, *pt_bitmap;  /* Pointers on the bit-map	*/
+      
+    pt_bitmap = bitMapBaseAddr;
+    j = 0;
+    pt_bitmap = pt_bitmap + j;
+    pt_scroll = pt_bitmap + maxCol;
+    for (i = j; i < (maxRow - 1) * maxCol; i++) {
+	*pt_bitmap++ = *pt_scroll++;
     }
-  }
-} /* printCHAR */
+    
+    /*
+     * Blank characters are displayed on the last line.
+     */ 
+    for (i = 0; i < maxCol; i++) {	
+	*pt_bitmap++ = (short) (' ' | attribute);
+    }
+}
 
-
-/*-------------------------------------------------------------------------+
-|         Function: printBS
-|      Description: Print BS (BackSpace - '\b') character to display.
-| Global Variables: videoRamPtr, cursRow, cursCol.
-|        Arguments: None.
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-static inline void
-printBS(void)
+    static void
+endColumn()
 {
-  /* Move cursor back one cell. */
-  if (cursCol > 0)
-    cursCol--;
-  else if (cursRow > 0)
-  {
-    cursRow--;
-    cursCol = videoCols - 1;
-  }
-  else
-    return;
-
-  /* Write a whitespace. */
-  *(--videoRamPtr) = BLANK;
-} /* printBS */
+    if (++row == maxRow) { 
+	scroll(); 	/* Scroll the screen now */
+	row = maxRow - 1; 
+    }
+    column = 0;
+    nLines++;
+    /* Move cursor on the next location  */
+    wr_cursor(row * maxCol + column, ioCrtBaseAddr);
+}
 
 
-/*-------------------------------------------------------------------------+
-|         Function: printHT
-|      Description: Print HT (Horizontal Tab - '\t') character to display.
-| Global Variables: cursCol.
-|        Arguments: None.
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-static inline void
-printHT(void)
+
+    static void 
+videoPutChar(char car)
 {
-  do
-    printCHAR(' ');
-  while (cursCol % TABSIZE);
-} /* printHT */
+    unsigned short *pt_bitmap = bitMapBaseAddr + row * maxCol;
+  
+    switch (car) {
+        case '\b': {
+	    if (column) column--;
+	    /* Move cursor on the previous location  */
+	    wr_cursor(row * maxCol + column, ioCrtBaseAddr);
+	    return;
+	}
+	case '\t': {
+	    int i;
 
+	    i = TAB_SPACE - (column & (TAB_SPACE - 1));
+	    pt_bitmap += column;
+	    column += i;
+	    if (column >= maxCol) {
+		endColumn();
+		return;
+	    }
+	    while (i--)	*pt_bitmap++ = ' ' | attribute;		
+	    wr_cursor(row * maxCol + column, ioCrtBaseAddr);
+	    return;
+	}
+	case '\n': {
+	    endColumn();
+	    return;
+	}
+        case 7: {	/* Bell code must be inserted here */
+	    return;
+	}
+	case '\r' : {   /* Already handled via \n */
+	    return;
+	}
+    	default: {
+	    pt_bitmap += column;
+	    *pt_bitmap = car | attribute;
+	    if (++column == maxCol) endColumn();
+	    else wr_cursor(row * maxCol + column, 
+			  ioCrtBaseAddr);
+	    return;
+	}
+    }
+}	
 
-/*-------------------------------------------------------------------------+
-|         Function: printLF
-|      Description: Print LF (Line Feed  - '\n') character to display.
-| Global Variables: cursRow.
-|        Arguments: None.
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-static inline void
-printLF(void)
+    void
+clear_screen()
 {
-  cursRow++;
-  if (cursRow == videoRows)
-  {
-    cursRow--;
-    scrollUp(1);
-  }
-  updateVideoRamPtr();
-} /* printLF */
+    int i,j;
 
-
-/*-------------------------------------------------------------------------+
-|         Function: printCR
-|      Description: Print CR (Carriage Return - '\r') to display.
-| Global Variables: cursCol.
-|        Arguments: None.
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-static inline void
-printCR(void)
-{
-  cursCol = 0;
-  updateVideoRamPtr();
-} /* printCR */
-
-
-/*-------------------------------------------------------------------------+
-|         Function: consPutc
-|      Description: Print a character to display at current position.
-| Global Variables: videoRamPtr, videoRam.
-|        Arguments: c - character to write to display.
-|          Returns: Nothing. 
-+--------------------------------------------------------------------------*/
-static void
-consPutc(char c)
-{
-  switch (c)
-  {
-    case '\b': printBS();    break;
-    case '\t': printHT();    break;
-    case '\n': printLF();    break;
-    case '\r': printCR();    break;
-    default:   printCHAR(c); break;
-  } /* switch */
-
-  setHardwareCursorPos(videoRamPtr - videoRam);
-                                           /* At current offset into videoRam */
-} /* consPutc */
-
+    for (j = 0; j <= maxRow; j++) {
+      for (i = 0; i <= maxCol; i++) {
+	videoPutChar(' ');
+      }
+    }
+    column  = 0;
+    row     = 0;
+}
 
 /*-------------------------------------------------------------------------+
 |         Function: _IBMPC_outch
@@ -267,20 +152,41 @@ consPutc(char c)
 void
 _IBMPC_outch(char c)
 {
-  consPutc(c);
+  videoPutChar(c);
 } /* _IBMPC_outch */
 
 
 /*-------------------------------------------------------------------------+
 |         Function: _IBMPC_initVideo
 |      Description: Video system initialization. Hook for any early setup.
-| Global Variables: videoRows.
+| Global Variables: bitMapBaseAddr, ioCrtBaseAddr, maxCol, maxRow, row
+|		    column, attribute, nLines;
 |        Arguments: None.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
 void
 _IBMPC_initVideo(void)
 {
-  scrollUp(videoRows);     /* Clear entire screen         */
-  setHardwareCursorPos(0); /* Cursor at upper left corner */
+    unsigned char* pt = (unsigned char*) (VIDEO_MODE_ADDR);
+
+    if (*pt == VGAMODE7) {
+      bitMapBaseAddr = (unsigned short*) V_MONO;
+    }
+    else {
+      bitMapBaseAddr = (unsigned short*) V_COLOR;
+    }
+    ioCrtBaseAddr = *(unsigned short*) DISPLAY_CRT_BASE_IO_ADDR;
+    maxCol  = * (unsigned short*) NB_MAX_COL_ADDR;
+    maxRow  = * (unsigned char*)  NB_MAX_ROW_ADDR;
+    column  = 0;
+    row     = 0;
+    attribute = ((BLACK << 4) | WHITE)<<8;
+    nLines = 0;
+    clear_screen();
+#ifdef DEBUG_EARLY_STAGE    
+    printk("bitMapBaseAddr = %X, display controller base IO = %X\n",
+	   (unsigned) bitMapBaseAddr,
+	   (unsigned) ioCrtBaseAddr);
+    videoPrintf("maxCol = %d, maxRow = %d\n", (unsigned) maxCol, (unsigned) maxRow);
+#endif
 } /* _IBMPC_initVideo */

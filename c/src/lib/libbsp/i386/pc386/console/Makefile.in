@@ -17,8 +17,13 @@ C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
 H_FILES=
 
+# Assembly source names, if any, go here -- minus the .s
+S_PIECES=videoAsm
+S_FILES=$(S_PIECES:%=%.s)
+S_O_FILES=$(S_FILES:%.s=${ARCH}/%.o)
+
 SRCS=$(C_FILES) $(H_FILES)
-OBJS=$(C_O_FILES)
+OBJS=$(C_O_FILES) $(S_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg

@@ -3,18 +3,29 @@ dnl $Id$
 dnl 
 dnl Check for target g++
 dnl 
-dnl Adaptation of autoconf-2.12's AC_PROG_CXX to rtems
-dnl
-dnl 98/02/10 Ralf Corsepius (corsepiu@faw.uni-ulm.de)
-dnl
- 
+dnl 98/05/20 Ralf Corsepius 	(corsepiu@faw.uni-ulm.de)
+dnl				Completely reworked
+
 AC_DEFUN(RTEMS_PROG_CXX,
 [
 AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
 AC_BEFORE([$0], [AC_PROG_CXX])dnl
-AC_CHECK_PROGS(CXX, $CCC c++ g++ gcc CC cxx cc++, gcc)
+AC_REQUIRE([RTEMS_TOOL_PREFIX])dnl
 
-RTEMS_PROG_CXX_WORKS
+dnl Only accept g++ and c++
+dnl NOTE: This might be too restrictive for native compilation
+AC_PATH_PROGS(CXX_FOR_TARGET, "$program_prefix"g++ "$program_prefix"c++)
+test -z "$CXX_FOR_TARGET" \
+  && AC_MSG_ERROR([no acceptable c++ found in \$PATH])
+
+dnl backup 
+rtems_save_CXX=$CXX
+rtems_save_CXXFLAGS=$CXXFLAGS
+
+dnl temporarily set CXX
+CXX=$CXX_FOR_TARGET
+
+AC_PROG_CXX_WORKS
 AC_PROG_CXX_GNU
 
 if test $ac_cv_prog_gxx = yes; then
@@ -37,32 +48,18 @@ else
   GXX=
   test "${CXXFLAGS+set}" = set || CXXFLAGS="-g"
 fi
-CXX_FOR_TARGET=$CXX
+
+rtems_cv_prog_gxx=$ac_cv_prog_gxx
+rtems_cv_prog_cxx_g=$ac_cv_prog_cxx_g
+rtems_cv_prog_cxx_works=$ac_cv_prog_cxx_works
+rtems_cv_prog_cxx_cross=$ac_cv_prog_cxx_cross
+
+CXX=$rtems_save_CXX
+CXXFLAGS=$rtems_save_CXXFLAGS
 
 dnl restore initial values
-unset CXX
 unset ac_cv_prog_gxx
-])
-
-
-dnl Almost identical to AC_PROG_CXX_WORKS
-dnl Additional handling of malloc
-dnl NOTE: using newlib with a native compiler is cross-compiling, indeed.
-AC_DEFUN(RTEMS_PROG_CXX_WORKS,
-[AC_MSG_CHECKING([whether the target C++ compiler ($CXX $CXXFLAGS $LDFLAGS) works])
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
-
-dnl this fails if rtems uses newlib, because rtems has its own malloc which
-dnl is not available at bootstrap
-AC_TRY_COMPILER(
-  [main(){return(0);}], 
-  rtems_cv_prog_cxx_works, rtems_cv_prog_cxx_cross)
-AC_LANG_RESTORE
-AC_MSG_RESULT($rtems_cv_prog_cxx_works)
-if test $rtems_cv_prog_cxx_works = no; then
-  AC_MSG_ERROR([installation or configuration problem: target C++ compiler cannot create executables.])
-fi
-AC_MSG_CHECKING([whether the target C++ compiler ($CXX $CXXFLAGS $LDFLAGS) is a cross-compiler])
-AC_MSG_RESULT($rtems_cv_prog_cxx_cross)
+unset ac_cv_prog_cc_g
+unset ac_cv_prog_cxx_works
+unset ac_cv_prog_cxx_cross
 ])

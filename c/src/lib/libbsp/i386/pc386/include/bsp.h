@@ -10,6 +10,14 @@
 |
 | Instituto Superior Tecnico * Lisboa * PORTUGAL
 +--------------------------------------------------------------------------+
+| Modified by Eric Valette the 20/05/98 in order to add definitions used
+| to enhance video putchar capabilities.
+|
+| Copyright (C) 1998  valette@crf.canon.fr
+|
+| Canon Centre Recherche France.
+|
++--------------------------------------------------------------------------+
 | Disclaimer:
 |
 | This file is provided "AS IS" without warranty of any kind, either
@@ -57,32 +65,9 @@ extern "C" {
 /*-------------------------------------------------------------------------+
 | Video (console) related constants.
 +--------------------------------------------------------------------------*/
-#define COLOUR  1  /* Assume colour console */
 
-#if COLOUR
-
-# define        GDC_REG_PORT    0x3D4
-# define        GDC_VAL_PORT    0x3D5
-# define        TVRAM           ((rtems_unsigned16 *)0xB8000)
-
-#else
-
-# define        GDC_REG_PORT    0x3B4
-# define        GDC_VAL_PORT    0x3B5
-# define        TVRAM           ((rtems_unsigned16 *)0xB0000)
-
-#endif /* COLOUR */
-
-/* Number of Video Lines & Columns */
-
-#define MAX_COL 80
-
-#ifdef RTEMS_VIDEO_80x50
-#define MAX_ROW 50
-#else
-#define MAX_ROW 25
-#endif /* RTEMS_VIDEO_80x50 */
-
+#include <crt.h>  
+  
 /*-------------------------------------------------------------------------+
 | Constants relating to the 8254 (or 8253) programmable interval timers.
 +--------------------------------------------------------------------------*/

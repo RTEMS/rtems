@@ -21,10 +21,6 @@ fi
 dnl check whether the tools exist
 dnl FIXME: What shall be done if they don't exist?
 
-dnl NOTE: CC_FOR_TARGET should always be valid at this point, 
-dnl       cf. RTEMS_PROG_CC  
-AC_PATH_PROG(CC_FOR_TARGET,"$program_prefix"gcc,no)
-
 dnl FIXME: This may fail if the compiler has not been recognized as gcc
 dnl       and uses tools with different names
 AC_PATH_PROG(AR_FOR_TARGET,"$program_prefix"ar,no)

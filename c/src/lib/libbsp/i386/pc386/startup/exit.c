@@ -39,15 +39,14 @@
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
-extern rtems_boolean _IBMPC_scankey(char *);  /* define in 'inch.c' */
-
+extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
 
 /*-------------------------------------------------------------------------+
 |         Function: rtemsReboot
-|      Description: Reboot the PC. 
+|      Description: Reboot the PC.
 | Global Variables: None.
 |        Arguments: None.
-|          Returns: Nothing. 
+|          Returns: Nothing.
 +--------------------------------------------------------------------------*/
 inline void rtemsReboot(void)
 {

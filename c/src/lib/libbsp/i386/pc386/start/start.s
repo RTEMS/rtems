@@ -12,6 +12,11 @@
 |
 | Instituto Superior Tecnico * Lisboa * PORTUGAL
 +--------------------------------------------------------------------------+
+|
+| Modified the 20/05/1998  by valette@crf.canon.fr in order to give a working
+| example of eraly stage debugging via the DEBUG_EARLY_START define.
+|
++--------------------------------------------------------------------------+
 | Disclaimer:
 |
 | This file is provided "AS IS" without warranty of any kind, either
@@ -62,11 +67,39 @@ BEGIN_CODE
 	EXTERN (boot_card)
 	EXTERN (load_segments)
 	EXTERN (exit)
+	EXTERN (_IBMPC_initVideo)
+	EXTERN (debugPoolingGetChar)
 
+/*
+ * In case it crash on your machine and this is not due
+ * to video mode set by the loader, you may try to define
+ * the follwoing variable
+#define DEBUG_EARLY_START
+ */
+	
 SYM (start):
 
         nop
         cli			# DISABLE INTERRUPTS!!!
+#ifdef DEBUG_EARLY_START
+	cld
+	/*
+	 * Must get video attribute to have a working printk.
+	 * Note that the following code assume we already have 
+	 * valid segments and a stack. It should be true for
+	 * any loader starting RTEMS in protected mode (or
+	 * at least I hope so :	-)).
+	 */
+	call _IBMPC_initVideo
+	/*
+	 * try printk and a getchar in polling mode ASAP
+	 */
+	pushl	$welcome_msg
+	call	printk
+	addl	$4, esp
+
+	call	debugPoolingGetChar
+#endif	
 
 /*----------------------------------------------------------------------------+
 | Load the segment registers (this is done by the board's BSP) and perform any
@@ -265,6 +298,14 @@ SYM (start_frame):
 SYM (stack_start):
 	.long	0
 
+#ifdef DEBUG_EARLY_START
+	
+	PUBLIC (welcome_msg)
+SYM (welcome_msg) :
+	.string "Ready to debug RTEMS ?\nEnter <CR>\n"
+
+#endif
+		
 END_DATA
 
 /*----------------------------------------------------------------------------+

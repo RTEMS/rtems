@@ -165,18 +165,9 @@ else
   AC_MSG_ERROR(no)
 fi
 
-dnl NOTE: host_os is automatically set by autoconf
-
-if [[ "${program_prefix}" = "NONE" ]] ; then
-  if [[ "${target}" = "${host}" ]] ; then
-    program_prefix=
-  else
-    program_prefix=${target}-
-  fi
-fi
+RTEMS_TOOL_PREFIX
 
 dnl check target cc
-CC="$program_prefix"gcc
 RTEMS_PROG_CC
 dnl check if the compiler supports --specs
 RTEMS_GCC_SPECS
@@ -190,25 +181,23 @@ if test "$RTEMS_USE_GCC272" != "yes" ; then
      RTEMS_USE_GCC272=yes
   fi
 fi
+test "$rtems_cv_gcc_pipe" = "yes" && CC_FOR_TARGET="$CC_FOR_TARGET --pipe"
 
 dnl check for g++
 if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
-  CXX="$program_prefix"g++
   RTEMS_PROG_CXX
   if test "$rtems_cv_prog_cc_cross" != "$rtems_cv_prog_cxx_cross"; then
     AC_MSG_ERROR([***]
      [Inconsistency in compiler configuration:]
      [Target C compiler and Target C++ compiler]
      [must both ether be cross compilers or native compilers]
-     [Hint: LD_LIBRARY_PATH ?] )
+     [Hint: If building a posix bsp: LD_LIBRARY_PATH?] )
   fi
-  AC_PATH_PROG(CXX_FOR_TARGET,"$program_prefix"g++,no)
 else
   CXX_FOR_TARGET="no"
 fi
 
 RTEMS_CANONICALIZE_TOOLS
-test "$rtems_cv_gcc_pipe" = "yes" && CC_FOR_TARGET="$CC_FOR_TARGET --pipe"
 
 dnl check host cc
 AC_PROG_CC

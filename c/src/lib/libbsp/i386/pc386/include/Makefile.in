@@ -8,7 +8,7 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-H_FILES = $(srcdir)/bsp.h $(srcdir)/coverhd.h  $(srcdir)/irq.h
+H_FILES = $(srcdir)/bsp.h $(srcdir)/coverhd.h  $(srcdir)/irq.h $(srcdir)/crt.h
 
 #
 #  Equate files are for including from assembly preprocessed by

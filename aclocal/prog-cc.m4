@@ -3,22 +3,29 @@ dnl $Id$
 dnl 
 dnl Check for target gcc
 dnl
-dnl Adaptation of autoconf-2.12's AC_PROG_CC to rtems
-dnl
-dnl 98/02/10 Ralf Corsepius 	(corsepiu@faw.uni-ulm.de)
-dnl
+dnl 98/05/20 Ralf Corsepius 	(corsepiu@faw.uni-ulm.de)
+dnl				Completely reworked
 
 AC_DEFUN(RTEMS_PROG_CC,
 [
 AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_BEFORE([$0], [AC_PROG_CC])dnl
-AC_CHECK_PROG(CC, gcc, gcc)
-if test -z "$CC"; then
-  AC_CHECK_PROG(CC, cc, cc, , , /usr/ucb/cc)
-  test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
-fi
+AC_REQUIRE([RTEMS_TOOL_PREFIX])dnl
 
-RTEMS_PROG_CC_WORKS
+dnl Only accept gcc and cc
+dnl NOTE: This might be too restrictive for native compilation
+AC_PATH_PROGS(CC_FOR_TARGET, "$program_prefix"gcc "$program_prefix"cc )
+test -z "$CC_FOR_TARGET" \
+  && AC_MSG_ERROR([no acceptable cc found in \$PATH])
+
+dnl backup 
+rtems_save_CC=$CC
+rtems_save_CFLAGS=$CFLAGS
+
+dnl temporarily set CC
+CC=$CC_FOR_TARGET
+
+AC_PROG_CC_WORKS
 AC_PROG_CC_GNU
 
 if test $ac_cv_prog_gcc = yes; then
@@ -42,34 +49,17 @@ else
   test "${CFLAGS+set}" = set || CFLAGS="-g"
 fi
 
-CC_FOR_TARGET=$CC
 rtems_cv_prog_gcc=$ac_cv_prog_gcc
 rtems_cv_prog_cc_g=$ac_cv_prog_cc_g
+rtems_cv_prog_cc_works=$ac_cv_prog_cc_works
+rtems_cv_prog_cc_cross=$ac_cv_prog_cc_cross
 
 dnl restore initial values
-unset CC
+CC=$rtems_save_CC
+CFLAGS=$rtems_save_CFLAGS
+
 unset ac_cv_prog_gcc
 unset ac_cv_prog_cc_g
-unset ac_cv_prog_CC
-])
-
-
-dnl Almost identical to AC_PROG_CC_WORKS
-dnl added malloc to program fragment, because rtems has its own malloc
-dnl which is not available while bootstrapping rtems
-
-AC_DEFUN(RTEMS_PROG_CC_WORKS,
-[AC_MSG_CHECKING([whether the target C compiler ($CC $CFLAGS $LDFLAGS) works])
-AC_LANG_SAVE
-AC_LANG_C
-AC_TRY_COMPILER(
-[main(){return(0);}], 
-rtems_cv_prog_cc_works, rtems_cv_prog_cc_cross)
-AC_LANG_RESTORE
-AC_MSG_RESULT($rtems_cv_prog_cc_works)
-if test $rtems_cv_prog_cc_works = no; then
-  AC_MSG_ERROR([installation or configuration problem: target C compiler cannot create executables.])
-fi
-AC_MSG_CHECKING([whether the target C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler])
-AC_MSG_RESULT($rtems_cv_prog_cc_cross)
+unset ac_cv_prog_cc_works
+unset ac_cv_prog_cc_cross
 ])
