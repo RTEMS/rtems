@@ -137,6 +137,7 @@ int unmount(
    *  Free the memory associated with the extracted mount table entry.
    */
 
+  rtems_filesystem_freenode( &temp_loc.mt_entry->mt_point_node );
   free( temp_loc.mt_entry );
   rtems_filesystem_freenode( &temp_loc );
 

@@ -95,6 +95,7 @@ int mount(
 {
   rtems_filesystem_location_info_t      loc;
   rtems_filesystem_mount_table_entry_t *temp_mt_entry;
+  rtems_filesystem_location_info_t     *loc_to_free = NULL;
 
 /* XXX add code to check for required operations */
 
@@ -141,99 +142,99 @@ int mount(
    */
 
   if ( mount_point ) {
-     if ( rtems_filesystem_evaluate_path( 
-       mount_point, 
-       RTEMS_LIBIO_PERMS_RWX,
-       &loc,
-       TRUE ) == -1 )
-       goto cleanup_and_bail;
 
-     /* 
-      * Test to see if it is a directory
-      */
+    if ( rtems_filesystem_evaluate_path( 
+            mount_point, RTEMS_LIBIO_PERMS_RWX, &loc, TRUE ) == -1 )
+      goto cleanup_and_bail;
 
-     if ( loc.ops->node_type( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
-       errno = ENOTDIR;
-       goto cleanup_and_bail;
-     }
+    /* 
+     *  Test to see if it is a directory
+     */
 
-     /*
-      *  You can only mount one file system onto a single mount point.
-      */
+    loc_to_free = &loc;
+    if ( loc.ops->node_type( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
+      errno = ENOTDIR;
+      goto cleanup_and_bail;
+    }
 
-     if ( search_mt_for_mount_point( &loc ) == FOUND ) {
-       errno = EBUSY;
-       goto cleanup_and_bail;
-     }
+    /*
+     *  You can only mount one file system onto a single mount point.
+     */
+
+    if ( search_mt_for_mount_point( &loc ) == FOUND ) {
+      errno = EBUSY;
+      goto cleanup_and_bail;
+    }
  
-     /*
-      * This must be a good mount point, so move the location information
-      * into the allocated mount entry
-      */
+    /*
+     *  This must be a good mount point, so move the location information
+     *  into the allocated mount entry.  Note:  the information that
+     *  may have been allocated in loc should not be sent to freenode 
+     *  until the system is unmounted.  It may be needed to correctly
+     *  traverse the tree.
+     */
 
-     temp_mt_entry->mt_point_node.node_access = loc.node_access;
-     temp_mt_entry->mt_point_node.handlers = loc.handlers;
-     temp_mt_entry->mt_point_node.ops = loc.ops;
-     temp_mt_entry->mt_point_node.mt_entry = loc.mt_entry;
+    temp_mt_entry->mt_point_node.node_access = loc.node_access;
+    temp_mt_entry->mt_point_node.handlers = loc.handlers;
+    temp_mt_entry->mt_point_node.ops = loc.ops;
+    temp_mt_entry->mt_point_node.mt_entry = loc.mt_entry;
 
-     /* 
-      * This link to the parent is only done when we are dealing with system 
-      * below the base file system 
-      */
+    /* 
+     *  This link to the parent is only done when we are dealing with system 
+     *  below the base file system 
+     */
 
-     if ( !loc.ops->mount ){
-       errno = ENOTSUP;
-       goto cleanup_and_bail;
-     }
+    if ( !loc.ops->mount ){
+      errno = ENOTSUP;
+      goto cleanup_and_bail;
+    }
 
-     if ( loc.ops->mount( temp_mt_entry ) ) {
-        goto cleanup_and_bail;
-     }
-  }
-  else {
+    if ( loc.ops->mount( temp_mt_entry ) ) {
+      goto cleanup_and_bail;
+    }
+  } else {
 
-     /* 
-      * This is a mount of the base file system --> The 
-      * mt_point_node.node_access will be set to null to indicate that this 
-      * is the root of the entire file system.
-      */
+    /* 
+     *  This is a mount of the base file system --> The 
+     *  mt_point_node.node_access will be set to null to indicate that this 
+     *  is the root of the entire file system.
+     */
 
-      temp_mt_entry->mt_fs_root.node_access = NULL;
-      temp_mt_entry->mt_fs_root.handlers = NULL;
-      temp_mt_entry->mt_fs_root.ops = NULL;
+    temp_mt_entry->mt_fs_root.node_access = NULL;
+    temp_mt_entry->mt_fs_root.handlers = NULL;
+    temp_mt_entry->mt_fs_root.ops = NULL;
 
-      temp_mt_entry->mt_point_node.node_access = NULL;
-      temp_mt_entry->mt_point_node.handlers = NULL;
-      temp_mt_entry->mt_point_node.ops = NULL;
-      temp_mt_entry->mt_point_node.mt_entry = NULL;
+    temp_mt_entry->mt_point_node.node_access = NULL;
+    temp_mt_entry->mt_point_node.handlers = NULL;
+    temp_mt_entry->mt_point_node.ops = NULL;
+    temp_mt_entry->mt_point_node.mt_entry = NULL;
   }
 
   if ( !fs_ops->fsmount_me ){
-      errno = ENOTSUP;
-      goto cleanup_and_bail;
+    errno = ENOTSUP;
+    goto cleanup_and_bail;
   }
 
   if ( fs_ops->fsmount_me( temp_mt_entry ) )
-      goto cleanup_and_bail;
+    goto cleanup_and_bail;
 
   /*
-   * Add the mount table entry to the mount table chain 
+   *  Add the mount table entry to the mount table chain 
    */
 
   Chain_Append( &rtems_filesystem_mount_table_control, &temp_mt_entry->Node );
 
   *mt_entry = temp_mt_entry;
 
-  rtems_filesystem_freenode( &loc );
-  
   return 0;
 
 cleanup_and_bail:
 
   free( temp_mt_entry );
-
-  rtems_filesystem_freenode( &loc );
   
+  if ( loc_to_free )
+    rtems_filesystem_freenode( loc_to_free );
+
   return -1;
 }
 
