@@ -209,34 +209,34 @@
 
 #define MEM_1MS			((396000000/1000000) * 1000)
 
-#define AU1X00_IC_CFG0RD(x)       (*(volatile unsigned32*)(x + 0x40))
-#define AU1X00_IC_CFG0SET(x)      (*(volatile unsigned32*)(x + 0x40))
-#define AU1X00_IC_CFG0CLR(x)      (*(volatile unsigned32*)(x + 0x44))
-#define AU1X00_IC_CFG1RD(x)       (*(volatile unsigned32*)(x + 0x48))
-#define AU1X00_IC_CFG1SET(x)      (*(volatile unsigned32*)(x + 0x48))
-#define AU1X00_IC_CFG1CLR(x)      (*(volatile unsigned32*)(x + 0x4c))
-#define AU1X00_IC_CFG2RD(x)       (*(volatile unsigned32*)(x + 0x50))
-#define AU1X00_IC_CFG2SET(x)      (*(volatile unsigned32*)(x + 0x50))
-#define AU1X00_IC_CFG2CLR(x)      (*(volatile unsigned32*)(x + 0x54))
-#define AU1X00_IC_REQ0INT(x)      (*(volatile unsigned32*)(x + 0x54))
-#define AU1X00_IC_SRCRD(x)        (*(volatile unsigned32*)(x + 0x58))
-#define AU1X00_IC_SRCSET(x)       (*(volatile unsigned32*)(x + 0x58))
-#define AU1X00_IC_SRCCLR(x)       (*(volatile unsigned32*)(x + 0x5c))
-#define AU1X00_IC_REQ1INT(x)      (*(volatile unsigned32*)(x + 0x5c))
-#define AU1X00_IC_ASSIGNRD(x)     (*(volatile unsigned32*)(x + 0x60))
-#define AU1X00_IC_ASSIGNSET(x)    (*(volatile unsigned32*)(x + 0x60))
-#define AU1X00_IC_ASSIGNCLR(x)    (*(volatile unsigned32*)(x + 0x64))
-#define AU1X00_IC_WAKERD(x)       (*(volatile unsigned32*)(x + 0x68))
-#define AU1X00_IC_WAKESET(x)      (*(volatile unsigned32*)(x + 0x68))
-#define AU1X00_IC_WAKECLR(x)      (*(volatile unsigned32*)(x + 0x6c))
-#define AU1X00_IC_MASKRD(x)       (*(volatile unsigned32*)(x + 0x70))
-#define AU1X00_IC_MASKSET(x)      (*(volatile unsigned32*)(x + 0x70))
-#define AU1X00_IC_MASKCLR(x)      (*(volatile unsigned32*)(x + 0x74))
-#define AU1X00_IC_RISINGRD(x)     (*(volatile unsigned32*)(x + 0x78))
-#define AU1X00_IC_RISINGCLR(x)    (*(volatile unsigned32*)(x + 0x78))
-#define AU1X00_IC_FALLINGRD(x)    (*(volatile unsigned32*)(x + 0x7c))
-#define AU1X00_IC_FALLINGCLR(x)   (*(volatile unsigned32*)(x + 0x7c))
-#define AU1X00_IC_TESTBIT(x)      (*(volatile unsigned32*)(x + 0x80))
+#define AU1X00_IC_CFG0RD(x)       (*(volatile uint32_t*)(x + 0x40))
+#define AU1X00_IC_CFG0SET(x)      (*(volatile uint32_t*)(x + 0x40))
+#define AU1X00_IC_CFG0CLR(x)      (*(volatile uint32_t*)(x + 0x44))
+#define AU1X00_IC_CFG1RD(x)       (*(volatile uint32_t*)(x + 0x48))
+#define AU1X00_IC_CFG1SET(x)      (*(volatile uint32_t*)(x + 0x48))
+#define AU1X00_IC_CFG1CLR(x)      (*(volatile uint32_t*)(x + 0x4c))
+#define AU1X00_IC_CFG2RD(x)       (*(volatile uint32_t*)(x + 0x50))
+#define AU1X00_IC_CFG2SET(x)      (*(volatile uint32_t*)(x + 0x50))
+#define AU1X00_IC_CFG2CLR(x)      (*(volatile uint32_t*)(x + 0x54))
+#define AU1X00_IC_REQ0INT(x)      (*(volatile uint32_t*)(x + 0x54))
+#define AU1X00_IC_SRCRD(x)        (*(volatile uint32_t*)(x + 0x58))
+#define AU1X00_IC_SRCSET(x)       (*(volatile uint32_t*)(x + 0x58))
+#define AU1X00_IC_SRCCLR(x)       (*(volatile uint32_t*)(x + 0x5c))
+#define AU1X00_IC_REQ1INT(x)      (*(volatile uint32_t*)(x + 0x5c))
+#define AU1X00_IC_ASSIGNRD(x)     (*(volatile uint32_t*)(x + 0x60))
+#define AU1X00_IC_ASSIGNSET(x)    (*(volatile uint32_t*)(x + 0x60))
+#define AU1X00_IC_ASSIGNCLR(x)    (*(volatile uint32_t*)(x + 0x64))
+#define AU1X00_IC_WAKERD(x)       (*(volatile uint32_t*)(x + 0x68))
+#define AU1X00_IC_WAKESET(x)      (*(volatile uint32_t*)(x + 0x68))
+#define AU1X00_IC_WAKECLR(x)      (*(volatile uint32_t*)(x + 0x6c))
+#define AU1X00_IC_MASKRD(x)       (*(volatile uint32_t*)(x + 0x70))
+#define AU1X00_IC_MASKSET(x)      (*(volatile uint32_t*)(x + 0x70))
+#define AU1X00_IC_MASKCLR(x)      (*(volatile uint32_t*)(x + 0x74))
+#define AU1X00_IC_RISINGRD(x)     (*(volatile uint32_t*)(x + 0x78))
+#define AU1X00_IC_RISINGCLR(x)    (*(volatile uint32_t*)(x + 0x78))
+#define AU1X00_IC_FALLINGRD(x)    (*(volatile uint32_t*)(x + 0x7c))
+#define AU1X00_IC_FALLINGCLR(x)   (*(volatile uint32_t*)(x + 0x7c))
+#define AU1X00_IC_TESTBIT(x)      (*(volatile uint32_t*)(x + 0x80))
 #define AU1X00_IC_IRQ_MAC0        (bit(28))
 #define AU1X00_IC_IRQ_MAC1        (bit(29))
 #define AU1X00_IC_IRQ_TOY_MATCH0  (bit(15))
@@ -245,27 +245,27 @@
 
 
 
-#define AU1X00_SYS_TOYTRIM(x)    (*(volatile unsigned32*)(x + 0x00))    
-#define AU1X00_SYS_TOYWRITE(x)   (*(volatile unsigned32*)(x + 0x04))
-#define AU1X00_SYS_TOYMATCH0(x)  (*(volatile unsigned32*)(x + 0x08))
-#define AU1X00_SYS_TOYMATCH1(x)  (*(volatile unsigned32*)(x + 0x0c))
-#define AU1X00_SYS_TOYMATCH2(x)  (*(volatile unsigned32*)(x + 0x10))
-#define AU1X00_SYS_CNTCTRL(x)    (*(volatile unsigned32*)(x + 0x14))
-#define AU1X00_SYS_SCRATCH0(x)   (*(volatile unsigned32*)(x + 0x18))
-#define AU1X00_SYS_SCRATCH1(x)   (*(volatile unsigned32*)(x + 0x1c))
-#define AU1X00_SYS_WAKEMSK(x)   (*(volatile unsigned32*)(x + 0x34))
-#define AU1X00_SYS_ENDIAN(x)     (*(volatile unsigned32*)(x + 0x38))
-#define AU1X00_SYS_POWERCTRL(x)  (*(volatile unsigned32*)(x + 0x3c))
-#define AU1X00_SYS_TOYREAD(x)    (*(volatile unsigned32*)(x + 0x40))
-#define AU1X00_SYS_RTCTRIM(x)    (*(volatile unsigned32*)(x + 0x44))
-#define AU1X00_SYS_RTCWRITE(x)   (*(volatile unsigned32*)(x + 0x48))
-#define AU1X00_SYS_RTCMATCH0(x)  (*(volatile unsigned32*)(x + 0x4c))
-#define AU1X00_SYS_RTCMATCH1(x)  (*(volatile unsigned32*)(x + 0x50))
-#define AU1X00_SYS_RTCMATCH2(x)  (*(volatile unsigned32*)(x + 0x54))
-#define AU1X00_SYS_RTCREAD(x)    (*(volatile unsigned32*)(x + 0x58))
-#define AU1X00_SYS_WAKESRC(x)    (*(volatile unsigned32*)(x + 0x5c))
-#define AU1X00_SYS_SLPPWR(x)     (*(volatile unsigned32*)(x + 0x78))
-#define AU1X00_SYS_SLEEP(x)      (*(volatile unsigned32*)(x + 0x7c))
+#define AU1X00_SYS_TOYTRIM(x)    (*(volatile uint32_t*)(x + 0x00))    
+#define AU1X00_SYS_TOYWRITE(x)   (*(volatile uint32_t*)(x + 0x04))
+#define AU1X00_SYS_TOYMATCH0(x)  (*(volatile uint32_t*)(x + 0x08))
+#define AU1X00_SYS_TOYMATCH1(x)  (*(volatile uint32_t*)(x + 0x0c))
+#define AU1X00_SYS_TOYMATCH2(x)  (*(volatile uint32_t*)(x + 0x10))
+#define AU1X00_SYS_CNTCTRL(x)    (*(volatile uint32_t*)(x + 0x14))
+#define AU1X00_SYS_SCRATCH0(x)   (*(volatile uint32_t*)(x + 0x18))
+#define AU1X00_SYS_SCRATCH1(x)   (*(volatile uint32_t*)(x + 0x1c))
+#define AU1X00_SYS_WAKEMSK(x)   (*(volatile uint32_t*)(x + 0x34))
+#define AU1X00_SYS_ENDIAN(x)     (*(volatile uint32_t*)(x + 0x38))
+#define AU1X00_SYS_POWERCTRL(x)  (*(volatile uint32_t*)(x + 0x3c))
+#define AU1X00_SYS_TOYREAD(x)    (*(volatile uint32_t*)(x + 0x40))
+#define AU1X00_SYS_RTCTRIM(x)    (*(volatile uint32_t*)(x + 0x44))
+#define AU1X00_SYS_RTCWRITE(x)   (*(volatile uint32_t*)(x + 0x48))
+#define AU1X00_SYS_RTCMATCH0(x)  (*(volatile uint32_t*)(x + 0x4c))
+#define AU1X00_SYS_RTCMATCH1(x)  (*(volatile uint32_t*)(x + 0x50))
+#define AU1X00_SYS_RTCMATCH2(x)  (*(volatile uint32_t*)(x + 0x54))
+#define AU1X00_SYS_RTCREAD(x)    (*(volatile uint32_t*)(x + 0x58))
+#define AU1X00_SYS_WAKESRC(x)    (*(volatile uint32_t*)(x + 0x5c))
+#define AU1X00_SYS_SLPPWR(x)     (*(volatile uint32_t*)(x + 0x78))
+#define AU1X00_SYS_SLEEP(x)      (*(volatile uint32_t*)(x + 0x7c))
 
 #define AU1X00_SYS_CNTCTRL_ERS   (bit(23))
 #define AU1X00_SYS_CNTCTRL_RTS   (bit(20))
@@ -288,40 +288,40 @@
 #define AU1X00_SYS_CNTCTRL_TS    (bit(0))
 #define AU1X00_SYS_WAKEMSK_M20   (bit(8))
 
-#define AU1X00_MAC_CONTROL(x)         (*(volatile unsigned32*)(x + 0x00))
-#define AU1X00_MAC_ADDRHIGH(x)        (*(volatile unsigned32*)(x + 0x04))
-#define AU1X00_MAC_ADDRLOW(x)         (*(volatile unsigned32*)(x + 0x08))
-#define AU1X00_MAC_HASHHIGH(x)        (*(volatile unsigned32*)(x + 0x0c))
-#define AU1X00_MAC_HASHLOW(x)         (*(volatile unsigned32*)(x + 0x10))
-#define AU1X00_MAC_MIICTRL(x)         (*(volatile unsigned32*)(x + 0x14))
-#define AU1X00_MAC_MIIDATA(x)         (*(volatile unsigned32*)(x + 0x18))
-#define AU1X00_MAC_FLOWCTRL(x)        (*(volatile unsigned32*)(x + 0x1c))
-#define AU1X00_MAC_VLAN1(x)           (*(volatile unsigned32*)(x + 0x20))
-#define AU1X00_MAC_VLAN2(x)           (*(volatile unsigned32*)(x + 0x24))
-#define AU1X00_MAC_EN0                (*(volatile unsigned32*)(AU1X00_MACEN_ADDR + 0x0))
-#define AU1X00_MAC_EN1                (*(volatile unsigned32*)(AU1X00_MACEN_ADDR + 0x4))
-#define AU1X00_MAC_DMA_TX0_ADDR(x)    (*(volatile unsigned32*)(x + 0x000))
-#define AU1X00_MAC_DMA_TX1_ADDR(x)    (*(volatile unsigned32*)(x + 0x010))
-#define AU1X00_MAC_DMA_TX2_ADDR(x)    (*(volatile unsigned32*)(x + 0x020))
-#define AU1X00_MAC_DMA_TX3_ADDR(x)    (*(volatile unsigned32*)(x + 0x030))
-#define AU1X00_MAC_DMA_RX0_ADDR(x)    (*(volatile unsigned32*)(x + 0x100))
-#define AU1X00_MAC_DMA_RX0_ADDR(x)    (*(volatile unsigned32*)(x + 0x110))
-#define AU1X00_MAC_DMA_RX0_ADDR(x)    (*(volatile unsigned32*)(x + 0x120))
-#define AU1X00_MAC_DMA_RX0_ADDR(x)    (*(volatile unsigned32*)(x + 0x130))
+#define AU1X00_MAC_CONTROL(x)         (*(volatile uint32_t*)(x + 0x00))
+#define AU1X00_MAC_ADDRHIGH(x)        (*(volatile uint32_t*)(x + 0x04))
+#define AU1X00_MAC_ADDRLOW(x)         (*(volatile uint32_t*)(x + 0x08))
+#define AU1X00_MAC_HASHHIGH(x)        (*(volatile uint32_t*)(x + 0x0c))
+#define AU1X00_MAC_HASHLOW(x)         (*(volatile uint32_t*)(x + 0x10))
+#define AU1X00_MAC_MIICTRL(x)         (*(volatile uint32_t*)(x + 0x14))
+#define AU1X00_MAC_MIIDATA(x)         (*(volatile uint32_t*)(x + 0x18))
+#define AU1X00_MAC_FLOWCTRL(x)        (*(volatile uint32_t*)(x + 0x1c))
+#define AU1X00_MAC_VLAN1(x)           (*(volatile uint32_t*)(x + 0x20))
+#define AU1X00_MAC_VLAN2(x)           (*(volatile uint32_t*)(x + 0x24))
+#define AU1X00_MAC_EN0                (*(volatile uint32_t*)(AU1X00_MACEN_ADDR + 0x0))
+#define AU1X00_MAC_EN1                (*(volatile uint32_t*)(AU1X00_MACEN_ADDR + 0x4))
+#define AU1X00_MAC_DMA_TX0_ADDR(x)    (*(volatile uint32_t*)(x + 0x000))
+#define AU1X00_MAC_DMA_TX1_ADDR(x)    (*(volatile uint32_t*)(x + 0x010))
+#define AU1X00_MAC_DMA_TX2_ADDR(x)    (*(volatile uint32_t*)(x + 0x020))
+#define AU1X00_MAC_DMA_TX3_ADDR(x)    (*(volatile uint32_t*)(x + 0x030))
+#define AU1X00_MAC_DMA_RX0_ADDR(x)    (*(volatile uint32_t*)(x + 0x100))
+#define AU1X00_MAC_DMA_RX1_ADDR(x)    (*(volatile uint32_t*)(x + 0x110))
+#define AU1X00_MAC_DMA_RX2_ADDR(x)    (*(volatile uint32_t*)(x + 0x120))
+#define AU1X00_MAC_DMA_RX3_ADDR(x)    (*(volatile uint32_t*)(x + 0x130))
 
 typedef struct {
-    volatile unsigned32 stat;
-    volatile unsigned32 addr;
-    unsigned32 _rsv0;
-    unsigned32 _rsv1;
+    volatile uint32_t stat;
+    volatile uint32_t addr;
+    uint32_t _rsv0;
+    uint32_t _rsv1;
 } au1x00_macdma_rx_t;
                                            
 
 typedef struct {
-    volatile unsigned32 stat;
-    volatile unsigned32 addr;
-    volatile unsigned32 len;
-    unsigned32 _rsv0;
+    volatile uint32_t stat;
+    volatile uint32_t addr;
+    volatile uint32_t len;
+    uint32_t _rsv0;
 } au1x00_macdma_tx_t;
                                            
 #define AU1X00_MAC_CTRL_RA                (bit(31))
@@ -411,18 +411,18 @@ typedef struct {
 
 
 typedef struct {
-    volatile unsigned long rxdata;
-    volatile unsigned long txdata;
-    volatile unsigned long inten;
-    volatile unsigned long intcause;
-    volatile unsigned long fifoctrl;
-    volatile unsigned long linectrl;
-    volatile unsigned long mdmctrl;
-    volatile unsigned long linestat;
-    volatile unsigned long mdmstat;
-    volatile unsigned long clkdiv;
-    volatile unsigned long _resv[54];
-    volatile unsigned long enable;
+    volatile uint32_t rxdata;
+    volatile uint32_t txdata;
+    volatile uint32_t inten;
+    volatile uint32_t intcause;
+    volatile uint32_t fifoctrl;
+    volatile uint32_t linectrl;
+    volatile uint32_t mdmctrl;
+    volatile uint32_t linestat;
+    volatile uint32_t mdmstat;
+    volatile uint32_t clkdiv;
+    volatile uint32_t _resv[54];
+    volatile uint32_t enable;
 } au1x00_uart_t;
 
 extern au1x00_uart_t *uart0;    

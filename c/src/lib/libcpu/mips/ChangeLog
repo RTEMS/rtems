@@ -1,5 +1,9 @@
 2005-02-24	Jay Monkman <jtm@lopingdog.com>
 
+	* au1x00/include/au1x00.h: Converted types to C99 types.
+
+2005-02-24	Jay Monkman <jtm@lopingdog.com>
+
 	* Makefile.am, configure.ac: New CPU.
         * shared/interrupts/installisrentries.c,
 	shared/interrupts/isr_entries.S: Added CPU32 support.
