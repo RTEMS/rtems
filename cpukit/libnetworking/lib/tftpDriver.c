@@ -18,6 +18,7 @@
 #include <malloc.h>
 #include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/rtems_bsdnet.h>
@@ -139,35 +140,65 @@ struct tftpStream {
 /*
  * Number of streams open at the same time
  */
+
 static rtems_id tftp_mutex;
 static int nStreams;
 static struct tftpStream ** volatile tftpStreams;
 
-typedef struct {
-   rtems_id                             tftp_mutex;
-   int                                  nStreams;
-   struct tftpStream ** volatile        tftpStreams;
-  rtems_filesystem_mount_table_entry_t *mt_entry;  
-}  tftp_fs_info;
+typedef const char *tftp_node;
+extern rtems_filesystem_operations_table  rtems_tftp_ops;
+extern rtems_filesystem_file_handlers_r   rtems_tftp_handlers;
+
+/*
+ *  Direct copy from the IMFS.  Look at this.
+ */
+
+rtems_filesystem_limits_and_options_t rtems_tftp_limits_and_options = {
+   5,   /* link_max */
+   6,   /* max_canon */
+   7,   /* max_input */
+   255, /* name_max */
+   255, /* path_max */
+   2,   /* pipe_buf */
+   1,   /* posix_async_io */
+   2,   /* posix_chown_restrictions */
+   3,   /* posix_no_trunc */
+   4,   /* posix_prio_io */
+   5,   /* posix_sync_io */
+   6    /* posix_vdisable */
+};
 
 int rtems_tftp_mount_me(
   rtems_filesystem_mount_table_entry_t *temp_mt_entry
 )
 {
-  tftp_fs_info      *fs_info;
   rtems_status_code  sc;
 
+  temp_mt_entry->mt_fs_root.handlers = &rtems_tftp_handlers;
+  temp_mt_entry->mt_fs_root.ops      = &rtems_tftp_ops;
+
   /*
-   * Allocate stuff for this file system.
+   *   We have no tftp filesystem specific data to maintain.  This
+   *   filesystem may only be mounted ONCE.
+   *
+   *   And we maintain no real filesystem nodes, so there is no real root.
    */
 
-  fs_info = calloc( 1, sizeof( tftp_fs_info ));
-  if ( !fs_info )
-    set_errno_and_return_minus_one( ENOMEM );
+  temp_mt_entry->fs_info                = NULL;
+  temp_mt_entry->mt_fs_root.node_access = NULL;
 
-  temp_mt_entry->fs_info                = fs_info;
-  temp_mt_entry->mt_fs_root.node_access = fs_info;
+  /*
+   *  These need to be looked at for full POSIX semantics.
+   */
 
+  temp_mt_entry->pathconf_limits_and_options = rtems_tftp_limits_and_options; 
+
+
+  /*
+   *  Now allocate a semaphore for mutual exclusion.
+   *
+   *  NOTE:  This could be in an fsinfo for this filesystem type.
+   */
   
   sc = rtems_semaphore_create (
     rtems_build_name('T', 'F', 'T', 'P'),
@@ -178,11 +209,11 @@ int rtems_tftp_mount_me(
     RTEMS_NO_PRIORITY_CEILING |
     RTEMS_LOCAL,
     0,
-    &fs_info->tftp_mutex
+    &tftp_mutex
   );
 
   if (sc != RTEMS_SUCCESSFUL)
-    set_errno_and_return_minus_one( ENOMEM ); /* ??? */
+    set_errno_and_return_minus_one( ENOMEM ); 
 
   return 0;
 }
@@ -190,18 +221,28 @@ int rtems_tftp_mount_me(
 /*
  * Initialize the TFTP driver
  */
-/* XXX change name to rtems_bsdnet_initialize_tftp_filesystem ("mountpt") */
-/* XXX this won't be a driver when we are finished */
-rtems_device_driver rtems_tftp_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
-{
 
-/* XXX change to a mount */
-	rtems_io_register_name (TFTP_PATHNAME_PREFIX, major, minor);
-	return RTEMS_SUCCESSFUL;
+int rtems_bsdnet_initialize_tftp_filesystem () 
+{
+ int                                   status;
+ rtems_filesystem_mount_table_entry_t *entry;
+
+ status = mkdir( TFTP_PATHNAME_PREFIX, S_IRWXU | S_IRWXG | S_IRWXO );
+ if ( status == -1 )
+   return status; 
+
+  status = mount( 
+     &entry,
+     &rtems_tftp_ops,
+     "RO",
+     NULL,
+     TFTP_PATHNAME_PREFIX
+  );
+
+  if ( status )
+    perror( "TFTP mount failed" );
+
+  return status;
 }
 
 /*
@@ -338,344 +379,376 @@ int rtems_tftp_evaluate_for_make(
    const char                        **name        /* OUT    */
 )
 {  
-    set_errno_and_return_minus_one( EIO );    
+  set_errno_and_return_minus_one( EIO );    
 }
+
 /*
  * XXX - Fix return values.
  */
 
-int TFTP_eval_path(  
+int rtems_tftp_eval_path(  
   const char                        *pathname,     /* IN     */
   int                                flags,        /* IN     */
   rtems_filesystem_location_info_t  *pathloc       /* IN/OUT */
 )
 {
-	rtems_unsigned32 farAddress;
-	int len;
-	const char *remoteFilename;
 
-  tftp_fs_info      *fs_info;
-  const char *cp1, *cp2;
+  /*
+   * Read-only for now
+   */
+   
+  if ( (flags & O_WRONLY) == O_WRONLY )
+    set_errno_and_return_minus_one( ENOENT );
 
-  fs_info = pathloc->node_access;
+  /*
+   * The File system is mounted at TFTP_PATHNAME_PREFIX
+   * the caller of this routine has striped off this part of the
+   * name. Save the remainder of the name for use by the open routine.
+   */
 
-	/*
-	 * Pick apart the name into a host:pathname pair
-	 */
-	/*
-	 * XXX - I think this is handled by the caller of 
-	 *       the evaluate routine. ? Am I starting at the right
-	 *       place?
-	 */
+  pathloc->node_access = (void * ) pathname;
+  pathloc->handlers    = &rtems_tftp_handlers;
 
-        cp2 = pathname+1;
+  return 0;
+}
 
-	if (*cp2 == '/') {
-		farAddress = rtems_bsdnet_bootp_server_address.s_addr;
-	}
-	else {
-		char *hostname;
 
-		cp1 = cp2;
-		while (*cp2 != '/') {
-			if (*cp2 == '\0')
-				return RTEMS_INVALID_NAME;
-			cp2++;
-		}
-		len = cp2 - cp1;
-		hostname = malloc (len + 1);
-		if (hostname == NULL)
-			return RTEMS_NO_MEMORY;
-		strncpy (hostname, cp1, len);
-		hostname[len] = '\0';
-		farAddress = inet_addr (hostname);
-		free (hostname);
-	}
-	if ((farAddress == 0) || (farAddress == ~0))
-		return RTEMS_INVALID_NAME;
-	if (*++cp2 == '\0')
-		return RTEMS_INVALID_NAME;
-	remoteFilename = cp2;
-	if (strlen (remoteFilename) > (TFTP_BUFSIZE - 10))
-		return RTEMS_INVALID_NAME;
+int rtems_tftp_open(
+  rtems_libio_t *iop,
+  const char    *new_name,
+  unsigned32     flag,
+  unsigned32     mode
+)
+{
+  struct tftpStream  *tp;
+  int                 retryCount;
+  rtems_unsigned32    farAddress;
+  int                 s;
+  int                 len;
+  char               *cp1;
+  char               *cp2;
+  char               *remoteFilename;
+  rtems_interval      now;
+  rtems_status_code   sc;
+
+  /*
+   * This came from the evaluate path. 
+   */
+
+  cp2 = iop->file_info;  
+  if (*cp2 == '/') {
+    farAddress = rtems_bsdnet_bootp_server_address.s_addr;
+  }
+  else {
+    char *hostname;
+
+    cp1 = cp2;
+    while (*cp2 != '/') {
+      if (*cp2 == '\0')
+        set_errno_and_return_minus_one( ENOENT );
+       cp2++;
+    }
+
+    len = cp2 - cp1;
+    hostname = malloc (len + 1);
+    if (hostname == NULL)
+      set_errno_and_return_minus_one( ENOMEM );
+
+    strncpy (hostname, cp1, len);
+    hostname[len] = '\0';
+    farAddress = inet_addr (hostname);
+    free (hostname);
+  }
+
+  if ((farAddress == 0) || (farAddress == ~0))
+    set_errno_and_return_minus_one( ENOENT );
+
+  if (*++cp2 == '\0')
+    set_errno_and_return_minus_one( ENOENT );
+
+  remoteFilename = cp2;
+  if (strlen (remoteFilename) > (TFTP_BUFSIZE - 10))
+    set_errno_and_return_minus_one( ENOENT );
+
+  /*
+   * Find a free stream
+   */
+
+  sc = rtems_semaphore_obtain (tftp_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  if (sc != RTEMS_SUCCESSFUL)
+    set_errno_and_return_minus_one( EBUSY );
+
+  for (s = 0 ; s < nStreams ; s++) {
+    if (tftpStreams[s] == NULL)
+    break;
+  }
+
+  if (s == nStreams) {
+    /*
+     * Reallocate stream pointers
+     * Guard against the case where realloc() returns NULL.
+     */
+    struct tftpStream **np;
+
+    np = realloc (tftpStreams, ++nStreams * sizeof *tftpStreams);
+    if (np == NULL) {
+      rtems_semaphore_release (tftp_mutex);
+      set_errno_and_return_minus_one( ENOMEM );
+    }
+    tftpStreams = np;
+  }
+
+  tp = tftpStreams[s] = malloc (sizeof (struct tftpStream));
+  rtems_semaphore_release (tftp_mutex);
+  if (tp == NULL)
+    set_errno_and_return_minus_one( ENOMEM );
+  iop->data0 = s;
+  iop->data1 = tp;
+
+  /*
+   * Create the socket
+   */
+
+  if ((tp->socket = socket (AF_INET, SOCK_DGRAM, 0)) < 0) {
+    releaseStream (s);
+    set_errno_and_return_minus_one( ENOMEM );
+  }
+
+  /*
+   * Bind the socket to a local address
+   */
+
+  retryCount = 0;
+  rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
+  for (;;) {
+    int try = (now + retryCount) % 10;
+
+    tp->myAddress.sin_family = AF_INET;
+    /*
+     *  XXX Eric .. how do we get the minor information???
+     * tp->myAddress.sin_port = htons (UDP_PORT_BASE + nStreams * try + minor);
+     */
+    tp->myAddress.sin_port = htons (UDP_PORT_BASE + nStreams * try);
+    tp->myAddress.sin_addr.s_addr = htonl (INADDR_ANY);
+    if (bind (tp->socket, (struct sockaddr *)&tp->myAddress, sizeof tp->myAddress) >= 0)
+      break;
+    if (++retryCount == 10) {
+      close (tp->socket);
+      /*
+       *  XXX Eric .. how do we get the minor information to release this???
+        releaseStream (minor);
+       */
+      set_errno_and_return_minus_one( EBUSY );
+    }
+  }
+
+  /*
+   * Set the UDP destination to the TFTP server
+   * port on the remote machine.
+   */
+  tp->farAddress.sin_family = AF_INET;
+  tp->farAddress.sin_addr.s_addr = farAddress;
+  tp->farAddress.sin_port = htons (69);
+
+  /*
+   * Start the transfer
+   */
+  tp->firstReply = 1;
+  for (;;) {
+    /*
+     * Create the request
+     */
+    tp->pkbuf.tftpRWRQ.opcode = htons (TFTP_OPCODE_RRQ);
+      /*
+       *  XXX Eric .. is this cast taking the const off right?
+       */
+
+    cp1 = (char *) tp->pkbuf.tftpRWRQ.filename_mode;
+    cp2 = (char *) remoteFilename;
+    while ((*cp1++ = *cp2++) != '\0')
+      continue;
+    cp2 = "octet";
+    while ((*cp1++ = *cp2++) != '\0')
+      continue;
+    len = cp1 - (char *)&tp->pkbuf.tftpRWRQ;
+
+    /*
+     * Send the request
+     */
+    if (sendto (tp->socket, (char *)&tp->pkbuf, len, 0, 
+          (struct sockaddr *)&tp->farAddress,
+          sizeof tp->farAddress) < 0) {
+      close (tp->socket);
+      /*
+       *  XXX Eric .. how do we get the minor information to release this???
+        releaseStream (minor);
+       */
+      set_errno_and_return_minus_one( EIO );
+    }
+
+    /*
+     * Get reply
+     */
+    len = getPacket (tp);
+    if (len >= (int) sizeof tp->pkbuf.tftpACK) {
+      int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
+      if ((opcode == TFTP_OPCODE_DATA)
+       && (ntohs (tp->pkbuf.tftpDATA.blocknum) == 1)) {
+        tp->nused = 0;
+        tp->blocknum = 1;
+        tp->nleft = len - 2 * sizeof (rtems_unsigned16);
+        tp->eof = (tp->nleft < TFTP_BUFSIZE);
+        if (sendAck (tp) != 0) {
+          close (tp->socket);
+      /*
+       *  XXX Eric .. how do we get the minor information to release this???
+          releaseStream (minor);
+       */
+
+          set_errno_and_return_minus_one( EIO );
+        }
+        break;
+      }
+      if (opcode == TFTP_OPCODE_ERROR) {
+        tftpSetErrno (tp);
+        close (tp->socket);
+      /*
+       *  XXX Eric .. how do we get the minor information to release this???
+       *  releaseStream (minor);
+       */
+        set_errno_and_return_minus_one( EIO );
+      }
+    }
+
+    /*
+     * Keep trying
+     */
+    if (++retryCount >= OPEN_RETRY_LIMIT) {
+      close (tp->socket);
+      /*
+       *  XXX Eric .. how do we get the minor information to release this???
+        releaseStream (minor);
+       */
+      set_errno_and_return_minus_one( EIO );
+    }
+  }
 
   return 0;
 }
 
 /*
- * Open a TFTP stream
- */
-rtems_device_driver rtems_tftp_open(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
-{
-	rtems_libio_open_close_args_t *ap = pargp;
-	struct tftpStream *tp;
-	int retryCount;
-	rtems_unsigned32 farAddress = 0; /* XXX - node parameter */
-	int s;
-	int len;
-	char *cp1, *cp2;
-	char *remoteFilename = NULL; /* XXX - node parameter */
-	rtems_interval now;
-	rtems_status_code sc;
-
-	/*
-	 * Read-only for now
-	 */
-	/* XXX - Move to the open routine */
-	if (ap->flags & LIBIO_FLAGS_WRITE)
-		return RTEMS_NOT_IMPLEMENTED;
-
-
-	/*
-	 * Find a free stream
-	 */
-	sc = rtems_semaphore_obtain (tftp_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-	if (sc != RTEMS_SUCCESSFUL)
-		return sc;
-	for (s = 0 ; s < nStreams ; s++) {
-		if (tftpStreams[s] == NULL)
-			break;
-	}
-	if (s == nStreams) {
-		/*
-		 * Reallocate stream pointers
-		 * Guard against the case where realloc() returns NULL.
-		 */
-		struct tftpStream **np;
-
-		np = realloc (tftpStreams, ++nStreams * sizeof *tftpStreams);
-		if (np == NULL) {
-			rtems_semaphore_release (tftp_mutex);
-			return RTEMS_NO_MEMORY;
-		}
-		tftpStreams = np;
-	}
-	tp = tftpStreams[s] = malloc (sizeof (struct tftpStream));
-	rtems_semaphore_release (tftp_mutex);
-	if (tp == NULL)
-		return RTEMS_NO_MEMORY;
-	ap->iop->data0 = s;
-	ap->iop->data1 = tp;
-
-	/*
-	 * Create the socket
-	 */
-	if ((tp->socket = socket (AF_INET, SOCK_DGRAM, 0)) < 0) {
-		releaseStream (s);
-		return RTEMS_TOO_MANY;
-	}
-
-	/*
-	 * Bind the socket to a local address
-	 */
-	retryCount = 0;
-	rtems_clock_get (RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &now);
-	for (;;) {
-		int try = (now + retryCount) % 10;
-
-		tp->myAddress.sin_family = AF_INET;
-		tp->myAddress.sin_port = htons (UDP_PORT_BASE + nStreams * try + minor);
-		tp->myAddress.sin_addr.s_addr = htonl (INADDR_ANY);
-		if (bind (tp->socket, (struct sockaddr *)&tp->myAddress, sizeof tp->myAddress) >= 0)
-			break;
-		if (++retryCount == 10) {
-			close (tp->socket);
-			releaseStream (minor);
-			return RTEMS_RESOURCE_IN_USE;
-		}
-	}
-
-	/*
-	 * Set the UDP destination to the TFTP server
-	 * port on the remote machine.
-	 */
-	tp->farAddress.sin_family = AF_INET;
-	tp->farAddress.sin_addr.s_addr = farAddress;
-	tp->farAddress.sin_port = htons (69);
-
-	/*
-	 * Start the transfer
-	 */
-	tp->firstReply = 1;
-	for (;;) {
-		/*
-		 * Create the request
-		 */
-		tp->pkbuf.tftpRWRQ.opcode = htons (TFTP_OPCODE_RRQ);
-		cp1 = tp->pkbuf.tftpRWRQ.filename_mode;
-		cp2 = remoteFilename;
-		while ((*cp1++ = *cp2++) != '\0')
-			continue;
-		cp2 = "octet";
-		while ((*cp1++ = *cp2++) != '\0')
-			continue;
-		len = cp1 - (char *)&tp->pkbuf.tftpRWRQ;
-
-		/*
-		 * Send the request
-		 */
-		if (sendto (tp->socket, (char *)&tp->pkbuf, len, 0, 
-					(struct sockaddr *)&tp->farAddress,
-					sizeof tp->farAddress) < 0) {
-			close (tp->socket);
-			releaseStream (minor);
-			return RTEMS_UNSATISFIED;
-		}
-
-		/*
-		 * Get reply
-		 */
-		len = getPacket (tp);
-		if (len >= (int) sizeof tp->pkbuf.tftpACK) {
-			int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
-			if ((opcode == TFTP_OPCODE_DATA)
-			 && (ntohs (tp->pkbuf.tftpDATA.blocknum) == 1)) {
-				tp->nused = 0;
-				tp->blocknum = 1;
-				tp->nleft = len - 2 * sizeof (rtems_unsigned16);
-				tp->eof = (tp->nleft < TFTP_BUFSIZE);
-				if (sendAck (tp) != 0) {
-					close (tp->socket);
-					releaseStream (minor);
-					return RTEMS_UNSATISFIED;
-				}
-				break;
-			}
-			if (opcode == TFTP_OPCODE_ERROR) {
-				tftpSetErrno (tp);
-				close (tp->socket);
-				releaseStream (ap->iop->data0);
-				return RTEMS_INTERNAL_ERROR;
-			}
-		}
-
-		/*
-		 * Keep trying
-		 */
-		if (++retryCount >= OPEN_RETRY_LIMIT) {
-			close (tp->socket);
-			releaseStream (minor);
-			return RTEMS_UNSATISFIED;
-		}
-	}
-	return RTEMS_SUCCESSFUL;
-}
-
-/*
  * Read from a TFTP stream
  */
-rtems_device_driver rtems_tftp_read(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
+
+int rtems_tftp_read(
+  rtems_libio_t *iop,
+  void          *buffer,
+  unsigned32     count
 )
 {
-	rtems_libio_rw_args_t *ap = pargp;
-	char *bp;
-	struct tftpStream *tp;
-	int retryCount;
-	int nwant;
+  char              *bp;
+  struct tftpStream *tp;
+  int                retryCount;
+  int                nwant;
 
-	tp = ap->iop->data1;
+  tp = iop->data1;
 
-	/*
-	 * Read till user request is satisfied or EOF is reached
-	 */
-	bp = ap->buffer;
-	nwant = ap->count;
-	while (nwant) {
-		if (tp->nleft) {
-			int count;
-			if (nwant < tp->nleft)
-				count = nwant;
-			else
-				count = tp->nleft;
-			memcpy (bp, &tp->pkbuf.tftpDATA.data[tp->nused], count);
-			tp->nused += count;
-			tp->nleft -= count;
-			bp += count;
-			nwant -= count;
-			if (nwant == 0)
-				break;
-		}
-		if (tp->eof)
-			break;
+  /*
+   * Read till user request is satisfied or EOF is reached
+   */
 
-		/*
-		 * Wait for the next packet
-		 */
-		retryCount = 0;
-		for (;;) {
-			int len = getPacket (tp);
-			if (len >= (int)sizeof tp->pkbuf.tftpACK) {
-				int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
-				rtems_unsigned16 nextBlock = tp->blocknum + 1;
-				if ((opcode == TFTP_OPCODE_DATA)
-				 && (ntohs (tp->pkbuf.tftpDATA.blocknum) == nextBlock)) {
-					tp->nused = 0;
-					tp->nleft = len - 2 * sizeof (rtems_unsigned16);
-					tp->eof = (tp->nleft < TFTP_BUFSIZE);
-					tp->blocknum++;
-					if (sendAck (tp) != 0)
-						return RTEMS_IO_ERROR;
-					break;
-				}
-				if (opcode == TFTP_OPCODE_ERROR) {
-					tftpSetErrno (tp);
-					return RTEMS_INTERNAL_ERROR;
-				}
-			}
+  bp = buffer;
+  nwant = count;
+  while (nwant) {
+    if (tp->nleft) {
+      int count;
+      if (nwant < tp->nleft)
+        count = nwant;
+      else
+        count = tp->nleft;
+      memcpy (bp, &tp->pkbuf.tftpDATA.data[tp->nused], count);
+      tp->nused += count;
+      tp->nleft -= count;
+      bp += count;
+      nwant -= count;
+      if (nwant == 0)
+        break;
+    }
+    if (tp->eof)
+      break;
 
-			/*
-			 * Keep trying?
-			 */
-			if (++retryCount == IO_RETRY_LIMIT)
-				return RTEMS_IO_ERROR;
-			if (sendAck (tp) != 0)
-				return RTEMS_IO_ERROR;
-		}
-	}
-	ap->bytes_moved = ap->count - nwant;
-	return RTEMS_SUCCESSFUL;
+    /*
+     * Wait for the next packet
+     */
+    retryCount = 0;
+    for (;;) {
+      int len = getPacket (tp);
+      if (len >= (int)sizeof tp->pkbuf.tftpACK) {
+        int opcode = ntohs (tp->pkbuf.tftpDATA.opcode);
+        rtems_unsigned16 nextBlock = tp->blocknum + 1;
+        if ((opcode == TFTP_OPCODE_DATA)
+         && (ntohs (tp->pkbuf.tftpDATA.blocknum) == nextBlock)) {
+          tp->nused = 0;
+          tp->nleft = len - 2 * sizeof (rtems_unsigned16);
+          tp->eof = (tp->nleft < TFTP_BUFSIZE);
+          tp->blocknum++;
+          if (sendAck (tp) != 0)
+            set_errno_and_return_minus_one( EIO );
+          break;
+        }
+        if (opcode == TFTP_OPCODE_ERROR) {
+          tftpSetErrno (tp);
+          return RTEMS_INTERNAL_ERROR;
+        }
+      }
+
+      /*
+       * Keep trying?
+       */
+      if (++retryCount == IO_RETRY_LIMIT)
+        set_errno_and_return_minus_one( EIO );
+      if (sendAck (tp) != 0)
+        set_errno_and_return_minus_one( EIO );
+    }
+  }
+
+ /*
+  * XXX - Eric is this right?
+  *
+  */
+  return count - nwant;
 }
 
 /*
  * Close a TFTP stream
  */
-rtems_device_driver rtems_tftp_close(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
+int rtems_tftp_close(
+  rtems_libio_t *iop
 )
 {
-	rtems_libio_open_close_args_t *ap = pargp;
-	struct tftpStream *tp = ap->iop->data1;;
+  struct tftpStream *tp = iop->data1;;
 
-	if (!tp->eof && !tp->firstReply) {
-		/*
-		 * Tell the other end to stop
-		 */
-		rtems_interval ticksPerSecond;
-		sendStifle (tp, &tp->farAddress);
-		rtems_clock_get (RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticksPerSecond);
-		rtems_task_wake_after (1 + ticksPerSecond / 10);
-	}
-	close (tp->socket);
-	releaseStream (ap->iop->data0);
-	return RTEMS_SUCCESSFUL;
+  if (!tp->eof && !tp->firstReply) {
+    /*
+     * Tell the other end to stop
+     */
+    rtems_interval ticksPerSecond;
+    sendStifle (tp, &tp->farAddress);
+    rtems_clock_get (RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticksPerSecond);
+    rtems_task_wake_after (1 + ticksPerSecond / 10);
+  }
+  close (tp->socket);
+  releaseStream (iop->data0);
+  return RTEMS_SUCCESSFUL;
 }
 
-rtems_device_driver rtems_tftp_write(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
+int rtems_tftp_write(
+  rtems_libio_t *iop,
+  const void    *buffer,
+  unsigned32     count
 )
 {
-	return RTEMS_NOT_CONFIGURED;
+  return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_device_driver rtems_tftp_control(
@@ -684,5 +757,48 @@ rtems_device_driver rtems_tftp_control(
   void *pargp
 )
 {
-	return RTEMS_NOT_CONFIGURED;
+  return RTEMS_NOT_CONFIGURED;
 }
+
+rtems_filesystem_node_types_t rtems_tftp_node_type(
+   rtems_filesystem_location_info_t    *pathloc         /* IN */
+)
+{
+  return RTEMS_FILESYSTEM_MEMORY_FILE;
+}
+
+
+rtems_filesystem_operations_table  rtems_tftp_ops = {
+  rtems_tftp_eval_path,            /* eval_path */
+  rtems_tftp_evaluate_for_make,    /* evaluate_for_make */
+  NULL,                            /* link */
+  NULL,                            /* unlink */
+  rtems_tftp_node_type,            /* node_type */
+  NULL,                            /* mknod */
+  NULL,                            /* rmnod */
+  NULL,                            /* chown */
+  NULL,                            /* freenodinfo */
+  NULL,                            /* mount */
+  rtems_tftp_mount_me,             /* initialize */
+  NULL,                            /* unmount */
+  NULL,                            /* fsunmount */
+  NULL,                            /* utime, */
+  NULL,                            /* evaluate_link */
+  NULL,                            /* symlink */
+  NULL,                            /* readlin */
+};
+
+rtems_filesystem_file_handlers_r rtems_tftp_handlers = {
+  rtems_tftp_open,
+  rtems_tftp_close,
+  rtems_tftp_read,
+  rtems_tftp_write,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+};
