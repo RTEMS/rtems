@@ -30,8 +30,14 @@
 .set T1CSR,      0x0a                       # T1 command/status reg
 .set RELOAD,     0x24                       # clr IP & IUS,allow countdown
 
+/*
+ * Duplicating this symbol is stupid but eliminates
+ * toolset variation problems.
+ */
         PUBLIC(timerisr)
+        PUBLIC(_timerisr)
 SYM (timerisr):
+SYM (_timerisr):
         #ldconst   1,r4
         #modpc     0,r4,r4               # enable tracing
 
