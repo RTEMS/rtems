@@ -111,7 +111,7 @@ _start:
 	bl	FUNC_NAME(boot_card)
 
 	/* return value from boot_card is argument to exit */
-	bl	FUNC_NAME(exit)
+	/* bl	FUNC_NAME(exit) */
 	trap
 .Lstart:
 	.size	_start,.Lstart-_start
