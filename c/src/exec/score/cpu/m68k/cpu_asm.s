@@ -238,7 +238,7 @@ bframe: clrl    SYM (_ISR_Signals_to_thread_executing)
         movec   msp,a0                   | a0 = master stack pointer
         movew   #0,a0@-                  | push format word
         movel   #SYM(_ISR_Dispatch),a0@- | push return addr
-        movew   sr,a0@-                  | push existing sr
+        movew   a0@(6),a0@-              | push saved sr
         movec   a0,msp                   | set master stack pointer
 #else
         jsr SYM (_Thread_Dispatch)       | Perform context switch
