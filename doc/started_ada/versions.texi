@@ -44,19 +44,19 @@
 @c
 
 @c The "official" binutils
-@c @set BINUTILS-VERSION     binutils 2.8.1
-@c @set BINUTILS-TAR         binutils-2.8.1.tar.gz
-@c @set BINUTILS-UNTAR       binutils-2.8.1
-@c @set BINUTILS-FTPSITE     ftp.gnu.org
-@c @set BINUTILS-FTPDIR      /pub/GNU
+@set BINUTILS-VERSION     binutils 2.9
+@set BINUTILS-TAR         binutils-2.9.tar.gz
+@set BINUTILS-UNTAR       binutils-2.9
+@set BINUTILS-FTPSITE     ftp.gnu.org
+@set BINUTILS-FTPDIR      /pub/GNU
 @c @set BINUTILS-RTEMSPATCH  binutils-2.8.1-rtems-diff-980321.gz
 
 @c When forced to use a snapshot
-@set BINUTILS-VERSION     gas 980314
-@set BINUTILS-TAR         gas-980314.tgz
-@set BINUTILS-UNTAR       gas-980314
-@set BINUTILS-FTPSITE     ftp.OARcorp.com
-@set BINUTILS-FTPDIR      /OARcorp/private/beta2/c_tools
+@c @set BINUTILS-VERSION     gas 980314
+@c @set BINUTILS-TAR         gas-980314.tgz
+@c @set BINUTILS-UNTAR       gas-980314
+@c @set BINUTILS-FTPSITE     ftp.OARcorp.com
+@c @set BINUTILS-FTPDIR      /OARcorp/private/beta2/c_tools
 @c @set BINUTILS-RTEMSPATCH  binutils-2.8.1-rtems-diff-980321.gz
 
 @c
