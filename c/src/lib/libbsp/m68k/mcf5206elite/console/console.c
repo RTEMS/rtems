@@ -197,22 +197,6 @@ console_last_close(int major, int minor, void *arg)
     return mcfuart_disable(&uart[minor]);
 }
 
-/* console_reserve_resources --
- *     reserve termios resources for 2 UART channels
- *
- * PARAMETERS:
- *     configuration -- pointer to the RTEMS configuration table
- *
- * RETURNS:
- *     none
- */
-void
-console_reserve_resources(rtems_configuration_table *configuration)
-{
-    if (console_mode != CONSOLE_MODE_RAW)
-        rtems_termios_reserve_resources (configuration, 2);
-}
-
 /* console_initialize --
  *     This routine initializes the console IO drivers and register devices
  *     in RTEMS I/O system.

@@ -1,3 +1,8 @@
+2002-11-04	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console.c, i2c/i2cdrv.c, nvram/nvram.c, startup/bspstart.c,
+	tod/ds1307.c: Removed warnings.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

@@ -19,6 +19,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <errno.h>
+#include <string.h>
 #include <bsp.h>
 #include <nvram.h>
 #include <i2c.h>
@@ -173,5 +174,3 @@ nvram_driver_write(rtems_device_major_number major,
     args->bytes_moved = count;
     return RTEMS_SUCCESSFUL;
 }
-
- 

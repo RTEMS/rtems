@@ -18,6 +18,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "i2c.h"
 #include "i2cdrv.h"

@@ -30,6 +30,7 @@
 
 #include <rtems.h>
 #include <libchip/rtc.h>
+#include <string.h>
 #include "ds1307.h"
 #include "i2c.h"
 
