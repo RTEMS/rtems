@@ -18,6 +18,11 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.4  2000/10/23 14:10:25  joel
+ * 2000-10-23	Joel Sherrill <joel@OARcorp.com>
+ *
+ * 	* console/serial_mouse.c: Fixed typos introduced by removal of CR/LF.
+ *
  * Revision 1.3  2000/10/20 16:01:13  joel
  * 2000-10-20	Rosimildo da Silva <rdasilva@connecttel.com>
  *
@@ -360,6 +365,7 @@ conSetAttr(int port, int minor, const struct termios *t)
     case CS5: databits = CHR_5_BITS; break;
     case CS6: databits = CHR_6_BITS; break;
     case CS7: databits = CHR_7_BITS; break;
+    default: /* just to avoid warnings -- all cases are covered. */
     case CS8: databits = CHR_8_BITS; break;
    }
 

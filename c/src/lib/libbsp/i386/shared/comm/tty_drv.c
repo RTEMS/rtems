@@ -18,6 +18,13 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.2  2000/10/18 16:10:50  joel
+ * 2000-10-18	 Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
+ *
+ * 	* comm/i386-stub-glue.c, comm/tty_drv.c, comm/uart.c, comm/uart.h:
+ * 	Add the ability to set parity, number of data bits and
+ * 	number of stop bits to the existing i386 serial drivers.
+ *
  * Revision 1.1  2000/08/30 08:18:56  joel
  * 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
  *
@@ -352,6 +359,7 @@ conSetAttr(int port, int minor, const struct termios *t)
     case CS5: databits = CHR_5_BITS; break;
     case CS6: databits = CHR_6_BITS; break;
     case CS7: databits = CHR_7_BITS; break;
+    default:  /* just to avoid warnings -- all cases are covered */
     case CS8: databits = CHR_8_BITS; break;
   }
 

@@ -1,3 +1,8 @@
+2000-12-01	Joel Sherrill <joel@OARcorp.com>
+
+	* pc386/console/console.c, pc386/console/serial_mouse.c,
+	pc386/console/vgainit.c, shared/comm/tty_drv.c: Remove warnings.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

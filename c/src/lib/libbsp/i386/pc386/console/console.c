@@ -534,6 +534,7 @@ conSetAttr(int minor, const struct termios *t)
     case CS5: databits = CHR_5_BITS; break;
     case CS6: databits = CHR_6_BITS; break;
     case CS7: databits = CHR_7_BITS; break;
+    default: /* just to avoid warnings -- all cases are covered. */
     case CS8: databits = CHR_8_BITS; break;
    }
 
