@@ -1,3 +1,12 @@
+2005-02-18	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/new-exceptions/cpu.h (Context_Control,
+	Context_Control_fp, CPU_Interrupt_frame): Remove.
+	* rtems/old-exceptions/cpu.h (Context_Control,
+	Context_Control_fp, CPU_Interrupt_frame): Remove.
+	* rtems/score/cpu.h (Context_Control,
+	Context_Control_fp, CPU_Interrupt_frame): Add.
+
 2005-02-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/new-exceptions/cpu.h (CPU_STACK_MINIMUM_SIZE,
