@@ -1,5 +1,9 @@
 2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Fix typo in previous patch.
+
+2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Use automake compilation rules.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

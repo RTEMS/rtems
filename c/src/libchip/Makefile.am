@@ -124,7 +124,7 @@ shmdr_rel_SOURCES = shmdr/addlq.c shmdr/cnvpkt.c shmdr/getlq.c shmdr/dump.c \
     shmdr/mpisr.c shmdr/poll.c shmdr/receive.c shmdr/retpkt.c shmdr/send.c \
     shmdr/setckvec.c
 shmdr_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-shmdr_rel_LDFLAGS = $(RTEMS_REL_LDFLAGS)
+shmdr_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 EXTRA_PROGRAMS += shmdr_g.rel
 CLEANFILES += shmdr_g.rel
