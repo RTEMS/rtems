@@ -1,3 +1,7 @@
+2003-12-17  
+
+    * c/src/aclocal/version.m4: Updated to rtems-20031217-test.
+
 2003-12-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/compile.am: Remove LINK_LIBS (Unused).
