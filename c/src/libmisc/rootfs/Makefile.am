@@ -15,6 +15,7 @@ H_FILES = mkrootfs.h
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
 $(PROJECT_INCLUDE)/rtems:
@@ -32,7 +33,9 @@ $(LIB): $(OBJS)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
     $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
 
+if HAS_NETWORKING
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
+endif
 
 .PRECIOUS: $(LIB)
 

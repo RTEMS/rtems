@@ -1,3 +1,10 @@
+2001-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.in, rootfs/Makefile.am: Added conditional to make sure
+	rootfs does not get built with networking is disabled.  Also
+	added include of compile.am to rootfs/Makefile.am.
+	* wrapup/Makefile.am: Added rootfs conditionally if networking enabled.
+
 2001-09-19	Chris Johns <ccj@acm.org>
 
 	* Added support for populating the initial "root" filesystem
