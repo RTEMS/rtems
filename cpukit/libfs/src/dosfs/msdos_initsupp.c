@@ -130,7 +130,7 @@ msdos_initialize_support(
     sc = rtems_semaphore_create(3,
                                 1,
                                 RTEMS_BINARY_SEMAPHORE | RTEMS_FIFO,
-                                RTEMS_INHERIT_PRIORITY,
+                                0,
                                 &fs_info->vol_sema);
     if (sc != RTEMS_SUCCESSFUL)
     {
