@@ -225,6 +225,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
     *libobjc*) echo "$i" >> files.objc ;;
     *include/objc*) ;;
     *include/g++*);;
+    *include/c++*);;
     *adainclude*);;
     *adalib*);;
     *gnat1);;

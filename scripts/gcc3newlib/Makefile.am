@@ -12,24 +12,14 @@ SUBPACKAGES = gccnewlib.add \
     target-c++.add \
     base-gnat.add target-gnat.add
 
-noinst_DATA = gccnewlib.spec.in gccnewlib_c_only.spec.in
+noinst_DATA = gccnewlib.spec.in
 
 gccnewlib.spec.in: $(SUBPACKAGES)
 	cat $^ > $@
 CLEANFILES = gccnewlib.spec.in
 
-gccnewlib_c_only.spec.in: gccnewlib.add base-gcc.add target-gcc.add \
-	target-c++.add
-	cat $^ \
-	| sed -e "s%@GCCLANGS@%\'--enable-languages=c,c++\'%g" > $@
-CLEANFILES += gccnewlib_c_only.spec.in
-
-C_ONLY_ARG = -a $(top_builddir)/gcc3newlib/gccnewlib_c_only.spec.in
-
 MKGCCNEWLIBSPEC_DEPS = $(top_builddir)/mkgcc3newlibspec gccnewlib.spec.in \
     $(top_builddir)/setup.cache
-MKGCCNEWLIB_C_ONLY_SPEC_DEPS = $(top_builddir)/mkgcc3newlibspec \
-    gccnewlib_c_only.spec.in $(top_builddir)/setup.cache
 
 RPM_SPECS_DATA =
 

@@ -1,3 +1,10 @@
+2002-08-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gcc3newlib/Makefile.am: Remove c_only remnants.
+	* gcc3newlib/gccnewlib.add: Reflect gcc-3.2 putting c++ 
+	headers into c++ instead of g++.
+	* gcc3newlib/target-c++.add: Ditto.
+
 2002-08-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* gcc3newlib/base-gnat.add: Don't use %{%prefix}/bin/gnat*.
