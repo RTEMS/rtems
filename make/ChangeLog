@@ -1,4 +1,10 @@
 
+2001-02-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/Cygwin-posix.cfg, custom/HPUX9-posix.cfg, 
+	custom/Solaris-posix.cfg, custom/FreeBSD-posix.cfg,
+	custom/Linux-posix.cfg: Remove RTEMS_UNIX from make-target-options.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* lib.cfg: include $(PROJECT_ROOT)/make/leaf.cfg
