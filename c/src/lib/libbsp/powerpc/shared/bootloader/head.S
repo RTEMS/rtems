@@ -18,23 +18,40 @@
 #include <asm.h>
 #include <rtems/score/cpu.h>
 #include "bootldr.h"
-		
-#undef TEST_PPCBUG_CALLS	
+
+#define TEST_PPCBUG_CALLS		
+#undef TEST_PPCBUG_CALLS
+	
 #define FRAME_SIZE 32
-#define LOCK_CACHES (HID0_DLOCK|HID0_ILOCK)
-#define INVL_CACHES (HID0_DCI|HID0_ICFI)
-#define ENBL_CACHES (HID0_DCE|HID0_ICE)
+#define LOCK_CACHES (HID0_DLOCK | HID0_ILOCK)
+#define INVL_CACHES (HID0_DCI | HID0_ICFI)
+#define ENBL_CACHES (HID0_DCE | HID0_ICE)
 
 #define USE_PPCBUG
 #undef 	USE_PPCBUG
 
+	
+#define PRINT_CHAR(c)		\
+	addi	r20,r3,0	; \
+	li	r3,c		; \
+	li	r10,0x20	; \
+	sc			; \
+	addi	r3,r20,0	; \
+	li	r10,0x26	; \
+	sc
+	
+	
+	
+	
 #define MONITOR_ENTER			\
 	mfmsr	r10		;	\
 	ori	r10,r10,MSR_IP	;	\
 	mtmsr	r10		;	\
 	li	r10,0x63	;	\
 	sc
+
 	
+		
 	START_GOT
 	GOT_ENTRY(_GOT2_TABLE_)
 	GOT_ENTRY(_FIXUP_TABLE_)
@@ -53,12 +70,13 @@
 	END_GOT
 	.globl	start
 	.type	start,@function
+	
 /* Point the stack into the PreP partition header in the x86 reserved
  * code area, so that simple C routines can be called. 
  */
 start:	
 #ifdef 	USE_PPCBUG
-	MONITOR_ENTER	
+	MONITOR_ENTER
 #endif
 	bl	1f
 1:	mflr	r1
@@ -66,17 +84,25 @@ start:
 	stwu	r0,start-1b-0x400+0x1b0-FRAME_SIZE(r1)
 	stmw	r26,FRAME_SIZE-24(r1)
 	GET_GOT
-	mfmsr	r28		/* Turn off interrupts */
+	mfmsr	r28			/* Turn off interrupts */
 	ori	r0,r28,MSR_EE
 	xori	r0,r0,MSR_EE
 	mtmsr	r0
 	
 /* Enable the caches, from now on cr2.eq set means processor is 601 */
+	
 	mfpvr	r0
 	mfspr	r29,HID0
 	srwi	r0,r0,16
 	cmplwi	cr2,r0,1
 	beq	2,2f
+
+
+/*
+ * commented out, 11/7/2002, gregm.  This instruction sequence seems to
+ * be pathological on the 603e.
+ *
+	
 #ifndef USE_PPCBUG
 	ori	r0,r29,ENBL_CACHES|INVL_CACHES|LOCK_CACHES
 	xori	r0,r0,INVL_CACHES|LOCK_CACHES
@@ -84,6 +110,9 @@ start:
 	isync
 	mtspr	HID0,r0
 #endif
+*/
+	
+			
 2:	bl	reloc
 	
 /* save all the parameters and the orginal msr/hid0/r31 */
@@ -115,7 +144,9 @@ start:
 	li	r5,_size_codemove
 	lwz	r3,mover(bd)
 	lwz	r6,cache_lsize(bd)
+
 	bl	codemove
+
 	mtctr	r3		# Where the temporary codemove is.
 	lwz	r3,image(bd)
 	lis	r5,_edata@sectoff@ha
@@ -123,13 +154,17 @@ start:
 	addi	r5,r5,_edata@sectoff@l
 	lwz	r6,cache_lsize(bd)
 	lwz	r8,GOT(moved)
+
 	sub	r7,r3,r4	# Difference to adjust pointers.
 	add	r8,r8,r7
 	add	r30,r30,r7
 	add	bd,bd,r7
+
 /* Call the copy routine but return to the new area. */
+
 	mtlr	r8		# for the return address
 	bctr			# returns to the moved instruction
+	
 /* Establish the new top stack frame. */
 moved:	lwz	r1,stack(bd)
 	li	r0,0
@@ -153,15 +188,25 @@ moved:	lwz	r1,stack(bd)
  * stale entries from interfering. No I/O access is allowed
  * during this time!
  */
-#ifndef USE_PPCBUG	
-4:	bl	MMUoff
-#endif	
+4:
+#ifdef USE_PPCBUG
+	PRINT_CHAR('M')
+#endif
+	bl	MMUoff
+
+#ifdef USE_PPCBUG	
+	PRINT_CHAR('B')
+#endif
 	bl	flush_tlb
+
 /* Some firmware versions leave stale values in the BATs, it's time
  * to invalidate them to avoid interferences with our own mappings.
  * But the 601 valid bit is in the BATL (IBAT only) and others are in
  * the [ID]BATU. Bloat, bloat.. fortunately thrown away later. 
  */
+#ifdef USE_PPCBUG	
+	PRINT_CHAR('T')
+#endif
 	li	r3,0
 	beq	cr2,5f
 	mtdbatu 0,r3
@@ -179,7 +224,14 @@ moved:	lwz	r1,stack(bd)
 	lis	r3,__size@sectoff@ha
 	addi	r3,r3,__size@sectoff@l
 	sync				# We are going to touch SDR1 !
+#ifdef USE_PPCBUG	
+	PRINT_CHAR('i')
+#endif
 	bl	mm_init
+	
+#ifdef USE_PPCBUG	
+	PRINT_CHAR('M')
+#endif
 	bl	MMUon
 	
 /* Now we are mapped and can perform I/O if we want */
@@ -192,6 +244,9 @@ moved:	lwz	r1,stack(bd)
 	lwz	r4,GOT(banner_end)
 	sc
 #endif	
+#ifdef USE_PPCBUG	
+	PRINT_CHAR('H')
+#endif
 	bl	setup_hw
 	lwz	r4,GOT(_binary_rtems_gz_start)
 	lis	r5,_rtems_gz_size@sectoff@ha
@@ -221,12 +276,14 @@ moved:	lwz	r1,stack(bd)
 	mtctr	r30
 /*
  *	Linux code again
+ *
 	lis	r30,0xdeadc0de@ha
 	addi	r30,r30,0xdeadc0de@l
 	stw	r30,0(0)
 	li	r30,0
 */
 	dcbst	0,r30	/* Make sure it's in memory ! */
+	
 /* We just flash invalidate and disable the dcache, unless it's a 601, 
  * critical areas have been flushed and we don't care about the stack 
  * and other scratch areas.
@@ -238,6 +295,7 @@ moved:	lwz	r1,stack(bd)
 	mtspr	HID0,r0
 	xori	r0,r0,HID0_DCI|HID0_DCE
 	mtspr	HID0,r0
+	
 /* Provisional return to FW, works for PPCBug */
 #if 0
 	MONITOR_ENTER
@@ -286,22 +344,32 @@ reloc:
  */
 	.globl  MMUon
 	.type	MMUon,@function
-MMUon:	mfmsr	r0
+MMUon:	blr
+	nop
+
+/*	
+	mfmsr	r0
 	ori	r0,r0,MSR_IR|MSR_DR|MSR_IP
 	mflr	r11
 	xori	r0,r0,MSR_IP
 	mtsrr0	r11
 	mtsrr1	r0
 	rfi
+*/
 	.globl  MMUoff
 	.type	MMUoff,@function
-MMUoff:	mfmsr	r0
+MMUoff:	blr
+	nop
+	
+/*
+	mfmsr	r0
 	ori	r0,r0,MSR_IR|MSR_DR|MSR_IP
 	mflr	r11
 	xori	r0,r0,MSR_IR|MSR_DR
 	mtsrr0	r11
 	mtsrr1	r0
 	rfi
+*/
 
 /* Due to the PPC architecture (and according to the specifications), a
  * series of tlbie which goes through a whole 256 MB segment always flushes 
