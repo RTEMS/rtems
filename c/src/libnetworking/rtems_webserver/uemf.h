@@ -879,6 +879,7 @@ extern void bstats(int handle, void (*writefn)(int handle, char_t *fmt, ...));
 
 
 #if !LINUX && !__rtems__
+#define		__NO_PACK		1
 extern char_t	*basename(char_t *name);
 #endif /* !LINUX */
 

@@ -1,3 +1,8 @@
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems_webserver/socket.c, rtems_webserver/uemf.h: Removed
+	warnings.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

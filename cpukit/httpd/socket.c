@@ -360,7 +360,7 @@ static void socketAccept(socket_t *sp)
  *	Accept the connection and prevent inheriting by children (F_SETFD)
  */
 	len = sizeof(struct sockaddr_in);
-	if ((newSock = accept(sp->sock, (struct sockaddr *) &addr, &len)) < 0) {
+	if ((newSock = accept(sp->sock, (struct sockaddr *) &addr, (int *)&len)) < 0) {
 		return;
 	}
 #ifndef __NO_FCNTL
