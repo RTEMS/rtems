@@ -1,5 +1,8 @@
-/*  m68k.h
- *
+/**
+ * @file rtems/score/m68k.h
+ */
+
+/*
  *  This include file contains information pertaining to the Motorola
  *  m68xxx processor family.
  *
