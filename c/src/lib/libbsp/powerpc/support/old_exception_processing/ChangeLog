@@ -1,3 +1,8 @@
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* cpu.c: Use _CPU_MSR_GET instead of _CPU_MSR_Value (Unify old/new
+	exception processing API).
+
 2005-02-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* cpu.c (ppc_exception_vector_addr): Merge ppc603 and ppc603e cases.

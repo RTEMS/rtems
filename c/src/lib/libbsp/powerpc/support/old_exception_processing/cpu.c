@@ -87,7 +87,7 @@ void _CPU_Initialize(
   /*
    * Store Msr Value in the IRQ info structure.
    */
-   _CPU_MSR_Value(_CPU_IRQ_info.msr_initial);
+   _CPU_MSR_GET(_CPU_IRQ_info.msr_initial);
 
 #if (PPC_USE_SPRG)
   i = _CPU_IRQ_info.msr_initial;
@@ -260,7 +260,7 @@ void _CPU_Context_Initialize(
    *     + Force the RI bit
    *     + Use the DR and IR bits
    */
-  _CPU_MSR_Value( msr_value );
+  _CPU_MSR_GET( msr_value );
   the_context->msr |= (msr_value & PPC_MSR_EP);
   the_context->msr |= PPC_MSR_RI;
   the_context->msr |= msr_value & (PPC_MSR_DR|PPC_MSR_IR);
@@ -546,7 +546,7 @@ uint32_t    ppc_exception_vector_addr(
   uint32_t   Offset = 0x000;
 
 #if (PPC_HAS_EXCEPTION_PREFIX)
-  _CPU_MSR_Value ( Msr );
+  _CPU_MSR_GET ( Msr );
   if ( ( Msr & PPC_MSR_EP) != 0 ) /* Vectors at FFFx_xxxx */
     Top = 0xfff00000;
 #elif (PPC_HAS_EVPR)
