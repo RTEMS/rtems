@@ -1,3 +1,7 @@
+/**
+ * @file rtems/capture-cli.h
+ */
+
 /*
   ------------------------------------------------------------------------
   $Id$
@@ -33,7 +37,7 @@ extern "C" {
 
 #include <rtems/capture.h>
 
-/*
+/**
  * rtems_capture_cli_init
  *
  *  DESCRIPTION:

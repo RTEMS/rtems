@@ -1,3 +1,7 @@
+/**
+ * @file rtems/capture.h
+ */
+ 
 /*
   ------------------------------------------------------------------------
   $Id$
@@ -32,12 +36,12 @@ extern "C" {
 
 #include <rtems.h>
 
-/*
+/**
  * The number of tasks in a trigger group.
  */
 #define RTEMS_CAPTURE_TRIGGER_TASKS (32)
 
-/*
+/**
  * rtems_capture_control_t
  *
  *  DESCRIPTION:
@@ -55,7 +59,7 @@ typedef struct rtems_capture_control_s
   struct rtems_capture_control_s* next;
 } rtems_capture_control_t;
 
-/*
+/**
  * Control flags.
  */
 #define RTEMS_CAPTURE_WATCH         (1 << 0)
@@ -63,7 +67,7 @@ typedef struct rtems_capture_control_s
 #define RTEMS_CAPTURE_TO_ANY        (1 << 2)
 #define RTEMS_CAPTURE_FROM_TO       (1 << 3)
 
-/*
+/**
  * rtems_capture_control_t
  *
  *  DESCRIPTION:
@@ -102,7 +106,7 @@ typedef struct rtems_capture_task_s
   struct rtems_capture_task_s* next;
 } rtems_capture_task_t;
 
-/*
+/**
  * Task flags.
  */
 #define RTEMS_CAPTURE_TRACED  (1 << 0)
@@ -124,30 +128,30 @@ typedef struct rtems_capture_record_s
   uint32_t        tick_offset;
 } rtems_capture_record_t;
 
-/*
+/**
  * The capture record event flags.
  */
-#define RTEMS_CAPTURE_REAL_PRI_EVENT_MASK (0x000000ff)
-#define RTEMS_CAPTURE_CURR_PRI_EVENT_MASK (0x0000ff00)
+#define RTEMS_CAPTURE_REAL_PRI_EVENT_MASK UINT32_C(0x000000ff)
+#define RTEMS_CAPTURE_CURR_PRI_EVENT_MASK UINT32_C(0x0000ff00)
 #define RTEMS_CAPTURE_REAL_PRIORITY_EVENT (0)
 #define RTEMS_CAPTURE_CURR_PRIORITY_EVENT (8)
 #define RTEMS_CAPTURE_EVENT_START         (16)
-#define RTEMS_CAPTURE_CREATED_BY_EVENT    (1 << 16)
-#define RTEMS_CAPTURE_CREATED_EVENT       (1 << 17)
-#define RTEMS_CAPTURE_STARTED_BY_EVENT    (1 << 18)
-#define RTEMS_CAPTURE_STARTED_EVENT       (1 << 19)
-#define RTEMS_CAPTURE_RESTARTED_BY_EVENT  (1 << 20)
-#define RTEMS_CAPTURE_RESTARTED_EVENT     (1 << 21)
-#define RTEMS_CAPTURE_DELETED_BY_EVENT    (1 << 22)
-#define RTEMS_CAPTURE_DELETED_EVENT       (1 << 23)
-#define RTEMS_CAPTURE_BEGIN_EVENT         (1 << 24)
-#define RTEMS_CAPTURE_EXITTED_EVENT       (1 << 25)
-#define RTEMS_CAPTURE_SWITCHED_OUT_EVENT  (1 << 26)
-#define RTEMS_CAPTURE_SWITCHED_IN_EVENT   (1 << 27)
-#define RTEMS_CAPTURE_TIMESTAMP           (1 << 28)
+#define RTEMS_CAPTURE_CREATED_BY_EVENT    UINT32_C(0x00010000)
+#define RTEMS_CAPTURE_CREATED_EVENT       UINT32_C(0x00020000)
+#define RTEMS_CAPTURE_STARTED_BY_EVENT    UINT32_C(0x00040000)
+#define RTEMS_CAPTURE_STARTED_EVENT       UINT32_C(0x00080000)
+#define RTEMS_CAPTURE_RESTARTED_BY_EVENT  UINT32_C(0x00100000)
+#define RTEMS_CAPTURE_RESTARTED_EVENT     UINT32_C(0x00200000)
+#define RTEMS_CAPTURE_DELETED_BY_EVENT    UINT32_C(0x00400000)
+#define RTEMS_CAPTURE_DELETED_EVENT       UINT32_C(0x00800000)
+#define RTEMS_CAPTURE_BEGIN_EVENT         UINT32_C(0x01000000)
+#define RTEMS_CAPTURE_EXITTED_EVENT       UINT32_C(0x02000000)
+#define RTEMS_CAPTURE_SWITCHED_OUT_EVENT  UINT32_C(0x04000000)
+#define RTEMS_CAPTURE_SWITCHED_IN_EVENT   UINT32_C(0x08000000)
+#define RTEMS_CAPTURE_TIMESTAMP           UINT32_C(0x10000000)
 #define RTEMS_CAPTURE_EVENT_END           (28)
 
-/*
+/**
  * rtems_capture_trigger_t
  *
  *  DESCRIPTION:
@@ -161,7 +165,7 @@ typedef enum rtems_capture_trigger_t
   rtems_capture_from_to
 } rtems_capture_trigger_t;
 
-/*
+/**
  * rtems_capture_timestamp
  *
  *  DESCRIPTION:
@@ -174,7 +178,7 @@ typedef enum rtems_capture_trigger_t
 typedef void (*rtems_capture_timestamp)
                 (uint32_t  * ticks, uint32_t  * micro);
 
-/*
+/**
  * rtems_capture_open
  *
  *  DESCRIPTION:
@@ -187,7 +191,7 @@ rtems_status_code
 rtems_capture_open (uint32_t          size,
                     rtems_capture_timestamp timestamp);
 
-/*
+/**
  * rtems_capture_close
  *
  *  DESCRIPTION:
@@ -198,7 +202,7 @@ rtems_capture_open (uint32_t          size,
 rtems_status_code
 rtems_capture_close ();
 
-/*
+/**
  * rtems_capture_control
  *
  *  DESCRIPTION:
@@ -219,7 +223,7 @@ rtems_capture_control (rtems_boolean enable);
 rtems_status_code
 rtems_capture_flush (rtems_boolean prime);
 
-/*
+/**
  * rtems_capture_watch_add
  *
  *  DESCRIPTION:
@@ -232,7 +236,7 @@ rtems_capture_flush (rtems_boolean prime);
 rtems_status_code
 rtems_capture_watch_add (rtems_name name, rtems_id id);
 
-/*
+/**
  * rtems_capture_watch_del
  *
  *  DESCRIPTION:
@@ -244,7 +248,7 @@ rtems_capture_watch_add (rtems_name name, rtems_id id);
 rtems_status_code
 rtems_capture_watch_del (rtems_name name, rtems_id id);
 
-/*
+/**
  * rtems_capture_watch_set
  *
  *  DESCRIPTION:
@@ -255,7 +259,7 @@ rtems_capture_watch_del (rtems_name name, rtems_id id);
 rtems_status_code
 rtems_capture_watch_ctrl (rtems_name name, rtems_id id, rtems_boolean enable);
 
-/*
+/**
  * rtems_capture_watch_global
  *
  *  DESCRIPTION:
@@ -267,7 +271,7 @@ rtems_capture_watch_ctrl (rtems_name name, rtems_id id, rtems_boolean enable);
 rtems_status_code
 rtems_capture_watch_global (rtems_boolean enable);
 
-/*
+/**
  * rtems_capture_watch_global_on
  *
  *  DESCRIPTION:
@@ -277,7 +281,7 @@ rtems_capture_watch_global (rtems_boolean enable);
 rtems_boolean
 rtems_capture_watch_global_on ();
 
-/*
+/**
  * rtems_capture_watch_ceiling
  *
  *  DESCRIPTION:
@@ -290,7 +294,7 @@ rtems_capture_watch_global_on ();
 rtems_status_code
 rtems_capture_watch_ceiling (rtems_task_priority ceiling);
 
-/*
+/**
  * rtems_capture_watch_get_ceiling
  *
  *  DESCRIPTION:
@@ -300,7 +304,7 @@ rtems_capture_watch_ceiling (rtems_task_priority ceiling);
 rtems_task_priority
 rtems_capture_watch_get_ceiling ();
 
-/*
+/**
  * rtems_capture_watch_floor
  *
  *  DESCRIPTION:
@@ -313,7 +317,7 @@ rtems_capture_watch_get_ceiling ();
 rtems_status_code
 rtems_capture_watch_floor (rtems_task_priority floor);
 
-/*
+/**
  * rtems_capture_watch_get_floor
  *
  *  DESCRIPTION:
@@ -323,7 +327,7 @@ rtems_capture_watch_floor (rtems_task_priority floor);
 rtems_task_priority
 rtems_capture_watch_get_floor ();
 
-/*
+/**
  * rtems_capture_set_trigger
  *
  *  DESCRIPTION:
@@ -352,7 +356,7 @@ rtems_capture_set_trigger (rtems_name              from,
                            rtems_id                to_id,
                            rtems_capture_trigger_t trigger);
 
-/*
+/**
  * rtems_capture_read
  *
  *  DESCRIPTION:
@@ -389,7 +393,7 @@ rtems_capture_read (uint32_t           threshold,
                     uint32_t  *        read,
                     rtems_capture_record_t** recs);
 
-/*
+/**
  * rtems_capture_release
  *
  *  DESCRIPTION:
@@ -400,7 +404,7 @@ rtems_capture_read (uint32_t           threshold,
 rtems_status_code
 rtems_capture_release (uint32_t   count);
 
-/*
+/**
  * rtems_capture_tick_time
  *
  *  DESCRIPTION:
@@ -420,7 +424,7 @@ rtems_capture_tick_time ();
 uint32_t
 rtems_capture_tick_time ();
 
-/*
+/**
  * rtems_capture_event_text
  *
  *  DESCRIPTION:
@@ -432,7 +436,7 @@ rtems_capture_tick_time ();
 const char*
 rtems_capture_event_text (int event);
 
-/*
+/**
  * rtems_capture_get_task_list
  *
  *  DESCRIPTION:
@@ -443,7 +447,7 @@ rtems_capture_event_text (int event);
 rtems_capture_task_t*
 rtems_capture_get_task_list ();
 
-/*
+/**
  * rtems_capture_next_task
  *
  *  DESCRIPTION:
@@ -457,7 +461,7 @@ rtems_capture_next_task (rtems_capture_task_t* task)
   return task->next;
 }
 
-/*
+/**
  * rtems_capture_task_valid
  *
  *  DESCRIPTION:
@@ -471,7 +475,7 @@ rtems_capture_task_valid (rtems_capture_task_t* task)
   return task->tcb != NULL;
 }
 
-/*
+/**
  * rtems_capture_task_id
  *
  *  DESCRIPTION:
@@ -484,7 +488,7 @@ rtems_capture_task_id (rtems_capture_task_t* task)
   return task->id;
 }
 
-/*
+/**
  * rtems_capture_task_state
  *
  *  DESCRIPTION:
@@ -499,7 +503,7 @@ rtems_capture_task_state (rtems_capture_task_t* task)
   return 0;
 }
 
-/*
+/**
  * rtems_capture_task_name
  *
  *  DESCRIPTION:
@@ -512,7 +516,7 @@ rtems_capture_task_name (rtems_capture_task_t* task)
   return task->name;
 }
 
-/*
+/**
  * rtems_capture_task_flags
  *
  *  DESCRIPTION:
@@ -525,7 +529,7 @@ rtems_capture_task_flags (rtems_capture_task_t* task)
   return task->flags;
 }
 
-/*
+/**
  * rtems_capture_task_control
  *
  *  DESCRIPTION:
@@ -538,7 +542,7 @@ rtems_capture_task_control (rtems_capture_task_t* task)
   return task->control;
 }
 
-/*
+/**
  * rtems_capture_task_control_flags
  *
  *  DESCRIPTION:
@@ -553,7 +557,7 @@ rtems_capture_task_control_flags (rtems_capture_task_t* task)
   return task->control->flags;
 }
 
-/*
+/**
  * rtems_capture_task_switched_in
  *
  *  DESCRIPTION:
@@ -567,7 +571,7 @@ rtems_capture_task_switched_in (rtems_capture_task_t* task)
   return task->in;
 }
 
-/*
+/**
  * rtems_capture_task_switched_out
  *
  *  DESCRIPTION:
@@ -581,7 +585,7 @@ rtems_capture_task_switched_out (rtems_capture_task_t* task)
   return task->out;
 }
 
-/*
+/**
  * rtems_capture_task_curr_priority
  *
  *  DESCRIPTION:
@@ -595,7 +599,7 @@ rtems_capture_task_start_priority (rtems_capture_task_t* task)
   return task->start_priority;
 }
 
-/*
+/**
  * rtems_capture_task_real_priority
  *
  *  DESCRIPTION:
@@ -610,7 +614,7 @@ rtems_capture_task_real_priority (rtems_capture_task_t* task)
   return 0;
 }
 
-/*
+/**
  * rtems_capture_task_curr_priority
  *
  *  DESCRIPTION:
@@ -625,7 +629,7 @@ rtems_capture_task_curr_priority (rtems_capture_task_t* task)
   return 0;
 }
 
-/*
+/**
  * rtems_capture_task_stack_usage
  *
  *  DESCRIPTION:
@@ -636,7 +640,7 @@ rtems_capture_task_curr_priority (rtems_capture_task_t* task)
 uint32_t
 rtems_capture_task_stack_usage (rtems_capture_task_t* task);
 
-/*
+/**
  * rtems_capture_task_stack_size
  *
  *  DESCRIPTION:
@@ -649,7 +653,7 @@ rtems_capture_task_stack_size (rtems_capture_task_t* task)
   return task->stack_size;
 }
 
-/*
+/**
  * rtems_capture_task_stack_used
  *
  *  DESCRIPTION:
@@ -662,7 +666,7 @@ rtems_capture_task_stack_used (rtems_capture_task_t* task)
   return task->stack_size - task->stack_clean;
 }
 
-/*
+/**
  * rtems_capture_task_ticks
  *
  *  DESCRIPTION:
@@ -675,7 +679,7 @@ rtems_capture_task_ticks (rtems_capture_task_t* task)
   return task->ticks;
 }
 
-/*
+/**
  * rtems_capture_task_tick_offset
  *
  *  DESCRIPTION:
@@ -688,7 +692,7 @@ rtems_capture_task_tick_offset (rtems_capture_task_t* task)
   return task->tick_offset;
 }
 
-/*
+/**
  * rtems_capture_task_time
  *
  *  DESCRIPTION:
@@ -702,7 +706,7 @@ rtems_capture_task_time (rtems_capture_task_t* task)
   return (t * rtems_capture_tick_time ()) + task->tick_offset;;
 }
 
-/*
+/**
  * rtems_capture_task_delta_time
  *
  *  DESCRIPTION:
@@ -722,7 +726,7 @@ rtems_capture_task_delta_time (rtems_capture_task_t* task)
   return (t * rtems_capture_tick_time ()) + o;
 }
 
-/*
+/**
  * rtems_capture_task_count
  *
  *  DESCRIPTION:
@@ -745,7 +749,7 @@ rtems_capture_task_count ()
   return count;
 }
 
-/*
+/**
  * rtems_capture_get_control_list
  *
  *  DESCRIPTION:
@@ -756,7 +760,7 @@ rtems_capture_task_count ()
 rtems_capture_control_t*
 rtems_capture_get_control_list ();
 
-/*
+/**
  * rtems_capture_next_control
  *
  *  DESCRIPTION:
@@ -770,7 +774,7 @@ rtems_capture_next_control (rtems_capture_control_t* control)
   return control->next;
 }
 
-/*
+/**
  * rtems_capture_control_id
  *
  *  DESCRIPTION:
@@ -783,7 +787,7 @@ rtems_capture_control_id (rtems_capture_control_t* control)
   return control->id;
 }
 
-/*
+/**
  * rtems_capture_control_name
  *
  *  DESCRIPTION:
@@ -796,7 +800,7 @@ rtems_capture_control_name (rtems_capture_control_t* control)
   return control->name;
 }
 
-/*
+/**
  * rtems_capture_control_flags
  *
  *  DESCRIPTION:
@@ -809,7 +813,7 @@ rtems_capture_control_flags (rtems_capture_control_t* control)
   return control->flags;
 }
 
-/*
+/**
  * rtems_capture_control_from_name
  *
  *  DESCRIPTION:
@@ -824,7 +828,7 @@ rtems_capture_control_from_name (rtems_capture_control_t* control, int from)
   return control->from[0];
 }
 
-/*
+/**
  * rtems_capture_control_from_id
  *
  *  DESCRIPTION:
@@ -839,7 +843,7 @@ rtems_capture_control_from_id (rtems_capture_control_t* control, int from)
   return control->from_id[0];
 }
 
-/*
+/**
  * rtems_capture_control_count
  *
  *  DESCRIPTION:

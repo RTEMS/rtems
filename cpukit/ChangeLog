@@ -1,5 +1,12 @@
 2004-12-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libmisc/capture/capture-cli.h, libmisc/capture/capture.h,
+	libmisc/monitor/monitor.h, libmisc/rtmonuse/rtmonuse.h,
+	libmisc/shell/shell.h: Partial doxygenification.
+	* libmisc/capture/capture.h: Use INT32_C for constants.
+
+2004-12-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libcsupport/include/chain.h,
 	libcsupport/include/clockdrv.h,
 	libcsupport/include/console.h,

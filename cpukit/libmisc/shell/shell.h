@@ -1,7 +1,10 @@
-/*
+/**
+ * @file rtems/shell.h
  *
  *  Instantatiate a new terminal shell.
- *
+ */
+
+/*
  *  Author:
  *
  *   WORK: fernando.ruiz@ctv.es

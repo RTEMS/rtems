@@ -1,11 +1,10 @@
+/**
+ * @file rtems/monitor.h
+ *
+ * The RTEMS monitor task.
+ */
+ 
 /*
- *  File:	monitor.h
- *
- *  Description:
- *    The RTEMS monitor task include file.
- *
- *  TODO:
- *
  *  $Id$
  */
 
