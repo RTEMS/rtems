@@ -76,12 +76,12 @@ int _POSIX_Message_queue_Create_support(
     attr.mq_maxmsg  = 10;
     attr.mq_msgsize = 16;
   } else {
-    if ( attr_ptr->mq_maxmsg < 0 ){
+    if ( attr_ptr->mq_maxmsg <= 0 ){
       _Thread_Enable_dispatch();
       rtems_set_errno_and_return_minus_one( EINVAL );
     }
 
-    if ( attr_ptr->mq_msgsize < 0 ){
+    if ( attr_ptr->mq_msgsize <= 0 ){
       _Thread_Enable_dispatch();
       rtems_set_errno_and_return_minus_one( EINVAL );
     }
