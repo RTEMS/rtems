@@ -1,3 +1,10 @@
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 354/networkign
+	* network/if_fxp.c (Intel eepro network driver): re-enabled the chip
+	against a table of supported chips. The untested
+	ones are still commented out, however.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
