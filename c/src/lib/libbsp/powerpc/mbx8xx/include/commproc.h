@@ -61,7 +61,6 @@
 /* Export the base address of the communication processor registers
  * and dual port ram.
  */
-extern	cpm8xx_t	*cpmp;		/* Pointer to comm processor */
 unsigned int		m8xx_cpm_dpalloc(unsigned int size);
 unsigned int		m8xx_cpm_hostalloc(unsigned int size);
 void			m8xx_cpm_setbrg(unsigned int brg, unsigned int rate);

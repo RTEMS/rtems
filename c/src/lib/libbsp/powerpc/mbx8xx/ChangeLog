@@ -1,3 +1,9 @@
+2005-01-20	Joel Sherrill <joel@OARcorp.com>
+
+	* include/commproc.h: The variable cpmp was not used anywhere but
+	console.c and was static in console.c, so should not have been in
+	this file as extern.
+
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Eliminate CFLAGS_OPTIMIZE_V.
