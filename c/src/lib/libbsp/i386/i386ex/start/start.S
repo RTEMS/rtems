@@ -324,7 +324,16 @@ SYM(InitInt):
 	SetExRegByte(OCW1M  , 0xde ) # IR0  only = 0xfe.  for IR5 and IR0 active use 0xde
 	SetExRegByte(INTCFG , 0x00 )
 	
-	movw    $0xFFFB, SYM(i8259s_cache) /* set up same values in cache */
+	/*
+	 *  The addr32 override should ensure that the address for
+	 *  i8259s_cache is put in 32-bit address space.
+	 */
+
+#if defined(NEW_GAS)
+	addr32 movw $0xFFFB, SYM(i8259s_cache) # set up same values in cache
+#else
+	movw    $0xFFFB, SYM(i8259s_cache)     # set up same values in cache
+#endif
 	
 SYM(SetCS4):	
 	SetExRegWord(CS4ADL , 0x702)         #Configure chip select 4
