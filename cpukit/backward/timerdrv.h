@@ -1,3 +1,8 @@
+/**
+ * @file timerdrv.h
+ * @deprecated
+ */
+
 #ifndef __timerdrv_h
 #define __timerdrv_h
 #ifndef RTEMS_NO_WARN_DEPRECATED

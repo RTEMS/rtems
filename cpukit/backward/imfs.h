@@ -1,3 +1,8 @@
+/**
+ * @file imfs.h
+ * @deprecated
+ */
+
 #ifndef __imfs_h
 #define __imfs_h
 #ifndef RTEMS_NO_WARN_DEPRECATED

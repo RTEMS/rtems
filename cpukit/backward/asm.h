@@ -1,3 +1,8 @@
+/**
+ * @file asm.h
+ * @deprecated
+ */
+
 #ifndef __asm_h
 #define __asm_h
 #ifndef RTEMS_NO_WARN_DEPRECATED

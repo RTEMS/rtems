@@ -1,3 +1,8 @@
+/**
+ * @file vmeintr.h
+ * @deprecated
+ */
+
 #ifndef __vmeintr_h
 #define __vmeintr_h
 #ifndef RTEMS_NO_WARN_DEPRECATED

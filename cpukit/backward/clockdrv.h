@@ -1,3 +1,8 @@
+/**
+ * @file clockdrv.h
+ * @deprecated
+ */
+
 #ifndef __clockdrv_h
 #define __clockdrv_h
 #ifndef RTEMS_NO_WARN_DEPRECATED

@@ -1,3 +1,8 @@
+/**
+ * @file zilog/z8036.h
+ * @deprecated
+ */
+
 #ifndef __zilog_z8036_h
 #define __zilog_z8036_h
 #ifndef RTEMS_NO_WARN_DEPRECATED

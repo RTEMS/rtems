@@ -1,3 +1,8 @@
+/**
+ * @file spurious.h
+ * @deprecated
+ */
+
 #ifndef __spurious_h
 #define __spurious_h
 #ifndef RTEMS_NO_WARN_DEPRECATED

@@ -1,3 +1,8 @@
+/**
+ * @file chain.h
+ * @deprecated
+ */
+
 #ifndef __chain_h
 #define __chain_h
 #ifndef RTEMS_NO_WARN_DEPRECATED

@@ -1,3 +1,8 @@
+/**
+ * @file itron.h
+ * @deprecated
+ */
+
 #ifndef __itron_h
 #define __itron_h
 #ifndef RTEMS_NO_WARN_DEPRECATED

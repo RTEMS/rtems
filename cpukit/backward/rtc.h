@@ -1,3 +1,8 @@
+/**
+ * @file rtc.h
+ * @deprecated
+ */
+
 #ifndef __rtc_h
 #define __rtc_h
 #ifndef RTEMS_NO_WARN_DEPRECATED

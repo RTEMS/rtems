@@ -1,3 +1,8 @@
+/**
+ * @file dosfs.h
+ * @deprecated
+ */
+
 #ifndef __dosfs_h
 #define __dosfs_h
 #ifndef RTEMS_NO_WARN_DEPRECATED

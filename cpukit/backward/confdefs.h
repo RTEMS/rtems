@@ -1,3 +1,8 @@
+/**
+ * @file confdefs.h
+ * @deprecated
+ */
+
 #ifndef __confdefs_h
 #define __confdefs_h
 #ifndef RTEMS_NO_WARN_DEPRECATED

@@ -1,3 +1,8 @@
+/**
+ * @file console.h
+ * @deprecated
+ */
+
 #ifndef __console_h
 #define __console_h
 #ifndef RTEMS_NO_WARN_DEPRECATED
