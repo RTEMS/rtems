@@ -78,15 +78,15 @@ typedef enum {
  */
 
 typedef struct {
-  Chain_Node        Node;
-  Watchdog_States   state;
-  Watchdog_Interval initial;
-  Watchdog_Interval delta_interval;
-  Watchdog_Interval start_time;
-  Watchdog_Interval stop_time;
+  Chain_Node                      Node;
+  Watchdog_States                 state;
+  Watchdog_Interval               initial;
+  Watchdog_Interval               delta_interval;
+  Watchdog_Interval               start_time;
+  Watchdog_Interval               stop_time;
   Watchdog_Service_routine_entry  routine;
-  Objects_Id        id;
-  void             *user_data;
+  Objects_Id                      id;
+  void                           *user_data;
 }   Watchdog_Control;
 
 /*
