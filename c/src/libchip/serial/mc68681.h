@@ -53,7 +53,6 @@ extern "C" {
 
 typedef unsigned char mc68681_baud_t;
 typedef mc68681_baud_t mc68681_baud_table_t[RTEMS_TERMIOS_NUMBER_BAUD_RATES];
-/* typedef mc68681_baud_t[RTEMS_TERMIOS_NUMBER_BAUD_RATES] mc68681_baud_table_t;*/
 
 #define MC68681_BAUD_NOT_VALID 0xFF
 
