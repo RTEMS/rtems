@@ -117,7 +117,7 @@ ARCH__V = $(ARCH_OPTIMIZE_V)
 ARCH = $(ARCH_$(VARIANT_V)_V)
 
 ${ARCH}/$(dirstamp):
-	@$(mkinstalldirs) $(ARCH)
+	@$(mkdir_p) $(ARCH)
 	@: > $(ARCH)/$(dirstamp)
 
 ## Setup the library suffix
