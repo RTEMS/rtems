@@ -1,3 +1,9 @@
+2000-08-10	Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
+
+	* shared/src/cache_manager.c (rtems_cache_flush_multiple_data_lines,
+	rtems_cache_invalidate_multiple_data_lines): Do not operate on the
+	entire address space when flushing zero bytes.
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
