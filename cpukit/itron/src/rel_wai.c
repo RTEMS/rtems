@@ -28,16 +28,10 @@ ER rel_wai(
   Objects_Locations        location;
 
   the_thread = _ITRON_Task_Get( tskid, &location );
-  if (!the_thread)
-    _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) );
-
-  _Thread_Disable_dispatch();
-
   switch ( location ) {
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
-      _Thread_Enable_dispatch();  
-      return _ITRON_Task_Clarify_get_id_error( tskid ); 
+      _ITRON_return_errorno( _ITRON_Task_Clarify_get_id_error( tskid ) ); 
 
     case OBJECTS_LOCAL:
       /*
