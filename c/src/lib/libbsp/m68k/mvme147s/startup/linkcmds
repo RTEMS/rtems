@@ -17,6 +17,8 @@
  *  $Id$
  */
 
+StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
+
 MEMORY
 	{
 	ram : org = 0x7000, l = 0x3d8fff
@@ -64,6 +66,9 @@ SECTIONS
 	    _bss_start = . ;
 	    *(.bss)
 	    *(COMMON)
+	    . += StackSize; /* XXX -- Old gld can't handle this */
+	    . = ALIGN (16);
+	    stack_init = .;
 	    end = . ;
 	    _end = . ;
 	}

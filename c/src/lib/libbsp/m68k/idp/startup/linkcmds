@@ -11,6 +11,9 @@
  * stack grows up towards high memory. This works for
  * both the rom68k and the mon68k monitors.
  */
+
+StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
+
 MEMORY 
 {
      ram : org = 0x10000, l = 2M
@@ -58,6 +61,9 @@ SECTIONS
         _bss_start = . ;
         *(.bss)
         *(COMMON)
+	. += StackSize; /* XXX -- Old gld can't handle this */
+	. = ALIGN (16);
+	stack_init = .;
         end = . ;
         _end = . ;
     }  

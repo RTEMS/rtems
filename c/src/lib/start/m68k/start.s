@@ -77,10 +77,7 @@ loop:   movel   #0,a1@+                 | to zero out uninitialized
         cmpal   a0,a1
         jlt     loop                    | loop until _end reached
 
-        movel   # SYM (end),d0          | d0 = end of bss/start of heap
-        addl    # SYM (heap_size),d0    | d0 = end of heap
-        movel   d0, SYM (stack_start)   | Save for brk() routine
-        addl    # SYM (stack_size),d0   | make room for stack
+        movel   # SYM (stack_init),d0   | d0 = stop of stack
         andl    #0xffffffc0,d0          | align it on 16 byte boundary
         movw    #0x3700,sr              | SUPV MODE,INTERRUPTS OFF!!!
         movel   d0,a7                   | set master stack pointer
@@ -124,9 +121,6 @@ BEGIN_DATA
 SYM (start_frame):
         .space  4,0
 
-	PUBLIC (stack_start)
-SYM (stack_start):
-        .space  4,0
 END_DATA
 
 BEGIN_BSS
@@ -151,13 +145,6 @@ SYM (initial_usp):
          PUBLIC (initial_sr)
 SYM (initial_sr):
         .space  2
-
-	PUBLIC (heap_size)
-        .set   SYM (heap_size),0x2000
-
-        PUBLIC (stack_size)
-        .set   SYM (stack_size),0x1000
-
 
 END_DATA
 #endif
