@@ -1,3 +1,7 @@
+2004-02-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* develenv/Makefile.am: Put *.texi into the builddir.
+
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* started/tversions.texi: Remove (Bogus).

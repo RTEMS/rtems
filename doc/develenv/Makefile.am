@@ -21,17 +21,17 @@ COMMON_FILES += $(top_srcdir)/common/cpright.texi
 info_TEXINFOS = develenv.texi
 develenv_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)
 
-$(srcdir)/direct.texi: direct.t
+direct.texi: direct.t
 	$(BMENU2) -p "Introduction" \
 	    -u "Top" \
 	    -n "Sample Applications" < $< > $@
 
-$(srcdir)/sample.texi: sample.t
+sample.texi: sample.t
 	$(BMENU2) -p "Directory Structure Documentation Directory" \
 	    -u "Top" \
 	    -n "RTEMS Specific Utilities" < $< > $@
 
-$(srcdir)/utils.texi: utils.t
+utils.texi: utils.t
 	$(BMENU2) -p "Sample Applications Network Loopback Test" \
 	    -u "Top" \
 	    -n "Command and Variable Index" < $< > $@
