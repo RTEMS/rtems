@@ -6,6 +6,10 @@
 
 	* aclocal/version.m4: Updated to rtems-4.6.2.
 
+2004-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/version.m4: Updated to rtems-4.6.2.
+
 2004-08-18	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* aclocal/canonical-host.m4, aclocal/canonical-target-name.m4,
