@@ -1,3 +1,16 @@
+2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Pass CFLAGS to cpukit configure.
+	* aclocal/rtems-flags.m4: Remove (Unused).
+	* aclocal/prog-ccas.m4: Remove $(GCCSPECS).
+	* aclocal/env-rtemsbsp.m4:
+	Comment out CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V, CPU_CFLAGS.
+	* aclocal/prog-cc.m4: Don't invoke _RTEMS_FLAGS to set up
+	RTEMS_CFLAGS.
+	* automake/compile.am: AM_CFLAGS = RTEMS_CFLAGS. Add AM_CXXFLAGS.
+	Remove CPPFLAGS, CFLAGS, CPU_CFLAGS, CFLAGS_OPTIMIZE, ASFLAGS.
+	Cleanup comments.
+
 2005-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* automake/compile.am: Remove build-variant support.

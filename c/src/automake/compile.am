@@ -2,82 +2,28 @@
 ## $Id$
 ##
 
-## -------------------------------------------------------------------------
-## NOTE: This file is rather immature and has to be considered to be 
-## almost experimental.
-##
-## Expect frequent changes -- It deserves to be cleaned up :(
-## -------------------------------------------------------------------------
-
-## The section below is based on make/compilers/gcc-target-default.cfg
-## used in former versions of RTEMS.
-
-## 
-## Set up the flags for the toolchains:
-##
-## We are considering 3 different building schemes here:
-## * Using gcc's being able to accept -specs (aka gcc-2.8 building scheme)
-## * Using gcc's not being able to accept -specs (aka gcc-2.7.2 building
-##   scheme)
-## * Using third party toolchains (aka non-gcc building scheme)
-##
-## Automake conditionals in use:
 ## RTEMS_USE_GCC     .. if we are using GCC
-
-## NOTES: 
-## * The gcc-2.8 building scheme is the nominal building scheme and
-##   is actively supported.
-## * The non-gcc building scheme requires manually setting up environment 
-##   variables and is hardly tested at all
-
-## CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V are the values we
-## would want the corresponding macros to be set to.
-##
-## CFLAGS_OPTIMIZE, CFLAGS_DEBUG are set by the 
-## 'VARIANT=<OPTIMIZE|DEBUG>' targets to their _V values.
 
 if RTEMS_USE_GCC
 ## All the stuff below is specific to gcc
 GCCSPECS = $(GCC_SPECS) $(RTEMS_BSP_SPECS)
 endif # RTEMS_USE_GCC
 
-CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(DEFINES)
-CFLAGS   = @RTEMS_CFLAGS@
-## FIXME: This should be correct, but is not supported, yet
-# CXXFLAGS = @RTEMS_CXXFLAGS@
-## Fall back to using RTEMS_CFLAGS for C++
-CXXFLAGS = @RTEMS_CFLAGS@ 
-ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS)
-
 depend:
 
 if RTEMS_USE_GCC
-## gcc >= 2.8
 RTEMS_RELLDFLAGS = -qnolinkcmds -nostdlib -Wl,-r
 endif
-
-## -------------------------------------------------------------------------
-## These are supposed to be set in make/custom/<bsp>.cfg
-CPU_CFLAGS = @CPU_CFLAGS@
-CFLAGS_OPTIMIZE_V = @CFLAGS_OPTIMIZE_V@
-
-## ------------------------------------------------------------------------
-## Setup hard-coded flags
-if RTEMS_USE_GCC
-## gcc >= gcc-2.8
-RTEMS_CFLAGS_OPTIMIZE_V =
-RTEMS_CFLAGS_DEBUG_V = -qrtems_debug -Wno-unused
-endif
-RTEMS_CFLAGS__V = $(RTEMS_CFLAGS_OPTIMIZE_V)
 
 ## -------------------------------------------------------------------------
 
 CC = @CC@ $(GCCSPECS)
 CXX = @CXX@ $(GCCSPECS)
 CPP = @CPP@ $(GCCSPECS)
+CCAS = @CCAS@ $(GCCSPECS)
 
 ##
 AM_CPPFLAGS = $(RTEMS_CPPFLAGS)
-AM_CFLAGS =
-AM_CXXFLAGS =
+AM_CFLAGS = $(RTEMS_CFLAGS)
+AM_CXXFLAGS = $(RTEMS_CFLAGS)
 AM_CCASFLAGS = $(RTEMS_CPPFLAGS) $(RTEMS_CCASFLAGS)
