@@ -14,6 +14,7 @@ RTEMS is an open source operating system for embedded systems.
 This is the gcc/g++ compiler for @target_alias@
 
 %files -n @target_alias@-c++ -f build/files.g++
+%defattr(-,root,root)
 %doc %{_prefix}/man/man1/@target_alias@-g++.1*
 
 %dir %{_prefix}/bin

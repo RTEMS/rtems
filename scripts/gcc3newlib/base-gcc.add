@@ -13,6 +13,7 @@ RTEMS is an open source operating system for embedded systems.
 This is the files for gcc and newlib that are shared by all targets.
 
 %files -n rtems-base-gcc
+%defattr(-,root,root)
 %dir %{_prefix}/info
 %doc %{_prefix}/info/cpp.info*.gz
 %doc %{_prefix}/info/cppinternals.info*.gz

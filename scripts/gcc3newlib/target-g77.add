@@ -14,6 +14,7 @@ RTEMS is an open source operating system for embedded systems.
 This is the gcc/g77 compiler for @target_alias@
 
 %files -n @target_alias@-g77 -f build/files.g77
+%defattr(-,root,root)
 %dir %{_prefix}/bin
 %{_prefix}/bin/@target_alias@-g77@exe_ext@
 

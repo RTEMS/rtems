@@ -29,7 +29,8 @@ Source1:	ftp://sources.redhat.com/pub/newlib/newlib-@newlib_version@.tar.gz
 @PATCH1@
 @PATCH3@
 Buildroot:	%{_tmppath}/%{name}
-
+BuildPreReq:	texinfo >= 4.2
+BuildPreReq:	@target_alias@-binutils
 #
 # The original sources are not included in the source RPM.
 # If we included them, then the source RPMs for each target
@@ -95,6 +96,21 @@ NoSource:	1
 %if "@target_alias@" == "sparc-rtems"
 %define build_gnat      %_gnat
 %define build_gcj 	1
+%endif
+
+%if %build_gcj
+# Building gcj requires bison and zlib
+BuildPreReq:	bison
+%if "%_vendor" == "redhat"
+BuildPreReq:	zlib-devel
+%endif
+%endif
+
+%if %build_gnat
+# Building gnat requires gnat
+%if "%_vendor" == "redhat"
+BuildPreReq:	gcc-gnat
+%endif
 %endif
 
 %description
@@ -243,6 +259,7 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-?? 2>/dev/null
 
   rm -f dirs ;
+  echo "%defattr(-,root,root)" >> dirs
   echo "%dir %{_prefix}/lib" >> dirs ;
   echo "%dir %{_prefix}/lib/gcc-lib" >> dirs ;
   echo "%dir %{_prefix}/lib/gcc-lib/@target_alias@" >> dirs ;

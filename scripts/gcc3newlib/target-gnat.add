@@ -14,6 +14,7 @@ RTEMS is an open source operating system for embedded systems.
 This is the gcc/gnat compiler for @target_alias@
 
 %files -n @target_alias@-gnat
+%defattr(-,root,root)
 # %files -n @target_alias@-gnat -f build/files.gnat
 %dir %{_prefix}/bin
 %{_prefix}/bin/@target_alias@-gnat*

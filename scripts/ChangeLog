@@ -1,5 +1,20 @@
 2003-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* gccnewlib.add: Add various BuildPreReq.
+	Add %defattr(-,root,root) to "dir".
+	* base-g77.add: %defattr(-,root,root).
+	* base-gcc.add %defattr(-,root,root).
+	* base-gcj.add %defattr(-,root,root).
+	* base-gnat.add %defattr(-,root,root).
+	* target-c++.add %defattr(-,root,root).
+	* target-g77.add %defattr(-,root,root).
+	* target-gcc.add %defattr(-,root,root).
+	* target-gcj.add %defattr(-,root,root).
+	* target-gnat.add %defattr(-,root,root).
+	* target-objc.add %defattr(-,root,root).
+
+2003-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* setup.def: binutils_rpm_release=2.
 	* binutils/base-binutils.add: %defattr(-,root,root).
 	* binutils/target-binutils.add: Ditto.

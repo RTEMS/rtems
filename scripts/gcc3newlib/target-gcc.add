@@ -13,6 +13,7 @@ RTEMS is an open source operating system for embedded systems.
 This is gcc and newlib C Library for @target_alias@.
 
 %files -n @target_alias@-gcc -f build/files.gcc
+%defattr(-,root,root)
 %doc %{_prefix}/man/man1/@target_alias@-gcc.1*
 
 %{_prefix}/bin/@target_alias@-cpp@exe_ext@

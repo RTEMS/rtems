@@ -14,6 +14,7 @@ RTEMS is an open source operating system for embedded systems.
 This is the files for gcc/g77 that are shared by all targets.
 
 %files -n rtems-base-g77
+%defattr(-,root,root)
 %dir %{_prefix}/info
 %doc %{_prefix}/info/g77.info*.gz
 
