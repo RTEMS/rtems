@@ -23,7 +23,7 @@ extern "C" {
 #if !defined(TESTS_BUFFER_OUTPUT)
 
 /* do not use iprintf if strict ansi mode */
-#ifndef __STRICT_ANSI__
+#if defined(_NEWLIB_VERSION) && !defined(__STRICT_ANSI__)
 #undef printf
 #define printf(...) \
   do { \
