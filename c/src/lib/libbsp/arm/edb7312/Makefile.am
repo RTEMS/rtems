@@ -84,8 +84,9 @@ include_HEADERS += irq/irq.h
 
 EXTRA_PROGRAMS += irq.rel
 CLEANFILES += irq.rel
-irq_rel_SOURCES = irq/irq.c irq/bsp_irq_init.c ../shared/irq/irq_init.c \
-    irq/bsp_irq_asm.S ../shared/irq/irq_asm.S irq/irq.h
+irq_rel_SOURCES = irq/irq.c irq/bsp_irq_init.c \
+    ../../arm/shared/irq/irq_init.c irq/bsp_irq_asm.S \
+    ../../arm/shared/irq/irq_asm.S irq/irq.h
 irq_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
