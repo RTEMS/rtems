@@ -1,5 +1,10 @@
 2003-08-05	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
+	PR 440/filesystem
+	* src/dosfs/fat_fat_operations.c: Improve write data speed for DOSFS FAT12/FAT16 systems
+
+2003-08-05	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
 	PR 439/filesystem
 	* src/dosfs/fat_file.c: flush temporary buffer when closing files
 
