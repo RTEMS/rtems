@@ -149,15 +149,41 @@ void _CORE_mutex_Initialize(
  *  If a unit is available or if the wait flag is FALSE, then the routine
  *  returns.  Otherwise, the calling task is blocked until a unit becomes
  *  available.
+ *
+ *  NOTE:  For performance reasons, this routine is implemented as
+ *         a macro that uses two support routines.
  */
 
-void _CORE_mutex_Seize(
+RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
   CORE_mutex_Control  *the_mutex,
-  Objects_Id           id,
+  ISR_Level           *level_p
+);
+
+void _CORE_mutex_Seize_interrupt_blocking(
+  CORE_mutex_Control  *the_mutex,
   boolean              wait,
   Watchdog_Interval    timeout
 );
- 
+
+#define _CORE_mutex_Seize( \
+  _the_mutex, _id, _wait, _timeout, _level ) \
+  do { \
+    if ( _CORE_mutex_Seize_interrupt_trylock( _the_mutex, &_level ) ) {  \
+      if ( !_wait ) { \
+        _ISR_Enable( _level ); \
+        _Thread_Executing->Wait.return_code = \
+          CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT; \
+      } else { \
+        _Thread_queue_Enter_critical_section( &(_the_mutex)->Wait_queue ); \
+        _Thread_Executing->Wait.queue = &(_the_mutex)->Wait_queue; \
+        _Thread_Executing->Wait.id    = _id; \
+        _Thread_Disable_dispatch(); \
+        _ISR_Enable( _level ); \
+       _CORE_mutex_Seize_interrupt_blocking( _the_mutex, _id, _timeout ); \
+      } \
+    } \
+  } while (0)
+
 /*
  *  _CORE_mutex_Surrender
  *
@@ -189,10 +215,6 @@ void _CORE_mutex_Flush(
   unsigned32                  status
 );
  
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/coremutex.inl>
-#endif
-
 #ifdef __cplusplus
 }
 #endif
