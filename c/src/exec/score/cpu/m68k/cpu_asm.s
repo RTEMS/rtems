@@ -112,9 +112,9 @@ norst:  frestore a0@+                     | restore the fp state frame
  *  With this approach, lower priority interrupts may
  *  execute twice if a higher priority interrupt is
  *  acknowledged before _Thread_Dispatch_disable is
- *  increamented and the higher priority interrupt
- *  preforms a context switch after executing. The lower
- *  priority intterrupt will execute (1) at the end of the
+ *  incremented and the higher priority interrupt
+ *  performs a context switch after executing. The lower
+ *  priority interrupt will execute (1) at the end of the
  *  higher priority interrupt in the new context if
  *  permitted by the new interrupt level mask, and (2) when
  *  the original context regains the cpu.
