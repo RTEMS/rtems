@@ -21,7 +21,7 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 
-#include "libio.h"
+#include <rtems/libio.h>
 #include "libio_.h"
 
 int tcsetattr(

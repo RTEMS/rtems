@@ -20,8 +20,8 @@ extern "C" {
 #endif
 
 #include <rtems.h>
+#include <rtems/libio.h>                /* include before standard IO */
 #include <rtems/assoc.h>                /* assoc.h not included by rtems.h */
-#include <rtems/libio.h>
 
 #include <stdio.h>                      /* O_RDONLY, et.al. */
 #include <fcntl.h>                      /* O_RDONLY, et.al. */
@@ -45,9 +45,6 @@ extern "C" {
 #include <string.h>                     /* strcmp */
 #include <unistd.h>
 #include <stdlib.h>                     /* calloc() */
-
-#include "libio.h"                      /* libio.h not pulled in by rtems */
-
 
 /*
  *  Semaphore to protect the io table

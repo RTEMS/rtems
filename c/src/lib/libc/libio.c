@@ -37,7 +37,7 @@
 #include <unistd.h>
 #include <stdlib.h>                     /* calloc() */
 
-#include "libio.h"                      /* libio.h not pulled in by rtems */
+#include <rtems/libio.h>                /* libio.h not pulled in by rtems */
 
 /*                            
  *  File descriptor Table Information
