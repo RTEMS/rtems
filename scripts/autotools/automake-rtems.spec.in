@@ -2,8 +2,8 @@
 # spec file for automake 
 #
 
-%define rpmvers 1.8.4
-%define srcvers	1.8.4
+%define rpmvers 1.8.5
+%define srcvers	1.8.5
 %define amvers  1.8
 
 %define _defaultbuildroot	%{_tmppath}/%{name}-%{srcvers}-root

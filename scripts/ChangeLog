@@ -1,3 +1,10 @@
+2004-05-18	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* binutils/Makefile.am: Add sh-rtemscoff.
+	Remove sh-rtemself.
+	* binutils/binutils.add: BuildRequires flex.
+	* autotools/automake-rtems.spec.in: Automake 1.8.5.
+
 2004-04-29	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* gcc3newlib/gccnewlib.add: Another attempt to make *info.gz
