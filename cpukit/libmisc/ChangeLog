@@ -1,3 +1,8 @@
+2003-12-11	Joel Sherrill <joel@OARcorp.com>
+
+	PR 531/rtems_misc
+	* rtmonuse/rtmonuse.c, stackchk/check.c: Correct indexing.
+
 2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add $(dirstamp) to compilation rules.

@@ -145,7 +145,7 @@ void Period_usage_Dump( void )
    */
 
   for ( i=1 ;
-        i<_Configuration_Table->RTEMS_api_configuration->maximum_periods ;
+        i<=_Configuration_Table->RTEMS_api_configuration->maximum_periods ;
         i++ ) {
     the_usage = &Period_usage_Information[ i ];
     if ( the_usage->count == 0 )
