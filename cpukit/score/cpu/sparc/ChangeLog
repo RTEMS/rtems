@@ -1,3 +1,11 @@
+2002-03-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* cpu.c: Replace NO_TABLE_MOVE-support by external function 
+	(code moved to libcpu/sparc/tbr/tbr.c).
+	* cpu.h: Replace NO_TABLE_MOVE-support by external function 
+	(code moved to libcpu/sparc/tbr/tbr.h).
+	* sparc.h: Add sparc_init_tbr (implemented in libcpu/sparc/tbr/tbr.c).
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
