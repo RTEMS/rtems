@@ -1,3 +1,9 @@
+2002-10-30	Eric Norum <eric.norum@usask.ca>
+
+    * cpukit/include/rtems/bspIo.h cpukit/libcsupport/src/printk.c:
+        Add vprintk function for kernel printing from routines
+        which have already obtained the va_list pointer.
+
 2002-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bootstrap: Add generate_bspdir_acinclude to automatically update
