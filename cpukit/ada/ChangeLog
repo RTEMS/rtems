@@ -1,3 +1,8 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems-multiprocessing.adb, rtems-multiprocessing.ads, rtems.adb,
+	rtems.ads: URL for license changed.
+
 2003-07-08	Joel Sherrill <joel@OARcorp.com>
 
 	PR 418/ada
