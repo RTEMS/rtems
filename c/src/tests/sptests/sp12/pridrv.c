@@ -47,7 +47,7 @@ void Priority_test_driver(
     status = rtems_task_create(
       Priority_task_name[ index ],
       Task_priority[ index ],
-      2048,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Priority_task_id[ index ]

@@ -170,8 +170,8 @@ typedef struct {
   do { \
     register unsigned32 _eflags = 0; \
     \
-    asm volatile ( "push %0 ; \
-                    popf " \
+    asm volatile ( "pushf ; \
+                    pop %0" \
                     : "=r" ((_eflags)) : "0" ((_eflags)) \
     ); \
     \

@@ -48,7 +48,7 @@ rtems_task Init(
   status = rtems_task_create(
     rtems_build_name( 'L', 'O', 'W', ' ' ),
     254,
-    1024,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &task_id
@@ -62,7 +62,7 @@ rtems_task Init(
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
       128,
-      1024,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
       &task_id

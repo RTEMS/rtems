@@ -35,7 +35,7 @@ rtems_task Init(
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', 'E' ),
     250,
-    1024,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
@@ -61,7 +61,7 @@ rtems_task Task_1(
     status = rtems_task_create (
       index,
       254,
-      1024,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
       &id
@@ -70,7 +70,7 @@ rtems_task Task_1(
 
     status = rtems_message_queue_create(
       index,
-      OPERATION_COUNT,
+      1,
       16,
       RTEMS_DEFAULT_ATTRIBUTES,
       &id

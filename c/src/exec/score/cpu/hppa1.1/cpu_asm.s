@@ -24,7 +24,7 @@
 #      Division Incorporated makes no representations about the
 #      suitability of this software for any purpose.
 #
- *  $Id$
+#  $Id$
 #
 
 #include <rtems/core/hppa.h>

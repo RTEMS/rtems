@@ -37,7 +37,7 @@ rtems_task Init(
   status = rtems_task_create(
     rtems_build_name( 'T', 'A', '1', ' ' ),
     254,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
@@ -129,7 +129,7 @@ rtems_task Task_1(
             (void) rtems_task_create(
                name,
                in_priority,
-               2048,
+               RTEMS_MINIMUM_STACK_SIZE,
                RTEMS_DEFAULT_MODES,
                RTEMS_DEFAULT_ATTRIBUTES,
                &id

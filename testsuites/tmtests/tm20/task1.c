@@ -54,7 +54,7 @@ rtems_task Init(
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', '1' ),
     128,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 1 ]
@@ -67,7 +67,7 @@ rtems_task Init(
   status = rtems_task_create(
     rtems_build_name( 'T', 'I', 'M', '2' ),
     129,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 2 ]
@@ -348,7 +348,7 @@ rtems_task Task_1(
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_initialize( 0, 0, NULL );
+      (void) rtems_io_initialize( _STUB_major, 0, NULL );
   end_time = Read_timer();
 
   put_time(
@@ -361,7 +361,7 @@ rtems_task Task_1(
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_open( 0, 0, NULL );
+      (void) rtems_io_open( _STUB_major, 0, NULL );
   end_time = Read_timer();
 
   put_time(
@@ -374,7 +374,7 @@ rtems_task Task_1(
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_close( 0, 0, NULL );
+      (void) rtems_io_close( _STUB_major, 0, NULL );
   end_time = Read_timer();
 
   put_time(
@@ -387,7 +387,7 @@ rtems_task Task_1(
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_read( 0, 0, NULL );
+      (void) rtems_io_read( _STUB_major, 0, NULL );
   end_time = Read_timer();
 
   put_time(
@@ -400,7 +400,7 @@ rtems_task Task_1(
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_write( 0, 0, NULL );
+      (void) rtems_io_write( _STUB_major, 0, NULL );
   end_time = Read_timer();
 
   put_time(
@@ -413,7 +413,7 @@ rtems_task Task_1(
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_io_control( 0, 0, NULL );
+      (void) rtems_io_control( _STUB_major, 0, NULL );
   end_time = Read_timer();
 
   put_time(

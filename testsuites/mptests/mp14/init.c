@@ -120,7 +120,7 @@ rtems_task Init(
   status = rtems_task_create(
     Task_name[ Multiprocessing_configuration.node ],
     2,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_TIMESLICE,
     RTEMS_GLOBAL,
     &Event_task_id[ 1 ]
@@ -135,7 +135,7 @@ rtems_task Init(
   status = rtems_task_create(
     Semaphore_task_name[ Multiprocessing_configuration.node ],
     2,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_TIMESLICE,
     RTEMS_GLOBAL,
     &Semaphore_task_id[ 1 ]
@@ -150,7 +150,7 @@ rtems_task Init(
   status = rtems_task_create(
     Queue_task_name[ Multiprocessing_configuration.node ],
     2,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_TIMESLICE,
     RTEMS_GLOBAL,
     &Queue_task_id[ 1 ]
@@ -166,7 +166,7 @@ rtems_task Init(
   status = rtems_task_create(
     Partition_task_name[ Multiprocessing_configuration.node ],
     2,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_TIMESLICE,
     RTEMS_GLOBAL,
     &Partition_task_id[ 1 ]

@@ -39,36 +39,18 @@ extern "C" {
 #include <rtems/core/object.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/core/threadq.h>
+#include <rtems/core/coremsg.h>
 
 /*
- *  The following defines the data types needed to manipulate
- *  the contents of message buffers.
- *  Since msgs are variable length we just make a ptr to 1.
+ *  The following enumerated type details the modes in which a message
+ *  may be submitted to a message queue.  The message may be posted
+ *  in a send or urgent fashion.
  */
-
-typedef struct {
-    unsigned32  size;
-
-#ifndef __cplusplus
-                               /* NOTE:   [0] is gcc specific,
-                                *   but specifically disallowed by ANSI STD C++
-                                * g++ warns about it, so we #ifdef it out to
-                                * get rid of warnings when compiled by g++.
-                                */
-    unsigned32  buffer[0];
-#endif
-
-} Message_queue_Buffer;
-
-/*
- *  The following records define the organization of a message
- *  buffer.
- */
-
-typedef struct {
-  Chain_Node           Node;
-  Message_queue_Buffer Contents;
-}   Message_queue_Buffer_control;
+ 
+typedef enum {
+  MESSAGE_QUEUE_SEND_REQUEST   = 0,
+  MESSAGE_QUEUE_URGENT_REQUEST = 1
+}  Message_queue_Submit_types;
 
 /*
  *  The following records define the control block used to manage
@@ -76,15 +58,9 @@ typedef struct {
  */
 
 typedef struct {
-  Objects_Control      Object;
-  Thread_queue_Control Wait_queue;
-  rtems_attribute      attribute_set;
-  unsigned32           maximum_pending_messages;
-  unsigned32           number_of_pending_messages;
-  unsigned32           maximum_message_size;
-  Chain_Control        Pending_messages;
-  Message_queue_Buffer *message_buffers;
-  Chain_Control        Inactive_messages;
+  Objects_Control             Object;
+  rtems_attribute             attribute_set;
+  CORE_message_queue_Control  message_queue;
 }   Message_queue_Control;
 
 /*
@@ -93,17 +69,6 @@ typedef struct {
  */
 
 EXTERN Objects_Information  _Message_queue_Information;
-
-/*
- *  The following enumerated type details the modes in which a message
- *  may be submitted to a message queue.  The message may be posted
- *  in a send or urgent fashion.
- */
-
-typedef enum {
-  MESSAGE_QUEUE_SEND_REQUEST   = 0,
-  MESSAGE_QUEUE_URGENT_REQUEST = 1
-}  Message_queue_Submit_types;
 
 /*
  *  _Message_queue_Manager_initialization
@@ -255,7 +220,7 @@ rtems_status_code rtems_message_queue_broadcast(
 rtems_status_code rtems_message_queue_receive(
   Objects_Id            id,
   void                 *buffer,
-  unsigned32           *size_p,
+  unsigned32           *size,
   unsigned32            option_set,
   rtems_interval        timeout
 );
@@ -277,136 +242,23 @@ rtems_status_code rtems_message_queue_flush(
 );
 
 /*
- *  _Message_queue_Copy_buffer
- *
- *  DESCRIPTION:
- *
- *  This routine copies the contents of the source message buffer
- *  to the destination message buffer.
- */
-
-STATIC INLINE void _Message_queue_Copy_buffer (
-  void      *source,
-  void      *destination,
-  unsigned32 size
-);
-
-/*
- *  _Message_queue_Seize
- *
- *  DESCRIPTION:
- *
- *  This routine attempts to receive a message from the_message_queue.
- *  If a message is available or if the RTEMS_NO_WAIT option is enabled in
- *  option_set, then the routine returns.  Otherwise, the calling task
- *  is blocked until a message is available.  If a message is returned
- *  to the task, then buffer will contain its contents.
- */
-
-boolean _Message_queue_Seize(
-  Message_queue_Control *the_message_queue,
-  unsigned32             option_set,
-  void                  *buffer,
-  unsigned32            *size_p
-);
-
-/*
- *  _Message_queue_Flush_support
- *
- *  DESCRIPTION:
- *
- *  This routine flushes all outstanding messages and returns
- *  them to the inactive message chain.
- */
-
-unsigned32 _Message_queue_Flush_support(
-  Message_queue_Control *the_message_queue
-);
-
-/*
  *  _Message_queue_Submit
  *
  *  DESCRIPTION:
  *
- *  This routine provides the common foundation for the
- *  rtems_message_queue_send and rtems_message_queue_urgent directives.
+ *  This routine implements the directives rtems_message_queue_send
+ *  and rtems_message_queue_urgent.  It processes a message that is
+ *  to be submitted to the designated message queue.  The message will
+ *  either be processed as a send send message which it will be inserted
+ *  at the rear of the queue or it will be processed as an urgent message
+ *  which will be inserted at the front of the queue.
  */
-
+ 
 rtems_status_code _Message_queue_Submit(
   Objects_Id                  id,
   void                       *buffer,
   unsigned32                  size,
   Message_queue_Submit_types  submit_type
-);
-
-/*
- *  _Message_queue_Allocate_message_buffer
- *
- *  DESCRIPTION:
- *
- *  This function allocates a message buffer from the inactive
- *  message buffer chain.
- */
-
-STATIC INLINE Message_queue_Buffer_control *
-  _Message_queue_Allocate_message_buffer (
-   Message_queue_Control *the_message_queue
-);
-
-/*
- *  _Message_queue_Free_message_buffer
- *
- *  DESCRIPTION:
- *
- *  This routine frees a message buffer to the inactive
- *  message buffer chain.
- */
-
-STATIC INLINE void _Message_queue_Free_message_buffer (
-  Message_queue_Control        *the_message_queue,
-  Message_queue_Buffer_control *the_message
-);
-
-/*
- *  _Message_queue_Get_pending_message
- *
- *  DESCRIPTION:
- *
- *  This function removes the first message from the_message_queue
- *  and returns a pointer to it.
- */
-
-STATIC INLINE
-  Message_queue_Buffer_control *_Message_queue_Get_pending_message (
-  Message_queue_Control *the_message_queue
-);
-
-/*
- *  _Message_queue_Append
- *
- *  DESCRIPTION:
- *
- *  This routine places the_message at the rear of the outstanding
- *  messages on the_message_queue.
- */
-
-STATIC INLINE void _Message_queue_Append (
-  Message_queue_Control        *the_message_queue,
-  Message_queue_Buffer_control *the_message
-);
-
-/*
- *  _Message_queue_Prepend
- *
- *  DESCRIPTION:
- *
- *  This routine places the_message at the rear of the outstanding
- *  messages on the_message_queue.
- */
-
-STATIC INLINE void _Message_queue_Prepend (
-  Message_queue_Control        *the_message_queue,
-  Message_queue_Buffer_control *the_message
 );
 
 /*
@@ -467,6 +319,35 @@ STATIC INLINE void _Message_queue_Free (
 STATIC INLINE Message_queue_Control *_Message_queue_Get (
   Objects_Id         id,
   Objects_Locations *location
+);
+
+/*
+ *  _Message_queue_Translate_core_message_queue_return_code
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns a RTEMS status code based on the core message queue
+ *  status code specified.
+ */
+ 
+rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
+  unsigned32 the_message_queue_status
+);
+
+/*
+ *
+ *  _Message_queue_Core_message_queue_mp_support
+ *
+ *  Input parameters:
+ *    the_thread - the remote thread the message was submitted to
+ *    id         - id of the message queue
+ *
+ *  Output parameters: NONE
+ */
+ 
+void  _Message_queue_Core_message_queue_mp_support (
+  Thread_Control *the_thread,
+  Objects_Id      id
 );
 
 #include <rtems/rtems/message.inl>

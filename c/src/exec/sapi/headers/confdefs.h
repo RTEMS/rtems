@@ -236,13 +236,108 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #define CONFIGURE_INITIAL_EXTENSIONS         NULL
 #endif
 
-/* Calculate the RAM size based on the maximum number of tasks configured */
+/* 
+ *  Calculate the RAM size based on the maximum number of objects configured.
+ *  The model is to estimate the memory required for each configured item,
+ *  sum the memory requirements and insure that there is at least 32K greater 
+ *  than that for things not directly addressed such as:
+ *
+ *    + stacks greater than minimum size
+ *    + FP contexts
+ *    + API areas (should be optional)
+ *    + messages
+ *    + object name and local pointer table overhead
+ *    + per node memory requirements
+ *    + executive fixed requirements (including at least internal threads
+ *       and the Ready chains)
+ *
+ *  NOTE:  Eventually this should take into account some of the above.
+ *         Basically, this is a "back of the envelope" estimate for
+ *         memory requirements.  It could be more accurate.
+ */
 
 #ifndef CONFIGURE_EXECUTIVE_RAM_SIZE
-#define CONFIGURE_MEMORY_REQUIRED(_tasks) \
-  (_tasks) * ( (sizeof(Thread_Control) + CONTEXT_FP_SIZE + STACK_MINIMUM_SIZE)) 
+
+#define CONFIGURE_OBJECT_TABLE_STUFF \
+  ( sizeof(Objects_Control *) + sizeof(rtems_name *) + sizeof(rtems_name) )
+
+#define CONFIGURE_MEMORY_FOR_TASKS(_tasks) \
+  ((_tasks) * \
+   ((sizeof(Thread_Control) + CONTEXT_FP_SIZE + \
+      STACK_MINIMUM_SIZE + sizeof( RTEMS_API_Control ) + \
+      CONFIGURE_OBJECT_TABLE_STUFF)) \
+  )
+
+#define CONFIGURE_MEMORY_FOR_TIMERS(_timers) \
+  ((_timers) * ( sizeof(Timer_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) \
+  ((_semaphores) * \
+   ( sizeof(Semaphore_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(_queues) \
+  ( (_queues) * \
+    ( sizeof(Message_queue_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_PARTITIONS(_partitions) \
+  ( (_partitions) * \
+    ( sizeof(Partition_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_REGIONS(_regions) \
+  ( (_regions) * \
+    ( sizeof(Region_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_PORTS(_ports) \
+  ( (_ports) * \
+    ( sizeof(Dual_ported_memory_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_PERIODS(_periods) \
+  ( (_periods) * \
+    ( sizeof(Rate_monotonic_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(_extensions) \
+  ( (_extensions) * \
+    ( sizeof(Extension_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+
+#define CONFIGURE_MEMORY_FOR_DEVICES(_devices) \
+  (((_devices) + 1) * ( sizeof(rtems_driver_name_t) ) )
+
+#ifdef CONFIGURE_MPTEST
+
+#ifndef CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE
+
+#define CONFIGURE_MEMORY_FOR_PROXIES(_proxies) \
+  ( ((_proxies) + 1) * ( sizeof(Thread_Proxy_control) )  )
+
+#define CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(_global_objects) \
+  ((_global_objects)  * ( sizeof(Objects_MP_Control) )  )
+
+#define CONFIGURE_MEMORY_FOR_MP \
+  ( CONFIGURE_MEMORY_FOR_PROXIES(CONFIGURE_MP_MAXIMUM_PROXIES) + \
+    CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS) \
+  )
+
+#endif  /* CONFIGURE_HAS_OWN_MULTIPROCESING_TABLE */
+
+#else
+
+#define CONFIGURE_MEMORY_FOR_MP  0
+
+#endif
 #define CONFIGURE_EXECUTIVE_RAM_SIZE \
-( (CONFIGURE_MEMORY_REQUIRED(CONFIGURE_MAXIMUM_TASKS) + (128*1024)) &0xffff0000)
+(( CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS) + \
+   CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS) + \
+   CONFIGURE_MEMORY_FOR_SEMAPHORES(CONFIGURE_MAXIMUM_SEMAPHORES) + \
+   CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(CONFIGURE_MAXIMUM_MESSAGE_QUEUES) + \
+   CONFIGURE_MEMORY_FOR_PARTITIONS(CONFIGURE_MAXIMUM_PARTITIONS) + \
+   CONFIGURE_MEMORY_FOR_REGIONS(CONFIGURE_MAXIMUM_REGIONS) + \
+   CONFIGURE_MEMORY_FOR_PORTS(CONFIGURE_MAXIMUM_PORTS) + \
+   CONFIGURE_MEMORY_FOR_PERIODS(CONFIGURE_MAXIMUM_PERIODS) + \
+   CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(CONFIGURE_MAXIMUM_USER_EXTENSIONS) + \
+   CONFIGURE_MEMORY_FOR_DEVICES(CONFIGURE_MAXIMUM_DEVICES) + \
+   CONFIGURE_MEMORY_FOR_MP + \
+   (96*1024) \
+) & 0xffff8000)
 #endif
 
 #ifdef CONFIGURE_INIT

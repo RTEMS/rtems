@@ -40,12 +40,18 @@ rtems_task Init(
   Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
   Task_name[ 3 ] = rtems_build_name( 'T', 'A', '3', ' ' );
 
-  status = rtems_task_create( Task_name[ 1 ], 1, 1024, RTEMS_DEFAULT_MODES,
-                        RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 1 ] );
-  status = rtems_task_create( Task_name[ 2 ], 1, 1024, RTEMS_DEFAULT_MODES,
-                        RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 2 ] );
-  status = rtems_task_create( Task_name[ 3 ], 1, 1024, RTEMS_DEFAULT_MODES,
-                        RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 3 ] );
+  status = rtems_task_create(
+    Task_name[ 1 ], 1, RTEMS_MINIMUM_STACK_SIZE, RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 1 ]
+  );
+  status = rtems_task_create(
+    Task_name[ 2 ], 1, RTEMS_MINIMUM_STACK_SIZE, RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 2 ]
+  );
+  status = rtems_task_create(
+    Task_name[ 3 ], 1, RTEMS_MINIMUM_STACK_SIZE, RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES, &Task_id[ 3 ]
+  );
 
   status = rtems_task_start( Task_id[ 1 ], Test_task, 1 );
   status = rtems_task_start( Task_id[ 2 ], Test_task, 2 );

@@ -179,7 +179,7 @@ EXTERN void               *_CPU_Interrupt_stack_high;
  */
 
 #define CPU_SYSTEM_INITIALIZATION_THREAD_EXTRA_STACK \
-   (4096 - CPU_STACK_MINIMUM_SIZE)
+   (CPU_STACK_MINIMUM_SIZE)
 
 /*
  *  i960 family supports 256 distinct vectors.
@@ -193,7 +193,7 @@ EXTERN void               *_CPU_Interrupt_stack_high;
  *  NOTE:  See CPU_SYSTEM_INITIALIZATION_THREAD_EXTRA_STACK
  */
 
-#define CPU_STACK_MINIMUM_SIZE          1024
+#define CPU_STACK_MINIMUM_SIZE          2048
 
 /*
  *  i960 is pretty tolerant of alignment.  Just put things on 4 byte boundaries.

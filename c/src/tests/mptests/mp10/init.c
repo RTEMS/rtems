@@ -80,7 +80,7 @@ rtems_task Init(
     status = rtems_task_create(
       Task_name[ 1 ],
       1,
-      1024,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_TIMESLICE,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Task_id[ 1 ]
@@ -95,7 +95,7 @@ rtems_task Init(
     status = rtems_task_create(
       Task_name[ 2 ],
       1,
-      1024,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_TIMESLICE,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Task_id[ 2 ]
@@ -110,7 +110,7 @@ rtems_task Init(
     status = rtems_task_create(
       Task_name[ 3 ],
       1,
-      1024,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_TIMESLICE,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Task_id[ 3 ]

@@ -52,7 +52,7 @@ rtems_task Init(
     status = rtems_task_create(
       Task_name[ index ],
       1,
-      2048,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Task_id[ index ]

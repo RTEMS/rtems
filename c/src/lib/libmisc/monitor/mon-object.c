@@ -130,7 +130,7 @@ rtems_monitor_id_fixup(
 #else
 #warning "TONY... FIX ME!!!!!"
 #if defined(hppa1_1)
-#error "TONY... I SAID TO FIX ME!!!!!  <HAHAHAHAHA>" 
+#warning "TONY... I SAID TO FIX ME!!!!!  <HAHAHAHAHA>" 
 #endif
         id = _Objects_Build_id(0, default_node, rtems_get_index(id));
 #endif

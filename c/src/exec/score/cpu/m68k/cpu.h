@@ -177,11 +177,9 @@ EXTERN void               *_CPU_Interrupt_stack_high;
 
 /*
  *  Minimum size of a thread's stack.
- *
- *  NOTE:  256 bytes is probably too low in most cases.
  */
 
-#define CPU_STACK_MINIMUM_SIZE           256
+#define CPU_STACK_MINIMUM_SIZE           1024
 
 /*
  *  m68k is pretty tolerant of alignment.  Just put things on 4 byte boundaries.

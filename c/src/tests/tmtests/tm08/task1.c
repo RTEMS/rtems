@@ -47,7 +47,7 @@ void test_init()
   status = rtems_task_create(
     1,
     128,
-    1024,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Test_task_id
@@ -60,7 +60,7 @@ void test_init()
   status = rtems_task_create(
     1,
     254,
-    1024,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Test_task_id

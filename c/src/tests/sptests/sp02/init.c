@@ -38,7 +38,7 @@ rtems_task Init(
   status = rtems_task_create(
      Preempt_task_name,
      1,
-     2048,
+     RTEMS_MINIMUM_STACK_SIZE,
      RTEMS_DEFAULT_MODES,
      RTEMS_DEFAULT_ATTRIBUTES,
      &Preempt_task_id
@@ -59,7 +59,7 @@ rtems_task Init(
   status = rtems_task_create(
      Task_name[ 1 ],
      3,
-     2048,
+     RTEMS_MINIMUM_STACK_SIZE,
      RTEMS_DEFAULT_MODES,
      RTEMS_DEFAULT_ATTRIBUTES,
      &Task_id[ 1 ]
@@ -69,7 +69,7 @@ rtems_task Init(
   status = rtems_task_create(
      Task_name[ 2 ],
      3,
-     2048,
+     RTEMS_MINIMUM_STACK_SIZE,
      RTEMS_DEFAULT_MODES,
      RTEMS_DEFAULT_ATTRIBUTES,
      &Task_id[ 2 ]
@@ -79,7 +79,7 @@ rtems_task Init(
   status = rtems_task_create(
      Task_name[ 3 ],
      3,
-     2048,
+     RTEMS_MINIMUM_STACK_SIZE,
      RTEMS_DEFAULT_MODES,
      RTEMS_DEFAULT_ATTRIBUTES,
      &Task_id[ 3 ]
@@ -111,7 +111,7 @@ rtems_task Init(
   status = rtems_task_create(
      Task_name[ 1 ],
      1,
-     2048,
+     RTEMS_MINIMUM_STACK_SIZE,
      RTEMS_DEFAULT_MODES,
      RTEMS_DEFAULT_ATTRIBUTES,
      &Task_id[ 1 ]
@@ -121,7 +121,7 @@ rtems_task Init(
   status = rtems_task_create(
      Task_name[ 2 ],
      3,
-     2048,
+     RTEMS_MINIMUM_STACK_SIZE,
      RTEMS_DEFAULT_MODES,
      RTEMS_DEFAULT_ATTRIBUTES,
      &Task_id[ 2 ]
@@ -131,7 +131,7 @@ rtems_task Init(
   status = rtems_task_create(
      Task_name[ 3 ],
      3,
-     2048,
+     RTEMS_MINIMUM_STACK_SIZE,
      RTEMS_DEFAULT_MODES,
      RTEMS_DEFAULT_ATTRIBUTES,
      &Task_id[ 3 ]

@@ -133,9 +133,11 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
       
       if (buffer) {
           the_packet->Buffer.size = *size_p;
-          _Message_queue_Copy_buffer(buffer,
-                                     the_packet->Buffer.buffer,
-                                     *size_p);
+          _CORE_message_queue_Copy_buffer(
+            buffer,
+            the_packet->Buffer.buffer,
+            *size_p
+          );
       }
 
       return _MPCI_Send_request_packet(rtems_get_node(message_queue_id),
@@ -310,7 +312,7 @@ void _Message_queue_MP_Process_packet (
         *(rtems_unsigned32 *)the_thread->Wait.return_argument_1 = 
            the_packet->size;
 
-        _Message_queue_Copy_buffer(
+        _CORE_message_queue_Copy_buffer(
           the_packet->Buffer.buffer,
           the_thread->Wait.return_argument,
           the_packet->size

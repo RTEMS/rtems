@@ -60,7 +60,7 @@ void test_init()
   status = rtems_task_create(
     rtems_build_name( 'H', 'I', 'G', 'H' ),
     priority,
-    1024,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &High_id
@@ -76,7 +76,7 @@ void test_init()
     status = rtems_task_create(
       rtems_build_name( 'M', 'I', 'D', ' ' ),
       priority,
-      1024,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Low_id
@@ -92,7 +92,7 @@ void test_init()
   status = rtems_task_create(
     rtems_build_name( 'L', 'O', 'W', ' ' ),
     priority,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Low_id

@@ -19,66 +19,6 @@
 
 /*PAGE
  *
- *  _Message_queue_Copy_buffer
- */
-
-#define _Message_queue_Copy_buffer( _source, _destination, _size ) \
-  memcpy( _destination, _source, _size)
-
-/*PAGE
- *
- *  _Message_queue_Allocate_message_buffer
- *
- */
-
-#define _Message_queue_Allocate_message_buffer( _the_message_queue ) \
-  (Message_queue_Buffer_control *) \
-    _Chain_Get( &(_the_message_queue)->Inactive_messages )
-
-/*PAGE
- *
- *  _Message_queue_Free_message_buffer
- *
- */
-
-#define _Message_queue_Free_message_buffer( _the_message_queue, _the_message ) \
-  _Chain_Append( \
-    &(_the_message_queue)->Inactive_messages, \
-    &(_the_message)->Node \
-  )
-
-/*PAGE
- *
- *  _Message_queue_Get_pending_message
- *
- */
-
-#define _Message_queue_Get_pending_message( _the_message_queue ) \
-   (Message_queue_Buffer_control *) \
-     _Chain_Get_unprotected( &(_the_message_queue)->Pending_messages )
-
-/*PAGE
- *
- *  _Message_queue_Append
- *
- */
-
-#define _Message_queue_Append( _the_message_queue, _the_message ) \
-   _Chain_Append( &(_the_message_queue)->Pending_messages, \
-                  &(_the_message)->Node )
-
-/*PAGE
- *
- *  _Message_queue_Prepend
- *
- */
-
-#define _Message_queue_Prepend( _the_message_queue, _the_message ) \
-   _Chain_Prepend( &(_the_message_queue)->Pending_messages, \
-                   &(_the_message)->Node )
-
-/*PAGE
- *
  *  _Message_queue_Is_null
  *
  */
@@ -93,19 +33,7 @@
  */
 
 #define _Message_queue_Free( _the_message_queue ) \
-  do { \
-    \
-    if ( (_the_message_queue)->message_buffers ) { \
-      _Workspace_Free((void *) (_the_message_queue)->message_buffers); \
-      (_the_message_queue)->message_buffers = 0; \
-    } \
-    \
-    _Objects_Free( \
-      &_Message_queue_Information, \
-      &(_the_message_queue)->Object \
-    ); \
-  } while ( 0 )
-
+  _Objects_Free( &_Message_queue_Information, &(_the_message_queue)->Object )
 
 /*PAGE
  *

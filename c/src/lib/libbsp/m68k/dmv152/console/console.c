@@ -230,7 +230,9 @@ rtems_device_driver console_write(
     }
     outbyte( buffer[ count ] );
   }
-  return maximum;
+
+  rw_args->bytes_moved = maximum;
+  return 0;
 }
 
 /*

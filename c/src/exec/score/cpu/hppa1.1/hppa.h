@@ -636,7 +636,7 @@ get_ ## name (void)                            \
 }
 
 #define EMIT_SET_CONTROL(name, reg)            \
-static __inline__ unsigned int                 \
+static __inline__ void                         \
 set_ ## name (unsigned int new_value)          \
 {                                              \
     HPPA_ASM_MTCTL(new_value, reg);            \

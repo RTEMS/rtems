@@ -53,7 +53,7 @@ rtems_task Init(
   status = rtems_task_create(
     rtems_build_name( 'L', 'O', 'W', ' ' ),
     10,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_NO_PREEMPT,
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
@@ -66,7 +66,7 @@ rtems_task Init(
   status = rtems_task_create(
     1,
     11,
-    1024,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
@@ -121,7 +121,7 @@ rtems_task Low_task(
   status = rtems_task_create(
     rtems_build_name( 'H', 'I', 'G', 'H' ),
     5,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_NO_PREEMPT,
     RTEMS_DEFAULT_ATTRIBUTES,
     &id

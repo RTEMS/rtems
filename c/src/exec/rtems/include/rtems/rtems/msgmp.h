@@ -63,7 +63,7 @@ typedef struct {
   unsigned32                         count;
   unsigned32                         size;
   unsigned32                         pad0;
-  Message_queue_Buffer               Buffer;
+  CORE_message_queue_Buffer          Buffer;
 }   Message_queue_MP_Packet;
 
 /*

@@ -14,7 +14,7 @@
  *  $Id$
  */
 
-#include <rtems/hppa.h>
+#include <rtems/core/hppa.h>
 #include <rtems/core/cpu_asm.h>
 
 	.SPACE $PRIVATE$

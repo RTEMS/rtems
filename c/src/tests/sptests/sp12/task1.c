@@ -100,7 +100,7 @@ pause();
   status = rtems_task_create(
     Task_name[ 4 ],
     4,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 4 ]
@@ -110,7 +110,7 @@ pause();
   status = rtems_task_create(
     Task_name[ 5 ],
     4,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 5 ]

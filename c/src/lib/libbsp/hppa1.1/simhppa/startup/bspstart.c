@@ -29,6 +29,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <rtems/libio.h>
+#include <rtems/core/intthrd.h>
 
 #include <libcsupport.h>
 
@@ -85,9 +86,9 @@ fast_idle_switch_hook(rtems_tcb *current_task,
      * but its the best we could think of at the moment.
      */
 
-    if (heir_task->name == rtems_build_name('I', 'D', 'L', 'E'))
+    if (heir_task == _Internal_threads_Idle_thread)
         CPU_HPPA_CLICKS_PER_TICK = fast_clock;
-    else if (current_task->name == rtems_build_name('I', 'D', 'L', 'E'))
+    else if (heir_task == _Internal_threads_Idle_thread)
         CPU_HPPA_CLICKS_PER_TICK = normal_clock;
 }
 
@@ -211,7 +212,7 @@ bsp_pretasking_hook(void)
 
         memset(&fast_idle_extension, 0, sizeof(fast_idle_extension));
 
-        fast_idle_extension.task_switch  = fast_idle_switch_hook;
+        fast_idle_extension.thread_switch  = fast_idle_switch_hook;
 
         rc = rtems_extension_create(rtems_build_name('F', 'D', 'L', 'E'),
                               &fast_idle_extension, &extension_id);

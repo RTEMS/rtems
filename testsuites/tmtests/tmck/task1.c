@@ -50,7 +50,7 @@ rtems_task Init(
   status = rtems_task_create(
     1,
     5,
-    1024,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &id

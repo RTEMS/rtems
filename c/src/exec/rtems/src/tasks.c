@@ -114,26 +114,21 @@ User_extensions_routine _RTEMS_tasks_Switch_extension(
   asr = &api->Signal;
  
   _ISR_Disable( level );
-
-  signal_set = asr->signals_posted;
- 
-  if ( signal_set ) {
-  /* if ( _ASR_Are_signals_pending( asr ) ) {
- 
-    signal_set          = asr->signals_posted; */
+    signal_set = asr->signals_posted;
     asr->signals_posted = 0;
-    _ISR_Enable( level );
+  _ISR_Enable( level );
  
-    asr->nest_level += 1;
-    rtems_task_mode( asr->mode_set, RTEMS_ALL_MODE_MASKS, &prev_mode );
  
-    (*asr->handler)( signal_set );
+  if ( !signal_set ) /* similar to _ASR_Are_signals_pending( asr ) */
+    return;
  
-    asr->nest_level -= 1;
-    rtems_task_mode( prev_mode, RTEMS_ALL_MODE_MASKS, &prev_mode );
-  }
-  else
-    _ISR_Enable( level );
+  asr->nest_level += 1;
+  rtems_task_mode( asr->mode_set, RTEMS_ALL_MODE_MASKS, &prev_mode );
+ 
+  (*asr->handler)( signal_set );
+
+  asr->nest_level -= 1;
+  rtems_task_mode( prev_mode, RTEMS_ALL_MODE_MASKS, &prev_mode );
 
 }
 

@@ -81,17 +81,42 @@ void bsp_libc_init()
         libc_init(1);                /* reentrant if possible */
     else
         libc_init(0);                /* non-reentrant */
-
-    /*
-     *  Initialize the stack bounds checker
-     */
-
-#ifdef STACK_CHECKER_ON
-    Stack_check_Initialize();
-#endif
-
 }
  
+/*
+ *  Function:   bsp_pretasking_hook
+ *  Created:    95/03/10
+ *
+ *  Description:
+ *      BSP pretasking hook.  Called just before drivers are initialized.
+ *      Used to setup libc and install any BSP extensions.
+ *
+ *  NOTES:
+ *      Must not use libc (to do io) from here, since drivers are
+ *      not yet initialized.
+ *
+ */
+ 
+void
+bsp_pretasking_hook(void)
+{
+    bsp_libc_init();
+ 
+#ifdef STACK_CHECKER_ON
+    /*
+     *  Initialize the stack bounds checker
+     *  We can either turn it on here or from the app.
+     */
+ 
+    Stack_check_Initialize();
+#endif
+ 
+#ifdef RTEMS_DEBUG
+    rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
+#endif
+}
+ 
+
 /*
  * After drivers are setup, register some "filenames"
  * and open stdin, stdout, stderr files
@@ -138,8 +163,8 @@ int main(
   else
     rtems_progname = "RTEMS";
 
-  Cpu_table.pretasking_hook	= NULL;
-  Cpu_table.predriver_hook = bsp_libc_init;  /* RTEMS resources available */
+  Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
+  Cpu_table.predriver_hook = NULL;
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.idle_task = NULL;  /* do not override system IDLE task */
   Cpu_table.do_zero_of_workspace = TRUE;

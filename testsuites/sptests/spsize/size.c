@@ -66,8 +66,6 @@
      (sizeof (Timer_Control) + NAME_PTR_SIZE)
 #define PER_MSGQ      \
      (sizeof (Message_queue_Control) + NAME_PTR_SIZE)
-#define PER_MSG_OVERHEAD       \
-     (sizeof (Message_queue_Buffer_control))
 #define PER_REGN      \
      (sizeof (Region_Control) + NAME_PTR_SIZE)
 #define PER_PART      \
@@ -479,9 +477,9 @@ maximum_msgqs = getint();
 size_msgqs = PER_MSGQ * maximum_msgqs;
 total_size += size_msgqs;
 
-printf( "What is maximum_messages? " );
+printf( "What is maximum_messages?  XXXX " );
 maximum_msgs = getint();
-size_msgs_overhead = PER_MSG_OVERHEAD * maximum_msgs;
+size_msgs_overhead = 0;
 total_size += size_msgs_overhead;
 
 printf( "What is maximum_regions? " );
@@ -570,7 +568,7 @@ printf( " Timers               - %03d * %03d            =  %d\n",
 printf( " Msg Queues           - %03d * %03d            =  %d\n",
           maximum_msgqs, PER_MSGQ, size_msgqs );
 printf( " Messages Overhead    - %03d * %03d            =  %d\n",
-          maximum_msgs, PER_MSG_OVERHEAD, size_msgs_overhead );
+          maximum_msgs, 0 /* PER_MSG_OVERHEAD */, size_msgs_overhead );
 printf( " Regions              - %03d * %03d            =  %d\n",
           maximum_regns, PER_REGN, size_regns);
 printf( " Partitions           - %03d * %03d            =  %d\n",

@@ -43,7 +43,7 @@ rtems_task Init(
   status = rtems_task_create(
     Task_name[ 1 ],
     2,
-    8192,
+    RTEMS_MINIMUM_STACK_SIZE * 4,
     RTEMS_DEFAULT_MODES,
     RTEMS_FLOATING_POINT,
     &Task_id[ 1 ]
@@ -53,7 +53,7 @@ rtems_task Init(
   status = rtems_task_create(
     Task_name[ 2 ],
     2,
-    8192,
+    RTEMS_MINIMUM_STACK_SIZE * 4,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 2 ]
@@ -63,7 +63,7 @@ rtems_task Init(
   status = rtems_task_create(
     Task_name[ 3 ],
     2,
-    8192,
+    RTEMS_MINIMUM_STACK_SIZE * 4,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 3 ]
@@ -73,7 +73,7 @@ rtems_task Init(
   status = rtems_task_create(
     Task_name[ 4 ],
     2,
-    8192,
+    RTEMS_MINIMUM_STACK_SIZE * 4,
     RTEMS_DEFAULT_MODES,
     RTEMS_FLOATING_POINT,
     &Task_id[ 4 ]
@@ -83,7 +83,7 @@ rtems_task Init(
   status = rtems_task_create(
     Task_name[ 5 ],
     2,
-    8192,
+    RTEMS_MINIMUM_STACK_SIZE * 4,
     RTEMS_DEFAULT_MODES,
     RTEMS_FLOATING_POINT,
     &Task_id[ 5 ]
@@ -93,7 +93,7 @@ rtems_task Init(
   status = rtems_task_create(
     Task_name[ 6 ],
     1,
-    8192,
+    RTEMS_MINIMUM_STACK_SIZE * 4,
     RTEMS_DEFAULT_MODES,
     RTEMS_FLOATING_POINT,
     &Task_id[ 6 ]

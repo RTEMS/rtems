@@ -21,96 +21,6 @@
 
 /*PAGE
  *
- *  _Message_queue_Copy_buffer
- *
- */
-
-STATIC INLINE void _Message_queue_Copy_buffer (
-  void      *source,
-  void      *destination,
-  unsigned32 size
-)
-{
-  memcpy(destination, source, size);
-}
-
-/*PAGE
- *
- *  _Message_queue_Allocate_message_buffer
- *
- */
-
-STATIC INLINE Message_queue_Buffer_control *
-_Message_queue_Allocate_message_buffer (
-    Message_queue_Control *the_message_queue
-)
-{
-   return (Message_queue_Buffer_control *)
-     _Chain_Get( &the_message_queue->Inactive_messages );
-}
-
-/*PAGE
- *
- *  _Message_queue_Free_message_buffer
- *
- */
-
-STATIC INLINE void _Message_queue_Free_message_buffer (
-    Message_queue_Control        *the_message_queue,
-    Message_queue_Buffer_control *the_message
-)
-{
-  _Chain_Append( &the_message_queue->Inactive_messages, &the_message->Node );
-}
-
-/*PAGE
- *
- *  _Message_queue_Get_pending_message
- *
- */
-
-STATIC INLINE
-  Message_queue_Buffer_control *_Message_queue_Get_pending_message (
-  Message_queue_Control *the_message_queue
-)
-{
-  return (Message_queue_Buffer_control *)
-    _Chain_Get_unprotected( &the_message_queue->Pending_messages );
-}
-
-/*PAGE
- *
- *  _Message_queue_Append
- *
- */
-
-STATIC INLINE void _Message_queue_Append (
-  Message_queue_Control        *the_message_queue,
-  Message_queue_Buffer_control *the_message
-)
-{
-  _Chain_Append( &the_message_queue->Pending_messages, &the_message->Node );
-}
-
-/*PAGE
- *
- *  _Message_queue_Prepend
- *
- */
-
-STATIC INLINE void _Message_queue_Prepend (
-  Message_queue_Control        *the_message_queue,
-  Message_queue_Buffer_control *the_message
-)
-{
-  _Chain_Prepend(
-    &the_message_queue->Pending_messages,
-    &the_message->Node
-  );
-}
-
-/*PAGE
- *
  *  _Message_queue_Is_null
  *
  */
@@ -133,11 +43,6 @@ STATIC INLINE void _Message_queue_Free (
   Message_queue_Control *the_message_queue
 )
 {
-  if (the_message_queue->message_buffers) {
-    _Workspace_Free((void *) the_message_queue->message_buffers);
-    the_message_queue->message_buffers = 0;
-  }
-  
   _Objects_Free( &_Message_queue_Information, &the_message_queue->Object );
 }
 

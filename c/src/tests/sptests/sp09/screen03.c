@@ -30,7 +30,7 @@ void Screen3()
   status = rtems_task_create(
     0,
     1,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
@@ -60,7 +60,7 @@ void Screen3()
   status = rtems_task_create(
     Task_name[ 2 ],
     4,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 2 ]
@@ -87,7 +87,7 @@ void Screen3()
   status = rtems_task_create(
     Task_name[ 3 ],
     4,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 3 ]
@@ -98,7 +98,7 @@ void Screen3()
   status = rtems_task_create(
     Task_name[ 4 ],
     4,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 4 ]
@@ -109,7 +109,7 @@ void Screen3()
   status = rtems_task_create(
     Task_name[ 5 ],
     4,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 5 ]
@@ -120,7 +120,7 @@ void Screen3()
   status = rtems_task_create(
     Task_name[ 6 ],
     4,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 6 ]
@@ -131,7 +131,7 @@ void Screen3()
   status = rtems_task_create(
     Task_name[ 7 ],
     4,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 7 ]
@@ -142,7 +142,7 @@ void Screen3()
   status = rtems_task_create(
     Task_name[ 8 ],
     4,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 8 ]
@@ -153,7 +153,7 @@ void Screen3()
   status = rtems_task_create(
     Task_name[ 9 ],
     4,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 9 ]
@@ -164,7 +164,7 @@ void Screen3()
   status = rtems_task_create(
     Task_name[ 10 ],
     4,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 10 ]
@@ -175,7 +175,7 @@ void Screen3()
   status = rtems_task_create(
     task_name,
     4,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
@@ -190,7 +190,7 @@ void Screen3()
   status = rtems_task_create(
     task_name,
     4,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_GLOBAL,
     &Junk_id

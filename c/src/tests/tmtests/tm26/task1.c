@@ -72,7 +72,7 @@ rtems_task Init(
   status = rtems_task_create(
     rtems_build_name( 'F', 'P', '1', ' ' ),
     201,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_FLOATING_POINT,
     &task_id
@@ -85,7 +85,7 @@ rtems_task Init(
   status = rtems_task_create(
     rtems_build_name( 'F', 'P', '2', ' ' ),
     202,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_FLOATING_POINT,
     &task_id
@@ -98,7 +98,7 @@ rtems_task Init(
   status = rtems_task_create(
     rtems_build_name( 'L', 'O', 'W', ' ' ),
     200,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &task_id
@@ -111,7 +111,7 @@ rtems_task Init(
   status = rtems_task_create(
     rtems_build_name( 'M', 'I', 'D', ' ' ),
     128,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &task_id
@@ -124,7 +124,7 @@ rtems_task Init(
   status = rtems_task_create(
     rtems_build_name( 'H', 'I', 'G', 'H' ),
     5,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &task_id
@@ -147,7 +147,7 @@ rtems_task Init(
     status = rtems_task_create(
       rtems_build_name( 'N', 'U', 'L', 'L' ),
       254,
-      1024,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
       &task_id

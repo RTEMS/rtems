@@ -116,26 +116,26 @@ rtems_status_code rtems_semaphore_create(
   unsigned32                  lock;
 
   if ( !rtems_is_name_valid( name ) )
-    return ( RTEMS_INVALID_NAME );
+    return RTEMS_INVALID_NAME;
 
   if ( _Attributes_Is_global( attribute_set ) ) {
 
     if ( !_System_state_Is_multiprocessing )
-      return( RTEMS_MP_NOT_CONFIGURED );
+      return RTEMS_MP_NOT_CONFIGURED;
 
     if ( _Attributes_Is_inherit_priority( attribute_set ) )
-      return( RTEMS_NOT_DEFINED );
+      return RTEMS_NOT_DEFINED;
 
   } else if ( _Attributes_Is_inherit_priority( attribute_set ) ) {
 
     if ( ! ( _Attributes_Is_binary_semaphore( attribute_set ) &&
              _Attributes_Is_priority( attribute_set ) ) )
-      return( RTEMS_NOT_DEFINED );
+      return RTEMS_NOT_DEFINED;
 
   }
 
   if ( _Attributes_Is_binary_semaphore( attribute_set ) && ( count > 1 ) )
-    return( RTEMS_INVALID_NUMBER );
+    return RTEMS_INVALID_NUMBER;
 
   _Thread_Disable_dispatch();             /* prevents deletion */
 
@@ -143,7 +143,7 @@ rtems_status_code rtems_semaphore_create(
 
   if ( !the_semaphore ) {
     _Thread_Enable_dispatch();
-    return( RTEMS_TOO_MANY );
+    return RTEMS_TOO_MANY;
   }
 
   if ( _Attributes_Is_global( attribute_set ) &&
@@ -151,7 +151,7 @@ rtems_status_code rtems_semaphore_create(
                             the_semaphore->Object.id, FALSE ) ) ) {
     _Semaphore_Free( the_semaphore );
     _Thread_Enable_dispatch();
-    return( RTEMS_TOO_MANY );
+    return RTEMS_TOO_MANY;
   }
 
   the_semaphore->attribute_set = attribute_set;
@@ -210,7 +210,7 @@ rtems_status_code rtems_semaphore_create(
       0                          /* Not used */
     );
   _Thread_Enable_dispatch();
-  return( RTEMS_SUCCESSFUL );
+  return RTEMS_SUCCESSFUL;
 }
 
 /*PAGE
@@ -270,15 +270,15 @@ rtems_status_code rtems_semaphore_delete(
   the_semaphore = _Semaphore_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
-      return( RTEMS_ILLEGAL_ON_REMOTE_OBJECT );
+      return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
     case OBJECTS_LOCAL:
       if ( _Attributes_Is_binary_semaphore( the_semaphore->attribute_set) ) { 
         if ( _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex ) ) {
           _Thread_Enable_dispatch();
-          return( RTEMS_RESOURCE_IN_USE );
+          return RTEMS_RESOURCE_IN_USE;
         }
         else
           _CORE_mutex_Flush(
@@ -310,10 +310,10 @@ rtems_status_code rtems_semaphore_delete(
         );
       }
       _Thread_Enable_dispatch();
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -345,7 +345,7 @@ rtems_status_code rtems_semaphore_obtain(
   the_semaphore = _Semaphore_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
       return _Semaphore_MP_Send_request_packet(
           SEMAPHORE_MP_OBTAIN_REQUEST,
@@ -367,8 +367,8 @@ rtems_status_code rtems_semaphore_obtain(
           timeout
         );
         _Thread_Enable_dispatch();
-        return( _Semaphore_Translate_core_mutex_return_code( 
-                  _Thread_Executing->Wait.return_code ) );
+        return _Semaphore_Translate_core_mutex_return_code( 
+                  _Thread_Executing->Wait.return_code );
       } else {
         _CORE_semaphore_Seize(
           &the_semaphore->Core_control.semaphore,
@@ -377,12 +377,12 @@ rtems_status_code rtems_semaphore_obtain(
           timeout
         );
         _Thread_Enable_dispatch();
-        return( _Semaphore_Translate_core_semaphore_return_code( 
-                  _Thread_Executing->Wait.return_code ) );
+        return _Semaphore_Translate_core_semaphore_return_code( 
+                  _Thread_Executing->Wait.return_code );
       }
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -411,15 +411,13 @@ rtems_status_code rtems_semaphore_release(
   the_semaphore = _Semaphore_Get( id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      return( RTEMS_INVALID_ID );
+      return RTEMS_INVALID_ID;
     case OBJECTS_REMOTE:
-      return(
-        _Semaphore_MP_Send_request_packet(
-          SEMAPHORE_MP_RELEASE_REQUEST,
-          id,
-          0,                               /* Not used */
-          MPCI_DEFAULT_TIMEOUT
-        )
+      return _Semaphore_MP_Send_request_packet(
+        SEMAPHORE_MP_RELEASE_REQUEST,
+        id,
+        0,                               /* Not used */
+        MPCI_DEFAULT_TIMEOUT
       );
     case OBJECTS_LOCAL:
       if ( _Attributes_Is_binary_semaphore( the_semaphore->attribute_set ) ) {
@@ -429,7 +427,7 @@ rtems_status_code rtems_semaphore_release(
                          _Semaphore_Core_mutex_mp_support
                        );
         _Thread_Enable_dispatch();
-        return( _Semaphore_Translate_core_mutex_return_code( mutex_status ) );
+        return _Semaphore_Translate_core_mutex_return_code( mutex_status );
       }
       else
         semaphore_status = _CORE_semaphore_Surrender(
@@ -438,11 +436,11 @@ rtems_status_code rtems_semaphore_release(
                              _Semaphore_Core_semaphore_mp_support
                            );
         _Thread_Enable_dispatch();
-        return(
-          _Semaphore_Translate_core_semaphore_return_code( semaphore_status ) );
+        return
+          _Semaphore_Translate_core_semaphore_return_code( semaphore_status );
   }
 
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -463,26 +461,21 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
 {
   switch ( the_mutex_status ) {
     case  CORE_MUTEX_STATUS_SUCCESSFUL:
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
     case CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT:
-      return( RTEMS_UNSATISFIED );
+      return RTEMS_UNSATISFIED;
     case CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED:
-      return( RTEMS_INTERNAL_ERROR );
+      return RTEMS_INTERNAL_ERROR;
     case CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE:
-      return( RTEMS_NOT_OWNER_OF_RESOURCE );
+      return RTEMS_NOT_OWNER_OF_RESOURCE;
     case CORE_MUTEX_WAS_DELETED:
-      return( RTEMS_OBJECT_WAS_DELETED );
+      return RTEMS_OBJECT_WAS_DELETED;
     case CORE_MUTEX_TIMEOUT:
-      return( RTEMS_TIMEOUT );
+      return RTEMS_TIMEOUT;
     case THREAD_STATUS_PROXY_BLOCKING:
-      return( THREAD_STATUS_PROXY_BLOCKING );
+      return THREAD_STATUS_PROXY_BLOCKING;
   }
-  _Internal_error_Occurred(
-    INTERNAL_ERROR_RTEMS_API,
-    TRUE,
-    the_mutex_status
-  );
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
@@ -503,23 +496,17 @@ rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
 {
   switch ( the_semaphore_status ) {
     case  CORE_SEMAPHORE_STATUS_SUCCESSFUL:
-      return( RTEMS_SUCCESSFUL );
+      return RTEMS_SUCCESSFUL;
     case CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT:
-      return( RTEMS_UNSATISFIED );
+      return RTEMS_UNSATISFIED;
     case CORE_SEMAPHORE_WAS_DELETED:
-      return( RTEMS_OBJECT_WAS_DELETED );
+      return RTEMS_OBJECT_WAS_DELETED;
     case CORE_SEMAPHORE_TIMEOUT:
-      return( RTEMS_TIMEOUT );
+      return RTEMS_TIMEOUT;
     case THREAD_STATUS_PROXY_BLOCKING:
-      return( THREAD_STATUS_PROXY_BLOCKING );
+      return THREAD_STATUS_PROXY_BLOCKING;
   }
-  _Internal_error_Occurred(
-    INTERNAL_ERROR_RTEMS_API,
-    TRUE,
-    the_semaphore_status
-  );
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
-  return( RTEMS_INTERNAL_ERROR );   /* unreached - only to remove warnings */
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
 
 /*PAGE

@@ -19,10 +19,11 @@
 
 int main(
   int   argc,
-  char **argv
+  char **argv,
+  char **environp
 )
 {
-  bsp_start();
+  bsp_start( argc, argv, environp );
 
   /*
    *  May be able to return to the "crt/start.s" code but also

@@ -34,7 +34,7 @@ void _CPU_Initialize(
 )
 {
   register unsigned16  fp_status asm ("ax");
-  register unsigned8  *fp_context;
+  register void       *fp_context;
 
   _CPU_Table = *cpu_table;
 
@@ -56,7 +56,7 @@ void _CPU_Initialize(
 
   if ( fp_status ==  0 ) {
 
-    fp_context = _CPU_Null_fp_context;
+    fp_context = &_CPU_Null_fp_context;
 
     asm volatile( "fsave (%0)" : "=r" (fp_context)
                                : "0"  (fp_context)

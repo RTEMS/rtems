@@ -42,7 +42,7 @@ rtems_task Init(
   status = rtems_task_create(
     Task_name[ 1 ],
     BASE_PRIORITY,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 1 ]
@@ -52,7 +52,7 @@ rtems_task Init(
   status = rtems_task_create(
     Task_name[ 2 ],
     BASE_PRIORITY,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 2 ]
@@ -62,7 +62,7 @@ rtems_task Init(
   status = rtems_task_create(
     Task_name[ 3 ],
     BASE_PRIORITY,
-    2048,
+    RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Task_id[ 3 ]

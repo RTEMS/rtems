@@ -61,7 +61,7 @@ void test_init()
     status = rtems_task_create(
       rtems_build_name( 'T', 'I', 'M', 'E' ),
       10,
-      1024,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_NO_PREEMPT,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Task_id[ index ]
@@ -179,7 +179,7 @@ rtems_task High_task(
      rtems_task_create(
         name,
         10,
-        1024,
+        RTEMS_MINIMUM_STACK_SIZE,
         RTEMS_NO_PREEMPT,
         RTEMS_DEFAULT_ATTRIBUTES,
         &Task_id[ index ]
@@ -217,7 +217,7 @@ rtems_task High_task(
     status = rtems_task_create(
       name,
       250,
-      1024,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_NO_PREEMPT,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Task_id[ index ]
@@ -264,7 +264,7 @@ rtems_task High_task(
     status = rtems_task_create(
       name,
       250,
-      1024,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Task_id[ index ]
@@ -344,7 +344,7 @@ rtems_task Low_tasks(
     status = rtems_task_create(
       rtems_build_name( 'H', 'I', ' ', ' ' ),
       5,
-      2048,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
       &id
@@ -357,7 +357,7 @@ rtems_task Low_tasks(
     status = rtems_task_create(
       rtems_build_name( 'H', 'I', 'G', 'H' ),
       3,
-      2048,
+      RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
       &Highest_id

@@ -1,5 +1,5 @@
 /*
- *  HP PA-RISC CPU Dependent Source
+ *  UNIX Simulator Dependent Source
  *
  *
  *  To anyone who acknowledges that this file is provided "AS IS"
@@ -18,6 +18,7 @@
 
 #include <rtems/system.h>
 #include <rtems/core/isr.h>
+#include <rtems/core/interr.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -169,21 +170,16 @@ void _CPU_Context_From_CPU_Init()
    */
 
   _CPU_ISR_Set_level( 0 );
-  setjmp( _CPU_Context_Default_with_ISRs_enabled.regs );
-  sigprocmask(
-    SIG_SETMASK,    /* ignored when second arg is NULL */
-    0,
-    &_CPU_Context_Default_with_ISRs_enabled.isr_level
+  _CPU_Context_switch(
+    &_CPU_Context_Default_with_ISRs_enabled,
+    &_CPU_Context_Default_with_ISRs_enabled
   );
 
   _CPU_ISR_Set_level( 1 );
-  setjmp( _CPU_Context_Default_with_ISRs_disabled.regs );
-  sigprocmask(
-    SIG_SETMASK,    /* ignored when second arg is NULL */
-    0,
-    &_CPU_Context_Default_with_ISRs_disabled.isr_level
+  _CPU_Context_switch(
+    &_CPU_Context_Default_with_ISRs_disabled,
+    &_CPU_Context_Default_with_ISRs_disabled
   );
-
 }
 
 /*PAGE
@@ -191,21 +187,21 @@ void _CPU_Context_From_CPU_Init()
  *  _CPU_ISR_Get_level
  */
 
+sigset_t GET_old_mask;
+
 unsigned32 _CPU_ISR_Get_level( void )
 {
-  sigset_t sigset;
+/*  sigset_t  old_mask; */
+   unsigned32 old_level;
  
-  sigprocmask( 0, 0, &sigset ); 
+  sigprocmask(0, 0, &GET_old_mask);
+ 
+  if (memcmp((void *)&posix_empty_mask, (void *)&GET_old_mask, sizeof(sigset_t)))
+    old_level = 1;
+  else 
+    old_level = 0;
 
-  /*
-   *  This is an educated guess based on ONLY ONE of the signals we
-   *  disable/enable to mask ISRs.
-   */
-
-  if ( sigismember( &sigset, SIGUSR1 ) )
-    return 1;
-  else
-    return 0;
+  return old_level;
 }
 
 /*  _CPU_Initialize
@@ -383,7 +379,7 @@ void _CPU_Context_Initialize(
   else
     source = _CPU_Context_Default_with_ISRs_disabled.regs;
       
-  memcpy(_the_context, source, sizeof(jmp_buf));
+  memcpy(_the_context, source, sizeof(Context_Control) ); /* sizeof(jmp_buf)); */
 
   addr = (unsigned32 *)_the_context;
 
@@ -470,15 +466,30 @@ void _CPU_Context_switch(
   Context_Control  *next
 )
 {
+  int status;
+
   /*
    *  Switch levels in one operation
    */
 
-  sigprocmask( SIG_SETMASK, &next->isr_level, &current->isr_level );
+  status = sigprocmask( SIG_SETMASK, &next->isr_level, &current->isr_level );
+  if ( status )
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      status
+    );
 
   if (setjmp(current->regs) == 0) {    /* Save the current context */
      longjmp(next->regs, 0);           /* Switch to the new context */
+     if ( status )
+       _Internal_error_Occurred(
+         INTERNAL_ERROR_CORE,
+         TRUE,
+         status
+       );
   }
+
 }
  
 /*PAGE
@@ -510,11 +521,18 @@ void _CPU_Restore_float_context(
 
 unsigned32 _CPU_ISR_Disable_support(void)
 {
+  int status;
   sigset_t  old_mask;
 
-  sigprocmask(SIG_BLOCK, &_CPU_Signal_mask, &old_mask);
+  status = sigprocmask(SIG_BLOCK, &_CPU_Signal_mask, &old_mask);
+  if ( status )
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      status
+    );
 
-  if (memcmp((void *)&posix_empty_mask, (void *)&old_mask, sizeof(sigset_t)) != 0)
+  if (memcmp((void *)&posix_empty_mask, (void *)&old_mask, sizeof(sigset_t)))
     return 1;
 
   return 0;
@@ -529,10 +547,19 @@ void _CPU_ISR_Enable(
   unsigned32 level
 )
 {
+  int status;
+
   if (level == 0)
-    sigprocmask(SIG_UNBLOCK, &_CPU_Signal_mask, 0);
+    status = sigprocmask(SIG_UNBLOCK, &_CPU_Signal_mask, 0);
   else
-    sigprocmask(SIG_BLOCK, &_CPU_Signal_mask, 0);
+    status = sigprocmask(SIG_BLOCK, &_CPU_Signal_mask, 0);
+
+  if ( status )
+    _Internal_error_Occurred(
+      INTERNAL_ERROR_CORE,
+      TRUE,
+      status
+    );
 }
 
 /*PAGE

@@ -147,11 +147,9 @@ EXTERN void               *_CPU_Interrupt_stack_high;
 
 /*
  *  Minimum size of a thread's stack.
- *
- *  NOTE:  256 bytes is probably too low in most cases.
  */
 
-#define CPU_STACK_MINIMUM_SIZE          256
+#define CPU_STACK_MINIMUM_SIZE          1024
 
 /*
  *  i386 is pretty tolerant of alignment.  Just put things on 4 byte boundaries.
@@ -232,8 +230,8 @@ unsigned32 _CPU_ISR_Get_level( void );
 
 #define _CPU_Context_Initialize_fp( _fp_area ) \
   { \
-    unsigned32 *_source      = (unsigned32 *) _CPU_Null_fp_context; \
-    unsigned32 *_destination = (unsigned32 *) *(_fp_area); \
+    unsigned32 *_source      = (unsigned32 *) &_CPU_Null_fp_context; \
+    unsigned32 *_destination = *(_fp_area); \
     unsigned32  _index; \
     \
     for ( _index=0 ; _index < CPU_CONTEXT_FP_SIZE/4 ; _index++ ) \
