@@ -1,3 +1,8 @@
+2003-02-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove references to obsoleted files
+	aclocal/enable-gcc28.m4, aclocal/enable-libcdir.m4.
+
 2003-02-14	Joel Sherrill <joel@OARcorp.com>
 
 	* README.configure, aclocal/rtems-cpu-subdirs.m4: Remove a29k
