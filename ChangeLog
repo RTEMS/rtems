@@ -1,5 +1,6 @@
 2003-06-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* bootstrap: Reflect having added config.sub. 
 	* config.sub: New from subversions to accomodate c4x/tic4x.
 
 2003-06-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
