@@ -190,7 +190,6 @@ void bsp_pretasking_hook(void)
 {
     uint32_t        heap_start=heapStart();    
     uint32_t        heap_size,heap_sbrk_spared;
-    char		    *buf;
     extern uint32_t _bsp_sbrk_init(uint32_t, uint32_t*);
 
     heap_size = (BSP_mem_size - heap_start) - BSP_Configuration.work_space_size;
@@ -326,12 +325,21 @@ void config_enable_L3CR(unsigned l3cr)
 
 void bsp_start( void )
 {
+#ifdef CONF_VPD
   int i;
+#endif
   unsigned char *stack;
   unsigned long	 *r1sp;
-  unsigned l1cr, l2cr, l3cr;
+#ifdef SHOW_LCR1_REGISTER
+  unsigned l1cr;
+#endif
+#ifdef SHOW_LCR2_REGISTER
+  unsigned l2cr;
+#endif
+#ifdef SHOW_LCR3_REGISTER
+  unsigned l3cr;
+#endif
   register unsigned char* intrStack;
-  register unsigned int intrNestingLevel = 0;
   unsigned char *work_space_start;
   ppc_cpu_id_t myCpu;
   ppc_cpu_revision_t myCpuRevision;
