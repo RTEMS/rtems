@@ -35,7 +35,9 @@ typedef enum
   PPC_821 = PPC_860,
   PPC_823 = PPC_860,
   PPC_8260 = 0x81,
-  PPC_UNKNOWN = 0xff
+  PPC_8240 = PPC_8260,
+  PPC_8245 = 0x8081,
+  PPC_UNKNOWN = 0xffff
 } ppc_cpu_id_t;
 
 typedef unsigned short ppc_cpu_revision_t;

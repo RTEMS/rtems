@@ -38,6 +38,7 @@
 #define PPC_860   0x50
 #define PPC_821   PPC_860
 #define PPC_8260  0x81
+#define PPC_8240  PPC_8260 
 
 /* ALTIVEC instructions (not recognized by off-the shelf gcc yet) */
 #define DSSALL	.long	0x7e00066c		/* DSSALL altivec instruction opcode */
@@ -47,8 +48,6 @@
 
 #ifndef MSSCR0
 #define MSSCR0   1014
-#else
-#warning MSSCR0 seems to be known, update __FILE__
 #endif
 
 #define DL1HWF	(1<<(31-8))
