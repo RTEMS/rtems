@@ -14,9 +14,9 @@
 #include <rtems.h>
 #include "system.h"
 #include "fptest.h"
-#include "coverhd.h"
-#include "tmacros.h"
-#include "timesys.h"
+#include <coverhd.h>
+#include <tmacros.h>
+#include <timesys.h>
 
 #undef EXTERN
 #define EXTERN
@@ -234,6 +234,8 @@ rtems_task Middle_task(
 
   _Context_Switch_necessary = FALSE;
 
+  _Thread_Disable_dispatch();
+
   Timer_initialize();
     _Context_Switch( &Middle_tcb->Registers, &_Thread_Executing->Registers );
 }
@@ -262,6 +264,8 @@ rtems_task Low_task(
   /* do not force context switch */
 
   _Context_Switch_necessary = FALSE;
+
+  _Thread_Disable_dispatch();
 
   Timer_initialize();
     _Context_Restore_fp( &_Thread_Executing->fp_context );
@@ -294,6 +298,8 @@ rtems_task Floating_point_task_1(
 
   _Context_Switch_necessary = FALSE;
 
+  _Thread_Disable_dispatch();
+
   Timer_initialize();
     _Context_Save_fp( &executing->fp_context );
     _Context_Restore_fp( &_Thread_Executing->fp_context );
@@ -320,6 +326,8 @@ rtems_task Floating_point_task_1(
   /* do not force context switch */
 
   _Context_Switch_necessary = FALSE;
+
+  _Thread_Disable_dispatch();
 
   Timer_initialize();
     _Context_Save_fp( &executing->fp_context );
@@ -355,6 +363,8 @@ rtems_task Floating_point_task_2(
   /* do not force context switch */
 
   _Context_Switch_necessary = FALSE;
+
+  _Thread_Disable_dispatch();
 
   Timer_initialize();
     _Context_Save_fp( &executing->fp_context );
