@@ -1,3 +1,7 @@
+2002-11-06	Chris Johns <ccj@acm.org>
+
+	* sys/select.h: Add C++ to C external.
+
 2002-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* kern/uipc_mbuf.c: Comment out m0 in m_copydata to suppress
