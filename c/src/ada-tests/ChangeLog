@@ -1,3 +1,14 @@
+2003-07-18	Joel Sherrill <joel@OARcorp.com>
+
+	PR 426/ada
+	* configure.ac, samples/Makefile.am: Remove base_mp from 4.6 branch.
+	* samples/base_mp/.cvsignore, samples/base_mp/Makefile.am,
+	samples/base_mp/config.h, samples/base_mp/mptest.adb,
+	samples/base_mp/mptest.ads, samples/base_mp/node1/.cvsignore,
+	samples/base_mp/node1/Makefile.am, samples/base_mp/node1/base_mp.scn,
+	samples/base_mp/node2/.cvsignore, samples/base_mp/node2/Makefile.am,
+	samples/base_mp/node2/base_mp.scn: Removed.
+
 2003-07-17	Joel Sherrill <joel@OARcorp.com>
 
 	PR 425/ada

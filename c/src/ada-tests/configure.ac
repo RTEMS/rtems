@@ -50,14 +50,6 @@ samples/hello/Makefile
 samples/ticker/Makefile
 ])
 
-if test "$HAS_MP" = "yes"; then
-AC_CONFIG_FILES([
-samples/base_mp/Makefile
-samples/base_mp/node1/Makefile
-samples/base_mp/node2/Makefile
-])
-fi
-
 AC_CONFIG_FILES([
 sptests/Makefile
 sptests/sp01/Makefile
