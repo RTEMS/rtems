@@ -18,8 +18,8 @@ include_ide_HEADERS = ata.h ide_ctrl_cfg.h ide_ctrl.h ide_ctrl_io.h
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../../automake/compile.am
+include $(top_srcdir)/../../automake/lib.am
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/libchip \
     $(include_ide_HEADERS:%=$(PROJECT_INCLUDE)/libchip/%)
@@ -36,5 +36,5 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
 
 EXTRA_DIST = $(C_FILES)
 
-include $(top_srcdir)/../../../automake/subdirs.am
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../automake/subdirs.am
+include $(top_srcdir)/../../automake/local.am

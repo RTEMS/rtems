@@ -13,8 +13,8 @@ OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_libchip_HEADERS = cs8900.h i82586var.h if_fxpvar.h sonic.h if_media.h mii.h
 
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../../automake/compile.am
+include $(top_srcdir)/../../automake/lib.am
 
 $(PROJECT_INCLUDE)/libchip:
 	@$(mkinstalldirs) $@
@@ -49,4 +49,4 @@ endif
 EXTRA_DIST = README README.cs8900 README.dec21140 README.i82586 README.sonic \
     cs8900.c cs8900.c.bsp dec21140.c i82586.c if_fxp.c sonic.c
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../automake/local.am
