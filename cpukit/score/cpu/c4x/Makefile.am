@@ -1,6 +1,6 @@
-## 
+##
 ## $Id$
-## 
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
@@ -18,6 +18,7 @@ S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 REL = $(ARCH)/rtems-cpu.rel
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
 rtems_cpu_rel_OBJECTS = $(C_O_FILES) $(S_O_FILES)
@@ -38,7 +39,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%=$(PROJECT_INCLUDE)/%)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
+    $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(REL)
 
