@@ -1,5 +1,10 @@
 2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/src/eventsurrender.c: Remove bogus type casts.
+	* sapi/Makefile.am: Eliminate *_FILES.
+
+2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* aclocal/env-rtemscpu.m4: Remove CFLAGS_OPTIMIZE_V.
 	Remove CPU_CFLAGS.
 	* aclocal/prog-cc.m4: Don't invoke _RTEMS_FLAGS to set up

@@ -21,17 +21,13 @@ include_rtems_HEADERS += macros/rtems/extension.inl
 endif
 
 ## src
-
-EXTENSION_FILES = src/extension.c src/extensioncreate.c \
-    src/extensiondelete.c src/extensionident.c
-C_FILES = src/debug.c $(EXTENSION_FILES) src/fatal.c src/exinit.c src/io.c \
-    src/itronapi.c src/posixapi.c src/rtemsapi.c
-
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
 noinst_LIBRARIES = libsapi.a
-libsapi_a_SOURCES = $(C_FILES)
+libsapi_a_SOURCES = src/debug.c src/extension.c src/extensioncreate.c \
+    src/extensiondelete.c src/extensionident.c src/fatal.c src/exinit.c \
+    src/io.c src/itronapi.c src/posixapi.c src/rtemsapi.c
 libsapi_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
 all-local: $(PREINSTALL_FILES)
