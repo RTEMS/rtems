@@ -12,64 +12,18 @@
 @chapter Example Application
 
 @example
-/*  example.c
- *
+/*
  *  This file contains an example of a simple RTEMS
- *  application.  It contains a Configuration Table, a
- *  user initialization task, and a simple task.
+ *  application.  It instantiates the RTEMS Configuration 
+ *  Information using confdef.h and contains two tasks:
+ *  a *  user initialization task and a simple task.
  *
  *  This example assumes that a board support package exists.
- *
- *  Most applications will actually use the confdefs.h method
- *  to generate their configuration.  This is provided primarily
- *  for reference.
  */
 
-#include "rtems.h"
+#include <rtems.h>
 
-rtems_task init_task();
-
-#define INIT_NAME      rtems_build_name( 'A', 'B', 'C', ' ' ' )
-
-rtems_initialization_tasks_table init_task = @{
-  @{ INIT_NAME,          /* init task name  "ABC" */
-    1024,               /* init task stack size */
-    1,                  /* init task priority */
-    DEFAULT_ATTRIBUTES, /* init task attributes */
-    init_task,          /* init task entry point */
-    TIMESLICE,          /* init task initial mode */
-    0                   /* init task argument */
-  @}
-@};
-
-rtems_configuration_table User_Configuration_Table = @{
-  NULL,                 /* dynamically assigned by the BSP */
-  65536,                /* executive RAM size */
-  2,                    /* maximum tasks */
-  0,                    /* maximum timers */
-  0,                    /* maximum semaphores */
-  0,                    /* maximum message queues */
-  0,                    /* maximum messages */
-  0,                    /* maximum partitions */
-  0,                    /* maximum regions */
-  0,                    /* maximum ports */
-  0,                    /* maximum periods */
-  0,                    /* maximum extensions */
-  RTEMS_MILLISECONDS_TO_MICROSECONDS(10), /* number of ms in a tick */
-  1,                    /* num of ticks in a timeslice  */
-  1,                    /* number of user init tasks    */
-  init_task_tbl,        /* user init task(s) table      */
-  0,                    /* number of device drivers     */
-  NULL,                 /* ptr to driver address table  */
-  NULL,                 /* ptr to extension table */
-  NULL                  /* ptr to MP config table */
-@};
-
-task user_application(
-  rtems_task_argument ignored
-);
-
-#define USER_APP_NAME  1  /* any 32-bit name; unique helps */
+rtems_task user_application(rtems_task_argument argument);
 
 rtems_task init_task(
   rtems_task_argument ignored
@@ -79,16 +33,14 @@ rtems_task init_task(
 
   /* example assumes SUCCESSFUL return value */
 
-  (void) rtems_task_create( USER_APP_NAME, 1, 1024,
+  (void) rtems_task_create( USER_APP_NAME, 1, RTEMS_MINIMUM_STACK_SIZE,
                         RTEMS_NO_PREEMPT, RTEMS_FLOATING_POINT, &tid );
   (void) rtems_task_start( tid, user_application, 0 );
   (void) rtems_task_delete( SELF );
 @}
 
 
-
-rtems_task user_application()
-
+rtems_task user_application(rtems_task_argument argument)
 @{
   /* application specific initialization goes here */
 
@@ -102,6 +54,16 @@ rtems_task user_application()
      */
   @}
 @}
+
+#define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER  /* for stdio */
+#define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER    /* for time services */
+
+#define CONFIGURE_INIT_TASK_NAME rtems_build_name( 'E', 'X', 'A', 'M' )
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT
+
+#include <confdefs.h>
 @end example
 
 
