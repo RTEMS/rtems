@@ -55,11 +55,10 @@ ${LIB}: ${SRCS} ${OBJS}
 	$(make-library)
 
 preinstall :
-	$(MKDIR) $(PROJECT_INCLUDE)/libcpu
 	$(INSTALL_CHANGE) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/libcpu
 
 all:	${ARCH} $(SRCS) preinstall $(OBJ) $(LIB)
-	cd wrapup; $(MAKE)
+	# cd wrapup; $(MAKE)
 
 # the .rel file built here will be put into libcpu.a by ../wrapup/Makefile
 install:  all
