@@ -117,7 +117,7 @@ rtems_blkdev_generic_write(
         bdbuf_buffer *diskbuf;
         int copy;
         
-        if ((blkofs == 0) && (count > block_size))
+        if ((blkofs == 0) && (count >= block_size))
             rc = rtems_bdbuf_get(dev, block, &diskbuf);
         else
             rc = rtems_bdbuf_read(dev, block, &diskbuf);
