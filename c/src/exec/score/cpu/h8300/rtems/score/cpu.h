@@ -427,7 +427,7 @@ typedef struct {
   boolean      do_zero_of_workspace;
   unsigned32   idle_task_stack_size;
   unsigned32   interrupt_stack_size;
-  unsigned32   extra_system_initialization_stack;
+  unsigned32   extra_mpci_receive_server_stack;
   void *     (*stack_allocate_hook)( unsigned32 );
   void       (*stack_free_hook)( void* );
 }   rtems_cpu_table;
