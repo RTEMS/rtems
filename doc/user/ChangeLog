@@ -1,3 +1,7 @@
+2002-04-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* io.t: Fix typo @sybsection.
+
 2002-03-27	Eric Norum <eric.norum@usask.ca>
 
         * intr.t: Per PR165, now correctly states that passing a NULL 

@@ -123,7 +123,7 @@ Although the RTEMS I/O manager provides a framework
 for device drivers, it makes no assumptions regarding the
 construction or operation of a device driver.
 
-@sybsection Runtime Driver Registration
+@subsection Runtime Driver Registration
 
 @cindex runtime driver registration
 
