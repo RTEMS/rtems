@@ -29,7 +29,7 @@ where the options are:
 @itemize @bullet
 
 @item -N and -P take care of adding and removing files (be careful not to
->include junk files like file.mybackup)
+include junk files like file.mybackup)
 
 @item -r tells diff to recurse through subdirectories
 
