@@ -25,7 +25,7 @@ The reference implementation for an IDE Controller driver can
 be found in @code{$RTEMS_SRC_ROOT/c/src/libchip/ide}. This driver
 is based on the libchip concept and allows to work with any of the IDE 
 Controller chips simply by appropriate configuration of BSP. Drivers for a
-paticular IDE Controller chips locate in the following directories: drivers
+particular IDE Controller chips locate in the following directories: drivers
 for well-known IDE Controller chips locate into
 @code{$RTEMS_SRC_ROOT/c/src/libchip/ide}, drivers for IDE Controller chips
 integrated with CPU locate into
@@ -38,7 +38,7 @@ for that particular IDE Controller chip.
 
 @section Initialization
 
-IDE Controller chips used by a BSP are statically confiured into
+IDE Controller chips used by a BSP are statically configured into
 @code{IDE_Controller_Table}. The @code{ide_controller_initialize} routine is 
 responsible for initialization of all configured IDE controller chips.
 Initialization order of the chips based on the order the chips are defined in 
@@ -56,7 +56,7 @@ rtems_device_driver ide_controller_initialize(
 )
 @{
    for each IDE Controller chip configured in IDE_Controller_Table
-     if (BSP dependant probe(if exists) AND device probe for this IDE chip 
+     if (BSP dependent probe(if exists) AND device probe for this IDE chip 
         indicates it is present)
        perform initialization of the particular chip
        register device with configured name for this chip
@@ -73,7 +73,7 @@ number. This routine is not allowed to be called from an application.
 @example
 @group
 void ide_controller_read_register(rtems_device_minor_number minor,
-                                  unsigned32 reg, unsiged32 *value)
+                                  unsigned32 reg, unsigned32 *value)
 @{
   get IDE Controller chip configuration information from
   IDE_Controller_Table by minor number
@@ -92,7 +92,7 @@ number. This routine is not allowed to be called from an application.
 @example
 @group
 void ide_controller_write_register(rtems_device_minor_number minor,
-                                   unsigned32 reg, unsiged32 value)
+                                   unsigned32 reg, unsigned32 value)
 @{
   get IDE Controller chip configuration information from
   IDE_Controller_Table by minor number

@@ -1,3 +1,7 @@
+2003-08-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ide-ctrl.t: Merger from 4.6-branch.
+
 2003-01-28	Joel Sherrill <joel@OARcorp.com>
 
 	* makefiles.t, support.t: Updated to reflect use of automake in
