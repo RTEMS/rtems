@@ -53,7 +53,7 @@ LDFLAGS   +=
 #  'make clobber' already includes 'make clean'
 #
 
-CLEAN_ADDITIONS +=
+CLEAN_ADDITIONS += scitab.c
 CLOBBER_ADDITIONS +=
 
 $(PGM): $(SRCS) ${OBJS}
