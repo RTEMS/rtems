@@ -73,11 +73,15 @@ TIME_C_PIECES= time posixtimespecsubtract posixtimespectointerval \
     posixintervaltotimespec clockgetcpuclockid clockgetenableattr \
     clockgetres clockgettime clocksetenableattr clocksettime nanosleep
 
+# the timer manager needs to be split further but only after its
+# dependence on the Classic API Timer Manager is removed.
+TIMER_C_PIECES=ptimer ptimer1
+
 C_PIECES = adasupp $(CANCEL_C_PIECES) $(CONDITION_VARIABLE_C_PIECES) \
     getpid $(KEY_C_PIECES) $(MESSAGE_QUEUE_C_PIECES) \
     $(MUTEX_C_PIECES) $(PTHREAD_C_PIECES) \
-    $(PSIGNAL_C_PIECES) ptimer sched $(SEMAPHORE_C_PIECES) \
-    $(TIME_C_PIECES) types unistd $(ENOSYS_C_PIECES) \
+    $(PSIGNAL_C_PIECES) sched $(SEMAPHORE_C_PIECES) \
+    $(TIME_C_PIECES) $(TIMER_C_PIECES) types unistd $(ENOSYS_C_PIECES) \
     $(BUILD_FOR_NOW_C_PIECES)
 
 C_FILES = $(C_PIECES:%=%.c)
