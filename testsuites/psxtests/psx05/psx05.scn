@@ -8,27 +8,23 @@ Init: mutex process shared is (0) -- PTHREAD_PROCESS_PRIVATE
 Init: pthread_mutexattr_destroy - SUCCESSFUL
 Init: pthread_mutexattr_destroy - EINVAL (NULL attr)
 Init: pthread_mutexattr_destroy - EINVAL (not initialized)
- 
 Init: pthread_mutexattr_getpshared - EINVAL (NULL attr)
 Init: pthread_mutexattr_getpshared - EINVAL (NULL pshared)
 Init: pthread_mutexattr_getpshared - EINVAL (not initialized)
 Init: pthread_mutexattr_setpshared - EINVAL (NULL attr)
 Init: pthread_mutexattr_setpshared - EINVAL (not initialized)
- 
 Init: pthread_mutexattr_getprotocol - EINVAL (NULL attr)
 Init: pthread_mutexattr_getprotocol - EINVAL (NULL protocol)
 Init: pthread_mutexattr_getprotocol - EINVAL (not initialized)
 Init: pthread_mutexattr_setprotocol - EINVAL (NULL attr)
 Init: pthread_mutexattr_setprotocol - EINVAL (invalid protocol)
 Init: pthread_mutexattr_setprotocol - EINVAL (not initialized)
- 
 Init: pthread_mutexattr_getprioceiling - EINVAL (NULL attr)
 Init: pthread_mutexattr_getprioceiling - EINVAL (NULL prioceiling)
 Init: pthread_mutexattr_getprioceiling - EINVAL (not initialized)
 Init: pthread_mutexattr_setprioceiling - EINVAL (NULL attr)
 Init: pthread_mutexattr_setprioceiling - EINVAL (invalid priority)
 Init: pthread_mutexattr_setprioceiling - EINVAL (not initialized)
- 
 Init: pthread_mutex_init - EINVAL (NULL mutex_id)
 Init: pthread_mutex_init - EINVAL (not initialized attr)
 Init: pthread_mutex_init - EINVAL (bad protocol)
@@ -55,20 +51,17 @@ Init: pthread_mutex_timedlock - time out in 1/2 second
 Task: mutex acquired
 Task: sleep for 2 seconds
 Init: pthread_mutex_timedlock - EAGAIN (timeout)
- 
 Init: pthread_mutex_init - SUCCESSFUL
 Init: pthread_mutex_init - EAGAIN (too many)
 Init: pthread_mutexattr_destroy - SUCCESSFUL
 Init: pthread_mutex_destroy - SUCCESSFUL
 Init: pthread_mutex_destroy - EINVAL (invalid id)
- 
 Init: pthread_mutexattr_init - SUCCESSFUL
 Init: pthread_mutex_init - SUCCESSFUL
 Init: pthread_mutex_trylock - SUCCESSFUL
 Init: pthread_mutex_destroy - EBUSY (already locked)
 Init: pthread_mutex_unlock - SUCCESSFUL
 Init: pthread_mutex_destroy - SUCCESSFUL
- 
 Init: pthread_mutexattr_init - SUCCESSFUL
 Init: pthread_mutexattr_setprotocol - SUCCESSFUL (PTHREAD_PRIO_INHERIT)
 Init: pthread_mutex_init - SUCCESSFUL
@@ -82,7 +75,6 @@ Task 2: unlock Mutex 2
 Task 2: exit
 Init: pthread_mutexattr_destroy - SUCCESSFUL
 Init: pthread_mutex_destroy - SUCCESSFUL
- 
 Init: pthread_mutexattr_init - SUCCESSFUL
 Init: pthread_mutexattr_setprotocol - SUCCESSFUL (PTHREAD_PRIO_PROTECT)
 Init: pthread_mutex_init - SUCCESSFUL
@@ -93,7 +85,7 @@ Init: pthread_mutex_setprioceiling - EINVAL (invalid id)
 Init: pthread_mutex_setprioceiling - EINVAL (illegal priority)
 Init: pthread_mutex_setprioceiling - EINVAL (NULL ceiling)
 Init: pthread_mutex_setprioceiling - new ceiling = 200
-Init: pthread_mutex_setprioceiling - old ceiling = 1
+Init: pthread_mutex_setprioceiling - old ceiling = 254
 Init: pthread_getschedparam - priority = 2
 Init: pthread_mutex_trylock - SUCCESSFUL
 Init: pthread_getschedparam - priority = 200
