@@ -4,36 +4,33 @@
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES.
-	Add PREINSTALL_FILES to CLEANFILES.
-	Add cpuopts.h to DISTCLEANFILES.
+	* Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
+	PREINSTALL_FILES to CLEANFILES. Add cpuopts.h to DISTCLEANFILES.
 
-2004-01-12  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* cpu/Makefile.am: Use @RTEMS_CPU@ instead of $(RTEMS_CPU).
 
-2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-01-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include compile.am, again.
-
-2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* macros/rtems/score/README: Remove (Redundant with macros/README).
 
-2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2004-01-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Add libs to CLEANFILES
-	Set lib*_g_a_SOURCES = lib*_a_SOURCES.
-
-2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* Makefile.am: Add libs to CLEANFILES Set lib*_g_a_SOURCES =
+	lib*_a_SOURCES.
 	* Makefile.am: Build libscore$(LIB_VARIANT).a instead of
 	$(ARCH)/libscore.a.
 
+2004-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Build library using EXTRA_LIBRARIES and automake rules.
+
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
-	* cpu/Makefile.am: mips64orion port removed as mips port more
-	completely covers the MIPS family.
+	* cpu/Makefile.am: mips64orion port removed as mips port more completely
+	covers the MIPS family.
 	* cpu/mips64orion/.cvsignore, cpu/mips64orion/ChangeLog,
 	cpu/mips64orion/Makefile.am, cpu/mips64orion/asm.h,
 	cpu/mips64orion/configure.ac, cpu/mips64orion/cpu.c,
@@ -44,10 +41,6 @@
 	cpu/mips64orion/rtems/score/cpu.h,
 	cpu/mips64orion/rtems/score/mips64orion.h,
 	cpu/mips64orion/rtems/score/types.h: Removed.
-
-2004-01-07  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Build library using EXTRA_LIBRARIES and automake rules.
 
 2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -67,17 +60,13 @@
 2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add $(dirstamp) to compilation rules.
-
-2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Add $(dirstamp) to preinstallation rules.
-	Remove MACROS.
+	* Makefile.am: Add $(dirstamp) to preinstallation rules. Remove MACROS.
 
 2003-11-25	Joel Sherrill <joel@OARcorp.com>
 
 	PR 526/rtems
-	* src/threadcreateidle.c: Idle task name should be a string and
-	PR484 broke this.
+	* src/threadcreateidle.c: Idle task name should be a string and PR484
+	broke this.
 
 2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -88,16 +77,12 @@
 	* src/chain.c: Ditto.
 	* src/coremutexseize.c: Ditto.
 	* src/threadget.c: Ditto.
-
-2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
 	* Makefile.am: Don't use gmake to preinstall.
 
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* src/coremsgseize.c, src/coremsgsubmit.c:
-	Remove unnecessary typecasts in assignments to 
-	thread->Wait.return_argument.
+	* src/coremsgseize.c, src/coremsgsubmit.c: Remove unnecessary typecasts
+	in assignments to  thread->Wait.return_argument.
 
 2003-10-02	Phil Torre <ptorre@zetron.com>
 
@@ -121,132 +106,127 @@
 	Thread_Control_struct.libc_reent to using struct _reent*.
 	* inline/rtems/score/thread.inl: Reflect change above.
 
+2003-09-08	Mikec Ivica <mikici@acm.org>
+
+	* inline/rtems/score/userext.inl, macros/rtems/score/userext.inl: Add
+	missing cast.
+
 2003-09-08	Derick Hammond <derick@perkinstechnologies.com.au>
 
 	PR 484/rtems
 	* src/threadcreateidle.c: Idle task name was initialized incorrectly.
 
-2003-09-08	Mikec Ivica <mikici@acm.org>
-
-	* inline/rtems/score/userext.inl, macros/rtems/score/userext.inl:
-	Add missing cast.
-
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
-	* include/rtems/debug.h, include/rtems/seterr.h,
-	include/rtems/system.h, include/rtems/score/address.h,
-	include/rtems/score/apiext.h, include/rtems/score/apimutex.h,
-	include/rtems/score/bitfield.h, include/rtems/score/chain.h,
-	include/rtems/score/context.h, include/rtems/score/copyrt.h,
-	include/rtems/score/coremsg.h, include/rtems/score/coremutex.h,
-	include/rtems/score/coresem.h, include/rtems/score/heap.h,
-	include/rtems/score/interr.h, include/rtems/score/isr.h,
-	include/rtems/score/mpci.h, include/rtems/score/mppkt.h,
-	include/rtems/score/object.h, include/rtems/score/objectmp.h,
-	include/rtems/score/priority.h, include/rtems/score/stack.h,
-	include/rtems/score/states.h, include/rtems/score/sysstate.h,
-	include/rtems/score/thread.h, include/rtems/score/threadmp.h,
-	include/rtems/score/threadq.h, include/rtems/score/tod.h,
-	include/rtems/score/tqdata.h, include/rtems/score/userext.h,
-	include/rtems/score/watchdog.h, include/rtems/score/wkspace.h,
-	inline/rtems/score/address.inl, inline/rtems/score/chain.inl,
-	inline/rtems/score/coremsg.inl, inline/rtems/score/coremutex.inl,
-	inline/rtems/score/coresem.inl, inline/rtems/score/heap.inl,
-	inline/rtems/score/isr.inl, inline/rtems/score/mppkt.inl,
-	inline/rtems/score/object.inl, inline/rtems/score/objectmp.inl,
-	inline/rtems/score/priority.inl, inline/rtems/score/stack.inl,
-	inline/rtems/score/states.inl, inline/rtems/score/sysstate.inl,
-	inline/rtems/score/thread.inl, inline/rtems/score/threadmp.inl,
-	inline/rtems/score/tod.inl, inline/rtems/score/tqdata.inl,
-	inline/rtems/score/userext.inl, inline/rtems/score/watchdog.inl,
-	inline/rtems/score/wkspace.inl, macros/rtems/score/address.inl,
-	macros/rtems/score/chain.inl, macros/rtems/score/coremsg.inl,
-	macros/rtems/score/coremutex.inl, macros/rtems/score/coresem.inl,
-	macros/rtems/score/heap.inl, macros/rtems/score/isr.inl,
-	macros/rtems/score/mppkt.inl, macros/rtems/score/object.inl,
-	macros/rtems/score/objectmp.inl, macros/rtems/score/priority.inl,
-	macros/rtems/score/stack.inl, macros/rtems/score/states.inl,
-	macros/rtems/score/sysstate.inl, macros/rtems/score/thread.inl,
-	macros/rtems/score/threadmp.inl, macros/rtems/score/tod.inl,
-	macros/rtems/score/tqdata.inl, macros/rtems/score/userext.inl,
-	macros/rtems/score/watchdog.inl, macros/rtems/score/wkspace.inl,
-	src/apiext.c, src/chain.c, src/coremsg.c, src/coremsgbroadcast.c,
-	src/coremsgclose.c, src/coremsgflush.c, src/coremsgflushsupp.c,
-	src/coremsgflushwait.c, src/coremsginsert.c, src/coremsgseize.c,
-	src/coremsgsubmit.c, src/coremutex.c, src/coremutexflush.c,
-	src/coremutexseize.c, src/coremutexsurrender.c, src/coresem.c,
-	src/coresemflush.c, src/coresemseize.c, src/coresemsurrender.c,
-	src/coretod.c, src/coretodset.c, src/coretodtickle.c,
-	src/coretodtoseconds.c, src/coretodvalidate.c, src/heap.c,
-	src/heapallocate.c, src/heapextend.c, src/heapfree.c,
-	src/heapgetinfo.c, src/heapsizeofuserarea.c, src/heapwalk.c,
-	src/interr.c, src/isr.c, src/iterateoverthreads.c, src/mpci.c,
-	src/object.c, src/objectallocate.c, src/objectallocatebyindex.c,
-	src/objectclearname.c, src/objectcomparenameraw.c,
-	src/objectcomparenamestring.c, src/objectcopynameraw.c,
-	src/objectcopynamestring.c, src/objectextendinformation.c,
-	src/objectfree.c, src/objectget.c, src/objectgetbyindex.c,
-	src/objectgetisr.c, src/objectgetnext.c, src/objectgetnoprotection.c,
-	src/objectidtoname.c, src/objectinitializeinformation.c,
-	src/objectmp.c, src/objectnametoid.c, src/objectshrinkinformation.c,
-	src/thread.c, src/threadchangepriority.c, src/threadclearstate.c,
-	src/threadclose.c, src/threadcreateidle.c, src/threaddelayended.c,
-	src/threaddispatch.c, src/threadevaluatemode.c, src/threadget.c,
-	src/threadhandler.c, src/threadidlebody.c, src/threadinitialize.c,
-	src/threadloadenv.c, src/threadmp.c, src/threadq.c,
-	src/threadqdequeue.c, src/threadqdequeuefifo.c,
+	* include/rtems/debug.h, include/rtems/seterr.h, include/rtems/system.h,
+	include/rtems/score/address.h, include/rtems/score/apiext.h,
+	include/rtems/score/apimutex.h, include/rtems/score/bitfield.h,
+	include/rtems/score/chain.h, include/rtems/score/context.h,
+	include/rtems/score/copyrt.h, include/rtems/score/coremsg.h,
+	include/rtems/score/coremutex.h, include/rtems/score/coresem.h,
+	include/rtems/score/heap.h, include/rtems/score/interr.h,
+	include/rtems/score/isr.h, include/rtems/score/mpci.h,
+	include/rtems/score/mppkt.h, include/rtems/score/object.h,
+	include/rtems/score/objectmp.h, include/rtems/score/priority.h,
+	include/rtems/score/stack.h, include/rtems/score/states.h,
+	include/rtems/score/sysstate.h, include/rtems/score/thread.h,
+	include/rtems/score/threadmp.h, include/rtems/score/threadq.h,
+	include/rtems/score/tod.h, include/rtems/score/tqdata.h,
+	include/rtems/score/userext.h, include/rtems/score/watchdog.h,
+	include/rtems/score/wkspace.h, inline/rtems/score/address.inl,
+	inline/rtems/score/chain.inl, inline/rtems/score/coremsg.inl,
+	inline/rtems/score/coremutex.inl, inline/rtems/score/coresem.inl,
+	inline/rtems/score/heap.inl, inline/rtems/score/isr.inl,
+	inline/rtems/score/mppkt.inl, inline/rtems/score/object.inl,
+	inline/rtems/score/objectmp.inl, inline/rtems/score/priority.inl,
+	inline/rtems/score/stack.inl, inline/rtems/score/states.inl,
+	inline/rtems/score/sysstate.inl, inline/rtems/score/thread.inl,
+	inline/rtems/score/threadmp.inl, inline/rtems/score/tod.inl,
+	inline/rtems/score/tqdata.inl, inline/rtems/score/userext.inl,
+	inline/rtems/score/watchdog.inl, inline/rtems/score/wkspace.inl,
+	macros/rtems/score/address.inl, macros/rtems/score/chain.inl,
+	macros/rtems/score/coremsg.inl, macros/rtems/score/coremutex.inl,
+	macros/rtems/score/coresem.inl, macros/rtems/score/heap.inl,
+	macros/rtems/score/isr.inl, macros/rtems/score/mppkt.inl,
+	macros/rtems/score/object.inl, macros/rtems/score/objectmp.inl,
+	macros/rtems/score/priority.inl, macros/rtems/score/stack.inl,
+	macros/rtems/score/states.inl, macros/rtems/score/sysstate.inl,
+	macros/rtems/score/thread.inl, macros/rtems/score/threadmp.inl,
+	macros/rtems/score/tod.inl, macros/rtems/score/tqdata.inl,
+	macros/rtems/score/userext.inl, macros/rtems/score/watchdog.inl,
+	macros/rtems/score/wkspace.inl, src/apiext.c, src/chain.c,
+	src/coremsg.c, src/coremsgbroadcast.c, src/coremsgclose.c,
+	src/coremsgflush.c, src/coremsgflushsupp.c, src/coremsgflushwait.c,
+	src/coremsginsert.c, src/coremsgseize.c, src/coremsgsubmit.c,
+	src/coremutex.c, src/coremutexflush.c, src/coremutexseize.c,
+	src/coremutexsurrender.c, src/coresem.c, src/coresemflush.c,
+	src/coresemseize.c, src/coresemsurrender.c, src/coretod.c,
+	src/coretodset.c, src/coretodtickle.c, src/coretodtoseconds.c,
+	src/coretodvalidate.c, src/heap.c, src/heapallocate.c, src/heapextend.c,
+	src/heapfree.c, src/heapgetinfo.c, src/heapsizeofuserarea.c,
+	src/heapwalk.c, src/interr.c, src/isr.c, src/iterateoverthreads.c,
+	src/mpci.c, src/object.c, src/objectallocate.c,
+	src/objectallocatebyindex.c, src/objectclearname.c,
+	src/objectcomparenameraw.c, src/objectcomparenamestring.c,
+	src/objectcopynameraw.c, src/objectcopynamestring.c,
+	src/objectextendinformation.c, src/objectfree.c, src/objectget.c,
+	src/objectgetbyindex.c, src/objectgetisr.c, src/objectgetnext.c,
+	src/objectgetnoprotection.c, src/objectidtoname.c,
+	src/objectinitializeinformation.c, src/objectmp.c, src/objectnametoid.c,
+	src/objectshrinkinformation.c, src/thread.c, src/threadchangepriority.c,
+	src/threadclearstate.c, src/threadclose.c, src/threadcreateidle.c,
+	src/threaddelayended.c, src/threaddispatch.c, src/threadevaluatemode.c,
+	src/threadget.c, src/threadhandler.c, src/threadidlebody.c,
+	src/threadinitialize.c, src/threadloadenv.c, src/threadmp.c,
+	src/threadq.c, src/threadqdequeue.c, src/threadqdequeuefifo.c,
 	src/threadqdequeuepriority.c, src/threadqenqueue.c,
 	src/threadqenqueuefifo.c, src/threadqenqueuepriority.c,
 	src/threadqextract.c, src/threadqextractfifo.c,
 	src/threadqextractpriority.c, src/threadqextractwithproxy.c,
-	src/threadqfirst.c, src/threadqfirstfifo.c,
-	src/threadqfirstpriority.c, src/threadqflush.c, src/threadqtimeout.c,
-	src/threadready.c, src/threadreset.c, src/threadresettimeslice.c,
-	src/threadrestart.c, src/threadresume.c, src/threadrotatequeue.c,
-	src/threadsetpriority.c, src/threadsetstate.c,
-	src/threadsettransient.c, src/threadstackallocate.c,
-	src/threadstackfree.c, src/threadstart.c,
+	src/threadqfirst.c, src/threadqfirstfifo.c, src/threadqfirstpriority.c,
+	src/threadqflush.c, src/threadqtimeout.c, src/threadready.c,
+	src/threadreset.c, src/threadresettimeslice.c, src/threadrestart.c,
+	src/threadresume.c, src/threadrotatequeue.c, src/threadsetpriority.c,
+	src/threadsetstate.c, src/threadsettransient.c,
+	src/threadstackallocate.c, src/threadstackfree.c, src/threadstart.c,
 	src/threadstartmultitasking.c, src/threadsuspend.c,
-	src/threadtickletimeslice.c, src/threadyieldprocessor.c,
-	src/userext.c, src/watchdog.c, src/watchdogadjust.c,
-	src/watchdoginsert.c, src/watchdogremove.c, src/watchdogtickle.c,
-	src/wkspace.c: URL for license changed.
+	src/threadtickletimeslice.c, src/threadyieldprocessor.c, src/userext.c,
+	src/watchdog.c, src/watchdogadjust.c, src/watchdoginsert.c,
+	src/watchdogremove.c, src/watchdogtickle.c, src/wkspace.c: URL for
+	license changed.
 
 2003-08-14	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, include/rtems/score/object.h,
 	include/rtems/score/objectmp.h, src/objectmp.c, src/objectnametoid.c:
-	Added ID to name lookup service and changed name of id/name
-	translation status code. This propagated to multiple functions. The
-	user API service added was rtems_object_id_to_name()
+	Added ID to name lookup service and changed name of id/name translation
+	status code. This propagated to multiple functions. The user API service
+	added was rtems_object_id_to_name().
 	* src/objectidtoname.c: New file.
-
-2003-08-14	Joel Sherrill <joel@OARcorp.com>
-
 	PR 408/filesystem
-	* score/Makefile.am, score/include/rtems/score/thread.h: Added
-	sync() service. As part of adding this service, the
-	new RTEMS service rtems_iterate_over_all_threads() was also added.
-	This new service makes it easier to iterate over all the
-	tasks/threads in a system and perform an action on them.
+	* score/Makefile.am, score/include/rtems/score/thread.h: Added sync()
+	service. As part of adding this service, the new RTEMS service
+	rtems_iterate_over_all_threads() was also added. This new service makes
+	it easier to iterate over all the tasks/threads in a system and perform
+	an action on them.
 	* score/src/iterateoverthreads.c: New file.
 	* ChangeLog: Fixed screwup.
 
 2003-07-18	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 430/rtems
-	* include/rtems/score/watchdog.h: _Watchdog_Ticks_since_boot should
-	be a VOLATILE variable.
-	* src/watchdoginsert.c: 'restart' algorithm needs to enforce
-	reloading the list head in case a TICK interrupt during ISR_Flash()
-	modified the list.  This is achieved by a proper VOLATILE cast.
-	Also _Watchdog_Sync_count++ should be protected by _ISR_Disable
-	(prevent corruption in case ISR calls watchdoginsert)
+	* include/rtems/score/watchdog.h: _Watchdog_Ticks_since_boot should be a
+	VOLATILE variable.
+	* src/watchdoginsert.c: 'restart' algorithm needs to enforce reloading
+	the list head in case a TICK interrupt during ISR_Flash() modified the
+	list.  This is achieved by a proper VOLATILE cast. Also
+	_Watchdog_Sync_count++ should be protected by _ISR_Disable (prevent
+	corruption in case ISR calls watchdoginsert).
 	* src/watchdogadjust.c: ISR protection added.
-	* src/watchdogtickle.c: ISR protection added.
-	NOTE: PowerPC BSPs using the new exception processing MUST BE UPDATED
-	to maintain _ISR_Nest_level. See also PR288 which provides fixes
-	for the affected BSPs distributed with RTEMS.
+	* src/watchdogtickle.c: ISR protection added. NOTE: PowerPC BSPs using
+	the new exception processing MUST BE UPDATED to maintain
+	_ISR_Nest_level. See also PR288 which provides fixes for the affected
+	BSPs distributed with RTEMS.
 
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -266,53 +246,38 @@
 
 	* src/objectmp.c: Removed warnings.
 
-2003-03-18  Till Straumann <strauman@slac.stanford.edu>
+2003-03-18	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 356/bsps
-	* src/threadhandlerc: This patch makes RTEMS/PowerPC eabi compliant.
-	Let Thread_Handler verify that _init/_main are non-NULL
-	before calling them (gives the linker script/user more
-	freedom to handle special cases).
-
-2002-03-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* include/rtems/system.h: Add __RTEMS_REVISION__.
-
-2002-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* include/rtems/system.h: Add __RTEMS_MAJOR__, __RTEMS_MINOR__.
+	* src/threadhandlerc: This patch makes RTEMS/PowerPC eabi compliant. Let
+	Thread_Handler verify that _init/_main are non-NULL before calling them
+	(gives the linker script/user more freedom to handle special cases).
 
 2003-02-14	Joel Sherrill <joel@OARcorp.com>
 
 	AMD a29k declared obsolete.
 	* cpu/Makefile.am: Removed reference.
 	* cpu/a29k/.cvsignore, cpu/a29k/ChangeLog, cpu/a29k/Makefile.am,
-	cpu/a29k/amd.ah, cpu/a29k/asm.h, cpu/a29k/configure.ac,
-	cpu/a29k/cpu.c, cpu/a29k/cpu_asm.S, cpu/a29k/pswmacro.ah,
-	cpu/a29k/register.ah, cpu/a29k/sig.S, cpu/a29k/rtems/.cvsignore,
+	cpu/a29k/amd.ah, cpu/a29k/asm.h, cpu/a29k/configure.ac, cpu/a29k/cpu.c,
+	cpu/a29k/cpu_asm.S, cpu/a29k/pswmacro.ah, cpu/a29k/register.ah,
+	cpu/a29k/sig.S, cpu/a29k/rtems/.cvsignore,
 	cpu/a29k/rtems/score/.cvsignore, cpu/a29k/rtems/score/a29k.h,
 	cpu/a29k/rtems/score/cpu.h, cpu/a29k/rtems/score/cpu_asm.h,
 	cpu/a29k/rtems/score/types.h: Removed.
 
 2003-01-10	Joel Sherrill <joel@OARcorp.com>
 
-	* src/objectmp.c: Corrected use of name parameter to reflect that it
-	is actually the name not a pointer to the name.
+	* src/objectmp.c: Corrected use of name parameter to reflect that it is
+	actually the name not a pointer to the name.
 
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Makefile.am: Don't create $ARCH.
+	* Makefile.am: Don't create $ARCH.
 
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	Makefile.am: Fix macro-file installation.
-
-2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	Makefile.am: Move include/rtems/score/cpuopts.h to STD_H_FILES.
-
-2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* Makefile.am: Fix macro-file installation.
+	* Makefile.am: Move include/rtems/score/cpuopts.h to STD_H_FILES.
 	* include/Makefile.am: Remove.
 	* inline/Makefile.am: Remove.
 	* macros/Makefile.am: Remove.
@@ -321,8 +286,8 @@
 
 2002-12-02	Joel Sherrill <joel@OARcorp.com>
 
-	* include/rtems/score/object.h, include/rtems/score/tod.h:
-	Added casts to eliminate warnings on 16 bit targets like the h8300.
+	* include/rtems/score/object.h, include/rtems/score/tod.h: Added casts
+	to eliminate warnings on 16 bit targets like the h8300.
 
 2002-11-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -346,119 +311,74 @@
 2002-08-07	Chris Johns <ccj@acm.org>
 
 	* src/coretodset.c: Correct calculation of ticks until next section
-	boundary.  It was incorrectly based upon current time not the
-	time that is being set.
+	boundary.  It was incorrectly based upon current time not the time that
+	is being set.
 
 2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/Makefile.am: Build into libscore.a.
 
-2002-07-22      Joel Sherrill <joel@OARcorp.com>
-
-	* include/rtems/score/apimutex.h (_API_Mutex_Lock): Per PR253
-	add the missing _ISR_Disable.  This fix was already applied to
-	the old location (c/src/exec/score/...).
-
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/Makefile.am: Use .$(OBJEXT) instead of .o.
 
+2002-07-22	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/score/apimutex.h (_API_Mutex_Lock): Per PR253 add the
+	missing _ISR_Disable.  This fix was already applied to the old location
+	(c/src/exec/score/...).
+
 2002-07-16	Joel Sherrill <joel@OARcorp.com>
 
-	* macros/rtems/score/object.inl: Corrected typos in 
-	_Objects_Open, _Objects_Close, and _Objects_Namespace_remove.
+	* macros/rtems/score/object.inl: Corrected typos in  _Objects_Open,
+	_Objects_Close, and _Objects_Namespace_remove.
 
 2002-07-05	Joel Sherrill <joel@OARcorp.com>
 
 	* macros/rtems/score/object.inl: Corrected implementation of
-	_Objects_Open, _Objects_Close, and _Objects_Namespace_remove
-	to be consistent with the inline implementation.
+	_Objects_Open, _Objects_Close, and _Objects_Namespace_remove to be
+	consistent with the inline implementation.
 
-2002-07-01    Joel Sherrill <joel@OARcorp.com>
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
-	* Mega patch merge to change the format of the object IDs to
-	loosen the dependency between the SCORE and the various APIs.
-	There was considerable work to simplify the object name management
-        and it appears that the name_table field is no longer needed.
-	This patch also includes the addition of the internal mutex
-	which is currently only used to protect some types of allocation
-	and deallocation.  This significantly can reduce context 
-	switch latency under certain circumstances.  In particular,
-	some heap/region operations were O(n) and had dispatching
-	disabled.  This should help enormously.  With this merge,
-	the patch is not as clean as it should be.  In particular,
-	the documentation has not been modified to reflect the new object
-	ID layout, the IDs in the test screens are not updated, and
-	_Objects_Get_information needs to be a real routine not inlined.
-	As part of this patch a lot of MP code for thread/proxy blocking
-	was made conditional and cleaned up.
+	* Mega patch merge to change the format of the object IDs to loosen the
+	dependency between the SCORE and the various APIs. There was
+	considerable work to simplify the object name management and it appears
+	that the name_table field is no longer needed. This patch also includes
+	the addition of the internal mutex which is currently only used to
+	protect some types of allocation and deallocation.  This significantly
+	can reduce context  switch latency under certain circumstances.  In
+	particular, some heap/region operations were O(n) and had dispatching
+	disabled.  This should help enormously.  With this merge, the patch is
+	not as clean as it should be.  In particular, the documentation has not
+	been modified to reflect the new object ID layout, the IDs in the test
+	screens are not updated, and _Objects_Get_information needs to be a real
+	routine not inlined. As part of this patch a lot of MP code for
+	thread/proxy blocking was made conditional and cleaned up.
 	* include/Makefile.am, include/rtems/score/coremsg.h,
 	include/rtems/score/coremutex.h, include/rtems/score/coresem.h,
 	include/rtems/score/object.h, include/rtems/score/threadq.h,
 	inline/rtems/score/object.inl, inline/rtems/score/thread.inl,
 	macros/rtems/score/object.inl, src/Makefile.am, src/coremsg.c,
-	src/coremutex.c, src/coresem.c, src/mpci.c,
-	src/objectcomparenameraw.c, src/objectextendinformation.c,
-	src/objectinitializeinformation.c, src/objectnametoid.c,
-	src/thread.c, src/threadclose.c, src/threadget.c, src/threadq.c,
-	src/threadqextractwithproxy.c: Modified as part of above.
-	* include/rtems/score/apimutex.h, src/objectgetnoprotection.c: New
-	files.
-
-2001-05-17	Joel Sherrill <joel@OARcorp.com>
-
-	* macros/rtems/score/thread..inl: Implemented missing routines
-	for new libc reentrancy support.
+	src/coremutex.c, src/coresem.c, src/mpci.c, src/objectcomparenameraw.c,
+	src/objectextendinformation.c, src/objectinitializeinformation.c,
+	src/objectnametoid.c, src/thread.c, src/threadclose.c, src/threadget.c,
+	src/threadq.c, src/threadqextractwithproxy.c: Modified as part of above.
+	* include/rtems/score/apimutex.h, src/objectgetnoprotection.c: New files.
 
 2002-05-15	Chris Johns <ccj@acm.org>
 
 	* include/rtems/score/thread.h, inline/rtems/score/thread.inl,
-	src/threaddispatch.c, src/threadinitialize.c: 
-	Move the C library re-enterrant support directly into
-	the thread dispatch code. RTEMS needs libc and so requiring
-	libc to use a user extension with its overhead is not the best
-	solution. This patch lowers the overhead to 2 pointer moves.
+	src/threaddispatch.c, src/threadinitialize.c:  Move the C library
+	re-enterrant support directly into the thread dispatch code. RTEMS needs
+	libc and so requiring libc to use a user extension with its overhead is
+	not the best solution. This patch lowers the overhead to 2 pointer moves.
 
 2002-05-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* include/Makefile.am: Work-around to autoconf-2.53 adding PACKAGE_*
-	to autoheaders - sed out *PACKAGE* from cpuopts-tmp.h.
+	* include/Makefile.am: Work-around to autoconf-2.53 adding PACKAGE_* to
+	autoheaders - sed out *PACKAGE* from cpuopts-tmp.h.
 
-2001-05-14	Till Straumann <strauman@slac.stanford.edu>
-
-	* src/threaddispatch.c, src/threadhandler.c: Per PR211 fix
-	saving/restoring floating point context.  The fpsave and fprestore
-	routines are only used in a executing context which _is_ fp and hence
-	has the FPU enabled. The current behavior required the FPU always to
-	be on which is very dangerous if lazy context switching is used.  
-	[Joel Note: Some ports explicitly enabled the FPU in the FP save and
-	restore routines to avoid this.]
-
-	The patch also makes sure (on powerpc only) that the FPU is disabled
-	for integer tasks. Note that this is crucial if deferred fp context
-	switching is used. Otherwise, fp context corruption may go undetected!
-	Also note that even tasks which merely push/pop FP registers to/from
-	the stack without modifying them still MUST be FP tasks - otherwise
-	(if lazy FP context switching is used), FP register corruption (of
-	other, FP, tasks may occur)!
-
-	Furthermore, (on PPC) by default, lazy FP context save/restore
-	is _disabled_.
-
-2001-04-26	Joel Sherrill <joel@OARcorp.com>
-
-	* src/objectcomparenamestring.c: Fix typos.
- 
-2001-04-26	Joel Sherrill <joel@OARcorp.com>
-
-	* include/rtems/score/object.h, inline/rtems/score/object.inl, 
-	src/objectcomparenamestring.c: Address PR81 that
-	reworked POSIX message queues to add a descriptor separate from
-	the underlying message queue.  This allows non-blocking to follow
-	the "open" not the underlying queue.   As part of debugging this
-	it became clear that _Objects_Compare_name_string was broken
-	and a simple version using strncmp() was substituted.
- 
 2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/system.h: Remove targopts.h.
@@ -479,45 +399,21 @@
 
 	* include/rtems/system.h: Add i386 to multilib-able targets.
 
-2001-04-11	Joel Sherrill <joel@OARcorp.com>
-
-	
-	* macros/rtems/score/userext.inl: Now works after merging patch for
-	functionality requested in PR174.
-	* inline/rtems/score/userext.inl: Added a comment explaining the
-	order in which routines appear since it is not the obvious order.
- 
 2002-04-08	Chris Johns <ccj@acm.org>
 
-	* Per PR141 and PR174, make task switch extension its own list and
-	fix all odd problems introduced by providing macro version.
+	* Per PR141 and PR174, make task switch extension its own list and fix
+	all odd problems introduced by providing macro version.
 	* inline/rtems/score/userext.inl: Fix.
-
-2001-04-08	Joel Sherrill <joel@OARcorp.com>
-
-	* macros/rtems/score/object.inl: Corrected arguments.
- 
-2001-04-08	Joel Sherrill <joel@OARcorp.com>
-
-	* macros/rtems/score/userext.inl: Updated to reflect modifications
-	to inline version from PR142.
-	* inline/rtems/score/userext.inl: Cleanup as side-effect of above.
- 
-2002-04-08	Chris Johns <ccj@acm.org>
-
 	* Per PR142, make task switch extension its own list.
 	* include/rtems/score/userext.h: Reflect above by adding 
 	User_extensions_Switch_control and adding it to User_extenions_Control.
-	* inline/rtems/score/userext.inl: Allocate all memory in one chunk
-	to minimize overhead.  Address processing dedicated switch chain.
-
-2002-04-08	Chris Johns <ccj@acm.org>
-
+	* inline/rtems/score/userext.inl: Allocate all memory in one chunk to
+	minimize overhead.  Address processing dedicated switch chain.
 	* Per PR142, make task switch extension its own list.
 	* include/rtems/score/userext.h: Reflect above by adding 
 	User_extensions_Switch_control and adding it to User_extenions_Control.
-	* inline/rtems/score/userext.inl: Allocate all memory in one chunk
-	to minimize overhead.  Address processing dedicated switch chain.
+	* inline/rtems/score/userext.inl: Allocate all memory in one chunk to
+	minimize overhead.  Address processing dedicated switch chain.
 
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -528,6 +424,14 @@
 	* inline/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* macros/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
+2002-03-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/system.h: Add __RTEMS_REVISION__.
+
+2002-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/system.h: Add __RTEMS_MAJOR__, __RTEMS_MINOR__.
+
 2002-01-29	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/score/watchdog.h: Added WATCHDOG_MAXIMUM_INTERVAL.
@@ -537,36 +441,25 @@
 	* include/rtems/system.h: Fix typo in yesterday's change:
 	RTEMS_MULTILIBS.
 
-2001-01-18	Joel Sherrill <joel@OARcorp.com>
-
-	* include/rtems/system.h: Only include cpuopts.h when building a
-	multilib configuration.  Some ports still need targopts.h but this
-	small modification lets those ports work non-multilib while 
-	fixing being fixed for multilib.
-	
 2002-01-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* include/rtems/seterr.h: Add do {..} while (0) in defines.
-	Rename set_errno_and_return_minus_one into
-	rtems_set_errno_and_return_minus_one.
+	* include/rtems/seterr.h: Add do {..} while (0) in defines. Rename
+	set_errno_and_return_minus_one into rtems_set_errno_and_return_minus_one.
 
 2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* inline/rtems/score/object.inl, macros/rtems/score/object.inl: Add
-	add casts to Objects_Id in _Objects_Build_ids to avoid implicit
-	typecasts from enum to int16 on bit16 targets (here: h8300).
-
-2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
+	* inline/rtems/score/object.inl, macros/rtems/score/object.inl: Add add
+	casts to Objects_Id in _Objects_Build_ids to avoid implicit typecasts
+	from enum to int16 on bit16 targets (here: h8300).
 	* src/Makefile.am: Add multilib support.
 
 2001-11-28	Joel Sherrill <joel@OARcorp.com>,
 
-	This was tracked as PR91.
+	PR 91
 	* include/rtems/score/isr.h, inline/rtems/score/isr.inl,
-	macros/rtems/score/isr.inl: Modified to allow any port to provide 
-	its own implementation of the macro _ISR_Is_in_progress.  If the
-	port overrides this macro, it must provide a non-inlined function
+	macros/rtems/score/isr.inl: Modified to allow any port to provide  its
+	own implementation of the macro _ISR_Is_in_progress.  If the port
+	overrides this macro, it must provide a non-inlined function
 	implementation.
 
 2001-11-20	Joel Sherrill <joel@OARcorp.com>
@@ -579,25 +472,17 @@
 
 2001-11-07	Joel Sherrill <joel@OARcorp.com>
 
-	Reported by Todor.Todorov@barco.com and tracked as PR36.
+	PR 36 (Reported by Todor.Todorov@barco.com)
 	* include/rtems/score/object.h: Added prototype for
 	_Objects_Get_by_index().
-	* src/objectget.c, src/objectgetisr.c: Corrected procedure for
-	getting index from Id so it is correct and optimal for both single
-	and multiprocessor configurations.
+	* src/objectget.c, src/objectgetisr.c: Corrected procedure for getting
+	index from Id so it is correct and optimal for both single and
+	multiprocessor configurations.
 
 2001-10-22	Joel Sherrill <joel@OARcorp.com>
 
 	* src/threadhandler.c: Use __USE_INIT_FINI__ since USE_INIT_FINI
 	pollutes the application namespace.
-
-2001-10-16	Joel Sherrill <joel@OARcorp.com>
-
-	* .cvsignore: Add stamp-h.in.
-
-2001-10-16	Joel Sherrill <joel@OARcorp.com>
-
-	* include/Makefile.am: Fixed path to cpuopts-tmp.h.
 
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -610,7 +495,12 @@
 	* inline/rtems/Makefile.am: Remove.
 	* inline/rtems/score/Makefile.am: Remove.
 	* inline/Makefile.am: Handle subdirs, require automake-1.5.
-	* Makefile.am: require automake-1.5
+	* Makefile.am: require automake-1.5.
+
+2001-10-16	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: Add stamp-h.in.
+	* include/Makefile.am: Fixed path to cpuopts-tmp.h.
 
 2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -621,10 +511,10 @@
 
 2001-09-27	Eric Norum <eric.norum@usask.ca>
 
-	* src/threadhandler.c: Now process C++ global constructors
-	(_init) as part of the first task execution not in BSP space.
-	This depends on the toolset defining USE_INIT_FINI so you
-	have to have the right toolset version.
+	* src/threadhandler.c: Now process C++ global constructors (_init) as
+	part of the first task execution not in BSP space. This depends on the
+	toolset defining USE_INIT_FINI so you have to have the right toolset
+	version.
 
 2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -637,79 +527,120 @@
 
 	*  src/coremutex.c, src/coremutexseize.c, src/coremutexsurrender.c,
 	inline/rtems/score/coremutex.inl: The per thread field resource_count
-	should only be manipulated when a mutex is priority ceiling or
-	priority inherit.  This was reported by Chris Johns <ccj@acm.org>
-	who also noticed that the use of switches for all disciplines
-	generated less efficient code than using explicit tests for the one
-	or two cases we were really interested in.  Further review of his
-	modifications made it apparent that the "isa" methods to test mutex
-	discipline were not being used so this modification was swept into
-	the code as well.
-
-2001-08-30	Joel Sherrill <joel@OARcorp.com>
-
-	* src/coremutexseize.c: Add missing code for proper handling
-	of nesting acquisitions.  This only impacts building with
-	inlines disabled on the source with the "fast mutex" optimizations.
-	This was post the 4.5 branch and did not impact released versions.
+	should only be manipulated when a mutex is priority ceiling or priority
+	inherit.  This was reported by Chris Johns <ccj@acm.org> who also
+	noticed that the use of switches for all disciplines generated less
+	efficient code than using explicit tests for the one or two cases we
+	were really interested in.  Further review of his modifications made it
+	apparent that the "isa" methods to test mutex discipline were not being
+	used so this modification was swept into the code as well.
+	* src/coremutexseize.c: Add missing code for proper handling of nesting
+	acquisitions.  This only impacts building with inlines disabled on the
+	source with the "fast mutex" optimizations. This was post the 4.5 branch
+	and did not impact released versions.
 
 2001-08-16	Joel Sherrill <joel@OARcorp.com>
 
-	* src/coremutexsurrender.c: Use holder thread not executing
-	thread because even though they may and often are the same
-	it is not guaranteed unless the proper attribute is set.
-
-2001-08-16	Joel Sherrill <joel@OARcorp.com>
-
-	* include/rtems/score/coremsg.h, src/coremsgsubmit.c: Add a new
-	return status to account for blocking sends.  Otherwise, the
-	caller will think that the returned message status will have
-	the ultimate results of the operation.  If the send times out,
-	the final status will be in the return_code of the thread.
+	* src/coremutexsurrender.c: Use holder thread not executing thread
+	because even though they may and often are the same it is not guaranteed
+	unless the proper attribute is set.
+	* include/rtems/score/coremsg.h, src/coremsgsubmit.c: Add a new return
+	status to account for blocking sends.  Otherwise, the caller will think
+	that the returned message status will have the ultimate results of the
+	operation.  If the send times out, the final status will be in the
+	return_code of the thread.
 
 2001-08-09	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/score/coremsg.h, inline/rtems/score/coremsg.inl,
-	src/coremsgsubmit.c: Unblocking message queue operations should
-	NOT use _Thread_Executing for return status since it is permissible
-	to invoke message send operations from an ISR.  This was reported
-	by Suvrat Gupta <suvrat@utstar.com>.
+	src/coremsgsubmit.c: Unblocking message queue operations should NOT use
+	_Thread_Executing for return status since it is permissible to invoke
+	message send operations from an ISR.  This was reported by Suvrat Gupta
+	<suvrat@utstar.com>.
 
-2000-05-25	Sergei Organov <osv@javad.ru>
+2001-05-17	Joel Sherrill <joel@OARcorp.com>
 
-	* macros/rtems/score/coresem.inl, inline/rtems/score/coresem.inl:
-	Cut and paste problem incorrectly enabled interrupts twice with
-	the first time being too early.
+	* macros/rtems/score/thread..inl: Implemented missing routines for new
+	libc reentrancy support.
+
+2001-05-14	Till Straumann <strauman@slac.stanford.edu>
+
+	* src/threaddispatch.c, src/threadhandler.c: Per PR211 fix
+	saving/restoring floating point context.  The fpsave and fprestore
+	routines are only used in a executing context which _is_ fp and hence
+	has the FPU enabled. The current behavior required the FPU always to be
+	on which is very dangerous if lazy context switching is used.   [Joel
+	Note: Some ports explicitly enabled the FPU in the FP save and restore
+	routines to avoid this.] The patch also makes sure (on powerpc only)
+	that the FPU is disabled for integer tasks. Note that this is crucial if
+	deferred fp context switching is used. Otherwise, fp context corruption
+	may go undetected! Also note that even tasks which merely push/pop FP
+	registers to/from the stack without modifying them still MUST be FP
+	tasks - otherwise (if lazy FP context switching is used), FP register
+	corruption (of other, FP, tasks may occur)! Furthermore, (on PPC) by
+	default, lazy FP context save/restore is _disabled_.
 
 2001-05-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* include/rtems/score/.cvsignore: Add stamp-h, cpuopts.h,
-	cpuopts.h.in, cpuopts-tmp.h.
+	* include/rtems/score/.cvsignore: Add stamp-h, cpuopts.h, cpuopts.h.in,
+	cpuopts-tmp.h.
+
+2001-04-26	Joel Sherrill <joel@OARcorp.com>
+
+	* src/objectcomparenamestring.c: Fix typos.
+	* include/rtems/score/object.h, inline/rtems/score/object.inl, 
+	src/objectcomparenamestring.c: Address PR81 that reworked POSIX message
+	queues to add a descriptor separate from the underlying message queue. 
+	This allows non-blocking to follow the "open" not the underlying queue. 
+	As part of debugging this it became clear that
+	_Objects_Compare_name_string was broken and a simple version using
+	strncmp() was substituted.
+
+2001-04-11	Joel Sherrill <joel@OARcorp.com>
+
+	* macros/rtems/score/userext.inl: Now works after merging patch for
+	functionality requested in PR174.
+	* inline/rtems/score/userext.inl: Added a comment explaining the order
+	in which routines appear since it is not the obvious order.
+
+2001-04-08	Joel Sherrill <joel@OARcorp.com>
+
+	* macros/rtems/score/object.inl: Corrected arguments.
+	* macros/rtems/score/userext.inl: Updated to reflect modifications to
+	inline version from PR142.
+	* inline/rtems/score/userext.inl: Cleanup as side-effect of above.
 
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/Makefile.am, include/rtems/score/Makefile.am,
-	inline/rtems/score/Makefile.am, macros/rtems/score/Makefile.am
-	Apply include_*HEADERS instead of H_FILES.
+	inline/rtems/score/Makefile.am, macros/rtems/score/Makefile.am Apply
+	include_*HEADERS instead of H_FILES.
 
 2001-01-29	Joel Sherrill <joel@OARcorp.com>
 
-	* src/objectextendinformation.c: Added include of string.h to
-	eliminate warning.
+	* src/objectextendinformation.c: Added include of string.h to eliminate
+	warning.
 
-2001-01-08	Joel Sherrill <joel@OARcorp.com>
+2001-01-18	Joel Sherrill <joel@OARcorp.com>
 
-	* src/threadinitialize.c: Fix my bad hack of Ralf's fp_area
-	warning removal patch. :(
+	* include/rtems/system.h: Only include cpuopts.h when building a
+	multilib configuration.  Some ports still need targopts.h but this small
+	modification lets those ports work non-multilib while  fixing being
+	fixed for multilib.
 
 2001-01-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/threadinitialize.c: Removed warning.
 
+2001-01-08	Joel Sherrill <joel@OARcorp.com>
+
+	* src/threadinitialize.c: Fix my bad hack of Ralf's fp_area warning
+	removal patch. :(.
+
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
-	* src/isr.c: Modify to properly dereference _ISR_Vector_table
-	now that it is dynamically allocated.
+	* src/isr.c: Modify to properly dereference _ISR_Vector_table now that
+	it is dynamically allocated.
 
 2000-12-19	Joel Sherrill <joel@OARcorp.com>
 
@@ -718,60 +649,56 @@
 
 2000-12-13	Joel Sherrill <joel@OARcorp.com>
 
-	* include/rtems/score/isr.h, src/isr.c: Allocate it from the
-	workspace rather than explicitly declaring it.  This allows
-	the size to be a non-constant from the perspective of score/cpu.
+	* include/rtems/score/isr.h, src/isr.c: Allocate it from the workspace
+	rather than explicitly declaring it.  This allows the size to be a
+	non-constant from the perspective of score/cpu.
 
 2000-12-01	Joel Sherrill <joel@OARcorp.com>
 
 	* macros/rtems/score/coresem.inl: Removed comments since convention
 	calls for comments to be in inline versin.
-	* macros/rtems/score/object.inl (Objects_Get_local_object): Fixed
-	style to use _ prefix on variable names and use parentheses.
+	* macros/rtems/score/object.inl (Objects_Get_local_object): Fixed style
+	to use _ prefix on variable names and use parentheses.
 	* macros/rtems/score/object.inl (_Objects_Namespace_remove): Added.
 
 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 
 	* General effort to make things compile with macros not inlines
-	* inline/rtems/score/coremutex.inl: Added comment indicating
-	for macros there is another copy of
-	_CORE_mutex_Seize_interrupt_trylock() in src/coremutexseize.c.
+	* inline/rtems/score/coremutex.inl: Added comment indicating for macros
+	there is another copy of _CORE_mutex_Seize_interrupt_trylock() in
+	src/coremutexseize.c.
 	* src/coremutexseize.c: Added body of
 	_CORE_mutex_Seize_interrupt_trylock() for macro case.
 	* macros/rtems/score/coremutex.inl: Added prototype for 
-	_CORE_mutex_Seize_interrupt_trylock() since there is a real
-	body when macros are enabled.
+	_CORE_mutex_Seize_interrupt_trylock() since there is a real body when
+	macros are enabled.
 	* macros/rtems/score/coresem.inl: Added macro implementation of
 	_CORE_semaphore_Seize_isr_disable.
 	* macros/score/Makefile.am: Fixed typos.
 	* rtems/score/address.inl: Correct macro implementation of
 	_Addresses_Is_aligned() so it would compile.
 	* macros/rtems/score/coremsg.inl: Added closing parentheses.
-	
+
 2000-11-28	Chris Johns <ccj@acm.org>
 
-	* src/heapallocate.c: Do not allow the size to overflow when
-	adjusting it.  A test allocated a stack of -1 (~0). This
-	actually resulted in a stack being allocated but with a
-	size of 0xb. The allocator did not test the size to see if
-	it rolled through 0 and so allowed the allocation to happen, the
-	thread to get created. The task crashed as you would expect.
+	* src/heapallocate.c: Do not allow the size to overflow when adjusting
+	it.  A test allocated a stack of -1 (~0). This actually resulted in a
+	stack being allocated but with a size of 0xb. The allocator did not test
+	the size to see if it rolled through 0 and so allowed the allocation to
+	happen, the thread to get created. The task crashed as you would expect.
 
 2000-11-02	Joel Sherrill <joel@OARcorp.com>
 
-	* include/rtems/system.h: Use proper conditional (RTEMS_POSIX_API)
-	so prototypes for POSIX_MP_NOT_IMPLEMENTED(), POSIX_NOT_IMPLEMENTED(),
+	* include/rtems/system.h: Use proper conditional (RTEMS_POSIX_API) so
+	prototypes for POSIX_MP_NOT_IMPLEMENTED(), POSIX_NOT_IMPLEMENTED(),
 	POSIX_BOTTOM_REACHED() are actually included.
-
-2000-11-02	Joel Sherrill <joel@OARcorp.com>
-
 	* include/rtems/system.h: Add prototypes for POSIX_MP_NOT_IMPLEMENTED(),
 	POSIX_NOT_IMPLEMENTED(), POSIX_BOTTOM_REACHED() removed from newlib.
 
 2000-10-18	Nick Simon <Nick.SIMON@syntegra.bt.co.uk>
 
-	* src/heapgetinfo.c, include/rtems/score/heap.h, src/Makefile.am:
-	Added _Heap_Get_information() and information control block.
+	* src/heapgetinfo.c, include/rtems/score/heap.h, src/Makefile.am: Added
+	_Heap_Get_information() and information control block.
 	* src/heapgetinfo.c: New file.
 
 2000-09-25	Joel Sherrill <joel@OARcorp.com>
@@ -781,8 +708,8 @@
 
 2000-09-20	Joel Sherrill <joel@OARcorp.com>
 
-	* src/objectgetbyindex.c: Do not enable dispatching on an
-	error path it was not disabled on.
+	* src/objectgetbyindex.c: Do not enable dispatching on an error path it
+	was not disabled on.
 
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -791,8 +718,7 @@
 2000-08-30	Joel Sherrill <joel@OARcorp.com>
 
 	* Many files: Moved posix/include/rtems/posix/seterr.h to 
-	score/include/rtems/seterr.h so it would be available within
-	all APIs.
+	score/include/rtems/seterr.h so it would be available within all APIs.
 
 2000-08-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -801,3 +727,10 @@
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
+
+2000-05-25	Sergei Organov <osv@javad.ru>
+
+	* macros/rtems/score/coresem.inl, inline/rtems/score/coresem.inl: Cut
+	and paste problem incorrectly enabled interrupts twice with the first
+	time being too early.
+
