@@ -36,7 +36,7 @@ SRCS = $(LIBBSP) $(LIBNETWORKING) $(LIBRDBG) \
 
 TMPINSTALL_FILES += $(LIB)
 
-all-local: $(ARCH) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(LIB) $(TMPINSTALL_FILES)
 
 $(LIB): $(SRCS)
 	rm -f $@
@@ -69,6 +69,8 @@ $(LIB): $(SRCS)
 	rm -f $(ARCH)/*
 	$(RANLIB) $@
 
-bsplib_DATA = $(LIB)
+install-data-local:
+	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
+	$(INSTALL_DATA) $(LIB) $(DESTDIR)$(bsplibdir)
 
 include $(top_srcdir)/../../automake/local.am
