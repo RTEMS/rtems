@@ -6,6 +6,9 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 VPATH = @srcdir@:@srcdir@/../../../shared:@srcdir@/../../shared/console:@srcdir@/../../shared/bootloader
 
+LIB = $(ARCH)/bootloader.o
+LDS = ppcboot.lds
+
 C_FILES = misc.c pci.c zlib.c mm.c em86.c polled_io.c lib.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
@@ -32,10 +35,7 @@ AM_CPPFLAGS += -D__BOOT__ -DDEBUG -mrelocatable
 AM_CFLAGS += -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple \
     -mstring -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata
 
-IMAGES = rtems.gz
-
-CLEANFILES += bootloader reloc.O
-DISTCLEANFILES += $(IMAGES)
+CLEANFILES += bootloader.o
 
 #
 # CAUTION :
@@ -46,22 +46,18 @@ DISTCLEANFILES += $(IMAGES)
 #
 # NEVER remove lib.c. You have been warned...
 #
-bootloader : $(OBJS) $(IMAGES) $(BINARY_LOADED) ppcboot.lds
-	$(LD) -o bootloader $(OBJS) --just-symbols=$(BINARY_LOADED) \
-	-b binary $(IMAGES) -T @srcdir@/../../shared/bootloader/ppcboot.lds \
-	-Map $(ARCH)/bootloader.map
 
-check_unresolved : $(OBJS)
-	$(LD) -r -o reloc.O $(OBJS)
-	$(NM) reloc.O |grep ' U '
+$(LIB) : $(OBJS) 
+	$(LD) -r -o $(ARCH)/bootloader.o $(OBJS)
+	$(NM)  $(ARCH)/bootloader.o | grep ' U '
 	echo "Every symbol listed should be defined in @srcdir@/ppcboot.lds"
 
-rtems: $(BINARY_LOADED)
-	$(OBJCOPY)  $(BINARY_LOADED) rtems -O binary -R .comment -S
+$(PROJECT_RELEASE)/lib/bootloader.o : $(LIB)
+	$(INSTALL_DATA) $< $@
 
-rtems.gz: rtems
-	gzip -vf9 rtems
+$(PROJECT_RELEASE)/lib/ppcboot.lds : $(LDS)
+	$(INSTALL_DATA) $< $@
 
-all-local: $(ARCH) $(OBJS)
+all-local: $(ARCH) $(PROJECT_RELEASE)/lib/bootloader.o $(PROJECT_RELEASE)/lib/ppcboot.lds
 
 include $(top_srcdir)/../../../../../../automake/local.am
