@@ -156,15 +156,15 @@ extern "C"
 
 /* Write */
 #define WRITE_REGISTER_8(address, data) \
-                 *((rtems_unsigned8 *) (address)) = ((rtems_unsigned8) (data))
+                 *((uint8_t*) (address)) = ((uint8_t) (data))
 #define WRITE_REGISTER_16(address, data) \
-                 *((rtems_unsigned16 *) (address)) = ((rtems_unsigned16) (data))
+                 *((uint16_t*) (address)) = ((uint16_t) (data))
 #define WRITE_REGISTER_32(address, data) \
-                 *((rtems_unsigned32 *) (address)) = ((rtems_unsigned32) (data))
+                 *((uint32_t*) (address)) = ((uint32_t) (data))
 /* Read */
-#define READ_REGISTER_8(address, data) data = *((rtems_unsigned8 *) (address))
-#define READ_REGISTER_16(address, data) data = *((rtems_unsigned16 *) (address))
-#define READ_REGISTER_32(address, data) data = *((rtems_unsigned32 *) (address))
+#define READ_REGISTER_8(address, data) data = *((uint8_t*) (address))
+#define READ_REGISTER_16(address, data) data = *((uint16_t*) (address))
+#define READ_REGISTER_32(address, data) data = *((uint32_t*) (address))
 
 /* CS2 : Peripherials */
 #define PERIPHERIALS_BASE         (CSEL_2_BASE)
@@ -228,10 +228,10 @@ extern "C"
 
  /* update the display, needs a long word */
 #define UPDATE_DISPLAY(LongWordPtr) \
-         ( WRITE_REGISTER_16(DISPLAY_BASE, *(((rtems_unsigned8 *) LongWordPtr) + 3)), \
-           WRITE_REGISTER_16(DISPLAY_BASE + 2, *(((rtems_unsigned8 *) LongWordPtr) + 2)), \
-           WRITE_REGISTER_16(DISPLAY_BASE + 4, *(((rtems_unsigned8 *) LongWordPtr) + 1)), \
-           WRITE_REGISTER_16(DISPLAY_BASE + 6, *((rtems_unsigned8 *) LongWordPtr)) )
+         ( WRITE_REGISTER_16(DISPLAY_BASE, *(((uint8_t*) LongWordPtr) + 3)), \
+           WRITE_REGISTER_16(DISPLAY_BASE + 2, *(((uint8_t*) LongWordPtr) + 2)), \
+           WRITE_REGISTER_16(DISPLAY_BASE + 4, *(((uint8_t*) LongWordPtr) + 1)), \
+           WRITE_REGISTER_16(DISPLAY_BASE + 6, *((uint8_t*) LongWordPtr)) )
 
 /* make a better test, say switches */
 #if defined(GDB_MONITOR_ACTIVE)

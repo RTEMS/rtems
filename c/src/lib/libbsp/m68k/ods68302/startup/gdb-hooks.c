@@ -45,10 +45,10 @@ char getDebugChar(void)
 void (*exceptionHook)(unsigned int) = 0;
 
 typedef struct {
-  rtems_unsigned16 move_a7;            /* move #FORMAT_ID,%a7@- */
-  rtems_unsigned16 format_id;
-  rtems_unsigned16 jmp;                /* jmp  _ISR_Handlers */
-  rtems_unsigned32 isr_handler;
+  uint16_t         move_a7;            /* move #FORMAT_ID,%a7@- */
+  uint16_t         format_id;
+  uint16_t         jmp;                /* jmp  _ISR_Handlers */
+  uint32_t         isr_handler;
 } GDB_HANDLER_ENTRY;
 
 #if !defined(M68K_MOVE_A7)
@@ -64,13 +64,13 @@ static GDB_HANDLER_ENTRY gdb_jump_table[256];
 
 void exceptionHandler(unsigned int vector, void *handler)
 {
-  rtems_unsigned32 *interrupt_table = 0;
+  uint32_t         *interrupt_table = 0;
   
   gdb_jump_table[vector].move_a7 = M68K_MOVE_A7;
   gdb_jump_table[vector].format_id = vector;
   gdb_jump_table[vector].jmp = M68K_JMP;
-  gdb_jump_table[vector].isr_handler = (rtems_unsigned32) handler;
+  gdb_jump_table[vector].isr_handler = (uint32_t) handler;
 
-  interrupt_table[vector] = (rtems_unsigned32) &gdb_jump_table[vector];
+  interrupt_table[vector] = (uint32_t) &gdb_jump_table[vector];
 }
 

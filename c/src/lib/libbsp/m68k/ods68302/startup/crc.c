@@ -18,7 +18,7 @@
 
  */
 
-static const rtems_unsigned16 factor[] =
+static const uint16_t         factor[] =
  {
    0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241,
    0xC601, 0x06C0, 0x0780, 0xC741, 0x0500, 0xC5C1, 0xC481, 0x0440,
@@ -66,12 +66,12 @@ static const rtems_unsigned16 factor[] =
    Calculates the CRC value of a block of memory
 */
 
-rtems_unsigned16 calc_crc(void* vdata,            /* pointer to memory block */
-                          rtems_unsigned32 count) /* length of block in bytes */
+uint16_t         calc_crc(void* vdata,            /* pointer to memory block */
+                          uint32_t         count) /* length of block in bytes */
 {
-   register rtems_unsigned8 *data = vdata;
-   register rtems_unsigned16 crc;
-   register rtems_unsigned32 byte;
+   register uint8_t         *data = vdata;
+   register uint16_t         crc;
+   register uint32_t         byte;
 
     /* initialise to either 0x0 or 0xffff depending on the
        CRC implementation */

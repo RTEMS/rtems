@@ -40,7 +40,7 @@
 			 * 2000 ticks @ (16MHz/1)/8 = 1-ms count
 			 */
 
-rtems_unsigned32 Timer_interrupts;
+uint32_t         Timer_interrupts;
 
 rtems_boolean Timer_driver_Find_average_overhead;
 
@@ -79,8 +79,8 @@ void Timer_initialize( void )
  */
 int Read_timer( void )
 {
-  rtems_unsigned16 clicks;
-  rtems_unsigned32 total;
+  uint16_t         clicks;
+  uint32_t         total;
 
   /*
    *  Read the timer and see how many clicks it has been since counter

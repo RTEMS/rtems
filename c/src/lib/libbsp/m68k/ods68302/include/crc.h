@@ -18,7 +18,7 @@ extern "C"
 {
 #endif
 
-rtems_unsigned16 calc_crc(void *data, rtems_unsigned32 count);
+uint16_t         calc_crc(void *data, uint32_t         count);
 
 #if __cplusplus
 }

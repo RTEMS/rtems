@@ -18,7 +18,7 @@ static volatile m302_SCC_t *scc[M68302_SCC_COUNT] = { 0, 0, 0 };
 static volatile m302_SCC_Registers_t *scc_reg[M68302_SCC_COUNT] = { 0, 0, 0 };
 static int scc_translate[M68302_SCC_COUNT] = { 0, 0, 0 };
 
-static const rtems_unsigned16 baud_clocks[] =
+static const uint16_t         baud_clocks[] =
 {
   (SYSTEM_CLOCK / (  4800 * 16)),
   (SYSTEM_CLOCK / (  9600 * 16)),
@@ -30,7 +30,7 @@ static const rtems_unsigned16 baud_clocks[] =
   
 void scc_initialise(int channel, int baud, int translate)
 {
-  rtems_unsigned16 scon;
+  uint16_t         scon;
   
   if (channel < M68302_SCC_COUNT)
   {
@@ -47,12 +47,12 @@ void scc_initialise(int channel, int baud, int translate)
     scc[channel]->bd.tx[0].status = 0x2000; 
     scc[channel]->bd.tx[0].length = 0;
     scc[channel]->bd.tx[0].buffer =
-      (rtems_unsigned8*) &(scc[channel]->bd.tx[1].buffer);
+      (uint8_t*) &(scc[channel]->bd.tx[1].buffer);
 
     scc[channel]->bd.rx[0].status = 0x2000; 
     scc[channel]->bd.rx[0].length = 0;
     scc[channel]->bd.rx[0].buffer =
-      (rtems_unsigned8*) &(scc[channel]->bd.rx[1].buffer);
+      (uint8_t*) &(scc[channel]->bd.rx[1].buffer);
 
     scc[channel]->parm.rfcr = 0x50;
     scc[channel]->parm.tfcr = 0x50;
@@ -78,7 +78,7 @@ void scc_initialise(int channel, int baud, int translate)
 
 unsigned char scc_status(int channel, unsigned char status)
 {
-  rtems_unsigned16 rx_status;
+  uint16_t         rx_status;
 
   m302.reg.wcn = 0;
 

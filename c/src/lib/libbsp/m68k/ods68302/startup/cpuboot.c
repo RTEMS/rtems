@@ -95,7 +95,7 @@ void boot_phase_1()
 
 void boot_phase_2(void)
 {
-  rtems_unsigned32 stack;
+  uint32_t         stack;
   
 #if defined(LED_CONTROL)
   LED_CONTROL(LED_1_RED, LED_2_RED, LED_3_OFF, LED_4_OFF,
@@ -111,7 +111,7 @@ void boot_phase_2(void)
 #endif
 
   /* seems to want 2, looked at assember code output */
-  *((volatile rtems_unsigned32*) (&stack + 2)) |= ROM_BASE;
+  *((volatile uint32_t*) (&stack + 2)) |= ROM_BASE;
 }
 
 /*
