@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/sci.rel
 
 C_FILES = gdbsci.c
