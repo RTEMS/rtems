@@ -10,7 +10,7 @@ include $(top_srcdir)/../../../automake/lib.am
 
 CC_FILES = rtemsEvent.cc rtemsInterrupt.cc rtemsMessageQueue.cc \
     rtemsSemaphore.cc rtemsStatusCode.cc rtemsTask.cc rtemsTimer.cc
-CC_O_FILES = $(CC_FILES:%.cc=${ARCH}/%.o)
+CC_O_FILES = $(CC_FILES:%.cc=${ARCH}/%.$(OBJEXT))
 
 SRCS = $(CC_FILES)
 OBJS = $(CC_O_FILES)
