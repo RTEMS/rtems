@@ -6,11 +6,12 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 BSP_PIECES = startup dlentry flashentry
 # pieces to pick up out of libcpu/ppc
-# CPU_PIECES = ppc403/clock ppc403/timer ppc403/console ppc403/vectors \
-#     ppc403/ictrl
+CPU_PIECES = clock timer console vectors ictrl
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o))
+OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
+    $(foreach piece, $(CPU_PIECES), ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(piece)/$(ARCH)/$(piece).rel)
+
 LIB = $(ARCH)/libbsp.a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
