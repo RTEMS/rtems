@@ -32,6 +32,7 @@ int close(
   if ( iop->handlers->close_h )
     rc = (*iop->handlers->close_h)( iop );
 
+  rtems_filesystem_freenode( &iop->pathinfo );
   rtems_libio_free( iop );
 
   return rc;

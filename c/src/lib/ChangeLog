@@ -1,3 +1,8 @@
+2001-10-18	Till Straumann <strauman@SLAC.Stanford.EDU>
+
+	* libc/open.c, libc/close.c:  Moved freenode from open to
+	  close.
+
 2001-10-17      Till Straumann <strauman@SLAC.Stanford.EDU>
 		
 	* These changes were discussed and reviewed by many people but the

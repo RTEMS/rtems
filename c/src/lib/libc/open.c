@@ -187,8 +187,6 @@ done:
     set_errno_and_return_minus_one( rc );
   }
 
-  rtems_filesystem_freenode( &loc );
-
   return iop - rtems_libio_iops;
 }
 
