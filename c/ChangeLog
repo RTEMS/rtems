@@ -1,3 +1,8 @@
+2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove make from SUBDIRS.
+	* configure.ac: Remove make from CONFIG_SUBDIRS, cosmetics.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.

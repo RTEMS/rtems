@@ -12,7 +12,7 @@ ACLOCAL_AMFLAGS = -I ../aclocal
 RTEMS_BSP = $(RTEMS_BSP_LIST)
 ## The '.' in SUBDIRS ensures that local make-targets (xxx-am) will be
 ## triggered before $(RTEMS_BSP_LIST) subdirectories are made.
-SUBDIRS = make . $(RTEMS_BSP)
+SUBDIRS = . $(RTEMS_BSP)
 
 ## Use @RTEMS_BSP_LIST@ here, using $(RTEMS_BSP_LIST) would trigger
 ## this rule for invalid BSPs

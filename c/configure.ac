@@ -20,9 +20,8 @@ RTEMS_ENABLE_RTEMSBSP(rtems_bsp)
 RTEMS_CHECK_CPU
 RTEMS_CANONICAL_HOST
 
-if test -z "$rtems_bsp"; then
-  RTEMS_CHECK_BSPS(rtems_bsp)
-fi
+AS_IF([test -z "$rtems_bsp"],
+  [RTEMS_CHECK_BSPS(rtems_bsp)])
 
 for i in $rtems_bsp; do
 
@@ -91,11 +90,8 @@ AC_SUBST(rtems_bsp_configure)
 
 AC_SUBST(RTEMS_BSP_LIST)
 
-AC_CONFIG_SUBDIRS(make)
-
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 
 echo
