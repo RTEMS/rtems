@@ -59,7 +59,7 @@ int killinfo(
    *  Only supported for the "calling process" (i.e. this node).
    */
  
-  if( pid != getpid() )
+  if ( pid != getpid() )
     set_errno_and_return_minus_one( ESRCH );
 
   /*
