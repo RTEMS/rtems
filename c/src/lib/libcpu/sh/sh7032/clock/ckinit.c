@@ -152,7 +152,7 @@ void Install_clock(
    */
 
   if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = (rtems_isr_entry) set_vector( Clock_isr, CLOCK_VECTOR, 1 );
+    rtems_interrupt_catch( Clock_isr, CLOCK_VECTOR, &Old_ticker );
     /*
      *  Hardware specific initialize goes here
      */
@@ -280,8 +280,10 @@ rtems_device_driver Clock_control(
 	}
       else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
 	{
+	  rtems_isr_entry	ignored ;
 	  rtems_interrupt_disable( isrlevel );
-	  (void) set_vector( args->buffer, CLOCK_VECTOR, 1 );
+	  rtems_interrupt_catch( args->buffer, CLOCK_VECTOR, &ignored );
+	  
 	  rtems_interrupt_enable( isrlevel );
 	}
     }

@@ -28,6 +28,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-all:	$(SRCS)
-	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
-	$(INSTALL) -m 444 $(EQ_FILES) $(PROJECT_INCLUDE)
+all:	preinstall
+
+preinstall: $(SRCS)
+	@INSTALL@ $(INSTINCFLAGS) $(H_FILES) $(PROJECT_INCLUDE)

@@ -1,5 +1,9 @@
 /*  set_vector
  *
+ *  NOTE: This function is considered OBSOLETE and may vanish soon.
+ *	Calls to set_vector should be replaced by calls to 
+ *	rtems_interrupt_catch or _CPU_ISR_install_raw_handler.
+ *
  *  This routine installs an interrupt vector on the target Board/CPU.
  *  This routine is allowed to be as board dependent as necessary.
  *
@@ -52,4 +56,3 @@ sh_isr_entry set_vector(      		/* returns old vector */
 
   return previous_isr;
 }
-

@@ -55,7 +55,11 @@ extern "C" {
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
-#define Install_tm27_vector( handler ) set_vector( (handler), 0, 1 )
+#define Install_tm27_vector( handler ) \
+{ \
+  rtems_isr_entry ignored ; \
+  rtems_interrupt_catch( (handler), 0, &ignored ) ; \
+}
 
 #define Cause_tm27_intr()
 
@@ -110,12 +114,14 @@ extern void bsp_cleanup( void );
 /*
  * FIXME: Should this go to libcpu/sh/sh7032 ?
  */
+#if 0
 /* functions */
 sh_isr_entry set_vector(                    /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */
   int                 type                      /* RTEMS or RAW intr  */
 );
+#endif
 
 #ifdef __cplusplus
 }

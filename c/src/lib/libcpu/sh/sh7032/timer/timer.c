@@ -62,10 +62,10 @@ rtems_boolean Timer_driver_Find_average_overhead;
 
 void Timer_initialize( void )
 {
-  rtems_unsigned8 temp8;
+  rtems_unsigned8  temp8;
   rtems_unsigned16 temp16;
   rtems_unsigned32 level;
-  rtems_isr* ignored;
+  rtems_isr	   *ignored;
 
   /*
    *  Timer has never overflowed.  This may not be necessary on some
@@ -117,7 +117,7 @@ void Timer_initialize( void )
   write16( temp16, INTC_IPRC);
 
   /* initialize ISR */
-  ignored = set_vector( timerisr, ITU1_VECTOR, 0);
+  _CPU_ISR_install_raw_handler( ITU1_VECTOR, timerisr, &ignored );
   _CPU_ISR_Enable( level);
 
   /* start timer 1 */
