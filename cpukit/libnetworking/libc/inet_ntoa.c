@@ -52,6 +52,7 @@ inet_ntoa(in)
 	struct in_addr in;
 {
 	static char ret[18];
+	char *strcpy(char *dest, const char *src);
 
 	strcpy(ret, "[inet_ntoa error]");
 	(void) inet_ntop(AF_INET, &in, ret, sizeof ret);

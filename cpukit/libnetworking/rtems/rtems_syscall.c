@@ -659,13 +659,13 @@ rtems_bsdnet_close (rtems_libio_t *iop)
 	return 0;
 }
 
-static int
+static ssize_t
 rtems_bsdnet_read (rtems_libio_t *iop, void *buffer, unsigned32 count)
 {
 	return recv (iop->data0, buffer, count, 0);
 }
 
-static int
+static ssize_t
 rtems_bsdnet_write (rtems_libio_t *iop, const void *buffer, unsigned32 count)
 {
 	return send (iop->data0, buffer, count, 0);

@@ -791,7 +791,7 @@ static int rtems_tftp_open(
 /*
  * Read from a TFTP stream
  */
-static int rtems_tftp_read(
+static ssize_t rtems_tftp_read(
     rtems_libio_t *iop,
     void          *buffer,
     unsigned32    count
@@ -932,7 +932,7 @@ static int rtems_tftp_close(
     return RTEMS_SUCCESSFUL;
 }
 
-static int rtems_tftp_write(
+static ssize_t rtems_tftp_write(
     rtems_libio_t   *iop,
     const void      *buffer,
     unsigned32      count

@@ -51,6 +51,10 @@ extern void soconnwakeup (struct socket *so);
 #define splimp()	0
 #define splx(_s)	do { (_s) = 0; } while(0)
 
+/* to avoid warnings */
+void *memcpy(void *dest, const void *src, size_t n);
+void *memset(void *s, int c, size_t n);
+
 #define ovbcopy(f,t,n) bcopy(f,t,n)
 #define copyout(f,t,n) (memcpy(t,f,n),0)
 #define copyin(f,t,n) (memcpy(t,f,n),0)

@@ -6,6 +6,7 @@
 #include <rtems/error.h>
 #include <sys/types.h>
 #include <rtems/rtems_bsdnet.h>
+#include <rtems/rtems_bsdnet_internal.h>
 
 /*
  * Perform a BOOTP request

@@ -1,3 +1,24 @@
+2002-10-28	Joel Sherrill <joel@OARcorp.com>
+
+	* Pass to eliminate warnings.
+	* kern/uipc_mbuf.c: Conditional SYSINIT() usage on __rtems__.
+	Fix return statement without a value.
+	* lib/ftpfs.c: read and write filesystem routines return ssize_t.
+	* lib/syslog.c: Add include of <string.h> to eliminate warning.
+	* lib/tftpDriver.c: read and write filesystem routines return ssize_t.
+	* libc/gethostbydns.c: Prototype abort().
+	* libc/inet_ntoa.c: Prototype strcpy().
+	* libc/rcmd.c: Add include of <sys/select.h>
+	* net/if_loop.c: Turn token at end of endif to comment.
+	* net/rtsock.c, nfs/bootp_subr.c:  Conditional SYSINIT() usage
+	on __rtems__.
+	* rtems/rtems_bootp.c: Add include of <rtems/rtems_bsdnet_internal.h>.
+	* rtems/rtems_bsdnet_internal.h: Added prototypes for memcpy() and
+	memset() since the BSD code tries to avoid using libc .h files 
+	since it is used to being in the kernel.
+	* rtems/rtems_syscall.c: read and write filesystem routines
+	return ssize_t.
+
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.

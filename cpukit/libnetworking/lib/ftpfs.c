@@ -959,7 +959,7 @@ int rtems_ftp_open(
 /*
  * Read from a FTP stream
  */
-int rtems_ftp_read(
+ssize_t rtems_ftp_read(
   rtems_libio_t *iop,
   void          *buffer,
   unsigned32     count
@@ -1013,7 +1013,7 @@ int rtems_ftp_read(
   return count - want_cnt;
 }
 
-int rtems_ftp_write(
+ssize_t rtems_ftp_write(
   rtems_libio_t *iop,
   const void    *buffer,
   unsigned32     count

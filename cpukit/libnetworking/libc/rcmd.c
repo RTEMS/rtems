@@ -59,6 +59,8 @@ static char sccsid[] = "@(#)rcmd.c	8.3 (Berkeley) 3/26/94";
 #include <rpcsvc/ypclnt.h>
 #endif
 
+#include <sys/select.h>
+
 
 #define max(a, b)	((a > b) ? a : b)
 

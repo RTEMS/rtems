@@ -121,8 +121,8 @@ static int md_lookup_swap __P((struct sockaddr_in *mdsin,char *path,
 static int setfs __P((struct sockaddr_in *addr, char *path, char *p));
 static int getdec __P((char **ptr));
 #endif
-static char *substr __P((char *a,char *b));
 #if !defined(__rtems__)
+static char *substr __P((char *a,char *b));
 static void mountopts __P((struct nfs_args *args, char *p)); 
 static int xdr_opaque_decode __P((struct mbuf **ptr,u_char *buf,
 				  int len));
@@ -670,6 +670,7 @@ static int setfs(addr, path, p)
 }
 #endif
 
+#if !defined(__rtems__)
 static int getdec(ptr)
 	char **ptr;
 {
@@ -683,7 +684,9 @@ static int getdec(ptr)
 	*ptr = p;
 	return(ret);
 }
+#endif
 
+#if !defined(__rtems__)
 static char *substr(a,b)
 	char *a,*b;
 {
@@ -702,6 +705,7 @@ static char *substr(a,b)
         }
         return (0);
 }
+#endif
 
 static void printip(char *prefix,struct in_addr addr)
 {

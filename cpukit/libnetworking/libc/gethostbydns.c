@@ -77,6 +77,8 @@ static char rcsid[] = "$Id$";
 
 #include "res_config.h"
 
+void abort(void); /* to avoid warning */
+
 #define SPRINTF(x) ((size_t)sprintf x)
 
 #define	MAXALIASES	35

@@ -50,8 +50,10 @@
 #include <vm/vm_kern.h>
 #include <vm/vm_extern.h>
 
+#if !defined(__rtems__)
 static void mbinit __P((void *))  __attribute__ ((unused));
 SYSINIT(mbuf, SI_SUB_MBUF, SI_ORDER_FIRST, mbinit, NULL)
+#endif
 
 struct mbuf *mbutl;
 char	*mclrefcnt;
@@ -729,7 +731,7 @@ m_copyback(m0, off, len, cp)
 	int totlen = 0;
 
 	if (m0 == 0)
-		return;
+		return 0;
 	while (off > (mlen = m->m_len)) {
 		off -= mlen;
 		totlen += mlen;
@@ -768,7 +770,8 @@ m_copyback(m0, off, len, cp)
 		m->m_len = mlen;
 		m = m->m_next;
 	}
-out:	if (((m = m0)->m_flags & M_PKTHDR) && (m->m_pkthdr.len < totlen))
+/*out:*/
+	if (((m = m0)->m_flags & M_PKTHDR) && (m->m_pkthdr.len < totlen))
 		m->m_pkthdr.len = totlen;
 	return 0;
 }

@@ -81,7 +81,7 @@
 #include <netinet/if_ether.h>
 #include <netatalk/at.h>
 #include <netatalk/at_var.h>
-#endif NETATALK
+#endif /* NETATALK */
 
 #include "bpfilter.h"
 
@@ -205,7 +205,7 @@ looutput(ifp, m, dst, rt)
 	        ifq = &atintrq2;
 		isr = NETISR_ATALK;
 		break;
-#endif NETATALK
+#endif /* NETATALK */
 	default:
 		printf("lo%d: can't handle af%d\n", ifp->if_unit,
 			dst->sa_family);
