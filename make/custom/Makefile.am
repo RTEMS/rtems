@@ -41,6 +41,7 @@ mvme147s.cfg \
 mvme162.cfg \
 mvme162lx.cfg \
 mvme167.cfg \
+mvme2307.cfg \
 no_bsp.cfg \
 ods68302.cfg \
 p4000.cfg \
