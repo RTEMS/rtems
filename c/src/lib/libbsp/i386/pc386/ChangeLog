@@ -1,3 +1,11 @@
+2004-05-21  Till Strauman <strauman@slac.stanford.edu>
+
+	* PR 624/bsps
+	startup/bspstart.c: When probing the memory, make sure not to
+	corrupt the application. Only probe addresses beyond rtemsFreeMemStart.
+	* Let IBMPC_outch() convert LF -> CRLF to avoid printk scrambling
+	the screen.
+
 2004-05-21	Joel Sherrill <joel@OARcorp.com>
 
 	* ne2000/ne2000.c, wd8003/wd8003.c: Include errno.h as a consequence of

@@ -81,38 +81,39 @@ void bsp_postdriver_hook(void);
 void bsp_pretasking_hook(void)
 {
   uint32_t         topAddr, val;
-  int i;
+  int i, lowest;
 
   if (rtemsFreeMemStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
     rtemsFreeMemStart = (rtemsFreeMemStart+CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-  if(_heap_size == 0)
-    {
-      /*
-       * We have to dynamically size memory. Memory size can be anything
-       * between 2M and 2048M.
-       * let us first write
-       */
-      for(i=2048; i>=2; i--)
-	{
-	  topAddr = i*1024*1024 - 4;
-	  *(volatile uint32_t*)topAddr = topAddr;
-	}
+  /* find the lowest 1M boundary to probe */
+  lowest = ((rtemsFreeMemStart + (1<<20)) >> 20) + 1;
+  if ( lowest  < 2 )
+      lowest = 2;
 
-      for(i=2; i<=2048; i++)
-	{
-	  topAddr = i*1024*1024 - 4;
-	  val =  *(uint32_t*)topAddr;
-	  if(val != topAddr)
-	    {
-	      break;
-	    }
-	}
-
-      topAddr = (i-1)*1024*1024 - 4;
-
-      _heap_size = topAddr - rtemsFreeMemStart;
+  if (_heap_size == 0) {
+    /*
+     * We have to dynamically size memory. Memory size can be anything
+     * between no less than 2M and 2048M.
+     * let us first write
+     */
+    for (i=2048; i>=lowest; i--) {
+      topAddr = i*1024*1024 - 4;
+      *(volatile uint32_t*)topAddr = topAddr;
     }
+
+   for(i=lowest; i<=2048; i++) {
+     topAddr = i*1024*1024 - 4;
+     val =  *(uint32_t*)topAddr;
+     if (val != topAddr) {
+       break;
+     }
+   }
+
+    topAddr = (i-1)*1024*1024 - 4;
+
+    _heap_size = topAddr - rtemsFreeMemStart;
+  }
 
   bsp_libc_init((void *)rtemsFreeMemStart, _heap_size, 0);
   rtemsFreeMemStart += _heap_size;           /* HEAP_SIZE  in KBytes */
