@@ -1,3 +1,10 @@
+2002-03-05	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* startup/gdb-support.c: Added calls into the mips-support gdb stub
+	for configuring the memory regions.  Any bsp that wants to use the
+	gdbstub will need to do something similar.
+	* startup/Makefile.am: Added shared/gdbstub directory to include path.
+
 2002-02-27	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* start/start.S: Added kseg1 test to enable cache flush code

@@ -14,6 +14,7 @@
 #include <rtems.h>
 #include <rtems/bspIo.h>
 #include <libcpu/mongoose-v.h>
+#include "gdb_if.h"
 
 #include <rtems/libio.h>
 
@@ -36,10 +37,9 @@ extern void mg5uart_write_polled(int minor, char c );
 extern int mg5uart_inbyte_nonblocking_polled(int minor);
 
 
-extern void mips_gdb_stub_install(void);
-
-
 static int debugUartEnabled = 0;
+
+
 
 
 
@@ -61,24 +61,36 @@ int mg5rdbgOpenGDBuart(int breakoninit)
       printf("gdbstub: Failed to configure UART 2 for 19200N82\n");
       return -1;
    }
+   printf("gdbstub: UART 2 configured for 19200N82\n");
 
    debugUartEnabled  = -1;
 
    /* set up vectoring for gdb */
-   mips_gdb_stub_install();
+   mips_gdb_stub_install(-1);
 
-   printf("gdbstub: Remote GDB stub listening on UART 2 at 19200N82\n");
+   /* 
+      this is a rough approximation of our memory map.  Yours is
+      probably different.  It only needs to be sufficient for the stub
+      to know what it can and can't do and where.
+   */
+   gdbstub_add_memsegment(0         , 0x8001ffff, MEMOPT_READABLE );
+   gdbstub_add_memsegment(0x80020000, 0x80afffff, MEMOPT_READABLE | MEMOPT_WRITEABLE );
+   gdbstub_add_memsegment(0x80b00000, 0x814fffff, MEMOPT_READABLE );
+   gdbstub_add_memsegment(0x81500000, 0x81ffffff, MEMOPT_READABLE | MEMOPT_WRITEABLE );
+
 
    if( breakoninit ) 
    {
+      printf("gdbstub: GDB stub entered, connect host debugger now\n");
       /* 
          break to gdb.  We'll wait there for the operator to get their gdb
          going, then they can 'continue' or do whatever.
       */
       mips_break(0);
+      printf("gdbstub: User code running\n");
    }
-
-   printf("gdbstub: User code running\n");
+   else
+      printf("gdbstub: GDB stub ready for exceptions\n");
 
    return RTEMS_SUCCESSFUL;
 }
@@ -112,4 +124,30 @@ void putDebugChar (char c)
    if( debugUartEnabled )
       return mg5uart_write_polled(1,c);
 }
+
+
+
+
+/*
+   {
+      * initialize hardware pc and data breakpoints to quiet state*
+      unsigned32 dcic, reg, mask;
+
+      reg = 0xffffffff;
+      mask = 0xffffffff;
+
+      mips_set_bpcrm( reg, mask );
+      mips_set_bdarm( reg, mask );
+
+      mips_get_dcic( dcic );
+      * configure dcic for trapping, user & kernel mode, PC traps and enable it *
+      dcic = DCIC_TR | DCIC_UD | DCIC_KD | DCIC_PCE | DCIC_DE;
+      * dcic = DCIC_UD | DCIC_KD | DCIC_PCE | DCIC_DE; *
+      mips_set_dcic( dcic ); 
+
+      mips_get_bpcrm( reg, mask );
+      mips_get_dcic( dcic ); 
+      * printf("bpc is %08X, bpc_mask is %08X, dcic is now %08X\n", reg, mask, dcic ); *
+   }
+*/
 
