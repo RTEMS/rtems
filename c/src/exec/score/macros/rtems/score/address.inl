@@ -52,7 +52,7 @@
  */
 
 #define _Addresses_Is_aligned( _address ) \
-    ( ( (unsigned32)(_address) % 4 ) == 0 )
+    ( ( (unsigned32)(_address) % CPU_ALIGNMENT ) == 0 )
 
 /*PAGE
  *
