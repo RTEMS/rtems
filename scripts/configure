@@ -769,6 +769,7 @@ fi
 
 
 # RTEMS_CHECK_VERSION(..)
+RTEMS_VERSION=GET_RTEMS_VERSION_XXX
 
 test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 . ./setup.cache
@@ -777,7 +778,7 @@ test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 # redhat uses /usr/src/redhat
 # others might use /usr/src
 echo $ac_n "checking for rpm SPECS directory""... $ac_c" 1>&6
-echo "configure:781: checking for rpm SPECS directory" >&5
+echo "configure:782: checking for rpm SPECS directory" >&5
 if test -d /usr/src/packages/SPECS;
 then
   RPM_SPECSdir=/usr/src/packages/SPECS;
@@ -801,6 +802,7 @@ BINUTILSVERS="binutils-${binutils_version}"
 GDBVERS="gdb-${gdb_version}"
 
 BSPVERS="${RTEMS_VERSION}"
+
 
 
 trap '' 1 2 15
@@ -973,6 +975,7 @@ s%@RPM_SPECSdir@%$RPM_SPECSdir%g
 s%@GCCNEWLIBVERS@%$GCCNEWLIBVERS%g
 s%@BINUTILSVERS@%$BINUTILSVERS%g
 s%@GDBVERS@%$GDBVERS%g
+s%@RTEMS_VERSION@%$RTEMS_VERSION%g
 s%@BSPVERS@%$BSPVERS%g
 
 CEOF

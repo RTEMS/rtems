@@ -4,6 +4,7 @@ AC_INIT(binutils)
 AM_INIT_AUTOMAKE(scripts,19991021-0,no)
 
 # RTEMS_CHECK_VERSION(..)
+RTEMS_VERSION=GET_RTEMS_VERSION_XXX
 
 test -f ./setup.cache || cp ${srcdir}/setup.def ./setup.cache
 . ./setup.cache
@@ -35,6 +36,7 @@ AC_SUBST(BINUTILSVERS)
 GDBVERS="gdb-${gdb_version}"
 AC_SUBST(GDBVERS)
 BSPVERS="${RTEMS_VERSION}"
+AC_SUBST(RTEMS_VERSION)
 AC_SUBST(BSPVERS)
 
 AC_OUTPUT(

@@ -24,7 +24,8 @@ Summary:      gdb for target @target_alias@
 Source0:      	gdb-@gdb_version@.tar.gz
 Patch0:		gdb-@gdb_version@-rtems-@gdb_patch_version@.diff
 
-Buildroot:    /tmp
+Buildroot:    	@rpm_build_root@
+
 # Patch:
 %description
 RTEMS is an open source operating system for embedded systems.

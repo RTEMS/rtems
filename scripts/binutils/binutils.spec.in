@@ -16,7 +16,7 @@ Provides:     @target_alias@-binutils
 
 Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
-Buildroot:    	/opt/tmp
+Buildroot:    	@rpm_build_root@
 Prefix:		/opt
 
 Version:      	@binutils_version@

@@ -22,7 +22,7 @@ Summary:      A free operating system for embedded systems
 Source:       rtems-@Version@.tar.gz
 # We claim to be relocatible, but in fact we are not
 Prefix:	      /opt
-Buildroot:    /opt/tmp
+Buildroot:    @rpm_build_root@
 # Patch:
 %description
 RTEMS is a free operating system for embedded systems.

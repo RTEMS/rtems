@@ -34,9 +34,10 @@ do
   echo "8 gdb version             : $gdb_version"
   echo "9 gdb patch version       : $gdb_patch_version"
   echo "a gdb rpm release         : $gdb_rpm_release"
+  echo "b rpm build root          : $rpm_build_root"
   echo
 
-  echo -n "[0-9a] or any other key to quit >"
+  echo -n "[0-9ab] or any other key to quit >"
   read sel
   case $sel in
   0) echo -n "BINUTILS source >"
@@ -61,6 +62,8 @@ do
      read gdb_patch_version ;;
   a) echo -n "GDB RPM release >"
      read gdb_rpm_release ;;
+  b) echo -n "RPM build root >"
+     read rpm_build_root ;;
   *) 
      return 0 ;;
   esac
@@ -83,7 +86,8 @@ echo "gcc_patch_version=$gcc_patch_version" >> $CFG
 echo "gccnewlib_rpm_release=$gccnewlib_rpm_release" >> $CFG
 echo "gdb_version=$gdb_version" >> $CFG
 echo "gdb_patch_version=$gdb_patch_version" >> $CFG
-echo "gdbrpm_release=$gdbrpm_release" >> $CFG
+echo "gdb_rpm_release=$gdb_rpm_release" >> $CFG
+echo "rpm_build_root=$rpm_build_root" >> $CFG
 
 echo " done"
 test -f Makefile || ./configure
