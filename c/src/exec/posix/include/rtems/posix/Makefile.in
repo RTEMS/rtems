@@ -16,11 +16,11 @@ PROJECT_ROOT = @PROJECT_ROOT@
 VPATH = @srcdir@
 
 # We only build multiprocessing related files if HAS_MP was defined
-MP_PIECES_yes_V = condmp mutexmp pthreadmp 
+MP_PIECES_yes_V = condmp mqueuemp mutexmp pthreadmp semaphoremp
 MP_PIECES = $(MP_PIECES_$(HAS_MP)_V)
 
-H_PIECES= cond config key mutex posixapi \
-    priority psignal pthread ptimer seterr threadsup time
+H_PIECES= cancel cond config key mqueue mutex posixapi \
+    priority psignal pthread ptimer semaphore seterr threadsup time
 #H_PIECES= cancel cond intr key mqueue mqueuemp mutex \
 #    mutexmp pthread pthreadmp priority semaphore semaphoremp threadsup \
 #    time
