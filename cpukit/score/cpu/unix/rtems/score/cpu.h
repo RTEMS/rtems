@@ -678,7 +678,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  Support routine to initialize the RTEMS vector table after it is allocated.
  */
 
-#define _CPU_Initialize_vectors()
+void _CPU_Initialize_vectors(void);
 
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous

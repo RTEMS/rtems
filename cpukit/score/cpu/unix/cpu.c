@@ -73,12 +73,18 @@ int cpu_number;
 
 /*PAGE
  *
- *  _CPU_ISR_From_CPU_Init
+ *  _CPU_Initialize_vectors()
+ *
+ *  Support routine to initialize the RTEMS vector table after it is allocated.
+ *
+ *  UNIX Specific Information:
+ *
+ *  Complete initialization since the table is now allocated.
  */
-
+ 
 sigset_t  posix_empty_mask;
 
-void _CPU_ISR_From_CPU_Init()
+void _CPU_Initialize_vectors(void)
 {
   unsigned32        i;
   proc_ptr          old_handler;
@@ -308,8 +314,6 @@ void _CPU_Initialize(
   /* XXX: FP context initialization support */
 
   _CPU_Table = *cpu_table;
-
-  _CPU_ISR_From_CPU_Init();
 
   _CPU_Sync_io_Init();
 

@@ -1,3 +1,9 @@
+2001-01-25	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c, rtems/score/cpu.h: Bug report from Peter Mueller
+	<peter.o.mueller@gmx.de> because of not correcting for the ISR
+	vector table now being allocated from the workspace.
+
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h: Added _CPU_Initialize_vectors().
