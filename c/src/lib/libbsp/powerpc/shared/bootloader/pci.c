@@ -251,11 +251,16 @@ static void insert_resource(pci_resource *r) {
    }
    }
 
+
+   /* 2004/11/30, PR 729 fix is removing the r->size=0 and r->base=0
+    * assignement which makes too-large regions conflict with onboard
+    * hardware, replacing it with sfree which deletes the memory region
+    * from the setup code, leaving it disabled. */
    if ((r->type==PCI_BASE_ADDRESS_SPACE_IO)
-       ? (r->size >= 0x10000)
-       : (r->size >= 0x10000000)) {
-      r->size  = 0;
-      r->base  = 0;
+       ? (r->size > 0x10000)
+       : (r->size > 0x18000000)) {
+      sfree(r);
+      return;
    }
 
    /* Now insert into the list sorting by
