@@ -29,20 +29,20 @@ all-local: $(TMPINSTALL_FILES) $(PGM)
 
 EXTRA_DIST = bspclean.c bspstart.c linkcmds linkcmds.rom linkcmds.rom2ram
 
-${PROJECT_RELEASE}/lib/$(dirstamp):
-	@$(mkdir_p) ${PROJECT_RELEASE}/lib
-	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
 
-${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
+$(PROJECT_LIB)/linkcmds: linkcmds $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
-${PROJECT_RELEASE}/lib/linkcmds.rom: linkcmds.rom ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds.rom
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds.rom
+$(PROJECT_LIB)/linkcmds.rom: linkcmds.rom $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.rom
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.rom
 
-${PROJECT_RELEASE}/lib/linkcmds.rom2ram: linkcmds.rom2ram ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds.rom2ram
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds.rom2ram
+$(PROJECT_LIB)/linkcmds.rom2ram: linkcmds.rom2ram $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.rom2ram
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.rom2ram
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -42,24 +42,24 @@ all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = start.c except_vect_332_ROM.S ram_init.ld ram_init.sed
 
-${PROJECT_RELEASE}/lib/$(dirstamp):
-	@$(mkdir_p) ${PROJECT_RELEASE}/lib
-	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
 
-${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start$(LIB_VARIANT).$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
+$(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start$(LIB_VARIANT).$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT)
 
-${PROJECT_RELEASE}/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT): $(ARCH)/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
+$(PROJECT_LIB)/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT): $(ARCH)/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
 
-${PROJECT_RELEASE}/lib/ram_init$(LIB_VARIANT): $(ARCH)/ram_init$(LIB_VARIANT) ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/ram_init$(LIB_VARIANT)
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/ram_init$(LIB_VARIANT)
+$(PROJECT_LIB)/ram_init$(LIB_VARIANT): $(ARCH)/ram_init$(LIB_VARIANT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/ram_init$(LIB_VARIANT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/ram_init$(LIB_VARIANT)
 
-${PROJECT_RELEASE}/lib/ram_init_FW$(LIB_VARIANT): $(ARCH)/ram_init_FW$(LIB_VARIANT) ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/ram_init_FW$(LIB_VARIANT)
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/ram_init_FW$(LIB_VARIANT)
+$(PROJECT_LIB)/ram_init_FW$(LIB_VARIANT): $(ARCH)/ram_init_FW$(LIB_VARIANT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/ram_init_FW$(LIB_VARIANT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/ram_init_FW$(LIB_VARIANT)
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -33,20 +33,20 @@ all-local: $(PGM) $(TMPINSTALL_FILES)
 EXTRA_DIST = bspclean.c bspstart.c crc.c debugger debugport.c gdb-hooks.c \
     linkcmds m68302scc.c m68k-stub.c memcheck.c rom trace.c
 
-${PROJECT_RELEASE}/lib/$(dirstamp):
-	@$(mkdir_p) ${PROJECT_RELEASE}/lib
-	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
 
-${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
+$(PROJECT_LIB)/linkcmds: linkcmds $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
-${PROJECT_RELEASE}/lib/rom: rom ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/rom
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/rom
+$(PROJECT_LIB)/rom: rom $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/rom
+TMPINSTALL_FILES += $(PROJECT_LIB)/rom
 
-${PROJECT_RELEASE}/lib/debugger: debugger ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/debugger
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/debugger
+$(PROJECT_LIB)/debugger: debugger $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/debugger
+TMPINSTALL_FILES += $(PROJECT_LIB)/debugger
 
 include $(top_srcdir)/../../../../automake/local.am

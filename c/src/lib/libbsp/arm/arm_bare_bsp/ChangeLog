@@ -1,3 +1,8 @@
+2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* start/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
+	* startup/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* irq/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.

@@ -29,20 +29,20 @@ all-local: $(TMPINSTALL_FILES) $(PGM)
 EXTRA_DIST = bspclean.c bspstart.c hw_init.c linkcmds linkcmds-le \
     linkcmds-le.coff
 
-${PROJECT_RELEASE}/lib/$(dirstamp):
-	@$(mkdir_p) ${PROJECT_RELEASE}/lib
-	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
 
-${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
+$(PROJECT_LIB)/linkcmds: linkcmds $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
-${PROJECT_RELEASE}/lib/linkcmds-le: linkcmds-le ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds-le
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds-le
+$(PROJECT_LIB)/linkcmds-le: linkcmds-le $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds-le
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds-le
 
-${PROJECT_RELEASE}/lib/linkcmds-le.coff: linkcmds-le.coff ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds-le.coff
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds-le.coff
+$(PROJECT_LIB)/linkcmds-le.coff: linkcmds-le.coff $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds-le.coff
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds-le.coff
 
 include $(top_srcdir)/../../../../automake/local.am

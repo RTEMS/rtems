@@ -31,20 +31,20 @@ all-local: $(PGM) $(TMPINSTALL_FILES)
 EXTRA_DIST = bspclean.c bspstart.c init5206e.c linkcmds linkcmds.flash \
     gdbinit
 
-${PROJECT_RELEASE}/lib/$(dirstamp):
-	@$(mkdir_p) ${PROJECT_RELEASE}/lib
-	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
 
-${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
+$(PROJECT_LIB)/linkcmds: linkcmds $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
-${PROJECT_RELEASE}/lib/gdbinit: gdbinit ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/gdbinit
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/gdbinit
+$(PROJECT_LIB)/gdbinit: gdbinit $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/gdbinit
+TMPINSTALL_FILES += $(PROJECT_LIB)/gdbinit
 
-${PROJECT_RELEASE}/lib/linkcmds.flash: linkcmds.flash ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds.flash
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds.flash
+$(PROJECT_LIB)/linkcmds.flash: linkcmds.flash $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.flash
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.flash
 
 include $(top_srcdir)/../../../../automake/local.am
