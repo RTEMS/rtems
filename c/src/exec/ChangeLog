@@ -1,3 +1,41 @@
+2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/bsp-alias.m4: Copied over from aclocal/.
+	* aclocal/canonical-host.m4: Ditto.
+	* aclocal/canonical-target-name.m4: Ditto.
+	* aclocal/canonicalize-tools.m4: Ditto.
+	* aclocal/check-bsp-cache.m4: Ditto.
+	* aclocal/check-bsps.m4: Ditto.
+	* aclocal/check-cpu.m4: Ditto.
+	* aclocal/check-itron.m4: Ditto.
+	* aclocal/check-multiprocessing.m4: Ditto.
+	* aclocal/check-networking.m4: Ditto.
+	* aclocal/check-newlib.m4: Ditto.
+	* aclocal/check-posix.m4: Ditto.
+	* aclocal/check-tool.m4: Ditto.
+	* aclocal/enable-bare.m4: Ditto.
+	* aclocal/enable-inlines.m4: Ditto.
+	* aclocal/enable-itron.m4: Ditto.
+	* aclocal/enable-multiprocessing.m4: Ditto.
+	* aclocal/enable-networking.m4: Ditto.
+	* aclocal/enable-posix.m4: Ditto.
+	* aclocal/enable-rtemsbsp.m4: Ditto.
+	* aclocal/env-rtemsbsp.m4: Ditto.
+	* aclocal/env-rtemscpu.m4: Ditto.
+	* aclocal/gcc-pipe.m4: Ditto.
+	* aclocal/gcc-specs.m4: Ditto.
+	* aclocal/multi.m4: Ditto.
+	* aclocal/multilib.m4: Ditto.
+	* aclocal/prog-cc.m4: Ditto.
+	* aclocal/project-root.m4: Ditto.
+	* aclocal/rtems-cpu-subdirs.m4: Ditto.
+	* aclocal/rtems-debug.m4: Ditto.
+	* aclocal/rtems-top.m4: Ditto.
+	* aclocal/subdirs.m4: Ditto.
+	* aclocal/sysv-ipc.m4: Ditto.
+	* aclocal/tool-paths.m4: Ditto.
+	* aclocal/version.m4: Ditto.
+
 2002-06-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/compile.am: Copied over from automake/.
