@@ -1,5 +1,5 @@
 *** POSIX TEST 11 ***
-Init's ID is 0x0c010001
+Init's ID is 0x0b010001
 Init: Setting scheduling parameters to FIFO with priority 127
 Init: Setting scheduling parameters to RR with priority 125
 Init: Setting scheduling parameters to OTHER with priority 121

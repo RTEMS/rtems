@@ -1,5 +1,5 @@
 *** POSIX TEST 3 ***
-Init's ID is 0x0c010001
+Init's ID is 0x0b010001
 Init: waiting on any signal for 3 seconds.
 Init: correctly timed out waiting for SIGUSR1.
  

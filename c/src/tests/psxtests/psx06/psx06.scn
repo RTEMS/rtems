@@ -1,5 +1,5 @@
 *** POSIX TEST 6 ***
-Init's ID is 0x0c010001
+Init's ID is 0x0b010001
 Init: pthread_key_create - SUCCESSFUL
 Destructor invoked 0 times
 Init: pthread_key_create - EAGAIN (too many keys)

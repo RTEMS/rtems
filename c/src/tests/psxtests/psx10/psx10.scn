@@ -17,14 +17,14 @@ Init: pthread_cond_destroy
 Init: pthread_cond_destroy - EINVAL (cond invalid)
 Init: pthread_cond_init - attr
 Init: sleep to switch to Task_1
-Task_1: ID is 0x0c010002
+Task_1: ID is 0x0b010002
 Task_1: pthread_cond_wait
 Init: pthread_cond_destroy - EBUSY (task1 waiting)
 Init: pthread_cond_signal
 Init: sleep - switch to Task_1 and Task_2
 Task_1: back from pthread_cond_wait release mutex
 Task_1: pthread_cond_wait
-Task_2: ID is 0x0c010003
+Task_2: ID is 0x0b010003
 Task_2: pthread_cond_wait
 Init: pthread_cond_broadcast
 Init: sleep - switch to Task_1
@@ -46,7 +46,7 @@ Init: pthread_cond_timedwait - ETIMEDOUT (abstime->tv_nsec < current time)
 Init: pthread_cond_wait - EINVAL (mutex not locked before call)
 Init: pthread_cond_timedwait - EINVAL (mutex not locked before call)
 Init: sleep - switch to Task_3
-Task_3: ID is 0x0c010004
+Task_3: ID is 0x0b010004
 Task_3: pthread_cond_wait
 Init: pthread_cond_signal
 Init: sleep - switch to Task_3

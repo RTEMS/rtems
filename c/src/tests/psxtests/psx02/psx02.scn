@@ -1,5 +1,5 @@
 *** POSIX TEST 2 ***
-Init's ID is 0x0c010001
+Init's ID is 0x0b010001
 Signal: 16 caught by 0xc010001 (1)
 Init: Block SIGUSR1
 Init: Signals pending 0x00000000

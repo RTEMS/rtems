@@ -28,7 +28,7 @@ Init: nanosleep - yield
 Init: nanosleep - 3.05 seconds
 Fri May 24 11:05:06 1996
 Init: sec (0), nsec (0) remaining
-Init: ID is 0x0c010001
+Init: ID is 0x0b010001
 Init: sched_get_priority_min (SCHED_FIFO) -- 1
 Init: sched_get_priority_min -- EINVAL (invalid policy)
 Init: sched_get_priority_max (SCHED_FIFO) -- 254
@@ -40,7 +40,7 @@ Init: sched_yield to Task_1
 Task_1: sched_yield to Init
 Init: pthread_exit
  
-Task_1: ID is 0x0c010002
+Task_1: ID is 0x0b010002
 Task_1: pthread_equal - match case passed
 Task_1: pthread_equal - different case passed
 Task_1: pthread_equal - first id bad

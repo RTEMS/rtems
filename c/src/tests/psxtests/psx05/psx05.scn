@@ -1,5 +1,5 @@
 *** POSIX TEST 5 ***
-Init's ID is 0x0c010001
+Init's ID is 0x0b010001
 Init: pthread_mutexattr_init - EINVAL (NULL attr)
 Init: pthread_mutexattr_init - SUCCESSFUL
 Init: mutex protocol is (0) -- PTHREAD_PRIO_NONE

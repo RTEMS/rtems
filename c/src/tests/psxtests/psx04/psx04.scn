@@ -1,5 +1,5 @@
 *** POSIX TEST 4 ***
-Init's ID is 0x0c010001
+Init's ID is 0x0b010001
 Init: sigemptyset -  set= 0x00000000
 Init: sigfillset -  set= 0xffffffff
 Init: sigdelset - delete SIGUSR1 set= 0xffff7fff

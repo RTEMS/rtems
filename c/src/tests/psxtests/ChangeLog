@@ -1,3 +1,10 @@
+2002-11-14	Joel Sherrill <joel@OARcorp.com>
+
+	* psx01/psx01.scn, psx02/psx02.scn, psx03/psx03.scn, psx04/psx04.scn,
+	psx05/psx05.scn, psx06/psx06.scn, psx07/psx07.scn, psx08/psx08.scn,
+	psx09/psx09.scn, psx10/psx10.scn, psx11/psx11.scn, psx12/psx12.scn:
+	Per PR239 update the IDs in the various screens.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

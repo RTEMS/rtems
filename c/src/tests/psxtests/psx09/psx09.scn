@@ -1,5 +1,5 @@
 *** POSIX TEST 9 ***
-Init's ID is 0x0c010001
+Init's ID is 0x0b010001
 Init: pthread_getschedparam - SUCCESSFUL
 Init: Fri May 24 11:05:00 1996 - current priority = 2
 Init: pthread_setschedparam - SUCCESSFUL (sporadic server)

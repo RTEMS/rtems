@@ -1,5 +1,5 @@
 *** POSIX TEST 8 ***
-Init's ID is 0x0c010001
+Init's ID is 0x0b010001
 Init: pthread_detach - ESRCH (invalid id)
 Init: pthread_detach self
 Init: pthread_join - ESRCH (invalid id)
