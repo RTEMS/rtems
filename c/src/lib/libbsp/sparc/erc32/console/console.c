@@ -19,10 +19,6 @@
 #include <stdlib.h>
 #include <assert.h>
 
-
-#undef  CONSOLE_USE_POLLED
-#define CONSOLE_USE_INTERRUPTS
-
 /*
  *  Should we use a polled or interrupt drived console?
  *  
@@ -368,13 +364,20 @@ int console_write_support (int minor, char *buf, int len)
 
   while (nwrite < len) {
 #if defined(CONSOLE_USE_INTERRUPTS)
-    console_outbyte_polled( minor, *buf++ );
-#else
     console_outbyte_interrupt( minor, *buf++ );
+#else
+    console_outbyte_polled( minor, *buf++ );
 #endif
     nwrite++;
   }
   return nwrite;
+}
+
+void console_reserve_resources(
+  rtems_configuration_table *configuration
+)
+{
+  rtems_termios_reserve_resources( configuration, 2 );
 }
 
 /*
