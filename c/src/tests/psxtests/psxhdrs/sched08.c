@@ -13,7 +13,7 @@
  *  $Id$
  */
 
-#include <pthread.h>
+#include <sched.h>
 
 #ifndef _POSIX_PRIORITY_SCHEDULING
 #error "rtems is supposed to have sched_rr_get_interval"
@@ -21,11 +21,11 @@
  
 void test( void )
 {
-  pid_t pid;
-  sruct timespec interval;
-  int   result;
+  pid_t  pid;
+  struct timespec interval;
+  int    result;
 
   pid = 0;
 
-  result = sched_rr_get_interval( pid, interval );
+  result = sched_rr_get_interval( pid, &interval );
 }
