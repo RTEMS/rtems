@@ -18,6 +18,17 @@
   (((1987 - 1970 + 1)  * TOD_SECONDS_PER_NON_LEAP_YEAR) + \
   (4 * TOD_SECONDS_PER_DAY))
 
+/*PAGE
+ *
+ *  _POSIX_Timespec_subtract
+ */
+ 
+void _POSIX_Timespec_subtract(
+  const struct timespec *the_start,
+  const struct timespec *end,
+  struct timespec *result
+);
+
 /*
  *  _POSIX_Timespec_to_interval
  */
