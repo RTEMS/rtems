@@ -1,5 +1,10 @@
 2003-12-17	Joel Sherrill <joel@OARcorp.com>
 
+	* release_support: Correct method used to find ChangeLog associated 
+        with the version.m4 files.  Keep going until I can get a tarball cut.
+
+2003-12-17	Joel Sherrill <joel@OARcorp.com>
+
 	* release_support: Use dirname not basedir.  Keep going until I
 	can get a tarball cut.
 
