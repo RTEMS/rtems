@@ -19,20 +19,18 @@ include $(top_srcdir)/../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-bsplib_DATA = linkcmds
-
-$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
-	$(INSTALL_DATA) $< $@
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
+project_lib_DATA = linkcmds
 
 $(PGM): $(OBJS)
 	$(make-rel)
 
-all-local: $(PREINSTALL_FILES) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(PGM)
+all-local: $(PREINSTALL_FILES) $(PGM) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bspclean.c bspstart.c hw_init.c linkcmds linkcmds.ram \
     linkcmds.rom
+
+${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
 
 include $(top_srcdir)/../../../../automake/local.am

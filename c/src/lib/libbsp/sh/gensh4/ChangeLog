@@ -1,3 +1,8 @@
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* start/Makefile.am: Misc cleanups and fixes.
+	* startup/Makefile.am: Misc cleanups and fixes.
+
 2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add preinstallation dirstamp support.
