@@ -164,7 +164,11 @@ void bsp_spurious_initialize()
     	(( trap >= 0x70 ) && ( trap <= 0x83 )))
       continue;
 
-    set_vector( bsp_spurious_handler, SPARC_SYNCHRONOUS_TRAP( trap ), 1 );
+    set_vector(
+        (rtems_isr_entry) bsp_spurious_handler,
+        SPARC_SYNCHRONOUS_TRAP( trap ),
+        1
+    );
   }
 
   LEON_REG.Interrupt_Mask = mask;
