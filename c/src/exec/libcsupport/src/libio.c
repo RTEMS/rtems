@@ -1,8 +1,6 @@
 /*
- * Provide UNIX/POSIX-like io system calls for RTEMS using the
+ *  Provide UNIX/POSIX-like io system calls for RTEMS using the
  *  RTEMS IO manager
- *
- * TODO
  *
  *  $Id$
  */
@@ -13,11 +11,14 @@
 #include <stdio.h>                      /* O_RDONLY, et.al. */
 #include <fcntl.h>                      /* O_RDONLY, et.al. */
 
-#if defined(solaris2)
-#define O_NDELAY O_NONBLOCK
-#elif defined(RTEMS_NEWLIB)
-#define O_NDELAY _FNBIO
+#if ! defined(O_NDELAY)
+# if defined(solaris2)
+#  define O_NDELAY O_NONBLOCK
+# elif defined(RTEMS_NEWLIB)
+#  define O_NDELAY _FNBIO
+# endif
 #endif
+
 
 #include <errno.h>
 #include <string.h>                     /* strcmp */
