@@ -1,3 +1,11 @@
+2004-03-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mpc5xx/.cvsignore, mpc5xx/Makefile.am: New.
+	* mpc5xx/exceptions/asm_utils.S,  mpc5xx/exceptions/raw_exception.c,
+	mpc5xx/exceptions/raw_exception.h, mpc5xx/ictrl/ictrl.c,
+	mpc5xx/ictrl/ictrl.h, mpc5xx/timer/timer.c: New (Submission from
+	Wilfried Busalski <w.busalski@lancier-monitoring.de>).
+
 2004-03-05	Joel Sherrill <joel@OARcorp.com>
 
 	* mpc6xx/mmu/pte121.c: Add missing ifdef DEBUG to remove warning for
