@@ -1,3 +1,7 @@
+2001-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* arpa/Makefile.am: Remove stray lines.
+
 2001-10-18	Eric Norum <eric.norum@usask.ca>
 
 	* lib/tftpDriver.c: Properly handles ../ components in chdir() and

@@ -4,8 +4,6 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-
-
 include_arpadir = $(includedir)/arpa
 
 include_arpa_HEADERS = ftp.h inet.h nameser.h nameser_compat.h telnet.h
