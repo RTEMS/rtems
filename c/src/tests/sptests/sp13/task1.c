@@ -25,6 +25,8 @@ char    big_receive_buffer[2048];
 
 long    buffer[ 4 ];
 
+#define MESSAGE_SIZE (sizeof(long) * 4)
+
 void dope_buffer(unsigned char *buff,
                  int   buff_size,
                  unsigned32 v)
@@ -64,12 +66,12 @@ rtems_task Task_1(
 
   Fill_buffer( "BUFFER 1 TO Q 1", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 1" );
-  status = rtems_message_queue_send( Queue_id[ 1 ], buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
   Fill_buffer( "BUFFER 2 TO Q 1", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 1" );
-  status = rtems_message_queue_send( Queue_id[ 1 ], buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
   puts( "TA1 - rtems_task_wake_after - sleep 5 seconds" );
@@ -78,7 +80,7 @@ rtems_task Task_1(
 
   Fill_buffer( "BUFFER 3 TO Q 1", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 3 TO Q 1" );
-  status = rtems_message_queue_send( Queue_id[ 1 ], buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 1 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
   puts( "TA1 - rtems_task_wake_after - sleep 5 seconds" );
@@ -89,7 +91,7 @@ rtems_test_pause();
 
   Fill_buffer( "BUFFER 1 TO Q 2", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 2" );
-  status = rtems_message_queue_send( Queue_id[ 2 ], buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 2 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
   puts_nocr( "TA1 - rtems_message_queue_receive - receive from queue 1 - " );
@@ -112,7 +114,7 @@ rtems_test_pause();
 
   Fill_buffer( "BUFFER 1 TO Q 3", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 3" );
-  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
   puts( "TA1 - rtems_task_wake_after - sleep 5 seconds" );
@@ -123,22 +125,22 @@ rtems_test_pause();
 
   Fill_buffer( "BUFFER 2 TO Q 3", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 3" );
-  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
   Fill_buffer( "BUFFER 3 TO Q 3", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 3 TO Q 3" );
-  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
   Fill_buffer( "BUFFER 4 TO Q 3", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 4 TO Q 3" );
-  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
   Fill_buffer( "BUFFER 5 TO Q 3", buffer );
   puts( "TA1 - rtems_message_queue_urgent - BUFFER 5 TO Q 3" );
-  status = rtems_message_queue_urgent( Queue_id[ 3 ], buffer, 16 );
+  status = rtems_message_queue_urgent( Queue_id[ 3 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_urgent" );
 
   for ( index = 1 ; index <= 4 ; index++ ) {
@@ -161,7 +163,7 @@ rtems_test_pause();
 
   Fill_buffer( "BUFFER 3 TO Q 2", buffer );
   puts( "TA1 - rtems_message_queue_urgent - BUFFER 3 TO Q 2" );
-  status = rtems_message_queue_urgent( Queue_id[ 2 ], buffer, 16 );
+  status = rtems_message_queue_urgent( Queue_id[ 2 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_urgent" );
 
   puts(
@@ -188,7 +190,7 @@ rtems_test_pause();
 
   Fill_buffer( "BUFFER 3 TO Q 2", buffer );
   puts( "TA1 - rtems_message_queue_urgent - BUFFER 3 TO Q 2" );
-  status = rtems_message_queue_urgent( Queue_id[ 2 ], buffer, 16 );
+  status = rtems_message_queue_urgent( Queue_id[ 2 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_urgent" );
 
   puts( "TA1 - rtems_message_queue_delete - delete queue 2" );
@@ -205,12 +207,12 @@ rtems_test_pause();
 
   Fill_buffer( "BUFFER 1 TO Q 3", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 1 TO Q 3" );
-  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
   Fill_buffer( "BUFFER 2 TO Q 3", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 2 TO Q 3" );
-  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
   /* this broadcast should have no effect on the queue */
@@ -231,7 +233,7 @@ rtems_test_pause();
 
   Fill_buffer( "BUFFER 3 TO Q 3", buffer );
   puts( "TA1 - rtems_message_queue_send - BUFFER 3 TO Q 3" );
-  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, 16 );
+  status = rtems_message_queue_send( Queue_id[ 3 ], buffer, MESSAGE_SIZE );
   directive_failed( status, "rtems_message_queue_send" );
 
   puts( "TA1 - rtems_message_queue_flush - Q 3" );
@@ -240,7 +242,7 @@ rtems_test_pause();
 
   puts( "TA1 - rtems_message_queue_send until all message buffers consumed" );
   while ( FOREVER ) {
-    status = rtems_message_queue_send( Queue_id[ 3 ], buffer, 16 );
+    status = rtems_message_queue_send( Queue_id[ 3 ], buffer, MESSAGE_SIZE );
     if ( status == RTEMS_TOO_MANY ) break;
     directive_failed( status, "rtems_message_queue_send loop" );
   }

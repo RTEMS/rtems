@@ -29,6 +29,7 @@ rtems_task Low_tasks(
   rtems_task_argument argument
 );
 
+#define MESSAGE_SIZE (sizeof(long) * 4)
 
 rtems_task Init(
   rtems_task_argument argument
@@ -72,7 +73,7 @@ rtems_task test_init(
   status = rtems_message_queue_create(
     rtems_build_name( 'M', 'Q', '1', ' ' ),
     OPERATION_COUNT,
-    16,
+    MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id
   );
@@ -114,7 +115,7 @@ rtems_task High_task(
 
   Timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
-      (void) rtems_message_queue_urgent( Queue_id, (long (*)[4]) Buffer, 16 );
+      (void) rtems_message_queue_urgent( Queue_id, Buffer, MESSAGE_SIZE );
   end_time = Read_timer();
 
   put_time(

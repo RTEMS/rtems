@@ -48,6 +48,8 @@ rtems_task Init(
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
 }
 
+#define MESSAGE_SIZE (sizeof(long) * 4)
+
 rtems_task Task_1(
   rtems_task_argument argument
 )
@@ -70,7 +72,7 @@ rtems_task Task_1(
     status = rtems_message_queue_create(
       index,
       1,                       /* only going to ident this queue */
-      16,
+      MESSAGE_SIZE,
       RTEMS_DEFAULT_ATTRIBUTES,
       &id
     );

@@ -24,6 +24,8 @@
 #define TEST_INIT
 #include "system.h"
 
+#define MESSAGE_SIZE (sizeof(long) * 4)
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -82,7 +84,7 @@ rtems_task Init(
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
     100,
-    16,
+    MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id[ 1 ]
   );
@@ -91,7 +93,7 @@ rtems_task Init(
   status = rtems_message_queue_create(
     Queue_name[ 2 ],
     10,
-    16,
+    MESSAGE_SIZE,
     RTEMS_PRIORITY,
     &Queue_id[ 2 ]
   );
@@ -100,7 +102,7 @@ rtems_task Init(
   status = rtems_message_queue_create(
     Queue_name[ 3 ],
     100,
-    16,
+    MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id[ 3 ]
   );
