@@ -31,7 +31,7 @@ MKGCCNEWLIB_C_ONLY_SPEC_DEPS = $(top_builddir)/mkgccnewlibspec \
     gccnewlib_c_only.spec.in $(top_builddir)/setup.cache
 
 h8300-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIB_C_ONLY_SPEC_DEPS)
-	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . h8300-rtems
+	$(MKGCCNEWLIBSPEC) $(C_ONLY_ARG) -cfg $(top_builddir)/setup.cache -o . h8300-rtems
 
 hppa1.1-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . hppa1.1-rtems
