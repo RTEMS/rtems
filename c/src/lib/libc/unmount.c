@@ -133,6 +133,7 @@ int unmount(
   free( temp_loc.mt_entry );
   rtems_filesystem_freenode( &temp_loc );
 
+  return 0;
 }
 
 
