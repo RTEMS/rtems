@@ -10,6 +10,7 @@
 
 typedef struct {
   pthread_attr_t          Attributes;
+  int                     detachstate;
 #if 0
   /*
    *  POSIX Interrupts 

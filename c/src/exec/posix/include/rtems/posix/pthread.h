@@ -25,12 +25,6 @@ extern "C" {
 #include <rtems/posix/threadsup.h>
 
 /*
- *  Data Structure used to manage a POSIX thread 
- */
-
-typedef Thread_Control POSIX_Threads_Control;
- 
-/*
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
@@ -69,7 +63,7 @@ void _POSIX_Threads_Manager_initialization(
  *  the inactive chain of free pthread control blocks.
  */
  
-STATIC INLINE POSIX_Threads_Control *_POSIX_Threads_Allocate( void );
+STATIC INLINE Thread_Control *_POSIX_Threads_Allocate( void );
  
 /*
  *  _POSIX_Threads_Free
@@ -81,7 +75,7 @@ STATIC INLINE POSIX_Threads_Control *_POSIX_Threads_Allocate( void );
  */
  
 STATIC INLINE void _POSIX_Threads_Free(
-  POSIX_Threads_Control *the_pthread
+  Thread_Control *the_pthread
 );
  
 /*
@@ -98,8 +92,8 @@ STATIC INLINE void _POSIX_Threads_Free(
  *  to OBJECTS_ERROR and the_pthread is undefined.
  */
  
-STATIC INLINE POSIX_Threads_Control *_POSIX_Threads_Get(
-  Objects_Id        *id,
+STATIC INLINE Thread_Control *_POSIX_Threads_Get(
+  pthread_t          id,
   Objects_Locations *location
 );
  
@@ -112,7 +106,7 @@ STATIC INLINE POSIX_Threads_Control *_POSIX_Threads_Get(
  */
  
 STATIC INLINE boolean _POSIX_Threads_Is_null(
-  POSIX_Threads_Control *the_pthread
+  Thread_Control *the_pthread
 );
 
 #include <rtems/posix/pthread.inl>
