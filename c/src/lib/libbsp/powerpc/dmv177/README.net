@@ -25,6 +25,8 @@ address on your network. The three high bytes are hard coded in the
 BSP and represent the vendor-specific Ethernet codes (0x00, 0x80, 0x7F).
 Together these six bytes form the target's Ethernet address.
 
+Address is of the form ...
+
 NOTE: The serial number is found on the packaging (box) that the
 board came in OR it is also located on the solder side of the board  and
 looks something like SERNO:XXXXXX.  It can not be determined dynamically
