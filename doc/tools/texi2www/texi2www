@@ -19,11 +19,15 @@ $usage = <<EOT;
 Usage: texi2www [option ...] texinfo_file
 where options are:
   -dir directory    -- Specify output directory.  Default is `.'.
+  -header path      -- Specifies the path to a file containing HTML;
+                       this files gets inserted near the top of each
+                       generated HTML file.
   -footer path      -- Specifies the path to a file containing HTML;
                        this files gets inserted near the bottom of each
                        generated HTML file.
   -icons path       -- Specifies the path, relative to the output directory,
                        to the arrow files.  Default is `..'.
+  -dirfile path     -- Specifies a replacement for ../dir.html
   -verbose          -- Verbose output.
 
 The complete user\'s is available at
@@ -32,12 +36,14 @@ EOT
 
 ########################################################################
 
-$icons = ".."; $dir = ".";
+$icons = ".."; $dir = "."; $dirfile = "../dir.html";
 while ($ARGV[0] =~ /^-/) {
     $_ = shift;
+    if (/-dirfile/) {$dirfile = shift; next;}
     if (/-dir/) {$_ = shift; s!/$!!; s!$!/!; $dir = $_; next;}
     if (/-verbose/) {$verbose = 1; next;}
     if (/-footer/) {$footer = shift; next;}
+    if (/-header/) {$header = shift; next;}
     if (/-icons/) {$_ = shift; s!\/$!!; $icons = $_; next;}
     die $usage;
 }
@@ -75,7 +81,7 @@ sub canonical # (node_name)
 
     $n =~ s/^\s+//; $n =~ s/\s+$//; # strip whitespace
 
-    return "../dir.html" if ($n =~ /\(dir\)/i); # handle (dir)
+    return "$dirfile" if ($n =~ /\(dir\)/i); # handle (dir)
     
     if ($n =~ /^\(([^\)]+)\)(.*)/) {
 	$p = $1; $p =~ s/^\s+//; $p =~ s/\s+$//; $p .= "/";
@@ -783,6 +789,7 @@ sub process_node
     &printHTML("<HTML>\n");
     &printHTML("<!-- created $today from " .
 	       $origin[$start_index] . " via texi2www -->\n");
+    &print_header if $header;
     &printHTML("<HEAD>\n<TITLE>$this</TITLE>\n");
     &printHTML("<LINK REL=\"Precedes\" HREF=\"$cnext\">\n") if $next;
     &printHTML("<LINK REV=\"Precedes\" HREF=\"$cprev\">\n") if $prev;
@@ -905,6 +912,20 @@ sub printHTML
 	print HTML $line;
     }
 } # printHTML
+
+########################################################################
+sub print_header
+{
+    unless (open(HEADER,$header)) {
+	print "WARNING -- couldn't open header file \"$header\" -- $!\n";
+	$header = 0;
+	return;
+    }
+    while (<HEADER>) {
+	&printHTML($_);
+    }
+    close(HEADER);
+}
 
 ########################################################################
 sub print_footer
