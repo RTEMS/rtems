@@ -24,7 +24,6 @@
 #define _LIB_LIBCPU_C_CLOCK_H
 
 #include <rtems.h>
-/* #include <bsp.h> */
 
 /*
  * These functions and variables represent the API exported by the
@@ -56,8 +55,3 @@ extern unsigned int BSP_processor_frequency;
 extern unsigned int BSP_time_base_divisor;
 
 #endif
-
-
-
-
-

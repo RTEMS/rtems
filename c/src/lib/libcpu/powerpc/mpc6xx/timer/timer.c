@@ -21,7 +21,6 @@
 #include <assert.h>
 #include <rtems.h>
 #include <libcpu/cpu.h>
-/* #include <bsp.h> */
 
 rtems_unsigned64 Timer_driver_Start_time;
 
