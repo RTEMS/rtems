@@ -1,13 +1,13 @@
-#
-# $Id$
-#
+##
+## $Id$
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
 EXTRA_DIST = README
 
 if MACROS
-# We only build multiprocessing related files if HAS_MP was defined
+## We only build multiprocessing related files if HAS_MP was defined
 MP_I_PIECES_yes_V = mppkt.inl objectmp.inl threadmp.inl
 MP_I_PIECES = $(MP_I_PIECES_$(HAS_MP)_V)
 

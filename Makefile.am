@@ -1,10 +1,10 @@
 #
 # top level directory for RTEMS build tree
 #
-# The target's toplevel Makefile now is in c/src
-#
-# $Id$
-#
+## The target's toplevel Makefile now is in c/src
+##
+## $Id$
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal

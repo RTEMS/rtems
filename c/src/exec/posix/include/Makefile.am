@@ -1,10 +1,10 @@
-#
-# $Id$
-#
+##
+## $Id$
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-# RTEMS unistd.h needs to be checked against newlib's and removed
+## RTEMS unistd.h needs to be checked against newlib's and removed
 #noinst_HEADERS= devctl.h intr.h
 H_PIECES = pthread.h sched.h aio.h mqueue.h semaphore.h
 

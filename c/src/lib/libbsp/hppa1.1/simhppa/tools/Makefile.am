@@ -1,6 +1,6 @@
-#
-#  $Id$
-#
+##
+##  $Id$
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
@@ -11,7 +11,7 @@ print_dump
 print_dump_SOURCES= \
 print_dump.c
 
-# HACK: install to build-tree
+## HACK: install to build-tree
 install-exec-local: $(PROGRAMS)
 	$(mkinstalldirs) $(PROJECT_ROOT)/simhppa/bin
 	$(INSTALL_PROGRAM) print_dump $(PROJECT_ROOT)/simhppa/bin

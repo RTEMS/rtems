@@ -1,6 +1,6 @@
-#
-# $Id$
-#
+##
+## $Id$
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -10,5 +10,5 @@ gcc-portsw.cfg \
 gcc-target-default.cfg \
 gcc.cfg.in
 
-# -------------------------------------------------------
+## -------------------------------------------------------
 include $(top_srcdir)/automake/local.am

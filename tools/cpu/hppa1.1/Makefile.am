@@ -1,6 +1,6 @@
-#
-#  $Id$
-#
+##
+##  $Id$
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
@@ -10,7 +10,7 @@ noinst_PROGRAMS=genoffsets
 genoffsets_SOURCES = \
 genoffsets.c
 
-# We use files that have not been installed yet.
+## We use files that have not been installed yet.
 
 CPU_DIR=../../cpu/$(RTEMS_CPU)
 

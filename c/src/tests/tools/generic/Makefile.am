@@ -1,6 +1,6 @@
-#
-#  $Id$
-#
+##
+##  $Id$
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
@@ -23,7 +23,7 @@ $(project_bspdir)/tests/difftest: difftest
 $(project_bspdir)/tests/sorttimes: sorttimes
 	$(INSTALL_SCRIPT) $< $@
 
-# HACK: install to build-tree
+## HACK: install to build-tree
 all-local: $(PREINSTALL_DIRS) $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../../automake/local.am

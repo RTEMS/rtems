@@ -1,10 +1,10 @@
-#
-# $Id$
-#
+##
+## $Id$
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-# We only build multiprocessing related files if HAS_MP was defined
+## We only build multiprocessing related files if HAS_MP was defined
 MP_H_PIECES_yes_V = condmp.h mqueuemp.h mutexmp.h pthreadmp.h semaphoremp.h
 MP_H_PIECES = $(MP_H_PIECES_$(HAS_MP)_V)
 

@@ -1,6 +1,6 @@
-#
-# $Id$
-#
+##
+## $Id$
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
@@ -21,7 +21,7 @@ $(PREINSTALL_DIRS):
 $(PROJECT_ROOT)/pc386/build-tools/bin2boot: bin2boot
 	$(INSTALL_PROGRAM) $< $@
 
-# HACK: install into build-tree
+## HACK: install into build-tree
 all-local: $(PREINSTALL_DIRS) $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../../../../automake/local.am

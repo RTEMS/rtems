@@ -1,6 +1,6 @@
-#
-# $Id$
-#
+##
+## $Id$
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
@@ -15,7 +15,7 @@ all-local: $(PREINSTALLDIRS)
 
 CPLUSPLUS_TESTS = cdtest
 
-# base_mp is a sample multiprocessing test
+## base_mp is a sample multiprocessing test
 MP_TESTS = base_mp
 
 FP_TESTS = paranoia

@@ -1,6 +1,6 @@
-#
-# $Id$
-#
+##
+## $Id$
+##
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
@@ -56,5 +56,5 @@ score603e.cfg \
 simhppa.cfg \
 ts_386ex.cfg
 
-# -------------------------------------------------------
+## -------------------------------------------------------
 include $(top_srcdir)/automake/local.am
