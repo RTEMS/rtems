@@ -1,3 +1,10 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* irq/irq_asm.S: Include <rtems/asm.h> instead of <asm.h>.
+	* vectors/vectors.S: Include <rtems/asm.h> instead of <asm.h>.
+	* include/bsp.h: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
+	* include/bsp.h: Include <rtems/console.h> instead of <console.h>.
+
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* console/console.c, ide/pcmcia_ide.c, network/network.c,
