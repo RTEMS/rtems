@@ -121,7 +121,8 @@ BSP_SUBDIRS=
 ## Configure ${srcdir}/../../cpukit as cpukit/ if multilibs are disabled
 RTEMS_BSP_CONFIG_SUBDIR(
   [cpukit],[../../cpukit],
-  ['--with-project-root=../../..' '--enable-rtemsbsp=$RTEMS_BSP'],
+  ['--with-project-root=${with_project_root}../$RTEMS_BSP/' \
+   '--enable-rtemsbsp=$RTEMS_BSP'],
   [test x"$multilib" = x"no"])
 
 ## Note: the order of the directories below is essential
@@ -168,28 +169,22 @@ AC_ARG_ENABLE([ada],
   *)  AC_MSG_ERROR(bad value ${enable_ada} for --enable-ada) ;;
 esac],[enable_ada=no])
 
-# FIXME: We should compute project_top from target-subdir
-if test -n "$with_target_subdir"; then
-project_top=../../../../
-else
-project_top=../../../
-fi
 AS_IF([test x"$enable_ada" = x"yes"],[
     RTEMS_BSP_CONFIG_SUBDIR(
       [ada-tests],[ada-tests],
-      ['--with-project-top=$project_top' \
-       '--enable-rtems-root=../' \
-       '--with-project-root=../../../' \
+      ['--enable-rtems-root=../' \
+       '--with-project-root=${with_project_root}../' \
+       '--with-project-top=${with_project_top}../' \
        '--enable-rtemsbsp=$RTEMS_BSP' \
       ],
-      [test x"$enable_tests" != x"no"])
+      [test x"$enable_tests" = x"yes"])
 ])
 
 RTEMS_BSP_CONFIG_SUBDIR(
   [testsuites],[../../testsuites],
-  ['--with-project-top=$project_top' \
-   '--enable-rtems-root=../' \
-   '--with-project-root=../../../' \
+  ['--enable-rtems-root=../' \
+   '--with-project-root=${with_project_root}../' \
+   '--with-project-top=${with_project_top}../' \
    '--enable-rtemsbsp=$RTEMS_BSP' \
    ],
   [test x"$enable_tests" != x"no"])
