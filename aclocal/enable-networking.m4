@@ -9,4 +9,5 @@ AC_ARG_ENABLE(networking,
   no) RTEMS_HAS_NETWORKING=no ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-networking option) ;;
 esac],[RTEMS_HAS_NETWORKING=yes])
+AC_SUBST(RTEMS_HAS_NETWORKING)dnl
 ])

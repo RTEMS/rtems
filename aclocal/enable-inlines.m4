@@ -9,4 +9,5 @@ AC_DEFUN(RTEMS_ENABLE_INLINES,
   no) RTEMS_USE_MACROS=yes ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for disable-rtems-inlines option) ;;
 esac],[RTEMS_USE_MACROS=no])
+AC_SUBST(RTEMS_USE_MACROS)dnl
 ])

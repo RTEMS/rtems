@@ -12,4 +12,5 @@ AC_ARG_ENABLE(gmake-print-directory,
   *)  AC_MSG_ERROR(bad value ${enableval} for gmake-print-directory option)
 ;;
 esac],[RTEMS_USE_OWN_PDIR=yes])
+AC_SUBST(RTEMS_USE_OWN_PDIR)dnl
 ])

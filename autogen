@@ -18,12 +18,27 @@ quiet="false"
 
 usage()
 {
-  echo "${progname} [-v|-q]"
+  echo
+  echo "usage: ${progname} [-h|-q|-v]"
+  echo
+  echo "options:"
+  echo "	-h .. display this message and exit";
+  echo "	-q .. quiet, don't display directories";
+  echo "	-v .. verbose, pass -v to automake when invoking automake"
+  echo
   exit 1;
 }
 
+if test ! -f VERSION; then
+  echo "${progname}:"
+  echo "	Please change directory to RTEMS's toplevel directory"
+  exit 1;
+fi
+
 while test $# -gt 0; do
 case $1 in
+-h|--he|--hel|--help)
+  usage ;;
 -q|--qu|--qui|--quie|--quiet)
   quiet="true";
   shift;;
@@ -37,14 +52,8 @@ case $1 in
 esac
 done
 
-if test ! -d aclocal; then
-  echo "${progname}"
-  echo "	Please change directory to RTEMS's toplevel directory"
-  exit 1;
-fi
-
 pwd=`pwd`;
-confs=`find $pwd -name configure.in`
+confs=`find $pwd -name 'configure.in' -print`
 
 aclocal_dir=$pwd/aclocal
 for i in $confs; do
@@ -57,4 +66,3 @@ dir=`dirname $i`;
   test -f Makefile.am && automake $verbose ;
 )
 done
-

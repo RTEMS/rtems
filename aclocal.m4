@@ -60,6 +60,7 @@ AC_ARG_ENABLE(gmake-print-directory,
   *)  AC_MSG_ERROR(bad value ${enableval} for gmake-print-directory option)
 ;;
 esac],[RTEMS_USE_OWN_PDIR=yes])
+AC_SUBST(RTEMS_USE_OWN_PDIR)dnl
 ])
 
 dnl $Id$
@@ -73,6 +74,7 @@ AC_ARG_ENABLE(multiprocessing,
   no) RTEMS_HAS_MULTIPROCESSING=no ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-multiprocessing option) ;;
 esac],[RTEMS_HAS_MULTIPROCESSING=no])
+AC_SUBST(RTEMS_HAS_MULTIPROCESSING)dnl
 ])
 
 dnl $Id$
@@ -86,6 +88,7 @@ AC_ARG_ENABLE(posix,
   no) RTEMS_HAS_POSIX_API=no ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-posix option) ;;
 esac],[RTEMS_HAS_POSIX_API=yes]) 
+AC_SUBST(RTEMS_HAS_POSIX_API)
 
 changequote(,)dnl
 case "${target}" in
@@ -123,6 +126,7 @@ AC_ARG_ENABLE(networking,
   no) RTEMS_HAS_NETWORKING=no ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-networking option) ;;
 esac],[RTEMS_HAS_NETWORKING=yes])
+AC_SUBST(RTEMS_HAS_NETWORKING)dnl
 ])
 
 dnl $Id$
@@ -136,6 +140,7 @@ AC_ARG_ENABLE(rdbg,
   no) RTEMS_HAS_RDBG=no ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-rdbg option) ;;
 esac],[RTEMS_HAS_RDBG=no])
+AC_SUBST(RTEMS_HAS_RDBG)dnl
 ])
 
 dnl $Id$
@@ -149,6 +154,7 @@ AC_DEFUN(RTEMS_ENABLE_INLINES,
   no) RTEMS_USE_MACROS=yes ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for disable-rtems-inlines option) ;;
 esac],[RTEMS_USE_MACROS=no])
+AC_SUBST(RTEMS_USE_MACROS)dnl
 ])
 
 dnl $Id$
@@ -186,6 +192,7 @@ AC_ARG_ENABLE(libcdir,
 [  --enable-libcdir=directory           set the directory for the C library],
 [ RTEMS_LIBC_DIR="${enableval}" ; \
 test -d ${enableval} || AC_MSG_ERROR("$enableval is not a directory" ) ] )
+AC_SUBST(RTEMS_LIBC_DIR)dnl
 ])
 
 AC_DEFUN(RTEMS_ENABLE_BARE,
@@ -703,7 +710,7 @@ dnl check for i386 gas supporting 16 bit mode
 dnl     - binutils 2.9.1.0.7 and higher
 
 AC_DEFUN(RTEMS_I386_GAS_CODE16,
-  if test "${target_cpu}" = "i386"; then
+[ if test "${target_cpu}" = "i386"; then
     AC_CACHE_CHECK([for 16 bit mode assembler support],
       rtems_cv_prog_gas_code16,
       [cat > conftest.s << EOF
@@ -719,7 +726,8 @@ EOF
       fi])
     RTEMS_GAS_CODE16="$rtems_cv_prog_gas_code16"
   fi
-)
+  AC_SUBST(RTEMS_GAS_CODE16)
+])
 
 
 dnl
@@ -886,5 +894,6 @@ AC_ARG_ENABLE(hwapi, \
     no)  RTEMS_HAS_HWAPI=no ;;
     *)  AC_MSG_ERROR(bad value ${enableval} for hwapi option) ;;
   esac],[RTEMS_HAS_HWAPI=no])
+AC_SUBST(RTEMS_HAS_HWAPI)dnl
 ])dnl
 

@@ -15,6 +15,14 @@
 #
 
 
+# $Id$
+
+# NOTE: This is a temporary work-around to keep 
+# "make debug" and "make debug_install" working.
+# Once automake is fully integrated these make targets 
+# and this file will probably be removed
+
+
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -96,7 +104,7 @@ TAR = tar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) $(top_srcdir)/../../../../../../automake/local.am
 	cd $(top_srcdir) && $(AUTOMAKE) --foreign Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
@@ -231,6 +239,24 @@ all-redirect all-am all installdirs mostlyclean-generic \
 distclean-generic clean-generic maintainer-clean-generic clean \
 mostlyclean distclean maintainer-clean
 
+
+debug-am:
+
+debug: debug-am
+
+debug_install-am:
+
+debug_install: debug_install-am
+
+profile-am:
+
+profile: profile-am
+
+profile_install-am:
+
+profile_install: profile_install-am
+
+.PHONY: debug debug_install profile profile_install
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -11,4 +11,5 @@ AC_ARG_ENABLE(hwapi, \
     no)  RTEMS_HAS_HWAPI=no ;;
     *)  AC_MSG_ERROR(bad value ${enableval} for hwapi option) ;;
   esac],[RTEMS_HAS_HWAPI=no])
+AC_SUBST(RTEMS_HAS_HWAPI)dnl
 ])dnl

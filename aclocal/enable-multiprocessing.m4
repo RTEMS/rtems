@@ -9,4 +9,5 @@ AC_ARG_ENABLE(multiprocessing,
   no) RTEMS_HAS_MULTIPROCESSING=no ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-multiprocessing option) ;;
 esac],[RTEMS_HAS_MULTIPROCESSING=no])
+AC_SUBST(RTEMS_HAS_MULTIPROCESSING)dnl
 ])

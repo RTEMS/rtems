@@ -1,0 +1,119 @@
+#!/usr/bin/perl
+
+#
+# Perl script to beautify and enhance RTEMS configure.in
+#
+# Reads from stdin and writes to stdout
+#
+# usage: 
+# acpolish <configure.in >configure.in~
+# mv configure.in~ configure.in
+#
+# ATTENTION: This file contains embedded tabs
+
+my $nl_seen = 0 ;
+
+# find a relative up-path to a file $file, starting at directory $pre
+sub find_file
+{
+  my $pre = $_[0] ;
+  my $file= $_[1] ;
+
+  my $top = "." ;
+  if (not "$pre") { $pre = "." ; }
+
+  for ( $str = "$pre" . "/" . "$top" ;
+    ( -d "$str" ) ;
+    $str = "$pre" . "/" . "$top" )
+  {
+    if ( -f "${str}/${file}" )  
+    {
+      return $top ; 
+    }
+    if ( "$top" eq "." )
+    {
+      $top = ".." ;
+    }
+    else
+    {
+      $top .= "/.." ;
+    }
+  } ;
+  die "Can't find file ${file}\n" ;
+}
+
+# find relative up-path to configure.in
+my $rtems_cfg = find_file(".","VERSION");
+
+
+while( <> )
+{ 
+  if ( /^[ 	]*$/o )
+  {
+    $nl_seen = $nl_seen+1;
+  }
+
+  if ( /^[ 	]*AC_CONFIG_AUX_DIR\(.*\)[ 	]*$/o )
+  {
+    print "AC_CONFIG_AUX_DIR($rtems_cfg)\n" ;
+  }
+  elsif ( /^[ 	]*RTEMS_TOP\(.*\)[ 	]*$/o )
+  {
+    print "RTEMS_TOP($rtems_cfg)\n" ;
+  }
+  elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_POSIX_API\)[ 	]*$/o ) 
+  {
+    #remove the line
+  }
+  elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_HWAPI\)[ 	]*$/o ) 
+  {
+    #remove the line
+  }
+  elsif ( /^[ 	]*AC_SUBST\(RTEMS_USE_MACROS\)[ 	]*$/o ) 
+  {
+    #remove the line
+  }
+  elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_MULTIPROCESSING\)[ 	]*$/o ) 
+  {
+    #remove the line
+  }
+  elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_RDBG\)[ 	]*$/o ) 
+  {
+    #remove the line
+  }
+  elsif ( /^[ 	]*AC_SUBST\(RTEMS_USE_OWN_PDIR\)[ 	]*$/o ) 
+  {
+    #remove the line
+  }
+  elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_NETWORKING\)[ 	]*$/o ) 
+  {
+    #remove the line
+  }
+  elsif ( /^[ 	]*AC_SUBST\(RTEMS_LIBC_DIR\)[ 	]*$/o ) 
+  {
+    #remove the line
+  }
+  elsif ( /^[ 	]*AC_SUBST\(PROJECT_ROOT\)[ 	]*$/o ) 
+  {
+    #remove the line
+  }
+  elsif ( /^[ 	]*AC_SUBST\(RTEMS_GAS_CODE16\)[ 	]*$/o ) 
+  {
+    #remove the line
+  }
+  elsif ( /^[ 	]*PROJECT_ROOT[ 	]*=.*$/o ) 
+  {
+    #remove the line
+  }
+  elsif ( /^[ 	]*$/o )
+  {
+    print "$_" if $nl_seen < 2 ;
+  }
+  else
+  {
+    print "$_" ;
+    $nl_seen = 0;
+  }
+} # while
+
+;1

@@ -9,4 +9,5 @@ AC_ARG_ENABLE(rdbg,
   no) RTEMS_HAS_RDBG=no ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-rdbg option) ;;
 esac],[RTEMS_HAS_RDBG=no])
+AC_SUBST(RTEMS_HAS_RDBG)dnl
 ])

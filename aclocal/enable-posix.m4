@@ -9,6 +9,7 @@ AC_ARG_ENABLE(posix,
   no) RTEMS_HAS_POSIX_API=no ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-posix option) ;;
 esac],[RTEMS_HAS_POSIX_API=yes]) 
+AC_SUBST(RTEMS_HAS_POSIX_API)
 
 changequote(,)dnl
 case "${target}" in

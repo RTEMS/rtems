@@ -1,3 +1,7 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl
+dnl  $Id$
+
 AC_INIT(shgen.c)
 AC_CONFIG_AUX_DIR(../../../../../..)
 
