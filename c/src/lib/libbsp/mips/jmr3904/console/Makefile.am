@@ -27,6 +27,4 @@ all-local: $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = console.c
-
 include $(top_srcdir)/../../../../automake/local.am

@@ -9,12 +9,9 @@ include $(top_srcdir)/../../../../automake/lib.am
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_FILES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT)) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/tx39/*/$(ARCH)/*.$(OBJEXT)) \
-    $(wildcard \
-    ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(ARCH)/*.$(OBJEXT)) \
-    $(foreach piece, $(GENERIC_FILES), \
-    ../../../$(piece)/$(ARCH)/$(piece).rel)
+    ../../../../libcpu/mips/shared/cache$(LIB_VARIANT).rel \
+    ../../../../libcpu/mips/shared/interrupts$(LIB_VARIANT).rel \
+    ../../../../libcpu/mips/tx39/vectorisrs$(LIB_VARIANT).rel
 
 $(ARCH)/libbsp.a: ${OBJS}
 	$(make-library)
