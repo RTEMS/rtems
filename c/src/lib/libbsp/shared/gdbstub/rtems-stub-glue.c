@@ -319,7 +319,7 @@ int rtems_gdb_stub_get_thread_info(
    int first_posix_id, first_rtems_id;
    Objects_Information *obj_info;
    Thread_Control *th;
-   unsigned32 name;
+   uint32_t   name;
    char tmp_buf[20];
 
    ASSERT(info != NULL);
@@ -372,9 +372,9 @@ int rtems_gdb_stub_get_thread_info(
 
       strcat(info->display, tmp_buf);
 #if 0
-      name = *(unsigned32 *)(obj_info->local_table[thread]->name);
+      name = *(uint32_t*)(obj_info->local_table[thread]->name);
 #else
-      name = *(unsigned32 *)(obj_info->local_table[thread - 
+      name = *(uint32_t*)(obj_info->local_table[thread - 
 						   first_rtems_id + 1]->name);
 #endif
       info->name[0] = (name >> 24) & 0xff;
@@ -416,7 +416,7 @@ int rtems_gdb_stub_get_thread_info(
 
    strcat(info->display, tmp_buf);
 
-   name = *(unsigned32 *)(obj_info->local_table[thread - 
+   name = *(uint32_t*)(obj_info->local_table[thread - 
                                                 first_posix_id + 1]->name);
 
    info->name[0] = (name >> 24) & 0xff;
@@ -1395,9 +1395,9 @@ int rtems_gdb_stub_get_offsets(
 )
 { 
 /*
-  extern unsigned32 _ftext;
-  extern unsigned32 _fdata;
-  extern unsigned32 _bss_start;
+  extern uint32_t   _ftext;
+  extern uint32_t   _fdata;
+  extern uint32_t   _bss_start;
 
   *text_addr = &_ftext;
   *data_addr = &_fdata;
@@ -1424,27 +1424,27 @@ void rtems_gdb_stub_get_registers_from_context(
    */
   registers[D0] = 0; 
   registers[D1] = 0;
-  registers[D2] = (unsigned32)th->Registers.d2;
-  registers[D3] = (unsigned32)th->Registers.d3;
-  registers[D4] = (unsigned32)th->Registers.d4;
-  registers[D5] = (unsigned32)th->Registers.d5;
-  registers[D6] = (unsigned32)th->Registers.d6;
-  registers[D7] = (unsigned32)th->Registers.d7;
+  registers[D2] = (uint32_t)th->Registers.d2;
+  registers[D3] = (uint32_t)th->Registers.d3;
+  registers[D4] = (uint32_t)th->Registers.d4;
+  registers[D5] = (uint32_t)th->Registers.d5;
+  registers[D6] = (uint32_t)th->Registers.d6;
+  registers[D7] = (uint32_t)th->Registers.d7;
 
   registers[A0] = 0;
   registers[A1] = 0;
-  registers[A2] = (unsigned32)th->Registers.a2;
-  registers[A3] = (unsigned32)th->Registers.a3;
-  registers[A4] = (unsigned32)th->Registers.a4;
-  registers[A5] = (unsigned32)th->Registers.a5;
-  registers[A6] = (unsigned32)th->Registers.a6;
-  registers[A7] = (unsigned32)th->Registers.a7_msp;
+  registers[A2] = (uint32_t)th->Registers.a2;
+  registers[A3] = (uint32_t)th->Registers.a3;
+  registers[A4] = (uint32_t)th->Registers.a4;
+  registers[A5] = (uint32_t)th->Registers.a5;
+  registers[A6] = (uint32_t)th->Registers.a6;
+  registers[A7] = (uint32_t)th->Registers.a7_msp;
   
-  registers[PS] = (unsigned32)th->Registers.sr;
+  registers[PS] = (uint32_t)th->Registers.sr;
 #if 0
-  registers[PC] = *(unsigned32 *)th->Registers.a7_msp; /* *SP = ret adr */
+  registers[PC] = *(uint32_t*)th->Registers.a7_msp; /* *SP = ret adr */
 #else
-  registers[PC] = (unsigned32)_CPU_Context_switch;
+  registers[PC] = (uint32_t)_CPU_Context_switch;
 #endif
 }
 
@@ -1456,9 +1456,9 @@ int rtems_gdb_stub_get_offsets(
 )
 { 
 /*
-  extern unsigned32 _ftext;
-  extern unsigned32 _fdata;
-  extern unsigned32 _bss_start;
+  extern uint32_t   _ftext;
+  extern uint32_t   _fdata;
+  extern uint32_t   _bss_start;
 
   *text_addr = &_ftext;
   *data_addr = &_fdata;

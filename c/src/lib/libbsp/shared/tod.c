@@ -220,14 +220,14 @@ int setRealTime(
  */
 
 /* XXX this routine should be part of the public RTEMS interface */ 
-unsigned32 _TOD_To_seconds( rtems_time_of_day *tod );
+uint32_t   _TOD_To_seconds( rtems_time_of_day *tod );
 
 int checkRealTime()
 {
   rtems_time_of_day rtems_tod;
   rtems_time_of_day rtc_tod;
-  unsigned32 rtems_time;
-  unsigned32 rtc_time;
+  uint32_t   rtems_time;
+  uint32_t   rtc_time;
 
   if (!RTC_Present)
     return -1;

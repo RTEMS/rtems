@@ -13,7 +13,7 @@ extern rtems_configuration_table  BSP_Configuration;
 
 void bsp_libc_init(
   void       *heap_start,
-  unsigned32  heap_size,
+  uint32_t    heap_size,
   int         use_sbrk
 )
 {
