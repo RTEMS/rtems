@@ -1,3 +1,14 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* console/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* irq/Makefile.am: Ditto.
+	* motorola/Makefile.am: Ditto.
+	* openpic/Makefile.am: Ditto.
+	* pci/Makefile.am: Ditto.
+	* residual/Makefile.am: Ditto.
+	* vectors/Makefile.am: Ditto.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* console/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
