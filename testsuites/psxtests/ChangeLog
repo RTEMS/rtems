@@ -1,3 +1,8 @@
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* psx06/init.c, psx06/system.h, psx06/task.c, psx06/task2.c: Convert
+	to using c99 fixed size types.
+
 2004-03-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* Makefile.am: Remove include from SUBDIRS.

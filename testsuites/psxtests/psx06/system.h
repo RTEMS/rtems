@@ -53,7 +53,7 @@ TEST_EXTERN pthread_t        Init_id;
 TEST_EXTERN pthread_t        Task_id;
 TEST_EXTERN pthread_t        Task2_id;
 TEST_EXTERN pthread_key_t    Key_id;
-TEST_EXTERN rtems_unsigned32 Data_array[ CONFIGURE_MAXIMUM_POSIX_THREADS ];
-TEST_EXTERN rtems_unsigned32 Destructor_invoked;
+TEST_EXTERN uint32_t   Data_array[ CONFIGURE_MAXIMUM_POSIX_THREADS ];
+TEST_EXTERN uint32_t   Destructor_invoked;
 
 /* end of include file */

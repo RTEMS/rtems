@@ -34,7 +34,7 @@ void *POSIX_Init(
 {
   int               status;
   unsigned int      remaining;
-  rtems_unsigned32 *key_data;
+  uint32_t   *key_data;
 
   puts( "\n\n*** POSIX TEST 6 ***" );
 
@@ -94,7 +94,7 @@ void *POSIX_Init(
 
   key_data = pthread_getspecific( Key_id );
   printf( "Init: Got the key value of %ld\n",
-          (unsigned long) ((rtems_unsigned32 *)key_data - Data_array) );
+          (unsigned long) ((uint32_t   *)key_data - Data_array) );
 
   remaining = sleep( 3 );
   if ( remaining )

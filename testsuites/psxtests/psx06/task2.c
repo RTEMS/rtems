@@ -25,7 +25,7 @@ void *Task_2(
 )
 {
   int               status;
-  rtems_unsigned32 *key_data;
+  uint32_t   *key_data;
  
   printf( "Destructor invoked %d times\n", Destructor_invoked );
 
@@ -37,7 +37,7 @@ void *Task_2(
  
   key_data = pthread_getspecific( Key_id );
   printf( "Task_2: Got the key value of %ld\n",
-          (unsigned long) ((rtems_unsigned32 *)key_data - Data_array) );
+          (unsigned long) ((uint32_t   *)key_data - Data_array) );
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );

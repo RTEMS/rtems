@@ -26,7 +26,7 @@ void *Task_1(
 )
 {
   int               status;
-  rtems_unsigned32 *key_data; 
+  uint32_t   *key_data; 
 
   printf( "Task_1: Setting the key to %d\n", 1 );
   status = pthread_setspecific( Key_id, &Data_array[ 1 ] );
@@ -36,7 +36,7 @@ void *Task_1(
  
   key_data = pthread_getspecific( Key_id );
   printf( "Task_1: Got the key value of %ld\n",
-          (unsigned long) ((rtems_unsigned32 *)key_data - Data_array) );
+          (unsigned long) ((uint32_t   *)key_data - Data_array) );
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
