@@ -46,7 +46,9 @@ void test3();
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define TASK_ALLOCATION_SIZE     (5)
+#define TASK_ALLOCATION_SIZE \
+    (rtems_configuration_get_rtems_api_configuration()->maximum_tasks & \
+                                    ~RTEMS_UNLIMITED_OBJECTS)
 #define CONFIGURE_MAXIMUM_TASKS  rtems_resource_unlimited(TASK_ALLOCATION_SIZE)
 #define CONFIGURE_EXTRA_TASK_STACKS (62 * RTEMS_MINIMUM_STACK_SIZE)
 

@@ -1,3 +1,10 @@
+2002-10-31	Chris Johns <ccj@acm.org>
+
+	* unlimited/test1.c: PR296. Only fails if more tasks than allowed
+	can be created.  
+	* unlimited/system.h: PR296. Reference the number of tasks in the
+	configuration table rather than a hardcoded number.
+
 2002-11-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Unconditionally check for CXX (Hack to bug in 
