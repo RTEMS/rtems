@@ -543,7 +543,7 @@ SCORE_EXTERN struct {
  *  that a "reasonable" small application should not have any problems.
  */
 
-#define CPU_STACK_MINIMUM_SIZE          (1024*3)
+#define CPU_STACK_MINIMUM_SIZE          (1024*8)
 
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
