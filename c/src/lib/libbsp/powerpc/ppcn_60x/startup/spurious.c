@@ -86,22 +86,21 @@ rtems_isr bsp_spurious_handler(
       DEBUG_puts( "Floating point Assist" );
       break;
 
-#if defined(ppc403)
-#error "Please fill in names. "                                  
+#if defined(ppc403) || defined(ppc405)
     case PPC_IRQ_CRIT :
       DEBUG_puts( "Critical Error ");     
       break;
     case PPC_IRQ_PIT:
-      DEBUG_puts( "0x01000" );
+      DEBUG_puts( "Prog. Interval Timer " );
       break;
     case PPC_IRQ_FIT:
-      DEBUG_puts( "0x01010" );
+      DEBUG_puts( "Fixed Interval Timer " );
       break;
     case PPC_IRQ_WATCHDOG :
-      DEBUG_puts( "0x01020" );
+      DEBUG_puts( "Watchdog Timer " );
       break;
     case PPC_IRQ_DEBUG	 :
-      DEBUG_puts( "0x02000" );
+      DEBUG_puts( "Debug " );
       break;
 
 #elif defined(ppc601)
