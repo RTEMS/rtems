@@ -18,6 +18,12 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.3  2000/12/05 16:37:38  joel
+ * 2000-12-01	Joel Sherrill <joel@OARcorp.com>
+ *
+ * 	* pc386/console/console.c, pc386/console/serial_mouse.c,
+ * 	pc386/console/vgainit.c, shared/comm/tty_drv.c: Remove warnings.
+ *
  * Revision 1.2  2000/10/18 16:10:50  joel
  * 2000-10-18	 Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
  *
@@ -47,6 +53,7 @@
 #include <bsp.h>
 #include <irq.h>
 #include <rtems/libio.h>
+#include <rtems/termiostypes.h>
 #include <termios.h>
 #include <uart.h>
 #include <libcpu/cpuModel.h>
@@ -175,17 +182,31 @@ tty1_open(rtems_device_major_number major,
                 void                      *arg)
 {
   rtems_status_code  status;
+#ifndef USE_TASK_DRIVEN
   static rtems_termios_callbacks cb = 
   {
-    NULL,	              /* firstOpen */
-    tty1_last_close,       /* lastClose */
-    NULL,                 /* poll read  */
+    NULL,                        /* firstOpen */
+    tty1_last_close,             /* lastClose */
+    NULL,                        /* poll read */
     BSP_uart_termios_write_com1, /* write */
-    tty1_conSetAttr,	     /* setAttributes */
-    NULL,	              /* stopRemoteTx */
-    NULL,	              /* startRemoteTx */
-    1		              /* outputUsesInterrupts */
+    tty1_conSetAttr,             /* setAttributes */
+    NULL,                        /* stopRemoteTx */
+    NULL,                        /* startRemoteTx */
+    TERMIOS_IRQ_DRIVEN           /* outputUsesInterrupts */
   };
+#else
+  static rtems_termios_callbacks cb = 
+  {
+    NULL,                        /* firstOpen */
+    tty1_last_close,             /* lastClose */
+    BSP_uart_termios_read_com1,  /* poll read */
+    BSP_uart_termios_write_com1, /* write */
+    tty1_conSetAttr,             /* setAttributes */
+    NULL,                        /* stopRemoteTx */
+    NULL,                        /* startRemoteTx */
+    TERMIOS_TASK_DRIVEN          /* outputUsesInterrupts */
+  };
+#endif
 
   status = rtems_termios_open( major, minor, arg, &cb );
   if(status != RTEMS_SUCCESSFUL)
@@ -451,17 +472,31 @@ tty2_open(rtems_device_major_number major,
                 void                      *arg)
 {
   rtems_status_code              status;
+#ifndef USE_TASK_DRIVEN
   static rtems_termios_callbacks cb = 
   {
-    NULL,	              /* firstOpen */
-    tty2_last_close,       /* lastClose */
-    NULL,                 /* poll read  */
+    NULL,                        /* firstOpen */
+    tty2_last_close,             /* lastClose */
+    NULL,                        /* poll read */
     BSP_uart_termios_write_com2, /* write */
-    tty2_conSetAttr,	              /* setAttributes */
-    NULL,	              /* stopRemoteTx */
-    NULL,	              /* startRemoteTx */
-    1		              /* outputUsesInterrupts */
+    tty2_conSetAttr,             /* setAttributes */
+    NULL,                        /* stopRemoteTx */
+    NULL,                        /* startRemoteTx */
+    TERMIOS_IRQ_DRIVEN           /* outputUsesInterrupts */
   };
+#else
+  static rtems_termios_callbacks cb = 
+  {
+    NULL,                        /* firstOpen */
+    tty2_last_close,             /* lastClose */
+    BSP_uart_termios_read_com2,  /* poll read */
+    BSP_uart_termios_write_com2, /* write */
+    tty2_conSetAttr,             /* setAttributes */
+    NULL,                        /* stopRemoteTx */
+    NULL,                        /* startRemoteTx */
+    TERMIOS_TASK_DRIVEN          /* outputUsesInterrupts */
+  };
+#endif
 
   status = rtems_termios_open (major, minor, arg, &cb);
   if(status != RTEMS_SUCCESSFUL)

@@ -20,6 +20,8 @@ int  BSP_uart_polled_status(int uart);
 void BSP_uart_polled_write(int uart, int val);
 int  BSP_uart_polled_read(int uart);
 void BSP_uart_termios_set(int uart, void *ttyp);
+int  BSP_uart_termios_read_com1(int uart);
+int  BSP_uart_termios_read_com2(int uart);
 int  BSP_uart_termios_write_com1(int minor, const char *buf, int len);
 int  BSP_uart_termios_write_com2(int minor, const char *buf, int len);
 void BSP_uart_termios_isr_com1();

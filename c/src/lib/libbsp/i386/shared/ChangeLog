@@ -1,4 +1,15 @@
 
+	* comm/tty_drv.c, comm/uart.c, comm/uart.h:  Adds the capability
+	to use task driven serial I/O to ti386 BSPs. This patch leaves thex
+	default I/O mode to be IRQ.  If you want to use task I/O mode,
+	then the tty_drv.c file needs to be modified.  Basically, all
+	you need to change is the data values of the termios callbacks
+	structure.  This callback structure is used in the tty1_open
+	and tty2_open functions.  The values you need to set are commented
+	out in the source code. 
+
+2001-06-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* comm/Makefile.am: Use *_HEADERS instead of *H_FILES.
 	* io/Makefile.am: Ditto.
 	* irq/Makefile.am: Ditto.
