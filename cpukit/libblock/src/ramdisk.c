@@ -29,7 +29,7 @@ struct ramdisk {
     int           block_num;  /* Number of blocks on this RAM disk */
     void         *area;       /* RAM disk memory area */
     rtems_boolean initialized;/* RAM disk is initialized */
-    rtems_boolean malloced;   /* != 0, if memory allocated by malloc for this 
+    rtems_boolean malloced;   /* != 0, if memory allocated by malloc for this
                                  RAM disk */
 };
 
@@ -40,7 +40,7 @@ static int nramdisks;
  *     RAM disk READ request handler. This primitive copies data from RAM
  *     disk to supplied buffer and invoke the callout function to inform
  *     upper layer that reading is completed.
- * 
+ *
  * PARAMETERS:
  *     req - pointer to the READ block device request info
  *
@@ -75,7 +75,7 @@ ramdisk_read(struct ramdisk *rd, blkdev_request *req)
  *     RAM disk WRITE request handler. This primitive copies data from
  *     supplied buffer to RAM disk and invoke the callout function to inform
  *     upper layer that writing is completed.
- * 
+ *
  * PARAMETERS:
  *     req - pointer to the WRITE block device request info
  *
@@ -159,7 +159,7 @@ ramdisk_ioctl(dev_t dev, int req, void *argp)
 }
 
 /* ramdisk_initialize --
- *     RAM disk device driver initialization. Run through RAM disk 
+ *     RAM disk device driver initialization. Run through RAM disk
  *     configuration information and configure appropriate RAM disks.
  *
  * PARAMETERS:
@@ -185,7 +185,7 @@ ramdisk_initialize(
     if (rc != RTEMS_SUCCESSFUL)
         return rc;
 
-    r = ramdisk = calloc(rtems_ramdisk_configuration_size, 
+    r = ramdisk = calloc(rtems_ramdisk_configuration_size,
                          sizeof(struct ramdisk));
 
     for (i = 0; i < rtems_ramdisk_configuration_size; i++, c++, r++)

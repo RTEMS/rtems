@@ -77,7 +77,7 @@
  * sector_data_t --
  *      corresponds to the sector on the device
  */
-typedef struct sector_data_s 
+typedef struct sector_data_s
 {
     uint32_t   sector_num; /* sector number on the device */
     uint8_t    data[0]; /* raw sector data */

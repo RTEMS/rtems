@@ -61,9 +61,9 @@ struct bdbuf_context {
     int            npools;       /* Number of entries in pool table */
 
     Chain_Control  mod;          /* Modified buffers list */
-    rtems_id       flush_sema;   /* Buffer flush semaphore; counting 
+    rtems_id       flush_sema;   /* Buffer flush semaphore; counting
                                     semaphore; incremented when buffer
-                                    flushed to the disk; decremented when 
+                                    flushed to the disk; decremented when
                                     buffer modified */
     rtems_id       swapout_task; /* Swapout task ID */
 };
@@ -462,7 +462,7 @@ avl_remove(bdbuf_buffer **root, const bdbuf_buffer *node)
     {
         r = q->avl.left;
         if (r != NULL)
-        {   
+        {
             r->avl.bal = 0;
         }
         q = r;
@@ -762,9 +762,9 @@ bdbuf_release_pool(rtems_bdpool_id pool)
 }
 
 /* rtems_bdbuf_init --
- *     Prepare buffering layer to work - initialize buffer descritors 
+ *     Prepare buffering layer to work - initialize buffer descritors
  *     and (if it is neccessary)buffers. Buffers will be allocated accoriding
- *     to the configuration table, each entry describes kind of block and 
+ *     to the configuration table, each entry describes kind of block and
  *     amount requested. After initialization all blocks is placed into
  *     free elements lists.
  *
@@ -831,7 +831,7 @@ rtems_bdbuf_init(rtems_bdbuf_config *conf_table, int size)
     rc = rtems_task_create(
         rtems_build_name('B', 'S', 'W', 'P'),
         SWAPOUT_PRIORITY,
-        SWAPOUT_STACK_SIZE, 
+        SWAPOUT_STACK_SIZE,
         RTEMS_DEFAULT_MODES | RTEMS_NO_PREEMPT,
         RTEMS_DEFAULT_ATTRIBUTES,
         &bd_ctx.swapout_task);
@@ -862,11 +862,11 @@ rtems_bdbuf_init(rtems_bdbuf_config *conf_table, int size)
  *     Looks for buffer already assigned for this dev/block. If one is found
  *     obtain block buffer. If specified block already cached (i.e. there's
  *     block in the _modified_, or _recently_used_), return address
- *     of appropriate buffer descriptor and increment reference counter to 1. 
- *     If block is not cached, allocate new buffer and return it. Data 
- *     shouldn't be read to the buffer from media; buffer contains arbitrary 
- *     data. This primitive may be blocked if there are no free buffer 
- *     descriptors available and there are no unused non-modified (or 
+ *     of appropriate buffer descriptor and increment reference counter to 1.
+ *     If block is not cached, allocate new buffer and return it. Data
+ *     shouldn't be read to the buffer from media; buffer contains arbitrary
+ *     data. This primitive may be blocked if there are no free buffer
+ *     descriptors available and there are no unused non-modified (or
  *     synchronized with media) buffers available.
  *
  * PARAMETERS:
@@ -886,7 +886,7 @@ rtems_bdbuf_init(rtems_bdbuf_config *conf_table, int size)
  */
 static rtems_status_code
 find_or_assign_buffer(disk_device *dd,
-                      blkdev_bnum block, 
+                      blkdev_bnum block,
                       bdbuf_buffer **ret_buf)
 {
     bdbuf_buffer *bd_buf;
@@ -908,9 +908,9 @@ again:
     if (bd_buf == NULL)
     {
         /* Try to obtain semaphore without waiting first. It is the most
-           frequent case when reasonable number of buffers configured. If 
-           it is failed, obtain semaphore blocking on it. In this case 
-           it should be checked that appropriate buffer hasn't been loaded 
+           frequent case when reasonable number of buffers configured. If
+           it is failed, obtain semaphore blocking on it. In this case
+           it should be checked that appropriate buffer hasn't been loaded
            by another thread, because this thread is preempted */
         rc = rtems_semaphore_obtain(bd_pool->bufget_sema, RTEMS_NO_WAIT, 0);
         if (rc == RTEMS_UNSATISFIED)
@@ -931,7 +931,7 @@ again:
             bd_buf = (bdbuf_buffer *)Chain_Get(&bd_pool->lru);
             if (bd_buf != NULL)
             {
-                int avl_result; 
+                int avl_result;
                 avl_result = avl_remove(&bd_pool->tree, bd_buf);
                 if (avl_result != 0)
                 {
@@ -986,17 +986,17 @@ again:
              * that our buffer descriptor is in the list. */
             if (bd_buf->modified)
             {
-                rc = rtems_semaphore_obtain(bd_ctx.flush_sema, 
+                rc = rtems_semaphore_obtain(bd_ctx.flush_sema,
                                             RTEMS_NO_WAIT, 0);
             }
             else
             {
-                rc = rtems_semaphore_obtain(bd_pool->bufget_sema, 
+                rc = rtems_semaphore_obtain(bd_pool->bufget_sema,
                                             RTEMS_NO_WAIT, 0);
             }
-            /* It is possible that we couldn't obtain flush or bufget sema 
+            /* It is possible that we couldn't obtain flush or bufget sema
              * although buffer in the appropriate chain is available:
-             * semaphore may be released to swapout task, but this task 
+             * semaphore may be released to swapout task, but this task
              * actually did not start to process it. */
             if (rc == RTEMS_UNSATISFIED)
                 rc = RTEMS_SUCCESSFUL;
@@ -1026,11 +1026,11 @@ again:
 /* rtems_bdbuf_get --
  *     Obtain block buffer. If specified block already cached (i.e. there's
  *     block in the _modified_, or _recently_used_), return address
- *     of appropriate buffer descriptor and increment reference counter to 1. 
- *     If block is not cached, allocate new buffer and return it. Data 
- *     shouldn't be read to the buffer from media; buffer may contains 
- *     arbitrary data. This primitive may be blocked if there are no free 
- *     buffer descriptors available and there are no unused non-modified 
+ *     of appropriate buffer descriptor and increment reference counter to 1.
+ *     If block is not cached, allocate new buffer and return it. Data
+ *     shouldn't be read to the buffer from media; buffer may contains
+ *     arbitrary data. This primitive may be blocked if there are no free
+ *     buffer descriptors available and there are no unused non-modified
  *     (or synchronized with media) buffers available.
  *
  * PARAMETERS:
@@ -1093,7 +1093,7 @@ bdbuf_initialize_transfer_sema(bdbuf_buffer *bd_buf)
     mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_FIFO;
     mutex_attr.priority_ceiling = 0;
 
-    _CORE_mutex_Initialize(&bd_buf->transfer_sema, 
+    _CORE_mutex_Initialize(&bd_buf->transfer_sema,
                            &mutex_attr, CORE_MUTEX_LOCKED);
 }
 
@@ -1120,7 +1120,7 @@ bdbuf_write_transfer_done(void *arg, rtems_status_code status, int error)
     bd_buf->error = RTEMS_IO_ERROR;
     bd_buf->in_progress = bd_buf->modified = FALSE;
     _CORE_mutex_Surrender(&bd_buf->transfer_sema, 0, NULL);
-    _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL, 
+    _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL,
                       CORE_MUTEX_STATUS_SUCCESSFUL);
 }
 
@@ -1146,7 +1146,7 @@ bdbuf_read_transfer_done(void *arg, rtems_status_code status, int error)
     bd_buf->status = status;
     bd_buf->error = RTEMS_IO_ERROR;
     _CORE_mutex_Surrender(&bd_buf->transfer_sema, 0, NULL);
-    _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL, 
+    _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL,
                       CORE_MUTEX_STATUS_SUCCESSFUL);
 }
 
@@ -1172,7 +1172,7 @@ bdbuf_read_transfer_done(void *arg, rtems_status_code status, int error)
  *     bufget_sema and transfer_sema semaphores obtained by this primitive.
  */
 rtems_status_code
-rtems_bdbuf_read(dev_t device, 
+rtems_bdbuf_read(dev_t device,
                  blkdev_bnum block,
                  bdbuf_buffer **bd)
 {
@@ -1294,7 +1294,7 @@ bdbuf_release(bdbuf_buffer *bd_buf)
         }
         else
         {
-            /* Buffer was not modified. Add this descriptor to the 
+            /* Buffer was not modified. Add this descriptor to the
              * end of lru chain and make it available for reuse. */
             Chain_Append(&bd_pool->lru, &bd_buf->link);
             rc = rtems_semaphore_release(bd_pool->bufget_sema);
@@ -1314,7 +1314,7 @@ bdbuf_release(bdbuf_buffer *bd_buf)
  *
  * PARAMETERS:
  *     bd_buf - pointer to the bdbuf_buffer structure previously obtained using
- *              get/read primitive. 
+ *              get/read primitive.
  *
  * RETURNS:
  *     RTEMS status code (RTEMS_SUCCESSFUL if operation completed successfully
@@ -1343,7 +1343,7 @@ rtems_bdbuf_release(bdbuf_buffer *bd_buf)
 
 /* rtems_bdbuf_release_modified --
  *     Release buffer allocated before, assuming that it is _modified_ by
- *     it's owner. This primitive decrease usage counter for buffer, mark 
+ *     it's owner. This primitive decrease usage counter for buffer, mark
  *     buffer descriptor as modified. If usage counter is 0, insert it at
  *     end of mod chain and release flush_sema semaphore to activate the
  *     flush task.
@@ -1376,7 +1376,7 @@ rtems_bdbuf_release_modified(bdbuf_buffer *bd_buf)
     }
     bd_buf->modified = TRUE;
     bd_buf->actual = TRUE;
-    rc = bdbuf_release(bd_buf);    
+    rc = bdbuf_release(bd_buf);
 
     ENABLE_PREEMPTION(key);
 
@@ -1479,7 +1479,7 @@ rtems_bdbuf_syncdev(dev_t dev)
  *     Body of task which take care on flushing modified buffers to the
  *     disk.
  */
-static rtems_task 
+static rtems_task
 bdbuf_swapout_task(rtems_task_argument unused)
 {
     rtems_status_code rc;
@@ -1521,7 +1521,7 @@ bdbuf_swapout_task(rtems_task_argument unused)
         req.req.bufs[0].length = dd->block_size;
         req.req.bufs[0].buffer = bd_buf->buffer;
 
-        /* transfer_sema initialized when bd_buf inserted in the mod chain 
+        /* transfer_sema initialized when bd_buf inserted in the mod chain
            first time */
         result = dd->ioctl(dd->phys_dev->dev, BLKIO_REQUEST, &req);
 
@@ -1575,7 +1575,7 @@ bdbuf_swapout_task(rtems_task_argument unused)
  *
  * RETURNS:
  *     RTEMS status code: RTEMS_SUCCESSFUL if operation completed successfully,
- *     RTEMS_INVALID_SIZE if specified block size is invalid (not a power 
+ *     RTEMS_INVALID_SIZE if specified block size is invalid (not a power
  *     of 2), RTEMS_NOT_DEFINED if buffer pool for this or greater block size
  *     is not configured.
  */
@@ -1623,7 +1623,7 @@ rtems_bdbuf_find_pool(int block_size, rtems_bdpool_id *pool)
  *     pool       - buffer pool number
  *     block_size - block size for which buffer pool is configured returned
  *                  there
- *     blocks     - number of buffers in buffer pool returned there 
+ *     blocks     - number of buffers in buffer pool returned there
  *
  * RETURNS:
  *     RTEMS status code: RTEMS_SUCCESSFUL if operation completed successfully,

@@ -46,7 +46,7 @@
  *      and does not support devices with sector size other than 512 bytes
  */
 static rtems_status_code
-get_sector(dev_t dev, uint32_t sector_num, sector_data_t **sector) 
+get_sector(dev_t dev, uint32_t sector_num, sector_data_t **sector)
 {
     sector_data_t      *s;
     bdbuf_buffer       *buf;
@@ -92,7 +92,7 @@ get_sector(dev_t dev, uint32_t sector_num, sector_data_t **sector)
  *      TRUE if sector has msdos signature, FALSE otherwise
  */
 static rtems_boolean
-msdos_signature_check (sector_data_t *sector) 
+msdos_signature_check (sector_data_t *sector)
 {
     uint8_t *p = sector->data + RTEMS_IDE_PARTITION_MSDOS_SIGNATURE_OFFSET;
 
@@ -112,7 +112,7 @@ msdos_signature_check (sector_data_t *sector)
  *      TRUE if partition type is extended, FALSE otherwise
  */
 static rtems_boolean
-is_extended(uint8_t type) 
+is_extended(uint8_t type)
 {
     return ((type == EXTENDED_PARTITION) || (type == LINUX_EXTENDED));
 }
@@ -128,7 +128,7 @@ is_extended(uint8_t type)
  *      TRUE if partition type is extended, FALSE otherwise
  */
 static rtems_boolean
-is_fat_partition(uint8_t type) 
+is_fat_partition(uint8_t type)
 {
   static const uint8_t fat_part_types[] = {
     DOS_FAT12_PARTITION,DOS_FAT16_PARTITION,
@@ -186,7 +186,7 @@ data_to_part_desc(uint8_t *data, part_desc_t **new_part_desc)
     part_desc->size = LE_TO_CPU_U32(temp);
 
     /*
-     * use partitions that are 
+     * use partitions that are
      * - extended
      * or
      * - FAT type and non-zero
@@ -195,7 +195,7 @@ data_to_part_desc(uint8_t *data, part_desc_t **new_part_desc)
 	((is_fat_partition(part_desc->sys_type)) && (part_desc->size != 0))) {
       *new_part_desc = part_desc;
     }
-    else {  
+    else {
       /* empty partition */
       free(part_desc);
     }
@@ -209,7 +209,7 @@ data_to_part_desc(uint8_t *data, part_desc_t **new_part_desc)
  *      and constructs the partition table tree
  *
  * PARAMETERS:
- *      start    - start sector of primary extended partition, used for 
+ *      start    - start sector of primary extended partition, used for
  *                 calculation of absolute partition sector address
  *      ext_part - description of extended partition to process
  *
@@ -219,7 +219,7 @@ data_to_part_desc(uint8_t *data, part_desc_t **new_part_desc)
  *      RTEMS_INTERNAL_ERROR if other error occurs.
  */
 static rtems_status_code
-read_extended_partition(uint32_t start, part_desc_t *ext_part) 
+read_extended_partition(uint32_t start, part_desc_t *ext_part)
 {
     int                 i;
     dev_t               dev;
@@ -256,7 +256,7 @@ read_extended_partition(uint32_t start, part_desc_t *ext_part)
 
     data = sector->data + RTEMS_IDE_PARTITION_TABLE_OFFSET;
 
-    for (i = 0; i < RTEMS_IDE_PARTITION_MAX_SUB_PARTITION_NUMBER; i++) 
+    for (i = 0; i < RTEMS_IDE_PARTITION_MAX_SUB_PARTITION_NUMBER; i++)
     {
         /* if data_to_part_desc fails skip this partition
          * and parse the next one
@@ -278,13 +278,13 @@ read_extended_partition(uint32_t start, part_desc_t *ext_part)
         new_part_desc->ext_part = ext_part;
         new_part_desc->disk_desc = ext_part->disk_desc;
 
-        if (is_extended(new_part_desc->sys_type)) 
+        if (is_extended(new_part_desc->sys_type))
         {
             new_part_desc->log_id = EMPTY_PARTITION;
             new_part_desc->start += start;
-            read_extended_partition(start, new_part_desc); 
+            read_extended_partition(start, new_part_desc);
         }
-        else 
+        else
         {
             disk_desc_t *disk_desc = new_part_desc->disk_desc;
             disk_desc->partitions[disk_desc->last_log_id] = new_part_desc;
@@ -314,7 +314,7 @@ read_extended_partition(uint32_t start, part_desc_t *ext_part)
  *      RTEMS_INTERNAL_ERROR otherwise
  */
 static rtems_status_code
-read_mbr(disk_desc_t *disk_desc) 
+read_mbr(disk_desc_t *disk_desc)
 {
     int                 part_num;
     sector_data_t      *sector;
@@ -351,13 +351,13 @@ read_mbr(disk_desc_t *disk_desc)
             return rc;
         }
 
-        if (part_desc != NULL) 
+        if (part_desc != NULL)
         {
             part_desc->log_id = part_num + 1;
             part_desc->disk_desc = disk_desc;
             part_desc->end = part_desc->start + part_desc->size - 1;
             disk_desc->partitions[part_num] = part_desc;
-        } 
+        }
         else
         {
             disk_desc->partitions[part_num] = NULL;

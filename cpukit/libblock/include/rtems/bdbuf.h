@@ -31,13 +31,13 @@ extern "C" {
  * Descriptors organized in AVL-tree to speedup buffer lookup.
  * dev and block fields are search key in AVL-tree.
  * Modified buffers, free buffers and used buffers linked in 'mod', 'free' and
- * 'lru' chains appropriately. 
+ * 'lru' chains appropriately.
  */
 
 typedef struct bdbuf_buffer {
     Chain_Node link; /* Link in the lru, mod or free chains */
 
-    struct bdbuf_avl_node { 
+    struct bdbuf_avl_node {
     	signed char cache;           /* Cache */
 
 	    struct bdbuf_buffer* left;  /* Left Child */
@@ -86,9 +86,9 @@ extern rtems_bdbuf_config rtems_bdbuf_configuration[];
 extern int rtems_bdbuf_configuration_size;
 
 /* rtems_bdbuf_init --
- *     Prepare buffering layer to work - initialize buffer descritors 
+ *     Prepare buffering layer to work - initialize buffer descritors
  *     and (if it is neccessary) buffers. Buffers will be allocated accoriding
- *     to the configuration table, each entry describes kind of block and 
+ *     to the configuration table, each entry describes kind of block and
  *     amount requested. After initialization all blocks is placed into
  *     free elements lists.
  *
@@ -107,11 +107,11 @@ rtems_bdbuf_init(rtems_bdbuf_config *conf_table, int size);
 /* rtems_bdbuf_get --
  *     Obtain block buffer. If specified block already cached (i.e. there's
  *     block in the _modified_, or _recently_used_), return address
- *     of appropriate buffer descriptor and increment reference counter to 1. 
- *     If block is not cached, allocate new buffer and return it. Data 
- *     shouldn't be read to the buffer from media; buffer may contains 
- *     arbitrary data. This primitive may be blocked if there are no free 
- *     buffer descriptors available and there are no unused non-modified 
+ *     of appropriate buffer descriptor and increment reference counter to 1.
+ *     If block is not cached, allocate new buffer and return it. Data
+ *     shouldn't be read to the buffer from media; buffer may contains
+ *     arbitrary data. This primitive may be blocked if there are no free
+ *     buffer descriptors available and there are no unused non-modified
  *     (or synchronized with media) buffers available.
  *
  * PARAMETERS:
@@ -163,7 +163,7 @@ rtems_bdbuf_read(dev_t device, blkdev_bnum block, bdbuf_buffer **bdb_ptr);
  *
  * PARAMETERS:
  *     bd_buf - pointer to the bdbuf_buffer structure previously obtained using
- *              get/read primitive. 
+ *              get/read primitive.
  *
  * RETURNS:
  *     RTEMS status code (RTEMS_SUCCESSFUL if operation completed successfully
@@ -177,7 +177,7 @@ rtems_bdbuf_release(bdbuf_buffer *bd_buf);
 
 /* rtems_bdbuf_release_modified --
  *     Release buffer allocated before, assuming that it is _modified_ by
- *     it's owner. This primitive decrease usage counter for buffer, mark 
+ *     it's owner. This primitive decrease usage counter for buffer, mark
  *     buffer descriptor as modified. If usage counter is 0, insert it at
  *     end of mod chain and release flush_sema semaphore to activate the
  *     flush task.
@@ -242,7 +242,7 @@ rtems_bdbuf_syncdev(dev_t dev);
  *
  * RETURNS:
  *     RTEMS status code: RTEMS_SUCCESSFUL if operation completed successfully,
- *     RTEMS_INVALID_SIZE if specified block size is invalid (not a power 
+ *     RTEMS_INVALID_SIZE if specified block size is invalid (not a power
  *     of 2), RTEMS_NOT_DEFINED if buffer pool for this or greater block size
  *     is not configured.
  */
@@ -256,7 +256,7 @@ rtems_bdbuf_find_pool(int block_size, rtems_bdpool_id *pool);
  *     pool       - buffer pool number
  *     block_size - block size for which buffer pool is configured returned
  *                  there
- *     blocks     - number of buffers in buffer pool returned there 
+ *     blocks     - number of buffers in buffer pool returned there
  *
  * RETURNS:
  *     RTEMS status code: RTEMS_SUCCESSFUL if operation completed successfully,

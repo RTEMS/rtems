@@ -1,4 +1,4 @@
-/* 
+/*
  * logdisk.h - Physical and logical block devices (disks) support
  *
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
@@ -48,7 +48,7 @@ typedef struct disk_device {
     int                 size;             /* Size of physical or logical disk
                                              in disk blocks */
     int                 block_size;       /* Size of device block (minimum
-                                             transfer unit) in bytes 
+                                             transfer unit) in bytes
                                              (must be power of 2) */
     int                 block_size_log2;  /* log2 of block_size */
     rtems_bdpool_id     pool;             /* Buffer pool assigned to this
@@ -91,13 +91,13 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
  *     (DOS-like partition table, BSD disk label, etc). This function usually
  *     invoked from application when application-specific splitting are in use,
  *     or from generic code which handle different logical disk organizations.
- *     This primitive will register device in rtems (invoke 
+ *     This primitive will register device in rtems (invoke
  *     rtems_io_register_name).
  *
  * PARAMETERS:
  *     dev   - logical device identifier (major, minor numbers)
  *     phys  - physical device (block device which holds this logical disk)
- *             identifier 
+ *             identifier
  *     start - starting block number on the physical device
  *     size  - logical disk size in blocks
  *     name  - logical disk name
@@ -105,7 +105,7 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
  * RETURNS:
  *     RTEMS_SUCCESSFUL if logical device successfully added, or error code
  *     if error occured (device already registered, no physical device
- *     exists, logical disk is out of physical disk boundaries, no memory 
+ *     exists, logical disk is out of physical disk boundaries, no memory
  *     available).
  */
 rtems_status_code
@@ -180,7 +180,7 @@ rtems_disk_next(dev_t dev);
  *     none
  *
  * RETURNS:
- *     RTEMS_SUCCESSFUL if library initialized, or error code if error 
+ *     RTEMS_SUCCESSFUL if library initialized, or error code if error
  *     occured.
  */
 rtems_status_code
@@ -193,7 +193,7 @@ rtems_disk_io_initialize(void);
  *     none
  *
  * RETURNS:
- *     RTEMS_SUCCESSFUL if all resources released, or error code if error 
+ *     RTEMS_SUCCESSFUL if all resources released, or error code if error
  *     occured.
  */
 rtems_status_code

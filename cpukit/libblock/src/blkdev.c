@@ -1,5 +1,5 @@
-/* 
- * blkdev.h - block device driver generic support 
+/*
+ * blkdev.h - block device driver generic support
  *
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
@@ -82,7 +82,7 @@ rtems_blkdev_generic_read(
 
 /* rtems_blkdev_generic_write --
  *     Generic block device write primitive. Implemented using block device
- *     buffer management primitives. 
+ *     buffer management primitives.
  */
 rtems_device_driver
 rtems_blkdev_generic_write(
@@ -233,13 +233,13 @@ rtems_blkdev_generic_ioctl(
         {
             blkdev_request *req = args->buffer;
             req->start += dd->start;
-            args->ioctl_return = dd->ioctl(dd->phys_dev->dev, args->command, 
+            args->ioctl_return = dd->ioctl(dd->phys_dev->dev, args->command,
                                            req);
             break;
         }
 
         default:
-            args->ioctl_return = dd->ioctl(dd->phys_dev->dev, args->command, 
+            args->ioctl_return = dd->ioctl(dd->phys_dev->dev, args->command,
                                            args->buffer);
             break;
     }

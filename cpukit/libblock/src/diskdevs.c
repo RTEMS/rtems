@@ -1,4 +1,4 @@
-/* 
+/*
  * diskdevs.c - Physical and logical block devices (disks) support
  *
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
@@ -297,13 +297,13 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
  *     (DOS-like partition table, BSD disk label, etc). This function usually
  *     invoked from application when application-specific splitting are in use,
  *     or from generic code which handle different logical disk organizations.
- *     This primitive will register device in rtems (invoke 
+ *     This primitive will register device in rtems (invoke
  *     rtems_io_register_name).
  *
  * PARAMETERS:
  *     dev   - logical device identifier (major, minor numbers)
  *     phys  - physical device (block device which holds this logical disk)
- *             identifier 
+ *             identifier
  *     start - starting block number on the physical device
  *     size  - logical disk size in blocks
  *     name  - logical disk name
@@ -311,7 +311,7 @@ rtems_disk_create_phys(dev_t dev, int block_size, int disk_size,
  * RETURNS:
  *     RTEMS_SUCCESSFUL if logical device successfully added, or error code
  *     if error occured (device already registered, no physical device
- *     exists, logical disk is out of physical disk boundaries, no memory 
+ *     exists, logical disk is out of physical disk boundaries, no memory
  *     available).
  */
 rtems_status_code
@@ -458,7 +458,7 @@ rtems_disk_lookup(dev_t dev)
     if (diskdevs_protected)
     {
         rtems_interrupt_enable(level);
-        rc = rtems_semaphore_obtain(diskdevs_mutex, RTEMS_WAIT, 
+        rc = rtems_semaphore_obtain(diskdevs_mutex, RTEMS_WAIT,
                                     RTEMS_NO_TIMEOUT);
         if (rc != RTEMS_SUCCESSFUL)
             return NULL;
@@ -524,7 +524,7 @@ rtems_disk_next(dev_t dev)
         return NULL;
 
     dtab = disktab + major;
-    while (TRUE) 
+    while (TRUE)
     {
         if ((dtab == NULL) || (minor > dtab->size))
         {
@@ -550,7 +550,7 @@ rtems_disk_next(dev_t dev)
  *     none
  *
  * RETURNS:
- *     RTEMS_SUCCESSFUL if library initialized, or error code if error 
+ *     RTEMS_SUCCESSFUL if library initialized, or error code if error
  *     occured.
  */
 rtems_status_code
@@ -569,7 +569,7 @@ rtems_disk_io_initialize(void)
     diskdevs_protected = FALSE;
     rc = rtems_semaphore_create(
         rtems_build_name('D', 'D', 'E', 'V'), 1,
-        RTEMS_FIFO | RTEMS_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY | 
+        RTEMS_FIFO | RTEMS_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY |
         RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL, 0, &diskdevs_mutex);
 
     if (rc != RTEMS_SUCCESSFUL)
@@ -599,7 +599,7 @@ rtems_disk_io_initialize(void)
  *     none
  *
  * RETURNS:
- *     RTEMS_SUCCESSFUL if all resources released, or error code if error 
+ *     RTEMS_SUCCESSFUL if all resources released, or error code if error
  *     occured.
  */
 rtems_status_code
@@ -609,7 +609,7 @@ rtems_disk_io_done(void)
     rtems_device_minor_number min;
     rtems_status_code rc;
 
-    /* Free data structures */    
+    /* Free data structures */
     for (maj = 0; maj < disktab_size; maj++)
     {
         struct disk_device_table *dtab = disktab + maj;
