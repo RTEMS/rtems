@@ -40,56 +40,56 @@ all-local: $(PGMS) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(rtems_C_FILES) $(sapi_C_FILES)
 
-${PROJECT_RELEASE}/lib/$(dirstamp):
-	@$(mkdir_p) ${PROJECT_RELEASE}/lib
-	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
 
-${PROJECT_RELEASE}/lib/no-ext$(LIB_VARIANT).rel: $(ARCH)/no-ext$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/no-ext$(LIB_VARIANT).rel
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/no-ext$(LIB_VARIANT).rel
+$(PROJECT_LIB)/no-ext$(LIB_VARIANT).rel: $(ARCH)/no-ext$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-ext$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/no-ext$(LIB_VARIANT).rel
 
-${PROJECT_RELEASE}/lib/no-io$(LIB_VARIANT).rel: $(ARCH)/no-io$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/no-io$(LIB_VARIANT).rel
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/no-io$(LIB_VARIANT).rel
+$(PROJECT_LIB)/no-io$(LIB_VARIANT).rel: $(ARCH)/no-io$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-io$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/no-io$(LIB_VARIANT).rel
 
-${PROJECT_RELEASE}/lib/no-dpmem$(LIB_VARIANT).rel: $(ARCH)/no-dpmem$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/no-dpmem$(LIB_VARIANT).rel
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/no-dpmem$(LIB_VARIANT).rel
+$(PROJECT_LIB)/no-dpmem$(LIB_VARIANT).rel: $(ARCH)/no-dpmem$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-dpmem$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/no-dpmem$(LIB_VARIANT).rel
 
-${PROJECT_RELEASE}/lib/no-event$(LIB_VARIANT).rel: $(ARCH)/no-event$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/no-event$(LIB_VARIANT).rel
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/no-event$(LIB_VARIANT).rel
+$(PROJECT_LIB)/no-event$(LIB_VARIANT).rel: $(ARCH)/no-event$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-event$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/no-event$(LIB_VARIANT).rel
 
-${PROJECT_RELEASE}/lib/no-msg$(LIB_VARIANT).rel: $(ARCH)/no-msg$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/no-msg$(LIB_VARIANT).rel
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/no-msg$(LIB_VARIANT).rel
+$(PROJECT_LIB)/no-msg$(LIB_VARIANT).rel: $(ARCH)/no-msg$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-msg$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/no-msg$(LIB_VARIANT).rel
 
-${PROJECT_RELEASE}/lib/no-mp$(LIB_VARIANT).rel: $(ARCH)/no-mp$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/no-mp$(LIB_VARIANT).rel
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/no-mp$(LIB_VARIANT).rel
+$(PROJECT_LIB)/no-mp$(LIB_VARIANT).rel: $(ARCH)/no-mp$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-mp$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/no-mp$(LIB_VARIANT).rel
 
-${PROJECT_RELEASE}/lib/no-part$(LIB_VARIANT).rel: $(ARCH)/no-part$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/no-part$(LIB_VARIANT).rel
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/no-part$(LIB_VARIANT).rel
+$(PROJECT_LIB)/no-part$(LIB_VARIANT).rel: $(ARCH)/no-part$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-part$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/no-part$(LIB_VARIANT).rel
 
-${PROJECT_RELEASE}/lib/no-region$(LIB_VARIANT).rel: $(ARCH)/no-region$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/no-region$(LIB_VARIANT).rel
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/no-region$(LIB_VARIANT).rel
+$(PROJECT_LIB)/no-region$(LIB_VARIANT).rel: $(ARCH)/no-region$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-region$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/no-region$(LIB_VARIANT).rel
 
-${PROJECT_RELEASE}/lib/no-rtmon$(LIB_VARIANT).rel: $(ARCH)/no-rtmon$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/no-rtmon$(LIB_VARIANT).rel
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/no-rtmon$(LIB_VARIANT).rel
+$(PROJECT_LIB)/no-rtmon$(LIB_VARIANT).rel: $(ARCH)/no-rtmon$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-rtmon$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/no-rtmon$(LIB_VARIANT).rel
 
-${PROJECT_RELEASE}/lib/no-sem$(LIB_VARIANT).rel: $(ARCH)/no-sem$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/no-sem$(LIB_VARIANT).rel
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/no-sem$(LIB_VARIANT).rel
+$(PROJECT_LIB)/no-sem$(LIB_VARIANT).rel: $(ARCH)/no-sem$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-sem$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/no-sem$(LIB_VARIANT).rel
 
-${PROJECT_RELEASE}/lib/no-signal$(LIB_VARIANT).rel: $(ARCH)/no-signal$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/no-signal$(LIB_VARIANT).rel
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/no-signal$(LIB_VARIANT).rel
+$(PROJECT_LIB)/no-signal$(LIB_VARIANT).rel: $(ARCH)/no-signal$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-signal$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/no-signal$(LIB_VARIANT).rel
 
-${PROJECT_RELEASE}/lib/no-timer$(LIB_VARIANT).rel: $(ARCH)/no-timer$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/no-timer$(LIB_VARIANT).rel
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/no-timer$(LIB_VARIANT).rel
+$(PROJECT_LIB)/no-timer$(LIB_VARIANT).rel: $(ARCH)/no-timer$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-timer$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/no-timer$(LIB_VARIANT).rel
 
 include $(top_srcdir)/automake/local.am

@@ -131,9 +131,9 @@ CLEANDIRS = */$(ARCH)
 
 PREINSTALL_FILES =
 
-${PROJECT_RELEASE}/lib/$(dirstamp):
-	@$(mkdir_p) ${PROJECT_RELEASE}/lib
-	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
 
 if LIBCHIP
 $(PROJECT_INCLUDE)/libchip/$(dirstamp):
@@ -189,9 +189,9 @@ $(PROJECT_INCLUDE)/libchip/open_eth.h: network/open_eth.h $(PROJECT_INCLUDE)/lib
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/open_eth.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/open_eth.h
 
-${PROJECT_RELEASE}/lib/libnetchip$(LIB_VARIANT).a: network/$(ARCH)/libnetchip$(LIB_VARIANT).a ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/libnetchip$(LIB_VARIANT).a
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/libnetchip$(LIB_VARIANT).a
+$(PROJECT_LIB)/libnetchip$(LIB_VARIANT).a: network/$(ARCH)/libnetchip$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libnetchip$(LIB_VARIANT).a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libnetchip$(LIB_VARIANT).a
 endif
 endif
 

@@ -34,9 +34,9 @@ all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 PREINSTALL_FILES =
 
-${PROJECT_RELEASE}/lib/$(dirstamp):
-	@$(mkdir_p) ${PROJECT_RELEASE}/lib
-	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
 
 if HAS_CXX
 $(PROJECT_INCLUDE)/rtems++/$(dirstamp):
@@ -75,9 +75,9 @@ $(PROJECT_INCLUDE)/rtems++/rtemsTimer.h: include/rtems++/rtemsTimer.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems++/rtemsTimer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems++/rtemsTimer.h
 
-${PROJECT_RELEASE}/lib/librtems++$(LIB_VARIANT).a: $(ARCH)/librtems++$(LIB_VARIANT).a ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/librtems++$(LIB_VARIANT).a
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/librtems++$(LIB_VARIANT).a
+$(PROJECT_LIB)/librtems++$(LIB_VARIANT).a: $(ARCH)/librtems++$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtems++$(LIB_VARIANT).a
+TMPINSTALL_FILES += $(PROJECT_LIB)/librtems++$(LIB_VARIANT).a
 endif
 
 include $(top_srcdir)/../automake/local.am

@@ -62,9 +62,9 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 
-${PROJECT_RELEASE}/lib/$(dirstamp):
-	@$(mkdir_p) ${PROJECT_RELEASE}/lib
-	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
 
 if HAS_MP
 $(PROJECT_INCLUDE)/shm_driver.h: shmdr/shm_driver.h $(PROJECT_INCLUDE)/$(dirstamp)
@@ -75,9 +75,9 @@ $(PROJECT_INCLUDE)/mpci.h: shmdr/mpci.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpci.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpci.h
 
-${PROJECT_RELEASE}/lib/shmdr$(LIB_VARIANT).rel: shmdr/$(ARCH)/shmdr$(LIB_VARIANT).rel ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/shmdr$(LIB_VARIANT).rel
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/shmdr$(LIB_VARIANT).rel
+$(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel: shmdr/$(ARCH)/shmdr$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel
 endif
 
 include $(top_srcdir)/automake/subdirs.am
