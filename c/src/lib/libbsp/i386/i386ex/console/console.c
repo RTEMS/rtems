@@ -143,7 +143,7 @@ console_initialize(rtems_device_major_number major,
    */
   
   /* 9600-8-N-1, no hardware flow control */
-  BSP_uart_init(BSPConsolePort, 9600, 0);
+  BSP_uart_init(BSPConsolePort, 9600, CHR_8_BITS, 0, 0, 0);
   
   
   /* Set interrupt handler */
