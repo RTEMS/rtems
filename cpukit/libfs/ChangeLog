@@ -1,3 +1,10 @@
+2001-05-25	Joel Sherrill <joel@OARcorp.com>
+
+ 	* src/imfs/imfs_initsupp.c: Create the root node with the
+	desired permissions.  Nodes should be created with the right
+	permissions because chmod() is not supported by the miniIMFS
+	so changing after creation is not possible.
+
 2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.

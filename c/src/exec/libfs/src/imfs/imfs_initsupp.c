@@ -46,13 +46,15 @@ int IMFS_initialize_support(
 
   /*
    *  Create the root node
+   *
+   *  NOTE: UNIX root is 755 and owned by root/root (0/0).
    */
 
   temp_mt_entry->mt_fs_root.node_access = IMFS_create_node(
     NULL,
     IMFS_DIRECTORY,
     "",
-    ( S_IFDIR | S_IRWXO | S_IRWXG| S_IRWXU ),
+    ( S_IFDIR | 0755 ),
     NULL
   );
 
