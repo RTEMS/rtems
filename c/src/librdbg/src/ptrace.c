@@ -23,7 +23,6 @@ extern Exception_context *FirstCtx;
 extern Exception_context *LastCtx;
 extern CPU_Exception_frame SavedContext;
 extern unsigned int NbExceptCtx;
-extern unsigned int NbSerializedCtx;         
 
 
 

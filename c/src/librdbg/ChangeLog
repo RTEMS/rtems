@@ -1,3 +1,7 @@
+2001-09-14	Eric Norum <eric.norum@usask.ca>
+
+	* include/rdbg/rdbg.h, src/ptrace.c: Modifications to make gcc 3.x happy.
+
 2001-04-20	Eric Valette <valette@crf.canon.fr>
 
  	* mcp750 directory renamed new_exception processing as it

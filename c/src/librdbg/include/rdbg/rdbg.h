@@ -81,8 +81,6 @@ extern int      PushSavedExceptCtx      ( Objects_Id Id,
 					  CPU_Exception_frame *ctx );
 extern int	ExcepToSig		(Exception_context *ctx);
 
-extern int    	ExitForSingleStep;
-
 extern rtems_id serializeSemId;
 extern rtems_id wakeupEventSemId;
 extern volatile unsigned int NbSerializedCtx;
