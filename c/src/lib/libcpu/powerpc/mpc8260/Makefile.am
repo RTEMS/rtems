@@ -14,14 +14,12 @@ all-local: $(PREINSTALL_FILES)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/mpc8260/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/mpc8260
+	@$(mkdir_p) $(PROJECT_INCLUDE)/mpc8260
 	@: > $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/$(dirstamp)
 
 $(PROJECT_INCLUDE)/mpc8260.h: include/mpc8260.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8260.h

@@ -29,9 +29,8 @@ EXTRA_DIST = ictrl.c ictrl.h
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/ictrl.h: ictrl.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ictrl.h

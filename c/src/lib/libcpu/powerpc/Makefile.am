@@ -40,9 +40,8 @@ all-local: $(TMPINSTALL_FILES)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/powerpc
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/powerpc
 	@: > $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/powerpc/cache.h: rtems/powerpc/cache.h $(PROJECT_INCLUDE)/rtems/powerpc/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/powerpc/cache.h

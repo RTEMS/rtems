@@ -14,14 +14,12 @@ all-local: $(PREINSTALL_FILES)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/mpc8xx
+	@$(mkdir_p) $(PROJECT_INCLUDE)/mpc8xx
 	@: > $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8xx/$(dirstamp)
 
 $(PROJECT_INCLUDE)/mpc8xx.h: include/mpc8xx.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc8xx.h

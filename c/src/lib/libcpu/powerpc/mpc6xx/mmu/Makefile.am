@@ -34,9 +34,8 @@ EXTRA_DIST = bat.c bat.h mmuAsm.S pte121.c pte121.h
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/libcpu
+	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
 $(PROJECT_INCLUDE)/libcpu/bat.h: bat.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/bat.h
