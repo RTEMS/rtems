@@ -37,22 +37,15 @@ extern "C" {
 typedef struct bdbuf_buffer {
     Chain_Node link; /* Link in the lru, mod or free chains */
 
-#ifdef BINARY_TREE
     struct bdbuf_avl_node { 
-        struct bdbuf_buffer *left;  /* link to the left sub-tree */
-        struct bdbuf_buffer *right; /* link to the right sub-tree */
+    	char cache;           /* Cache */
 
-        int              bf; /* AVL tree node balance factor */
-    }           avl;     /* AVL-tree links */
-#else /* AVL TREE */
-    struct bdbuf_avl_node { 
-	char cache;           /* Cache */
+	    struct bdbuf_buffer* left;  /* Left Child */
+	    struct bdbuf_buffer* right; /* Right Child */
 
-	struct bdbuf_buffer* link[2]; /* Left and Right Kids */
-
-	char bal;             /* The balance of the sub-tree */
+    	char bal;             /* The balance of the sub-tree */
     } avl;
-#endif
+
     dev_t       dev;     /* device number */
     blkdev_bnum block;   /* block number on the device */
     

@@ -5,6 +5,7 @@
  * Copyright (C) 2001 OKTET Ltd., St.-Peterburg, Russia
  * Author: Andrey G. Ivanov <Andrey.Ivanov@oktet.ru>
  *         Victor V. Vengerov <vvv@oktet.ru>
+ *         Alexander Kukuta <kam@oktet.ru>
  *
  * @(#) $Id$
  */
@@ -21,10 +22,6 @@
 #define BLKDEV_FATAL_ERROR(n) (('B' << 24) | ((n) & 0x00FFFFFF))
 #define BLKDEV_FATAL_BDBUF_CONSISTENCY BLKDEV_FATAL_ERROR(1)
 #define BLKDEV_FATAL_BDBUF_SWAPOUT     BLKDEV_FATAL_ERROR(2)
-
-enum balance_factor {BF_LEFT = -1, 
-                     BF_NONE = 0, 
-                     BF_RIGHT = 1}; 
 
 
 #define SWAPOUT_PRIORITY 15
@@ -111,107 +108,6 @@ typedef boolean preemption_key;
 #endif
 
 
-#ifdef BINARY_TREE
-static bdbuf_buffer *
-avl_search(bdbuf_buffer **root, dev_t dev, blkdev_bnum block)
-{
-    bdbuf_buffer *p = *root;
-    while ((p != NULL) && ((p->dev != dev) || (p->block != block)))
-    {
-        if ((p->dev < dev) || ((p->dev == dev) && (p->block < block)))
-            p = p->avl.right;
-        else
-            p = p->avl.left;
-    }
-    return p;
-}
-
-static bdbuf_buffer *
-avl_search_for_sync(bdbuf_buffer **root, disk_device *dd)
-{
-    bdbuf_buffer *p = *root;
-    bdbuf_buffer *s[32];
-    bdbuf_buffer **sp = s;
-    dev_t dev = dd->phys_dev->dev;
-    blkdev_bnum b = dd->start;
-    blkdev_bnum e = b + dd->size - 1;
-    
-    while (p != NULL)
-    {
-        if ((p->dev < dev) || ((p->dev == dev) && (p->block < b)))
-            p = p->avl.right;
-        else if ((p->dev > dev) || ((p->dev == dev) && (p->block > e)))
-            p = p->avl.left;
-        else if (p->modified)
-            return p;
-        else
-        {
-            if (p->avl.right != NULL)
-                *sp++ = p->avl.right;
-            p = p->avl.left;
-        }
-        if ((p == NULL) && (sp > s))
-            p = *--sp;
-    }
-    return p;
-}
-
-static int
-avl_insert(bdbuf_buffer **root, bdbuf_buffer *node)
-{
-    bdbuf_buffer **r = root;
-    node->avl.left = node->avl.right = NULL;
-    while (TRUE)
-    {
-        bdbuf_buffer *rr = *r;
-        if (rr == NULL)
-        {
-            *r = node;
-            return 0;
-        }
-        else if ((rr->dev < node->dev) || ((rr->dev == node->dev) &&
-                                           (rr->block < node->block)))
-        {
-            r = &rr->avl.right;
-        }
-        else if ((rr->dev == node->dev) && (rr->block == node->block))
-        {
-            return -1;
-        }
-        else
-        {
-            r = &rr->avl.left;
-        }
-    }
-}
-
-static int
-avl_remove(bdbuf_buffer **root, bdbuf_buffer *node)
-{
-    bdbuf_buffer **p = root;
-    dev_t dev = node->dev;
-    blkdev_bnum block = node->block;
-    
-    while ((*p != NULL) && (*p != node))
-    {
-        if (((*p)->dev < dev) || (((*p)->dev == dev) && ((*p)->block < block)))
-            p = &(*p)->avl.right;
-        else
-            p = &(*p)->avl.left;
-    }
-    if (*p == NULL)
-        return -1;
-    
-    *p = node->avl.left;
-    while (*p != NULL)
-        p = &(*p)->avl.right;
-    *p = node->avl.right;
-    node->avl.left = node->avl.right = NULL;
-    return 0;
-}
-
-#else
-
 /* The default maximum height of 32 allows for AVL trees having
    between 5,704,880 and 4,294,967,295 nodes, depending on order of
    insertion.  You may change this compile-time constant as you
@@ -219,70 +115,6 @@ avl_remove(bdbuf_buffer **root, bdbuf_buffer *node)
 #ifndef AVL_MAX_HEIGHT
 #define AVL_MAX_HEIGHT  32
 #endif
-
-
-
-/*
- * avl_cmp_node_node --
- *     Compares two avl nodes. Function compares dev/block pairs of
- *     the node1 and node2.
- *
- * PARAMETERS:
- *     node1 - Pointer to the first node to compare
- *     node2 - Pointer to the second node to compare
- *
- * RETURNS:
- *     0 - dev/block of the nodes are equal
- *     1 - dev/block of the second node are less
- *    -1 - dev/block of the first node are less
- */
-static inline int 
-avl_cmp_node_node(const bdbuf_buffer *const node1,
-                  const bdbuf_buffer *const node2)
-{
-    if (node1->dev < node2->dev)
-        return -1;
-    else if (node1->dev > node2->dev)
-        return +1;
-    else if (node1->block < node2->block)
-        return -1;
-    else if (node1->block > node2->block)
-        return +1;
-    else
-        return 0;
-}
-
-/*
- * avl_cmp_node_pattern -
- *     compares the dev/block of the node with specified two.
- *
- * PARAMETERS:
- *     node1     - Pointer to the node to compare
- *     dev/block - The pattern to compare with
- *
- * RETURNS:
- *     0 - dev/block of the node and specified are equal
- *     1 - dev/block specified are less
- *    -1 - dev/block of the first node are less
- *
- */
-static inline int 
-avl_cmp_node_pattern(const bdbuf_buffer *const node1,
-                     dev_t dev,
-                     blkdev_bnum block)
-{
-    if (node1->dev < dev)
-        return -1;
-    else if (node1->dev > dev)
-        return +1;
-    else if (node1->block < block)
-        return -1;
-    else if (node1->block > block)
-        return +1;
-    else
-        return 0;
-}
-
 
 /*
  * avl_search --
@@ -299,17 +131,23 @@ avl_cmp_node_pattern(const bdbuf_buffer *const node1,
 static bdbuf_buffer *
 avl_search(bdbuf_buffer **root, dev_t dev, blkdev_bnum block)
 {
-
     bdbuf_buffer *p = *root;
+
     while ((p != NULL) && ((p->dev != dev) || (p->block != block)))
     {
         if ((p->dev < dev) || ((p->dev == dev) && (p->block < block)))
-            p = p->avl.link[1];
+        {
+            p = p->avl.right;
+        }
         else
-            p = p->avl.link[0];
+        {
+            p = p->avl.left;
+        }
     }
+    
     return p;
 }
+
 
 /* avl_search_for_sync --
  *     Search in AVL tree for first modified buffer belongs to specified
@@ -326,30 +164,43 @@ avl_search(bdbuf_buffer **root, dev_t dev, blkdev_bnum block)
 static bdbuf_buffer *
 avl_search_for_sync(bdbuf_buffer **root, disk_device *dd)
 {
-    bdbuf_buffer *p = *root;
-    bdbuf_buffer *s[AVL_MAX_HEIGHT];
-    bdbuf_buffer **sp = s;
     dev_t dev = dd->phys_dev->dev;
-    blkdev_bnum b = dd->start;
-    blkdev_bnum e = b + dd->size - 1;
-    
+    blkdev_bnum block_start = dd->start;
+    blkdev_bnum block_end = dd->start + dd->size - 1;
+
+    bdbuf_buffer *buf_stack[AVL_MAX_HEIGHT];
+    bdbuf_buffer **buf_prev = buf_stack;
+    bdbuf_buffer *p = *root;
+
     while (p != NULL)
     {
-        if ((p->dev < dev) || ((p->dev == dev) && (p->block < b)))
-            p = p->avl.link[1];
-        else if ((p->dev > dev) || ((p->dev == dev) && (p->block > e)))
-            p = p->avl.link[0];
+        if ((p->dev < dev) || ((p->dev == dev) && (p->block < block_start)))
+        {
+            p = p->avl.right;
+        }
+        else if ((p->dev > dev) || ((p->dev == dev) && (p->block > block_end)))
+        {
+            p = p->avl.left;
+        }
         else if (p->modified)
+        {
             return p;
+        }
         else
         {
-            if (p->avl.link[1] != NULL)
-                *sp++ = p->avl.link[1];
-            p = p->avl.link[0];
+            if (p->avl.right != NULL)
+            {
+                *buf_prev++ = p->avl.right;
+            }
+            p = p->avl.left;
         }
-        if ((p == NULL) && (sp > s))
-            p = *--sp;
+
+        if ((p == NULL) && (buf_prev > buf_stack))
+        {
+            p = *--buf_prev;
+        }
     }
+
     return p;
 }
 
@@ -359,7 +210,7 @@ avl_search_for_sync(bdbuf_buffer **root, disk_device *dd)
  *     Inserts the specified node to the AVl-Tree.
  *
  * PARAMETERS:
- *     root_addr - Pointer to pointer to the root node
+ *     root - Pointer to pointer to the root node
  *     node - Pointer to the node to add.
  *
  * RETURNS:
@@ -367,211 +218,171 @@ avl_search_for_sync(bdbuf_buffer **root, disk_device *dd)
  *    -1 - An error occured
  */
 static int
-avl_insert (bdbuf_buffer **root_addr, bdbuf_buffer *node)
+avl_insert(bdbuf_buffer **root, bdbuf_buffer *node)
 {
-    /* Uses Knuth's Algorithm 6.2.3A (balanced tree search and
-       insertion), but caches results of comparisons.  In empirical
-       tests this eliminates about 25% of the comparisons seen under
-       random insertions.  */
+    dev_t dev = node->dev;
+    blkdev_bnum block = node->block;
 
-  /* A1. */
-    int t_modified = 0;
-    bdbuf_buffer *t;
-    bdbuf_buffer *s, *p, *q, *r;
+    bdbuf_buffer *p = *root;
+    bdbuf_buffer *q, *p1, *p2;
+    bdbuf_buffer *buf_stack[AVL_MAX_HEIGHT];
+    bdbuf_buffer **buf_prev = buf_stack;
 
-    bdbuf_buffer *root_link = *root_addr;;
+    boolean modified = FALSE;
 
-    t = root_link;
-    s = p = t;
-
-    if (s == NULL)
+    if (p == NULL)
     {
-        q = t = node;
-        q->avl.link[0] = q->avl.link[1] = NULL;
-        q->avl.bal = 0;
-        *root_addr = t;
+        *root = node;
+        node->avl.left = NULL;
+        node->avl.right = NULL;
+        node->avl.bal = 0;
         return 0;
     }
 
-    for (;;)
+    while (p != NULL)
     {
-        /* A2. */
-        int diff = avl_cmp_node_node(node, p);
+        *buf_prev++ = p;
 
-      /* A3. */
-        if (diff < 0)
+        if ((p->dev < dev) || ((p->dev == dev) && (p->block < block)))
         {
-            p->avl.cache = 0;
-            q = p->avl.link[0];
+            p->avl.cache = 1;
+            q = p->avl.right;
             if (q == NULL)
             {
-                p->avl.link[0] = q = node;
+                q = node;
+                p->avl.right = q = node;
                 break;
             }
         }
-        /* A4. */
-        else 
-            if (diff > 0)
-            {
-                p->avl.cache = 1;
-                q = p->avl.link[1];
-                if (q == NULL)
-                {
-                    p->avl.link[1] = q = node;
-                    break;
-                }
-            }
-            else
-                /* A2. */
-            {
-                /*
-                 * The item found. Nothing changed. Have not to update 
-                 * root_adr*/
-
-                return -1;
-            }
-
-        /* A3, A4. */
-        if (q->avl.bal != 0)
+        else if ((p->dev != dev) || (p->block != block))
         {
-            t = p, s = q;
-            t_modified = 1;
+            p->avl.cache = -1;
+            q = p->avl.left;
+            if (q == NULL)
+            {
+                q = node;
+                p->avl.left = q;
+                break;
+            }
         }
+        else
+        {
+            return -1;
+        }
+
         p = q;
     }
-  
-    /* A5. */
-    q->avl.link[0] = q->avl.link[1] = NULL;
+
+    q->avl.left = q->avl.right = NULL;
     q->avl.bal = 0;
+    modified = TRUE;
+    buf_prev--;
 
-    /* A6. */
-    r = p = s->avl.link[(int) s->avl.cache];
-    while (p != q)
+    while (modified)
     {
-        p->avl.bal = p->avl.cache * 2 - 1;
-        p = p->avl.link[(int) p->avl.cache];
-    }
+        if (p->avl.cache == -1)
+        {
+            switch (p->avl.bal)
+            {
+                case 1:
+                    p->avl.bal = 0;
+                    modified = FALSE;
+                    break;
 
-    /* A7. */
-    if (s->avl.cache == 0)
-    {
-        /* a = -1. */
-        if (s->avl.bal == 0)
-        {
-            s->avl.bal = -1;
-            *root_addr = root_link;
-            return 0;
-        }
-        else if (s->avl.bal == +1)
-        {
-            s->avl.bal = 0;
-            *root_addr = root_link;
-            return 0;
-        }
-      
-        assert (s->avl.bal == -1);
-        if (r->avl.bal == -1)
-        {
-            /* A8. */
-            p = r;
-            s->avl.link[0] = r->avl.link[1];
-            r->avl.link[1] = s;
-            s->avl.bal = r->avl.bal = 0;
+                case 0:
+                    p->avl.bal = -1;
+                    break;
+
+                case -1:
+                    p1 = p->avl.left;
+                    if (p1->avl.bal == -1) /* simple LL-turn */
+                    {
+                        p->avl.left = p1->avl.right;
+                        p1->avl.right = p;
+                        p->avl.bal = 0;
+                        p = p1;
+                    }
+                    else /* double LR-turn */
+                    {
+                        p2 = p1->avl.right;
+                        p1->avl.right = p2->avl.left;
+                        p2->avl.left = p1;
+                        p->avl.left = p2->avl.right;
+                        p2->avl.right = p;
+                        if (p2->avl.bal == -1) p->avl.bal = +1; else p->avl.bal = 0;
+                        if (p2->avl.bal == +1) p1->avl.bal = -1; else p1->avl.bal = 0;
+                        p = p2;
+                    }
+                    p->avl.bal = 0;
+                    modified = FALSE;
+                    break;
+
+                default:
+                    break;
+            }
         }
         else
         {
-            /* A9. */
-            assert(r->avl.bal == +1);
-            p = r->avl.link[1];
-            r->avl.link[1] = p->avl.link[0];
-            p->avl.link[0] = r;
-            s->avl.link[0] = p->avl.link[1];
-            p->avl.link[1] = s;
-            if (p->avl.bal == -1)
-                s->avl.bal = 1, r->avl.bal = 0;
-            else 
+            switch (p->avl.bal)
             {
-                if (p->avl.bal == 0)
-                {
-                    s->avl.bal = r->avl.bal = 0;
-                }
-                else 
-                {
-                    assert (p->avl.bal == +1);
-                    s->avl.bal = 0, r->avl.bal = -1;
-                }
-            }
-            p->avl.bal = 0;
-        }
-    }
-    else
-    {
-        /* a == +1. */
-        if (s->avl.bal == 0)
-        {
-            s->avl.bal = 1;
-            *root_addr = root_link;
-            return 0;
-        } 
-        else if (s->avl.bal == -1)
-        {
-            s->avl.bal = 0;
-            *root_addr = root_link;
-            return 0;
-        }
+                case -1:
+                    p->avl.bal = 0;
+                    modified = FALSE;
+                    break;
 
-        assert(s->avl.bal == +1);
-        if (r->avl.bal == +1)
+                case 0:
+                    p->avl.bal = 1;
+                    break;
+
+                case 1:
+                    p1 = p->avl.right;
+                    if (p1->avl.bal == 1) /* simple RR-turn */
+                    {
+                        p->avl.right = p1->avl.left;
+                        p1->avl.left = p;
+                        p->avl.bal = 0;
+                        p = p1;
+                    }
+                    else /* double RL-turn */
+                    {
+                        p2 = p1->avl.left;
+                        p1->avl.left = p2->avl.right;
+                        p2->avl.right = p1;
+                        p->avl.right = p2->avl.left;
+                        p2->avl.left = p;
+                        if (p2->avl.bal == +1) p->avl.bal = -1; else p->avl.bal = 0;
+                        if (p2->avl.bal == -1) p1->avl.bal = +1; else p1->avl.bal = 0;
+                        p = p2;
+                    }
+                    p->avl.bal = 0;
+                    modified = FALSE;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        q = p;
+        if (buf_prev > buf_stack)
         {
-            /* A8. */
-            p = r;
-            s->avl.link[1] = r->avl.link[0];
-            r->avl.link[0] = s;
-            s->avl.bal = r->avl.bal = 0;
+            p = *--buf_prev;
+
+            if (p->avl.cache == -1)
+            {
+                p->avl.left = q;
+            }
+            else
+            {
+                p->avl.right = q;
+            }
         }
         else
         {
-            /* A9. */
-            assert(r->avl.bal == -1);
-            p = r->avl.link[0];
-            r->avl.link[0] = p->avl.link[1];
-            p->avl.link[1] = r;
-            s->avl.link[1] = p->avl.link[0];
-            p->avl.link[0] = s;
-            if (p->avl.bal == +1)
-            {
-                s->avl.bal = -1, r->avl.bal = 0;
-            }
-            else 
-            {
-                if (p->avl.bal == 0)
-                {
-                    s->avl.bal = r->avl.bal = 0;
-                }
-                else 
-                {
-                    assert(p->avl.bal == -1);
-                    s->avl.bal = 0, r->avl.bal = 1;
-                }
-            }
-            p->avl.bal = 0;
+            *root = p;
+            break;
         }
-    }
-                
-    /* A10. */
-    if (t_modified)
-    {
-        if (s == t->avl.link[1])
-            t->avl.link[1] = p;
-        else
-            t->avl.link[0] = p;
-    }
-    else
-    {
-        root_link = p;
-    }
+    };
 
-    *root_addr = root_link;
     return 0;
 }
 
@@ -588,309 +399,265 @@ avl_insert (bdbuf_buffer **root_addr, bdbuf_buffer *node)
  *    -1 - No such item found
  */
 static int
-avl_remove(bdbuf_buffer **root_addr, const bdbuf_buffer *node)
+avl_remove(bdbuf_buffer **root, const bdbuf_buffer *node)
 {
-    /* Uses my Algorithm D, which can be found at
-       http://www.msu.edu/user/pfaffben/avl.  Algorithm D is based on
-       Knuth's Algorithm 6.2.2D (Tree deletion) and 6.2.3A (Balanced
-       tree search and insertion), as well as the notes on pages 465-466
-       of Vol. 3. */
+    dev_t dev = node->dev;
+    blkdev_bnum block = node->block;
 
-  /* D1. */
-    bdbuf_buffer *pa[AVL_MAX_HEIGHT];           /* Stack P: Nodes. */
-    char a[AVL_MAX_HEIGHT];             /* Stack P: Bits. */
-    int k = 1;                          /* Stack P: Pointer. */
-  
-    bdbuf_buffer **q;
-    bdbuf_buffer *p;
+    bdbuf_buffer *p = *root;
+    bdbuf_buffer *q, *r, *s, *p1, *p2;
+    bdbuf_buffer *buf_stack[AVL_MAX_HEIGHT];
+    bdbuf_buffer **buf_prev = buf_stack;
 
+    boolean modified = FALSE;
 
-    /*
-     * To avoid using unnessary instance of the 'bdbuf_buffer' (as pa[0])
-     * we will catch all access to pa[0] and use &root_avl instead
-     */
-    struct bdbuf_avl_node root_avl;
+    memset(buf_stack, 0, sizeof(buf_stack));
 
-    root_avl.link[0] = *root_addr;
-    root_avl.link[1] = NULL;
-    root_avl.bal = 0;
-    root_avl.cache = 0;
-
-    a[0] = 0;
-
-    p = root_avl.link[0];
-
-
-    k = 1;
-
-    for (;;)
+    while (p != NULL)
     {
-        /* D2. */
-        int diff;
+        *buf_prev++ = p;
 
-        if (p == NULL)
-            return -1;
-
-        diff = avl_cmp_node_node(node, p);
-
-        if (diff == 0)
+        if ((p->dev < dev) || ((p->dev == dev) && (p->block < block)))
+        {
+            p->avl.cache = 1;
+            p = p->avl.right;
+        }
+        else if ((p->dev != dev) || (p->block != block))
+        {
+            p->avl.cache = -1;
+            p = p->avl.left;
+        }
+        else
+        {
+            /* node found */
             break;
-
-      /* D3, D4. */
-        pa[k] = p;
-        if (diff < 0)
-        {
-            p = p->avl.link[0];
-            a[k] = 0;
         }
-        else if (diff > 0)
-        {
-            p = p->avl.link[1];
-            a[k] = 1;
-        }
-        k++;
+    }
+    
+    if (p == NULL)
+    {
+        /* there is no such node */
+        return -1;
     }
 
-    /* D5. */
-    if (k == 1)
+    q = p;
+
+    buf_prev--;
+    if (buf_prev > buf_stack)
     {
-        /* Andron */
-        q = &root_avl.link[(int) a[k - 1]];
+        p = *(buf_prev - 1);
     }
     else
     {
-        q = &pa[k - 1]->avl.link[(int) a[k - 1]];
+        p = NULL;
     }
-    if (p->avl.link[1] == NULL)
+
+    /* at this moment q - is a node to delete, p is q's parent */
+    if (q->avl.right == NULL)
     {
-        *q = p->avl.link[0];
-        if (*q)
-            (*q)->avl.bal = 0;
+        r = q->avl.left;
+        if (r != NULL)
+        {   
+            r->avl.bal = 0;
+        }
+        q = r;
     }
     else
     {
-        /* D6. */
-        bdbuf_buffer *r = p->avl.link[1];
-        if (r->avl.link[0] == NULL)
+        bdbuf_buffer **t;
+
+        r = q->avl.right;
+
+        if (r->avl.left == NULL)
         {
-            r->avl.link[0] = p->avl.link[0];
-            *q = r;
-            r->avl.bal = p->avl.bal;
-            a[k] = 1;
-            pa[k++] = r;
+            r->avl.left = q->avl.left;
+            r->avl.bal = q->avl.bal;
+            r->avl.cache = 1;
+            *buf_prev++ = q = r;
         }
         else
         {
-            /* D7. */
-            bdbuf_buffer *s = r->avl.link[0];
-            int l = k++;
-
-            a[k] = 0;
-            pa[k++] = r;
+            t = buf_prev++;
+            s = r;
             
-            /* D8. */
-            while (s->avl.link[0] != NULL)
+            while (s->avl.left != NULL)
             {
-                r = s;
-                s = r->avl.link[0];
-                a[k] = 0;
-                pa[k++] = r;
+                *buf_prev++ = r = s;
+                s = r->avl.left;
+                r->avl.cache = -1;
             }
-
-            /* D9. */
-            a[l] = 1;
-            pa[l] = s;
-            s->avl.link[0] = p->avl.link[0];
-            r->avl.link[0] = s->avl.link[1];
-            s->avl.link[1] = p->avl.link[1];
-            s->avl.bal = p->avl.bal;
-            *q = s;
+            
+            s->avl.left = q->avl.left;
+            r->avl.left = s->avl.right;
+            s->avl.right = q->avl.right;
+            s->avl.bal = q->avl.bal;
+            s->avl.cache = 1;
+            
+            *t = q = s;
         }
     }
 
-    assert(k > 0);
-    /* D10. */
-    while (--k)
+    if (p != NULL)
     {
-        bdbuf_buffer *s = pa[k], *r;
-
-        if (a[k] == 0)
+        if (p->avl.cache == -1)
         {
-            /* D10. */
-            if (s->avl.bal == -1)
-            {
-                s->avl.bal = 0;
-                continue;
-            }
-            else if (s->avl.bal == 0)
-            { 
-                s->avl.bal = 1;
-                break;
-            }
-
-            assert(s->avl.bal == +1);
-            r = s->avl.link[1];
-
-            assert(r != NULL);
-            if (r->avl.bal == 0)
-            {
-                /* D11. */
-                s->avl.link[1] = r->avl.link[0];
-                r->avl.link[0] = s;
-                r->avl.bal = -1;
-                if (k == 1)
-                {
-                    /* Andron */
-                    root_avl.link[(int) a[k - 1]] = r;
-                }
-                else
-                {
-                    pa[k - 1]->avl.link[(int) a[k - 1]] = r;
-                }
-                break;
-            }
-            else 
-                if (r->avl.bal == +1)
-                {
-                    /* D12. */
-                    s->avl.link[1] = r->avl.link[0];
-                    r->avl.link[0] = s;
-                    s->avl.bal = r->avl.bal = 0;
-                    if (k == 1)
-                    {
-                        /* Andron */
-                        root_avl.link[(int) a[k - 1]] = r;
-                    }
-                    else
-                    {
-                        pa[k - 1]->avl.link[(int) a[k - 1]] = r;
-                    }
-                }
-                else 
-                {
-                    /* D13. */
-                    assert(r->avl.bal == -1);
-                    p = r->avl.link[0];
-                    r->avl.link[0] = p->avl.link[1];
-                    p->avl.link[1] = r;
-                    s->avl.link[1] = p->avl.link[0];
-                    p->avl.link[0] = s;
-                    if (p->avl.bal == +1)
-                        s->avl.bal = -1, r->avl.bal = 0;
-                    else if (p->avl.bal == 0)
-                    {
-                        s->avl.bal = r->avl.bal = 0;
-                    }
-                    else
-                    {
-                        assert(p->avl.bal == -1);
-                        s->avl.bal = 0, r->avl.bal = +1;
-                    }
-                    p->avl.bal = 0;
-                    if (k == 1)
-                    {
-                        /* Andron */
-                        root_avl.link[(int) a[k - 1]] = p;
-                    }
-                    else
-                    {
-                        pa[k - 1]->avl.link[(int) a[k - 1]] = p;
-                    }
-                }
+            p->avl.left = q;
         }
         else
         {
-            assert(a[k] == 1);
+            p->avl.right = q;
+        }
+    }
+    else
+    {
+        *root = q;
+    }
 
-            /* D10. */
-            if (s->avl.bal == +1)
+    modified = TRUE;
+
+    while (modified)
+    {
+        if (buf_prev > buf_stack)
+        {
+            p = *--buf_prev;
+        }
+        else
+        {
+            break;
+        }
+        
+        if (p->avl.cache == -1)
+        {
+            /* rebalance left branch */
+            switch (p->avl.bal)
             {
-                s->avl.bal = 0;
-                continue;
-            }
-            else 
-                if (s->avl.bal == 0)
-                {
-                    s->avl.bal = -1;
+                case -1:
+                    p->avl.bal = 0;
                     break;
-                }
+                case  0:
+                    p->avl.bal = 1;
+                    modified = FALSE;
+                    break;
 
-            assert(s->avl.bal == -1);
-            r = s->avl.link[0];
+                case +1:
+                    p1 = p->avl.right;
 
-            if (r == NULL || r->avl.bal == 0)
-            {
-                /* D11. */
-                s->avl.link[0] = r->avl.link[1];
-                r->avl.link[1] = s;
-                r->avl.bal = 1;
-                if (k == 1)
-                {
-                    /* Andron */
-                    root_avl.link[(int) a[k - 1]] = r;
-                }
-                else
-                {
-                    pa[k - 1]->avl.link[(int) a[k - 1]] = r;
-                }
-
-                break;
-            }
-            else 
-                if (r->avl.bal == -1)
-                {
-                    /* D12. */
-                    s->avl.link[0] = r->avl.link[1];
-                    r->avl.link[1] = s;
-                    s->avl.bal = r->avl.bal = 0;
-                    if (k == 1)
+                    if (p1->avl.bal >= 0) /* simple RR-turn */
                     {
-                        root_avl.link[(int) a[k - 1]] = r;
-                    }
-                    else
-                    {
-                        pa[k - 1]->avl.link[(int) a[k - 1]] = r;
-                    }
+                        p->avl.right = p1->avl.left;
+                        p1->avl.left = p;
 
-                }
-                else 
-                    if (r->avl.bal == +1)
-                    {
-                        /* D13. */
-                        p = r->avl.link[1];
-                        r->avl.link[1] = p->avl.link[0];
-                        p->avl.link[0] = r;
-                        s->avl.link[0] = p->avl.link[1];
-                        p->avl.link[1] = s;
-                        if (p->avl.bal == -1)
-                            s->avl.bal = 1, r->avl.bal = 0;
-                        else 
-                            if (p->avl.bal == 0)
-                                s->avl.bal = r->avl.bal = 0;
-                            else
-                            {
-                                assert(p->avl.bal == 1);
-                                s->avl.bal = 0, r->avl.bal = -1;
-                            }
-                        p->avl.bal = 0;
-                        if (k == 1)
+                        if (p1->avl.bal == 0)
                         {
-                            /* Andron */
-                            root_avl.link[(int) a[k - 1]] = p;
+                            p1->avl.bal = -1;
+                            modified = FALSE;
                         }
                         else
                         {
-                            pa[k - 1]->avl.link[(int) a[k - 1]] = p;
+                            p->avl.bal = 0;
+                            p1->avl.bal = 0;
                         }
+                        p = p1;
                     }
-        }
-    }
+                    else /* double RL-turn */
+                    {
+                        p2 = p1->avl.left;
 
-    *root_addr = root_avl.link[0];
+                        p1->avl.left = p2->avl.right;
+                        p2->avl.right = p1;
+                        p->avl.right = p2->avl.left;
+                        p2->avl.left = p;
+                        
+                        if (p2->avl.bal == +1) p->avl.bal = -1; else p->avl.bal = 0;
+                        if (p2->avl.bal == -1) p1->avl.bal = 1; else p1->avl.bal = 0;
+                        
+                        p = p2;
+                        p2->avl.bal = 0;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            /* rebalance right branch */
+            switch (p->avl.bal)
+            {
+                case +1:
+                    p->avl.bal = 0;
+                    break;
+
+                case  0:
+                    p->avl.bal = -1;
+                    modified = FALSE;
+                    break;
+
+                case -1:
+                    p1 = p->avl.left;
+
+                    if (p1->avl.bal <= 0) /* simple LL-turn */
+                    {
+                        p->avl.left = p1->avl.right;
+                        p1->avl.right = p;
+                        if (p1->avl.bal == 0)
+                        {
+                            p1->avl.bal = 1;
+                            modified = FALSE;
+                        }
+                        else
+                        {
+                            p->avl.bal = 0;
+                            p1->avl.bal = 0;
+                        }
+                        p = p1;
+                    }
+                    else /* double LR-turn */
+                    {
+                        p2 = p1->avl.right;
+
+                        p1->avl.right = p2->avl.left;
+                        p2->avl.left = p1;
+                        p->avl.left = p2->avl.right;
+                        p2->avl.right = p;
+                        
+                        if (p2->avl.bal == -1) p->avl.bal = 1; else p->avl.bal = 0;
+                        if (p2->avl.bal == +1) p1->avl.bal = -1; else p1->avl.bal = 0;
+
+                        p = p2;
+                        p2->avl.bal = 0;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        if (buf_prev > buf_stack)
+        {
+            q = *(buf_prev - 1);
+            
+            if (q->avl.cache == -1)
+            {
+                q->avl.left = p;
+            }
+            else
+            {
+                q->avl.right = p;
+            }
+        }
+        else
+        {
+            *root = p;
+            break;
+        }
+
+    }
+    
     return 0;
 }
-
-#endif 
 
 /* bdbuf_initialize_pool --
  *      Initialize single buffer pool.
@@ -1181,12 +948,12 @@ again:
         {
             bd_buf->dev = device;
             bd_buf->block = block;
-#ifdef BINARY_TREE
-            bd_buf->avl.left = NULL;
-            bd_buf->avl.right = NULL;
-#else
+#ifdef AVL_GPL
             bd_buf->avl.link[0] = NULL;
             bd_buf->avl.link[1] = NULL;
+#else
+            bd_buf->avl.left = NULL;
+            bd_buf->avl.right = NULL;
 #endif
             bd_buf->use_count = 1;
             bd_buf->modified = bd_buf->actual = bd_buf->in_progress = FALSE;
@@ -1241,6 +1008,7 @@ again:
         bd_buf->use_count++;
         while (bd_buf->in_progress != 0)
         {
+            rtems_interrupt_disable(level);
             _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE,
                               WATCHDOG_NO_TIMEOUT, level);
         }
@@ -1459,6 +1227,7 @@ rtems_bdbuf_read(dev_t device,
         }
         else
         {
+            rtems_interrupt_disable(level);
             _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE,
                               WATCHDOG_NO_TIMEOUT, level);
             bd_buf->actual = TRUE;
@@ -1650,6 +1419,7 @@ rtems_bdbuf_sync(bdbuf_buffer *bd_buf)
 
     if (rc == RTEMS_SUCCESSFUL)
     {
+        rtems_interrupt_disable(level);
         _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE,
                           WATCHDOG_NO_TIMEOUT, level);
     }
@@ -1691,6 +1461,7 @@ rtems_bdbuf_syncdev(dev_t dev)
         bd_buf = avl_search_for_sync(&pool->tree, dd);
         if (bd_buf != NULL /* && bd_buf->modified */)
         {
+            rtems_interrupt_disable(level);
             _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE,
                               WATCHDOG_NO_TIMEOUT, level);
         }
@@ -1763,6 +1534,7 @@ bdbuf_swapout_task(rtems_task_argument unused)
         {
             if (bd_buf->in_progress)
             {
+                rtems_interrupt_disable(level);
                 _CORE_mutex_Seize(&bd_buf->transfer_sema, 0, TRUE, 0, level);
             }
         }
