@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 BSP_PIECES = clock console irq openpic pci residual startup vectors motorola
 

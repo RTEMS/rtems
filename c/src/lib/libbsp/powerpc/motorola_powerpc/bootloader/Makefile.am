@@ -5,7 +5,6 @@
 ## NOTE: This Makefile.am applies automake compilation rules and does not 
 ## apply RTEMS's compilation rules.
 
-AUTOMAKE_OPTIONS = foreign no-exeext 1.5
 
 VPATH = @srcdir@:@srcdir@/../../shared/bootloader:@srcdir@/../../shared/console
 

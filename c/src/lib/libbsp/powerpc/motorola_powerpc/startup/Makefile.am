@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 VPATH = @srcdir@:@srcdir@/../console:@srcdir@/../../../shared:@srcdir@/../../shared/startup
 

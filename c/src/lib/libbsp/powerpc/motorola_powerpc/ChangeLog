@@ -1,3 +1,23 @@
+	* startup/linkcmds: Per PR170, PR171, and PR172 add .eh_frame 
+ 
+2002-04-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bootloader/Makefile.am: Use automake-1.6 AS compilation rules.
+
+2001-04-02	Joel Sherrill <joel@OARcorp.com>
+
+	* bootloader/Makefile.am: Use AM_CCASFLAGS instead of AM_ASFLAGS.
+
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* bootloader/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* clock/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* console/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* include/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* irq/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* motorola/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* openpic/Makefile.am: Remove AUTOMAKE_OPTIONS.
