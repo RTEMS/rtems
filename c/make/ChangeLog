@@ -1,3 +1,8 @@
+2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* target.cfg.in: Comment out RTEMS_HOST, RTEMS_CROSS_TARGET.
+	* Makefile.am: Switch to GNU canonicalization.
+
 2000-09-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* target.cfg.in: Comment out DEFS.
