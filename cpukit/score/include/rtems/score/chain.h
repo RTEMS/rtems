@@ -104,8 +104,8 @@ typedef struct {
 void _Chain_Initialize(
   Chain_Control *the_chain,
   void          *starting_address,
-  unsigned32     number_nodes,
-  unsigned32     node_size
+  uint32_t       number_nodes,
+  uint32_t       node_size
 );
 
 #ifndef RTEMS_INLINES

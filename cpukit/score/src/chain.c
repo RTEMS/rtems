@@ -50,7 +50,7 @@ void _Chain_Initialize(
   count                     = number_nodes;
   current                   = _Chain_Head( the_chain );
   the_chain->permanent_null = NULL;
-  next                      = (Chain_Node *)starting_address;
+  next                      = starting_address;
   while ( count-- ) {
     current->next  = next;
     next->previous = current;
