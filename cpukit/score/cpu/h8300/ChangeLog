@@ -1,3 +1,10 @@
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu_asm.S, rtems/score/cpu.h: Modified to better support 
+	multilibing.  These changes result in the code being able to
+	compile with the default gcc settings.  It is not functional
+	in this configuration but does compile.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include compile.am.

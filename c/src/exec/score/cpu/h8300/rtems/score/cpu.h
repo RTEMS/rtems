@@ -649,7 +649,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 
 /* end of ISR handler macros */
 
-#else
+#else /* modern gcc version */
 
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous
@@ -660,10 +660,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  XXX  
  */
 
-#if defined(__H8300__)
-#define _CPU_ISR_Disable( _isr_cookie )
-    asm volatile( "orc #0x80,ccr " );
-#else
+#if defined(__H8300H__) || defined(__H8300S__)
 #define _CPU_ISR_Disable( _isr_cookie ) \
   do { \
     unsigned char __ccr; \
@@ -671,6 +668,8 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
              : "=m" (__ccr) : "0" (__ccr) ); \
     (_isr_cookie) = __ccr; \
   } while (0) 
+#else
+#define _CPU_ISR_Disable( _isr_cookie ) (_isr_cookie) = 0
 #endif
 
 
@@ -684,15 +683,14 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  XXX
  */
 
-#if defined(__H8300__)
-#define _CPU_ISR_Enable( _isr_cookie )  \
-   asm(" andc #0x7f,ccr \n")
-#else
+#if defined(__H8300H__) || defined(__H8300S__)
 #define _CPU_ISR_Enable( _isr_cookie )  \
   do { \
     unsigned char __ccr = (unsigned char) (_isr_cookie); \
     asm volatile( "ldc %0, ccr" :  : "m" (__ccr) ); \
   } while (0) 
+#else
+#define _CPU_ISR_Enable( _isr_cookie )
 #endif
 
 /*
@@ -706,15 +704,14 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  XXX
  */
 
-#if defined(__H8300__)
-#define _CPU_ISR_Enable( _isr_cookie )  \
-   asm( "andc #0x7f,ccr \n orc #0x80,ccr\n" )
-#else
+#if defined(__H8300H__) || defined(__H8300S__)
 #define _CPU_ISR_Flash( _isr_cookie ) \
   do { \
     unsigned char __ccr = (unsigned char) (_isr_cookie); \
     asm volatile( "ldc %0, ccr ; orc #0x80,ccr " :  : "m" (__ccr) ); \
   } while (0) 
+#else
+#define _CPU_ISR_Flash( _isr_cookie )
 #endif
 
 #endif /* end of old gcc */
@@ -1151,8 +1148,8 @@ void _CPU_Context_restore_fp(
  *  XXX
  */
  
-static inline unsigned int CPU_swap_u32(
-  unsigned int value
+static inline unsigned32 CPU_swap_u32(
+  unsigned32 value
 )
 {
   unsigned32 byte1, byte2, byte3, byte4, swapped;
