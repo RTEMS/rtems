@@ -205,7 +205,7 @@ the host debugger on the target are only simple actions which look like :
 @example
 @group
 XXXXX reference it in the previous paragraph
-XXXXX insert seg_init.eps
+XXXXX insert seq_init.eps
 XXXXX Caption Debug session initialization
 @end group
 @end example
@@ -215,18 +215,18 @@ XXXXX Caption Debug session initialization
 @example
 @group
 XXXXX reference it in the previous paragraph
-XXXXX insert seg_init.eps
+XXXXX insert seq_init.eps
 XXXXX Caption Debug session initialization
 @end group
 @end example
 @end ifset
 
-@c @image{seg_init}
+@c @image{seq_init}
 
 @ifset use-html
-@c <IMG SRC="seg_init.jpg" WIDTH=500 HEIGHT=600 ALT="Debug session initialization">
+@c <IMG SRC="seq_init.jpg" WIDTH=500 HEIGHT=600 ALT="Debug session initialization">
 @html
-<IMG SRC="seg_init.jpg" ALT="Debug session initialization">
+<IMG SRC="seq_init.jpg" ALT="Debug session initialization">
 @end html
 @end ifset
 

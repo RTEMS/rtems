@@ -105,4 +105,16 @@ conclusion.texi: conclusion.t Makefile
 	    -u "Top" \
 	    -n "" ${*}.t
 
-
+garde.eps
+layers.eps
+process.eps
+seq_init.eps
+seq_break.eps
+seq_detach.eps
+convert: 
+	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=garde.pdf -- garde.eps -c -quit
+	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=layers.pdf -- layers.eps -c -quit
+	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=process.pdf -- process.eps -c -quit
+	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=seq_init.pdf -- seq_init.eps -c -quit
+	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=seq_break.pdf -- seq_break.eps -c -quit
+	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=seq_detach.pdf -- PCIreg.eps -c -quit
