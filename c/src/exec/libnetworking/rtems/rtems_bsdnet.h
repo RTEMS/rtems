@@ -110,6 +110,13 @@ struct rtems_bsdnet_ifconfig {
 	unsigned int	irno;   /* irq of the board */
 	unsigned int	bpar;   /* memory of the board */
 
+  /*
+   * Driver control block pointer. Typcially this points to the driver's
+   * controlling structure. You set this when you have the structure allocated
+   * externally to the driver.
+   */
+  void *drv_ctrl;
+
 };
 
 struct rtems_bsdnet_config {
