@@ -44,7 +44,7 @@ $(PROJECT_INCLUDE)/goahead/%.h: %.h
 $(PROJECT_INCLUDE)/rtems_webserver.h: rtems_webserver.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems_webserver.h \
+PREINSTALL_FILES = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems_webserver.h \
     $(PROJECT_INCLUDE)/goahead $(H_FILES:%.h=$(PROJECT_INCLUDE)/goahead/%.h)
 
 if HAS_POSIX

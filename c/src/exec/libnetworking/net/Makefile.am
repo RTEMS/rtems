@@ -40,7 +40,7 @@ include_net_HEADERS = bpf.h ethernet.h if.h if_arp.h if_dl.h if_llc.h if_ppp.h \
     if_types.h netisr.h ppp-comp.h ppp_defs.h radix.h raw_cb.h route.h \
     if_pppvar.h pppcompress.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/net \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/net \
     $(include_net_HEADERS:%=$(PROJECT_INCLUDE)/net/%)
 
 $(PROJECT_INCLUDE)/net:

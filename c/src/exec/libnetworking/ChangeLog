@@ -1,3 +1,18 @@
+2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* machine/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* net/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* netinet/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* vm/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* pppd/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* sys/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* rtems_servers/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* arpa/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* nfs/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* rtems_webserver/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* rtems_telnetd/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use PREINSTALL_FILES = to make automake-1.5 happy.

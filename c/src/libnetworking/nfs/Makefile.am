@@ -36,7 +36,7 @@ EXTRA_DIST = bootp_subr.c
 
 include_nfs_HEADERS = krpc.h nfs.h nfsdiskless.h nfsproto.h rpcv2.h xdr_subs.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/nfs \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/nfs \
     $(include_nfs_HEADERS:%=$(PROJECT_INCLUDE)/nfs/%)
 
 $(PROJECT_INCLUDE)/nfs:

@@ -21,7 +21,7 @@ OBJS = $(C_O_FILES)
 
 include_rtems_HEADERS = rtems_bsdnet.h rtems_bsdnet_internal.h tftp.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
     $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems:

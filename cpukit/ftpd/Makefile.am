@@ -35,7 +35,7 @@ include_HEADERS = ftpd.h
 
 include_rtems_HEADERS =
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) \
+PREINSTALL_FILES = $(PROJECT_INCLUDE) \
    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%) \
    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 

@@ -14,7 +14,7 @@ include_sys_HEADERS = buf.h callout.h conf.h domain.h filio.h ioctl.h kernel.h l
     sockio.h sysctl.h syslimits.h syslog.h systm.h ttydefaults.h ucred.h \
     uio.h un.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/sys \
     $(include_sys_HEADERS:%=$(PROJECT_INCLUDE)/sys/%)
 
 $(PROJECT_INCLUDE)/sys:

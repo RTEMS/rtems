@@ -45,7 +45,7 @@ include_netinet_HEADERS = icmp_var.h if_ether.h igmp.h igmp_var.h in.h in_pcb.h 
     in_var.h ip.h ip_fw.h ip_icmp.h ip_mroute.h ip_var.h tcp.h tcp_debug.h \
     tcp_fsm.h tcp_seq.h tcp_timer.h tcp_var.h tcpip.h udp.h udp_var.h
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/netinet \
     $(include_netinet_HEADERS:%=$(PROJECT_INCLUDE)/netinet/%)
 
 $(PROJECT_INCLUDE)/netinet:
