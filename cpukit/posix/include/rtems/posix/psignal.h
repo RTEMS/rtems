@@ -98,7 +98,7 @@ void _POSIX_signals_Set_process_signals(
   sigset_t   mask
 );
 
-void _POSIX_signals_Set_process_signals(
+void _POSIX_signals_Clear_process_signals(
   sigset_t   mask
 );
 
