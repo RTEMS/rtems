@@ -9,7 +9,6 @@ endif
 
 BSP_PIECES = startup clock console timer tod $(NETWORK) nvram universe pci \
     vectors
-# pieces to pick up out of libcpu/$(RTEMS_CPU)
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \

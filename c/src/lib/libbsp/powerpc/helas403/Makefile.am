@@ -18,6 +18,7 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
 
+PREINSTALL_DIRS =
 TMPINSTALL_FILES =
 
 $(PROJECT_LIB)/bsp_specs.dl: bsp_specs.dl $(PROJECT_LIB)/$(dirstamp)
@@ -29,6 +30,7 @@ $(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 CLEANFILES = $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/subdirs.am
