@@ -1,4 +1,8 @@
 
+2001-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/simhppa.cfg: Remove SIMHPPA_FAST_IDLE, make-target-options.
+
 2001-11-14	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/eth_comm.cfg, custom/mbx860_005b.cfg, custom/mbx8xx.cfg,
