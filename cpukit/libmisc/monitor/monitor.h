@@ -313,7 +313,7 @@ typedef struct {
 
 /* monitor.c */
 void    rtems_monitor_kill(void);
-void    rtems_monitor_init(rtems_boolean);
+void    rtems_monitor_init(unsigned32);
 void    rtems_monitor_wakeup(void);
 void    rtems_monitor_pause_cmd(int, char **, unsigned32, boolean);
 void    rtems_monitor_fatal_cmd(int, char **, unsigned32, boolean);

@@ -15,6 +15,11 @@
 #include <rtems.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+/* for strcasecmp in linux */
+#if defined(linux)
+#define __USE_BSD
+#endif
 #include <string.h>
 
 #include <rtems/monitor.h>
