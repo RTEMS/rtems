@@ -1,3 +1,9 @@
+2000-09-29	Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
+
+	* startup/linkcmds: Added lines so DWARF debug information
+	would be available.  Otherwise gdb complains that the offsets
+	for the debug info are incorrect and doesn't load the files.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* canbus/Makefile.am, console/Makefile.am, network/Makefile.am,
