@@ -1,5 +1,10 @@
 2004-07-24	Joel Sherrill <joel@OARcorp.com>
 
+	PR 661/rtems
+	* src/objectmp.c: Fix invalid dereference.
+
+2004-07-24	Joel Sherrill <joel@OARcorp.com>
+
 	PR 660/rtems
 	* src/threadinitialize.c, src/threadstackallocate.c: Check for
 	overflow when allocating stack.

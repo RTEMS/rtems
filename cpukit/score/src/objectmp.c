@@ -165,7 +165,7 @@ Objects_Name_to_id_errors _Objects_MP_Global_name_search (
   Objects_MP_Control *the_object;
   unsigned32          name_to_use;
 
-  name_to_use = *(unsigned32 *)the_name;  /* XXX only fixed length names */
+  name_to_use = (unsigned32)the_name;  /* XXX only fixed length names */
 
   if ( nodes_to_search > _Objects_Maximum_nodes )
     return OBJECTS_INVALID_NODE;
