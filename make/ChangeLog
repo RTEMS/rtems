@@ -1,4 +1,12 @@
 
+2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/dmv177.cfg: Reflect changes to dmv177/configure.ac.
+	* custom/ppcn_60x.cfg: Refect changes to ppcn_60x/configure.ac.
+	* custom/psim.cfg: Refect changes to psim/configure.ac.
+	* custom/score603e.cfg: Reflect changes to score603e/configure.ac,
+	remove SCORE603E_GENERATION.
+
 2001-11-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/eth_comm.cfg: Reflect changes to eth_comm/configure.ac.
