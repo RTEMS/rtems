@@ -324,6 +324,7 @@ __rtems_close(
     rtems_driver_name_t *np;
     rtems_libio_t *iop;
     rtems_libio_open_close_args_t args;
+    int status;
 
     if (rtems_file_descriptor_type(fd)) {
         int (*fp)(int fd);
@@ -333,7 +334,9 @@ __rtems_close(
             errno = EBADF;
             return -1;
         }
-        return (*fp)(fd);
+        status = (*fp)(fd);
+        rtems_libio_free(iop);
+        return status;
     }
     iop = rtems_libio_iop(fd);
     rtems_libio_check_fd(fd);
@@ -345,6 +348,8 @@ __rtems_close(
     args.mode = 0;
     
     rc = rtems_io_close(np->major, np->minor, (void *) &args);
+
+    rtems_libio_free(iop);
 
     if (rc != RTEMS_SUCCESSFUL)
         return rtems_libio_errno(rc);
