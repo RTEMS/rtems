@@ -161,7 +161,6 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
 
 void _CORE_mutex_Seize_interrupt_blocking(
   CORE_mutex_Control  *the_mutex,
-  boolean              wait,
   Watchdog_Interval    timeout
 );
 
@@ -179,7 +178,7 @@ void _CORE_mutex_Seize_interrupt_blocking(
         _Thread_Executing->Wait.id    = _id; \
         _Thread_Disable_dispatch(); \
         _ISR_Enable( _level ); \
-       _CORE_mutex_Seize_interrupt_blocking( _the_mutex, _id, _timeout ); \
+       _CORE_mutex_Seize_interrupt_blocking( _the_mutex, _timeout ); \
       } \
     } \
   } while (0)
@@ -215,6 +214,10 @@ void _CORE_mutex_Flush(
   unsigned32                  status
 );
  
+#ifndef __RTEMS_APPLICATION__
+#include <rtems/score/coremutex.inl>
+#endif
+
 #ifdef __cplusplus
 }
 #endif
