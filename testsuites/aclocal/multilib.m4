@@ -2,7 +2,7 @@ dnl This provides configure definitions used for multilib support
 
 dnl parts of these macros are derived from newlib-1.8.2's multilib support
 
-AC_DEFUN(RTEMS_ENABLE_MULTILIB,
+AC_DEFUN([RTEMS_ENABLE_MULTILIB],
 [
 AC_ARG_ENABLE(multilib,
 AC_HELP_STRING([--enable-multilib],

@@ -1,3 +1,23 @@
+2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/canonical-target-name.m4, aclocal/canonicalize-tools.m4,
+	aclocal/check-custom-bsp.m4, aclocal/check-cxx.m4,
+	aclocal/check-itron.m4, aclocal/check-multiprocessing.m4,
+	aclocal/check-networking.m4, aclocal/check-posix.m4,
+	aclocal/check-tool.m4, aclocal/config-subdirs.m4,
+	aclocal/enable-bare.m4, aclocal/enable-cxx.m4,
+	aclocal/enable-itron.m4, aclocal/enable-multiprocessing.m4,
+	aclocal/enable-networking.m4, aclocal/enable-posix.m4,
+	aclocal/enable-rtemsbsp.m4, aclocal/enable-tests.m4,
+	aclocal/env-rtemsbsp.m4, aclocal/gcc-isystem.m4,
+	aclocal/gcc-pipe.m4, aclocal/gcc-specs.m4,
+	aclocal/multilib.m4, aclocal/path-ksh.m4,
+	aclocal/prog-cc.m4, aclocal/prog-cxx.m4,
+	aclocal/project-root.m4, aclocal/rtems-test-no-pause.m4,
+	aclocal/rtems-top.m4, aclocal/target.m4,
+	aclocal/tool-paths.m4:
+	Fix underquoting to silence automake-1.8.
+
 2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Reflect having moved to testsuites/.

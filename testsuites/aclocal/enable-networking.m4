@@ -1,6 +1,6 @@
 dnl $Id$
 
-AC_DEFUN(RTEMS_ENABLE_NETWORKING,
+AC_DEFUN([RTEMS_ENABLE_NETWORKING],
 [
 AC_ARG_ENABLE(networking,
 [AC_HELP_STRING([--enable-networking],[enable TCP/IP stack])],
