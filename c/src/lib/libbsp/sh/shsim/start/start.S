@@ -1,29 +1,64 @@
-	.section .text
-	.global	start
-start:
+/*
+ *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de) and
+ *           Bernd Becker (becker@faw.uni-ulm.de)
+ *
+ *  COPYRIGHT (c) 1997-1998, FAW Ulm, Germany
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *
+ *  COPYRIGHT (c) 1998.
+ *  On-Line Applications Research Corporation (OAR).
+ *  Copyright assigned to U.S. Government, 1994.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
+ */
+
+#include "asm.h"
+
+	BEGIN_CODE
+	PUBLIC(start)
+SYM (start):
+        ! install the stack pointer
 	mov.l	stack_k,r15
 
 	! zero out bss
 	mov.l	edata_k,r0
 	mov.l	end_k,r1
 	mov	#0,r2
-start_l:
-	 mov.l	r2,@r0
+0:
+	mov.l	r2,@r0
 	add	#4,r0
 	cmp/ge	r0,r1
-	bt	start_l
+	bt	0b
 
-#if defined (__SH3E__) || defined(__SH4_SINGLE__) || defined(__SH4__) || defined(__SH4_SINGLE_ONLY)
-	mov.l set_fpscr_k, r1
-	jsr @r1
-	mov #0,r4
-	lds r3,fpscr
-#endif /*  defined (__SH3E__) || defined(__SH4_SINGLE__) || defined(__SH4__) || defined(__SH4_SINGLE_ONLY__) */
+	! copy the vector table from rom to ram
+	mov.l   vects_k,r0   	! vectab
+	mov	#0,r1		! address of boot vector table
+	mov     #0,r2		! number of bytes copied
+	mov.w   vects_size,r3   ! size of entries in vectab
+1:
+	mov.l   @r1+,r4
+	mov.l   r4,@r0
+	add     #4,r0
+	add     #1,r2
+	cmp/hi  r3,r2
+	bf      1b
+
+	mov.l   vects_k,r0   	! update vbr to point to vectab
+	ldc     r0,vbr
 
 	! call the mainline	
-	mov.l	boot_card_k,r0
-	jsr	@r0
-	or	r0,r0
+	mov #0,r4		! argc
+	mov.l main_k,r0
+	jsr @r0
+	mov #0,r5		! argv
 
 	! call exit
 	mov	r0,r4
@@ -31,25 +66,31 @@ start_l:
 	jsr	@r0
 	or	r0,r0
 
+	END_CODE
+
 	.align 2
-#if defined (__SH3E__) || defined(__SH4_SINGLE__) || defined(__SH4__) || defined(__SH4_SINGLE_ONLY__)
-set_fpscr_k:
-	.long	___set_fpscr
-#endif /*  defined (__SH3E__) || defined(__SH4_SINGLE__) || defined(__SH4__) || defined(SH4_SINGLE_ONLY) */
 stack_k:
-	.long	_stack	
+	.long	SYM(stack)	
 edata_k:
-	.long	_edata
+	.long	SYM(edata)
 end_k:
-	.long	_end
-boot_card_k:
-	.long	_boot_card
+	.long	SYM(end)
+main_k:
+	.long	SYM(boot_card)
 exit_k:
-	.long	_exit
+	.long	SYM(exit)
+
+vects_k:
+	.long	SYM(vectab)
+vects_size:
+	.word	255
 
 #ifdef __ELF__
 	.section .stack,"aw"
 #else
 	.section .stack
 #endif
-_stack:	.long	0xdeaddead
+SYM(stack):
+	.long	0xdeaddead
+monvects_k:
+	.long	SYM(monvects)

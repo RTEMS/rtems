@@ -24,6 +24,10 @@
 #define SYS_read        3
 #define SYS_write       4
 
+int errno ;
+
+extern int __trap34(int, int, void*, int );
+
 /*
  *  console_initialize_hardware
  *
@@ -47,7 +51,8 @@ void console_outbyte_polled(
   char ch
 )
 {
- return __trap34 (SYS_write, 1, &ch, 1);
+  __trap34 (SYS_write, 1, &ch, 1);
+  return;
 }
 
 /*

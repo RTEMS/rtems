@@ -6,9 +6,31 @@ Simple BSP for the SH simulator built into gdb.
 
 Simulator Invocation
 ====================
-target sim
+sh-rtems[elf|]-gdb <executable>
+(gdb) target sim
+(gdb) set archi [sh|sh2]
+(gdb) load <executable>
+(gdb) run
 
 Status
 ======
-Does not link yet.  libcpu/sh code needs to be addressed so we can
-get context switch code.
+
+* The simulator invocation procedure outlined above produces error messages
+with gdb-5.0, nevertheless seems to work. With gdb versions > 5.0 these
+error messages are gone. I.e. if you plan to seriously work with the gdb
+simulator better use gdb versions > 5.0.
+
+* gdb's simulator is not able to correctly emulate memory areas esp. shadowing
+and non-consecutive memory. I.e. access to memory areas besides area 0 will 
+(bogusly) generate SIGBUS exceptions.  This includes access to area 5 
+(On-chip peripherials) and prevents simulation of configuration of
+accesses to on-chip peripherials.
+
+* Due to limitations of the simulator you will only be able to run
+applications which do not try to access any SH control registers.
+
+Currently, this excludes all applications, which apply timers and serial 
+devices, i.e. almost any real world application.
+
+* The simulator currently uses gdb's trap34 interface for console I/O. This
+could be replaced with polled sci1 I/O for SHes > SH1.

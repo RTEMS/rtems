@@ -1,35 +1,24 @@
 /*
- * This is an adapted linker script from egcs-1.0.1 
+ * Memory layout for an SH 7032 with main memory in area 0
  *
- * Memory layout for an SH 7032 with main memory in area 2
- * This memory layout it very similar to that used for Hitachi's
- * EVB with CMON in rom
+ * NOTES: 
+ * + All RAM/ROM areas are mapped onto area 0, because gdb's simulator
+ * is not able to simulate memory areas but area 0. Area 5 (on-chip
+ * peripherials) can not be mapped onto area 0 and will cause SIGILL 
+ * exceptions.
+ * + Assumed to be compatible with other SH-cpu family members (eg. SH7045)
  *
- * NOTE: The ram start address may vary, all other start addresses are fixed
- *       Not suiteable for gdb's simulator
+ *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de)
  *
- *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de) and
- *           Bernd Becker (becker@faw.uni-ulm.de)
- *
- *  COPYRIGHT (c) 1997-1998, FAW Ulm, Germany
+ *  COPYRIGHT (c) 2001, Ralf Corsepius, Ulm, Germany
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *
- *  COPYRIGHT (c) 1998.
- *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
- *
  *  $Id$
  */
 
-OUTPUT_FORMAT("coff-sh")
 OUTPUT_ARCH(sh)
 ENTRY(_start)
 
@@ -37,33 +26,34 @@ MEMORY
 {
   rom           : o = 0x00000000, l = 128k
   onchip_peri	: o = 0x05000000, l = 512
-  ram           : o = 0x0A040000, l = 256k
+  ram           : o = 0x00040000, l = 256k
 
-  onchip_ram    : o = 0x0f000000, l = 8k
+  onchip_ram    : o = 0x00080000, l = 8k
 }
 
 SECTIONS
 {
   /* boot vector table */
-  .monvects 0x00000000 (NOLOAD): {
+  .monvects 0x00000000 (NOLOAD) :
+  { 
     _monvects = . ;
   } > rom
 
   /* monitor play area */
-  .monram 0x0A040000 (NOLOAD) : 
+  .monram 0x00040000 (NOLOAD) : 
   {
   _ramstart = .;
   } > ram 
 
   /* monitor vector table */
-  .vects   0x0A042000 (NOLOAD) : {
+  .vects   0x00042000 (NOLOAD) : {
     _vectab = . ;
     *(.vects);
   }
 
   /* Read-only sections, merged into text segment: */
 
-  . = 0x0a044000 ;
+  . = 0x00044000 ;
   .interp        : { *(.interp) 	}
   .hash          : { *(.hash)		}
   .dynsym        : { *(.dynsym)		}
@@ -153,15 +143,15 @@ SECTIONS
   _end = . ;
   PROVIDE (end = .);
 
-  _HeapBase = . ;
+  _HeapStart = . ;
   . = . + 1024 * 20 ;
   PROVIDE( _HeapEnd = . );
 
-  _WorkSpaceBase = . ;
-  . = 0x0a080000 ;
+  _WorkSpaceStart = . ;
+  . = 0x00080000 ;
   PROVIDE(_WorkSpaceEnd = .);
 
-  _CPU_Interrupt_stack_low  = 0x0f000000 ;
+  _CPU_Interrupt_stack_low  = 0x00080000 ;
   _CPU_Interrupt_stack_high = _CPU_Interrupt_stack_low + 4096 ;
 
   /* Stabs debugging sections.  */
@@ -198,6 +188,6 @@ SECTIONS
   .debug_typenames 0 : { *(.debug_typenames) }
   .debug_varnames  0 : { *(.debug_varnames) }
 
-  .stack 0x0f001ff0 : { _stack = .; *(.stack) } > onchip_ram
+  .stack 0x00081ff0 : { _stack = .; *(.stack) } > onchip_ram
   /* These must appear regardless of  .  */
 }

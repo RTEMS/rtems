@@ -1,3 +1,8 @@
+2001-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am, README, console/console-io.c, start/start.S,
+	startup/linkcmds: Update to make shsim closer to functional.
+
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
 	* console/console-io.c: Added console_initialize_hardware().
