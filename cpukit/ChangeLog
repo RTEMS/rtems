@@ -1,3 +1,15 @@
+2005-02-10	Joel Sherrill <joel@OARcorp.com>
+
+	PR 753/rtems
+	* score/include/rtems/score/object.h,
+	score/src/objectinitializeinformation.c: Configured number of objects
+	needs to be of a type with more bits than Objects_Maximum to support
+	configuring unlimited objects. The type for configuring the maximum
+	number of objects should probably always be the same fundamental type
+	as Object Id. For 16-bit Id configurations, the constant
+	OBJECTS_UNLIMITED_OBJECTS was changed to 0x8000 to move in this
+	direction.
+
 2005-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libmisc/untar/untar.c (_rtems_octal2ulong): Replace.

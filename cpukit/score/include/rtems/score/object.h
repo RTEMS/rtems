@@ -29,13 +29,6 @@ extern "C" {
 #include <rtems/score/isr.h>
 
 /*
- *  Mask to enable unlimited objects.  This is used in the configuration
- *  table when specifying the number of configured objects.
- */
-
-#define OBJECTS_UNLIMITED_OBJECTS 0x80000000
-
-/*
  *  The following type defines the control block used to manage
  *  object names.
  */
@@ -48,7 +41,7 @@ typedef void * Objects_Name;
  *  NOTE:  Must be a power of 2.  Matches the name manipulation routines.
  */
 
-#define OBJECTS_NAME_ALIGNMENT     sizeof( uint32_t   )
+#define OBJECTS_NAME_ALIGNMENT     sizeof( uint32_t )
 
 /*
  *  Functions which compare names are prototyped like this.
@@ -77,9 +70,16 @@ typedef uint8_t    Objects_Maximum;
 #define OBJECTS_API_START_BIT    8
 #define OBJECTS_CLASS_START_BIT 11
 
-#define OBJECTS_INDEX_MASK      (Objects_Id)0x000000ff
-#define OBJECTS_API_MASK        (Objects_Id)0x00000700
-#define OBJECTS_CLASS_MASK      (Objects_Id)0x0000F800
+#define OBJECTS_INDEX_MASK      (Objects_Id)0x00ff
+#define OBJECTS_API_MASK        (Objects_Id)0x0700
+#define OBJECTS_CLASS_MASK      (Objects_Id)0xF800
+
+#define OBJECTS_INDEX_VALID_BITS  (Objects_Id)0x00ff
+#define OBJECTS_API_VALID_BITS    (Objects_Id)0x0007
+/* OBJECTS_NODE_VALID_BITS should not be used with 16 bit Ids */
+#define OBJECTS_CLASS_VALID_BITS  (Objects_Id)0x001f
+
+#define OBJECTS_UNLIMITED_OBJECTS 0x8000
 
 #else
 /*
@@ -109,6 +109,13 @@ typedef uint16_t   Objects_Maximum;
 #define OBJECTS_NODE_VALID_BITS   (Objects_Id)0x000000ff
 #define OBJECTS_API_VALID_BITS    (Objects_Id)0x00000007
 #define OBJECTS_CLASS_VALID_BITS  (Objects_Id)0x0000001f
+
+/*
+ *  Mask to enable unlimited objects.  This is used in the configuration
+ *  table when specifying the number of configured objects.
+ */
+#define OBJECTS_UNLIMITED_OBJECTS 0x80000000
+
 #endif
 
 /*
@@ -344,7 +351,7 @@ void _Objects_Initialize_information (
   Objects_Information *information,
   Objects_APIs         the_api,
   uint32_t             the_class,
-  Objects_Maximum      maximum,
+  uint32_t             maximum,
   uint16_t             size,
   boolean              is_string,
   uint32_t             maximum_name_length

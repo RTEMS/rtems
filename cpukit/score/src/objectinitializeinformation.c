@@ -51,7 +51,7 @@ void _Objects_Initialize_information(
   Objects_Information *information,
   Objects_APIs         the_api,
   uint32_t             the_class,
-  Objects_Maximum      maximum,
+  uint32_t             maximum,
   uint16_t             size,
   boolean              is_string,
   uint32_t             maximum_name_length
