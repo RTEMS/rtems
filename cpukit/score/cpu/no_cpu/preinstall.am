@@ -2,7 +2,7 @@
 
 if AMPOLISH3
 $(srcdir)/preinstall.am: Makefile.am
-	$(top_srcdir)/ampolish3 $(srcdir)/Makefile.am > $(srcdir)/preinstall.am
+	$(AMPOLISH3) $(srcdir)/Makefile.am > $(srcdir)/preinstall.am
 endif
 
 PREINSTALL_DIRS =
