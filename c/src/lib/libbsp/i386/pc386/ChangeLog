@@ -1,3 +1,8 @@
+2001-01-05	Joel Sherrill <joel@OARcorp.com>
+
+	* console/vt.c: Added include of <rtems.h> so _CPU_ISR_disable 
+	would be visible.
+
 2000-12-05	 Eric Valette <valette@crf.canon.fr>
 
 	* console/inch.c, console/keyboard.c, console/pc_keyb.c,
