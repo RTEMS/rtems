@@ -59,7 +59,7 @@ noinst_DATA += console$(LIB_VARIANT).rel
 
 EXTRA_PROGRAMS += liblnk.rel
 CLEANFILES += liblnk.rel
-liblnk_rel_SOURCES = liblnk/liblnk.S
+liblnk_rel_SOURCES = liblnk/lnklib.S
 liblnk_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 liblnk_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
