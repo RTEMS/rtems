@@ -40,7 +40,7 @@ rtems_task Task_2(
 #define CONFIGURE_MAXIMUM_TASKS             3
 
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 

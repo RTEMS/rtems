@@ -34,7 +34,7 @@ void task1(void);
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 

@@ -35,7 +35,7 @@ int getint( void );
 #define CONFIGURE_MAXIMUM_TASKS 1
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 

@@ -42,7 +42,7 @@ rtems_task Task_1_through_3(
 
 #define CONFIGURE_EXTRA_TASK_STACKS           (3 * RTEMS_MINIMUM_STACK_SIZE)
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 

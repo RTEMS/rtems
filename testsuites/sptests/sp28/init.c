@@ -17,7 +17,7 @@ rtems_task Init(rtems_task_argument argument);
 
 #define CONFIGURE_MICROSECONDS_INIT
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 #include <bsp.h>
 #include <rtems/error.h>

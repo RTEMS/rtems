@@ -60,7 +60,7 @@ extern rtems_extensions_table initial_extensions;
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 

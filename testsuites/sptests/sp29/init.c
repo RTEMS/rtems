@@ -19,7 +19,7 @@ rtems_task Init (rtems_task_argument argument);
 
 #define CONFIGURE_INIT
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 #include <rtems/error.h>
 #include <stdio.h>
