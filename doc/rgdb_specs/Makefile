@@ -56,7 +56,7 @@ html: dirs $(FILES)
  	    $(PROJECT).texi
 
 clean:
-	rm -f *.o $(PROG) *.txt core *.pdf
+	rm -f *.o $(PROG) *.txt core $(PROJECT).pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* $(GENERATED_FILES)
 	rm -f *.fixed _* 
@@ -105,16 +105,11 @@ conclusion.texi: conclusion.t Makefile
 	    -u "Top" \
 	    -n "" ${*}.t
 
-garde.eps
-layers.eps
-process.eps
-seq_init.eps
-seq_break.eps
-seq_detach.eps
 convert: 
 	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=garde.pdf -- garde.eps -c -quit
 	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=layers.pdf -- layers.eps -c -quit
 	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=process.pdf -- process.eps -c -quit
-	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=seq_init.pdf -- seq_init.eps -c -quit
-	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=seq_break.pdf -- seq_break.eps -c -quit
-	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=seq_detach.pdf -- PCIreg.eps -c -quit
+	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=seqinit.pdf -- seqinit.eps -c -quit
+	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=seqbreak.pdf -- seqbreak.eps -c -quit
+	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=seqdetach.pdf -- seqdetach.eps -c -quit
+

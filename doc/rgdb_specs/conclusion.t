@@ -33,14 +33,14 @@ XXXXX Caption remote debugger tasks and handlers
 @ifset use-tex
 @example
 @group
-XXXXX reference it in the previous paragraph
-XXXXX insert process.eps
-XXXXX Caption remote debugger tasks and handlers
+@c XXXXX reference it in the previous paragraph
+@c XXXXX insert process.eps
+@c XXXXX Caption remote debugger tasks and handlers
 @end group
 @end example
+@image{process,6in,}
 @end ifset
 
-@c @image{process}
 
 @ifset use-html
 @c <IMG SRC="process.jpg" WIDTH=500 HEIGHT=600 ALT="remote debugger tasks and handlers">

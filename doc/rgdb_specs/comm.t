@@ -94,14 +94,14 @@ XXXXX Caption Communications Layers
 @ifset use-tex
 @example
 @group
-XXXXX reference it in the previous paragraph
-XXXXX insert layers.eps
-XXXXX Caption Communications Layers
+@c XXXXX reference it in the previous paragraph
+@c XXXXX insert layers.eps
+@c XXXXX Caption Communications Layers
 @end group
 @end example
+@image{layers,,6in}
 @end ifset
 
-@c @image{layers}
 
 @ifset use-html
 @c <IMG SRC="layers.jpg" WIDTH=500 HEIGHT=600 ALT="Communications Layers">

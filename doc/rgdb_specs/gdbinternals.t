@@ -205,7 +205,7 @@ the host debugger on the target are only simple actions which look like :
 @example
 @group
 XXXXX reference it in the previous paragraph
-XXXXX insert seq_init.eps
+XXXXX insert seqinit.eps
 XXXXX Caption Debug session initialization
 @end group
 @end example
@@ -214,19 +214,20 @@ XXXXX Caption Debug session initialization
 @ifset use-tex
 @example
 @group
-XXXXX reference it in the previous paragraph
-XXXXX insert seq_init.eps
-XXXXX Caption Debug session initialization
+@c XXXXX reference it in the previous paragraph
+@c XXXXX insert seqinit.eps
+@c XXXXX Caption Debug session initialization
 @end group
 @end example
+@page
+@image{seqinit}
 @end ifset
 
-@c @image{seq_init}
 
 @ifset use-html
-@c <IMG SRC="seq_init.jpg" WIDTH=500 HEIGHT=600 ALT="Debug session initialization">
+@c <IMG SRC="seqinit.jpg" WIDTH=500 HEIGHT=600 ALT="Debug session initialization">
 @html
-<IMG SRC="seq_init.jpg" ALT="Debug session initialization">
+<IMG SRC="seqinit.jpg" ALT="Debug session initialization">
 @end html
 @end ifset
 
@@ -239,7 +240,7 @@ XXXXX Caption Debug session initialization
 @example
 @group
 XXXXX reference it in the previous paragraph
-XXXXX insert seq_break.eps
+XXXXX insert seqbreak.eps
 XXXXX Caption Breakpoint and process execution
 @end group
 @end example
@@ -248,19 +249,20 @@ XXXXX Caption Breakpoint and process execution
 @ifset use-tex
 @example
 @group
-XXXXX reference it in the previous paragraph
-XXXXX insert seq_break.eps
-XXXXX Caption Breakpoint and process execution
+@c XXXXX reference it in the previous paragraph
+@c XXXXX insert seqbreak.eps
+@c XXXXX Caption Breakpoint and process execution
 @end group
 @end example
+@page
+@sp 5
+@image{seqbreak,,9in}
 @end ifset
 
-@c @image{seq_break}
-
 @ifset use-html
-@c <IMG SRC="seq_break.jpg" WIDTH=500 HEIGHT=600 ALT="Breakpoint and process execution">
+@c <IMG SRC="seqbreak.jpg" WIDTH=500 HEIGHT=600 ALT="Breakpoint and process execution">
 @html
-<IMG SRC="seq_break.jpg" ALT="Breakpoint and process execution">
+<IMG SRC="seqbreak.jpg" ALT="Breakpoint and process execution">
 @end html
 @end ifset
 
@@ -274,7 +276,7 @@ XXXXX Caption Breakpoint and process execution
 @example
 @group
 XXXXX reference it in the previous paragraph
-XXXXX insert seq_detach.eps
+XXXXX insert seqdetach.eps
 XXXXX Caption Detach a process and close a connection
 @end group
 @end example
@@ -283,19 +285,19 @@ XXXXX Caption Detach a process and close a connection
 @ifset use-tex
 @example
 @group
-XXXXX reference it in the previous paragraph
-XXXXX insert seq_detach.eps
-XXXXX Caption Detach a process and close a connection
+@c XXXXX reference it in the previous paragraph
+@c XXXXX insert seqdetach.eps
+@c XXXXX Caption Detach a process and close a connection
 @end group
 @end example
+@sp 10
+@image{seqdetach}
 @end ifset
 
-@c @image{seq_detach}
-
 @ifset use-html
-@c <IMG SRC="seq_detach.jpg" WIDTH=500 HEIGHT=600 ALT="Detach a process and close a connection">
+@c <IMG SRC="seqdetach.jpg" WIDTH=500 HEIGHT=600 ALT="Detach a process and close a connection">
 @html
-<IMG SRC="seq_detach.jpg" ALT="Detach a process and close a connection">
+<IMG SRC="seqdetach.jpg" ALT="Detach a process and close a connection">
 @end html
 @end ifset
 
