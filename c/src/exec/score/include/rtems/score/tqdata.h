@@ -76,7 +76,6 @@ typedef struct {
   Thread_queue_Disciplines discipline; /* queue discipline               */
   States_Control           state;      /* state of threads on Thread_q   */
   unsigned32               timeout_status;
-  unsigned32               count;
 }   Thread_queue_Control;
 
 #ifndef __RTEMS_APPLICATION__
