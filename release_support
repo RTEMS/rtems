@@ -31,7 +31,7 @@ case $1 in
        c/src/aclocal/version.m4 \
        cpukit/aclocal/version.m4
     do
-      b=`basedir $version_file`/..
+      b=`dirname $version_file`/..
       cat << EOF > $version_file
 AC_DEFUN([RTEMS_VERSIONING],
 m4_define([_RTEMS_VERSION],[${current}]))
@@ -42,7 +42,7 @@ EOF
         echo ) >YYY
         cat YYY ${b}/ChangeLog >XXX
         mv XXX ${b}/ChangeLog
-        cvs -d ${cvs_root} commit -F YYY ${b}/ChangeLog ${version_file}
+        cvs commit -F YYY ${b}/ChangeLog ${version_file}
         rm -f YYY
     done
     ;;
