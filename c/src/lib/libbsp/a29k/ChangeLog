@@ -1,10 +1,6 @@
 2000-09-25	Joel Sherrill <joel@OARcorp.com>
 
-	* bsp_specs: Formatting more like other bsp_specs.
-	* include/bsp.h: CPU_CLOCK_RATE_MHZ not a real variable to
-	elimate need for including bsp.h in libcpu.
-	* startup/bspstart.c: Ditto.
-	* wrapup/Makefile.am: Did not list shmdr.
+	* ChangeLog: Entry added to wrong file and moved.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
