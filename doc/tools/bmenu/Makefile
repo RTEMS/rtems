@@ -32,10 +32,10 @@ TESTER=init
 test: all
 	#rm -f timer.txt
 	#./bmenu -v timer.texi
-	cp ../user/$(TESTER).texi .
-	./bmenu $(TESTER).texi
-	mv $(TESTER).txt $(TESTER).texi
-	makeinfo c_user.texinfo
+	#cp ../user/$(TESTER).texi .
+	./bmenu -u "DOCS UP" -p "DOCS PREV" -n "DOCS NEXT" -v testdoc.txt
+	#mv $(TESTER).txt $(TESTER).texi
+	#makeinfo c_user.texinfo
 
 
 clean:
