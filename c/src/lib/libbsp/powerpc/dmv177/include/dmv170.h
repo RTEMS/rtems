@@ -52,12 +52,13 @@ extern "C" {
 #define MC68681_PORT2_ADDR   0xf2800040
 
 /* base address for the SCC (85C30) */ 
-#define Z85C30_ADDR       0xfb000000
-#define Z85C30_CTRL_A     0xfb000000
-#define Z85C30_DATA_A     0xfb000008
-#define Z85C30_CTRL_B     0xfb000010
-#define Z85C30_DATA_B     0xfb000018
-#define Z85C30_CLOCK      (8 * 1024 * 1024)
+#define Z85C30_ADDR       0xfb000010
+#define Z85C30_CTRL_A     0xfb000010
+#define Z85C30_DATA_A     0xfb000018
+#define Z85C30_CTRL_B     0xfb000000
+#define Z85C30_DATA_B     0xfb000008
+#define Z85C30_CLOCK_10   (10485760)      /* 10 Mhz */
+#define Z85C30_CLOCK_2    (2581175)       /* 2.4616 Mhz */
 
 /* base address for the SCV64 */
 #define DMV170_SCV64_BASE_ADDRESS                        0xf2000000
@@ -74,6 +75,16 @@ extern "C" {
 
 #define DMV170_READ( _reg, _data ) \
    (_data) = *((volatile rtems_unsigned16 *)(_reg))
+
+/*
+ *  The following defines the bits in the DMA Control and Status Register
+ */
+
+/* XXX fill in the other bits */
+
+#define DMV170_DMA_CONTROL_STATUS_REG                     0xfc000090
+
+#define DMV170_SCC_10MHZ                                  0x00010000
 
 /*
  *  The following defines the bits in the Local Control and Status Register.
@@ -121,6 +132,7 @@ extern "C" {
 /*
  *  The following defines the bits in the Timer Control Register.
  */
+
 #define DMV170_TIMER0_ENABLE_MASK                         0x0001
 #define DMV170_TIMER0_IS_ENABLED                          0x0001
 #define DMV170_TIMER0_IS_DISABLED                         0x0000
@@ -147,9 +159,10 @@ extern "C" {
 #define DMV170_TIMER2_INTERRUPT_ENABLE                    0x0080
 #define DMV170_TIMER2_INTERRUPT_CLEAR                     0x0000
 
+/*
+ *  The Following define the bits for the Card Resource Register.
+ */
 
-
-/* The Following definethe bits for the Card Resource Register      */
 #define DMV170_DUART_INTERRUPT_MASK    0x0001  /* DUART Interrupt Sense Bit  */
 #define DMV170_DUART_INTERRUPT_NEGATE  0x0001
 #define DMV170_DUART_INTERRUPT_ASSERT  0x0000
@@ -196,8 +209,9 @@ extern "C" {
 
 
 /*
- * DUART Baud Rate Definations.
+ * DUART Baud Rate Definitions.
  */
+
 #define DMV170_DUART_9621     MC68681_BAUD_RATE_MASK_600 /* close to 9600 */  
 
 #define DMV170_RTC_FREQUENCY             0x0000
@@ -208,6 +222,7 @@ extern "C" {
  * Note: For the interrupt level read the lower 3 bits of the
  *       Local Control and Status Register.
  */
+
 #define DMV170_IRQ_FIRST                       ( PPC_IRQ_LAST +  1 )
 
 #define DMV170_LIRQ0                           ( DMV170_IRQ_FIRST + 0 )
@@ -239,6 +254,7 @@ extern "C" {
 #define DMV170_DARF_BUS_ERROR_IRQ              ( DMV170_IRQ_FIRST + 11)
 #define DMV170_PERIPHERAL_IRQ                  ( DMV170_IRQ_FIRST + 12)
 
+#define MAX_BOARD_IRQS                         DMV170_PERIPHERAL_IRQ
 
 #define SCV64_Is_IRQ0( _status ) (_status&0x01)
 #define SCV64_Is_IRQ1( _status ) (_status&0x02)
@@ -255,45 +271,10 @@ void SCV64_Generate_DUART_Interrupts();
 rtems_unsigned32 SCV64_Get_Interrupt();
 rtems_unsigned32 SCV64_Get_Interrupt_Enable();
 
-/*
- *  css_iface.c
- */
-
-void Init_Css();
-
-rtems_unsigned32 Css_Id(
-  rtems_vector_number vector        /* vector number      */
-);
-
-rtems_vector_number Vector_id(
-  rtems_unsigned32 id
-);
-
-void enable_card_interrupt( 
-  rtems_vector_number vector        /* vector number      */
-);
-
-rtems_vector_number Get_interrupt();
-
-void Clear_interrupt( 
-  rtems_vector_number vector
-);
-
-
-#define MAX_BOARD_IRQS                         DMV170_PERIPHERAL_IRQ
 #ifdef __cplusplus
 }
 #endif
  
 #endif /* !_INCLUDE_DMV170_h */
 /* end of include file */
-
-
-
-
-
-
-
-
-
 
