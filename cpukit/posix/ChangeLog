@@ -1,3 +1,9 @@
+2002-03-01	Eric Norum <eric.norum@usask.ca>
+
+	* src/pthreadonce.c: Task is not preemptable while running a 
+	pthread_once init function.  This is slightly less heavy handed
+	than disabling dispatching and seems better than consuming a mutex.
+
 2002-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/getegid.c: Add #include <rtems/userenv.h>.
