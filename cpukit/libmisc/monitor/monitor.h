@@ -285,6 +285,9 @@ extern unsigned32 rtems_monitor_default_node;  /* current default for commands *
 
 typedef struct rtems_monitor_command_entry_s rtems_monitor_command_entry_t;
 
+/* FIXME: This should not be here */
+extern rtems_monitor_command_entry_t rtems_monitor_commands[];
+
 typedef void ( *rtems_monitor_command_function_t )(
                  int         argc,
                  char      **argv,
@@ -292,11 +295,7 @@ typedef void ( *rtems_monitor_command_function_t )(
                  boolean     verbose
              );
 
-#if defined(__mips64)
-    typedef unsigned64   rtems_monitor_command_arg_t;
-#else
-    typedef unsigned32   rtems_monitor_command_arg_t;
-#endif
+typedef unsigned32   rtems_monitor_command_arg_t;
 
 struct rtems_monitor_command_entry_s {
     char        *command;      /* command name */
@@ -305,7 +304,7 @@ struct rtems_monitor_command_entry_s {
     rtems_monitor_command_function_t command_function;
                                /* Some argument for the command */
     rtems_monitor_command_arg_t   command_arg;
-    struct rtems_monitor_command_entry_s *next;
+    rtems_monitor_command_entry_t *next;
 };
 
 typedef void *(*rtems_monitor_object_next_fn)(void *, void *, rtems_id *);

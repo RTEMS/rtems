@@ -94,6 +94,7 @@ struct translation_table
   unsigned int             key;
 };
 
+#ifndef RTEMS_UNIX
 static struct translation_table trans_two[] =
 {
   { '~', 0, KEYS_INS },
@@ -150,6 +151,7 @@ static struct translation_table trans_tab[] =
   { 'O', trans_tab_O,   0 },    /* O are the fuction keys */
   { 0,   0,             0 }
 };
+#endif
 
 /*
  * Perform a basic tranlation for some ANSI/VT100 key codes.
@@ -158,6 +160,7 @@ static struct translation_table trans_tab[] =
  * line editor below so considiered not worth the effort.
  */
 
+#ifndef RTEMS_UNIX
 static unsigned int
 rtems_monitor_getchar (
 )
@@ -213,6 +216,7 @@ rtems_monitor_getchar (
     }
   }
 }
+#endif
 
 #ifndef RTEMS_UNIX
 /*

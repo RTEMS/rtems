@@ -1,3 +1,14 @@
+2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* monitor/monitor.h: 
+	Add rtems_monitor_commands[] (Illegally applied by shell/).
+	Remove ifdef(__mips64) (Make broken code visible again).
+	* monitor/mon-command.c: Add several ifndef RTEMS_UNIX to avoid
+	warnings.
+	* monitor/mon-monitor.c: Remove RTEMS_CPU_HAS_16_BIT_ADDRESSES (Make
+	broken code visible again).
+	* shell/cmds.c: Remove local decls of rtems_monitor_commands[].
+
 2003-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* monitor/monitor.h: Remove STREQ, STNEQ (pollute namespace), 
