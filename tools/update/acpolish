@@ -404,10 +404,17 @@ sub subst_line
     { # makefile variable addition
 # print STDERR "MACRO: <$1> += <$2>\n";
         my $p = "$1" ;
-        ${"var_$p+"}="$2" ; 
-        # place a marker
-        push @tbuf, "§5$p\n" ;
-        push @vars, "$p+" ;
+	if ( not defined ${"var_$p+"} )
+        {
+          # place a marker
+          push @tbuf, "§5$p\n" ;
+          push @vars, "$p+" ;
+        }
+	else
+        {
+          print STDERR "WARNING += $_" ;
+        }
+        ${"var_$p+"} .=" $2" ; 
     }
     elsif ( /^[\s]*(\@[^\s]+\@)$/o )
     { # autoconf variable

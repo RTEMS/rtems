@@ -53,7 +53,7 @@ LD_PATHS +=
 LD_LIBS +=
 LDFLAGS +=
 
-IMAGES : = rtems.gz
+IMAGES = rtems.gz
 
 #
 # Add your list of files to delete here.  The config files

@@ -26,6 +26,10 @@ rtems_bspdir = $(rtemsdir)/@RTEMS_BSP@
 rtems_bsp_DATA = \
 Makefile.inc
 
+rtems_bsp_makedir = $(rtems_bspdir)/make
+rtems_bsp_make_DATA = \
+bsp.cfg
+
 if MAINTAINER_MODE
 $(srcdir)/main.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/main.cfg
 	sed -e 's%\$$(RTEMS_BSP)%\@RTEMS_BSP\@%g' < $< >$@

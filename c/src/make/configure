@@ -2921,35 +2921,56 @@ echo "$ac_t""$rtems_cv_prog_gas_code16" 1>&6
   
 
 
-
 echo $ac_n "checking for make/custom/$RTEMS_BSP.cfg""... $ac_c" 1>&6
-echo "configure:2927: checking for make/custom/$RTEMS_BSP.cfg" >&5
+echo "configure:2926: checking for make/custom/$RTEMS_BSP.cfg" >&5
 if test -r "$srcdir/$RTEMS_TOPdir/make/custom/$RTEMS_BSP.cfg"; then
   echo "$ac_t""yes" 1>&6
 else
   { echo "configure: error: no" 1>&2; exit 1; }
 fi
 
-
-if test "$RTEMS_HAS_RDBG" = "yes"; then
-  echo $ac_n "checking whether cpu supports librdbg""... $ac_c" 1>&6
-echo "configure:2937: checking whether cpu supports librdbg" >&5
-if eval "test \"`echo '$''{'rtems_cv_has_rdbg'+set}'`\" = set"; then
+echo $ac_n "checking whether BSP supports multiprocessing""... $ac_c" 1>&6
+echo "configure:2934: checking whether BSP supports multiprocessing" >&5
+if eval "test \"`echo '$''{'rtems_cv_HAS_MP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  
-    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/librdbg/${RTEMS_CPU}"; then
-      rtems_cv_has_rdbg="yes" ;
+      if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/libbsp/${RTEMS_CPU}/${RTEMS_BSP}/shmsupp"; then
+      if test "$RTEMS_HAS_MULTIPROCESSING" = "yes"; then
+        rtems_cv_HAS_MP="yes" ;
+      else
+        rtems_cv_HAS_MP="disabled";
+      fi
     else
-      rtems_cv_has_rdbg="no";
+      rtems_cv_HAS_MP="no";
     fi
   
 fi
 
-echo "$ac_t""$rtems_cv_has_rdbg" 1>&6
-
-  RTEMS_HAS_RDBG="$rtems_cv_has_rdbg";
+echo "$ac_t""$rtems_cv_HAS_MP" 1>&6
+if test "$rtems_cv_HAS_MP" = "yes"; then
+HAS_MP="yes"
+else
+HAS_MP="no"
 fi
+
+
+echo $ac_n "checking whether BSP supports librdbg""... $ac_c" 1>&6
+echo "configure:2959: checking whether BSP supports librdbg" >&5
+if eval "test \"`echo '$''{'rtems_cv_HAS_RDBG'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  
+    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/librdbg/${RTEMS_CPU}/${RTEMS_BSP}"; then
+      rtems_cv_HAS_RDBG="yes" ;
+    else
+      rtems_cv_HAS_RDBG="no";
+    fi
+  
+fi
+
+echo "$ac_t""$rtems_cv_HAS_RDBG" 1>&6
+HAS_RDBG="$rtems_cv_HAS_RDBG"
+
 
 
 
@@ -3113,6 +3134,7 @@ Makefile.inc
 main.cfg
 host.cfg
 target.cfg
+bsp.cfg
 Templates/Makefile
 custom/Makefile
 custom/default.cfg
@@ -3219,6 +3241,8 @@ s%@OBJCOPY_FOR_TARGET@%$OBJCOPY_FOR_TARGET%g
 s%@SIZE_FOR_TARGET@%$SIZE_FOR_TARGET%g
 s%@STRIP_FOR_TARGET@%$STRIP_FOR_TARGET%g
 s%@RTEMS_GAS_CODE16@%$RTEMS_GAS_CODE16%g
+s%@HAS_MP@%$HAS_MP%g
+s%@HAS_RDBG@%$HAS_RDBG%g
 s%@rtems_cv_prog_cc_cross@%$rtems_cv_prog_cc_cross%g
 s%@RTEMS_HAS_CPLUSPLUS@%$RTEMS_HAS_CPLUSPLUS%g
 s%@RTEMS_USE_GCC272@%$RTEMS_USE_GCC272%g
@@ -3276,6 +3300,7 @@ Makefile.inc
 main.cfg
 host.cfg
 target.cfg
+bsp.cfg
 Templates/Makefile
 custom/Makefile
 custom/default.cfg

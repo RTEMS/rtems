@@ -77,7 +77,7 @@ CLOBBER_ADDITIONS +=
 FRONTEND = \"$(RTEMS_CPU)/@RTEMS_BSP@/remdeb_f.x\"
 
 all: ${ARCH} $(LIB) 
-	$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
+	@$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
 
 $(LIB): $(SRCS) ${OBJS}
 	$(make-library)
@@ -87,7 +87,7 @@ remdeb.h: $(X_FILES)
 	( pwd=`pwd`; cd $(srcdir)/../..; \
 	$(RPCGEN) -h -DFRONTEND=$(FRONTEND) \
 	  -o $$pwd/$@ remdeb.x )
-	$(INSTALL_CHANGE) -m 755 $@ $(PROJECT_INCLUDE)/rdbg
+	@$(INSTALL_CHANGE) -m 755 $@ $(PROJECT_INCLUDE)/rdbg
 
 remdeb_xdr.c: $(X_FILES)
 	@rm -f $@

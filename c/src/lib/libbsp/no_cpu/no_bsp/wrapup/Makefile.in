@@ -13,13 +13,12 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-BSP_PIECES = startup clock console timer
-GENERIC_PIECES = $
-
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
 
 INSTALL_CHANGE = @INSTALL_CHANGE@
+
+BSP_PIECES = startup clock console timer
 
 GENERIC_MP_REL_PIECES_yes_V = shmdr
 GENERIC_MP_REL_PIECES_no_V =

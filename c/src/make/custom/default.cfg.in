@@ -18,6 +18,7 @@ TARGET_ARCH=o-@RTEMS_BSP@
 endif
 
 include $(RTEMS_ROOT)/make/main.cfg
+include $(RTEMS_ROOT)/make/bsp.cfg
 
 # use the inline functions instead of the macros
 # ref: src/exec/generic/Makefile
@@ -53,25 +54,11 @@ else
 HAS_CPLUSPLUS=no
 endif
 
-# Define this to yes if this target supports multiprocessor environments.
-ifeq ($(RTEMS_HAS_MULTIPROCESSING),yes)
-HAS_MP=yes
-else
-HAS_MP=no
-endif
-
 # Define this to yes if this target wants the TCP/IP stack
 ifeq ($(RTEMS_HAS_NETWORKING),yes)
 HAS_NETWORKING=yes
 else
 HAS_NETWORKING=no
-endif
-
-# Define this to yes if this target wants the remote debugger
-ifeq ($(RTEMS_HAS_RDBG),yes)
-HAS_RDBG=yes
-else
-HAS_RDBG=no
 endif
 
 # Define this to yes if this target wants the posix api

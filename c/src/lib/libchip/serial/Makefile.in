@@ -59,7 +59,7 @@ CLEAN_ADDITIONS += $(LIB)
 CLOBBER_ADDITIONS +=
 
 all: ${ARCH} preinstall $(LIB)
-	$(INSTALL_VARIANT) -m 644 ${LIB} $(PROJECT_RELEASE)/lib
+	@$(INSTALL_VARIANT) -m 644 ${LIB} $(PROJECT_RELEASE)/lib
 
 $(LIB): $(SRCS) ${OBJS}
 	$(make-library)

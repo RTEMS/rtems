@@ -42,7 +42,7 @@ CLOBBER_ADDITIONS += sptables.h
 all: preinstall
 
 preinstall: $(INSTALLDIRS) $(H_FILES)
-	$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/rtems
+	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/rtems
 
 sptables.h: $(srcdir)/sptables.h.in $(top_builddir)/config.status
 	cd $(top_builddir) \

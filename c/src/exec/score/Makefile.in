@@ -27,7 +27,7 @@ $(INSTALLDIRS):
 SUB_DIRS = include $(INLINE) cpu src
 
 preinstall: 
-	$(mkinstalldirs) $(INSTALLDIRS)
+	@$(mkinstalldirs) $(INSTALLDIRS)
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

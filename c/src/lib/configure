@@ -2641,6 +2641,31 @@ else
   { echo "configure: error: no" 1>&2; exit 1; }
 fi
 
+echo $ac_n "checking whether BSP supports multiprocessing""... $ac_c" 1>&6
+echo "configure:2646: checking whether BSP supports multiprocessing" >&5
+if eval "test \"`echo '$''{'rtems_cv_HAS_MP'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+      if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/libbsp/${RTEMS_CPU}/${RTEMS_BSP}/shmsupp"; then
+      if test "$RTEMS_HAS_MULTIPROCESSING" = "yes"; then
+        rtems_cv_HAS_MP="yes" ;
+      else
+        rtems_cv_HAS_MP="disabled";
+      fi
+    else
+      rtems_cv_HAS_MP="no";
+    fi
+  
+fi
+
+echo "$ac_t""$rtems_cv_HAS_MP" 1>&6
+if test "$rtems_cv_HAS_MP" = "yes"; then
+HAS_MP="yes"
+else
+HAS_MP="no"
+fi
+
+
 
 
     # account for "aliased" bsps which share source code
@@ -2681,7 +2706,7 @@ fi
 if test -d "$srcdir/libbsp/$bspcpudir$bspdir"; then
   
 echo $ac_n "checking for Makefile.in in libbsp/${bspcpudir}$bspdir""... $ac_c" 1>&6
-echo "configure:2685: checking for Makefile.in in libbsp/${bspcpudir}$bspdir" >&5
+echo "configure:2710: checking for Makefile.in in libbsp/${bspcpudir}$bspdir" >&5
 if test -d $srcdir/libbsp/${bspcpudir}$bspdir; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2696,7 +2721,7 @@ fi
 
   
 echo $ac_n "checking for Makefile.in in libbsp/${bspcpudir}shared""... $ac_c" 1>&6
-echo "configure:2700: checking for Makefile.in in libbsp/${bspcpudir}shared" >&5
+echo "configure:2725: checking for Makefile.in in libbsp/${bspcpudir}shared" >&5
 if test -d $srcdir/libbsp/${bspcpudir}shared; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2732,7 +2757,7 @@ fi
 # find all the CPU dependent library Makefiles
 
 echo $ac_n "checking for Makefile.in in libcpu/$RTEMS_CPU""... $ac_c" 1>&6
-echo "configure:2736: checking for Makefile.in in libcpu/$RTEMS_CPU" >&5
+echo "configure:2761: checking for Makefile.in in libcpu/$RTEMS_CPU" >&5
 if test -d $srcdir/libcpu/$RTEMS_CPU; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2752,7 +2777,7 @@ case "${target}" in
   *)
     
 echo $ac_n "checking for Makefile.in in start/$RTEMS_CPU""... $ac_c" 1>&6
-echo "configure:2756: checking for Makefile.in in start/$RTEMS_CPU" >&5
+echo "configure:2781: checking for Makefile.in in start/$RTEMS_CPU" >&5
 if test -d $srcdir/start/$RTEMS_CPU; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2781,12 +2806,12 @@ fi
 
 # If the TCP/IP stack is enabled, then find all TCP/IP Makefiles
 echo $ac_n "checking if networking is enabled? ""... $ac_c" 1>&6
-echo "configure:2785: checking if networking is enabled? " >&5
+echo "configure:2810: checking if networking is enabled? " >&5
 echo "$ac_t""$RTEMS_HAS_NETWORKING" 1>&6
 if test "$RTEMS_HAS_NETWORKING" = "yes"; then
   
 echo $ac_n "checking for Makefile.in in libnetworking""... $ac_c" 1>&6
-echo "configure:2790: checking for Makefile.in in libnetworking" >&5
+echo "configure:2815: checking for Makefile.in in libnetworking" >&5
 if test -d $srcdir/libnetworking; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2801,7 +2826,7 @@ fi
 
   
 echo $ac_n "checking for Makefile.in in librpc""... $ac_c" 1>&6
-echo "configure:2805: checking for Makefile.in in librpc" >&5
+echo "configure:2830: checking for Makefile.in in librpc" >&5
 if test -d $srcdir/librpc; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2816,29 +2841,30 @@ fi
 
 
   if test "$RTEMS_HAS_RDBG" = "yes"; then
-    echo $ac_n "checking whether cpu supports librdbg""... $ac_c" 1>&6
-echo "configure:2821: checking whether cpu supports librdbg" >&5
-if eval "test \"`echo '$''{'rtems_cv_has_rdbg'+set}'`\" = set"; then
+    echo $ac_n "checking whether BSP supports librdbg""... $ac_c" 1>&6
+echo "configure:2846: checking whether BSP supports librdbg" >&5
+if eval "test \"`echo '$''{'rtems_cv_HAS_RDBG'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   
-    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/librdbg/${RTEMS_CPU}"; then
-      rtems_cv_has_rdbg="yes" ;
+    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/librdbg/${RTEMS_CPU}/${RTEMS_BSP}"; then
+      rtems_cv_HAS_RDBG="yes" ;
     else
-      rtems_cv_has_rdbg="no";
+      rtems_cv_HAS_RDBG="no";
     fi
   
 fi
 
-echo "$ac_t""$rtems_cv_has_rdbg" 1>&6
+echo "$ac_t""$rtems_cv_HAS_RDBG" 1>&6
+HAS_RDBG="$rtems_cv_HAS_RDBG"
 
-    RTEMS_HAS_RDBG="$rtems_cv_has_rdbg";
 
-    if test "$rtems_cv_has_rdbg" = "yes"; then
+
+    if test "$HAS_RDBG" = "yes"; then
       # Extract the first word of "rpcgen", so it can be a program name with args.
 set dummy rpcgen; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:2842: checking for $ac_word" >&5
+echo "configure:2868: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_RPCGEN'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2869,7 +2895,7 @@ do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:2873: checking for $ac_word" >&5
+echo "configure:2899: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_AWK'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2905,10 +2931,10 @@ done
         { echo "configure: error: missing awk, required to build librdbg" 1>&2; exit 1; }
       fi
     fi
-    if test "$rtems_cv_has_rdbg" = "yes"; then
+    if test "$HAS_RDBG" = "yes"; then
       
 echo $ac_n "checking for Makefile.in in librdbg""... $ac_c" 1>&6
-echo "configure:2912: checking for Makefile.in in librdbg" >&5
+echo "configure:2938: checking for Makefile.in in librdbg" >&5
 if test -d $srcdir/librdbg; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2929,7 +2955,7 @@ fi
 if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
   
 echo $ac_n "checking for Makefile.in in librtems++""... $ac_c" 1>&6
-echo "configure:2933: checking for Makefile.in in librtems++" >&5
+echo "configure:2959: checking for Makefile.in in librtems++" >&5
 if test -d $srcdir/librtems++; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2960,13 +2986,13 @@ fi
 
 if test "$RTEMS_HAS_HWAPI" = "yes"; then
   echo $ac_n "checking whether libwapi is present""... $ac_c" 1>&6
-echo "configure:2964: checking whether libwapi is present" >&5
+echo "configure:2990: checking whether libwapi is present" >&5
   if test -f ${srcdir}/libhwapi/Makefile.in ; then
     echo "$ac_t""yes" 1>&6
     makefiles="$makefiles libhwapi/Makefile"
     
 echo $ac_n "checking for Makefile.in in libhwapi/analog""... $ac_c" 1>&6
-echo "configure:2970: checking for Makefile.in in libhwapi/analog" >&5
+echo "configure:2996: checking for Makefile.in in libhwapi/analog" >&5
 if test -d $srcdir/libhwapi/analog; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2981,7 +3007,7 @@ fi
 
     
 echo $ac_n "checking for Makefile.in in libhwapi/discrete""... $ac_c" 1>&6
-echo "configure:2985: checking for Makefile.in in libhwapi/discrete" >&5
+echo "configure:3011: checking for Makefile.in in libhwapi/discrete" >&5
 if test -d $srcdir/libhwapi/discrete; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2996,7 +3022,7 @@ fi
 
     
 echo $ac_n "checking for Makefile.in in libhwapi/drivers""... $ac_c" 1>&6
-echo "configure:3000: checking for Makefile.in in libhwapi/drivers" >&5
+echo "configure:3026: checking for Makefile.in in libhwapi/drivers" >&5
 if test -d $srcdir/libhwapi/drivers; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3011,7 +3037,7 @@ fi
 
     
 echo $ac_n "checking for Makefile.in in libhwapi/non_volatile_memory""... $ac_c" 1>&6
-echo "configure:3015: checking for Makefile.in in libhwapi/non_volatile_memory" >&5
+echo "configure:3041: checking for Makefile.in in libhwapi/non_volatile_memory" >&5
 if test -d $srcdir/libhwapi/non_volatile_memory; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3026,7 +3052,7 @@ fi
 
     
 echo $ac_n "checking for Makefile.in in libhwapi/serial""... $ac_c" 1>&6
-echo "configure:3030: checking for Makefile.in in libhwapi/serial" >&5
+echo "configure:3056: checking for Makefile.in in libhwapi/serial" >&5
 if test -d $srcdir/libhwapi/serial; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3041,7 +3067,7 @@ fi
 
     
 echo $ac_n "checking for Makefile.in in libhwapi/support""... $ac_c" 1>&6
-echo "configure:3045: checking for Makefile.in in libhwapi/support" >&5
+echo "configure:3071: checking for Makefile.in in libhwapi/support" >&5
 if test -d $srcdir/libhwapi/support; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3056,7 +3082,7 @@ fi
 
     
 echo $ac_n "checking for Makefile.in in libhwapi/wrapup""... $ac_c" 1>&6
-echo "configure:3060: checking for Makefile.in in libhwapi/wrapup" >&5
+echo "configure:3086: checking for Makefile.in in libhwapi/wrapup" >&5
 if test -d $srcdir/libhwapi/wrapup; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3084,7 +3110,7 @@ fi
 # pick up all the Makefiles in required parts of the tree
 
 echo $ac_n "checking for Makefile.in in libchip""... $ac_c" 1>&6
-echo "configure:3088: checking for Makefile.in in libchip" >&5
+echo "configure:3114: checking for Makefile.in in libchip" >&5
 if test -d $srcdir/libchip; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3099,7 +3125,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in libmisc""... $ac_c" 1>&6
-echo "configure:3103: checking for Makefile.in in libmisc" >&5
+echo "configure:3129: checking for Makefile.in in libmisc" >&5
 if test -d $srcdir/libmisc; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3325,9 +3351,11 @@ s%@RTEMS_GAS_CODE16@%$RTEMS_GAS_CODE16%g
 s%@RTEMS_GAS_CODE16_TRUE@%$RTEMS_GAS_CODE16_TRUE%g
 s%@RTEMS_GAS_CODE16_FALSE@%$RTEMS_GAS_CODE16_FALSE%g
 s%@CC@%$CC%g
+s%@HAS_MP@%$HAS_MP%g
 s%@RTEMS_LIBBSP_CPU_SUBDIR@%$RTEMS_LIBBSP_CPU_SUBDIR%g
 s%@UNIX_TRUE@%$UNIX_TRUE%g
 s%@UNIX_FALSE@%$UNIX_FALSE%g
+s%@HAS_RDBG@%$HAS_RDBG%g
 s%@RPCGEN@%$RPCGEN%g
 s%@AWK@%$AWK%g
 s%@RTEMS_HAS_CPLUSPLUS@%$RTEMS_HAS_CPLUSPLUS%g

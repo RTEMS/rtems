@@ -2,13 +2,15 @@ AC_DEFUN(RTEMS_CHECK_RDBG,
 [dnl
 AC_REQUIRE([RTEMS_TOP])dnl
 AC_REQUIRE([RTEMS_CHECK_CPU])dnl
-AC_CACHE_CHECK([whether cpu supports librdbg],
-  rtems_cv_has_rdbg,
+AC_CACHE_CHECK([whether BSP supports librdbg],
+  rtems_cv_HAS_RDBG,
   [
-    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/librdbg/${RTEMS_CPU}"; then
-      rtems_cv_has_rdbg="yes" ;
+    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/librdbg/${RTEMS_CPU}/${$1}"; then
+      rtems_cv_HAS_RDBG="yes" ;
     else
-      rtems_cv_has_rdbg="no";
+      rtems_cv_HAS_RDBG="no";
     fi
   ])
+HAS_RDBG="$rtems_cv_HAS_RDBG"
+AC_SUBST(HAS_RDBG)
 ])

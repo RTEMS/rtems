@@ -69,15 +69,10 @@ LDFLAGS +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-preinstall: 
-	$(INSTALL_CHANGE) ${IMPORT_SRC} .
-
-#	${CP} ${IMPORT_SRC} .
-
 ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
-all: ${ARCH} preinstall $(SRCS) $(PGM)
-	$(INSTALL_CHANGE) $(srcdir)/linkcmds $(PROJECT_RELEASE)/lib
+all: ${ARCH} $(SRCS) $(PGM)
+	@$(INSTALL_CHANGE) $(srcdir)/linkcmds $(PROJECT_RELEASE)/lib
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 install: all

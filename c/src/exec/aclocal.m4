@@ -894,44 +894,6 @@ AC_SUBST(RTEMS_USE_NEWLIB)
 ])
 
 
-dnl
-dnl $Id$
-dnl
-
-dnl RTEMS_CHECK_MAKEFILE(path)
-dnl Search for Makefile.in's within the directory starting
-dnl at path and append an entry for Makefile to global variable 
-dnl "makefiles" (from configure.in) for each Makefile.in found
-dnl 
-AC_DEFUN(RTEMS_CHECK_MAKEFILE,
-[RTEMS_CHECK_FILES_IN($1,Makefile,makefiles)
-])
-
-dnl
-dnl $Id$
-dnl
-
-dnl RTEMS_CHECK_FILES_IN(path,file,var)
-dnl path .. path relative to srcdir, where to start searching for files
-dnl file .. name of the files to search for
-dnl var  .. shell variable to append files found
-
-AC_DEFUN(RTEMS_CHECK_FILES_IN,
-[
-AC_MSG_CHECKING(for $2.in in $1)
-if test -d $srcdir/$1; then
-  rtems_av_save_dir=`pwd`;
-  cd $srcdir;
-  rtems_av_tmp=`find $1 -name "$2.in" -print | sed "s/$2\.in/%/" | sort | sed "s/%/$2/"`
-  $3="$$3 $rtems_av_tmp";
-  cd $rtems_av_save_dir;
-  AC_MSG_RESULT(done)
-else
-  AC_MSG_RESULT(no)
-fi
-])
-
-
 dnl $Id$
 
 dnl Report all available bsps for a target,
@@ -980,4 +942,69 @@ else
   AC_MSG_ERROR([no])
 fi
 ])dnl
+
+dnl $Id$
+
+AC_DEFUN(RTEMS_CHECK_MULTIPROCESSING,
+[dnl
+AC_REQUIRE([RTEMS_TOP])dnl
+AC_REQUIRE([RTEMS_CHECK_CPU])dnl
+AC_CACHE_CHECK([whether BSP supports multiprocessing],
+  rtems_cv_HAS_MP,
+  [dnl
+    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/libbsp/${RTEMS_CPU}/${$1}/shmsupp"; then
+      if test "$RTEMS_HAS_MULTIPROCESSING" = "yes"; then
+        rtems_cv_HAS_MP="yes" ;
+      else
+        rtems_cv_HAS_MP="disabled";
+      fi
+    else
+      rtems_cv_HAS_MP="no";
+    fi
+  ])
+if test "$rtems_cv_HAS_MP" = "yes"; then
+HAS_MP="yes"
+else
+HAS_MP="no"
+fi
+AC_SUBST(HAS_MP)
+])
+
+dnl
+dnl $Id$
+dnl
+
+dnl RTEMS_CHECK_MAKEFILE(path)
+dnl Search for Makefile.in's within the directory starting
+dnl at path and append an entry for Makefile to global variable 
+dnl "makefiles" (from configure.in) for each Makefile.in found
+dnl 
+AC_DEFUN(RTEMS_CHECK_MAKEFILE,
+[RTEMS_CHECK_FILES_IN($1,Makefile,makefiles)
+])
+
+dnl
+dnl $Id$
+dnl
+
+dnl RTEMS_CHECK_FILES_IN(path,file,var)
+dnl path .. path relative to srcdir, where to start searching for files
+dnl file .. name of the files to search for
+dnl var  .. shell variable to append files found
+
+AC_DEFUN(RTEMS_CHECK_FILES_IN,
+[
+AC_MSG_CHECKING(for $2.in in $1)
+if test -d $srcdir/$1; then
+  rtems_av_save_dir=`pwd`;
+  cd $srcdir;
+  rtems_av_tmp=`find $1 -name "$2.in" -print | sed "s/$2\.in/%/" | sort | sed "s/%/$2/"`
+  $3="$$3 $rtems_av_tmp";
+  cd $rtems_av_save_dir;
+  AC_MSG_RESULT(done)
+else
+  AC_MSG_RESULT(no)
+fi
+])
+
 

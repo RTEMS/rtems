@@ -1378,7 +1378,6 @@ ac_given_INSTALL="$INSTALL"
 trap 'rm -fr `echo "Makefile
 install-if-change
 lock-directory
-rcs-clean
 unlock-directory
  config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
@@ -1479,7 +1478,6 @@ cat >> $CONFIG_STATUS <<EOF
 CONFIG_FILES=\${CONFIG_FILES-"Makefile
 install-if-change
 lock-directory
-rcs-clean
 unlock-directory
 "}
 EOF

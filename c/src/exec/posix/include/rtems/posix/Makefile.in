@@ -13,6 +13,17 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
+mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
+
+INSTALLDIRS = $(PROJECT_INCLUDE)/rtems/posix
+
+$(INSTALLDIRS):
+	@$(mkinstalldirs) $(INSTALLDIRS)
+
 # We only build multiprocessing related files if HAS_MP was defined
 MP_H_PIECES_yes_V = condmp mqueuemp mutexmp pthreadmp semaphoremp
 MP_H_PIECES = $(MP_H_PIECES_$(HAS_MP)_V)
@@ -25,17 +36,6 @@ H_PIECES = cancel cond config key mqueue mutex posixapi priority psignal \
 H_FILES = $(H_PIECES:%=$(srcdir)/%.h)
 
 SRCS = $(H_FILES)
-
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/leaf.cfg
-
-INSTALL_CHANGE = @INSTALL_CHANGE@
-mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
-
-INSTALLDIRS = $(PROJECT_INCLUDE)/rtems/posix
-
-$(INSTALLDIRS):
-	@$(mkinstalldirs) $(INSTALLDIRS)
 
 #
 # Add your list of files to delete here.  The config files

@@ -77,16 +77,16 @@ CLOBBER_ADDITIONS +=
 # We only make the install point for the networking header files if needed.
 
 preinstall: $(INSTALLDIRS) $(SRCS)
-	$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/networking
-	$(INSTALL_CHANGE) -m 644 $(SYS_H_FILES) $(PROJECT_INCLUDE)/networking/sys
-	$(INSTALL_CHANGE) -m 644 $(RTEMS_H_FILES) $(PROJECT_INCLUDE)/networking/rtems
-	$(INSTALL_CHANGE) -m 644 $(MACHINE_H_FILES) $(PROJECT_INCLUDE)/networking/machine
-	$(INSTALL_CHANGE) -m 644 $(VM_H_FILES) $(PROJECT_INCLUDE)/networking/vm
-	$(INSTALL_CHANGE) -m 644 $(NET_H_FILES) $(PROJECT_INCLUDE)/networking/net
-	$(INSTALL_CHANGE) -m 644 $(NETINET_H_FILES) $(PROJECT_INCLUDE)/networking/netinet
-	$(INSTALL_CHANGE) -m 644 $(ARPA_H_FILES) $(PROJECT_INCLUDE)/networking/arpa
-	$(INSTALL_CHANGE) -m 644 $(NFS_H_FILES) $(PROJECT_INCLUDE)/networking/nfs
-	$(INSTALL_CHANGE) -m 644 $(RTEMS_SERVERS_H_FILES) $(PROJECT_INCLUDE)/networking
+	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/networking
+	@$(INSTALL_CHANGE) -m 644 $(SYS_H_FILES) $(PROJECT_INCLUDE)/networking/sys
+	@$(INSTALL_CHANGE) -m 644 $(RTEMS_H_FILES) $(PROJECT_INCLUDE)/networking/rtems
+	@$(INSTALL_CHANGE) -m 644 $(MACHINE_H_FILES) $(PROJECT_INCLUDE)/networking/machine
+	@$(INSTALL_CHANGE) -m 644 $(VM_H_FILES) $(PROJECT_INCLUDE)/networking/vm
+	@$(INSTALL_CHANGE) -m 644 $(NET_H_FILES) $(PROJECT_INCLUDE)/networking/net
+	@$(INSTALL_CHANGE) -m 644 $(NETINET_H_FILES) $(PROJECT_INCLUDE)/networking/netinet
+	@$(INSTALL_CHANGE) -m 644 $(ARPA_H_FILES) $(PROJECT_INCLUDE)/networking/arpa
+	@$(INSTALL_CHANGE) -m 644 $(NFS_H_FILES) $(PROJECT_INCLUDE)/networking/nfs
+	@$(INSTALL_CHANGE) -m 644 $(RTEMS_SERVERS_H_FILES) $(PROJECT_INCLUDE)/networking
 
 all: preinstall
 

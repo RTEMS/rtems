@@ -13,17 +13,6 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-# We only build multiprocessing related files if HAS_MP was defined
-MP_I_PIECES_yes_V = mppkt objectmp threadmp
-MP_I_PIECES = $(MP_I_PIECES_$(HAS_MP)_V)
-
-I_PIECES = address chain coremsg coremutex coresem heap isr object priority \
-    stack states sysstate thread tod tqdata userext watchdog wkspace \
-    $(MP_I_PIECES)
-I_FILES = $(I_PIECES:%=$(srcdir)/%.inl)
-
-SRCS = $(I_FILES)
-
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
 
@@ -34,6 +23,17 @@ INSTALLDIRS = $(PROJECT_INCLUDE)/rtems/score
 
 $(INSTALLDIRS):
 	@$(mkinstalldirs) $(INSTALLDIRS)
+
+# We only build multiprocessing related files if HAS_MP was defined
+MP_I_PIECES_yes_V = mppkt objectmp threadmp
+MP_I_PIECES = $(MP_I_PIECES_$(HAS_MP)_V)
+
+I_PIECES = address chain coremsg coremutex coresem heap isr object priority \
+    stack states sysstate thread tod tqdata userext watchdog wkspace \
+    $(MP_I_PIECES)
+I_FILES = $(I_PIECES:%=$(srcdir)/%.inl)
+
+SRCS = $(I_FILES)
 
 #
 # Add your list of files to delete here.  The config files

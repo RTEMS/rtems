@@ -2672,40 +2672,46 @@ RTEMS_USE_NEWLIB="$rtems_cv_use_newlib"
 
 
 
+# Check if there is custom/*.cfg for this BSP
+echo $ac_n "checking for make/custom/$RTEMS_BSP.cfg""... $ac_c" 1>&6
+echo "configure:2678: checking for make/custom/$RTEMS_BSP.cfg" >&5
+if test -r "$srcdir/$RTEMS_TOPdir/make/custom/$RTEMS_BSP.cfg"; then
+  echo "$ac_t""yes" 1>&6
+else
+  { echo "configure: error: no" 1>&2; exit 1; }
+fi
+
+
+echo $ac_n "checking whether BSP supports multiprocessing""... $ac_c" 1>&6
+echo "configure:2687: checking whether BSP supports multiprocessing" >&5
+if eval "test \"`echo '$''{'rtems_cv_HAS_MP'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+      if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/libbsp/${RTEMS_CPU}/${RTEMS_BSP}/shmsupp"; then
+      if test "$RTEMS_HAS_MULTIPROCESSING" = "yes"; then
+        rtems_cv_HAS_MP="yes" ;
+      else
+        rtems_cv_HAS_MP="disabled";
+      fi
+    else
+      rtems_cv_HAS_MP="no";
+    fi
+  
+fi
+
+echo "$ac_t""$rtems_cv_HAS_MP" 1>&6
+if test "$rtems_cv_HAS_MP" = "yes"; then
+HAS_MP="yes"
+else
+HAS_MP="no"
+fi
+
+
+
 # find all the Executive Makefiles
 
-echo $ac_n "checking for Makefile.in in rtems""... $ac_c" 1>&6
-echo "configure:2679: checking for Makefile.in in rtems" >&5
-if test -d $srcdir/rtems; then
-  rtems_av_save_dir=`pwd`;
-  cd $srcdir;
-  rtems_av_tmp=`find rtems -name "Makefile.in" -print | sed "s/Makefile\.in/%/" | sort | sed "s/%/Makefile/"`
-  makefiles="$makefiles $rtems_av_tmp";
-  cd $rtems_av_save_dir;
-  echo "$ac_t""done" 1>&6
-else
-  echo "$ac_t""no" 1>&6
-fi
-
-
-
-echo $ac_n "checking for Makefile.in in sapi""... $ac_c" 1>&6
-echo "configure:2694: checking for Makefile.in in sapi" >&5
-if test -d $srcdir/sapi; then
-  rtems_av_save_dir=`pwd`;
-  cd $srcdir;
-  rtems_av_tmp=`find sapi -name "Makefile.in" -print | sed "s/Makefile\.in/%/" | sort | sed "s/%/Makefile/"`
-  makefiles="$makefiles $rtems_av_tmp";
-  cd $rtems_av_save_dir;
-  echo "$ac_t""done" 1>&6
-else
-  echo "$ac_t""no" 1>&6
-fi
-
-
-
 echo $ac_n "checking for Makefile.in in score/cpu/$RTEMS_CPU""... $ac_c" 1>&6
-echo "configure:2709: checking for Makefile.in in score/cpu/$RTEMS_CPU" >&5
+echo "configure:2715: checking for Makefile.in in score/cpu/$RTEMS_CPU" >&5
 if test -d $srcdir/score/cpu/$RTEMS_CPU; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2719,44 +2725,31 @@ fi
 
 
 
-if test "$RTEMS_HAS_POSIX_API" = "yes"; then
-  
-echo $ac_n "checking for Makefile.in in posix""... $ac_c" 1>&6
-echo "configure:2726: checking for Makefile.in in posix" >&5
-if test -d $srcdir/posix; then
-  rtems_av_save_dir=`pwd`;
-  cd $srcdir;
-  rtems_av_tmp=`find posix -name "Makefile.in" -print | sed "s/Makefile\.in/%/" | sort | sed "s/%/Makefile/"`
-  makefiles="$makefiles $rtems_av_tmp";
-  cd $rtems_av_save_dir;
-  echo "$ac_t""done" 1>&6
-else
-  echo "$ac_t""no" 1>&6
-fi
-
-
-  makefiles="$makefiles wrapup/posix/Makefile"
-fi
-
-# Check if there is custom/*.cfg for this BSP
-echo $ac_n "checking for make/custom/$RTEMS_BSP.cfg""... $ac_c" 1>&6
-echo "configure:2744: checking for make/custom/$RTEMS_BSP.cfg" >&5
-if test -r "$srcdir/$RTEMS_TOPdir/make/custom/$RTEMS_BSP.cfg"; then
-  echo "$ac_t""yes" 1>&6
-else
-  { echo "configure: error: no" 1>&2; exit 1; }
-fi
-
-
 # If RTEMS macros are enabled, then use them.  Otherwise, use inlines.
 if test "$RTEMS_USE_MACROS" = "yes"; then
-  inline_dir=macros
+  inline_dir="macros"
   if test "$RTEMS_HAS_POSIX_API" = "yes"; then
     # The problem is that there is currently no code in posix/macros :)
     { echo "configure: error: Macros are not implemented for the POSIX API" 1>&2; exit 1; }
   fi
 else
-  inline_dir=inline
+  inline_dir="inline"
+fi
+
+if test "$RTEMS_HAS_POSIX_API" = "yes"; then
+  makefiles="$makefiles posix/Makefile"
+  makefiles="$makefiles posix/src/Makefile"
+  makefiles="$makefiles posix/include/Makefile"
+  makefiles="$makefiles posix/include/sys/Makefile"
+  makefiles="$makefiles posix/include/rtems/Makefile"
+  makefiles="$makefiles posix/include/rtems/posix/Makefile"
+  makefiles="$makefiles posix/include/wrap/Makefile"
+  makefiles="$makefiles posix/optman/Makefile"
+  makefiles="$makefiles wrapup/posix/Makefile"
+
+  makefiles="$makefiles posix/${inline_dir}/Makefile"
+  makefiles="$makefiles posix/${inline_dir}/rtems/Makefile"
+  makefiles="$makefiles posix/${inline_dir}/rtems/posix/Makefile"
 fi
 
 
@@ -2885,6 +2878,25 @@ ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
 trap 'rm -fr `echo "Makefile
+rtems/Makefile
+rtems/src/Makefile
+rtems/include/Makefile
+rtems/include/wrap/Makefile
+rtems/include/rtems/Makefile
+rtems/include/rtems/rtems/Makefile
+rtems/optman/Makefile
+rtems/${inline_dir}/Makefile
+rtems/${inline_dir}/rtems/Makefile
+rtems/${inline_dir}/rtems/rtems/Makefile
+sapi/Makefile
+sapi/src/Makefile
+sapi/include/Makefile
+sapi/include/wrap/Makefile
+sapi/include/rtems/Makefile
+sapi/include/rtems/sptables.h
+sapi/${inline_dir}/Makefile
+sapi/${inline_dir}/rtems/Makefile
+sapi/optman/Makefile
 score/Makefile
 score/cpu/Makefile
 score/include/Makefile
@@ -2898,7 +2910,6 @@ score/src/Makefile
 wrapup/Makefile
 wrapup/rtems/Makefile
 $makefiles
-sapi/include/rtems/sptables.h
 " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -2982,6 +2993,7 @@ s%@STRIP_FOR_TARGET@%$STRIP_FOR_TARGET%g
 s%@RTEMS_GAS_CODE16@%$RTEMS_GAS_CODE16%g
 s%@CC@%$CC%g
 s%@RTEMS_USE_NEWLIB@%$RTEMS_USE_NEWLIB%g
+s%@HAS_MP@%$HAS_MP%g
 s%@RTEMS_VERSION@%$RTEMS_VERSION%g
 s%@rtems_cv_prog_cc_cross@%$rtems_cv_prog_cc_cross%g
 s%@RTEMS_HAS_CPLUSPLUS@%$RTEMS_HAS_CPLUSPLUS%g
@@ -3033,6 +3045,25 @@ EOF
 cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"Makefile
+rtems/Makefile
+rtems/src/Makefile
+rtems/include/Makefile
+rtems/include/wrap/Makefile
+rtems/include/rtems/Makefile
+rtems/include/rtems/rtems/Makefile
+rtems/optman/Makefile
+rtems/${inline_dir}/Makefile
+rtems/${inline_dir}/rtems/Makefile
+rtems/${inline_dir}/rtems/rtems/Makefile
+sapi/Makefile
+sapi/src/Makefile
+sapi/include/Makefile
+sapi/include/wrap/Makefile
+sapi/include/rtems/Makefile
+sapi/include/rtems/sptables.h
+sapi/${inline_dir}/Makefile
+sapi/${inline_dir}/rtems/Makefile
+sapi/optman/Makefile
 score/Makefile
 score/cpu/Makefile
 score/include/Makefile
@@ -3046,7 +3077,6 @@ score/src/Makefile
 wrapup/Makefile
 wrapup/rtems/Makefile
 $makefiles
-sapi/include/rtems/sptables.h
 "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
@@ -3117,4 +3147,5 @@ EOF
 chmod +x $CONFIG_STATUS
 rm -fr confdefs* $ac_clean_files
 test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
+
 

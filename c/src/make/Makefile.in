@@ -87,6 +87,8 @@ CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXX_FOR_TARGET = @CXX_FOR_TARGET@
 GCCSED = @GCCSED@
+HAS_MP = @HAS_MP@
+HAS_RDBG = @HAS_RDBG@
 INSTALL_CHANGE = @INSTALL_CHANGE@
 KSH = @KSH@
 LN = @LN@
@@ -143,14 +145,19 @@ rtems_bspdir = $(rtemsdir)/@RTEMS_BSP@
 rtems_bsp_DATA =  Makefile.inc
 
 
+rtems_bsp_makedir = $(rtems_bspdir)/make
+rtems_bsp_make_DATA =  bsp.cfg
+
+
 SUBDIRS = compilers custom Templates
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/../../../mkinstalldirs
-CONFIG_CLEAN_FILES =  Makefile.inc main.cfg host.cfg target.cfg
-DATA =  $(noinst_DATA) $(rtems_bsp_DATA) $(rtems_make_DATA)
+CONFIG_CLEAN_FILES =  Makefile.inc main.cfg host.cfg target.cfg bsp.cfg
+DATA =  $(noinst_DATA) $(rtems_bsp_DATA) $(rtems_bsp_make_DATA) \
+$(rtems_make_DATA)
 
 DIST_COMMON =  Makefile.am Makefile.in Makefile.inc.in aclocal.m4 \
-configure configure.in host.cfg.in main.cfg.in target.cfg.in
+bsp.cfg.in configure configure.in host.cfg.in main.cfg.in target.cfg.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -181,6 +188,8 @@ host.cfg: $(top_builddir)/config.status host.cfg.in
 	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 target.cfg: $(top_builddir)/config.status target.cfg.in
 	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
+bsp.cfg: $(top_builddir)/config.status bsp.cfg.in
+	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 install-rtems_bspDATA: $(rtems_bsp_DATA)
 	@$(NORMAL_INSTALL)
@@ -199,6 +208,25 @@ uninstall-rtems_bspDATA:
 	@$(NORMAL_UNINSTALL)
 	list='$(rtems_bsp_DATA)'; for p in $$list; do \
 	  rm -f $(DESTDIR)$(rtems_bspdir)/$$p; \
+	done
+
+install-rtems_bsp_makeDATA: $(rtems_bsp_make_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(rtems_bsp_makedir)
+	@list='$(rtems_bsp_make_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(rtems_bsp_makedir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(rtems_bsp_makedir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(rtems_bsp_makedir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(rtems_bsp_makedir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-rtems_bsp_makeDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(rtems_bsp_make_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(rtems_bsp_makedir)/$$p; \
 	done
 
 install-rtems_makeDATA: $(rtems_make_DATA)
@@ -383,13 +411,15 @@ installcheck: installcheck-recursive
 install-exec-am:
 install-exec: install-exec-recursive
 
-install-data-am: install-rtems_bspDATA install-rtems_makeDATA
+install-data-am: install-rtems_bspDATA install-rtems_bsp_makeDATA \
+		install-rtems_makeDATA
 install-data: install-data-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-recursive
-uninstall-am: uninstall-rtems_bspDATA uninstall-rtems_makeDATA
+uninstall-am: uninstall-rtems_bspDATA uninstall-rtems_bsp_makeDATA \
+		uninstall-rtems_makeDATA
 uninstall: uninstall-recursive
 all-am: Makefile $(DATA)
 all-redirect: all-recursive
@@ -397,7 +427,9 @@ install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs: installdirs-recursive
 installdirs-am:
-	$(mkinstalldirs)  $(DESTDIR)$(rtems_bspdir) $(DESTDIR)$(rtems_makedir)
+	$(mkinstalldirs)  $(DESTDIR)$(rtems_bspdir) \
+		$(DESTDIR)$(rtems_bsp_makedir) \
+		$(DESTDIR)$(rtems_makedir)
 
 
 mostlyclean-generic:
@@ -431,6 +463,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f config.status
 
 .PHONY: uninstall-rtems_bspDATA install-rtems_bspDATA \
+uninstall-rtems_bsp_makeDATA install-rtems_bsp_makeDATA \
 uninstall-rtems_makeDATA install-rtems_makeDATA install-data-recursive \
 uninstall-data-recursive install-exec-recursive \
 uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \

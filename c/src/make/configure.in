@@ -26,7 +26,6 @@ RTEMS_ENABLE_CXX
 RTEMS_ENABLE_GCC28
 RTEMS_ENABLE_LIBCDIR
 RTEMS_ENABLE_BARE
-dnl RTEMS_ENABLE_RTEMSBSP
 
 RTEMS_ENV_RTEMSBSP
 
@@ -71,16 +70,9 @@ RTEMS_CANONICALIZE_TOOLS
 dnl if this is an i386, does gas have good code16 support?
 RTEMS_I386_GAS_CODE16
 
-dnl RTEMS_CHECK_BSPS(rtems_bsp)
-
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
-
-if test "$RTEMS_HAS_RDBG" = "yes"; then
-  RTEMS_CHECK_RDBG
-  RTEMS_HAS_RDBG="$rtems_cv_has_rdbg";
-fi
-
-dnl END configure.target.in
+RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
+RTEMS_CHECK_RDBG(RTEMS_BSP)
 
 AC_SUBST(rtems_cv_prog_cc_cross)
 AC_SUBST(RTEMS_HAS_CPLUSPLUS)
@@ -131,6 +123,7 @@ Makefile.inc
 main.cfg
 host.cfg
 target.cfg
+bsp.cfg
 Templates/Makefile
 custom/Makefile
 custom/default.cfg

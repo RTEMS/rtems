@@ -13,6 +13,11 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(RTEMS_ROOT)/make/lib.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
+
 # We only build multiprocessing related files if HAS_MP was defined
 MP_C_PIECES_yes_V = mpci objectmp threadmp
 MP_C_PIECES = $(MP_C_PIECES_$(HAS_MP)_V)
@@ -34,11 +39,6 @@ C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
 SRCS = $(C_FILES)
 OBJS = $(C_O_FILES)
-
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/lib.cfg
-
-INSTALL_CHANGE = @INSTALL_CHANGE@
 
 #
 # Add local stuff here using +=

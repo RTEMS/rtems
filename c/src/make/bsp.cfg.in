@@ -1,0 +1,9 @@
+##
+## Does this BSP support multiprocessing ?
+##
+HAS_MP = @HAS_MP@
+
+##
+## Does this BSP support RTEMS's remote debugger ?
+##
+HAS_RDBG = @HAS_RDBG@

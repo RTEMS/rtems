@@ -58,7 +58,7 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all: ${ARCH} $(SRCS) $(OBJS) $(PGM)
-	$(INSTALL_VARIANT) -m 755 ${PGMS} $(PROJECT_RELEASE)/lib
+	@$(INSTALL_VARIANT) -m 755 ${PGMS} $(PROJECT_RELEASE)/lib
 
 # Install the program(s), appending _g or _p as appropriate.
 # for include files, just use $(INSTALL_CHANGE)

@@ -66,7 +66,7 @@ CLOBBER_ADDITIONS +=
 ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 
-preinstall: 
+preinstall: $(INSTALLDIRS) $(H_FILES)
 	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/libcpu
 
 all: ${ARCH} $(SRCS) preinstall $(PGM)

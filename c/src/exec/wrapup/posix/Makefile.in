@@ -55,7 +55,7 @@ $(LIB): ${OBJS}
 	$(make-library)
 
 all: ${ARCH} $(SRCS) $(LIB)
-	$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
+	@$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

@@ -13,7 +13,9 @@ default.cfg
 
 if MAINTAINER_MODE
 $(srcdir)/default.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/custom/default.cfg
-	sed -e 's%\$$(RTEMS_BSP)%\@RTEMS_BSP\@%g' < $< >$@
+	sed -e 's%\$$(RTEMS_BSP)%\@RTEMS_BSP\@%g' \
+	-e 's%\$$(RTEMS_ROOT)/\@RTEMS_BSP\@%$$(RTEMS_ROOT)%g' \
+	< $< >$@
 endif
 
 include $(top_srcdir)/../../../automake/local.am

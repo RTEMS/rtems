@@ -26,8 +26,7 @@ $(INSTALLDIRS):
 
 SUB_DIRS = include $(INLINE) optman src
 
-preinstall: 
-	$(mkinstalldirs) $(INSTALLDIRS)
+preinstall: $(INSTALLDIRS) 
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
