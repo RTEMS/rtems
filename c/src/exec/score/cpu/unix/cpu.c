@@ -48,18 +48,23 @@ int cpu_number;
  *  _CPU_ISR_From_CPU_Init
  */
 
+sigset_t  posix_empty_mask;
+
 void _CPU_ISR_From_CPU_Init()
 {
   unsigned32        i;
   proc_ptr          old_handler;
 
+  /*
+   * Generate an empty mask to be used by disable_support
+   */
 
+  sigemptyset(&posix_empty_mask);
+ 
   /*
    * Block all the signals except SIGTRAP for the debugger
    * and SIGABRT for fatal errors.
    */
-
-  _CPU_ISR_Enable(1);
 
   (void) sigfillset(&_CPU_Signal_mask);
   (void) sigdelset(&_CPU_Signal_mask, SIGTRAP);
@@ -67,7 +72,7 @@ void _CPU_ISR_From_CPU_Init()
   (void) sigdelset(&_CPU_Signal_mask, SIGIOT);
   (void) sigdelset(&_CPU_Signal_mask, SIGCONT);
 
-  sigprocmask(SIG_BLOCK, &_CPU_Signal_mask, 0);
+  _CPU_ISR_Enable(1);
 
   /*
    * Set the handler for all signals to be signal_handler
@@ -130,11 +135,7 @@ void _CPU_Signal_initialize( void )
   sigaction(SIGTTIN, &act, 0);
   sigaction(SIGTTOU, &act, 0);
   sigaction(SIGURG, &act, 0);
-/*
- *  XXX: Really should be on HPUX.
- */
-
-#if defined(hppa1_1)
+#ifdef SIGLOST
     sigaction(SIGLOST, &act, 0);
 #endif
 
@@ -491,13 +492,10 @@ void _CPU_Restore_float_context(
 unsigned32 _CPU_ISR_Disable_support(void)
 {
   sigset_t  old_mask;
-  sigset_t  empty_mask;
 
-  sigemptyset(&empty_mask);
-  sigemptyset(&old_mask);
   sigprocmask(SIG_BLOCK, &_CPU_Signal_mask, &old_mask);
 
-  if (memcmp((char *)&empty_mask, (char *)&old_mask, sizeof(sigset_t)) != 0)
+  if (memcmp((void *)&posix_empty_mask, (void *)&old_mask, sizeof(sigset_t)) != 0)
     return 1;
 
   return 0;
@@ -609,6 +607,14 @@ void _CPU_Stray_signal(int sig_num)
 void _CPU_Fatal_error(unsigned32 error)
 {
   setitimer(ITIMER_REAL, 0, 0);
+
+  if ( error ) {
+#ifdef RTEMS_DEBUG
+    abort();
+#endif
+    if (getenv("RTEMS_DEBUG"))
+      abort();
+  }
 
   _exit(error);
 }

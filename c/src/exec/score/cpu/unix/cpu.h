@@ -58,18 +58,6 @@ extern "C" {
 
 #endif
 
-#if 0
-static inline X() 
-{
-#ifdef _POSIX_C_SOURCE
-  printf( "_POSIX_C_SOURCE", _POSIX_C_SOURCE );
-#endif
-#ifdef __STRICT_ANSI__
-  printf( "__STRICT_ANSI__", __STRICT_ANSI__ );
-#endif
-}
-#endif
-
 #include <unistd.h>
 #include <setjmp.h>
 #include <signal.h>
@@ -334,7 +322,7 @@ static inline X()
  * Word indices within a jmp_buf structure
  */
 
-#ifdef RTEMS_NEWLIB
+#ifdef RTEMS_NEWLIB_SETJMP
 #define RP_OFF       6
 #define SP_OFF       2
 #define R3_OFF      10
@@ -356,7 +344,7 @@ static inline X()
 #define DP_OFF      26
 #endif
 
-#ifdef RTEMS_UNIXLIB
+#ifdef RTEMS_UNIXLIB_SETJMP
 #define RP_OFF       0
 #define SP_OFF       1
 #define R3_OFF       4
