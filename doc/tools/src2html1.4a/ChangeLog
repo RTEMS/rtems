@@ -1,3 +1,10 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Ctags/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* FreeBSD/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* ctags-emacs/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2002-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Require automake-1.5.

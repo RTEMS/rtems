@@ -1,5 +1,4 @@
 
-AUTOMAKE_OPTIONS = foreign 1.5
 
 SUBDIRS = Ctags FreeBSD ctags-emacs
 
