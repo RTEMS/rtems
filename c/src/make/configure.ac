@@ -87,16 +87,8 @@ AC_SUBST(CC_LDFLAGS_PROFILE_V)
 cfg_dir="${RTEMS_TOPdir}/make"
 AC_SUBST(cfg_dir)
 
-# Symlink the *.cfg files from the toplevel make directory into the build
-# trees c/<bsp>/make subdirectories
-
-AC_CONFIG_LINKS([
-  compilers/gcc-target-default.cfg:compilers/gcc-target-default.cfg
-  directory.cfg:directory.cfg
-  lib.cfg:lib.cfg
-  README:README
-  leaf.cfg:leaf.cfg
-])
+# Symlink leaf.cfg from the source directory into the build directory.
+AC_CONFIG_LINKS([leaf.cfg:leaf.cfg])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
