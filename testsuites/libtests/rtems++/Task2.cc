@@ -32,7 +32,7 @@ void Task2::body(rtems_task_argument )
 {
   screen4();
 
-  printf("%s - destory itself\n", name_string());
+  printf("%s - destroy itself\n", name_string());
   destroy();
 }
 

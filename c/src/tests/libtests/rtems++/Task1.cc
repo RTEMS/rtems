@@ -23,6 +23,7 @@
  *  $Id$
  */
 
+#include <stdlib.h>
 #include <string.h>
 #include "System.h"
 
@@ -54,10 +55,20 @@ void Task1::body(rtems_task_argument argument)
   rtems_test_pause_and_screen_number(6);
   
   screen6();
-  rtems_test_pause_and_screen_number(7);
 
-  // causes init to delete me and itself
-  end_init.send(RTEMS_SIGNAL_0);
+  // do not call exit(0) from this thread as this object is static
+  // the static destructor call delete the task which is calling exit
+  // so exit never completes
+  
+  EndTask end_task("ENDT", (rtems_task_priority) 1, RTEMS_MINIMUM_STACK_SIZE * 6);
+  end_task.start(0);
+
+  rtemsEvent block_me;
+  rtems_event_set out;
+  
+  block_me.receive(RTEMS_SIGNAL_0, out);
+
+  printf("**** TASK 1 did not block ????\n");
 }
 
 void Task1::screen1(void)
@@ -655,3 +666,17 @@ void Task1::print_mode(rtems_mode mode, rtems_mode mask)
     printf("INTMASK=%i",
            mode & RTEMS_INTERRUPT_MASK);
 }
+
+EndTask::EndTask(const char* name,
+                 const rtems_task_priority initial_priority,
+                 const rtems_unsigned32 stack_size)
+  : rtemsTask(name, initial_priority, stack_size, RTEMS_NO_PREEMPT)
+{
+}
+  
+void EndTask::body(rtems_task_argument )
+{
+ printf("*** END OF RTEMS++ TEST ***\n");
+ exit(0);
+}
+
