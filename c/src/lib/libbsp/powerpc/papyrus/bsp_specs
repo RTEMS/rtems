@@ -18,6 +18,9 @@
 %{!qrtems_debug: } \
 %{qrtems_debug: }}
 
+*endfile:
+%{!qrtems: %(old_endfile)} %{qrtems: ecrtn%O%s}
+
 *link:
 %{!qrtems: %(old_link)} %{qrtems: -dc -dp -u __vectors -u download_entry -N }
 

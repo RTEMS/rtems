@@ -10,13 +10,16 @@
 *lib:
 %{!qrtems: %(old_lib)} %{qrtems: --start-group \
 %{!qrtems_debug: -lrtemsall} %{qrtems_debug: -lrtemsall_g} \
--lc -lgcc --end-group  ecrtn%O%s \
+-lc -lgcc --end-group \
 %{!qnolinkcmds: -T linkcmds%s}}
 
 *startfile:
 %{!qrtems: %(old_startfile)} %{qrtems:  ecrti%O%s \
 %{!qrtems_debug: startsim.o%s} \
 %{qrtems_debug: startsim_g.o%s}}
+
+*endfile:
+%{!qrtems: %(old_endfile)} %{qrtems: ecrtn%O%s}
 
 *link:
 %{!qrtems: %(old_link)} %{qrtems: -Qy -dp -Bstatic -T linkcmds%s -e _start -u __vectors}
