@@ -331,8 +331,11 @@ void ITRON_Init( void )
    */
   
    puts( "\n\n*** Rotate Ready Queue Errors ***" );
-   puts( "Init - rot_rdq - invalid priority - E_PAR" );
+   puts( "Init - rot_rdq - priority  -1 - E_PAR" );
    status = rot_rdq( -1 );
+   assert( status == E_PAR );
+   puts( "Init - rot_rdq - priority  257 - E_PAR" );
+   status = rot_rdq( 257 );
    assert( status == E_PAR );
 
 #if (0)
