@@ -3,7 +3,7 @@
 ## $Id$
 
 AC_PREREQ(2.52)
-AC_INIT([rtems-c-src-lib-libbsp-or32-bender],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
+AC_INIT([rtems-c-src-lib-libbsp-or32-orp],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)
 AC_CONFIG_AUX_DIR(../../../../../..)
