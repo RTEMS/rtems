@@ -1,3 +1,8 @@
+2001-05-15	Joel Sherrill <joel@OARcorp.com>
+
+	* src/i386/any/remdeb_svc.c, src/m68k/any/remdeb_svc.c,
+	src/powerpc/new_exception_processing/remdeb_svc.c: Readding as
+	I accidentally deleted the incorrectly empty versions.
 2002-05-14	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	* src/m68k/rdbg_cpu_asm.S: Per PR163, Fix incorrect assumption that
