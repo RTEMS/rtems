@@ -60,18 +60,36 @@ int rtems_filesystem_evaluate_path(
 
   if ( (result == 0) && follow_link ) {
 
-    if ( !pathloc->ops->node_type_h )
+    if ( !pathloc->ops->node_type_h ){
+      rtems_filesystem_freenode( pathloc );
       rtems_set_errno_and_return_minus_one( ENOTSUP );
+    }
 
     type = (*pathloc->ops->node_type_h)( pathloc );
 
     if ( ( type == RTEMS_FILESYSTEM_HARD_LINK ) ||
          ( type == RTEMS_FILESYSTEM_SYM_LINK ) ) {
 
-        if ( !pathloc->ops->eval_link_h )
+        if ( !pathloc->ops->eval_link_h ){
+          rtems_filesystem_freenode( pathloc );
           rtems_set_errno_and_return_minus_one( ENOTSUP );
+        }
 
-         result =  (*pathloc->ops->eval_link_h)( pathloc, flags );
+        /* what to do with the valid node pathloc points to
+         * if eval_link_h fails?
+         * Let the FS implementation deal with this case.  It
+         * should probably free pathloc in either case:
+         *  - if the link evaluation fails, it must free the
+         *    original (valid) pathloc because we are going 
+         *    to return -1 and hence the FS generics won't
+         *    cleanup pathloc.
+         *  - if the link evaluation is successful, the updated
+         *    pathloc will be passed up (and eventually released).
+         *    Hence, the (valid) originial node that we submit to
+         *    eval_link_h() should be released by the handler.
+         */
+
+        result =  (*pathloc->ops->eval_link_h)( pathloc, flags );
  
     }
   }
