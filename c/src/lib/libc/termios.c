@@ -760,8 +760,7 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 }
 
 /*
- *  Reserve enough resources to at least open every physical device
- *  once.
+ *  Reserve enough resources to open every physical device once.
  */
 
 void rtems_termios_reserve_resources(
