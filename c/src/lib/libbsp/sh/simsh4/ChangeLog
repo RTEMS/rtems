@@ -1,3 +1,8 @@
+2001-10-26	Alexandra Kossovsky <sasha@oktet.ru>
+
+	* tools: New subdirectory.
+	* tools/Makefile.am, tools/runtest: New files.
+
 2001-10-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Added support for START_HW_INIT.

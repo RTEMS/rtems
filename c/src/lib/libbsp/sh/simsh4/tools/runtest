@@ -1,0 +1,231 @@
+#! /bin/sh -p
+#
+# Run rtems tests on the Motorola MCF5206eLITE Coldfire Evaluation board
+# using gdb configured with P&E Micro Background Debug Mode debugging
+# interface.
+#
+# This program generates a gdb script to run each test, intercept
+# serial port output and put log into output file.
+#
+# Author: Victor V. Vengerov <vvv@oktet.ru>
+# Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
+#
+# Partially based on runtest script for powerpc psim.
+#
+#  COPYRIGHT (c) 1989-1999.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in found in the file LICENSE in this distribution or at
+#  http://www.OARcorp.com/rtems/license.html.
+#
+#  @(#) $Id$
+#
+
+# progname=`basename $0`
+progname=${0##*/}        # fast basename hack for ksh, bash
+
+USAGE=\
+"usage: $progname [ -opts ] test [ test ... ]
+        -r runname   -- specify name of run program to be used
+        -v           -- verbose output
+        -d           -- don't remove temporary files (for debugging only)
+        -l logdir    -- specify log directory (default is 'logdir')
+
+  Specify test as 'test' or 'test.exe'.
+  All multiprocessing tests *must* be specified simply as 'mp01', etc.
+"
+
+# export everything
+set -a
+
+#   log an error to stderr
+prerr()
+{
+    echo "$*" >&2
+}
+
+fatal() {
+    [ "$1" ] && prerr $*
+    prerr "$USAGE"
+    exit 1
+}
+
+warn() {
+    [ "$1" ] && prerr $*
+}
+
+# run at normal and signalled exit
+test_exit()
+{
+    exit_code=$1
+
+    rm -f ${logfile}.tmp*
+    [ "$run_pid" ] && kill -9 $run_pid
+
+    exit $exit_code
+}
+
+#
+# process the options
+#
+# defaults for getopt vars
+#
+# max_run_time is defaulted to 5 minutes
+#
+
+verbose=""
+runprog=sh-rtemself-run
+logdir=log
+max_run_time=$((10 * 60))
+#sizeof_ram=$((1 * 1024 * 1024))
+debugging="no"
+#console_mode=0
+
+while getopts vdips:r:b:l: OPT
+do
+    case "$OPT" in
+	v)
+	    verbose="yes";;
+        d)
+            debugging="yes";;
+        l)
+            logdir="$OPTARG";;
+        r)
+            runprog="$OPTARG";;
+#        p)
+#            console_mode=1;;
+#        i)
+#            console_mode=2;;
+        *)
+            fatal;;
+    esac
+done
+
+let $((shiftcount = $OPTIND - 1))
+shift $shiftcount
+
+args=$*
+
+#
+# Run the tests
+#
+
+tests="$args"
+if [ ! "$tests" ]
+then
+     set -- `echo *.exe`
+     tests="$*"
+fi
+
+[ -d $logdir ] ||
+  mkdir $logdir || fatal "could not create log directory ($logdir)"
+
+# where the tmp files go
+trap "test_exit" 1 2 3 13 14 15
+
+for tfile in $tests
+do
+
+   tname=`basename $tfile .exe`
+   cpus="1"
+   TEST_TYPE="single"
+
+   case "$tname" in
+       # size is no longer interactive.
+       monitor* | termios*)
+            warn "Skipping $tname; it is interactive"
+            continue
+            ;;
+       *-node2*)
+           warn "Skipping $tname; 'runtest' runs both nodes when for *-node1"
+           continue
+           ;;
+       *-node1*)
+           warn "Running both nodes associated with $tname"
+           tname=`echo $tname | sed 's/-node.*//'`
+           TEST_TYPE="mp"
+           ;;
+       minimum*|spfatal*)
+           continue
+           ;;
+   esac
+
+   if [ "$TEST_TYPE" = "mp" ] ; then
+       fatal "MP tests not supported for this board"
+   fi
+
+   if [ $TEST_TYPE = "single" ] ; then
+     logfile=$logdir/${tname}
+     infofile=${logfile}.info
+#     scriptfile=${logfile}.ss
+#     runlogfile=${logfile}.run
+
+     rm -f ${logfile}.tmp*
+
+     date=`date`
+     echo "Starting $tname at $date"
+
+     ${runprog} "${tfile}" > "${logfile}"  2>&1 &
+     run_pid=$!
+     {
+         time_run=0
+         while [ $time_run -lt $max_run_time ] ; do
+             sleep 10s
+             if kill -0 $run_pid 2> /dev/null ; then
+                 time_run=$((time_run+10)) ;
+             else
+                 exit 0
+             fi
+         done
+         kill -2 $run_pid 2> /dev/null
+         {
+             sleep 5s ; 
+             if kill -0 $run_pid 2> /dev/null ; then
+                 kill -9 $run_pid 2> /dev/null ;
+             fi
+         } &
+     } &
+     wait $run_pid
+     run_status=$?
+     if [ $run_status -ge 128 ] ; then
+         ran_too_long="yes" ;
+     else
+         ran_too_long="no"
+     fi
+     if [ $run_status -ne 0 ] ; then
+         test_failed="yes" ;
+     else
+         test_failed="no"
+     fi
+     run_pid=""
+   fi
+
+   # Create the info files
+   {
+       echo "$date"
+       echo "Test run on: `uname -n`"
+       echo "Host Information:"
+       echo `uname -a`
+       echo
+       echo "run:         `type -path ${runprog}`"
+
+       cat ${logfile}
+
+       if [ "$test_failed" = "yes" ] ; then
+           echo -e "\\n\\nTest did not finish normally"
+           if [ "$ran_too_long" = "yes" ] ; then
+               echo "Test killed after $max_run_time seconds"
+           fi
+       fi
+
+       echo
+       date;
+   } > ${infofile}
+#   if [ "${debugging}" = "no" ] ; then
+#       rm -f ${runlogfile}
+#   fi
+done
+
+echo "Tests completed at " `date`
+test_exit 0
