@@ -1,4 +1,9 @@
 
+2000-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/vegaplus.cfg: Fix make-exe rule and eliminate mkdir
+	and copies that should not be in it.
+
 2000-12-01	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/jmr3904.cfg: Turn optimization back up to -O2.
