@@ -649,7 +649,7 @@ EXTERN unsigned8 _CPU_Trap_Table_area[ 8192 ]
  *  stack frame.
  */
 
-#define CPU_STACK_MINIMUM_SIZE  (1024*2)
+#define CPU_STACK_MINIMUM_SIZE  (1024*2 + 512)
 
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
