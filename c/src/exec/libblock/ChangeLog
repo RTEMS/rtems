@@ -1,0 +1,25 @@
+2002-02-28	Joel Sherrill <joel@OARcorp.com>
+
+	* Submitted by Victor V. Vengerov <vvv@oktet.ru> and merged
+	into the RTEMS source.
+	* ChangeLog, Makefile.am, README, configure.ac, include/Makefile.am,
+	include/rtems/bdbuf.h, include/rtems/blkdev.h, include/rtems/diskdevs.h,
+	include/rtems/ramdisk.h, include/rtems/.cvsignore, include/.cvsignore,
+	src/Makefile.am, src/bdbuf.c, src/blkdev.c, src/diskdevs.c,
+	src/ramdisk.c, src/.cvsignore, .cvsignore: New files.
+
+2001-11-29      Victor V. Vengerov <vvv@oktet.ru>
+        * AVL trees implementation added.
+
+2001-11-16      Victor V. Vengerov <vvv@oktet.ru>
+        * include/rtems/bdbuf.h, src/bdbuf.c(rtems_bdbuf_syncdev): New.
+
+2001-11-07      Victor V. Vengerov <vvv@oktet.ru>
+
+	* ChangeLog: New file.
+        * src/, include/, include/rtems/: New directories.
+        * README, configure.ac, Makefile.am, src/Makefile.am,
+          include/Makefile.am: New files.
+        * include/rtems/bdbuf.h include/rtems/blkdev.h  
+          include/rtems/diskdevs.h include/rtems/ramdisk.h
+          src/bdbuf.c src/blkdev.c src/diskdevs.c src/ramdisk.c: New files.
