@@ -22,13 +22,13 @@ OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += $(LIBC_DEFINES)
 
-${ARCH}/%.$(OBJEXT): src/%.c
+${ARCH}/%.$(OBJEXT): src/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 
 $(LIB): ${OBJS}
 	$(make-library)
 
-all-local: $(PREINSTALL_FILES) ${ARCH} $(LIB)
+all-local: $(PREINSTALL_FILES) $(LIB)
 
 PREINSTALL_FILES =
 

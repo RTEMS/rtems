@@ -130,9 +130,9 @@ OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
 
 AM_CFLAGS += $(LIBC_DEFINES)
 
-all-local: ${ARCH} ${LIB}
+all-local: ${LIB}
 
-${ARCH}/%.$(OBJEXT): src/%.c
+${ARCH}/%.$(OBJEXT): src/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 
 $(LIB): ${OBJS}
