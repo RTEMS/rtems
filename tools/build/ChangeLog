@@ -1,3 +1,7 @@
+2000-08-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* multigen: Fix BARE_CPU_CFLAGS.
+
 2000-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* multigen: Fix usage.

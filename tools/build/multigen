@@ -161,7 +161,7 @@ EOF
 cat << EOF > $cfg
 #  Config file for the bare-$f BSP
 
-BARE_CPU_FLAGS=$flags
+BARE_CPU_CFLAGS=$flags
 BARE_CPU_MODEL=NONE
 
 include \$(RTEMS_ROOT)/make/custom/bare.cfg
