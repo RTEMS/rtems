@@ -67,7 +67,7 @@ extern "C" {
 
 #define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
 #define CPU_STACK_GROWS_UP               TRUE
-#define CPU_STRUCTURE_ALIGNMENT          __attribute__ ((aligned (16)))
+#define CPU_STRUCTURE_ALIGNMENT          /* __attribute__ ((aligned (16))) */
 
 /*
  *  Define what is required to specify how the network to host conversion
@@ -169,9 +169,7 @@ typedef struct {
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
 
-#if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
-  i960ca_PRCB *Prcb;
-#endif
+  i960_PRCB *Prcb;
 }   rtems_cpu_table;
 
 /* variables */
