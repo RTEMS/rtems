@@ -6,7 +6,7 @@
 PGM = $(ARCH)/wd8003.rel
 
 C_FILES = wd8003.c
-wd8003_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
+wd8003_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am

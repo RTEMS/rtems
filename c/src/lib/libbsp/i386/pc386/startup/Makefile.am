@@ -11,10 +11,10 @@ C_FILES = bsplibc.c bsppost.c bspstart.c exit.c idt.c irq.c irq_init.c \
     bootcard.c main.c sbrk.c i386-stub.c i386-stub-glue.c uart.c pcibios.c \
     gnatinstallhandler.c gdb_glue.c tty_drv.c
 
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 S_FILES = ldsegs.S irq_asm.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 startup_rel_OBJECTS = $(C_O_FILES) $(S_O_FILES)
 

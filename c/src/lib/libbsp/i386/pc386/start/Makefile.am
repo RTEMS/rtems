@@ -3,7 +3,7 @@
 ##
 
 S_FILES = start16.S start.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(S_O_FILES)
 
@@ -17,24 +17,24 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 LINKCMDS = $(top_srcdir)/startup/linkcmds
 
-bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
+bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
 bsplib_DATA += $(PROJECT_RELEASE)/lib/start16$(LIB_VARIANT).bin
 
-$(ARCH)/start16.o: start16.S
+$(ARCH)/start16.$(OBJEXT): start16.S
 	$(COMPILE.S) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ $<
 
-$(ARCH)/start16.bin: $(ARCH)/start16.o
-	$(LD) -N -T $(LINKCMDS) -Ttext $(START16ADDR) -e start16 -nostdlib 	  --oformat=elf32-i386 -o $(basename $@).obj $(basename $@).o
-	$(OBJCOPY) -O binary $(basename $@).obj $@
+$(ARCH)/start16.bin: $(ARCH)/start16.$(OBJEXT)
+	$(LD) -N -T $(LINKCMDS) -Ttext $(START16ADDR) -e start16 -nostdlib 	  --oformat=elf32-i386 -o $(basename $@).$(OBJEXT)bj $(basename $@).$(OBJEXT)
+	$(OBJCOPY) -O binary $(basename $@).$(OBJEXT)bj $@
 
 $(PROJECT_RELEASE)/lib/start16$(LIB_VARIANT).bin: $(ARCH)/start16.bin
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(ARCH)/start.o
+$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start16$(LIB_VARIANT).bin \
-    $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
+    $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
 
 all-local: $(ARCH) $(OBJS) $(TMPINSTALL_FILES)
 

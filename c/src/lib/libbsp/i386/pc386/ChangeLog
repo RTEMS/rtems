@@ -1,3 +1,15 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* 3c509/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* clock/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* console/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* ne2000/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* start/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* startup/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* timer/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* wd8003/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* wrapup/Makefile.am: Use .$(OBJEXT) instead of .o.
+
 2002-07-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* startup/ldsegs.S: #include <asm.h>.

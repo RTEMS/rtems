@@ -6,7 +6,7 @@
 PGM = $(ARCH)/ne2000.rel
 
 C_FILES = ne2000.c
-ne2000_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
+ne2000_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am

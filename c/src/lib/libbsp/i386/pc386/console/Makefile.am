@@ -12,7 +12,7 @@ C_FILES = console.c inch.c outch.c defkeymap.c fb_vga.c keyboard.c \
     mouse_parser.c pc_keyb.c ps2_mouse.c serial_mouse.c vgainit.c vt.c
 S_FILES = videoAsm.S
 
-console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o) $(S_FILES:%.S=$(ARCH)/%.o)
+console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am
