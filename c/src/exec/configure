@@ -2287,10 +2287,48 @@ fi
 
 
 if test "$RTEMS_CPU" = "unix" ; then
+  
+echo $ac_n "checking whether $RTEMS_HOST defines union semun""... $ac_c" 1>&6
+echo "configure:2293: checking whether $RTEMS_HOST defines union semun" >&5
+if eval "test \"`echo '$''{'rtems_cv_HAS_UNION_SEMUN'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  cat > conftest.$ac_ext <<EOF
+#line 2298 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+int main() {
+union semun arg ;
+; return 0; }
+EOF
+if { (eval echo configure:2308: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+  rm -rf conftest*
+  rtems_cv_HAS_UNION_SEMUN="yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  rtems_cv_HAS_UNION_SEMUN="no"
+fi
+rm -f conftest*
+
+if test "$rtems_cv_HAS_UNION_SEMUN" = "yes"; then
+    cat >> confdefs.h <<\EOF
+#define HAS_UNION_SEMUN 1
+EOF
+
+fi
+fi
+
+echo "$ac_t""$rtems_cv_HAS_UNION_SEMUN" 1>&6
+
    
 
 echo $ac_n "checking whether $RTEMS_HOST supports System V semaphores""... $ac_c" 1>&6
-echo "configure:2294: checking whether $RTEMS_HOST supports System V semaphores" >&5
+echo "configure:2332: checking whether $RTEMS_HOST supports System V semaphores" >&5
 if eval "test \"`echo '$''{'rtems_cv_sysv_sem'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2299,22 +2337,22 @@ if test "$cross_compiling" = yes; then
   :
 else
   cat > conftest.$ac_ext <<EOF
-#line 2303 "configure"
+#line 2341 "configure"
 #include "confdefs.h"
 
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
-int main () {
-#if !defined(sun) 
-  union semun arg ;
-#else
+#if !HAS_UNION_SEMUN
   union semun {
     int val;
     struct semid_ds *buf;
     ushort *array;
-  } arg;
+  } ;
 #endif
+int main () {
+  union semun arg ;
+
   int id=semget(IPC_PRIVATE,1,IPC_CREAT|0400);
   if (id == -1)
     exit(1);
@@ -2325,7 +2363,7 @@ int main () {
 }
 
 EOF
-if { (eval echo configure:2329: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:2367: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
   rtems_cv_sysv_sem="yes"
 else
@@ -2348,7 +2386,7 @@ echo "$ac_t""$rtems_cv_sysv_sem" 1>&6
    
 
 echo $ac_n "checking whether $RTEMS_HOST supports System V shared memory""... $ac_c" 1>&6
-echo "configure:2352: checking whether $RTEMS_HOST supports System V shared memory" >&5
+echo "configure:2390: checking whether $RTEMS_HOST supports System V shared memory" >&5
 if eval "test \"`echo '$''{'rtems_cv_sysv_shm'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2357,7 +2395,7 @@ if test "$cross_compiling" = yes; then
   :
 else
   cat > conftest.$ac_ext <<EOF
-#line 2361 "configure"
+#line 2399 "configure"
 #include "confdefs.h"
 
 #include <sys/types.h>
@@ -2373,7 +2411,7 @@ int main () {
 }
 
 EOF
-if { (eval echo configure:2377: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:2415: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
   rtems_cv_sysv_shm="yes"
 else
@@ -2396,7 +2434,7 @@ echo "$ac_t""$rtems_cv_sysv_shm" 1>&6
    
 
 echo $ac_n "checking whether $RTEMS_HOST supports System V messages""... $ac_c" 1>&6
-echo "configure:2400: checking whether $RTEMS_HOST supports System V messages" >&5
+echo "configure:2438: checking whether $RTEMS_HOST supports System V messages" >&5
 if eval "test \"`echo '$''{'rtems_cv_sysv_msg'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2405,7 +2443,7 @@ if test "$cross_compiling" = yes; then
   :
 else
   cat > conftest.$ac_ext <<EOF
-#line 2409 "configure"
+#line 2447 "configure"
 #include "confdefs.h"
 
 #include <sys/types.h>
@@ -2421,7 +2459,7 @@ int main () {
 }
 
 EOF
-if { (eval echo configure:2425: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:2463: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
   rtems_cv_sysv_msg="yes"
 else
@@ -2445,7 +2483,7 @@ fi
 
 
 echo $ac_n "checking for newlib""... $ac_c" 1>&6
-echo "configure:2449: checking for newlib" >&5
+echo "configure:2487: checking for newlib" >&5
 if eval "test \"`echo '$''{'rtems_cv_use_newlib'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2454,14 +2492,14 @@ else
     CC=$CC_FOR_TARGET
 
     cat > conftest.$ac_ext <<EOF
-#line 2458 "configure"
+#line 2496 "configure"
 #include "confdefs.h"
 extern int not_required_by_rtems() ;
 int main() {
 not_required_by_rtems()
 ; return 0; }
 EOF
-if { (eval echo configure:2465: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2503: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   rtems_cv_use_newlib="yes"
 else
@@ -2472,14 +2510,14 @@ rm -f conftest*
 
     if test -z "$rtems_cv_use_newlib"; then
       cat > conftest.$ac_ext <<EOF
-#line 2476 "configure"
+#line 2514 "configure"
 #include "confdefs.h"
 extern int rtems_provides_crt0 ;
 int main() {
 rtems_provides_crt0 = 0
 ; return 0; }
 EOF
-if { (eval echo configure:2483: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2521: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   rtems_cv_use_newlib="yes"
 else
@@ -2500,7 +2538,7 @@ RTEMS_USE_NEWLIB="$rtems_cv_use_newlib"
 
 # Check if there is custom/*.cfg for this BSP
 echo $ac_n "checking for make/custom/$RTEMS_BSP.cfg""... $ac_c" 1>&6
-echo "configure:2504: checking for make/custom/$RTEMS_BSP.cfg" >&5
+echo "configure:2542: checking for make/custom/$RTEMS_BSP.cfg" >&5
 if test -r "$srcdir/$RTEMS_TOPdir/make/custom/$RTEMS_BSP.cfg"; then
   echo "$ac_t""yes" 1>&6
 else
@@ -2508,7 +2546,7 @@ else
 fi
 
 echo $ac_n "checking whether BSP supports multiprocessing""... $ac_c" 1>&6
-echo "configure:2512: checking whether BSP supports multiprocessing" >&5
+echo "configure:2550: checking whether BSP supports multiprocessing" >&5
 if eval "test \"`echo '$''{'rtems_cv_HAS_MP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2532,7 +2570,7 @@ fi
 
 
 echo $ac_n "checking whether BSP supports libposix""... $ac_c" 1>&6
-echo "configure:2536: checking whether BSP supports libposix" >&5
+echo "configure:2574: checking whether BSP supports libposix" >&5
 if eval "test \"`echo '$''{'rtems_cv_HAS_POSIX_API'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2561,7 +2599,7 @@ fi
 # find all the Executive Makefiles
 
 echo $ac_n "checking for Makefile.in in score/cpu/$RTEMS_CPU""... $ac_c" 1>&6
-echo "configure:2565: checking for Makefile.in in score/cpu/$RTEMS_CPU" >&5
+echo "configure:2603: checking for Makefile.in in score/cpu/$RTEMS_CPU" >&5
 if test -d $srcdir/score/cpu/$RTEMS_CPU; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;

@@ -53,7 +53,7 @@ $(INSTALLDIRS):
 # (OPTIONAL) Add local stuff here using +=
 #
 
-DEFINES += -DCPU_SYNC_IO $(LIBC_DEFINES)
+DEFINES += -DCPU_SYNC_IO $(LIBC_DEFINES) @DEFS@
 CPPFLAGS += -I$(srcdir)/..
 CFLAGS += $(CFLAGS_OS_V)
 

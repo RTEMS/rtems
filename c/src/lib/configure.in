@@ -44,8 +44,6 @@ dnl if this is an i386, does gas have good code16 support?
 RTEMS_I386_GAS_CODE16
 AM_CONDITIONAL(RTEMS_GAS_CODE16,test "$RTEMS_GAS_CODE16" = "yes");
 
-RTEMS_CHECK_SYSV_UNIX
-
 # find all the Makefiles for the BSPs
 makefiles="$makefiles libbsp/$RTEMS_CPU/Makefile"
 

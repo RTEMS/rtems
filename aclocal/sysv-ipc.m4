@@ -16,26 +16,44 @@ dnl All of the calls use IPC_PRIVATE, so tests will not unintentionally
 dnl modify any existing key sets.  See the man pages for semget, shmget, 
 dnl msgget, semctl, shmctl and msgctl for details.
 
+AC_DEFUN(RTEMS_UNION_SEMUN,
+[
+AC_CACHE_CHECK([whether $RTEMS_HOST defines union semun],
+  rtems_cv_HAS_UNION_SEMUN,
+  [AC_TRY_COMPILE([
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>],
+[union semun arg ;],
+[rtems_cv_HAS_UNION_SEMUN="yes"],
+[rtems_cv_HAS_UNION_SEMUN="no"])
+
+if test "$rtems_cv_HAS_UNION_SEMUN" = "yes"; then
+    AC_DEFINE(HAS_UNION_SEMUN)
+fi])
+])
+
 AC_DEFUN(RTEMS_SYSV_SEM,
 [AC_REQUIRE([AC_PROG_CC]) 
 AC_REQUIRE([RTEMS_CANONICAL_HOST])
 AC_CACHE_CHECK(whether $RTEMS_HOST supports System V semaphores,
 rtems_cv_sysv_sem,
 [
-AC_TRY_RUN([
+AC_TRY_RUN(
+[
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
-int main () {
-#if !defined(sun) 
-  union semun arg ;
-#else
+#if !HAS_UNION_SEMUN
   union semun {
     int val;
     struct semid_ds *buf;
     ushort *array;
-  } arg;
+  } ;
 #endif
+int main () {
+  union semun arg ;
+
   int id=semget(IPC_PRIVATE,1,IPC_CREAT|0400);
   if (id == -1)
     exit(1);
@@ -98,6 +116,7 @@ rtems_cv_sysv_msg="yes", rtems_cv_sysv_msg="no", :)
 AC_DEFUN(RTEMS_CHECK_SYSV_UNIX,
 [AC_REQUIRE([RTEMS_CANONICAL_HOST])
 if test "$RTEMS_CPU" = "unix" ; then
+  RTEMS_UNION_SEMUN
   RTEMS_SYSV_SEM
   if test "$rtems_cv_sysv_sem" != "yes" ; then
     AC_MSG_ERROR([System V semaphores don't work, required by simulator])

@@ -991,25 +991,19 @@ void _CPU_SHM_Init(
 
     if ( is_master_node ) {
       for ( i=0 ; i <= maximum_nodes ; i++ ) {
-#if defined(solaris2)
+#if !HAS_UNION_SEMUN
         union semun {
           int val;
           struct semid_ds *buf;
-          ushort *array;
-        } help;
-
-        help.val = 1;
-        status = semctl( _CPU_SHM_Semid, i, SETVAL, help );
-#elif defined(__linux__) || defined(__FreeBSD__)
-        union semun help;
-
-        help.val = 1;
-        status = semctl( _CPU_SHM_Semid, i, SETVAL, help );
-#elif defined(hpux)
-        status = semctl( _CPU_SHM_Semid, i, SETVAL, 1 );
-#else
-#error "Not a supported unix variant"
+          unsigned short int *array;
+#if defined(__linux__)
+          struct seminfo *__buf;
+#endif          
+        } ;
 #endif
+        union semun help ;
+        help.val = 1;
+        status = semctl( _CPU_SHM_Semid, i, SETVAL, help );
 
         fix_syscall_errno(); /* in case of newlib */
         if ( status == -1 ) {

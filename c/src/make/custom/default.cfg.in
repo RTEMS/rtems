@@ -30,9 +30,10 @@ INLINE=inline
 INLINE_UPCASE=INLINE
 endif
 
+# OBSOLETE: Not used inside the source tree anymore
 # HOST Compiler config file
 # You may also want to specify where the compiler resides here.
-CONFIG.$(HOST_ARCH).CC	 = $(PROJECT_ROOT)/make/compilers/gcc.cfg
+# CONFIG.$(HOST_ARCH).CC	 = $(PROJECT_ROOT)/make/compilers/gcc.cfg
 
 ## Target compiler config file, if any
 CONFIG.$(TARGET_ARCH).CC = $(RTEMS_ROOT)/make/compilers/gcc-target-default.cfg

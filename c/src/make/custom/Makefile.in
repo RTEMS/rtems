@@ -260,11 +260,6 @@ installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
-@MAINTAINER_MODE_TRUE@$(srcdir)/default.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/custom/default.cfg
-@MAINTAINER_MODE_TRUE@	sed -e 's%\$$(RTEMS_BSP)%\@RTEMS_BSP\@%g' \
-@MAINTAINER_MODE_TRUE@	-e 's%\$$(RTEMS_ROOT)/\@RTEMS_BSP\@%$$(RTEMS_ROOT)%g' \
-@MAINTAINER_MODE_TRUE@	< $< >$@
-
 debug-am:
 debug: debug-am
 .PHONY: debug debug-am
