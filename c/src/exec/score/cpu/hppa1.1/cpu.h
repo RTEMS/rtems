@@ -216,26 +216,12 @@ typedef struct {
   void       (*predriver_hook)( void );
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
-
-                 /* HPPA simulator is slow enough; don't waste time
-                  * zeroing memory that is already zero
-                  */
   boolean      do_zero_of_workspace;
-
   unsigned32   interrupt_stack_size;
   unsigned32   extra_mpci_receive_server_stack;
-
-  /*
-   * Control of external interrupts.
-   * We keep a table of external vector numbers (0 - 31)
-   * The table is sorted by priority, that is: the first entry
-   * in the table indicates the vector that is highest priorty.
-   * The handler function is stored in _ISR_Vector_Table[] and
-   * is set by rtems_interrupt_catch()
-   */
-
-  unsigned32   external_interrupts;   /* # of external interrupts we use */
-  unsigned32   external_interrupt[HPPA_EXTERNAL_INTERRUPTS];
+  void *     (*stack_allocate_hook)( unsigned32 );
+  void       (*stack_free_hook)( void * );
+  /* end of fields required on all CPUs */
 
   hppa_rtems_isr_entry spurious_handler;
 
@@ -248,9 +234,6 @@ EXTERN Context_Control_fp  _CPU_Null_fp_context;
 EXTERN unsigned32          _CPU_Default_gr27;
 EXTERN void               *_CPU_Interrupt_stack_low;
 EXTERN void               *_CPU_Interrupt_stack_high;
-
-/* entry points */
-void hppa_external_interrupt_spurious_handler(unsigned32, CPU_Interrupt_frame *);
 
 #endif          /* ! ASM */
 
@@ -285,15 +268,12 @@ void hppa_external_interrupt_spurious_handler(unsigned32, CPU_Interrupt_frame *)
 
 /*
  * HPPA has 32 interrupts, then 32 external interrupts
- * Rtems (_ISR_Vector_Table) is aware of the first 64
- * A BSP may reserve more.
+ * Rtems (_ISR_Vector_Table) is aware ONLY of the first 32
+ * The BSP is aware of the external interrupts and possibly more.
  *
- * External interrupts all come thru the same vector (4)
- * The external handler is the only person aware of the other
- * interrupts (genie, rhino, etc)
  */
 
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS      (HPPA_INTERRUPT_MAX)
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS      (HPPA_INTERNAL_INTERRUPTS)
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /*

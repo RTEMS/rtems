@@ -19,116 +19,51 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
+void hppa_cpu_halt(unsigned32 the_error);
 
-void hppa_external_interrupt_initialize(void);
-void hppa_external_interrupt_enable(unsigned32);
-void hppa_external_interrupt_disable(unsigned32);
-void hppa_external_interrupt(unsigned32, CPU_Interrupt_frame *);
-void hppa_cpu_halt(unsigned32);
 
-/*
- * The first level interrupt handler for first 32 interrupts/traps.
- * Indexed by vector; generally each entry is _Generic_ISR_Handler.
- * Some TLB traps may have their own first level handler.
+/*PAGE
+ *
+ *  _CPU_ISR_install_raw_handler
  */
-
-extern void _Generic_ISR_Handler(void);
-unsigned32 HPPA_first_level_interrupt_handler[HPPA_INTERNAL_INTERRUPTS];
-
-/*  _CPU_Initialize
- *
- *  This routine performs processor dependent initialization.
- *
- *  INPUT PARAMETERS:
- *    cpu_table       - CPU table to initialize
- *    thread_dispatch - address of disptaching routine
- *
- */
-
-void _CPU_Initialize(
-  rtems_cpu_table  *cpu_table,
-  void      (*thread_dispatch)      /* ignored on this CPU */
+ 
+void _CPU_ISR_install_raw_handler(
+  unsigned32  vector,
+  proc_ptr    new_handler,
+  proc_ptr   *old_handler
 )
 {
-    register unsigned8  *fp_context;
-    unsigned32 iva;
-    unsigned32 iva_table;
-    int i;
+  /*
+   *  This is unsupported.  For HPPA this function is handled by BSP
+   */
 
-    extern void IVA_Table(void);
-
-    /*
-     * XXX; need to setup fpsr smarter perhaps
-     */
-
-    fp_context = (unsigned8*) &_CPU_Null_fp_context;
-    for (i=0 ; i<sizeof(Context_Control_fp); i++)
-        *fp_context++ = 0;
-
-    /*
-     *  Set _CPU_Default_gr27 here so it will hopefully be the correct
-     *  global data pointer for the entire system.
-     */
-
-    asm volatile( "stw   %%r27,%0" : "=m" (_CPU_Default_gr27): );
-
-    /*
-     * Init the first level interrupt handlers
-     */
-
-    for (i=0; i <= HPPA_INTERNAL_INTERRUPTS; i++)
-        HPPA_first_level_interrupt_handler[i] = (unsigned32) _Generic_ISR_Handler;
-
-    /*
-     * Init the 2nd level interrupt handlers
-     */
-
-    for (i=0; i <= CPU_INTERRUPT_NUMBER_OF_VECTORS; i++)
-        _ISR_Vector_table[i] = (ISR_Handler_entry) hppa_cpu_halt;
-
-    /*
-     * Stabilize the interrupt stuff
-     */
-
-    (void) hppa_external_interrupt_initialize();
-
-    /*
-     * Set the IVA to point to physical address of the IVA_Table
-     */
-
-    iva_table = (unsigned32) IVA_Table;
-#if defined(hppa1_1)
-    /*
-     * HACK:  (from PA72000 TRM, page 4-19)
-     * "The hardware TLB miss handler will never attempt to service
-     *  a non-access TLB miss or a TLB protection violation.  It
-     *  will only attempt to service TLB accesses that would cause
-     *  Trap Numbers 6 (Instruction TLB miss) and 15 (Data TLB miss)."
-     *
-     * The LPA instruction is used to translate a virtual address to
-     * a physical address, however, if the requested virtual address
-     * is not currently resident in the TLB, the hardware TLB miss
-     * handler will NOT insert it.  In this situation Trap Number
-     * #17 is invoked (Non-access Data TLB miss fault).
-     *
-     * To work around this, a dummy data access is first performed
-     * to the virtual address prior to the LPA.  The dummy access
-     * causes the TLB entry to be inserted (if not already present)
-     * and then the following LPA instruction will not generate
-     * a non-access data TLB miss fault.
-     *
-     * It is unclear whether or not this behaves the same way for
-     * the PA8000.
-     * 
-     */
-    iva = *(volatile unsigned32 *)iva_table;  /* dummy access */
-#endif
-
-    HPPA_ASM_LPA(0, iva_table, iva);
-    set_iva(iva);
-
-    _CPU_Table = *cpu_table;
+  _CPU_Fatal_halt( 0xdeaddead );
 }
+
+
+
+/*
+ * This is the default handler which is called if
+ * _CPU_ISR_install_vector() has not been called for the
+ * specified vector.  It simply forwards onto the spurious
+ * handler defined in the cpu-table.
+ */
+
+static ISR_Handler
+hppa_interrupt_report_spurious(ISR_Vector_number vector,
+                               void* rtems_isr_frame) /* HPPA extension */
+{
+
+    /*
+     * If the CPU table defines a spurious_handler, then
+     * call it.  If the handler returns halt.
+     */
+    if ( _CPU_Table.spurious_handler )
+        _CPU_Table.spurious_handler(vector, rtems_isr_frame);
+    
+    hppa_cpu_halt(vector);
+}
+
 
 /*PAGE
  *
@@ -146,28 +81,10 @@ unsigned32 _CPU_ISR_Get_level(void)
 
 /*PAGE
  *
- *  _CPU_ISR_install_raw_handler
- */
- 
-void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-)
-{
-  /*
-   *  This is unsupported.
-   */
-
-  _CPU_Fatal_halt( 0xdeaddead );
-}
-
-/*PAGE
- *
  *  _CPU_ISR_install_vector
  *
  *  This kernel routine installs the RTEMS handler for the
- *  specified vector.
+ *  specified vector.  The handler is a C callable routine.
  *
  *  Input parameters:
  *    vector      - interrupt vector number
@@ -176,12 +93,6 @@ void _CPU_ISR_install_raw_handler(
  *
  *  Output parameters:  NONE
  *
- */
-
-/*
- * HPPA has 8w for each vector instead of an address to jump to.
- * We put the actual ISR address in '_ISR_vector_table'.  This will
- * be pulled by the code in the vector.
  */
 
 void _CPU_ISR_install_vector(
@@ -193,156 +104,55 @@ void _CPU_ISR_install_vector(
     *old_handler = _ISR_Vector_table[vector];
 
     _ISR_Vector_table[vector] = new_handler;
-
-    if (vector >= HPPA_INTERRUPT_EXTERNAL_BASE)
-    {
-        unsigned32 external_vector;
-
-        external_vector = vector - HPPA_INTERRUPT_EXTERNAL_BASE;
-        if (new_handler)
-            hppa_external_interrupt_enable(external_vector);
-        else
-            /* XXX this can never happen due to _ISR_Is_valid_user_handler */
-            hppa_external_interrupt_disable(external_vector);
-    }
 }
 
-
-/*
- * Support for external and spurious interrupts on HPPA
+/*  _CPU_Initialize
  *
- *  TODO:
- *    Count interrupts
- *    make sure interrupts disabled properly
+ *  This routine performs processor dependent initialization.
+ *
+ *  INPUT PARAMETERS:
+ *    cpu_table       - CPU table to initialize
+ *    thread_dispatch - address of disptaching routine
+ *
  */
 
-#define DISMISS(mask)           set_eirr(mask)
-#define DISABLE(mask)           set_eiem(get_eiem() & ~(mask))
-#define ENABLE(mask)            set_eiem(get_eiem() | (mask))
-#define VECTOR_TO_MASK(v)       (1 << (31 - (v)))
-
-/*
- * Init the external interrupt scheme
- * called by bsp_start()
- */
-
-void
-hppa_external_interrupt_initialize(void)
+void _CPU_Initialize(
+  rtems_cpu_table  *cpu_table,
+  void      (*thread_dispatch)      /* ignored on this CPU */
+)
 {
-    proc_ptr ignore;
+    register unsigned8  *fp_context;
+    int i;
+    proc_ptr   old_handler;
 
-    /* mark them all unused */
-    DISABLE(~0);
-    DISMISS(~0);
+    /*
+     * XXX; need to setup fpsr smarter perhaps
+     */
 
-    /* install the external interrupt handler */
-    _CPU_ISR_install_vector(
-        HPPA_INTERRUPT_EXTERNAL_INTERRUPT,
-	(proc_ptr)hppa_external_interrupt, &ignore
-);
+    fp_context = (unsigned8*) &_CPU_Null_fp_context;
+    for (i=0 ; i<sizeof(Context_Control_fp); i++)
+        *fp_context++ = 0;
+
+    /*
+     *  Set _CPU_Default_gr27 here so it will hopefully be the correct
+     *  global data pointer for the entire system.
+     */
+
+    asm volatile( "stw   %%r27,%0" : "=m" (_CPU_Default_gr27): );
+
+    /*
+     * Init the 2nd level interrupt handlers
+     */
+
+    for (i=0; i < CPU_INTERRUPT_NUMBER_OF_VECTORS; i++)
+        _CPU_ISR_install_vector(i,
+                                hppa_interrupt_report_spurious,
+                                &old_handler);
+
+    _CPU_Table = *cpu_table;
+    
 }
 
-/*
- * Enable a specific external interrupt
- */
-
-void
-hppa_external_interrupt_enable(unsigned32 v)
-{
-    unsigned32 isrlevel;
-
-    _CPU_ISR_Disable(isrlevel);
-    ENABLE(VECTOR_TO_MASK(v));
-    _CPU_ISR_Enable(isrlevel);
-}
-
-/*
- * Does not clear or otherwise affect any pending requests
- */
-
-void
-hppa_external_interrupt_disable(unsigned32 v)
-{
-    unsigned32 isrlevel;
-
-    _CPU_ISR_Disable(isrlevel);
-    DISABLE(VECTOR_TO_MASK(v));
-    _CPU_ISR_Enable(isrlevel);
-}
-
-void
-hppa_external_interrupt_spurious_handler(unsigned32           vector,
-                                         CPU_Interrupt_frame *iframe)
-{
-/* XXX should not be printing :)
-    printf("spurious external interrupt: %d at pc 0x%x; disabling\n",
-       vector, iframe->Interrupt.pcoqfront);
-*/
-}
-
-void
-hppa_external_interrupt_report_spurious(unsigned32           spurious_mask,
-                                        CPU_Interrupt_frame *iframe)
-{
-    int v;
-    for (v=0; v < HPPA_EXTERNAL_INTERRUPTS; v++)
-        if (VECTOR_TO_MASK(v) & spurious_mask)
-        {
-            DISMISS(VECTOR_TO_MASK(v));
-            DISABLE(VECTOR_TO_MASK(v));
-            hppa_external_interrupt_spurious_handler(v, iframe);
-        }
-    DISMISS(spurious_mask);
-}
-
-
-/*
- * External interrupt handler.
- * This is installed as cpu interrupt handler for
- * HPPA_INTERRUPT_EXTERNAL_INTERRUPT. It vectors out to
- * specific external interrupt handlers.
- */
-
-void
-hppa_external_interrupt(unsigned32           vector,
-                        CPU_Interrupt_frame *iframe)
-{
-    unsigned32   mask;
-    unsigned32  *vp, *max_vp;
-    unsigned32   external_vector;
-    unsigned32   global_vector;
-    hppa_rtems_isr_entry handler;
-
-    max_vp = &_CPU_Table.external_interrupt[_CPU_Table.external_interrupts];
-    while ( (mask = (get_eirr() & get_eiem())) )
-    {
-        for (vp = _CPU_Table.external_interrupt; (vp < max_vp) && mask; vp++)
-        {
-            unsigned32 m;
-
-            external_vector = *vp;
-            global_vector = external_vector + HPPA_INTERRUPT_EXTERNAL_BASE;
-            m = VECTOR_TO_MASK(external_vector);
-            handler = (hppa_rtems_isr_entry) _ISR_Vector_table[global_vector];
-            if ((m & mask) && handler)
-            {
-                DISMISS(m);
-                mask &= ~m;
-                handler(global_vector, iframe);
-            }
-        }
-
-        if (mask != 0) {
-            if ( _CPU_Table.spurious_handler )
-            {
-                handler = (hppa_rtems_isr_entry) _CPU_Table.spurious_handler;
-                handler(mask, iframe);
-            }
-            else
-                hppa_external_interrupt_report_spurious(mask, iframe);
-        }
-    }
-}
 
 /*
  * Halt the system.
@@ -351,7 +161,16 @@ hppa_external_interrupt(unsigned32           vector,
  * XXX
  * Later on, this will allow us to return to the prom.
  * For now, we just ignore 'type_of_halt'
+ *
+ * XXX
+ * NOTE: for gcc, this function must be at the bottom
+ * of the file, that is because if it is at the top
+ * of the file, gcc will inline it's calls.  Since
+ * the function uses the HPPA_ASM_LABEL() macro, when
+ * gcc inlines it, you get two definitions of the same
+ * label name, which is an assembly error.
  */
+
 
 void
 hppa_cpu_halt(unsigned32 the_error)
@@ -360,6 +179,11 @@ hppa_cpu_halt(unsigned32 the_error)
 
     _CPU_ISR_Disable(isrlevel);
 
+    /*
+     * XXXXX NOTE: This label is only needed that that when
+     * the simulator stops, it shows the label name specified
+     */
     HPPA_ASM_LABEL("_hppa_cpu_halt");
-    HPPA_ASM_BREAK(1, 0);
+    HPPA_ASM_BREAK(0, 0);
 }
+

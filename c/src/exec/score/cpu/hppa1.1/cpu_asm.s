@@ -1,5 +1,3 @@
-# 	@(#)cpu_asm.S	1.7 - 95/09/21
-# 	
 # 
 # TODO: 
 #       Context_switch needs to only save callee save registers
@@ -30,7 +28,6 @@
 #include <rtems/score/hppa.h>
 #include <rtems/score/cpu_asm.h>
 #include <rtems/score/cpu.h>
-
 #include <rtems/score/offsets.h>
 
 	.SPACE $PRIVATE$
@@ -64,20 +61,12 @@ isr_r8             .reg    %cr26
 
 
 #  PAGE^L
-#  void __Generic_ISR_Handler()
+#  void _Generic_ISR_Handler()
 #
 #  This routine provides the RTEMS interrupt management.
 #
-#  NOTE:
-#    Upon entry, the stack will contain a stack frame back to the
-#    interrupted task.  If dispatching is enabled, this is the
-#    outer most interrupt, (and a context switch is necessary or
-#    the current task has signals), then set up the stack to
-#    transfer control to the interrupt dispatcher.
-#
-#
 #   We jump here from the interrupt vector.
-#   The hardware has done some stuff for us:
+#   The HPPA hardware has done some stuff for us:
 #       PSW saved in IPSW
 #       PSW set to 0
 #       PSW[E] set to default (0)
@@ -89,117 +78,30 @@ isr_r8             .reg    %cr26
 #       registers GR  1,8,9,16,17,24,25 copied to shadow regs
 #                 SHR 0 1 2  3  4  5  6
 #
-#   Our vector stub did the following
-#       placed vector number is in r1
+#   Our vector stub (in the BSP) MUST have done the following:  
 #
-#        stub
-#            r1 <- vector number
-#            save ipsw under rock
-#            ipsw = ipsw & ~1    --  disable ints
-#            save qregs under rock
-#            qra = _Generic_ISR_handler
-#            rfi
+#   a) Saved the original %r9 into %isr_r9 (%cr25)
+#   b) Placed the vector number in %r9
+#   c) Was allowed to also destroy $isr_r8 (%cr26),
+#      but the stub was NOT allowed to destroy any other registers.
 #
-################################################
-
-#  Distinct Interrupt Entry Points
+#   The typical stub sequence (in the BSP) should look like this:
 #
-#  The following macro and the 32 instantiations of the macro
-#  are necessary to determine which interrupt vector occurred.
+#   a)     mtctl   %r9,isr_r9     ; (save r9 in cr25)
+#   b)     ldi     vector,%r9     ; (load constant vector number in r9)
+#   c)     mtctl   %r8,isr_r8     ; (save r8 in cr26)
+#   d)     ldil    L%MY_BSP_first_level_interrupt_handler,%r8
+#   e)     ldo     R%MY_BSP_first_level_interrupt_handler(%r8),%r8
+#                                 ; (point to BSP raw handler table)
+#   f)     ldwx,s  %r9(%r8),%r8   ; (load value from raw handler table)
+#   g)     bv      0(%r8)         ; (call raw handler: _Generic_ISR_Handler)
+#   h)     mfctl   isr_r8,%r8     ; (restore r8 from cr26 in delay slot)
 #
-#  r9 is loaded with the vector number and then we jump to
-#    the first level interrupt handler.  In most cases this
-#    is _Generic_ISR_Handler.  In a few cases (such as TLB misc)
-#    it may be to some other entry point.
+#   Optionally, steps (c) thru (h) _could_ be replaced with a single
+#          bl,n    _Generic_ISR_Handler,%r0
 #
-
-# table for first level interrupt handlers
-        .import   HPPA_first_level_interrupt_handler, data
-
-#define THANDLER(vector) \
-        mtctl   %r9,  isr_r9 ! \
-        mtctl   %r8,  isr_r8 ! \
-        ldi     vector, %r9  ! \
-        ldil    L%HPPA_first_level_interrupt_handler,%r8 ! \
-        ldo     R%HPPA_first_level_interrupt_handler(%r8),%r8 ! \
-        ldwx,s  %r9(%r8),%r8 ! \
-        bv      0(%r8) ! \
-        mfctl   isr_r8, %r8
-
-        .align 4096
-	.EXPORT IVA_Table,ENTRY,PRIV_LEV=0
-IVA_Table:
-	.PROC
-	.CALLINFO FRAME=0,NO_CALLS
-	.ENTRY
-
-        THANDLER(0)     	/* unused */
-
-        THANDLER(HPPA_INTERRUPT_HIGH_PRIORITY_MACHINE_CHECK)
-
-        THANDLER(HPPA_INTERRUPT_POWER_FAIL)
-
-        THANDLER(HPPA_INTERRUPT_RECOVERY_COUNTER)
-
-        THANDLER(HPPA_INTERRUPT_EXTERNAL_INTERRUPT)
-
-        THANDLER(HPPA_INTERRUPT_LOW_PRIORITY_MACHINE_CHECK)
-
-        THANDLER(HPPA_INTERRUPT_INSTRUCTION_TLB_MISS)
-
-        THANDLER(HPPA_INTERRUPT_INSTRUCTION_MEMORY_PROTECTION)
-
-        THANDLER(HPPA_INTERRUPT_ILLEGAL_INSTRUCTION)
-
-        THANDLER(HPPA_INTERRUPT_BREAK_INSTRUCTION)
-
-        THANDLER(HPPA_INTERRUPT_PRIVILEGED_OPERATION)
-
-        THANDLER(HPPA_INTERRUPT_PRIVILEGED_REGISTER)
-
-        THANDLER(HPPA_INTERRUPT_OVERFLOW)
-
-        THANDLER(HPPA_INTERRUPT_CONDITIONAL)
-
-        THANDLER(HPPA_INTERRUPT_ASSIST_EXCEPTION)
-
-        THANDLER(HPPA_INTERRUPT_DATA_TLB_MISS)
-
-        THANDLER(HPPA_INTERRUPT_NON_ACCESS_INSTRUCTION_TLB_MISS)
-
-        THANDLER(HPPA_INTERRUPT_NON_ACCESS_DATA_TLB_MISS)
-
-        THANDLER(HPPA_INTERRUPT_DATA_MEMORY_PROTECTION)
-
-        THANDLER(HPPA_INTERRUPT_DATA_MEMORY_BREAK)
-
-        THANDLER(HPPA_INTERRUPT_TLB_DIRTY_BIT)
-
-        THANDLER(HPPA_INTERRUPT_PAGE_REFERENCE)
-
-        THANDLER(HPPA_INTERRUPT_ASSIST_EMULATION)
-
-        THANDLER(HPPA_INTERRUPT_HIGHER_PRIVILEGE_TRANSFER)
-
-        THANDLER(HPPA_INTERRUPT_LOWER_PRIVILEGE_TRANSFER)
-
-        THANDLER(HPPA_INTERRUPT_TAKEN_BRANCH)
-
-        THANDLER(HPPA_INTERRUPT_DATA_MEMORY_ACCESS_RIGHTS)
-
-        THANDLER(HPPA_INTERRUPT_DATA_MEMORY_PROTECTION_ID)
-
-        THANDLER(HPPA_INTERRUPT_UNALIGNED_DATA_REFERENCE)
-
-        THANDLER(HPPA_INTERRUPT_PERFORMANCE_MONITOR)
-
-        THANDLER(HPPA_INTERRUPT_INSTRUCTION_DEBUG)
-
-        THANDLER(HPPA_INTERRUPT_DATA_DEBUG)
-
-        .EXIT
-        .PROCEND
-
+#
+#
 	.EXPORT _Generic_ISR_Handler,ENTRY,PRIV_LEV=0
 _Generic_ISR_Handler:
 	.PROC
@@ -235,8 +137,8 @@ _Generic_ISR_Handler:
 # At this point the following registers are damaged wrt the interrupt
 #  reg    current value        saved value
 # ------------------------------------------------
-#  arg0   scratch               isr_arg0  (ctl)
-#  r9     vector number         isr_r9    (ctl)
+#  arg0   scratch               isr_arg0  (cr24)
+#  r9     vector number         isr_r9    (cr25)
 #
 # Point to beginning of integer context and
 # save the integer context
@@ -277,8 +179,8 @@ _Generic_ISR_Handler:
 # The following items are currently wrong in the integer context
 #  reg    current value        saved value
 # ------------------------------------------------
-#  arg0   scratch               isr_arg0  (ctl)
-#  r9     vector number         isr_r9    (ctl)
+#  arg0   scratch               isr_arg0  (cr24)
+#  r9     vector number         isr_r9    (cr25)
 #
 # Fix them
 
@@ -377,6 +279,9 @@ stack_done:
         stw       %r6, 0(%r4)
 
 # load address of user handler
+# Note:  No error checking is done, it is assumed that the
+#        vector table contains a valid address or a stub
+#        spurious handler.
         .import   _ISR_Vector_table,data
 	ldil	  L%_ISR_Vector_table,%r8
 	ldo	  R%_ISR_Vector_table(%r8),%r8
@@ -388,7 +293,7 @@ stack_done:
 # NOTE:  can not use 'bl' since it uses "pc-relative" addressing
 #    and we are using a hard coded address from a table
 #  So... we fudge r2 ourselves (ala dynacall)
-#
+#  arg0 = vector number, arg1 = ptr to rtems_interrupt_frame
         copy      %r9, %r26
         .call  ARGW0=GR, ARGW1=GR
         blr       %r0, rp
@@ -404,29 +309,32 @@ post_user_interrupt_handler:
         rsm        HPPA_PSW_I + HPPA_PSW_R, %r0
         ldw        -4(sp), sp
 
-#    r3  -- &_ISR_Nest_level
+#    r3  -- (most of) &_ISR_Nest_level
 #    r5  -- value _ISR_Nest_level
-#    r4  -- &_Thread_Dispatch_disable_level
+#    r4  -- (most of) &_Thread_Dispatch_disable_level
 #    r6  -- value _Thread_Dispatch_disable_level
+#    r7  -- (most of) &_ISR_Signals_to_thread_executing
+#    r8  -- value _ISR_Signals_to_thread_executing
 
  	.import   _ISR_Nest_level,data
 	ldil	  L%_ISR_Nest_level,%r3
-	ldo	  R%_ISR_Nest_level(%r3),%r3
-	ldw	  0(%r3),%r5
+	ldw	  R%_ISR_Nest_level(%r3),%r5
 
 	.import   _Thread_Dispatch_disable_level,data
 	ldil	  L%_Thread_Dispatch_disable_level,%r4
-	ldo	  R%_Thread_Dispatch_disable_level(%r4),%r4
-	ldw	  0(%r4), %r6
+	ldw	  R%_Thread_Dispatch_disable_level(%r4),%r6
+
+	.import    _ISR_Signals_to_thread_executing,data
+	ldil	   L%_ISR_Signals_to_thread_executing,%r7
 
 # decrement isr nest level
 	addi      -1, %r5, %r5
-        stw       %r5, 0(%r3)
+        stw       %r5, R%_ISR_Nest_level(%r3)
 
 # decrement dispatch disable level counter and, if not 0, go on
         addi       -1,%r6,%r6
         comibf,=   0,%r6,isr_restore
-        stw        %r6, 0(%r4)
+        stw        %r6, R%_Thread_Dispatch_disable_level(%r4)
 
 # check whether or not a context switch is necessary
 	.import    _Context_Switch_necessary,data
@@ -436,9 +344,7 @@ post_user_interrupt_handler:
 
 # check whether or not a context switch is necessary because an ISR
 #    sent signals to the interrupted task
-	.import    _ISR_Signals_to_thread_executing,data
-	ldil	   L%_ISR_Signals_to_thread_executing,%r8
-	ldw	   R%_ISR_Signals_to_thread_executing(%r8),%r8
+	ldw	   R%_ISR_Signals_to_thread_executing(%r7),%r8
 	comibt,=,n 0,%r8,isr_restore
 
 
@@ -450,6 +356,8 @@ post_user_interrupt_handler:
 #
 
 ISR_dispatch:
+	stw	   %r0, R%_ISR_Signals_to_thread_executing(%r7)
+
         ssm        HPPA_PSW_I, %r0
 
         .import    _Thread_Dispatch,code

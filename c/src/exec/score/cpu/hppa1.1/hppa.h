@@ -1,7 +1,4 @@
 /*
- * @(#)hppa.h	1.17 - 95/12/13
- * 
- *
  *  Description:
  *		
  * Definitions for HP PA Risc
