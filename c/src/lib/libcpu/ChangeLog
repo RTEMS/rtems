@@ -1,3 +1,17 @@
+2004-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* README: i960 obsoleted.
+	* i960/.cvsignore, i960/ChangeLog, i960/Makefile.am, i960/configure.ac,
+	i960/i960ca/.cvsignore, i960/i960ca/Makefile.am,
+	i960/i960ca/cpu_install_intr_stack.c,
+	i960/i960ca/cpu_install_raw_isr.c, i960/i960ka/.cvsignore,
+	i960/i960ka/Makefile.am, i960/i960ka/cpu_install_intr_stack.c,
+	i960/i960ka/cpu_install_raw_isr.c, i960/i960rp/.cvsignore,
+	i960/i960rp/Makefile.am, i960/i960rp/cpu_install_intr_stack.c,
+	i960/i960rp/cpu_install_raw_isr.c, i960/include/i960CA.h,
+	i960/include/i960HA.h, i960/include/i960JX_RP_common.h,
+	i960/include/i960KA.h, i960/include/i960RP.h: Removed.
+
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
 	* mips64orion/.cvsignore, mips64orion/ChangeLog,
