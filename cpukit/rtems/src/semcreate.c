@@ -129,8 +129,8 @@ rtems_status_code rtems_semaphore_create(
   the_semaphore->attribute_set = attribute_set;
 
   /*
-   *  If it is not a counting, semaphore, then it is either a 
-   *  simple binary semaphore or a more powerful lmutex style binary
+   *  If it is not a counting semaphore, then it is either a 
+   *  simple binary semaphore or a more powerful mutex style binary
    *  semaphore.
    */
 
