@@ -33,12 +33,13 @@ all-local: $(PREINSTALL_FILES) $(console_rel_OBJECTS) $(PGM)
 
 EXTRA_DIST = $(C_FILES) $(S_FILES)
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/keyboard.h: keyboard.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/keyboard.h
@@ -61,5 +62,6 @@ $(PROJECT_INCLUDE)/rtems/fb_vga.h: fb_vga.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fb_vga.h
 
 CLEANFILES = $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/../../../../automake/local.am
