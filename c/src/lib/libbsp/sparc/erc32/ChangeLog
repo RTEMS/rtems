@@ -1,3 +1,7 @@
+2001-08-16	Joel Sherrill <joel@OARcorp.com>
+
+	* tools/runtest.in: Recognize debug variant of monitor test.
+
 2001-05-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Add bspopts.h.
