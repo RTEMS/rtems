@@ -46,7 +46,7 @@
 #include <rtems.h>
 
 #include "error.h"
-#include "assoc.h"
+#include <rtems/assoc.h>
 
 #include <stdio.h>
 #include <stdarg.h>
