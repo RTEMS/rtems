@@ -264,8 +264,11 @@ rn_match(v_arg, head)
 	/*
 	 * This extra grot is in case we are explicitly asked
 	 * to look up the default.  Ugh!
+	 *
+	 * Never return the root node itself, it seems to cause a
+	 * lot of confusion.
 	 */
-	if ((t->rn_flags & RNF_ROOT) && t->rn_dupedkey)
+	if (t->rn_flags & RNF_ROOT)
 		t = t->rn_dupedkey;
 	return t;
 on1:

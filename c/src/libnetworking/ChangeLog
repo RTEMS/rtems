@@ -1,3 +1,9 @@
+2002-02-27	Eric Norum <eric.norum@usask.ca>
+
+	* net/radix.c: Properly handle fetching the default route when there
+	is no route.  This was a bug in the original FreeBSD code and this
+	fix is from an updated version of their code.
+
 2001-02-01	Mike Siers <mikes@poliac.com>
 
 	* pppd/rtemspppd.c (rtems_pppd_disconnect): Modified to avoid bringing
