@@ -1,3 +1,7 @@
+2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: RTEMS_TOP([../../../..]).
+
 2004-02-26	Andreas Karlsson <andreas.karlsson@space.se>
 
 	* cpu_asm.S: Close window while restoring interrupted task state which

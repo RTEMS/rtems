@@ -1,3 +1,7 @@
+2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: RTEMS_TOP([../../../..]).
+
 2004-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 561/rtems
