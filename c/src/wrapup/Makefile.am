@@ -39,7 +39,7 @@ SRCS += ../libnetworking/rtems_telnetd/libtelnetd$(LIB_VARIANT).a
 endif
 
 if HAS_RDBG
-SRCS += ../librdbg/src/librdbg$(LIB_VARIANT).a
+SRCS += ../librdbg/librdbg$(LIB_VARIANT).a
 endif
 
 # FIXME: ATM, there is no libcpu.a, anymore.

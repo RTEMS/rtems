@@ -115,9 +115,10 @@ RTEMS_CANONICALIZE_TOOLS
 AC_SUBST(CUSTOM_CFG_FILES)
 AC_SUBST(cfg_dir)
 
+RTEMS_CHECK_MULTIPROCESSING
+
 ## Configure ${srcdir}/../../cpukit as cpukit/ if multilibs are disabled
 AS_IF([test x"$multilib" = x"no"],[
-  RTEMS_CHECK_MULTIPROCESSING
   AC_CONFIG_COMMANDS_POST([
     if test x"$multilib" = x"no"; then
     RTEMS_CONFIG_SUBDIR([cpukit],[../../cpukit],
@@ -249,8 +250,6 @@ libnetworking/rtems_telnetd/Makefile
 libnetworking/rtems_webserver/Makefile
 
 librdbg/Makefile
-librdbg/include/Makefile
-librdbg/src/Makefile
 
 libchip/Makefile
 

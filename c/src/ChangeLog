@@ -1,3 +1,13 @@
+2004-02-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* librdbg/Makefile.am: Merge-in librdbg/include/Makefile.am,
+	librdbg/src/Makefile.am.
+	* librdbg/include/Makefile.am, librdbg/src/Makefile.am: Remove.
+	* configure.ac: Reflect changes above. 
+	Unconditionally apply RTEMS_CHECK_MULTIPROCESSING.
+	* wrapup/Makefile.am: Reflect changes above.
+	* Makefile.am: Add DIST_SUBDIRS = @BSP_SUBDIRS@.
+
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/check-rdbg.m4: Don't AC_SUBST(HAS_RDBG).
