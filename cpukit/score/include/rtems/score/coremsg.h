@@ -39,21 +39,14 @@ typedef void ( *CORE_message_queue_API_mp_support_callout )(
 /*
  *  The following defines the data types needed to manipulate
  *  the contents of message buffers.
- *  Since msgs are variable length we just make a ptr to 1.
+ *
+ *  NOTE:  The buffer field is normally longer than a single unsigned32.
+ *         but since messages are variable length we just make a ptr to 1.  
  */
  
 typedef struct {
     unsigned32  size;
- 
-#ifndef __cplusplus
-                               /* NOTE:   [0] is gcc specific,
-                                *   but specifically disallowed by ANSI STD C++
-                                * g++ warns about it, so we #ifdef it out to
-                                * get rid of warnings when compiled by g++.
-                                */
-    unsigned32  buffer[0];
-#endif
- 
+    unsigned32  buffer[1];
 } CORE_message_queue_Buffer;
  
 /*
