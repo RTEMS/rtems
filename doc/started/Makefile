@@ -36,8 +36,8 @@ ps: dirs $(PROJECT).ps
 pdf: dirs $(PROJECT).pdf
 	
 $(PROJECT).pdf: $(FILES)
-	$(TEXI2PDF) $(PROJECT).texi
-	cp $(PROJECT).pdf $(PDF_INSTALL)
+	#$(TEXI2PDF) $(PROJECT).texi
+	#cp $(PROJECT).pdf $(PDF_INSTALL)
 	
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
@@ -91,7 +91,7 @@ html: dirs $(FILES)
  	    $(PROJECT).texi
 
 clean:
-	rm -f *.o $(PROG) *.txt core *.pdf
+	rm -f *.o $(PROG) *.txt core $(PROJECT).pdf
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* $(GENERATED_FILES)
 	rm -f *.fixed _*
