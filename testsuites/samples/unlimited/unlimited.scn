@@ -1,0 +1,337 @@
+
+*** UNLIMITED TASK TEST ***
+
+ TEST1 : auto-extend disabled.
+ TEST1 : creating task 'aa00', number =   0, id = 08010002, starting, task 0 has started.
+ TEST1 : creating task 'aa01', number =   1, id = 08010003, starting, task 1 has started.
+ TEST1 : creating task 'aa02', number =   2, id = 08010004, starting, task 2 has started.
+ TEST1 : creating task 'aa03', number =   3, id = 08010005, starting, task 3 has started.
+ TEST1 : creating task 'aa04', failure, too many.
+ TEST1 : signal task 08010002 to delete, task 0 ending.
+ TEST1 : signal task 08010003 to delete, task 1 ending.
+ TEST1 : signal task 08010004 to delete, task 2 ending.
+ TEST1 : signal task 08010005 to delete, task 3 ending.
+ TEST1 : completed
+
+ TEST2 : re-allocate of index numbers, and a block free'ed and one inactive
+ TEST2 : creating task 'aa00', number =   0, id = 08010002, starting, task 0 has started.
+ TEST2 : creating task 'aa01', number =   1, id = 08010003, starting, task 1 has started.
+ TEST2 : creating task 'aa02', number =   2, id = 08010004, starting, task 2 has started.
+ TEST2 : creating task 'aa03', number =   3, id = 08010005, starting, task 3 has started.
+ TEST2 : creating task 'aa04', number =   4, id = 08010006, starting, task 4 has started.
+ TEST2 : creating task 'aa05', number =   5, id = 08010007, starting, task 5 has started.
+ TEST2 : creating task 'aa06', number =   6, id = 08010008, starting, task 6 has started.
+ TEST2 : creating task 'aa07', number =   7, id = 08010009, starting, task 7 has started.
+ TEST2 : creating task 'aa08', number =   8, id = 0801000a, starting, task 8 has started.
+ TEST2 : creating task 'aa09', number =   9, id = 0801000b, starting, task 9 has started.
+ TEST2 : creating task 'aa10', number =  10, id = 0801000c, starting, task 10 has started.
+ TEST2 : creating task 'aa11', number =  11, id = 0801000d, starting, task 11 has started.
+ TEST2 : creating task 'aa12', number =  12, id = 0801000e, starting, task 12 has started.
+ TEST2 : creating task 'aa13', number =  13, id = 0801000f, starting, task 13 has started.
+ TEST2 : creating task 'aa14', number =  14, id = 08010010, starting, task 14 has started.
+ TEST2 : creating task 'aa15', number =  15, id = 08010011, starting, task 15 has started.
+ TEST2 : creating task 'aa16', number =  16, id = 08010012, starting, task 16 has started.
+ TEST2 : creating task 'aa17', number =  17, id = 08010013, starting, task 17 has started.
+ TEST2 : creating task 'aa18', number =  18, id = 08010014, starting, task 18 has started.
+ TEST2 : creating task 'aa19', number =  19, id = 08010015, starting, task 19 has started.
+ TEST2 : creating task 'aa20', number =  20, id = 08010016, starting, task 20 has started.
+ TEST2 : creating task 'aa21', number =  21, id = 08010017, starting, task 21 has started.
+ TEST2 : creating task 'aa22', number =  22, id = 08010018, starting, task 22 has started.
+ TEST2 : creating task 'aa23', number =  23, id = 08010019, starting, task 23 has started.
+ TEST2 : block 1 remove, signal task 08010006, task 4 ending.
+ TEST2 : block 1 remove, signal task 08010007, task 5 ending.
+ TEST2 : block 1 remove, signal task 08010008, task 6 ending.
+ TEST2 : block 1 remove, signal task 08010009, task 7 ending.
+ TEST2 : block 1 remove, signal task 0801000a, task 8 ending.
+ TEST2 : block 3 remove, signal task 08010010, task 14 ending.
+ TEST2 : block 3 remove, signal task 08010011, task 15 ending.
+ TEST2 : block 3 remove, signal task 08010012, task 16 ending.
+ TEST2 : block 3 remove, signal task 08010013, task 17 ending.
+ TEST2 : block 3 remove, signal task 08010014, task 18 ending.
+ TEST2 : creating task 'aa24', number =  24, id = 08010010, starting, task 24 has started.
+ TEST2 : creating task 'aa25', number =  25, id = 08010011, starting, task 25 has started.
+ TEST2 : creating task 'aa26', number =  26, id = 08010012, starting, task 26 has started.
+ TEST2 : creating task 'aa27', number =  27, id = 08010013, starting, task 27 has started.
+ TEST2 : creating task 'aa28', number =  28, id = 08010014, starting, task 28 has started.
+ TEST2 : creating task 'aa29', number =  29, id = 08010006, starting, task 29 has started.
+ TEST2 : creating task 'aa30', number =  30, id = 08010007, starting, task 30 has started.
+ TEST2 : creating task 'aa31', number =  31, id = 08010008, starting, task 31 has started.
+ TEST2 : creating task 'aa32', number =  32, id = 08010009, starting, task 32 has started.
+ TEST2 : creating task 'aa33', number =  33, id = 0801000a, starting, task 33 has started.
+ TEST2 : signal task 08010002 to delete, task 0 ending.
+ TEST2 : signal task 08010003 to delete, task 1 ending.
+ TEST2 : signal task 08010004 to delete, task 2 ending.
+ TEST2 : signal task 08010005 to delete, task 3 ending.
+ TEST2 : signal task 08010010 to delete, task 24 ending.
+ TEST2 : signal task 08010011 to delete, task 25 ending.
+ TEST2 : signal task 08010012 to delete, task 26 ending.
+ TEST2 : signal task 08010013 to delete, task 27 ending.
+ TEST2 : signal task 08010014 to delete, task 28 ending.
+ TEST2 : signal task 0801000b to delete, task 9 ending.
+ TEST2 : signal task 0801000c to delete, task 10 ending.
+ TEST2 : signal task 0801000d to delete, task 11 ending.
+ TEST2 : signal task 0801000e to delete, task 12 ending.
+ TEST2 : signal task 0801000f to delete, task 13 ending.
+ TEST2 : signal task 08010006 to delete, task 29 ending.
+ TEST2 : signal task 08010007 to delete, task 30 ending.
+ TEST2 : signal task 08010008 to delete, task 31 ending.
+ TEST2 : signal task 08010009 to delete, task 32 ending.
+ TEST2 : signal task 0801000a to delete, task 33 ending.
+ TEST2 : signal task 08010015 to delete, task 19 ending.
+ TEST2 : signal task 08010016 to delete, task 20 ending.
+ TEST2 : signal task 08010017 to delete, task 21 ending.
+ TEST2 : signal task 08010018 to delete, task 22 ending.
+ TEST2 : signal task 08010019 to delete, task 23 ending.
+ TEST2 : completed
+ TEST3 : free more than 3 x allocation size, but not the same block,
+         then free a block
+ TEST3 : creating task 'aa00', number =   0, id = 08010002, starting, task 0 has started.
+ TEST3 : creating task 'aa01', number =   1, id = 08010003, starting, task 1 has started.
+ TEST3 : creating task 'aa02', number =   2, id = 08010004, starting, task 2 has started.
+ TEST3 : creating task 'aa03', number =   3, id = 08010005, starting, task 3 has started.
+ TEST3 : creating task 'aa04', number =   4, id = 08010015, starting, task 4 has started.
+ TEST3 : creating task 'aa05', number =   5, id = 08010016, starting, task 5 has started.
+ TEST3 : creating task 'aa06', number =   6, id = 08010017, starting, task 6 has started.
+ TEST3 : creating task 'aa07', number =   7, id = 08010018, starting, task 7 has started.
+ TEST3 : creating task 'aa08', number =   8, id = 08010019, starting, task 8 has started.
+ TEST3 : creating task 'aa09', number =   9, id = 08010006, starting, task 9 has started.
+ TEST3 : creating task 'aa10', number =  10, id = 08010007, starting, task 10 has started.
+ TEST3 : creating task 'aa11', number =  11, id = 08010008, starting, task 11 has started.
+ TEST3 : creating task 'aa12', number =  12, id = 08010009, starting, task 12 has started.
+ TEST3 : creating task 'aa13', number =  13, id = 0801000a, starting, task 13 has started.
+ TEST3 : creating task 'aa14', number =  14, id = 0801000b, starting, task 14 has started.
+ TEST3 : creating task 'aa15', number =  15, id = 0801000c, starting, task 15 has started.
+ TEST3 : creating task 'aa16', number =  16, id = 0801000d, starting, task 16 has started.
+ TEST3 : creating task 'aa17', number =  17, id = 0801000e, starting, task 17 has started.
+ TEST3 : creating task 'aa18', number =  18, id = 0801000f, starting, task 18 has started.
+ TEST3 : creating task 'aa19', number =  19, id = 08010010, starting, task 19 has started.
+ TEST3 : creating task 'aa20', number =  20, id = 08010011, starting, task 20 has started.
+ TEST3 : creating task 'aa21', number =  21, id = 08010012, starting, task 21 has started.
+ TEST3 : creating task 'aa22', number =  22, id = 08010013, starting, task 22 has started.
+ TEST3 : creating task 'aa23', number =  23, id = 08010014, starting, task 23 has started.
+ TEST3 : creating task 'aa24', number =  24, id = 0801001a, starting, task 24 has started.
+ TEST3 : creating task 'aa25', number =  25, id = 0801001b, starting, task 25 has started.
+ TEST3 : creating task 'aa26', number =  26, id = 0801001c, starting, task 26 has started.
+ TEST3 : creating task 'aa27', number =  27, id = 0801001d, starting, task 27 has started.
+ TEST3 : creating task 'aa28', number =  28, id = 0801001e, starting, task 28 has started.
+ TEST3 : creating task 'aa29', number =  29, id = 0801001f, starting, task 29 has started.
+ TEST3 : creating task 'aa30', number =  30, id = 08010020, starting, task 30 has started.
+ TEST3 : creating task 'aa31', number =  31, id = 08010021, starting, task 31 has started.
+ TEST3 : creating task 'aa32', number =  32, id = 08010022, starting, task 32 has started.
+ TEST3 : creating task 'aa33', number =  33, id = 08010023, starting, task 33 has started.
+ TEST3 : creating task 'aa34', number =  34, id = 08010024, starting, task 34 has started.
+ TEST3 : creating task 'aa35', number =  35, id = 08010025, starting, task 35 has started.
+ TEST3 : creating task 'aa36', number =  36, id = 08010026, starting, task 36 has started.
+ TEST3 : creating task 'aa37', number =  37, id = 08010027, starting, task 37 has started.
+ TEST3 : creating task 'aa38', number =  38, id = 08010028, starting, task 38 has started.
+ TEST3 : creating task 'aa39', number =  39, id = 08010029, starting, task 39 has started.
+ TEST3 : creating task 'aa40', number =  40, id = 0801002a, starting, task 40 has started.
+ TEST3 : creating task 'aa41', number =  41, id = 0801002b, starting, task 41 has started.
+ TEST3 : creating task 'aa42', number =  42, id = 0801002c, starting, task 42 has started.
+ TEST3 : creating task 'aa43', number =  43, id = 0801002d, starting, task 43 has started.
+ TEST3 : creating task 'aa44', number =  44, id = 0801002e, starting, task 44 has started.
+ TEST3 : creating task 'aa45', number =  45, id = 0801002f, starting, task 45 has started.
+ TEST3 : creating task 'aa46', number =  46, id = 08010030, starting, task 46 has started.
+ TEST3 : creating task 'aa47', number =  47, id = 08010031, starting, task 47 has started.
+ TEST3 : creating task 'aa48', number =  48, id = 08010032, starting, task 48 has started.
+ TEST3 : creating task 'aa49', number =  49, id = 08010033, starting, task 49 has started.
+ TEST3 : creating task 'aa50', number =  50, id = 08010034, starting, task 50 has started.
+ TEST3 : creating task 'aa51', number =  51, id = 08010035, starting, task 51 has started.
+ TEST3 : creating task 'aa52', number =  52, id = 08010036, starting, task 52 has started.
+ TEST3 : creating task 'aa53', number =  53, id = 08010037, starting, task 53 has started.
+ TEST3 : creating task 'aa54', number =  54, id = 08010038, starting, task 54 has started.
+ TEST3 : creating task 'aa55', number =  55, id = 08010039, starting, task 55 has started.
+ TEST3 : creating task 'aa56', number =  56, id = 0801003a, starting, task 56 has started.
+ TEST3 : creating task 'aa57', number =  57, id = 0801003b, starting, task 57 has started.
+ TEST3 : creating task 'aa58', number =  58, id = 0801003c, starting, task 58 has started.
+ TEST3 : creating task 'aa59', number =  59, id = 0801003d, starting, task 59 has started.
+ TEST3 : creating task 'aa60', number =  60, id = 0801003e, starting, task 60 has started.
+ TEST3 : creating task 'aa61', number =  61, id = 0801003f, starting, task 61 has started.
+ TEST3 : creating task 'aa62', number =  62, id = 08010040, starting, task 62 has started.
+ TEST3 : creating task 'aa63', number =  63, id = 08010041, starting, task 63 has started.
+ TEST3 : creating task 'aa64', number =  64, id = 08010042, starting, task 64 has started.
+ TEST3 : creating task 'aa65', number =  65, id = 08010043, starting, task 65 has started.
+ TEST3 : creating task 'aa66', number =  66, id = 08010044, starting, task 66 has started.
+ TEST3 : creating task 'aa67', number =  67, id = 08010045, starting, task 67 has started.
+ TEST3 : creating task 'aa68', number =  68, id = 08010046, starting, task 68 has started.
+ TEST3 : creating task 'aa69', number =  69, id = 08010047, starting, task 69 has started.
+ TEST3 : creating task 'aa70', number =  70, id = 08010048, starting, task 70 has started.
+ TEST3 : creating task 'aa71', number =  71, id = 08010049, starting, task 71 has started.
+ TEST3 : creating task 'aa72', number =  72, id = 0801004a, starting, task 72 has started.
+ TEST3 : creating task 'aa73', number =  73, id = 0801004b, starting, task 73 has started.
+ TEST3 : creating task 'aa74', number =  74, id = 0801004c, starting, task 74 has started.
+ TEST3 : creating task 'aa75', number =  75, id = 0801004d, starting, task 75 has started.
+ TEST3 : creating task 'aa76', number =  76, id = 0801004e, starting, task 76 has started.
+ TEST3 : creating task 'aa77', number =  77, id = 0801004f, starting, task 77 has started.
+ TEST3 : creating task 'aa78', number =  78, id = 08010050, starting, task 78 has started.
+ TEST3 : creating task 'aa79', number =  79, id = 08010051, starting, task 79 has started.
+ TEST3 : creating task 'aa80', number =  80, id = 08010052, starting, task 80 has started.
+ TEST3 : creating task 'aa81', number =  81, id = 08010053, starting, task 81 has started.
+ TEST3 : creating task 'aa82', number =  82, id = 08010054, starting, task 82 has started.
+ TEST3 : creating task 'aa83', number =  83, id = 08010055, starting, task 83 has started.
+ TEST3 : creating task 'aa84', number =  84, id = 08010056, starting, task 84 has started.
+ TEST3 : creating task 'aa85', number =  85, id = 08010057, starting, task 85 has started.
+ TEST3 : creating task 'aa86', number =  86, id = 08010058, starting, task 86 has started.
+ TEST3 : creating task 'aa87', number =  87, id = 08010059, starting, task 87 has started.
+ TEST3 : creating task 'aa88', number =  88, id = 0801005a, starting, task 88 has started.
+ TEST3 : creating task 'aa89', number =  89, id = 0801005b, starting, task 89 has started.
+ TEST3 : creating task 'aa90', number =  90, id = 0801005c, starting, task 90 has started.
+ TEST3 : creating task 'aa91', number =  91, id = 0801005d, starting, task 91 has started.
+ TEST3 : creating task 'aa92', number =  92, id = 0801005e, starting, task 92 has started.
+ TEST3 : creating task 'aa93', number =  93, id = 0801005f, starting, task 93 has started.
+ TEST3 : creating task 'aa94', number =  94, id = 08010060, starting, task 94 has started.
+ TEST3 : creating task 'aa95', number =  95, id = 08010061, starting, task 95 has started.
+ TEST3 : creating task 'aa96', number =  96, id = 08010062, starting, task 96 has started.
+ TEST3 : creating task 'aa97', number =  97, id = 08010063, starting, task 97 has started.
+ TEST3 : creating task 'aa98', number =  98, id = 08010064, starting, task 98 has started.
+ TEST3 : creating task 'aa99', number =  99, id = 08010065, starting, task 99 has started.
+ TEST3 : creating task 'ab00', number = 100, id = 08010066, starting, task 100 has started.
+ TEST3 : creating task 'ab01', number = 101, id = 08010067, starting, task 101 has started.
+ TEST3 : creating task 'ab02', number = 102, id = 08010068, starting, task 102 has started.
+ TEST3 : creating task 'ab03', number = 103, id = 08010069, starting, task 103 has started.
+ TEST3 : creating task 'ab04', number = 104, id = 0801006a, starting, task 104 has started.
+ TEST3 : creating task 'ab05', number = 105, id = 0801006b, starting, task 105 has started.
+ TEST3 : creating task 'ab06', number = 106, id = 0801006c, starting, task 106 has started.
+ TEST3 : creating task 'ab07', number = 107, id = 0801006d, starting, task 107 has started.
+ TEST3 : creating task 'ab08', number = 108, id = 0801006e, starting, task 108 has started.
+ TEST3 : creating task 'ab09', number = 109, id = 0801006f, starting, task 109 has started.
+ TEST3 : creating task 'ab10', number = 110, id = 08010070, starting, task 110 has started.
+ TEST3 : creating task 'ab11', number = 111, id = 08010071, starting, task 111 has started.
+ TEST3 : creating task 'ab12', number = 112, id = 08010072, starting, task 112 has started.
+ TEST3 : creating task 'ab13', number = 113, id = 08010073, starting, task 113 has started.
+ TEST3 : creating task 'ab14', number = 114, id = 08010074, starting, task 114 has started.
+ TEST3 : creating task 'ab15', number = 115, id = 08010075, starting, task 115 has started.
+ TEST3 : creating task 'ab16', number = 116, id = 08010076, starting, task 116 has started.
+ TEST3 : creating task 'ab17', number = 117, id = 08010077, starting, task 117 has started.
+ TEST3 : creating task 'ab18', number = 118, id = 08010078, starting, task 118 has started.
+ TEST3 : creating task 'ab19', number = 119, id = 08010079, starting, task 119 has started.
+ TEST3 : creating task 'ab20', number = 120, id = 0801007a, starting, task 120 has started.
+ TEST3 : creating task 'ab21', failure, unsatisfied.
+ TEST3 : remove, signal task 08010015, task 4 ending.
+ TEST3 : remove, signal task 08010016, task 5 ending.
+ TEST3 : remove, signal task 08010017, task 6 ending.
+ TEST3 : remove, signal task 08010006, task 9 ending.
+ TEST3 : remove, signal task 08010007, task 10 ending.
+ TEST3 : remove, signal task 08010008, task 11 ending.
+ TEST3 : remove, signal task 0801000b, task 14 ending.
+ TEST3 : remove, signal task 0801000c, task 15 ending.
+ TEST3 : remove, signal task 0801000d, task 16 ending.
+ TEST3 : remove, signal task 08010010, task 19 ending.
+ TEST3 : remove, signal task 08010011, task 20 ending.
+ TEST3 : remove, signal task 08010012, task 21 ending.
+ TEST3 : remove, signal task 08010018, task 7 ending.
+ TEST3 : remove, signal task 08010019, task 8 ending.
+ TEST3 : signal task 08010002 to delete, task 0 ending.
+ TEST3 : signal task 08010003 to delete, task 1 ending.
+ TEST3 : signal task 08010004 to delete, task 2 ending.
+ TEST3 : signal task 08010005 to delete, task 3 ending.
+ TEST3 : signal task 08010009 to delete, task 12 ending.
+ TEST3 : signal task 0801000a to delete, task 13 ending.
+ TEST3 : signal task 0801000e to delete, task 17 ending.
+ TEST3 : signal task 0801000f to delete, task 18 ending.
+ TEST3 : signal task 08010013 to delete, task 22 ending.
+ TEST3 : signal task 08010014 to delete, task 23 ending.
+ TEST3 : signal task 0801001a to delete, task 24 ending.
+ TEST3 : signal task 0801001b to delete, task 25 ending.
+ TEST3 : signal task 0801001c to delete, task 26 ending.
+ TEST3 : signal task 0801001d to delete, task 27 ending.
+ TEST3 : signal task 0801001e to delete, task 28 ending.
+ TEST3 : signal task 0801001f to delete, task 29 ending.
+ TEST3 : signal task 08010020 to delete, task 30 ending.
+ TEST3 : signal task 08010021 to delete, task 31 ending.
+ TEST3 : signal task 08010022 to delete, task 32 ending.
+ TEST3 : signal task 08010023 to delete, task 33 ending.
+ TEST3 : signal task 08010024 to delete, task 34 ending.
+ TEST3 : signal task 08010025 to delete, task 35 ending.
+ TEST3 : signal task 08010026 to delete, task 36 ending.
+ TEST3 : signal task 08010027 to delete, task 37 ending.
+ TEST3 : signal task 08010028 to delete, task 38 ending.
+ TEST3 : signal task 08010029 to delete, task 39 ending.
+ TEST3 : signal task 0801002a to delete, task 40 ending.
+ TEST3 : signal task 0801002b to delete, task 41 ending.
+ TEST3 : signal task 0801002c to delete, task 42 ending.
+ TEST3 : signal task 0801002d to delete, task 43 ending.
+ TEST3 : signal task 0801002e to delete, task 44 ending.
+ TEST3 : signal task 0801002f to delete, task 45 ending.
+ TEST3 : signal task 08010030 to delete, task 46 ending.
+ TEST3 : signal task 08010031 to delete, task 47 ending.
+ TEST3 : signal task 08010032 to delete, task 48 ending.
+ TEST3 : signal task 08010033 to delete, task 49 ending.
+ TEST3 : signal task 08010034 to delete, task 50 ending.
+ TEST3 : signal task 08010035 to delete, task 51 ending.
+ TEST3 : signal task 08010036 to delete, task 52 ending.
+ TEST3 : signal task 08010037 to delete, task 53 ending.
+ TEST3 : signal task 08010038 to delete, task 54 ending.
+ TEST3 : signal task 08010039 to delete, task 55 ending.
+ TEST3 : signal task 0801003a to delete, task 56 ending.
+ TEST3 : signal task 0801003b to delete, task 57 ending.
+ TEST3 : signal task 0801003c to delete, task 58 ending.
+ TEST3 : signal task 0801003d to delete, task 59 ending.
+ TEST3 : signal task 0801003e to delete, task 60 ending.
+ TEST3 : signal task 0801003f to delete, task 61 ending.
+ TEST3 : signal task 08010040 to delete, task 62 ending.
+ TEST3 : signal task 08010041 to delete, task 63 ending.
+ TEST3 : signal task 08010042 to delete, task 64 ending.
+ TEST3 : signal task 08010043 to delete, task 65 ending.
+ TEST3 : signal task 08010044 to delete, task 66 ending.
+ TEST3 : signal task 08010045 to delete, task 67 ending.
+ TEST3 : signal task 08010046 to delete, task 68 ending.
+ TEST3 : signal task 08010047 to delete, task 69 ending.
+ TEST3 : signal task 08010048 to delete, task 70 ending.
+ TEST3 : signal task 08010049 to delete, task 71 ending.
+ TEST3 : signal task 0801004a to delete, task 72 ending.
+ TEST3 : signal task 0801004b to delete, task 73 ending.
+ TEST3 : signal task 0801004c to delete, task 74 ending.
+ TEST3 : signal task 0801004d to delete, task 75 ending.
+ TEST3 : signal task 0801004e to delete, task 76 ending.
+ TEST3 : signal task 0801004f to delete, task 77 ending.
+ TEST3 : signal task 08010050 to delete, task 78 ending.
+ TEST3 : signal task 08010051 to delete, task 79 ending.
+ TEST3 : signal task 08010052 to delete, task 80 ending.
+ TEST3 : signal task 08010053 to delete, task 81 ending.
+ TEST3 : signal task 08010054 to delete, task 82 ending.
+ TEST3 : signal task 08010055 to delete, task 83 ending.
+ TEST3 : signal task 08010056 to delete, task 84 ending.
+ TEST3 : signal task 08010057 to delete, task 85 ending.
+ TEST3 : signal task 08010058 to delete, task 86 ending.
+ TEST3 : signal task 08010059 to delete, task 87 ending.
+ TEST3 : signal task 0801005a to delete, task 88 ending.
+ TEST3 : signal task 0801005b to delete, task 89 ending.
+ TEST3 : signal task 0801005c to delete, task 90 ending.
+ TEST3 : signal task 0801005d to delete, task 91 ending.
+ TEST3 : signal task 0801005e to delete, task 92 ending.
+ TEST3 : signal task 0801005f to delete, task 93 ending.
+ TEST3 : signal task 08010060 to delete, task 94 ending.
+ TEST3 : signal task 08010061 to delete, task 95 ending.
+ TEST3 : signal task 08010062 to delete, task 96 ending.
+ TEST3 : signal task 08010063 to delete, task 97 ending.
+ TEST3 : signal task 08010064 to delete, task 98 ending.
+ TEST3 : signal task 08010065 to delete, task 99 ending.
+ TEST3 : signal task 08010066 to delete, task 100 ending.
+ TEST3 : signal task 08010067 to delete, task 101 ending.
+ TEST3 : signal task 08010068 to delete, task 102 ending.
+ TEST3 : signal task 08010069 to delete, task 103 ending.
+ TEST3 : signal task 0801006a to delete, task 104 ending.
+ TEST3 : signal task 0801006b to delete, task 105 ending.
+ TEST3 : signal task 0801006c to delete, task 106 ending.
+ TEST3 : signal task 0801006d to delete, task 107 ending.
+ TEST3 : signal task 0801006e to delete, task 108 ending.
+ TEST3 : signal task 0801006f to delete, task 109 ending.
+ TEST3 : signal task 08010070 to delete, task 110 ending.
+ TEST3 : signal task 08010071 to delete, task 111 ending.
+ TEST3 : signal task 08010072 to delete, task 112 ending.
+ TEST3 : signal task 08010073 to delete, task 113 ending.
+ TEST3 : signal task 08010074 to delete, task 114 ending.
+ TEST3 : signal task 08010075 to delete, task 115 ending.
+ TEST3 : signal task 08010076 to delete, task 116 ending.
+ TEST3 : signal task 08010077 to delete, task 117 ending.
+ TEST3 : signal task 08010078 to delete, task 118 ending.
+ TEST3 : signal task 08010079 to delete, task 119 ending.
+ TEST3 : signal task 0801007a to delete, task 120 ending.
+ TEST3 : completed
+
+*** END OF UNLIMITED TASK TEST ***
+
+NOTE: The failures are expected. This is the limiting factor, memory in the 
+      work-space.
+NOTE: The number of tasks may vary due to the size of the work-space.

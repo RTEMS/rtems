@@ -158,37 +158,67 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Are_ids_equal(
 
 /*PAGE
  *
- *  _Objects_Allocate
+ *  _Objects_Get_local_object
  *
  *  DESCRIPTION:
  *
- *  This function allocates a object control block from
- *  the inactive chain of free object control blocks.
+ *  This function returns a pointer to the local_table object
+ *  referenced by the index.
  */
 
-RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Allocate(
-  Objects_Information *information
+RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
+  Objects_Information *information,
+  unsigned32           index
 )
 {
-  return (Objects_Control *) _Chain_Get( &information->Inactive );
+  if ( index > information->maximum)
+    return NULL;
+  return ( information->local_table[ index ] );
 }
 
 /*PAGE
  *
- *  _Objects_Free
+ *  _Objects_Set_local_object
  *
  *  DESCRIPTION:
  *
- *  This function frees a object control block to the
- *  inactive chain of free object control blocks.
+ *  This function sets the pointer to the local_table object
+ *  referenced by the index.
  */
 
-RTEMS_INLINE_ROUTINE void _Objects_Free(
+RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
   Objects_Information *information,
+  unsigned32           index,
   Objects_Control     *the_object
 )
 {
-  _Chain_Append( &information->Inactive, &the_object->Node );
+  if ( index <= information->maximum)
+    information->local_table[ index ] = the_object;
+}
+
+
+/*PAGE
+ *
+ *  _Objects_Get_information
+ *
+ *  DESCRIPTION:
+ *
+ *  This function return the information structure given
+ *  an id of an object.
+ */
+ 
+RTEMS_INLINE_ROUTINE Objects_Information *_Objects_Get_information(
+  Objects_Id  id
+)
+{
+  Objects_Classes  the_class;
+
+  the_class = _Objects_Get_class( id );
+
+  if ( !_Objects_Is_class_valid( the_class ) )
+    return NULL;
+
+  return _Objects_Information_table[ the_class ];
 }
 
 /*PAGE
@@ -210,7 +240,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Open(
   unsigned32  index;
 
   index = _Objects_Get_index( the_object->id );
-  information->local_table[ index ] = the_object;
+  _Objects_Set_local_object( information, index, the_object );
 
   if ( information->is_string ) 
     _Objects_Copy_name_string( name, the_object->name );
@@ -236,7 +266,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Close(
   unsigned32 index;
 
   index = _Objects_Get_index( the_object->id );
-  information->local_table[ index ] = (Objects_Control *) NULL;
+  _Objects_Set_local_object( information, index, NULL );
   _Objects_Clear_name( the_object->name, information->name_length );
 }
 

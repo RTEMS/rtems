@@ -93,21 +93,39 @@
 
 /*PAGE
  *
- *  _Objects_Allocate
+ *  _Objects_Get_local_object
  *
  */
 
-#define _Objects_Allocate( _information )  \
-  (Objects_Control *) _Chain_Get( &(_information)->Inactive )
+#define _Objects_Get_local_object( information, index ) \
+  ( ( index > information->maximum) ?  NULL : \
+                       information->local_table[ index ] )
 
 /*PAGE
  *
- *  _Objects_Free
+ *  _Objects_Set_local_object
  *
  */
 
-#define _Objects_Free( _information, _the_object )  \
-  _Chain_Append( &(_information)->Inactive, &(_the_object)->Node )
+#define _Objects_Set_local_object( information, index, the_object ) \
+  { \
+    if ( index <= information->maximum) \
+      information->local_table[ index ] = the_object; \
+  }
+
+
+/*PAGE
+ *
+ *  _Objects_Get_information
+ *
+ */
+ 
+#define _Objects_Get_information( id ) \
+ ( \
+   ( !_Objects_Is_class_valid( _Objects_Get_class( id ) ) ) ? \
+     NULL : \
+     _Objects_Information_table[ _Objects_Get_class( id ) ] \
+ )
 
 /*PAGE
  *

@@ -26,6 +26,14 @@ extern "C" {
 #include <rtems/score/chain.h>
 
 /*
+ *  Mask to enable unlimited objects
+ *
+ *  XXX - needs to be moved to the API some-where
+ */
+
+#define OBJECTS_UNLIMITED_OBJECTS 0x80000000
+
+/*
  *  The following type defines the control block used to manage
  *  object names.
  */
@@ -121,9 +129,9 @@ typedef enum {
  */
 
 typedef struct {
-  Chain_Node    Node;
-  Objects_Id    id;
-  Objects_Name  name;
+  Chain_Node     Node;
+  Objects_Id     id;
+  Objects_Name   name;
 }   Objects_Control;
 
 /*
@@ -132,18 +140,24 @@ typedef struct {
  */
 
 typedef struct {
-  Objects_Classes   the_class;       /* Class of this object */
-  Objects_Id        minimum_id;      /* minimum valid id of this type */
-  Objects_Id        maximum_id;      /* maximum valid id of this type */
-  unsigned32        maximum;         /* maximum number of objects */
-  Objects_Control **local_table;     /* table of local object pointers */
-  Objects_Name     *name_table;      /* table of local object names */
-  Chain_Control    *global_table;    /* pointer to global table */
-  Chain_Control     Inactive;        /* chain of inactive ctl blocks */
-  boolean           is_string;       /* TRUE if names are strings */
-  unsigned32        name_length;     /* maximum length of names */
-  boolean           is_thread;       /* TRUE if these are threads */
-                                     /*   irregardless of API */
+  Objects_Classes   the_class;          /* Class of this object */
+  Objects_Id        minimum_id;         /* minimum valid id of this type */
+  Objects_Id        maximum_id;         /* maximum valid id of this type */
+  unsigned32        maximum;            /* maximum number of objects */
+  boolean           auto_extend;        /* TRUE if unlimited objects */
+  unsigned32        allocation_size;    /* number of objects in a block */
+  unsigned32        size;               /* size of the objects */
+  Objects_Control **local_table;
+  Objects_Name     *name_table;
+  Chain_Control    *global_table;       /* pointer to global table */
+  Chain_Control     Inactive;           /* chain of inactive ctl blocks */
+  unsigned32        inactive;           /* number of objects on the InActive list */
+  unsigned32       *inactive_per_block; /* used to release a block */
+  void            **object_blocks;      /* the object memory to remove */
+  boolean           is_string;          /* TRUE if names are strings */
+  unsigned32        name_length;        /* maximum length of names */
+  boolean           is_thread;          /* TRUE if these are threads */
+                                        /*   irregardless of API */
 }   Objects_Information;
 
 /*
@@ -208,6 +222,30 @@ void _Objects_Handler_initialization(
 );
 
 /*
+ *  _Objects_Extend_information
+ *
+ *  DESCRIPTION:
+ *
+ *  This function extends an object class information record.
+ */
+
+void _Objects_Extend_information(
+  Objects_Information *information
+);
+
+/*
+ *  _Objects_Shrink_information
+ *
+ *  DESCRIPTION:
+ *
+ *  This function shrink an object class information record.
+ */
+
+void _Objects_Shrink_information(
+  Objects_Information *information
+);
+
+/*
  *  _Objects_Initialize_information
  *
  *  DESCRIPTION:
@@ -230,6 +268,35 @@ void _Objects_Initialize_information (
   boolean              is_string,
   unsigned32           maximum_name_length,
   boolean              is_task
+);
+
+/*PAGE
+ *
+ *  _Objects_Allocate
+ *
+ *  DESCRIPTION:
+ *
+ *  This function allocates a object control block from
+ *  the inactive chain of free object control blocks.
+ */
+
+Objects_Control *_Objects_Allocate(
+  Objects_Information *information
+);
+
+/*PAGE
+ *
+ *  _Objects_Free
+ *
+ *  DESCRIPTION:
+ *
+ *  This function frees a object control block to the
+ *  inactive chain of free object control blocks.
+ */
+
+void _Objects_Free(
+  Objects_Information *information,
+  Objects_Control     *the_object
 );
 
 /*
@@ -369,19 +436,6 @@ Objects_Control *_Objects_Get_next(
     Objects_Id          *next_id_p
 );
 
-/*
- *  _Objects_Get_information
- *
- *  DESCRIPTION:
- *
- *  Returns the information control block for the class of objects
- *  corresponding to this id.
- */
-
-Objects_Information *_Objects_Get_information(
-  Objects_Id  id
-);
-  
 /*
  *  Pieces of object.inl are promoted out to the user
  */

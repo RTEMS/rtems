@@ -22,6 +22,20 @@ extern "C" {
 #endif
 
 /*
+ *  Unlimited object support. Changes the configuration table entry for POSIX
+ *  or RTEMS APIs to bounded only by the memory of the work-space.
+ *
+ *  Use the macro to define the resource unlimited before placing in the configuration
+ *  table.
+ */
+
+#include <rtems/score/object.h>
+#define RTEMS_UNLIMITED_OBJECTS OBJECTS_UNLIMITED_OBJECTS
+  
+#define rtems_resource_unlimited(resource) \
+  ( resource | RTEMS_UNLIMITED_OBJECTS )
+    
+/*
  *  This is kind of kludgy but it allows targets to totally ignore the
  *  POSIX API safely.
  */

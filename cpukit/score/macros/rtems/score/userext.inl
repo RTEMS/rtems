@@ -23,14 +23,22 @@
  *
  */
 
-#define _User_extensions_Handler_initialization( _initial_extensions ) \
+#define _User_extensions_Handler_initialization( \
+  number_of_extensions, _initial_extensions \
+) \
   { \
+    User_extensions_Control *extension; \
+    unsigned32               i; \
     _Chain_Initialize_empty( &_User_extensions_List ); \
     \
     if ( (_initial_extensions) ) { \
-      _User_extensions_Initial.Callouts = *(_initial_extensions); \
-      _Chain_Append( \
-        &_User_extensions_List, &_User_extensions_Initial.Node ); \
+      for (i=0 ; i<number_of_extensions ; i++ ) { \
+        extension = \
+           _Workspace_Allocate_or_fatal_error( sizeof(User_extensions_Control) ); \
+        \
+        extension->Callouts = _initial_extensions[i]; \
+        _Chain_Append( &_User_extensions_List, &extension->Node ); \
+      } \
     } \
   }
 
