@@ -13,8 +13,9 @@
 # source tree
 
 progname=`basename $0`
-am_verbose="";
+verbose="";
 quiet="false"
+mode="generate"
 
 usage()
 {
@@ -25,6 +26,7 @@ usage()
   echo "	-h .. display this message and exit";
   echo "	-q .. quiet, don't display directories";
   echo "	-v .. verbose, pass -v to automake when invoking automake"
+  echo "	-c .. clean, remove all aclocal/autoconf/automake generated files"
   echo
   exit 1;
 }
@@ -45,6 +47,9 @@ case $1 in
 -v|--ve|--ver|--verb|--verbo|--verbos|--verbose)
   verbose="-v";
   shift;;
+-c|--cl|--cle|--clea|--clean)
+  mode="clean";
+  shift;;
 -*) echo "unknown option $1" ;
   usage ;;
 *) echo "invalid parameter $1" ;
@@ -53,16 +58,51 @@ esac
 done
 
 pwd=`pwd`;
-confs=`find $pwd -name 'configure.in' -print`
 
-aclocal_dir=$pwd/aclocal
-for i in $confs; do
-dir=`dirname $i`;
-( test "$quiet" = "true" || echo "$dir";
-  cd $dir;
-  aclocal -I $aclocal_dir;
-  autoconf;
-  test -n "`grep CONFIG_HEADER configure.in`" && autoheader ; 
-  test -f Makefile.am && automake $verbose ;
-)
-done
+case $mode in
+generate)
+  confs=`find $pwd -name 'configure.in' -print`
+  aclocal_dir=$pwd/aclocal
+  for i in $confs; do
+  dir=`dirname $i`;
+  ( test "$quiet" = "true" || echo "$dir";
+    cd $dir;
+    aclocal -I $aclocal_dir;
+    autoconf;
+    test -n "`grep CONFIG_HEADER configure.in`" && autoheader ; 
+    test -f Makefile.am && automake $verbose ;
+  )
+  done
+  ;;
+clean)
+  test "$quiet" = "true" || echo "removing automake generated Makefile.in files"
+  files=`find . -name 'Makefile.am' -print | sed -e 's%\.am%\.in%g'` ;
+  for i in $files; do if test -f $i; then
+    rm -f $i
+    test "$verbose" = "-v" && echo "$i"    
+  fi; done
+
+  test "$quiet" = "true" || echo "removing configure files"
+  files=`find . -name 'configure' -print` ;
+  test "$verbose" = "-v" && test -n "$files" && echo "$files" ;
+  for i in $files; do if test -f $i; then
+    rm -f $i
+    test "$verbose" = "-v" && echo "$i"    
+  fi; done
+  
+  test "$quiet" = "true" || echo "removing aclocal.m4 files"
+  files=`find . -name 'aclocal.m4' -print` ;
+  test "$verbose" = "-v" && test -n "$files" && echo "$files" ;
+  for i in $files; do if test -f $i; then
+    rm -f $i
+    test "$verbose" = "-v" && echo "$i"    
+  fi; done
+
+  find . -name '*~' -print | xargs rm -f
+  find . -name '*.orig' -print | xargs rm -f
+  find . -name '*.rej' -print | xargs rm -f
+  find . -name 'config.status' -print | xargs rm -f
+  find . -name 'config.log' -print | xargs rm -f
+  find . -name '.deps' -print | xargs rm -rf
+  ;;
+esac

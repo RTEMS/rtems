@@ -158,26 +158,46 @@ AC_MSG_ERROR(
 fi
 ])
 
-# Like AC_CONFIG_HEADER, but automatically create stamp file.
+dnl $Id$
 
-AC_DEFUN(AM_CONFIG_HEADER,
-[AC_PREREQ([2.12])
-AC_CONFIG_HEADER([$1])
-dnl When config.status generates a header, we must update the stamp-h file.
-dnl This file resides in the same directory as the config header
-dnl that is generated.  We must strip everything past the first ":",
-dnl and everything past the last "/".
-AC_OUTPUT_COMMANDS(changequote(<<,>>)dnl
-ifelse(patsubst(<<$1>>, <<[^ ]>>, <<>>), <<>>,
-<<test -z "<<$>>CONFIG_HEADERS" || echo timestamp > patsubst(<<$1>>, <<^\([^:]*/\)?.*>>, <<\1>>)stamp-h<<>>dnl>>,
-<<am_indx=1
-for am_file in <<$1>>; do
-  case " <<$>>CONFIG_HEADERS " in
-  *" <<$>>am_file "*<<)>>
-    echo timestamp > `echo <<$>>am_file | sed -e 's%:.*%%' -e 's%[^/]*$%%'`stamp-h$am_indx
-    ;;
-  esac
-  am_indx=`expr "<<$>>am_indx" + 1`
-done<<>>dnl>>)
-changequote([,]))])
+AC_DEFUN(RTEMS_PATH_PERL,
+[
+AC_PATH_PROG(PERL,perl)
+if test -z "$PERL" ; then
+AC_MSG_WARN(
+[***]
+[   perl was not found]
+[   Note: Some tools will not be built.])
+fi
+])
+
+# Define a conditional.
+
+AC_DEFUN(AM_CONDITIONAL,
+[AC_SUBST($1_TRUE)
+AC_SUBST($1_FALSE)
+if $2; then
+  $1_TRUE=
+  $1_FALSE='#'
+else
+  $1_TRUE='#'
+  $1_FALSE=
+fi])
+
+AC_DEFUN(RTEMS_TOOLPATHS,
+[
+# tooldir='$(exec_prefix)/'$target_alias
+# Temporary work-around until building in source tree is supported
+tooldir='$(PROJECT_ROOT)'
+AC_SUBST(tooldir)
+
+project_includedir='$(tooldir)'/include
+AC_SUBST(project_includedir)
+
+project_libdir='$(tooldir)/lib$(MULTISUBDIR)'
+AC_SUBST(project_libdir)
+
+project_bindir='$(tooldir)/bin'
+AC_SUBST(project_bindir)
+])
 

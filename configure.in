@@ -78,8 +78,6 @@ dnl imply all BSPs.  Eventually we would like to build a collection
 dnl of CPU model specific RTEMS libraries which in conjunction with
 dnl a BSP library would be used to link an application.
 
-RTEMS_HOST=$host_os
-
 RTEMS_CANONICAL_TARGET_CPU
 RTEMS_CHECK_CPU
 RTEMS_CANONICAL_HOST
@@ -335,8 +333,8 @@ fi
 
 RTEMS_ENABLE_TESTS
 
-RTEMS_CHECK_MAKEFILE(c/src/tests/tools/$target_cpu)
-
+# always build the test tools
+testtools_cfgdirs="c/src/tests/tools/generic"
 if test "$tests_enabled" = "yes"; then
    RTEMS_CHECK_MAKEFILE(c/src/tests/libtests)
    RTEMS_CHECK_MAKEFILE(c/src/tests/sptests)
@@ -347,7 +345,9 @@ if test "$tests_enabled" = "yes"; then
    if test "$RTEMS_HAS_POSIX_API" = "yes"; then
      RTEMS_CHECK_MAKEFILE(c/src/tests/psxtests)
    fi
-   AC_CONFIG_SUBDIRS(c/src/tests/tools/generic)
+   if test -d "$srcdir/c/src/tests/tools/$target_cpu"; then
+     testtools_cfgdirs="$testtools_cfgdirs c/src/tests/tools/$target_cpu"
+   fi
 fi 
 
 # If the HWAPI is enabled, the find the HWAPI Makefiles
@@ -371,7 +371,6 @@ fi
 
 AC_SUBST(rtems_cv_prog_cc_cross)
 AC_SUBST(RTEMS_BSP_LIST)
-AC_SUBST(RTEMS_HOST)
 AC_SUBST(RTEMS_HAS_CPLUSPLUS)
 AC_SUBST(RTEMS_USE_GCC272)
 AC_SUBST(BARE_CPU_CFLAGS)
@@ -389,8 +388,10 @@ RTEMS_CHECK_MAKEFILE(c/src/lib/libmisc)
 RTEMS_CHECK_MAKEFILE(c/src/tests/samples)
 
 AC_CONFIG_SUBDIRS(c/build-tools)
+AC_CONFIG_SUBDIRS(c/update-tools)
 AC_CONFIG_SUBDIRS($scoretools_cfgdirs)
 AC_CONFIG_SUBDIRS($bsptools_cfgdirs)
+AC_CONFIG_SUBDIRS($testtools_cfgdirs)
 
 # FIXME: libhwapi needs a separate configure.in in future ;-
 # AC_CONFIG_SUBDIRS(c/src/lib/libhwapi)
@@ -432,8 +433,7 @@ c/src/tests/support/include/Makefile
 c/src/tests/support/stubdr/Makefile
 c/src/tests/support/wrapup/Makefile
 c/src/tests/tools/Makefile
-$makefiles
-c/update-tools/Makefile)
+$makefiles)
 
 echo
 echo target architecture: $target_cpu.

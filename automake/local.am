@@ -1,9 +1,9 @@
-# $Id$
+## $Id$
 
-# NOTE: This is a temporary work-around to keep 
-# "make debug" and "make debug_install" working.
-# Once automake is fully integrated these make targets 
-# and this file will probably be removed
+## NOTE: This is a temporary work-around to keep 
+## "make debug" and "make debug_install" working.
+## Once automake is fully integrated these make targets 
+## and this file will probably be removed
 
 debug-am:
 
@@ -12,6 +12,8 @@ debug: debug-am
 debug_install-am:
 
 debug_install: debug_install-am
+
+.PHONY: debug debug_install debug-am
 
 
 profile-am:
@@ -22,5 +24,12 @@ profile_install-am:
 
 profile_install: profile_install-am
 
+.PHONY: profile profile_install profile-am
 
-.PHONY: debug debug_install profile profile_install
+
+preinstall-am:
+
+preinstall: preinstall-am
+
+.PHONY: preinstall preinstall-am
+
