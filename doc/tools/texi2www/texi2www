@@ -1020,6 +1020,11 @@ sub read_input
 			                      "$texinfo_file[0] line $.");
 	    next;
 	}
+	if (/^\@ifnottex/) {
+	    &read_input($echo,'/^\@end\s+ifnottex/',
+			                      "$texinfo_file[0] line $.");
+	    next;
+	}
 	if (/^\@ifhtml/) {
 	    &read_input($echo,'/^\@end\s+ifhtml/',
 			                      "$texinfo_file[0] line $.");
