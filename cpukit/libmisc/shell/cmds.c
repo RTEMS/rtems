@@ -10,8 +10,6 @@
  * A 'monitor' command is added to adapt the call rtems monitor commands
  * at my call procedure
  * 
- * MINIX date.c is adapted to run here. Like a exercise only....
- *
  * TODO: A lot of improvements of course. 
  *      cp, mv, ...
  *      hexdump,
@@ -385,56 +383,24 @@ int main_rm    (int argc, char *argv[])
    return 0;
 }
 /*-----------------------------------------------------------*/  	
-/* date - print or set time and date		Author: Jan Looyen */
-/* MINIX 1.5 GPL'ed */
-
-
-#define	MIN	60L		/* # seconds in a minute */
-#define	HOUR	(60 * MIN)	/* # seconds in an hour */
-#define	DAY	(24 * HOUR)	/* # seconds in a day */
-#define	YEAR	(365 * DAY)	/* # seconds in a year */
-
-static int conv(unsigned32 *value,char **ptr,unsigned32 max) 
-{
-  int buf;
-  *ptr -= 2;
-  buf = atoi(*ptr);
-  **ptr = 0;
-  if (buf < 0 || buf > max) {
-   fprintf(stderr, "Date: bad conversion\n");
-   return 0;
-  }; 
-  *value=buf;
-  return 1;
-}
+/* date - print or set time and date */
 
 static int set_time(char *t) 
 {
   rtems_time_of_day tod;	
   FILE * rtc;
-  char *tp;
   int len;
-  if (rtems_clock_get(RTEMS_CLOCK_GET_TOD,&tod)!=RTEMS_SUCCESSFUL) 
-	  memset(&tod,0,sizeof(tod));
-  len = strlen(t);
-  if (len != 12 && len != 10 && len != 6 && len != 4) return 0;
-  tp = t;
-  while (*tp)
-   if (!isdigit(*tp++)) {
-    fprintf(stderr, "date: bad conversion\n");
-    return 0;
-   };
-  if (len == 6 || len == 12) 
-   if (!conv(&tod.second,&tp, 59)) return 0;
-  if (!conv(&tod.minute,&tp, 59)) return 0;
-  if (!conv(&tod.hour,&tp, 23)) return 0;
-  if (len == 12 || len == 10) {
-   if (!conv(&tod.year,&tp, 99)) return 0;
-   tod.year+=1900;
-   if (tod.year<TOD_BASE_YEAR) tod.year+=100;
-   if (!conv(&tod.day   ,&tp, 31)) return 0;
-   if (!conv(&tod.month ,&tp, 12)) return 0;
-  }
+
+  if ( rtems_clock_get(RTEMS_CLOCK_GET_TOD,&tod) != RTEMS_SUCCESSFUL ) 
+     memset( &tod, 0, sizeof(tod) );
+
+  /* JRS
+   *
+   *  This code that was used to parse the command line was taken 
+   *  from an inappropriate source.  It has been removed and needs
+   *  to be replaced.
+   */
+
   if (!_TOD_Validate(&tod)) {
     fprintf(stderr, "Invalid date value\n");
   } else {
@@ -452,7 +418,8 @@ static int set_time(char *t)
 int main_date(int argc,char *argv[]) 
 {
   time_t t;
-  if (argc == 2) set_time(argv[1]);
+  if (argc == 2)
+    set_time(argv[1]);
   time(&t);
   printf("%s", ctime(&t));
   return 0;
