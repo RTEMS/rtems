@@ -12,7 +12,7 @@ LIBNAME=libcsupport.a
 LIB=${ARCH}/${LIBNAME}
 
 BASE_FS_PIECES=base_fs mount unmount ioman \
-  libio eval
+  libio libio_sockets eval
 
 IMFS_PIECES= imfs_chown imfs_creat imfs_directory imfs_eval imfs_free \
     imfs_gtkn imfs_init imfs_link imfs_mknod imfs_mount imfs_fchmod \
