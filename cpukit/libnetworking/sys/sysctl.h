@@ -13,10 +13,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -34,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)sysctl.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: src/sys/sys/sysctl.h,v 1.110 2002/10/20 22:48:08 phk Exp $
+ * $FreeBSD: src/sys/sys/sysctl.h,v 1.128 2004/04/07 04:19:49 imp Exp $
  */
 
 #ifndef _SYS_SYSCTL_H_
@@ -52,14 +48,14 @@ struct thread;
  * respective subsystem header files.
  */
 
-#define CTL_MAXNAME	12	/* largest number of components supported */
+#define CTL_MAXNAME	24	/* largest number of components supported */
 
 /*
  * Each subsystem defined by sysctl defines a list of variables
  * for that subsystem. Each name is either a node with further
  * levels defined below it, or it is a leaf of some particular
  * type given below. Each sysctl level defines a set of name/type
- * pairs to be used by sysctl(1) in manipulating the subsystem.
+ * pairs to be used by sysctl(8) in manipulating the subsystem.
  */
 struct ctlname {
 	char	*ctl_name;	/* subsystem name */
@@ -86,6 +82,19 @@ struct ctlname {
 #define CTLFLAG_PRISON	0x04000000	/* Prisoned roots can fiddle */
 #define CTLFLAG_DYN	0x02000000	/* Dynamic oid - can be freed */
 #define CTLFLAG_SKIP	0x01000000	/* Skip this sysctl when listing */
+#define CTLMASK_SECURE	0x00F00000	/* Secure level */
+#define CTLFLAG_TUN	0x00080000	/* Tunable variable */
+#define CTLFLAG_RDTUN	(CTLFLAG_RD|CTLFLAG_TUN)
+
+/*
+ * Secure level.   Note that CTLFLAG_SECURE == CTLFLAG_SECURE1.  
+ *
+ * Secure when the securelevel is raised to at least N.
+ */
+#define CTLSHIFT_SECURE	20
+#define CTLFLAG_SECURE1	(CTLFLAG_SECURE | (0 << CTLSHIFT_SECURE))
+#define CTLFLAG_SECURE2	(CTLFLAG_SECURE | (1 << CTLSHIFT_SECURE))
+#define CTLFLAG_SECURE3	(CTLFLAG_SECURE | (2 << CTLSHIFT_SECURE))
 
 /*
  * USE THIS instead of a hardwired number from the categories below
@@ -126,6 +135,7 @@ struct sysctl_req {
 	size_t		newlen;
 	size_t		newidx;
 	int		(*newfunc)(struct sysctl_req *, void *, size_t);
+	size_t		validlen;
 };
 
 SLIST_HEAD(sysctl_oid_list, sysctl_oid);
@@ -183,6 +193,9 @@ struct sysctl_ctx_entry {
 
 TAILQ_HEAD(sysctl_ctx_list, sysctl_ctx_entry);
 
+#define SYSCTL_NODE_CHILDREN(parent, name) \
+	sysctl_##parent##_##name##_children
+
 /* This constructs a "raw" MIB oid. */
 #define SYSCTL_OID(parent, nbr, name, kind, a1, a2, handler, fmt, descr) \
 	static struct sysctl_oid sysctl__##parent##_##name = {		 \
@@ -195,9 +208,9 @@ TAILQ_HEAD(sysctl_ctx_list, sysctl_ctx_entry);
 
 /* This constructs a node from which other oids can hang. */
 #define SYSCTL_NODE(parent, nbr, name, access, handler, descr)		    \
-	struct sysctl_oid_list sysctl_##parent##_##name##_children;	    \
+	struct sysctl_oid_list SYSCTL_NODE_CHILDREN(parent, name);	    \
 	SYSCTL_OID(parent, nbr, name, CTLTYPE_NODE|(access),		    \
-		   (void*)&sysctl_##parent##_##name##_children, 0, handler, \
+		   (void*)&SYSCTL_NODE_CHILDREN(parent, name), 0, handler, \
 		   "N", descr)
 
 #define SYSCTL_ADD_NODE(ctx, parent, nbr, name, access, handler, descr)	    \
@@ -240,7 +253,7 @@ TAILQ_HEAD(sysctl_ctx_list, sysctl_ctx_entry);
 	sysctl_add_oid(ctx, parent, nbr, name, CTLTYPE_LONG|(access),	    \
 	ptr, 0, sysctl_handle_long, "L", descr)
 
-/* Oid for a long.  The pointer must be non NULL. */
+/* Oid for an unsigned long.  The pointer must be non NULL. */
 #define SYSCTL_ULONG(parent, nbr, name, access, ptr, val, descr) \
 	SYSCTL_OID(parent, nbr, name, CTLTYPE_ULONG|(access), \
 		ptr, val, sysctl_handle_long, "LU", descr)
@@ -403,6 +416,12 @@ TAILQ_HEAD(sysctl_ctx_list, sysctl_ctx_entry);
 #define	KERN_PROC_UID		5	/* by effective uid */
 #define	KERN_PROC_RUID		6	/* by real uid */
 #define	KERN_PROC_ARGS		7	/* get/set arguments/proctitle */
+#define	KERN_PROC_PROC		8	/* only return procs */
+#define	KERN_PROC_SV_NAME	9	/* get syscall vector name */
+#define	KERN_PROC_INC_THREAD	0x10	/*
+					 * modifier for pid, pgrp, tty,
+					 * uid, ruid, and proc
+					 */
 
 /*
  * KERN_IPC identifiers
@@ -572,6 +591,7 @@ SYSCTL_DECL(_compat);
 extern char	machine[];
 extern char	osrelease[];
 extern char	ostype[];
+extern char	kern_ident[];
 
 /* Dynamic oid handling */
 struct sysctl_oid *sysctl_add_oid(struct sysctl_ctx_list *clist,
@@ -579,6 +599,8 @@ struct sysctl_oid *sysctl_add_oid(struct sysctl_ctx_list *clist,
 		int kind, void *arg1, int arg2,
 		int (*handler) (SYSCTL_HANDLER_ARGS),
 		const char *fmt, const char *descr);
+int	sysctl_move_oid(struct sysctl_oid *oidp,
+		struct sysctl_oid_list *parent);
 int	sysctl_remove_oid(struct sysctl_oid *oidp, int del, int recurse);
 int	sysctl_ctx_init(struct sysctl_ctx_list *clist);
 int	sysctl_ctx_free(struct sysctl_ctx_list *clist);
@@ -600,7 +622,7 @@ int	userland_sysctl(struct thread *td, int *name, u_int namelen, void *old,
 			size_t *retval);
 int	sysctl_find_oid(int *name, u_int namelen, struct sysctl_oid **noid,
 			int *nindx, struct sysctl_req *req);
-void	sysctl_wire_old_buffer(struct sysctl_req *req, size_t len);
+int	sysctl_wire_old_buffer(struct sysctl_req *req, size_t len);
 
 #else	/* !_KERNEL */
 #include <sys/cdefs.h>

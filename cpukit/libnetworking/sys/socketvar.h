@@ -1,3 +1,5 @@
+/* $Id$ */
+
 /*-
  * Copyright (c) 1982, 1986, 1990, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -31,7 +33,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)socketvar.h	8.3 (Berkeley) 2/19/95
- * $Id$
+ * $FreeBSD: src/sys/sys/socketvar.h,v 1.110 2004/03/01 03:14:23 rwatson Exp $
  */
 
 #ifndef _SYS_SOCKETVAR_H_
@@ -51,7 +53,7 @@ struct socket {
 	short	so_options;		/* from socket call, see socket.h */
 	short	so_linger;		/* time to linger while closing */
 	short	so_state;		/* internal state flags SS_*, below */
-	caddr_t	so_pcb;			/* protocol control block */
+	void 	*so_pcb;		/* protocol control block */
 	struct	protosw *so_proto;	/* protocol handle */
 /*
  * Variables for connection queuing.
@@ -72,7 +74,7 @@ struct socket {
 	short	so_incqlen;		/* number of unaccepted incomplete
 					   connections */
 	short	so_qlimit;		/* max number queued connections */
-	u_long	so_timeo;		/* connection timeout */
+	short	so_timeo;		/* connection timeout */
 	u_short	so_error;		/* error affecting connection */
 	pid_t	so_pgid;		/* pgid for signals */
 	u_long	so_oobmark;		/* chars to oob mark */
@@ -80,15 +82,15 @@ struct socket {
  * Variables for socket buffering.
  */
 	struct	sockbuf {
-		u_long	sb_cc;		/* actual chars in buffer */
-		u_long	sb_hiwat;	/* max actual char count */
-		u_long	sb_mbcnt;	/* chars of mbufs used */
-		u_long	sb_mbmax;	/* max chars of mbufs to use */
-		long	sb_lowat;	/* low water mark */
+		u_int	sb_cc;		/* actual chars in buffer */
+		u_int	sb_hiwat;	/* max actual char count */
+		u_int	sb_mbcnt;	/* chars of mbufs used */
+		u_int	sb_mbmax;	/* max chars of mbufs to use */
+		int	sb_lowat;	/* low water mark */
 		struct	mbuf *sb_mb;	/* the mbuf chain */
 		struct	selinfo sb_sel;	/* process selecting read/write */
 		short	sb_flags;	/* flags, see below */
-		u_long	sb_timeo;	/* timeout for read/write */
+		int	sb_timeo;	/* timeout for read/write */
 		void	(*sb_wakeup) __P((struct socket *, caddr_t));
 		caddr_t	sb_wakeuparg;	/* arg for above */
 	} so_rcv, so_snd;
@@ -102,8 +104,8 @@ struct socket {
 #define	SB_NOINTR	0x40		/* operations not interruptible */
 
 	caddr_t	so_tpcb;		/* Wisc. protocol control block XXX */
-	void	(*so_upcall) __P((struct socket *so, caddr_t arg, int waitf));
-	caddr_t	so_upcallarg;		/* Arg for above */
+	void	(*so_upcall)(struct socket *, void *arg, int);
+	void 	*so_upcallarg;		/* Arg for above */
 	uid_t	so_uid;			/* who opened the socket */
 };
 
@@ -214,68 +216,68 @@ struct stat;
 /*
  * File operations on sockets.
  */
-int	soo_ioctl __P((struct file *fp, int cmd, caddr_t data,
-	    struct proc *p));
-int	soo_select __P((struct file *fp, int which, struct proc *p));
-int	soo_stat __P((struct socket *so, struct stat *ub));
+int	soo_ioctl(struct file *fp, int cmd, caddr_t data,
+	    struct proc *p);
+int	soo_select(struct file *fp, int which, struct proc *p);
+int	soo_stat(struct socket *so, struct stat *ub);
 
 /*
  * From uipc_socket and friends
  */
-int	getsock __P((struct filedesc *fdp, int fdes, struct file **fpp));
-int	sockargs __P((struct mbuf **mp, caddr_t buf, int buflen, int type));
-void	sbappend __P((struct sockbuf *sb, struct mbuf *m));
-int	sbappendaddr __P((struct sockbuf *sb, struct sockaddr *asa,
-	    struct mbuf *m0, struct mbuf *control));
-int	sbappendcontrol __P((struct sockbuf *sb, struct mbuf *m0,
-	    struct mbuf *control));
-void	sbappendrecord __P((struct sockbuf *sb, struct mbuf *m0));
-void	sbcheck __P((struct sockbuf *sb));
-void	sbcompress __P((struct sockbuf *sb, struct mbuf *m, struct mbuf *n));
+int	getsock(struct filedesc *fdp, int fdes, struct file **fpp);
+int	sockargs(struct mbuf **mp, caddr_t buf, int buflen, int type);
+void	sbappend(struct sockbuf *sb, struct mbuf *m);
+int	sbappendaddr(struct sockbuf *sb, struct sockaddr *asa,
+	    struct mbuf *m0, struct mbuf *control);
+int	sbappendcontrol(struct sockbuf *sb, struct mbuf *m0,
+	    struct mbuf *control);
+void	sbappendrecord(struct sockbuf *sb, struct mbuf *m0);
+void	sbcheck(struct sockbuf *sb);
+void	sbcompress(struct sockbuf *sb, struct mbuf *m, struct mbuf *n);
 struct mbuf *
-	sbcreatecontrol __P((caddr_t p, int size, int type, int level));
-void	sbdrop __P((struct sockbuf *sb, int len));
-void	sbdroprecord __P((struct sockbuf *sb));
-void	sbflush __P((struct sockbuf *sb));
-void	sbinsertoob __P((struct sockbuf *sb, struct mbuf *m0));
-void	sbrelease __P((struct sockbuf *sb));
-int	sbreserve __P((struct sockbuf *sb, u_long cc));
-int	sbwait __P((struct sockbuf *sb));
-int	sb_lock __P((struct sockbuf *sb));
-int	soabort __P((struct socket *so));
-int	soaccept __P((struct socket *so, struct mbuf *nam));
-int	sobind __P((struct socket *so, struct mbuf *nam));
-void	socantrcvmore __P((struct socket *so));
-void	socantsendmore __P((struct socket *so));
-int	soclose __P((struct socket *so));
-int	soconnect __P((struct socket *so, struct mbuf *nam));
-int	soconnect2 __P((struct socket *so1, struct socket *so2));
-int	socreate __P((int dom, struct socket **aso, int type, int proto,
-	    struct proc *p));
-int	sodisconnect __P((struct socket *so));
-void	sofree __P((struct socket *so));
-int	sogetopt __P((struct socket *so, int level, int optname,
-	    struct mbuf **mp));
-void	sohasoutofband __P((struct socket *so));
-void	soisconnected __P((struct socket *so));
-void	soisconnecting __P((struct socket *so));
-void	soisdisconnected __P((struct socket *so));
-void	soisdisconnecting __P((struct socket *so));
-int	solisten __P((struct socket *so, int backlog));
+	sbcreatecontrol(caddr_t p, int size, int type, int level);
+void	sbdrop(struct sockbuf *sb, int len);
+void	sbdroprecord(struct sockbuf *sb);
+void	sbflush(struct sockbuf *sb);
+void	sbinsertoob(struct sockbuf *sb, struct mbuf *m0);
+void	sbrelease(struct sockbuf *sb);
+int	sbreserve(struct sockbuf *sb, u_long cc);
+int	sbwait(struct sockbuf *sb);
+int	sb_lock(struct sockbuf *sb);
+int	soabort(struct socket *so);
+int	soaccept(struct socket *so, struct mbuf *nam);
+int	sobind(struct socket *so, struct mbuf *nam);
+void	socantrcvmore(struct socket *so);
+void	socantsendmore(struct socket *so);
+int	soclose(struct socket *so);
+int	soconnect(struct socket *so, struct mbuf *nam);
+int	soconnect2(struct socket *so1, struct socket *so2);
+int	socreate(int dom, struct socket **aso, int type, int proto,
+	    struct proc *p);
+int	sodisconnect(struct socket *so);
+void	sofree(struct socket *so);
+int	sogetopt(struct socket *so, int level, int optname,
+	    struct mbuf **mp);
+void	sohasoutofband(struct socket *so);
+void	soisconnected(struct socket *so);
+void	soisconnecting(struct socket *so);
+void	soisdisconnected(struct socket *so);
+void	soisdisconnecting(struct socket *so);
+int	solisten(struct socket *so, int backlog);
 struct socket *
-	sodropablereq __P((struct socket *head));
+	sodropablereq(struct socket *head);
 struct socket *
-	sonewconn1 __P((struct socket *head, int connstatus));
-int	soreceive __P((struct socket *so, struct mbuf **paddr, struct uio *uio,
-	    struct mbuf **mp0, struct mbuf **controlp, int *flagsp));
-int	soreserve __P((struct socket *so, u_long sndcc, u_long rcvcc));
-void	sorflush __P((struct socket *so));
-int	sosend __P((struct socket *so, struct mbuf *addr, struct uio *uio,
-	    struct mbuf *top, struct mbuf *control, int flags));
-int	sosetopt __P((struct socket *so, int level, int optname,
-	    struct mbuf *m0));
-int	soshutdown __P((struct socket *so, int how));
-void	sowakeup __P((struct socket *so, struct sockbuf *sb));
+	sonewconn1(struct socket *head, int connstatus);
+int	soreceive(struct socket *so, struct mbuf **paddr, struct uio *uio,
+	    struct mbuf **mp0, struct mbuf **controlp, int *flagsp);
+int	soreserve(struct socket *so, u_long sndcc, u_long rcvcc);
+void	sorflush(struct socket *so);
+int	sosend(struct socket *so, struct mbuf *addr, struct uio *uio,
+	    struct mbuf *top, struct mbuf *control, int flags);
+int	sosetopt(struct socket *so, int level, int optname,
+	    struct mbuf *m0);
+int	soshutdown(struct socket *so, int how);
+void	sowakeup(struct socket *so, struct sockbuf *sb);
 #endif /* _KERNEL */
 
 #endif /* !_SYS_SOCKETVAR_H_ */
