@@ -1,3 +1,8 @@
+2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/target.m4: Apply RTEMS_CONFIGURE_ARGS_QUOTE (Part of fix
+	to PR 312).
+
 2002-11-18	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: Updated to rtems-ss-20021118.
@@ -10,6 +15,10 @@
 
 	* aclocal/bsp-alias.m4, aclocal/check-bsps.m4: Added support for
 	Motorola MTX603e.
+
+2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/target.m4: Use RTEMS_CONFIGURE_ARGS_QUOTE.
 
 2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

@@ -20,32 +20,14 @@ if test "$no_recursion" != yes; then
   else
     target_subdir="."
   fi
-  # Remove --cache-file and --srcdir arguments so they do not pile up.
-  ac_sub_configure_args=
-  rtems_prev=
-  for rtems_arg in $rtems_configure_args; do
-    if test -n "$rtems_prev"; then
-      rtems_prev=
-      continue
-    fi
-    case `eval echo $rtems_arg` in
-    -cache-file | --cache-file | --cache-fil | --cache-fi \
-    | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
-      rtems_prev=cache_file ;;
-    -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
-    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
-      ;;
-    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
-      rtems_prev=srcdir ;;
-    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
-      ;;
+  RTEMS_CONFIGURE_ARGS_QUOTE([ac_sub_configure_args],
+    [
     --target*) ;;
     --build*) ;;
     --host*) ;;
-    *_alias* ) ;; # HACK: Workaround to autoconf passing *_alias
-    *) ac_sub_configure_args="$ac_sub_configure_args $rtems_arg" ;;
-    esac
-  done
+    *_alias=* ) ;; # HACK: Workaround to autoconf passing *_alias
+    ],
+    [rtems_configure_args])
 
   for rtems_config_dir in $RTEMS_BUILD_SUBDIRS; do
     # Do not complain, so a configure script can configure whichever
