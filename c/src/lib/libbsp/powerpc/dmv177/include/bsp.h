@@ -64,41 +64,6 @@ int rtems_dmv177_sonic_driver_attach(struct rtems_bsdnet_ifconfig *config);
 #define Z8530_Baud( _frequency, _clock_by, _baud_rate  )   \
   ( (_frequency /( _clock_by * 2 * _baud_rate))  - 2)
 
-/*
- *  Stuff for Time Test 27
- */
-
-#define MUST_WAIT_FOR_INTERRUPT 1
-
-#define Install_tm27_vector( _handler ) \
-  set_vector( (_handler), PPC_IRQ_DECREMENTER, 1 )
-
-#define Cause_tm27_intr()  \
-  do { \
-    uint32_t   _clicks = 1; \
-    asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
-  } while (0)
-
-#define Clear_tm27_intr() \
-  do { \
-    uint32_t   _clicks = 0xffffffff; \
-    uint32_t   _msr = 0; \
-    _ISR_Set_level( 0 ); \
-    asm volatile( "mfmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
-    _msr &=  ~0x8000; \
-    asm volatile( "mtmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
-    asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
-  } while (0)
-
-#define Lower_tm27_intr() \
-  do { \
-    uint32_t   _msr = 0; \
-    _ISR_Set_level( 0 ); \
-    asm volatile( "mfmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
-    _msr |=  0x8002; \
-    asm volatile( "mtmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
-  } while (0)
-
 /* Constants */
 
 /*
