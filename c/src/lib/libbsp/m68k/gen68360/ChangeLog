@@ -1,3 +1,7 @@
+2002-06-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	* startup/Makefile.am: Compile the m68k gdb stub and glue.
+
 2002-05-14	Eric Norum <eric.norum@usask.ca>
 
 	* startup/linkcmds.bootp, startup/linkcmds.prom: Per PR192 add

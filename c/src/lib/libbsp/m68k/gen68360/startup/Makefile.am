@@ -3,13 +3,14 @@
 ##
 
 
-VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
+VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared:@srcdir@/../../shared/gdbstub::@srcdir@/../../../shared/gdbstub
 
 PGM = $(ARCH)/startup.rel
 
 C_FILES = alloc360.c bspclean.c bsplibc.c bsppost.c m68kpretaskinghook.c \
     bspstart.c init68360.c bootcard.c main.c sbrk.c setvec.c \
-    gnatinstallhandler.c
+    gnatinstallhandler.c m68k-stub.c rtems-stub-glue.c
+
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
@@ -23,7 +24,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 #
 
 # USE_INIT_FINI tells main.c what C++ help we need.
-AM_CPPFLAGS += -DUSE_INIT_FINI
+AM_CPPFLAGS += -DUSE_INIT_FINI -I @srcdir@/../../shared/gdbstub
 
 $(PGM): $(OBJS)
 	$(make-rel)
