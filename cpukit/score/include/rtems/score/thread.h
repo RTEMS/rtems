@@ -131,7 +131,7 @@ typedef struct {
 
 typedef enum {
   THREAD_API_RTEMS,
-  THREAD_API_POSIX,
+  THREAD_API_POSIX
 }  Thread_APIs;
 
 #define THREAD_API_FIRST THREAD_API_RTEMS
