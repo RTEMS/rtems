@@ -1,3 +1,7 @@
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems_webserver/misc.c: Per PR236 eliminate definition of strnlen().
+
 2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Build libnetapps.a. 
