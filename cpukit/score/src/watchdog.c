@@ -50,8 +50,8 @@ Watchdog_States _Watchdog_Remove(
   Watchdog_Control *the_watchdog
 )
 {
-  ISR_Level                level;
-  Watchdog_States          previous_state;
+  ISR_Level         level;
+  Watchdog_States   previous_state;
   Watchdog_Control *next_watchdog;
 
   _ISR_Disable( level );
