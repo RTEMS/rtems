@@ -1,3 +1,14 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems++/rtemsEvent.h, include/rtems++/rtemsInterrupt.h,
+	include/rtems++/rtemsMessageQueue.h,
+	include/rtems++/rtemsSemaphore.h, include/rtems++/rtemsStatusCode.h,
+	include/rtems++/rtemsTask.h, include/rtems++/rtemsTaskMode.h,
+	include/rtems++/rtemsTimer.h, src/rtemsEvent.cc,
+	src/rtemsInterrupt.cc, src/rtemsMessageQueue.cc,
+	src/rtemsSemaphore.cc, src/rtemsStatusCode.cc, src/rtemsTask.cc,
+	src/rtemsTimer.cc: URL for license changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
