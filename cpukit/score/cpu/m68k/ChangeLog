@@ -1,3 +1,7 @@
+2005-01-28	Eric Norum <norume@aps.anl.gov>
+
+	* rtems/score/cpu.h, rtems/score/m68k.h: ColdFire ISA A+ instructions
+
 2004-01-28	Ralf Corsepius <ralf.corsepiu@rtems.org>
 
 	* asm.h, rtems/score/cpu.h, rtems/score/m68k.h, rtems/score/types.h:

@@ -45,6 +45,7 @@ extern "C" {
  *     -m68332        (no FP) (deprecated, use -mcpu32)
  *     -mcpu32        (no FP)
  *     -m5200         (no FP)
+ *     -m528x         (no FP, ISA A+)
  *
  *  As of gcc 2.8.1 and egcs 1.1, there is no distinction made between
  *  the CPU32 and CPU32+.  The option -mcpu32 generates code which can
@@ -196,6 +197,20 @@ extern "C" {
 #define M68K_HAS_FPU             0
 #define M68K_HAS_FPSP_PACKAGE    0
 
+#elif defined(__mcf528x__)
+/* Motorola ColdFire ISA A+ - RISC/68020 hybrid */ 
+#define CPU_MODEL_NAME         "m528x"
+#define M68K_HAS_VBR             1
+#define M68K_HAS_BFFFO           0
+#define M68K_HAS_SEPARATE_STACKS 0
+#define M68K_HAS_PREINDEXING     0
+#define M68K_HAS_EXTB_L          1
+#define M68K_HAS_MISALIGNED      1
+#define M68K_HAS_FPU             0
+#define M68K_HAS_FPSP_PACKAGE    0
+#define M68K_COLDFIRE_ARCH       1
+#define M68K_HAS_ISA_APLUS       1
+
 #elif defined(__mcf5200__)
 /* Motorola ColdFire V2 core - RISC/68020 hybrid */ 
 #define CPU_MODEL_NAME         "m5200"
@@ -208,6 +223,7 @@ extern "C" {
 #define M68K_HAS_FPU             0
 #define M68K_HAS_FPSP_PACKAGE    0
 #define M68K_COLDFIRE_ARCH       1
+#define M68K_HAS_ISA_APLUS       0
 
 #elif defined(__mc68000__)
  
@@ -316,14 +332,14 @@ extern "C" {
   asm volatile ( "movec   %0,%%vbr " : : "r" (vbr))
 
 #elif ( M68K_COLDFIRE_ARCH == 1 )
-#define m68k_get_vbr( _vbr ) _vbr = (void *)_VBR
+extern void *_ColdFire_VBR;
+#define m68k_get_vbr( _vbr ) _vbr = _ColdFire_VBR
 
-#define m68k_set_vbr( _vbr ) \
-    asm volatile ("move.l  %%a7,%%d1 \n\t" \
-	          "move.l  %0,%%a7\n\t"    \
-	          "movec   %%a7,%%vbr\n\t" \
-                  "move.l  %%d1,%%a7\n\t"  \
-		  : : "d" (_vbr) : "d1" );
+#define m68k_set_vbr( vbr ) \
+  do { \
+    asm volatile ( "movec   %0,%%vbr " : : "r" (vbr)); \
+    _ColdFire_VBR = (void *)vbr; \
+  } while(0)
   
 #else
 #define m68k_get_vbr( _vbr ) _vbr = (void *)_VBR

@@ -480,8 +480,18 @@ void _CPU_Thread_Idle_body( void );
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   asm volatile( "bfffo (%1),#0,#16,%0" : "=d" (_output) : "a" (&_value));
-#else
 
+#elif ( M68K_HAS_ISA_APLUS == 1 )
+  /* This is simplified by the fact that RTEMS never calls it with _value=0 */
+#define _CPU_Bitfield_Find_first_bit( _value, _output ) \
+    asm volatile ( \
+       "   swap     %0\n"        \
+       "   ff1.l    %0\n"        \
+       : "=d" ((_output))        \
+       : "0" ((_value))          \
+       : "cc" ) ;
+
+#else
 /* duplicates BFFFO results for 16 bits (i.e., 15-(_priority) in
    _CPU_Priority_bits_index is not needed), handles the 0 case, and
    does not molest _value -- jsg */
