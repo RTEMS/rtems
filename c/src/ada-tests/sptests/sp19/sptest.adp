@@ -28,8 +28,8 @@ with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
 
-include(../../include/fp.inc)
-include(../../include/integer.inc)
+include(../../support/fp.inc)
+include(../../support/integer.inc)
 
 package body SPTEST is
 

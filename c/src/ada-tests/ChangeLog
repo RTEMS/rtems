@@ -1,5 +1,9 @@
 2002-08-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* sptests/sp19/sptest.adp: Fix include paths.
+
+2002-08-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* sptests/sp19/sptest.adb: Remove.
 	* sptests/sp19/Makefile.am: Let m4 generate sptests.adb from
 	sptests.adp.
