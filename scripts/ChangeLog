@@ -1,3 +1,8 @@
+2004-09-23	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* gcc3newlib/Makefile.am: Add avr-rtems*gcc.
+	* gcc3newlib/gccnewlib.add: Disable c++ for avr.
+
 2004-07-29	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* autotools/automake.spec.in: automake-1.9.

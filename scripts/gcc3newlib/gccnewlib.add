@@ -79,6 +79,10 @@ NoSource:	1
 %define build_gcj	%_gcj
 %endif
 
+%if "%{gcc_target}" == "avr-rtems@osversion@"
+%define build_cxx	0
+%endif
+
 %if "%{gcc_target}" == "c4x-rtems@osversion@"
 %define build_cxx	0
 %endif

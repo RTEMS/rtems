@@ -28,6 +28,10 @@ arm-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache arm-rtems@osversion@ > $@
 RPM_SPECS_DATA += arm-rtems@osversion@-$(GCC3NEWLIBVERS).spec
 
+avr-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache avr-rtems@osversion@ > $@
+RPM_SPECS_DATA += avr-rtems@osversion@-$(GCC3NEWLIBVERS).spec
+
 h8300-rtems@osversion@-$(GCC3NEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems@osversion@ > $@
 RPM_SPECS_DATA += h8300-rtems@osversion@-$(GCC3NEWLIBVERS).spec
