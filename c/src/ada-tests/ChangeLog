@@ -1,5 +1,10 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* sptests/sp19/sptest.adp, support/init.c: Removed incorrect statement
+	about copyright assignment.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	* samples/base_sp/base_sp.adb, samples/base_sp/config.h,
 	samples/base_sp/sptest.adb, samples/base_sp/sptest.ads,
 	samples/hello/config.h, samples/hello/hello.adb,

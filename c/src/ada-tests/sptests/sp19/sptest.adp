@@ -13,11 +13,7 @@
 --  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
 --  On-Line Applications Research Corporation (OAR).
 --
---  This material may be reproduced by or for the U.S. Government pursuant
---  to the copyright license under the clause at DFARS 252.227-7013.  This
---  notice must appear in all copies of this file and its derivatives.
---
---  sptest.adp,v 1.3 1995/07/12 19:42:20 joel Exp
+--  $Id$
 --
 
 with INTERFACES; use INTERFACES;
