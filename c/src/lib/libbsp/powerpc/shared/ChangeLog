@@ -1,5 +1,9 @@
 2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Remove SUBDIRS.
+
+2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Merge-in bootloader/Makefile.am, clock/Makefile.am,
 	console/Makefile.am, include/Makefile.am, irq/Makefile.am,
 	motorola/Makefile.am, openpic/Makefile.am, pci/Makefile.am,

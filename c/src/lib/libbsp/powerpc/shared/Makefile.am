@@ -5,8 +5,6 @@
 # FIXME: Herein lies madness ;)
 
 if need_shared
-SUBDIRS = bootloader
-
 include_bspdir = $(includedir)/bsp
 
 ## include
