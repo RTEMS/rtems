@@ -40,6 +40,15 @@
 
 
 /* macros/functions */
-void reboot(void) __attribute__ ((noreturn));
+
+/*
+ *  This prototype really should have the noreturn attribute but
+ *  that causes a warning since it appears that the routine does
+ *  return.
+ *
+ *   void reboot(void) __attribute__ ((noreturn));
+ */
+
+void reboot(void);
 
 #endif /* _EFI332_H_ */

@@ -13,7 +13,15 @@ char * const __env[]= {""};
 
 int main(const int argc, char * const argv[], char * const env[]);
 
-void dumby_start ()  __attribute__ ((noreturn));
+/*
+ *  This prototype really should have the noreturn attribute but
+ *  that causes a warning since it appears that the routine does
+ *  return.
+ *
+ *   void dumby_start ()  __attribute__ ((noreturn));
+ */
+
+void dumby_start ();
 void  dumby_start() {
 
   /* We need to by-pass the link instruction since the RAM chip-
