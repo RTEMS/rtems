@@ -849,7 +849,7 @@ SYM(_mainDone):
 	movel	d0,a7@-						| This should cause a RESET
 /*	stop	#0x2700						| Stop with interrupts disabled */
 	move.w	#0x2700,sr
-	bra.s	SYM(_mainDone)					| Stuck forever
+	bra.l	SYM(_mainDone)					| Stuck forever
 
         .align 2
 	PUBLIC (_HeapSize)
