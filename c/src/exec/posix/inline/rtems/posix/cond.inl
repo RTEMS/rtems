@@ -53,10 +53,13 @@ RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control *_POSIX_Condition_variabl
   Objects_Locations *location
 )
 {
-/* XXX really should validate pointer */
 /* XXX should support COND_INITIALIZER */
-  return (POSIX_Condition_variables_Control *)
-    _Objects_Get( &_POSIX_Condition_variables_Information, *id, location );
+  if ( id )
+    return (POSIX_Condition_variables_Control *)
+      _Objects_Get( &_POSIX_Condition_variables_Information, *id, location );
+
+  *location = OBJECTS_ERROR;
+  return NULL;
 }
  
 /*PAGE
