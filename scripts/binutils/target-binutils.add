@@ -15,7 +15,7 @@ This is the GNU binutils for RTEMS targetting %{binutils_target}.
 
 %files -n %{rpmprefix}%{binutils_target}-binutils
 %defattr(-,root,root)
-%doc %{_prefix}/man/man1/%{binutils_target}-*.1*
+%doc %{_mandir}/man1/%{binutils_target}-*.1*
 
 %dir %{_prefix}/bin
 %{_prefix}/bin/%{binutils_target}-addr2line%{_exeext}

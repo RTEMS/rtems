@@ -15,39 +15,43 @@ This is the base for binutils regardless of target CPU.
 %post -n %{rpmprefix}rtems@osversion@-base-binutils
   if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
-    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    rm -f $RPM_INSTALL_PREFIX%{_infodir}/dir
     f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
     test x"$f" != x"" && for i in $f; do
-      /sbin/install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+      /sbin/install-info $i $RPM_INSTALL_PREFIX%{_infodir}/dir
     done
   fi
 
 %postun -n %{rpmprefix}rtems@osversion@-base-binutils
   if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
   then
-    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    rm -f $RPM_INSTALL_PREFIX%{_infodir}/dir
     f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
     test x"$f" != x"" && for i in $f; do
-      /sbin/install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+      /sbin/install-info $i $RPM_INSTALL_PREFIX%{_infodir}/dir
     done
   fi
 
-%files -n %{rpmprefix}rtems@osversion@-base-binutils -f files
+%files -n %{rpmprefix}rtems@osversion@-base-binutils
 %defattr(-,root,root)
 %dir %{_prefix}/info
-%doc %{_prefix}/info/dir
-%doc %{_prefix}/info/as.info*
-%doc %{_prefix}/info/bfd.info*
-%doc %{_prefix}/info/binutils.info*
-%doc %{_prefix}/info/ld.info*
+%doc %{_infodir}/dir
+%doc %{_infodir}/as.info*
+%doc %{_infodir}/bfd.info*
+%doc %{_infodir}/binutils.info*
+%doc %{_infodir}/ld.info*
 
 %if "%{binutils_version}" < "2.13"
-%doc %{_prefix}/info/gasp.info.gz
+%doc %{_infodir}/gasp.info*
 %endif
-%doc %{_prefix}/info/standards.info.gz
+%doc %{_infodir}/standards.info*
 
-%dir %{_prefix}/man
-%dir %{_prefix}/man/man1
+%if "%{binutils_version}" < "2.9.5"
+%doc %{_infodir}/configure.info*
+%endif
+
+# %dir %{_mandir}
+# %dir %{_mandir}/man1
 
 # deleted as of 2.13
 # %dir %{_prefix}/include
@@ -55,9 +59,8 @@ This is the base for binutils regardless of target CPU.
 # %{_prefix}/include/ansidecl.h
 # %{_prefix}/include/bfdlink.h
 
-%dir %{_prefix}/lib
-# deleted as of 2.13
-%{_prefix}/lib/libiberty*
+# %dir %{_prefix}/lib
+# %{_prefix}/lib/libiberty*
 # deleted as of 2.13
 # %{_prefix}/lib/libbfd*
 # %{_prefix}/lib/libopcodes*

@@ -1,3 +1,11 @@
+2004-03-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* binutils/base-binutils.add: Apply _infodir.
+	Don't install libiberty. Misc. cleanups.
+	* binutils/binutils.add: Apply _infodir, _mandir.
+	Don't install libiberty. Gzip man pages. Misc. cleanups.
+	* binutils/target-binutils.add: Apply _mandir.
+
 2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* autotools/automake-rtems.spec.in: Upgrade to 1.8.3.

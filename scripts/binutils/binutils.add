@@ -47,7 +47,8 @@ This is binutils sources with patches for RTEMS.
   ../binutils-%{binutils_version}/configure \
     --build=%_build --host=%_host \
     --target=%{binutils_target} \
-    --verbose --prefix=%{_prefix} --disable-nls
+    --verbose --disable-nls \
+    --prefix=%{_prefix} --mandir=%{_mandir} --infodir=%{_infodir}
 
   make all
   make info
@@ -55,31 +56,32 @@ This is binutils sources with patches for RTEMS.
 
 %install
   cd build
-  make prefix=$RPM_BUILD_ROOT%{_prefix} install
-  make prefix=$RPM_BUILD_ROOT%{_prefix} install-info
+  make prefix=$RPM_BUILD_ROOT%{_prefix} \
+    mandir=$RPM_BUILD_ROOT%{_mandir} \
+    infodir=$RPM_BUILD_ROOT%{_infodir} \
+    install
+  make prefix=$RPM_BUILD_ROOT%{_prefix} \
+    mandir=$RPM_BUILD_ROOT%{_mandir} \
+    infodir=$RPM_BUILD_ROOT%{_infodir} \
+    install-info
 # A bug in binutils: binutils does not install share/locale
 # however it uses it
   ../binutils-%{binutils_version}/mkinstalldirs \
     $RPM_BUILD_ROOT%{_prefix}/share/locale
 
-#  rm -f $RPM_BUILD_ROOT%{_prefix}/bin/%{binutils_target}-c++filt%{_exeext}
 # gzip info files
-  gzip -9qf $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
-  gzip -9qf $RPM_BUILD_ROOT%{_prefix}/info/*.info-* 2>/dev/null
-
-  if test -f $RPM_BUILD_ROOT%{_prefix}/info/configure.info.gz;
-  then
-# These are only present in binutils >= 2.9.5
-    find $RPM_BUILD_ROOT%{_prefix}/info -name 'configure.*' | \
-      sed -e "s,^$RPM_BUILD_ROOT,,g" > ../files
-  else
-    touch ../files
-  fi
+  gzip -9qf $RPM_BUILD_ROOT%{_infodir}/*.info 2>/dev/null
+  gzip -9qf $RPM_BUILD_ROOT%{_infodir}/*.info-* 2>/dev/null
 
 # We assume that info/dir exists when building the RPMs
-  rm -f $RPM_BUILD_ROOT%{_prefix}/info/dir
+  rm -f $RPM_BUILD_ROOT%{_infodir}/dir
   f=`find $RPM_BUILD_ROOT%{_prefix}/info -name '*.info.gz'`
   test x"$f" != x"" && for i in $f; do
-    /sbin/install-info $i $RPM_BUILD_ROOT%{_prefix}/info/dir
+    /sbin/install-info $i $RPM_BUILD_ROOT%{_infodir}/dir
   done
 
+# gzip man pages
+  gzip -9qf $RPM_BUILD_ROOT%{_mandir}/man?/*.? 2>/dev/null
+
+# We don't ship host files
+  rm -f ${RPM_BUILD_ROOT}%{_prefix}/lib/libiberty*
