@@ -104,15 +104,15 @@ C_FILES = $(TASK_C_FILES) $(TASKSYNC_C_FILES) $(SEMAPHORE_C_FILES) \
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-EXTRA_LIBRARIES = o-optimize/libitron.a
-o_optimize_libitron_a_SOURCES = $(C_FILES)
-o_optimize_libitron_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+EXTRA_LIBRARIES = libitron.a
+libitron_a_SOURCES = $(C_FILES)
+libitron_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-EXTRA_LIBRARIES += o-debug/libitron.a
-o_debug_libitron_a_SOURCES = $(C_FILES)
-o_debug_libitron_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+EXTRA_LIBRARIES += libitron_g.a
+libitron_g_a_SOURCES = $(C_FILES)
+libitron_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-all-local: $(PREINSTALL_FILES) $(ARCH)/libitron.a
+all-local: $(PREINSTALL_FILES) libitron$(LIB_VARIANT).a
 endif
 
 UNUSED_C_FILES = src/cre_mbx.c src/del_mbx.c src/mboxtranslatereturncode.c \
