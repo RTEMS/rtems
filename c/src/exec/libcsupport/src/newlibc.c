@@ -290,14 +290,6 @@ libc_init(int reentrant)
 }
 
 
-void
-exit(int status)
-{
-    libc_wrapup();
-    rtems_shutdown_executive(status);
-}
-
-
 /*
  *  Function:   _exit
  *  Created:    94/12/10
@@ -329,6 +321,14 @@ exit(int status)
 #if !defined(RTEMS_UNIX) && !defined(__GO32__)
 void _exit(int status)
 {
+    rtems_shutdown_executive(status);
+}
+
+#else
+
+void exit(int status)
+{
+    libc_wrapup();
     rtems_shutdown_executive(status);
 }
 #endif
