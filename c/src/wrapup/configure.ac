@@ -21,11 +21,11 @@ RTEMS_ENABLE_MULTILIB
 RTEMS_ENV_RTEMSBSP
 RTEMS_CHECK_CPU
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
-RTEMS_BSP_ALIAS(${RTEMS_BSP},bspalias)
+RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 
 # The bare bsp doesn't have libbsp.a
 # FIXME: We should use a feature based check, here
-AM_CONDITIONAL(HAS_LIBBSP,[! test "$bspalias" = "bare"])
+AM_CONDITIONAL(HAS_LIBBSP,[! test "$RTEMS_BSP_FAMILY" = "bare"])
 
 RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 if test "$HAS_NETWORKING" = "yes"; then

@@ -21,7 +21,7 @@ LIBRDBG = $(PROJECT_RELEASE)/lib/librdbg$(LIB_VARIANT).a
 endif
 
 if HAS_LIBBSP
-LIBBSP = ../lib/libbsp/@RTEMS_CPU@/$(RTEMS_BSP_FAMILY)/wrapup/$(ARCH)/libbsp.a
+LIBBSP = ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/wrapup/$(ARCH)/libbsp.a
 endif
 
 SRCS = $(LIBBSP) $(LIBNETWORKING) $(LIBRDBG) \
