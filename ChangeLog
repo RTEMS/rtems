@@ -1,8 +1,13 @@
-2000-09-01	Ralf Corsepius
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/compile.am: New file
+	* ChangeLog: Fix email addresses
+
+2000-09-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* LICENSE.NET, README, README.configure: Spelling corrections.
 
-2000-09-01	Ralf Corsepius
+2000-09-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/check-bsps.m4: Fix c4* and sim68000 entries
 
