@@ -16,7 +16,7 @@
 #include <bsp/vectors.h>
 #include <libcpu/cpu.h>
 #include <libcpu/raw_exception.h>
-#include <rtems/score/targopts.h>
+#include <rtems/score/cpuopts.h>  /* for PPC_HAS_FPU */
 #include "asm.h"
 	
 
