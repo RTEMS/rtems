@@ -100,4 +100,10 @@ install_files: $(PROJECT_ROOT)/$(RTEMS_BSP)/Makefile.inc
 tests:
 	cd src/tests; $(MAKE) all
 
+debug_tests: debug
+	cd src/tests; $(MAKE) debug
+
+profile_tests: profile
+	cd src/tests; $(MAKE) profile
+
 env:    $(SRCS) dirs
