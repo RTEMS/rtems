@@ -20,8 +20,8 @@ LIBS=../monitor/$(ARCH)/libmonitor-tmp.a \
      ../assoc/$(ARCH)/libassoc-tmp.a \
      ../stackchk/$(ARCH)/libstackchk-tmp.a \
      ../cpuuse/$(ARCH)/libcpuuse-tmp.a \
-     ../rtmonuse/$(ARCH)/librtmonuse-tmp.a \
-     $(wildcard ../purify/$(ARCH)/libpurify-tmp.a)
+     ../rtmonuse/$(ARCH)/librtmonuse-tmp.a
+
 RELS=
 
 CLEAN_ADDITIONS +=
