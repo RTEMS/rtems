@@ -12,6 +12,8 @@
 #include <bsp.h>
 #include <m68360.h>
 #include <m68360.h>
+#include <stdio.h>
+#include <stdarg.h>
 #include <stdarg.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
@@ -490,7 +492,6 @@ scc_rxDaemon (void *arg)
 			 * FIXME: Packet filtering hook could be done here.
 			 */
 			struct ether_header *eh;
-			int s;
 
 			m = sc->rxMbuf[rxBdIndex];
 			m->m_len = m->m_pkthdr.len = rxBd->length -
@@ -802,9 +803,7 @@ scc_stats (struct scc_softc *sc)
 static int
 scc_ioctl (struct ifnet *ifp, int command, caddr_t data)
 {
-	struct ifaddr *ifa = (struct ifaddr *)data;
 	struct scc_softc *sc = ifp->if_softc;
-	struct ifreq *ifr = (struct ifreq *) data;
 	int error = 0;
 
 	switch (command) {
