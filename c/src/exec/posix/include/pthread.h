@@ -16,13 +16,14 @@
 
 /*
  *  3.1.3 Register Fork Handlers, P1003.1c/Draft 10, P1003.1c/Draft 10, p. 27
+ *
+ *  RTEMS does not support processes, so we fall under this and do not 
+ *  provide this routine:
+ *
+ *  "Either the implementation shall support the pthread_atfork() function
+ *   as described above or the pthread_atfork() funciton shall not be 
+ *   provided."
  */
-
-int pthread_atfork(
-  void (*prepare)(void),
-  void (*parent)(void),
-  void (*child)(void)
-);
 
 /*
  *  11.3.1 Mutex Initialization Attributes, P1003.1c/Draft 10, p. 81
@@ -182,10 +183,10 @@ int pthread_attr_getscope(
   int                   *contentionscope
 );
 
-#define PTHREAD_INHERIT_SCHED  0      /* scheduling policy and associated */
+#define PTHREAD_INHERIT_SCHED  1      /* scheduling policy and associated */
                                       /*   attributes are inherited from */
                                       /*   the calling thread. */
-#define PTHREAD_EXPLICIT_SCHED 0      /* set from provided attribute object */
+#define PTHREAD_EXPLICIT_SCHED 2      /* set from provided attribute object */
 
 int pthread_attr_setinheritsched(
   pthread_attr_t  *attr,
@@ -395,10 +396,12 @@ int pthread_equal(
 /*
  *  This is used to statically initialize a pthread_once_t. Example:
  *
- *  pthread_once_t once = PTHREAD_ONCE_INITIALIZER;
+ *  pthread_once_t once = PTHREAD_ONCE_INIT;
+ *
+ *  NOTE:  This is named inconsistently -- it should be INITIALIZER.
  */
  
-#define PTHREAD_ONCE_INITIALIZER  { TRUE, FALSE }
+#define PTHREAD_ONCE_INIT  { 1, 0 }  /* is initialized and not run */
  
 int pthread_once(
   pthread_once_t  *once_control,
@@ -485,7 +488,7 @@ void pthread_cleanup_pop(
  */
  
 int pthread_getcpuclockid(
-  pthread_t      pid,
+  pthread_t  thread_id,
   clockid_t *clock_id
 );
  

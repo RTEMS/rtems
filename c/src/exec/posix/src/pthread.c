@@ -62,23 +62,17 @@ void _POSIX_Threads_Manager_initialization(
   );
 }
 
-#ifdef NOT_IMPLEMENTED_YET
-
 /*PAGE
  *
  *  3.1.3 Register Fork Handlers, P1003.1c/Draft 10, P1003.1c/Draft 10, p. 27
+ *
+ *  RTEMS does not support processes, so we fall under this and do not
+ *  provide this routine:
+ *
+ *  "Either the implementation shall support the pthread_atfork() function
+ *   as described above or the pthread_atfork() funciton shall not be
+ *   provided."
  */
-
-int pthread_atfork(
-  void (*prepare)(void),
-  void (*parent)(void),
-  void (*child)(void)
-)
-{
-  return POSIX_NOT_IMPLEMENTED();
-}
-
-#endif
 
 /*PAGE
  *
