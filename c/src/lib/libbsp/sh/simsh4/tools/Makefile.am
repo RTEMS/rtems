@@ -17,4 +17,4 @@ $(PROJECT_ROOT)/simsh4/tests/runtest: runtest
 
 all-local: $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../../../../automake/host.am
+include $(top_srcdir)/../../../../automake/host.am
