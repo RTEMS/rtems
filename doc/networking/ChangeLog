@@ -1,3 +1,8 @@
+2003-08-30	Ralf Corsepius <corsepius@faw.uni-ulm.de>
+
+	* networking.texi: include common/rtems.texi.
+	* Makefile.am: Reflect changes to $(top_srcdir)/project.am.
+
 2003-02-11	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* networkapp.t: Add an example code snippet for adding a default route.
