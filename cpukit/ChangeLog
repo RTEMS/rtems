@@ -1,5 +1,14 @@
 2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libblock/include/rtems/bdbuf.h, libblock/include/rtems/blkdev.h,
+	libblock/include/rtems/diskdevs.h,
+	libblock/include/rtems/ide_part_table.h,
+	libblock/include/rtems/ramdisk.h,
+	libfs/src/dosfs/dosfs.h, libfs/src/imfs/imfs.h:
+	New header guards.
+
+2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libcsupport/include/inttypes.h: New header guard.
 	Fix doxygen preamble.
 
