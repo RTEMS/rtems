@@ -5,17 +5,9 @@
 This is the top level of the RTEMS directory structure.  The following
 is a description of the files and directories in this directory:
 
-  LICENSE
-    Required legalese.
-
-  Makefile
+  Makefile.in
     The top-level Make command file used to build the C implementation
     of RTEMS.  [RTEMS assumes the use of GNU make.]
-
-  Modules
-    Example Modules command files used to configure the user's environment
-    for RTEMS.  These require the Modules system administration package
-    available from numerous ftp sites.
 
   README
     This file.
