@@ -1,3 +1,8 @@
+2002-11-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove make/Templates/Makefile.
+	* README.configure: Minor massaging.
+
 2002-11-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	Further preparations for autoconf > 2.52:

@@ -67,14 +67,13 @@ AS_IF([test x"${enable_docs}" = x"yes"],
 RTEMS_TARGET_CONFIG_SUBDIRS([c/make])
 AS_IF([test x"$enable_multilib" = x"yes"],[
   RTEMS_TARGET_CONFIG_SUBDIRS([cpukit])
-])  
+])
 RTEMS_TARGET_CONFIG_SUBDIRS([c])
 
 AC_CONFIG_FILES([Makefile
 tools/Makefile
 make/Makefile
 make/custom/Makefile
-make/Templates/Makefile
 make/compilers/Makefile 
 ])
 

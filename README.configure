@@ -10,6 +10,9 @@ configured and built either standalone or together with the compiler
 tools in the Cygnus one-tree structure. Using autoconf also means
 that RTEMS now can be built in a separate build directory.
 
+To re-generate auto*tool generated files (configure, Makefile.in etc),
+autoconf-2.52 and automake-1.6.* are required.
+
 2. Installation
 ===============
 
@@ -26,8 +29,6 @@ RTEMS-specific option are supported:
         --enable-cxx
         --enable-bare-cpu-model=<MODEL>
         --enable-bare-cpu-cflags=<FLAGS>
-        --enable-gcc28               (also use enable-libcdir when disabled)
-        --enable-libcdir=<DIRECTORY>      (do not use if gcc 2.8 is enabled)
         --enable-multiprocessing
 	--enable-rtemsbsp="bsp1 bsp2 ..."
 	--enable-tests
@@ -38,7 +39,6 @@ In addition, the following standard autoconf options are frequently
 used when configuring RTEMS installations:
 
         --prefix=INSTALL_DIRECTORY
-        --program-prefix=
 
 By default, inline routines are used instead of macros where possible.
 Macros can be selected using the --disable-inlines option.  [NOTE:
@@ -64,19 +64,14 @@ with the --enable-cxx option. If the rtems++ C++ library is installed
 it will also be build.
 
 By default, the RTEMS test suites are NOT configured -- only the 
-sample tests are built.  The --enable-tests will not configure
+sample tests are built.  --enable-tests will configure
 the RTEMS test suite. The default speeds up the build
 and configure process when the tests are not desired.
 
-By default, RTEMS is built using arguments and build rules which are 
-NOT compatible with gcc 2.7.2.2.  If using a gcc which supports the
--specs option, then the --enable-gcc28 option may be used to enable
-this feature.  You should use the --enable-gcc28 option when using
-either the egcs source tree, testgcc snapshots, or gcc 2.8.0 or newer.
-If you --disable-gcc28, then you MUST  specify the location of the
-Standard C Library with the --enable-libcdir option.   [NOTE: These
-options are considered obsolete and may be removed in a future
-RTEMS release.]
+By default, RTEMS is built using arguments and build rules which require a
+gcc supporting the -specs option, ie. a gcc >= 2.8.
+[The --disable-gcc28 option, which has been present in former releases, has
+been removed.]
 
 By default, multiprocessing is is not built.  It can be enabled
 for those BSPs supporting it by the --enable-multiprocessing option.
@@ -139,6 +134,8 @@ test suite.
 By default, --enable-docs is disabled and documentation is not built.
 
 2.2 Build with Cygnus one-tree release
+
+[NOTE: This section does not apply anymore.]
 
 To build and install RTEMS with the one-tree structure, just copy the rtems
 directory to the tree. The one-tree configure.in and Makefile.in has to be 
@@ -223,11 +220,12 @@ Gcc-target-default.cfg contains the common gcc definitions. Some targets
 6. Adding a bsp
 ===============
 
+[OBSOLETE: This section below does not apply anymore.]
 The top-level configure.in has to be modified if a new target is added
 or if a new bsp is to be built by default. The additions required is
 basically to add which makefiles are to be created by configure and
-to add the target to the selection statement. To re-generate
-configure, autoconf-2.13 and automake-1.14 are needed.
+to add the target to the selection statement. 
+
 
 7. Tested configurations
 ========================
@@ -246,20 +244,18 @@ The following configurations have NOT been tested:
 Gawk version 2 or higher.
 GNU make version 3.72 or higher.
 Bash.
-gcc version ???
+gcc version > 2.8
 
 TODO
 ====
 
 The install-if-change script requires bash. On Solaris systems, this should
-be changed to ksh, since ksh is provided with Solaris (bash not).
+be changed to ksh, since ksh is provided with Solaris (bash not). This
+script is not used by RTEMS and only is provided for convenience.
 
 A fairly recent version of gawk is needed to build RTEMS. This should be
 changed so that a plain vanilla awk also works. [NOTE: This dependency
 should disappear when the "gcc 2.8 -specs" is finished.]
-
-'make install' should only install necessary files, not the full
-PROJECT_RELEASE directory as now.
 
 Posix port on Solaris-2.5 fails due to undefined built-in functions
 (gcc-2.7.2, might be my installation).
