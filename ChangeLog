@@ -1,3 +1,9 @@
+2001-04-20	Eric Valette <valette@crf.canon.fr>
+
+ 	* aclocal/check-rdbg.m4: Added check to determine which PowerPC
+	BSPs support the new exception processing model and 
+	consequently, librdbg.
+
 2001-02-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Reworked for Canadian Cross support.
