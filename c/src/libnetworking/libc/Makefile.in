@@ -17,10 +17,13 @@ LIBNAME = lib.a
 LIB = ${ARCH}/${LIBNAME}
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES = base64 gethostbydns gethostbyht gethostbynis gethostnamadr herror \
-    inet_addr inet_ntoa inet_ntop inet_pton map_v4v6 nsap_addr ns_name \
-    ns_netint ns_parse ns_print ns_ttl res_comp res_data res_debug res_init \
-    res_mkquery res_mkupdate res_query res_send res_stubs res_update strsep
+C_PIECES = base64 gethostbydns gethostbyht gethostbynis gethostnamadr \
+    getnetbydns getnetbyht getnetbynis getnetnamadr getproto getprotoent \
+    getprotoname getservbyname getservbyport getservent herror inet_addr \
+    inet_lnaof inet_makeaddr inet_network inet_ntoa inet_ntop inet_pton \
+    map_v4v6 nsap_addr ns_name ns_netint ns_parse ns_print ns_ttl \
+    res_comp res_data res_debug res_init res_mkquery res_mkupdate \
+    res_query res_send res_stubs res_update strsep
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
