@@ -675,7 +675,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
   do { \
     unsigned char __ccr; \
     asm volatile( "stc ccr, %0 ; orc #0x80,ccr " \
-             : "=m" (__ccr) : "0" (__ccr) ); \
+             : "=m" (__ccr) /* : "0" (__ccr) */ ); \
     (_isr_cookie) = __ccr; \
   } while (0) 
 #else

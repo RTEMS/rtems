@@ -1,3 +1,9 @@
+2004-12-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 733/rtems
+	* rtems/score/cpu.h: Remove output arg from inline asm in 
+	_CPU_ISR_Disable.
+
 2004-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/score/types.h: Use __rtems_score_types_h as preprocessor
