@@ -59,7 +59,7 @@ extern "C" {
  *     m68lc040      (no FP)
  *     m68ec040      (no FP)
  *     m68302        (no FP)
- *     m68360        (no FP)
+ *     mcpu32        (no FP)  (includes m68360)
  *
  *  Primary difference (for RTEMS) between m68040, m680lc040, and 
  *  m68ec040 is the presence or absence of the FPU.
@@ -177,9 +177,9 @@ extern "C" {
 #define M68K_HAS_PREINDEXING     0
 #define M68K_HAS_EXTB_L          1
 
-#elif defined(m68360)
+#elif defined(mcpu32)
  
-#define CPU_MODEL_NAME         "m68360"
+#define CPU_MODEL_NAME         "mcpu32"
 #define M68K_HAS_VBR             1
 #define M68K_HAS_SEPARATE_STACKS 0
 #define M68K_HAS_FPU             0
