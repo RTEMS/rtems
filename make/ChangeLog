@@ -1,3 +1,8 @@
+2005-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* compilers/gcc-portsw.cfg: Remove.
+	* Makefile.am: Reflect change above.
+
 2004-11-23	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Remove eth_comm.
