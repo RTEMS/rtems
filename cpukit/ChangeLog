@@ -1,5 +1,9 @@
 2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/prog-ccas.m4: Remove $(GCCSPECS).
+
+2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/src/eventsurrender.c: Remove bogus type casts.
 	* sapi/Makefile.am: Eliminate *_FILES.
 
