@@ -1,4 +1,10 @@
-2005-02-09	Eric Norum <norum@aps.anl.gov>
+2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* librpc/Makefile.am: Split preinstallation rules in to separate
+	preinstall.am-files.
+	* librpc/preinstall.am: New (Generated from corresponding Makefile.am).
+
+2005-02-08	Eric Norum <norum@aps.anl.gov>
 
 	* libfs/Makefile.am, libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_eval.c,
 	libfs/src/imfs/imfs_fchmod.c, libfs/src/imfs/imfs_handlers_memfile.c,

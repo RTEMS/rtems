@@ -7,6 +7,7 @@ include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST =
 CLEANFILES =
+DISTCLEANFILES =
 
 if LIBRPC
 include_rpcdir = $(includedir)/rpc
@@ -92,89 +93,8 @@ EXTRA_DIST += include/rpcsvc/bootparam_prot.x include/rpcsvc/crypt.x \
     include/rpcsvc/ypupdate_prot.x include/rpcsvc/yp.x \
     include/rpcsvc/ypxfrd.x
 
-PREINSTALL_DIRS =
-PREINSTALL_FILES =
+all-local: $(PREINSTALL_FILES)
 
-if LIBRPC
-$(PROJECT_INCLUDE)/rpc/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/rpc
-	@: > $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-
-$(PROJECT_INCLUDE)/rpc/auth.h: include/rpc/auth.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/auth.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/auth.h
-
-$(PROJECT_INCLUDE)/rpc/auth_des.h: include/rpc/auth_des.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/auth_des.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/auth_des.h
-
-$(PROJECT_INCLUDE)/rpc/auth_unix.h: include/rpc/auth_unix.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/auth_unix.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/auth_unix.h
-
-$(PROJECT_INCLUDE)/rpc/clnt.h: include/rpc/clnt.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/clnt.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/clnt.h
-
-$(PROJECT_INCLUDE)/rpc/clnt_stat.h: include/rpc/clnt_stat.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/clnt_stat.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/clnt_stat.h
-
-$(PROJECT_INCLUDE)/rpc/des.h: include/rpc/des.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/des.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/des.h
-
-$(PROJECT_INCLUDE)/rpc/des_crypt.h: include/rpc/des_crypt.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/des_crypt.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/des_crypt.h
-
-$(PROJECT_INCLUDE)/rpc/pmap_clnt.h: include/rpc/pmap_clnt.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/pmap_clnt.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/pmap_clnt.h
-
-$(PROJECT_INCLUDE)/rpc/pmap_prot.h: include/rpc/pmap_prot.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/pmap_prot.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/pmap_prot.h
-
-$(PROJECT_INCLUDE)/rpc/pmap_rmt.h: include/rpc/pmap_rmt.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/pmap_rmt.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/pmap_rmt.h
-
-$(PROJECT_INCLUDE)/rpc/rpc.h: include/rpc/rpc.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/rpc.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/rpc.h
-
-$(PROJECT_INCLUDE)/rpc/rpc_com.h: include/rpc/rpc_com.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/rpc_com.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/rpc_com.h
-
-$(PROJECT_INCLUDE)/rpc/rpc_msg.h: include/rpc/rpc_msg.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/rpc_msg.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/rpc_msg.h
-
-$(PROJECT_INCLUDE)/rpc/rpcent.h: include/rpc/rpcent.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/rpcent.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/rpcent.h
-
-$(PROJECT_INCLUDE)/rpc/svc.h: include/rpc/svc.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/svc.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/svc.h
-
-$(PROJECT_INCLUDE)/rpc/svc_auth.h: include/rpc/svc_auth.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/svc_auth.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/svc_auth.h
-
-$(PROJECT_INCLUDE)/rpc/types.h: include/rpc/types.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/types.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/types.h
-
-$(PROJECT_INCLUDE)/rpc/xdr.h: include/rpc/xdr.h $(PROJECT_INCLUDE)/rpc/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rpc/xdr.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rpc/xdr.h
-endif
-
-CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+include $(srcdir)/preinstall.am
 
 include $(top_srcdir)/automake/local.am
