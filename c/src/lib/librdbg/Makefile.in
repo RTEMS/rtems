@@ -1,0 +1,96 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH = @srcdir@:@srcdir@/$(RTEMS_CPU)
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+LIBNAME=librdbg.a
+LIB=${ARCH}/${LIBNAME}
+
+# C and C++ source names, if any, go here -- minus the .c or .cc
+C_PIECES= rdbg servcon servbkpt servrpc excep \
+	  servtgt servtsp servutil _servtgt rdbg_f \
+	  ptrace 
+C_FILES=$(C_PIECES:%=%.c)
+C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+
+# Asm source names, if any, go here -- minus the .s 
+ASM_PIECES= rdbg_cpu_asm
+ASM_FILES=$(ASM_PIECES:%=%.s)
+ASM_O_FILES=$(ASM_PIECES:%=${ARCH}/%.o)
+
+# Generated C source names, if any, go here -- minus the .c
+C_GEN_PIECES= remdeb_xdr remdeb_svc
+C_GEN_FILES=$(C_GEN_PIECES:%=%.c)
+C_GEN_O_FILES=$(C_GEN_PIECES:%=${ARCH}/%.o)
+
+# H source names, if any, go here -- minus the .h
+H_PIECES=remdeb
+H_FILES=$(H_PIECES:%=%.h)
+
+# X source names, if any, go here -- minus the .x 
+X_FILE1=remdeb.x
+X_FILE2=remdeb_f.x
+X_FILES=$(X_FILE1) $(X_FILE2) 
+
+SRCS=$(C_FILES) $(ASM_FILES)
+OBJS=$(X_FILES) $(H_FILES) $(C_GEN_FILES) $(C_GEN_O_FILES) $(C_O_FILES) $(ASM_O_FILES)
+
+RPCGEN=rpcgen
+AWK=awk
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/lib.cfg
+
+#
+# Add local stuff here using +=
+#
+
+DEFINES  += 
+CPPFLAGS +=
+CFLAGS   +=
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS += $(LIB) $(H_FILES) $(X_FILES) $(C_GEN_FILES)
+CLOBBER_ADDITIONS +=
+
+all:	${ARCH} $(LIB) 
+	$(INSTALL_VARIANT) -m 644 $(LIB) ${PROJECT_RELEASE}/lib
+
+$(LIB): $(SRCS) ${OBJS}
+	$(make-library)
+
+remdeb.h: $(X_FILES)
+	@rm -f $@
+	$(RPCGEN) -h remdeb.x -o $@
+	@rm -f $(PROJECT_INCLUDE)/rdbg/$@
+	$(INSTALL) -m 444 $@ $(PROJECT_INCLUDE)/rdbg
+
+remdeb_xdr.c: $(X_FILES)
+	@rm -f $@
+	$(RPCGEN) -c remdeb.x -o $@
+
+remdeb_svc.c: $(X_FILES)
+	@rm -f $@ tmpSvc.c
+	$(RPCGEN) -s udp remdeb.x -o tmpSvc.c
+	$(AWK) -f @srcdir@/awk.svc THEPROG="remdeb.h" tmpSvc.c >$@
+	@rm -f tmpSvc.c
+
+preinstall:
+	@rm -f $(X_FILES)
+	@cp @srcdir@/$(X_FILE1) .
+	@cp @srcdir@/$(RTEMS_CPU)/$(RTEMS_BSP)/$(X_FILE2) .
+
+
+
+

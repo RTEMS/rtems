@@ -109,6 +109,7 @@ SYM (_CPU_Context_restore_fp):
         frstor    (eax)                    # restore FP context
         ret
 
+        PUBLIC (_Exception_Handler)
 SYM (_Exception_Handler):
 	pusha				   # Push general purpose registers
 	pushl	esp			   # Push exception frame address

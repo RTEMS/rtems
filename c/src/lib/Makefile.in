@@ -17,6 +17,14 @@ LIBNETWORKING = $(LIBNETWORKING_$(HAS_NETWORKING)_V)
 NETWORKING_INCLUDE_yes_V = libnetworking/include
 NETWORKING_INCLUDE = $(NETWORKING_INCLUDE_$(HAS_NETWORKING)_V)
 
+# We only build the rpc library if HAS_NETWORKING was defined
+LIBRPC_yes_V = librpc
+LIBRPC = $(LIBRPC_$(HAS_NETWORKING)_V)
+
+# We only build the rdbg library if HAS_NETWORKING and HAS_RDBG was defined
+LIBRDBG_yes_yes_V = librdbg
+LIBRDBG = $(LIBRDBG_$(HAS_NETWORKING)_$(HAS_RDBG)_V)
+
 # We only build the rtems++ library if HAS_CPLUSPLUS was defined
 LIBRTEMSCPLUSPLUS_yes_V = librtems++
 LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
@@ -25,7 +33,8 @@ LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
 LIBHWAPI=$(wildcard libhwapi)
 
 
-ifneq ($(RTEMS_CPU),unix)
+         $(LIBNETWORKING) $(LIBRPC) $(LIBRDBG) \
+	 $(LIBHWAPI) $(LIBRTEMSCPLUSPLUS) wrapup
 LIBCHIP=libchip
 endif
 

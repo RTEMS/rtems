@@ -19,6 +19,8 @@ SRCS=$(wildcard $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a) \
      $(PROJECT_RELEASE)/lib/librtems$(LIB_VARIANT).a \
      $(wildcard $(PROJECT_RELEASE)/lib/libposix$(LIB_VARIANT).a) \
      $(wildcard $(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a) \
+     $(wildcard $(PROJECT_RELEASE)/lib/librpc$(LIB_VARIANT).a) \
+     $(wildcard $(PROJECT_RELEASE)/lib/librdbg$(LIB_VARIANT).a) \
      $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a) \
      $(wildcard $(PROJECT_RELEASE)/lib/librtcio$(LIB_VARIANT).a) \
      $(wildcard $(PROJECT_RELEASE)/lib/libserialio$(LIB_VARIANT).a) \

@@ -33,6 +33,14 @@ LIBNETWORKING_yes_V = lib/include/networking lib/include/networking/sys \
 	lib/include/networking/nfs
 LIBNETWORKING = $(LIBNETWORKING_$(HAS_NETWORKING)_V)
 
+# We only make the rpc install point if networking is enabled.
+LIBRPC_yes_V = lib/include/rpc
+LIBRPC = $(LIBRPC_$(HAS_NETWORKING)_V)
+
+# We only make the rdbg install point if networking and rdbg is enabled.
+LIBRDBG_yes_yes_V = lib/include/rdbg
+LIBRDBG = $(LIBRDBG_$(HAS_NETWORKING)_$(HAS_RDBG)_V)
+
 # We only make the rtems++ install point if it is enabled.
 LIBRTEMSCPLUSPLUS_yes_V = lib/include/rtems++
 LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
@@ -45,6 +53,8 @@ CREATE_DIRS = \
     lib/include/motorola lib/include/zilog \
     lib/include/libchip \
     $(LIBNETWORKING) \
+    $(LIBRPC) \
+    $(LIBRDBG) \
     $(LIBRTEMSCPLUSPLUS) \
     bin samples \
     tests tests/screens tests/screens/sptests \

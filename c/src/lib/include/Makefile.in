@@ -25,8 +25,15 @@ RTEMSCPLUSPLUS_H_PIECES= rtemsEvent rtemsInterrupt rtemsMessageQueue \
   rtemsSemaphore rtemsStatusCode rtemsTask rtemsTaskMode rtemsTimer
 RTEMSCPLUSPLUS_H_FILES=$(RTEMSCPLUSPLUS_H_PIECES:%=$(srcdir)/rtems++/%.h)
 
+RPC_H_PIECES=  auth clnt rpc rpc_msg svc svc_auth types xdr
+RPC_H_FILES=$(RPC_H_PIECES:%=$(srcdir)/rpc/%.h)
+
+RDBG_H_PIECES=  servrpc rdbg $(RTEMS_CPU)/rdbg_f $(RTEMS_CPU)/reg 
+RDBG_H_FILES=$(RDBG_H_PIECES:%=$(srcdir)/rdbg/%.h)
+
 SRCS=$(H_FILES) $(SYS_H_FILES) \
-     $(MOTOROLA_H_FILES) $(RTEMSCPLUSPLUS_H_FILES)
+     $(MOTOROLA_H_FILES) $(RTEMSCPLUSPLUS_H_FILES) \
+     $(RPC_H_FILES) $(RDBG_H_FILES)
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
@@ -41,4 +48,10 @@ all:	$(SRCS)
 	$(INSTALL) -m 444 $(ZILOG_H_FILES) $(PROJECT_INCLUDE)/zilog
 ifeq ($(HAS_CPLUSPLUS),yes)
 	$(INSTALL) -m 444 $(RTEMSCPLUSPLUS_H_FILES) $(PROJECT_INCLUDE)/rtems++
+endif
+ifeq ($(HAS_NETWORKING),yes)
+	$(INSTALL) -m 444 $(RPC_H_FILES) $(PROJECT_INCLUDE)/rpc
+ifeq ($(HAS_RDBG),yes)
+	$(INSTALL) -m 444 $(RDBG_H_FILES) $(PROJECT_INCLUDE)/rdbg
+endif
 endif
