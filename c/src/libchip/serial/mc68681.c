@@ -528,6 +528,10 @@ MC68681_STATIC int mc68681_inbyte_nonblocking_polled(
   }
 }
 
+/*
+ *  mc68681_baud_rate
+ */
+
 MC68681_STATIC int mc68681_baud_rate(
   int           minor,
   int           baud,

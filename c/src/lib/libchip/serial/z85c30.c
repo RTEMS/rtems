@@ -43,14 +43,12 @@
  * Flow control is only supported when using interrupts
  */
 
-console_flow z85c30_flow_RTSCTS =
-{
+console_flow z85c30_flow_RTSCTS = {
   z85c30_negate_RTS,    /* deviceStopRemoteTx */
   z85c30_assert_RTS     /* deviceStartRemoteTx */
 };
 
-console_flow z85c30_flow_DTRCTS =
-{
+console_flow z85c30_flow_DTRCTS = {
   z85c30_negate_DTR,    /* deviceStopRemoteTx */
   z85c30_assert_DTR     /* deviceStartRemoteTx */
 };
@@ -59,8 +57,7 @@ console_flow z85c30_flow_DTRCTS =
  * Exported driver function table
  */
 
-console_fns z85c30_fns =
-{
+console_fns z85c30_fns = {
   libchip_serial_default_probe,  /* deviceProbe */
   z85c30_open,                   /* deviceFirstOpen */
   NULL,                          /* deviceLastClose */
@@ -72,8 +69,7 @@ console_fns z85c30_fns =
   TRUE                           /* deviceOutputUsesInterrupts */
 };
 
-console_fns z85c30_fns_polled =
-{
+console_fns z85c30_fns_polled = {
   libchip_serial_default_probe,      /* deviceProbe */
   z85c30_open,                       /* deviceFirstOpen */
   z85c30_close,                      /* deviceLastClose */
@@ -88,9 +84,9 @@ console_fns z85c30_fns_polled =
 extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
 
 /* 
- * z85c30_initialize_port
+ *  z85c30_initialize_port
  *
- * initialize a z85c30 Port
+ *  initialize a z85c30 Port
  */
 
 Z85C30_STATIC void z85c30_initialize_port(
@@ -207,6 +203,10 @@ Z85C30_STATIC void z85c30_initialize_port(
   (*setReg)( ulCtrlPort, SCC_WR0_SEL_WR0, SCC_WR0_RST_INT );
 }
 
+/*
+ *  z85c30_open
+ */
+
 Z85C30_STATIC int z85c30_open(
   int   major,
   int   minor,
@@ -227,6 +227,10 @@ Z85C30_STATIC int z85c30_open(
   return(RTEMS_SUCCESSFUL);
 }
 
+/*
+ *  z85c30_close
+ */
+
 Z85C30_STATIC int z85c30_close(
   int   major,
   int   minor,
@@ -245,7 +249,7 @@ Z85C30_STATIC int z85c30_close(
 }
 
 /*
- *  Console Device Driver Entry Points
+ *  z85c30_init
  */
 
 Z85C30_STATIC void z85c30_init(int minor)
@@ -522,16 +526,9 @@ Z85C30_STATIC int z85c30_set_attributes(
 }
 
 /*
- *  z85c30_isr
+ *  z85c30_process
  *
- *  This routine is the console interrupt handler for COM3 and COM4
- *
- *  Input parameters:
- *    vector - vector number
- *
- *  Output parameters: NONE
- *
- *  Return values:     NONE
+ *  This is the per port ISR handler.
  */
 
 Z85C30_STATIC void z85c30_process(
@@ -633,6 +630,12 @@ Z85C30_STATIC void z85c30_process(
   (*setReg)(ulCtrlPort, SCC_WR0_SEL_WR0, SCC_WR0_RST_HI_IUS);
 }
 
+/*
+ *  z85c30_isr
+ *
+ *  This is the ISR handler for each Z8530.
+ */
+
 Z85C30_STATIC rtems_isr z85c30_isr(
   rtems_vector_number vector
 )
@@ -641,7 +644,7 @@ Z85C30_STATIC rtems_isr z85c30_isr(
   unsigned32          ulCtrlPort;
   volatile unsigned8  ucIntPend;
   volatile unsigned8  ucIntPendPort;
-  getRegister_f    getReg;
+  getRegister_f       getReg;
 
   for (minor=0;minor<Console_Port_Count;minor++) {
     if(Console_Port_Tbl[minor].ulIntVector == vector && 
