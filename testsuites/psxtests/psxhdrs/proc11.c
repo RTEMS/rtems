@@ -19,7 +19,6 @@
 void test( void )
 {
   char  loginnamebuffer[ LOGIN_NAME_MAX ];
-  char *loginname;
   int   result;
 
   result = getlogin_r( loginnamebuffer, LOGIN_NAME_MAX );

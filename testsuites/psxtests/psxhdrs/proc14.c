@@ -17,8 +17,8 @@
  
 void test( void )
 {
-  pid_t pid;
-  pid_t pgid;
+  pid_t pid = 0;
+  pid_t pgid = 0;
   int   result;
 
   result = setpgid( pid, pgid );
