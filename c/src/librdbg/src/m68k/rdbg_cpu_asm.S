@@ -98,42 +98,79 @@ SYM (enterRdbg):
         PUBLIC (excHandler)
         PUBLIC (BreakPointExcHdl)
 
+SYM (excFormatLength):	
+	/*
+	 * size of exception stack frame depending on format type
+	 * This is valid for m68k with VBR (68020/030/040/CPU32/CPU32+)
+	 *	size | format/name
+	 */
+	dc.w	 4*2 |  $0 standard                           
+	dc.w	 4*2 |  $1 throwaway stackframe               
+	dc.w	 6*2 |  $2 CHK/CHK2/TRAPcc/TRAPV/DIV0/TRACE   
+	dc.w	 6*2 |  $3 Coprocessor Post-Instruction (040) 
+	dc.w	 4*2 |  $4 reserved
+	dc.w	 4*2 |  $5 reserved
+	dc.w	 4*2 |  $6 reserved
+	dc.w	30*2 |  $7 Access Error (040)                 
+	dc.w	29*2 |  $8 Bus Error    (020)                 
+	dc.w	10*2 |  $9 Coprocessor Mid-Instruction (020)  
+	dc.w	16*2 |  $A Short Bus-Error (020)              
+	dc.w	46*2 |  $B Long  Bus-Error (020)              
+	dc.w	12*2 |  $C Bus Error/Address Error (CPU32)    
+	dc.w	 4*2 |  $D reserved
+	dc.w	 4*2 |  $E reserved
+	dc.w	 4*2 |  $F reserved
+	
 SYM (excHandler):	
-#if ( M68K_COLDFIRE_ARCH == 0 )
-        moveml  d0-d1/a0-a1,a7@-         | save d0-d1,a0-a1
-        movew   a7@(16+FVO_OFFSET),d0	 | d0 = F/VO
-        andl    #0x0fff,d0               | d0 = vector offset in vbr
-#else
+#if ( M68K_COLDFIRE_ARCH == 1 )
 	lea	a7@(-16),a7
 	movm.l  d0-d1/a0-a1,a7@		 | save d0-d1,a0-a1
 	movew   a7@(16+FVO_OFFSET),d0	 | d0 = F/VO
 	andl    #0x0ffc,d0               | d0 = vector offset in vbr
-#endif
         lsrl    #2,d0                    | d0 = vector number
 	lea	a7@(16),a1		 | address of orig frame
 	lea	a7@(16),a0		 | address of orig frame
-#if ( M68K_HAS_VBR == 0 )
-	lea	a0@(2),a0		 | skip vector
-#endif
-	lea	a0@(6),a0		 | a0 = orig sp
-#if ( M68K_COLDFIRE_ARCH == 0 )
-        cmpiw   #3,d0			 | bus error or address error ?
+	lea	a0@(8),a0		 | skip exception frame
 #else
-        cmpi.l  #3,d0
-#endif
-        bgt     1f			 | if >3 then normal exc
+        moveml  d0-d1/a0-a1,a7@-         | save d0-d1,a0-a1
+	movew   a7@(16+FVO_OFFSET),d0	 | d0 = F/VO
 #if ( M68K_HAS_VBR == 1 )
-	lea	a1@(2*29),a0
-#else
+	movew	d0,d1                    | d1 is copy of F/VO
+	andl    #0x0ffc,d0               | d0 = vector offset in vbr
+        lsrl    #2,d0                    | d0 = vector number
+	lsrl	#8,d1
+	lsrl	#3,d1
+	andl	#0x001f,d1		 | d1 is format number
+	lea	SYM (excFormatLength),a1
+	movew	a1@(d1),d1	         | d1 = size of exc frame
+	lea	a7@(16,d1),a0
+	lea	a7@(16),a1		 | address of orig frame
+
+#else /* (M68k_HAS_VBR == 0) */
+	lea	a7@(16),a1		 | address of orig frame
+	lea	a1@(6),a0		 | skip stack frame
+/*
+ * skip bus error stack frame...
+ */	
+        cmpi.l  #3,d0
+        bgt     1f			 | if >3 then normal exc
 	lea	a1@(8),a0		 | skip extra stuff
 	lea	a0@(6),a0		 | a0 = orig sp
-#endif
 1:
+#endif /* M68K_HAS_VBR */
+#endif /* ( M68K_COLDFIRE_ARCH == 0 ) */
+
+	/*
+	* at this point:
+	* a0 points to stack above exception stack frame
+	* a1 points to start of exception stack frame
+	*/
+	
 	movew	a1@(SR_OFFSET),d1	 | d1 = sr
 	andl	#0xffff,d1
 	lea	a7@(-76),a7		 | reserve room for exception frame
-| build CPU_Exception_frame
-	movel	d0,a7@			 | vecnum
+|                                          build CPU_Exception_frame
+ 	movel	d0,a7@			 | vecnum
 	movel	d1,a7@(4)		 | sr
 	movel	a1@(PC_OFFSET),d1	 | d1 = pc
 #if ( M68K_COLDFIRE_ARCH == 0 )
