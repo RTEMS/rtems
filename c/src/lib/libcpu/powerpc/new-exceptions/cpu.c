@@ -148,3 +148,25 @@ void _CPU_Context_Initialize(
 void _CPU_Install_interrupt_stack( void )
 {
 }
+
+/*  _CPU_ISR_install_vector
+ *
+ *  This kernel routine installs the RTEMS handler for the
+ *  specified vector.
+ *
+ *  Input parameters:
+ *    vector      - interrupt vector number
+ *    old_handler - former ISR for this vector number
+ *    new_handler - replacement ISR for this vector number
+ *
+ *  Output parameters:  NONE
+ */
+
+void _CPU_ISR_install_vector(
+  uint32_t    vector,
+  proc_ptr    new_handler,
+  proc_ptr   *old_handler 
+) 
+{
+  BSP_panic("_CPU_ISR_install_vector called\n");
+}

@@ -1,5 +1,9 @@
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* new-exceptions/cpu.c (_CPU_ISR_install_vector): New.
+
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* old-exceptions/rtems/score/ppc_offs.h, 
 	old-exceptions/ChangeLog, old-exceptions/README,
 	old-exceptions/TODO, old-exceptions/cpu.c,
@@ -141,13 +145,10 @@
 
 2004-10-20	Eric Norum <norume@aps.anl.gov>
 
-	Add Kate Feng's MPC7455 support
-	* configure.ac
-    	* mpc6xx/exceptions/raw_exception.c
-    	* mpc6xx/mmu/mmuAsm.S
-	* mpc6xx/mmu/pte121.c
-    	* shared/include/cpuIdent.c
-    	* shared/include/cpuIdent.h
+	* configure.ac, mpc6xx/exceptions/raw_exception.c,
+    	mpc6xx/mmu/mmuAsm.S, mpc6xx/mmu/pte121.c,
+    	shared/include/cpuIdent.c, shared/include/cpuIdent.h:
+	Add Kate Feng's MPC7455 support.
 
 2004-10-19	Ralf Corsepius <ralf_corsepius@rtems.org>
 
