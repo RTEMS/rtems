@@ -45,10 +45,9 @@ $(PROJECT).dvi: $(FILES)
 
 html:
 	-mkdir $(WWW_INSTALL)/$(PROJECT)
+	-cd .. ; gmake headers
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
-	cp ../rtems.html $(WWW_INSTALL)
-
 
 clean:
 	rm -f *.o $(PROG) *.txt core *.html 
