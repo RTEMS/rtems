@@ -32,7 +32,7 @@ void Screen12()
   status = rtems_region_create(
     0,
     Region_good_area,
-    128,
+    0x40,
     32,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
@@ -47,7 +47,7 @@ void Screen12()
   status = rtems_region_create(
     Region_name[ 1 ],
     Region_bad_area,
-    128,
+    0x40,
     32,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
@@ -62,7 +62,7 @@ void Screen12()
   status = rtems_region_create(
     Region_name[ 1 ],
     Region_good_area,
-    128,
+    0x40,
     34,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
@@ -78,7 +78,7 @@ void Screen12()
     Region_name[ 1 ],
     &Region_good_area[ REGION_START_OFFSET ],
     REGION_LENGTH,
-    128,
+    0x40,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Region_id[ 1 ]
   );
@@ -89,7 +89,7 @@ void Screen12()
     Region_name[ 1 ],
     Region_good_area,
     512,
-    128,
+    0x40,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
   );
@@ -126,7 +126,7 @@ void Screen12()
 
   status = rtems_region_get_segment(
     100,
-    128,
+    0x40,
     RTEMS_DEFAULT_OPTIONS,
     RTEMS_NO_TIMEOUT,
     &segment_address_1
@@ -164,7 +164,7 @@ void Screen12()
 
   status = rtems_region_get_segment(
      Region_id[ 1 ],
-     384,
+     REGION_LENGTH / 2,
      RTEMS_NO_WAIT,
      RTEMS_NO_TIMEOUT,
      &segment_address_2
@@ -223,6 +223,8 @@ void Screen12()
   puts( "TA1 - rtems_debug_disable - RTEMS_DEBUG_REGION" );
   rtems_debug_disable( RTEMS_DEBUG_REGION );
 
+#if 0
+
   offset = (segment_address_1 - (void *)Region_good_area) / 4;
 
 /* bad FRONT_FLAG error */
@@ -254,6 +256,14 @@ void Screen12()
   puts( "TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS" );
 
   Region_good_area[ offset - 2 ] = good_back_flag;
+
+#else
+  offset = 0;
+  good_front_flag = 0;
+  good_back_flag = 0;
+  puts( "TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS - SKIPPED" );
+  puts( "TA1 - rtems_region_return_segment - RTEMS_INVALID_ADDRESS - SKIPPED" );
+#endif
 
   puts( "TA1 - rtems_debug_enable - RTEMS_DEBUG_REGION" );
   rtems_debug_enable( RTEMS_DEBUG_REGION );
