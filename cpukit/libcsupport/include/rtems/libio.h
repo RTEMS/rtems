@@ -32,7 +32,7 @@ typedef struct {
     char                *pathname;      /* opened pathname */
     Objects_Id           sem;
     unsigned32           data0;         /* private to "driver" */
-    unsigned32           data1;         /* ... */
+    void                *data1;         /* ... */
 } rtems_libio_t;
 
 
@@ -105,7 +105,7 @@ int __rtems_isatty(int _fd);
 typedef struct {
     int (*open)(const char  *pathname, unsigned32 flag, unsigned32 mode);
     int (*close)(int  fd);
-    int (*read)(int fd, void *buffer, unsigned32 count);
+    int (*read)(int fd, void *buffer);
     int (*write)(int fd, const void *buffer, unsigned32 count);
     int (*ioctl)(int fd, unsigned32  command, void *buffer);
     int (*lseek)(int fd, rtems_libio_offset_t offset, int whence);
@@ -127,5 +127,25 @@ void rtems_register_libio_handler(int handler_flag,
 
 #define       RTEMS_IO_GET_ATTRIBUTES 1
 #define       RTEMS_IO_SET_ATTRIBUTES 2
+
+/*
+ * Termios prototypes
+ */
+void rtems_termios_initialize (void);
+rtems_status_code rtems_termios_open (
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg,
+  int                       (*deviceFirstOpen)(int major, int minor, void *arg),
+  int                       (*deviceLastClose)(int major, int minor, void *arg),
+  int                       (*deviceRead)(int minor, char *buf),
+  int                       (*deviceWrite)(int minor, char *buf, int len)
+  );
+
+rtems_status_code rtems_termios_close (void *arg);
+rtems_status_code rtems_termios_read (void *arg);
+rtems_status_code rtems_termios_write (void *arg);
+rtems_status_code rtems_termios_ioctl (void *arg);
+void rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len);
 
 #endif /* _RTEMS_LIBIO_H */
