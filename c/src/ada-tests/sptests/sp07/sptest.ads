@@ -166,4 +166,21 @@ package SPTEST is
       RUNNING_TASK : in     RTEMS.TCB_POINTER
    );
 
+--
+--  This is the User Extension Table for this test.
+--
+
+   EXTENSIONS : aliased RTEMS.EXTENSIONS_TABLE :=
+   (
+        SPTEST.TASK_CREATE_EXTENSION'ACCESS,         -- Task create
+        SPTEST.TASK_START_EXTENSION'ACCESS,          -- Task start
+        SPTEST.TASK_RESTART_EXTENSION'ACCESS,        -- Task restart
+        SPTEST.TASK_DELETE_EXTENSION'ACCESS,         -- Task delete
+        NULL,                                        -- Task switch
+        NULL,                                        -- Task post switch
+        NULL,                                        -- Task begin
+        SPTEST.TASK_EXIT_EXTENSION'ACCESS,           -- Task exitted
+        NULL                                         -- Fatal error
+   );
+
 end SPTEST;

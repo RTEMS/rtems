@@ -30,6 +30,16 @@ with UNSIGNED32_IO;
 package body SPTEST is
 
 --PAGE
+--
+-- TCB_To_ID
+--
+
+      function TCB_To_ID (
+         TCB : RTEMS.TCB_POINTER
+      ) return RTEMS.ID;
+      pragma Import (C, TCB_To_ID, "tcb_to_id" );
+
+--PAGE
 -- 
 --  INIT
 --
@@ -62,7 +72,7 @@ package body SPTEST is
       RTEMS.TASK_CREATE( 
          SPTEST.TASK_NAME( 1 ), 
          4, 
-         2048, 
+         RTEMS.MINIMUM_STACK_SIZE, 
          RTEMS.DEFAULT_MODES,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.TASK_ID( 1 ),
@@ -73,7 +83,7 @@ package body SPTEST is
       RTEMS.TASK_CREATE( 
          SPTEST.TASK_NAME( 2 ), 
          4, 
-         2048, 
+         RTEMS.MINIMUM_STACK_SIZE, 
          RTEMS.DEFAULT_MODES,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.TASK_ID( 2 ),
@@ -84,7 +94,7 @@ package body SPTEST is
       RTEMS.TASK_CREATE( 
          SPTEST.TASK_NAME( 3 ), 
          250, 
-         2048, 
+         RTEMS.MINIMUM_STACK_SIZE, 
          RTEMS.DEFAULT_MODES,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.TASK_ID( 3 ),
@@ -95,7 +105,7 @@ package body SPTEST is
       RTEMS.TASK_CREATE( 
          SPTEST.TASK_NAME( 4 ), 
          254, 
-         2048, 
+         RTEMS.MINIMUM_STACK_SIZE, 
          RTEMS.DEFAULT_MODES,
          RTEMS.DEFAULT_ATTRIBUTES,
          SPTEST.TASK_ID( 4 ),
@@ -369,7 +379,7 @@ package body SPTEST is
    ) is
    begin
 
-      if TEST_SUPPORT.TASK_NUMBER( RUNNING_TASK.OBJECT.ID ) > 0 then
+      if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( RUNNING_TASK ) ) > 0 then
          TEXT_IO.PUT_LINE( "TASK_EXITTED - user extension invoked correctly" );
       end if;
 
@@ -389,11 +399,11 @@ package body SPTEST is
    ) is
    begin
 
-      if TEST_SUPPORT.TASK_NUMBER( CREATED_TASK.OBJECT.ID ) > 0 then
+      if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( CREATED_TASK ) ) > 0 then
          TEXT_IO.PUT( "TASKS_CREATE - " );
          TEST_SUPPORT.PUT_NAME( 
             SPTEST.TASK_NAME( 
-               TEST_SUPPORT.TASK_NUMBER( CREATED_TASK.OBJECT.ID )
+               TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( CREATED_TASK ) )
             ),
             FALSE
          );
@@ -413,21 +423,21 @@ package body SPTEST is
    ) is
    begin
 
-      if TEST_SUPPORT.TASK_NUMBER( RUNNING_TASK.OBJECT.ID ) > 0 then
+      if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( RUNNING_TASK ) ) > 0 then
          TEXT_IO.PUT( "TASKS_DELETE - " );
          TEST_SUPPORT.PUT_NAME( 
             SPTEST.TASK_NAME( 
-               TEST_SUPPORT.TASK_NUMBER( RUNNING_TASK.OBJECT.ID ) 
+               TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( RUNNING_TASK ) ) 
             ),
             FALSE
          );
       end if;
 
-      if TEST_SUPPORT.TASK_NUMBER( DELETED_TASK.OBJECT.ID ) > 0 then
+      if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( DELETED_TASK ) ) > 0 then
          TEXT_IO.PUT( "deleting " );
          TEST_SUPPORT.PUT_NAME( 
             SPTEST.TASK_NAME( 
-               TEST_SUPPORT.TASK_NUMBER( DELETED_TASK.OBJECT.ID ) 
+               TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( DELETED_TASK ) ) 
             ),
             TRUE
          );
@@ -446,11 +456,11 @@ package body SPTEST is
    ) is
    begin
 
-      if TEST_SUPPORT.TASK_NUMBER( RESTARTED_TASK.OBJECT.ID ) > 0 then
+      if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( RESTARTED_TASK ) ) > 0 then
          TEXT_IO.PUT( "TASKS_RESTART - " );
          TEST_SUPPORT.PUT_NAME( 
             SPTEST.TASK_NAME( 
-               TEST_SUPPORT.TASK_NUMBER( RESTARTED_TASK.OBJECT.ID ) 
+               TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( RESTARTED_TASK ) ) 
             ),
             FALSE
          );
@@ -470,11 +480,11 @@ package body SPTEST is
    ) is
    begin
 
-      if TEST_SUPPORT.TASK_NUMBER( STARTED_TASK.OBJECT.ID ) > 0 then
+      if TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( STARTED_TASK ) ) > 0 then
          TEXT_IO.PUT( "TASKS_START - " );
          TEST_SUPPORT.PUT_NAME( 
             SPTEST.TASK_NAME( 
-               TEST_SUPPORT.TASK_NUMBER( STARTED_TASK.OBJECT.ID ) 
+               TEST_SUPPORT.TASK_NUMBER( TCB_To_ID( STARTED_TASK ) ) 
             ),
             FALSE
          );
