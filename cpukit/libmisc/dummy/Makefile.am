@@ -7,9 +7,7 @@ LIBNAME = libdummy-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = dummy.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES)
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/lib.am

@@ -1,5 +1,22 @@
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Require autoconf-2.57+automake-1.7.2.
+	* capture/Makefile.am: Eliminate C_O_FILES.
+	* cpuuse/Makefile.am: Ditto.
+	* devnull/Makefile.am: Ditto.
+	* dummy/Makefile.am: Ditto.
+	* dumpbuf/Makefile.am: Ditto.
+	* monitor/Makefile.am: Ditto.
+	* rtmonuse/Makefile.am: Ditto.
+	* serdbg/Makefile.am: Ditto.
+	* shell/Makefile.am: Ditto.
+	* stackchk/Makefile.am: Ditto.
+	* untar/Makefile.am: Ditto.
+	* mw-fb/Makefile.am: Eliminate C_O_FILES.
+	Eliminate SRCS.
+
+2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	Moving libmisc from rtems/c/src to rtems/cpukit.
 
 	* Makefile.am: Reflect new path.

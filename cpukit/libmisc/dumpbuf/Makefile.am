@@ -9,11 +9,9 @@ LIBNAME = libdumpbuf-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = dumpbuf.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS = dumpbuf.h
-
-OBJS = $(C_O_FILES)
 
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/lib.am

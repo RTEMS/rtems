@@ -15,15 +15,12 @@ C_FILES = mon-command.c mon-symbols.c mon-prmisc.c mon-monitor.c \
     mon-object.c mon-server.c mon-task.c mon-queue.c mon-driver.c \
     mon-dname.c mon-itask.c mon-extension.c mon-manager.c mon-config.c
 
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 if HAS_MP
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) $(MP_C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
-else
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+OBJS += $(MP_C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 endif
 
 include_rtems_HEADERS = monitor.h symbols.h
-
-OBJS = $(C_O_FILES)
 
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/lib.am
