@@ -10,13 +10,15 @@ SUBDIRS = . dlentry flashentry startup @exceptions@ wrapup
 
 include $(top_srcdir)/../../bsp.am
 
-dist_bsplib_DATA += bsp_specs.dl
+dist_project_lib_DATA = bsp_specs.dl
 
 include_HEADERS += include/coverhd.h
 
 all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
+
+TMPINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h

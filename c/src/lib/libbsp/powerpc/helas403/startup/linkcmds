@@ -101,7 +101,7 @@ SECTIONS
   {
     *(.data)
     *(.data1)
-    *(.gnu.linkonce.d*)
+    *(.data.* .gnu.linkonce.d*)
     PROVIDE (__SDATA_START__ = .);
     *(.sdata)
     *(.gnu.linkonce.s.*)

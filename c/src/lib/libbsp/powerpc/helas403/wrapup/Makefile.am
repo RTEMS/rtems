@@ -7,9 +7,8 @@ BSP_PIECES = startup dlentry flashentry
 CPU_PIECES = clock timer console vectors ictrl
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard \
-    ../$(piece)/$(ARCH)/*.$(OBJEXT))) ../@exceptions@/$(ARCH)/rtems-cpu.rel \
-    $(foreach piece, $(CPU_PIECES), \
+OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
+    ../@exceptions@/$(ARCH)/rtems-cpu.rel $(foreach piece, $(CPU_PIECES), \
     ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(piece)/$(ARCH)/$(piece).rel)
 
 LIB = $(ARCH)/libbsp.a
