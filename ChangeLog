@@ -1,5 +1,13 @@
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/bsp-configure.m4: Add RTEMS_CHECK_MULTIPROCESSING.
+	* automake/compile.am: Add test -d $(ARCH) || mkdir $(ARCH) to all
+	compilation rules (Work-around to an automake bug).
+	* automake/lib.am: Add test -d $(ARCH) || mkdir $(ARCH) to
+	make-library.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Activate cpukit. Remove references to c/src/exec.
 
 2002-07-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

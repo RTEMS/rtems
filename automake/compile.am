@@ -107,25 +107,32 @@ AS = $(CC)
 ASCOMPILE = $(AS) $(AM_ASFLAGS) $(ASFLAGS)
 
 ${ARCH}/%.o: %.c
+	test -d $(ARCH) || mkdir $(ARCH)
 	${COMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.cc
+	test -d $(ARCH) || mkdir $(ARCH)
 	${CXXCOMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.cpp
+	test -d $(ARCH) || mkdir $(ARCH)
 	${CXXCOMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.cxx
+	test -d $(ARCH) || mkdir $(ARCH)
 	${CXXCOMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.C
+	test -d $(ARCH) || mkdir $(ARCH)
 	${CXXCOMPILE} -o $@ -c $<
 
 ${ARCH}/%.o: %.S
+	test -d $(ARCH) || mkdir $(ARCH)
 	${ASCOMPILE} -DASM -o $@ -c $<
 
 # Make foo.rel from foo.o
 ${ARCH}/%.rel: ${ARCH}/%.o
+	test -d $(ARCH) || mkdir $(ARCH)
 	${make-rel}
 
 # Dependency files for use by gmake
