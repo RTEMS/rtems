@@ -39,3 +39,11 @@ initialization (e.g printk, ...).
 Eric Valette (valette@crf.canon.fr)
 
 
+**************************************************
+2003/5/7, Greg Menke, gregory.menke@gsfc.nasa.gov
+
+Reworked the pci bus 0 initialization a little and added support for
+configuring an arbitrary number of other busses & their respective
+bridges.  Also added support for configuring IO ranges below 0x10000,
+which I think is reasonable given this is a PowerPC bsp.
+

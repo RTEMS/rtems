@@ -253,7 +253,7 @@ void bsp_start( void )
    * provided by the RAVEN
    */
   /* T. Straumann: give more PCI address space */
-  setdbat(2, PCI_MEM_BASE, PCI_MEM_BASE, 0x10000000, IO_PAGE);
+  setdbat(2, PCI_MEM_BASE, PCI_MEM_BASE, 0x30000000, IO_PAGE);
   /*
    * Must have acces to open pic PCI ACK registers 
    * provided by the RAVEN
@@ -300,6 +300,21 @@ void bsp_start( void )
   printk("Going to start PCI buses scanning and initialization\n");
 #endif  
   InitializePCI();
+
+ {
+    struct _int_map     *bspmap   = motorolaIntMap(currentBoard);
+    if( bspmap )
+    {
+       printk("pci : Configuring interrupt routing for '%s'\n", motorolaBoardToString(currentBoard));
+       FixupPCI(bspmap, motorolaIntSwizzle(currentBoard) );
+    }
+    else
+       printk("pci : Interrupt routing not available for this bsp\n");
+
+ }
+
+
+
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Number of PCI buses found is : %d\n", BusCountPCI());
 #endif

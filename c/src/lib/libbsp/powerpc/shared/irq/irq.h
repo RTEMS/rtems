@@ -143,38 +143,43 @@ typedef void (*rtems_irq_disable)	(const struct __rtems_irq_connect_data__*);
 typedef int  (*rtems_irq_is_enabled)	(const struct __rtems_irq_connect_data__*);
 
 typedef struct __rtems_irq_connect_data__ {
-  /*
-   * IRQ line
-   */
-  rtems_irq_symbolic_name 	name;
-  /*
-   * handler. See comment on handler properties below in function prototype.
-   */
-  rtems_irq_hdl	   		hdl;
-  /*
-   * function for enabling interrupts at device level (ONLY!).
-   * The BSP code will automatically enable it at i8259s level and openpic level.
-   * RATIONALE : anyway such code has to exist in current driver code.
-   * It is usually called immediately AFTER connecting the interrupt handler.
-   * RTEMS may well need such a function when restoring normal interrupt
-   * processing after a debug session.
-   * 
-   */
-    rtems_irq_enable		on;	
-  /*
-   * function for disabling interrupts at device level (ONLY!).
-   * The code will disable it at i8259s level. RATIONALE : anyway
-   * such code has to exist for clean shutdown. It is usually called
-   * BEFORE disconnecting the interrupt. RTEMS may well need such
-   * a function when disabling normal interrupt processing for
-   * a debug session. May well be a NOP function.
-   */
-  rtems_irq_disable		off;
-  /*
-   * function enabling to know what interrupt may currently occur
-   * if someone manipulates the i8259s interrupt mask without care...
-   */
-    rtems_irq_is_enabled	isOn;
+      /*
+       * IRQ line
+       */
+      rtems_irq_symbolic_name 	name;
+      /*
+       * handler. See comment on handler properties below in function prototype.
+       */
+      rtems_irq_hdl	   		hdl;
+      /*
+       * function for enabling interrupts at device level (ONLY!).
+       * The BSP code will automatically enable it at i8259s level and openpic level.
+       * RATIONALE : anyway such code has to exist in current driver code.
+       * It is usually called immediately AFTER connecting the interrupt handler.
+       * RTEMS may well need such a function when restoring normal interrupt
+       * processing after a debug session.
+       * 
+       */
+      rtems_irq_enable		on;	
+      /*
+       * function for disabling interrupts at device level (ONLY!).
+       * The code will disable it at i8259s level. RATIONALE : anyway
+       * such code has to exist for clean shutdown. It is usually called
+       * BEFORE disconnecting the interrupt. RTEMS may well need such
+       * a function when disabling normal interrupt processing for
+       * a debug session. May well be a NOP function.
+       */
+      rtems_irq_disable		off;
+      /*
+       * function enabling to know what interrupt may currently occur
+       * if someone manipulates the i8259s interrupt mask without care...
+       */
+      rtems_irq_is_enabled	isOn;
+      /*
+       *  Set to -1 for vectors forced to have only 1 handler
+       */
+      void *next_handler;
+
 }rtems_irq_connect_data;
 
 typedef struct {
@@ -276,6 +281,10 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine);
  * 
  */
 int BSP_install_rtems_irq_handler   	(const rtems_irq_connect_data*);
+int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data*);
+
+#define BSP_SHARED_HANDLER_SUPPORT      1
+
 /*
  * function to get the current RTEMS irq handler for ptr->name. It enables to
  * define hanlder chain...
