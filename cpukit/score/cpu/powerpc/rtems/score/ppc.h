@@ -124,7 +124,7 @@ extern "C" {
 #define PPC_LOW_POWER_MODE       PPC_LOW_POWER_MODE_STANDARD
 #define PPC_HAS_DOUBLE           0
 
-#elif defined(ppc403)
+#elif defined(ppc403) || defined(ppc405)
 /*
  *  IBM 403
  *
@@ -133,7 +133,11 @@ extern "C" {
  *  Does not have user mode.
  */
  
+#if defined(ppc403)
 #define CPU_MODEL_NAME "PowerPC 403"
+#elif defined (ppc405)
+#define CPU_MODEL_NAME "PowerPC 405"
+#endif
 #define PPC_ALIGNMENT		4  
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_HAS_RFCI    	1
@@ -504,7 +508,7 @@ extern "C" {
 
 #define PPC_IRQ_FIRST           PPC_IRQ_SYSTEM_RESET
 
-#if defined(ppc403)
+#if defined(ppc403) || defined(ppc405)
                                   
 #define PPC_IRQ_CRIT     PPC_IRQ_SYSTEM_RESET /*0x00100- Critical int. pin */
 #define PPC_IRQ_PIT      (PPC_STD_IRQ_LAST+1) /*0x01000- Pgm interval timer*/

@@ -164,10 +164,10 @@
  */
 #define srr0	0x01a
 #define srr1	0x01b
-#ifdef ppc403
+#if defined(ppc403) || defined(ppc405)
 #define srr2	0x3de	/* IBM 400 series only */
 #define srr3	0x3df	/* IBM 400 series only */
-#endif /* ppc403 */
+#endif /* ppc403 or ppc405 */
 
 #define sprg0	0x110
 #define sprg1	0x111
@@ -177,15 +177,22 @@
 #define dar     0x013   /* Data Address Register */
 #define dec		0x016	/* Decrementer Register */
 
-#if defined(ppc403)
+#if defined(ppc403) || defined(ppc405)
 /* the following SPR/DCR registers exist only in IBM 400 series */
 #define dear	0x3d5	
 #define evpr    0x3d6   /* SPR: exception vector prefix register   */
 #define iccr    0x3fb   /* SPR: instruction cache control reg.     */
 #define dccr    0x3fa   /* SPR: data cache control reg.            */
 
+#if defined (ppc403)
 #define exisr   0x040   /* DCR: external interrupt status register */
 #define exier   0x042   /* DCR: external interrupt enable register */
+#endif /* ppc403 */
+#if defined(ppc405)
+#define exisr   0x0C0   /* DCR: external interrupt status register */
+#define exier   0x0C2   /* DCR: external interrupt enable register */
+#endif /* ppc405 */
+
 #define br0     0x080   /* DCR: memory bank register 0             */
 #define br1     0x081   /* DCR: memory bank register 1             */
 #define br2     0x082   /* DCR: memory bank register 2             */
