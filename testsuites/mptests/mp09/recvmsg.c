@@ -22,8 +22,8 @@
 void Receive_messages()
 {
  rtems_status_code status;
- rtems_unsigned32  index;
- rtems_unsigned32  size;
+ uint32_t    index;
+ uint32_t    size;
  char              receive_buffer[16];
 
  for ( index=1 ; index <=3 ; index++ ) {

@@ -30,8 +30,8 @@ rtems_task Test_task(
 )
 {
   rtems_status_code status;
-  rtems_unsigned32  count;
-  rtems_unsigned32  size;
+  uint32_t    count;
+  uint32_t    size;
   char              receive_buffer[16];
 
   status = rtems_task_wake_after( TICKS_PER_SECOND );

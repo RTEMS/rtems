@@ -27,7 +27,7 @@ rtems_task Test_task(
 {
   rtems_id            tid;
   rtems_status_code   status;
-  rtems_unsigned32    remote_node;
+  uint32_t      remote_node;
   rtems_id            remote_tid;
   rtems_task_priority previous_priority;
   rtems_task_priority previous_priority_1;

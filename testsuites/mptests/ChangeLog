@@ -1,3 +1,13 @@
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* mp02/task1.c, mp03/system.h, mp03/task1.c, mp04/task1.c,
+	mp05/system.h, mp06/task1.c, mp07/task1.c, mp08/task1.c,
+	mp09/recvmsg.c, mp09/sendmsg.c, mp09/task1.c, mp10/task1.c,
+	mp11/init.c, mp12/init.c, mp13/task1.c, mp14/evtask1.c,
+	mp14/evtmtask.c, mp14/init.c, mp14/msgtask1.c, mp14/pttask1.c,
+	mp14/smtask1.c, mp14/system.h: Convert to using c99 fixed size
+	types.
+
 2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add 2nd arg to RTEMS_TOP.

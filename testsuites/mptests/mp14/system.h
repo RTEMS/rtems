@@ -102,7 +102,7 @@ TEST_EXTERN rtems_name Task_name[ 4 ];       /* remote event task names */
 TEST_EXTERN rtems_id   Timer_id[ 4 ];         /* event timer ids */
 TEST_EXTERN rtems_name Timer_name[ 4 ];       /* event timer names */
 
-TEST_EXTERN rtems_unsigned32 Msg_buffer[ 4 ][ 4 ];
+TEST_EXTERN uint32_t   Msg_buffer[ 4 ][ 4 ];
 
 extern rtems_multiprocessing_table Multiprocessing_configuration;
 

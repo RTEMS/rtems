@@ -26,7 +26,7 @@ rtems_task Test_task1(
 )
 {
   char              receive_buffer[16];
-  rtems_unsigned32  size;
+  uint32_t    size;
   rtems_status_code status;
 
   puts( "Getting QID of message queue" );

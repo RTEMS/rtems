@@ -24,8 +24,8 @@ rtems_task Delayed_events_task(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32  count;
-  rtems_unsigned32  previous_mode;
+  uint32_t    count;
+  uint32_t    previous_mode;
   rtems_status_code status;
   rtems_event_set   events;
 

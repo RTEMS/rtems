@@ -86,8 +86,8 @@ rtems_task Test_task(
 )
 {
   rtems_status_code status;
-  rtems_unsigned32  count;
-  rtems_unsigned32  remote_node;
+  uint32_t    count;
+  uint32_t    remote_node;
   rtems_id          remote_tid;
   rtems_event_set   event_out;
   rtems_event_set   event_for_this_iteration;

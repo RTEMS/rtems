@@ -29,7 +29,7 @@
 #define TEST_INIT
 #include "system.h"
 
-rtems_unsigned8 Partition_area[ 1024 ] CPU_STRUCTURE_ALIGNMENT;
+uint8_t   Partition_area[ 1024 ] CPU_STRUCTURE_ALIGNMENT;
 
 rtems_task Init(
   rtems_task_argument argument

@@ -22,7 +22,7 @@
 void Send_messages()
 {
   rtems_status_code status;
-  rtems_unsigned32  broadcast_count;
+  uint32_t    broadcast_count;
 
   puts_nocr( "rtems_message_queue_send: " );
   puts( buffer1 );

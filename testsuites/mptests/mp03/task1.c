@@ -26,7 +26,7 @@
  */
 
 void Test_Task_Support(
-  rtems_unsigned32  node
+  uint32_t    node
 )
 {
   rtems_event_set   events;

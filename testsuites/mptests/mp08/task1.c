@@ -24,7 +24,7 @@ rtems_task Test_task(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32  count;
+  uint32_t    count;
   rtems_status_code status;
 
   puts( "Getting SMID of semaphore" );

@@ -53,11 +53,11 @@ TEST_EXTERN rtems_name Timer_name[ 2 ];  /* array of timer names */
  
 TEST_EXTERN volatile rtems_boolean Stop_Test;
  
-TEST_EXTERN rtems_unsigned32          remote_node;
+TEST_EXTERN uint32_t            remote_node;
 TEST_EXTERN rtems_id                  remote_tid;
 TEST_EXTERN rtems_signal_set          remote_signal;
 TEST_EXTERN rtems_signal_set          expected_signal;
-TEST_EXTERN volatile rtems_unsigned32 signal_count;
-TEST_EXTERN volatile rtems_unsigned32 signal_caught;
+TEST_EXTERN volatile uint32_t   signal_count;
+TEST_EXTERN volatile uint32_t   signal_caught;
  
 /* end of include file */

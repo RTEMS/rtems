@@ -52,7 +52,7 @@ TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
 TEST_EXTERN rtems_id   Timer_id[ 2 ];    /* array of timer ids */
 TEST_EXTERN rtems_name Timer_name[ 2 ];  /* array of timer names */
  
-TEST_EXTERN rtems_unsigned32  remote_node;
+TEST_EXTERN uint32_t    remote_node;
 TEST_EXTERN rtems_id          remote_tid;
  
 /* end of include file */

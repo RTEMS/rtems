@@ -29,10 +29,10 @@ rtems_task Test_task(
 {
   rtems_id          tid;
   rtems_status_code status;
-  rtems_unsigned32  remote_node;
+  uint32_t    remote_node;
   rtems_id          remote_tid;
   rtems_id          test_tid;
-  rtems_unsigned32  note;
+  uint32_t    note;
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
 

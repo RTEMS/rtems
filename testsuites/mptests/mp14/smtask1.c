@@ -25,9 +25,9 @@ rtems_task Semaphore_task(
   rtems_task_argument argument
 )
 {
-  rtems_unsigned32  count;
+  uint32_t    count;
   rtems_status_code status;
-  rtems_unsigned32  yield_count;
+  uint32_t    yield_count;
 
   puts( "Getting SMID of semaphore" );
   while ( FOREVER ) {

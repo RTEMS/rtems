@@ -27,11 +27,11 @@ rtems_task Message_queue_task(
 )
 {
   rtems_status_code  status;
-  rtems_unsigned32   count;
-  rtems_unsigned32   yield_count;
-  rtems_unsigned32  *buffer_count;
-  rtems_unsigned32  *overflow_count;
-  rtems_unsigned32   size;
+  uint32_t     count;
+  uint32_t     yield_count;
+  uint32_t    *buffer_count;
+  uint32_t    *overflow_count;
+  uint32_t     size;
 
   Msg_buffer[ index ][0] = 0;
   Msg_buffer[ index ][1] = 0;
@@ -78,7 +78,7 @@ rtems_task Message_queue_task(
       );
       directive_failed( status, "rtems_message_queue_receive" );
 
-      if ( *buffer_count == (rtems_unsigned32)0xffffffff ) {
+      if ( *buffer_count == (uint32_t  )0xffffffff ) {
         *buffer_count    = 0;
         *overflow_count += 1;
       } else
