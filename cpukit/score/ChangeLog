@@ -1,3 +1,8 @@
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
+	* src/heapgetinfo.c: Fixed comment.
+	* src/mpci.c: Removed warning.
+
 2002-10-28	Joel Sherrill <joel@OARcorp.com>
 
 	* src/threadhandler.c: Prototype _init() and _main() if they are needed

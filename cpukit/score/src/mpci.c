@@ -385,6 +385,8 @@ Thread _MPCI_Receive_server(
         (*the_function)( the_packet );
     }
   }
+
+  return 0;   /* unreached - only to remove warnings */
 }
 
 /*PAGE
