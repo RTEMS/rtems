@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 if HAS_MP
 GENERIC_MP_REL_FILES = shmdr
