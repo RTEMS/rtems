@@ -2,10 +2,11 @@
 ## $Id$
 ##
 
+VPATH = @srcdir@:@srcdir@/../../shared/tod:@srcdir@/../../../shared
 
 PGM = $(ARCH)/clock.rel
 
-C_FILES = ckinit.c rtc.c
+C_FILES = ckinit.c todcfg.c tod.c
 clock_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../../../../../../automake/compile.am
@@ -25,6 +26,6 @@ all-local: $(ARCH) $(clock_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = ckinit.c rtc.c
+EXTRA_DIST = 
 
 include $(top_srcdir)/../../../../../../automake/local.am

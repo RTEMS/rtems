@@ -10,11 +10,12 @@ LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = rtcprobe.c icm7170.c icm7170_reg.c icm7170_reg2.c icm7170_reg4.c \
     icm7170_reg8.c m48t08.c m48t08_reg.c m48t08_reg2.c m48t08_reg4.c \
-    m48t08_reg8.c
+    m48t08_reg8.c \
+    mc146818a.c mc146818a_ioreg.c
 
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include_libchip_HEADERS = rtc.h icm7170.h m48t08.h
+include_libchip_HEADERS = rtc.h icm7170.h m48t08.h mc146818a.h
 
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
