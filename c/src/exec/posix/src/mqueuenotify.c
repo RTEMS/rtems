@@ -21,6 +21,8 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <mqueue.h>
+#include <sys/types.h>
+#include <signal.h>
 
 #include <rtems/system.h>
 #include <rtems/score/watchdog.h>
