@@ -1,3 +1,9 @@
+2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
+
+	* README.configure, aclocal/bsp-alias.m4, aclocal/check-bsps.m4:
+	Modified to reflect addition of LEON BSPs as well as the 
+	no-FP ERC32 variant.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/gcc-pipe.m4: Use $GCC instead of ac_cv_prog_gcc (autoconf

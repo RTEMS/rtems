@@ -182,7 +182,7 @@ no_cpu          : no_bsp
 mips64orion 	: p4600 p4650 (p4000 port with either R4600 or R4650)
 powerpc		: papyrus psim helas403
 sh              : gensh1
-sparc 		: erc32
+sparc 		: erc32 erc32nfp leon1 leon2
 any             : bare
 
 5. Makefile structure
