@@ -32,16 +32,8 @@ AS_IF([test "$HAS_MP" = "yes"],
 
 ## The code fragment below had been used in tools/cpu/unix/gensize.c.
 ## FIXME: 
-## * The sun-stuff needs to be looked after.
 ## * The pad very likely is not necessary.
 AC_CHECK_SIZEOF([CPU_CONTEXT],[],[
-#if defined(__sun__) && defined(__sparc__) && \
-    defined(__unix__) && defined(__svr4__)
-#undef  _POSIX_C_SOURCE  
-#define _POSIX_C_SOURCE 3
-#undef  __STRICT_ANSI__
-#endif
-
 #include <stdio.h>
 #include <setjmp.h>
 
