@@ -29,7 +29,8 @@ extern "C" {
 
 typedef enum {
   INTERNAL_ERROR_CORE,
-  INTERNAL_ERROR_RTEMS_API
+  INTERNAL_ERROR_RTEMS_API,
+  INTERNAL_ERROR_POSIX_API
 } Internal_errors_Source;
 
 /*
