@@ -67,6 +67,15 @@ AC_ARG_ENABLE([ada],
   *)  AC_MSG_ERROR([bad value ${enable_ada} for --enable-ada]) ;;
 esac],[enable_ada=no])
 
+AC_ARG_ENABLE([deprecated],
+[AS_HELP_STRING(--enable-deprecated,allow using deprecated files)],
+[case "${enable_deprecated}" in
+  yes) ;;
+  no) ;;
+  *) enable_deprecated=yes ;;
+esac],[enable_deprecated=yes])
+AM_CONDITIONAL([DEPRECATED],[test "$enable_deprecated" = "yes"])
+
 # HACK: We should use a feature-based configuration.
 AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
 # HACK: silently accept --enable-unixlib

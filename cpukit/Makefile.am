@@ -20,10 +20,13 @@ preinstall-stamp:
 	touch preinstall-stamp
 CLEANFILES = preinstall-stamp
 
-include_HEADERS = backward/asm.h backward/chain.h backward/clockdrv.h \
-    backward/console.h backward/imfs.h backward/iosupp.h backward/ringbuf.h \
-    backward/rtc.h backward/spurious.h backward/timerdrv.h \
-    backward/vmeintr.h
+include_HEADERS =
+
+if DEPRECATED
+include_HEADERS += backward/asm.h backward/chain.h backward/clockdrv.h \
+    backward/confdefs.h backward/console.h backward/imfs.h backward/iosupp.h \
+    backward/ringbuf.h backward/rtc.h backward/spurious.h \
+    backward/timerdrv.h backward/vmeintr.h
 
 if !UNIX
 include_HEADERS += backward/dosfs.h
@@ -31,6 +34,7 @@ endif
 
 if HAS_ITRON
 include_HEADERS += backward/itron.h
+endif
 endif
 
 include_rtemsdir = $(includedir)/rtems
@@ -46,6 +50,7 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
+if DEPRECATED
 $(PROJECT_INCLUDE)/asm.h: backward/asm.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/asm.h
@@ -57,6 +62,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/chain.h
 $(PROJECT_INCLUDE)/clockdrv.h: backward/clockdrv.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/clockdrv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/clockdrv.h
+
+$(PROJECT_INCLUDE)/confdefs.h: backward/confdefs.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/confdefs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/confdefs.h
 
 $(PROJECT_INCLUDE)/console.h: backward/console.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/console.h
@@ -100,6 +109,7 @@ if HAS_ITRON
 $(PROJECT_INCLUDE)/itron.h: backward/itron.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/itron.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/itron.h
+endif
 endif
 
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
