@@ -36,7 +36,7 @@
     asm volatile ( "pushf ; \
                     cli ; \
                     pop %0" \
-                    : "=r" ((_level)) : "0" ((_level)) \
+                   : "=rm" ((_level)) \
     ); \
   }
 
@@ -44,7 +44,7 @@
   { \
     asm volatile ( "push %0 ; \
                     popf" \
-                    : "=r" ((_level)) : "0" ((_level)) \
+                    : "=rm" ((_level)) \
     ); \
   }
 
@@ -53,20 +53,20 @@
     asm volatile ( "push %0 ; \
                     popf ; \
                     cli" \
-                    : "=r" ((_level)) : "0" ((_level)) \
+                    : "=rm" ((_level)) \
     ); \
   }
 
 #define i386_get_interrupt_level( _level ) \
   do { \
-    register unsigned32 _eflags = 0; \
+    register unsigned32 _eflags; \
     \
     asm volatile ( "pushf ; \
                     pop %0" \
-                    : "=r" ((_eflags)) : "0" ((_eflags)) \
+                    : "=rm" ((_eflags)) \
     ); \
     \
-    _level = (_eflags &  EFLAGS_INTR_ENABLE) ? 0 : 1; \
+    _level = (_eflags & EFLAGS_INTR_ENABLE) ? 0 : 1; \
   } while (0)
 
 #define _CPU_ISR_Disable( _level ) i386_disable_interrupts( _level )
