@@ -62,6 +62,10 @@ typedef struct blkdev_request {
     blkdev_request_op req;      /* Block device operation (read or write) */
     blkdev_request_cb req_done; /* Callback function */
     void             *done_arg; /* Argument to be passed to callback function*/
+    rtems_status_code status;  /* Last I/O operation completion status */
+    int               error;   /* If status != RTEMS_SUCCESSFUL, this field 
+                                * contains error code
+                                */
     blkdev_bnum       start;    /* Start block number */
     rtems_unsigned32  count;    /* Number of blocks to be exchanged */
     rtems_unsigned32  bufnum;   /* Number of buffers provided */    

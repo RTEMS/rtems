@@ -1,3 +1,11 @@
+2002-10-28	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
+
+	* Added ATA  support.
+	* include/rtems/blkdev.h: Added last IO status.
+	* include/rtems/ata.h, include/rtems/ata_internal.h,
+	include/rtems/ide_part_table.h, src/ata.c, src/ide_part_table.c: New
+	files.
+
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
