@@ -10,7 +10,7 @@ MP_H_PIECES = $(MP_H_PIECES_$(HAS_MP)_V)
 
 H_PIECES = cancel.h cond.h config.h key.h mqueue.h mutex.h posixapi.h \
     priority.h psignal.h pthread.h ptimer.h semaphore.h seterr.h threadsup.h \
-    time.h $(MP_H_PIECES)
+    time.h timer.h $(MP_H_PIECES)
 #H_PIECES= intr.h threadsup.h time.h
 
 noinst_HEADERS = $(H_PIECES)

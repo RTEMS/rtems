@@ -35,13 +35,44 @@
 #include <rtems/posix/timer.h>
 
 /* ***************************************************************************
+ * TIMER_INITIALIZE_S
+ *
+ *  Description: Initialize the data of a timer
+ * ***************************************************************************/
+
+void TIMER_INITIALIZE_S ( int timer_pos )
+{
+
+   /*
+    * Indicates that the position in the table is free
+    */
+
+    timer_struct[timer_pos].state = STATE_FREE_C;
+
+   /*
+    * The initial data of timing are set with null value
+    */
+
+    timer_struct[timer_pos].timer_data.it_value.tv_sec     = 0;
+    timer_struct[timer_pos].timer_data.it_value.tv_nsec    = 0;
+    timer_struct[timer_pos].timer_data.it_interval.tv_sec  = 0;
+    timer_struct[timer_pos].timer_data.it_interval.tv_nsec = 0;
+
+   /*
+    * The count of expirations is 0
+    */
+
+    timer_struct[timer_pos].overrun = 0;
+
+}
+
+/* ***************************************************************************
  * _POSIX_Timer_Manager_initialization
  *
  *  Description: Initialize the internal structure in which the data of all 
  *               the timers are stored
  * ***************************************************************************/
 
-extern void TIMER_INITIALIZE_S( int );
 int timer_max;
 timer_alive_t *timer_struct;
 

@@ -38,26 +38,6 @@
  * Constants
  * ************/ 
 
-#define STATE_FREE_C        0x01 /* Free position of the table of timers   */
-#define STATE_CREATE_NEW_C  0x02 /* Created timer but not running          */
-#define STATE_CREATE_RUN_C  0x03 /* Created timer and running              */
-#define STATE_CREATE_STOP_C 0x04 /* Created, ran and stopped timer         */
-#define MAX_NSEC_C    1000000000 /* Maximum number of nsec allowed         */
-#define MIN_NSEC_C             0 /* Minimum number of nsec allowew         */
-#define TIMER_RELATIVE_C       0 /* Indicates that the fire time is       
-                                  * relative to the current one            */ 
-#define SEC_TO_TICKS_C _TOD_Ticks_per_second /* Number of ticks in a second*/
-#define NSEC_PER_SEC_C 1000000000 /* Nanoseconds in a second               */
-
-#define NO_MORE_TIMERS_C      11 /* There is not available timers          */
-#define BAD_TIMER_C           11 /* The timer does not exist in the table  */
-
-#define SECONDS_PER_YEAR_C    ( 360 * 24 * 60 * 60 )
-#define SECONDS_PER_MONTH_C    ( 30 * 24 * 60 * 60 )
-#define SECONDS_PER_DAY_C           ( 24 * 60 * 60 )
-#define SECONDS_PER_HOUR_C               ( 60 * 60 )
-#define SECONDS_PER_MINUTE_C                  ( 60 )
-
 /*
 #define DEBUG_MESSAGES
  */
@@ -121,31 +101,7 @@ static void PRINT_ERRNO_S ()
  *  Description: Initialize the data of a timer 
  * ***************************************************************************/
 
-void TIMER_INITIALIZE_S ( int timer_pos )
-{
-
-   /*
-    * Indicates that the position in the table is free 
-    */
-
-    timer_struct[timer_pos].state = STATE_FREE_C;
-
-   /*
-    * The initial data of timing are set with null value 
-    */
-
-    timer_struct[timer_pos].timer_data.it_value.tv_sec     = 0;
-    timer_struct[timer_pos].timer_data.it_value.tv_nsec    = 0;
-    timer_struct[timer_pos].timer_data.it_interval.tv_sec  = 0;
-    timer_struct[timer_pos].timer_data.it_interval.tv_nsec = 0;
-
-   /* 
-    * The count of expirations is 0 
-    */
-
-    timer_struct[timer_pos].overrun = 0;
-
-}
+extern void TIMER_INITIALIZE_S ( int timer_pos );
 
 /* ***************************************************************************
  * _POSIX_Timer_Manager_initialization
