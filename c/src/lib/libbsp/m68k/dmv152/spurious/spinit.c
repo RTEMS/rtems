@@ -43,4 +43,6 @@ rtems_device_driver Spurious_Initialize(
 
   for ( vector = 0x40 ; vector <= 0xFF ; vector++ )
     (void) set_vector( Spurious_Isr, vector, 1 );
+
+  return 0;
 }
