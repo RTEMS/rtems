@@ -856,12 +856,11 @@ rtems_device_driver console_open(
   void *arg
 )
 {
+#if NVRAM_CONFIGURE == 1
   /* Used to track termios private data for callbacks */
   extern struct rtems_termios_tty *ttyp[];
-  
   rtems_libio_open_close_args_t *args = arg;
-  rtems_status_code sc;
-  
+#endif
   static const rtems_termios_callbacks sccEPPCBugCallbacks = {
     NULL,                       	/* firstOpen */
     NULL,                       	/* lastClose */
@@ -871,29 +870,35 @@ rtems_device_driver console_open(
     NULL,                       	/* startRemoteTx */
     0                           	/* outputUsesInterrupts */
   };
+  static const rtems_termios_callbacks pollCallbacks = {
+    NULL,                       	/* firstOpen */
+    NULL,                       	/* lastClose */
+    m8xx_uart_pollRead,        	        /* pollRead */
+    m8xx_uart_pollWrite,       	        /* write */
+    m8xx_uart_setAttributes,            /* setAttributes */
+    NULL,                       	/* stopRemoteTx */
+    NULL,                       	/* startRemoteTx */
+    0                           	/* outputUsesInterrupts */
+  };
+  rtems_status_code sc;
+  
+   
+#if (NVRAM_CONFIGURE == 1) || \
+    ((NVRAM_CONFIGURE != 1) && (UARTS_USE_TERMIOS == 1) && \
+      (UARTS_IO_MODE == 1))
   
   static const rtems_termios_callbacks intrCallbacks = {
     NULL,                       	/* firstOpen */
     NULL,                       	/* lastClose */
-    NULL,                         /* pollRead */
-    m8xx_uart_write,       	      /* write */
+    NULL,                               /* pollRead */
+    m8xx_uart_write,       	        /* write */
     m8xx_uart_setAttributes,    	/* setAttributes */
     NULL,                       	/* stopRemoteTx */
     NULL,                       	/* startRemoteTx */
     1                           	/* outputUsesInterrupts */
   };
+#endif
   
-  static const rtems_termios_callbacks pollCallbacks = {
-    NULL,                       	/* firstOpen */
-    NULL,                       	/* lastClose */
-    m8xx_uart_pollRead,        	  /* pollRead */
-    m8xx_uart_pollWrite,       	  /* write */
-    m8xx_uart_setAttributes,      /* setAttributes */
-    NULL,                       	/* stopRemoteTx */
-    NULL,                       	/* startRemoteTx */
-    0                           	/* outputUsesInterrupts */
-  };
-   
   if ( minor > NUM_PORTS-1 ) 
     return RTEMS_INVALID_NUMBER;
 

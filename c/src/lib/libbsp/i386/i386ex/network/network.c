@@ -1,4 +1,4 @@
-/* uti596.c: An 82596 ethernet driver for rtems-bsd.
+/* uti595.c: An 82596 ethernet driver for rtems-bsd.
  *
  *  $Id$
  */
@@ -60,6 +60,7 @@ int count_rx = 0;
 #include "netexterns.h"
 
 #include <asm.h>
+#include <string.h>
 
 
 /* #include "../misc/utils.h" */
@@ -68,7 +69,6 @@ static struct uti596_softc uti596_softc;
 
 
 static    int scbStatus;
-static    rtems_status_code sc;
 static    struct i596_cmd *pIsrCmd;
 static    struct i596_rfd *pIsrRfd;
 
@@ -169,6 +169,8 @@ void send_packet(struct ifnet *, struct mbuf *);
 
 void 
 uti596_request_reset(void){
+   rtems_status_code sc;
+
    uti596_softc.nic_reset = 0;
    sc = rtems_event_send(uti596_softc.resetDaemonTid, NIC_RESET_EVENT);
    if ( sc != RTEMS_SUCCESSFUL )
@@ -2709,7 +2711,6 @@ void uti596_init(void * arg){
 
   struct uti596_softc  *sc = arg;
   struct ifnet *ifp = &sc->arpcom.ac_if;
-  rtems_status_code status_code;
 
 
   if (sc->txDaemonTid == 0) {

@@ -43,6 +43,7 @@ void __assert (const char *file, int line, const char *msg);
 #include <bsp.h>
 #include <irq.h>
 #include <rtems/libio.h>
+#include <rtems/error.h>
 #include <termios.h>
 #include <uart.h>
 #include <libcpu/cpuModel.h>
@@ -188,8 +189,6 @@ console_initialize(rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 } /* console_initialize */
 
-
-static int console_open_count = 0;
 
 static int console_last_close(int major, int minor, void *arg)
 {

@@ -136,7 +136,8 @@ static void  m8xx_scc1_ethernet_off(const rtems_irq_connect_data* ptr)
 
 static void  m8xx_scc1_ethernet_isOn(const rtems_irq_connect_data* ptr)
 {
-  return BSP_irq_enabled_at_cpm (ptr->name);
+  int BSP_irq_enabled_at_cpm(const rtems_irq_symbolic_name );
+  BSP_irq_enabled_at_cpm (ptr->name);
 }
 
 /*
@@ -203,8 +204,6 @@ m8xx_enet_initialize (struct m8xx_enet_struct *sc)
 {
   int i;
   unsigned char *hwaddr;
-  rtems_status_code status;
-  rtems_isr_entry old_handler;
   
   /*
    * Configure port A
@@ -754,10 +753,10 @@ scc_rxDaemon (void *arg)
        */
       struct ether_header *eh;
       
-   		/*
-			 * Invalidate the buffer for this descriptor
-			 */
-			rtems_cache_invalidate_multiple_data_lines(rxBd->buffer, rxBd->length);
+   	/*
+	 * Invalidate the buffer for this descriptor
+	 */
+	rtems_cache_invalidate_multiple_data_lines(rxBd->buffer, rxBd->length);
       
       m = sc->rxMbuf[rxBdIndex];
       m->m_len = m->m_pkthdr.len = rxBd->length -
