@@ -54,7 +54,7 @@ static sci_tab_t test_array[4] ;
 static void Compute( 
   unsigned int n, 
   unsigned int B, 
-  unsigned int Phi,
+  double   Phi,
   struct sci_tab *entry )
 {
   int    a = ( 32 << ( 2 * n ) ) * B ;
