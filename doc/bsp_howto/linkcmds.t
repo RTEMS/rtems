@@ -10,52 +10,73 @@
 
 @section What is a "linkcmds" file?
 
-The linkcmds file is a script which is passed to the linker at linking
-time. It holds somewhat the board memory configuration. 
+The @code{linkcmds} file is a script which is passed to the linker at linking
+time.  This file describes the memory configuration of the board as needed
+to link the program.  Specifically it specifies where the code and data
+for your application will reside in memory.
 
-@section Image of an Executable
+@section Program Sections
 
-A program destined to be embedded has some specificities. Embedded
-machines often mean average performances and small memory usage. 
+An embedded systems programmer must be much more aware of the
+placement of their executable image in memory than the average
+"normal" programmer.  A program destined to be embedded as well
+as the target system have some specific properties that must be
+taken into account. Embedded machines often mean average performances
+and small memory usage.  It is the memory usage that concerns us
+when examining the linker command file.
 
-Two types of memories have to be distinguished: one is volatile but on
-read and write access (RAM), while the other is non-volatile but read only
-(ROM). Even though RAM and ROM can be found in every personal computer,
-one generally doesn't care about them , because a program is always put in
-RAM and is executed in RAM. That's a bit different in embedded
-development: the target will execute the program each time it's reboot or
-switched on, which means the program is stored in ROM. On the other hand,
-data processing occurs in RAM. 
+Two types of memories have to be distinguished:
 
-This leads us to the structure of an embedded program: it is roughly made
-of sections. For example, if using COFF on the Motorola m68k family
-of microprocessors, then the following sections will be present.
+@itemize @bullet
+@item RAM - volatile offering read and write access
+@item ROM - non-volatile but read only
+@end itemize
 
-@table @b
+Even though RAM and ROM can be found in every personal computer,
+one generally doesn't care about them.  In a personal computer,
+a program is nearly always stored on disk and executed in RAM.  Things
+are a bit different for embedded targets: the target will execute the
+program each time it is rebooted or switched on.   The application
+program is stored in ROM. On the other hand, data processing occurs in RAM. 
 
-@item the code (@code{.text}) section
-holds the program's main
-code, so that it doesn't have to be modified. This section
-may be placed in ROM. 
+This leads us to the structure of an embedded program.  In rough terms,
+an embedded program is made of sections.  It is the responsibility of
+the application programmer to place these sections in the appropriate
+place in target memory.  To make this clearer, if using COFF on the
+Motorola m68k family of microprocessors, the following sections will
+be present:
 
-@item the non-initialized data (@code{.bss}) section
+@itemize @bullet
+
+@item @b{code (@code{.text}) section}: 
+is the program's code and it should not be modified.
+This section may be placed in ROM. 
+
+@item @b{non-initialized data (@code{.bss}) section}: 
 holds uninitialized variables of the program. It can stay in RAM. 
-XXX 
 
-@item the initialized data (@code{.data}) section 
-holds the
-program data which are to be modified during the program's life, which
-means they have to be in RAM. On another hand, these variables must be set
-to predefined values, which have to be stored in ROM... 
+@item @b{initialized data (@code{.data}) section}:
+holds the initialized program data which may be modified during the
+program's life.  This means they have to be in RAM.
+On the other hand, these variables must be set to predefined values, and
+those predefined values have to be stored in ROM.
 
-@end table
+@end itemize
+
+@b{NOTE:} Many programs and support libraries unknowingly assume that the
+@code{.bss} section and, possibly, the application heap are initialized
+to zero at program start.  This is not required by the ISO/ANSI C Standard
+but is such a common requirement that most BSPs do this.
 
 That brings us up to the notion of the image of an executable: it consists
 in the set of the program sections. 
 
+@section Image of an Executable
+
 As a program executable has many sections (note that the user can define
-his own, and that compilers define theirs without any notice), one has to
-state in which type of memory (RAM or ROM) the sections will be arranged.
+their own, and that compilers define theirs without any notice), one has to
+specify the placement of each section as well as the type of memory
+(RAM or ROM) the sections will be placed into.
 For instance, a program compiled for a Personal Computer will see all the
 sections to go to RAM, while a program destined to be embedded will see
 some of his sections going into the ROM. 
@@ -81,13 +102,14 @@ layout is conceptually similar.
 @end group
 @end example
 
+@section Example Linker Command Script 
+
 The GNU linker has a command language to specify the image format.  This
 command language can be quite complicated but most of what is required
 can be learned by careful examination of a well-documented example.
 The following is a heavily commented version of the linker script 
 used with the the @code{gen68340} BSP  This file can be found at
 $BSP340_ROOT/startup/linkcmds. 
-
 
 @example
 /*
@@ -331,6 +353,8 @@ SECTIONS @{
   @} >ram
 @}
 @end example
+
+@section Initialized Data
 
 Now there's a problem with the initialized data: the @code{.data} section
 has to be in RAM as these data may be modified during the program execution.

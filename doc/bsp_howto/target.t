@@ -21,7 +21,7 @@ into one of the following categories.
 @item Peripheral dependent
 @end itemize
 
-@subheading CPU Dependent
+@section CPU Dependent
 
 This class of code includes the foundation
 routines for the executive proper such as as the context switch and
@@ -36,7 +36,7 @@ dependent on a particular CPU model.  For example, the MC68000 and MC68020
 processors are both members of the m68k CPU family but there are significant
 differents between these CPU models which RTEMS must take into account.
 
-@subheading Board Dependent
+@section Board Dependent
 
 This class of code provides the most specific glue between RTEMS and
 a particular board.  This code is represented by the Board Support Packages
@@ -48,7 +48,7 @@ single base base.  For example, the Motorola MVME162 board family has a
 a fairly large number of variations based upon the particular CPU model
 and the peripherals actually placed on the board.
 
-@subheading Peripheral Dependent
+@section Peripheral Dependent
 
 This class of code provides a reusable library of peripheral device
 drivers which can be tailored easily to a particular board.  This

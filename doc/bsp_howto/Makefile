@@ -79,10 +79,10 @@ makefiles.texi: makefiles.t Makefile
 linkcmds.texi: linkcmds.t Makefile
 	$(BMENU) -p "Makefiles Creating a New BSP Make Customization File" \
 	    -u "Top" \
-	    -n "" ${*}.t
+	    -n "Required Support Routines" ${*}.t
 
 support.texi: support.t Makefile
-	$(BMENU) -p "" \
+	$(BMENU) -p "Linker Script Initialized Data" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
