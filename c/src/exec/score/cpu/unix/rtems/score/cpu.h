@@ -378,7 +378,7 @@ extern "C" {
 #endif
  
 /*
- *  For Linux 1.1
+ *  For i386 targets
  */
  
 #ifdef RTEMS_UNIXLIB
@@ -389,7 +389,18 @@ extern "C" {
 #define ESP_OFF    3
 #define ESI_OFF    4
 #define EDI_OFF    5
+#elif defined(__CYGWIN__)
+#define EAX_OFF    0
+#define EBX_OFF    1
+#define ECX_OFF    2
+#define EDX_OFF    3
+#define ESI_OFF    4
+#define EDI_OFF    5
+#define EBP_OFF    6
+#define ESP_OFF    7
+#define RET_OFF    8
 #else
+/* Linux */
 #define EBX_OFF    0
 #define ESI_OFF    1
 #define EDI_OFF    2

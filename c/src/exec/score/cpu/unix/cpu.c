@@ -99,7 +99,9 @@ void _CPU_ISR_From_CPU_Init()
   (void) sigfillset(&_CPU_Signal_mask);
   (void) sigdelset(&_CPU_Signal_mask, SIGTRAP);
   (void) sigdelset(&_CPU_Signal_mask, SIGABRT);
+#if !defined(__CYGWIN__)
   (void) sigdelset(&_CPU_Signal_mask, SIGIOT);
+#endif
   (void) sigdelset(&_CPU_Signal_mask, SIGCONT);
   (void) sigdelset(&_CPU_Signal_mask, SIGSEGV);
   (void) sigdelset(&_CPU_Signal_mask, SIGBUS);
@@ -806,7 +808,9 @@ void _CPU_Stray_signal(int sig_num)
       case SIGBUS:
       case SIGSEGV:
       case SIGTERM:
+#if !defined(__CYGWIN__)
       case SIGIOT:
+#endif
         _CPU_Fatal_error(0x100 + sig_num);
   }
 }

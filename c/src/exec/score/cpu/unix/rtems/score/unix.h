@@ -37,13 +37,13 @@ extern "C" {
  
 #define CPU_MODEL_NAME  "Solaris"
  
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(linux)
  
 #define CPU_MODEL_NAME  "Linux"
  
-#elif defined(linux)
+#elif defined(__CYGWIN__)
  
-#define CPU_MODEL_NAME  "Linux"
+#define CPU_MODEL_NAME  "Cygwin"
  
 #elif defined(__FreeBSD__)
  

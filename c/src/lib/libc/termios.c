@@ -28,7 +28,6 @@
  *  FreeBSD does not support a full POSIX termios so we have to help it out
  */
 
-
 #if defined(__FreeBSD__)
 #define XTABS   0
 #define ONLRET  0
@@ -38,6 +37,14 @@
 #define ILCUC   0
 #define OCRNL   0
 #define IUCLC   0
+#endif
+
+/*
+ *  Cygwin does not define these
+ */
+
+#if defined(__CYGWIN__)
+#define ECHOPRT 0
 #endif
 
 /*
