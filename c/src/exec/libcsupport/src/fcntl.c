@@ -30,6 +30,7 @@ int fcntl(
   rtems_libio_t *diop;
   int            fd2;
   int            flags;
+  int            ret = 0;
   
   va_start( ap, cmd );
 
@@ -53,8 +54,10 @@ int fcntl(
       else {
         /* allocate a file control block */
         diop = rtems_libio_allocate();
-        if ( diop == 0 )
-          return -1;
+        if ( diop == 0 ) {
+          ret = -1;
+          break;
+        }
       }
 
       diop->handlers   = iop->handlers;
@@ -62,12 +65,11 @@ int fcntl(
       diop->flags      = iop->flags;
       diop->pathinfo   = iop->pathinfo;
       
-      return 0;
+      break;
 
     case F_GETFD:        /* get f_flags */
-      if ( iop->flags & LIBIO_FLAGS_CLOSE_ON_EXEC )
-        return 1;
-      return 0;
+      ret = ((iop->flags & LIBIO_FLAGS_CLOSE_ON_EXEC) != 0);
+      break;
 
     case F_SETFD:        /* set f_flags */
       /*
@@ -82,46 +84,56 @@ int fcntl(
         iop->flags |= LIBIO_FLAGS_CLOSE_ON_EXEC;
       else
         iop->flags &= ~LIBIO_FLAGS_CLOSE_ON_EXEC;
-      return 0;
+      break;
 
     case F_GETFL:        /* more flags (cloexec) */
-      return rtems_libio_to_fcntl_flags( iop->flags );
+      ret = rtems_libio_to_fcntl_flags( iop->flags );
 
     case F_SETFL:
       flags = rtems_libio_fcntl_flags( va_arg( ap, int ) );
 
       /*
-       *  XXX Double check this in the POSIX spec.  According to the Linux
-       *  XXX man page, only these flags can be added.
-       */
-
-      flags = (iop->flags & ~(O_APPEND|O_NONBLOCK)) |
-                   (flags & (O_APPEND|O_NONBLOCK));
-
-      /*
        *  XXX If we are turning on append, should we seek to the end?
        */
 
-      iop->flags = flags;
-      return 0;
+      iop->flags = (iop->flags & ~(O_APPEND | O_NONBLOCK)) |
+                   (flags & (O_APPEND | O_NONBLOCK));
+      break;
 
     case F_GETLK:
-      return -1;
+      errno = ENOTSUP;
+      ret = -1;
+      break;
 
     case F_SETLK:
-      return -1;
+      errno = ENOTSUP;
+      ret = -1;
+      break;
 
     case F_SETLKW:
-      return -1;
+      errno = ENOTSUP;
+      ret = -1;
+      break;
 
     case F_SETOWN:       /*  for sockets. */
-      return -1;
+      errno = ENOTSUP;
+      ret = -1;
+      break;
 
     case F_GETOWN:       /*  for sockets. */
-      return -1;
+      errno = ENOTSUP;
+      ret = -1;
+      break;
 
     default:
       break;
   }
-  return -1;
+  if ((ret >= 0) && iop->handlers->fcntl) {
+    int err = (*iop->handlers->fcntl)( cmd, iop );
+    if (err) {
+      errno = err;
+      ret = -1;
+    }
+  }
+  return ret;
 }

@@ -20,6 +20,7 @@
 #include <sys/socketvar.h>
 #include <sys/protosw.h>
 #include <sys/proc.h>
+#include <sys/fcntl.h>
 #include <sys/filio.h>
 
 #include <net/if.h>
@@ -644,14 +645,18 @@ rtems_bsdnet_write (rtems_libio_t *iop, const void *buffer, unsigned32 count)
 }
 
 static int
-so_ioctl (struct socket *so, unsigned32 command, void *buffer)
+so_ioctl (rtems_libio_t *iop, struct socket *so, unsigned32 command, void *buffer)
 {
 	switch (command) {
 	case FIONBIO:
-		if (*(int *)buffer)
+		if (*(int *)buffer) {
+			iop->flags |= O_NONBLOCK;
 			so->so_state |= SS_NBIO;
-		else
+		}
+		else {
+			iop->flags &= ~O_NONBLOCK;
 			so->so_state &= ~SS_NBIO;
+		}
 		return 0;
 
 	case FIONREAD:
@@ -678,13 +683,33 @@ rtems_bsdnet_ioctl (rtems_libio_t *iop, unsigned32 command, void *buffer)
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
-	error = so_ioctl (so, command, buffer);
+	error = so_ioctl (iop, so, command, buffer);
 	rtems_bsdnet_semaphore_release ();
 	if (error) {
 		errno = error;
 		return -1;
 	}
 	return 0;
+}
+
+static int
+rtems_bsdnet_fcntl (int cmd, rtems_libio_t *iop)
+{
+	struct socket *so;
+
+	if (cmd == F_SETFL) {
+		rtems_bsdnet_semaphore_obtain ();
+		if ((so = iop->data1) == NULL) {
+			rtems_bsdnet_semaphore_release ();
+			return EBADF;
+		}
+		if (iop->flags & O_NONBLOCK)
+			so->so_state |= SS_NBIO;
+		else
+			so->so_state &= ~SS_NBIO;
+		rtems_bsdnet_semaphore_release ();
+	}
+        return 0;
 }
 
 static int
@@ -707,4 +732,5 @@ static const rtems_filesystem_file_handlers_r socket_handlers = {
 	NULL,			/* fpathconf */
 	NULL,			/* fsync */
 	NULL,			/* fdatasync */
+	rtems_bsdnet_fcntl,	/* fcntl */
 };

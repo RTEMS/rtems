@@ -115,6 +115,11 @@ typedef int (*rtems_filesystem_fdatasync_t)(
   rtems_libio_t *iop
 );
 
+typedef int (*rtems_filesystem_fcntl_t)(
+  int cmd,
+  rtems_libio_t *iop
+);
+
 typedef struct {
     rtems_filesystem_open_t         open;
     rtems_filesystem_close_t        close;
@@ -128,6 +133,7 @@ typedef struct {
     rtems_filesystem_fpathconf_t    fpathconf;
     rtems_filesystem_fsync_t        fsync;
     rtems_filesystem_fdatasync_t    fdatasync;
+    rtems_filesystem_fcntl_t        fcntl;
 } rtems_filesystem_file_handlers_r;
 
 /*
