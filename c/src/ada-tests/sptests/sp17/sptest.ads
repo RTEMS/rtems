@@ -37,7 +37,7 @@ package SPTEST is
 --  The following is set to TRUE by TASK_2 when it preempts TASK_1.
 --
 
-   TASK_2_PREEMPTED : RTEMS.BOOLEAN;
+   TASK_2_PREEMPTED : STANDARD.BOOLEAN;
 
 --
 --  INIT
