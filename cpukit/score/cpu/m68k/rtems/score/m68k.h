@@ -229,6 +229,10 @@ extern "C" {
 
 #endif
 
+#ifndef ASM
+#include <rtems/score/m68ktypes.h>
+#endif
+
 /*
  *  If the above did not specify a ColdFire architecture, then set
  *  this flag to indicate that it is not a ColdFire CPU.
@@ -326,6 +330,34 @@ extern "C" {
  *  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.
  */
+#if ( M68K_COLDFIRE_ARCH == 1 )
+
+/* There are no rotate commands in Coldfire architecture. We will use
+ * generic implementation of endian swapping for Coldfire.
+ */
+static inline unsigned int CPU_swap_u32(
+  unsigned int value
+  )
+{
+  unsigned32 byte1, byte2, byte3, byte4, swapped;
+    
+  byte4 = (value >> 24) & 0xff;
+  byte3 = (value >> 16) & 0xff;
+  byte2 = (value >> 8)  & 0xff;
+  byte1 =  value        & 0xff;
+           
+  swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
+  return( swapped );
+}
+ 
+static inline unsigned int m68k_swap_u16(
+  unsigned int value
+)
+{
+  return (((value & 0xff) << 8) | ((value >> 8) & 0xff));
+}
+                  
+#else
 
 static inline unsigned int m68k_swap_u32(
   unsigned int value
@@ -350,6 +382,7 @@ static inline unsigned int m68k_swap_u16(
 
   return( swapped );
 }
+#endif
 
 #define CPU_swap_u32( value )  m68k_swap_u32( value )
 #define CPU_swap_u16( value )  m68k_swap_u16( value )

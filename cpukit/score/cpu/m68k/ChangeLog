@@ -1,3 +1,9 @@
+2002-03-06      Victor V. Vengerov <vvv@oktet.ru>
+
+        * rtems/score/m68k.h [M68K_COLDFIRE_ARCH] (CPU_swap_u16, CPU_swap_u32): 
+	Generic implementation of endian swap primitives added for Coldfire 
+	family.
+
 2002-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/Makefile.am: Removed.
