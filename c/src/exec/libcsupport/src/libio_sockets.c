@@ -59,6 +59,6 @@ int rtems_bsdnet_makeFdForSocket(
   iop->flags |= LIBIO_FLAGS_WRITE | LIBIO_FLAGS_READ;
   iop->data0 = fd;
   iop->data1 = so;
-  iop->handlers = h;
+  iop->handlers = (rtems_filesystem_file_handlers_r *) h;
   return fd;
 }
