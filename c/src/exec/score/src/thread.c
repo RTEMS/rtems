@@ -107,7 +107,8 @@ void _Thread_Handler_initialization(
 
 void _Thread_Create_idle( void )
 {
-  void *idle;
+  void       *idle;
+  unsigned32  idle_task_stack_size;
 
   /*
    *  The entire workspace is zeroed during its initialization.  Thus, all
@@ -130,11 +131,15 @@ void _Thread_Create_idle( void )
   if ( _CPU_Table.idle_task )
     idle = _CPU_Table.idle_task;
  
+  idle_task_stack_size =  _CPU_Table.idle_task_stack_size;
+  if ( idle_task_stack_size < STACK_MINIMUM_SIZE )
+    idle_task_stack_size = STACK_MINIMUM_SIZE;
+ 
   _Thread_Initialize(
     &_Thread_Internal_information,
     _Thread_Idle,
     NULL,        /* allocate the stack */
-    THREAD_IDLE_STACK_SIZE,
+    idle_task_stack_size,
     CPU_IDLE_TASK_IS_FP,
     PRIORITY_MAXIMUM,
     TRUE,        /* preemptable */

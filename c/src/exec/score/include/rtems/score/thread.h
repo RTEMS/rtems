@@ -192,14 +192,6 @@ struct Thread_Control_struct {
 };
 
 /*
- *  The following constants define the stack size requirements for
- *  the idle thread.
- */
- 
- 
-#define THREAD_IDLE_STACK_SIZE  STACK_MINIMUM_SIZE
- 
-/*
  *  The following defines the information control block used to
  *  manage this class of objects.
  */

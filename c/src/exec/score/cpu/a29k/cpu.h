@@ -456,6 +456,7 @@ typedef struct {
   void       (*postdriver_hook)( void );
   void       (*idle_task)( void );
   boolean      do_zero_of_workspace;
+  unsigned32   idle_task_stack_size;
   unsigned32   interrupt_stack_size;
   unsigned32   extra_system_initialization_stack;
   unsigned32   some_other_cpu_dependent_info;
