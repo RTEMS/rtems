@@ -551,7 +551,7 @@ procedure Semaphore_Delete (
 
 @subheading DESCRIPTION:
 
-This directive deletes the semaphore specified by id.
+This directive deletes the semaphore specified by @code{id}.
 All tasks blocked waiting to acquire the semaphore will be
 readied and returned a status code which indicates that the
 semaphore was deleted.  The SMCB for this semaphore is reclaimed
