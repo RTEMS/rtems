@@ -1,5 +1,9 @@
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Don't include subdirs.am.
+
+2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Fix typo.
 
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
