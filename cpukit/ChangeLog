@@ -1,3 +1,10 @@
+2002-06-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add librpc. AC_PROG_RANLIB.
+	* wrapup/Makefile.am: Add librpc.
+	Use relative path to lib*.a for
+	POSIX_OBJS, ITRON_OBJS, NETWORKING_OBJS.
+
 2002-06-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/subdirs.m4: Remove.

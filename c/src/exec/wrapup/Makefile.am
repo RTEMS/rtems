@@ -16,11 +16,11 @@ SAPI_OBJS = $(wildcard ../sapi/src/$(ARCH)/*.o)
 RTEMS_OBJS = $(wildcard ../rtems/src/$(ARCH)/*.o)
 
 if HAS_POSIX
-POSIX_OBJS = $(wildcard ../posix/src/$(ARCH)/*.o)
+POSIX_OBJS = ../posix/src/$(ARCH)/libposix.a
 endif
 
 if HAS_ITRON
-ITRON_OBJS = $(wildcard ../itron/src/$(ARCH)/*.o)
+ITRON_OBJS = ../itron/src/$(ARCH)/libitron.a
 endif
 
 LIBCSUPPORT_OBJS = ../libcsupport/$(ARCH)/libcsupport.a
@@ -33,7 +33,9 @@ LIBIMFS_OBJS = ../libfs/src/imfs/$(ARCH)/libimfs.a
 
 if HAS_NETWORKING
 NETWORKING_OBJS = \
-    ../libnetworking/wrapup/$(ARCH)/libnetworking.a
+    ../libnetworking/wrapup/$(ARCH)/libnetworking.a \
+    ../librpc/src/rpc/$(ARCH)/librpc.a \
+    ../librpc/src/rpc/$(ARCH)/libxdr.a
 endif
 
 OBJS = $(CPU_OBJS) $(CORE_OBJS) $(RTEMS_OBJS) $(SAPI_OBJS) \
