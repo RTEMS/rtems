@@ -627,6 +627,9 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
    sc->irqInfo.off  = no_op;
    sc->irqInfo.isOn = dec21140IsOn;
 
+#ifdef DEC_DEBUG
+   printk( "dec2114x: Installing IRQ %d\n", sc->irqInfo.name );
+#endif
 #ifdef BSP_SHARED_HANDLER_SUPPORT
    st = BSP_install_rtems_shared_irq_handler( &sc->irqInfo );
 #else
@@ -1026,7 +1029,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
     * Get the instance number for the board we're going to configure
     * from the user.
     */
-   if( (unitNumber = rtems_bsdnet_parse_driver_name( config, &unitName)) == -1 )
+   if( (unitNumber = rtems_bsdnet_parse_driver_name(config, &unitName)) == -1 )
    {
       return 0;
    }
@@ -1077,9 +1080,6 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
       if( BSP_pciFindDevice( PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_21143,
                              unitNumber-1, &pbus, &pdev, &pfun) != -1 )
       {
-         printk("dec21143 : found device '%s', PPC support has not been tested.  Using it anyway.\n", 
-                config->name );
-
          pci_write_config_dword(pbus,
                                 pdev,
                                 pfun,
@@ -1154,7 +1154,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
                             PTE_CACHE_DISABLE | PTE_WRITABLE);
    else
       sc->base = (unsigned int *)(value & ~MEM_MASK);
-	
+
    pcib_conf_read8(signature, 60, &interrupt);
    cvalue = interrupt;
 #endif
@@ -1173,7 +1173,8 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
                                PCI_BASE_ADDRESS_1,
                                &lvalue);
 
-   tmp = (unsigned int)(lvalue & (unsigned int)(~MEM_MASK)) + (unsigned int)PCI_MEM_BASE;
+   tmp = (unsigned int)(lvalue & (unsigned int)(~MEM_MASK))
+      + (unsigned int)PCI_MEM_BASE_ADJUSTMENT;
 
    sc->base = (unsigned int *)(tmp);
 
@@ -1209,7 +1210,9 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
    sc->irqInfo.name = cvalue;
 
 
-   /* printk("dec2114x : unit %d base address %08x.\n", unitNumber, sc->base ); */
+#ifdef DEC_DEBUG
+   printk("dec2114x : unit %d base address %08x.\n", unitNumber, sc->base );
+#endif
 
 
    /*

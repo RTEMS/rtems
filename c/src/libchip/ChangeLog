@@ -1,3 +1,8 @@
+2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
+
+	* network/dec21140.c: Cleanup a bit and remove message about not
+	supported on PowerPC since it works on the MVME2100 BSP.
+
 2004-11-10	Joel Sherrill <joel@oarcorp.com>
 
 	PR 715/bsps
