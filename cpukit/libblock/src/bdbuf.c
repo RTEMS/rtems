@@ -1088,8 +1088,8 @@ bdbuf_initialize_transfer_sema(bdbuf_buffer *bd_buf)
     mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_FIFO;
     mutex_attr.priority_ceiling = 0;
 
-    _CORE_mutex_Initialize(&bd_buf->transfer_sema, OBJECTS_NO_CLASS,
-                           &mutex_attr, CORE_MUTEX_LOCKED, NULL);
+    _CORE_mutex_Initialize(&bd_buf->transfer_sema, 
+                           &mutex_attr, CORE_MUTEX_LOCKED);
 }
 
 /* bdbuf_write_transfer_done --

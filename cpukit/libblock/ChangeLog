@@ -1,3 +1,7 @@
+2002-09-07	Joel Sherrill <joel@OARcorp.com>
+
+	* src/bdbuf.c: Previous fix for PR282 regressed mutex changes. 
+
 2002-09-06	Alexander M. Kukuta <kam@oktet.ru>
 
 	* src/bdbuf.c: Per PR282, correct problem in function
