@@ -11,10 +11,12 @@ include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
 # generation 1
-TOD_C_FILES_1_V = tod_g1.c
+if SCORE603E_GENERATION_1
+TOD_C_FILES = tod_g1.c
+else
 # generation 2
-TOD_C_FILES_2_V = tod.c
-TOD_C_FILES = $(TOD_C_FILES_$(SCORE603E_GENERATION)_V)
+TOD_C_FILES = tod.c
+endif
 
 C_FILES = $(TOD_C_FILES)
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)

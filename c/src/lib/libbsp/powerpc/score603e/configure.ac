@@ -21,12 +21,65 @@ RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 RTEMS_CANONICAL_HOST
 
 ## bsp-specific options
-CONSOLE_USE_INTERRUPTS=${CONSOLE_USE_INTERRUPTS-0}
-AC_DEFINE_UNQUOTED([CONSOLE_USE_INTERRUPTS],
-  [$CONSOLE_USE_INTERRUPTS],
-  [whether using console interrupts])
+RTEMS_BSPOPTS_SET([SCORE603E_GENERATION],[*],[2])
+RTEMS_BSPOPTS_HELP([SCORE603E_GENERATION],
+[FIXME: Missing explanation])
+
+RTEMS_BSPOPTS_SET([CONSOLE_USE_INTERRUPTS],[*],[0])
+RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],
+[whether using console interrupts])
+
+RTEMS_BSPOPTS_SET([INITIALIZE_COM_PORTS],[*],[1])
+RTEMS_BSPOPTS_HELP([INITIALIZE_COM_PORTS],
+[FIXME: Missing explanation])
+
+RTEMS_BSPOPTS_SET([HAS_PMC_PSC8],[*],[0])
+RTEMS_BSPOPTS_HELP([HAS_PMC_PSC8],
+[FIXME: Missing explanation])
+
+## FIXME: This should be a 1 out of 3 selection
+## and is somehow coupled to USE_DINK (cf. include/gen2.h)
+RTEMS_BSPOPTS_SET([SCORE603E_USE_SDS],[*],[0])
+RTEMS_BSPOPTS_HELP([SCORE603E_USE_SDS],
+[use SDS ROM monitor])
+
+RTEMS_BSPOPTS_SET([SCORE603E_OPEN_FIRMWARE],[*],[0])
+RTEMS_BSPOPTS_HELP([SCORE603E_OPEN_FIRMWARE],
+[use Open Firmware ROM monitor])
+
+RTEMS_BSPOPTS_SET([SCORE603E_USE_NONE],[*],[0])
+RTEMS_BSPOPTS_HELP([SCORE603E_USE_NONE],
+[use no ROM monitor])
+
+RTEMS_BSPOPTS_SET([SCORE603E_USE_DINK],[*],[1])
+RTEMS_BSPOPTS_HELP([SCORE603E_USE_DINK],
+[FIXME: Missing explanation.])
+
+RTEMS_BSPOPTS_SET([PPC_USE_SPRG],[*],[0])
+RTEMS_BSPOPTS_HELP([PPC_USE_SPRG],
+[If defined, then the PowerPC specific code in RTEMS will use some
+of the special purpose registers to slightly optimize interrupt
+response time.  The use of these registers can conflict with
+other tools like debuggers.])
+
+RTEMS_BSPOPTS_SET([PPC_USE_DATA_CACHE],[*],[0])
+RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
+[If defined, then the PowerPC specific code in RTEMS will use
+ data cache instructions to optimize the context switch code.
+ This code can conflict with debuggers or emulators.  It is known
+ to break the Corelis PowerPC emulator with at least some combinations
+ of PowerPC 603e revisions and emulator versions.
+ The BSP actually contains the call that enables this.])
+
+RTEMS_BSPOPTS_SET([PPC_VECTOR_FILE_BASE],[*],[0x0100])
+RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
+[This defines the base address of the exception table.
+ NOTE: Vectors are actually at 0xFFF00000 but file starts at offset.])
 
 AM_CONFIG_HEADER(include/bspopts.h)
+
+AM_CONDITIONAL(SCORE603E_GENERATION_1, test "${SCORE603E_GENERATION}" = "1")
+
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
@@ -41,5 +94,7 @@ timer/Makefile
 tod/Makefile
 vectors/Makefile
 wrapup/Makefile])
-AC_OUTPUT
 
+RTEMS_PPC_EXCEPTIONS([old])
+
+AC_OUTPUT

@@ -25,6 +25,7 @@
  *  $Id$
  */
 
+#include <bsp.h>
 #include "asm.h"
 
 #ifndef PPC_VECTOR_FILE_BASE

@@ -1,3 +1,16 @@
+2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add @exceptions@ to SUBDIRS.
+	* configure.ac: Apply RTEMS_BSPOPTS_*(*) to merge-in settings from
+	make/custom/score603e.cfg; 
+	Add automake conditional for SCORE_GENERATION_1;
+	Add RTEMS_PPC_EXCEPTIONS([old]).
+	* include/Makefile.am: include force-preinstall.am.
+	* start/start.S: include <bspopts.h> instead of targopts.h.
+	* tod/Makefile.am: Apply SCORE_GENERATION_1 conditional.
+	* vectors/vector.S: include <bsp.h>.
+	* wrapup/Makefile.am: Apply @exceptions@.
+
 2001-10-25	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Added _init and _fini.
