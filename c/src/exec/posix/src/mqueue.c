@@ -55,7 +55,7 @@ void _POSIX_Message_queue_Manager_initialization(
     maximum_message_queues,            /* maximum objects of this class */
     sizeof( POSIX_Message_queue_Control ),
                                 /* size of this object's control block */
-    FALSE,                      /* TRUE if names for this object are strings */
+    TRUE,                       /* TRUE if names for this object are strings */
     _POSIX_PATH_MAX             /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,

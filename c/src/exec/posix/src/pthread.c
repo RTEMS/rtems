@@ -207,7 +207,9 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
 
   api = deleted->API_Extensions[ THREAD_API_POSIX ];
  
-  /* XXX run cancellation handlers */
+  /*
+   *  Run the POSIX cancellation handlers
+   */
 
   _POSIX_Keys_Run_destructors( deleted );
 
@@ -373,8 +375,9 @@ void _POSIX_Threads_Manager_initialization(
    */
  
   _User_extensions_Add_API_set( &_POSIX_Threads_User_extensions );
- 
+
   _API_extensions_Add( &_POSIX_Threads_API_extensions );
+
  
   /*
    *  If we supported MP, then here we would ...

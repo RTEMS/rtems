@@ -20,15 +20,19 @@
 
 /*PAGE
  *
- *  _POSIX_Thread_cancel_run
+ *  _POSIX_Threads_cancel_run
  *
  */
 
-void _POSIX_Thread_cancel_run( 
+#if !defined(PTHREAD_CANCELED)
+#warning "PTHREAD_CANCELED NOT DEFINED -- patch newlib"
+#define PTHREAD_CANCELED ((void *) -1)
+#endif
+
+void _POSIX_Threads_cancel_run( 
   Thread_Control *the_thread
 )
 {
-  int                                old_cancel_state;
   POSIX_Cancel_Handler_control      *handler;
   Chain_Control                     *handler_stack;
   POSIX_API_Control                 *thread_support;
@@ -38,8 +42,6 @@ void _POSIX_Thread_cancel_run(
  
   handler_stack = &thread_support->Cancellation_Handlers;
  
-  old_cancel_state = thread_support->cancelability_state;
-
   thread_support->cancelability_state = PTHREAD_CANCEL_DISABLE;
 
   while ( !_Chain_Is_empty( handler_stack ) ) {
@@ -53,7 +55,13 @@ void _POSIX_Thread_cancel_run(
     _Workspace_Free( handler );
   }
 
-  thread_support->cancelation_requested = 0;
+  /* Now we can delete the thread */
 
-  thread_support->cancelability_state = old_cancel_state;
+  the_thread->Wait.return_argument = (unsigned32 *)PTHREAD_CANCELED;
+  _Thread_Close(
+    _Objects_Get_information( the_thread->Object.id ),
+    the_thread
+  );
+  _POSIX_Threads_Free( the_thread );
+
 }

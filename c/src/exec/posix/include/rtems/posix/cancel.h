@@ -13,7 +13,7 @@ typedef struct {
 }  POSIX_Cancel_Handler_control;
 
 /*
- *  _POSIX_Thread_cancel_run
+ *  _POSIX_Threads_cancel_run
  *
  *  DESCRIPTION:
  *
@@ -21,7 +21,7 @@ typedef struct {
  *  have been registered and executes them.
  */
 
-void _POSIX_Thread_cancel_run(
+void _POSIX_Threads_cancel_run(
   Thread_Control *the_thread
 );
 

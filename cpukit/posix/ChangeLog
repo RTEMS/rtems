@@ -1,3 +1,10 @@
+2002-07-05	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/posix/cancel.h, src/cancel.c, src/cancelrun.c,
+	src/mqueue.c, src/pthread.c, src/semaphore.c, src/setcancelstate.c,
+	src/setcanceltype.c, src/testcancel.c:  Per PR164, corrected the
+	behavior of thread cancellation and did some cleanup as a side-effect.
+
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: RTEMS_TOP(../..).

@@ -31,6 +31,13 @@ int pthread_cancel(
   POSIX_API_Control                 *thread_support;
   Objects_Locations                  location;
 
+  /*
+   *  Don't even think about deleting a resource from an ISR.
+   */
+
+  if ( _ISR_Is_in_progress() ) 
+    return EPROTO;
+
   the_thread = _POSIX_Threads_Get( thread, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
@@ -41,6 +48,11 @@ int pthread_cancel(
       thread_support = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
       thread_support->cancelation_requested = 1;
+
+      if ( thread_support->cancelability_state == PTHREAD_CANCEL_ENABLE && 
+           thread_support->cancelability_type == PTHREAD_CANCEL_ASYNCHRONOUS ) {
+        _POSIX_Threads_cancel_run( the_thread );
+      }
 
       _Thread_Enable_dispatch();
       return 0;

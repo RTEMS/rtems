@@ -43,7 +43,7 @@ void _POSIX_Semaphore_Manager_initialization(
     maximum_semaphores             /* maximum objects of this class */,
     sizeof( POSIX_Semaphore_Control ),
                                 /* size of this object's control block */
-    FALSE,                      /* TRUE if names for this object are strings */
+    TRUE,                       /* TRUE if names for this object are strings */
     _POSIX_PATH_MAX             /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
