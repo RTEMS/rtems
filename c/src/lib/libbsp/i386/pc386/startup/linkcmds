@@ -62,6 +62,7 @@ SECTIONS
 
     _rodata_start = . ;
     *(.rodata)
+    *(.gnu.linkonce.r*)
     _erodata = ALIGN( 0x10 ) ;
 
     _etext = ALIGN( 0x10 ) ;
