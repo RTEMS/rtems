@@ -75,10 +75,7 @@ _start16:
 	/*---------------------------------------------------------------------+
 	| Bare PC machines boot in real mode! We have to turn protected mode on.
 	+---------------------------------------------------------------------*/
-#ifdef NEW_GAS
-	data32
-	addr32
-#endif	
+
 	lgdt	gdtptr - start16	# load Global Descriptor Table
 	movl	%cr0, %eax
 	orl	$CR0_PE, %eax
@@ -130,22 +127,26 @@ _start16:
 | will delay for 1us on 1Gz machine, it will take a little bit
 | longer on slower machines, however, it does not matter because we
 | are going to call this function only a few times
-
+!
+| NOTE: Saving the content of the EAX register just in case. - Rosimildo.
 +----------------------------------------------------------------------------*/
 	.p2align 4
 	.globl _delay
 	.globl delay
 delay:
 _delay:
-/*
+	pushl	%eax
+#if defined(USE_OUTB_FOR_DELAY)
 	outb	%al, $0x80	# about 1uS delay on most machines
-*/
-/* 
+
+#else
+
 	movl	$0x200, %eax
 delay1:
 	dec	%eax
 	jnz	delay1
-*/
+#endif
+	popl	%eax
  	ret
 
 /*----------------------------------------------------------------------------+
