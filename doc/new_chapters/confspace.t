@@ -85,6 +85,9 @@ int cfg_mount(
 
 @subheading STATUS CODES:
 
+A successful call to @code{cfg_mount()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item EPERM
 The caller does not have the appropriate privilege.
@@ -93,7 +96,7 @@ The caller does not have the appropriate privilege.
 Search permission is denied for a component of the path prefix.
 
 @item EEXIST
-The file specified by the file argument does not exist
+The file specified by the @code{file} argument does not exist
 
 @item ENAMETOOLONG
 A component of a pathname exceeded @code{NAME_MAX} characters,
@@ -104,10 +107,10 @@ or an entire path name exceed @code{PATH_MAX} characters while
 A component of @code{cfgpath} does not exist.
 
 @item ENOTDIR
-A component of the file path prefix is not a directory.
+A component of the @code{file} path prefix is not a directory.
 
 @item EBUSY
-The configuration space defined by file is already mounted.
+The configuration space defined by @code{file} is already mounted.
 
 @item EINVAL
 The notification argument specifies an invalid log facility.
@@ -157,6 +160,9 @@ int cfg_unmount(
 
 @subheading STATUS CODES:
 
+A successful call to @code{cfg_umount()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item EPERM
 The caller does not have the appropriate privileges.
@@ -165,7 +171,7 @@ The caller does not have the appropriate privileges.
 Search permission is denied for a component of the path prefix.
 
 @item ENOENT
-A component of cfgpath does not exist.
+A component of @code{cfgpath} does not exist.
 
 @item ENAMETOOLONG
 A component of a pathname exceeded @code{NAME_MAX} characters,
@@ -183,7 +189,7 @@ referenced by the cfgpath argument.
 
 @item ELOOP
 A node appears more than once in the path specified by the 
-@code{cfg_path} argument
+@code{cfgpath} argument
 
 @item ELOOP
 More than @code{SYMLOOP_MAX} symbolic links were encountered during
@@ -225,6 +231,9 @@ int cfg_mknod(
 
 @subheading STATUS CODES:
 
+A successful call to @code{cfg_mknod()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item ENAMETOOLONG
 A component of a pathname exceeded @code{NAME_MAX} characters,
@@ -237,9 +246,6 @@ A component of the path prefix does not exist.
 @item EACCES
 Search permission is denied for a component of the path prefix.
 
-@item ELOOP
-Too many symbolic links were encountered in translating the 
-pathname.
 
 @item EPERM
 The calling process does not have the appropriate privilege.
@@ -255,11 +261,11 @@ The value of @code{type} is invalid.
 
 @item ELOOP
 A node appears more than once in the path specified by the 
-@cdoe{cfg_path} argument
+@code{cfg_path} argument
 
 @item ELOOP
 More than @code{SYMLOOP_MAX} symbolic links were encountered during
-resolution of the cfgpath argument.
+resolution of the @code{cfgpath} argument.
 
 @item EROFS
 The named @code{node} resides on a read-only configuration space.
@@ -300,6 +306,9 @@ int cfg_get(
 
 @subheading STATUS CODES:
 
+A successful call to @code{cfg_get()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item ENAMETOOLONG
 A component of a pathname exceeded @code{NAME_MAX} characters,
@@ -307,7 +316,7 @@ or an entire path name exceed @code{PATH_MAX} characters while
 @code{_POSIX_NO_TRUNC} is in effect.
 
 @item ENOENT
-A component of cfgpath does not exist.
+A component of @code{cfgpath} does not exist.
 
 @item EACCES
 Search permission is denied for a component of the path prefix.
@@ -317,17 +326,17 @@ The calling process does not have the appropriate privileges.
 
 @item ELOOP
 A node appears more than once in the path specified by the 
-cfg_path argument
+@code{cfgpath} argument
 
 @item ELOOP
 More than @code{SYMLOOP_MAX} symbolic links were encountered during
-resolution of the cfgpath argument.
+resolution of the @code{cfgpath} argument.
 
 @end table
 
 @subheading DESCRIPTION:
 
-The @code{cfg_get} function stores the value attribute of the
+The @code{cfg_get()} function stores the value attribute of the
 configuration node identified by @code{cfgpath}, into the buffer
 described by the @code{value} pointer.
 
@@ -357,6 +366,9 @@ int cfg_set(
 
 @subheading STATUS CODES:
 
+A successful call to @code{cfg_set()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item ENAMETOOLONG
 A component of a pathname exceeded @code{NAME_MAX} characters,
@@ -364,7 +376,7 @@ or an entire path name exceed @code{PATH_MAX} characters while
 @code{_POSIX_NO_TRUNC} is in effect.
 
 @item ENOENT
-A component of cfgpath does not exist
+A component of @code{cfgpath} does not exist
 
 @item EACCES
 Search permission is denied for a component of the path prefix.
@@ -374,7 +386,7 @@ The calling process does not have the appropriate privilege.
 
 @item ELOOP
 A node appears more than once in the path specified by the
-cfg-path argument.
+@code{cfgpath} argument.
 
 @item ELOOP
 More than @code{SYMLOOP_MAX} symbolic links were encountered during
@@ -384,7 +396,7 @@ resolution of the cfgpath argument.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_set} function stores the value specified by the
+The @code{cfg_set()} function stores the value specified by the
 @code{value} argument in the configuration node defined by the 
 @code{cfgpath} argument.
 
@@ -414,6 +426,9 @@ int cfg_link(
 
 @subheading STATUS CODES:
 
+A successful call to @code{cfg_link()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item ENAMETOOLONG
 A component of a pathname exceeded @code{NAME_MAX} characters,
@@ -431,17 +446,17 @@ The requested link requires writing in a node with a mode that
 denies write permission.
 
 @item ENOENT
-The node named by src does not exist.
+The node named by @code{src} does not exist.
 
 @item EEXIST
-The node named by dest does exist.
+The node named by @code{dest} does exist.
 
 @item EPERM
 The calling process does not have the appropriate privilege to
-modify the node indicated by the src argument.
+modify the node indicated by the @code{src} argument.
 
 @item EXDEV
-The link named by dest and the node named by src are from different
+The link named by @code{dest} and the node named by @code{src} are from different
 configuration spaces.
 
 @item ENOSPC
@@ -457,28 +472,18 @@ configuration space to make the link entry.
 The requested link requires writing in a node on a read-only
 configuration space.
 
-@item ELOOP
-A node appears more than once in the path specified by the
-cfg-path argument.
-
-@item ELOOP
-More than @code{SYMLOOP_MAX} symbolic links were encountered during
-resolution of the cfgpath argument.
-
 @end table
 
 @subheading DESCRIPTION:
 
-The @code{src} and @code{dest}arguments point to pathnames which 
-name existing nodes.  The @code{cfg_link} function atomically creates
+The @code{src} and @code{dest} arguments point to pathnames which 
+name existing nodes.  The @code{cfg_link()} function atomically creates
 a link between specified nodes, and increment by one the link count 
 of the node specified by the @code{src} argument. 
 
-If the @code{cfg_link} function fails, no link is created, and the
+If the @code{cfg_link()} function fails, no link is created, and the
 link count of the node remains unchanged by this function call.
 
-This implementation may require that the calling process has permission 
-to access the specified nodes.
 
 @subheading NOTES:
 
@@ -505,13 +510,13 @@ int cfg_unlink(
 
 @subheading STATUS CODES:
 
+A successful call to @code{cfg_unlink()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item ENAMETOOLONG
 A component of a pathname exceeded @code{NAME_MAX} characters,
 or an entire path name exceed @code{PATH_MAX} characters.
-
-@item ENOENT
-The named  node does not exist.
 
 @item EACCES
 Search permission is denied on the node containing the link to
@@ -522,11 +527,11 @@ Write permission is denied on the node containing the link to
 be removed.
 
 @item ENOENT
-A component of cfgpath does not exist.
+A component of @code{cfgpath} does not exist.
 
 @item EPERM
 The calling process does not have the appropriate privilege to 
-modify the node indicated by the path prefix of the cfgpath
+modify the node indicated by the path prefix of the @code{cfgpath}
 argument.
 
 @item EBUSY
@@ -542,7 +547,7 @@ The named node resides in a read-only configuration space.
 
 @item ELOOP
 A node appears more than once in the path specified by the
-cfg-path argument.
+@code{cfgpath} argument.
 
 @item ELOOP
 More than @code{SYMLOOP_MAX} symbolic links were encountered during
@@ -552,7 +557,7 @@ resolution of the cfgpath argument.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_unlink} function removes the link between the node
+The @code{cfg_unlink()} function removes the link between the node
 specified by the @code{cfgpath} path prefix and the parent node 
 specified by @code{cfgpath}, and decrements the link count 
 of the @code{cfgpath} node.
@@ -588,6 +593,9 @@ int cfg_open(
 
 @subheading STATUS CODES:
 
+A successful call to @code{cfg_open()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item EACCES
 Search permission is denied for any component of a pathname.
@@ -605,26 +613,26 @@ The pathname argument is an empty string or the named node
 does not exist.
 
 @item EINVAL
-Either both or neither of CFG_LOGICAL and CFG_PHYSICAL are
-specified by the options argument
+Either both or neither of @code{CFG_LOGICAL} and @code{CFG_PHYSICAL} are
+specified by the @code{options} argument
 
 @item ENOMEM
 Not enough memory is available to create the necessary structures.
 
 @item ELOOP
 More than @code{SYMLOOP_MAX} symbolic links were encountered during
-resolution of the pathnames argument.
+resolution of the @code{pathnames} argument.
 
 @item ENAMETOOLONG
 As a result of encountering a symbolic link in resolution of the
-pathname specified by the pathnames argument, the length of
+pathname specified by the @code{pathnames} argument, the length of
 the substituted pathname string exceeded @code{PATH_MAX}.
 
 @end table
 
 @subheading DESCRIPTION:
 
-The @code{cfg_open} function opens a configuration traversal stream
+The @code{cfg_open()} function opens a configuration traversal stream
 rooted in the configuration nodes name by the @code{pathnames} argument.
 It stores a pointer to a CFG object that represents that stream at 
 the location identified the @code{cfgstream} pointer.  The @code{pathnames}
@@ -669,7 +677,7 @@ instead of the link itself, unless the target node does
 not exist.  If the target node has children, the 
 pre-order return, followed by the return of structures
 referencing all its descendants, followed by a post-order
-return, shall be done.
+return, is done.
 
 @item CFG_XDEV
 The configuration space functions do not return a
@@ -679,7 +687,7 @@ by the CFGENT structures for the @code{pathnames} argument.
 
 @end table
 
-The @code{cfg_open} argument @code{compar} is either a NULL or point
+The @code{cfg_open()} argument @code{compar} is either a NULL or point
 to a function that is called with two pointers to pointers to CFGENT 
 structures that returns less than, equal to , or greater than zero if 
 the node referenced by the first argument is considered to be respectively
@@ -691,9 +699,9 @@ described with the exception that the contents of the @code{cfg_path} and
 This comparison routine is used to determine the order in which nodes in
 directories encountered during the traversal are returned, and the order
 of traversal when more than one node is specified in the @code{pathnames}
-argument to @code{cfg_open}.  If a comparison routine is specified, the
+argument to @code{cfg_open()}.  If a comparison routine is specified, the
 order of traversal is from the least to the greatest.  If the @code{compar}
-argument is NULL, the order of traversal shall be as listed in the 
+argument is NULL, the order of traversal shall is listed in the 
 @code{pathnames} argument. 
 
 @subheading NOTES:
@@ -722,12 +730,15 @@ int cfg_read(
 
 @subheading STATUS CODES:
 
+A successful call to @code{cfg_read()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item EACCES
 Search permission is denied for any component of a pathname.
 
 @item EBADF
-The cfgp argument does not refer to an open configuration
+The @code{cfgp} argument does not refer to an open configuration
 space.
 
 @item ELOOP
@@ -735,7 +746,7 @@ A loop exists in symbolic links encountered during resolution
 of a pathname.
 
 @item ENOENT
-A named node does not exist.
+A named @code{node} does not exist.
 
 @item ENOMEM
 Not enough memory is available to create the necessary structures.
@@ -753,20 +764,20 @@ substituted pathname string exceeded @code{PATH_MATH}.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_read} function returns a pointer to a CFGENT structure
+The @code{cfg_read()} function returns a pointer to a CFGENT structure
 representing a node in the configuration space to which @code{cfgp}
 refers.  The returned pointer is stored at the location indicated 
 by the @code{node} argument.
 
 The child nodes of each node in the configuration tree is returned
-by @code{cfg_read}.  If a comparison routine is specified to the
-@code{cfg_open} function, the order of return of the child nodes is
-as specified by the routine, from least to greatest.  Otherwise
-the order of return is unspecified.
+by @code{cfg_read()}.  If a comparison routine was specified to the
+@code{cfg_open()} function, the order of return of the child nodes is
+as specified by the @code{compar} routine, from least to greatest.  
+Otherwise, the order of return is unspecified.
 
 Structures referencing nodes with children is returned by the 
-function @code{cfg_read} at least twice [unless the application
-specifies otherwise with @code{cfg_mark}]-once immediately before
+function @code{cfg_read()} at least twice [unless the application
+specifies otherwise with @code{cfg_mark()}]-once immediately before
 the structures representing their descendants, are returned 
 (pre-order), and once immediately after structures representing all
 of their descendants, if any, are returned (post-order).  The 
@@ -782,24 +793,24 @@ information:
 
 @item cfg_parent
 A pointer to the structure returned by the 
-@code{cfg_read} function for the node that contains
+@code{cfg_read()} function for the node that contains
 the entry for the current node.  A @code{cfg_parent}
 structure is provided for the node(s) specified by
-the @code{pathnames} argument to the @code{cfg_open}
+the @code{pathnames} argument to the @code{cfg_open()}
 function, but the contents of other than its 
 @code{cfg_number}, @code{cfg_pointer}, @code{cfg_parent},
 and @code{cfg_parent}, and @code{cfg_level} fields are
 unspecified.  Its @code{cfg_link} field is unspecified.
 
 @item cfg_link
-Upon return from the @code{cfg_children} function, the
+Upon return from the @code{cfg_children()} function, the
 @code{cfg_link} field points to the next CFGENT structure 
 in a NULL-terminated linked list of CFGENT structures.  
 Otherwise, the content of the @code{cfg_link} field is 
 unspecified.
 
 @item cfg_cycle
-If the structure being returned by @code{cfg_read} 
+If the structure being returned by @code{cfg_read()} 
 represents a node that appears in the @code{cfg_parent}
 linked list tree, the @code{cfg_cycle} field shall point 
 to the structure representing that entry from the 
@@ -809,20 +820,20 @@ the @code{cfg_cycle} field is unspecified.
 @item cfg_number
 The @code{cfg_number} field is provided for use by the 
 application program.  It is initialized to zero for 
-each new node returned by the @code{cfg_read} function, 
+each new node returned by the @code{cfg_read()} function, 
 but is not further modified by the configuration space
 routines.
 
 @item cfg_pointer
 The @code{cfg_pointer} field is provided for use by the
 application program.  It is initialized to NULL for
-each new node returned by the @code{cfg_read} function, 
+each new node returned by the @code{cfg_read()} function, 
 but is not further modified by the configuration 
 space routines.
 
 @item cfg_path
 A pathname for the node including and relative to the 
-argument supplied to the @code{cfg_open} routine for this
+argument supplied to the @code{cfg_open()} routine for this
 configuration space.  This pathname may be longer than
 @code{PATH_MAX} bytes.  This pathname is NULL-terminated.
 
@@ -831,7 +842,7 @@ The nodename of the node.
 
 @item cfg_pathlen
 The length of the string pointed at by the @code{cfg_path}
-field when returned by @code{cfg_read}.
+field when returned by @code{cfg_read()}.
 
 @item cfg_namelen
 The length of the string pointed at by the @code{cfg_name}
@@ -841,7 +852,7 @@ field.
 The depth of the current entry in the configuration space.
 The @code{cfg_level} field of the @code{cfg_parent} 
 structure for each of the node(s) specified in the 
-@code{pathnames} argument to the @code{cfg_open} function
+@code{pathnames} argument to the @code{cfg_open()} function
 is set to 0, and this number is incremented for each
 node level descendant.
 
@@ -858,7 +869,7 @@ pre-order.
 
 @item CFG_DC
 The structure represents a node that is a parent
-of the node most recently returned by @code{cfg_read}.
+of the node most recently returned by @code{cfg_read()}.
 The @code{cfg_cycle} field references the structure 
 previously returned by @code{cfg_read} that is the
 same as the returned structure.
@@ -897,21 +908,21 @@ information cannot be obtained.
 
 @end table
 
-Structures returned by @code{cfg_read} with a @code{cfg_info} field equal
+Structures returned by @code{cfg_read()} with a @code{cfg_info} field equal
 to CFG_D is accessible until a subsequent call, on the same
-configuration traversal stream, to @code{cfg_close}, or to @code{cfg_read}
+configuration traversal stream, to @code{cfg_close()}, or to @code{cfg_read()}
 after they have been returned by the @code{cfg_read} function in
-post-order.  Structures returned by @code{cfg_read} with an
+post-order.  Structures returned by @code{cfg_read()} with an
 @code{cfg_info} field not equal to CFG_D is accessible until a subsequent
-call, on the same configuration traversal stream, to @code{cfg_close}
-or @code{cfg_read}. 
+call, on the same configuration traversal stream, to @code{cfg_close()}
+or @code{cfg_read()}. 
 
 The content of the @code{cfg_path} field is specified only for the
-structure most recently returned by @code{cfg_read}. 
+structure most recently returned by @code{cfg_read()}. 
 
 The specified fields in structures in the list representing nodes for
-which structures have previously been returned by @code{cfg_children},
-is identical to those returned by @code{cfg_children}, except that
+which structures have previously been returned by @code{cfg_children()},
+is identical to those returned by @code{cfg_children()}, except that
 the contents of the @code{cfg_path} and @code{cfg_pathlen} fields are
 unspecified. 
          
@@ -942,12 +953,15 @@ int cfg_children(
 
 @subheading STATUS CODES:
 
+A successful call to @code{cfg_children()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item EACCES
 Search permission is denied for any component of a pathname
 
 @item EBADF
-The cfgp argument does not refer to an open configuration space.
+The @code{cfgp} argument does not refer to an open configuration space.
 
 @item ELOOP
 A loop exists in symbolic links encountered during resolution of 
@@ -959,7 +973,7 @@ component is longer than @code{NAME_MAX} while @code{_POSIX_NO_TRUNC} is
 in effect.
 
 @item EINVAL
-The specified value of the options argument is invalid.
+The specified value of the @code{options} argument is invalid.
 
 @item ENOENT
 The named node does not exist.
@@ -971,20 +985,20 @@ Not enough memory is available to create the necessary structures.
 
 @subheading DESCRIPTION:
 
-The first @code{cfg_children} call after a @code{cfg_read} returns 
+The first @code{cfg_children()} call after a @code{cfg_read()} returns 
 information about the first node without children under the node
-returned by @code{cfg_read}.  Subsequent calls to @code{cfg_children}
-without the intervening @code{cfg_read} shall return information
+returned by @code{cfg_read()}.  Subsequent calls to @code{cfg_children()}
+without the intervening @code{cfg_read()} shall return information
 about the remaining nodes without children under that same node.
 
-If @code{cfg_read} has not yet been called for the configuration
-traversal stream represented by @code{cfgp}, @code{cfg_children}
+If @code{cfg_read()} has not yet been called for the configuration
+traversal stream represented by @code{cfgp}, @code{cfg_children()}
 returns a pointer to the first entry in a list of the nodes 
-represented by the @code{pathnames} argument to @code{cfg_open}.
+represented by the @code{pathnames} argument to @code{cfg_open()}.
 
 In either case, the list is NULL-terminated, ordered by the 
 user-specified comparison function, if any, and linked through the
-cfg_link field.
+@code{cfg_link} field.
 
 @subheading NOTES:
 
@@ -1013,20 +1027,23 @@ int cfg_mark(
 
 @subheading STATUS CODES:
 
+A successful call to @code{cfg_mark()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item EINVAL
-The specified combination of the cfgp and f arguments is not 
+The specified combination of the @code{cfgp} and @code{f} arguments is not 
 supported by the implementation.
 
 @item EINVAL
-The specified value of the options argument is invalid.
+The specified value of the @code{options} argument is invalid.
 
 @end table
 
 @subheading DESCRIPTION:
 
-The @code{cfg_mark} function modifies the subsequent behavior of
-the cfg functions with regard to the node referenced by the structure
+The @code{cfg_mark()} function modifies the subsequent behavior of
+the @code{cfg} functions with regard to the node referenced by the structure
 pointed to by the argument @code{f} or the configuration space referenced 
 by the structure pointed to by the argument @code{cfgp}.
 
@@ -1040,9 +1057,9 @@ specified in the following list:
 @item CFG_AGAIN
 If the @code{cfgp} argument is non-NULL, or the @code{f}
 argument is NULL, or the structure referenced by @code{f}
-is not the one most recently returned by @code{cfg_read},
-@code{cfg_mark} returns an error.  Otherwise, the next 
-call to the @code{cfg_read} function returns the structure
+is not the one most recently returned by @code{cfg_read()},
+@code{cfg_mark()} returns an error.  Otherwise, the next 
+call to the @code{cfg_read()} function returns the structure
 referenced by @code{f} with the @code{cfg_info} field
 reinitialized.  Subsequent behavior of the @code{cfg}
 functions are based on the reinitialized value of 
@@ -1053,17 +1070,17 @@ If the @code{cfgp} argument is non-NULL, or the @code{f}
 argument is NULL, or the structure referenced by @code{f}
 is not one of those specified as accessible, or the structure
 referenced by @code{f} is not for a node of type pre-order 
-node, @code{cfg_mark} returns an error.  Otherwise, no 
+node, @code{cfg_mark()} returns an error.  Otherwise, no 
 more structures for the node referenced by @code{f} or its 
-descendants are returned by the @code{cfg_read} function.
+descendants are returned by the @code{cfg_read()} function.
 
 @item CFG_FOLLOW
 If the @code{cfgp} argument is non-NULL, or the @code{f} 
 argument is NULL, or the structure referenced by @code{f}
 is not one of those specified as accessible, or the structure
 referenced by @code{f} is not for a node of type symbolic link,
-@code{cfg_mark} returns an error.  Otherwise, the next
-call to the @code{cfg_read} function returns the structure
+@code{cfg_mark()} returns an error.  Otherwise, the next
+call to the @code{cfg_read()} function returns the structure
 referenced by @code{f} with the @code{cfg_info} field reset
 to reflect the target of the symbolic link instead of the 
 symbolic link itself.  If the target of the link is node with
@@ -1074,7 +1091,7 @@ post-order return, shall be done.
 @end table
 
 If the target of the symbolic link does not exist, the fields
-of the structure by @code{cfg_read} shall be unmodified, except
+of the structure by @code{cfg_read()} shall be unmodified, except
 that the @code{cfg_info} field shall be reset to @code{CFG_SLNONE}.
 
 @subheading NOTES:
@@ -1102,16 +1119,19 @@ int cfg_close(
 
 @subheading STATUS CODES:
 
+A successful call to @code{cfg_close()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item EBADF
-The cfgp argument does not refer to an open configuration space
+The @code{cfgp} argument does not refer to an open configuration space
 traversal stream.
 
 @end table
 
 @subheading DESCRIPTION:
 
-The @code{cfg_close} function closes a configuration space transversal
+The @code{cfg_close()} function closes a configuration space transversal
 stream represented by the CFG structure pointed at by the @code{cfgp}
 argument.  All system resources allocated for this configuration space
 traversal stream should be deallocated.  Upon return, the value of 
@@ -1151,136 +1171,25 @@ Invalid file descriptor
 
 @subheading DESCRIPTION:
 
-The @code{cfg_readdir} function returns a pointer to a structure @code{dirent}
+The @code{cfg_readdir()} function returns a pointer to a structure @code{dirent}
 representing the next directory entry from the directory stream pointed to
 by @code{dirp}.  On end-of-file, NULL is returned.
 
-The @code{cfg_readdir} function may (or may not) return entries for . or .. Your
+The @code{cfg_readdir()} function may (or may not) return entries for . or .. Your
 program should tolerate reading dot and dot-dot but not require them.
 
-The data pointed to be @code{cfg_readdir} may be overwritten by another call to
-@code{readdir} for the same directory stream.  It will not be overwritten by 
+The data pointed to be @code{cfg_readdir()} may be overwritten by another call to
+@code{readdir()} for the same directory stream.  It will not be overwritten by 
 a call for another directory.
 
 @subheading NOTES:
 
-If ptr is not a pointer returned by @code{malloc}, @code{calloc}, or 
-@code{realloc} or has been deallocated with @code{free} or @code{realloc}, 
+If @code{ptr} is not a pointer returned by @code{malloc()}, @code{calloc()}, or 
+@code{realloc()} or has been deallocated with @code{free()} or @code{realloc()}, 
 the results are not portable and are probably disastrous.
 
-@page
-@subsection open - Opens a file
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
-int open(
-   const char *path,
-   int         oflag,
-   mode_t      mode
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@table @b
-@item EACCES
-Search permission is denied for a directory in a file's path prefix
-@item EEXIST
-The named file already exists.
-@item EINTR
-Function was interrupted by a signal.
-@item EISDIR
-Attempt to open a directory for writing or to rename a file to be a
-directory.
-@item EMFILE
-Too many file descriptors are in use by this process.
-@item ENAMETOOLONG
-Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
-effect.
-@item ENFILE
-Too many files are currently open in the system.
-@item ENOENT
-A file or directory does not exist.
-@item ENOSPC
-No space left on disk.
-@item ENOTDIR
-A component of the specified pathname was not a directory when a directory
-was expected.
-@item ENXIO
-No such device.  This error may also occur when a device is not ready, for 
-example, a tape drive is off-line.
-@item EROFS
-Read-only file system.
-@end table
-
-@subheading DESCRIPTION:
-
-The @code{open} function establishes a connection between a file and a file 
-descriptor.  The file descriptor is a small integer that is used by I/O 
-functions to reference the file.  The @code{path} argument points to the 
-pathname for the file.
-
-The @code{oflag} argument is the bitwise inclusive OR of the values of 
-symbolic constants.  The programmer must specify exactly one of the following
-three symbols:
-
-@table @b
-@item O_RDONLY
-Open for reading only.
-
-@item O_WRONLY
-Open for writing only.
-
-@item O_RDWR
-Open for reading and writing.
-
-@end table
-
-Any combination of the following symbols may also be used.
-
-@table @b
-@item O_APPEND
-Set the file offset to the end-of-file prior to each write.
-
-@item O_CREAT
-If the file does not exist, allow it to be created.  This flag indicates
-that the @code{mode} argument is present in the call to @code{open}.
-
-@item O_EXCL
-This flag may be used only if O_CREAT is also set.  It causes the call
-to @code{open} to fail if the file already exists.
-
-@item O_NOCTTY
-If @code{path} identifies a terminal, this flag prevents that teminal from
-becoming the controlling terminal for thi9s process.  See Chapter 8 for a
-description of terminal I/O.
-
-@item O_NONBLOCK
-Do no wait for the device or file to be ready or available.  After the file
-is open, the @code{read} and @code{write} calls return immediately.  If the 
-process would be delayed in the read or write opermation, -1 is returned and 
-@code{errno} is set to @code{EAGAIN} instead of blocking the caller.
-
-@item O_TRUNC
-This flag should be used only on ordinary files opened for writing.  It 
-causes the file to be tuncated to zero length..
-
-@end table
-
-Upon successful completion, @code{open} returns a non-negative file 
-descriptor.
-
-@subheading NOTES:
+This function is not defined in the POSIX specification.  It is an extension 
+provided by this implementation.
 
 @page
 @subsection cfg_umask - Sets a file creation mask.
@@ -1305,186 +1214,19 @@ mode_t cfg_umask(
 
 @subheading DESCRIPTION:
 
-The @code{cfg_umask} function sets the process file creation mask to @code{cmask}.
-The file creation mask is used during @code{open}, @code{creat}, @code{mkdir},
-@code{mkfifo} calls to turn off permission bits in the @code{mode} argument.
+The @code{cfg_umask()} function sets the process node creation mask to @code{cmask}.
+The file creation mask is used during @code{open()}, @code{creat()}, @code{mkdir()},
+@code{mkfifo()} calls to turn off permission bits in the @code{mode} argument.
 Bit positions that are set in @code{cmask} are cleared in the mode of the
 created file.
 
-The file creation mask is inherited across @code{fork} and @code{exec} calls.
+The file creation mask is inherited across @code{fork()} and @code{exec()} calls.
 This makes it possible to alter the default permission bits of created files.
 
-@subheading NOTES:
+@subheading NOTES: None
 
 The @code{cmask} argument should have only permission bits set.  All other 
 bits should be zero.
-
-@page
-@subsection link - Creates a link to a file
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-#include <unistd.h>
-
-int link(
-  const char *existing,
-  const char *new
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@table @b
-@item EACCES
-Search permission is denied for a directory in a file's path prefix
-@item EEXIST
-The named file already exists.
-@item EMLINK
-The number of links would exceed @code{LINK_MAX}.
-@item ENAMETOOLONG
-Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
-effect.
-@item ENOENT
-A file or directory does not exist.
-@item ENOSPC
-No space left on disk.
-@item ENOTDIR
-A component of the specified pathname was not a directory when a directory
-was expected.
-@item EPERM
-Operation is not permitted.  Process does not have the appropriate priviledges
-or permissions to perform the requested operations.
-@item EROFS
-Read-only file system.
-@item EXDEV
-Attempt to link a file to another file system.
-
-@end table
-
-@subheading DESCRIPTION:
-
-The @code{link} function atomically creates a new link for an existing file
-and increments the link count for the file.
-
-If the @code{link} function fails, no directories are modified.
-
-The @code{existing} argument should not be a directory.
-
-The callder may (or may not) need permission to access the existing file.
-
-@subheading NOTES:
-
-@page
-@subsection unlink - Removes a directory entry
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-#include <unistd.h>
-
-int unlink(
-  const char path
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@table @b
-@item EACCES
-Search permission is denied for a directory in a file's path prefix
-@item EBUSY
-The directory is in use.
-@item ENAMETOOLONG
-Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
-effect.
-@item ENOENT
-A file or directory does not exist.
-@item ENOTDIR
-A component of the specified pathname was not a directory when a directory
-was expected.
-@item EPERM
-Operation is not permitted.  Process does not have the appropriate priviledges
-or permissions to perform the requested operations.
-@item EROFS
-Read-only file system.
-
-@end table
-
-@subheading DESCRIPTION:
-
-The @code{unlink} function removes the link named by @{code} and decrements the
-link count of the file referenced by the link.  When the link count goes to zero
-and no process has the file open, the space occupied by the file is freed and the
-file is no longer accessible. 
-
-@subheading NOTES:
-
-@page
-@subsection cfg_mkdir - Makes a directory
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-#include <sys/types.h>
-#include <sys/stat.h>
-
-int cfg_mkdir(
-  const char *path,
-  mode_t      mode
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@table @b
-@item EACCES
-Search permission is denied for a directory in a file's path prefix
-@item EEXIST
-The name file already exist.  
-@item EMLINK
-The number of links would exceed LINK_MAX
-@item ENAMETOOLONG
-Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
-effect.
-@item ENOENT
-A file or directory does not exist.
-@item ENOSPC
-No space left on disk.
-@item ENOTDIR
-A component of the specified pathname was not a directory when a directory
-was expected.
-@item EROFS
-Read-only file system.
-
-@end table
-
-@subheading DESCRIPTION:
-
-The @code{cfg_mkdir} function creates a new diectory named @code{path}.  The 
-permission bits (modified by the file creation mask) are set from @code{mode}.
-The owner and group IDs for the directory are set from the effective user ID
-and group ID.
-
-The new directory may (or may not) contain entries for. and .. but is otherwise
-empty.
-
-@subheading NOTES:
 
 @page
 @subsection cfg_chmod - Changes file mode.
@@ -1507,6 +1249,9 @@ int cfg_chmod(
 @end ifset
 
 @subheading STATUS CODES:
+
+A successful call to @code{cfg_chmod()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
 
 @table @b
 @item EACCES
@@ -1531,8 +1276,8 @@ Read-only file system.
 
 Set the file permission bits, the set user ID bit, and the set group ID bit 
 for the file named by @code{path} to @code{mode}.  If the effective user ID 
-does not match the owner of the file and the calling process does not have 
-the appropriate privileges, @code{cfg_chmod} returns -1 and sets @code{errno} to
+does not match the owner of the node and the calling process does not have 
+the appropriate privileges, @code{cfg_chmod()} returns -1 and sets @code{errno} to
 @code{EPERM}.
 
 @subheading NOTES:
@@ -1559,6 +1304,9 @@ int cfg_chown(
 @end ifset
 
 @subheading STATUS CODES:
+
+A successful call to @code{cfg_chown()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
 
 @table @b
 @item EACCES
@@ -1591,7 +1339,7 @@ bits are cleared.
 
 Some systems consider it a security violation to allow the owner of a file to
 be changed,  If users are billed for disk space usage, loaning a file to 
-another user could result in incorrect billing.  The @code{cfg_chown} function
+another user could result in incorrect billing.  The @code{cfg_chown()} function
 may be restricted to privileged users for some or all files.  The group ID can
 still be changed to one of the supplementary group IDs.
 
