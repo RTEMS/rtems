@@ -19,9 +19,14 @@ VPATH = @srcdir@
 MP_PIECES_yes_V = eventmp mp msgmp partmp regionmp semmp signalmp taskmp
 MP_PIECES = $(MP_PIECES_$(HAS_MP)_V)
 
+TASK_PIECES=\
+  tasks taskcreate taskdelete taskgetnote taskident taskinitusers \
+  taskmode taskrestart taskresume tasksetnote tasksetpriority \
+  taskstart tasksuspend taskwakeafter taskwakewhen
+
 C_PIECES=attr clock dpmem event intr intrbody msg \
    part ratemon region sem signal \
-   tasks timer $(MP_PIECES)
+   $(TASK_PIECES) timer $(MP_PIECES)
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
