@@ -1,7 +1,0 @@
-*** TEST 32 ***
-period 0: measured 1 tick(s), wanted 1
-period 1: measured 50 tick(s), wanted 50
-period 2: measured 200 tick(s), wanted 200
-period 3: measured 25 tick(s), wanted 25
-period 4: measured 3 tick(s), wanted 3
-*** END OF TEST SP32 ***

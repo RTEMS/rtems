@@ -1,9 +1,0 @@
-
-
-*** CHROOT01 TEST ***
-SUCCESS on /one/one.test
-SUCCESS on /two/two.test
-Reset the private environment
-SUCCESS on /one/one.test
-SUCCESS on /two/two.test
-*** END OF CHROOT01 TEST ***
