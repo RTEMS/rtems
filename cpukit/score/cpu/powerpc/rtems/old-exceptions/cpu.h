@@ -685,11 +685,17 @@ void _CPU_Initialize_vectors(void);
 #ifndef ASM
 extern const unsigned int _PPC_MSR_DISABLE_MASK;
 
-#define _CPU_MSR_Value( _msr_value ) \
+#define _CPU_MSR_GET( _msr_value ) \
   do { \
     _msr_value = 0; \
     asm volatile ("mfmsr %0" : "=&r" ((_msr_value)) : "0" ((_msr_value))); \
   } while (0)
+
+/* FIXME: Backward compatibility
+ * new-exception-processing uses _CPU_MSR_GET
+ * old-exception-processing had used _CPU_MSR_Value
+ */
+#define _CPU_MSR_Value(_msr_value) _CPU_MSR_GET(_msr_value)
 
 #define _CPU_MSR_SET( _msr_value ) \
 { asm volatile ("mtmsr %0" : "=&r" ((_msr_value)) : "0" ((_msr_value))); }

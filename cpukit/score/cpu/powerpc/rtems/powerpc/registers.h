@@ -255,12 +255,12 @@ lidate */
  *  Routines to access the time base register
  */
 
-static inline unsigned long long PPC_Get_timebase_register( void )
+static inline uint64_t PPC_Get_timebase_register( void )
 {
-  unsigned long tbr_low;
-  unsigned long tbr_high;
-  unsigned long tbr_high_old;
-  unsigned long long tbr;
+  uint32_t tbr_low;
+  uint32_t tbr_high;
+  uint32_t tbr_high_old;
+  uint64_t tbr;
 
   do {
     asm volatile( "mftbu %0" : "=r" (tbr_high_old));
@@ -274,10 +274,10 @@ static inline unsigned long long PPC_Get_timebase_register( void )
   return tbr;
 }
 
-static inline  void PPC_Set_timebase_register (unsigned long long tbr)
+static inline  void PPC_Set_timebase_register (uint64_t tbr)
 {
-  unsigned long tbr_low;
-  unsigned long tbr_high;
+  uint32_t tbr_low;
+  uint32_t tbr_high;
 
   tbr_low = (tbr & 0xffffffff) ;
   tbr_high = (tbr >> 32) & 0xffffffff;
