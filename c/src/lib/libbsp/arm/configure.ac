@@ -4,7 +4,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT([rtems-c-src-lib-libbsp-arm],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
-AC_CONFIG_SRCDIR([arm_bare_bsp])
+AC_CONFIG_SRCDIR([../arm])
 RTEMS_TOP(../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
