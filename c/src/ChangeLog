@@ -1,3 +1,8 @@
+2003-10-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/check-multiprocessing.m4: Remove RTEMS_BSP_ALIAS.
+	* aclocal/bsp-alias.m4: Remove.
+
 2003-10-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Make presence of tests/ optional.

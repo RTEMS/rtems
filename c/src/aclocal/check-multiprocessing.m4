@@ -9,7 +9,6 @@ AC_REQUIRE([RTEMS_ENV_RTEMSBSP])dnl
 AC_REQUIRE([RTEMS_TOP])dnl
 AC_REQUIRE([RTEMS_CHECK_CPU])dnl
 AC_REQUIRE([RTEMS_ENABLE_MULTIPROCESSING])dnl
-AC_REQUIRE([RTEMS_BSP_ALIAS])dnl
 
 AC_CACHE_CHECK([if wanting multiprocessing],
   [rtems_cv_want_multiprocessing],
