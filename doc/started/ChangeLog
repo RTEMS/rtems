@@ -1,3 +1,8 @@
+2004-01-20	Joel Sherrill <joel@OARcorp.com>
+
+	PR 555/doc
+	* sample.t: Fix RTEMS_MAKEFILE_PATH reference.
+
 2004-01-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add tversions.texi.in to EXTRA_DIST.
