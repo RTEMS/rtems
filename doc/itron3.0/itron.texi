@@ -1,6 +1,6 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename itron3.0
+@setfilename itron
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
