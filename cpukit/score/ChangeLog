@@ -1,3 +1,12 @@
+2001-11-28	Joel Sherrill <joel@OARcorp.com>,
+
+	This was tracked as PR91.
+	* include/rtems/score/isr.h, inline/rtems/score/isr.inl,
+	macros/rtems/score/isr.inl: Modified to allow any port to provide 
+	its own implementation of the macro _ISR_Is_in_progress.  If the
+	port overrides this macro, it must provide a non-inlined function
+	implementation.
+
 2001-11-20	Joel Sherrill <joel@OARcorp.com>
 
 	* src/threadhandler.c: When __USE__MAIN__ is defined by the toolset,

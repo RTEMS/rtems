@@ -18,15 +18,6 @@
 
 /*PAGE
  *
- *  _ISR_Is_in_progress
- *
- */
-
-#define _ISR_Is_in_progress() \
-        (_ISR_Nest_level != 0)
-
-/*PAGE
- *
  *  _ISR_Is_vector_number_valid
  *
  */

@@ -220,6 +220,24 @@ void _ISR_Handler( void );
 
 void _ISR_Dispatch( void );
 
+/*PAGE
+ *
+ *  _ISR_Is_in_progress
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the processor is currently servicing
+ *  and interrupt and FALSE otherwise.   A return value of TRUE indicates
+ *  that the caller is an interrupt service routine, NOT a thread.  The
+ */
+
+#if (CPU_PROVIDES_ISR_IS_IN_PROGRESS == TRUE)
+boolean _ISR_Is_in_progress( void );
+#else
+#define _ISR_Is_in_progress() \
+        (_ISR_Nest_level != 0)
+#endif
+
 #include <rtems/score/isr.inl>
 
 #ifdef __cplusplus
