@@ -44,20 +44,23 @@ extern "C" {
 /* Note:  Move address defs to the linker files. XXX */
 
 /* Real Time Clock Base Address */
-#define  DMV170_RTC_ADDRESS   (unsigned char *)0xf2c00000
+#define DMV170_RTC_ADDRESS   (unsigned char *)0xf2c00000
 
 /* base address of the DUART (68681) */
-#define  MC68681_ADDR         0xf2800000
-#define  MC68681_PORT1_ADDR   0xf2800000
-#define  MC68681_PORT2_ADDR   0xf2800040
+#define MC68681_ADDR         0xf2800000
+#define MC68681_PORT1_ADDR   0xf2800000
+#define MC68681_PORT2_ADDR   0xf2800040
 
 /* base address for the SCC (85C30) */ 
-#define  Z85C30_ADDR       0xfb000000
-#define  Z85C30_CTRL_A     0xfb000000
-#define  Z85C30_DATA_A     0xfb000008
-#define  Z85C30_CTRL_B     0xfb000010
-#define  Z85C30_DATA_B     0xfb000018
-#define  Z85C30_CLOCK      (8 * 1024 * 1024)
+#define Z85C30_ADDR       0xfb000000
+#define Z85C30_CTRL_A     0xfb000000
+#define Z85C30_DATA_A     0xfb000008
+#define Z85C30_CTRL_B     0xfb000010
+#define Z85C30_DATA_B     0xfb000018
+#define Z85C30_CLOCK      (8 * 1024 * 1024)
+
+/* base address for the SCV64 */
+#define DMV170_SCV64_BASE_ADDRESS                        0xf2000000
 
 #define DMV170_LOCAL_CONTROL_STATUS_REG                   0xf2400000
 #define DMV170_TIMER0_COUNT_INTERVAL_REG                  0xf2400008
@@ -237,6 +240,45 @@ extern "C" {
 #define DMV170_PERIPHERAL_IRQ                  ( DMV170_IRQ_FIRST + 12)
 
 
+#define SCV64_Is_IRQ0( _status ) (_status&0x01)
+#define SCV64_Is_IRQ1( _status ) (_status&0x02)
+#define SCV64_Is_IRQ2( _status ) (_status&0x04)
+#define SCV64_Is_IRQ3( _status ) (_status&0x08)
+#define SCV64_Is_IRQ4( _status ) (_status&0x10)
+#define SCV64_Is_IRQ5( _status ) (_status&0x20)
+
+/*
+ *  scv64.c
+ */
+
+void SCV64_Generate_DUART_Interrupts();
+rtems_unsigned32 SCV64_Get_Interrupt();
+
+/*
+ *  css_iface.c
+ */
+
+void Init_Css();
+
+rtems_unsigned32 Css_Id(
+  rtems_vector_number vector        /* vector number      */
+);
+
+rtems_vector_number Vector_id(
+  rtems_unsigned32 id
+);
+
+void enable_card_interrupt( 
+  rtems_vector_number vector        /* vector number      */
+);
+
+rtems_vector_number Get_interrupt();
+
+void Clear_interrupt( 
+  rtems_vector_number vector
+);
+
+
 #define MAX_BOARD_IRQS                         DMV170_PERIPHERAL_IRQ
 #ifdef __cplusplus
 }
@@ -244,6 +286,10 @@ extern "C" {
  
 #endif /* !_INCLUDE_DMV170_h */
 /* end of include file */
+
+
+
+
 
 
 
