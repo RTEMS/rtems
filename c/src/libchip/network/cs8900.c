@@ -26,7 +26,7 @@
    
 */
 
-#include <sys/errno.h>
+#include <errno.h>
 #include <string.h>
 #include <stdio.h>
 

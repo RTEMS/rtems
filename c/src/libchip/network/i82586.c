@@ -154,13 +154,13 @@ Mode of operation:
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+#include <errno.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>
 #include <sys/socket.h>
 #include <sys/sockio.h>
 #include <sys/ioctl.h>
-#include <sys/errno.h>
 
 #include <net/ethernet.h>
 #include <net/if.h>

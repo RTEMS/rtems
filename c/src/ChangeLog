@@ -1,3 +1,9 @@
+2004-04-20	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* libchip/network/if_media.h: Update from FreeBSD.
+	* libchip/network/open_eth.c, libchip/network/cs8900.c, 
+	libchip/network/i82586.c: #include <errno.h>.
+
 2004-04-14	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* aclocal/rtems-top.4: Remove RTEMS_ROOT (Obsolete).

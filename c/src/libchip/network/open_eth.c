@@ -33,6 +33,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <errno.h>
+
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 #include <libchip/open_eth.h>
