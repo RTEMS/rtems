@@ -22,6 +22,6 @@ LIB = $(ARCH)/libbsp.a
 $(LIB): ${OBJS}
 	$(make-library)
 
-all-local: ${ARCH} $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(LIB) $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../../../automake/local.am
