@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-
 SAMPLE = paranoia
 PGM = ${ARCH}/$(SAMPLE).exe
 
@@ -37,7 +36,7 @@ AM_CPPFLAGS += -DNOSIGNAL -DCYGNUS -DNOMAIN
 
 LD_LIBS = -lm
 
-all-local: ${ARCH} $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)

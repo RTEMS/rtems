@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-
 SAMPLE = cdtest
 PGM = ${ARCH}/$(SAMPLE).exe
 
@@ -38,7 +37,7 @@ if HAS_CXX
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-cxx-exe)
 
-all-local: ${ARCH} $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 else
 all-local:
 endif

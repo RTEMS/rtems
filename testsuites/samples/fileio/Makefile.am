@@ -2,7 +2,6 @@
 ##  Makefile.am,v 1.9 2002/08/11 05:18:59 ralf Exp
 ##
 
-
 SAMPLE = fileio
 PGM = ${ARCH}/$(SAMPLE).exe
 
@@ -32,7 +31,7 @@ include $(top_srcdir)/sample.am
 #
 
 if LIBCHIP
-all-local: ${ARCH} $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
@@ -41,4 +40,3 @@ endif
 EXTRA_DIST = $(C_FILES) $(DOCS)
 
 include $(top_srcdir)/../automake/local.am
-

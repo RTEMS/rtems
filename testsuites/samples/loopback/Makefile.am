@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-
 SAMPLE = loopback
 PGM = ${ARCH}/$(SAMPLE).exe
 
@@ -28,9 +27,8 @@ include $(top_srcdir)/sample.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-
 if HAS_NETWORKING
-all-local: ${ARCH} $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)

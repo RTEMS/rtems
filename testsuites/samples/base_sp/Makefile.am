@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-
 SAMPLE = base_sp
 PGM = ${ARCH}/$(SAMPLE).exe
 
@@ -31,7 +30,7 @@ include $(top_srcdir)/sample.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-all-local: ${ARCH} $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
