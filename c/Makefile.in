@@ -81,10 +81,7 @@ make_src_makefiles: Makefile.in Makefile
 	-rm make_src_makefiles.tmp
 
 pre_install_src: env make_src_makefiles
-	cd build-tools/scripts; \
-	 $(MAKE) RTEMS_BSP=${RTEMS_BSP} install-exec-local
-	cd build-tools/src; \
-	 $(MAKE) RTEMS_BSP=${RTEMS_BSP} install-exec-local
+	cd build-tools; $(MAKE) RTEMS_BSP=${RTEMS_BSP} install-exec-local
 	@echo "Order of preinstall directories"
 	cat make_src_makefiles
 	@echo 
