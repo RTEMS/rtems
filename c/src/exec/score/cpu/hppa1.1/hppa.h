@@ -249,6 +249,28 @@ extern "C" {
 #define HPPA_PROT_X2   0x06c00000   /* Execute Only, Promote to Level 2 */
 #define HPPA_PROT_X3   0x07c00000   /* Execute Only, Promote to Level 3 */
 
+/*
+ * Floating point status register definitions
+ */
+
+#define HPPA_FPSTATUS_ENABLE_I	  0x00000001	/* inexact operation */
+#define HPPA_FPSTATUS_ENABLE_U	  0x00000002    /* underflow */
+#define HPPA_FPSTATUS_ENABLE_O	  0x00000004    /* overflow */
+#define HPPA_FPSTATUS_ENABLE_Z    0x00000008    /* division by zero */
+#define HPPA_FPSTATUS_ENABLE_V    0x00000010    /* invalid operation */
+#define HPPA_FPSTATUS_D           0x00000020    /* denormalize as zero */
+#define HPPA_FPSTATUS_T           0x00000040    /* delayed trap */
+#define HPPA_FPSTATUS_RM_MASK     0x00000600    /* rounding mode */
+#define HPPA_FPSTATUS_RM_SHIFT    9
+#define HPPA_FPSTATUS_CQ_MASK     0x001FFC00	/* compare queue */
+#define HPPA_FPSTATUS_CQ_SHIFT	  13
+#define HPPA_FPSTATUS_C		  0x04000000	/* most recent ompare bit */
+#define HPPA_FPSTATUS_FLAG_I      0x08000000	/* inexact */
+#define HPPA_FPSTATUS_FLAG_U	  0x10000000	/* underflow */
+#define HPPA_FPSTATUS_FLAG_O	  0x20000000	/* overflow */
+#define HPPA_FPSTATUS_FLAG_Z	  0x40000000	/* division by zero */
+#define HPPA_FPSTATUS_FLAG_V      0x80000000	/* invalid operation */
+
 
 /*
  * Inline macros for misc. interesting opcodes

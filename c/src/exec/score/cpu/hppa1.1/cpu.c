@@ -126,15 +126,17 @@ void _CPU_Initialize(
     proc_ptr   old_handler;
 
     /*
-     * XXX; need to setup fpsr smarter perhaps
+     * This is the default fp context for all tasks
+     * Set it up so that denormalized results go to zero.
      */
 
     fp_context = (unsigned8*) &_CPU_Null_fp_context;
     for (i=0 ; i<sizeof(Context_Control_fp); i++)
         *fp_context++ = 0;
+    *((unsigned32 *) &_CPU_Null_fp_context) = HPPA_FPSTATUS_D;
 
     /*
-     *  Set _CPU_Default_gr27 here so it will hopefully be the correct
+     *  Save r27 into _CPU_Default_gr27 so it will hopefully be the correct
      *  global data pointer for the entire system.
      */
 
