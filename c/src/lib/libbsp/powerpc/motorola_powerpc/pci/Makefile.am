@@ -21,7 +21,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CFLAGS = -O2
+AM_CFLAGS += -O2
 
 $(PROJECT_INCLUDE)/bsp:
 	$(mkinstalldirs) $<

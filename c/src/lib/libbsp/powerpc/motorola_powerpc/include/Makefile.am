@@ -4,6 +4,8 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+include_HEADERS = bspopts.h
+
 H_FILES = ../../shared/include/nvram.h ../../shared/include/bsp.h \
     ../../../shared/include/coverhd.h
 
@@ -15,6 +17,9 @@ $(PROJECT_INCLUDE):
 
 $(PROJECT_INCLUDE)/bsp:
 	$(mkinstalldirs) $@
+
+$(PROJECT_INCLUDE)/%.h: %.h
+	$(INSTALL_DATA) $< $@
 
 $(PROJECT_INCLUDE)/nvram.h: ../../shared/include/nvram.h
 	$(INSTALL_DATA) $< $@
@@ -41,7 +46,8 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp \
     $(PROJECT_INCLUDE)/nvram.h $(PROJECT_INCLUDE)/bsp.h \
     $(PROJECT_INCLUDE)/coverhd.h $(PROJECT_INCLUDE)/bsp/consoleIo.h \
     $(PROJECT_INCLUDE)/bsp/uart.h $(PROJECT_INCLUDE)/bsp/irq.h \
-    $(PROJECT_INCLUDE)/bsp/motorola.h
+    $(PROJECT_INCLUDE)/bsp/motorola.h \
+    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all-local: $(PREINSTALL_FILES)
 

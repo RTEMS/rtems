@@ -1,3 +1,10 @@
+	* Makefile.am: Add @exceptions@ to SUBDIRS; 
+	Remove need_motorola_powerpc.
+	* configure.ac: Apply RTEMS_BSPOPTS_*(*) to merge-in settings from
+	make/custom/mcp750.cfg, make/custom/mvme2307.cfg;
+	Remove need_motorola_powerpc;
+	Add RTEMS_PPC_EXCEPTIONS([new]).
+	* include/Makefile.am: Replace PREINSTALL_FILES with
 	TMPINSTALL_FILES, include force-preinstall.am.
 	* wrapup/Makefile.am: Apply @exceptions@.
 
