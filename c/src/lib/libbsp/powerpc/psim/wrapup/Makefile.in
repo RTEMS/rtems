@@ -8,7 +8,7 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-BSP_PIECES=startup clock console shmsupp timer vectors
+BSP_PIECES=startup clock console timer vectors
 # pieces to pick up out of libcpu/ppc
 CPU_PIECES=
 GENERIC_PIECES=
