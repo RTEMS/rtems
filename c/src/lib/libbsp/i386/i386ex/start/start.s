@@ -44,8 +44,6 @@ changes:
  * #define NEXT_GAS
  */			
 
-#define NEXT_GAS
-	
         EXTERN (boot_card)         /* exits to bspstart   */ 
 	EXTERN (stack_start)       /* defined in startup/linkcmds */
 	EXTERN (Clock_exit)
