@@ -87,7 +87,6 @@ typedef struct {
 
 #define LIBIO_FLAGS_READ_WRITE    (LIBIO_FLAGS_READ | LIBIO_FLAGS_WRITE)
 
-void rtems_libio_config(rtems_configuration_table *config, unsigned32 max_fds);
 void rtems_libio_init(void);
 
 int __rtems_open(const char  *pathname, unsigned32 flag, unsigned32 mode);
