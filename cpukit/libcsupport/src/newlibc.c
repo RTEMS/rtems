@@ -79,6 +79,14 @@ extern void _reclaim_reent(struct _reent *);
 void
 libc_wrapup(void)
 {
+    /*
+     *  In case RTEMS is already down, don't do this.  It could be 
+     *  dangerous.
+     */
+
+    if (!_System_state_Is_up(_System_state_Get()))
+       return;
+
     _wrapup_reent(0);
     if (_REENT != &libc_global_reent)
     {
