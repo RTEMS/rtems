@@ -51,10 +51,6 @@ CLOBBER_ADDITIONS +=
 all:	${ARCH} $(SRCS) $(PGMS)
 	$(INSTALL) -m 555 ${PGMS} ${PROJECT_RELEASE}/bin
 
-# Hack
-# we are #including files that haven't been installed yet.
-# Make sure they are available in the src tree (ie: checked
-# out from SCCS or RCS)
 preinstall: 
 
 # Install the program(s), appending _g or _p as appropriate.

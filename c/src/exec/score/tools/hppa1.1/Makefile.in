@@ -53,8 +53,7 @@ all:	${ARCH} $(SRCS) preinstall $(PGMS)
 
 # Hack
 # we are #including files that haven't been installed yet.
-# Make sure they are available in the src tree (ie: checked
-# out from SCCS or RCS)
+# Make sure they are available.
 preinstall: FORCEIT
 	cd $(CPU_DIR);   $(MAKE) install-headers
 
