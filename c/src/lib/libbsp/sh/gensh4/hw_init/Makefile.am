@@ -8,7 +8,7 @@ VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 PGM = $(ARCH)/hw_init.rel
 
 C_FILES = hw_init.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
