@@ -1,3 +1,8 @@
+2000-09-22	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Use default object format to avoid name
+	changes in object format due to tool version changes.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am, console/Makefile.am, start/Makefile.am,

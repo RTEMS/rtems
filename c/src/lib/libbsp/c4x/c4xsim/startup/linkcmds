@@ -1,4 +1,4 @@
-OUTPUT_FORMAT("coff-c4x")
+/* OUTPUT_FORMAT("coff-c4x") */
  __SYSMEM_SIZE = DEFINED(__SYSMEM_SIZE) ? __SYSMEM_SIZE : 0x4000;
  __STACK_SIZE  = DEFINED(__STACK_SIZE)  ? __STACK_SIZE  : 0x1000;
  __HeapSize = DEFINED(__HeapSize) ? __HeapSize : 0x10000;
