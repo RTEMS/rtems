@@ -1,3 +1,13 @@
+2004-07-24	Mick Davis <mickd@microsol.iinet.net.au>
+
+	PR 641/rtems
+	* src/eventsurrender.c: The problem here is that events may be lost
+	when sent to a task which enters rtems_event_receive() with options
+	set to wait with a timeout and to return on receipt of any event. The
+	events are sent from an interrupt source such as a timer service
+	routine. If more than one set of events is sent to the task before it
+	returns, the first event set may be overwritten.
+
 2004-07-24	Joel Sherrill <joel@OARcorp.com>
 
 	PR 652/rtems
