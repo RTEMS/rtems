@@ -28,6 +28,8 @@ SECTIONS
 	. = ALIGN (16);
 
 	*(.eh_fram)
+        *(.gnu.linkonce.t*)
+
 	. = ALIGN (16);
 
 	/*
@@ -43,7 +45,12 @@ SECTIONS
 	*(.dtors)
 	LONG(0)
 	__DTOR_END__ = .;
-            etext = ALIGN( 0x10 ) ;
+
+        _rodata_start = . ;
+        *(.rodata)
+        *(.gnu.linkonce.r*)
+        _erodata = ALIGN( 0x10 ) ;
+        etext = ALIGN( 0x10 ) ;
 /*            _etext = .; -- conflicts */
         }
         .data ADDR( .text ) + SIZEOF( .text ):
