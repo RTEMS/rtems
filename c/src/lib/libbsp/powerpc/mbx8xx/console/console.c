@@ -149,7 +149,6 @@ int _EPPCBug_pollRead(
   retval = -1;
 
   input_params.clun = 0;
-  input_params.dlun = 0;
   
   switch( minor ) {
     case SMC1_MINOR:    
@@ -549,7 +548,7 @@ rtems_device_driver console_read(
 {
 #if UARTS_USE_TERMIOS != 1
   rtems_libio_rw_args_t *rw_args = arg;
-  int i;
+  int c;
 #endif
   
   if ( minor > NUM_PORTS-1 )
@@ -563,12 +562,11 @@ rtems_device_driver console_read(
 
 #if UARTS_IO_MODE != 1    /* Polled I/O without termios */
 
-  for( i = 0; i < rw_args->count; i++ ) {
-    rw_args->buffer[i] = BSP_READ( minor );
-    if( rw_args->buffer[i] == '\r' )
-      rw_args->buffer[i] = '\n';
-  }
-  rw_args->bytes_moved = i;
+  while( (c = BSP_READ( minor )) == -1 );
+  rw_args->buffer[0] = (unsigned8)c;
+  if( rw_args->buffer[0] == '\r' )
+      rw_args->buffer[0] = '\n';
+  rw_args->bytes_moved = 1;
   return RTEMS_SUCCESSFUL;
   
 #else                     /* RTEMS interrupt-driven I/O without termios */
@@ -592,7 +590,7 @@ rtems_device_driver console_write(
 {
 #if UARTS_USE_TERMIOS != 1
   rtems_libio_rw_args_t *rw_args = arg;
-  int i;
+  unsigned32 i;
   char cr = '\r';
 #endif
 
@@ -613,7 +611,7 @@ rtems_device_driver console_write(
     if( rw_args->buffer[i] == '\n' )
       BSP_WRITE( minor, &cr, 1 );
   }
-  rw_args->bytes_moved = rw_args->count;
+  rw_args->bytes_moved = i;
   return RTEMS_SUCCESSFUL;
     
 #else                     /* RTEMS interrupt-driven I/O without termios */

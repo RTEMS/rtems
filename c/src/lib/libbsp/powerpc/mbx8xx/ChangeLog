@@ -1,3 +1,7 @@
+2000-08-11  Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
+
+	* console/console.c: Fix polled input.
+
 2000-08-10	Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
 
 	* README: Updated.
