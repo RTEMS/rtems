@@ -1,3 +1,11 @@
+2002-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: RTEMS_CHECK_CUSTOM_BSP.
+	* clock/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* milli/Makefile.am: Ditto.
+	* semaphore/Makefile.am: Ditto.
+	* timer/Makefile.am: Ditto.
+
 2002-12-16	Joel Sherrill <joel@OARcorp.com>
 
 	* milli/milli.S: Per PR329, use GNU binutils assembler directives.
