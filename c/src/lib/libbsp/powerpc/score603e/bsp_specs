@@ -22,5 +22,5 @@
 %{!qrtems: %(old_endfile)} %{qrtems: ecrtn%O%s}
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -Qy -dp -Bstatic -T linkcmds%s -e _start -u __vectors}
+%{!qrtems: %(old_link)} %{qrtems: -Qy -dp -Bstatic -e _start -u __vectors}
 
