@@ -67,6 +67,7 @@
  *
  */
 
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 #define _Thread_Restart_self()  \
   {  \
      if ( _Thread_Executing->fp_context != NULL ) \
@@ -74,6 +75,12 @@
      \
     _CPU_Context_Restart_self( &_Thread_Executing->Registers ); \
   }
+#else
+#define _Thread_Restart_self()  \
+  {  \
+    _CPU_Context_Restart_self( &_Thread_Executing->Registers ); \
+  }
+#endif
 
 /*PAGE
  *
@@ -96,8 +103,10 @@
  *
  */
 
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 #define _Thread_Is_allocated_fp( _the_thread ) \
         ( (_the_thread) == _Thread_Allocated_fp )
+#endif
 
 /*PAGE
  *
@@ -105,8 +114,10 @@
  *
  */
 
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 #define _Thread_Deallocate_fp() \
         _Thread_Allocated_fp = NULL
+#endif
 
 /*PAGE
  *

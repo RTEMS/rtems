@@ -53,6 +53,7 @@ void _Thread_Close(
 
   _User_extensions_Thread_delete( the_thread );
  
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 #if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
   if ( _Thread_Is_allocated_fp( the_thread ) )
     _Thread_Deallocate_fp();
@@ -60,7 +61,8 @@ void _Thread_Close(
   the_thread->fp_context = NULL;
 
   if ( the_thread->Start.fp_context )
-  (void) _Workspace_Free( the_thread->Start.fp_context );
+    (void) _Workspace_Free( the_thread->Start.fp_context );
+#endif
 
   _Thread_Stack_Free( the_thread );
 
