@@ -1,3 +1,15 @@
+2004-01-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* m68040/Makefile.am: Merge-in m68040/fpsp/Makefile.am.
+	Use automake-compilation rules.
+	* m68040/fpsp/Makefile.am: Remove.
+	* shared/Makefile.am: Use automake compilation rules.
+	* Makefile.am: Reflect changes above. Remove CPU_SUBDIR.
+	* configure.ac: Require automake >= 1.8.2.
+	Add subdir-objects to AUTOMAKE_OPTIONS.
+	Remove CHECK_CUSTOM_BSP.
+	Reflect changes above.
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* shared/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.

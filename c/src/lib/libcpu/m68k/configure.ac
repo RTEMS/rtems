@@ -9,20 +9,18 @@ RTEMS_TOP(../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define foreign 1.8])
+AM_INIT_AUTOMAKE([no-define foreign subdir-objects 1.8.2])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_BARE
 RTEMS_ENV_RTEMSBSP
 
-
 RTEMS_PROJECT_ROOT
 
 RTEMS_PROG_CC_FOR_TARGET
+AM_PROG_CC_C_O
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
-
-RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 # At this time all models should use the shared directory so do this
 AM_CONDITIONAL(shared, true)
@@ -45,14 +43,10 @@ AM_CONDITIONAL(mcpu32p, test "$RTEMS_CPU_MODEL" = "m68360" \
 
 AM_CONDITIONAL(mcf5272, test "$RTEMS_CPU_MODEL" = "mcf5272" )
 
-case "$RTEMS_CPU_MODEL" in
-mcf5206 ) AC_CONFIG_SUBDIRS([mcf5206]);;
-*) ;;
-esac
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 shared/Makefile
 m68040/Makefile
-m68040/fpsp/Makefile])
+mcf5206/Makefile
+])
 AC_OUTPUT

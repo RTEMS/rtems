@@ -2,43 +2,37 @@
 ## $Id$
 ##
 
-CLEANDIRS =
+CLEANFILES =
 EXTRA_DIST =
+EXTRA_PROGRAMS =
 noinst_DATA =
 
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-## cache
-
-cache_C_FILES = cache/cache.c
-EXTRA_DIST += $(cache_C_FILES)
-cache_OBJECTS = $(cache_C_FILES:cache/%.c=cache/$(ARCH)/%.$(OBJEXT))
-
-common_C_FILES = ../../shared/src/cache_aligned_malloc.c
-common_C_FILES += ../../shared/src/cache_manager.c
-cache_OBJECTS += \
-    $(common_C_FILES:../../shared/src/%.c=cache/$(ARCH)/%.$(OBJEXT))
-
-cache/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) cache/$(ARCH)
-	@: > cache/$(ARCH)/$(dirstamp)
-cache/$(ARCH)/%.$(OBJEXT): cache/%.c cache/$(ARCH)/$(dirstamp)
-	${COMPILE} -I$(srcdir)/cache $(M68K_CPPFLAGS) -o $@ -c $<
-cache/$(ARCH)/%.$(OBJEXT): ../../shared/src/%.c cache/$(ARCH)/$(dirstamp)
-	${COMPILE} -I$(srcdir)/cache $(M68K_CPPFLAGS) -o $@ -c $<
-CLEANDIRS += cache/o-optimize cache/o-debug
-noinst_DATA += $(cache_OBJECTS)
-
+if shared
 include_libcpudir = $(includedir)/libcpu
 
-noinst_HEADERS = cache/cache_.h
+## cache
 include_libcpu_HEADERS = ../../shared/include/cache.h
 
-## misc
+EXTRA_PROGRAMS += cache.rel
+CLEANFILES += cache.rel
+cache_rel_SOURCES = cache/cache.c cache/cache_.h \
+    ../../shared/src/cache_aligned_malloc.c \
+    ../../shared/src/cache_manager.c
+cache_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) -I$(srcdir)/cache
+cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-misc_C_FILES = misc/memcpy.c misc/m68kidle.c
-misc_OBJECTS = $(misc_C_FILES:misc/%.c=misc/$(ARCH)/%.$(OBJEXT))
+EXTRA_PROGRAMS += cache_g.rel
+CLEANFILES += cache_g.rel
+cache_g_rel_SOURCES = $(cache_rel_SOURCES)
+cache_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) -I$(srcdir)/cache
+cache_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_DATA += cache$(LIB_VARIANT).rel
+
+## misc
 
 # gcc doesn't recognize difference between the cpu32 and cpu32+ so we have to
 if mcpu32p
@@ -48,28 +42,40 @@ if mcf5272
 M68K_CPPFLAGS = -Dmcf5272
 endif
 
-misc/$(ARCH)/$(dirstamp):
-	@$(mkdir_p) misc/$(ARCH)
-	@: > misc/$(ARCH)/$(dirstamp)
-misc/$(ARCH)/%.$(OBJEXT): misc/%.c misc/$(ARCH)/$(dirstamp)
-	${COMPILE} $(M68K_CPPFLAGS) -o $@ -c $<
-CLEANDIRS += misc/o-optimize misc/o-debug
-noinst_DATA += $(misc_OBJECTS)
+EXTRA_PROGRAMS += misc.rel
+CLEANFILES += misc.rel
+misc_rel_SOURCES = misc/memcpy.c misc/m68kidle.c
+misc_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(M68K_CPPFLAGS)
+misc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+EXTRA_PROGRAMS += misc_g.rel
+CLEANFILES += misc_g.rel
+misc_g_rel_SOURCES = $(misc_rel_SOURCES)
+misc_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V) $(M68K_CPPFLAGS)
+misc_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+
+noinst_DATA += misc$(LIB_VARIANT).rel
+endif
 
 ## --
 all-local: $(PREINSTALL_FILES)
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
+if shared
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
 $(PROJECT_INCLUDE)/libcpu/cache.h: ../../shared/include/cache.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
 
-CLEANFILES = $(PREINSTALL_FILES)
+endif
+
+CLEANFILES += $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/../../../automake/local.am
