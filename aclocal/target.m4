@@ -22,9 +22,12 @@ if test "$no_recursion" != yes; then
   fi
   RTEMS_CONFIGURE_ARGS_QUOTE([ac_sub_configure_args],
     [
-    --target*) ;;
-    --build*) ;;
-    --host*) ;;
+    -host* | --host* ) ;;
+    --host ) ac_prev=host_alias;;
+    -target* | --target* ) ;;
+    -target ) ac_prev=target_alias ;;
+    -build* | --build* ) ;;
+    -build ) ac_prev_build_alias ;;
     *_alias=* ) ;; # HACK: Workaround to autoconf passing *_alias
     ],
     [rtems_configure_args])

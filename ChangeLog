@@ -1,5 +1,10 @@
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/sysv-ipc.m4: Remove (Unused).
+	* aclocal/target.m4: Sync with acinclude.m4 (Part of fix to PR 312).
+
+2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* acinclude.m4: Lots of changes addressing PR 312.
 
 2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
