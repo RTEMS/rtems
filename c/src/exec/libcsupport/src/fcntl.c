@@ -64,7 +64,7 @@ int fcntl(
       diop->file_info  = iop->file_info;
       diop->flags      = iop->flags;
       diop->pathinfo   = iop->pathinfo;
-      
+      ret = (int) (diop - rtems_libio_iops);
       break;
 
     case F_GETFD:        /* get f_flags */
