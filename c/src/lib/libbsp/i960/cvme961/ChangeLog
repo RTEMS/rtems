@@ -1,3 +1,7 @@
+
+	* cvme961/timer/timer.c: Include <rtems/zilog/z8536.h> instead of
+	<zilog/z8536.h>.
+
 2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* start/start.S: Include <rtems/asm.h> instead of <asm.h>.
