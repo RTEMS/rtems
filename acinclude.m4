@@ -23,68 +23,88 @@ AC_DEFUN([_RTEMS_SUBST_IFNOT],
   [AC_SUBST([$1],["[$]$1 $2"])])
 ])
 
+AC_DEFUN([_RTEMS_TOOLS],
+[
+m4_ifdef([_RTEMS_$2_CONFIGDIRS_LIST],
+[
+_RTEMS_ARG_VAR([CC_FOR_$2],
+  [c-compiler to be used for $1 subdirs (default: auto-detected)])
+_RTEMS_ARG_VAR([CFLAGS_FOR_$2],
+  [c-flags to be used for $1 subdirs (default: provided by autoconf)])
+_RTEMS_ARG_VAR([CXX_FOR_$2],
+  [c++-compiler to be used for $1 subdirs (default: auto-detected)])
+_RTEMS_ARG_VAR([CXXFLAGS_FOR_$2],
+  [c++-flags to be used for $1 subdirs (default: provided by autoconf)])
+])
+])
+
 AC_DEFUN([_RTEMS_COMMANDS_POST_CONFIG_SUBDIRS],
 [
 AC_CONFIG_COMMANDS_PRE([
+
+test -z "$host_alias" && host_alias="$host"
+test -z "$build_alias" && build_alias="$build"
+test -z "$target_alias" && target_alias="$target"
+
 _RTEMS_BUILD_CONFIG_PREPARE
 _RTEMS_HOST_CONFIG_PREPARE
 _RTEMS_TARGET_CONFIG_PREPARE
 
+build_SUBDIRS="${build_configdirs}"
+build_configdirs="${build_configdirs}"
+
 AS_IF([test $build = $host],
-[
+[dnl
   AS_IF([test $host = $target],
   [dnl b=h, h=t, t=b
-    BUILD_SUBDIRS="${build_configdirs}"
-    build_configdirs="${build_configdirs}"
-    HOST_SUBDIRS=""
-    host_configdirs=""
-    TARGET_SUBDIRS=""
-    target_configdirs=""],
+    host_SUBDIRS="${host_configdirs}"
+    host_configdirs="${host_configdirs}"
+    target_SUBDIRS="${target_configdirs}"
+    target_configdirs="${target_configdirs}"],
   [dnl b=h, h!=t, t!=b
-    BUILD_SUBDIRS="${build_configdirs}"
-    build_configdirs="${build_configdirs}"
-    HOST_SUBDIRS=""
-    host_configdirs=""
-    TARGET_SUBDIRS=`echo "${target_configdirs}" | \
+    host_SUBDIRS="${host_configdirs}"
+    host_configdirs="${host_configdirs}"
+    target_SUBDIRS=`echo "${target_configdirs}" | \
       sed -e "s%\([[^ ]][[^ ]]*\)%$target_alias/\1%g"`
     target_configdirs="${target_configdirs}"
   ])
-],[
+],[dnl
   AS_IF([test $host = $target],
   [ dnl b!=h, h=t, b!=t
-    BUILD_SUBDIRS="${build_configdirs}"
-    build_configdirs="${build_configdirs}"
-    HOST_SUBDIRS=`echo "${host_configdirs}" | \
+    host_SUBDIRS=`echo "${host_configdirs}" | \
       sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
     host_configdirs="${host_configdirs}"
-    TARGET_SUBDIRS=""
-    target_configdirs=""],
-  [
-    AS_IF([test $build = $target],
-    [dnl b!=h, h!=t, b=t
-      BUILD_SUBDIRS="${build_configdirs}"
-      build_configdirs="${build_configdirs}"
-      HOST_SUBDIRS=`echo "${host_configdirs}" | \
-        sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
-      host_configdirs="${host_configdirs}"
-      TARGET_SUBDIRS=""
-      target_configdirs=""],
-    [dnl b!=h, h!=t, b!=t
-      BUILD_SUBDIRS="${build_configdirs}"
-      build_configdirs="${build_configdirs}"
-      HOST_SUBDIRS=`echo "${host_configdirs}" | \
-        sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
-      host_configdirs="${host_configdirs}"
-      TARGET_SUBDIRS=`echo "${target_configdirs}" | \
+    AS_IF([test x"$enable_experimental" = x"yes" ],[
+      target_SUBDIRS=`echo "${target_configdirs}" | \
         sed -e "s%\([[^ ]][[^ ]]*\)%$target_alias/\1%g"`
       target_configdirs="${target_configdirs}"
+    ])
+  ],[dnl
+    AS_IF([test $build = $target],
+    [dnl b!=h, h!=t, b=t
+      host_SUBDIRS=`echo "${host_configdirs}" | \
+        sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
+      host_configdirs="${host_configdirs}"
+      AS_IF([test x"$enable_experimental" = x"yes" ],[
+        target_SUBDIRS="${target_configdirs}"
+        target_configdirs="${target_configdirs}"
+      ])
+    ],[dnl b!=h, h!=t, b!=t
+      host_SUBDIRS=`echo "${host_configdirs}" | \
+        sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
+      host_configdirs="${host_configdirs}"
+      AS_IF([test x"$enable_experimental" = x"yes" ],[
+        target_SUBDIRS=`echo "${target_configdirs}" | \
+          sed -e "s%\([[^ ]][[^ ]]*\)%$target_alias/\1%g"`
+        target_configdirs="${target_configdirs}"
+      ])
     ])
   ])
 ])
 
-AC_SUBST(HOST_SUBDIRS)
-AC_SUBST(TARGET_SUBDIRS)
-AC_SUBST(BUILD_SUBDIRS)
+AC_SUBST(host_SUBDIRS)
+AC_SUBST(target_SUBDIRS)
+AC_SUBST(build_SUBDIRS)
 ])
 
   AC_CONFIG_COMMANDS_POST([
@@ -160,22 +180,17 @@ dnl _RTEMS_OUTPUT_SUBDIRS([host|target|build],[HOST|TARGET|BUILD])
 AC_DEFUN([_RTEMS_OUTPUT_SUBDIRS],[
 m4_ifdef([_RTEMS_$2_CONFIGDIRS_LIST],
 [
-_RTEMS_ARG_VAR([CC_FOR_$2],
-  [c-compiler to be used for $1 subdirs (default: auto-detected)])
-_RTEMS_ARG_VAR([CFLAGS_FOR_$2],
-  [c-flags to be used for $1 subdirs (default: provided by autoconf)])
-_RTEMS_ARG_VAR([CXX_FOR_$2],
-  [c++-compiler to be used for $1 subdirs (default: auto-detected)])
-_RTEMS_ARG_VAR([CXXFLAGS_FOR_$2],
-  [c++-flags to be used for $1 subdirs (default: provided by autoconf)])
 if test "$no_recursion" != yes; then
 
- if test -n "${$2_SUBDIRS}"; then
+ if test -n "${$1_SUBDIRS}"; then
    ac_sub_configure_args="[$]$1args"
 
   # Always prepend --prefix to ensure using the same prefix
   # in subdir configurations.
   ac_sub_configure_args="'--prefix=$prefix' $ac_sub_configure_args"
+
+  # make sure that $1_subdir is not empty
+  test -n "$$1_subdir" || $1_subdir="."
 
   case "$$1_subdir" in
   "." ) ;;
@@ -183,9 +198,6 @@ if test "$no_recursion" != yes; then
     ac_sub_configure_args="$ac_sub_configure_args '--with-target-subdir=$$1_subdir' '--exec-prefix=${prefix}/$$1_subdir'"
     ;;
   esac
-
-  # make sure that $1_subdir is not empty
-  test -n "$$1_subdir" || $1_subdir="."
 
   ac_popdir=`pwd`
   for ac_dir in $$1_configdirs; do
@@ -247,18 +259,6 @@ fi
 ])
 ])
 
-## PUBLIC: RTEMS_BUILD_CONFIG_SUBDIRS(build_subdir)
-# subdirs to be built for the build environment
-AC_DEFUN([RTEMS_BUILD_CONFIG_SUBDIRS],[
-m4_append([_RTEMS_BUILD_CONFIGDIRS_LIST],[ $1])
-dnl Always append to build_configdirs
-AC_SUBST(build_configdirs,"$build_configdirs $1")
-
-m4_divert_text([DEFAULTS],
-               [ac_subdirs_all="$ac_subdirs_all m4_normalize([$1])"])
-m4_expand_once([_RTEMS_COMMANDS_POST_CONFIG_SUBDIRS])
-])
-
 AC_DEFUN([_RTEMS_CONFIGURE_ARGS_PRUNE],
 [
 $1_prune()
@@ -311,18 +311,28 @@ $1_prune()
 }
 ])
 
+## PUBLIC: RTEMS_BUILD_CONFIG_SUBDIRS(build_subdir)
+# subdirs to be built for the build environment
+AC_DEFUN([RTEMS_BUILD_CONFIG_SUBDIRS],[
+m4_append([_RTEMS_BUILD_CONFIGDIRS_LIST],[ $1])
+dnl Always append to build_configdirs
+AC_SUBST(build_configdirs,"$build_configdirs $1")
+
+m4_divert_text([DEFAULTS],
+               [ac_subdirs_all="$ac_subdirs_all m4_normalize([$1])"])
+m4_expand_once([_RTEMS_COMMANDS_POST_CONFIG_SUBDIRS])
+])
+
 AC_DEFUN(_RTEMS_BUILD_CONFIG_PREPARE,[
 ## # Record the configure arguments in Makefile.
 m4_ifdef([_RTEMS_BUILD_CONFIGDIRS_LIST],
 [
+m4_expand_once([_RTEMS_TOOLS([build],[BUILD])])
 m4_expand_once([_RTEMS_CONFIGURE_ARGS_PRUNE([buildargs])])
 eval buildargs_prune $ac_configure_args
 buildargs="'--host=${build}' '--build=${build}' ${buildargs}"
 test -n "${target_alias}" && \
 buildargs="${buildargs} --target='${target_alias}'"
-
-## AC_SUBST(buildargs)
-
 build_subdir="."
 ],[])
 ])
@@ -332,21 +342,7 @@ build_subdir="."
 AC_DEFUN([RTEMS_HOST_CONFIG_SUBDIRS],[
 m4_append([_RTEMS_HOST_CONFIGDIRS_LIST],[ $1])dnl
 
-if test $build = $host;
-then
-  AS_IF([test $host = $target],
-    [_RTEMS_SUBST_IFNOT([build_configdirs],[$1])],
-    [_RTEMS_SUBST_IFNOT([build_configdirs],[$1])]
-  )
-else
-  AS_IF([test $host = $target],
-    [_RTEMS_SUBST_IFNOT([host_configdirs],[$1])],
-    [AS_IF([test $build = $target],
-      [_RTEMS_SUBST_IFNOT([host_configdirs],[$1])],
-      [_RTEMS_SUBST_IFNOT([host_configdirs],[$1])]
-    )]
-  )
-fi
+_RTEMS_SUBST_IFNOT([host_configdirs],[$1])
 
 m4_divert_text([DEFAULTS],
                [ac_subdirs_all="$ac_subdirs_all m4_normalize([$1])"])
@@ -356,12 +352,10 @@ m4_expand_once([_RTEMS_COMMANDS_POST_CONFIG_SUBDIRS])
 AC_DEFUN(_RTEMS_HOST_CONFIG_PREPARE,[
 m4_ifdef([_RTEMS_HOST_CONFIGDIRS_LIST],
 [
-## Record configure arguments in Makefile.
+m4_expand_once([_RTEMS_TOOLS([host],[HOST])])
 m4_expand_once([_RTEMS_CONFIGURE_ARGS_PRUNE([hostargs])])
 eval hostargs_prune $ac_configure_args
 hostargs="'--host=${host_alias}' '--build=${build}' '--target=${target_alias}' ${hostargs}"
-## AC_SUBST(hostargs)
-
 host_subdir="${host_alias}"
 ],[])
 ])
@@ -371,21 +365,7 @@ host_subdir="${host_alias}"
 AC_DEFUN([RTEMS_TARGET_CONFIG_SUBDIRS],[
 m4_append([_RTEMS_TARGET_CONFIGDIRS_LIST],[ $1])
 
-if test $build = $host;
-then
-  AS_IF([test $host = $target],
-    [_RTEMS_SUBST_IFNOT([build_configdirs],[$1])],
-    [_RTEMS_SUBST_IFNOT([target_configdirs],[$1])]
-  )
-else
-  AS_IF([test $host = $target],
-    [_RTEMS_SUBST_IFNOT([host_configdirs],[$1])],
-    [AS_IF([test $build = $target],
-      [_RTEMS_SUBST_IFNOT([build_configdirs],[$1])],
-      [_RTEMS_SUBST_IFNOT([target_configdirs],[$1])]
-    )]
-  )
-fi
+_RTEMS_SUBST_IFNOT([target_configdirs],[$1])
 
 m4_divert_text([DEFAULTS],
                [ac_subdirs_all="$ac_subdirs_all m4_normalize([$1])"])
@@ -395,12 +375,10 @@ m4_expand_once([_RTEMS_COMMANDS_POST_CONFIG_SUBDIRS])
 AC_DEFUN(_RTEMS_TARGET_CONFIG_PREPARE,[
 m4_ifdef([_RTEMS_TARGET_CONFIGDIRS_LIST],
 [
-## Record the configure arguments in Makefile.
+m4_expand_once([_RTEMS_TOOLS([target],[TARGET])])
 m4_expand_once([_RTEMS_CONFIGURE_ARGS_PRUNE([targetargs])])
 eval targetargs_prune $ac_configure_args
 targetargs="'--host=${target_alias}' '--build=${build}' '--target=${target_alias}' ${targetargs}"
-## AC_SUBST(targetargs)
-
 target_subdir="${target_alias}"
 ],[])
 ])

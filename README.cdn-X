@@ -38,7 +38,7 @@ mkdir build
 cd build
 <path>/rtems/configure [options] \
 --target=sparc-rtems \
---prefix=/opt/cygwin/rtems/sparc-rtems
+--prefix=/opt/cygwin
 make
 make install
 
@@ -56,11 +56,11 @@ cd host
 --target=sparc-rtems \
 --build=`<path>/rtems/config.guess` \
 --host=i386-cygwin \
---prefix=/opt/cygwin/rtems
+--prefix=/opt/cygwin
 make
 make install
 
-This will build RTEMS host-tools for i386-cygwin and install it to the given
+This will build RTEMS host-tools for i386-cygwin and install them to the given
 PREFIX.
 
 
@@ -69,17 +69,5 @@ PREFIX.
 
 * At present time, building RTEMS Canadian Cross is known to be immature, and
 to require additional work. Do not expect this to work.
-
-* The configure scripts expect to find a native c-compiler called "cc". If
-your host doesn't have such a "cc" (e.g. Cygwin) or has a non-functional
-"cc" (eg. Solaris) try introducing a symlink <functional-cc> -> cc
-(E.g.: ln -s <path-to>/gcc /opt/rtems/bin/cc) and make sure this cc can be
-found on $PATH.
-
-* It will *not* work for all BSPs requiring BSP-specific host-tools 
-(Unfortunately, this comprizes i386-rtems/pcx86 and all powerpc BSPs).
-
-* Incomplete support for *_FOR_TARGET, *_FOR_HOST, *_FOR_BUILD environment
-variables.
 
 * The <toplevel>/make/ directory hierarchy is not treated correctly.

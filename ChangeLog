@@ -1,3 +1,58 @@
+2003-03-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* acinclude.m4: Reformat build_* handling.
+	Preset *_alias if empty.
+	* configure.ac: Change tools/build to build-config dirs.
+	Conditionally build tools/build as host-config dirs.
+
+2003-03-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* acinclude.m4: Fix broken comments.
+	Add hidden option --enable-experimental.
+	* README.cdn-X: Update.
+	* configure.ac:	Build tools/build as host and build-host tools to
+	accomodate those BSPs applying packhex in <BSP>.cfg.
+	Build tools/cpu as build-host tools.
+
+2003-03-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* tools/Makefile.am: Remove.
+	* configure.ac: Remove tools.
+	* acinclude.m4: Fix build_subdir handling.
+	* Makefile.am: Remove tools from SUBDIRS.
+	Rename HOST|BUILD|TARGET_SUBDIRS into host|build|target_SUBDIRS.
+
+2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove AC_CONFIG_AUX_DIR.
+	* alocal/rtems-top.a4: Add AC_CONFIG_AUX_DIR.
+
+2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bootstrap: Add ACLOCAL, AUTOHEADER.
+	Don't check for auto*tool-versions.
+
+2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* config-ml.in: Don't build sh-rtems ml and ml/m2 multilib variants.
+
+2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/compile.am: Introduce depend-gcc.
+	* automake/lib.am: Remove stray comment.
+	* automake/local.am: Introduce depend-gcc.
+
+2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* config-ml.in: Don't build arm-rtems/*fpu* multilib variants.
+
+2003-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/rtems-top.m4: Set PROJECT_ROOT unconditionally.
+	* automake/local.am: Remove $(ARCH), clean-local.
+	* automake/compile.am: Add $(ARCH), clean-local.
+	Set CXXFLAGS = @RTEMS_CFLAGS@ $(XCXXFLAGS).
+
 2003-02-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove references to obsoleted files
