@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
 
 #include "rtems/blkdev.h"
 #include "rtems/diskdevs.h"
@@ -118,7 +119,7 @@ ramdisk_write(struct ramdisk *rd, blkdev_request *req)
  *     IOCTL return value
  */
 static int
-ramdisk_ioctl(dev_t dev, int req, void *argp)
+ramdisk_ioctl(dev_t dev, uint32_t req, void *argp)
 {
     switch (req)
     {
@@ -192,7 +193,7 @@ ramdisk_initialize(
     {
         dev_t dev = rtems_filesystem_make_dev_t(major, i);
         char name[sizeof(RAMDISK_DEVICE_BASE_NAME "0123456789")];
-        snprintf(name, sizeof(name), RAMDISK_DEVICE_BASE_NAME "%d", i);
+        snprintf(name, sizeof(name), RAMDISK_DEVICE_BASE_NAME "%" PRIu32, i);
         r->block_size = c->block_size;
         r->block_num = c->block_num;
         if (c->location == NULL)

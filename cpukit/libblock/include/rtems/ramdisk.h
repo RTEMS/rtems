@@ -35,7 +35,7 @@ typedef struct rtems_ramdisk_config {
  * The following is definitions for RAM disk configuration table
  */
 extern rtems_ramdisk_config rtems_ramdisk_configuration[];
-extern int rtems_ramdisk_configuration_size;
+extern size_t rtems_ramdisk_configuration_size;
 
 /* ramdisk_initialize --
  *     RAM disk driver initialization entry point.
