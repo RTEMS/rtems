@@ -26,7 +26,6 @@ $(ARCH)/%.$(OBJEXT): rtems/%.c $(ARCH)/$(dirstamp)
 $(ARCH)/%$(LIB_VARIANT).rel: $(ARCH)/%.o
 	${make-rel}
 
-project_libdir = $(libdir)
 project_lib_DATA = $(ARCH)/no-ext$(LIB_VARIANT).rel \
     $(ARCH)/no-io$(LIB_VARIANT).rel $(ARCH)/no-dpmem$(LIB_VARIANT).rel \
     $(ARCH)/no-event$(LIB_VARIANT).rel $(ARCH)/no-msg$(LIB_VARIANT).rel \
