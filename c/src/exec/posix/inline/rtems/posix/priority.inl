@@ -5,6 +5,14 @@
 #ifndef __RTEMS_POSIX_PRIORITY_inl
 #define __RTEMS_POSIX_PRIORITY_inl
 
+/*
+ *  1003.1b-1993,2.2.2.80 definition of priority, p. 19
+ *
+ *  "Numericallly higher values represent higher priorities."
+ *
+ *  Thus, RTEMS Core has priorities run in the opposite sense of the POSIX API.
+ */
+
 STATIC INLINE boolean _POSIX_Priority_Is_valid(
   int priority
 )
