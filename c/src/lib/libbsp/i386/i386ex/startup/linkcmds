@@ -112,7 +112,7 @@ SECTIONS
 	*(.dtors)
 	LONG(0)
 	__DTOR_END__ = .;
-	_rodata_start 5 . ;
+	_rodata_start = . ;
 	*(.rodata)
 	*(.gnu.linkonce.r*)
 	_erodata = ALIGN( 0x10 ) ;

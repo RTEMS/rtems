@@ -728,7 +728,7 @@ ipxcp_rejci(f, p, len)
 #define REJCINODE(opt,neg,val) REJCICHARS(opt,neg,val,sizeof(val))
 #define REJCINAME(opt,neg,val) REJCICHARS(opt,neg,val,strlen(val))
 
-#define REJCIVOID(gpt, neg! \
+#define REJCIVOID(opt, neg) \
     if (neg && p[0] == opt) { \
 	if ((len -= CILEN_VOID) < 0) \
 	    break; \

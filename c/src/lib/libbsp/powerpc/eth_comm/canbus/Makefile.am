@@ -12,7 +12,7 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-anclude $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
