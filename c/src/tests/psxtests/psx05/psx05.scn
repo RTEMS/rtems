@@ -36,7 +36,7 @@ Init: mutex priority ceiling is 128
 Init: mutex process shared is (1) -- PTHREAD_PROCESS_SHARED
 Init: Resetting mutex attributes
 Init: pthread_mutex_init - SUCCESSFUL
-Init: pthread_mutex_init - EBUSY (attempt to initialize an existing mutex)
+Init: pthread_mutex_init - EBUSY (reinitialize an existing mutex) - skipped
 Init: pthread_mutex_trylock - EINVAL (illegal ID)
 Init: pthread_mutex_trylock - SUCCESSFUL
 Init: pthread_mutex_trylock - EDEADLK (already locked)
