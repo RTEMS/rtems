@@ -21,10 +21,6 @@
 extern "C" {
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <sys/types.h>
 
 void RTEMS_Malloc_Initialize(
@@ -39,9 +35,8 @@ extern void libc_init(int reentrant);
 }
 #endif
 
-#ifdef __cplusplus
-}
-#endif
+extern int  host_errno(void);
+extern void fix_syscall_errno(void);
 
 #endif
 /* end of include file */
