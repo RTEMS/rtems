@@ -12,7 +12,7 @@
 # to be run from the toplevel directory of RTEMS'
 # source tree
 
-AUTOCONF_VERS=2\.5[47]
+AUTOCONF_VERS=2\.57
 AUTOMAKE_VERS=1\.7\.2
 
 progname=`basename $0`
@@ -95,7 +95,7 @@ done
 
 case $mode in
 generate)
-  AUTOCONF=${AUTOCONF-`which autoconf`}
+  AUTOCONF=${AUTOCONF-autoconf}
   if test -z "$AUTOCONF"; then
     echo "You must have autoconf installed to run $program"
   fi
@@ -108,7 +108,7 @@ EOF
   exit 1
   fi
   
-  AUTOMAKE=${AUTOMAKE-`which automake`}
+  AUTOMAKE=${AUTOMAKE-automake}
   if test -z "$AUTOMAKE"; then
     echo "You must have automake installed to run $program"
   fi

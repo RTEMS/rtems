@@ -1,7 +1,13 @@
+2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bootstrap: Remove attempts to detect autoconf and automake using
+	"which" (PR 325).
+
 2003-02-06	Joel Sherrill <joel@OARcorp.com>
 
 	* README.configure: Updated to reflect new BSPs and deprecated
 	targets.
+
 2003-01-28	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: Updated to rtems-ss-20030128.
