@@ -12,7 +12,7 @@ Epoch:          0
 License:        gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
 
 Autoreqprov:  	on
-Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
+Packager:     	ralf.corsepius@rtems.org and joel@OARcorp.com
 
 Version:      	gcc%{gcc_version}newlib%{newlib_version}
 
@@ -83,6 +83,11 @@ NoSource:	1
 %define build_cxx	0
 %endif
 
+%if "%{gcc_target}" == "tic4x-rtems@osversion@"
+%define build_cxx	0
+%endif
+
+# OBSOLETE: use tic4x instead
 %if "%{gcc_target}" == "c4x-rtems@osversion@"
 %define build_cxx	0
 %endif
