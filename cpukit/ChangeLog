@@ -1,5 +1,10 @@
 2004-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/enable-itron.m4, aclocal/check-itron.m4:
+	Allow building itron for unix.
+
+2004-11-22	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/Makefile.am: Don't install bpfilter.h (Private
 	header).
 
