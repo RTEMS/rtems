@@ -57,6 +57,8 @@ posix_api_configuration_table _POSIX_Default_configuration = {
   0,                             /* maximum_timers */
   0,                             /* maximum_queued_signals */
   0,                             /* number_of_initialization_threads */
+  0,                             /* maximum_message_queues */
+  0,                             /* maximum_semaphores */
   NULL                           /* User_initialization_threads_table */
 };
 
