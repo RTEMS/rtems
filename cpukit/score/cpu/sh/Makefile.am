@@ -42,16 +42,11 @@ rtems_cpu_rel_OBJECTS = $(C_O_FILES)
 $(REL): $(rtems_cpu_rel_OBJECTS)
 	$(make-rel)
 
-$(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o
-
 all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
     $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(REL)
 
-EXTRA_DIST = cpu.c rtems.c
+EXTRA_DIST = cpu.c
 
 include $(top_srcdir)/../../../automake/local.am

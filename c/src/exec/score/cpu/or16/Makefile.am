@@ -32,9 +32,6 @@ include_rtems_score_HEADERS = \
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h)
 
-$(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
-	$(INSTALL_DATA) $< $@
-
 C_FILES = cpu.c cpu_asm.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
@@ -45,13 +42,11 @@ rtems_cpu_rel_OBJECTS = $(C_O_FILES)
 $(REL): $(rtems_cpu_rel_OBJECTS)
 	$(make-rel)
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o
-
 all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
     $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(REL)
 
-EXTRA_DIST = cpu.c cpu_asm.c rtems.c
+EXTRA_DIST = cpu.c cpu_asm.c
 
 include $(top_srcdir)/../../../automake/local.am

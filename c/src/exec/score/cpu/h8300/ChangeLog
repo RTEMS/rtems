@@ -1,3 +1,8 @@
+2002-07-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems.c: Remove.
+	* Makefile.am: Reflect changes above.
+
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h: Fixed comments and renamed
