@@ -24,7 +24,7 @@ by the task manager are:
 @item @code{@value{DIRPREFIX}task_delete} - Delete a task 
 @item @code{@value{DIRPREFIX}task_suspend} - Suspend a task 
 @item @code{@value{DIRPREFIX}task_resume} - Resume a task 
-@item @code{@value{DIRPREFIX}task_is_suspended} - Determine if a task is Suspended
+@item @code{@value{DIRPREFIX}task_is_suspended} - Determine if a task is suspended
 @item @code{@value{DIRPREFIX}task_set_priority} - Set task priority 
 @item @code{@value{DIRPREFIX}task_mode} - Change current task's mode 
 @item @code{@value{DIRPREFIX}task_get_note} - Get task notepad entry 
@@ -32,6 +32,7 @@ by the task manager are:
 @item @code{@value{DIRPREFIX}task_wake_after} - Wake up after interval 
 @item @code{@value{DIRPREFIX}task_wake_when} - Wake up when specified  
 @item @code{@value{DIRPREFIX}task_variable_add} - Associate per task variable
+@item @code{@value{DIRPREFIX}task_variable_add} - Obtain value of a a per task variable
 @item @code{@value{DIRPREFIX}task_variable_delete} - Remove per task variable
 @end itemize
 
@@ -1634,6 +1635,52 @@ is to have a single task variable that is a pointer to a dynamically
 allocated structure containing the task's private `global' data.
 In this case the destructor function could be `free'.
 
+@page
+
+@subsection TASK_VARIABLE_GET - Obtain value of a per task variable
+
+@cindex get per-task variable
+@cindex obtain per-task variable
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_task_variable_get
+@example
+rtems_status_code rtems_task_variable_get(
+  rtems_id  tid,
+  void    **ptr,
+  void    **result
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Task_Variable_Delete (
+   Id          : in     RTEMS.ID;
+   Ptr         : in     RTEMS.Address;
+   Value       :    out RTEMS.Address;
+   Result      :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - per task variable added successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid task id@*
+@code{@value{RPREFIX}NO_MEMORY} - invalid task id@*
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported on remote tasks@*
+
+@subheading DESCRIPTION:
+This directive looks up the private value of a task variable for a
+specified task and stores that value in the location pointed to by
+the result argument.  The specified task is usually not the calling
+task, which can get its private value by directly accessing the variable.
+
+@subheading NOTES:
+
+NONE
 @page
 
 @subsection TASK_VARIABLE_DELETE - Remove per task variable
