@@ -1,3 +1,8 @@
+2001-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.d>
+
+	* include/confdefs.h: define CONFIGURE_NEWLIB_EXTENSION 0 if not
+	using NEWLIB, cleanup related comment.
+
 2001-01-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/confdefs.h: include cpuopts.h, replace stubdr w/ devnull.

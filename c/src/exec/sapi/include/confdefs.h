@@ -57,13 +57,14 @@ extern itron_api_configuration_table    Configuration_ITRON_API;
 
 /*
  *  RTEMS C Library and Newlib support
- *
- *  NOTE:  This ends up defining these even when newlib is not used.
  */
 
 #ifdef RTEMS_NEWLIB
 #define CONFIGURE_NEWLIB_EXTENSION 1
+#else
+#define CONFIGURE_NEWLIB_EXTENSION 0
 #endif
+
 #define CONFIGURE_MALLOC_REGION 1
 
 /*
