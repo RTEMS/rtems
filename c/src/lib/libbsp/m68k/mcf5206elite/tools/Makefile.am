@@ -4,15 +4,17 @@
 
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-noinst_SCRIPTS = runtest
+transform =
+bsptools_bindir = ${exec_prefix}/@RTEMS_BSP@/tests
+bsptools_bin_SCRIPTS = runtest
 
-TMPINSTALL_FILES = $(PROJECT_ROOT)/mcf5206elite/tests \
-    $(PROJECT_ROOT)/mcf5206elite/tests/runtest
+TMPINSTALL_FILES = $(PROJECT_ROOT)/@RTEMS_BSP@/tests \
+    $(PROJECT_ROOT)/@RTEMS_BSP@/tests/runtest
 
-$(PROJECT_ROOT)/mcf5206elite/tests:
+$(PROJECT_ROOT)/@RTEMS_BSP@/tests:
 	$(mkinstalldirs) $@
 
-$(PROJECT_ROOT)/mcf5206elite/tests/runtest: runtest
+$(PROJECT_ROOT)/@RTEMS_BSP@/tests/runtest: runtest
 	$(INSTALL_SCRIPT) $< $@
 
 all-local: $(TMPINSTALL_FILES)

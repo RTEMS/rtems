@@ -1,3 +1,8 @@
+2002-07-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add transform and bsptools_bindir hacks.
+	* configure.ac: Add RTEMS_ENV_RTEMSBSP.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:
