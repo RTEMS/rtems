@@ -4,10 +4,6 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-#if HAS_NETWORKING
-#NETWORKING_DRIVER = network
-#endif
-
 BSP_PIECES = startup console clock timer gnatsupp $(NETWORK)
 # pieces to pick up out of libcpu/sparc
 CPU_PIECES = cache reg_win syscall
