@@ -20,10 +20,12 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
 
+PREINSTALL_DIRS =
+
 $(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
 $(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
@@ -46,6 +48,7 @@ $(PROJECT_INCLUDE)/bsp/8xx_immap.h: include/8xx_immap.h $(PROJECT_INCLUDE)/bsp/$
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/8xx_immap.h
 
 CLEANFILES = $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am

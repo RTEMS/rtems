@@ -8,15 +8,17 @@ NETWORKING = network
 endif
 
 BSP_PIECES = clock irq ide startup console vectors $(NETWORKING)
-# pieces to pick up out of libcpu/ppc
-# CPU_PIECES = mpc8xx/clock mpc8xx/console-generic mpc8xx/cpm \
-#              mpc8xx/mmu mpc8xx/timer mpc8xx/vectors
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
     $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT)) \
-    ../@exceptions@/$(ARCH)/rtems-cpu.rel $(wildcard \
-    ../../../../libcpu/$(RTEMS_CPU)/mpc8xx/*/$(ARCH)/*.$(OBJEXT))
+    ../@exceptions@/$(ARCH)/rtems-cpu.rel \
+    ../../../../libcpu/powerpc/mpc8xx/clock$(LIB_VARIANT).rel \
+    ../../../../libcpu/powerpc/mpc8xx/console-generic$(LIB_VARIANT).rel \
+    ../../../../libcpu/powerpc/mpc8xx/cpm$(LIB_VARIANT).rel \
+    ../../../../libcpu/powerpc/mpc8xx/mmu$(LIB_VARIANT).rel \
+    ../../../../libcpu/powerpc/mpc8xx/timer$(LIB_VARIANT).rel \
+    ../../../../libcpu/powerpc/mpc8xx/exceptions$(LIB_VARIANT).rel
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
