@@ -13,6 +13,13 @@
 // MODIFICATION/HISTORY:
 //
 // $Log$
+// Revision 1.2  2000/08/30 17:12:55  joel
+// 2000-08-30	Joel Sherrill <joel@OARcorp.com>
+//
+// 	* Many files: Moved posix/include/rtems/posix/seterr.h to
+// 	score/include/rtems/seterr.h so it would be available within
+// 	all APIs.
+//
 // Revision 1.1  2000/08/30 08:21:24  joel
 // 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
 //
@@ -38,7 +45,6 @@
 #include <sys/ioctl.h>
 #include <errno.h>
 #include <rtems.h>
-#include <bsp.h>
 
 #include <rtems/mw_uid.h>
 #include <rtems/seterr.h>

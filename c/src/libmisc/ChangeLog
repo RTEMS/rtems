@@ -1,3 +1,7 @@
+2000-11-30	Joel Sherrill <joel@OARcorp.com>
+
+	* mw-fb/mw_uid.c: Removed unnecessary dependency on <bsp.h>.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
