@@ -268,6 +268,17 @@ fi
 RTEMS_ROOT=`cd $srcdir/c; pwd`
 PROJECT_ROOT=`pwd;`
 
+# If RTEMS macros are enabled, then use them.  Otherwise, use inlines.
+if test "$RTEMS_USE_MACROS" = "yes"; then
+  inline_dir=macros
+  if test "$RTEMS_HAS_POSIX_API" = "yes"; then
+    # The problem is that there is currently no code in posix/macros :)
+    AC_MSG_ERROR(Macros are not implemented for the POSIX API)
+  fi
+else
+  inline_dir=inline
+fi
+
 # If the KA9Q TCP/IP stack is enabled, then find all KA9Q Makefiles
 if test "$RTEMS_HAS_KA9Q" = "yes"; then
   makefiles="$makefiles c/src/lib/libka9q/Makefile"
@@ -356,7 +367,7 @@ c/src/exec/Makefile
 c/src/exec/score/Makefile
 c/src/exec/score/cpu/Makefile
 c/src/exec/score/headers/Makefile
-c/src/exec/score/inline/Makefile
+c/src/exec/score/${inline_dir}/Makefile
 c/src/exec/score/src/Makefile
 c/src/exec/score/tools/Makefile
 c/src/exec/score/tools/generic/Makefile

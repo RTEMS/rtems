@@ -1531,6 +1531,17 @@ fi
 RTEMS_ROOT=`cd $srcdir/c; pwd`
 PROJECT_ROOT=`pwd;`
 
+# If RTEMS macros are enabled, then use them.  Otherwise, use inlines.
+if test "$RTEMS_USE_MACROS" = "yes"; then
+  inline_dir=macros
+  if test "$RTEMS_HAS_POSIX_API" = "yes"; then
+    # The problem is that there is currently no code in posix/macros :)
+    { echo "configure: error: Macros are not implemented for the POSIX API" 1>&2; exit 1; }
+  fi
+else
+  inline_dir=inline
+fi
+
 # If the KA9Q TCP/IP stack is enabled, then find all KA9Q Makefiles
 if test "$RTEMS_HAS_KA9Q" = "yes"; then
   makefiles="$makefiles c/src/lib/libka9q/Makefile"
@@ -1543,7 +1554,7 @@ fi
 
 # If the tests are enabled, then find all the test suite Makefiles
 echo $ac_n "checking Are the test suites enabled? ""... $ac_c" 1>&6
-echo "configure:1547: checking Are the test suites enabled? " >&5
+echo "configure:1558: checking Are the test suites enabled? " >&5
 tests_enabled=yes
 # Check whether --enable-tests or --disable-tests was given.
 if test "${enable_tests+set}" = set; then
@@ -1563,7 +1574,7 @@ fi
 if test "$tests_enabled" = "yes"; then
    
 echo $ac_n "checking for Makefile.in in c/src/tests/tools/$target_cpu""... $ac_c" 1>&6
-echo "configure:1567: checking for Makefile.in in c/src/tests/tools/$target_cpu" >&5
+echo "configure:1578: checking for Makefile.in in c/src/tests/tools/$target_cpu" >&5
 if test -d $srcdir/c/src/tests/tools/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1578,7 +1589,7 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/libtests""... $ac_c" 1>&6
-echo "configure:1582: checking for Makefile.in in c/src/tests/libtests" >&5
+echo "configure:1593: checking for Makefile.in in c/src/tests/libtests" >&5
 if test -d $srcdir/c/src/tests/libtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1593,7 +1604,7 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/sptests""... $ac_c" 1>&6
-echo "configure:1597: checking for Makefile.in in c/src/tests/sptests" >&5
+echo "configure:1608: checking for Makefile.in in c/src/tests/sptests" >&5
 if test -d $srcdir/c/src/tests/sptests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1608,7 +1619,7 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/tmtests""... $ac_c" 1>&6
-echo "configure:1612: checking for Makefile.in in c/src/tests/tmtests" >&5
+echo "configure:1623: checking for Makefile.in in c/src/tests/tmtests" >&5
 if test -d $srcdir/c/src/tests/tmtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1623,7 +1634,7 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/mptests""... $ac_c" 1>&6
-echo "configure:1627: checking for Makefile.in in c/src/tests/mptests" >&5
+echo "configure:1638: checking for Makefile.in in c/src/tests/mptests" >&5
 if test -d $srcdir/c/src/tests/mptests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1639,7 +1650,7 @@ fi
    if test "$RTEMS_HAS_POSIX" = "yes"; then
      
 echo $ac_n "checking for Makefile.in in c/src/tests/psxtests""... $ac_c" 1>&6
-echo "configure:1643: checking for Makefile.in in c/src/tests/psxtests" >&5
+echo "configure:1654: checking for Makefile.in in c/src/tests/psxtests" >&5
 if test -d $srcdir/c/src/tests/psxtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1657,7 +1668,7 @@ fi
 
 # If the HWAPI is enabled, the find the HWAPI Makefiles
 echo $ac_n "checking Is the HWAPI enabled? ""... $ac_c" 1>&6
-echo "configure:1661: checking Is the HWAPI enabled? " >&5
+echo "configure:1672: checking Is the HWAPI enabled? " >&5
 # Check whether --enable-hwapi or --disable-hwapi was given.
 if test "${enable_hwapi+set}" = set; then
   enableval="$enable_hwapi"
@@ -1668,7 +1679,7 @@ if test "${enable_hwapi+set}" = set; then
             makefiles="$makefiles c/src/lib/libhwapi/Makefile"
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/analog""... $ac_c" 1>&6
-echo "configure:1672: checking for Makefile.in in c/src/lib/libhwapi/analog" >&5
+echo "configure:1683: checking for Makefile.in in c/src/lib/libhwapi/analog" >&5
 if test -d $srcdir/c/src/lib/libhwapi/analog; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1683,7 +1694,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/discrete""... $ac_c" 1>&6
-echo "configure:1687: checking for Makefile.in in c/src/lib/libhwapi/discrete" >&5
+echo "configure:1698: checking for Makefile.in in c/src/lib/libhwapi/discrete" >&5
 if test -d $srcdir/c/src/lib/libhwapi/discrete; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1698,7 +1709,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/drivers""... $ac_c" 1>&6
-echo "configure:1702: checking for Makefile.in in c/src/lib/libhwapi/drivers" >&5
+echo "configure:1713: checking for Makefile.in in c/src/lib/libhwapi/drivers" >&5
 if test -d $srcdir/c/src/lib/libhwapi/drivers; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1713,7 +1724,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/eeprom""... $ac_c" 1>&6
-echo "configure:1717: checking for Makefile.in in c/src/lib/libhwapi/eeprom" >&5
+echo "configure:1728: checking for Makefile.in in c/src/lib/libhwapi/eeprom" >&5
 if test -d $srcdir/c/src/lib/libhwapi/eeprom; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1728,7 +1739,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/serial""... $ac_c" 1>&6
-echo "configure:1732: checking for Makefile.in in c/src/lib/libhwapi/serial" >&5
+echo "configure:1743: checking for Makefile.in in c/src/lib/libhwapi/serial" >&5
 if test -d $srcdir/c/src/lib/libhwapi/serial; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1743,7 +1754,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/support""... $ac_c" 1>&6
-echo "configure:1747: checking for Makefile.in in c/src/lib/libhwapi/support" >&5
+echo "configure:1758: checking for Makefile.in in c/src/lib/libhwapi/support" >&5
 if test -d $srcdir/c/src/lib/libhwapi/support; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1758,7 +1769,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/wrapup""... $ac_c" 1>&6
-echo "configure:1762: checking for Makefile.in in c/src/lib/libhwapi/wrapup" >&5
+echo "configure:1773: checking for Makefile.in in c/src/lib/libhwapi/wrapup" >&5
 if test -d $srcdir/c/src/lib/libhwapi/wrapup; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1801,7 +1812,7 @@ fi
 # pick up all the Makefiles in required parts of the tree
 
 echo $ac_n "checking for Makefile.in in c/build-tools""... $ac_c" 1>&6
-echo "configure:1805: checking for Makefile.in in c/build-tools" >&5
+echo "configure:1816: checking for Makefile.in in c/build-tools" >&5
 if test -d $srcdir/c/build-tools; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1816,7 +1827,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/make""... $ac_c" 1>&6
-echo "configure:1820: checking for Makefile.in in c/make" >&5
+echo "configure:1831: checking for Makefile.in in c/make" >&5
 if test -d $srcdir/c/make; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1831,7 +1842,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/lib/libmisc""... $ac_c" 1>&6
-echo "configure:1835: checking for Makefile.in in c/src/lib/libmisc" >&5
+echo "configure:1846: checking for Makefile.in in c/src/lib/libmisc" >&5
 if test -d $srcdir/c/src/lib/libmisc; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1846,7 +1857,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/tests/samples""... $ac_c" 1>&6
-echo "configure:1850: checking for Makefile.in in c/src/tests/samples" >&5
+echo "configure:1861: checking for Makefile.in in c/src/tests/samples" >&5
 if test -d $srcdir/c/src/tests/samples; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -1980,7 +1991,7 @@ c/src/exec/Makefile
 c/src/exec/score/Makefile
 c/src/exec/score/cpu/Makefile
 c/src/exec/score/headers/Makefile
-c/src/exec/score/inline/Makefile
+c/src/exec/score/${inline_dir}/Makefile
 c/src/exec/score/src/Makefile
 c/src/exec/score/tools/Makefile
 c/src/exec/score/tools/generic/Makefile
@@ -2126,7 +2137,7 @@ c/src/exec/Makefile
 c/src/exec/score/Makefile
 c/src/exec/score/cpu/Makefile
 c/src/exec/score/headers/Makefile
-c/src/exec/score/inline/Makefile
+c/src/exec/score/${inline_dir}/Makefile
 c/src/exec/score/src/Makefile
 c/src/exec/score/tools/Makefile
 c/src/exec/score/tools/generic/Makefile
