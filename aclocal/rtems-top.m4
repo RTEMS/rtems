@@ -8,8 +8,8 @@ dnl
 AC_DEFUN(RTEMS_TOP,
 [dnl
 AC_REQUIRE([RTEMS_VERSIONING])
+AC_CONFIG_AUX_DIR([$1])
 AC_CHECK_PROGS(MAKE, gmake make)
-AC_BEFORE([$0], [AC_CONFIG_AUX_DIR])dnl
 AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
 
 AC_PREFIX_DEFAULT([/opt/rtems])
@@ -35,13 +35,7 @@ PROJECT_TOPdir=${dots}${RTEMS_TOPdir}/'$(top_builddir)'
 fi
 AC_SUBST(PROJECT_TOPdir)
 
-if test "$with_target_subdir" = "." ; then
-# Native
 PROJECT_ROOT="${RTEMS_TOPdir}/\$(top_builddir)"
-else
-# Cross
-PROJECT_ROOT="${RTEMS_TOPdir}/\$(top_builddir)"
-fi
 AC_SUBST(PROJECT_ROOT)
 
 AC_MSG_CHECKING([for RTEMS Version])
