@@ -1,3 +1,7 @@
+2003-09-03	Aaron J. Grier <aaron@frye.com>
+
+	* tools.t: Added how to generate and apply a patch.
+
 2003-08-30	Ralf Corsepius <corsepius@faw.uni-ulm.de>
 
 	* FAQ.texi: include common/rtems.texi.

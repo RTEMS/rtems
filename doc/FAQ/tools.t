@@ -49,3 +49,23 @@ in the two source files.  The GNU open-source packages usually have
 UNIX style CR/LF.  If you edit on a Windows platform, the line 
 terminators may have been transformed by the editor into Windows
 style.
+
+@section How do I apply a patch?
+
+Patches generated with the @code{diff} program are fed into the
+@code{patch} program as follows:
+
+@example
+patch -p1 <PATCHFILE
+@end example
+
+where the options are:
+
+@itemize @bullet
+
+@item -pNUM tells @code{patch} to strip off NUM slashes from the
+pathname.
+
+@end itemize
+
+If @code{patch} prompts for a file to patch, you may need to adjust NUM.
