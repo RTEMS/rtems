@@ -11,7 +11,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  $Id$
+ *  attr.h,v 1.2 1995/05/31 16:46:08 joel Exp
  */
 
 #ifndef __RTEMS_ATTRIBUTES_h
@@ -37,9 +37,6 @@ typedef unsigned32 rtems_attribute;
 
 #define RTEMS_FIFO                0x00000000 /* process RTEMS_FIFO */
 #define RTEMS_PRIORITY            0x00000004 /* process by priority */
-
-#define RTEMS_NO_LIMIT            0x00000000 /* unlimited Q entries */
-#define RTEMS_LIMIT               0x00000008 /* limit Q entries */
 
 #define RTEMS_COUNTING_SEMAPHORE  0x00000000
 #define RTEMS_BINARY_SEMAPHORE    0x00000010
@@ -139,6 +136,7 @@ STATIC INLINE boolean _Attributes_Is_priority(
   rtems_attribute attribute_set
 );
 
+#if 0
 /*
  *  _Attributes_Is_limit
  *
@@ -151,6 +149,7 @@ STATIC INLINE boolean _Attributes_Is_priority(
 STATIC INLINE boolean _Attributes_Is_limit(
   rtems_attribute attribute_set
 );
+#endif
 
 /*
  *  _Attributes_Is_binary_semaphore
