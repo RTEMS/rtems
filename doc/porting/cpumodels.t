@@ -35,7 +35,7 @@ the burden on the embedded systems programmer by providing a consistent,
 high-performance environment regardless of the target processor.  RTEMS
 has been ported to a variety of microprocessor families including:
 
-@itemize bullet
+@itemize @bullet
 
 @item Motorola ColdFire
 
