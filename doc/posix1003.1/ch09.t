@@ -7,8 +7,26 @@
 @c
 
 @chapter System Databases
+
 @section System Databases Section
+
 @section Database Access
-@section Group Database Access
-@section User Database Access
+
+@subsection Group Database Access
+
+@example
+getgrgid()
+getgrgid_r()
+getgrname()
+getgrnam_r()
+@end example
+
+@subsection User Database Access
+
+@example
+getpwuid()
+getpwuid_r()
+getpwnam()
+getpwnam_r()
+@end example
 

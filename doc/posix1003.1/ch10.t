@@ -7,8 +7,12 @@
 @c
 
 @chapter Data Interchange Format
+
 @section Archive/Interchange File Format
+
 @subsection Extended tar Format
+
 @subsection Extended cpio Format
+
 @subsection Multiple Volumes
 
