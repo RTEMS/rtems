@@ -60,7 +60,6 @@ void bsp_pretasking_hook(void)
     extern int HeapSize;
     void         *heapStart = &HeapBase;
     unsigned long heapSize = (unsigned long)&HeapSize;
-    unsigned long ramSpace;
 
     bsp_libc_init(heapStart, (unsigned32) heapSize, 0);
 
@@ -78,8 +77,10 @@ void bsp_pretasking_hook(void)
 
 void bsp_start( void )
 {
-  extern int _end;
   extern int WorkspaceBase;
+  extern void _sys_exit(int);
+  extern void mips_install_isr_entries(void);
+
   /* Configure Number of Register Caches */
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */

@@ -11,5 +11,6 @@
 
 void bsp_cleanup( void )
 {
+  extern void _sys_exit(int);
   _sys_exit(0);
 }
