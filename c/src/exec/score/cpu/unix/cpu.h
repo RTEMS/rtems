@@ -42,22 +42,6 @@ extern "C" {
 #define MALLOC_0_RETURNS_NULL
 #endif
 
-#if 0
-
-/*
- *  In order to get the types and prototypes used in this file under
- *  Solaris 2.3, it is necessary to pull the following magic.
- */ 
-
-#if defined(solaris2)
-#warning "Ignore the undefining __STDC__ warning"
-#undef __STDC__
-#define __STDC__ 0
-#undef  _POSIX_C_SOURCE
-#endif
-
-#endif
-
 #include <unistd.h>
 #include <setjmp.h>
 #include <signal.h>
