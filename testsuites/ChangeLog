@@ -1,5 +1,6 @@
 2003-08-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/check-tests.m4: New (Split out from enable-tests.m4).
 	* aclocal/enable-tests.m4: Change to support
 	--enable-tests=no|yes|samples, default is samples.
 	* configure.ac: Reflect changes above.
