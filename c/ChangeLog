@@ -1,5 +1,9 @@
 2001-05-25	Joel Sherrill <joel@OARcorp.com>
 
+ 	* TESTED: Corrected the name of the MRM332 BSP.
+
+2001-05-25	Joel Sherrill <joel@OARcorp.com>
+
  	* TESTED: Updated the list of BSPs.
  	* TOOLS_TARGETS: Updated the list of tools and object formats.
 
