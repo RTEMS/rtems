@@ -32,7 +32,7 @@ rtems_cpu_table Cpu_table;
 char            *rtems_progname = "RTEMS";
 
 extern void rtems_irq_mngt_init(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 void bsp_postdriver_hook(void);
 
 /**************************************************************************/
@@ -50,8 +50,8 @@ void bsp_postdriver_hook(void);
 /**************************************************************************/
 void bsp_pretasking_hook(void)
 {
-    unsigned32 heap_start;
-    unsigned32 heap_size;
+    uint32_t heap_start;
+    uint32_t heap_size;
 
     /* 
      * Set up the heap. 
@@ -105,10 +105,10 @@ void bsp_start_default( void )
     /* Place RTEMS workspace at beginning of free memory. */
     BSP_Configuration.work_space_start = (void *)&_bss_free_start;
     
-    free_mem_start = ((unsigned32)&_bss_free_start + 
+    free_mem_start = ((uint32_t)&_bss_free_start + 
                       BSP_Configuration.work_space_size);
     
-    free_mem_end = ((unsigned32)&_sdram_base + (unsigned32)&_sdram_size);
+    free_mem_end = ((uint32_t)&_sdram_base + (uint32_t)&_sdram_size);
     
 
     /*
