@@ -1,4 +1,6 @@
 @c
+@c  Timing information for PSIM
+@c
 @c  COPYRIGHT (c) 1988-1998.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
@@ -43,8 +45,8 @@
 @end ifinfo
 @section Introduction
 
-The timing data for RTEMS on the RTEMS_BSP implementation
-of the PowerPC architecture is provided along with the target
+The timing data for RTEMS on the RTEMS_BSP target board
+is provided along with the target
 dependent aspects concerning the gathering of the timing data.
 The hardware platform used to gather the times is described to
 give the reader a better understanding of each directive time
@@ -66,7 +68,7 @@ The PowerPC decrementer register was was used to gather
 all timing information.  In real hardware implementations
 of the PowerPC architecture, this register would typically
 count something like CPU cycles or be a function of the clock
-speed.  However, wth PSIM each count of the decrementer register 
+speed.  However, with PSIM each count of the decrementer register 
 represents an instruction.  Thus all measurements in this 
 chapter are reported as the actual number of instructions
 executed.  All sources of hardware interrupts were disabled,
@@ -94,11 +96,12 @@ RTEMS_MAXIMUM_DISABLE_PERIOD_MHZ Mhz.
 determined for Release RTEMS_RELEASE_FOR_MAXIMUM_DISABLE_PERIOD.]
 
 The maximum period with interrupts disabled within
-RTEMS is hand-timed with some assistance from PSIM.  The maximum
-period with interrupts disabled with RTEMS occurs .... XXX
+RTEMS is hand-timed with some assistance from RTEMS_BSP.  The maximum
+period with interrupts disabled with RTEMS occurs was not measured
+on this target.
 
 The interrupt vector and entry overhead time was
-generated on the PSIM benchmark platform using the PowerPC's
+generated on the RTEMS_BSP benchmark platform using the PowerPC's
 decrementer register.  This register was programmed to generate
 an interrupt after one countdown.
 
@@ -107,8 +110,8 @@ an interrupt after one countdown.
 @end ifinfo
 @section Context Switch
 
-The RTEMS processor context switch time is XXX
-microseconds on the PSIM benchmark platform when no floating
+The RTEMS processor context switch time is RTEMS_NO_FP_CONTEXTS
+instructions on the RTEMS_BSP benchmark platform when no floating
 point context is saved or restored.  Additional execution time
 is required when a TASK_SWITCH user extension is configured.
 The use of the TASK_SWITCH extension is application dependent.
@@ -128,7 +131,7 @@ is dispatched, RTEMS does not need to save the current state of
 the numeric coprocessor.
 
 The following table summarizes the context switch
-times for the PSIM benchmark platform:
+times for the RTEMS_BSP benchmark platform:
 
 @include timetbl.texi
 

@@ -1,4 +1,6 @@
 @c
+@c  Timing information for the DMV177
+@c
 @c  COPYRIGHT (c) 1988-1998.
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
@@ -12,39 +14,39 @@
 @end tex
 
 @ifinfo
-@node DMV177 Timing Data, DMV177 Timing Data Introduction, PSIM Timing Data Rate Monotonic Manager, Top
+@node RTEMS_BSP Timing Data, RTEMS_BSP Timing Data Introduction, PSIM Timing Data Rate Monotonic Manager, Top
 @end ifinfo
-@chapter DMV177 Timing Data
+@chapter RTEMS_BSP Timing Data
 @ifinfo
 @menu
-* DMV177 Timing Data Introduction::
-* DMV177 Timing Data Hardware Platform::
-* DMV177 Timing Data Interrupt Latency::
-* DMV177 Timing Data Context Switch::
-* DMV177 Timing Data Directive Times::
-* DMV177 Timing Data Task Manager::
-* DMV177 Timing Data Interrupt Manager::
-* DMV177 Timing Data Clock Manager::
-* DMV177 Timing Data Timer Manager::
-* DMV177 Timing Data Semaphore Manager::
-* DMV177 Timing Data Message Manager::
-* DMV177 Timing Data Event Manager::
-* DMV177 Timing Data Signal Manager::
-* DMV177 Timing Data Partition Manager::
-* DMV177 Timing Data Region Manager::
-* DMV177 Timing Data Dual-Ported Memory Manager::
-* DMV177 Timing Data I/O Manager::
-* DMV177 Timing Data Rate Monotonic Manager::
+* RTEMS_BSP Timing Data Introduction::
+* RTEMS_BSP Timing Data Hardware Platform::
+* RTEMS_BSP Timing Data Interrupt Latency::
+* RTEMS_BSP Timing Data Context Switch::
+* RTEMS_BSP Timing Data Directive Times::
+* RTEMS_BSP Timing Data Task Manager::
+* RTEMS_BSP Timing Data Interrupt Manager::
+* RTEMS_BSP Timing Data Clock Manager::
+* RTEMS_BSP Timing Data Timer Manager::
+* RTEMS_BSP Timing Data Semaphore Manager::
+* RTEMS_BSP Timing Data Message Manager::
+* RTEMS_BSP Timing Data Event Manager::
+* RTEMS_BSP Timing Data Signal Manager::
+* RTEMS_BSP Timing Data Partition Manager::
+* RTEMS_BSP Timing Data Region Manager::
+* RTEMS_BSP Timing Data Dual-Ported Memory Manager::
+* RTEMS_BSP Timing Data I/O Manager::
+* RTEMS_BSP Timing Data Rate Monotonic Manager::
 @end menu
 @end ifinfo
 
 @ifinfo
-@node DMV177 Timing Data Introduction, DMV177 Timing Data Hardware Platform, DMV177 Timing Data, DMV177 Timing Data
+@node RTEMS_BSP Timing Data Introduction, RTEMS_BSP Timing Data Hardware Platform, RTEMS_BSP Timing Data, RTEMS_BSP Timing Data
 @end ifinfo
 @section Introduction
 
-The timing data for RTEMS on the DMV177 implementation
-of the PowerPC architecture is provided along with the target
+The timing data for RTEMS on the DY-4 RTEMS_BSP board
+is provided along with the target
 dependent aspects concerning the gathering of the timing data.
 The hardware platform used to gather the times is described to
 give the reader a better understanding of each directive time
@@ -53,28 +55,26 @@ latency and the context switch times as they pertain to the
 PowerPC version of RTEMS.
 
 @ifinfo
-@node DMV177 Timing Data Hardware Platform, DMV177 Timing Data Interrupt Latency, DMV177 Timing Data Introduction, DMV177 Timing Data
+@node RTEMS_BSP Timing Data Hardware Platform, RTEMS_BSP Timing Data Interrupt Latency, RTEMS_BSP Timing Data Introduction, RTEMS_BSP Timing Data
 @end ifinfo
 @section Hardware Platform
 
-All times reported in this chapter were measured using the PowerPC
-Instruction Simulator (PSIM). PSIM simulates a variety of PowerPC
-6xx models with the DMV177 being used as the basis for the measurements
-reported in this chapter.
+All times reported in this chapter were measured using a RTEMS_BSP board.
 
 The PowerPC decrementer register was was used to gather
-all timing information.  In real hardware implementations
-of the PowerPC architecture, this register would typically
-count something like CPU cycles or be a function of the clock
-speed.  However, wth PSIM each count of the decrementer register 
-represents an instruction.  Thus all measurements in this 
-chapter are reported as the actual number of instructions
-executed.  All sources of hardware interrupts were disabled,
+all timing information.  In the PowerPC architecture,
+this register typically counts
+something like CPU cycles or is a function of the clock
+speed.  On the PPC603e decrements based on bus cycles.
+This is a very accurate number and given the high clock
+speed of the PowerPC family, Thus all measurements in this 
+chapter are reported as the actual number of decrementer
+clicks reported.  All sources of hardware interrupts were disabled,
 although traps were enabled and the interrupt level of the
 PowerPC allows all interrupts.
 
 @ifinfo
-@node DMV177 Timing Data Interrupt Latency, DMV177 Timing Data Context Switch, DMV177 Timing Data Hardware Platform, DMV177 Timing Data
+@node RTEMS_BSP Timing Data Interrupt Latency, RTEMS_BSP Timing Data Context Switch, RTEMS_BSP Timing Data Hardware Platform, RTEMS_BSP Timing Data
 @end ifinfo
 @section Interrupt Latency
 
@@ -94,8 +94,9 @@ RTEMS_MAXIMUM_DISABLE_PERIOD_MHZ Mhz.
 determined for Release RTEMS_RELEASE_FOR_MAXIMUM_DISABLE_PERIOD.]
 
 The maximum period with interrupts disabled within
-RTEMS is hand-timed with some assistance from PSIM.  The maximum
-period with interrupts disabled with RTEMS occurs .... XXX
+RTEMS is hand-timed with some assistance from the PowerPC simulator.
+The maximum period with interrupts disabled with RTEMS has not
+been calculated on this target.
 
 The interrupt vector and entry overhead time was
 generated on the PSIM benchmark platform using the PowerPC's
@@ -103,12 +104,12 @@ decrementer register.  This register was programmed to generate
 an interrupt after one countdown.
 
 @ifinfo
-@node DMV177 Timing Data Context Switch, DMV177 Timing Data Directive Times, DMV177 Timing Data Interrupt Latency, DMV177 Timing Data
+@node RTEMS_BSP Timing Data Context Switch, RTEMS_BSP Timing Data Directive Times, RTEMS_BSP Timing Data Interrupt Latency, RTEMS_BSP Timing Data
 @end ifinfo
 @section Context Switch
 
-The RTEMS processor context switch time is XXX
-microseconds on the PSIM benchmark platform when no floating
+The RTEMS processor context switch time is RTEMS_NO_FP_CONTEXTS
+bus cycle on the RTEMS_BSP benchmark platform when no floating
 point context is saved or restored.  Additional execution time
 is required when a TASK_SWITCH user extension is configured.
 The use of the TASK_SWITCH extension is application dependent.
@@ -128,7 +129,7 @@ is dispatched, RTEMS does not need to save the current state of
 the numeric coprocessor.
 
 The following table summarizes the context switch
-times for the PSIM benchmark platform:
+times for the RTEMS_BSP benchmark platform:
 
 @include timetbldmv177.texi
 
