@@ -24,7 +24,7 @@ COMMON_FILES=../../common/cpright.texi ../../common/setup.texi \
 FILES= $(PROJECT).texi preface.texi \
   $(COMMON_FILES) $(GENERATED_FILES)
 GENERATED_FILES=\
-  cpumodel.texi callconv.texi
+  cpumodel.texi callconv.texi memmodel.texi intr.texi
 
 #  bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
 #  intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi wksheets.texi 
@@ -57,11 +57,21 @@ callconv.texi: callconv.t Makefile
 	    -u "Top" \
 	    -n "" ${*}.t
 
-replace: timedata.texi
+memmodel.texi: memmodel.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
 
-intr.texi: intr.t MVME136_TIMES
-	${REPLACE} -p MVME136_TIMES intr.t
-	mv intr.t.fixed intr.texi
+intr.texi: intr.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+intr.t: intr_NOTIMES.t BSP_TIMES
+	${REPLACE} -p BSP_TIMES intr_NOTIMES.t
+	mv intr_NOTIMES.t.fixed intr.t
+
+replace: timedata.texi
 
 timetbl.t: ../../common/timetbl.t
 	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
@@ -94,6 +104,6 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f c_$(PROJECT) c_$(PROJECT)-*
-	rm -f timedata.texi timetbl.texi intr.texi wksheets.texi
+	rm -f timedata.texi timetbl.texi intr.t wksheets.texi
 	rm -f timetbl.t wksheets.t
 	rm -f *.fixed _* $(GENERATED_FILES)
