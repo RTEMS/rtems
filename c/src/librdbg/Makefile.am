@@ -193,7 +193,7 @@ TMPINSTALL_FILES =
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 if HAS_RDBG
 $(PROJECT_INCLUDE)/rdbg/$(dirstamp):

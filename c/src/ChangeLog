@@ -1,3 +1,9 @@
+2004-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libchip/Makefile.am, librdbg/Makefile.am, optman/Makefile.am, 
+	wrapup/Makefile.am: Fix automake problems having been introduced 
+	in previous patch.
+
 2004-02-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libchip/Makefile.am, librdbg/Makefile.am, optman/Makefile.am:

@@ -183,7 +183,7 @@ TMPINSTALL_FILES =
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/no-ext$(LIB_VARIANT).rel: no-ext$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-ext$(LIB_VARIANT).rel
@@ -233,7 +233,6 @@ $(PROJECT_LIB)/no-timer$(LIB_VARIANT).rel: no-timer$(LIB_VARIANT).rel $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-timer$(LIB_VARIANT).rel
 TMPINSTALL_FILES += $(PROJECT_LIB)/no-timer$(LIB_VARIANT).rel
 
-DISTCLEANFILES = $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am
