@@ -50,6 +50,7 @@ extern "C" {
  *  It is used in single processor configurations.
  */
 
+#if defined(SAPI_INIT) 
 const rtems_multiprocessing_table
        _Initialization_Default_multiprocessing_table = {
   1,                      /* local node number */
@@ -58,6 +59,10 @@ const rtems_multiprocessing_table
   0,                      /* maximum number proxies */
   NULL,                   /* pointer to MPCI address table */
 };
+#else
+extern const rtems_multiprocessing_table
+       _Initialization_Default_multiprocessing_table;
+#endif
 
 /*
  *  This is the version string.
@@ -65,9 +70,13 @@ const rtems_multiprocessing_table
 
 #define RTEMS_VERSION "rtems-@RTEMS_VERSION@"
 
+#if defined(SAPI_INIT) 
 const char _RTEMS_version[] =
   "RTEMS RELEASE " RTEMS_VERSION
      "(" CPU_NAME "/" CPU_MODEL_NAME "/@RTEMS_BSP@)";
+#else
+extern const char _RTEMS_version[];
+#endif
 
 #ifdef __cplusplus
 }
