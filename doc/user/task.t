@@ -1657,7 +1657,7 @@ rtems_status_code rtems_task_variable_get(
 
 @ifset is-Ada
 @example
-procedure Task_Variable_Delete (
+procedure Task_Variable_Get (
    Id          : in     RTEMS.ID;
    Ptr         : in     RTEMS.Address;
    Value       :    out RTEMS.Address;
@@ -1680,7 +1680,11 @@ task, which can get its private value by directly accessing the variable.
 
 @subheading NOTES:
 
-NONE
+If you change memory which @code{result} points to, remember to declare that
+memory as volatile, so that the compiler will optimize it correctly.  In this
+case both the pointer @code{result} and data referenced by @code{result}
+should be considered volatile.
+
 @page
 
 @subsection TASK_VARIABLE_DELETE - Remove per task variable
