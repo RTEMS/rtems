@@ -56,10 +56,8 @@ done
 ##
 
 ## Adjust paths
-case $srcdir in
-/*) rtems_bsp_configure="$srcdir/src/configure";;
-*)  rtems_bsp_configure="../$srcdir/src/configure";;
-esac
+_RTEMS_ADJUST_SRCDIR([rtems_bsp_configure],[src])
+rtems_bsp_configure="$rtems_bsp_configure/configure"
 
 ## Remove --cache-file, --srcdir and --enable-rtemsbsp arguments
 ## so they do not pile up

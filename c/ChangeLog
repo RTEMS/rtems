@@ -1,3 +1,7 @@
+2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Apply _RTEMS_ADJUST_SRCDIR.
+
 2000-12-14	Joel Sherrill <joel@OARcorp.com>
 
 	* TESTED: Added comment on 68en302 now that there is a network driver.
