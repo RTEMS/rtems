@@ -30,6 +30,9 @@ MKGCCNEWLIBSPEC_DEPS = $(top_builddir)/mkgccnewlibspec gccnewlib.spec.in \
 MKGCCNEWLIB_C_ONLY_SPEC_DEPS = $(top_builddir)/mkgccnewlibspec \
     gccnewlib_c_only.spec.in $(top_builddir)/setup.cache
 
+h8300-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIB_C_ONLY_SPEC_DEPS)
+	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . h8300-rtems
+
 hppa1.1-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . hppa1.1-rtems
 
@@ -60,7 +63,8 @@ sh-rtemself-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 sparc-rtems-$(GCCNEWLIBVERS).spec: $(MKGCCNEWLIBSPEC_DEPS)
 	$(MKGCCNEWLIBSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems
 
-RPM_SPECS_DATA = hppa1.1-rtems-$(GCCNEWLIBVERS).spec \
+RPM_SPECS_DATA = h8300-rtems-$(GCCNEWLIBVERS).spec \
+    hppa1.1-rtems-$(GCCNEWLIBVERS).spec \
     i386-rtems-$(GCCNEWLIBVERS).spec i960-rtems-$(GCCNEWLIBVERS).spec \
     m68k-rtems-$(GCCNEWLIBVERS).spec m68k-rtemself-$(GCCNEWLIBVERS).spec \
     mips64orion-rtems-$(GCCNEWLIBVERS).spec \

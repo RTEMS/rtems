@@ -15,6 +15,9 @@ CLEANFILES += gdb.spec.in
 MKGDBSPEC_DEPS = $(top_builddir)/mkgdbspec gdb.spec.in \
     $(top_builddir)/setup.cache
 
+h8300-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . h8300-rtems
+
 hppa1.1-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . hppa1.1-rtems
 
@@ -45,7 +48,8 @@ sh-rtemself-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 sparc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems
 
-RPM_SPECS_DATA = hppa1.1-rtems-$(GDBVERS).spec i386-rtems-$(GDBVERS).spec \
+RPM_SPECS_DATA = h8300-rtems-$(GDBVERS).spec i386-rtems-$(GDBVERS).spec \
+    hppa1.1-rtems-$(GDBVERS).spec i386-rtems-$(GDBVERS).spec \
     i960-rtems-$(GDBVERS).spec m68k-rtems-$(GDBVERS).spec \
     m68k-rtemself-$(GDBVERS).spec mips64orion-rtems-$(GDBVERS).spec \
     powerpc-rtems-$(GDBVERS).spec sh-rtems-$(GDBVERS).spec \
