@@ -35,10 +35,105 @@
  * all others being given the name indicated.
  */
 
+mc68681_baud_t 
+  dmv177_mc68681_baud_table[4][RTEMS_TERMIOS_NUMBER_BAUD_RATES] = {
+  { /* ACR[7] = 0, X = 0 */
+    MC68681_BAUD_NOT_VALID,    /* B0 */
+    MC68681_BAUD_NOT_VALID,    /* B50 */
+    0x01,                      /* B75 */
+    MC68681_BAUD_NOT_VALID,    /* B110 */
+    0x03,                      /* B134 */
+    MC68681_BAUD_NOT_VALID,    /* B150 */
+    0x04,                      /* B200 */
+    MC68681_BAUD_NOT_VALID,    /* B300 */
+    MC68681_BAUD_NOT_VALID,    /* B600 */
+    MC68681_BAUD_NOT_VALID,    /* B1200 */
+    MC68681_BAUD_NOT_VALID,    /* B1800 */
+    MC68681_BAUD_NOT_VALID,    /* B2400 */
+    0x0A,                      /* B4800 */
+    MC68681_BAUD_NOT_VALID,    /* B9600 */
+    MC68681_BAUD_NOT_VALID,    /* B19200 */
+    MC68681_BAUD_NOT_VALID,    /* B38400 */
+    MC68681_BAUD_NOT_VALID,    /* B57600 */
+    MC68681_BAUD_NOT_VALID,    /* B115200 */
+    MC68681_BAUD_NOT_VALID,    /* B230400 */
+    MC68681_BAUD_NOT_VALID     /* B460800 */
+  },
+  { /* ACR[7] = 1, X = 0 */
+    MC68681_BAUD_NOT_VALID,    /* B0 */
+    0x00,                      /* B50 */
+    0x01,                      /* B75 */
+    MC68681_BAUD_NOT_VALID,    /* B110 */
+    MC68681_BAUD_NOT_VALID,    /* B134 */
+    MC68681_BAUD_NOT_VALID,    /* B150 */
+    0x04,                      /* B200 */
+    MC68681_BAUD_NOT_VALID,    /* B300 */
+    MC68681_BAUD_NOT_VALID,    /* B600 */
+    0x0A,                      /* B1200 */
+    MC68681_BAUD_NOT_VALID,    /* B1800 */
+    MC68681_BAUD_NOT_VALID,    /* B2400 */
+    MC68681_BAUD_NOT_VALID,    /* B4800 */
+    MC68681_BAUD_NOT_VALID,    /* B9600 */
+    MC68681_BAUD_NOT_VALID,    /* B19200 */
+    MC68681_BAUD_NOT_VALID,    /* B38400 */
+    MC68681_BAUD_NOT_VALID,    /* B57600 */
+    MC68681_BAUD_NOT_VALID,    /* B115200 */
+    MC68681_BAUD_NOT_VALID,    /* B230400 */
+    MC68681_BAUD_NOT_VALID     /* B460800 */
+  },
+  { /* ACR[7] = 0, X = 1 */
+    MC68681_BAUD_NOT_VALID,    /* B0 */
+    0x00,                      /* B50 */
+    0x01,                      /* B75 */
+    MC68681_BAUD_NOT_VALID,    /* B110 */
+    MC68681_BAUD_NOT_VALID,    /* B134 */
+    MC68681_BAUD_NOT_VALID,    /* B150 */
+    MC68681_BAUD_NOT_VALID,    /* B200 */
+    MC68681_BAUD_NOT_VALID,    /* B300 */
+    MC68681_BAUD_NOT_VALID,    /* B600 */
+    MC68681_BAUD_NOT_VALID,    /* B1200 */
+    MC68681_BAUD_NOT_VALID,    /* B1800 */
+    0x04,                      /* B2400 */
+    MC68681_BAUD_NOT_VALID,    /* B4800 */
+    0x05,                      /* B9600 */
+    0x06,                      /* B19200 */
+    0x07,                      /* B38400 */
+    MC68681_BAUD_NOT_VALID,    /* B57600 */
+    MC68681_BAUD_NOT_VALID,    /* B115200 */
+    MC68681_BAUD_NOT_VALID,    /* B230400 */
+    MC68681_BAUD_NOT_VALID     /* B460800 */
+  },
+  { /* ACR[7] = 1, X = 1 */
+    MC68681_BAUD_NOT_VALID,    /* B0 */
+    MC68681_BAUD_NOT_VALID,    /* B50 */
+    0x01,                      /* B75 */
+    MC68681_BAUD_NOT_VALID,    /* B110 */
+    0x03,                      /* B134 */
+    MC68681_BAUD_NOT_VALID,    /* B150 */
+    MC68681_BAUD_NOT_VALID,    /* B200 */
+    MC68681_BAUD_NOT_VALID,    /* B300 */
+    MC68681_BAUD_NOT_VALID,    /* B600 */
+    MC68681_BAUD_NOT_VALID,    /* B1200 */
+    MC68681_BAUD_NOT_VALID,    /* B1800 */
+    0x04,                      /* B2400 */
+    0x0A,                      /* B4800 */
+    0x05,                      /* B9600 */
+    0x06,                      /* B19200 */
+    0x07,                      /* B38400 */
+    MC68681_BAUD_NOT_VALID,    /* B57600 */
+    MC68681_BAUD_NOT_VALID,    /* B115200 */
+    MC68681_BAUD_NOT_VALID,    /* B230400 */
+    MC68681_BAUD_NOT_VALID     /* B460800 */
+  },
+};
+
+#define MC68681_PORT_CONFIG  \
+  (MC68681_DATA_BAUD_RATE_SET_1|MC68681_XBRG_ENABLED) 
+
 console_tbl	Console_Port_Tbl[] = {
 	{
 		"/dev/com0",			/* sDeviceName */
-		&mc68681_fns,			/* pDeviceFns */
+		&mc68681_fns_polled,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		NULL,				/* pDeviceFlow */
 		16,				/* ulMargin */
@@ -46,17 +141,17 @@ console_tbl	Console_Port_Tbl[] = {
 		(void *)9600,	/* baud rate */	/* pDeviceParams */
 		MC68681_ADDR,			/* ulCtrlPort1 */
 		MC68681_PORT1_ADDR,		/* ulCtrlPort2 */
-		0,				/* ulDataPort */
+		MC68681_PORT_CONFIG,		/* ulDataPort */
 		Read_mc68681_register,		/* getRegister */
 		Write_mc68681_register,		/* setRegister */
 		NULL, /* unused */		/* getData */
 		NULL, /* unused */		/* setData */
-                0,    /* unused */              /* ulClock */
+                (unsigned32)dmv177_mc68681_baud_table, /* ulClock */
 		DMV170_DUART_IRQ		/* ulIntVector */
 	},
 	{
 		"/dev/com1",			/* sDeviceName */
-		&mc68681_fns,			/* pDeviceFns */
+		&mc68681_fns_polled,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		NULL,				/* pDeviceFlow */
 		16,				/* ulMargin */
@@ -64,17 +159,17 @@ console_tbl	Console_Port_Tbl[] = {
 		(void *)9600,	/* baud rate */	/* pDeviceParams */
 		MC68681_ADDR,			/* ulCtrlPort1 */
 		MC68681_PORT2_ADDR,		/* ulCtrlPort2 */
-		0,				/* ulDataPort */
+		MC68681_PORT_CONFIG,		/* ulDataPort */
 		Read_mc68681_register,		/* getRegister */
 		Write_mc68681_register,		/* setRegister */
 		NULL, /* unused */		/* getData */
 		NULL, /* unused */		/* setData */
-                0,    /* unused */              /* ulClock */
+                (unsigned32)dmv177_mc68681_baud_table, /* ulClock */
 		DMV170_DUART_IRQ		/* ulIntVector */
 	},
 	{
 		"/dev/com3",			/* sDeviceName */
-		&z85c30_fns,			/* pDeviceFns */
+		&z85c30_fns_polled,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		NULL,				/* pDeviceFlow */
 		16,				/* ulMargin */
@@ -92,7 +187,7 @@ console_tbl	Console_Port_Tbl[] = {
 	},
 	{
 		"/dev/com4",			/* sDeviceName */
-		&z85c30_fns,			/* pDeviceFns */
+		&z85c30_fns_polled,		/* pDeviceFns */
 		NULL,				/* deviceProbe */
 		NULL,				/* pDeviceFlow */
 		16,				/* ulMargin */
