@@ -33,7 +33,7 @@ SYSTEM_CALL_PIECES=\
   symlink readlink
 
 DIRECTORY_SCAN_PIECES=\
-  opendir closedir readdir rewinddir scandir seekdir telldir
+  opendir closedir readdir rewinddir scandir seekdir telldir getcwd
 
 MALLOC_PIECES=\
   malloc __brk __sbrk \
