@@ -180,21 +180,6 @@ mailing list is archived at:
 http://www.rtems.com/ml/rtems-users
 @end example
 
-The @code{@value{RTEMSSNAPSHOTS}} mailing list is for those
-interested in taking a more active role in the design, development,
-and maintenance of RTEMS.  Discussions on this list tend to focus
-on problems in the development source, design of new features, problem
-reports, etc..  Subscribe by sending an empty mail
-message to @code{@value{RTEMSSNAPSHOTSSUBSCRIBE}}.
-mailing list is archived at:
-
-@example
-http://www.rtems.com/ml/rtems-snapshots
-@end example
-
-The archives for both mailing lists include discussions back 
-to 1997.
-
 @section Are there any license restrictions?
 
 RTEMS is licensed under a modified version of the GNU General Public License
