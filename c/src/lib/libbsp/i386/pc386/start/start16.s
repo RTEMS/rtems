@@ -33,13 +33,6 @@
 .set HDROFF,        0x24	# offset into bin2boot header of start32 addr
 .set STACKOFF,      0x200-0x10  # offset to load into %esp, from start of image
 
-/*----------------------------------------------------------------------------+
-| A Descriptor table register has the following format:	
-+----------------------------------------------------------------------------*/
-
-.set DTR_LIMIT, 0		# offset of two byte limit
-.set DTR_BASE,  2		# offset of four byte base address
-.set DTR_SIZE,  6		# size of DTR register
 
 /*----------------------------------------------------------------------------+
 | CODE section
@@ -60,13 +53,6 @@ _start16:
 	movw	%ax, %ds	# set the rest of real mode registers
 	movw	%ax, %es	#
 	movw	%ax, %ss	#
-
-.code32
-
-        movl    $STACKOFF, %esp # set stack pointer
-        movl    $STACKOFF, %ebp #
-
-.code16
 
 #if defined(RTEMS_VIDEO_80x50)
 	
@@ -94,7 +80,6 @@ _start16:
 	+---------------------------------------------------------------------*/
 
 	lgdt	gdtptr - start16	# load Global Descriptor Table
-	lidt	idtptr - start16	# load Interrupt Descriptor Table
 	
 	movl	%cr0, %eax
 	orl	$CR0_PE, %eax
@@ -112,8 +97,8 @@ _start16:
 	movl	%ax, %ds
 	movl	%ax, %es
 	movl	%ax, %ss
-	addl	$start16, %esp		# fix up stack pointer
-	addl	$start16, %ebp		# fix up stack pointer
+	movl	$start16 + STACKOFF, %esp	# set up stack pointer
+	addl	$start16 + STACKOFF, %ebp	# set up stack pointer
 
         /*---------------------------------------------------------------------+
         | we have to enable A20 in order to access memory above 1MByte
@@ -174,7 +159,7 @@ no_output:
 * GLOBAL DESCRIPTOR TABLE *
 **************************/
 
-	.align	4
+	.p2align 4
 gdtptr:
 	/* we use the NULL descriptor to store the GDT pointer - a trick quite
 	   nifty due to: Robert Collins (rcollins@x86.org) */
@@ -192,11 +177,3 @@ gdtptr:
 
 	.set	gdtlen, . - gdtptr	# length of GDT
 	
-/*************************************
-* INTERRUPT DESCRIPTOR TABLE POINTER *
-*************************************/
-
-	.align	4
-idtptr:
-	.word	0x07ff	# limit at maximum (allows all 256 interrupts)
-	.word	0, 0	# base at 0
