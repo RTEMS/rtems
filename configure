@@ -1115,7 +1115,7 @@ case "${target}" in
        	makefiles=$i960_mk
 	;;
   m68k-rtems*)
-	rtems_bsp="dmv152 efi332 efi68k gen68302 gen68360 idp \
+	rtems_bsp="dmv152 efi332 efi68k gen68302 gen68360 gen68360_040 idp \
                    mvme136 mvme147 mvme147s mvme162"
        	makefiles=$m68k_mk
 	;;
