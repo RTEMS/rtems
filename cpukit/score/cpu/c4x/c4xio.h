@@ -90,15 +90,15 @@ struct c4x_timer {
 
 #else
 
-static inline unsigned32 c3x_get_iof( void )
+static inline uint32_t   c3x_get_iof( void )
 {
-  register unsigned32 iof_value;
+  register uint32_t   iof_value;
 
   __asm__ volatile ("ldi iof, %0" : "=r" (iof_value));
   return iof_value;
 }
 
-static inline void c3x_set_iof( unsigned32 value )
+static inline void c3x_set_iof( uint32_t   value )
 {
   __asm__ volatile ("ldi  %0,iof" : : "g" (value) : "iof", "cc");
 }

@@ -27,9 +27,9 @@
 
 register unsigned long  *stack_ptr asm("sp");
 
-void __ISR_Handler(unsigned32 vector, void *isr_sp)
+void __ISR_Handler(uint32_t   vector, void *isr_sp)
 {
-  register unsigned32 level;
+  register uint32_t   level;
 
   /* already disabled when we get here */
   /* _CPU_ISR_Disable( level ); */

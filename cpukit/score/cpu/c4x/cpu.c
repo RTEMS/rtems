@@ -72,7 +72,7 @@ void _CPU_Initialize(
  */
  
 void _CPU_ISR_install_raw_handler(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
@@ -97,8 +97,8 @@ void _CPU_ISR_install_raw_handler(
 void _CPU_Context_Initialize(
   Context_Control       *_the_context,
   void                  *_stack_base,
-  unsigned32            _size,
-  unsigned32            _isr,
+  uint32_t              _size,
+  uint32_t              _isr,
   void  (*_entry_point)(void),
   int                   _is_fp
 )
@@ -133,7 +133,7 @@ void _CPU_Context_Initialize(
  */
 
 void _CPU_ISR_install_vector(
-  unsigned32  vector,
+  uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )

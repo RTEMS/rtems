@@ -1,3 +1,8 @@
+2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* c4xio.h, cpu.c, irq.c, rtems/score/cpu.h: Convert to using c99
+	fixed size types.
+
 2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: RTEMS_TOP([../../../..]).
