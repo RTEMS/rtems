@@ -345,6 +345,11 @@ extern ERC32_Register_Map ERC32_MEC;
 
 #define ERC32_Force_interrupt( _source ) \
   do { \
+    unsigned32 _level; \
+    \
+    sparc_disable_interrupts( _level ); \
+    ERC32_MEC.Test_Control = ERC32_MEC.Test_Control | 0x80000; \
+    sparc_enable_interrupts( _level ); \
     ERC32_MEC.Interrupt_Force = (1 << (_source)); \
   } while (0)
  
