@@ -246,6 +246,15 @@ TA1 - rtems_timer_fire_after - RTEMS_INVALID_ID
 TA1 - rtems_timer_fire_when - RTEMS_INVALID_ID
 TA1 - rtems_timer_fire_after - RTEMS_INVALID_NUMBER
 TA1 - rtems_timer_fire_when - 08:30:45   02/05/1987 - RTEMS_INVALID_CLOCK
-TA1 - rtems_clock_get       - 00:00:00   01/01/1992
+TA1 - rtems_clock_get       - 00:00:01   01/01/1992
 TA1 - rtems_timer_fire_when - 08:30:45   02/05/1990 - before RTEMS_INVALID_CLOCK
+TA1 - rtems_timer_server_fire_after - RTEMS_INCORRECT_STATE
+TA1 - rtems_timer_server_fire_when - RTEMS_INCORRECT_STATE
+TA1 - rtems_timer_initiate_server
+TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_ID
+TA1 - rtems_timer_server_fire_when - RTEMS_INVALID_ID
+TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_NUMBER
+TA1 - rtems_timer_server_fire_when - 08:30:45   02/05/1987 - RTEMS_INVALID_CLOCK
+TA1 - rtems_clock_get       - 00:00:01   01/01/1992
+TA1 - rtems_timer_server_fire_when - 08:30:45   02/05/1990 - before RTEMS_INVALID_CLOCK
 *** END OF TEST 9 ***

@@ -150,4 +150,86 @@ void Screen14()
     &time,
     " - before RTEMS_INVALID_CLOCK\n"
   );
+
+/* timer server interface routines */
+
+  status = rtems_timer_server_fire_after( 0, 5, NULL, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INCORRECT_STATE,
+    "rtems_timer_server_fire_after incorrect state"
+  );
+  puts( "TA1 - rtems_timer_server_fire_after - RTEMS_INCORRECT_STATE" );
+
+  status = rtems_timer_server_fire_when( 0, &time, NULL, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INCORRECT_STATE,
+    "rtems_timer_server_fire_when incorrect state"
+  );
+  puts( "TA1 - rtems_timer_server_fire_when - RTEMS_INCORRECT_STATE" );
+
+  status = rtems_timer_initiate_server( 0, 0 );
+  directive_failed( status, "rtems_timer_initiate_server" );
+  puts( "TA1 - rtems_timer_initiate_server" );
+  
+  status = rtems_timer_server_fire_after(
+    0x010100,
+    5 * TICKS_PER_SECOND,
+    Delayed_routine,
+    NULL
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_timer_server_fire_after illegal id"
+  );
+  puts( "TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_ID" );
+
+  build_time( &time, 12, 31, 1994, 9, 0, 0, 0 );
+  status = rtems_timer_server_fire_when( 0x010100, &time, Delayed_routine, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ID,
+    "rtems_timer_server_fire_when with illegal id"
+  );
+  puts( "TA1 - rtems_timer_server_fire_when - RTEMS_INVALID_ID" );
+
+  status = rtems_timer_server_fire_after( Timer_id[ 1 ], 0, Delayed_routine, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NUMBER,
+    "rtems_timer_server_fire_after with 0 ticks"
+  );
+  puts( "TA1 - rtems_timer_server_fire_after - RTEMS_INVALID_NUMBER" );
+
+  build_time( &time, 2, 5, 1987, 8, 30, 45, 0 );
+  status = rtems_timer_server_fire_when( Timer_id[ 1 ], &time, Delayed_routine, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_CLOCK,
+    "rtems_timer_server_fire_when with illegal time"
+  );
+  print_time(
+    "TA1 - rtems_timer_server_fire_when - ",
+    &time,
+    " - RTEMS_INVALID_CLOCK\n"
+  );
+
+  status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &time );
+  directive_failed( status, "rtems_clock_set" );
+  print_time( "TA1 - rtems_clock_get       - ", &time, "\n" );
+
+  build_time( &time, 2, 5, 1990, 8, 30, 45, 0 );
+  status = rtems_timer_server_fire_when( Timer_id[ 1 ], &time, Delayed_routine, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_CLOCK,
+    "rtems_timer_server_fire_when before current time"
+  );
+  print_time(
+    "TA1 - rtems_timer_server_fire_when - ",
+    &time,
+    " - before RTEMS_INVALID_CLOCK\n"
+  );
 }

@@ -1,3 +1,16 @@
+2001-01-16	Joel Sherrill <joel@OARcorp.com>
+
+	* Added tests for task-based timers.  This included the new tests
+	sp30 and sp31.
+	* Makefile.am, configure.ac: Modified to reflect new tests and files.
+	* sp09/screen14.c, sp09/sp09.scn: Modified to add error checks
+	for task-based timer services.
+	* sp30/.cvsignore, sp30/Makefile.am, sp30/init.c, sp30/resume.c,
+	sp30/sp30.doc, sp30/sp30.scn, sp30/system.h, sp30/task1.c,
+	sp31/.cvsignore, sp31/Makefile.am, sp31/delay.c, sp31/init.c,
+	sp31/prtime.c, sp31/sp31.doc, sp31/sp31.scn, sp31/system.h,
+	sp31/task1.c: New files.
+
 2001-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* sp26/system.h: Properly account for stack memory used by
