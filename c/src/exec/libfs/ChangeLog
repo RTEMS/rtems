@@ -1,3 +1,11 @@
+2001-03-23	Joel Sherrill <joel@OARcorp.com>
+
+	* src/imfs/memfile.c: Reapply fix from bug report from
+	Jose Sturniolo <jsturnio@nec.com.ar> where NULL pointer
+	was dereferenced when freeing a triply indirect file.  
+	The fix was applied to the 4.5 release branch and not
+	the development branch.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/imfs/Makefile.am: Apply include_*HEADERS instead of H_FILES.
