@@ -112,7 +112,7 @@ void _Thread_queue_Enqueue(
     _Watchdog_Insert_ticks(
        &the_thread->Timer,
       timeout,
-      WATCHDOG_NO_ACTIVATE
+      WATCHDOG_ACTIVATE_NOW
     );
   }
 
@@ -121,8 +121,7 @@ void _Thread_queue_Enqueue(
       _Thread_queue_Enqueue_fifo( the_thread_queue, the_thread, timeout );
       break;
     case THREAD_QUEUE_DISCIPLINE_PRIORITY:
-      _Thread_queue_Enqueue_priority(
-         the_thread_queue, the_thread, timeout );
+      _Thread_queue_Enqueue_priority( the_thread_queue, the_thread, timeout );
       break;
   }
 }
@@ -150,7 +149,6 @@ Thread_Control *_Thread_queue_Dequeue(
 )
 {
   Thread_Control *the_thread;
-  ISR_Level       level;
 
   switch ( the_thread_queue->discipline ) {
     case THREAD_QUEUE_DISCIPLINE_FIFO:
@@ -164,18 +162,7 @@ Thread_Control *_Thread_queue_Dequeue(
       break;
   }
 
-  if ( !_Thread_Is_null( the_thread ) )
-    return( the_thread );
-
-  _ISR_Disable( level );
-  if ( the_thread_queue->sync == FALSE ) {
-    _ISR_Enable( level );
-    return( NULL );
-  }
-
-  the_thread_queue->sync = FALSE;
-  _ISR_Enable( level );
-  return( _Thread_Executing );
+  return( the_thread );
 }
 
 /*PAGE
@@ -331,8 +318,9 @@ void _Thread_queue_Timeout(
   void       *ignored
 )
 {
-  Thread_Control  *the_thread;
-  Objects_Locations       location;
+  Thread_Control       *the_thread;
+  Thread_queue_Control *the_thread_queue;
+  Objects_Locations     location;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
@@ -340,8 +328,15 @@ void _Thread_queue_Timeout(
     case OBJECTS_REMOTE:  /* impossible */
       break;
     case OBJECTS_LOCAL:
-      the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
-      _Thread_queue_Extract( the_thread->Wait.queue, the_thread );
+      the_thread_queue = the_thread->Wait.queue;
+
+      if ( the_thread_queue->sync == TRUE && _Thread_Is_executing(the_thread)) {
+        if ( the_thread_queue->sync_state != THREAD_QUEUE_SATISFIED )
+          the_thread_queue->sync_state = THREAD_QUEUE_TIMEOUT;
+      } else {
+        the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
+        _Thread_queue_Extract( the_thread->Wait.queue, the_thread );
+      }
       _Thread_Unnest_dispatch();
       break;
   }
@@ -374,30 +369,39 @@ void _Thread_queue_Enqueue_fifo (
   ISR_Level level;
 
   _ISR_Disable( level );
-  if ( the_thread_queue->sync == TRUE ) {
-    the_thread_queue->sync = FALSE;
 
-    _Chain_Append_unprotected(
-      &the_thread_queue->Queues.Fifo,
-      &the_thread->Object.Node
-    );
+  switch ( the_thread_queue->sync_state ) {
+    case THREAD_QUEUE_NOTHING_HAPPENED: 
+      the_thread_queue->sync = FALSE;
+      _Chain_Append_unprotected(
+        &the_thread_queue->Queues.Fifo,
+        &the_thread->Object.Node
+      );
+      _ISR_Enable( level );
+      return;
 
-    if ( timeout != WATCHDOG_NO_TIMEOUT )
-      _Watchdog_Activate( &the_thread->Timer );
+    case THREAD_QUEUE_TIMEOUT: 
+      the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
+      _ISR_Enable( level );
+      break;
 
-    _ISR_Enable( level );
-    return;
+    case THREAD_QUEUE_SATISFIED:
+      if ( _Watchdog_Is_active( &the_thread->Timer ) ) {
+        _Watchdog_Deactivate( &the_thread->Timer );
+        _ISR_Enable( level );
+        (void) _Watchdog_Remove( &the_thread->Timer );
+      } else
+        _ISR_Enable( level );
+      break;
   }
 
-  if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
-    _ISR_Enable( level );
-    _Thread_Unblock( the_thread );
-  } else {
-    _Watchdog_Deactivate( &the_thread->Timer );
-    _ISR_Enable( level );
-    (void) _Watchdog_Remove( &the_thread->Timer );
-    _Thread_Unblock( the_thread );
-  }
+  /*
+   *  Global objects with thread queue's should not be operated on from an
+   *  ISR.  But the sync code still must allow short timeouts to be processed
+   *  correctly.
+   */
+
+  _Thread_Unblock( the_thread );
 
   if ( !_Objects_Is_local_id( the_thread->Object.id ) )
     _Thread_MP_Free_proxy( the_thread );
@@ -447,10 +451,15 @@ Thread_Control *_Thread_queue_Dequeue_fifo(
     if ( !_Objects_Is_local_id( the_thread->Object.id ) )
       _Thread_MP_Free_proxy( the_thread );
 
-    return( the_thread );
+    return the_thread;
+  } else if ( the_thread_queue->sync ) {
+    the_thread_queue->sync_state = THREAD_QUEUE_SATISFIED;
+    _ISR_Enable( level );
+    return _Thread_Executing;
+  } else {
+    _ISR_Enable( level );
+    return NULL;
   }
-  _ISR_Enable( level );
-  return( NULL );
 }
 
 /*PAGE
@@ -597,12 +606,10 @@ restart_forward_search:
     search_thread =
        (Thread_Control *)search_thread->Object.Node.next;
   }
-  if ( the_thread_queue->sync == FALSE )
+  if ( the_thread_queue->sync_state != THREAD_QUEUE_NOTHING_HAPPENED )
     goto syncronize;
 
   the_thread_queue->sync = FALSE;
-  if ( timeout != WATCHDOG_NO_TIMEOUT )
-    _Watchdog_Activate( &the_thread->Timer );
 
   if ( priority == search_priority )
     goto equal_priority;
@@ -643,12 +650,10 @@ restart_reverse_search:
     search_thread = (Thread_Control *)
                          search_thread->Object.Node.previous;
   }
-  if ( !the_thread_queue->sync )
+  if ( the_thread_queue->sync_state != THREAD_QUEUE_NOTHING_HAPPENED )
     goto syncronize;
 
   the_thread_queue->sync = FALSE;
-  if ( timeout != WATCHDOG_NO_TIMEOUT )
-    _Watchdog_Activate( &the_thread->Timer );
 
   if ( priority == search_priority )
     goto equal_priority;
@@ -677,15 +682,37 @@ equal_priority:               /* add at end of priority group */
   return;
 
 syncronize:
-  if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
-    _ISR_Enable( level );
-    _Thread_Unblock( the_thread );
-  } else {
-    _Watchdog_Deactivate( &the_thread->Timer );
-    _ISR_Enable( level );
-    (void) _Watchdog_Remove( &the_thread->Timer );
-    _Thread_Unblock( the_thread );
+
+  switch ( the_thread_queue->sync_state ) {
+    case THREAD_QUEUE_NOTHING_HAPPENED:
+      /*
+       *  All of this was dealt with above.  This should never happen.
+       */
+      break;
+ 
+    case THREAD_QUEUE_TIMEOUT:
+      the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
+      _ISR_Enable( level );
+      break;
+ 
+    case THREAD_QUEUE_SATISFIED:
+      if ( _Watchdog_Is_active( &the_thread->Timer ) ) {
+        _Watchdog_Deactivate( &the_thread->Timer );
+        _ISR_Enable( level );
+        (void) _Watchdog_Remove( &the_thread->Timer );
+      } else
+        _ISR_Enable( level );
+      break;
   }
+ 
+  /*
+   *  Global objects with thread queue's should not be operated on from an
+   *  ISR.  But the sync code still must allow short timeouts to be processed
+   *  correctly.
+   */
+ 
+  _Thread_Unblock( the_thread );
+ 
   if ( !_Objects_Is_local_id( the_thread->Object.id ) )
     _Thread_MP_Free_proxy( the_thread );
 }
@@ -721,17 +748,24 @@ Thread_Control *_Thread_queue_Dequeue_priority(
   Chain_Node     *next_node;
   Chain_Node     *previous_node;
 
+  _ISR_Disable( level );
   for( index=0 ;
        index < TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS ;
        index++ ) {
-    _ISR_Disable( level );
     if ( !_Chain_Is_empty( &the_thread_queue->Queues.Priority[ index ] ) ) {
       the_thread = (Thread_Control *)
                     the_thread_queue->Queues.Priority[ index ].first;
       goto dequeue;
     }
-    _ISR_Enable( level );
   }
+
+  if ( the_thread_queue->sync ) {
+    the_thread_queue->sync_state = THREAD_QUEUE_SATISFIED;
+    _ISR_Enable( level );
+    return _Thread_Executing;
+  } 
+
+  _ISR_Enable( level );
   return NULL;
 
 dequeue:
