@@ -1,3 +1,10 @@
+2001-10-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add bspopts.h; Add CPU_CLOCK_RATE_HZ.
+	* startup/bspstart.c: Replace HZ with CPU_CLOCK_RATE_HZ.
+	* include/.cvsignore: Add stamp-h* bspopts.h*
+	* include/bsp.h: Add bspopts.h.
+
 2001-10-11	Alexandra Kossovsky <sasha@oktet.ru>
 
 	* clock/Makefile.am, clock/ckinit.c, clock/.cvsignore, Makefile.am,
