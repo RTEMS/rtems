@@ -30,7 +30,7 @@ AS_HELP_STRING(--enable-rtems-root,directory containing make/custom)],
 [case ${enable_rtems_root} in
   [[\\/$]]* | ?:[[\\/]]* ) # absolute directory
    rtems_rootdir=${enable_rtems_root}
-   RTEMS_RTEMS=${enable_rtems_root}
+   RTEMS_ROOT=${enable_rtems_root}
    ;;
   *) # relative directory
    rtems_rootdir=${enable_rtems_root}${rtems_updir}
