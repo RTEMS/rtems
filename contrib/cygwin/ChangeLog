@@ -1,3 +1,8 @@
+2001-02-05	Joel Sherrill <joel@OARcorp.com>
+
+	* i386-cygwin-libs.spec.in, i386-cygwin-mingw.spec.in,
+	i386-cygwin-w32api.spec.in: Modified group.
+
 2001-01-22	Joel Sherrill <joel@OARcorp.com>
 
 	* i386-cygwin-binutils.spec.in, i386-cygwin-gcc.spec.in,

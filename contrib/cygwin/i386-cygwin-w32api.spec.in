@@ -10,7 +10,7 @@ Distribution: Linux
 Name:         i386-cygwin-w32api
 Release:      @W32API_RPMREL@
 Copyright:    Red Hat Inc.
-Group:        Development/Libraries
+Group:        cygwin
 Provides:     i386-cygwin-w32api
 
 Autoreqprov:  	off
