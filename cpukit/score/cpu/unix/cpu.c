@@ -55,16 +55,16 @@
 
 typedef struct {
   jmp_buf   regs;
-  sigset_t  isr_level;
+  unsigned32  isr_level;
 } Context_Control_overlay;
 
 void  _CPU_Signal_initialize(void);
 void  _CPU_Stray_signal(int);
 void  _CPU_ISR_Handler(int);
 
-sigset_t         _CPU_Signal_mask;
-Context_Control  _CPU_Context_Default_with_ISRs_enabled;
-Context_Control  _CPU_Context_Default_with_ISRs_disabled;
+static sigset_t         _CPU_Signal_mask;
+static Context_Control_overlay  _CPU_Context_Default_with_ISRs_enabled;
+static Context_Control_overlay  _CPU_Context_Default_with_ISRs_disabled;
 
 /*
  * Which cpu are we? Used by libcpu and libbsp.
@@ -92,7 +92,7 @@ void _CPU_ISR_From_CPU_Init()
 
   /*
    * Block all the signals except SIGTRAP for the debugger
-   * and SIGABRT for fatal errors.
+   * and fatal error signals.
    */
 
   (void) sigfillset(&_CPU_Signal_mask);
@@ -100,6 +100,9 @@ void _CPU_ISR_From_CPU_Init()
   (void) sigdelset(&_CPU_Signal_mask, SIGABRT);
   (void) sigdelset(&_CPU_Signal_mask, SIGIOT);
   (void) sigdelset(&_CPU_Signal_mask, SIGCONT);
+  (void) sigdelset(&_CPU_Signal_mask, SIGSEGV);
+  (void) sigdelset(&_CPU_Signal_mask, SIGBUS);
+  (void) sigdelset(&_CPU_Signal_mask, SIGFPE);
 
   _CPU_ISR_Enable(1);
 
@@ -120,20 +123,16 @@ void _CPU_Signal_initialize( void )
 {
   struct sigaction  act;
   sigset_t          mask;
-
+ 
   /* mark them all active except for TraceTrap  and Abort */
-
-  sigfillset(&mask);
-  sigdelset(&mask, SIGTRAP);
-  sigdelset(&mask, SIGABRT);
-  sigdelset(&mask, SIGIOT);
-  sigdelset(&mask, SIGCONT);
+ 
+  mask = _CPU_Signal_mask;
   sigprocmask(SIG_UNBLOCK, &mask, 0);
-
+ 
   act.sa_handler = _CPU_ISR_Handler;
   act.sa_mask = mask;
   act.sa_flags = SA_RESTART;
-
+ 
   sigaction(SIGHUP, &act, 0);
   sigaction(SIGINT, &act, 0);
   sigaction(SIGQUIT, &act, 0);
@@ -167,7 +166,6 @@ void _CPU_Signal_initialize( void )
 #ifdef SIGLOST
     sigaction(SIGLOST, &act, 0);
 #endif
-
 }
 
 /*PAGE
@@ -209,14 +207,14 @@ void _CPU_Context_From_CPU_Init()
 
   _CPU_ISR_Set_level( 0 );
   _CPU_Context_switch(
-    &_CPU_Context_Default_with_ISRs_enabled,
-    &_CPU_Context_Default_with_ISRs_enabled
+    (Context_Control *) &_CPU_Context_Default_with_ISRs_enabled,
+    (Context_Control *) &_CPU_Context_Default_with_ISRs_enabled
   );
-
+ 
   _CPU_ISR_Set_level( 1 );
   _CPU_Context_switch(
-    &_CPU_Context_Default_with_ISRs_disabled,
-    &_CPU_Context_Default_with_ISRs_disabled
+    (Context_Control *) &_CPU_Context_Default_with_ISRs_disabled,
+    (Context_Control *) &_CPU_Context_Default_with_ISRs_disabled
   );
 }
 
@@ -225,21 +223,16 @@ void _CPU_Context_From_CPU_Init()
  *  _CPU_ISR_Get_level
  */
 
-sigset_t GET_old_mask;
-
 unsigned32 _CPU_ISR_Get_level( void )
 {
-/*  sigset_t  old_mask; */
-   unsigned32 old_level;
+  sigset_t old_mask;
  
-  sigprocmask(0, 0, &GET_old_mask);
+  sigprocmask(SIG_BLOCK, 0, &old_mask);
  
-  if (memcmp((void *)&posix_empty_mask, (void *)&GET_old_mask, sizeof(sigset_t)))
-    old_level = 1;
-  else 
-    old_level = 0;
-
-  return old_level;
+  if (memcmp((void *)&posix_empty_mask, (void *)&old_mask, sizeof(sigset_t)))
+      return 1;
+ 
+  return 0;
 }
 
 /*  _CPU_Initialize
@@ -361,8 +354,15 @@ void _CPU_Install_interrupt_stack( void )
 
 void _CPU_Thread_Idle_body( void )
 {
-  while (1)
+  while (1) {
+#ifdef RTEMS_DEBUG
+    /* interrupts had better be enabled at this point! */
+    if (_CPU_ISR_Get_level() != 0)
+       abort();
+#endif
     pause();
+  }
+
 }
 
 /*PAGE
@@ -379,7 +379,6 @@ void _CPU_Context_Initialize(
   boolean           _is_fp
 )
 {
-  void        *source;
   unsigned32  *addr;
   unsigned32   jmp_addr;
   unsigned32   _stack_low;   /* lowest "stack aligned" address */
@@ -410,16 +409,12 @@ void _CPU_Context_Initialize(
    */
 
   if ( _new_level == 0 )
-    source = &_CPU_Context_Default_with_ISRs_enabled;
+      *_the_context = *(Context_Control *)
+                         &_CPU_Context_Default_with_ISRs_enabled;
   else
-    source = &_CPU_Context_Default_with_ISRs_disabled;
+      *_the_context = *(Context_Control *)
+                         &_CPU_Context_Default_with_ISRs_disabled;
       
-  memcpy(
-    _the_context,
-    source, 
-    sizeof(Context_Control)                /* sizeof(jmp_buf)); */
-  );
-
   addr = (unsigned32 *)_the_context;
 
 #if defined(hppa1_1)
@@ -492,7 +487,7 @@ void _CPU_Context_restore(
 {
   Context_Control_overlay *nextp = (Context_Control_overlay *)next;
 
-  sigprocmask( SIG_SETMASK, &nextp->isr_level, 0 );
+  _CPU_ISR_Enable(nextp->isr_level);
   longjmp( nextp->regs, 0 );
 }
 
@@ -501,6 +496,11 @@ void _CPU_Context_restore(
  *  _CPU_Context_switch
  */
 
+static void do_jump(
+  Context_Control_overlay *currentp,
+  Context_Control_overlay *nextp
+);
+
 void _CPU_Context_switch(
   Context_Control  *current,
   Context_Control  *next
@@ -508,33 +508,50 @@ void _CPU_Context_switch(
 {
   Context_Control_overlay *currentp = (Context_Control_overlay *)current;
   Context_Control_overlay *nextp = (Context_Control_overlay *)next;
-
+#if 0
   int status;
+#endif
+ 
+  currentp->isr_level = _CPU_ISR_Disable_support();
+ 
+  do_jump( currentp, nextp );
 
-  /*
-   *  Switch levels in one operation
-   */
-
-  status = sigprocmask( SIG_SETMASK, &nextp->isr_level, &currentp->isr_level );
-  if ( status )
-    _Internal_error_Occurred(
-      INTERNAL_ERROR_CORE,
-      TRUE,
-      status
-    );
-
-  if (setjmp(currentp->regs) == 0) {    /* Save the current context */
-     longjmp(nextp->regs, 0);           /* Switch to the new context */
-     if ( status )
-       _Internal_error_Occurred(
+#if 0
+  if (sigsetjmp(currentp->regs, 1) == 0) {    /* Save the current context */
+     siglongjmp(nextp->regs, 0);           /* Switch to the new context */
+     _Internal_error_Occurred(
          INTERNAL_ERROR_CORE,
          TRUE,
          status
        );
   }
-
+#endif
+ 
+#ifdef RTEMS_DEBUG
+    if (_CPU_ISR_Get_level() == 0)
+       abort();
+#endif
+ 
+  _CPU_ISR_Enable(currentp->isr_level);
 }
  
+static void do_jump( 
+  Context_Control_overlay *currentp,
+  Context_Control_overlay *nextp 
+)
+{
+  int status;
+
+  if (setjmp(currentp->regs) == 0) {    /* Save the current context */
+     longjmp(nextp->regs, 0);           /* Switch to the new context */
+     _Internal_error_Occurred(
+         INTERNAL_ERROR_CORE,
+         TRUE,
+         status
+       );
+  }
+}
+
 /*PAGE
  *
  *  _CPU_Save_float_context
@@ -714,6 +731,7 @@ void _CPU_Stray_signal(int sig_num)
       case SIGBUS:
       case SIGSEGV:
       case SIGTERM:
+      case SIGIOT:
         _CPU_Fatal_error(0x100 + sig_num);
   }
 }

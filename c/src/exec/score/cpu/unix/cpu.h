@@ -436,8 +436,8 @@ extern "C" {
 /*
  *  This is really just the area for the following fields.
  *
- *    jmp_buf   regs;
- *    sigset_t  isr_level;
+ *    jmp_buf    regs;
+ *    unsigned32 isr_level;
  *
  *  Doing it this way avoids conflicts between the native stuff and the
  *  RTEMS stuff.
