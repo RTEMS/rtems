@@ -1189,7 +1189,7 @@ extern int pci_write_config_dword();
  * Return the number of PCI busses in the system
  */
 extern unsigned char BusCountPCI();
-extern void InitializePCI();
+extern void pci_initialize();
 #endif
 
 int BSP_PCIxFindDevice(unsigned short vendorid, unsigned short deviceid,

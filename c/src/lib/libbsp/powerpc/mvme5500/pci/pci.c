@@ -172,7 +172,7 @@ pci_config BSP_pci_config[2] = {
 /*
  * This routine determines the maximum bus number in the system
  */
-void InitializePCI()
+void pci_initialize()
 {
   int PciNumber;
   unchar ucBusNumber, ucSlotNumber, ucFnNumber, ucNumFuncs;

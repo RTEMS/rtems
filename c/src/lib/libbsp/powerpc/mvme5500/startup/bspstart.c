@@ -589,7 +589,7 @@ void bsp_start( void )
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Going to start PCI buses scanning and initialization\n");
 #endif  
-  InitializePCI();
+  pci_initialize();
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Number of PCI buses found is : %d\n", BusCountPCI());
 #endif
