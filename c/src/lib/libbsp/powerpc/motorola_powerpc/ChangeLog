@@ -1,3 +1,7 @@
+2003-10-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* vectors/Makefile.am: Fix header installation.
+
 2003-09-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in include/Makefile.am.
