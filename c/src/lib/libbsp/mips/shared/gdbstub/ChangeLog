@@ -1,5 +1,18 @@
 2002-02-08	Joel Sherrill <joel@OARcorp.com>
 
+	* Makefile, stubinit.S, r46kstub.ld, ioaddr.h: Removed as unused
+	with RTEMS.
+	* r46kstub.c: Renamed to mips-stub.c.
+	* mips-stub.c: New file -- was r46kstub.c.
+	* memlimits.h: New file was limits.h.
+	* limits.h: Removed.
+	* r4600.h: Eliminated need for this file.
+	* README: Updated.
+ 	* gdb_if.h: Added CVS Id.
+	* mips-stub.c: Attempt to deal with MIPS1 versus MIPS3.
+
+2002-02-08	Joel Sherrill <joel@OARcorp.com>
+
 	* Merged r46kstub.c into RTEMS distribution without modification.
 	I got the code from Franz Fischer <Franz.Fischer@franz-fischer.de>
 	who had used this with an old version of RTEMS with the mips64orion

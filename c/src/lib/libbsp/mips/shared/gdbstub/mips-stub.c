@@ -10,6 +10,8 @@
     REGARD TO THIS SOFTWARE INCLUDING BUT NOT LIMITED TO THE WARRANTIES
     OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
+    $Id$
+
 ********************************************************************************
 *
 *   r46kstub.c -- target debugging stub for the IDT R4600 Orion processor
@@ -120,16 +122,74 @@
 #include <string.h>
 #include <signal.h>
 #include "mips_opcode.h"
-#include "r4600.h"
-#include "limits.h"
+#include "memlimits.h"
+#include <rtems.h>
 #include "gdb_if.h"
 
+/***************/
+/* Exception Codes */
+#define	EXC_INT		0		/* External interrupt */
+#define	EXC_MOD		1		/* TLB modification exception */
+#define	EXC_TLBL	2		/* TLB miss (Load or Ifetch) */
+#define	EXC_TLBS	3		/* TLB miss (Store) */
+#define	EXC_ADEL	4		/* Address error (Load or Ifetch) */
+#define	EXC_ADES	5		/* Address error (Store) */
+#define	EXC_IBE		6		/* Bus error (Ifetch) */
+#define	EXC_DBE		7		/* Bus error (data load or store) */
+#define	EXC_SYS		8		/* System call */
+#define	EXC_BP		9		/* Break point */
+#define	EXC_RI		10		/* Reserved instruction */
+#define	EXC_CPU		11		/* Coprocessor unusable */
+#define	EXC_OVF		12		/* Arithmetic overflow */
+#define	EXC_TRAP	13		/* Trap exception */
+#define	EXC_FPE		15		/* Floating Point Exception */
+
+/* FPU Control/Status register fields */
+#define	CSR_FS		0x01000000	/* Set to flush denormals to zero */
+#define	CSR_C		0x00800000	/* Condition bit (set by FP compare) */
+
+#define	CSR_CMASK	(0x3f<<12)
+#define	CSR_CE		0x00020000
+#define	CSR_CV		0x00010000
+#define	CSR_CZ		0x00008000
+#define	CSR_CO		0x00004000
+#define	CSR_CU		0x00002000
+#define	CSR_CI		0x00001000
+
+#define	CSR_EMASK	(0x1f<<7)
+#define	CSR_EV		0x00000800
+#define	CSR_EZ		0x00000400
+#define	CSR_EO		0x00000200
+#define	CSR_EU		0x00000100
+#define	CSR_EI		0x00000080
+
+#define	CSR_FMASK	(0x1f<<2)
+#define	CSR_FV		0x00000040
+#define	CSR_FZ		0x00000020
+#define	CSR_FO		0x00000010
+#define	CSR_FU		0x00000008
+#define	CSR_FI		0x00000004
+
+#define	CSR_RMODE_MASK	(0x3<<0)
+#define	CSR_RM		0x00000003
+#define	CSR_RP		0x00000002
+#define	CSR_RZ		0x00000001
+#define	CSR_RN		0x00000000
+
+/***************/
 
 /*
  * Saved register information.  Must be prepared by the exception
  * preprocessor before handle_exception is invoked.
  */
-extern long long registers[NUM_REGS];
+#if (__mips == 3)
+typedef long long mips_register_t;
+#elif (__mips == 1)
+typedef unsigned int mips_register_t;
+#else
+#error "unknown MIPS ISA"
+#endif
+static mips_register_t *registers;
 
 
 /*
@@ -720,13 +780,15 @@ computeSignal (void)
  * reacts to gdb's requests.
  */
 void
-handle_exception (void)
+handle_exception (CPU_Interrupt_frame *frame)
 {
   int host_has_detached = 0;
   int sigval;
   int regno, addr, length;
   long long regval;
   char *ptr;
+
+  registers = (mips_register_t *)frame;
 
   /* reply to host that an exception has occurred */
   sigval = computeSignal ();
@@ -755,6 +817,10 @@ handle_exception (void)
           outBuffer[1] = highhex (sigval);
           outBuffer[2] = lowhex (sigval);
           outBuffer[3] = '\0';
+          break;
+
+        case 'd':
+          /* toggle debug flag */
           break;
 
         case 'g':

@@ -1,7 +1,29 @@
-/* r46kstub 9/29/96 c. m. heard */
-/* 7/26/96 -- original posting */
-/* 8/06/96 -- cache initialization/flushing logic fixed */
-/* 9/29/96 -- coprocessor load delay slots respected, documentation improved */
+#
+#  $Id$
+#
+
+
+The contents of this directory are based upon the "r46kstub.tar.gz" package
+released to the net by
+
+	C. M. Heard
+	VVNET, Inc.                           phone:  +1 408 247 9376
+	4040 Moorpark Ave. Suite 206          fax:    +1 408 244 3651
+	San Jose, CA 95117 USA                e-mail: heard@vvnet.com
+
+This package was released in the September 1996 time frame for use
+with gdb 4.16 and an IDT R4600 Orion.   The stub was modified to support
+R3000 class CPUs and to work within the mips-rtems exeception processing
+framework.
+
+THe file memlimits.h could end up being target board dependent.  If
+this is the case, copy it to your BSP directory and modify as necessary.
+
+--joel
+8 February 2002
+
+Original README 
+===============
 
 The r46kstub directory and its compressed archive (r46kstub.tar.gz) contain
 the 9/29/96 source code snapshot for a ROM-resident gdb-4.16 debug agent
@@ -108,8 +130,3 @@ the "set" command to load an unmapped sixty-four bit virtual address into
 the PC, as you can for all other registers.
 
 Please send bug reports, comments, or suggestions for improvement to:
-
-C. M. Heard
-VVNET, Inc.                           phone:  +1 408 247 9376
-4040 Moorpark Ave. Suite 206          fax:    +1 408 244 3651
-San Jose, CA 95117 USA                e-mail: heard@vvnet.com

@@ -10,13 +10,15 @@
  *  THE CONTRIBUTORS DISCLAIM ANY WARRANTIES, EXPRESS OR IMPLIED, WITH
  *  REGARD TO THIS SOFTWARE INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  $Id$
  */
 
 #ifndef _GDB_IF_H
 #define _GDB_IF_H
 
 /*
- * R4600 registers, numbered in the order in which gdb expects to see them.
+ * MIPS registers, numbered in the order in which gdb expects to see them.
  */
 #define	ZERO		0
 #define	AT		1
