@@ -84,7 +84,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 
 #endif
 
-#if defined (CLANGUAGE) || defined(_LANGUAGE_C)
+#ifndef ASM
 typedef struct {
 	unsigned int	mem_size;
 	unsigned int	icache_size;
@@ -95,7 +95,7 @@ typedef struct {
 
 	} mem_config;
 
-#endif CLANGUAGE || defined(_LANGUAGE_C)
+#endif
 
 /*
 ** general equates for diagnostics and boolean functions
