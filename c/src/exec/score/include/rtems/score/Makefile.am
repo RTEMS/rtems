@@ -33,13 +33,6 @@ $(PROJECT_INCLUDE)/rtems/score:
 $(PROJECT_INCLUDE)/rtems/score/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-#
-# Add your list of files to delete here.  The config files
-#  already know how to delete some stuff, so you may want
-#  to just run 'make clean' first to see what gets missed.
-#  'make clobber' already includes 'make clean'
-#
-
 CLEANFILES += $(TARGOPTS)
 
 # Until RTEMS_CPU is removed from all the make configuration files,

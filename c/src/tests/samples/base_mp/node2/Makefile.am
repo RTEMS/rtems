@@ -38,13 +38,6 @@ if HAS_MP
 
 AM_CPPFLAGS += -DNODE_NUMBER=$(NODE) -I.
 
-#
-# Add your list of files to delete here.  The config files
-#  already know how to delete some stuff, so you may want
-#  to just run 'make clean' first to see what gets missed.
-#  'make clobber' already includes 'make clean'
-#
-
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 

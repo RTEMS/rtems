@@ -47,13 +47,6 @@ $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIBVARIANT).a
 # Add local stuff here using +=
 #
 
-#
-# Add your list of files to delete here.  The config files
-#  already know how to delete some stuff, so you may want
-#  to just run 'make clean' first to see what gets missed.
-#  'make clobber' already includes 'make clean'
-#
-
 CLEANFILES += $(LIB) $(H_FILES) $(GEN_C_FILES)
 
 FRONTEND = \"$(RTEMS_CPU)/mcp750/remdeb_f.x\"

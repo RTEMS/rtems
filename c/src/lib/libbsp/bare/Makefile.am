@@ -12,9 +12,6 @@ SUBDIRS = . include
 $(PROJECT_RELEASE)/bsp_specs: bsp_specs
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += \
-$(PROJECT_RELEASE)/bsp_specs
-
 all-local : $(PREINSTALL_FILES)
 
 EXTRA_DIST = \
