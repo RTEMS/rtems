@@ -89,6 +89,8 @@ void _POSIX_Interval_to_timespec(
  *  4.5.1 Get System Time, P1003.1b-1993, p. 91
  */
 
+/* Using the implementation in newlib */
+#if 0
 time_t time(
   time_t   *tloc
 )
@@ -113,6 +115,7 @@ time_t time(
 
   return seconds_since_epoch;
 }
+#endif
 
 /*PAGE
  *
