@@ -1,19 +1,17 @@
 /*
- * Initialize SMC1 for console IO.
+ *  SMC1 raw console serial I/O.
  *
- * Based on the `gen68302' board support package, and covered by the
- * original distribution terms.
+ *  This driver is an example of `POLLING' or `INTERRUPT' input.
  *
- * W. Eric Norum
- * Saskatchewan Accelerator Laboratory
- * University of Saskatchewan
- * Saskatoon, Saskatchewan, CANADA
- * eric@skatter.usask.ca
+ *  To compile with interrupt-driven input, define M360_SMC1_INTERRUPT
+ *  in the make customization file for this bsp (gen68360.cfg).
  *
- *  $Id$
- */
-
-/*
+ *  Author:
+ *    W. Eric Norum
+ *    Saskatchewan Accelerator Laboratory
+ *    University of Saskatchewan
+ *    Saskatoon, Saskatchewan, CANADA
+ *    eric@skatter.usask.ca
  *
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
@@ -21,45 +19,62 @@
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
+ *
  *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
  */
 
-#define GEN68360_INIT
-
+#include <termios.h>
 #include <bsp.h>
 #include <rtems/libio.h>
 #include "m68360.h"
 
-/*  console_initialize
- *
- *  This routine initializes the console IO driver.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- */
+#if (defined (M360_SMC1_INTERRUPT))
+# define RXBUFSIZE	16
+static void *smc1ttyp;
+#else
+# define RXBUFSIZE	1
+#endif
 
 /*
- * I/O buffers can be in ordindary RAM
+ * I/O buffers and pointers to buffer descriptors
  */
-static volatile char rxBuf, txBuf;
-static volatile m360BufferDescriptor_t *consoleRxBd, *consoleTxBd;
+static volatile char rxBuf[RXBUFSIZE], txBuf;
+static volatile m360BufferDescriptor_t *smcRxBd, *smcTxBd;
 
-rtems_device_driver console_initialize(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
-)
+/*
+ * Device-specific routines
+ */
+#if (defined (M360_SMC1_INTERRUPT))
+static rtems_isr
+smc1InterruptHandler (rtems_vector_number v)
 {
-	rtems_status_code status;
+	/*
+	 * Buffer received?
+	 */
+	if (m360.smc1.smce & 0x1) {
+		m360.smc1.smce = 0x1;
+		while ((smcRxBd->status & M360_BD_EMPTY) == 0) {
+			rtems_termios_enqueue_raw_characters (smc1ttyp,
+							(char *)smcRxBd->buffer,
+							smcRxBd->length);
+			smcRxBd->status = M360_BD_EMPTY | M360_BD_WRAP | M360_BD_INTERRUPT;
+		}
+	}
+	m360.cisr = 1UL << 4;	/* Clear SMC1 interrupt-in-service bit */
+}
 
+#endif
+
+static void
+smc1Initialize (void)
+{
 	/*
 	 * Allocate buffer descriptors
 	 */
-	consoleRxBd = M360AllocateBufferDescriptors (1);
-	consoleTxBd = M360AllocateBufferDescriptors (1);
+	smcRxBd = M360AllocateBufferDescriptors (1);
+	smcTxBd = M360AllocateBufferDescriptors (1);
 
 	/*
 	 * Configure port B pins to enable SMTXD1 and SMRXD1 pins
@@ -82,16 +97,16 @@ rtems_device_driver console_initialize(
 	/*
 	 * Set up SMC1 parameter RAM common to all protocols
 	 */
-	m360.smc1p.rbase = (char *)consoleRxBd - (char *)&m360;
-	m360.smc1p.tbase = (char *)consoleTxBd - (char *)&m360;
+	m360.smc1p.rbase = (char *)smcRxBd - (char *)&m360;
+	m360.smc1p.tbase = (char *)smcTxBd - (char *)&m360;
 	m360.smc1p.rfcr = M360_RFCR_MOT | M360_RFCR_DMA_SPACE;
 	m360.smc1p.tfcr = M360_TFCR_MOT | M360_TFCR_DMA_SPACE;
-	m360.smc1p.mrblr = 1;
+	m360.smc1p.mrblr = RXBUFSIZE;
 	 
 	/*
 	 * Set up SMC1 parameter RAM UART-specific parameters
 	 */
-	m360.smc1p.un.uart.max_idl = 0;
+	m360.smc1p.un.uart.max_idl = 10;
 	m360.smc1p.un.uart.brklen = 0;
 	m360.smc1p.un.uart.brkec = 0;
 	m360.smc1p.un.uart.brkcr = 0;
@@ -99,16 +114,16 @@ rtems_device_driver console_initialize(
 	/*
 	 * Set up the Receive Buffer Descriptor
 	 */
-	consoleRxBd->status = M360_BD_EMPTY | M360_BD_WRAP;
-	consoleRxBd->length = 0;
-	consoleRxBd->buffer = &rxBuf;
+	smcRxBd->status = M360_BD_EMPTY | M360_BD_WRAP | M360_BD_INTERRUPT;
+	smcRxBd->length = 0;
+	smcRxBd->buffer = rxBuf;
 	 
 	/*
 	 * Setup the Transmit Buffer Descriptor
 	 */
-	consoleTxBd->length = 1;
-	consoleTxBd->status = M360_BD_WRAP;
-	consoleTxBd->buffer = &txBuf;
+	smcTxBd->status = M360_BD_WRAP;
+	smcTxBd->length = 1;
+	smcTxBd->buffer = &txBuf;
 	 
 	/*
 	 * Set up SMC1 general and protocol-specific mode registers
@@ -127,181 +142,158 @@ rtems_device_driver console_initialize(
 	 */
 	m360.smc1.smcmr |= M360_SMCMR_TEN | M360_SMCMR_REN;
 
-	status = rtems_io_register_name(
-				"/dev/console",
-				    major,
-				    (rtems_device_minor_number)0);
-	if (status != RTEMS_SUCCESSFUL)
-		rtems_fatal_error_occurred(status);
-	return RTEMS_SUCCESSFUL;
+#if (defined (M360_SMC1_INTERRUPT))
+	{
+	rtems_isr_entry old_handler;
+	rtems_status_code sc;
+
+	sc = rtems_interrupt_catch (smc1InterruptHandler,
+						(m360.cicr & 0xE0) | 0x04,
+						&old_handler);
+	m360.smc1.smcm = 1;	/* Enable SMC1 receiver interrupt */
+	m360.cimr |= 1UL << 4;	/* Enable SMC1 interrupts */
+	}
+#endif
 }
 
-/*  is_character_ready
- *
- *  Check to see if a character is available on the console port.  If so,
- *  then return a TRUE (along with the character).  Otherwise return FALSE.
- *
- *  Input parameters:   pointer to location in which to return character
- *
- *  Output parameters:  character (if available)
- *
- *  Return values:      TRUE - character available
- *                      FALSE - no character available
- */
-
-rtems_boolean is_character_ready(
-  char *ch				/* -> character  */
-)
+static int
+smc1Read (int minor)
 {
-	if (consoleRxBd->status & M360_BD_EMPTY)
-		return FALSE;
-	*ch = rxBuf;
-	consoleRxBd->status = M360_BD_EMPTY | M360_BD_WRAP;
-	return TRUE;
+	unsigned char c;
+
+	if (smcRxBd->status & M360_BD_EMPTY)
+		return -1;
+	c = rxBuf[0];
+	smcRxBd->status = M360_BD_EMPTY | M360_BD_WRAP;
+	return c;
 }
 
-
-/*  inbyte
- *
- *  Receive a character from the console port
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:      character read
- */
-
-char inbyte( void )
+static int
+smc1Write (int minor, char *buf, int len)
 {
-    char ch;
+	int nwrite = 0;
 
-    while (is_character_ready (&ch) == FALSE)
-	continue;
-    return ch;
-}
-
-
-/*  outbyte
- *
- *  Transmit a character to the console serial port
- *
- *  Input parameters:
- *    ch  - character to be transmitted
- *
- *  Output parameters:  NONE
- */
-
-void outbyte(
-  char ch
-)
-{
-	if (ch == '\n')
-		outbyte('\r');
-	while (consoleTxBd->status & M360_BD_READY)
-		continue;
-	txBuf = ch;
-	consoleTxBd->status = M360_BD_READY | M360_BD_WRAP;
+	while (nwrite < len) {
+		while (smcTxBd->status & M360_BD_READY)
+			continue;
+		txBuf = *buf++;
+		smcTxBd->status = M360_BD_READY | M360_BD_WRAP;
+		nwrite++;
+	}
+	return nwrite;
 }
 
 /*
- *  Open entry point
+ ***************
+ * BOILERPLATE *
+ ***************
  */
 
+/*
+ * Initialize and register the device
+ */
+rtems_device_driver console_initialize(
+  rtems_device_major_number  major,
+  rtems_device_minor_number  minor,
+  void                      *arg
+)
+{
+	rtems_status_code status;
+
+	/*
+	 * Set up TERMIOS
+	 */
+	rtems_termios_initialize ();
+
+	/*
+	 * Do device-specific initialization
+	 */
+	smc1Initialize ();
+
+	/*
+	 * Register the device
+	 */
+	status = rtems_io_register_name ("/dev/console", major, 0);
+	if (status != RTEMS_SUCCESSFUL)
+		rtems_fatal_error_occurred (status);
+	return RTEMS_SUCCESSFUL;
+}
+
+/*
+ * Open the device
+ */
 rtems_device_driver console_open(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  return RTEMS_SUCCESSFUL;
+	rtems_status_code sc;
+
+#if (defined (M360_SMC1_INTERRUPT))
+	rtems_libio_open_close_args_t *args = arg;
+
+	sc = rtems_termios_open (major, minor, arg,
+			NULL,
+			NULL,
+			NULL,
+			smc1Write);
+	smc1ttyp = args->iop->data1;
+#else
+	sc = rtems_termios_open (major, minor, arg,
+			NULL,
+			NULL,
+			smc1Read,
+			smc1Write);
+#endif
+	return sc;
 }
  
 /*
- *  Close entry point
+ * Close the device
  */
-
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  return RTEMS_SUCCESSFUL;
+	return rtems_termios_close (arg);
 }
 
 /*
- * read bytes from the serial port. We only have stdin.
+ * Read from the device
  */
-
 rtems_device_driver console_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  rtems_libio_rw_args_t *rw_args;
-  char *buffer;
-  int maximum;
-  int count = 0;
- 
-  rw_args = (rtems_libio_rw_args_t *) arg;
-
-  buffer = rw_args->buffer;
-  maximum = rw_args->count;
-
-  for (count = 0; count < maximum; count++) {
-    buffer[ count ] = inbyte();
-    if (buffer[ count ] == '\n' || buffer[ count ] == '\r') {
-      buffer[ count++ ]  = '\n';
-      break;
-    }
-  }
-
-  rw_args->bytes_moved = count;
-  return (count >= 0) ? RTEMS_SUCCESSFUL : RTEMS_UNSATISFIED;
+	return rtems_termios_read (arg);
 }
 
 /*
- * write bytes to the serial port. Stdout and stderr are the same. 
+ * Write to the device
  */
-
 rtems_device_driver console_write(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  int count;
-  int maximum;
-  rtems_libio_rw_args_t *rw_args;
-  char *buffer;
-
-  rw_args = (rtems_libio_rw_args_t *) arg;
-
-  buffer = rw_args->buffer;
-  maximum = rw_args->count;
-
-  for (count = 0; count < maximum; count++) {
-    if ( buffer[ count ] == '\n') {
-      outbyte('\r');
-    }
-    outbyte( buffer[ count ] );
-  }
-
-  rw_args->bytes_moved = maximum;
-  return 0;
+	return rtems_termios_write (arg);
 }
 
 /*
- *  IO Control entry point
+ * Handle ioctl request.
+ * Should set hardware line speed, bits/char, etc.
  */
-
 rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
-{
-  return RTEMS_SUCCESSFUL;
+{ 
+	return rtems_termios_ioctl (arg);
 }
