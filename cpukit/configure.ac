@@ -83,6 +83,13 @@ AC_MSG_RESULT([$LIBRPC])
 ])
 AM_CONDITIONAL(LIBRPC,[test "$LIBRPC" = "yes"])
 
+AC_ARG_ENABLE([ada],[enable ada support])
+AS_IF([test x"$enable_ada" = x"yes"],[
+  AS_IF([test -d ${srcdir}/ada],[
+    AC_CONFIG_SUBDIRS([ada])
+  ])
+])
+
 RTEMS_DEFINE_POSIX_API
 RTEMS_DEFINE_ITRON_API
 RTEMS_DEFINE_MULTIPROCESSING
