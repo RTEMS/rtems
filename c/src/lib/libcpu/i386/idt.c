@@ -45,7 +45,21 @@ rtems_raw_irq_hdl get_hdl_from_vector(rtems_vector_offset index)
     unsigned			limit;
 
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
+	
+    /* Convert limit into number of entries */
+    limit = (limit + 1) >> 3;
+
+    if(index >= limit) {
+        return 0;
+    }
+	
+    /* Convert limit into number of entries */
+    limit = (limit + 1) / sizeof(interrupt_gate_descriptor);
   
+    if(index >= limit) {
+        return 0;
+    }
+
     * ((unsigned int*) &hdl) = (idt_entry_tbl[index].low_offsets_bits | 
 			      (idt_entry_tbl[index].high_offsets_bits << 16));
     return hdl;
@@ -60,7 +74,10 @@ int i386_set_idt_entry  (const rtems_raw_irq_connect_data* irq)
     
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
-    if (irq->idtIndex > limit) {
+    /* Convert limit into number of entries */
+    limit = (limit + 1) / sizeof(interrupt_gate_descriptor);
+
+    if (irq->idtIndex >= limit) {
       return 0;
     }
     /*
@@ -73,6 +90,7 @@ int i386_set_idt_entry  (const rtems_raw_irq_connect_data* irq)
     if (get_hdl_from_vector(irq->idtIndex) != default_raw_irq_entry.hdl) {
       return 0;
     }
+
     _CPU_ISR_Disable(level);
     
     raw_irq_table [irq->idtIndex] = *irq;
@@ -94,7 +112,10 @@ void _CPU_ISR_install_vector (unsigned vector,
     
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
-    if (vector > limit) {
+    /* Convert limit into number of entries */
+    limit = (limit + 1) / sizeof(interrupt_gate_descriptor);
+
+    if (vector >= limit) {
       return;
     }
     _CPU_ISR_Disable(level)
@@ -114,14 +135,17 @@ int i386_get_current_idt_entry (rtems_raw_irq_connect_data* irq)
 
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
-    if (irq->idtIndex > limit) {
-      return 1;
+    /* Convert limit into number of entries */
+    limit = (limit + 1) / sizeof(interrupt_gate_descriptor);
+
+    if (irq->idtIndex >= limit) {
+      return 0;
     }
     raw_irq_table [irq->idtIndex].hdl = get_hdl_from_vector(irq->idtIndex);
     
     *irq = raw_irq_table [irq->idtIndex];
     
-    return 0;
+    return 1;
 }
 
 int i386_delete_idt_entry (const rtems_raw_irq_connect_data* irq)
@@ -132,10 +156,13 @@ int i386_delete_idt_entry (const rtems_raw_irq_connect_data* irq)
     
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
-    if (irq->idtIndex > limit) {
-      return 1;
+    /* Convert limit into number of entries */
+    limit = (limit + 1) / sizeof(interrupt_gate_descriptor);
+
+    if (irq->idtIndex >= limit) {
+      return 0;
     }
-     /*
+    /*
      * Check if handler passed is actually connected. If not issue an error.
      * You must first get the current handler via i386_get_current_idt_entry
      * and then disconnect it using i386_delete_idt_entry.
@@ -143,7 +170,7 @@ int i386_delete_idt_entry (const rtems_raw_irq_connect_data* irq)
      * to get the previous handler before accepting to disconnect.
      */
     if (get_hdl_from_vector(irq->idtIndex) != irq->hdl){
-      return 1;
+      return 0;
     }
     _CPU_ISR_Disable(level);
 
@@ -152,10 +179,11 @@ int i386_delete_idt_entry (const rtems_raw_irq_connect_data* irq)
     irq->off(irq);
     
     raw_irq_table[irq->idtIndex] = default_raw_irq_entry;
+    raw_irq_table[irq->idtIndex].idtIndex = irq->idtIndex;
 
     _CPU_ISR_Enable(level);
     
-    return 0;
+    return 1;
 }
 
 /*
@@ -170,9 +198,11 @@ int i386_init_idt (rtems_raw_irq_global_settings* config)
     
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
+    /* Convert limit into number of entries */
+    limit = (limit + 1) / sizeof(interrupt_gate_descriptor);
       
     if (config->idtSize != limit) {
-      return 1;
+      return 0;
     }
     /*
      * store various accelarators
@@ -198,13 +228,13 @@ int i386_init_idt (rtems_raw_irq_global_settings* config)
     }
     _CPU_ISR_Enable(level);
 
-    return 0;
+    return 1;
 }
 
 int i386_get_idt_config (rtems_raw_irq_global_settings** config)
 {
   *config = local_settings;
-  return 0;
+  return 1;
 }
 
 /*
@@ -222,7 +252,7 @@ int i386_set_gdt_entry (unsigned short segment_selector, unsigned base,
     i386_get_info_from_GDTR (&gdt_entry_tbl, &gdt_limit);
 
     if (segment_selector > limit) {
-      return 1;
+      return 0;
     }
     /*
      * set up limit first
@@ -249,7 +279,7 @@ int i386_set_gdt_entry (unsigned short segment_selector, unsigned base,
     gdt_entry_tbl[segment_selector].present 		= 1; 	/* not present */
 
     /*
-     * Now, reload all segment registers so the limit takes effect.
+    return 1;
      */
 
     asm volatile( "movw %%ds,%0 ; movw %0,%%ds
@@ -261,5 +291,5 @@ int i386_set_gdt_entry (unsigned short segment_selector, unsigned base,
                    : "0"  (tmp_segment)
 		  );
     
-    return 0;
+    return 1;
 }
