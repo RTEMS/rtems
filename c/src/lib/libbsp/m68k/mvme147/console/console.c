@@ -21,7 +21,7 @@
 
 #include <bsp.h>
 #include <rtems/libio.h>
-#include <zilog/z8530.h>
+#include <rtems/zilog/z8530.h>
 
 
 /*  console_initialize
