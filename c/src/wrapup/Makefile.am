@@ -28,6 +28,7 @@ SRCS += $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a)
 if LIBCHIP
 SRCS += ../libchip/rtc/$(ARCH)/librtcio.a
 SRCS += ../libchip/serial/$(ARCH)/libserialio.a
+SRCS += ../libchip/ide/$(ARCH)/libide.a
 SRCS += $(wildcard $(PROJECT_RELEASE)/lib/libnetchip$(LIB_VARIANT).a)
 endif
 
