@@ -1,5 +1,9 @@
 2001-09-13	Joel Sherrill <joel@OARcorp.com>
 
+	* src/sysconf.c: Fix typo syntax error accidentally committed.
+
+2001-09-13	Joel Sherrill <joel@OARcorp.com>
+
 	* src/mprotect.c: New file. Stub required by some gcc's to pass tests.
 	In particular, about 350 ACATS tests fail if this is not present.
 	* src/getpagesize.c: Ditto.
