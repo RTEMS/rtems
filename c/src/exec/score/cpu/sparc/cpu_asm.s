@@ -489,22 +489,22 @@ dont_switch_stacks:
 
         sub      %sp, CPU_MINIMUM_STACK_FRAME_SIZE, %sp
 
-      /*
-       *  Check if we have an external interrupt (trap 0x11 - 0x1f). If so,
-       *  set the PIL in the %psr to mask off interrupts with lower priority.
-       *  The original %psr in %l0 is not modified since it will be restored
-       *  when the interrupt handler returns.
-       */
+        /*
+         *  Check if we have an external interrupt (trap 0x11 - 0x1f). If so,
+         *  set the PIL in the %psr to mask off interrupts with lower priority.
+         *  The original %psr in %l0 is not modified since it will be restored
+         *  when the interrupt handler returns.
+         */
 
-      mov     %l0, %g5
-      subcc   %l3, 0x11, %g0
-      bl      dont_fix_pil
-      subcc   %l3, 0x1f, %g0
-      bg      dont_fix_pil
-      sll     %l3, 8, %g4
-      and     %g4, SPARC_PSR_PIL_MASK, %g4
-      andn    %l0, SPARC_PSR_PIL_MASK, %g5
-      or      %g4, %g5, %g5
+        mov      %l0, %g5
+        subcc    %l3, 0x11, %g0
+        bl       dont_fix_pil
+        subcc    %l3, 0x1f, %g0
+        bg       dont_fix_pil
+        sll      %l3, 8, %g4
+        and      %g4, SPARC_PSR_PIL_MASK, %g4
+        andn     %l0, SPARC_PSR_PIL_MASK, %g5
+        or       %g4, %g5, %g5
 dont_fix_pil:
         wr       %g5, SPARC_PSR_ET_MASK, %psr ! **** ENABLE TRAPS ****
 
