@@ -1,3 +1,7 @@
+2002-08-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* tmtests/tm20/Makefile.am: Remove EXPADA.
+
 2002-08-30	Joel Sherrill <joel@OARcorp.com>
 
 	* samples/base_mp/mptest.ads: Removed lingering reference to BSP_MPCI.
@@ -15,12 +19,6 @@
 	* sptests/sp21/sptest.adb: Remove RESULT from TASK_1.
 	* tmtests/tmoverhd/dummy_rtems.adb: Reflect changes to IO_Managers.
 	* tmtests/tmoverhd/dummy_rtems.ads: Reflect changes to IO_Managers.
-
-2002-08-27	Joel Sherrill <joel@OARcorp.com>
-
-	* tmtests/tm20/tmtest.adb, tmtests/tmoverhd/tmtest.adb: Fixed
-	call to RTEMS IO Manager services.
-
 
 2002-08-27	Joel Sherrill <joel@OARcorp.com>
 
