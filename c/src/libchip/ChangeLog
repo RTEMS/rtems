@@ -1,3 +1,13 @@
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:
+	AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* network/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* rtc/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* serial/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* network/cs8900.c: Include rtems/bspIo.h instead of bspIo.h.
