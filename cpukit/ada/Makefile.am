@@ -2,9 +2,8 @@
 # $Id$
 #
 
-include_adadir = $(includedir)/adainclude
-
 if RTEMS_ADA
+include_adadir = $(includedir)/adainclude
 include_ada_HEADERS = rtems.adb rtems.ads
 include_ada_HEADERS += rtems-multiprocessing.adb rtems-multiprocessing.ads
 endif
@@ -13,11 +12,12 @@ all-local: $(PREINSTALL_FILES)
 
 PREINSTALL_FILES =
 
+if RTEMS_ADA
 $(PROJECT_INCLUDE)/adainclude/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/adainclude
 	@: > $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
 
-if RTEMS_ADA
 $(PROJECT_INCLUDE)/adainclude/rtems.adb: rtems.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems.adb
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems.adb
@@ -34,5 +34,7 @@ $(PROJECT_INCLUDE)/adainclude/rtems-multiprocessing.ads: rtems-multiprocessing.a
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-multiprocessing.ads
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-multiprocessing.ads
 endif
+
+CLEANFILES = $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

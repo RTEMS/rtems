@@ -1,5 +1,10 @@
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Move include_adadir into RTEMS_ADA condional block.
+	Add CLEANFILES. Add PREINSTALL_FILES to CLEANFILES.
+
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
