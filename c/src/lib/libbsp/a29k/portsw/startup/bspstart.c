@@ -25,6 +25,8 @@
 static char _sccsid[] = "@(#)bspstart.c 09/11/96     1.15\n";
 #endif
 
+int CPU_CLOCK_RATE_MHZ = 25;
+
 /*
  *  The original table from the application and our copy of it with
  *  some changes.

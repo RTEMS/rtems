@@ -69,7 +69,7 @@ extern "C" {
   }
 
 /* Constants */
-#define CPU_CLOCK_RATE_MHZ 25
+/* #define CPU_CLOCK_RATE_MHZ 25*/
 
 #define RAM_START 0
 #define RAM_END   0x100000
