@@ -2,18 +2,26 @@
 #  $Id$
 #
 
-This test should be for rtems_semaphore_flush.  It will be something like:
+This test will be for rtems_semaphore_flush once it is written.  
+
+To avoid scheduling problems in the printout, it would be better to
+have the test program:
+
+volatile int bFlag, cFlag;
 
 TaskA:
-        create semaphore with initial count 0
-        start taskB and TaskC (Higher priority than taskA, no round-robin)
-        print message
-        semaphore_flush
+         create semaphore with initial count 0
+         start taskB and TaskC (Higher priority than taskA, no
+round-robin)
+         print bFlag, cFlag (should both be 0)
+         semaphore_flush
+         print bFlag, cFlag (should both be 1)
 
-TaskB/C:
-        obtain semaphore
-        print message
-        suspend/delete self
+ TaskB/C:
+         obtain semaphore
+         set flag (B or C as appropriate)
+         suspend/delete self
 
 Successful test would show message from both tasks B and C after the
 message from task A.
+
