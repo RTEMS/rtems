@@ -84,6 +84,8 @@ int _POSIX_Mutex_From_core_mutex_status(
       return EINVAL;
     case CORE_MUTEX_TIMEOUT:
       return EAGAIN;
+    case CORE_MUTEX_STATUS_CEILING_VIOLATED:
+      return EINVAL;
     default:
       break;
   }
