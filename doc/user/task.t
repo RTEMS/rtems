@@ -637,7 +637,7 @@ procedure Task_Create (
 
 @subheading DESCRIPTION:
 This directive creates a task which resides on the local node. 
-It  allocates and initializes a TCB, a stack, and an optional
+It allocates and initializes a TCB, a stack, and an optional
 floating point context area.  The mode parameter contains values
 which sets the task's initial execution mode.  The
 @code{@value{RPREFIX}FLOATING_POINT} attribute should be
