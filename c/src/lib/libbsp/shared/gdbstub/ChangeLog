@@ -1,3 +1,9 @@
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems-stub-glue.c: Corrected use of
+	_Objects_Information_table now that it is a two dimensional
+	array based upon API and class.
+
 2002-06-25	Joel Sherrill <joel@OARcorp.com>
 
 	* Thomas Doerfler <Thomas.Doerfler@imd-systems.de> added m68k

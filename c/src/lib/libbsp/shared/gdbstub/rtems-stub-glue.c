@@ -95,7 +95,7 @@ int rtems_gdb_stub_id_to_index(
   /* Let us figure out thread_id for gdb */
   first_rtems_id = 2;
 
-  obj_info = _Objects_Information_table[OBJECTS_RTEMS_TASKS];
+  obj_info = _Objects_Information_table[OBJECTS_CLASSIC_API][1];
 
   min_id = obj_info->minimum_id;
   max_id = obj_info->maximum_id;
@@ -106,7 +106,7 @@ int rtems_gdb_stub_id_to_index(
 
   first_posix_id = first_rtems_id + (max_id - min_id) + 1;
 
-  min_id = _Objects_Information_table[OBJECTS_POSIX_THREADS]->minimum_id;
+  min_id = _Objects_Information_table[OBJECTS_POSIX_API][1]->minimum_id;
 
   return first_posix_id + (thread_obj_id - min_id);
 } 
@@ -142,7 +142,7 @@ Thread_Control *rtems_gdb_index_to_stub_id(
    thread_obj_id = _Thread_Executing->Object.id;
 
    /* Let us figure out thread_id for gdb */
-   obj_info = _Objects_Information_table[OBJECTS_RTEMS_TASKS];
+   obj_info = _Objects_Information_table[OBJECTS_CLASSIC_API][1];
 
    min_id = obj_info->minimum_id;
    max_id = obj_info->maximum_id;
@@ -160,7 +160,7 @@ Thread_Control *rtems_gdb_index_to_stub_id(
 
    first_posix_id = first_rtems_id + (max_id - min_id) + 1;
 
-   obj_info = _Objects_Information_table[OBJECTS_POSIX_THREADS];
+   obj_info = _Objects_Information_table[OBJECTS_POSIX_API][1];
 
    min_id = obj_info->minimum_id;
    max_id = obj_info->maximum_id;
@@ -209,7 +209,7 @@ int rtems_gdb_stub_get_next_thread(int athread)
 
   first_rtems_id = 2;
  
-  obj_info = _Objects_Information_table[OBJECTS_RTEMS_TASKS];
+  obj_info = _Objects_Information_table[OBJECTS_CLASSIC_API][1];
 
   min_id = obj_info->minimum_id;
   max_id = obj_info->maximum_id;
@@ -232,7 +232,7 @@ int rtems_gdb_stub_get_next_thread(int athread)
       
   first_posix_id = first_rtems_id + (max_id - min_id) + 1;
 
-  obj_info = _Objects_Information_table[OBJECTS_POSIX_THREADS];
+  obj_info = _Objects_Information_table[OBJECTS_POSIX_API][1];
 
   min_id = obj_info->minimum_id;
   max_id = obj_info->maximum_id;
@@ -344,7 +344,7 @@ int rtems_gdb_stub_get_thread_info(
    /* Let us figure out thread_id for gdb */
    first_rtems_id = 2;
   
-   obj_info = _Objects_Information_table[OBJECTS_RTEMS_TASKS];
+   obj_info = _Objects_Information_table[OBJECTS_CLASSIC_API][1];
 
    min_id = obj_info->minimum_id;
    max_id = obj_info->maximum_id;
@@ -390,7 +390,7 @@ int rtems_gdb_stub_get_thread_info(
 
    first_posix_id = first_rtems_id + (max_id - min_id) + 1;
 
-   obj_info = _Objects_Information_table[OBJECTS_POSIX_THREADS];
+   obj_info = _Objects_Information_table[OBJECTS_POSIX_API][1];
 
    min_id = obj_info->minimum_id;
    max_id = obj_info->maximum_id;
