@@ -6,12 +6,12 @@
 include_bspdir = $(includedir)/bsp
 
 C_FILES = irq.c irq_init.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_bsp_HEADERS = irq.h
 
 S_FILES = irq_asm.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES) $(S_O_FILES)
 

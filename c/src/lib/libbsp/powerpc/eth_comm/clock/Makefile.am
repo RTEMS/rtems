@@ -6,7 +6,7 @@
 VPATH = @srcdir@:@srcdir@/../../shared/clock
 
 C_FILES = p_clock.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

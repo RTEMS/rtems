@@ -9,7 +9,7 @@ PGM = $(ARCH)/startup.rel
 
 C_FILES = bspclean.c bsplibc.c bsppost.c bspstart.c bootcard.c cpuinit.c \
     main.c mmutlbtab.c sbrk.c gnatinstallhandler.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
