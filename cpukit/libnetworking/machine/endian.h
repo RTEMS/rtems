@@ -13,12 +13,14 @@
 #define BIG_ENDIAN	4321
 #define LITTLE_ENDIAN	1234
 
+#ifndef BYTE_ORDER
 #if CPU_BIG_ENDIAN
 # define BYTE_ORDER BIG_ENDIAN
 #elif CPU_LITTLE_ENDIAN
 # define BYTE_ORDER LITTLE_ENDIAN
 #else
 # error "Can't decide which end is which!"
+#endif
 #endif
 
 #if ( CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES == FALSE )

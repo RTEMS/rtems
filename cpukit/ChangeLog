@@ -1,3 +1,8 @@
+2004-11-05	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/machine/endian.h: Protect BYTE_ORDER from double
+	definition.
+
 2004-11-05	Ralf Corsepius <ralf_corsepiu@rtems.org>
 
 	* configure.ac: Remove RTEMS_USES_INTTYPES_H. Require inttypes.h.
