@@ -34,6 +34,7 @@ volatile rtems_unsigned32 Interrupt_occurred;
 volatile rtems_unsigned32 Interrupt_enter_time, Interrupt_enter_nested_time;
 volatile rtems_unsigned32 Interrupt_return_time, Interrupt_return_nested_time;
 rtems_unsigned32 Interrupt_nest;
+rtems_unsigned32 timer_overhead;
 
 rtems_isr Isr_handler(
   rtems_vector_number vector
@@ -75,6 +76,11 @@ rtems_task Init(
   status = rtems_task_start( Task_id[ 2 ], Task_2, 0 );
   directive_failed( status, "rtems_task_start of Task_2" );
 
+  Timer_initialize();
+  Read_timer();
+  Timer_initialize();
+  timer_overhead = Read_timer();
+
   status = rtems_task_delete( RTEMS_SELF );
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
 }
@@ -94,8 +100,9 @@ rtems_task Task_1(
   _Thread_Dispatch_disable_level = 0;
 
   Interrupt_occurred = 0;
+
   Timer_initialize();
-    Cause_tm27_intr();
+  Cause_tm27_intr();
   /* goes to Isr_handler */
 
 #if (MUST_WAIT_FOR_INTERRUPT == 1)
@@ -108,7 +115,7 @@ rtems_task Task_1(
     Interrupt_enter_time,
     1,
     0,
-    0
+    timer_overhead
   );
 
   put_time(
@@ -116,7 +123,7 @@ rtems_task Task_1(
     Interrupt_return_time,
     1,
     0,
-    0
+    timer_overhead
   );
 
   /*
@@ -129,7 +136,7 @@ rtems_task Task_1(
 
   Interrupt_occurred = 0;
   Timer_initialize();
-    Cause_tm27_intr();
+  Cause_tm27_intr();
   /* goes to Isr_handler */
 
 #if (MUST_WAIT_FOR_INTERRUPT == 1)
@@ -165,7 +172,7 @@ rtems_task Task_1(
 
   Interrupt_occurred = 0;
   Timer_initialize();
-    Cause_tm27_intr();
+  Cause_tm27_intr();
 
   /*
    *  goes to Isr_handler and then returns
@@ -197,7 +204,7 @@ rtems_task Task_2(
     Interrupt_enter_time,
     1,
     0,
-    0
+    timer_overhead
   );
 
   put_time(
@@ -256,7 +263,7 @@ void Isr_handler_inner( void )
       Interrupt_occurred = 0;
       Lower_tm27_intr();
       Timer_initialize();
-        Cause_tm27_intr();
+      Cause_tm27_intr();
       /* goes to a nested copy of Isr_handler */
 #if (MUST_WAIT_FOR_INTERRUPT == 1)
        while ( Interrupt_occurred == 0 );

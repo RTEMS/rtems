@@ -19,8 +19,9 @@
  *  $Id$
  */
 
-#ifndef __SIS_h
-#define __SIS_h
+#ifndef __ERC32_BSP_h
+#define __ERC32_BSP_h
+  
 
 #ifdef __cplusplus
 extern "C" {
@@ -90,16 +91,19 @@ extern "C" {
 #else   /* use a regular asynchronous trap */
 
 #define TEST_INTERRUPT_SOURCE ERC32_INTERRUPT_EXTERNAL_1
+#define TEST_INTERRUPT_SOURCE2 (ERC32_INTERRUPT_EXTERNAL_1+1)
 #define TEST_VECTOR ERC32_TRAP_TYPE( TEST_INTERRUPT_SOURCE )
+#define TEST_VECTOR2 ERC32_TRAP_TYPE( TEST_INTERRUPT_SOURCE2 )
  
 #define MUST_WAIT_FOR_INTERRUPT 1
  
 #define Install_tm27_vector( handler ) \
-  set_vector( (handler), TEST_VECTOR, 1 );
+  set_vector( (handler), TEST_VECTOR, 1 ); \
+  set_vector( (handler), TEST_VECTOR2, 1 );
  
 #define Cause_tm27_intr() \
   do { \
-    ERC32_Force_interrupt( TEST_INTERRUPT_SOURCE ); \
+    ERC32_Force_interrupt( TEST_INTERRUPT_SOURCE+(Interrupt_nest>>1) ); \
     nop(); \
     nop(); \
     nop(); \
