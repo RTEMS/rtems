@@ -137,6 +137,7 @@ connect (int s, struct sockaddr *name, int namelen)
 	}
 	error = soconnect (so, nam);
 	if (error) {
+		m_freem(nam);
 		errno = error;
 		rtems_bsdnet_semaphore_release ();
 		return -1;
@@ -605,6 +606,7 @@ getpeersockname (int s, struct sockaddr *name, int *namelen, int pflag)
 	else
 		error = (*so->so_proto->pr_usrreqs->pru_sockaddr)(so, m);
 	if (error) {
+		m_freem(m);
 		errno = error;
 		rtems_bsdnet_semaphore_release ();
 		return -1;
