@@ -16,7 +16,6 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/attr.h>
-#include <rtems/config.h>
 #include <rtems/core/isr.h>
 #include <rtems/core/object.h>
 #include <rtems/rtems/options.h>

@@ -25,7 +25,7 @@
 #include <rtems/core/threadq.h>
 #include <rtems/core/tqdata.h>
 #include <rtems/core/watchdog.h>
-#include <rtems/sysstate.h>
+#include <rtems/core/sysstate.h>
 
 void _Multiprocessing_Manager_initialization ( void )
 {
@@ -36,7 +36,8 @@ void rtems_multiprocessing_announce ( void )
 }
 
 void _MPCI_Handler_initialization( 
-  MPCI_Control            *users_mpci_table
+  MPCI_Control            *users_mpci_table,
+  unsigned32               timeout_status
 )
 {
 }

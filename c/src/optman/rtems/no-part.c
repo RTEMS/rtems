@@ -16,7 +16,6 @@
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/core/address.h>
-#include <rtems/config.h>
 #include <rtems/core/object.h>
 #include <rtems/rtems/part.h>
 #include <rtems/core/thread.h>

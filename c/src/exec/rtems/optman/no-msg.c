@@ -17,7 +17,6 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/core/chain.h>
-#include <rtems/config.h>
 #include <rtems/core/isr.h>
 #include <rtems/rtems/message.h>
 #include <rtems/core/object.h>
