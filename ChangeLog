@@ -1,3 +1,27 @@
+2001-09-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: autoupdate to autoconf-2.52.
+	* bootstrap: Add handling for configure.ac, make autoheader verbose,
+	fix auto*tool invocation order.
+	* aclocal/rtems-test-no-pause.m4: Introduce AC_HELP_STRING.
+	* aclocal/enable-bare.m4: Introduce AC_HELP_STRING.
+	* aclocal/enable-cxx.m4: Introduce AC_HELP_STRING.
+	* aclocal/enable-gcc28: Introduce AC_HELP_STRING.
+	* aclocal/enable-inlines.m4: Introduce AC_HELP_STRING.
+	* aclocal/enable-itron.m4: Introduce AC_HELP_STRING.
+	* aclocal/enable-libcdir.m4: Introduce AC_HELP_STRING.
+	* aclocal/enable-multiprocessing.m4: Introduce AC_HELP_STRING.
+	* aclocal/enable-networking.m4: Introduce AC_HELP_STRING.
+	* aclocal/enable-posix.m4: Introduce AC_HELP_STRING.
+	* aclocal/enable-rdbg.m4: Introduce AC_HELP_STRING.
+	* aclocal/enable-rtemsbsp.m4: Introduce AC_HELP_STRING.
+	* aclocal/enable-tests.m4: Introduce AC_HELP_STRING.
+	* aclocal/env-rtemsbsp.m4: Add AC_ARC_VAR(RTEMS_BSP), apply true in
+	RTEMS_CONFIG_PER_BSP conditional.
+	* aclocal/multilib.m4: Introduce AC_HELP_STRING.
+	* aclocal/rtems-debug.m4: Introduce AC_HELP_STRING.
+	* aclocal/rtems-top.m4: Add AC_PREFIX_DEFAULT(/opt/rtems).
+
 2001-05-25	Joel Sherrill <joel@OARcorp.com>
 
  	* README.configure: Corrected the name of the MRM332 BSP.

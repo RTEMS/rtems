@@ -11,6 +11,8 @@ AC_CHECK_PROGS(MAKE, gmake make)
 AC_BEFORE([$0], [AC_CONFIG_AUX_DIR])dnl
 AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
 
+AC_PREFIX_DEFAULT([/opt/rtems])
+
 ## HACK to allow gnu-make conditionals in automake-Makefiles.
 ENDIF=endif
 AC_SUBST(ENDIF)

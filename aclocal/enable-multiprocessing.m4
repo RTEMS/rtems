@@ -3,7 +3,7 @@ dnl $Id$
 AC_DEFUN(RTEMS_ENABLE_MULTIPROCESSING,
 [
 AC_ARG_ENABLE(multiprocessing,
-[  --enable-multiprocessing             enable multiprocessing interface],
+AC_HELP_STRING([--enable-multiprocessing],[enable multiprocessing interface]),
 [case "${enableval}" in 
   yes) RTEMS_HAS_MULTIPROCESSING=yes ;;
   no) RTEMS_HAS_MULTIPROCESSING=no ;;

@@ -1,6 +1,6 @@
 AC_DEFUN(RTEMS_ENABLE_RTEMS_TEST_NO_PAUSE,
 [AC_ARG_ENABLE(test-no-pause,
-[  --disable-test-no-pause              disable RTEMS_TEST_NO_PAUSE],
+AC_HELP_STRING([--disable-test-no-pause],[disable RTEMS_TEST_NO_PAUSE]),
 [case "${enableval}" in
   yes) RTEMS_TEST_NO_PAUSE=yes ;;
   no) RTEMS_TEST_NO_PAUSE=no ;;

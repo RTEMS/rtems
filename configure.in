@@ -2,8 +2,9 @@ dnl Process this file with autoconf to produce a configure script.
 dnl
 dnl  $Id$
 
-AC_PREREQ(2.13)
-AC_INIT(c)
+AC_PREREQ(2.52)
+AC_INIT
+AC_CONFIG_SRCDIR([c])
 RTEMS_TOP(.)
 
 # Abort if trying to build inside of the source tree.
@@ -14,7 +15,7 @@ if test -f VERSION; then
     [Please use a separate build directory, instead] )
 fi
 
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_TARGET([])
 AM_INIT_AUTOMAKE(rtems,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
@@ -111,14 +112,14 @@ AC_CONFIG_SUBDIRS($BUILD_SUBDIRS)
 AC_SUBST(TARGET_SUBDIRS)
 AC_SUBST(BUILD_SUBDIRS)
 
-AC_OUTPUT(
-Makefile
+AC_CONFIG_FILES([Makefile
 tools/Makefile
 make/Makefile
 make/custom/Makefile
 make/Templates/Makefile
 make/compilers/Makefile 
-doc/Makefile)
+doc/Makefile])
+AC_OUTPUT
 
 RTEMS_TARGET_CONFIG_SUBDIRS
 RTEMS_HOST_CONFIG_SUBDIRS

@@ -69,9 +69,10 @@ generate)
     ;;
   esac
 
-  confs=`find . -name 'configure.in' -print`
+  confs=`find . \( -name 'configure.in' -o -name 'configure.ac' \) -print`
   for i in $confs; do
   dir=`dirname $i`;
+  configure=`basename $i`;
   ( test "$quiet" = "true" || echo "$dir";
     cd $dir;
     pat="s,\$(RTEMS_TOPdir),${aclocal_dir},g"
@@ -79,9 +80,10 @@ generate)
       sed -e 's%.*ACLOCAL_AMFLAGS.*\=[ ]*%%g' -e $pat ` ;
     test "$verbose" = "-v" && echo "aclocal $aclocal_args"
     aclocal $aclocal_args;
-    autoconf;
-    test -n "`grep CONFIG_HEADER configure.in`" && autoheader ;
+    test -n "`grep CONFIG_HEADER ${configure}`" && autoheader \
+      && test "$verbose" = "-v" && echo "autoheader";
     test -f Makefile.am && automake $verbose ;
+    autoconf;
     test -f Makefile.am && test -n "`grep 'stamp-h\.in' Makefile.in`" \
       && echo timestamp > stamp-h.in
   )
