@@ -1,5 +1,10 @@
 2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/rtems-top.m4: Remove check for cpukit/aclocal/version.m4.
+	Remove gnu-make endif HACK (Unused).
+
+2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Include compile.am.
 	Use TMP_LIBS instead of LIBS to avoid potential conflicts with
 	auto*tools' LIBS.

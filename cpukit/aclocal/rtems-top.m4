@@ -17,10 +17,6 @@ AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
 
 AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
 
-## HACK to allow gnu-make conditionals in automake-Makefiles.
-ENDIF=endif
-AC_SUBST(ENDIF)
-
 RTEMS_TOPdir="$1";
 AC_SUBST(RTEMS_TOPdir)
 
@@ -42,9 +38,6 @@ PROJECT_ROOT="${with_project_root}${RTEMS_TOPdir}/\$(MULTIBUILDTOP)\$(top_buildd
 AC_SUBST(PROJECT_ROOT)
 
 AC_MSG_CHECKING([for RTEMS Version])
-AS_IF([test -r "${srcdir}/${RTEMS_TOPdir}/cpukit/aclocal/version.m4"],
-[],
-[AC_MSG_ERROR([Unable to find ${RTEMS_TOPdir}/cpukit/aclocal/version.m4])])
 AC_MSG_RESULT([_RTEMS_VERSION])
 
 AC_SUBST([dirstamp],[\${am__leading_dot}dirstamp])
