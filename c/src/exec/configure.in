@@ -65,6 +65,11 @@ RTEMS_DEFINE_POSIX_API
 RTEMS_DEFINE_ITRON_API
 RTEMS_DEFINE_MULTIPROCESSING
 
+# HACK: We should use a feature-based configuration.
+if test x"${RTEMS_CPU}" = x"unix"; then
+AC_DEFINE_UNQUOTED(RTEMS_UNIX,1,[to indicate RTEMS unix])
+fi
+
 AM_CONFIG_HEADER(score/include/rtems/score/cpuopts-tmp.h)
 
 # Explicitly list all Makefiles here

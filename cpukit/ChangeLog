@@ -1,3 +1,7 @@
+2001-02-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: AC_DEFINE RTEMS_UNIX if RTEMS_CPU=unix.
+
 2000-12-01	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.in: Removed error check for enabling macros with
