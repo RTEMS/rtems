@@ -1,3 +1,13 @@
+2003-06-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove "BLEEDING EDGE" warning.
+	Put docs into RTEMS_BUILD_CONFIG_SUBDIRS.
+	* acinclude.m4: Add AC_PREREQ(2.57).
+	Major overhaul (PR 412).
+	* aclocal/prog-cc.m4: Add RTEMS_GCC_ISYSTEM.
+	* aclocal/gcc-isystem.m4: New.
+	* Makefile.am: Add aclocal/gcc-isystem.m4.
+
 2003-06-06      Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/local.am: Remove $(ARCH), clean-local.
