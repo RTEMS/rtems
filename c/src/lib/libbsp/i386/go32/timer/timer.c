@@ -40,6 +40,9 @@ static void restore_timer( void )
 }
 #else /* pentium */
 rtems_isr timerisr();
+
+#define TIMER_ISR_US  10000
+
 #endif /* pentium */
 
 void Timer_initialize()
@@ -74,10 +77,10 @@ void Timer_initialize()
        /* Wait for ISR to be called at least once */
        WAIT();
 
-       /* load timer for 250 microsecond period */
+       /* load timer for TIMER_ISR_US microsecond period */
        outport_byte( TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN );
-       outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 0 & 0xff);
-       outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 8 & 0xff);
+       outport_byte( TIMER_CNTR0, US_TO_TICK(TIMER_ISR_US) >> 0 & 0xff);
+       outport_byte( TIMER_CNTR0, US_TO_TICK(TIMER_ISR_US) >> 8 & 0xff);
     }
 
     /* Wait for ISR to be called at least once */
@@ -101,7 +104,7 @@ int Read_timer()
     inport_byte( TIMER_CNTR0, lsb );
     inport_byte( TIMER_CNTR0, msb );
     clicks = msb << 8 | lsb;
-    total = Ttimer_val + (250 - TICK_TO_US( clicks ));
+    total = (Ttimer_val * TIMER_ISR_US) + (TIMER_ISR_US - TICK_TO_US( clicks ));
 #endif /* pentium */
 
     if ( Timer_driver_Find_average_overhead == 1 )

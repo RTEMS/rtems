@@ -27,7 +27,7 @@
         PUBLIC(timerisr)
 
 SYM (timerisr): 
-        addl    $250,_Ttimer_val   # another 250 microseconds
+        addl    $1,_Ttimer_val   # another tick
         push    edx
         push    eax
         movw    $0x20,dx

@@ -86,7 +86,14 @@ void _CPU_ISR_install_raw_handler(
 #if __GO32__
     _go32_dpmi_seginfo handler_info;
  
-    *old_handler =  0;    /* XXX not supported */
+    /* get the address of the old handler */
+    _go32_dpmi_get_protected_mode_interrupt_vector( vector, &handler_info);
+ 
+    /* Notice how we're failing to save the pm_segment portion of the */
+    /* structure here?  That means we might crash the system if we  */
+    /* try to restore the ISR.  Can't fix this until i386_isr is  */
+    /* redefined.  XXX [BHC].           */
+    *old_handler = (proc_ptr *) handler_info.pm_offset;
 
     handler_info.pm_offset = (u_long) new_handler;
     handler_info.pm_selector = _go32_my_cs();
