@@ -1,3 +1,9 @@
+2003-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Remove.
+	* wrapup/.cvsignore: Remove.
+	* Makefile.am: Reflect changes above.
+
 2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* capture/config.h: Remove.

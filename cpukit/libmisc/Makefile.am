@@ -3,7 +3,7 @@
 ##
 
 SUBDIRS = capture cpuuse devnull dummy dumpbuf monitor mw-fb shell \
-          rtmonuse serdbg stackchk untar fsmount wrapup
+          rtmonuse serdbg stackchk untar fsmount
 
 EXTRA_DIST = README
 
