@@ -1,3 +1,7 @@
+2001-10-22	Joel Sherrill <joel@OARcorp.com>
+
+	* acinclude.m4: Added mpc8260ads subdirectory.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
