@@ -21,11 +21,35 @@
 #include <assert.h>
 #include "system.h"
 
+int Preempt_task_Count;
+
 void Preempt_task()
 {
-  ER   status;
+  ER       status;
+  T_RTSK   pk_rtsk;
 
-  puts( "PREEMPT - exd_tsk"  );
-  exd_tsk(  );
-  assert( 0 );
+  puts( "PREEMPT - ref_tsk validation"  );
+  status = ref_tsk( &pk_rtsk, PREEMPT_TASK_ID );
+  assert( status          == E_OK );
+  assert( pk_rtsk.tskpri  == PREEMPT_PRIORITY );
+  assert( pk_rtsk.itskpri == PREEMPT_PRIORITY );
+  assert( pk_rtsk.task    == Preempt_task );
+  assert( pk_rtsk.stksz   >= RTEMS_MINIMUM_STACK_SIZE );
+  assert( pk_rtsk.tskstat == (TTS_RUN | TTS_RDY) );
+
+  if ( Preempt_task_Count == 0 ) {
+    Preempt_task_Count ++;
+    puts( "PREEMPT - chg_pri increment priority "); 
+    status = chg_pri( PREEMPT_TASK_ID, (PREEMPT_PRIORITY+1) );
+    directive_failed( status, "chg_pri" );
+    puts( "PREEMPT - ext_tsk - going to DORMANT state" );
+    ext_tsk( );
+    assert( 0 );
+  } else {
+    Preempt_task_Count ++;
+    puts( "PREEMPT - exd_tsk - Exit and Delete task" );
+    exd_tsk(  );
+    assert( 0 );
+  }
 }
+

@@ -40,6 +40,8 @@ void Task_3();
 #define TA2_ID                  4
 #define TA3_ID                  5
 
+
+#define PREEMPT_PRIORITY        1
 TEST_EXTERN rtems_id Global_variable;   /* example global variable     */
 
 /* end of include file */
