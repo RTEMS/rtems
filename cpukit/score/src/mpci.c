@@ -50,6 +50,22 @@ void _MPCI_Handler_initialization(
 
   _MPCI_table = users_mpci_table;
 
+  if ( !_System_state_Is_multiprocessing )
+    return;
+
+  /*
+   *  Register the MP Process Packet routine.
+   */
+ 
+  _MPCI_Register_packet_processor(
+    MP_PACKET_MPCI_INTERNAL,
+    _MPCI_Internal_packets_Process_packet
+  );
+
+  /*
+   *  Create the counting semaphore used by the MPCI Receive Server.
+   */
+
   attributes.discipline = CORE_SEMAPHORE_DISCIPLINES_FIFO;
 
   _CORE_semaphore_Initialize(
@@ -67,6 +83,49 @@ void _MPCI_Handler_initialization(
     STATES_WAITING_FOR_RPC_REPLY,
     NULL,
     timeout_status
+  );
+}
+
+/*PAGE
+ *
+ *  _MPCI_Create_server
+ *
+ *  This subprogram creates the MPCI receive server.
+ */
+
+char *_MPCI_Internal_name = "MPCI";
+
+void _MPCI_Create_server( void )
+{
+
+  if ( !_System_state_Is_multiprocessing )
+    return;
+
+  /*
+   *  Initialize the MPCI Receive Server
+   */
+
+  _MPCI_Receive_server_tcb = _Thread_Internal_allocate();
+ 
+  _Thread_Initialize(
+    &_Thread_Internal_information,
+    _MPCI_Receive_server_tcb,
+    NULL,        /* allocate the stack */
+    MPCI_RECEIVE_SERVER_STACK_SIZE,
+    CPU_ALL_TASKS_ARE_FP,
+    PRIORITY_MINIMUM,
+    FALSE,       /* no preempt */
+    FALSE,       /* not timesliced */
+    0,           /* all interrupts enabled */
+    _MPCI_Internal_name
+  );
+ 
+  _Thread_Start(
+    _MPCI_Receive_server_tcb,
+    THREAD_START_NUMERIC,
+    _MPCI_Receive_server,
+    NULL,
+    0
   );
 }
 
@@ -286,7 +345,9 @@ Thread_Control *_MPCI_Process_response (
  *
  */
 
-void _MPCI_Receive_server( void )
+Thread _MPCI_Receive_server(
+  unsigned32 ignored
+)
 {
  
   MP_packet_Prefix         *the_packet;
@@ -294,7 +355,6 @@ void _MPCI_Receive_server( void )
   Thread_Control           *executing;
  
   executing = _Thread_Executing;
-  _MPCI_Receive_server_tcb = executing;
 
   for ( ; ; ) {
  
@@ -340,6 +400,125 @@ void _MPCI_Announce ( void )
   _Thread_Disable_dispatch();
   (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, 0, 0 );
   _Thread_Enable_dispatch();
+}
+
+/*PAGE
+ *
+ *  _MPCI_Internal_packets_Send_process_packet
+ *
+ */
+ 
+void _MPCI_Internal_packets_Send_process_packet (
+   MPCI_Internal_Remote_operations operation
+)
+{
+  MPCI_Internal_packet *the_packet;
+ 
+  switch ( operation ) {
+ 
+    case MPCI_PACKETS_SYSTEM_VERIFY:
+ 
+      the_packet                    = _MPCI_Internal_packets_Get_packet();
+      the_packet->Prefix.the_class  = MP_PACKET_MPCI_INTERNAL;
+      the_packet->Prefix.length     = sizeof ( MPCI_Internal_packet );
+      the_packet->Prefix.to_convert = sizeof ( MPCI_Internal_packet );
+      the_packet->operation         = operation;
+ 
+      the_packet->maximum_nodes = _Objects_Maximum_nodes;
+ 
+      the_packet->maximum_global_objects = _Objects_MP_Maximum_global_objects;
+ 
+      _MPCI_Send_process_packet( MPCI_ALL_NODES, &the_packet->Prefix );
+      break;
+  }
+}
+ 
+/*PAGE
+ *
+ *  _MPCI_Internal_packets_Send_request_packet
+ *
+ *  This subprogram is not needed since there are no request
+ *  packets to be sent by this manager.
+ *
+ */
+ 
+/*PAGE
+ *
+ *  _MPCI_Internal_packets_Send_response_packet
+ *
+ *  This subprogram is not needed since there are no response
+ *  packets to be sent by this manager.
+ *
+ */
+ 
+/*PAGE
+ *
+ *
+ *  _MPCI_Internal_packets_Process_packet
+ *
+ */
+ 
+void _MPCI_Internal_packets_Process_packet (
+  MP_packet_Prefix  *the_packet_prefix
+)
+{
+  MPCI_Internal_packet *the_packet;
+  unsigned32                  maximum_nodes;
+  unsigned32                  maximum_global_objects;
+ 
+  the_packet = (MPCI_Internal_packet *) the_packet_prefix;
+ 
+  switch ( the_packet->operation ) {
+ 
+    case MPCI_PACKETS_SYSTEM_VERIFY:
+ 
+      maximum_nodes          = the_packet->maximum_nodes;
+      maximum_global_objects = the_packet->maximum_global_objects;
+      if ( maximum_nodes != _Objects_Maximum_nodes ||
+           maximum_global_objects != _Objects_MP_Maximum_global_objects ) {
+ 
+        _MPCI_Return_packet( the_packet_prefix );
+ 
+        _Internal_error_Occurred(
+          INTERNAL_ERROR_CORE,
+          TRUE,
+          INTERNAL_ERROR_INCONSISTENT_MP_INFORMATION
+        );
+      }
+ 
+      _MPCI_Return_packet( the_packet_prefix );
+ 
+      break;
+  }
+}
+ 
+/*PAGE
+ *
+ *  _MPCI_Internal_packets_Send_object_was_deleted
+ *
+ *  This subprogram is not needed since there are no objects
+ *  deleted by this manager.
+ *
+ */
+ 
+/*PAGE
+ *
+ *  _MPCI_Internal_packets_Send_extract_proxy
+ *
+ *  This subprogram is not needed since there are no objects
+ *  deleted by this manager.
+ *
+ */
+ 
+/*PAGE
+ *
+ *  _MPCI_Internal_packets_Get_packet
+ *
+ */
+ 
+MPCI_Internal_packet *_MPCI_Internal_packets_Get_packet ( void )
+{
+  return ( (MPCI_Internal_packet *) _MPCI_Get_packet() );
 }
 
 /* end of file */

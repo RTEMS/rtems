@@ -197,5 +197,21 @@ void _Thread_Enable_dispatch( void );
 #define _Thread_Is_proxy_blocking( _code ) \
   ( (_code) == THREAD_STATUS_PROXY_BLOCKING )
 
+/*
+ *  _Thread_Internal_allocate
+ *
+ */
+ 
+#define _Thread_Internal_allocate() \
+  ((Thread_Control *) _Objects_Allocate( &_Thread_Internal_information ))
+ 
+/*
+ *  _Thread_Internal_free
+ *
+ */
+ 
+#define _Thread_Internal_free( _the_task ) \
+  _Objects_Free( &_Thread_Internal_information, &(_the_task)->Object )
+
 #endif
 /* end of include file */

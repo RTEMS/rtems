@@ -40,13 +40,15 @@
  *  Output parameters:  NONE
  */
 
+char *_Thread_Idle_name = "IDLE";
+
 void _Thread_Handler_initialization(
   unsigned32   ticks_per_timeslice,
   unsigned32   maximum_extensions,
   unsigned32   maximum_proxies
 )
 {
-  unsigned32 index;
+  unsigned32      index;
 
   _Context_Switch_necessary = FALSE;
   _Thread_Executing         = NULL;
@@ -66,6 +68,83 @@ void _Thread_Handler_initialization(
     _Chain_Initialize_empty( &_Thread_Ready_chain[ index ] );
 
   _Thread_MP_Handler_initialization( maximum_proxies );
+
+  /*
+   *  Initialize this class of objects.
+   */
+ 
+  _Objects_Initialize_information(
+    &_Thread_Internal_information,
+    OBJECTS_INTERNAL_THREADS,
+    FALSE,
+    ( _System_state_Is_multiprocessing ) ?  2 : 1,
+    sizeof( Thread_Control ),
+    TRUE,
+    8,
+    TRUE
+  );
+
+}
+
+/*PAGE
+ *
+ *  _Thread_Create_idle
+ */
+
+void _Thread_Create_idle( void )
+{
+  Thread (*idle);
+
+  /*
+   *  The entire workspace is zeroed during its initialization.  Thus, all
+   *  fields not explicitly assigned were explicitly zeroed by
+   *  _Workspace_Initialization.
+   */
+ 
+  _Thread_Idle = _Thread_Internal_allocate();
+ 
+  /*
+   *  Initialize the IDLE task.
+   */
+ 
+#if (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
+  idle = _CPU_Thread_Idle_body;
+#else
+  idle = _Thread_Idle_body;
+#endif
+ 
+  if ( _CPU_Table.idle_task )
+    idle = _CPU_Table.idle_task;
+ 
+  _Thread_Initialize(
+    &_Thread_Internal_information,
+    _Thread_Idle,
+    NULL,        /* allocate the stack */
+    THREAD_IDLE_STACK_SIZE,
+    CPU_IDLE_TASK_IS_FP,
+    PRIORITY_MAXIMUM,
+    TRUE,        /* preemptable */
+    FALSE,       /* not timesliced */
+    0,           /* all interrupts enabled */
+    _Thread_Idle_name
+  );
+ 
+  /*
+   *  WARNING!!! This is necessary to "kick" start the system and
+   *             MUST be done before _Thread_Start is invoked.
+   */
+ 
+  _Thread_Heir      =
+  _Thread_Executing = _Thread_Idle;
+ 
+  _Thread_Start(
+    _Thread_Idle,
+    THREAD_START_NUMERIC,
+    idle,
+    NULL,
+    0
+  );
+ 
 }
 
 /*PAGE
@@ -89,10 +168,7 @@ void _Thread_Handler_initialization(
  *    select heir
  */
 
-void _Thread_Start_multitasking(
-  Thread_Control *system_thread,
-  Thread_Control *idle_thread
-)
+void _Thread_Start_multitasking( void )
 {
   /*
    *  The system is now multitasking and completely initialized.  
@@ -1068,4 +1144,28 @@ STATIC INLINE Thread_Control *_Thread_Get (
  
   return (Thread_Control *) _Objects_Get( information, id, location );
 }
+
+/*PAGE
+ *
+ *  _Thread_Idle_body
+ *
+ *  This kernel routine is the idle thread.  The idle thread runs any time
+ *  no other thread is ready to run.  This thread loops forever with
+ *  interrupts enabled.
+ *
+ *  Input parameters:
+ *    ignored - this parameter is ignored
+ *
+ *  Output parameters:  NONE
+ */
+ 
+#if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
+Thread _Thread_Idle_body(
+  unsigned32 ignored
+)
+{
+  for( ; ; ) ;
+}
+#endif
+
 #endif

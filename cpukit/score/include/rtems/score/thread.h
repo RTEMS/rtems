@@ -161,6 +161,28 @@ typedef struct {
 }   Thread_Control;
 
 /*
+ *  The following constants define the stack size requirements for
+ *  the idle thread.
+ */
+ 
+ 
+#define THREAD_IDLE_STACK_SIZE  STACK_MINIMUM_SIZE
+ 
+/*
+ *  The following defines the information control block used to
+ *  manage this class of objects.
+ */
+ 
+EXTERN Objects_Information _Thread_Internal_information;
+ 
+/*
+ *  The following define the thread control pointers used to access
+ *  and manipulate the idle thread.
+ */
+ 
+EXTERN Thread_Control *_Thread_Idle;
+
+/*
  *  The following context area contains the context of the "thread"
  *  which invoked the start multitasking routine.  This context is 
  *  restored as the last action of the stop multitasking routine.  Thus
@@ -236,6 +258,18 @@ void _Thread_Handler_initialization (
   unsigned32   maximum_extensions,
   unsigned32   maximum_proxies
 );
+
+/*
+ *  _Thread_Create_idle
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine creates the idle thread.
+ *
+ *  WARNING!! No thread should be created before this one.
+ */
+ 
+void _Thread_Create_idle( void );
 
 /*
  *  _Thread_Start_multitasking
@@ -755,6 +789,42 @@ STATIC INLINE Thread_Control *_Thread_Get (
 STATIC INLINE boolean _Thread_Is_proxy_blocking (
   unsigned32 code
 );
+
+/*
+ *  _Thread_Internal_allocate
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine allocates an internal thread.
+ */
+ 
+STATIC INLINE Thread_Control *_Thread_Internal_allocate( void );
+ 
+/*
+ *  _Thread_Internal_free
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine frees an internal thread.
+ */
+ 
+STATIC INLINE void _Thread_Internal_free (
+  Thread_Control *the_task
+);
+
+/*
+ *  _Thread_Idle_body
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine is the body of the system idle thread.
+ */
+ 
+#if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
+Thread _Thread_Idle_body(
+  unsigned32 ignored
+);
+#endif
 
 #include <rtems/score/thread.inl>
 #include <rtems/score/threadmp.h>

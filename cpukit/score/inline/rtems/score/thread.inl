@@ -283,5 +283,29 @@ STATIC INLINE boolean _Thread_Is_proxy_blocking (
   return (code == THREAD_STATUS_PROXY_BLOCKING);
 }
 
+/*PAGE
+ *
+ *  _Thread_Internal_allocate
+ *
+ */
+ 
+STATIC INLINE Thread_Control *_Thread_Internal_allocate( void )
+{
+  return (Thread_Control *) _Objects_Allocate( &_Thread_Internal_information );
+}
+ 
+/*PAGE
+ *
+ *  _Thread_Internal_free
+ *
+ */
+ 
+STATIC INLINE void _Thread_Internal_free (
+  Thread_Control *the_task
+)
+{
+  _Objects_Free( &_Thread_Internal_information, &the_task->Object );
+}
+
 #endif
 /* end of include file */

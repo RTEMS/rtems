@@ -38,7 +38,7 @@ extern "C" {
  */
 
 typedef enum {
-  MP_PACKET_INTERNAL_THREADS = 0,
+  MP_PACKET_MPCI_INTERNAL    = 0,
   MP_PACKET_TASKS            = 1,
   MP_PACKET_MESSAGE_QUEUE    = 2,
   MP_PACKET_SEMAPHORE        = 3,
@@ -48,7 +48,7 @@ typedef enum {
   MP_PACKET_SIGNAL           = 7
 }   MP_packet_Classes;
 
-#define MP_PACKET_CLASSES_FIRST  MP_PACKET_INTERNAL_THREADS
+#define MP_PACKET_CLASSES_FIRST  MP_PACKET_MPCI_INTERNAL
 #define MP_PACKET_CLASSES_LAST   MP_PACKET_SIGNAL
 
 /*
