@@ -1,5 +1,10 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* console/conscfg.c, include/bsp.h, startup/bspstart.c,
+	startup/spurious_assistant.c: URL for license changed.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	* start/start.S: Removed incorrect statement about copyright
 	assignment.
 
