@@ -14,16 +14,16 @@ The items in this category provide pointers to other resources.
 
 @section CrossGCC
 
-http://www.objsw.com
+@uref{http://www.objsw.com}
 
 @section CPU Family Specific Forums
 
 @subsection Motorola M68xxx and ColdFire
 
 David Fiddes maintains a fabulous site on ColdFire and MC68xxx embedded
-development.  It is at http://www.calm.hw.ac.uk/davidf/coldfire/.
+development.  It is at @uref{http://www.calm.hw.ac.uk/davidf/coldfire/}.
 
-Motorola has a lot of information at http://www.mot.com/SPS/HPESD/index.html.
+Motorola has a lot of information at @uref{http://www.mot.com/SPS/HPESD/index.html}.
 
 @subsection Hitach SH
 
