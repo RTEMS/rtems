@@ -1,9 +1,11 @@
 /*
- * main.c -- Main program for the GoAhead WebServer (LINUX version)
+ * main.c -- Main program for the GoAhead WebServer (RTEMS version)
  *
  * Copyright (c) Go Ahead Software Inc., 1995-1999. All Rights Reserved.
  *
  * See the file "license.txt" for usage and redistribution license requirements
+ *
+ *  $Id$
  */
 
 /******************************** Description *********************************/
@@ -20,6 +22,8 @@
 #include	<signal.h>
 #include	<sys/time.h>
 #include 	<pthread.h>
+
+#include	<rtems/error.h>
 
 /*********************************** Locals ***********************************/
 /*
@@ -63,7 +67,7 @@ static void rtems_httpd_daemon();
  
 /*********************************** Code *************************************/
 /*
- *	Main -- entry point from LINUX
+ *	Main -- entry point from RTEMS
  */
 int rtems_initialize_webserver()
 {
@@ -269,7 +273,10 @@ static void formTest(webs_t wp, char_t *path, char_t *query)
 
 void *emfCreateTimer(int delay, void (*routine)(long arg), 	long arg)
 {
+/* this variable is only used in the if'ed 0 section below */
+#if 0
 	struct sigaction	act;
+#endif
 	struct itimerspec its = { {0,0}, {0,0} };
 	struct sigevent se;
 	int 	status;

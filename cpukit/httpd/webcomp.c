@@ -73,8 +73,8 @@ static int compile(char_t *fileList, char_t *prefix)
 	char_t			file[FNAMESIZE];
 	char_t			*cp;
 	char			buf[512];
-	unsigned char	*p;
-	int				j, i, len, fd, nFile;
+	char			*p;
+	int			j, i, len, fd, nFile;
 
 /*
  *	Open list of files
@@ -159,8 +159,8 @@ static int compile(char_t *fileList, char_t *prefix)
 			fprintf(stdout, "    { T(\"/%s\"), 0, 0 },\n", cp);
 			continue;
 		}
-		fprintf(stdout, "    { T(\"/%s\"), page_%d, %d },\n", cp, nFile, 
-			sbuf.st_size);
+		fprintf(stdout, "    { T(\"/%s\"), page_%d, %ld },\n", cp, nFile, 
+			(long) sbuf.st_size);
 		nFile++;
 	}
 	fclose(lp); 

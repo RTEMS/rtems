@@ -209,7 +209,7 @@ static void socketAccept(socket_t* sp)
 {
 	struct sockaddr_in	addr;
 	socket_t 			*nsp;
-	size_t				len;
+	int				len;
 	int 				newSock, nid;
 
 	a_assert(sp);
@@ -980,9 +980,8 @@ static int socketNonBlock(socket_t *sp)
  *	Duplicate stdin and stdout
  */
 
-int DuplicateStdFile (int sid){
-  int i;
-  
+int DuplicateStdFile (int sid)
+{
   if (0 != dup2(socketList[sid]->sock, 0)  || 1 != dup2(socketList[sid]->sock, 1))
     return -1;
   
