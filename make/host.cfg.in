@@ -19,7 +19,7 @@ SHELL=@SHELL@
 ECHO=echo
 
 CAT=cat
-RM=@RM@ -f
+## RM=@RM@ -f
 CP=@CP@
 MV=@MV@
 LN=@LN@

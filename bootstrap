@@ -76,8 +76,8 @@ generate)
     cd $dir;
     aclocal -I $aclocal_dir;
     autoconf;
-    test -f Makefile.am && automake $verbose ;
     test -n "`grep CONFIG_HEADER configure.in`" && autoheader ;
+    test -f Makefile.am && automake $verbose ;
     test -f Makefile.am && test -n "`grep 'stamp-h\.in' Makefile.in`" \
       && echo timestamp > stamp-h.in
   )
