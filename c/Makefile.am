@@ -19,7 +19,7 @@ SUBDIRS = . $(RTEMS_BSP)
 	@set fnord $(MAKEFLAGS); amf=$$2; \
 	test -n "${RTEMS_BSP}" && for i in ${RTEMS_BSP}; do \
 	  echo "Configuring RTEMS_BSP=$$i"; \
-	  test -d $$i || mkdir $$i; \
+	  $(mkinstalldirs) $$i; \
 	  ( cd $$i && \
 	    CONFIG_SHELL=$(SHELL) RTEMS_BSP=$$i $(rtems_bsp_configure) \
 	    && $(MAKE) $(AM_MAKEFLAGS) preinstall ) \

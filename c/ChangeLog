@@ -1,3 +1,7 @@
+2002-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use mkinstalldirs instead of mkdir.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Fix --enable-rtemsbsp= handling.
