@@ -28,11 +28,7 @@ H_FILES = remdeb.h
 # X source names
 X_FILES = remdeb.x remdeb_f.x
 
-SRCS = $(C_FILES) $(S_FILES) $(GEN_C_FILES) $(H_FILES)
 OBJS = $(GEN_C_O_FILES) $(C_O_FILES) $(S_O_FILES)
-
-RPCGEN = @RPCGEN@
-AWK = @AWK@
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/lib.am

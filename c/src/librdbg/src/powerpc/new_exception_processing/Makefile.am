@@ -1,49 +1,34 @@
-#
-#  $Id$
-#
+##
+##  $Id$
+##
 
-@SET_MAKE@
-srcdir = @srcdir@
-top_srcdir = @top_srcdir@
-top_builddir = ../../..
-subdir = src/powerpc/mcp750
-
-RTEMS_ROOT = @RTEMS_ROOT@
-PROJECT_ROOT = @PROJECT_ROOT@
+AUTOMAKE_OPTIONS = foreign 1.4
 
 VPATH = @srcdir@:@srcdir@/..:@srcdir@/../..
 
-LIBNAME = librdbg.a
-LIB = ${ARCH}/${LIBNAME}
+LIBNAME = librdbg
+LIB = ${ARCH}/${LIBNAME}.a
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES = rdbg servcon servbkpt servrpc excep excep_f servtgt servtsp \
-    servutil _servtgt rdbg_f ptrace
-C_FILES = $(C_PIECES:%=%.c)
-C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
+C_FILES = rdbg.c servcon.c servbkpt.c servrpc.c excep.c excep_f.c servtgt.c \
+    servtsp.c servutil.c _servtgt.c rdbg_f.c ptrace.c
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
 # Asm source names, if any, go here -- minus the .s 
-S_PIECES = rdbg_cpu_asm
-S_FILES = $(S_PIECES:%=%.S)
-S_O_FILES = $(S_PIECES:%=${ARCH}/%.o)
+S_FILES = rdbg_cpu_asm.S
+S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 
 # Generated C source names, if any, go here -- minus the .c
-GEN_C_PIECES = remdeb_xdr remdeb_svc
-GEN_C_FILES = $(GEN_C_PIECES:%=%.c)
-GEN_C_O_FILES = $(GEN_C_PIECES:%=${ARCH}/%.o)
+GEN_C_FILES = remdeb_xdr.c remdeb_svc.c
+GEN_C_O_FILES = $(GEN_C_PIECES:%.c=${ARCH}/%.o)
 
 # H source names, if any, go here -- minus the .h
-H_PIECES = remdeb
-H_FILES = $(H_PIECES:%=%.h)
+H_FILES = remdeb.h
 
 # X source names
 X_FILES = remdeb.x remdeb_f.x
 
-SRCS = $(C_FILES) $(S_FILES) $(GEN_C_FILES) $(H_FILES)
 OBJS = $(GEN_C_O_FILES) $(C_O_FILES) $(S_O_FILES)
-
-RPCGEN = @RPCGEN@
-AWK = @AWK@
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/lib.am
@@ -71,7 +56,7 @@ $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIBVARIANT).a
 
 CLEANFILES += $(LIB) $(H_FILES) $(GEN_C_FILES)
 
-FRONTEND = \"$(RTEMS_CPU)/@RTEMS_BSP@/remdeb_f.x\"
+FRONTEND = \"$(RTEMS_CPU)/mcp750/remdeb_f.x\"
 
 $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIBVARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
