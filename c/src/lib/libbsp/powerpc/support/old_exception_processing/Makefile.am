@@ -2,10 +2,7 @@
 ## $Id$
 ##
 
-
 ACLOCAL_AMFLAGS = -I ../../../../../../../aclocal
-
-INCLUDES = -I$(srcdir)
 
 # C source names
 C_FILES = cpu.c
@@ -22,13 +19,10 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../../automake/lib.am
 
+AM_CPPFLAGS += -I$(srcdir)
+
 TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%=$(PROJECT_INCLUDE)/%)
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
-
-$(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
-	$(INSTALL_DATA) $< $@
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
