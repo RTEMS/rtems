@@ -72,6 +72,7 @@ zylons()
 {
   unsigned char *leds 	= (unsigned char *)LED_ADDR;
   unsigned char curled = 0xfe;
+  void delay( int );
 
   while (1)
     {
