@@ -13,7 +13,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  wkspace.c,v 1.4 1995/05/25 15:26:53 joel Exp
+ *  $Id$
  */
 
 #include <rtems/system.h>

@@ -18,7 +18,7 @@
  *      Division Incorporated makes no representations about the
  *      suitability of this software for any purpose.
  *
- *  tty.c,v 1.2 1995/05/09 20:17:14 joel Exp
+ *  $Id$
  */
 
 #include <bsp.h>

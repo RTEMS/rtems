@@ -10,7 +10,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  thread.c,v 1.5 1995/07/31 22:22:38 joel Exp
+ *  $Id$
  */
 
 #include <rtems/system.h>
