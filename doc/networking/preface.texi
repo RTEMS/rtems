@@ -22,3 +22,36 @@ stack.  Much of this documentation was written by Eric Norum
 of the Saskatchewan Accelerator Laboratory
 who also ported the FreeBSD TCP/IP stack to RTEMS.
 
+The following is a list of resources which should be useful in trying
+to understand Ethernet:
+
+@itemize @bullet
+
+@item @cite{Charles Spurgeon's Ethernet Web Site}
+
+"This site provides extensive information about Ethernet
+(IEEE 802.3) local area network (LAN) technology. Including
+the original 10 Megabit per second (Mbps) system, the 100 Mbps
+Fast Ethernet system (802.3u), and the Gigabit Ethernet system (802.3z)."
+The URL is:
+@ifset use-html
+(@href{http://wwwhost.ots.utexas.edu/ethernet/index.html,,,http://wwwhost.ots.utexas.edu/ethernet/index.html})
+@end ifset
+@ifclear use-html
+(http://wwwhost.ots.utexas.edu/ethernet/index.html)
+@end ifclear
+
+@item @cite{TCP/IP Illustrated, Volume 1 : The Protocols} by
+by W. Richard Stevens (ISBN: 0201633469)
+
+This book provides detailed introduction to TCP/IP and includes diagnostic
+programs which are publicly available.
+
+@item @cite{TCP/IP Illustrated : The Implementation} by W. Richard
+Stevens and Gary Wright (ISBN: 020163354X)
+
+This book focuses on implementation issues regarding TCP/IP.  The
+treat for RTEMS users is that the implementation covered is the BSD
+stack.
+
+@end itemize
