@@ -60,6 +60,8 @@ AS_IF([test x"$HAS_ITRON_API" = x"yes"],
 RTEMS_CPU_SUBDIRS([score/cpu])
 
 AC_CONFIG_SUBDIRS([libcsupport])
+AC_CONFIG_SUBDIRS([libblock])
+AC_CONFIG_SUBDIRS([libfs])
 
 RTEMS_DEFINE_POSIX_API
 RTEMS_DEFINE_ITRON_API
@@ -71,6 +73,8 @@ AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
 # HACK: silently accept --enable-unixlib
   test -n "${enable_unixlib}" || enable_unixlib="yes"
 ])
+
+AM_CONDITIONAL(UNIX,[test x"${RTEMS_CPU}" = x"unix"])
 
 AS_IF([test x"${enable_unixlib}" = x"yes"],
   [AC_DEFINE_UNQUOTED([RTEMS_UNIXLIB],[1],

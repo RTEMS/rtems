@@ -1,3 +1,8 @@
+2002-05-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add libblock. Add libfs. Add AM_CONDITIONAL(UNIX).
+	* wrapup/Makefile.am: Add libblock, libfs/dosfs, libfs/imfs.
+
 2002-05-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add libcsupport.

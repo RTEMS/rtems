@@ -25,8 +25,15 @@ endif
 
 LIBCSUPPORT_OBJS = $(wildcard ../libcsupport/src/$(ARCH)/*.o)
 
+LIBBLOCK_OBJS = $(wildcard ../libblock/$(ARCH)/*.o)
+if !UNIX
+LIBDOSFS_OBJS = $(wildcard ../libfs/src/dosfs/$(ARCH)/*.o)
+endif
+LIBIMFS_OBJS = $(wildcard ../libfs/src/imfs/$(ARCH)/*.o)
+
 OBJS = $(CPU_OBJS) $(CORE_OBJS) $(RTEMS_OBJS) $(SAPI_OBJS) \
-    $(POSIX_OBJS) $(ITRON_OBJS) $(LIBCSUPPORT_OBJS)
+    $(POSIX_OBJS) $(ITRON_OBJS) $(LIBCSUPPORT_OBJS) \
+    $(LIBBLOCK_OBJS) $(LIBDOSFS_OBJS) $(LIBIMFS_OBJS)
 
 $(LIB): ${OBJS}
 	$(make-library)
