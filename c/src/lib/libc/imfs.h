@@ -66,9 +66,21 @@ typedef struct {
  *
  *  block_ptr is a pointer to a block of IMFS_MEMFILE_BYTES_PER_BLOCK in
  *  length which could be data or a table of pointers to blocks.
+ *
+ *  Setting IMFS_MEMFILE_BYTES_PER_BLOCK to different values has a significant
+ *  impact on the maximum file size supported as well as the amount of
+ *  memory wasted due to internal file fragmentation.  The following
+ *  is a list of maximum file sizes based on various settings
+ *
+ *    max_filesize with blocks of   16 is         1,328
+ *    max_filesize with blocks of   32 is        18,656
+ *    max_filesize with blocks of   64 is       279,488
+ *    max_filesize with blocks of  128 is     4,329,344
+ *    max_filesize with blocks of  256 is    68,173,568
+ *    max_filesize with blocks of  512 is 1,082,195,456
  */
 
-#define IMFS_MEMFILE_BYTES_PER_BLOCK     64 /* 512 */
+#define IMFS_MEMFILE_BYTES_PER_BLOCK     128
 #define IMFS_MEMFILE_BLOCK_SLOTS \
   (IMFS_MEMFILE_BYTES_PER_BLOCK / sizeof(void *))
 
