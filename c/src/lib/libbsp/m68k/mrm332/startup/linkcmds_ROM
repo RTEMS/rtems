@@ -178,7 +178,9 @@ SECTIONS
     bss_start = .;
     _bss_start = .;
     _clear_start = .;
-    *(.bss)
+    *(.shbss)
+    *(.dynbss)
+    *(.bss .bss.* .gnu.linkonce.b.*)
     *(COMMON)
     . = ALIGN (16);
     end = .;
