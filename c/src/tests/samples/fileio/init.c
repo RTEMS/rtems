@@ -92,9 +92,7 @@ fstab_t fs_table[] = {
   }
 };
 
-#ifndef MIN
 #define MIN(a,b) (((a) > (b)) ? (b) : (a))
-#endif
 
 #define USE_SHELL
 
@@ -596,5 +594,3 @@ Init (rtems_task_argument ignored)
 
   fileio_menu();
 }
-
-

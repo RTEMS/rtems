@@ -1,3 +1,8 @@
+2003-09-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* fileio/init.c: Unconditionally define MIN (We *do want* to see
+	error messages if it conflicts).
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* README, base_mp/apptask.c, base_mp/init.c, base_mp/system.h,
