@@ -1,3 +1,25 @@
+2003-02-14	Joel Sherrill <joel@OARcorp.com>
+
+	AMD a29k port declared obsolete.
+	* a29k/.cvsignore, a29k/ChangeLog, a29k/Makefile.am, a29k/acinclude.m4,
+	a29k/configure.ac, a29k/portsw/.cvsignore, a29k/portsw/ChangeLog,
+	a29k/portsw/Makefile.am, a29k/portsw/README, a29k/portsw/bsp_specs,
+	a29k/portsw/configure.ac, a29k/portsw/times,
+	a29k/portsw/console/.cvsignore, a29k/portsw/console/Makefile.am,
+	a29k/portsw/console/concntl.h, a29k/portsw/console/console.c,
+	a29k/portsw/console/serial.c, a29k/portsw/console/serial.h,
+	a29k/portsw/include/.cvsignore, a29k/portsw/include/Makefile.am,
+	a29k/portsw/include/bsp.h, a29k/portsw/start/.cvsignore,
+	a29k/portsw/start/Makefile.am, a29k/portsw/start/amd.ah,
+	a29k/portsw/start/pswmacro.ah, a29k/portsw/start/register.S,
+	a29k/portsw/start/register.ah, a29k/portsw/start/start.S,
+	a29k/portsw/startup/.cvsignore, a29k/portsw/startup/Makefile.am,
+	a29k/portsw/startup/bspclean.c, a29k/portsw/startup/bspstart.c,
+	a29k/portsw/startup/linkcmds, a29k/portsw/startup/main.c,
+	a29k/portsw/startup/ramlink, a29k/portsw/startup/romlink,
+	a29k/portsw/startup/setvec.c, a29k/portsw/wrapup/.cvsignore,
+	a29k/portsw/wrapup/Makefile.am: Removed.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
