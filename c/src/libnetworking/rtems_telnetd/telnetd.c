@@ -32,6 +32,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>	/* memset */
 #include <stdio.h>
 /***********************************************************/
 rtems_id            telnetd_task_id      =0;

@@ -1838,7 +1838,6 @@ session(rtems_task_argument arg)
   while(1)
   {
     rtems_event_set set;
-    char buf[128];
 
     rtems_event_receive(FTPD_RTEMS_EVENT, RTEMS_EVENT_ANY, RTEMS_NO_TIMEOUT,
       &set);

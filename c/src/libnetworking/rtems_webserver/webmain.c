@@ -176,8 +176,7 @@ static int initWebs()
 {
 	struct hostent*	hp;
 	struct in_addr	intaddr;
-	char			host[128], dir[128], webdir[128];
-	char			*cp;
+	char			host[128], webdir[128];
 	char_t			wbuf[128];
 
 /*
