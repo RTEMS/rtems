@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 BSP_PIECES = startup dlentry
 # pieces to pick up out of libcpu/ppc
