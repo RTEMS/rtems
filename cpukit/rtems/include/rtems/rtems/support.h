@@ -20,9 +20,7 @@
 extern "C" {
 #endif
 
-#include <sys/types.h>
 #include <rtems/rtems/types.h>
-#include <rtems/rtems/status.h>
 
 /*
  *  rtems_build_name
@@ -87,34 +85,6 @@ extern "C" {
         TOD_MILLISECONDS_TO_TICKS(_ms)
 #define RTEMS_MICROSECONDS_TO_TICKS(_ms) \
         TOD_MICROSECONDS_TO_TICKS(_ms)
-
-/*
- *  Workspace Related
- */
-
-/*
- *  rtems_workspace_get_information
- *
- *  DESCRIPTION:
- *
- *  This directive will return information about the RTEMS
- *  executive workspace.
- */
-
-rtems_status_code rtems_workspace_get_information(
-  Heap_Information_block *the_info
-);
-
-/*
- *  rtems_workspace_free_space
- *
- *  DESCRIPTION:
- *
- *  This directive will return the number of bytes available in the RTEMS
- *  executive workspace.  This area is probably not be contiguous.
- */
-
-size_t rtems_workspace_free_space(void);
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/rtems/support.inl>

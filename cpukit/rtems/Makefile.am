@@ -116,10 +116,10 @@ DPMEM_C_FILES = src/dpmem.c src/dpmemcreate.c src/dpmemdelete.c \
     src/dpmemexternal2internal.c src/dpmemident.c \
     src/dpmeminternal2external.c
 
-librtems_a_SOURCES += src/attr.c src/rtemsidtoname.c src/wkspacegetinfo.c \
-    $(TASK_C_FILES) $(RATEMON_C_FILES) $(INTR_C_FILES) $(CLOCK_C_FILES) \
-    $(TIMER_C_FILES) $(SEMAPHORE_C_FILES) $(MESSAGE_QUEUE_C_FILES) \
-    $(EVENT_C_FILES) $(SIGNAL_C_FILES) $(PARTITION_C_FILES) $(REGION_C_FILES) \
+librtems_a_SOURCES += src/attr.c src/rtemsidtoname.c $(TASK_C_FILES) \
+    $(RATEMON_C_FILES) $(INTR_C_FILES) $(CLOCK_C_FILES) $(TIMER_C_FILES) \
+    $(SEMAPHORE_C_FILES) $(MESSAGE_QUEUE_C_FILES) $(EVENT_C_FILES) \
+    $(SIGNAL_C_FILES) $(PARTITION_C_FILES) $(REGION_C_FILES) \
     $(DPMEM_C_FILES)
 
 if HAS_MP
