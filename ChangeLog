@@ -1,3 +1,7 @@
+2002-11-11	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/version.m4: Updated to rtems-ss-20021111.
+
 2002-11-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/compile.am: Remove rel rule.
