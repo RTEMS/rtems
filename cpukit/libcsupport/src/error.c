@@ -1,7 +1,4 @@
 /*
- *	@(#)error.c	1.6 - 95/12/12
- *	
- *
  *  report errors and panics to RTEMS' stderr.
  *  Currently just used by RTEMS monitor.
  *

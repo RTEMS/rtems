@@ -1,12 +1,9 @@
 /*
- *	@(#)genoffsets.c	1.7 - 95/09/25
- *	
- *
  *  genoffsets.c
  *
  *  This file generates the offsets.h for the HP PA-RISC port of RTEMS.
  *
- *  NOTE:  It only prints the offset for structures actually used 
+ *  NOTE:  It only prints the offset for structures actually used
  *         by the assembly code.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
@@ -17,7 +14,6 @@
  *  notice must appear in all copies of this file and its derivatives.
  *
  *  $Id$
- *
  */
 
 #include <stdio.h>
@@ -70,7 +66,7 @@ printf(
           (int) &((TYPE)0)->FIELD );
 
 #define PRINT_SIZE( STRING, item ) \
-  printf( "#define\t%s\t%d\t\t/* 0x%x */\n", \
+  printf( "#ifdef ASM\n#define\t%s\t%d\t\t/* 0x%x */\n#endif\n", \
           STRING, \
           sizeof(item), \
           sizeof(item) );
@@ -144,6 +140,39 @@ printf(
   PRINT_SIZE("CPU_CONTEXT_SIZE", Context_Control);
 
   PRINT_COMMENT("Context_Control_fp information");
+
+  PRINT_IT( "FR0_OFFSET", Context_Control_fp *, fr0 );
+  PRINT_IT( "FR1_OFFSET", Context_Control_fp *, fr1 );
+  PRINT_IT( "FR2_OFFSET", Context_Control_fp *, fr2 );
+  PRINT_IT( "FR3_OFFSET", Context_Control_fp *, fr3 );
+  PRINT_IT( "FR4_OFFSET", Context_Control_fp *, fr4 );
+  PRINT_IT( "FR5_OFFSET", Context_Control_fp *, fr5 );
+  PRINT_IT( "FR6_OFFSET", Context_Control_fp *, fr6 );
+  PRINT_IT( "FR7_OFFSET", Context_Control_fp *, fr7 );
+  PRINT_IT( "FR8_OFFSET", Context_Control_fp *, fr8 );
+  PRINT_IT( "FR9_OFFSET", Context_Control_fp *, fr9 );
+  PRINT_IT( "FR10_OFFSET", Context_Control_fp *, fr10 );
+  PRINT_IT( "FR11_OFFSET", Context_Control_fp *, fr11 );
+  PRINT_IT( "FR12_OFFSET", Context_Control_fp *, fr12 );
+  PRINT_IT( "FR13_OFFSET", Context_Control_fp *, fr13 );
+  PRINT_IT( "FR14_OFFSET", Context_Control_fp *, fr14 );
+  PRINT_IT( "FR15_OFFSET", Context_Control_fp *, fr15 );
+  PRINT_IT( "FR16_OFFSET", Context_Control_fp *, fr16 );
+  PRINT_IT( "FR17_OFFSET", Context_Control_fp *, fr17 );
+  PRINT_IT( "FR18_OFFSET", Context_Control_fp *, fr18 );
+  PRINT_IT( "FR19_OFFSET", Context_Control_fp *, fr19 );
+  PRINT_IT( "FR20_OFFSET", Context_Control_fp *, fr20 );
+  PRINT_IT( "FR21_OFFSET", Context_Control_fp *, fr21 );
+  PRINT_IT( "FR22_OFFSET", Context_Control_fp *, fr22 );
+  PRINT_IT( "FR23_OFFSET", Context_Control_fp *, fr23 );
+  PRINT_IT( "FR24_OFFSET", Context_Control_fp *, fr24 );
+  PRINT_IT( "FR25_OFFSET", Context_Control_fp *, fr25 );
+  PRINT_IT( "FR26_OFFSET", Context_Control_fp *, fr26 );
+  PRINT_IT( "FR27_OFFSET", Context_Control_fp *, fr27 );
+  PRINT_IT( "FR28_OFFSET", Context_Control_fp *, fr28 );
+  PRINT_IT( "FR29_OFFSET", Context_Control_fp *, fr29 );
+  PRINT_IT( "FR30_OFFSET", Context_Control_fp *, fr30 );
+  PRINT_IT( "FR31_OFFSET", Context_Control_fp *, fr31 );
 
   PRINT_SIZE("CPU_CONTEXT_FP_SIZE", Context_Control_fp);
 

@@ -1,8 +1,5 @@
 /*
- *	@(#)server.c	1.5 - 96/01/03
- *	
- *
- *  RTEMS monitor server (handles requests for info from RTEMS monitors
+ * RTEMS monitor server (handles requests for info from RTEMS monitors
  *             running on other nodes)
  *
  *  $Id$

@@ -1,7 +1,4 @@
 /*
- *	@(#)config.c	1.5 - 95/08/02
- *	
- *
  * RTEMS Config display support
  *
  * TODO

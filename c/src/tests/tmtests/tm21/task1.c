@@ -70,7 +70,7 @@ rtems_task Task_1(
 
     status = rtems_message_queue_create(
       index,
-      1,
+      OPERATION_COUNT,
       16,
       RTEMS_DEFAULT_ATTRIBUTES,
       &id

@@ -1,7 +1,4 @@
 /*
- *	@(#)mpci.c	1.6 - 95/08/02
- *	
- *
  * RTEMS MPCI Config display support
  *
  * TODO

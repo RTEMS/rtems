@@ -1,7 +1,4 @@
 /*
- *	@(#)dname.c	1.5 - 96/01/03
- *	
- *
  * RTEMS monitor driver names support.
  *
  * There are 2 "driver" things the monitor knows about.

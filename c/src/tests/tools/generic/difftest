@@ -1,6 +1,7 @@
 #!KSHELL -p
 #
 #  Check test results against official output in the src tree
+#
 #  $Id$
 #
 
@@ -64,8 +65,7 @@ args=$*
 # Run the tests
 #
 
-cd $RTEMS_HOME/tests/$logdir ||
-  fatal "No log directory: $RTEMS_HOME/tests/$logdir"
+cd $RTEMS_HOME/tests/$logdir || fatal "No log directory: $RTEMS_HOME/tests/$logdir"
 
 tests="$args"
 if [ ! "$tests" ]

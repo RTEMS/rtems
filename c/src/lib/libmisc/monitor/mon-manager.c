@@ -1,9 +1,6 @@
 /*
- *	@(#)manager.c	1.4 - 96/01/03
- *	
- *
- *  RTEMS Monitor "manager" support.
- *  Used to traverse object (chain) lists and print them out.
+ * RTEMS Monitor "manager" support.
+ * Used to traverse object (chain) lists and print them out.
  *
  *  $Id$
  */

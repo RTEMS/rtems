@@ -1,7 +1,4 @@
 /*
- *	@(#)symbols.h	1.3 - 95/06/09
- *	
- *
  *  RTEMS monitor symbol table functions
  *
  *  Description:
@@ -46,14 +43,6 @@ typedef struct {
      */
 
     rtems_symbol_t  *addresses;         /* symbol array by address */
-
-    /*
-     * String list -- sorted by name (when we do a lookup)
-     * This is a duplicate of the info in table->addresses, but it's
-     * pretty small, so I don't worry about it.
-     */
-
-    rtems_symbol_t  *symbols;           /* symbol array */
 
     /*
      * String pool, unsorted, a list of blocks of string data

@@ -1,7 +1,4 @@
 /*
- *	@(#)extension.c	1.6 - 95/09/25
- *	
- *
  * RTEMS Monitor extension support
  *
  *  $Id$

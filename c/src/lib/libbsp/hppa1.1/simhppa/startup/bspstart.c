@@ -1,7 +1,3 @@
-/*
- *	@(#)bspstart.c	1.16 - 95/06/28
- */
-
 /*  bsp_start()
  *
  *  This routine starts the application.  It includes application,
@@ -352,6 +348,12 @@ bsp_start(void)
 
     Cpu_table.itimer_clicks_per_microsecond = 1;
 
+#ifdef 0
+    /*
+     * Commented by DIVISION INC.  External interrupt
+     * processing is now divorced from RTEMS for HPPA.
+     */
+
     /*
      * Determine the external interrupt processing order
      * the external interrupt handler walks thru this table, in
@@ -369,6 +371,7 @@ bsp_start(void)
          HPPA_INTERRUPT_EXTERNAL_10 - HPPA_INTERRUPT_EXTERNAL_BASE;
       Cpu_table.external_interrupts++;
     }
+#endif
 
     /*
      * Add 1 region for RTEMS Malloc

@@ -1,7 +1,4 @@
 /*
- *	@(#)assoc.c	1.6 - 95/10/25
- *
- *
  * assoc.c
  *      rtems assoc routines
  *

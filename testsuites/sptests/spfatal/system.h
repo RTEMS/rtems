@@ -28,7 +28,8 @@ void put_error(
 );
  
 rtems_extension Fatal_extension(
-  rtems_unsigned32 error
+  rtems_unsigned32 error,
+  boolean          is_internal
 );
  
 rtems_task Task_1(

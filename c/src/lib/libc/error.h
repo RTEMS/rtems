@@ -1,8 +1,4 @@
-
 /*
- *	@(#)error.h	1.3 - 95/10/25
- *	
- *
  *  Defines and externs for rtems error reporting
  *
  *  $Id$
@@ -24,7 +20,12 @@
 
 const char *rtems_status_text(rtems_status_code);
 int   rtems_error(int error_code, const char *printf_format, ...);
+#ifdef __GNUC__
+void  rtems_panic(const char *printf_format, ...) 
+                                         __attribute__ ((__noreturn__));
+#else
 void  rtems_panic(const char *printf_format, ...);
+#endif
 
 extern int rtems_panic_in_progress;
 

@@ -1,7 +1,4 @@
 /*
- *	@(#)task.c	1.9 - 95/08/01
- *	
- *
  * RTEMS Monitor task support
  *
  *  $Id$

@@ -1,7 +1,4 @@
 /*
- *	@(#)prmisc.c	1.9 - 95/08/02
- *	
- *
  * Print misc stuff for the monitor dump routines
  * Each routine returns the number of characters it output.
  *

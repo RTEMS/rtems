@@ -20,6 +20,19 @@
 
 #include <rtems.h>
 
+/*
+ * HACK
+ * the stack dump information should be printed by a "fatal" extension.
+ * Fatal extensions only get called via rtems_fatal_error_occurred()
+ * and not when rtems_shutdown_executive() is called.
+ * I hope/think this is changing so that fatal extensions are renamed
+ * to "shutdown" extensions.
+ * When that happens, this #define should be deleted and all the code
+ * it marks.
+ */
+#define DONT_USE_FATAL_EXTENSION
+
+
 extern rtems_configuration_table BSP_Configuration;
 
 #include <assert.h>
@@ -49,7 +62,11 @@ rtems_extensions_table Stack_check_Extension_table = {
   Stack_check_Switch_extension,     /* task_switch  */
   Stack_check_Begin_extension,      /* task_begin   */
   0,                                /* task_exitted */
+#ifdef DONT_USE_FATAL_EXTENSION
+  0,                                /* fatal        */
+#else
   Stack_check_Fatal_extension,      /* fatal        */
+#endif
 };
 
 /*
@@ -167,10 +184,6 @@ void Stack_check_Initialize( void )
 
   Stack_check_Blown_task = 0;
 
-#ifdef STACK_CHECKER_REPORT_USAGE
-  atexit( Stack_check_Dump_usage );
-#endif
-
   /*
    * If installed by a task, that task will not get setup properly
    * since it missed out on the create hook.  This will cause a
@@ -216,6 +229,17 @@ void Stack_check_Initialize( void )
 
       stack_check_dope_stack(&stack_check_interrupt_stack);
   }
+
+#ifdef DONT_USE_FATAL_EXTENSION
+#ifdef RTEMS_DEBUG
+    /*
+     * this would normally be called by a fatal extension
+     * handler, but we don't run fatal extensions unless
+     * we fatal error.
+     */
+  atexit(Stack_check_Dump_usage);
+#endif
+#endif
 
   stack_check_initialized = 1;
 }
@@ -431,14 +455,16 @@ void Stack_check_Dump_threads_usage(
  *  Stack_check_Fatal_extension
  */
 
-void Stack_check_Fatal_extension( 
+void Stack_check_Fatal_extension(
     Internal_errors_Source  source,
     boolean                 is_internal,
     unsigned32              status
 )
 {
+#ifndef DONT_USE_FATAL_EXTENSION
     if (status == 0)
         Stack_check_Dump_usage();
+#endif
 }
 
 

@@ -1,12 +1,4 @@
 /*
- *      @(#)symbols.c	1.10 - 95/08/02
- *      
- *  $Id$
- */
-
-/* #define qsort _quicksort */
-
-/*
  *  File:	symbols.c
  *
  *  Description:
@@ -15,6 +7,8 @@
  *
  *
  *  TODO:
+ *
+ *  $Id$
  */
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
@@ -50,11 +44,6 @@ rtems_symbol_table_destroy(rtems_symbol_table_t *table)
         if (table->addresses)
             (void) free(table->addresses);
         table->addresses = 0;
-
-        if (table->symbols)
-            (void) free(table->symbols);
-        table->symbols = 0;
-
         p = table->string_buffer_head;
         while (p)
         {
@@ -93,11 +82,6 @@ rtems_symbol_create(
         table->addresses = (rtems_symbol_t *) realloc((void *) table->addresses, newsize * sizeof(rtems_symbol_t));
         if (table->addresses == 0)        /* blew it; lost orig */
             goto failed;
-
-        table->symbols = (rtems_symbol_t *) realloc((void *) table->symbols, newsize * sizeof(rtems_symbol_t));
-        if (table->symbols == 0)        /* blew it; lost orig */
-            goto failed;
-
         table->size = newsize;
     }
 
@@ -129,9 +113,6 @@ rtems_symbol_create(
     (void) strcpy(sp->name, name);
 
     table->strings_next += symbol_length;
-
-    table->symbols[table->next] = *sp;
-
     table->sorted = 0;
     table->next++;
 
@@ -147,7 +128,7 @@ failed:
  * Qsort entry point for compare by address
  */
 
-int
+static int
 rtems_symbol_compare(const void *e1,
                      const void *e2)
 {
@@ -162,47 +143,19 @@ rtems_symbol_compare(const void *e1,
     return 0;
 }
 
-/*
- * Qsort entry point for compare by string name (case independent)
- */
-
-int
-rtems_symbol_string_compare(const void *e1,
-                            const void *e2)
-{
-    rtems_symbol_t *s1, *s2;
-    s1 = (rtems_symbol_t *) e1;
-    s2 = (rtems_symbol_t *) e2;
-
-    return strcasecmp(s1->name, s2->name);
-}
-
 
 /*
  * Sort the symbol table using qsort
  */
 
-void
+static void
 rtems_symbol_sort(rtems_symbol_table_t *table)
 {
-#ifdef RTEMS_ON_SIMULATOR
-    printf("Sorting symbols ... ");         /* so slow we need a msg */
-    fflush(stdout);
-#endif
-
     qsort((void *) table->addresses, (size_t) table->next,
           sizeof(rtems_symbol_t), rtems_symbol_compare);
-
-    qsort((void *) table->symbols, (size_t) table->next,
-          sizeof(rtems_symbol_t), rtems_symbol_string_compare);
-
-#ifdef RTEMS_ON_SIMULATOR
-    /* so slow we need a msg */
-    printf("done\n");
-#endif
-
     table->sorted = 1;
 }
+
 
 /*
  * Search the symbol table by address
@@ -262,6 +215,53 @@ rtems_symbol_value_lookup(
 }
 
 /*
+ * Search the symbol table for the exact matching address.
+ * If the symbol table has already been sorted, then
+ * call the regular symbol value lookup, however, it it
+ * has not yet been sorted, search it sequentially.
+ * This routine is primarily used for low level symbol
+ * lookups (eg. from exception handler and interrupt routines)
+ * where the penality of sorted is not wanted and where
+ * an exact match is needed such that symbol table order
+ * is not important.
+ */
+const rtems_symbol_t *
+rtems_symbol_value_lookup_exact(
+    rtems_symbol_table_t *table,
+    rtems_unsigned32      value
+  )
+{
+    int s;
+    rtems_symbol_t *sp;
+
+    if (table == 0)
+    {
+        table = rtems_monitor_symbols;
+        if (table == 0)
+            return NULL;
+    }
+    
+    if (table->sorted)
+    {
+        sp = rtems_symbol_value_lookup(table, value);
+        if ( rtems_symbol_value(sp) == value )
+            return sp;
+        else
+            return NULL;  /* not an exact match */
+    }
+ 
+    for (s = 0, sp = table->addresses; s < table->next; s++, sp++)
+    {
+        if ( sp->value == value )
+            return sp;
+    }
+
+    return NULL;
+
+}
+
+
+/*
  * Search the symbol table by string name (case independent)
  */
 
@@ -271,33 +271,23 @@ rtems_symbol_name_lookup(
     char                 *name
   )
 {
-    rtems_symbol_t *sp = 0;
-    rtems_symbol_t  key;
+    int s;
+    rtems_symbol_t *sp;
 
     if (table == 0)
+    {
         table = rtems_monitor_symbols;
+        if (table == 0)
+            return NULL;
+    }
+    
+    for (s = 0, sp = table->addresses; s < table->next; s++, sp++)
+    {
+        if ( strcasecmp(sp->name, name) == 0 )
+            return sp;
+    }
 
-    if ((table == 0) || (name == 0))
-        goto done;
-
-    if (table->sorted == 0)
-        rtems_symbol_sort(table);
-
-    /*
-     * dummy up one for bsearch()
-     */
-
-    key.name = name;
-    key.value = 0;
-
-    sp = (rtems_symbol_t *) bsearch((const void *) &key,
-                                    (const void *) table->symbols,
-                                    (size_t) table->next,
-                                    sizeof(rtems_symbol_t),
-                                    rtems_symbol_string_compare);
-
-done:
-    return sp;
+    return NULL;
 }
 
 void *
@@ -325,7 +315,7 @@ rtems_monitor_symbol_next(
     _Thread_Disable_dispatch();
 
     *next_id += 1;
-    return (void *) (table->symbols + n);
+    return (void *) (table->addresses + n);
 
 failed:
     *next_id = RTEMS_OBJECT_ID_FINAL;
@@ -438,7 +428,7 @@ rtems_monitor_symbol_dump_all(
     if (table->sorted == 0)
         rtems_symbol_sort(table);
 
-    for (s = 0, sp = table->symbols; s < table->next; s++, sp++)
+    for (s = 0, sp = table->addresses; s < table->next; s++, sp++)
     {
         rtems_monitor_symbol_t canonical_symbol;
 

@@ -1,7 +1,4 @@
 /*
- *	@(#)driver.c	1.4 - 95/08/02
- *	
- *
  * RTEMS monitor IO (device drivers) support
  *
  * There are 2 "driver" things the monitor knows about.

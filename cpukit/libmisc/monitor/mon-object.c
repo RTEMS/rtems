@@ -1,7 +1,4 @@
 /*
- *	@(#)object.c	1.9 - 96/01/03
- *	
- *
  * RTEMS Monitor "object" support.
  *
  * Used to traverse object lists and print them out.
@@ -341,7 +338,7 @@ rtems_monitor_object_cmd(
 
         for (arg=1; argv[arg]; arg++)
         {
-            id = (rtems_id) strtoul(argv[arg], 0, 0);
+            id = (rtems_id) strtoul(argv[arg], 0, 16);
             id = rtems_monitor_id_fixup(id, default_node, type);
             type = (rtems_monitor_object_type_t) rtems_get_class(id);
 

@@ -1,6 +1,4 @@
 /*
- *	@(#)assoc.h	1.4 - 95/10/25
- *	
  *
  *  Rtems associativity routines.  Mainly used to convert a value from
  *  one space to another (eg: our errno's to host errno's and v.v)

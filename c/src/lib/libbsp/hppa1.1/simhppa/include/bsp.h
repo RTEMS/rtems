@@ -97,30 +97,7 @@ extern int use_print_buffer;
  */
 #define BSP_LIBIO_MAX_FDS       20
 
-/*
- *  Device Driver Table Entries
- */
-
-/*
- * When not doing printf to a buffer, we do printf thru RTEMS libio
- * and our tty driver.  Set it up so that console is right.
- */
-
-#define CONSOLE_DRIVER_TABLE_ENTRY \
-  { tty_initialize, tty_open, tty_close, tty_read, tty_write, tty_control }
-
-/*
- * NOTE: Use the standard Clock driver entry
- */
-
-/*
- * How many libio files we want
- */
-#define BSP_LIBIO_MAX_FDS       20
-
 #define HPPA_INTERRUPT_EXTERNAL_MPCI        HPPA_INTERRUPT_EXTERNAL_10
-
-rtems_isr_entry set_vector(rtems_isr_entry, rtems_vector_number, int);
 
 rtems_isr_entry set_vector(rtems_isr_entry, rtems_vector_number, int);
 

@@ -1,7 +1,4 @@
 /*
- *	@(#)command.c	1.5 - 95/08/02
- *	
- *
  * Command parsing routines for RTEMS monitor
  *
  * TODO:

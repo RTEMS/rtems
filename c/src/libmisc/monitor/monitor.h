@@ -1,17 +1,12 @@
 /*
- *      @(#)monitor.h	1.21 - 96/01/03
- *      
- *
- *  monitor.h,v 1.3 1995/09/29 17:19:02 joel Exp
- */
-
-/*
  *  File:	monitor.h
  *
  *  Description:
  *    The RTEMS monitor task include file.
  *
  *  TODO:
+ *
+ *  $Id$
  */
 
 #ifndef __MONITOR_H
@@ -25,7 +20,7 @@ extern "C" {
 #endif
 
 /*
- * XXX this should be in rtems proper when type becomes part of id
+ * Monitor types are derived from rtems object classes
  */
 
 typedef enum {
@@ -306,7 +301,7 @@ typedef void (*rtems_monitor_object_dump_header_fn)(boolean);
 typedef void (*rtems_monitor_object_dump_fn)(void *, boolean);
 
 typedef struct {
-    rtems_monitor_object_type_t                 type;
+    rtems_monitor_object_type_t         type;
     void                               *object_information;
     int                                 size;	/* of canonical object */
     rtems_monitor_object_next_fn        next;
@@ -419,6 +414,7 @@ void                  rtems_symbol_table_destroy(rtems_symbol_table_t *table);
 
 rtems_symbol_t *rtems_symbol_create(rtems_symbol_table_t *, char *, unsigned32);
 rtems_symbol_t *rtems_symbol_value_lookup(rtems_symbol_table_t *, unsigned32);
+const rtems_symbol_t *rtems_symbol_value_lookup_exact(rtems_symbol_table_t *, unsigned32);
 rtems_symbol_t *rtems_symbol_name_lookup(rtems_symbol_table_t *, char *);
 void   *rtems_monitor_symbol_next(void *object_info, rtems_monitor_symbol_t *, rtems_id *);
 void    rtems_monitor_symbol_canonical(rtems_monitor_symbol_t *, rtems_symbol_t *);

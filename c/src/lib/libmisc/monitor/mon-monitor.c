@@ -1,8 +1,4 @@
 /*
- *	@(#)monitor.c	1.23 - 96/01/03
- *	
- *
- *
  * RTEMS monitor main body
  *	
  *  TODO:
@@ -18,7 +14,7 @@
  *      should have a separate monitor FILE stream (ala the debugger)
  *      remote request/response stuff should be cleaned up
  *         maybe we can use real rpc??
- *      'info' commadn to print out:
+ *      'info' command to print out:
  *           interrupt stack location, direction and size
  *           floating point config stuff
  *           interrupt config stuff
@@ -262,6 +258,18 @@ rtems_monitor_wakeup(void)
     status = rtems_event_send(rtems_monitor_task_id, MONITOR_WAKEUP_EVENT);
 }
 
+void
+rtems_monitor_debugger_cmd(
+    int        argc,
+    char     **argv,
+    unsigned32 command_arg,
+    boolean    verbose
+)
+{
+#ifdef CPU_INVOKE_DEBUGGER
+    CPU_INVOKE_DEBUGGER;
+#endif
+}
 
 void
 rtems_monitor_pause_cmd(
@@ -303,19 +311,6 @@ rtems_monitor_continue_cmd(
 }
 
 void
-rtems_monitor_debugger_cmd(
-    int        argc,
-    char     **argv,
-    unsigned32 command_arg,
-    boolean    verbose
-)
-{
-#ifdef CPU_INVOKE_DEBUGGER
-    CPU_INVOKE_DEBUGGER;
-#endif
-}
-
-void
 rtems_monitor_node_cmd(
     int     argc,
     char  **argv,
@@ -340,8 +335,10 @@ rtems_monitor_node_cmd(
             break;
     }
 
-    if ((new_node >= 1) && (new_node <= _Configuration_MP_table->maximum_nodes))
-        rtems_monitor_default_node = new_node;
+    if ((new_node >= 1) &&
+        _Configuration_MP_table &&
+        (new_node <= _Configuration_MP_table->maximum_nodes))
+            rtems_monitor_default_node = new_node;
 }
 
 
@@ -383,11 +380,7 @@ rtems_monitor_symbols_loadup(void)
     if (rtems_monitor_symbols == 0)
         return;
 
-#ifdef SIMHPPA
-    fp = fdopen(8, "r");                /* don't ask; don't tell */
-#else
     fp = fopen("symbols", "r");
-#endif
     
     if (fp == 0)
         return;
