@@ -81,6 +81,11 @@ extern "C" {
 #define Clear_tm27_intr() \
   do { \
     unsigned32 _clicks = 0xffffffff; \
+    unsigned32 _msr = 0; \
+    _ISR_Set_level( 0 ); \
+    asm volatile( "mfmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
+    _msr &=  ~0x8000; \
+    asm volatile( "mtmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
