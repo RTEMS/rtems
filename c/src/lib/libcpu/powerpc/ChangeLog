@@ -1,3 +1,10 @@
+2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* new-exceptions/cpu.c, rtems/powerpc/powerpc.h: 
+	Remove CPU_MINIMUM_STACK_FRAME_SIZE.
+	Use PPC_MINIMUM_STACK_FRAME_SIZE instead.
+	* rtems/powerpc/powerpc.h: Add PPC_MINIMUM_STACK_FRAME_SIZE.
+
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* new-exceptions/cpu.c: Add CPU_MINIMUM_STACK_FRAME_SIZE.

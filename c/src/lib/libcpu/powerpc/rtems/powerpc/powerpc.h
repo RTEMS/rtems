@@ -701,6 +701,9 @@ extern "C" {
 
 #define PPC_INIT_FPSCR		0x000000f8
 
+
+#define PPC_MINIMUM_STACK_FRAME_SIZE PPC_STACK_ALIGNMENT
+
 #ifdef __cplusplus
 }
 #endif

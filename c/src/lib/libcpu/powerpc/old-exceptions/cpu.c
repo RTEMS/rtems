@@ -220,9 +220,6 @@ uint32_t   _CPU_ISR_Get_level( void )
  *  _CPU_Context_Initialize
  */
 
-/* PPC_ABI_SVR4 or PPC_ABI_EABI */
-#define CPU_MINIMUM_STACK_FRAME_SIZE 8
-
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
   uint32_t         *stack_base,
@@ -235,7 +232,7 @@ void _CPU_Context_Initialize(
   uint32_t   msr_value;
   uint32_t   sp;
 
-  sp = (uint32_t)stack_base + size - CPU_MINIMUM_STACK_FRAME_SIZE;
+  sp = (uint32_t)stack_base + size - PPC_MINIMUM_STACK_FRAME_SIZE;
   *((uint32_t*)sp) = 0;
   the_context->gpr1 = sp;
 
