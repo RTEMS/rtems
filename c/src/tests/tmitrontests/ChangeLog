@@ -1,3 +1,20 @@
+2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/.cvsignore: Remove.
+	* include/Makefile.am: Remove.
+	* include/timesys.h: Remove.
+	* .cvsignore: Remove.
+	* ChangeLog: Remove.
+	* Makefile.am: Remove.
+	* README: Remove.
+	* configure.ac: Remove.
+	* tmitrontests.am: Remove.
+	* tmitronsem01/.cvsignore: Remove.
+	* tmitronsem01/Makefile.am: Remove.
+	* tmitronsem01/init.c: Remove.
+	* tmitronsem01/system.h: Remove.
+	* tmitronsem01/tmitronsem01.doc: Remove.
+
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CANONICAL_HOST.
