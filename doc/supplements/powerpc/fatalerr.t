@@ -40,8 +40,7 @@ handler.
 The default fatal error handler which is invoked by
 the fatal_error_occurred directive when there is no user handler
 configured or the user handler returns control to RTEMS.  The
-default fatal error handler disables processor interrupts to
-level 15, places the error code in g1, and goes into an infinite
+default fatal error handler disables all processor exceptions,
+places the error code in r5, and goes into an infinite
 loop to simulate a halt processor instruction.
-
 

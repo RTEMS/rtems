@@ -48,6 +48,10 @@ target processor are the same, different compilers may use
 different calling conventions.  As a result, calling conventions
 are both processor and compiler dependent.
 
+RTEMS supports the Embedded Application Binary Interface (EABI)
+calling convention.  Documentation for EABI is available by sending
+a message with a subject line of "EABI" to eabi@@goth.sis.mot.com.
+
 @ifinfo
 @node Calling Conventions Programming Model, Non-Floating Point Registers, Calling Conventions Introduction, Calling Conventions
 @end ifinfo
@@ -61,102 +65,22 @@ are both processor and compiler dependent.
 @end ifinfo
 
 This section discusses the programming model for the
-SPARC architecture.
+PowerPC architecture.
 
 @ifinfo
 @node Non-Floating Point Registers, Floating Point Registers, Calling Conventions Programming Model, Calling Conventions Programming Model
 @end ifinfo
 @subsection Non-Floating Point Registers
 
-The SPARC architecture defines thirty-two
-non-floating point registers directly visible to the programmer.
-These are divided into four sets:
+The PowerPC architecture defines thirty-two non-floating point registers
+directly visible to the programmer.  In thirty-two bit implementations, each
+register is thirty-two bits wide.  In sixty-four bit implementations, each
+register is sixty-four bits wide.
 
-@itemize @bullet
-@item input registers
+These registers are referred to as @code{gpr0} to @code{gpr31}.
 
-@item local registers
-
-@item output registers
-
-@item global registers
-@end itemize
-
-Each register is referred to by either two or three
-names in the SPARC reference manuals.  First, the registers are
-referred to as r0 through r31 or with the alternate notation
-r[0] through r[31].  Second, each register is a member of one of
-the four sets listed above.  Finally, some registers have an
-architecturally defined role in the programming model which
-provides an alternate name.  The following table describes the
-mapping between the 32 registers and the register sets:
-
-@ifset use-ascii
-@example
-@group
-     +-----------------+----------------+------------------+
-     | Register Number | Register Names |   Description    |
-     +-----------------+----------------+------------------+
-     |     0 - 7       |    g0 - g7     | Global Registers |
-     +-----------------+----------------+------------------+
-     |     8 - 15      |    o0 - o7     | Output Registers |
-     +-----------------+----------------+------------------+
-     |    16 - 23      |    l0 - l7     | Local Registers  |
-     +-----------------+----------------+------------------+
-     |    24 - 31      |    i0 - i7     | Input Registers  |
-     +-----------------+----------------+------------------+
-@end group
-@end example
-@end ifset
-
-@ifset use-tex
-@sp 1
-@tex
-\centerline{\vbox{\offinterlineskip\halign{
-\vrule\strut#&
-\hbox to 1.75in{\enskip\hfil#\hfil}&
-\vrule#&
-\hbox to 1.75in{\enskip\hfil#\hfil}&
-\vrule#&
-\hbox to 1.75in{\enskip\hfil#\hfil}&
-\vrule#\cr
-\noalign{\hrule}
-&\bf Register Number &&\bf Register Names&&\bf Description&\cr\noalign{\hrule}
-&0 - 7&&g0 - g7&&Global Registers&\cr\noalign{\hrule}
-&8 - 15&&o0 - o7&&Output Registers&\cr\noalign{\hrule}
-&16 - 23&&l0 - l7&&Local Registers&\cr\noalign{\hrule}
-&24 - 31&&i0 - i7&&Input Registers&\cr\noalign{\hrule}
-}}\hfil}
-@end tex
-@end ifset
-
-@ifset use-html
-@html
-<CENTER>
-  <TABLE COLS=3 WIDTH="80%" BORDER=2>
-<TR><TD ALIGN=center><STRONG>Register Number</STRONG></TD>
-    <TD ALIGN=center><STRONG>Register Names</STRONG></TD>
-    <TD ALIGN=center><STRONG>Description</STRONG></TD>
-<TR><TD ALIGN=center>0 - 7</TD>
-    <TD ALIGN=center>g0 - g7</TD>
-    <TD ALIGN=center>Global Registers</TD></TR>
-<TR><TD ALIGN=center>8 - 15</TD>
-    <TD ALIGN=center>o0 - o7</TD>
-    <TD ALIGN=center>Output Registers</TD></TR>
-<TR><TD ALIGN=center>16 - 23</TD>
-    <TD ALIGN=center>l0 - l7</TD>
-    <TD ALIGN=center>Local Registers</TD></TR>
-<TR><TD ALIGN=center>24 - 31</TD>
-    <TD ALIGN=center>i0 - i7</TD>
-    <TD ALIGN=center>Input Registers</TD></TR>
-  </TABLE>
-</CENTER>
-@end html
-@end ifset
-
-As mentioned above, some of the registers serve
-defined roles in the programming model.  The following table
-describes the role of each of these registers:
+Some of the registers serve defined roles in the EABI programming model.  
+The following table describes the role of each of these registers:
 
 @ifset use-ascii
 @example

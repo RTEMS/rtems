@@ -36,16 +36,32 @@ of that model are described in this chapter.
 @end ifinfo
 @section Flat Memory Model
 
-The SPARC architecture supports a flat 32-bit address
+The PowerPC architecture supports a variety of memory models.
+RTEMS supports the PowerPC using a flat memory model with 
+paging disabled.  In this mode, the PowerPC automatically
+converts every address from a logical to a physical address
+each time it is used.  The PowerPC uses information provided
+in the XXX to convert these addresses.
+
+Implementations of the PowerPC architecture may be thirty-two or sixty-four bit.
+The PowerPC architecture supports a flat thirty-two or sixty-four bit address
 space with addresses ranging from 0x00000000 to 0xFFFFFFFF (4
-gigabytes).  Each address is represented by a 32-bit value and
-is byte addressable.  The address may be used to reference a
-single byte, half-word (2-bytes), word (4 bytes), or doubleword
-(8 bytes).  Memory accesses within this address space are
-performed in big endian fashion by the SPARC.  Memory accesses
-which are not properly aligned generate a "memory address not
-aligned" trap (type number 7).  The following table lists the
-alignment requirements for a variety of data accesses:
+gigabytes) in thirty-two bit implementations or 0xFFFFFFFFFFFFFFFF 
+(XXX) in sixty-four bit implementations.  Each address is represented
+by either a thirty-two bit or sixty-four bit value and is byte addressable.  
+The address may be used to reference a single byte, half-word
+(2-bytes), word (4 bytes), or in sixty-four bit implementations a
+doubleword (8 bytes).  Memory accesses within the address space are
+performed in big or little endian fashion by the PowerPC based
+upon the current setting of the Little-endian mode enable bit (LE)
+in the Machine State Register (MSR).  While the processor is in
+big endian mode, memory accesses which are not properly aligned
+generate an "alignment exception" (vector offset 0x00600).  In
+little endian mode, the PowerPC architecture does not require
+the processor to generate alignment exceptions.
+
+The following table lists the alignment requirements for a variety
+of data accesses:
 
 @ifset use-ascii
 @example
@@ -100,20 +116,10 @@ alignment requirements for a variety of data accesses:
 @end html
 @end ifset
 
-Doubleword load and store operations must use a pair
-of registers as their source or destination.  This pair of
-registers must be an adjacent pair of registers with the first
-of the pair being even numbered.  For example, a valid
-destination for a doubleword load might be input registers 0 and
-1 (i0 and i1).  The pair i1 and i2 would be invalid.  [NOTE:
-Some assemblers for the SPARC do not generate an error if an odd
-numbered register is specified as the beginning register of the
-pair.  In this case, the assembler assumes that what the
-programmer meant was to use the even-odd pair which ends at the
-specified register.  This may or may not have been a correct
-assumption.]
+Doubleword load and store operations are only available in 
+PowerPC CPU models which are sixty-four bit implementations.
 
-RTEMS does not support any SPARC Memory Management
+RTEMS does not directly support any PowerPC  Memory Management
 Units, therefore, virtual memory or segmentation systems
-involving the SPARC are not supported.
+involving the PowerPC  are not supported.
 
