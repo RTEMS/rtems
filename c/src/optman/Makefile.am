@@ -40,9 +40,12 @@ all-local: $(PGMS) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(rtems_C_FILES) $(sapi_C_FILES)
 
+TMPINSTALL_FILES =
+
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/no-ext$(LIB_VARIANT).rel: $(ARCH)/no-ext$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-ext$(LIB_VARIANT).rel
@@ -91,5 +94,7 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/no-signal$(LIB_VARIANT).rel
 $(PROJECT_LIB)/no-timer$(LIB_VARIANT).rel: $(ARCH)/no-timer$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-timer$(LIB_VARIANT).rel
 TMPINSTALL_FILES += $(PROJECT_LIB)/no-timer$(LIB_VARIANT).rel
+
+CLEANFILES = $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

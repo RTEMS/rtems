@@ -18,6 +18,7 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
 $(PROJECT_INCLUDE)/libcpu/i960CA.h: include/i960CA.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/i960CA.h
@@ -38,6 +39,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/i960RP.h
 $(PROJECT_INCLUDE)/libcpu/i960JX_RP_common.h: include/i960JX_RP_common.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/i960JX_RP_common.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/i960JX_RP_common.h
+
+CLEANFILES = $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

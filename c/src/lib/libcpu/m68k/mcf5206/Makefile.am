@@ -90,6 +90,7 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/mcf5206/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/mcf5206
 	@: > $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
 
 $(PROJECT_INCLUDE)/mcf5206/mcf5206e.h: include/mcf5206e.h $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5206/mcf5206e.h
@@ -102,5 +103,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5206/mcfmbus.h
 $(PROJECT_INCLUDE)/mcf5206/mcfuart.h: include/mcfuart.h $(PROJECT_INCLUDE)/mcf5206/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mcf5206/mcfuart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mcf5206/mcfuart.h
+
+CLEANFILES = $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

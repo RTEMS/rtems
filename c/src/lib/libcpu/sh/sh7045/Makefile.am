@@ -77,10 +77,12 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/sh/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/sh
 	@: > $(PROJECT_INCLUDE)/sh/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
 $(PROJECT_INCLUDE)/sh/io_types.h: include/io_types.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/io_types.h
@@ -109,5 +111,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ispsh7045.h
 $(PROJECT_INCLUDE)/rtems/score/iosh7045.h: include/iosh7045.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/iosh7045.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/iosh7045.h
+
+CLEANFILES = $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

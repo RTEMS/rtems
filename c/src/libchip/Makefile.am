@@ -156,19 +156,23 @@ EXTRA_DIST += $(libserialio_C_FILES) $(libserialio_DOC_FILES)
 CLEANDIRS = */$(ARCH)
 
 PREINSTALL_FILES =
+TMPINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 if LIBCHIP
 $(PROJECT_INCLUDE)/libchip/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/libchip
 	@: > $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 endif
 
 if LIBCHIP
@@ -274,5 +278,8 @@ $(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel: shmdr/$(ARCH)/shmdr$(LIB_VARIANT).rel $(
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel
 TMPINSTALL_FILES += $(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel
 endif
+
+CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

@@ -82,10 +82,12 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/sh/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/sh
 	@: > $(PROJECT_INCLUDE)/sh/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
 $(PROJECT_INCLUDE)/sh/sh4uart.h: include/sh/sh4uart.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/sh4uart.h
@@ -110,5 +112,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ispsh7750.h
 $(PROJECT_INCLUDE)/rtems/score/sh4_regs.h: include/rtems/score/sh4_regs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/sh4_regs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/sh4_regs.h
+
+CLEANFILES = $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
