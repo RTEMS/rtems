@@ -1,3 +1,10 @@
+2003-11-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* target.cfg.in: Remove RTEMS_USE_MACROS.
+	* Makefile.inc.in: Remove RTEMS_USE_MACROS.
+	* aclocal/enable-inlines.m4: Removed.
+	* configure.ac: Remove RTEMS_ENABLE_INLINES.
+
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CANONICAL_HOST.
