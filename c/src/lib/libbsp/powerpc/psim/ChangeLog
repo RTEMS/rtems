@@ -1,3 +1,11 @@
+2001-01-03	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/clock.c: Use shared clock driver shell.
+	* console/console.c: Removed.  Now use shared polling shell.
+	* console/console-io.c: New file.
+	* console/Makefile.am: Correct to use shared polling shell.
+	* startup/bspstart.c: Remove all fast idle references.
+
 2000-12-19	Joel Sherrill <joel@OARcorp.com>
 
 	* timer/timer.c: Removed incorrect comments about ERC32.

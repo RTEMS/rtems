@@ -1,233 +1,51 @@
 /*
- *  Clock Tick Device Driver
- *
- *  This routine utilizes the Decrementer Register common to the PPC family.
- *
- *  The tick frequency is directly programmed to the configured number of
- *  microseconds per tick.
- *
- *  COPYRIGHT (c) 1989-1999.
- *  On-Line Applications Research Corporation (OAR).
- *
- *  The license and distribution terms for this file may be
- *  found in found in the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
+ *  Instantiate the clock driver shell for psim based
+ *  on the decrementer register.
  *
  *  $Id$
  */
 
-#include <stdlib.h>
-
-#include <bsp.h>
-#include <rtems/libio.h>
+#include <rtems.h>
 
 /*
- *  The Real Time Clock Counter Timer uses this trap type.
+ *  If defined, speed up the clock ticks while the idle task is running so
+ *  time spent in the idle task is minimized.  This significantly reduces
+ *  the wall time required to execute the RTEMS test suites.
  */
+
+#define CLOCK_DRIVER_USE_FAST_IDLE
 
 #define CLOCK_VECTOR PPC_IRQ_DECREMENTER
 
-/*
- *  Clock ticks since initialization
+/*  On psim, each click of the decrementer register corresponds
+ *  to 1 instruction.  By setting this to 100, we are indicating
+ *  that we are assuming it can execute 100 instructions per
+ *  microsecond.  This corresponds to sustaining 1 instruction
+ *  per cycle at 100 Mhz.  Whether this is a good guess or not
+ *  is anyone's guess.
  */
 
-volatile rtems_unsigned32 Clock_driver_ticks;
+extern int PSIM_INSTRUCTIONS_PER_MICROSECOND;
 
-/*
- *  This is the value programmed into the count down timer.  It
- *  is artificially lowered when PSIM_FAST_IDLE is defined to
- *  cut down how long we spend in the idle task while executing on
- *  the simulator.
- */
+unsigned int PPC_DECREMENTER_CLICKS;
 
-extern rtems_unsigned32 CPU_PPC_CLICKS_PER_TICK;
-
-rtems_isr_entry  Old_ticker;
-
-void Clock_exit( void );
- 
-/*
- * These are set by clock driver during its init
- */
- 
-rtems_device_major_number rtems_clock_major = ~0;
-rtems_device_minor_number rtems_clock_minor;
-
-/*
- *  Clock_isr
- *
- *  This is the clock tick interrupt handler.
- *
- *  Input parameters:
- *    vector - vector number
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- *
- */
-
-#define PPC_Set_decrementer( _clicks ) \
+#define Clock_driver_support_install_isr( _new, _old ) \
   do { \
-    asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
+    _old = (rtems_isr_entry) set_vector( _new, CLOCK_VECTOR, 1 ); \
+    PPC_DECREMENTER_CLICKS = (unsigned int)&PSIM_INSTRUCTIONS_PER_MICROSECOND; \
+    PPC_DECREMENTER_CLICKS *= rtems_configuration_get_microseconds_per_tick(); \
+    PPC_DECREMENTER_CLICKS = 1000; \
+  } while(0)
+
+#define Clock_driver_support_initialize_hardware() \
+  do { \
+    unsigned int _clicks = PPC_DECREMENTER_CLICKS; \
+    PPC_Set_decrementer( _clicks ); \
   } while (0)
 
-rtems_isr Clock_isr(
-  rtems_vector_number vector
-)
-{
-  /*
-   *  Whether or not we we are in "fast idle" mode, the value for clicks
-   *  per tick must be programmed.  If we are using "fast idle" mode for
-   *  a simulator, then the clicks per tick value is lowered to decrease
-   *  the amount of time spent executing the idle task while using the
-   *  an instruction simulator like psim.
-   */
+#define Clock_driver_support_at_tick() \
+  Clock_driver_support_initialize_hardware()
 
+#define Clock_driver_support_shutdown_hardware()
 
-  PPC_Set_decrementer( CPU_PPC_CLICKS_PER_TICK );
-
-  /*
-   *  The driver has seen another tick.
-   */
-
-  Clock_driver_ticks += 1;
-
-  /*
-   *  Real Time Clock counter/timer is set to automatically reload.
-   */
-
-  rtems_clock_tick();
-}
-
-/*
- *  Install_clock
- *
- *  This routine actually performs the hardware initialization for the clock.
- *
- *  Input parameters:
- *    clock_isr - clock interrupt service routine entry point
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- *
- */
-
-extern int CLOCK_SPEED;
-
-void Install_clock(
-  rtems_isr_entry clock_isr
-)
-{
-  Clock_driver_ticks = 0;
-
-  Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
-
-  PPC_Set_decrementer( CPU_PPC_CLICKS_PER_TICK );
-
-  atexit( Clock_exit );
-}
-
-/*
- *  Clock_exit
- *
- *  This routine allows the clock driver to exit by masking the interrupt and
- *  disabling the clock's counter.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- *
- *  Return values:      NONE
- *
- */
-
-void Clock_exit( void )
-{
-  /* nothing to do */; 
-
-  /* do not restore old vector */
-}
- 
-/*
- *  Clock_initialize
- *
- *  This routine initializes the clock driver.
- *
- *  Input parameters:
- *    major - clock device major number
- *    minor - clock device minor number
- *    parg  - pointer to optional device driver arguments
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    rtems_device_driver status code
- */
-
-rtems_device_driver Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
-{
-  Install_clock( Clock_isr );
- 
-  /*
-   * make major/minor avail to others such as shared memory driver
-   */
- 
-  rtems_clock_major = major;
-  rtems_clock_minor = minor;
- 
-  return RTEMS_SUCCESSFUL;
-}
- 
-/*
- *  Clock_control
- *
- *  This routine is the clock device driver control entry point.
- *
- *  Input parameters:
- *    major - clock device major number
- *    minor - clock device minor number
- *    parg  - pointer to optional device driver arguments
- *
- *  Output parameters:  NONE
- *
- *  Return values:
- *    rtems_device_driver status code
- */
-
-rtems_device_driver Clock_control(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
-{
-    rtems_unsigned32 isrlevel;
-    rtems_libio_ioctl_args_t *args = pargp;
- 
-    if (args == 0)
-        goto done;
- 
-    /*
-     * This is hokey, but until we get a defined interface
-     * to do this, it will just be this simple...
-     */
- 
-    if (args->command == rtems_build_name('I', 'S', 'R', ' '))
-    {
-        Clock_isr(CLOCK_VECTOR);
-    }
-    else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
-    {
-      rtems_interrupt_disable( isrlevel );
-       (void) set_vector( args->buffer, CLOCK_VECTOR, 1 );
-      rtems_interrupt_enable( isrlevel );
-    }
- 
-done:
-    return RTEMS_SUCCESSFUL;
-}
+#include "../../../shared/clockdrv_shell.c"

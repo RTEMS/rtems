@@ -4,9 +4,11 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+VPATH = @srcdir@:@srcdir@/../../../shared
+
 PGM = $(ARCH)/console.rel
 
-C_FILES = console.c
+C_FILES = console-io.c console-polled.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 S_FILES = consupp.S
@@ -31,6 +33,6 @@ all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = console.c consupp.S
+EXTRA_DIST = console-io.c consupp.S
 
 include $(top_srcdir)/../../../../../../automake/local.am
