@@ -16,7 +16,7 @@ assessing the amount of disk space required for your installation:
 +----------------------------------------+------------------------------+
 |                Component               |     Disk Space Required      |
 +----------------------------------------+------------------------------+
-|          archive directory             |          20 Mbytes           |
+|          archive directory             |          30 Mbytes           |
 |          tools src unzipped            |          77 Mbytes           |
 |    each individual build directory     |    120 Mbytes worst case     |
 |       each installation directory      |         20-60 Mbytes         |
