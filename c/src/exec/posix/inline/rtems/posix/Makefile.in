@@ -16,7 +16,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 VPATH = @srcdir@
 
 #I_PIECES= cond intr key mqueue mutex pthread priority semaphore
-I_PIECES=cond key mutex pthread priority
+I_PIECES=cond key mqueue mutex pthread priority semaphore
 I_FILES=$(I_PIECES:%=$(srcdir)/%.inl)
 
 SRCS=$(I_FILES)
