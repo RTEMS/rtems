@@ -1,3 +1,16 @@
+2002-07-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/rpc/Makefile.am: Merge src/rpc/PSD.doc/Makefile.am.
+	* include/Makefile.am: Merge include/rpc/Makefile.am.
+	Merge include/rpcsvc/Makefile.am.
+	* include/rpc/Makefile.am: Remove.
+	* include/rpcsvc/Makefile.am: Remove.
+	* src/rpc/PSD.doc/Makefile.am: Remove.
+	* configure.ac: Remove duplicate AC_PROG_RANLIB.
+	Remove include/rpc/Makefile.
+	Remove include/rpcsvc/Makefile.
+	Remove src/rpc/PSD.doc/Makefile.
+
 2002-07-23	Joel Sherrill <joel@OARcorp.com>
 
 	* src/rpc/pmap_clnt.c (pmap_set): Changed prototype to match .h.
