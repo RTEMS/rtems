@@ -1,0 +1,16 @@
+@c
+@c  $Id$
+@c
+
+@set RTEMSHTTPSITE		www.rtems.com
+@set RTEMSUSERS			rtems-users@@rtems.com
+@set RTEMSUSERSSUBSCRIBE	rtems-users-subscribe@@rtems.com
+@set RTEMSSNAPSHOTS 		rtems-snapshots@@rtems.com
+@set RTEMSSNAPSHOTSSUBSCRIBE 	rtems-snapshots-subscribe@@rtems.com
+@set RTEMSBUGS			rtems-bugs@@rtems.com
+@set RTEMSFTPURL		ftp://www.rtems.com
+@set RTEMSHTTPURL		http://www.rtems.com
+@set RTEMSGNATS			@value{RTEMSHTTPURL}/cgi-bin/gnatsweb.pl
+@set RTEMSPREFIX		@RTEMSPREFIX@
+@set RTEMSAPI			@RTEMSAPI@
+

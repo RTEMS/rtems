@@ -1,3 +1,8 @@
+2003-09-19	Joel Sherrill <joel@OARcorp.com>
+
+	* cpright.texi, setup.texi: Merge from branch.
+	* rtems.texi.in: New file.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.

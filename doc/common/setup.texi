@@ -61,5 +61,3 @@
 \global\parskip 6pt plus 1pt
 @end ifclear
 @end tex
-
-
