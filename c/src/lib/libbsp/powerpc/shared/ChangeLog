@@ -1,5 +1,9 @@
 2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* startup/bspstart.c: Eliminate rtems_unsigned32.
+
+2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* startup/bspstart.c: include <rtems/powerpc/powerpc.h>.
 	Use PPC_MINIMUM_STACK_FRAME_SIZE instead of
 	CPU_MINIMUM_STACK_FRAME_SIZE.

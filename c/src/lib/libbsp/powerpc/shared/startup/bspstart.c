@@ -166,12 +166,12 @@ void bsp_libc_init( void *, uint32_t, int );
 
 void bsp_pretasking_hook(void)
 {
-  rtems_unsigned32        heap_start;    
-  rtems_unsigned32        heap_size;
-  rtems_unsigned32        heap_sbrk_spared;
-  extern rtems_unsigned32 _bsp_sbrk_init(rtems_unsigned32, rtems_unsigned32*);
+  uint32_t        heap_start;    
+  uint32_t        heap_size;
+  uint32_t        heap_sbrk_spared;
+  extern uint32_t _bsp_sbrk_init(uint32_t, uint32_t*);
 
-  heap_start = ((rtems_unsigned32) __rtems_end) +
+  heap_start = ((uint32_t) __rtems_end) +
                 INIT_STACK_SIZE + INTR_STACK_SIZE;
   if (heap_start & (CPU_ALIGNMENT-1))
       heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
