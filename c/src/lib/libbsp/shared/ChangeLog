@@ -1,3 +1,10 @@
+2003-08-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Remove (merged into Makefile.am).
+	* gdbstub/Makefile.am: Remove (merged into Makefile.am).
+	* Makefile.am: Reflect changes above.
+	Reflect having merged ../configure.ac into ../../../configure.ac.
+
 2003-06-30	Joel Sherrill <joel@OARcorp.com>
 
 	* console-polled.c: Corrected comments in header.
