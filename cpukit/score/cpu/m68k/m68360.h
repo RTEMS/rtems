@@ -37,42 +37,42 @@
  * Memory controller registers
  */
 typedef struct m360MEMCRegisters_ {
-	rtems_unsigned32	br;
-	rtems_unsigned32	or;
-	rtems_unsigned32	_pad[2];
+	unsigned long		br;
+	unsigned long		or;
+	unsigned long		_pad[2];
 } m360MEMCRegisters_t;
 
 /*
  * Serial Communications Controller registers
  */
 typedef struct m360SCCRegisters_ {
-	rtems_unsigned32	gsmr_l;
-	rtems_unsigned32	gsmr_h;
-	rtems_unsigned16	psmr;
-	rtems_unsigned16	_pad0;
-	rtems_unsigned16	todr;
-	rtems_unsigned16	dsr;
-	rtems_unsigned16	scce;
-	rtems_unsigned16	_pad1;
-	rtems_unsigned16	sccm;
-	rtems_unsigned8		_pad2;
-	rtems_unsigned8		sccs;
-	rtems_unsigned32	_pad3[2];
+	unsigned long		gsmr_l;
+	unsigned long		gsmr_h;
+	unsigned short		psmr;
+	unsigned short		_pad0;
+	unsigned short		todr;
+	unsigned short		dsr;
+	unsigned short		scce;
+	unsigned short		_pad1;
+	unsigned short		sccm;
+	unsigned char		_pad2;
+	unsigned char		sccs;
+	unsigned long		_pad3[2];
 } m360SCCRegisters_t;
 
 /*
  * Serial Management Controller registers
  */
 typedef struct m360SMCRegisters_ {
-	rtems_unsigned16	_pad0;
-	rtems_unsigned16	smcmr;
-	rtems_unsigned16	_pad1;
-	rtems_unsigned8		smce;
-	rtems_unsigned8		_pad2;
-	rtems_unsigned16	_pad3;
-	rtems_unsigned8		smcm;
-	rtems_unsigned8		_pad4;
-	rtems_unsigned32	_pad5;
+	unsigned short		_pad0;
+	unsigned short		smcmr;
+	unsigned short		_pad1;
+	unsigned char		smce;
+	unsigned char		_pad2;
+	unsigned short		_pad3;
+	unsigned char		smcm;
+	unsigned char		_pad4;
+	unsigned long		_pad5;
 } m360SMCRegisters_t;
 
 
@@ -82,10 +82,10 @@ typedef struct m360SMCRegisters_ {
  *************************************************************************
  */
 typedef struct m360MiscParms_ {
-	rtems_unsigned16	rev_num;
-	rtems_unsigned16	_res1;
-	rtems_unsigned32	_res2;
-	rtems_unsigned32	_res3;
+	unsigned short		rev_num;
+	unsigned short		_res1;
+	unsigned long		_res2;
+	unsigned long		_res3;
 } m360MiscParms_t;
 
 /*
@@ -94,12 +94,12 @@ typedef struct m360MiscParms_ {
  *************************************************************************
  */
 typedef struct m360TimerParms_ {
-	rtems_unsigned16	tm_base;
-	rtems_unsigned16	_tm_ptr;
-	rtems_unsigned16	_r_tmr;
-	rtems_unsigned16	_r_tmv;
-	rtems_unsigned32	tm_cmd;
-	rtems_unsigned32	tm_cnt;
+	unsigned short		tm_base;
+	unsigned short		_tm_ptr;
+	unsigned short		_r_tmr;
+	unsigned short		_r_tmv;
+	unsigned long		tm_cmd;
+	unsigned long		tm_cnt;
 } m360TimerParms_t;
 
 /*
@@ -125,10 +125,10 @@ typedef struct m360TimerParms_ {
  *************************************************************************
  */
 typedef struct m360IDMAparms_ {
-	rtems_unsigned16	ibase;
-	rtems_unsigned16	ibptr;
-	rtems_unsigned32	_istate;
-	rtems_unsigned32	_itemp;
+	unsigned short		ibase;
+	unsigned short		ibptr;
+	unsigned long		_istate;
+	unsigned long		_itemp;
 } m360IDMAparms_t;
 
 /*
@@ -137,131 +137,140 @@ typedef struct m360IDMAparms_ {
  *************************************************************************
  */
 typedef struct m360SCCparms_ {
-	rtems_unsigned16	rbase;
-	rtems_unsigned16	tbase;
-	rtems_unsigned8		rfcr;
-	rtems_unsigned8		tfcr;
-	rtems_unsigned16	mrblr;
-	rtems_unsigned32	_rstate;
-	rtems_unsigned32	_pad0;
-	rtems_unsigned16	_rbptr;
-	rtems_unsigned16	_pad1;
-	rtems_unsigned32	_pad2;
-	rtems_unsigned32	_tstate;
-	rtems_unsigned32	_pad3;
-	rtems_unsigned16	_tbptr;
-	rtems_unsigned16	_pad4;
-	rtems_unsigned32	_pad5;
-	rtems_unsigned32	_rcrc;
-	rtems_unsigned32	_tcrc;
+	unsigned short		rbase;
+	unsigned short		tbase;
+	unsigned char		rfcr;
+	unsigned char		tfcr;
+	unsigned short		mrblr;
+	unsigned long		_rstate;
+	unsigned long		_pad0;
+	unsigned short		_rbptr;
+	unsigned short		_pad1;
+	unsigned long		_pad2;
+	unsigned long		_tstate;
+	unsigned long		_pad3;
+	unsigned short		_tbptr;
+	unsigned short		_pad4;
+	unsigned long		_pad5;
+	unsigned long		_rcrc;
+	unsigned long		_tcrc;
 	union {
 		struct {
-			rtems_unsigned32	_res0;
-			rtems_unsigned32	_res1;
-			rtems_unsigned16	max_idl;
-			rtems_unsigned16	_idlc;
-			rtems_unsigned16	brkcr;
-			rtems_unsigned16	parec;
-			rtems_unsigned16	frmec;
-			rtems_unsigned16	nosec;
-			rtems_unsigned16	brkec;
-			rtems_unsigned16	brklen;
-			rtems_unsigned16	uaddr[2];
-			rtems_unsigned16	_rtemp;
-			rtems_unsigned16	toseq;
-			rtems_unsigned16	character[8];
-			rtems_unsigned16	rccm;
-			rtems_unsigned16	rccr;
-			rtems_unsigned16	rlbc;
+			unsigned long		_res0;
+			unsigned long		_res1;
+			unsigned short		max_idl;
+			unsigned short		_idlc;
+			unsigned short		brkcr;
+			unsigned short		parec;
+			unsigned short		frmec;
+			unsigned short		nosec;
+			unsigned short		brkec;
+			unsigned short		brklen;
+			unsigned short		uaddr[2];
+			unsigned short		_rtemp;
+			unsigned short		toseq;
+			unsigned short		character[8];
+			unsigned short		rccm;
+			unsigned short		rccr;
+			unsigned short		rlbc;
 		} uart;
+		struct {
+			unsigned long		crc_p;
+			unsigned long		crc_c;
+		} transparent;
+
 	} un;
 } m360SCCparms_t;
 
 typedef struct m360SCCENparms_ {
-	rtems_unsigned16	rbase;
-	rtems_unsigned16	tbase;
-	rtems_unsigned8		rfcr;
-	rtems_unsigned8		tfcr;
-	rtems_unsigned16	mrblr;
-	rtems_unsigned32	_rstate;
-	rtems_unsigned32	_pad0;
-	rtems_unsigned16	_rbptr;
-	rtems_unsigned16	_pad1;
-	rtems_unsigned32	_pad2;
-	rtems_unsigned32	_tstate;
-	rtems_unsigned32	_pad3;
-	rtems_unsigned16	_tbptr;
-	rtems_unsigned16	_pad4;
-	rtems_unsigned32	_pad5;
-	rtems_unsigned32	_rcrc;
-	rtems_unsigned32	_tcrc;
+	unsigned short		rbase;
+	unsigned short		tbase;
+	unsigned char		rfcr;
+	unsigned char		tfcr;
+	unsigned short		mrblr;
+	unsigned long		_rstate;
+	unsigned long		_pad0;
+	unsigned short		_rbptr;
+	unsigned short		_pad1;
+	unsigned long		_pad2;
+	unsigned long		_tstate;
+	unsigned long		_pad3;
+	unsigned short		_tbptr;
+	unsigned short		_pad4;
+	unsigned long		_pad5;
+	unsigned long		_rcrc;
+	unsigned long		_tcrc;
 	union {
 		struct {
-			rtems_unsigned32	_res0;
-			rtems_unsigned32	_res1;
-			rtems_unsigned16	max_idl;
-			rtems_unsigned16	_idlc;
-			rtems_unsigned16	brkcr;
-			rtems_unsigned16	parec;
-			rtems_unsigned16	frmec;
-			rtems_unsigned16	nosec;
-			rtems_unsigned16	brkec;
-			rtems_unsigned16	brklen;
-			rtems_unsigned16	uaddr[2];
-			rtems_unsigned16	_rtemp;
-			rtems_unsigned16	toseq;
-			rtems_unsigned16	character[8];
-			rtems_unsigned16	rccm;
-			rtems_unsigned16	rccr;
-			rtems_unsigned16	rlbc;
+			unsigned long		_res0;
+			unsigned long		_res1;
+			unsigned short		max_idl;
+			unsigned short		_idlc;
+			unsigned short		brkcr;
+			unsigned short		parec;
+			unsigned short		frmec;
+			unsigned short		nosec;
+			unsigned short		brkec;
+			unsigned short		brklen;
+			unsigned short		uaddr[2];
+			unsigned short		_rtemp;
+			unsigned short		toseq;
+			unsigned short		character[8];
+			unsigned short		rccm;
+			unsigned short		rccr;
+			unsigned short		rlbc;
 		} uart;
 		struct {
-			rtems_unsigned32	c_pres;
-			rtems_unsigned32	c_mask;
-			rtems_unsigned32	crcec;
-			rtems_unsigned32	alec;
-			rtems_unsigned32	disfc;
-			rtems_unsigned16	pads;
-			rtems_unsigned16	ret_lim;
-			rtems_unsigned16	_ret_cnt;
-			rtems_unsigned16	mflr;
-			rtems_unsigned16	minflr;
-			rtems_unsigned16	maxd1;
-			rtems_unsigned16	maxd2;
-			rtems_unsigned16	_maxd;
-			rtems_unsigned16	dma_cnt;
-			rtems_unsigned16	_max_b;
-			rtems_unsigned16	gaddr1;
-			rtems_unsigned16	gaddr2;
-			rtems_unsigned16	gaddr3;
-			rtems_unsigned16	gaddr4;
-			rtems_unsigned32	_tbuf0data0;
-			rtems_unsigned32	_tbuf0data1;
-			rtems_unsigned32	_tbuf0rba0;
-			rtems_unsigned32	_tbuf0crc;
-			rtems_unsigned16	_tbuf0bcnt;
-			rtems_unsigned16	paddr_h;
-			rtems_unsigned16	paddr_m;
-			rtems_unsigned16	paddr_l;
-			rtems_unsigned16	p_per;
-			rtems_unsigned16	_rfbd_ptr;
-			rtems_unsigned16	_tfbd_ptr;
-			rtems_unsigned16	_tlbd_ptr;
-			rtems_unsigned32	_tbuf1data0;
-			rtems_unsigned32	_tbuf1data1;
-			rtems_unsigned32	_tbuf1rba0;
-			rtems_unsigned32	_tbuf1crc;
-			rtems_unsigned16	_tbuf1bcnt;
-			rtems_unsigned16	_tx_len;
-			rtems_unsigned16	iaddr1;
-			rtems_unsigned16	iaddr2;
-			rtems_unsigned16	iaddr3;
-			rtems_unsigned16	iaddr4;
-			rtems_unsigned16	_boff_cnt;
-			rtems_unsigned16	taddr_l;
-			rtems_unsigned16	taddr_m;
-			rtems_unsigned16	taddr_h;
+			unsigned long		c_pres;
+			unsigned long		c_mask;
+			unsigned long		crcec;
+			unsigned long		alec;
+			unsigned long		disfc;
+			unsigned short		pads;
+			unsigned short		ret_lim;
+			unsigned short		_ret_cnt;
+			unsigned short		mflr;
+			unsigned short		minflr;
+			unsigned short		maxd1;
+			unsigned short		maxd2;
+			unsigned short		_maxd;
+			unsigned short		dma_cnt;
+			unsigned short		_max_b;
+			unsigned short		gaddr1;
+			unsigned short		gaddr2;
+			unsigned short		gaddr3;
+			unsigned short		gaddr4;
+			unsigned long		_tbuf0data0;
+			unsigned long		_tbuf0data1;
+			unsigned long		_tbuf0rba0;
+			unsigned long		_tbuf0crc;
+			unsigned short		_tbuf0bcnt;
+			unsigned short		paddr_h;
+			unsigned short		paddr_m;
+			unsigned short		paddr_l;
+			unsigned short		p_per;
+			unsigned short		_rfbd_ptr;
+			unsigned short		_tfbd_ptr;
+			unsigned short		_tlbd_ptr;
+			unsigned long		_tbuf1data0;
+			unsigned long		_tbuf1data1;
+			unsigned long		_tbuf1rba0;
+			unsigned long		_tbuf1crc;
+			unsigned short		_tbuf1bcnt;
+			unsigned short		_tx_len;
+			unsigned short		iaddr1;
+			unsigned short		iaddr2;
+			unsigned short		iaddr3;
+			unsigned short		iaddr4;
+			unsigned short		_boff_cnt;
+			unsigned short		taddr_l;
+			unsigned short		taddr_m;
+			unsigned short		taddr_h;
 		} ethernet;
+		struct {
+			unsigned long		crc_p;
+			unsigned long		crc_c;
+		} transparent;
 	} un;
 } m360SCCENparms_t;
 
@@ -280,32 +289,32 @@ typedef struct m360SCCENparms_ {
  *************************************************************************
  */
 typedef struct m360SMCparms_ {
-	rtems_unsigned16	rbase;
-	rtems_unsigned16	tbase;
-	rtems_unsigned8		rfcr;
-	rtems_unsigned8		tfcr;
-	rtems_unsigned16	mrblr;
-	rtems_unsigned32	_rstate;
-	rtems_unsigned32	_pad0;
-	rtems_unsigned16	_rbptr;
-	rtems_unsigned16	_pad1;
-	rtems_unsigned32	_pad2;
-	rtems_unsigned32	_tstate;
-	rtems_unsigned32	_pad3;
-	rtems_unsigned16	_tbptr;
-	rtems_unsigned16	_pad4;
-	rtems_unsigned32	_pad5;
+	unsigned short		rbase;
+	unsigned short		tbase;
+	unsigned char		rfcr;
+	unsigned char		tfcr;
+	unsigned short		mrblr;
+	unsigned long		_rstate;
+	unsigned long		_pad0;
+	unsigned short		_rbptr;
+	unsigned short		_pad1;
+	unsigned long		_pad2;
+	unsigned long		_tstate;
+	unsigned long		_pad3;
+	unsigned short		_tbptr;
+	unsigned short		_pad4;
+	unsigned long		_pad5;
 	union {
 		struct {
-			rtems_unsigned16	max_idl;
-			rtems_unsigned16	_pad0;
-			rtems_unsigned16	brklen;
-			rtems_unsigned16	brkec;
-			rtems_unsigned16	brkcr;
-			rtems_unsigned16	_r_mask;
+			unsigned short		max_idl;
+			unsigned short		_pad0;
+			unsigned short		brklen;
+			unsigned short		brkec;
+			unsigned short		brkcr;
+			unsigned short		_r_mask;
 		} uart;
 		struct {
-			rtems_unsigned16	_pad0[5];
+			unsigned short		_pad0[5];
 		} transparent;
 	} un;
 } m360SMCparms_t;
@@ -339,21 +348,21 @@ typedef struct m360SMCparms_ {
  *************************************************************************
  */
 typedef struct m360SPIparms_ {
-	rtems_unsigned16	rbase;
-	rtems_unsigned16	tbase;
-	rtems_unsigned8		rfcr;
-	rtems_unsigned8		tfcr;
-	rtems_unsigned16	mrblr;
-	rtems_unsigned32	_rstate;
-	rtems_unsigned32	_pad0;
-	rtems_unsigned16	_rbptr;
-	rtems_unsigned16	_pad1;
-	rtems_unsigned32	_pad2;
-	rtems_unsigned32	_tstate;
-	rtems_unsigned32	_pad3;
-	rtems_unsigned16	_tbptr;
-	rtems_unsigned16	_pad4;
-	rtems_unsigned32	_pad5;
+	unsigned short		rbase;
+	unsigned short		tbase;
+	unsigned char		rfcr;
+	unsigned char		tfcr;
+	unsigned short		mrblr;
+	unsigned long		_rstate;
+	unsigned long		_pad0;
+	unsigned short		_rbptr;
+	unsigned short		_pad1;
+	unsigned long		_pad2;
+	unsigned long		_tstate;
+	unsigned long		_pad3;
+	unsigned short		_tbptr;
+	unsigned short		_pad4;
+	unsigned long		_pad5;
 } m360SPIparms_t;
 
 /*
@@ -389,8 +398,8 @@ typedef struct m360SPIparms_ {
  *************************************************************************
  */
 typedef struct m360BufferDescriptor_ {
-	rtems_unsigned16	status;
-	rtems_unsigned16	length;
+	unsigned short		status;
+	unsigned short		length;
 	volatile void		*buffer;
 } m360BufferDescriptor_t;
 
@@ -445,9 +454,9 @@ typedef struct m360BufferDescriptor_ {
  *************************************************************************
  */
 typedef struct m360IDMABufferDescriptor_ {
-	rtems_unsigned16	status;
-	rtems_unsigned16	_pad;
-	rtems_unsigned32	length;
+	unsigned short		status;
+	unsigned short		_pad;
+	unsigned long		length;
 	void			*source;
 	void			*destination;
 } m360IDMABufferDescriptor_t;
@@ -631,192 +640,192 @@ typedef struct m360_ {
 	/*
 	 * Dual-port RAM
 	 */
-	rtems_unsigned8		dpram0[0x400];	/* Microcode program */
-	rtems_unsigned8		dpram1[0x200];
-	rtems_unsigned8		dpram2[0x100];	/* Microcode scratch */
-	rtems_unsigned8		dpram3[0x100];	/* Not on REV A or B masks */
-	rtems_unsigned8		_rsv0[0xC00-0x800];
+	unsigned char		dpram0[0x400];	/* Microcode program */
+	unsigned char		dpram1[0x200];
+	unsigned char		dpram2[0x100];	/* Microcode scratch */
+	unsigned char		dpram3[0x100];	/* Not on REV A or B masks */
+	unsigned char		_rsv0[0xC00-0x800];
 	m360SCCENparms_t	scc1p;
-	rtems_unsigned8		_rsv1[0xCB0-0xC00-sizeof(m360SCCENparms_t)];
+	unsigned char		_rsv1[0xCB0-0xC00-sizeof(m360SCCENparms_t)];
 	m360MiscParms_t		miscp;
-	rtems_unsigned8		_rsv2[0xD00-0xCB0-sizeof(m360MiscParms_t)];
+	unsigned char		_rsv2[0xD00-0xCB0-sizeof(m360MiscParms_t)];
 	m360SCCparms_t		scc2p;
-	rtems_unsigned8		_rsv3[0xD80-0xD00-sizeof(m360SCCparms_t)];
+	unsigned char		_rsv3[0xD80-0xD00-sizeof(m360SCCparms_t)];
 	m360SPIparms_t		spip;
-	rtems_unsigned8		_rsv4[0xDB0-0xD80-sizeof(m360SPIparms_t)];
+	unsigned char		_rsv4[0xDB0-0xD80-sizeof(m360SPIparms_t)];
 	m360TimerParms_t	tmp;
-	rtems_unsigned8		_rsv5[0xE00-0xDB0-sizeof(m360TimerParms_t)];
+	unsigned char		_rsv5[0xE00-0xDB0-sizeof(m360TimerParms_t)];
 	m360SCCparms_t		scc3p;
-	rtems_unsigned8		_rsv6[0xE70-0xE00-sizeof(m360SCCparms_t)];
+	unsigned char		_rsv6[0xE70-0xE00-sizeof(m360SCCparms_t)];
 	m360IDMAparms_t		idma1p;
-	rtems_unsigned8		_rsv7[0xE80-0xE70-sizeof(m360IDMAparms_t)];
+	unsigned char		_rsv7[0xE80-0xE70-sizeof(m360IDMAparms_t)];
 	m360SMCparms_t		smc1p;
-	rtems_unsigned8		_rsv8[0xF00-0xE80-sizeof(m360SMCparms_t)];
+	unsigned char		_rsv8[0xF00-0xE80-sizeof(m360SMCparms_t)];
 	m360SCCparms_t		scc4p;
-	rtems_unsigned8		_rsv9[0xF70-0xF00-sizeof(m360SCCparms_t)];
+	unsigned char		_rsv9[0xF70-0xF00-sizeof(m360SCCparms_t)];
 	m360IDMAparms_t		idma2p;
-	rtems_unsigned8		_rsv10[0xF80-0xF70-sizeof(m360IDMAparms_t)];
+	unsigned char		_rsv10[0xF80-0xF70-sizeof(m360IDMAparms_t)];
 	m360SMCparms_t		smc2p;
-	rtems_unsigned8		_rsv11[0x1000-0xF80-sizeof(m360SMCparms_t)];
+	unsigned char		_rsv11[0x1000-0xF80-sizeof(m360SMCparms_t)];
 
 	/*
 	 * SIM Block
 	 */
-	rtems_unsigned32	mcr;
-	rtems_unsigned32	_pad00;
-	rtems_unsigned8		avr;
-	rtems_unsigned8		rsr;
-	rtems_unsigned16	_pad01;
-	rtems_unsigned8		clkocr;
-	rtems_unsigned8		_pad02;
-	rtems_unsigned16	_pad03;
-	rtems_unsigned16	pllcr;
-	rtems_unsigned16	_pad04;
-	rtems_unsigned16	cdvcr;
-	rtems_unsigned16	pepar;
-	rtems_unsigned32	_pad05[2];
-	rtems_unsigned16	_pad06;
-	rtems_unsigned8		sypcr;
-	rtems_unsigned8		swiv;
-	rtems_unsigned16	_pad07;
-	rtems_unsigned16	picr;
-	rtems_unsigned16	_pad08;
-	rtems_unsigned16	pitr;
-	rtems_unsigned16	_pad09;
-	rtems_unsigned8		_pad10;
-	rtems_unsigned8		swsr;
-	rtems_unsigned32	bkar;
-	rtems_unsigned32	bcar;
-	rtems_unsigned32	_pad11[2];
+	unsigned long		mcr;
+	unsigned long		_pad00;
+	unsigned char		avr;
+	unsigned char		rsr;
+	unsigned short		_pad01;
+	unsigned char		clkocr;
+	unsigned char		_pad02;
+	unsigned short		_pad03;
+	unsigned short		pllcr;
+	unsigned short		_pad04;
+	unsigned short		cdvcr;
+	unsigned short		pepar;
+	unsigned long		_pad05[2];
+	unsigned short		_pad06;
+	unsigned char		sypcr;
+	unsigned char		swiv;
+	unsigned short		_pad07;
+	unsigned short		picr;
+	unsigned short		_pad08;
+	unsigned short		pitr;
+	unsigned short		_pad09;
+	unsigned char		_pad10;
+	unsigned char		swsr;
+	unsigned long		bkar;
+	unsigned long		bcar;
+	unsigned long		_pad11[2];
 
 	/*
 	 * MEMC Block
 	 */
-	rtems_unsigned32	gmr;
-	rtems_unsigned16	mstat;
-	rtems_unsigned16	_pad12;
-	rtems_unsigned32	_pad13[2];
+	unsigned long		gmr;
+	unsigned short		mstat;
+	unsigned short		_pad12;
+	unsigned long		_pad13[2];
 	m360MEMCRegisters_t	memc[8];
-	rtems_unsigned8		_pad14[0xF0-0xD0];
-	rtems_unsigned8		_pad15[0x100-0xF0];
-	rtems_unsigned8		_pad16[0x500-0x100];
+	unsigned char		_pad14[0xF0-0xD0];
+	unsigned char		_pad15[0x100-0xF0];
+	unsigned char		_pad16[0x500-0x100];
 	
 	/*
 	 * IDMA1 Block
 	 */
-	rtems_unsigned16	iccr;
-	rtems_unsigned16	_pad17;
-	rtems_unsigned16	cmr1;
-	rtems_unsigned16	_pad18;
-	rtems_unsigned32	sapr1;
-	rtems_unsigned32	dapr1;
-	rtems_unsigned32	bcr1;
-	rtems_unsigned8		fcr1;
-	rtems_unsigned8		_pad19;
-	rtems_unsigned8		cmar1;
-	rtems_unsigned8		_pad20;
-	rtems_unsigned8		csr1;
-	rtems_unsigned8		_pad21;
-	rtems_unsigned16	_pad22;
+	unsigned short		iccr;
+	unsigned short		_pad17;
+	unsigned short		cmr1;
+	unsigned short		_pad18;
+	unsigned long		sapr1;
+	unsigned long		dapr1;
+	unsigned long		bcr1;
+	unsigned char		fcr1;
+	unsigned char		_pad19;
+	unsigned char		cmar1;
+	unsigned char		_pad20;
+	unsigned char		csr1;
+	unsigned char		_pad21;
+	unsigned short		_pad22;
 	
 	/*
 	 * SDMA Block
 	 */
-	rtems_unsigned8		sdsr;
-	rtems_unsigned8		_pad23;
-	rtems_unsigned16	sdcr;
-	rtems_unsigned32	sdar;
+	unsigned char		sdsr;
+	unsigned char		_pad23;
+	unsigned short		sdcr;
+	unsigned long		sdar;
 	
 	/*
 	 * IDMA2 Block
 	 */
-	rtems_unsigned16	_pad24;
-	rtems_unsigned16	cmr2;
-	rtems_unsigned32	sapr2;
-	rtems_unsigned32	dapr2;
-	rtems_unsigned32	bcr2;
-	rtems_unsigned8		fcr2;
-	rtems_unsigned8		_pad26;
-	rtems_unsigned8		cmar2;
-	rtems_unsigned8		_pad27;
-	rtems_unsigned8		csr2;
-	rtems_unsigned8		_pad28;
-	rtems_unsigned16	_pad29;
-	rtems_unsigned32	_pad30;
+	unsigned short		_pad24;
+	unsigned short		cmr2;
+	unsigned long		sapr2;
+	unsigned long		dapr2;
+	unsigned long		bcr2;
+	unsigned char		fcr2;
+	unsigned char		_pad26;
+	unsigned char		cmar2;
+	unsigned char		_pad27;
+	unsigned char		csr2;
+	unsigned char		_pad28;
+	unsigned short		_pad29;
+	unsigned long		_pad30;
 	
 	/*
 	 * CPIC Block
 	 */
-	rtems_unsigned32	cicr;
-	rtems_unsigned32	cipr;
-	rtems_unsigned32	cimr;
-	rtems_unsigned32	cisr;
+	unsigned long		cicr;
+	unsigned long		cipr;
+	unsigned long		cimr;
+	unsigned long		cisr;
 
 	/*
 	 * Parallel I/O Block
 	 */
-	rtems_unsigned16	padir;
-	rtems_unsigned16	papar;
-	rtems_unsigned16	paodr;
-	rtems_unsigned16	padat;
-	rtems_unsigned32	_pad31[2];
-	rtems_unsigned16	pcdir;
-	rtems_unsigned16	pcpar;
-	rtems_unsigned16	pcso;
-	rtems_unsigned16	pcdat;
-	rtems_unsigned16	pcint;
-	rtems_unsigned16	_pad32;
-	rtems_unsigned32	_pad33[5];
+	unsigned short		padir;
+	unsigned short		papar;
+	unsigned short		paodr;
+	unsigned short		padat;
+	unsigned long		_pad31[2];
+	unsigned short		pcdir;
+	unsigned short		pcpar;
+	unsigned short		pcso;
+	unsigned short		pcdat;
+	unsigned short		pcint;
+	unsigned short		_pad32;
+	unsigned long		_pad33[5];
 	
 	/*
 	 * TIMER Block
 	 */
-	rtems_unsigned16	tgcr;
-	rtems_unsigned16	_pad34;
-	rtems_unsigned32	_pad35[3];
-	rtems_unsigned16	tmr1;
-	rtems_unsigned16	tmr2;
-	rtems_unsigned16	trr1;
-	rtems_unsigned16	trr2;
-	rtems_unsigned16	tcr1;
-	rtems_unsigned16	tcr2;
-	rtems_unsigned16	tcn1;
-	rtems_unsigned16	tcn2;
-	rtems_unsigned16	tmr3;
-	rtems_unsigned16	tmr4;
-	rtems_unsigned16	trr3;
-	rtems_unsigned16	trr4;
-	rtems_unsigned16	tcr3;
-	rtems_unsigned16	tcr4;
-	rtems_unsigned16	tcn3;
-	rtems_unsigned16	tcn4;
-	rtems_unsigned16	ter1;
-	rtems_unsigned16	ter2;
-	rtems_unsigned16	ter3;
-	rtems_unsigned16	ter4;
-	rtems_unsigned32	_pad36[2];
+	unsigned short		tgcr;
+	unsigned short		_pad34;
+	unsigned long		_pad35[3];
+	unsigned short		tmr1;
+	unsigned short		tmr2;
+	unsigned short		trr1;
+	unsigned short		trr2;
+	unsigned short		tcr1;
+	unsigned short		tcr2;
+	unsigned short		tcn1;
+	unsigned short		tcn2;
+	unsigned short		tmr3;
+	unsigned short		tmr4;
+	unsigned short		trr3;
+	unsigned short		trr4;
+	unsigned short		tcr3;
+	unsigned short		tcr4;
+	unsigned short		tcn3;
+	unsigned short		tcn4;
+	unsigned short		ter1;
+	unsigned short		ter2;
+	unsigned short		ter3;
+	unsigned short		ter4;
+	unsigned long		_pad36[2];
 	
 	/*
 	 * CP Block
 	 */
-	rtems_unsigned16	cr;
-	rtems_unsigned16	_pad37;
-	rtems_unsigned16	rccr;
-	rtems_unsigned16	_pad38;
-	rtems_unsigned32	_pad39[3];
-	rtems_unsigned16	_pad40;
-	rtems_unsigned16	rter;
-	rtems_unsigned16	_pad41;
-	rtems_unsigned16	rtmr;
-	rtems_unsigned32	_pad42[5];
+	unsigned short		cr;
+	unsigned short		_pad37;
+	unsigned short		rccr;
+	unsigned short		_pad38;
+	unsigned long		_pad39[3];
+	unsigned short		_pad40;
+	unsigned short		rter;
+	unsigned short		_pad41;
+	unsigned short		rtmr;
+	unsigned long		_pad42[5];
 
 	/*
 	 * BRG Block
 	 */
-	rtems_unsigned32	brgc1;
-	rtems_unsigned32	brgc2;
-	rtems_unsigned32	brgc3;
-	rtems_unsigned32	brgc4;
+	unsigned long		brgc1;
+	unsigned long		brgc2;
+	unsigned long		brgc3;
+	unsigned long		brgc4;
 
 	/*
 	 * SCC Block
@@ -835,44 +844,44 @@ typedef struct m360_ {
 	/*
 	 * SPI Block
 	 */
-	rtems_unsigned16	spmode;
-	rtems_unsigned16	_pad43[2];
-	rtems_unsigned8		spie;
-	rtems_unsigned8		_pad44;
-	rtems_unsigned16	_pad45;
-	rtems_unsigned8		spim;
-	rtems_unsigned8		_pad46[2];
-	rtems_unsigned8		spcom;
-	rtems_unsigned16	_pad47[2];
+	unsigned short		spmode;
+	unsigned short		_pad43[2];
+	unsigned char		spie;
+	unsigned char		_pad44;
+	unsigned short		_pad45;
+	unsigned char		spim;
+	unsigned char		_pad46[2];
+	unsigned char		spcom;
+	unsigned short		_pad47[2];
 
 	/*
 	 * PIP Block
 	 */
-	rtems_unsigned16	pipc;
-	rtems_unsigned16	_pad48;
-	rtems_unsigned16	ptpr;
-	rtems_unsigned32	pbdir;
-	rtems_unsigned32	pbpar;
-	rtems_unsigned16	_pad49;
-	rtems_unsigned16	pbodr;
-	rtems_unsigned32	pbdat;
-	rtems_unsigned32	_pad50[6];
+	unsigned short		pipc;
+	unsigned short		_pad48;
+	unsigned short		ptpr;
+	unsigned long		pbdir;
+	unsigned long		pbpar;
+	unsigned short		_pad49;
+	unsigned short		pbodr;
+	unsigned long		pbdat;
+	unsigned long		_pad50[6];
 
 	/*
 	 * SI Block
 	 */
-	rtems_unsigned32	simode;
-	rtems_unsigned8		sigmr;
-	rtems_unsigned8		_pad51;
-	rtems_unsigned8		sistr;
-	rtems_unsigned8		sicmr;
-	rtems_unsigned32	_pad52;
-	rtems_unsigned32	sicr;
-	rtems_unsigned16	_pad53;
-	rtems_unsigned16	sirp[2];
-	rtems_unsigned16	_pad54;
-	rtems_unsigned32	_pad55[2];
-	rtems_unsigned8		siram[256];
+	unsigned long		simode;
+	unsigned char		sigmr;
+	unsigned char		_pad51;
+	unsigned char		sistr;
+	unsigned char		sicmr;
+	unsigned long		_pad52;
+	unsigned long		sicr;
+	unsigned short		_pad53;
+	unsigned short		sirp[2];
+	unsigned short		_pad54;
+	unsigned long		_pad55[2];
+	unsigned char		siram[256];
 } m360_t;
 
 extern volatile m360_t m360;
