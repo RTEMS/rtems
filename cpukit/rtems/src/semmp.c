@@ -305,4 +305,58 @@ Semaphore_MP_Packet *_Semaphore_MP_Get_packet ( void )
   return ( (Semaphore_MP_Packet *) _MPCI_Get_packet() );
 }
 
+/*PAGE
+ *
+ *  _Semaphore_Core_mutex_mp_support
+ *
+ *  Input parameters:
+ *    the_thread - the remote thread the semaphore was surrendered to
+ *    id         - id of the surrendered semaphore
+ *
+ *  Output parameters: NONE
+ */
+ 
+#if defined(RTEMS_MULTIPROCESSING)
+void  _Semaphore_Core_mutex_mp_support (
+  Thread_Control *the_thread,
+  Objects_Id      id
+)
+{
+  the_thread->receive_packet->return_code = RTEMS_SUCCESSFUL;
+ 
+  _Semaphore_MP_Send_response_packet(
+     SEMAPHORE_MP_OBTAIN_RESPONSE,
+     id,
+     the_thread
+   );
+}
+#endif
+
+
+/*PAGE
+ *
+ *  _Semaphore_Core_semaphore_mp_support
+ *
+ *  Input parameters:
+ *    the_thread - the remote thread the semaphore was surrendered to
+ *    id         - id of the surrendered semaphore
+ *
+ *  Output parameters: NONE
+ */
+ 
+#if defined(RTEMS_MULTIPROCESSING)
+void  _Semaphore_Core_semaphore_mp_support (
+  Thread_Control *the_thread,
+  Objects_Id      id
+)
+{
+  the_thread->receive_packet->return_code = RTEMS_SUCCESSFUL;
+ 
+  _Semaphore_MP_Send_response_packet(
+     SEMAPHORE_MP_OBTAIN_RESPONSE,
+     id,
+     the_thread
+   );
+}
+#endif
 /* end of file */
