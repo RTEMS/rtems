@@ -4,7 +4,6 @@
 ## build and install libbsp
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 BSP_PIECES = startup scitab console
 
