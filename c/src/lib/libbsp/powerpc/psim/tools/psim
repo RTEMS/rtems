@@ -44,7 +44,7 @@ case $0 in
      ${GDB} -x ${GDB_FILE} $*
      ;;
    *)
-     ${RUN} -f ${TREE_FILE} $*
+     # ${RUN} -f ${TREE_FILE} $*
      ${RUN} -f ${TREE_FILE} ${RUN_DEBUG} $*
      ;;
 esac
