@@ -1,3 +1,10 @@
+2001-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Add src/imfs/config.h
+	* src/imfs/Makefile.am: Add INCLUDES += -I. to pickup config.h
+	* src/imfs/.cvsignore: Add config.h and stamp-h
+	* src/imfs/*.c: Add config.h support.
+
 2001-01-12	Jake Janovetz <janovetz@uiuc.edu>
 
 	* src/imfs/imfs.h, src/imfs/imfs_creat.c, src/imfs/imfs_debug.c,

@@ -1,3 +1,11 @@
+/*
+ * $Id$
+ */
+
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /**************************************************************************
  * This file implements the "mount" procedure for tar-based IMFS
  * extensions.  The TAR is not actually mounted under the IMFS.

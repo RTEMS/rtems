@@ -15,6 +15,10 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <errno.h>
 #include "imfs.h"
 #include <rtems/libio_.h>
