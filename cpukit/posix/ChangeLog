@@ -1,3 +1,9 @@
+2002-12-06	Vladimir Nesic <vnesic@dkts.co.yu>
+
+	* inline/rtems/posix/cond.inl, macros/rtems/posix/cond.inl:
+	Implemented PTHREAD_COND_INITIALIZER support.  Vladimir implemented
+	the inline version and Joel adapted it to the macro version.
+
 2002-12-02	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/posix/timer.h, src/keygetspecific.c,
