@@ -27,6 +27,8 @@ void ITRON_Init( void );
 
 #define CONFIGURE_ITRON_INIT_TASK_TABLE
 
+#define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
+
 #include <confdefs.h>
 
 /* global variables */
