@@ -1,3 +1,9 @@
+2004-07-24	Joel Sherrill <joel@OARcorp.com>
+
+	PR rtems/652
+	* src/signalsend.c: Return RTEMS_INVALID_NUMBER when sending an empty
+	signal set.
+
 2004-07-14	Joel Sherrill <joel@OARcorp.com>
 
 	PR 651/core

@@ -33,18 +33,21 @@
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
- *    error code - if unsuccessful
+ *    error code       - if unsuccessful
  */
 
 rtems_status_code rtems_signal_send(
-  Objects_Id             id,
-  rtems_signal_set signal_set
+  Objects_Id        id,
+  rtems_signal_set  signal_set
 )
 {
   register Thread_Control *the_thread;
   Objects_Locations        location;
   RTEMS_API_Control       *api;
   ASR_Information         *asr;
+
+  if ( !signal_set )
+    return RTEMS_INVALID_NUMBER;
 
   the_thread = _Thread_Get( id, &location );
   switch ( location ) {
