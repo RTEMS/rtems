@@ -457,6 +457,130 @@ tcp_notify(inp, error)
 	sowwakeup(so);
 }
 
+#ifdef __rtems__
+#define INP_INFO_RLOCK
+#define INP_INFO_RUNLOCK
+#define INP_LOCK
+#define INP_UNLOCK
+#endif
+
+static int
+tcp_pcblist(SYSCTL_HANDLER_ARGS)
+{
+	int error, i, n, s;
+	struct inpcb *inp, **inp_list;
+	inp_gen_t gencnt;
+	struct xinpgen xig;
+
+	/*
+	 * The process of preparing the TCB list is too time-consuming and
+	 * resource-intensive to repeat twice on every request.
+	 */
+	if (req->oldptr == 0) {
+		n = tcbinfo.ipi_count;
+		req->oldidx = 2 * (sizeof xig)
+			+ (n + n/8) * sizeof(struct xtcpcb);
+		return 0;
+	}
+
+	if (req->newptr != 0)
+		return EPERM;
+
+	/*
+	 * OK, now we're committed to doing something.
+	 */
+	s = splnet();
+	INP_INFO_RLOCK(&tcbinfo);
+	gencnt = tcbinfo.ipi_gencnt;
+	n = tcbinfo.ipi_count;
+	INP_INFO_RUNLOCK(&tcbinfo);
+	splx(s);
+
+	sysctl_wire_old_buffer(req, 2 * (sizeof xig)
+		+ n * sizeof(struct xtcpcb));
+
+	xig.xig_len = sizeof xig;
+	xig.xig_count = n;
+	xig.xig_gen = gencnt;
+/*	xig.xig_sogen = so_gencnt; remove by ccj */
+	error = SYSCTL_OUT(req, &xig, sizeof xig);
+	if (error)
+		return error;
+
+	/* ccj add exit if the count is 0 */
+	if (!n)
+		return error;
+  
+	inp_list = malloc(n * sizeof *inp_list, M_TEMP, M_WAITOK);
+	if (inp_list == 0)
+		return ENOMEM;
+	
+	s = splnet();
+	INP_INFO_RLOCK(&tcbinfo);
+	for (inp = LIST_FIRST(tcbinfo.listhead), i = 0; inp && i < n;
+	     inp = LIST_NEXT(inp, inp_list)) {
+		INP_LOCK(inp);
+		if (inp->inp_gencnt <= gencnt)
+#if 0
+      &&
+		    cr_canseesocket(req->td->td_ucred, inp->inp_socket) == 0)
+#endif
+			inp_list[i++] = inp;
+		INP_UNLOCK(inp);
+	}
+	INP_INFO_RUNLOCK(&tcbinfo);
+	splx(s);
+	n = i;
+
+	error = 0;
+	for (i = 0; i < n; i++) {
+		inp = inp_list[i];
+		INP_LOCK(inp);
+		if (inp->inp_gencnt <= gencnt) {
+			struct xtcpcb xt;
+			caddr_t inp_ppcb;
+			xt.xt_len = sizeof xt;
+			/* XXX should avoid extra copy */
+			bcopy(inp, &xt.xt_inp, sizeof *inp);
+			inp_ppcb = inp->inp_ppcb;
+			if (inp_ppcb != NULL)
+				bcopy(inp_ppcb, &xt.xt_tp, sizeof xt.xt_tp);
+			else
+				bzero((char *) &xt.xt_tp, sizeof xt.xt_tp);
+#if 0      
+			if (inp->inp_socket)
+				sotoxsocket(inp->inp_socket, &xt.xt_socket);
+#endif
+			error = SYSCTL_OUT(req, &xt, sizeof xt);
+		}
+		INP_UNLOCK(inp);
+	}
+	if (!error) {
+		/*
+		 * Give the user an updated idea of our state.
+		 * If the generation differs from what we told
+		 * her before, she knows that something happened
+		 * while we were processing this request, and it
+		 * might be necessary to retry.
+		 */
+		s = splnet();
+		INP_INFO_RLOCK(&tcbinfo);
+		xig.xig_gen = tcbinfo.ipi_gencnt;
+#if 0    
+		xig.xig_sogen = so_gencnt;
+#endif
+		xig.xig_count = tcbinfo.ipi_count;
+		INP_INFO_RUNLOCK(&tcbinfo);
+		splx(s);
+		error = SYSCTL_OUT(req, &xig, sizeof xig);
+	}
+	free(inp_list, M_TEMP);
+	return error;
+}
+
+SYSCTL_PROC(_net_inet_tcp, TCPCTL_PCBLIST, pcblist, CTLFLAG_RD, 0, 0,
+	    tcp_pcblist, "S,xtcpcb", "List of active TCP connections");
+
 void
 tcp_ctlinput(cmd, sa, vip)
 	int cmd;

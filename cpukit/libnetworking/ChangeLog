@@ -1,3 +1,47 @@
+2002-11-26	Chris Johns <cjohns@cybertec.com.au>
+
+	* Makefile.am: Added sys/linker_set.h
+	* kern/Makefile.am: Added kern_mib.c and kern_sysctl.c.
+	* kern/uipc_socket.c: OID changed from KERN_SOMAXCONN to KIPC_SOMAXCONN.
+	* kern/uipc_socket2.c: OID changed from KERN_MAXSOCKBUF to
+	KIPC_MAXSOCKBUF.
+	* net/if_ethersubr.c: FreeBSD 2.2.2 does not have a _net_link node
+	while 5.0 does.
+	* net/if_ppp.c: Removed the TEXT_SET define as these macros are
+	now implemented.
+	* net/rtsock.c: Enable sysctl support plus fix the bug with the
+	lastest FreeBSD sysctl header file.
+	* netinet/icmp_var.h: FreeBSD 2.2.2 does not have a _net_inet_icmp
+	node while 5.0 does.
+	* netinet/if_ether.c: FreeBSD 2.2.2 does not have a _net_link_ether
+	node while 5.0 does.
+	* netinet/igmp_var.h: FreeBSD 2.2.2 does not have a _net_inet_igmp
+	node while 5.0 does.
+	* netinet/in_pcb.c: Fixed the arguments to the sysctl call. Add
+	inp_gencnt and ipi_count. These are used when listing connections.
+	* netinet/in_pcb.h: Added counters to aid the listing of connections.
+	* netinet/in_var.h: Provide the _net_inet_ip and _net_inet_raw nodes.
+	* netinet/ip_fw.c: Disable the firewall sysctl calls.
+	* netinet/tcp_subr.c: Merge tcp_pcblist from the lastest FreeBSD source.
+	* netinet/tcp_var.h: Add structures needed by net-snmp to list
+	connections.
+	* netinet/udp_usrreq.c: Merged udp_pcblist from the lastest FreeBSD
+	source.
+	* netinet/udp_var.h: Added the sysctl id UDPCTL_PCBLIST. Used by
+	net-snmp.
+	* rtems_glue.c: Call sysctl_register_all when initialising the
+	network stack to register all the sysctl calls. These are in the
+	special sections and required an updated linker script.
+	* rtems/rtems_syscall.c: Add the sysctl call.
+	* sys/kernel.h: Use the lastest FreeBSD method of handling sysctl
+	structures.  This now held in the sys/linker_set.h file.
+	* sys/queue.h: This is from the lastest FreeBSD code with the circular 
+	code merged back in as it is not used in the lastest FreeBSD kernel.
+	* sys/sysctl.h: The lastest sysctl. This was needed to use with the new
+	linker set method. The FreeBSD 2.2.2 version has asm hacks. The lastest
+	version of the FreeBSD does not have these hacks. It uses gcc attribute
+	directives.
+
 2002-12-18	Eric Norum <eric.norum@usask.ca>
 	* Makefile.am: Include netinet sources.
 

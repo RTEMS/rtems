@@ -48,6 +48,8 @@
  */
 LIST_HEAD(inpcbhead, inpcb);
 
+typedef	u_int64_t inp_gen_t;
+
 struct inpcb {
 	LIST_ENTRY(inpcb) inp_list;		/* list for all PCBs of this proto */
 	LIST_ENTRY(inpcb) inp_hash;		/* hash list */
@@ -66,10 +68,39 @@ struct inpcb {
 	u_char	inp_ip_p;		/* protocol proto */
 	u_char	pad[1];			/* alignment */
 	struct	ip_moptions *inp_moptions; /* IP multicast options */
+	inp_gen_t	inp_gencnt;	/* generation count of this instance */
 #if 0 /* Someday, perhaps... */
 	struct	ip inp_ip;		/* header prototype; should have more */
 #endif
 };
+
+/*
+ * Interface exported to userland by various protocols which use
+ * inpcbs.  Hack alert -- only define if struct xsocket is in scope.
+ * 
+ * ccj - 20 Nov 2002
+ * Double hack alert. This is taken from the pre 5.0 sources and
+ * merged into RTEMS. This allows the TCPCTL_PCBLIST code in
+ * net-snmp to work.
+ */
+#ifdef _SYS_SOCKETVAR_H_
+typedef	u_int64_t so_gen_t; /* should be in sys/sockvar.h */
+
+struct	xinpcb {
+	size_t	xi_len;		/* length of this structure */
+	struct	inpcb xi_inp;
+/*	struct	xsocket xi_socket; ccj removed */
+	u_int64_t	xi_alignment_hack;
+};
+
+
+struct	xinpgen {
+	size_t	xig_len;	/* length of this structure */
+	u_int	xig_count;	/* number of PCBs at this time */
+	inp_gen_t xig_gen;	/* generation count at this time */
+	so_gen_t xig_sogen;	/* socket generation count at this time */
+};
+#endif /* _SYS_SOCKETVAR_H_ */
 
 struct inpcbinfo {
 	struct inpcbhead *listhead;
@@ -78,6 +109,8 @@ struct inpcbinfo {
 	unsigned short lastport;
 	unsigned short lastlow;
 	unsigned short lasthi;
+	u_int	ipi_count;	/* number of pcbs in this list */
+	u_int64_t ipi_gencnt;	/* current generation count */
 };
 
 #define INP_PCBHASH(faddr, lport, fport, mask) \

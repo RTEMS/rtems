@@ -93,6 +93,9 @@ void	igmp_joingroup __P((struct in_multi *));
 void	igmp_leavegroup __P((struct in_multi *));
 void	igmp_fasttimo __P((void));
 void	igmp_slowtimo __P((void));
+
+SYSCTL_DECL(_net_inet_igmp);
+
 #endif
 
 /*

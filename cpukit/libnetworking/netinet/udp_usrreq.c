@@ -455,6 +455,124 @@ release:
 	return (error);
 }
 
+#ifdef __rtems__
+#define INP_INFO_RLOCK
+#define INP_INFO_RUNLOCK
+#define INP_LOCK
+#define INP_UNLOCK
+#endif
+
+static int
+udp_pcblist(SYSCTL_HANDLER_ARGS)
+{
+	int error, i, n, s;
+	struct inpcb *inp, **inp_list;
+	inp_gen_t gencnt;
+	struct xinpgen xig;
+
+	/*
+	 * The process of preparing the TCB list is too time-consuming and
+	 * resource-intensive to repeat twice on every request.
+	 */
+	if (req->oldptr == 0) {
+		n = udbinfo.ipi_count;
+		req->oldidx = 2 * (sizeof xig)
+			+ (n + n/8) * sizeof(struct xinpcb);
+		return 0;
+	}
+
+	if (req->newptr != 0)
+		return EPERM;
+
+	/*
+	 * OK, now we're committed to doing something.
+	 */
+	s = splnet();
+	gencnt = udbinfo.ipi_gencnt;
+	n = udbinfo.ipi_count;
+	splx(s);
+
+	sysctl_wire_old_buffer(req, 2 * (sizeof xig)
+		+ n * sizeof(struct xinpcb));
+
+	xig.xig_len = sizeof xig;
+	xig.xig_count = n;
+	xig.xig_gen = gencnt;
+#if 0
+	xig.xig_sogen = so_gencnt;
+#endif
+	error = SYSCTL_OUT(req, &xig, sizeof xig);
+	if (error)
+		return error;
+
+  /* ccj add the exit if count is 0 */
+  if (!n)
+    return error;
+  
+	inp_list = malloc(n * sizeof *inp_list, M_TEMP, M_WAITOK);
+	if (inp_list == 0)
+		return ENOMEM;
+	
+	s = splnet();
+	INP_INFO_RLOCK(&udbinfo);
+	for (inp = LIST_FIRST(udbinfo.listhead), i = 0; inp && i < n;
+	     inp = LIST_NEXT(inp, inp_list)) {
+		INP_LOCK(inp);
+		if (inp->inp_gencnt <= gencnt)
+#if 0
+      &&
+		    cr_canseesocket(req->td->td_ucred, inp->inp_socket) == 0)
+#endif
+			inp_list[i++] = inp;
+		INP_UNLOCK(inp);
+	}
+	INP_INFO_RUNLOCK(&udbinfo);
+	splx(s);
+	n = i;
+
+	error = 0;
+	for (i = 0; i < n; i++) {
+		inp = inp_list[i];
+		INP_LOCK(inp);
+		if (inp->inp_gencnt <= gencnt) {
+			struct xinpcb xi;
+			xi.xi_len = sizeof xi;
+			/* XXX should avoid extra copy */
+			bcopy(inp, &xi.xi_inp, sizeof *inp);
+#if 0
+			if (inp->inp_socket)
+				sotoxsocket(inp->inp_socket, &xi.xi_socket);
+#endif
+			error = SYSCTL_OUT(req, &xi, sizeof xi);
+		}
+		INP_UNLOCK(inp);
+	}
+	if (!error) {
+		/*
+		 * Give the user an updated idea of our state.
+		 * If the generation differs from what we told
+		 * her before, she knows that something happened
+		 * while we were processing this request, and it
+		 * might be necessary to retry.
+		 */
+		s = splnet();
+		INP_INFO_RLOCK(&udbinfo);
+		xig.xig_gen = udbinfo.ipi_gencnt;
+#if 0
+		xig.xig_sogen = so_gencnt;
+#endif
+		xig.xig_count = udbinfo.ipi_count;
+		INP_INFO_RUNLOCK(&udbinfo);
+		splx(s);
+		error = SYSCTL_OUT(req, &xig, sizeof xig);
+	}
+	free(inp_list, M_TEMP);
+	return error;
+}
+
+SYSCTL_PROC(_net_inet_udp, UDPCTL_PCBLIST, pcblist, CTLFLAG_RD, 0, 0,
+	    udp_pcblist, "S,xinpcb", "List of active UDP sockets");
+
 static u_long	udp_sendspace = 9216;		/* really max datagram size */
 					/* 40 1K datagrams */
 SYSCTL_INT(_net_inet_udp, UDPCTL_MAXDGRAM, maxdgram, CTLFLAG_RW,

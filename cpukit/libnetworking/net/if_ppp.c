@@ -179,8 +179,9 @@ struct compressor *ppp_compressors[8] = {
 extern struct ifqueue    ipintrq;
 static struct timeval    ppp_time;
 
+#ifndef __rtems__
 TEXT_SET(pseudo_set, ppp_rxdaemon);
-
+#endif
 
 static rtems_task ppp_rxdaemon(rtems_task_argument arg)
 {

@@ -52,7 +52,7 @@
 #include <limits.h>
 
 static int somaxconn = SOMAXCONN;
-SYSCTL_INT(_kern, KERN_SOMAXCONN, somaxconn, CTLFLAG_RW, &somaxconn, 0, "");
+SYSCTL_INT(_kern, KIPC_SOMAXCONN, somaxconn, CTLFLAG_RW, &somaxconn, 0, "");
 
 /*
  * Socket operation routines.

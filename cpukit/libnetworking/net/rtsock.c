@@ -67,10 +67,8 @@ static struct mbuf *
 static int	rt_msg2 __P((int,
 		    struct rt_addrinfo *, caddr_t, struct walkarg *));
 static int	rt_xaddrs __P((caddr_t, caddr_t, struct rt_addrinfo *));
-#if !defined(__rtems__)
 static int	sysctl_dumpentry __P((struct radix_node *rn, void *vw));
 static int	sysctl_iflist __P((int af, struct walkarg *w));
-#endif
 static int	 route_output __P((struct mbuf *, struct socket *));
 static int	 route_usrreq __P((struct socket *,
 	    int, struct mbuf *, struct mbuf *, struct mbuf *));
@@ -677,7 +675,6 @@ rt_newaddrmsg(cmd, ifa, error, rt)
 /*
  * This is used in dumping the kernel table via sysctl().
  */
-#if !defined(__rtems__)
 int
 sysctl_dumpentry(rn, vw)
 	struct radix_node *rn;
@@ -710,9 +707,7 @@ sysctl_dumpentry(rn, vw)
 	}
 	return (error);
 }
-#endif
 
-#if !defined(__rtems__)
 int
 sysctl_iflist(af, w)
 	int	af;
@@ -739,7 +734,7 @@ sysctl_iflist(af, w)
 			ifm->ifm_flags = (u_short)ifp->if_flags;
 			ifm->ifm_data = ifp->if_data;
 			ifm->ifm_addrs = info.rti_addrs;
-			error =0;
+			error = SYSCTL_OUT(w->w_req,(caddr_t)ifm, len);
 			if (error)
 				return (error);
 		}
@@ -758,7 +753,7 @@ sysctl_iflist(af, w)
 				ifam->ifam_flags = ifa->ifa_flags;
 				ifam->ifam_metric = ifa->ifa_metric;
 				ifam->ifam_addrs = info.rti_addrs;
-				error = 0;
+				error = SYSCTL_OUT(w->w_req, w->w_tmem, len);
 				if (error)
 					return (error);
 			}
@@ -767,11 +762,9 @@ sysctl_iflist(af, w)
 	}
 	return (0);
 }
-#endif
 
-#if !defined(__rtems__)
 static int
-sysctl_rtsock SYSCTL_HANDLER_ARGS
+sysctl_rtsock(SYSCTL_HANDLER_ARGS)
 {
 	int	*name = (int *)arg1;
 	u_int	namelen = arg2;
@@ -814,7 +807,6 @@ sysctl_rtsock SYSCTL_HANDLER_ARGS
 }
 
 SYSCTL_NODE(_net, PF_ROUTE, routetable, CTLFLAG_RD, sysctl_rtsock,"");
-#endif
 
 /*
  * Definitions of protocols supported in the ROUTE domain.

@@ -72,6 +72,7 @@ struct	icmpstat {
 }
 
 #ifdef KERNEL
+SYSCTL_DECL(_net_inet_icmp);
 extern struct	icmpstat icmpstat;
 #endif
 

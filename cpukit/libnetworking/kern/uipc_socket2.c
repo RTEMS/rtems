@@ -59,7 +59,7 @@
  */
 
 u_long	sb_max = SB_MAX;		/* XXX should be static */
-SYSCTL_INT(_kern, KERN_MAXSOCKBUF, maxsockbuf, CTLFLAG_RW, &sb_max, 0, "")
+SYSCTL_INT(_kern, KIPC_MAXSOCKBUF, maxsockbuf, CTLFLAG_RW, &sb_max, 0, "");
 
 static	u_long sb_efficiency = 8;	/* parameter for sbreserve() */
 SYSCTL_INT(_kern, OID_AUTO, sockbuf_waste_factor, CTLFLAG_RW, &sb_efficiency,

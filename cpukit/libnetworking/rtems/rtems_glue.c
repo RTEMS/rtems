@@ -37,6 +37,11 @@
 #include <net/route.h>
 
 /*
+ * Sysctl init all.
+ */
+void sysctl_register_all(void *arg);
+
+/*
  * Memory allocation
  */
 static int nmbuf	= (64 * 1024) / MSIZE;
@@ -196,6 +201,11 @@ bsd_init (void)
 	domaininit (NULL);
 	}
 
+  /*
+   * Setup the sysctl, normally done by a SYSINIT call.
+   */
+  sysctl_register_all(0);
+    
 	/*
 	 * Set up interfaces
 	 */

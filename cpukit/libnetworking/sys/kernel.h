@@ -72,6 +72,7 @@ extern int lbolt;			/* once a second sleep address */
 extern int tickdelta;
 extern long timedelta;
 
+#if FREEBSD_RELENG_2_2_2_BASE
 /*
  * The following macros are used to declare global sets of objects, which
  * are collected by the linker into a `struct linker_set' as defined below.
@@ -86,6 +87,18 @@ extern long timedelta;
 #define BSS_SET(set, sym)  MAKE_SET(set, sym, 27)
 #define ABS_SET(set, sym)  MAKE_SET(set, sym, 21)
 
+#else
+
+/*
+ * RTEMS specific port using the updated sys/linker_set.h
+ * from the lastest FreeBSD (2002-Nov-15). This is a better
+ * way.
+ *
+ * Chris Johns (ccj@acm.org> 18 Nov 2002.
+ */
+#include <sys/linker_set.h>
+
+#endif
 
 /*
  * Enumerated types for known system startup interfaces.

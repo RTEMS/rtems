@@ -78,7 +78,8 @@ struct	udpstat {
 #define UDPCTL_STATS		2	/* statistics (read-only) */
 #define	UDPCTL_MAXDGRAM		3	/* max datagram size */
 #define	UDPCTL_RECVSPACE	4	/* default receive buffer space */
-#define UDPCTL_MAXID		5
+#define	UDPCTL_PCBLIST		5	/* list of PCBs for UDP sockets */
+#define UDPCTL_MAXID		6
 
 #define UDPCTL_NAMES { \
 	{ 0, 0 }, \
@@ -89,6 +90,8 @@ struct	udpstat {
 }
 
 #ifdef KERNEL
+SYSCTL_DECL(_net_inet_udp);
+
 extern struct	inpcbhead udb;
 extern struct	inpcbinfo udbinfo;
 extern struct	udpstat udpstat;

@@ -161,6 +161,12 @@ struct in_multi {
 };
 
 #ifdef KERNEL
+
+#ifdef SYSCTL_DECL
+SYSCTL_DECL(_net_inet_ip);
+SYSCTL_DECL(_net_inet_raw);
+#endif
+
 /*
  * Structure used by macros below to remember position when stepping through
  * all of the in_multi records.

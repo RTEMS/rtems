@@ -44,8 +44,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa \
 
 ## kern
 
-kern_C_FILES = kern/kern_subr.c kern/uipc_domain.c kern/uipc_mbuf.c \
-   kern/uipc_socket.c kern/uipc_socket2.c
+kern_C_FILES = kern/kern_mib.c kern/kern_subr.c kern/uipc_domain.c \
+   kern/uipc_mbuf.c kern/uipc_socket.c kern/uipc_socket2.c
 OBJS = $(kern_C_FILES:kern/%.c=$(ARCH)/%.$(OBJEXT))
 
 $(ARCH)/%.$(OBJEXT): kern/%.c
@@ -172,7 +172,7 @@ EXTRA_DIST += $(rtems_C_FILES)
 include_sysdir = $(includedir)/sys
 
 include_sys_HEADERS = sys/buf.h sys/callout.h sys/conf.h sys/domain.h \
-    sys/kernel.h sys/libkern.h sys/malloc.h sys/mbuf.h sys/mount.h \
+    sys/kernel.h sys/libkern.h sys/linker_set.h sys/malloc.h sys/mbuf.h sys/mount.h \
     sys/proc.h sys/protosw.h sys/queue.h sys/reboot.h sys/resourcevar.h \
     sys/rtprio.h sys/select.h sys/signalvar.h sys/socket.h sys/socketvar.h \
     sys/sysctl.h sys/syslog.h sys/systm.h sys/ttydefaults.h sys/ucred.h \

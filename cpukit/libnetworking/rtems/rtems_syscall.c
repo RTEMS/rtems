@@ -6,6 +6,7 @@
 #include <stdarg.h>
 /* #include <stdlib.h> */
 #include <stdio.h>
+#include <errno.h>
 
 #include <rtems.h>
 #include <rtems/libio.h>
@@ -631,6 +632,28 @@ int
 getsockname (int s, struct sockaddr *name, int *namelen)
 {
 	return getpeersockname (s, name, namelen, 0);
+}
+
+int
+sysctl(int *name, u_int namelen, void *oldp,
+       size_t *oldlenp, void *newp, size_t newlen)
+{
+  int    error;
+	size_t j;
+
+  rtems_bsdnet_semaphore_obtain ();  
+  error = userland_sysctl (0, name, namelen, oldp, oldlenp, 1, newp, newlen, &j);
+  rtems_bsdnet_semaphore_release ();
+
+  if (oldlenp)
+    *oldlenp = j;
+  
+  if (error)
+  {
+    errno = error;
+    return -1;
+  }
+  return 0;
 }
 
 /*

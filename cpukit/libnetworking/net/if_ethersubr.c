@@ -895,6 +895,7 @@ ether_delmulti(ifr, ac)
 	return (ENETRESET);
 }
 
+SYSCTL_DECL(_net_link);
 SYSCTL_NODE(_net_link, IFT_ETHER, ether, CTLFLAG_RW, 0, "Ethernet");
 
 int

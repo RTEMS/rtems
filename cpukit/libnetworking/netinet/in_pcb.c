@@ -79,9 +79,8 @@ static int ipport_hilastauto  = IPPORT_HILASTAUTO;	/* 44999 */
 	if ((var) < (min)) { (var) = (min); } \
 	else if ((var) > (max)) { (var) = (max); }
 
-#if 0
 static int
-sysctl_net_ipport_check SYSCTL_HANDLER_ARGS
+sysctl_net_ipport_check(SYSCTL_HANDLER_ARGS)
 {
 	int error = sysctl_handle_int(oidp,
 		oidp->oid_arg1, oidp->oid_arg2, req);
@@ -95,7 +94,6 @@ sysctl_net_ipport_check SYSCTL_HANDLER_ARGS
 	}
 	return error;
 }
-#endif
 
 #undef RANGECHK
 
@@ -126,10 +124,12 @@ in_pcballoc(so, pcbinfo)
 	if (inp == NULL)
 		return (ENOBUFS);
 	bzero((caddr_t)inp, sizeof(*inp));
+	inp->inp_gencnt = ++pcbinfo->ipi_gencnt;
 	inp->inp_pcbinfo = pcbinfo;
 	inp->inp_socket = so;
 	s = splnet();
 	LIST_INSERT_HEAD(pcbinfo->listhead, inp, inp_list);
+	pcbinfo->ipi_count++;
 	in_pcbinshash(inp);
 	splx(s);
 	so->so_pcb = (caddr_t)inp;
@@ -445,8 +445,10 @@ in_pcbdetach(inp)
 	struct inpcb *inp;
 {
 	struct socket *so = inp->inp_socket;
+	struct inpcbinfo *ipi = inp->inp_pcbinfo;
 	int s;
 
+	inp->inp_gencnt = ++ipi->ipi_gencnt;
 	so->so_pcb = 0;
 	sofree(so);
 	if (inp->inp_options)
@@ -753,5 +755,6 @@ in_pcbrehash(inp)
 		inp->inp_lport, inp->inp_fport, inp->inp_pcbinfo->hashmask)];
 
 	LIST_INSERT_HEAD(head, inp, inp_hash);
+	inp->inp_pcbinfo->ipi_count--;
 	splx(s);
 }

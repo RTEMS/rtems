@@ -60,11 +60,16 @@ static int fw_verbose_limit = 0;
 
 LIST_HEAD (ip_fw_head, ip_fw_chain) ip_fw_chain;
 
+/*
+ * ccj - No current need for firewall so have provided the MIB.
+ */
+#if 0
 #ifdef SYSCTL_NODE
 SYSCTL_NODE(_net_inet_ip, OID_AUTO, fw, CTLFLAG_RW, 0, "Firewall");
 SYSCTL_INT(_net_inet_ip_fw, OID_AUTO, debug, CTLFLAG_RW, &fw_debug, 0, "");
 SYSCTL_INT(_net_inet_ip_fw, OID_AUTO, verbose, CTLFLAG_RW, &fw_verbose, 0, "");
 SYSCTL_INT(_net_inet_ip_fw, OID_AUTO, verbose_limit, CTLFLAG_RW, &fw_verbose_limit, 0, "");
+#endif
 #endif
 
 #define dprintf(a)	if (!fw_debug); else printf a

@@ -307,6 +307,23 @@ struct	tcpstat {
 };
 
 /*
+ * TCB structure exported to user-land via sysctl(3).
+ * Evil hack: declare only if in_pcb.h and sys/socketvar.h have been
+ * included.  Not all of our clients do.
+ */
+#if defined(_NETINET_IN_PCB_H_) && defined(_SYS_SOCKETVAR_H_)
+struct	xtcpcb {
+	size_t	xt_len;
+	struct	inpcb	xt_inp;
+	struct	tcpcb	xt_tp;
+#if 0
+	struct	xsocket	xt_socket;
+	u_quad_t	xt_alignment_hack;
+#endif
+};
+#endif
+
+/*
  * Names for TCP sysctl objects
  */
 #define	TCPCTL_DO_RFC1323	1	/* use RFC-1323 extensions */
@@ -319,7 +336,8 @@ struct	tcpstat {
 #define	TCPCTL_SENDSPACE	8	/* send buffer space */
 #define	TCPCTL_RECVSPACE	9	/* receive buffer space */
 #define	TCPCTL_KEEPINIT		10	/* receive buffer space */
-#define TCPCTL_MAXID		11
+#define	TCPCTL_PCBLIST		11	/* list of all outstanding PCBs */
+#define TCPCTL_MAXID		12
 
 #define TCPCTL_NAMES { \
 	{ 0, 0 }, \
@@ -336,6 +354,10 @@ struct	tcpstat {
 }
 
 #ifdef KERNEL
+#ifdef SYSCTL_DECL
+SYSCTL_DECL(_net_inet_tcp);
+#endif
+
 extern	struct inpcbhead tcb;		/* head of queue of active tcpcb's */
 extern	struct inpcbinfo tcbinfo;
 extern	struct tcpstat tcpstat;	/* tcp statistics */
