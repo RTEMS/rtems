@@ -125,6 +125,7 @@ void rtems_register_libio_handler(int handler_flag,
 
 #define       RTEMS_IO_GET_ATTRIBUTES 1
 #define       RTEMS_IO_SET_ATTRIBUTES 2
+#define       RTEMS_IO_TCDRAIN        3
 
 /*
  * Callbacks from TERMIOS routines to device-dependent code
