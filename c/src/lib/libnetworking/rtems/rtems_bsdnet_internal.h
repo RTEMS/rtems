@@ -175,7 +175,7 @@ void ipintr (void);
 void arpintr (void);
 void bootpc_init(void);
 int socket (int, int, int);
-int ioctl (int, unsigned long, ...);
+int ioctl (int, int, ...);
 
 /*
  * Events used by networking routines.

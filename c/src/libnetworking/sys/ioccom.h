@@ -67,7 +67,7 @@
 #include <sys/cdefs.h>
 
 __BEGIN_DECLS
-int	ioctl __P((int, unsigned long, ...));
+int	ioctl __P((int, int, ...));
 __END_DECLS
 
 #endif /* !KERNEL */
