@@ -6,6 +6,7 @@
 
 RPM Version binutils-2.10-1
 ===========================
++ Add initial support for the ARM.
 + Adds support for the h8300. 
 
 binutils-2.10-rtems-20000628.diff

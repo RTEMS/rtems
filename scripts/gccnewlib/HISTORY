@@ -6,8 +6,13 @@
 
 RPM Version gcc2.95.2newlib1.8.2-8
 ==================================
++ arm
+  - Add initial support.
++ c4x
+  - Add initial support.
 + h8300
   - Add initial support.
+  - define CPU type in libfunc
 + i386
   - Build soft and HW floating point multilibs for i386 embedded targets.
 + i960
@@ -15,7 +20,7 @@ RPM Version gcc2.95.2newlib1.8.2-8
 + powerpc
   - Fixes possible bug in gcc target where incorrect startup files specified.
 
-gcc-2.95.2-rtems-20000710.diff
+gcc-2.95.2-rtems-20000724.diff
    - Add i386 embedded soft float multlibs (Joel)
    - Define _SOFT_FLOAT on i960 when -msoft-float specified (Joel)
    - fixes h8300-rtems specific configuration problems (Joel)

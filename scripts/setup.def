@@ -4,16 +4,16 @@
 # $Id$
 #
 binutils_version=2.10
-binutils_patch_version=20000628
-binutils_rpm_release=1
+binutils_patch_version=20000726
+binutils_rpm_release=2
 newlib_version=1.8.2
 newlib_patch_version=20000606
 gcc_version=2.95.2
-gcc_patch_version=20000710
+gcc_patch_version=20000724
 gccnewlib_rpm_release=8
 gdb_version=5.0
 gdb_patch_version=20000627
 gdb_rpm_release=1
-rtems_version=rtems-4.5.0-beta3a
+rtems_version=ss-20000726
 rtems_rpm_release=1
 rpm_build_root=/tmp

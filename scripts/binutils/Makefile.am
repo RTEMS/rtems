@@ -16,6 +16,12 @@ CLEANFILES += binutils.spec.in
 MKBINUTILSSPEC_DEPS = $(top_builddir)/mkbinutilspec binutils.spec.in \
     $(top_builddir)/setup.cache
 
+arm-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . arm-rtems
+
+c4x-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . c4x-rtems
+
 h8300-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . h8300-rtems
 
@@ -49,7 +55,10 @@ sh-rtemself-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 sparc-rtems-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems
 
-RPM_SPECS_DATA = h8300-rtems-$(BINUTILSVERS).spec \
+RPM_SPECS_DATA = \
+    arm-rtems-$(BINUTILSVERS).spec \
+    c4x-rtems-$(BINUTILSVERS).spec \
+    h8300-rtems-$(BINUTILSVERS).spec \
     hppa1.1-rtems-$(BINUTILSVERS).spec \
     i386-rtems-$(BINUTILSVERS).spec i960-rtems-$(BINUTILSVERS).spec \
     m68k-rtems-$(BINUTILSVERS).spec m68k-rtemself-$(BINUTILSVERS).spec \

@@ -159,11 +159,11 @@ The following persons/organizations have made contributions:
 + Eric Valette <valette@crf.canon.fr> and Emmanuel Raguet <raguet@crf.canon.fr>
   of Canon CRF - Communication Dept for numerous submissions including
   remote debugging on the i386 and PowerPC, port of RPC, port of the
-  GoAhead web server, BSP for the Motorola MCP750 PowerPC board, and
-  numerous improvements to the i386 and PowerPC ports of RTEMS
-  including a new enhanced interrupt management API that reduces
-  interrupt latency while making it easier to support external interrupt
-  controllers.
+  GoAhead web server, port of RTEMS to the ARM architecture, 
+  BSP for the Motorola MCP750 PowerPC board, and numerous improvements
+  to the i386 and PowerPC ports of RTEMS including a new enhanced
+  interrupt management API that reduces interrupt latency while making
+  it easier to support external interrupt controllers.
 
 + Mark Bronson <mark@ramix.com> of RAMIX for submitting i960RP
   support and the rxgen960 board support package.
