@@ -88,7 +88,11 @@ END_DATA
 SYM(reset):
 	nop
 	cli
+#ifdef NEW_GAS	
+	data32 addr32 jmp     SYM(_initInternalRegisters) /* different section in this file */
+#else
 	jmp     SYM(_initInternalRegisters) /* different section in this file */
+#endif	
 /*	.code32                              in case this section moves     */
 	nop                                 /* required by CHIP LAB to pad out size */
 	nop
@@ -374,10 +378,10 @@ SYM(SetUCS1):
  ****************************/
 	
 #ifdef NEW_GAS	
-	data32
-	addr32
-#endif	
+	data32 addr32 lgdt SYM(GDTR) #  location of GDT
+#else
         lgdt SYM(GDTR) #  location of GDT
+#endif	
 
 	
 SYM(SetUCS):		
