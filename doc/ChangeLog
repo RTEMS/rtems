@@ -1,5 +1,9 @@
 2002-07-30	Joel Sherrill <joel@OARcorp.com>
 
+	* configure.ac: Added supplements/arm/Makefile.
+
+2002-07-30	Joel Sherrill <joel@OARcorp.com>
+
 	* README: Updated.
 
 2002-06-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

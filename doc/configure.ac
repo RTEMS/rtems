@@ -159,6 +159,7 @@ rgdb_specs/Makefile
 relnotes/Makefile
 new_chapters/Makefile
 supplements/Makefile
+supplements/arm/Makefile
 supplements/hppa1_1/Makefile
 supplements/i386/Makefile
 supplements/i960/Makefile
