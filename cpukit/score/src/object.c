@@ -455,7 +455,7 @@ Objects_Control *
 _Objects_Get_next(
     Objects_Information *information,
     Objects_Id           id,
-    unsigned32          *location_p,
+    Objects_Locations   *location_p,
     Objects_Id          *next_id_p
 )
 {
