@@ -199,7 +199,7 @@ int pthread_cond_init(
  
   the_cond->process_shared  = the_attr->process_shared;
 
-  the_cond->Mutex = 0;
+  the_cond->Mutex = (unsigned32) NULL;
 
 /* XXX some more initialization might need to go here */
   _Thread_queue_Initialize(
@@ -314,6 +314,8 @@ int _POSIX_Condition_variables_Signal_support(
  
       do { 
         the_thread = _Thread_queue_Dequeue( &the_cond->Wait_queue );
+        if ( !the_thread )
+          the_cond->Mutex = (unsigned32) NULL;
       } while ( is_broadcast && the_thread );
       return 0;
   }
@@ -372,9 +374,8 @@ int _POSIX_Condition_variables_Wait_support(
       return EINVAL;
     case OBJECTS_LOCAL:
  
-      /*
-       *  XXX: should be an error if cond->Mutex != mutex
-       */
+      if ( the_cond->Mutex && ( the_cond->Mutex != *mutex ) )
+        return EINVAL;
  
       status = pthread_mutex_unlock( mutex );
       if ( !status )
@@ -382,7 +383,8 @@ int _POSIX_Condition_variables_Wait_support(
  
       the_cond->Mutex = *mutex;
  
-/* XXX .. enter critical section .. */
+      _Thread_queue_Enter_critical_section( &the_cond->Wait_queue );
+
       _Thread_queue_Enqueue( &the_cond->Wait_queue, 0 );
 
       _Thread_Enable_dispatch();
