@@ -5,13 +5,13 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 if MACROS
-I_PIECES =
+I_FILES =
 
-noinst_HEADERS = $(I_PIECES)
+noinst_HEADERS = $(I_FILES)
 
-TMPINSTALL_FILES = \
+PREINSTALL_FILES = \
 $(PROJECT_INCLUDE)/rtems/posix \
-$(I_PIECES:%=$(PROJECT_INCLUDE)/rtems/posix/%)
+$(I_FILES:%=$(PROJECT_INCLUDE)/rtems/posix/%)
 
 $(PROJECT_INCLUDE)/rtems/posix:
 	@$(mkinstalldirs) $@
@@ -19,8 +19,8 @@ $(PROJECT_INCLUDE)/rtems/posix/%.inl: %.inl
 	$(INSTALL_DATA) $< $@
 endif
 
-all-am: $(TMPINSTALL_FILES)
-debug-am: $(TMPINSTALL_FILES)
-profile-am: $(TMPINSTALL_FILES)
+all-am: $(PREINSTALL_FILES)
+debug-am: $(PREINSTALL_FILES)
+profile-am: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

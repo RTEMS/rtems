@@ -9,12 +9,12 @@ noinst_SCRIPTS = difftest sorttimes
 
 project_bspdir = $(PROJECT_ROOT)/@RTEMS_BSP@
 
-PREINSTALL_DIRS = $(project_bspdir)/tests
 PREINSTALL_FILES = \
-   $(project_bspdir)/tests/difftest \
-   $(project_bspdir)/tests/sorttimes
+$(project_bspdir)/tests \
+$(project_bspdir)/tests/difftest \
+$(project_bspdir)/tests/sorttimes
 
-$(PREINSTALL_DIRS):
+$(project_bspdir)/tests:
 	@$(mkinstalldirs) $@
 
 $(project_bspdir)/tests/difftest: difftest
@@ -23,7 +23,6 @@ $(project_bspdir)/tests/difftest: difftest
 $(project_bspdir)/tests/sorttimes: sorttimes
 	$(INSTALL_SCRIPT) $< $@
 
-## HACK: install to build-tree
-all-local: $(PREINSTALL_DIRS) $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../../automake/local.am

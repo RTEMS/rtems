@@ -5,11 +5,11 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 
 if HAS_RDBG
-H_PIECES = rdbg.h servrpc.h
+H_FILES = rdbg.h servrpc.h
 
-noinst_HEADERS = $(H_PIECES)
+noinst_HEADERS = $(H_FILES)
 
-TMPINSTALL_FILES = \
+PREINSTALL_FILES = \
 $(PROJECT_INCLUDE)/rdbg \
 $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/rdbg/%)
 
@@ -19,9 +19,9 @@ $(PROJECT_INCLUDE)/rdbg/%.h: %.h
 	$(INSTALL_DATA) $< $@
 endif
 
-all-am: $(TMPINSTALL_FILES)
-debug-am: $(TMPINSTALL_FILES)
-profile-am: $(TMPINSTALL_FILES)
+all-am: $(PREINSTALL_FILES)
+debug-am: $(PREINSTALL_FILES)
+profile-am: $(PREINSTALL_FILES)
 
 if HAS_RDBG
 SUBDIRS = $(RTEMS_CPU)

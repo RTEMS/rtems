@@ -22,7 +22,7 @@ ifeq ($(wildcard $(RTEMS_CPU_MODEL)),$(RTEMS_CPU_MODEL))
 SHARED_LIB = shared
 endif 
 
-SUB_DIRS =  $(SHARED_LIB) $(wildcard $(RTEMS_CPU_MODEL)) wrapup
+SUBDIRS =  $(SHARED_LIB) $(wildcard $(RTEMS_CPU_MODEL)) wrapup
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

@@ -28,7 +28,7 @@ NETWORK = $(NETWORK_$(HAS_NETWORKING)_V)
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUB_DIRS = clock console include pci residual openpic irq vectors \
+SUBDIRS = clock console include pci residual openpic irq vectors \
     start startup bootloader $(NETWORK) wrapup
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status

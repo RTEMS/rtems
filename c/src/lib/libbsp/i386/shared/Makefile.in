@@ -19,7 +19,7 @@ include $(RTEMS_ROOT)/make/directory.cfg
 INSTALL_CHANGE = @INSTALL_CHANGE@
 
 # Descend into the $(RTEMS_BSP_FAMILY) directory
-SUB_DIRS = irq io comm pci
+SUBDIRS = irq io comm pci
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

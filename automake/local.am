@@ -13,7 +13,7 @@ profile-am:
 profile: profile-am
 .PHONY: profile profile-am
 
-preinstall-am: $(TMPINSTALL_FILES)
+preinstall-am: $(PREINSTALL_FILES)
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am
 

@@ -66,6 +66,7 @@ FORCEIT:
 
 FORCE:
 
+ifndef AUTOMAKE
 distclean-generic:
 	-$(RM) Makefile .#* $(CONFIG_CLEAN_FILES)
 	-$(RM) -r $(CLOBBER_ADDITIONS)
@@ -73,6 +74,7 @@ distclean-generic:
 clean-generic:
 	-$(RM) a.out core mon.out gmon.out
 	-$(RM) -r $(CLEAN_ADDITIONS)
+endif
 
 .PHONY:	$(RECURSE_TARGETS) 
 .PHONY: clean-generic

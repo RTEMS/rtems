@@ -18,7 +18,7 @@ include $(RTEMS_ROOT)/make/directory.cfg
 
 INSTALL_CHANGE = @INSTALL_CHANGE@
 
-SUB_DIRS = reg_win syscall
+SUBDIRS = reg_win syscall
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

@@ -26,7 +26,7 @@ else
 CPUDIR = other_cpu
 endif 
 
-SUB_DIRS = $(CPUDIR) $(SHARED_LIB)
+SUBDIRS = $(CPUDIR) $(SHARED_LIB)
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

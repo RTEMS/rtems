@@ -416,9 +416,9 @@
 
                 XCCFLAGS    -- same as XCFLAGS for C++.
 
-                SUB_DIRS    -- list of sub directories for make recursion.
+                SUBDIRS    -- list of sub directories for make recursion.
                                directory Makefiles only.
-                               [ eg: SUB_DIRS=cpu bsp ]
+                               [ eg: SUBDIRS=cpu bsp ]
 
                 CLEAN_ADDITIONS
                             -- list of files or directories that should

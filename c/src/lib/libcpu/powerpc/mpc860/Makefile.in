@@ -18,7 +18,7 @@ include $(RTEMS_ROOT)/make/directory.cfg
 
 INSTALL_CHANGE = @INSTALL_CHANGE@
 
-SUB_DIRS = include console-generic clock timer vectors
+SUBDIRS = include console-generic clock timer vectors
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

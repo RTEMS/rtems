@@ -27,7 +27,7 @@ $(INSTALLDIRS):
 # We only build it if HAS_MP was defined
 @HAS_MP_TRUE@MP_DRIVERS = shmdr
 
-SUB_DIRS = $(MP_DRIVERS)
+SUBDIRS = $(MP_DRIVERS)
 
 # If we are building a "real" BSP, then we need to descend into the
 # appropriate CPU specific directory.  The bare BSP is a special
@@ -35,7 +35,7 @@ SUB_DIRS = $(MP_DRIVERS)
 # level as the CPUs.  If we are building the bare BSP, then descend
 # into that directory.
 
-SUB_DIRS += @RTEMS_LIBBSP_CPU_SUBDIR@
+SUBDIRS += @RTEMS_LIBBSP_CPU_SUBDIR@
 
 preinstall: 
 	@$(mkinstalldirs) $(PROJECT_ROOT)/@RTEMS_BSP@/lib

@@ -24,7 +24,7 @@ all: $(SRCS)
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUB_DIRS = include wrapup
+SUBDIRS = include wrapup
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

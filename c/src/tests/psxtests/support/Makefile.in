@@ -20,7 +20,7 @@ INSTALL_CHANGE = @INSTALL_CHANGE@
 
 all: 
 
-SUB_DIRS = include
+SUBDIRS = include
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

@@ -1,0 +1,42 @@
+##
+##  $Id$
+##
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+LIBNAME = libcpuuse-tmp
+LIB = ${ARCH}/${LIBNAME}.a
+
+C_FILES = cpuuse.c
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+
+H_FILES = cpuuse.h
+noinst_HEADERS = $(H_FILES)
+
+SRCS = $(C_FILES) $(H_FILES)
+OBJS = $(C_O_FILES)
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(RTEMS_ROOT)/make/lib.cfg
+
+PREINSTALL_FILES = \
+$(PROJECT_INCLUDE)/rtems \
+$(H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
+
+$(PROJECT_INCLUDE)/rtems:
+	@$(mkinstalldirs) $@
+$(PROJECT_INCLUDE)/rtems/%.h: %.h
+	$(INSTALL_DATA) $< $@
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+${LIB}: ${SRCS} ${OBJS}
+	$(make-library)
+
+all: ${ARCH} $(PREINSTALL_FILES) $(LIB) $(TMPINSTALL_FILES)
+
+EXTRA_DIST += $(C_FILES)
+
+include $(top_srcdir)/../../../automake/local.am

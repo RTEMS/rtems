@@ -15,7 +15,7 @@ install-data-local:
 	rm -rf $(rtems_bspdir)/[bsl]*;
 	$(mkinstalldirs) $(rtems_bspdir)
 	cd $(PROJECT_ROOT); \
-          tar cf - @RTEMS_BSP@/[bilsuM]* | (cd $(prefix); tar xpBf - );
+          tar cf - @RTEMS_BSP@/[bilsuM]* | (cd $(DESTDIR)$(prefix); tar xpBf - );
 
 include $(top_srcdir)/../../automake/subdirs.am
 include $(top_srcdir)/../../automake/local.am

@@ -6,19 +6,19 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 if HAS_NETWORKING
 else
-NETWORKING_H_PIECES += ioctl.h
+NETWORKING_H_FILES += ioctl.h
 endif
 
 if UNIX
 else
-NEWLIB_H_PIECES += termios.h
+NEWLIB_H_FILES += termios.h
 endif
 
-H_PIECES += utime.h $(NEWLIB_H_PIECES) $(NETWORKING_H_PIECES)
+H_FILES += utime.h $(NEWLIB_H_FILES) $(NETWORKING_H_FILES)
 
-noinst_HEADERS = $(H_PIECES)
+noinst_HEADERS = $(H_FILES)
 
-TMPINSTALL_FILES = \
+PREINSTALL_FILES = \
 $(PROJECT_INCLUDE)/sys \
 $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/sys/%)
 
@@ -27,8 +27,8 @@ $(PROJECT_INCLUDE)/sys:
 $(PROJECT_INCLUDE)/sys/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-all-am: $(TMPINSTALL_FILES)
-debug-am: $(TMPINSTALL_FILES)
-profile-am: $(TMPINSTALL_FILES)
+all-am: $(PREINSTALL_FILES)
+debug-am: $(PREINSTALL_FILES)
+profile-am: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

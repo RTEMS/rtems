@@ -7,18 +7,19 @@ AUTOMAKE_OPTIONS = foreign 1.4
 EXTRA_DIST = README
 
 if MACROS
+if HAS_MP
 ## We only build multiprocessing related files if HAS_MP was defined
-MP_I_PIECES_yes_V = mppkt.inl objectmp.inl threadmp.inl
-MP_I_PIECES = $(MP_I_PIECES_$(HAS_MP)_V)
+MP_I_FILES = mppkt.inl objectmp.inl threadmp.inl
+endif
 
-I_PIECES = address.inl chain.inl coremsg.inl coremutex.inl coresem.inl heap.inl \
+I_FILES = address.inl chain.inl coremsg.inl coremutex.inl coresem.inl heap.inl \
     isr.inl object.inl priority.inl stack.inl states.inl sysstate.inl \
     thread.inl tod.inl tqdata.inl userext.inl watchdog.inl wkspace.inl \
-    $(MP_I_PIECES)
+    $(MP_I_FILES)
 
-noinst_HEADERS = $(I_PIECES)
+noinst_HEADERS = $(I_FILES)
 
-TMPINSTALL_FILES = \
+PREINSTALL_FILES = \
 $(PROJECT_INCLUDE) \
 $(noinst_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
@@ -28,8 +29,8 @@ $(PROJECT_INCLUDE)/rtems/score/%.inl: %.inl
 	$(INSTALL_DATA) $< $@
 endif
 
-all-am: $(TMPINSTALL_FILES)
-debug-am: $(TMPINSTALL_FILES)
-profile-am: $(TMPINSTALL_FILES)
+all-am: $(PREINSTALL_FILES)
+debug-am: $(PREINSTALL_FILES)
+profile-am: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

@@ -18,7 +18,7 @@ include $(RTEMS_ROOT)/make/directory.cfg
 
 INSTALL_CHANGE = @INSTALL_CHANGE@
 
-SUB_DIRS = include clock sci timer null
+SUBDIRS = include clock sci timer null
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

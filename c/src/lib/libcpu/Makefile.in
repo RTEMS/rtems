@@ -17,7 +17,7 @@ include $(RTEMS_ROOT)/make/directory.cfg
 
 INSTALL_CHANGE = @INSTALL_CHANGE@
 
-SUB_DIRS = $(wildcard $(RTEMS_CPU))
+SUBDIRS = $(wildcard $(RTEMS_CPU))
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

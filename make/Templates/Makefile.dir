@@ -5,5 +5,5 @@
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
-SUB_DIRS=a b c your-directories-go-here
+SUBDIRS=a b c your-directories-go-here
 
