@@ -13,7 +13,7 @@ in a non-language specific way.
 
 @section What is GNU?
 
-Take a look at @uref{http://www.gnu.org} for information on the GNU Project.
+Take a look at @uref{http://www.gnu.org,http://www.gnu.org} for information on the GNU Project.
 
 @section How do I generate a patch?
 

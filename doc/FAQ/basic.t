@@ -145,13 +145,11 @@ Yes, but not all are based on standards and the open source philosophy.
 
 @section How can I get RTEMS?
 
-RTEMS is distributed by OAR Corporation via the Internet.  Point your
+RTEMS is distributed by @uref{http://www.OARcorp.com,OAR Corporation} via the
+Internet.  Point your
 favorite browser at the following URL and following the link:
 
-@c this version should work
-@c @set OAR-URL http://www.OARcorp.com
-@c @uref{@value{OAR-URL},@value{OAR-URL}}
-@uref{http://www.OARcorp.com,http://www.OARcorp.com}
+@uref{@value{RTEMSHTTPURL},@value{RTEMSHTTPURL}}
 
 @section What about support?
 
@@ -160,22 +158,22 @@ training, and custom development.
 
 @section Are there any mailing lists?
 
-The primary RTEMS mailing list is @code{rtems-users@@oarcorp.com}.  This
+The primary RTEMS mailing list is @code{@value{RTEMSUSERS}}.  This
 list is for general RTEMS discussions, questions, design help, advice,
 etc..  Subscribe by sending an empty mail
-message to @code{rtems-users-subscribe@@OARcorp.com}.  This
+message to @code{@value{RTEMSUSERSSUBSCRIBE}}.  This
 mailing list is archived at:
 
 @example
 http://www.oarcorp.com/rtems/maillistArchives/rtems-users
 @end example
 
-The @code{rtems-snapshots@@oarcorp.com} mailing list is for those
+The @code{@value{RTEMSSNAPSHOTS}} mailing list is for those
 interested in taking a more active role in the design, development,
 and maintenance of RTEMS.  Discussions on this list tend to focus
 on problems in the development source, design of new features, problem
 reports, etc..  Subscribe by sending an empty mail
-message to @code{rtems-snapshots-subscribe@@OARcorp.com}.
+message to @code{@value{RTEMSSNAPSHOTSSUBSCRIBE}}.
 mailing list is archived at:
 
 @example
