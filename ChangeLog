@@ -1,3 +1,7 @@
+2001-01-03	Emmanuel Raguet <raguet@crf.canon.fr>
+
+	* automake/compile.am: Add LD.
+
 2000-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* config.guess, config.sub: Update from CVS-autoconf to pick
