@@ -78,13 +78,6 @@ AC_SUBST(BSPVERS)
 AC_SUBST(RPM_CPU)
 
 AC_CONFIG_FILES([Makefile
-buildall
-buildalltar
-mkbinutilspec
-mkgccnewlibspec
-mkgcc3newlibspec
-mkgdbspec
-mkbspspec
 binutils/Makefile
 gccnewlib/Makefile
 gcc3newlib/Makefile
@@ -94,7 +87,16 @@ autotools/Makefile
 autotools/automake-rtems.spec
 cpukit/Makefile
 ])
+
+AC_CONFIG_FILES([buildalltar],[chmod +x buildalltar])
+AC_CONFIG_FILES([buildall],[chmod +x buildall])
+AC_CONFIG_FILES([mkgdbspec],[chmod +x mkgdbspec])
+AC_CONFIG_FILES([mkbinutilspec],[chmod +x mkbinutilspec])
+AC_CONFIG_FILES([mkgccnewlibspec],[chmod +x mkgccnewlibspec])
+AC_CONFIG_FILES([mkgcc3newlibspec],[chmod +x mkgcc3newlibspec])
+AC_CONFIG_FILES([mkbspspec],[chmod +x mkbspspec])
 AC_CONFIG_FILES([cpukit/mkspec],[chmod +x cpukit/mkspec])
+
 AC_CONFIG_COMMANDS([default],[[chmod 755 buildall
 chmod 755 buildalltar
 ]],[[]])

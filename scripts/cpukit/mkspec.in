@@ -1,5 +1,4 @@
-#!/bin/sh 
-#
+#! /bin/sh 
 
 RTEMS_DIR=`dirname $0`/@top_srcdir@
 RTEMS_VERSION=@VERSION@

@@ -1,5 +1,15 @@
 2002-07-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Use AC_CONFIG_FILES(script, chmod +x script) 
+	to generate mk*spec scripts.
+	* mkbspspec.in: Use ',' as pattern delimiter in sed expression 
+	for $rpm_build_root.
+	* mkbinutilsspec.in:  Use ',' as pattern delimiter in sed
+	expression for $rpm_build_root.
+	* cpukit/mkspec.in: Cosmetical changes.
+
+2002-07-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* ChangeLog: Fix 2002-07-22 ChangeLog entry bogusly referring to
 	Joel.
 	* cpukit/Makefile.am: New.
