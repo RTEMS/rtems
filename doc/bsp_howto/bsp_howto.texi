@@ -66,10 +66,17 @@ END-INFO-DIR-ENTRY
 @include target.texi
 @include makefiles.texi
 @include linkcmds.texi
+@include support.texi
 @include init.texi
-@include clock.texi
 @include console.texi
+@include clock.texi
 @include timer.texi
+@include rtc.texi
+@include nvmem.texi
+@include network.texi
+@include shmsupp.texi
+@include analog.texi
+@include discrete.texi
 
 @ifinfo
 @node Top, , (dir), (dir)
@@ -82,10 +89,17 @@ This is the online version of the Getting Started with RTEMS for C/C++ Users.
 * CPU and Board Dependent Files::
 * Makefiles::
 * Linker Script::
+* Required Support Routines::
 * Initialization Code::
-* Clock Driver::
 * Console Driver::
+* Clock Driver::
 * Timer Driver::
+* Real-Time Clock Driver::
+* Networking Driver::
+* Non-Volatile Memory Driver::
+* Shared Memory Support Driver::
+* Analog Driver::
+* Discrete Driver::
 @end menu
 
 @c * Command and Variable Index::
