@@ -439,7 +439,7 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
         free(fs_info->rhash);
         set_errno_and_return_minus_one( ENOMEM );
     }
-    fs_info->sec_buf = (char *)calloc(vol->bps, sizeof(char));
+    fs_info->sec_buf = (uint8_t *)calloc(vol->bps, sizeof(uint8_t));
     if (fs_info->sec_buf == NULL)
     {
         rtems_disk_release(vol->dd);
