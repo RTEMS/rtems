@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = ${ARCH}/shmsupp.rel
 
 C_FILES = addrconv.c getcfg.c lock.c mpisr.c
