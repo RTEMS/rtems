@@ -1,4 +1,8 @@
 
+2001-10-26	Victor V. Vengerov <vvv@oktet.ru>
+
+	* custom/mcf5206elite.cfg: New file.
+
 2001-10-22	Andy Dachs <a.dachs@sstl.co.uk>
 
 	* custom/mpc8260ads.cfg: New file.
