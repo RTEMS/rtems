@@ -15,6 +15,9 @@
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>
+#include <bspIo.h>
+#include <rtems/score/thread.h>
+
 
 /*  _CPU_Initialize
  *
@@ -82,3 +85,90 @@ void _CPU_Thread_Idle_body ()
     asm volatile ("hlt");
   }
 }
+
+void _defaultExcHandler (CPU_Exception_frame *ctx)
+{
+  printk("----------------------------------------------------------\n");
+  printk("Exception %d caught at PC %x by thread %d\n",
+	 ctx->idtIndex,
+	 ctx->eip,
+	 _Thread_Executing->Object.id);
+  printk("----------------------------------------------------------\n");
+  printk("Processor execution context at time of the fault was  :\n");
+  printk("----------------------------------------------------------\n");
+  printk(" EAX = %x	EBX = %x	ECX = %x	EDX = %x\n",
+	 ctx->eax, ctx->ebx, ctx->ecx, ctx->edx);
+  printk(" ESI = %x	EDI = %x	EBP = %x	ESP = %x\n",
+	 ctx->esi, ctx->edi, ctx->ebp, ctx->esp0);
+  printk("----------------------------------------------------------\n");
+  printk("Error code pushed by processor itself (if not 0) = %x\n",
+	 ctx->faultCode);
+  printk("----------------------------------------------------------\n\n");
+  printk(" ************ FAULTY THREAD WILL BE DELETED **************\n");
+  /*
+   * OK I could probably use a simplified version but at least this
+   * should work.
+   */
+  rtems_task_delete(_Thread_Executing->Object.id);
+}
+
+cpuExcHandlerType _currentExcHandler = _defaultExcHandler;
+
+extern void rtems_exception_prologue_0();
+extern void rtems_exception_prologue_1();
+extern void rtems_exception_prologue_2();
+extern void rtems_exception_prologue_3();
+extern void rtems_exception_prologue_4();
+extern void rtems_exception_prologue_5();
+extern void rtems_exception_prologue_6();
+extern void rtems_exception_prologue_7();
+extern void rtems_exception_prologue_8();
+extern void rtems_exception_prologue_9();
+extern void rtems_exception_prologue_10();
+extern void rtems_exception_prologue_11();
+extern void rtems_exception_prologue_12();
+extern void rtems_exception_prologue_13();
+extern void rtems_exception_prologue_14();
+extern void rtems_exception_prologue_16();
+extern void rtems_exception_prologue_17();
+extern void rtems_exception_prologue_18();
+
+static rtems_raw_irq_hdl tbl[] = {
+	 rtems_exception_prologue_0,
+	 rtems_exception_prologue_1,
+	 rtems_exception_prologue_2,
+	 rtems_exception_prologue_3,
+	 rtems_exception_prologue_4,
+	 rtems_exception_prologue_5,
+	 rtems_exception_prologue_6,
+	 rtems_exception_prologue_7,
+	 rtems_exception_prologue_8,
+	 rtems_exception_prologue_9,
+	 rtems_exception_prologue_10,
+	 rtems_exception_prologue_11,
+	 rtems_exception_prologue_12,
+	 rtems_exception_prologue_13,
+	 rtems_exception_prologue_14,
+	 rtems_exception_prologue_16,
+	 rtems_exception_prologue_17,
+	 rtems_exception_prologue_18,
+};
+
+void rtems_exception_init_mngt()
+{
+      unsigned int		 i,j;
+      interrupt_gate_descriptor	 *currentIdtEntry;
+      unsigned			 limit;
+      unsigned			 level;
+      
+      i = sizeof(tbl) / sizeof (rtems_raw_irq_hdl);
+
+      i386_get_info_from_IDTR (&currentIdtEntry, &limit);
+
+      _CPU_ISR_Disable(level);
+      for (j = 0; j < i; j++) {
+	create_interrupt_gate_descriptor (&currentIdtEntry[j], tbl[j]);
+      }
+      _CPU_ISR_Enable(level);
+}
+      

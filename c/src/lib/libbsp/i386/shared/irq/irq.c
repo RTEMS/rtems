@@ -14,7 +14,9 @@
 
 #include <bsp.h>
 #include <irq.h>
-  
+#include <rtems/score/thread.h>
+#include <rtems/score/apiext.h>
+
 /*
  * pointer to the mask representing the additionnal irq vectors
  * that must be disabled when a particular entry is activated.
@@ -360,11 +362,18 @@ int pc386_rtems_irq_mngt_get(rtems_irq_global_settings** config)
 void _ThreadProcessSignalsFromIrq (CPU_Exception_frame* ctx)
 {
   /*
-   * If I understand the _Thread_Dispatch routine correctly
-   * I do not see how this routine can be called given the
-   * actual code. I plan to use this so far unused feature
-   * to implement remote debugger ptrace("attach", ...)
-   * command.
+   * Process pending signals that have not already been
+   * processed by _Thread_Displatch. This happens quite
+   * unfrequently : the ISR must have posted an action
+   * to the current running thread.
    */
-  printk(" _ThreadProcessSignalsFromIrq called! mail valette@crf.canon.fr\n");
+  if ( _Thread_Do_post_task_switch_extension ||
+       _Thread_Executing->do_post_task_switch_extension ) {
+    _Thread_Executing->do_post_task_switch_extension = FALSE;
+    _API_extensions_Run_postswitch();
+  }
+  /*
+   * I plan to process other thread related events here.
+   * This will include DEBUG session requsted from keyboard...
+   */
 }

@@ -19,8 +19,7 @@
 #include <libcpu/cpu.h>
 #include <string.h>
 #include <libcpu/cpuModel.h>
-
-extern void printk(const char*, ...);
+#include <bspIo.h>
 
 unsigned char Cx86_step = 0;
 static const char *Cx86_type[] = {

@@ -173,10 +173,13 @@ void bsp_start( void )
   console_reserve_resources(&BSP_Configuration);
 
   /*
-   * Init rtems_interrupt_management
+   * Init rtems interrupt management
    */
   rtems_irq_mngt_init();
-  
+  /*
+   * Init rtems exceptions management
+   */
+  rtems_exception_init_mngt();
   /*
    *  The following information is very useful when debugging.
    */

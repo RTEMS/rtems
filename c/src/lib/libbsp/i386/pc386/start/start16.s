@@ -33,7 +33,7 @@
 .set HDROFF,        0x24	# offset into bin2boot header of start32 addr
 .set STACKOFF,      0x200-0x10  # offset to load into %esp, from start of image
 
-
+/* #define NEW_GAS*/
 /*----------------------------------------------------------------------------+
 | CODE section
 +----------------------------------------------------------------------------*/
@@ -78,14 +78,20 @@ _start16:
 	/*---------------------------------------------------------------------+
 	| Bare PC machines boot in real mode! We have to turn protected mode on.
 	+---------------------------------------------------------------------*/
-
+#ifdef NEW_GAS
+	data32
+	addr32
+#endif	
 	lgdt	gdtptr - start16	# load Global Descriptor Table
-	
 	movl	%cr0, %eax
 	orl	$CR0_PE, %eax
 	movl	%eax, %cr0		# turn on protected mode
 	
+#ifdef NEW_GAS
+	ljmpl	$PROT_CODE_SEG, $1f	# flush prefetch queue, and reload %cs
+#else
 	ljmp	$PROT_CODE_SEG, $1f	# flush prefetch queue, and reload %cs
+#endif	
 1:
 
 .code32

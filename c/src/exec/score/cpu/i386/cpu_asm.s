@@ -109,6 +109,105 @@ SYM (_CPU_Context_restore_fp):
         frstor    (eax)                    # restore FP context
         ret
 
+SYM (_Exception_Handler):
+	pusha				   # Push general purpose registers
+	pushl	esp			   # Push exception frame address
+	movl	_currentExcHandler, eax	   # Call function storead in _currentExcHandler
+	call	* eax
+	addl	$4, esp
+	popa				   # restore general purpose registers
+	addl	$8, esp			   # skill vector number and faultCode
+	iret
+		
+#define DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY(_vector) \
+        .p2align 4                         ; \
+        PUBLIC (rtems_exception_prologue_ ## _vector ) ; \
+SYM (rtems_exception_prologue_ ## _vector ):             \
+	pushl	$ _vector	; \
+        jmp   SYM (_Exception_Handler) ;
+
+#define DISTINCT_EXCEPTION_WITHOUT_FAULTCODE_ENTRY(_vector) \
+        .p2align 4                         ; \
+        PUBLIC (rtems_exception_prologue_ ## _vector ) ; \
+SYM (rtems_exception_prologue_ ## _vector ):             \
+	pushl	$ 0		; \
+	pushl	$ _vector	; \
+        jmp   SYM (_Exception_Handler) ;
+
+/*
+ * Divide Error
+ */	
+DISTINCT_EXCEPTION_WITHOUT_FAULTCODE_ENTRY (0)
+/*
+ * Debug Exception
+ */	
+DISTINCT_EXCEPTION_WITHOUT_FAULTCODE_ENTRY (1)
+/*
+ * NMI
+ */	
+DISTINCT_EXCEPTION_WITHOUT_FAULTCODE_ENTRY (2)
+/*
+ * Breakpoint
+ */	
+DISTINCT_EXCEPTION_WITHOUT_FAULTCODE_ENTRY (3)
+/*
+ * Overflow
+ */	
+DISTINCT_EXCEPTION_WITHOUT_FAULTCODE_ENTRY (4)
+/*
+ * Bound Range Exceeded
+ */	
+DISTINCT_EXCEPTION_WITHOUT_FAULTCODE_ENTRY (5)
+/*
+ * Invalid Opcode
+ */	
+DISTINCT_EXCEPTION_WITHOUT_FAULTCODE_ENTRY (6)
+/*
+ * No Math Coproc
+ */	
+DISTINCT_EXCEPTION_WITHOUT_FAULTCODE_ENTRY (7)
+/*
+ * Double Fault
+ */	
+DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY (8)
+/*
+ * Coprocessor segment overrun
+ */	
+DISTINCT_EXCEPTION_WITHOUT_FAULTCODE_ENTRY (9)
+/*
+ * Invalid TSS
+ */	
+DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY (10)
+/*
+ * Segment Not Present
+ */	
+DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY (11)
+/*
+ * Stack segment Fault
+ */	
+DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY (12)
+/*
+ * General Protection Fault
+ */	
+DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY (13)
+/*
+ * Page Fault
+ */	
+DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY (14)
+/*
+ * Floating point error (NB 15 is reserved it is therefor skipped)
+ */	
+DISTINCT_EXCEPTION_WITHOUT_FAULTCODE_ENTRY (16)
+/*
+ * Aligment Check
+ */	
+DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY (17)
+/*
+ * Machine Check
+ */	
+DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY (18)
+	
+
 /*
  *  GO32 does not require these segment related routines.
  */

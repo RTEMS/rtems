@@ -138,6 +138,10 @@ typedef struct {
   unsigned32  eflags;
 } CPU_Exception_frame;
 
+typedef void (*cpuExcHandlerType) (CPU_Exception_frame*);
+extern cpuExcHandlerType _currentExcHandler;
+extern void rtems_exception_init_mngt();
+
 /*
  *  The following structure defines the set of information saved
  *  on the current stack by RTEMS upon receipt of each interrupt
@@ -145,6 +149,29 @@ typedef struct {
  */
 
 typedef CPU_Exception_frame CPU_Interrupt_frame;
+
+typedef enum {
+  DIVIDE_BY_ZERO	=	0,
+  DEBUG			=	1,
+  NMI			=	2,
+  BREAKPOINT		=	3,
+  OVERFLOW		=	4,
+  BOUND			=	5,
+  ILLEGAL_INSTR		=	6,
+  MATH_COPROC_UNAVAIL	=	7,
+  DOUBLE_FAULT		=	8,
+  I386_COPROC_SEG_ERR	=	9,
+  INVALID_TSS		=	10,
+  SEGMENT_NOT_PRESENT	=	11,
+  STACK_SEGMENT_FAULT	=	12,
+  GENERAL_PROT_ERR	=	13,
+  PAGE_FAULT		=	14,
+  INTEL_RES15		=	15,
+  FLOAT_ERROR		=	16,
+  ALIGN_CHECK		=	17,
+  MACHINE_CHECK		=	18
+} Intel_symbolic_exception_name;
+  
 
 /*
  *  The following table contains the information required to configure

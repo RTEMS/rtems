@@ -14,6 +14,8 @@
 #include "asm.h"	
 #include <irq_asm.h>
 
+	       BEGIN_CODE
+	
 SYM (_ISR_Handler):	
        /*
         *  Before this was point is reached the vectors unique
@@ -243,3 +245,6 @@ SYM (default_raw_idt_handler):
 	popa
 	iret
 	
+END_CODE
+
+END
