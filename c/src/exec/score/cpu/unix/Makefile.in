@@ -65,12 +65,12 @@ install:  all
 
 # Real ports using the gnu tools will need to have bsp_specs!!!
 #            ${PROJECT_RELEASE}/lib/bsp_specs
-preinstall: ${PROJECT_RELEASE}/include/rtems/score/unix.h $(ARCH)/unixsize.h \
-            ${PROJECT_RELEASE}/include/rtems/score/targopts.h 
-	$(INSTALL) -m 444 ${H_FILES} ${PROJECT_RELEASE}/include/rtems/score
-	$(INSTALL) -m 444 ${ARCH}/unixsize.h ${PROJECT_RELEASE}/include/rtems/score
+preinstall: $(PROJECT_INCLUDE)/rtems/score/unix.h $(ARCH)/unixsize.h \
+            $(PROJECT_INCLUDE)/rtems/score/targopts.h 
+	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
+	$(INSTALL) -m 444 ${ARCH}/unixsize.h $(PROJECT_INCLUDE)/rtems/score
 
-${PROJECT_RELEASE}/include/rtems/score/unix.h: unix.h
+$(PROJECT_INCLUDE)/rtems/score/unix.h: unix.h
 	 $(SED) -e 's?REPLACE_THIS_WITH_THE_CPU_MODEL?$(RTEMS_CPU_MODEL)?' \
 	        -e 's?REPLACE_THIS_WITH_THE_BSP?$(RTEMS_BSP)?' \
 	        -e 's?REPLACE_THIS_WITH_THE_CPU_FAMILY?$(RTEMS_CPU_FAMILY)?' \
@@ -78,7 +78,7 @@ ${PROJECT_RELEASE}/include/rtems/score/unix.h: unix.h
       <$(srcdir)/unix.h >$(ARCH)/unix.h.tmp
 	$(INSTALL) -m 444 $(ARCH)/unix.h.tmp $@
 
-${PROJECT_RELEASE}/include/rtems/score/targopts.h: $(ARCH)/targopts.h-tmp
+$(PROJECT_INCLUDE)/rtems/score/targopts.h: $(ARCH)/targopts.h-tmp
 	$(INSTALL) -m 444 $(ARCH)/targopts.h-tmp $@
 
 # $(ARCH)/targopts.h-tmp rule is in leaf.cfg

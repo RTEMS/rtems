@@ -57,13 +57,13 @@ $(ARCH)/rtems-cpu.rel: $(OBJS)
 
 all:	${ARCH} $(SRCS) preinstall $(OBJS) $(RELS)
 
-preinstall: ${PROJECT_RELEASE}/include/rtems/score/targopts.h \
+preinstall: $(PROJECT_INCLUDE)/rtems/score/targopts.h \
             ${PROJECT_RELEASE}/lib/bsp_specs
-	$(INSTALL) -m 444 ${H_FILES} ${PROJECT_RELEASE}/include/rtems/score
+	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/score
 # we will share the basic cpu file
-	$(INSTALL) -m 444 ${EXTERNAL_H_FILES} ${PROJECT_RELEASE}/include
+	$(INSTALL) -m 444 ${EXTERNAL_H_FILES} $(PROJECT_INCLUDE)
 
-${PROJECT_RELEASE}/include/rtems/score/targopts.h: $(ARCH)/targopts.h-tmp
+$(PROJECT_INCLUDE)/rtems/score/targopts.h: $(ARCH)/targopts.h-tmp
 	$(INSTALL) -m 444 $(ARCH)/targopts.h-tmp $@
 
 # $(ARCH)/targopts.h-tmp rule is in leaf.cfg

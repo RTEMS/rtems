@@ -56,8 +56,8 @@ $(LIB): $(SRCS) ${OBJS}
 # Install the library, appending _g or _p as appropriate.
 # for include files, just use $(INSTALL)
 preinstall:
-	$(INSTALL) -m 444 ${RTEMS_H_FILES} ${PROJECT_RELEASE}/include/rtems
-	$(INSTALL) -m 444 $(H_FILES) ${PROJECT_RELEASE}/include
-	$(INSTALL) -m 444 $(SYS_H_FILES) ${PROJECT_RELEASE}/include/sys
+	$(INSTALL) -m 444 ${RTEMS_H_FILES} $(PROJECT_INCLUDE)/rtems
+	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
+	$(INSTALL) -m 444 $(SYS_H_FILES) $(PROJECT_INCLUDE)/sys
 
 

@@ -30,4 +30,4 @@ CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
 all:	$(SRCS)
-	$(INSTALL) -m 444 ${H_FILES} ${PROJECT_RELEASE}/include/rtems/posix
+	$(INSTALL) -m 444 ${H_FILES} $(PROJECT_INCLUDE)/rtems/posix

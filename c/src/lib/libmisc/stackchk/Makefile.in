@@ -49,4 +49,4 @@ ${LIB}: ${SRCS} ${OBJS}
 	$(make-library)
 
 all:	${ARCH} $(SRCS) $(LIB)
-	 $(INSTALL) -m 444 ${INSTALLED_H_FILES} ${PROJECT_RELEASE}/include
+	 $(INSTALL) -m 444 ${INSTALLED_H_FILES} $(PROJECT_INCLUDE)

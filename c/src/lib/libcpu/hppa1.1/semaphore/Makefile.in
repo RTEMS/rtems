@@ -49,4 +49,4 @@ ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 
 all:	${ARCH} $(SRCS) $(PGM)
-	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_RELEASE)/include
+	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)

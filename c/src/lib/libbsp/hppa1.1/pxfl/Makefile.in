@@ -46,4 +46,4 @@ all install::
 	    eval $$cmd || $(EXIT_CMD); \
 	fi
 	@$(ECHO); $(ECHO)
-	$(INSTALL) -m 444 $(srcdir)/floss-bsp.h $(PROJECT_RELEASE)/include/bsp.h
+	$(INSTALL) -m 444 $(srcdir)/floss-bsp.h $(PROJECT_INCLUDE)/bsp.h

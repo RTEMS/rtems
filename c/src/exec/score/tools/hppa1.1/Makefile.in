@@ -33,7 +33,7 @@ CPU_DIR=../../cpu/$(RTEMS_CPU)
 #
 
 DEFINES  +=
-CPPFLAGS += -I$(PROJECT_RELEASE)/include \
+CPPFLAGS += -I$(PROJECT_INCLUDE) \
 	    -I$(CPU_DIR)
 CFLAGS   +=
 

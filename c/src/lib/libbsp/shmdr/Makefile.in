@@ -56,4 +56,4 @@ all:	preinstall ${ARCH} $(SRCS) $(PGM)
 #   ../$(RTEMS_BSP_FAMILY)/wrapup/Makefile
 
 preinstall:
-	$(INSTALL) -m 444 $(H_FILES) ${PROJECT_RELEASE}/include
+	$(INSTALL) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
