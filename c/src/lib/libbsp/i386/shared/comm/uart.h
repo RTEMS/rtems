@@ -12,6 +12,7 @@
 
 void BSP_uart_init(int uart, unsigned long baud, unsigned long databits, unsigned long parity, unsigned long stopbits, int hwFlow);
 void BSP_uart_set_attributes(int uart, unsigned long baud, unsigned long databits, unsigned long parity, unsigned long stopbits);
+void BSP_uart_set_baud(int uart, unsigned long baud);
 void BSP_uart_intr_ctrl(int uart, int cmd);
 void BSP_uart_throttle(int uart);
 void BSP_uart_unthrottle(int uart);

@@ -1,4 +1,8 @@
 
+	* common/uart.h: Added prototype for BSP_uart_set_baud().
+
+2000-10-19	   Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
+
 	* comm/uart.c (BSP_uart_init): Save more line state parameters.
 
 2000-10-18	 Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
