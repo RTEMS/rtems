@@ -445,7 +445,7 @@ processors.
 
 The "lib" directory contains the support libraries and BSPS.  
 Board support packages (BSPs), processor environment start up code,
-C library support, the KA9Q TCP/IP stack, common BSP header files,
+C library support, the FreeBSD TCP/IP stack, common BSP header files,
 and miscellaneous support functions are provided in the subdirectories.
 These are combined with the RTEMS executive object to form the single 
 RTEMS library which installed.  
@@ -542,7 +542,7 @@ clock      console    include     shmsupp    startup     timer
                                |
   +-----------+----------+-----+-----+----------+----------+
   |           |          |           |          |          |
-clock      console    include     shmsupp    startup     timer
+clock      console    include       ...      startup     timer
 @end group
 @end example
 @html
@@ -568,7 +568,7 @@ implementation is as follows:
                                    |
    +----------+---------+----------+---------+---------+---------+
    |          |         |          |         |         |         |
-libtests   sptests   support    tmtests   mptests    tools    samples
+libtests   sptests   support    tmtests   mptests   psxtest   samples
 @end group
 @end example
 @end ifset
