@@ -264,7 +264,7 @@ and @code{ENOTDIR} are detected in this manner.
 #include <evlog.h>
 
 int log_read(
-  const logd_t logdes,
+  const logd_t      logdes,
   struct log_entry *entry,
   void             *log_buf,
   const size_t      log_len,
@@ -452,19 +452,13 @@ int log_seek(
 
 @table @b
 @item EBADF
-The logdes argument is not a valid log file descriptor.
-
-@item EINTR
-The log_seek() function was interrupted by a signal.
-
-@item EINVAL
-The log_recid argument is not a valid record id.
+The @code{logdes} argument is not a valid log file descriptor.
 
 @end table
 
 @subheading DESCRIPTION:
 
-The @code{log_seek} function shall set the log file offset of the open 
+The @code{log_seek} function sets the log file offset of the open 
 log description associated with the @code{logdes} log file descriptor 
 to the event record in the log file identified by @code{log_recid}.  
 The @code{log_recid} argument is either the record id of a valid event
@@ -473,21 +467,23 @@ record or one of the following values, as defined in the header <evlog.h>:
 @table @b
 @item LOG_SEEK_START
 Set log file position to point at the first event
-record in the log file
+record in the log file.
 
 @item LOG_SEEK_END
 Set log file position to point after the last event 
-record in the log file
+record in the log file.
 
 @end table
-
-If the @code{log_seek} function is interrupted, the state of the open log
-file description associated with @code{logdes} is unspecified.
 
 @subheading NOTES:
 
 The @code{_POSIX_LOGGING} feature flag is defined to indicate
 this service is available.
+
+This implementation can not return @code{EINTR}.
+
+This implementation can not return @code{EINVAL} to indicate that
+the @code{log_recid} argument is not a valid record id.
 
 @page
 @subsection log_severity_before - Compare event record severities
