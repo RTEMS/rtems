@@ -32,18 +32,16 @@ EXTRA_DIST = cpu.c cpu_asm.S i960RP.h
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/asm.h: asm.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/asm.h
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/score
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
 	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rtems/score/cpu.h: rtems/score/cpu.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpu.h
