@@ -28,7 +28,7 @@
 #include <assert.h>
 #include <unistd.h>
 #include <errno.h>
-#include <imfs.h>
+#include <rtems/imfs.h>
 #include <assert.h>
 
 DIR *directory;

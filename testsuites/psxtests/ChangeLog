@@ -1,3 +1,10 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* psxcancel/init.c: Include <rtems/console.h> instead of <console.h>.
+	* psxmount/test.c: Include <rtems/imfs.h> instead of <imfs.h>.
+	* psxreaddir/test.c: Include <rtems/imfs.h> instead of <imfs.h>.
+	* psxstat/test.c: Include <rtems/imfs.h> instead of <imfs.h>.
+
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* psx06/init.c, psx06/system.h, psx06/task.c, psx06/task2.c: Convert
