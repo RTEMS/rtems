@@ -1,3 +1,9 @@
+2002-10-24	Joel Sherrill <joel@OARcorp.com>
+
+	* samples/hello/config.h: Change CONFIGURE_SPTEST to
+	CONFIGURE_APPLICATION to reflect current usage.
+	* support/init.c: Include stdlib.h not unistd.h to remove warning.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

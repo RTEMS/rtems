@@ -12,7 +12,7 @@
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <bsp.h>
-#include <unistd.h>
+#include <stdlib.h>
 
 void *POSIX_Init(
   void *argument

@@ -16,11 +16,13 @@
 
 /* configuration information */
 
-#define CONFIGURE_SPTEST
+#define CONFIGURE_APPLICATION
 
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
+
+#define CONFIGURE_MAXIMUM_TASKS              2
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS              10
 #define CONFIGURE_MAXIMUM_POSIX_KEYS                 10
