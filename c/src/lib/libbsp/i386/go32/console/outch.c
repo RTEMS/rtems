@@ -5,7 +5,7 @@
 #include <go32.h>
 #include <bsp.h>
 
-#include <memory.h>
+#include <string.h>
 
 #define	MAX_COL	80
 #define MAX_ROW	50

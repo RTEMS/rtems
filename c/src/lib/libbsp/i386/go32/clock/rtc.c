@@ -36,7 +36,7 @@
 
 
 #include <rtems.h>
-#include <memory.h>
+#include <string.h>
 
 void init_rtc( void )
 {

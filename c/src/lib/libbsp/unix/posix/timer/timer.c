@@ -16,6 +16,8 @@
  *  $Id$
  */
 
+/* For solaris 2.4 */
+#define __EXTENSIONS__
 
 #include <bsp.h>
 #include <time.h>

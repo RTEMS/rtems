@@ -21,7 +21,7 @@ int uname(
 {
   /*  XXX: Here is what Solaris returns...
           sysname = SunOS
-          nodename = merlin
+          nodename = node_name
           release = 5.3
           version = Generic_101318-12
           machine = sun4m

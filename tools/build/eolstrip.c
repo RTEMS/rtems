@@ -9,6 +9,9 @@
  *
  * $Id$
  * $Log$
+ * Revision 1.2  1995/05/31  16:44:28  joel
+ * fixing revision
+ *
  * Revision 1.1.1.1  1995/05/11  17:35:12  joel
  * Release 3.1.15
  *
