@@ -29,7 +29,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include <mc68230.h>
+#include <motorola/mc68230.h>
 
 #define TIMER_VECTOR 0x4D
 
