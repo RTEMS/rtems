@@ -14,6 +14,8 @@
 #include <reent.h>
 #include "swi.h"
 
+#include <bspopts.h>
+
 int armulator_stdin;
 int armulator_stdout;
 int armulator_stderr;

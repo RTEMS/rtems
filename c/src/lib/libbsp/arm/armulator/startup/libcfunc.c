@@ -5,6 +5,9 @@
    Note: These functions are in a seperate file so that OS providers can
    overrride the system call stubs (defined in syscalls.c) without having
    to provide libc funcitons as well.  */
+
+#include <bspopts.h>
+
 #include "swi.h"
 
 #ifdef ARM_RDI_MONITOR

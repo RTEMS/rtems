@@ -1,3 +1,4 @@
+#include <bspopts.h>
 #include "../startup/swi.h"
 
 /* ANSI concatenation macros.  */
