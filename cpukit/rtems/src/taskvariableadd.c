@@ -24,7 +24,8 @@
 
 rtems_status_code rtems_task_variable_add(
   rtems_id tid,
-  int *ptr
+  void **ptr,
+  void (*dtor)(void *)
 )
 {
   Thread_Control        *the_thread;
@@ -54,6 +55,7 @@ rtems_status_code rtems_task_variable_add(
     tvp = the_thread->task_variables;
     while (tvp) {
       if (tvp->ptr == ptr) {
+	tvp->dtor = dtor;
         _Thread_Enable_dispatch();
         return RTEMS_SUCCESSFUL;
       }
@@ -72,6 +74,7 @@ rtems_status_code rtems_task_variable_add(
     }
     new->var = 0;
     new->ptr = ptr;
+    new->dtor = dtor;
 
     new->next = the_thread->task_variables;
     the_thread->task_variables = new;
@@ -80,4 +83,3 @@ rtems_status_code rtems_task_variable_add(
   }
   return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
-

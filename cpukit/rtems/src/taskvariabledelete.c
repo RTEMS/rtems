@@ -24,7 +24,7 @@
 
 rtems_status_code rtems_task_variable_delete(
   rtems_id  tid,
-  int      *ptr
+  void    **ptr
 )
 {
   Thread_Control        *the_thread;

@@ -22,7 +22,7 @@ rtems_task Init(rtems_task_argument argument);
 #include <rtems/error.h>
 #include <stdio.h>
 
-volatile int taskvar;
+volatile void *taskvar;
 
 rtems_task
 subtask (rtems_task_argument arg)
@@ -31,37 +31,36 @@ subtask (rtems_task_argument arg)
 	int i;
 	rtems_status_code sc;
 
-	sc = rtems_task_variable_add (RTEMS_SELF, (void *) &taskvar);
+	sc = rtems_task_variable_add (RTEMS_SELF, &taskvar, NULL);
 	if (sc != RTEMS_SUCCESSFUL) {
 		printf ("Can't add task variable: %s\n", rtems_status_text (sc));
 		rtems_task_suspend (RTEMS_SELF);
 	}
-	taskvar = localvar;
+	taskvar = (void *)localvar;
 	while (localvar < 1000) {
 		localvar++;
 		rtems_task_wake_after (0);
-		taskvar++;
+		taskvar = (void *)((int)taskvar + 1);
 		rtems_task_wake_after (0);
-		if (taskvar != localvar) {
-			printf ("Task:%d taskvar:%d localvar:%d\n", arg, taskvar, localvar);
+		if ((int)taskvar != localvar) {
+			printf ("Task:%d taskvar:%d localvar:%d\n", arg, (int)taskvar, localvar);
 			rtems_task_suspend (RTEMS_SELF);
 		}
 	}
-	sc = rtems_task_variable_delete (RTEMS_SELF, (void *) &taskvar);
+	sc = rtems_task_variable_delete (RTEMS_SELF, &taskvar);
 	if (sc != RTEMS_SUCCESSFUL) {
 		printf ("Can't delete task variable: %s\n", rtems_status_text (sc));
 		rtems_task_suspend (RTEMS_SELF);
 	}
 	for (i = 0 ; ; i++) {
-		taskvar = localvar = 100 * arg;
+		taskvar = (void *)(localvar = 100 * arg);
 		rtems_task_wake_after (0);
-		if (taskvar == localvar) {
-			printf ("Task:%d taskvar:%d localvar:%d\n", arg, taskvar, localvar);
+		if ((int)taskvar == localvar) {
+			printf ("Task:%d taskvar:%d localvar:%d\n", arg, (int)taskvar, localvar);
 			rtems_task_suspend (RTEMS_SELF);
 		}
 		if ((arg == 3) && (i == 100)) {
-			puts ("Task variables test succeeded.");
-			puts ("*** END OF TEST SP28 ***");
+			printf ("Task variables test succeeded.\n");
 			exit (0);
 		}
 	}
@@ -75,7 +74,7 @@ starttask (int arg)
 
 	sc = rtems_task_create (rtems_build_name ('S', 'R', 'V', arg + 'A'),
 		100,
-                RTEMS_MINIMUM_STACK_SIZE * 3,
+		10000,
 		RTEMS_PREEMPT|RTEMS_NO_TIMESLICE|RTEMS_NO_ASR|RTEMS_INTERRUPT_LEVEL(0),
 		RTEMS_NO_FLOATING_POINT|RTEMS_LOCAL,
 		&tid);
@@ -93,7 +92,6 @@ starttask (int arg)
 rtems_task
 Init (rtems_task_argument ignored)
 {
-	puts ("*** START OF TEST SP28 ***");
 	starttask (1);
 	starttask (2);
 	starttask (3);

@@ -412,7 +412,8 @@ rtems_status_code rtems_task_is_suspended(
 
 rtems_status_code rtems_task_variable_add(
   rtems_id  tid,
-  int      *ptr
+  void    **ptr,
+  void    (*dtor)(void *)
 );
 
 /*
@@ -423,7 +424,7 @@ rtems_status_code rtems_task_variable_add(
 
 rtems_status_code rtems_task_variable_delete(
   rtems_id  tid,
-  int      *ptr
+  void    **ptr
 );
 
 /*

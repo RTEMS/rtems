@@ -93,8 +93,9 @@ struct rtems_task_variable_tt;
 
 struct rtems_task_variable_tt {
   struct rtems_task_variable_tt  *next;
-  int                            *ptr;
-  int                             var;
+  void                          **ptr;
+  void                           *var;
+  void                          (*dtor)(void *);
 };
 
 typedef struct rtems_task_variable_tt   rtems_task_variable_t;
