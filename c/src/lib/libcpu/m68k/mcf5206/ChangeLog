@@ -1,3 +1,15 @@
+2003-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Cosmetics.
+	* clock/Makefile.am: Remove.
+	* console/Makefile.am: Remove.
+	* include/Makefile.am: Remove.
+	* mbus/Makefile.am: Remove.
+	* timer/Makefile.am: Remove.
+	* Makefile.am: Merge-in former clock/Makefile.am, console/Makefile.am,
+	include/Makefile.am, mbus/Makefile.am, timer/Makefile.am.
+	* configure.ac: Reflect changes above.
+
 2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am: Cosmetics.

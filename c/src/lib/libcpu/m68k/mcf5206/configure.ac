@@ -25,10 +25,5 @@ RTEMS_PROG_CCAS
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-include/Makefile
-mbus/Makefile
-timer/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
