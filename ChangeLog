@@ -1,3 +1,8 @@
+2001-09-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bootstrap: remove/add automake added files.
+	* .cvsignore: reflect changes to bootstrap.
+
 2001-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/leaf.am: New file.

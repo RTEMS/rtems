@@ -82,7 +82,7 @@ generate)
     aclocal $aclocal_args;
     test -n "`grep CONFIG_HEADER ${configure}`" && autoheader \
       && test "$verbose" = "-v" && echo "autoheader";
-    test -f Makefile.am && automake $verbose ;
+    test -f Makefile.am && automake -a -c $verbose ;
     autoconf;
     test -f Makefile.am && test -n "`grep 'stamp-h\.in' Makefile.in`" \
       && echo timestamp > stamp-h.in
@@ -102,7 +102,7 @@ clean)
   files=`find . -name 'configure' -print` ;
   test "$verbose" = "-v" && test -n "$files" && echo "$files" ;
   for i in $files; do if test -f $i; then
-    rm -f $i
+    rm -f $i config.guess config.sub depcomp install-sh missing mkinstalldirs
     test "$verbose" = "-v" && echo "$i"    
   fi; done
   
