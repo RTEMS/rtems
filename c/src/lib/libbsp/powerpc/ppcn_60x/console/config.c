@@ -281,7 +281,7 @@ static boolean config_PMX1553_probe(int minor)
 {
 	uint8_t   ucBusNumber, ucSlotNumber, ucChannel;
 	uint8_t   ucIntLine;
-	uint32_t   ulPortBase, ulMemBase, ulDeviceID;
+	uint32_t   ulPortBase, ulMemBase, ulDeviceID, ulTemp;
 	uint8_t   *pucSIO_cir, *pucUart_int_sr, *pucUartDevIntReg;
 	PSP_WRITE_REGISTERS     pNS16550Write;
 
@@ -436,23 +436,28 @@ static boolean config_PMX1553_probe(int minor)
 	 * available, 22.1184 MHz will be used allowing rates up to
 	 * 1382400 baud (RS422 only).
 	 */
+
+        ulTemp = (uint32_t)Console_Port_Tbl[minor].pDeviceParams
 #if 1
 	/*
 	 * Scale requested baud rate for 16 MHz clock
 	 */
-	(uint32_t)Console_Port_Tbl[minor].pDeviceParams*=7373;
-	(uint32_t)Console_Port_Tbl[minor].pDeviceParams/=16000;
+        ulTemp *= 7373;
+	ulTemp /= 16000;
 #else
 	/*
 	 * Scale requested baud rate for 22.1184 MHz clock
 	 */
-	(uint32_t)Console_Port_Tbl[minor].pDeviceParams/=3;
+	ulTemp /= 3;
 #endif
+
 	/*
 	 * In order to maintain maximum data rate accuracy, we will
 	 * apply a div 4 here rather than in hardware (using MCR bit 7).
 	 */
-	(uint32_t)Console_Port_Tbl[minor].pDeviceParams/=4;
+	ultemp /= 4;
+
+	Console_Port_Tbl[minor].pDeviceParams = (void *)ulTemp;
 
 	return(TRUE);
 }
