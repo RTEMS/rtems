@@ -85,7 +85,7 @@ rtems_device_minor_number  Console_Port_Minor;
  *  printk() support that simply routes printk to stderr
  */
 
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 void GENMG5_output_char(char c) { write( 2, &c, 1 ); }
   
