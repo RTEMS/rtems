@@ -80,7 +80,35 @@ int _POSIX_Message_queue_Create_support(
 );
 
 /*
+ *  _POSIX_Message_queue_Delete
  *
+ *  DESCRIPTION:
+ *
+ *  This routine supports the mq_unlink and mq_close routines by
+ *  doing most of the work involved with removing a message queue.
+ */ 
+  
+void _POSIX_Message_queue_Delete(
+  POSIX_Message_queue_Control *the_mq
+);
+
+/*
+ *  _POSIX_Message_queue_Receive_support
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine supports the various flavors of receiving a message.
+ */
+
+ssize_t _POSIX_Message_queue_Receive_support(
+  mqd_t               mqdes,
+  char               *msg_ptr,
+  size_t              msg_len,
+  unsigned int       *msg_prio,
+  Watchdog_Interval   timeout
+);
+
+/*
  *  _POSIX_Message_queue_Send_support
  *
  *  DESCRIPTION:
