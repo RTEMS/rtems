@@ -19,7 +19,7 @@
 #include "idtcpu.h"
 
 
-#include <bspIo.h>  /* for printk */
+#include <rtems/bspIo.h>  /* for printk */
 
 
 

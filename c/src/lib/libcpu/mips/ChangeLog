@@ -1,5 +1,11 @@
 2001-02-01	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
+	* mongoosev/vectorisrs/vectorisrs.c,
+	shared/interrupts/vectorexceptions.c: Use rtems/bspIo.h, not just
+	bspIo.h.
+
+2001-02-01	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
 	* Lots of tinkering and tuning as part of improving interrupt latency
 	and improving the per-task interrupt level control and FP mask handling.
 	With these modifications interrupt latency was measured at a worst-case
