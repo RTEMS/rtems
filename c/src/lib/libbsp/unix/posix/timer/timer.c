@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#include <rtems.h>
 
+#include <bsp.h>
 #include <time.h>
 #include <sys/time.h>
 

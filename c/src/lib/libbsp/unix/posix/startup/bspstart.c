@@ -27,8 +27,6 @@
  *  $Id$
  */
 
-#include <rtems.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>

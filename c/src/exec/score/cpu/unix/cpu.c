@@ -20,15 +20,38 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/interr.h>
 
+#if defined(solaris2)
+#undef  _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 3
+#undef  __STRICT_ANSI__
+#define __STRICT_ANSI__
+#endif
+ 
+#if defined(linux)
+#define MALLOC_0_RETURNS_NULL
+#endif
+ 
 #include <stdio.h>
 #include <stdlib.h>
+#include <setjmp.h>
 #include <signal.h>
 #include <time.h>
 #include <sys/time.h>
+#include <sys/types.h>
+#include <errno.h>
+#include <unistd.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <sys/sem.h>
 
 #ifndef SA_RESTART
 #define SA_RESTART 0
 #endif
+
+typedef struct {
+  jmp_buf   regs;
+  sigset_t  isr_level;
+} Context_Control_overlay;
 
 void  _CPU_Signal_initialize(void);
 void  _CPU_Stray_signal(int);
@@ -375,9 +398,9 @@ void _CPU_Context_Initialize(
    */
 
   if ( _new_level == 0 )
-    source = _CPU_Context_Default_with_ISRs_enabled.regs;
+    source = &_CPU_Context_Default_with_ISRs_enabled;
   else
-    source = _CPU_Context_Default_with_ISRs_disabled.regs;
+    source = &_CPU_Context_Default_with_ISRs_disabled;
       
   memcpy(_the_context, source, sizeof(Context_Control) ); /* sizeof(jmp_buf)); */
 
@@ -452,8 +475,10 @@ void _CPU_Context_restore(
   Context_Control  *next
 )
 {
-  sigprocmask( SIG_SETMASK, &next->isr_level, 0 );
-  longjmp( next->regs, 0 );
+  Context_Control_overlay *nextp = (Context_Control_overlay *)next;
+
+  sigprocmask( SIG_SETMASK, &nextp->isr_level, 0 );
+  longjmp( nextp->regs, 0 );
 }
 
 /*PAGE
@@ -466,13 +491,16 @@ void _CPU_Context_switch(
   Context_Control  *next
 )
 {
+  Context_Control_overlay *currentp = (Context_Control_overlay *)current;
+  Context_Control_overlay *nextp = (Context_Control_overlay *)next;
+
   int status;
 
   /*
    *  Switch levels in one operation
    */
 
-  status = sigprocmask( SIG_SETMASK, &next->isr_level, &current->isr_level );
+  status = sigprocmask( SIG_SETMASK, &nextp->isr_level, &currentp->isr_level );
   if ( status )
     _Internal_error_Occurred(
       INTERNAL_ERROR_CORE,
@@ -480,8 +508,8 @@ void _CPU_Context_switch(
       status
     );
 
-  if (setjmp(current->regs) == 0) {    /* Save the current context */
-     longjmp(next->regs, 0);           /* Switch to the new context */
+  if (setjmp(currentp->regs) == 0) {    /* Save the current context */
+     longjmp(nextp->regs, 0);           /* Switch to the new context */
      if ( status )
        _Internal_error_Occurred(
          INTERNAL_ERROR_CORE,
@@ -610,18 +638,19 @@ void _CPU_ISR_Handler(int vector)
 
 void _CPU_Stray_signal(int sig_num)
 {
-  char buffer[ 80 ];   
+  char buffer[ 4 ];   
 
   /* 
    *  We avoid using the stdio section of the library.
    *  The following is generally safe.
    */
 
-  write( 
-    2,
-    buffer, 
-    sprintf( buffer, "Stray signal %d\n", sig_num )
-  );
+  buffer[ 0 ] = (sig_num >> 4) + 0x30;
+  buffer[ 1 ] = (sig_num & 0xf) + 0x30;
+  buffer[ 2 ] = '\n';
+
+  write( 2, "Stray signal 0x", 12 );
+  write( 2, buffer, 3 );
  
   /*
    * If it was a "fatal" signal, then exit here
@@ -679,4 +708,253 @@ int _CPU_ffs(unsigned32 value)
   output = output - 1;
 
   return output;
+}
+
+
+/*
+ *  Special Purpose Routines to hide the use of UNIX system calls.
+ */
+
+#if 0
+/* XXX clock had this set of #define's */
+
+/*
+ *  In order to get the types and prototypes used in this file under
+ *  Solaris 2.3, it is necessary to pull the following magic.
+ */
+ 
+#if defined(solaris)
+#warning "Ignore the undefining __STDC__ warning"
+#undef __STDC__
+#define __STDC__ 0
+#undef  _POSIX_C_SOURCE
+#endif
+#endif
+
+int _CPU_Get_clock_vector( void )
+{
+  return SIGALRM;
+}
+
+
+void _CPU_Start_clock( 
+  int microseconds
+)
+{
+  struct itimerval  new;
+
+  new.it_value.tv_sec = 0;
+  new.it_value.tv_usec = microseconds;
+  new.it_interval.tv_sec = 0;
+  new.it_interval.tv_usec = microseconds;
+
+  setitimer(ITIMER_REAL, &new, 0);
+}
+
+void _CPU_Stop_clock( void )
+{
+  struct itimerval  new;
+  struct sigaction  act;
+ 
+  /*
+   * Set the SIGALRM signal to ignore any last
+   * signals that might come in while we are
+   * disarming the timer and removing the interrupt
+   * vector.
+   */
+ 
+  act.sa_handler = SIG_IGN;
+
+  sigaction(SIGALRM, &act, 0);
+ 
+  new.it_value.tv_sec = 0;
+  new.it_value.tv_usec = 0;
+ 
+  setitimer(ITIMER_REAL, &new, 0);
+}
+
+int  _CPU_SHM_Semid;
+extern       void fix_syscall_errno( void );
+
+void _CPU_SHM_Init( 
+  unsigned32   maximum_nodes,
+  boolean      is_master_node,
+  void       **shm_address,
+  unsigned32  *shm_length
+)
+{
+  int          i;
+  int          shmid;
+  char        *shm_addr;
+  key_t        shm_key;
+  key_t        sem_key;
+  int          status;
+  int          shm_size;
+ 
+  if (getenv("RTEMS_SHM_KEY"))
+    shm_key = strtol(getenv("RTEMS_SHM_KEY"), 0, 0);
+  else
+#ifdef RTEMS_SHM_KEY
+    shm_key = RTEMS_SHM_KEY;
+#else
+    shm_key = 0xa000;
+#endif
+ 
+    if (getenv("RTEMS_SHM_SIZE"))
+      shm_size = strtol(getenv("RTEMS_SHM_SIZE"), 0, 0);
+    else
+#ifdef RTEMS_SHM_SIZE
+      shm_size = RTEMS_SHM_SIZE;
+#else
+      shm_size = 64 * 1024;
+#endif
+ 
+    if (getenv("RTEMS_SHM_SEMAPHORE_KEY"))
+      sem_key = strtol(getenv("RTEMS_SHM_SEMAPHORE_KEY"), 0, 0);
+    else
+#ifdef RTEMS_SHM_SEMAPHORE_KEY
+      sem_key = RTEMS_SHM_SEMAPHORE_KEY;
+#else
+      sem_key = 0xa001;
+#endif
+ 
+    shmid = shmget(shm_key, shm_size, IPC_CREAT | 0660);
+    if ( shmid == -1 ) {
+      fix_syscall_errno(); /* in case of newlib */
+      perror( "shmget" );
+      _CPU_Fatal_halt( 0xdead0001 );
+    }
+ 
+    shm_addr = shmat(shmid, (char *)0, SHM_RND);
+    if ( shm_addr == (void *)-1 ) {
+      fix_syscall_errno(); /* in case of newlib */
+      perror( "shmat" );
+      _CPU_Fatal_halt( 0xdead0002 );
+    }
+ 
+    _CPU_SHM_Semid = semget(sem_key, maximum_nodes + 1, IPC_CREAT | 0660);
+    if ( _CPU_SHM_Semid == -1 ) {
+      fix_syscall_errno(); /* in case of newlib */
+      perror( "semget" );
+      _CPU_Fatal_halt( 0xdead0003 );
+    }
+ 
+    if ( is_master_node ) {
+      for ( i=0 ; i <= maximum_nodes ; i++ ) {
+#if defined(solaris2)
+        union semun {
+          int val;
+          struct semid_ds *buf;
+          ushort *array;
+        } help;
+ 
+        help.val = 1;
+        status = semctl( _CPU_SHM_Semid, i, SETVAL, help );
+#endif
+#if defined(hpux)
+        status = semctl( _CPU_SHM_Semid, i, SETVAL, 1 );
+#endif
+ 
+        fix_syscall_errno(); /* in case of newlib */
+        if ( status == -1 ) {
+          _CPU_Fatal_halt( 0xdead0004 );
+        }
+      }
+    }
+ 
+  *shm_address = shm_addr;
+  *shm_length = shm_size;
+
+}
+
+int _CPU_Get_pid( void )
+{
+  return getpid();
+}
+
+/*
+ * Define this to use signals for MPCI shared memory driver.
+ * If undefined, the shared memory driver will poll from the
+ * clock interrupt.
+ * Ref: ../shmsupp/getcfg.c
+ *
+ * BEWARE:: many UN*X kernels and debuggers become severely confused when
+ *          debugging programs which use signals.  The problem is *much*
+ *          worse when using multiple signals, since ptrace(2) tends to
+ *          drop all signals except 1 in the case of multiples.
+ *          On hpux9, this problem was so bad, we couldn't use interrupts
+ *          with the shared memory driver if we ever hoped to debug
+ *          RTEMS programs.
+ *          Maybe systems that use /proc don't have this problem...
+ */
+ 
+ 
+int _CPU_SHM_Get_vector( void )
+{
+#ifdef CPU_USE_SHM_INTERRUPTS
+  return SIGUSR1;
+#else
+  return 0;
+#endif
+}
+
+void _CPU_SHM_Send_interrupt(
+  int pid,
+  int vector
+)
+{
+  kill((pid_t) pid, vector);
+}
+
+void _CPU_SHM_Lock( 
+  int semaphore
+)
+{
+  struct sembuf      sb;
+  int                status;
+ 
+  sb.sem_num = semaphore;
+  sb.sem_op  = -1;
+  sb.sem_flg = 0;
+ 
+  while (1) {
+    status = semop(_CPU_SHM_Semid, &sb, 1);
+    if ( status >= 0 )
+      break;
+    if ( status == -1 ) {
+       fix_syscall_errno();    /* in case of newlib */
+        if (errno == EINTR)
+            continue;
+        perror("shm lock");
+        _CPU_Fatal_halt( 0xdead0005 );
+    }
+  }
+
+}
+
+void _CPU_SHM_Unlock(
+  int semaphore
+)
+{
+  struct sembuf  sb;
+  int            status;
+ 
+  sb.sem_num = semaphore;
+  sb.sem_op  = 1;
+  sb.sem_flg = 0;
+ 
+  while (1) {
+    status = semop(_CPU_SHM_Semid, &sb, 1);
+    if ( status >= 0 )
+      break;
+ 
+    if ( status == -1 ) {
+      fix_syscall_errno();    /* in case of newlib */
+      if (errno == EINTR)
+          continue;
+      perror("shm unlock");
+      _CPU_Fatal_halt( 0xdead0006 );
+    }
+  }
+
 }

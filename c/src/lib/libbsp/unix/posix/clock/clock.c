@@ -14,32 +14,15 @@
  *  $Id$
  */
 
-#include <rtems.h>
-#include <rtems/libio.h>
 #include <bsp.h>
-
-/*
- *  In order to get the types and prototypes used in this file under
- *  Solaris 2.3, it is necessary to pull the following magic.
- */
- 
-#if defined(solaris)
-#warning "Ignore the undefining __STDC__ warning"
-#undef __STDC__
-#define __STDC__ 0
-#undef  _POSIX_C_SOURCE
-#endif
- 
+#include <rtems/libio.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <signal.h>
-#include <time.h>
-
-extern rtems_configuration_table Configuration;
 
 void Clock_exit(void);
 
 volatile rtems_unsigned32 Clock_driver_ticks;
+
+rtems_unsigned32 Clock_driver_vector;
 
 /*
  * These are set by clock driver during its init
@@ -51,18 +34,11 @@ rtems_device_minor_number rtems_clock_minor;
 void
 Install_clock(rtems_isr_entry clock_isr)
 {
-    struct itimerval  new;
-
     Clock_driver_ticks = 0;
 
-    new.it_value.tv_sec = 0;
-    new.it_value.tv_usec = Configuration.microseconds_per_tick;
-    new.it_interval.tv_sec = 0;
-    new.it_interval.tv_usec = Configuration.microseconds_per_tick;
+    (void)set_vector(clock_isr, Clock_driver_vector, 1);
 
-    (void)set_vector(clock_isr, SIGALRM, 1);
-
-    setitimer(ITIMER_REAL, &new, 0);
+    _CPU_Start_clock( BSP_Configuration.microseconds_per_tick );
 
     atexit(Clock_exit);
 }
@@ -73,7 +49,7 @@ ReInstall_clock(rtems_isr_entry new_clock_isr)
     rtems_unsigned32  isrlevel = 0;
 
     rtems_interrupt_disable(isrlevel);
-    (void)set_vector(new_clock_isr, SIGALRM, 1);
+    (void)set_vector(new_clock_isr, Clock_driver_vector, 1);
     rtems_interrupt_enable(isrlevel);
 }
 
@@ -92,26 +68,9 @@ Clock_isr(int vector)
 void
 Clock_exit(void)
 {
-    struct itimerval  new;
-     struct sigaction  act;
+  _CPU_Stop_clock();
 
-     /*
-      * Set the SIGALRM signal to ignore any last
-      * signals that might come in while we are
-      * disarming the timer and removing the interrupt
-      * vector.
-      */
-
-     act.sa_handler = SIG_IGN;
-
-     sigaction(SIGALRM, &act, 0);
-
-    new.it_value.tv_sec = 0;
-    new.it_value.tv_usec = 0;
-
-    setitimer(ITIMER_REAL, &new, 0);
-
-    (void)set_vector(0, SIGALRM, 1);
+  (void)set_vector(0, Clock_driver_vector, 1);
 }
 
 rtems_device_driver
@@ -121,6 +80,8 @@ Clock_initialize(
   void *pargp
 )
 {
+    Clock_driver_vector = _CPU_Get_clock_vector();
+
     Install_clock((rtems_isr_entry) Clock_isr);
 
     /*
@@ -150,7 +111,7 @@ rtems_device_driver Clock_control(
 
     if (args->command == rtems_build_name('I', 'S', 'R', ' '))
     {
-        Clock_isr(SIGALRM);
+        Clock_isr(Clock_driver_vector);
     }
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
     {

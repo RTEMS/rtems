@@ -35,7 +35,7 @@ PRI5 - rtems_semaphore_release - nested
 PRI5 - rtems_semaphore_release - restore priority
 PRI5 - priority of PRI5 is 68
 <pause>
-TA1 - rtems_semaphore_ident - smid => 10010002
+TA1 - rtems_semaphore_ident - smid => 14010002
 TA1 - rtems_semaphore_obtain - wait forever on SM2
 TA1 - got SM2
 TA1 - rtems_semaphore_obtain - wait forever on SM3

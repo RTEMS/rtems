@@ -1,5 +1,5 @@
 *** TEST 25 ***
-TA1 - rtems_region_ident - 0x1c010002
+TA1 - rtems_region_ident - 0x20010002
 TA1 - rtems_region_get_segment - wait on 64 byte segment from region 1
 TA1 - got segment from region 1 - 0x0000f9b8
 TA1 - rtems_region_get_segment - wait on 128 byte segment from region 1

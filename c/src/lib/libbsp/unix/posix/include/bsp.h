@@ -25,7 +25,6 @@ extern "C" {
 #include <console.h>
 #include <iosupp.h>
 #include <libcsupport.h>
-#include <signal.h>
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
@@ -61,24 +60,6 @@ extern "C" {
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;
-
-/*
- * Define this to use signals for MPCI shared memory driver.
- * If undefined, the shared memory driver will poll from the
- * clock interrupt.
- * Ref: ../shmsupp/getcfg.c
- *
- * BEWARE:: many UN*X kernels and debuggers become severely confused when
- *          debugging programs which use signals.  The problem is *much*
- *          worse when using multiple signals, since ptrace(2) tends to
- *          drop all signals except 1 in the case of multiples.
- *          On hpux9, this problem was so bad, we couldn't use interrupts
- *          with the shared memory driver if we ever hoped to debug
- *          RTEMS programs.
- *          Maybe systems that use /proc don't have this problem...
- */
- 
-/* #define INTERRUPT_EXTERNAL_MPCI        SIGUSR1 */
 
 /*
  *  Device Driver Table Entries

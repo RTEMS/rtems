@@ -236,6 +236,7 @@ rtems_mpci_entry Shm_Initialization( void )
   }
 
   MPCI_Shm_extensions.fatal = MPCI_Fatal;
+
   (void) rtems_extension_create(
     rtems_build_name( 'M', 'P', 'E', 'X' ),
     &MPCI_Shm_extensions,

@@ -17,17 +17,8 @@
  *  $Id$
  */
 
-#include <rtems.h>
-
 #include <bsp.h>
 #include <shm.h>
-
-#include <errno.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#include <sys/sem.h>
 
 extern int      semid;
 
@@ -55,30 +46,13 @@ void Shm_Lock(
   Shm_Locked_queue_Control *lq_cb
 )
 {
-    rtems_unsigned32   isr_level;
-    struct sembuf      sb;
-    int                status;
+  rtems_unsigned32   isr_level;
 
-    sb.sem_num = lq_cb->lock;
-    sb.sem_op  = -1;
-    sb.sem_flg = 0;
+  rtems_interrupt_disable( isr_level );
 
-    rtems_interrupt_disable( isr_level );
+  Shm_isrstat = isr_level;
 
-    Shm_isrstat = isr_level;
-
-    while (1) {
-      status = semop(semid, &sb, 1);
-      if ( status >= 0 )
-        break;
-      if ( status == -1 ) {
-         fix_syscall_errno();    /* in case of newlib */
-          if (errno == EINTR)
-              continue;
-          perror("shm lock");
-          rtems_fatal_error_occurred(RTEMS_UNSATISFIED);
-      }
-    }
+  _CPU_SHM_Lock( lq_cb->lock );
 }
 
 /*
@@ -91,28 +65,10 @@ void Shm_Unlock(
   Shm_Locked_queue_Control *lq_cb
 )
 {
-    rtems_unsigned32   isr_level;
-    struct sembuf      sb;
-    int                status;
+  rtems_unsigned32   isr_level;
 
-    sb.sem_num = lq_cb->lock;
-    sb.sem_op  = 1;
-    sb.sem_flg = 0;
+  _CPU_SHM_Unlock( lq_cb->lock );
 
-    while (1) {
-      status = semop(semid, &sb, 1);
-      if ( status >= 0 )
-        break;
-
-      if ( status == -1 ) {
-          fix_syscall_errno();    /* in case of newlib */
-          if (errno == EINTR)
-              continue;
-          perror("shm unlock");
-          rtems_fatal_error_occurred(RTEMS_UNSATISFIED);
-      }
-    }
-
-    isr_level = Shm_isrstat;
-    rtems_interrupt_enable( isr_level );
+  isr_level = Shm_isrstat;
+  rtems_interrupt_enable( isr_level );
 }

@@ -18,14 +18,15 @@
  *  $Id$
  */
 
-#include <rtems.h>
-
 #include <bsp.h>
 #include <shm.h>
 
 void Shm_setvec( void )
 {
-#ifdef INTERRUPT_EXTERNAL_MPCI
-  set_vector( Shm_isr, INTERRUPT_EXTERNAL_MPCI, 1 );
-#endif
+  int vector;
+
+  vector = _CPU_SHM_Get_vector();
+
+  if ( vector )
+    set_vector( Shm_isr, vector, 1 );
 }

@@ -31,6 +31,8 @@ extern "C" {
 #include <rtems/score/unixtypes.h>
 #endif
 
+#include <rtems/score/unixsize.h>
+
 #if defined(solaris2)
 #undef  _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 3
@@ -41,10 +43,6 @@ extern "C" {
 #if defined(linux)
 #define MALLOC_0_RETURNS_NULL
 #endif
-
-#include <unistd.h>
-#include <setjmp.h>
-#include <signal.h>
 
 /* conditional compilation parameters */
 
@@ -431,9 +429,17 @@ extern "C" {
  *  a debugger such as gdb.  But that is another problem.
  */
 
+/*
+ *  This is really just the area for the following fields.
+ *
+ *    jmp_buf   regs;
+ *    sigset_t  isr_level;
+ *
+ *  Doing it this way avoids conflicts between the native stuff and the
+ *  RTEMS stuff.
+ */
 typedef struct {
-  jmp_buf   regs;
-  sigset_t  isr_level;
+  char      Area[ CPU_CONTEXT_SIZE_IN_BYTES ];
 } Context_Control;
 
 typedef struct {
@@ -967,6 +973,42 @@ static inline unsigned int CPU_swap_u32(
   swapped = (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
   return( swapped );
 }
+
+/*
+ *  Special Purpose Routines to hide the use of UNIX system calls.
+ */
+
+int _CPU_Get_clock_vector( void );
+
+void _CPU_Start_clock( 
+  int microseconds
+);
+
+void _CPU_Stop_clock( void );
+
+void _CPU_SHM_Init( 
+  unsigned32   maximum_nodes,
+  boolean      is_master_node,
+  void       **shm_address,
+  unsigned32  *shm_length
+);
+
+int _CPU_Get_pid( void );
+ 
+int _CPU_SHM_Get_vector( void );
+ 
+void _CPU_SHM_Send_interrupt(
+  int pid,
+  int vector
+);
+ 
+void _CPU_SHM_Lock( 
+  int semaphore
+);
+
+void _CPU_SHM_Unlock(
+  int semaphore
+);
 
 #ifdef __cplusplus
 }

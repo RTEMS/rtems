@@ -19,18 +19,15 @@
  *  $Id$
  */
 
-#include <rtems.h>
+#include <bsp.h>
 #include <shm.h>
 
-#include <stdio.h>
-#include <signal.h>
- 
 void Shm_Cause_interrupt_unix(
   rtems_unsigned32 node
 )
 {
-    Shm_Interrupt_information *intr;
-    intr = &Shm_Interrupt_table[node];
+  Shm_Interrupt_information *intr;
+  intr = &Shm_Interrupt_table[node];
  
-    kill((pid_t) intr->address, intr->value);
+  _CPU_SHM_Send_interrupt( (int) intr->address, (int) intr->value );
 }

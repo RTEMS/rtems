@@ -19,8 +19,6 @@
  *  $Id$
  */
 
-#include <rtems.h>
-
 #include <bsp.h>
 #include <shm.h>
 

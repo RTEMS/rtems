@@ -14,7 +14,6 @@
  *  $Id$
  */
 
-#include <rtems.h>
 #include <bsp.h>
 #include <clockdrv.h>
 

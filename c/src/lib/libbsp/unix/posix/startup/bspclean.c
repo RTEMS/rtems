@@ -19,7 +19,6 @@
  *  $Id$
  */
 
-#include <rtems.h>
 #include <bsp.h>
 
 #include <stdio.h>
@@ -30,13 +29,13 @@
 
 void bsp_cleanup( void )
 {
-    /*
-     * Invoke any fatal error extension and "halt"
-     * By definition, rtems_fatal_error_occurred does not return.
-     */
+  /*
+   * Invoke any fatal error extension and "halt"
+   * By definition, rtems_fatal_error_occurred does not return.
+   */
 
-fflush(stdout);
-fflush(stderr);
+  fflush(stdout);
+  fflush(stderr);
 
-    rtems_fatal_error_occurred(0);
+  rtems_fatal_error_occurred(0);
 }
