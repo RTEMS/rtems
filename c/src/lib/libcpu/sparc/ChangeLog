@@ -1,3 +1,11 @@
+2003-01-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+	
+	* include/erc32.h: Remove (Unused).
+	* include/Makefile.am: Remove.
+	* include/.cvsignore: Remove (Obsolete).
+	* Makefile.am: Reflect changes above.
+	* configure.ac: Reflect changes above.
+
 2002-12-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 	
 	* cache/Makefile.am: Don't include @RTEMS_BSP@.cfg.

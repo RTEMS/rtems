@@ -33,7 +33,6 @@ AM_CONDITIONAL(has_instruction_cache, test "$RTEMS_CPU_MODEL" = "leon1" \
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 cache/Makefile
-include/Makefile
 reg_win/Makefile
 syscall/Makefile])
 AC_OUTPUT
