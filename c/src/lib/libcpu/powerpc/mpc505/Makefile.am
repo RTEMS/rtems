@@ -44,7 +44,7 @@ CLEANDIRS += timer/o-optimize timer/o-debug
 noinst_DATA += timer/$(ARCH)/timer.rel
 
 ## vector
-vectors_S_FILES = vectors.S
+vectors_S_FILES = vectors/vectors.S
 EXTRA_DIST += $(vectors_S_FILES)
 
 vectors_rel_OBJECTS = \

@@ -25,7 +25,7 @@ include/$(ARCH)/libcpuspec.a: $(libcpuspec_OBJS)
 	$(make-library)
 CLEANDIRS = include/o-optimize include/o-debug
 
-EXTRA_DIST = libcpuspec_C_FILES
+EXTRA_DIST = $(libcpuspec_C_FILES)
 
 # src
 
