@@ -31,7 +31,7 @@ This is the base for gdb regardless of target CPU.
 %dir %{_prefix}/man
 %dir %{_prefix}/man/man1
 
-%dir %{_prefix}/include
+# %dir %{_prefix}/include
 # We install libbfd from binutils
 # %{_prefix}/include/bfd.h
 # %{_prefix}/include/bfdlink.h

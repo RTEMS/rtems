@@ -13,9 +13,10 @@ Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 Version:      %{gdb_version}
 Summary:      gdb for target %{gdb_version}
 Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-%{gdb_version}.tar.gz
-Patch0:	      gdb-%{gdb_version}-rtems-base-@gdb_patch_version@.diff
-Patch1:	      gdb-%{gdb_version}-rtems-cg-@gdb_patch_version@.diff
-Patch2:	      gdb-%{gdb_version}-rtems-rdbg-@gdb_patch_version@.diff
+Patch0:	      gdb-%{gdb_version}-rtems-@gdb_patch_version@.diff
+# Patch0:	      gdb-%{gdb_version}-rtems-base-@gdb_patch_version@.diff
+# Patch1:	      gdb-%{gdb_version}-rtems-cg-@gdb_patch_version@.diff
+# Patch2:	      gdb-%{gdb_version}-rtems-rdbg-@gdb_patch_version@.diff
 
 %if "%{_vendor}" == "redhat"
 BuildPreReq:	ncurses-devel
@@ -56,8 +57,8 @@ This is the GNU gdb for RTEMS targetting %{gdb_version}.
 
 cd gdb-%{gdb_version}
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
+# %patch1 -p1
+# %patch2 -p1
 
 %build
 %if "%_sim" == "1"
