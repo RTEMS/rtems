@@ -115,7 +115,7 @@ rtems_task Last_task(
   overhead = Read_timer();
 
   put_time(
-    "rtems_task_set_priority (preemptive)",
+    "rtems_task_set_priority: preempts caller",
     end_time,
     OPERATION_COUNT,
     overhead,

@@ -139,7 +139,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_semaphore_release (preemptive)",
+    "rtems_semaphore_release: task readied -- preempts caller",
     end_time,
     OPERATION_COUNT,
     0,

@@ -137,7 +137,7 @@ rtems_task Task_1(
   end_time = Read_timer();
 
   put_time(
-    "rtems_partition_get_buffer (available)",
+    "rtems_partition_get_buffer: available",
     end_time,
     1,
     0,
@@ -162,7 +162,7 @@ rtems_task Task_1(
   end_time = Read_timer();
 
   put_time(
-    "rtems_partition_get_buffer (not available)",
+    "rtems_partition_get_buffer: not available",
     end_time,
     1,
     0,
@@ -223,7 +223,7 @@ rtems_task Task_1(
   end_time = Read_timer();
 
   put_time(
-    "rtems_region_get_segment (available)",
+    "rtems_region_get_segment: available",
     end_time,
     1,
     0,
@@ -241,7 +241,7 @@ rtems_task Task_1(
   end_time = Read_timer();
 
   put_time(
-    "rtems_region_get_segment (RTEMS_NO_WAIT)",
+    "rtems_region_get_segment: not available -- NO_WAIT",
     end_time,
     1,
     0,
@@ -256,7 +256,7 @@ rtems_task Task_1(
   end_time = Read_timer();
 
   put_time(
-    "rtems_region_return_segment (no tasks waiting)",
+    "rtems_region_return_segment: no waiting tasks",
     end_time,
     1,
     0,
@@ -286,7 +286,7 @@ rtems_task Task_1(
   end_time = Read_timer();
 
   put_time(
-    "rtems_region_return_segment (preempt)",
+    "rtems_region_return_segment: task readied -- preempts caller",
     end_time,
     1,
     0,
@@ -437,7 +437,7 @@ rtems_task Task_2(
   end_time = Read_timer();
 
   put_time(
-    "rtems_region_get_segment (blocking)",
+    "rtems_region_get_segment: not available -- caller blocks",
     end_time,
     1,
     0,
@@ -454,7 +454,7 @@ rtems_task Task_2(
   end_time = Read_timer();
 
   put_time(
-    "rtems_region_return_segment (ready -- return)",
+    "rtems_region_return_segment: task readied -- returns to caller",
     end_time,
     1,
     0,

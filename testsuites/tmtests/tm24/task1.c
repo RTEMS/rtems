@@ -85,7 +85,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_wake_after (no context switch)",
+    "rtems_task_wake_after: yield -- returns to caller",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -110,7 +110,7 @@ rtems_task Tasks(
     end_time = Read_timer();
 
     put_time(
-      "rtems_task_wake_after (context switch)",
+      "rtems_task_wake_after: yields -- preempts caller",
       end_time,
       OPERATION_COUNT,
       overhead,

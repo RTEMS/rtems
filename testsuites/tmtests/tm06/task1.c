@@ -88,7 +88,7 @@ rtems_task Task_1(
   overhead = Read_timer();
 
   put_time(
-    "rtems_task_restart self",
+    "rtems_task_restart: calling task",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -116,7 +116,7 @@ rtems_task Task_1(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_suspend (no preempt)",
+    "rtems_task_suspend: returns to caller",
     end_time,
     OPERATION_COUNT,
     0,
@@ -129,7 +129,7 @@ rtems_task Task_1(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_resume (no preempt)",
+    "rtems_task_resume: task readied -- returns to caller",
     end_time,
     OPERATION_COUNT,
     0,
@@ -142,7 +142,7 @@ rtems_task Task_1(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_delete (others)",
+    "rtems_task_delete: ready task",
     end_time,
     OPERATION_COUNT,
     0,

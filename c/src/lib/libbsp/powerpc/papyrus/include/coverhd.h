@@ -26,7 +26,7 @@
  */
 
 /*
- *  Updated for a 25MHz Papyrus by Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Updated for a 25MHz Papyrus by Andrew Bray <andy@i-cubed.co.uk>
  *
  *  Units are 100ns.
  *

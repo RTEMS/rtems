@@ -100,7 +100,7 @@ rtems_task Last_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_delete self",
+    "rtems_task_delete: calling task",
     end_time,
     OPERATION_COUNT,
     0,

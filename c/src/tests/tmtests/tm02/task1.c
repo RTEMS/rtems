@@ -146,7 +146,7 @@ rtems_task Low_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_semaphore_obtain (blocking)",
+    "rtems_semaphore_obtain: not available -- caller blocks",
     end_time,
     OPERATION_COUNT,
     0,

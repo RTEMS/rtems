@@ -1,7 +1,7 @@
 /*
  *  PowerPC CPU Dependent Source
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -33,14 +33,11 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/context.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
 
 /*
  *  These are for testing purposes.
  */
-/*
-#define Testing
-*/
+#undef Testing
 
 #ifdef Testing
 static unsigned32 msr;
@@ -100,10 +97,10 @@ void _CPU_Initialize(
   _CPU_IRQ_info.Signal = &_ISR_Signals_to_thread_executing;
 
   i = (int)&_CPU_IRQ_info;
-  asm volatile("mtsprg3 %0" : "=r" (i) : "0" (i));
+  asm volatile("mtspr 0x113, %0" : "=r" (i) : "0" (i)); /* SPRG 3 */
 
   i = PPC_MSR_INITIAL & ~PPC_MSR_DISABLE_MASK;
-  asm volatile("mtsprg2 %0" : "=r" (i) : "0" (i));
+  asm volatile("mtspr 0x112, %0" : "=r" (i) : "0" (i)); /* SPRG 2 */
 
 #ifdef Testing
   {
@@ -112,11 +109,11 @@ void _CPU_Initialize(
     asm volatile ("mfmsr %0" : "=r" (tmp));
     msr = tmp;
 #ifdef ppc403
-    asm volatile ("mfevpr %0" : "=r" (tmp));
+    asm volatile ("mfspr %0, 0x3d6" : "=r" (tmp)); /* EVPR */
     evpr = tmp;
-    asm volatile ("mfexier %0" : "=r" (tmp));
+    asm volatile ("mfdcr %0, 0x42" : "=r" (tmp)); /* EXIER */
     exier = tmp;
-    asm volatile ("mtevpr %0" :: "r" (0));
+    asm volatile ("mtspr 0x3d6, %0" :: "r" (0)); /* EVPR */
 #endif
   }
 #endif
@@ -128,6 +125,40 @@ void _CPU_Initialize(
     _ISR_Vector_table[i] = handler;
 
   _CPU_Table = *cpu_table;
+}
+
+/*PAGE
+ *
+ *  _CPU_ISR_Get_level
+ *
+ *  COMMENTS FROM Andrew Bray <andy@i-cubed.co.uk>:
+ *
+ *  The PowerPC puts its interrupt enable status in the MSR register
+ *  which also contains things like endianness control.  To be more
+ *  awkward, the layout varies from processor to processor.  This
+ *  is why I adopted a table approach in my interrupt handling.
+ *  Thus the inverse process is slow, because it requires a table
+ *  search.
+ *
+ *  This could fail, and return 4 (an invalid level) if the MSR has been
+ *  set to a value not in the table.  This is also quite an expensive
+ *  operation - I do hope its not too common.
+ *
+ */
+ 
+unsigned32 _CPU_ISR_Get_level( void )
+{
+  unsigned32 level, msr;
+ 
+  asm volatile("mfmsr %0" : "=r" ((msr)));
+ 
+  msr &= PPC_MSR_DISABLE_MASK;
+ 
+  for (level = 0; level < 4; level++)
+    if ((_CPU_msrs[level] & PPC_MSR_DISABLE_MASK) == msr)
+      break;
+ 
+  return level;
 }
 
 /*  _CPU_ISR_install_vector
@@ -163,11 +194,10 @@ void _CPU_ISR_install_vector(
     *  be used by the _ISR_Handler so the user gets control.
     */
 
-    _ISR_Vector_table[ vector ] = 
-       (new_handler) ? (ISR_Handler_entry) new_handler :
-       ((_CPU_Table.spurious_handler) ? 
-          (ISR_Handler_entry) _CPU_Table.spurious_handler :
-          (ISR_Handler_entry) ppc_spurious);
+    _ISR_Vector_table[ vector ] = new_handler ? (ISR_Handler_entry)new_handler :
+       _CPU_Table.spurious_handler ? 
+          (ISR_Handler_entry)_CPU_Table.spurious_handler :
+          (ISR_Handler_entry)ppc_spurious;
 }
 
 /*PAGE
@@ -196,19 +226,19 @@ static void ppc_spurious(int v, CPU_Interrupt_frame *i)
 	{
 	    register int r = 0;
 
-	    asm volatile("mtexier %0" : "=r" ((r)) : "0" ((r)));
+	    asm volatile("mtdcr 0x42, %0" : "=r" ((r)) : "0" ((r))); /* EXIER */
 	}
     else if (v == PPC_IRQ_PIT)
 	{
 	    register int r = 0x08000000;
 
-	    asm volatile("mttsr %0" : "=r" ((r)) : "0" ((r)));
+	    asm volatile("mtspr 0x3d8, %0" : "=r" ((r)) : "0" ((r))); /* TSR */
 	}
     else if (v == PPC_IRQ_FIT)
 	{
 	    register int r = 0x04000000;
 
-	    asm volatile("mttsr %0" : "=r" ((r)) : "0" ((r)));
+	    asm volatile("mtspr 0x3d8, %0" : "=r" ((r)) : "0" ((r))); /* TSR */
 	}
 #endif
 }
@@ -222,9 +252,9 @@ void _CPU_Fatal_error(unsigned32 _error)
   asm volatile ("mtmsr %0" :: "r" (tmp));
 #ifdef ppc403
   tmp = evpr;
-  asm volatile ("mtevpr %0" :: "r" (tmp));
+  asm volatile ("mtspr 0x3d6, %0" :: "r" (tmp)); /* EVPR */
   tmp = exier;
-  asm volatile ("mtexier %0" :: "r" (tmp));
+  asm volatile ("mtdcr 0x42, %0" :: "r" (tmp)); /* EXIER */
 #endif
 #endif
   asm volatile ("mr 3, %0" : : "r" ((_error)));

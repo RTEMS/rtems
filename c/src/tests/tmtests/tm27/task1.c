@@ -104,7 +104,7 @@ rtems_task Task_1(
   Interrupt_return_time = Read_timer();
 
   put_time(
-    "INTERRUPT_ENTER (no preempt)",
+    "interrupt entry overhead: returns to interrupted task",
     Interrupt_enter_time,
     1,
     0,
@@ -112,7 +112,7 @@ rtems_task Task_1(
   );
 
   put_time(
-    "INTERRUPT_RETURN (no preempt)",
+    "interrupt exit overhead: returns to interrupted task",
     Interrupt_return_time,
     1,
     0,
@@ -138,7 +138,7 @@ rtems_task Task_1(
   Interrupt_return_time = Read_timer();
 
   put_time(
-    "INTERRUPT_ENTER (nested interrupt)",
+    "interrupt entry overhead: returns to nested interrupt",
     Interrupt_enter_nested_time,
     1,
     0,
@@ -146,7 +146,7 @@ rtems_task Task_1(
   );
 
   put_time(
-    "INTERRUPT_RETURN (nested interrupt)",
+    "interrupt exit overhead: returns to nested interrupt",
     Interrupt_return_nested_time,
     1,
     0,
@@ -193,7 +193,7 @@ rtems_task Task_2(
   end_time = Read_timer();
 
   put_time(
-    "INTERRUPT_ENTER (preempt)",
+    "interrupt entry overhead: returns to preempting task",
     Interrupt_enter_time,
     1,
     0,
@@ -201,7 +201,7 @@ rtems_task Task_2(
   );
 
   put_time(
-    "INTERRUPT_RETURN (preempt)",
+    "interrupt exit overhead: returns to preempting task",
     end_time,
     1,
     0,

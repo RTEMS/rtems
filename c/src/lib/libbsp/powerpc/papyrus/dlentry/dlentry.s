@@ -3,7 +3,7 @@
  *  This file contains the entry veneer for RTEMS programs
  *  downloaded to Papyrus.
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -223,8 +223,8 @@ bss_addr:
 	stw	r3, 4(r1)
 	stw	r3, 8(r1)
 	stw	r3, 12(r1)
-        .extern .main
-        b       .main          		 /* call the first C routine */
+        .extern SYM (main)
+        b       SYM (main)          		 /* call the first C routine */
 
 /*-------------------------------------------------------------------------------
  * bssclr.

@@ -105,7 +105,7 @@ void test_init()
   end_time = Read_timer();
 
   put_time(
-    "rtems_message_queue_receive (RTEMS_NO_WAIT)",
+    "rtems_message_queue_receive: not available -- NO_WAIT",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -153,7 +153,7 @@ rtems_task Low_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_message_queue_receive (blocking)",
+    "rtems_message_queue_receive: not available -- caller blocks",
     end_time,
     OPERATION_COUNT,
     0,

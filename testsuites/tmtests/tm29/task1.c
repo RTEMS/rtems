@@ -57,7 +57,7 @@ rtems_task Init(
   end_time = Read_timer();
 
   put_time(
-    "rtems_rate_monotonic_period (initial)",
+    "rtems_rate_monotonic_period: initiate period -- returns to caller",
     end_time,
     1,
     0,
@@ -69,7 +69,7 @@ rtems_task Init(
   end_time = Read_timer();
 
   put_time(
-    "rtems_rate_monotonic_period (STATUS)",
+    "rtems_rate_monotonic_period: obtain status",
     end_time,
     1,
     0,
@@ -93,7 +93,7 @@ rtems_task Init(
   end_time = Read_timer();
 
   put_time(
-    "rtems_rate_monotonic_delete (cancelled)",
+    "rtems_rate_monotonic_delete: inactive",
     end_time,
     1,
     0,
@@ -111,7 +111,7 @@ rtems_task Init(
   end_time = Read_timer();
 
   put_time(
-    "rtems_rate_monotonic_delete (active)",
+    "rtems_rate_monotonic_delete: active",
     end_time,
     1,
     0,
@@ -195,7 +195,7 @@ rtems_task Low_task(
   overhead = Read_timer();
 
   put_time(
-    "rtems_rate_monotonic_period (blocking)",
+    "rtems_rate_monotonic_period: conclude periods -- caller blocks",
     end_time,
     OPERATION_COUNT,
     overhead,

@@ -94,7 +94,7 @@ rtems_task Highest_task(
     end_time = Read_timer();
 
     put_time(
-      "rtems_task_restart (blocked, preempt)",
+      "rtems_task_restart: blocked task -- preempts caller",
       end_time,
       1,
       0,
@@ -113,7 +113,7 @@ rtems_task Highest_task(
   end_time = Read_timer();
 
     put_time(
-      "rtems_task_restart (ready, preempt)",
+      "rtems_task_restart: ready task -- preempts caller",
       end_time,
       1,
       0,
@@ -160,7 +160,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_semaphore_release (readying)",
+    "rtems_semaphore_release: task readied -- returns to caller",
     end_time,
     OPERATION_COUNT,
     0,
@@ -237,7 +237,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_restart (suspended)",
+    "rtems_task_restart: suspended task -- returns to caller",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -253,7 +253,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_delete (suspended)",
+    "rtems_task_delete: suspended task",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -281,7 +281,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_restart (ready)",
+    "rtems_task_restart: ready task -- returns to caller",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -303,7 +303,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_restart (blocked, no preempt)",
+    "rtems_task_restart: blocked task -- returns to caller",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -320,7 +320,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_delete (blocked)",
+    "rtems_task_delete: blocked task",
     end_time,
     OPERATION_COUNT,
     overhead,

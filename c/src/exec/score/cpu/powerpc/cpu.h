@@ -3,7 +3,7 @@
  *  This include file contains information pertaining to the PowerPC
  *  processor.
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -495,6 +495,10 @@ EXTERN void               *_CPU_Interrupt_stack_high;
  */
 
 EXTERN struct {
+  unsigned32 *Nest_level;
+  unsigned32 *Disable_level;
+  void *Vector_table;
+  void *Stack;
 #if (PPC_ABI == PPC_ABI_POWEROPEN)
   unsigned32 Dispatch_r2;
 #else
@@ -503,10 +507,6 @@ EXTERN struct {
   unsigned32 Default_r13;
 #endif
 #endif
-  unsigned32 *Nest_level;
-  unsigned32 *Disable_level;
-  void *Vector_table;
-  void *Stack;
   boolean *Switch_necessary;
   boolean *Signal;
 } _CPU_IRQ_info CPU_STRUCTURE_ALIGNMENT;
@@ -541,7 +541,7 @@ EXTERN struct {
  *  by RTEMS.
  */
 
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS      (PPC_INTERRUPT_MAX)
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS  (PPC_INTERRUPT_MAX)
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /*
@@ -570,7 +570,7 @@ EXTERN struct {
  *         be greater or equal to than CPU_ALIGNMENT.
  */
 
-#define CPU_HEAP_ALIGNMENT         (PPC_CACHE_ALIGNMENT)
+#define CPU_HEAP_ALIGNMENT         (PPC_ALIGNMENT)
 
 /*
  *  This number corresponds to the byte alignment requirement for memory
@@ -584,7 +584,7 @@ EXTERN struct {
  *         be greater or equal to than CPU_ALIGNMENT.
  */
 
-#define CPU_PARTITION_ALIGNMENT    (PPC_CACHE_ALIGNMENT)
+#define CPU_PARTITION_ALIGNMENT    (PPC_ALIGNMENT)
 
 /*
  *  This number corresponds to the byte alignment requirement for the
@@ -603,6 +603,8 @@ EXTERN struct {
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _level.
  */
+
+#define loc_string(a,b)	a " (" #b ")\n"
 
 #define _CPU_ISR_Disable( _isr_cookie ) \
   { \
@@ -660,6 +662,8 @@ EXTERN struct {
 	"r" ((PPC_MSR_DISABLE_MASK)), "r" ((_CPU_msrs[new_level])), "0" ((tmp)) \
 	); \
   }
+
+unsigned32 _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
@@ -817,11 +821,11 @@ EXTERN struct {
  *
  *  RTEMS guarantees that (1) will never happen so it is not a concern.
  *  (2),(3), (4) are handled by the macros _CPU_Priority_mask() and
- *  _CPU_Priority_bits_index().  These three form a set of routines
+ *  _CPU_Priority_Bits_index().  These three form a set of routines
  *  which must logically operate together.  Bits in the _value are
  *  set and cleared based on masks built by _CPU_Priority_mask().
  *  The basic major and minor values calculated by _Priority_Major()
- *  and _Priority_Minor() are "massaged" by _CPU_Priority_bits_index()
+ *  and _Priority_Minor() are "massaged" by _CPU_Priority_Bits_index()
  *  to properly range between the values returned by the "find first bit"
  *  instruction.  This makes it possible for _Priority_Get_highest() to
  *  calculate the major and directly index into the minor table.
@@ -855,9 +859,6 @@ EXTERN struct {
  *    where bit_set_table[ 16 ] has values which indicate the first
  *      bit set
  */
-
-#define CPU_USE_GENERIC_BITFIELD_CODE FALSE
-#define CPU_USE_GENERIC_BITFIELD_DATA FALSE
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \

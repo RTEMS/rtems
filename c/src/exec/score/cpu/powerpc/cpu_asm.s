@@ -1,9 +1,10 @@
-/*  cpu_asm.s	1.0 - 95/08/08
+
+/*  cpu_asm.s	1.1 - 95/12/04
  *
  *  This file contains the assembly code for the PowerPC implementation
  *  of RTEMS.
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -671,9 +672,6 @@ PROC (_CPU_Context_restore):
 	blr
 
 /*  Individual interrupt prologues look like this:
- *	mtsprg{0,1} r0
- *	mfsprg2 r0
- *	mtmsr   r0
  * #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
  * #if (PPC_HAS_FPU)
  *	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
@@ -683,7 +681,6 @@ PROC (_CPU_Context_restore):
  * #else
  *	stwu	r1, -(IP_END)(r1)
  * #endif
- *	mfsprg{0,1} r0
  *	stw	r0, IP_0(r1)
  *
  *	li      r0, vectornum
@@ -700,8 +697,12 @@ PROC (_CPU_Context_restore):
 	PUBLIC_PROC (_ISR_Handler)
 PROC (_ISR_Handler):
 #define LABEL(x)	x
-#define MTSAVE(x)	mtsprg0	x
-#define MFSAVE(x)	mfsprg0	x
+#define MTSAVE(x)	mtspr	sprg0, x
+#define MFSAVE(x)	mfspr	x, sprg0
+#define MTPC(x)		mtspr	srr0, x
+#define MFPC(x)		mfspr	x, srr0
+#define MTMSR(x)	mtspr	srr1, x
+#define MFMSR(x)	mfspr	x, srr1
 	#include	"irq_stub.s"
 	rfi
 
@@ -718,9 +719,17 @@ PROC (_ISR_HandlerC):
 #undef	LABEL
 #undef	MTSAVE
 #undef	MFSAVE
+#undef	MTPC
+#undef	MFPC
+#undef	MTMSR
+#undef	MFMSR
 #define LABEL(x)	x##_C
-#define MTSAVE(x)	mtsprg1	x
-#define MFSAVE(x)	mfsprg1	x
+#define MTSAVE(x)	mtspr	sprg1, x
+#define MFSAVE(x)	mfspr	x, sprg1
+#define MTPC(x)		mtspr	srr2, x
+#define MFPC(x)		mfspr	x, srr2
+#define MTMSR(x)	mtspr	srr3, x
+#define MFMSR(x)	mfspr	x, srr3
 	#include	"irq_stub.s"
 	rfci
 #endif

@@ -44,5 +44,17 @@
 #define _Thread_queue_Get_number_waiting( _the_thread_queue ) \
   ( (_the_thread_queue)->count )
 
+/*PAGE
+ *
+ *  _Thread_queue_Enter_critical_section
+ *
+ */
+ 
+#define _Thread_queue_Enter_critical_section( _the_thread_queue ) \
+  do { \
+    (_the_thread_queue)->sync = TRUE; \
+    (_the_thread_queue)->sync_state = THREAD_QUEUE_NOTHING_HAPPENED; \
+  } while ( 0 )
+
 #endif
 /* end of include file */

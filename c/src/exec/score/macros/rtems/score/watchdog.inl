@@ -84,12 +84,11 @@
  *
  */
 
-#define _Watchdog_Insert_ticks( _the_watchdog, _units, _insert_mode ) \
-  { \
+#define _Watchdog_Insert_ticks( _the_watchdog, _units ) \
+  do { \
     (_the_watchdog)->initial = (_units); \
-    _Watchdog_Insert( &_Watchdog_Ticks_chain, \
-                        (_the_watchdog), (_insert_mode) ); \
-  }
+    _Watchdog_Insert( &_Watchdog_Ticks_chain, (_the_watchdog) ); \
+  } while ( 0 )
 
 /*PAGE
  *
@@ -97,12 +96,11 @@
  *
  */
 
-#define _Watchdog_Insert_seconds( _the_watchdog, _units, _insert_mode ) \
-  { \
+#define _Watchdog_Insert_seconds( _the_watchdog, _units ) \
+  do { \
     (_the_watchdog)->initial = (_units); \
-    _Watchdog_Insert( &_Watchdog_Seconds_chain, \
-                        (_the_watchdog), (_insert_mode) ); \
-  }
+    _Watchdog_Insert( &_Watchdog_Seconds_chain, (_the_watchdog) ); \
+  } while ( 0 )
 
 /*PAGE
  *
@@ -131,8 +129,7 @@
 #define _Watchdog_Reset( _the_watchdog ) \
    { \
      (void) _Watchdog_Remove( (_the_watchdog) ); \
-     _Watchdog_Insert( &_Watchdog_Ticks_chain, \
-                         (_the_watchdog), WATCHDOG_ACTIVATE_NOW ); \
+     _Watchdog_Insert( &_Watchdog_Ticks_chain, (_the_watchdog) ); \
    }
 
 /*PAGE

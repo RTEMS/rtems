@@ -161,7 +161,7 @@ rtems_task Test_task(
   }
 
   put_time(
-    "rtems_semaphore_obtain",
+    "rtems_semaphore_obtain: available",
     semaphore_obtain_time,
     OPERATION_COUNT * OPERATION_COUNT,
     semaphore_obtain_loop_time,
@@ -169,7 +169,7 @@ rtems_task Test_task(
   );
 
   put_time(
-    "rtems_semaphore_obtain (RTEMS_NO_WAIT)",
+    "rtems_semaphore_obtain: not available -- NO_WAIT",
     semaphore_obtain_no_wait_time,
     OPERATION_COUNT * OPERATION_COUNT,
     semaphore_obtain_loop_time,
@@ -177,7 +177,7 @@ rtems_task Test_task(
   );
 
   put_time(
-    "rtems_semaphore_release",
+    "rtems_semaphore_release: no waiting tasks",
     semaphore_release_time,
     OPERATION_COUNT * OPERATION_COUNT * 2,
     semaphore_release_loop_time * 2,

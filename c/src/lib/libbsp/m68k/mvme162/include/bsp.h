@@ -1,6 +1,6 @@
 /*  bsp.h
  *
- *  This include file contains all MVME162 board IO definitions.
+ *  This include file contains all MVME162fx board IO definitions.
  *
  *  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
  *  On-Line Applications Research Corporation (OAR).
@@ -165,6 +165,13 @@ typedef volatile struct mcchip_regs {
  * Prototypes for the low-level serial io are also included here,
  * because such stuff is bsp-specific (yet). The function bodies
  * are in console.c
+ *
+ * NOTE from Eric Vaitl <evaitl@viasat.com>:
+ *
+ * I dropped RTEMS into a 162FX today (the MVME162-513). The 162FX has a 
+ * bug in the MC2 chip (revision 1) such that the SCC data register is 
+ * not accessible, it has to be accessed indirectly through the SCC 
+ * control register. 
  */
 
 enum {portB, portA};
@@ -190,10 +197,11 @@ typedef volatile struct scc_regs {
 #define ZREAD0(port)  (scc[port].csr)
 
 #define ZREAD(port, n)  (ZWRITE0(port, n), (scc[port].csr))
-#define ZREADD(port)  (scc[port].buf)
+#define ZREADD(port)  (scc[port].csr=0x08, scc[port].csr )
 
 #define ZWRITE(port, n, v) (ZWRITE0(port, n), ZWRITE0(port, v))
-#define ZWRITED(port, v)  (scc[port].buf = (unsigned char)(v))
+#define ZWRITED(port, v)  (scc[port].csr = 0x08, \
+                           scc[port].csr = (unsigned char)(v))
 /*----------------------------------------------------------------*/
 
 /*

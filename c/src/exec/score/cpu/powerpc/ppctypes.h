@@ -3,7 +3,7 @@
  *  This include file contains type definitions pertaining to the PowerPC
  *  processor family.
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *

@@ -188,7 +188,7 @@ int main(
 
   lcsr->vector_base = (VBR0 << 28) | (VBR1 << 24);
 
-  m68k_enable_caching();
+  page_table_init();
 
   /*
    *  we only use a hook to get the C library initialized.

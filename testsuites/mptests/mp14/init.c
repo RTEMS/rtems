@@ -166,7 +166,7 @@ rtems_task Init(
   status = rtems_task_create(
     Partition_task_name[ Multiprocessing_configuration.node ],
     2,
-    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_MINIMUM_STACK_SIZE * 2,
     RTEMS_TIMESLICE,
     RTEMS_GLOBAL,
     &Partition_task_id[ 1 ]

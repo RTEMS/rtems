@@ -119,7 +119,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_message_queue_send (readying)",
+    "rtems_message_queue_send: task readied -- returns to caller",
     end_time,
     OPERATION_COUNT,
     overhead,

@@ -28,6 +28,25 @@ any case I am ready to answer questions regarding the port and intend
 to follow the future RTEMS versions. I will do my best to provide
 whatever support I can afford time-wise.
 
+MVME162FX and DMA on the IP bus
+-------------------------------
+
+From Eric Vaitl <eric@viasat.com>:
+
+If you have any customers that will be using the 162FX, tell them to 
+be careful. The main difference between the 162 and the 162FX is DMA 
+on the IP bus. I spent over a month trying to write a DMA HDLC driver 
+for GreenSprings IP-MP and couldn't get it to work. I talked to some 
+people at GreenSprings, and they agreed that there really is no way to 
+get DMA to work unless you know the size of the packets in advance. 
+Once the IP2 chip DMA controller is given the character count and 
+enabled, it doesn't accept further commands until all of the 
+characters have arrived. The only way to terminate a DMA transfer 
+prematurely is by raising DMAEND* during the last read. None of the IP 
+modules that I know of are currently able to do that. GreenSprings is 
+working on the problem, but nothing is going to available for a few 
+months. 
+
 Installation
 ------------
 Nothing unique to the MVME162.  It has been incorporated into the

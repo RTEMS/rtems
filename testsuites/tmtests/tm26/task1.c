@@ -173,7 +173,7 @@ rtems_task High_task(
   end_time = Read_timer();
  
   put_time(
-    "INTERRUPT DISABLE",
+    "_ISR_Disable",
     end_time,
     1,
     0,
@@ -185,7 +185,7 @@ rtems_task High_task(
   end_time = Read_timer();
  
   put_time(
-    "INTERRUPT FLASH",
+    "_ISR_Flash",
     end_time,
     1,
     0,
@@ -197,7 +197,7 @@ rtems_task High_task(
   end_time = Read_timer();
  
   put_time(
-    "INTERRUPT ENABLE",
+    "_ISR_Enable",
     end_time,
     1,
     0,
@@ -209,7 +209,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "THREAD_DISABLE_DISPATCH",
+    "_Thread_Disable_dispatch",
     end_time,
     1,
     0,
@@ -221,7 +221,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "THREAD_ENABLE_DISPATCH",
+    "_Thread_Enable_dispatch",
     end_time,
     1,
     0,
@@ -233,7 +233,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "THREAD_SET_STATE",
+    "_Thread_Set_state",
     end_time,
     1,
     0,
@@ -253,7 +253,7 @@ rtems_task Middle_task(
   end_time = Read_timer();
 
   put_time(
-    "THREAD_DISPATCH (NO FP)",
+    "_Thread_Disptach (NO FP)",
     end_time,
     1,
     0,
@@ -289,7 +289,7 @@ rtems_task Low_task(
   end_time = Read_timer();
 
   put_time(
-    "CONTEXT_SWITCH (NO FP)",
+    "context switch: no floating point contexts",
     end_time,
     1,
     0,
@@ -306,7 +306,7 @@ rtems_task Low_task(
   end_time = Read_timer();
 
   put_time(
-    "CONTEXT_SWITCH (SELF)",
+    "context switch: self",
     end_time,
     1,
     0,
@@ -318,7 +318,7 @@ rtems_task Low_task(
   end_time = Read_timer();
 
   put_time(
-    "CONTEXT_SWITCH (Initialised)",
+    "context switch: to another task",
     end_time,
     1,
     0,
@@ -349,7 +349,7 @@ rtems_task Floating_point_task_1(
   end_time = Read_timer();
 
   put_time(
-    "CONTEXT_SWITCH (restore 1st FP)",
+    "fp context switch: restore 1st FP task",
     end_time,
     1,
     0,
@@ -376,7 +376,7 @@ rtems_task Floating_point_task_1(
   end_time = Read_timer();
 
   put_time(
-    "CONTEXT_SWITCH (used->init FP)",
+    "fp context switch: save idle, restore initialized",
     end_time,
     1,
     0,
@@ -413,7 +413,7 @@ rtems_task Floating_point_task_2(
   end_time = Read_timer();
 
   put_time(
-    "CONTEXT_SWITCH (init->init FP)",
+    "fp context switch: save idle, restore idle",
     end_time,
     1,
     0,
@@ -442,7 +442,7 @@ rtems_task Floating_point_task_2(
   end_time = Read_timer();
 
   put_time(
-    "CONTEXT_SWITCH (used->used FP)",
+    "fp context switch: save initialized, restore initialized",
     end_time,
     1,
     0,
@@ -462,7 +462,7 @@ void complete_test( void )
   end_time = Read_timer();
 
   put_time(
-    "THREAD_RESUME",
+    "_Thread_Resume",
     end_time,
     1,
     0,
@@ -476,7 +476,7 @@ void complete_test( void )
   end_time = Read_timer();
 
   put_time(
-    "THREAD_UNBLOCK",
+    "_Thread_Unblock",
     end_time,
     1,
     0,
@@ -490,7 +490,7 @@ void complete_test( void )
   end_time = Read_timer();
 
   put_time(
-    "THREAD_READY",
+    "_Thread_Ready",
     end_time,
     1,
     0,
@@ -510,7 +510,7 @@ void complete_test( void )
   end_time = Read_timer();
 
   put_time(
-    "THREAD_GET",
+    "_Thread_Get",
     end_time,
     OPERATION_COUNT,
     0,
@@ -523,7 +523,7 @@ void complete_test( void )
   end_time = Read_timer();
 
   put_time(
-    "SEMAPHORE_GET",
+    "_Semaphore_Get",
     end_time,
     OPERATION_COUNT,
     0,
@@ -536,7 +536,7 @@ void complete_test( void )
   end_time = Read_timer();
 
   put_time(
-    "THREAD_GET invalid id",
+    "_Thread_Get: invalid id",
     end_time,
     OPERATION_COUNT,
     0,

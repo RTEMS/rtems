@@ -98,7 +98,7 @@ void test_init()
   end_time = Read_timer();
 
   put_time(
-    "rtems_event_receive (current)",
+    "rtems_event_receive: obtain current events",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -119,7 +119,7 @@ void test_init()
   end_time = Read_timer();
 
   put_time(
-    "rtems_event_receive (RTEMS_NO_WAIT)",
+    "rtems_event_receive: not available -- NO_WAIT",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -137,7 +137,7 @@ rtems_task Low_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_event_receive (blocking)",
+    "rtems_event_receive: not available -- caller blocks",
     end_time,
     OPERATION_COUNT,
     0,
@@ -155,7 +155,7 @@ rtems_task Low_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_event_send (non-blocking)",
+    "rtems_event_send: no task readied",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -172,7 +172,7 @@ rtems_task Low_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_event_receive (available)",
+    "rtems_event_receive: available",
     end_time,
     1,
     0,
@@ -185,7 +185,7 @@ rtems_task Low_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_event_send (readying)",
+    "rtems_event_send: task readied -- returns to caller",
     end_time,
     OPERATION_COUNT,
     overhead,

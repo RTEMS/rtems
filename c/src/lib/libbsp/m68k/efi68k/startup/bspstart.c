@@ -1,4 +1,3 @@
-#define STACK_CHECKER_ON
 /*  bsp_start()
  *
  *  This routine starts the application.  It includes application,

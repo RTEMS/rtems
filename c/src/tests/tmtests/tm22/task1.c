@@ -97,7 +97,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_message_queue_broadcast (readying)",
+    "rtems_message_queue_broadcast: task readied -- returns to caller",
     end_time,
     1,
     0,
@@ -151,7 +151,7 @@ rtems_task Low_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_message_queue_broadcast (no waiting tasks)",
+    "rtems_message_queue_broadcast: no waiting tasks",
     end_time,
     OPERATION_COUNT,
     1,
@@ -171,7 +171,7 @@ rtems_task Low_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_message_queue_broadcast (preempt)",
+    "rtems_message_queue_broadcast: task readied -- preempts caller",
     end_time,
     1,
     0,

@@ -3,7 +3,7 @@
  *  This file contains the entry veneer for RTEMS programs
  *  stored in Papyrus' flash ROM.
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -230,8 +230,10 @@ bss_addr:
          *----------------------------------------------------------------------*/
         addis   r2,r0,0x8000
         addi    r2,r2,0x0001
-        mticcr  r2
-        mtdccr  r2
+
+        mtspr   0x3fb, r2               /* ICCR */
+        mtspr   0x3fa, r2               /* DCCR */
+
         /*-----------------------------------------------------------------------
          * C_setup.
          *----------------------------------------------------------------------*/
@@ -243,8 +245,8 @@ bss_addr:
 	stw	r3, 4(r1)
 	stw	r3, 8(r1)
 	stw	r3, 12(r1)
-        .extern .main
-        b       .main            /* call the first C routine */
+        .extern SYM (main)
+        b       SYM (main)            /* call the first C routine */
 
 /*-------------------------------------------------------------------------------
  * Rom2ram.

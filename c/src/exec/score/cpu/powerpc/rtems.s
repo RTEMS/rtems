@@ -3,7 +3,7 @@
  *  This file contains the single entry point code for
  *  the PowerPC implementation of RTEMS.
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *

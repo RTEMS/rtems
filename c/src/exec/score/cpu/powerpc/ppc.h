@@ -3,7 +3,7 @@
  *  This file contains definitions for the IBM/Motorola PowerPC
  *  family members.
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -92,7 +92,7 @@ extern "C" {
 
 #define PPC_MSR_0		0x00029200
 #define PPC_MSR_1		0x00021200
-#define PPC_MSR_2		0x00001000
+#define PPC_MSR_2		0x00021000
 #define PPC_MSR_3		0x00000000
 
 #elif defined(ppc601)

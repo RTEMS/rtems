@@ -51,9 +51,8 @@
  *
  */
 
-#define _TOD_Activate( ticks ) \
-   _Watchdog_Insert_ticks( &_TOD_Seconds_watchdog, \
-      (ticks), WATCHDOG_ACTIVATE_NOW )
+#define _TOD_Activate( _ticks ) \
+   _Watchdog_Insert_ticks( &_TOD_Seconds_watchdog, (_ticks) )
 
 #endif
 /* end of include file */

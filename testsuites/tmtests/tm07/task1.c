@@ -14,7 +14,7 @@
 #define TEST_INIT
 #include "system.h"
 
-rtems_id Task_id[OPERATION_COUNT+1], task_index;
+rtems_id Task_id[ OPERATION_COUNT+1 ], task_index;
 
 rtems_task High_task(
   rtems_task_argument argument
@@ -84,7 +84,7 @@ rtems_task High_task(
     end_time = Read_timer();
 
     put_time(
-      "rtems_task_restart suspended/preempt",
+      "rtems_task_restart: suspended task -- preempts caller",
       end_time,
       OPERATION_COUNT,
       0,

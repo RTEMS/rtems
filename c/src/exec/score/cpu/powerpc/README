@@ -8,21 +8,9 @@ There are various issues regarding this port:
 
 1) Legal
 
-This port is written by Andrew Bray <andy@i-cubed.demon.co.uk>, and
+This port is written by Andrew Bray <andy@i-cubed.co.uk>, and
 is copyright 1995 i-cubed ltd.
 
-Due to the current lack of a formal release note, this is a limited
-release to OAR, and other specific parties designated by OAR who
-are involved in porting RTEMS to the PowerPC architecture.
-
-This set of release files SHOULD (IMHO) include a cpu specific
-alignment exception handler.  Ours is derived from IBM sample
-code.  I am seeking a release from IBM for this file.  In the
-mean time this file is excluded (but still included in the Makefile
-as a place-holder).
-
-NOTE: IBM released the alignment exception handler under generous enough
-      terms where it could be included in this distribution.
 
 
 2) CPU support.
@@ -74,10 +62,10 @@ caveat:  we used an ELF assembler and linker.  So some attention may be required
 on the assembler files to get them through a traditional (XCOFF) PowerOpen
 assembler.
 
-This port contains support for the other ABIs, but this may prove to be incoplete
+This port contains support for the other ABIs, but this may prove to be incomplete
 as it is untested.
 
 In the long term, the RTEMS PowerPC port should move to the EABI as its primary
 or only port.  This should wait on a true EABI version of GCC.
 
-Andrew Bray 18/8/1995
+Andrew Bray 4/December/1995

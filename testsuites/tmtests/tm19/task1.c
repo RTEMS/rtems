@@ -94,14 +94,12 @@ rtems_asr Process_asr_for_pass_1(
   end_time = Read_timer();
 
   put_time(
-    "rtems_signal_send (self)",
+    "rtems_signal_send: signal to self",
     end_time,
     1,
     0,
     CALLING_OVERHEAD_SIGNAL_SEND
   );
-
-  puts( "SIGNAL_ENTER (non-preemptive) na" );
 
   Timer_initialize();
 }
@@ -111,8 +109,6 @@ rtems_asr Process_asr_for_pass_2(
 )
 {
   rtems_status_code status;
-
-  puts( "SIGNAL_ENTER (preemptive) na" );
 
   status = rtems_task_resume( Task_id[ 3 ] );
   directive_failed( status, "rtems_task_resume" );
@@ -143,7 +139,7 @@ rtems_task Task_1(
   end_time = Read_timer();
 
   put_time(
-    "rtems_signal_send (non-preemptive)",
+    "rtems_signal_send: returns to caller",
     end_time,
     1,
     0,
@@ -158,7 +154,7 @@ rtems_task Task_1(
   end_time = Read_timer();
 
   put_time(
-    "SIGNAL_RETURN (non-preemptive)",
+    "exit ASR overhead: returns to calling task",
     end_time,
     1,
     0,
@@ -200,7 +196,7 @@ rtems_task Task_3(
   end_time = Read_timer();
 
   put_time(
-    "SIGNAL_RETURN (preemptive)",
+    "exit ASR overhead: returns to preempting task",
     end_time,
     1,
     0,

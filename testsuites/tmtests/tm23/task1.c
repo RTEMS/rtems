@@ -122,7 +122,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_timer_fire_after (inactive)",
+    "rtems_timer_fire_after: inactive",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -135,7 +135,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_timer_fire_after (active)",
+    "rtems_timer_fire_after: active",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -148,7 +148,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_timer_cancel (active)",
+    "rtems_timer_cancel: active",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -162,7 +162,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_timer_cancel (inactive)",
+    "rtems_timer_cancel: inactive",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -176,7 +176,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_timer_reset (inactive)",
+    "rtems_timer_reset: inactive",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -189,7 +189,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_timer_reset (active)",
+    "rtems_timer_reset: active",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -213,7 +213,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_timer_fire_when (inactive)",
+    "rtems_timer_fire_when: inactive",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -227,7 +227,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_timer_fire_when (active)",
+    "rtems_timer_fire_when: active",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -240,7 +240,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_timer_delete (active)",
+    "rtems_timer_delete: active",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -265,7 +265,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_timer_delete (inactive)",
+    "rtems_timer_delete: inactive",
     end_time,
     OPERATION_COUNT,
     overhead,

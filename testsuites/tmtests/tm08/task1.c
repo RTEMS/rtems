@@ -97,7 +97,7 @@ rtems_task test_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_set_priority current priority",
+    "rtems_task_set_priority: obtain current priority",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -110,7 +110,7 @@ rtems_task test_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_set_priority no preempt",
+    "rtems_task_set_priority: returns to caller",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -127,7 +127,7 @@ rtems_task test_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_mode (current)",
+    "rtems_task_mode: obtain current mode",
     end_time,
     OPERATION_COUNT,
     overhead,
@@ -150,7 +150,7 @@ rtems_task test_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_mode (no reschedule)",
+    "rtems_task_mode: no reschedule",
     end_time,
     OPERATION_COUNT * 2,
     overhead,
@@ -162,7 +162,7 @@ rtems_task test_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_mode (reschedule)",
+    "rtems_task_mode: reschedule -- returns to caller",
     end_time,
     1,
     0,
@@ -244,7 +244,7 @@ rtems_task test_task1(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_mode (preemptive)",
+    "rtems_task_mode: reschedule -- preempts caller",
     end_time,
     1,
     0,

@@ -1,9 +1,9 @@
-/*  irq_stub.s	1.0 - 95/08/08
+/*  irq_stub.s	1.1 - 95/12/04
  *
  *  This file contains the interrupt handler assembly code for the PowerPC
  *  implementation of RTEMS.  It is #included from cpu_asm.s.
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -45,10 +45,10 @@
 	mfctr	r6
 	mfxer	r7
 	mflr	r8
-	mfsrr0	r9
-	mfsrr1	r10
+	MFPC	(r9)
+	MFMSR	(r10)
 	/* Establish addressing */
-	mfsprg3	r11
+	mfspr	r11, sprg3
 	dcbt	r0, r11
 	stw	r5, IP_CR(r1)
 	stw	r6, IP_CTR(r1)
@@ -72,6 +72,9 @@
    *  #endif
    */
 	/* Switch stacks, here we must prevent ALL interrupts */
+	mfmsr	r5
+	mfspr   r6, sprg2
+	mtmsr	r6
 	cmpwi	r30, 0
 	lwz	r29, Disable_level(r11)
 	subf	r31,r1,r31
@@ -93,6 +96,7 @@ LABEL (nested):
    */
 	addi	r31,r31,1
 	stw	r31, 0(r29)
+	mtmsr	r5
   /*
    *  (*_ISR_Vector_table[ vector ])( vector );
    */
@@ -120,9 +124,11 @@ LABEL (nested):
 	or	r6,r6,r6
 
 	/*	We must re-disable the interrupts */
-	mfsprg3	r11
-	mfsprg2 r0
+	mfspr	r11, sprg3
+	mfspr	r0, sprg2
 	mtmsr   r0
+	lwz	r30, 0(r28)
+	lwz	r31, 0(r29)
 
   /*
    *  if (--Thread_Dispatch_disable,--_ISR_Nest_level)
@@ -134,6 +140,7 @@ LABEL (nested):
 	stw	r30, 0(r28)
 	stw	r31, 0(r29)
 	bne	LABEL (easy_exit)
+	cmpwi	r31, 0
 
 	lwz	r30, Switch_necessary(r11)
 
@@ -143,6 +150,7 @@ LABEL (nested):
    *  #endif
    */
 	lwz	r1,0(r1)
+	bne	LABEL (easy_exit)
 	lwz	r30, 0(r30)
 	lwz	r31, Signal(r11)
 	
@@ -152,6 +160,7 @@ LABEL (nested):
    */
 	cmpwi	r30, 0
 	lwz	r28, 0(r31)
+	li	r6,0
 	bne	LABEL (switch)
   /*  
    *  if ( !_ISR_Signals_to_thread_executing )
@@ -159,28 +168,30 @@ LABEL (nested):
    *  _ISR_Signals_to_thread_executing = 0;
    */
 	cmpwi	r28, 0
-	li	r6,0
 	beq	LABEL (easy_exit)
-	stw	r6, 0(r31)
 
   /*
    * switch:
    *  call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
    */
 LABEL (switch):
+	stw	r6, 0(r31)
+	/* Re-enable interrupts */
+	lwz	r0, IP_MSR(r1)
 #if (PPC_ABI == PPC_ABI_POWEROPEN)
 	lwz	r2, Dispatch_r2(r11)
 #else
 	/* R2 and R13 still hold their values from the last call */
 #endif
-	bl	PROC (_Thread_Dispatch)
+	mtmsr	r0
+	bl	SYM (_Thread_Dispatch)
 	/* NOP marker for debuggers */
 	or	r6,r6,r6
   /*
    *  prepare to get out of interrupt
    */
 	/* Re-disable IRQs */
-	mfsprg2 r0
+	mfspr   r0, sprg2
 	mtmsr   r0
   /*
    *  easy_exit:
@@ -198,8 +209,8 @@ LABEL (easy_exit):
 	mtctr	r6
 	mtxer	r7
 	mtlr	r8
-	mtsrr0	r9
-	mtsrr1	r10
+	MTPC	(r9)
+	MTMSR	(r10)
 	lwz	r0, IP_0(r1)
 	lwz	r2, IP_2(r1)
 	lwz	r3, IP_3(r1)

@@ -90,7 +90,7 @@ rtems_task High_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_resume (causing preempt)",
+    "rtems_task_resume: task readied -- preempts caller",
     end_time,
     OPERATION_COUNT,
     0,
@@ -119,7 +119,7 @@ rtems_task Low_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_suspend self",
+    "rtems_task_suspend: calling task",
     end_time,
     OPERATION_COUNT,
     0,

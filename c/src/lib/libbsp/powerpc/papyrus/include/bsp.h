@@ -2,7 +2,7 @@
  *
  *  This include file contains all Papyrus board IO definitions.
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -44,6 +44,9 @@ extern "C" {
 #else
 #include <rtems.h>
 #include <console.h>
+#include <clockdrv.h>
+#include <console.h>
+#include <iosupp.h>
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
@@ -55,6 +58,7 @@ extern "C" {
 
 #define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
 #define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
+
 
 /*
  *  Stuff for Time Test 27
@@ -78,17 +82,29 @@ extern "C" {
 #define delay( microseconds ) \
   { \
     unsigned32 start, ticks, now; \
-    asm volatile ("mftblo %0" : "=r" (start)); \
+    asm volatile ("mfspr %0, 0x3dd" : "=r" (start)); /* TBLO */ \
     ticks = (microseconds) * Cpu_table.clicks_per_usec; \
     do \
-      asm volatile ("mftblo %0" : "=r" (now)); \
+      asm volatile ("mfspr %0, 0x3dd" : "=r" (now)); /* TBLO */ \
     while (now - start < ticks); \
   }
+
 
 /* Constants */
 
 #define RAM_START 0
 #define RAM_END   0x00200000
+
+
+/* Some useful LED debugging bits */
+/* LED numbers are from 0-2 */
+#define __led_base	((volatile int *)0x7F200000)
+
+/* Turn a LED on */
+#define led_on(n)	(__led_base[n] = 0)
+
+/* Turn a LED off */
+#define led_off(n)	(__led_base[n] = 1)
 
 /* miscellaneous stuff assumed to exist */
 
@@ -98,7 +114,7 @@ extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 /*
  *  Device Driver Table Entries
  */
-
+ 
 /*
  * NOTE: Use the standard Console driver entry
  */
@@ -106,16 +122,21 @@ extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 /*
  * NOTE: Use the standard Clock driver entry
  */
-
+ 
 /*
  * How many libio files we want
  */
-
+ 
 #define BSP_LIBIO_MAX_FDS       20
 
 /* functions */
 
-void bsp_start( void );
+int bsp_start(
+  int   argc,
+  char **argv,
+  char **environp
+);
+
 void bsp_cleanup( void );
 
 rtems_isr_entry set_vector(                    /* returns old vector */

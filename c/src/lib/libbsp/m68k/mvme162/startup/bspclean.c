@@ -28,6 +28,8 @@ void bsp_return_to_monitor_trap()
 {
   extern void start( void  );
 
+  page_table_teardown();
+
   lcsr->intr_ena = 0;               /* disable interrupts */
   m68k_set_vbr(0xFFE00000);         /* restore 162Bug vectors */
   asm volatile( "trap   #15"  );    /* trap to 162Bug */

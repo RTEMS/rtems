@@ -9,7 +9,7 @@
  *
  *  OUTPUT: NONE
  *
- *  Author:	Andrew Bray <andy@i-cubed.demon.co.uk>
+ *  Author:	Andrew Bray <andy@i-cubed.co.uk>
  *
  *  COPYRIGHT (c) 1995 by i-cubed ltd.
  *
@@ -166,7 +166,7 @@ bsp_postdriver_hook(void)
     rtems_fatal_error_occurred( error_code | 'I' << 8 | 'O' );
 }
 
-int main(
+int bsp_start(
   int argc,
   char **argv,
   char **environp
@@ -224,8 +224,6 @@ int main(
    *  tell the RTEMS configuration where it is.  This memory is
    *  not malloc'ed.  It is just "pulled from the air".
    */
-
-/*BSP_Configuration.work_space_size *= 4;*/
 
   BSP_Configuration.work_space_start = (void *)
       RAM_END - BSP_Configuration.work_space_size;

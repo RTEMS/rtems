@@ -184,7 +184,7 @@ void queue_test()
   }
 
   put_time(
-    "rtems_message_queue_send (no tasks waiting)",
+    "rtems_message_queue_send: no waiting tasks",
     send_time,
     OPERATION_COUNT * OPERATION_COUNT,
     send_loop_time,
@@ -192,7 +192,7 @@ void queue_test()
   );
 
   put_time(
-    "rtems_message_queue_urgent (no tasks waiting)",
+    "rtems_message_queue_urgent: no waiting tasks",
     urgent_time,
     OPERATION_COUNT * OPERATION_COUNT,
     urgent_loop_time,
@@ -200,7 +200,7 @@ void queue_test()
   );
 
   put_time(
-    "rtems_message_queue_receive (messages available)",
+    "rtems_message_queue_receive: available",
     receive_time,
     OPERATION_COUNT * OPERATION_COUNT * 2,
     receive_loop_time * 2,
@@ -208,7 +208,7 @@ void queue_test()
   );
 
   put_time(
-    "rtems_message_queue_flush (empty queue)",
+    "rtems_message_queue_flush: no messages flushed",
     empty_flush_time,
     OPERATION_COUNT,
     0,
@@ -216,7 +216,7 @@ void queue_test()
   );
 
   put_time(
-    "rtems_message_queue_flush (messages flushed)",
+    "rtems_message_queue_flush: messages flushed",
     flush_time,
     OPERATION_COUNT,
     0,
