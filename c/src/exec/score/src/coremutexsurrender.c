@@ -81,6 +81,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
         /* should never occur */
         return CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
       case CORE_MUTEX_NESTING_BLOCKS:
+        /* Currently no API exercises this behavior. */
         break;
     }
   }
