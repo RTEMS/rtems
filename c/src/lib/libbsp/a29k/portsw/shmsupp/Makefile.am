@@ -30,6 +30,6 @@ endif
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-EXTRA_DIST = $(C_FILES)
+EXTRA_DIST = addrconv.c getcfg.c lock.c mpisr.c
 
 include $(top_srcdir)/../../../../../../automake/local.am
