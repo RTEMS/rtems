@@ -23,6 +23,7 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
+#include <rtems/score/interr.h>
 
 void _Semaphore_Manager_initialization(
   unsigned32 maximum_semaphores
@@ -38,6 +39,11 @@ rtems_status_code rtems_semaphore_create(
   Objects_Id           *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -47,6 +53,11 @@ rtems_status_code rtems_semaphore_ident(
   Objects_Id   *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -54,6 +65,11 @@ rtems_status_code rtems_semaphore_delete(
   Objects_Id id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -63,6 +79,11 @@ rtems_status_code rtems_semaphore_obtain(
   rtems_interval timeout
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -70,6 +91,11 @@ rtems_status_code rtems_semaphore_release(
   Objects_Id id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -78,6 +104,11 @@ boolean _Semaphore_Seize(
   rtems_option    option_set
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   _Thread_Executing->Wait.return_code = RTEMS_UNSATISFIED;
-  return( TRUE );
+  return TRUE;
 }

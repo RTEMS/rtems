@@ -20,6 +20,7 @@
 #include <rtems/rtems/region.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/interr.h>
 
 void _Region_Manager_initialization(
   unsigned32 maximum_regions
@@ -36,6 +37,11 @@ rtems_status_code rtems_region_create(
   Objects_Id         *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -44,6 +50,11 @@ rtems_status_code rtems_region_ident(
   Objects_Id   *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -51,6 +62,11 @@ rtems_status_code rtems_region_delete(
   Objects_Id id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -62,6 +78,11 @@ rtems_status_code rtems_region_get_segment(
   void              **segment
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -71,6 +92,11 @@ rtems_status_code rtems_region_get_segment_size(
   unsigned32        *size
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -79,5 +105,10 @@ rtems_status_code rtems_region_return_segment(
   void       *segment
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }

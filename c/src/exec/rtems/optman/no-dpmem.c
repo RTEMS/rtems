@@ -16,6 +16,7 @@
 #include <rtems/score/address.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/interr.h>
 
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
@@ -35,6 +36,11 @@ rtems_status_code rtems_port_create(
   Objects_Id   *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -43,6 +49,11 @@ rtems_status_code rtems_port_ident(
   Objects_Id   *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -50,6 +61,11 @@ rtems_status_code rtems_port_delete(
   Objects_Id id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -59,6 +75,11 @@ rtems_status_code rtems_port_internal_to_external(
   void       **external
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -68,5 +89,10 @@ rtems_status_code rtems_port_external_to_internal(
   void       **internal
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }

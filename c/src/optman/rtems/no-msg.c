@@ -24,6 +24,7 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/score/interr.h>
 
 void _Message_queue_Manager_initialization(
   unsigned32 maximum_message_queues
@@ -39,6 +40,11 @@ rtems_status_code rtems_message_queue_create(
   Objects_Id         *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -48,6 +54,11 @@ rtems_status_code rtems_message_queue_ident(
   Objects_Id   *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -55,6 +66,11 @@ rtems_status_code rtems_message_queue_delete(
   Objects_Id id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -64,6 +80,11 @@ rtems_status_code rtems_message_queue_send(
   unsigned32            size
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -73,6 +94,11 @@ rtems_status_code rtems_message_queue_urgent(
   unsigned32            size
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -83,6 +109,11 @@ rtems_status_code rtems_message_queue_broadcast(
   unsigned32           *count
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -94,6 +125,11 @@ rtems_status_code rtems_message_queue_receive(
   rtems_interval        timeout
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -102,6 +138,11 @@ rtems_status_code rtems_message_queue_flush(
   unsigned32 *count
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -109,6 +150,12 @@ unsigned32 _Message_queue_Flush_support(
   Message_queue_Control *the_message_queue
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
+  return RTEMS_NOT_CONFIGURED;
   return 0;
 }
 
@@ -119,6 +166,12 @@ boolean _Message_queue_Seize(
   unsigned32             *size_p
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
+  return RTEMS_NOT_CONFIGURED;
   _Thread_Executing->Wait.return_code = RTEMS_UNSATISFIED;
   return TRUE;
 }
@@ -130,5 +183,10 @@ rtems_status_code _Message_queue_Submit(
   Message_queue_Submit_types  submit_type
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }

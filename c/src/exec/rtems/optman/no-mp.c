@@ -26,6 +26,7 @@
 #include <rtems/score/tqdata.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/score/interr.h>
 
 void _Multiprocessing_Manager_initialization ( void )
 {
@@ -33,6 +34,11 @@ void _Multiprocessing_Manager_initialization ( void )
 
 void rtems_multiprocessing_announce ( void )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
 }
 
 void _MPCI_Handler_initialization( 
@@ -60,6 +66,11 @@ void _MPCI_Register_packet_processor(
  
 MP_packet_Prefix *_MPCI_Get_packet ( void )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return NULL;
 }
 
@@ -67,6 +78,11 @@ void _MPCI_Return_packet (
   MP_packet_Prefix   *the_packet
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
 }
 
 void _MPCI_Send_process_packet (
@@ -74,6 +90,11 @@ void _MPCI_Send_process_packet (
   MP_packet_Prefix   *the_packet
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
 }
 
 unsigned32 _MPCI_Send_request_packet (
@@ -82,6 +103,11 @@ unsigned32 _MPCI_Send_request_packet (
   States_Control      extra_state
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return 0;
 }
 
@@ -90,10 +116,20 @@ void _MPCI_Send_response_packet (
   MP_packet_Prefix   *the_packet
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
 }
 
 MP_packet_Prefix  *_MPCI_Receive_packet ( void )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return NULL;
 }
 
@@ -101,6 +137,11 @@ Thread_Control *_MPCI_Process_response (
   MP_packet_Prefix  *the_packet
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return NULL;
 }
 
@@ -108,10 +149,20 @@ Thread _MPCI_Receive_server(
   unsigned32 ignore
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
 }
 
 void _MPCI_Announce ( void )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
 }
 
 
@@ -119,16 +170,31 @@ void _MPCI_Internal_packets_Send_process_packet (
    MPCI_Internal_Remote_operations operation
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
 }
  
 void _MPCI_Internal_packets_Process_packet (
   MP_packet_Prefix  *the_packet_prefix
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
 }
  
 MPCI_Internal_packet *_MPCI_Internal_packets_Get_packet ( void )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return NULL;
 }
 

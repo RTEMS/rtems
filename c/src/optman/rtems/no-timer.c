@@ -19,6 +19,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/score/interr.h>
 
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/timer.h>
@@ -34,6 +35,11 @@ rtems_status_code rtems_timer_create(
   Objects_Id   *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -42,6 +48,11 @@ rtems_status_code rtems_timer_ident(
   Objects_Id   *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -49,6 +60,11 @@ rtems_status_code rtems_timer_cancel(
   Objects_Id id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -56,6 +72,11 @@ rtems_status_code rtems_timer_delete(
   Objects_Id id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -66,6 +87,11 @@ rtems_status_code rtems_timer_fire_after(
   void                              *user_data
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -76,6 +102,11 @@ rtems_status_code rtems_timer_fire_when(
   void                              *user_data
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -83,5 +114,10 @@ rtems_status_code rtems_timer_reset(
   Objects_Id id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }

@@ -17,6 +17,7 @@
 #include <rtems/rtems/status.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/interr.h>
 
 #include <rtems/rtems/asr.h>
 #include <rtems/rtems/modes.h>
@@ -31,6 +32,11 @@ rtems_status_code rtems_signal_catch(
   rtems_mode        mode_set
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -39,6 +45,11 @@ rtems_status_code rtems_signal_send(
   rtems_signal_set signal_set
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 

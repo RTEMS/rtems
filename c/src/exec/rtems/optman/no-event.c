@@ -20,12 +20,22 @@
 #include <rtems/rtems/options.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/interr.h>
+
+void _Event_Manager_initialization( void )
+{
+}
 
 rtems_status_code rtems_event_send(
   Objects_Id         id,
   rtems_event_set event_in
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -36,6 +46,11 @@ rtems_status_code rtems_event_receive(
   rtems_event_set *event_out
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 

@@ -19,6 +19,7 @@
 #include <rtems/score/object.h>
 #include <rtems/rtems/part.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/interr.h>
 
 void _Partition_Manager_initialization(
   unsigned32 maximum_partitions
@@ -35,6 +36,11 @@ rtems_status_code rtems_partition_create(
   Objects_Id         *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -44,6 +50,11 @@ rtems_status_code rtems_partition_ident(
   Objects_Id   *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -51,6 +62,11 @@ rtems_status_code rtems_partition_delete(
   Objects_Id id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -59,6 +75,11 @@ rtems_status_code rtems_partition_get_buffer(
   void       **buffer
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -67,5 +88,10 @@ rtems_status_code rtems_partition_return_buffer(
   void       *buffer
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }

@@ -18,6 +18,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/interr.h>
 
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/ratemon.h>
@@ -33,6 +34,11 @@ rtems_status_code rtems_rate_monotonic_create(
   Objects_Id   *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -41,6 +47,11 @@ rtems_status_code rtems_rate_monotonic_ident(
   Objects_Id   *id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -48,6 +59,11 @@ rtems_status_code rtems_rate_monotonic_cancel(
   Objects_Id id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -55,6 +71,11 @@ rtems_status_code rtems_rate_monotonic_delete(
   Objects_Id id
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -63,6 +84,11 @@ rtems_status_code rtems_rate_monotonic_period(
   rtems_interval length
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -71,11 +97,21 @@ void _Rate_monotonic_Timeout(
   void       *ignored
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
 }
 
 boolean _Rate_monotonic_Set_state(
 Rate_monotonic_Control *the_period
 )
 {
-  return( FALSE );
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
+  return FALSE;
 }

@@ -19,6 +19,7 @@
 #include <rtems/io.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/interr.h>
 
 void _IO_Manager_initialization(
   rtems_driver_address_table *driver_table,
@@ -36,16 +37,26 @@ rtems_status_code rtems_io_register_name(
     char *device_name,
     rtems_device_major_number major,
     rtems_device_minor_number minor
-  )
+)
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
 rtems_status_code rtems_io_lookup_name(
     const char *pathname,
     rtems_driver_name_t **rnp
-  )
+)
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -55,6 +66,11 @@ rtems_status_code rtems_io_initialize(
   void             *argument
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -64,6 +80,11 @@ rtems_status_code rtems_io_open(
   void             *argument
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -73,6 +94,11 @@ rtems_status_code rtems_io_close(
   void             *argument
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -82,6 +108,11 @@ rtems_status_code rtems_io_read(
   void             *argument
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -91,6 +122,11 @@ rtems_status_code rtems_io_write(
   void             *argument
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
 
@@ -100,5 +136,10 @@ rtems_status_code rtems_io_control(
   void             *argument
 )
 {
+  _Internal_error_Occurred(
+    INTERNAL_ERROR_RTEMS_API,
+    FALSE,
+    RTEMS_NOT_CONFIGURED
+  );
   return RTEMS_NOT_CONFIGURED;
 }
