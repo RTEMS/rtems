@@ -26,13 +26,17 @@ arm-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache arm-rtems@osversion@ > $@
 RPM_SPECS_DATA += arm-rtems@osversion@-$(GDBVERS).spec
 
+avr-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache avr-rtems@osversion@ > $@
+RPM_SPECS_DATA += avr-rtems@osversion@-$(GDBVERS).spec
+
 h8300-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems@osversion@ > $@
 RPM_SPECS_DATA += h8300-rtems@osversion@-$(GDBVERS).spec
 
-RPM_SPECS_DATA += i386-rtems@osversion@-$(GDBVERS).spec
 i386-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache i386-rtems@osversion@ > $@
+RPM_SPECS_DATA += i386-rtems@osversion@-$(GDBVERS).spec
 
 # does not build with 5.2
 # i386-RTEMS-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
@@ -46,6 +50,10 @@ RPM_SPECS_DATA += m68k-rtems@osversion@-$(GDBVERS).spec
 mips-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache mips-rtems@osversion@ > $@
 RPM_SPECS_DATA += mips-rtems@osversion@-$(GDBVERS).spec
+
+mips64-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache mips64-rtems@osversion@ > $@
+RPM_SPECS_DATA += mips64-rtems@osversion@-$(GDBVERS).spec
 
 mipstx39-rtems@osversion@-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
 	$(MKSPEC) -cfg $(top_builddir)/setup.cache mipstx39-rtems@osversion@ > $@

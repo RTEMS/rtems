@@ -1,3 +1,12 @@
+2005-03-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gdb/Makefile.am: Add avr, mips64.
+	Cosmetics.
+	* gdb/base-gdb.add: Reflect gdb-6.3 not shipping mmalloc.info*.
+	* gdb/target-gdb.add: Add support for gcc-6.3's gdbtui.
+	* gdb/mkspec.in: Add PATCH-magic.
+	Add gdb_suffix.
+
 2005-03-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* binutils/binutils.add, binutils/mkspec.in, setup.def:
