@@ -154,8 +154,14 @@ void _POSIX_Threads_Manager_initialization(
                                                  number_of_initialization_tasks;
   _POSIX_Threads_User_initialization_tasks = user_tasks;
 
+  /*
+   *  There may not be any POSIX initialization threads configured.
+   */
+
+#if 0
   if ( user_tasks == NULL || number_of_initialization_tasks == 0 )
     _Internal_error_Occurred( INTERNAL_ERROR_POSIX_API, TRUE, EINVAL );
+#endif
 
   _Objects_Initialize_information(
     &_POSIX_Threads_Information,
@@ -498,18 +504,16 @@ int pthread_attr_setdetachstate(
   return 0;
 }
 
-#ifdef NOT_IMPLEMENTED_YET
-
 /*PAGE
  *
  *  16.1.2 Thread Creation, P1003.1c/Draft 10, p. 144
  */
 
 int pthread_create(
-  pthread_t             *thread,
-  const pthread_attr_t  *attr,
-  void                 (*start_routine)( void * ),
-  void                  *arg
+  pthread_t              *thread,
+  const pthread_attr_t   *attr,
+  void                 *(*start_routine)( void * ),
+  void                   *arg
 )
 {
   const pthread_attr_t  *local_attr;
@@ -535,6 +539,8 @@ int pthread_create(
 #endif
   int  detachstate;
 #endif
+
+  return POSIX_NOT_IMPLEMENTED();
 }
 
 /*PAGE
@@ -562,7 +568,17 @@ int pthread_detach(
   return POSIX_NOT_IMPLEMENTED();
 }
 
-#endif
+/*PAGE
+ *
+ * 16.1.5.1 Thread Termination, p1003.1c/Draft 10, p. 150
+ */
+ 
+void pthread_exit(
+  void  *value_ptr
+)
+{
+  POSIX_NOT_IMPLEMENTED();
+}
 
 /*PAGE
  *

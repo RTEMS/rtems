@@ -7,6 +7,31 @@
 
 #include <rtems/system.h>
 
+/*
+ * TEMPORARY
+ */
+
+#include <assert.h>
+
+int POSIX_MP_NOT_IMPLEMENTED()
+{
+  assert( 0 );
+}
+
+int POSIX_BOTTOM_REACHED()
+{
+  assert( 0 );
+}
+
+int POSIX_NOT_IMPLEMENTED()
+{
+  assert( 0 );
+}
+
+/*
+ * END OF TEMPORARY
+ */
+
 #ifdef NOT_IMPLEMENTED_YET
 
 /*PAGE

@@ -13,6 +13,31 @@
 #include <rtems/posix/cond.h>
 #include <rtems/posix/time.h>
 
+/*
+ *  TEMPORARY
+ */
+
+void _POSIX_Condition_variables_MP_Send_process_packet (
+  POSIX_Condition_variables_MP_Remote_operations  operation,
+  Objects_Id                        condition_variables_id,
+  Objects_Name                      name,
+  Objects_Id                        proxy_id
+)
+{
+  (void) POSIX_MP_NOT_IMPLEMENTED();
+}
+
+void _POSIX_Condition_variables_MP_Send_extract_proxy(
+  Thread_Control *the_thread
+)
+{
+  (void) POSIX_MP_NOT_IMPLEMENTED();
+}
+
+/*
+ *  END OF TEMPORARY
+ */
+
 /*PAGE
  *
  *  The default condition variable attributes structure.

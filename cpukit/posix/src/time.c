@@ -18,6 +18,17 @@
   (4 * TOD_SECONDS_PER_DAY))
 
 /*
+ *  _POSIX_Time_Spec_to_interval
+ */
+
+Watchdog_Interval _POSIX_Time_Spec_to_interval(
+  const struct timespec *time
+)
+{
+  return POSIX_NOT_IMPLEMENTED();
+}
+
+/*
  *  4.5.1 Get System Time, P1003.1b-1993, p. 91
  */
 
