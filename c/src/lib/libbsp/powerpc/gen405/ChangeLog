@@ -1,3 +1,8 @@
+2001-11-14	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Fixed syntax error in my previous addition
+	of __init.
+
 2001-11-13	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Added _init, and _fini symbols.

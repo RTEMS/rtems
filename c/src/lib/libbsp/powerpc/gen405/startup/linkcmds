@@ -58,8 +58,8 @@ SECTIONS
 
      *(.lit)
      *(.shdata)
-     _init = .; __init=.; *(.init)
-     _fini = .; __fini=.; *(.fini)
+     _init = .; __init = .; *(.init)
+     _fini = .; __fini = .; *(.fini)
      _endtext = ALIGN(0x10);
      text.end = .;
   } > RAM
