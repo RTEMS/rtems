@@ -1,5 +1,13 @@
 2003-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/gcc-isystem.m4: New.
+	* aclocal/gcc-specs.m4: Remove.
+	* aclocal/prog-cc.m4: Remove RTEMS_GCC_SPECS.
+	Add RTEMS_GCC_ISYSTEM.
+	Reformat setting up RTEMS_CPPFLAGS.
+
+2003-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/local.am: Introduce depend-gcc.
 	Remove ${ARCH}.
 	* automake/compile.am: Remove GCCSPECS, GCC_SPECS, CONFIG.CC, CC,

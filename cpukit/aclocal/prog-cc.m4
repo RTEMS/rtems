@@ -26,8 +26,8 @@ AC_DEFUN(RTEMS_PROG_CC_FOR_TARGET,
 [
 dnl check target cc
 RTEMS_PROG_CC
-dnl check if the compiler supports --specs
-RTEMS_GCC_SPECS
+dnl check if the compiler supports -isystem
+RTEMS_GCC_ISYSTEM
 dnl check if the target compiler may use --pipe
 RTEMS_GCC_PIPE
 test "$rtems_cv_gcc_pipe" = "yes" && CC="$CC --pipe"
@@ -35,9 +35,12 @@ test "$rtems_cv_gcc_pipe" = "yes" && CC="$CC --pipe"
 if test "$GCC" = yes; then
 RTEMS_CFLAGS="$RTEMS_CFLAGS -Wall"
 m4_if([$1],,[],[RTEMS_CFLAGS="$RTEMS_CFLAGS $1"])
-RTEMS_CPPFLAGS="-isystem \$(PROJECT_INCLUDE)"
-else
-RTEMS_CPPFLAGS="-I\$(PROJECT_INCLUDE)"
 fi
+
+AS_IF([test x"$rtems_cv_gcc_isystem" = x"yes"],[
+  RTEMS_CPPFLAGS="-isystem \$(PROJECT_INCLUDE)"],[
+  RTEMS_CPPFLAGS="-I\$(PROJECT_INCLUDE)"
+])
 AC_SUBST(RTEMS_CPPFLAGS)
+
 ])
