@@ -21,7 +21,7 @@
 
 #define STUB_DRIVER_MAJOR     0x2
 #define NO_DRIVER_MAJOR       0x3
-#define INVALID_DRIVER_MAJOR  (CONFIGURE_MAXIMUM_DRIVERS + 1)
+#define INVALID_DRIVER_MAJOR  (Configuration.number_of_device_drivers + 1)
 /* #define INVALID_DRIVER_MAJOR  0xffffffff */
 
 rtems_task Task_1(

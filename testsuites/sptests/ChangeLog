@@ -1,3 +1,8 @@
+2001-05-17	Joel Sherrill <joel@OARcorp.com>
+
+	* sp21/task1.c (INVALID_DRIVER_MAJOR): Change definition to reflect
+	number of staticly configured device drivers.
+
 2001-05-14	Joel Sherrill <joel@OARcorp.com>
 
 	* sp21/task1.c: Correct INVALID_DRIVER_MAJOR so it is precisely 1 more
