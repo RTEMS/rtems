@@ -29,10 +29,6 @@
 #include <rtems/libio.h>
 
 #ifdef RTEMS_NEWLIB
-/*
- *  fstat, stat, and isatty must lie consistently and report that everything
- *  is a tty or stdout will not be line buffered.
- */
 
 int __rtems_fstat(int _fd, struct stat* _sbuf)
 {

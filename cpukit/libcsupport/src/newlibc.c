@@ -32,11 +32,6 @@
 #include <errno.h>
 
 /*
- *  NOTE: When using RTEMS fake stat, fstat, and isatty, all output
- *        is line buffered so this setvbuf is not necessary.  This
- *        setvbuf insures that we can redirect the output of a test
- *        on the UNIX simulator and it is in the same order as for a
- *        real target.
  *  NOTE:
  *        There is some problem with doing this on the hpux version
  *        of the UNIX simulator (symptom is printf core dumps), so
@@ -143,12 +138,6 @@ libc_start_hook(rtems_tcb *current_task,
 
 /*
  * Called for all user TASKS (system tasks are MPCI Receive Server and IDLE)
- *
- *  NOTE: When using RTEMS fake stat, fstat, and isatty, all output 
- *        is line buffered so this setvbuf is not necessary.  This
- *        setvbuf insures that we can redirect the output of a test
- *        on the UNIX simulator and it is in the same order as for a 
- *        real target.
  */
  
 #ifdef NEED_SETVBUF
