@@ -250,7 +250,6 @@ libnetworking/Makefile
 libnetworking/pppd/Makefile
 libnetworking/rtems_servers/Makefile
 libnetworking/rtems_telnetd/Makefile
-libnetworking/rtems_webserver/Makefile
 
 librdbg/Makefile
 
