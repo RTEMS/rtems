@@ -14,4 +14,4 @@ include $(PROJECT_ROOT)/make/directory.cfg
 LIBRTEMSCPLUSPLUS_yes_V = rtems++
 LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
 
-SUB_DIRS=cpuuse rtmonuse malloctest stackchk $(LIBRTEMSCPLUSPLUS)
+SUB_DIRS=cpuuse rtmonuse malloctest stackchk monitor $(LIBRTEMSCPLUSPLUS)
