@@ -1,3 +1,9 @@
+2003-08-21	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 457/bsps
+	* rtems/powerpc/registers.h: Add a few definitions for the PowerPC
+	thermal assistance unit.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
