@@ -1,3 +1,7 @@
+2002-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Fix typo in yesterday's patch.
+
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Don't create $ARCH.

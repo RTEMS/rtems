@@ -39,8 +39,8 @@ LIBS += ../libnetworking/wrapup/$(ARCH)/libnetworking.a
 endif
 
 if LIBRPC
-LIBS += ../librpc/src/rpc/$(ARCH)/librpc.a
-LIBS += ../librpc/src/xdr/$(ARCH)/libxdr.a
+LIBS += ../librpc/$(ARCH)/librpc.a
+LIBS += ../librpc/$(ARCH)/libxdr.a
 endif
 
 $(LIB): ${LIBS}
@@ -79,7 +79,7 @@ TMPINSTALL_FILES += $(project_libdir)$(MULTISUBDIR)/librtemscpu$(LIB_VARIANT).a
 all-am: $(ARCH) $(LIB) $(TMPINSTALL_FILES)
 
 install-data-hook: $(LIB)
-	$(mkinstalldir) $(DESTDIR)/$(libdir)
+	@$(mkinstalldirs) $(DESTDIR)/$(libdir)
 	$(INSTALL_DATA) $(LIB) $(DESTDIR)/$(libdir)
 
 include $(top_srcdir)/automake/local.am
