@@ -1,28 +1,7 @@
-2002-07-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2002-08-14      Greg Menke <gregory.menke@gsfc.nasa.gov>
 
-	* Makefile.am: Build libscorecpu.a instead of rtems-cpu.rel.
-
-2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* Makefile.am: Use .$(OBJEXT) instead of .o.
-
-2002-07-16      Greg Menke <gregory.menke@gsfc.nasa.gov>
-
-	* cpu_asm.S: Added SR_IEO to context restore to fix isr disabled
-	deadlock caused by interrupt arriving while dispatching.
-
-2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: RTEMS_TOP(../../../..).
-
-2002-07-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* rtems.c: Remove.
-	* Makefile.am: Reflect changes above.
-
-2002-07-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* configure.ac: Remove RTEMS_PROJECT_ROOT.
+	* cpu_asm.S: Clarified some comments, removed code that forced
+	SR_IEP on when returning from an interrupt.
 
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -33,6 +12,10 @@
 	* configure.ac: Use AC_CONFIG_AUX_DIR(../../../..).
 	Add AC_PROG_RANLIB.
 
+2002-06-20      Greg Menke <gregory.menke@gsfc.nasa.gov>
+	* cpu_asm.S: Added SR_IEO to context restore to fix isr disabled
+	deadlock caused by interrupt arriving while dispatching.
+	
 2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include $(top_srcdir)/../../../automake/*.am.

@@ -393,9 +393,9 @@ FRAME(_CPU_Context_switch,sp,0,ra)
 	
 	/* 
 	** this code grabs the userspace EPC if we're dispatching from
-	** an interrupt frame or fakes an address as the EPC if we're
-	** not.  This is for the gdbstub's benefit so it can know
-	**  where each thread is running.
+	** an interrupt frame or supplies the address of the dispatch
+	** routines if not.  This is entirely for the gdbstub's benefit so 
+	** it can know where each task is running.
 	**
 	** Its value is only set when calling threadDispatch from
 	** the interrupt handler and is cleared immediately when this 
@@ -454,14 +454,14 @@ _CPU_Context_switch_restore:
 
 
 /*
-** Incorporate the new task's FP coprocessor state and interrupt mask/enable
+** Incorporate the incoming task's FP coprocessor state and interrupt mask/enable
 ** into the status register.  We jump thru the requisite hoops to ensure we 
 ** maintain all other SR bits as global values.
 **
-** Get the thread's FPU enable, int mask & int enable bits.  Although we keep the 
+** Get the task's FPU enable, int mask & int enable bits.  Although we keep the 
 ** software int enables on a per-task basis, the rtems_task_create
 ** Interrupt Level & int level manipulation functions cannot enable/disable them, 
-** so they are automatically enabled for all tasks.  To turn them off, a thread  
+** so they are automatically enabled for all tasks.  To turn them off, a task  
 ** must itself manipulate the SR register.  
 **
 ** Although something of a hack on this processor, we treat the SR register
@@ -470,7 +470,7 @@ _CPU_Context_switch_restore:
 ** Manipulation of a task's interrupt level directly corresponds to manipulation
 ** of that task's SR bits, as seen in cpu.c
 **
-** Note, interrupts are disabled before context is saved, though the thread's
+** Note, interrupts are disabled before context is saved, though the task's
 ** interrupt enable state is recorded.  The task swapping in will apply its
 ** specific SR bits, including interrupt enable.  If further task-specific
 ** SR bits are arranged, it is this code, the cpu.c interrupt level stuff and
@@ -484,7 +484,14 @@ _CPU_Context_switch_restore:
 #if __mips == 3
 	or	t2,SR_EXL + SR_IE
 #elif __mips == 1
-	or	t2,SR_IEC + SR_IEP + SR_IEO	/* save current & previous int enable */
+	/* 
+	** Save current, previous & old int enables.  This is key because
+	** we can dispatch from within the stack frame used by an
+	** interrupt service.  The int enables nest, but not beyond
+	** previous and old because of the dispatch interlock seen
+	** in the interrupt processing code
+	*/
+	or	t2,SR_IEC + SR_IEP + SR_IEO
 #endif
 	and	t0,t2		/* keep only the per-task bits */
 		
@@ -645,11 +652,6 @@ FRAME(_ISR_Handler,sp,0,ra)
 
 _ISR_Handler_Exception:
 
-	/*
-	sw	t0,0x8001FF00
-	sw	t1,0x8001FF04
-	*/
-	
 	/*  If we return from the exception, it is assumed nothing
          *  bad is going on and we can continue to run normally.
          *  But we want to save the entire CPU context so exception
@@ -719,11 +721,16 @@ _ISR_Handler_Exception:
 	**
 	** It is expected the only code using the exception processing is
 	** either the gdb stub or some user code which is either going to
-	** panic or do something useful.
+	** panic or do something useful.  Regardless, it is up to each
+	** exception routine to properly adjust EPC, so the code below
+	** may be helpful for doing just that.
 	*/
-
 	
 /* *********************************************************************
+** this code follows the R3000's exception return logic, but is not
+** needed because the gdb stub does it for us.  It might be useful
+** for something else at some point...
+**
 	* compute the address of the instruction we'll return to *
 
 	LDREG	t1, R_CAUSE*R_SZ(sp)
@@ -802,6 +809,14 @@ excreturn:
         /* do NOT restore the sp as this could mess up the world */
         /* do NOT restore the cause as this could mess up the world */
 
+	/* 
+	** Jump all the way out.  If theres a pending interrupt, just
+	** let it be serviced later.  Since we're probably using the 
+	** gdb stub, we've already disrupted the ISR service timing
+	** anyhow.  We oughtn't mix exception and interrupt processing
+	** in the same exception call in case the exception stuff
+	** might interfere with the dispatching & timer ticks.
+	*/
 	j	 _ISR_Handler_exit
 	NOP
 
@@ -959,11 +974,16 @@ _ISR_Handler_1:
 	and	t0, t1
 
 #if __mips == 1
-	/* make sure previous int enable is on  because we're returning from an interrupt
+	/* disabled 7/29, gregm, this tasks context was saved previously in an interrupt,
+	** so we'll just restore the task's previous interrupt enables.
+
+	**
+	** make sure previous int enable is on  because we're returning from an interrupt
 	** which means interrupts have to be enabled
-	*/
+	
 	li	t1,SR_IEP
 	or	t0,t1
+	*/
 #endif
         MTC0    t0, C0_SR
 	NOP
