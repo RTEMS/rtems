@@ -1,3 +1,8 @@
+2001-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Fix latent bug exposed by removal of config.cache's
+	which prevented powerpc targets librdbg from building. 
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
