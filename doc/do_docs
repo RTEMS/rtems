@@ -1,4 +1,7 @@
 #! /bin/sh
+#
+#  $Id$
+#
 
 basedir=$1
 shift
