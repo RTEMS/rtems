@@ -1,3 +1,13 @@
+2002-01-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* 3c509/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* clock/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* console/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* ne2000/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* startup/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* timer/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* wd8003/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: Use install-data-local to install startfile.
