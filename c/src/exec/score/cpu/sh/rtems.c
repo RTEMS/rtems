@@ -59,12 +59,12 @@ extern void* _Entry_points[] ;
 void __RTEMS()
 {
   asm volatile ( 
-       ".global _RTEMS
-_RTEMS:" );
+       ".global _RTEMS\n"
+"_RTEMS:" );
 
   asm volatile ( 
-       "jmp %0
-   	rts
-   	nop"
+"	jmp %0\n"
+"	rts\n"
+"   	nop\n"
     :: "m" (_Entry_points) );
 }
