@@ -1,3 +1,7 @@
+2002-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add RTEMS_PROG_CCAS.
+
 2002-11-04	Joel Sherrill <joel@OARcorp.com>
 
 	* mpc8260/console-generic/console-generic.c, mpc8260/cpm/dpram.c,
