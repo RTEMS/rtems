@@ -28,14 +28,5 @@ RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 AC_SUBST(RTEMS_BSP)
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-startup/Makefile
-timer/Makefile
-3c509/Makefile
-ne2000/Makefile
-wd8003/Makefile
-ide/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

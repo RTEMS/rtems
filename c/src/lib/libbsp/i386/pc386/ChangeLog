@@ -1,3 +1,15 @@
+2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in 3c509/Makefile.am, clock/Makefile.am,
+	console/Makefile.am, ide/Makefile.am, ne2000/Makefile.am,
+	startup/Makefile.am, timer/Makefile.am, wd8003/Makefile.am,
+	wrapup/Makefile.am. Use automake compilation rules.
+	* 3c509/Makefile.am, clock/Makefile.am, console/Makefile.am,
+	ide/Makefile.am, ne2000/Makefile.am, startup/Makefile.am,
+	timer/Makefile.am, wd8003/Makefile.am, wrapup/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+	* start/start.S: Change comment to make it gcc -ansi compliant.
+
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add nostdinc to AUTOMAKE_OPTIONS.

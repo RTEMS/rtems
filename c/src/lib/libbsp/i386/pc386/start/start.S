@@ -145,8 +145,7 @@ SYM (zero_bss):
 	shrl	ecx
 	xorl	eax, eax		# value to clear out memory
 	repne				# while ecx != 0
-	stosl
-					#   clear a long in the bss
+	stosl				#   clear a long in the bss
 
 /*-------------------------------------------------------------------+
 | Initialize the video because zero_bss has cleared initVideo parameters
