@@ -1,3 +1,8 @@
+2003-10-02	Gene Smith <gene.smith@siemens.com>
+
+	* networkapp.t, preface.texi: Improve documentation for SO_RCVWAKEUP
+	and SO_SNDWAKEUP and update the references in the preface.
+
 2003-08-30	Ralf Corsepius <corsepius@faw.uni-ulm.de>
 
 	* networking.texi: include common/rtems.texi.
