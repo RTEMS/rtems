@@ -12,7 +12,7 @@ C_FILES = ../exit.c ../init.c ../delay.c ../evtask1.c ../evtmtask.c \
     ../pttask1.c ../smtask1.c ../msgtask1.c
 C_O_FILES = $(C_FILES:../%.c=${ARCH}/%.$(OBJEXT))
 
-$(ARCH)/%$(LIB_VARIANT).$(OBJEXT): ../%.c $(ARCH)/$(dirstamp)
+$(ARCH)/%.$(OBJEXT): ../%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 
 H_FILES = system.h

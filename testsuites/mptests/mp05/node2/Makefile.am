@@ -11,7 +11,7 @@ MANAGERS = io mp signal timer
 C_FILES = ../init.c ../asr.c ../task1.c
 C_O_FILES = $(C_FILES:../%.c=${ARCH}/%.$(OBJEXT))
 
-$(ARCH)/%$(LIB_VARIANT).$(OBJEXT): ../%.c $(ARCH)/$(dirstamp)
+$(ARCH)/%.$(OBJEXT): ../%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 
 H_FILES = system.h
