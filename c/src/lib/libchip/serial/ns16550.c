@@ -363,7 +363,7 @@ NS16550_STATIC int ns16550_set_attributes(
   if (!baud_requested)
     baud_requested = B9600;              /* default to 9600 baud */
 
-  ulBaudDivisor = termios_baud_to_number(baud_requested);
+  ulBaudDivisor = NS16550_Baud(termios_baud_to_number(baud_requested));
 
   ucLineControl = 0;
 
