@@ -3,7 +3,7 @@
 ##
 
 S_FILES = start.S register.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(S_O_FILES)
 
@@ -15,16 +15,16 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
+bsplib_DATA = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
 
-$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(ARCH)/start.o
+$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
 
-all-local: $(ARCH) $(OBJS) $(ARCH)/start.o $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(OBJS) $(ARCH)/start.$(OBJEXT) $(TMPINSTALL_FILES)
 
-.PRECIOUS: $(ARCH)/start.o
+.PRECIOUS: $(ARCH)/start.$(OBJEXT)
 
 EXTRA_DIST = amd.ah start.S pswmacro.ah register.S register.ah
 

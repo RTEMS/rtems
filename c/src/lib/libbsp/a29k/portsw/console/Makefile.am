@@ -6,7 +6,7 @@
 PGM = $(ARCH)/console.rel
 
 C_FILES = console.c serial.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_HEADERS = concntl.h
 noinst_HEADERS = serial.h
