@@ -1,5 +1,26 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* mpc6xx/clock/c_clock.c, mpc6xx/clock/c_clock.h,
+	mpc6xx/exceptions/raw_exception.c, mpc6xx/exceptions/raw_exception.h,
+	mpc6xx/mmu/bat.c, mpc6xx/mmu/bat.h, mpc6xx/mmu/mmuAsm.S,
+	mpc6xx/timer/timer.c, mpc8260/clock/clock.c,
+	mpc8260/console-generic/console-generic.c, mpc8260/cpm/brg.c,
+	mpc8260/exceptions/raw_exception.c,
+	mpc8260/exceptions/raw_exception.h, mpc8260/include/cpm.h,
+	mpc8260/include/mmu.h, mpc8260/mmu/mmu.c, mpc8260/timer/timer.c,
+	mpc8xx/clock/clock.c, mpc8xx/console-generic/console-generic.c,
+	mpc8xx/exceptions/raw_exception.c, mpc8xx/exceptions/raw_exception.h,
+	mpc8xx/include/cpm.h, mpc8xx/include/mmu.h, mpc8xx/mmu/mmu.c,
+	mpc8xx/timer/timer.c, ppc403/clock/clock.c,
+	ppc403/console/console.c.polled, ppc403/timer/timer.c,
+	rtems/powerpc/debugmod.h, shared/include/byteorder.h,
+	shared/include/cpuIdent.c, shared/include/cpuIdent.h,
+	shared/include/io.h, shared/include/mmu.h, shared/include/page.h,
+	shared/include/pgtable.h, shared/include/spr.h: URL for license
+	changed.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	* mpc505/timer/timer.c, mpc8260/clock/clock.c,
 	ppc403/console/console.c, ppc403/console/console405.c: Removed
 	incorrect statement about copyright assignment.
