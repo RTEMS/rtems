@@ -16,9 +16,10 @@ endif
 BSP_PIECES = startup clock console timer $(BSP_MP_O_PIECES)
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.$(OBJEXT))) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT)) \
-    $(foreach piece, $(GENERIC_PIECES), ../../../$(piece)/$(ARCH)/$(piece).rel)
+OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard \
+    ../$(piece)/$(ARCH)/*.$(OBJEXT))) $(wildcard \
+    ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.$(OBJEXT)) $(foreach \
+    piece, $(GENERIC_PIECES), ../../../$(piece)/$(ARCH)/$(piece).rel)
 LIB = $(ARCH)/libbsp.a
 
 #

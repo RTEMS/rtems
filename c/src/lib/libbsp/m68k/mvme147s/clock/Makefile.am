@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../mvme147/clock
 
 PGM = $(ARCH)/clock.rel
