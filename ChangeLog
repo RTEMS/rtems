@@ -1,5 +1,9 @@
 2002-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/ppc.m4: Apply RTEMS_CONFIGURE_ARGS_QUOTE.
+
+2002-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/quoting.m4: New (Implements RTEMS_CONFIGURE_ARGS_QUOTE).
 	* acinclude.m4: Apply RTEMS_CONFIGURE_ARGS_QUOTE.
 
