@@ -55,7 +55,7 @@ rtems/score/cpuopts.h: rtems/score/cpuopts-tmp.h
 	@echo "#ifndef __CPU_OPTIONS_h"                        >>$@
 	@echo "#define __CPU_OPTIONS_h"                        >>$@
 	@echo                                                  >>$@
-	@cat rtems/score/cpuopts-tmp.h                         >>$@
+	@cat rtems/score/cpuopts-tmp.h | sed -e '/.*PACKAGE.*/d' >>$@
 	@echo                                                  >>$@
 	@echo "#endif"                                         >>$@
 
