@@ -18,7 +18,8 @@ noinst_DATA =
 include_bspdir = $(includedir)/bsp
 
 include_HEADERS += include/coverhd.h
-include_bsp_HEADERS = include/mbx.h include/commproc.h include/8xx_immap.h
+include_bsp_HEADERS = include/mbx.h include/commproc.h include/8xx_immap.h \
+  irq/irq.h vectors/vectors.h
 
 EXTRA_DIST = times-mbx821 times-mbx860
 
@@ -156,6 +157,14 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/commproc.h
 $(PROJECT_INCLUDE)/bsp/8xx_immap.h: include/8xx_immap.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/8xx_immap.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/8xx_immap.h
+
+$(PROJECT_INCLUDE)/bsp/irq.h: irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
+
+$(PROJECT_INCLUDE)/bsp/vectors.h: vectors/vectors.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
 
 $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
