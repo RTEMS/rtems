@@ -1,5 +1,11 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* clock/ckinit.c, console/console.c, include/bsp.h, misc/interr.c,
+	spurious/spinit.c, startup/bspclean.c, startup/bspstart.c,
+	timer/timer.c: URL for license changed.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	* console/console.c: Removed incorrect statement about copyright
 	assignment.
 
