@@ -42,7 +42,7 @@
  */
 
 #include <rtems.h>
-#include <clockdrv.h>
+#include <rtems/clockdrv.h>
 #include <rtems/libio.h>
 #include <libcpu/irq.h>
 

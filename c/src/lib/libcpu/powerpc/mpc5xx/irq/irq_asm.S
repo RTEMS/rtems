@@ -24,7 +24,7 @@
  * $Id$
  */
   	
-#include <asm.h>
+#include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <libcpu/vectors.h>
 #include <libcpu/raw_exception.h>

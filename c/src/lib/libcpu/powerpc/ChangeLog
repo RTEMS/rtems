@@ -1,5 +1,10 @@
 2004-04-13	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* mpc5xx/clock/clock.c, mpc5xx/irq/irq_asm.S, mpc5xx/vectors/vectors.S:
+	Reflect new locations of cpukit headers.
+
+2004-04-13	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* mpc505/ictrl/ictrl.c, mpc505/vectors/vectors.S,
 	mpc6xx/exceptions/raw_exception.c,
 	mpc8260/exceptions/raw_exception.c,
