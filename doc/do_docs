@@ -15,7 +15,7 @@ supplements="supplements/hppa1_1 supplements/i386 \
 # Division by access level
 public_docs="FAQ user develenv networking posix_users started started_ada \
     rtems_gdb rgdb_specs"
-support_docs="${supplements} bsp_howto ada_user posix1003.1"
+support_docs="${supplements} bsp_howto porting ada_user posix1003.1"
 
 if [ x${MANUAL_SET} = x ] ; then
   MANUAL_SET=public
