@@ -21,4 +21,4 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE) \
 
 all-local: $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
