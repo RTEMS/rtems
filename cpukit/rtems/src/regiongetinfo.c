@@ -62,7 +62,8 @@ rtems_status_code rtems_region_get_information(
 
     case OBJECTS_LOCAL:
 
-      if ( _Heap_Get_information( &the_region->Memory, the_info ) ) {
+      if ( _Heap_Get_information( &the_region->Memory, the_info ) ==
+           HEAP_GET_INFORMATION_SUCCESSFUL ) {
         _RTEMS_Unlock_allocator();
         return RTEMS_SUCCESSFUL;
       }
