@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  *
  *	@(#)sysctl.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: src/sys/sys/sysctl.h,v 1.128 2004/04/07 04:19:49 imp Exp $
+ * $FreeBSD: src/sys/sys/sysctl.h,v 1.133 2004/10/11 22:04:16 peter Exp $
  */
 
 #ifndef _SYS_SYSCTL_H_
@@ -102,7 +102,7 @@ struct ctlname {
  * technology. This is the way nearly all new sysctl variables should
  * be implemented.
  * e.g. SYSCTL_INT(_parent, OID_AUTO, name, CTLFLAG_RW, &variable, 0, "");
- */
+ */ 
 #define OID_AUTO	(-1)
 
 /*
@@ -351,14 +351,14 @@ TAILQ_HEAD(sysctl_ctx_list, sysctl_ctx_entry);
 #define	KERN_BOOTFILE		26	/* string: name of booted kernel */
 #define	KERN_MAXFILESPERPROC	27	/* int: max open files per proc */
 #define	KERN_MAXPROCPERUID 	28	/* int: max processes per uid */
-#define KERN_DUMPDEV		29	/* dev_t: device to dump on */
+#define KERN_DUMPDEV		29	/* struct cdev *: device to dump on */
 #define	KERN_IPC		30	/* node: anything related to IPC */
 #define	KERN_DUMMY		31	/* unused */
 #define	KERN_PS_STRINGS		32	/* int: address of PS_STRINGS */
 #define	KERN_USRSTACK		33	/* int: address of USRSTACK */
 #define	KERN_LOGSIGEXIT		34	/* int: do we log sigexit procs? */
 #define	KERN_IOV_MAX		35	/* int: value of UIO_MAXIOV */
-#define KERN_MAXID		36      /* number of valid kern ids */
+#define KERN_MAXID		36	/* number of valid kern ids */
 
 #define CTL_KERN_NAMES { \
 	{ 0, 0 }, \
@@ -418,9 +418,11 @@ TAILQ_HEAD(sysctl_ctx_list, sysctl_ctx_entry);
 #define	KERN_PROC_ARGS		7	/* get/set arguments/proctitle */
 #define	KERN_PROC_PROC		8	/* only return procs */
 #define	KERN_PROC_SV_NAME	9	/* get syscall vector name */
+#define	KERN_PROC_RGID		10	/* by real group id */
+#define	KERN_PROC_GID		11	/* by effective group id */
 #define	KERN_PROC_INC_THREAD	0x10	/*
 					 * modifier for pid, pgrp, tty,
-					 * uid, ruid, and proc
+					 * uid, ruid, gid, rgid and proc
 					 */
 
 /*

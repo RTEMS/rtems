@@ -1,5 +1,14 @@
 2004-12-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/radix.c, libnetworking/net/radix.h,
+	libnetworking/net/route.h, libnetworking/netinet/if_ether.h,
+	libnetworking/netinet/in_var.h, libnetworking/netinet/tcp_timer.h,
+	libnetworking/netinet/udp_usrreq.c, libnetworking/netinet/udp_var.h,
+	libnetworking/sys/callout.h, libnetworking/sys/socketvar.h,
+	libnetworking/sys/sysctl.h: Cosmetics from FreeBSD.
+
+2004-12-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libmisc/capture/capture-cli.h, libmisc/capture/capture.h,
 	libmisc/monitor/monitor.h, libmisc/rtmonuse/rtmonuse.h,
 	libmisc/shell/shell.h: Partial doxygenification.
