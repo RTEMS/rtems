@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# $Id$
+
 version=0.1
 verbose=0
 target=
@@ -11,7 +13,7 @@ usage()
 program=`basename $0`
 cat << EOF
 
-\`$program' generates RTEMS custom/\*.cfgs and config-files for gcc multilib
+$program generates RTEMS custom/*.cfgs and config-files for gcc multilib
 variants a target's gcc supports
 
 Usage: $program [options]
@@ -20,7 +22,7 @@ Options:
 	--target=STRING         target
         --custom		generate make/custom/*.cfg files
         --config                generate config scripts
-        --rtems=DIR             use \`DIR\' as location of RTEMS source tree
+        --rtems=DIR             use DIR as location of RTEMS source tree
 	-v, --verbose           verbose
 	-h, --help              Print this usage
 	--version               Print version and exit
