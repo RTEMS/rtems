@@ -96,7 +96,7 @@ extern rtems_cpu_table           Cpu_table;             /* owned by BSP */
 extern int                       rtems_argc;
 extern char                    **rtems_argv;
 
-extern rtems_unsigned32          bsp_isr_level;
+extern uint32_t                  bsp_isr_level;
 
 extern char *rtems_progname;    /* UNIX executable name */
 

@@ -33,11 +33,11 @@ shm_config_table BSP_shm_cfgtbl;
 int semid;
 
 void Shm_Cause_interrupt_unix(
-  rtems_unsigned32 node
+  uint32_t         node
 );
 
 void Shm_Get_configuration(
-  rtems_unsigned32   localnode,
+  uint32_t           localnode,
   shm_config_table **shmcfg
 )
 {
@@ -45,7 +45,7 @@ void Shm_Get_configuration(
     Shm_Maximum_nodes,
     Shm_Is_master_node(),
     (void **)&BSP_shm_cfgtbl.base,
-    (unsigned32 *)&BSP_shm_cfgtbl.length
+    (uint32_t*)&BSP_shm_cfgtbl.length
   );
 
   BSP_shm_cfgtbl.format       = SHM_BIG;

@@ -34,8 +34,8 @@ extern rtems_configuration_table  Configuration;
 rtems_configuration_table    BSP_Configuration;
 rtems_multiprocessing_table  BSP_Multiprocessing;
 rtems_cpu_table              Cpu_table;
-rtems_unsigned32             bsp_isr_level;
-rtems_unsigned32             Heap_size;
+uint32_t                     bsp_isr_level;
+uint32_t                     Heap_size;
 int                          rtems_argc;
 char                       **rtems_argv;
 
@@ -53,14 +53,14 @@ char                       **rtems_argv;
  * script to bump it without recompiling rtems
  */
 
-rtems_unsigned32 CPU_CLICKS_PER_TICK;
+uint32_t         CPU_CLICKS_PER_TICK;
 
 /*
  *  Use the shared implementations of the following routines
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -118,7 +118,7 @@ void bsp_postdriver_hook(void)
 
 void bsp_start(void)
 {
-    unsigned32 workspace_ptr;
+    uint32_t   workspace_ptr;
 
     /*
      *  Copy the table (normally done in shared main).
@@ -173,7 +173,7 @@ void bsp_start(void)
      */
  
     workspace_ptr = 
-      (unsigned32) sbrk(BSP_Configuration.work_space_size + CPU_ALIGNMENT);
+      (uint32_t) sbrk(BSP_Configuration.work_space_size + CPU_ALIGNMENT);
     workspace_ptr += CPU_ALIGNMENT - 1;
     workspace_ptr &= ~(CPU_ALIGNMENT - 1);
 

@@ -23,7 +23,7 @@
 #include <sys/types.h>      /* pid_t */
 
 void Shm_Cause_interrupt_unix(
-  rtems_unsigned32 node
+  uint32_t         node
 )
 {
   Shm_Interrupt_information *intr;
