@@ -142,8 +142,8 @@ isnew:
 	 */
 is486x:	xor ax,ax
 	sahf
-	movb $5,ax
-	movb $2,bx
+	movb $5,al
+	movb $2,bl
 	div bl
 	lahf
 	cmpb $2,ah
@@ -154,42 +154,42 @@ is486x:	xor ax,ax
 	 *	do all this with interrupts off.
 	 */
 #define setCx86(reg, val) \
-	movb reg,ax;	\
-	outb ax,$0x22;	\
-	movb val,ax;	\
-	outb ax,$0x23
+	movb reg,al;	\
+	outb al,$0x22;	\
+	movb val,al;	\
+	outb al,$0x23
 
 #define getCx86(reg) \
-	movb reg,ax;	\
-	outb ax,$0x22;	\
-	inb $0x23,ax
+	movb reg,al;	\
+	outb al,$0x22;	\
+	inb $0x23,al
 
 	cli
 	getCx86($0xc3)		/*  get CCR3 */
-	movb ax,cx		/* Save old value */
-	movb ax,bx
-	andb $0x0f,bx		/* Enable access to all config registers */
-	orb $0x10,bx		/* by setting bit 4 */
-	setCx86($0xc3,bx)
+	movb al,cl		/* Save old value */
+	movb al,bl
+	andb $0x0f,bl		/* Enable access to all config registers */
+	orb $0x10,bl		/* by setting bit 4 */
+	setCx86($0xc3,bl)
 
 	getCx86($0xe8)		/* now we can get CCR4 */
-	orb $0x80,ax		/* and set bit 7 (CPUIDEN) */
-	movb ax,bx		/* to enable CPUID execution */
-	setCx86($0xe8,bx)
+	orb $0x80,al		/* and set bit 7 (CPUIDEN) */
+	movb al,bl		/* to enable CPUID execution */
+	setCx86($0xe8,bl)
 
         getCx86($0xfe)          /* DIR0 : let's check this is a 6x86(L) */
-        andb $0xf0,ax		/* should be 3xh */
-	cmpb $0x30,ax		
+        andb $0xf0,al		/* should be 3xh */
+	cmpb $0x30,al		
 	jne n6x86
         getCx86($0xe9)          /* CCR5 : we reset the SLOP bit */
-        andb $0xfd,ax		/* so that udelay calculation */
-        movb ax,bx		/* is correct on 6x86(L) CPUs */
-        setCx86($0xe9,bx)
-	setCx86($0xc3,cx)	/* Restore old CCR3 */
+        andb $0xfd,al		/* so that udelay calculation */
+        movb al,bl		/* is correct on 6x86(L) CPUs */
+        setCx86($0xe9,bl)
+	setCx86($0xc3,cl)	/* Restore old CCR3 */
 	sti
 	jmp isnew		/* We enabled CPUID now */
 
-n6x86:	setCx86($0xc3,cx)	/* Restore old CCR3 */
+n6x86:	setCx86($0xc3,cl)	/* Restore old CCR3 */
 	sti
 ncyrix:				/* restore original EFLAGS */
 	popfl
