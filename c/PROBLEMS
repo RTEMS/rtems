@@ -40,6 +40,10 @@ This is the list of outstanding problems in this release.
          be addressed.  The POSIX API cannot be used with this port as a
          result of this.
 
+       + Someone suggested writing a mini-system call interface to
+         include with RTEMS which would eliminate name conflicts.  This
+         would allow the RTEMS POSIX API to be tested in this configuration.
+
 +   Some of the tests may execute correctly and not produce the exact
     ordering of lines in the screen file.  This appears to be a combination
     of a number of factors including buffering, processor speed, IO
@@ -57,3 +61,13 @@ This is the list of outstanding problems in this release.
    + warn/refuse to configure when --enable-libcdir and
      --enable-gcc28 are given.
    + force --enable-libcdir when --disable-gcc28 is given
+
++  make profile does not currently work for a variety of reasons.  Few
+   BSPs include profile versions of the libraries in their bsp_specs
+   file.  There is no mechanism to sample data for gperf to process.
+   All of this will need to be addressed before "make profile" is truly
+   useful.
+
++  Bare BSP does not compile for all configurations yet.  This is 
+   primarily due to libcpu support code assuming that the BSP has
+   made something available which is not with a bare BSP.
