@@ -36,6 +36,8 @@
 #define TABDLY  0
 #define OLCUC   0
 #define ILCUC   0
+#define OCRNL   0
+#define IUCLC   0
 #endif
 
 /*
