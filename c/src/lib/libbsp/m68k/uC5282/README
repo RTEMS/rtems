@@ -86,6 +86,25 @@ port into RAM then executed or programmed into flash memory.
 5) Type 'goram<CR>' to start the downloaded program, or type 'program<CR>'
 to burn the code onto the uCDIMM flash.
 
+EPICS Bootstrap Information
+===========================
+The EPICS startup code uses the following environment variables.  If an
+optional environment variable is missing the value in parentheses will be used.
+All Internet addresses must be given in 'dotted-decimal' format.
+HWADDR0    - Ethernet hardware address.
+IPADDR0    - Internet address (192.168.0.2).
+NETMASK    - Local network address mask (255.255.252.0).
+HOSTNAME   - Internet host name (iocNobody).
+GATEWAY    - Internet address of gateway machine (NULL).
+SERVER     - Internet address of NFS server (192.168.0.1).
+NAMESERVER - Internet address of DNS server (SERVER).
+DOMAIN     - DNS domain name (precompiled value from CONFIG_SITE).
+NTPSERVER  - Internet address of NTP server (SERVER).
+LOGSERVER  - Internet address of syslog server (SERVER).
+BOOTFILE   - Path to executable (epics/iocNobody/bin/RTEMS-uC5282/myApp.boot).
+CMDLINE    - Path to startup script (epics/iocBoot/iocNobody/st.cmd).
+
+
 ============================================================================
 
       Memory map as set up by dBUG bootstrap and BSP initialization
