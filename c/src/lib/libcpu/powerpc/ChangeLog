@@ -1,5 +1,9 @@
 2001-11-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove mpc8xx from new_exception_processing.
+
+2001-11-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Remove mpc8620 from new_exception_processing.
 
 2001-11-20	Joel Sherrill <joel@OARcorp.com>
