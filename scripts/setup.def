@@ -6,11 +6,6 @@
 binutils_version=2.14
 binutils_patch_version=20030911
 binutils_rpm_release=3
-newlib_version=1.10.0
-newlib_patch_version=20020322
-gcc_version=2.95.3
-gcc_patch_version=20020328
-gccnewlib_rpm_release=3
 gdb_version=5.2
 gdb_patch_version=20030211
 gdb_rpm_release=2

@@ -26,11 +26,6 @@ do
   echo "0 binutils version        : $binutils_version"
   echo "1 binutils patch version  : $binutils_patch_version"
   echo "2 binutils rpm release    : $binutils_rpm_release"
-  echo "3 gcc version             : $gcc_version"
-  echo "4 gcc patch version       : $gcc_patch_version"
-  echo "5 newlib version          : $newlib_version"
-  echo "6 newlib patch version    : $newlib_patch_version"
-  echo "7 gcc/newlib rpm release  : $gccnewlib_rpm_release"
   echo "8 gdb version             : $gdb_version"
   echo "9 gdb patch version       : $gdb_patch_version"
   echo "a gdb rpm release         : $gdb_rpm_release"
@@ -53,16 +48,6 @@ do
      read binutils_patch_version ;;
   2) echo -n "BINUTILS RPM release >"
      read binutils_rpm_release ;;
-  3) echo -n "GCC source >"
-     read gcc_version ;;
-  4) echo -n "GCC patch version>"
-     read gcc_patch_version ;;
-  5) echo -n "NEWLIB source >"
-     read newlib_version ;;
-  6) echo -n "NEWLIB patch version>"
-     read newlib_patch_version ;;
-  7) echo -n "GCC/NEWLIB RPM release >"
-     read gccnewlib_rpm_release ;;
   8) echo -n "GDB source >"
      read gdb_version ;;
   9) echo -n "GDB patch version>"

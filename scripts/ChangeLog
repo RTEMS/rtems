@@ -1,5 +1,9 @@
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac, setup, setup.def: Remove now unused vars.
+
+2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* mkgccnewlibspec.in, gccnewlib/.cvsignore, gccnewlib/HISTORY,
 	gccnewlib/Makefile.am, gccnewlib/README, gccnewlib/base-chill.add,
 	gccnewlib/base-g77.add, gccnewlib/base-gcc.add, gccnewlib/base-gcj.add,
