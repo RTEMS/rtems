@@ -142,7 +142,7 @@ typedef struct {
   rtems_attribute       attribute_set;     /* task attributes */
   rtems_task_entry      entry_point;       /* task entry point */
   rtems_mode            mode_set;          /* task initial mode */
-  uint32_t              argument;          /* task argument */
+  rtems_task_argument	argument;          /* task argument */
 } rtems_initialization_tasks_table;
 
 /*
@@ -362,7 +362,7 @@ rtems_status_code rtems_task_set_priority(
 rtems_status_code rtems_task_start(
   Objects_Id   id,
   rtems_task_entry entry_point,
-  uint32_t     argument
+  rtems_task_argument     argument
 );
 
 /*

@@ -1,3 +1,8 @@
+2004-11-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* rtems/include/rtems/rtems/tasks.h, rtems/src/taskstart.c:
+	rtems_task_start(..., rtems_task_argument  argument );
+
 2004-11-01	Joel Sherrill <joel@oarcorp.com>
 
 	* score/cpu/no_cpu/rtems/score/cpu.h, score/include/rtems/debug.h,

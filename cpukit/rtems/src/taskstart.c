@@ -47,9 +47,9 @@
  */
 
 rtems_status_code rtems_task_start(
-  rtems_id         id,
-  rtems_task_entry entry_point,
-  uint32_t         argument
+  rtems_id         	id,
+  rtems_task_entry 	entry_point,
+  rtems_task_argument	argument
 )
 {
   register Thread_Control *the_thread;
