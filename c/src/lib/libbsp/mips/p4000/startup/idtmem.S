@@ -40,7 +40,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 
 #include <iregdef.h>
 #include <idtcpu.h>
-#include <asm.h>
+#include <rtems/asm.h>
 
 	.data
 mem_size:

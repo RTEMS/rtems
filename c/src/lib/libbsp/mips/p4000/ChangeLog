@@ -1,3 +1,12 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* console/led.S: Include <rtems/asm.h> instead of <asm.h>.
+	* start/start.S: Include <rtems/asm.h> instead of <asm.h>.
+	* startup/idtmem.S: Include <rtems/asm.h> instead of <asm.h>.
+	* startup/idttlb.S: Include <rtems/asm.h> instead of <asm.h>.
+	* include/bsp.h: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
+	* include/bsp.h: Include <rtems/console.h> instead of <console.h>.
+
 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* times, include/bsp.h, startup/bspstart.c: Convert to using c99
