@@ -296,7 +296,7 @@ Entry:
 	PUBLIC (_uhoh)
 SYM(_uhoh):	nop				| Leave spot for breakpoint
 	stop	#0x2700			| Stop with interrupts disabled
-	bra.s	SYM(_uhoh)			| Stuck forever
+	bra.l	SYM(_uhoh)			| Stuck forever
 
 /*
  * Log, but otherwise ignore, spurious interrupts
@@ -407,7 +407,7 @@ SYM(_mainDone):
 	movew	#1,a7			| Force a double bus error
 	movel	d0,a7@-			| This should cause a RESET
 	stop	#0x2700			| Stop with interrupts disabled
-	bra.s	SYM(_mainDone)		| Stuck forever
+	bra.l	SYM(_mainDone)		| Stuck forever
 
         .align 2
 	PUBLIC (_HeapSize)
