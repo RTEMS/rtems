@@ -40,13 +40,8 @@ SYM (RTEMS):
         lsll      #2, d0
         addal     d0, a0
 
-#if (M68K_COLDFIRE_ARCH == 0)
-        moveal    @(a0),a0
-        jmpl      @(a0)
-#else
         moveal    (a0),a0
         jmpl      (a0)
-#endif
 
         END_CODE
 END
