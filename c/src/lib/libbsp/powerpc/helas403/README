@@ -1,0 +1,48 @@
+#
+#  $Id$
+#
+
+BSP NAME:           helas403
+BOARD:              IMD, helas-ppc
+BUS:                N/A
+CPU FAMILY:         ppc
+CPU:                PowerPC 403GA
+COPROCESSORS:       N/A
+MODE:               32 bit mode
+
+DEBUG MONITOR:      Modified Motorola FBUG
+
+PERIPHERALS
+===========
+TIMERS:             403GA internal
+  RESOLUTION:         .04 microseconds
+SERIAL PORTS:       403GA internal 
+REAL-TIME CLOCK:    403GA internal
+DMA:                403GA internal
+VIDEO:              none
+SCSI:               none
+NETWORKING:         none
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       403GA internal
+IOSUPP DRIVER:      N/A
+SHMSUPP:            N/A
+TIMER DRIVER:       403GA internal
+TTY DRIVER:         403GA internal
+
+STDIO
+=====
+PORT:               Console port 0
+ELECTRICAL:         RS-232
+BAUD:               9600
+BITS PER CHARACTER: 8
+PARITY:             None
+STOP BITS:          1
+
+Notes
+=====
+
+helas403 only supports single processor operations.
+
+
