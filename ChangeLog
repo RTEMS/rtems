@@ -1,5 +1,9 @@
 2004-08-18	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* acinclude.m4: Fix m4-underquoting.
+
+2004-08-18	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* aclocal/bsp-alias.m4, aclocal/bsp-arg-enable.m4,
 	aclocal/canonical-host.m4, aclocal/canonical-target-name.m4,
 	aclocal/canonicalize-tools.m4, aclocal/check-bsps.m4,
