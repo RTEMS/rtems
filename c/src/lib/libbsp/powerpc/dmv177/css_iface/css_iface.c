@@ -1,20 +1,28 @@
+#include <bsp.h>
 #include <Css.h>
+#include <dmv170.h>
+#include <assert.h>
+
+css_jump_table_struct         *W_Css_jump_table;
+#define JUMP_TABLE_ADDRESS   ((void **) 0xf0f030a0)
+
+void Init_Css()
+{
+  W_Css_jump_table = *JUMP_TABLE_ADDRESS;
+}
 
 rtems_unsigned32 Css_Id(
   rtems_vector_number vector        /* vector number      */
 )
 {
-  rtems_unsigned32 id;
+  rtems_unsigned32 id = 0;
 
   switch ( vector ) {
     case DMV170_DUART_IRQ:
-    case DMV170_ETHERNET_IRQ:
-    case DMV170_SCSI_IRQ:
-    case DMV170_SCC_IRQ:
       id = CSS_DARF_INT;
       break;
 
-    case DMV170_MEZZANINE_IRQ:
+    case DMV170_MEZZANINE_IRQ_0:
       id = CSS_MAXPACK_INT;
       break;
 
@@ -42,7 +50,7 @@ rtems_vector_number Vector_id(
   rtems_unsigned32 id
 )
 {
-  rtems_vector_number vector;
+  rtems_vector_number vector = 0;
 
   switch ( id ) {
     case CSS_ACFAIL_INT:
@@ -76,10 +84,10 @@ rtems_vector_number Vector_id(
       vector = DMV170_PERIPHERAL_IRQ;
       break;
     case CSS_MAXPACK_INT:
-      vector = DMV170_MEZZANINE_IRQ_0;assert(0);
+      assert(0);
       break;
     case CSS_SCV_VME_INT:
-      vector = DMV170_MEZZANINE_IRQ_1;assert(0);
+      assert(0);
       break;
     case CSS_RTC_INT:
       vector = DMV170_RTC_IRQ;
@@ -96,12 +104,12 @@ void enable_card_interrupt(
   rtems_unsigned32 Id;
   Id = Css_Id(vector);
 
-  Enable_int(Id);
+  Enable_int(Id, TRUE);
 }
 
 rtems_vector_number Get_interrupt()
 {
-  rtems_vector_number vector;
+  rtems_vector_number vector = 0;
   rtems_unsigned32    id;
 
   if ( Get_int_status(CSS_ACFAIL_INT) )
@@ -129,7 +137,7 @@ rtems_vector_number Get_interrupt()
     assert(0);
   }
   else if ( Get_int_status( CSS_SCV_VME_INT) ) {
-    vector = DMV170_MEZZANINE_IRQ_1;
+    vector = DMV170_MEZZANINE_IRQ_0;
     assert(0);
   }
   else if ( Get_int_status( CSS_RTC_INT) )
