@@ -1,5 +1,10 @@
 2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* m68040/Makefile.am, mcf5206/Makefile.am, mcf5272/Makefile.am,
+	shared/Makefile.am: Remove build-variant support.
+
+2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* ChangeLog: Merge-in mcf5272/ChangeLog.
 	* mcf5272/ChangeLog: Remove.
 

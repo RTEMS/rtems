@@ -2,15 +2,12 @@
 ## $Id$
 ##
 
-EXTRA_PROGRAMS =
-CLEANFILES =
-noinst_DATA =
+noinst_PROGRAMS =
 
 include $(top_srcdir)/../../../automake/compile.am
 
 if m68040
-EXTRA_PROGRAMS += fpsp.rel
-CLEANFILES += fpsp.rel
+noinst_PROGRAMS += fpsp.rel
 fpsp_rel_SOURCES = fpsp/rtems_fpsp.c fpsp/bindec.S fpsp/binstr.S \
     fpsp/bugfix.S fpsp/decbin.S fpsp/do_func.S fpsp/gen_except.S \
     fpsp/get_op.S fpsp/kernel_ex.S fpsp/res_func.S fpsp/round.S \
@@ -23,14 +20,6 @@ fpsp_rel_SOURCES = fpsp/rtems_fpsp.c fpsp/bindec.S fpsp/binstr.S \
     fpsp/x_unsupp.S
 fpsp_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 fpsp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-EXTRA_PROGRAMS += fpsp_g.rel
-CLEANFILES += fpsp_g.rel
-fpsp_g_rel_SOURCES = $(fpsp_rel_SOURCES)
-fpsp_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-fpsp_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += fpsp$(LIB_VARIANT).rel
 
 noinst_HEADERS = fpsp/fpsp.defs
 endif
