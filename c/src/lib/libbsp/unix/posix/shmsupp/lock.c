@@ -76,7 +76,7 @@ void Shm_Lock(
       if ( status == -1 && errno == EINTR )
         continue;
 
-      fprintf( stderr, "shm lock (%d %d)\n", status, errno );
+      fprintf( stderr, "shm lock(%d %d)\n", status, errno );
       exit( 0 );
     }
 }
@@ -108,7 +108,7 @@ void Shm_Unlock(
       if ( status == -1 && errno == EINTR )
         continue;
 
-      fprintf( stderr, "shm lock (%d %d)\n", status, errno ); fflush( stderr );
+      fprintf( stderr, "shm unlock(%d %d)\n", status, errno );
       exit( 0 );
     }
 
