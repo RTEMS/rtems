@@ -12,9 +12,6 @@
 # to be run from the toplevel directory of RTEMS'
 # source tree
 
-AUTOCONF_VERS=2\.57
-AUTOMAKE_VERS=1\.7\.2
-
 progname=`basename $0`
 top_srcdir=`dirname $0`
 
@@ -98,29 +95,27 @@ generate)
   AUTOCONF=${AUTOCONF-autoconf}
   if test -z "$AUTOCONF"; then
     echo "You must have autoconf installed to run $program"
+    exit 1
   fi
-  if test -z "`$AUTOCONF --version 2>/dev/null | grep -e \" $AUTOCONF_VERS\"`"; then
-cat << EOF
-RTEMS requires autoconf version $AUTOCONF_VERS.
-
-You are trying to use $AUTOCONF which does not seem to be sufficient
-EOF
-  exit 1
+  
+  AUTOHEADER=${AUTOHEADER-autoheader}
+  if test -z "$AUTOHEADER"; then
+    echo "You must have autoconf installed to run $program"
+    exit 1
   fi
   
   AUTOMAKE=${AUTOMAKE-automake}
   if test -z "$AUTOMAKE"; then
     echo "You must have automake installed to run $program"
-  fi
-  if test -z "`$AUTOMAKE --version 2>/dev/null | grep -e \" $AUTOMAKE_VERS\"`"; then
-cat << EOF
-RTEMS requires automake version $AUTOMAKE_VERS.
-
-You are trying to use $AUTOMAKE which does not seem to be sufficient
-EOF
-  exit 1
+    exit 1
   fi
   
+  ACLOCAL=${ACLOCAL-aclocal}
+  if test -z "$ACLOCAL"; then
+    echo "You must have automake installed to run $program"
+    exit 1
+  fi
+
   case $top_srcdir in
   /* ) aclocal_dir=$top_srcdir
     ;;
@@ -139,14 +134,14 @@ EOF
     pat="s,\$(RTEMS_TOPdir),${aclocal_dir},g"
     aclocal_args=`grep '^[ ]*ACLOCAL_AMFLAGS' Makefile.am | \
       sed -e 's%.*ACLOCAL_AMFLAGS.*\=[ ]*%%g' -e $pat ` ;
-    test "$verbose" = "-v" && echo "aclocal $aclocal_args"
-    aclocal $aclocal_args;
-    test -n "`grep CONFIG_HEADER ${configure}`" && autoheader \
-      && test "$verbose" = "-v" && echo "autoheader";
-    test -n "`grep RTEMS_BSP_CONFIGURE ${configure}`" && autoheader \
-      && test "$verbose" = "-v" && echo "autoheader";
-    test -f Makefile.am && automake -a -c $verbose ;
-    autoconf;
+    test "$verbose" = "-v" && echo "${ACLOCAL} $aclocal_args"
+    ${ACLOCAL} $aclocal_args;
+    test -n "`grep CONFIG_HEADER ${configure}`" && ${AUTOHEADER} \
+      && test "$verbose" = "-v" && echo "${AUTOHEADER}";
+    test -n "`grep RTEMS_BSP_CONFIGURE ${configure}`" && ${AUTOHEADER} \
+      && test "$verbose" = "-v" && echo "${AUTOHEADER}";
+    test -f Makefile.am && ${AUTOMAKE} -a -c $verbose ;
+    ${AUTOCONF};
     test -f Makefile.am && test -n "`grep 'stamp-h\.in' Makefile.in`" \
       && echo timestamp > stamp-h.in
   )

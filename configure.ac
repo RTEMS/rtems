@@ -49,17 +49,16 @@ AC_MSG_WARN([]
 fi
 
 ## NOTES:
-## The tools/*-directories situation is unclear
 ## * tools/build are host-native tools to be installed on the host.
 ## * tools/cpu are host-native or host-cross-target-tools
-## * tools/update are build-host-native tools
 
-# these tools are built for the build environment
-#
-RTEMS_BUILD_CONFIG_SUBDIRS([tools/update])
+RTEMS_BUILD_CONFIG_SUBDIRS([tools/build])
+RTEMS_BUILD_CONFIG_SUBDIRS([tools/cpu])
 
+# Some BSPs carelessly apply these tools as build-tools
+AS_IF([test $host != $build],[
 RTEMS_HOST_CONFIG_SUBDIRS([tools/build])
-RTEMS_HOST_CONFIG_SUBDIRS([tools/cpu])
+])
 
 AS_IF([test x"${enable_docs}" = x"yes"],
   [RTEMS_HOST_CONFIG_SUBDIRS([doc])])
@@ -70,7 +69,6 @@ AS_IF([test x"$enable_multilib" = x"yes"],[
 RTEMS_TARGET_CONFIG_SUBDIRS([c])
 
 AC_CONFIG_FILES([Makefile
-tools/Makefile
 make/Makefile
 make/custom/Makefile
 ])

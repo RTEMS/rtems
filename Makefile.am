@@ -8,7 +8,7 @@
 
 ACLOCAL_AMFLAGS = -I aclocal
 
-SUBDIRS = tools make $(BUILD_SUBDIRS) $(HOST_SUBDIRS) $(TARGET_SUBDIRS)
+SUBDIRS = make $(build_SUBDIRS) $(host_SUBDIRS) $(target_SUBDIRS)
 
 AUTOMAKE_FILES = automake/compile.am automake/host.am automake/lib.am \
     automake/local.am automake/subdirs.am \
