@@ -44,11 +44,27 @@ rtems_interrupt_level bsp_isr_level;
  *  Since there is a forward reference
  */
 
-int main(int argc, char **argv);
+int main(int argc, char **argv, char **envp);
 
-int boot_card(int argc, char **argv)
+int boot_card(int argc, char **argv, char **envp)
 {
-  int status;
+  int    status;
+  static char  *argv_pointer = NULL;
+  static char  *envp_pointer = NULL;
+  char **argv_p = &argv_pointer;
+  char **envp_p = &envp_pointer;
+
+  /*
+   *  Set things up so main is called with real pointers for argv and envp.
+   *  If the BSP has passed us something useful, then pass it on.
+   */
+
+  if ( argv )
+    argv_p = argv;
+
+  if ( envp )
+    envp_p = envp;
+
 
   /*
    *  Set default values for the CPU Table fields all ports must have.
@@ -104,7 +120,7 @@ int boot_card(int argc, char **argv)
    _init();
 #endif
 
-  status = main(argc, argv);
+  status = main( argc, argv_p, envp_p );
 
   /*
    *  Perform any BSP specific shutdown actions.
