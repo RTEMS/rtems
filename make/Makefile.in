@@ -29,9 +29,18 @@ MAKEFILES := README \
 
 # NOTE: Use the wildcard rule to install all custom files
 # CUSTOM_FILES := $(wildcard $(srcdir)/custom/*.cfg)
+
 # NOTE: This should be sufficient, but may fail for some BSPS:
-#       Get all custom files for the BSP family, they may depend on eachother
-CUSTOM_FILES := custom/default.cfg $(patsubst %,custom/%.cfg,@RTEMS_BSP_LIST@)
+#       Get all custom files for the BSP family, they may depend on each other
+#CUSTOM_FILES := custom/default.cfg $(patsubst %,custom/%.cfg, posix)
+
+#  This version of the rule is pretty ugly but I think it works ALL the time.
+#      + Figure out what this BSP.cfg includes
+#      + Make those files have the correct relative path.
+#      + Now fix $(RTEMS_HOST) to the real host name
+CUSTOM_FILES := custom/default.cfg custom/$(RTEMS_BSP).cfg \
+   $(shell grep "^include.*make/custom" $(srcdir)/custom/$(RTEMS_BSP).cfg | \
+    sed -e 's/^.*make\///' | sed -e s/\\$$\(RTEMS_HOST\)/${RTEMS_HOST}/)
 
 # NOTE: Use the wildcard rule to install all compiler files
 # COMPILER_FILES := $(wildcard $(srcdir)/compilers/*.cfg)
