@@ -1,3 +1,17 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* README, base_mp/apptask.c, base_mp/init.c, base_mp/system.h,
+	base_mp/node1/base_mp.doc, base_mp/node2/base_mp.doc,
+	base_sp/apptask.c, base_sp/base_sp.doc, base_sp/init.c,
+	base_sp/system.h, cdtest/init.c, cdtest/main.cc, cdtest/system.h,
+	fileio/fileio.doc, fileio/init.c, fileio/system.h, hello/hello.doc,
+	hello/init.c, hello/system.h, minimum/init.c, minimum/minimum.doc,
+	paranoia/init.c, paranoia/paranoia.doc, paranoia/system.h,
+	ticker/init.c, ticker/system.h, ticker/tasks.c, ticker/ticker.doc,
+	unlimited/init.c, unlimited/system.h, unlimited/test1.c,
+	unlimited/test2.c, unlimited/test3.c, unlimited/unlimited.doc: URL
+	for license changed.
+
 2003-08-13	Joel Sherrill <joel@OARcorp.com>
 
 	* fileio/.cvsignore: New file.
