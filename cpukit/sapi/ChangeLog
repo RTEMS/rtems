@@ -1,3 +1,9 @@
+2003-08-14	Joel Sherrill <joel@OARcorp.com>
+
+	* src/extensionident.c: Added ID to name lookup service and changed
+	name of id/name translation status code. This propagated to multiple
+	functions. The user API service added was rtems_object_id_to_name()
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove stray reference to sptables.h.in.
