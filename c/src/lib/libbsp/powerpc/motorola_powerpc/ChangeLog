@@ -1,3 +1,8 @@
+2003-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 533/bsps
+	* startup/linkcmds: Update linkcmds for gcc 3.3.2.
+
 2003-09-26	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 496/bsps
