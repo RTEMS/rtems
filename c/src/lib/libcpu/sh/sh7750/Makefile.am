@@ -73,7 +73,7 @@ ${ARCH}/timer.rel: $(timer_rel_OBJECTS)
 
 # --
 
-all-local: $(ARCH) $(PGMS) $(TMPINSTALL_FILES)
+all-local: $(PGMS) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGMS)
 
