@@ -1,5 +1,9 @@
 2001-01-17	Joel Sherrill <joel@OARcorp.com>
 
+	* .cvsignore: Added rtems_header.html and rtems_footer.html.
+
+2001-01-17	Joel Sherrill <joel@OARcorp.com>
+
 	* timer.t: Added task-based timer information including the
 	new directives rtems_timer_initiate(), rtems_timer_server_fire_after(),
 	and rtems_timer_server_fire_when().

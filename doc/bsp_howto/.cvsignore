@@ -35,3 +35,5 @@ shmsupp.texi
 support.texi
 target.texi
 timer.texi
+rtems_header.html
+rtems_footer.html

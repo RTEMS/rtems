@@ -45,3 +45,5 @@ states.pdf
 task.texi
 timer.texi
 userext.texi
+rtems_header.html
+rtems_footer.html

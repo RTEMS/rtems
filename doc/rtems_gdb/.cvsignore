@@ -22,3 +22,5 @@ rtems_gdb.vr
 started.texi
 swarch.texi
 trouble.texi
+rtems_header.html
+rtems_footer.html

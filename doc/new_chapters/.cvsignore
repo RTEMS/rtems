@@ -27,3 +27,5 @@ new_chapters.tp
 new_chapters.vr
 rtmonuse.texi
 stackchk.texi
+rtems_header.html
+rtems_footer.html

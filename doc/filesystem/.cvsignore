@@ -26,3 +26,5 @@ mounting.texi
 patheval.texi
 syscalls.texi
 tftp.texi
+rtems_header.html
+rtems_footer.html

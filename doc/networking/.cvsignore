@@ -25,3 +25,5 @@ networktasks.texi
 recvbd.pdf
 servers.texi
 testing.texi
+rtems_header.html
+rtems_footer.html

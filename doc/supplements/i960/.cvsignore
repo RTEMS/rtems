@@ -30,3 +30,5 @@ timing.t
 timing.texi
 wksheets.t
 wksheets.texi
+rtems_header.html
+rtems_footer.html

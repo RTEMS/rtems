@@ -28,3 +28,5 @@ porting.vr
 prioritybitmap.texi
 sourcecode.texi
 taskcontext.texi
+rtems_header.html
+rtems_footer.html

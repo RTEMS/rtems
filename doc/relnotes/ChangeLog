@@ -1,3 +1,7 @@
+2001-01-17	Joel Sherrill <joel@OARcorp.com>
+
+	* .cvsignore: Added rtems_header.html and rtems_footer.html.
+
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Removed GENERATED_FILES from list of TEXINFOS.

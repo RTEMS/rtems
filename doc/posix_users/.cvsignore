@@ -42,3 +42,5 @@ status.texi
 systemdb.texi
 thread.texi
 timer.texi
+rtems_header.html
+rtems_footer.html

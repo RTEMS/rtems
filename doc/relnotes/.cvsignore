@@ -16,3 +16,5 @@ relnotes.ps
 relnotes.toc
 relnotes.tp
 relnotes.vr
+rtems_header.html
+rtems_footer.html
