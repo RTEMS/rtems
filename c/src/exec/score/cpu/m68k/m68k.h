@@ -37,9 +37,19 @@ extern "C" {
  *     -m68040 -msoft-float
  *     -m68040
  *     -m68040 -msoft-float
- *     -m68302        (no FP)
- *     -m68332        (no FP)
+ *     -m68302        (no FP) (deprecated, use -m68000)
+ *     -m68332        (no FP) (deprecated, use -mcpu32)
  *     -mcpu32        (no FP)
+ *
+ *  As of gcc 2.8.1 and egcs 1.1, there is no distinction made between
+ *  the CPU32 and CPU32+.  The option -mcpu32 generates code which can
+ *  be run on either core.  RTEMS distinguishes between these two cores
+ *  because they have different alignment rules which impact performance.
+ *  If you are using a CPU32+, then the symbol RTEMS__mcpu32p__ should
+ *  be defined in your custom file (see make/custom/gen68360.cfg for an
+ *  example of how to do this.  If gcc ever distinguishes between these
+ *  two cores, then RTEMS__mcpu32p__ usage will be replaced with the
+ *  appropriate compiler defined predefine.
  *
  *  Here is some information on the 040 variants (courtesy of Doug McBride,
  *  mcbride@rodin.colorado.edu):
@@ -129,19 +139,8 @@ extern "C" {
 #define M68K_HAS_FPU             0
 #define M68K_HAS_FPSP_PACKAGE    0
 
-#elif defined(__mc68332__)
- 
-#define CPU_MODEL_NAME          "mcpu32"
-#define M68K_HAS_VBR             1
-#define M68K_HAS_SEPARATE_STACKS 0
-#define M68K_HAS_BFFFO           0
-#define M68K_HAS_PREINDEXING     1
-#define M68K_HAS_EXTB_L          1
-#define M68K_HAS_MISALIGNED      0
-#define M68K_HAS_FPU             0
-#define M68K_HAS_FPSP_PACKAGE    0
-
-#elif defined(__mcpu32__)
+  /* gcc and egcs do not distinguish between CPU32 and CPU32+ */
+#elif defined(RTEMS__mcpu32p__)
  
 #define CPU_MODEL_NAME          "mcpu32+"
 #define M68K_HAS_VBR             1
@@ -150,6 +149,18 @@ extern "C" {
 #define M68K_HAS_PREINDEXING     1
 #define M68K_HAS_EXTB_L          1
 #define M68K_HAS_MISALIGNED      1
+#define M68K_HAS_FPU             0
+#define M68K_HAS_FPSP_PACKAGE    0
+
+#elif defined(__mcpu32__)
+ 
+#define CPU_MODEL_NAME          "mcpu32"
+#define M68K_HAS_VBR             1
+#define M68K_HAS_SEPARATE_STACKS 0
+#define M68K_HAS_BFFFO           0
+#define M68K_HAS_PREINDEXING     1
+#define M68K_HAS_EXTB_L          1
+#define M68K_HAS_MISALIGNED      0
 #define M68K_HAS_FPU             0
 #define M68K_HAS_FPSP_PACKAGE    0
 
