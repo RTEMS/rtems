@@ -1,3 +1,8 @@
+2002-03-27	Eric Norum <eric.norum@usask.ca>
+
+        * intr.t: Per PR165, now correctly states that passing a NULL 
+	pointer for the return argument is an error.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.

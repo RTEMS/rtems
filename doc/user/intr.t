@@ -273,7 +273,7 @@ procedure Interrupt_Catch (
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - ISR established successfully@*
 @code{@value{RPREFIX}INVALID_NUMBER} - illegal vector number@*
-@code{@value{RPREFIX}INVALID_ADDRESS} - illegal ISR entry point or invalid old_isr_handler
+@code{@value{RPREFIX}INVALID_ADDRESS} - illegal ISR entry point or invalid @code{old_isr_handler}
 
 @subheading DESCRIPTION:
 
@@ -285,11 +285,6 @@ returned in @code{old_isr_handler}.
 
 To release an interrupt vector, pass the old handler's address obtained
 when the vector was first capture.
-
-@ifset is-C
-Passing a NULL pointer as the @code{old_handler} address and this parameter
-will be ignored.
-@end ifset
 
 @subheading NOTES:
 
