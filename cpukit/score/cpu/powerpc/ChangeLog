@@ -1,3 +1,8 @@
+2004-10-20	Eric Norum <norume@aps.anl.gov
+
+	Add Kate Feng's MVME5500 BSP
+	* rtems/powerpc/registers.h, rtems/score/powerpc.h
+
 2004-09-29	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/new-exceptions/cpu.h, rtems/old-exceptions/cpu.h: i960

@@ -1,6 +1,12 @@
 2004-10-20	Eric Norum <norume@aps.anl.gov>
 
-	* configure.ac: Add MPC7455 support
+     Add Kate Feng's MPC7455 support
+	* configure.ac
+    * mpc6xx/exceptions/raw_exception.c
+    * mpc6xx/mmu/mmuAsm.S
+    * mpc6xx/mmu/pte121.c
+    * shared/include/cpuIdent.c
+    * shared/include/cpuIdent.h
 
 2004-10-19	Ralf Corsepius <ralf_corsepius@rtems.org>
 

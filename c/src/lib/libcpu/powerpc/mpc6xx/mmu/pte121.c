@@ -382,7 +382,8 @@ triv121PgTblInit(unsigned long base, unsigned ldSize)
   			PPC_604e	!=current_ppc_cpu &&
   			PPC_604r	!=current_ppc_cpu &&
   			PPC_750		!=current_ppc_cpu &&
-  			PPC_7400	!=current_ppc_cpu )
+  			PPC_7400	!=current_ppc_cpu &&
+  			PPC_7455	!=current_ppc_cpu )
 		return 0;	/* unsupported by this CPU */
 
 	pgTbl.base=(PTE)base;
@@ -425,24 +426,24 @@ triv121PgTblGet(void)
 long
 triv121PgTblMap(
 				Triv121PgTbl	pt,
-				long			vsid,
+				long		ovsid,
 				unsigned long	start,
 				unsigned long	numPages,
 				unsigned		attributes,
 				unsigned		protection
 				)
 {
-int				i,pass;
+int		i,pass;
 unsigned long	pi;
-PTE				pte;
-
+PTE		pte;
+long            vsid;
 	/* already activated - no change allowed */
 	if (pt->active)
 			return -1;
 
-	if (vsid < 0) {
+	if (ovsid < 0) {
 			/* use 1:1 mapping */
-			vsid = VSID121(start);
+			ovsid = VSID121(start);
 	}
 
 #ifdef DEBUG
@@ -465,7 +466,11 @@ PTE				pte;
 	 */
 	for (pass=0; pass<2; pass++) {
 		/* check if we would succeed during the first pass */
-		for (i=0, pi=PI121(start); i<numPages; i++,pi++) {
+		for (i=0, pi=PI121(start), vsid = ovsid; i<numPages; i++,pi++) {
+			if ( pi >= 1<<LD_PI_SIZE ) {
+                               vsid++;
+                               pi = 0;
+                       }
 			/* leave alone existing mappings for this EA */
 			if (!alreadyMapped(pt, vsid, pi)) {
 				if (!(pte=slotFor(pt, vsid, pi))) {

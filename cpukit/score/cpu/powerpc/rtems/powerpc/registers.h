@@ -50,6 +50,11 @@ extern "C" {
 #define HID0_EBA	(1<<29)		/* Enable Bus Address Parity */
 #define HID0_EBD	(1<<28)		/* Enable Bus Data Parity */
 #define HID0_SBCLK	(1<<27)
+#define HID0_TBEN       (1<<26)         /* 7455:this bit must be set
+					 * and TBEN signal must be asserted
+					 * to enable the time base and
+					 * decrementer.
+					 */
 #define HID0_EICE	(1<<26)
 #define HID0_ECLK	(1<<25)
 #define HID0_PAR	(1<<24)
@@ -65,6 +70,10 @@ extern "C" {
 #define HID0_DCI	(1<<10)		/* Data Cache Invalidate */
 #define HID0_SIED	(1<<7)		/* Serial Instruction Execution [Disable] */
 #define HID0_BTIC	(1<<5)          /* Branch Target Instruction Cache [Enable] */
+/* S.K. Feng 10/03, added for MPC7455 */
+#define HID0_LRSTK	(1<<4)          /* Link register stack enable (7455) */
+#define HID0_FOLD	(1<<3)          /* Branch folding enable (7455) */
+
 #define HID0_BHTE	(1<<2)		/* Branch History Table Enable */
 #define HID0_BTCD	(1<<1)		/* Branch target cache disable */
 
@@ -143,7 +152,73 @@ n:
 #define IABR	1010	/* Instruction Address Breakpoint */
 #define DEC	22	/* Decrementer */
 #define EAR	282	/* External Address Register */
-#define L2CR	1017    /* PPC 750 L2 control register */
+
+#define MSSCR0   1014   /* Memory Subsystem Control Register */
+
+#define L2CR	1017    /* PPC 750 and 74xx L2 control register */
+
+#define L2CR_L2E   (1<<31)	/* enable */
+#define L2CR_L2I   (1<<21)	/* global invalidate */
+
+/* watch out L2IO and L2DO are different between 745x and 7400/7410 */
+/* Oddly, the following L2CR bit defintions in 745x
+ * is different from that of 7400 and 7410.
+ * Though not used in 7400 and 7410, it is appeded with _745x just
+ * to be clarified.
+ */	
+#define L2CR_L2IO_745x  0x100000  /* (1<<20) L2 Instruction-Only  */
+#define L2CR_L2DO_745x  0x10000   /* (1<<16) L2 Data-Only */
+#define L2CR_LOCK_745x  (L2CR_L2IO_745x|L2CR_L2DO_745x)
+#define L2CR_L3OH0      0x00080000 /* 12:L3 output hold 0 */
+	
+#define L3CR    1018    /* PPC 7450/7455 L3 control register */
+#define L3CR_L3IO_745x  0x400000  /* (1<<22) L3 Instruction-Only */
+#define L3CR_L3DO_745x  0x40	  /* (1<<6) L3 Data-Only */
+
+#define L3CR_LOCK_745x  (L3CR_L3IO_745x|L3CR_L3DO_745x)
+
+#define	  L3CR_RESERVED		  0x0438003a /* Reserved bits in L3CR */
+#define	  L3CR_L3E		  0x80000000 /* 0: L3 enable */
+#define	  L3CR_L3PE		  0x40000000 /* 1: L3 data parity checking enable */
+#define	  L3CR_L3APE		  0x20000000 /* 2: L3 address parity checking enable */
+#define	  L3CR_L3SIZ		  0x10000000 /* 3: L3 size (0=1MB, 1=2MB) */
+#define	   L3SIZ_1M		  0x00000000
+#define	   L3SIZ_2M		  0x10000000
+#define	  L3CR_L3CLKEN		  0x08000000 /* 4: Enables the L3_CLK[0:1] signals */
+#define	  L3CR_L3CLK		  0x03800000 /* 6-8: L3 clock ratio */
+#define	   L3CLK_60		  0x00000000 /* core clock / 6   */
+#define	   L3CLK_20		  0x01000000 /*            / 2   */
+#define	   L3CLK_25		  0x01800000 /*            / 2.5 */
+#define	   L3CLK_30		  0x02000000 /*            / 3   */
+#define	   L3CLK_35		  0x02800000 /*            / 3.5 */
+#define	   L3CLK_40		  0x03000000 /*            / 4   */
+#define	   L3CLK_50		  0x03800000 /*            / 5   */
+#define	  L3CR_L3IO		  0x00400000 /* 9: L3 instruction-only mode */
+#define	  L3CR_L3SPO		  0x00040000 /* 13: L3 sample point override */
+#define	  L3CR_L3CKSP		  0x00030000 /* 14-15: L3 clock sample point */
+#define	   L3CKSP_2		  0x00000000 /* 2 clocks */
+#define	   L3CKSP_3		  0x00010000 /* 3 clocks */
+#define	   L3CKSP_4		  0x00020000 /* 4 clocks */
+#define	   L3CKSP_5		  0x00030000 /* 5 clocks */
+#define	  L3CR_L3PSP		  0x0000e000 /* 16-18: L3 P-clock sample point */
+#define	   L3PSP_0		  0x00000000 /* 0 clocks */
+#define	   L3PSP_1		  0x00002000 /* 1 clocks */
+#define	   L3PSP_2		  0x00004000 /* 2 clocks */
+#define	   L3PSP_3		  0x00006000 /* 3 clocks */
+#define	   L3PSP_4		  0x00008000 /* 4 clocks */
+#define	   L3PSP_5		  0x0000a000 /* 5 clocks */
+#define	  L3CR_L3REP		  0x00001000 /* 19: L3 replacement algorithm (0=default, 1=alternate) */
+#define	  L3CR_L3HWF		  0x00000800 /* 20: L3 hardware flush */
+#define	  L3CR_L3I		  0x00000400 /* 21: L3 global invaregisters.h.orig
+lidate */
+#define	  L3CR_L3RT		  0x00000300 /* 22-23: L3 SRAM type */
+#define	   L3RT_MSUG2_DDR	  0x00000000 /* MSUG2 DDR SRAM */
+#define	   L3RT_PIPELINE_LATE	  0x00000100 /* Pipelined (register-register) synchronous late-write SRAM */
+#define	   L3RT_PB2_SRAM	  0x00000300 /* PB2 SRAM */
+#define	  L3CR_L3NIRCA		  0x00000080 /* 24: L3 non-integer ratios clock adjustment for the SRAM */
+#define	  L3CR_L3DO		  0x00000040 /* 25: L3 data-only mode */
+#define	  L3CR_PMEN		  0x00000004 /* 29: Private memory enable */
+#define	  L3CR_PMSIZ		  0x00000004 /* 31: Private memory size (0=1MB, 1=2MB) */
 
 #define THRM1	1020
 #define THRM2	1021
