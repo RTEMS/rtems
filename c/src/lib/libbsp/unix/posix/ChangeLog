@@ -1,3 +1,7 @@
+2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp_specs: Add qnolinkcmds.
+
 2000-10-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
