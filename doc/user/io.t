@@ -367,7 +367,6 @@ procedure IO_Initialize (
    Major        : in     RTEMS.Device_Major_Number;
    Minor        : in     RTEMS.Device_Minor_Number;
    Argument     : in     RTEMS.Address;
-   Return_Value :    out RTEMS.Unsigned32;
    Result       :    out RTEMS.Status_Codes
 );
 @end example
@@ -513,7 +512,6 @@ procedure IO_Open (
    Major        : in     RTEMS.Device_Major_Number;
    Minor        : in     RTEMS.Device_Minor_Number;
    Argument     : in     RTEMS.Address;
-   Return_Value :    out RTEMS.Unsigned32;
    Result       :    out RTEMS.Status_Codes
 );
 @end example
@@ -563,7 +561,6 @@ procedure IO_Close (
    Major        : in     RTEMS.Device_Major_Number;
    Minor        : in     RTEMS.Device_Minor_Number;
    Argument     : in     RTEMS.Address;
-   Return_Value :    out RTEMS.Unsigned32;
    Result       :    out RTEMS.Status_Codes
 );
 @end example
@@ -613,7 +610,6 @@ procedure IO_Read (
    Major        : in     RTEMS.Device_Major_Number;
    Minor        : in     RTEMS.Device_Minor_Number;
    Argument     : in     RTEMS.Address;
-   Return_Value :    out RTEMS.Unsigned32;
    Result       :    out RTEMS.Status_Codes
 );
 @end example
@@ -664,7 +660,6 @@ procedure IO_Write (
    Major        : in     RTEMS.Device_Major_Number;
    Minor        : in     RTEMS.Device_Minor_Number;
    Argument     : in     RTEMS.Address;
-   Return_Value :    out RTEMS.Unsigned32;
    Result       :    out RTEMS.Status_Codes
 );
 @end example
@@ -716,7 +711,6 @@ procedure IO_Control (
    Major        : in     RTEMS.Device_Major_Number;
    Minor        : in     RTEMS.Device_Minor_Number;
    Argument     : in     RTEMS.Address;
-   Return_Value :    out RTEMS.Unsigned32;
    Result       :    out RTEMS.Status_Codes
 );
 @end example
