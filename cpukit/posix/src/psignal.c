@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <pthread.h>
 #include <signal.h>
+#include <string.h>	/* memcpy */
 
 #include <rtems/system.h>
 #include <rtems/score/isr.h>

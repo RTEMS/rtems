@@ -4,7 +4,7 @@
 
 AC_PREREQ(2.52)
 AC_INIT
-AC_CONFIG_SRCDIR([optman])
+AC_CONFIG_SRCDIR([src/pthread.c])
 RTEMS_TOP(../../../..)
 AC_CONFIG_AUX_DIR(../../../..)
 

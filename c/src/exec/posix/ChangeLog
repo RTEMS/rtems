@@ -1,3 +1,8 @@
+2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: AC_CONFIG_SRCDIR([src/pthreads.c])
+	* src/psignal.c: #include <string.h>.
+
 2001-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove optman/Makefile from CONFIG_FILES.
