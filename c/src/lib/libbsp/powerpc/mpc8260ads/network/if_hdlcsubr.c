@@ -294,7 +294,7 @@ hdlc_ifattach(ifp)
 }
 
 
-SYSCTL_NODE(_net_link, IFT_ETHER, ether, CTLFLAG_RW, 0, "Ethernet");
+/* SYSCTL_NODE(_net_link, IFT_ETHER, ether, CTLFLAG_RW, 0, "Ethernet"); */
 
 int
 hdlc_ioctl(struct ifnet *ifp, int command, caddr_t data)

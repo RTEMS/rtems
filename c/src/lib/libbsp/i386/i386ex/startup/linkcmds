@@ -95,9 +95,18 @@ SECTIONS
 	text_start = . ;
         _text_start = . ;
         *(.text ) ;
+	/*
+	 * Special FreeBSD sysctl sections.
+	 */
 	. = ALIGN (16);
+	__start_set_sysctl_set = .;
+	*(set_sysctl_*);
+	__stop_set_sysctl_set = ABSOLUTE(.);
+	*(set_domain_*);
+	*(set_pseudo_*);
 
 	*(.eh_fram)
+
 	. = ALIGN (16);
 
 	/*

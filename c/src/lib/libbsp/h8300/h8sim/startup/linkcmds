@@ -43,6 +43,16 @@ SECTIONS
 	*(.text) 
 	
         /*
+         * Special FreeBSD sysctl sections.
+         */
+        . = ALIGN (16);
+        __start_set_sysctl_set = .;
+        *(set_sysctl_*);
+        __stop_set_sysctl_set = ABSOLUTE(.);
+        *(set_domain_*);
+        *(set_pseudo_*);
+
+        /*
          * Read-only data
          */
         . = ALIGN (16);
