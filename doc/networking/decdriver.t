@@ -13,9 +13,10 @@
 
 @c XXX add back in cross reference to list of boards.
 
-One aim of our project is to port RTEMS on a standard PowerPC platform. To achieve
-it, we have chosen a Motorola MCP750 board. This board includes an Ethernet
-controller based on a DEC21140 chip. Because RTEMS has a TCP/IP stack, we will
+One aim of our project is to port RTEMS on a standard PowerPC platform.
+To achieve it, we have chosen a Motorola MCP750 board. This board includes
+an Ethernet controller based on a DEC21140 chip. Because RTEMS has a
+TCP/IP stack, we will
 have to develop the DEC21140 related ethernet driver for the PowerPC port of
 RTEMS. As this controller is able to support 100Mbps network and as there is
 a lot of PCI card using this DEC chip, we have decided to first
