@@ -1,0 +1,169 @@
+/*
+ * This file contains GNU linker directives for an MCF5206eLITE
+ * evaluation board.
+ *
+ * Variations in memory size and allocation can be made by
+ * overriding some values with linker command-line arguments.
+ *
+ * Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
+ * Author: Victor V. Vengerov <vvv@oktet.ru>
+ *
+ * This file based on work:
+ * David Fiddes, D.J.Fiddes@hw.ac.uk
+ * http://www.calm.hw.ac.uk/davidf/coldfire/
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ *
+ * http://www.OARcorp.com/rtems/license.html.
+ * 
+ *  $Id$
+ */
+
+/*
+ * Declare some sizes.
+ * XXX: The assignment of ". += XyzSize;" fails in older gld's if the
+ *      number used there is not constant.  If this happens to you, edit
+ *      the lines marked XXX below to use a constant value.
+ */
+/*
+ * Declare size of heap.
+ * A heap size of 0 means "Use all available memory for the heap".
+ * Initial stack located in on-chip SRAM and not declared there.
+ */
+_HeapSize = DEFINED(_HeapSize) ? _HeapSize : 0x0;
+
+/*
+ * Declare system clock frequency.
+ */
+_SYS_CLOCK_FREQUENCY = DEFINED(_SYS_CLOCK_FREQUENCY) ? _SYS_CLOCK_FREQUENCY : 54000000;
+
+/*
+ * Setup the memory map of the MCF5206eLITE evaluation board
+ *
+ * The "rom" section is in USER Flash on the board
+ * The "ram" section is placed in USER RAM starting at 10000h
+ * 
+ */
+MEMORY
+{
+  ram     : ORIGIN = 0x30000000, LENGTH = 0x00100000
+  rom     : ORIGIN = 0xFFE20000, LENGTH = 128k 
+}
+
+MBase = 0x10000000;
+
+/* Interrupt Vector table located at start of external static RAM */
+_VBR = 0x30000000;
+
+SECTIONS
+{
+     
+  /*
+   * Dynamic RAM
+   */
+  ram : {
+          _RamBase = .;
+          __RamBase = .;
+          /* Reserve space for interrupt table */
+          . += 0x400;
+  } >ram 
+
+  /*
+   * Text, data and bss segments
+   */
+   .text : {
+           CREATE_OBJECT_SYMBOLS
+           *(.text)
+
+	   /*
+	    * C++ constructors/destructors
+	    */
+	   *(.gnu.linkonce.t.*)
+
+	   /*
+	    * Initialization and finalization code.
+	    */
+           . = ALIGN (16);
+	   PROVIDE (_init = .);
+	   *crti.o(.init)
+	   *(.init)
+	   *crtn.o(.init)
+           . = ALIGN (16);
+	   PROVIDE (_fini = .);
+	   *crti.o(.fini)
+	   *(.fini)
+	   *crtn.o(.fini)
+
+	   /*
+	    * C++ constructors/destructors
+	    */
+	   . = ALIGN (16);
+	   *crtbegin.o(.ctors)
+	   *(.ctors)
+	   *crtend.o(.ctors)
+	   *crtbegin.o(.dtors)
+	   *(.dtors)
+	   *crtend.o(.dtors)
+
+	   /*
+	    * Exception frame info
+	    */
+	   . = ALIGN (16);
+	   *(.eh_frame)
+
+	   /*
+	    * Read-only data
+	    */
+	   . = ALIGN (16);
+	   _rodata_start = . ;
+	   *(.rodata)
+	   *(.gnu.linkonce.r*)
+
+           . = ALIGN (16);
+           PROVIDE (etext = .);
+
+   } > ram
+
+   .data BLOCK (0x4) : {
+           copy_start = .;
+           *(.shdata)
+           . = ALIGN (0x10);
+           *(.data)
+           . = ALIGN (0x10);
+           *(.gcc_exc)
+           *(.gcc_except_table)
+           . = ALIGN (0x10);
+           *(.gnu.linkonce.d*)
+           . = ALIGN (0x10);
+           _edata = .;
+	   copy_end = .;
+   } > ram
+
+  .bss BLOCK (0x4) :
+  {
+    clear_start = . ;
+    *(.shbss)
+    *(.bss)
+    *(COMMON)
+    . = ALIGN(0x10);
+    _end = .;
+    
+    clear_end = .;
+
+    _WorkspaceBase = .;
+    __WorkspaceBase = .;
+
+  } > ram
+
+  .stab 0 (NOLOAD) :
+  {
+    *(.stab)
+  }
+
+  .stabstr 0 (NOLOAD) :
+  {
+    *(.stabstr)
+  }
+ 
+}

@@ -1,0 +1,220 @@
+#
+# GDB Init script for the Coldfire 5206e processor.
+#
+# The main purpose of this script is to perform minimum initialization of
+# processor so code can be loaded. Also, exception handling is performed.
+# 
+# Copyright (C) OKTET Ltd., St.-Petersburg, Russia
+# Author: Victor V. Vengerov <vvv@oktet.ru>
+#
+# This script partially based on gdb scripts written by 
+# Eric Norum, <eric@skatter.usask.ca>
+#
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution or at
+#
+# http://www.OARcorp.com/rtems/license.html.
+#
+# $Id$
+#
+
+define addresses
+
+set $mbar  = 0x10000001
+set $simr  = $mbar - 1 + 0x003
+set $icr1  = $mbar - 1 + 0x014
+set $icr2  = $mbar - 1 + 0x015
+set $icr3  = $mbar - 1 + 0x016
+set $icr4  = $mbar - 1 + 0x017
+set $icr5  = $mbar - 1 + 0x018
+set $icr6  = $mbar - 1 + 0x019
+set $icr7  = $mbar - 1 + 0x01A
+set $icr8  = $mbar - 1 + 0x01B
+set $icr9  = $mbar - 1 + 0x01C
+set $icr10 = $mbar - 1 + 0x01D
+set $icr11 = $mbar - 1 + 0x01E
+set $icr12 = $mbar - 1 + 0x01F
+set $icr13 = $mbar - 1 + 0x020
+set $imr   = $mbar - 1 + 0x036
+set $ipr   = $mbar - 1 + 0x03A
+set $rsr   = $mbar - 1 + 0x040
+set $sypcr = $mbar - 1 + 0x041
+set $swivr = $mbar - 1 + 0x042
+set $swsr  = $mbar - 1 + 0x043
+set $dcrr  = $mbar - 1 + 0x046
+set $dctr  = $mbar - 1 + 0x04A
+set $dcar0 = $mbar - 1 + 0x04C
+set $dcmr0 = $mbar - 1 + 0x050
+set $dccr0 = $mbar - 1 + 0x057
+set $dcar1 = $mbar - 1 + 0x058
+set $dcmr1 = $mbar - 1 + 0x05C
+set $dccr1 = $mbar - 1 + 0x063
+set $csar0 = $mbar - 1 + 0x064
+set $csmr0 = $mbar - 1 + 0x068
+set $cscr0 = $mbar - 1 + 0x06E
+set $csar1 = $mbar - 1 + 0x070
+set $csmr1 = $mbar - 1 + 0x074
+set $cscr1 = $mbar - 1 + 0x07A
+set $csar2 = $mbar - 1 + 0x07C
+set $csmr2 = $mbar - 1 + 0x080
+set $cscr2 = $mbar - 1 + 0x086
+set $csar3 = $mbar - 1 + 0x088
+set $csmr3 = $mbar - 1 + 0x08C
+set $cscr3 = $mbar - 1 + 0x092
+set $csar4 = $mbar - 1 + 0x094
+set $csmr4 = $mbar - 1 + 0x098
+set $cscr4 = $mbar - 1 + 0x09E
+set $csar5 = $mbar - 1 + 0x0A0
+set $csmr5 = $mbar - 1 + 0x0A4
+set $cscr5 = $mbar - 1 + 0x0AA
+set $csar6 = $mbar - 1 + 0x0AC
+set $csmr6 = $mbar - 1 + 0x0B0
+set $cscr6 = $mbar - 1 + 0x0B6
+set $csar7 = $mbar - 1 + 0x0B8
+set $csmr7 = $mbar - 1 + 0x0BC
+set $cscr7 = $mbar - 1 + 0x0C2
+set $dmcr  = $mbar - 1 + 0x0C6
+set $par   = $mbar - 1 + 0x0CA
+set $tmr1  = $mbar - 1 + 0x100
+set $trr1  = $mbar - 1 + 0x104
+set $tcr1  = $mbar - 1 + 0x108
+set $tcn1  = $mbar - 1 + 0x10C
+set $ter1  = $mbar - 1 + 0x111
+set $tmr2  = $mbar - 1 + 0x120
+set $trr2  = $mbar - 1 + 0x124
+set $tcr2  = $mbar - 1 + 0x128
+set $tcn2  = $mbar - 1 + 0x12C
+set $ter2  = $mbar - 1 + 0x131
+
+end
+
+#
+#  Setup CSAR0 for the FLASH ROM.
+#
+
+define setup-cs
+
+set *((short*) $csar0) = 0xffe0
+set *((int*)   $csmr0) = 0x000f0000
+set *((short*) $cscr0) = 0x1da3
+set *((short*) $csar1) = 0x5000
+set *((int*)   $csmr1) = 0x00000000
+set *((short*) $cscr1) = 0x3d43
+set *((short*) $csar2) = 0x3000
+set *((int*)   $csmr2) = 0x000f0000
+set *((short*) $cscr2) = 0x1903
+set *((short*) $csar3) = 0x4000
+set *((int*)   $csmr3) = 0x000f0000
+set *((short*) $cscr3) = 0x0083
+
+end
+
+#
+# Setup the DRAM controller.
+#
+
+define setup-dram
+
+set *((short*) $dcrr)  = 24
+set *((short*) $dctr)  = 0x0000
+set *((short*) $dcar0) = 0x0000
+set *((long*)  $dcmr0) = 0x000e0000
+set *((char*)  $dccr0) = 0x07
+set *((short*) $dcar1) = 0x0000
+set *((long*)  $dcmr1) = 0x00000000
+set *((char*)  $dccr1) = 0x00
+
+end
+
+
+#
+# Wake up the board
+#
+
+define initboard
+
+addresses
+setup-cs
+# setup-dram
+
+end
+
+define ss
+si
+x/i $pc
+end
+
+#
+# Display exception information
+#
+define exception-info
+set $excpc = *(unsigned int *)($sp+4)
+set $excfmt = (*(unsigned int *)$sp >> 28) & 0x0f
+set $excfs = ((*(unsigned int *)$sp >> 24) & 0x0c) | \
+             ((*(unsigned int *)$sp >> 16) & 0x03)
+set $excvec = (*(unsigned int *)$sp >> 18) & 0xff
+set $excsr = *(unsigned int *)$sp & 0xffff
+
+printf "EXCEPTION -- SR:0x%X  PC:0x%X  FRAME:0x%X VECTOR:%d\n", \
+        $excsr, $excpc, $sp, $excvec
+if $excvec == 2
+    printf "Access error exception"
+end
+if $excvec == 3
+    printf "Address error exception"
+end
+if $excvec == 4
+    printf "Illegal instruction exception"
+end
+if $excvec == 8
+    printf "Privelege violation exception"
+end
+if $excvec == 9
+    printf "Trace exception"
+end
+if $excvec == 10
+    printf "Unimplemented LINE-A opcode exception"
+end
+if $excvec == 11
+    printf "Unimplemented LINE-F opcode exception"
+end
+if $excvec == 12
+    printf "Debug interrupt"
+end
+if $excvec == 14
+    printf "Format error exception"
+end
+if $excfs == 0x04
+    printf " on instruction fetch"
+end
+if $excfs == 0x08
+    printf " on operand write"
+end
+if $excfs == 0x09
+    printf " on write to write-protected space"
+end
+if $excfs == 0x0c
+    printf " on operand read"
+end
+printf "\n"
+x/4i $excpc
+set $pc=$excpc
+set $sp=$sp+8
+end
+
+target bdm /dev/bdmcf0
+initboard
+load
+set $pc=start
+set $sp=0x20001ffc
+b bsp_cleanup
+b _stop
+b _unexp_exception
+commands
+silent
+exception-info
+end
+b _unexp_int
+b _reserved_int
+b _spurious_int

@@ -1,0 +1,15 @@
+2001-10-26	Victor V. Vengerov <vvv@oktet.ru>
+
+	* New BSP for MCF5206eLITE evaluation board BSP.
+	* ChangeLog, README, bsp_specs, configure.ac, console/console.c,
+	console/.cvsignore, i2c/i2c.c, i2c/i2cdrv.c, i2c/.cvsignore,
+	include/bsp.h, include/bspopts.h.in, include/coverhd.h,
+	include/ds1307.h, include/i2c.h, include/i2cdrv.h, include/nvram.h,
+	include/.cvsignore, nvram/nvram.c, nvram/.cvsignore, start/start.S,
+	start/.cvsignore, startup/bspclean.c, startup/bspstart.c,
+	startup/gdbinit, startup/init5206e.c, startup/linkcmds,
+	startup/linkcmds.flash, startup/.cvsignore, times, tod/ds1307.c,
+	tod/todcfg.c, tod/.cvsignore, tools/.cvsignore, tools/configure.ac,
+	tools/runtest, tools/changes, wrapup/.cvsignore, .cvsignore: 
+	New files.
+
