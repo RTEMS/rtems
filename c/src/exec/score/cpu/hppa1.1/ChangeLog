@@ -1,3 +1,8 @@
+2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
+        Switch to GNU canonicalization.
+
 2000-09-25	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/hppa.h: Switched to using cpuopts.h not
