@@ -1,4 +1,4 @@
-2002-01-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* 3c509/Makefile.am: Don't include @RTEMS_BSP@.cfg.
 	* clock/Makefile.am: Don't include @RTEMS_BSP@.cfg.
