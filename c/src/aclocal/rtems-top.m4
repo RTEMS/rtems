@@ -24,7 +24,11 @@ rtems_updir=m4_if([$2],[],[`echo "$1/" | sed s,^\.\.\/\.\.\/,,`],[$2/])
 
 AC_SUBST([RTEMS_ROOT],[${rtems_updir}'$(top_builddir)'])
 
-AC_SUBST([PROJECT_TOPdir],[${with_project_top}${rtems_updir}'$(top_builddir)'])
+AS_IF([test -n "${with_target_subdir}"],
+  [project_top="../${with_project_top}"],
+  [project_top="${with_project_top}"])
+AC_SUBST([PROJECT_TOPdir],[${project_top}${rtems_updir}'$(top_builddir)'])
+
 AC_SUBST([PROJECT_ROOT],[${with_project_root}${rtems_updir}'$(top_builddir)'])
 
 AC_SUBST([dirstamp],[\${am__leading_dot}dirstamp])

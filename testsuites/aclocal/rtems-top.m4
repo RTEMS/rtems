@@ -41,8 +41,12 @@ rtems_rootdir=${rtems_updir}
 RTEMS_ROOT=${rtems_updir}'$(top_builddir)'
 ])
 AC_SUBST([RTEMS_ROOT])
+                                                                 
+AS_IF([test -n "${with_target_subdir}"],
+  [project_top="../${with_project_top}"],
+  [project_top="${with_project_top}"])
+AC_SUBST([PROJECT_TOPdir],[${project_top}${rtems_updir}'$(top_builddir)'])
 
-AC_SUBST([PROJECT_TOPdir],[${with_project_top}${rtems_updir}'$(top_builddir)'])
 AC_SUBST([PROJECT_ROOT],[${with_project_root}${rtems_updir}'$(top_builddir)'])
 
 AC_SUBST([dirstamp],[\${am__leading_dot}dirstamp])

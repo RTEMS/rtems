@@ -1,3 +1,7 @@
+2004-04-14	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* aclocal/rtems-top.m4: Add project_top/with_project_top processing.
+
 2004-03-28	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* aclocal/rtems-top.m4: s/RTEMS_RTEMS/RTEMS_ROOT (typo).
