@@ -10,6 +10,7 @@ dnl
 AC_DEFUN([RTEMS_TOP],
 [dnl
 AC_REQUIRE([RTEMS_VERSIONING])
+AC_REQUIRE([AM_SET_LEADING_DOT])
 AC_CONFIG_AUX_DIR([$1])
 AC_CHECK_PROGS(MAKE, gmake make)
 AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
@@ -39,4 +40,6 @@ AC_SUBST(PROJECT_TOPdir)
 
 PROJECT_ROOT="${with_project_root}${RTEMS_TOPdir}/\$(top_builddir)"
 AC_SUBST(PROJECT_ROOT)
+
+AC_SUBST([dirstamp],[\${am__leading_dot}dirstamp])
 ])dnl
