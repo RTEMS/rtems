@@ -33,6 +33,7 @@ char EmptyString[] = "";
 char *DocsNextNode;
 char *DocsPreviousNode;
 char *DocsUpNode;
+int NodeNameIncludesChapter = 1;
 
 extern int   optind;     /* Why is this not in <stdlib.h>? */
 extern char *optarg;     /* Why is this not in <stdlib.h>? */
@@ -58,7 +59,7 @@ FILE           *OutFile = stdout;
 
 char *Usage_Strings[] = {
   "\n",
-  "usage: cmd [-bv] [-p prev] [-n next] [-u up] files ...\n", 
+  "usage: cmd [-cv] [-p prev] [-n next] [-u up] files ...\n", 
   "\n",
   "EOF"
 };
@@ -83,10 +84,11 @@ char *Usage_Strings[] = {
  *    3 indicates a heading (e.g. "DESCRIPTION:").
  */
 
-#define TEXT         0
-#define SECTION      1
-#define SUBSECTION   2
-#define HEADING      3
+#define TEXT            0
+#define SECTION         1
+#define SUBSECTION      2
+#define SUBSUBSECTION   3
+#define HEADING         4
   
 typedef enum {
   UNUSED,                            /* dummy 0 slot */
@@ -94,6 +96,9 @@ typedef enum {
   KEYWORD_CHAPHEADING,
   KEYWORD_SECTION,
   KEYWORD_SUBSECTION,
+  KEYWORD_SUBSUBSECTION,
+  KEYWORD_RAISE,
+  KEYWORD_LOWER,
   KEYWORD_OTHER,
   KEYWORD_END
   
@@ -117,6 +122,7 @@ typedef struct {
   Keyword_indices_t  keyword;   /* unused is unknown/undecided */
   ExtraFormat_info_t format;
   int                number;
+  int                level;
   char               Contents[ PARAGRAPH_SIZE ];
 } Line_Control;
 
@@ -148,14 +154,16 @@ typedef struct {
 }  Keyword_info_t;
 
 Keyword_info_t Keywords[] = {
-  { "unused",
-        0,         0,                0, NULL }, /* so 0 can be invalid */
-  { "@chapter",    SECTION,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
-  { "@chapheading",SECTION,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
-  { "@section",    SECTION,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
-  { "@subsection", SUBSECTION, RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
-  { "",            HEADING,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
-  { "END OF FILE", SECTION,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL }
+  { "unused",         0, 0, 0, NULL }, /* so 0 can be invalid */
+  { "@chapter",       SECTION,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
+  { "@chapheading",   SECTION,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
+  { "@section",       SECTION,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
+  { "@subsection",    SUBSECTION, RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
+  { "@subsubsection", SUBSUBSECTION, RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
+  { "@raise",         SUBSECTION, RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
+  { "@lower",         SUBSECTION, RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
+  { "",               HEADING,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL },
+  { "END OF FILE",    SECTION,    RT_FORBIDDEN,      BL_FORBIDDEN, NULL }
 };
 
 #define NUMBER_OF_KEYWORDS \
@@ -206,9 +214,10 @@ void PrintLine(
    */
   fprintf(
     stderr,
-    "<%d,%d>:%s\n", 
+    "<%d,%d,%d>:%s\n", 
     line->keyword,
     line->format,
+    line->level,
     line->Contents
   );
 #endif
@@ -259,6 +268,7 @@ Line_Control *AllocateLine( void )
   memset( new_line->Contents, '\0', sizeof( new_line->Contents ) );
 */
   new_line->number = -1;
+  new_line->level = -1;
 
   new_line->keyword = UNUSED;
   new_line->format = NO_EXTRA_FORMATTING_INFO;
@@ -424,10 +434,13 @@ int main(
   DocsPreviousNode = TopString;
   DocsUpNode       = TopString;
 
-  while ((c = getopt(argc, argv, "vp:n:u:")) != EOF) {
+  while ((c = getopt(argc, argv, "vcp:n:u:")) != EOF) {
     switch (c) {
       case 'v':
         Verbose = TRUE;
+        break;
+      case 'c':
+        NodeNameIncludesChapter = 0;
         break;
       case 'p':
         DocsPreviousNode = strdup(optarg); 
@@ -633,6 +646,12 @@ void StripBlanks( void )
       line->keyword = KEYWORD_SECTION;
     else if ( strstr( line->Contents, "@subsection" ) )
       line->keyword = KEYWORD_SUBSECTION;
+    else if ( strstr( line->Contents, "@subsubsection" ) )
+      line->keyword = KEYWORD_SUBSUBSECTION;
+    else if ( strstr( line->Contents, "@raise" ) )
+      line->keyword = KEYWORD_RAISE;
+    else if ( strstr( line->Contents, "@lower" ) )
+      line->keyword = KEYWORD_LOWER;
     else
       line->keyword = KEYWORD_OTHER;
     
@@ -665,234 +684,188 @@ boolean strIsAllSpace(
 
 void BuildTexinfoNodes( void ) 
 {
-  Line_Control *line;
-  Line_Control *new_line;
-  Line_Control *next_node;
-  char          Buffer[ BUFFER_SIZE ];
-  char          ChapterName[ BUFFER_SIZE ];
-  char          NodeName[ BUFFER_SIZE ];
-  char          NextNode[ BUFFER_SIZE ];
-  char          NextNodeName[ BUFFER_SIZE ];
-  char          PreviousNodeName[ BUFFER_SIZE ];
-  char          UpNodeName[ BUFFER_SIZE ];
-  char          SectionName[ BUFFER_SIZE ];
-  char          MenuBuffer[ BUFFER_SIZE ];
-  Line_Control *node_insert_point;
-  Line_Control *menu_insert_point;
-  Line_Control *node_line;
-  boolean       next_found;
-  int           menu_items;
+  char               Buffer[ BUFFER_SIZE ];
+  Line_Control      *line;
+  Line_Control      *next_node;
+  Line_Control      *up_node;
+  Line_Control      *new_line;
+  Line_Control      *menu_insert_point;
+  Line_Control      *node_line;
+  int                next_found;
+  int                menu_items;
+  Keyword_indices_t  index;
+  char               ChapterName[ BUFFER_SIZE ];
+  char               NodeName[ BUFFER_SIZE ];
+  char               UpNodeName[ BUFFER_SIZE ];
+  char               NextNodeName[ BUFFER_SIZE ];
+  char               PreviousNodeName[ BUFFER_SIZE ];
+
+  /*
+   *  Set Initial Previous Node Name
+   */
 
   strcpy( PreviousNodeName, DocsPreviousNode );
 
   for ( line = (Line_Control *) Lines.first ;
-        !_Chain_Is_last( &line->Node ) ; 
+        !_Chain_Is_last( &line->Node ) ;
         line = (Line_Control *) line->Node.next
-      ) {
+        ) {
 
-    menu_insert_point = (Line_Control *) line->Node.next;
+    if ( line->level == -1 )
+      continue;
 
-    switch ( Keywords[ line->keyword ].level ) {
-      case TEXT:
-      case HEADING:
-        break;
-      case SECTION:
-        if ( line->keyword == KEYWORD_END )
-          goto bottom; 
+    LineCopyFromRight( line, NodeName );
 
-        if ( line->keyword == KEYWORD_CHAPTER || 
-             line->keyword == KEYWORD_CHAPHEADING ) {
-          LineCopyFromRight( line, ChapterName );
-          strcpy( UpNodeName, DocsUpNode );
-          strcpy( NodeName, ChapterName );
-        } else {
-          LineCopySectionName( line, Buffer );
-          sprintf( NodeName, "%s %s", ChapterName, Buffer );
-          strcpy( UpNodeName, ChapterName );
-        }
-        strcpy( SectionName, NodeName );
+    if ( line->keyword == KEYWORD_CHAPTER ||
+         line->keyword == KEYWORD_CHAPHEADING ) {
+    
+      strcpy( ChapterName, NodeName );
 
-        /*
-         *  Go ahead and put it on the chain in the right order (ahead of
-         *  the menu) and we can fill it in later (after the menu is built).
-         */
-
-        new_line = AllocateLine();
-        strcpy( new_line->Contents, "@ifinfo" );
-        _Chain_Insert( line->Node.previous, &new_line->Node );
-
-        node_line = AllocateLine();
-        _Chain_Insert( line->Node.previous, &node_line->Node );
-
-        new_line = AllocateLine();
-        strcpy( new_line->Contents, "@end ifinfo" );
-        _Chain_Insert( line->Node.previous, &new_line->Node );
-
-        menu_items = 0;
-       
-        if ( line->keyword == KEYWORD_CHAPTER || line->keyword == KEYWORD_CHAPHEADING ) {
-          next_node = (Line_Control *) line->Node.next;
-          next_found = FALSE;
-          for ( ; ; ) {
-            if ( next_node->keyword == KEYWORD_END )
-              break;
-            if ( Keywords[ next_node->keyword ].level == SECTION ) {
-              LineCopySectionName( next_node, Buffer );
-              if ( !next_found ) {
-                next_found = TRUE;
-                sprintf( NextNodeName, "%s %s", ChapterName, Buffer );
-              }
-
-              if ( menu_items == 0 ) {
-                new_line = AllocateLine();
-                strcpy( new_line->Contents, "@ifinfo" );
-                _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
-
-                new_line = AllocateLine();
-                strcpy( new_line->Contents, "@menu" );
-                _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
-              }
-
-              menu_items++;
-
-              new_line = AllocateLine();
-              sprintf( new_line->Contents, "* %s %s::", ChapterName, Buffer );
-              _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
-            }
-            next_node = (Line_Control *) next_node->Node.next;
-          }
-        } else {
-          next_node = (Line_Control *) line->Node.next;
-        
-          next_found = FALSE;
-          for ( ; ; ) {
-            if ( Keywords[ next_node->keyword ].level == SECTION ) {
-              if ( !next_found ) {
-                if ( next_node->keyword == KEYWORD_END ) {
-                  strcpy( NextNodeName, DocsNextNode );
-                } else {
-                  LineCopySectionName( next_node, Buffer );
-                  sprintf( NextNodeName, "%s %s", ChapterName, Buffer );
-                }
-                next_found = TRUE;
-              }
-              break;
-            } else if ( Keywords[ next_node->keyword ].level == SUBSECTION ) {
-              LineCopySectionName( next_node, MenuBuffer ); /* has next node */
-
-              if ( menu_items == 0 ) {
-                new_line = AllocateLine();
-                strcpy( new_line->Contents, "@ifinfo" );
-                _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
-
-                new_line = AllocateLine();
-                strcpy( new_line->Contents, "@menu" );
-                _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
-              }
-
-              menu_items++;
-
-              new_line = AllocateLine();
-              sprintf( new_line->Contents, "* %s::", MenuBuffer );
-              _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
-
-              if ( !next_found ) {
-                next_found = TRUE;
-                strcpy( NextNodeName, MenuBuffer );
-              }
-            }
-            next_node = (Line_Control *) next_node->Node.next;
-          }
-        }
-
-        if ( menu_items ) {
-          new_line = AllocateLine();
-          strcpy( new_line->Contents, "@end menu" );
-          _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
-
-          new_line = AllocateLine();
-          strcpy( new_line->Contents, "@end ifinfo" );
-          _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
-        }
-#if 0
-        fprintf(
-          stderr,
-          "@node %s, %s, %s, %s\n",
-          NodeName,
-          NextNodeName,
-          PreviousNodeName,
-          UpNodeName
-        );
-#endif
-        /* node_line was previously inserted */
-        sprintf(
-          node_line->Contents,
-          "@node %s, %s, %s, %s",
-          NodeName,
-          NextNodeName,
-          PreviousNodeName,
-          UpNodeName
-        );
-
-        strcpy( PreviousNodeName, NodeName );
-        break;
-
-      case SUBSECTION:
-        strcpy( UpNodeName, SectionName );
-
-        LineCopyFromRight( line, NodeName );
-
-        new_line = AllocateLine();
-        strcpy( new_line->Contents, "@ifinfo" );
-        _Chain_Insert( line->Node.previous, &new_line->Node );
-
-        next_node = (Line_Control *) line->Node.next;
-        for ( ; ; ) {
-          if ( Keywords[ next_node->keyword ].level == SECTION ) {
-            if ( next_node->keyword == KEYWORD_END ) {
-              strcpy( NextNodeName, DocsNextNode );
-            } else {
-              LineCopySectionName( next_node, Buffer );
-              sprintf( NextNodeName, "%s %s", ChapterName, Buffer );
-            }
-            break;
-          } else if ( Keywords[ next_node->keyword ].level == SUBSECTION ) {
-            LineCopyFromRight( next_node, NextNodeName );
-            break;
-          }
-          next_node = (Line_Control *) next_node->Node.next;
-        }
-
-#if 0
-        fprintf(
-          stderr,
-          "@node %s, %s, %s, %s\n",
-          NodeName,
-          NextNodeName,
-          PreviousNodeName,
-          UpNodeName
-        );
-#endif
-        new_line = AllocateLine();
-        sprintf(
-          new_line->Contents,
-          "@node %s, %s, %s, %s",
-          NodeName,
-          NextNodeName,
-          PreviousNodeName,
-          UpNodeName
-        );
-        _Chain_Insert( line->Node.previous, &new_line->Node );
-
-        new_line = AllocateLine();
-        strcpy( new_line->Contents, "@end ifinfo" );
-        _Chain_Insert( line->Node.previous, &new_line->Node );
-
-        strcpy( PreviousNodeName, NodeName );
-        break;
     }
+
+    /*
+     *  Set Default Next Node Name
+     */
+
+    next_found = FALSE;
+    strcpy( NextNodeName, DocsNextNode );
+
+    /*
+     *  Go ahead and put it on the chain in the right order (ahead of
+     *  the menu) and we can fill it in later (after the menu is built).
+     */
+
+    new_line = AllocateLine();
+    strcpy( new_line->Contents, "@ifinfo" );
+    _Chain_Insert( line->Node.previous, &new_line->Node );
+
+    node_line = AllocateLine();
+    _Chain_Insert( line->Node.previous, &node_line->Node );
+
+    new_line = AllocateLine();
+    strcpy( new_line->Contents, "@end ifinfo" );
+    _Chain_Insert( line->Node.previous, &new_line->Node );
+
+    next_node = (Line_Control *) line->Node.next;
+    menu_insert_point = next_node;
+    menu_items = 0;
+
+    for ( ; ; ) {
+      if ( next_node->keyword == KEYWORD_END )
+        break;
+
+      if ( next_node->level == -1 )
+        goto continue_menu_loop;
+
+      LineCopySectionName( next_node, Buffer );
+      if ( !next_found ) {
+        next_found = TRUE;
+        if (NodeNameIncludesChapter)
+          sprintf( NextNodeName, "%s %s", ChapterName, Buffer );
+        else
+          sprintf( NextNodeName, "%s", Buffer );
+      }
+
+      if ( next_node->level <= line->level )
+        break;
+
+      if ( next_node->level != (line->level + 1) )
+        goto continue_menu_loop;
+
+      if ( menu_items == 0 ) {
+        new_line = AllocateLine();
+        strcpy( new_line->Contents, "@ifinfo" );
+        _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
+
+        new_line = AllocateLine();
+        strcpy( new_line->Contents, "@menu" );
+        _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
+      }
+
+      menu_items++;
+
+      new_line = AllocateLine();
+      if (NodeNameIncludesChapter)
+        sprintf( new_line->Contents, "* %s %s::", ChapterName, Buffer );
+      else
+        sprintf( new_line->Contents, "* %s::", Buffer );
+      _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
+
+continue_menu_loop:
+      next_node = (Line_Control *) next_node->Node.next;
+    }
+
+    /*
+     *  If menu items were generated, then insert the end of menu stuff.
+     */
+
+    if ( menu_items ) {
+      new_line = AllocateLine();
+      strcpy( new_line->Contents, "@end menu" );
+      _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
+
+      new_line = AllocateLine();
+      strcpy( new_line->Contents, "@end ifinfo" );
+      _Chain_Insert( menu_insert_point->Node.previous, &new_line->Node );
+    }
+
+    /*
+     *  Find the UpNodeName
+     */
+
+/* DumpList( &Lines ); */
+
+    if ( line->level == 0 ) {
+      strcpy( UpNodeName, DocsUpNode );
+    } else {
+      for ( up_node = line;
+            up_node && !_Chain_Is_first((Chain_Node *)up_node) ;
+            up_node = (Line_Control *) up_node->Node.previous
+            ) {
+
+        if ( (up_node->level == -1) )
+          continue;
+          
+        if ( up_node->level == (line->level - 1) ) { 
+          LineCopySectionName( up_node, Buffer );
+          if (NodeNameIncludesChapter)
+            sprintf( UpNodeName, "%s %s", ChapterName, Buffer );
+          else
+            sprintf( UpNodeName, "%s", Buffer );
+          break;
+        }
+      }
+    }
+
+    /*
+     *  Update the node information
+     */
+
+#if 0
+    fprintf(
+      stderr,
+      "@node %s, %s, %s, %s\n",
+      NodeName,
+      NextNodeName,
+      PreviousNodeName,
+      UpNodeName
+    );
+#endif
+
+    /* node_line was previously inserted */
+    sprintf(
+      node_line->Contents,
+      "@node %s, %s, %s, %s",
+      NodeName,
+      NextNodeName,
+      PreviousNodeName,
+      UpNodeName
+    );
+
+    strcpy( PreviousNodeName, NodeName );
+
+    /* PrintLine( line ); */
   }
-bottom:
 }
 
 /*
@@ -901,8 +874,51 @@ bottom:
 
 void FormatToTexinfo( void )
 {
+  Line_Control *line;
+  int           baselevel = 0;
+  int           currentlevel;
+
   if ( Verbose )
     fprintf( stderr, "-------->INSERTING TEXINFO MENUS\n" );
+
+  for ( line = (Line_Control *) Lines.first ;
+        !_Chain_Is_last( &line->Node ) ; 
+        line = (Line_Control *) line->Node.next ) {
+
+    switch (line->keyword) {
+      case UNUSED:
+      case KEYWORD_OTHER:
+      case KEYWORD_END:
+        line->level = -1;
+        break;
+      case KEYWORD_CHAPTER:
+      case KEYWORD_CHAPHEADING:
+        currentlevel = 0;
+        line->level = baselevel + currentlevel;
+        break;
+      case KEYWORD_SECTION:
+        currentlevel = 1;
+        line->level = baselevel + currentlevel;
+        break;
+      case KEYWORD_SUBSECTION:
+        currentlevel = 2;
+        line->level = baselevel + currentlevel;
+        break;
+      case KEYWORD_SUBSUBSECTION:
+        currentlevel = 3;
+        line->level = baselevel + currentlevel;
+        break;
+      case KEYWORD_RAISE:
+        assert( baselevel );
+        baselevel--;
+        line->level = -1;
+        break;
+      case KEYWORD_LOWER:
+        baselevel++;
+        line->level = -1;
+        break;
+    }
+  }
 
   BuildTexinfoNodes();
 }
@@ -956,7 +972,9 @@ void DumpList(
   for ( line = (Line_Control *) the_list->first ;
       !_Chain_Is_last( &line->Node ) ; 
       line = (Line_Control *) line->Node.next ) {
-    fprintf( stderr, "%s\n", line->Contents );
+    /* if (line->level != -1) */
+      PrintLine( line );
+      /* fprintf( stderr, "%s\n", line->Contents ); */
   }
 }
 
