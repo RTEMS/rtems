@@ -98,7 +98,7 @@
 #endif
 
 #define SYSTEM_TASKS  \
-    (MINIMUM_STACK_SIZE + \
+    (STACK_MINIMUM_SIZE + \
      MPCI_RECEIVE_SERVER_STACK_SIZE + \
      (2*sizeof(Thread_Control))) + \
      MPCI_RECEIVE_SERVER_FP + \
