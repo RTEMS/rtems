@@ -1,3 +1,37 @@
+2001-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* tm27/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm26/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm24/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm16/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm18/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm02/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm10/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm11/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm15/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm19/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm04/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm17/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm28/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tmck/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm08/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm12/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm03/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm13/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm29/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tmoverhd/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm20/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm09/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm01/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm21/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm07/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm25/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm22/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm06/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm05/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm14/Makefile.am: include leaf.am instead of leaf.cfg.
+	* tm23/Makefile.am: include leaf.am instead of leaf.cfg.
+
 2001-05-10	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Use RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm]).
