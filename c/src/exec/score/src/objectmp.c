@@ -17,7 +17,7 @@
 #include <rtems/core/interr.h>
 #include <rtems/core/object.h>
 #include <rtems/core/wkspace.h>
-#include <rtems/rtems/support.h>
+#include <rtems/core/thread.h>
 
 /*PAGE
  *
