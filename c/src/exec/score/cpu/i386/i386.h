@@ -31,7 +31,7 @@ extern "C" {
  *
  *  Currently recognized:
  *    i386_fp    (i386 DX or SX w/i387)
- *    i386_fp    (i386 DX or SX w/o i387)
+ *    i386_nofp  (i386 DX or SX w/o i387)
  *    i486dx
  *    i486sx
  *    pentium

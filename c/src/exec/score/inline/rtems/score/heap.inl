@@ -100,7 +100,7 @@ RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Next_block (
  *  DESCRIPTION:
  *
  *  This function calculates and returns a block's location (address)
- *  in the heap based upad a base address and an offset.
+ *  in the heap based upon a base address and an offset.
  */
 
 RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Block_at(
