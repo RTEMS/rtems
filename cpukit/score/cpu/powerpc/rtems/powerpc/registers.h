@@ -294,7 +294,7 @@ static inline  void PPC_Set_timebase_register (unsigned long long tbr)
 
 #define PPC_Set_decrementer( _clicks ) \
   do { \
-    asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
+    asm volatile( "mtdec %0" : : "r" ((_clicks)) ); \
   } while (0)
 
 #define PPC_Get_decrementer( _clicks ) \
