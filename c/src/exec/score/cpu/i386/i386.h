@@ -71,7 +71,7 @@ extern "C" {
 #elif defined(i386_nofp)
 
 #define CPU_MODEL_NAME  "i386 w/o i387"
-#define I386_HAS_FPU 1
+#define I386_HAS_FPU 0
 
 #elif defined(i486dx)
 
