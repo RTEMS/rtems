@@ -1,3 +1,11 @@
+2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Remove.
+	* inline/Makefile.am: Remove.
+	* macros/Makefile.am: Remove.
+	* src/Makefile.am: Remove.
+	* Makefile.am: Merge-in removed Makefile.ams.
+
 2002-12-02	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/score/object.h, include/rtems/score/tod.h:
