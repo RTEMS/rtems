@@ -1,5 +1,12 @@
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* src2html: Remove.
+	* src2html1.4a: Remove.
+	* configure.ac: Reflect changes above.
+	* Makefile.am: Reflect changes above.
+
+2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
 
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

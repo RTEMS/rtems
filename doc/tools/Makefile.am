@@ -1,6 +1,6 @@
 ## $Id$
-
+ACLOCAL_AMFLAGS = -I ../../aclocal
 
 EXTRA_DIST = word-replace2
 
-SUBDIRS = bmenu src2html1.4a src2html texi2www
+SUBDIRS = bmenu texi2www
