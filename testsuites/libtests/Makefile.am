@@ -9,5 +9,5 @@ SUBDIRS = cpuuse malloctest putenvtest monitor rtmonuse stackchk termios \
 
 EXTRA_DIST = libtests.am
 
-include $(top_srcdir)/../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../automake/subdirs.am
+include $(top_srcdir)/../automake/local.am
