@@ -148,7 +148,7 @@ struct sysctl_oid {
 	struct sysctl_oid_list *oid_parent;
 	SLIST_ENTRY(sysctl_oid) oid_link;
 	int		oid_number;
-	u_int		oid_kind;
+	uint32_t	oid_kind;
 	void		*oid_arg1;
 	int		oid_arg2;
 	const char	*oid_name;

@@ -1,3 +1,8 @@
+2005-02-17	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* libnetworking/sys/sysctl.h (struct sysctl_oid): uint32_t
+	oid_kind (16bit target compliance).
+
 2005-02-12	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* configure.ac: Remove LIBSCORECPU.
