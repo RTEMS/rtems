@@ -36,9 +36,10 @@ CREATE_DIRS = 	include include/sys \
     include/rtems include/rtems/score include/rtems/rtems include/rtems/posix \
                 include/netinet include/libc include/libc/sys \
                 $(LIBKA9Q) \
-		lib \
-		bin \
-		samples tests \
+		lib bin samples \
+                tests tests/screens tests/screens/sptests \
+                tests/screens/psxtests tests/screens/mptests \
+                tests/screens/mptests/node1 tests/screens/mptests/node2 \
 		build-tools update-tools
 
 # Make all/install must include 'env'
