@@ -461,7 +461,9 @@ Timing tests:
 
 
 Network tests:
-       Network driver is not implemented.
 
-
+The driver is currently being worked on. It is somewhat functional,
+but it does run out of buffers under certain conditions. The code is
+also undergoing a substantial reorganization. Before making any changes,
+you should check with us for the availability of updates.  
 
