@@ -1,3 +1,7 @@
+2001-10-26	Alexandra Kossovsky <sasha@oktet.ru>
+
+	* include/sh/sh4uart.h, sci/sh4uart.c: Minor fixes post merge.
+
 2001-10-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/sh4uart.h: move to include/sh/sh4uart.h.

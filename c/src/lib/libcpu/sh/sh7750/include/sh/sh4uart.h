@@ -112,7 +112,7 @@ sh4uart_reset(sh4uart *uart);
  *     controller
  */
 rtems_status_code
-sh4uart_disable(sh4uart *uart);
+sh4uart_disable(sh4uart *uart, int disable_port);
 
 /* sh4uart_set_attributes --
  *     This function parse the termios attributes structure and perform

@@ -19,16 +19,12 @@
 #include <rtems.h>
 #include <termios.h>
 #include <rtems/libio.h>
-#include <sh/sh4uart.h>
+#include <bsp.h>
+#include "sh/sh4uart.h"
 
 #ifndef SH4_UART_INTERRUPT_LEVEL
 #define SH4_UART_INTERRUPT_LEVEL 4
 #endif
-
-/* FIXME: ???
-#define SH7750_SCSMR_CKS_S SH7750_SCSMR_CKS_DIV1
- */
-#define SH7750_SCSMR_CKS_S     0
 
 /* Forward function declarations */
 static rtems_isr
@@ -78,8 +74,8 @@ sh4uart_init(sh4uart *uart, void *tty, int chn, int int_driven)
  *    Get current peripheral module clock.
  *    
  * PARAMETERS: none;
- *    Cpu clock is get from SH4_CPU_HZ_Frequency.
- *    This variable should be defined in bsp.
+ *    Cpu clock is get from CPU_CLOCK_RATE_HZ marco 
+ *    (defined in bspopts.h, included from bsp.h)
  *
  * RETURNS:
  *    peripheral module clock in Hz.
@@ -88,7 +84,7 @@ rtems_unsigned32
 sh4uart_get_Pph(void)
 {
     rtems_unsigned16 frqcr = *(volatile rtems_unsigned16 *)SH7750_FRQCR;
-    rtems_unsigned32 Pph = rtems_cpu_configuration_get_clicks_per_second() ;
+    rtems_unsigned32 Pph = CPU_CLOCK_RATE_HZ;
 
     switch (frqcr & SH7750_FRQCR_IFC)
     {
@@ -312,17 +308,19 @@ sh4uart_reset(sh4uart *uart)
  *
  * PARAMETERS:
  *     uart - pointer to UART channel descriptor structure
+ *     disable_port - disable receive and transmit on the port
  *
  * RETURNS:
  *     RTEMS_SUCCESSFUL if UART closed successfuly, or error code in
  *     other case
  */
 rtems_status_code
-sh4uart_disable(sh4uart *uart)
+sh4uart_disable(sh4uart *uart, int disable_port)
 {
     rtems_status_code rc;
 
-    SCSCR(uart->chn) &= ~(SH7750_SCSCR_TE | SH7750_SCSCR_RE);
+    if (disable_port)
+        SCSCR(uart->chn) &= ~(SH7750_SCSCR_TE | SH7750_SCSCR_RE);
 
     if (uart->int_driven)
     {
@@ -944,3 +942,5 @@ ipl_console_poll_write(int minor, const char *buf, int len)
     return 0;
 }
 #endif
+
+
