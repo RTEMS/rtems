@@ -20,22 +20,16 @@ This is the files for gcc and newlib that are shared by all targets.
 %doc %{_prefix}/info/libc.info*.gz
 %doc %{_prefix}/info/libm.info*.gz
 
-%dir %{_prefix}/bin
-%{_prefix}/bin/gcov@exe_ext@
-%{_prefix}/bin/gccbug@exe_ext@
-
 %dir %{_prefix}/man
 %dir %{_prefix}/man/man1
-%doc %{_prefix}/man/man1/cpp.1
-%doc %{_prefix}/man/man1/gcov.1
-# %doc %{_prefix}/man/man1/cccp.1
+%doc %{_prefix}/man/man1/cpp.1*
+%doc %{_prefix}/man/man1/gcov.1*
 %dir %{_prefix}/man/man7
-%doc %{_prefix}/man/man7/fsf-funding.7
-%doc %{_prefix}/man/man7/gfdl.7
-%doc %{_prefix}/man/man7/gpl.7
+%doc %{_prefix}/man/man7/fsf-funding.7*
+%doc %{_prefix}/man/man7/gfdl.7*
+%doc %{_prefix}/man/man7/gpl.7*
 
 %dir %{_prefix}/include
-%{_prefix}/include/g++-v3
 
 %post -n rtems-base-gcc
   if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 

@@ -18,7 +18,7 @@ This is the files for gcc/g77 that are shared by all targets.
 
 %dir %{_prefix}/man
 %dir %{_prefix}/man/man1
-%doc %{_prefix}/man/man1/@target_alias@-g77.1
+%doc %{_prefix}/man/man1/@target_alias@-g77.1*
 
 %post -n rtems-base-g77
   if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 

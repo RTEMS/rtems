@@ -1,3 +1,14 @@
+2002-06-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mkgcc3newlibspec.in: Remove SETUP (bogus).
+	* gcc3newlib/target-c++.add: New.
+	* gcc3newlib/Makefile.am: Add target-c++.add.
+	* gcc3newlib/base-g77.add: Adapt to gcc-3.1.
+	Reflect having split out c++. Various minor fixes.
+	* gcc3newlib/base-gcc.add: Ditto.
+	* gcc3newlib/gccnewlib.add: Ditto.
+	* gcc3newlib/target-gcc.add: Ditto.
+
 2002-04-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* gcc3newlib/gccnewlib.add: Add gcc_update --touch to fix

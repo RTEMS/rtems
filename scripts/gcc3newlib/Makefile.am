@@ -8,14 +8,16 @@ SUBPACKAGES = gccnewlib.add \
     base-gcc.add target-gcc.add \
     base-g77.add target-g77.add \
     base-gcj.add target-gcj.add \
-    target-objc.add
+    target-objc.add \
+    target-c++.add
 
 gccnewlib.spec.in: $(SUBPACKAGES)
 	cat $^ \
 	| sed -e 's%@GCCLANGS@%%g' > $@
 CLEANFILES = gccnewlib.spec.in
 
-gccnewlib_c_only.spec.in: gccnewlib.add base-gcc.add target-gcc.add
+gccnewlib_c_only.spec.in: gccnewlib.add base-gcc.add target-gcc.add \
+	target-c++.add
 	cat $^ \
 	| sed -e "s%@GCCLANGS@%\'--enable-languages=c,c++\'%g" > $@
 CLEANFILES += gccnewlib_c_only.spec.in

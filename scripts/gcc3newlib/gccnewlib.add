@@ -60,13 +60,16 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 
 %prep
 # untar the sources inside @target_alias@-gcc-newlib
-%setup -c -n %{name} @SETUP@
+%setup -c -T -n %{name} -a0 -a1
 
 @PATCH2@
 @PATCH4@
 
   # Fix timestamps
-  gcc-@gcc_version@/contrib/gcc_update --touch
+  cd gcc-@gcc_version@
+    contrib/gcc_update --touch
+  cd ..
+
   # Copy the C library into gcc's source tree
   ln -s ../newlib-@newlib_version@/newlib gcc-@gcc_version@
   test -d build || mkdir build
@@ -81,8 +84,9 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 
   ../gcc-@gcc_version@/configure $CONFIGURE_ARGS --target=@target_alias@ \
     --with-gnu-as --with-gnu-ld --with-newlib --verbose \
+    --with-system-zlib --disable-nls \
+    --enable-version-specific-runtime-libs \
     --enable-threads=rtems --prefix=%{_prefix} @GCCLANGS@
-
   make all
   make info
 
@@ -93,19 +97,18 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 #  ../gcc-@gcc_version@/mkinstalldirs \
 #    $RPM_BUILD_ROOT%{_prefix}/@target_alias@/bin
 #
-  
+
   make prefix=$RPM_BUILD_ROOT%{_prefix} install
   cd @target_alias@/newlib
   make prefix=$RPM_BUILD_ROOT%{_prefix} install-info
+  # cd back to build/
+  cd ../..
 
   # Bug in gcc-3.0.x: It puts the build dirs into *.la files
   files=`find ${RPM_BUILD_ROOT}%{_prefix}/@target_alias@/lib -name '*.la'`
-  for i in $files; do
+  test -n "$files" && for i in $files; do
     rm -f $i
   done
-
-  # cd back to build/
-  cd ../..
 
   # Bug in gcc-2.95.x: It bogusly tries to share cpp for all targets.
   # Rename it to target_alias-cpp
@@ -126,8 +129,19 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   echo "%dir %{_prefix}/lib/gcc-lib/@target_alias@" >> dirs ;
 
   # Collect multilib subdirectories
-  TGTDIR="%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@"
   f=`gcc/xgcc -Bgcc/ --print-multi-lib | sed -e 's,;.*$,,'`
+
+  TGTDIR="%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@"
+  for i in $f; do
+    case $i in
+    \.) echo "%dir ${TGTDIR}" >> dirs
+      ;;
+    *)  echo "%dir ${TGTDIR}/$i" >> dirs
+      ;;
+    esac
+  done
+
+  TGTDIR="%{_prefix}/@target_alias@/lib"
   for i in $f; do
     case $i in
     \.) echo "%dir ${TGTDIR}" >> dirs
@@ -142,17 +156,34 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
   cp dirs files.g77
   cp dirs files.objc
   cp dirs files.gcj
+  cp dirs files.g++
 
+  TGTDIR="%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@"
   f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
   for i in $f; do
     case $i in
+    *lib*.la);; # ignore: gcc produces bogus libtool libs
     *f771) ;;
     *cc1obj) ;;
     *libobjc*) echo "$i" >> files.objc ;;
     *include/objc*) ;;
+    *include/g++*);;
     *jc1) ;;
     *jvgenmain) ;;
+    *libstdc++.a) echo "$i" >> files.g++ ;;
+    *libsupc++.a) echo "$i" >> files.g++ ;;
     *) echo "$i" >> files.gcc ;;
+    esac
+  done
+
+  TGTDIR="%{_prefix}/@target_alias@/lib"
+  f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
+  for i in $f; do
+    case $i in
+    *lib*.la);; # ignore - gcc produces bogus libtool libs
+    *libiberty.a) ;; # ignore - GPL'ed
+# all other files belong to gcc
+    *) echo "$i" >> files.gcc ;; 
     esac
   done
 
@@ -160,4 +191,3 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 # let rpm --clean remove BuildRoot iif using the default BuildRoot
   test "$RPM_BUILD_ROOT" = "%{_tmppath}/%{name}" && \
     rm -rf $RPM_BUILD_ROOT
-

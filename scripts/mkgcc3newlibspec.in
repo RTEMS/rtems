@@ -62,14 +62,12 @@ if test -n "${gcc3_patch_version}"; then
 patchn=`expr $patchn + 1`
 PATCH1="Patch${patchn}: gcc-${gcc3_version}-rtems-${gcc3_patch_version}.diff"
 PATCH2="%patch${patchn} -p0"
-SETUP="${SETUP} -a${patchn}"
 fi
 
 if test -n "${gcc3newlib_patch_version}"; then
 patchn=`expr $patchn + 1`
 PATCH3="Patch${patchn}: newlib-${gcc3newlib_version}-rtems-${gcc3newlib_patch_version}.diff"
 PATCH4="%patch${patchn} -p0"
-SETUP="${SETUP} -a${patchn}"
 fi
 
 # note that the variables in the gcc3newlib directory are actually the same
@@ -77,7 +75,6 @@ sed -e "s,@PATCH1\@,${PATCH1}," \
     -e "s,@PATCH2\@,${PATCH2}," \
     -e "s,@PATCH3\@,${PATCH3}," \
     -e "s,@PATCH4\@,${PATCH4}," \
-    -e "s,@SETUP\@,${SETUP}," \
     -e "s%@Release\@%${gcc3newlib_rpm_release}%g" \
     -e "s%@target_alias\@%${target_alias}%g" \
     -e "s%@prefix\@%@prefix@%g" \
