@@ -28,6 +28,7 @@
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/time.h>
 
+
 /*PAGE
  *
  *  _POSIX_Message_queue_Send_support
@@ -37,37 +38,73 @@ int _POSIX_Message_queue_Send_support(
   mqd_t               mqdes,
   const char         *msg_ptr,
   unsigned32          msg_len,
-  Priority_Control    msg_prio,
+  unsigned32          msg_prio,
   Watchdog_Interval   timeout
 )
 {
   register POSIX_Message_queue_Control *the_mq;
   Objects_Locations                     location;
- 
+  CORE_message_queue_Status             status;
+
+  /*
+   * Validate the priority.
+   * XXX - Do not validate msg_prio is not less than 0.
+   */
+
+  if ( msg_prio > MQ_PRIO_MAX )
+    set_errno_and_return_minus_one( EINVAL );
+
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
+
   switch ( location ) {
     case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EINVAL );
+      set_errno_and_return_minus_one( EBADF );
+
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
       set_errno_and_return_minus_one( EINVAL );
+
     case OBJECTS_LOCAL:
-      /* XXX must add support for timeout and priority */
-      _CORE_message_queue_Send(
+      if ( (the_mq->oflag & O_ACCMODE) == O_RDONLY ) {
+        _Thread_Enable_dispatch();
+        set_errno_and_return_minus_one( EBADF );
+      }
+
+      status = _CORE_message_queue_Submit(
         &the_mq->Message_queue,
         (void *) msg_ptr,
         msg_len,
-        mqdes,
+        mqdes,      /* mqd_t is an object id */
 #if defined(RTEMS_MULTIPROCESSING)
-        NULL       /* XXX _POSIX_Message_queue_Core_message_queue_mp_support*/
+        NULL,      /* XXX _POSIX_Message_queue_Core_message_queue_mp_support*/
 #else
-        NULL
+        NULL,
 #endif
+        _POSIX_Message_queue_Priority_to_core( msg_prio )
       );
+
+      if ( status != CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL ) {
+        _Thread_Enable_dispatch();
+        set_errno_and_return_minus_one(
+          _POSIX_Message_queue_Translate_core_message_queue_return_code(status)
+        );
+      }
+
+      /*
+       *  For now, we can't do a blocking send.  So if we get here, it was
+       *  a successful send.  The return code in the TCB won't be set by
+       *  the SuperCore since it does not support blocking mqueue sends.
+       */
+
+#if 1
+      _Thread_Enable_dispatch();
+      return 0;
+#else
       _Thread_Enable_dispatch();
       return _Thread_Executing->Wait.return_code;
+#endif
   }
+
   return POSIX_BOTTOM_REACHED();
 }
-
