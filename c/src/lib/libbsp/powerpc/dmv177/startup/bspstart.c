@@ -131,11 +131,10 @@ void bsp_start( void )
    */
 
 #if ( PPC_USE_INSTRUCTION_CACHE )
-  powerpc_instruction_cache_enable ();
+  rtems_cache_enable_instruction();
 #endif
 
 #if ( PPC_USE_DATA_CACHE )
-  powerpc_data_cache_enable ();
+  rtems_cache_enable_data();
 #endif
-
 }
