@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	x_store.sa 3.2 1/24/91
 //
 //	store --- store operand to memory or register

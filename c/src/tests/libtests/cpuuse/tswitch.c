@@ -18,7 +18,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  tswitch.c,v 1.4 1995/12/19 20:18:44 joel Exp
+ *  $Id$
  */
 
 #include "system.h"

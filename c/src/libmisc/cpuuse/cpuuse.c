@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  check.c,v 1.13 1996/04/22 16:51:52 joel Exp
+ *  $Id$
  *
  */
 

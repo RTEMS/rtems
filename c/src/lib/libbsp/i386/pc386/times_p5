@@ -1,7 +1,7 @@
 #
 #  Timing Test Suite Results for the go32 BSP using a Pentium
 #
-#  times_p5,v 1.3 1995/12/19 20:07:20 joel Exp
+#  $Id$
 #
 
 NOTE:  To obtain the execution time in microseconds, divide the number of

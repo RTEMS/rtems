@@ -1,6 +1,8 @@
 #
 #  External API name
 #
+#  $Id$
+#
 initialize_executive rtems_initialize_executive
 initialize_executive_early rtems_initialize_executive_early
 initialize_executive_late rtems_initialize_executive_late

@@ -11,7 +11,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  init.c,v 1.6 1995/12/19 20:21:09 joel Exp
+ *  $Id$
  */
 
 #define TEST_INIT

@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	satanh.sa 3.3 12/19/90
 //
 //	The entry point satanh computes the inverse

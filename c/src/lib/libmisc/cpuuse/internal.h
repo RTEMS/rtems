@@ -11,7 +11,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  internal.h,v 1.5 1995/12/19 20:13:50 joel Exp
+ *  $Id$
  */
 
 #ifndef __INTERNAL_STACK_CHECK_h

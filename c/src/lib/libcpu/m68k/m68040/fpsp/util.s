@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	util.sa 3.7 7/29/91
 //
 //	This file contains routines used by other programs.

@@ -1,3 +1,6 @@
+#
+#  $Id$
+#
 echo Setting up the environment for efi332 debuging.\n
 
 target bdm /dev/pdbdm0

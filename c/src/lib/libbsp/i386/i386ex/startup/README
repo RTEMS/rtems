@@ -1,3 +1,6 @@
+#
+#  $Id$
+#
 
 
 	The doit shell file cd's to $H, which refers to the directory

@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	slog2.sa 3.1 12/10/90
 //
 //       The entry point slog10 computes the base-10 

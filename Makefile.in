@@ -3,6 +3,8 @@
 #
 # Modified by Jiri to implement autoconf and cygnus one-tree build
 #
+#  $Id$
+#
 
 @SET_MAKE@
 srcdir = @srcdir@

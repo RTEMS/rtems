@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	smovecr.sa 3.1 12/10/90
 //
 //	The entry point sMOVECR returns the constant at the

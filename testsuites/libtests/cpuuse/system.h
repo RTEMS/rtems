@@ -11,7 +11,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  system.h,v 1.6 1995/12/19 20:18:39 joel Exp
+ *  $Id$
  */
 
 #include <tmacros.h>

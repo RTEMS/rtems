@@ -1,6 +1,6 @@
 /*  linkcmds
  *
- *  linkcmds,v 1.1 1995/09/20 15:04:47 joel Exp
+ *  $Id$
  */
 
 OUTPUT_ARCH(m68k)

@@ -1,7 +1,7 @@
 #
 #  Timing Test Suite Results for the go32 BSP using an i486DX
 #
-#  times_i486dx,v 1.4 1996/07/02 18:14:27 joel Exp
+#  $Id$
 #
 
 Board:                PC/AT clone

@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	setox.sa 3.1 12/10/90
 //
 //	The entry point setox computes the exponential of a value.

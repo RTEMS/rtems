@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	do_func.sa 3.4 2/18/91
 //
 // Do_func performs the unimplemented operation.  The operation

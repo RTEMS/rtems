@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	skeleton.sa 3.2 4/26/91
 //
 //	This file contains code that is system dependent and will

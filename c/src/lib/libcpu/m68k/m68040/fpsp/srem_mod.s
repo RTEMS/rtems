@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	srem_mod.sa 3.1 12/10/90
 //
 //      The entry point sMOD computes the floating point MOD of the

@@ -37,6 +37,9 @@
 # it does not support.  The user should be able to distinguish
 # a failure to support a valid configuration from a meaningless
 # configuration.
+#
+#  $Id$
+#
 
 # The goal of this file is to map all the various variations of a given
 # machine specification into a single specification in the form:

@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	scale.sa 3.3 7/30/91
 //
 //	The entry point sSCALE computes the destination operand

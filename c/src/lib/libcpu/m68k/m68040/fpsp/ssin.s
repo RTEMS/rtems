@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	ssin.sa 3.3 7/29/91
 //
 //	The entry point sSIN computes the sine of an input argument

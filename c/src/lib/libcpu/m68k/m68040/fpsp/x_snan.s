@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	x_snan.sa 3.3 7/1/91
 //
 // fpsp_snan --- FPSP handler for signalling NAN exception

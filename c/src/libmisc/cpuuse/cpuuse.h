@@ -11,7 +11,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  stackchk.h,v 1.3 1995/12/19 20:13:52 joel Exp
+ *  $Id$
  */
 
 #ifndef __CPU_USE_h

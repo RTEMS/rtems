@@ -19,14 +19,16 @@
 |   timerisr.s,v 1.5 1995/12/19 20:07:45 joel Exp - go32 BSP
 | With the following copyright notice:
 | **************************************************************************
-| * COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.                      *
-| * On-Line Applications Research Corporation (OAR).                       *
-| * All rights assigned to U.S. Government, 1994.                          *
-| *                                                                        *
-| * This material may be reproduced by or for the U.S. Government pursuant *
-| * to the copyright license under the clause at DFARS 252.227-7013.  This *
-| * notice must appear in all copies of this file and its derivatives.     *
+| *  COPYRIGHT (c) 1989-1997.
+| *  On-Line Applications Research Corporation (OAR).
+| *  Copyright assigned to U.S. Government, 1994. 
+| *
+| *  The license and distribution terms for this file may be
+| *  found in found in the file LICENSE in this distribution or at
+| *  http://www.OARcorp.com/rtems/license.html.
 | **************************************************************************
+|
+|  $Id$
 +--------------------------------------------------------------------------*/
 
 

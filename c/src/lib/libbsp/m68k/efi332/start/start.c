@@ -1,3 +1,7 @@
+/*
+ *  $Id
+ */
+
 #include <efi332.h>
 #include <sim.h>
 #define __START_C__

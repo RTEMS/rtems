@@ -4,6 +4,8 @@ dnl Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de), 97/11/29
 dnl 
 dnl Last Modified: 98/01/10
 dnl
+dnl  $Id$
+dnl
 
 dnl macro to detect mkdir
 AC_DEFUN(RTEMS_PATH_MKDIR,

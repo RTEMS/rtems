@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	stan.sa 3.3 7/29/91
 //
 //	The entry point stan computes the tangent of

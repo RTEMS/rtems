@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	slogn.sa 3.1 12/10/90
 //
 //	slogn computes the natural logarithm of an

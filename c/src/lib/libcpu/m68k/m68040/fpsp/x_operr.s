@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	x_operr.sa 3.5 7/1/91
 //
 //	fpsp_operr --- FPSP handler for operand error exception

@@ -34,6 +34,8 @@
 # Only a few systems have been added to this list; please add others
 # (but try to keep the structure clean).
 #
+#  $Id$
+#
 
 # This is needed to find uname on a Pyramid OSx when run in the BSD universe.
 # (ghazi@noc.rutgers.edu 8/24/94.)

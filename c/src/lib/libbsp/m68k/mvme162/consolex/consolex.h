@@ -24,6 +24,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
+ *  $Id$
  */
 
 #ifndef _CONSOLEX_DRIVER_h

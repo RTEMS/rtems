@@ -4,7 +4,7 @@
 #  NOTE: This is just a template.  The times are irrelevant since this BSP
 #        can only be compiled -- not executed.
 #
-#  times,v 1.2 1995/12/07 15:44:23 joel Exp
+#  $Id$
 #
 # @(#)times        08/01/96     1.4
 

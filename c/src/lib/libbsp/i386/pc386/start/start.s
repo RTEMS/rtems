@@ -32,6 +32,8 @@
 |
 | Also based on (from the Linux source tree):
 |   video.S - Copyright (C) 1995, 1996 Martin Mares <mj@k332.feld.cvut.cz>
+|
+|  $Id$
 +--------------------------------------------------------------------------*/
 
 

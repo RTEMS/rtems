@@ -16,6 +16,9 @@
 ; Standard Hardware Register Definitions for Use with Assembler
 ; version A.08.06
 ;	- fr16-31 added at Utah
+;
+;  $Id$
+;
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Hardware General Registers
 r0: .equ	0

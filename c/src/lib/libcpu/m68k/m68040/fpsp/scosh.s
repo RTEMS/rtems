@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	scosh.sa 3.1 12/10/90
 //
 //	The entry point sCosh computes the hyperbolic cosine of

@@ -1,6 +1,7 @@
 //
-//	bugfix.sa 3.2 1/31/91
+//      $Id$
 //
+//	bugfix.sa 3.2 1/31/91
 //
 //	This file contains workarounds for bugs in the 040
 //	relating to the Floating-Point Software Package (FPSP)

@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	sint.sa 3.1 12/10/90
 //
 //	The entry point sINT computes the rounded integer 

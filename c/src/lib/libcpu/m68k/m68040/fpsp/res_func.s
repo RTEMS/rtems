@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	res_func.sa 3.9 7/29/91
 //
 // Normalizes denormalized numbers if necessary and updates the

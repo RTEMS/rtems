@@ -1,4 +1,6 @@
 //
+//      $Id$
+//
 //	x_unsupp.sa 3.3 7/1/91
 //
 //	fpsp_unsupp --- FPSP handler for unsupported data type exception

@@ -4,6 +4,8 @@
 #  it, and adds headers so it is in the same order as is printed in
 #  the supplement.
 #
+#  $Id$
+#
 
 usage()
 {

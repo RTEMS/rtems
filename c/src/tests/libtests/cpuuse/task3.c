@@ -16,7 +16,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  task3.c,v 1.3 1995/12/19 20:18:43 joel Exp
+ *  $Id$
  */
 
 #include "system.h"

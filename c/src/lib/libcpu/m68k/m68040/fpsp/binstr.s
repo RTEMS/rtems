@@ -1,6 +1,7 @@
 //
-//	binstr.sa 3.3 12/19/90
+//      $Id$
 //
+//	binstr.sa 3.3 12/19/90
 //
 //	Description: Converts a 64-bit binary integer to bcd.
 //
