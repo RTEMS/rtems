@@ -1,5 +1,10 @@
 2002-09-13	Joel Sherrill <joel@OARcorp.com>
 
+	* samples/base_mp/node1/Makefile.am, samples/base_mp/node2/Makefile.am:
+	Now appear to mostly compile.
+
+2002-09-13	Joel Sherrill <joel@OARcorp.com>
+
 	* samples/hello/Makefile.am: Make sure init.c is compiled and
 	included.  This test now runs.
 
