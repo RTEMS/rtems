@@ -113,18 +113,19 @@ void *POSIX_Init(
   assert( status == -1 );
   assert( errno == EINVAL );
 
-  tv.tv_sec = -1;
-  puts( "Init: nanosleep - EAGAIN (negative seconds)" );
-  status = nanosleep ( &tv, &tr );
-  assert( status == -1 );
-  assert( errno == EAGAIN );
-
   tv.tv_sec = 0;
   tv.tv_nsec = TOD_NANOSECONDS_PER_SECOND * 2;
   puts( "Init: nanosleep - EINVAL (too many nanoseconds)" );
   status = nanosleep ( &tv, &tr );
   assert( status == -1 );
   assert( errno == EINVAL );
+
+  /* this is actually a small delay or yield */
+  tv.tv_sec = -1;
+  tv.tv_nsec = 0;
+  puts( "Init: nanosleep - negative seconds small delay " );
+  status = nanosleep ( &tv, &tr );
+  assert( !status );
 
   /* use nanosleep to yield */
 
