@@ -126,7 +126,7 @@ struct rtems_termios_tty {
 	volatile unsigned int	rawOutBufHead;
 	volatile unsigned int	rawOutBufTail;
 	rtems_id		rawOutBufSemaphore;
-	enum {rob_idle, rob_busy, rob_wait }	rawOutBufState;
+	volatile enum {rob_idle, rob_busy, rob_wait }	rawOutBufState;
 
 	/*
 	 * Callbacks to device-specific routines
@@ -219,7 +219,7 @@ rtems_termios_open (
 		sc = rtems_semaphore_create (
 			rtems_build_name ('T', 'R', 'x', c),
 			0,
-			RTEMS_COUNTING_SEMAPHORE | RTEMS_PRIORITY,
+			RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_FIFO,
 			RTEMS_NO_PRIORITY,
 			&tty->rawOutBufSemaphore);
 		if (sc != RTEMS_SUCCESSFUL)
@@ -531,7 +531,7 @@ osend (const char *buf, int len, struct rtems_termios_tty *tty)
 		if (tty->rawOutBufState == rob_idle) {
 		  /* check, whether XOFF has been received */
 		  if (!(tty->flow_ctrl & FL_ORCVXOF)) {
-			(*tty->device.write)(tty->minor,
+		    (*tty->device.write)(tty->minor,
 				(char *)&tty->rawOutBuf[tty->rawOutBufTail],1);
 		  }
 		  else {
@@ -1101,8 +1101,10 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
 	else {
 	  if (tty->rawOutBufState == rob_wait)
 	    rtems_semaphore_release (tty->rawOutBufSemaphore);
-	  if ( tty->rawOutBufHead == tty->rawOutBufTail )
+	  if ( tty->rawOutBufHead == tty->rawOutBufTail ) {
+	    tty->rawOutBufState = rob_idle;
 	    return 0;	
+	  }
 	  newTail = (tty->rawOutBufTail + len) % RAW_OUTPUT_BUFFER_SIZE;
 	  if (newTail == tty->rawOutBufHead) {
 	    /*
@@ -1117,6 +1119,7 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
             /* Buffer not empty, but output stops due to XOFF */
 	    /* set flag, that output has been stopped */
 	    tty->flow_ctrl |= FL_OSTOP;
+	    tty->rawOutBufState = rob_busy;
 	    nToSend = 0;
 	  }
 	  else {
@@ -1130,15 +1133,12 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
 	    /* when flow control XON or XOF, don't send blocks of data     */
 	    /* to allow fast reaction on incoming flow ctrl and low latency*/
 	    /* for outgoing flow control                                   */
-	    if (tty->flow_ctrl & (FL_MDXON | FL_MDXOF)) {
+	    if (tty->flow_ctrl & (FL_MDXON | FL_MDXOF))
 	      nToSend = 1;
-	    }
-	    (*tty->device.write)(tty->minor, (char *)&tty->rawOutBuf[newTail], nToSend);
 	    tty->rawOutBufState = rob_busy;
+	    (*tty->device.write)(tty->minor, (char *)&tty->rawOutBuf[newTail], nToSend);
 	  }
 	  tty->rawOutBufTail = newTail;
 	}
 	return nToSend;
 }
-
-
