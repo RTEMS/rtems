@@ -140,7 +140,8 @@ of the status indicate a driver specific code.
 @subsection Device Driver Initialization
 
 RTEMS automatically initializes all device drivers
-when multitasking is initiated via the initialize_executive
+when multitasking is initiated via the
+@code{@value{DIRPREFIX}initialize_executive}
 directive.  RTEMS initializes the device drivers by invoking
 each device driver initialization entry point with the following
 parameters:
