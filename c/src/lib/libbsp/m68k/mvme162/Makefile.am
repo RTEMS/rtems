@@ -14,11 +14,19 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUBDIRS = . include start startup clock console timer tod network wrapup tools
+SUBDIRS = . start startup clock console timer tod network wrapup tools
 
 include $(top_srcdir)/../../bsp.am
 
-EXTRA_DIST = bsp_specs times
+include_HEADERS += include/coverhd.h
+include_HEADERS += include/page_table.h
+include_HEADERS += include/tod.h
+
+nodist_include_HEADERS += $(top_srcdir)/../shared/mvme/include/mvme16x_hw.h
+
+all-local: $(PREINSTALL_FILES)
+
+EXTRA_DIST = times
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am

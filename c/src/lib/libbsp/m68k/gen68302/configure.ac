@@ -18,12 +18,10 @@ RTEMS_CHECK_NETWORKING
 
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 network/Makefile
 start/Makefile
 startup/Makefile

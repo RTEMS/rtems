@@ -55,7 +55,6 @@ AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
 fatal/Makefile
-include/Makefile
 network/Makefile
 start/Makefile
 startup/Makefile

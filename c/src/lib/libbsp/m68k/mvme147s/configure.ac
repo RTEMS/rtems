@@ -23,7 +23,6 @@ AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 shmsupp/Makefile
 start/Makefile
 startup/Makefile

@@ -35,7 +35,6 @@ AM_CONDITIONAL(ODS68302_DEBUG,[test "$ODS68302_DEBUG" = "yes"])
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 start/Makefile
 startup/Makefile
 timer/Makefile

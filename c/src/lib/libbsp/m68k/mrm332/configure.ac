@@ -14,13 +14,10 @@ RTEMS_BSP_CONFIGURE
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
-
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 spurious/Makefile
 start/Makefile
 startup/Makefile

@@ -5,14 +5,46 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 # wrapup is the one that actually builds and installs the library
-#  from the individual .rel files built in other directories
+# from the individual .rel files built in other directories
 
-SUBDIRS = . include start startup console i2c \
-            tod nvram tools wrapup
+SUBDIRS = . start startup console i2c tod nvram tools wrapup
 
 include $(top_srcdir)/../../bsp.am
 
-EXTRA_DIST = bsp_specs times README
+include_HEADERS += include/coverhd.h
+include_HEADERS += include/i2c.h
+include_HEADERS += include/i2cdrv.h
+include_HEADERS += include/ds1307.h
+include_HEADERS += include/nvram.h
+nodist_include_HEADERS += $(top_srcdir)/../../shared/tod.h
+
+all-local: $(PREINSTALL_FILES)
+
+EXTRA_DIST = times
+
+$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
+
+$(PROJECT_INCLUDE)/i2c.h: include/i2c.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2c.h
+
+$(PROJECT_INCLUDE)/i2cdrv.h: include/i2cdrv.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/i2cdrv.h
+
+$(PROJECT_INCLUDE)/ds1307.h: include/ds1307.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/ds1307.h
+
+$(PROJECT_INCLUDE)/nvram.h: include/nvram.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/nvram.h
+
+$(PROJECT_INCLUDE)/tod.h: $(top_srcdir)/../../shared/tod.h
+	$(INSTALL_DATA) $< $@
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/tod.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am

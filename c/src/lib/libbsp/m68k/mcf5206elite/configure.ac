@@ -16,13 +16,10 @@ RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_NETWORKING
 
-
 AC_CONFIG_SUBDIRS(tools)
-
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-include/Makefile
 start/Makefile
 startup/Makefile
 console/Makefile
