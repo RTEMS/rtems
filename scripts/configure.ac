@@ -85,7 +85,9 @@ binutils/Makefile
 gccnewlib/Makefile
 gdb/Makefile
 rtems/Makefile
-autotools/Makefile])
+autotools/Makefile
+autotools/automake-rtems.spec
+])
 AC_CONFIG_COMMANDS([default],[[chmod 755 buildall
 chmod 755 buildalltar
 ]],[[]])

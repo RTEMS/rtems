@@ -3,8 +3,8 @@
 #
 # $Id$
 #
-binutils_version=2.10
-binutils_patch_version=NA-BUILDING-GCC
+binutils_version=2.12prer1
+binutils_patch_version=20010622
 binutils_rpm_release=3
 newlib_version=1.9.0
 newlib_patch_version=20010622

@@ -23,7 +23,7 @@ BuildRoot:	%{_tmppath}/@target_alias@-binutils
 
 Version:      	@binutils_version@
 Source0:      	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-@binutils_version@.tar.gz
-Patch0:		binutils-@binutils_version@-rtems-@binutils_patch_version@.diff
+# Patch0:		binutils-@binutils_version@-rtems-@binutils_patch_version@.diff
 #
 # The original sources are not included in the source RPM.
 # If we included them, then the source RPMs for each target
@@ -47,7 +47,7 @@ This is binutils sources with patches for RTEMS.
 # untar the sources inside @target_alias@-binutils
 %setup -c -n @target_alias@-binutils
 
-%patch0 -p0
+# %patch0 -p0
   test -d build || mkdir build
 
 %build
