@@ -18,7 +18,7 @@
  *
  *  Derived from c/src/exec/score/cpu/no_cpu/cpu_asm.h:
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

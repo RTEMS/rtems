@@ -7,9 +7,8 @@
  *  the current directory position index. These entries will be placed in
  *  character array pointed to by -dd_buf-
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

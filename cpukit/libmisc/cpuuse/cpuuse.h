@@ -3,9 +3,8 @@
  *  This include file contains information necessary to utilize
  *  and install the cpu usage reporting mechanism.
  *
- *  COPYRIGHT (c) 1989-1998. 1996.
+ *  COPYRIGHT (c) 1989-1999. 1996.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

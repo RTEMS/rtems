@@ -4,9 +4,8 @@
  *  with the Asynchronous Signal Handler.  This Handler provides the low-level
  *  support required by the Signal Manager.
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

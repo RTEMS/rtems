@@ -4,9 +4,8 @@
  *  Cyclone CVME960 and CVME961 boards.  These boards are the
  *  same except the 960 uses SRAM and the 961 DRAM.
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

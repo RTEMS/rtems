@@ -3,9 +3,8 @@
  *  This include file contains the copyright notice for RTEMS
  *  which is included in every binary copy of the executive.
  *
- *  COPYRIGHT (c) 1989-1998.
+ *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -24,9 +23,8 @@ extern "C" {
 #ifdef SCORE_INIT
 
 const char _Copyright_Notice[] =
-"COPYRIGHT (c) 1989-1998.\n\
-On-Line Applications Research Corporation (OAR).\n\
-Copyright assigned to U.S. Government, 1994.\n";
+"COPYRIGHT (c) 1989-1999.\n\
+On-Line Applications Research Corporation (OAR).\n";
 
 #else
 
