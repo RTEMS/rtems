@@ -360,6 +360,7 @@ c/src/exec/score/inline/Makefile
 c/src/exec/score/src/Makefile
 c/src/exec/score/tools/Makefile
 c/src/exec/score/tools/generic/Makefile
+c/src/exec/score/tools/generic/size_rtems
 c/src/exec/wrapup/Makefile
 c/src/exec/wrapup/rtems/Makefile
 c/src/lib/Makefile
