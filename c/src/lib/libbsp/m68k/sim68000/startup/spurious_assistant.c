@@ -12,7 +12,7 @@
  */
 
 #include <bsp.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 /*
  *  bsp_spurious_handler_assistant

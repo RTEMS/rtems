@@ -81,7 +81,7 @@ void bsp_start( void )
   BSP_Configuration.work_space_start = (void *) &_WorkspaceBase;
 }
 
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 int debug_putc( char c ) { write( 2, &c, 1 ); return 0; }
 BSP_output_char_function_type BSP_output_char =  debug_putc;
