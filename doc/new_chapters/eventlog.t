@@ -80,6 +80,8 @@ and status codes.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_write(
   const log_facility_t  facility,
   const int             event_id,
@@ -164,6 +166,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_open(
   const logd_t         *logdes,
   const char           *path,
@@ -254,6 +258,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_read(
   const logd_t logdes,
   struct log_entry *entry,
@@ -322,6 +328,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_notify(
   const logd_t           logdes,
   const struct sigevent *notification
@@ -345,7 +353,7 @@ The notification argument specifies an invalid signal.
 The process has requested a notify on a log that will not be
 written to.
 
-@item ENOSY
+@item ENOSYS
 The function log_notify() is not supported by this implementation.
 
 @end table
@@ -379,6 +387,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_close(
   const logd_t   logdes
 );
@@ -423,6 +433,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_seek(
   const logd_t    logdes,
   log_recid_t     log_recid
@@ -481,6 +493,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_severity_before(
   log_severity_t  s1,
   log_severity_t  s2
@@ -522,6 +536,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_facilityemptyset(
   log_facility_set_t  *set
 );
@@ -582,6 +598,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_facilityfillset(
   log_facility_set_t  *set
 );
@@ -642,6 +660,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_facilityaddset(
   log_facility_set_t  *set,
   log_facility_t      facilityno
@@ -703,6 +723,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_facilitydelset(
   log_facility_set_t  *set,
   log_facility_t      facilityno
@@ -764,6 +786,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_facilityismember(
   const log_facility_set_t *set,
   log_facility_t            facilityno,
@@ -826,6 +850,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_create(
   logd_t       *ld,
   const char   *path,
@@ -847,7 +873,7 @@ The is ????????????
 @subheading DESCRIPTION:
 
 This function dynamically allocates memory for the @code{ld}, associates 
-a directory path to the @code{Ld}, and provides access permissions to the
+a directory path to the @code{ld}, and provides access permissions to the
 @code{ld}.
 
 @subheading NOTES:
@@ -862,6 +888,8 @@ this service is available.
 
 @ifset is-C
 @example
+#include <evlog.h>
+
 int log_sys_create();
 @end example
 @end ifset
