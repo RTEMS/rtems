@@ -23,9 +23,17 @@ Linux and control a Motorola CPU32+ (68360) or Coldfire (5206, 5206e, or
 this is available at the following URL:
 http://www.calm.hw.ac.uk/davidf/coldfire/gdb-bdm-linux.htm.
 
+Peter Shoebridge (peter@@zeecube.com) has ported the Linux
+parallel port BDM driver by Eric Norum to Windows NT.  It is
+available at http://www.zeecube.com/bdm.
+
+
 The efi332 project has a home-built BDM module and gdb driver for 
 Linux.  See http://egi332.eng.ohio-state.edu/efi332/hardware.html)
 for details.
+
+http://cmp.felk.cvut.cz/~pisa/m683xx/bdm_driver.html
+
 
 Huntsville Microsystems (HMI) has GDB support for their BDM module
 available upon request.  It is also available from their ftp site:
