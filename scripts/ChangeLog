@@ -1,3 +1,8 @@
+2002-12-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* autotools/automake-rtems.spec.in: Update to automake-1.7.2.
+	* autotools/autoconf-rtems.spec.in: Update to autoconf-2.57.
+
 2002-12-06	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: Removed duplicate entry.

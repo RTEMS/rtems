@@ -2,8 +2,8 @@
 # spec file for autoconf 
 #
 
-%define rpmvers 2.52
-%define srcvers	2.52
+%define rpmvers 2.57
+%define srcvers	2.57
 
 %define _defaultbuildroot	%{_tmppath}/%{name}-%{srcvers}-root
 %define _prefix			@prefix@
@@ -86,3 +86,4 @@ fi
 #%doc %{_infodir}/standards.info*.gz
 %doc %{_mandir}/man?/*.gz
 %{_datadir}/autoconf
+%{_datadir}/emacs/site-lisp/*

@@ -2,9 +2,9 @@
 # spec file for automake 
 #
 
-%define rpmvers 1.6.3
-%define srcvers	1.6.3
-%define amvers  1.6
+%define rpmvers 1.7.2
+%define srcvers	1.7.2
+%define amvers  1.7
 
 %define _defaultbuildroot	%{_tmppath}/%{name}-%{srcvers}-root
 %define _prefix			@prefix@
@@ -12,12 +12,12 @@
 
 %if "%{_prefix}" != "/usr"
 %define name			%{_name}-rtems
-%define requirements		autoconf-rtems >= 2.52
+%define requirements		autoconf-rtems >= 2.54
 %define _infodir		%{_prefix}/info
 %define _mandir			%{_prefix}/man
 %else
 %define name			%{_name}
-%define requirements		autoconf >= 2.52
+%define requirements		autoconf >= 2.54
 %endif
 
 Vendor:       http://www.rtems.com
