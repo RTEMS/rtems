@@ -1,3 +1,7 @@
+2002-11-13	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* acinclude.m4: Added edb7312.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.
