@@ -1,5 +1,16 @@
 2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am,
+	scv64/Makefile.am, sonic/Makefile.am, start/Makefile.am,
+	startup/Makefile.am, timer/Makefile.am, tod/Makefile.am. Use automake
+	compilation rules.
+	* clock/Makefile.am, console/Makefile.am, scv64/Makefile.am,
+	sonic/Makefile.am, start/Makefile.am, startup/Makefile.am,
+	timer/Makefile.am, tod/Makefile.am: Remove.
+	* configure.ac, wrapup/Makefile.am: Reflect changes above.
+
+2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Merge-in start/Makefile.am.
 	* start/Makefile.am: Remove.
 	* configure.ac: Reflect changes above.

@@ -49,13 +49,6 @@ RTEMS_BSPOPTS_HELP([DMV177_USE_INSTRUCTION_CACHE],
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-scv64/Makefile
-sonic/Makefile
-startup/Makefile
-timer/Makefile
-tod/Makefile
 wrapup/Makefile
 ])
 
