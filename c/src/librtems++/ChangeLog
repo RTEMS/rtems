@@ -1,3 +1,7 @@
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add dirstamp support.
+
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove all-local: $(ARCH).
