@@ -69,24 +69,12 @@ extern "C" {
  *
  *    + PPC_INTERRUPT_MAX        - 16
  *    + PPC_CACHE_ALIGNMENT      - 32
- *    + PPC_LOW_POWER_MODE       - PPC_LOW_POWER_MODE_NONE
  *    + PPC_HAS_EXCEPTION_PREFIX - 1
  *    + PPC_HAS_FPU              - 1
  *    + PPC_HAS_DOUBLE           - 1 if PPC_HAS_FPU, 
  *                               - 0 otherwise
  */
  
-/*
- *  Define the low power mode models
- *
- *  Standard:   as defined for 603e
- *  Nap Mode:   nap mode only (604)
- *  XXX 403GB, 603, 603e, 604, 821
- */
-
-#define PPC_LOW_POWER_MODE_NONE      0
-#define PPC_LOW_POWER_MODE_STANDARD  1
-
 /*
  *  Figure out all CPU Model Feature Flags based upon compiler
  *  predefines.
@@ -119,9 +107,6 @@ extern "C" {
 /* Copied from mpc505 */
 #define PPC_ALIGNMENT		4
 #define PPC_CACHE_ALIGNMENT	16
-
-/* Added by querbach@realtime.bc.ca */
-#define PPC_LOW_POWER_MODE	PPC_LOW_POWER_MODE_STANDARD
 
 #elif defined(mpc505) || defined(mpc509)
 /*
@@ -174,8 +159,6 @@ extern "C" {
  */
 
 #define PPC_ALIGNMENT		8
-
-#define PPC_LOW_POWER_MODE PPC_LOW_POWER_MODE_STANDARD
 
 #elif defined(mpc604)
 /*
@@ -328,14 +311,6 @@ extern "C" {
 
 #ifndef PPC_HAS_EXCEPTION_PREFIX
 #define PPC_HAS_EXCEPTION_PREFIX 1
-#endif
-
-/*
- *  If no low power mode model was specified, then assume there is none.
- */
-
-#ifndef PPC_LOW_POWER_MODE
-#define PPC_LOW_POWER_MODE PPC_LOW_POWER_MODE_NONE
 #endif
 
 /*
