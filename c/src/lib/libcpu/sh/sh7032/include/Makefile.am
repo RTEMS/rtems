@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 # NOTE: Unlike other CPUS, we install into a subdirectory to avoid
 #       file name conflicts
