@@ -14,7 +14,7 @@ C_PIECES=
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES=$(srcdir)/cpu.h $(srcdir)/spr.h $(srcdir)/io.h $(srcdir)/mmu.h $(srcdir)/page.h $(srcdir)/byteorder.h $(srcdir)/pgtable.h $(srcdir)/processor.h
+H_FILES=$(srcdir)/cpu.h $(srcdir)/spr.h $(srcdir)/io.h $(srcdir)/mmu.h $(srcdir)/page.h $(srcdir)/byteorder.h $(srcdir)/pgtable.h
 
 # Assembly source names, if any, go here -- minus the .s
 S_PIECES=

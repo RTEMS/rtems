@@ -1,3 +1,20 @@
+/*
+ * cpu.h
+ *
+ *	    This file contains some powerpc MSR and registers access definitions.
+ *
+ * It is a stripped down version of linux ppc processor.h file...
+ *
+ * Copyright (C) 1999  Eric Valette (valette@crf.canon.fr)
+ *                     Canon Centre Recherche France.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
+ */
+
 #ifndef __ASM_PPC_PROCESSOR_H
 #define __ASM_PPC_PROCESSOR_H
 

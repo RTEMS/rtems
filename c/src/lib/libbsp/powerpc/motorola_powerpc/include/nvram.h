@@ -1,5 +1,9 @@
 /*
  * PreP compliant NVRAM access
+ *
+ * This file can be found in motorla or IBP PPC site.
+ *
+ * $Id$
  */
 
 #ifndef _PPC_NVRAM_H

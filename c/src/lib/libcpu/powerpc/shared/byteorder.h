@@ -1,3 +1,21 @@
+/*
+ * byteorder.h
+ *
+ *        This file contains inline implementation of function to
+ *          deal with endian conversion.
+ *
+ * It is a stripped down version of linux ppc file...
+ *
+ * Copyright (C) 1999  Eric Valette (valette@crf.canon.fr)
+ *                     Canon Centre Recherche France.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
+ */
+
 #ifndef _PPC_BYTEORDER_H
 #define _PPC_BYTEORDER_H
 

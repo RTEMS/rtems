@@ -1,3 +1,21 @@
+/*
+ * pci.c :  this file contains basic PCI Io functions.
+ *
+ *  CopyRight (C) 1999 valette@crf.canon.fr
+ *
+ *  This code is heavilly inspired by the public specification of STREAM V2
+ *  that can be found at :
+ *
+ *      <http://www.chorus.com/Documentation/index.html> by following
+ *  the STREAM API Specification Document link.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
+ */
+
 #include <bsp/consoleIo.h>
 #include <libcpu/io.h>
 #include <bsp/pci.h>

@@ -11,6 +11,8 @@
  *	PCI Local Bus Specification
  *	PCI to PCI Bridge Specification
  *	PCI System Design Guide
+ *
+ * $Id$
  */
 
 #ifndef RTEMS_PCI_H

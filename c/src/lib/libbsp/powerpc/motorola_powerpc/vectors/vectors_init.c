@@ -1,5 +1,16 @@
-/*
+/* 
+ * vectors_init.c Exception hanlding initialisation (and generic handler).
  *
+ *  This include file describe the data structure and the functions implemented
+ *  by rtems to handle exceptions.
+ *
+ *  CopyRight (C) 1999 valette@crf.canon.fr
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
  */
 #include <bsp/vectors.h>
 #include <libcpu/raw_exception.h>

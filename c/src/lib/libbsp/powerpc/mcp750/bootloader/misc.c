@@ -1,15 +1,18 @@
 /*
- * arch/ppc/prepboot/misc.c
+ *  head.S -- Bootloader Entry point
  *
- *  Copyright (C) 1998 Gabriel Paubert, paubert@iram.es
+ *  Copyright (C) 1998, 1999 Gabriel Paubert, paubert@iram.es
  *
- *  This file is based on arch/ppc/boot misc.c in previous versions of 
- * Linux/PPC but has been so extensively changed that only a few lines
- * remain from the original.
+ *  Modified to compile in RTEMS development environment
+ *  by Eric Valette
  *
- *  This file is subject to the terms and conditions of the GNU General Public
- *  License.  See the file COPYING in the main directory of this archive
- *  for more details.
+ *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ * $Id$
  */
 
 #include <sys/types.h>

@@ -12,6 +12,9 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
+ *  Modified to support the MCP750.
+ *  Modifications Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *
  *  $Id$
  */
 
@@ -119,13 +122,17 @@ void bsp_libc_init( void *, unsigned32, int );
 void bsp_pretasking_hook(void)
 {
     extern int end;
-    rtems_unsigned32        heap_start;
+    rtems_unsigned32        heap_start;    
+    rtems_unsigned32        heap_size;
 
     heap_start = ((rtems_unsigned32) &__rtems_end) +INIT_STACK_SIZE + INTR_STACK_SIZE;
     if (heap_start & (CPU_ALIGNMENT-1))
         heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-    bsp_libc_init((void *) heap_start, 64 * 1024, 0);
+    heap_size = (BSP_mem_size - heap_start) - BSP_Configuration.work_space_size;
+
+    printk(" HEAP start %x  size %x\n", heap_start, heap_size);
+    bsp_libc_init((void *) heap_start, heap_size, 0);
 
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );

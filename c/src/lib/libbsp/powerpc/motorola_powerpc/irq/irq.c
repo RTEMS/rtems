@@ -1,8 +1,8 @@
-/* irq.c
+/*
  *
  *  This file contains the implementation of the function described in irq.h
  *
- *  CopyRight (C) 1998 valette@crf.canon.fr
+ *  Copyright (C) 1998, 1999 valette@crf.canon.fr
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
@@ -10,8 +10,7 @@
  *
  *  $Id$
  */
-
-
+  
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/openpic.h>
@@ -19,7 +18,7 @@
 #include <rtems/score/apiext.h>
 #include <libcpu/raw_exception.h>
 #include <bsp/vectors.h>
-#include <libcpu/processor.h>
+#include <libcpu/cpu.h>
 
 #define RAVEN_INTR_ACK_REG 0xfeff0030
 

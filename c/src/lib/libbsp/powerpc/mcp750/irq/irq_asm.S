@@ -1,15 +1,14 @@
 /*
- * (c) 1999, Eric Valette valette@crf.canon.fr
- *
- *
  *  This file contains the assembly code for the PowerPC 
  *  IRQ veneers for RTEMS.
  *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
  * $Id$
  */
-	
-
-
+  	
 #include <bsp/vectors.h>
 #include <libcpu/cpu.h>
 #include <libcpu/raw_exception.h>

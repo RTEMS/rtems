@@ -1,5 +1,13 @@
 /*
- * empty file. Just because referenced by portable application layer.
+ *  bsp.h  -- contain BSP API definition.
+ *
+ *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ * $Id$
  */
 #ifndef LIBBSP_POWERPC_MCP750_BSP_H
 #define LIBBSP_POWERPC_MCP750_BSP_H

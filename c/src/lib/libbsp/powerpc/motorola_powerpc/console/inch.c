@@ -1,34 +1,23 @@
-/*-------------------------------------------------------------------------+
-| inch.c v1.1 - PC386 BSP - 1997/08/07
-+--------------------------------------------------------------------------+
-| (C) Copyright 1997 -
-| - NavIST Group - Real-Time Distributed Systems and Industrial Automation
-|
-| http://pandora.ist.utl.pt
-|
-| Instituto Superior Tecnico * Lisboa * PORTUGAL
-+--------------------------------------------------------------------------+
-| Disclaimer:
-|
-| This file is provided "AS IS" without warranty of any kind, either
-| expressed or implied.
-+--------------------------------------------------------------------------+
-| This code is based on:
-|   inch.c,v 1.3 1995/12/19 20:07:25 joel Exp - go32 BSP
-| With the following copyright notice:
-| With the following copyright notice:
-| **************************************************************************
-| *  COPYRIGHT (c) 1989-1998.
-| *  On-Line Applications Research Corporation (OAR).
-| *  Copyright assigned to U.S. Government, 1994. 
-| *
-| *  The license and distribution terms for this file may be
-| *  found in found in the file LICENSE in this distribution or at
-| *  http://www.OARcorp.com/rtems/license.html.
-| **************************************************************************
-|
-|  $Id$
-+--------------------------------------------------------------------------*/
+/*
+ *  inch.c  -- keyboard minimal driver
+ *
+ *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *
+ * This code is based on the pc386 BSP inch.c so the following
+ * copyright also applies :
+ *
+ * (C) Copyright 1997 -
+ * - NavIST Group - Real-Time Distributed Systems and Industrial Automation
+ *
+ * http://pandora.ist.utl.pt
+ *
+ * Instituto Superior Tecnico * Lisboa * PORTUGAL
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ * $Id$
+ */
 
 #include <bsp.h>
 #include <bsp/irq.h>

@@ -1,13 +1,19 @@
 /*
- *  arch/ppc/kernel/openpic.c -- OpenPIC Interrupt Handling
+ *  openpic.c -- OpenPIC Interrupt Handling
  *
  *  Copyright (C) 1997 Geert Uytterhoeven
  *
- *  This file is subject to the terms and conditions of the GNU General Public
- *  License.  See the file COPYING in the main directory of this archive
- *  for more details.
+ *  Modified to compile in RTEMS development environment
+ *  by Eric Valette
+ *
+ *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ * $Id$
  */
-
 
 /*
  *  Note: Interprocessor Interrupt (IPI) and Timer support is incomplete
@@ -19,8 +25,6 @@
 #include <bsp/consoleIo.h>
 #include <libcpu/io.h>
 #include <libcpu/byteorder.h>
-
-/* #include <asm/irq.h> */
 
 #define NULL 0
 #define REGISTER_DEBUG

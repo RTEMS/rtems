@@ -1,15 +1,18 @@
 /*
- *  arch/ppc/prepboot/pci.c -- Crude pci handling for early boot.
+ *  pci.c -- Crude pci handling for early boot.
  *
- *  Copyright (C) 1998 Gabriel Paubert, paubert@iram.es
+ *  Copyright (C) 1998, 1999 Gabriel Paubert, paubert@iram.es
  *
- *  The pci_scan_bus and pci_read_bases functions are slightly modified 
- * versions of functions with the same name in linux/drivers/pci.c by 
- * Martin Mares (mj@ucw.cz) and others (taken around linux-2.1.120).
+ *  Modified to compile in RTEMS development environment
+ *  by Eric Valette
  *
- *  This file is subject to the terms and conditions of the GNU General Public
- *  License.  See the file COPYING in the main directory of this archive
- *  for more details.
+ *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ * $Id$
  */
 
 

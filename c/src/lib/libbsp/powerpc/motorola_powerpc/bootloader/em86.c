@@ -1,3 +1,20 @@
+/*
+ *  em86.c -- Include file for bootloader.
+ *
+ *  Copyright (C) 1998, 1999 Gabriel Paubert, paubert@iram.es
+ *
+ *  Modified to compile in RTEMS development environment
+ *  by Eric Valette
+ *
+ *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ * $Id$
+ */
+
 /*****************************************************************************
 * 
 * Code to interpret Video BIOS ROM routines.

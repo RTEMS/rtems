@@ -1,14 +1,18 @@
 /*
- * arch/ppc/prepboot/console.c
+ *  polled_io.c -- Basic input/output for early boot
  *
- *  Copyright (C) 1998 Gabriel Paubert, paubert@iram.es
+ *  Copyright (C) 1998, 1999 Gabriel Paubert, paubert@iram.es
  *
- *  This file is based on arch/ppc/boot/{kbd,vreset}.c in previous versions 
- * of Linux/PPC, mostly contributed by Gary Thomas and Cort Dougan.
+ *  Modified to compile in RTEMS development environment
+ *  by Eric Valette
  *
- *  This file is subject to the terms and conditions of the GNU General Public
- *  License.  See the file COPYING in the main directory of this archive
- *  for more details.
+ *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ * $Id$
  */
 
 #include <sys/types.h>

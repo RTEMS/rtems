@@ -1,5 +1,18 @@
 /*
- * PowerPC memory management structures
+ * mmu.h
+ *
+ *	PowerPC memory management structures
+ *
+ * It is a stripped down version of linux ppc file...
+ *
+ * Copyright (C) 1999  Eric Valette (valette@crf.canon.fr)
+ *                     Canon Centre Recherche France.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
  */
 
 #ifndef _PPC_MMU_H_

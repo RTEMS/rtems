@@ -1,3 +1,18 @@
+/*
+ * residual.c : function used to parse residual data.
+ *
+ *  CopyRight (C) 1999 valette@crf.canon.fr
+ *
+ *  This code is heavilly inspired by the public specification of STREAM V2
+ *  that can be found at :
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
+ */
+
 #include <bsp/residual.h>
 #include <libcpu/io.h>
 #include <libcpu/byteorder.h>
