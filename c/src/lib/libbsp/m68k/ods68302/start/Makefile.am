@@ -38,8 +38,6 @@ $(PGM): $(OBJS)
 $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(PGM)
 	$(INSTALL_DATA) $< $@
 
-# Install the program(s), appending _g or _p as appropriate.
-# for include files, just use $(INSTALL_CHANGE)
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
 
 all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)

@@ -1,0 +1,43 @@
+## 
+## $Id$
+## 
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+LIBNAME = lib.a
+LIB = $(ARCH)/$(LIBNAME)
+
+C_FILES = if_ether.c igmp.c in.c in_cksum.c in_pcb.c in_proto.c in_rmx.c \
+    ip_divert.c ip_fw.c ip_icmp.c ip_input.c ip_mroute.c ip_output.c \
+    raw_ip.c tcp_debug.c tcp_input.c tcp_output.c tcp_subr.c tcp_timer.c \
+    tcp_usrreq.c udp_usrreq.c
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+
+OBJS = $(C_O_FILES)
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/lib.am
+
+#
+# Add local stuff here using +=
+#
+
+AM_CPPFLAGS += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC \
+    -DBOOTP_COMPAT
+
+$(LIB): $(OBJS)
+	$(make-library)
+
+all-local: $(ARCH) $(OBJS) $(LIB)
+
+.PRECIOUS: $(LIB)
+
+EXTRA_DIST = icmp_var.h if_ether.c if_ether.h igmp.c igmp.h igmp_var.h in.c \
+    in.h in_cksum.c in_cksum_i386.c in_cksum_m68k.c in_cksum_powerpc.c \
+    in_pcb.c in_pcb.h in_proto.c in_rmx.c in_systm.h in_var.h ip.h \
+    ip_divert.c ip_fw.c ip_fw.h ip_icmp.c ip_icmp.h ip_input.c ip_mroute.c \
+    ip_mroute.h ip_output.c ip_var.h raw_ip.c tcp.h tcp_debug.c tcp_debug.h \
+    tcp_fsm.h tcp_input.c tcp_output.c tcp_seq.h tcp_subr.c tcp_timer.c \
+    tcp_timer.h tcp_usrreq.c tcp_var.h tcpip.h udp.h udp_usrreq.c udp_var.h
+
+include $(top_srcdir)/../../../automake/local.am

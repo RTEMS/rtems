@@ -1,0 +1,35 @@
+## 
+## $Id$
+## 
+
+AUTOMAKE_OPTIONS = foreign 1.4
+
+if HAS_POSIX
+POSIX_PIECES = rtems_webserver
+endif 
+
+NET_O_PIECES = kern lib libc net netinet nfs rtems rtems_servers pppd \
+    $(POSIX_PIECES)
+OBJS = $(foreach piece, $(NET_O_PIECES), ../$(piece)/$(ARCH)/*.o)
+LIB = $(ARCH)/libnetworking.a
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/lib.am
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+$(LIB): $(OBJS)
+	$(make-library)
+
+$(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a: $(LIB)
+	$(INSTALL_DATA) $< $@
+
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a
+
+all-local: $(ARCH) $(OBJS) $(LIB) $(TMPINSTALL_FILES)
+
+.PRECIOUS: $(LIB)
+
+include $(top_srcdir)/../../../automake/local.am

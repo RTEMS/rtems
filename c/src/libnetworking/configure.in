@@ -34,16 +34,15 @@ RTEMS_CHECK_POSIX_API(RTEMS_BSP)
 
 AM_CONDITIONAL(HAS_POSIX,test "$HAS_POSIX_API" = "yes")
 
-if test "$HAS_POSIX_API" = "yes"; then
-  cfg_subdirs="posix"
-fi
-AC_CONFIG_SUBDIRS($cfg_subdirs)
-
 # try to explicitly list a Makefile here 
 AC_OUTPUT( 
 Makefile
 include/Makefile
+arpa/Makefile
+machine/Makefile
 kern/Makefile
+sys/Makefile
+vm/Makefile
 lib/Makefile
 libc/Makefile
 net/Makefile
