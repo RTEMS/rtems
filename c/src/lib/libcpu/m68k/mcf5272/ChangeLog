@@ -1,3 +1,8 @@
+2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* clock/ckinit.c, include/mcf5272.h, timer/timer.c:
+	Use POSIX fixed-size types.
+
 2004-08-02	Jay Monkman <jtm@lopingdog.com>
 
 	* .cvsignore, ChangeLog, Makefile.am, clock/.cvsignore, clock/ckinit.c,

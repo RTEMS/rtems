@@ -35,7 +35,7 @@
  * Clock_driver_ticks is a monotonically increasing counter of the
  * number of clock ticks since the driver was initialized.
  */
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t Clock_driver_ticks;
 
 
 /*
@@ -86,7 +86,7 @@ void
 Clock_exit(void)
 {
     if (BSP_Configuration.ticks_per_timeslice) {
-        unsigned32 icr;
+        uint32_t icr;
         /* disable all timer1 interrupts */
         icr = g_intctrl_regs->icr1;
         icr = icr & ~(MCF5272_ICR1_TMR1_MASK | MCF5272_ICR1_TMR1_PI);
@@ -115,7 +115,7 @@ Clock_exit(void)
 static void
 Install_clock(rtems_isr_entry clock_isr)
 {
-    unsigned32 icr;
+    uint32_t icr;
     Clock_driver_ticks = 0;
     if (BSP_Configuration.ticks_per_timeslice) {
         
@@ -202,7 +202,7 @@ Clock_control(rtems_device_major_number major,
               rtems_device_minor_number minor,
               void *pargp)
 {
-    rtems_unsigned32 isrlevel;
+    uint32_t isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
 
     if (args)

@@ -217,471 +217,471 @@
 
 #ifndef ASM
 typedef struct {
-    volatile unsigned32 mbar;       /* READ ONLY!! */
+    volatile uint32_t mbar;       /* READ ONLY!! */
 
-    volatile unsigned16 scr;
-    volatile unsigned16 _res0;
+    volatile uint16_t scr;
+    volatile uint16_t _res0;
 
-    volatile unsigned16 _res1;
-    volatile unsigned16 spr;
+    volatile uint16_t _res1;
+    volatile uint16_t spr;
 
-    volatile unsigned32 pmr;
+    volatile uint32_t pmr;
 
-    volatile unsigned16 _res2;
-    volatile unsigned16 alpr;
+    volatile uint16_t _res2;
+    volatile uint16_t alpr;
 
-    volatile unsigned32 dir;
+    volatile uint32_t dir;
 } sim_regs_t;
 
 typedef struct {
-    volatile unsigned32 icr1;
-    volatile unsigned32 icr2;
-    volatile unsigned32 icr3;
-    volatile unsigned32 icr4;
-    volatile unsigned32 isr;
-    volatile unsigned32 pitr;
-    volatile unsigned32 piwr;
-    volatile unsigned8  _res0[3];
-    volatile unsigned8  pivr;
+    volatile uint32_t icr1;
+    volatile uint32_t icr2;
+    volatile uint32_t icr3;
+    volatile uint32_t icr4;
+    volatile uint32_t isr;
+    volatile uint32_t pitr;
+    volatile uint32_t piwr;
+    volatile uint8_t  _res0[3];
+    volatile uint8_t  pivr;
 } intctrl_regs_t;
 
 typedef struct {
-    volatile unsigned32 csbr0;
-    volatile unsigned32 csor0;
-    volatile unsigned32 csbr1;
-    volatile unsigned32 csor1;
-    volatile unsigned32 csbr2;
-    volatile unsigned32 csor2;
-    volatile unsigned32 csbr3;
-    volatile unsigned32 csor3;
-    volatile unsigned32 csbr4;
-    volatile unsigned32 csor4;
-    volatile unsigned32 csbr5;
-    volatile unsigned32 csor5;
-    volatile unsigned32 csbr6;
-    volatile unsigned32 csor6;
-    volatile unsigned32 csbr7;
-    volatile unsigned32 csor7;
+    volatile uint32_t csbr0;
+    volatile uint32_t csor0;
+    volatile uint32_t csbr1;
+    volatile uint32_t csor1;
+    volatile uint32_t csbr2;
+    volatile uint32_t csor2;
+    volatile uint32_t csbr3;
+    volatile uint32_t csor3;
+    volatile uint32_t csbr4;
+    volatile uint32_t csor4;
+    volatile uint32_t csbr5;
+    volatile uint32_t csor5;
+    volatile uint32_t csbr6;
+    volatile uint32_t csor6;
+    volatile uint32_t csbr7;
+    volatile uint32_t csor7;
 } chipsel_regs_t;
 
 typedef struct {
-    volatile unsigned32 pacnt;
+    volatile uint32_t pacnt;
 
-    volatile unsigned16 paddr;
-    volatile unsigned16 _res0;
+    volatile uint16_t paddr;
+    volatile uint16_t _res0;
 
-    volatile unsigned16 _res1;
-    volatile unsigned16 padat;
+    volatile uint16_t _res1;
+    volatile uint16_t padat;
 
-    volatile unsigned32 pbcnt;
+    volatile uint32_t pbcnt;
 
-    volatile unsigned16 pbddr;
-    volatile unsigned16 _res2;
+    volatile uint16_t pbddr;
+    volatile uint16_t _res2;
 
-    volatile unsigned16 _res3;
-    volatile unsigned16 pbdat;
+    volatile uint16_t _res3;
+    volatile uint16_t pbdat;
 
-    volatile unsigned16 pcddr; 
-    volatile unsigned16 _res4;
+    volatile uint16_t pcddr; 
+    volatile uint16_t _res4;
 
-    volatile unsigned16 _res5;
-    volatile unsigned16 pcdat;
+    volatile uint16_t _res5;
+    volatile uint16_t pcdat;
 
-    volatile unsigned32 pdcnt;
+    volatile uint32_t pdcnt;
 } gpio_regs_t;
 
 typedef struct {
-    volatile unsigned32 qmr;
-    volatile unsigned32 qdlyr;
-    volatile unsigned32 qwr;
-    volatile unsigned32 qir;
-    volatile unsigned32 qar;
-    volatile unsigned32 qdr;
+    volatile uint32_t qmr;
+    volatile uint32_t qdlyr;
+    volatile uint32_t qwr;
+    volatile uint32_t qir;
+    volatile uint32_t qar;
+    volatile uint32_t qdr;
 } qspi_regs_t;
 
 typedef struct {
-    volatile unsigned8 pwcr1;
-    volatile unsigned8 _res0[3];
+    volatile uint8_t pwcr1;
+    volatile uint8_t _res0[3];
 
-    volatile unsigned8 pwcr2;
-    volatile unsigned8 _res1[3];
+    volatile uint8_t pwcr2;
+    volatile uint8_t _res1[3];
 
-    volatile unsigned8 pwcr3;
-    volatile unsigned8 _res2[3];
+    volatile uint8_t pwcr3;
+    volatile uint8_t _res2[3];
 
-    volatile unsigned8 pwwd1;
-    volatile unsigned8 _res3[3];
+    volatile uint8_t pwwd1;
+    volatile uint8_t _res3[3];
 
-    volatile unsigned8 pwwd2;
-    volatile unsigned8 _res4[3];
+    volatile uint8_t pwwd2;
+    volatile uint8_t _res4[3];
 
-    volatile unsigned8 pwwd3;
-    volatile unsigned8 _res5[3];
+    volatile uint8_t pwwd3;
+    volatile uint8_t _res5[3];
 } pwm_regs_t;
 
 typedef struct {
-    volatile unsigned32 dcmr;
+    volatile uint32_t dcmr;
     
-    volatile unsigned16 _res0;
-    volatile unsigned16 dcir;
+    volatile uint16_t _res0;
+    volatile uint16_t dcir;
 
-    volatile unsigned32 dbcr;
+    volatile uint32_t dbcr;
 
-    volatile unsigned32 dsar;
+    volatile uint32_t dsar;
 
-    volatile unsigned32 ddar;
+    volatile uint32_t ddar;
 } dma_regs_t;
 
 typedef struct {
-    volatile unsigned8 umr;              /* 0x000 */
-    volatile unsigned8 _res0[3];
+    volatile uint8_t umr;              /* 0x000 */
+    volatile uint8_t _res0[3];
 
-    volatile unsigned8 ucsr;             /* 0x004 */
-    volatile unsigned8 _res2[3];
+    volatile uint8_t ucsr;             /* 0x004 */
+    volatile uint8_t _res2[3];
 
-    volatile unsigned8 ucr;              /* 0x008 */
-    volatile unsigned8 _res3[3];
+    volatile uint8_t ucr;              /* 0x008 */
+    volatile uint8_t _res3[3];
 
-    volatile unsigned8 udata;            /* 0x00c */
-    volatile unsigned8 _res4[3];
+    volatile uint8_t udata;            /* 0x00c */
+    volatile uint8_t _res4[3];
 
-    volatile unsigned8 uccr;             /* 0x010 */
-    volatile unsigned8 _res6[3];
+    volatile uint8_t uccr;             /* 0x010 */
+    volatile uint8_t _res6[3];
 
-    volatile unsigned8 uisr;             /* 0x014 */
-    volatile unsigned8 _res8[3];
+    volatile uint8_t uisr;             /* 0x014 */
+    volatile uint8_t _res8[3];
 
-    volatile unsigned8 ubg1;             /* 0x018 */
-    volatile unsigned8 _res10[3];
+    volatile uint8_t ubg1;             /* 0x018 */
+    volatile uint8_t _res10[3];
 
-    volatile unsigned8 ubg2;             /* 0x01c */
-    volatile unsigned8 _res11[3];
+    volatile uint8_t ubg2;             /* 0x01c */
+    volatile uint8_t _res11[3];
 
-    volatile unsigned8 uabr1;            /* 0x020 */
-    volatile unsigned8 _res12[3];
+    volatile uint8_t uabr1;            /* 0x020 */
+    volatile uint8_t _res12[3];
 
-    volatile unsigned8 uabr2;            /* 0x024 */
-    volatile unsigned8 _res13[3];
+    volatile uint8_t uabr2;            /* 0x024 */
+    volatile uint8_t _res13[3];
 
-    volatile unsigned8 utxfcsr;          /* 0x028 */
-    volatile unsigned8 _res14[3];
+    volatile uint8_t utxfcsr;          /* 0x028 */
+    volatile uint8_t _res14[3];
 
-    volatile unsigned8 urxfcsr;          /* 0x02c */
-    volatile unsigned8 _res15[3];
+    volatile uint8_t urxfcsr;          /* 0x02c */
+    volatile uint8_t _res15[3];
 
-    volatile unsigned8 ufpdn;            /* 0x030 */
-    volatile unsigned8 _res16[3];
+    volatile uint8_t ufpdn;            /* 0x030 */
+    volatile uint8_t _res16[3];
 
-    volatile unsigned8 uip;              /* 0x034 */
-    volatile unsigned8 _res17[3];
+    volatile uint8_t uip;              /* 0x034 */
+    volatile uint8_t _res17[3];
 
-    volatile unsigned8 uop1;             /* 0x038 */
-    volatile unsigned8 _res18[3];
+    volatile uint8_t uop1;             /* 0x038 */
+    volatile uint8_t _res18[3];
 
-    volatile unsigned8 uop0;             /* 0x03c */
-    volatile unsigned8 _res19[3];
+    volatile uint8_t uop0;             /* 0x03c */
+    volatile uint8_t _res19[3];
 } uart_regs_t;
 
 typedef struct {
-    volatile unsigned16 tmr0;
-    volatile unsigned16 _res0;
+    volatile uint16_t tmr0;
+    volatile uint16_t _res0;
 
-    volatile unsigned16 trr0;
-    volatile unsigned16 _res1;
+    volatile uint16_t trr0;
+    volatile uint16_t _res1;
 
-    volatile unsigned16 tcap0;
-    volatile unsigned16 _res2;
+    volatile uint16_t tcap0;
+    volatile uint16_t _res2;
 
-    volatile unsigned16 tcn0;
-    volatile unsigned16 _res3;
+    volatile uint16_t tcn0;
+    volatile uint16_t _res3;
 
-    volatile unsigned16 ter0;
-    volatile unsigned16 _res4;
+    volatile uint16_t ter0;
+    volatile uint16_t _res4;
 
-    volatile unsigned8  _res40[12];
+    volatile uint8_t  _res40[12];
 
-    volatile unsigned16 tmr1;
-    volatile unsigned16 _res5;
+    volatile uint16_t tmr1;
+    volatile uint16_t _res5;
 
-    volatile unsigned16 trr1;
-    volatile unsigned16 _res6;
+    volatile uint16_t trr1;
+    volatile uint16_t _res6;
 
-    volatile unsigned16 tcap1;
-    volatile unsigned16 _res7;
+    volatile uint16_t tcap1;
+    volatile uint16_t _res7;
 
-    volatile unsigned16 tcn1;
-    volatile unsigned16 _res8;
+    volatile uint16_t tcn1;
+    volatile uint16_t _res8;
 
-    volatile unsigned16 ter1;
-    volatile unsigned16 _res9;
+    volatile uint16_t ter1;
+    volatile uint16_t _res9;
 
-    volatile unsigned8  _res91[12];
+    volatile uint8_t  _res91[12];
 
-    volatile unsigned16 tmr2;
-    volatile unsigned16 _res10;
+    volatile uint16_t tmr2;
+    volatile uint16_t _res10;
 
-    volatile unsigned16 trr2;
-    volatile unsigned16 _res11;
+    volatile uint16_t trr2;
+    volatile uint16_t _res11;
 
-    volatile unsigned16 tcap2;
-    volatile unsigned16 _res12;
+    volatile uint16_t tcap2;
+    volatile uint16_t _res12;
 
-    volatile unsigned16 tcn2;
-    volatile unsigned16 _res13;
+    volatile uint16_t tcn2;
+    volatile uint16_t _res13;
 
-    volatile unsigned16 ter2;
-    volatile unsigned16 _res14;
+    volatile uint16_t ter2;
+    volatile uint16_t _res14;
 
-    volatile unsigned8  _res140[12];
+    volatile uint8_t  _res140[12];
 
-    volatile unsigned16 tmr3;
-    volatile unsigned16 _res15;
+    volatile uint16_t tmr3;
+    volatile uint16_t _res15;
 
-    volatile unsigned16 trr3;
-    volatile unsigned16 _res16;
+    volatile uint16_t trr3;
+    volatile uint16_t _res16;
 
-    volatile unsigned16 tcap3;
-    volatile unsigned16 _res17;
+    volatile uint16_t tcap3;
+    volatile uint16_t _res17;
 
-    volatile unsigned16 tcn3;
-    volatile unsigned16 _res18;
+    volatile uint16_t tcn3;
+    volatile uint16_t _res18;
 
-    volatile unsigned16 ter3;
-    volatile unsigned16 _res19;
+    volatile uint16_t ter3;
+    volatile uint16_t _res19;
 
-    volatile unsigned8  _res190[12];
+    volatile uint8_t  _res190[12];
 
-    volatile unsigned16 wrrr;
-    volatile unsigned16 _res20;
+    volatile uint16_t wrrr;
+    volatile uint16_t _res20;
 
-    volatile unsigned16 wirr;
-    volatile unsigned16 _res21;
+    volatile uint16_t wirr;
+    volatile uint16_t _res21;
 
-    volatile unsigned16 wcr;
-    volatile unsigned16 _res22;
+    volatile uint16_t wcr;
+    volatile uint16_t _res22;
 
-    volatile unsigned16 wer;
-    volatile unsigned16 _res23;
+    volatile uint16_t wer;
+    volatile uint16_t _res23;
 } timer_regs_t;
 
 typedef struct {
-    volatile unsigned32 p0b1rr;
-    volatile unsigned32 p1b1rr;
-    volatile unsigned32 p2b1rr;
-    volatile unsigned32 p3b1rr;
-    volatile unsigned32 p0b2rr;
-    volatile unsigned32 p1b2rr;
-    volatile unsigned32 p2b2rr;
-    volatile unsigned32 p3b2rr;
+    volatile uint32_t p0b1rr;
+    volatile uint32_t p1b1rr;
+    volatile uint32_t p2b1rr;
+    volatile uint32_t p3b1rr;
+    volatile uint32_t p0b2rr;
+    volatile uint32_t p1b2rr;
+    volatile uint32_t p2b2rr;
+    volatile uint32_t p3b2rr;
 
-    volatile unsigned8  p0drr;
-    volatile unsigned8  p1drr;
-    volatile unsigned8  p2drr;
-    volatile unsigned8  p3drr;
+    volatile uint8_t  p0drr;
+    volatile uint8_t  p1drr;
+    volatile uint8_t  p2drr;
+    volatile uint8_t  p3drr;
 
-    volatile unsigned32 p0b1tr;
-    volatile unsigned32 p1b1tr;
-    volatile unsigned32 p2b1tr;
-    volatile unsigned32 p3b1tr;
-    volatile unsigned32 p0b2tr;
-    volatile unsigned32 p1b2tr;
-    volatile unsigned32 p2b2tr;
-    volatile unsigned32 p3b2tr;
+    volatile uint32_t p0b1tr;
+    volatile uint32_t p1b1tr;
+    volatile uint32_t p2b1tr;
+    volatile uint32_t p3b1tr;
+    volatile uint32_t p0b2tr;
+    volatile uint32_t p1b2tr;
+    volatile uint32_t p2b2tr;
+    volatile uint32_t p3b2tr;
 
-    volatile unsigned8  p0dtr;
-    volatile unsigned8  p1dtr;
-    volatile unsigned8  p2dtr;
-    volatile unsigned8  p3dtr;
+    volatile uint8_t  p0dtr;
+    volatile uint8_t  p1dtr;
+    volatile uint8_t  p2dtr;
+    volatile uint8_t  p3dtr;
 
-    volatile unsigned16 p0cr;
-    volatile unsigned16 p1cr;
-    volatile unsigned16 p2cr;
-    volatile unsigned16 p3cr;
-    volatile unsigned16 p0icr;
-    volatile unsigned16 p1icr;
-    volatile unsigned16 p2icr;
-    volatile unsigned16 p3icr;
-    volatile unsigned16 p0gmr;
-    volatile unsigned16 p1gmr;
-    volatile unsigned16 p2gmr;
-    volatile unsigned16 p3gmr;
-    volatile unsigned16 p0gmt;
-    volatile unsigned16 p1gmt;
-    volatile unsigned16 p2gmt;
-    volatile unsigned16 p3gmt;
+    volatile uint16_t p0cr;
+    volatile uint16_t p1cr;
+    volatile uint16_t p2cr;
+    volatile uint16_t p3cr;
+    volatile uint16_t p0icr;
+    volatile uint16_t p1icr;
+    volatile uint16_t p2icr;
+    volatile uint16_t p3icr;
+    volatile uint16_t p0gmr;
+    volatile uint16_t p1gmr;
+    volatile uint16_t p2gmr;
+    volatile uint16_t p3gmr;
+    volatile uint16_t p0gmt;
+    volatile uint16_t p1gmt;
+    volatile uint16_t p2gmt;
+    volatile uint16_t p3gmt;
 
-    volatile unsigned8  _res0;
-    volatile unsigned8  pgmts;
-    volatile unsigned8  pgmta;
-    volatile unsigned8  _res1;
-    volatile unsigned8  p0gcir;
-    volatile unsigned8  p1gcir;
-    volatile unsigned8  p2gcir;
-    volatile unsigned8  p3gcir;
-    volatile unsigned8  p0gcit;
-    volatile unsigned8  p1gcit;
-    volatile unsigned8  p2gcit;
-    volatile unsigned8  p3gcit;
-    volatile unsigned8  _res3[3];
-    volatile unsigned8  pgcitsr;
-    volatile unsigned8  _res4[3];
-    volatile unsigned8  pdcsr;
+    volatile uint8_t  _res0;
+    volatile uint8_t  pgmts;
+    volatile uint8_t  pgmta;
+    volatile uint8_t  _res1;
+    volatile uint8_t  p0gcir;
+    volatile uint8_t  p1gcir;
+    volatile uint8_t  p2gcir;
+    volatile uint8_t  p3gcir;
+    volatile uint8_t  p0gcit;
+    volatile uint8_t  p1gcit;
+    volatile uint8_t  p2gcit;
+    volatile uint8_t  p3gcit;
+    volatile uint8_t  _res3[3];
+    volatile uint8_t  pgcitsr;
+    volatile uint8_t  _res4[3];
+    volatile uint8_t  pdcsr;
 
-    volatile unsigned16 p0psr;
-    volatile unsigned16 p1psr;
-    volatile unsigned16 p2psr;
-    volatile unsigned16 p3psr;
-    volatile unsigned16 pasr;
-    volatile unsigned8  _res5;
-    volatile unsigned8  plcr;
-    volatile unsigned16 _res6;
-    volatile unsigned16 pdrqr;
-    volatile unsigned16 p0sdr;
-    volatile unsigned16 p1sdr;
-    volatile unsigned16 p2sdr;
-    volatile unsigned16 p3sdr;
-    volatile unsigned16 _res7;
-    volatile unsigned16 pcsr;
+    volatile uint16_t p0psr;
+    volatile uint16_t p1psr;
+    volatile uint16_t p2psr;
+    volatile uint16_t p3psr;
+    volatile uint16_t pasr;
+    volatile uint8_t  _res5;
+    volatile uint8_t  plcr;
+    volatile uint16_t _res6;
+    volatile uint16_t pdrqr;
+    volatile uint16_t p0sdr;
+    volatile uint16_t p1sdr;
+    volatile uint16_t p2sdr;
+    volatile uint16_t p3sdr;
+    volatile uint16_t _res7;
+    volatile uint16_t pcsr;
 } plic_regs_t;
 
 typedef struct {
-    volatile unsigned32 ecr;
-    volatile unsigned32 eir;
-    volatile unsigned32 eimr;
-    volatile unsigned32 ivsr;
-    volatile unsigned32 rdar;
-    volatile unsigned32 tdar;
-    volatile unsigned32 _res0[10];
-    volatile unsigned32 mmfr;
-    volatile unsigned32 mscr;
-    volatile unsigned32 _res1[17];
-    volatile unsigned32 frbr;
-    volatile unsigned32 frsr;
-    volatile unsigned32 _res2[4];
-    volatile unsigned32 tfwr;
-    volatile unsigned32 _res3[1];
-    volatile unsigned32 tfsr;
-    volatile unsigned32 _res4[21];
-    volatile unsigned32 rcr;
-    volatile unsigned32 mflr;
-    volatile unsigned32 _res5[14];
-    volatile unsigned32 tcr;
-    volatile unsigned32 _res6[158];
-    volatile unsigned32 malr;
-    volatile unsigned32 maur;
-    volatile unsigned32 htur;
-    volatile unsigned32 htlr;
-    volatile unsigned32 erdsr;
-    volatile unsigned32 etdsr;
-    volatile unsigned32 emrbr;
-/*    volatile unsigned8  fifo[448]; */
+    volatile uint32_t ecr;
+    volatile uint32_t eir;
+    volatile uint32_t eimr;
+    volatile uint32_t ivsr;
+    volatile uint32_t rdar;
+    volatile uint32_t tdar;
+    volatile uint32_t _res0[10];
+    volatile uint32_t mmfr;
+    volatile uint32_t mscr;
+    volatile uint32_t _res1[17];
+    volatile uint32_t frbr;
+    volatile uint32_t frsr;
+    volatile uint32_t _res2[4];
+    volatile uint32_t tfwr;
+    volatile uint32_t _res3[1];
+    volatile uint32_t tfsr;
+    volatile uint32_t _res4[21];
+    volatile uint32_t rcr;
+    volatile uint32_t mflr;
+    volatile uint32_t _res5[14];
+    volatile uint32_t tcr;
+    volatile uint32_t _res6[158];
+    volatile uint32_t malr;
+    volatile uint32_t maur;
+    volatile uint32_t htur;
+    volatile uint32_t htlr;
+    volatile uint32_t erdsr;
+    volatile uint32_t etdsr;
+    volatile uint32_t emrbr;
+/*    volatile uint8_t  fifo[448]; */
 } enet_regs_t;
 
 typedef struct {
-    volatile unsigned16 _res0;
-    volatile unsigned16 fnr;
-    volatile unsigned16 _res1;
-    volatile unsigned16 fnmr;
-    volatile unsigned16 _res2;
-    volatile unsigned16 rfmr;
-    volatile unsigned16 _res3;
-    volatile unsigned16 rfmmr;
-    volatile unsigned8  _res4[3]; 
-    volatile unsigned8  far;
-    volatile unsigned32 asr;
-    volatile unsigned32 drr1;
-    volatile unsigned32 drr2;
-    volatile unsigned16 _res5; 
-    volatile unsigned16 specr;
-    volatile unsigned16 _res6;
-    volatile unsigned16 ep0sr;
+    volatile uint16_t _res0;
+    volatile uint16_t fnr;
+    volatile uint16_t _res1;
+    volatile uint16_t fnmr;
+    volatile uint16_t _res2;
+    volatile uint16_t rfmr;
+    volatile uint16_t _res3;
+    volatile uint16_t rfmmr;
+    volatile uint8_t  _res4[3]; 
+    volatile uint8_t  far;
+    volatile uint32_t asr;
+    volatile uint32_t drr1;
+    volatile uint32_t drr2;
+    volatile uint16_t _res5; 
+    volatile uint16_t specr;
+    volatile uint16_t _res6;
+    volatile uint16_t ep0sr;
 
-    volatile unsigned32 iep0cfg;
-    volatile unsigned32 oep0cfg;
-    volatile unsigned32 ep1cfg;
-    volatile unsigned32 ep2cfg;
-    volatile unsigned32 ep3cfg;
-    volatile unsigned32 ep4cfg;
-    volatile unsigned32 ep5cfg;
-    volatile unsigned32 ep6cfg;
-    volatile unsigned32 ep7cfg;
-    volatile unsigned32 ep0ctl;
+    volatile uint32_t iep0cfg;
+    volatile uint32_t oep0cfg;
+    volatile uint32_t ep1cfg;
+    volatile uint32_t ep2cfg;
+    volatile uint32_t ep3cfg;
+    volatile uint32_t ep4cfg;
+    volatile uint32_t ep5cfg;
+    volatile uint32_t ep6cfg;
+    volatile uint32_t ep7cfg;
+    volatile uint32_t ep0ctl;
 
-    volatile unsigned16 _res7;
-    volatile unsigned16 ep1ctl;
-    volatile unsigned16 _res8;
-    volatile unsigned16 ep2ctl;
-    volatile unsigned16 _res9;
-    volatile unsigned16 ep3ctl;
-    volatile unsigned16 _res10;
-    volatile unsigned16 ep4ctl;
-    volatile unsigned16 _res11;
-    volatile unsigned16 ep5ctl;
-    volatile unsigned16 _res12;
-    volatile unsigned16 ep6ctl;
-    volatile unsigned16 _res13;
-    volatile unsigned16 ep7ctl;
+    volatile uint16_t _res7;
+    volatile uint16_t ep1ctl;
+    volatile uint16_t _res8;
+    volatile uint16_t ep2ctl;
+    volatile uint16_t _res9;
+    volatile uint16_t ep3ctl;
+    volatile uint16_t _res10;
+    volatile uint16_t ep4ctl;
+    volatile uint16_t _res11;
+    volatile uint16_t ep5ctl;
+    volatile uint16_t _res12;
+    volatile uint16_t ep6ctl;
+    volatile uint16_t _res13;
+    volatile uint16_t ep7ctl;
 
-    volatile unsigned32 ep0isr;
+    volatile uint32_t ep0isr;
 
-    volatile unsigned16 _res14;
-    volatile unsigned16 ep1isr;
-    volatile unsigned16 _res15;
-    volatile unsigned16 ep2isr;
-    volatile unsigned16 _res16;
-    volatile unsigned16 ep3isr;
-    volatile unsigned16 _res17;
-    volatile unsigned16 ep4isr;
-    volatile unsigned16 _res18;
-    volatile unsigned16 ep5isr;
-    volatile unsigned16 _res19;
-    volatile unsigned16 ep6isr;
-    volatile unsigned16 _res20;
-    volatile unsigned16 ep7isr;
+    volatile uint16_t _res14;
+    volatile uint16_t ep1isr;
+    volatile uint16_t _res15;
+    volatile uint16_t ep2isr;
+    volatile uint16_t _res16;
+    volatile uint16_t ep3isr;
+    volatile uint16_t _res17;
+    volatile uint16_t ep4isr;
+    volatile uint16_t _res18;
+    volatile uint16_t ep5isr;
+    volatile uint16_t _res19;
+    volatile uint16_t ep6isr;
+    volatile uint16_t _res20;
+    volatile uint16_t ep7isr;
 
-    volatile unsigned32 ep0imr;
+    volatile uint32_t ep0imr;
 
-    volatile unsigned16 _res21;
-    volatile unsigned16 ep1imr;
-    volatile unsigned16 _res22;
-    volatile unsigned16 ep2imr;
-    volatile unsigned16 _res23;
-    volatile unsigned16 ep3imr;
-    volatile unsigned16 _res24;
-    volatile unsigned16 ep4imr;
-    volatile unsigned16 _res25;
-    volatile unsigned16 ep5imr;
-    volatile unsigned16 _res26;
-    volatile unsigned16 ep6imr;
-    volatile unsigned16 _res27;
-    volatile unsigned16 ep7imr;
+    volatile uint16_t _res21;
+    volatile uint16_t ep1imr;
+    volatile uint16_t _res22;
+    volatile uint16_t ep2imr;
+    volatile uint16_t _res23;
+    volatile uint16_t ep3imr;
+    volatile uint16_t _res24;
+    volatile uint16_t ep4imr;
+    volatile uint16_t _res25;
+    volatile uint16_t ep5imr;
+    volatile uint16_t _res26;
+    volatile uint16_t ep6imr;
+    volatile uint16_t _res27;
+    volatile uint16_t ep7imr;
 
-    volatile unsigned32 ep0dr;
-    volatile unsigned32 ep1dr;
-    volatile unsigned32 ep2dr;
-    volatile unsigned32 ep3dr;
-    volatile unsigned32 ep4dr;
-    volatile unsigned32 ep5dr;
-    volatile unsigned32 ep6dr;
-    volatile unsigned32 ep7dr;
+    volatile uint32_t ep0dr;
+    volatile uint32_t ep1dr;
+    volatile uint32_t ep2dr;
+    volatile uint32_t ep3dr;
+    volatile uint32_t ep4dr;
+    volatile uint32_t ep5dr;
+    volatile uint32_t ep6dr;
+    volatile uint32_t ep7dr;
 
-    volatile unsigned16 _res28;
-    volatile unsigned16 ep0dpr;
-    volatile unsigned16 _res29;
-    volatile unsigned16 ep1dpr;
-    volatile unsigned16 _res30;
-    volatile unsigned16 ep2dpr;
-    volatile unsigned16 _res31;
-    volatile unsigned16 ep3dpr;
-    volatile unsigned16 _res32;
-    volatile unsigned16 ep4dpr;
-    volatile unsigned16 _res33;
-    volatile unsigned16 ep5dpr;
-    volatile unsigned16 _res34;
-    volatile unsigned16 ep6dpr;
-    volatile unsigned16 _res35;
-    volatile unsigned16 ep7dpr;
-/*    unsigned8  ram[1024]; */
+    volatile uint16_t _res28;
+    volatile uint16_t ep0dpr;
+    volatile uint16_t _res29;
+    volatile uint16_t ep1dpr;
+    volatile uint16_t _res30;
+    volatile uint16_t ep2dpr;
+    volatile uint16_t _res31;
+    volatile uint16_t ep3dpr;
+    volatile uint16_t _res32;
+    volatile uint16_t ep4dpr;
+    volatile uint16_t _res33;
+    volatile uint16_t ep5dpr;
+    volatile uint16_t _res34;
+    volatile uint16_t ep6dpr;
+    volatile uint16_t _res35;
+    volatile uint16_t ep7dpr;
+/*    uint8_t  ram[1024]; */
 } usb_regs_t;
 
 extern intctrl_regs_t *g_intctrl_regs;
