@@ -97,5 +97,3 @@ clean_modules:
 mlink:
 	test -d make || ln -s $(RTEMS_ROOT)/make make
 
-
-
