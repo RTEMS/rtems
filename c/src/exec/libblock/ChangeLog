@@ -1,3 +1,8 @@
+2002-04-03      Alexander Kukuta <kam@oktet.ru>
+
+        * include/rtems/bdbuf.h: Address PR168 by changing bdbuf_buffer.avl.bal
+	and bdbuf_buffer.avl.cache to signed char instead of char.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:

@@ -38,12 +38,12 @@ typedef struct bdbuf_buffer {
     Chain_Node link; /* Link in the lru, mod or free chains */
 
     struct bdbuf_avl_node { 
-    	char cache;           /* Cache */
+    	signed char cache;           /* Cache */
 
 	    struct bdbuf_buffer* left;  /* Left Child */
 	    struct bdbuf_buffer* right; /* Right Child */
 
-    	char bal;             /* The balance of the sub-tree */
+    	signed char bal;             /* The balance of the sub-tree */
     } avl;
 
     dev_t       dev;     /* device number */
