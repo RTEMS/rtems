@@ -210,12 +210,6 @@ DISTINCT_EXCEPTION_WITH_FAULTCODE_ENTRY (18)
 	
 
 /*
- *  GO32 does not require these segment related routines.
- */
-
-#ifndef __GO32__
-
-/*
  *  void *i386_Logical_to_physical(
  *     rtems_unsigned16  segment,
  *     void             *address
@@ -275,7 +269,6 @@ SYM (i386_Physical_to_logical):
         subl    eax,ecx                # ecx = logical address equivalent
         movl    ecx,eax                # eax = ecx
         ret
-#endif /* __GO32__ */
 
 END_CODE
 

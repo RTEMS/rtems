@@ -44,19 +44,6 @@
  */
 
 /*
- *  Go32 suffers the same bug as __REGISTER_PREFIX__ 
- */
- 
-#if __GO32__
-#undef  __USER_LABEL_PREFIX__
-#define __USER_LABEL_PREFIX__ _
-#endif
-
-#ifndef __USER_LABEL_PREFIX__
-#define __USER_LABEL_PREFIX__ _
-#endif
-
-/*
  *  Looks like there is a bug in gcc 2.6.2 where this is not
  *  defined correctly when configured as i386-coff and
  *  i386-aout.

@@ -80,7 +80,6 @@ architecture.  The following targets are supported:
 
 	a29k-rtems		only standalone, uses non-gnu compiler
 	i386-rtems
-	i386-go32-rtems         see notes
 	i960-rtems
 	hppa1.1-rtems
 	m68k-rtems
@@ -123,33 +122,6 @@ replaced with the RTEMS-aware versions. The build options are the same as
 for the standalone build.
 
 2.3 Target Dependent Notes
-
-i386-go32-rtems:
-
-  1.  This is based on djgpp v1.xx.  It needs to be updated to v2.xx.
-  2.  This cannot be built one-tree style since RTEMS requires some
-      files which must be obtained from the binary distribution of the
-      djgpp library.  DJGPP can be obtained from
-      http://www.delorie.com/djgpp/dl/ofc.
-  3.  You will need to manually install a number of files from the
-      binary distribution of the DJGPP library doing something
-      like the following:
-
-      # unzip the djgpp distribution
-      cd include
-      cp dpmi.h INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/include
-      cp go32.h INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/include
-      cp dos.h INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/include
-      cp pc.h INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/include
-
-      cd ../lib
-      cp crt* INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2
-      cp libpc* INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2
-
-      # Make sure about destination on the next lines.  It keeps the newlib
-      # libc.a and the binary djgpp libc.a from conflicting.
-      cp libc.a INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/libcgo32.a
-      cp libc_p.a INSTALL_POINT/lib/gcc-lib/i386-go32-rtems/2.7.2/libcgo32_p.a
 
 bare:
 
