@@ -99,6 +99,9 @@ struct scc_softc {
 	unsigned long	txUnderrun;
 	unsigned long	txLostCarrier;
 	unsigned long	txRawWait;
+	unsigned long	txCoalesced;
+	unsigned long	txCoalesceFailed;
+	unsigned long	txRetry;
 };
 static struct scc_softc scc_softc[NSCCDRIVER];
 
@@ -344,81 +347,78 @@ m360Enet_retire_tx_bd (struct scc_softc *sc)
 	int i;
 	int nRetired;
 	struct mbuf *m, *n;
+	int retries = 0;
+	int saveStatus = 0;
 
 	i = sc->txBdTail;
 	nRetired = 0;
 	while ((sc->txBdActiveCount != 0)
 	   &&  (((status = (sc->txBdBase + i)->status) & M360_BD_READY) == 0)) {
 		/*
-		 * See if anything went wrong
+		 * Check for errors which stop the transmitter.
 		 */
-		if (status & (M360_BD_DEFER |
-				M360_BD_HEARTBEAT |
-				M360_BD_LATE_COLLISION |
+		if (status & (M360_BD_LATE_COLLISION |
 				M360_BD_RETRY_LIMIT |
-				M360_BD_UNDERRUN |
-				M360_BD_CARRIER_LOST)) {
+				M360_BD_UNDERRUN)) {
+			int j;
+
+			if (status & M360_BD_LATE_COLLISION)
+				sc->txLateCollision++;
+			if (status & M360_BD_RETRY_LIMIT)
+				sc->txRetryLimit++;
+			if (status & M360_BD_UNDERRUN)
+				sc->txUnderrun++;
+
 			/*
-			 * Check for errors which stop the transmitter.
+			 * Reenable buffer descriptors
 			 */
-			if (status & (M360_BD_LATE_COLLISION |
-					M360_BD_RETRY_LIMIT |
-					M360_BD_UNDERRUN)) {
-				int j;
-
-				if (status & M360_BD_LATE_COLLISION)
-					scc_softc[0].txLateCollision++;
-				if (status & M360_BD_RETRY_LIMIT)
-					scc_softc[0].txRetryLimit++;
-				if (status & M360_BD_UNDERRUN)
-					scc_softc[0].txUnderrun++;
-
-				/*
-				 * Reenable buffer descriptors
-				 */
-				j = sc->txBdTail;
-				for (;;) {
-					status = (sc->txBdBase + j)->status;
-					if (status & M360_BD_READY)
-						break;
-					(sc->txBdBase + j)->status = M360_BD_READY | 
-						(status & (M360_BD_PAD | 
-							   M360_BD_WRAP | 
-							   M360_BD_INTERRUPT | 
-							   M360_BD_LAST |
-							   M360_BD_TX_CRC));
-					if (status & M360_BD_LAST)
-						break;
-					if (++j == sc->txBdCount)
-						j = 0;
-				}
-
-				/*
-				 * Move transmitter back to the first
-				 * buffer descriptor in the frame.
-				 */
-				m360.scc1p._tbptr = m360.scc1p.tbase + 
-					sc->txBdTail * sizeof (m360BufferDescriptor_t);
-
-				/*
-				 * Restart the transmitter
-				 */
-				M360ExecuteRISC (M360_CR_OP_RESTART_TX | M360_CR_CHAN_SCC1);
-				continue;
+			j = sc->txBdTail;
+			for (;;) {
+				status = (sc->txBdBase + j)->status;
+				if (status & M360_BD_READY)
+					break;
+				(sc->txBdBase + j)->status = M360_BD_READY | 
+					(status & (M360_BD_PAD | 
+						   M360_BD_WRAP | 
+						   M360_BD_INTERRUPT | 
+						   M360_BD_LAST |
+						   M360_BD_TX_CRC));
+				if (status & M360_BD_LAST)
+					break;
+				if (++j == sc->txBdCount)
+					j = 0;
 			}
-			if (status & M360_BD_DEFER)
-				scc_softc[0].txDeferred++;
-			if (status & M360_BD_HEARTBEAT)
-				scc_softc[0].txHeartbeat++;
-			if (status & M360_BD_CARRIER_LOST)
-				scc_softc[0].txLostCarrier++;
+
+			/*
+			 * Move transmitter back to the first
+			 * buffer descriptor in the frame.
+			 */
+			m360.scc1p._tbptr = m360.scc1p.tbase + 
+				sc->txBdTail * sizeof (m360BufferDescriptor_t);
+
+			/*
+			 * Restart the transmitter
+			 */
+			M360ExecuteRISC (M360_CR_OP_RESTART_TX | M360_CR_CHAN_SCC1);
+			continue;
 		}
+		saveStatus |= status;
+		retries += (status >> 2) & 0xF;
 		nRetired++;
 		if (status & M360_BD_LAST) {
 			/*
 			 * A full frame has been transmitted.
 			 * Free all the associated buffer descriptors.
 			 */
+			if (saveStatus & M360_BD_DEFER)
+				sc->txDeferred++;
+			if (saveStatus & M360_BD_HEARTBEAT)
+				sc->txHeartbeat++;
+			if (saveStatus & M360_BD_CARRIER_LOST)
+				sc->txLostCarrier++;
+			saveStatus = 0;
+			sc->txRetry += retries;
+			retries = 0;
 			sc->txBdActiveCount -= nRetired;
 			while (nRetired) {
 				nRetired--;
@@ -600,6 +600,74 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 	nAdded = 0;
 	txBd = firstTxBd = sc->txBdBase + sc->txBdHead;
 	while (m) {
+		/*
+		 * There are more mbufs in the packet than there
+		 * are transmit buffer descriptors.
+		 * Coalesce into a single buffer.
+		 */
+		if (nAdded == sc->txBdCount) {
+			struct mbuf *nm;
+			int j;
+			char *dest;
+
+			/*
+			 * Get the pointer to the first mbuf of the packet
+			 */
+			if (sc->txBdTail != sc->txBdHead)
+				rtems_panic ("sendpacket coalesce");
+			m = sc->txMbuf[sc->txBdTail];
+
+			/*
+			 * Rescind the buffer descriptor READY bits
+			 */
+			for (j = 0 ; j < sc->txBdCount ; j++)
+				(sc->txBdBase + j)->status = 0;
+
+			/*
+			 * Allocate an mbuf cluster
+			 * Toss the packet if allocation fails
+			 */
+			MGETHDR (nm, M_DONTWAIT, MT_DATA);
+			if (nm == NULL) {
+				sc->txCoalesceFailed++;
+				m_freem (m);
+				return;
+			}
+			MCLGET (nm, M_DONTWAIT);
+			if (nm->m_ext.ext_buf == NULL) {
+				sc->txCoalesceFailed++;
+				m_freem (m);
+				m_free (nm);
+				return;
+			}
+			nm->m_pkthdr = m->m_pkthdr;
+			nm->m_len = nm->m_pkthdr.len;
+
+			/*
+			 * Copy data from packet chain to mbuf cluster
+			 */
+			sc->txCoalesced++;
+			dest = nm->m_ext.ext_buf;
+			while (m) {
+				struct mbuf *n;
+
+				if (m->m_len) {
+					memcpy (dest, mtod(m, caddr_t), m->m_len);
+					dest += m->m_len;
+				}
+				MFREE (m, n);
+				m = n;
+			}
+			
+			/*
+			 * Redo the send with the new mbuf cluster
+			 */
+			m = nm;
+			nAdded = 0;
+			status = 0;
+			continue;
+		}
+
 		/*
 		 * Wait for buffer descriptor to become available.
 		 */
@@ -815,7 +883,10 @@ scc_stats (struct scc_softc *sc)
 	printf ("Retransmit Limit:%-8lu", sc->txRetryLimit);
 	printf ("  Late Collision:%-8lu\n", sc->txLateCollision);
 	printf ("           Underrun:%-8lu", sc->txUnderrun);
-	printf (" Raw output wait:%-8lu\n", sc->txRawWait);
+	printf (" Raw output wait:%-8lu", sc->txRawWait);
+	printf ("       Coalesced:%-8lu\n", sc->txCoalesced);
+	printf ("    Coalesce failed:%-8lu", sc->txCoalesceFailed);
+	printf ("         Retries:%-8lu\n", sc->txRetry);
 }
 
 /*
