@@ -127,7 +127,8 @@ This is equivalent to the following list of definitions.  Early versions
 of the RTEMS BSD network stack required that all of these be defined.
 
 @example
--D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC -DBOOTP_COMPAT
+-D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
+    -DDIAGNOSTIC -DBOOTP_COMPAT
 @end example
 
 Defining these macros tells the network header files that the driver

@@ -110,13 +110,16 @@ type Configuration_Table is
        Ticks_Per_Timeslice          : RTEMS.Unsigned32;
        Maximum_Devices              : RTEMS.Unsigned32;
        Number_Of_Device_Drivers     : RTEMS.Unsigned32;
-       Device_Driver_Table          : RTEMS.Driver_Address_Table_Pointer;
+       Device_Driver_Table          :
+            RTEMS.Driver_Address_Table_Pointer;
        Number_Of_Initial_Extensions : RTEMS.Unsigned32;
        User_Extension_Table         : RTEMS.Extensions_Table_Pointer;
-       User_Multiprocessing_Table   : RTEMS.Multiprocessing_Table_Pointer;
-       RTEMS_API_Configuration      : RTEMS.API_Configuration_Table_Pointer;
+       User_Multiprocessing_Table   :
+            RTEMS.Multiprocessing_Table_Pointer;
+       RTEMS_API_Configuration      :
+            RTEMS.API_Configuration_Table_Pointer;
        POSIX_API_Configuration      :
-                       RTEMS.POSIX_API_Configuration_Table_Pointer;
+            RTEMS.POSIX_API_Configuration_Table_Pointer;
    end record;
 
 type Configuration_Table_Pointer is access all Configuration_Table;
@@ -315,10 +318,11 @@ type API_Configuration_Table is
       Maximum_Periods                 : RTEMS.Unsigned32;
       Number_Of_Initialization_Tasks  : RTEMS.Unsigned32;
       User_Initialization_Tasks_Table :
-                                RTEMS.Initialization_Tasks_Table_Pointer;
+           RTEMS.Initialization_Tasks_Table_Pointer;
    end record;
 
-type API_Configuration_Table_Pointer is access all API_Configuration_Table;
+type API_Configuration_Table_Pointer is
+           access all API_Configuration_Table;
 @end example
 @end ifset
 
@@ -511,8 +515,9 @@ typedef struct @{
             RTEMS.POSIX_Initialization_Threads_Table_Pointer;
       end record;
 
-   type POSIX_API_Configuration_Table is array ( RTEMS.Unsigned32 range <> ) of
-      RTEMS.POSIX_API_Configuration_Table_Entry;
+   type POSIX_API_Configuration_Table is array
+      ( RTEMS.Unsigned32 range <> ) of
+          RTEMS.POSIX_API_Configuration_Table_Entry;
 
    type POSIX_API_Configuration_Table_Pointer is access all
           RTEMS.POSIX_API_Configuration_Table;
@@ -669,8 +674,9 @@ type Initialization_Tasks_Table_Entry is
       Argument         : RTEMS.Unsigned32;    -- task argument
    end record;
 
-type Initialization_Tasks_Table is array ( RTEMS.Unsigned32 range <> ) of
-  RTEMS.Initialization_Tasks_Table_Entry;
+type Initialization_Tasks_Table is array
+    ( RTEMS.Unsigned32 range <> ) of
+      RTEMS.Initialization_Tasks_Table_Entry;
 
 type Initialization_Tasks_Table_Pointer is access all
      Initialization_Tasks_Table;
@@ -731,7 +737,8 @@ Initialization_tasks[2] = @{
 
 @ifset is-Ada
 @example
-Initialization_Tasks : aliased RTEMS.Initialization_Tasks_Table( 1 .. 2 ) := (
+Initialization_Tasks : aliased
+  RTEMS.Initialization_Tasks_Table( 1 .. 2 ) := (
    (INIT_1_NAME,
     1024,
     1,

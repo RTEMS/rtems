@@ -1150,8 +1150,8 @@ typedef struct @{
 @example
 type Rate_Monotonic_Period_Status is
    begin
-      State                            : RTEMS.Rate_Monotonic_Period_States;
-      Ticks_Since_Last_Period          : RTEMS.Unsigned32;
+      State                    : RTEMS.Rate_Monotonic_Period_States;
+      Ticks_Since_Last_Period  : RTEMS.Unsigned32;
       Ticks_Executed_Since_Last_Period : RTEMS.Unsigned32;
    end record;
 @end example
