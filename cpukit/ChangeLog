@@ -1,5 +1,7 @@
 2004-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ChangeLog: Merge-in libmisc/ChangeLog, librpc/ChangeLog.
+	* libmisc/ChangeLog, librpc/ChangeLog: Remove.
 	* ChangeLog: Merge-in itron/ChangeLog, posix/ChangeLog, score/ChangeLog,
 	sapi/ChangeLog, rtems/ChangeLog.
 	* itron/ChangeLog, posix/ChangeLog, score/ChangeLog, sapi/ChangeLog,
@@ -19,6 +21,8 @@
 	* score/Makefile.am: Add PREINSTALL_DIRS.
 	* sapi/Makefile.am: Add PREINSTALL_DIRS.
 	* rtems/Makefile.am: Add PREINSTALL_DIRS.
+	* libmisc/Makefile.am: Add PREINSTALL_DIRS.
+	* librpc/Makefile.am: Add PREINSTALL_DIRS.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -37,6 +41,10 @@
 	* sapi/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
 	PREINSTALL_FILES to CLEANFILES.
 	* rtems/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
+	PREINSTALL_FILES to CLEANFILES.
+	* libmisc/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
+	PREINSTALL_FILES to CLEANFILES.
+	* librpc/Makefile.am: Re-add dirstamps to PREINSTALL_FILES. Add
 	PREINSTALL_FILES to CLEANFILES.
 
 2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -74,6 +82,10 @@
 	* score/macros/rtems/score/README: Remove (Redundant with macros/README).
 	* sapi/Makefile.am: Include compile.am, again.
 	* rtems/Makefile.am: Include compile.am, again.
+	* libmisc/Makefile.am: Include compile.am again. Misc fixes.
+	* librpc/Makefile.am: Include compile.am, again. Put man-pages into
+	EXTRA_DIST to work around automake not distributing conditionally
+	installed *_MANS. Distribute include/rpcsvc.
 
 2004-01-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -107,6 +119,14 @@
 	lib*_a_SOURCES.
 	* rtems/Makefile.am: Build librtems$(LIB_VARIANT).a instead of
 	$(ARCH)/librtems.a.
+	* libmisc/Makefile.am: Add libs to CLEANFILES Set lib*_g_a_SOURCES =
+	lib*_a_SOURCES.
+	* libmisc/Makefile.am: Build lib*$(LIB_VARIANT).a instead of
+	$(ARCH)/lib*.a.
+	* librpc/Makefile.am: Add libs to CLEANFILES. Set lib*_g_a_SOURCES =
+	lib*_a_SOURCES.
+	* librpc/Makefile.am: Build lib*$(LIB_VARIANT).a instead of
+	$(ARCH)/lib*.a.
 
 2004-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -122,6 +142,10 @@
 	* sapi/Makefile.am: Build library using EXTRA_LIBRARIES and automake
 	rules.
 	* rtems/Makefile.am: Build library using EXTRA_LIBRARIES and automake
+	rules.
+	* libmisc/Makefile.am: Build library using EXTRA_LIBRARIES and automake
+	rules.
+	* librpc/Makefile.am: Build library using EXTRA_LIBRARIES and automake
 	rules.
 
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
@@ -183,6 +207,22 @@
 	* score/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
 	* sapi/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
 	* rtems/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* libmisc/Makefile.am: Use mkdir_p. Remove dirs from
+	PRE/TMPINSTALL_FILES.
+	* librpc/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/Makefile.am: Cosmetics.
+
+2003-12-11	Joel Sherrill <joel@OARcorp.com>
+
+	PR 540/rtems_misc
+	* libmisc/cpuuse/cpuuse.c, libmisc/rtmonuse/rtmonuse.c: Correct object
+	name printing.
+	PR 531/rtems_misc
+	* libmisc/rtmonuse/rtmonuse.c, libmisc/stackchk/check.c: Correct
+	indexing.
 
 2003-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -209,12 +249,32 @@
 	AM_CPPFLAGS += -I$(top_builddir).
 	* rtems/Makefile.am: Add $(dirstamp) to preinstallation rules. Remove
 	MACROS.
+	* libmisc/Makefile.am: Add $(dirstamp) to compilation rules. Fix misc.
+	typos.
+	* libmisc/Makefile.am: Add $(dirstamp) to preinstallation rules.
+	* librpc/Makefile.am: Add $(dirstamp) to compilation rules.
+	* librpc/Makefile.am: Add $(dirstamp) to preinstallation rules.
 
 2003-11-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Reflect having removed libnetworking/libc/Makefile.am,
 	libnetworking/lib/Makefile.am.
 	* configure.ac: Reflect changes to libmisc/*.
+	* libmisc/Makefile.am: Reformat.
+	* libmisc/capture/Makefile.am: Remove.
+	* libmisc/cpuuse/Makefile.am: Remove.
+	* libmisc/devnull/Makefile.am: Remove.
+	* libmisc/dummy/Makefile.am: Remove.
+	* libmisc/dumpbuf/Makefile.am: Remove.
+	* libmisc/fsmount/Makefile.am: Remove.
+	* libmisc/monitor/Makefile.am: Remove.
+	* libmisc/mw-fb/Makefile.am: Remove.
+	* libmisc/rtmonuse/Makefile.am: Remove.
+	* libmisc/serdbg/Makefile.am: Remove.
+	* libmisc/shell/Makefile.am: Remove.
+	* libmisc/stackchk/Makefile.am: Remove.
+	* libmisc/untar/Makefile.am: Remove.
+	* libmisc/Makefile.am: Merge-in the Makefile.ams above.
 
 2003-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -228,6 +288,23 @@
 	* aclocal/check-itron.m4: Remove HAS_IRON_API.
 	* aclocal/check-multiprocessing.m4: Remove HAS_MP.
 	* aclocal/check-posix.m4: Remove HAS_POSIX_API.
+	* libmisc/wrapup/Makefile.am: Remove.
+	* libmisc/wrapup/.cvsignore: Remove.
+	* libmisc/Makefile.am: Reflect changes above.
+	* librpc/src/rpc/Makefile.am, librpc/src/xdr/Makefile.am,
+	librpc/src/Makefile.am: Removed.
+	* librpc/Makefile.am: Merge-in src/rpc/Makefile.am, src/xdr/Makefile.am,
+	src/Makefile.am. Various fixes. Reformat.
+	* librpc/include/rpc/rpc.hinclude/rpc/rpc.h: Rename struct
+	rtems_rpc_task_variables into struct _rtems_rpc_task_variables (Avoid
+	symbol conflict between struct and variable). struct
+	_rtems_rpc_task_variables *rtems_rpc_task_variables; Reflect changes
+	above.
+	* librpc/src/rpc/clnt_perror.c, librpc/src/rpc/clnt_raw.c,
+	librpc/src/rpc/clnt_simple.c, librpc/src/rpc/rpcdname.c,
+	librpc/src/rpc/rtems_rpc.c, librpc/src/rpc/svc.c, librpc/
+	src/rpc/svc_auth.c, librpc/src/rpc/svc_raw.c,
+	librpc/src/rpc/svc_simple.c: Reflect changes above.
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -290,6 +367,42 @@
 	* posix/src/config.h: Remove.
 	* posix/Makefile.am: Remove src/config.h AM_CPPFLAGS +=
 	-I$(top_builddir).
+	* libmisc/capture/config.h: Remove.
+	* libmisc/capture/Makefile.am: Remove config.h. AM_CPPFLAGS +=
+	-I$(top_builddir).
+	* libmisc/cpuuse/config.h: Remove.
+	* libmisc/cpuuse/Makefile.am: Remove config.h. AM_CPPFLAGS +=
+	-I$(top_builddir).
+	* libmisc/devnull/config.h: Remove.
+	* libmisc/devnull/Makefile.am: Remove config.h. AM_CPPFLAGS +=
+	-I$(top_builddir).
+	* libmisc/dummy/config.h: Remove.
+	* libmisc/dummy/Makefile.am: Remove config.h. AM_CPPFLAGS +=
+	-I$(top_builddir).
+	* libmisc/dumpbuf/config.h: Remove.
+	* libmisc/dumpbuf/Makefile.am: Remove config.h. AM_CPPFLAGS +=
+	-I$(top_builddir).
+	* libmisc/monitor/config.h: Remove.
+	* libmisc/monitor/Makefile.am: Remove config.h. AM_CPPFLAGS +=
+	-I$(top_builddir).
+	* libmisc/mw-fb/config.h: Remove.
+	* libmisc/mw-fb/Makefile.am: Remove config.h. AM_CPPFLAGS +=
+	-I$(top_builddir).
+	* libmisc/rtmonuse/config.h: Remove.
+	* libmisc/rtmonuse/Makefile.am: Remove config.h. AM_CPPFLAGS +=
+	-I$(top_builddir).
+	* libmisc/serdbg/config.h: Remove.
+	* libmisc/serdbg/Makefile.am: Remove config.h. AM_CPPFLAGS +=
+	-I$(top_builddir).
+	* libmisc/shell/config.h: Remove.
+	* libmisc/shell/Makefile.am: Remove config.h. AM_CPPFLAGS +=
+	-I$(top_builddir).
+	* libmisc/stackchk/config.h: Remove.
+	* libmisc/stackchk/Makefile.am: Remove config.h. AM_CPPFLAGS +=
+	-I$(top_builddir).
+	* libmisc/untar/config.h: Remove.
+	* libmisc/untar/Makefile.am: Remove config.h. AM_CPPFLAGS +=
+	-I$(top_builddir).
 
 2003-10-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -325,6 +438,11 @@
 	typecasts in assignments to thread->Wait.return_argument.
 	* score/src/coremsgseize.c, score/src/coremsgsubmit.c: Remove
 	unnecessary typecasts in assignments to  thread->Wait.return_argument.
+	* libmisc/capture/capture-cli.c: Reflect new rtems_monitor_command_arg_t.
+	* librpc/src/rpc/Makefile.am: Remove __P from AM_CPPFLAGS. Rely on
+	sys/cdefs.h providing it.
+	* librpc/src/xdr/Makefile.am: Remove __P from AM_CPPFLAGS. Rely on
+	sys/cdefs.h providing it.
 
 2003-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -344,6 +462,15 @@
 	* score/include/rtems/score/coremutex.h: Add fatal error check for a
 	task blocking on a mutex when thread dispatching is disabled.
 
+2003-09-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 495/rtems_misc
+	* libmisc/capture/capture-cli.c, libmisc/monitor/mon-command.c,
+	libmisc/monitor/mon-config.c, libmisc/monitor/mon-monitor.c,
+	libmisc/monitor/mon-object.c, libmisc/monitor/mon-symbols.c,
+	libmisc/monitor/monitor.h, libmisc/shell/cmds.c: Move to making libmisc
+	16/32 bit clean.
+
 2003-09-26	Joel Sherrill <joel@OARcorp.com>
 
 	* score/cpu/hppa1.1/.cvsignore, score/cpu/hppa1.1/ChangeLog,
@@ -362,6 +489,31 @@
 	* include/Makefile.am: Remove.
 	* configure.ac: Reflect having removed include/Makefile.am and
 	librpc/include/Makefile.am.
+	* librpc/Makefile.am: Merge-in include/Makefile.am.
+	* librpc/include/Makefile.am: Remove.
+
+2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/monitor/monitor.h:  Add rtems_monitor_commands[] (Illegally
+	applied by shell/). Remove ifdef(__mips64) (Make broken code visible
+	again).
+	* libmisc/monitor/mon-command.c: Add several ifndef RTEMS_UNIX to avoid
+	warnings.
+	* libmisc/monitor/mon-monitor.c: Remove RTEMS_CPU_HAS_16_BIT_ADDRESSES
+	(Make broken code visible again).
+	* libmisc/shell/cmds.c: Remove local decls of rtems_monitor_commands[].
+
+2003-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/monitor/monitor.h: Remove STREQ, STNEQ (pollute namespace), 
+	RTEMS_MONITOR_PROMPT (pollutes namespace, useless).
+	* libmisc/monitor/mon-command.c: Add RTEMS_MONITOR_PROMPT.
+	* libmisc/monitor/mon-monitor.c: Apply private version of STREQ.
+	* libmisc/monitor/symbols.h: Convert to private header.
+	* libmisc/monitor/monitor.h: Don't include symbols.h. Add forward decls.
+	for symbols from symbols.h.
+	* libmisc/monitor/Makefile.am: Don't install symbols.h.
+	* libmisc/monitor/mon-symbols.c: Include "symbols.h".
 
 2003-09-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -695,6 +847,14 @@
 	rtems/src/timerident.c, rtems/src/timerreset.c, rtems/src/timerserver.c,
 	rtems/src/timerserverfireafter.c, rtems/src/timerserverfirewhen.c: URL
 	for license changed.
+	* libmisc/cpuuse/cpuuse.c, libmisc/cpuuse/cpuuse.h,
+	libmisc/devnull/devnull.c, libmisc/devnull/devnull.h,
+	libmisc/dummy/dummy.c, libmisc/dumpbuf/dumpbuf.c,
+	libmisc/dumpbuf/dumpbuf.h, libmisc/fsmount/fsmount.c,
+	libmisc/fsmount/fsmount.h, libmisc/serdbg/serdbgio.c,
+	libmisc/serdbg/termios_printk.c, libmisc/stackchk/check.c,
+	libmisc/stackchk/internal.h, libmisc/stackchk/stackchk.h,
+	libmisc/untar/untar.c, libmisc/untar/untar.h: URL for license changed.
 
 2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -720,6 +880,10 @@
 	* posix/src/setpgid.c: Remove (Moved to ../libcsupport/src).
 	* posix/src/setsid.c: Remove (Moved to ../libcsupport/src).
 	* posix/Makefile.am: Reflect changes above.
+
+2003-08-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/fsmount/Makefile.am: Fix path to automake-includes.
 
 2003-08-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -756,6 +920,16 @@
 	of id/name translation status code. This propagated to multiple
 	functions. The user API service added was rtems_object_id_to_name().
 	* rtems/src/rtemsidtoname.c: New file.
+	PR 408/filesystem
+	* libmisc/cpuuse/cpuuse.c: Added sync() service. As part of adding this
+	service, the new RTEMS service rtems_iterate_over_all_threads() was also
+	added. This new service makes it easier to iterate over all the
+	tasks/threads in a system and perform an action on them. This change is
+	to use the new thread iteration service.
+
+2003-08-13	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/fsmount/.cvsignore: New file.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -768,6 +942,20 @@
 2003-08-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add libmisc/fsmount/Makefile.
+
+2003-08-06	Thomas Doerfler<Thomas.Doerfler@imd-systems.de>
+
+	PR 369/filesystem
+	* libmisc/Makefile.am, libmisc/shell/cmds.c, libmisc/wrapup/Makefile.am:
+	sample application to show the use of the DOSFS functions.
+	* libmisc/fsmount/Makefile.am, libmisc/fsmount/README,
+	libmisc/fsmount/fsmount.c, libmisc/fsmount/fsmount.h: New files.
+
+2003-08-05	Till Strauman <strauman@slac.stanford.edu>
+
+	PR 436/rtems_misc
+	* libmisc/monitor/mon-monitor.c: monitor registered commands list
+	manipulation bugs.
 
 2003-07-18	Till Straumann <strauman@slac.stanford.edu>
 
@@ -819,6 +1007,87 @@
 	../configure.ac.
 	* posix/src/config.h: New.
 	* score/cpu/Makefile.am: Add DIST_SUBDIRS = $(RTEMS_CPU).
+	* libmisc/configure.ac: Remove (Merged into ../configure.ac).
+	* libmisc/Makefile.am:  Reflect having merged configure.ac into
+	../configure.ac.
+	* libmisc/capture/config.h: New.
+	* libmisc/capture/Makefile.am: Add config.h. Reflect having merged
+	configure.ac into ../configure.ac.
+	* libmisc/cpuuse/config.h: New.
+	* libmisc/cpuuse/Makefile.am: Add config.h. Reflect having merged
+	configure.ac into ../configure.ac.
+	* libmisc/devnull/config.h: New.
+	* libmisc/devnull/Makefile.am: Add config.h. Reflect having merged
+	configure.ac into ../configure.ac.
+	* libmisc/dummy/config.h: New.
+	* libmisc/dummy/Makefile.am: Add config.h. Reflect having merged
+	configure.ac into ../configure.ac.
+	* libmisc/dumpbuf/config.h: New.
+	* libmisc/dumpbuf/Makefile.am: Add config.h. Reflect having merged
+	configure.ac into ../configure.ac.
+	* libmisc/monitor/config.h: New.
+	* libmisc/monitor/Makefile.am: Add config.h.  Reflect having merged
+	configure.ac into ../configure.ac.
+	* libmisc/mw-fb/config.h: New.
+	* libmisc/mw-fb/Makefile.am: Add config.h. Reflect having merged
+	configure.ac into ../configure.ac.
+	* libmisc/rtmonuse/config.h: New.
+	* libmisc/rtmonuse/Makefile.am: Add config.h. Reflect having merged
+	configure.ac into ../configure.ac.
+	* libmisc/serdbg/config.h: New.
+	* libmisc/serdbg/Makefile.am: Add config.h. Reflect having merged
+	configure.ac into ../configure.ac.
+	* libmisc/shell/config.h: New.
+	* libmisc/shell/Makefile.am: Add config.h. Reflect having merged
+	configure.ac into ../configure.ac.
+	* libmisc/stackchk/config.h: New.
+	* libmisc/stackchk/Makefile.am: Add config.h. Reflect having merged
+	configure.ac into ../configure.ac.
+	* libmisc/untar/config.h: New.
+	* libmisc/untar/Makefile.am: Add config.h. Reflect having merged
+	configure.ac into ../configure.ac.
+	* libmisc/wrapup/Makefile.am: Reflect having merged configure.ac into
+	../configure.ac.
+	* libmisc/capture/capture-cli.c: Add config-header support.
+	* libmisc/capture/capture.c: Add config-header support.
+	* libmisc/cpuuse/cpuuse.c: Add config-header support.
+	* libmisc/devnull/devnull.c: Add config-header support.
+	* libmisc/dummy/dummy.c: Add config-header support.
+	* libmisc/dumpbuf/dumpbuf.c: Add config-header support.
+	* libmisc/monitor/mon-command.c: Add config-header support.
+	* libmisc/monitor/mon-config.c: Add config-header support.
+	* libmisc/monitor/mon-dname.c: Add config-header support.
+	* libmisc/monitor/mon-driver.c: Add config-header support.
+	* libmisc/monitor/mon-extension.c: Add config-header support.
+	* libmisc/monitor/mon-itask.c: Add config-header support.
+	* libmisc/monitor/mon-manager.c: Add config-header support.
+	* libmisc/monitor/mon-monitor.c: Add config-header support.
+	* libmisc/monitor/mon-mpci.c: Add config-header support.
+	* libmisc/monitor/mon-object.c: Add config-header support.
+	* libmisc/monitor/mon-prmisc.c: Add config-header support.
+	* libmisc/monitor/mon-queue.c: Add config-header support.
+	* libmisc/monitor/mon-server.c: Add config-header support.
+	* libmisc/monitor/mon-symbols.c: Add config-header support.
+	* libmisc/monitor/mon-task.c: Add config-header support.
+	* libmisc/mw-fb/mw_fb.c: Add config-header support.
+	* libmisc/mw-fb/mw_uid.c: Add config-header support.
+	* libmisc/rtmonuse/rtmonuse.c: Add config-header support.
+	* libmisc/serdbg/serdbg.c: Add config-header support.
+	* libmisc/serdbg/serdbgio.c: Add config-header support.
+	* libmisc/serdbg/termios_printk.c: Add config-header support.
+	* libmisc/shell/cmds.c: Add config-header support.
+	* libmisc/stackchk/check.c: Add config-header support.
+	* libmisc/untar/untar.c: Add config-header support.
+	* librpc/configure.ac: Remove (Merged-in into ../configure.ac).
+	* librpc/Makefile.am, librpc/include/Makefile.am,
+	librpc/src/Makefile.am, librpc/src/rpc/Makefile.am,
+	librpc/src/xdr/Makefile.am: Reflect having merged configure.ac into
+	../configure.ac.
+
+2003-07-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/configure.ac: Remove RTEMS_BSP from
+	RTEMS_CHECK_MULTIPROCESSING.
 
 2003-07-07	Joel Sherrill <joel@OARcorp.com>
 
@@ -841,6 +1110,10 @@
 	rtems/include/rtems/rtems/regionmp.h, rtems/include/rtems/rtems/semmp.h,
 	rtems/src/msgmp.c, rtems/src/partmp.c, rtems/src/regionmp.c,
 	rtems/src/semmp.c: Removed warnings.
+
+2003-06-04	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/stackchk/check.c: Removed warnings.
 
 2003-05-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -870,6 +1143,10 @@
 	* aclocal/enable-rtemsbsp.m4: Remove.
 	* aclocal/env-rtemscpu.m4: Remove stray '/' in setting up 
 	project_libdir.
+
+2003-04-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/dummy/Makefile.am: Remove stray dummy.rel.
 
 2003-04-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -920,6 +1197,7 @@
 	* sapi/macros/.cvsignore: Remove.
 	* sapi/macros/rtems/.cvsignore: Remove.
 	* sapi/src/.cvsignore: Remove.
+	* libmisc/configure.ac: Remove AC_CONFIG_AUX_DIR.
 
 2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -944,6 +1222,13 @@
 	* aclocal/prog-cc.m4: Set up RTEMS_CPPFLAGS.
 	* aclocal/env-rtemscpu.m4: Remove GCC_SPECS.
 	* aclocal/env-rtemsbsp.m4: Remove GCC_SPECS.
+	capture/capture-cli.c: Add proper definition to avoid compiler
+	warnings. Apply int = getchar().
+
+2003-02-14	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 352/rtems_misc
+	* libmisc/shell/shell.c: make rtems_shell main task an FP enabled task.
 
 2003-02-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -969,6 +1254,8 @@
 	* itron/configure.ac: AC_PREREQ(2.57).
 	* posix/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
 	* posix/configure.ac: AC_PREREQ(2.57).
+	* librpc/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* librpc/configure.ac: AC_PREREQ(2.57).
 
 2003-02-03	Joel Sherrill <joel@OARcorp.com>
 
@@ -984,6 +1271,13 @@
 
 	* posix/src/ptimer1.c: Correct problem which could lead to overflow in
 	time math.
+
+2003-01-27	Dan Smisko <dan@balanced.com>
+
+	* libmisc/stackchk/check.c: Fix problem where _Objects_Get_information()
+	will dereference a null pointer when checking the interrupt stack. If
+	there's something at 0, you may be ok at run time but it is wrong.
+	* libmisc/monitor/mon-command.c: Correct two potential NULL references.
 
 2003-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1037,11 +1331,59 @@
 	* sapi/Makefile.am: Don't create $ARCH as side-effect of compilation.
 	* rtems/Makefile.am: Don't create $ARCH as side-effect of compilation.
 	Re-order all-local.
+	* libmisc/configure.ac: Require autoconf-2.57+automake-1.7.2.
+	* libmisc/capture/Makefile.am: Eliminate C_O_FILES.
+	* libmisc/cpuuse/Makefile.am: Ditto.
+	* libmisc/devnull/Makefile.am: Ditto.
+	* libmisc/dummy/Makefile.am: Ditto.
+	* libmisc/dumpbuf/Makefile.am: Ditto.
+	* libmisc/monitor/Makefile.am: Ditto.
+	* libmisc/rtmonuse/Makefile.am: Ditto.
+	* libmisc/serdbg/Makefile.am: Ditto.
+	* libmisc/shell/Makefile.am: Ditto.
+	* libmisc/stackchk/Makefile.am: Ditto.
+	* libmisc/untar/Makefile.am: Ditto.
+	* libmisc/mw-fb/Makefile.am: Eliminate C_O_FILES. Eliminate SRCS. Moving
+	libmisc from rtems/c/src to rtems/cpukit.
+	* libmisc/Makefile.am: Reflect new path.
+	* libmisc/configure.ac: Reflect new path.  Use RTEMS_ENV_RTEMSCPU
+	instead of RTEMS_ENV_RTEMSBSP. Remove RTEMS_PROJECT_ROOT.
+	* libmisc/capture/Makefile.am: Reflect new path. Remove OBJS from
+	all-local.
+	* libmisc/cpuuse/Makefile.am: Ditto.
+	* libmisc/devnull/Makefile.am: Ditto.
+	* libmisc/dummy/Makefile.am: Ditto.
+	* libmisc/dumpbuf/Makefile.am: Ditto.
+	* libmisc/monitor/Makefile.am: Ditto.
+	* libmisc/mw-fb/Makefile.am: Ditto.
+	* libmisc/rtmonuse/Makefile.am: Ditto.
+	* libmisc/serdbg/Makefile.am: Ditto.
+	* libmisc/shell/Makefile.am: Ditto.
+	* libmisc/stackchk/Makefile.am: Ditto.
+	* libmisc/untar/Makefile.am: Ditto.
+	* libmisc/wrapup/Makefile.am: Reflect new path.
 
 2002-12-11	Vladimir Nesic <vnesic@dkts.co.yu>
 
 	* posix/src/cancelrun.c, posix/src/cleanuppop.c: Get the last real node
 	not the permanent null last node.
+
+2002-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/configure.ac: Remove RTEMS_CHECK_CUSTOM_BSP.
+	* libmisc/capture/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* libmisc/cpuuse/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* libmisc/devnull/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* libmisc/dummy/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* libmisc/dumpbuf/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* libmisc/monitor/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* libmisc/mw-fb/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* libmisc/rtmonuse/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* libmisc/serdbg/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* libmisc/shell/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* libmisc/stackchk/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* libmisc/untar/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* libmisc/wrapup/Makefile.am: Don't include @RTEMS_BSP@.cfg.
 
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1118,6 +1460,7 @@
 	Added casts to eliminate warnings on 16 bit targets like the h8300.
 	* rtems/include/rtems/rtems/support.h: Added casts to eliminate warnings
 	on 16 bit targets like the h8300.
+	* libmisc/stackchk/check.c: Better handling of task name.
 
 2002-11-29	Eric Norum <eric.norum@usask.ca>
 
@@ -1134,6 +1477,7 @@
 	* itron/configure.ac: Fix package name.
 	* posix/configure.ac: Cosmetical fixes.
 	* posix/configure.ac: Fix package name.
+	* librpc/configure.ac: Fix package name.
 
 2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1150,6 +1494,17 @@
 	* aclocal/prog-cc.m4: Acknowledge configuration-time CFLAGS.
 	* automake/compile.am: Acknowledge configuration-time CFLAGS. Remove
 	CFLAGS_DEFAULT.
+	* libmisc/monitor/mon-commands.c: Removed warnings for RTEMS_UNIX.
+
+2002-11-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/capture/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/serdbg/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/serdbg/serdbgio.c: Add #include <unistd.h>.
+	* libmisc/shell/Makefile.am: Add RTEMS_LIBSHELL conditional.
+	* libmisc/wrapup/Makefile.am: Add RTEMS_LIBSHELL conditional.
+	* libmisc/configure.ac: Check for stdio assignments. Add RTEMS_LIBSHELL
+	conditional.
 
 2002-11-14	Joel Sherrill <joel@OARcorp.com>
 
@@ -1166,16 +1521,23 @@
 	* aclocal/version.m4: Updated to rtems-ss-20021111.
 	* aclocal/version.m4: Updated to rtems-ss-20021111.
 
+2002-11-04	Joel Sherrill <joel@OARcorp.com>
+
+	* librpc/src/rpc/pmap_rmt.c: Removed warnings.
+
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: Corrected.
 	* posix/ChangeLog: Corrected.
+	* libmisc/stackchk/check.c: Removed warnings.
 
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
 	* score/src/heapgetinfo.c: Fixed comment.
 	* score/src/mpci.c: Removed warning.
 	* rtems/src/regiongetinfo.c: Corrected return value check.
+	* libmisc/stackchk/check.c: Removed warning.
+	* librpc/src/rpc/svc_run.c: Remove warning.
 
 2002-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1198,18 +1560,39 @@
 	* score/src/threadhandler.c: Prototype _init() and _main() if they are
 	needed to avoid a warning.
 	* rtems/src/timerserver.c: Add useless return to avoid warning.
+	* librpc/src/rpc/clnt_tcp.c, librpc/src/rpc/clnt_udp.c,
+	librpc/src/rpc/pmap_rmt.c, librpc/src/rpc/rtime.c,
+	librpc/src/rpc/svc_tcp.c: Add include of <sys/select.h> to eliminate
+	warning.
+	* librpc/src/rpc/rpcdname.c: Add prototype of getdomainname() to
+	eliminate warning.
+
+2002-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/monitor/mon-command.c: Don't build rtems_monitor_line_editor
+	for RTEMS_UNIX to avoid gcc warning.
 
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
 	* itron/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
 	* posix/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
+	* librpc/configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.
+
+2002-10-24	Fabrizio Pirovano <pirovano.thysys@tiscalinet.it>
+
+	* libmisc/capture/capture.c, libmisc/monitor/mon-manager.c,
+	libmisc/stackchk/check.c: Patch to remove problems introduced by object
+	name rework.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 	* itron/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 	* posix/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
+	* libmisc/.cvsignore: Reformat. Add autom4te*cache. Remove
+	autom4te.cache.
+	* librpc/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-10-21	Joel Sherrill <joel@OARcorp.com>
 
@@ -1236,6 +1619,11 @@
 	rtems/src/timerident.c: Added casts to Objects_Name to eliminate
 	warnings.
 
+2002-08-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/shell/shell.c: #include <time.h>.
+	* libmisc/wrapup/Makefile.am: Eliminate LIBNAME.
+
 2002-08-30	Joel Sherrill <joel@OARcorp.com>
 
 	* sapi/src/io.c: Fixed some spacing.
@@ -1259,10 +1647,36 @@
 
 	* aclocal/bsp-alias.m4: Remove.
 
+2002-08-20	Joel Sherrill <joel@OARcorp.com>
+
+	* librpc/src/xdr/xdr_stdio.c: Per PR268, add include of <netinet/in.h>
+	to avoid warning on ntohl().
+
 2002-08-14	Joel Sherrill <joel@OARcorp.com>
 
 	* score/macros/rtems/score/coremsg.inl: Add <string.h> to remove warning.
 	* score/src/threadidlebody.c: Add return 0 to avoid warning.
+
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/capture/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libmisc/cpuuse/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libmisc/devnull/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libmisc/dummy/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libmisc/dumpbuf/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libmisc/monitor/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libmisc/mw-fb/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libmisc/rtmonuse/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libmisc/serdbg/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libmisc/shell/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libmisc/stackchk/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* libmisc/untar/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* librpc/src/rpc/rtems_portmapper.c: include <stdlib.h> (Get rid of
+	gcc31 warnings about abort/exit).
+
+2002-08-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/shell/Makefile.am: Remove shell.h from EXTRA_DIST.
 
 2002-08-09	Joel Sherrill <joel@OARcorp.com>
 
@@ -1296,6 +1710,7 @@
 2002-08-06	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac: or32 does not currently support librpc.
+	* librpc/configure.ac: or32 does not currently support librpc.
 
 2002-08-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1303,6 +1718,11 @@
 	* wrapup/Makefile.am: Use libsapi.a.
 	* sapi/src/Makefile.am: Add libsapi.a.
 	* rtems/src/Makefile.am: Add librtems.a.
+
+2002-08-01	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/cpuuse/cpuuse.c (CPU_usage_Dump) : Corrected so it honors when
+	an object name is raw versus being a string.
 
 2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1321,9 +1741,35 @@
 	* aclocal/rtems-cpu-subdirs.m4:  Removed the or16 port was just a stub
 	and only the OR32 port is getting worked on.
 
+2002-07-30	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/stackchk/check.c: Don't reference the RTEMS allocated
+	interrupt stack if the port doesn't configure using it.
+
+2002-07-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* librpc/src/rpc/Makefile.am: Merge src/rpc/PSD.doc/Makefile.am.
+	* librpc/include/Makefile.am: Merge include/rpc/Makefile.am. Merge
+	include/rpcsvc/Makefile.am.
+	* librpc/include/rpc/Makefile.am: Remove.
+	* librpc/include/rpcsvc/Makefile.am: Remove.
+	* librpc/src/rpc/PSD.doc/Makefile.am: Remove.
+	* librpc/configure.ac: Remove duplicate AC_PROG_RANLIB. Remove
+	include/rpc/Makefile. Remove include/rpcsvc/Makefile. Remove
+	src/rpc/PSD.doc/Makefile.
+
 2002-07-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/compile.am: Use .$(OBJEXT) instead of .o.
+
+2002-07-24	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/wrapup/Makefile.am: Temporarily don't include serdbg since it
+	causes some BSPs to not link "main(){}" as required by autoconf.
+
+2002-07-23	Joel Sherrill <joel@OARcorp.com>
+
+	* librpc/src/rpc/pmap_clnt.c (pmap_set): Changed prototype to match .h.
 
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1347,12 +1793,21 @@
 	* score/src/Makefile.am: Use .$(OBJEXT) instead of .o.
 	* sapi/src/Makefile.am: Use .$(OBJEXT) instead of .o.
 	* rtems/src/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* librpc/src/xdr/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* librpc/src/rpc/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* librpc/src/xdr/Makefile.am: Eliminate LIBNAME.
+	* librpc/src/rpc/Makefile.am: Eliminate LIBNAME.
 
 2002-07-22	Joel Sherrill <joel@OARcorp.com>
 
 	* score/include/rtems/score/apimutex.h (_API_Mutex_Lock): Per PR253 add
 	the missing _ISR_Disable.  This fix was already applied to the old
 	location (c/src/exec/score/...).
+
+2002-07-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/capture/capture.c: include <string.h> for memset.
+	* libmisc/capture/capture-cli.c: include <string.h> for memset.
 
 2002-07-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1377,6 +1832,7 @@
 	* configure.ac: RTEMS_TOP(..).
 	* itron/configure.ac: RTEMS_TOP(../..).
 	* posix/configure.ac: RTEMS_TOP(../..).
+	* librpc/configure.ac: RTEMS_TOP(../..).
 
 2002-07-05	Joel Sherrill <joel@OARcorp.com>
 
@@ -1412,6 +1868,7 @@
 	* aclocal/prog-cc.m4: Remove obsolete comments. Comment out GCCSED.
 	* itron/configure.ac: Remove RTEMS_PROJECT_ROOT.
 	* posix/configure.ac: Remove RTEMS_PROJECT_ROOT.
+	* librpc/configure.ac: Remove RTEMS_PROJECT_ROOT.
 
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
@@ -1527,6 +1984,14 @@
 	rtems/src/sem.c, rtems/src/semcreate.c, rtems/src/taskcreate.c,
 	rtems/src/taskident.c, rtems/src/tasks.c, rtems/src/timercreate.c:
 	Modified as part of above.
+	* libmisc/capture/capture-cli.c, libmisc/cpuuse/cpuuse.c,
+	libmisc/monitor/mon-monitor.c, libmisc/monitor/mon-object.c,
+	libmisc/monitor/monitor.h: Corrected use of _Objects_Information_table
+	now that it is a two dimensional array based upon API and class.  In
+	addition, in the monitor,  corrected an error which occured when a
+	target has 64 bit pointers.
+	* libmisc/stackchk/check.c: Corrected use of _Objects_Information_table
+	now that it is a two dimensional array based upon API and class.
 
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1539,6 +2004,7 @@
 	* configure.ac: Use AC_CONFIG_AUX_DIR(..).
 	* itron/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
 	* posix/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
+	* librpc/configure.ac: Use AC_CONFIG_AUX_DIR(../..). Add AC_PROG_RANLIB.
 
 2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1551,6 +2017,21 @@
 	* itron/src/Makefile.am: Add libitron.a.
 	* posix/configure.ac: Remove references to RTEMS_BSP.
 	* posix/src/Makefile.am: Add libposix.a.
+	* libmisc/wrapup/Makefile.am: Don't preinstall libmisc.a.
+
+2002-06-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	* With the addition of serdbg, the standard polled I/O functions for
+	gdbstub and/or printk are optionally routed to any termios-aware device
+	driver, that supports polled mode. See libmisc/serdbg/README.
+	* libmisc/serdbg/Makefile.am, libmisc/serdbg/README,
+	libmisc/serdbg/serdbg.c, libmisc/serdbg/serdbg.h,
+	libmisc/serdbg/serdbgcnf.h, libmisc/serdbg/serdbgio.c,
+	libmisc/serdbg/termios_printk.c, libmisc/serdbg/termios_printk.h,
+	libmisc/serdbg/termios_printk_cnf.h, libmisc/serdbg/.cvsignore: New
+	files.
+	* libmisc/configure.ac, libmisc/Makefile.am, libmisc/wrapup/Makefile.am:
+	Modified to reflect addition.
 
 2002-06-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1558,6 +2039,20 @@
 	* configure.ac: Add librpc. AC_PROG_RANLIB.
 	* wrapup/Makefile.am: Add librpc. Use relative path to lib*.a for
 	POSIX_OBJS, ITRON_OBJS, NETWORKING_OBJS.
+	* librpc/configure.ac: RTEMS_TOP(../../../..).
+	AC_CONFIG_AUX_DIR(../../../..). Remove RTEMS_CANONICAL_HOST. Use
+	RTEMS_ENV_RTEMSCPU. Add AC_PROG_RANLIB.
+	* librpc/include/rpc/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* librpc/include/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* librpc/include/rpcsvc/Makefile.am: Include
+	$(top_srcdir)/../automake/*.am.
+	* librpc/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	ACLOCAL_AMFLAGS = -I ../aclocal.
+	* librpc/src/rpc/PSD.doc/Makefile.am: Include
+	$(top_srcdir)/../automake/*.am.
+	* librpc/src/rpc/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* librpc/src/xdr/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* librpc/src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
 
 2002-06-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1651,10 +2146,33 @@
 	* configure.ac: Add libnetworking.
 	* wrapup/Makefile.am: Ditto.
 
+2002-05-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/configure.ac, libmisc/Makefile.am: Remove references to rootfs.
+
 2002-05-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add libblock. Add libfs. Add AM_CONDITIONAL(UNIX).
 	* wrapup/Makefile.am: Add libblock, libfs/dosfs, libfs/imfs.
+
+2002-05-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/rootfs/.cvsignore: Remove.
+	* libmisc/rootfs/Makefile.am: Remove.
+	* libmisc/rootfs/mkrootfs.h: Remove.
+	* libmisc/rootfs/mkrootfs.c: Remove.
+	* libmisc/configure.ac: Remove rootfs and NETWORKING macros.
+	* libmisc/wrapup/Makefile.am: Remove rootfs and HAS_NETWORKING.
+
+2002-05-16	Chris Johns <ccj@acm.org>
+
+	* Per PR194, added the Capture engine.  
+	* libmisc/capture/Makefile.am, libmisc/capture/README,
+	libmisc/capture/capture-cli.c, libmisc/capture/capture-cli.h,
+	libmisc/capture/capture.c, libmisc/capture/capture.h,
+	libmisc/capture/.cvsignore: New files.
+	* libmisc/Makefile.am, libmisc/configure.ac, libmisc/wrapup/Makefile.am:
+	Modified to reflect addition.
 
 2002-05-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1733,6 +2251,10 @@
 	* include/rtems/bspIo.h: Fix cpp-guards, remove references to i386.
 	* posix/src/psignal.c: Include <stdlib.h>.
 
+2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/monitor/mon-monitor.c: Replace done with return (gcc3).
+
 2002-04-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* posix/src/getegid.c: Remove <errno.h>.
@@ -1778,6 +2300,40 @@
 	* rtems/inline/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* rtems/macros/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* rtems/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* libmisc/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/cpuuse/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/devnull/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/dummy/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/dumpbuf/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/monitor/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/mw-fb/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/rootfs/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/rtmonuse/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/shell/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/stackchk/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/untar/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* libmisc/wrapup/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librpc/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* librpc/include/rpc/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librpc/include/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librpc/include/rpcsvc/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librpc/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librpc/src/rpc/PSD.doc/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librpc/src/rpc/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librpc/src/xdr/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* librpc/src/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
+2002-03-20	Chris Johns <ccj@acm.org>
+
+	* libmisc/monitor/mon-command.c: Per PR192 the RTEMS monitor makes
+	everything lowercase. The capture engine need to set triggers or watches
+	on task with uppercase names.   Also stop the monitor repeating command
+	when enter is pressed.
+	* PR148.
+	* libmisc/monitor/mon-prmisc.c: Fixed to print task states correctly.
 
 2002-03-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -1812,6 +2368,35 @@
 
 	* score/include/rtems/score/watchdog.h: Added WATCHDOG_MAXIMUM_INTERVAL.
 
+2002-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/shell/shell.c: Remove #undef __STRICT_ANSI__.
+
+2002-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/configure.ac: Fix tests for GCC.
+
+2002-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/configure.ac: Add check for weak function attribute. Remove
+	AM_CONDITIONAL([RTEMS_LIBSHELL]. Add AM_CONDITIONAL(LIBSHELL),
+	AM_CONDITIONAL(LIBSERDBG).
+	* libmisc/capture/Makefile.am:  Use *.a instead of *-tmp.a.
+	* libmisc/cpuuse/Makefile.am:  Use *.a instead of *-tmp.a.
+	* libmisc/devnull/Makefile.am:  Use *.a instead of *-tmp.a.
+	* libmisc/dummy/Makefile.am:  Use *.a instead of *-tmp.a.
+	* libmisc/dumpbuf/Makefile.am:  Use *.a instead of *-tmp.a.
+	* libmisc/monitor/Makefile.am:  Use *.a instead of *-tmp.a.
+	* libmisc/mw-fb/Makefile.am:  Use *.a instead of *-tmp.a.
+	* libmisc/rtmonuse/Makefile.am:  Use *.a instead of *-tmp.a.
+	* libmisc/serdbg/Makefile.am:  Use *.a instead of *-tmp.a. Build iff
+	LIBSERDBG is true.
+	* libmisc/shell/Makefile.am:  Use *.a instead of *-tmp.a. Build iff
+	LIBSHELL is true.
+	* libmisc/stackchk/Makefile.am:  Use *.a instead of *-tmp.a.
+	* libmisc/untar/Makefile.am:  Use *.a instead of *-tmp.a.
+	* libmisc/wrapup/Makefile.am: Reflect changes above.
+
 2002-01-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* score/include/rtems/system.h: Fix typo in yesterday's change:
@@ -1831,6 +2416,8 @@
 	* wrapup/Makefile.am: Add install-hook.  Remove SIZE_RTEMS.
 	* include/rtems/fs.h: New, extracted from libio_.h.
 	* include/rtems/userenv.h: New. extracted from libio_.h.
+	* libmisc/rootfs/Makefile.am: Use include_rtems_HEADERS instead of
+	H_FILES.
 
 2002-01-07	Joel Sherrill <joel@OARcorp.com>
 
@@ -1855,6 +2442,7 @@
 
 	* score/include/rtems/seterr.h: Add do {..} while (0) in defines. Rename
 	set_errno_and_return_minus_one into rtems_set_errno_and_return_minus_one.
+	* libmisc/mw-fb/mw_uid.c: Apply rtems_set_errno_and_return_minus_one.
 
 2002-01-04	Joel Sherrill <joel@OARcorp.com>
 
@@ -2010,6 +2598,7 @@
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* sapi/include/rtems/directives.h: Fixed typo.
+	* libmisc/rootfs/mkrootfs.c, libmisc/rootfs/mkrootfs.h: Fixed typo.
 
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2023,6 +2612,14 @@
 	* posix/.cvsignore: Add autom4te.cache for autoconf > 2.52.
 	* posix/configure.in: Remove.
 	* posix/configure.ac: New file, generated from configure.in by
+	autoupdate.
+	* libmisc/.cvsignore: Add autom4te.cache for autoconf > 2.52.
+	* libmisc/configure.in: Remove.
+	* libmisc/configure.ac: New file, generated from configure.in by
+	autoupdate.
+	* librpc/.cvsignore: Add autom4te.cache for autoconf > 2.52.
+	* librpc/configure.in: Remove.
+	* librpc/configure.ac: New file, generated from configure.in by
 	autoupdate.
 
 2001-09-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
@@ -2039,10 +2636,28 @@
 	* rtems/include/Makefile.am: Use 'PREINSTALL_FILES ='.
 	* rtems/inline/rtems/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
 	* rtems/macros/rtems/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libmisc/untar/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libmisc/monitor/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libmisc/shell/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libmisc/devnull/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libmisc/dumpbuf/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libmisc/mw-fb/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libmisc/stackchk/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libmisc/rtmonuse/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libmisc/cpuuse/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* libmisc/rootfs/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* librpc/include/rpc/Makefile.am: Use 'PREINSTALL_FILES ='.
 
 2001-09-28	Joel Sherrill <joel@OARcorp.com>
 
 	* posix/src/mqueueopen.c, posix/src/semopen.c: Clarify type on va_arg.
+	* libmisc/dummy/dummy.c: Now a useful configuration that starts main().
+	* libmisc/wrapup/Makefile.am: Include a base level configuration in
+	RTEMS library.
+
+2001-09-27	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/ChangeLog: Fixed typo in date.
 
 2001-09-27	Eric Norum <eric.norum@usask.ca>
 
@@ -2077,9 +2692,43 @@
 	* posix/src/Makefile.am: Adapt INCLUDES to make automake-1.5 happy.
 	* sapi/optman/Makefile.am: Adapt ASM4FLAGS to automake-1.5.
 
+2001-09-21	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/configure.in, libmisc/rootfs/Makefile.am: Added conditional to
+	make sure rootfs does not get built with networking is disabled.  Also
+	added include of compile.am to rootfs/Makefile.am.
+	* libmisc/wrapup/Makefile.am: Added rootfs conditionally if networking
+	enabled.
+
+2001-09-19	Chris Johns <ccj@acm.org>
+
+	* Added support for populating the initial "root" filesystem with
+	information obtained via the DHCP response.
+	* libmisc/rootfs: New directory.
+	* libmisc/rootfs/.cvsignore, libmisc/rootfs/Makefile.am,
+	libmisc/rootfs/mkrootfs.c, libmisc/rootfs/mkrootfs.h: New files.
+	* libmisc/configure.in, libmisc/Makefile.am: Modified to reflect
+	addition.
+
+2001-09-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/aclocal/canonical-target-name.m4: Use AC_CANONICAL_TARGET
+	instead of AC_CANONICAL_SYSTEM.
+	* libmisc/aclocal/config-subdirs.m4: Use AS_MKDIR_P instead of
+	mkinstalldirs and mkdir.
+	* libmisc/aclocal/target.m4: Obsolete RTEMS_OUTPUT_BUILD_SUBDIRS, hack
+	RTEMS_CONFIG_BUILD_SUBDIRS, introduce _RTEMS_OUTPUT_BUILD_SUBDIRS.
+	* libmisc/aclocal/canonical-target-name.m4: Use AC_CANONICAL_TARGET
+	instead of AC_CANONICAL_SYSTEM.
+	* libmisc/aclocal/config-subdirs.m4: Use AS_MKDIR_P instead of
+	mkinstalldirs and mkdir.
+	* libmisc/aclocal/target.m4: Obsolete RTEMS_OUTPUT_BUILD_SUBDIRS, hack
+	RTEMS_CONFIG_BUILD_SUBDIRS, introduce _RTEMS_OUTPUT_BUILD_SUBDIRS.
+
 2001-09-14	Fernando Ruiz <fernando.ruiz@ctv.es>
 
 	* rtems/src/tasks.c: Dereference pointer passed to destructor.
+	* libmisc/shell/shell.c: Don't close file it wasn't open.
 
 2001-09-13	Joel Sherrill <joel@OARcorp.com>
 
@@ -2090,6 +2739,7 @@
 	* posix/src/sysconf.c: Addition of Solaris value for _SC_STACK_PROT
 	required to pass about 350 ACATS test cases.
 	* posix/src/Makefile.am: Added new files.
+	* libmisc/devnull/devnull.c: Eliminate warning.
 
 2001-08-30	Joel Sherrill <joel@OARcorp.com>
 
@@ -2127,6 +2777,12 @@
 	to account for possibly blocking during the core send operation because
 	Classic API message queue send is always non-blocking.
 
+2001-08-09	Keith Outwater <vac4050@cae597.rsc.raytheon.com>
+
+	* libmisc/monitor/mon-command.c: Add support for partial command
+	matching. The monitor used to have this functionality before it was
+	overhauled to support addition of user commands.
+
 2001-08-09	Joel Sherrill <joel@OARcorp.com>
 
 	* itron/src/snd_mbx.c, itron/src/tsnd_mbf.c: Unblocking message queue
@@ -2147,17 +2803,50 @@
 	invoke message send operations from an ISR.  This was reported by Suvrat
 	Gupta <suvrat@utstar.com>.
 
+2001-08-09	Fernando-Ruiz Casas <correo@fernando-ruiz.com>
+
+	* libmisc/shell/pty.c: Moved to libnetworking/rtems_telnetd.
+	* libmisc/shell/Makefile.am, libmisc/shell/README, libmisc/shell/cmds.c,
+	libmisc/shell/shell.c, libmisc/shell/shell.h: Updates.
+
+2001-06-14	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/shell/telnetd.c, libmisc/shell/telnetd.h: Moved to
+	libnetworking/rtems_servers so the network stack to address network
+	depenendency.
+	* libmisc/shell/Makefile.am: Modified to reflect above.
+
 2001-05-25	Sergei Organov <osv@javad.ru>
 
 	* score/macros/rtems/score/coresem.inl,
 	score/inline/rtems/score/coresem.inl: Cut and paste problem incorrectly
 	enabled interrupts twice with the first time being too early.
 
+2001-05-25	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/shell/cmds.c: Removed code from inappropriate source.
+
 2001-05-24	Fernando Ruiz Casas <fernando.ruiz@ctv.es>
 
 	* posix/src/getegid.c, posix/src/geteuid.c, posix/src/getgid.c,
 	posix/src/getlogin.c, posix/src/getuid.c: Now save their values in
 	private user environment.
+	* libmisc/monitor/mon-prmisc.c: Correct print line.
+	* libmisc/shell/Makefile.am: Added new file telnetd.c.
+	* libmisc/shell/telnetd.c, libmisc/shell/telnetd.h, libmisc/shell/pty.c:
+	New files.
+	* libmisc/shell/shell.c, libmisc/shell/cmds.c, libmisc/shell/shell.h:
+	Numerous improvments: - The shell_init has a new parameter 'forever'
+	because in /dev/console you need that this process runs forever but in
+	tcp/ip not. (respawn?) - A new task for every session opened trought
+	tcp/ip telnet client. (the chargen,daytime and more are possible of
+	implementation but I ask me if they are necesary) - Exit from the
+	session delete the task and when the client fails too. - More cmds have
+	been implemented. (very reduced version of these) umask, chmod, id,
+	whoami, rm, cat, ... - A reduced line edit has been implemented. Ctrl-C
+	abort the input, Ctrl-d in the first position gives EOF (logout). '\b'
+	and DEL makes the rubout operation. I think that readline() for every
+	session spents a lot of resources.
 
 2001-05-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -2183,6 +2872,11 @@
 	corruption (of other, FP, tasks may occur)! Furthermore, (on PPC) by
 	default, lazy FP context save/restore is _disabled_.
 
+2001-05-14	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/dummy/Makefile.am, libmisc/wrapup/Makefile.am: Fixed to
+	generate a library of the same name.
+
 2001-05-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* score/include/rtems/score/.cvsignore: Add stamp-h, cpuopts.h,
@@ -2193,6 +2887,11 @@
 	* sapi/src/exinit.c: Slightly rework initialization so there is a valid
 	thread as _Thread_Executing when the pre_tasking hook is called.  This
 	allows one directives and malloc to potentially use mutex protection.
+
+2001-04-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/shell/cmds.c, libmisc/shell/shell.c: Remove fileno-hacks.
+	* libmisc/monitor/mon-symbols.c: Remove #undef __STRICT_ANSI__.
 
 2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2225,6 +2924,22 @@
 
 	* itron/src/task.c (_ITRON_Task_User_extensions): Add new fields to  be
 	correct in respect to newly added fields for separate switch list.
+
+2001-04-20	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/devnull/devnull.c (null_initialize): Added check to  ensure
+	that the driver is only initialized once.  Otherwise, it will abort when
+	the device /dev/null is present. (null_write): Do not dereference a NULL
+	pointer.
+
+2001-04-20	Fernando Ruiz Casas <correo@fernando-ruiz.com>
+
+	* Added initial shell functionality.
+	* libmisc/Makefile.am, libmisc/configure.in, libmisc/wrapup/Makefile.am:
+	Reflect having added shell.
+	* libmisc/shell/.cvsignore, libmisc/shell/Makefile.am,
+	libmisc/shell/README, libmisc/shell/cmds.c, libmisc/shell/shell.c,
+	libmisc/shell/shell.h: New files.
 
 2001-04-16	Joel Sherrill <joel@OARcorp.com>
 
@@ -2290,6 +3005,10 @@
 
 	* configure.in: AC_DEFINE RTEMS_UNIX if RTEMS_CPU=unix.
 
+2001-02-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libmisc/monitor/mon-command.c: Use #if defined(RTEMS_UNIX).
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* itron/include/Makefile.am, itron/include/itronsys/Makefile.am,
@@ -2311,6 +3030,13 @@
 	rtems/inline/rtems/rtems/Makefile.am,
 	rtems/macros/rtems/rtems/Makefile.am, rtems/ rtems/optman/Makefile.am:
 	Apply include_*HEADERS instead of H_FILES.
+	* libmisc/untar/Makefile.am, libmisc/monitor/Makefile.am,
+	libmisc/dummy/Makefile.am, libmisc/devnull/Makefile.am,
+	libmisc/dumpbuf/Makefile.am, libmisc/mw-fb/Makefile.am,
+	libmisc/stackchk/Makefile.am, libmisc/rtmonuse/Makefile.am,
+	libmisc/cpuuse/Makefile.am: Apply include_*HEADERS instead of H_FILES.
+	* librpc/include/rpc/Makefile.am: Apply include_*HEADERS instead of
+	H_FILES.
 
 2001-01-31	Joel Sherrill <joel@OARcorp.com>
 
@@ -2427,6 +3153,14 @@
 	* itron/src/.cvsignore: Add config.h and stamp-h.
 	* itron/src/*.c: Add config.h support.
 
+2001-01-05	Joel Sherrill <joel@OARcorp.com>
+
+	* libmisc/devnull: New addition.  Moved from libcpu/sh.
+	* libmisc/devnull/devnull.c, libmisc/devnull/devnull.h,
+	libmisc/devnull/.cvsignore, libmisc/ devnull/Makefile.am: New files.
+	* libmisc/Makefile.am, libmisc/configure.in, libmisc/wrapup/Makefile.am:
+	Modified to reflect addition of above.
+
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
 	* score/src/isr.c: Modify to properly dereference _ISR_Vector_table now
@@ -2516,6 +3250,7 @@
 	would compile with both macros and inlines.
 	* rtems/macros/rtems/rtems/sem.inl: Added macro implementation of
 	_Semaphore_Get_interrupt_disable().
+	* libmisc/mw-fb/mw_uid.c: Removed unnecessary dependency on <bsp.h>.
 
 2000-11-28	Chris Johns <ccj@acm.org>
 
@@ -2535,6 +3270,9 @@
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
 	* itron/Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
 	* posix/Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
+	* libmisc/Makefile.am: Use ... instead of RTEMS_TOPdir in
+	ACLOCAL_AMFLAGS.
+	* librpc/Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
 
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2542,6 +3280,10 @@
 	* itron/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
 	$(RTEMS_TOPdir)/aclocal.
 	* posix/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
+	* libmisc/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
+	$(RTEMS_TOPdir)/aclocal.
+	* librpc/Makefile.am: Switch to ACLOCAL_AMFLAGS = -I
 	$(RTEMS_TOPdir)/aclocal.
 
 2000-11-02	Joel Sherrill <joel@OARcorp.com>
@@ -2579,6 +3321,19 @@
 	RTEMS source code.
 	* sapi/include/confdefs.h: Replaced include of <sys/siginfo.h> with
 	<signal.h> since that file no longer exists.
+	* POSIX include files merged into newlib.  This resulted in some
+	definitions moving to other files and thus some secondary effects in
+	RTEMS source code.
+	* librpc/src/rpc/Makefile.am, librpc/src/rpc/auth_time.c,
+	librpc/src/rpc/clnt_simple.c, librpc/src/rpc/clnt_tcp.c,
+	librpc/src/rpc/clnt_udp.c, librpc/src/rpc/clnt_unix.c,
+	librpc/src/rpc/get_myaddress.c, librpc/src/rpc/pmap_clnt.c,
+	librpc/src/rpc/pmap_getmaps.c, librpc/src/rpc/pmap_getport.c,
+	librpc/src/rpc/pmap_rmt.c, librpc/src/rpc/rtime.c,
+	librpc/src/rpc/svc_tcp.c, librpc/src/rpc/svc_udp.c,
+	librpc/src/rpc/svc_unix.c: Use of _read, _write, and _close as macros
+	conflicted with newlib's use of these as routine names.  They were
+	renamed to include "_RPC_" prefix.
 
 2000-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -2587,6 +3342,10 @@
 	* itron/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch
 	to GNU canonicalization.
 	* posix/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch
+	to GNU canonicalization.
+	* libmisc/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros.
+	Switch to GNU canonicalization.
+	* librpc/Makefile.am: ACLOCAL_AMFLAGS= -I $(RTEMS_TOPdir)/macros. Switch
 	to GNU canonicalization.
 
 2000-10-18	Nick Simon <Nick.SIMON@syntegra.bt.co.uk>
@@ -2625,11 +3384,17 @@
 	* sapi/include/rtems/io.h (rtems_driver_address_table): Added "_entry"
 	to all names.
 	* sapi/src/io.c: Accounted for above.
+	* libmisc/monitor/mon-driver.c: Accounted for addition of "_entry" to
+	fields in rtems_driver_address_table.
 
 2000-09-25	Joel Sherrill <joel@OARcorp.com>
 
 	* score/rtems/system.h: Switched a29k and hppa1.1 to using cpuopts.h not
 	targopts.h to reduce dependency on BSP.
+
+2000-09-22	Joel Sherrill <joel@OARcorp.com>
+
+	* librpc/src/xdr/xdr_float.c: Added A29K support.
 
 2000-09-20	Joel Sherrill <joel@OARcorp.com>
 
@@ -2649,6 +3414,13 @@
 	* score/src/Makefile.am: Include compile.am.
 	* sapi/src/Makefile.am, sapi/optman/Makefile.am: Include compile.am.
 	* rtems/optman/Makefile.am, rtems/src/Makefile.am: Include compile.am.
+	* libmisc/cpuuse/Makefile.am, libmisc/dummy/Makefile.am,
+	libmisc/dumpbuf/Makefile.am, libmisc/monitor/Makefile.am,
+	libmisc/rtmonuse/Makefile.am, libmisc/stackchk/Makefile.am,
+	libmisc/untar/Makefile.am, libmisc/wrapup/Makefile.am,
+	libmisc/mw-fb/Makefile.am: Include compile.am.
+	* librpc/src/rpc/Makefile.am, librpc/src/xdr/Makefile.am: Include
+	compile.am.
 
 2000-08-30	Joel Sherrill <joel@OARcorp.com>
 
@@ -2656,6 +3428,9 @@
 	score/include/rtems/seterr.h so it would be available within all APIs.
 	* score/Many files: Moved posix/include/rtems/posix/seterr.h to 
 	score/include/rtems/seterr.h so it would be available within all APIs.
+	* libmisc/Many files: Moved posix/include/rtems/posix/seterr.h to 
+	score/include/rtems/seterr.h so it would be available within all APIs.
+	* libmisc/mw-fb/.cvsignore: New file.
 
 2000-08-30	Joel Sherrill <joel.sherrill@OARcorp.com>
 
@@ -2663,6 +3438,22 @@
 	Only committed this so it could be easily revisited as we discussing
 	moving main() to user space from BSP space.
 	* rtems/taskstart.c: Added 1st cut at rtems_task_start_main_style.
+
+2000-08-26	Rosimildo da Silva  <rdasilva@connecttel.com>
+
+	* Added generic Micro FrameBuffer interface for MicroWindows. This
+	interface allows MicroWindows to under RTEMS. A sample driver has been
+	developed for the pc386 BSP. See pc386/fb_vga.c as a sample.
+	* Added Uniform Input Device interface for MicroWindows.  See PC386 bsp
+	for sample drivers for mouse and keyboard (console).
+	* libmisc/mw-bf: New directory.
+	* libmisc/Makefile.am, libmisc/configure.in, libmisc/wrapup/Makefile.am:
+	Account for mw-fb.
+	* libmisc/mw-fb/Makefile.am: New file.
+	* libmisc/mw-fb/mw_fb.c: New file.
+	* libmisc/mw-fb/mw_fb.h: New file.
+	* libmisc/mw-fb/mw_uid.c: New file.
+	* libmisc/mw-fb/mw_uid.h: New file.
 
 2000-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
 
@@ -2697,4 +3488,6 @@
 	* score/ChangeLog: New file.
 	* sapi/ChangeLog: New file.
 	* rtems/ChangeLog: New file.
+	* libmisc/ChangeLog: New file.
+	* librpc/ChangeLog: New file.
 
