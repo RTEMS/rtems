@@ -20,8 +20,8 @@ void *POSIX_Init(
 )
 {
   int                 status;
-  pthread_t           thread_id;
   pthread_condattr_t  attr;
+  pthread_condattr_t  attr_error;
   int                 pshared;
   pthread_cond_t      cond;
   struct timespec     timeout;
@@ -32,7 +32,7 @@ void *POSIX_Init(
   status = pthread_condattr_init( &attr );
   assert( !status );
 
-  puts( "Init: pthread_condattr_init - EINVAL" );
+  puts( "Init: pthread_condattr_init - EINVAL (attribute invalid)" );
   status = pthread_condattr_init( NULL );
   if ( status != EINVAL )
     printf( "status = %d\n", status );
@@ -42,7 +42,7 @@ void *POSIX_Init(
   status = pthread_condattr_destroy( &attr );
   assert( !status );
 
-  puts( "Init: pthread_condattr_destroy - EINVAL" );
+  puts( "Init: pthread_condattr_destroy - EINVAL (attribute invalid)" );
   status = pthread_condattr_destroy( NULL );
   if ( status != EINVAL )
     printf( "status = %d\n", status );
@@ -64,13 +64,13 @@ void *POSIX_Init(
   if ( status != EINVAL )
     printf( "status = %d\n", status );
   assert( status == EINVAL );
-  puts( "Init: pthread_condattr_setpshared - EINVAL - attr" );
+  puts( "Init: pthread_condattr_setpshared - EINVAL (attribute invalid)" );
 
   status = pthread_condattr_setpshared( &attr, 0xFFFFFF );
   if ( status != EINVAL )
     printf( "status = %d\n", status );
   assert( status == EINVAL );
-  puts( "Init: pthread_condattr_setpshared - EINVAL - pshared" );
+  puts( "Init: pthread_condattr_setpshared - EINVAL (pshared invalid)" );
 
   status = pthread_condattr_getpshared( &attr, &pshared );
   assert( !status );
@@ -80,15 +80,37 @@ void *POSIX_Init(
   if ( status != EINVAL )
     printf( "status = %d\n", status );
   assert( status == EINVAL );
-  puts( "Init: pthread_condattr_getpshared - EINVAL" );
+  puts( "Init: pthread_condattr_getpshared - EINVAL (attribute invalid)" );
 
   puts( "Init: pthread_cond_init - NULL attr" );
   status = pthread_cond_init( &cond, NULL );
   assert( !status );
 
+/* error for attribute not initialized */
+
+  status = pthread_cond_init( &cond, &attr_error );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_init - EINVAL (attr not initialized)" );
+
+  status = pthread_cond_init( &cond, NULL );
+  if ( status != ENOMEM )
+    printf( "status = %d\n", status );
+  assert( status == ENOMEM );
+  puts( "Init: pthread_cond_init - ENOMEM (too many conds)" );
+
   puts( "Init: pthread_cond_destroy" );
   status = pthread_cond_destroy( &cond );
   assert( !status );
+
+/* error for bad condition variable passed */
+
+  status = pthread_cond_destroy( NULL );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_destroy - EINVAL (cond invalid)" );
 
 /* initiailize the attribute for the rest of the test */
 
@@ -107,6 +129,12 @@ void *POSIX_Init(
 
   puts( "Init: sleep to switch to Task_1" );
   sleep( 1 );
+
+  status = pthread_cond_destroy( &Cond1_id );
+  if ( status != EBUSY )
+    printf( "status = %d\n", status );
+  assert( status == EBUSY );
+  puts( "Init: pthread_cond_destroy - EBUSY (task1 waiting)" );
 
   puts( "Init: pthread_cond_signal" );
   status = pthread_cond_signal( &Cond1_id );
@@ -145,9 +173,126 @@ void *POSIX_Init(
   if ( status != ETIMEDOUT )
     printf( "status = %d\n", status );
   assert( status == ETIMEDOUT );
+  puts( "Init: pthread_cond_timedwait - ETIMEDOUT - (mutex not acquired)" );
 
-  puts( "Init: timedout on pthread_cond_timedwait release mutex" );
-  /* exit this thread */
+/* remaining error messages */
+
+  empty_line();
+
+/* errors for bad variable passed */
+
+  status = pthread_cond_signal( NULL );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_signal - EINVAL (cond invalid)" );
+
+  status = pthread_cond_broadcast( NULL );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_broadcast - EINVAL (cond invalid)" );
+
+/* acquire mutex so errors will occur */
+
+  status = pthread_mutex_lock( &Mutex_id );
+  assert( !status );
+
+  status = pthread_cond_wait( NULL, &Mutex_id );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_wait - EINVAL (cond invalid)" );
+
+  status = pthread_cond_timedwait( NULL, &Mutex_id, &timeout );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_timedwait - EINVAL (cond invalid)" );
+
+  status = pthread_cond_wait( &Cond1_id, NULL );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_wait - EINVAL (mutex invalid)" );
+ 
+  status = pthread_cond_timedwait( &Cond1_id, NULL, &timeout );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_timedwait - EINVAL (mutex invalid)" );
+
+  status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, NULL );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_timedwait - EINVAL (abstime NULL)" );
+
+  timeout.tv_sec = -1;
+  status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, &timeout );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_timedwait - EINVAL (abstime->tv_sec invalid)" );
+
+  timeout.tv_sec = 2;
+  timeout.tv_nsec = -1;
+  status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, &timeout );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_timedwait - EINVAL (abstime->tv_nsec invalid)" );
+
+  timeout.tv_sec = 2;
+  timeout.tv_nsec = 2;
+  timeout.tv_nsec = 0x7FFFFFFF;
+  status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, &timeout );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_timedwait - EINVAL (abstime->tv_nsec to large)" );
+
+/* unlock mutex for rest of test */
+
+  status = pthread_mutex_unlock( &Mutex_id );
+  assert( !status );
+
+/* wait and timedwait without mutex */
+
+  status = pthread_cond_wait( &Cond1_id, &Mutex_id );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_wait - EINVAL (mutex not locked before call)" );
+
+  status = pthread_cond_timedwait( &Cond1_id, &Mutex_id, &timeout );
+  if ( status != EINVAL )
+    printf( "status = %d\n", status );
+  assert( status == EINVAL );
+  puts( "Init: pthread_cond_timedwait - EINVAL (mutex not locked before call)");
+
+  empty_line();
+
+  status = pthread_create( &Task3_id, NULL, Task_3, NULL );
+  assert( !status );
+
+/* switch to task3 to allow it to wait for broadcast signal */
+
+  puts( "Init: sleep - switch to Task_3" );
+  sleep( 1 );
+
+/* destroy the mutex so Task3 can not acguire at the end of Wait_support */
+
+  status = pthread_mutex_destroy( &Mutex_id );
+  assert( !status );
+
+/* signal a condition variable to task3 */
+
+  puts( "Init: pthread_cond_signal" );
+  status = pthread_cond_signal( &Cond1_id );
+
+  puts( "Init: sleep - switch to Task_3" );
+  sleep( 1 );
 
   puts( "*** END OF POSIX TEST 5 ***" );
   exit( 0 );
