@@ -161,28 +161,36 @@ rtems_status_code _Objects_Name_to_id(
   Objects_Id                 *id
 )
 {
-  Objects_Name *names;
-  unsigned32    index;
+  boolean           search_local_node;
+  Objects_Control **objects;
+  Objects_Control  *the_object;
+  unsigned32        index;
 
   if ( name == 0 )
     return( RTEMS_INVALID_NAME );
 
-  if ( (information->maximum != 0) &&
-       (node == RTEMS_SEARCH_ALL_NODES ||
-        node == RTEMS_SEARCH_LOCAL_NODE ||
-        _Objects_Is_local_node( node )) ) {
-    for ( names = information->name_table, index = 1;
-          index <= information->maximum;
-          index++
-         )
-      if ( name == names[ index ] ) {
-        *id = _Objects_Build_id(
-          information->the_class,
-          _Objects_Local_node,
-          index
-        );
+  search_local_node = FALSE;
+
+  if ( information->maximum != 0 &&
+      (node == RTEMS_SEARCH_ALL_NODES || node == RTEMS_SEARCH_LOCAL_NODE ||
+      _Objects_Is_local_node( node ) ) )
+   search_local_node = TRUE;
+
+  if ( search_local_node ) {
+    objects = information->local_table;
+
+    for ( index = 1; index <= information->maximum; index++ ) {
+
+      the_object = objects[ index ];
+
+      if ( !the_object || !the_object->name )
+        continue;
+
+      if ( name == *the_object->name ) {
+        *id = the_object->id;
         return( RTEMS_SUCCESSFUL );
       }
+    }
   }
 
   if ( _Objects_Is_local_node( node ) || node == RTEMS_SEARCH_LOCAL_NODE )
