@@ -43,6 +43,7 @@ base_sp/Makefile
 hello/Makefile
 loopback/Makefile
 minimum/Makefile
+fileio/Makefile
 paranoia/Makefile
 ticker/Makefile
 unlimited/Makefile
