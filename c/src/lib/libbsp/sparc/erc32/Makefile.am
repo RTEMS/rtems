@@ -65,8 +65,6 @@ erc32sonic_rel_SOURCES = erc32sonic/erc32sonic.c
 erc32sonic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
     $(erc32sonic_CPPFLAGS)
 erc32sonic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-    $(erc32sonic_CPPFLAGS)
 endif
 
 noinst_LIBRARIES = libbsp.a
