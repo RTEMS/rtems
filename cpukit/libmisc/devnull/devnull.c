@@ -32,7 +32,7 @@
  */
 
 rtems_unsigned32 NULL_major;
-static initialized;
+static char initialized;
 
 rtems_device_driver null_initialize(
   rtems_device_major_number major,
