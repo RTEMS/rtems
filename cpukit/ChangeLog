@@ -1,3 +1,9 @@
+2004-01-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: 
+	Reflect changes to libblock/Makefile.am.
+	Reflect changes to libcsupport/Makefile.am.
+
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
 	* aclocal/rtems-cpu-subdirs.m4: mips64orion port removed as mips port

@@ -24,9 +24,9 @@ if HAS_ITRON
 LIBS += ../itron/$(ARCH)/libitron.a
 endif
 
-LIBS += ../libcsupport/$(ARCH)/libcsupport.a
+LIBS += ../libcsupport/libcsupport$(LIB_VARIANT).a
 
-LIBS += ../libblock/$(ARCH)/libblock.a
+LIBS += ../libblock/libblock$(LIB_VARIANT).a
 if !UNIX
 LIBS += ../libfs/$(ARCH)/libdosfs.a
 endif
