@@ -20,6 +20,16 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 RTEMS_CANONICAL_HOST
 
+RTEMS_BSPOPTS_SET([DATA_CACHE_ENABLE],[*],[0])
+RTEMS_BSPOPTS_HELP([DATA_CACHE_ENABLE],
+[If defined, the data cache will be enabled after address translation
+ is turned on.])
+
+RTEMS_BSPOPTS_SET([INSTRUCTION_CACHE_ENABLE],[*],[0])
+RTEMS_BSPOPTS_HELP([INSTRUCTION_CACHE_ENABLE],
+[If defined, the instruction cache will be enabled after address translation
+ is turned on.])
+
 RTEMS_BSPOPTS_SET([UARTS_USE_TERMIOS],[*],[0])
 RTEMS_BSPOPTS_HELP([UARTS_USE_TERMIOS],
 [Define to 1 if you want termios support for every port.

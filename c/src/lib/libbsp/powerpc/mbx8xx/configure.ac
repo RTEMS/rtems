@@ -32,6 +32,16 @@ RTEMS_BSPOPTS_HELP([PPC_USE_DATA_CACHE],
  data cache instructions to optimize the context switch code.
  This code can conflict with debuggers or emulators.])
 
+RTEMS_BSPOPTS_SET([DATA_CACHE_ENABLE],[*],[1])
+RTEMS_BSPOPTS_HELP([DATA_CACHE_ENABLE],
+[If defined, the data cache will be enabled after address translation
+ is turned on.])
+
+RTEMS_BSPOPTS_SET([INSTRUCTION_CACHE_ENABLE],[*],[1])
+RTEMS_BSPOPTS_HELP([INSTRUCTION_CACHE_ENABLE],
+[If defined, the instruction cache will be enabled after address translation
+ is turned on.])
+
 RTEMS_BSPOPTS_SET([NVRAM_CONFIGURE],[mbx860_005b],[0])
 RTEMS_BSPOPTS_SET([NVRAM_CONFIGURE],[*],[1])
 RTEMS_BSPOPTS_HELP([NVRAM_CONFIGURE],

@@ -1,3 +1,8 @@
+2001-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add RTEMS_BSPOPTS_*(DATA_CACHE_ENABLE),
+	RTEMS_BSPOPTS_*(INSTRUCTION_CACHE_ENABLE).
+
 2001-11-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add @exceptions@ to SUBDIRS.
