@@ -38,48 +38,50 @@
 #include "iregdef.h"
 #include "idtcpu.h"
 
-#define EXCP_STACK_SIZE (NREGS*R_SZ)
-#define ISR_VEC_SIZE 4
-
 /*  Ifdefs prevent the duplication of code for MIPS ISA Level 3 ( R4xxx )
  *  and MIPS ISA Level 1 (R3xxx).
  */
 
 #if __mips == 3
 /* 64 bit register operations */
-#define ADD   dadd
-#define STREG sd
-#define LDREG ld
-#define MFCO  dmfc0
-#define MTCO  dmtc0
-#define ADDU   addu
-#define ADDIU  addiu
-#define R_SZ  8
-#define F_SZ  8
-#define SZ_INT 8
+#define NOP	
+#define ADD	dadd
+#define STREG	sd
+#define LDREG	ld
+#define MFCO	dmfc0
+#define MTCO	dmtc0
+#define ADDU	addu
+#define ADDIU	addiu
+#define R_SZ	8
+#define F_SZ	8
+#define SZ_INT	8
 #define SZ_INT_POW2 3
 
 /* XXX if we don't always want 64 bit register ops, then another ifdef */
 
 #elif __mips == 1
 /* 32 bit register operations*/
-#define ADD   add
-#define STREG sw
-#define LDREG lw
-#define MFCO  mfc0
-#define MTCO  mtc0
-#define ADDU  add
-#define ADDIU addi
-#define R_SZ  4
-#define F_SZ  4
-#define SZ_INT 4
+#define NOP	nop
+#define ADD	add
+#define STREG	sw
+#define LDREG	lw
+#define MFCO	mfc0
+#define MTCO	mtc0
+#define ADDU	add
+#define ADDIU	addi
+#define R_SZ	4
+#define F_SZ	4
+#define SZ_INT	4
 #define SZ_INT_POW2 2
-
 #else
 #error "mips assembly: what size registers do I deal with?"
 #endif
 
 
+#define ISR_VEC_SIZE	4
+#define EXCP_STACK_SIZE (NREGS*R_SZ)
+
+	
 #ifdef __GNUC__
 #define ASM_EXTERN(x,size) .extern x,size
 #else
@@ -158,6 +160,7 @@
 FRAME(_CPU_Context_save_fp,sp,0,ra)
         .set noat
         ld a1,(a0)
+	NOP
         swc1 $f0,FP0_OFFSET*F_SZ(a1)
         swc1 $f1,FP1_OFFSET*F_SZ(a1)
         swc1 $f2,FP2_OFFSET*F_SZ(a1)
@@ -218,6 +221,7 @@ ENDFRAME(_CPU_Context_save_fp)
 FRAME(_CPU_Context_restore_fp,sp,0,ra)
         .set noat
         ld a1,(a0)
+	NOP
         lwc1 $f0,FP0_OFFSET*4(a1)
         lwc1 $f1,FP1_OFFSET*4(a1)
         lwc1 $f2,FP2_OFFSET*4(a1)
@@ -269,14 +273,14 @@ ENDFRAME(_CPU_Context_restore_fp)
 
 FRAME(_CPU_Context_switch,sp,0,ra)
 
-        mfc0  t0,C0_SR
+        MFC0  t0,C0_SR
         li    t1,~(SR_INTERRUPT_ENABLE_BITS)
         STREG t0,C0_SR_OFFSET*4(a0)   /* save status register */
         and   t0,t1
-        mtc0  t0,C0_SR                /* first disable ie bit (recommended) */
+        MTC0  t0,C0_SR                /* first disable ie bit (recommended) */
 #if __mips == 3
-        ori t0,SR_EXL|SR_IE   /* enable exception level to disable interrupts */
-        mtc0  t0,C0_SR
+        ori   t0,SR_EXL|SR_IE   /* enable exception level to disable interrupts */
+        MTC0  t0,C0_SR
 #endif
 
         STREG ra,RA_OFFSET*R_SZ(a0)         /* save current context */
@@ -292,9 +296,13 @@ FRAME(_CPU_Context_switch,sp,0,ra)
         STREG s7,S7_OFFSET*R_SZ(a0)
 
         MFC0  t0,C0_EPC
+	NOP
         STREG t0,C0_EPC_OFFSET*R_SZ(a0)
 
 _CPU_Context_switch_restore:
+        LDREG ra,RA_OFFSET*R_SZ(a1)
+        LDREG sp,SP_OFFSET*R_SZ(a1)
+        LDREG fp,FP_OFFSET*R_SZ(a1)
         LDREG s0,S0_OFFSET*R_SZ(a1)           /* restore context */
         LDREG s1,S1_OFFSET*R_SZ(a1)
         LDREG s2,S2_OFFSET*R_SZ(a1)
@@ -303,34 +311,34 @@ _CPU_Context_switch_restore:
         LDREG s5,S5_OFFSET*R_SZ(a1)
         LDREG s6,S6_OFFSET*R_SZ(a1)
         LDREG s7,S7_OFFSET*R_SZ(a1)
-        LDREG fp,FP_OFFSET*R_SZ(a1)
-        LDREG sp,SP_OFFSET*R_SZ(a1)
-        LDREG ra,RA_OFFSET*R_SZ(a1)
+
         LDREG t0,C0_EPC_OFFSET*R_SZ(a1)
+	NOP
         MTC0  t0,C0_EPC
         LDREG t0, C0_SR_OFFSET*R_SZ(a1)
-
+	NOP
+	
 #if __mips == 3
         andi  t0,SR_EXL
         bnez  t0,_CPU_Context_1   /* set exception level from restore context */
         li    t0,~SR_EXL
-        mfc0  t1,C0_SR
-        nop
+        MFC0  t1,C0_SR
+        NOP
         and   t1,t0
-        mtc0  t1,C0_SR
+        MTC0  t1,C0_SR
 
 #elif __mips == 1
         andi  t0,(SR_INTERRUPT_ENABLE_BITS) /* we know 0 disabled */
         beq   t0,$0,_CPU_Context_1          /* set level from restore context */
-        mfc0  t0,C0_SR
-        nop
+        MFC0  t0,C0_SR
+        NOP
         or    t0,(SR_INTERRUPT_ENABLE_BITS) /* new_sr = old sr with enabled  */
-        mtc0  t0,C0_SR                      /* set with enabled */
+        MTC0  t0,C0_SR                      /* set with enabled */
 #endif
 
 _CPU_Context_1:
         j ra
-        nop
+        NOP
 ENDFRAME(_CPU_Context_switch)
 
 /*
@@ -349,7 +357,7 @@ ENDFRAME(_CPU_Context_switch)
 FRAME(_CPU_Context_restore,sp,0,ra)
         ADD a1,a0,zero
         j   _CPU_Context_switch_restore
-        nop
+        NOP
 ENDFRAME(_CPU_Context_restore)
 
 ASM_EXTERN(_ISR_Nest_level, SZ_INT)
@@ -416,38 +424,34 @@ FRAME(_ISR_Handler,sp,0,ra)
         STREG t9, R_T9*R_SZ(sp)
         mfhi  k0
         STREG gp, R_GP*R_SZ(sp)
-        STREG fp, R_FP*R_SZ(sp)
         STREG k0, R_MDHI*R_SZ(sp) 
+        STREG fp, R_FP*R_SZ(sp)
         .set noat
         STREG AT, R_AT*R_SZ(sp)
         .set at
 
-        /* Q: Why hardcode -40 for stack add??? */
-        /* This needs to be figured out.........*/
-        ADDIU    sp,sp,-40
-        STREG    ra,32(sp)                /* store ra on the stack */
-        MFC0     t0, C0_EPC		  /* XXX */
-        STREG    t0,16(sp)                /* XXX store EPC on the stack */
-        mfc0     t0,C0_SR
-        STREG    t0,24(sp)                /* XXX store SR on the stack */
+	MFC0     t0,C0_EPC		  /* XXX */
+        MFC0     t1,C0_SR
+        STREG    t0,R_EPC*R_SZ(sp)        /* XXX store EPC on the stack */
+        STREG    t1,R_SR*R_SZ(sp)         /* XXX store SR on the stack */
 
 /* determine if an interrupt generated this exception */
 
-        mfc0     k0,C0_CAUSE
+        MFC0     k0,C0_CAUSE
+	NOP
         and      k1,k0,CAUSE_EXCMASK
         beq      k1, 0, _ISR_Handler_1
-        nop
 
 _ISR_Handler_Exception:
         nop
-        b        _ISR_Handler_Exception       /* Jump to the exception code */
+        jal    mips_vector_exceptions
         nop
 
 _ISR_Handler_1:
 
-        mfc0     k1,C0_SR
-        and      k0,k1
+        MFC0     k1,C0_SR
         and      k0,CAUSE_IPMASK
+        and      k0,k1
         beq      k0,zero,_ISR_Handler_exit
                 /* external interrupt not enabled, ignore */
                 /* but if it's not an exception or an interrupt, */
@@ -468,12 +472,14 @@ _ISR_Handler_1:
    *  _ISR_Nest_level++;
    */
         LDREG  t0,_ISR_Nest_level
+	NOP
         ADD    t0,t0,1
         STREG  t0,_ISR_Nest_level
   /*
    *  _Thread_Dispatch_disable_level++;
    */
         LDREG  t1,_Thread_Dispatch_disable_level
+	NOP
         ADD    t1,t1,1
         STREG  t1,_Thread_Dispatch_disable_level
 
@@ -489,12 +495,14 @@ _ISR_Handler_1:
    *  --_ISR_Nest_level;
    */
         LDREG  t2,_ISR_Nest_level
+	NOP
         ADD    t2,t2,-1
         STREG  t2,_ISR_Nest_level
   /*
    *  --_Thread_Dispatch_disable_level;
    */
         LDREG  t1,_Thread_Dispatch_disable_level
+	NOP
         ADD    t1,t1,-1
         STREG  t1,_Thread_Dispatch_disable_level
   /*
@@ -514,39 +522,53 @@ _ISR_Handler_1:
    */
         LDREG t0,_Context_Switch_necessary
         LDREG t1,_ISR_Signals_to_thread_executing
+	NOP
         or    t0,t0,t1
         beq   t0,zero,_ISR_Handler_exit
         nop
+
   /*
    *  call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
    */
+        LDREG    t0,R_SR*R_SZ(sp)         /* XXX restore SR on the stack */
+	NOP
+        MTC0     t0,C0_SR
+        la       t0,_ISR_Dispatch
+        MTC0     t0, C0_EPC		  /* XXX */
+	NOP
+        j        t0
+        rfe                               /* go to _ISR_Dispatch in task mode */
+
+_ISR_Dispatch:
         jal _Thread_Dispatch
         nop
+	
+	li	t0,0x10011001
+	sw	t0,0x8001ff00
+	nop
   /*
    *  prepare to get out of interrupt
    *  return from interrupt  (maybe to _ISR_Dispatch)
    *
-   *  LABEL "exit interrupt (simple case):
+   *  LABEL "exit interrupt (simple case):"
    *  prepare to get out of interrupt
    *  return from interrupt
    */
 
 _ISR_Handler_exit:
-        LDREG    ra,32(sp)
-        LDREG    t0,16(sp)                /* XXX restore EPC on the stack */
+        LDREG    t0, R_EPC*R_SZ(sp)        /* XXX restore EPC on the stack */
+        LDREG    t1, R_SR*R_SZ(sp)         /* XXX restore SR on the stack */
         MTC0     t0, C0_EPC		  /* XXX */
-        LDREG    t0,24(sp)                /* XXX restore SR on the stack */
-        mtc0     t0,C0_SR
-        ADDIU    sp,sp,40    /* Q: Again with the 40...Is this needed? */
+        MTC0     t1, C0_SR
 
 /* restore interrupt context from stack */
       
-        LDREG k0, R_MDLO*R_SZ(sp)           
+        LDREG k0, R_MDLO*R_SZ(sp)
+        LDREG a2, R_A2*R_SZ(sp)
         mtlo  k0
         LDREG k0, R_MDHI*R_SZ(sp)           
-        LDREG a2, R_A2*R_SZ(sp)
-        mthi  k0
         LDREG a3, R_A3*R_SZ(sp)
+        mthi  k0
         LDREG t0, R_T0*R_SZ(sp)
         LDREG t1, R_T1*R_SZ(sp)
         LDREG t2, R_T2*R_SZ(sp)
@@ -568,13 +590,12 @@ _ISR_Handler_exit:
         LDREG AT, R_AT*R_SZ(sp)
         .set at
 
-        ADDIU     sp,sp,EXCP_STACK_SIZE 
+        ADDIU     sp,sp,EXCP_STACK_SIZE
 
         MFC0      k0, C0_EPC
-	nop
-        
-        rfe  /* Might not need to do RFE here... */
+	NOP
         j         k0
+        rfe			/* Might not need to do RFE here... */
         nop
 
        .set    reorder
@@ -589,4 +610,5 @@ FRAME(mips_break,sp,0,ra)
 #endif
         nop
 ENDFRAME(mips_break)
+
 

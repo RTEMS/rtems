@@ -1,3 +1,9 @@
+2001-05-07	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu_asm.S: Merged patches from Gregory Menke
+	<Gregory.D.Menke.1@gsfc.nasa.gov> that clean up
+	stack usage and include nops in the delay slots.
+
 2001-04-20	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu_asm.S: Added code to save and restore SR and EPC to
