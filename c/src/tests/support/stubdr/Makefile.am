@@ -16,7 +16,7 @@ SRCS = $(C_FILES) $(H_FILES)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/leaf.cfg
+include $(top_srcdir)/../../../../automake/leaf.am
 
 TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%=$(PROJECT_INCLUDE)/%)
 
