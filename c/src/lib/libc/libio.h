@@ -121,4 +121,11 @@ void rtems_register_libio_handler(int handler_flag,
 #define rtems_file_descriptor_type(fd)          ((fd) & 0xF000)
 #define rtems_file_descriptor_type_index(fd)    ((((fd) & 0xF000) >> 12) - 1)
 
+/*
+ *  IOCTL values
+ */
+
+#define       RTEMS_IO_GET_ATTRIBUTES 1
+#define       RTEMS_IO_SET_ATTRIBUTES 2
+
 #endif /* _RTEMS_LIBIO_H */

@@ -38,6 +38,17 @@ MVME162FX modele uses XXX.
 MVME162LX model uses 68LC040 and 2 ZCC chips so that it supports
 4 serial ports.
 
+Extended Console Driver
+-----------------------
+This BSP includes an extended console driver which supports all 4 serial
+ports on the MVME162LX model.  It was submitted by Katsutoshi Shibuya 
+<shibuya@mxb.meshnet.or.jp>.
+
+The application can choose this driver by using "CONSOLEX_DRIVER_TABLE_ENTRY"
+in the driver table definition, in place of "CONSOLE_DRIVER_TABLE_ENTRY".  
+See consolex/cTest.c for an example and consolex/README for more information. 
+
+This driver is only built for the mvme162lx bsp model.
 
 MVME162FX and DMA on the IP bus
 -------------------------------
@@ -65,15 +76,21 @@ standard release.
 
 Port Description
 ----------------
+This section describes the initial port effort.  There have been 
+additions and modifications to the bsp since this was done.
+Interestingly, this was the first bsp submitted to the RTEMS project
+and the submission offer came out of the blue with no prior
+communication with the author. :)
+
 The port was done using already existing ports to the M68020 boards,
 DMV152 and MVME136. 
 
-The host system was SUN/Solaris 2.3, and the cross-development
-environment consisted of Free Software Foundation (FSF)'s GNU C
-compiler (version 2.6), GNU Assembler (version 2.3) and GNU binary
-utilities binutils version 2.5.2, built with m68k as a target. The
-recent/latest versions of other GNU programs (flex, make, etc) were
-also used at the build stage.
+The initial host development system was SUN/Solaris 2.3, and
+the cross-development environment consisted of Free Software
+Foundation (FSF)'s GNU C compiler (version 2.6), GNU Assembler
+(version 2.3) and GNU binary utilities binutils version 2.5.2,
+built with m68k as a target. The recent/latest versions of other
+GNU programs (flex, make, etc) were also used at the build stage.
 
 In all subdirectories of the RTEMS distribution tree, the directories
 mvme136 were duplicated as mvme162.

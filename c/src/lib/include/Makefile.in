@@ -11,6 +11,9 @@ H_PIECES=console clockdrv iosupp ringbuf \
    spurious timerdrv vmeintr z8036 z8530 z8536
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 
+SYS_H_PIECES=termios
+SYS_H_FILES=$(SYS_H_PIECES:%=$(srcdir)/sys/%.h)
+
 KA9Q_H_PIECES= arp asy ax25 ax25mail bootp cmdparse commands config \
   daemon dialer domain enet ftp ftpcli global hardware icmp iface \
   internet ip kiss lapb lzw mailbox mbuf netuser nospc nr4 nr4mail \
@@ -22,9 +25,7 @@ RTEMSCPLUSPLUS_H_PIECES= rtemsEvent rtemsInterrupt rtemsMessageQueue \
   rtemsSemaphore rtemsStatusCode rtemsTask rtemsTaskMode rtemsTimer
 RTEMSCPLUSPLUS_H_FILES=$(RTEMSCPLUSPLUS_H_PIECES:%=$(srcdir)/rtems++/%.h)
 
-SYS_H_FILES=
-
-SRCS=$(H_FILES) $(SYS_H_FILES)
+SRCS=$(H_FILES) $(SYS_H_FILES) $(KA9Q_H_FILES) $(RTEMSCPLUSPLUS_H_FILES)
 
 include $(RTEMS_CUSTOM)
 include $(PROJECT_ROOT)/make/leaf.cfg

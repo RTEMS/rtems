@@ -87,4 +87,34 @@ fstat(int fd,
  *  getpid and kill are provided directly by rtems
  */
 
+/*
+ * ioctl -- IO control
+ */
+
+int
+ioctl(int fd, int request, void *argp)
+{
+    return __rtems_ioctl(fd,request,argp);
+}
+
+/*
+ * tcgetattr/tcsetattr -- get/set attributes of a device.
+ *
+ * by K.Shibuya
+ */
+
+int
+tcgetattr(int fd, struct termios *tp)
+{
+    return __rtems_ioctl(fd,RTEMS_IO_GET_ATTRIBUTES,tp);
+}
+
+int
+tcsetattr(int fd, int opt, struct termios *tp)
+{
+    if(opt != TCSANOW)
+      return -1;
+    return __rtems_ioctl(fd,RTEMS_IO_SET_ATTRIBUTES,tp);
+}
+
 #endif
