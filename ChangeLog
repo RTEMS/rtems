@@ -1,3 +1,19 @@
+2004-10-13	Eric Norum <norume@aps.anl.gov>
+
+    * c/src/lib/libbsp/shared/tod.c: Set RTEMS time during TOD initialization
+	PR 688
+	* Libchip driver for MC146818A (and several Dallas Semiconductor) TOD chips.
+      c/src/lib/libbsp/i386/pc386/clock/todcfg.c
+      c/src/libchip/rtc/rtc.h
+      c/src/libchip/rtc/mc146818a.c
+      c/src/libchip/rtc/mc146818a.h
+      c/src/libchip/rtc/mc146818a_ioreg.c
+      c/src/lib/libbsp/i386/pc386/clock/todcfg.c
+      c/src/lib/libbsp/i386/pc386/clock/Makefile.am
+	PR 686
+	* Fix lockup in if_fxp.c, add additional device code
+      c/src/libchip/network/if_fxp.c
+
 2004-08-18	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	PR 673/make_build
