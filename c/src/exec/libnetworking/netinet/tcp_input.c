@@ -828,11 +828,12 @@ findpcb:
 			 * we don't get fooled into using T/TCP.
 			 */
 			if (to.to_flag & TOF_CCECHO) {
-				if (tp->cc_send != to.to_ccecho)
+				if (tp->cc_send != to.to_ccecho) {
 					if (taop->tao_ccsent != 0)
 						goto drop;
 					else
 						goto dropwithreset;
+				}
 			} else
 				tp->t_flags &= ~TF_RCVD_CC;
 			tcpstat.tcps_connects++;
