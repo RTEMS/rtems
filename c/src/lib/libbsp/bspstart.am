@@ -1,0 +1,8 @@
+#
+# HACK: Compilation rules for building variant'ed object files.
+#
+${ARCH}/%$(LIB_VARIANT).o: %.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
+${ARCH}/%$(LIB_VARIANT).o: %.S $(ARCH)/$(dirstamp)
+	${CCASCOMPILE} -DASM -o $@ -c $<
+
