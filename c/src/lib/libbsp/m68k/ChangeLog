@@ -1,3 +1,43 @@
+2004-01-07	Joel Sherrill <joel@OARcorp.com>
+
+	Per John S. Gwynne <jgwynne@mrcday.com>, there are no longer any
+	users of these boards so we are removing them.
+	* efi332/.cvsignore, efi332/ChangeLog, efi332/Makefile.am,
+	efi332/README, efi332/bsp_specs, efi332/configure.ac, efi332/times,
+	efi332/clock/.cvsignore, efi332/clock/Makefile.am,
+	efi332/clock/ckinit.c, efi332/console/.cvsignore,
+	efi332/console/Makefile.am, efi332/console/console.c,
+	efi332/include/.cvsignore, efi332/include/bsp.h,
+	efi332/include/efi332.h, efi332/misc/dotests, efi332/misc/gdbinit68,
+	efi332/misc/interr.c, efi332/spurious/.cvsignore,
+	efi332/spurious/Makefile.am, efi332/spurious/spinit.c,
+	efi332/start/.cvsignore, efi332/start/Makefile.am,
+	efi332/start/except_vect_332_ROM.S, efi332/start/ram_init.ld,
+	efi332/start/ram_init.sed, efi332/start/start.c,
+	efi332/startup/.cvsignore, efi332/startup/Makefile.am,
+	efi332/startup/bspclean.c, efi332/startup/bspstart.c,
+	efi332/startup/linkcmds, efi332/startup/linkcmds_ROM,
+	efi332/timer/.cvsignore, efi332/timer/Makefile.am,
+	efi332/timer/timer.c, efi332/wrapup/.cvsignore,
+	efi332/wrapup/Makefile.am, efi68k/.cvsignore, efi68k/ChangeLog,
+	efi68k/Makefile.am, efi68k/README, efi68k/bsp_specs,
+	efi68k/configure.ac, efi68k/times, efi68k/clock/.cvsignore,
+	efi68k/clock/Makefile.am, efi68k/clock/ckinit.c,
+	efi68k/console/.cvsignore, efi68k/console/Makefile.am,
+	efi68k/console/console.c, efi68k/include/.cvsignore,
+	efi68k/include/16550.h, efi68k/include/DP8570A.h,
+	efi68k/include/bsp.h, efi68k/include/efi68k.h,
+	efi68k/spurious/.cvsignore, efi68k/spurious/Makefile.am,
+	efi68k/spurious/spinit.c, efi68k/start/.cvsignore,
+	efi68k/start/start.c, efi68k/startup/.cvsignore,
+	efi68k/startup/Makefile.am, efi68k/startup/bspclean.c,
+	efi68k/startup/bspstart.c, efi68k/startup/efi68k_tcp.c,
+	efi68k/startup/efi68k_wd.c, efi68k/startup/linkcmds,
+	efi68k/startup/m68k-stub.c, efi68k/startup/setvec.c,
+	efi68k/timer/.cvsignore, efi68k/timer/Makefile.am,
+	efi68k/timer/timer.c, efi68k/wrapup/.cvsignore,
+	efi68k/wrapup/Makefile.am: Removed.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
