@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/..:@srcdir@/../..
 
 RPCCPUDIR = $(RTEMS_CPU)/new_exception_processing
@@ -76,18 +75,24 @@ if RPCTOOLS
 	rm -f $(RPCCPUDIR)/tmpSvc.c )
 endif
 
-$(PROJECT_INCLUDE)/rdbg/remdeb.h: $(srcdir)/remdeb.h
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_INCLUDE)/rdbg:
-	@$(mkinstalldirs) $@
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/rdbg $(PROJECT_INCLUDE)/rdbg/remdeb.h
+include_rdbgdir = $(includedir)/rdbg
+include_rdbg_HEADERS = $(srcdir)/remdeb.h
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
 all-local: ${ARCH} $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = remdeb_f.x $(GEN_C_FILES)
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/rdbg/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rdbg
+	@: > $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rdbg/remdeb.h: $(srcdir)/remdeb.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/remdeb.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/remdeb.h
 
 include $(top_srcdir)/automake/local.am

@@ -1,3 +1,19 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Reformat. Apply dirstamps to preinstallation.
+	* include/Makefile.am: Ditto.
+	* include/rdbg/Makefile.am: Ditto.
+	* include/rdbg/i386/Makefile.am: Ditto.
+	* include/rdbg/m68k/Makefile.am: Ditto.
+	* include/rdbg/powerpc/Makefile.am: Ditto:
+	* src/Makefile.am: Ditto.
+	* src/i386/Makefile.am: Ditto.
+	* src/i386/any/Makefile.am: Ditto.
+	* src/m68k/Makefile.am: Ditto.
+	* src/m68k/any/Makefile.am: Ditto.
+	* src/powerpc/Makefile.am: Ditto.
+	* src/powerpc/new_exception_processing/Makefile.am: Ditto.
+
 2003-08-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/i386/any/Makefile.am, src/m68k/any/Makefile.am,
