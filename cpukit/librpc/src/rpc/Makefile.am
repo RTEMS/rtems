@@ -2,9 +2,9 @@
 ## $Id$
 ##
 
-include $(top_srcdir)/../automake/multilib.am
-include $(top_srcdir)/../automake/compile.am
-include $(top_srcdir)/../automake/lib.am
+include $(top_srcdir)/automake/multilib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 LIB = $(ARCH)/librpc.a
 
@@ -29,13 +29,13 @@ OBJS = $(C_O_FILES)
 
 AM_CPPFLAGS += '-D__P(x)=x' -D_RPC_read=read -D_RPC_write=write -D_RPC_close=close -D_RTEMS_RPC_INTERNAL_
 
+if LIBRPC
 $(LIB): $(OBJS)
 	$(make-library)
 
 noinst_MANS = bindresvport.3 getrpcent.3 publickey.3 rpc.3 rpc_secure.3 \
     rstat_svc.8 des_crypt.3 getrpcport.3 publickey.5 rpc.5 rstat.1 rtime.3
 
-if HAS_NETWORKING
 man_MANS = $(noinst_MANS)
 all-local: $(ARCH) $(LIB)
 endif
@@ -45,4 +45,4 @@ EXTRA_DIST = $(C_FILES) DISCLAIMER $(UNUSED_C_FILES) $(noinst_MANS)
 EXTRA_DIST += PSD.doc/nfs.rfc.ms PSD.doc/rpc.prog.ms PSD.doc/rpc.rfc.ms \
     PSD.doc/rpcgen.ms PSD.doc/xdr.nts.ms PSD.doc/xdr.rfc.ms
 
-include $(top_srcdir)/../automake/local.am
+include $(top_srcdir)/automake/local.am
