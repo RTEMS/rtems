@@ -1,3 +1,9 @@
+2003-07-07	Joel Sherrill <joel@OARcorp.com>
+
+	PR 417/rtems
+	* src/coresemsurrender.c: Correct incorrect check for maximum_count
+	reported by Sergei Organov <osv@topconrd.ru>.
+
 2003-06-13	Joel Sherrill <joel@OARcorp.com>
 
 	* src/threadloadenv.c: Removed warnings.
