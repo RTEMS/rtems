@@ -329,7 +329,7 @@ int main(
    * Attempt to unmount a directory that does not exist.
    */
 
-  printf(" unmount /b/mount_point should fail with EINVAL\n");
+  printf("unmount /b/mount_point should fail with EINVAL\n");
   status = unmount( "/b/mount_point" );
   assert( status == -1 );
   assert( errno == ENOENT );

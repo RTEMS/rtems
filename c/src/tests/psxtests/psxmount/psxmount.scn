@@ -55,7 +55,7 @@ chdir() status : 0
 
 Unmount status: 0
 Mount a NULL file system and verify EINVAL
-mount with option -62 should fail with EINVAL
+mount with option of -62 should fail with EINVAL
 Mount a Read Only filesystem at /c/y/my_mount_point 
 Read only file system successfully mounted at /c/y/my_mount_point 
 create c/y/my_mount_point/../../y/my_mount_point/new_dir
@@ -64,8 +64,8 @@ Mount on a file should fail with ENOTDIR
 Create and chdir to /c/y/my_mount_point/mydir
 unmount of /c/y/my_mount_point should fail with EBUSY
 chdir to / and verify we can unmount /c/y/my_mount_point
- unmount /c/y/my_mount_point 
- unmount /b/mount_point should fail with EINVAL
+unmount /c/y/my_mount_point
+unmount /b/mount_point should fail with EINVAL
 Mount /c/y/my_mount_point
 Create and open /c/y/my_mount_point/my_file
 
