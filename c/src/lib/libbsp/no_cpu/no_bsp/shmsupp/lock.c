@@ -46,7 +46,7 @@ void Shm_Lock(
 )
 {
   rtems_unsigned32 isr_level;
-  rtems_unsigned32 *lockptr = &lq_cb->lock;
+  rtems_unsigned32 *lockptr = (rtems_unsigned32 *) &lq_cb->lock;
   rtems_unsigned32 lock_value;
 
   lock_value = 0x80000000;
