@@ -1,3 +1,8 @@
+2003-08-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add tools to SUBDIRS.
+	* configure.ac: Add RTEMS_CONFIG_BUILD_SUBDIRS(tools).
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
