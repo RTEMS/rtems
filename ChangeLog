@@ -1,3 +1,8 @@
+2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/enable-libcdir.m4, aclocal/enable-gcc28.m4: Remove
+	ENABLE_GCC28.
+
 2002-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/compile.am: Remove GCC272 support. 
