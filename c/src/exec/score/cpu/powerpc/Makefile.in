@@ -73,7 +73,7 @@ preinstall: ${PROJECT_RELEASE}/include/rtems/score/ppc.h \
 # we will share the basic cpu file
 	$(INSTALL) -m 444 ${EXTERNAL_H_FILES} ${PROJECT_RELEASE}/include
 # make a link in case we are not compiling in the source directory
-	-$(LN) -s $(srcdir)/irq_stub.s irq_stub.s
+	test -f irq_stub.s || $(LN) -s $(srcdir)/irq_stub.s irq_stub.s
 
 ${PROJECT_RELEASE}/include/rtems/score/ppc.h: ppc.h
 	 $(SED) -e 's?REPLACE_THIS_WITH_THE_CPU_MODEL?$(RTEMS_CPU_MODEL)?' \
