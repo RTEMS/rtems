@@ -177,7 +177,9 @@ void  rtems_irq_mngt_init()
       while (1);
     }
 
-#define DEBUG    
+    /*
+     * #define DEBUG    
+     */
 #ifdef DEBUG
     {
       /*

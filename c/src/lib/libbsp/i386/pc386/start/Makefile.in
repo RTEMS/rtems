@@ -64,7 +64,7 @@ ${ARCH}/start16.o: start16.s
 	$(AS) $(ASFLAGS) -o $@ $*.i
 
 ${ARCH}/start16.bin: ${ARCH}/start16.o
-	$(LD) -N -T $(LINKCMDS) -Ttext $(START16ADDR) -e start16 -nostdlib \
+	- $(LD) -N -T $(LINKCMDS) -Ttext $(START16ADDR) -e start16 -nostdlib \
 	  --oformat=elf32-i386 -o $(basename $@).obj $(basename $@).o
-	$(OBJCOPY) -O binary $(basename $@).obj $@
-
+	- $(OBJCOPY) -O binary $(basename $@).obj $@
+	cp $(basename $@).o $(basename $@).bin

@@ -10,6 +10,9 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 PGM=${ARCH}/startup.rel
 
+IMPORT_SRC=$(srcdir)/../../shared/irq/irq.c \
+   $(srcdir)/../../shared/irq/irq_init.c $(srcdir)/../../shared/irq/irq_asm.s
+
 # C source names, if any, go here -- minus the .c
 C_PIECES=bspclean bsplibc bsppost bspstart exit irq irq_init main sbrk 
 C_FILES=$(C_PIECES:%=%.c)
@@ -49,9 +52,6 @@ LDFLAGS   +=
 
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
-
-IMPORT_SRC=$(srcdir)/../../shared/irq/irq.c \
-   $(srcdir)/../../shared/irq/irq_init.c $(srcdir)/../../shared/irq/irq_asm.s
 
 preinstall:
 	${CP} ${IMPORT_SRC} .

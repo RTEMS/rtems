@@ -15,7 +15,7 @@
 #include <ka9q/trace.h>
 #include <ka9q/commands.h>
 #include <ka9q/domain.h>
-#include "irq.h"
+#include <irq.h>
 
 #define	ET_MINLEN 60		/* minimum message length */
 
@@ -49,41 +49,41 @@
  * Hardware-specific storage
  */
 typedef struct  {
-  struct mbuf		**rxMbuf;
-  struct mbuf		**txMbuf;
-  unsigned int 		port;
-  char 			*base;
-  unsigned long		bpar;
-  unsigned int		irno;
-  int			rxBdCount;
-  int			txBdCount;
-  int			txBdHead;
-  int			txBdTail;
-  int			txBdActiveCount;
-  struct iface		*iface;
-  rtems_id		txWaitTid;
+  rtems_irq_connect_data	irqInfo;
+  struct mbuf			**rxMbuf;
+  struct mbuf			**txMbuf;
+  unsigned int 			port;
+  unsigned char			*base;
+  unsigned long			bpar;
+  int				rxBdCount;
+  int				txBdCount;
+  int				txBdHead;
+  int				txBdTail;
+  int				txBdActiveCount;
+  struct iface			*iface;
+  rtems_id			txWaitTid;
   
   /*
    * Statistics
    */
-  unsigned long	rxInterrupts;
-  unsigned long	rxNotFirst;
-  unsigned long	rxNotLast;
-  unsigned long	rxGiant;
-  unsigned long	rxNonOctet;
-  unsigned long	rxRunt;
-  unsigned long	rxBadCRC;
-  unsigned long	rxOverrun;
-  unsigned long	rxCollision;
+  unsigned long			rxInterrupts;
+  unsigned long			rxNotFirst;
+  unsigned long			rxNotLast;
+  unsigned long			rxGiant;
+  unsigned long			rxNonOctet;
+  unsigned long			rxRunt;
+  unsigned long			rxBadCRC;
+  unsigned long			rxOverrun;
+  unsigned long			rxCollision;
   
-  unsigned long	txInterrupts;
-  unsigned long	txDeferred;
-  unsigned long	txHeartbeat;
-  unsigned long	txLateCollision;
-  unsigned long	txRetryLimit;
-  unsigned long	txUnderrun;
-  unsigned long	txLostCarrier;
-  unsigned long	txRawWait;
+  unsigned long			txInterrupts;
+  unsigned long			txDeferred;
+  unsigned long			txHeartbeat;
+  unsigned long			txLateCollision;
+  unsigned long			txRetryLimit;
+  unsigned long			txUnderrun;
+  unsigned long			txLostCarrier;
+  unsigned long			txRawWait;
 }wd80x3EnetDriver;
 
 #define RO 0x10
@@ -98,10 +98,12 @@ static unsigned long loopc;
 static wd80x3EnetDriver wd8003EnetDriver[NSCCDRIVER];
 
 /*
- * WD8003 interrupt handler
+ * WD8003 interrupt handler. The code as it is cleraly showes that
+ * only one driver is connected. In order to change this a table
+ * making the correspondance between the current irq number and
+ * the corresponding wd8003EnetDriver structure could be used...
  */
-static rtems_isr
-wd8003Enet_interrupt_handler (rtems_vector_number v)
+static void wd8003Enet_interrupt_handler ()
 {
   unsigned int tport, nowTicks, bootTicks;
   unsigned char status, status2;
@@ -116,10 +118,6 @@ wd8003Enet_interrupt_handler (rtems_vector_number v)
 
   tport = wd8003EnetDriver[0].port ;
 
-  PC386_disableIrq(wd8003EnetDriver[0].irno);
-  PC386_ackIrq(wd8003EnetDriver[0].irno);
-  asm volatile("sti");
-  
   /*
    * Drop chips interrupt
    */
@@ -195,9 +193,19 @@ wd8003Enet_interrupt_handler (rtems_vector_number v)
    * Enable chip interrupts
    */
   outport_byte(tport+IMR, 0x15);
-  asm volatile("cli");
-  PC386_enableIrq(wd8003EnetDriver[0].irno);
-  
+}
+
+static void nopOn(const rtems_irq_connect_data* notUsed)
+{
+  /*
+   * code should be moved from wd8003Enet_initialize_hardware
+   * to this location
+   */
+}
+
+static int wdIsOn(const rtems_irq_connect_data* irq)
+{
+  return pc386_irq_enabled_at_i8259s (irq->name);
 }
 
 /*
@@ -273,10 +281,15 @@ wd8003Enet_initialize_hardware (wd80x3EnetDriver *dp, int broadcastFlag)
   /*
    * Set up interrupts
    */
-  sc = PC386_installRtemsIrqHandler(dp->irno, wd8003Enet_interrupt_handler);
-  if (sc != RTEMS_SUCCESSFUL)
-    rtems_panic ("Can't attach interrupt handler: %s\n",
-		 rtems_status_text (sc));
+  dp->irqInfo.hdl = wd8003Enet_interrupt_handler;
+  dp->irqInfo.on  = nopOn;
+  dp->irqInfo.off = nopOn;
+  dp->irqInfo.isOn = wdIsOn;
+  
+  sc = pc386_install_rtems_irq_handler (&dp->irqInfo);
+  if (!sc)
+    rtems_panic ("Can't attach WD interrupt handler for irq %d\n",
+		  dp->irqInfo.name);
 }
 
 
@@ -458,9 +471,9 @@ rtems_ka9q_driver_attach (int argc, char *argv[], void *p)
   dp->txWaitTid = 0;
   dp->rxBdCount = RX_BUF_COUNT;
   dp->txBdCount = TX_BUF_COUNT * TX_BD_PER_BUF;
-  dp->irno = 5;
+  dp->irqInfo.name = (rtems_irq_symbolic_name) 5;
   dp->port = 0x240;
-  dp->base = 0xD0000;
+  dp->base = (unsigned char*) 0xD0000;
   dp->bpar = 0xD0000;
   iface->mtu = 1500;
   iface->addr = Ip_addr;
@@ -492,14 +505,14 @@ rtems_ka9q_driver_attach (int argc, char *argv[], void *p)
       gether (iface->hwaddr, argv[argIndex]);
     }
     else if (strcmp ("irno", argv[argIndex]) == 0) {
-      dp->irno = atoi (argv[++argIndex]);
+      dp->irqInfo.name = (rtems_irq_symbolic_name) atoi (argv[++argIndex]);
     }
     else if (strcmp ("port", argv[argIndex]) == 0) {
       sscanf(argv[++argIndex], "%x", &(dp->port));
     }
     else if (strcmp ("bpar", argv[argIndex]) == 0) {
-      sscanf(argv[++argIndex], "%x", &(dp->bpar));
-      dp->base = (char *)(dp->bpar);
+      sscanf(argv[++argIndex], "%x", (unsigned) &(dp->bpar));
+      dp->base = (unsigned char *)(dp->bpar);
     }
     else {
       printf ("Argument %d (%s) is invalid.\n", argIndex, argv[argIndex]);
@@ -508,8 +521,8 @@ rtems_ka9q_driver_attach (int argc, char *argv[], void *p)
   }
   printf ("Ethernet address: %s\n", pether (cbuf, iface->hwaddr));
   printf ("Internet address: %s\n", inet_ntoa(iface->addr));
-  printf ("Irno: %X, port: %X, bpar: %X, base: %X\n",dp->irno, dp->port,
-	  dp->bpar, dp->base);
+  printf ("Irno: %X, port: %X, bpar: %X, base: %X\n",dp->irqInfo.name, dp->port,
+	  (unsigned) dp->bpar, (unsigned) dp->base);
   fflush(stdout);
   /*	
    * Fill in remainder of interface configuration

@@ -11,7 +11,11 @@ PROJECT_ROOT = @PROJECT_ROOT@
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
+# We only build the Network library if HAS_KA9Q was defined
+NETWORK_yes_V = network
+NETWORK = $(NETWORK_$(HAS_KA9Q)_V)
+
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUB_DIRS=include tools start startup clock console timer pc386dev network \
+SUB_DIRS=include tools start startup clock console timer pc386dev $(NETWORK) \
           wrapup
