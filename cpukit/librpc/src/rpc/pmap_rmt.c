@@ -236,7 +236,7 @@ clnt_broadcast(prog, vers, proc, xargs, argsp, xresults, resultsp, eachresult)
 	caddr_t		resultsp;	/* pointer to results */
 	resultproc_t	eachresult;	/* call with each result obtained */
 {
-	enum clnt_stat stat;
+	enum clnt_stat stat = RPC_SUCCESS; /* to avoid warning */
 	AUTH *unix_auth = authunix_create_default();
 	XDR xdr_stream;
 	register XDR *xdrs = &xdr_stream;
