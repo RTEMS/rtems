@@ -1,3 +1,20 @@
+2003-11-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* capture/Makefile.am: Remove.
+	* cpuuse/Makefile.am: Remove.
+	* devnull/Makefile.am: Remove.
+	* dummy/Makefile.am: Remove.
+	* dumpbuf/Makefile.am: Remove.
+	* fsmount/Makefile.am: Remove.
+	* monitor/Makefile.am: Remove.
+	* mw-fb/Makefile.am: Remove.
+	* rtmonuse/Makefile.am: Remove.
+	* serdbg/Makefile.am: Remove.
+	* shell/Makefile.am: Remove.
+	* stackchk/Makefile.am: Remove.
+	* untar/Makefile.am: Remove.
+	* Makefile.am: Merge-in the Makefile.ams above.
+
 2003-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Remove.
