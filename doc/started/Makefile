@@ -19,7 +19,7 @@ dirs:
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
 GENERATED_FILES= buildc.texi buildrt.texi gdb.texi intro.texi \
-    require.texi sample.texi
+    nt.texi require.texi sample.texi
 
 FILES= $(PROJECT).texi versions.texi $(GENERATED_FILES)
 
@@ -71,6 +71,11 @@ sample.texi: sample.t versions.texi
 
 gdb.texi: gdb.t versions.texi
 	$(BMENU) -c -p "Application Executable" \
+	    -u "Top" \
+	    -n "Using MS-Windows as a Development Host" ${*}.t
+
+nt.texi: nt.t versions.texi
+	$(BMENU) -c -p "GDB for DINK32" \
 	    -u "Top" \
 	    -n "" ${*}.t
 

@@ -73,6 +73,7 @@ END-INFO-DIR-ENTRY
 @include buildrt.texi
 @include sample.texi
 @include gdb.texi
+@include nt.texi
 
 @ifinfo
 @node Top, Introduction, (dir), (dir)
@@ -87,6 +88,7 @@ This is the online version of the Getting Started with RTEMS for C/C++ Users.
 * Building RTEMS::
 * Building the Sample Application::
 * Building the GNU Debugger::
+* Using MS-Windows as a Development Host::
 @end menu
 
 @c * Command and Variable Index::
@@ -97,7 +99,7 @@ This is the online version of the Getting Started with RTEMS for C/C++ Users.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@c @node Command and Variable Index, Concept Index, GDB for DINK32, Top
+@c @node Command and Variable Index, Concept Index, Installing EGCS AND NEWLIB, Top
 @c @unnumbered Command and Variable Index
 
 @c There are currently no Command and Variable Index entries.

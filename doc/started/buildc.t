@@ -72,6 +72,8 @@ approximately 20 megabytes.
 Create a directory called tools that will serve as a working directory to
 perform the build of the cross compiler tools.
 
+@section Unarchiving the Tools
+
 Unpack the compressed tar files using the following command sequence: 
 
 @example
