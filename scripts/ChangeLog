@@ -1,3 +1,14 @@
+2004-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/rtems-source.add: Require automake-1.8.2, autoconf-2.59.
+
+2004-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/rtems-source.add: New.
+	* Makefile.am: Add rtems/rtems-source.spec handling.
+	* configure.ac: AC_SUBST(RTEMS_VERSION,[_RTEMS_VERSION]).
+	* common/common.add.in: Use www.rtems.com as Vendor.
+
 2004-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use RTEMS_ENABLE_RPMPREFIX.

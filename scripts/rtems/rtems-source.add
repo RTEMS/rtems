@@ -12,10 +12,8 @@ Prefix:		%{_prefix}/src
 BuildArch:	noarch
 #---------------------------------------------------------------------
 
-Requires:       %{rpmprefix}automake-rtems < 1.8
-Requires:	%{rpmprefix}automake-rtems >= 1.7.2
-Requires:	%{rpmprefix}autoconf-rtems <= 2.59
-Requires:	%{rpmprefix}autoconf-rtems >= 2.57
+Requires:       %{rpmprefix}automake-rtems = 1.8.2
+Requires:	%{rpmprefix}autoconf-rtems = 2.59
 
 %description
 RTEMS is an open source operating system for embedded systems.
