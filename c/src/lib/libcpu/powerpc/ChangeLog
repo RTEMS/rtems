@@ -1,3 +1,8 @@
+2001-05-15	Till Straumann <strauman@slac.stanford.edu>
+
+	* mpc6xx/mmu/pte121.c, mpc6xx/mmu/pte121.h: New files. Missed in
+	merge of PR213.
+
 2001-05-14	Joel Sherrill <joel@OARcorp.com>
 
 	* shared/include/cpuIdent.c: Account for duplicate numbers.
