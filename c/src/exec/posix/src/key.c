@@ -204,8 +204,6 @@ int pthread_key_delete(
  *
  *  NOTE:  This is the routine executed when a thread exits to
  *         run through all the keys and do the destructor action.
- *
- *  XXX: This needs to be hooked to the thread exitting -- SOMEHOW.
  */
 
 void _POSIX_Keys_Run_destructors(
@@ -252,6 +250,8 @@ void _POSIX_Keys_Run_destructors(
     /*
      *  The standard allows one to not do this and thus go into an infinite
      *  loop.  It seems rude to unnecessarily lock up a system.
+     *
+     *  Reference: 17.1.1.2 P1003.1c/Draft 10, p. 163, line 99.
      */
 
     if ( iterations >= PTHREAD_DESTRUCTOR_ITERATIONS )

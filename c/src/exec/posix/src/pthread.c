@@ -16,6 +16,7 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/config.h>
+#include <rtems/posix/key.h>
 #include <rtems/posix/time.h>
 
 /*PAGE
@@ -82,9 +83,9 @@ void _POSIX_Threads_Sporadic_budget_callout(
 {
   POSIX_API_Control                  *api;
 
-  /* XXX really should be based on MAX_U32 */
-
   api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+
+  /* XXX really should be based on MAX_U32 */
 
   the_thread->cpu_time_budget = 0xFFFFFFFF;
 
@@ -115,16 +116,35 @@ boolean _POSIX_Threads_Create_extension(
  
   created->API_Extensions[ THREAD_API_POSIX ] = api;
  
-  /* XXX something should go here */
+  api->Attributes  = _POSIX_Threads_Default_attributes;
+  api->detachstate = _POSIX_Threads_Default_attributes.detachstate;
+  api->schedpolicy = _POSIX_Threads_Default_attributes.schedpolicy;
+  api->schedparam  = _POSIX_Threads_Default_attributes.schedparam;
+  api->schedparam.sched_priority = 
+     _POSIX_Priority_From_core( created->current_priority );
+ 
+  _Thread_queue_Initialize(
+    &api->Join_List,
+    OBJECTS_NO_CLASS,                 /* only used for proxy operations */
+    THREAD_QUEUE_DISCIPLINE_FIFO,
+    STATES_WAITING_FOR_JOIN_AT_EXIT,
+    NULL,                             /* no extract proxy handler */
+    0
+  );
+ 
+  _Watchdog_Initialize(
+    &api->Sporadic_timer,
+    _POSIX_Threads_Sporadic_budget_TSR,
+    created->Object.id,
+    created
+  );
 
   return TRUE;
 }
- 
+
 /*PAGE
  *
  *  _POSIX_Threads_Delete_extension
- *
- *  XXX
  */
  
 User_extensions_routine _POSIX_Threads_Delete_extension(
@@ -132,11 +152,31 @@ User_extensions_routine _POSIX_Threads_Delete_extension(
   Thread_Control *deleted
 )
 {
+  Thread_Control     *the_thread;
+  POSIX_API_Control  *api;
+  void              **value_ptr;
+
   (void) _Workspace_Free( deleted->API_Extensions[ THREAD_API_POSIX ] );
  
   deleted->API_Extensions[ THREAD_API_POSIX ] = NULL;
 
-  /* XXX run _POSIX_Keys_Run_destructors here? */
+  /* XXX run cancellation handlers */
+
+  _POSIX_Keys_Run_destructors( deleted );
+
+  /*
+   *  Wakeup all the tasks which joined with this one
+   */
+ 
+  api = deleted->API_Extensions[ THREAD_API_POSIX ];
+ 
+  value_ptr = (void **) deleted->Wait.return_argument;
+
+  while ( (the_thread = _Thread_queue_Dequeue( &api->Join_List )) )
+      *(void **)the_thread->Wait.return_argument = value_ptr;
+ 
+  if ( api->schedpolicy == SCHED_SPORADIC )
+    (void) _Watchdog_Remove( &api->Sporadic_timer );
 }
 
 /*PAGE
@@ -754,7 +794,7 @@ int pthread_create(
 #endif
 
   /*
-   *  P1003.1c/D10, p. 121.
+   *  P1003.1c/Draft 10, p. 121.
    *
    *  If inheritsched is set to PTHREAD_INHERIT_SCHED, then this thread
    *  inherits scheduling attributes from the creating thread.   If it is
@@ -894,15 +934,6 @@ int pthread_create(
   api->schedpolicy = schedpolicy;
   api->schedparam  = schedparam;
 
-  _Thread_queue_Initialize(
-    &api->Join_List,
-    OBJECTS_NO_CLASS,                 /* only used for proxy operations */
-    THREAD_QUEUE_DISCIPLINE_FIFO,
-    0,                                /* XXX join blocking state */
-    NULL,                             /* no extract proxy handler */
-    0
-  );
-
   /*
    *  POSIX threads are allocated and started in one operation.
    */
@@ -916,13 +947,6 @@ int pthread_create(
   );
 
   if ( schedpolicy == SCHED_SPORADIC ) {
-    _Watchdog_Initialize(
-      &api->Sporadic_timer,
-      _POSIX_Threads_Sporadic_budget_TSR,
-      the_thread->Object.id,
-      the_thread
-    );
-
     _Watchdog_Insert_ticks(
       &api->Sporadic_timer,
       _POSIX_Timespec_to_interval( &api->schedparam.ss_replenish_period )
@@ -977,13 +1001,18 @@ int pthread_join(
         return EINVAL;
       }
 
+      if ( _Thread_Is_executing( the_thread ) ) {
+        _Thread_Enable_dispatch();
+        return EDEADLK;
+      }
+
       /*
        *  Put ourself on the threads join list
        */
 
-      /* XXX is this right? */
-
       _Thread_Executing->Wait.return_argument = (unsigned32 *) value_ptr;
+
+      _Thread_queue_Enter_critical_section( &api->Join_List );
 
       _Thread_queue_Enqueue( &api->Join_List, WATCHDOG_NO_TIMEOUT );
 
@@ -1026,45 +1055,29 @@ int pthread_detach(
 
 /*PAGE
  *
- * 16.1.5.1 Thread Termination, p1003.1c/Draft 10, p. 150
+ *  16.1.5.1 Thread Termination, p1003.1c/Draft 10, p. 150
+ *
+ *  NOTE: Key destructors are executed in the POSIX api delete extension.
  */
  
 void pthread_exit(
   void  *value_ptr
 )
 {
-  register Thread_Control *executing;
-  register Thread_Control *the_thread;
-  POSIX_API_Control       *api;
-
-  executing = _Thread_Executing;
-
   _Thread_Disable_dispatch();
 
-  _Thread_Close( &_POSIX_Threads_Information, executing );
+  _Thread_Executing->Wait.return_argument = (unsigned32 *)value_ptr;
 
-  /*
-   *  Wakeup all the tasks which joined with this one
-   */
+  _Thread_Close( &_POSIX_Threads_Information, _Thread_Executing );
 
-  api = executing->API_Extensions[ THREAD_API_POSIX ];
-
-  while ( (the_thread = _Thread_queue_Dequeue( &api->Join_List )) )
-      *(void **)the_thread->Wait.return_argument = value_ptr;
-
-  if ( api->schedpolicy == SCHED_SPORADIC )
-    (void) _Watchdog_Remove( &api->Sporadic_timer );
-
-  /* XXX run _POSIX_Keys_Run_destructors here? */
-
-  _POSIX_Threads_Free( executing );
+  _POSIX_Threads_Free( _Thread_Executing );
 
   _Thread_Enable_dispatch();
 }
 
 /*PAGE
  *
- * 16.1.6 Get Calling Thread's ID, p1003.1c/Draft 10, p. XXX
+ *  16.1.6 Get Calling Thread's ID, p1003.1c/Draft 10, p. 152
  */
 
 pthread_t pthread_self( void )
@@ -1138,7 +1151,7 @@ int pthread_equal(
 
 /*PAGE
  *
- *  16.1.8 Dynamic Package Initialization
+ *  16.1.8 Dynamic Package Initialization, P1003.1c/Draft 10, p. 154
  */
 
 int pthread_once(
@@ -1146,25 +1159,15 @@ int pthread_once(
   void           (*init_routine)(void)
 )
 {
-  /* XXX: Should we implement this routine this way or make it a full */
-  /* XXX: fledged object? */
-
   if ( !once_control || !init_routine )
     return EINVAL;
 
   _Thread_Disable_dispatch();
 
-  if ( !once_control->is_initialized ) {
-
+  if ( !once_control->init_executed ) {
     once_control->is_initialized = TRUE;
     once_control->init_executed = TRUE;
     (*init_routine)();
-
-  } if ( !once_control->init_executed ) {
-
-    once_control->init_executed = TRUE;
-    (*init_routine)();
-
   }
   
   _Thread_Enable_dispatch();
@@ -1173,7 +1176,7 @@ int pthread_once(
 
 /*PAGE
  *
- *  20.1.6 Accessing a Thread CPU-time Clock, P1003.4b/D8, p. 58
+ *  20.1.6 Accessing a Thread CPU-time Clock, P1003.4b/Draft 8, p. 58
  */
  
 int pthread_getcpuclockid(
@@ -1186,7 +1189,7 @@ int pthread_getcpuclockid(
 
 /*PAGE
  *
- *  20.1.7 CPU-time Clock Thread Creation Attribute, P1003.4b/D8, p. 59
+ *  20.1.7 CPU-time Clock Thread Creation Attribute, P1003.4b/Draft 8, p. 59
  */
 
 int pthread_attr_setcputime(
@@ -1210,7 +1213,7 @@ int pthread_attr_setcputime(
 
 /*PAGE
  *
- *  20.1.7 CPU-time Clock Thread Creation Attribute, P1003.4b/D8, p. 59
+ *  20.1.7 CPU-time Clock Thread Creation Attribute, P1003.4b/Draft 8, p. 59
  */
 
 int pthread_attr_getcputime(
