@@ -26,9 +26,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-## FIXME: This doesn't seem to be useful
-## AM_CPPFLAGS += -I$(srcdir)
-
 AM_CPPFLAGS += -DUSE_INIT_FINI
 
 $(PGM): $(startup_rel_OBJECTS)

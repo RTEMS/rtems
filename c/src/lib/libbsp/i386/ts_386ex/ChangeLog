@@ -1,3 +1,8 @@
+2000-09-11      Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* start/Makefile.am: Remove AM_CPPFLAGS and GAS_CODE16 conditional.
+	* startup/Makefile.am: Cleanup comments.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am, console/Makefile.am, network/Makefile.am,
