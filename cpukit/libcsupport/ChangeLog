@@ -1,3 +1,12 @@
+2003-01-03     Till Straumann  <strauman@slac.stanford.edu>
+
+	* ChangeLog, base_fs.c, getpwent.c, privateenv.c 
+	Per PR303, Fix violation of node_access copy syemantics 
+
+2002-12-26     Till Straumann  <strauman@slac.stanford.edu
+
+        * src/fchdir.c: PR302 fix violation of FS node object copy semantics.
+
 2002-12-06	Joel Sherrill <joel@OARcorp.com>
 
 	* src/malloc.c: Fixed code that incorrected did a disable dispatch
