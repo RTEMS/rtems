@@ -35,10 +35,6 @@ AM_CONDITIONAL(RTEMS_GAS_CODE16,test "$RTEMS_GAS_CODE16" = "yes");
 # find all the Makefiles for the BSPs
 makefiles="$makefiles $RTEMS_CPU/Makefile"
 
-if test "${RTEMS_BSP}" = "bare"; then
-makefiles="$makefiles bare/Makefile"
-fi
-
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
 RTEMS_CHECK_NETWORKING(RTEMS_BSP)
@@ -93,6 +89,11 @@ fi
 AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
 AC_CONFIG_SUBDIRS($bsptools_cfgdirs)
+if test "$RTEMS_BSP" = "bare"; then
+cfg_subdirs="bare"
+fi
+
+AC_CONFIG_SUBDIRS($cfg_subdirs)
 
 # try to explicitly list a Makefile here 
 AC_OUTPUT( 
