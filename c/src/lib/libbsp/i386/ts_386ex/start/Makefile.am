@@ -11,22 +11,20 @@ noinst_FILES = 80386ex.h
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
+include $(top_srcdir)/../../bspstart.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-install-data-local: $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
-	$(INSTALL_DATA) $< $(DESTDIR)$(bsplibdir)
+project_lib_DATA = $(ARCH)/start$(LIB_VARIANT).$(OBJEXT)
 
-$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-
-all-local: $(OBJS) $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = 80386ex.h 80386ex.inc macros.inc start.S ts_1325.inc
+
+${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start$(LIB_VARIANT).$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
 
 include $(top_srcdir)/../../../../automake/local.am

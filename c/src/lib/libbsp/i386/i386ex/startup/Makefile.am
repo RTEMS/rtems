@@ -26,19 +26,16 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(PGM): $(startup_rel_OBJECTS)
 	$(make-rel)
 
-bsplib_DATA = linkcmds
-
-$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
-	$(INSTALL_DATA) $< $@
+project_lib_DATA = linkcmds
 
 UNUSED_C_FILES = setvec.c
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
-
 all-local: $(startup_rel_OBJECTS) $(PGM) $(TMPINSTALL_FILES)
 
-.PRECIOUS: $(PGM)
-
 EXTRA_DIST = README bspstart.c linkcmds setvec.c
+
+${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
 
 include $(top_srcdir)/../../../../automake/local.am
