@@ -1,3 +1,11 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* pppd/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* rtems_servers/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* rtems_telnetd/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* rtems_webserver/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* wrapup/Makefile.am: Use .$(OBJEXT) instead of .o.
+
 2002-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* pppd/chap.c, pppd/fsm.c, pppd/fsm.h, pppd/upap.c: Per PR255

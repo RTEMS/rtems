@@ -12,7 +12,7 @@ C_FILES = asp.c balloc.c default.c ejlex.c ejparse.c emfdb.c form.c \
     h.c handler.c md5c.c mime.c misc.c webpage.c ringq.c rom.c security.c \
     sock.c socket.c sym.c uemf.c um.c url.c value.c wbase64.c webrom.c webs.c \
     websuemf.c webmain.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

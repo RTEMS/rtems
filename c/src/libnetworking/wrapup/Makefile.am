@@ -9,7 +9,7 @@ endif
 
 NET_O_PIECES = rtems_servers \
     rtems_telnetd pppd $(POSIX_PIECES)
-OBJS = $(foreach piece, $(NET_O_PIECES), ../$(piece)/$(ARCH)/*.o)
+OBJS = $(foreach piece, $(NET_O_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT))
 LIB = $(ARCH)/libnetapps.a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

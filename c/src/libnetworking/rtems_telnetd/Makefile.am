@@ -9,7 +9,7 @@ LIBNAME = libtelnetd-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = pty.c telnetd.c icmds.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS = pty.h telnetd.h
 

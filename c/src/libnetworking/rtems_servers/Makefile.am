@@ -9,7 +9,7 @@ LIBNAME = lib.a
 LIB = $(ARCH)/$(LIBNAME)
 
 C_FILES = ftpd.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
