@@ -14,10 +14,13 @@
 --
 
 with System;
+with System.Storage_Elements; use System.Storage_Elements;
 with Interfaces;
 with Interfaces.C;
 
 package RTEMS is
+
+   Structure_Alignment : constant := 16;
 
    --
    --  RTEMS Base Types
@@ -57,7 +60,9 @@ package RTEMS is
    Single_Units     : constant := 4;
    Double_Units     : constant := 8;
 
-   --
+   Null_Address     : constant RTEMS.Address :=
+      System.Storage_Elements.To_Address(0);
+
    --  More Types
    --
 
@@ -203,10 +208,19 @@ package RTEMS is
    --  Attribute constants
    --
 
-   Default_Attributes : constant RTEMS.Attribute := 16#0000#;
-
-   --Floating_Point :
-   --No_Floating_Point :
+   Default_Attributes  : constant RTEMS.Attribute := 16#00000000#;
+   No_Floating_Point   : constant RTEMS.Attribute := 16#00000000#;
+   Floating_Point      : constant RTEMS.Attribute := 16#00000001#;
+   Local               : constant RTEMS.Attribute := 16#00000000#;
+   Global              : constant RTEMS.Attribute := 16#00000002#;
+   FIFO                : constant RTEMS.Attribute := 16#00000000#;
+   Priority            : constant RTEMS.Attribute := 16#00000004#;
+   Counting_Semaphore  : constant RTEMS.Attribute := 16#00000000#;
+   Binary_Semaphore    : constant RTEMS.Attribute := 16#00000010#;
+   No_Inherit_Priority : constant RTEMS.Attribute := 16#00000000#;
+   Inherit_Priority    : constant RTEMS.Attribute := 16#00000020#;
+   No_Priority_Ceiling : constant RTEMS.Attribute := 16#00000000#;
+   Priority_Ceiling    : constant RTEMS.Attribute := 16#00000040#;
 
    function Interrupt_Level (
       Level : in     RTEMS.Unsigned32
@@ -465,6 +479,44 @@ package RTEMS is
    Event_31   : constant RTEMS.Event_Set := 16#80000000#;
 
    --
+   --  RTEMS Signals
+   --
+
+   All_Signals : constant RTEMS.Signal_Set := 16#7FFFFFFF#;
+   Signal_0    : constant RTEMS.Signal_Set := 16#00000001#;
+   Signal_1    : constant RTEMS.Signal_Set := 16#00000002#;
+   Signal_2    : constant RTEMS.Signal_Set := 16#00000004#;
+   Signal_3    : constant RTEMS.Signal_Set := 16#00000008#;
+   Signal_4    : constant RTEMS.Signal_Set := 16#00000010#;
+   Signal_5    : constant RTEMS.Signal_Set := 16#00000020#;
+   Signal_6    : constant RTEMS.Signal_Set := 16#00000040#;
+   Signal_7    : constant RTEMS.Signal_Set := 16#00000080#;
+   Signal_8    : constant RTEMS.Signal_Set := 16#00000100#;
+   Signal_9    : constant RTEMS.Signal_Set := 16#00000200#;
+   Signal_10   : constant RTEMS.Signal_Set := 16#00000400#;
+   Signal_11   : constant RTEMS.Signal_Set := 16#00000800#;
+   Signal_12   : constant RTEMS.Signal_Set := 16#00001000#;
+   Signal_13   : constant RTEMS.Signal_Set := 16#00002000#;
+   Signal_14   : constant RTEMS.Signal_Set := 16#00004000#;
+   Signal_15   : constant RTEMS.Signal_Set := 16#00008000#;
+   Signal_16   : constant RTEMS.Signal_Set := 16#00010000#;
+   Signal_17   : constant RTEMS.Signal_Set := 16#00020000#;
+   Signal_18   : constant RTEMS.Signal_Set := 16#00040000#;
+   Signal_19   : constant RTEMS.Signal_Set := 16#00080000#;
+   Signal_20   : constant RTEMS.Signal_Set := 16#00100000#;
+   Signal_21   : constant RTEMS.Signal_Set := 16#00200000#;
+   Signal_22   : constant RTEMS.Signal_Set := 16#00400000#;
+   Signal_23   : constant RTEMS.Signal_Set := 16#00800000#;
+   Signal_24   : constant RTEMS.Signal_Set := 16#01000000#;
+   Signal_25   : constant RTEMS.Signal_Set := 16#02000000#;
+   Signal_26   : constant RTEMS.Signal_Set := 16#04000000#;
+   Signal_27   : constant RTEMS.Signal_Set := 16#08000000#;
+   Signal_28   : constant RTEMS.Signal_Set := 16#10000000#;
+   Signal_29   : constant RTEMS.Signal_Set := 16#20000000#;
+   Signal_30   : constant RTEMS.Signal_Set := 16#40000000#;
+   Signal_31   : constant RTEMS.Signal_Set := 16#80000000#;
+
+   --
    --  RTEMS API Configuration Information
    --
 
@@ -707,6 +759,10 @@ package RTEMS is
    function Are_Statuses_Equal (
       Status  : in     RTEMS.Status_Codes;
       Desired : in     RTEMS.Status_Codes
+   ) return Standard.Boolean;
+
+   function Is_Status_Successful (
+      Status  : in     RTEMS.Status_Codes
    ) return Standard.Boolean;
 
    --

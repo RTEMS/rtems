@@ -158,6 +158,19 @@ package body RTEMS is
 
    end Are_Statuses_Equal;
 
+   function Is_Status_Successful (
+      Status  : in     RTEMS.Status_Codes
+   ) return Standard.Boolean is
+   begin
+
+      if Status = RTEMS.Successful then
+         return True;
+      end if;
+
+      return False;
+
+   end Is_Status_Successful;
+
    --
    --
    --  RTEMS API
