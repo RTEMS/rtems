@@ -47,7 +47,7 @@
     &_Workspace_Area, \
     (_starting_address), \
     (_size), \
-    CPU_ALIGNMENT \
+    CPU_HEAP_ALIGNMENT \
   ); \
   \
   if ( memory_available == 0 ) \
