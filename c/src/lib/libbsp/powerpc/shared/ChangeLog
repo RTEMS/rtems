@@ -1,3 +1,11 @@
+2003-09-26  Till Straumann <strauman@slac.stanford.edu>
+
+	PR 497/bsps
+	* bootloader/head.S: Let the bootloader shut down the
+	network interface. NOTE: this involves a PPCBug system
+	call and will hence fail if other software is used
+	to boot. Need to #undef USE_PPCBUG in such cases!
+  
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* bootloader/bootldr.h, bootloader/em86.c, bootloader/em86real.S,
