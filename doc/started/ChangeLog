@@ -1,3 +1,7 @@
+2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* started.texi: Set @setfilename started.info.
+
 2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Put GENERATED_FILES into $builddir.
