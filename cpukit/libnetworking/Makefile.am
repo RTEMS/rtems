@@ -115,7 +115,7 @@ netinet_C_FILES = netinet/if_ether.c netinet/igmp.c netinet/in.c \
     netinet/tcp_debug.c netinet/tcp_input.c netinet/tcp_output.c \
     netinet/tcp_subr.c netinet/tcp_timer.c netinet/tcp_usrreq.c \
     netinet/udp_usrreq.c
-OBJS += $(C_FILES:netinet/%.c=$(ARCH)/%.$(OBJEXT))
+OBJS += $(netinet_C_FILES:netinet/%.c=$(ARCH)/%.$(OBJEXT))
 
 $(ARCH)/%.$(OBJEXT): netinet/%.c
 	${COMPILE} -o $@ -c $<

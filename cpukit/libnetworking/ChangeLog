@@ -1,3 +1,6 @@
+2002-12-18	Eric Norum <eric.norum@usask.ca>
+	* Makefile.am: Include netinet sources.
+
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in kern/Makefile.am, net/Makefile.am,
