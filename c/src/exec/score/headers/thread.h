@@ -60,6 +60,8 @@ extern "C" {
 #define RTEMS_NOTEPAD_15   15             /* notepad location 15 */
 #define RTEMS_NOTEPAD_LAST RTEMS_NOTEPAD_15     /* highest numbered notepad */
 
+#define RTEMS_NUMBER_NOTEPADS  (RTEMS_NOTEPAD_LAST+1)
+
 /*
  *  The following defines the "return type" of an RTEMS thread.
  *
@@ -155,24 +157,24 @@ typedef struct {
   Objects_Control           Object;
   Objects_Name              name;
   States_Control            current_state;
-  rtems_task_priority          current_priority;
-  rtems_task_priority          real_priority;
+  rtems_task_priority       current_priority;
+  rtems_task_priority       real_priority;
   unsigned32                resource_count;
   Thread_Wait_information   Wait;
   Watchdog_Control          Timer;
-  rtems_packet_prefix         *receive_packet;
+  rtems_packet_prefix      *receive_packet;
      /****************** end of common block ********************/
   Chain_Control            *ready;
   Priority_Information      Priority_map;
-  rtems_event_set        pending_events;
-  rtems_event_set        events_out;
+  rtems_event_set           pending_events;
+  rtems_event_set           events_out;
   Thread_Start_information  Start;
   ASR_Information           Signal;
-  rtems_mode             current_modes;
-  rtems_attribute        attribute_set;
+  rtems_mode                current_modes;
+  rtems_attribute           attribute_set;
   Context_Control           Registers;
   void                     *fp_context;
-  unsigned32                Notepads[ 16 ];
+  unsigned32                Notepads[ RTEMS_NUMBER_NOTEPADS ];
   void                     *extension;
 }   Thread_Control;
 
