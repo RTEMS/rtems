@@ -1,3 +1,9 @@
+2000-10-18	 Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
+
+	* console/console.c, console/serial_mouse.c, include/bsp.h:
+	Add the ability to set parity, number of data bits and
+	number of stop bits to the existing i386 serial drivers.
+
 2000-10-17	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/Makefile.am: Added idt.c since it has been moved libcpu/i386

@@ -226,7 +226,7 @@ console_initialize(rtems_device_major_number major,
        * Do device-specific initialization
        */
       /* 9600-8-N-1 */
-      BSP_uart_init(BSPConsolePort, 9600, 0);
+      BSP_uart_init(BSPConsolePort, 9600, CHR_8_BITS, 0, 0, 0);
       
       
       /* Set interrupt handler */
@@ -454,7 +454,7 @@ console_control(rtems_device_major_number major,
 static int
 conSetAttr(int minor, const struct termios *t)
 {
-  int baud;
+  unsigned long baud, databits, parity, stopbits;
 
   switch (t->c_cflag & CBAUD) 
     {
@@ -510,12 +510,43 @@ conSetAttr(int minor, const struct termios *t)
       baud = 115200;
       break;
     default:
-      baud = 0;
       rtems_fatal_error_occurred (RTEMS_INTERNAL_ERROR);
       return 0;
     }
 
-  BSP_uart_set_baud(BSPConsolePort, baud);
+  if (t->c_cflag & PARENB) {
+    /* Parity is enabled */
+    if (t->c_cflag & PARODD) {
+      /* Parity is odd */
+      parity = PEN;
+    }
+    else {
+      /* Parity is even */
+      parity = PEN | EPS;
+    }
+  }
+  else {
+    /* No parity */
+    parity = 0;
+  }
+  
+  switch (t->c_cflag & CSIZE) {
+    case CS5: databits = CHR_5_BITS; break;
+    case CS6: databits = CHR_6_BITS; break;
+    case CS7: databits = CHR_7_BITS; break;
+    case CS8: databits = CHR_8_BITS; break;
+   }
+
+  if (t->c_cflag & CSTOPB) {
+    /* 2 stop bits */
+    stopbits = STB;
+  }
+  else {
+    /* 1 stop bit */
+    stopbits = 0;
+  }
+
+  BSP_uart_set_attributes(BSPConsolePort, baud, databits, parity, stopbits);
 
   return 0;
 }
