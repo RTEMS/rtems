@@ -3,7 +3,6 @@
  *  This include file contains declaration of interface that
  *  will be provided by the file contained in this directory.
  *
- *
  *  COPYRIGHT (c) 1998 valette@crf.canon.fr
  *
  *  The license and distribution terms for this file may be
@@ -12,8 +11,8 @@
  *
  *  $Id$
  */
-#ifndef _LIBBSP_I386_SHARED_IO_BSP_IO_H
-#define _LIBBSP_I386_SHARED_IO_BSP_IO_H
+#ifndef _rtems_bspIo_h
+#define _rtems_bspIo_h
 
 /*
  * All the functions declared as extern after this comment
@@ -26,12 +25,13 @@ typedef char 	(*BSP_polling_getchar_function_type) 	(void);
 
 extern 	BSP_output_char_function_type 		BSP_output_char;
 extern 	BSP_polling_getchar_function_type 	BSP_poll_char;
+
 /*
  * All the function declared as extern after this comment
- * are available for each ix86 BSP by compiling and linking
+ * are available for each BSP by compiling and linking
  * the files contained in this directory PROVIDED definition
  * and initialisation of the previous variable are done.
  */
-void printk(char *fmt, ...);
+extern void printk(char *fmt, ...);
 
 #endif
