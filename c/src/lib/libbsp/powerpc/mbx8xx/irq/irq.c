@@ -11,13 +11,13 @@
  *  $Id$
  */
   
+#include <rtems/system.h>
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/apiext.h>
 #include <libcpu/raw_exception.h>
 #include <bsp/vectors.h>
-#include <libcpu/cpu.h>
 #include <bsp/8xx_immap.h>
 #include <bsp/mbx.h>
 #include <bsp/commproc.h>
@@ -402,8 +402,9 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   register unsigned oldMask;		      /* old siu pic masks */
   register unsigned msr;
   register unsigned new_msr;
+#ifdef DISPATCH_HANDLER_STAT
   unsigned loopCounter;
-
+#endif
   /*
    * Handle decrementer interrupt
    */
