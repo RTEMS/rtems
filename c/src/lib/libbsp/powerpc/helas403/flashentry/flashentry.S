@@ -190,7 +190,7 @@ stack_top:
 	lis	r3,0x0100       /* size  16 MB   = 0x01000000 */
 	bl	ramacc		/* test memory accessibility  */
 	cmpi	0,0,r4,0	/* memory ok? else test smaller size */
-	beq	ramcfgok	/* ok, we found configuration... +/
+	beq	ramcfgok	/* ok, we found configuration... */
 
 	lis	r2,0x0000	/* disable BR6, config not ok */
 	mtdcr	br6,r2		/* write to DCR BR6*/
@@ -262,7 +262,7 @@ ramcfgt18:
 	lis	r3,0x0080       /* size   8 MB   = 0x00800000 */
 	bl	ramacc		/* test memory accessibility  */
 	cmpi	0,0,r4,0	/* memory ok? else test smaller size */
-	beq	ramcfgok	/* ok, we found configuration... +/
+	beq	ramcfgok	/* ok, we found configuration... */
 
 	lis	r2,0x0000	/* disable BR6, config not ok */
 	mtdcr	br6,r2		/* write to DCR BR6*/
@@ -332,7 +332,7 @@ ramcfgt14:
 	lis	r3,0x0040       /* size   4 MB   = 0x00400000 */
 	bl	ramacc		/* test memory accessibility  */
 	cmpi	0,0,r4,0	/* memory ok? else test smaller size */
-	beq	ramcfgok	/* ok, we found configuration... +/
+	beq	ramcfgok	/* ok, we found configuration... */
 
 	lis	r2,0x0000	/* disable BR6, config not ok */
 	mtdcr	br6,r2		/* write to DCR BR6*/

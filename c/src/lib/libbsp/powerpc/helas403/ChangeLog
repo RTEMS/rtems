@@ -1,3 +1,9 @@
+2004-10-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	PR 697/bsps
+	* flashentry/flashentry.S: Fix broken comments
+	(Patch by Thomas.Doerfler@imd-systems.de)
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
