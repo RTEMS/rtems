@@ -1,3 +1,28 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* mp01/init.c, mp01/system.h, mp01/task1.c, mp01/node1/mp01.doc,
+	mp01/node2/mp01.doc, mp02/init.c, mp02/system.h, mp02/task1.c,
+	mp02/node1/mp02.doc, mp02/node2/mp02.doc, mp03/delay.c, mp03/init.c,
+	mp03/system.h, mp03/task1.c, mp03/node1/mp03.doc,
+	mp03/node2/mp03.doc, mp04/init.c, mp04/system.h, mp04/task1.c,
+	mp04/node1/mp04.doc, mp04/node2/mp04.doc, mp05/asr.c, mp05/init.c,
+	mp05/system.h, mp05/task1.c, mp05/node1/mp05.doc,
+	mp05/node2/mp05.doc, mp06/init.c, mp06/system.h, mp06/task1.c,
+	mp06/node1/mp06.doc, mp06/node2/mp06.doc, mp07/init.c, mp07/system.h,
+	mp07/task1.c, mp07/node1/mp07.doc, mp07/node2/mp07.doc, mp08/init.c,
+	mp08/system.h, mp08/task1.c, mp08/node1/mp08.doc,
+	mp08/node2/mp08.doc, mp09/init.c, mp09/recvmsg.c, mp09/sendmsg.c,
+	mp09/system.h, mp09/task1.c, mp09/node1/mp09.doc,
+	mp09/node2/mp09.doc, mp10/init.c, mp10/system.h, mp10/task1.c,
+	mp10/task2.c, mp10/task3.c, mp10/node1/mp10.doc, mp10/node2/mp10.doc,
+	mp11/init.c, mp11/system.h, mp11/node1/mp11.doc, mp11/node2/mp11.doc,
+	mp12/init.c, mp12/system.h, mp12/node1/mp12.doc, mp12/node2/mp12.doc,
+	mp13/init.c, mp13/system.h, mp13/task1.c, mp13/task2.c,
+	mp13/node1/mp13.doc, mp13/node2/mp13.doc, mp14/delay.c,
+	mp14/evtask1.c, mp14/evtmtask.c, mp14/exit.c, mp14/init.c,
+	mp14/msgtask1.c, mp14/pttask1.c, mp14/smtask1.c, mp14/system.h,
+	mp14/node1/mp14.doc, mp14/node2/mp14.doc: URL for license changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
