@@ -1,3 +1,8 @@
+2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Include $(top_srcdir)/../../../automake/*.am.
+	Use ../../../aclocal.
+
 2002-04-18	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* rtems/score/cpu.h (CPU_ISR_Disable and CPU_ISR_Enable): Correct them

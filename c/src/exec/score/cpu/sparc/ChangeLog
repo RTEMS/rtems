@@ -1,3 +1,8 @@
+2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Include $(top_srcdir)/../../../automake/*.am.
+	Use ../../../aclocal.
+
 2002-04-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* cpu.c: Remove call to sparc_init_tbr/NO_TABLE_MOVE.

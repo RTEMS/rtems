@@ -2,11 +2,11 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../../../../aclocal
+ACLOCAL_AMFLAGS = -I ../../../aclocal
 
-include $(top_srcdir)/../../../../../../automake/multilib.am
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/multilib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
@@ -56,4 +56,4 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
 
 EXTRA_DIST = cpu.c cpu_asm.S memcpy.c rtems.S
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

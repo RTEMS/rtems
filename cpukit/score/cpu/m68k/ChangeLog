@@ -1,3 +1,8 @@
+2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Include $(top_srcdir)/../../../automake/*.am.
+	Use ../../../aclocal.
+
 2002-05-28	Chris Johns <ccj@acm.org>
 
 	* rtems/score/m68k.h: Per PR227, mc68060 does not require FPSP
