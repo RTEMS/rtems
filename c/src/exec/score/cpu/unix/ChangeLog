@@ -1,3 +1,7 @@
+2000-09-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use += to set up AM_CPPFLAGS.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/score/Makefile.am: Use PROJECT_TOPdir in path to gensize.

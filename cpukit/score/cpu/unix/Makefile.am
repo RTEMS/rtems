@@ -11,7 +11,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 SUBDIRS = rtems
 
-AM_CPPFLAGS = -DCPU_SYNC_IO $(LIBC_DEFINES)
+AM_CPPFLAGS += -DCPU_SYNC_IO $(LIBC_DEFINES)
 
 C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
