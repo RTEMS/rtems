@@ -214,5 +214,21 @@ void _Thread_Enable_dispatch( void );
 #define _Thread_Internal_free( _the_task ) \
   _Objects_Free( &_Thread_Internal_information, &(_the_task)->Object )
 
+/*
+ *  _Thread_Get_libc_reent
+ */
+ 
+#define _Thread_Get_libc_reent() \
+  (_Thread_libc_reent)
+
+/*
+ *  _Thread_Set_libc_reent
+ */
+ 
+#define _Thread_Set_libc_reent(_libc_reent) \
+  do { \
+    _Thread_libc_reent = (_libc_reent); \
+  } while (0)
+
 #endif
 /* end of include file */
