@@ -1,4 +1,9 @@
 
+2000-08-25	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* libc/isatty.c, libc/imfs_handlers_directory.c, libc/creat.c,
+	libc/imfs_directory.c: Fixed style issues.
+
 2000-08-11  Chris Johns <ccj@acm.org>
 
 	* libc/chmod.c: Return ENOTSUP if filesystem does not have handler.

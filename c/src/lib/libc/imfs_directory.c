@@ -1,5 +1,5 @@
 /*
- *  XXX
+ *  IMFS Directory Access Routines
  *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
@@ -25,10 +25,12 @@
 #include "imfs.h"
 #include "libio_.h"
 
-/* -----------------------------------------------------------------------
- * This rountine will verify that the node being opened as a directory is
- * in fact a directory node. If it is then the offset into the directory 
- * will be set to 0 to position to the first directory entry.
+/*
+ *  imfs_dir_open
+ *
+ *  This rountine will verify that the node being opened as a directory is
+ *  in fact a directory node. If it is then the offset into the directory 
+ *  will be set to 0 to position to the first directory entry.
  */
 
 int imfs_dir_open( 
@@ -44,25 +46,25 @@ int imfs_dir_open(
   the_jnode = (IMFS_jnode_t *) iop->file_info;
 
   if ( the_jnode->type != IMFS_DIRECTORY )
-     return -1;		/* It wasn't a directory --> return error */
+     return -1;      /* It wasn't a directory --> return error */
 
   iop->offset = 0;
   return 0;
 }
 
-
-
-/* -----------------------------------------------------------------------
- * This routine will read the next directory entry based on the directory 
- * offset. The offset should be equal to -n- time the size of an individual
- * dirent structure. If n is not an integer multiple of the sizeof a 
- * dirent structure, an integer division will be performed to determine 
- * directory entry that will be returned in the buffer. Count should reflect
- * -m- times the sizeof dirent bytes to be placed in the buffer.
- * If there are not -m- dirent elements from the current directory position
- * to the end of the exisiting file, the remaining entries will be placed in 
- * the buffer and the returned value will be equal to -m actual- times the
- * size of a directory entry.
+/*
+ *  imfs_dir_read
+ *
+ *  This routine will read the next directory entry based on the directory 
+ *  offset. The offset should be equal to -n- time the size of an individual
+ *  dirent structure. If n is not an integer multiple of the sizeof a 
+ *  dirent structure, an integer division will be performed to determine 
+ *  directory entry that will be returned in the buffer. Count should reflect
+ *  -m- times the sizeof dirent bytes to be placed in the buffer.
+ *  If there are not -m- dirent elements from the current directory position
+ *  to the end of the exisiting file, the remaining entries will be placed in 
+ *  the buffer and the returned value will be equal to -m actual- times the
+ *  size of a directory entry.
  */
 
 int imfs_dir_read(
@@ -79,9 +81,9 @@ int imfs_dir_read(
    Chain_Control     *the_chain;
    IMFS_jnode_t      *the_jnode;
    int                bytes_transferred;
-   int 	              current_entry;
-   int 	              first_entry;
-   int 	              last_entry;
+   int                current_entry;
+   int                first_entry;
+   int                last_entry;
    struct dirent      tmp_dirent;
 
    the_jnode = (IMFS_jnode_t *)iop->file_info;
@@ -100,7 +102,7 @@ int imfs_dir_read(
    last_entry = first_entry + (count/sizeof(struct dirent)) * sizeof(struct dirent);
 
    /* The directory was not empty so try to move to the desired entry in chain*/
-   for( 
+   for ( 
       current_entry = 0; 
       current_entry < last_entry; 
       current_entry = current_entry + sizeof(struct dirent) ){
@@ -138,35 +140,41 @@ int imfs_dir_read(
 
 
 
-/* -----------------------------------------------------------------------
- * This routine will be called by the generic close routine to cleanup any
- * resources that have been allocated for the management of the file
+/*
+ *  imfs_dir_close
+ *
+ *  This routine will be called by the generic close routine to cleanup any
+ *  resources that have been allocated for the management of the file
  */
 
 int imfs_dir_close(
   rtems_libio_t  *iop
 )
 {
-  /* The generic close routine handles the deallocation of the file control */
-  /* and associated memory. At present the imfs_dir_close simply      */
-  /* returns a successful completion status                                 */
+  /*
+   *  The generic close routine handles the deallocation of the file control
+   *  and associated memory. At present the imfs_dir_close simply
+   *  returns a successful completion status.
+   */
  
   return 0;
 }
 
 
 
-/* -----------------------------------------------------------------------
- * This routine will behave in one of three ways based on the state of 
- * argument whence. Based on the state of its value the offset argument will
- * be interpreted using one of the following methods:
+/*
+ *  imfs_dir_lseek
  *
- * 	SEEK_SET - offset is the absolute byte offset from the start of the
- *                 logical start of the dirent sequence that represents the
- *                 directory
- * 	SEEK_CUR - offset is used as the relative byte offset from the current
- *                 directory position index held in the iop structure
- *	SEEK_END - N/A --> This will cause an assert.
+ *  This routine will behave in one of three ways based on the state of 
+ *  argument whence. Based on the state of its value the offset argument will
+ *  be interpreted using one of the following methods:
+ *
+ *     SEEK_SET - offset is the absolute byte offset from the start of the
+ *                logical start of the dirent sequence that represents the
+ *                directory
+ *     SEEK_CUR - offset is used as the relative byte offset from the current
+ *                directory position index held in the iop structure
+ *     SEEK_END - N/A --> This will cause an assert.
  */
 
 int imfs_dir_lseek(
@@ -180,18 +188,17 @@ int imfs_dir_lseek(
   normal_offset = (offset/sizeof(struct dirent)) * sizeof(struct dirent);
 
 
-  switch( whence )
-  {
-     case SEEK_SET:	/* absolute move from the start of the file */
+  switch( whence ) {
+     case SEEK_SET:   /* absolute move from the start of the file */
         iop->offset = normal_offset;
         break;
 
-     case SEEK_CUR:	/* relative move */
+     case SEEK_CUR:   /* relative move */
         iop->offset = iop->offset + normal_offset;
         break;
 
-     case SEEK_END:	/* Movement past the end of the directory via lseek */
-	      		/* is not a permitted operation                     */
+     case SEEK_END:   /* Movement past the end of the directory via lseek */
+                      /* is not a permitted operation                     */
       default:
         set_errno_and_return_minus_one( EINVAL );
         break;
@@ -203,28 +210,30 @@ int imfs_dir_lseek(
 
 
 
-/* -----------------------------------------------------------------------
- * This routine will obtain the following information concerning the current 
- * directory:
- * 	st_dev		0ll
- *	st_ino		1
- *  	st_mode		mode extracted from the jnode
- *	st_nlink	number of links to this node
- * 	st_uid		uid extracted from the jnode
- *	st_gid		gid extracted from the jnode
- * 	st_rdev		0ll
- *	st_size		the number of bytes in the directory 
- *			This is calculated by taking the number of entries
- *			in the directory and multiplying by the size of a 
- *			dirent structure
- *	st_blksize	0
- *   	st_blocks	0
- *	stat_atime	time of last access
- *	stat_mtime	time of last modification
- *	stat_ctime	time of the last change
+/*
+ *  imfs_dir_fstat
  *
- * This information will be returned to the calling function in a -stat- struct
- *	
+ *  This routine will obtain the following information concerning the current 
+ *  directory:
+ *        st_dev      0ll
+ *        st_ino      1
+ *        st_mode     mode extracted from the jnode
+ *        st_nlink    number of links to this node
+ *        st_uid      uid extracted from the jnode
+ *        st_gid      gid extracted from the jnode
+ *        st_rdev     0ll
+ *        st_size     the number of bytes in the directory 
+ *                    This is calculated by taking the number of entries
+ *                    in the directory and multiplying by the size of a 
+ *                    dirent structure
+ *        st_blksize  0
+ *        st_blocks   0
+ *        stat_atime  time of last access
+ *        stat_mtime  time of last modification
+ *        stat_ctime  time of the last change
+ *
+ *  This information will be returned to the calling function in a -stat- struct
+ *
  */
 
 int imfs_dir_fstat(

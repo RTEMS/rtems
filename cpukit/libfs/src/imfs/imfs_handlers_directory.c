@@ -36,10 +36,3 @@ rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
   imfs_dir_rmnod
 };
 
-
-
-
-
-
-
-

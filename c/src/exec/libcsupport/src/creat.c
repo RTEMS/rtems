@@ -1,3 +1,7 @@
+/*
+ *  $Id$
+ */
+
 /* creat() "system call" */
 
 /* This is needed by f2c and therefore the SPEC benchmarks.  */
