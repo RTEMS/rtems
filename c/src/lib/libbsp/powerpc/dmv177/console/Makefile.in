@@ -18,7 +18,7 @@ VPATH = @srcdir@:@srcdir@/../../../shared
 PGM=${ARCH}/console.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=config console debugio
+C_PIECES=config conscfg debugio
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
