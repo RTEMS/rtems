@@ -66,7 +66,6 @@ int count_rx = 0;
 
 static struct uti596_softc uti596_softc;
 
-int uti596packetNumber = 0;
 
 static    int scbStatus;
 static    rtems_status_code sc;
@@ -410,7 +409,6 @@ void uti596supplyFD(struct i596_rfd * pRfd )
  }
 }
 
-
 static void
 uti596_start (struct ifnet *ifp)
 {
@@ -425,24 +423,23 @@ uti596_initialize_hardware(struct uti596_softc *sc)
 {
   int boguscnt = 1000;
   rtems_status_code status_code;
+
+  printf("uti596_initialize_hardware\n");
   
   /* reset the board  */
   outport_word( PORT_ADDR, 0 );
   outport_word( PORT_ADDR, 0 );
 
-  sc->pScp = (struct i596_scp *)
-    calloc(1,sizeof(struct i596_scp) + 0xf);
+  uti596_softc.pScp = (struct i596_scp *) calloc(1,sizeof(struct i596_scp) + 0xf);
 #ifdef DBG_INIT
   printf("initialize_hardware:Scp address initially %p\n", sc->pScp);
 #endif
   sc->pScp = (struct i596_scp *)
     ((((int)uti596_softc.pScp) + 0xf) & 0xfffffff0);
-  
 
 #ifdef DBG_INIT
   printf("initialize_hardware:change scp address to : %p\n",sc->pScp);
 #endif
-
   
   /* change the scp address */
 #ifdef DBG_INIT
@@ -460,8 +457,8 @@ uti596_initialize_hardware(struct uti596_softc *sc)
   outport_word( PORT_ADDR, 0 );
   outport_word( PORT_ADDR, 0 );
   
-  outport_word(PORT_ADDR, ((((int)uti596_softc.pScp) &  0xffff) | 2 ));
-  outport_word(PORT_ADDR, (( (int)uti596_softc.pScp) >> 16 ) & 0xffff );
+  outport_word(PORT_ADDR, ((((int)sc->pScp) &  0xffff) | 2 ));
+  outport_word(PORT_ADDR, (( (int)sc->pScp) >> 16 ) & 0xffff );
   
   /* This is linear mode, LOCK function is disabled  */
   
@@ -521,11 +518,18 @@ uti596_reset_hardware(struct uti596_softc *sc)
   rtems_status_code status_code;
   struct i596_cmd *pCmd;
  
+
+  printf("uti596_reset_hardware\n");
   pCmd = sc->pCmdHead;  /* This is a tx command for sure (99.99999%)  */
   
   /* reset the board  */
   outport_word( PORT_ADDR, 0 );
   outport_word( PORT_ADDR, 0 );
+
+  if ( sc->pScp == NULL ) {
+    printf("Calloc scp\n");
+    uti596_softc.pScp = (struct i596_scp *) calloc(1,sizeof(struct i596_scp) + 0xf);
+  }
 
 #ifdef DBG_RESET
   printf("reset_hardware:Scp address %p\n", sc->pScp);
@@ -554,8 +558,11 @@ uti596_reset_hardware(struct uti596_softc *sc)
   outport_word( PORT_ADDR, 0 );
   outport_word( PORT_ADDR, 0 );
   
-  outport_word(PORT_ADDR, ((((int)uti596_softc.pScp) &  0xffff) | 2 ));
-  outport_word(PORT_ADDR, (( (int)uti596_softc.pScp) >> 16 ) & 0xffff );
+  /*  outport_word(PORT_ADDR, ((((int)uti596_softc.pScp) &  0xffff) | 2 ));
+  outport_word(PORT_ADDR, (( (int)uti596_softc.pScp) >> 16 ) & 0xffff ); */
+ 
+  outport_word(PORT_ADDR, ((((int)sc->pScp) &  0xffff) | 2 ));
+  outport_word(PORT_ADDR, (( (int)sc->pScp) >> 16 ) & 0xffff );
   
   /* This is linear mode, LOCK function is disabled  */
   
@@ -1201,7 +1208,7 @@ void uti596addPolledCmd(struct i596_cmd *pCmd)
      printf("Adding command 0x%x\n", pCmd -> command );
  #endif
 
-#ifdef DEBUG_POLLED_CMD
+#ifdef DBG_POLLED_CMD
      
      switch ( pCmd -> command & 0x7 ){ /* check bottom 7 bits */
      case CmdConfigure:
@@ -1239,17 +1246,16 @@ void uti596addPolledCmd(struct i596_cmd *pCmd)
 
      pCmd->next = I596_NULL;
 
-     uti596_softc.pCmdHead = uti596_softc.pCmdTail = uti596_softc.scb.pCmd = pCmd;
-
      UTI_WAIT_COMMAND_ACCEPTED(10000,"Add Polled command: wait prev");
 
+     uti596_softc.pCmdHead = uti596_softc.pCmdTail = uti596_softc.scb.pCmd = pCmd;
      uti596_softc.scb.command = CUC_START;
      outport_word (CHAN_ATTN,0);
 
-     UTI_WAIT_COMMAND_ACCEPTED(2000000,"Add Polled command: start"); 
+     UTI_WAIT_COMMAND_ACCEPTED(10000,"Add Polled command: start"); 
      uti596_softc.pCmdHead = uti596_softc.pCmdTail = uti596_softc.scb.pCmd = I596_NULL;
 
-#ifdef DBG_596
+#ifdef DBG_POLLED_CMD
      printf("Scb status & command 0x%x 0x%x\n", 
 	    uti596_softc.scb.status,
 	    uti596_softc.scb.command );
@@ -1836,6 +1842,7 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 
   /* Indicate to ULCS that this is initialized */  
   ifp->if_softc = sc;  
+  sc -> pScp = NULL;
   
   /* Assign the name */
   ifp->if_name = "uti";
@@ -1941,7 +1948,7 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
      UTI_WAIT_COMMAND_ACCEPTED(20000, "****ERROR:ACK");
    }
    else {
-     printk("***INFO: ACK'd w/o processing. status = %x\n", scbStatus);
+     /*     printk("***INFO: ACK'd w/o processing. status = %x\n", scbStatus); */
      return;
    }
  }
@@ -2490,7 +2497,6 @@ void uti596_stop(struct uti596_softc *sc)
     sc->scb.command = CUC_ABORT|RX_ABORT;
     outport_word( CHAN_ATTN, 0 );
 
-    
 }
 
 
@@ -2703,23 +2709,34 @@ void uti596_init(void * arg){
 
   struct uti596_softc  *sc = arg;
   struct ifnet *ifp = &sc->arpcom.ac_if;
+  rtems_status_code status_code;
+
 
   if (sc->txDaemonTid == 0) {
 
     uti596_initialize_hardware(sc);
-
+    
     /*
      * Start driver tasks
      */
-
+    
     sc->txDaemonTid = rtems_bsdnet_newproc ("UTtx", 2*4096, uti596_txDaemon, sc);
     sc->rxDaemonTid = rtems_bsdnet_newproc ("UTrx", 2*4096, uti596_rxDaemon, sc);
     sc->resetDaemonTid = rtems_bsdnet_newproc ("UTrt", 2*4096, 
 					       uti596_resetDaemon, sc);
+    
+    
+#ifdef DBG_INIT
+    printf("After attach, status of board = 0x%x\n", sc->scb.status );
+#endif
+    outport_word(0x380, 0xf); /* reset the LED's */
+
   }
+
   /* 
    * Enable receiver
    */
+  UTI_WAIT_COMMAND_ACCEPTED(4000, "init:Before RX_START"); 
   sc->scb.pRfd = sc -> pBeginRFA;
   sc->scb.command = RX_START;
   outport_word(CHAN_ATTN,0 ); 
