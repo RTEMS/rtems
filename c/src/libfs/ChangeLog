@@ -1,3 +1,8 @@
+2001-04-04	Joel Sherrill <joel@OARcorp.com>
+
+	* src/dosfs/Makefile.am: Per PR129 do not install as many files
+	to the $(includedir).
+
 2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/dosfs/fat.h: Include <string.h>.

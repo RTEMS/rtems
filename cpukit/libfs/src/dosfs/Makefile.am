@@ -26,8 +26,7 @@ C_FILES = $(FATFS_C_FILES) $(DOSFS_C_FILES)
 
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-include_HEADERS = fat.h fat_fat_operations.h \
-                  fat_file.h msdos.h dosfs.h
+include_HEADERS = dosfs.h
 
 H_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
