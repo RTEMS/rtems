@@ -64,8 +64,10 @@ time_t time(
 {
   time_t  seconds_since_epoch;
 
-  if ( !_TOD_Is_set() )
-    set_errno_and_return_minus_one( EINVAL );
+  /*
+   *  No error is the time of day is not set.   For RTEMS the system time
+   *  starts out at the rtems epoch.
+   */
 
   /*
    *  Internally the RTEMS epoch is 1988.  This must be taken into account.
