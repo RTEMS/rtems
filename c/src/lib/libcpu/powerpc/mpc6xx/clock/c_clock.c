@@ -11,7 +11,7 @@
  *
  *  The license and distribution terms for this file may in
  *  the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
+ *  http://www.rtems.com/license/LICENSE.
  *
  *  Modified to support the MPC750.
  *  Modifications Copyright (c) 1999 Eric Valette valette@crf.canon.fr
