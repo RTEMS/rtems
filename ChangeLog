@@ -1,5 +1,11 @@
 2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/compile.am: Remove CFLAGS_DEBUG_OPTIMIZE_V,
+	CXXFLAGS_DEBUG_OPTIMIZE_V, LDFLAGS_DEBUG_V, CFLAGS_DEFAULT.
+	Support @CFLAGS@, @CXXFLAGS@.
+
+2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* bootstrap: Allow autoconf-2.56.
 
 2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

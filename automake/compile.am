@@ -43,7 +43,6 @@
 if RTEMS_USE_GCC
 ## All the stuff below is specific to gcc
 
-CFLAGS_DEFAULT=-g -Wall
 ## gcc >= 2.8.x
 GCCSPECS = $(GCC_SPECS) $(RTEMS_BSP_SPECS)
 else
@@ -56,18 +55,11 @@ DEFS = @DEFS@
 
 CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) \
    $(DEFINES) $(XCPPFLAGS) $(CPPFLAGS_GCC)
-CFLAGS   = $(CFLAGS_DEFAULT) $(CPU_CFLAGS) $(XCFLAGS)
-CXXFLAGS = $(CFLAGS_DEFAULT) $(CPU_CFLAGS) $(XCXXFLAGS)
+CFLAGS   = @CFLAGS@ $(CPU_CFLAGS) $(XCFLAGS)
+CXXFLAGS = @CXXFLAGS@ $(CPU_CFLAGS) $(XCXXFLAGS)
 ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
 
 LINK_LIBS = $(LD_LIBS)
-
-## FIXME: This doesn't seem to be correct
-# when debugging, optimize flag: typically empty
-# some compilers do allow optimization with their "-g"
-CFLAGS_DEBUG_OPTIMIZE_V=-g
-CXXFLAGS_DEBUG_OPTIMIZE_V=-g
-LDFLAGS_DEBUG_V =
 
 # profile flag; use gprof(1)
 CFLAGS_PROFILE_V=-pg
