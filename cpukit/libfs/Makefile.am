@@ -3,17 +3,30 @@
 ##
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/amcompile.am
+include $(top_srcdir)/automake/compile.am
 
 AM_CPPFLAGS += -I$(top_builddir)
-AM_CPPFLAGS += $(LIBC_DEFINES)
 
 EXTRA_DIST = README
 
 include_HEADERS =
 
-# imfs
-libimfs_EMBEDDED_C_FILES = src/imfs/imfs_chown.c src/imfs/imfs_config.c \
+EXTRA_LIBRARIES = libimfs.a
+CLEANFILES = libimfs.a
+libimfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(LIBC_DEFINES) $(CFLAGS_OPTIMIZE_V)
+
+EXTRA_LIBRARIES += libimfs_g.a
+CLEANFILES += libimfs_g.a
+libimfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(LIBC_DEFINES) $(CFLAGS_DEBUG_V)
+
+UNUSED_FILES = src/imfs/imfs_load_tar.c
+
+libimfs_a_SOURCES =
+
+if UNIX
+libimfs_a_SOURCES += src/imfs/imfs_unixstub.c
+else
+libimfs_a_SOURCES += src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/imfs/imfs_creat.c src/imfs/imfs_directory.c src/imfs/imfs_eval.c \
     src/imfs/imfs_free.c src/imfs/imfs_fsunmount.c src/imfs/imfs_gtkn.c \
     src/imfs/imfs_init.c src/imfs/imfs_initsupp.c src/imfs/imfs_link.c \
@@ -26,26 +39,9 @@ libimfs_EMBEDDED_C_FILES = src/imfs/imfs_chown.c src/imfs/imfs_config.c \
     src/imfs/imfs_debug.c src/imfs/imfs_rmnod.c src/imfs/imfs_symlink.c \
     src/imfs/imfs_readlink.c src/imfs/imfs_fdatasync.c src/imfs/imfs_fcntl.c \
     src/imfs/ioman.c src/imfs/miniimfs_init.c
-
-libimfs_UNUSED_C_FILES = src/imfs/imfs_load_tar.c
-
-libimfs_UNIX_C_FILES = src/imfs/imfs_unixstub.c
-
-if UNIX
-libimfs_C_FILES = $(libimfs_UNIX_C_FILES)
-else
-libimfs_C_FILES = $(libimfs_EMBEDDED_C_FILES)
 endif
 
-EXTRA_LIBRARIES = libimfs.a
-CLEANFILES = libimfs.a
-libimfs_a_SOURCES = $(libimfs_C_FILES)
-libimfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += libimfs_g.a
-CLEANFILES += libimfs_g.a
 libimfs_g_a_SOURCES = $(libimfs_a_SOURCES)
-libimfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 include_HEADERS += src/imfs/imfs.h
 
@@ -53,34 +49,37 @@ IMFSLIB = libimfs$(LIB_VARIANT).a
 
 # dosfs
 
-libdosfs_FATFS_C_FILES = src/dosfs/fat.c src/dosfs/fat_fat_operations.c \
-    src/dosfs/fat_file.c src/dosfs/fat.h
+if !UNIX
+EXTRA_LIBRARIES += libdosfs.a
+CLEANFILES += libdosfs.a
+libdosfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(LIBC_DEFINES) $(CFLAGS_OPTIMIZE_V)
 
-libdosfs_DOSFS_C_FILES = src/dosfs/msdos_create.c src/dosfs/msdos_dir.c \
+EXTRA_LIBRARIES += libdosfs_g.a
+CLEANFILES += libdosfs_g.a
+libdosfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(LIBC_DEFINES) $(CFLAGS_DEBUG_V)
+
+# libdosfs_FATFS_C_FILES
+libdosfs_a_SOURCES = src/dosfs/fat.c src/dosfs/fat.h \
+    src/dosfs/fat_fat_operations.c src/dosfs/fat_fat_operations.h \
+    src/dosfs/fat_file.c src/dosfs/fat_file.h
+
+# libdosfs_DOSFS_C_FILES
+libdosfs_a_SOURCES += src/dosfs/msdos_create.c src/dosfs/msdos_dir.c \
     src/dosfs/msdos_eval.c src/dosfs/msdos_file.c src/dosfs/msdos_free.c \
     src/dosfs/msdos_fsunmount.c src/dosfs/msdos_handlers_dir.c \
     src/dosfs/msdos_handlers_file.c src/dosfs/msdos_init.c \
     src/dosfs/msdos_initsupp.c src/dosfs/msdos_misc.c \
     src/dosfs/msdos_mknod.c src/dosfs/msdos_node_type.c \
-    src/dosfs/msdos_conv.c
+    src/dosfs/msdos_conv.c src/dosfs/msdos.h
 
-if !UNIX
-libdosfs_C_FILES = $(libdosfs_FATFS_C_FILES) $(libdosfs_DOSFS_C_FILES)
+libdosfs_g_a_SOURCES = $(libdosfs_a_SOURCES)
 
 include_HEADERS += src/dosfs/dosfs.h
 
 DOSFSLIB = libdosfs$(LIB_VARIANT).a
-
-EXTRA_LIBRARIES += libdosfs.a
-CLEANFILES += libdosfs.a
-libdosfs_a_SOURCES = $(libdosfs_C_FILES)
-libdosfs_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += libdosfs_g.a
-CLEANFILES += libdosfs_g.a
-libdosfs_g_a_SOURCES = $(libdosfs_a_SOURCES)
-libdosfs_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 endif
+
+EXTRA_DIST += $(UNUSED_FILES)
 
 all-local: $(PREINSTALL_FILES) $(IMFSLIB) $(DOSFSLIB)
 
