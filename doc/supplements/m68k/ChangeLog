@@ -1,3 +1,7 @@
+2002-07-30	Joel Sherrill <joel@OARcorp.com>
+
+	* timeMVME136.t, timedata.t: Replaced XXX's with real info.
+
 2002-07-26	Joel Sherrill <joel@OARcorp.com>
 
 	* intr_NOTIMES.t: Per PR258, changed single @ to double @ in email
