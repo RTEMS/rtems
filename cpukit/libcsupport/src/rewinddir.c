@@ -1,14 +1,6 @@
 /*
  *  rewinddir() - POSIX 1003.1b - XXX
  *
- *  COPYRIGHT (c) 1989-1998.
- *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
- *
  *  $Id$
  */
 
@@ -23,16 +15,6 @@ void rewinddir(
   DIR *dirp
 )
 {
-  off_t status;
-
-  status = lseek( dirp->dd_fd, 0, SEEK_SET );
- 
-  if( status == -1 ) {
-      printf("REWINDDIR: errno: %d\n", errno );
-      assert(0);
-  }
-
-  dirp->dd_loc = 0;
-
-
+  errno = ENOSYS;
+  return -1;
 }
