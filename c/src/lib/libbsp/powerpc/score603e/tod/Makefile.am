@@ -7,6 +7,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 PGM = $(ARCH)/tod.rel
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
 # generation 1
