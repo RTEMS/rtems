@@ -1,34 +1,18 @@
+%rename cpp old_cpp
+%rename lib old_lib
+%rename endfile old_endfile
+%rename startfile old_startfile
+%rename link old_link
 
-predefines:
--D__embedded__ -Asystem(embedded)
+*cpp:
+%(old_cpp) %{qrtems: -D__embedded__} -Asystem(embedded)
 
-startfile: replace
-mrtems:
-pg: start.o%s
-{!pg:
-g: start.o%s
-{!g:
-p: start.o%s
-!p: start.o%s
-}}
-{!mrtems:
-pg: pgcrt0%O
-{!pg:
-g: gcrt0%O
-{!g:
-p: pcrt0%O
-!p: crt0%O
-}}}
+*lib:
+%{!qrtems: %(old_lib)} %{qrtems: --start-group -lc -lrtemsall -lgcc --end-group}
 
+*startfile:
+%{!qrtems: %(old_startfile)} %{qrtems: start.o%s}
 
-link: replace
-mrtems: -dc -dp -N -T linkcmds%s -e start
-
-lib: replace
-mrtems: -( -lc -lrtemsall -lgcc -)
-
-
-libgcc: replace
-
-
+*link:
+%{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -T linkcmds%s -e start}
 
