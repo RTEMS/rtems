@@ -1,5 +1,10 @@
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* project.am: Append $($(PROJECT)_TEXINFOS) to
+	html-dependencies.
+
+2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Require autoconf-2.57.
 	Require automake-1.7.2.
 	Remove started/pictures/Makefile.

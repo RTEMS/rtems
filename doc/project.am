@@ -44,8 +44,8 @@ rtems_footer.html: $(top_srcdir)/rtems_footer.html.in version.texi
 	-e s%\@VERSION\@%@VERSION@%g \
 	< $< > $@
 
-index.html $(PROJECT)*.html: $(PROJECT).texi \
-    rtems_header.html rtems_footer.html
+index.html $(PROJECT)*.html: $(PROJECT).texi $($(PROJECT)_TEXINFOS) \
+    rtems_header.html rtems_footer.html 
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -base $(PROJECT) $<
 
 MOSTLYCLEANFILES += index.html $(PROJECT)*.html rtems_header.html \
