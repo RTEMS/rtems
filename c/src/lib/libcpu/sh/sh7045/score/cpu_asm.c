@@ -226,7 +226,7 @@ __CPU_Context_switch:\n\
 	sts.l   macl,@-r4\n\
 	mov.l   r15,@-r4\n\
 \n\
-	mov     r5, r4"\n\
+	mov     r5, r4"
   :: "I" (sizeof(Context_Control))
   );
 
