@@ -1,3 +1,9 @@
+2003-11-25	Joel Sherrill <joel@OARcorp.com>
+
+	PR 526/rtems
+	* src/threadcreateidle.c: Idle task name should be a string and
+	PR484 broke this.
+
 2003-10-02	Phil Torre <ptorre@zetron.com>
 
 	PR 504/rtems
