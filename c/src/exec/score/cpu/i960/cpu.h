@@ -231,7 +231,8 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 #define _CPU_ISR_Set_level( newlevel ) \
   { \
-    unsigned32 _mask, _level=(newlevel); \
+    unsigned32 _mask = 0; \
+    unsigned32 _level = (newlevel); \
     \
     __asm__ volatile ( "ldconst 0x1f0000,%0; \
                     modpc   0,%0,%1"     : "=d" (_mask), "=d" (_level) \
@@ -326,6 +327,7 @@ unsigned32 _CPU_ISR_Get_level( void );
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { unsigned32 _search = (_value); \
     \
+    (_output) = 0; /* to prevent warnings */ \
     __asm__ volatile ( "scanbit   %0,%1  " \
                     : "=d" (_search), "=d" (_output) \
                     : "0"  (_search), "1"  (_output) ); \
