@@ -582,11 +582,14 @@ int pthread_create(
 {
   const pthread_attr_t  *attrp;
   Priority_Control       core_priority;
+  boolean                is_timesliced;
   boolean                is_fp;
   boolean                status;
   Thread_Control        *the_thread;
   char                  *default_name = "psx";
   POSIX_API_Control     *api;
+  int                    schedpolicy = SCHED_RR;
+  struct sched_param     schedparams;
 
   attrp = (attr) ? attr : &_POSIX_Threads_Default_attributes;
 
@@ -600,14 +603,12 @@ int pthread_create(
 
 #if 0
   int contentionscope;
-  int inheritsched;
   int schedpolicy;
   struct sched_param schedparam;
 
 #if defined(_POSIX_THREAD_CPUTIME)
   int  cputime_clock_allowed;  /* see time.h */
 #endif
-  int  detachstate;
 #endif
 
   /*
@@ -621,20 +622,44 @@ int pthread_create(
 
   switch ( attrp->inheritsched ) {
     case PTHREAD_INHERIT_SCHED:
+      api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+      schedpolicy = api->schedpolicy;
+      schedparams = api->Schedule;
       break; 
     case PTHREAD_EXPLICIT_SCHED:
+      schedpolicy = attrp->schedpolicy;
+      schedparams = attrp->schedparam;
       break; 
   }
 
   /*
-   *  Validate the RTEMS API priority and convert it to the core priority range.
+   *  Interpret the scheduling parameters.
    */
- 
+
+  is_timesliced = FALSE;
+
   if ( !_POSIX_Priority_Is_valid( attrp->schedparam.sched_priority ) )
     return EINVAL;
  
   core_priority = _POSIX_Priority_To_core( attrp->schedparam.sched_priority );
  
+  switch ( schedpolicy ) {
+    case SCHED_OTHER:
+    case SCHED_FIFO:
+      break;
+    case SCHED_RR:
+      is_timesliced = TRUE;
+      break;
+    case SCHED_SPORADIC:
+      /*  XXX interpret the following parameters */
+#if 0
+  ss_low_priority;     /* Low scheduling priority for sporadic */
+  ss_replenish_period; /* Replenishment period for sporadic server */
+  ss_initial_budget;   /* Initial budget for sporadic server */
+#endif
+      break;
+  }
+
   /*
    *  Currently all POSIX threads are floating point if the hardware 
    *  supports it.
@@ -673,7 +698,7 @@ int pthread_create(
     is_fp,
     core_priority,
     TRUE,                 /* preemptible */
-    TRUE,                 /* timesliced */
+    is_timesliced,        /* timesliced */
     0,                    /* isr level */
     &default_name         /* posix threads don't have a name */
   );

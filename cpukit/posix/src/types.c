@@ -2,10 +2,19 @@
  *  $Id$
  */
 
+#include <limits.h>
+#include <errno.h>
+#include <string.h>
 #include <sys/types.h>
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>
+
+pid_t _POSIX_types_Ppid = 0;
+uid_t _POSIX_types_Uid = 0;
+uid_t _POSIX_types_Euid = 0;
+gid_t _POSIX_types_Gid = 0;
+gid_t _POSIX_types_Egid = 0;
 
 /*PAGE
  *
@@ -24,7 +33,7 @@ pid_t getpid( void )
 
 pid_t getppid( void )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  return _POSIX_types_Ppid;
 }
 
 /*PAGE
@@ -35,7 +44,7 @@ pid_t getppid( void )
 
 uid_t getuid( void )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  return _POSIX_types_Uid;
 }
 
 /*PAGE
@@ -46,7 +55,7 @@ uid_t getuid( void )
 
 uid_t geteuid( void )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  return _POSIX_types_Euid;
 }
 
 /*PAGE
@@ -57,7 +66,7 @@ uid_t geteuid( void )
 
 gid_t getgid( void )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  return _POSIX_types_Gid;
 }
 
 /*PAGE
@@ -68,7 +77,7 @@ gid_t getgid( void )
 
 gid_t getegid( void )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  return _POSIX_types_Egid;
 }
 
 /*PAGE
@@ -80,7 +89,8 @@ int setuid(
   uid_t  uid
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  _POSIX_types_Uid = uid;
+  return 0;
 }
 
 /*PAGE
@@ -92,7 +102,8 @@ int setgid(
   gid_t  gid
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  _POSIX_types_Gid = gid;
+  return 0;
 }
 
 /*PAGE
@@ -105,7 +116,7 @@ int getgroups(
   gid_t  grouplist[]
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  return 0;  /* no supplemental group ids */
 }
 
 /*PAGE
@@ -115,9 +126,12 @@ int getgroups(
  *  NOTE:  P1003.1c/D10, p. 49 adds getlogin_r().
  */
 
+static char _POSIX_types_Getlogin_buffer[ LOGIN_NAME_MAX ];
+
 char *getlogin( void )
 {
-  return (char *) POSIX_NOT_IMPLEMENTED();
+  (void) getlogin_r( _POSIX_types_Getlogin_buffer, LOGIN_NAME_MAX );
+  return _POSIX_types_Getlogin_buffer;
 }
 
 /*PAGE
@@ -132,7 +146,11 @@ int getlogin_r(
   size_t  namesize
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  if ( namesize < LOGIN_NAME_MAX )
+    return ERANGE;
+
+  strcpy( name, "posixapp" );
+  return 0;
 }
 
 /*PAGE
@@ -142,7 +160,12 @@ int getlogin_r(
 
 pid_t getpgrp( void )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  /*
+   *  This always succeeds and returns the process group id.  For rtems,
+   *  this will always be the local node;
+   */
+
+  return _Objects_Local_node;
 }
 
 /*PAGE
@@ -152,7 +175,8 @@ pid_t getpgrp( void )
 
 pid_t setsid( void )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  errno = ENOSYS;
+  return -1;
 }
 
 /*PAGE
@@ -165,7 +189,8 @@ int setpgid(
   pid_t  pgid
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  errno = ENOSYS;
+  return -1;
 }
 
 /*

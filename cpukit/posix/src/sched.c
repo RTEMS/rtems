@@ -85,7 +85,18 @@ int sched_get_priority_max(
   int  policy
 )
 {
-  /* XXX error check the policy */
+  switch ( policy ) {
+    case SCHED_OTHER:
+    case SCHED_FIFO:
+    case SCHED_RR:
+    case SCHED_SPORADIC:
+      break;
+ 
+    default:
+      errno = EINVAL;
+      return -1;
+  }
+
   return POSIX_SCHEDULER_MAXIMUM_PRIORITY;
 }
 
@@ -98,7 +109,18 @@ int sched_get_priority_min(
   int  policy
 )
 {
-  /* XXX error check the policy */
+  switch ( policy ) {
+    case SCHED_OTHER:
+    case SCHED_FIFO:
+    case SCHED_RR:
+    case SCHED_SPORADIC:
+      break;
+ 
+    default:
+      errno = EINVAL;
+      return -1;
+  }
+
   return POSIX_SCHEDULER_MINIMUM_PRIORITY;
 }
 
@@ -114,18 +136,16 @@ int sched_rr_get_interval(
 {
   time_t us_per_quantum; 
 
-  /* XXX eventually should support different time quantums per thread */
+  /* XXX do we need to support different time quantums per thread */
 
-  /* XXX should get for errors? (bad pid) */
+  /*
+   *  Only supported for the "calling process" (i.e. this node).
+   */
 
-  /* XXX some of the time routines also convert usecs to a timespec -- */
-  /* XXX   should this be a common routine? */
+  assert( pid == getpid() );
 
-  us_per_quantum = _TOD_Microseconds_per_tick * _Thread_Ticks_per_timeslice;
 
-  interval->tv_sec  = us_per_quantum / TOD_MICROSECONDS_PER_SECOND;
-  interval->tv_nsec = (us_per_quantum % TOD_MICROSECONDS_PER_SECOND) * 
-                         TOD_NANOSECONDS_PER_MICROSECOND;
+  _POSIX_Interval_to_timespec( _Thread_Ticks_per_timeslice, interval );
   return 0;
 }
 
