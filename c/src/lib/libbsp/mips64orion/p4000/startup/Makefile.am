@@ -34,16 +34,16 @@ all-local: $(PGM) $(TMPINSTALL_FILES)
 EXTRA_DIST = bspclean.c bspstart.c ghlinkcmds idtmem.S idttlb.S inittlb.c \
     linkcmds setvec.c
 
-${PROJECT_RELEASE}/lib/$(dirstamp):
-	@$(mkdir_p) ${PROJECT_RELEASE}/lib
-	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+$(PROJECT_LIB)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
 
-${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
+$(PROJECT_LIB)/linkcmds: linkcmds $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
+TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
-${PROJECT_RELEASE}/lib/ghlinkcmds: ghlinkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/ghlinkcmds
-TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/ghlinkcmds
+$(PROJECT_LIB)/ghlinkcmds: ghlinkcmds $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/ghlinkcmds
+TMPINSTALL_FILES += $(PROJECT_LIB)/ghlinkcmds
 
 include $(top_srcdir)/../../../../automake/local.am
