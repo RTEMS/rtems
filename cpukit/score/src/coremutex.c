@@ -72,8 +72,8 @@ void _CORE_mutex_Initialize(
   _Thread_queue_Initialize(
     &the_mutex->Wait_queue,
     the_class,
-    _CORE_mutex_Is_priority( the_mutex_attributes ) ?
-      THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
+    _CORE_mutex_Is_fifo( the_mutex_attributes ) ?
+      THREAD_QUEUE_DISCIPLINE_FIFO : THREAD_QUEUE_DISCIPLINE_PRIORITY,
     STATES_WAITING_FOR_MUTEX,
     proxy_extract_callout,
     CORE_MUTEX_TIMEOUT
