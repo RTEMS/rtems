@@ -64,8 +64,8 @@ args=$*
 # Run the tests
 #
 
-cd $RTEMS_ROOT/c/$RTEMS_BSP/tests/$logdir ||
-  fatal "No log directory: $RTEMS_ROOT/c/$RTEMS_BSP/tests/$logdir"
+cd $RTEMS_HOME/tests/$logdir ||
+  fatal "No log directory: $RTEMS_HOME/tests/$logdir"
 
 tests="$args"
 if [ ! "$tests" ]
