@@ -13,6 +13,20 @@
  *
  *  $Id$
  */
+	.data
+	.align 4
+_soft_reset_reg_save:
+	.word  0
+	.word  0
+	.word  0
+	.word  0
+_ISR_reg_save:
+	.word  0
+	.word  0
+	.word  0
+	.word  0
+	.word  0
+	.word  0
 
           .text
 /*
@@ -123,6 +137,9 @@ __ISR_Handler:
           lda       1(r4),r4                 # increment dispatch disable level
           movl      g6,r14                   # save g6-g7
 
+		  stq		g8, _ISR_reg_save		 # save g8-g11
+		  stl		g12, _ISR_reg_save+16    # save g12-g13
+
           ld        __ISR_Vector_table[g0*4],g1    # g1 = Users handler
           addo      1,r5,r5                  # increment ISR level
 
@@ -173,6 +190,8 @@ bframe:   mov       0,g2
 exit:     mov       r7,g14                   # restore g14
           movq      r8,g0                    # restore g0-g3
           movq      r12,g4                   # restore g4-g7
+		  ldq		_ISR_reg_save, g8		 # restore g8-g11
+		  ldl		_ISR_reg_save+16, g12    # restore g12-g13
           ret
 
 
@@ -197,3 +216,29 @@ __ISR_Dispatch:
         movq      r8,g0
         movq      r12,g4
         ret
+
+
+/*PAGE
+ *
+ *  void __i960_soft_reset_asm
+ *
+ *  Flush the register cache and save the important (fp, pfp, sp) registers,
+ *  which are clobbered by the reinit operation. (Not documented, but it happens).
+ */
+
+		.globl __i960_soft_reset_asm
+__i960_soft_reset_asm:
+		flushreg						   		# flush register cache
+		mov			fp, r4
+		mov			pfp, r5
+		mov			sp, r6
+		stt			r4, _soft_reset_reg_save    # save fp, pfp, sp
+		lda			__i960_reset_done, r4
+		ldconst 	0x300, r5
+		sysctl     	r5, r4, g0                  # reinit: clobbers almost all registers
+__i960_reset_done:
+		ldt 		_soft_reset_reg_save, r4    # restore fp, pfp, sp
+		mov			r4, fp
+		mov			r5, pfp
+		mov			r6, sp
+		ret
