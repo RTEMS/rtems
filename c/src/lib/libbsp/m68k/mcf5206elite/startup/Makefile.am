@@ -22,26 +22,25 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(PGM): $(OBJS)
 	$(make-rel)
 
-$(PROJECT_RELEASE)/lib/gdbinit: gdbinit
-	$(INSTALL_DATA) $< $@
-
-bsplib_DATA = linkcmds gdbinit linkcmds.flash
-
-$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_RELEASE)/lib/linkcmds.flash: linkcmds.flash
-	$(INSTALL_DATA) $< $@
+project_lib_DATA = linkcmds gdbinit linkcmds.flash
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds \
-    $(PROJECT_RELEASE)/lib/linkcmds.flash $(PROJECT_RELEASE)/lib/gdbinit
 
-all: $(OBJS) $(PGM) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(PGM)
+all-local: $(PGM) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bspclean.c bspstart.c init5206e.c linkcmds linkcmds.flash \
     gdbinit
+
+${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
+
+${PROJECT_RELEASE}/lib/gdbinit: gdbinit ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/gdbinit
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/gdbinit
+
+${PROJECT_RELEASE}/lib/linkcmds.flash: linkcmds.flash ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds.flash
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds.flash
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -21,8 +21,7 @@ $(PGM): $(OBJS)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-all: $(OBJS) $(PGM)
-
+all-local: $(OBJS) $(PGM)
 .PRECIOUS: $(PGM)
 
 EXTRA_DIST = nvram.c

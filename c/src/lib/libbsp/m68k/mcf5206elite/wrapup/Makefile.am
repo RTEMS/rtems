@@ -7,8 +7,8 @@ BSP_PIECES = startup console i2c tod nvram
 CPU_PIECES = clock console timer mbus
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard \
-    ../$(piece)/$(ARCH)/*.$(OBJEXT))) $(wildcard \
+OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
+    $(wildcard \
     ../../../../libcpu/$(RTEMS_CPU)/shared/misc/$(ARCH)/*.$(OBJEXT)) \
     $(foreach piece, $(CPU_PIECES), \
     ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(piece)/$(ARCH)/$(piece).rel) \
@@ -26,6 +26,6 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(LIB): $(OBJS)
 	$(make-library)
 
-all: $(OBJS) $(LIB) $(TMPINSTALL_FILES)
+all-local: $(LIB)
 
 include $(top_srcdir)/../../../../automake/local.am

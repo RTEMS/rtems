@@ -1,3 +1,13 @@
+2003-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* console/Makefile.am: Misc cleanups and fixes.
+	* i2c/Makefile.am: Misc cleanups and fixes.
+	* nvram/Makefile.am: Misc cleanups and fixes.
+	* start/Makefile.am: Misc cleanups and fixes.
+	* startup/Makefile.am: Misc cleanups and fixes.
+	* tod/Makefile.am: Misc cleanups and fixes.
+	* wrapup/Makefile.am: Misc cleanups and fixes.
+
 2003-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* console/Makefile.am: Remove all: $(ARCH)..
