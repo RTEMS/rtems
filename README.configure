@@ -26,7 +26,6 @@ RTEMS-specific option are supported:
         --enable-bare-cpu-model=<MODEL>
         --enable-bare-cpu-cflags=<FLAGS>
         --enable-gcc28               (also use enable-libcdir when disabled)
-        --enable-gmake-print-directory
         --enable-libcdir=<DIRECTORY>      (do not use if gcc 2.8 is enabled)
 	--enable-rtemsbsp="bsp1 bsp2 ..."
 	--enable-tests

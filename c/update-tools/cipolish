@@ -81,8 +81,12 @@ while( <> )
   {
     #remove the line
   }
-  elsif ( /^[ 	]*AC_SUBST\(RTEMS_USE_OWN_PDIR\)[ 	]*$/o ) 
-  {
+  elsif ( /^[\s\t]*AC_SUBST\(RTEMS_USE_OWN_PDIR\)[ 	]*$/o ) 
+  { # obsolete option
+    #remove the line
+  }
+  elsif ( /^[\s\t]*RTEMS_ENABLE_GMAKE_PRINT[     ]*$/o ) 
+  { # obsolete macro
     #remove the line
   }
   elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_NETWORKING\)[ 	]*$/o ) 
