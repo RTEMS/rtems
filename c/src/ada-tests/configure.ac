@@ -2,14 +2,14 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.57)
+AC_PREREQ(2.59)
 AC_INIT([rtems-ada-tests],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([support])
 RTEMS_TOP(../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
+AM_INIT_AUTOMAKE([no-define foreign 1.8])
 AM_MAINTAINER_MODE
 
 AC_CHECK_PROGS([M4],[gm4 m4]) 

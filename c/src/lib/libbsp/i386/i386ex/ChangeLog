@@ -1,5 +1,9 @@
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
+
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Cosmetics.
 
 2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

@@ -2,14 +2,14 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.57)
+AC_PREREQ(2.59)
 AC_INIT([rtems-c-src-tests-libtests],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([cpuuse])
 RTEMS_TOP([../..])
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
+AM_INIT_AUTOMAKE([no-define foreign 1.8])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_CXX

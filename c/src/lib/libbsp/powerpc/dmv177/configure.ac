@@ -2,13 +2,13 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.57)
+AC_PREREQ(2.59)
 AC_INIT([rtems-c-src-lib-libbsp-powerpc-dmv177],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([bsp_specs])
 RTEMS_TOP(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
-AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
+AM_INIT_AUTOMAKE([no-define foreign 1.8])
 RTEMS_BSP_CONFIGURE
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
