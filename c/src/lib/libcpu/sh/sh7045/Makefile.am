@@ -16,23 +16,6 @@ include_sh_HEADERS = include/io_types.h include/sci.h include/sh7_pfc.h \
     include/sh7_sci.h include/sci_termios.h
 include_rtems_score_HEADERS = include/ispsh7045.h include/iosh7045.h
 
-$(PROJECT_INCLUDE)/sh:
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/sh/%.h: include/%.h
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_INCLUDE)/rtems/score:
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/rtems/score/%.h: include/%.h
-	$(INSTALL_DATA) $< $@
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/sh \
-    $(include_sh_HEADERS:include/%=$(PROJECT_INCLUDE)/sh/%) \
-    $(PROJECT_INCLUDE)/rtems/score \
-    $(include_rtems_score_HEADERS:include/%=$(PROJECT_INCLUDE)/rtems/score/%)
-
 # clock
 
 PGMS = $(ARCH)/clock.rel
@@ -88,5 +71,45 @@ ${ARCH}/timer.rel: $(timer_rel_OBJECTS)
 all-local: $(ARCH) $(PGMS) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGMS)
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/sh/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/sh
+	@: > $(PROJECT_INCLUDE)/sh/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/score
+	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+
+$(PROJECT_INCLUDE)/sh/io_types.h: include/io_types.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/io_types.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/io_types.h
+
+$(PROJECT_INCLUDE)/sh/sci.h: include/sci.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/sci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/sci.h
+
+$(PROJECT_INCLUDE)/sh/sh7_pfc.h: include/sh7_pfc.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/sh7_pfc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/sh7_pfc.h
+
+$(PROJECT_INCLUDE)/sh/sh7_sci.h: include/sh7_sci.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/sh7_sci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/sh7_sci.h
+
+$(PROJECT_INCLUDE)/sh/sci_termios.h: include/sci_termios.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/sci_termios.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/sci_termios.h
+
+$(PROJECT_INCLUDE)/rtems/score/ispsh7045.h: include/ispsh7045.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ispsh7045.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ispsh7045.h
+
+$(PROJECT_INCLUDE)/rtems/score/iosh7045.h: include/iosh7045.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/iosh7045.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/iosh7045.h
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -15,23 +15,6 @@ include_rtems_scoredir = $(includedir)/rtems/score
 include_sh_HEADERS = include/sci.h include/sh7_pfc.h include/sh7_sci.h
 include_rtems_score_HEADERS = include/ispsh7032.h include/iosh7032.h
 
-$(PROJECT_INCLUDE)/sh:
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/sh/%.h: include/%.h
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_INCLUDE)/rtems/score:
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/rtems/score/%.h: include/%.h
-	$(INSTALL_DATA) $< $@
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/sh \
-    $(include_sh_HEADERS:include/%.h=$(PROJECT_INCLUDE)/sh/%.h) \
-    $(PROJECT_INCLUDE)/rtems/score \
-    $(include_rtems_score_HEADERS:include/%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
-
 # clock
 
 PGMS = $(ARCH)/clock.rel
@@ -100,5 +83,37 @@ ${ARCH}/timer.rel: $(timer_rel_OBJECTS)
 all-local: $(ARCH) $(PGMS) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGMS)
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/sh/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/sh
+	@: > $(PROJECT_INCLUDE)/sh/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/score
+	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+
+$(PROJECT_INCLUDE)/sh/sci.h: include/sci.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/sci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/sci.h
+
+$(PROJECT_INCLUDE)/sh/sh7_pfc.h: include/sh7_pfc.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/sh7_pfc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/sh7_pfc.h
+
+$(PROJECT_INCLUDE)/sh/sh7_sci.h: include/sh7_sci.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/sh7_sci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/sh7_sci.h
+
+$(PROJECT_INCLUDE)/rtems/score/ispsh7032.h: include/ispsh7032.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ispsh7032.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ispsh7032.h
+
+$(PROJECT_INCLUDE)/rtems/score/iosh7032.h: include/iosh7032.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/iosh7032.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/iosh7032.h
 
 include $(top_srcdir)/../../../../automake/local.am

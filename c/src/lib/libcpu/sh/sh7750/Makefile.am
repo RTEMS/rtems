@@ -13,27 +13,9 @@ include_shdir = $(includedir)/sh
 include_rtems_scoredir = $(includedir)/rtems/score
 
 include_sh_HEADERS = include/sh/sh4uart.h
-include_rtems_score_HEADERS = \
-include/rtems/score/sh7750_regs.h \
-include/rtems/score/ipl.h \
-include/rtems/score/iosh7750.h \
-include/rtems/score/ispsh7750.h \
-include/rtems/score/sh4_regs.h
-
-$(PROJECT_INCLUDE)/sh:
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/rtems/score:
-	$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/%.h: include/%.h
-	$(INSTALL_DATA) $< $@
-
-PREINSTALL_FILES = \
-    $(PROJECT_INCLUDE)/sh \
-    $(include_sh_HEADERS:include/%=$(PROJECT_INCLUDE)/%) \
-    $(PROJECT_INCLUDE)/rtems/score \
-    $(include_rtems_score_HEADERS:include/%=$(PROJECT_INCLUDE)/%)
+include_rtems_score_HEADERS = include/rtems/score/sh7750_regs.h \
+    include/rtems/score/ipl.h include/rtems/score/iosh7750.h \
+    include/rtems/score/ispsh7750.h include/rtems/score/sh4_regs.h
 
 all-local: $(TMPINSTALL_FILES)
 
@@ -94,5 +76,41 @@ ${ARCH}/timer.rel: $(timer_rel_OBJECTS)
 all-local: $(ARCH) $(PGMS) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGMS)
+
+PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/sh/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/sh
+	@: > $(PROJECT_INCLUDE)/sh/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rtems/score
+	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+
+$(PROJECT_INCLUDE)/sh/sh4uart.h: include/sh/sh4uart.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/sh4uart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/sh4uart.h
+
+$(PROJECT_INCLUDE)/rtems/score/sh7750_regs.h: include/rtems/score/sh7750_regs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/sh7750_regs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/sh7750_regs.h
+
+$(PROJECT_INCLUDE)/rtems/score/ipl.h: include/rtems/score/ipl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ipl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ipl.h
+
+$(PROJECT_INCLUDE)/rtems/score/iosh7750.h: include/rtems/score/iosh7750.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/iosh7750.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/iosh7750.h
+
+$(PROJECT_INCLUDE)/rtems/score/ispsh7750.h: include/rtems/score/ispsh7750.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ispsh7750.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ispsh7750.h
+
+$(PROJECT_INCLUDE)/rtems/score/sh4_regs.h: include/rtems/score/sh4_regs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/sh4_regs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/sh4_regs.h
 
 include $(top_srcdir)/../../../../automake/local.am
