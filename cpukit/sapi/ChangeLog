@@ -1,6 +1,7 @@
-2004-03-05	Joel Sherrill <joel@OARcorp.com>
+2004-06-08	Joel Sherrill <joel@OARcorp.com>
 
-	* include/confdefs.h:
+	* ChangeLog, include/confdefs.h: Reverse previous accidental commit
+	which included too much and had no PR.
 
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 

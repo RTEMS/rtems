@@ -44,7 +44,6 @@ extern "C" {
  * Include the executive's configuration
  */
 #include <rtems/score/cpuopts.h>
-#include <rtems/score/apimutex.h>
 
 extern rtems_initialization_tasks_table Initialization_tasks[];
 extern rtems_driver_address_table       Device_drivers[];
@@ -473,7 +472,6 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 
 #include <sys/types.h>
 #include <signal.h>
-#include <limits.h>
 #include <mqueue.h>
 #include <rtems/posix/cond.h>
 #include <rtems/posix/mqueue.h>
@@ -564,8 +562,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 
 #define CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) \
   ((_mutexes) * \
-   ( sizeof(POSIX_Mutex_Control) + CONFIGURE_OBJECT_TABLE_STUFF + \
-     NAME_MAX ) )
+   ( sizeof(POSIX_Mutex_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
 
 #define CONFIGURE_MEMORY_FOR_POSIX_CONDITION_VARIABLES(_condition_variables) \
   ((_condition_variables) * \
@@ -586,14 +583,11 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 
 #define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
   ((_message_queues) * \
-   ( sizeof( POSIX_Message_queue_Control) + \
-    CONFIGURE_OBJECT_TABLE_STUFF + \
-    NAME_MAX ) )
+   ( sizeof( POSIX_Message_queue_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
 #define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
   ((_semaphores) * \
-   ( sizeof( POSIX_Semaphore_Control) + \
-    CONFIGURE_OBJECT_TABLE_STUFF + \
-    NAME_MAX ) )
+   ( sizeof( POSIX_Semaphore_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+  
 
 #define CONFIGURE_MEMORY_FOR_POSIX \
   ( \
@@ -811,21 +805,12 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 #define CONFIGURE_OBJECT_TABLE_STUFF \
   ( sizeof(Objects_Control *) + sizeof(rtems_name *) + sizeof(rtems_name) )
 
-#if defined(RTEMS_NEWLIB)
-#include <reent.h>
-
-#define CONFIGURE_MEMORY_PER_TASK_FOR_LIBC_REENTRANCY sizeof(struct _reent)
-#else
-#define CONFIGURE_MEMORY_PER_TASK_FOR_LIBC_REENTRANCY 0
-#endif
-
 #define CONFIGURE_MEMORY_FOR_TASKS(_tasks) \
   (((_tasks) + 1 ) * \
    ((sizeof(Thread_Control) + CONTEXT_FP_SIZE + \
       STACK_MINIMUM_SIZE + sizeof( RTEMS_API_Control ) + \
       CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API + \
       CONFIGURE_MEMORY_PER_TASK_FOR_ITRON_API + \
-      CONFIGURE_MEMORY_PER_TASK_FOR_LIBC_REENTRANCY + \
       CONFIGURE_OBJECT_TABLE_STUFF)) \
   )
 
@@ -895,17 +880,11 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 #define CONFIGURE_EXTRA_TASK_STACKS 0
 #endif
 
-#define CONFIGURE_API_MUTEX_MEMORY \
-  ( (1) * \
-    ( sizeof(API_Mutex_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) \
-  ) 
-
 #define CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD \
   ( CONFIGURE_MEMORY_FOR_TASKS(1) +    /* IDLE */ \
     (256 * 12) +                       /* Ready chains */ \
     256        +                       /* name/ptr table overhead */ \
-    CONFIGURE_INTERRUPT_STACK_MEMORY + /* interrupt stack */ \
-    CONFIGURE_API_MUTEX_MEMORY         /* allocation mutex */ \
+    CONFIGURE_INTERRUPT_STACK_MEMORY   /* interrupt stack */ \
   )
 
 /*
