@@ -31,7 +31,7 @@
 #include <bsp.h>
 #include <rtems.h>
 #include <rtems/libio.h>
-#include <iosupp.h>
+#include <rtems/iosupp.h>
 
 #ifndef BSP_CONSOLE_DEVNAME
 #error Missing BSP_CONSOLE_DEVNAME
