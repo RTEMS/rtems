@@ -26,7 +26,7 @@ Use the following commands to unarchive the gdb distribution:
 
 @example
 cd tools
-tar xzf ../arc/@value{GDB-TAR}
+tar xzf ../archive/@value{GDB-TAR}
 @end example
 
 The directory @value{GDB-UNTAR} is created under the tools directory.
@@ -48,7 +48,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{GDB-UNTAR}
-zcat arc/@value{GDB-GNATPATCH} | patch -p1
+zcat archive/@value{GDB-GNATPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -90,7 +90,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{GDB-UNTAR}
-zcat arc/@value{GDB-RTEMSPATCH} | patch -p1
+zcat archive/@value{GDB-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following

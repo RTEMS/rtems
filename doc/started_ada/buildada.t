@@ -21,50 +21,28 @@ directory.  The command sequence to do this is shown
 below:
 
 @example
-mkdir arc
+mkdir archive
 mkdir tools
 @end example
 
 This will result in an initial directory structure similar to the
 one shown in the following figure:
 
-@ifset use-ascii
 @example
 @group
-                parent directory common to the 
-               tools and archive subdirectories
-                             |
-      +----------------------+----------------------+
-      |                                             |  
-   tools                                           arc
+/whatever/prefix/you/choose/
+        archive/
+        tools/
+
 @end group
 @end example
-@end ifset
 
-
-@ifset use-tex
-@c for now use the ascii version
-@example 
-@group
-                parent directory common to the 
-               tools and archive subdirectories
-                             |
-      +----------------------+----------------------+
-      |                                             |
-   tools                                           arc
-@end group
-@end example
-@tex
-@end tex
-@end ifset
-
-
-@ifset use-html
-@html
-<IMG SRC="sfile12c.jpg" WIDTH=417 HEIGHT=178 
-    ALT="Starting Directory Organization">
-@end html
-@end ifset
+@c @ifset use-html
+@c @html
+@c <IMG SRC="sfile12c.jpg" WIDTH=417 HEIGHT=178 
+@c     ALT="Starting Directory Organization">
+@c @end html
+@c @end ifset
 
 @section Get All the Pieces 
 
@@ -161,10 +139,10 @@ tar files using the following command sequence:
 
 @example
 cd tools
-tar xzf ../arc/@value{GCC-TAR}
-tar xzf ../arc/@value{GNAT-TAR}
-tar xzf ../arc/@value{BINUTILS-TAR}
-tar xzf ../arc/@value{NEWLIB-TAR}
+tar xzf ../archive/@value{GCC-TAR}
+tar xzf ../archive/@value{GNAT-TAR}
+tar xzf ../archive/@value{BINUTILS-TAR}
+tar xzf ../archive/@value{NEWLIB-TAR}
 @end example
 
 After the compressed tar files have been unpacked, the following
@@ -251,7 +229,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{GCC-UNTAR}
-zcat arc/@value{GCC-RTEMSPATCH} | patch -p1
+zcat archive/@value{GCC-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -283,7 +261,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{BINUTILS-UNTAR}
-zcat arc/@value{BINUTILS-RTEMSPATCH} | patch -p1
+zcat archive/@value{BINUTILS-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -316,7 +294,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{NEWLIB-UNTAR}
-zcat arc/@value{NEWLIB-RTEMSPATCH} | patch -p1
+zcat archive/@value{NEWLIB-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -349,7 +327,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{GNAT-UNTAR}
-zcat arc/@value{GNAT-RTEMSPATCH} | patch -p1
+zcat archive/@value{GNAT-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -387,7 +365,8 @@ cp -r ada ../../../@value{GCC-UNTAR}
 
 @section Modify the bit_ada Script
 
-Copy the @code{bit_ada} script from arc to the tools directory.
+Copy the @code{bit_ada} script from @code{archive} to the @code{tools}
+directory.
 
 Edit the @code{bit_ada} file to alter the following environmental variables:
 

@@ -16,7 +16,7 @@ tools directory:
 
 @example
 cd tools
-tar xzf ../arc/@value{RTEMS-TAR}
+tar xzf ../archive/@value{RTEMS-TAR}
 @end example
 
 @section Add <INSTALL_POINT>/bin to Executable PATH

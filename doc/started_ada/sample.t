@@ -14,7 +14,7 @@ Use the following command to unarchive the sample application:
 
 @example
 cd tools
-tar xzf ../arc/hello_world_ada.tgz
+tar xzf ../archive/hello_world_ada.tgz
 @end example
 
 @section Create a BSP Specific Makefile
