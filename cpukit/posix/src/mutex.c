@@ -45,6 +45,14 @@ int _POSIX_Mutex_MP_Send_request_packet (
   return POSIX_MP_NOT_IMPLEMENTED();
 }
 
+void POSIX_Threads_mutex_MP_support(
+  Thread_Control *the_thread,
+  Objects_Id      id
+)
+{
+  (void) POSIX_MP_NOT_IMPLEMENTED();   /* XXX: should never get here */
+}
+
 /*
  *  END OF TEMPORARY
  */
@@ -360,7 +368,8 @@ int pthread_mutex_destroy(
   return POSIX_BOTTOM_REACHED();
 }
 
-/*
+/*PAGE
+ *
  *  _POSIX_Mutex_Lock_support
  *
  *  A support routine which implements guts of the blocking, non-blocking, and
@@ -436,14 +445,6 @@ int pthread_mutex_trylock(
  *        
  *  NOTE: P1003.4b/D8 adds pthread_mutex_timedlock(), p. 29
  */
-
-void POSIX_Threads_mutex_MP_support(
-  Thread_Control *the_thread,
-  Objects_Id      id
-)
-{
-  (void) POSIX_MP_NOT_IMPLEMENTED();   /* XXX: should never get here */
-}
 
 int pthread_mutex_unlock(
   pthread_mutex_t           *mutex
