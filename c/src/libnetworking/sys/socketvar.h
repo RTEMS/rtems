@@ -72,7 +72,7 @@ struct socket {
 	short	so_incqlen;		/* number of unaccepted incomplete
 					   connections */
 	short	so_qlimit;		/* max number queued connections */
-	short	so_timeo;		/* connection timeout */
+	u_long	so_timeo;		/* connection timeout */
 	u_short	so_error;		/* error affecting connection */
 	pid_t	so_pgid;		/* pgid for signals */
 	u_long	so_oobmark;		/* chars to oob mark */
@@ -88,7 +88,7 @@ struct socket {
 		struct	mbuf *sb_mb;	/* the mbuf chain */
 		struct	selinfo sb_sel;	/* process selecting read/write */
 		short	sb_flags;	/* flags, see below */
-		short	sb_timeo;	/* timeout for read/write */
+		u_long	sb_timeo;	/* timeout for read/write */
 	} so_rcv, so_snd;
 #define	SB_MAX		(256*1024)	/* default for max chars in sockbuf */
 #define	SB_LOCK		0x01		/* lock on data queue */

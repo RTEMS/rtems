@@ -682,6 +682,162 @@ static void printip(char *prefix,struct in_addr addr)
 	 ip >> 24, (ip >> 16) & 255 ,(ip >> 8) & 255 ,ip & 255 );
 }
 
+static int dhcpOptionOverload = 0;
+static char dhcp_gotgw = 0;
+static char dhcp_gotnetmask = 0;
+static char dhcp_gotserver = 0;
+static char dhcp_gotlogserver = 0;
+static struct sockaddr_in dhcp_netmask;
+static struct sockaddr_in dhcp_gw;
+
+static void
+processOptions (unsigned char *optbuf, int optbufSize)
+{
+  int j = 0;
+  int len;
+  int code, ncode;
+  char *p;
+
+  ncode = optbuf[0];
+  while (j < optbufSize) {
+    code = optbuf[j] = ncode;
+    if (code == 255)
+      return;
+    if (code == 0) {
+      j++;
+      continue;
+    }
+    len = optbuf[j+1];
+    j += 2;
+    if ((len + j) >= optbufSize) {
+      printf ("Truncated field for code %d", code);
+      return;
+    }
+    ncode = optbuf[j+len];
+    optbuf[j+len] = '\0';
+    p = &optbuf[j];
+    j += len;
+
+    /*
+     * Process the option
+     */
+    switch (code) {
+    case 1:
+      /* Subnet mask */
+      if (len!=4) 
+        panic("bootpc: subnet mask len is %d",len);
+      bcopy (p, &dhcp_netmask.sin_addr, 4);
+      dhcp_gotnetmask = 1;
+      break;
+
+    case 2:    /* Time offset, unused */
+      break;
+
+    case 3:
+      /* Routers */
+      if (len % 4) 
+        panic ("bootpc: Router Len is %d", len);
+      if (len > 0) {
+        bcopy(p, &dhcp_gw.sin_addr, 4);
+	dhcp_gotgw = 1;
+      }
+      break;
+
+    case 6:
+      /* Domain Name servers */
+      if (len % 4) 
+        panic ("bootpc: DNS Len is %d", len);
+      {
+      int dlen = 0;
+      while ((dlen < len) &&
+             (rtems_bsdnet_nameserver_count < sizeof rtems_bsdnet_config.name_server /
+        sizeof rtems_bsdnet_config.name_server[0])) {
+        bcopy (p+dlen,
+        &rtems_bsdnet_nameserver[rtems_bsdnet_nameserver_count],
+        4);
+        printip("Domain Name Server",
+          rtems_bsdnet_nameserver[rtems_bsdnet_nameserver_count]);
+        rtems_bsdnet_nameserver_count++;
+        dlen += 4;
+      }
+      }
+      break;
+
+    case 12:
+      /* Host name */
+      if (len>=MAXHOSTNAMELEN)
+        panic ("bootpc: hostname >=%d bytes", MAXHOSTNAMELEN);
+      if (sethostname (p, len) < 0)
+        panic("Can't set host name");
+      printf("Hostname is %s\n", p);
+      break;
+
+    case 7:
+      /* Log servers */
+      if (len % 4) 
+        panic ("bootpc: Log server Len is %d", len);
+      if (len > 0) {
+        bcopy(p, &rtems_bsdnet_log_host_address, 4);
+	dhcp_gotlogserver = 1;
+      }
+      break;
+
+    case 15:
+      /* Domain name */
+      if (p[0]) {
+        rtems_bsdnet_domain_name = strdup (p);
+        printf("Domain name is %s\n", rtems_bsdnet_domain_name);
+      }
+      break;
+
+    case 16:  /* Swap server IP address. unused */
+      break;
+
+    case 52:
+      /* DHCP option override */
+      if (len != 1) 
+        panic ("bootpc: DHCP option overload len is %d", len);
+      dhcpOptionOverload = p[0];
+      break;
+
+    case 128: /* Site-specific option for DHCP servers that 
+               *   a) don't supply tag 54
+               * and
+               *   b) don't supply the server address in siaddr
+               * For example, on Solaris 2.6 in.dhcpd, include in the dhcptab:
+               *    Bootsrv s Site,128,IP,1,1
+               * and use that symbol in the macro that defines the client:
+               *    Bootsrv=<tftp-server-ip-address>
+               */
+    case 54:
+      /* DHCP server */
+      if (len != 4) 
+        panic ("bootpc: DHCP server len is %d", len);
+      bcopy(p, &rtems_bsdnet_bootp_server_address, 4);
+      dhcp_gotserver = 1;
+      break;
+
+    case 66:
+      /* DHCP server name option */
+      if (p[0])
+        rtems_bsdnet_bootp_server_name = strdup (p);
+      break;
+
+    case 67:
+      /* DHCP bootfile option */
+      if (p[0])
+        rtems_bsdnet_bootp_boot_file_name = strdup (p);
+      break;
+
+    default:
+      printf ("Ignoring BOOTP/DHCP option code %d\n", code);
+      break;
+    }
+  }
+}
+
+#define EALEN 6
+
 void
 bootpc_init(void)
 {
@@ -692,27 +848,9 @@ bootpc_init(void)
   struct ifreq ireq;
   struct ifnet *ifp;
   struct socket *so;
-  int error;
-  int code,ncode,len;
   int j;
-  char *p;
-  unsigned int ip;
-
+  int error;
   struct sockaddr_in myaddr;
-  struct sockaddr_in netmask;
-  struct sockaddr_in gw;
-  int gotgw=0;
-  int gotnetmask=0;
-#if !defined(__rtems__)
-  int gotrootpath=0;
-  int gotswappath=0;
-#endif
-  char lookup_path[24];
-
-#define EALEN 6
-#if !defined(__rtems__)
-  unsigned char ea[EALEN];
-#endif
   struct ifaddr *ifa;
   struct sockaddr_dl *sdl = NULL;
   char *delim;
@@ -723,12 +861,6 @@ bootpc_init(void)
    */
   if (nfs_diskless_valid)
     return;
-
-  /*
-   * Bump time if 0.
-  if (!time.tv_sec)
-    time.tv_sec++;
-   */
 
   /*
    * Find a network interface.
@@ -803,166 +935,77 @@ bootpc_init(void)
   if (error)
     panic("BOOTP call failed -- error %d", error);
   
+  /*
+   * Initialize network address structures
+   */
   bzero(&myaddr,sizeof(myaddr));
-  bzero(&netmask,sizeof(netmask));
-  bzero(&gw,sizeof(gw));
-
+  bzero(&dhcp_netmask,sizeof(dhcp_netmask));
+  bzero(&dhcp_gw,sizeof(dhcp_gw));
   myaddr.sin_len = sizeof(myaddr);
   myaddr.sin_family = AF_INET;
+  dhcp_netmask.sin_len = sizeof(dhcp_netmask);
+  dhcp_netmask.sin_family = AF_INET;
+  dhcp_gw.sin_len = sizeof(dhcp_gw);
+  dhcp_gw.sin_family= AF_INET;
 
-  netmask.sin_len = sizeof(netmask);
-  netmask.sin_family = AF_INET;
-
-  gw.sin_len = sizeof(gw);
-  gw.sin_family= AF_INET;
-
-  rtems_bsdnet_bootp_server_address = reply.siaddr;
-  rtems_bsdnet_log_host_address = reply.siaddr;
-
+  /*
+   * Set our address
+   */
   myaddr.sin_addr = reply.yiaddr;
-
-  ip = ntohl(myaddr.sin_addr.s_addr);
-  sprintf(lookup_path,"swap.%d.%d.%d.%d",
-	  ip >> 24, (ip >> 16) & 255 ,(ip >> 8) & 255 ,ip & 255 );
-
   printip("My ip address",myaddr.sin_addr);
 
-  printip("Server ip address",reply.siaddr);
-
-  gw.sin_addr = reply.giaddr;
-  printip("Gateway ip address",reply.giaddr);
-
-  if (reply.sname[0])
-    printf("Server name is %s\n",reply.sname);
-  if (reply.file[0])
-    printf("boot file is %s\n",reply.file);
-  rtems_bsdnet_bootp_boot_file_name = strdup (reply.file);
+  /*
+   * Process BOOTP/DHCP options
+   */
   if (reply.vend[0]==99 && reply.vend[1]==130 &&
       reply.vend[2]==83 && reply.vend[3]==99) {
-    j=4;
-    ncode = reply.vend[j];
-    while (j<sizeof(reply.vend)) {
-      code = reply.vend[j] = ncode;
-      if (code==255)
-	break;
-      if (code==0) {
-	j++;
-	continue;
-      }
-      len = reply.vend[j+1];
-      j+=2;
-      if (len+j>=sizeof(reply.vend)) {
-	printf("Truncated field");
-	break;
-      }
-      ncode = reply.vend[j+len];
-      reply.vend[j+len]='\0';
-      p = &reply.vend[j];
-      switch (code) {
-      case 1:
-	if (len!=4) 
-	  panic("bootpc: subnet mask len is %d",len);
-	bcopy(&reply.vend[j],&netmask.sin_addr,4);
-	gotnetmask=1;
-	printip("Subnet mask",netmask.sin_addr);
-	break;
-      case 6:
-	/* Domain Name servers */
-	if (len % 4) 
-	  panic("bootpc: DNS Len is %d",len);
-	{
-	int dlen = 0;
-	while ((dlen < len) &&
-	  (rtems_bsdnet_nameserver_count < sizeof rtems_bsdnet_config.name_server /
-				  sizeof rtems_bsdnet_config.name_server[0])) {
-	    bcopy(&reply.vend[j+dlen],
-			&rtems_bsdnet_nameserver[rtems_bsdnet_nameserver_count],
-			4);
-	    printip("Domain Name Server",
-			rtems_bsdnet_nameserver[rtems_bsdnet_nameserver_count]);
-	    rtems_bsdnet_nameserver_count++;
-	    dlen += 4;
-	  }
-	}
-	break;
-      case 16:	/* Swap server IP address. unused */
-      case 2:
-	/* Time offset */
-	break;
-      case 3:
-	/* Routers */
-	if (len % 4) 
-	  panic("bootpc: Router Len is %d",len);
-	if (len > 0) {
-	  bcopy(&reply.vend[j],&gw.sin_addr,4);
-	  printip("Router",gw.sin_addr);
-	  gotgw=1;
-	}
-	break;
-      case 7:
-	/* Log servers */
-	if (len % 4) 
-	  panic("bootpc: Log server len is %d",len);
-	if (len > 0) {
-	  bcopy(&reply.vend[j],&rtems_bsdnet_log_host_address,4);
-	  printip("Log server",rtems_bsdnet_log_host_address);
-	}
-	break;
-      case 12:
-	if (len>=MAXHOSTNAMELEN)
-	  panic("bootpc: hostname  >=%d bytes",MAXHOSTNAMELEN);
-	if (sethostname (&reply.vend[j], len) < 0)
-	  panic("Can't set host name");
-	printf("Hostname is %.*s\n",len,&reply.vend[j]);
-	break;
-      case 15:
-	/* Domain name */
-	rtems_bsdnet_domain_name = strdup (&reply.vend[j]);
-	if (rtems_bsdnet_domain_name)
-		printf("Domain name is %s\n", rtems_bsdnet_domain_name);
-	break;
-      default:
-	printf("Ignoring field type %d\n",code);
-      }
-      j+=len;
-    }
+    processOptions (&reply.vend[4], sizeof(reply.vend) - 4);
   }
+  if (dhcpOptionOverload & 1) {
+    processOptions (reply.file, sizeof reply.file);
+  }
+  else {
+    if (reply.file[0])
+      rtems_bsdnet_bootp_boot_file_name = strdup (reply.file);
+  }
+  if (dhcpOptionOverload & 2) {
+    processOptions (reply.sname, sizeof reply.sname);
+  }
+  else {
+    if (reply.sname[0])
+      rtems_bsdnet_bootp_server_name = strdup (reply.sname);
+  }
+  if (rtems_bsdnet_bootp_server_name)
+    printf ("Server name is %s\n", rtems_bsdnet_bootp_server_name);
+  if (rtems_bsdnet_bootp_boot_file_name)
+    printf ("Boot file is %s\n", rtems_bsdnet_bootp_boot_file_name);
 
-  if (!gotnetmask) {
+  /*
+   * Use defaults if values were not supplied by BOOTP/DHCP options
+   */
+  if (!dhcp_gotnetmask) {
     if (IN_CLASSA(ntohl(myaddr.sin_addr.s_addr)))
-      netmask.sin_addr.s_addr = htonl(IN_CLASSA_NET);
+      dhcp_netmask.sin_addr.s_addr = htonl(IN_CLASSA_NET);
     else if (IN_CLASSB(ntohl(myaddr.sin_addr.s_addr)))
-      netmask.sin_addr.s_addr = htonl(IN_CLASSB_NET);
+      dhcp_netmask.sin_addr.s_addr = htonl(IN_CLASSB_NET);
     else 
-      netmask.sin_addr.s_addr = htonl(IN_CLASSC_NET);
+      dhcp_netmask.sin_addr.s_addr = htonl(IN_CLASSC_NET);
   }
-  if (!gotgw) {
-    /* Use proxyarp */
-    gw.sin_addr.s_addr = myaddr.sin_addr.s_addr;
-  }
+  printip ("Subnet mask", dhcp_netmask.sin_addr);
+  if (!dhcp_gotserver)
+   rtems_bsdnet_bootp_server_address = reply.siaddr;
+  printip ("Server ip address" ,rtems_bsdnet_bootp_server_address);
+  if (!dhcp_gotgw)
+    dhcp_gw.sin_addr = reply.giaddr;
+  printip ("Gateway ip address", dhcp_gw.sin_addr);
+  if (!dhcp_gotlogserver)
+    rtems_bsdnet_log_host_address = rtems_bsdnet_bootp_server_address;
+  printip ("Log server ip address", rtems_bsdnet_log_host_address);
   
-#if 0
-  bootpboot_p_iflist();
-  bootpboot_p_rtlist();
-#endif
+  /*
+   * Configure the interface with the new settings
+   */
   error = bootpc_adjust_interface(&ireq,so,
-				  &myaddr,&netmask,&gw,procp);
-  
+				  &myaddr,&dhcp_netmask,&dhcp_gw,procp);
   soclose(so);
-
-#if 0
-  bootpboot_p_iflist();
-  bootpboot_p_rtlist();
-#endif
-
-
-#if 0
-    myaddr.sin_addr.s_addr | ~ netmask.sin_addr.s_addr;
-#endif
-
-#if 0
-  bootpboot_p_iflist();
-  bootpboot_p_rtlist();
-#endif
-  return;
 }

@@ -49,6 +49,7 @@
 #include <sys/resourcevar.h>
 #include <sys/signalvar.h>
 #include <sys/sysctl.h>
+#include <limits.h>
 
 static int somaxconn = SOMAXCONN;
 SYSCTL_INT(_kern, KERN_SOMAXCONN, somaxconn, CTLFLAG_RW, &somaxconn, 0, "");
@@ -948,14 +949,14 @@ sosetopt(so, level, optname, m0)
 		case SO_RCVTIMEO:
 		    {
 			struct timeval *tv;
-			short val;
+			unsigned long val;
 
 			if (m == NULL || m->m_len < sizeof (*tv)) {
 				error = EINVAL;
 				goto bad;
 			}
 			tv = mtod(m, struct timeval *);
-			if (tv->tv_sec > SHRT_MAX / hz - hz) {
+			if (tv->tv_sec >= (ULONG_MAX - hz) / hz) {
 				error = EDOM;
 				goto bad;
 			}
@@ -1065,7 +1066,7 @@ sogetopt(so, level, optname, mp)
 		case SO_SNDTIMEO:
 		case SO_RCVTIMEO:
 		    {
-			int val = (optname == SO_SNDTIMEO ?
+			unsigned long val = (optname == SO_SNDTIMEO ?
 			     so->so_snd.sb_timeo : so->so_rcv.sb_timeo);
 
 			m->m_len = sizeof(struct timeval);

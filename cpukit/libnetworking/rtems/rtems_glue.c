@@ -85,6 +85,7 @@ int nfs_diskless_valid;
 struct in_addr rtems_bsdnet_log_host_address;
 struct in_addr rtems_bsdnet_bootp_server_address;
 char *rtems_bsdnet_bootp_boot_file_name;
+char *rtems_bsdnet_bootp_server_name;
 char *rtems_bsdnet_domain_name;
 struct in_addr rtems_bsdnet_nameserver[sizeof rtems_bsdnet_config.name_server /
 			sizeof rtems_bsdnet_config.name_server[0]];

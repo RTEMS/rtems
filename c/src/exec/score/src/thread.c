@@ -271,6 +271,8 @@ void _Thread_Dispatch( void )
     _Thread_Dispatch_disable_level = 1;
     _Context_Switch_necessary = FALSE;
     _Thread_Executing = heir;
+    executing->rtems_ada_self = rtems_ada_self;
+    rtems_ada_self = heir->rtems_ada_self;
     _ISR_Enable( level );
 
     heir->ticks_executed++;
@@ -436,6 +438,12 @@ boolean _Thread_Initialize(
   void                *stack = NULL;
   void                *fp_area;
   void                *extensions_area;
+
+  /*
+   *  Initialize the Ada self pointer
+   */
+
+  the_thread->rtems_ada_self = NULL;
 
   /*
    *  Allocate and Initialize the stack for this thread.

@@ -11,6 +11,7 @@
  * Values that may be obtained by BOOTP
  */
 extern struct in_addr rtems_bsdnet_bootp_server_address;
+extern char *rtems_bsdnet_bootp_server_name;
 extern char *rtems_bsdnet_bootp_boot_file_name;
 
 /*

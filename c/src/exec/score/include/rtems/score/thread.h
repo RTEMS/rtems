@@ -177,6 +177,7 @@ struct Thread_Control_struct {
   boolean                               do_post_task_switch_extension;
 
   boolean                               is_preemptible;
+  void                                 *rtems_ada_self;
   unsigned32                            cpu_time_budget;
   Thread_CPU_budget_algorithms          budget_algorithm;
   Thread_CPU_budget_algorithm_callout   budget_callout;
@@ -191,6 +192,12 @@ struct Thread_Control_struct {
   void                                **extensions;
 };
 
+/*
+ *  Self for the GNU Ada Run-Time
+ */
+
+SCORE_EXTERN void *rtems_ada_self;
+ 
 /*
  *  The following defines the information control block used to
  *  manage this class of objects.

@@ -207,7 +207,7 @@ void _POSIX_signals_Clear_process_signals(
 
   _ISR_Disable( level );
     _POSIX_signals_Pending &= ~mask;
-    if ( !_POSIX_signals_Pending )
+    if ( !_POSIX_signals_Pending && _Thread_Do_post_task_switch_extension )
       _Thread_Do_post_task_switch_extension--;
   _ISR_Enable( level );
 }

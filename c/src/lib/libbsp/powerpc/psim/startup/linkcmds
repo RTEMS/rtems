@@ -19,9 +19,10 @@ ENTRY(_start)
 /* Do we need any of these for elf?
    __DYNAMIC = 0;    */
 PROVIDE (PSIM_INSTRUCTIONS_PER_MICROSECOND = 100);
+PROVIDE (CPU_PPC_CLICKS_PER_MS = 16667);
 MEMORY
   {
-        RAM : ORIGIN = 0, LENGTH = 4M
+        RAM : ORIGIN = 0, LENGTH = 8M
         EPROM : ORIGIN = 0xFFF00000, LENGTH = 0x20000
   }
 
@@ -67,7 +68,7 @@ SECTIONS
   .fini		  : { *(.fini)		} >RAM
   .rodata  	  : { *(.rodata) *(.gnu.linkonce.r*) } >RAM
   .rodata1	  : { *(.rodata1) 	} >RAM
-  _etext = .;
+  PROVIDE (_etext = .);
   PROVIDE (etext = .);
   PROVIDE (__SDATA2_START__ = .);
   .sdata2   	  : { *(.sdata2) 	} >RAM
@@ -139,7 +140,7 @@ SECTIONS
   _edata  =  .;
   PROVIDE (edata = .);
 
-  PROVIDE (RAM_END = 0x3f0000);
+  PROVIDE (RAM_END = 0x7f0000);
   .sbss      :
   {
     PROVIDE (__sbss_start = .);
