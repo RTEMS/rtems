@@ -43,7 +43,15 @@ void Screen9()
     RTEMS_INVALID_ADDRESS,
     "rtems_interrupt_catch with invalid handler"
   );
-  puts( "TA1 - rtems_interrupt_catch - RTEMS_INVALID_ADDRESS" );
+  puts( "TA1 - rtems_interrupt_catch - bad handler RTEMS_INVALID_ADDRESS" );
+
+  status = rtems_interrupt_catch( Service_routine, 3, NULL );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_interrupt_catch with invalid old isr pointer"
+  );
+  puts( "TA1 - rtems_interrupt_catch - old isr RTEMS_INVALID_ADDRESS" );
 
   status = rtems_signal_send( 100, RTEMS_SIGNAL_1 );
   fatal_directive_status(
