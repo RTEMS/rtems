@@ -69,7 +69,7 @@ END-INFO-DIR-ENTRY
 @include memmodel.texi
 @include intr.texi
 @include fatalerr.texi
-@c @include bsp.texi
+@include bsp.texi
 @c @include cputable.texi
 @c @include wksheets.texi
 @c @include ../../common/timing.texi
@@ -88,7 +88,7 @@ Applications Supplement.
 * Memory Model::
 * Interrupt Processing::
 * Default Fatal Error Processing::
-** Board Support Packages::
+* Board Support Packages::
 ** Processor Dependent Information Table::
 ** Memory Requirements::
 ** Timing Specification::
