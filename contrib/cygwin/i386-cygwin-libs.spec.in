@@ -1,0 +1,49 @@
+#
+# spec file for package i386-cygwin-libs
+# 
+
+%define cygwin_version @CYGWIN_VERS@
+%define cygwin_rpmvers @CYGWIN_RPMVERS@
+
+Vendor:       Ralf Corsepius
+Distribution: Linux
+Name:         i386-cygwin-libs
+Release:      @CYGWIN_RPMREL@
+Copyright:    Red Hat Inc.
+Group:        Development/Libraries
+Provides:     i386-cygwin-libs
+
+Autoreqprov:  	off
+Packager:     	corsepiu@faw.uni-ulm.de
+Prefix:		/opt/cygwin
+BuildRoot:	@RPM_BUILD_ROOT@
+
+Version:      	%cygwin_rpmvers
+Summary:      	cygwin
+
+Source0:	ftp://sourceware.cygnus.com/pub/cygwin/latest/cygwin/cygwin-%{cygwin_version}.tar.gz
+NoSource:	0
+
+%description
+Cygwin libs
+
+%prep
+%setup -c
+
+%build
+  rm -rf usr/bin
+  rm -rf usr/info
+  mv usr i386-cygwin
+
+%install
+  mkdir -p $RPM_BUILD_ROOT%{prefix}
+  cp -a i386-cygwin $RPM_BUILD_ROOT%{prefix}
+
+%clean
+# let rpm --clean remove BuildRoot iff using the default BuildRoot
+  test "$RPM_BUILD_ROOT" = "@RPM_BUILD_ROOT@" && \
+    rm -rf $RPM_BUILD_ROOT
+
+
+%files
+%{prefix}/i386-cygwin

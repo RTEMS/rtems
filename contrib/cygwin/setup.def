@@ -1,0 +1,16 @@
+#
+# Cygwin cross tools setup
+#
+# $Id$
+#
+binutils_version=20001221-1
+binutils_rpm_release=1
+mingw_version=20010130-1
+mingw_rpm_release=1
+w32api_version=20010130-1
+w32api_rpm_release=1
+cygwin_version=1.1.8-2
+cygwin_rpm_release=1
+gcc_version=2.95.2-9
+gcc_rpm_release=1
+rpm_build_root=/var/tmp

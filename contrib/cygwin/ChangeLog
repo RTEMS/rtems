@@ -1,0 +1,8 @@
+2001-08-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am, .cvsignore, configure.in, i386-cygwin-binutils.spec.in,
+	i386-cygwin-gcc.spec.in, i386-cygwin-libs.spec.in,
+	i386-cygwin-w32api.spec.in, i386-cygwin-mingw.spec.in, setup, setup.def:
+	New files that support building RPMs for Linux hosted cross compilers
+	targeting Cygwin.
+	

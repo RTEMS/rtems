@@ -1,0 +1,99 @@
+#
+# spec file for building gcc for cygwin
+# 
+
+%define gcc_version @GCC_VERS@
+%define gcc_rpmvers @GCC_RPMVERS@
+
+Vendor:       	OAR Corporation
+Distribution: 	Linux
+Name:         	i386-cygwin-gcc
+Summary:      	i386-cygwin gcc.
+Requires: 	i386-cygwin-binutils
+Requires:	i386-cygwin-libs
+Group:	      	cygwin
+Release:      	@GCC_RPMREL@
+License:      	gcc is GPL/LGPL
+Prefix:	      	/opt/cygwin
+Autoreqprov:  	on
+Packager:     	corsepiu@faw.uni-ulm.de
+Version:        %gcc_rpmvers
+
+Source0: 	ftp://sourceware.cygnus.com/pub/cygwin/latest/gcc/gcc-%{gcc_version}-src.tar.gz
+NoSource:	0
+
+BuildRoot:	@RPM_BUILD_ROOT@
+
+%description
+Cross gcc for target cygwin
+
+%prep
+# untar the sources inside i386-cygwin-gcc
+%setup -c -n %{name} -a 0 
+
+  test -d build || mkdir build
+
+%build
+  cd build
+
+  ../gcc-%{gcc_version}/configure --target=i386-cygwin \
+    --with-gnu-as --with-gnu-ld --verbose \
+    --disable-nls --disable-win32-registry \
+    --with-newlib --enable-languages=c,c++ \
+    --prefix=%{prefix} 
+
+  make all
+# We don't want info files
+#  make info
+
+%install
+  cd build
+  # Bug in gcc-2.95.1: It doesn't build this installation directory
+  # If it doesn't find it, gcc doesn't install i386-cygwin/bin/gcc
+  ../gcc-%{gcc_version}/mkinstalldirs \
+    $RPM_BUILD_ROOT%{prefix}/i386-cygwin/bin
+
+  make prefix=$RPM_BUILD_ROOT%{prefix} install
+  # cd back to build/
+  cd ../..
+
+  # We don't want info files
+  rm -rf $RPM_BUILD_ROOT%{prefix}/info
+
+  # libiberty comes from cygwin-libs
+  rm -f $RPM_BUILD_ROOT%{prefix}/i386-cygwin/lib/libiberty.a
+
+%clean
+# let rpm --clean remove BuildRoot iff using the default BuildRoot
+  test "$RPM_BUILD_ROOT" = "@RPM_BUILD_ROOT@" && \
+    rm -rf $RPM_BUILD_ROOT
+
+%files
+
+%dir %{prefix}/bin
+%{prefix}/bin/cpp
+%{prefix}/bin/gcov
+
+%dir %{prefix}/man
+%dir %{prefix}/man/man1
+%doc %{prefix}/man/man1/cccp.1*
+%doc %{prefix}/man/man1/i386-cygwin-gcc.1*
+%doc %{prefix}/man/man1/i386-cygwin-g++.1*
+
+%dir %{prefix}/include
+
+%{prefix}/include/g++-3
+%{prefix}/bin/i386-cygwin-c++
+%{prefix}/bin/i386-cygwin-c++filt
+%{prefix}/bin/i386-cygwin-g++
+%{prefix}/bin/i386-cygwin-gcc
+%{prefix}/bin/i386-cygwin-protoize
+%{prefix}/bin/i386-cygwin-unprotoize
+
+# %dir %{prefix}/lib/gcc-lib/i386-cygwin/%{gcc_version}/include
+
+%{prefix}/i386-cygwin
+%dir %{prefix}/lib
+%dir %{prefix}/lib/gcc-lib
+%dir %{prefix}/lib/gcc-lib/i386-cygwin
+%{prefix}/lib/gcc-lib/i386-cygwin/gcc-%{gcc_version}

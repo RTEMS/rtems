@@ -1,0 +1,86 @@
+#
+# spec file for binutils package targetting cygwin
+# 
+
+%define binutils_version @BINUTILS_VERS@
+%define binutils_rpmvers @BINUTILS_RPMVERS@
+
+Vendor:       OAR Corporation
+Distribution: Linux
+Name:         i386-cygwin-binutils
+Summary:      binutils for target i386-cygwin
+Group:        cygwin
+Release:      @BINUTILS_RPMREL@
+Summary:      binutils for i386-cygwin
+License:      GPL/LGPL
+Autoreqprov:  	off
+Packager:     	corsepiu@faw.uni-ulm.de
+Prefix:		/opt/cygwin
+BuildRoot:	@RPM_BUILD_ROOT@
+
+Version:      	%binutils_rpmvers
+Source0:	ftp://sourceware.cygnus.com/pub/cygwin/latest/binutils/binutils-%{binutils_version}-src.tar.gz
+NoSource: 	0
+%description
+
+Cross binutils for target cygwin
+
+%prep
+# untar the sources inside i386-cygwin-binutils
+%setup -c -n i386-cygwin-binutils -a 0
+
+%build
+  test -d build || mkdir build
+  cd build
+  ../binutils-%{binutils_version}/configure --target=i386-cygwin \
+    --disable-nls --disable-win32-registry \
+    --verbose --prefix=%{prefix}
+
+  make all
+
+%install
+  cd build
+  make prefix=$RPM_BUILD_ROOT%{prefix} install
+
+# A bug in binutils: binutils does not install share/locale
+# however it uses it
+  ../binutils-%{binutils_version}/mkinstalldirs \
+    $RPM_BUILD_ROOT%{prefix}/share/locale
+
+# We don't want info files
+  rm -rf $RPM_BUILD_ROOT%{prefix}/info
+
+# c++filt now comes from gcc
+  rm -f $RPM_BUILD_ROOT%{prefix}/bin/i386-cygwin-c++filt
+
+%clean
+# let rpm --clean remove BuildRoot iff using the default BuildRoot
+  test "$RPM_BUILD_ROOT" = "@RPM_BUILD_ROOT@" && \
+    rm -rf $RPM_BUILD_ROOT
+
+%files
+
+%dir %{prefix}/man
+%dir %{prefix}/man/man1
+%doc %{prefix}/man/man1/i386-cygwin-*.1*
+
+%dir %{prefix}/include
+%{prefix}/include/*.h
+
+%dir %{prefix}/lib
+%{prefix}/lib/libbfd*
+%{prefix}/lib/libiberty*
+%{prefix}/lib/libopcodes*
+
+%dir %{prefix}/share
+%dir %{prefix}/share/locale
+
+%dir %{prefix}/bin
+%{prefix}/bin/*
+
+%dir %{prefix}/i386-cygwin
+%dir %{prefix}/i386-cygwin/bin
+%{prefix}/i386-cygwin/bin/*
+
+%dir %{prefix}/i386-cygwin/lib
+%{prefix}/i386-cygwin/lib/ldscripts

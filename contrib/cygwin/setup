@@ -1,0 +1,111 @@
+#!/bin/bash
+
+CFG=setup.cache
+
+# RTEMS tools setup
+
+if test ! -f ./$CFG;
+then
+ echo -n "restoring default setup.cache .." 
+ cp ./setup.def ./$CFG
+ echo " done"
+fi
+
+echo -n "loading setup from ./$CFG .."
+. ./$CFG
+echo " done"
+echo
+
+menu_setup()
+{
+while true;
+do
+  echo
+  echo "       Source packages setup"
+  echo
+  echo "0 binutils version        : $binutils_version"
+  echo "1 binutils rpm release    : $binutils_rpm_release"
+  echo "2 cygwin version          : $cygwin_version"
+  echo "3 cygwin rpm release      : $cygwin_rpm_release"
+  echo "4 mingw version           : $mingw_version"
+  echo "5 mingw rpm release       : $mingw_rpm_release"
+  echo "6 w32api version          : $w32api_version"
+  echo "7 w32api rpm release      : $w32api_rpm_release"
+  echo "8 gcc version             : $gcc_version"
+  echo "9 gcc rpm release         : $gcc_rpm_release"
+  echo "a rpm build root          : $rpm_build_root"
+  echo
+
+  echo -n "[0-9a] or any other key to quit >"
+  read sel
+  case $sel in
+  0) echo -n "BINUTILS source >"
+     read binutils_version ;;
+  1) echo -n "BINUTILS rpm release >"
+     read binutils_rpm_release ;;
+  2) echo -n "CYGWIN source >"
+     read cygwin_version ;;
+  3) echo -n "CYGWIN rpm release >"
+     read cygwin_rpm_release ;;
+  4) echo -n "MINGW source >"
+     read mingw_version ;;
+  5) echo -n "MINGW rpm release >"
+     read mingw_rpm_release ;;
+  6) echo -n "W32API source >"
+     read w32api_version ;;
+  7) echo -n "W32API rpm release >"
+     read w32api_rpm_release ;;
+  8) echo -n "GCC source >"
+     read gcc_version ;;
+  9) echo -n "GCC RPM release >"
+     read gcc_rpm_release ;;
+  a) echo -n "RPM build root >"
+     read rpm_build_root ;;
+  *) 
+     return 0 ;;
+  esac
+done
+}
+
+
+save_setup()
+{
+echo -n "saving setup to $CFG .."
+
+echo "# RTEMS tools setup" > $CFG
+
+echo "binutils_version=$binutils_version" >> $CFG
+echo "binutils_patch_version=$binutils_patch_version" >> $CFG
+echo "binutils_rpm_release=$binutils_rpm_release" >> $CFG
+
+echo "mingw_version=$mingw_version" >> $CFG
+echo "mingw_patch_version=$mingw_patch_version" >> $CFG
+echo "mingw_rpm_release=$mingw_rpm_release" >> $CFG
+
+echo "cygwin_version=$cygwin_version" >> $CFG
+echo "cygwin_patch_version=$cygwin_patch_version" >> $CFG
+echo "cygwin_rpm_release=$cygwin_rpm_release" >> $CFG
+
+echo "w32api_version=$w32api_version" >> $CFG
+echo "w32api_patch_version=$w32api_patch_version" >> $CFG
+echo "w32api_rpm_release=$w32api_rpm_release" >> $CFG
+
+echo "gcc_version=$gcc_version" >> $CFG
+echo "gcc_patch_version=$gcc_patch_version" >> $CFG
+echo "gcc_rpm_release=$gcc_rpm_release" >> $CFG
+
+echo "rpm_build_root=$rpm_build_root" >> $CFG
+
+echo " done"
+test -f Makefile || ./configure
+}
+
+menu_setup
+
+echo
+echo -n "Save setup [y|n] >"
+read sel
+case $sel in
+''|y*|Y*) save_setup ;;
+*) ;;
+esac

@@ -1,0 +1,47 @@
+#
+# spec file for package i386-cygwin-w32api
+# 
+
+%define w32api_version @W32API_VERS@
+%define w32api_rpmvers @W32API_RPMVERS@
+
+Vendor:       Ralf Corsepius
+Distribution: Linux
+Name:         i386-cygwin-w32api
+Release:      @W32API_RPMREL@
+Copyright:    Red Hat Inc.
+Group:        Development/Libraries
+Provides:     i386-cygwin-w32api
+
+Autoreqprov:  	off
+Packager:     	corsepiu@faw.uni-ulm.de
+Prefix:		/opt/cygwin
+BuildRoot:	@RPM_BUILD_ROOT@
+
+Version:        %w32api_rpmvers
+Summary:      	Cygwin's w32api libs
+Source0:	ftp://sourceware.cygnus.com/pub/cygwin/latest/w32api/w32api-%{w32api_version}.tar.gz
+
+NoSource:	0
+
+%description
+Cygwin's w32api libs
+
+%prep
+%setup -c
+
+%build
+  rm -rf usr/bin
+  mv usr i386-cygwin
+
+%install
+  mkdir -p $RPM_BUILD_ROOT%{prefix}
+  cp -a i386-cygwin $RPM_BUILD_ROOT%{prefix}
+
+%clean
+# let rpm --clean remove BuildRoot iff using the default BuildRoot
+  test "$RPM_BUILD_ROOT" = "@RPM_BUILD_ROOT@" && \
+    rm -rf $RPM_BUILD_ROOT
+
+%files
+%{prefix}/i386-cygwin
