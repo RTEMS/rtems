@@ -1,3 +1,8 @@
+2002-12-02	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def, gcc3newlib/gccnewlib.add: Updated to gcc 3.2.1 RPM revision
+	2 which enabled the mips-rtems gnat using gcc 3.2.1 patch 20021129.
+
 2002-11-29	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Updated to gcc-3.2.1.
