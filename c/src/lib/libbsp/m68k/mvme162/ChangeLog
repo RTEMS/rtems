@@ -1,3 +1,7 @@
+2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/mvme16x_hw.h: Include <bsp.h> instead of targopts.h.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:

@@ -17,7 +17,7 @@
 #ifndef __MVME16xHW_h
 #define __MVME16xHW_h
 
-#include <rtems/score/targopts.h>
+#include <bsp.h>
 
 #ifdef __cplusplus
 extern "C" {
