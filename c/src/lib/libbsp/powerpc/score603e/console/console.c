@@ -122,16 +122,7 @@ int console_inbyte_nonblocking(
    */
   return inbyte_nonblocking_85c30( &Ports_85C30[ port ] );
 }
-
  
-void console_reserve_resources(
-  rtems_configuration_table *configuration
-)
-{
-  rtems_termios_reserve_resources( configuration, NUM_Z85C30_PORTS );
-}
-
-
 rtems_device_driver console_close(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
