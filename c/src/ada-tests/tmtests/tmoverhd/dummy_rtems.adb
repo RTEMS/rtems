@@ -427,7 +427,8 @@ package body DUMMY_RTEMS is
 
    procedure MESSAGE_QUEUE_SEND (
       ID     : in     RTEMS.ID;
-      BUFFER : in     RTEMS.BUFFER_POINTER;
+      BUFFER : in     RTEMS.ADDRESS;
+      Size   : in     RTEMS.Unsigned32;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
    begin
@@ -438,7 +439,8 @@ package body DUMMY_RTEMS is
 
    procedure MESSAGE_QUEUE_URGENT (
       ID     : in     RTEMS.ID;
-      BUFFER : in     RTEMS.BUFFER_POINTER;
+      BUFFER : in     RTEMS.ADDRESS;
+      Size   : in     RTEMS.Unsigned32;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
    begin
@@ -449,7 +451,8 @@ package body DUMMY_RTEMS is
 
    procedure MESSAGE_QUEUE_BROADCAST (
       ID     : in     RTEMS.ID;
-      BUFFER : in     RTEMS.BUFFER_POINTER;
+      BUFFER : in     RTEMS.ADDRESS;
+      Size   : in     RTEMS.Unsigned32;
       COUNT  :    out RTEMS.UNSIGNED32;
       RESULT :    out RTEMS.STATUS_CODES
    ) is
@@ -461,9 +464,10 @@ package body DUMMY_RTEMS is
 
    procedure MESSAGE_QUEUE_RECEIVE (
       ID         : in     RTEMS.ID;
-      BUFFER     : in     RTEMS.BUFFER_POINTER;
+      BUFFER     : in     RTEMS.ADDRESS;
       OPTION_SET : in     RTEMS.OPTION;
       TIMEOUT    : in     RTEMS.INTERVAL;
+      Size       :    out RTEMS.Unsigned32;
       RESULT     :    out RTEMS.STATUS_CODES
    ) is
    begin

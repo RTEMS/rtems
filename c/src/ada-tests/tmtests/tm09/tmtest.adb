@@ -80,6 +80,7 @@ package body TMTEST is
          RTEMS.MESSAGE_QUEUE_CREATE(
             1,
             TIME_TEST_SUPPORT.OPERATION_COUNT,
+            16,
             RTEMS.DEFAULT_OPTIONS,
             TMTEST.QUEUE_ID,
             STATUS
@@ -133,8 +134,9 @@ package body TMTEST is
       INDEX             : RTEMS.UNSIGNED32;
       ITERATIONS        : RTEMS.UNSIGNED32;
       LOOP_COUNT        : RTEMS.UNSIGNED32;
-      BUFFER            : RTEMS.BUFFER;
-      BUFFER_POINTER    : RTEMS.BUFFER_POINTER;
+      BUFFER            : TMTEST.BUFFER;
+      BUFFER_POINTER    : RTEMS.ADDRESS;
+      MESSAGE_SIZE      : RTEMS.UNSIGNED32;
       STATUS            : RTEMS.STATUS_CODES;
    begin
 
@@ -149,7 +151,7 @@ package body TMTEST is
       FLUSH_COUNT       := 0;
       EMPTY_FLUSH_COUNT := 0;
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       for ITERATIONS in 1 .. TIME_TEST_SUPPORT.ITERATION_COUNT
       loop
@@ -181,6 +183,7 @@ package body TMTEST is
                RTEMS.MESSAGE_QUEUE_SEND( 
                   TMTEST.QUEUE_ID,
                   BUFFER_POINTER,
+                  16,
                   STATUS
                );
             end loop;
@@ -194,6 +197,7 @@ package body TMTEST is
                   BUFFER_POINTER,
                   RTEMS.DEFAULT_OPTIONS,
                   RTEMS.NO_TIMEOUT,
+                  MESSAGE_SIZE,
                   STATUS
                );
             end loop;
@@ -205,6 +209,7 @@ package body TMTEST is
                RTEMS.MESSAGE_QUEUE_URGENT( 
                   TMTEST.QUEUE_ID,
                   BUFFER_POINTER,
+                  16,
                   STATUS
                );
             end loop;
@@ -218,6 +223,7 @@ package body TMTEST is
                   BUFFER_POINTER,
                   RTEMS.DEFAULT_OPTIONS,
                   RTEMS.NO_TIMEOUT,
+                  MESSAGE_SIZE,
                   STATUS
                );
             end loop;
@@ -235,6 +241,7 @@ package body TMTEST is
          RTEMS.MESSAGE_QUEUE_SEND( 
             TMTEST.QUEUE_ID, 
             BUFFER_POINTER, 
+            16,
             STATUS
          );
          TIMER_DRIVER.INITIALIZE;

@@ -142,8 +142,9 @@ package body TMTEST is
       SIGNALS        : RTEMS.SIGNAL_SET;
       ADDRESS_1      : RTEMS.ADDRESS;
       EVENTS         : RTEMS.SIGNAL_SET;
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : TMTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
+      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
       COUNT          : RTEMS.UNSIGNED32;
       MAJOR          : RTEMS.DEVICE_MAJOR_NUMBER;
       MINOR          : RTEMS.DEVICE_MINOR_NUMBER;
@@ -154,7 +155,7 @@ package body TMTEST is
 
       NAME := RTEMS.BUILD_NAME(  'N', 'A', 'M', 'E' );
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
      
 -- INITIALIZE_EXECUTIVE
 
@@ -821,7 +822,7 @@ TEST_SUPPORT.PAUSE;
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            DUMMY_RTEMS.MESSAGE_QUEUE_SEND( ID, BUFFER_POINTER, STATUS );
+            DUMMY_RTEMS.MESSAGE_QUEUE_SEND( ID, BUFFER_POINTER, 16, STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -838,7 +839,7 @@ TEST_SUPPORT.PAUSE;
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
          loop
-            DUMMY_RTEMS.MESSAGE_QUEUE_URGENT( ID, BUFFER_POINTER, STATUS );
+            DUMMY_RTEMS.MESSAGE_QUEUE_URGENT( ID, BUFFER_POINTER, 16, STATUS );
          end loop;
       TMTEST.END_TIME := TIMER_DRIVER.READ_TIMER;
 
@@ -858,6 +859,7 @@ TEST_SUPPORT.PAUSE;
             DUMMY_RTEMS.MESSAGE_QUEUE_BROADCAST( 
                ID, 
                BUFFER_POINTER, 
+               16,
                COUNT, 
                STATUS 
             );
@@ -882,6 +884,7 @@ TEST_SUPPORT.PAUSE;
                BUFFER_POINTER,
                RTEMS.DEFAULT_OPTIONS,
                TIMEOUT,
+               MESSAGE_SIZE,
                STATUS 
             );
          end loop;

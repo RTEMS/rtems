@@ -82,12 +82,12 @@ package body TMTEST is
       TASK_ENTRY     : RTEMS.TASK_ENTRY;
       PRIORITY       : RTEMS.TASK_PRIORITY;
       TASK_ID        : RTEMS.ID;
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : TMTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       RTEMS.MESSAGE_QUEUE_CREATE(
          RTEMS.BUILD_NAME( 'M', 'Q', '1', ' ' ),
@@ -130,6 +130,7 @@ package body TMTEST is
       RTEMS.MESSAGE_QUEUE_URGENT( 
          TMTEST.QUEUE_ID,
          BUFFER_POINTER,
+         16,
          STATUS
       );
 
@@ -143,13 +144,13 @@ package body TMTEST is
    procedure HIGH_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : TMTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
       OVERHEAD       : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       TIMER_DRIVER.INITIALIZE;
          for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
@@ -164,6 +165,7 @@ package body TMTEST is
          RTEMS.MESSAGE_QUEUE_URGENT(
             TMTEST.QUEUE_ID,
             BUFFER_POINTER, 
+            16,
             STATUS
          );
 
@@ -191,18 +193,20 @@ package body TMTEST is
    procedure LOW_TASKS (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : TMTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
+      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
  
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       RTEMS.MESSAGE_QUEUE_RECEIVE( 
          TMTEST.QUEUE_ID,
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
  

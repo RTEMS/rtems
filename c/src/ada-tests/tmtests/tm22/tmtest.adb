@@ -96,18 +96,19 @@ package body TMTEST is
    procedure HIGH_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : TMTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
       COUNT          : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       TIMER_DRIVER.INITIALIZE;
          RTEMS.MESSAGE_QUEUE_BROADCAST(
             TMTEST.MESSAGE_QUEUE_ID,
             BUFFER_POINTER,
+            16,
             COUNT,
             STATUS 
          );
@@ -135,15 +136,16 @@ package body TMTEST is
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
       ID             : RTEMS.ID;
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : TMTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
       INDEX          : RTEMS.UNSIGNED32;
       OVERHEAD       : RTEMS.UNSIGNED32;
       COUNT          : RTEMS.UNSIGNED32;
+      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       RTEMS.TASK_CREATE( 
          RTEMS.BUILD_NAME( 'H', 'I', 'G', 'H' ), 
@@ -164,6 +166,7 @@ package body TMTEST is
          BUFFER_POINTER,
          RTEMS.DEFAULT_MODES,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
 
@@ -180,6 +183,7 @@ package body TMTEST is
             RTEMS.MESSAGE_QUEUE_BROADCAST(
                TMTEST.MESSAGE_QUEUE_ID,
                BUFFER_POINTER,
+               16,
                COUNT,
                STATUS 
             );
@@ -199,6 +203,7 @@ package body TMTEST is
          BUFFER_POINTER,
          RTEMS.DEFAULT_MODES,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
 
@@ -226,18 +231,19 @@ package body TMTEST is
    procedure PREEMPT_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : TMTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
       COUNT          : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       TIMER_DRIVER.INITIALIZE;
          RTEMS.MESSAGE_QUEUE_BROADCAST(
             TMTEST.MESSAGE_QUEUE_ID,
             BUFFER_POINTER,
+            16,
             COUNT,
             STATUS 
          );

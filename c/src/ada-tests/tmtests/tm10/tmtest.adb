@@ -64,12 +64,13 @@ package body TMTEST is
       PRIORITY       : RTEMS.TASK_PRIORITY;
       OVERHEAD       : RTEMS.UNSIGNED32;
       TASK_ID        : RTEMS.ID;
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : TMTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
+      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       PRIORITY := 5;
 
@@ -125,6 +126,7 @@ package body TMTEST is
                BUFFER_POINTER,
                RTEMS.NO_WAIT,
                RTEMS.NO_TIMEOUT,
+               MESSAGE_SIZE,
                STATUS
             );
          end loop;
@@ -147,12 +149,13 @@ package body TMTEST is
    procedure HIGH_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : TMTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
+      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       TIMER_DRIVER.INITIALIZE;
 
@@ -161,6 +164,7 @@ package body TMTEST is
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
 
@@ -174,18 +178,20 @@ package body TMTEST is
    procedure MIDDLE_TASKS (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      BUFFER         : RTEMS.BUFFER;
-      BUFFER_POINTER : RTEMS.BUFFER_POINTER;
+      BUFFER         : TMTEST.BUFFER;
+      BUFFER_POINTER : RTEMS.ADDRESS;
+      MESSAGE_SIZE   : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
  
-      BUFFER_POINTER := RTEMS.TO_BUFFER_POINTER( BUFFER'ADDRESS );
+      BUFFER_POINTER := BUFFER'ADDRESS;
 
       RTEMS.MESSAGE_QUEUE_RECEIVE( 
          TMTEST.QUEUE_ID,
          BUFFER_POINTER,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
  
