@@ -22,7 +22,7 @@ pipe(), Function, Dummy Implementation
 
 @example
 dup(), Function, Implemented
-dup2(), Function, Untested Implementation
+dup2(), Function, Untested Iimplementation
 @end example
 
 @section File Descriptor Deassignment

@@ -23,7 +23,8 @@ GENERATED_FILES= \
    cspecific.texi device.texi dumpcontrol.texi eventlog.texi files.texi \
    io.texi key.texi memorymgmt.texi message.texi mutex.texi procenv.texi \
    process.texi sched.texi semaphores.texi signal.texi systemdb.texi \
-   thread.texi
+   thread.texi \
+   stackchk.texi rtmonuse.texi cpuuse.texi error.texi monitor.texi
 
 FILES= posix_users.texi preface.texi \
   $(COMMON_FILES) $(GENERATED_FILES)
@@ -53,7 +54,6 @@ html: dirs $(FILES)
 	-cd .. ; gmake headers
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    posix_users.texi
-
 
 clean:
 	rm -f *.o $(PROG) *.txt core *.html 
@@ -170,3 +170,27 @@ systemdb.texi: systemdb.t Makefile
 	    -u "Top" \
 	    -n "" ${*}.t
 
+stackchk.texi: stackchk.t Makefile
+	$(BMENU) -p "" \
+            -u "Top" \
+            -n "" ${*}.t
+
+rtmonuse.texi: rtmonuse.t Makefile
+	$(BMENU) -p "" \
+            -u "Top" \
+            -n "" ${*}.t
+
+cpuuse.texi: cpuuse.t Makefile
+	$(BMENU) -p "" \
+            -u "Top" \
+            -n "" ${*}.t
+
+error.texi: error.t Makefile
+	$(BMENU) -p "" \
+            -u "Top" \
+            -n "" ${*}.t
+
+monitor.texi: monitor.t Makefile
+	$(BMENU) -p "" \
+            -u "Top" \
+            -n "" ${*}.t

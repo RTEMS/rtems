@@ -129,6 +129,32 @@ case ${chapter} in
     ROUTINES="strcpy strncpy strcat strncat strcmp strncmp strchr strcspn \
        strpbrk strrchr strspn strstr strtok stlen"
     ;;
+  misc_stackchk)
+    CHAPTER_CAPS="Stack Bounds Checker"
+    CHAPTER_LOWER="stack bounds checker"
+    ROUTINES="Stack_check_Initialize Stack_check_Dump_usage"
+    ;;
+  misc_rtmonuse)
+    CHAPTER_CAPS="Rate Monotonic Period Statistics"
+    CHAPTER_LOWER="rate monotonic period statistics"
+    ROUTINES="Period_usage_Initialize Period_usage_Reset \
+        Period_usage_Update Period_usage_Dump"
+    ;;
+  misc_cpuuse)
+    CHAPTER_CAPS="CPU Usage Statistics"
+    CHAPTER_LOWER="CPU usage statistics"
+    ROUTINES="CPU_usage_Dump CPU_usage_Reset"
+    ;;
+  misc_error)
+    CHAPTER_CAPS="Error Reporting Support"
+    CHAPTER_LOWER="error reporting support"
+    ROUTINES="rtems_error rtems_panic"
+    ;;
+  misc_monitor)
+    CHAPTER_CAPS="Monitor Task"
+    CHAPTER_LOWER="monitor task"
+    ROUTINES="rtems_monitor_init rtems_monitor_wakeup"
+    ;;
   *)
     echo "Unknown chapter name"
     exit 1

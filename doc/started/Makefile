@@ -41,8 +41,8 @@ $(PROJECT).ps: $(PROJECT).dvi
 
 # run texi2dvi twice to generate the xref's properly.
 $(PROJECT).dvi: $(FILES)
-	$(TEXI2DVI) $(PROJECT).texi
-	texi2dvi $(PROJECT).texi
+	$(TEXI2DVI) -v $(PROJECT).texi
+	texi2dvi -v $(PROJECT).texi
 
 intro.texi: intro.t versions.texi
 	$(BMENU) -c -p "Top" \

@@ -28,6 +28,8 @@ The directives provided by the files and directories manager are:
 @item @code{creat} - Create a new file or rewrite an existing one
 @item @code{umask} - Sets a file creation mask
 @item @code{link} - Creates a link to a file
+@item @code{symlink} - Creates a symbolic link to a file
+@item @code{readlink} - Obtain the name of the link destination
 @item @code{mkdir} - Makes a directory
 @item @code{mkfifo} - Makes a FIFO special file
 @item @code{unlink} - Removes a directory entry 
@@ -735,6 +737,133 @@ If the @code{link()} function fails, no directories are modified.
 The @code{existing} argument should not be a directory.
 
 The caller may (or may not) need permission to access the existing file.
+
+@subheading NOTES:
+
+NONE
+
+@page
+@subsection symlink - Creates a symbolic link to a file
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <unistd.h>
+
+int symlink(
+  const char *topath,
+  const char *frompath
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+
+@item EACCES
+Search permission is denied for a directory in a file's path prefix
+
+@item EEXIST
+The named file already exists.
+
+@item ENAMETOOLONG
+Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
+effect.
+
+@item ENOENT
+A file or directory does not exist.
+
+@item ENOSPC
+No space left on disk.
+
+@item ENOTDIR
+A component of the specified pathname was not a directory when a directory
+was expected.
+
+@item EPERM
+Operation is not permitted.  Process does not have the appropriate priviledges
+or permissions to perform the requested operations. 
+
+@item EROFS
+Read-only file system.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{symlink()} function creates a symbolic link from the frombath to the
+topath.  The symbolic link will be interpreted at run-time.
+
+If the @code{symlink()} function fails, no directories are modified.
+
+The caller may (or may not) need permission to access the existing file.
+
+@subheading NOTES:
+
+NONE
+
+@page
+@subsection readlink - Obtain the name of a symbolic link destination
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <unistd.h>
+
+int readlink(
+  const char *path,
+  char       *buf,
+  size_t      bufsize
+);
+
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+
+@item EACCES
+Search permission is denied for a directory in a file's path prefix
+
+@item ENAMETOOLONG
+Length of a filename string exceeds PATH_MAX and _POSIX_NO_TRUNC is in
+effect.
+
+@item ENOENT
+A file or directory does not exist.
+
+@item ENOTDIR
+A component of the prefix pathname was not a directory when a directory
+was expected.
+
+@item ELOOP
+Too many symbolic links were encountered in the pathname.
+
+@item EINVAL
+The pathname does not refer to a symbolic link
+
+@item EFAULT
+An invalid pointer was passed into the @code{readlink()} routine.
+
+@end table
+
+@subheading DESCRIPTION:
+
+The @code{readlink()} function places the symbolic link destination into 
+@code{buf} argument and returns the number of characters copied.
+
+If the symbolic link destination is longer than bufsize characters the 
+name will be truncated.
 
 @subheading NOTES:
 

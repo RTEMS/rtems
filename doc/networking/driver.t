@@ -8,7 +8,7 @@
 @c  $Id$
 @c
 
-@chapter Writing RTEMS Network Device Drivers
+@chapter Networking Driver
 
 @section Introduction
 

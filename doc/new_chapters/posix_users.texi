@@ -107,6 +107,11 @@ END-INFO-DIR-ENTRY
 @include dumpcontrol.texi
 @include confspace.texi
 @include adminiface.texi
+@include stackchk.texi
+@include rtmonuse.texi
+@include cpuuse.texi
+@include error.texi
+@include monitor.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
 @top posix_users_new
@@ -137,6 +142,11 @@ This is the online version of the RTEMS POSIX API User's Guide
 * Process Dump Control Manager::
 * Configuration Space Manager::
 * Administration Interface Manager::
+* Stack Bounds Checker::
+* Rate Monotonic Period Statistics::
+* CPU Usage Statistics::
+* Error Reporting Support::
+* Monitor Task::
 * Command and Variable Index::
 * Concept Index::
 @end menu

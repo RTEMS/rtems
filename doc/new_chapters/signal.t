@@ -108,6 +108,8 @@ This function adds the @code{signo} to the specified signal @code{set}.
 
 @subheading NOTES:
 
+NONE
+
 @page
 @subsection sigdelset - Delete a Signal from a Signal Set
 

@@ -21,11 +21,13 @@ as interrupt vector table and chip select initialization.
 Most of the examples in this chapter will be based on the gen68340 BSP
 initialization code.  Like most BSPs, the initialization for this 
 BSP is divided into two subdirectories under the BSP source directory.
-The gen68340 BSP source code in the following directory:
+The gen68340 BSP source code is in the following directory:
 
 @example
-c/src/lib/libbsp/m68k/gen68340: 
+c/src/lib/libbsp/m68k/gen68340
 @end example
+
+The following source code files are in this subdirectory.
 
 @itemize @bullet
 
@@ -44,6 +46,26 @@ In the @code{start340} directory are two source files.  The file
 @code{startfor340only.s} is the simpler of these files as it only has 
 initialization code for a MC68340 board.  The file @code{start340.s}
 contains initialization for a 68349 based board as well.
+
+@section Required Global Variables
+
+Although not strictly part of initialization, there are a few global
+variables assumed to exist by many support components.  These 
+global variables are usually declared in the file @code{startup/bspstart.c}
+that provides most of the BSP specific initialization.  The following is
+a list of these global variables:
+
+@itemize @bullet
+@item @code{BSP_Configuration} is the BSP's writable copy of the RTEMS
+Configuration Table.
+
+@item @code{Cpu_table} is the RTEMS CPU Dependent Information Table.
+
+@item @code{bsp_isr_level} is the interrupt level that is set at
+system startup.  It will be restored when the executive returns
+control to the BSP.
+
+@end itemize
 
 @section Board Initialization
 
@@ -76,7 +98,7 @@ invoking the shared routine @code{boot_card()}.
 @subsection boot_card() - Boot the Card
 
 The @code{boot_card()} is the first C code invoked.  Most of the BSPs
-use the sams shared version of @code{boot_card()} which is located in
+use the same shared version of @code{boot_card()} which is located in
 the following file:
 
 @example
@@ -128,8 +150,11 @@ c/src/lib/libbsp/CPU/BSP/startup/bspstart.c
 
 This routine is also responsible for overriding the default settings
 in the CPU Configuration Table and setting port specific entries
-in this table.  This routine will typically install routines
-for one or more of the following initialization hooks:
+in this table.  This may include increasing the maximum number
+of some types of RTEMS system objects to reflect the needs of 
+the BSP and the base set of device drivers. This routine will
+typically also install routines for one or more of the following
+initialization hooks:
 
 @itemize @bullet
 @item BSP Pretasking Hook
@@ -172,18 +197,22 @@ c/src/lib/libbsp/shared/main.c
 @end example
 
 In addition to the implicit invocation of @code{__main}, this 
-routine performs some explitit initialization.  This routine 
+routine performs some explicit initialization.  This routine 
 sets the variable @code{rtems_progname} and initiates 
 multitasking via a call to the RTEMS directive
 @code{rtems_initialize_executive_late}.  It is important to note
 that the executive does not return to this routine until the
 RTEMS directive @code{rtems_shutdown_executive} is invoked.
 
+The RTEMS initialization procedure is described in the @b{Initialization
+Manager} chapter of the @b{RTEMS Application C User's Guide}.
+Please refer to that manual for more information.
+
 @subsection RTEMS Pretasking Callback
 
 The @code{pretasking_hook} entry in the RTEMS CPU Configuration
 Table may be the address of a user provided routine that is
-invoked once RTEMS initialization is complete but before interrupts
+invoked once RTEMS API initialization is complete but before interrupts
 and tasking are enabled.  No tasks -- not even the IDLE task -- have
 been created when this hook is invoked.  The pretasking hook is optional.
 
@@ -197,157 +226,47 @@ c/src/lib/libbsp/CPU/BSP/startup/bspstart.c
 
 The @code{bsp_pretasking_hook()} routine is the appropriate place to
 initialize any support components which depend on the RTEMS APIs.
-Most BSPs initialize the RTEMS C Library support in their
+Most BSPs set the debug level for the system and initialize the
+RTEMS C Library support in their
 implementation of @code{bsp_pretasking_hook()}.  This initialization
-includes the application heap as well as the reentrancy support
-for the C Library.
+includes the application heap used by the @code{malloc} family
+of routines as well as the reentrancy support for the C Library.
+
+The routine @code{bsp_libc_init} routine invoked from the
+@code{bsp_pretasking_hook()} routine is passed the starting
+address, length, and growth amount passed to @code{sbrk}.  
+This "sbrk amount" is only used if the heap runs out of
+memory.  In this case, the RTEMS malloc implementation will
+invoked @code{sbrk} to obtain more memory.  See
+@ref{Miscellaneous Support Files sbrk() Implementation} for more details.
 
 @subsection RTEMS Predriver Callback
 
-XXX is the address of the user provided
-routine which is invoked with tasking enabled immediately before
-the MPCI and device drivers are initialized. RTEMS
-initialization is complete, interrupts and tasking are enabled,
-but no device drivers are initialized.  This field may be NULL to
-indicate that the hook is not utilized.
+The @code{predriver_hook} entry in the RTEMS CPU Configuration
+Table may be the address of a user provided routine that is
+is invoked immediately before the the device drivers and MPCI
+are initialized. RTEMS
+initialization is complete but interrupts and tasking are disabled.
+This field may be NULL to indicate that the hook is not utilized.
+
+Most BSPs do not use this callback.
 
 @subsection Device Driver Initialization
 
 At this point in the initialization sequence, the initialization 
 routines for all of the device drivers specified in the Device
-Driver Table are invoked.
+Driver Table are invoked.  The initialization routines are invoked
+in the order they appear in the Device Driver Table.
 
-@subsection RTEMS Postdriver Callback
-
-XXX is the address of the user provided
-routine which is invoked with tasking enabled immediately after
-the MPCI and device drivers are initialized. RTEMS
-initialization is complete, interrupts and tasking are enabled,
-and the device drivers are initialized.  This field may be NULL
-to indicate that the hook is not utilized.
-
-
-@section The Interrupts Vector Table
-
-
-
-After the entry label starts a code section in which some room is
-allocated for the table of interrupts vectors. They are assigned to the
-address of the __uhoh label. 
-
-At __uhoh label you can find the default interrupt handler routine. This
-routine is only called when an unexpected interrupts is raised. You can
-add your own routine there (in that case there's a call to a routine -
-$BSP_ROOT/startup/dumpanic.c - that pri nts which address caused the
-interrupt and the contents of the registers, stack...), but this should
-not return. 
-
-@section Chip Select Initialization
-
-When the microprocessor accesses a memory area, address decoding is
-handled by an address decoder (!), so that the microprocessor knows which
-memory chip to access. 
-
-Figure 4 : address decoding
-
-You have to program your Chip Select registers in order that they match
-the linkcmds settings. In this BSP ROM and RAM addresses can be found in
-both the linkcmds and initialization code, but this is not a great way to
-do, better use some shared variables . 
-
-@section Integrated processor registers initialization
-
-There are always some specific integrated processor registers
-initialization to do. Integrated processors' user manuals often detail
-them. 
-
-@section Data section recopy
-
-The next initialization part can be found in
-$BSP340_ROOT/start340/init68340.c. First the Interrupt Vector Table is
-copied into RAM, then the data section recopy is initiated
-(_CopyDataClearBSSAndStart in $BSP340_ROOT/start340/startfor340only.s). 
-
-This code performs the following actions:
-
-@itemize @bullet
-
-@item copies the .data section from ROM to its location reserved in RAM
-(see 5.2 for more details about this copy),
-
-@item clear .bss section (all the non-initialized data will take value 0). 
-
-@end itemize
-
-Then control is passed to the RTEMS-specific initialization code. 
-
-@section RTEMS-Specific Initialization
-
-@section The RTEMS configuration table
-
-The RTEMS configuration table contains the maximum number of objects RTEMS
-can handle during the application (e.g. maximum number of tasks,
-semaphores, etc.). It's used to allocate the size for the RTEMS inner data
-structures. 
-
-The RTEMS configuration table is application dependant, which means that
-one has to provide one per application. It's usually an header file
-included in the main module of the application. 
-
-The BSP_Configuration label points on this table. 
-
-For more information on the RTEMS configuration table, refer to C user's
-guide, chapter 23 <insert a link here>. 
-
-@section RTEMS initialization procedure
-
-The RTEMS initialization procedure is described in the 3rd chapter of the
-C user's manual <insert a link here>. Please read it carefully. 
-
-There are a few BSP specific functions called from the initialization
-manager. They can be found in the startup directory of the BSP. 
-
-@table @b
-
-@item bspstart.c
-
-It starts the application.  It includes application, board, and monitor
-specific initialization and configuration. 
-
-@item bspstart.c
-
-@table @b
-@item bsp_pretasking_hook
-
-It starts libc support (needed to allocate some memory using C primitive
-malloc for example). Heap size must be passed in argument, this is the one
-which is defined in the linkcmds (cf. 5.) 
-
-
-@end table
-
-@item bspclean.c
-
-@table @b
-
-@item bsp_cleanup
-
-Return control to the monitor. 
-
-@end table
-
-@end table
-
-@section Drivers initialization
-
-The Driver Address Table is part of the RTEMS configuration table. It
-defines RTEMS drivers entry points (initialization, open, close, read,
-write, and control). For more information about this table, check C User's
-manual chapter 21 section 6 <insert a l ink here>. 
+The Driver Address Table is part of the RTEMS Configuration Table. It
+defines device drivers entry points (initialization, open, close, read,
+write, and control). For more information about this table, please
+refer to the @b{Configuring a System} chapter in the
+@b{RTEMS Application C User's Guide}.
 
 The RTEMS initialization procedure calls the initialization function for
-every driver defined in the RTEMS Configuration Table (this permits to add
-only the drivers needed by the application). 
+every driver defined in the RTEMS Configuration Table (this allows
+one to include only the drivers needed by the application). 
 
 All these primitives have a major and a minor number as arguments: 
 
@@ -361,4 +280,144 @@ driver, but two minor numbers for channel A and B if there are two
 channels in the UART). 
 
 @end itemize
+
+@subsection RTEMS Postdriver Callback
+
+The @code{postdriver_hook} entry in the RTEMS CPU Configuration
+Table may be the address of a user provided routine that is
+invoked immediately after the the device drivers and MPCI are initialized.
+Interrupts and tasking are disabled.  The postdriver hook is optional.
+
+Although optional, most of the RTEMS BSPs provide a postdriver hook
+callback.  This routine is usually called @code{bsp_postdriver_hook}
+and is found in the file:
+
+@example
+c/src/lib/libbsp/CPU/BSP/startup/bsppost.c
+@end example
+
+The @code{bsp_postdriver_hook()} routine is the appropriate place to
+perform initialization that must be performed before the first task 
+executes but requires that a device driver be initialized.  The 
+shared implementation of the postdriver hook opens the default 
+standard in, out, and error files and associates them with 
+@code{/dev/console}.
+
+@section The Interrupt Vector Table
+
+The Interrupt Vector Table is called different things on different
+processor families but the basic functionality is the same.  Each
+entry in the Table corresponds to the handler routine for a particular
+interrupt source.  When an interrupt from that source occurs, the 
+specified handler routine is invoked.  Some context information is
+saved by the processor automatically when this happens.  RTEMS saves
+enough context information so that an interrupt service routine
+can be implemented in a high level language.
+
+On some processors, the Interrupt Vector Table is at a fixed address.  If
+this address is in RAM, then usually the BSP only has to initialize
+it to contain pointers to default handlers.  If the table is in ROM,
+then the application developer will have to take special steps to
+fill in the table.
+
+If the base address of the Interrupt Vector Table can be dynamically 
+changed to an arbitrary address, then the RTEMS port to that processor
+family will usually allocate its own table and install it.  For example,
+on some members of the Motorola MC68xxx family, the Vector Base Register
+(@code{vbr}) contains this base address.  
+
+@subsection Interrupt Vector Table on the gen68340 BSP
+
+The gen68340 BSP provides a default Interrupt Vector Table in the
+file @code{$BSP_ROOT/start340/start340.s}.  After the @code{entry}
+label is the definition of space reserved for the table of
+interrupts vectors.  This space is assigned the symbolic name
+of @code{__uhoh} in the @code{gen68340} BSP.
+
+At @code{__uhoh} label is the default interrupt handler routine. This
+routine is only called when an unexpected interrupts is raised.  One can
+add their own routine there (in that case there's a call to a routine -
+$BSP_ROOT/startup/dumpanic.c - that prints which address caused the
+interrupt and the contents of the registers, stack, etc.), but this should
+not return. 
+
+@section Chip Select Initialization
+
+When the microprocessor accesses a memory area, address decoding is
+handled by an address decoder, so that the microprocessor knows which
+memory chip(s) to access.   The following figure illustrates this:
+
+@example
+@group
+                     +-------------------+
+         ------------|                   |
+         ------------|                   |------------
+         ------------|      Address      |------------
+         ------------|      Decoder      |------------
+         ------------|                   |------------
+         ------------|                   |
+                     +-------------------+
+           CPU Bus                           Chip Select
+@end group
+@end example
+
+
+The Chip Select registers must be programmed such that they match
+the @code{linkcmds} settings. In the gen68340 BSP, ROM and RAM
+addresses can be found in both the @code{linkcmds} and initialization
+code, but this is not a great way to do this.  It is better to
+define addresses in the linker script.
+
+@section Integrated Processor Registers Initialization
+
+The CPUs used in many embedded systems are highly complex devices
+with multiple peripherals on the CPU itself.  For these devices,
+there are always some specific integrated processor registers
+that must be initialized.  Refer to the processors' manuals for
+details on these registers and be VERY careful programming them.
+
+@section Data Section Recopy
+
+The next initialization part can be found in
+@code{$BSP340_ROOT/start340/init68340.c}. First the Interrupt
+Vector Table is copied into RAM, then the data section recopy is initiated
+(_CopyDataClearBSSAndStart in @code{$BSP340_ROOT/start340/startfor340only.s}). 
+
+This code performs the following actions:
+
+@itemize @bullet
+
+@item copies the .data section from ROM to its location reserved in RAM
+(see @ref{Linker Script Initialized Data} for more details about this copy),
+
+@item clear @code{.bss} section (all the non-initialized
+data will take value 0). 
+
+@end itemize
+
+@section RTEMS-Specific Initialization
+
+@section The RTEMS configuration table
+
+The RTEMS configuration table contains the maximum number of objects RTEMS
+can handle during the application (e.g. maximum number of tasks,
+semaphores, etc.). It's used to allocate the size for the RTEMS inner data
+structures. 
+
+The RTEMS configuration table is application dependent, which means that
+one has to provide one per application. It is usually defined
+by defining macros and including the header file @code{<confdefs.h>}.
+In simple applications such as the tests provided with RTEMS, it is
+commonly found in the main module of the application.  For more complex
+applications, it may be in a file by itself.
+
+The header file @code{<confdefs.h>} defines a constant table named
+@code{Configuration}.  It is common practice for the BSP to copy 
+this table into a modifiable copy named @code{BSP_Configuration}.
+This copy of the table is modified to define the base address of the
+RTEMS Executive Workspace as well as to reflect any BSP and
+device driver requirements not automatically handled by the application.
+
+For more information on the RTEMS Configuration Table, refer to the
+@b{RTEMS Application C User's Guide}.
 

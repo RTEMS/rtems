@@ -44,7 +44,7 @@ $(PROJECT).ps: $(PROJECT).dvi
 # run texi2dvi twice to generate the xref's properly.
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
-	$(TEXI2DVI) $(PROJECT).texi
+	texi2dvi $(PROJECT).texi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
@@ -55,7 +55,14 @@ clean:
 	rm -f *.o $(PROG) *.txt core 
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* $(GENERATED_FILES)
-	rm -f *.fixed _*
+	rm -f *.fixed _* network.t
+
+#
+#  Grab the chapter on writing a network device driver.
+#
+network.t: 
+	ln -s ../networking/driver.t  network.t
+
 
 #
 #  Process Automatically Generated Files
@@ -79,7 +86,7 @@ makefiles.texi: makefiles.t Makefile
 linkcmds.texi: linkcmds.t Makefile
 	$(BMENU) -p "Makefiles Creating a New BSP Make Customization File" \
 	    -u "Top" \
-	    -n "Required Support Routines" ${*}.t
+	    -n "Miscellaneous Support Files" ${*}.t
 
 support.texi: support.t Makefile
 	$(BMENU) -p "Linker Script Initialized Data" \

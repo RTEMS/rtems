@@ -89,7 +89,7 @@ This is the online version of the Getting Started with RTEMS for C/C++ Users.
 * Target Dependent Files::
 * Makefiles::
 * Linker Script::
-* Required Support Routines::
+* Miscellaneous Support Files::
 * Initialization Code::
 * Console Driver::
 * Clock Driver::

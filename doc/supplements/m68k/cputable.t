@@ -47,26 +47,24 @@ typedef struct @{
 
 @table @code
 @item pretasking_hook
-is the address of the
-user provided routine which is invoked once RTEMS initialization
-is complete but before interrupts and tasking are enabled.  This
-field may be NULL to indicate that the hook is not utilized.
+is the address of the user provided routine which is invoked
+once RTEMS APIs are initialized.  This routine will be invoked
+before any system tasks are created.  Interrupts are disabled.
+This field may be NULL to indicate that the hook is not utilized.
 
 @item predriver_hook
 is the address of the user provided
-routine which is invoked with tasking enabled immediately before
-the MPCI and device drivers are initialized. RTEMS
-initialization is complete, interrupts and tasking are enabled,
-but no device drivers are initialized.  This field may be NULL to
-indicate that the hook is not utilized.
+routine that is invoked immediately before the
+the device drivers and MPCI are initialized. RTEMS
+initialization is complete but interrupts and tasking are disabled.
+This field may be NULL to indicate that the hook is not utilized.
 
 @item postdriver_hook
 is the address of the user provided
-routine which is invoked with tasking enabled immediately after
-the MPCI and device drivers are initialized. RTEMS
-initialization is complete, interrupts and tasking are enabled,
-and the device drivers are initialized.  This field may be NULL
-to indicate that the hook is not utilized.
+routine that is invoked immediately after the
+the device drivers and MPCI are initialized. RTEMS
+initialization is complete but interrupts and tasking are disabled.
+This field may be NULL to indicate that the hook is not utilized.
 
 @item idle_task
 is the address of the optional user
