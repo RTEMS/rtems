@@ -137,6 +137,18 @@ boolean _Thread_Initialize(
   the_thread->Start.is_preemptible   = is_preemptible;
   the_thread->Start.budget_algorithm = budget_algorithm;
   the_thread->Start.budget_callout   = budget_callout;
+
+  switch ( budget_algorithm ) {
+    case THREAD_CPU_BUDGET_ALGORITHM_NONE:
+    case THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE:
+      break;
+    case THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE:
+      the_thread->cpu_time_budget = _Thread_Ticks_per_timeslice;
+      break;
+    case THREAD_CPU_BUDGET_ALGORITHM_CALLOUT:
+      break;
+  }
+
   the_thread->Start.isr_level        = isr_level;
 
   the_thread->current_state          = STATES_DORMANT;
