@@ -1,3 +1,11 @@
+2003-12-18	Joel Sherrill <joel@OARcorp.com>
+
+	* shmdr/addlq.c, shmdr/cnvpkt.c, shmdr/dump.c, shmdr/fatal.c,
+	shmdr/getlq.c, shmdr/getpkt.c, shmdr/init.c, shmdr/initlq.c,
+	shmdr/intr.c, shmdr/mpci.h, shmdr/mpisr.c, shmdr/poll.c,
+	shmdr/README, shmdr/receive.c, shmdr/retpkt.c, shmdr/send.c,
+	shmdr/setckvec.c, shmdr/shm_driver.h: Copied from libbsp/shmdr.
+
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
