@@ -39,6 +39,8 @@ The directives provided by the configuration space manager are:
 
 @subsection Configuration Space
 
+@subsection Format of a Configuration Space File
+
 @section Operations
 
 @subsection Mount and Unmounting
