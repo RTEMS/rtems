@@ -13,7 +13,7 @@
  *  $Id$
  */
 #ifndef LIBBSP_POWERPC_MBX8XX_VECTORS_H
-#define LIBBSP_POWERPC_MBX8xx_VECTORS_H
+#define LIBBSP_POWERPC_MBX8XX_VECTORS_H
 
 /*
  * The callee (high level exception code written in C) 

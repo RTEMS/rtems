@@ -13,7 +13,7 @@
  *  $Id$
  */
 #ifndef LIBBSP_POWERPC_ETH_COMM_VECTORS_H
-#define LIBBSP_POWERPC_Eth_Comm_VECTORS_H
+#define LIBBSP_POWERPC_ETH_COMM_VECTORS_H
 
 /*
  * The callee (high level exception code written in C) 
@@ -141,4 +141,4 @@ typedef exception_handler_t cpuExcHandlerType;
 
 #endif /* ASM */
 
-#endif /* LIBBSP_POWERPC_MCP750_VECTORS_H */
+#endif /* LIBBSP_POWERPC_ETH_COMM_VECTORS_H */

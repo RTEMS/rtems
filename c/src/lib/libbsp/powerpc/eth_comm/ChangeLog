@@ -1,3 +1,8 @@
+2001-04-20	Eric Valette <valette@crf.canon.fr>
+
+ 	* include/bsp.h: Added include of <bsp/vectors.h>
+	* vectors/vectors.h: Corrected typos.
+
 2001-04-11	Eric Valette <valette@crf.canon.fr>
 
 	* clock/.cvsignore, clock/Makefile.am, clock/p_clock.c,

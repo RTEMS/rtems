@@ -29,6 +29,7 @@ extern "C" {
 #include <mpc8xx/cpm.h>
 #include <mpc8xx/mmu.h>
 #include <mpc8xx/console.h>
+#include <bsp/vectors.h>
 
 
 /*
