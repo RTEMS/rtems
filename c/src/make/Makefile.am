@@ -4,8 +4,6 @@
 
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-
 rtems_makedir = $(prefix)/make
 
 GENERIC_FILES = host.cfg
