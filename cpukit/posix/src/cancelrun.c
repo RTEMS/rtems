@@ -41,7 +41,8 @@ void _POSIX_Threads_cancel_run(
 
   while ( !_Chain_Is_empty( handler_stack ) ) {
     _ISR_Disable( level );
-      handler = (POSIX_Cancel_Handler_control *) _Chain_Tail( handler_stack );
+      handler = (POSIX_Cancel_Handler_control *) 
+           _Chain_Tail( handler_stack )->previous;
       _Chain_Extract_unprotected( &handler->Node );
     _ISR_Enable( level );
  

@@ -1,3 +1,8 @@
+2002-12-11	Vladimir Nesic <vnesic@dkts.co.yu>
+
+	* src/cancelrun.c, src/cleanuppop.c: Get the last real node not the
+	permanent null last node.
+
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am: Remove.
