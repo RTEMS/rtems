@@ -1,3 +1,8 @@
+2004-02-05	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/p4000.cfg, custom/p4600.cfg, custom/p4650.cfg: Re-added
+	these -- copied from the 4.6 branch.
+
 2004-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 553/bsps
