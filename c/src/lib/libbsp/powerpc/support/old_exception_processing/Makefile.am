@@ -38,10 +38,10 @@ REL = $(ARCH)/rtems-cpu.rel
 $(REL): $(C_O_FILES) $(S_O_FILES)
 	$(make-rel)
 
-all-local: $(ARCH) $(TMPINSTALL_FILES) $(REL) $(ARCH)/rtems.o
+all-local: $(ARCH) $(TMPINSTALL_FILES) $(REL)
 
 UNUSED_FILES = irq_stub.S
 
-EXTRA_DIST = TODO rtems.S $(C_FILES) $(S_FILES) $(UNUSED_FILES)
+EXTRA_DIST = TODO $(C_FILES) $(S_FILES) $(UNUSED_FILES)
 
 include $(top_srcdir)/../../../../../../../automake/local.am

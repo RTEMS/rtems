@@ -1,5 +1,9 @@
 2002-07-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Fix oversights in previous patch.
+
+2002-07-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* rtems.S: Remove.
 	* Makefile.am: Reflect having removed rtems.S. Use AM_CPPFLAGS
 	instead of INCLUDES (Latest automake standard).
