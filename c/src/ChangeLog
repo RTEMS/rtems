@@ -1,3 +1,9 @@
+2004-09-29	Joel Sherrill <joel@OARcorp.com>
+
+	* aclocal/rtems-cpu-subdirs.m4, libchip/shmdr/shm_driver.h,
+	libnetworking/pppd/utils.c: i960 obsoleted and all references
+	removed.
+
 2004-04-09	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	PR 607/networking

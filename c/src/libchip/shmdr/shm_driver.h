@@ -118,10 +118,7 @@ extern "C" {
  *         view of the VMEbus address space) are not addressed yet.
  */
 
-#if defined(__i960__)
-#define SHM_LOCK_VALUE    0x00000080
-#define SHM_UNLOCK_VALUE  0
-#elif defined(__mc68000__)
+#if defined(__mc68000__)
 #define SHM_LOCK_VALUE    0x80000000
 #define SHM_UNLOCK_VALUE  0
 #define SHM_LOCK_VALUE    0x80000000
