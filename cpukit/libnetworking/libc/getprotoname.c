@@ -42,6 +42,8 @@ static char sccsid[] = "@(#)getprotoname.c	8.1 (Berkeley) 6/4/93";
 
 extern int _proto_stayopen;
 
+extern struct protoent *getprotobyname_static(const char *);
+
 struct protoent *
 getprotobyname(name)
 	register const char *name;
@@ -60,5 +62,8 @@ getprotobyname(name)
 found:
 	if (!_proto_stayopen)
 		endprotoent();
+
+	if ( !p )
+		p = getprotobyname_static(name);
 	return (p);
 }
