@@ -20,7 +20,6 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
-#include <ringbuf.h>
 
 #include <libchip/serial.h>
 #include <libchip/mc68681.h>

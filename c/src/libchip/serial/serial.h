@@ -3,18 +3,13 @@
  *
  *  This driver uses the termios pseudo driver.
  *
- *  COPYRIGHT (c) 1998 by Radstone Technology
+ *  COPYRIGHT (c) 1989-1998.
+ *  On-Line Applications Research Corporation (OAR).
+ *  Copyright assigned to U.S. Government, 1994.
  *
- *
- * THIS FILE IS PROVIDED TO YOU, THE USER, "AS IS", WITHOUT WARRANTY OF ANY
- * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK
- * AS TO THE QUALITY AND PERFORMANCE OF ALL CODE IN THIS FILE IS WITH YOU.
- *
- * You are hereby granted permission to use, copy, modify, and distribute
- * this file, provided that this notice, plus the above copyright notice
- * and disclaimer, appears in all copies. Radstone Technology will provide
- * no support for this code.
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
  *
  *  $Id$
  */
@@ -23,7 +18,6 @@
 #define __LIBCHIP_SERIAL_h
 
 #include <termios.h>
-#include <ringbuf.h>
 
 /*
  *  Types for get and set register routines
@@ -57,7 +51,6 @@ typedef enum {
   SERIAL_NS16550,              /* National Semiconductor NS16550 */
   SERIAL_Z85C30,               /* Zilog Z85C30 */
   SERIAL_CUSTOM                /* BSP specific driver */
-
 } console_devs;
 
 /*
