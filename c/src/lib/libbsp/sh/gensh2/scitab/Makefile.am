@@ -25,7 +25,7 @@ $(PGM): $(OBJS)
 	$(make-rel)
 
 scitab.c: $(SHGEN)
- 	$(SHGEN) -H @CPU_CLOCK_RATE_HZ@ sci > $@
+	$(SHGEN) -H @CPU_CLOCK_RATE_HZ@ sci > $@
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 

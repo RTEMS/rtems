@@ -1,3 +1,7 @@
+2001-09-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* scitab/Makefile.am: Remove stray blank from SCITAB rule.
+
 2001-08-01  Radzislaw Galler  <rgaller@et.put.poznan.pl>
 
 	* include/bsp.h: Disabled redefinition of
