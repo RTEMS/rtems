@@ -65,9 +65,9 @@ msdos_creat_node(
     uint16_t         time_val = 0;
     uint16_t         date = 0;
     fat_auxiliary_t  aux;
-    unsigned char    new_node  [MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
-    unsigned char    dot_dotdot[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE * 2];
-    unsigned char    link_node [MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
+    char             new_node  [MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
+    char             dot_dotdot[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE * 2];
+    char             link_node [MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
     uint32_t         sec = 0;
     uint32_t         byte = 0;
 

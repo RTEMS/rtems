@@ -2,6 +2,8 @@
 
 	* libfs/src/dosfs/fat.c (fat_init_volume_info): Reflect
 	fs_info->sec_buf being a uint8_t.
+	* libfs/src/dosfs/msdos_create.c, libfs/src/dosfs/msdos_misc.c:
+	Eliminate warnings.
 
 2005-01-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 

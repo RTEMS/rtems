@@ -140,7 +140,7 @@ msdos_find_name(
     fat_auxiliary_t  aux;
     unsigned short   time_val = 0;
     unsigned short   date = 0;
-    unsigned char    node_entry[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
+    char             node_entry[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
 
     memset(node_entry, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
 
@@ -385,8 +385,8 @@ msdos_get_dotdot_dir_info_cluster_num_and_offset(
     int              rc = RC_OK;
     msdos_fs_info_t *fs_info = mt_entry->fs_info;
     fat_file_fd_t   *fat_fd = NULL;
-    unsigned char    dot_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
-    unsigned char    dotdot_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
+    char             dot_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
+    char             dotdot_node[MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE];
     uint32_t         cl4find = 0;
 
     memset(dot_node, 0, MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE);
