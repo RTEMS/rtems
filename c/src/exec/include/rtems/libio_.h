@@ -211,6 +211,14 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
 /*
  *  External structures
  */
+#if !defined(LOGIN_NAME_MAX)
+#if defined(__linux__)
+#define LOGIN_NAME_MAX _POSIX_LOGIN_NAME_MAX
+#else
+#error "don't know how to set LOGIN_NAME_MAX"
+#endif
+#endif
+
 typedef struct {
  rtems_id                         task_id;	
  rtems_filesystem_location_info_t current_directory;

@@ -17,6 +17,23 @@
 
 #include <rtems.h>
 
+rtems_status_code rtems_io_register_name(
+  char *device_name,
+  rtems_device_major_number major,
+  rtems_device_minor_number minor
+)
+{
+  return 0; /* not supported */
+}
+
+rtems_status_code rtems_io_lookup_name(
+  const char           *name,
+  rtems_driver_name_t **device_info
+)
+{
+  return 0; /* not supported */
+}
+
 #if defined(RTEMS_UNIXLIB)
 
 void libc_init(int reentrant)
