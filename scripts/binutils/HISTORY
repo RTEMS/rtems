@@ -1,0 +1,25 @@
+#
+#  History of the binutils RPMs
+#
+#  $Id$
+#
+
+binutils_version=2.10
+binutils_patch_version=20000628
+binutils_rpm_release=1
+newlib_version=1.8.2
+
+RPM Version binutils-2.10-1
+=================================
++ Adds support for the h8300. 
+
+binutils-2.10-rtems-20000628.diff
+   - adds h8300 support.
+
+RPM Version binutils-2.9.5.0.24-1
+=================================
++ Corrects the object format for numerous RTEMS targets.
+
+binutils-2.9.5.0.24-rtems-20000207.diff
+   - base line
+
