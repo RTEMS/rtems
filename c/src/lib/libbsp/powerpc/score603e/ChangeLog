@@ -1,3 +1,14 @@
+2003-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* PCI_bus/Makefile.am: Eliminate VPATH.
+	* clock/Makefile.am: Eliminate VPATH.
+	* console/Makefile.am: Eliminate VPATH.
+	* start/Makefile.am: Eliminate VPATH.
+	* startup/Makefile.am: Eliminate VPATH.
+	* timer/Makefile.am: Eliminate VPATH.
+	* tod/Makefile.am: Eliminate VPATH.
+	* vectors/Makefile.am: Eliminate VPATH.
+
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
