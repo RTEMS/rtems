@@ -217,12 +217,29 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 # This should work, but doesn't.
 #  make -C gcc gnatlib 
 
+%if "%{gcc_version}" >= "3.3"
+# gcc >= 3.3
+  rm -rf gnatlib
+  mkdir gnatlib
+  pushd gnatlib
+  ACC="../gcc/xgcc -B../gcc/ -B../%{gcc_target}/newlib/"
+  ACC="$ACC -isystem ../%{gcc_target}/newlib/targ-include"
+  ACC="$ACC -isystem ../../newlib-%{newlib_version}/newlib/libc/include"
+  CC="$ACC" ../../gcc-%{gcc_version}/gcc/configure --disable-nls \
+     --host=%{gcc_target} --target=%{gcc_target} --enable-languages=ada
+  popd
+  make -C gcc/ada ../stamp-gnatlib1 LN_S="ln -s"
+  rm -f gcc/ada/rts/auto-target.h gcc/ada/rts/config.h
+  cp gnatlib/auto-host.h gcc/ada/rts/auto-target.h
+  sed -e 's,auto-host,auto-target,' < gcc/config.h > gcc/ada/rts/config.h
+%endif
 # This is what gcc/ada/Makefile.in contains by default, 
 # but what we override below
   GNATLIBCFLAGS="-g -O2"
 # Let gnatlib building find newlib's headers
   GNATLIBCFLAGS="$GNATLIBCFLAGS -isystem `pwd`/%{gcc_target}/newlib/targ-include"
   GNATLIBCFLAGS="$GNATLIBCFLAGS -isystem `pwd`/../newlib-%{newlib_version}/newlib/libc/include"
+  GNATLIBCFLAGS="$GNATLIBCFLAGS -isystem `pwd`/../gcc-%{gcc_version}/include"
 # Without this xgcc doesn't find the target's binutils.
   GNATLIBCFLAGS="$GNATLIBCFLAGS -B%{_prefix}/%{gcc_target}/bin/"
 %if "%{gcc_target}" == "mips-rtems@osversion@"

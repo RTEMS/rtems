@@ -14,5 +14,30 @@ This is the gcc/gnat tools for the gcc/gnat compiler
 %files -n %{rpmprefix}rtems@osversion@-base-gnat
 %defattr(-,root,root)
 %dir %{_prefix}/bin
-# %{_prefix}/bin/gnat*
+
+%if "%{gcc_version}" >= "3.3"
+%{_prefix}/info/gnat*
+%endif
+
+%if "%{gcc_version}" >= "3.3"
+%post -n %{rpmprefix}rtems@osversion@-base-gnat
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
+  then
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    done
+  fi
+
+%postun -n %{rpmprefix}rtems@osversion@-base-gnat
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
+  then
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    done
+  fi
+%endif
 %endif

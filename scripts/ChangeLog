@@ -1,3 +1,9 @@
+2003-11-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* gcc3newlib/gccnewlib.add: Add hacks to make gnatlib
+	buildable.
+	* gcc3newlib/base-gnat.add: Add info files.
+
 2003-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* gcc3newlib/gccnewlib.add: Make not building gnat and gcj the
