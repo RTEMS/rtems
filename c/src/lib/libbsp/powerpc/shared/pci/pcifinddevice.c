@@ -14,7 +14,7 @@
 #include <rtems/bspIo.h>
 
 int
-BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
+pci_find_by_devid( unsigned short vendorid, unsigned short deviceid,
                    int instance, int *pbus, int *pdev, int *pfun )
 {
    unsigned int d;
@@ -37,7 +37,7 @@ BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
 			if (PCI_INVALID_VENDORDEVICEID == d)
 				continue;
 #ifdef PCI_DEBUG
-			printk("BSP_pciFindDevice: found 0x%08x at %d/%d/%d\n",d,bus,dev,fun);
+			printk("pci_find_by_devid: found 0x%08x at %d/%d/%d\n",d,bus,dev,fun);
 #endif
 			(void) pci_read_config_word(bus,dev,fun,PCI_VENDOR_ID,&s);
 			if (vendorid != s)

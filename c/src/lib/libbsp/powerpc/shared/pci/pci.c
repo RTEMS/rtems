@@ -521,7 +521,7 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
 /*
  * This routine determines the maximum bus number in the system
  */
-void InitializePCI()
+void pci_initialize()
 {
   extern void detect_host_bridge();
   unsigned char ucSlotNumber, ucFnNumber, ucNumFuncs;

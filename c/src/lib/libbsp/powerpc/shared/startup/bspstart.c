@@ -399,7 +399,7 @@ void bsp_start( void )
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Going to start PCI buses scanning and initialization\n");
 #endif
-  InitializePCI();
+  pci_initialize();
 
   {
     const struct _int_map *bspmap  = motorolaIntMap(currentBoard);
