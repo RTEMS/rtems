@@ -56,12 +56,13 @@
  */
 
 void _CORE_message_queue_Seize(
-  CORE_message_queue_Control *the_message_queue,
-  Objects_Id                  id,
-  void                       *buffer,
-  unsigned32                 *size,
-  boolean                     wait,
-  Watchdog_Interval           timeout
+  CORE_message_queue_Control      *the_message_queue,
+  Objects_Id                       id,
+  void                            *buffer,
+  unsigned32                      *size,
+  boolean                          wait,
+  CORE_message_queue_Submit_types *priority,
+  Watchdog_Interval                timeout
 )
 {
   ISR_Level                          level;
@@ -77,6 +78,7 @@ void _CORE_message_queue_Seize(
     the_message = _CORE_message_queue_Get_pending_message( the_message_queue );
     _ISR_Enable( level );
     *size = the_message->Contents.size;
+    *priority = the_message->priority;
     _CORE_message_queue_Copy_buffer(the_message->Contents.buffer,buffer,*size );
     _CORE_message_queue_Free_message_buffer(the_message_queue, the_message );
     return;
