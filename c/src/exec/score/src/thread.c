@@ -21,6 +21,7 @@
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/states.h>
+#include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/userext.h>
@@ -93,22 +94,19 @@ void _Thread_Start_multitasking(
   Thread_Control *idle_thread
 )
 {
-   _Thread_Executing  =
-   _Thread_Heir       =
-   _Thread_MP_Receive = system_thread;
+  /*
+   *  The system is now multitasking and completely initialized.  
+   *  This system thread now either "goes away" in a single processor 
+   *  system or "turns into" the server thread in an MP system.
+   */
 
-   /*
-    *  Scheduling will not work "correctly" until the above
-    *  statements have been executed.
-    */
+  _System_state_Set( SYSTEM_STATE_UP );
 
-   _Thread_Ready( system_thread );
-   _Thread_Ready( idle_thread );
+  _Context_Switch_necessary = FALSE;
 
-   _Context_Switch_necessary = FALSE;
+  _Thread_Executing = _Thread_Heir;
 
-   _Context_Switch( &_Thread_BSP_context, &system_thread->Registers );
-
+  _Context_Switch( &_Thread_BSP_context, &_Thread_Executing->Registers );
 }
 
 /*PAGE
