@@ -223,6 +223,7 @@ void Stack_check_Initialize( void )
    * If appropriate, setup the interrupt stack for high water testing
    * also.
    */
+#if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
   if (_CPU_Interrupt_stack_low && _CPU_Interrupt_stack_high)
   {
       stack_check_interrupt_stack.area = _CPU_Interrupt_stack_low;
@@ -231,6 +232,7 @@ void Stack_check_Initialize( void )
 
       stack_check_dope_stack(&stack_check_interrupt_stack);
   }
+#endif
 
 #ifdef DONT_USE_FATAL_EXTENSION
 #ifdef RTEMS_DEBUG
