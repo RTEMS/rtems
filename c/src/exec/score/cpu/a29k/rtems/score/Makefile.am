@@ -20,6 +20,6 @@ $(PROJECT_INCLUDE)/rtems/score:
 $(PROJECT_INCLUDE)/rtems/score/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-all: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../../../automake/local.am

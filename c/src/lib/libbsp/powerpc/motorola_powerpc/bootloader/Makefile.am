@@ -61,6 +61,6 @@ rtems: $(BINARY_LOADED)
 rtems.gz: rtems
 	gzip -vf9 rtems
 
-all: $(ARCH) $(OBJS)
+all-local: $(ARCH) $(OBJS)
 
 include $(top_srcdir)/../../../../../../automake/local.am

@@ -23,6 +23,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-all: $(ARCH) $(OBJS)
+all-local: $(ARCH) $(OBJS)
 
 include $(top_srcdir)/../../../../../../automake/local.am

@@ -31,6 +31,6 @@ $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a: $(LIB)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a
 
-all: ${ARCH} $(LIB) $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(LIB) $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../../automake/local.am

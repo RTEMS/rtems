@@ -40,9 +40,9 @@ LD_LIBS += $(CPLUS_LD_LIBS)
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
-all: ${ARCH} $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(TMPINSTALL_FILES)
 else
-all:
+all-local:
 endif
 
 EXTRA_DIST = $(C_FILES) $(CC_FILES) $(DOCS)

@@ -41,7 +41,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/goahead \
     $(H_FILES:%.h=$(PROJECT_INCLUDE)/goahead/%.h)
 
 if HAS_POSIX
-all: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
+all-local: $(PREINSTALL_FILES) $(ARCH) $(OBJS) $(LIB)
 endif
 
 .PRECIOUS: $(LIB)

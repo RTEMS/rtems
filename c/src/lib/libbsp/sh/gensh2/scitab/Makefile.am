@@ -28,7 +28,7 @@ scitab.c: $(SHGEN)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
-all: $(ARCH) $(OBJS) $(PGM)
+all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

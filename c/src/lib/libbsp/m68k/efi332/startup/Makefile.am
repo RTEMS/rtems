@@ -42,7 +42,7 @@ TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds \
     $(PROJECT_RELEASE)/lib/linkcmds_ROM \
     $(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).o
 
-all: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 

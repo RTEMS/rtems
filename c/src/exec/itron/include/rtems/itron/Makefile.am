@@ -18,7 +18,7 @@ $(PROJECT_INCLUDE)/rtems/itron:
 $(PROJECT_INCLUDE)/rtems/itron/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-all-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = README
 

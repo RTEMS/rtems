@@ -17,12 +17,10 @@ include $(top_srcdir)/../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CFLAGS = $(CFLAGS_OS_V)
-
 $(PGM): $(timer_rel_OBJECTS)
 	$(make-rel)
 
-all: $(ARCH) $(timer_rel_OBJECTS) $(PGM)
+all-local: $(ARCH) $(timer_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

@@ -27,6 +27,6 @@ $(LIB): ${OBJS}
 $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
-all: ${ARCH} $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -18,15 +18,13 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CFLAGS = $(CFLAGS_OS_V)
-
 $(PGM): $(OBJS)
 	$(make-rel)
 
 # the .rel file built here will be put into libbsp.a by
 #    ../wrapup/Makefile
 
-all: $(ARCH) $(OBJS) $(PGM)
+all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

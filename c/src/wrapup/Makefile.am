@@ -9,8 +9,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../automake/lib.am
 
-LIBNAME = librtemsall
-LIB = $(PROJECT_RELEASE)/lib/$(LIBNAME)${LIB_VARIANT}.a
+LIB = $(PROJECT_RELEASE)/lib/librtemsall${LIB_VARIANT}.a
 
 if HAS_NETWORKING
 LIBNETWORKING = $(PROJECT_RELEASE)/lib/libnetworking$(LIB_VARIANT).a \
@@ -34,9 +33,9 @@ SRCS = $(wildcard $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a) \
     $(PROJECT_RELEASE)/lib/libmisc$(LIB_VARIANT).a \
     $(wildcard $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o)
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)${LIB_VARIANT}.a
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/librtemsall${LIB_VARIANT}.a
 
-all: $(ARCH) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(TMPINSTALL_FILES)
 
 $(LIB): $(SRCS)
 	rm -f $@

@@ -26,6 +26,6 @@ $(LIB): ${OBJS}
 	$(make-library)
 	cp $(LIB) ..
 
-all: ${ARCH} $(LIB)
+all-local: ${ARCH} $(LIB)
 
 include $(top_srcdir)/../../../../../automake/local.am

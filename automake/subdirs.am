@@ -8,9 +8,7 @@
 ## and this file will probably be removed
 
 depend-recursive \
-preinstall-recursive \
-debug-recursive \
-profile-recursive:
+preinstall-recursive:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
 	dot_seen=no; \
 	target=`echo $@ | sed s/-recursive//`; \
@@ -30,12 +28,6 @@ profile-recursive:
 	if test "$$dot_seen" = "no"; then \
 	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
 	fi; test -z "$$fail"
-
-debug: debug-recursive
-.PHONY: debug-recursive
-
-profile: profile-recursive
-.PHONY: profile-recursive
 
 preinstall: preinstall-recursive
 .PHONY: preinstall-recursive

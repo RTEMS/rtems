@@ -18,7 +18,7 @@ $(PROJECT_INCLUDE)/sh/%.h: %.h
 TMPINSTALL_FILES += $(PROJECT_INCLUDE)/sh \
     $(H_FILES:%=$(PROJECT_INCLUDE)/sh/%)
 
-all: $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = null.h sci.h sh7_pfc.h sh7_sci.h
 

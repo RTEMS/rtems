@@ -24,7 +24,7 @@ $(PROJECT_INCLUDE)/coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h) \
     $(PROJECT_INCLUDE)/coverhd.h
 
-all: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = bsp.h crt.h wd80x3.h
 

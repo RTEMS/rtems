@@ -16,6 +16,6 @@ $(PROJECT_INCLUDE)/zilog:
 $(PROJECT_INCLUDE)/zilog/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-all-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

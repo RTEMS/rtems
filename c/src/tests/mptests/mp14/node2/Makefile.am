@@ -41,9 +41,9 @@ AM_CPPFLAGS += -DNODE_NUMBER=$(NODE) -I$(srcdir)/..
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
-all: $(ARCH) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(TMPINSTALL_FILES)
 else
-all:
+all-local:
 endif
 
 EXTRA_DIST = $(DOCS)

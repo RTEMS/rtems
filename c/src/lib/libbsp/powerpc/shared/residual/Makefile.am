@@ -17,7 +17,7 @@ $(PROJECT_INCLUDE)/bsp/%.h: %.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp \
     $(H_FILES:%.h=$(PROJECT_INCLUDE)/bsp/%.h)
 
-all: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = pnp.h residual.c residual.h
 

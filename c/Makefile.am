@@ -28,7 +28,7 @@ SUBDIRS = make . $(RTEMS_BSP)
 	done
 
 ## Let all RTEMS' make targets depend on ${RTEMS_BSP}
-all-am: ${RTEMS_BSP}
+all-local: ${RTEMS_BSP}
 preinstall-am: ${RTEMS_BSP}
 depend-am: ${RTEMS_BSP}
 

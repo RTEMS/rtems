@@ -5,21 +5,30 @@
 ## Once automake is fully integrated these make targets 
 ## and this file will probably be removed
 
-debug-am:
-	$(MAKE) $(AM_MAKEFLAGS) "ARCH=o-debug" \
-      "CFLAGS_DEBUG=$(CFLAGS_DEBUG_V)" \
-      "LDFLAGS_DEBUG=$(LDFLAGS_DEBUG_V)" $(TARGET_VA)
+VARIANT = OPTIMIZE
 
-debug: debug-am
-.PHONY: debug debug-am
+VARIANT_OPTIMIZE_V = optimize
+VARIANT_DEBUG_V = debug
+VARIANT_PROFILE_V = profile
 
-profile-am:
-	$(MAKE) $(AM_MAKEFLAGS) "ARCH=o-profile" \
-      "CFLAGS_PROFILE=$(CFLAGS_PROFILE_V)" \
-      "LDFLAGS_PROFILE=$(LDFLAGS_PROFILE_V)" $(TARGET_VA)
+ARCH = o-$(VARIANT_$(VARIANT)_V)
+AM_CFLAGS += $(CFLAGS_$(VARIANT)_V)
 
-profile: profile-am
-.PHONY: profile profile-am
+debug:
+	@echo
+	@echo "\"make debug\" is obsolete, instead use:"
+	@echo "	make VARIANT=DEBUG"
+	@echo
+
+.PHONY: debug
+
+profile:
+	@echo
+	@echo "\"make profile\" is obsolete, instead use:"
+	@echo "	make VARIANT=PROFILE"
+	@echo
+
+.PHONY: profile
 
 preinstall-am: $(PREINSTALL_FILES)
 preinstall: preinstall-am
@@ -28,3 +37,9 @@ preinstall: preinstall-am
 depend-am:
 depend: depend-am
 .PHONY: depend depend-am
+
+${ARCH}:
+	mkdir ${ARCH}
+
+clean:
+	$(RM) -r o-optimize o-debug o-profile

@@ -20,7 +20,7 @@ include $(top_srcdir)/../../../../../automake/lib.am
 $(PGM): $(semaphore_rel_OBJECTS)
 	$(make-rel)
 
-all: $(ARCH) $(semaphore_rel_OBJECTS) $(PGM)
+all-local: $(ARCH) $(semaphore_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

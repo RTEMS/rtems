@@ -48,10 +48,10 @@ $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o: $(ARCH)/rtems-ctor.o
 	$(INSTALL_DATA) $< $@
 
 if HAS_CXX
-all: $(ARCH) $(PGM) $(PROJECT_RELEASE)/lib/libno-ctor$(LIB_VARIANT).a \
+all-local: $(ARCH) $(PGM) $(PROJECT_RELEASE)/lib/libno-ctor$(LIB_VARIANT).a \
     $(PROJECT_RELEASE)/lib/rtems-ctor$(LIB_VARIANT).o
 else
-all: $(ARCH) $(PGM)
+all-local: $(ARCH) $(PGM)
 endif
 
 EXTRA_DIST = bspclean.c bspstart.c exit.c main.c no-ctor.c rtems-ctor.cc \

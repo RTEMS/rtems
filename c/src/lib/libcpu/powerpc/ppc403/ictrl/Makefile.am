@@ -24,14 +24,12 @@ $(PROJECT_INCLUDE)/%.h: %.h
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CFLAGS = $(CFLAGS_OS_V)
-
 $(PGM): $(ictrl_rel_OBJECTS)
 	$(make-rel)
 
 TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/ictrl.h
 
-all: $(ARCH) $(ictrl_rel_OBJECTS) $(PGM) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(ictrl_rel_OBJECTS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 

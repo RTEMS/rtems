@@ -28,7 +28,7 @@ $(PROJECT_INCLUDE)/rtems/posix:
 $(PROJECT_INCLUDE)/rtems/posix/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-all-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = $(UNUSED_H_FILES)
 

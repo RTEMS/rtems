@@ -13,25 +13,3 @@
 #
 
 PROJECT_TOOLS = $(PROJECT_RELEASE)/build-tools
-
-#
-# Target architecture; may be changed as per 'make "ARCH=debug"'
-# This is where the object files get put.
-#
-
-ARCH=o-optimize
-
-VARIANT=
-
-#
-# Target variant names
-#
-TARGET_VARIANTS = optimize debug profile
-
-#
-# Generate list of object directories: o-optimize, o-debug, o-profile
-#
-VARIANTS=${TARGET_VARIANTS:%=o-%}
-
-${ARCH}:
-	test -d ${ARCH} || mkdir ${ARCH}

@@ -34,6 +34,6 @@ $(PROJECT_INCLUDE)/bsp/vectors.h: ../../shared/vectors/vectors.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/vectors.h
 
-all: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
 
 include $(top_srcdir)/../../../../../../automake/local.am

@@ -18,7 +18,7 @@ $(PROJECT_INCLUDE)/rdbg/%.h: %.h
 	$(INSTALL_DATA) $< $@
 endif
 
-all-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 if HAS_RDBG
 SUBDIRS = $(RTEMS_CPU)

@@ -30,6 +30,6 @@ $(PROJECT_INCLUDE)/rtems/score/%.inl: %.inl
 	$(INSTALL_DATA) $< $@
 endif
 
-all-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

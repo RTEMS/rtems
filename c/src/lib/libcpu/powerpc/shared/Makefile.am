@@ -32,7 +32,7 @@ $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
     $(H_FILES:%=$(PROJECT_INCLUDE)/libcpu/%)
 
-all: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 

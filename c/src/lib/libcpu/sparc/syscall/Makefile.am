@@ -20,15 +20,13 @@ include $(top_srcdir)/../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CFLAGS = $(CFLAGS_OS_V)
-
 $(PGM): $(syscall_rel_OBJECTS)
 	$(make-rel)
 
 # the .rel file built here will be put into libbsp.a by
 #    libbsp/sparc/BSP/wrapup/Makefile
 
-all: $(ARCH) $(syscall_rel_OBJECTS) $(PGM)
+all-local: $(ARCH) $(syscall_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

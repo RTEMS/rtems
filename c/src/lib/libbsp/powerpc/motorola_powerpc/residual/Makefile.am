@@ -33,6 +33,6 @@ $(PROJECT_INCLUDE)/bsp/residual.h: ../../shared/residual/residual.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/pnp.h \
     $(PROJECT_INCLUDE)/bsp/residual.h
 
-all: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
 
 include $(top_srcdir)/../../../../../../automake/local.am

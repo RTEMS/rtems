@@ -16,7 +16,7 @@ $(PROJECT_INCLUDE):
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-all-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 SUBDIRS = rtems
 

@@ -19,7 +19,7 @@ $(PROJECT_INCLUDE)/bsp/%.h: %.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp \
     $(H_FILES:%.h=$(PROJECT_INCLUDE)/bsp/%.h)
 
-all: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = i8259.c irq.c irq.h irq_asm.S irq_init.c
 

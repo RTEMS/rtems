@@ -40,7 +40,7 @@ $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o: $(ARCH)/start.o
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start16$(LIB_VARIANT).bin \
     $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).o
 
-all: $(ARCH) $(OBJS) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(OBJS) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = start.S start16.S
 

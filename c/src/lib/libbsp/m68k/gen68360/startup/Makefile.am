@@ -41,7 +41,7 @@ TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds \
     $(PROJECT_RELEASE)/lib/linkcmds.prom \
     $(PROJECT_RELEASE)/lib/linkcmds.bootp
 
-all: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 

@@ -101,7 +101,7 @@ OBJS = $(C_O_FILES)
 
 AM_CFLAGS += $(LIBC_DEFINES)
 
-all: ${ARCH} $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(TMPINSTALL_FILES)
 
 $(LIB): ${OBJS}
 	$(make-library)

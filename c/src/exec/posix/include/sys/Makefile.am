@@ -16,6 +16,6 @@ $(PROJECT_INCLUDE)/sys:
 $(PROJECT_INCLUDE)/sys/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-all-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

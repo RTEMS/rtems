@@ -24,6 +24,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-all: $(ARCH) $(OBJS)
+all-local: $(ARCH) $(OBJS)
 
 include $(top_srcdir)/../../../../../../automake/local.am

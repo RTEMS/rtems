@@ -35,7 +35,7 @@ AM_CPPFLAGS += -DNOPOLL -DNOSELECT -U__STRICT_ANSI__
 $(LIB): $(OBJS)
 	$(make-library)
 
-all: $(ARCH) $(OBJS) $(LIB)
+all-local: $(ARCH) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 

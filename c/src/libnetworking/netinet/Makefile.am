@@ -28,7 +28,7 @@ AM_CPPFLAGS += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC \
 $(LIB): $(OBJS)
 	$(make-library)
 
-all: $(ARCH) $(OBJS) $(LIB)
+all-local: $(ARCH) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 

@@ -46,9 +46,7 @@ $(REL): $(C_O_FILES) $(S_O_FILES)
 	test -d ../$(ARCH) || mkdir ../$(ARCH)
 	$(make-rel)
 
-all: $(ARCH) $(PREINSTALL_FILES) $(REL)
-all: $(ARCH)/rtems.o
-all: $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(REL) $(ARCH)/rtems.o $(TMPINSTALL_FILES)
 
 clean-local:
 	$(RM) -r ../o-optimize ../o-debug ../o-profile

@@ -117,8 +117,15 @@ else { $rtems_top .= "/" ; }
     elsif ( /^[\s]*(ACLOCAL_AMFLAGS)[\s\t]*[\+]*=[\s]*(.*)[\s]*$/o )
     { # remove the line
     }
+    elsif ( /^[\s]*(AM_CFLAGS)[\s\t]*[\+]*=[\s]*\$\(CFLAGS_OS_V\)[\s]*$/o )
+    { # remove the line
+    }
     elsif ( /^[\s]*debug-am:.*$/o )
     { # remove the line
+    }
+    elsif ( /^[\s]*all(\-am):(.*)$/o )
+    { # replace the line
+      push @ibuf, "all-local:$2\n" ;
     }
     elsif ( /^[\s]*profile-am:.*$/o )
     { # remove the line

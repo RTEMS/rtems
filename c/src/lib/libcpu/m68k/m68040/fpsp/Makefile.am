@@ -28,13 +28,11 @@ OBJS = $(C_O_FILES) $(S_O_FILES)
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CFLAGS += $(CFLAGS_OS_V)
-
 $(PGM): $(OBJS)
 	$(make-rel)
 
 if m68040
-all: $(ARCH) $(OBJS) $(PGM)
+all-local: $(ARCH) $(OBJS) $(PGM)
 endif
 
 .PRECIOUS: $(PGM)

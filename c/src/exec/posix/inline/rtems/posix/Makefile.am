@@ -20,7 +20,7 @@ $(PROJECT_INCLUDE)/rtems/posix/%.inl: %.inl
 	$(INSTALL_DATA) $< $@
 endif
 
-all-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = intr.inl
 

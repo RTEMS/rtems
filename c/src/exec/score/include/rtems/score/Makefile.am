@@ -88,7 +88,7 @@ $(TARGOPTS):
 	@echo                                                  >>$@
 	@echo "#endif"                                         >>$@
 
-all: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = $(STD_H_FILES) $(MP_H_FILES)
 

@@ -19,6 +19,6 @@ $(PROJECT_INCLUDE)/rtems/%.h: %.h
 
 EXTRA_DIST = README
 
-all-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

@@ -26,15 +26,13 @@ $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CFLAGS = $(CFLAGS_OS_V)
-
 $(PGM): $(mmu_rel_OBJECTS)
 	$(make-rel)
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
     $(PROJECT_INCLUDE)/libcpu/bat.h
 
-all: $(ARCH) $(PREINSTALL_FILES) $(mmu_rel_OBJECTS) $(PGM)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(mmu_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

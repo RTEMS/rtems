@@ -36,7 +36,7 @@ TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp.h \
     $(PROJECT_INCLUDE)/m340timer.h $(PROJECT_INCLUDE)/m68340.h \
     $(PROJECT_INCLUDE)/m68340.inc $(PROJECT_INCLUDE)/m68349.inc
 
-all: $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bsp.h coverhd.h m340timer.h m340uart.h m68340.h m68340.inc \
     m68349.inc

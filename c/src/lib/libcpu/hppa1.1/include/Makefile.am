@@ -18,7 +18,7 @@ $(PROJECT_INCLUDE)/hppa1.1/%.h: %.h
 TMPINSTALL_FILES += $(PROJECT_INCLUDE)/hppa1.1 \
     $(H_FILES:%.h=$(PROJECT_INCLUDE)/hppa1.1/%.h)
 
-all: $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = runway.h semaphore.h
 

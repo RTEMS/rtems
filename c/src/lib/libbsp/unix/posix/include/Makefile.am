@@ -18,7 +18,7 @@ $(PROJECT_INCLUDE)/coverhd.h: $(srcdir)/../../../shared/include/coverhd.h
 TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h) \
     $(PROJECT_INCLUDE)/coverhd.h
 
-all: $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bsp.h
 

@@ -34,7 +34,7 @@ $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a: $(LIB)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a
 
-all: $(ARCH) $(OBJS) $(LIB) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(OBJS) $(LIB) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(LIB)
 

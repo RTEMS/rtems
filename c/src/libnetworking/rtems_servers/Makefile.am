@@ -22,7 +22,7 @@ include $(top_srcdir)/../../../automake/lib.am
 $(LIB): $(OBJS)
 	$(make-library)
 
-all: $(ARCH) $(OBJS) $(LIB)
+all-local: $(ARCH) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 

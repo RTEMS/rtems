@@ -37,7 +37,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
-all: $(ARCH) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(C_FILES) $(DOCS)
 

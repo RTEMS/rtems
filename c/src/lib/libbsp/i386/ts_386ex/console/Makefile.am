@@ -26,7 +26,7 @@ $(PGM): $(console_rel_OBJECTS)
 # the .rel file built here will be put into libbsp.a by
 # 	../wrapup/Makefile
 
-all: $(ARCH) $(console_rel_OBJECTS) $(PGM)
+all-local: $(ARCH) $(console_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

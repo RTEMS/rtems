@@ -14,7 +14,7 @@ $(PROJECT_INCLUDE)/%.h: %.h
 
 TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h)
 
-all: $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bsp.h coverhd.h
 

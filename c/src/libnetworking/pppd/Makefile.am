@@ -31,7 +31,7 @@ EXTRA_FILES = modem_example/16550.h modem_example/README \
     modem_example/modem.c modem_example/modem.h modem_example/ppp.c \
     modem_example/ppp.h modem_example/pppcompress.c
 
-all: $(ARCH) $(OBJS) $(LIB)
+all-local: $(ARCH) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 

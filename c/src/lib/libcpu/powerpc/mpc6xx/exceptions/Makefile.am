@@ -27,15 +27,13 @@ $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 # (OPTIONAL) Add local stuff here using +=
 #
 
-AM_CFLAGS = $(CFLAGS_OS_V)
-
 $(PGM): $(exceptions_rel_OBJECTS)
 	$(make-rel)
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
     $(PROJECT_INCLUDE)/libcpu/raw_exception.h
 
-all: $(ARCH) $(PREINSTALL_FILES) $(exceptions_rel_OBJECTS) $(PGM)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(exceptions_rel_OBJECTS) $(PGM)
 
 .PRECIOUS: $(PGM)
 

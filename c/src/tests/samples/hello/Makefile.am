@@ -31,7 +31,7 @@ include $(top_srcdir)/sample.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-all: ${ARCH} $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(TMPINSTALL_FILES)
 
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)

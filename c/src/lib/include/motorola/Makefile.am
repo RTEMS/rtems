@@ -16,6 +16,6 @@ $(PROJECT_INCLUDE)/motorola:
 $(PROJECT_INCLUDE)/motorola/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-all-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

@@ -25,7 +25,7 @@ $(PGM): $(ne2000_rel_OBJECTS)
 # 	../wrapup/Makefile
 
 if HAS_NETWORKING
-all: $(ARCH) $(ne2000_rel_OBJECTS) $(PGM)
+all-local: $(ARCH) $(ne2000_rel_OBJECTS) $(PGM)
 endif
 
 .PRECIOUS: $(PGM)

@@ -38,7 +38,7 @@ $(PROJECT_RELEASE)/lib/debugger: debugger
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds \
     $(PROJECT_RELEASE)/lib/rom $(PROJECT_RELEASE)/lib/debugger
 
-all: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
+all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 

@@ -91,9 +91,8 @@ include $(top_srcdir)/../../../../automake/lib.am
 #
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
-AM_CFLAGS += $(CFLAGS_OS_V)
 
-all: ${ARCH} ${OBJS}
+all-local: ${ARCH} ${OBJS}
 
 # temporary so we can see how many things are left to implement
 not:

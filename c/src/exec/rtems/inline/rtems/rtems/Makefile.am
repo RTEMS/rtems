@@ -20,6 +20,6 @@ $(PROJECT_INCLUDE)/rtems/rtems/%.inl: %.inl
 	$(INSTALL_DATA) $< $@
 endif
 
-all-am: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

@@ -24,7 +24,7 @@ $(PGM): $(wd8003_rel_OBJECTS)
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
 if HAS_NETWORKING
-all: $(ARCH) $(wd8003_rel_OBJECTS) $(PGM)
+all-local: $(ARCH) $(wd8003_rel_OBJECTS) $(PGM)
 endif
 
 .PRECIOUS: $(PGM)

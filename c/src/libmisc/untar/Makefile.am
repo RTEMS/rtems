@@ -32,7 +32,7 @@ $(LIB): $(OBJS)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
     $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
 
-all: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 

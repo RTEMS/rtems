@@ -49,9 +49,8 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../automake/lib.am
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
-AM_CFLAGS += $(CFLAGS_OS_V)
 
-all: ${ARCH} ${OBJS}
+all-local: ${ARCH} ${OBJS}
 
 UNUSED_C_FILES = cre_mbx.c del_mbx.c mboxtranslatereturncode.c network.c \
     prcv_mbx.c rcv_mbx.c ref_mbx.c snd_mbx.c sysmgmt.c trcv_mbx.c

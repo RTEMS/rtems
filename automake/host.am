@@ -5,13 +5,19 @@
 ## Once automake is fully integrated these make targets 
 ## and this file will probably be removed
 
-debug-am: all-am
-debug: debug-am
-.PHONY: debug debug-am
+debug:
+	@echo
+	@echo "\"make debug\" is obsolete, instead use:"
+	@echo "	make VARIANT=DEBUG"
+	@echo
 
-profile-am: all-am
-profile: profile-am
-.PHONY: profile profile-am
+.PHONY: debug
+
+profile:
+	@echo
+	@echo "\"make profile\" is obsolete, instead use:"
+	@echo "	make VARIANT=PROFILE"
+	@echo
 
 preinstall-am: $(PREINSTALL_FILES)
 preinstall: preinstall-am

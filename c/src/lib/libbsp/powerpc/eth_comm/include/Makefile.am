@@ -25,7 +25,7 @@ TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp.h \
     $(PROJECT_INCLUDE)/coverhd.h $(PROJECT_INCLUDE)/canbus.h \
     $(PROJECT_INCLUDE)/info.h
 
-all: $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bsp.h canbus.h coverhd.h info.h
 

@@ -17,7 +17,7 @@ $(PROJECT_INCLUDE)/%.h: %.h
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h)
 
-all: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = GDB.HOWTO i386-stub-glue.c i386-stub.c uart.c uart.h
 

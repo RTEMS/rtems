@@ -11,7 +11,7 @@ $(PROJECT_INCLUDE)/%.h: %.h
 
 PREINSTALL_FILES += $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h)
 
-all: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = bsp.h coverhd.h
 
