@@ -1,3 +1,9 @@
+2003-12-16	Joel Sherrill <joel@OARcorp.com>
+
+	PR 542/filesystem
+	* include/rtems/libio_.h: Add rtems_libio_iop_to_descriptor macro to
+	convert iop to the corresponding integer file descriptor.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.

@@ -54,6 +54,16 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
   ((((unsigned32)(_fd)) < rtems_libio_number_iops) ? \
          &rtems_libio_iops[_fd] : 0)
 
+/*
+ *  rtems_libio_iop_to_descriptor
+ *
+ *  Macro to convert an internal file descriptor pointer (iop) into
+ *  the integer file descriptor used by the "section 2" system calls.
+ */
+
+#define rtems_libio_iop_to_descriptor(_iop) \
+   ((!(_iop)) ? -1 : (_iop - rtems_libio_iops))
+
 /*  
  *  rtems_libio_check_is_open
  *  
