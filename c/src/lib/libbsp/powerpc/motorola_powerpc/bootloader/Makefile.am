@@ -48,10 +48,9 @@ bootloader.o: $(bootloader_o_OBJECTS)
 	$(NM)  $@ | grep ' U '
 	@echo "Every symbol listed should be defined in @srcdir@/ppcboot.lds"
 
-# FIXME: We might want to apply this in future.
-# ppcbootdir = $(exec_prefix)/@RTEMS_BSP@/lib
-# ppcboot_DATA = bootloader.o
-# ppcboot_DATA += ../../shared/bootloader/ppcboot.lds
+ppcbootdir = $(bsplibdir)
+ppcboot_DATA = bootloader.o
+ppcboot_DATA += ../../shared/bootloader/ppcboot.lds
 
 # FIXME: Tmp-install stuff to make mcp750.cfg's make-exe happy.
 # As mcp750.cfg's make-exe doesn't work outside of the source-tree. 

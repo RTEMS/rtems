@@ -1,3 +1,8 @@
+2002-07-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bootloader/Makefile.am: Install bootloader.o.
+	Install bootloader/bootloader.ppcboot.lds.
+
 2002-07-24	Joel Sherrill <joel@OARcorp.com>
 
 	* vectors/Makefile.am: Install bsp/vectors.h.
