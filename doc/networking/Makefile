@@ -99,3 +99,6 @@ clean:
 	rm -f timetbl.t wksheets.t
 	rm -f *.fixed _*
 
+convert:
+	/usr/bin/gs -dMaxBitmap=300000000 -g5500x7500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER  -sOutputFile=networkflow.pdf -- networkflow.eps -c -quit
+	/usr/bin/gs -dMaxBitmap=300000000 -g4500x5500 -sDEVICE=pdfwrite -q -dNOPAUSE -dSAFER -sOutputFile=PCIreg.pdf -- PCIreg.eps -c -quit
