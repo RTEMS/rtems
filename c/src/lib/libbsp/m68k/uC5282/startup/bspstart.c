@@ -160,7 +160,6 @@ void bsp_start( void )
 {
   extern char _WorkspaceBase[];
   extern char _RamBase[], _RamSize[];
-  extern char _FlashBase[], _FlashSize[];
   extern unsigned long  _M68k_Ramsize;
 
   _M68k_Ramsize = (unsigned long)_RamSize;      /* RAM size set in linker script */
