@@ -9,7 +9,7 @@ RTEMS_TOP(..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.8])
+AM_INIT_AUTOMAKE([no-define nostdinc subdir-objects foreign 1.8])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_MULTILIB
@@ -33,6 +33,7 @@ fi
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
+AM_PROG_CC_C_O
 AC_PROG_RANLIB
 
 # FIXME: For the moment, no reason to check for ada
