@@ -1,3 +1,7 @@
+2004-03-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* startup/Makefile.am: Remove references to linkcmds.
+
 2004-02-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 575/bsps
