@@ -244,15 +244,11 @@ unsigned int sleep(
   unsigned int seconds
 )
 {
-  _Thread_Disable_dispatch();
-    _Thread_Set_state( _Thread_Executing, STATES_WAITING_FOR_TIME );
-    _Watchdog_Initialize(
-      &_Thread_Executing->Timer,
-      _Thread_Delay_ended,          /* XXX may need to be POSIX specific */
-      _Thread_Executing->Object.id,
-      NULL
-    );
-    _Watchdog_Insert_seconds( &_Thread_Executing->Timer, seconds );
-  _Thread_Enable_dispatch();
-  return 0;                       /* XXX should account for signal */
+  /* XXX can we get away with this implementation? */
+  struct timespec tp;
+
+  tp.tv_sec = seconds;
+  tp.tv_nsec = 0;
+
+  return nanosleep( &tp, NULL );
 }

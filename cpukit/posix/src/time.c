@@ -2,9 +2,13 @@
  *  $Id$
  */
 
+#include <assert.h>
 #include <time.h>
+#include <errno.h>
 
 #include <rtems/system.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 
 /*
@@ -24,7 +28,15 @@ Watchdog_Interval _POSIX_Time_Spec_to_interval(
   const struct timespec *time
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  Watchdog_Interval  ticks;
+
+  ticks  = (time->tv_sec * TOD_MICROSECONDS_PER_SECOND) / 
+             _TOD_Microseconds_per_tick;
+
+  ticks += (time->tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND) / 
+             _TOD_Microseconds_per_tick;
+
+  return ticks;
 }
 
 /*
@@ -38,7 +50,7 @@ time_t time(
   time_t  seconds_since_epoch;
 
   if ( !_TOD_Is_set() ) {
-    /* XXX set errno */
+    errno = EINVAL;
     return -1;
   }
 
@@ -65,7 +77,66 @@ int clock_settime(
   const struct timespec *tp
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  struct tm         split_time;
+  TOD_Control       tod;
+  Watchdog_Interval seconds;
+
+  assert( tp );
+
+  switch ( clock_id ) {
+ 
+    case CLOCK_REALTIME:
+      (void) gmtime_r( &tp->tv_sec, &split_time );
+ 
+      /*
+       *  Convert the tm structure format to that used by the TOD Handler
+       *
+       *  NOTE: TOD Handler does not honor leap seconds.
+       */
+
+      tod.year   = split_time.tm_year + 1900;  /* RHS is years since 1900 */
+      tod.month  = split_time.tm_mon + 1;      /* RHS uses 0-11 */
+      tod.day    = split_time.tm_mday;
+      tod.hour   = split_time.tm_hour;
+      tod.minute = split_time.tm_min;
+      tod.second = split_time.tm_sec;  /* RHS allows 0-61 for leap seconds */
+
+      tod.ticks  = (tp->tv_nsec / TOD_NANOSECONDS_PER_MICROSECOND) /
+                      _TOD_Microseconds_per_tick;
+
+      if ( !_TOD_Validate( &tod ) ) {
+        errno = EINVAL;
+        return -1;
+      }
+ 
+      /*
+       *  We can't use the tp->tv_sec field because it is based on 
+       *  a different EPOCH.
+       */
+
+      seconds = _TOD_To_seconds( &tod );
+      _Thread_Disable_dispatch();
+        _TOD_Set( &tod, seconds );
+      _Thread_Enable_dispatch();
+      break;
+ 
+#ifdef _POSIX_CPUTIME
+    case CLOCK_PROCESS_CPUTIME:
+      return POSIX_NOT_IMPLEMENTED();
+      break;
+#endif
+ 
+#ifdef _POSIX_THREAD_CPUTIME
+    case CLOCK_THREAD_CPUTIME:
+      return POSIX_NOT_IMPLEMENTED();
+      break;
+#endif
+    default:
+      errno = EINVAL;
+      return -1;
+ 
+  }
+  return 0;
 }
 
 /*
@@ -77,7 +148,48 @@ int clock_gettime(
   struct timespec *tp
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  ISR_Level      level;
+  time_t         seconds;
+  long           ticks;
+
+  assert( tp );
+
+  switch ( clock_id ) {
+
+    case CLOCK_REALTIME:
+      if ( !_TOD_Is_set() ) {  /* XXX does posix allow it to not be set? */
+        errno = EINVAL;
+        return -1;
+      }
+ 
+      _ISR_Disable( level );
+        seconds = _TOD_Seconds_since_epoch;
+        ticks   = _TOD_Current.ticks;
+      _ISR_Enable( level );
+ 
+      tp->tv_sec  = seconds + POSIX_TIME_SECONDS_1970_THROUGH_1988;
+      tp->tv_nsec = ticks * _TOD_Microseconds_per_tick * 
+                      TOD_NANOSECONDS_PER_MICROSECOND; 
+      break;
+
+#ifdef _POSIX_CPUTIME
+    case CLOCK_PROCESS_CPUTIME:
+      /* could base this on _TOD_Ticks_since_boot -- must make set work though*/
+      return POSIX_NOT_IMPLEMENTED();
+      break;
+#endif
+
+#ifdef _POSIX_THREAD_CPUTIME
+    case CLOCK_THREAD_CPUTIME:
+      return POSIX_NOT_IMPLEMENTED();
+      break;
+#endif
+    default:
+      errno = EINVAL;
+      return -1;
+
+  }
+  return 0;
 }
 
 /*
@@ -89,7 +201,29 @@ int clock_getres(
   struct timespec *res
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  switch ( clock_id ) {
+ 
+    /*
+     *  All time in rtems is based on the same clock tick.
+     */
+
+    case CLOCK_REALTIME:
+    case CLOCK_PROCESS_CPUTIME:
+    case CLOCK_THREAD_CPUTIME:
+      if ( res ) {
+        res->tv_sec  = _TOD_Microseconds_per_tick / TOD_MICROSECONDS_PER_SECOND;
+        res->tv_nsec = 
+          (_TOD_Microseconds_per_tick % TOD_MICROSECONDS_PER_SECOND) *
+            TOD_NANOSECONDS_PER_MICROSECOND;
+      }
+      break;
+ 
+    default:
+      errno = EINVAL;
+      return -1;
+ 
+  }
+  return 0;
 }
 
 /*
@@ -162,7 +296,28 @@ int nanosleep(
   struct timespec        *rmtp
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  Watchdog_Interval ticks;
+
+/* XXX this is interruptible by a posix signal */
+
+/* XXX rmtp is the time remaining on the timer -- we do not support this */
+
+/* XXX rmtp may be NULL */
+
+  ticks = _POSIX_Time_Spec_to_interval( rqtp );
+  
+  _Thread_Disable_dispatch();
+    _Thread_Set_state( _Thread_Executing, STATES_WAITING_FOR_TIME );
+    _Watchdog_Initialize(
+      &_Thread_Executing->Timer,
+      _Thread_Delay_ended,          /* XXX may need to be POSIX specific */
+      _Thread_Executing->Object.id,
+      NULL
+    );
+    _Watchdog_Insert_ticks( &_Thread_Executing->Timer, ticks );
+  _Thread_Enable_dispatch();
+  return 0;                    /* XXX should account for signal/remaining */
+
 }
 
 /*
