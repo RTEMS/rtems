@@ -18,28 +18,29 @@
  *  Macros to assist in accessing memory mapped Mongoose registers
  */
 
+
 #define MONGOOSEV_READ( _base ) \
-  *((volatile unsigned32 *)(_base))
+  ( *((volatile unsigned32 *)(_base)) )
 
 #define MONGOOSEV_WRITE( _base, _value ) \
-  *((volatile unsigned32 *)(_base)) = (_value)
+  ( *((volatile unsigned32 *)(_base)) = (_value) )
 
 #define MONGOOSEV_READ_REGISTER( _base, _register ) \
-  *((volatile unsigned32 *)((_base) + (_register)))
+  ( *((volatile unsigned32 *)((_base) + (_register))) )
 
 #define MONGOOSEV_WRITE_REGISTER( _base, _register, _value ) \
-  *((volatile unsigned32 *)((_base) + (_register))) = (_value)
+  ( *((volatile unsigned32 *)((_base) + (_register))) = (_value) )
 
-#define MONGOOSEV_ATOMIC_MASK( _addr, _mask, _new ) \
-  do { \
-    rtems_interrupt_level  Irql; \
-    rtems_unsigned32       tmp; \
-    \
-    rtems_interrupt_disable(Irql); \
-      tmp = *((volatile unsigned32 *)(_addr)) & ~(_mask); \
-      *((volatile unsigned32 *)(_addr)) = tmp | (_new); \
-    rtems_interrupt_enable(Irql); \
-  } while (0)
+
+
+
+
+/*
+ * Macros to read/write the Mongoose FPU control register.
+ */
+
+
+
 
 /*
  *  BIU and DRAM Registers
@@ -61,33 +62,22 @@
 #define MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_CAUSE_REGISTER  0xFFFE0188
 #define MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_MASK_REGISTER   0xFFFE018C
 
-#define MONGOOSEV_PFICR MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_CAUSE_REGISTER
-#define MONGOOSEV_PFIMR MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_MASK_REGISTER
-
-#define mongoosev_set_in_pficr( _mask, _bits ) \
-  MONGOOSEV_ATOMIC_MASK( MONGOOSEV_PFICR, _mask, _bits )
-#define mongoosev_clear_in_pficr( _mask, _bits ) \
-  MONGOOSEV_ATOMIC_MASK( MONGOOSEV_PFICR, _mask, ~(_bits) )
-
-#define mongoosev_set_in_pfimr( _mask, _bits ) \
-  MONGOOSEV_ATOMIC_MASK( MONGOOSEV_PFIMR, _mask, _bits )
-#define mongoosev_clear_in_pfimr( _mask, _bits ) \
-  MONGOOSEV_ATOMIC_MASK( MONGOOSEV_PFIMR, _mask, ~(_bits) )
+#define MONGOOSEV_WATCHDOG			0xBE000000
 
 /* UART Bits in Peripheral Command Register Bits (TX/RX tied together here) */
-#define MONGOOSEV_UART_CMD_RESET_BOTH_PORTS   0x0001
-#define MONGOOSEV_UART_CMD_LOOPBACK_CTSN      0x0002
-#define MONGOOSEV_UART_CMD_LOOPBACK_RXTX      0x0004
+#define MONGOOSEV_UART_CMD_RESET_BOTH_PORTS	0x0001
+#define MONGOOSEV_UART_CMD_LOOPBACK_CTSN	0x0002
+#define MONGOOSEV_UART_CMD_LOOPBACK_RXTX	0x0004
 
-#define MONGOOSEV_UART_CMD_TX_ENABLE        0x001
-#define MONGOOSEV_UART_CMD_TX_DISABLE       0x000
-#define MONGOOSEV_UART_CMD_RX_ENABLE        0x002
-#define MONGOOSEV_UART_CMD_RX_DISABLE       0x000
-#define MONGOOSEV_UART_CMD_TX_READY         0x004
-#define MONGOOSEV_UART_CMD_PARITY_ENABLE    0x008
-#define MONGOOSEV_UART_CMD_PARITY_DISABLE   0x000
-#define MONGOOSEV_UART_CMD_PARITY_EVEN      0x800
-#define MONGOOSEV_UART_CMD_PARITY_ODD       0x000
+#define MONGOOSEV_UART_CMD_RX_ENABLE		0x001
+#define MONGOOSEV_UART_CMD_RX_DISABLE		0x000
+#define MONGOOSEV_UART_CMD_TX_ENABLE		0x002
+#define MONGOOSEV_UART_CMD_TX_DISABLE		0x000
+#define MONGOOSEV_UART_CMD_TX_READY		0x004
+#define MONGOOSEV_UART_CMD_PARITY_ENABLE	0x008
+#define MONGOOSEV_UART_CMD_PARITY_DISABLE	0x000
+#define MONGOOSEV_UART_CMD_PARITY_EVEN		0x010
+#define MONGOOSEV_UART_CMD_PARITY_ODD		0x000
 
 #define MONGOOSEV_UART0_CMD_SHIFT 5
 #define MONGOOSEV_UART1_CMD_SHIFT 11
@@ -129,9 +119,8 @@
 #define MONGOOSEV_UART_TX_READY                    0x0008
 #define MONGOOSEV_UART_RX_READY                    0x0010
 
-#define MONGOOSEV_UART_ALL_RX_STATUS_BITS          0x0003
+#define MONGOOSEV_UART_ALL_RX_STATUS_BITS          0x0013
 #define MONGOOSEV_UART_ALL_STATUS_BITS             0x001F
-#define MONGOOSEV_UART_ALL_IRQ_BITS                0x001F
 
 /* 
  *  The Peripheral Interrupt Status, Cause, and Mask registers have the 
@@ -173,21 +162,21 @@
 */
 #define MONGOOSEV_EDAC_SERR_BIT          0x80000000
 #define MONGOOSEV_EDAC_MERR_BIT          0x40000000
+#define MONGOOSEV_MAVN_WRITE_ACCESS      0x00800000
+#define MONGOOSEV_MAVN_READ_ACCESS       0x00400000
 /* 29 - 24 reserved */
-#define MONGOOSEV_UART_0_RX_READY        0x00008000
-#define MONGOOSEV_UART_0_TX_READY        0x00004000
-#define MONGOOSEV_UART_0_TX_EMPTY        0x00002000
-#define MONGOOSEV_UART_0_RX_OVERRUN      0x00001000
-#define MONGOOSEV_UART_0_FRAME_ERROR     0x00000800
-#define MONGOOSEV_UART_0_RESERVED        0x00000400
 #define MONGOOSEV_UART_1_RX_READY        0x00200000
 #define MONGOOSEV_UART_1_TX_READY        0x00100000
 #define MONGOOSEV_UART_1_TX_EMPTY        0x00080000
 #define MONGOOSEV_UART_1_RX_OVERRUN      0x00040000
 #define MONGOOSEV_UART_1_FRAME_ERROR     0x00020000
-#define MONGOOSEV_UART_1_RESERVED        0x00010000
-#define MONGOOSEV_MAVN_WRITE_ACCESS      0x00400000
-#define MONGOOSEV_MAVN_READ_ACCESS       0x00800000
+#define MONGOOSEV_RESERVED_16            0x00010000
+#define MONGOOSEV_UART_0_RX_READY        0x00008000
+#define MONGOOSEV_UART_0_TX_READY        0x00004000
+#define MONGOOSEV_UART_0_TX_EMPTY        0x00002000
+#define MONGOOSEV_UART_0_RX_OVERRUN      0x00001000
+#define MONGOOSEV_UART_0_FRAME_ERROR     0x00000800
+#define MONGOOSEV_RESERVED_10            0x00000400
 #define MONGOOSEV_EXTERN_INT_9           0x00000200
 #define MONGOOSEV_EXTERN_INT_8           0x00000100
 #define MONGOOSEV_EXTERN_INT_7           0x00000080
@@ -264,43 +253,122 @@
 #define MONGOOSEV_IRQ_INT1                    1
 #define MONGOOSEV_IRQ_TIMER2                  MONGOOSEV_IRQ_INT1
 #define MONGOOSEV_IRQ_INT2                    2
-#define MONGOOSEV_IRQ_INT4                    3
-/* MONGOOSEV_IRQ_INT5 indicates that a peripheral caused the IRQ. */
-#define MONGOOSEV_IRQ_PERIPHERAL_BASE         4
-#define MONGOOSEV_IRQ_XINT0                   4
-#define MONGOOSEV_IRQ_XINT1                   5
-#define MONGOOSEV_IRQ_XINT2                   6
-#define MONGOOSEV_IRQ_XINT3                   7
-#define MONGOOSEV_IRQ_XINT4                   8
-#define MONGOOSEV_IRQ_XINT5                   9
-#define MONGOOSEV_IRQ_XINT6                  10
-#define MONGOOSEV_IRQ_XINT7                  11
-#define MONGOOSEV_IRQ_XINT8                  12
-#define MONGOOSEV_IRQ_XINT9                  13
-#define MONGOOSEV_IRQ_READ_ACCESS_VIOLATION  14
-#define MONGOOSEV_IRQ_WRITE_ACCESS_VIOLATION 15
-#define MONGOOSEV_IRQ_RESERVED_BIT_12        16
-#define MONGOOSEV_IRQ_UART1_RX_FRAME_ERROR   17
-#define MONGOOSEV_IRQ_UART1_RX_OVERRUN_ERROR 18
-#define MONGOOSEV_IRQ_UART1_TX_EMPTY         19
-#define MONGOOSEV_IRQ_UART1_TX_READY         20
-#define MONGOOSEV_IRQ_UART1_RX_READY         21
-#define MONGOOSEV_IRQ_RESERVED_BIT_18        22
-#define MONGOOSEV_IRQ_UART0_RX_FRAME_ERROR   23
-#define MONGOOSEV_IRQ_UART0_RX_OVERRUN_ERROR 24
-#define MONGOOSEV_IRQ_UART0_TX_EMPTY         25
-#define MONGOOSEV_IRQ_UART0_TX_READY         26
-#define MONGOOSEV_IRQ_UART0_RX_READY         27
-#define MONGOOSEV_IRQ_RESERVED_24            28
-#define MONGOOSEV_IRQ_RESERVED_25            29
-#define MONGOOSEV_IRQ_RESERVED_26            30
-#define MONGOOSEV_IRQ_RESERVED_27            31
-#define MONGOOSEV_IRQ_RESERVED_28            32
-#define MONGOOSEV_IRQ_RESERVED_29            33
-#define MONGOOSEV_IRQ_UNCORRECTABLE_ERROR    34
-#define MONGOOSEV_IRQ_CORRECTABLE_ERROR      35
+#define MONGOOSEV_IRQ_INT3                    3
+#define MONGOOSEV_IRQ_FPU		      MONGOOSEV_IRQ_INT3
 
-#define MONGOOSEV_IRQ_SOFTWARE_1             36
-#define MONGOOSEV_IRQ_SOFTWARE_2             37
+#define MONGOOSEV_IRQ_INT4                    4
+
+/* MONGOOSEV_IRQ_INT5 indicates that a peripheral caused the IRQ. */
+#define MONGOOSEV_IRQ_PERIPHERAL_BASE         5
+#define MONGOOSEV_IRQ_XINT0                  MONGOOSEV_IRQ_PERIPHERAL_BASE + 0
+#define MONGOOSEV_IRQ_XINT1                  MONGOOSEV_IRQ_PERIPHERAL_BASE + 1
+#define MONGOOSEV_IRQ_XINT2                  MONGOOSEV_IRQ_PERIPHERAL_BASE + 2
+#define MONGOOSEV_IRQ_XINT3                  MONGOOSEV_IRQ_PERIPHERAL_BASE + 3
+#define MONGOOSEV_IRQ_XINT4                  MONGOOSEV_IRQ_PERIPHERAL_BASE + 4
+#define MONGOOSEV_IRQ_XINT5                  MONGOOSEV_IRQ_PERIPHERAL_BASE + 5
+#define MONGOOSEV_IRQ_XINT6                  MONGOOSEV_IRQ_PERIPHERAL_BASE + 6
+#define MONGOOSEV_IRQ_XINT7                  MONGOOSEV_IRQ_PERIPHERAL_BASE + 7
+#define MONGOOSEV_IRQ_XINT8                  MONGOOSEV_IRQ_PERIPHERAL_BASE + 8
+#define MONGOOSEV_IRQ_XINT9                  MONGOOSEV_IRQ_PERIPHERAL_BASE + 9
+#define MONGOOSEV_IRQ_RESERVED_BIT_10	     MONGOOSEV_IRQ_PERIPHERAL_BASE + 10
+#define MONGOOSEV_IRQ_UART0_RX_FRAME_ERROR   MONGOOSEV_IRQ_PERIPHERAL_BASE + 11
+#define MONGOOSEV_IRQ_UART0_RX_OVERRUN_ERROR MONGOOSEV_IRQ_PERIPHERAL_BASE + 12
+#define MONGOOSEV_IRQ_UART0_TX_EMPTY         MONGOOSEV_IRQ_PERIPHERAL_BASE + 13
+#define MONGOOSEV_IRQ_UART0_TX_READY         MONGOOSEV_IRQ_PERIPHERAL_BASE + 14
+#define MONGOOSEV_IRQ_UART0_RX_READY         MONGOOSEV_IRQ_PERIPHERAL_BASE + 15
+#define MONGOOSEV_IRQ_RESERVED_BIT_16        MONGOOSEV_IRQ_PERIPHERAL_BASE + 16
+#define MONGOOSEV_IRQ_UART1_RX_FRAME_ERROR   MONGOOSEV_IRQ_PERIPHERAL_BASE + 17
+#define MONGOOSEV_IRQ_UART1_RX_OVERRUN_ERROR MONGOOSEV_IRQ_PERIPHERAL_BASE + 18
+#define MONGOOSEV_IRQ_UART1_TX_EMPTY         MONGOOSEV_IRQ_PERIPHERAL_BASE + 19
+#define MONGOOSEV_IRQ_UART1_TX_READY         MONGOOSEV_IRQ_PERIPHERAL_BASE + 20
+#define MONGOOSEV_IRQ_UART1_RX_READY         MONGOOSEV_IRQ_PERIPHERAL_BASE + 21
+#define MONGOOSEV_IRQ_READ_ACCESS_VIOLATION  MONGOOSEV_IRQ_PERIPHERAL_BASE + 22
+#define MONGOOSEV_IRQ_WRITE_ACCESS_VIOLATION MONGOOSEV_IRQ_PERIPHERAL_BASE + 23
+#define MONGOOSEV_IRQ_RESERVED_24            MONGOOSEV_IRQ_PERIPHERAL_BASE + 24
+#define MONGOOSEV_IRQ_RESERVED_25            MONGOOSEV_IRQ_PERIPHERAL_BASE + 25
+#define MONGOOSEV_IRQ_RESERVED_26            MONGOOSEV_IRQ_PERIPHERAL_BASE + 26
+#define MONGOOSEV_IRQ_RESERVED_27            MONGOOSEV_IRQ_PERIPHERAL_BASE + 27
+#define MONGOOSEV_IRQ_RESERVED_28            MONGOOSEV_IRQ_PERIPHERAL_BASE + 28
+#define MONGOOSEV_IRQ_RESERVED_29            MONGOOSEV_IRQ_PERIPHERAL_BASE + 29
+#define MONGOOSEV_IRQ_UNCORRECTABLE_ERROR    MONGOOSEV_IRQ_PERIPHERAL_BASE + 30
+#define MONGOOSEV_IRQ_CORRECTABLE_ERROR      MONGOOSEV_IRQ_PERIPHERAL_BASE + 31
+
+#define MONGOOSEV_IRQ_SOFTWARE_1             37
+#define MONGOOSEV_IRQ_SOFTWARE_2             38
+
+
+/* gdm, 5/14.  Added exception vectoring to the ISR table- these
+entries are never called by the ISR servicing, only by the exception
+servicing routine.  The ISR table is used because vector setup there
+is already supported.  Please note exception routines are passed 2
+parameters; one of the below vectors and a pointer to the exception's
+stack frame, the register layout of which is found in
+
+exec/score/cpu/mips/iregdef.h
+
+in conjunction with 
+
+exec/score/cpu/mips/cpu_asm.S
+
+*/
+
+#define MONGOOSEV_EXCEPTION_BASE 39
+
+#define MONGOOSEV_EXCEPTION_ADEL	     MONGOOSEV_EXCEPTION_BASE+0
+#define MONGOOSEV_EXCEPTION_ADES	     MONGOOSEV_EXCEPTION_BASE+1
+#define MONGOOSEV_EXCEPTION_IBE		     MONGOOSEV_EXCEPTION_BASE+2
+#define MONGOOSEV_EXCEPTION_DBE		     MONGOOSEV_EXCEPTION_BASE+3
+#define MONGOOSEV_EXCEPTION_SYSCALL	     MONGOOSEV_EXCEPTION_BASE+4
+#define MONGOOSEV_EXCEPTION_BREAK	     MONGOOSEV_EXCEPTION_BASE+5
+#define MONGOOSEV_EXCEPTION_RI		     MONGOOSEV_EXCEPTION_BASE+6
+#define MONGOOSEV_EXCEPTION_CPU		     MONGOOSEV_EXCEPTION_BASE+7
+#define MONGOOSEV_EXCEPTION_OVERFLOW	     MONGOOSEV_EXCEPTION_BASE+8
+
+
+
+
+
+
+#define	SR_CUMASK	0xf0000000	/* coproc usable bits */
+#define	SR_CU3		0x80000000	/* Coprocessor 3 usable */
+#define	SR_CU2		0x40000000	/* Coprocessor 2 usable */
+#define	SR_CU1		0x20000000	/* Coprocessor 1 usable */
+#define	SR_CU0		0x10000000	/* Coprocessor 0 usable */
+#define	SR_BEV		0x00400000	/* use boot exception vectors */
+#define	SR_TS		0x00200000	/* TLB shutdown */
+#define	SR_PE		0x00100000	/* cache parity error */
+#define	SR_CM		0x00080000	/* cache miss */
+#define	SR_PZ		0x00040000	/* cache parity zero */
+#define	SR_SWC		0x00020000	/* swap cache */
+#define	SR_ISC		0x00010000	/* Isolate data cache */
+#define	SR_IMASK	0x0000ff00	/* Interrupt mask */
+#define	SR_IMASK8	0x00000000	/* mask level 8 */
+#define	SR_IMASK7	0x00008000	/* mask level 7 */
+#define	SR_IMASK6	0x0000c000	/* mask level 6 */
+#define	SR_IMASK5	0x0000e000	/* mask level 5 */
+#define	SR_IMASK4	0x0000f000	/* mask level 4 */
+#define	SR_IMASK3	0x0000f800	/* mask level 3 */
+#define	SR_IMASK2	0x0000fc00	/* mask level 2 */
+#define	SR_IMASK1	0x0000fe00	/* mask level 1 */
+#define	SR_IMASK0	0x0000ff00	/* mask level 0 */
+
+#define	SR_IBIT8	0x00008000	/* bit level 8 */
+#define	SR_IBIT7	0x00004000	/* bit level 7 */
+#define	SR_IBIT6	0x00002000	/* bit level 6 */
+#define	SR_IBIT5	0x00001000	/* bit level 5 */
+#define	SR_IBIT4	0x00000800	/* bit level 4 */
+#define	SR_IBIT3	0x00000400	/* bit level 3 */
+#define	SR_IBIT2	0x00000200	/* bit level 2 */
+#define	SR_IBIT1	0x00000100	/* bit level 1 */
+
+#define	SR_KUO		0x00000020	/* old kernel/user, 0 => k, 1 => u */
+#define	SR_IEO		0x00000010	/* old interrupt enable, 1 => enable */
+#define	SR_KUP		0x00000008	/* prev kernel/user, 0 => k, 1 => u */
+#define	SR_IEP		0x00000004	/* prev interrupt enable, 1 => enable */
+#define	SR_KUC		0x00000002	/* cur kernel/user, 0 => k, 1 => u */
+#define	SR_IEC		0x00000001	/* cur interrupt enable, 1 => enable */
+#define SR_KUMSK	(SR_KUO|SR_IEO|SR_KUP|SR_IEP|SR_KUC|SR_IEC)
+
+#define	SR_IMASKSHIFT	8
 
 #endif

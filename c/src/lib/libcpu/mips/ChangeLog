@@ -1,3 +1,12 @@
+2001-05-22	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* Assisted in design and debug by Joel Sherrill <joel@OARcorp.com>.
+	* mongoosev/duart/mg5uart.c, mongoosev/duart/mg5uart.h,
+	mongoosev/include/mongoose-v.h, mongoosev/vectorisrs/vectorisrs.c,
+	shared/interrupts/maxvectors.c: Now works.  Significant rework
+	of exceptions and interrupt vectoring to clean things up.
+	* shared/interrupts/vectorexceptions.c: Removed.
+
 2001-05-07	Joel Sherrill <joel@OARcorp.com>
 
 	* shared/interrupts/vectorexceptions.c: New file to decode

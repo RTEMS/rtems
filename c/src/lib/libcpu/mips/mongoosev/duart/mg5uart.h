@@ -34,22 +34,32 @@ extern "C" {
  */
 
 /* shared registers from peripheral base (i.e. from ulCtrlPort1) */
-#define MG5UART_COMMAND_REGISTER          0x00
+/*
+#define MG5UART_COMMAND_REGISTER          0
+#define MG5UART_STATUS_REGISTER           1
+#define MG5UART_INTERRUPT_CAUSE_REGISTER  2
+#define MG5UART_INTERRUPT_MASK_REGISTER   3
+*/
+
+#define MG5UART_COMMAND_REGISTER          0
 #define MG5UART_STATUS_REGISTER           0x04
 #define MG5UART_INTERRUPT_CAUSE_REGISTER  0x08
-#define MG5UART_INTERRUPT_MASK_REGISTER   0x0c
+#define MG5UART_INTERRUPT_MASK_REGISTER   0x0C
 
 /* port specific registers from uart base (i.e. from ulCtrlPort2) */
-#define MG5UART_RX_BUFFER 0x00
-#define MG5UART_TX_BUFFER 0x04
-#define MG5UART_BAUD_RATE 0x08
+#define MG5UART_RX_BUFFER  0
+#define MG5UART_TX_BUFFER  4
+#define MG5UART_BAUD_RATE  8
 
 /*
  *  Interrupt mask values
  */
 
 #define MG5UART_ENABLE_ALL_EXCEPT_TX MONGOOSEV_UART_ALL_RX_STATUS_BITS
-#define MG5UART_ENABLE_ALL           (MONGOOSEV_UART_ALL_STATUS_BITS)
+
+/* all rx ints on, but only tx ready.  no need to also int on tx empty */
+#define MG5UART_ENABLE_ALL           (MONGOOSEV_UART_ALL_STATUS_BITS & ~MONGOOSEV_UART_TX_EMPTY)
+
 #define MG5UART_DISABLE_ALL          0x0000
 
 /*

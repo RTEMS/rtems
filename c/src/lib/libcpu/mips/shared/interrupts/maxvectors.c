@@ -31,10 +31,12 @@
  *  through the IP bits, and 32 more from the PFICR.  Some of
  *  these are reserved but for simplicity in processing, we
  *  reserve slots for those bits anyway.
+ *
+ * gdm, 5/14, added 15 more slots so exceptions can be vectored as well.
  */
 
 #if defined(MONGOOSEV)
-#define MAX_VECTORS 37
+#define MAX_VECTORS (38+10)
 #endif
 
 #ifndef MAX_VECTORS
@@ -42,3 +44,4 @@
 #endif
 
 unsigned int mips_interrupt_number_of_vectors = MAX_VECTORS;
+
