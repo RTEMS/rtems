@@ -78,8 +78,8 @@ rtems_device_driver console_initialize(
 {
   rtems_status_code status;
   int tmp,tmp2;
-  unsigned32 sr;
-  extern unsigned32 Or1k_Interrupt_Vectors[16];
+  uint32_t   sr;
+  extern uint32_t   Or1k_Interrupt_Vectors[16];
 
   /* Make sure the UART (interrupt 2) is enabled and
      reports a low prority interrupt */
@@ -100,7 +100,7 @@ rtems_device_driver console_initialize(
 
   old_handler = (void(*)(unsigned int,unsigned int,unsigned int,unsigned int))
     Or1k_Interrupt_Vectors[5];
-  Or1k_Interrupt_Vectors[5] = (unsigned32)console_interrupt;
+  Or1k_Interrupt_Vectors[5] = (uint32_t)console_interrupt;
 
   asm volatile ("l.mtspr r0,%0,0x11\n\t":: "r" (sr));
 

@@ -36,7 +36,7 @@ void Clock_isr( rtems_vector_number vector,unsigned int pc,
  *  number of clock ticks since the driver was initialized.
  */
 
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t         Clock_driver_ticks;
 
 /*
  *  Clock_isrs is the number of clock ISRs until the next invocation of
@@ -46,7 +46,7 @@ volatile rtems_unsigned32 Clock_driver_ticks;
  *  has passed.
  */
 
-rtems_unsigned32 Clock_isrs;              /* ISRs until next tick */
+uint32_t         Clock_isrs;              /* ISRs until next tick */
 
 /*
  * These are set by clock driver during its init
@@ -66,10 +66,10 @@ static const unsigned int TTMR_RESET = 0x60030D40;
  *  Isr Handler
  */
 
-void Clock_isr(unsigned32 vector,
-	       unsigned32 pc,
-	       unsigned32 ear,
-	       unsigned32 sr)
+void Clock_isr(uint32_t   vector,
+	       uint32_t   pc,
+	       uint32_t   ear,
+	       uint32_t   sr)
 {
   register int pending;
   register int value = 0x60002710;
@@ -97,8 +97,8 @@ void Clock_isr(unsigned32 vector,
 
 void Install_clock()
 {
-  unsigned32 tmp,sr,ttmr,ttcr;
-  extern unsigned32 Or1k_Interrupt_Vectors[16];
+  uint32_t   tmp,sr,ttmr,ttcr;
+  extern uint32_t   Or1k_Interrupt_Vectors[16];
 
   ttmr = TTMR_RESET;    /* Reset value */
   ttcr = 0;             /* Start at 0 */
@@ -129,7 +129,7 @@ void Install_clock()
 
   old_handler = (void(*)(unsigned int,unsigned int,unsigned int,unsigned int))
     Or1k_Interrupt_Vectors[8];
-  Or1k_Interrupt_Vectors[8] = (unsigned32)Clock_isr;
+  Or1k_Interrupt_Vectors[8] = (uint32_t)Clock_isr;
 
   asm volatile ("l.mtspr r0,%0,0x11\n\t":: "r" (sr));
 		 
@@ -199,7 +199,7 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
-    rtems_unsigned32 isrlevel;
+    uint32_t         isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
  
     if (args == 0)

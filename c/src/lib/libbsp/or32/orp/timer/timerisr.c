@@ -25,7 +25,7 @@
 
 #include <rtems.h>
 
-extern rtems_unsigned32 _Timer_interrupts;
+extern uint32_t         _Timer_interrupts;
 
 void timerisr( void )
 {

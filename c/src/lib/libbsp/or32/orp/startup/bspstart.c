@@ -40,7 +40,7 @@ rtems_cpu_table Cpu_table;
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -58,9 +58,9 @@ void bsp_libc_init( void *, unsigned32, int );
  
 void bsp_pretasking_hook(void)
 {
-    rtems_unsigned32        heap_start;
+    uint32_t                heap_start;
 
-    heap_start = (rtems_unsigned32) _mem_end;
+    heap_start = (uint32_t) _mem_end;
     if (heap_start & (CPU_ALIGNMENT-1))
         heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
