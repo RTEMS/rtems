@@ -43,7 +43,7 @@ mqd_t mq_open(
 {
   va_list                        arg;
   mode_t                         mode;
-  struct mq_attr                *attr;
+  struct mq_attr                *attr = NULL;
   int                            status;
   Objects_Id                     the_mq_id;
   POSIX_Message_queue_Control   *the_mq;
@@ -51,6 +51,7 @@ mqd_t mq_open(
  
   _Thread_Disable_dispatch();
 
+  /* XXX is attr used with out being initialized otherwise? */
   if ( oflag & O_CREAT ) {
     va_start(arg, oflag);
     mode = (mode_t) va_arg( arg, mode_t );

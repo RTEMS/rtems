@@ -37,10 +37,9 @@ int mq_unlink(
   const char *name
 )
 {
-  int  status;
+  int                                   status;
   register POSIX_Message_queue_Control *the_mq;
-  Objects_Id                        the_mq_id;
-  Objects_Locations                 location;
+  Objects_Id                            the_mq_id;
  
   _Thread_Disable_dispatch();
 
