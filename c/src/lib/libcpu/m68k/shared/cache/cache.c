@@ -53,7 +53,7 @@
 /* Only the mc68030 has a data cache; it is writethrough only. */
 
 void _CPU_cache_flush_1_data_line ( const void * d_addr ) {}
-void _CPU_cache_flush_entire_data ( const void * d_addr ) {}
+void _CPU_cache_flush_entire_data ( void ) {}
 
 void _CPU_cache_invalidate_1_data_line (
   const void * d_addr )
