@@ -1,3 +1,8 @@
+2003-07-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* config-ml.in: Partial sync with gcc-3.4's config-ml.in.
+	Add "autoconf-2.5x unquoting" hack.
+
 2003-07-03	Joel Sherrill <joel@OARcorp.com>
 
 	* SUPPORT: Fix Mark Johannes' email address.

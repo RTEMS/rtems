@@ -82,21 +82,10 @@
 # Note that `host' in this case is GCC's `target'.  Target libraries are
 # configured for a particular host.
 
-if [ -n "${ac_configure_args}" ]; then
-  Makefile=${ac_file-Makefile}
-  ml_config_shell=${CONFIG_SHELL-/bin/sh}
-  ml_arguments="${ac_configure_args}"
-  ml_realsrcdir=${srcdir}
-else
-  Makefile=${Makefile-Makefile}
-  ml_config_shell=${config_shell-/bin/sh}
-  ml_arguments="${arguments}"
-  if [ -n "${subdir}" -a "${subdir}" != "." ] ; then
-    ml_realsrcdir=${srcdir}/${subdir}
-  else
-    ml_realsrcdir=${srcdir}
-  fi
-fi
+Makefile=${ac_file-Makefile}
+ml_config_shell=${CONFIG_SHELL-/bin/sh}
+ml_arguments=${ac_configure_args}
+ml_realsrcdir=${srcdir}
 
 # Scan all the arguments and set all the ones we need.
 
@@ -104,6 +93,8 @@ ml_verbose=--verbose
 for option in ${ml_arguments}
 do
   case $option in
+# Unquote autoconf >= 2.57 added quotes
+  \'--*\') eval option="$option" ;;
   --*) ;;
   -*) option=-$option ;;
   esac
