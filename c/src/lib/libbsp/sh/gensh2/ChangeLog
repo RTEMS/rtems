@@ -1,5 +1,9 @@
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* start/Makefile.am: Use .$(OBJEXT) instead of .o.
+
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* console/Makefile.am: Use .$(OBJEXT) instead of .o.
  	* scitab/Makefile.am: Use .$(OBJEXT) instead of .o.
  	* start/Makefile.am: Use .$(OBJEXT) instead of .o.
