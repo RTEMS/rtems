@@ -4,6 +4,8 @@
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
+EXEEXT =
+
 # wrapup is the one that actually builds and installs the library
 # from the individual .rel files built in other directories
 SUBDIRS = . tools
@@ -21,8 +23,6 @@ CLEANFILES =
 noinst_DATA =
 
 nodist_include_HEADERS += ../../shared/include/coverhd.h
-
-AM_CFLAGS += $(LIBC_DEFINES)
 
 project_lib_DATA =
 
@@ -45,7 +45,7 @@ EXTRA_PROGRAMS += startup.rel
 CLEANFILES += startup.rel
 startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     startup/bspstart.c startup/setvec.c
-if HAS_CXX
+if !HAS_CXX
 startup_rel_SOURCES += startup/main.c
 endif
 

@@ -1,3 +1,8 @@
+2004-04-08	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* Makefile.am: Build main.o for !HAS_CXX.
+	Set EXEEXT = <empty> (Workaround to a bug in automake).
+
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* include/bsp.h: Include <rtems/clockdrv.h> instead of <clockdrv.h>.
