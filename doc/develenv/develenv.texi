@@ -71,7 +71,6 @@
 
 @include intro.texi
 @include direct.texi
-@c @include compile.texi
 @include sample.texi
 @include utils.texi
 
@@ -80,8 +79,6 @@
 @top develenv
 
 This is the online version of the RTEMS Development Environment Guide.
-
-@c * Compilation and GNU Make Stanzas::
 
 @menu
 * Introduction::

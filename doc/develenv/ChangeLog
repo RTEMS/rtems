@@ -1,5 +1,10 @@
 2003-04-16	Joel Sherrill <joel@OARcorp.com>
 
+	* Makefile.am, develenv.texi: Remove unused file.
+	* compile.texi: Removed.
+
+2003-04-16	Joel Sherrill <joel@OARcorp.com>
+
 	* Makefile.am: Fix next/previous section names.
 
 2003-03-24	Joel Sherrill <joel@OARcorp.com>

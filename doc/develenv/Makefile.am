@@ -13,7 +13,7 @@ EDITION = 1
 include $(top_srcdir)/project.am
 include $(top_srcdir)/main.am
 
-FILES = compile.texi direct.texi intro.texi sample.texi utils.texi
+FILES = direct.texi intro.texi sample.texi utils.texi
 
 GENERATED_FILES = direct.texi sample.texi utils.texi
 
