@@ -82,14 +82,6 @@ extern "C" {
 
 /* Structures */
 
-#ifdef GEN68360_INIT
-#undef EXTERN
-#define EXTERN
-#else
-#undef EXTERN
-#define EXTERN extern
-#endif
-
 /*
  *  Device Driver Table Entries
  */
