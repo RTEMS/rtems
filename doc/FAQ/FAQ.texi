@@ -71,6 +71,7 @@ END-INFO-DIR-ENTRY
 @include embeddedinfo.texi
 @include hwdebugaids.texi
 @include projects.texi
+@include endoftime.texi
 
 @ifinfo
 @node Top, Basic Information, (dir), (dir)
@@ -93,6 +94,7 @@ Common questions have been divided into the following categories.
 * Resources for Embedded Information::
 * Hardware to Ease Debugging::
 * RTEMS Projects::
+* Date/Time Issues in Systems Using RTEMS::
 @end menu
 
 @c * Command and Variable Index::

@@ -19,7 +19,7 @@ COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
 GENERATED_FILES= \
     basic.texi tools.texi concepts.texi bsp.texi debug.texi freesw.texi \
-    embeddedinfo.texi hwdebugaids.texi projects.texi
+    embeddedinfo.texi hwdebugaids.texi projects.texi endoftime.texi
 
 FILES=$(PROJECT).texi $(GENERATED_FILES)
 
@@ -104,8 +104,13 @@ hwdebugaids.texi: hwdebugaids.t Makefile
 	    -u "Top" \
 	    -n "" ${*}.t
 
-
 projects.texi: projects.t Makefile
+	$(BMENU) -c -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+
+endoftime.texi: endoftime.t Makefile
 	$(BMENU) -c -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
