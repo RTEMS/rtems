@@ -12,7 +12,7 @@ POSIX_DIRS = psxhdrs psx01 psx02 psx03 psx04 psx05 psx06 psx07 psx08 psx09 \
 
 POSIX_FILES_DIRS = psxfile01 psxreaddir psxstat psxmount psx13
 
-UNUSED_DIRS = psxfile02
+UNUSED_DIRS = 
 
 SUBDIRS = $(SHARED_DIRS) $(POSIX_DIRS) $(POSIX_FILES_DIRS) $(UNUSED_DIRS)
 

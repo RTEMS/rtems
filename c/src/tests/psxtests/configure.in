@@ -56,7 +56,6 @@ psx12/Makefile
 psx13/Makefile
 psxcancel/Makefile
 psxfile01/Makefile
-psxfile02/Makefile
 psxhdrs/Makefile
 psxmount/Makefile
 psxmsgq01/Makefile
@@ -68,5 +67,3 @@ psxtimer/Makefile
 support/Makefile
 support/include/Makefile
 )
-
-# psxfile02/Makefile
