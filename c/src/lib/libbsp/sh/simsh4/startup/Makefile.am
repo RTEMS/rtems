@@ -26,8 +26,7 @@ $(PGM): $(OBJS)
 
 all-local: $(TMPINSTALL_FILES) $(PGM)
 
-EXTRA_DIST = bspclean.c bspstart.c hw_init.c linkcmds linkcmds-le \
-    linkcmds-le.coff
+EXTRA_DIST = bspstart.c hw_init.c linkcmds linkcmds-le linkcmds-le.coff
 
 TMPINSTALL_FILES =
 

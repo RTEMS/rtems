@@ -27,6 +27,6 @@ all-local: $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = timer.c timerisr.S
+EXTRA_DIST = timer.c
 
 include $(top_srcdir)/../../../../automake/local.am
