@@ -736,12 +736,12 @@ package RTEMS is
       Milliseconds : RTEMS.Unsigned32
    ) return RTEMS.Unsigned32;
 
-   function Milliseconds_To_Ticks (
-      Milliseconds : RTEMS.Unsigned32
-   ) return RTEMS.Interval;
-
    function Microseconds_To_Ticks (
       Microseconds : RTEMS.Unsigned32
+   ) return RTEMS.Interval;
+
+   function Milliseconds_To_Ticks (
+      Milliseconds : RTEMS.Unsigned32
    ) return RTEMS.Interval;
 
    function Build_Name (
