@@ -1,3 +1,9 @@
+2000-10-19  Antti P Miettinen  <anmietti@trshp.ntc.nokia.com>
+
+	* lib/tftpDriver.c: add comments to handlers struct function pointers.
+	* rtems/rtems_glue.c: move pointer arithmetic to be _after_
+	pointer has been checked against NULL.
+
 2000-10-18	 Chris Johns <ccj@acm.org>
 
 	* pppd/ipxcp.c: Fixed a typo.

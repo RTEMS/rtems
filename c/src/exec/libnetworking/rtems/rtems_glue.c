@@ -142,11 +142,11 @@ bsd_init (void)
 	 * Set up mbuf cluster data strutures
 	 */
 	p = malloc ((nmbclusters*MCLBYTES)+MCLBYTES-1);
-	p = (char *)(((unsigned long)p + (MCLBYTES-1)) & ~(MCLBYTES-1));
 	if (p == NULL) {
 		printf ("Can't get network cluster memory.\n");
 		return -1;
 	}
+	p = (char *)(((unsigned long)p + (MCLBYTES-1)) & ~(MCLBYTES-1));
 	mbutl = (struct mbuf *)p;
 	for (i = 0; i < nmbclusters; i++) {
 		((union mcluster *)p)->mcl_next = mclfree;

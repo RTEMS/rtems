@@ -760,16 +760,18 @@ rtems_filesystem_operations_table  rtems_tftp_ops = {
 };
 
 rtems_filesystem_file_handlers_r rtems_tftp_handlers = {
-  rtems_tftp_open,
-  rtems_tftp_close,
-  rtems_tftp_read,
-  rtems_tftp_write,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
+  rtems_tftp_open,   /* open */     
+  rtems_tftp_close,  /* close */    
+  rtems_tftp_read,   /* read */     
+  rtems_tftp_write,  /* write */    
+  NULL,		     /* ioctl */    
+  NULL,		     /* lseek */    
+  NULL,		     /* fstat */    
+  NULL,		     /* fchmod */   
+  NULL,		     /* ftruncate */
+  NULL,		     /* fpathconf */
+  NULL,		     /* fsync */    
+  NULL,		     /* fdatasync */
+  NULL,		     /* fcntl */
+  NULL		     /* rmnod */
 };
