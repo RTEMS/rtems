@@ -16,21 +16,29 @@
 #include <sys/domain.h>
 
 #include <net/if.h>
+#include <net/if_dl.h>
 #include <net/route.h>
 
 #include <netinet/in.h>
+
+#include <arpa/inet.h>
 
 /*
  * We'll use the application versions of malloc and free.
  */
 #undef malloc
 #undef free
+
 /*
  * Information per route
  */
 struct rinfo {
-	struct in_addr	dst;
-	struct in_addr	gw_mask;
+	struct sockaddr	dst;
+	union {
+		struct sockaddr		sa;
+		struct sockaddr_in	sin;
+		struct sockaddr_dl	sdl;
+	} un;
 	unsigned long	pksent;
 	unsigned long	expire;
 	int		flags;
@@ -47,6 +55,29 @@ struct dinfo {
 	int		count;
 	struct rinfo	*routes;
 };
+
+/*
+ * Copy address
+ */
+static void
+copyAddress (void *to, void *from, int tolen)
+{
+	int ncopy;
+	struct sockaddr dummy;
+
+	if (from == NULL) {
+		/*
+		 * Create a fake address of unspecified type
+		 */
+		from = &dummy;
+		dummy.sa_len = 4;
+		dummy.sa_family = AF_UNSPEC;
+	}
+	ncopy = ((struct sockaddr *)from)->sa_len;
+	if (ncopy > tolen)
+		ncopy = tolen;
+	memcpy (to, from, ncopy);
+}
 
 /*
  * Package everything up before printing it.
@@ -78,11 +109,21 @@ show_inet_route (rn, vw)
 	/*
 	 * Fill in the route info structure
 	 */
-	r->dst = ((struct sockaddr_in *)rt_key(rt))->sin_addr;
-	if (rt->rt_flags & RTF_GATEWAY)
-		r->gw_mask = ((struct sockaddr_in *)rt->rt_gateway)->sin_addr;
-	else if (!(rt->rt_flags & RTF_HOST))
-		r->gw_mask = ((struct sockaddr_in *)rt_mask(rt))->sin_addr;
+	copyAddress (&r->dst, rt_key(rt), sizeof r->dst);
+	if (rt->rt_flags & (RTF_GATEWAY | RTF_HOST)) {
+		copyAddress (&r->un, rt->rt_gateway, sizeof r->un);
+	}
+	else {
+		/*
+		 * Create a fake address to hold the mask
+		 */
+		struct sockaddr_in dummy;
+
+		dummy.sin_family = AF_INET;
+		dummy.sin_len = sizeof dummy;
+		dummy.sin_addr = ((struct sockaddr_in *)rt_mask(rt))->sin_addr;
+		copyAddress (&r->un, &dummy, sizeof r->un);
+	}
 	r->flags = rt->rt_flags;
 	r->refcnt = rt->rt_refcnt;
 	r->pksent = rt->rt_rmx.rmx_pksent;
@@ -94,21 +135,37 @@ show_inet_route (rn, vw)
 }
 
 /*
- * Reentrant version of inet_ntoa
+ * Convert link address to ASCII
  */
-char *
-inet_ntoa_r (struct in_addr ina, char *buf)
+static char *
+link_ascii (struct sockaddr_dl *sdl, char *buf, int bufsize)
 {
-	unsigned char *ucp = (unsigned char *)&ina;
+	char *cp;
+	int i;
+	int first = 1;
+	int nleft = sdl->sdl_alen;
+	unsigned char *ap = LLADDR (sdl);
+	static const char hextab[16] = "0123456789ABCDEF";
 
-	sprintf (buf, "%d.%d.%d.%d",
-				ucp[0] & 0xff,
-				ucp[1] & 0xff,
-				ucp[2] & 0xff,
-				ucp[3] & 0xff);
-											return buf;
+	cp = buf;
+	while (nleft && (bufsize > 4)) {
+		if (first) {
+			first = 0;
+		}
+		else {
+			*cp++ = ':';
+			bufsize--;
+		}
+		i = *ap++;
+		*cp++ = hextab[(i >> 4) & 0xf];
+		*cp++ = hextab[i & 0xf];
+		nleft--;
+		bufsize -= 2;
+	}
+	*cp = '\0';
+	return buf;
 }
-
+		
 void
 rtems_bsdnet_show_inet_routes (void)
 {
@@ -117,6 +174,9 @@ rtems_bsdnet_show_inet_routes (void)
 	struct rinfo *r;
 	int i, error;
 
+	/*
+	 * For now we'll handle only AF_INET
+	 */
 	rnh = rt_tables[AF_INET];
 	if (!rnh)
 		return;
@@ -133,22 +193,34 @@ rtems_bsdnet_show_inet_routes (void)
 		printf ("No routes!\n");
 		return;
 	}
-	printf ("Destination     Gateway/Mask    Flags     Refs     Use Expire Interface\n");
+	printf ("Destination     Gateway/Mask/Hw    Flags     Refs     Use Expire Interface\n");
 	for (i = 0, r = d.routes ; i < d.count ; i++, r++) {
 		char buf[30];
 		char *cp, *fc, flagbuf[10];
+		const char *addr;
 		unsigned long flagbit;
+		struct sockaddr_in *sin;
 
-		if (r->dst.s_addr == INADDR_ANY)
-			cp = "default";
+		sin = (struct sockaddr_in *)&r->dst;
+		if (sin->sin_addr.s_addr == INADDR_ANY)
+			addr = "default";
 		else
-			cp = inet_ntoa_r (r->dst, buf);
-		printf ("%-16s", cp);
-		if (!(r->flags & RTF_HOST))
-			cp = inet_ntoa_r (r->gw_mask, buf);
-		else
-			cp = "";
-		printf ("%-16s", cp);
+			addr = inet_ntop (AF_INET, &sin->sin_addr, buf, sizeof buf);
+		printf ("%-16s", addr);
+		switch (r->un.sa.sa_family) {
+		case AF_INET:
+			addr = inet_ntop (AF_INET, &r->un.sin.sin_addr, buf, sizeof buf);
+			break;
+
+		case AF_LINK:
+			addr = link_ascii (&r->un.sdl, buf, sizeof buf);
+			break;
+
+		default:
+			addr = "";
+			break;
+		}
+		printf ("%-19s", addr);
 		fc = "UGHRDM   XLS";
 		for (flagbit = 0x1, cp = flagbuf ; *fc ; flagbit <<= 1, fc++) {
 			if ((r->flags & flagbit) && (*fc != ' '))
