@@ -7,6 +7,7 @@
 
 #include <bsp.h>
 #include <signal.h>
+#include <stdlib.h>
 
 /*
  * Synchronous trap handler. Map the trap number of SIGFPE, SIGSEGV
