@@ -106,6 +106,14 @@ rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
       return RTEMS_OBJECT_WAS_DELETED;
     case CORE_SEMAPHORE_TIMEOUT:
       return RTEMS_TIMEOUT;
+    
+    /*
+     *  An overflow should not occur in the Classic API.
+     */
+
+    case CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED:
+      return RTEMS_INTERNAL_ERROR;
+
     case THREAD_STATUS_PROXY_BLOCKING:
       return THREAD_STATUS_PROXY_BLOCKING;
   }
