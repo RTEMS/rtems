@@ -25,8 +25,6 @@ void *Task_1(
   void *argument
 )
 {
-  int   status;
-
   puts( "Task_1: exitting" );
 
   return( &Task1_id );

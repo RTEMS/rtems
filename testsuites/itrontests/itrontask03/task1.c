@@ -22,7 +22,6 @@
 void Task_1()
 {
   ER       status;
-  PRI      previous_priority;
 
   /*
    * XXX - Change to itron routine.

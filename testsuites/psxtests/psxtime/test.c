@@ -26,7 +26,7 @@
 /*
  *  List of dates and times to test.
  */
-#define NUMBER_OF_DATES   7
+#define NUMBER_OF_DATES   8
 rtems_time_of_day Dates[ NUMBER_OF_DATES ] = {
   /* YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, TICKS */
   {  1988,   1,    1,   12,    45,     00,     0 },
@@ -67,7 +67,8 @@ void check_a_tod(
     /* now do the posix time gets */
     result = gettimeofday( &tv, 0 );
     assert( result == 0 );
-    printf( "gettimeofday: %s", ctime( &tv.tv_sec ) );
+    a_time_t = tv.tv_sec;   /* ctime() takes a time_t */
+    printf( "gettimeofday: %s", ctime( &a_time_t) );
   
     a_time_t = time( 0 );
     printf( "time:         %s", ctime( &a_time_t ) );

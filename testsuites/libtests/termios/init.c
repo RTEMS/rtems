@@ -41,6 +41,8 @@ rtems_task Init (rtems_task_argument argument);
 #include <errno.h>
 #include <string.h>
 
+int fileno( FILE *stream); /* beyond ANSI */
+
 /*
  * Test raw (ICANON=0) input
  */

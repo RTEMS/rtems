@@ -25,7 +25,6 @@ rtems_interval ticksPerSecond;
 rtems_task
 subtask (rtems_task_argument arg)
 {
-	int i;
 	rtems_status_code sc;
 	rtems_id sem = (rtems_id)arg;
 

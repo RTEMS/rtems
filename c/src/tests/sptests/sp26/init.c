@@ -29,8 +29,6 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
-
   puts( "\n\n*** TEST 26 ***" );
 
   task1();

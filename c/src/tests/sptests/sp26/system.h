@@ -21,9 +21,7 @@ rtems_task Init(
   rtems_task_argument argument
 );
 
-rtems_task Task_1(
-  rtems_task_argument argument
-);
+void task1(void);
 
 /* configuration information */
 

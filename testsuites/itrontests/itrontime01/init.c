@@ -44,7 +44,7 @@ m_sec = r_time*1000;
 printf( "Time from 1970: %d\n", t_time );
 printf( "Time between 1970 and 1985: %d\n", s_time );
 printf( "Time from 1985: %d\n", r_time );
-printf("milliseconds: %f\n",m_sec);
+printf("milliseconds: %ld\n",m_sec);
 
 return 0;
 } 
