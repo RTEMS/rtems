@@ -63,10 +63,7 @@ void console_outbyte_polled(
  *  This routine polls for a character.
  */
 
-int console_inbyte_nonblocking(
-  int port,
-  char *c
-)
+int console_inbyte_nonblocking( int port )
 {
   int UStat;
 
@@ -81,8 +78,8 @@ int console_inbyte_nonblocking(
       }
 
       if ((UStat & ERC32_MEC_UART_STATUS_DRA) == 0)
-         return 0;
-      *c = (char) ERC32_MEC.UART_Channel_A;
+         return -1;
+      return (int) ERC32_MEC.UART_Channel_A;
       return 1;
 
     case 1:
@@ -92,15 +89,14 @@ int console_inbyte_nonblocking(
       }
 
       if ((UStat & ERC32_MEC_UART_STATUS_DRB) == 0)
-        return 0;
-      *c = (char) ERC32_MEC.UART_Channel_B;
-      return 1;
+        return -1;
+      return (int) ERC32_MEC.UART_Channel_B;
 
     default:
       assert( 0 );
   }
 
-  return 0;
+  return -1;
 }
 
 /*
