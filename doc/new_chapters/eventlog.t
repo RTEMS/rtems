@@ -140,6 +140,9 @@ int log_write(
 
 @subheading STATUS CODES:
 
+A successful call to @code{log_write()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item E2BIG
 This error indicates an inconsistency in the implementation.
@@ -240,6 +243,9 @@ int log_write_any(
 @end ifset
 
 @subheading STATUS CODES:
+
+A successful call to @code{log_write_any()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
 
 @table @b
 @item E2BIG
@@ -346,6 +352,9 @@ int log_write_entry(
 
 @subheading STATUS CODES:
 
+A successful call to @code{log_write_entry()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item E2BIG
 This error indicates an inconsistency in the implementation.
@@ -428,6 +437,9 @@ int log_open(
 @end ifset
 
 @subheading STATUS CODES:
+
+A successful call to @code{log_open()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
 
 @table @b
 @item EACCES
@@ -526,6 +538,9 @@ int log_read(
 
 @subheading STATUS CODES:
 
+A successful call to @code{log_read()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item E2BIG
 This error indicates an inconsistency in the implementation.
@@ -613,6 +628,9 @@ int log_notify(
 
 @subheading STATUS CODES:
 
+A successful call to @code{log_notify()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item EBADF
 The logdes argument is not a valid log file descriptor.
@@ -671,6 +689,9 @@ int log_close(
 
 @subheading STATUS CODES:
 
+A successful call to @code{log_close()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
+
 @table @b
 @item EBADF
 The logdes argument is not a valid log file descriptor.
@@ -717,6 +738,9 @@ int log_seek(
 @end ifset
 
 @subheading STATUS CODES:
+
+A successful call to @code{log_seek()} returns a value of zero
+and an unsuccessful call returns the @code{errno}.
 
 @table @b
 @item EBADF
@@ -828,6 +852,9 @@ int log_facilityemptyset(
 
 @subheading STATUS CODES:
 
+A successful call to @code{log_facilityemptyset()} returns a value of zero
+and a unsuccessful call returns the @code{errno}.
+
 @table @b
 @item EFAULT
 The @code{set} argument is an invalid pointer.
@@ -872,6 +899,9 @@ int log_facilityfillset(
 @end ifset
 
 @subheading STATUS CODES:
+
+A successful call to @code{log_facilityfillset()} returns a value of zero
+and a unsuccessful call returns the @code{errno}.
 
 @table @b
 @item EFAULT
@@ -918,6 +948,9 @@ int log_facilityaddset(
 @end ifset
 
 @subheading STATUS CODES:
+
+A successful call to @code{log_facilityaddset()} returns a value of zero
+and a unsuccessful call returns the @code{errno}.
 
 @table @b
 @item EFAULT
@@ -968,6 +1001,9 @@ int log_facilitydelset(
 
 @subheading STATUS CODES:
 
+A successful call to @code{log_facilitydelset()} returns a value of zero
+and a unsuccessful call returns the @code{errno}.
+
 @table @b
 @item EFAULT
 The @code{set} argument is an invalid pointer.
@@ -1017,6 +1053,9 @@ int log_facilityismember(
 @end ifset
 
 @subheading STATUS CODES:
+
+A successful call to @code{log_facilityismember()} returns a value 
+of zero and a unsuccessful call returns the @code{errno}.
 
 @table @b
 @item EFAULT
@@ -1071,6 +1110,9 @@ int log_facilityisvalid(
 
 @subheading STATUS CODES:
 
+A return value of zero indicates that the @code{facilityno} is valid and 
+a return value other than zero represents an @code{errno}.
+
 @table @b
 @item EFAULT
 The @code{set} or @code{member} argument is an invalid pointer.
@@ -1122,6 +1164,9 @@ int log_create(
 @end ifset
 
 @subheading STATUS CODES:
+
+A successful call to @code{log_create()} returns a value 
+of zero and a unsuccessful call returns the @code{errno}.
 
 @table @b
 
@@ -1199,6 +1244,9 @@ int log_sys_create();
 @end ifset
 
 @subheading STATUS CODES:
+
+A successful call to @code{log_sys_create()} returns a value 
+of zero and a unsuccessful call returns the @code{errno}.
 
 @table @b
 @item EEXIST
