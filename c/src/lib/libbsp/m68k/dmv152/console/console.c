@@ -199,7 +199,8 @@ rtems_device_driver console_open(
                         NULL,
                         NULL,
                         console_inbyte_nonblocking,
-                        console_write_support);
+                        console_write_support,
+                        0);
 
   return RTEMS_SUCCESSFUL;
 }
