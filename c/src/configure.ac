@@ -33,7 +33,6 @@ if test x"$multilib" = x"no"; then
 AC_CONFIG_SUBDIRS(exec)
 fi
 AC_CONFIG_SUBDIRS(optman)
-AC_CONFIG_SUBDIRS(lib)
 AC_CONFIG_SUBDIRS(lib/libcpu)
 AC_CONFIG_SUBDIRS(libblock)
 AC_CONFIG_SUBDIRS(lib/libbsp)
