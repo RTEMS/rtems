@@ -36,10 +36,10 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
  * to set mem_size. 
  */
 
-#include "iregdef.h"
-#include "idtcpu.h"  
-#include "idtmon.h"  
-#include "saunder.h"
+#include <rtems/score/iregdef.h>
+#include <rtems/score/idtcpu.h>
+#include <rtems/score/idtmon.h>
+/* #include <rtems/score/saunder.h> XXX - missing*/
 
 
 	.data

@@ -30,8 +30,6 @@ static char _sccsid[] = "@(#)setvec.c 04/25/96     1.2\n";
 #include <rtems.h>
 #include <bsp.h>
 
-#include <excepthdr.h>
-
 mips_isr_entry set_vector(                    /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */
