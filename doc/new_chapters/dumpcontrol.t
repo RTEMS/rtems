@@ -44,6 +44,8 @@ and status codes.
 
 @ifset is-C
 @example
+#include <dump.h>
+
 int dump_setpath(
   const char      *path
 );
