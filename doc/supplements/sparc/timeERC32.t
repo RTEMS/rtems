@@ -11,36 +11,8 @@
 \global\advance \smallskipamount by -4pt
 @end tex
 
-@ifinfo
-@node ERC32 Timing Data, ERC32 Timing Data Introduction, Timing Specification Terminology, Top
-@end ifinfo
 @chapter ERC32 Timing Data
-@ifinfo
-@menu
-* ERC32 Timing Data Introduction::
-* ERC32 Timing Data Hardware Platform::
-* ERC32 Timing Data Interrupt Latency::
-* ERC32 Timing Data Context Switch::
-* ERC32 Timing Data Directive Times::
-* ERC32 Timing Data Task Manager::
-* ERC32 Timing Data Interrupt Manager::
-* ERC32 Timing Data Clock Manager::
-* ERC32 Timing Data Timer Manager::
-* ERC32 Timing Data Semaphore Manager::
-* ERC32 Timing Data Message Manager::
-* ERC32 Timing Data Event Manager::
-* ERC32 Timing Data Signal Manager::
-* ERC32 Timing Data Partition Manager::
-* ERC32 Timing Data Region Manager::
-* ERC32 Timing Data Dual-Ported Memory Manager::
-* ERC32 Timing Data I/O Manager::
-* ERC32 Timing Data Rate Monotonic Manager::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node ERC32 Timing Data Introduction, ERC32 Timing Data Hardware Platform, ERC32 Timing Data, ERC32 Timing Data
-@end ifinfo
 @section Introduction
 
 The timing data for RTEMS on the ERC32 implementation
@@ -52,9 +24,6 @@ provided.  Also, provided is a description of the interrupt
 latency and the context switch times as they pertain to the
 SPARC version of RTEMS.
 
-@ifinfo
-@node ERC32 Timing Data Hardware Platform, ERC32 Timing Data Interrupt Latency, ERC32 Timing Data Introduction, ERC32 Timing Data
-@end ifinfo
 @section Hardware Platform
 
 All times reported in this chapter were measured
@@ -82,9 +51,6 @@ with one microsecond accuracy.  All sources of hardware
 interrupts were disabled, although traps were enabled and the
 interrupt level of the SPARC allows all interrupts.
 
-@ifinfo
-@node ERC32 Timing Data Interrupt Latency, ERC32 Timing Data Context Switch, ERC32 Timing Data Hardware Platform, ERC32 Timing Data
-@end ifinfo
 @section Interrupt Latency
 
 The maximum period with traps disabled or the
@@ -127,9 +93,6 @@ generated on the SIS benchmark platform using the ERC32's
 ability to forcibly generate an arbitrary interrupt as the
 source of the "benchmark" interrupt.
 
-@ifinfo
-@node ERC32 Timing Data Context Switch, RTEMS_CPU_MODEL Timing Data Directive Times, ERC32 Timing Data Interrupt Latency, ERC32 Timing Data
-@end ifinfo
 @section Context Switch
 
 The RTEMS processor context switch time is 10
@@ -154,11 +117,4 @@ the numeric coprocessor.
 
 The following table summarizes the context switch
 times for the ERC32 benchmark platform:
-
-@include timetbl.texi
-
-@tex
-\global\advance \smallskipamount by 4pt
-@end tex
-
 
