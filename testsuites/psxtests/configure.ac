@@ -29,7 +29,6 @@ AC_SUBST(BARE_CPU_MODEL)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-include/Makefile
 psx01/Makefile
 psx02/Makefile
 psx03/Makefile
