@@ -9,7 +9,11 @@ AC_REQUIRE([RTEMS_ENABLE_RDBG])dnl
 AC_CACHE_CHECK([whether BSP supports librdbg],
   rtems_cv_HAS_RDBG,
   [
-    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/librdbg/src/${RTEMS_CPU}/${$1}"; then
+    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/librdbg/src/${RTEMS_CPU}/${$1}";
+    then
+      rtems_cv_HAS_RDBG="yes" ;
+    elif test -d "$srcdir/${RTEMS_TOPdir}/c/src/librdbg/src/${RTEMS_CPU}/any"; 
+    then
       rtems_cv_HAS_RDBG="yes" ;
     else
       rtems_cv_HAS_RDBG="no";
