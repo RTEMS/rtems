@@ -17,10 +17,10 @@ S_FILES = videoAsm.S
 console_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o) $(S_FILES:%.S=$(ARCH)/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
-
-PREINSTALL_FILES = $(PROJECT_INCLUDE) \
+PREINSTALL_FILES += $(PROJECT_INCLUDE) \
     $(RTEMS_H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/%.h)
 
 #

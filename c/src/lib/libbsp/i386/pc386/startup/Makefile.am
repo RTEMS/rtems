@@ -20,6 +20,7 @@ S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 startup_rel_OBJECTS = $(C_O_FILES) $(S_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
 #

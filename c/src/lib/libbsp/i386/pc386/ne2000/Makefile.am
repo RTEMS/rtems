@@ -10,6 +10,7 @@ C_FILES = ne2000.c
 ne2000_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
 #

@@ -1,3 +1,10 @@
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* 3c509/Makefile.am, clock/Makefile.am, console/Makefile.am,
+	ne2000/Makefile.am, start/Makefile.am, startup/Makefile.am,
+	timer/Makefile.am, wd8003/Makefile.am, wrapup/Makefile.am: Include
+	compile.am
+
 2000-08-30	Joel Sherrill <joel@OARcorp.com>
 
 	* console/keyboard.h: Changed numerous routines from extern inline
