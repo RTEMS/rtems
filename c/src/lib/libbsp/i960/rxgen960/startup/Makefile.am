@@ -46,12 +46,17 @@ EXTRA_DIST = asmfault.S asmfault.h asmstub.S asmstub.h bspstart.c cntrltbl.c \
     rommon.h rxgen_romld.S sctns.c sctns.h setvec.c systbl.c systbl.h \
     time.h
 
+TMPINSTALL_FILES =
+
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/linkcmds: linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
+
+CLEANFILES = $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -21,12 +21,17 @@ all-local: $(ARCH)/rxgen_romld.$(OBJEXT) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = rxgen_romld.S
 
+TMPINSTALL_FILES =
+
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/rxgen_romld$(LIB_VARIANT).$(OBJEXT): $(ARCH)/rxgen_romld$(LIB_VARIANT).$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/rxgen_romld$(LIB_VARIANT).$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/rxgen_romld$(LIB_VARIANT).$(OBJEXT)
+
+CLEANFILES = $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
