@@ -61,14 +61,12 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/powerpc \
     $(include_rtems_powerpc_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h)
 
 C_FILES = # cpu.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 S_FILES = # cpu_asm.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
+OBJS += $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
-libscorecpu_a_OBJECTS = $(C_O_FILES) $(S_O_FILES)
-
-$(LIB): $(libscorecpu_a_OBJECTS)
+$(LIB): $(OBJS)
 	$(make-library)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB) \

@@ -33,13 +33,11 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h)
 
 C_FILES = cpu.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 LIB = $(ARCH)/libscorecpu.a
 
-libscorecpu_a_OBJECTS = $(C_O_FILES)
-
-$(LIB): $(libscorecpu_a_OBJECTS)
+$(LIB): $(OBJS)
 	$(make-library)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB) \

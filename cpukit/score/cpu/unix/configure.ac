@@ -2,7 +2,7 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.52)
+AC_PREREQ(2.57)
 AC_INIT([rtems-cpukit-score-cpu-unix],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([cpu.c])
 RTEMS_TOP(../../../..)
@@ -10,7 +10,7 @@ AC_CONFIG_AUX_DIR(../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.6])
+AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.7.2])
 AM_MAINTAINER_MODE
 
 RTEMS_ENV_RTEMSCPU
@@ -43,7 +43,7 @@ typedef struct {
 } CPU_CONTEXT;
 ])
 
-AM_CONFIG_HEADER([rtems/score/unixsize-tmp.h],[
+AC_CONFIG_HEADERS([rtems/score/unixsize-tmp.h],[
 echo "/* automatically generated -- DO NOT EDIT!! */" >$tmp/config.h
 echo                                                  >>$tmp/config.h
 echo "#ifndef __rtems_score_unixsize_h"               >>$tmp/config.h
