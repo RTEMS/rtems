@@ -19,7 +19,7 @@ SYS_H_PIECES=buf callout cdefs conf domain filio ioccom ioctl kernel \
     ucred uio
 SYS_H_FILES=$(SYS_H_PIECES:%=$(srcdir)/../sys/%.h)
 
-RTEMS_H_PIECES= rtems_bsdnet 
+RTEMS_H_PIECES= rtems_bsdnet rtems_bsdnet_internal
 RTEMS_H_FILES=$(RTEMS_H_PIECES:%=$(srcdir)/../rtems/%.h)
 
 MACHINE_H_PIECES= conf cpu cpufunc endian in_cksum limits param types vmparam
