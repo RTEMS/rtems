@@ -14,7 +14,9 @@ echo
 
 summarize_chapter()
 {
-  grep "^@chapter" $1 | sed -e "s/^.chapter/@section/"
+  grep "^@chapter" $1 | \
+    sed -e "s/^.chapter/@section/"  \
+        -e "s/$/ Chapter/" 
   echo
   num_functions=`grep "()" $1 | wc -l`
   echo "Functions: ${num_functions}"

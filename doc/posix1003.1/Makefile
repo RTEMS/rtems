@@ -151,7 +151,6 @@ ch19.texi: ch19.t
 	    -u "Top" \
 	    -n "Command and Variable Index" ${*}.t
 	
-
 html: $(FILES)
 	-mkdir $(WWW_INSTALL)/$(PROJECT)
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \

@@ -81,6 +81,7 @@ END-INFO-DIR-ENTRY
 @include ch16.texi
 @include ch17.texi
 @include ch18.texi
+@include ch19.texi
 
 @ifinfo
 @node Top, Preface, (dir), (dir)
@@ -108,6 +109,7 @@ This is the online version of the RTEMS POSIX 1003.1 Compliance Guide.
 * Thread Management::
 * Thread-Specific Data::
 * Thread Cancellation::
+* Compliance Summary::
 * Command and Variable Index::
 * Concept Index::
 @end menu
@@ -118,7 +120,7 @@ This is the online version of the RTEMS POSIX 1003.1 Compliance Guide.
 @c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
 @c
 
-@node Command and Variable Index, Concept Index, List of Cancellation Points, Top
+@node Command and Variable Index, Concept Index, Thread Cancellation Chapter, Top
 @unnumbered Command and Variable Index
 
 There are currently no Command and Variable Index entries.
