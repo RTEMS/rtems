@@ -387,7 +387,7 @@ void malloc_walk(size_t source, size_t printf_enabled)
  */
 
 #ifdef RTEMS_NEWLIB
-void *malloc_r(
+void *_malloc_r(
   struct _reent *ignored,
   size_t  size
 )
@@ -395,7 +395,8 @@ void *malloc_r(
   return malloc( size );
 }
 
-void *calloc_r(
+void *_calloc_r(
+  struct _reent *ignored,
   size_t nelem,
   size_t elsize
 )
@@ -403,15 +404,17 @@ void *calloc_r(
   return calloc( nelem, elsize );
 }
 
-void *realloc_r(
+void *_realloc_r(
+  struct _reent *ignored,
   void *ptr,
   size_t size
 )
 {
-  return realloc_r( ptr, size );
+  return realloc( ptr, size );
 }
 
-void free_r(
+void _free_r(
+  struct _reent *ignored,
   void *ptr
 )
 {
