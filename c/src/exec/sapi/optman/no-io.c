@@ -20,6 +20,14 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
 
+void _IO_Manager_initialization(
+  rtems_driver_address_table *driver_table,
+  unsigned32                  number_of_drivers,
+  unsigned32                  number_of_devices
+)
+{
+}
+
 void _IO_Initialize_all_drivers( void )
 {
 }
