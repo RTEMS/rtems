@@ -28,6 +28,9 @@ void test( void )
   policy = SCHED_FIFO;
   policy = SCHED_RR;
   policy = SCHED_OTHER;
+#ifdef _POSIX_SPORADIC_SERVER
+  policy = SCHED_SPORADIC;
+#endif
   
   result = pthread_attr_setschedpolicy( &attr, policy );
 }

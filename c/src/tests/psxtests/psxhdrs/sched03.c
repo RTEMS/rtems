@@ -31,8 +31,22 @@ void test( void )
   policy = SCHED_RR;
   policy = SCHED_FIFO;
   policy = SCHED_OTHER;
+#ifdef _POSIX_SPORADIC_SERVER
+  policy = SCHED_SPORADIC;
+#endif
+
+  /*
+   *  really should use sched_get_priority_min() and sched_get_priority_max()
+   */
 
   param.sched_priority = 0;
+#ifdef _POSIX_SPORADIC_SERVER
+  param.ss_low_priority = 0;
+  param.ss_replenish_period.tv_sec = 0;
+  param.ss_replenish_period.tv_nsec = 0;
+  param.ss_initial_budget.tv_sec = 0;
+  param.ss_initial_budget.tv_nsec = 0;
+#endif
 
   result = sched_setscheduler( pid, policy, &param );
 }

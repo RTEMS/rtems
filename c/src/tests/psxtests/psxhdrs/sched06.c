@@ -27,6 +27,9 @@ void test( void )
   policy = SCHED_RR;
   policy = SCHED_FIFO;
   policy = SCHED_OTHER;
+#ifdef _POSIX_SPORADIC_SERVER
+  policy = SCHED_SPORADIC;
+#endif
 
   result = sched_get_priority_max( policy );
 }
