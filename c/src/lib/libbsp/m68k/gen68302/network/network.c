@@ -154,8 +154,6 @@ m302Enet_initialize_hardware (struct scc_softc *sc)
 	rtems_isr_entry old_handler;
 	struct m68302_scc_bd	*a_bd;			/* Buffer Descriptor pointer */
 	ushort *cam;
-	void **p;
-	ushort tmp;		
 #define LBK		0x0008
 #define DSQE	0x0010
 #define FDE		0x0020
@@ -537,7 +535,6 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 	struct mbuf *l = NULL;
 	rtems_unsigned16 status;
 	int nAdded;
-	char buf[20];
 	
 	/*
 	 * Free up buffer descriptors

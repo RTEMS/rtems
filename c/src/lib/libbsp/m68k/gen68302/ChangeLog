@@ -1,3 +1,7 @@
+2000-12-14	Joel Sherrill <joel@OARcorp.com>
+
+	* network/network.c: Removed unused variable warnings.
+
 2000-12-11	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am, configure.in, include/Makefile.am,
