@@ -1,3 +1,7 @@
+2002-03-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove stray ';', PR 139.
+
 2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/bsp.h: Include rtems/bspIo.h instead of bspIo.h.
