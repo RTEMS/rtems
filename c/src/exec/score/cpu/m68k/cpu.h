@@ -21,13 +21,6 @@
 extern "C" {
 #endif
 
-/*
- *  If defined, this causes some of the macros to initialize their
- *  variables to zero before doing inline assembly.  This gets rid
- *  of compile time warnings at the cost of a little execution time
- *  in some time critical routines.
- */
-
 #include <rtems/score/m68k.h>
 #ifndef ASM
 #include <rtems/score/m68ktypes.h>
