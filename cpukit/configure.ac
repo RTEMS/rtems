@@ -2,7 +2,7 @@
 ## 
 ## $Id$
 
-AC_PREREQ(2.52)
+AC_PREREQ(2.54)
 AC_INIT([rtems-cpukit],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([score])
 RTEMS_TOP(..)
@@ -10,7 +10,7 @@ AC_CONFIG_AUX_DIR(..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.6])
+AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.7.2])
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_MULTILIB

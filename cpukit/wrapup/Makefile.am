@@ -8,50 +8,44 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
+LIBS =
 if LIBSCORECPU
-CPU_OBJS = ../score/cpu/$(RTEMS_CPU)/$(ARCH)/libscorecpu.a
+LIBS += ../score/cpu/$(RTEMS_CPU)/$(ARCH)/libscorecpu.a
 endif
-CORE_OBJS = ../score/$(ARCH)/libscore.a
-SAPI_OBJS = ../sapi/$(ARCH)/libsapi.a
-RTEMS_OBJS = ../rtems/$(ARCH)/librtems.a
+LIBS += ../score/$(ARCH)/libscore.a
+LIBS += ../sapi/$(ARCH)/libsapi.a
+LIBS += ../rtems/$(ARCH)/librtems.a
 
 if HAS_POSIX
-POSIX_OBJS = ../posix/$(ARCH)/libposix.a
+LIBS += ../posix/$(ARCH)/libposix.a
 endif
 
 if HAS_ITRON
-ITRON_OBJS = ../itron/$(ARCH)/libitron.a
+LIBS += ../itron/$(ARCH)/libitron.a
 endif
 
-LIBCSUPPORT_OBJS = ../libcsupport/$(ARCH)/libcsupport.a
+LIBS += ../libcsupport/$(ARCH)/libcsupport.a
 
-LIBBLOCK_OBJS = ../libblock/$(ARCH)/libblock.a
+LIBS += ../libblock/$(ARCH)/libblock.a
 if !UNIX
-LIBDOSFS_OBJS = ../libfs/src/dosfs/$(ARCH)/libdosfs.a
+LIBS += ../libfs/src/dosfs/$(ARCH)/libdosfs.a
 endif
-LIBIMFS_OBJS = ../libfs/src/imfs/$(ARCH)/libimfs.a
+LIBS += ../libfs/src/imfs/$(ARCH)/libimfs.a
 
 if HAS_NETWORKING
-NETWORKING_OBJS = \
-    ../libnetworking/wrapup/$(ARCH)/libnetworking.a
+LIBS += ../libnetworking/wrapup/$(ARCH)/libnetworking.a
 endif
 
 if LIBRPC
-LIBRPC_OBJS = \
-    ../librpc/src/rpc/$(ARCH)/librpc.a \
-    ../librpc/src/xdr/$(ARCH)/libxdr.a
+LIBS += ../librpc/src/rpc/$(ARCH)/librpc.a
+LIBS += ../librpc/src/xdr/$(ARCH)/libxdr.a
 endif
 
-OBJS = $(CPU_OBJS) $(CORE_OBJS) $(RTEMS_OBJS) $(SAPI_OBJS) \
-    $(POSIX_OBJS) $(ITRON_OBJS) $(LIBCSUPPORT_OBJS) \
-    $(LIBBLOCK_OBJS) $(LIBDOSFS_OBJS) $(LIBIMFS_OBJS) \
-    $(NETWORKING_OBJS) $(LIBRPC_OBJS)
-
-$(LIB): ${OBJS}
+$(LIB): ${LIBS}
 	rm -f $@
 	test -d $(ARCH) || mkdir $(ARCH)
 	rm -rf $(ARCH)/*
-	for f in $(OBJS); do \
+	for f in $(LIBS); do \
 	  case $$f in \
 	  *.$(OBJEXT) | *.rel) \
 	    if test -f $(ARCH)/`basename $$f`; then \

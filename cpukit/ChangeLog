@@ -1,5 +1,10 @@
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* wrapup/Makefile.am: Remove *_OBJS, use LIBS+= instead.
+	* configure.ac: Require autoconf >= 2.54, automake-1.7.2.
+
+2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Reflect changes to score/.
 	* configure.ac: Reflect changes to score/.
 
