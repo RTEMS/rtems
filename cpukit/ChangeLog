@@ -1,5 +1,9 @@
 2004-04-26	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libnetworking/kern/kern_sysctl.c: Partial updates from FreeBSD.
+
+2004-04-26	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libnetworking/netinet/igmp_var.h: Cosmetic updates from FreeBSD.
 	* libnetworking/sys/sysctl.h: Update from FreeBSD.
 	* libnetworking/sys/socketvar.h: Update from FreeBSD.

@@ -95,7 +95,7 @@ static struct sx sysctllock;
 #else
 #define	SYSCTL_LOCK()		sx_xlock(&sysctllock)
 #define	SYSCTL_UNLOCK()		sx_xunlock(&sysctllock)
-#define	SYSCTL_INIT()		sx_init(&sysctllock, "sysctl sysctllock")
+#define	SYSCTL_INIT()		sx_init(&sysctllock, "sysctl lock")
 #endif
 
 static int sysctl_root(SYSCTL_HANDLER_ARGS);
@@ -423,7 +423,7 @@ sysctl_add_oid(struct sysctl_ctx_list *clist, struct sysctl_oid_list *parent,
  */
 SET_DECLARE(sysctl_set, struct sysctl_oid);
 
-void
+static void
 sysctl_register_all(void *arg)
 {
 	struct sysctl_oid **oidp;
@@ -587,7 +587,7 @@ sysctl_sysctl_next_ls(struct sysctl_oid_list *lsp, int *name, u_int namelen,
 			if (!sysctl_sysctl_next_ls(lsp, 0, 0, next+1,
 				len, level+1, oidpp))
 				return 0;
-			goto next;
+			goto emptynode;
 		}
 
 		if (oidp->oid_number < *name)
@@ -616,6 +616,7 @@ sysctl_sysctl_next_ls(struct sysctl_oid_list *lsp, int *name, u_int namelen,
 			return (0);
 	next:
 		namelen = 1;
+	emptynode:
 		*len = level;
 	}
 	return 1;
@@ -1077,7 +1078,7 @@ sysctl_new_user(struct sysctl_req *req, void *p, size_t l)
  * a place to save it in the sysctl_req structure so that the matching
  * amount of memory can be unwired in the sysctl exit code.
  */
-void
+int
 sysctl_wire_old_buffer(struct sysctl_req *req, size_t len)
 {
 	if (req->lock == REQ_LOCKED && req->oldptr && 
@@ -1087,6 +1088,7 @@ sysctl_wire_old_buffer(struct sysctl_req *req, size_t len)
 #endif
 		req->lock = REQ_WIRED;
 	}
+	return (0);
 }
 
 int
