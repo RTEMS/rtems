@@ -1,3 +1,9 @@
+2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Per PR169.
+	* src/dosfs/config.h.in, src/dosfs/stamp-h2.in: Removed from CVS.
+
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/dosfs/fat_file.c: Remove bsp.h. 
