@@ -1,5 +1,12 @@
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/compile.am: Remove hard-coded *_PROFILE_V.
+	Add autoconf-supplied CPU_CFLAGS, CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V, 
+	CFLAGS_PROFILE_V.
+	Remove CPPFLAGS_GCC.
+
+2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/env-rtemsbsp.m4: Add AC_ARG_VAR for CPU_CFLAGS,
 	CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V, CFLAGS_PROFILE_V, RTEMS_BSP_FAMILY.
 	* aclocal/prog-cc.m4: Reworked CFLAGS handling.

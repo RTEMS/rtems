@@ -54,17 +54,12 @@ endif # RTEMS_USE_GCC
 DEFS = @DEFS@
 
 CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) \
-   $(DEFINES) $(XCPPFLAGS) $(CPPFLAGS_GCC)
+   $(DEFINES) $(XCPPFLAGS)
 CFLAGS   = @CFLAGS@ $(CPU_CFLAGS) $(XCFLAGS)
 CXXFLAGS = @CXXFLAGS@ $(CPU_CFLAGS) $(XCXXFLAGS)
 ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
 
 LINK_LIBS = $(LD_LIBS)
-
-# profile flag; use gprof(1)
-CFLAGS_PROFILE_V=-pg
-CXXFLAGS_PROFILE_V=-pg
-LDFLAGS_PROFILE_V =
 
 #
 # Client compiler and support tools
@@ -194,9 +189,10 @@ LIB_VARIANT = $(LIBSUFFIX_$(VARIANT_V)_V)
 LIBSUFFIX_VA = $(LIB_VARIANT).a
 
 ## These are supposed to be set in make/custom/<bsp>.cfg
-## CFLAGS_OPTIMIZE_V = 
-## CFLAGS_DEBUG_V =
-## CFLAGS_PROFILE_V =
+CPU_CFLAGS = @CPU_CFLAGS@
+CFLAGS_OPTIMIZE_V = @CFLAGS_OPTIMIZE_V@
+CFLAGS_DEBUG_V = @CFLAGS_DEBUG_V@
+CFLAGS_PROFILE_V = @CFLAGS_PROFILE_V@
 CFLAGS__V = $(CFLAGS_OPTIMIZE_V)
 
 ## ------------------------------------------------------------------------
@@ -224,7 +220,6 @@ OBJCOPY = @OBJCOPY@
 NM = @NM@
 SIZE = @SIZE@
 STRIP = @STRIP@
-
 
 ##
 AM_CPPFLAGS = $(RTEMS_CPPFLAGS)
