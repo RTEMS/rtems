@@ -1,3 +1,9 @@
+2003-08-30	Ralf Corsepius <corsepius@faw.uni-ulm.de>
+
+	* itron.texi: include common/rtems.texi.
+	include common/cpright.texi
+	* Makefile.am: Reflect changes to $(top_srcdir)/project.am.
+
 2003-01-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* itron.texi: Set @setfilename itron.info.
