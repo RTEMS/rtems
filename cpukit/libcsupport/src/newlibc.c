@@ -40,9 +40,7 @@
 #define NEED_SETVBUF
 #endif
  
-#ifdef NEED_SETVBUF
 #include <stdio.h>
-#endif
 
 int              libc_reentrant;        /* do we think we are reentrant? */
 struct _reent    libc_global_reent;
@@ -55,8 +53,6 @@ struct _reent    libc_global_reent;
 
 extern void _wrapup_reent(struct _reent *);
 extern void _reclaim_reent(struct _reent *);
-
-#include <stdio.h>
 
 void libc_wrapup(void)
 {
