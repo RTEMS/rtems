@@ -78,12 +78,6 @@ extern rtems_device_driver sh_sci_control(
   void *
 );
 
-/* Internal error codes */
-#define SH_TTY_NO_ERROR         0x2000
-#define SH_TTY_FRAME_ERR        0x2001
-#define SH_TTY_PARITY_ERR       0x2002
-#define SH_TTY_OVERRUN_ERR      0x2003
-
 #ifdef __cplusplus
 }
 #endif

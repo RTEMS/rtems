@@ -30,13 +30,21 @@
 extern "C" {
 #endif
 
-#define CPU_CONSOLE_DEVNAME "/dev/null"
-
-
 #include <rtems.h>
 #include <clockdrv.h>
-#include <sh/null.h>
 #include <console.h>
+
+/* EDIT: To activate the sci driver, change the define below */
+#if 1
+#include <sh/null.h>
+#define BSP_CONSOLE_DEVNAME "/dev/null"
+#define BSP_CONSOLE_DRIVER_TABLE_ENTRY DEVNULL_DRIVER_TABLE_ENTRY
+#else
+#include <sh/sci.h>
+#define BSP_CONSOLE_DEVNAME "/dev/sci0"
+#define BSP_CONSOLE_DRIVER_TABLE_ENTRY DEVSCI_DRIVER_TABLE_ENTRY
+#endif
+
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
@@ -68,39 +76,14 @@ extern "C" {
 #define Lower_tm27_intr()
 
 /* Constants */
-#ifndef MHZ
-#error Missing MHZ
-#endif
 
 /*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
- *
- *  Since we don't have a real time clock, this is a very rough
- *  approximation, assuming that each cycle of the delay loop takes
- *  approx. 4 machine cycles.
- *
- *  e.g.: MHZ = 20 =>     5e-8 secs per instruction
- *                 => 4 * 5e-8 secs per delay loop
  */
 
-#define delay( microseconds ) \
-{ register unsigned int _delay = (microseconds) * (MHZ / 4 ); \
-  asm volatile ( \
-"0:	add  #-1,%0\n \
-	nop\n \
-	cmp/pl %0\n \
-	bt 0b\
-	nop" \
-    :: "r" (_delay) );  \
-}
-
-/*
- * For backward compatibility only.
- * Do not rely on them being present in future
- */
-#define CPU_delay( microseconds ) delay( microseconds )
-#define sh_delay( microseconds ) delay( microseconds )
+#define delay( microseconds ) CPU_delay(microseconds)
+#define sh_delay( microseconds ) CPU_delay(microseconds)
 
 /*
  * Defined in the linker script 'linkcmds'
@@ -128,31 +111,15 @@ extern void bsp_cleanup( void );
 /*
  * We redefine CONSOLE_DRIVER_TABLE_ENTRY to redirect /dev/console
  */
-#if defined(CONSOLE_DRIVER_TABLE_ENTRY)
-#warning Overwriting CONSOLE_DRIVER_TABLE_ENTRY
 #undef CONSOLE_DRIVER_TABLE_ENTRY
-#endif
-
 #define CONSOLE_DRIVER_TABLE_ENTRY \
-  DEVNULL_DRIVER_TABLE_ENTRY, \
+  BSP_CONSOLE_DRIVER_TABLE_ENTRY, \
   { console_initialize, console_open, console_close, \
       console_read, console_write, console_control }
  
 /*
  * NOTE: Use the standard Clock driver entry
  */
-
-/*
- * FIXME: Should this go to libcpu/sh/sh7032 ?
- */
-#if 0
-/* functions */
-sh_isr_entry set_vector(                    /* returns old vector */
-  rtems_isr_entry     handler,                  /* isr routine        */
-  rtems_vector_number vector,                   /* vector number      */
-  int                 type                      /* RTEMS or RAW intr  */
-);
-#endif
 
 #ifdef __cplusplus
 }

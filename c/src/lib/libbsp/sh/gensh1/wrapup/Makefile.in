@@ -15,11 +15,11 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-BSP_PIECES = startup scitab
+BSP_PIECES = startup scitab console
 GENERIC_PIECES =
 
 # pieces to pick up out of libcpu/sh
-CPU_PIECES = sh7032/null sh7032/clock sh7032/console sh7032/timer
+CPU_PIECES = sh7032/null sh7032/clock sh7032/timer sh7032/sci sh7032/delay
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
@@ -61,8 +61,10 @@ CLOBBER_ADDITIONS +=
 $(LIB): ${OBJS}
 	$(make-library)
 
-all: ${ARCH} $(SRCS) $(LIB)
-	$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
+$(PROJECT_RELEASE)/lib/libbsp$(LIBSUFFIX_VA): $(LIB)
+	$(INSTALL_DATA) $^ $@
+
+all: ${ARCH} $(SRCS) $(PROJECT_RELEASE)/lib/libbsp$(LIBSUFFIX_VA)
 
 install: all
 

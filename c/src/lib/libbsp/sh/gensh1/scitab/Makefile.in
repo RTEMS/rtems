@@ -64,7 +64,7 @@ $(PGM): $(SRCS) ${OBJS}
 all: ${ARCH} $(SRCS) $(PGM)
 
 scitab.c: $(SHGEN)
-	$(SHGEN) -M $(MHZ) sci > $@
+	$(SHGEN) -H $(HZ) sci > $@
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 install: all

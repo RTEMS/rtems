@@ -18,7 +18,8 @@ C_PIECES =
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_PIECES = cpu.h shtypes.h sh.h sh_io.h cpu_isps.h iosh7030.h
+H_PIECES = cpu.h shtypes.h sh.h sh_io.h isp$(RTEMS_CPU_MODEL).h \
+    io$(RTEMS_CPU_MODEL).h
 H_FILES = $(H_PIECES:%=$(srcdir)/%)
 
 # Assembly source names, if any, go here -- minus the .S

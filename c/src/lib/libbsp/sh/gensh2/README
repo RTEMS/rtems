@@ -1,0 +1,51 @@
+#
+#  $Id$
+#
+#  Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de)
+#  Adapted by: John Mills (jmills@tga.com)
+#
+
+BSP NAME:           generic SH2 (gensh2)
+BOARD:              n/a
+BUS:                n/a
+CPU FAMILY:         Hitachi SH
+CPU:                SH 7045F
+COPROCESSORS:	    none
+MODE:               n/a
+
+DEBUG MONITOR:      gdb
+
+PERIPHERALS
+===========
+TIMERS:             on-chip
+  RESOLUTION:         cf. Hitachi SH 704X Hardware Manual (Phi/4)
+SERIAL PORTS:       on-chip (with 2 ports)
+REAL-TIME CLOCK:    none
+DMA:                not used
+VIDEO:              none
+SCSI:               none
+NETWORKING:         none
+
+DRIVER INFORMATION
+==================
+CLOCK DRIVER:       on-chip timer
+IOSUPP DRIVER:      default
+SHMSUPP:            default
+TIMER DRIVER:       on-chip timer
+TTY DRIVER:         /dev/null (stub)
+
+STDIO
+=====
+PORT:               /dev/null (stub)
+ELECTRICAL:         n/a
+BAUD:               n/a
+BITS PER CHARACTER: n/a
+PARITY:             n/a
+STOP BITS:          n/a
+
+NOTES
+=====
+
+(1) Only stub console driver available at the moment.
+    Driver for the on-chip serial devices (sci) will be available soon.
+

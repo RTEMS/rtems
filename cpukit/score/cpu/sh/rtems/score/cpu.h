@@ -377,6 +377,7 @@ typedef struct {
   void *     (*stack_allocate_hook)( unsigned32 );
   void       (*stack_free_hook)( void* );
   /* end of fields required on all CPUs */
+  unsigned32	clicks_per_second ; /* cpu frequency in Hz */
 }   rtems_cpu_table;
 
 /*
@@ -388,8 +389,9 @@ typedef struct {
  *  Macros to access SH specific additions to the CPU Table
  */
 
-/* There are no CPU specific additions to the CPU Table for this port. */
-
+#define rtems_cpu_configuration_get_clicks_per_second() \
+  (_CPU_Table.clicks_per_second)
+   
 /*
  *  This variable is optional.  It is used on CPUs on which it is difficult
  *  to generate an "uninitialized" FP context.  It is filled in by
@@ -434,6 +436,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  */
 
 /* XXX: if needed, put more variables here */
+SCORE_EXTERN void CPU_delay( unsigned32 microseconds );
 
 /*
  *  The size of the floating point context area.  On some CPUs this
@@ -637,7 +640,7 @@ SCORE_EXTERN void _CPU_Context_Initialize(
  *
  *  Other models include (1) not doing anything, and (2) putting
  *  a "null FP status word" in the correct place in the FP context.
- *  SH has no FPU !!!!!!!!!!!!
+ *  SH1, SH2, SH3 have no FPU, but the SH3e and SH4 have.
  */
 
 #define _CPU_Context_Initialize_fp( _destination ) \

@@ -30,10 +30,14 @@
 
 #include <rtems/system.h>
 #include <rtems/score/shtypes.h>
-#include <rtems/score/cpu_isps.h>
+#include <rtems/score/ispsh7032.h>
+
+#if !defined(sh7032)
+#error Wrong CPU MODEL
+#endif
 
 /*
- * This is a exception vector table
+ * This is an exception vector table
  *
  * It has the same structure like the actual vector table (vectab)
  */

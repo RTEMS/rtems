@@ -32,17 +32,26 @@
 #include <rtems.h>
 
 #include <rtems/score/sh_io.h>
-#include <rtems/score/iosh7030.h>
+#include <rtems/score/ispsh7032.h>
+#include <rtems/score/iosh7032.h>
+
+#define I_CLK_PHI_1     0
+#define I_CLK_PHI_2     1
+#define I_CLK_PHI_4     2
+#define I_CLK_PHI_8     3
 
 /*
- * We use a Phi/4 timer
+ * Set I_CLK_PHI to one of the I_CLK_PHI_X values from above to choose
+ * a PHI/X clock rate.  
  */
-#define SCALE (MHZ/4)
+   
+#define I_CLK_PHI       I_CLK_PHI_4
+#define CLOCK_SCALE     (1<<I_CLK_PHI)
 
 #define ITU1_STARTMASK 	0xfd
 #define ITU1_SYNCMASK 	0xfd
 #define ITU1_MODEMASK 	0xfd
-#define ITU1_TCRMASK 	0x02
+#define ITU1_TCRMASK 	(0x00 | I_CLK_PHI)
 #define ITU1_TIORMASK 	0x88
 #define ITU1_STAT_MASK 	0xf8
 #define ITU1_TIERMASK 	0xfc
@@ -52,7 +61,7 @@
 #define ITU1_PRIO 15
 #endif
 
-#define ITU1_VECTOR 86
+#define ITU1_VECTOR OVI1_ISP_V
 
 rtems_isr timerisr();
 
@@ -60,12 +69,16 @@ static rtems_unsigned32 Timer_interrupts;
 
 rtems_boolean Timer_driver_Find_average_overhead;
 
+static rtems_unsigned32 Timer_HZ ;
+
 void Timer_initialize( void )
 {
   rtems_unsigned8  temp8;
   rtems_unsigned16 temp16;
   rtems_unsigned32 level;
   rtems_isr	   *ignored;
+
+  Timer_HZ = rtems_cpu_configuration_get_clicks_per_second() / CLOCK_SCALE ;
 
   /*
    *  Timer has never overflowed.  This may not be necessary on some
@@ -93,12 +106,7 @@ void Timer_initialize( void )
   temp8 = read8( ITU_TMDR) & ITU1_MODEMASK;
   write8( temp8, ITU_TMDR);
 
-  /* x0000000
-   * |||||+++--- Internal Clock
-   * |||++------ Count on rising edge
-   * |++-------- disable TCNT clear
-   * +---------- don`t care
-   */
+  /* Use a Phi/X counter */
   write8( ITU1_TCRMASK, ITU_TCR1);
 
   /* gra and grb are not used */
@@ -142,14 +150,14 @@ void Timer_initialize( void )
 
 int Read_timer( void )
 {
-  rtems_unsigned32 clicks;
+  rtems_unsigned32 cclicks;
   rtems_unsigned32 total ;
   /*
    *  Read the timer and see how many clicks it has been since we started.
    */
   
 
-  clicks = read16( ITU_TCNT1);   /* XXX: read some HW here */
+  cclicks = read16( ITU_TCNT1);   /* XXX: read some HW here */
   
   /*
    *  Total is calculated by taking into account the number of timer overflow
@@ -157,10 +165,10 @@ int Read_timer( void )
    *  interrupts.
    */
 
-  total = clicks + Timer_interrupts * 65536 ;
+  total = cclicks + Timer_interrupts * 65536 ;
 
   if ( Timer_driver_Find_average_overhead )
-    return total / SCALE;          /* in XXX microsecond units */
+    return total / CLOCK_SCALE;          /* in XXX microsecond units */
   else 
   {
     if ( total < LEAST_VALID )
@@ -168,7 +176,7 @@ int Read_timer( void )
   /*
    *  Somehow convert total into microseconds
    */
-    return (total / SCALE - AVG_OVERHEAD) ;
+    return (total / CLOCK_SCALE - AVG_OVERHEAD) ;
   }
 }
 

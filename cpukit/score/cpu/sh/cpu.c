@@ -30,7 +30,7 @@
 #include <rtems/score/sh.h>
 
 
-/* referenced in start.s */
+/* referenced in start.S */
 extern proc_ptr vectab[] ;
 
 proc_ptr vectab[256] ;

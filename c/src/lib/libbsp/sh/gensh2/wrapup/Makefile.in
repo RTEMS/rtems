@@ -1,0 +1,69 @@
+#
+#  $Id$
+#
+#  build and install libbsp
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+top_builddir = ../../..
+subdir = sh/gensh2/wrapup
+
+RTEMS_ROOT = @RTEMS_ROOT@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+VPATH = @srcdir@
+
+BSP_PIECES = startup scitab console
+GENERIC_PIECES =
+
+# pieces to pick up out of libcpu/sh
+CPU_PIECES = sh7045/null sh7045/clock sh7045/timer sh7045/sci
+
+# bummer; have to use $foreach since % pattern subst rules only replace 1x
+OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
+    $(foreach piece, $(CPU_PIECES), \
+    ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/$(notdir $(piece)).rel) \
+    $(foreach piece, $(GENERIC_PIECES), \
+    ../../../../$(piece)/$(ARCH)/$(piece).rel)
+
+LIB = $(ARCH)/libbsp.a
+
+include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(RTEMS_ROOT)/make/lib.cfg
+
+INSTALL_CHANGE = @INSTALL_CHANGE@
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES +=
+CPPFLAGS +=
+CFLAGS +=
+
+LD_PATHS +=
+LD_LIBS +=
+LDFLAGS +=
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+$(LIB): ${OBJS}
+	$(make-library)
+
+all: ${ARCH} $(SRCS) $(LIB)
+	$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
+
+install: all
+Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status

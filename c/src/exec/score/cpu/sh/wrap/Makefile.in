@@ -23,7 +23,7 @@ VPATH = @srcdir@/..
 RELS = ../$(ARCH)/rtems-cpu.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = cpu cpu_asm cpu_isps
+C_PIECES = cpu cpu_asm isp$(RTEMS_CPU_MODEL)
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 

@@ -45,6 +45,10 @@ STOP BITS:          n/a
 NOTES
 =====
 
-(1) Only stub console driver available at the moment.
-    Driver for the on-chip serial devices (sci) will be available soon.
+(1) The stub console driver (null) is enabled by default.
 
+(2) The driver for the on-chip serial devices (sci) is still in its infancy
+    and not fully tested. It may even be non-functional and therefore is
+    disabled by default. Please let us know any problems you encounter with
+    it.
+    To activate it edit libbsp/sh/gensh1/include/bsp.h

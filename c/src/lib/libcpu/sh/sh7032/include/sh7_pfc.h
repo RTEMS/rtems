@@ -27,7 +27,7 @@
 #ifndef _sh7_pfc_h
 #define _sh7_pfc_h
 
-#include <rtems/score/iosh7030.h>
+#include <rtems/score/iosh7032.h>
 
 /*
  * Port B IO Register (PBIOR)

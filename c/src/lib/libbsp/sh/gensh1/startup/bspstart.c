@@ -126,9 +126,9 @@ void bsp_start(void)
 
   Cpu_table.pretasking_hook = bsp_pretasking_hook;  /* init libc, etc. */
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
-
+  
 #if ( CPU_ALLOCATE_INTERRUPT_STACK == TRUE )
   Cpu_table.interrupt_stack_size = 4096;
 #endif
-
+  Cpu_table.clicks_per_second = HZ ;
 }
