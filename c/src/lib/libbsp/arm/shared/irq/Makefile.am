@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 C_FILES = irq_init.c
 S_FILES = irq_asm.S
