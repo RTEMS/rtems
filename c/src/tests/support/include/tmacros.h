@@ -39,7 +39,7 @@ extern "C" {
 #define check_dispatch_disable_level( _expect ) \
   do { \
     extern volatile rtems_unsigned32 _Thread_Dispatch_disable_level; \
-    if ( _Thread_Dispatch_disable_level != (_expect) ) { \
+    if ( (_expect) != -1 && _Thread_Dispatch_disable_level != (_expect) ) { \
       printf( "\n_Thread_Dispatch_disable_level is (%d) not %d\n", \
               _Thread_Dispatch_disable_level, (_expect) ); \
       fflush(stdout); \
