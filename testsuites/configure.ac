@@ -31,7 +31,6 @@ RTEMS_CHECK_TESTS
 
 case $enable_tests in
 yes | samples )
-  AC_CONFIG_SUBDIRS(tools)
   AC_CONFIG_SUBDIRS(support)
   AC_CONFIG_SUBDIRS(samples)
   ;;

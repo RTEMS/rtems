@@ -1,5 +1,9 @@
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove subdir tools.
+
+2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/target.m4: Remove (Unused).
 
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
