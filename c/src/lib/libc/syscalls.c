@@ -26,6 +26,7 @@
 #include <stdio.h>  /* only for puts */
 
 #include <rtems.h>
+#include <rtems/libio.h>
 
 #ifdef RTEMS_NEWLIB
 /*
@@ -35,20 +36,36 @@
 
 int __rtems_fstat(int _fd, struct stat* _sbuf)
 {
-  if ( _fd > 2 ) {
-    puts( "__rtems_fstat -- only stdio supported" );
-    assert( 0 );
-  }
-  _sbuf->st_mode = S_IFCHR;
 #ifdef HAVE_BLKSIZE
   _sbuf->st_blksize = 0;
 #endif
+
+  /*
+   * For now assume stdin/stdout/stderr are always a TTY line
+   */
+  if (_fd <= 2) {
+    _sbuf->st_mode = S_IFCHR;
+  } else {
+    switch (rtems_file_descriptor_type (_fd)) {
+    case RTEMS_FILE_DESCRIPTOR_TYPE_SOCKET:
+      _sbuf->st_mode = S_IFSOCK;
+      break;
+
+    default:
+      puts( "__rtems_fstat -- unknown socket type" );
+      assert( 0 );
+    }
+  }
   return 0;
 }
 
 int __rtems_isatty(int _fd)
 {
-  return 1;
+  struct stat st;
+
+  if (__rtems_fstat(_fd, &st) < 0)
+    return 0;
+  return S_ISCHR (st.st_mode);
 }
 
 #if !defined(RTEMS_UNIX)

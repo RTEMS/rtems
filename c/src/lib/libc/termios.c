@@ -113,6 +113,7 @@ struct rtems_termios_tty {
 	int		(*read)(int minor);
 	int		(*write)(int minor, const char *buf, int len);
 };
+
 static struct rtems_termios_tty *ttyHead, *ttyTail;
 static rtems_id ttyMutex;
 
