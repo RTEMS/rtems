@@ -57,7 +57,7 @@ possible to override some things without having to modify the driver code.
       CFLAGS += -DBSP_PIC_DO_EOI=do{}while(0)
       CFLAGS += -DBSP_PCI_CONFIG_IN_LONG=PCIConfigRead32
       CFLAGS += -DBSP_PCI_CONFIG_IN_BYTE=PCIConfigRead8
-      (you still need to supply pci_find_by_devid)
+      (you still need to supply pci_find_device)
  3)   create your own version of vmeUniverseInstallIrqMgr():
       copy to a separate file and replace   
       BSP_rtems_install_irq_handler() by a proper call to set_vector.

@@ -1,3 +1,8 @@
+2005-03-14	Joel Sherrill <joel@OARcorp.com>
+
+	* vmeUniverse/README.porting, vmeUniverse/vmeUniverse.c: Continue PCI
+	API unification. All use pci_find_device().
+
 2005-01-23	Joel Sherrill <joel@OARcorp.com>
 
 	* tod.c: Change type of RTC_Count to size_t.

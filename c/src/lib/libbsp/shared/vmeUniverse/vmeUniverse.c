@@ -59,7 +59,7 @@
 
 /* allow the BSP to override the default routines */
 #ifndef BSP_PCI_FIND_DEVICE
-#define BSP_PCI_FIND_DEVICE		pci_find_by_devid
+#define BSP_PCI_FIND_DEVICE	pci_find_device
 #endif
 #ifndef BSP_PCI_CONFIG_IN_LONG
 #define BSP_PCI_CONFIG_IN_LONG	pci_read_config_dword
