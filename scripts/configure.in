@@ -48,5 +48,6 @@ mkbspspec
 binutils/Makefile
 gccnewlib/Makefile
 gdb/Makefile
-rtems/Makefile
+rtems/Makefile,,
+chmod 755 buildall
 )

@@ -47,5 +47,6 @@ mkgdbspec
 mkbspspec
 binutils/Makefile
 gnatnewlib/Makefile
-gdb/Makefile
+gdb/Makefile,,
+chmod 755 buildall
 )

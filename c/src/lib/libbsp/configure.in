@@ -8,12 +8,10 @@ RTEMS_TOP(../../../..)
 AC_CONFIG_AUX_DIR(../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
-AC_PROG_MAKE_SET
-AC_PROG_INSTALL
+AM_INIT_AUTOMAKE(rtems-c-src-lib-libbsp,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_MULTIPROCESSING
-RTEMS_ENABLE_NETWORKING
 RTEMS_ENABLE_LIBCDIR
 RTEMS_ENABLE_BARE
 
@@ -30,7 +28,6 @@ RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
-RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 
 RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
 
@@ -57,45 +54,12 @@ else
   RTEMS_LIBBSP_CPU_SUBDIR=$RTEMS_CPU
 fi
 AC_SUBST(RTEMS_LIBBSP_CPU_SUBDIR)
-
-if test ! -f ${srcdir}/${RTEMS_LIBBSP_CPU_SUBDIR}/configure.in
-then
-
-# find all the Makefiles for the BSPs
-  makefiles="$makefiles $RTEMS_CPU/Makefile"
-     
-  if test -d "$srcdir/$bspcpudir$bspdir"; then
-    RTEMS_CHECK_MAKEFILE(${bspcpudir}$bspdir)
-    RTEMS_CHECK_MAKEFILE(${bspcpudir}shared)
-
-    # HACK: sed out bsp-tools from makefiles
-    t="$bspcpudir$bspdir/tools"
-    if test -d "$srcdir/$t"; then
-      bsptools_cfgdirs="$bsptools_cfgdirs $t"
-      makefiles=`echo "$makefiles" | sed -e "s%$t/.*Makefile%%g"`
-    fi
-  else
-    AC_MSG_ERROR([unable to find libbsp subdirectory ($bspdir) for  ${RTEMS_BSP}])
-  fi
-else
-  cfg_subdirs="$RTEMS_LIBBSP_CPU_SUBDIR"
-fi
-
-if test "$HAS_MP" = "yes"; then
-  makefiles="$makefiles shmdr/Makefile"
-else
-  # HACK: sed out shmsupp/Makefile from makefiles
-  t="$bspcpudir$bspdir/shmsupp"
-  makefiles=`echo "$makefiles" | sed -e "s%$t/.*Makefile%%g"`
-fi
+cfg_subdirs="$RTEMS_LIBBSP_CPU_SUBDIR"
 
 AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
-
-AC_CONFIG_SUBDIRS($bsptools_cfgdirs)
-
 AC_CONFIG_SUBDIRS($cfg_subdirs)
 
-# try to explicitly list a Makefile here 
+# Explicitly list all Makefiles
 AC_OUTPUT( 
 Makefile
-$makefiles)
+shmdr/Makefile)
