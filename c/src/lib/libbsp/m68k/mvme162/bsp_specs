@@ -14,5 +14,5 @@
 %{!qrtems: %(old_startfile)} %{qrtems: start.o%s} 
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -T linkcmds%s -e start}
+%{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e start %{!qnolinkcmds: -T linkcmds%s}}
 

@@ -14,5 +14,5 @@
 %{!qrtems: %(old_startfile)} %{qrtems: }
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -dc -dp -u __vectors -u download_entry -N -T linkcmds%s}
+%{!qrtems: %(old_link)} %{qrtems: -dc -dp -u __vectors -u download_entry -N -e start %{!qnolinkcmds: -T linkcmds%s}}
 
