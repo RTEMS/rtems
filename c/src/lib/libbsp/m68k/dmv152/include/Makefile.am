@@ -4,22 +4,17 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = bsp.h coverhd.h
+include_HEADERS = bsp.h coverhd.h bspopts.h
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
 
-$(PROJECT_INCLUDE)/bsp.h: bsp.h
+$(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_INCLUDE)/coverhd.h: coverhd.h
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp.h \
-    $(PROJECT_INCLUDE)/coverhd.h
+TMPINSTALL_FILES += $(PROJECT_INCLUDE) \
+    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all-local: $(TMPINSTALL_FILES)
-
-EXTRA_DIST = bsp.h coverhd.h
 
 include $(top_srcdir)/../../../../../../automake/local.am

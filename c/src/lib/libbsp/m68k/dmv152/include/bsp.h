@@ -19,6 +19,8 @@
 extern "C" {
 #endif
 
+#include <bspopts.h>
+
 #include <rtems.h>
 #include <console.h>
 #include <clockdrv.h>

@@ -8,7 +8,7 @@ if HAS_NETWORKING
 NETWORK_H_FILES = wd80x3.h
 endif
 
-H_FILES = bsp.h coverhd.h wd80x3.h $(NETWORK_H_FILES)
+include_HEADERS = bsp.h coverhd.h wd80x3.h $(NETWORK_H_FILES) bspopts.h
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
@@ -16,10 +16,10 @@ $(PROJECT_INCLUDE):
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%.h=$(PROJECT_INCLUDE)/%.h)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 all-local: $(PREINSTALL_FILES)
 
-EXTRA_DIST = bsp.h coverhd.h wd80x3.h
+EXTRA_DIST = wd80x3.h
 
 include $(top_srcdir)/../../../../../../automake/local.am

@@ -22,6 +22,7 @@ RTEMS_CANONICAL_HOST
 
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
+AM_CONFIG_HEADER(include/bspopts.h)
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
