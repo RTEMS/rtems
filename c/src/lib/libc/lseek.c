@@ -11,9 +11,13 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 off_t lseek(
   int     fd,
@@ -33,7 +37,7 @@ off_t lseek(
    *  Check as many errors as possible before touching iop->offset.
    */
 
-  if ( !iop->handlers->lseek )
+  if ( !iop->handlers->lseek_h )
     set_errno_and_return_minus_one( ENOTSUP );
 
   /*
@@ -63,15 +67,14 @@ off_t lseek(
    *  new offset.
    */
 
-  status = (*iop->handlers->lseek)( iop, offset, whence );
-  if ( !status )
-    return 0;
+  status = (*iop->handlers->lseek_h)( iop, offset, whence );
+  if ( status == (off_t) -1 )
+    iop->offset = old_offset;
 
   /*
    *  So if the operation failed, we have to restore iop->offset.
    */
 
-  iop->offset = old_offset;
   return status;
 }
 
