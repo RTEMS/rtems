@@ -8,7 +8,7 @@ TEST = sp12
 MANAGERS = io semaphore
 
 C_FILES = init.c task1.c task2.c task3.c task4.c task5.c pridrv.c pritask.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h
 noinst_HEADERS = $(H_FILES)

@@ -8,7 +8,7 @@ TEST = sp30
 MANAGERS = all
 
 C_FILES = init.c resume.c task1.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 DOCTYPES = scn
 DOCS = $(DOCTYPES:%=$(TEST).%)

@@ -12,7 +12,7 @@ C_FILES = init.c delay.c isr.c screen01.c screen02.c screen03.c screen04.c \
     screen05.c screen06.c screen07.c screen08.c screen09.c screen10.c \
     screen11.c screen12.c screen13.c screen14.c task1.c task2.c task3.c \
     task4.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h
 noinst_HEADERS = $(H_FILES)

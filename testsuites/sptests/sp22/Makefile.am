@@ -8,7 +8,7 @@ TEST = sp22
 MANAGERS = io timer
 
 C_FILES = init.c prtime.c delay.c task1.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h
 noinst_HEADERS = $(H_FILES)

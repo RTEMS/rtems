@@ -8,7 +8,7 @@ TEST = sp29
 MANAGERS = all
 
 C_FILES = init.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 DOCTYPES = scn
 DOCS = $(DOCTYPES:%=$(TEST).%)
