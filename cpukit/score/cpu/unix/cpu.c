@@ -29,9 +29,11 @@
 #include <sys/time.h>
 #include <errno.h>
 #include <unistd.h>
+#if defined(RTEMS_MULTIPROCESSING)
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/sem.h>
+#endif
 #include <string.h>   /* memset */
 
 #ifndef SA_RESTART
@@ -922,8 +924,10 @@ void _CPU_Stop_clock( void )
   setitimer(ITIMER_REAL, &new, 0);
 }
 
+extern void fix_syscall_errno( void );
+
+#if defined(RTEMS_MULTIPROCESSING)
 int  _CPU_SHM_Semid;
-extern       void fix_syscall_errno( void );
 
 void _CPU_SHM_Init(
   unsigned32   maximum_nodes,
@@ -1015,12 +1019,14 @@ void _CPU_SHM_Init(
   *shm_length = shm_size;
 
 }
+#endif
 
 int _CPU_Get_pid( void )
 {
   return getpid();
 }
 
+#if defined(RTEMS_MULTIPROCESSING)
 /*
  * Define this to use signals for MPCI shared memory driver.
  * If undefined, the shared memory driver will poll from the
@@ -1108,3 +1114,4 @@ void _CPU_SHM_Unlock(
   }
 
 }
+#endif

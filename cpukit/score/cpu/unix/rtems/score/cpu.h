@@ -1061,6 +1061,8 @@ void _CPU_Start_clock(
 
 void _CPU_Stop_clock( void );
 
+#if defined(RTEMS_MULTIPROCESSING)
+
 void _CPU_SHM_Init( 
   unsigned32   maximum_nodes,
   boolean      is_master_node,
@@ -1084,6 +1086,7 @@ void _CPU_SHM_Lock(
 void _CPU_SHM_Unlock(
   int semaphore
 );
+#endif
 
 #ifdef __cplusplus
 }
