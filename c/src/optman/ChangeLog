@@ -1,3 +1,7 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove all-local: $(ARCH).
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/no-dpmem.c, rtems/no-event.c, rtems/no-mp.c, rtems/no-msg.c,

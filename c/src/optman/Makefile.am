@@ -32,7 +32,7 @@ TMPINSTALL_FILES += \
 $(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel: $(ARCH)/%$(LIB_VARIANT).rel
 	$(INSTALL_DATA) $< $@
 
-all-local: ${ARCH} $(PGMS) $(TMPINSTALL_FILES)
+all-local: $(PGMS) $(TMPINSTALL_FILES)
 
 install-data-local: $(PGMS)
 	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)

@@ -48,6 +48,6 @@ $(LIB): $(OBJS)
 $(PROJECT_RELEASE)/lib/librtems++$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
 
-all-local: ${ARCH} $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
+all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../automake/local.am
