@@ -1,4 +1,5 @@
 2003-07-02	Chris Johns <cjohns@cybertec.com.au>
+
 	* include/rtems/libio.h, src/termios.c: Patch by Chris Johns
 	<cjohns@cybertec.com.au> adding the rtems_termios_bufsize call.
 	

@@ -1,4 +1,5 @@
 2003-07-02	Chris Johns <cjohns@cybertec.com.au>
+
 	* src/dosfs/Makefile.am, src/dosfs/msdos.h,
 	src/dosfs/msdos_conv.c, src/dosfs/msdos_create.c,
 	src/dosfs/msdos_dir.c, src/dosfs/msdos_misc.c: Patch from Victor
