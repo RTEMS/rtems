@@ -93,6 +93,11 @@ case ${chapter} in
     CHAPTER_LOWER="network support"
     ROUTINES=" nrea_dat nwri_dat nget_nod nget_ver"
     ;;
+  psxtimer)
+    CHAPTER_CAPS="Timer"
+    CHAPTER_LOWER="timer"
+    ROUTINES="timer_create timer_delete timer_settime timer_gettime timer_getoverrun"
+    ;;
   *)
     echo "Unknown chapter name"
     exit 1
