@@ -22,7 +22,7 @@ include $(RTEMS_ROOT)/make/lib.cfg
 # Add local stuff here using +=
 #
 
-DEFINES  +=
+DEFINES  += -D__RTEMS_INSIDE__
 CPPFLAGS +=
 CFLAGS   += $(CFLAGS_OS_V)
 
