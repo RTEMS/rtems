@@ -37,7 +37,7 @@ extern "C" {
 #if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
 
 #define CPU_MODEL_NAME  "i960ca"
-#define __RTEMS__i960CA__
+#define __RTEMS_I960CA__
 #define I960_HAS_FPU 0
 
 #elif defined(__i960HA__) || defined(__i960_HA__) || defined(__i960HA)
