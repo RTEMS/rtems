@@ -1,0 +1,20 @@
+#
+# pkg-config support file for RTEMS BSP @RTEMS_BSP@
+#
+# Warning: This stuff is experimental and may be changed at any time.
+#
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+CPU_CFLAGS=@CPU_CFLAGS@
+CFLAGS_OPTIMIZE=@CFLAGS_OPTIMIZE_V@
+CFLAGS_DEBUG=@CFLAGS_DEBUG_V@
+RTEMS_BSP=@RTEMS_BSP@
+
+Name: @host_alias@-@RTEMS_BSP@
+Version: @VERSION@
+Description: RTEMS BSP @RTEMS_BSP@
+Libs:
+Cflags: -qrtems -B${exec_prefix}/lib/ -B${libdir}/ --specs bsp_specs ${CPU_CFLAGS}

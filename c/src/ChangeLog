@@ -1,3 +1,8 @@
+2003-08-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add bsp.pc.in
+	* bsp.pc.in: New (pkgconfig support).
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.

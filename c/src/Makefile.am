@@ -38,5 +38,12 @@ preinstall-stamp:
 	touch preinstall-stamp
 CLEANFILES = preinstall-stamp 
 
+@host_alias@-@RTEMS_BSP@.pc: config.status bsp.pc.in
+	./config.status --file=$@:$(srcdir)/bsp.pc.in
+
+pkgconfigdir = $(prefix)/lib/pkgconfig
+pkgconfig_DATA = @host_alias@-@RTEMS_BSP@.pc
+DISTCLEANFILES += @host_alias@-@RTEMS_BSP@.pc
+
 include $(top_srcdir)/../../automake/subdirs.am
 include $(top_srcdir)/../../automake/host.am
