@@ -1,3 +1,7 @@
+2003-12-17  Joel Sherrill <joel@OARcorp.com>
+
+    * aclocal/version.m4: Updated to rtems-20031217-test.
+
 2003-12-17	Joel Sherrill <joel@OARcorp.com>
 
 	* release_support: Correct method used to find ChangeLog associated 
