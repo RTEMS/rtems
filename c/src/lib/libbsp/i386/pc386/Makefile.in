@@ -1,0 +1,15 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/directory.cfg
+
+# wrapup is the one that actually builds and installs the library
+#  from the individual .rel files built in other directories
+SUB_DIRS=include tools start startup clock console timer wrapup

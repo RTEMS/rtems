@@ -1,0 +1,62 @@
+/*-------------------------------------------------------------------------+
+| linkcmds v1.1 - PC386 BSP - 1997/08/07
++--------------------------------------------------------------------------+
+| This file contains directives for the GNU linker which are specific to the
+| PC386 bsp.
++--------------------------------------------------------------------------+
+| (C) Copyright 1997 -
+| - NavIST Group - Real-Time Distributed Systems and Industrial Automation
+|
+| http://pandora.ist.utl.pt
+|
+| Instituto Superior Tecnico * Lisboa * PORTUGAL
++--------------------------------------------------------------------------+
+| Disclaimer:
+|
+| This file is provided "AS IS" without warranty of any kind, either
+| expressed or implied.
++--------------------------------------------------------------------------+
+| This code is based on:
+|   linkcmds,v 1.3 1995/12/19 20:06:58 joel Exp - FORCE CPU386 BSP
+| With the following copyright notice:
+| **************************************************************************
+| * COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.                      *
+| * On-Line Applications Research Corporation (OAR).                       *
+| * All rights assigned to U.S. Government, 1994.                          *
+| *                                                                        *
+| * This material may be reproduced by or for the U.S. Government pursuant *
+| * to the copyright license under the clause at DFARS 252.227-7013.  This *
+| * notice must appear in all copies of this file and its derivatives.     *
+| **************************************************************************
++--------------------------------------------------------------------------*/
+
+
+SECTIONS
+{
+  .text :
+  {
+    _text_start = . ;
+    *(.text)
+    _etext = ALIGN( 0x10 ) ;
+  }
+  .rodata ADDR( .text ) + SIZEOF( .text ):
+  {
+    _rodata_start = . ;
+    *(.rodata)
+    _erodata = ALIGN( 0x10 ) ;
+  }
+  .data ADDR( .rodata ) + SIZEOF( .rodata ):
+  {
+    _data_start = . ;
+    *(.data)
+    _edata = ALIGN( 0x10 ) ;
+  }
+  .bss ADDR( .data ) + SIZEOF( .data ):
+  {
+    _bss_start = . ;
+    *(.bss)
+    *(COMMON)
+    _end = . ;
+    __end = . ;
+  }
+}
