@@ -28,6 +28,7 @@ TMP_LIBS += ../devnull/$(ARCH)/libdevnull.a
 TMP_LIBS += ../dummy/$(ARCH)/libdummy.a
 TMP_LIBS += ../mw-fb/$(ARCH)/libmw-fb.a
 TMP_LIBS += ../capture/$(ARCH)/libcapture.a
+TMP_LIBS += ../fsmount/$(ARCH)/libfsmount.a
 
 #
 # (OPTIONAL) Add local stuff here using +=

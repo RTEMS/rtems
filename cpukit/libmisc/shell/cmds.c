@@ -286,7 +286,7 @@ int main_ls(int argc, char *argv[])
       strcat(nbuf,dp->d_name); /* always the fullpathname. Avoid ftpd problem.*/
       if (stat(nbuf, &stat_buf) == 0)
       { /* AWFUL buts works...*/
-	 strftime(sbuf,sizeof(sbuf)-1,"%b %d %H:%M",gmtime(&stat_buf.st_atime));     
+	 strftime(sbuf,sizeof(sbuf)-1,"%b %d %H:%M",gmtime(&stat_buf.st_mtime));     
 	 pwd=getpwuid(stat_buf.st_uid);
 	 user=pwd?pwd->pw_name:"nouser";
 	 grp=getgrgid(stat_buf.st_gid);
