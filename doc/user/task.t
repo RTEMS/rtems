@@ -1057,6 +1057,7 @@ procedure Task_Set_Priority (
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - task priority set successfully@*
 @code{@value{RPREFIX}INVALID_ID} - invalid task id@*
+@code{@value{RPREFIX}INVALID_ADDRESS} - invalid return argument pointer@*
 @code{@value{RPREFIX}INVALID_PRIORITY} - invalid task priority
 
 @subheading DESCRIPTION:
