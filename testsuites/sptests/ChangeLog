@@ -1,3 +1,10 @@
+2002-09-14	Aaron J. Grier <aaron@frye.com>
+
+	* PR271 was not applicable against the current source but included
+	a nice test that Joel decided to add to the tree as sp32.
+	* sp32/Makefile.am, sp32/init.c, sp32/sp32.scn: New file.
+	* Makefile.am, configure.ac: Modified to reflect addition.
+
 2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* sp01/Makefile.am: Use $(OBJEXT) instead of .o.
