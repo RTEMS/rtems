@@ -14,7 +14,6 @@ LIB = $(PROJECT_RELEASE)/lib/librtemsbsp${LIB_VARIANT}.a
 
 if HAS_NETWORKING
 LIBNETWORKING = $(PROJECT_RELEASE)/lib/libnetapps$(LIB_VARIANT).a \
-    $(wildcard $(PROJECT_RELEASE)/lib/librpc$(LIB_VARIANT).a) \
     $(wildcard $(PROJECT_RELEASE)/lib/libxdr$(LIB_VARIANT).a)
 endif
 
