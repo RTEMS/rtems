@@ -27,7 +27,9 @@
  *  Indicate we are in an assembly file and get the basic CPU definitions.
  */
 
+#ifndef ASM
 #define ASM
+#endif
 
 #include <rtems/score/targopts.h>
 #include <rtems/score/cpu.h>
