@@ -1,5 +1,10 @@
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/lib.am: Use project_libdir instead of
+	$(PROJECT_RELEASE)/lib.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/env-rtemsbsp.m4: Remove RTEMS_BSP_SPECS, PROJECT_RELEASE.
 	Add project_libdir, libdir. New GCC_SPECS. Various cleanups.
 	* aclocal/env-rtemscpu.m4: Remove RTEMS_BSP_SPECS, PROJECT_RELEASE.
