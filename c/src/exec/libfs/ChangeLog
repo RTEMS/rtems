@@ -1,3 +1,10 @@
+2000-10-24	Joel Sherrill <joel@OARcorp.com>
+
+	* src/imfs/imfs_config.c: New file containing IMFS configuration
+	information split from libc/base_fs.c.
+	* src/imfs/ioman.c: New file. Moved from lib/libc. Missed previously.
+	* src/imfs/Makefile.am: Added imfs_config.c and ioman.c.
+
 2000-10-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am, configure.in:  Introduce GNU canonicalization to libfs/.
