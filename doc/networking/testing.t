@@ -95,12 +95,12 @@ workstations on your network.
 
 @end itemize
 
-@section BOOTP operation
+@section BOOTP/DHCP operation
 
-Set up a BOOTP server on the network.
+Set up a BOOTP/DHCP server on the network.
 Set define @code{RTEMS USE_BOOT} in @code{networkconfig.h}.
 Run the @code{netdemo} test program.
-Verify that the target system configures itself from the BOOTP server and
+Verify that the target system configures itself from the BOOTP/DHCP server and
 that all the above tests succeed.
 
 @section Stress Tests

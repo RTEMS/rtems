@@ -68,7 +68,7 @@ and initializing the @code{rtems_bsdnet_configuration}
 structure.
 
 The structure entries are described in the following table.
-If your application uses BOOTP to obtain network configuration
+If your application uses BOOTP/DHCP to obtain network configuration
 information and if you are happy with the default values described
 below, you need to provide only the first two entries in this structure.
 
@@ -82,9 +82,10 @@ You must provide a value for this entry since there is no default value for it.
 
 @item void (*bootp)(void)
 This entry should be set to @code{rtems_bsdnet_do_bootp}
-if your application will use BOOTP to obtain network configuration information.
+if your application will use BOOTP/DHCP
+to obtain network configuration information.
 It should be set to @code{NULL}
-if your application does not use BOOTP.
+if your application does not use BOOTP/DHCP.
 
 
 @item int network_task_priority 
@@ -103,7 +104,7 @@ If a value of 0 is specified, 128 kbytes will be allocated.
 @item char *hostname
 The host name of the system.
 If this, or any of the following, entries are @code{NULL} the value
-may be obtained from a BOOTP server.
+may be obtained from a BOOTP/DHCP server.
 
 @item char *domainname
 The name of the Internet domain to which the system belongs.
@@ -139,7 +140,7 @@ Network devices are specified and configured by declaring and initializing a
 
 The structure entries are described in the following table.  An application
 which uses a single network interface, gets network configuration information
-from a BOOTP server, and uses the default values for all driver
+from a BOOTP/DHCP server, and uses the default values for all driver
 parameters needs to initialize only the first two entries in the
 structure.
 
@@ -166,13 +167,13 @@ last network interface.
 The Internet address of the device,
 specified in `dotted decimal' (@code{129.128.4.2}) form, or @code{NULL}
 if the device configuration information is being obtained from a
-BOOTP server.
+BOOTP/DHCP server.
 
 @item char *ip_netmask
 The Internet inetwork mask of the device,
 specified in `dotted decimal' (@code{255.255.255.0}) form, or @code{NULL}
 if the device configuration information is being obtained from a
-BOOTP server.
+BOOTP/DHCP server.
 
 
 @item void *hardware_address
@@ -204,7 +205,7 @@ A complete network configuration specification can be as simple as the one
 shown in the following example.
 This configuration uses a single network interface, gets
 network configuration information
-from a BOOTP server, and uses the default values for all driver
+from a BOOTP/DHCP server, and uses the default values for all driver
 parameters.
 
 @example
