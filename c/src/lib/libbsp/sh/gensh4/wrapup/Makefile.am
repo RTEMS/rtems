@@ -6,7 +6,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-BSP_PIECES = startup hw_init
+BSP_PIECES = startup hw_init console
 
 # pieces to pick up out of libcpu/sh/sh7750
 CPU_PIECES = clock sci timer score

@@ -1,3 +1,18 @@
+2001-10-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove AC_SUBST(CPU_CLOCK_RATE_HZ), add
+	START_HW_INIT-support macros, add console/Makefile.
+	* Makefile.am: Add console SUBDIR.
+	* hw_init/Makefile.am: Fix C_FILES, remove AM_CPPFLAGS/HZ.
+	* include/Makefile.am: Add bspopts.h.
+	* include/bsp.h: Comment out SH4_CPU_HZ_Frequency.
+	* startup/bspstart.c: Comment out SH4_CPU_HZ_Frequency.
+	* startup/linkcmds: Comment out OUTPUT_FORMAT for coff
+	compatibility.
+	* wrapup/Makefile.am: Add console to BSP_PIECES.
+	* console/Makefile.am: New.
+	* console/console.c: Moved from libcpu/sh/sh7750/sci/console.c.
+
 2001-10-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add bspopts.h; Add CPU_CLOCK_RATE_HZ.

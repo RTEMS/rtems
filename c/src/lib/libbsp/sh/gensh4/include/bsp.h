@@ -134,10 +134,12 @@ extern unsigned32       WorkSpaceEnd ;
 extern void *CPU_Interrupt_stack_low ;
 extern void *CPU_Interrupt_stack_high ;
 
+#if OBSOLETE
 /*
  * This variable is nesessary for console driver.
  */
 extern rtems_unsigned32 SH4_CPU_HZ_Frequency;
+#endif
 
 /*
  * Defined in start.S

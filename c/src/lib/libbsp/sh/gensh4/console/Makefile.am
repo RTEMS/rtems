@@ -4,11 +4,9 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
+PGM = $(ARCH)/console.rel
 
-PGM = $(ARCH)/hw_init.rel
-
-C_FILES = hw_init.c
+C_FILES = console.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
@@ -21,16 +19,14 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-## FIXME: This is gcc-specific.
-AM_CFLAGS += -fomit-frame-pointer
-
 $(PGM): $(OBJS)
 	$(make-rel)
+
+# the .rel file built here will be put into libbsp.a by
+# 	../wrapup/Makefile
 
 all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
-
-EXTRA_DIST = hw_init.c
 
 include $(top_srcdir)/../../../../../../automake/local.am
