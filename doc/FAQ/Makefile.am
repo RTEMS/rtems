@@ -17,8 +17,7 @@ GENERATED_FILES = basic.texi tools.texi concepts.texi build45.texi bsp.texi \
     debug.texi freesw.texi embeddedinfo.texi hwdebugaids.texi projects.texi \
     endoftime.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 FILES =
 

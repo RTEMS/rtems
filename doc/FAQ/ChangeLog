@@ -1,3 +1,10 @@
+2003-08-30	Ralf Corsepius <corsepius@faw.uni-ulm.de>
+
+	* FAQ.texi: include common/rtems.texi.
+	* Makefile.am: Reflect changes to $(top_srcdir)/project.am.
+	* basic.t: Use RTEMSHTTPURL instead of http://www.rtems.com.
+	* build45.t: Use RTEMSPREFIX instead of /opt/rtems.
+
 2003-08-28	Ralf Corsepius <corsepius@faw.uni-ulm.de>
 
 	* basic.t, build45.t, tools.t: Reflect new VARS in

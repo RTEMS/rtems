@@ -155,7 +155,7 @@ Host tools are supposed not to be prefixed.
 e.g.: cc, ld, gcc, autoconf, automake, aclocal etc.
 
 If using the pre-built tool binaries provided by the RTEMS project,
-simply prepend @code{/opt/rtems/bin} to @code{$PATH}.
+simply prepend @code{@value{RTEMSPREFIX}} to @code{$PATH}.
 
 @subsection Can I build RTEMS Canadian Cross?
 

@@ -150,7 +150,7 @@ Yes, but not all are based on standards and the open source philosophy.
 
 @section How can I get RTEMS?
 
-RTEMS is distributed from @uref(http://www.rtems.com,http://www.rtems.com).
+RTEMS is distributed from @uref{@value{RTEMSHTTPURL},@value{RTEMSHTTPURL}}.
 This is a server dedicated to the RTEMS Project which was donated by and
 hosted by @uref{http://www.OARcorp.com,OAR Corporation} to provide
 a focal point for all RTEMS activities.  Point your
@@ -164,7 +164,7 @@ But if you are already reading this, you probably already found it. :)
 
 RTEMS development and support services are available from a number
 of firms.  See
-@uref(http://www.rtems.com/support.html,http://www.rtems.com/support.html)
+@uref{@value{RTEMSHTTPURL}/support.html,@value{RTEMSHTTPURL}/support.html}
 for the current list of RTEMS service providers.
 
 Remember that RTEMS maintenance is funded by users.  If you are
