@@ -22,6 +22,7 @@ all: html info ps
 COMMON_FILES=
 
 GENERATED_FILES= \
+    status.texi \
     task.texi tasksync.texi semaphore.texi eventflags.texi mailbox.texi \
     msgbuffer.texi rendezvous.texi interrupt.texi memorypool.texi \
     fixedblock.texi time.texi config.texi network.texi \
@@ -39,11 +40,15 @@ $(PROJECT): $(FILES)
 
 dvi: $(PROJECT).dvi
 ps: $(PROJECT).ps
+pdf: $(PROJECT).pdf
 	
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
 
 $(PROJECT).dvi: $(FILES)
+	$(TEXI2DVI) $(PROJECT).texi
+
+$(PROJECT).pdf: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
 html: $(FILES)
@@ -56,6 +61,11 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-* _* $(GENERATED_FILES)
 	rm -rf html
+
+status.texi: status.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
 
 task.texi: task.t Makefile
 	$(BMENU) -p "" \
