@@ -21,10 +21,10 @@
 extern "C" {
 #endif
 
+#include <rtems/score/i386.h>              /* pick up machine definitions */
 #ifndef ASM
 #include <rtems/score/i386types.h>
 #endif
-#include <rtems/score/i386.h>
 
 /* conditional compilation parameters */
 
