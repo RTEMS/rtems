@@ -1,3 +1,7 @@
+2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Use 'TMPINSTALL_FILES ='.
+
 2000-12-19	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.

@@ -7,7 +7,7 @@ ACLOCAL_AMFLAGS = -I ../../../../../../../aclocal
 
 noinst_SCRIPTS = runtest
 
-TMPINSTALL_FILES += $(PROJECT_ROOT)/jmr3904/tests \
+TMPINSTALL_FILES = $(PROJECT_ROOT)/jmr3904/tests \
     $(PROJECT_ROOT)/jmr3904/tests/runtest 
 
 $(PROJECT_ROOT)/jmr3904/tests:
