@@ -163,17 +163,17 @@ ide_controller_write_register(rtems_device_minor_number minor, int reg,
  *     Set controller's speed of IO operations
  *
  * PARAMETERS:
- *     minor         - minor number of controller
- *     modes_avaible - speeds available
+ *     minor           - minor number of controller
+ *     modes_available - speeds available
  *
  * RETURNS:
  *     RTEMS_SUCCESSFUL on success, or error code if
  *     error occured
  */
 rtems_status_code
-ide_controller_config_io_speed(int minor, uint8_t   modes_avaible)
+ide_controller_config_io_speed(int minor, uint16_t modes_available)
 {
     return IDE_Controller_Table[minor].fns->ctrl_config_io_speed(
                minor,
-               modes_avaible);
+               modes_available);
 }

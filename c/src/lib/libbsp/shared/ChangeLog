@@ -1,3 +1,9 @@
+2004-11-20      Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+        PR 703/filesystem
+	* ide_ctrl.c: Extend the "modes_available" and "mode_active" 
+	parameters to uint16_t for UDMA support.
+
 2004-11-16	Richard Campbell <richard.campbell@OARcorp.com>
 
 	* vmeUniverse/vmeUniverse.c: Use PCI_MEM_BASE_ADJUSTMENT because some
