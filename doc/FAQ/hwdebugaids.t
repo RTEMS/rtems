@@ -15,7 +15,7 @@ debugging assistants that are available.
 
 Eric Norum (eric@@skatter.usask.ca) has a driver for a parallel
 port interface to a BDM module.  This driver has a long history 
-and is based on a driver by Gunter Magin (gunter@@skil.camelot.de)
+and is based on a driver by Gunter Magin (magin@@skil.camelot.de)
 which in turn was based on BD32 for DOS by Scott Howard.  Eric Norum
 and Chris Johns (ccj@@acm.org) have put together a package containing
 everything you need to use this BDM driver including software, PCB layouts,
@@ -44,7 +44,7 @@ available at http://www.zeecube.com/bdm.
 The efi332 project has a home-built BDM module and gdb backend for 
 Linux.  See http://efi332.eng.ohio-state.edu/efi332/hardware.html)
 for details.  The device driver and gdb backend are based on those
-by Gunter Magin (magin@skil@@camelot.de) available from
+by Gunter Magin (magin@skil.camelot.de) available from
 ftp.lpr.e-technik.tu-muenchen.de.
 
 Pavel Pisa (pisa@@cmp.felk.cvut.cz) has one available at
@@ -55,7 +55,7 @@ available upon request.  It is also available from their ftp site:
 ftp://ftp.hmi.com/pub/gdb
 
 The Macraigor OCD BDM module has a driver for Linux
-written by Gunter Magin (Gunter.Magin@@skil.camelot.de).  
+written by Gunter Magin (magin@@skil.camelot.de).  
 No URLs yet.
 
 Information in this section from:
