@@ -15,7 +15,7 @@ that is CPU family and CPU model dependent.
 
 The CPU family dependent files associated with a port of the RTEMS
 executive code proper to a particular processor family are found in
-c/src/exec/score/cpu.  Support code for this port as well as processor
+cpukit/score/cpu.  Support code for this port as well as processor
 dependent code which may be reused across multiple Board Support Packages
 is found in c/src/lib/libcpu.
 

@@ -40,13 +40,15 @@ has been ported to a variety of microprocessor families including:
 @item Motorola ColdFire
 @item Motorola MC68xxx
 @item Motorola MC683xx
-@item Intel ix86 (i386 and above)
+@item Intel ix86 (i386, i486, Pentium and above)
 @item Intel i960
 @item ARM
 @item MIPS
 @item PowerPC 4xx, 5xx, 6xx, 7xx, 8xx, and 84xx
 @item SPARC
 @item Hewlett-Packard PA-RISC
+@item Hitachi H8/300
+@item Hitachi SH
 @item OpenCores OR32
 @item Texas Instruments C3x/C4x
 
