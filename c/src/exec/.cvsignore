@@ -12,3 +12,4 @@ depcomp
 install-sh
 missing
 mkinstalldirs
+stamp-h.in
