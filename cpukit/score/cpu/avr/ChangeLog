@@ -1,3 +1,7 @@
+2004-11-21	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* asm.h: Add doxygen preamble.
+
 2004-10-02	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* rtems/score/avr.h: Add doxygen preamble.

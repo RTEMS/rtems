@@ -1,11 +1,14 @@
-/*  asm.h
+/**
+ * @file rtems/asm.h
  *
  *  This include file attempts to address the problems
  *  caused by incompatible flavors of assemblers and
  *  toolsets.  It primarily addresses variations in the
  *  use of leading underscores on symbols and the requirement
  *  that register names be preceded by a %.
- *
+ */
+
+/*
  *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de) and
  *           Bernd Becker (becker@faw.uni-ulm.de)
  *

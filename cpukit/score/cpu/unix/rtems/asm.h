@@ -1,4 +1,5 @@
-/*  asm.h
+/**
+ * @file rtems/asm.h
  *
  *  This include file attempts to address the problems
  *  caused by incompatible flavors of assemblers and
@@ -8,7 +9,9 @@
  *
  *  This file is a "just an incomplete stub" and provided for consistency 
  *  with other ports, only.
- *
+ */
+
+/*
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
