@@ -460,7 +460,7 @@ void Stack_check_Dump_threads_usage(
     if ( info->is_string ) {
       name = (char *) the_thread->Object.name;
     } else {
-      u32_name = (unsigned32 *)the_thread->Object.name;
+      u32_name = *(unsigned32 *)the_thread->Object.name;
       name[ 0 ] = (u32_name >> 24) & 0xff;
       name[ 1 ] = (u32_name >> 16) & 0xff;
       name[ 2 ] = (u32_name >>  8) & 0xff;
