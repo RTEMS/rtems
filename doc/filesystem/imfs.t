@@ -1,49 +1,215 @@
+@c  COPYRIGHT (c) 1988-1998.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
 
 @chapter In-Memory Filesystem 
 
-This chapter describes the In-Memory Filesystem.
+This chapter describes the In-Memory Filesystem (IMFS).  The IMFS is a
+full featured POSIX filesystem that keeps all information in memory.
 
-@section Filesystem Handler Table Functions
+@section IMFS Per Node Data Structure
+
+Each regular file, device, hard link, and directory is represented by a data
+structure called a @code{jnode}. The @code{jnode} is formally represented by the
+structure:
+
+@example
+struct IMFS_jnode_tt @{
+  Chain_Node          Node;             /* for chaining them together */
+  IMFS_jnode_t       *Parent;           /* Parent node */
+  char                name[NAME_MAX+1]; /* "basename" */
+  mode_t              st_mode;          /* File mode */
+  nlink_t             st_nlink;         /* Link count */
+  ino_t               st_ino;           /* inode */
+
+  uid_t               st_uid;           /* User ID of owner */
+  gid_t               st_gid;           /* Group ID of owner */
+  time_t              st_atime;         /* Time of last access */
+  time_t              st_mtime;         /* Time of last modification */
+  time_t              st_ctime;         /* Time of last status change */
+  IMFS_jnode_types_t  type;             /* Type of this entry */
+  IMFS_typs_union     info;
+@};
+@end example
+
+The key elements of this structure are listed below together with a brief
+explanation of their role in the filesystem.
+
+@table @b
+
+@item Node
+exists to allow the entire @code{jnode} structure to be included in a chain.
+
+@item Parent
+is a pointer to another @code{jnode} structure that is the logical parent of the
+node in which it appears.  This field may be NULL if the file associated with
+this node is deleted but there are open file descriptors on this file or
+there are still hard links to this node.
+
+@item name
+is the name of this node within the filesystem hierarchical tree. Example:  If
+the fully qualified pathname to the @code{jnode} was @code{/a/b/c}, the
+@code{jnode} name field would contain the null terminated string @code{"c"}.
+
+@item st_mode
+is the standard Unix access permissions for the file or directory.
+
+@item st_nlink
+is the number of hard links to this file. When a @code{jnode} is first created
+its link count is set to 1. A @code{jnode} and its associated resources
+cannot be deleted unless its link count is less than 1.
+
+@item st_ino
+is a unique node identification number
+
+@item st_uid
+is the user ID of the file's owner
+
+@item st_gid
+is the group ID of the file's owner
+
+@item st_atime
+is the time of the last access to this file
+
+@item st_mtime
+is the time of the last modification of this file
+
+@item st_ctime
+is the time of the last status change to the file
+
+@item type
+is the indication of node type must be one of the following states:
+
+@itemize @bullet
+@item IMFS_DIRECTORY 
+@item IMFS_MEMORY_FILE 
+@item IMFS_HARD_LINK
+@item IMFS_SYM_LINK
+@item IMFS_DEVICE 
+@end itemize
+
+
+@item info
+is this contains a structure that is unique to file type (See IMFS_typs_union
+in imfs.h).
+
+@itemize @bullet
+
+@item IMFS_DIRECTORY
+
+An IMFS directory contains a dynamic chain structure that
+records all files and directories that are subordinate to the directory node.
+
+@item IMFS_MEMORY_FILE
+
+Under the in memory filesystem regular files hold data. Data is dynamically
+allocated to the file in 128 byte chunks of memory.  The individual chunks of
+memory are tracked by arrays of pointers that record the address of the
+allocated chunk of memory. Single, double, and triple indirection pointers
+are used to record the locations of all segments of the file.  The
+memory organization of an IMFS file are discussed elsewhere in this manual.
+
+@item IMFS_HARD_LINK
+
+The IMFS filesystem supports the concept of hard links to other nodes in the
+IMFS filesystem.  These hard links are actual pointers to other nodes in the
+same filesystem. This type of link cannot cross-filesystem boundaries.
+
+@item IMFS_SYM_LINK
+
+The IMFS filesystem supports the concept of symbolic links to other nodes in
+any filesystem. A symbolic link consists of a pointer to a character string
+that represents the pathname to the target node. This type of link can
+cross-filesystem boundaries.  Just as with most versions of UNIX supporting
+symbolic links, a symbolic link can point to a non-existent file.
+
+@item IMFS_DEVICE
+
+All RTEMS devices now appear as files under the in memory filesystem. On
+system initialization, all devices are registered as nodes under the file
+system.
+
+@end itemize
+
+@end table
+
+@section Miscellaneous IMFS Information
+
+@section Memory associated with the IMFS
+
+A memory based filesystem draws its resources for files and directories
+from the memory resources of the system. When it is time to un-mount the
+filesystem, the memory resources that supported filesystem are set free.
+In order to free these resources, a recursive walk of the filesystems
+tree structure will be performed. As the leaf nodes under the filesystem
+are encountered their resources are freed. When directories are made empty
+by this process, their resources are freed.
+
+@subsection Node removal constraints for the IMFS
+
+The IMFS conforms to the general filesystem requirements for node
+removal.  See @ref{File and Directory Removal Constraints}.
+
+@subsection IMFS General Housekeeping Notes
+
+The following is a list of odd housekeeping notes for the IMFS.
+
+@itemize @bullet 
+
+@item If the global variable rtems_filesystem_current refers to the node that
+we are trying to remove, the node_access element of this structure must be
+set to NULL to invalidate it.
+
+@item If the node was of IMFS_MEMORY_FILE type, free the memory associated
+with the memory file before freeing the node. Use the IMFS_memfile_remove()
+function.
+
+@end itemize
+
+@section IMFS Operation Tables
+
+@subsection IMFS Filesystem Handler Table Functions
 
 OPS table functions are defined in a rtems_filesystem_operations_table
-structure.  It defines functions that are specific to a given file system.
-One table exists for each file system that is supported in the RTEMS
+structure.  It defines functions that are specific to a given filesystem.
+One table exists for each filesystem that is supported in the RTEMS
 configuration. The structure definition appears below and is followed by
 general developmental information on each of the functions contained in this
 function management structure.
 
 @example
-typedef struct @{
-  rtems_filesystem_evalpath_t        evalpath;
-  rtems_filesystem_evalmake_t        evalformake;
-  rtems_filesystem_link_t            link;
-  rtems_filesystem_unlink_t          unlink;
-  rtems_filesystem_node_type_t       node_type;
-  rtems_filesystem_mknod_t           mknod;
-  rtems_filesystem_rmnod_t           rmnod;
-  rtems_filesystem_chown_t           chown;
-  rtems_filesystem_freenode_t        freenod;
-  rtems_filesystem_mount_t           mount;
-  rtems_filesystem_fsmount_me_t      fsmount_me;
-  rtems_filesystem_unmount_t         unmount;
-  rtems_filesystem_fsunmount_me_t    fsunmount_me;
-  rtems_filesystem_utime_t           utime;
-  rtems_filesystem_evaluate_link_t   eval_link;
-  rtems_filesystem_symlink_t         symlink;
-@} rtems_filesystem_operations_table;
+rtems_filesystem_operations_table  IMFS_ops = @{
+  IMFS_eval_path,
+  IMFS_evaluate_for_make,
+  IMFS_link,
+  IMFS_unlink,
+  IMFS_node_type,
+  IMFS_mknod,
+  IMFS_rmnod,
+  IMFS_chown,
+  IMFS_freenodinfo,
+  IMFS_mount,
+  IMFS_initialize,
+  IMFS_unmount,
+  IMFS_fsunmount,
+  IMFS_utime,
+  IMFS_evaluate_link,
+  IMFS_symlink,
+  IMFS_readlink
+@};
 @end example
 
-
-
 @c
 @c
 @c
-
 @page
 
-@subsection evalpath()
+@subsubsection IMFS_evalpath()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -55,7 +221,7 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
@@ -63,12 +229,11 @@ XXX
 @c
 @c
 @c
-
 @page
 
-@subsection evalformake()
+@subsubsection IMFS_evalformake()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -80,7 +245,7 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
@@ -88,12 +253,11 @@ XXX
 @c
 @c
 @c
-
 @page
 
-@subsection link()
+@subsubsection IMFS_link()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 link
 
@@ -110,10 +274,10 @@ const char                          *token        /* IN */
 
 imfs_link.c
 
-@subheading Development Comments:
+@subheading Description:
 
 
-This routine is used in the IMFS file system to create a hard-link.
+This routine is used in the IMFS filesystem to create a hard-link.
 
 It will first examine the st_nlink count of the node that we are trying to.
 If the link count exceeds LINK_MAX an error will be returned.
@@ -121,7 +285,7 @@ If the link count exceeds LINK_MAX an error will be returned.
 The name of the link will be normalized to remove extraneous separators from
 the end of the name.
 
-IMFS_create_node will be used to create a file system node that will have the
+IMFS_create_node will be used to create a filesystem node that will have the
 following characteristics:
 
 @itemize @bullet
@@ -146,13 +310,14 @@ The time fields of the link will be set to reflect the creation time of the
 hard-link.
 
 
-@c @c @c
-
+@c
+@c
+@c
 @page
 
-@subsection unlink()
+@subsubsection IMFS_unlink()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -164,7 +329,7 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
@@ -172,12 +337,11 @@ XXX
 @c
 @c
 @c
-
 @page
 
-@subsection node_type()
+@subsubsection IMFS_node_type()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 IMFS_node_type()
 
@@ -191,10 +355,10 @@ rtems_filesystem_location_info_t    *pathloc        /* IN */
 
 imfs_ntype.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine will locate the IMFS_jnode_t structure that holds ownership
-information for the selected node in the file system.
+information for the selected node in the filesystem.
 
 This structure is pointed to by pathloc->node_access.
 
@@ -215,12 +379,11 @@ The IMFS_jnode_t type element indicates one of the node types listed below:
 @c
 @c
 @c
-
 @page
 
-@subsection mknod()
+@subsubsection IMFS_mknod()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 IMFS_mknod()
 
@@ -237,7 +400,7 @@ rtems_filesystem_location_info_t    *pathloc       /* IN/OUT */
 
 imfs_mknod.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine will examine the mode argument to determine is we are trying to
 create a directory, regular file and a device node. The creation of other
@@ -254,12 +417,11 @@ attempt to allocate space for the @code{jnode} (ENOMEN).
 @c
 @c
 @c
-
 @page
 
-@subsection rmnod()
+@subsubsection IMFS_rmnod()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -271,7 +433,7 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
@@ -279,12 +441,11 @@ XXX
 @c
 @c
 @c
-
 @page
 
-@subsection chown()
+@subsubsection IMFS_chown()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 IMFS_chown()
 
@@ -300,15 +461,15 @@ gid_t                                group          /* IN */
 
 imfs_chown.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine will locate the IMFS_jnode_t structure that holds ownership
-information for the selected node in the file system.
+information for the selected node in the filesystem.
 
 This structure is pointed to by pathloc->node_access.
 
 The st_uid and st_gid fields of the node are then modified. Since this is a
-memory based file system, no further action is required to alter the
+memory based filesystem, no further action is required to alter the
 ownership of the IMFS_jnode_t structure.
 
 
@@ -316,12 +477,11 @@ ownership of the IMFS_jnode_t structure.
 @c
 @c
 @c
-
 @page
 
-@subsection freenod()
+@subsubsection IMFS_freenod()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -333,7 +493,7 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX 
 
@@ -341,12 +501,11 @@ XXX
 @c
 @c
 @c
-
 @page
 
-@subsection mount()
+@subsubsection IMFS_mount()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 IMFS_mount()
 
@@ -360,32 +519,31 @@ rtems_filesystem_mount_table_entry_t   *mt_entry
 
 imfs_mount.c
 
-@subheading Development Comments:
+@subheading Description:
 
-This routine provides the file system specific processing required to mount a
-file system for the system that contains the mount point. It will determine
+This routine provides the filesystem specific processing required to mount a
+filesystem for the system that contains the mount point. It will determine
 if the point that we are trying to mount onto is a node of IMFS_DIRECTORY
 type.
 
 If it is the node's info element is altered so that the info.directory.mt_fs
 element points to the mount table chain entry that is associated with the
-mounted file system at this point. The info.directory.mt_fs element can be
-examined to determine if a file system is mounted at a directory. If it is
+mounted filesystem at this point. The info.directory.mt_fs element can be
+examined to determine if a filesystem is mounted at a directory. If it is
 NULL, the directory does not serve as a mount point. A non-NULL entry
 indicates that the directory does serve as a mount point and the value of
 info.directory.mt_fs can be used to locate the mount table chain entry that
-describes the file system mounted at this point.
+describes the filesystem mounted at this point.
 
 
 @c
 @c
 @c
-
 @page
 
-@subsection fsmount_me()
+@subsubsection IMFS_fsmount_me()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 IMFS_initialize()
 
@@ -399,13 +557,13 @@ rtems_filesystem_mount_table_entry_t   *mt_entry
 
 imfs_init.c
 
-@subheading Development Comments:
+@subheading Description:
 
-This function is provided with a file system to take care of the internal
-file system management details associated with mounting that file system
+This function is provided with a filesystem to take care of the internal
+filesystem management details associated with mounting that filesystem
 under the RTEMS environment.
 
-It is not responsible for the mounting details associated the file system
+It is not responsible for the mounting details associated the filesystem
 containing the mount point.
 
 The rtems_filesystem_mount_table_entry_t structure contains the key elements
@@ -415,13 +573,13 @@ rtems_filesystem_location_info_t         *mt_point_node,
 
 This structure contains information about the mount point. This 
 allows us to find the ops-table and the handling functions 
-associated with the file system containing the mount point.
+associated with the filesystem containing the mount point.
 
 rtems_filesystem_location_info_t         *fs_root_node,
 
 This structure contains information about the root node in the file 
 system to be mounted. It allows us to find the ops-table and the 
-handling functions associated with the file system to be mounted.
+handling functions associated with the filesystem to be mounted.
 
 rtems_filesystem_options_t                 options,
 
@@ -430,18 +588,18 @@ Read only or read/write access
 void                                         *fs_info,
 
 This points to an allocated block of memory the will be used to 
-hold any file system specific information of a global nature. This 
+hold any filesystem specific information of a global nature. This 
 allocated region if important because it allows us to mount the 
-same file system type more than once under the RTEMS system. 
-Each instance of the mounted file system has its own set of global 
+same filesystem type more than once under the RTEMS system. 
+Each instance of the mounted filesystem has its own set of global 
 management information that is separate from the global 
 management information associated with the other instances of the 
-mounted file system type.
+mounted filesystem type.
 
 rtems_filesystem_limits_and_options_t    pathconf_info,
 
 The table contains the following set of values associated with the 
-mounted file system:
+mounted filesystem:
 
 @itemize @bullet
 
@@ -477,7 +635,7 @@ functions.
 const char                                   *dev
 
 The is intended to contain a string that identifies the device that contains
-the file system information. The file systems that are currently implemented
+the filesystem information. The filesystems that are currently implemented
 are memory based and don't require a device specification.
 
 If the mt_point_node.node_access is NULL then we are mounting the base file 
@@ -491,9 +649,9 @@ others.
 
 The node's name will be a null string.
 
-A file system information structure(fs_info) will be allocated and
-initialized for the IMFS file system. The fs_info pointer in the mount table
-entry will be set to point the file system information structure.
+A filesystem information structure(fs_info) will be allocated and
+initialized for the IMFS filesystem. The fs_info pointer in the mount table
+entry will be set to point the filesystem information structure.
 
 The pathconf_info element of the mount table will be set to the appropriate
 table of path configuration constants ( IMFS_LIMITS_AND_OPTIONS ).
@@ -502,9 +660,9 @@ The fs_root_node structure will be filled in with the following:
 
 @itemize @bullet
 
-@item pointer to the allocated root node of the file system
+@item pointer to the allocated root node of the filesystem
 
-@item directory handlers for a directory node under the IMFS file system
+@item directory handlers for a directory node under the IMFS filesystem
 
 @item OPS table functions for the IMFS
 
@@ -517,12 +675,11 @@ otherwise a 1 will be returned.
 @c
 @c
 @c
-
 @page
 
-@subsection unmount()
+@subsubsection IMFS_unmount()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -534,7 +691,7 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX 
 
@@ -542,12 +699,11 @@ XXX
 @c
 @c
 @c
-
 @page
 
-@subsection fsunmount_me()
+@subsubsection IMFS_fsunmount_me()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 imfs_fsunmount_me()
 
@@ -561,7 +717,7 @@ rtems_filesystem_mount_table_entry_t   *mt_entry
 
 imfs_fsunmount_me.c
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX 
 
@@ -569,12 +725,11 @@ XXX
 @c
 @c
 @c
-
 @page
 
-@subsection utime()
+@subsubsection IMFS_utime()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -586,7 +741,7 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX 
 
@@ -594,12 +749,11 @@ XXX
 @c
 @c
 @c
-
 @page
 
-@subsection eval_link()
+@subsubsection IMFS_eval_link()
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -611,7 +765,7 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
@@ -619,42 +773,42 @@ XXX
 @c
 @c
 @page
-@section Regular File Handler Table Functions
+@subsection Regular File Handler Table Functions
 
 Handler table functions are defined in a rtems_filesystem_file_handlers_r
 structure. It defines functions that are specific to a node type in a given
-file system. One table exists for each of the file system's node types. The
+filesystem. One table exists for each of the filesystem's node types. The
 structure definition appears below. It is followed by general developmental
 information on each of the functions associated with regular files contained
 in this function management structure.
 
 @example
-typedef struct @{
-    rtems_filesystem_open_t           open;
-    rtems_filesystem_close_t          close;
-    rtems_filesystem_read_t           read;
-    rtems_filesystem_write_t          write;
-    rtems_filesystem_ioctl_t          ioctl;
-    rtems_filesystem_lseek_t          lseek;
-    rtems_filesystem_fstat_t          fstat;
-    rtems_filesystem_fchmod_t         fchmod;
-    rtems_filesystem_ftruncate_t      ftruncate;
-    rtems_filesystem_fpathconf_t      fpathconf;
-    rtems_filesystem_fsync_t          fsync;
-    rtems_filesystem_fdatasync_t      fdatasync;
-@} rtems_filesystem_file_handlers_r;
+rtems_filesystem_file_handlers_r IMFS_memfile_handlers = @{
+  memfile_open,
+  memfile_close,
+  memfile_read,
+  memfile_write,
+  memfile_ioctl,
+  memfile_lseek,
+  IMFS_stat,
+  IMFS_fchmod,
+  memfile_ftruncate,
+  NULL,                /* fpathconf */
+  NULL,                /* fsync */
+  IMFS_fdatasync,
+  IMFS_fcntl
+@};
 @end example
 
 
 @c
 @c
 @c
-
 @page
 
-@subsection open() for Regular Files
+@subsubsection memfile_open() for Regular Files
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 memfile_open()
 
@@ -671,7 +825,7 @@ unsigned32       mode
 
 memfile.c
 
-@subheading Development Comments:
+@subheading Description:
 
 Currently this function is a shell. No meaningful processing is performed and
 a success code is always returned.
@@ -679,12 +833,11 @@ a success code is always returned.
 @c
 @c
 @c
-
 @page
 
-@subsection close() for Regular Files
+@subsubsection memfile_close() for Regular Files
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 memfile_close()
 
@@ -698,9 +851,9 @@ rtems_libio_t     *iop
 
 memfile.c
 
-@subheading Development Comments:
+@subheading Description:
 
-This routine is a dummy for regular files under the base file system. It
+This routine is a dummy for regular files under the base filesystem. It
 performs a capture of the IMFS_jnode_t pointer from the file control block
 and then immediately returns a success status.
 
@@ -708,12 +861,11 @@ and then immediately returns a success status.
 @c
 @c
 @c
-
 @page
 
-@subsection read() for Regular Files
+@subsubsection memfile_read() for Regular Files
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 memfile_read()
 
@@ -729,7 +881,7 @@ unsigned32         count
 
 memfile.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine will determine the @code{jnode} that is associated with this file.
 
@@ -755,12 +907,11 @@ IMFS_memfile_read() will do the following:
 @c
 @c
 @c
-
 @page
 
-@subsection write() for Regular Files
+@subsubsection memfile_write() for Regular Files
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -771,19 +922,18 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
 @c
 @c
 @c
-
 @page
 
-@subsection ioctl() for Regular Files
+@subsubsection memfile_ioctl() for Regular Files
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -799,7 +949,7 @@ void              *buffer
 
 memfile.c
 
-@subheading Development Comments:
+@subheading Description:
 
 The current code is a placeholder for future development. The routine returns
 a successful completion status.
@@ -807,12 +957,11 @@ a successful completion status.
 @c
 @c
 @c
-
 @page
 
-@subsection lseek() for Regular Files
+@subsubsection memfile_lseek() for Regular Files
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 Memfile_lseek()
 
@@ -828,7 +977,7 @@ int                whence
 
 memfile.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine make sure that the memory based file is sufficiently large to
 allow for the new file position index.
@@ -840,12 +989,11 @@ file position index. A success code is always returned from this routine.
 @c
 @c
 @c
-
 @page
 
-@subsection fstat() for Regular Files
+@subsubsection IMFS_stat() for Regular Files
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 IMFS_stat()
 
@@ -860,13 +1008,13 @@ struct stat                        *buf
 
 imfs_stat.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine actually performs status processing for both devices and regular
 files.
 
 The IMFS_jnode_t structure is referenced to determine the type of node under
-the file system.
+the filesystem.
 
 If the node is associated with a device, node information is extracted and
 transformed to set the st_dev element of the stat structure.
@@ -902,12 +1050,11 @@ structure:
 @c
 @c
 @c
-
 @page
 
-@subsection fchmod() for Regular Files
+@subsubsection IMFS_fchmod() for Regular Files
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 IMFS_fchmod()
 
@@ -922,7 +1069,7 @@ mode_t              mode
 
 imfs_fchmod.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine will obtain the pointer to the IMFS_jnode_t structure from the
 information currently in the file control block.
@@ -943,12 +1090,11 @@ based on the mode calling parameter.
 @c
 @c
 @c
-
 @page
 
-@subsection ftruncate() for Regular Files
+@subsubsection memfile_ftruncate() for Regular Files
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -959,19 +1105,14 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
-@c
-@c
-@c
 
-@page
+@subsubsection No pathconf() for Regular Files
 
-@subsection fpathconf() for Regular Files
-
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 NULL
 
@@ -983,7 +1124,7 @@ Not Implemented
 
 Not Implemented
 
-@subheading Development Comments:
+@subheading Description:
 
 Not Implemented
 
@@ -991,12 +1132,11 @@ Not Implemented
 @c
 @c
 @c
-
 @page
 
-@subsection fsync() for Regular Files
+@subsubsection No fsync() for Regular Files
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -1007,7 +1147,7 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
@@ -1015,12 +1155,11 @@ XXX
 @c
 @c
 @c
-
 @page
 
-@subsection fdatasync() for Regular Files
+@subsubsection IMFS_fdatasync() for Regular Files
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -1031,7 +1170,7 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
@@ -1039,42 +1178,41 @@ XXX
 @c
 @c
 @page
-@section Directory Handler Table Functions
+@subsection Directory Handler Table Functions
 
 Handler table functions are defined in a rtems_filesystem_file_handlers_r
 structure. It defines functions that are specific to a node type in a given
-file system. One table exists for each of the file system's node types. The
+filesystem. One table exists for each of the filesystem's node types. The
 structure definition appears below. It is followed by general developmental
 information on each of the functions associated with directories contained in
 this function management structure.
 
 @example
-typedef struct @{
-    rtems_filesystem_open_t           open;
-    rtems_filesystem_close_t          close;
-    rtems_filesystem_read_t           read;
-    rtems_filesystem_write_t          write;
-    rtems_filesystem_ioctl_t          ioctl;
-    rtems_filesystem_lseek_t          lseek;
-    rtems_filesystem_fstat_t          fstat;
-    rtems_filesystem_fchmod_t         fchmod;
-    rtems_filesystem_ftruncate_t      ftruncate;
-    rtems_filesystem_fpathconf_t      fpathconf;
-    rtems_filesystem_fsync_t          fsync;
-    rtems_filesystem_fdatasync_t      fdatasync;
-@} rtems_filesystem_file_handlers_r;
+rtems_filesystem_file_handlers_r IMFS_directory_handlers = @{
+  IMFS_dir_open,
+  IMFS_dir_close,
+  IMFS_dir_read,
+  NULL,             /* write */
+  NULL,             /* ioctl */
+  IMFS_dir_lseek,
+  IMFS_dir_fstat, 
+  IMFS_fchmod,
+  NULL,             /* ftruncate */
+  NULL,             /* fpathconf */
+  NULL,             /* fsync */
+  IMFS_fdatasync,
+  IMFS_fcntl
+@};
 @end example
 
 
 @c
 @c
 @c
-
 @page
+@subsubsection IMFS_dir_open() for Directories
 
-@subsection open() for Directories
-
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 imfs_dir_open()
 
@@ -1091,7 +1229,7 @@ unsigned32      mode
 
 imfs_directory.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine will look into the file control block to find the @code{jnode} that
 is associated with the directory.
@@ -1105,12 +1243,11 @@ This allows us to start reading at the beginning of the directory.
 @c
 @c
 @c
-
 @page
 
-@subsection close() for Directories
+@subsubsection IMFS_dir_close() for Directories
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 imfs_dir_close()
 
@@ -1124,20 +1261,19 @@ rtems_libio_t     *iop
 
 imfs_directory.c
 
-@subheading Development Comments:
+@subheading Description:
 
-This routine is a dummy for directories under the base file system. It
+This routine is a dummy for directories under the base filesystem. It
 immediately returns a success status.
 
 @c
 @c
 @c
-
 @page
 
-@subsection read() for Directories
+@subsubsection IMFS_dir_read() for Directories
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 imfs_dir_read
 
@@ -1153,7 +1289,7 @@ unsigned32      count
 
 imfs_directory.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine will read a fixed number of directory entries from the current
 directory offset. The number of directory bytes read will be returned from
@@ -1163,12 +1299,11 @@ this routine.
 @c
 @c
 @c
-
 @page
 
-@subsection write() for Directories
+@subsubsection No write() for Directories
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -1180,19 +1315,18 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
 @c
 @c
 @c
-
 @page
 
-@subsection ioctl() for Directories
+@subsubsection No ioctl() for Directories
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 ioctl
 
@@ -1203,19 +1337,18 @@ ioctl
 
 Not supported
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
 @c
 @c
 @c
-
 @page
 
-@subsection lseek() for Directories
+@subsubsection IMFS_dir_lseek() for Directories
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 imfs_dir_lseek()
 
@@ -1231,7 +1364,7 @@ int                 whence
 
 imfs_directory.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine alters the offset in the file control block.
 
@@ -1244,12 +1377,11 @@ the open directory.
 @c
 @c
 @c
-
 @page
 
-@subsection fstat() for Directories
+@subsubsection IMFS_dir_fstat() for Directories
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 imfs_dir_fstat()
 
@@ -1265,7 +1397,7 @@ struct stat                        *buf
 
 imfs_directory.c
 
-@subheading Development Comments:
+@subheading Description:
 
 The node access information in the rtems_filesystem_location_info_t structure
 is used to locate the appropriate IMFS_jnode_t structure. The following
@@ -1290,12 +1422,11 @@ of the children of the directory.
 @c
 @c
 @c
-
 @page
 
-@subsection fchmod() for Directories
+@subsubsection IMFS_fchmod() for Directories
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 IMFS_fchmod()
 
@@ -1310,7 +1441,7 @@ mode_t             mode
 
 imfs_fchmod.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine will obtain the pointer to the IMFS_jnode_t structure from the
 information currently in the file control block.
@@ -1331,12 +1462,11 @@ based on the mode calling parameter.
 @c
 @c
 @c
-
 @page
 
-@subsection ftruncate() for Directories
+@subsubsection No ftruncate() for Directories
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -1348,19 +1478,18 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
 @c
 @c
 @c
-
 @page
 
-@subsection fpathconf() for Directories
+@subsubsection No fpathconf() for Directories
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 fpathconf
 
@@ -1372,7 +1501,7 @@ Not Implemented
 
 Not Implemented
 
-@subheading Development Comments:
+@subheading Description:
 
 Not Implemented
 
@@ -1380,12 +1509,11 @@ Not Implemented
 @c
 @c
 @c
-
 @page
 
-@subsection fsync() for Directories
+@subsubsection No fsync() for Directories
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -1396,7 +1524,7 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
@@ -1404,12 +1532,11 @@ XXX
 @c
 @c
 @c
-
 @page
 
-@subsection fdatasync() for Directories
+@subsubsection IMFS_fdatasync() for Directories
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -1421,16 +1548,19 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
-
-@section Device Handler Table Functions
+@c
+@c
+@c
+@page
+@subsection Device Handler Table Functions
 
 Handler table functions are defined in a rtems_filesystem_file_handlers_r
 structure. It defines functions that are specific to a node type in a given
-file system. One table exists for each of the file system's node types. The
+filesystem. One table exists for each of the filesystem's node types. The
 structure definition appears below. It is followed by general developmental
 information on each of the functions associated with devices contained in
 this function management structure.
@@ -1455,12 +1585,11 @@ typedef struct @{
 @c
 @c
 @c
-
 @page
 
-@subsection open() for Devices
+@subsubsection device_open() for Devices
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 device_open()
 
@@ -1477,7 +1606,7 @@ unsigned32         mode
 
 deviceio.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine will use the file control block to locate the node structure for
 the device.
@@ -1491,12 +1620,11 @@ driver that contains the file control block, flags and mode information.
 @c
 @c
 @c
-
 @page
 
-@subsection close() for Devices
+@subsubsection device_close() for Devices
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 device_close()
 
@@ -1510,7 +1638,7 @@ rtems_libio_t     *iop
 
 deviceio.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine extracts the major and minor device driver numbers from the
 IMFS_jnode_t that is referenced in the file control block.
@@ -1524,12 +1652,11 @@ major and minor device numbers.
 @c
 @c
 @c
-
 @page
 
-@subsection read() for Devices
+@subsubsection device_read() for Devices
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 device_read()
 
@@ -1545,7 +1672,7 @@ unsigned32         count
 
 deviceio.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine will extract the major and minor numbers for the device from the -
 jnode- associated with the file descriptor.
@@ -1575,12 +1702,11 @@ read will be returned to the calling program.
 @c
 @c
 @c
-
 @page
 
-@subsection write() for Devices
+@subsubsection device_write() for Devices
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -1591,19 +1717,18 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
 @c
 @c
 @c
-
 @page
 
-@subsection ioctl() for Devices
+@subsubsection device_ioctl() for Devices
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 ioctl
 
@@ -1619,7 +1744,7 @@ void              *buffer
 
 deviceio.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This handler will obtain status information about a device.
 
@@ -1644,12 +1769,11 @@ the calling program, otherwise the ioctl_return value is returned.
 @c
 @c
 @c
-
 @page
 
-@subsection lseek() for Devices
+@subsubsection device_lseek() for Devices
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 device_lseek()
 
@@ -1665,7 +1789,7 @@ int                whence
 
 deviceio.c
 
-@subheading Development Comments:
+@subheading Description:
 
 At the present time this is a placeholder function. It always returns a
 successful status.
@@ -1673,12 +1797,11 @@ successful status.
 @c
 @c
 @c
-
 @page
 
-@subsection fstat() for Devices
+@subsubsection IMFS_stat() for Devices
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 IMFS_stat()
 
@@ -1693,12 +1816,12 @@ struct stat                        *buf
 
 imfs_stat.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine actually performs status processing for both devices and regular files. 
 
 The IMFS_jnode_t structure is referenced to determine the type of node under the 
-file system. 
+filesystem. 
 
 If the node is associated with a device, node information is extracted and 
 transformed to set the st_dev element of the stat structure.
@@ -1735,12 +1858,11 @@ structure:
 @c
 @c
 @c
-
 @page
 
-@subsection fchmod() for Devices
+@subsubsection IMFS_fchmod() for Devices
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 IMFS_fchmod()
 
@@ -1755,7 +1877,7 @@ mode_t             mode
 
 imfs_fchmod.c
 
-@subheading Development Comments:
+@subheading Description:
 
 This routine will obtain the pointer to the IMFS_jnode_t structure from the
 information currently in the file control block.
@@ -1777,12 +1899,11 @@ based on the mode calling parameter.
 @c
 @c
 @c
-
 @page
 
-@subsection ftruncate() for Devices
+@subsubsection No ftruncate() for Devices
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -1793,19 +1914,18 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
 @c
 @c
 @c
-
 @page
 
-@subsection fpathconf() for Devices
+@subsubsection No fpathconf() for Devices
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 fpathconf
 
@@ -1817,7 +1937,7 @@ Not Implemented
 
 Not Implemented
 
-@subheading Development Comments:
+@subheading Description:
 
 Not Implemented
 
@@ -1825,12 +1945,11 @@ Not Implemented
 @c
 @c
 @c
-
 @page
 
-@subsection fsync() for Devices
+@subsubsection No fsync() for Devices
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -1842,7 +1961,7 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 
@@ -1850,14 +1969,13 @@ XXX
 @c
 @c
 @c
-
 @page
 
-@subsection fdatasync() for Devices
+@subsubsection No fdatasync() for Devices
 
 Not Implemented
 
-@subheading Slot Function:
+@subheading Corresponding Structure Element:
 
 XXX
 
@@ -1869,7 +1987,7 @@ XXX
 
 XXX
 
-@subheading Development Comments:
+@subheading Description:
 
 XXX
 

@@ -9,7 +9,7 @@
 @chapter System Call Development Notes
 
 This set of routines represents the application's interface to files and directories 
-under the RTEMS file system. All routines are compliant with POSIX standards if a 
+under the RTEMS filesystem. All routines are compliant with POSIX standards if a 
 specific interface has been established. The list below represents the routines that have 
 been included as part of the application's interface.
 
@@ -63,7 +63,7 @@ function.
 
 This routine is layered on top of the stat() function. As long as the st_mode 
 element in the returned structure follow the standard UNIX conventions, this 
-function should support other file systems without alteration.
+function should support other filesystems without alteration.
 
 @page
 @section chdir
@@ -84,10 +84,10 @@ rtems_filesystem_evaluate_path() routine.
 @subheading Development Comments:
 
 This routine is layered on the rtems_filesystem_evaluate_path() routine and the 
-file system specific OP table function node_type().
+filesystem specific OP table function node_type().
 
-The routine node_type() must be a routine provided for each file system since it 
-must access the file systems node information to determine which of the 
+The routine node_type() must be a routine provided for each filesystem since it 
+must access the filesystems node information to determine which of the 
 following types the node is:
 
 @itemize @bullet
@@ -98,7 +98,7 @@ following types the node is:
 @end itemize
 
 This acknowledges that the form of the node management information can vary 
-from one file system implementation to another.
+from one filesystem implementation to another.
 
 RTEMS has a special global structure that maintains the current directory 
 location. This global variable is of type rtems_filesystem_location_info_t and is 
@@ -118,7 +118,7 @@ chmod.c
 
 This routine is layered on the open(), fchmod () and close () functions. As long as 
 the standard interpretation of the mode_t value is maintained, this routine should 
-not need modification to support other file systems.
+not need modification to support other filesystems.
 
 @subheading Development Comments:
 
@@ -149,7 +149,7 @@ system.
 rtems_filesystem_evaluate_path() is used to determine if the path specified 
 actually exists. If it does a rtems_filesystem_location_info_t structure will be 
 obtained that allows the shell function to locate the OPS table that is to be used 
-for this file system.
+for this filesystem.
 
 It is possible that the chown() function that should be in the OPS table is not 
 defined. A test for a non-NULL OPS table chown() entry is performed before the 
@@ -174,7 +174,7 @@ appropriate network function handler will be selected from a table of previously
 registered network functions (rtems_libio_handlers) and that function will be 
 invoked.
 
-If the file descriptor refers to an entry in the file system, the appropriate handler 
+If the file descriptor refers to an entry in the filesystem, the appropriate handler 
 will be selected using information that has been placed in the file control block for 
 the device (rtems_libio_t structure).
 
@@ -190,9 +190,9 @@ handler invoked and the status of the network handler will be returned to the
 calling process.
 
 If none of the upper bits are set in the file descriptor index, the file descriptor 
-refers to an element of the RTEMS file system.
+refers to an element of the RTEMS filesystem.
 
-The following sequence will be performed for any file system file descriptor:
+The following sequence will be performed for any filesystem file descriptor:
 
 @enumerate
 
@@ -202,7 +202,7 @@ file descriptor
 @item Range check the file descriptor using rtems_libio_check_fd()
 
 @item Determine if there is actually a function in the selected handler table that 
-processes the close() operation for the file system and node type selected. 
+processes the close() operation for the filesystem and node type selected. 
 This is generally done to avoid execution attempts on functions that have not 
 been implemented.
 
@@ -229,7 +229,7 @@ closedir.c
 The code was obtained from the BSD group. This routine must clean up the 
 memory resources that are required to track an open directory. The code is layered 
 on the close() function and standard memory free () functions. It should not 
-require alterations to support other file systems.
+require alterations to support other filesystems.
 
 @subheading Development Comments:
 
@@ -287,7 +287,7 @@ fchmod.c
 
 @subheading Processing: 
 
-This routine will alter the permissions of a node in a file system. It is layered on 
+This routine will alter the permissions of a node in a filesystem. It is layered on 
 the following functions and macros:
 
 @itemize @bullet
@@ -333,7 +333,7 @@ fcntl.c
 
 This routine currently only interacts with the file control block. If the structure of 
 the file control block and the associated meanings do not change, the partial 
-implementation of fcntl() should remain unaltered for other file system 
+implementation of fcntl() should remain unaltered for other filesystem 
 implementations.
 
 @subheading Development Comments:
@@ -368,9 +368,9 @@ fdatasync.c
 
 @subheading Processing: 
 
-This routine is a template in the in memory file system that will route us to the 
+This routine is a template in the in memory filesystem that will route us to the 
 appropriate handler function to carry out the fdatasync() processing. In the in 
-memory file system this function is not necessary. Its function in a disk based file 
+memory filesystem this function is not necessary. Its function in a disk based file 
 system that employs a memory cache is to flush all memory based data buffers to 
 disk. It is layered on the following functions and macros:
 
@@ -430,8 +430,8 @@ This routine is layered on the following functions and macros:
 
 @end itemize
 
-When a file system is mounted, a set of constants is specified for the file system. 
-These constants are stored with the mount table entry for the file system. These 
+When a filesystem is mounted, a set of constants is specified for the filesystem. 
+These constants are stored with the mount table entry for the filesystem. These 
 constants appear in the POSIX standard and are listed below.
 
 @itemize @bullet
@@ -465,7 +465,7 @@ constants appear in the POSIX standard and are listed below.
 
 This routine will find the mount table information associated the file control block 
 for the specified file descriptor parameter. The mount table entry structure 
-contains a set of file system specific constants that can be accessed by individual 
+contains a set of filesystem specific constants that can be accessed by individual 
 identifiers. 
 
 @subheading Development Comments:
@@ -481,10 +481,10 @@ The file control block is examined to determine if it has read permissions to th
 file.
 
 Pathinfo in the file control block is used to locate the mount table entry for the 
-file system associated with the file descriptor.
+filesystem associated with the file descriptor.
 
 The mount table entry contains the pathconf_limits_and_options element. This 
-element is a table of constants that is associated with the file system. 
+element is a table of constants that is associated with the filesystem. 
 
 The name argument is used to reference the desired constant from the 
 pathconf_limits_and_options table.
@@ -505,7 +505,7 @@ implementation of fstat() will return a mode set to S_IFSOCK. In a later version
 this routine will map the status of a network connection to an external handler 
 routine. 
 
-If the file descriptor is associated with a node under a file system, the fstat() 
+If the file descriptor is associated with a node under a filesystem, the fstat() 
 routine will map to the fstat() function taken from the node handler table. 
 
 @subheading Development Comments:
@@ -521,7 +521,7 @@ performed. In the current implementation, the file descriptor type processing
 needs to be improved. It currently just drops into the normal processing for file 
 system nodes.
 
-If the file descriptor is associated with a node under a file system, the following 
+If the file descriptor is associated with a node under a filesystem, the following 
 steps are performed:
 
 @enumerate
@@ -548,8 +548,8 @@ ioctl.c
 
 Not defined in the POSIX 1003.1b standard but commonly supported in most 
 UNIX and POSIX system. Ioctl() is a catchall for I/O operations. Routine is 
-layered on external network handlers and file system specific handlers. The 
-development of new file systems should not alter the basic processing performed 
+layered on external network handlers and filesystem specific handlers. The 
+development of new filesystems should not alter the basic processing performed 
 by this routine.
 
 @subheading Development Comments:
@@ -559,7 +559,7 @@ The file descriptor is examined to determine if it is associated with a network
 device. If it is processing is mapped to an external network handler. The value 
 returned by this handler is then returned to the calling program.
 
-File descriptors that are associated with a file system undergo the following 
+File descriptors that are associated with a filesystem undergo the following 
 processing:
 
 @enumerate
@@ -590,7 +590,7 @@ link.c
 @subheading Processing: 
 
 This routine will establish a hard link to a file, directory or a device. The target of 
-the hard link must be in the same file system as the new link being created. A link 
+the hard link must be in the same filesystem as the new link being created. A link 
 to an existing link is also permitted but the existing link is evaluated before the 
 new link is made. This implies that links to links are reduced to links to files, 
 directories or devices before they are made.
@@ -607,22 +607,22 @@ rtems_filesystem_evaluate_path()
 Rtems_filesystem_get_start_loc() is used to determine where to start the path 
 evaluation of the new name. This macro examines the first characters of the name 
 to see if the name of the new link starts with a rtems_filesystem_is_separator. If it 
-does the search starts from the root of the RTEMS file system; otherwise the 
+does the search starts from the root of the RTEMS filesystem; otherwise the 
 search will start from the current directory.
 
-The OPS table evalformake() function for the parent's file system is used to 
+The OPS table evalformake() function for the parent's filesystem is used to 
 locate the node that will be the parent of the new link. It will also locate the start 
 of the new path's name. This name will be used to define a child under the parent 
 directory.
 
 If the parent is found, the routine will determine if the hard link that we are trying 
-to create will cross a file system boundary. This is not permitted for hard-links.
+to create will cross a filesystem boundary. This is not permitted for hard-links.
 
-If the hard-link does not cross a file system boundary, a check is performed to 
+If the hard-link does not cross a filesystem boundary, a check is performed to 
 determine if the OPS table contains an entry for the link() function.
 
 If a link() function is defined, the OPS table link () function will be called to 
-establish the actual link within the file system.
+establish the actual link within the filesystem.
 
 The return code from the OPS table link() function is returned to the calling 
 program.
@@ -636,8 +636,8 @@ lseek.c
 
 @subheading Processing: 
 
-This routine is layered on both external handlers and file system / node type 
-specific handlers. This routine should allow for the support of new file systems 
+This routine is layered on both external handlers and filesystem / node type 
+specific handlers. This routine should allow for the support of new filesystems 
 without modification.
 
 @subheading Development Comments:
@@ -648,7 +648,7 @@ called with the file descriptor, offset and whence as its calling parameters. Th
 return code from the external handler will be returned to the calling routine.
 
 If the file descriptor is not associated with a network connection, it is associated 
-with a node in a file system. The following steps will be performed for file system nodes:
+with a node in a filesystem. The following steps will be performed for filesystem nodes:
 
 @enumerate
 
@@ -681,7 +681,7 @@ mkdir.c
 
 @subheading Processing: 
 
-This routine attempts to create a directory node under the file system. The routine 
+This routine attempts to create a directory node under the filesystem. The routine 
 is layered the mknod() function. 
 
 @subheading Development Comments:
@@ -697,7 +697,7 @@ mkfifo.c
 
 @subheading Processing: 
 
-This routine attempts to create a FIFO node under the file system. The routine is 
+This routine attempts to create a FIFO node under the filesystem. The routine is 
 layered the mknod() function. 
 
 @subheading Development Comments:
@@ -714,7 +714,7 @@ mknod.c
 @subheading Processing: 
 
 This function will allow for the creation of the following types of nodes under the 
-file system:
+filesystem:
 
 @itemize @bullet
 
@@ -731,11 +731,11 @@ file system:
 @end itemize
 
 At the present time, an attempt to create a FIFO will result in an ENOTSUP error 
-to the calling function. This routine is layered the file system specific routines 
-evalformake and mknod. The introduction of a new file system must include its 
+to the calling function. This routine is layered the filesystem specific routines 
+evalformake and mknod. The introduction of a new filesystem must include its 
 own evalformake and mknod function to support the generic mknod() function. 
 Under this condition the generic mknod() function should accommodate other 
-file system types without alteration. 
+filesystem types without alteration. 
 
 @subheading Development Comments:
 
@@ -767,10 +767,10 @@ function.
 Determine if the pathname leads to a valid directory that can be accessed for the 
 creation of a node.
 
-If the pathname is a valid location to create a node, verify that a file system 
+If the pathname is a valid location to create a node, verify that a filesystem 
 specific mknod() function exists.
 
-If the mknod() function exists, call the file system specific mknod () function. 
+If the mknod() function exists, call the filesystem specific mknod () function. 
 Pass the name, mode, device type and the location information associated with the 
 directory under which the node will be created. 
 
@@ -796,8 +796,8 @@ This is a pointer to a table of functions that are associated with the file
 system that we are about to mount. This is the mechanism to selected file 
 system type without keeping a dynamic database of all possible file 
 system types that are valid for the mount operation. Using this method, it 
-is only necessary to configure the file systems that we wish to use into the 
-RTEMS build. Unused file systems types will not be drawn into the build.
+is only necessary to configure the filesystems that we wish to use into the 
+RTEMS build. Unused filesystems types will not be drawn into the build.
 
 char                      *fsoptions,
 
@@ -807,24 +807,24 @@ or read/write access. Valid states are "RO" and "RW"
 char                      *device,
 
 This argument is reserved for the name of a device that will be used to 
-access the file system information. Current file system implementations 
-are memory based and do not require a device to access file system 
+access the filesystem information. Current filesystem implementations 
+are memory based and do not require a device to access filesystem 
 information.
 
 char                      *mount_point
 
-This is a pathname to a directory in a currently mounted file system that 
+This is a pathname to a directory in a currently mounted filesystem that 
 allows read, write and execute permissions.
 
 @subheading Processing: 
 
-This routine will handle the mounting of a file system on a mount point. If the 
+This routine will handle the mounting of a filesystem on a mount point. If the 
 operation is successful, a pointer to the mount table chain entry associated with 
-the mounted file system will be returned to the calling function. The specifics 
-about the processing required at the mount point and within the file system being 
-mounted is isolated in the file system specific mount() and fsmount_me () 
+the mounted filesystem will be returned to the calling function. The specifics 
+about the processing required at the mount point and within the filesystem being 
+mounted is isolated in the filesystem specific mount() and fsmount_me () 
 functions. This allows the generic mount() function to remain unaltered even if 
-new file system types are introduced.
+new filesystem types are introduced.
 
 
 
@@ -833,31 +833,31 @@ new file system types are introduced.
 This routine will use get_file_system_options() to determine if the mount options 
 are valid ("RO" or "RW").
 
-It confirms that a file system ops-table has been selected.
+It confirms that a filesystem ops-table has been selected.
 
 Space is allocated for a mount table entry and selective elements of the temporary 
 mount table entry are initialized.
 
 If a mount point is specified:
 The mount point is examined to determine that it is a directory and also 
-has the appropriate permissions to allow a file system to be mounted.
+has the appropriate permissions to allow a filesystem to be mounted.
 
 The current mount table chain is searched to determine that there is not 
-another file system mounted at the mount point we are trying to mount 
+another filesystem mounted at the mount point we are trying to mount 
 onto.
 
-If a mount function is defined in the ops table for the file system 
+If a mount function is defined in the ops table for the filesystem 
 containing the mount point, it is called at this time.
 
 If no mount point is specified:
 Processing if performed to set up the mount table chain entry as the base 
-file system.
+filesystem.
 
-If the fsmount_me() function is specified for ops-table of the file system being 
-mounted, that function is called to initialize for the new file system.
+If the fsmount_me() function is specified for ops-table of the filesystem being 
+mounted, that function is called to initialize for the new filesystem.
 
 On successful completion, the temporary mount table entry will be placed on the 
-mount table chain to record the presence of the mounted file system.
+mount table chain to record the presence of the mounted filesystem.
 
 @page
 @section open
@@ -868,9 +868,9 @@ open.c
 
 @subheading Processing: 
 
-This routine is layered on both RTEMS calls and file system specific 
+This routine is layered on both RTEMS calls and filesystem specific 
 implementations of the open() function. These functional interfaces should not 
-change for new file systems and therefore this code should be stable as new file 
+change for new filesystems and therefore this code should be stable as new file 
 systems are introduced.
 
 @subheading Development Comments:
@@ -880,12 +880,12 @@ about to open.
 
 It will then test to see if the pathname exists. If it does a 
 rtems_filesystem_location_info_t data structure will be filled out. This structure 
-contains information that associates node information, file system specific 
+contains information that associates node information, filesystem specific 
 functions and mount table chain information with the pathname.
 
 If the create option has been it will attempt to create a node for a regular file along 
 the specified path. If a file already exists along this path, an error will be 
-generated; otherwise, a node will be allocated for the file under the file system 
+generated; otherwise, a node will be allocated for the file under the filesystem 
 that contains the pathname. When a new node is created, it is also evaluated so 
 that an appropriate rtems_filesystem_location_info_t data structure can be filled 
 out for the newly created node. 
@@ -893,9 +893,9 @@ out for the newly created node.
 If the file exists or the new file was created successfully, the file control block 
 structure will be initialized with handler table information, node information and 
 the rtems_filesystem_location_info_t data structure that describes the node and 
-file system data in detail.
+filesystem data in detail.
 
-If an open() function exists in the file system specific handlers table for the node 
+If an open() function exists in the filesystem specific handlers table for the node 
 that we are trying to open, it will be called at this time.
 
 If any error is detected in the process, cleanup is performed. It consists of freeing 
@@ -916,7 +916,7 @@ opendir.c
 
 This routine will attempt to open a directory for read access. It will setup a DIR 
 control structure that will be used to access directory information. This routine is 
-layered on the generic open() routine and file system specific directory 
+layered on the generic open() routine and filesystem specific directory 
 processing routines. 
 
 @subheading Development Comments:
@@ -934,7 +934,7 @@ pathconf.c
 
 This routine will obtain the value of one of the path configuration parameters and 
 return it to the calling routine. It is layered on the generic open() and fpathconf () 
-functions. These interfaces should not change with the addition of new file system 
+functions. These interfaces should not change with the addition of new filesystem 
 types.
 
 @subheading Development Comments:
@@ -955,9 +955,9 @@ deviceio.c
 
 @subheading Processing: 
 
-This routine is layered on a set of RTEMS calls and file system specific read 
+This routine is layered on a set of RTEMS calls and filesystem specific read 
 operations. The functions are layered in such a way as to isolate them from 
-change as new file systems are introduced.
+change as new filesystems are introduced.
 
 @subheading Development Comments:
 
@@ -967,7 +967,7 @@ If the file descriptor is associated with a network device, the read function wi
 mapped to a special network handler. The return code from the network handler 
 will then be sent as the return code from generic read() function.
 
-For file descriptors that are associated with the file system the following sequence 
+For file descriptors that are associated with the filesystem the following sequence 
 will be performed:
 
 @enumerate
@@ -1007,7 +1007,7 @@ original form.
 @subheading Development Comments:
 
 The routine calls a customized getdents() function that is provided by the user. 
-This routine provides the file system specific aspects of reading a directory. 
+This routine provides the filesystem specific aspects of reading a directory. 
 
 It is layered on the read() function in the directory handler table. This function 
 has been mapped to the Imfs_dir_read() function.
@@ -1021,22 +1021,22 @@ unmount.c
 
 @subheading Processing: 
 
-This routine will attempt to dismount a mounted file system and then free all 
-resources that were allocated for the management of that file system.
+This routine will attempt to dismount a mounted filesystem and then free all 
+resources that were allocated for the management of that filesystem.
 
 @subheading Development Comments:
 
 @itemize @bullet
 
-@item This routine will determine if there are any file systems currently mounted 
-under the file system that we are trying to dismount. This would prevent the 
-dismount of the file system.
+@item This routine will determine if there are any filesystems currently mounted 
+under the filesystem that we are trying to dismount. This would prevent the 
+dismount of the filesystem.
 
-@item It will test to see if the current directory is in the file system that we are 
-attempting to dismount. This would prevent the dismount of the file system.
+@item It will test to see if the current directory is in the filesystem that we are 
+attempting to dismount. This would prevent the dismount of the filesystem.
 
 @item It will scan all the currently open file descriptors to determine is there is an 
-open file descriptor to a file in the file system that we are attempting to 
+open file descriptor to a file in the filesystem that we are attempting to 
 unmount().
 
 @end itemize
@@ -1045,16 +1045,16 @@ If the above preconditions are met then the following sequence is performed:
 
 @enumerate
 
-@item Call the file system specific unmount() function for the file system that 
+@item Call the filesystem specific unmount() function for the filesystem that 
 contains the mount point. This routine should indicate that the mount point 
-no longer has a file system mounted below it.
+no longer has a filesystem mounted below it.
 
-@item Call the file system specific fsunmount_me() function for the mounted 
-file system that we are trying to unmount(). This routine should clean up 
+@item Call the filesystem specific fsunmount_me() function for the mounted 
+filesystem that we are trying to unmount(). This routine should clean up 
 any resources that are no longer needed for the management of the file 
 system being un-mounted.
 
-@item Extract the mount table entry for the file system that was just dismounted 
+@item Extract the mount table entry for the filesystem that was just dismounted 
 from the mount table chain.
 
 @item Free the memory associated with the extracted mount table entry.

@@ -63,12 +63,10 @@ END-INFO-DIR-ENTRY
 @c  The alternative is to rework a sentence to avoid this problem.
 
 @include preface.texi
-@include basefs.texi
-@include applayering.texi
 @include patheval.texi
 @include init.texi
 @include mounting.texi
-@include lifecycle.texi
+@include fsrequirements.texi
 @include imfs.texi
 @include syscalls.texi
 @ifinfo
@@ -79,12 +77,10 @@ This is the online version of the RTEMS Filesystem Design Guide.
 
 @menu
 * Preface::
-* Base Filesystem::
-* Applications and Functional Layering::
 * Pathname Evaluation::
 * System Initialization::
 * Mounting and Unmounting Filesystems::
-* Filesystem Lifecycle::
+* Filesystem Requirements::
 * In-Memory Filesystem::
 * System Call Development Notes::
 * Command and Variable Index::

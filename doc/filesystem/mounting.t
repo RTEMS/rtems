@@ -16,19 +16,25 @@ The following is the list of the characteristics of a mount point:
 
 @item The mount point must be a directory. It may have files and other
 directories under it. These files and directories will be hidden when the
-file system is mounted.
+filesystem is mounted.
 
 @item The task must have read/write/execute permissions to the mount point
 or the mount attempt will be rejected.
 
-@item Only one file system can be mounted to a single mount point.
+@item Only one filesystem can be mounted to a single mount point.
 
-@item The Root of the mountable file system will be referenced by the name
+@item The Root of the mountable filesystem will be referenced by the name
 of the mount point after the mount is complete.
 
 @end itemize
 
 @section Mount Table Chain
+
+The mount table chain is a dynamic list of structures that describe
+mounted filesystems a specific points in the filesystem hierarchy. It is
+initialized to an empty state during the base filesystem initialization.
+The mount operation will add entries to the mount table chain. The
+un-mount operation will remove entries from the mount table chain.
 
 Each entry in the mount table chain is of the following type:
 
@@ -56,15 +62,13 @@ struct rtems_filesystem_mount_table_entry_tt
 
 @section Adding entries to the chain during mount
 
-When a file system is mounted, its presence and location in the file
+When a filesystem is mounted, its presence and location in the file
 system hierarchy is recorded in a dynamic list structure known as a chain.
 A unique rtems_filesystem_mount_table_entry_tt structure is logged for
-each file system that is mounted. This includes the base file system.
+each filesystem that is mounted. This includes the base filesystem.
 
 @section Removing entries from the chain during unmount
 
-When a file system is dismounted its entry in the mount table chain is
+When a filesystem is dismounted its entry in the mount table chain is
 extracted and the memory for this entry is freed.
-
-
 

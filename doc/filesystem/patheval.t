@@ -20,7 +20,7 @@ permissions, and return information on a node that is to become a parent.
 Additionally, evalformake() returns a pointer to the start of the name of
 the new node to be created.
 
-@item Pathname evaluation is specific to a file system
+@item Pathname evaluation is specific to a filesystem
 
 @item Mechanics of crossing a mount point during the evaluation of a path
 name
@@ -29,13 +29,13 @@ name
 
 @itemize @bullet
 
-@item Finding file system node information
+@item Finding filesystem node information
 
-@item Finding file system node handlers
+@item Finding filesystem node handlers
 
-@item Finding file system node operations table
+@item Finding filesystem node operations table
 
-@item Finding mount table entry for the file system that this node is part
+@item Finding mount table entry for the filesystem that this node is part
 of 
 
 @end itemize
