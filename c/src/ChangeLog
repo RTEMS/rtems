@@ -1,5 +1,9 @@
 2000-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.in: add lib/libcpu to the GNU canonicalized subdirectories, 
+
+2000-10-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.in: add lib to the GNU canonicalized subdirectories, 
 	make the lib directory before configuring lib/.
 
