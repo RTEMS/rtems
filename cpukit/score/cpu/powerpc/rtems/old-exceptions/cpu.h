@@ -1089,8 +1089,7 @@ static inline uint64_t   PPC_Get_timebase_register( void )
   return tbr;
 }
 
-/* ASM */
-#endif
+#endif /* ASM */
 
 #ifdef __cplusplus
 }
