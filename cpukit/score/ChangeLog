@@ -1,3 +1,9 @@
+2002-01-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/seterr.h: Add do {..} while (0) in defines.
+	Rename set_errno_and_return_minus_one into
+	rtems_set_errno_and_return_minus_one.
+
 2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* inline/rtems/score/object.inl, macros/rtems/score/object.inl: Add

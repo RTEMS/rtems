@@ -12,11 +12,11 @@
 #ifndef __RTEMS_SET_ERRNO_h
 #define __RTEMS_SET_ERRNO_h
  
-#define set_errno_and_return_minus_one( _error ) \
-  { errno = (_error); return -1; }
+#define rtems_set_errno_and_return_minus_one( _error ) \
+  do { errno = (_error); return -1; } while(0)
 
-#define set_errno_and_return_minus_one_cast( _error, _cast ) \
-  { errno = (_error); return (_cast) -1; }
+#define rtems_set_errno_and_return_minus_one_cast( _error, _cast ) \
+  do { errno = (_error); return (_cast) -1; } while(0)
 
 #endif
 /* end of include file */
