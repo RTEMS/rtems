@@ -68,7 +68,7 @@ void bsp_libc_init( void *, unsigned32, int );
  
 void bsp_pretasking_hook(void)
 {
-    bsp_libc_init(&HeapStart, (&HeapEnd - &HeapStart), 0);
+    bsp_libc_init(&HeapStart, (char *)&HeapEnd - (char *)&HeapStart, 0);
  
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
