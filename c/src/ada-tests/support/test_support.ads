@@ -1,0 +1,173 @@
+--
+--  Test_Support / SPECIFICATION
+--
+--  DESCRIPTION:
+--
+--  This package provides routines which aid the Test Suites
+--  and simplify their design and operation.
+--
+--  DEPENDENCIES: 
+--
+--  
+--
+--  COPYRIGHT (c) 1989, 1990, 1991, 1992, 1993, 1994.
+--  On-Line Applications Research Corporation (OAR).
+--  All rights assigned to U.S. Government, 1994.
+--
+--  This material may be reproduced by or for the U.S. Government pursuant
+--  to the copyright license under the clause at DFARS 252.227-7013.  This
+--  notice must appear in all copies of this file and its derivatives.
+--
+--  test_support.ads,v 1.1 1995/07/12 19:38:15 joel Exp
+--
+
+with Interfaces; use Interfaces;
+with RTEMS;
+with Text_IO;
+
+package Test_Support is
+
+--
+--  Fatal_Directive_Status
+--
+--  DESCRIPTION:
+--
+--  This subprogram checks if Status is equal to Desired.  If so, it 
+--  returns immediately.  Otherwise, it prints the Message along with
+--  the Status and Desired status and invokes the Fatal_Error_Occurred
+--  directive.
+--
+
+   procedure Fatal_Directive_Status (
+      Status  : in     RTEMS.Status_Codes;
+      Desired : in     RTEMS.Status_Codes;
+      Message : in     STRING
+   );
+   pragma Inline ( Fatal_Directive_Status );
+
+--  Directive_Failed
+--
+--  DESCRIPTION:
+--
+--  This subprogram checks if Status is equal to Successful.  If so, it 
+--  returns immediately.  Otherwise, it prints the Message along with
+--  the Status and Desired status and invokes the Fatal_Error_Occurred
+--
+
+   procedure Directive_Failed (
+      Status  : in     RTEMS.Status_Codes;
+      Message : in     STRING
+   );
+   pragma Inline ( Directive_Failed );
+
+--
+--  Print_Time
+--
+--  DESCRIPTION:
+--
+--  This subprogram prints the Prefix string, following by the
+--  time of day in Time_Buffer, followed by the Suffix.
+--
+
+   procedure Print_Time (
+      Prefix      : in     STRING;
+      Time_Buffer : in     RTEMS.Time_Of_Day;
+      Suffix      : in     STRING
+   );
+   pragma Inline ( Print_Time );
+
+--
+--  Put_Dot
+--
+--  DESCRIPTION:
+--
+--  This subprogram prints a single character without a carriage return.
+--
+
+   procedure Put_Dot ( 
+      Buffer : in     STRING
+   );
+   pragma Inline ( Put_Dot );
+
+--
+--  Pause
+--
+--  DESCRIPTION:
+--
+--  This subprogram is used to pause screen output in the Test Suites
+--  until the user presses carriage return.
+--
+
+   procedure Pause;
+
+--
+--  Pause_And_Screen_Number
+--
+--  DESCRIPTION:
+--
+--  This subprogram is used to pause screen output  and print the current
+--  number in the Test Suites until the user presses carriage return.
+--
+
+   procedure Pause_And_Screen_Number (
+      SCREEN : in     RTEMS.Unsigned32
+   );
+
+--
+--  Put_Name
+--
+--  DESCRIPTION:
+--
+--  This subprogram prints the RTEMS object Name.  If New_Line is TRUE, 
+--  then a carriage return is printed after the Name.
+--
+
+   procedure Put_Name (
+      Name     : in     RTEMS.Name;
+      New_Line : in     Boolean
+   );
+ 
+--
+--  Task_Number
+--
+--  DESCRIPTION:
+--
+--  This function returns the task index which the test should use
+--  for TID.
+--
+
+   function Task_Number (
+      TID : in     RTEMS.ID
+   ) return RTEMS.Unsigned32;
+   pragma Inline ( Task_Number );
+
+--
+--  Do_Nothing
+--
+--  DESCRIPTION:
+--
+--  This procedure is called when a test wishes to use a delay
+--  loop and insure that the compiler does not optimize it away.
+--
+
+   procedure Do_Nothing;
+
+--
+--  Ticks_Per_Second is the number of RTEMS clock ticks which
+--  occur each second.
+--
+
+   Ticks_Per_Second : RTEMS.Interval; 
+   pragma Import (C, Ticks_Per_Second, "_TOD_Ticks_per_second");
+
+--
+--  Milliseconds_Per_Tick is the number of milliseconds which
+--  occur between each RTEMS clock tick.
+--
+
+   function Milliseconds_Per_Tick 
+   return RTEMS.Unsigned32;
+
+private
+
+end Test_Support;
