@@ -62,7 +62,7 @@ const rtems_multiprocessing_table
  */
 
 const char _RTEMS_version[] =
-  "RTEMS RELEASE V3.5.02 (" CPU_NAME "/" CPU_MODEL_NAME ")";
+  "RTEMS RELEASE V3.5.1 (" CPU_NAME "/" CPU_MODEL_NAME ")";
 
 
 /*
