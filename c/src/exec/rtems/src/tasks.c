@@ -269,15 +269,6 @@ rtems_status_code rtems_task_create(
 #endif
 
   /*
-   *  Validate the RTEMS API priority and convert it to the core priority range.
-   */
-
-  if ( !_RTEMS_tasks_Priority_is_valid( initial_priority ) )
-    return RTEMS_INVALID_PRIORITY;
-
-  core_priority = _RTEMS_tasks_Priority_to_Core( initial_priority );
-
-  /*
    *  Fix the attribute set to match the attributes which
    *  this processor (1) requires and (2) is able to support.
    *  First add in the required flags for attribute_set
@@ -294,6 +285,17 @@ rtems_status_code rtems_task_create(
     is_fp = TRUE;
   else
     is_fp = FALSE;
+
+  /*
+   *  Validate the RTEMS API priority and convert it to the core priority range.
+   */
+
+  if ( !_Attributes_Is_system_task( the_attribute_set ) ) {
+    if ( !_RTEMS_tasks_Priority_is_valid( initial_priority ) )
+      return RTEMS_INVALID_PRIORITY;
+  }
+
+  core_priority = _RTEMS_tasks_Priority_to_Core( initial_priority );
 
   if ( _Attributes_Is_global( the_attribute_set ) ) {
 

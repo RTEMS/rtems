@@ -87,5 +87,14 @@
 #define _Attributes_Is_priority_ceiling( _attribute_set ) \
   ( (_attribute_set) & RTEMS_PRIORITY_CEILING )
 
+/*PAGE
+ *
+ *  _Attributes_Is_system_task
+ *
+ */
+ 
+#define _Attributes_Is_system_task( _attribute_set ) \
+  ( (_attribute_set) & RTEMS_SYSTEM_TASK )
+
 #endif
 /* end of include file */

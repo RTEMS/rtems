@@ -155,5 +155,22 @@ RTEMS_INLINE_ROUTINE boolean _Attributes_Is_priority_ceiling(
    return ( attribute_set & RTEMS_PRIORITY_CEILING );
 }
 
+/*PAGE
+ *
+ *  _Attributes_Is_system_task
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns TRUE if the system task attribute
+ *  is enabled in the attribute_set and FALSE otherwise.
+ */
+ 
+RTEMS_INLINE_ROUTINE boolean _Attributes_Is_system_task(
+  rtems_attribute attribute_set
+)
+{
+   return ( attribute_set & RTEMS_PRIORITY_CEILING );
+}
+
 #endif
 /* end of include file */
