@@ -3,6 +3,7 @@
 ## ${TARGET_CONFIGDIRS_LIST} is directories we build using the target tools.
 ## ${BUILD_CONFIGDIRS_LIST} is directories we build using the build tools
 
+AC_PREREQ(2.57)
 
 dnl RTEMS_ARG_VAR(VAR,HELP-STRING)
 dnl An internal macros to have help strings pretty
@@ -42,64 +43,72 @@ AC_DEFUN([_RTEMS_COMMANDS_POST_CONFIG_SUBDIRS],
 [
 AC_CONFIG_COMMANDS_PRE([
 
-test -z "$host_alias" && host_alias="$host"
-test -z "$build_alias" && build_alias="$build"
-test -z "$target_alias" && target_alias="$target"
+if test -z "${build_alias}"; then
+# build_alias is empty
+  if test -z "${host_alias}"; then
+  # host_alias is empty
+    if test -z "${target_alias}"; then
+    : target_alias is empty
+    else
+    : target_alias is not empty
+    fi
+  else
+  # host_alias is not empty
+    if test -z "${target_alias}"; then
+    : target_alias is empty
+    target_alias="${host_alias}"
+    else
+    : target_alias is not empty
+    fi
+  fi
+else
+# build_alias is not empty
+  if test -z "${host_alias}"; then
+  # host_alias is empty
+    if test -z "${target_alias}"; then
+    : target_alias is empty
+    else
+    : target_alias is not empty
+    fi
+  else
+  # host_alias is not empty
+    if test -z "${target_alias}"; then
+    : target_alias is empty
+    target_alias="${host_alias}"
+    else
+    : target_alias is not empty
+    fi
+  fi
+fi
 
 _RTEMS_BUILD_CONFIG_PREPARE
 _RTEMS_HOST_CONFIG_PREPARE
 _RTEMS_TARGET_CONFIG_PREPARE
 
+build_subdir="."
 build_SUBDIRS="${build_configdirs}"
 build_configdirs="${build_configdirs}"
 
-AS_IF([test $build = $host],
+AS_IF([test $build != $host],
 [dnl
-  AS_IF([test $host = $target],
-  [dnl b=h, h=t, t=b
-    host_SUBDIRS="${host_configdirs}"
-    host_configdirs="${host_configdirs}"
-    target_SUBDIRS="${target_configdirs}"
-    target_configdirs="${target_configdirs}"],
-  [dnl b=h, h!=t, t!=b
-    host_SUBDIRS="${host_configdirs}"
-    host_configdirs="${host_configdirs}"
-    target_SUBDIRS=`echo "${target_configdirs}" | \
-      sed -e "s%\([[^ ]][[^ ]]*\)%$target_alias/\1%g"`
-    target_configdirs="${target_configdirs}"
-  ])
+  host_subdir="${host_alias-$host}"
+  host_SUBDIRS=`echo "${host_configdirs}" | \
+        sed -e "s%\([[^ ]][[^ ]]*\)%$host_subdir/\1%g"`
+  host_configdirs="${host_configdirs}"
 ],[dnl
-  AS_IF([test $host = $target],
-  [ dnl b!=h, h=t, b!=t
-    host_SUBDIRS=`echo "${host_configdirs}" | \
-      sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
-    host_configdirs="${host_configdirs}"
-    AS_IF([test x"$enable_experimental" = x"yes" ],[
-      target_SUBDIRS=`echo "${target_configdirs}" | \
-        sed -e "s%\([[^ ]][[^ ]]*\)%$target_alias/\1%g"`
-      target_configdirs="${target_configdirs}"
-    ])
-  ],[dnl
-    AS_IF([test $build = $target],
-    [dnl b!=h, h!=t, b=t
-      host_SUBDIRS=`echo "${host_configdirs}" | \
-        sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
-      host_configdirs="${host_configdirs}"
-      AS_IF([test x"$enable_experimental" = x"yes" ],[
-        target_SUBDIRS="${target_configdirs}"
-        target_configdirs="${target_configdirs}"
-      ])
-    ],[dnl b!=h, h!=t, b!=t
-      host_SUBDIRS=`echo "${host_configdirs}" | \
-        sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
-      host_configdirs="${host_configdirs}"
-      AS_IF([test x"$enable_experimental" = x"yes" ],[
-        target_SUBDIRS=`echo "${target_configdirs}" | \
-          sed -e "s%\([[^ ]][[^ ]]*\)%$target_alias/\1%g"`
-        target_configdirs="${target_configdirs}"
-      ])
-    ])
-  ])
+  host_SUBDIRS="${host_configdirs}"
+  host_configdirs="${host_configdirs}"
+])
+
+AS_IF([test $build != $target],
+[dnl
+  target_subdir="${target_alias-$target}"
+  target_SUBDIRS=`echo "${target_configdirs}" | \
+      sed -e "s%\([[^ ]][[^ ]]*\)%$target_subdir/\1%g"`
+  target_configdirs="${target_configdirs}"
+],[dnl
+  target_SUBDIRS="${target_configdirs}"
+  target_configdirs="${target_configdirs}"
 ])
 
 AC_SUBST(host_SUBDIRS)
@@ -330,11 +339,11 @@ m4_ifdef([_RTEMS_BUILD_CONFIGDIRS_LIST],
 m4_expand_once([_RTEMS_TOOLS([build],[BUILD])])
 m4_expand_once([_RTEMS_CONFIGURE_ARGS_PRUNE([buildargs])])
 eval buildargs_prune $ac_configure_args
-buildargs="'--host=${build}' '--build=${build}' ${buildargs}"
-test -n "${target_alias}" && \
-buildargs="${buildargs} --target='${target_alias}'"
-build_subdir="."
+buildargs="'--host=${build_alias-$build}' '--build=${build_alias-$build}' ${buildargs}"
+buildargs="${buildargs} '--target=${target_alias-$target}'"
 ],[])
+AC_SUBST(buildargs)
+AC_SUBST(build_subdir)
 ])
 
 ## PUBLIC: RTEMS_HOST_CONFIG_SUBDIRS(host_subdir)
@@ -355,9 +364,10 @@ m4_ifdef([_RTEMS_HOST_CONFIGDIRS_LIST],
 m4_expand_once([_RTEMS_TOOLS([host],[HOST])])
 m4_expand_once([_RTEMS_CONFIGURE_ARGS_PRUNE([hostargs])])
 eval hostargs_prune $ac_configure_args
-hostargs="'--host=${host_alias}' '--build=${build}' '--target=${target_alias}' ${hostargs}"
-host_subdir="${host_alias}"
+hostargs="'--host=${host_alias-$host}' '--build=${build_alias-$build}' '--target=${target_alias-$target}' ${hostargs}"
 ],[])
+AC_SUBST(hostargs)
+AC_SUBST(host_subdir)
 ])
 
 ## PUBLIC: RTEMS_TARGET_CONFIG_SUBDIRS(target_subdir)
@@ -378,7 +388,8 @@ m4_ifdef([_RTEMS_TARGET_CONFIGDIRS_LIST],
 m4_expand_once([_RTEMS_TOOLS([target],[TARGET])])
 m4_expand_once([_RTEMS_CONFIGURE_ARGS_PRUNE([targetargs])])
 eval targetargs_prune $ac_configure_args
-targetargs="'--host=${target_alias}' '--build=${build}' '--target=${target_alias}' ${targetargs}"
-target_subdir="${target_alias}"
+targetargs="'--host=${target_alias-$target}' '--build=${build_alias-$build}' '--target=${target_alias-$target}' ${targetargs}"
 ],[])
+AC_SUBST(targetargs)
+AC_SUBST(target_subdir)
 ])

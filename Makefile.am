@@ -30,7 +30,7 @@ ACLOCAL_FILES = aclocal/bsp-alias.m4 aclocal/canonical-host.m4 \
     aclocal/project-root.m4 aclocal/rtems-debug.m4 \
     aclocal/rtems-test-no-pause.m4 aclocal/rtems-top.m4 \
     aclocal/target.m4 aclocal/tool-paths.m4 aclocal/bspopts.m4 \
-    aclocal/ppc.m4 aclocal/bsp-configure.m4
+    aclocal/ppc.m4 aclocal/bsp-configure.m4 aclocal/gcc-isystem.m4
 
 noinst_SCRIPTS = bootstrap
 

@@ -37,17 +37,6 @@ AC_ARG_ENABLE([docs],
   [AC_HELP_STRING([--enable-docs],[enable building documentation
     (default:disabled)])])
 
-if test $host != $build; then
-AC_MSG_WARN([]
-[*** *** *** WARNING *** *** ***]
-[]
-[Entering BEYOND BLEEDING EDGE TERRITORY]
-[]
-[You are trying to build RTEMS Canadian cross]
-[If you really mean it, feel free to continue ...]
-[*** *** *** *** *** *** *** ***])
-fi
-
 ## NOTES:
 ## * tools/build are host-native tools to be installed on the host.
 ## * tools/cpu are host-native or host-cross-target-tools
@@ -61,7 +50,7 @@ RTEMS_HOST_CONFIG_SUBDIRS([tools/build])
 ])
 
 AS_IF([test x"${enable_docs}" = x"yes"],
-  [RTEMS_HOST_CONFIG_SUBDIRS([doc])])
+  [RTEMS_BUILD_CONFIG_SUBDIRS([doc])])
 
 AS_IF([test x"$enable_multilib" = x"yes"],[
   RTEMS_TARGET_CONFIG_SUBDIRS([cpukit])
