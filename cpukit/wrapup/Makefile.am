@@ -23,8 +23,10 @@ if HAS_ITRON
 ITRON_OBJS = $(wildcard ../itron/src/$(ARCH)/*.o)
 endif
 
+LIBCSUPPORT_OBJS = $(wildcard ../libcsupport/src/$(ARCH)/*.o)
+
 OBJS = $(CPU_OBJS) $(CORE_OBJS) $(RTEMS_OBJS) $(SAPI_OBJS) \
-    $(POSIX_OBJS) $(ITRON_OBJS)
+    $(POSIX_OBJS) $(ITRON_OBJS) $(LIBCSUPPORT_OBJS)
 
 $(LIB): ${OBJS}
 	$(make-library)
