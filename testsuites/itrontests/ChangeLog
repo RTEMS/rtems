@@ -1,3 +1,16 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* itronhello/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* itronmbf01/Makefile.am: Ditto.
+	* itronmbox01/Makefile.am: Ditto.
+	* itronsem01/Makefile.am: Ditto.
+	* itrontask01/Makefile.am: Ditto.
+	* itrontask02/Makefile.am: Ditto.
+	* itrontask03/Makefile.am: Ditto.
+	* itrontask04/Makefile.am: Ditto.
+	* itrontime01/Makefile.am: Ditto.
+
 2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* itrontests.am: Add dirstamp support.
