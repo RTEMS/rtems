@@ -2,7 +2,7 @@
 #  $Id$
 #
 
-This is the RTEMS entry in the Crossgcc FAQ at http://www.objsw.com.
+This is the RTEMS entry in the Crossgcc FAQ at @uref{http://www.objsw.com}.
 As of 8/19/99, it has been submitted twice and the FAQ not updated.
 
 RTEMS is a freely available, royalty free real-time executive with
@@ -49,10 +49,9 @@ m683xx and mpc8xx series which support the on-CPU peripherals.
 
 WWW: 
 
-http://www.OARcorp.com
+@uref{http://www.OARcorp.com}
 
 E-mail: 
 
-rtems-info@OARcorp.com or
-Joel Sherrill (joel@OARcorp.com)
+@code{rtems-info@@OARcorp.com}
 
