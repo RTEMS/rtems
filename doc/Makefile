@@ -36,6 +36,7 @@ clean:
 	./do_docs $(BASEDIR) clean
 	cd tools/bmenu ; gmake clean
 	cd tools/pdl2texi ; gmake clean
+	cd tools/src2html ; gmake clean
 
 
 .PHONY: tools
@@ -43,3 +44,4 @@ clean:
 tools:
 	cd tools/bmenu ; gmake 
 	cd tools/pdl2texi ; gmake 
+	cd tools/src2html ; gmake
