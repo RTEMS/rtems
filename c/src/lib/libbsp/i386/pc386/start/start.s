@@ -165,7 +165,8 @@ SYM (zero_bss):
 	movl	$ SYM (_end), ecx	# find end of .bss
 	movl	$ SYM (_bss_start), edi	# edi = beginning of .bss
 	subl	edi, ecx		# ecx = size of .bss in bytes
-	shll	ecx			# size of .bss in longs
+	shrl	ecx			# size of .bss in longs
+	shrl	ecx
 	xorl	eax, eax		# value to clear out memory
 	repne				# while ecx != 0
 	stosl				#   clear a long in the bss
