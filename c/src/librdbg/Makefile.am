@@ -16,17 +16,8 @@ include_rdbgdir = $(includedir)/rdbg
 
 include_rdbg_HEADERS = include/rdbg/rdbg.h include/rdbg/servrpc.h
 
-EXTRA_LIBRARIES = librdbg.a
-CLEANFILES += librdbg.a
+noinst_LIBRARIES = librdbg.a
 librdbg_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += librdbg_g.a
-CLEANFILES += librdbg_g.a
-librdbg_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-librdbg_g_a_SOURCES = $(librdbg_a_SOURCES)
-
-project_lib_DATA = librdbg$(LIB_VARIANT).a
-
 librdbg_a_SOURCES = src/rdbg.c src/servcon.c src/servbkpt.c src/servrpc.c \
     src/excep.c src/servtgt.c src/servtsp.c src/servutil.c src/_servtgt.c \
     src/ptrace.c
@@ -182,12 +173,6 @@ all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
-TMPINSTALL_FILES =
-
-$(PROJECT_LIB)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_LIB)
-	@: > $(PROJECT_LIB)/$(dirstamp)
-TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 if HAS_RDBG
 $(PROJECT_INCLUDE)/rdbg/$(dirstamp):
@@ -202,10 +187,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/rdbg.h
 $(PROJECT_INCLUDE)/rdbg/servrpc.h: include/rdbg/servrpc.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/servrpc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/servrpc.h
-
-$(PROJECT_LIB)/librdbg$(LIB_VARIANT).a: librdbg$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/librdbg$(LIB_VARIANT).a
-TMPINSTALL_FILES += $(PROJECT_LIB)/librdbg$(LIB_VARIANT).a
 endif
 
 if HAS_RDBG
@@ -258,6 +239,5 @@ endif
 
 CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
-CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am
