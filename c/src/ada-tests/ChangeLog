@@ -1,5 +1,17 @@
 2002-08-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: New.
+	* configure.ac: New.
+	* ada.am: New.
+	* support/Makefile.am: New.
+	* samples/Makefile.am: New.
+	* samples/base_mp/Makefile.am: New.
+	* samples/base_sp/Makefile.am: New.
+	* samples/hello/Makefile.am: New.
+	* samples/ticker/Makefile.am: New.
+
+2002-08-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* sptests/Makefile.am: New.
 	* sptests/sp01/Makefile.am: New.
 	* sptests/sp02/Makefile.am: New.

@@ -1,0 +1,18 @@
+SUFFIXES = .adb .ali .ads
+
+ADACOMPILE = $(ADAC) $(AM_ADAFLAGS) $(ADAFLAGS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+
+ADAC = @ADAC@ $(GCCSPECS)
+GNATMAKE = @GNATMAKE@ -cargs $(GCCSPECS) -largs $(GCCSPECS)
+
+AM_ADAFLAGS = -I$(PROJECT_ROOT)/lib/include/adainclude \
+-I$(PROJECT_ROOT)/@RTEMS_BSP@/lib/include/adainclude \
+-I$(top_srcdir)/support
+
+GNATCOMPILE = $(GNATMAKE) \
+-margs $(AM_ADAFLAGS) $(ADAFLAGS) \
+-cargs $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
+-largs $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+
+CLEANFILES = *.ali *.o b~*.adb b~*.ads
+
