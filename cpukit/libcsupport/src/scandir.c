@@ -86,7 +86,7 @@ scandir(dirname, namelist, select, dcomp)
 	register struct dirent *d = NULL;
 	register struct dirent *p = NULL;
 	register struct dirent **names = NULL;
-	register size_t nitems;
+	register size_t nitems = 0;
 	struct stat stb;
 	long arraysz;
 	DIR *dirp = NULL;
@@ -106,7 +106,6 @@ scandir(dirname, namelist, select, dcomp)
 	if (names == NULL)
 		goto  cleanup_and_bail;
 
-	nitems = 0;
 	while ((d = readdir(dirp)) != NULL) {
 		if (select != NULL && !(*select)(d))
 			continue;	/* just selected names */

@@ -1,3 +1,7 @@
+2002-04-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libc/scandir.c: Initialize nitems = 0.
+
 2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am: Add stdint.h and inttypes.h.
