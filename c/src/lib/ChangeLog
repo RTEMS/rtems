@@ -1,4 +1,9 @@
 
+2000-11-29	Joel Sherrill <joel@OARcorp.com>
+
+	* include/sys/ttycom.h: New file -- moved from libnetworking/sys.
+	* Makefile.am: Modified to reflect above.
+
 2000-11-28	 Sergei Organov <osv@javad.ru>
 
 	* libc/getcwd.c: Ensure _closedir(dir) is called even on

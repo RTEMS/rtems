@@ -13,7 +13,7 @@ if NEWLIB
 NEWLIB_H_FILES += termios.h cdefs.h
 endif
 
-H_FILES = ioccom.h utime.h $(NEWLIB_H_FILES) $(NETWORKING_H_FILES)
+H_FILES = ioccom.h ttycom.h utime.h $(NEWLIB_H_FILES) $(NETWORKING_H_FILES)
 
 noinst_HEADERS = utime.h termios.h ioctl.h ioccom.h
 
