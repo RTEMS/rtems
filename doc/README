@@ -7,30 +7,41 @@ Tools Required
 The following tools are used in the production of this documentation:
 
 TeX
-texinfo 3.7
-texi2www-960103
+texinfo 4.0
+texi2www-960103 (included in tree)
 
 This was used by the authors to generate the directory tree figure
 in the texinfo printed version:
 
 tree (from the CTAN Archives -- see http://jasper.ora.com/ctan.html)
 
-Installation
-============
-1.  Edit replace-word so it references perl in the correct location.
+Changing the Version Number and Timestamp
+=========================================
 
-2.  Edit Make.config and localize it.
+RTEMS Version number is in configure.in.  Edit that file and run bootstrap.
 
-3.  Edit do_docs and fix basedir
+Documentation date is in common/setup.texi.in and also must be modified
+by hand.  bootstrap does not have to be run after modifying this file.
 
-4.  Create the installation point for the html and info files.
+Making the Documentation
+========================
 
-5.  Copy texi2www gif files into the main rtems html install directory.
+cvs co rtems-doc
+./bootstrap
+./configure ...
+cd tools ; make
+make info
+make all
+make install
 
+Cleaning
+========
 
-Use do_docs to:
+make clean
+make distclean
+make maintainer-clean
 
-do_docs info
-do_docs html
-do_docs clean
+Common Problems
+===============
 
+TeX pool_size too small.  
