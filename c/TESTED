@@ -2,8 +2,7 @@
 #  $Id$
 #
 
-This file is current as of Decembter 23, 1997 for the snapshots
-preceding the 4.0.0 release.
+This file is current for the 4.0.0 release.
 
 The RTEMS project uses Intel x86 based computers running the RedHat
 distribution of the Linux operating system internally for development.  
