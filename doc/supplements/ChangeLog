@@ -1,3 +1,7 @@
+2002-12-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* supplement.am: Append -I $(topsrc_dir) to AM_MAKEINFOFLAGS.
+
 2002-07-30	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Added arm subdirectory.
