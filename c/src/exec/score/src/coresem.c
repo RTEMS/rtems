@@ -135,7 +135,6 @@ void _CORE_semaphore_Seize(
   _ISR_Disable( level );
   if ( the_semaphore->count != 0 ) {
     the_semaphore->count -= 1;
-    executing->resource_count++;
     _ISR_Enable( level );
     return;
   }
