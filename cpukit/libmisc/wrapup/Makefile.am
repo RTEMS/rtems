@@ -4,8 +4,8 @@
 
 LIB = $(ARCH)/libmisc.a
 
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/lib.am
 
 ## XXX temporarily remove this from the list because it causes a 
 ## XXX number of BSPs to not link "main(){}" used by autoconf
@@ -36,4 +36,4 @@ $(LIB): $(TMP_LIBS)
 
 all-local: $(ARCH) $(LIB)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../automake/local.am

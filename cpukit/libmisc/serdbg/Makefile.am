@@ -16,8 +16,8 @@ include_HEADERS = serdbgcnf.h serdbg.h termios_printk_cnf.h \
 
 OBJS = $(C_O_FILES)
 
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/lib.am
 
 $(PROJECT_INCLUDE):
 	@$(mkinstalldirs) $@
@@ -34,11 +34,11 @@ $(LIB): $(OBJS)
 PREINSTALL_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
 
 .PRECIOUS: $(LIB)
 
 EXTRA_DIST = README serdbg.c serdbgio.c serdbgcnf.h serdbg.h \
              termios_printk.c termios_printk.h termios_printk_cnf.h
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../automake/local.am

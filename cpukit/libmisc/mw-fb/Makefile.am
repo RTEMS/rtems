@@ -16,8 +16,8 @@ include_rtems_HEADERS = mw_fb.h mw_uid.h
 SRCS = $(C_FILES)
 OBJS = $(C_O_FILES)
 
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/lib.am
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
@@ -40,4 +40,4 @@ all-local: ${ARCH} $(PREINSTALL_FILES) $(LIB) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(C_FILES)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../automake/local.am

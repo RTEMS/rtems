@@ -25,8 +25,8 @@ include_rtems_HEADERS = monitor.h symbols.h
 
 OBJS = $(C_O_FILES)
 
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/lib.am
 
 $(PROJECT_INCLUDE)/rtems:
 	$(mkinstalldirs) $@
@@ -43,7 +43,7 @@ $(LIB): $(OBJS)
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
     $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
 
 .PRECIOUS: $(LIB)
 
@@ -52,4 +52,4 @@ EXTRA_DIST = README mon-command.c mon-config.c mon-dname.c mon-driver.c \
     mon-object.c mon-prmisc.c mon-queue.c mon-server.c mon-symbols.c \
     mon-task.c
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../automake/local.am

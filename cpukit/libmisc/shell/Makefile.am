@@ -17,8 +17,8 @@ endif
 
 OBJS = $(C_O_FILES)
 
-include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../automake/compile.am
+include $(top_srcdir)/../automake/lib.am
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
@@ -36,11 +36,11 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
     $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 if RTEMS_LIBSHELL
-all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
+all-local: $(ARCH) $(PREINSTALL_FILES) $(LIB)
 endif
 
 .PRECIOUS: $(LIB)
 
 EXTRA_DIST = README shell.c cmds.c shell.h
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../automake/local.am

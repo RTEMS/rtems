@@ -1,3 +1,26 @@
+2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Moving libmisc from rtems/c/src to rtems/cpukit.
+
+	* Makefile.am: Reflect new path.
+	* configure.ac: Reflect new path. 
+	Use RTEMS_ENV_RTEMSCPU instead of RTEMS_ENV_RTEMSBSP.
+	Remove RTEMS_PROJECT_ROOT.
+	* capture/Makefile.am: Reflect new path.
+	Remove OBJS from all-local.
+	* cpuuse/Makefile.am: Ditto.
+	* devnull/Makefile.am: Ditto.
+	* dummy/Makefile.am: Ditto.
+	* dumpbuf/Makefile.am: Ditto.
+	* monitor/Makefile.am: Ditto.
+	* mw-fb/Makefile.am: Ditto.
+	* rtmonuse/Makefile.am: Ditto.
+	* serdbg/Makefile.am: Ditto.
+	* shell/Makefile.am: Ditto.
+	* stackchk/Makefile.am: Ditto.
+	* untar/Makefile.am: Ditto.
+	* wrapup/Makefile.am: Reflect new path.
+
 2002-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CHECK_CUSTOM_BSP.
