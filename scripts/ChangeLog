@@ -1,3 +1,9 @@
+2004-04-08	Joel Sherrill <joel@OARcorp.com>
+
+	PR 594/tools
+	* setup.def, autotools/autoconf-rtems.spec.in: Increment and rebuild so
+	GNAT included.
+
 2004-02-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use rtems_source_spec_DEPS instead of
