@@ -4,11 +4,7 @@ preinstall-am: $(PREINSTALL_FILES)
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am
 
-depend-am: depend-gcc
+depend-am:
 depend: depend-am
-.PHONY: depend depend-am depend-gcc
-
-clean-local:
-	$(RM) -r o-optimize o-debug $(CLEANDIRS)
-	$(RM) Depends-o-optimize.tmp Depends-o-debug.tmp
+.PHONY: depend depend-am
 

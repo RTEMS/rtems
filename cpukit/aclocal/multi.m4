@@ -3,8 +3,7 @@
 AC_DEFUN([AC_ENABLE_MULTILIB],
 [
 AC_ARG_ENABLE(multilib,
-AC_HELP_STRING([--enable-multilib],
-[build many library versions (default=no)]),
+AS_HELP_STRING(--enable-multilib,build many library versions (default=no)),
 [case "${enableval}" in
   yes) multilib=yes ;;
   no)  multilib=no ;;

@@ -60,7 +60,7 @@ AC_MSG_RESULT([$LIBRPC])
 ])
 
 AC_ARG_ENABLE([ada],
-[AC_HELP_STRING([--enable-ada],[enable ada support])],
+[AS_HELP_STRING(--enable-ada,enable ada support)],
 [case "${enable_ada}" in
   yes) ;;
   no) ;;

@@ -1,3 +1,13 @@
+2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac, aclocal/enable-bare.m4,
+	aclocal/enable-inlines.m4, aclocal/enable-itron.m4,
+	aclocal/enable-multiprocessing.m4, aclocal/enable-networking.m4,
+	aclocal/enable-posix.m4, aclocal/enable-rtems-debug.m4, aclocal/multi.m4,
+	aclocal/multilib.m4: Use AS_HELP_STRING instead of AC_HELP_STRING
+	(deprecated in autoconf-2.59)
+	* automake/local.am: Remove clean-local, depend-gcc.
+
 2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Cosmetics.

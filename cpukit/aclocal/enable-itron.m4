@@ -5,7 +5,7 @@ AC_DEFUN([RTEMS_ENABLE_ITRON],
 ## AC_BEFORE([$0], [RTEMS_CHECK_ITRON_API])dnl
 
 AC_ARG_ENABLE(itron,
-AC_HELP_STRING([--enable-itron],[enable itron interface]),
+AS_HELP_STRING(--enable-itron,enable itron interface),
 [case "${enableval}" in 
   yes) RTEMS_HAS_ITRON_API=yes ;;
   no) RTEMS_HAS_ITRON_API=no ;;
