@@ -60,7 +60,7 @@ void _CPU_cache_disable_data (
   PPC_Set_HID0( value );
 }
 
-void _CPU_cache_enable_inst (
+void _CPU_cache_enable_instruction (
 	void )
 {
   unsigned32 value;
@@ -69,7 +69,7 @@ void _CPU_cache_enable_inst (
   PPC_Set_HID0( value );
 }
 
-void _CPU_cache_disable_inst (
+void _CPU_cache_disable_instruction (
 	void )
 {
   unsigned32 value;
@@ -78,7 +78,7 @@ void _CPU_cache_disable_inst (
   PPC_Set_HID0( value );
 }
 
-#elif ( defined(mpc860) || defined(mpc821) )
+#elif ( defined(mpx8xx) || defined(mpc860) || defined(mpc821) )
 
 #define mtspr(_spr,_reg) \
   __asm__ volatile ( "mtspr %0, %1\n" : : "i" ((_spr)), "r" ((_reg)) )
@@ -120,18 +120,18 @@ void _CPU_cache_disable_data ( void )
   isync;
 }
 
-void _CPU_cache_invalidate_1_inst_line(
+void _CPU_cache_invalidate_1_instruction_line(
 	const void * _address )
 {
   register const void *__address = _address;
   asm volatile ( "icbi 0,%0" :: "r" (__address) );
 }
 
-void _CPU_cache_invalidate_entire_inst ( void ) {}
-void _CPU_cache_freeze_inst ( void ) {}
-void _CPU_cache_unfreeze_inst ( void ) {}
+void _CPU_cache_invalidate_entire_instruction ( void ) {}
+void _CPU_cache_freeze_instruction ( void ) {}
+void _CPU_cache_unfreeze_instruction ( void ) {}
 
-void _CPU_cache_enable_inst ( void )
+void _CPU_cache_enable_instruction ( void )
 {
   unsigned32 r1;
   r1 = (0x2<<24);
@@ -139,7 +139,7 @@ void _CPU_cache_enable_inst ( void )
   isync;
 }
 
-void _CPU_cache_disable_inst ( void )
+void _CPU_cache_disable_instruction ( void )
 {
   unsigned32 r1;
   r1 = (0x4<<24);
