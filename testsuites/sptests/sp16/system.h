@@ -71,15 +71,15 @@ TEST_EXTERN rtems_unsigned8 Area_4[8192] CPU_STRUCTURE_ALIGNMENT;
 #define BASE_PRIORITY 140
 
 #define Put_address_from_area_1( _to_be_printed ) \
-   printf( "0x%08x", ((rtems_unsigned8 *)(_to_be_printed)) - Area_1 )
+   printf( "0x%08lx", ((rtems_unsigned8 *)(_to_be_printed)) - Area_1 )
 
 #define Put_address_from_area_2( _to_be_printed ) \
-   printf( "0x%08x", ((rtems_unsigned8 *)(_to_be_printed)) - Area_2 )
+   printf( "0x%08lx", ((rtems_unsigned8 *)(_to_be_printed)) - Area_2 )
 
 #define Put_address_from_area_3( _to_be_printed ) \
-   printf( "0x%08x", ((rtems_unsigned8 *)(_to_be_printed)) - Area_3 )
+   printf( "0x%08lx", ((rtems_unsigned8 *)(_to_be_printed)) - Area_3 )
 
 #define Put_address_from_area_4( _to_be_printed ) \
-   printf( "0x%08x", ((rtems_unsigned8 *)(_to_be_printed)) - Area_4 )
+   printf( "0x%08lx", ((rtems_unsigned8 *)(_to_be_printed)) - Area_4 )
 
 /* end of include file */

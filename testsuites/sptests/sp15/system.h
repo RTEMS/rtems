@@ -52,9 +52,9 @@ TEST_EXTERN rtems_unsigned8 Area_1[4096] CPU_STRUCTURE_ALIGNMENT;
 TEST_EXTERN rtems_unsigned8 Area_2[274] CPU_STRUCTURE_ALIGNMENT;
  
 #define Put_address_from_area_1( _to_be_printed ) \
-   printf( "0x%08x", ((rtems_unsigned8 *)(_to_be_printed)) - Area_1 )
+   printf( "0x%08lx", ((rtems_unsigned8 *)(_to_be_printed)) - Area_1 )
  
 #define Put_address_from_area_2( _to_be_printed ) \
-   printf( "0x%08x", ((rtems_unsigned8 *)(_to_be_printed)) - Area_2 )
+   printf( "0x%08lx", ((rtems_unsigned8 *)(_to_be_printed)) - Area_2 )
  
 /* end of include file */

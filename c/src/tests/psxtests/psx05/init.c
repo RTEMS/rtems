@@ -14,7 +14,7 @@
 #include "system.h"
 #include <errno.h>
 
-#define MUTEX_BAD_ID -2
+#define MUTEX_BAD_ID 0xfffffffe 
 
 void Print_mutexattr(
   char                *msg,
