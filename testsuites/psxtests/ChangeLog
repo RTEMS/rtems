@@ -1,3 +1,11 @@
+2001-11-07	Jennifer Averett <jennifer@OARcorp.com>
+
+	Reported by Ibragimov Ilya <ibr@oktet.ru> and tracked as PR63.
+	* psxstat/test.c: Fix test ENOTDIR to correspond to chdir() change.
+	Since we check permissions before evaluating enough to see if it
+	a regular file or directory, this hack is needed to make the regular
+	file executable.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
