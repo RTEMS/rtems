@@ -1,3 +1,8 @@
+2003-03-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/score/cpu.h: Set up CPU_*_ENDIAN based on -D__ARMEL__ and
+	-D__ARMEB__. Fix minor typo in comment.
+
 2003-02-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/score/arm.h: Set up ARM_HAS_FPU based on -D__SOFTFP__.
