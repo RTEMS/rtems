@@ -1,4 +1,4 @@
-/*-
+/*
  * Copyright (c) 1990 The Regents of the University of California.
  * All rights reserved.
  *
@@ -47,15 +47,24 @@
  * in the normal case (where there are no options and the header length is
  * therefore always exactly five 32-bit words.
  */
+
+/*
+ *  Optimized version for the i386 family
+ */
+
 #if (defined(__GNUC__) && defined(__i386__))
+
 static __inline u_int
 in_cksum_hdr(const struct ip *ip)
 {
 	register u_int sum = 0;
 		    
-#define ADD(n)	__asm("addl " #n "(%2), %0" : "=r" (sum) : "0" (sum), "r" (ip))
-#define ADDC(n)	__asm("adcl " #n "(%2), %0" : "=r" (sum) : "0" (sum), "r" (ip))
-#define MOP	__asm("adcl         $0, %0" : "=r" (sum) : "0" (sum))
+#define ADD(n)	\
+    __asm__ volatile ("addl " #n "(%2), %0" : "=r" (sum) : "0" (sum), "r" (ip))
+#define ADDC(n)	\
+    __asm__ volatile ("adcl " #n "(%2), %0" : "=r" (sum) : "0" (sum), "r" (ip))
+#define MOP	\
+    __asm__ volatile ("adcl         $0, %0" : "=r" (sum) : "0" (sum))
 
 	ADD(0);
 	ADDC(4);
@@ -77,6 +86,10 @@ in_cksum_update(struct ip *ip)
 	__tmpsum = (int)ntohs(ip->ip_sum) + 256;
 	ip->ip_sum = htons(__tmpsum + (__tmpsum >> 16));
 }
+
+/*
+ *  Optimized version for the MC68xxx and Coldfire families
+ */
 
 #elif (defined(__GNUC__) && (defined(__mc68000__) || defined(__m68k__)))
 
@@ -103,6 +116,50 @@ in_cksum_hdr(const struct ip *ip)
 		sum -= 0xffff;
 	return ~sum & 0xffff;
 }
+
+/*
+ *  Optimized version for the PowerPC family
+ */
+
+#elif (defined(__GNUC__) && (defined(__PPC__) || defined(__ppc__)))
+
+static __inline u_int
+in_cksum_hdr(const struct ip *ip)
+{
+        register u_int sum = 0;
+        register u_int tmp;
+
+#define ADD(n) \
+	 __asm__ volatile ("addc  %0,%0,%2" : "=r" (sum) : "0" (sum), "r" (n))
+#define ADDC(n) \
+	__asm__ volatile ("adde  %0,%0,%2" : "=r" (sum) : "0" (sum), "r" (n))
+#define MOP     \
+	__asm__ volatile ("addic %0,%0,0"  : "=r" (sum) : "0" (sum))
+
+        tmp = *(((u_int *) ip));      ADD(tmp);
+        tmp = *(((u_int *) ip) + 1);  ADDC(tmp);
+        tmp = *(((u_int *) ip) + 2);  ADDC(tmp);
+        tmp = *(((u_int *) ip) + 3);  ADDC(tmp);
+        tmp = *(((u_int *) ip) + 4);  ADDC(tmp);
+        tmp = 0;                      ADDC(tmp);
+        sum = (sum & 0xffff) + (sum >> 16);
+        if (sum > 0xffff)
+                sum -= 0xffff;
+
+        return ~sum & 0xffff;
+}
+
+static __inline void
+in_cksum_update(struct ip *ip)
+{
+        int __tmpsum;
+        __tmpsum = (int)ntohs(ip->ip_sum) + 256;
+        ip->ip_sum = htons(__tmpsum + (__tmpsum >> 16));
+}
+
+/*
+ *  Here is the generic, portable, inefficient algorithm.
+ */
 
 #else
 u_int in_cksum_hdr __P((const struct ip *));
