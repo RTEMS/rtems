@@ -391,6 +391,18 @@ __CPU_Context_save:
 ;	jmpi lr0
 ;        nop
 
+	.global	_a29k_getops
+_a29k_getops:
+	asneq 113, gr96, gr96
+	jmpi lr0
+	nop
+
+	.global	_a29k_getops_sup
+_a29k_getops_sup:
+	mfsr	gr96, ops	; caller wants ops
+	iret
+	nop
+
 	.global	_a29k_disable
 _a29k_disable:
 	asneq 110, gr96, gr96
@@ -400,6 +412,7 @@ _a29k_disable:
 	.global	_a29k_disable_sup
 _a29k_disable_sup:
 	mfsr	kt0, ops
+	add	gr96, kt0, 0	; return ops to caller
 	const	kt1, (DI | TD)
 	consth	kt1, (DI | TD)
 	or	kt1, kt0, kt1
@@ -416,8 +429,8 @@ _a29k_disable_all:
         .global _a29k_disable_all_sup
 _a29k_disable_all_sup:
         mfsr    kt0, ops
-        const   kt1, DA
-        consth  kt1, DA
+	const	kt1, (DI | TD)
+	consth	kt1, (DI | TD)
         or    	kt1, kt0, kt1
         mtsr    ops, kt1
         iret
@@ -432,8 +445,8 @@ _a29k_enable_all:
         .global _a29k_enable_all_sup
 _a29k_enable_all_sup:
         mfsr    kt0, ops
-        const   kt1, DA
-        consth  kt1, DA
+	const	kt1, (DI | TD)
+	consth	kt1, (DI | TD)
         andn    kt1, kt0, kt1
         mtsr    ops, kt1
         iret
@@ -450,7 +463,9 @@ _a29k_enable_sup:
 	mfsr	kt0, ops
 	const	kt1, (DI | TD)
 	consth	kt1, (DI | TD)
-	andn	kt1, kt0, kt1
+	and	kt3, lr2, kt1
+	andn	kt0, kt0, kt1
+	or	kt1, kt0, kt3
 	mtsr	ops, kt1
 	iret
 	nop

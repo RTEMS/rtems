@@ -30,7 +30,7 @@
  *
  *  $Id$
  */
-/* @(#)cpu.h       09/06/96     1.10 */
+/* @(#)cpu.h	10/21/96	1.11 */
 
 #ifndef __CPU_h
 #define __CPU_h
@@ -46,6 +46,8 @@ extern "C" {
 
 extern unsigned int a29k_disable( void );
 extern void a29k_enable( unsigned int cookie );
+extern unsigned int a29k_getops( void );
+extern void a29k_getops_sup( void );
 extern void a29k_disable_sup( void );
 extern void a29k_enable_sup( void );
 extern void a29k_disable_all( void );
@@ -655,6 +657,9 @@ extern void _CPU_Context_save(
       (_the_context)->local_count = 1-1;			    \
       (_the_context)->PC1 = _entry_point;                           \
       (_the_context)->PC0 = (unsigned32)((char *)_entry_point + 4); \
+      if (_isr) { (_the_context)->OPS |= (TD | DI); }               \
+      else                                                          \
+                { (_the_context)->OPS &= ~(TD | DI); }              \
   }while(0)
 
 /*

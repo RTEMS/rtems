@@ -29,7 +29,7 @@
  *  $Id$
  */
 #ifndef lint
-static char _sccsid[] = "@(#)cpu.c 21 Aug 1996     1.6\n";
+static char _sccsid[] = "@(#)cpu.c 10/21/96     1.8\n";
 #endif
 
 #include <rtems/system.h>
@@ -94,10 +94,16 @@ void _CPU_Initialize(
  
 unsigned32 _CPU_ISR_Get_level( void )
 {
+  unsigned32	cps;
+
   /*
    *  This routine returns the current interrupt level.
    */
-   return 0;
+  cps = a29k_getops();
+  if (cps & (TD|DI))
+    return 1;
+  else
+    return 0;
 }
 
 /*PAGE
@@ -106,8 +112,8 @@ unsigned32 _CPU_ISR_Get_level( void )
  */
  
 extern void intr14( void );
-extern void intr3( void );
-extern void intr2( void );
+extern void intr18( void );
+extern void intr19( void );
 
 void _CPU_ISR_install_raw_handler(
   unsigned32  vector,
@@ -124,12 +130,13 @@ void _CPU_ISR_install_raw_handler(
       case 14:
          _settrap( vector, intr14 );
          break;
-      case 3:
-         _settrap( vector, intr3 );
+      case 18:
+         _settrap( vector, intr18 );
          break;
-      case 2:
-         _settrap( vector, intr2 );
+      case 19:
+         _settrap( vector, intr19 );
          break;
+
       default:
          break;
    }

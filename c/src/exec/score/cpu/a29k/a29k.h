@@ -10,7 +10,7 @@
  *  $Id$
  *
  */
-/* @(#)a29k.h       09/12/96     1.2 */
+/* @(#)a29k.h       10/21/96     1.3 */
 
 #ifndef _INCLUDE_A29K_h
 #define _INCLUDE_A29K_h
@@ -66,6 +66,12 @@ extern "C" {
  */
 
 #define CPU_NAME "AMD 29K"
+
+/*
+ * Some bits in the CPS:
+ */
+#define	TD	0x20000
+#define	DI	0x00002
 
 #ifdef __cplusplus
 }
