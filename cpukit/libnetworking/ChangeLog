@@ -1,3 +1,9 @@
+2002-08-07	Joel Sherrill <joel@OARcorp.com>
+
+	* netinet/in.h: Per PR263, added include of <machine/endian.h>
+	to <netinet/in.h> so it includes prototypes of ntohl() family
+	of routines.
+
 2002-08-01	Joel Sherrill <joel@OARcorp.com>
 
 	* machine/param.h, sys/syslimits.h: In the continued effort to

@@ -37,6 +37,8 @@
 #ifndef _NETINET_IN_H_
 #define _NETINET_IN_H_
 
+#include <machine/endian.h>  /* for ntohx routines */
+
 /*
  * Constants and structures defined by the internet system,
  * Per RFC 790, September 1981, and numerous additions.
