@@ -31,19 +31,22 @@ extern "C" {
  *  of the family.
  */
  
-#if defined(c30)
+#if defined(_C30)
 #define CPU_MODEL_NAME  "C30"
 
-#elif defined(c31)
+#elif defined(_C31)
 #define CPU_MODEL_NAME  "C31"
  
-#elif defined(c32)
+#elif defined(_C32)
 #define CPU_MODEL_NAME  "C32"
  
-#elif defined(c40)
+#elif defined(_C33)
+#define CPU_MODEL_NAME  "C33"
+ 
+#elif defined(_C40)
 #define CPU_MODEL_NAME  "C40"
  
-#elif defined(c44)
+#elif defined(_C44)
 #define CPU_MODEL_NAME  "C44"
  
 #else
