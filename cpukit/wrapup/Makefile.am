@@ -39,8 +39,8 @@ LIBS += ../libnetworking/wrapup/$(ARCH)/libnetworking.a
 endif
 
 if LIBRPC
-LIBS += ../librpc/$(ARCH)/librpc.a
-LIBS += ../librpc/$(ARCH)/libxdr.a
+LIBS += ../librpc/src/rpc/$(ARCH)/librpc.a
+LIBS += ../librpc/src/xdr/$(ARCH)/libxdr.a
 endif
 
 $(LIB): ${LIBS}

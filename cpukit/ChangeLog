@@ -1,3 +1,8 @@
+2002-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Fix path to libxdr and librpc (Another typo in
+	from the 2002-12-12 patch).
+
 2002-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Fix typo in yesterday's patch.
