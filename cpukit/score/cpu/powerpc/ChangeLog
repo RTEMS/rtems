@@ -1,5 +1,14 @@
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/old-exceptions/cpu.h (CPU_Get_timebase_low, rtems_bsp_delay,
+	rtems_bsp_delay_in_bus_cycles): Remove.
+	* rtems/powerpc/registers.h (CPU_Get_timebase_low, rtems_bsp_delay,
+	rtems_bsp_delay_in_bus_cycles): Remove.
+	* rtems/score/cpu.h (CPU_Get_timebase_low, rtems_bsp_delay,
+        rtems_bsp_delay_in_bus_cycles): New.
+
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/new-exceptions/cpu.h 
 	(rtems_cpu_configuration_get_clicks_per_usec,
 	rtems_cpu_configuration_get_exceptions_in_ram): Remove.
