@@ -116,7 +116,11 @@ SYM (excHandler):
 	lea	a0@(2),a0		 | skip vector
 #endif
 	lea	a0@(6),a0		 | a0 = orig sp
+#if ( M68K_COLDFIRE_ARCH == 0 )
         cmpiw   #3,d0			 | bus error or address error ?
+#else
+        cmpi.l  #3,d0
+#endif
         bgt     1f			 | if >3 then normal exc
 #if ( M68K_HAS_VBR == 1 )
 	lea	a1@(2*29),a0
@@ -132,7 +136,11 @@ SYM (excHandler):
 	movel	d0,a7@			 | vecnum
 	movel	d1,a7@(4)		 | sr
 	movel	a1@(PC_OFFSET),d1	 | d1 = pc
+#if ( M68K_COLDFIRE_ARCH == 0 )
 	cmpiw	#47,d0			 | trap #15, breakpoint?
+#else
+	cmpil	#47,d0			 | trap #15, breakpoint?
+#endif
 	bne	2f
 	subql	#2,d1			 | real PC is at trap insn
 2:	movel	d1,a7@(8)		 | store pc to exframe struct

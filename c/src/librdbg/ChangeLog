@@ -1,3 +1,7 @@
+2001-10-30	Victor V. Vengerov <vvv@oktet.ru>
+
+	* src/m68k/rdbg_cpu_asm.S: Now compiles on ColdFire.
+
 2001-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Fix latent bug exposed by removal of config.cache's
