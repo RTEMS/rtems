@@ -1,3 +1,7 @@
+2003-10-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Make presence of tests/ optional.
+
 2003-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/path-perl.m4: Remove (Unused).

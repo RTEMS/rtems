@@ -166,8 +166,10 @@ AS_IF([test x"$enable_ada" = x"yes"],[
   ])
 ])
 
-AC_CONFIG_SUBDIRS([tests])
-BSP_SUBDIRS="$BSP_SUBDIRS tests"
+AS_IF([test -d ${srcdir}/tests],[
+    AC_CONFIG_SUBDIRS([tests])
+    BSP_SUBDIRS="$BSP_SUBDIRS tests"
+])
 
 AC_SUBST([BSP_SUBDIRS],[$BSP_SUBDIRS])
 
