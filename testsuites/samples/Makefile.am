@@ -23,8 +23,5 @@ SUBDIRS += loopback
 SUBDIRS += pppd
 endif
 
-DIST_SUBDIRS = hello ticker base_sp unlimited minimum fileio base_mp cdtest \
-    paranoia loopback pppd
-
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am
