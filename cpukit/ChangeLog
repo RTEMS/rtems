@@ -1,5 +1,11 @@
 2005-02-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems/ftpfs.h, libnetworking/rtems/mkrootfs.h,
+	libnetworking/rtems/rtems_bsdnet_internal.h,
+	libnetworking/rtems/tftp.h: New header guards.
+
+2005-02-02	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libnetworking/rtems/issetugid.c,
 	libnetworking/rtems/mkrootfs.c,
 	libnetworking/rtems/rtems_bootp.c,
