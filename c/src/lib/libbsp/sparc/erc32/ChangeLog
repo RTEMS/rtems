@@ -1,3 +1,8 @@
+2000-11-14	Jiri Gaisler <jgais@ws.estec.esa.nl>
+
+	* wrapup/Makefile.am: Pick up cache code from libcpu and pick
+	up .o's instead of .rel's from libcpu.
+
 2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
 	* Makefile.am, configure.in, gnatsupp/Makefile.am,

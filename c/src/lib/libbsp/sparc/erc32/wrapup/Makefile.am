@@ -11,11 +11,11 @@ endif
 
 BSP_PIECES = startup console clock timer gnatsupp $(NETWORKING_DRIVER)
 # pieces to pick up out of libcpu/sparc
-CPU_PIECES = reg_win syscall
+CPU_PIECES = cache reg_win syscall
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
-    $(foreach piece, $(CPU_PIECES), ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/$(piece).rel)
+    $(foreach piece, $(CPU_PIECES), ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/*.o)
 LIB = $(ARCH)/libbsp.a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
