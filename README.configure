@@ -190,8 +190,8 @@ i386		: i386ex pc386 pc386dx pc486 pc586 pc686 pck6 ts_386ex
 
 i960		: cvme961 i960sim rxgen960
 
-m68k		: dmv152 efi332 efi68k gen68302 gen68340 gen68360 
-                  gen68360_040 idp mcf5206elite mrm332 mvme136 mvme147
+m68k		: dmv152 gen68302 gen68340 gen68360 gen68360_040 
+                  idp mcf5206elite mrm332 mvme136 mvme147
                   mvme147s mvme162 mvme162lx ods68302
 
 no_cpu          : no_bsp  (porting example)

@@ -1,5 +1,10 @@
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
+	* README.configure: Remove efi68k and efi332 references as they are no
+	longer in the tree.
+
+2004-01-07	Joel Sherrill <joel@OARcorp.com>
+
 	* aclocal/bsp-alias.m4, aclocal/rtems-cpu-subdirs.m4: mips64orion port
 	removed as mips port more completely covers the MIPS family.
 
