@@ -13,19 +13,13 @@ source code for a GNU cross compiler toolset, apply
 any required RTEMS specific patches, compile that 
 toolset and install it.
 
-@section Directory Organization
-
-The tree structure in the figure below is assumed to be present in the
-following discussions:
-
-@center @b{XXX directory tree figure goes here}
-
 @section Get all the Pieces 
 
 Gather the components that will be required for the installation and place
-them in an archive directory. Call this directory arc. Be sure that there
+them in an archive directory. Call this directory @code{arc}. Be sure that there
 is sufficient space to hold all necessary information. This will amount to
-approximately 20 megabytes. 
+approximately 20 megabytes.  In addition, make a directory named @code{tools}
+to build the cross-compiler in.
 
 @subheading @value{GCC-VERSION}
 @example
@@ -79,9 +73,52 @@ approximately 20 megabytes.
 @section Create the tools Directory
 
 Create a directory called tools that will serve as a working directory to
-perform the build of the cross compiler tools.
+perform the build of the cross compiler tools.  Since we previously
+created a directory named @code{arc} to place the files we downloaded
+into, this will result in a starting directory structure similar the
+one shown in the following figure:
+                
+@ifset use-ascii
+@example
+@group
+                parent directory common to the
+               tools and archive subdirectories
+                             |
+      +----------------------+----------------------+
+      |                                             |
+   tools                                           arc
+@end group
+@end example
+@end ifset
+    
 
-Unpack the compressed tar files using the following command sequence: 
+@ifset use-tex
+@c for now use the ascii version
+@example
+@group
+                parent directory common to the
+               tools and archive subdirectories
+                             |
+      +----------------------+----------------------+
+      |                                             |
+   tools                                           arc
+@end group
+@end example
+@tex
+@end tex
+@end ifset
+
+
+@ifset use-html  
+@html
+<IMG SRC="sfile12c.jpg" WIDTH=417 HEIGHT=178 ALT="Base Directory Organization">
+@end html
+@end ifset
+
+@section Unarchiving the Sources
+
+While in the @code{tools} directory, unpack the compressed
+tar files using the following command sequence: 
 
 @example
 cd tools
@@ -100,6 +137,35 @@ directories will have been created under tools.
 @item @value{GNAT-UNTAR}
 @item @value{NEWLIB-UNTAR}
 @end itemize
+
+Graphically, this will look something like the following figure:
+
+@ifset use-ascii
+@example
+@group
+Not currently available in ASCII.
+@end group
+@end example
+@end ifset
+
+
+@ifset use-tex
+@c for now use the ascii version
+@example
+@group
+Not currently available in printed document.
+@end group
+@end example
+@tex
+@end tex
+@end ifset
+
+@ifset use-html
+@html
+<IMG SRC="bit_ada.jpg" WIDTH=816 HEIGHT=267 ALT="Directory Organization">
+@end html
+@end ifset
+
 
 @c
 @c  GCC patches

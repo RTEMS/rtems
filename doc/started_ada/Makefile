@@ -50,7 +50,7 @@ intro.texi: intro.t versions.texi
 	    -n "Requirements" ${*}.t
 
 require.texi: require.t versions.texi
-	$(BMENU) -c -p "Resources on the Internet" \
+	$(BMENU) -c -p "GNAT Chat Mailing List" \
 	    -u "Top" \
 	    -n "Building the GNAT Cross Compiler Toolset" ${*}.t
 
@@ -76,6 +76,8 @@ gdb.texi: gdb.t versions.texi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
+	-cp ../started/pictures/sfile12c.jpg $(WWW_INSTALL)/$(PROJECT)
+	-cp ../started/pictures/bit_ada.jpg $(WWW_INSTALL)/$(PROJECT)
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
 
