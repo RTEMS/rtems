@@ -1,3 +1,8 @@
+2001-04-03	Joel Sherrill <joel@OARcorp.com>
+
+	* sh/COPYING: Readded.  Deleting this violated GPL on shgen.
+
+
 2001-04-02	Joel Sherrill <joel@OARcorp.com>
 
 	* sh/COPYING: Deleted.
