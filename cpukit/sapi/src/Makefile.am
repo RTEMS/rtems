@@ -2,6 +2,7 @@
 ##  $Id$
 ##
 
+LIB=$(ARCH)/libsapi.a
 
 EXTENSION_FILES = extension.c extensioncreate.c extensiondelete.c \
     extensionident.c
@@ -21,7 +22,10 @@ include $(top_srcdir)/automake/lib.am
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-all-local: ${ARCH} ${OBJS}
+all-local: ${ARCH} $(LIB)
+
+$(LIB): ${OBJS}
+	$(make-library)
 
 EXTRA_DIST = $(C_FILES)
 
