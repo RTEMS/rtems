@@ -1,3 +1,8 @@
+2003-02-06	Joel Sherrill <joel@OARcorp.com>
+
+	* include/sys/ioccom.h: Include <sys/types.h> not <machine/types.h> so
+	Linux port builds.
+
 2003-02-05     Till Straumann  <strauman@slac.stanford.edu>
 
 	PR 340/filesystem
