@@ -1,5 +1,10 @@
 2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* src/dosfs/fat.h: Include <string.h>.
+	Remove DBG1 and DBG2 (unused).
+
+2002-04-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Per PR169.
 	* src/dosfs/config.h.in, src/dosfs/stamp-h2.in: Removed from CVS.
 

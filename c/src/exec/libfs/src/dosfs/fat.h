@@ -21,6 +21,8 @@
 extern "C" {
 #endif
 
+#include <string.h>
+
 #include <rtems/seterr.h>
 
 /* XXX: temporary hack :(( */
@@ -31,9 +33,6 @@ extern "C" {
 #include <rtems/score/cpu.h>
 #include <errno.h>
 #include <rtems/bdbuf.h>
-
-#define DBG1(x)  x
-#define DBG2(x)  x
 
 #ifndef RC_OK
 #define RC_OK 0x00000000
