@@ -30,9 +30,6 @@
 
 static const char rcsid[] = RCSID;
 
-extern long mrand48 __P((void));
-extern void srand48 __P((long));
-
 /*
  * magic_init - Initialize the magic number generator.
  *
@@ -58,28 +55,4 @@ u_int32_t
 magic()
 {
     return (u_int32_t) mrand48();
-}
-
-/*
- * Substitute procedures for those systems which don't have
- * drand48 et al.
- */
-
-double
-drand48()
-{
-    return (double)rand() / (double)0x7fffffffL; /* 2**31-1 */
-}
-
-long
-mrand48()
-{
-    return rand();
-}
-
-void
-srand48(seedval)
-long seedval;
-{
-    srand((int)seedval);
 }

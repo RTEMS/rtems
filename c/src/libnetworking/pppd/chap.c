@@ -41,6 +41,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>	/* drand48, srand48 */
 #include <sys/types.h>
 #include <sys/time.h>
 
@@ -114,9 +115,6 @@ static void ChapSendStatus __P((chap_state *, int));
 static void ChapSendChallenge __P((chap_state *));
 static void ChapSendResponse __P((chap_state *));
 static void ChapGenChallenge __P((chap_state *));
-
-extern double drand48 __P((void));
-extern void srand48 __P((long));
 
 /*
  * ChapInit - Initialize a CHAP unit.
