@@ -40,6 +40,7 @@ mode_t rtems_filesystem_umask;
 
 void rtems_filesystem_initialize( void )
 {
+#if !defined(RTEMS_UNIX)
   int                                   status;
   rtems_filesystem_mount_table_entry_t *first_entry;
 
@@ -78,4 +79,5 @@ void rtems_filesystem_initialize( void )
   status = mkdir( "/dev", S_IRWXU | S_IRWXG | S_IRWXO );
   if ( status != 0 )
     rtems_fatal_error_occurred( 0xABCD0003 );
+#endif
 }

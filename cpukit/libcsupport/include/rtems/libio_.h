@@ -27,6 +27,7 @@ extern "C" {
 #include <fcntl.h>                      /* O_RDONLY, et.al. */
 #include <assert.h>
 #include <stdarg.h>
+#include <errno.h>
 
 #if ! defined(O_NDELAY)
 # if defined(solaris2)
@@ -34,6 +35,10 @@ extern "C" {
 # elif defined(RTEMS_NEWLIB)
 #  define O_NDELAY _FNBIO
 # endif
+#endif
+
+#if !defined(ENOTSUP)
+#define ENOTSUP EOPNOTSUPP
 #endif
 
 #include <errno.h>
