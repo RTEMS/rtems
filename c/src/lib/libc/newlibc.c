@@ -40,24 +40,17 @@
 #include <stdio.h>
 #endif
 
+static int extension_index;
+
 /*
  *  Private routines
  */
 
-void MY_task_set_note(
-  rtems_tcb        *tcb,
-  rtems_unsigned32 notepad,
-  rtems_unsigned32 note
-);
+#define set_newlib_extension( _the_thread, _value ) \
+  (_the_thread)->extensions[ extension_index ] = (_value);
 
-rtems_unsigned32 MY_task_get_note(
-  rtems_tcb        *tcb,
-  rtems_unsigned32  notepad
-);
-
-
-#define LIBC_NOTEPAD RTEMS_NOTEPAD_LAST
-
+#define get_newlib_extension( _the_thread ) \
+  (_the_thread)->extensions[ extension_index ]
 
 int              libc_reentrant;        /* do we think we are reentrant? */
 struct _reent    libc_global_reent;
@@ -73,90 +66,93 @@ extern void _reclaim_reent(struct _reent *);
 
 #include <stdio.h>
 
-void
-libc_wrapup(void)
+void libc_wrapup(void)
 {
-    /*
-     *  In case RTEMS is already down, don't do this.  It could be 
-     *  dangerous.
-     */
+  /*
+   *  In case RTEMS is already down, don't do this.  It could be 
+   *  dangerous.
+   */
 
-    if (!_System_state_Is_up(_System_state_Get()))
-       return;
+  if (!_System_state_Is_up(_System_state_Get()))
+     return;
 
-    /*
-     *  This was already done if the user called exit() directly .
+  /*
+   *  This was already done if the user called exit() directly .
+  _wrapup_reent(0);
+   */
 
-    _wrapup_reent(0);
-     */
-    if (_REENT != &libc_global_reent)
-    {
-        _wrapup_reent(&libc_global_reent);
+  if (_REENT != &libc_global_reent) {
+      _wrapup_reent(&libc_global_reent);
 #if 0
-        /* don't reclaim this one, just in case we do printfs */
-        /* on our way out to ROM */
-        _reclaim_reent(&libc_global_reent);
+      /*  Don't reclaim this one, just in case we do printfs
+       *  on the way out to ROM.
+       */
+      _reclaim_reent(&libc_global_reent);
 #endif
-        _REENT = &libc_global_reent;
-    }
-    
-    /*
-     * Try to drain output buffers.
-     *
-     * Should this be changed to do *all* file streams?
-     *	_fwalk (_REENT, fclose);
-     */
-    fclose (stdin);
-    fclose (stdout);
-    fclose (stderr);
+      _REENT = &libc_global_reent;
+  }
+  
+  /*
+   * Try to drain output buffers.
+   *
+   * Should this be changed to do *all* file streams?
+   *    _fwalk (_REENT, fclose);
+   */
+
+  fclose (stdin);
+  fclose (stdout);
+  fclose (stderr);
 }
 
 
-rtems_boolean
-libc_create_hook(rtems_tcb *current_task,
-                 rtems_tcb *creating_task)
+rtems_boolean libc_create_hook(
+  rtems_tcb *current_task,
+  rtems_tcb *creating_task
+)
 {
-    MY_task_set_note(creating_task, LIBC_NOTEPAD, 0);
-    return TRUE;
+  set_newlib_extension( creating_task, NULL );
+  return TRUE;
 }
 
 /*
  * Called for all user TASKS (system tasks are MPCI Receive Server and IDLE)
  */
 
-rtems_extension
-libc_start_hook(rtems_tcb *current_task,
-                rtems_tcb *starting_task)
+rtems_extension libc_start_hook(
+  rtems_tcb *current_task,
+  rtems_tcb *starting_task
+)
 {
-    struct _reent *ptr;
+  struct _reent *ptr;
 
-    /* NOTE: our malloc is reentrant without a reent ptr since
-     *  it is based on region manager
-     */
+  /*  NOTE: The RTEMS malloc is reentrant without a reent ptr since
+   *        it is based on the Classic API Region Manager.
+   */
 
-    ptr = (struct _reent *) calloc(1, sizeof(struct _reent));
+  ptr = (struct _reent *) calloc(1, sizeof(struct _reent));
 
-    if (!ptr)
-       rtems_fatal_error_occurred(RTEMS_NO_MEMORY);
+  if (!ptr)
+     rtems_fatal_error_occurred(RTEMS_NO_MEMORY);
  
 #ifdef __GNUC__
-    /* GCC extension: structure constants */
-    *ptr = (struct _reent) _REENT_INIT((*ptr));
+  /* GCC extension: structure constants */
+  *ptr = (struct _reent) _REENT_INIT((*ptr));
 #else
-    /* 
-     *  Warning: THIS IS VERY DEPENDENT ON NEWLIB!!! WRITTEN FOR 1.7.0
-     */
-    ptr->_errno=0;
-    ptr->_stdin=&ptr->__sf[0];
-    ptr->_stdout=&ptr->__sf[1];
-    ptr->_stderr=&ptr->__sf[2];
-    ptr->_scanpoint=0;
-    ptr->_asctime[0]=0;
-    ptr->_next=1;
-    ptr->__sdidinit=0;
+  /* 
+   *  WARNING: THIS IS VERY DEPENDENT ON NEWLIB!!! 
+   *           Last visual check was against newlib 1.8.2 but last known
+   *           use was against 1.7.0.  This is basically an exansion of
+   *           REENT_INIT() in <sys/reent.h>.
+   *  NOTE:    calloc() takes care of zeroing fields.
+   */
+  ptr->_stdin = &ptr->__sf[0];
+  ptr->_stdout = &ptr->__sf[1];
+  ptr->_stderr = &ptr->__sf[2];
+  ptr->_current_locale = "C";
+  ptr->_new._reent._rand_next = 1;
 #endif
 
-    MY_task_set_note(starting_task, LIBC_NOTEPAD, (rtems_unsigned32) ptr);
+  set_newlib_extension( starting_task, ptr );
 }
 
 /*
@@ -164,38 +160,26 @@ libc_start_hook(rtems_tcb *current_task,
  */
  
 #ifdef NEED_SETVBUF
-rtems_extension
-libc_begin_hook(rtems_tcb *current_task)
+rtems_extension libc_begin_hook(rtems_tcb *current_task)
 {
   setvbuf( stdout, NULL, _IOLBF, BUFSIZ );
 }
 #endif
 
-rtems_extension
-libc_switch_hook(rtems_tcb *current_task,
-                 rtems_tcb *heir_task)
+rtems_extension libc_switch_hook(
+  rtems_tcb *current_task,
+  rtems_tcb *heir_task
+)
 {
-    rtems_unsigned32 impure_value;
+  /*
+   *  Don't touch the outgoing task if it has been deleted.
+   */
 
-    /* XXX We can't use rtems_task_set_note() here since SYSI task has a
-     * tid of 0, which is treated specially (optimized, actually)
-     * by rtems_task_set_note
-     *
-     * NOTE:  The above comment is no longer true and we need to use
-     *        the extension data areas added about the same time.
-     */
+  if ( !_States_Is_transient( current_task->current_state ) ) {
+    set_newlib_extension( current_task, _REENT );
+  }
 
-    /*
-     *  Don't touch the outgoing task if it has been deleted.
-     */
-
-    if ( !_States_Is_transient( current_task->current_state ) ) {
-      impure_value = (rtems_unsigned32) _REENT;
-      MY_task_set_note(current_task, LIBC_NOTEPAD, impure_value);
-    }
-
-    _REENT = (struct _reent *) MY_task_get_note(heir_task, LIBC_NOTEPAD);
-
+  _REENT = (struct _reent *) get_newlib_extension( heir_task );
 }
 
 /*
@@ -222,43 +206,40 @@ libc_switch_hook(rtems_tcb *current_task,
  *
  *
  */
-rtems_extension
-libc_delete_hook(rtems_tcb *current_task,
-                 rtems_tcb *deleted_task)
+
+rtems_extension libc_delete_hook(
+  rtems_tcb *current_task,
+  rtems_tcb *deleted_task
+)
 {
-    struct _reent *ptr;
+  struct _reent *ptr;
 
-    /*
-     * The reentrancy structure was allocated by newlib using malloc()
-     */
+  /*
+   * The reentrancy structure was allocated by newlib using malloc()
+   */
 
-    if (current_task == deleted_task)
-    {
-      ptr = _REENT;
-    }
-    else
-    {
-      ptr = (struct _reent *) MY_task_get_note(deleted_task, LIBC_NOTEPAD);
-    }
+  if (current_task == deleted_task) {
+    ptr = _REENT;
+  } else {
+    ptr = (struct _reent *) get_newlib_extension( deleted_task );
+  }
 
-    /* if (ptr) */
-    if (ptr && ptr != &libc_global_reent)
-    {
-      _wrapup_reent(ptr);
-      _reclaim_reent(ptr);
-      free(ptr);
-    }
+  /* if (ptr) */
+  if (ptr && ptr != &libc_global_reent) {
+    _wrapup_reent(ptr);
+    _reclaim_reent(ptr);
+    free(ptr);
+  }
 
-    MY_task_set_note(deleted_task, LIBC_NOTEPAD, 0);
+  set_newlib_extension( deleted_task, NULL );
 
-    /*
-     * Require the switch back to another task to install its own
-     */
+  /*
+   * Require the switch back to another task to install its own
+   */
 
-    if (current_task == deleted_task)
-    {
-      _REENT = 0;
-    }
+  if ( current_task == deleted_task ) {
+    _REENT = 0;
+  }
 }
 
 /*
@@ -294,44 +275,33 @@ libc_delete_hook(rtems_tcb *current_task,
 void
 libc_init(int reentrant)
 {
-    rtems_extensions_table  libc_extension;
-    rtems_id                extension_id;
-    rtems_status_code       rc;
+  rtems_extensions_table  libc_extension;
+  rtems_status_code       rc;
+  rtems_id                extension_id;
 
-    libc_global_reent = (struct _reent) _REENT_INIT((libc_global_reent));
-    _REENT = &libc_global_reent;
+  libc_global_reent = (struct _reent) _REENT_INIT((libc_global_reent));
+  _REENT = &libc_global_reent;
 
-    if (reentrant)
-    {
-        memset(&libc_extension, 0, sizeof(libc_extension));
+  if (reentrant) {
+    memset(&libc_extension, 0, sizeof(libc_extension));
 
-        libc_extension.thread_create  = libc_create_hook;
-        libc_extension.thread_start   = libc_start_hook;
+    libc_extension.thread_create  = libc_create_hook;
+    libc_extension.thread_start   = libc_start_hook;
 #ifdef NEED_SETVBUF
-        libc_extension.thread_begin   = libc_begin_hook;
+    libc_extension.thread_begin   = libc_begin_hook;
 #endif
-        libc_extension.thread_switch  = libc_switch_hook;
-        libc_extension.thread_delete  = libc_delete_hook;
+    libc_extension.thread_switch  = libc_switch_hook;
+    libc_extension.thread_delete  = libc_delete_hook;
 
-        rc = rtems_extension_create(rtems_build_name('L', 'I', 'B', 'C'),
-                              &libc_extension, &extension_id);
-        if (rc != RTEMS_SUCCESSFUL)
-            rtems_fatal_error_occurred( rc );
+    rc = rtems_extension_create(rtems_build_name('L', 'I', 'B', 'C'),
+                          &libc_extension, &extension_id);
+    if (rc != RTEMS_SUCCESSFUL)
+      rtems_fatal_error_occurred( rc );
 
-        libc_reentrant = reentrant;
-    }
+    libc_reentrant = reentrant;
+    extension_index = rtems_get_index( extension_id );
+  }
 }
-
-#if 0
-/*
- *  Routines required by the gnat runtime.
- */
-
-int get_errno()
-{
-  return errno;
-}
-#endif
 
 /*
  *  Function:   _exit
@@ -366,134 +336,24 @@ int get_errno()
 #if !defined(RTEMS_UNIX) && !defined(_AM29K)
 void _exit(int status)
 {
-    /*
-     *  We need to do the exit processing on the global reentrancy structure.
-     *  This has already been done on the per task reentrancy structure
-     *  associated with this task.
-     */
+  /*
+   *  We need to do the exit processing on the global reentrancy structure.
+   *  This has already been done on the per task reentrancy structure
+   *  associated with this task.
+   */
 
-    libc_wrapup();
-    rtems_shutdown_executive(status);
+  libc_wrapup();
+  rtems_shutdown_executive(status);
 }
 
 #else
 
 void exit(int status)
 {
-    libc_wrapup();
-    rtems_shutdown_executive(status);
+  libc_wrapup();
+  rtems_shutdown_executive(status);
 }
 #endif
 
 
-/*
- *  These are directly supported (and completely correct) in the posix api.
- */
-
-pid_t __getpid(void)
-{
-  return getpid();
-}
-
-#if !defined(RTEMS_POSIX_API)
-pid_t getpid(void)
-{
-  return 0;
-}
-
-pid_t _getpid_r(
-  struct _reent *ptr
-)
-{
-  return getpid();
-}
-#endif
-
-#if !defined(RTEMS_POSIX_API)
-int kill( pid_t pid, int sig )
-{
-  return 0;
-}
-
-int _kill_r( pid_t pid, int sig )
-{
-  return 0;
-}
-#endif
-
-int __kill( pid_t pid, int sig )
-{
-  return 0;
-}
-
-#if !defined(RTEMS_POSIX_API)
-unsigned int sleep(
-  unsigned int seconds
-)
-{
-  rtems_status_code status;
-  rtems_interval    ticks_per_second;
-  rtems_interval    ticks;
- 
-  status = rtems_clock_get(
-    RTEMS_CLOCK_GET_TICKS_PER_SECOND,
-    &ticks_per_second
-  );
- 
-  ticks = seconds * ticks_per_second;
- 
-  status = rtems_task_wake_after( ticks );
- 
-  /*
-   *  Returns the "unslept" amount of time.  In RTEMS signals are not
-   *  interruptable, so tasks really sleep all of the requested time.
-   */
- 
-  return 0;
-}
-#endif
-
-
-/*
- *  Newlib Interface Support
- *
- *  Routines to Access Internal RTEMS Resources without violating
- *  kernel visibility.
- *
- */
-
-void MY_task_set_note(
-  Thread_Control *the_thread,
-  unsigned32      notepad,
-  unsigned32      note
-)
-{
-  RTEMS_API_Control    *api;
- 
-  api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
-
-  if ( api )
-    api->Notepads[ notepad ] = note;
-}
-
-
-unsigned32 MY_task_get_note(
-  Thread_Control *the_thread,
-  unsigned32      notepad
-)
-{
-  RTEMS_API_Control    *api;
- 
-  api = the_thread->API_Extensions[ THREAD_API_RTEMS ];
-
-  return api->Notepads[ notepad ];
-}
-
-void *MY_CPU_Context_FP_start(
-  void       *base,
-  unsigned32  offset
-)
-{
-  return _CPU_Context_Fp_start( base, offset );
-}
 #endif

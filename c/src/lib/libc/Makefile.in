@@ -46,8 +46,8 @@ MALLOC_C_PIECES = malloc __brk __sbrk
 
 PASSWORD_GROUP_C_PIECES = getpwent getgrent
 
-LIBC_GLUE_C_PIECES = __gettod __times truncate access stat lstat pathconf \
-    newlibc no_libc
+LIBC_GLUE_C_PIECES = __getpid __gettod __times truncate access stat \
+    lstat pathconf newlibc no_posix no_libc
 
 UNIX_LIBC_C_PIECES = unixlibc hosterr
 
