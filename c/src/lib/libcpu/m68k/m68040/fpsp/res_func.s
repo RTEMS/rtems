@@ -24,7 +24,7 @@ RES_FUNC:    //idnt    2,1 | Motorola 040 Floating Point Software Package
 
 	|section	8
 
-	.include "fpsp.defs"
+#include "fpsp.defs"
 
 sp_bnds:	.short	0x3f81,0x407e
 		.short	0x3f6a,0x0000

@@ -91,7 +91,7 @@
 
 	|section	8
 
-	.include "fpsp.defs"
+#include "fpsp.defs"
 
 BOUNDS1:	.long 0x3FD78000,0x4004BC7E
 TWOBYPI:	.long 0x3FE45F30,0x6DC9C883

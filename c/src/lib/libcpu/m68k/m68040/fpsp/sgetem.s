@@ -32,7 +32,7 @@
 
 	|section 8
 
-	.include "fpsp.defs"
+#include "fpsp.defs"
 
 	|xref	nrm_set
 

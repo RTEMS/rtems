@@ -84,7 +84,7 @@
 
 	|section	8
 
-	.include "fpsp.defs"
+#include "fpsp.defs"
 
 BOUNDS1:	.long 0x3FB98000,0x400D80C0 // ... 2^(-70),16480
 BOUNDS2:	.long 0x3FB98000,0x400B9B07 // ... 2^(-70),16480 LOG2/LOG10

@@ -29,7 +29,7 @@
 
 	|section	8
 
-	.include "fpsp.defs"
+#include "fpsp.defs"
 
 	|xref	t_ovfl2
 	|xref	t_unfl

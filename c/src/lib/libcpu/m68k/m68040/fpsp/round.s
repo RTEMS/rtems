@@ -16,7 +16,7 @@
 
 	|section	8
 
-	.include "fpsp.defs"
+#include "fpsp.defs"
 
 //
 //	round --- round result according to precision/mode

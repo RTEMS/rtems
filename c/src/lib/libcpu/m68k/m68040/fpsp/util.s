@@ -24,7 +24,7 @@
 
 	|section	8
 
-	.include "fpsp.defs"
+#include "fpsp.defs"
 
 	|xref	mem_read
 

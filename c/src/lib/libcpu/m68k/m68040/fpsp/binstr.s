@@ -68,7 +68,7 @@
 
 	|section	8
 
-	.include "fpsp.defs"
+#include "fpsp.defs"
 
 	.global	binstr
 binstr:

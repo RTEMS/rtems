@@ -21,7 +21,7 @@ X_BSUN:	//idnt    2,1 | Motorola 040 Floating Point Software Package
 
 	|section	8
 
-	.include "fpsp.defs"
+#include "fpsp.defs"
 
 	|xref	real_bsun
 

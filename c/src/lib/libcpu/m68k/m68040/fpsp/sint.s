@@ -59,7 +59,7 @@
 
 	|section	8
 
-	.include "fpsp.defs"
+#include "fpsp.defs"
 
 	|xref	dnrm_lp
 	|xref	nrm_set

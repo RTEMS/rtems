@@ -71,7 +71,7 @@
 
 	|section	8
 
-	.include "fpsp.defs"
+#include "fpsp.defs"
 
 BOUNDS1:  .long 0x3FFEF07D,0x3FFF8841
 BOUNDS2:  .long 0x3FFE8000,0x3FFFC000

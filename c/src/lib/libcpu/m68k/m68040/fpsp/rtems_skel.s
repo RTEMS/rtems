@@ -45,7 +45,7 @@
 
 //SKELETON	idnt    2,1 | Motorola 040 Floating Point Software Package
 
-	.include "fpsp.defs"
+#include "fpsp.defs"
 
 //
 //	Divide by Zero exception
@@ -54,11 +54,11 @@
 //
 	.global	SYM(_fpspEntry_dz)
 SYM(_fpspEntry_dz):
-	link		%a6,#-LOCAL_SIZE
-	fsave		-(%sp)
-	bclrb		#E1,E_BYTE(%a6)
-	frestore	(%sp)+
-	unlk		%a6
+	link		a6,#-LOCAL_SIZE
+	fsave		-(sp)
+	bclrb		#E1,E_BYTE(a6)
+	frestore	(sp)+
+	unlk		a6
 	jmp		([SYM(M68040FPSPUserExceptionHandlers)+3*4],za0)
 
 //
@@ -85,32 +85,32 @@ SYM(_fpspEntry_dz):
 	.global	SYM(_fpspEntry_inex)
 	.global	real_inex
 SYM(_fpspEntry_inex):
-	link		%a6,#-LOCAL_SIZE
-	fsave		-(%sp)
-	cmpib		#VER_40,(%sp)		//test version number
+	link		a6,#-LOCAL_SIZE
+	fsave		-(sp)
+	cmpib		#VER_40,(sp)		//test version number
 	bnes		not_fmt40
-	fmovel		%fpsr,-(%sp)
-	btstb		#E1,E_BYTE(%a6)		//test for E1 set
+	fmovel		fpsr,-(sp)
+	btstb		#E1,E_BYTE(a6)		//test for E1 set
 	beqs		not_b1232
-	btstb		#snan_bit,2(%sp) //test for snan
+	btstb		#snan_bit,2(sp) //test for snan
 	beq		inex_ckofl
-	addl		#4,%sp
-	frestore	(%sp)+
-	unlk		%a6
+	addl		#4,sp
+	frestore	(sp)+
+	unlk		a6
 	bra		snan
 inex_ckofl:
-	btstb		#ovfl_bit,2(%sp) //test for ovfl
+	btstb		#ovfl_bit,2(sp) //test for ovfl
 	beq		inex_ckufl 
-	addl		#4,%sp
-	frestore	(%sp)+
-	unlk		%a6
+	addl		#4,sp
+	frestore	(sp)+
+	unlk		a6
 	bra		SYM(_fpspEntry_ovfl)
 inex_ckufl:
-	btstb		#unfl_bit,2(%sp) //test for unfl
+	btstb		#unfl_bit,2(sp) //test for unfl
 	beq		not_b1232
-	addl		#4,%sp
-	frestore	(%sp)+
-	unlk		%a6
+	addl		#4,sp
+	frestore	(sp)+
+	unlk		a6
 	bra		SYM(_fpspEntry_unfl)
 
 //
@@ -118,31 +118,31 @@ inex_ckufl:
 // real_inex.
 //
 not_b1232:
-	addl		#4,%sp
-	frestore	(%sp)+
-	unlk		%a6
+	addl		#4,sp
+	frestore	(sp)+
+	unlk		a6
 
 real_inex:
-	link		%a6,#-LOCAL_SIZE
-	fsave		-(%sp)
+	link		a6,#-LOCAL_SIZE
+	fsave		-(sp)
 not_fmt40:
-	bclrb		#E3,E_BYTE(%a6)		//clear and test E3 flag
+	bclrb		#E3,E_BYTE(a6)		//clear and test E3 flag
 	beqs		inex_cke1
 //
 // Clear dirty bit on dest resister in the frame before branching
 // to b1238_fix.
 //
-	moveml		%d0/%d1,USER_DA(%a6)
-	bfextu		CMDREG1B(%a6){#6:#3},%d0		//get dest reg no
-	bclrb		%d0,FPR_DIRTY_BITS(%a6)	//clr dest dirty bit
+	moveml		d0/d1,USER_DA(a6)
+	bfextu		CMDREG1B(a6){#6:#3},d0		//get dest reg no
+	bclrb		d0,FPR_DIRTY_BITS(a6)	//clr dest dirty bit
 	bsrl		b1238_fix		//test for bug1238 case
-	moveml		USER_DA(%a6),%d0/%d1
+	moveml		USER_DA(a6),d0/d1
 	bras		inex_done
 inex_cke1:
-	bclrb		#E1,E_BYTE(%a6)
+	bclrb		#E1,E_BYTE(a6)
 inex_done:
-	frestore	(%sp)+
-	unlk		%a6
+	frestore	(sp)+
+	unlk		a6
 	jmp	([SYM(M68040FPSPUserExceptionHandlers)+2*4],za0)
 	
 //
@@ -153,14 +153,14 @@ inex_done:
 SYM(_fpspEntry_ovfl):
 	jmp	fpsp_ovfl
 real_ovfl:
-	link		%a6,#-LOCAL_SIZE
-	fsave		-(%sp)
-	bclrb		#E3,E_BYTE(%a6)		//clear and test E3 flag
+	link		a6,#-LOCAL_SIZE
+	fsave		-(sp)
+	bclrb		#E3,E_BYTE(a6)		//clear and test E3 flag
 	bnes		ovfl_done
-	bclrb		#E1,E_BYTE(%a6)
+	bclrb		#E1,E_BYTE(a6)
 ovfl_done:
-	frestore	(%sp)+
-	unlk		%a6
+	frestore	(sp)+
+	unlk		a6
 	jmp	([SYM(M68040FPSPUserExceptionHandlers)+6*4],za0)
 	
 //
@@ -171,14 +171,14 @@ ovfl_done:
 SYM(_fpspEntry_unfl):
 	jmp	fpsp_unfl
 real_unfl:
-	link		%a6,#-LOCAL_SIZE
-	fsave		-(%sp)
-	bclrb		#E3,E_BYTE(%a6)		//clear and test E3 flag
+	link		a6,#-LOCAL_SIZE
+	fsave		-(sp)
+	bclrb		#E3,E_BYTE(a6)		//clear and test E3 flag
 	bnes		unfl_done
-	bclrb		#E1,E_BYTE(%a6)
+	bclrb		#E1,E_BYTE(a6)
 unfl_done:
-	frestore	(%sp)+
-	unlk		%a6
+	frestore	(sp)+
+	unlk		a6
 	jmp	([SYM(M68040FPSPUserExceptionHandlers)+4*4],za0)
 	
 //
@@ -190,11 +190,11 @@ SYM(_fpspEntry_snan):
 snan:
 	jmp	fpsp_snan
 real_snan:
-	link		%a6,#-LOCAL_SIZE
-	fsave		-(%sp)
-	bclrb		#E1,E_BYTE(%a6)	//snan is always an E1 exception
-	frestore	(%sp)+
-	unlk		%a6
+	link		a6,#-LOCAL_SIZE
+	fsave		-(sp)
+	bclrb		#E1,E_BYTE(a6)	//snan is always an E1 exception
+	frestore	(sp)+
+	unlk		a6
 	jmp	([SYM(M68040FPSPUserExceptionHandlers)+7*4],za0)
 
 //
@@ -205,11 +205,11 @@ real_snan:
 SYM(_fpspEntry_operr):
 	jmp	fpsp_operr
 real_operr:
-	link		%a6,#-LOCAL_SIZE
-	fsave		-(%sp)
-	bclrb		#E1,E_BYTE(%a6)	//operr is always an E1 exception
-	frestore	(%sp)+
-	unlk		%a6
+	link		a6,#-LOCAL_SIZE
+	fsave		-(sp)
+	bclrb		#E1,E_BYTE(a6)	//operr is always an E1 exception
+	frestore	(sp)+
+	unlk		a6
 	jmp	([SYM(M68040FPSPUserExceptionHandlers)+5*4],za0)
 	
 //
@@ -222,14 +222,14 @@ real_operr:
 SYM(_fpspEntry_bsun):
 	jmp	fpsp_bsun
 real_bsun:
-	link		%a6,#-LOCAL_SIZE
-	fsave		-(%sp)
-	bclrb		#E1,E_BYTE(%a6)	//bsun is always an E1 exception
-	fmovel		%FPSR,-(%sp)
-	bclrb		#nan_bit,(%sp)
-	fmovel		(%sp)+,%FPSR
-	frestore	(%sp)+
-	unlk		%a6
+	link		a6,#-LOCAL_SIZE
+	fsave		-(sp)
+	bclrb		#E1,E_BYTE(a6)	//bsun is always an E1 exception
+	fmovel		fpsr,-(sp)
+	bclrb		#nan_bit,(sp)
+	fmovel		(sp)+,fpsr
+	frestore	(sp)+
+	unlk		a6
 	jmp	([SYM(M68040FPSPUserExceptionHandlers)+1*4],za0)
 
 //
@@ -253,11 +253,11 @@ real_fline:
 SYM(_fpspEntry_unsupp):
 	jmp	fpsp_unsupp
 real_unsupp:
-	link		%a6,#-LOCAL_SIZE
-	fsave		-(%sp)
-	bclrb		#E1,E_BYTE(%a6)	//unsupp is always an E1 exception
-	frestore	(%sp)+
-	unlk		%a6
+	link		a6,#-LOCAL_SIZE
+	fsave		-(sp)
+	bclrb		#E1,E_BYTE(a6)	//unsupp is always an E1 exception
+	frestore	(sp)+
+	unlk		a6
 	jmp	([SYM(M68040FPSPUserExceptionHandlers)+8*4],za0)
 
 //
@@ -309,21 +309,21 @@ fpsp_done:
 //
 	.global	mem_write
 mem_write:
-	btstb	#5,EXC_SR(%a6)	//check for supervisor state
+	btstb	#5,EXC_SR(a6)	//check for supervisor state
 	beqs	user_write
 super_write:
-	moveb	(%a0)+,(%a1)+
-	subql	#1,%d0
+	moveb	(a0)+,(a1)+
+	subql	#1,d0
 	bnes	super_write
 	rts
 user_write:
-	movel	%d1,-(%sp)	//preserve d1 just in case
-	movel	%d0,-(%sp)
-	movel	%a1,-(%sp)
-	movel	%a0,-(%sp)
+	movel	d1,-(sp)	//preserve d1 just in case
+	movel	d0,-(sp)
+	movel	a1,-(sp)
+	movel	a0,-(sp)
 	jsr		copyout
-	addw	#12,%sp
-	movel	(%sp)+,%d1
+	addw	#12,sp
+	movel	(sp)+,d1
 	rts
 //
 //	mem_read --- read from user or supervisor address space
@@ -346,21 +346,21 @@ user_write:
 //
 	.global	mem_read
 mem_read:
-	btstb	#5,EXC_SR(%a6)	//check for supervisor state
+	btstb	#5,EXC_SR(a6)	//check for supervisor state
 	beqs	user_read
 super_read:
-	moveb	(%a0)+,(%a1)+
-	subql	#1,%d0
+	moveb	(a0)+,(a1)+
+	subql	#1,d0
 	bnes	super_read
 	rts
 user_read:
-	movel	%d1,-(%sp)	//preserve d1 just in case
-	movel	%d0,-(%sp)
-	movel	%a1,-(%sp)
-	movel	%a0,-(%sp)
+	movel	d1,-(sp)	//preserve d1 just in case
+	movel	d0,-(sp)
+	movel	a1,-(sp)
+	movel	a0,-(sp)
 	jsr		copyin
-	addw	#12,%sp
-	movel	(%sp)+,%d1
+	addw	#12,sp
+	movel	(sp)+,d1
 	rts
 
 //
@@ -369,29 +369,29 @@ user_read:
 // and copyin overwrites SFC.
 //
 copyout:
-	movel	4(%sp),%a0	// source
-	movel	8(%sp),%a1	// destination
-	movel	12(%sp),%d0	// count
-	subl	#1,%d0		// dec count by 1 for dbra
-	movel	#1,%d1
-	movec	%d1,%DFC		// set dfc for user data space
+	movel	4(sp),a0	// source
+	movel	8(sp),a1	// destination
+	movel	12(sp),d0	// count
+	subl	#1,d0		// dec count by 1 for dbra
+	movel	#1,d1
+	movec	d1,dfc		// set dfc for user data space
 moreout:
-	moveb	(%a0)+,%d1	// fetch supervisor byte
-	movesb	%d1,(%a1)+	// write user byte
-	dbf	%d0,moreout
+	moveb	(a0)+,d1	// fetch supervisor byte
+	movesb	d1,(a1)+	// write user byte
+	dbf	d0,moreout
 	rts
 
 copyin:
-	movel	4(%sp),%a0	// source
-	movel	8(%sp),%a1	// destination
-	movel	12(%sp),%d0	// count
-	subl	#1,%d0		// dec count by 1 for dbra
-	movel	#1,%d1
-	movec	%d1,%SFC		// set sfc for user space
+	movel	4(sp),a0	// source
+	movel	8(sp),a1	// destination
+	movel	12(sp),d0	// count
+	subl	#1,d0		// dec count by 1 for dbra
+	movel	#1,d1
+	movec	d1,sfc		// set sfc for user space
 morein:
-	movesb	(%a0)+,%d1	// fetch user byte
-	moveb	%d1,(%a1)+	// write supervisor byte
-	dbf	%d0,morein
+	movesb	(a0)+,d1	// fetch user byte
+	moveb	d1,(a1)+	// write supervisor byte
+	dbf	d0,morein
 	rts
 
 	|end
