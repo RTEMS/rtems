@@ -24,6 +24,7 @@ int fsync(
 
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
+  rtems_libio_check_is_open(iop);
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
 
   /*

@@ -66,6 +66,7 @@ int fstat(
 
   iop = rtems_libio_iop( fd );
   rtems_libio_check_fd( fd );
+  rtems_libio_check_is_open(iop);
 
   if ( !iop->handlers->fstat )
     set_errno_and_return_minus_one( ENOTSUP );

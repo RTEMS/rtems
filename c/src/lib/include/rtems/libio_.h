@@ -103,6 +103,20 @@ extern mode_t    rtems_filesystem_umask;
   ((((unsigned32)(_fd)) < rtems_libio_number_iops) ? \
          &rtems_libio_iops[_fd] : 0)
 
+/*  
+ *  rtems_libio_check_is_open
+ *  
+ *  Macro to check if a file descriptor is actually open.
+ */
+
+#define rtems_libio_check_is_open(_iop) \
+  do {                                               \
+      if (((_iop)->flags & LIBIO_FLAGS_OPEN) == 0) { \
+          errno = EBADF;                             \
+          return -1;                                 \
+      }                                              \
+  } while (0)
+
 /*
  *  rtems_libio_check_fd
  *
@@ -118,7 +132,7 @@ extern mode_t    rtems_filesystem_umask;
   } while (0)
 
 /*
- *  rtems_libio_check_fd
+ *  rtems_libio_check_buffer
  *
  *  Macro to check if a buffer pointer is valid.
  */

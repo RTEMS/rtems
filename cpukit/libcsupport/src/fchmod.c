@@ -29,6 +29,7 @@ int fchmod(
   
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
+  rtems_libio_check_is_open(iop);
 
   /*
    *  If this is not a file system based entity, it is an error.
