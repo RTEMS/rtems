@@ -122,15 +122,15 @@ endif
 AM_CPPFLAGS += -I$(top_builddir)
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-EXTRA_LIBRARIES = o-optimize/librtems.a
-o_optimize_librtems_a_SOURCES = $(C_FILES)
-o_optimize_librtems_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+EXTRA_LIBRARIES = librtems.a
+librtems_a_SOURCES = $(C_FILES)
+librtems_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-EXTRA_LIBRARIES += o-debug/librtems.a
-o_debug_librtems_a_SOURCES = $(C_FILES)
-o_debug_librtems_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+EXTRA_LIBRARIES += librtems_g.a
+librtems_g_a_SOURCES = $(C_FILES)
+librtems_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
-all-local: $(PREINSTALL_FILES) $(ARCH)/librtems.a
+all-local: $(PREINSTALL_FILES) librtems$(LIB_VARIANT).a
 
 EXTRA_DIST = $(STD_C_FILES) $(MP_C_FILES)
 
