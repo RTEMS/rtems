@@ -31,6 +31,5 @@ AC_CONFIG_FILES([Makefile
 src/Makefile
 src/imfs/Makefile
 src/dosfs/Makefile
-wrapup/Makefile
 ])
 AC_OUTPUT

@@ -4,7 +4,7 @@
 
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-SUBDIRS = src wrapup
+SUBDIRS = src
 
 EXTRA_DIST = README
 

@@ -1,15 +1,9 @@
-2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* src/dosfs/Makefile.am: Use .$(OBJEXT) instead of .o.
-	* src/src/imfs/Makefile.am: Ditto.
-
-2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-
-	* src/dosfs/Makefile.am: Use AM_CPPFLAGS instead of INCLUDES and
-	AM_CFLAGS. Eliminate LIBNAME.
-	* src/imfs/Makefile.am: Use AM_CPPFLAGS instead of INCLUDES and
-	AM_CFLAGS. Eliminate LIBNAME.
-	* wrapup/Makefile.am: Eliminate LIBNAME.
+	* wrapup/Makefile.am: Remove.
+	* wrapup/.cvsignore: Remove.
+	* Makefile.am: Remove wrapup SUBDIR.
+	* configure.ac: Remove wrapup/Makefile.
 
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
