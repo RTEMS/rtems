@@ -18,6 +18,18 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.4  2001/07/03 17:56:32  joel
+ * 2001-07-03	Mike Seirs <mike@poliac.com>
+ *
+ * 	* comm/tty_drv.c, comm/uart.c, comm/uart.h:  Adds the capability
+ * 	to use task driven serial I/O to ti386 BSPs. This patch leaves thex
+ * 	default I/O mode to be IRQ.  If you want to use task I/O mode,
+ * 	then the tty_drv.c file needs to be modified.  Basically, all
+ * 	you need to change is the data values of the termios callbacks
+ * 	structure.  This callback structure is used in the tty1_open
+ * 	and tty2_open functions.  The values you need to set are commented
+ * 	out in the source code.
+ *
  * Revision 1.3  2000/12/05 16:37:38  joel
  * 2000-12-01	Joel Sherrill <joel@OARcorp.com>
  *
@@ -198,7 +210,7 @@ tty1_open(rtems_device_major_number major,
   static rtems_termios_callbacks cb = 
   {
     NULL,                        /* firstOpen */
-    tty1_last_close,             /* lastClose */
+    NULL,                        /* lastClose */
     BSP_uart_termios_read_com1,  /* poll read */
     BSP_uart_termios_write_com1, /* write */
     tty1_conSetAttr,             /* setAttributes */
@@ -488,7 +500,7 @@ tty2_open(rtems_device_major_number major,
   static rtems_termios_callbacks cb = 
   {
     NULL,                        /* firstOpen */
-    tty2_last_close,             /* lastClose */
+    NULL,                        /* lastClose */
     BSP_uart_termios_read_com2,  /* poll read */
     BSP_uart_termios_write_com2, /* write */
     tty2_conSetAttr,             /* setAttributes */

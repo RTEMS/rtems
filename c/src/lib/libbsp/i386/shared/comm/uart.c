@@ -543,8 +543,8 @@ BSP_uart_termios_read_com2(int uart)
   char    buf[40];
 
   /* read current byte */
-  while (( off < sizeof(buf) ) && ( uread(BSP_UART_COM1, LSR) & DR )) {
-    buf[off++] = uread(BSP_UART_COM1, RBR);
+  while (( off < sizeof(buf) ) && ( uread(BSP_UART_COM2, LSR) & DR )) {
+    buf[off++] = uread(BSP_UART_COM2, RBR);
   }
 
   /* write out data */

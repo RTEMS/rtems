@@ -1,4 +1,8 @@
 
+	* comm/tty_drv.c, comm/uart.c: Correct some minor cut and paste bugs.
+
+2001-07-03	Mike Seirs <mike@poliac.com>
+
 	* comm/tty_drv.c, comm/uart.c, comm/uart.h:  Adds the capability
 	to use task driven serial I/O to ti386 BSPs. This patch leaves thex
 	default I/O mode to be IRQ.  If you want to use task I/O mode,
