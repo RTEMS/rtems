@@ -16,5 +16,8 @@
 #define set_errno_and_return_minus_one( _error ) \
   { errno = (_error); return -1; }
 
+#define set_errno_and_return_minus_one_cast( _error, _cast ) \
+  { errno = (_error); return (_cast) -1; }
+
 #endif
 /* end of include file */
