@@ -674,9 +674,16 @@ _ISR_Handler_Exception:
 
         /* CP0 special registers */
 
+#if __mips == 1
 	MFC0	 t0,C0_TAR
+#endif
         MFC0     t1,C0_BADVADDR
+	
+#if __mips == 1
         STREG	 t0,R_TAR*R_SZ(sp)
+#else
+	NOP
+#endif
         STREG    t1,R_BADVADDR*R_SZ(sp)
 	
 #if ( CPU_HARDWARE_FP == TRUE )
