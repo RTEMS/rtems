@@ -8,6 +8,9 @@
 
 @chapter I/O Manager
 
+@cindex device drivers
+@cindex IO Manager
+
 @section Introduction
 
 The input/output interface manager provides a
@@ -29,6 +32,8 @@ directives provided by the I/O manager are:
 @section Background
 
 @subsection Device Driver Table
+
+@cindex Device Driver Table
 
 Each application utilizing the RTEMS I/O manager must
 specify the address of a Device Driver Table in its
@@ -54,6 +59,9 @@ driver entry points.
 
 @subsection Major and Minor Device Numbers
 
+@cindex major device number
+@cindex minor device number
+
 Each call to the I/O manager must provide a device's
 major and minor numbers as arguments.  The major number is the
 index of the requested driver's entry points in the Device
@@ -63,6 +71,8 @@ commonly used to distinguish between a number of devices
 controlled by the same driver.
 
 @subsection Device Names
+
+@cindex device names
 
 The I/O Manager provides facilities to associate a
 name with a particular device.  Directives are provided to
@@ -100,6 +110,8 @@ for device drivers, it makes no assumptions regarding the
 construction or operation of a device driver.
 
 @subsection Device Driver Interface
+
+@cindex device driver interface
 
 When an application invokes an I/O manager directive,
 RTEMS determines which device driver entry point must be
@@ -198,13 +210,18 @@ subsection is dedicated to each of this manager's directives and
 describes the calling sequence, related constants, usage, and
 status codes.
 
+@c
+@c
+@c
 @page
 @subsection IO_INITIALIZE - Initialize a device driver
+
+@cindex initialize a device driver
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_io_initialize
+@findex rtems_io_initialize
 @example
 rtems_status_code rtems_io_initialize(
   rtems_device_major_number  major,
@@ -249,13 +266,18 @@ This directive may or may not cause the calling task
 to be preempted.  This is dependent on the device driver being
 initialized.
 
+@c
+@c
+@c
 @page
 @subsection IO_REGISTER_NAME - Register a device
+
+@cindex register device
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_io_register_name
+@findex rtems_io_register_name
 @example
 rtems_status_code rtems_io_register_name(
   char                      *name,
@@ -290,13 +312,18 @@ major/minor number pair.
 This directive will not cause the calling task to be
 preempted.
 
+@c
+@c
+@c
 @page
 @subsection IO_LOOKUP_NAME - Lookup a device
+
+@cindex lookup device major and minor number
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_io_lookup_name
+@findex rtems_io_lookup_name
 @example
 rtems_status_code rtems_io_lookup_name(
   const char                *name,
@@ -329,13 +356,18 @@ associated with the given device name in device_info.
 This directive will not cause the calling task to be
 preempted.
 
+@c
+@c
+@c
 @page
 @subsection IO_OPEN - Open a device
+
+@cindex open a devive
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_io_open
+@findex rtems_io_open
 @example
 rtems_status_code rtems_io_open(
   rtems_device_major_number  major,
@@ -374,13 +406,18 @@ This directive may or may not cause the calling task
 to be preempted.  This is dependent on the device driver being
 invoked.
 
+@c
+@c
+@c
 @page
 @subsection IO_CLOSE - Close a device
+
+@cindex close a device
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_io_close
+@findex rtems_io_close
 @example
 rtems_status_code rtems_io_close(
   rtems_device_major_number  major,
@@ -419,13 +456,18 @@ This directive may or may not cause the calling task
 to be preempted.  This is dependent on the device driver being
 invoked.
 
+@c
+@c
+@c
 @page
 @subsection IO_READ - Read from a device
+
+@cindex read from a device
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_io_read
+@findex rtems_io_read
 @example
 rtems_status_code rtems_io_read(
   rtems_device_major_number  major,
@@ -465,13 +507,18 @@ This directive may or may not cause the calling task
 to be preempted.  This is dependent on the device driver being
 invoked.
 
+@c
+@c
+@c
 @page
 @subsection IO_WRITE - Write to a device
+
+@cindex write to a device
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_io_write
+@findex rtems_io_write
 @example
 rtems_status_code rtems_io_write(
   rtems_device_major_number  major,
@@ -511,13 +558,19 @@ This directive may or may not cause the calling task
 to be preempted.  This is dependent on the device driver being
 invoked.
 
+@c
+@c
+@c
 @page
 @subsection IO_CONTROL - Special device services
+
+@cindex special device services
+@cindex IO Control
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_io_control
+@findex rtems_io_control
 @example
 rtems_status_code rtems_io_control(
   rtems_device_major_number  major,

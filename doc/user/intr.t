@@ -31,6 +31,8 @@ directive:
 
 @subsection Processing an Interrupt
 
+@cindex interrupt processing
+
 The interrupt manager allows the application to
 connect a function to a hardware interrupt vector.  When an
 interrupt occurs, the processor will automatically vector to
@@ -98,7 +100,6 @@ RTEMS directive.}
 
 @end itemize
 
-
 Consider a processor which allows a numerically low
 interrupt level to interrupt a numerically greater interrupt
 level.  In this example, if an RTEMS directive is used in a
@@ -113,6 +114,8 @@ outermost ISR terminates will the postponed dispatching occur.
 
 @subsection RTEMS Interrupt Levels
 
+@cindex interrupt levels
+
 Many processors support multiple interrupt levels or
 priorities.  The exact number of interrupt levels is processor
 dependent.  RTEMS internally supports 256 interrupt levels which
@@ -123,6 +126,8 @@ chapter of the Applications Supplement document for a specific
 target processor.
 
 @subsection Disabling of Interrupts by RTEMS
+
+@cindex disabling interrupts
 
 During the execution of directive calls, critical
 sections of code may be executed.  When these sections are
@@ -225,13 +230,19 @@ directives.  A subsection is dedicated to each of this manager's
 directives and describes the calling sequence, related
 constants, usage, and status codes.
 
+@c
+@c
+@c
 @page
 @subsection INTERRUPT_CATCH - Establish an ISR
+
+@cindex establish an ISR
+@cindex install an ISR
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_interrupt_catch
+@findex rtems_interrupt_catch
 @example
 rtems_status_code rtems_interrupt_catch(
   rtems_isr_entry      new_isr_handler,
@@ -277,13 +288,18 @@ will be ignored.
 
 This directive will not cause the calling task to be preempted.
 
+@c
+@c
+@c
 @page
 @subsection INTERRUPT_DISABLE - Disable Interrupts
+
+@cindex disable interrupts
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_interrupt_disable
+@findex rtems_interrupt_disable
 @example
 void rtems_interrupt_disable(
   rtems_interrupt_level  level
@@ -320,13 +336,18 @@ This directive will not cause the calling task to be preempted.
 parameter.}
 @end ifset
 
+@c
+@c
+@c
 @page
 @subsection INTERRUPT_ENABLE - Enable Interrupts
+
+@cindex enable interrupts
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_interrupt_enable
+@findex rtems_interrupt_enable
 @example
 void rtems_interrupt_enable(
   rtems_interrupt_level  level
@@ -360,13 +381,18 @@ and will be enabled when this directive returns to the caller.
 This directive will not cause the calling task to be preempted.
 
 
+@c
+@c
+@c
 @page
 @subsection INTERRUPT_FLASH - Flash Interrupts
+
+@cindex flash interrupts
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C 
-@c @findex rtems_interrupt_flash
+@findex rtems_interrupt_flash
 @example
 void rtems_interrupt_flash(
   rtems_interrupt_level level
@@ -399,13 +425,18 @@ and will be redisabled when this directive returns to the caller.
 
 This directive will not cause the calling task to be preempted.
 
+@c
+@c
+@c
 @page
 @subsection INTERRUPT_IS_IN_PROGRESS - Is an ISR in Progress
+
+@cindex is interrupt in progress
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_interrupt_is_in_progress
+@findex rtems_interrupt_is_in_progress
 @example
 rtems_boolean rtems_interrupt_is_in_progress( void );
 @end example

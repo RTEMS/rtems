@@ -8,6 +8,9 @@
 
 @chapter Message Manager
 
+@cindex messages
+@cindex message queues
+
 @section Introduction
 
 The message manager provides communication and
@@ -53,6 +56,8 @@ The maximum length message which can be sent is set
 on a per message queue basis.
 
 @subsection Building a Message Queue Attribute Set
+
+@cindex message queue attributes
 
 In general, an attribute set is built by a bitwise OR
 of the desired attribute components.  The set of valid message
@@ -211,13 +216,18 @@ directives.  A subsection is dedicated to each of this manager's
 directives and describes the calling sequence, related
 constants, usage, and status codes.
 
+@c
+@c
+@c
 @page
 @subsection MESSAGE_QUEUE_CREATE - Create a queue
+
+@cindex create a message queue
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_message_queue_create
+@findex rtems_message_queue_create
 @example
 rtems_status_code rtems_message_queue_create(
   rtems_name        name,
@@ -297,13 +307,18 @@ The total number of global objects, including message
 queues, is limited by the maximum_global_objects field in the
 configuration table.
 
+@c
+@c
+@c
 @page
 @subsection MESSAGE_QUEUE_IDENT - Get ID of a queue
+
+@cindex get ID of a message queue
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_message_queue_ident
+@findex rtems_message_queue_ident
 @example
 rtems_status_code rtems_message_queue_ident(
   rtems_name        name,
@@ -355,13 +370,18 @@ This directive does not generate activity on remote
 nodes.  It accesses only the local copy of the global object
 table.
 
+@c
+@c
+@c
 @page
 @subsection MESSAGE_QUEUE_DELETE - Delete a queue
+
+@cindex delete a message queue
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_message_queue_delete
+@findex rtems_message_queue_delete
 @example
 rtems_status_code rtems_message_queue_delete(
   rtems_id id
@@ -417,13 +437,18 @@ deletion from the local copy of the global object table.
 Proxies, used to represent remote tasks, are
 reclaimed when the message queue is deleted.
 
+@c
+@c
+@c
 @page
 @subsection MESSAGE_QUEUE_SEND - Put message at rear of a queue
+
+@cindex send message to a queue
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_message_queue_send
+@findex rtems_message_queue_send
 @example
 rtems_status_code rtems_message_queue_send(
   rtems_id           id,
@@ -476,13 +501,18 @@ node from the message queue, then the message is forwarded to
 the appropriate node, the waiting task is unblocked, and the
 proxy used to represent the task is reclaimed.
 
+@c
+@c
+@c
 @page
 @subsection MESSAGE_QUEUE_URGENT - Put message at front of a queue
+
+@cindex put message at front of queue
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_message_queue_urgent
+@findex rtems_message_queue_urgent
 @example
 rtems_status_code rtems_message_queue_urgent(
   rtems_id           id,
@@ -536,13 +566,18 @@ node from the message queue, then the message is forwarded to
 the appropriate node, the waiting task is unblocked, and the
 proxy used to represent the task is reclaimed.
 
+@c
+@c
+@c
 @page
 @subsection MESSAGE_QUEUE_BROADCAST - Broadcast N messages to a queue
+
+@cindex broadcast message to a queue
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_message_queue_broadcast
+@findex rtems_message_queue_broadcast
 @example
 rtems_status_code rtems_message_queue_broadcast(
   rtems_id           id,
@@ -600,13 +635,18 @@ node from the message queue, a copy of the message is forwarded
 to the appropriate node,  the waiting task is unblocked, and the
 proxy used to represent the task is reclaimed.
 
+@c
+@c
+@c
 @page
 @subsection MESSAGE_QUEUE_RECEIVE - Receive message from a queue
+
+@cindex receive message from a queue
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_message_queue_receive
+@findex rtems_message_queue_receive
 @example
 rtems_status_code rtems_message_queue_receive(
   rtems_id           id,
@@ -687,13 +727,18 @@ message is posted.
 A clock tick is required to support the timeout functionality of
 this directive.
 
+@c
+@c
+@c
 @page
 @subsection MESSAGE_QUEUE_GET_NUMBER_PENDING - Get number of messages pending on a queue
+
+@cindex get number of pending messages
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_message_queue_get_number_pending
+@findex rtems_message_queue_get_number_pending
 @example
 rtems_status_code rtems_message_queue_get_number_pending(
   rtems_id          id,
@@ -730,13 +775,18 @@ remote node to actually obtain the pending message count for
 the specified message queue.
 
 
+@c
+@c
+@c
 @page
 @subsection MESSAGE_QUEUE_FLUSH - Flush all messages on a queue
+
+@cindex flush messages on a queue
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_message_queue_flush
+@findex rtems_message_queue_flush
 @example
 rtems_status_code rtems_message_queue_flush(
   rtems_id          id,

@@ -8,6 +8,8 @@
 
 @chapter Clock Manager
 
+@cindex clock
+
 @section Introduction
 
 The clock manager provides support for time of day
@@ -218,13 +220,18 @@ A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
+@c
+@c
+@c
 @page
 @subsection CLOCK_SET - Set system date and time
 
 @subheading CALLING SEQUENCE:
 
+@cindex set the time of day
+
 @ifset is-C
-@c @findex rtems_clock_set
+@findex rtems_clock_set
 @example
 rtems_status_code rtems_clock_set(
   rtems_time_of_day *time_buffer
@@ -269,13 +276,18 @@ to be reset to an uninitialized state.  Another call to
 @code{@value{DIRPREFIX}clock_set} is required to re-initialize
 the system date and time to application specific specifications.
 
+@c
+@c
+@c
 @page
 @subsection CLOCK_GET - Get system date and time information
+
+@cindex obtain the time of day
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_clock_get
+@findex rtems_clock_get
 @example
 rtems_status_code rtems_clock_get(
   rtems_clock_get_options  option,
@@ -360,13 +372,18 @@ time to be reset to an uninitialized state.  Another call to
 @code{@value{DIRPREFIX}clock_set} is required to re-initialize the
 system date and time to application specific specifications.
 
+@c
+@c
+@c
 @page
 @subsection CLOCK_TICK - Announce a clock tick
+
+@cindex clock tick
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_clock_tick
+@findex rtems_clock_tick
 @example
 rtems_status_code rtems_clock_tick( void );
 @end example

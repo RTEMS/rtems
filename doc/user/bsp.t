@@ -8,7 +8,12 @@
 
 @chapter Board Support Packages
 
+@cindex Board Support Packages
+@cindex BSPs
+
 @section Introduction
+
+@cindex BSP, definition
 
 A board support package (BSP) is a collection of
 user-provided facilities which interface RTEMS and an

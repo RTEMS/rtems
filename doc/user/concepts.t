@@ -23,6 +23,8 @@ one with these concepts.
 
 @section Objects
 
+@cindex objects
+
 RTEMS provides directives which can be used to
 dynamically create, delete, and manipulate a set of predefined
 object types.  These types include tasks, message queues,
@@ -41,6 +43,8 @@ reflect the object's use in the application.  Conversely, object
 IDs are designed to facilitate efficient object manipulation by
 the executive.
 
+@cindex object name
+
 An object name is an unsigned thirty-two bit entity
 associated with the object by the user.  Although not required
 by RTEMS, object names are typically composed of four ASCII
@@ -54,6 +58,8 @@ application requires one-hundred tasks, it would be difficult to
 assign meaningful ASCII names to each task.  A more convenient
 approach would be to name them the binary values one through
 one-hundred, respectively.
+
+@cindex object ID
 
 @need 3000
 
@@ -179,6 +185,8 @@ user applications.
 
 @section Communication and Synchronization
 
+@cindex communication and synchronization
+
 In real-time multitasking applications, the ability
 for cooperating execution threads to communicate and synchronize
 with each other is imperative.  A real-time executive should
@@ -219,6 +227,8 @@ supports only asynchronous communication and is typically used
 for exception handling.
 
 @section Time
+
+@cindex time
 
 The development of responsive real-time applications
 requires an understanding of how RTEMS maintains and supports
@@ -266,6 +276,8 @@ provides a periodic clock tick.  This clock tick is typically
 provided by a real time clock or counter/timer device.
 
 @section Memory Management
+
+@cindex memory management
 
 RTEMS memory management facilities can be grouped
 into two classes: dynamic memory allocation and address

@@ -8,6 +8,9 @@
 
 @chapter Dual-Ported Memory Manager
 
+@cindex ports
+@cindex dual ported memory
+
 @section Introduction
 
 The dual-ported memory manager provides a mechanism
@@ -24,6 +27,10 @@ The directives provided by the dual-ported memory manager are:
 @end itemize
 
 @section Background
+
+@cindex dual ported memory, definition
+@cindex external addresses, definition
+@cindex internal addresses, definition
 
 A dual-ported memory area (DPMA) is an contiguous
 block of RAM owned by a particular processor but which can be
@@ -92,13 +99,18 @@ directives.  A subsection is dedicated to each of this manager's
 directives and describes the calling sequence, related
 constants, usage, and status codes.
 
+@c
+@c
+@c
 @page
 @subsection PORT_CREATE - Create a port
+
+@cindex create a port
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_port_create
+@findex rtems_port_create
 @example
 rtems_status_code rtems_port_create(
   rtems_name        name,
@@ -150,13 +162,19 @@ must be on a four byte boundary.
 This directive will not cause the calling task to be
 preempted.
 
+@c
+@c
+@c
 @page
 @subsection PORT_IDENT - Get ID of a port
+
+@cindex get ID of a port
+@cindex obtain ID of a port
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_port_ident
+@findex rtems_port_ident
 @example
 rtems_status_code rtems_port_ident(
   rtems_name  name,
@@ -193,13 +211,18 @@ other dual-ported memory area related directives.
 This directive will not cause the running task to be
 preempted.
 
+@c
+@c
+@c
 @page
 @subsection PORT_DELETE - Delete a port
+
+@cindex delete a port
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_port_delete
+@findex rtems_port_delete
 @example
 rtems_status_code rtems_port_delete(
   rtems_id id
@@ -235,13 +258,18 @@ The calling task does not have to be the task that
 created the port.  Any local task that knows the port id can
 delete the port.
 
+@c
+@c
+@c
 @page
 @subsection PORT_EXTERNAL_TO_INTERNAL - Convert external to internal address
+
+@cindex convert external to internal address
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_port_external_to_internal
+@findex rtems_port_external_to_internal
 @example
 rtems_status_code rtems_port_external_to_internal(
   rtems_id   id,
@@ -280,13 +308,18 @@ This directive is callable from an ISR.
 This directive will not cause the calling task to be
 preempted.
 
+@c
+@c
+@c
 @page
 @subsection PORT_INTERNAL_TO_EXTERNAL - Convert internal to external address
+
+@cindex convert internal to external address
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_port_internal_to_external
+@findex rtems_port_internal_to_external
 @example
 rtems_status_code rtems_port_internal_to_external(
   rtems_id   id,

@@ -8,6 +8,8 @@
 
 @chapter Task Manager
 
+@cindex tasks
+
 @section Introduction
 
 The task manager provides a comprehensive set of directives to
@@ -34,6 +36,8 @@ by the task manager are:
 @section Background
 
 @subsection Task Definition
+
+@cindex task, definition
 
 Many definitions of a task have been proposed in computer literature. 
 Unfortunately, none of these definitions encompasses all facets of the
@@ -87,6 +91,8 @@ the task's TCB.
 
 @subsection Task States
 
+@cindex task states
+
 A task may exist in one of the following five states:
 
 @itemize @bullet
@@ -109,6 +115,9 @@ current state and priority.
 
 @subsection Task Priority
 
+@cindex task priority
+@cindex priority, task
+
 A task's priority determines its importance in relation to the
 other tasks executing on the same processor.  RTEMS supports 255
 levels of priority ranging from 1 to 255.  Tasks of numerically
@@ -130,6 +139,8 @@ processor execution time.
 
 @subsection Task Mode
 
+@cindex task mode
+
 A task's mode is a combination of the following four components:
 
 @itemize @bullet
@@ -142,6 +153,8 @@ A task's mode is a combination of the following four components:
 It is used to modify RTEMS' scheduling process and to alter the
 execution environment of the task. 
 
+@cindex preemption
+
 The preemption component allows a task to determine when control of the
 processor is relinquished.  If preemption is disabled
 (@code{@value{RPREFIX}NO_PREEMPT}), the task will retain control of the
@@ -150,6 +163,8 @@ priority task is made ready.  If preemption is enabled
 (@code{@value{RPREFIX}PREEMPT})  and a higher priority task is made ready,
 then the processor will be taken away from the current task immediately and
 given to the higher priority task. 
+
+@cindex timeslicing
 
 The timeslicing component is used by the RTEMS scheduler to determine how
 the processor is allocated to tasks of equal priority.  If timeslicing is
@@ -171,6 +186,8 @@ signals received by the task will remain posted until signal processing is
 enabled.  This component affects only tasks which have established a
 routine to process asynchronous signals.
 
+@cindex interrupt level, task
+
 The interrupt level component is used to determine which
 interrupts will be enabled when the task is executing. 
 @code{@value{RPREFIX}INTERRUPT_LEVEL(n)}
@@ -188,6 +205,8 @@ specifies that the task will execute at interrupt level n.
 @end itemize
 
 @subsection Accessing Task Arguments
+
+@cindex task arguments
 
 All RTEMS tasks are invoked with a single argument which is
 specified when they are started or restarted.  The argument is
@@ -215,6 +234,8 @@ Application tasks requiring more information may view this
 single argument as an index into an array of parameter blocks.
 
 @subsection Floating Point Considerations
+
+@cindex floating point
 
 Creating a task with the @code{@value{RPREFIX}FLOATING_POINT} flag results
 in additional memory being allocated for the TCB to store the state of the
@@ -267,6 +288,8 @@ generally result in an exception condition.
 
 @subsection Building a Task Attribute Set
 
+@cindex task attributes, building
+
 In general, an attribute set is built by a bitwise OR of the
 desired components.  The set of valid task attribute components
 is listed below:
@@ -297,6 +320,8 @@ coprocessor, then the attribute_set parameter would be
 @code{@value{RPREFIX}GLOBAL @value{OR} @value{RPREFIX}FLOATING_POINT}. 
 
 @subsection Building a Mode and Mask
+
+@cindex task mode, building
 
 In general, a mode and its corresponding mask is built by a
 bitwise OR of the desired components.  The set of valid mode
@@ -598,10 +623,12 @@ status codes.
 
 @subsection TASK_CREATE - Create a task
 
+@cindex create a task
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_create
+@findex rtems_task_create
 @example
 rtems_status_code rtems_task_create(
   rtems_name           name,
@@ -708,10 +735,12 @@ by the maximum_global_objects field in the Configuration Table.
 
 @subsection TASK_IDENT - Get ID of a task
 
+@cindex get ID of a task
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_ident
+@findex rtems_task_ident
 @example
 rtems_status_code rtems_task_ident(
   rtems_name        name,
@@ -764,10 +793,12 @@ accesses only the local copy of the global object table.
 
 @subsection TASK_START - Start a task
 
+@cindex starting a task
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_start
+@findex rtems_task_start
 @example
 rtems_status_code rtems_task_start(
   rtems_id            id,
@@ -815,10 +846,12 @@ the @code{@value{DIRPREFIX}task_start} directive.
 
 @subsection TASK_RESTART - Restart a task
 
+@cindex restarting a task
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_restart
+@findex rtems_task_restart
 @example
 rtems_status_code rtems_task_restart(
   rtems_id            id,
@@ -878,10 +911,12 @@ created with the @code{@value{RPREFIX}GLOBAL} option.
 
 @subsection TASK_DELETE - Delete a task
 
+@cindex deleting a task
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_delete
+@findex rtems_task_delete
 @example
 rtems_status_code rtems_task_delete(
   rtems_id id
@@ -936,10 +971,12 @@ created with the @code{@value{RPREFIX}GLOBAL} option.
 
 @subsection TASK_SUSPEND - Suspend a task
 
+@cindex suspending a task
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_suspend
+@findex rtems_task_suspend
 @example
 rtems_status_code rtems_task_suspend(
   rtems_id id
@@ -986,10 +1023,12 @@ If the task specified by id is already suspended, then the
 
 @subsection TASK_RESUME - Resume a task
 
+@cindex resuming a task
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_resume
+@findex rtems_task_resume
 @example
 rtems_status_code rtems_task_resume(
   rtems_id id
@@ -1033,10 +1072,12 @@ If the task specified by id is not suspended, then the
 
 @subsection TASK_IS_SUSPENDED - Determine if a task is Suspended
 
+@cindex is task suspended
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_is_suspended
+@findex rtems_task_is_suspended
 @example
 rtems_status_code rtems_task_is_suspended(
   rtems_id id
@@ -1072,10 +1113,15 @@ This operation is not currently supported on remote tasks.
 
 @subsection TASK_SET_PRIORITY - Set task priority
 
+@findex rtems_task_set_priority
+@cindex current task priority
+@cindex set task priority
+@cindex get task priority
+@cindex obtain task priority
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_set_priority
 @example
 rtems_status_code rtems_task_set_priority(
   rtems_id             id,
@@ -1136,10 +1182,17 @@ binary semaphores.
 
 @subsection TASK_MODE - Change the current task mode
 
+@cindex current task mode
+@cindex set task mode
+@cindex get task mode
+@cindex set task preemption mode
+@cindex get task preemption mode
+@cindex obtain task mode
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_mode
+@findex rtems_task_mode
 @example
 rtems_status_code rtems_task_mode(
   rtems_mode  mode_set,
@@ -1292,10 +1345,12 @@ mask constant is provided in the following table:
 
 @subsection TASK_GET_NOTE - Get task notepad entry
 
+@cindex get task notepad entry
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_get_note
+@findex rtems_task_get_note
 @example
 rtems_status_code rtems_task_get_note(
   rtems_id          id,
@@ -1346,10 +1401,12 @@ the notepad entry of the specified task.
 
 @subsection TASK_SET_NOTE - Set task notepad entry
 
+@cindex set task notepad entry
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_set_note
+@findex rtems_task_set_note
 @example
 rtems_status_code rtems_task_set_note(
   rtems_id         id,
@@ -1400,10 +1457,13 @@ node to set the specified notepad entry.
 
 @subsection TASK_WAKE_AFTER - Wake up after interval
 
+@cindex delay a task for an interval
+@cindex wake up after an interval
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_wake_after
+@findex rtems_task_wake_after
 @example
 rtems_status_code rtems_task_wake_after(
   rtems_interval ticks
@@ -1446,10 +1506,13 @@ A clock tick is required to support the functionality of this directive.
 
 @subsection TASK_WAKE_WHEN - Wake up when specified
 
+@cindex delay a task until a wall time
+@cindex wake up at a wall time
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_task_wake_when
+@findex rtems_task_wake_when
 @example
 rtems_status_code rtems_task_wake_when(
   rtems_time_of_day *time_buffer

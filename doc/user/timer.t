@@ -8,6 +8,8 @@
 
 @chapter Timer Manager
 
+@cindex timers
+
 @section Introduction
 
 The timer manager provides support for timer
@@ -152,13 +154,18 @@ A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
+@c
+@c
+@c
 @page
 @subsection TIMER_CREATE - Create a timer
+
+@cindex create a timer
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_timer_create
+@findex rtems_timer_create
 @example
 rtems_status_code rtems_timer_create(
   rtems_name  name,
@@ -195,13 +202,18 @@ and initializes it.
 This directive will not cause the calling task to be
 preempted.
 
+@c
+@c
+@c
 @page
 @subsection TIMER_IDENT - Get ID of a timer
+
+@cindex obtain the ID of a timer
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_timer_ident
+@findex rtems_timer_ident
 @example
 rtems_status_code rtems_timer_ident(
   rtems_name  name,
@@ -238,13 +250,18 @@ other timer related directives.
 This directive will not cause the running task to be
 preempted.
 
+@c
+@c
+@c
 @page
 @subsection TIMER_CANCEL - Cancel a timer
+
+@cindex cancel a timer
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_timer_cancel
+@findex rtems_timer_cancel
 @example
 rtems_status_code rtems_timer_cancel(
   rtems_id id
@@ -276,13 +293,18 @@ be reinitiated by the next invocation of @code{@value{DIRPREFIX}timer_reset},
 
 This directive will not cause the running task to be preempted.
 
+@c
+@c
+@c
 @page
 @subsection TIMER_DELETE - Delete a timer
+
+@cindex delete a timer
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_timer_delete
+@findex rtems_timer_delete
 @example
 rtems_status_code rtems_timer_delete(
   rtems_id id
@@ -317,13 +339,18 @@ preempted.
 A timer can be deleted by a task other than the task
 which created the timer.
 
+@c
+@c
+@c
 @page
 @subsection TIMER_FIRE_AFTER - Fire timer after interval
+
+@cindex fire a timer after an interval
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_timer_fire_after
+@findex rtems_timer_fire_after
 @example
 rtems_status_code rtems_timer_fire_after(
   rtems_id                           id,
@@ -365,13 +392,18 @@ argument user_data.
 This directive will not cause the running task to be
 preempted.
 
+@c
+@c
+@c
 @page
 @subsection TIMER_FIRE_WHEN - Fire timer when specified
+
+@cindex fire a timer at wall time
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_timer_fire_when
+@findex rtems_timer_fire_when
 @example
 rtems_status_code rtems_timer_fire_when(
   rtems_id                           id,
@@ -414,13 +446,18 @@ user_data.
 This directive will not cause the running task to be
 preempted.
 
+@c
+@c
+@c
 @page
 @subsection TIMER_RESET - Reset an interval timer
+
+@cindex reset a timer
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_timer_reset
+@findex rtems_timer_reset
 @example
 rtems_status_code rtems_timer_reset(
   rtems_id   id

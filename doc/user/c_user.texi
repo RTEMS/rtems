@@ -37,6 +37,7 @@ END-INFO-DIR-ENTRY
 @end ifinfo
 @end ignore
 
+@c @syncodeindex fn cp
 @c variable substitution info:
 @c
 @set is-C
@@ -154,15 +155,16 @@ This is the online version of the RTEMS C User's Guide.
 @node Command and Variable Index, Concept Index, Glossary, Top
 @unnumbered Command and Variable Index
 
-There are currently no Command and Variable Index entries.
+@printindex fn
 
-@c @printindex fn
+@c There are currently no Command and Variable Index entries.
+
 
 @node Concept Index, , Command and Variable Index, Top
 @unnumbered Concept Index
 
-There are currently no Concept Index entries.
-@c @printindex cp
+@c There are currently no Concept Index entries.
+@printindex cp
 
 @contents
 @bye

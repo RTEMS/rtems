@@ -8,6 +8,8 @@
 
 @chapter Fatal Error Manager
 
+@cindex fatal errors
+
 @section Introduction
 
 The fatal error manager processes all fatal or
@@ -19,6 +21,10 @@ manager is:
 @end itemize
 
 @section Background
+
+@cindex fatal error detection
+@cindex fatal error processing
+@cindex fatal error user extension
 
 The fatal error manager is called upon detection of
 an irrecoverable error condition by either RTEMS or the
@@ -110,13 +116,19 @@ directives.  A subsection is dedicated to each of this manager's
 directives and describes the calling sequence, related
 constants, usage, and status codes.
 
+@c
+@c
+@c
 @page
 @subsection FATAL_ERROR_OCCURRED - Invoke the fatal error handler
+
+@cindex announce fatal error
+@cindex fatal error, announce
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_fatal_error_occurred
+@findex rtems_fatal_error_occurred
 @example
 void volatile rtems_fatal_error_occurred(
   rtems_unsigned32        the_error

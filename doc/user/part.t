@@ -8,6 +8,8 @@
 
 @chapter Partition Manager
 
+@cindex partitions
+
 @section Introduction
 
 The partition manager provides facilities to
@@ -26,9 +28,13 @@ provided by the partition manager are:
 
 @subsection Partition Manager Definitions
 
+@cindex partition, definition
+
 A partition is a physically contiguous memory area
 divided into fixed-size buffers that can be dynamically
 allocated and deallocated.
+
+@cindex buffers, definition
 
 Partitions are managed and maintained as a list of
 buffers.  Buffers are obtained from the front of the partition's
@@ -42,6 +48,8 @@ adjacent allocated buffer.
 
 @subsection Building a Partition Attribute Set
 
+@cindex partition attribute set, building
+
 In general, an attribute set is built by a bitwise OR
 of the desired attribute components.  The set of valid partition
 attributes is provided in the following table:
@@ -50,7 +58,6 @@ attributes is provided in the following table:
 @item @code{@value{RPREFIX}LOCAL} - local task (default)
 @item @code{@value{RPREFIX}GLOBAL} - global task
 @end itemize
-
 
 Attribute values are specifically designed to be
 mutually exclusive, therefore bitwise OR and addition operations
@@ -123,13 +130,18 @@ directives.  A subsection is dedicated to each of this manager's
 directives and describes the calling sequence, related
 constants, usage, and status codes.
 
+@c
+@c
+@c
 @page
 @subsection PARTITION_CREATE - Create a partition
+
+@cindex create a partition
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_partition_create
+@findex rtems_partition_create
 @example
 rtems_status_code rtems_partition_create(
   rtems_name        name,
@@ -210,13 +222,19 @@ The total number of global objects, including
 partitions, is limited by the maximum_global_objects field in
 the Configuration Table.
 
+@c
+@c
+@c
 @page
 @subsection PARTITION_IDENT - Get ID of a partition
+
+@cindex get ID of a partition
+@cindex obtain ID of a partition
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_partition_ident
+@findex rtems_partition_ident
 @example
 rtems_status_code rtems_partition_ident(
   rtems_name        name,
@@ -268,13 +286,18 @@ This directive does not generate activity on remote
 nodes.  It accesses only the local copy of the global object
 table.
 
+@c
+@c
+@c
 @page
 @subsection PARTITION_DELETE - Delete a partition
+
+@cindex delete a partition
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_partition_delete
+@findex rtems_partition_delete
 @example
 rtems_status_code rtems_partition_delete(
   rtems_id id
@@ -320,13 +343,19 @@ from the local copy of the global object table.
 The partition must reside on the local node, even if
 the partition was created with the @code{@value{RPREFIX}GLOBAL} option.
 
+@c
+@c
+@c
 @page
 @subsection PARTITION_GET_BUFFER - Get buffer from a partition
+
+@cindex get buffer from partition
+@cindex obtain buffer from partition
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_partition_get_buffer
+@findex rtems_partition_get_buffer
 @example
 rtems_status_code rtems_partition_get_buffer(
   rtems_id   id,
@@ -369,13 +398,18 @@ Getting a buffer from a global partition which does
 not reside on the local node will generate a request telling the
 remote node to allocate a buffer from the specified partition.
 
+@c
+@c
+@c
 @page
 @subsection PARTITION_RETURN_BUFFER - Return buffer to a partition
+
+@cindex return buffer to partitition
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_partition_return_buffer
+@findex rtems_partition_return_buffer
 @example
 rtems_status_code rtems_partition_return_buffer(
   rtems_id  id,

@@ -8,6 +8,8 @@
 
 @chapter User Extensions Manager
 
+@cindex user extensions
+
 @section Introduction
 
 The RTEMS User Extensions Manager allows the
@@ -43,6 +45,8 @@ These extensions are invoked as a function with
 arguments that are appropriate to the system event.
 
 @subsection Extension Sets
+
+@cindex extension set
 
 An extension set is defined as a set of routines
 which are invoked at each of the critical system events at which
@@ -117,6 +121,8 @@ All user extensions are optional and RTEMS places no
 naming  restrictions on the user.
 
 @subsection TCB Extension Area
+
+@cindex TCB extension area
 
 RTEMS provides for a pointer to a user-defined data
 area for each extension set to be linked to each task's control
@@ -525,13 +531,18 @@ directives.  A subsection is dedicated to each of this manager's
 directives and describes the calling sequence, related
 constants, usage, and status codes.
 
+@c
+@c
+@c
 @page
 @subsection EXTENSION_CREATE - Create a extension set
+
+@cindex create an extension set
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_extension_create
+@findex rtems_extension_create
 @example
 rtems_status_code rtems_extension_create(
   rtems_name              name,
@@ -571,13 +582,19 @@ it.
 This directive will not cause the calling task to be
 preempted.
 
+@c
+@c
+@c
 @page
 @subsection EXTENSION_IDENT - Get ID of a extension set
+
+@cindex get ID of an extension set
+@cindex obtain ID of an extension set
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_extension_ident
+@findex rtems_extension_ident
 @example
 rtems_status_code rtems_extension_ident(
   rtems_name  name,
@@ -615,13 +632,18 @@ extension set in other extension set related directives.
 This directive will not cause the running task to be
 preempted.
 
+@c
+@c
+@c
 @page
 @subsection EXTENSION_DELETE - Delete a extension set
+
+@cindex delete an extension set
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_extension_delete
+@findex rtems_extension_delete
 @example
 rtems_status_code rtems_extension_delete(
   rtems_id id

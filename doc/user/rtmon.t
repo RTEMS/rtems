@@ -14,6 +14,9 @@
 
 @chapter Rate Monotonic Manager
 
+@cindex rate mononitonic tasks
+@cindex periodic tasks
+
 @section Introduction
 
 The rate monotonic manager provides facilities to
@@ -46,6 +49,8 @@ A clock tick is required to support the functionality provided by this manager.
 
 @subsection Rate Monotonic Manager Definitions
 
+@cindex periodic task, definition
+
 A periodic task is one which must be executed at a
 regular interval.  The interval between successive iterations of
 the task is referred to as its period.  Periodic tasks can be
@@ -61,11 +66,15 @@ the execution time may be the average, worst, or best case, the
 worst-case execution time is more appropriate for use when
 analyzing system behavior under transient overload conditions.
 
+@cindex aperiodic task, definition
+
 In contrast, an aperiodic task executes at irregular
 intervals and has only a soft deadline.  In other words, the
 deadlines for aperiodic tasks are not rigid, but adequate
 response times are desirable.  For example, an aperiodic task
 may process user input from a terminal.
+
+@cindex sporadic task, definition
 
 Finally, a sporadic task is an aperiodic task with a
 hard deadline and minimum interarrival time.  The minimum
@@ -77,6 +86,9 @@ insures a minimum time period between successive activations,
 but the missile must be launched by a hard deadline.
 
 @subsection Rate Monotonic Scheduling Algorithm
+
+@cindex Rate Monotonic Scheduling Algorithm, definition
+@cindex RMS Algorithm, definition
 
 The Rate Monotonic Scheduling Algorithm (RMS) is
 important to real-time systems designers because it allows one
@@ -196,6 +208,8 @@ schedulability is only guaranteed for the critical task set.
 
 @subsection Schedulability Analysis
 
+@cindex RMS schedulability analysis
+
 RMS allows application designers to insure that tasks
 can meet all deadlines, even under transient overload, without
 knowing exactly when any given task will execute by applying
@@ -232,6 +246,8 @@ some of the above assumptions can be relaxed and the
 side-effects accounted for.
 
 @subsection Processor Utilization Rule
+
+@cindex RMS Processor Utilization Rule
 
 The Processor Utilization Rule requires that
 processor utilization be calculated based upon the period and
@@ -346,6 +362,8 @@ The total processor utilization for this task set is
 this task set is guaranteed to be schedulable using RMS.
 
 @subsection First Deadline Rule
+
+@cindex RMS First Deadline Rule
 
 If a given set of tasks do exceed the processor
 utilization upper limit imposed by the Processor Utilization
@@ -828,13 +846,18 @@ directives.  A subsection is dedicated to each of this manager's
 directives and describes the calling sequence, related
 constants, usage, and status codes.
 
+@c
+@c
+@c
 @page
 @subsection RATE_MONOTONIC_CREATE - Create a rate monotonic period
+
+@cindex create a period
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_rate_monotonic_create
+@findex rtems_rate_monotonic_create
 @example
 rtems_status_code rtems_rate_monotonic_create(
   rtems_name  name,
@@ -872,13 +895,19 @@ initializes it.
 This directive will not cause the calling task to be
 preempted.
 
+@c
+@c
+@c
 @page
 @subsection RATE_MONOTONIC_IDENT - Get ID of a period
+
+@cindex get ID of a period
+@cindex obtain ID of a period
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_rate_monotonic_ident
+@findex rtems_rate_monotonic_ident
 @example
 rtems_status_code rtems_rate_monotonic_ident(
   rtems_name  name,
@@ -915,13 +944,18 @@ access this period in other rate monotonic manager directives.
 This directive will not cause the running task to be
 preempted.
 
+@c
+@c
+@c
 @page
 @subsection RATE_MONOTONIC_CANCEL - Cancel a period
+
+@cindex cancel a period
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_rate_monotonic_cancel
+@findex rtems_rate_monotonic_cancel
 @example
 rtems_status_code rtems_rate_monotonic_cancel(
   rtems_id id
@@ -957,13 +991,18 @@ preempted.
 The rate monotonic period specified by id must have
 been created by the calling task.
 
+@c
+@c
+@c
 @page
 @subsection RATE_MONOTONIC_DELETE - Delete a rate monotonic period
+
+@cindex delete a period
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_rate_monotonic_delete
+@findex rtems_rate_monotonic_delete
 @example
 rtems_status_code rtems_rate_monotonic_delete(
   rtems_id id
@@ -998,13 +1037,20 @@ preempted.
 A rate monotonic period can be deleted by a task
 other than the task which created the period.
 
+@c
+@c
+@c
 @page
 @subsection RATE_MONOTONIC_PERIOD - Conclude current/Start next period
+
+@cindex conclude current period
+@cindex start current period
+@cindex period initiation
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_rate_monotonic_period
+@findex rtems_rate_monotonic_period
 @example
 rtems_status_code rtems_rate_monotonic_period(
   rtems_id       id,
@@ -1049,14 +1095,19 @@ the state or period of the period.
 
 This directive will not cause the running task to be preempted.
 
----------------------
+@c
+@c
+@c
 @page
 @subsection RATE_MONOTONIC_GET_STATUS - Obtain status information on period
+
+@cindex get status of period
+@cindex obtain status of period
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_rate_monotonic_get_status
+@findex rtems_rate_monotonic_get_status
 @example
 rtems_status_code rtems_rate_monotonic_get_status(
   rtems_id                            id,

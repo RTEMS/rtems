@@ -8,6 +8,11 @@
 
 @chapter Semaphore Manager
 
+@cindex semaphores
+@cindex binary semaphores
+@cindex counting semaphores
+@cindex mutual exclusion
+
 @section Introduction
 
 The semaphore manager utilizes standard Dijkstra
@@ -209,16 +214,15 @@ defaults are desired, the attribute
 @code{@value{RPREFIX}DEFAULT_ATTRIBUTES} should be
 specified on this call.
 
-This example demonstrates the attribute_set parameter
-needed to create a local semaphore with the task priority
-waiting queue discipline.  The attribute_set parameter passed to
-the @code{@value{DIRPREFIX}semaphore_create} directive could be either
-@code{@value{RPREFIX}PRIORITY} or
-@code{@value{RPREFIX}LOCAL @value{OR} @value{RPREFIX}PRIORITY}.  
-The attribute_set parameter can be set to @code{@value{RPREFIX}PRIORITY}
-because @code{@value{RPREFIX}LOCAL} is the default for all created tasks.  If a
-similar semaphore were to be known globally, then the
-attribute_set parameter would be
+This example demonstrates the attribute_set parameter needed to create a
+local semaphore with the task priority waiting queue discipline.  The
+attribute_set parameter passed to the
+@code{@value{DIRPREFIX}semaphore_create} directive could be either
+@code{@value{RPREFIX}PRIORITY} or @code{@value{RPREFIX}LOCAL @value{OR}
+@value{RPREFIX}PRIORITY}.  The attribute_set parameter can be set to
+@code{@value{RPREFIX}PRIORITY} because @code{@value{RPREFIX}LOCAL} is the
+default for all created tasks.  If a similar semaphore were to be known
+globally, then the attribute_set parameter would be
 @code{@value{RPREFIX}GLOBAL @value{OR} @value{RPREFIX}PRIORITY}.
 
 @subsection Building a SEMAPHORE_OBTAIN Option Set
@@ -233,13 +237,12 @@ in the following table:
 @item @code{@value{RPREFIX}NO_WAIT} - task should not wait
 @end itemize
 
-Option values are specifically designed to be
-mutually exclusive, therefore bitwise OR and addition operations
-are equivalent as long as each attribute appears exactly once in
-the component list.  An option listed as a default is not
-required to appear in the list, although it is a good
-programming practice to specify default options.  If all
-defaults are desired, the option @code{@value{RPREFIX}DEFAULT_OPTIONS} should be
+Option values are specifically designed to be mutually exclusive,
+therefore bitwise OR and addition operations are equivalent as long as
+each attribute appears exactly once in the component list.  An option
+listed as a default is not required to appear in the list, although it is
+a good programming practice to specify default options.  If all defaults
+are desired, the option @code{@value{RPREFIX}DEFAULT_OPTIONS} should be
 specified on this call.
 
 This example demonstrates the option parameter needed
@@ -302,8 +305,8 @@ one of the following situations applies:
 @item By default, the calling task will wait forever to
 acquire the semaphore.
 
-@item Specifying @code{@value{RPREFIX}NO_WAIT} forces an immediate return with an
-error status code.
+@item Specifying @code{@value{RPREFIX}NO_WAIT} forces an immediate return
+with an error status code.
 
 @item Specifying a timeout limits the interval the task will
 wait before returning with an error status code.
@@ -327,7 +330,8 @@ be elevated.
 
 The @code{@value{DIRPREFIX}semaphore_release} directive is used to release
 the specified semaphore.  A simplified version of the
-@code{@value{DIRPREFIX}semaphore_release} directive can be described as follows:
+@code{@value{DIRPREFIX}semaphore_release} directive can be described as
+follows:
 
 @example
 if no tasks are waiting on this semaphore
@@ -360,13 +364,18 @@ directives.  A subsection is dedicated to each of this manager's
 directives and describes the calling sequence, related
 constants, usage, and status codes.
 
+@c
+@c
+@c
 @page
 @subsection SEMAPHORE_CREATE - Create a semaphore
+
+@cindex create a semaphore
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_semaphore_create
+@findex rtems_semaphore_create
 @example
 rtems_status_code rtems_semaphore_create(
   rtems_name           name,
@@ -462,13 +471,19 @@ The total number of global objects, including
 semaphores, is limited by the maximum_global_objects field in
 the Configuration Table.
 
+@c
+@c
+@c
 @page
 @subsection SEMAPHORE_IDENT - Get ID of a semaphore
+
+@cindex get ID of a semaphore
+@cindex obtain ID of a semaphore
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_semaphore_ident
+@findex rtems_semaphore_ident
 @example
 rtems_status_code rtems_semaphore_ident(
   rtems_name        name,
@@ -520,13 +535,18 @@ This directive does not generate activity on remote
 nodes.  It accesses only the local copy of the global object
 table.
 
+@c
+@c
+@c
 @page
 @subsection SEMAPHORE_DELETE - Delete a semaphore
+
+@cindex delete a semaphore
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_semaphore_delete
+@findex rtems_semaphore_delete
 @example
 rtems_status_code rtems_semaphore_delete(
   rtems_id id
@@ -579,13 +599,19 @@ the semaphore was created with the @code{@value{RPREFIX}GLOBAL} option.
 Proxies, used to represent remote tasks, are
 reclaimed when the semaphore is deleted.
 
+@c
+@c
+@c
 @page
 @subsection SEMAPHORE_OBTAIN - Acquire a semaphore
+
+@cindex obtain a semaphore
+@cindex lock a semaphore
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_semaphore_obtain
+@findex rtems_semaphore_obtain
 @example
 rtems_status_code rtems_semaphore_obtain(
   rtems_id         id,
@@ -624,31 +650,30 @@ semaphore is not currently available.  With either @code{@value{RPREFIX}WAIT} or
 decremented by one and the semaphore is successfully acquired by
 returning immediately with a successful return code.
 
-If the calling task chooses to return immediately and
-the current semaphore count is zero or negative, then a status
-code is returned indicating that the semaphore is not available.
-If the calling task chooses to wait for a semaphore and the
-current semaphore count is zero or negative, then it is
-decremented by one and the calling task is placed on the
-semaphore's wait queue and blocked.  If the semaphore was
-created with the @code{@value{RPREFIX}PRIORITY} attribute, then the calling task is
-inserted into the queue according to its priority.  However, if
-the semaphore was created with the @code{@value{RPREFIX}FIFO} attribute, then the
-calling task is placed at the rear of the wait queue.  If the
-binary semaphore was created with the @code{@value{RPREFIX}INHERIT_PRIORITY}
-attribute, then the priority of the task currently holding the
-binary semaphore is guaranteed to be greater than or equal to
-that of the blocking task.  If the binary semaphore was created
-with the @code{@value{RPREFIX}PRIORITY_CEILING} attribute, a task successfully obtains
-the semaphore, and the priority of that task is greater than the
-ceiling priority for this semaphore, then the priority of the
-task obtaining the semaphore is elevated to that of the ceiling.
+If the calling task chooses to return immediately and the current
+semaphore count is zero or negative, then a status code is returned
+indicating that the semaphore is not available. If the calling task
+chooses to wait for a semaphore and the current semaphore count is zero or
+negative, then it is decremented by one and the calling task is placed on
+the semaphore's wait queue and blocked.  If the semaphore was created with
+the @code{@value{RPREFIX}PRIORITY} attribute, then the calling task is
+inserted into the queue according to its priority.  However, if the
+semaphore was created with the @code{@value{RPREFIX}FIFO} attribute, then
+the calling task is placed at the rear of the wait queue.  If the binary
+semaphore was created with the @code{@value{RPREFIX}INHERIT_PRIORITY}
+attribute, then the priority of the task currently holding the binary
+semaphore is guaranteed to be greater than or equal to that of the
+blocking task.  If the binary semaphore was created with the
+@code{@value{RPREFIX}PRIORITY_CEILING} attribute, a task successfully
+obtains the semaphore, and the priority of that task is greater than the
+ceiling priority for this semaphore, then the priority of the task
+obtaining the semaphore is elevated to that of the ceiling.
 
-The timeout parameter specifies the maximum interval
-the calling task is willing to be blocked waiting for the
-semaphore.  If it is set to @code{@value{RPREFIX}NO_TIMEOUT}, then the calling task
-will wait forever.  If the semaphore is available or the @code{@value{RPREFIX}NO_WAIT}
-option component is set, then timeout is ignored.
+The timeout parameter specifies the maximum interval the calling task is
+willing to be blocked waiting for the semaphore.  If it is set to
+@code{@value{RPREFIX}NO_TIMEOUT}, then the calling task will wait forever.  
+If the semaphore is available or the @code{@value{RPREFIX}NO_WAIT} option
+component is set, then timeout is ignored.
 
 @subheading NOTES:
 The following semaphore acquisition option constants
@@ -659,23 +684,29 @@ are defined by RTEMS:
 @item @code{@value{RPREFIX}NO_WAIT} - task should not wait
 @end itemize
 
-Attempting to obtain a global semaphore which does not reside on
-the local node will generate a request to the remote node to
-access the semaphore.  If the semaphore is not available and
-@code{@value{RPREFIX}NO_WAIT} was not specified, then the task must be blocked until
-the semaphore is released.  A proxy is allocated on the remote
-node to represent the task until the semaphore is released.
+Attempting to obtain a global semaphore which does not reside on the local
+node will generate a request to the remote node to access the semaphore.  
+If the semaphore is not available and @code{@value{RPREFIX}NO_WAIT} was
+not specified, then the task must be blocked until the semaphore is
+released.  A proxy is allocated on the remote node to represent the task
+until the semaphore is released.
 
 A clock tick is required to support the timeout functionality of
 this directive.
 
+@c
+@c
+@c
 @page
 @subsection SEMAPHORE_RELEASE - Release a semaphore
+
+@cindex release a semaphore
+@cindex unlock a semaphore
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_semaphore_release
+@findex rtems_semaphore_release
 @example
 rtems_status_code rtems_semaphore_release(
   rtems_id id

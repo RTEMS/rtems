@@ -8,6 +8,8 @@
 
 @chapter Multiprocessing Manager
 
+@cindex multiprocessing
+
 @section Introduction
 
 In multiprocessor real-time systems, new
@@ -43,6 +45,8 @@ software, to be viewed logically as a single system.
 
 @section Background
 
+@cindex multiprocessing topologies
+
 RTEMS makes no assumptions regarding the connection
 media or topology of a multiprocessor system.  The tasks which
 compose a particular application can be spread among as many
@@ -70,10 +74,13 @@ heterogeneous processing required is isolated in the MPCI layer.
 
 @subsection Nodes
 
+@cindex nodes, definition
+
 A processor in a RTEMS system is referred to as a
 node.  Each node is assigned a unique non-zero node number by
 the application designer.  RTEMS assumes that node numbers are
-assigned consecutively from one to maximum_nodes.  The node
+assigned consecutively from one to the @code{maximum_nodes}
+configuration parameter.  The node
 number, node, and the maximum number of nodes, maximum_nodes, in
 a system are found in the Multiprocessor Configuration Table.
 The maximum_nodes field and the number of global objects,
@@ -86,6 +93,8 @@ Multiprocessor Communications Interface Layer (MPCI) must be
 able to route messages based on the node number.
 
 @subsection Global Objects
+
+@cindex global objects, definition
 
 All RTEMS objects which are created with the GLOBAL
 attribute will be known on all other nodes.  Global objects can
@@ -100,6 +109,8 @@ performed during the application design phase.  Dynamic task
 relocation is not supported by RTEMS.
 
 @subsection Global Object Table
+
+@cindex global objects table
 
 RTEMS maintains two tables containing object
 information on every node in a multiprocessor system: a local
@@ -122,6 +133,8 @@ node in the system must be informed of the creation or deletion
 of a global object.
 
 @subsection Remote Operations
+
+@cindex MPCI and remote operations
 
 When an application performs an operation on a remote
 global object, RTEMS must generate a Remote Request (RQ) message
@@ -191,6 +204,8 @@ the MPCI and makes no attempt to detect or correct errors.
 
 @subsection Proxies
 
+@cindex proxy, definition
+
 A proxy is an RTEMS data structure which resides on a
 remote node and is used to represent a task which must block as
 part of a remote operation. This action can occur as part of the
@@ -229,6 +244,8 @@ assumed that if the execution mode and/or interrupt level are
 altered by the MPCI layer, that they will be restored prior to
 returning to RTEMS.
 
+@cindex MPCI, definition
+
 The MPCI layer is responsible for managing a pool of
 buffers called packets and for sending these packets between
 system nodes.  Packet buffers contain the messages sent between
@@ -236,6 +253,8 @@ the nodes.  Typically, the MPCI layer will encapsulate the
 packet within an envelope which contains the information needed
 by the MPCI layer.  The number of packets available is dependent
 on the MPCI layer implementation.
+
+@cindex MPCI entry points
 
 The entry points to the routines in the user's MPCI
 layer should be placed in the Multiprocessor Communications
@@ -250,8 +269,7 @@ the following table entries in a multiprocessor system:
 @item receive_packet 	called to get an arrived packet
 @end itemize
 
-A packet is sent by RTEMS in each of the following
-situations:
+A packet is sent by RTEMS in each of the following situations:
 
 @itemize @bullet
 @item an RQ is generated on an originating node;
@@ -457,6 +475,8 @@ heterogeneous system.
 
 @subsection Supporting Heterogeneous Environments
 
+@cindex heterogeneous multiprocessing
+
 Developing an MPCI layer for a heterogeneous system
 requires a thorough understanding of the differences between the
 processors which comprise the system.  One difficult problem is
@@ -554,13 +574,18 @@ subsection is dedicated to each of this manager's directives and
 describes the calling sequence, related constants, usage, and
 status codes.
 
+@c
+@c
+@c
 @page
 @subsection MULTIPROCESSING_ANNOUNCE - Announce the arrival of a packet
+
+@cindex announce arrival of package
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_multiprocessing_announce
+@findex rtems_multiprocessing_announce
 @example
 void rtems_multiprocessing_announce( void );
 @end example

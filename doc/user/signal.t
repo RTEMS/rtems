@@ -8,6 +8,8 @@
 
 @chapter Signal Manager
 
+@cindex signals
+
 @section Introduction
 
 The signal manager provides the capabilities required
@@ -22,6 +24,9 @@ signal manager are:
 @section Background
 
 @subsection Signal Manager Definitions
+
+@cindex asynchronous signal routine 
+@cindex ASR
 
 The signal manager allows a task to optionally define
 an asynchronous signal routine (ASR).  An ASR is to a task what
@@ -42,6 +47,9 @@ with a valid ASR, but has not been processed by that task's ASR.
 
 
 @subsection A Comparison of ASRs and ISRs
+
+@cindex ASR vs. ISR
+@cindex ISR vs. ASR
 
 The format of an ASR is similar to that of an ISR
 with the following exceptions:
@@ -65,6 +73,8 @@ result, does not have a task mode.
 
 @subsection Building a Signal Set
 
+@cindex signal set, building
+
 A signal set is built by a bitwise OR of the desired
 signals.  The set of valid signals is @code{@value{RPREFIX}SIGNAL_0} through
 @code{@value{RPREFIX}SIGNAL_31}.  If a signal is not explicitly specified in the
@@ -83,6 +93,8 @@ to the @code{@value{DIRPREFIX}signal_send} directive should be
 @value{RPREFIX}SIGNAL_15 @value{OR} @value{RPREFIX}SIGNAL_31}.
 
 @subsection Building an ASR Mode
+
+@cindex ASR mode, building
 
 In general, an ASR's mode is built by a bitwise OR of
 the desired mode components.  The set of valid mode components
@@ -230,13 +242,19 @@ A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
+@c
+@c
+@c
 @page
 @subsection SIGNAL_CATCH - Establish an ASR
+
+@cindex establish an ASR
+@cindex install an ASR
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_signal_catch
+@findex rtems_signal_catch
 @example
 rtems_status_code rtems_signal_catch(
   rtems_asr_entry  asr_handler,
@@ -302,13 +320,18 @@ The following task mode constants are defined by RTEMS:
 @code{@value{RPREFIX}INTERRUPT_MASK} and sets interrupts level n
 @end itemize
 
+@c
+@c
+@c
 @page
 @subsection SIGNAL_SEND - Send signal set to a task
+
+@cindex send signal set
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_signal_send
+@findex rtems_signal_send
 @example
 rtems_status_code rtems_signal_send(
   rtems_id         id,

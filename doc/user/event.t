@@ -8,6 +8,8 @@
 
 @chapter Event Manager
 
+@cindex events
+
 @section Introduction
 
 The event manager provides a high performance method
@@ -22,6 +24,8 @@ provided by the event manager are:
 @section Background
 
 @subsection Event Sets
+
+@cindex event set, definition
 
 An event flag is used by a task (or ISR) to inform
 another task of the occurrence of a significant situation.
@@ -59,6 +63,9 @@ is satisfied when at least a single requested event is posted.  The
 is satisfied when every requested event is posted.
 
 @subsection Building an Event Set or Condition
+
+@cindex event condition, building
+@cindex event set, building
 
 An event set or condition is built by a bitwise OR of
 the desired events.  The set of valid events is @code{@value{RPREFIX}EVENT_0} through
@@ -184,13 +191,18 @@ A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
+@c
+@c
+@c
 @page
 @subsection EVENT_SEND - Send event set to a task
+
+@cindex send event set to a task
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_event_send
+@findex rtems_event_send
 @example
 rtems_status_code rtems_event_send (
   rtems_id         id,
@@ -241,13 +253,18 @@ Sending an event set to a global task which does not
 reside on the local node will generate a request telling the
 remote node to send the event set to the appropriate task.
 
+@c
+@c
+@c
 @page
 @subsection EVENT_RECEIVE - Receive event condition
+
+@cindex receive event condition
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_event_receive
+@findex rtems_event_receive
 @example 
 rtems_status_code rtems_event_receive (
   rtems_event_set  event_in,

@@ -8,6 +8,8 @@
 
 @chapter Region Manager
 
+@cindex regions
+
 @section Introduction
 
 The region manager provides facilities to dynamically
@@ -27,6 +29,9 @@ provided by the region manager are:
 @section Background
 
 @subsection Region Manager Definitions
+
+@cindex region, definition
+@cindex segment, definition
 
 A region makes up a physically contiguous memory
 space with user-defined boundaries from which variable-sized
@@ -54,6 +59,8 @@ coalesced with its neighbors (if free) on both sides to produce
 the largest possible unused block.
 
 @subsection Building an Attribute Set
+
+@cindex region attribute set, building
 
 In general, an attribute set is built by a bitwise OR
 of the desired attribute components.  The set of valid region
@@ -214,13 +221,18 @@ A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
+@c
+@c
+@c
 @page
 @subsection REGION_CREATE - Create a region
+
+@cindex create a region
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_region_create
+@findex rtems_region_create
 @example
 rtems_status_code rtems_region_create(
   rtems_name        name,
@@ -293,13 +305,19 @@ by RTEMS:
 @item @code{@value{RPREFIX}PRIORITY} - tasks wait by priority
 @end itemize
 
+@c
+@c
+@c
 @page
 @subsection REGION_IDENT - Get ID of a region
+
+@cindex get ID of a region
+@cindex obtain ID of a region
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_region_ident
+@findex rtems_region_ident
 @example
 rtems_status_code rtems_region_ident(
   rtems_name  name,
@@ -336,13 +354,18 @@ access this region in other region manager directives.
 
 This directive will not cause the running task to be preempted.
 
+@c
+@c
+@c
 @page
 @subsection REGION_DELETE - Delete a region
+
+@cindex delete a region
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_region_delete
+@findex rtems_region_delete
 @example
 rtems_status_code rtems_region_delete(
   rtems_id id
@@ -380,13 +403,19 @@ The calling task does not have to be the task that
 created the region.  Any local task that knows the region id can
 delete the region.
 
+@c
+@c
+@c
 @page
 @subsection REGION_EXTEND - Add memory to a region
+
+@cindex add memory to a region
+@cindex region, add memory
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_region_extend
+@findex rtems_region_extend
 @example
 rtems_status_code rtems_region_extend(
   rtems_id            id,
@@ -426,13 +455,18 @@ The calling task does not have to be the task that
 created the region.  Any local task that knows the region id can
 extend the region.
 
+@c
+@c
+@c
 @page
 @subsection REGION_GET_SEGMENT - Get segment from a region
+
+@cindex get segment from region
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_region_get_segment
+@findex rtems_region_get_segment
 @example
 rtems_status_code rtems_region_get_segment(
   rtems_id            id,
@@ -514,13 +548,18 @@ are defined by RTEMS:
 A clock tick is required to support the timeout functionality of
 this directive.
 
+@c
+@c
+@c
 @page
 @subsection REGION_RETURN_SEGMENT - Return segment to a region
+
+@cindex return segment to region
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_region_return_segment
+@findex rtems_region_return_segment
 @example
 rtems_status_code rtems_region_return_segment(
   rtems_id  id,
@@ -568,13 +607,18 @@ and the following conditions exist:
 is less than or equal to the size of the segment returned.
 @end itemize
 
+@c
+@c
+@c
 @page
 @subsection REGION_GET_SEGMENT_SIZE - Obtain size of a segment
+
+@cindex get size of segment
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_region_get_segment_size
+@findex rtems_region_get_segment_size
 @example
 rtems_status_code rtems_region_get_segment_size(
   rtems_id            id,

@@ -36,27 +36,31 @@ info: dirs $(PROJECT)
 $(PROJECT): $(FILES)
 	$(MAKEINFO) $(PROJECT).texi
 
-dvi: $(PROJECT).dvi
+dvi: dirs $(PROJECT).dvi
 ps: dirs $(PROJECT).ps
 pdf: dirs $(PROJECT).pdf
 	
 $(PROJECT).pdf: $(FILES)
 	$(TEXI2PDF) $(PROJECT).texi
-	cp $(PROJECT).pdf $(PDF_INSTALL)
+	cp $(PROJECT).pdf $(WWW_INSTALL)/$(PROJECT)
 	
 $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
-	cp $(PROJECT).ps $(PS_INSTALL)
+	cp $(PROJECT).ps $(WWW_INSTALL)/$(PROJECT)
 
 $(PROJECT).dvi: $(FILES)
-	# $(TEXI2DVI) $(PROJECT).texi
-	texi2dvi -V $(PROJECT).texi
+	$(TEXI2DVI) $(PROJECT).texi
+	cp $(PROJECT).dvi $(WWW_INSTALL)/$(PROJECT)
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
 	cp rtemsarc.png rtemspie.png states.png $(WWW_INSTALL)/c_user
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
+
+index:
+	texindex $(PROJECT).cp $(PROJECT).vr $(PROJECT).fn \
+	$(PROJECT).tp $(PROJECT).pg $(PROJECT).ky
 
 clean:
 	rm -f *.o $(PROG) *.txt core *.html $(PROJECT).pdf

@@ -29,6 +29,8 @@ directives provided by the initialization manager are:
 
 @subsection Initialization Tasks
 
+@cindex initialization tasks
+
 Initialization task(s) are the mechanism by which
 RTEMS transfers initial control to the user's application.
 Initialization tasks differ from other application tasks in that
@@ -190,10 +192,12 @@ constants, usage, and status codes.
 @page
 @subsection INITIALIZE_EXECUTIVE - Initialize RTEMS
 
+@cindex initialize RTEMS
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_initialize_executive
+@findex rtems_initialize_executive
 @example
 void rtems_initialize_executive(
   rtems_configuration_table *configuration_table,
@@ -254,10 +258,12 @@ with no intervening actions.
 @page
 @subsection INITIALIZE_EXECUTIVE_EARLY - Initialize RTEMS and do NOT Start Multitasking
 
+@cindex initialize RTEMS
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_initialize_executive_early
+@findex rtems_initialize_executive_early
 @example
 rtems_interrupt_level rtems_initialize_executive_early(
   rtems_configuration_table *configuration_table,
@@ -307,10 +313,13 @@ initialization sequences:
 @page
 @subsection INITIALIZE_EXECUTIVE_LATE - Complete Initialization and Start Multitasking
 
+@cindex initialize RTEMS
+@cindex start multitasking
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_initialize_executive_late
+@findex rtems_initialize_executive_late
 @example
 void rtems_initialize_executive_late(
   rtems_interrupt_level  bsp_level
@@ -357,7 +366,7 @@ a fatal error is generated.
 The application must use only one of the two
 initialization sequences:
 @code{@value{DIRPREFIX}initialize_executive} or
-@code{@value{DIRPREFIX}nitialize_executive_early} and
+@code{@value{DIRPREFIX}initialize_executive_early} and
 @code{@value{DIRPREFIX}initialize_executive_late}.
 
 
@@ -365,10 +374,12 @@ initialization sequences:
 @page
 @subsection SHUTDOWN_EXECUTIVE - Shutdown RTEMS
 
+@cindex shutdown RTEMS
+
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
-@c @findex rtems_shutdown_executive
+@findex rtems_shutdown_executive
 @example
 void rtems_shutdown_executive(
   rtems_unsigned32 result

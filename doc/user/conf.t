@@ -31,6 +31,9 @@
 
 @section Automatic Generation of System Configuration
 
+@cindex confdefs.h
+@fnindex confdefs.h
+
 RTEMS provides the @code{confdefs.h} C language header file that
 based on the setting of a variety of macros can automatically
 produce nearly all of the configuration tables required
@@ -61,6 +64,9 @@ macro corresponding to that field is discussed.  Most systems
 can be easily configured using the @code{confdefs.h} mechanism.
 
 @section Configuration Table
+
+@cindex Configuration Table
+@cindex RTEMS Configuration Table
 
 The RTEMS Configuration Table is used to tailor an
 application for its specific needs.  For example, the user can
@@ -268,6 +274,8 @@ and NULL if the POSIX API is not configured.
 
 @section RTEMS API Configuration Table
 
+@cindex RTEMS API Configuration Table
+
 The RTEMS API Configuration Table is used to configure the 
 managers which constitute the RTEMS API for a particular application.  
 For example, the user can configure the maximum number of tasks for 
@@ -443,6 +451,8 @@ to the setting of the macro @code{CONFIGURE_EXECUTIVE_RAM_WORK_AREA}.
 
 @section POSIX API Configuration Table
 
+@cindex POSIX API Configuration Table
+
 The POSIX API Configuration Table is used to configure the
 managers which constitute the POSIX API for a particular application.
 For example, the user can configure the maximum number of threads for
@@ -601,6 +611,8 @@ to the address of the @code{POSIX_Initialization_threads} structure.
 
 @section CPU Dependent Information Table
 
+@cindex CPU Dependent Information Table
+
 The CPU Dependent Information Table is used to
 describe processor dependent information required by RTEMS.
 This table is generally used to supply RTEMS with information
@@ -613,6 +625,8 @@ The @code{confdefs.h} mechanism does not support generating this
 table.  It is normally filled in by the Board Support Package.
 
 @section Initialization Task Table
+
+@cindex Initialization Tasks Table
 
 The Initialization Task Table is used to describe
 each of the user initialization tasks to the Initialization
@@ -738,6 +752,8 @@ Initialization_Tasks : aliased RTEMS.Initialization_Tasks_Table( 1 .. 2 ) := (
 
 @section Driver Address Table
 
+@cindex Device Driver Table
+
 The Device Driver Table is used to inform the I/O
 Manager of the set of entry points for each device driver
 configured in the system.  The table contains one entry for each
@@ -831,6 +847,8 @@ operation of device drivers is provided in the I/O Manager
 chapter.
 
 @section User Extensions Table
+
+@cindex User Extensions Table
 
 The User Extensions Table is used to inform RTEMS of
 the optional user-supplied static extension set.  This table
@@ -991,6 +1009,8 @@ provided in the User Extensions chapter.
 
 @section Multiprocessor Configuration Table
 
+@cindex Multiprocessor Configuration Table
+
 The Multiprocessor Configuration Table contains
 information needed when using RTEMS in a multiprocessor
 configuration.  Many of the details associated with configuring
@@ -1111,6 +1131,8 @@ address of the table named @code{MPCI_table}.
 @end table
 
 @section Multiprocessor Communications Interface Table
+
+@cindex  Multiprocessor Communications Interface Table
 
 This table defines the set of callouts that must be provided by 
 an Multiprocessor Communications Interface implementation.  

@@ -13,6 +13,9 @@
 
 @chapter Scheduling Concepts
 
+@cindex scheduling
+@cindex task scheduling
+
 @section Introduction
 
 The concept of scheduling in real-time systems
@@ -49,6 +52,8 @@ events.
 
 @section Scheduling Mechanisms
 
+@cindex scheduling mechanisms
+
 RTEMS provides four mechanisms which allow the user
 to impact the task scheduling process:
 
@@ -74,6 +79,8 @@ description.
 
 @subsection Task Priority and Scheduling
 
+@cindex task priority
+
 The most significant of these mechanisms is the
 ability for the user to assign a priority level to each
 individual task when it is created and to alter a task's
@@ -95,6 +102,8 @@ to a task.}
 
 @subsection Preemption
 
+@cindex preemption
+
 Another way the user can alter the basic scheduling
 algorithm is by manipulating the preemption mode flag
 (@code{@value{RPREFIX}PREEMPT_MASK}) of individual tasks.  If preemption is disabled
@@ -107,6 +116,9 @@ which a task is scheduled.  It only applies once a task has
 control of the processor.
 
 @subsection Timeslicing
+
+@cindex timeslicing
+@cindex round robin scheduling
 
 Timeslicing or round-robin scheduling is an
 additional method which can be used to alter the basic
@@ -127,6 +139,8 @@ entire timeslice.
 
 @subsection Manual Round-Robin
 
+@cindex manual round robin
+
 The final mechanism for altering the RTEMS scheduling
 algorithm is called manual round-robin.  Manual round-robin is
 invoked by using the @code{@value{DIRPREFIX}task_wake_after}
@@ -138,6 +152,8 @@ priority are ready to run, then the task does not lose control
 of the processor.
 
 @subsection Dispatching Tasks
+
+@cindex dispatching
 
 The dispatcher is the RTEMS component responsible for
 allocating the processor to a ready task.  In order to allocate
@@ -166,6 +182,8 @@ when a @code{@value{RPREFIX}FLOATING_POINT} task is dispatched and that task was
 the last task to utilize the coprocessor.
 
 @section Task State Transitions
+
+@cindex task state transitions
 
 Tasks in an RTEMS system must always be in one of the
 five allowable task states.  These states are: executing, ready,
