@@ -45,8 +45,6 @@ RTEMS_CHECK_POSIX_API
 RTEMS_CHECK_ITRON_API
 RTEMS_CHECK_NETWORKING
 
-AC_DEFINE(RTEMS_VERSION,["][_RTEMS_VERSION]["],[RTEMS version string])
-
 RTEMS_CPU_SUBDIRS([score/cpu])
 
 AS_IF([test x"$HAS_NETWORKING" = x"yes"],[
@@ -68,10 +66,6 @@ AC_ARG_ENABLE([ada],
   *)  AC_MSG_ERROR([bad value ${enable_ada} for --enable-ada]) ;;
 esac],[enable_ada=no])
 
-RTEMS_DEFINE_POSIX_API
-RTEMS_DEFINE_ITRON_API
-RTEMS_DEFINE_MULTIPROCESSING
-
 # HACK: We should use a feature-based configuration.
 AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
 # HACK: silently accept --enable-unixlib
@@ -85,12 +79,12 @@ AC_CHECK_FUNCS([strsep strcasecmp snprintf])
 AC_CHECK_FUNCS([bcopy bcmp])
 AC_CHECK_FUNCS([isascii fileno])
 
-cat << EOF > cpuopts.tmp
+cat >>cpuopts.tmp <<\_ACEOF
 /* target cpu dependent options file */
 /* automatically generated -- DO NOT EDIT!! */
 #ifndef __CPU_OPTIONS_h
 #define __CPU_OPTIONS_h
-EOF
+_ACEOF
 
 RTEMS_CPUOPT([RTEMS_DEBUG],
   [test x"${enable_rtems_debug}" = x"yes"],
@@ -113,7 +107,7 @@ RTEMS_CPUOPT([RTEMS_MULTILIBS],
   [using multilib'ed RTEMS])
 
 RTEMS_CPUOPT([RTEMS_MULTIPROCESSING],
-  [test x"$HAS_MP" = "yes"],
+  [test x"$enable_multiprocessing" = x"yes"],
   [1],
   [if multiprocessing is enabled])
 
@@ -123,7 +117,7 @@ RTEMS_CPUOPT([RTEMS_NEWLIB],
   [if using newlib])
 
 RTEMS_CPUOPT([RTEMS_POSIX_API],
-  [test x"$HAS_POSIX_API" = x"yes"],
+  [test x"$rtems_cv_HAS_POSIX_API" = x"yes"],
   [1],
   [if posix api is supported])
 
@@ -139,11 +133,13 @@ RTEMS_CPUOPT([RTEMS_UNIXLIB],
 
 RTEMS_CPUOPT([RTEMS_VERSION],
   [true],
-  [\"]_RTEMS_VERSION[\"],
+  ["]_RTEMS_VERSION["],
   [RTEMS version string])
 
-echo >> cpuopts.tmp
-echo "#endif" >> cpuopts.tmp
+cat >>cpuopts.tmp <<\_ACEOF
+
+#endif
+_ACEOF
 
 AS_MKDIR_P(score/include/rtems/score)
 AS_IF([test -f score/include/rtems/score/cpuopts.h],
@@ -252,10 +248,10 @@ AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
 
 AM_CONDITIONAL(INLINE,test x"$enable_rtems_inlines" = x"yes" )
 AM_CONDITIONAL(MACROS,test x"$enable_rtems_inlines" = x"no" )
-AM_CONDITIONAL(HAS_MP,test x"$HAS_MP" = x"yes" )
+AM_CONDITIONAL(HAS_MP,test x"$enable_multiprocessing" = x"yes" )
 
-AM_CONDITIONAL(HAS_POSIX,test x"$HAS_POSIX_API" = x"yes")
-AM_CONDITIONAL(HAS_ITRON,test x"$HAS_ITRON_API" = x"yes")
+AM_CONDITIONAL(HAS_POSIX,test x"$rtems_cv_HAS_POSIX_API" = x"yes")
+AM_CONDITIONAL(HAS_ITRON,test x"$rtems_cv_HAS_ITRON_API" = x"yes")
 AM_CONDITIONAL(HAS_NETWORKING,test x"$HAS_NETWORKING" = x"yes")
 
 # FIXME: All ports should have a libscorecpu.a - But the powerpc doesn't!
@@ -295,9 +291,6 @@ libnetworking/Makefile
 libnetworking/lib/Makefile
 libnetworking/libc/Makefile
 librpc/Makefile
-librpc/src/Makefile
-librpc/src/xdr/Makefile
-librpc/src/rpc/Makefile
 libmisc/Makefile
 libmisc/cpuuse/Makefile
 libmisc/shell/Makefile

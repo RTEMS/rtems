@@ -2,11 +2,20 @@
 
 AC_DEFUN([RTEMS_CPUOPT],
 [
-  echo >> cpuopts.tmp
-  echo "/* $4 */" >> cpuopts.tmp
   if $2; then
-    echo "#define $1 $3" >> cpuopts.tmp
+cat >>cpuopts.tmp <<\_ACEOF
+
+/* $4 */
+#define $1 $3
+_ACEOF
+## FIXME: Duplicate the define to the autoheader
+## Sanity check - Should be removed in future
+    AC_DEFINE([$1],[$3],[$4])
   else
-    echo "/* #undef $1 */" >> cpuopts.tmp
-  fi 
+cat >>cpuopts.tmp <<\_ACEOF
+
+/* $4 */
+/* #undef $1 */
+_ACEOF
+  fi
 ])

@@ -20,18 +20,4 @@ AC_CACHE_CHECK([whether CPU supports libitron],
       fi
       ;;
     esac])
-if test "$rtems_cv_HAS_ITRON_API" = "yes"; then
-  HAS_ITRON_API="yes";
-else
-  HAS_ITRON_API="no";
-fi
-AC_SUBST(HAS_ITRON_API)dnl
-])
-
-AC_DEFUN([RTEMS_DEFINE_ITRON_API],
-[AC_REQUIRE([RTEMS_CHECK_ITRON_API])dnl
-if test x"${HAS_ITRON_API}" = x"yes";
-then
-  AC_DEFINE_UNQUOTED(RTEMS_ITRON_API,1,[if itron api is supported])
-fi
 ])

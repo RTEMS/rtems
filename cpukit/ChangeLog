@@ -1,3 +1,13 @@
+2003-11-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use here-documents to generate cpuopts.tmp.
+	Various fixes and changes to argument processing.
+	Reflect changes to librpc Makefile.ams.
+	* acinclude.m4: Use here-documents to generate cpuopts.tmp.
+	* aclocal/check-itron.m4: Remove HAS_IRON_API.
+	* aclocal/check-multiprocessing.m4: Remove HAS_MP.
+	* aclocal/check-posix.m4: Remove HAS_POSIX_API.
+
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/canonicalize-tools.m4, aclocal/check-itron.m4,
