@@ -1,3 +1,9 @@
+2003-01-28	Joel Sherrill <joel@OARcorp.com>
+
+	* include/DP8570A.h, include/bsp.h, start/start.c,
+	startup/efi68k_tcp.c: Rename tcp_init() to bsp_tcp_init()
+	to avoid conflict with TCP/IP stack internal routine.
+
 2003-01-20	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds*: Add FreeBSD sysctl() sections.

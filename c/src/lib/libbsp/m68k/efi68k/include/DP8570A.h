@@ -270,6 +270,6 @@ extern struct clock_ram * const tcp_power_down;
 extern struct clock_counters * const tcp_clock;
 extern struct clock_ram * const tcp_save_ram;
 
-void tcp_init(void);
+void bsp_tcp_init(void);
 
 #endif /* _DP8570A_H_ */

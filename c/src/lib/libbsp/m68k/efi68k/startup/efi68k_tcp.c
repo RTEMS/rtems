@@ -41,7 +41,7 @@ void tcp_delay(int count)
   for (i=0;i<count/4;i++);
 }
 
-void tcp_init()
+void bsp_tcp_init()
 {
   unsigned char low_bat, osc_fail, power_up;
   unsigned char mon, dom, hrs, min, sec;
@@ -164,7 +164,7 @@ void tcp_init()
      Vcc,....  *except* for battery switched on for the
      first time before power up in which case the chip
      will still be in single suppy mode till restarted (a
-     second call to tcp_init such as when the time is set
+     second call to bsp_tcp_init such as when the time is set
      or a reboot.)  The timer/clock itself should always
      be completely functional regardless of the supply
      mode. */

@@ -156,7 +156,7 @@ void console_init(void);
 
 void watch_dog_init(void);
 
-void tcp_init(void);
+void bsp_tcp_init(void);
 
 void Spurious_Initialize(void);
 

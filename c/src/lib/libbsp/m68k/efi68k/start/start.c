@@ -59,7 +59,7 @@ void  boot_card();
   Spurious_Initialize();
   console_init();
   watch_dog_init();
-  tcp_init();
+  bsp_tcp_init();
 
   /*
    * Execute main with arguments argv and environment env
