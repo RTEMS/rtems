@@ -14,21 +14,22 @@
 
 MEMORY
 	{
-	ram : org = 0x0, l = 1M
+	    flash : org = 0x00000000, l = 2M
+	    ram   : org = 0x10000000, l = 32M
 	}
 
 SECTIONS
 {
-        .text 0x0 :
-	{
+    .text : AT (0x0) {
 	text_start = . ;
 	_text_start = . ;
-        *(.text)
+	
+	*(.text)
 	. = ALIGN (16);
-
+	
 	*(.eh_fram)
 	. = ALIGN (16);
-
+	
 	/*
 	 * C++ constructors
 	 */
@@ -43,21 +44,29 @@ SECTIONS
 	LONG(0)
 	__DTOR_END__ = .;
 	_etext = ALIGN( 0x10 ) ;
-        }
-        .data ADDR( .text ) + SIZEOF( .text ):
-	{
+	. = ALIGN( 0x10) ;
+    } > flash
+    
+    .data : AT ( ADDR(.text) + SIZEOF(.text) ) {
 	data_start = . ;
 	_data_start = . ;
-        *(.data)
-	_edata = ALIGN( 0x10 ) ;
-        }
-        .bss ADDR( .data ) + SIZEOF( .data ):
-        {
-	bss_start = . ;
-	_bss_start = . ;
+	
+	*(.data)
+	
+	_edata = ALIGN( 0x10 );
+	. = ALIGN (0x10);
+    } > ram
+    
+    .bss : AT ( ADDR(.text) + SIZEOF(.text) + SIZEOF(.data) ) {
+	bss_start = .;
+	_bss_start = .;
+	
 	*(.bss)
 	*(COMMON)
-	end = . ;
-	__end = . ;
-	}
+	
+	end = ALIGN( 0x10 );
+	__end = ALIGN( 0x10 );
+	. = ALIGN (0x10);
+    } > ram
+    
 }

@@ -56,17 +56,18 @@ SYM (Or1k_Interrupt_Vectors):
 	.word	0x00000000			# Breakpoint
 	.word	0x00000000			# Trap
 
+/*
 	PUBLIC(BOTTOM_OF_MEMORY)
 SYM (BOTTOM_OF_MEMORY):	
-	.word	0x00000000       # Assume RAM @ 0 for the sim
+	.word	0x10000000       # Assume RAM @ 0 for the sim
 
 	PUBLIC(TOP_OF_MEMORY)
 SYM (TOP_OF_MEMORY):	
-	.word	0x800000	# Assume RAM @ 0 for the sim
-	
+	.word	0x10800000	# Assume RAM @ 0 for the sim
+*/	
 	PUBLIC(_mem_end)
 SYM (_mem_end):
-	.word	0x00000000
+	.word	0x10800000
 	
         BEGIN_CODE
 	.org	0x0
@@ -208,7 +209,20 @@ L2_2:
 	.val	.
 	.scl	-1
 	.endef
-	
+
+/****************************************************************************/
+/* These constants must be in .text section in order to be                  */
+/* properly addressed in code.                                              */
+
+        PUBLIC(BOTTOM_OF_MEMORY)
+SYM (BOTTOM_OF_MEMORY):
+        .word   0x10000000       # Assume RAM @ 0 for the sim
+
+        PUBLIC(TOP_OF_MEMORY)
+SYM (TOP_OF_MEMORY):
+        .word   0x10800000      # Assume RAM @ 0 for the sim
+
+/****************************************************************************/
 
 	/** Currently, about 57 of the 64 valid address locations
 	    are being used here. If you add code to the above
@@ -706,37 +720,39 @@ _start:
 	   that the cache gives us sufficient performance that this
 	   is not necessary. It will be very easy to add this later.
 	 */	
-	l.movhi		r4,hi(_data_start)
-	l.ori		r4,r4,lo(_data_start)
+	l.movhi		r4,hi(_etext)
+	l.ori		r4,r4,lo(_etext)
 	l.movhi		r5,hi(_BOTTOM_OF_MEMORY)
 	l.ori		r5,r5,lo(_BOTTOM_OF_MEMORY)
 	l.lwz		r5,0(r5)            # Dereference it
-	l.add		r5,r5,r4	    # Place it in memory above the text segment
+/*	l.add		r5,r5,r4	    # Place it in memory above the text segment*/
 	l.movhi		r3,hi(_edata)
 	l.ori		r3,r3,lo(_edata)
+        l.movhi         r5,hi(_data_start)
+        l.ori           r5,r5,lo(_data_start)
 	
 L3_0:	
 	l.lwz		r6,0(r4)
 	l.addi		r5,r5,4
 	l.addi		r4,r4,4
-	l.sfeq		r3,r4
+	l.sfeq		r3,r5
 	l.bnf		L3_0
 	l.sw		-4(r5),r6           # Minimize write after read stalls
 
 	/* Initialize the BSS segment */
-	l.movhi		r3,hi(_bss_start)
-	l.ori		r3,r3,lo(_bss_start)
-	l.sub		r3,r3,r4
-	l.add		r3,r3,r5
+	l.movhi		r3,hi(__end)
+	l.ori		r3,r3,lo(__end)
+/*	l.sub		r3,r3,r4
+	l.add		r3,r3,r5*/
 	l.sfleu		r3,r5
 	l.bf		L3_2		   # Check for no BSS segment!
 	l.nop
 		
 L3_1:
-	l.sw		0(r5),r0
+        l.addi          r5,r5,4
 	l.sfeq		r5,r3
 	l.bnf		L3_1
-	l.addi		r5,r5,4	
+        l.sw            -4(r5),r0
 
 L3_2:
 	/* Tell everyone where the heap begins */

@@ -70,8 +70,8 @@ extern "C" {
 
 /* Constants */
 
-#define RAM_START 0
-#define RAM_END   0x100000
+#define RAM_START 0x10000000
+#define RAM_END   0x10800000
 
 /* miscellaneous stuff assumed to exist */
 
