@@ -77,14 +77,14 @@ CCLD = $(CC)
 
 CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
 
-${ARCH}/%.o: %.c
+${ARCH}/%.$(OBJEXT): %.c
 	${COMPILE} -o $@ -c $<
 
-${ARCH}/%.o: %.S
+${ARCH}/%.$(OBJEXT): %.S
 	${CCASCOMPILE} -o $@ -c $<
 
-# Make foo.rel from foo.o
-${ARCH}/%.rel: ${ARCH}/%.o
+# Make foo.rel from foo.$(OBJEXT)
+${ARCH}/%.rel: ${ARCH}/%.$(OBJEXT)
 	${make-rel}
 
 # Dependency files for use by gmake
@@ -105,7 +105,7 @@ CLOBBER_DEPEND=$(DEPEND)
 ## FIXME: The approach below is known to be conceptionally broken.
 depend-am: $(C_FILES) $(CC_FILES) $(S_FILES)
 ##       Use gcc -M to generate dependencies
-##       Replace foo.o with $(ARCH)/foo.o
+##       Replace foo.$(OBJEXT) with $(ARCH)/foo.$(OBJEXT)
 ##       Replace $(ARCH) value with string $(ARCH)
 ##           so that it will for debug and profile cases
 	$(COMPILE) -M   $^    |  \
