@@ -58,6 +58,19 @@ extern "C" {
 
 #endif
 
+#if 0
+static inline X() 
+{
+#ifdef _POSIX_C_SOURCE
+  printf( "_POSIX_C_SOURCE", _POSIX_C_SOURCE );
+#endif
+#ifdef __STRICT_ANSI__
+  printf( "__STRICT_ANSI__", __STRICT_ANSI__ );
+#endif
+}
+#endif
+
+#include <unistd.h>
 #include <setjmp.h>
 #include <signal.h>
 
