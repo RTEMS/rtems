@@ -67,7 +67,6 @@ console/Makefile
 network/Makefile
 nvram/Makefile
 pci/Makefile
-start/Makefile
 startup/Makefile
 timer/Makefile
 tod/Makefile

@@ -75,7 +75,6 @@ console/Makefile
 network/Makefile
 irq/Makefile
 vectors/Makefile
-start/Makefile
 startup/Makefile
 wrapup/Makefile])
 

@@ -1,5 +1,11 @@
 2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Merge-in start/Makefile.am.
+	* start/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+
+2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Reflect changes to
 	../support/*exception_processing/*.
 

@@ -44,7 +44,6 @@ canbus/Makefile
 console/Makefile
 irq/Makefile
 network/Makefile
-start/Makefile
 startup/Makefile
 vectors/Makefile
 wrapup/Makefile])

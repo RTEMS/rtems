@@ -53,7 +53,6 @@ clock/Makefile
 console/Makefile
 scv64/Makefile
 sonic/Makefile
-start/Makefile
 startup/Makefile
 timer/Makefile
 tod/Makefile
