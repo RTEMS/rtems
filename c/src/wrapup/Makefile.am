@@ -4,7 +4,7 @@
 ##  build and install "glommed" librtemsbsp.a
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
@@ -23,8 +23,11 @@ if HAS_RDBG
 LIBRDBG = $(PROJECT_RELEASE)/lib/librdbg$(LIB_VARIANT).a
 endif
 
-SRCS =  $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a
-SRCS += $(LIBNETWORKING) $(LIBRDBG) \
+if HAS_LIBBSP
+LIBBSP = $(PROJECT_RELEASE)/lib/libbsp$(LIB_VARIANT).a
+endif
+
+SRCS = $(LIBBSP) $(LIBNETWORKING) $(LIBRDBG) \
     $(wildcard $(PROJECT_RELEASE)/lib/libcpu$(LIB_VARIANT).a) \
     $(wildcard $(PROJECT_RELEASE)/lib/librtcio$(LIB_VARIANT).a) \
     $(wildcard $(PROJECT_RELEASE)/lib/libserialio$(LIB_VARIANT).a) \
