@@ -22,7 +22,15 @@ void *POSIX_Init(
   void *argument
 );
 
-void *Task_1_through_3(
+void *Task_1(
+  void *argument
+);
+
+void *Task_2(
+  void *argument
+);
+
+void *Task_3(
   void *argument
 );
 
@@ -32,6 +40,8 @@ void *Task_1_through_3(
 
 #define CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 5
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
@@ -46,6 +56,8 @@ void *Task_1_through_3(
 #endif
 
 TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_t        Task_id;
+TEST_EXTERN pthread_t        Task1_id;
+TEST_EXTERN pthread_t        Task2_id;
+TEST_EXTERN pthread_t        Task3_id;
 
 /* end of include file */
