@@ -45,8 +45,8 @@
  *  $Id$
  */
 
-#ifndef _SIM_H_
-#define _SIM_H_
+#ifndef _RTEMS_M68K_SIM_H
+#define _RTEMS_M68K_SIM_H
 
 
 /* SAM-- shift and mask */
@@ -330,4 +330,4 @@
 #define CSOR9 SIM_VOLATILE_USHORT_POINTER(0x72 + SIM_CRB)
 #define CSOR10 SIM_VOLATILE_USHORT_POINTER(0x76 + SIM_CRB)
 
-#endif /* _SIM_h_ */
+#endif /* _RTEMS_M68K_SIM_H */

@@ -432,4 +432,4 @@ static inline void * _CPU_virtual_to_physical (
 }
 #endif
 
-#endif /* __M68K_h */
+#endif /* _RTEMS_SCORE_M68K_H */

@@ -32,8 +32,8 @@
  *------------------------------------------------------------------
  */
 
-#ifndef __MOTOROLA_MC68302_DEFINITIONS_h
-#define __MOTOROLA_MC68302_DEFINITIONS_h
+#ifndef _RTEMS_M68K_M68302_H
+#define _RTEMS_M68K_M68302_H
 
 /*
  * BAR - Base Address Register

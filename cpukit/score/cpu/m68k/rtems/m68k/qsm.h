@@ -37,8 +37,8 @@
  *  $Id$
  */
 
-#ifndef _QSM_H_
-#define _QSM_H_
+#ifndef _RTEMS_M68K_QSM_H
+#define _RTEMS_M68K_QSM_H
 
 /* SAM-- shift and mask */
 #undef  SAM
@@ -201,4 +201,4 @@
 #define QSPIcR (volatile unsigned char * const)(0x140 + QSM_CRB)
 				/* QSPI Command RAM */
 
-#endif /* _QSM_H_ */
+#endif /* _RTEMS_M68K_QSM_H */
