@@ -1,3 +1,10 @@
+2001-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/i386/any/Makefile.am: Move MAINTAINERCLEANFILES before the
+	includes and use MAINTAINERCLEANFILES = to make automake-1.5 happy.
+	* src/m68k/any/Makefile.am: Ditto.
+	* src/powerpc/new_exception_processing/Makefile.am: Ditto.
+
 2001-09-14	Eric Norum <eric.norum@usask.ca>
 
 	* include/rdbg/rdbg.h, src/ptrace.c: Modifications to make gcc 3.x happy.
