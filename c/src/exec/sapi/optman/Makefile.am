@@ -12,14 +12,14 @@ PGMS = $(C_FILES:%.c=$(ARCH)/%.rel)
 ## FIXME: Is this used anywhere?
 ASM4FLAGS = -I$(PROJECT_INCLUDE)/rtems
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/multilib.am
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
 TMPINSTALL_FILES += \
-    $(C_FILES:%.c=$(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel)
+    $(C_FILES:%.c=$(PROJECT_RELEASE)/lib$(MULTISUBDIR)/%$(LIB_VARIANT).rel)
 
-$(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel: $(ARCH)/%.rel
+$(PROJECT_RELEASE)/lib$(MULTISUBDIR)/%$(LIB_VARIANT).rel: $(ARCH)/%.rel
 	$(INSTALL_DATA) $< $@
 
 #

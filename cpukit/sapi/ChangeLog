@@ -1,3 +1,8 @@
+2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* optman/Makefile.am: Add multilib support.
+	* src/Makefile.am: Add multilib support.
+
 2001-10-16	Chris Johns <ccj@acm.org>
 
 	* include/confdefs.h, include/rtems/config.h, include/rtems/io.h,
