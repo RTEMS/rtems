@@ -24,5 +24,4 @@ AC_OUTPUT(
 Makefile
 shared/Makefile
 shared/comm/Makefile
-shared/io/Makefile
 shared/irq/Makefile)
