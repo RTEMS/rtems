@@ -71,7 +71,7 @@ extern "C" {
  *  This is very dependent on the clock speed of the target.
  */
 
-#define delay( microseconds ) \
+#define rtems_bsp_delay( microseconds ) \
   { register rtems_unsigned32 _delay=(microseconds); \
     register rtems_unsigned32 _tmp=123; \
     asm volatile( "0: \

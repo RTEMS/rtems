@@ -166,7 +166,7 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 | Simple spin delay in microsecond units for device drivers.
 | This is very dependent on the clock speed of the target.
 +--------------------------------------------------------------------------*/
-#define delay(_microseconds) \
+#define rtems_bsp_delay(_microseconds) \
 { \
   rtems_unsigned32 _cnt = _microseconds; \
   asm volatile ("0: nop; mov %0,%0; loop 0b" : "=c"(_cnt) : "0"(_cnt)); \

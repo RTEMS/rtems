@@ -82,7 +82,7 @@ extern "C" {
  * FIXME: Not applicable with gdb's simulator
  * Kept for sourcecode compatibility with other sh-BSPs 
  */
-#define delay( microseconds ) CPU_delay(microseconds)
+#define rtems_bsp_delay( microseconds ) CPU_delay(microseconds)
 #define sh_delay( microseconds ) CPU_delay(microseconds)
 
 /*

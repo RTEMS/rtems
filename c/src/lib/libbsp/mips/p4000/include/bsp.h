@@ -80,9 +80,10 @@ extern unsigned32 mips_get_timer( void );
  *        by code in the delay macro that is necessary for 64 bit mode.
  */
 
-#define delay( microseconds ) \
+#define rtems_bsp_delay( microseconds ) \
   { \
-     unsigned32 _end_clock = mips_get_timer() + microseconds * CLOCKS_PER_MICROSECOND; \
+     unsigned32 _end_clock = \
+          mips_get_timer() + microseconds * CLOCKS_PER_MICROSECOND; \
      _end_clock %= 0x100000000;  /* make sure result is 32 bits */ \
      \
      /* handle timer overflow, if necessary */ \

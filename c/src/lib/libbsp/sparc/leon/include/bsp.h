@@ -123,7 +123,7 @@ extern "C" {
 
 extern void Clock_delay(rtems_unsigned32 microseconds);
 
-#define delay( microseconds ) Clock_delay(microseconds)
+#define rtems_bsp_delay( microseconds ) Clock_delay(microseconds)
 
 /* Constants */
 

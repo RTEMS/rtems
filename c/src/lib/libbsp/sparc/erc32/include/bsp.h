@@ -130,7 +130,7 @@ extern int rtems_erc32_sonic_driver_attach (struct rtems_bsdnet_ifconfig *config
 
 extern void Clock_delay(rtems_unsigned32 microseconds);
 
-#define delay( microseconds ) Clock_delay(microseconds)
+#define rtems_bsp_delay( microseconds ) Clock_delay(microseconds)
 
 /* Constants */
 
