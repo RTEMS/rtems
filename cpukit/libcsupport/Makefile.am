@@ -2,11 +2,11 @@
 ##  $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../aclocal
+ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-include $(top_srcdir)/../../../automake/multilib.am
+include $(top_srcdir)/../../../../automake/multilib.am
 
-SUBDIRS = . libc
+SUBDIRS = . src
 
 include_HEADERS = include/chain.h include/console.h include/clockdrv.h \
     include/iosupp.h include/ringbuf.h include/rtc.h \
@@ -87,5 +87,5 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/zilog \
 ##  General stuff
 all-local: $(PREINSTALL_FILES)
 
-include $(top_srcdir)/../../../automake/subdirs.am
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/../../../../automake/subdirs.am
+include $(top_srcdir)/../../../../automake/local.am
