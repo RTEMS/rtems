@@ -37,21 +37,33 @@ int _POSIX_Message_queue_Create_support(
   const char                    *name,
   int                            pshared,
   unsigned int                   oflag,
-  struct mq_attr                *attr,
+  struct mq_attr                *attr_ptr,
   POSIX_Message_queue_Control  **message_queue
 )
 {
   POSIX_Message_queue_Control   *the_mq;
- 
+  CORE_message_queue_Attributes *the_mq_attr;
+  struct mq_attr                 attr;
+
   _Thread_Disable_dispatch();
  
-  the_mq = _POSIX_Message_queue_Allocate();
- 
-  if ( !the_mq ) {
-    _Thread_Enable_dispatch();
-    set_errno_and_return_minus_one( ENFILE );
+  if ( attr_ptr == NULL ) {
+    attr.mq_maxmsg  = 0;  /* XXX */
+    attr.mq_msgsize = 0;  /* XXX */
+  } else {
+    if ( attr_ptr->mq_maxmsg < 0 ){
+      _Thread_Enable_dispatch();
+      set_errno_and_return_minus_one( EINVAL );
+    }
+
+    if ( attr_ptr->mq_msgsize < 0 ){
+      _Thread_Enable_dispatch();
+      set_errno_and_return_minus_one( EINVAL );
+    }
+
+    attr = *attr_ptr;
   }
- 
+
 #if defined(RTEMS_MULTIPROCESSING)
   if ( pshared == PTHREAD_PROCESS_SHARED &&
        !( _Objects_MP_Allocate_and_open( &_POSIX_Message_queue_Information, 0,
@@ -62,16 +74,38 @@ int _POSIX_Message_queue_Create_support(
   }
 #endif
  
+  if ( name ) {
+
+    if( strlen(name) > PATH_MAX ) {  /* XXX - Is strlen ok to use here ? */
+      _Thread_Enable_dispatch();
+      set_errno_and_return_minus_one( ENAMETOOLONG );
+    }
+
+    /*
+     * XXX Greater than NAME_MAX while POSIX_NO_TRUNC in effect.
+     * XXX Error description in POSIX book different for mq_open and mq_unlink
+     *     Why???
+     */
+  }
+
+  the_mq = _POSIX_Message_queue_Allocate();
+  if ( !the_mq ) {
+    _Thread_Enable_dispatch();
+    set_errno_and_return_minus_one( ENFILE );
+  }
+ 
   the_mq->process_shared  = pshared;
  
   if ( name ) {
     the_mq->named = TRUE;
     the_mq->open_count = 1;
     the_mq->linked = TRUE;
-  }
-  else
+ }
+  else {
     the_mq->named = FALSE;
- 
+
+  }
+
   if ( oflag & O_NONBLOCK ) 
     the_mq->blocking = FALSE;
   else
@@ -90,16 +124,18 @@ int _POSIX_Message_queue_Create_support(
   the_mq_attr->message_discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
   the_mq_attr->waiting_discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
  */
+   
 
   the_mq->Message_queue.Attributes.discipline =
                                          CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
- 
+  the_mq_attr = &the_mq->Message_queue.Attributes;
+
   if ( ! _CORE_message_queue_Initialize(
            &the_mq->Message_queue,
            OBJECTS_POSIX_MESSAGE_QUEUES,
-           &the_mq->Message_queue.Attributes,
-           attr->mq_maxmsg,
-           attr->mq_msgsize,
+           the_mq_attr,
+           attr.mq_maxmsg,
+           attr.mq_msgsize,
 #if defined(RTEMS_MULTIPROCESSING)
            _POSIX_Message_queue_MP_Send_extract_proxy
 #else
@@ -140,4 +176,8 @@ int _POSIX_Message_queue_Create_support(
   _Thread_Enable_dispatch();
   return 0;
 }
+
+
+
+
 
