@@ -64,15 +64,16 @@ rtems_isr external_exception_ISR (
   rtems_vector_number   vector             /* IN  */
 )
 { 
- rtems_unsigned16    index;
- Chain_Node          *node;
- EE_ISR_Type         *ee_isr;
+ rtems_unsigned16      index;
+ rtems_vector_number   chained_vector;
+ Chain_Node           *node;
+ EE_ISR_Type          *ee_isr;
  
  /*
   * Read vector.
   */
- index = 0;
-
+ chained_vector = Get_interrupt();
+ index = chained_vector - DMV170_IRQ_FIRST
  node = ISR_Array[ index ].first;
  while ( !_Chain_Is_tail( &ISR_Array[ index ], node ) ) {
    ee_isr = (EE_ISR_Type *) node;
@@ -83,6 +84,8 @@ rtems_isr external_exception_ISR (
  /*
   * Clear the interrupt.
   */
+ Clear_interrupt( chained_vector );
+
 }
 
 
@@ -180,8 +183,15 @@ rtems_isr_entry  set_EE_vector(
   Chain_Append( &ISR_Array[vec_idx], &ISR_Nodes[index].Node );
 
   /*
+   * Enable the interrupt.
+   */
+   enable_card_interrupt( vector );
+
+  /*
    * No interrupt service routine was removed so return 0
    */
   return 0;
 }
+
+
 
