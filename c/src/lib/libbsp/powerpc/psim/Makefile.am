@@ -119,7 +119,7 @@ shmsupp_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 noinst_DATA += shmsupp$(LIB_VARIANT).rel
 endif
 
-all-local: $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 PREINSTALL_DIRS =
 TMPINSTALL_FILES =

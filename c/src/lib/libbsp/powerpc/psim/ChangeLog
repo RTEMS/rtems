@@ -1,3 +1,7 @@
+2004-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add $(TMPINSTALL_FILES) to all-local.
+
 2004-02-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Convert to automake-building rules.
