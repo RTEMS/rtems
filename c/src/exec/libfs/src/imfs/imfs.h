@@ -183,7 +183,9 @@ struct IMFS_jnode_tt {
   } while (0)
 
 typedef struct {
-  ino_t    ino_count;
+  ino_t                             ino_count;
+  rtems_filesystem_file_handlers_r *memfile_handlers;
+  rtems_filesystem_file_handlers_r *directory_handlers;
 } IMFS_fs_info_t;
 
 #define increment_and_check_linkcounts( _fs_info )                  \
@@ -214,6 +216,7 @@ extern rtems_filesystem_file_handlers_r       IMFS_device_handlers;
 extern rtems_filesystem_file_handlers_r       IMFS_memfile_handlers;
 extern rtems_filesystem_file_handlers_r       IMFS_directory_handlers;
 extern rtems_filesystem_operations_table      IMFS_ops;
+extern rtems_filesystem_operations_table      miniIMFS_ops;
 extern rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS; 
 
 /*
@@ -222,6 +225,17 @@ extern rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS;
 
 int IMFS_initialize( 
    rtems_filesystem_mount_table_entry_t *mt_entry
+);
+
+int miniIMFS_initialize( 
+   rtems_filesystem_mount_table_entry_t *mt_entry
+);
+
+int IMFS_initialize_support( 
+   rtems_filesystem_mount_table_entry_t *mt_entry,
+   rtems_filesystem_operations_table    *op_table,
+   rtems_filesystem_file_handlers_r     *memfile_handlers,
+   rtems_filesystem_file_handlers_r     *directory_handlers
 );
 
 int IMFS_fsunmount(

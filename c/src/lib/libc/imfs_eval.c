@@ -32,11 +32,13 @@ int IMFS_Set_handlers(
   rtems_filesystem_location_info_t   *loc
 )
 {
-  IMFS_jnode_t  *node = loc->node_access;
+  IMFS_jnode_t    *node = loc->node_access;
+  IMFS_fs_info_t  *fs_info;
 
+  fs_info = loc->mt_entry->fs_info;
   switch( node->type ) {
     case IMFS_DIRECTORY:
-      loc->handlers = &IMFS_directory_handlers;
+      loc->handlers = fs_info->directory_handlers;
       break;
     case IMFS_DEVICE:
       loc->handlers = &IMFS_device_handlers;
@@ -46,7 +48,7 @@ int IMFS_Set_handlers(
       loc->handlers = &rtems_filesystem_null_handlers;
       break;
     case IMFS_MEMORY_FILE:
-      loc->handlers = &IMFS_memfile_handlers;
+      loc->handlers = fs_info->memfile_handlers;
       break;
   }
 

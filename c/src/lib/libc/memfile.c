@@ -30,6 +30,26 @@
 #define MEMFILE_STATIC 
 
 /*
+ *  Set of operations handlers for operations on memfile entities.
+ */
+
+rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
+  memfile_open,
+  memfile_close,
+  memfile_read,
+  memfile_write,
+  memfile_ioctl,
+  memfile_lseek,
+  IMFS_stat,
+  IMFS_fchmod,
+  memfile_ftruncate,
+  NULL,                /* fpathconf */
+  NULL,                /* fsync */
+  IMFS_fdatasync,
+  IMFS_fcntl
+};
+
+/*
  *  Prototypes of private routines 
  */
 

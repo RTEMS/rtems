@@ -52,6 +52,13 @@ void rtems_filesystem_initialize( void )
 
   init_fs_mount_table();
 
+  /*
+   *  mount the first filesystem.
+   *
+   *  NOTE: XXX This really needs to be read from a table of filesystems
+   *        to mount initially and the miniIMFS needs to be shaken out.
+   */
+
   status = mount( 
      &first_entry,
      &IMFS_ops,

@@ -27,35 +27,14 @@
 #endif
 
 /*
- *  IMFS file system operations table
- */
-
-rtems_filesystem_operations_table  IMFS_ops = {
-  IMFS_eval_path,
-  IMFS_evaluate_for_make,
-  IMFS_link,
-  IMFS_unlink,
-  IMFS_node_type,
-  IMFS_mknod,
-  IMFS_rmnod,
-  IMFS_chown,
-  IMFS_freenodinfo,
-  IMFS_mount,
-  IMFS_initialize,
-  IMFS_unmount,
-  IMFS_fsunmount,
-  IMFS_utime, 
-  IMFS_evaluate_link,
-  IMFS_symlink,
-  IMFS_readlink
-};
-
-/*
  *  IMFS_initialize
  */
 
-int IMFS_initialize(
-  rtems_filesystem_mount_table_entry_t *temp_mt_entry
+int IMFS_initialize_support(
+  rtems_filesystem_mount_table_entry_t *temp_mt_entry,
+   rtems_filesystem_operations_table    *op_table,
+   rtems_filesystem_file_handlers_r     *memfile_handlers,
+   rtems_filesystem_file_handlers_r     *directory_handlers
 )
 {
   IMFS_fs_info_t                        *fs_info;
@@ -73,8 +52,8 @@ int IMFS_initialize(
     NULL
   );
 
-  temp_mt_entry->mt_fs_root.handlers    = &IMFS_directory_handlers;
-  temp_mt_entry->mt_fs_root.ops         = &IMFS_ops;
+  temp_mt_entry->mt_fs_root.handlers         = directory_handlers;
+  temp_mt_entry->mt_fs_root.ops              = op_table;
   temp_mt_entry->pathconf_limits_and_options = IMFS_LIMITS_AND_OPTIONS;
 
   /*
@@ -91,68 +70,12 @@ int IMFS_initialize(
    * Set st_ino for the root to 1.
    */
 
-  fs_info->ino_count   = 1;
+  fs_info->ino_count        = 1;
+  fs_info->memfile_handlers = memfile_handlers;
+  fs_info->memfile_handlers = directory_handlers;
 
   jnode = temp_mt_entry->mt_fs_root.node_access;
   jnode->st_ino = fs_info->ino_count;
 
   return 0;
 }
-
-#define jnode_get_control( jnode ) \
-  (&jnode->info.directory.Entries)
-
-#define jnode_has_no_children( jnode )  \
-  Chain_Is_empty( jnode_get_control( jnode ) )
-
-#define jnode_has_children( jnode ) \
-  ( ! jnode_has_no_children( jnode ) )
-
-#define jnode_get_first_child( jnode ) \
-    ((IMFS_jnode_t *)( Chain_Head( jnode_get_control( jnode ) )->next))
-
-
-int IMFS_fsunmount(
-  rtems_filesystem_mount_table_entry_t *temp_mt_entry
-)
-{
-   IMFS_jnode_t                     *jnode;
-   IMFS_jnode_t                     *next;
-   rtems_filesystem_location_info_t loc;       
-   int                              result = 0;
-
-   /* 
-    * Traverse tree that starts at the mt_fs_root and deallocate memory 
-    * associated memory space
-    */
-    
-   jnode = (IMFS_jnode_t *)temp_mt_entry->mt_fs_root.node_access;
-
-   do {
-     next = jnode->Parent;
-     loc.node_access = (void *)jnode;
-
-     if ( jnode->type != IMFS_DIRECTORY ) {
-        result = IMFS_unlink( &loc );
-        if (result != 0)
-          return -1;
-        jnode = next;
-     } else if ( jnode_has_no_children( jnode ) ) {
-        result = IMFS_unlink( &loc );
-        if (result != 0)
-          return -1;
-        jnode = next;
-     }
-     if ( jnode != NULL ) {
-       if ( jnode->type == IMFS_DIRECTORY ) {
-         if ( jnode_has_children( jnode ) )
-           jnode = jnode_get_first_child( jnode );
-       }
-     }
-   } while (jnode != NULL);
-
-   return 0;
-}
-
-
-

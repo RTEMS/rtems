@@ -306,7 +306,7 @@ typedef struct {
  * Structure for a mount table entry.
  */
 
-struct rtems_filesystem_mount_table_entry_tt{
+struct rtems_filesystem_mount_table_entry_tt {
   Chain_Node                             Node;
   rtems_filesystem_location_info_t       mt_point_node;
   rtems_filesystem_location_info_t       mt_fs_root;
