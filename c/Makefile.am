@@ -21,8 +21,7 @@ SUBDIRS = . $(RTEMS_BSP)
 	  echo "Configuring RTEMS_BSP=$$i"; \
 	  $(mkinstalldirs) $$i; \
 	  ( cd $$i && \
-	    CONFIG_SHELL=$(SHELL) RTEMS_BSP=$$i $(rtems_bsp_configure) \
-	    && $(MAKE) $(AM_MAKEFLAGS) preinstall ) \
+	    CONFIG_SHELL=$(SHELL) RTEMS_BSP=$$i $(rtems_bsp_configure) ) \
 	  || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
 	done
 
