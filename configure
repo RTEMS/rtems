@@ -1103,7 +1103,11 @@ fi
 if test "${enable_posix+set}" = set; then
   enableval="$enable_posix"
   \
-RTEMS_HAS_POSIX_API=no
+case "${enableval}" in 
+  yes) RTEMS_HAS_POSIX_API=yes ;;
+  no) RTEMS_HAS_POSIX_API=no ;;
+  *)  { echo "configure: error: bad value ${enableval} for disable-posix option" 1>&2; exit 1; } ;;
+esac
 else
   RTEMS_HAS_POSIX_API=yes
 fi
@@ -1113,7 +1117,11 @@ fi
 if test "${enable_tcpip+set}" = set; then
   enableval="$enable_tcpip"
   \
-RTEMS_HAS_KA9Q=no
+case "${enableval}" in 
+  yes) RTEMS_HAS_KA9Q=yes ;;
+  no) RTEMS_HAS_KA9Q=no ;;
+  *)  { echo "configure: error: bad value ${enableval} for disable-tcpip option" 1>&2; exit 1; } ;;
+esac
 else
   RTEMS_HAS_KA9Q=yes
 fi
@@ -1123,7 +1131,11 @@ fi
 if test "${enable_rtems_inlines+set}" = set; then
   enableval="$enable_rtems_inlines"
   \
-RTEMS_USE_MACROS=yes
+case "${enableval}" in 
+  yes) RTEMS_USE_MACROS=yes ;;
+  no) RTEMS_USE_MACROS=no ;;
+  *)  { echo "configure: error: bad value ${enableval} for disable-rtems-inlines option" 1>&2; exit 1; } ;;
+esac
 else
   RTEMS_USE_MACROS=no
 fi
@@ -1133,7 +1145,11 @@ fi
 if test "${enable_gcc28+set}" = set; then
   enableval="$enable_gcc28"
   \
-RTEMS_USE_GCC272=no
+case "${enableval}" in 
+  yes) RTEMS_USE_GCC272=no ;;
+  no) RTEMS_USE_GCC272=yes ;;
+  *)  { echo "configure: error: bad value ${enableval} for gcc-28 option" 1>&2; exit 1; } ;;
+esac
 else
   RTEMS_USE_GCC272=yes
 fi
@@ -1247,7 +1263,7 @@ do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1251: checking for $ac_word" >&5
+echo "configure:1267: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_AWK'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1276,7 +1292,7 @@ test -n "$AWK" && break
 done
 
 echo $ac_n "checking whether ln -s works""... $ac_c" 1>&6
-echo "configure:1280: checking whether ln -s works" >&5
+echo "configure:1296: checking whether ln -s works" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_LN_S'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else

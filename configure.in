@@ -421,19 +421,35 @@ host=$withval)
 
 AC_ARG_ENABLE(posix, \
 [  --disable-posix 	     	    disable posix interface], \
-RTEMS_HAS_POSIX_API=no,RTEMS_HAS_POSIX_API=yes)
+[case "${enableval}" in 
+  yes) RTEMS_HAS_POSIX_API=yes ;;
+  no) RTEMS_HAS_POSIX_API=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for disable-posix option) ;;
+esac],[RTEMS_HAS_POSIX_API=yes])
 
 AC_ARG_ENABLE(tcpip, \
 [  --disable-tcpip 	     	    disable KA9Q TCP/IP stack], \
-RTEMS_HAS_KA9Q=no,RTEMS_HAS_KA9Q=yes)
+[case "${enableval}" in 
+  yes) RTEMS_HAS_KA9Q=yes ;;
+  no) RTEMS_HAS_KA9Q=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for disable-tcpip option) ;;
+esac],[RTEMS_HAS_KA9Q=yes])
 
 AC_ARG_ENABLE(rtems-inlines, \
 [  --disable-rtems-inlines 	    disable RTEMS inline functions (use macros)], \
-RTEMS_USE_MACROS=yes,RTEMS_USE_MACROS=no)
+[case "${enableval}" in 
+  yes) RTEMS_USE_MACROS=yes ;;
+  no) RTEMS_USE_MACROS=no ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for disable-rtems-inlines option) ;;
+esac],[RTEMS_USE_MACROS=no])
 
 AC_ARG_ENABLE(gcc28, \
 [  --enable-gcc28		    enable use of gcc 2.8.x features], \
-RTEMS_USE_GCC272=no,RTEMS_USE_GCC272=yes)
+[case "${enableval}" in 
+  yes) RTEMS_USE_GCC272=no ;;
+  no) RTEMS_USE_GCC272=yes ;;
+  *)  AC_MSG_ERROR(bad value ${enableval} for gcc-28 option) ;;
+esac],[RTEMS_USE_GCC272=yes])
 
 AC_ARG_ENABLE(libcdir, \
 [  --enable-libcdir=directory	    set the directory for the C library], \
