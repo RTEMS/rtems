@@ -38,6 +38,6 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 
-EXTRA_DIST = README shell.c cmds.c shell.h 
+EXTRA_DIST = README shell.c cmds.c
 
 include $(top_srcdir)/../../../automake/local.am
