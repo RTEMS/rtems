@@ -219,7 +219,7 @@ __CPU_Context_switch:\n\
 	mov.l   r15,@-r4\n\
 \n\
 	mov     r5, r4"
-  :: "I" (sizeof(Context_Control))
+  :: "i" (sizeof(Context_Control))
   );
 
   asm volatile("\n\

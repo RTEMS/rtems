@@ -220,7 +220,7 @@ asm volatile(
 "	mov.l   r15,@-r4\n"
 
 "	mov     r5, r4\n"
-  :: "I" (sizeof(Context_Control))
+  :: "i" (sizeof(Context_Control))
   );
 
   asm volatile(
