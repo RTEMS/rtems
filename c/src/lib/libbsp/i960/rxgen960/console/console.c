@@ -11,12 +11,6 @@
  *  $Id$
  */
 
-#define NO_BSP_INIT
-
-
-/* only one of the following can be defined */
-#define SERIAL_INPUT  /* use serial input */
-
 #include <bsp.h>
 #include <rtems/libio.h>
 #include "concntl.h"

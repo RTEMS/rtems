@@ -1,3 +1,7 @@
+2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* console/console.c: Remove NO_BSP_INIT, SERIAL_INPUT.
+
 2001-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bsp_specs: Replace -lrtemsall with -lrtemsbsp -lrtemscpu,
