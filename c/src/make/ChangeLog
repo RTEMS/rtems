@@ -1,3 +1,7 @@
+2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/check-itron.m4: Allow unix.
+
 2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/rtems-flags.new: New (moved from ../aclocal).
