@@ -338,8 +338,9 @@ void Stack_check_report_blown_task(void)
 
     fprintf(
         stderr,
-        "  Damaged pattern begins at 0x%08x and is %d bytes long\n",
-        (unsigned32) Stack_check_Get_pattern_area(stack), PATTERN_SIZE_BYTES);
+        "  Damaged pattern begins at 0x%08lx and is %ld bytes long\n",
+        (unsigned long) Stack_check_Get_pattern_area(stack),
+        PATTERN_SIZE_BYTES);
     fflush(stderr);
 
     rtems_fatal_error_occurred( (unsigned32) "STACK BLOWN" );
