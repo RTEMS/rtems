@@ -1,0 +1,23 @@
+##
+##  $Id$
+##
+
+## LD = @LD@
+AR = @AR@
+RANLIB = @RANLIB@
+
+ARFLAGS = ruv
+
+define make-library
+test -d $(ARCH) || mkdir $(ARCH)
+$(RM) $@
+$(AR) $(ARFLAGS) $@ $^
+$(RANLIB) $@
+endef
+
+$(PROJECT_RELEASE)/lib:
+	@$(mkinstalldirs) $@
+
+TMPINSTALL_FILES = $(PROJECT_RELEASE)/lib
+
+.PRECIOUS: $(LIB)
