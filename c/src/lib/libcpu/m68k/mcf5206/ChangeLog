@@ -1,0 +1,9 @@
+2001-10-26	Victor V. Vengerov <vvv@oktet.ru>
+
+	* New libcpu support for mcf5206e.
+	* ChangeLog, clock/ckinit.c, clock/.cvsignore, configure.ac,
+	console/mcfuart.c, console/.cvsignore, include/mcf5206e.h,
+	include/mcfmbus.h, include/mcfuart.h, include/.cvsignore,
+	mbus/mcfmbus.c, mbus/.cvsignore, timer/timer.c, timer/timerisr.S,
+	timer/.cvsignore, .cvsignore: New files.
+
