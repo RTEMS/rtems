@@ -135,6 +135,12 @@ static scc_regs	*scc[NPORTS] = {
 #else
 /* XXX fix me */
 #warning "MVME162 BSP -- unknown address for SCC's"
+static scc_regs	*scc[NPORTS] = {
+    ((scc_regs * const) 0xFFF45004),
+    ((scc_regs * const) 0xFFF45000),
+    ((scc_regs * const) 0xFFF45804),
+    ((scc_regs * const) 0xFFF45800)
+};
 #endif
 
 #undef	ZWRITE0
