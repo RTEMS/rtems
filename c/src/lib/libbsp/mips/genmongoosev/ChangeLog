@@ -1,3 +1,9 @@
+2002-02-08	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/Makefile.am: Now compile the gdb stub.
+	* startup/bspstart.c: Fixed header block.
+	* startup/gdb-support.c: New file in stub state.
+
 2001-02-01	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* include/lr33000.h, include/lr330x0.h, include/r3000.h, start/mg5.h:

@@ -1,22 +1,22 @@
 /*
-**  This routine starts the application.  It includes application,
-**  board, and monitor specific initialization and configuration.
-**  The generic CPU dependent initialization has been performed
-**  before this routine is invoked.
-**
-**  COPYRIGHT (c) 1989-2001.
-**  On-Line Applications Research Corporation (OAR).
-**
-**  The license and distribution terms for this file may be
-**  found in the file LICENSE in this distribution or at
-**  http://www.OARcorp.com/rtems/license.html.
-**
-**  $Id$
-**
-** Modification History:
-**        12/10/01  A.Ferrer, NASA/GSFC, Code 582
-**           Set interrupt mask to 0xAF00 (Line 139).
-*/
+ *  This routine starts the application.  It includes application,
+ *  board, and monitor specific initialization and configuration.
+ *  The generic CPU dependent initialization has been performed
+ *  before this routine is invoked.
+ *
+ *  COPYRIGHT (c) 1989-2001.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
+ *
+ *  $Id$
+ *
+ * Modification History:
+ *        12/10/01  A.Ferrer, NASA/GSFC, Code 582
+ *           Set interrupt mask to 0xAF00 (Line 139).
+ */
 
 #include <string.h>
 
