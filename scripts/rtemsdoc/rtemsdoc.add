@@ -4,10 +4,11 @@
 %define srcvers	@rtems_version@
 %define rpmvers  %{expand:%%(echo @rtems_version@ | tr - _ )}
 
-Name:         rtemsdoc
+Name:         %{rpmprefix}rtemsdoc
 Release:      @rtems_rpm_release@
+Epoch:	      0
 License:      Distributable
-Group:        rtems
+Group:        %{rpmgroup}/Documentation
 
 Autoreqprov:  on
 Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
@@ -64,13 +65,12 @@ cd build
   rm -rf ${RPM_BUILD_ROOT}/%{_datadir}/rtems/html/supplements/template*
 
   gzip -9qf ${RPM_BUILD_ROOT}/%{_infodir}/*
-  bzip2 -9qf ${RPM_BUILD_ROOT}/%{_datadir}/rtems/ps/*
 
 ## base
 
 %package base
 Summary: Documentation for RTEMS ada support
-Group: rtems/documentation
+Group: %{rpmgroup}/Documentation
 
 %description base
 RTEMS is a free operating system for embedded systems.

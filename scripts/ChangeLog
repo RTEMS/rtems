@@ -1,3 +1,18 @@
+2004-02-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtemsdoc/.cvsignore: Reformat.
+	* configure.ac: Add RTEMS_RPM_RELEASE.
+	* Makefile.am: Reformat. Add RTEMS_RPM_RELEASE support to
+	rtems-source.add
+	* rtems/rtems-source.add: Add RTEMS_RPM_RELEASE.
+	* rtemsdoc/mkspec.in: Remove.
+	* rtemsdoc/Makefile.am: Reworked.
+	* rtemsdoc/header.add: Update Copyright notice.
+	* rtemsdoc/rtemsdoc.add: Add RTEMS_RPM_RELEASE.
+	Add %{rpmgroup}. Remove bzip-ing *.ps.
+	* rtemsdoc/supplement.add.in: Add %{rpmgroup}.
+	* rtemsdoc/templ.add.in: Add %{rpmgroup}.
+
 2004-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/rtems-source.add: New.

@@ -70,6 +70,7 @@ AC_SUBST(BSPVERS)
 AC_SUBST(RPM_CPU)
 AC_SUBST(rpmprefix,$rpmprefix)
 AC_SUBST(rpmgroup,[RTEMS/][RTEMS_API])
+AC_SUBST(RTEMS_RPM_RELEASE,$rtems_rpm_release)
 AC_SUBST(osversion,$osversion)
 AC_CONFIG_FILES([Makefile
 binutils/Makefile
