@@ -12,7 +12,7 @@
 
 The administration interface manager provides a portable
 interface for some system administrative functions.
-The capabilities in this manager were defined in the POSIX
+The capabilities in this manager are defined in the POSIX
 1003.1h/D3 proposed standard titled @b{Services for Reliable,
 Available, and Serviceable Systems}.
 
@@ -36,29 +36,33 @@ This field ...
 
 @table @b
 @item ADMIN_AUTOBOOT
-This field ...
+The default, causing the system to reboot in its usual fashion.  The
+@code{admin_data} field points to an implementation defined string
+that specifies the system image to reboot.
 
 @item ADMIN_HALT
-This field ...
+The system is simply halted; no reboot takes place.
 
 @item ADMIN_FAST
-This field ...
+The system does no send SIGTERM to active processes before halting.
 
 @item ADMIN_IMMEDIATE
-This field ...
+The system does not perform any of the normal shutdown procedures.
 
 @item ADMIN_ALTSYSTEM
-This field ...
+The system reboots using the @code{admin_data} string as a specification
+of the system to be booted.
 
 @item ADMIN_ALTCONFIG
-This field ...
+The system reboots using the @code{admin_data} string as a specification
+of the initial implicit configuration space.
 
 @item ADMIN_SYSDUMP
-This field ...
+Dump kernal memory before rebooting.
 
 @item ADMIN_INIT
-This field ...
-
+An option allowing the specification of an alternate initial program
+to be run when the system reboots.
 
 @end table
 
