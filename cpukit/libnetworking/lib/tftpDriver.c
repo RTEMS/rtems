@@ -305,8 +305,8 @@ getPacket (struct tftpStream *tp)
 	int len;
 	struct timeval tv;
 
-	tv.tv_sec = 6;
-	tv.tv_usec = 0;
+	tv.tv_sec = PACKET_REPLY_MILLISECONDS / 1000;
+	tv.tv_usec = (PACKET_REPLY_MILLISECONDS % 1000) * 1000;
 	setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
 	for (;;) {
 		union {
@@ -335,6 +335,7 @@ getPacket (struct tftpStream *tp)
 		sendStifle (tp, &from.i);
 	}
 	tv.tv_sec = 0;
+	tv.tv_usec = 0;
 	setsockopt (tp->socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
 	return len;
 }
