@@ -35,7 +35,7 @@ rtems_extension Task_switch(
   rtems_time_of_day time;
   rtems_status_code status;
 
-  index = task_number( heir->Object.id );
+  index = task_number( heir->Object.id ) - task_number( Task_id[1] ) + 1;
 
   switch( index ) {
     case 1:

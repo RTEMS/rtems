@@ -1,3 +1,10 @@
+2002-03-20	Chris Johns <ccj@acm.org>
+
+	* PR145.
+	* sp04/task1.c, sp04/tswitch.c: Test fails if other tasks present
+	in system (e.g. driver tasks).  Also exit on minimum number of
+	switches not precise number.
+
 2001-01-29	Joel Sherrill <joel@OARcorp.com>
 
 	* Fixed bug where resetting a timer that was not at the head

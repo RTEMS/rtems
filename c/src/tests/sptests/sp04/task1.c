@@ -74,7 +74,7 @@ rtems_task Task_1(
   directive_failed( status, "rtems_task_resume of TA3" );
 
   while ( FOREVER ) {
-    if ( Run_count[ 1 ] == 3 ) {
+    if ( Run_count[ 1 ] >= 3 ) {
       puts( "TA1 - rtems_task_mode - change mode to NO RTEMS_PREEMPT" );
 
       status = rtems_task_mode(
