@@ -14,9 +14,8 @@ EXTRA_DIST = console.c inch.c polled_io.c uart.c reboot.c console.inl
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/bsp/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
+	@$(mkdir_p) $(PROJECT_INCLUDE)/bsp
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
 $(PROJECT_INCLUDE)/bsp/consoleIo.h: consoleIo.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/consoleIo.h
