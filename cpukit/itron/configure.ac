@@ -39,7 +39,7 @@ AM_CONDITIONAL(MACROS,test "$INLINEdir" = "macros" )
 ## Needed when using automake for libs/rels
 RTEMS_CHECK_NEWLIB
 
-AM_CONFIG_HEADER(src/config.h)
+AM_CONFIG_HEADER([src/config.h])
 
 ##
 ## FIXME: We configure and build the macros subdirectory, too.

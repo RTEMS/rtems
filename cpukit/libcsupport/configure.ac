@@ -45,7 +45,7 @@ AC_CHECK_DECLS([CHAR_BIT],,,[#include <limits.h>])
 
 AM_CONDITIONAL([NEED_SYS_CDEFS_H],[test x"$NEED_SYS_CDEFS_H" = x"yes"])
 
-AM_CONFIG_HEADER(src/config.h)
+AM_CONFIG_HEADER([src/config.h])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

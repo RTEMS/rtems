@@ -24,7 +24,7 @@ RTEMS_CANONICALIZE_TOOLS
 AC_PROG_RANLIB
 
 AM_CONDITIONAL(UNIX,test x"$RTEMS_CPU" = x"unix")
-AM_CONFIG_HEADER(config.h)
+AM_CONFIG_HEADER([config.h])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile

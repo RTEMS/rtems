@@ -1,5 +1,9 @@
 2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Cosmetical fixes.
+
+2002-11-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Fix package name.
 
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

@@ -46,7 +46,7 @@ if test "$HAS_POSIX_API" != "yes"; then
 AC_MSG_ERROR([libposix is not supported by this configuration])
 fi
 
-AM_CONFIG_HEADER(src/config.h)
+AM_CONFIG_HEADER([src/config.h])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
