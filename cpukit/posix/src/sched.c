@@ -23,7 +23,8 @@ int sched_setparam(
   const struct sched_param *param
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  errno = ENOSYS;
+  return -1;
 }
 
 /*PAGE
@@ -36,7 +37,8 @@ int sched_getparam(
   const struct sched_param *param
 )
 {
-  return POSIX_NOT_IMPLEMENTED();
+  errno = ENOSYS;
+  return -1;
 }
 
 /*PAGE
@@ -57,7 +59,8 @@ int sched_setscheduler(
 
   assert( pid == getpid() );
 
-  return POSIX_NOT_IMPLEMENTED();
+  errno = ENOSYS;
+  return -1;
 }
 
 /*PAGE
@@ -75,7 +78,8 @@ int sched_getscheduler(
 
   assert( pid == getpid() );
 
-  return POSIX_NOT_IMPLEMENTED();
+  errno = ENOSYS;
+  return -1;
 }
 
 /*PAGE
