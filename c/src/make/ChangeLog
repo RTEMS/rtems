@@ -1,3 +1,7 @@
+2003-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_PATH_PERL (Unused).
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/check-itron.m4: New.
