@@ -1,3 +1,8 @@
+2003-10-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/rtems-top.m4: Add support for --with-project-root.
+	Remove RTEMS Version message.
+
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/canonical-host.m4: Remove.
