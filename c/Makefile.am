@@ -32,8 +32,8 @@ preinstall-am: ${RTEMS_BSP}
 depend-am: ${RTEMS_BSP}
 
 ## Pull in extra files intro the distribution
-EXTRA_DIST = ACKNOWLEDGEMENTS README.DOS REQUIRES PROBLEMS TESTED README \
-    UPDATE_HELP
+EXTRA_DIST = ACKNOWLEDGEMENTS
+EXTRA_DIST += TOOL_TARGETS
 
 DIST_SUBDIRS = ${RTEMS_BSP}
 ## -------------------------------------------------------
