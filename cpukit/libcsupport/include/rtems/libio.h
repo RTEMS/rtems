@@ -554,6 +554,17 @@ typedef struct rtems_termios_callbacks {
 
 void rtems_termios_initialize (void);
 
+/*
+ * CCJ: Change before opening a tty. Newer code from Eric is coming
+ * so extra work to handle an open tty is not worth it. If the tty
+ * is open, close then open it again.
+ */
+rtems_status_code rtems_termios_bufsize (
+  int cbufsize,     /* cooked buffer size */
+  int raw_input,    /* raw input buffer size */
+  int raw_output    /* raw output buffer size */
+);
+
 rtems_status_code rtems_termios_open (
   rtems_device_major_number      major,
   rtems_device_minor_number      minor,
