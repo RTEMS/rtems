@@ -1,5 +1,9 @@
 2002-08-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* sptests/sp04/Makefile.am: Remove init.$(OBJEXT).
+
+2002-08-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Activate tmtests.
 	* configure.ac: Activate tmtests.
 	* samples/base_mp/Makefile.am: Add nodeX subdirs.

@@ -12,7 +12,7 @@ endif
 
 sp04_SOURCES = sp04.adb config.h sptest.adb sptest.ads
 
-sp04$(EXEEXT): sp04.adb init.$(OBJEXT)
+sp04$(EXEEXT): sp04.adb
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 EXTRA_DIST = sp04.scn
