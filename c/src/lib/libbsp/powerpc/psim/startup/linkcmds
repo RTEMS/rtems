@@ -60,6 +60,7 @@ SECTIONS
   .text      :
   {
     *(.text)
+    *(.gnu.linkonce.t.*)
     *(.descriptors)
     /* .gnu.warning sections are handled specially by elf32.em.  */
     *(.gnu.warning)
@@ -92,6 +93,7 @@ SECTIONS
   .data    :
   {
     *(.data)
+    *(.gnu.linkonce.d.*)
     CONSTRUCTORS
   } >RAM
   PROVIDE (__EXCEPT_START__ = .);
