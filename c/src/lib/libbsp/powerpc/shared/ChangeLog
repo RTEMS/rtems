@@ -1,3 +1,7 @@
+
+	* include/Makefile.am: Use _HEADER instead of H_FILES.
+	* irq/Makefile.am: Ditto.
+	* openpic/Makefile.am: Ditto.
 	* include/bsp.h: Include <bspopts.h>.
 
 2001-10-25	Joel Sherrill <joel@OARcorp.com>
