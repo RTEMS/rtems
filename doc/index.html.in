@@ -163,7 +163,7 @@
     </MENU>
 
 
-<LI>CPU Supplements
+<LI>CPU Supplements for Primary Ports
 
   <MENU>
         <LI><A HREF="HELP.html">
@@ -173,7 +173,7 @@
             <A HREF="HELP.html">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="HELP.html">
-               RTEMS AMD 29K Applications Supplement</A>
+               RTEMS Texas Instruments C3x/C4x Applications Supplement</A>
             </LI>
 
         <LI><A HREF="HELP.html">
@@ -183,7 +183,7 @@
             <A HREF="HELP.html">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="HELP.html">
-               RTEMS Hitachi SH Applications Supplement</A>
+               RTEMS Hitachi H8/300 Applications Supplement</A>
             </LI>
 
         <LI><A HREF="../pdf/i386.pdf">
@@ -206,16 +206,6 @@
                RTEMS Intel i960 Applications Supplement</A>
             </LI>
 
-        <LI><A HREF="HELP.html">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-               RTEMS MIPS64 ORION Applications Supplement</A>
-            </LI>
-
         <LI><A HREF="../pdf/m68k.pdf">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../ps/m68k.ps">
@@ -224,6 +214,26 @@
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="supplements/m68k/index.html">
                RTEMS Motorola MC68xxx Applications Supplement</A>
+            </LI>
+
+        <LI><A HREF="../pdf/mips.pdf">
+                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="../ps/mips.ps">
+                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="../dvi/mips.dvi">
+                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="supplements/mips/index.html">
+               RTEMS MIPS Applications Supplement</A>
+            </LI>
+
+        <LI><A HREF="HELP.html">
+                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="HELP.html">
+                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="HELP.html">
+                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="HELP.html">
+               RTEMS OpenCores OR32 Applications Supplement</A>
             </LI>
 
         <LI><A HREF="../pdf/powerpc.pdf">
@@ -236,6 +246,16 @@
                RTEMS PowerPC Applications Supplement</A>
             </LI>
 
+        <LI><A HREF="../pdf/sh.pdf">
+                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="../ps/sh.ps">
+                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="../dvi/sh.dvi">
+                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="supplements/sh/index.html">
+               RTEMS Hitachi SH Applications Supplement</A>
+            </LI>
+
         <LI><A HREF="../pdf/sparc.pdf">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="../ps/sparc.ps">
@@ -246,14 +266,29 @@
                RTEMS SPARC Applications Supplement</A>
             </LI>
 
-        <LI><A HREF="../pdf/hppa1_1.pdf">
+        <LI><A HREF="HELP.html">
                     <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../ps/hppa1_1.ps">
+            <A HREF="HELP.html">
                     <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="../dvi/hppa1_1.dvi">
+            <A HREF="HELP.html">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="supplements/hppa1_1/index.html">
-               RTEMS Hewlett Packard PA-RISC Applications Supplement</A>
+            <A HREF="HELP.html">
+               RTEMS UNIX Port Applications Supplement</A>
+            </LI>
+
+    </MENU>
+
+<LI>CPU Supplements for Secondary Ports
+
+  <MENU>
+        <LI><A HREF="HELP.html">
+                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="HELP.html">
+                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="HELP.html">
+                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="HELP.html">
+               RTEMS AMD 29K Applications Supplement</A>
             </LI>
 
         <LI><A HREF="HELP.html">
@@ -263,7 +298,17 @@
             <A HREF="HELP.html">
                     <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
             <A HREF="HELP.html">
-               RTEMS UNIX Port Applications Supplement</A>
+               RTEMS MIPS64 ORION Applications Supplement</A>
+            </LI>
+
+        <LI><A HREF="../pdf/hppa1_1.pdf">
+                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="../ps/hppa1_1.ps">
+                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="../dvi/hppa1_1.dvi">
+                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
+            <A HREF="supplements/hppa1_1/index.html">
+               RTEMS Hewlett Packard PA-RISC Applications Supplement</A>
             </LI>
 
     </MENU>
