@@ -28,7 +28,7 @@
 const pthread_attr_t _POSIX_Threads_Default_attributes = {
   TRUE,                    /* is_initialized */
   NULL,                    /* stackaddr */
-  STACK_MINIMUM_SIZE,      /* stacksize */
+  STACK_MINIMUM_SIZE * 2,  /* stacksize */
   PTHREAD_SCOPE_PROCESS,   /* contentionscope */
   PTHREAD_EXPLICIT_SCHED,  /* inheritsched */
   SCHED_FIFO,              /* schedpolicy */

@@ -59,14 +59,14 @@ struct sigaction _POSIX_signals_Default_vectors[ SIG_ARRAY_MAX ] = {
   /* SIGTERM     */  SIGACTION_TERMINATE,
   /* SIGUSR1     */  SIGACTION_TERMINATE,
   /* SIGUSR2     */  SIGACTION_TERMINATE,
-  /* SIGCHLD     */  SIGACTION_IGNORE,
-  /* SIGCONT     */  SIGACTION_CONTINUE,
-  /* SIGSTOP     */  SIGACTION_STOP,
-  /* SIGTSTP     */  SIGACTION_STOP,
-  /* SIGTTIN     */  SIGACTION_STOP,
-  /* SIGTTOU     */  SIGACTION_STOP,
-  /* SIGBUS      */  SIGACTION_TERMINATE,
-  /* SIGRTMIN 21 */  SIGACTION_IGNORE,
+  /* SIGRTMIN 14 */  SIGACTION_IGNORE,
+  /* SIGRT    15 */  SIGACTION_IGNORE,
+  /* SIGRT    16 */  SIGACTION_IGNORE,
+  /* SIGRT    17 */  SIGACTION_IGNORE,
+  /* SIGRT    18 */  SIGACTION_IGNORE,
+  /* SIGRT    19 */  SIGACTION_IGNORE,
+  /* SIGRT    20 */  SIGACTION_IGNORE,
+  /* SIGRT    21 */  SIGACTION_IGNORE,
   /* SIGRT    22 */  SIGACTION_IGNORE,
   /* SIGRT    23 */  SIGACTION_IGNORE,
   /* SIGRT    24 */  SIGACTION_IGNORE,
@@ -108,6 +108,7 @@ boolean _POSIX_signals_Check_signal(
   boolean             do_callout;
   siginfo_t          *siginfo = NULL;  /* really needs to be set below */
   siginfo_t           siginfo_struct;
+  sigset_t            saved_signals_blocked;
 
   mask = signo_to_mask( signo );
 
@@ -136,6 +137,20 @@ boolean _POSIX_signals_Check_signal(
   assert( _POSIX_signals_Vectors[ signo ].sa_handler ||
           _POSIX_signals_Vectors[ signo ].sa_sigaction );
  
+  /*
+   *  Just to prevent sending a signal which is currently being ignored.
+   */
+
+  if ( _POSIX_signals_Vectors[ signo ].sa_handler == SIG_IGN )
+    return FALSE;
+
+  /*
+   *  Block the signals requested in sa_mask
+   */
+
+  saved_signals_blocked = api->signals_blocked;
+  api->signals_blocked |= _POSIX_signals_Vectors[ signo ].sa_mask;
+
   switch ( _POSIX_signals_Vectors[ signo ].sa_flags ) {
     case SA_SIGINFO:
       assert( 0 );   /* XXX we haven't completely implemented this yet */
@@ -155,6 +170,13 @@ boolean _POSIX_signals_Check_signal(
       (*_POSIX_signals_Vectors[ signo ].sa_handler)( signo );
       break;
   }
+
+  /*
+   *  Restore the previous set of blocked signals
+   */
+ 
+  api->signals_blocked = saved_signals_blocked;
+
   return TRUE;
 }
 
@@ -164,18 +186,26 @@ void _POSIX_signals_Post_switch_extension(
 {
   POSIX_API_Control  *api;
   int                 signo;
+  ISR_Level           level;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   /*
    *  If we invoke any user code, there is the possibility that
-   *  a new signal has been posted that we should process.
+   *  a new signal has been posted that we should process so we
+   *  restart the loop if a signal handler was invoked.
+   *
+   *  The first thing done is to check there are any signals to be 
+   *  processed at all.  No point in doing this loop otherwise.
    */
 
-/* XXX somewhere we need to see if all pending signals are gone and clear */
-/* XXX do_post_switch_extension */
-
 restart:
+  _ISR_Disable( level );
+    if ( !(~api->signals_blocked & 
+          (api->signals_pending | _POSIX_signals_Pending)) )
+      return;
+  _ISR_Enable( level );
+
   for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
 
     if ( _POSIX_signals_Check_signal( api, signo, FALSE ) )
@@ -186,7 +216,7 @@ restart:
 
   }
 
-  for ( signo = SIGABRT ; signo <= SIGBUS ; signo++ ) {
+  for ( signo = SIGABRT ; signo <= __SIGLASTNOTRT ; signo++ ) {
 
     if ( _POSIX_signals_Check_signal( api, signo, FALSE ) )
       goto restart;
@@ -370,19 +400,24 @@ int sigaction(
   struct sigaction       *oact
 )
 {
-  if ( !act )
-    set_errno_and_return_minus_one( EFAULT );
-
   if ( !is_valid_signo(sig) )
     set_errno_and_return_minus_one( EINVAL );
   
   if ( oact )
     *oact = _POSIX_signals_Vectors[ sig ];
 
-  /* XXX need to interpret some stuff here */
   /* XXX some signals cannot be ignored */
+  /* XXX can't find this in spec -- ignore calls on SIGKILL and SIGSTOP */
+  /* XXX we don't do SIGSTOP */
 
-  _POSIX_signals_Vectors[ sig ] = *act;
+  if ( sig == SIGKILL )
+    set_errno_and_return_minus_one( EINVAL );
+  
+  /* XXX need to interpret some stuff here */
+
+  if ( act ) {
+    _POSIX_signals_Vectors[ sig ] = *act;
+  }
 
   return 0;
 }
@@ -420,7 +455,6 @@ int pthread_sigmask(
 )
 {
   POSIX_API_Control  *api;
-  boolean             evaluate_signals;
 
 /* XXX some signals can not be ignored */
 
@@ -435,12 +469,9 @@ int pthread_sigmask(
   if ( !set )
     set_errno_and_return_minus_one( EFAULT );
 
-  evaluate_signals = TRUE;
-
   switch ( how ) {
     case SIG_BLOCK:
       api->signals_blocked |= *set;
-      evaluate_signals = FALSE;
       break;
     case SIG_UNBLOCK:
       api->signals_blocked &= ~*set;
@@ -456,13 +487,11 @@ int pthread_sigmask(
 
   /* XXX evaluate the new set */
 
-  if ( evaluate_signals == TRUE ) {
-     if ( ~api->signals_blocked & 
-          (api->signals_pending | _POSIX_signals_Pending) ) {
-       api->signals_global_pending &= _POSIX_signals_Pending;
-       _Thread_Executing->do_post_task_switch_extension = TRUE;
-       _Thread_Dispatch();
-     }
+  if ( ~api->signals_blocked & 
+       (api->signals_pending | _POSIX_signals_Pending) ) {
+    api->signals_global_pending &= _POSIX_signals_Pending;
+    _Thread_Executing->do_post_task_switch_extension = TRUE;
+    _Thread_Dispatch();
   }
 
   return 0;
@@ -622,9 +651,9 @@ int pthread_kill(
 
         if ( api->signals_pending & ~api->signals_blocked ) {
           the_thread->do_post_task_switch_extension = TRUE;
-
  
-          /* XXX may have to unblock the task -- this is a kludge -- fix it */
+          /* XXX unblock the task -- this is a kludge -- fix it */
+
           if ( the_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL ) {
             the_thread->Wait.return_code = EINTR;
             if ( _States_Is_waiting_on_thread_queue(the_thread->current_state) )
