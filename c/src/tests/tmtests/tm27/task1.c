@@ -86,37 +86,11 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
-  _Thread_Dispatch_disable_level = 1;
-
-  Interrupt_nest = 1;
-
   Install_tm27_vector( Isr_handler );
 
-  Interrupt_occurred = 0;
-  Timer_initialize();
-    Cause_tm27_intr();
-  /* goes to Isr_handler */
-
-#if (MUST_WAIT_FOR_INTERRUPT == 1)
-  while ( Interrupt_occurred == 0 );
-#endif
-  Interrupt_return_time = Read_timer();
-
-  put_time(
-    "INTERRUPT_ENTER (nested interrupt)",
-    Interrupt_enter_nested_time,
-    1,
-    0,
-    0
-  );
-
-  put_time(
-    "INTERRUPT_RETURN (nested interrupt)",
-    Interrupt_return_nested_time,
-    1,
-    0,
-    0
-  );
+  /*
+   *  No preempt .. no nesting
+   */
 
   Interrupt_nest = 0;
 
@@ -147,6 +121,44 @@ rtems_task Task_1(
     0,
     0
   );
+
+  /*
+   *  No preempt .. nested
+   */
+
+  _Thread_Dispatch_disable_level = 1;
+
+  Interrupt_nest = 1;
+
+  Interrupt_occurred = 0;
+  Timer_initialize();
+    Cause_tm27_intr();
+  /* goes to Isr_handler */
+
+#if (MUST_WAIT_FOR_INTERRUPT == 1)
+  while ( Interrupt_occurred == 0 );
+#endif
+  Interrupt_return_time = Read_timer();
+
+  put_time(
+    "INTERRUPT_ENTER (nested interrupt)",
+    Interrupt_enter_nested_time,
+    1,
+    0,
+    0
+  );
+
+  put_time(
+    "INTERRUPT_RETURN (nested interrupt)",
+    Interrupt_return_nested_time,
+    1,
+    0,
+    0
+  );
+
+  /*
+   *  Does a preempt .. not nested
+   */
 
   _Thread_Dispatch_disable_level = 0;
 
