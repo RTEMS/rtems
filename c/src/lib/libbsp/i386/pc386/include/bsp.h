@@ -87,8 +87,13 @@ extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 #define BSP_DEC21140_NETWORK_DRIVER_NAME    "dc1"
 #define BSP_DEC21140_NETWORK_DRIVER_ATTACH  rtems_dec21140_driver_attach
 
+#ifndef RTEMS_BSP_NETWORK_DRIVER_NAME
 #define RTEMS_BSP_NETWORK_DRIVER_NAME   BSP_DEC21140_NETWORK_DRIVER_NAME
+#endif
+
+#ifndef RTEMS_BSP_NETWORK_DRIVER_ATTACH
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH BSP_DEC21140_NETWORK_DRIVER_ATTACH
+#endif
 
 /*-------------------------------------------------------------------------+
 | Constants
