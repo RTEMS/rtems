@@ -7,7 +7,7 @@ ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 VPATH = @srcdir@:@srcdir@/../shared/src
 
 C_FILES = cache.c cache_aligned_malloc.c cache_manager.c displayCpu.c page.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_libcpudir = $(includedir)/libcpu
 
@@ -15,7 +15,7 @@ noinst_HEADERS = cache_.h
 include_libcpu_HEADERS = cpu.h cpuModel.h cache.h
 
 S_FILES = cpuModel.S idtr.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES) $(S_O_FILES)
 
