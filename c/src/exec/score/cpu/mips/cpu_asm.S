@@ -165,7 +165,7 @@
  * );
  */
 
-#if ( CPU_HARDWARE_FP == FALSE )
+#if ( CPU_HARDWARE_FP == TRUE )
 FRAME(_CPU_Context_save_fp,sp,0,ra)
         .set noat
         ld   a1,(a0)
@@ -226,7 +226,7 @@ ENDFRAME(_CPU_Context_save_fp)
  * )
  */
 
-#if ( CPU_HARDWARE_FP == FALSE )
+#if ( CPU_HARDWARE_FP == TRUE )
 FRAME(_CPU_Context_restore_fp,sp,0,ra)
         .set noat
         ld a1,(a0)
