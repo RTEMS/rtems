@@ -8,6 +8,7 @@ LIBNAME = librtems
 LIB = $(ARCH)/$(LIBNAME).a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
 CPU_OBJS = $(wildcard ../../score/cpu/$(RTEMS_CPU)/$(ARCH)/*.rel)
