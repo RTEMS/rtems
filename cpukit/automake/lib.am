@@ -13,9 +13,4 @@ $(AR) $(ARFLAGS) $@ $^
 $(RANLIB) $@
 endef
 
-$(project_libdir)$(MULTISUBDIR):
-	@$(mkinstalldirs) $@
-
-TMPINSTALL_FILES = $(project_libdir)$(MULTISUBDIR)
-
-.PRECIOUS: $(LIB)
+TMPINSTALL_FILES =

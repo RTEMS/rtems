@@ -23,8 +23,6 @@ include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = include/rtems/bspIo.h include/rtems/userenv.h \
     include/rtems/fs.h include/rtems/stdint.h
 
-BUILT_SOURCES = $(PREINSTALL_FILES)
-
 AUTOMAKE_FILES = automake/compile.am automake/lib.am automake/local.am \
     automake/multilib.am automake/subdirs.am
 EXTRA_DIST = $(AUTOMAKE_FILES)
