@@ -48,6 +48,7 @@ TARGET_SUBDIRS="$target_subdirs"
 fi
 AC_SUBST(TARGET_SUBDIRS)
 
+# Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 tools/Makefile

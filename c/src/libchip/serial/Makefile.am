@@ -16,7 +16,6 @@ H_FILES = mc68681_p.h ns16550_p.h sersupp.h z85c30_p.h
 INSTALLED_H_FILES = mc68681.h ns16550.h z85c30.h serial.h
 noinst_HEADERS = $(H_FILES) $(INSTALLED_H_FILES)
 
-SRCS = $(C_FILES) $(H_FILES)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
@@ -51,6 +50,6 @@ all: ${ARCH} $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 DOC_FILES = \
 README.mc68681 README.ns16550 README.xr88681 README.z85c30 STATUS
 
-EXTRA_DIST += $(C_FILES) $(DOC_FILES)
+EXTRA_DIST = $(C_FILES) $(DOC_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

@@ -9,12 +9,155 @@
 # acpolish <configure.in >configure.in~
 # mv configure.in~ configure.in
 #
-# ATTENTION: This file contains embedded tabs
 
-my $nl_seen = 0 ;
+# $Id$
+
+# find relative up-path to configure.in
+my $rtems_cfg = &find_file(".","VERSION");
+my $rtems_root = &find_root() ;
+$rtems_root =~ tr/\//\-/ ;
+my $rtems_name = "rtems" ;
+$rtems_name .=  "-" . "$rtems_root" if (length($rtems_root) > 0 ) ;
+
+my @buffer = () ;
+
+while ( <> )
+{
+  push @buffer, "$_" ;
+}
+
+{
+  my @tbuf = () ;
+
+  foreach ( @buffer )
+  { 
+    if ( /^#.*list.*Makefile.*$/o ) {}
+    elsif ( /^dnl[\s]+check.*target.*cc.*$/o ) {}
+    elsif ( /^[\s]*AC_CONFIG_AUX_DIR\(.*\)[\s]*$/o )
+    {
+      push @tbuf, "AC_CONFIG_AUX_DIR($rtems_cfg)\n" ;
+    }
+    elsif ( /^[\s]*RTEMS_TOP\(.*\)[\s]*$/o )
+    {
+      push @tbuf, "RTEMS_TOP($rtems_cfg)\n" ;
+    }
+    elsif ( /^[\s]*AM_INIT_AUTOMAKE\(.*\)[\s]*$/o )
+    {
+      push @tbuf, "AM_INIT_AUTOMAKE($rtems_name,\$RTEMS_VERSION,no)\n" ;
+    }
+    elsif ( /^[\s]*AC_SUBST\(RTEMS_HAS_POSIX_API\)[\s]*$/o ) 
+    {
+      #remove the line
+    }
+    elsif ( /^[\s]*AC_SUBST\(RTEMS_HAS_ITRON_API\)[\s]*$/o ) 
+    {
+      #remove the line
+    }
+    elsif ( /^[\s]*AC_SUBST\(RTEMS_HAS_HWAPI\)[\s]*$/o ) 
+    {
+      #remove the line
+    }
+    elsif ( /^[\s]*AC_SUBST\(RTEMS_USE_MACROS\)[\s]*$/o ) 
+    {
+      #remove the line
+    }
+    elsif ( /^[\s]*AC_SUBST\(RTEMS_HAS_MULTIPROCESSING\)[\s]*$/o ) 
+    {
+      #remove the line
+    }
+    elsif ( /^[\s]*AC_SUBST\(RTEMS_HAS_RDBG\)[\s]*$/o ) 
+    {
+      #remove the line
+    }
+    elsif ( /^[\s\t]*AC_SUBST\(RTEMS_USE_OWN_PDIR\)[\s]*$/o ) 
+    { # obsolete option
+      #remove the line
+    }
+    elsif ( /^[\s\t]*RTEMS_ENABLE_GMAKE_PRINT[     ]*$/o ) 
+    { # obsolete macro
+      #remove the line
+    }
+    elsif ( /^[\s]*AC_SUBST\(RTEMS_HAS_NETWORKING\)[\s]*$/o ) 
+    {
+      #remove the line
+    }
+    elsif ( /^[\s]*AC_SUBST\(RTEMS_LIBC_DIR\)[\s]*$/o ) 
+    {
+      #remove the line
+    }
+    elsif ( /^[\s]*AC_SUBST\(PROJECT_ROOT\)[\s]*$/o ) 
+    {
+      #remove the line
+    }
+    elsif ( /^[\s]*AC_SUBST\(RTEMS_GAS_CODE16\)[\s]*$/o ) 
+    {
+      #remove the line
+    }
+    elsif ( /^[\s]*PROJECT_ROOT[\s]*=.*$/o ) 
+    {
+      #remove the line
+    }
+    elsif ( /^[\s]*(RTEMS_ENABLE_LIBCDIR).*$/o ) 
+    { #remove the line
+      &define_variable("$1","");
+      push @tbuf, "$_" ;
+    }
+    elsif ( /^[\s]*(RTEMS_PROG_CC_FOR_TARGET).*$/o ) 
+    {
+      &define_variable("$1","");
+      push @tbuf, "$_" ;
+    }
+    elsif ( /^[\s]*(RTEMS_PROG_CXX_FOR_TARGET).*$/o ) 
+    {
+      &define_variable("$1","");
+      push @tbuf, "$_" ;
+    }
+    else
+    {
+      push @tbuf, "$_" ;
+    }
+  } # foreach
+  @buffer = @tbuf ;
+}
+
+{
+  my @tbuf = () ;
+  foreach ( @buffer )
+  {
+    if ( /^[\s]*(RTEMS_ENABLE_LIBCDIR).*$/o )
+    {
+      if (  ( not defined $var_RTEMS_PROG_CC_FOR_TARGET )
+        and ( not defined $var_RTEMS_PROG_CXX_FOR_TARGET )
+      ) 
+      {
+        push @tbuf, "$_" ;
+      }
+    }
+    elsif ( /^AC_OUTPUT.*$/o )
+    {
+      push @tbuf, "# Explicitly list all Makefiles here\n" ;
+      push @tbuf, "$_" ;
+    }
+    else
+    {
+      push @tbuf, "$_" ;
+    }
+  }
+  @buffer = @tbuf ;
+}
+
+{ ## pretty print
+  my $out = join ('',@buffer) ;
+  $out =~ s/\s\#\n(\#\n)+/\n/g ;
+  $out =~ s/\n\n\#\n\n/\n/g ;
+  $out =~ s/\n\n[\n]*/\n\n/g ;
+  print $out ;
+}
+
+exit 1 ;
 
 # find a relative up-path to a file $file, starting at directory $pre
-sub find_file
+sub find_file($$)
 {
   my $pre = $_[0] ;
   my $file= $_[1] ;
@@ -42,86 +185,52 @@ sub find_file
   die "Can't find file ${file}\n" ;
 }
 
-# find relative up-path to configure.in
-my $rtems_cfg = find_file(".","VERSION");
+sub find_root()
+{
+  my $top_builddir = "." ;
+  my $subdir="";
+  my $pwd = `pwd`; chomp $pwd;
+  $pwd .= "/" ;
+  my $len ;
 
+  if ( -f "VERSION" )  { return $subdir ; }
+  my $i = rindex($pwd,'/');
 
-while( <> )
-{ 
-  if ( /^[ 	]*$/o )
-  {
-    $nl_seen = $nl_seen+1;
-  }
+  $len = $i;
+  $pwd = substr($pwd,0,$len);
+  $i = rindex($pwd,'/');
+  $subdir = substr($pwd,$i+1,$len - 1);
+  $top_builddir = ".." ;  
 
-  if ( /^[ 	]*AC_CONFIG_AUX_DIR\(.*\)[ 	]*$/o )
+  while( -d "$top_builddir" ) 
   {
-    print "AC_CONFIG_AUX_DIR($rtems_cfg)\n" ;
-  }
-  elsif ( /^[ 	]*RTEMS_TOP\(.*\)[ 	]*$/o )
+    if ( -f "${top_builddir}/VERSION" )  
+    { 
+      return $subdir ; 
+    }
+    $len=$i;
+    $pwd = substr($pwd,0,$len);
+    $i = rindex($pwd,'/');
+    $subdir = substr($pwd,$i+1,$len - 1) . "/$subdir";
+    $top_builddir .= "/.." ;  
+  } ;
+  die "Can't find VERSION\n" ;
+}
+
+sub define_variable
+{
+  my ($name,$value) = @_ ;
+
+  if ( not defined ${"var_$name"} )
   {
-    print "RTEMS_TOP($rtems_cfg)\n" ;
-  }
-  elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_POSIX_API\)[ 	]*$/o ) 
-  {
-    #remove the line
-  }
-  elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_ITRON_API\)[ 	]*$/o ) 
-  {
-    #remove the line
-  }
-  elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_HWAPI\)[ 	]*$/o ) 
-  {
-    #remove the line
-  }
-  elsif ( /^[ 	]*AC_SUBST\(RTEMS_USE_MACROS\)[ 	]*$/o ) 
-  {
-    #remove the line
-  }
-  elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_MULTIPROCESSING\)[ 	]*$/o ) 
-  {
-    #remove the line
-  }
-  elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_RDBG\)[ 	]*$/o ) 
-  {
-    #remove the line
-  }
-  elsif ( /^[\s\t]*AC_SUBST\(RTEMS_USE_OWN_PDIR\)[ 	]*$/o ) 
-  { # obsolete option
-    #remove the line
-  }
-  elsif ( /^[\s\t]*RTEMS_ENABLE_GMAKE_PRINT[     ]*$/o ) 
-  { # obsolete macro
-    #remove the line
-  }
-  elsif ( /^[ 	]*AC_SUBST\(RTEMS_HAS_NETWORKING\)[ 	]*$/o ) 
-  {
-    #remove the line
-  }
-  elsif ( /^[ 	]*AC_SUBST\(RTEMS_LIBC_DIR\)[ 	]*$/o ) 
-  {
-    #remove the line
-  }
-  elsif ( /^[ 	]*AC_SUBST\(PROJECT_ROOT\)[ 	]*$/o ) 
-  {
-    #remove the line
-  }
-  elsif ( /^[ 	]*AC_SUBST\(RTEMS_GAS_CODE16\)[ 	]*$/o ) 
-  {
-    #remove the line
-  }
-  elsif ( /^[ 	]*PROJECT_ROOT[ 	]*=.*$/o ) 
-  {
-    #remove the line
-  }
-  elsif ( /^[ 	]*$/o )
-  {
-    print "$_" if $nl_seen < 2 ;
+# print STDERR "DEFINING $name = $value\n" ;
+    push @vars, "$name" ;
+    ${"var_$name"} = "$value" ;
   }
   else
   {
-    print "$_" ;
-    $nl_seen = 0;
+# print STDERR "APPENDING <$name> <- <$value>\n" ; 
+    ${"var_$name"} .= " $value" ;
   }
-} # while
+}
 
-;1

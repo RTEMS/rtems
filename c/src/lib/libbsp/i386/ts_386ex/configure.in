@@ -8,10 +8,11 @@ RTEMS_TOP(../../../../../..)
 AC_CONFIG_AUX_DIR(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
-AM_INIT_AUTOMAKE(rtems-c-src-lib-libbsp-i386-ts_i386ex,$RTEMS_VERSION,no)
+AM_INIT_AUTOMAKE(rtems-c-src-lib-libbsp-i386-ts_386ex,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
-RTEMS_ENABLE_LIBCDIR
+RTEMS_PROG_CC_FOR_TARGET
+RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_ENV_RTEMSBSP
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
@@ -23,12 +24,13 @@ dnl if this is an i386, does gas have good code16 support?
 RTEMS_I386_GAS_CODE16
 AM_CONDITIONAL(RTEMS_GAS_CODE16,test "$RTEMS_GAS_CODE16" = "yes");
 
-RTEMS_PROJECT_ROOT
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 AC_CONFIG_SUBDIRS(tools)
 
-# Explicitly list all Makefile here 
+RTEMS_PROJECT_ROOT
+
+# Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 clock/Makefile

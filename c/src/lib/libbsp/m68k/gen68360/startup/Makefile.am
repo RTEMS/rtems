@@ -33,9 +33,13 @@ $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 $(PROJECT_RELEASE)/lib/linkcmds.prom: linkcmds.prom
 	$(INSTALL_DATA) $< $@
 
+$(PROJECT_RELEASE)/lib/linkcmds.bootp: linkcmds.bootp
+	$(INSTALL_DATA) $< $@
+
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds \
-    $(PROJECT_RELEASE)/lib/linkcmds.prom
+    $(PROJECT_RELEASE)/lib/linkcmds.prom \
+    $(PROJECT_RELEASE)/lib/linkcmds.bootp
 
 all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 

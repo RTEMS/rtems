@@ -32,18 +32,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 $(PGM): $(OBJS)
 	$(make-rel)
 
-# FIXME: The original Makefile.in contained this:
-#> XXX: JRS look at the list of objects installed
-#>	$(INSTALL_CHANGE) -m 644 $(OBJS) $(PROJECT_RELEASE)/lib
-#
-# The install_change line could probably be replaced by this:
-# $(PROJECT_RELEASE)/lib/%.o: $(ARCH)/%.o
-#	$(INSTALL_DATA) $< $@
-# TMPINSTALL_FILES += \
-#  $(OBJS:$(ARCH)/%.o=$(PROJECT_RELEASE)/lib/%.o)
-#
-# .. but this behavior seems to be rather questionable :(
-
 $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 	$(INSTALL_DATA) $< $@
 

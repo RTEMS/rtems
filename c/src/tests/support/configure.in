@@ -19,7 +19,6 @@ RTEMS_CANONICAL_HOST
 
 RTEMS_PROJECT_ROOT
 
-dnl check target cc
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
@@ -30,7 +29,7 @@ RTEMS_CHECK_POSIX_API(RTEMS_BSP)
 AC_SUBST(BARE_CPU_CFLAGS)
 AC_SUBST(BARE_CPU_MODEL)
 
-# Try to explicitly list a Makefile here
+# Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 include/Makefile

@@ -64,7 +64,6 @@ C_FILES = $(STD_C_FILES)
 endif
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-SRCS = $(C_FILES)
 OBJS = $(C_O_FILES)
 
 #

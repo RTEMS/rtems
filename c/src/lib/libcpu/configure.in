@@ -22,5 +22,6 @@ AC_SUBST(RTEMS_CPU_SUBDIR)
 
 AC_CONFIG_SUBDIRS($RTEMS_CPU_SUBDIR)
 
+# Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile)

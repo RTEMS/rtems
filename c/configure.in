@@ -100,8 +100,7 @@ AC_SUBST(RTEMS_BSP_LIST)
 
 AC_CONFIG_SUBDIRS(make)
 
-AC_CONFIG_SUBDIRS(make)
-
+# Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 )

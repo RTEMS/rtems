@@ -18,7 +18,7 @@ RTEMS_CANONICAL_HOST
 
 RTEMS_PROJECT_ROOT
 
-# try to explicitly list a Makefile here 
+# Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 include/Makefile)

@@ -81,7 +81,6 @@ C_FILES = adasupp.c $(CANCEL_C_FILES) $(CONDITION_VARIABLE_C_FILES) \
     $(BUILD_FOR_NOW_C_FILES) utsname.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-SRCS = $(C_FILES)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
@@ -94,7 +93,7 @@ include $(top_srcdir)/../../../../automake/lib.am
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 AM_CFLAGS += $(CFLAGS_OS_V)
 
-all: ${ARCH} $(SRCS) ${OBJS}
+all: ${ARCH} ${OBJS}
 
 # temporary so we can see how many things are left to implement
 not: 

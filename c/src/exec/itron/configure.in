@@ -23,10 +23,6 @@ RTEMS_CANONICAL_HOST
 
 RTEMS_PROJECT_ROOT
 
-## FIXME: needed for INSTALL_CHANGE in autoconf subdirectories
-RTEMS_PATH_KSH
-
-dnl check target cc
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
@@ -60,7 +56,7 @@ fi
 ##
 ## FIXME: We configure and build the macros subdirectory, too.
 ## Should probably use AM_CONDITIONALs to disable them in future
-# Try to explicitly list a Makefile here 
+# Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 src/Makefile

@@ -12,7 +12,6 @@ AM_INIT_AUTOMAKE(rtems-c-src-libchip,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_NETWORKING
-RTEMS_ENABLE_LIBCDIR
 RTEMS_ENABLE_BARE
 
 RTEMS_ENV_RTEMSBSP
@@ -22,7 +21,6 @@ RTEMS_CANONICAL_HOST
 
 RTEMS_PROJECT_ROOT
 
-dnl check target cc
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
@@ -37,7 +35,7 @@ fi
 
 AM_CONDITIONAL(HAS_NETWORKING, test "$HAS_NETWORKING" = "yes")
 
-# try to explicitly list a Makefile here 
+# Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 network/Makefile

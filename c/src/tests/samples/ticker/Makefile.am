@@ -38,6 +38,6 @@ all-local: ${ARCH} $(TMPINSTALL_FILES)
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
-EXTRA_DIST += $(C_FILES) $(DOCS)
+EXTRA_DIST = $(C_FILES) $(DOCS)
 
 include $(top_srcdir)/../../../../automake/local.am

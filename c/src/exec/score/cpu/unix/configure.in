@@ -12,7 +12,6 @@ RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE(rtems-c-src-exec-score-cpu-unix,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
-RTEMS_ENABLE_LIBCDIR
 RTEMS_ENABLE_MULTIPROCESSING
 
 RTEMS_ENV_RTEMSBSP
@@ -22,7 +21,6 @@ RTEMS_CANONICAL_HOST
 
 RTEMS_PROJECT_ROOT
 
-dnl check target cc
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
@@ -37,7 +35,7 @@ if test "$HAS_MP" = "yes"; then
   RTEMS_CHECK_SYSV_UNIX
 fi
 
-# Try to explicitly list a Makefile here 
+# Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 rtems/Makefile

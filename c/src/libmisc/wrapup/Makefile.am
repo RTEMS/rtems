@@ -1,22 +1,19 @@
-##
-##  $Id$
-##
+## 
+## $Id$
+## 
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
 LIBNAME = libmisc
-LIB = ${ARCH}/$(LIBNAME).a
+LIB = $(ARCH)/$(LIBNAME).a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/lib.am
 
-TMP_LIBS = ../monitor/$(ARCH)/libmonitor-tmp.a ../untar/$(ARCH)/libuntar-tmp.a \
-    ../stackchk/$(ARCH)/libstackchk-tmp.a ../cpuuse/$(ARCH)/libcpuuse-tmp.a \
-    ../rtmonuse/$(ARCH)/librtmonuse-tmp.a \
+TMP_LIBS = ../monitor/$(ARCH)/libmonitor-tmp.a \
+    ../untar/$(ARCH)/libuntar-tmp.a ../stackchk/$(ARCH)/libstackchk-tmp.a \
+    ../cpuuse/$(ARCH)/libcpuuse-tmp.a ../rtmonuse/$(ARCH)/librtmonuse-tmp.a \
     ../dumpbuf/$(ARCH)/libdumpbuf-tmp.a
-
-TMPINSTALL_FILES += \
-$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
 $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 	$(INSTALL_DATA) $< $@
@@ -29,12 +26,14 @@ $(LIB): $(TMP_LIBS)
 	$(RM) $@
 	$(RM) -r $(ARCH)
 	mkdir $(ARCH)
-	cd $(ARCH); for lib in $^; do \
-                         $(AR) -xv ../$$lib; \
-                    done
+	cd $(ARCH); for lib in $^; do $(AR) -xv ../$$lib; done
 	$(AR) ruv $@ $(ARCH)/*
 	$(RANLIB) $@
 
-all: ${ARCH} $(LIB) $(TMPINSTALL_FILES)
+TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
+
+all-local: $(ARCH) $(LIB) $(TMPINSTALL_FILES)
+
+.PRECIOUS: $(LIB)
 
 include $(top_srcdir)/../../../automake/local.am

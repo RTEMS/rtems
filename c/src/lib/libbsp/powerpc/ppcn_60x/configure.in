@@ -11,7 +11,8 @@ RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE(rtems-c-src-lib-libbsp-powerpc-ppcn_60x,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
-RTEMS_ENABLE_LIBCDIR
+RTEMS_PROG_CC_FOR_TARGET
+RTEMS_CANONICALIZE_TOOLS
 RTEMS_ENABLE_MULTIPROCESSING
 
 RTEMS_ENV_RTEMSBSP
@@ -20,16 +21,15 @@ RTEMS_CHECK_BSP_CACHE(RTEMS_BSP)
 RTEMS_CHECK_NETWORKING
 RTEMS_CANONICAL_HOST
 
-RTEMS_PROJECT_ROOT
-
 # Don't build the network directory
 # The problem is that the code there has not yet been converted to
 # bsd networking
 AM_CONDITIONAL(HAS_NETWORKING,false)
 # AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
+RTEMS_PROJECT_ROOT
 
-# Explicitly list a Makefile here 
+# Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 clock/Makefile

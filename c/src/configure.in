@@ -57,6 +57,7 @@ AC_CONFIG_SUBDIRS(tests)
 
 RTEMS_PROJECT_ROOT
 
+# Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 wrapup/Makefile

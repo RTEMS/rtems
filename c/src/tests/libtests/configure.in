@@ -15,7 +15,6 @@ AM_MAINTAINER_MODE
 RTEMS_ENABLE_INLINES
 RTEMS_ENABLE_CXX
 RTEMS_ENABLE_GCC28
-RTEMS_ENABLE_LIBCDIR
 RTEMS_ENABLE_BARE
 
 RTEMS_ENV_RTEMSBSP
@@ -40,7 +39,7 @@ AC_SUBST(BARE_CPU_MODEL)
 
 AM_CONDITIONAL(HAS_CXX,test "$HAS_CPLUSPLUS" = "yes")
 
-# Try to explicitly list a Makefile here
+# Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 cpuuse/Makefile

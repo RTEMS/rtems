@@ -23,7 +23,7 @@ include $(top_srcdir)/../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-$(PGM): $(SRCS) $(OBJS)
+$(PGM): $(OBJS)
 	$(make-rel)
 
 all-local: $(ARCH) $(OBJS) $(PGM)

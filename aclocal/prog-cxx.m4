@@ -12,6 +12,7 @@ AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
 AC_BEFORE([$0], [AC_PROG_CXX])dnl
 AC_BEFORE([$0], [RTEMS_CANONICALIZE_TOOLS])dnl
 AC_REQUIRE([RTEMS_TOOL_PREFIX])dnl
+AC_REQUIRE([RTEMS_ENABLE_LIBCDIR])dnl
 
 dnl Only accept g++ and c++
 dnl NOTE: This might be too restrictive for native compilation

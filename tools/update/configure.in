@@ -18,6 +18,7 @@ RTEMS_PATH_PERL
 AM_CONDITIONAL(PERL,test -n "$PERL")
 
 RTEMS_TOOLPATHS
+# Explicitly list all Makefiles here
 AC_OUTPUT(
 Makefile
 )

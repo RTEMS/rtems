@@ -8,7 +8,7 @@ AC_CONFIG_AUX_DIR(../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE(rtems-tests-tools,$RTEMS_VERSION,no)
+AM_INIT_AUTOMAKE(rtems-c-src-tests-tools,$RTEMS_VERSION,no)
 AM_MAINTAINER_MODE
 
 RTEMS_TOOLPATHS
@@ -19,4 +19,5 @@ if test -d $srcdir/$RTEMS_CPU; then
 AC_CONFIG_SUBDIRS($RTEMS_CPU)
 fi
 
+# Explicitly list all Makefiles here
 AC_OUTPUT(Makefile)

@@ -20,13 +20,13 @@ include $(top_srcdir)/../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
-$(PGM): $(SRCS) $(OBJS)
+$(PGM): $(OBJS)
 	$(make-rel)
 
 all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = Makefile gettime.S timer.c timerisr.c
+EXTRA_DIST = Makefile timer.c timerisr.c
 
 include $(top_srcdir)/../../../../../automake/local.am

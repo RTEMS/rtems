@@ -43,7 +43,6 @@ C_FILES = $(TASK_C_FILES) $(TASKSYNC_C_FILES) $(SEMAPHORE_C_FILES) \
     $(TIME_C_FILES)
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-SRCS = $(C_FILES)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg

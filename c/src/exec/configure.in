@@ -16,7 +16,6 @@ RTEMS_ENABLE_POSIX
 RTEMS_ENABLE_ITRON
 RTEMS_ENABLE_INLINES
 RTEMS_ENABLE_GCC28
-RTEMS_ENABLE_LIBCDIR
 
 RTEMS_ENV_RTEMSBSP
 
@@ -25,7 +24,6 @@ RTEMS_CANONICAL_HOST
 
 RTEMS_PROJECT_ROOT
 
-dnl check target cc
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
@@ -69,7 +67,7 @@ fi
 AC_CONFIG_SUBDIRS($cfg_subdirs)
 AC_CONFIG_SUBDIRS(score/cpu/$RTEMS_CPU)
 
-# Try to explicitly list a Makefile here 
+# Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
 rtems/Makefile

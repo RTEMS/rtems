@@ -15,7 +15,6 @@ C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 H_FILES = rtc.h icm7170.h m48t08.h
 noinst_HEADERS = $(H_FILES)
 
-SRCS = $(C_FILES) $(H_FILES)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
@@ -50,6 +49,6 @@ all: ${ARCH} $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 DOC_FILES = \
 README.ds1643 README.icm7170 README.m48t08 README.m48t18 STATUS
 
-EXTRA_DIST += $(C_FILES) $(DOC_FILES)
+EXTRA_DIST = $(C_FILES) $(DOC_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

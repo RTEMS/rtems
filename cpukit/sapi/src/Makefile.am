@@ -8,7 +8,6 @@ C_FILES = debug.c entrytable.c extension.c fatal.c exinit.c io.c itronapi.c \
     posixapi.c rtemsapi.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-SRCS = $(C_FILES)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
