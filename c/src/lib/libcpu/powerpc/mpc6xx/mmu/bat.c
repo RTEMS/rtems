@@ -55,7 +55,7 @@ void setdbat(int bat_index, unsigned long virt, unsigned long phys,
   bat_addrs[bat_index].limit = virt + ((bl + 1) << 17) - 1;
   bat_addrs[bat_index].phys = phys;
   switch (bat_index) {
-  case 0 : asm_setdbat1(bat.word[0], bat.word[1]); break;
+  case 0 : asm_setdbat0(bat.word[0], bat.word[1]); break;
   case 1 : asm_setdbat1(bat.word[0], bat.word[1]); break;
   case 2 : asm_setdbat2(bat.word[0], bat.word[1]); break;
   case 3 : asm_setdbat3(bat.word[0], bat.word[1]); break;
