@@ -1,5 +1,9 @@
 2002-10-21	Joel Sherrill <joel@OARcorp.com>
 
+	* VERSION: Updated to rtems-20021021-test.
+
+2002-10-21	Joel Sherrill <joel@OARcorp.com>
+
 	* aclocal/version.m4: Updated to rtems-20021021-test.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
