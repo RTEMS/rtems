@@ -1,3 +1,8 @@
+2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* optman/Makefile.am: Add multilib support. Remove ASM4FLAGS.
+	* src/Makefile.am: Add multilib support.
+
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/sys/Makefile.am: Remove.
