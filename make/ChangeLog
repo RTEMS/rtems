@@ -1,3 +1,11 @@
+2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/Cygwin-posix.cfg: Remove -DRTEMS_UNIXLIB -DRTEMS_UNIX.
+	* custom/Linux-posix.cfg: Remove -DRTEMS_UNIXLIB -DRTEMS_UNIX.
+	* custom/Solaris-posix.cfg: Remove -DRTEMS_UNIXLIB -DRTEMS_UNIX.
+	* custom/FreeBSD-posix.cfg: Remove -DRTEMS_UNIXLIB -DRTEMS_UNIX.
+	* custom/HPUX9-posix.cfg: Remove -DRTEMS_UNIXLIB -DRTEMS_UNIX.
+
 2002-11-13	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* custom/edb7312.cfg: New file.
