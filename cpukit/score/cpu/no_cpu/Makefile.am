@@ -5,7 +5,7 @@
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 include $(top_srcdir)/../../../automake/multilib.am
-include $(top_srcdir)/../../../automake/amcompile.am
+include $(top_srcdir)/../../../automake/compile.am
 
 include_HEADERS = asm.h
 
@@ -24,7 +24,6 @@ libscorecpu_g_a_SOURCES = $(libscorecpu_a_SOURCES)
 libscorecpu_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 all-local: $(PREINSTALL_FILES) libscorecpu$(LIB_VARIANT).a
-
 
 PREINSTALL_FILES =
 

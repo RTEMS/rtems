@@ -5,8 +5,15 @@
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 include $(top_srcdir)/../../../automake/multilib.am
-include $(top_srcdir)/../../../automake/amcompile.am
-include $(top_srcdir)/../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+
+EXTRA_LIBRARIES = libscorecpu.a
+CLEANFILES = libscorecpu.a
+libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+
+EXTRA_LIBRARIES += libscorecpu_g.a
+CLEANFILES += libscorecpu_g.a
+libscorecpu_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 include_HEADERS = asm.h m68302.h m68360.h qsm.h sim.h
 
@@ -14,15 +21,9 @@ include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/m68k.h \
     rtems/score/types.h
 
-EXTRA_LIBRARIES = libscorecpu.a
-CLEANFILES = libscorecpu.a
 libscorecpu_a_SOURCES = cpu.c cpu_asm.S
-libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 
-EXTRA_LIBRARIES += libscorecpu_g.a
-CLEANFILES += libscorecpu_g.a
 libscorecpu_g_a_SOURCES = $(libscorecpu_a_SOURCES)
-libscorecpu_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 all-local: $(PREINSTALL_FILES) libscorecpu$(LIB_VARIANT).a
 

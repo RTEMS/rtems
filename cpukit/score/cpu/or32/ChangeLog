@@ -1,5 +1,9 @@
 2004-01-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Include compile.am, again.
+
+2004-01-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Convert to using automake compilation rules.
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
