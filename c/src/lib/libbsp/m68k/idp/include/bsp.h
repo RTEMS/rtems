@@ -11,8 +11,10 @@
 #include <rtems.h>
 #include <console.h>
 #include <clockdrv.h>
-#include <mc68230.h>
-#include <mc68681.h>
+#include <motorola/mc68230.h>
+#include <motorola/mc68681.h>
+
+#define DUART_ADDR	0xb00003   /* base address of the MC68681 DUART */
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.

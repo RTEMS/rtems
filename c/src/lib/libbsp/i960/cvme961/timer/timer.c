@@ -29,7 +29,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include "z8536.h"
+#include <zilog/z8536.h>
 
 #define TIMER       0xc00000a0
 

@@ -8,7 +8,7 @@ top_srcdir = @top_srcdir@
 VPATH=@srcdir@
 
 H_FILES = $(srcdir)/bsp.h $(srcdir)/coverhd.h $(srcdir)/leds.h \
-	  $(srcdir)/mc68230.h $(srcdir)/mc68681.h 
+	  $(srcdir)/mc68230.h
 
 #
 #  Equate files are for including from assembly preprocessed by
