@@ -260,6 +260,16 @@ fat_init_volume_info(rtems_filesystem_mount_table_entry_t *mt_entry)
          i >>= 1, vol->sec_log2++);
 
     vol->spc = FAT_BR_SECTORS_PER_CLUSTER(boot_rec);
+    /*
+     * "sectors per cluster" of zero is invalid
+     * (and would hang the following loop)
+     */
+    if (vol->spc == 0)
+    {
+        rtems_disk_release(vol->dd);
+        set_errno_and_return_minus_one(EINVAL);
+    }    
+
     for (vol->spc_log2 = 0, i = vol->spc; (i & 1) == 0; 
          i >>= 1, vol->spc_log2++);
   
@@ -526,7 +536,7 @@ fat_init_clusters_chain(
     if ( buf == NULL )
         set_errno_and_return_minus_one( EIO );
 
-    while ((cur_cln & fs_info->vol.mask) != fs_info->vol.eoc_val)
+    while ((cur_cln & fs_info->vol.mask) < fs_info->vol.eoc_val)
     {
         ret = fat_cluster_write(mt_entry, cur_cln, buf);
         if ( ret == -1 )

@@ -138,7 +138,10 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 #define msdos_is_valid_name_char(_ch)    (1)
 #define msdos_is_separator(_ch)          rtems_filesystem_is_separator(_ch)
 
-#define MSDOS_SHORT_NAME_LEN             11 /* 11 characters */
+#define MSDOS_SHORT_BASE_LEN             8  /* 8 characters */
+#define MSDOS_SHORT_EXT_LEN              3  /* 3 characters */
+#define MSDOS_SHORT_NAME_LEN             (MSDOS_SHORT_BASE_LEN+\
+                                          MSDOS_SHORT_EXT_LEN) /* 11 chars */
 #define MSDOS_NAME_MAX                   MSDOS_SHORT_NAME_LEN
 #define MSDOS_NAME_MAX_WITH_DOT          (MSDOS_NAME_MAX + 1)
 

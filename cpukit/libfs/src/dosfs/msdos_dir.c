@@ -104,6 +104,75 @@ msdos_dir_close(rtems_libio_t *iop)
     return RC_OK;
 }
 
+/*  msdos_format_dirent_with_dot --
+ *      This routine convert a (short) MSDOS filename as present on disk 
+ *      (fixed 8+3 characters, filled with blanks, without separator dot)
+ *      to a "normal" format, with between 0 and 8 name chars, 
+ *      a separating dot and up to 3 extension characters
+ *   Rules to work:
+ *      - copy any (0-8) "name" part characters that are non-blank
+ *      - if an extension exists, append a dot
+ *      - copy any (0-3) non-blank extension characters
+ *      - append a '\0' (dont count it for the rturn code
+ *
+ * PARAMETERS:
+ *     dst: pointer to destination char array (must be big enough)
+ *     src: pointer to source characters
+ *
+ *
+ * RETURNS:
+ *     the number of bytes (without trailing '\0'(written to destination 
+ */
+static ssize_t 
+msdos_format_dirent_with_dot(char *dst,const char *src)
+{
+  ssize_t len;
+  int i;
+  const char *src_tmp;
+
+  /*
+   * find last non-blank character of base name
+   */
+  for ((i       =       MSDOS_SHORT_BASE_LEN  ,
+	src_tmp = src + MSDOS_SHORT_BASE_LEN-1);
+       ((i > 0) &&
+	(*src_tmp == ' '));
+       i--,src_tmp--)
+    {};
+  /*
+   * copy base name to destination
+   */
+  src_tmp = src;
+  len = i;
+  while (i-- > 0) {
+    *dst++ = *src_tmp++;
+  }
+  /*
+   * find last non-blank character of extension
+   */
+  for ((i       =                            MSDOS_SHORT_EXT_LEN  ,
+	src_tmp = src + MSDOS_SHORT_BASE_LEN+MSDOS_SHORT_EXT_LEN-1);
+       ((i > 0) && 
+	(*src_tmp == ' '));
+       i--,src_tmp--)
+    {};
+  /*
+   * extension is not empty
+   */
+  if (i > 0) {
+    *dst++ = '.'; /* append dot */
+    len += i + 1; /* extension + dot */
+    src_tmp = src + MSDOS_SHORT_BASE_LEN;
+    while (i-- > 0) {
+      *dst++ = *src_tmp++;
+      len++;
+    }
+  }
+  *dst = '\0'; /* terminate string */
+
+  return len;
+}
+
 /*  msdos_dir_read --
  *      This routine will read the next directory entry based on the directory
  *      offset. The offset should be equal to -n- time the size of an 
@@ -236,12 +305,13 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, unsigned32 count)
             tmp_dirent.d_off = start + cmpltd;
             tmp_dirent.d_reclen = sizeof(struct dirent);
             tmp_dirent.d_ino = tmp_fat_fd->ino;
-            tmp_dirent.d_namlen = MSDOS_SHORT_NAME_LEN;
-            memcpy(tmp_dirent.d_name, MSDOS_DIR_NAME((fs_info->cl_buf + i)),
-                   MSDOS_SHORT_NAME_LEN);
-      
-            /* d_name is null-terminated */
-            tmp_dirent.d_name[MSDOS_SHORT_NAME_LEN] = 0;       
+	    /*
+	     * convert dir entry from fixed 8+3 format (without dot)
+	     * to 0..8 + 1dot + 0..3 format
+	     */
+	    tmp_dirent.d_namlen = 
+	      msdos_format_dirent_with_dot(tmp_dirent.d_name,
+					 fs_info->cl_buf + i); /* src text */
             memcpy(buffer + cmpltd, &tmp_dirent, sizeof(struct dirent));
    
             iop->offset = iop->offset + sizeof(struct dirent);
