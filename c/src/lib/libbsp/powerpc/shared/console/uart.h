@@ -12,6 +12,9 @@
 
 #include <bsp/irq.h>
 
+#include <sys/ioctl.h>
+#include <rtems/libio.h>
+
 void BSP_uart_init(int uart, int baud, int hwFlow);
 void BSP_uart_set_baud(int aurt, int baud);
 void BSP_uart_intr_ctrl(int uart, int cmd);
@@ -28,11 +31,32 @@ void BSP_uart_dbgisr_com1(void);
 void BSP_uart_dbgisr_com2(void);
 int  BSP_uart_install_isr(int uart, rtems_irq_hdl handler);
 int  BSP_uart_remove_isr(int uart, rtems_irq_hdl handler);
+int  BSP_uart_get_break_cb(int uart, rtems_libio_ioctl_args_t *arg);
+int  BSP_uart_set_break_cb(int uart, rtems_libio_ioctl_args_t *arg);
 
 extern unsigned BSP_poll_char_via_serial(void);
 extern void BSP_output_char_via_serial(int val);
 extern int BSPConsolePort;
 extern int BSPBaseBaud;
+
+/* Special IOCTLS to install a lowlevel 'BREAK' handler */
+
+/* pass a BSP_UartBreakCb pointer to ioctl when retrieving
+ * or installing break callback
+ */
+typedef void (*BSP_UartBreakCbProc)(int			uartMinor,
+									unsigned	uartRBRLSRStatus,
+									void		*termiosPrivatePtr,
+									void		*private);
+
+typedef struct BSP_UartBreakCbRec_ {
+		BSP_UartBreakCbProc		handler;	/* NOTE NOTE this handler runs in INTERRUPT CONTEXT */
+		void					*private;	/* closure pointer which is passed to the callback  */
+} BSP_UartBreakCbRec, *BSP_UartBreakCb;
+
+#define BIOCGETBREAKCB	_IOR('b',1,sizeof(BSP_UartBreakCbRec))
+#define BIOCSETBREAKCB	_IOW('b',2,sizeof(BSP_UartBreakCbRec))
+
 /*
  * Command values for BSP_uart_intr_ctrl(),
  * values are strange in order to catch errors 

@@ -27,8 +27,10 @@
 #include <bsp/pci.h>
 #include <bsp/openpic.h>
 #include <bsp/irq.h>
+#include <bsp/VME.h>
 #include <bsp.h>
 #include <libcpu/bat.h>
+#include <libcpu/pte121.h>
 #include <libcpu/cpuIdent.h>
 #include <bsp/vectors.h>
 #include <bsp/motorola.h>
@@ -41,6 +43,13 @@ extern void L1_caches_enables();
 extern unsigned get_L2CR();
 extern void set_L2CR(unsigned);
 extern void bsp_cleanup(void);
+extern Triv121PgTbl BSP_pgtbl_setup();
+extern void			BSP_pgtbl_activate();
+extern void			BSP_vme_config();
+
+SPR_RW(SPR0)
+SPR_RW(SPR1)
+
 /*
  * Copy of residuals passed by firmware
  */
@@ -173,6 +182,7 @@ void bsp_start( void )
   ppc_cpu_revision_t myCpuRevision;
   prep_t boardManufacturer;
   motorolaBoard myBoard;
+  Triv121PgTbl	pt=0;
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
    * store the result in global variables so that it can be used latter...
@@ -217,8 +227,8 @@ void bsp_start( void )
  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
   *((unsigned32 *)intrStack) = 0;
 
-  asm volatile ("mtspr	273, %0" : "=r" (intrStack) : "0" (intrStack));
-  asm volatile ("mtspr	272, %0" : "=r" (intrNestingLevel) : "0" (intrNestingLevel));
+  _write_SPR1((unsigned int)intrStack);
+  _write_SPR0(intrNestingLevel);
   /*
    * Initialize default raw exception hanlders. See vectors/vectors_init.c
    */
@@ -231,18 +241,20 @@ void bsp_start( void )
    * PC legacy IO space used for inb/outb and all PC
    * compatible hardware
    */
-  setdbat(1, 0x80000000, 0x80000000, 0x10000000, IO_PAGE);
+  setdbat(1, _IO_BASE, _IO_BASE, 0x10000000, IO_PAGE);
   /*
    * PCI devices memory area. Needed to access OPENPIC features
    * provided by the RAVEN
    */
   /* T. Straumann: give more PCI address space */
-  setdbat(2, 0xc0000000, 0xc0000000, 0x10000000, IO_PAGE);
+  setdbat(2, PCI_MEM_BASE, PCI_MEM_BASE, 0x10000000, IO_PAGE);
   /*
    * Must have acces to open pic PCI ACK registers 
    * provided by the RAVEN
+   * 
    */
   setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
+
   select_console(CONSOLE_LOG);
 
   /* We check that the keyboard is present and immediately 
@@ -304,6 +316,27 @@ void bsp_start( void )
   BSP_processor_frequency		= residualCopy.VitalProductData.ProcessorHz;
   BSP_time_base_divisor			= (residualCopy.VitalProductData.TimeBaseDivisor?
 					   residualCopy.VitalProductData.TimeBaseDivisor : 4000);
+
+  /* Allocate and set up the page table mappings
+   * This is only available on >604 CPUs.
+   *
+   * NOTE: This setup routine may modify the available memory
+   *       size. It is essential to call it before
+   *       calculating the workspace etc.
+   */
+  pt = BSP_pgtbl_setup(&BSP_mem_size);
+
+  if (!pt ||
+	  TRIV121_MAP_SUCCESS != triv121PgTblMap(
+			  							pt,
+										TRIV121_121_VSID,
+										0xfeff0000,
+										1,
+										TRIV121_ATTR_IO_PAGE,
+										TRIV121_PP_RW_PAGE
+										)) {
+	printk("WARNING: unable to setup page tables VME bridge must share PCI space\n");
+  }
   
   /*
    * Set up our hooks
@@ -335,6 +368,34 @@ void bsp_start( void )
    * Initalize RTEMS IRQ system
    */
   BSP_rtems_irq_mng_init(0);
+
+  
+  /* Activate the page table mappings only after
+   * initializing interrupts because the irq_mng_init()
+   * routine needs to modify the text
+   */           
+  if (pt) {
+#ifdef  SHOW_MORE_INIT_SETTINGS
+    printk("Page table setup finished; will activate it NOW...\n");
+#endif
+    BSP_pgtbl_activate(pt);
+  	/* finally, switch off DBAT3 */
+	setdbat(3, 0, 0, 0, 0); 
+  }
+
+  /*
+   * Initialize VME bridge - needs working PCI
+   * and IRQ subsystems...
+   */
+#ifdef SHOW_MORE_INIT_SETTINGS
+  printk("Going to initialize VME bridge\n");
+#endif
+  /* VME initialization is in a separate file so apps which don't use
+   * VME or want a different configuration may link against a customized
+   * routine.
+   */
+  BSP_vme_config();
+
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");
 #endif  

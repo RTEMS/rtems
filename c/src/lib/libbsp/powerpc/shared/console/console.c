@@ -257,11 +257,24 @@ console_write(rtems_device_major_number major,
  * Handle ioctl request.
  */
 rtems_device_driver 
-console_control(rtems_device_major_number major,
-		rtems_device_minor_number minor,
-		void                      * arg
+console_control(rtems_device_major_number	major,
+		rtems_device_minor_number			minor,
+		void                      			*arg
 )
 { 
+/* does the BSP support break callbacks ? */
+#if defined(BIOCSETBREAKCB) && defined(BIOCGETBREAKCB)
+rtems_libio_ioctl_args_t	*ioa=arg;
+	switch (ioa->command) {
+			case BIOCSETBREAKCB:
+				return BSP_uart_set_break_cb(minor, ioa);
+			case BIOCGETBREAKCB:
+				return BSP_uart_get_break_cb(minor, ioa);
+			
+			default:
+			   	break;
+	}
+#endif
   return rtems_termios_ioctl (arg);
 }
 

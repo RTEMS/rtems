@@ -11,6 +11,7 @@
 #include <bsp/irq.h>
 #include <bsp/uart.h>
 #include <rtems/libio.h>
+#include <rtems/bspIo.h>
 #include <assert.h>
 
 /*
@@ -19,9 +20,10 @@
 
 struct uart_data
 {
-  unsigned long ioBase;
-  int hwFlow;
-  int baud;
+  unsigned long			ioBase;
+  int					hwFlow;
+  int					baud;
+  BSP_UartBreakCbRec	breakCallback;
 };
 
 /*
@@ -74,11 +76,13 @@ uwrite(int uart, int reg, unsigned int val)
   out_8((unsigned char*)(uart_data[uart].ioBase + reg), val);
 }
 
+#define UARTDEBUG
 #ifdef UARTDEBUG
     static void
-uartError(int uart)
+uartError(int uart, void *termiosPrivate)
 {
   unsigned char uartStatus, dummy;
+  BSP_UartBreakCbProc		h;
 
   uartStatus = uread(uart, LSR);
   dummy = uread(uart, RBR);
@@ -89,19 +93,32 @@ uartError(int uart)
     printk("********* Parity Error   **********\n");
   if (uartStatus & FE)
     printk("********* Framing Error  **********\n");
-  if (uartStatus & BI)
-    printk("********* Parity Error   **********\n");
+  if (uartStatus & BI) {
+    printk("********* BREAK INTERRUPT *********\n");
+	if ((h=uart_data[uart].breakCallback.handler))
+		h(uart,
+		  (dummy<<8)|uartStatus,
+		  termiosPrivate,
+		  uart_data[uart].breakCallback.private);
+
+  }
   if (uartStatus & ERFIFO)
     printk("********* Error receive Fifo **********\n");
 
 }
 #else
-inline void uartError(int uart)
+inline void uartError(int uart, void *termiosPrivate)
 {
-  unsigned char uartStatus;
+  unsigned char uartStatus,dummy;
+  BSP_UartBreakCbProc		h;
   
   uartStatus = uread(uart, LSR);
-  uartStatus = uread(uart, RBR);
+  dummy		 = uread(uart, RBR);
+  if ((uartStatus & BI) && (h=uart_data[uart].breakCallback.handler))
+		h(uart,
+		  (dummy<<8)|uartStatus,
+		  termiosPrivate,
+		  uart_data[uart].breakCallback.private);
 }
 #endif
 
@@ -644,7 +661,7 @@ BSP_uart_termios_isr_com(int uart)
 	  break;
 	case RECEIVER_ERROR:
 	  /* RX error: eat character */
-	   uartError(uart);
+	   uartError(uart, termios_ttyp_com[uart]);
 	  break;
 	default:
 	  /* Should not happen */
@@ -666,3 +683,30 @@ BSP_uart_termios_isr_com2(void)
 	BSP_uart_termios_isr_com(BSP_UART_COM2);
 }
 
+/* retrieve 'break' handler info */
+int
+BSP_uart_get_break_cb(int uart, rtems_libio_ioctl_args_t *arg)
+{
+BSP_UartBreakCb	cb=arg->buffer;
+unsigned long flags;
+	SANITY_CHECK(uart);
+	rtems_interrupt_disable(flags);
+		*cb = uart_data[uart].breakCallback;
+	rtems_interrupt_enable(flags);
+	arg->ioctl_return=0;
+	return RTEMS_SUCCESSFUL;
+}
+
+/* install 'break' handler */
+int
+BSP_uart_set_break_cb(int uart, rtems_libio_ioctl_args_t *arg)
+{
+BSP_UartBreakCb	cb=arg->buffer;
+unsigned long flags;
+	SANITY_CHECK(uart);
+	rtems_interrupt_disable(flags);
+		uart_data[uart].breakCallback = *cb;
+	rtems_interrupt_enable(flags);
+	arg->ioctl_return=0;
+	return RTEMS_SUCCESSFUL;
+}

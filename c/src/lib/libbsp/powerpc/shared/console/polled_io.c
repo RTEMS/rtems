@@ -888,7 +888,7 @@ static int skip_atoi(const char **s)
  * bloat has been limited since we basically only need %u, %x, %s and %c.
  * But we need 64 bit values !
  */
-int vsprintf(char *buf, const char *fmt, va_list args);
+int k_vsprintf(char *buf, const char *fmt, va_list args);
 
 int printk(const char *fmt, ...) {
 	va_list args;
@@ -897,7 +897,7 @@ int printk(const char *fmt, ...) {
 	char buf[1024];
 	
 	va_start(args, fmt);
-	i = vsprintf(buf, fmt, args);
+	i = k_vsprintf(buf, fmt, args);
 	va_end(args);
 	puts(buf);
 	return  i;
@@ -988,7 +988,7 @@ static char * number(char * str, int size, int type, u64 num)
 	return str;
 }
 
-int vsprintf(char *buf, const char *fmt, va_list args)
+int k_vsprintf(char *buf, const char *fmt, va_list args)
 {
 	int len;
 	u64 num;

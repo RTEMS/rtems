@@ -40,9 +40,12 @@ SYM (default_exception_vector_code_prolog):
 	 */
 	stwu    r1, - (EXCEPTION_FRAME_END)(r1)
 	stw	r3, GPR3_OFFSET(r1)
+	/* R2 should never change (EABI: pointer to .sdata2) - we
+     * save it nevertheless..
+	 */
 	stw	r2, GPR2_OFFSET(r1)
-	mflr	r2
-	stw	r2, EXC_LR_OFFSET(r1)
+	mflr	r3
+	stw	r3, EXC_LR_OFFSET(r1)
 	bl	0f
 0:	/*
 	 * r3 = exception vector entry point 
@@ -64,8 +67,8 @@ PUBLIC_VAR (push_normalized_frame)
 SYM (push_normalized_frame):
 	stw	r3, EXCEPTION_NUMBER_OFFSET(r1)
 	stw	r0, GPR0_OFFSET(r1)
-	mfsrr0  r2
-	stw	r2, SRR0_FRAME_OFFSET(r1)
+	mfsrr0  r3
+	stw	r3, SRR0_FRAME_OFFSET(r1)
 	mfsrr1  r3
 	stw	r3, SRR1_FRAME_OFFSET(r1)
 	/*
@@ -89,14 +92,14 @@ SYM (push_normalized_frame):
 	stw	r28,  EXC_MSR_OFFSET(r1)
 	mfdar	r28
 	stw	r28,  EXC_DAR_OFFSET(r1)
-        /*
-         * compute SP at exception entry
-         */
-        addi    r2, r1, EXCEPTION_FRAME_END
-        /*
-         * store it at the right place
-         */
-        stw     r2, GPR1_OFFSET(r1)
+	/*
+	 * compute SP at exception entry
+	 */
+	addi    r3, r1, EXCEPTION_FRAME_END
+	/*
+	 * store it at the right place
+	 */
+	stw     r3, GPR1_OFFSET(r1)
 	/*
 	 * Enable data and instruction address translation, exception nesting
 	 */

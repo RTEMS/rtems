@@ -7,7 +7,7 @@ ENTRY(_start)
 PROVIDE (__stack = 0);
 MEMORY {
 	VECTORS	: ORIGIN = 0x0 ,  LENGTH = 0x3000
-	CODE : ORIGIN = 0x3000 , LENGTH = 0x100000 
+	CODE : ORIGIN = 0x3000 , LENGTH = 0x400000 
 }
 SECTIONS
 {
@@ -75,10 +75,10 @@ SECTIONS
   .rodata         : { *(.rodata*) *(.gnu.linkonce.r*) }	> CODE
   .rodata1        : { *(.rodata1) }	> CODE
   .eh_frame	  : { *.(eh_frame)		} >CODE
-  _etext = .;
-  PROVIDE (etext = .);
   .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >CODE
   .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >CODE
+  _etext = .;
+  PROVIDE (etext = .);
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  It would
      be more correct to do this:
