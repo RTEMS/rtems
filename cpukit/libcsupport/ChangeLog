@@ -1,3 +1,8 @@
+2003-09-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 486/rtems
+	* src/newlib.c: Unconditionally include <stdio.h>
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* include/chain.h, include/clockdrv.h, include/console.h,
