@@ -14,6 +14,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/seterr.h>
 #include <rtems/posix/threadsup.h>
+#include <rtems/posix/psignal.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/time.h>
 
@@ -93,11 +94,6 @@ struct sigaction _POSIX_signals_Vectors[ SIG_ARRAY_MAX ];
 Watchdog_Control _POSIX_signals_Alarm_timer;
 
 Thread_queue_Control _POSIX_signals_Wait_queue;
-
-typedef struct {
-  Chain_Node  Node;
-  siginfo_t   Info;
-}  POSIX_signals_Siginfo_node;
 
 Chain_Control _POSIX_signals_Inactive_siginfo;
 Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
