@@ -10,7 +10,7 @@
 #include <bsp.h>
 #include <debugport.h>
 
-#ifdef 0
+#if 0
 /* FIXME : could get the string to print when in the BSP */
 static const char *exception_names[] =
 {
