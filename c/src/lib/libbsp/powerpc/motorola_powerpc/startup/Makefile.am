@@ -28,6 +28,9 @@ $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
 
+# USE_INIT_FINI tells main.c what C++ help we need.
+AM_CPPFLAGS += -DUSE_INIT_FINI
+
 all-local: $(ARCH) $(OBJS) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = linkcmds

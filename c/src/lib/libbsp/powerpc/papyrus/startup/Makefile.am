@@ -21,6 +21,9 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 # (OPTIONAL) Add local stuff here using +=
 #
 
+# USE_INIT_FINI tells main.c what C++ help we need.
+AM_CPPFLAGS += -DUSE_INIT_FINI
+
 $(PGM): $(OBJS)
 	$(make-rel)
 
