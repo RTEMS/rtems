@@ -105,7 +105,7 @@ dnl _RTEMS_POP_BUILDDIR
 dnl
 AC_DEFUN([_RTEMS_POP_BUILDDIR],
 [
-  cd $ac_popdir
+  cd "$ac_popdir"
 ])
 
 dnl
