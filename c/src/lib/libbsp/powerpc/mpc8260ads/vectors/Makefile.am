@@ -6,7 +6,7 @@ C_FILES = vectors_init.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_bspdir = $(includedir)/bsp
-include_bsp_HEADERS = vectors.h 
+include_bsp_HEADERS = vectors.h
 
 S_FILES = vectors.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))

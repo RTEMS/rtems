@@ -1,5 +1,11 @@
 2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* startup/Makefile.am: Remove S_FILES (Unused).
+	* vectors/Makefile.am: Cosmetics.
+	* wrapup/Makefile.am: Cosmetics.
+
+2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Add preinstallation dirstamp support.
 	* clock/Makefile.am: Cosmetics.
 	* console/Makefile.am: Cosmetics.
