@@ -12,17 +12,9 @@
  *  $Id$
  */
 
-
 /*
- *  The Toshiba TX3904 attaches 4 of the eight interrupt bits to an
- *  on-CPU interrupt controller so that these four bits map to 16
- *  unique interrupts.  So you have: 2 software interrupts, an NMI,
- *  and 16 others.
+ *  Reserve first 32 for exceptions.
  */
-
-#if defined(TX39)
-#define MAX_VECTORS 19
-#endif
 
 /*
  *  The Synova Mongoose-V attached one of the eight interrupt bits 
@@ -31,17 +23,11 @@
  *  through the IP bits, and 32 more from the PFICR.  Some of
  *  these are reserved but for simplicity in processing, we
  *  reserve slots for those bits anyway.
- *
- * gdm, 5/14, added 15 more slots so exceptions can be vectored as well.
  */
 
-#if defined(MONGOOSEV)
-#define MAX_VECTORS (38+10)
-#endif
+#include <rtems.h>
+#include <libcpu/mongoose-v.h>
 
-#ifndef MAX_VECTORS
-#define MAX_VECTORS 8
-#endif
+unsigned int mips_interrupt_number_of_vectors = MONGOOSEV_MAXIMUM_VECTORS;
 
-unsigned int mips_interrupt_number_of_vectors = MAX_VECTORS;
 

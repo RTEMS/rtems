@@ -6,7 +6,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 PGM = $(ARCH)/interrupts.rel
 
-C_FILES = installisrentries.c maxvectors.c
+C_FILES = installisrentries.c vectorexceptions.c
 
 S_FILES = isr_entries.S
 

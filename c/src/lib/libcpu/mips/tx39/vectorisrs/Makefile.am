@@ -6,7 +6,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 PGM = $(ARCH)/vectorisrs.rel
 
-C_FILES = vectorisrs.c
+C_FILES = maxvectors.c vectorisrs.c
 
 vectorisrs_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.o) $(S_FILES:%.S=$(ARCH)/%.o)
 

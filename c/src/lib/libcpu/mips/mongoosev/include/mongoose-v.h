@@ -248,18 +248,18 @@
  *        per p. 5-22 of Mongoose-V manual.
  */
 
-#define MONGOOSEV_IRQ_INT0                    0
+#define MONGOOSEV_IRQ_INT0                    MIPS_INTERRUPT_BASE+0
 #define MONGOOSEV_IRQ_TIMER1                  MONGOOSEV_IRQ_INT0
-#define MONGOOSEV_IRQ_INT1                    1
+#define MONGOOSEV_IRQ_INT1                    MIPS_INTERRUPT_BASE+1
 #define MONGOOSEV_IRQ_TIMER2                  MONGOOSEV_IRQ_INT1
-#define MONGOOSEV_IRQ_INT2                    2
-#define MONGOOSEV_IRQ_INT3                    3
+#define MONGOOSEV_IRQ_INT2                    MIPS_INTERRUPT_BASE+2
+#define MONGOOSEV_IRQ_INT3                    MIPS_INTERRUPT_BASE+3
 #define MONGOOSEV_IRQ_FPU		      MONGOOSEV_IRQ_INT3
 
-#define MONGOOSEV_IRQ_INT4                    4
+#define MONGOOSEV_IRQ_INT4                    MIPS_INTERRUPT_BASE+4
 
 /* MONGOOSEV_IRQ_INT5 indicates that a peripheral caused the IRQ. */
-#define MONGOOSEV_IRQ_PERIPHERAL_BASE         5
+#define MONGOOSEV_IRQ_PERIPHERAL_BASE         MIPS_INTERRUPT_BASE+5
 #define MONGOOSEV_IRQ_XINT0                  MONGOOSEV_IRQ_PERIPHERAL_BASE + 0
 #define MONGOOSEV_IRQ_XINT1                  MONGOOSEV_IRQ_PERIPHERAL_BASE + 1
 #define MONGOOSEV_IRQ_XINT2                  MONGOOSEV_IRQ_PERIPHERAL_BASE + 2
@@ -293,82 +293,55 @@
 #define MONGOOSEV_IRQ_UNCORRECTABLE_ERROR    MONGOOSEV_IRQ_PERIPHERAL_BASE + 30
 #define MONGOOSEV_IRQ_CORRECTABLE_ERROR      MONGOOSEV_IRQ_PERIPHERAL_BASE + 31
 
-#define MONGOOSEV_IRQ_SOFTWARE_1             37
-#define MONGOOSEV_IRQ_SOFTWARE_2             38
+#define MONGOOSEV_IRQ_SOFTWARE_1             MIPS_INTERRUPT_BASE+37
+#define MONGOOSEV_IRQ_SOFTWARE_2             MIPS_INTERRUPT_BASE+38
+#define MONGOOSEV_MAXIMUM_VECTORS            MIPS_INTERRUPT_BASE+39
 
 
-/* gdm, 5/14.  Added exception vectoring to the ISR table- these
-entries are never called by the ISR servicing, only by the exception
-servicing routine.  The ISR table is used because vector setup there
-is already supported.  Please note exception routines are passed 2
-parameters; one of the below vectors and a pointer to the exception's
-stack frame, the register layout of which is found in
+/*
+ *  Status Register Bits
+ */
 
-exec/score/cpu/mips/iregdef.h
+#define SR_CUMASK	0xf0000000	/* coproc usable bits */
+#define SR_CU3		0x80000000	/* Coprocessor 3 usable */
+#define SR_CU2		0x40000000	/* Coprocessor 2 usable */
+#define SR_CU1		0x20000000	/* Coprocessor 1 usable */
+#define SR_CU0		0x10000000	/* Coprocessor 0 usable */
+#define SR_BEV		0x00400000	/* use boot exception vectors */
+#define SR_TS		0x00200000	/* TLB shutdown */
+#define SR_PE		0x00100000	/* cache parity error */
+#define SR_CM		0x00080000	/* cache miss */
+#define SR_PZ		0x00040000	/* cache parity zero */
+#define SR_SWC		0x00020000	/* swap cache */
+#define SR_ISC		0x00010000	/* Isolate data cache */
+#define SR_IMASK	0x0000ff00	/* Interrupt mask */
+#define SR_IMASK8	0x00000000	/* mask level 8 */
+#define SR_IMASK7	0x00008000	/* mask level 7 */
+#define SR_IMASK6	0x0000c000	/* mask level 6 */
+#define SR_IMASK5	0x0000e000	/* mask level 5 */
+#define SR_IMASK4	0x0000f000	/* mask level 4 */
+#define SR_IMASK3	0x0000f800	/* mask level 3 */
+#define SR_IMASK2	0x0000fc00	/* mask level 2 */
+#define SR_IMASK1	0x0000fe00	/* mask level 1 */
+#define SR_IMASK0	0x0000ff00	/* mask level 0 */
 
-in conjunction with 
+#define SR_IBIT8	0x00008000	/* bit level 8 */
+#define SR_IBIT7	0x00004000	/* bit level 7 */
+#define SR_IBIT6	0x00002000	/* bit level 6 */
+#define SR_IBIT5	0x00001000	/* bit level 5 */
+#define SR_IBIT4	0x00000800	/* bit level 4 */
+#define SR_IBIT3	0x00000400	/* bit level 3 */
+#define SR_IBIT2	0x00000200	/* bit level 2 */
+#define SR_IBIT1	0x00000100	/* bit level 1 */
 
-exec/score/cpu/mips/cpu_asm.S
-
-*/
-
-#define MONGOOSEV_EXCEPTION_BASE 39
-
-#define MONGOOSEV_EXCEPTION_ADEL	     MONGOOSEV_EXCEPTION_BASE+0
-#define MONGOOSEV_EXCEPTION_ADES	     MONGOOSEV_EXCEPTION_BASE+1
-#define MONGOOSEV_EXCEPTION_IBE		     MONGOOSEV_EXCEPTION_BASE+2
-#define MONGOOSEV_EXCEPTION_DBE		     MONGOOSEV_EXCEPTION_BASE+3
-#define MONGOOSEV_EXCEPTION_SYSCALL	     MONGOOSEV_EXCEPTION_BASE+4
-#define MONGOOSEV_EXCEPTION_BREAK	     MONGOOSEV_EXCEPTION_BASE+5
-#define MONGOOSEV_EXCEPTION_RI		     MONGOOSEV_EXCEPTION_BASE+6
-#define MONGOOSEV_EXCEPTION_CPU		     MONGOOSEV_EXCEPTION_BASE+7
-#define MONGOOSEV_EXCEPTION_OVERFLOW	     MONGOOSEV_EXCEPTION_BASE+8
-
-
-
-
-
-
-#define	SR_CUMASK	0xf0000000	/* coproc usable bits */
-#define	SR_CU3		0x80000000	/* Coprocessor 3 usable */
-#define	SR_CU2		0x40000000	/* Coprocessor 2 usable */
-#define	SR_CU1		0x20000000	/* Coprocessor 1 usable */
-#define	SR_CU0		0x10000000	/* Coprocessor 0 usable */
-#define	SR_BEV		0x00400000	/* use boot exception vectors */
-#define	SR_TS		0x00200000	/* TLB shutdown */
-#define	SR_PE		0x00100000	/* cache parity error */
-#define	SR_CM		0x00080000	/* cache miss */
-#define	SR_PZ		0x00040000	/* cache parity zero */
-#define	SR_SWC		0x00020000	/* swap cache */
-#define	SR_ISC		0x00010000	/* Isolate data cache */
-#define	SR_IMASK	0x0000ff00	/* Interrupt mask */
-#define	SR_IMASK8	0x00000000	/* mask level 8 */
-#define	SR_IMASK7	0x00008000	/* mask level 7 */
-#define	SR_IMASK6	0x0000c000	/* mask level 6 */
-#define	SR_IMASK5	0x0000e000	/* mask level 5 */
-#define	SR_IMASK4	0x0000f000	/* mask level 4 */
-#define	SR_IMASK3	0x0000f800	/* mask level 3 */
-#define	SR_IMASK2	0x0000fc00	/* mask level 2 */
-#define	SR_IMASK1	0x0000fe00	/* mask level 1 */
-#define	SR_IMASK0	0x0000ff00	/* mask level 0 */
-
-#define	SR_IBIT8	0x00008000	/* bit level 8 */
-#define	SR_IBIT7	0x00004000	/* bit level 7 */
-#define	SR_IBIT6	0x00002000	/* bit level 6 */
-#define	SR_IBIT5	0x00001000	/* bit level 5 */
-#define	SR_IBIT4	0x00000800	/* bit level 4 */
-#define	SR_IBIT3	0x00000400	/* bit level 3 */
-#define	SR_IBIT2	0x00000200	/* bit level 2 */
-#define	SR_IBIT1	0x00000100	/* bit level 1 */
-
-#define	SR_KUO		0x00000020	/* old kernel/user, 0 => k, 1 => u */
-#define	SR_IEO		0x00000010	/* old interrupt enable, 1 => enable */
-#define	SR_KUP		0x00000008	/* prev kernel/user, 0 => k, 1 => u */
-#define	SR_IEP		0x00000004	/* prev interrupt enable, 1 => enable */
-#define	SR_KUC		0x00000002	/* cur kernel/user, 0 => k, 1 => u */
-#define	SR_IEC		0x00000001	/* cur interrupt enable, 1 => enable */
+#define SR_KUO		0x00000020	/* old kernel/user, 0 => k, 1 => u */
+#define SR_IEO		0x00000010	/* old interrupt enable, 1 => enable */
+#define SR_KUP		0x00000008	/* prev kernel/user, 0 => k, 1 => u */
+#define SR_IEP		0x00000004	/* prev interrupt enable, 1 => enable */
+#define SR_KUC		0x00000002	/* cur kernel/user, 0 => k, 1 => u */
+#define SR_IEC		0x00000001	/* cur interrupt enable, 1 => enable */
 #define SR_KUMSK	(SR_KUO|SR_IEO|SR_KUP|SR_IEP|SR_KUC|SR_IEC)
 
-#define	SR_IMASKSHIFT	8
+#define SR_IMASKSHIFT	8
 
 #endif

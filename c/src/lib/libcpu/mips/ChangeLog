@@ -1,3 +1,18 @@
+2000-05-24	Joel Sherrill <joel@OARcorp.com>
+
+	* mongoosev/include/mongoose-v.h, mongoosev/vectorisrs/vectorisrs.c,
+	r46xx/vectorisrs/vectorisrs.c, tx39/vectorisrs/vectorisrs.c,
+	tx39/include/tx3904.h: All exceptions were given low numbers and thus
+	can be now be installed and processed in a uniform manner just like interrupts.
+	Variances between various MIPS ISA levels are not accounted for at this time.
+	* mongoosev/vectorisrs/Makefile.am, mongoosev/vectorisrs/maxvectors.c,
+	r46xx/vectorisrs/Makefile.am, r46xx/vectorisrs/maxvectors.c,
+	tx39/vectorisrs/Makefile.am, tx39/vectorisrs/maxvectors.c,
+	shared/interrupts/maxvectors.c, shared/interrupts/Makefile.am: Split the
+	shared maxvectors.c into a variety of CPU model specific versions to simplify
+	the build process and reduce depdencies.  Deleted shared/interrupts/maxvectors.c
+	and created various CPU model versions.
+
 2001-05-24	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* clock/clock.S: Move placement of nop.
