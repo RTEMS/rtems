@@ -328,7 +328,7 @@ void *POSIX_Init (
    params_c.period.tv_nsec = 000000000; /* nanoseconds */
    params_c.signo = SIGALRM;
    if (pthread_create (&tc, &attr, task_c, &params_c) != 0) {
-     perror ("Error in trhead create for task c\n");
+     perror ("Error in thread create for task c\n");
    }
 
 

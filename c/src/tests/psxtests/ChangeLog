@@ -1,3 +1,8 @@
+2004-03-05	Joel Sherrill <joel@OARcorp.com>
+
+	* psxmsgq01/init.c, psxtimer/psxtimer.c: Eliminate warning from
+	previous patch.
+
 2004-02-26	Sébastien Barré <sbarre@sdelcc.com>
 
 	PR 582/core
