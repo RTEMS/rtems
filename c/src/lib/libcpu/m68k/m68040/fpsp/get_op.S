@@ -173,7 +173,7 @@ PTENRP:
 get_op:
 	clrb	DY_MO_FLG(%a6)
 	tstb	UFLG_TMP(%a6)	//test flag for unsupp/unimp state
-	beqs	uni_getop
+	beq	uni_getop
 
 uns_getop:
 	btstb	#direction_bit,CMDREG1B(%a6)

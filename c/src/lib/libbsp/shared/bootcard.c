@@ -27,7 +27,7 @@ extern rtems_configuration_table  BSP_Configuration;
 extern rtems_cpu_table            Cpu_table;
 
 /* Initialize C++ global Ctor/Dtor and initializes exception handling. */
-#ifdef USE_INIT_FINI 
+#if defined(USE_INIT_FINI)
 extern void _fini( void );
 extern void _init( void );
 #endif

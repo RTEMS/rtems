@@ -486,7 +486,7 @@ A9_str:
 	fmovex	(%a0),%fp0	//load X from memory
 	fabsx	%fp0		//use abs(X)
 	tstw	%d5		//LAMBDA is in lower word of d5
-	bnes	sc_mul		//if neg (LAMBDA = 1), scale by mul
+	bne 	sc_mul		//if neg (LAMBDA = 1), scale by mul
 	fdivx	%fp1,%fp0		//calculate X / SCALE -> Y to fp0
 	bras	A10_st		//branch to A10
 

@@ -94,7 +94,7 @@ opc011:
 	cmpil	#0,%d0		//if dest format is extended
 	beq	dest_ext	//then branch
 	cmpil	#1,%d0		//if dest format is single
-	beqs	dest_sgl	//then branch
+	beq	dest_sgl	//then branch
 //
 //	fall through to dest_dbl
 //

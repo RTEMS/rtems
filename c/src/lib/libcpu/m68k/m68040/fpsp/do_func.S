@@ -79,7 +79,7 @@ not_fmovecr:
 	movew	CMDREG1B(%a6),%d0
 	andl	#0x7F,%d0
 	cmpil	#0x38,%d0		//if the extension is >= $38, 
-	bges	serror		//it is illegal
+	bge	serror		//it is illegal
 	bfextu	STAG(%a6){#0:#3},%d1
 	lsll	#3,%d0		//make room for STAG
 	addl	%d1,%d0		//combine for final index into table

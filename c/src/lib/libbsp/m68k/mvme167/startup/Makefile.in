@@ -23,7 +23,7 @@ C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
 H_FILES =
 
-SRCS = $(srcdir)/linkcmds $(C_FILES) $(H_FILES)
+SRCS = $(srcdir)/linkcmds $(srcdir)/elflinkcmds $(C_FILES) $(H_FILES)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
@@ -41,7 +41,9 @@ $(INSTALLDIRS):
 # (OPTIONAL) Add local stuff here using +=
 #
 
-DEFINES +=
+# USE_INIT_FINI tells main.c what C++ help we need.
+
+DEFINES += -DUSE_INIT_FINI
 CPPFLAGS +=
 CFLAGS +=
 
@@ -64,6 +66,7 @@ ${PGM}: ${SRCS} ${OBJS}
 
 all: ${ARCH} $(SRCS) $(PGM)
 	$(INSTALL_CHANGE) $(srcdir)/linkcmds $(PROJECT_RELEASE)/lib
+	$(INSTALL_CHANGE) $(srcdir)/elflinkcmds $(PROJECT_RELEASE)/lib
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

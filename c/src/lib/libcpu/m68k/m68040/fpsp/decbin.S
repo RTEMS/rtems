@@ -232,7 +232,7 @@ nextlw:
 //
 m_sign:
 	btst	#31,(%a0)	//test sign of the mantissa
-	beqs	ap_st_z		//if clear, go to append/strip zeros
+	beq	ap_st_z		//if clear, go to append/strip zeros
 	fnegx	%fp0		//if set, negate fp0
 	
 //
@@ -290,7 +290,7 @@ ap_st_z:
 	cmpl	#27,%d1		//test is with 27
 	ble	pwrten		//if abs(expA) <28, skip ap/st zeros
 	btst	#30,(%a0)	//check sign of exp
-	bnes	ap_st_n		//if neg, go to neg side
+	bne	ap_st_n		//if neg, go to neg side
 	clrl	%d1		//zero count reg
 	movel	(%a0),%d4		//load lword 1 to d4
 	bfextu	%d4{#28:#4},%d0	//get M16 in d0
@@ -338,7 +338,7 @@ ap_p_en:
 	tstl	%d0		//check if d0 is zero
 	bnes	ap_p_el		//if not, get next bit
 	fmulx	%fp1,%fp0		//mul mantissa by 10**(no_bits_shifted)
-	bras	pwrten		//go calc pwrten
+	bra	pwrten		//go calc pwrten
 //
 // This section handles a negative adjusted exponent.
 //
