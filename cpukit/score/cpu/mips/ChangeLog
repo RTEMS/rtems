@@ -1,3 +1,12 @@
+2001-02-01	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* cpu.c: Enhancements and fixes for modifying the SR when changing
+	the interrupt level.
+	* cpu_asm.S: Fixed handling of FP enable bit so it is properly 
+	managed on a per-task basis, improved handling of interrupt levels,
+	and made deferred FP contexts work on the MIPS.
+	* rtems/score/cpu.h: Modified to support above changes.
+
 2002-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/Makefile.am: Removed.

@@ -82,51 +82,66 @@ unsigned32 _CPU_ISR_Get_level( void )
   mips_get_sr(sr);
 
 #if __mips == 3
-  return ((sr & SR_EXL) >> 1);
+/* EXL bit and shift down hardware ints into bits 1 thru 6 */
+  return ((sr & SR_EXL) >> 1) + ((sr & 0xfc00) >> 9);
 
 #elif __mips == 1
-  return ((sr & SR_IEC) ? 0 : 1);
+/* IEC bit and shift down hardware ints into bits 1 thru 6 */
+  return (sr & SR_IEC) + ((sr & 0xfc00) >> 9);
 
 #else
 #error "CPU ISR level: unknown MIPS level for SR handling"
 #endif
 }
 
+
 void _CPU_ISR_Set_level( unsigned32 new_level )
 {
-  unsigned int sr;
+  unsigned int sr, srbits;
+
+  /* 
+  ** mask off the int level bits only so we can 
+  ** preserve software int settings and FP enable
+  ** for this thread.  Note we don't force software ints
+  ** enabled when changing level, they were turned on
+  ** when this task was created, but may have been turned 
+  ** off since, so we'll just leave them alone.
+  */
+
 
   mips_get_sr(sr);
 
 #if __mips == 3
+  mips_set_sr(sr & ~SR_IE);                 /* first disable ie bit (recommended) */
+
+  srbits = sr & ~(0xfc00 | SR_EXL | SR_IE);
+
+  sr = srbits | ((new_level==0)? (0xfc00 | SR_EXL | SR_IE): \
+		 (((new_level<<9) & 0xfc000) | \
+		  (new_level & 1)?(SR_EXL | SR_IE):0));
+/*
   if ( (new_level & SR_EXL) == (sr & SR_EXL) )
     return;
 
   if ( (new_level & SR_EXL) == 0 ) {
-    sr &= ~SR_EXL;                    /* clear the EXL bit */
+    sr &= ~SR_EXL;                    * clear the EXL bit *
     mips_set_sr(sr);
   } else {
-    sr &= ~SR_IE;
-    mips_set_sr(sr);                 /* first disable ie bit (recommended) */
 
-    sr |= SR_EXL|SR_IE;              /* enable exception level */
-    mips_set_sr(sr);                 /* first disable ie bit (recommended) */
+    sr |= SR_EXL|SR_IE;              * enable exception level *
+    mips_set_sr(sr);                 * first disable ie bit (recommended) *
   }
+*/
  
 #elif __mips == 1
-  if ( (new_level & SR_IEC) == (sr & SR_IEC) )
-    return;
+  mips_set_sr( (sr & ~SR_IEC) );	
 
-  sr &= ~SR_IEC;                    /* clear the IEC bit */
-  if ( !new_level )
-    sr |= SR_IEC;                   /* enable interrupts */
-
-  mips_set_sr(sr);
-
+  srbits = sr & ~(0xfc00 | SR_IEC);
+  sr = srbits | ((new_level==0)?0xfc01:( ((new_level<<9) & 0xfc000) | (new_level & 1)));
 #else
 #error "CPU ISR level: unknown MIPS level for SR handling"
 #endif
-
+  mips_set_sr( sr );
 }
 
 /*PAGE
@@ -153,7 +168,7 @@ void _CPU_ISR_install_raw_handler(
    *  table used by the CPU to dispatch interrupt handlers.
    *
    *  Because all interrupts are vectored through the same exception handler
-   *  this is not necessary on this port.
+   *  this is not necessary on thi sport.
    */
 }
 

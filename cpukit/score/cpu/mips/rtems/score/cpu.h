@@ -67,7 +67,7 @@ extern "C" {
  *  one subroutine call is avoided entirely.]
  */
 
-#define CPU_INLINE_ENABLE_DISPATCH       TRUE
+#define CPU_INLINE_ENABLE_DISPATCH       FALSE
 
 /*
  *  Should the body of the search loops in _Thread_queue_Enqueue_priority
@@ -207,7 +207,7 @@ extern "C" {
  *  must be saved as part of the preemption.
  */
 
-#define CPU_IDLE_TASK_IS_FP      FALSE
+#define CPU_IDLE_TASK_IS_FP      TRUE
 
 /*
  *  Should the saving of the floating point registers be deferred
@@ -555,13 +555,6 @@ extern unsigned int mips_interrupt_number_of_vectors;
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /*
- *  This is defined if the port has a special way to report the ISR nesting
- *  level.  Most ports maintain the variable _ISR_Nest_level.
- */
-
-#define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
-
-/*
  *  Should be large enough to run all RTEMS tests.  This insures
  *  that a "reasonable" small application should not have any problems.
  */
@@ -632,7 +625,8 @@ extern unsigned int mips_interrupt_number_of_vectors;
 #define _CPU_ISR_Disable( _level ) \
   do { \
     mips_get_sr( _level ); \
-    mips_set_sr( (_level) & ~SR_INTERRUPT_ENABLE_BITS ); \
+    mips_set_sr( _level & ~SR_INTERRUPT_ENABLE_BITS ); \
+    _level &= SR_INTERRUPT_ENABLE_BITS; \
   } while(0)
 
 /*
@@ -643,21 +637,22 @@ extern unsigned int mips_interrupt_number_of_vectors;
 
 #define _CPU_ISR_Enable( _level )  \
   do { \
-    mips_set_sr(_level); \
+    unsigned int _scratch; \
+    mips_get_sr( _scratch ); \
+    mips_set_sr( (_scratch & ~SR_INTERRUPT_ENABLE_BITS) | (_level & SR_INTERRUPT_ENABLE_BITS) ); \
   } while(0)
 
 /*
  *  This temporarily restores the interrupt to _level before immediately
  *  disabling them again.  This is used to divide long RTEMS critical
  *  sections into two or more parts.  The parameter _level is not
- * modified.
+ *  modified.
  */
 
 #define _CPU_ISR_Flash( _xlevel ) \
   do { \
-    unsigned int _scratch; \
     _CPU_ISR_Enable( _xlevel ); \
-    _CPU_ISR_Disable( _scratch ); \
+    _CPU_ISR_Disable( _xlevel ); \
   } while(0)
 
 /*
@@ -701,21 +696,51 @@ void _CPU_ISR_Set_level( unsigned32 );  /* in cpu.c */
  *        point thread.  This is typically only used on CPUs where the
  *        FPU may be easily disabled by software such as on the SPARC
  *        where the PSR contains an enable FPU bit.
+ *
+ *  The per-thread status register holds the interrupt enable, FP enable
+ *  and global interrupt enable for that thread.  It means each thread can
+ *  enable its own set of interrupts.  If interrupts are disabled, RTEMS
+ *  can still dispatch via blocking calls.  This is the function of the 
+ *  "Interrupt Level", and on the MIPS, it controls the IEC bit and all 
+ *  the hardware interrupts as defined in the SR.  Software ints
+ *  are automatically enabled for all threads, as they will only occur under 
+ *  program control anyhow.  Besides, the interrupt level parm is only 8 bits, 
+ *  and controlling the software ints plus the others would require 9.
+ *
+ *  If the Interrupt Level is 0, all ints are on.  Otherwise, the 
+ *  Interrupt Level should supply a bit pattern to impose on the SR 
+ *  interrupt bits; bit 0 applies to the mips1 IEC bit/mips3 EXL&IE, bits 1 thru 6
+ *  apply to the SR register Intr bits from bit 10 thru bit 15.  Bit 7 of 
+ *  the Interrupt Level parameter is unused at this time.
+ *
+ *  These are the only per-thread SR bits, the others are maintained
+ *  globally & explicitly preserved by the Context Switch code in cpu_asm.s
  */
 
-#define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                 _isr, _entry_point, _is_fp ) \
+
+#if __mips == 3
+#define _INTON	(SR_EXL | SR_IE)
+#endif
+#if __mips == 1
+#define _INTON  SR_IEC
+#endif
+
+#define _CPU_Context_Initialize( _the_context, _stack_base, _size, _isr, _entry_point, _is_fp ) \
   { \
  	unsigned32 _stack_tmp = \
            (unsigned32)(_stack_base) + (_size) - CPU_STACK_ALIGNMENT; \
+        unsigned32 _intlvl = _isr & 0xff; \
   	_stack_tmp &= ~(CPU_STACK_ALIGNMENT - 1); \
   	(_the_context)->sp = _stack_tmp; \
   	(_the_context)->fp = _stack_tmp; \
 	(_the_context)->ra = (unsigned64)_entry_point; \
-	(_the_context)->c0_sr = ((_the_context)->c0_sr & 0x0fff0000) | \
-				((_isr)?0xff00:0xff01) | \
-				((_is_fp)?0x20000000:0x10000000); \
+	(_the_context)->c0_sr = ((_intlvl==0)?(0xFF00 | _INTON):( ((_intlvl<<9) & 0xfc00) | \
+						       0x300 | \
+						       ((_intlvl & 1)?_INTON:0)) ) | \
+				SR_CU0 | ((_is_fp)?SR_CU1:0); \
   }
+
+
 
 /*
  *  This routine is responsible for somehow restarting the currently

@@ -23,6 +23,13 @@
  *    2001: Joel Sherrill <joel@OARcorp.com> continued this rework,
  *          rewriting as much as possible in C and added the JMR3904 BSP
  *          so testing could be performed on a simulator.
+ *    2001: Greg Menke <gregory.menke@gsfc.nasa.gov>, bench tested ISR
+ *	    performance, tweaking this code and the isr vectoring routines
+ *          to reduce overhead & latencies.  Added optional
+ *	    instrumentation as well.
+ *    2002: Greg Menke <gregory.menke@gsfc.nasa.gov>, overhauled cpu_asm.S,
+ *          cpu.c and cpu.h to manage FP vs int only tasks, interrupt levels
+ *          and deferred FP contexts.
  *  
  *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
@@ -42,8 +49,9 @@
 * Mongoose-ism debug tool- but may be handy in the future so we
 * left it in...
 */
-/* #define INSTRUMENT */
-	
+
+#define INSTRUMENT_ISR_VECTORING
+//#define INSTRUMENT_EXECUTING_THREAD
 
 
 	
@@ -165,10 +173,28 @@
  * );
  */
 
-#if ( CPU_HARDWARE_FP == TRUE )
+#if ( CPU_HARDWARE_FP == FALSE )
 FRAME(_CPU_Context_save_fp,sp,0,ra)
         .set noat
-        ld   a1,(a0)
+
+#if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
+	/* 
+	** Make sure the FPU is on before we save state.  This code is here
+	** because the FPU context switch might occur when an integer
+	** task is switching out w/ an FP task switching in, but the current 
+	** FPU state was left by a sometime previously scheduled FP task.
+	**
+	** In non-deferred FP context switch, if the exiting task is FP, then
+	** the FPU is already on so we don't need to do this.
+	*/
+	
+	MFC0	t0,C0_SR	
+	li	k0,SR_CU1	
+	or	t0,k0
+	MTC0	t0,C0_SR	
+#endif
+		
+	ld   a1,(a0)
 	NOP
         swc1 $f0,FP0_OFFSET*F_SZ(a1)
         swc1 $f1,FP1_OFFSET*F_SZ(a1)
@@ -226,10 +252,22 @@ ENDFRAME(_CPU_Context_save_fp)
  * )
  */
 
-#if ( CPU_HARDWARE_FP == TRUE )
+#if ( CPU_HARDWARE_FP == FALSE )
 FRAME(_CPU_Context_restore_fp,sp,0,ra)
         .set noat
-        ld a1,(a0)
+	
+	/* 
+	** Make sure the FPU is on before we retrieve state.  This code 
+	** is here because the FPU context switch might occur when an 
+	** integer task is switching out with a FP task switching in.
+	*/
+	
+	MFC0	t0,C0_SR	
+	li	k0,SR_CU1	
+	or	t0,k0
+	MTC0	t0,C0_SR	
+
+	ld a1,(a0)
 	NOP
         lwc1 $f0,FP0_OFFSET*4(a1)
         lwc1 $f1,FP1_OFFSET*4(a1)
@@ -284,13 +322,12 @@ FRAME(_CPU_Context_switch,sp,0,ra)
 
         MFC0  t0,C0_SR
         li    t1,~(SR_INTERRUPT_ENABLE_BITS)
-        STREG t0,C0_SR_OFFSET*4(a0)	/* save status register */
+	STREG t0,C0_SR_OFFSET*R_SZ(a0)
         and   t0,t1
-        MTC0  t0,C0_SR			/* first disable ie bit (recommended) */
 #if __mips == 3
-        ori   t0,SR_EXL|SR_IE		/* enable exception level to disable interrupts */
-        MTC0  t0,C0_SR
+        ori   t0,(SR_EXL|SR_IE)		/* enable exception level to disable interrupts */
 #endif
+        MTC0  t0,C0_SR
 
         STREG ra,RA_OFFSET*R_SZ(a0)	/* save current context */
         STREG sp,SP_OFFSET*R_SZ(a0)
@@ -304,7 +341,7 @@ FRAME(_CPU_Context_switch,sp,0,ra)
         STREG s6,S6_OFFSET*R_SZ(a0)
         STREG s7,S7_OFFSET*R_SZ(a0)
 
-	/*
+	/*  EPC is readonly...
         MFC0  t0,C0_EPC
 	NOP
         STREG t0,C0_EPC_OFFSET*R_SZ(a0)
@@ -323,35 +360,64 @@ _CPU_Context_switch_restore:
         LDREG s6,S6_OFFSET*R_SZ(a1)
         LDREG s7,S7_OFFSET*R_SZ(a1)
 
-	/*
+	/*  EPC is readonly...
         LDREG t0,C0_EPC_OFFSET*R_SZ(a1)
 	NOP
         MTC0  t0,C0_EPC
 	*/
-	
+
         LDREG t0, C0_SR_OFFSET*R_SZ(a1)
+	
+//	NOP
+//#if __mips == 3
+//        andi  t0,SR_EXL
+//        bnez  t0,_CPU_Context_1   /* set exception level from restore context */
+//        li    t0,~SR_EXL
+//        MFC0  t1,C0_SR
+//        NOP
+//        and   t1,t0
+//        MTC0  t1,C0_SR
+//
+//#elif __mips == 1
+//
+//        andi  t0,(SR_INTERRUPT_ENABLE_BITS) /* we know 0 disabled */
+//        beq   t0,$0,_CPU_Context_1          /* set level from restore context */
+//        MFC0  t0,C0_SR
+//        NOP
+//        or    t0,(SR_INTERRUPT_ENABLE_BITS) /* new_sr = old sr with enabled  */
+//        MTC0  t0,C0_SR                      /* set with enabled */
+//	  NOP
+
+	
+/*
+** Incorporate the new thread's FP coprocessor state and interrupt mask/enable
+** into the status register.  We jump thru the requisite hoops to ensure we 
+** maintain all other SR bits as global values.
+**
+** Get the thread's FPU enable, int mask & int enable bits.  Although we keep the 
+** software int enables on a per-task basis, the rtems_task_create
+** Interrupt Level & int level manipulation functions cannot enable/disable them, 
+** so they are automatically enabled for all tasks.  To turn them off, a thread  
+** must itself manipulate the SR register.
+*/
+
+#if __mips == 3
+	li	k0,(SR_CU1 | SR_IMASK | SR_EXL | SR_IE)
+#elif __mips == 1
+	li	k0,(SR_CU1 | SR_IMASK | SR_IEC)
+#endif
+	and	t0,k0		
+		
+	MFC0	t1,C0_SR	/* grab the current SR */
+	not	k0		/* invert k0 so we can clear out the SR bits */
+	and	t1,k0
+
+	or	t0,t1		/* setup the new task's SR value */
+
+        MTC0	t0,C0_SR	/* and load the new SR */
 	NOP
 	
-#if __mips == 3
-        andi  t0,SR_EXL
-        bnez  t0,_CPU_Context_1   /* set exception level from restore context */
-        li    t0,~SR_EXL
-        MFC0  t1,C0_SR
-        NOP
-        and   t1,t0
-        MTC0  t1,C0_SR
-
-#elif __mips == 1
-        andi  t0,(SR_INTERRUPT_ENABLE_BITS) /* we know 0 disabled */
-        beq   t0,$0,_CPU_Context_1          /* set level from restore context */
-        MFC0  t0,C0_SR
-        NOP
-        or    t0,(SR_INTERRUPT_ENABLE_BITS) /* new_sr = old sr with enabled  */
-        MTC0  t0,C0_SR                      /* set with enabled */
-#endif
-
-	
-_CPU_Context_1:
+/* _CPU_Context_1: */
         j ra
         NOP
 ENDFRAME(_CPU_Context_switch)
@@ -450,42 +516,15 @@ FRAME(_ISR_Handler,sp,0,ra)
 	MFC0     t1,C0_EPC
         STREG    t0,R_SR*R_SZ(sp)
         STREG    t1,R_EPC*R_SZ(sp)
+	
 
-
-#ifdef INSTRUMENT
+#ifdef INSTRUMENT_EXECUTING_THREAD
 	lw t2, _Thread_Executing
 	nop
 	sw t2, 0x8001FFF0
-
-	sw t0, 0x8001F050
-	sw t1, 0x8001F054
-
-	li t0, 0xdeadbeef
-	li t1, 0xdeadbeef
-	li t2, 0xdeadbeef
-			
-        sw ra, 0x8001F000
-        sw v0, 0x8001F004
-        sw v1, 0x8001F008
-        sw a0, 0x8001F00c
-        sw a1, 0x8001F010
-        sw a2, 0x8001F014
-        sw a3, 0x8001F018
-        sw t0, 0x8001F01c
-        sw t1, 0x8001F020
-        sw t2, 0x8001F024
-        sw t3, 0x8001F028
-        sw t4, 0x8001F02c
-        sw t5, 0x8001F030
-        sw t6, 0x8001F034
-        sw t7, 0x8001F038
-        sw t8, 0x8001F03c
-        sw t9, 0x8001F040
-        sw gp, 0x8001F044
-        sw fp, 0x8001F048
 #endif
 	
-/* determine if an interrupt generated this exception */
+	/* determine if an interrupt generated this exception */
 
         MFC0     k0,C0_CAUSE
 	NOP
@@ -515,9 +554,11 @@ _ISR_Handler_1:
         /* Then where did it come from??? */
 	
 	beq      k0,zero,_ISR_Handler_exit
+
 	
-	li	 t2,1		/* set a flag so we process interrupts */
 	
+	
+		
   /*
    *  save some or all context on stack
    *  may need to save some special interrupt information for exit
@@ -547,10 +588,23 @@ _ISR_Handler_1:
    *  Call the CPU model or BSP specific routine to decode the
    *  interrupt source and actually vector to device ISR handlers.
    */
+	
+#ifdef INSTRUMENT_ISR_VECTORING
+	nop
+	li	t1, 1
+	sw	t1, 0x8001e000
+#endif
+
 	move	 a0,sp
         jal      mips_vector_isr_handlers
         nop
-
+	
+#ifdef INSTRUMENT_ISR_VECTORING
+	li	t1, 0
+	sw	t1, 0x8001e000
+	nop
+#endif
+		
   /*
    *  --_ISR_Nest_level;
    */
@@ -572,6 +626,14 @@ _ISR_Handler_1:
         or  t0,t2,t1
         bne t0,zero,_ISR_Handler_exit
         nop
+
+
+
+
+
+	
+
+	
   /*
    *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
    *    restore stack
@@ -589,32 +651,35 @@ _ISR_Handler_1:
 
 	
 	
-#ifdef INSTRUMENT
-	li	t0,0x11111111
-	sw	t0,0x8001F104
+#ifdef INSTRUMENT_EXECUTING_THREAD
+	lw	t0,_Thread_Executing
+	nop
+	sw	t0,0x8001FFF4
 #endif
-	
-  /* restore interrupt state from the saved status register,
-   * if the isr vectoring didn't so we allow nested interrupts to
-   * occur */
-		
-        LDREG    t0,R_SR*R_SZ(sp)
+
+/*
+** Turn on interrupts before entering Thread_Dispatch which
+** will run for a while, thus allowing new interrupts to
+** be serviced.  Observe the Thread_Dispatch_disable_level interlock
+** that prevents recursive entry into Thread_Dispatch.
+*/
+
+        MFC0    t0, C0_SR
 	NOP
-        MTC0     t0,C0_SR
-        rfe
-	
+	or	t0, SR_INTERRUPT_ENABLE_BITS
+        MTC0    t0, C0_SR
+	NOP
+		
+        jal     _Thread_Dispatch
+        NOP
 
-        jal _Thread_Dispatch
-        nop
-
-#ifdef INSTRUMENT
-	li	t0,0x22222222
-	sw	t0,0x8001F100
+#ifdef INSTRUMENT_EXECUTING_THREAD
+	lw	t0,_Thread_Executing
+	nop
+	sw	t0,0x8001FFF8
 #endif
 
 	
-			
-
   /*
    *  prepare to get out of interrupt
    *  return from interrupt  (maybe to _ISR_Dispatch)
@@ -625,16 +690,19 @@ _ISR_Handler_1:
    */
 
 _ISR_Handler_exit:
-        LDREG    t0, R_SR*R_SZ(sp)
-	NOP
-        MTC0     t0, C0_SR
+/*
+** Skip the SR restore because its a global register. _CPU_Context_switch_restore
+** adjusts it according to each task's configuration.  If we didn't dispatch, the
+** SR value isn't changing, so all we need to do is return.
+**
+*/
 
-/* restore context from stack */
-
-#ifdef INSTRUMENT
+	/* restore context from stack */
+	
+#ifdef INSTRUMENT_EXECUTING_THREAD
 	lw	t0,_Thread_Executing
 	nop
-	sw	t0, 0x8001FFF4
+	sw	t0, 0x8001FFFC
 #endif
 
         LDREG k0, R_MDLO*R_SZ(sp)
@@ -660,33 +728,11 @@ _ISR_Handler_exit:
         LDREG a3, R_A3*R_SZ(sp)
         LDREG v1, R_V1*R_SZ(sp)
         LDREG v0, R_V0*R_SZ(sp)
-
-#ifdef INSTRUMENT
-        sw ra, 0x8001F000
-        sw v0, 0x8001F004
-        sw v1, 0x8001F008
-        sw a0, 0x8001F00c
-        sw a1, 0x8001F010
-        sw a2, 0x8001F014
-        sw a3, 0x8001F018
-        sw t0, 0x8001F01c
-        sw t1, 0x8001F020
-        sw t2, 0x8001F024
-        sw t3, 0x8001F028
-        sw t4, 0x8001F02c
-        sw t5, 0x8001F030
-        sw t6, 0x8001F034
-        sw t7, 0x8001F038
-        sw t8, 0x8001F03c
-        sw t9, 0x8001F040
-        sw gp, 0x8001F044
-        sw fp, 0x8001F048
-#endif
 	
         LDREG     k0, R_EPC*R_SZ(sp)
 	
 	.set noat
-        LDREG AT, R_AT*R_SZ(sp)
+        LDREG     AT, R_AT*R_SZ(sp)
         .set at
 
         ADDIU     sp,sp,EXCP_STACK_SIZE
@@ -697,6 +743,7 @@ _ISR_Handler_exit:
        .set    reorder
 ENDFRAME(_ISR_Handler)
 
+	
 FRAME(mips_break,sp,0,ra)
 #if 1
         break 0x0
