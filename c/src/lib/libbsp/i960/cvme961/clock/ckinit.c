@@ -25,7 +25,7 @@
 #include <clockdrv.h>
 
 rtems_unsigned32 Clock_isrs;              /* ISRs until next tick */
-i960_isr         Old_ticker;
+i960_isr_entry   Old_ticker;
 volatile rtems_unsigned32 Clock_driver_ticks;
                                           /* ticks since initialization */
 

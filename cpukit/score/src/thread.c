@@ -588,19 +588,20 @@ void _Thread_Handler( void )
 
   executing = _Thread_Executing;
 
-  _Thread_Dispatch_disable_level = 0;
-
   /*
-   * Do the 'begin' here instead of after the context switch.
-   * This ensures 'switch' extensions can not be called before
-   * 'begin' extensions.
+   * Take care that 'begin' extensions get to complete before
+   * 'switch' extensions can run.  This means must keep dispatch
+   * disabled until all 'begin' extensions complete.
+   */
+ 
+  _User_extensions_Task_begin( executing );
+ 
+  /*
+   *  At this point, the dispatch disable level BETTER be 1.
    */
 
-  _User_extensions_Task_begin( executing );
-
-  if ( _Thread_Is_context_switch_necessary() )
-    _Thread_Dispatch();
-
+  _Thread_Enable_dispatch();
+ 
   (*executing->Start.entry_point)( executing->Start.initial_argument );
 
   _User_extensions_Task_exitted( executing );

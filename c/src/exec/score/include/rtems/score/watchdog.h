@@ -104,8 +104,8 @@ typedef struct {
  *  during an insert on a watchdog delta chain.
  */
 
-volatile unsigned32  _Watchdog_Sync_level;
-volatile unsigned32  _Watchdog_Sync_count;
+EXTERN volatile unsigned32  _Watchdog_Sync_level;
+EXTERN volatile unsigned32  _Watchdog_Sync_count;
 
 /*
  *  The following defines the watchdog chains which are managed

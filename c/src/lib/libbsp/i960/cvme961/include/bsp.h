@@ -119,7 +119,7 @@ BSP_EXTERN i960ca_control_table *Ctl_tbl;
 
 void bsp_cleanup( void );
 
-i960_isr set_vector( rtems_isr_entry, unsigned int, unsigned int );
+i960_isr_entry set_vector( rtems_isr_entry, unsigned int, unsigned int );
 
 #ifdef __cplusplus
 }
