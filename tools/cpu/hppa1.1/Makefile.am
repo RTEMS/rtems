@@ -14,4 +14,6 @@ CPU_DIR = ../../cpu/$(RTEMS_CPU)
 
 AM_CPPFLAGS = -I$(PROJECT_INCLUDE) -I$(CPU_DIR)
 
+PREINSTALL_FILES = genoffsets
+
 include $(top_srcdir)/../../../automake/host.am
