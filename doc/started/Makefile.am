@@ -17,7 +17,7 @@ include $(top_srcdir)/project.am
 COMMON_FILES=$(top_srcdir)/common/cpright.texi $(top_builddir)/common/setup.texi
 
 GENERATED_FILES= binaries.texi buildc.texi buildrt.texi gdb.texi intro.texi \
-    nt.texi require.texi sample.texi
+    nt.texi require.texi nextstep.texi sample.texi
 
 FILES= tversions.texi
 
@@ -30,7 +30,7 @@ intro.texi: intro.t tversions.texi
 	    -n "Requirements" $<
 
 require.texi: require.t tversions.texi
-	$(BMENU) -c -p "EGCS Mailing List" \
+	$(BMENU) -c -p "GCC Mailing Lists" \
 	    -u "Top" \
 	    -n "Prebuilt Toolset Executables" $<
 
@@ -57,10 +57,15 @@ sample.texi: sample.t tversions.texi
 gdb.texi: gdb.t tversions.texi
 	$(BMENU) -c -p "Application Executable" \
 	    -u "Top" \
+	    -n "Where To Go From Here" $<
+
+nextstep.texi: nextstep.t tversions.texi
+	$(BMENU) -c -p "GDB for DINK32" \
+	    -u "Top" \
 	    -n "Using MS-Windows as a Development Host" $<
 
 nt.texi: nt.t tversions.texi
-	$(BMENU) -c -p "GDB for DINK32" \
+	$(BMENU) -c -p "Where To Go From Here" \
 	    -u "Top" \
 	    -n "" $<
 

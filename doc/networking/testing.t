@@ -61,7 +61,7 @@ is a list of them:
 There are commented out calls to @code{printf} in the file 
 @code{sys/mbuf.h} in the network stack code.  Uncommenting
 these lines results in output when mbuf's are allocated
-and freed.  This is very useful for findind memory leaks.
+and freed.  This is very useful for finding memory leaks.
 
 @item TX and RX queuing
 

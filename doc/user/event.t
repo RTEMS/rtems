@@ -25,13 +25,18 @@ provided by the event manager are:
 
 @subsection Event Sets
 
+@cindex event flag, definition
 @cindex event set, definition
+@findex rtems_event_set
 
 An event flag is used by a task (or ISR) to inform
 another task of the occurrence of a significant situation.
 Thirty-two event flags are associated with each task.  A
 collection of one or more event flags is referred to as an event
-set.  The application developer should remember the following
+set.  The data type @code{@value{DIRPREFIX}event_set} is used to manage
+event sets.
+
+The application developer should remember the following
 key characteristics of event operations when utilizing the event
 manager:
 
@@ -53,7 +58,7 @@ subsequent send operations to that same task have no effect.
 
 An event set is posted when it is directed (or sent) to a task.  A
 pending event is an event that has been posted but not received.  An event
-condition is used to specify the events which the task desires to receive
+condition is used to specify the event set which the task desires to receive
 and the algorithm which will be used to determine when the request is
 satisfied. An event condition is satisfied based upon one of two
 algorithms which are selected by the user.  The

@@ -18,8 +18,11 @@
  *  application.  It contains a Configuration Table, a
  *  user initialization task, and a simple task.
  *
- *  This example assumes that a board support package exists
- *  and invokes the initialize_executive() directive.
+ *  This example assumes that a board support package exists.
+ *
+ *  Most applications will actually use the confdefs.h method
+ *  to generate their configuration.  This is provided primarily
+ *  for reference.
  */
 
 #include "rtems.h"
@@ -40,7 +43,7 @@ rtems_initialization_tasks_table init_task = @{
 @};
 
 rtems_configuration_table User_Configuration_Table = @{
-  NULL,                 /* filled in by the BSP */
+  NULL,                 /* dynamically assigned by the BSP */
   65536,                /* executive RAM size */
   2,                    /* maximum tasks */
   0,                    /* maximum timers */

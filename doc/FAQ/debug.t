@@ -10,6 +10,51 @@
 
 The questions in this category are hints that can ease debugging.
 
+@section Executable Size
+
+@subsection Why is my executable so big?
+
+There are two primary causes for this.  The most common is that
+you are doing an @code{ls -l} and looking at the actual file
+size -- not the size of the code in the target image.  This
+file could be in an object format such as ELF or COFF and
+contain debug information.  If this is the case, it could
+be an order of magnitude larger than the required code space.
+Use the strip command in your cross toolset to remove debugging
+information.
+
+The following example was done using the i386-rtems cross toolset
+and the pc386 BSP.  Notice that with symbolic information included
+the file @code{hello.exe} is almost a megabyte and would barely fit
+on a boot floppy.  But there is actually only about 93K of code
+and initialized data.  The other 800K is symbolic information
+which is not required to execute the application.
+
+@example
+$ ls -l hello.exe 
+-rwxrwxr-x    1 joel     users      930515 May  2 09:50 hello.exe
+$ i386-rtems-size hello.exe 
+   text	   data	    bss	    dec	    hex	filename
+  88605	   3591	  11980	 104176	  196f0	hello.exe
+$ i386-rtems-strip hello.exe 
+$ ls -l hello.exe 
+-rwxrwxr-x    1 joel     users      106732 May  2 10:02 hello.exe
+$ i386-rtems-size hello.exe 
+   text	   data	    bss	    dec	    hex	filename
+  88605	   3591	  11980	 104176	  196f0	hello.exe
+@end example
+
+Another alternative is that the executable file is in an ASCII
+format such as Motorola Srecords.  In this case, there is
+no debug information in the file but each byte in the target
+image requires two bytes to represent.  On top of that, there
+is some overhead required to specify the addresses where the image
+is to be placed in target memory as well as checksum information.
+In this case, it is not uncommon to see executable files
+that are between two and three times larger than the actual
+space required in target memory.
+
+
 @section Malloc
 
 @subsection Is malloc reentrant?

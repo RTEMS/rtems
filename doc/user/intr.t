@@ -43,13 +43,20 @@ processor and invokes the user's ISR.  The user's ISR is
 responsible for processing the interrupt, clearing the interrupt
 if necessary, and device specific manipulation.
 
+@findex rtems_vector_number
+
 The @code{@value{DIRPREFIX}interrupt_catch}
 directive connects a procedure to
-an interrupt vector.  The interrupt service routine is assumed
+an interrupt vector.  The vector number is managed using
+the @code{@value{DIRPREFIX}vector_number} data type.
+
+The interrupt service routine is assumed
 to abide by these conventions and have a prototype similar to
 the following:
 
 @ifset is-C
+@findex rtems_isr
+
 @example
 rtems_isr user_isr(
   rtems_vector_number vector

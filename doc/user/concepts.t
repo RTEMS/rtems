@@ -43,15 +43,32 @@ reflect the object's use in the application.  Conversely, object
 IDs are designed to facilitate efficient object manipulation by
 the executive.
 
+@subsection Object Names
+
 @cindex object name
+@findex rtems_object_name
 
 An object name is an unsigned thirty-two bit entity
-associated with the object by the user.  Although not required
-by RTEMS, object names are typically composed of four ASCII
-characters which help identify that object.  For example, a task
-which causes a light to blink might be called "LITE".  Utilities
-are provided to build an object name from four ASCII characters
-and to decompose an object name into four ASCII characters.
+associated with the object by the user.  The data type
+@code{@value{DIRPREFIX}name} is used to store object names.
+
+@findex rtems_build_name
+
+Although not required by RTEMS, object names are often
+composed of four ASCII characters which help identify that object.
+For example, a task which causes a light to blink might be
+called "LITE".  The @code{@value{DIRPREFIX}build_name} routine
+is provided to build an object name from four ASCII characters.  
+@ifset is-C
+The following example illustrates this:
+
+@example
+rtems_object_name my_name;
+
+my_name = rtems_build_name( 'L', 'I', 'T', 'E' );
+@end example
+@end ifset
+
 However, it is not required that the application use ASCII
 characters to build object names.  For example, if an
 application requires one-hundred tasks, it would be difficult to
@@ -59,13 +76,18 @@ assign meaningful ASCII names to each task.  A more convenient
 approach would be to name them the binary values one through
 one-hundred, respectively.
 
+@subsection Object IDs
+
 @cindex object ID
 @cindex object ID composition
+@findex rtems_id
 
 @need 3000
 
 An object ID is a unique unsigned thirty-two bit
 entity composed of three parts: object class, node, and index.
+The data type @code{@value{DIRPREFIX}id} is used to store object IDs.
+
 
 @ifset use-ascii
 @example
@@ -259,6 +281,8 @@ known as a tick.  The frequency of clock ticks is completely
 application dependent and determines the granularity and
 accuracy of all interval and calendar time operations.
 
+@findex rtems_interval
+
 By tracking time in units of ticks, RTEMS is capable
 of supporting interval timing functions such as task delays,
 timeouts, timeslicing, the delayed execution of timer service
@@ -267,6 +291,8 @@ interval is defined as a number of ticks relative to the current
 time.  For example, when a task delays for an interval of ten
 ticks, it is implied that the task will not execute until ten
 clock ticks have occurred.
+All intervals are specified using data type
+@code{@value{DIRPREFIX}interval}.
 
 A characteristic of interval timing is that the
 actual interval period may be a fraction of a tick less than the
@@ -291,6 +317,10 @@ date and time.  This allows selected time operations to be
 scheduled at an actual calendar date and time.  For example, a
 task could request to delay until midnight on New Year's Eve
 before lowering the ball at Times Square.
+The data type @code{@value{DIRPREFIX}time_of_day} is used to specify
+calendar time in RTEMS services.  
+@xref{Clock Manager Time and Date Data Structures, , Time and Date Data Structures}.
+@findex rtems_time_of_day
 
 Obviously, the directives which use intervals or wall
 time cannot operate without some external mechanism which

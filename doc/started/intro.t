@@ -149,15 +149,11 @@ The crossgcc FAQ as well as a number of patches and utiliities
 of interest to cross development system users are available
 at ftp://ftp.cygnus.com/pub/embedded/crossgcc.
 
-@subsection EGCS Mailing List
+@subsection GCC Mailing Lists
 
-egcs@@cygnus.com
+See http://gcc.gnu.org for details.
 
-This mailing list is dedicated to the EGCS Project which was
-formed to speed the development and integration of the various
-GNU languages.  The RTEMS and Linux communities were among those
-initially targetted by the EGCS Project as being important
-for its success.  Numerous RTEMS users have made contributions
-to this project.  Subscribe by sending a message with
-the one line "subscribe" to egcs-request@@cygnus.com.
+The GCC Project maintains multiple mailing lists.  They
+are described at the above web site along with subscription
+information.
 

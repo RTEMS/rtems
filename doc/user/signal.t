@@ -37,11 +37,16 @@ signal is sent to a task, that task's execution path will be
 "interrupted" by the ASR.  Sending a signal to a task has no
 effect on the receiving task's current execution state.
 
+@findex rtems_signal_set
+
 A signal flag is used by a task (or ISR) to inform
 another task of the occurrence of a significant situation.
 Thirty-two signal flags are associated with each task.  A
 collection of one or more signals is referred to as a signal
-set.  A signal set is posted when it is directed (or sent) to a
+set.  The data type @code{@value{DIRPREFIX}signal_set}
+is used to manipulate signal sets.
+
+A signal set is posted when it is directed (or sent) to a
 task. A pending signal is a signal that has been sent to a task
 with a valid ASR, but has not been processed by that task's ASR.
 
@@ -216,6 +221,7 @@ The ASR should have the following calling sequence and adhere to
 @value{LANGUAGE} calling conventions:
 
 @ifset is-C
+@findex rtems_asr
 @example
 rtems_asr user_routine(
   rtems_signal_set signals

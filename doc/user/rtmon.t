@@ -1137,11 +1137,12 @@ This directive returns status information associated with
 the rate monotonic period id in the following data @value{STRUCTURE}:
 
 @ifset is-C
+@findex rtems_rate_monotonic_period_status
 @example
 typedef struct @{
   rtems_rate_monotonic_period_states  state;
-  unsigned32                          ticks_since_last_period;
-  unsigned32                          ticks_executed_since_last_period;
+  rtems_unsigned32                    ticks_since_last_period;
+  rtems_unsigned32                    ticks_executed_since_last_period;
 @}  rtems_rate_monotonic_period_status;
 @end example
 @end ifset

@@ -267,16 +267,16 @@ the Cygwin32 environment with the new path.
 @end enumerate
 
 @c
-@c  EGCS
+@c  GCC
 @c
 
-@section Installing EGCS AND NEWLIB
+@section Installing GCC AND NEWLIB
 
 @enumerate
-@item Unarchive and patch @value{EGCS-TAR} and @value{NEWLIB-TAR}
+@item Unarchive and patch @value{GCC-TAR} and @value{NEWLIB-TAR}
 following the instructions in @ref{Unarchiving the Tools}. 
 Apply the appropriate RTEMS specific patches as detailed in
-@ref{Apply RTEMS Patch to EGCS} and @ref{Apply RTEMS Patch to newlib}.
+@ref{Apply RTEMS Patch to GCC} and @ref{Apply RTEMS Patch to newlib}.
 
 @b{NOTE}: See @ref{Bug in Patch Utility}.
 
@@ -291,7 +291,7 @@ or Objective-C as Cygwin32 cross-compilers):
 
 @b{NOTE}: See @ref{Bug in Patch Utility}.
 
-@item Link the following directories from Newlib to the main EGCS directory, 
+@item Link the following directories from Newlib to the main GCC directory, 
 /source/@value{GCC-UNTAR}/ :
 
 @itemize @bullet

@@ -56,7 +56,8 @@ established for the passing of messages. Synchronization is needed when a
 task waits for a message to arrive at a queue. Also, a task may poll a
 queue for the arrival of a message.
 
-The message queue descriptor mqd_t mq represents the message queue. It is
+@findex mqd_t
+The message queue descriptor @code{mqd_t} represents the message queue. It is
 passed as an argument to all of the message queue functions.
 
 @subsection Building a Message Queue Attribute Set
@@ -64,6 +65,7 @@ passed as an argument to all of the message queue functions.
 The mq_attr structure is used to define the characteristics of the message
 queue.
 
+@findex mq_attr
 @example
 @group
 typedef struct mq_attr@{

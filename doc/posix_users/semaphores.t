@@ -42,11 +42,14 @@ returned to the semaphore. If there is more than one task waiting for a
 semaphore, the tasks will be placed in the queue.
 
 @subsection "sem_t" Structure
-The "sem_t" structure is used to represent semaphores. It is passed as an
+
+@findex sem_t
+
+The @code{sem_t} structure is used to represent semaphores. It is passed as an
 argument to the semaphore directives and is defined as follows:
 
 @example
-typedef int sem_t
+typedef int sem_t;
 @end example
 
 @subsection Building a Semaphore Attribute Set

@@ -58,6 +58,7 @@ The timer service routine should adhere to @value{LANGUAGE} calling
 conventions and have a prototype similar to the following:
 
 @ifset is-C
+@findex rtems_timer_service_routine
 @example
 rtems_timer_service_routine user_routine(
   rtems_id   timer_id,

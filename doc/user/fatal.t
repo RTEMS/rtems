@@ -66,6 +66,8 @@ a specific target processor.
 
 @subsection Announcing a Fatal Error
 
+@findex _Internal_errors_What_happened
+
 The @code{@value{DIRPREFIX}fatal_error_occurred} directive is invoked when a
 fatal error is detected.  Before invoking any user-supplied
 fatal error handlers or the RTEMS fatal error handler, the

@@ -70,6 +70,13 @@ The exact usage of the minor number is driver specific, but is
 commonly used to distinguish between a number of devices
 controlled by the same driver.
 
+@findex rtems_device_major_number
+@findex rtems_device_minor_number
+
+The data types @code{@value{DIRPREFIX}device_major_number} and
+@code{@value{DIRPREFIX}device_minor_number} are used to
+manipulate device major and minor numbers, respectively.
+
 @subsection Device Names
 
 @cindex device names

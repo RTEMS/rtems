@@ -102,6 +102,8 @@ tools/@value{RTEMS-UNTAR}/README.configure
 in the RTEMS source tree.  If the BSP parameter is not specified,
 then all supported BSPs for the selected CPU family will be built.
 
+@b{NOTE:}  The POSIX API must be enabled to use GNAT/RTEMS.
+
 @subsection Using the RTEMS configure Script Directly
 
 Make a build directory under tools and build the RTEMS product in this
@@ -111,6 +113,10 @@ arguments. These arguments are discussed in detail in documentation that
 comes with the RTEMS distribution. In the installation described in the
 section "Unpack the RTEMS source", these configuration options can be found
 in the file tools/@value{RTEMS-UNTAR}/README.configure.
+
+The GNAT/RTEMS run-time implementation is based on the POSIX API.  Thus
+the RTEMS configuration for a GNAT/RTEMS environment MUST include the
+@code{--enable-posix} flag.
 
 The following shows the command sequence required to configure,
 compile, and install RTEMS with the POSIX API, FreeBSD TCP/IP,

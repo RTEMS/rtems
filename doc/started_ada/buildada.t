@@ -211,7 +211,6 @@ The directory tree should look something like the following figure:
             @value{GCC-UNTAR}/
             @value{GNAT-UNTAR}/
             @value{NEWLIB-UNTAR}/
-            @value{RTEMS-UNTAR}/
             bit_ada
             bit_gdb
             bit_rtems
@@ -398,13 +397,16 @@ cd tools/@value{GNAT-UNTAR}/src
 cp -r ada ../../@value{GCC-UNTAR}
 @end example
 
+
+===================================================================
+
 @c
 @c  Localizing the Configuration
 @c
 
 @section Localizing the Configuration
 
-Edit the @code{user.cfg} file to alter the settings of various
+Edit the @code{user.cfg} file to alter the settings of various 
 variables which are used to tailor the build process.
 Each of the variables set in @code{user.cfg} may be modified
 as described below:
@@ -416,12 +418,12 @@ RTEMS to be built. It is recommended that the directory chosen to receive
 these tools be named so that it is clear from which egcs distribution it
 was generated and for which target system the tools are to produce code for.
 
-@b{WARNING}: The @code{INSTALL_POINT} should not be a subdirectory
+@b{WARNING}: The @code{INSTALL_POINT} should not be a subdirectory 
 under the build directory.  The build directory will be removed
 automatically upon successful completion of the build procedure.
 
 @item BINUTILS
-is the directory under tools that contains @value{BINUTILS-UNTAR}.
+is the directory under tools that contains @value{BINUTILS-UNTAR}. 
 For example:
 
 @example
@@ -448,7 +450,9 @@ NEWLIB=@value{NEWLIB-UNTAR}
 @end example
 
 @item BUILD_DOCS
-is set to "yes" if you want to install documentation.
+is set to "yes" if you want to install documentation.  This requires
+that tools supporting documentation production be installed.  This
+currently is limited to the GNU texinfo package.
 For example:
 
 @example
@@ -457,12 +461,21 @@ BUILD_DOCS=yes
 
 @item BUILD_OTHER_LANGUAGES
 is set to "yes" if you want to build languages other than C and C++.  At
-the current time, this enables Fortan and Objective-C.
+the current time, the set of alternative languages includes Java, Fortran,
+and Objective-C.  These alternative languages do not always build cross. 
+Hence this option defaults to "no".
+
 For example:
 
 @example
 BUILD_OTHER_LANGUAGES=yes
 @end example
+
+@b{NOTE:} Based upon the version of the compiler being used, it may not
+be possible to build languages other than C and C++ cross.  In many cases,
+the language run-time support libraries are not "multilib'ed".  Thus the
+executable code in these libraries will be for the default compiler settings
+and not necessarily be correct for your CPU model.
 
 @item RTEMS
 is the directory under tools that contails @value{RTEMS-UNTAR}.
@@ -475,9 +488,28 @@ and is forced to "no" for those targets.  This corresponds to the
 
 This must be enabled to support the GNAT/RTEMS run-time.
 
+@item ENABLE_RTEMS_ITRON
+is set to "yes" if you want to enable the RTEMS ITRON API support.
+At this time, this feature is not supported by the UNIX ports of RTEMS
+and is forced to "no" for those targets.  This corresponds to the
+@code{configure} option @code{--enable-itron}.
+
+@item ENABLE_RTEMS_MP
+is set to "yes" if you want to enable the RTEMS multiprocessing
+support.  This feature is not supported by all RTEMS BSPs and
+is automatically forced to "no" for those BSPs.  This corresponds to the
+@code{configure} option @code{--enable-multiprocessing}.
+
+@item ENABLE_RTEMS_CXX
+is set to "yes" if you want to build the RTEMS C++ support including
+the C++ Wrapper for the Classic API.  This corresponds to the
+@code{configure} option @code{--enable-cxx}.
+
 @item ENABLE_RTEMS_TESTS
 is set to "yes" if you want to build the RTEMS Test Suite.  If this
-is set to "no", then only the Sample Tests will be built.
+is set to "no", then only the Sample Tests will be built.  Setting
+this option to "yes" significantly increases the amount of disk
+space required to build RTEMS.
 This corresponds to the @code{configure} option @code{--enable-tests}.
 
 @item ENABLE_RTEMS_TCPIP
@@ -486,10 +518,36 @@ particular BSP does not support TCP/IP, then this feature is automatically
 disabled.  This corresponds to the @code{configure} option
 @code{--enable-tcpip}.
 
-@item ENABLE_RTEMS_CXX
-is set to "yes" if you want to build the RTEMS C++ support including
-the C++ Wrapper for the Classic API.  This corresponds to the
-@code{configure} option @code{--enable-cxx}.
+@item ENABLE_RTEMS_NONDEBUG
+is set to "yes" if you want to build RTEMS in a fully optimized
+state.  This corresponds to executing @code{make} after configuring
+the source tree.
+
+@item ENABLE_RTEMS_DEBUG
+is set to "yes" if you want to build RTEMS in a debug version.
+When built for debug, RTEMS will include run-time code to 
+perform consistency checks such as heap consistency checks.
+Although the precise compilation arguments are BSP dependent,
+the debug version of RTEMS is usually built at a lower optimization
+level.  This is usually done to reduce inlining which can make
+tracing code execution difficult.  This corresponds to executing
+@code{make VARIANT=debug} after configuring
+the source tree.
+
+@item INSTALL_RTEMS
+is set to "yes" if you want to install RTEMS after building it.
+This corresponds to executing @code{make install} after configuring
+and building the source tree.
+
+@item ENABLE_RTEMS_MAINTAINER_MODE
+is set to "yes" if you want to enabled maintainer mode functionality
+in the RTEMS Makefile.  This is disabled by default and it is not
+expected that most users will want to enable this.  When this option
+is enabled, the build process may attempt to regenerate files that
+require tools not required when this option is disabled.
+This corresponds to the @code{configure} option
+@code{--enable-maintainer-mode}.
+
 @end table
 
 @section Running the bit_ada Script
@@ -521,6 +579,15 @@ Where <target configuration> is one of the following:
 NOTE:  The above list of target configurations is the list of RTEMS supported
 targets.  Only a subset of these have been tested with GNAT/RTEMS.  For more
 information, contact your GNAT/RTEMS representative.
+
+The build process can take a while to complete.  Many users find it
+handy to run the build process in the background, capture the output
+in a file, and monitor the output.  This can be done as follows:
+
+@example
+./bit_ada <target configuration> >bit.log 2>&1 &
+tail -f bit.log
+@end example
 
 If no errors are encountered, the @code{bit_ada} script will conclude by 
 printing messages similar to the following:

@@ -42,7 +42,9 @@ The clock facilities of the clock manager operate
 upon calendar time.  These directives utilize the following date
 and time @value{STRUCTURE} for the native time and date format:
 
+
 @ifset is-C
+@findex rtems_time_of_day
 @example
 struct rtems_tod_control @{
   rtems_unsigned32 year;   /* greater than 1987 */
@@ -108,6 +110,8 @@ seconds since the RTEMS epoch of January 1, 1988.
 
 @subsection Clock Tick and Timeslicing
 
+@cindex timeslicing
+
 Timeslicing is a task scheduling discipline in which
 tasks of equal priority are executed for a specific period of
 time before control of the CPU is passed to another task.  It is
@@ -129,6 +133,8 @@ ready task of equal priority.
 
 @subsection Delays
 
+@cindex delays
+
 A sleep timer allows a task to delay for a given
 interval or up until a given time, and then wake and continue
 execution.  This type of timer is created automatically by the
@@ -139,6 +145,8 @@ be explicitly deleted.  Each task may activate one and only one
 sleep timer at a time.
 
 @subsection Timeouts
+
+@cindex timeouts
 
 Timeouts are a special type of timer automatically
 created when the timeout option is used on the
@@ -190,8 +198,12 @@ the number of seconds since the RTEMS epoch, the number of ticks
 since the executive was initialized, and the number of ticks per
 second.  The information returned by the
 @code{@value{DIRPREFIX}clock_get} directive is
-dependent on the option selected by the caller.  The following
-options are available:
+dependent on the option selected by the caller.  This
+is specified using one of the following constants
+associated with the enumerated type
+@code{@value{DIRPREFIX}clock_get_options}:
+
+@findex rtems_clock_get_options 
 
 @itemize @bullet
 @item @code{@value{RPREFIX}CLOCK_GET_TOD} - obtain native style date and time
@@ -325,8 +337,12 @@ The caller can always obtain the number of ticks per second (option is
 ticks since the executive was initialized option is
 @code{@value{RPREFIX}CLOCK_GET_TICKS_SINCE_BOOT}).
 
-The data type expected for time_buffer is indicated below:
+The @code{option} argument may taken on any value of the enumerated
+type @code{rtems_clock_get_options}.  The data type expected for
+@code{time_buffer} is based on the value of @code{option} as
+indicated below:
 
+@findex rtems_clock_get_options 
 @ifset is-C
 @itemize @bullet
 @item @code{@value{RPREFIX}CLOCK_GET_TOD} - (rtems_time_of_day *)

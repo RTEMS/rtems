@@ -74,6 +74,7 @@ END-INFO-DIR-ENTRY
 @include buildrt.texi
 @include sample.texi
 @include gdb.texi
+@include nextstep.texi
 @include nt.texi
 
 @ifinfo
@@ -90,6 +91,7 @@ This is the online version of the Getting Started with RTEMS for C/C++ Users.
 * Building RTEMS::
 * Building the Sample Application::
 * Building the GNU Debugger::
+* Where To Go From Here::
 * Using MS-Windows as a Development Host::
 @end menu
 

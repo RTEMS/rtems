@@ -56,6 +56,7 @@ performance monitoring or debugger support.  RTEMS is informed of
 the entry points which constitute an extension set via the
 following @value{STRUCTURE}:
 
+@findex rtems_extensions_table
 @ifset is-C
 @example
 @group
@@ -68,7 +69,7 @@ typedef struct @{
   rtems_task_begin_extension       thread_begin;
   rtems_task_exitted_extension     thread_exitted;
   rtems_fatal_extension            fatal;
-@} User_extensions_Table;
+@} rtems_extensions_table;
 @end group
 @end example
 @end ifset
@@ -169,7 +170,7 @@ its arguments are all defined by the user.  The names used in
 the examples were arbitrarily chosen and impose no naming
 conventions on the user.
 
-@subsection TASK_CREATE Extension
+@subsubsection TASK_CREATE Extension
 
 The TASK_CREATE extension directly corresponds to the
 task_create directive.  If this extension is defined in any
@@ -178,6 +179,8 @@ then the extension routine will automatically be invoked by
 RTEMS.  The extension should have a prototype similar to the
 following:
 
+@findex rtems_task_create_extension
+@findex rtems_extension
 @ifset is-C
 @example
 rtems_extension user_task_create(
@@ -203,7 +206,7 @@ invoked from the task_create directive after new_task has been
 completely initialized, but before it is placed on a ready TCB
 chain.
 
-@subsection TASK_START Extension
+@subsubsection TASK_START Extension
 
 The TASK_START extension directly corresponds to the
 task_start directive.  If this extension is defined in any
@@ -212,6 +215,7 @@ then the extension routine will automatically be invoked by
 RTEMS.  The extension should have a prototype similar to the
 following:
 
+@findex rtems_task_start_extension
 @ifset is-C
 @example
 rtems_extension user_task_start(
@@ -237,7 +241,7 @@ extension is invoked from the task_start directive after
 started_task has been made ready to start execution, but before
 it is placed on a ready TCB chain.
 
-@subsection TASK_RESTART Extension
+@subsubsection TASK_RESTART Extension
 
 The TASK_RESTART extension directly corresponds to
 the task_restart directive.  If this extension is defined in any
@@ -245,6 +249,7 @@ static or dynamic extension set and a task is being restarted,
 then the extension should have a prototype similar to the
 following:
 
+@findex rtems_task_restart_extension
 @ifset is-C
 @example
 rtems_extension user_task_restart(
@@ -270,7 +275,7 @@ invoked from the task_restart directive after restarted_task has
 been made ready to start execution, but before it is placed on a
 ready TCB chain.
 
-@subsection TASK_DELETE Extension
+@subsubsection TASK_DELETE Extension
 
 The TASK_DELETE extension is associated with the
 task_delete directive.  If this extension is defined in any
@@ -279,6 +284,7 @@ then the extension routine will automatically be invoked by
 RTEMS.  The extension should have a prototype similar to the
 following:
 
+@findex rtems_task_delete_extension
 @ifset is-C
 @example
 rtems_extension user_task_delete(
@@ -306,7 +312,7 @@ including the TCB have been returned to their respective free
 pools.  This extension should not call any RTEMS directives if a
 task is deleting itself (current_task is equal to deleted_task).
 
-@subsection TASK_SWITCH Extension
+@subsubsection TASK_SWITCH Extension
 
 The TASK_SWITCH extension corresponds to a task
 context switch.  If this extension is defined in any static or
@@ -315,6 +321,7 @@ then the extension routine will automatically be invoked by
 RTEMS.  The extension should have a prototype similar to the
 following:
 
+@findex rtems_task_switch_extension
 @ifset is-C
 @example
 rtems_extension user_task_switch(
@@ -341,13 +348,14 @@ context has been saved, but before the heir_task context has
 been restored.  This extension should not call any RTEMS
 directives.
 
-@subsection TASK_BEGIN Extension
+@subsubsection TASK_BEGIN Extension
 
 The TASK_BEGIN extension is invoked when a task
 begins execution.  It is invoked immediately before the body of
 the starting procedure and executes in the context in the task.
 This user extension have a prototype similar to the following:
 
+@findex rtems_task_begin_extension
 @ifset is-C
 @example
 rtems_extension user_task_begin(
@@ -372,13 +380,14 @@ task while the TASK_START extension is executed in the context
 of the task performing the task_start directive.  For most
 extensions, this is not a critical distinction.
 
-@subsection TASK_EXITTED Extension
+@subsubsection TASK_EXITTED Extension
 
 The TASK_EXITTED extension is invoked when a task
 exits the body of the starting procedure by either an implicit
 or explicit return statement.  This user extension have a
 prototype similar to the following:
 
+@findex rtems_task_exitted_extension
 @ifset is-C
 @example
 rtems_extension user_task_exitted(
@@ -407,9 +416,7 @@ returns control to RTEMS, then the RTEMS default handler will be
 used.  This default handler invokes the directive
 fatal_error_occurred with the @code{@value{RPREFIX}TASK_EXITTED} directive status.
 
-@lowersections
-
-@subsection FATAL Error Extension
+@subsubsection FATAL Error Extension
 
 The FATAL error extension is associated with the
 fatal_error_occurred directive.  If this extension is defined in
@@ -417,6 +424,7 @@ any static or dynamic extension set and the fatal_error_occurred
 directive has been invoked, then this extension will be called.
 This extension should have a prototype similar to the following:
 
+@findex rtems_fatal_extension
 @ifset is-C
 @example
 rtems_extension user_fatal_error(
@@ -444,8 +452,6 @@ invoked before RTEMS' default fatal error routine is invoked and
 the processor is stopped.  For example, this extension could be
 used to pass control to a debugger when a fatal error occurs.
 This extension should not call any RTEMS directives.
-
-@raisesections
 
 @subsection Order of Invocation
 

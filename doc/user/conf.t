@@ -204,6 +204,7 @@ The RTEMS Configuration Table
 is defined in the following @value{LANGUAGE} @value{STRUCTURE}:
 
 @ifset is-C
+@findex rtems_configuration_table
 @example
 @group
 typedef struct @{
@@ -262,7 +263,10 @@ RTEMS will invoke the fatal error handler during
 @code{@value{DIRPREFIX}initialize_executive}.
 When using the @code{confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
-to the setting of the macro @code{CONFIGURE_EXECUTIVE_RAM_WORK_AREA}.
+to the setting of the macro @code{CONFIGURE_EXECUTIVE_RAM_WORK_AREA}
+which defaults to @code{NULL}.  Normally, this field should be 
+configured as @code{NULL} as BSPs will assign memory for the
+RTEMS RAM Workspace as part of system initialization.
 
 @item work_space_size
 is the calculated size of the
@@ -278,9 +282,9 @@ is number of microseconds per clock tick.
 When using the @code{confdefs.h} mechanism for configuring
 an RTEMS application, the value for this field corresponds
 to the setting of the macro @code{CONFIGURE_MICROSECONDS_PER_TICK}.
-If not defined by the application, then the @code{CONFIGURE_MAXIMUM_TASKS}
-macro defaults to 10.
-XXX
+If not defined by the application, then the
+@code{CONFIGURE_MICROSECONDS_PER_TICK} macro defaults to 10000 
+(10 milliseconds).
 
 @item ticks_per_timeslice
 is the number of clock ticks for a timeslice.
@@ -374,8 +378,8 @@ configuration.  This field must be NULL when RTEMS is used in a
 single processor configuration.
 When using the @code{confdefs.h} mechanism for configuring
 an RTEMS application, the Multiprocessor Configuration Table
-is automatically generated when the @code{CONFIGURE_MPTEST}
-is defined.  If @code{CONFIGURE_MPTEST} is not defined, the this
+is automatically generated when the @code{CONFIGURE_MP_APPLICATION}
+is defined.  If @code{CONFIGURE_MP_APPLICATION} is not defined, the this
 entry is set to NULL.  The generated table has the name
 @code{Multiprocessing_configuration}.
 
@@ -412,6 +416,7 @@ this application. The RTEMS API Configuration Table is defined in
 the following @value{LANGUAGE} @value{STRUCTURE}:
 
 @ifset is-C
+@findex rtems_api_configuration_table
 @example
 @group
 typedef struct @{
@@ -590,6 +595,8 @@ this application. The POSIX API Configuration Table is defined in
 the following @value{LANGUAGE} @value{STRUCTURE}:
  
 @ifset is-C
+@findex posix_initialization_threads_table
+@findex posix_api_configuration_table
 @example
 @group
 typedef struct @{
@@ -774,6 +781,7 @@ Initialization Task Table is defined in the following @value{LANGUAGE}
 @value{STRUCTURE}:
 
 @ifset is-C
+@findex rtems_initialization_tasks_table
 @example
 typedef struct @{
   rtems_name           name;
@@ -897,6 +905,7 @@ Driver Table is defined in
 the following @value{LANGUAGE} @value{STRUCTURE}:
 
 @ifset is-C
+@findex rtems_driver_address_table
 @example
 typedef struct @{
   rtems_device_driver_entry initialization;
@@ -1164,9 +1173,9 @@ Multiprocessing chapter.
 
 
 When using the @code{confdefs.h} mechanism for configuring
-an RTEMS application, the macro @code{CONFIGURE_MPTEST} must
+an RTEMS application, the macro @code{CONFIGURE_MP_APPLICATION} must
 be defined to automatically generate the Multiprocessor Configuration Table.
-If @code{CONFIGURE_MPTEST}, is not defined, then a NULL pointer
+If @code{CONFIGURE_MP_APPLICATION}, is not defined, then a NULL pointer
 is configured as the address of this table.
 
 The format of the Multiprocessor Configuration Table is defined in 

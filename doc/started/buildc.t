@@ -157,10 +157,9 @@ which aid in building the tools and RTEMS.  They are:
 @end itemize
 
 When the @code{bit} script is executed later in this process, 
-it will automatically create two other subdirectories:
+it will automatically create this subdirectory:
 
 @itemize @bullet
-@item src
 @item build-$@{CPU@}-tools
 @end itemize
 
@@ -195,7 +194,6 @@ The tree should look something like the following figure:
             @value{BINUTILS-UNTAR}/
             @value{GCC-UNTAR}/
             @value{NEWLIB-UNTAR}/
-            @value{RTEMS-UNTAR}/
             bit
             bit_gdb
             bit_rtems
@@ -250,12 +248,25 @@ to at least GNU fileutile version 3.16 to resolve this problem.
 Each of the tools in the GNU development suite comes with documentation.
 It is in the reader's and tool maintainers' interest that one read the
 documentation before posting a problem to a mailing list or news group.
+Much of that documentation is available on-line.  The following is
+a list of URLs where can find HTML versions of the manuals.
+
+@table @b
+GCC Documentation
+http://gcc.gnu.org/onlinedocs
+
+Newlib Documentation
+Not currently online at http://sourceware.cygnus.com/newlib
+
+Binutils Documentation
+Not currently online at http://sourceware.cygnus.com/binutils
+@end table
 
 @c
-@c  EGCS patches
+@c  GCC patches
 @c
 
-@section Apply RTEMS Patch to EGCS
+@section Apply RTEMS Patch to GCC
 
 @ifclear GCC-RTEMSPATCH
 No RTEMS specific patches are required for @value{GCC-VERSION} to
@@ -396,7 +407,9 @@ NEWLIB=@value{NEWLIB-UNTAR}
 @end example
 
 @item BUILD_DOCS
-is set to "yes" if you want to install documentation.
+is set to "yes" if you want to install documentation.  This requires
+that tools supporting documentation production be installed.  This
+currently is limited to the GNU texinfo package.
 For example:
 
 @example
@@ -405,7 +418,10 @@ BUILD_DOCS=yes
 
 @item BUILD_OTHER_LANGUAGES
 is set to "yes" if you want to build languages other than C and C++.  At
-the current time, this enables Fortan and Objective-C.
+the current time, the set of alternative languages includes Java, Fortran,
+and Objective-C.  These alternative languages do not always build cross. 
+Hence this option defaults to "no".
+
 For example:
 
 @example
@@ -427,9 +443,28 @@ At this time, this feature is not supported by the UNIX ports of RTEMS
 and is forced to "no" for those targets.  This corresponds to the
 @code{configure} option @code{--enable-posix}.
 
+@item ENABLE_RTEMS_ITRON
+is set to "yes" if you want to enable the RTEMS ITRON API support.
+At this time, this feature is not supported by the UNIX ports of RTEMS
+and is forced to "no" for those targets.  This corresponds to the
+@code{configure} option @code{--enable-itron}.
+
+@item ENABLE_RTEMS_MP
+is set to "yes" if you want to enable the RTEMS multiprocessing
+support.  This feature is not supported by all RTEMS BSPs and
+is automatically forced to "no" for those BSPs.  This corresponds to the
+@code{configure} option @code{--enable-multiprocessing}.
+
+@item ENABLE_RTEMS_CXX
+is set to "yes" if you want to build the RTEMS C++ support including
+the C++ Wrapper for the Classic API.  This corresponds to the
+@code{configure} option @code{--enable-cxx}.
+
 @item ENABLE_RTEMS_TESTS
 is set to "yes" if you want to build the RTEMS Test Suite.  If this
-is set to "no", then only the Sample Tests will be built.
+is set to "no", then only the Sample Tests will be built.  Setting
+this option to "yes" significantly increases the amount of disk
+space required to build RTEMS.
 This corresponds to the @code{configure} option @code{--enable-tests}.
 
 @item ENABLE_RTEMS_TCPIP
@@ -438,10 +473,36 @@ particular BSP does not support TCP/IP, then this feature is automatically
 disabled.  This corresponds to the @code{configure} option
 @code{--enable-tcpip}.
 
-@item ENABLE_RTEMS_CXX
-is set to "yes" if you want to build the RTEMS C++ support including
-the C++ Wrapper for the Classic API.  This corresponds to the
-@code{configure} option @code{--enable-cxx}.
+@item ENABLE_RTEMS_NONDEBUG
+is set to "yes" if you want to build RTEMS in a fully optimized
+state.  This corresponds to executing @code{make} after configuring
+the source tree.
+
+@item ENABLE_RTEMS_DEBUG
+is set to "yes" if you want to build RTEMS in a debug version.
+When built for debug, RTEMS will include run-time code to 
+perform consistency checks such as heap consistency checks.
+Although the precise compilation arguments are BSP dependent,
+the debug version of RTEMS is usually built at a lower optimization
+level.  This is usually done to reduce inlining which can make
+tracing code execution difficult.  This corresponds to executing
+@code{make VARIANT=debug} after configuring
+the source tree.
+
+@item INSTALL_RTEMS
+is set to "yes" if you want to install RTEMS after building it.
+This corresponds to executing @code{make install} after configuring
+and building the source tree.
+
+@item ENABLE_RTEMS_MAINTAINER_MODE
+is set to "yes" if you want to enabled maintainer mode functionality
+in the RTEMS Makefile.  This is disabled by default and it is not
+expected that most users will want to enable this.  When this option
+is enabled, the build process may attempt to regenerate files that
+require tools not required when this option is disabled.
+This corresponds to the @code{configure} option
+@code{--enable-maintainer-mode}.
+
 @end table
 
 @section Running the bit Script
@@ -470,12 +531,21 @@ Where <target configuration> is one of the following:
 @item sparc
 @end itemize
 
+The build process can take a while to complete.  Many users find it
+handy to run the build process in the background, capture the output
+in a file, and monitor the output.  This can be done as follows:
+
+@example
+./bit_ada <target configuration> >bit.log 2>&1 &
+tail -f bit.log
+@end example
+
 If no errors are encountered, the @code{bit} script will conclude by 
 printing messages similar to the following:
 
 @example
 
-The src and build-i386-tools subdirectory may now be removed.
+The build-i386-tools subdirectory may now be removed.
 
 Started:  Fri Apr 10 10:14:07 CDT 1998
 Finished: Fri Apr 10 12:01:33 CDT 1998
@@ -522,6 +592,10 @@ indicates that "." is before the standard system directories
 in your PATH.  As a general rule, including "." in your PATH
 is a security risk and should be avoided.  Remove "." from
 your PATH.
+
+NOTE:  In some environments, it may be difficult remove "."
+completely from your PATH.  In this case, make sure that "."
+is after the system directories containing "as" and "ld".
 
 @subsection Error Messages Indicating Configuration Problems
 

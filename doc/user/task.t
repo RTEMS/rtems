@@ -120,10 +120,15 @@ current state and priority.
 
 @cindex task priority
 @cindex priority, task
+@findex rtems_task_priority
 
 A task's priority determines its importance in relation to the
 other tasks executing on the same processor.  RTEMS supports 255
-levels of priority ranging from 1 to 255.  Tasks of numerically
+levels of priority ranging from 1 to 255.  The data type
+@code{@value{DIRPREFIX}task_priority} is used to store task
+priorities.
+
+Tasks of numerically
 smaller priority values are more important tasks than tasks of
 numerically larger priority values.  For example, a task at
 priority level 5 is of higher privilege than a task at priority
@@ -143,8 +148,10 @@ processor execution time.
 @subsection Task Mode
 
 @cindex task mode
+@findex rtems_task_mode
 
-A task's mode is a combination of the following four components:
+A task's execution mode is a combination of the following
+four components:
 
 @itemize @bullet
 @item preemption
@@ -154,7 +161,9 @@ A task's mode is a combination of the following four components:
 @end itemize
 
 It is used to modify RTEMS' scheduling process and to alter the
-execution environment of the task. 
+execution environment of the task.  The data type
+@code{@value{DIRPREFIX}task_mode} is used to manage the task 
+execution mode.
 
 @cindex preemption
 
@@ -210,6 +219,7 @@ specifies that the task will execute at interrupt level n.
 @subsection Accessing Task Arguments
 
 @cindex task arguments
+@cindex task prototype
 
 All RTEMS tasks are invoked with a single argument which is
 specified when they are started or restarted.  The argument is
@@ -218,6 +228,8 @@ The simplest manner in which to define a task which accesses it
 argument is:
 
 @ifset is-C
+@findex rtems_task
+
 @example
 rtems_task user_task( 
   rtems_task_argument argument
@@ -240,7 +252,8 @@ single argument as an index into an array of parameter blocks.
 
 @cindex floating point
 
-Creating a task with the @code{@value{RPREFIX}FLOATING_POINT} flag results
+Creating a task with the @code{@value{RPREFIX}FLOATING_POINT} attribute
+flag results
 in additional memory being allocated for the TCB to store the state of the
 numeric coprocessor during task switches.  This additional memory is
 @b{NOT} allocated for @code{@value{RPREFIX}NO_FLOATING_POINT} tasks. Saving
@@ -726,10 +739,6 @@ This directive will not cause the calling task to be preempted.
 
 Valid task priorities range from a high of 1 to a low of 255.
 
-RTEMS supports a maximum of 256 interrupt levels which are
-mapped onto the interrupt levels actually supported by the
-target processor.
-
 The requested stack size should be at least
 @code{@value{RPREFIX}MINIMUM_STACK_SIZE}
 bytes.  The value of @code{@value{RPREFIX}MINIMUM_STACK_SIZE}
@@ -759,6 +768,11 @@ The following task mode constants are defined by RTEMS:
 @item @code{@value{RPREFIX}INTERRUPT_LEVEL(0)} - enable all interrupts (default) 
 @item @code{@value{RPREFIX}INTERRUPT_LEVEL(n)} - execute at interrupt level n
 @end itemize
+
+The interrupt level portion of the task execution mode
+supports a maximum of 256 interrupt levels.  These levels are
+mapped onto the interrupt levels actually supported by the
+target processor in a processor dependent fashion.
 
 Tasks should not be made global unless remote tasks must
 interact with them.  This avoids the system overhead incurred by

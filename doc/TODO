@@ -7,6 +7,10 @@ manuals.
 
 General Issues
 ==============
+Need a Roadmap
+
+Need a description of hello world and writing an application.
+
 More automatic handling of version, date, revision, release, etc.
 
 Eliminate use of gifs.
@@ -17,6 +21,18 @@ Redraw pictures as appropriate in open source tools
 Getting Started (C and Ada versions)
 ====================================
 Produce PDF
+
+Classic Users Guide
+===================
+
+Add Primitive Data Types Chapter
+
+Add descriptions for confdefs.h macros in configuring a system
+chapter.
+
+Add defaults for all confdefs.h values.
+
+Replace example configuration
 
 POSIX User Notes
 ================

@@ -301,6 +301,7 @@ been initialized.  This component should be adhere to the
 following prototype:
 
 @ifset is-C
+@findex rtems_mpci_entry
 @example
 @group
 rtems_mpci_entry user_mpci_initialization(
@@ -465,13 +466,15 @@ MPCI layers will be built upon hardware which support a
 broadcast mechanism, others may be required to generate a copy
 of the packet for each node in the system.
 
-Many MPCI layers use the packet_length field of the MP_packet_prefix
+@c XXX packet_prefix structure needs to be defined in this document
+Many MPCI layers use the @code{packet_length} field of the
+@code{@value{DIRPREFIX}packet_prefix} portion
 of the packet to avoid sending unnecessary data.  This is especially 
 useful if the media connecting the nodes is relatively slow.
 
 The to_convert field of the MP_packet_prefix portion of the packet indicates
-how much of the packet (in unsigned32's) may require conversion in a 
-heterogeneous system.
+how much of the packet (in @code{@value{DIRPREFIX}unsigned32}'s) may require
+conversion in a heterogeneous system.
 
 @subsection Supporting Heterogeneous Environments
 

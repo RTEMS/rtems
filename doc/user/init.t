@@ -87,7 +87,7 @@ other task is made ready to execute.
 
 @subsection Initialization Manager Failure
 
-The fatal_error_occurred directive will be called
+The @code{@value{DIRPREFIX}ifatal_error_occurred} directive will be called
 from @code{@value{DIRPREFIX}initialize_executive}
 for any of the following reasons:
 
@@ -307,8 +307,8 @@ be the same one passed to
 The application must use only one of the two
 initialization sequences:
 @code{@value{DIRPREFIX}initialize_executive} or
-@code{@value{DIRPREFIX}nitialize_executive_early} and 
-@code{@value{DIRPREFIX}nitialize_executive_late}.
+@code{@value{DIRPREFIX}initialize_executive_early} and 
+@code{@value{DIRPREFIX}initialize_executive_late}.
 
 @page
 @subsection INITIALIZE_EXECUTIVE_LATE - Complete Initialization and Start Multitasking
