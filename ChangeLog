@@ -1,3 +1,9 @@
+2002-11-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* acinclude.m4: _RTEMS_OUTPUT_SUBDIRS: Move ac_subconfigure_vars to the
+	end of the args passed to sub-configure-scripts. (Reported by
+	Wulf Hofbauer <wh73@cornell.edu>)
+
 2002-11-12	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac: Remove make/compilers/Makefile.

@@ -222,17 +222,18 @@ if test "$no_recursion" != yes; then
         ac_sub_cache_file=$ac_top_builddir$cache_file ;;
       esac
 
-      AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args \
-           --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir])
+      ac_sub_configure_args="$ac_sub_configure_args '--cache-file=$ac_sub_cache_file'"
+      ac_sub_configure_args="$ac_sub_configure_args '--srcdir=$ac_srcdir'"
+
       # The eval makes quoting arguments work.
       ac_sub_configure_vars=
       test -n "[$]CC_FOR_$2" && \
 	ac_sub_configure_vars="'CC=[$]CC_FOR_$2'"
       test -n "[$]CFLAGS_FOR_$2" && \
         ac_sub_configure_vars="$ac_sub_configure_vars 'CFLAGS=[$]CFLAGS_FOR_$2'"
-      eval $ac_sub_configure_vars \
-	$ac_sub_configure $ac_sub_configure_args \
-          --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir ||
+
+      AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args $ac_sub_configure_vars])
+      eval $ac_sub_configure $ac_sub_configure_args $ac_sub_configure_vars ||
         AC_MSG_ERROR([$ac_sub_configure failed for $ac_dir])
     fi
 
