@@ -153,7 +153,7 @@ static rtems_status_code do_poll_write(
 )
 {
   rtems_libio_rw_args_t *rw_args = arg;
-  unsigned32 i;
+  uint32_t i;
   char cr ='\r';
 
   for( i = 0; i < rw_args->count; i++ ) {

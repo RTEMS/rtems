@@ -51,26 +51,26 @@ extern "C" {
  * off-board devices.
  */
 typedef struct cpld_ {
-  rtems_unsigned8	cs3a[32];		/* Chip select 3A */
-  rtems_unsigned8	pad0[0x200000 - 0x000020];
+  uint8_t	cs3a[32];		/* Chip select 3A */
+  uint8_t	pad0[0x200000 - 0x000020];
 
-  rtems_unsigned8	cs3b[32];		/* Chip select 3B */
-  rtems_unsigned8	pad2[0x400000 - 0x200020];
+  uint8_t	cs3b[32];		/* Chip select 3B */
+  uint8_t	pad2[0x400000 - 0x200020];
 
-  rtems_unsigned8	cs3c[32];		/* Chip select 3C */
-  rtems_unsigned8	pad4[0x600000 - 0x400020];
+  uint8_t	cs3c[32];		/* Chip select 3C */
+  uint8_t	pad4[0x600000 - 0x400020];
 
-  rtems_unsigned8	cs3d[32];		/* Chip select 3D */
-  rtems_unsigned8	pad6[0x800000 - 0x600020];
+  uint8_t	cs3d[32];		/* Chip select 3D */
+  uint8_t	pad6[0x800000 - 0x600020];
 
-  rtems_unsigned8	serial_ints;	/* Enable/disable serial interrupts */
-  rtems_unsigned8	serial_resets;	/* Enable/disable serial resets */
-  rtems_unsigned8	serial_ack;	/* Acknowledge serial transfers */
-  rtems_unsigned8	pad8[0xA00000 - 0x800003];
+  uint8_t	serial_ints;	/* Enable/disable serial interrupts */
+  uint8_t	serial_resets;	/* Enable/disable serial resets */
+  uint8_t	serial_ack;	/* Acknowledge serial transfers */
+  uint8_t	pad8[0xA00000 - 0x800003];
 
-  rtems_unsigned8	iflash_writess;	/* Enable/disable internal-flash writes */
-  rtems_unsigned8	nflash_writess;	/* Enable/disable NAND-flash writes */
-  rtems_unsigned8	padA[0xC00000 - 0xA00002];
+  uint8_t	iflash_writess;	/* Enable/disable internal-flash writes */
+  uint8_t	nflash_writess;	/* Enable/disable NAND-flash writes */
+  uint8_t	padA[0xC00000 - 0xA00002];
 } cpld_t;
 
 extern volatile cpld_t cpld;              /* defined in linkcmds */

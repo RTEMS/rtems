@@ -31,7 +31,7 @@ SPR_RW(BBCMCR);
  */
 void _InitSS555 (void)
 {
-  register unsigned32 plprcr, msr;
+  register uint32_t plprcr, msr;
 
   /*
    * Initialize the System Protection Control Register (SYPCR).
@@ -103,7 +103,7 @@ void _InitSS555 (void)
 
   usiu.memc[0]._br =
       USIU_MEMC_BR_BA(_read_IMMR() & IMMR_FLEN
-        ? (rtems_unsigned32)int_ram_top : 0)	/* base address */
+        ? (uint32_t)int_ram_top : 0)	/* base address */
     | USIU_MEMC_BR_PS32			/* 32-bit data bus */
     | USIU_MEMC_BR_TBDIP		/* toggle bdip */
     | USIU_MEMC_BR_V;			/* base register valid */

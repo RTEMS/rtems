@@ -58,7 +58,7 @@ char *rtems_progname;
  *  rtems/c/src/lib/libbsp/shared/bsplibc.c.
  */
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 void BSP_panic(char *s)
 {
