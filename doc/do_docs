@@ -6,9 +6,10 @@
 basedir=$1
 shift
 manuals="develenv hppa1_1 i386 i960 m68k relnotes powerpc sparc user ka9q \
-  posix_test_plan ada_user"
+  posix_test_plan ada_user hwapi"
 # posix_test_plan manual left out until finished
 # ada_user manual left out until bindings released
+# hwapi manual left out until bindings released
 
 for action in $*
 do
