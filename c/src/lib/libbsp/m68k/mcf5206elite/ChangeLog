@@ -1,3 +1,12 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* README, console/console.c, i2c/i2c.c, i2c/i2cdrv.c, include/bsp.h,
+	include/ds1307.h, include/i2c.h, include/i2cdrv.h, include/nvram.h,
+	nvram/nvram.c, start/start.S, startup/bspclean.c, startup/bspstart.c,
+	startup/gdbinit, startup/init5206e.c, startup/linkcmds,
+	startup/linkcmds.flash, tod/ds1307.c, tod/todcfg.c, tools/runtest:
+	URL for license changed.
+
 2003-08-20	Joel Sherrill <joel@OARcorp.com>
 
 	* console/console.c, start/start.S, startup/bspclean.c,
