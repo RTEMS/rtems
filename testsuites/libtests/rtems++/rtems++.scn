@@ -1,0 +1,161 @@
+*** RTEMS++ TEST ***
+INIT - Task.create() - RTEMS[19] invalid thread priority
+INIT - Task.create() - RTEMS[00] successful completion
+INIT - Task.create() - RTEMS[16] illegal on calling thread
+INIT - Task.restart() - RTEMS[14] thread is in wrong state
+INIT - Task.start(0xDEADDEAD) - RTEMS[00] successful completion
+<pause - screen 1>
+ * START Task Class test *
+TA1  - test argument - argument matched
+TA1  - copy constructor - local and this id's match
+TA1  - copy constructor - local and this name's match
+TA1  - copy operator - local and this id's match
+TA1  - copy operator - local and this name's match
+TA1  - not owner destroy's task - RTEMS[23] not owner of resource
+TA1  - connect to a local valid task name - RTEMS[00] successful completion
+TA1  - connect to an invalid task name - RTEMS[03] invalid object name
+SELF - connect to a task on an invalid node - RTEMS[21] invalid node id
+TA1  - restart from a non-owner - RTEMS[23] not owner of resource
+<pause - screen 2>
+TA1  - wake after 0 secs - RTEMS[00] successful completion
+TA1  - wake after 500 msecs - RTEMS[00] successful completion
+TA1  - wake after 5 secs - RTEMS[00] successful completion
+TA1  - wake when - to do
+TA1  - connected object wake after 0 secs - RTEMS[00] successful completion
+TA1  - connected object wake after 500 msecs - RTEMS[00] successful completion
+TA1  - connected object wake after 5 secs - RTEMS[00] successful completion
+TA1  - connected object wake when - to do
+SELF - self object wake after 0 secs - RTEMS[00] successful completion
+SELF - self object wake after 500 msecs - RTEMS[00] successful completion
+SELF - self object wake after 5 secs - RTEMS[00] successful completion
+SELF - self object wake when - to do
+TA1  - get priority - RTEMS[00] successful completion, priority is 10
+TA1  - set priority to 512 - RTEMS[19] invalid thread priority
+TA1  - set priority to 25 - RTEMS[00] successful completion
+TA1  - set priority to original - RTEMS[00] successful completion, priority was 25
+TA1  - connected object get priority - RTEMS[00] successful completion, priority is 10
+TA1  - connected object set priority to 512 - RTEMS[19] invalid thread priority
+TA1  - connected object set priority to 25 - RTEMS[00] successful completion
+TA1  - connected object set priority to original - RTEMS[00] successful completion, priority was 25
+SELF - self object get priority - RTEMS[00] successful completion, priority is 10
+SELF - self object set priority to 512 - RTEMS[19] invalid thread priority
+SELF - self object set priority to 25 - RTEMS[00] successful completion
+SELF - self object set priority to original - RTEMS[00] successful completion, priority was 25
+TA1  - get note - RTEMS[00] successful completion, note is 0
+TA1  - get with bad notepad number - RTEMS[10] number was invalid, note is 0
+TA1  - set note to 0xDEADBEEF - RTEMS[00] successful completion
+TA1  - get note - RTEMS[00] successful completion, note is 0xDEADBEEF
+TA1  - set note to original value - RTEMS[00] successful completion
+TA1  - connected object get note - RTEMS[00] successful completion, notepad is 0
+TA1  - connected object get with bad notepad number - RTEMS[10] number was invalid, note is 0
+TA1  - connected object set note to 0xDEADBEEF - RTEMS[00] successful completion
+TA1  - connected object get note - RTEMS[00] successful completion, note is 0xDEADBEEF
+TA1  - connected object set note to original value - RTEMS[00] successful completion
+SELF - self object get note - RTEMS[00] successful completion, note is 0
+SELF - self object get with bad notepad number - RTEMS[10] number was invalid, note is 0
+SELF - self object set note to 0xDEADBEEF - RTEMS[00] successful completion
+SELF - self object get note - RTEMS[00] successful completion, notepad is 0xDEADBEEF
+SELF - self object set note to original value - RTEMS[00] successful completion
+ * END Task Class test *
+<pause - screen 3>
+ * START TaskMode Class test *
+SELF - get mode - RTEMS[00] successful completion,
+         mode is 0x00000100, RTEMS_NO_PREEMPT RTEMS_NO_TIMESLICE RTEMS_NO_ASR INTMASK=0
+SELF - get preemption state - RTEMS[00] successful completion,
+         mode is 0x00000100, RTEMS_NO_PREEMPT 
+SELF - set preemption state to RTEMS_PREEMPT - RTEMS[00] successful completion,
+         mode is 0x00000000, RTEMS_PREEMPT RTEMS_TIMESLICE RTEMS_NO_ASR INTMASK=0
+SELF - set preemption state to RTEMS_NO_PREEMPT - RTEMS[00] successful completion,
+         mode is 0x00000100, RTEMS_NO_PREEMPT RTEMS_NO_TIMESLICE RTEMS_NO_ASR INTMASK=0
+SELF - get timeslice state - RTEMS[00] successful completion,
+         mode is 0x00000000, RTEMS_TIMESLICE 
+SELF - set timeslice state to RTEMS_TIMESLICE - RTEMS[00] successful completion,
+         mode is 0x00000300, RTEMS_NO_PREEMPT RTEMS_NO_TIMESLICE RTEMS_NO_ASR INTMASK=0
+SELF - set timeslice state to RTEMS_NO_TIMESLICE - RTEMS[00] successful completion,
+         mode is 0x00000100, RTEMS_NO_PREEMPT RTEMS_NO_TIMESLICE RTEMS_NO_ASR INTMASK=0
+SELF - get asr state - RTEMS[00] successful completion,
+         mode is 0x00000000, RTEMS_NO_ASR 
+SELF - set asr state to RTEMS_ASR - RTEMS[00] successful completion,
+         mode is 0x00000100, RTEMS_NO_PREEMPT RTEMS_NO_TIMESLICE RTEMS_NO_ASR INTMASK=0
+SELF - set asr state to RTEMS_NO_ASR - RTEMS[00] successful completion,
+         mode is 0x00000500, RTEMS_NO_PREEMPT RTEMS_NO_TIMESLICE RTEMS_ASR INTMASK=0
+SELF - get current interrupt level - RTEMS[00] successful completion, level is 0
+SELF - set interrupt level to 102 - RTEMS[00] successful completion
+SELF - set interrupt level to original level - RTEMS[00] successful completion, level was 0
+SELF - set mode to original mode - RTEMS[00] successful completion,
+         mode is 0x00000100, RTEMS_NO_PREEMPT RTEMS_NO_TIMESLICE RTEMS_NO_ASR INTMASK=0
+ * END TaskMode Class test *
+<pause - screen 4>
+ * START Event Class test *
+TA1  - create task 2 - RTEMS[00] successful completion
+TA1  - start task 2 - RTEMS[00] successful completion
+TA1  - construct event connecting to task 2 - RTEMS[00] successful completion
+TA2  - event no wait - RTEMS[13] request not satisfied
+TA2  - event 5 secs timeout - RTEMS[06] timed out waiting
+TA2  - event wait forever for signal 0 from TA1 ....
+TA1  - send event signal 0 using the task id - RTEMS[00] successful completion
+TA2  - RTEMS[00] successful completion, signals out are 0x00000001
+TA2  - event wait forever for signal 0 from TA1 ....
+TA1  - send event signal 0 using the task object reference - RTEMS[00] successful completion
+TA2  - RTEMS[00] successful completion, signals out are 0x00000001
+TA2  - event wait forever for signal 31 from TA1 ....
+TA1  - send event signal 31 using connected id - RTEMS[00] successful completion
+TA2  - RTEMS[00] successful completion, signals out are 0x80000000
+TA2  - event wait forever for signal 0 and 31 from TA1 ....
+TA1  - send event signal 0 and 31 - RTEMS[00] successful completion
+TA1  - waiting 5 secs for TA2 to finish
+TA2  - RTEMS[00] successful completion, signals out are 0x80000001
+TA2  - send event signal 1 - RTEMS[00] successful completion
+TA2  - event wait forever for signal 1 from TA2 - RTEMS[00] successful completion, signals out are 0x00000002
+TA2  - destory itself
+ * END Event Class test *
+<pause - screen 5>
+ * START Interrupt Class test *
+ do not know a portable BSP type interrupt test
+ * END Interrupt Class test *
+<pause - screen 6>
+ * START MessageQueue Class test *
+TA1  - construct message queue 1 with no memory error - RTEMS[05] too many
+TA1  - construct/create message queue 2 - RTEMS[00] successful completion
+TA1  - send u1 to mq_2 - RTEMS[00] successful completion
+TA1  - urgent send u2 to mq_2 - RTEMS[00] successful completion
+TA1  - create task 3_1 - RTEMS[00] successful completion
+TA1  - start task 3_1 - RTEMS[00] successful completion
+TA1  - create task 3_2 - RTEMS[00] successful completion
+TA1  - start task 3_2 - RTEMS[00] successful completion
+TA31 - construction connect mq_2 - RTEMS[00] successful completion
+TA31 - loopback from mq_2 to mq_2 ...
+TA31 - mq_2 receive - RTEMS[00] successful completion, size=12, message string size=11
+TA31 - loopback to mq_2 - RTEMS[00] successful completion
+TA32 - construction connect mq_2 - RTEMS[00] successful completion
+TA32 - loopback from mq_2 to mq_2 ...
+TA32 - mq_2 receive - RTEMS[00] successful completion, size=12, message string size=11
+TA32 - loopback to mq_2 - RTEMS[00] successful completion
+TA1  - receive u2 on mq_2 ...
+TA1  - RTEMS[00] successful completion
+TA1  - message u2 received correctly
+TA1  - receive u1 on mq_2 ...
+TA1  - RTEMS[00] successful completion
+TA1  - message u1 received correctly
+TA31 - loopback from mq_2 to mq_2 ...
+TA32 - loopback from mq_2 to mq_2 ...
+TA1  - broadcast send b1 ...
+TA1  - mq_2 broadcast send - RTEMS[00] successful completion, count=2
+TA31 - mq_2 receive - RTEMS[00] successful completion, size=18, message string size=17
+TA31 - loopback to mq_2 - RTEMS[00] successful completion
+TA31 - destory itself
+TA32 - mq_2 receive - RTEMS[00] successful completion, size=18, message string size=17
+TA32 - loopback to mq_2 - RTEMS[00] successful completion
+TA32 - destory itself
+TA1  - receive message b1 on mq_2 from TA31...
+TA1  - RTEMS[00] successful completion
+TA1  - message b1 received correctly
+TA1  - receive message b1 on mq_2 from TA31...
+TA1  - RTEMS[00] successful completion
+TA1  - message b1 received correctly
+TA1  - send f1 to mq_2 - RTEMS[00] successful completion
+TA1  - send f1 to mq_2 - RTEMS[00] successful completion
+TA1  - send f1 to mq_2 - RTEMS[00] successful completion
+TA1  - flush mq_2 - RTEMS[00] successful completion, flushed=3
+ * END MessageQueue Class test *
+<pause - screen 7>

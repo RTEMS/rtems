@@ -1,0 +1,54 @@
+/*
+ * $Id$
+ *
+ * MC68302 Linker command file
+ *
+ */
+
+SECTIONS
+{
+  .text . :
+  {
+    text_start = .;
+    *(.text)
+    etext = .;
+    . = ALIGN(4);
+    __CTOR_LIST__ = .;
+    LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
+    *(.ctors)
+    LONG(0)
+    __CTOR_END__ = .;
+    . = ALIGN(4);
+    __DTOR_LIST__ = .;
+    LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
+    *(.dtors)
+    LONG(0)
+    __DTOR_END__ = .;
+  }
+
+  .vtable (ADDR(.text) + SIZEOF(.text))  :
+  {
+    vtable_start = .;
+    *(.vtable)
+    evtable = .;
+  }
+  .data (ADDR(.vtable) + SIZEOF(.vtable)) : 
+  {
+    data_start = .;
+    *(.data)
+    edata = .;
+  }
+  .bss (ADDR(.data) + SIZEOF(.data)) :
+  {
+    bss_start = .;
+    *(.bss)
+    *(COMMON)
+    end = . ;
+    _end = . ;
+  }  
+}
+
+m302 = MC68302_BASE;
+_VBR = 0;		/* location of the VBR table (in RAM) */
+
+ENTRY(start);

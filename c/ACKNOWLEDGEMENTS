@@ -101,6 +101,11 @@ The following persons/organizations have made contributions:
   Laboratory submitted a port of the KA9Q TCP/IP stack to RTEMS as
   well as a network device driver for the gen68360 BSP.
 
++ Chris Johns (cjohns@plessey.com.au) submitted the ods68302 BSP which
+  offers easier configuration than its counterpart gen68302.  Chris
+  also submitted the RTEMS++ C++ class library and test code for
+  that library.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU
