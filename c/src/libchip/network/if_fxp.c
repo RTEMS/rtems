@@ -449,7 +449,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	/*
 	 * init PCI Bios interface...
 	 */
-	i = pcib_init();
+	i = pci_initialize();
 	DBGLVL_PRINTK(2,"fxp_attach: pcib_init returned %d\n",i);
 	if (i != PCIB_ERR_SUCCESS) {
 	  device_printf(dev, "could not initialize pci bios interface\n");

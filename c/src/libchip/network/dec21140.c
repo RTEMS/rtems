@@ -1038,14 +1038,14 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
       return 0;
    }
 
+   if (pci_initialize() != PCIB_ERR_SUCCESS)
+      rtems_panic("Unable to initialize PCI");
+
 
 #if defined(__i386__)
    /*
     * First, find a DEC board
     */
-
-   if (pcib_init() == PCIB_ERR_NOTPRESENT)
-      rtems_panic("PCI BIOS not found !!");
 
    /*
     * Try to find the network card on the PCI bus. Probe for a DEC 21140

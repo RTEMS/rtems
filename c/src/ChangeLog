@@ -1,3 +1,8 @@
+2005-03-04	Joel Sherrill <joel@OARcorp.com>
+
+	* libchip/network/dec21140.c, libchip/network/if_fxp.c: Make PCI
+	initialize function part of the unified PCI API as pci_initialize().
+
 2005-02-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* aclocal/ppc.m4; Dynamically switch between {old|new} exceptions 
