@@ -1,3 +1,8 @@
+2004-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ChangeLog: Merge-in optman/ChangeLog.
+	* optman/ChangeLog: Remove.
+
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Reflect changes to cpukit.
@@ -20,12 +25,15 @@
 	libnetworking/*/lib*.a instead of libnetapps.a.
 	* configure.ac: Add subdir-objects to AUTOMAKE_OPTIONS. Require
 	automake-1.8.2. Add RTEMS_PROG_CCAS. Add AM_PROG_CC_C_O.
+	* optman/Makefile.am: Use automake compilation rules.
 
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
 	PRE/TMPINSTALL_FILES to CLEANFILES.
 	* automake/lib.am: Remove TMPINSTALL_FILES.
+	* optman/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES. Add
+	PRE/TMPINSTALL_FILES to CLEANFILES.
 
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
@@ -62,6 +70,7 @@
 
 	* aclocal/env-rtemsbsp.m4: Add PROJECT_LIB.
 	* wrapup/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
+	* optman/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.
 
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -72,6 +81,8 @@
 	$(PROJECT_RELEASE)/lib/$(dirstamp) handling.
 	* aclocal/env-rtemsbsp.m4: Remove bsplibdir. Cleanups.
 	* configure.ac: Require automake >= 1.8, autoconf >= 2.59.
+	* optman/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* optman/Makefile.am: Remove project_libdir.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -82,6 +93,7 @@
 2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Reflect changes to librdbg.
+	* optman/Makefile.am: Add tmpinstall dirstamp support.
 
 2003-12-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -105,6 +117,8 @@
 	* support/Makefile.am: Remove all-local: $(ARCH).
 	* wrapup/Makefile.am: Remove all-local: $(ARCH).
 	* automake/compile.am: Add $(ARCH)/$(dirstamp) rules.
+	* optman/Makefile.am: Add dependencies to $(ARCH)/$(dirstamp). Reformat.
+	* optman/Makefile.am: Remove all-local: $(ARCH).
 
 2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -177,6 +191,12 @@
 	lib/libcpu/shared/src/cache_aligned_malloc.c,
 	lib/libcpu/shared/src/cache_manager.c, support/version.c: URL for
 	license changed.
+	* optman/rtems/no-dpmem.c, optman/rtems/no-event.c,
+	optman/rtems/no-mp.c, optman/rtems/no-msg.c, optman/rtems/no-part.c,
+	optman/rtems/no-region.c, optman/rtems/no-rtmon.c,
+	optman/rtems/no-sem.c, optman/rtems/no-signal.c,
+	optman/rtems/no-timer.c, optman/sapi/no-ext.c, optman/sapi/no-io.c: URL
+	for license changed.
 
 2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -249,6 +269,7 @@
 	* automake/compile.am, automake/force-preinstall.am, automake/host.am,
 	automake/lib.am, automake/local.am, automake/subdirs.am: New (copied
 	from ../../automake).
+	* optman/Makefile.am: Reflect having moved automake/.
 
 2003-08-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -279,6 +300,9 @@
 
 	* configure.ac: Merge-in libchip/configure.ac. Merge-in
 	optman/configure.ac.
+	* optman/configure.ac: Remove (Merged into ../configure.ac).
+	* optman/Makefile.am: Reflect having merged configure.ac into
+	../configure.ac.
 
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -300,6 +324,7 @@
 	* support/Makefile.am: New.
 	* support/version.c: New.
 	* wrapup/Makefile.am: Add support/libsupport.a.
+	* optman/configure.ac: Remove AC_CONFIG_AUX_DIR.
 
 2003-03-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -309,6 +334,14 @@
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
 	* configure.ac: AC_PREREQ(2.57).
+	* optman/configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
+	* optman/configure.ac: AC_PREREQ(2.57).
+
+2003-02-03	Joel Sherrill <joel@OARcorp.com>
+
+	PR 338/filesystem
+	* optman/sapi/no-io.c: Side-effect of fixing reentrancy problem with 
+	rtems_io_lookup_name() (API change).  Unused function removed.
 
 2003-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -320,22 +353,49 @@
 	Let all-local: depend on $(LIB).
 	* wrapup/Makefile.am: Remove libmisc.
 	* configure.ac: Remove libmisc.
+	* optman/Makefile.am: Apply install-data-local to install *.rels.
+
+2002-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* optman/Makefile.am: Eliminate *_O_FILES. Don't create $ARCH in %.o:
+	%.c rules.
+	* optman/Makefile.am: Use .$(OBJEXT) instead of .o.
+
+2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* optman/Makefile.am: Introduce sapi_C_FILES, rtems_C_FILES.
 
 2002-12-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Append RTEMS_CPU_MODEL to ac_configure_args. Resort
 	cache-checking.
+	* optman/Makefile.am: Don't include @RTEMS_BSP@.cfg.
 
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Expand RTEMS_CHECK_BSP_CACHE.
 	* configure.ac: Append CPU_CFLAGS, CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V,
 	CFLAGS_PROFILE_V, RTEMS_BSP_FAMILY to ac_configure_args.
+	* optman/configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
+
+2002-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* optman/Makefile.am: Merge-in rtems/Makefile.am and sapi/Makefile.am.
+	* optman/sapi/Makefile.am: Removed.
+	* optman/rtems/Makefile.am: Removed.
+	* optman/rel.am: Removed.
+	* optman/configure.ac: Add RTEMS_BSP_CHECK_CACHE. Reflect changes above.
 
 2002-11-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use test "$RTEMS_BSP_FAMILY" != "bare" to setup
 	HAS_LIBBSP conditional (Solaris/bash incompatibility fix).
+
+2002-11-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* optman/rtems/Makefile.am: Reworked.
+	* optman/sapi/Makefile.am: Reworked.
+	* optman/rel.am: New.
 
 2002-11-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -347,10 +407,15 @@
 
 	* .cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 	* wrapup/.cvsignore: Remove autom4te.cache.
+	* optman/.cvsignore: Reformat. Add autom4te*cache. Remove autom4te.cache.
 
 2002-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: Apply RTEMS_CONFIGURE_ARGS_QUOTE.
+
+2002-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* optman/.cvsignore: Add autom4te.cache.
 
 2002-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -372,6 +437,8 @@
 	* wrapup/Makefile.am: Use .$(OBJEXT) instead of .o.
 	* configure.ac: Add BSP_SUBDIRS.
 	* Makefile.am: Use BSP_SUBDIRS to setup SUBDIRS.
+	* optman/rtems/Makefile.am: Use .$(OBJEXT) instead of .o.
+	* optman/sapi/Makefile.am: Use .$(OBJEXT) instead of .o.
 
 2002-08-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -398,6 +465,11 @@
 
 	* Makefile.am: Clean $(PROJECT_RELEASE).
 
+2002-07-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* optman/sapi/Makefile.am: Add bsplib_DATA = $(PGMS). Remove ASM4FLAGS.
+	* optman/rtems/Makefile.am: Add bsplib_DATA = $(PGMS).
+
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: Add test "$multilib" != "yes".
@@ -405,6 +477,9 @@
 	* acinclude.m4: Cleanups.
 	* configure.ac: Build ${srcdir}/../../cpukit/ as ./exec/ instead of
 	${srcdir}/exec/. Further adaptations to autoconf >= 2.50.
+	* optman/configure.ac: Remove RTEMS_ENABLE_MULTIPROCESSING, 
+	RTEMS_ENABLE_POSIX, RTEMS_ENABLE_ITRON, RTEMS_ENABLE_INLINES,
+	RTEMS_ENABLE_RTEMS_DEBUG, RTEMS_CHECK_RTEMS_DEBUG, RTEMS_CHECK_NEWLIB.
 
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -423,6 +498,12 @@
 	* configure.ac, wrapup/Makefile.am: Modified.
 	* librpc, librpc/ChangeLog: Removed.
 
+2002-06-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* optman/Makefile.am: Remove multilib support.
+	* optman/configure.ac: Ditto.
+	* optman/sapi/Makefile.am: Ditto.
+
 2002-05-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove CONFIG_SUBDIRS libblock, libfs.
@@ -435,20 +516,39 @@
 
 	* config-ml.in: Take out arm and sh variants RTEMS does not support.
 
+2002-04-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* optman/configure.ac: Remove ENABLE_GCC28.
+
 2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* optman/configure.ac: AC_INIT(package,_RTEMS_VERSION,_RTEMS_BUGS).
+	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
+	* optman/rtems/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* optman/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* optman/sapi/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2002-02-28	Victor V. Vengerov <vvv@oktet.ru>
 
 	* DOS filesystem including FAT12, FAT16, and FAT32 support submitted.
 	* configure.ac: Modified to reflect addition.
 
+2002-01-06	Joel Sherrill <joel@OARcorp.com>
+
+	* optman/.cvsignore: Added aclocal.m4 and configure.
+	* optman/.cvsignore: New file.
+
 2002-01-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add AC_CONFIG_SUBDIRS(optman). Remove AC_CONFIG_COMMANDS.
+	* optman/ChangeLog: New.
+	* optman/configure.ac: New.
+	* optman/Makefile.am: New.
+	* optman/rtems/*: Copied from c/src/exec/rtems/optman.
+	* optman/sapi/*: Copied from c/src/exec/sapi/optman.
 
 2001-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
