@@ -1,5 +1,10 @@
 2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Merge-in libcsupport/configure.ac.
+	* Makefile.am: Add libcsupport to SUBDIRS.
+
+2003-07-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Merge-in posix/configure.ac.
 	Merge-in itron/configure.ac.
 	Misc. cosmetical changes.

@@ -48,7 +48,6 @@ AC_SUBST(INLINEdir)
 AC_DEFINE(RTEMS_VERSION,["][_RTEMS_VERSION]["],[RTEMS version string])
 
 RTEMS_CPU_SUBDIRS([score/cpu])
-AC_CONFIG_SUBDIRS([libcsupport])
 
 AS_IF([test x"$HAS_NETWORKING" = x"yes"],[
 ## FIXME: Should better use a feature-based test
@@ -63,6 +62,7 @@ AC_MSG_RESULT([$LIBRPC])
     [AC_CONFIG_SUBDIRS([librpc])
   ])
 ])
+
 AC_ARG_ENABLE([ada],
 [AC_HELP_STRING([--enable-ada],[enable ada support])],
 [case "${enable_ada}" in
@@ -81,7 +81,6 @@ AS_IF([test x"${RTEMS_CPU}" = x"unix"],[
 # HACK: silently accept --enable-unixlib
   test -n "${enable_unixlib}" || enable_unixlib="yes"
 ])
-
 
 AS_IF([test x"${enable_unixlib}" = x"yes"],
   [AC_DEFINE_UNQUOTED([RTEMS_UNIXLIB],[1],
@@ -151,8 +150,60 @@ AC_CACHE_CHECK([whether $CC supports function __attribute__((weak))],
     CFLAGS=$save_CFLAGS])
 ])
 
+AS_IF([test x"$RTEMS_USE_NEWLIB" != x"yes"],[
+## Provide headers only if the host doesn't.
+  AC_CHECK_HEADERS([sys/cdefs.h],[NEED_SYS_CDEFS_H=no],[NEED_SYS_CDEFS_H=yes])
+  AC_CHECK_HEADERS([stdint.h],[NEED_STDINT_H=no],[NEED_STDINT_H=yes])
+  AC_CHECK_HEADERS([inttypes.h],[NEED_INTTYPES_H=no],[NEED_INTTYPES=yes])
+],[
+## Using newlib, we provide sys/cdefs.h
+  NEED_SYS_CDEFS_H=yes
+  NEED_STDINT_H=yes
+  NEED_INTTYPES_H=yes
+])
+
+# FIXME: These checks are only in here to provide
+# configuration-time diagnostics and are not really used.
+AC_CHECK_DECLS([_POSIX_LOGIN_NAME_MAX],,,[#include <limits.h>])
+AC_CHECK_DECLS([CHAR_BIT],,,[#include <limits.h>])
+
+AS_IF([test x"${RTEMS_USE_NEWLIB}" = x"yes"],[
+ac_cv_have_decl_XTABS=yes
+ac_cv_have_decl_OLCUC=yes
+## SUSV3, but seemingly not available on some platforms (reportedly FreeBSD)
+ac_cv_have_decl_ONLRET=yes
+ac_cv_have_decl_ONOCR=yes
+ac_cv_have_decl_TABDLY=yes
+ac_cv_have_decl_OCRNL=yes
+ac_cv_have_decl_IUCLC=yes
+## SUSV3-XSI extension
+ac_cv_have_decl_ECHOPRT=yes
+])
+
+# FIXME: Some cruft to work around portability issues with termios.c
+## Seemingly not covered by any standard.
+AC_CHECK_DECLS([XTABS],,,[#include <termios.h>])
+AC_CHECK_DECLS([OLCUC],,,[#include <termios.h>])
+## SUSV3, but seemingly not available on some platforms (reportedly FreeBSD)
+AC_CHECK_DECLS([ONLRET],,,[#include <termios.h>])
+AC_CHECK_DECLS([ONOCR],,,[#include <termios.h>])
+AC_CHECK_DECLS([TABDLY],,,[#include <termios.h>])
+AC_CHECK_DECLS([OCRNL],,,[#include <termios.h>])
+AC_CHECK_DECLS([IUCLC],,,[#include <termios.h>])
+## SUSV3-XSI extension
+AC_CHECK_DECLS([ECHOPRT],,,[#include <termios.h>])
+
+## BSD-ism, excluded from POSIX, but available on most platforms
+AC_CHECK_DECLS([sbrk],,,[#include <unistd.h>])
+
+## Check if libc provides BSD's strlcpy/strlcat
+AC_CHECK_FUNCS(strlcpy strlcat)
+
+
+# ... far too many conditionals ...
 AM_CONDITIONAL(LIBRPC,[test "$LIBRPC" = "yes"])
 AM_CONDITIONAL(UNIX,[test x"${RTEMS_CPU}" = x"unix"])
+AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
 
 AM_CONDITIONAL(INLINE,test x"$INLINEdir" = x"inline" )
 AM_CONDITIONAL(MACROS,test x"$INLINEdir" = x"macros" )
@@ -168,6 +219,10 @@ AM_CONDITIONAL([LIBSCORECPU],
 
 AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
   && test x"$HAS_POSIX_API" = x"yes"])
+
+AM_CONDITIONAL([NEED_SYS_CDEFS_H],[test x"$NEED_SYS_CDEFS_H" = x"yes"])
+AM_CONDITIONAL([NEED_STDINT_H],[test x"$NEED_STDINT_H" = x"yes"])
+AM_CONDITIONAL([NEED_INTTYPES_H],[test x"$NEED_INTTYPES_H" = x"yes"])
 
 AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
 AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
@@ -188,6 +243,7 @@ libfs/Makefile
 libfs/src/Makefile
 libfs/src/imfs/Makefile
 libfs/src/dosfs/Makefile
+libcsupport/Makefile
 libnetworking/Makefile
 libnetworking/lib/Makefile
 libnetworking/libc/Makefile
