@@ -67,15 +67,15 @@
 /*
  * The size of the cooked buffer
  */
-#define CBUFSIZE	256
+#define CBUFSIZE	(rtems_termios_cbufsize)
 
 /*
  * The sizes of the raw message buffers.
  * On most architectures it is quite a bit more
  * efficient if these are powers of two.
  */
-#define RAW_INPUT_BUFFER_SIZE	128
-#define RAW_OUTPUT_BUFFER_SIZE	64
+#define RAW_INPUT_BUFFER_SIZE	(rtems_termios_raw_input_size)
+#define RAW_OUTPUT_BUFFER_SIZE	(rtems_termios_raw_output_size)
 
 /* fields for "flow_ctrl" status */
 #define FL_IREQXOF 1        /* input queue requests stop of incoming data */
@@ -112,6 +112,10 @@ int	nlinesw = sizeof (linesw) / sizeof (linesw[0]);
 extern struct rtems_termios_tty *rtems_termios_ttyHead;
 extern struct rtems_termios_tty *rtems_termios_ttyTail;
 extern rtems_id rtems_termios_ttyMutex;
+
+static int rtems_termios_cbufsize = 256;
+static int rtems_termios_raw_input_size = 128;
+static int rtems_termios_raw_output_size = 64;
 
 static rtems_task rtems_termios_rxdaemon(rtems_task_argument argument);
 static rtems_task rtems_termios_txdaemon(rtems_task_argument argument);
@@ -455,6 +459,17 @@ rtems_termios_close (void *arg)
 	}
 	rtems_semaphore_release (rtems_termios_ttyMutex);
 	return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code rtems_termios_bufsize (
+  int cbufsize,
+  int raw_input,
+  int raw_output
+)
+{
+  rtems_termios_cbufsize        = cbufsize;
+  rtems_termios_raw_input_size  = raw_input;
+  rtems_termios_raw_output_size = raw_output;
 }
 
 static void 
@@ -1063,10 +1078,8 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 
 			/* continue processing new character */
 			if (tty->termios.c_lflag & ICANON) {
-				if  (siproc (c, tty)) {
+				if  (siproc (c, tty))
 					wait = 0;
-               break; /* done */
-            }
 			}
 			else {
 				siproc (c, tty);
@@ -1512,4 +1525,3 @@ static rtems_task rtems_termios_rxdaemon(rtems_task_argument argument)
 		}
 	}
 }
-
