@@ -159,7 +159,7 @@ void rtems_termios_rxirq_occured(struct rtems_termios_tty *tty);
  * FIXME: this should move to termios.h!
  * put a string to output ring buffer
  */
-void rtems_termios_puts (const char *buf,
+void rtems_termios_puts (const void *buf,
 			 int len,
 			 struct rtems_termios_tty *tty);
 /*

@@ -33,7 +33,7 @@ rtems_blkdev_generic_read(
     rtems_libio_rw_args_t *args = arg;
     int block_size_log2;
     int block_size;
-    char *buf;
+    unsigned char *buf;
     unsigned int count;
     unsigned int block;
     unsigned int blkofs;
@@ -93,7 +93,7 @@ rtems_blkdev_generic_write(
     rtems_libio_rw_args_t *args = arg;
     int block_size_log2;
     int block_size;
-    char *buf;
+    unsigned char *buf;
     unsigned int count;
     unsigned int block;
     unsigned int blkofs;

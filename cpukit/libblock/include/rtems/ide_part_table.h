@@ -134,7 +134,7 @@ typedef struct disk_desc_s {
     dev_t        dev; /* device number */
 
     /* device name in /dev filesystem */
-    uint8_t      dev_name[RTEMS_IDE_PARTITION_DEV_NAME_LENGTH_MAX];
+    char         dev_name[RTEMS_IDE_PARTITION_DEV_NAME_LENGTH_MAX];
 
     uint32_t     sector_size; /* size of sector */
     uint32_t     sector_bits; /* the base-2 logarithm of sector_size */

@@ -76,7 +76,10 @@
   } while (0)
  
  
-static POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
+/* If we find a compiler that doesn't accept static inline functions,
+ * then this will have to move to a .c file.  Until then, we will use this.
+ */
+static inline POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get (
   Objects_Id        *id,
   Objects_Locations *location
 )

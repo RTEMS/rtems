@@ -67,7 +67,10 @@
     } \
   } while (0)
  
-static POSIX_Mutex_Control * _POSIX_Mutex_Get(
+/* If we find a compiler that doesn't accept static inline functions,
+ * then this will have to move to a .c file.  Until then, we will use this.
+ */
+static inline POSIX_Mutex_Control * _POSIX_Mutex_Get(
   Objects_Id        *id,
   Objects_Locations *location
 )
@@ -78,7 +81,10 @@ static POSIX_Mutex_Control * _POSIX_Mutex_Get(
     _Objects_Get( &_POSIX_Mutex_Information, *id, location );
 }
 
-static POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable(
+/* If we find a compiler that doesn't accept static inline functions,
+ * then this will have to move to a .c file.  Until then, we will use this.
+ */
+static inline POSIX_Mutex_Control *_POSIX_Mutex_Get_interrupt_disable(
   Objects_Id        *id,
   Objects_Locations *location,
   ISR_Level         *level

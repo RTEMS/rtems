@@ -626,14 +626,16 @@ rtems_termios_ioctl (void *arg)
  * Send characters to device-specific code
  */
 void
-rtems_termios_puts (const char *buf, int len, struct rtems_termios_tty *tty)
+rtems_termios_puts (
+  const void *_buf, int len, struct rtems_termios_tty *tty)
 {
+	const unsigned char *buf = _buf;
 	unsigned int newHead;
 	rtems_interrupt_level level;
 	rtems_status_code sc;
 
 	if (tty->device.outputUsesInterrupts == TERMIOS_POLLED) {
-		(*tty->device.write)(tty->minor, buf, len);
+		(*tty->device.write)(tty->minor, (void *)buf, len);
 		return;
 	}
 	newHead = tty->rawOutBuf.Head;
@@ -1032,8 +1034,8 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 				  || (tty->flow_ctrl & FL_OSTOP))) {
 			    /* XON should be sent now... */
 			    (*tty->device.write)(tty->minor,
-						 &(tty->termios.c_cc[VSTART]),
-						 1);
+				(void *)&(tty->termios.c_cc[VSTART]),
+				1);
 			  }
 			  else if (tty->flow_ctrl & FL_MDRTS) {
 			    tty->flow_ctrl &= ~FL_IRTSOFF;
@@ -1215,8 +1217,8 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 		      /*    call write function here                 */
 		      tty->flow_ctrl |= FL_ISNTXOF;
 		      (*tty->device.write)(tty->minor,
-					   &(tty->termios.c_cc[VSTOP]),
-					   1);
+			 (void *)&(tty->termios.c_cc[VSTOP]),
+			 1);
 		    }
 		  }
 		  else if ((tty->flow_ctrl & (FL_MDRTS | FL_IRTSOFF))
@@ -1270,7 +1272,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 	    == (FL_MDXOF | FL_IREQXOF)) {
 	  /* XOFF should be sent now... */
 	  (*tty->device.write)(tty->minor,
-			       &(tty->termios.c_cc[VSTOP]), 1);
+			       (void *)&(tty->termios.c_cc[VSTOP]), 1);
 
 	  rtems_interrupt_disable(level);
 	  tty->t_dqlen--;
@@ -1290,7 +1292,7 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 		 * Therefore the dequeue "length" should be reduced by 1
 		 */
 	  (*tty->device.write)(tty->minor,
-			       &(tty->termios.c_cc[VSTART]), 1);
+			       (void *)&(tty->termios.c_cc[VSTART]), 1);
 
 	  rtems_interrupt_disable(level);
 	  tty->t_dqlen--;

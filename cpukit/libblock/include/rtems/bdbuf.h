@@ -54,7 +54,7 @@ typedef struct bdbuf_buffer {
     dev_t       dev;     /* device number */
     blkdev_bnum block;   /* block number on the device */
 
-    char       *buffer;  /* Pointer to the buffer memory area */
+    unsigned char    *buffer;  /* Pointer to the buffer memory area */
     rtems_status_code status; /* Last I/O operation completion status */
     int         error;   /* If status != RTEMS_SUCCESSFUL, this field contains
                             errno value which can be used by user later */
@@ -79,12 +79,13 @@ typedef struct bdbuf_buffer {
  * amount, memory location) for buffering layer
  */
 typedef struct rtems_bdbuf_config {
-    int     size;     /* Size of block */
-    int     num;      /* Number of blocks of appropriate size */
-    char   *mem_area; /* Pointer to the blocks location or NULL, in this
-                          case memory for blocks will be allocated by
-                          Buffering Layer with the help of RTEMS partition
-                          manager */
+    int      size;      /* Size of block */
+    int      num;       /* Number of blocks of appropriate size */
+    unsigned char  *mem_area;
+                        /* Pointer to the blocks location or NULL, in this
+                           case memory for blocks will be allocated by
+                           Buffering Layer with the help of RTEMS partition
+                           manager */
 } rtems_bdbuf_config;
 
 extern rtems_bdbuf_config rtems_bdbuf_configuration[];
