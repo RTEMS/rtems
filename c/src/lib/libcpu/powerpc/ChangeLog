@@ -1,3 +1,12 @@
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* mpc6xx/clock/c_clock.c, mpc6xx/clock/c_clock.h, mpc8xx/clock/clock.c,
+	mpc8xx/timer/timer.c, new_exception_processing/cpu.c,
+	new_exception_processing/cpu.h, new_exception_processing/cpu_asm.S,
+	old_exception_processing/cpu.c, old_exception_processing/cpu.h,
+	old_exception_processing/cpu_asm.S, old_exception_processing/rtems.S:
+	Fixed typo.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
