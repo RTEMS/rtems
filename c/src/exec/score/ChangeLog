@@ -1,4 +1,9 @@
 
+2000-09-25	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/system.h: Switched a29k and hppa1.1 to using cpuopts.h not
+	targopts.h to reduce dependency on BSP.
+
 2000-09-20	Joel Sherrill <joel@OARcorp.com>
 
 	* src/objectgetbyindex.c: Do not enable dispatching on an

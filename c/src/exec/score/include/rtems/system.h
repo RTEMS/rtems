@@ -30,7 +30,9 @@ extern "C" {
 /*
  * FIXME: cpuopts.h should be included here.
  */
-#if defined(__h8300__) \
+#if defined(_AM29K) \
+  || defined(__hppa__) \
+  || defined(__h8300__) \
   || defined(__i960__) \
   || defined(__mc68000__) \
   || defined(__sh__) \
@@ -39,7 +41,7 @@ extern "C" {
   /* these cpus are ready to apply cpuopts.h */
 #include <rtems/score/cpuopts.h>
 #else
-  /* fallback to targopts.h for hppa1.1, mips, and powerpc */
+  /* fallback to targopts.h for mips and powerpc */
 #include <rtems/score/targopts.h>
 #endif
 
