@@ -19,7 +19,7 @@ Prefix:		/opt/cygwin
 BuildRoot:	@RPM_BUILD_ROOT@
 
 Version:      	%binutils_rpmvers
-Source0:	ftp://sourceware.cygnus.com/pub/cygwin/latest/binutils/binutils-%{binutils_version}-src.tar.gz
+Source0:	ftp://sourceware.cygnus.com/pub/cygwin/latest/binutils/binutils-%{binutils_version}-src.tar.bz2
 NoSource: 	0
 %description
 

@@ -19,7 +19,7 @@ Autoreqprov:  	on
 Packager:     	corsepiu@faw.uni-ulm.de
 Version:        %gcc_rpmvers
 
-Source0: 	ftp://sourceware.cygnus.com/pub/cygwin/latest/gcc/gcc-%{gcc_version}-src.tar.gz
+Source0: 	ftp://sourceware.cygnus.com/pub/cygwin/latest/gcc/gcc-%{gcc_version}-src.tar.bz2
 NoSource:	0
 
 BuildRoot:	@RPM_BUILD_ROOT@
@@ -96,4 +96,4 @@ Cross gcc for target cygwin
 %dir %{prefix}/lib
 %dir %{prefix}/lib/gcc-lib
 %dir %{prefix}/lib/gcc-lib/i386-cygwin
-%{prefix}/lib/gcc-lib/i386-cygwin/gcc-%{gcc_version}
+%{prefix}/lib/gcc-lib/i386-cygwin/%{gcc_version}

@@ -21,7 +21,7 @@ BuildRoot:	@RPM_BUILD_ROOT@
 Version:      	%cygwin_rpmvers
 Summary:      	cygwin
 
-Source0:	ftp://sourceware.cygnus.com/pub/cygwin/latest/cygwin/cygwin-%{cygwin_version}.tar.gz
+Source0:	ftp://sourceware.cygnus.com/pub/cygwin/latest/cygwin/cygwin-%{cygwin_version}.tar.bz2
 NoSource:	0
 
 %description

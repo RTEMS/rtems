@@ -20,7 +20,7 @@ BuildRoot:	@RPM_BUILD_ROOT@
 
 Version:        %w32api_rpmvers
 Summary:      	Cygwin's w32api libs
-Source0:	ftp://sourceware.cygnus.com/pub/cygwin/latest/w32api/w32api-%{w32api_version}.tar.gz
+Source0:	ftp://sourceware.cygnus.com/pub/cygwin/latest/w32api/w32api-%{w32api_version}.tar.bz2
 
 NoSource:	0
 

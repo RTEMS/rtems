@@ -21,7 +21,7 @@ BuildRoot:	@RPM_BUILD_ROOT@
 Version:      	%mingw_rpmvers
 Summary:      	Cygwin's mingw libs
 
-Source0:	ftp://sourceware.cygnus.com/pub/cygwin/latest/mingw/mingw-%{mingw_version}.tar.gz
+Source0:	ftp://sourceware.cygnus.com/pub/cygwin/latest/mingw/mingw-runtime-%{mingw_version}.tar.gz
 NoSource:	0
 
 %description
