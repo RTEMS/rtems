@@ -284,10 +284,11 @@ c/src/lib/libhwapi/support/dumpbuf/Makefile"
 tests_mk="c/src/tests/libtests/Makefile \
 c/src/tests/libtests/cpuuse/Makefile \
 c/src/tests/libtests/malloctest/Makefile \
+c/src/tests/libtests/monitor/Makefile \
 c/src/tests/libtests/rtmonuse/Makefile \
 c/src/tests/libtests/stackchk/Makefile \
+c/src/tests/libtests/termios/Makefile \
 c/src/tests/libtests/rtems++/Makefile \
-c/src/tests/libtests/monitor/Makefile \
 c/src/tests/mptests/Makefile \
 c/src/tests/mptests/mp01/Makefile \
 c/src/tests/mptests/mp01/node1/Makefile \
