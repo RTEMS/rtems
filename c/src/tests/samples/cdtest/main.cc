@@ -16,8 +16,15 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
+ *
+ *  by Rosimildo da Silva:
+ *  Modified the test a bit to indicate when an instance is
+ *  global or not, and added code to test C++ exception.
+ *
+ *
  *  $Id$
  */
+// #define RTEMS_TEST_IO_STREAM
 
 #include <rtems.h>
 #include <stdio.h>
@@ -26,7 +33,9 @@
 #include <iostream.h>
 #endif
 
-extern "C" {
+extern "C" 
+{
+#include <tmacros.h>
 extern rtems_task main_task(rtems_task_argument);
 }
 
@@ -34,13 +43,12 @@ static int num_inst = 0;
 
 class A {
 public:
-    A(void)
+  A(const char *p = "LOCAL" ) : ptr( p )
     {
         num_inst++;
         printf(
-          "Hey I'm in base class constructor number %d for %p.\n",
-          num_inst,
-          this
+          "%s: Hey I'm in base class constructor number %d for %p.\n",
+          p, num_inst, this
         );
 
 	/*
@@ -54,9 +62,8 @@ public:
     virtual ~A()
     {
         printf(
-          "Hey I'm in base class destructor number %d for %p.\n",
-          num_inst,
-          this
+          "%s: Hey I'm in base class destructor number %d for %p.\n",
+          ptr, num_inst, this
         );
 	print();
         num_inst--;
@@ -66,17 +73,17 @@ public:
 
 protected:
     char  *string;
+    const char *ptr;
 };
 
 class B : public A {
 public:
-    B(void)
+  B(const char *p = "LOCAL" ) : A( p ) 
     {
         num_inst++;
         printf(
-          "Hey I'm in derived class constructor number %d for %p.\n",
-          num_inst,
-          this
+          "%s: Hey I'm in derived class constructor number %d for %p.\n",
+          p, num_inst,  this
         );
 
 	/*
@@ -90,8 +97,8 @@ public:
     ~B()
     {
         printf(
-          "Hey I'm in derived class destructor number %d for %p.\n",
-          num_inst,
+          "%s: Hey I'm in derived class destructor number %d for %p.\n",
+          ptr, num_inst,
           this
         );
 	      print();
@@ -102,8 +109,34 @@ public:
 };
 
 
-A foo;
-B foobar;
+class RtemsException 
+{
+public:
+    
+    RtemsException( char *module, int ln, int err = 0 )
+    : error( err ), line( ln ), file( module )
+    {
+      printf( "RtemsException raised=File:%s, Line:%d, Error=%X\n",
+               file, line, error ); 
+    }
+
+    void show()
+    {
+      printf( "RtemsException ---> File:%s, Line:%d, Error=%X\n",
+               file, line, error ); 
+    }
+
+private:
+   int  error;
+   int  line;
+   char *file;
+
+};
+
+
+
+A foo( "GLOBAL" );
+B foobar( "GLOBAL" );
 
 void
 cdtest(void)
@@ -116,8 +149,8 @@ cdtest(void)
 #else
     printf("IO Stream not tested\n");
 #endif
-
     bar = blech;
+    rtems_task_wake_after( 5 * get_ticks_per_second() );
 }
 
 //
@@ -127,6 +160,18 @@ cdtest(void)
 //      run.
 //
 
+static void foo_function()
+{
+    try 
+    {
+      throw "foo_function() throw this exception";  
+    }
+    catch( const char *e )
+    {
+     printf( "foo_function() catch block called:\n   < %s  >\n", e );
+     throw "foo_function() re-throwing execption...";  
+    }
+}
 
 rtems_task main_task(
   rtems_task_argument 
@@ -138,5 +183,33 @@ rtems_task main_task(
 
     printf( "*** END OF CONSTRUCTOR/DESTRUCTOR TEST ***\n\n\n" );
 
+
+    printf( "*** TESTING C++ EXCEPTIONS ***\n\n" );
+
+    try 
+    {
+      foo_function();
+    }
+    catch( const char *e )
+    {
+       printf( "Success catching a char * exception\n%s\n", e );
+    }
+    try 
+    {
+      printf( "throw an instance based exception\n" );
+		throw RtemsException( __FILE__, __LINE__, 0x55 ); 
+    }
+    catch( RtemsException & ex ) 
+    {
+       printf( "Success catching RtemsException...\n" );
+       ex.show();
+    }
+    catch(...) 
+    {
+      printf( "Caught another exception.\n" );
+    }
+    printf( "Exceptions are working properly.\n" );
+    rtems_task_wake_after( 5 * get_ticks_per_second() );
+    printf( "Global Dtors should be called after this line....\n" );
     exit(0);
 }
