@@ -1,3 +1,8 @@
+2002-11-13	Paul Whitfield <paulw@microsol.iinet.net.au>
+
+	* src/regionreturnsegment.c: When RTEMS_REGION_SHRED_ON_FREE is
+	set, there should have been an & in front of size.
+
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
 	* src/regiongetinfo.c: Corrected return value check.
