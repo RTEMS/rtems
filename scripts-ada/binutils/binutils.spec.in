@@ -10,7 +10,7 @@ Vendor:       OAR Corporation
 Distribution: Linux
 Name:         @target_alias@-gnat-binutils-collection
 Summary:      binutils for target @target_alias@
-Group:        rtems
+Group:        gnatrtems
 Release:      @Release@
 Copyright:    1999 OARCorp
 

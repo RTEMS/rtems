@@ -13,7 +13,7 @@ Distribution: Linux
 Name:         @target_alias@-gnat-gdb-collection
 Release:      @Release@
 Copyright:    1999 OARCorp
-Group:        rtems
+Group:        gnatrtems
 Provides:     rtems-base-gnat-gdb @target_alias@-gnat-gdb
 
 Autoreqprov:  on
