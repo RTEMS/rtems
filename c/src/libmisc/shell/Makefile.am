@@ -11,7 +11,9 @@ LIB = $(ARCH)/$(LIBNAME).a
 C_FILES = cmds.c shell.c 
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
+if RTEMS_LIBSHELL
 include_rtems_HEADERS = shell.h
+endif
 
 OBJS = $(C_O_FILES)
 
@@ -34,10 +36,12 @@ $(LIB): $(OBJS)
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems \
     $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
+if RTEMS_LIBSHELL
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
+endif
 
 .PRECIOUS: $(LIB)
 
-EXTRA_DIST = README shell.c cmds.c
+EXTRA_DIST = README shell.c cmds.c shell.h
 
 include $(top_srcdir)/../../../automake/local.am

@@ -29,6 +29,18 @@ RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
 
 AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes")
 
+# shell/* wants to assign file descriptors to stdio file descriptors.
+AC_MSG_CHECKING([for assignable stdio])
+AC_COMPILE_IFELSE(
+  [AC_LANG_PROGRAM(
+    [#include <stdio.h>], 
+    [stdin = fopen("/tmp", "r")])],
+  [HAVE_ASSIGNABLE_STDIO=yes],
+  [HAVE_ASSIGNABLE_STDIO=no])
+AC_MSG_RESULT([$HAVE_ASSIGNABLE_STDIO])
+
+AM_CONDITIONAL([RTEMS_LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 cpuuse/Makefile

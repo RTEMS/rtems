@@ -28,6 +28,7 @@
 #include <rtems.h>
 #include <rtems/libio_.h>
 #include <errno.h>
+#include <unistd.h> /* close */
 #include <stdio.h>
 #include <fcntl.h>
 #include <termios.h>

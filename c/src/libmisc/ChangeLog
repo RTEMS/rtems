@@ -1,3 +1,13 @@
+2002-11-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* capture/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* serdbg/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* serdbg/serdbgio.c: Add #include <unistd.h>.
+	* shell/Makefile.am: Add RTEMS_LIBSHELL conditional.
+	* wrapup/Makefile.am: Add RTEMS_LIBSHELL conditional.
+	* configure.ac: Check for stdio assignments.
+	Add RTEMS_LIBSHELL conditional.
+
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* stackchk/check.c: Removed warnings.
