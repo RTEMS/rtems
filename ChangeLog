@@ -1,3 +1,7 @@
+2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: RTEMS_BUILD_CONFIG_SUBDIRS([testsuites/tools]).
+
 2004-02-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove AUTOMAKE_FILES.

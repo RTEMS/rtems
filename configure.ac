@@ -44,6 +44,12 @@ AC_ARG_ENABLE([docs],
 RTEMS_BUILD_CONFIG_SUBDIRS([tools/build])
 RTEMS_BUILD_CONFIG_SUBDIRS([tools/cpu])
 
+case $enable_tests in
+yes | samples )
+  RTEMS_BUILD_CONFIG_SUBDIRS([testsuites/tools])
+  ;;
+esac
+
 # Some BSPs carelessly apply these tools as build-tools
 AS_IF([test $host != $build],[
 RTEMS_HOST_CONFIG_SUBDIRS([tools/build])
