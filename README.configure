@@ -142,12 +142,13 @@ makefile has to include a bsp-specific makefile that will define the
 RTEMS variables necessary to find include files and libraries. The
 bsp-specific makefile is installed at 
 
-	$(prefix)/$(target)/rtmes/$(RTEMS_BSP)/Makefile.inc
+	$(RTEMS_MAKEFILE_PATH)/Makefile.inc
 
-For the erc32 bsp installed at /usr/local/cross, the line would read:
+For the erc32 bsp installed at /usr/local/cross, the environment
+variable RTEMS_MAKEFILE_PATH would be set as follows to the
+following:
 
-include /usr/local/cross/sparc-rtems/rtems/erc32/Makefile.inc
-
+/usr/local/cross/sparc-rtems/rtems/erc32/Makefile.inc
 
 4. Supported target bsps
 ========================
@@ -198,8 +199,7 @@ configure, autoconf-2.12 is needed.
 ========================
 
 All gnu-based bsps have been built on Linux. 
-The native (posix) ports have been built and run on Linux ans Solaris.
-The sparc port has been tested on SunOS and Linux. 
+The native (posix) ports have been built and run only on Linux.
 
 The following configurations have NOT been tested:
 
