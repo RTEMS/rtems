@@ -1,3 +1,12 @@
+2003-10-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac:Remove RTEMS_CHECK_CPU.
+	* aclocal/check-cpu.m4: Remove.
+	* aclocal/check-cxx.m4, aclocal/check-itron.m4, 
+	aclocal/check-multiprocessing.m4, aclocal/check-networking.m4,
+	aclocal/check-posix.m4: AC_REQUIRE RTEMS_CANONICAL_TARGET_CPU instead of
+	RTEMS_CHECK_CPU.
+
 2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/rtems-top.m4: Add RTEMS_API.
