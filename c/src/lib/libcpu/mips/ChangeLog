@@ -1,3 +1,11 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/ckinit.c, mongoosev/duart/mg5uart.c, mongoosev/duart/mg5uart.h,
+	mongoosev/duart/mg5uart_reg.c, mongoosev/include/mongoose-v.h,
+	mongoosev/vectorisrs/maxvectors.c, mongoosev/vectorisrs/vectorisrs.c,
+	r46xx/vectorisrs/maxvectors.c, shared/interrupts/isr_entries.S,
+	timer/timer.c, tx39/vectorisrs/maxvectors.c: URL for license changed.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
