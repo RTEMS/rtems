@@ -30,6 +30,7 @@
 #include <errno.h>
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <imfs.h>
 
 extern rtems_filesystem_location_info_t rtems_filesystem_current;
 

@@ -1,3 +1,8 @@
+2000-10-24	Joel Sherrill <joel@OARcorp.com>
+
+	* psxmount/test.c, psxstat/test.c: Include <imfs.h> to get IMFS_ops.
+	It was formerly incorrectly prototyped in <libio.h>.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* psx01/Makefile.am, psx02/Makefile.am, psx03/Makefile.am,

@@ -23,6 +23,7 @@
 #include <string.h>
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <imfs.h>
 
 #define MAXSYMLINK 5   /* There needs to be a better way of getting this. */
 
