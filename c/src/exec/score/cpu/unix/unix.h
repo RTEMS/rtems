@@ -34,7 +34,7 @@ extern "C" {
  
 #define CPU_MODEL_NAME  "HP-UX"
  
-#elif defined(solaris)
+#elif defined(solaris2)
  
 #define CPU_MODEL_NAME  "Solaris"
  
