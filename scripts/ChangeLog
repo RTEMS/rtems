@@ -1,5 +1,9 @@
 2004-02-19	Joel Sherrill <joel@OARcorp.com>
 
+	* setup.def, gdb/gdb.add: gdb 6.0 RPMs built.
+
+2004-02-19	Joel Sherrill <joel@OARcorp.com>
+
 	* ChangeLog: Replace RTEMS user account with Joel.
 
 2004-02-17	Joel Sherrill <joel@oarcorp.com>

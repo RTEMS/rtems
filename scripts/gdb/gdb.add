@@ -12,11 +12,16 @@ Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
 
 Version:      %{gdb_version}
 Summary:      gdb for target %{gdb_version}
+
+%if "%{gdb_version}" < "6.0"
 Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-%{gdb_version}.tar.gz
+Patch0:	      gdb-%{gdb_version}-rtems-base-@gdb_patch_version@.diff
+Patch1:	      gdb-%{gdb_version}-rtems-cg-@gdb_patch_version@.diff
+Patch2:	      gdb-%{gdb_version}-rtems-rdbg-@gdb_patch_version@.diff
+%else
+Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-%{gdb_version}.tar.bz2
 Patch0:	      gdb-%{gdb_version}-rtems-@gdb_patch_version@.diff
-# Patch0:	      gdb-%{gdb_version}-rtems-base-@gdb_patch_version@.diff
-# Patch1:	      gdb-%{gdb_version}-rtems-cg-@gdb_patch_version@.diff
-# Patch2:	      gdb-%{gdb_version}-rtems-rdbg-@gdb_patch_version@.diff
+%endif
 
 %if "%{_vendor}" == "redhat"
 BuildPreReq:	ncurses-devel
@@ -101,4 +106,7 @@ test -d build || mkdir build
   # gzip info files
   gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
   gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-? 2>/dev/null
+%if "%{gdb_version}" < "6.0"
   gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-?? 2>/dev/null
+%endif
+
