@@ -26,7 +26,7 @@ void ITRON_Init( void )
   ER                status;
   T_CTSK            pk_ctsk;
 
-  puts( "\n\n*** ITRON TEST 6 ***" );
+  puts( "\n\n*** ITRON TASK TEST 4 ***" );
 
   status = chg_pri( 0, 20 );
   directive_failed( status, "chg_pri to 20" );

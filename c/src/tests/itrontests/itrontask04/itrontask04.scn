@@ -1,4 +1,4 @@
-*** ITRON TEST 6 ***
+*** ITRON TASK TEST 4 ***
 INIT - dis_dsp while starting tasks
 INIT - suspending TA2 3 times
 INIT - ena_dsp while starting tasks
@@ -32,4 +32,4 @@ TA3 - rot_rdq priority 2 queue
 TA3 - rtems_task_wake_after - sleep 1 second
 TA2 - rtems_task_suspend RTEMS_SELF
 TA2 - rtems_task_suspend RTEMS_SELF
-*** END OF TEST 6 ***
+*** ITRON TASK TEST 4 ***

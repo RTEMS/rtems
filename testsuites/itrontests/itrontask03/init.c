@@ -26,7 +26,7 @@ void ITRON_Init( void )
   ER                status;
   T_CTSK            pk_ctsk;
 
-  puts( "\n\n*** ITRON TEST 5 ***" );
+  puts( "\n\n*** ITRON TASK TEST 3 ***" );
 
   pk_ctsk.exinf    = NULL;
   pk_ctsk.tskatr   = TA_HLNG;

@@ -54,6 +54,6 @@ void Task_1()
   status = rtems_task_wake_after( 5*TICKS_PER_SECOND );
   directive_failed( status, "rtems_task_wake_after" );
 
-  puts( "*** END OF TEST 5 ***" );
+  puts( "*** ITRON TASK TEST 3 ***" );
   exit( 0 );
 }
