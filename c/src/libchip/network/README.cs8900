@@ -1,0 +1,37 @@
+#
+#  $Id$
+#
+
+Conditionals
+============
+CS8900_DATA_BUS_SWAPPED - XXX
+
+CS8900_TRACE - XXX
+
+CS8900_VERBOSE - XXX
+
+Todo
+====
++ Build two versions -- one with swapped, one without.
+
++ Document conditionals.
+
++ Document each of the user supplied functions.
+
++ PC386 BSP wrapper for this.
+
+Configuration
+=============
+The BSP provides these routines:
+
+void cs8900_attach_interrupt (int dev, cs8900_device *cs);
+void cs8900_detach_interrupt (int dev);
+void cs8900_get_mac_addr (int dev, unsigned char *mac_address);
+void cs8900_io_set_reg (int dev, unsigned short reg, unsigned short data);
+unsigned short cs8900_io_get_reg (int dev, unsigned short reg);
+void cs8900_mem_set_reg (int dev, unsigned long reg, unsigned short data);
+unsigned short cs8900_mem_get_reg (int dev, unsigned long reg);
+void cs8900_put_data_block (int dev, int len, unsigned char *data);
+unsigned short cs8900_get_data_block (int dev, unsigned char *data);
+void cs8900_tx_load (int dev, struct mbuf *m);
+

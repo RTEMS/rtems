@@ -1,3 +1,7 @@
+2000-11-03	Chris Johns <ccj@acm.org>
+
+	* network/README.cs8900, network/cs8900.c, network/cs8900.h: New files.
+
 2000-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Switch to ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal.

@@ -7,10 +7,11 @@ AUTOMAKE_OPTIONS = foreign 1.4
 LIBNAME = libnetchip
 LIB = $(ARCH)/$(LIBNAME).a
 
+# add cs8900.c to work with it and make it compile
 C_FILES = dec21140.c sonic.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = sonic.h
+H_FILES = cs8900.h sonic.h
 
 OBJS = $(C_O_FILES)
 
@@ -38,7 +39,7 @@ $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 
 if HAS_NETWORKING
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip \
-    $(PROJECT_INCLUDE)/libchip/sonic.h
+    $(PROJECT_INCLUDE)/libchip/cs8900.h $(PROJECT_INCLUDE)/libchip/sonic.h 
 endif
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
@@ -49,6 +50,7 @@ endif
 
 .PRECIOUS: $(LIB)
 
-EXTRA_DIST = README README.dec21140 README.sonic dec21140.c sonic.c sonic.h
+EXTRA_DIST = README README.cs8900 README.dec21140 README.sonic \
+    cs8900.c cs8900.h dec21140.c sonic.c sonic.h
 
 include $(top_srcdir)/../../../automake/local.am
