@@ -72,6 +72,16 @@ RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get (
     _Objects_Get( &_Semaphore_Information, id, location );
 }
 
+RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get_interrupt_disable (
+  Objects_Id         id,
+  Objects_Locations *location,
+  ISR_Level         *level
+)
+{
+  return (Semaphore_Control *)
+    _Objects_Get_isr_disable( &_Semaphore_Information, id, location, level );
+}
+
 /*PAGE
  *
  *  _Semaphore_Is_null
