@@ -39,15 +39,9 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
-typedef unsigned char  unsigned8;      /* unsigned 8-bit  integer */
-typedef unsigned short unsigned16;     /* unsigned 16-bit integer */
-typedef unsigned int   unsigned32;     /* unsigned 32-bit integer */
 
 typedef unsigned16     Priority_Bit_map_control;
 
-typedef signed char      signed8;      /* 8-bit  signed integer */
-typedef signed short     signed16;     /* 16-bit signed integer */
-typedef signed int       signed32;     /* 32-bit signed integer */
 
 /*
  * some C++ compilers (eg: HP's) don't do 'long long'

@@ -1,5 +1,10 @@
 2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/score/types.h: Remove signed8, signed16, signed32,
+	unsigned8, unsigned16, unsigned32.
+
+2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/score/cpu.h: *_swap_u32( uint32_t ).
 
 2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>

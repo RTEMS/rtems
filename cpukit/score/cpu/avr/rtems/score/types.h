@@ -31,17 +31,11 @@ extern "C" {
  *  This section defines the basic types for this processor.
  */
 
-typedef uint8_t  unsigned8;	/* unsigned 8-bit  integer */
-typedef uint16_t unsigned16;	/* unsigned 16-bit integer */
-typedef uint32_t unsigned32;	/* unsigned 32-bit integer */
 typedef uint64_t unsigned64;	/* unsigned 64-bit integer */
 
-typedef int8_t  signed8;	/* 8-bit  signed integer */
-typedef int16_t signed16;	/* 16-bit signed integer */
-typedef int32_t	signed32;	/* 32-bit signed integer */
-typedef int64_t signed64;	/* 64 bit signed integer */
-
 typedef unsigned16     Priority_Bit_map_control;
+
+typedef int64_t signed64;	/* 64 bit signed integer */
 
 typedef unsigned32 boolean;     /* Boolean value   */
 
