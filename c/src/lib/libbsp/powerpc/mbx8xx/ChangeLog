@@ -1,3 +1,14 @@
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* clock/Makefile.am: Remove all-local: $(ARCH).
+	* console/Makefile.am: Remove all-local: $(ARCH).
+	* ide/Makefile.am: Remove all-local: $(ARCH).
+	* irq/Makefile.am: Remove all-local: $(ARCH).
+	* network/Makefile.am: Remove all-local: $(ARCH).
+	* startup/Makefile.am: Remove all-local: $(ARCH).
+	* vectors/Makefile.am: Remove all-local: $(ARCH).
+	* wrapup/Makefile.am: Remove all-local: $(ARCH).
+
 2003-10-22	Joel Sherrill <joel@OARcorp.com>
 
 	PR 510/bsps
