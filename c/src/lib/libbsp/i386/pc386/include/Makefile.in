@@ -14,7 +14,6 @@ WD80X3_yes_V = $(srcdir)/wd80x3.h
 WD80X3 = $(WD80X3_$(HAS_NETWORKING)_V)
 
 H_FILES = $(srcdir)/bsp.h $(srcdir)/coverhd.h  $(srcdir)/crt.h \
-          $(srcdir)/pc386uart.h $(srcdir)/pcibios.h \
 	  $(WD80X3)
 
 #
