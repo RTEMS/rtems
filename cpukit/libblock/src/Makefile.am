@@ -2,9 +2,7 @@
 ##  $Id$
 ##
 
-
-LIBNAME = libblock
-LIB = ${ARCH}/${LIBNAME}.a
+LIB = ${ARCH}/libblock.a
 
 C_FILES = bdbuf.c blkdev.c diskdevs.c ramdisk.c
 

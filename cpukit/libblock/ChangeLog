@@ -1,6 +1,6 @@
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* Makefile.am: Eliminate LIBNAME. Cosmetical cleanups.
+	* src/Makefile.am: Eliminate LIBNAME. Cosmetical cleanups.
 
 2002-07-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
