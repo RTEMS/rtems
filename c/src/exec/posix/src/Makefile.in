@@ -43,7 +43,7 @@ PSIGNAL_PIECES=\
   psignal alarm kill killinfo pause pthreadkill pthreadsigmask \
   sigaction sigaddset sigdelset sigemptyset sigfillset sigismember \
   sigpending sigprocmask sigqueue sigsuspend sigtimedwait sigwait \
-  sigwaitinfo
+  sigwaitinfo signal_2
 
 C_PIECES= adasupp cond getpid key mutex $(PTHREAD_PIECES) \
   $(PSIGNAL_PIECES) ptimer sched time \
