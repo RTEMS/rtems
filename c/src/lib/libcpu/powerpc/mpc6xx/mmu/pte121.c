@@ -22,8 +22,8 @@
 #include <rtems.h>
 #include <rtems/bspIo.h>
 #include <libcpu/cpuIdent.h>
-#include <bsp.h>
 #ifdef	DEBUG_EXC
+#include <bsp.h>
 #include <bsp/vectors.h>
 #include <libcpu/raw_exception.h>
 #endif
@@ -125,7 +125,7 @@
 
 
 /* Horrible Macros */
-#ifdef __rtems
+#ifdef __rtems__
 /* must not use printf until multitasking is up */
 typedef void (*PrintF)(char *,...);
 static PrintF whatPrintf(void)
@@ -363,8 +363,8 @@ triv121PgTblInit(unsigned long base, unsigned ldSize)
 	if (base & ((1<<ldSize)-1))
 		return 0; /* misaligned */
 
-	/* This should work on a 604, but I couldn't test (I did
-	 * on 750 and 7400). Verify that the TLB invalidation works
+	/* This was tested on 604r, 750 and 7400.
+	 * On other CPUs, verify that the TLB invalidation works
 	 * for a new CPU variant and that it has hardware PTE lookup/
 	 * TLB replacement before adding it to this list.
 	 *
@@ -678,10 +678,34 @@ static int maxw=20;	/* mute after detecting this many errors */
 	}
 
 	v=m=0;
-	for (i=0, pte=pt->base; i<pt->size/sizeof(PTERec); i++,pte++) {
+#if 1
+	/* 10/9/2002: I had machine checks crashing after this loop
+	 *            terminated. Maybe caused by speculative loads
+	 *            from beyond the valid memory area (since the
+	 *            page hash table sits at the top of physical
+	 *            memory).
+	 *            Very bizarre - the other loops in this file
+	 *            seem to be fine. Maybe there is a compiler bug??
+	 *            For the moment, I let the loop run backwards...
+	 *
+	 * 			  Also see the comment a couple of lines down.
+	 */
+ 	for (i=pt->size/sizeof(PTERec)-1, pte=pt->base + i; i>=0; i--,pte--)
+#else
+	for (i=0, pte=pt->base; i<pt->size/sizeof(PTERec); i++,pte++)
+#endif
+	{
 		int				err=0;
 		char			buf[500];
 		unsigned long	*lp=(unsigned long*)pte;
+#if 0
+		/* If I put this bogus while statement here (the body is
+		 * never reached), the original loop works OK
+		 */
+		while (pte >= pt->base + pt->size/sizeof(PTERec))
+				/* never reached */;
+#endif
+
 		if ( (*lp & (0xfffff0<<7)) || *(lp+1) & 0xe00 || (pte->v && pte->marked)) {
 			/* check for vsid (without segment bits) == 0, unused bits == 0, valid && marked */
 			sprintf(buf,"invalid VSID , unused bits or v && m");

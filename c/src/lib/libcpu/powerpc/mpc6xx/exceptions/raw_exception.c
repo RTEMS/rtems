@@ -125,7 +125,7 @@ int mpc60x_vector_is_valid(rtems_vector vector)
             break;
         case PPC_604:
         case PPC_604e:
-        /* case PPC_604r: -- same value as PPC_750 */
+        case PPC_604r:
             if (!mpc604_vector_is_valid(vector)) {
                 return 0;
             }
@@ -138,7 +138,7 @@ int mpc60x_vector_is_valid(rtems_vector vector)
             }
             break;
         default:
-            printk("Please complete libcpu/powerpc/mpc6xx/raw_exception.c\n");
+            printk("Please complete libcpu/powerpc/mpc6xx/exceptions/raw_exception.c\n");
             printk("current_ppc_cpu = %x\n", current_ppc_cpu);
             return 0;
      }

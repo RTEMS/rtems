@@ -1,3 +1,18 @@
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 349/bsps
+	* mpc6xx/exceptions/raw_exception.c, mpc6xx/mmu/bat.c,
+	mpc6xx/mmu/pte121.c, shared/include/cpuIdent.c,
+	shared/include/cpuIdent.h, shared/src/Makefile.am, shared/src/stack.c,
+	shared/src/stackTrace.h, powerpc/registers.h:
+	  - undo improper 'fix' who broke mpc604r identification
+	  - fix: 7400 identification PVR value was wrong
+	  - enhance 'setdbat()' to switch OFF a given BAT if called with 0 size
+	  - fix: page table support bugfix
+	  - enhancement: provide routines to take and print stack trace
+	    snapshots
+	  - add definitions for HID1 and DABR SPRs
+
 2003-02-14	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	PR 348/bsps
