@@ -1,3 +1,9 @@
+2003-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 389/rtems
+	* src/no_posix.c: Correct _kill_r() prototype and make it conditional
+	on newlib.
+
 2003-04-03	Eri Valette <eric.valette@free.fr>
 
 	PR 381/core
