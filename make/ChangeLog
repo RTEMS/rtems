@@ -1,3 +1,9 @@
+2005-03-03	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* custom/mpc8260ads.cfg : Remove PPC_ASM, PPC_ABI.
+	* custom/mvme5500.cfg: Remove CFLAGS_PROFILE_V.
+	Remove -Wa,-m7450.
+
 2005-02-25	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/jmr3904.cfg: arm_bare_bsp obsoleted.
