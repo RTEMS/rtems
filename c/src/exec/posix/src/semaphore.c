@@ -14,6 +14,7 @@
 #include <rtems/score/object.h>
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/time.h>
+#include <rtems/posix/seterr.h>
 
 /*PAGE
  *
@@ -67,6 +68,7 @@ int _POSIX_Semaphore_Create_support(
     set_errno_and_return_minus_one( ENOMEM );
   }
  
+#if defined(RTEMS_MULTIPROCESSING)
   if ( pshared == PTHREAD_PROCESS_SHARED &&
        !( _Objects_MP_Allocate_and_open( &_POSIX_Semaphore_Information, 0,
                             the_semaphore->Object.id, FALSE ) ) ) {
@@ -74,6 +76,7 @@ int _POSIX_Semaphore_Create_support(
     _Thread_Enable_dispatch();
     set_errno_and_return_minus_one( EAGAIN );
   }
+#endif
  
   the_semaphore->process_shared  = pshared;
 
@@ -111,6 +114,7 @@ int _POSIX_Semaphore_Create_support(
  
   *the_sem = the_semaphore;
  
+#if defined(RTEMS_MULTIPROCESSING)
   if ( pshared == PTHREAD_PROCESS_SHARED )
     _POSIX_Semaphore_MP_Send_process_packet(
       POSIX_SEMAPHORE_MP_ANNOUNCE_CREATE,
@@ -118,6 +122,7 @@ int _POSIX_Semaphore_Create_support(
       (char *) name,
       0                /* proxy id - Not used */
     );
+#endif
  
   _Thread_Enable_dispatch();
   return 0;
@@ -166,33 +171,35 @@ int sem_destroy(
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       /*
        *  Undefined operation on a named semaphore.
        */
 
       if ( the_semaphore->named == TRUE ) {
-        seterrno( EINVAL );
-        return( -1 );
+        set_errno_and_return_minus_one( EINVAL );
       }
  
       _Objects_Close( &_POSIX_Semaphore_Information, &the_semaphore->Object );
  
       _CORE_semaphore_Flush(
         &the_semaphore->Semaphore,
+#if defined(RTEMS_MULTIPROCESSING)
         _POSIX_Semaphore_MP_Send_object_was_deleted,
+#else
+        NULL,
+#endif
         -1  /* XXX should also seterrno -> EINVAL */
       );
  
       _POSIX_Semaphore_Free( the_semaphore );
  
+#if defined(RTEMS_MULTIPROCESSING)
       if ( the_semaphore->process_shared == PTHREAD_PROCESS_SHARED ) {
  
         _Objects_MP_Close(
@@ -207,6 +214,7 @@ int sem_destroy(
           0                          /* Not used */
         );
       }
+#endif
       _Thread_Enable_dispatch();
       return 0;
   }
@@ -257,19 +265,17 @@ sem_t *sem_open(
 
     if ( status == EINVAL ) {      /* name -> ID translation failed */
       if ( !(oflag & O_CREAT) ) {  /* willing to create it? */
-        seterrno( ENOENT );
-        return (sem_t *) -1;
+        set_errno_and_return_minus_one_cast( ENOENT, sem_t * );
       }
       /* we are willing to create it */
     }
-    seterrno( status );               /* some type of error */
-    return (sem_t *) -1;
+    /* some type of error */
+    set_errno_and_return_minus_one_cast( status, sem_t * );
 
   } else {                /* name -> ID translation succeeded */
 
     if ( (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL) ) {
-      seterrno( EEXIST );
-      return (sem_t *) -1;
+      set_errno_and_return_minus_one_cast( EEXIST, sem_t * );
     }
 
     /* 
@@ -315,6 +321,7 @@ void _POSIX_Semaphore_Delete(
   if ( !the_semaphore->linked && !the_semaphore->open_count ) {
     _POSIX_Semaphore_Free( the_semaphore );
 
+#if defined(RTEMS_MULTIPROCESSING)
     if ( the_semaphore->process_shared == PTHREAD_PROCESS_SHARED ) {
 
       _Objects_MP_Close(
@@ -329,6 +336,7 @@ void _POSIX_Semaphore_Delete(
         0                          /* Not used */
       );
     }
+#endif
 
   }
 }
@@ -348,13 +356,11 @@ int sem_close(
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       the_semaphore->open_count -= 1;
       _POSIX_Semaphore_Delete( the_semaphore );
@@ -386,21 +392,21 @@ int sem_unlink(
   the_semaphore = _POSIX_Semaphore_Get( &the_semaphore_id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
 
+#if defined(RTEMS_MULTIPROCESSING)
       if ( the_semaphore->process_shared == PTHREAD_PROCESS_SHARED ) {
         _Objects_MP_Close(
           &_POSIX_Semaphore_Information,
           the_semaphore->Object.id
         );
       }
+#endif
 
       the_semaphore->linked = FALSE;
 
@@ -429,13 +435,11 @@ int _POSIX_Semaphore_Wait_support(
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       _CORE_semaphore_Seize(
         &the_semaphore->Semaphore,
@@ -520,18 +524,20 @@ int sem_post(
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       _CORE_semaphore_Surrender(
         &the_semaphore->Semaphore,
         the_semaphore->Object.id,
+#if defined(RTEMS_MULTIPROCESSING)
         POSIX_Semaphore_MP_support
+#else
+        NULL
+#endif
       );
       _Thread_Enable_dispatch();
       return 0;
@@ -555,13 +561,11 @@ int sem_getvalue(
   the_semaphore = _POSIX_Semaphore_Get( sem, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       *sval = _CORE_semaphore_Get_count( &the_semaphore->Semaphore );
       _Thread_Enable_dispatch();

@@ -80,6 +80,7 @@ int _POSIX_Message_queue_Create_support(
     set_errno_and_return_minus_one( ENFILE );
   }
  
+#if defined(RTEMS_MULTIPROCESSING)
   if ( pshared == PTHREAD_PROCESS_SHARED &&
        !( _Objects_MP_Allocate_and_open( &_POSIX_Message_queue_Information, 0,
                             the_mq->Object.id, FALSE ) ) ) {
@@ -87,6 +88,7 @@ int _POSIX_Message_queue_Create_support(
     _Thread_Enable_dispatch();
     set_errno_and_return_minus_one( ENFILE );
   }
+#endif
  
   the_mq->process_shared  = pshared;
  
@@ -126,10 +128,17 @@ int _POSIX_Message_queue_Create_support(
            &the_mq->Message_queue.Attributes,
            attr->mq_maxmsg,
            attr->mq_msgsize,
-           _POSIX_Message_queue_MP_Send_extract_proxy ) ) {
+#if defined(RTEMS_MULTIPROCESSING)
+           _POSIX_Message_queue_MP_Send_extract_proxy
+#else
+           NULL
+#endif
+      ) ) {
 
+#if defined(RTEMS_MULTIPROCESSING)
     if ( pshared == PTHREAD_PROCESS_SHARED )
       _Objects_MP_Close( &_POSIX_Message_queue_Information, the_mq->Object.id );
+#endif
  
     _POSIX_Message_queue_Free( the_mq );
     _Thread_Enable_dispatch();
@@ -146,6 +155,7 @@ int _POSIX_Message_queue_Create_support(
  
   *message_queue = the_mq;
  
+#if defined(RTEMS_MULTIPROCESSING)
   if ( pshared == PTHREAD_PROCESS_SHARED )
     _POSIX_Message_queue_MP_Send_process_packet(
       POSIX_MESSAGE_QUEUE_MP_ANNOUNCE_CREATE,
@@ -153,6 +163,7 @@ int _POSIX_Message_queue_Create_support(
       (char *) name,
       0                          /* Not used */
     );
+#endif
  
   _Thread_Enable_dispatch();
   return 0;
@@ -198,18 +209,18 @@ mqd_t mq_open(
  
     if ( status == EINVAL ) {      /* name -> ID translation failed */
       if ( !(oflag & O_CREAT) ) {  /* willing to create it? */
-        seterrno( ENOENT );
+        set_errno_and_return_minus_one( ENOENT );
         return (mqd_t) -1;
       }
       /* we are willing to create it */
     }
-    seterrno( status );               /* some type of error */
+    set_errno_and_return_minus_one( status ); /* some type of error */
     return (mqd_t) -1;
  
   } else {                /* name -> ID translation succeeded */
  
     if ( (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL) ) {
-      seterrno( EEXIST );
+      set_errno_and_return_minus_one( EEXIST );
       return (mqd_t) -1;
     }
  
@@ -256,6 +267,7 @@ void _POSIX_Message_queue_Delete(
   if ( !the_mq->linked && !the_mq->open_count ) {
     _POSIX_Message_queue_Free( the_mq );
  
+#if defined(RTEMS_MULTIPROCESSING)
     if ( the_mq->process_shared == PTHREAD_PROCESS_SHARED ) {
  
       _Objects_MP_Close(
@@ -270,6 +282,7 @@ void _POSIX_Message_queue_Delete(
         0                          /* Not used */
       );
     }
+#endif
  
   }
 }
@@ -289,13 +302,11 @@ int mq_close(
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       the_mq->open_count -= 1;
       _POSIX_Message_queue_Delete( the_mq );
@@ -327,19 +338,19 @@ int mq_unlink(
   the_mq = _POSIX_Message_queue_Get( the_mq_id, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
  
+#if defined(RTEMS_MULTIPROCESSING)
       _Objects_MP_Close(
         &_POSIX_Message_queue_Information,
         the_mq->Object.id
       );
+#endif
  
       the_mq->linked = FALSE;
  
@@ -370,13 +381,11 @@ int _POSIX_Message_queue_Send_support(
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       /* XXX must add support for timeout and priority */
       _CORE_message_queue_Send(
@@ -384,7 +393,11 @@ int _POSIX_Message_queue_Send_support(
         (void *) msg_ptr,
         msg_len,
         mqdes,
+#if defined(RTEMS_MULTIPROCESSING)
         NULL       /* XXX _POSIX_Message_queue_Core_message_queue_mp_support*/
+#else
+        NULL
+#endif
       );
       _Thread_Enable_dispatch();
       return _Thread_Executing->Wait.return_code;
@@ -462,13 +475,11 @@ ssize_t _POSIX_Message_queue_Receive_support(
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       /* XXX need to define the options argument to this */
       length_out = msg_len;
@@ -571,19 +582,16 @@ int mq_notify(
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      seterrno( EBADF );
-      return( -1 );
+      set_errno_and_return_minus_one( EBADF );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       if ( notification ) {
         if ( _CORE_message_queue_Is_notify_enabled( &the_mq->Message_queue ) ) {
           _Thread_Enable_dispatch();
-          seterrno( EBUSY );
-          return( -1 );
+          set_errno_and_return_minus_one( EBUSY );
         }
 
         _CORE_message_queue_Set_notify( &the_mq->Message_queue, NULL, NULL );
@@ -625,13 +633,11 @@ int mq_setattr(
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       /*
        *  Return the old values.
@@ -681,13 +687,11 @@ int mq_getattr(
   the_mq = _POSIX_Message_queue_Get( mqdes, &location );
   switch ( location ) {
     case OBJECTS_ERROR:
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_REMOTE:
       _Thread_Dispatch();
       return POSIX_MP_NOT_IMPLEMENTED();
-      seterrno( EINVAL );
-      return( -1 );
+      set_errno_and_return_minus_one( EINVAL );
     case OBJECTS_LOCAL:
       /*
        *  Return the old values.
