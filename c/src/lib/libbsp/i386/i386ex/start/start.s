@@ -40,7 +40,7 @@ changes:
 #include "80386ex.inc"
 
 /*
- * NEXT_GAS Needed for binutils 2.9.1.0.7 and higher
+ * NEW_GAS Needed for binutils 2.9.1.0.7 and higher
  */			
 
         EXTERN (boot_card)         /* exits to bspstart   */ 
@@ -358,7 +358,7 @@ SYM(SetUCS1):
  * Table Register
  ****************************/
 	
-#ifdef NEXT_GAS	
+#ifdef NEW_GAS	
 	data32
 	addr32
 #endif	
