@@ -1,3 +1,7 @@
+2002-06-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove librpc.
+
 2002-06-25	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR233, moved librpc to exec.  Ralf will patch after move.

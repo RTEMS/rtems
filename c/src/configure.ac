@@ -43,7 +43,7 @@ if test "$RTEMS_CPU" != "unix"; then
 fi
 
 if test "$HAS_NETWORKING" = "yes"; then
-  AC_CONFIG_SUBDIRS(libnetworking librpc)
+  AC_CONFIG_SUBDIRS(libnetworking)
   if test "$RTEMS_HAS_RDBG" = "yes"; then
     RTEMS_CHECK_RDBG(RTEMS_BSP)
   fi
