@@ -54,6 +54,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <termios.h>
+#include <bsp.h>
 
 extern rtems_cpu_table Cpu_table;
 
@@ -703,12 +704,18 @@ m8xx_uart_scc_initialize (int minor)
 
   sccparms->rfcr = M8xx_RFCR_MOT | M8xx_RFCR_DMA_SPACE(0);
   sccparms->tfcr = M8xx_TFCR_MOT | M8xx_TFCR_DMA_SPACE(0);
+#if NVRAM_CONFIGURE == 1
+  if ( (nvram->console_mode & 0x06) == 0x02 )
+    sccparms->mrblr = RXBUFSIZE;    /* Maximum Rx buffer size */
+  else
+    sccparms->mrblr = 1;            /* Maximum Rx buffer size */
+#else
 #if UARTS_IO_MODE == 1
   sccparms->mrblr = RXBUFSIZE;      /* Maximum Rx buffer size */
 #else
   sccparms->mrblr = 1;              /* Maximum Rx buffer size */
 #endif
-
+#endif
   sccparms->un.uart.max_idl = 10;   /* Set nb of idle chars to close buffer */
   sccparms->un.uart.brkcr = 0;      /* Set nb of breaks to send for STOP Tx */
 
@@ -774,6 +781,42 @@ m8xx_uart_scc_initialize (int minor)
       break;
 #endif
   }
+#if NVRAM_CONFIGURE == 1
+  if ( (nvram->console_mode & 0x06) == 0x02 ) {
+    switch (minor) {
+      case SCC2_MINOR:
+        rtems_interrupt_catch (m8xx_scc2_interrupt_handler,
+                               PPC_IRQ_CPM_SCC2,
+                               &old_handler[minor]);
+
+        sccregs->sccm = 3;            /* Enable SCC2 Rx & Tx interrupts */
+        m8xx.cimr |= 1UL <<  29;      /* Enable SCC2 interrupts */
+        break;
+
+#ifdef mpc860
+      case SCC3_MINOR:
+        rtems_interrupt_catch (m8xx_scc3_interrupt_handler,
+                               PPC_IRQ_CPM_SCC3,
+                               &old_handler[minor]);
+
+        sccregs->sccm = 3;            /* Enable SCC2 Rx & Tx interrupts */
+        m8xx.cimr |= 1UL <<  28;      /* Enable SCC2 interrupts */
+        break;
+      
+      case SCC4_MINOR:
+        rtems_interrupt_catch (m8xx_scc4_interrupt_handler,
+                               PPC_IRQ_CPM_SCC4,
+                               &old_handler[minor]);
+
+        sccregs->sccm = 3;            /* Enable SCC2 Rx & Tx interrupts */
+        m8xx.cimr |= 1UL <<  27;      /* Enable SCC2 interrupts */
+        break;
+#endif /* mpc860 */
+    }
+  }
+  
+#else /* NVRAM_CONFIGURE != 1 */
+
 #if UARTS_IO_MODE == 1
   switch (minor) {
     case SCC2_MINOR:
@@ -806,6 +849,8 @@ m8xx_uart_scc_initialize (int minor)
 #endif /* mpc860 */
   }
 #endif /* UARTS_IO_MODE */
+
+#endif /* NVRAM_CONFIGURE */
 }
 
 
@@ -874,10 +919,17 @@ m8xx_uart_smc_initialize (int minor)
   smcparms->tbase = (char *)TxBd[minor] - (char *)&m8xx;
   smcparms->rfcr = M8xx_RFCR_MOT | M8xx_RFCR_DMA_SPACE(0);
   smcparms->tfcr = M8xx_TFCR_MOT | M8xx_TFCR_DMA_SPACE(0);
+#if NVRAM_CONFIGURE == 1
+  if ( (nvram->console_mode & 0x06) == 0x02 )
+    smcparms->mrblr = RXBUFSIZE;    /* Maximum Rx buffer size */
+  else
+    smcparms->mrblr = 1;            /* Maximum Rx buffer size */
+#else
 #if UARTS_IO_MODE == 1
   smcparms->mrblr = RXBUFSIZE;      /* Maximum Rx buffer size */
 #else
   smcparms->mrblr = 1;              /* Maximum Rx buffer size */
+#endif
 #endif
 
   /*
@@ -923,6 +975,29 @@ m8xx_uart_smc_initialize (int minor)
    * Enable receiver and transmitter
    */
   smcregs->smcmr |= M8xx_SMCMR_TEN | M8xx_SMCMR_REN;
+#if NVRAM_CONFIGURE == 1
+  if ( (nvram->console_mode & 0x06) == 0x02 ) {
+    switch (minor) {
+      case SMC1_MINOR:
+        rtems_interrupt_catch (m8xx_smc1_interrupt_handler,
+                                    PPC_IRQ_CPM_SMC1,
+                                    &old_handler[minor]);
+
+        smcregs->smcm = 3;            /* Enable SMC1 Rx & Tx interrupts */
+        m8xx.cimr |= 1UL <<  4;       /* Enable SMC1 interrupts */
+        break;
+      
+      case SMC2_MINOR:
+        rtems_interrupt_catch (m8xx_smc2_interrupt_handler,
+                                    PPC_IRQ_CPM_SMC2,
+                                    &old_handler[minor]);
+
+        smcregs->smcm = 3;            /* Enable SMC2 Rx & Tx interrupts */
+        m8xx.cimr |= 1UL <<  3;       /* Enable SMC2 interrupts */
+        break;
+    }
+  }
+#else
 #if UARTS_IO_MODE == 1
   switch (minor) {
     case SMC1_MINOR:
@@ -943,6 +1018,8 @@ m8xx_uart_smc_initialize (int minor)
       m8xx.cimr |= 1UL <<  3;       /* Enable SMC2 interrupts */
       break;
   }
+#endif
+
 #endif
 }
 
