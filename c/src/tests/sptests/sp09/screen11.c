@@ -88,6 +88,12 @@ void Screen11()
     "TA1 - rtems_partition_create - length < buffer size - RTEMS_INVALID_SIZE"
   );
 
+  /*
+   *  The check for an object being global is only made if
+   *  multiprocessing is enabled.
+   */
+
+#if defined(RTEMS_MULTIPROCESSING)
   status = rtems_partition_create(
     Partition_name[ 1 ],
     Partition_good_area,
@@ -101,6 +107,7 @@ void Screen11()
     RTEMS_MP_NOT_CONFIGURED,
     "rtems_partition_create of global"
   );
+#endif
   puts( "TA1 - rtems_partition_create - RTEMS_MP_NOT_CONFIGURED" );
 
   status = rtems_partition_create(

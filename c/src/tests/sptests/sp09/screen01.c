@@ -74,12 +74,24 @@ void Screen1()
   );
   puts( "TA1 - rtems_task_ident - local RTEMS_INVALID_NAME" );
 
+  /*
+   *  This one case is different if MP is enabled/disabled.
+   */
+
   status = rtems_task_ident( 100, 2, &Junk_id );
+#if defined(RTEMS_MULTIPROCESSING)
   fatal_directive_status(
     status,
     RTEMS_INVALID_NODE,
     "rtems_task_ident with illegal node"
   );
+#else
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_NAME,
+    "rtems_task_ident with illegal node"
+  );
+#endif
   puts( "TA1 - rtems_task_ident - RTEMS_INVALID_NODE" );
 
   status = rtems_task_restart( 100, 0 );
