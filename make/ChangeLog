@@ -1,4 +1,9 @@
 
+2000-11-30	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/jmr3904.cfg: Use -m3900 not -mips3. TX3904 is actually
+	a mips1.  gcc translates -m3900 into that.
+
 2000-11-27	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/jmr3904.cfg: Fix incorrect reference to i960.
