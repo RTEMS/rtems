@@ -7,6 +7,11 @@ This is the list of outstanding problems in this release.
 +   The POSIX threads and real time extensions code in this tree does
     not work yet and is intentionally not in the normal build path.
 
++   The test spfatal is out of date and as a result will NOT execute
+    correctly.  The addition of POSIX and consequent ongoing initialization
+    reorganization makes it pointless to fix this until the POSIX support
+    is completely in place.
+
 +   The m68000 support is nearly complete now.  The missing piece
     inside the executive proper is support for the software interrupt 
     stack.  Also, the m68k family has become quite large and an 
@@ -19,6 +24,8 @@ This is the list of outstanding problems in this release.
     floating point support found in other family members is present.
     This also implies that RTEMS may "think" of something as generic
     across the i960 family when in fact it is specific to the CA.
+    To make matters worse, the i960 target board owned by the RTEMS Project
+    is now broken and as a result even the i960CA is a "compile only" port.
 
 +   Some of the BSPs still define RAM_START and RAM_END in the bsp.h file.
     It is better to define these in the linkcmds file.  It is also nice
