@@ -1,3 +1,8 @@
+2002-11-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/score/cpu.h: Add prototype of H8BD_Install_IRQ to eliminate
+	warning.
+
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.

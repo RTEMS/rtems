@@ -1180,6 +1180,12 @@ static inline unsigned32 CPU_swap_u32(
   return( swapped );
 }
 
+/* to be provided by the BSP */
+extern void H8BD_Install_IRQ(
+  unsigned32	vector,
+  proc_ptr	new_handler,
+  proc_ptr	*old_handler );
+
 #ifdef __cplusplus
 }
 #endif
