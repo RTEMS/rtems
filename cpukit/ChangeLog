@@ -1,3 +1,10 @@
+2004-11-05	Ralf Corsepius <ralf_corsepiu@rtems.org>
+
+	* configure.ac: Remove RTEMS_USES_INTTYPES_H. Require inttypes.h.
+	* include/rtems/stdint.h: Remove "wild guesses", require inttypes.h.
+	* libcsupport/include/inttypes.h: Cleanup.
+	* libcsupport/include/stdint.h: Cleanup.
+
 2004-11-04	Ralf Corsepius <ralf_corsepiu@rtems.org>
 
 	* include/sys/_stdint.h: Various changes.
