@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/fatal.rel
 
 C_FILES = bspfatal.c
