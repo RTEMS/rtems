@@ -42,32 +42,27 @@
  *
  */
  
+rtems_status_code _Message_queue_Translate_core_return_code_[] = {
+  RTEMS_SUCCESSFUL,         /* CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL */
+  RTEMS_INVALID_SIZE,       /* CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE */
+  RTEMS_TOO_MANY,           /* CORE_MESSAGE_QUEUE_STATUS_TOO_MANY */
+  RTEMS_UNSATISFIED,        /* CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED */
+  RTEMS_UNSATISFIED,        /* CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT */
+  RTEMS_OBJECT_WAS_DELETED, /* CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED */
+  RTEMS_TIMEOUT             /* CORE_MESSAGE_QUEUE_STATUS_TIMEOUT */
+};
+
 rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
-  unsigned32 the_message_queue_status
+  unsigned32 status
 )
 {
-  switch ( the_message_queue_status ) {
-    case  CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL:
-      return RTEMS_SUCCESSFUL;
-    case  CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE:
-      return RTEMS_INVALID_SIZE;
-    case  CORE_MESSAGE_QUEUE_STATUS_TOO_MANY:
-      return RTEMS_TOO_MANY;
-    case CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED:
-      return RTEMS_UNSATISFIED;
-    case CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT:
-      return RTEMS_UNSATISFIED;
-    case CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED:
-      return RTEMS_OBJECT_WAS_DELETED;
-    case CORE_MESSAGE_QUEUE_STATUS_TIMEOUT:
-      return RTEMS_TIMEOUT;
-    case THREAD_STATUS_PROXY_BLOCKING:
-      return RTEMS_PROXY_BLOCKING;
-  }
-  _Internal_error_Occurred(         /* XXX */
-    INTERNAL_ERROR_RTEMS_API,
-    TRUE,
-    the_message_queue_status
-  );
-  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
+#if defined(RTEMS_MULTIPROCESSING)
+  if ( status == THREAD_STATUS_PROXY_BLOCKING )
+    return RTEMS_PROXY_BLOCKING;
+  else
+#endif
+  if ( status > CORE_MESSAGE_QUEUE_STATUS_TIMEOUT )
+    return RTEMS_INTERNAL_ERROR;
+  else
+    return _Message_queue_Translate_core_return_code_[status];
 }
