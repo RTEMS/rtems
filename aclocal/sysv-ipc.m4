@@ -29,7 +29,7 @@ AC_CACHE_CHECK([whether $host defines union semun],
 [rtems_cv_HAS_UNION_SEMUN="no"])
 ])
 if test "$rtems_cv_HAS_UNION_SEMUN" = "yes"; then
-    AC_DEFINE(HAS_UNION_SEMUN)
+    AC_DEFINE(HAS_UNION_SEMUN,[1],[if having union semum])
 fi
 ])
 

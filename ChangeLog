@@ -1,3 +1,9 @@
+2002-01-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/sysv-ipc.m4: Use 3-args AC_DEFINE for autoconf-2.5x
+	compatibility.
+	* bootstrap: Let --clean remove texinfo.tex.
+
 2002-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/env-rtemsbsp.m4: Use ${RTEMS_BSP} to setup includedir.

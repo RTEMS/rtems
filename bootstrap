@@ -104,7 +104,8 @@ clean)
   files=`find . -name 'configure' -print` ;
   test "$verbose" = "-v" && test -n "$files" && echo "$files" ;
   for i in $files; do if test -f $i; then
-    rm -f $i config.guess config.sub depcomp install-sh missing mkinstalldirs
+    rm -f $i config.guess config.sub depcomp install-sh mdate-sh missing \
+	mkinstalldirs texinfo.tex
     test "$verbose" = "-v" && echo "$i"    
   fi; done
   
