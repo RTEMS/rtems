@@ -16,10 +16,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -441,7 +437,7 @@ SYSINIT(sysctl, SI_SUB_KMEM, SI_ORDER_ANY, sysctl_register_all, 0);
 /*
  * "Staff-functions"
  *
- * These functions implement a presently undocumented interface 
+ * These functions implement a presently undocumented interface
  * used by the sysctl program to walk the tree, and get the type
  * so it can print the value.
  * This interface is under work and consideration, and should probably
@@ -551,7 +547,7 @@ sysctl_sysctl_name(SYSCTL_HANDLER_ARGS)
 			namelen--;
 			name++;
 
-			if ((oid->oid_kind & CTLTYPE) != CTLTYPE_NODE) 
+			if ((oid->oid_kind & CTLTYPE) != CTLTYPE_NODE)
 				break;
 
 			if (oid->oid_handler)
@@ -568,7 +564,7 @@ sysctl_sysctl_name(SYSCTL_HANDLER_ARGS)
 SYSCTL_NODE(_sysctl, 1, name, CTLFLAG_RD, sysctl_sysctl_name, "");
 
 static int
-sysctl_sysctl_next_ls(struct sysctl_oid_list *lsp, int *name, u_int namelen, 
+sysctl_sysctl_next_ls(struct sysctl_oid_list *lsp, int *name, u_int namelen,
 	int *next, int *len, int level, struct sysctl_oid **oidpp)
 {
 	struct sysctl_oid *oidp;
@@ -582,13 +578,13 @@ sysctl_sysctl_next_ls(struct sysctl_oid_list *lsp, int *name, u_int namelen,
 			continue;
 
 		if (!namelen) {
-			if ((oidp->oid_kind & CTLTYPE) != CTLTYPE_NODE) 
+			if ((oidp->oid_kind & CTLTYPE) != CTLTYPE_NODE)
 				return 0;
-			if (oidp->oid_handler) 
+			if (oidp->oid_handler)
 				/* We really should call the handler here...*/
 				return 0;
 			lsp = (struct sysctl_oid_list *)oidp->oid_arg1;
-			if (!sysctl_sysctl_next_ls(lsp, 0, 0, next+1, 
+			if (!sysctl_sysctl_next_ls(lsp, 0, 0, next+1,
 				len, level+1, oidpp))
 				return 0;
 			goto next;
@@ -603,7 +599,7 @@ sysctl_sysctl_next_ls(struct sysctl_oid_list *lsp, int *name, u_int namelen,
 			if (oidp->oid_handler)
 				return 0;
 			lsp = (struct sysctl_oid_list *)oidp->oid_arg1;
-			if (!sysctl_sysctl_next_ls(lsp, name+1, namelen-1, 
+			if (!sysctl_sysctl_next_ls(lsp, name+1, namelen-1,
 				next+1, len, level+1, oidpp))
 				return (0);
 			goto next;
@@ -615,7 +611,7 @@ sysctl_sysctl_next_ls(struct sysctl_oid_list *lsp, int *name, u_int namelen,
 			continue;
 
 		lsp = (struct sysctl_oid_list *)oidp->oid_arg1;
-		if (!sysctl_sysctl_next_ls(lsp, name+1, namelen-1, next+1, 
+		if (!sysctl_sysctl_next_ls(lsp, name+1, namelen-1, next+1,
 			len, level+1, oidpp))
 			return (0);
 	next:
@@ -661,7 +657,7 @@ name2oid (char *name, int *oid, int *len, struct sysctl_oid **oidpp)
 
 	*len = 0;
 
-	for (p = name; *p && *p != '.'; p++) 
+	for (p = name; *p && *p != '.'; p++)
 		;
 	i = *p;
 	if (i == '.')
@@ -692,7 +688,7 @@ name2oid (char *name, int *oid, int *len, struct sysctl_oid **oidpp)
 		lsp = (struct sysctl_oid_list *)oidp->oid_arg1;
 		oidp = SLIST_FIRST(lsp);
 		name = p+1;
-		for (p = name; *p && *p != '.'; p++) 
+		for (p = name; *p && *p != '.'; p++)
 				;
 		i = *p;
 		if (i == '.')
@@ -708,7 +704,7 @@ sysctl_sysctl_name2oid(SYSCTL_HANDLER_ARGS)
 	int error, oid[CTL_MAXNAME], len;
 	struct sysctl_oid *op = 0;
 
-	if (!req->newlen) 
+	if (!req->newlen)
 		return ENOENT;
 	if (req->newlen >= MAXPATHLEN)	/* XXX arbitrary, undocumented */
 		return (ENAMETOOLONG);
@@ -734,7 +730,7 @@ sysctl_sysctl_name2oid(SYSCTL_HANDLER_ARGS)
 	return (error);
 }
 
-SYSCTL_PROC(_sysctl, 3, name2oid, CTLFLAG_RW|CTLFLAG_ANYBODY, 0, 0, 
+SYSCTL_PROC(_sysctl, 3, name2oid, CTLFLAG_RW|CTLFLAG_ANYBODY, 0, 0,
 	sysctl_sysctl_name2oid, "I", "");
 
 static int
@@ -978,19 +974,19 @@ kernel_sysctl(struct thread *td, int *name, u_int namelen, void *old,
 
 	req.oldfunc = sysctl_old_kernel;
 	req.newfunc = sysctl_new_kernel;
-	req.lock = 1;
+	req.lock = REQ_LOCKED;
 
 	SYSCTL_LOCK();
 
 	error = sysctl_root(0, name, namelen, &req);
 
-	if (req.lock == 2)
+	if (req.lock == REQ_WIRED)
 #ifdef __rtems__
     printf ("kern_sysctl: vsunlock needs to be called!\n");
 #else
 		vsunlock(req.oldptr, req.oldlen);
 #endif
-    
+
 	SYSCTL_UNLOCK();
 
 	if (error && error != ENOMEM)
@@ -1084,11 +1080,12 @@ sysctl_new_user(struct sysctl_req *req, void *p, size_t l)
 void
 sysctl_wire_old_buffer(struct sysctl_req *req, size_t len)
 {
-	if (req->lock == 1 && req->oldptr && req->oldfunc == sysctl_old_user) {
+	if (req->lock == REQ_LOCKED && req->oldptr && 
+	    req->oldfunc == sysctl_old_user) {
 #ifndef __rtems__
 		vslock(req->oldptr, req->oldlen);
 #endif
-		req->lock = 2;
+		req->lock = REQ_WIRED;
 	}
 }
 
@@ -1105,7 +1102,7 @@ sysctl_find_oid(int *name, u_int namelen, struct sysctl_oid **noid,
 		if (oid->oid_number == name[indx]) {
 			indx++;
 			if (oid->oid_kind & CTLFLAG_NOLOCK)
-				req->lock = 0;
+				req->lock = REQ_UNLOCKED;
 			if ((oid->oid_kind & CTLTYPE) == CTLTYPE_NODE) {
 				if (oid->oid_handler != NULL ||
 				    indx == namelen) {
@@ -1169,7 +1166,7 @@ sysctl_root(SYSCTL_HANDLER_ARGS)
 		if (error)
 			return (error);
 	}
-  
+
 	/* Is this sysctl writable by only privileged users? */
 	if (req->newptr && !(oid->oid_kind & CTLFLAG_ANYBODY)) {
 		int flags;
@@ -1183,7 +1180,7 @@ sysctl_root(SYSCTL_HANDLER_ARGS)
 			return (error);
 	}
 #endif
-  
+
 	if (!oid->oid_handler)
 		return EINVAL;
 
@@ -1284,7 +1281,7 @@ userland_sysctl(struct thread *td, int *name, u_int namelen, void *old,
 
 	req.oldfunc = sysctl_old_user;
 	req.newfunc = sysctl_new_user;
-	req.lock = 1;
+	req.lock = REQ_LOCKED;
 
 	SYSCTL_LOCK();
 
@@ -1304,10 +1301,10 @@ userland_sysctl(struct thread *td, int *name, u_int namelen, void *old,
 
 	req = req2;
 #ifndef __rtems__
-	if (req.lock == 2)
+	if (req.lock == REQ_WIRED)
 		vsunlock(req.oldptr, req.oldlen);
 #endif
-  
+
 	SYSCTL_UNLOCK();
 
 	if (error && error != ENOMEM)
@@ -1440,7 +1437,7 @@ ogetkerninfo(struct thread *td, struct getkerninfo_args *uap)
 
 	case KINFO_METER:
 		name[0] = CTL_VM;
-		name[1] = VM_METER;
+		name[1] = VM_TOTAL;
 		error = userland_sysctl(td, name, 2, uap->where, uap->size,
 			0, 0, 0, &size);
 		break;

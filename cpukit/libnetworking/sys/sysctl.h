@@ -93,7 +93,7 @@ struct ctlname {
  * technology. This is the way nearly all new sysctl variables should
  * be implemented.
  * e.g. SYSCTL_INT(_parent, OID_AUTO, name, CTLFLAG_RW, &variable, 0, "");
- */ 
+ */
 #define OID_AUTO	(-1)
 
 /*
@@ -106,13 +106,18 @@ struct ctlname {
 #define SYSCTL_HANDLER_ARGS struct sysctl_oid *oidp, void *arg1, int arg2, \
 	struct sysctl_req *req
 
+/* definitions for sysctl_req 'lock' member */
+#define REQ_UNLOCKED	0	/* not locked and not wired */
+#define REQ_LOCKED	1	/* locked and not wired */
+#define REQ_WIRED	2	/* locked and wired */
+
 /*
  * This describes the access space for a sysctl request.  This is needed
  * so that we can use the interface from the kernel or from user-space.
  */
 struct sysctl_req {
 	struct thread	*td;		/* used for access checking */
-	int		lock;
+	int		lock;		/* locking/wiring state */
 	void		*oldptr;
 	size_t		oldlen;
 	size_t		oldidx;
@@ -328,7 +333,7 @@ TAILQ_HEAD(sysctl_ctx_list, sysctl_ctx_entry);
 #define	KERN_BOOTTIME		21	/* struct: time kernel was booted */
 #define KERN_NISDOMAINNAME	22	/* string: YP domain name */
 #define KERN_UPDATEINTERVAL	23	/* int: update process sleep time */
-#define KERN_OSRELDATE		24	/* int: OS release date */
+#define KERN_OSRELDATE		24	/* int: kernel release date */
 #define KERN_NTP_PLL		25	/* node: NTP PLL control */
 #define	KERN_BOOTFILE		26	/* string: name of booted kernel */
 #define	KERN_MAXFILESPERPROC	27	/* int: max open files per proc */
