@@ -1,5 +1,9 @@
 2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/net/if_pppvar.h: Ansify.
+
+2005-01-28	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* include/rtems/userenv.h: Set up LOGIN_NAME_MAX iff not having been
 	defined before.
 

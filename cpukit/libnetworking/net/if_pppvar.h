@@ -57,9 +57,9 @@ struct ppp_softc {
 	struct	ifnet sc_if;		/* network-visible interface */
 	u_int	sc_flags;		/* control/status bits; see if_ppp.h */
 	void	*sc_devp;		/* pointer to device-dep structure */
-	void	(*sc_start) __P((struct ppp_softc *));	/* start output proc */
-	void	(*sc_ctlp) __P((struct ppp_softc *)); /* rcvd control pkt */
-	void	(*sc_relinq) __P((struct ppp_softc *)); /* relinquish ifunit */
+	void	(*sc_start)(struct ppp_softc *);	/* start output proc */
+	void	(*sc_ctlp)(struct ppp_softc *); /* rcvd control pkt */
+	void	(*sc_relinq)(struct ppp_softc *); /* relinquish ifunit */
 	short	sc_mru;			/* max receive unit */
 	pid_t	sc_xfer;		/* used in transferring unit */
 	struct	ifqueue sc_rawq;	/* received packets */
@@ -114,15 +114,15 @@ struct ppp_softc {
 
 struct	ppp_softc ppp_softc[NPPP];
 
-struct	ppp_softc *pppalloc __P((pid_t pid));
-void	pppdealloc __P((struct ppp_softc *sc));
-int	pppoutput __P((struct ifnet *, struct mbuf *,
-		       struct sockaddr *, struct rtentry *));
-int	pppioctl __P((struct ppp_softc *sc, int cmd, caddr_t data,
-		      int flag, struct proc *p));
-struct	mbuf *ppp_dequeue __P((struct ppp_softc *sc));
-u_short pppfcs __P((u_short fcs, u_char *cp, int len));
-void    pppallocmbuf __P((struct ppp_softc *sc, struct mbuf **mp));
+struct	ppp_softc *pppalloc(pid_t pid);
+void	pppdealloc(struct ppp_softc *sc);
+int	pppoutput(struct ifnet *, struct mbuf *,
+		       struct sockaddr *, struct rtentry *);
+int	pppioctl(struct ppp_softc *sc, int cmd, caddr_t data,
+		      int flag, struct proc *p);
+struct	mbuf *ppp_dequeue(struct ppp_softc *sc);
+u_short pppfcs(u_short fcs, u_char *cp, int len);
+void    pppallocmbuf(struct ppp_softc *sc, struct mbuf **mp);
 
 
 /* define event values */
