@@ -109,7 +109,7 @@ RTEMS_PATH_MKDIR
 RTEMS_PROG_MKDIR_M
 RTEMS_PROG_MKDIR_P
 test "$rtems_cv_prog_MKDIR_P" = "yes" && MKDIR="$MKDIR -p"
-test "$rtems_cv_prog_MKDIR_M" = "yes" && MKDIR="$MKDIR -m 0755"
+#test "$rtems_cv_prog_MKDIR_M" = "yes" && MKDIR="$MKDIR -m 0755"
 
 AC_PATH_PROG(TOUCH,touch)
 AC_PATH_PROG(CMP,cmp)

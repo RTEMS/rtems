@@ -22,7 +22,7 @@ RTEMS-specific option are supported:
 	--disable-rtems-inlines
 	--disable-posix
 	--disable-tests
-	--disable-ka9q
+	--disable-networking
         --enable-cxx
         --enable-bare-cpu-model=<MODEL>
         --enable-bare-cpu-cflags=<FLAGS>
@@ -40,8 +40,9 @@ used when configuring RTEMS installations:
 By default, the RTEMS posix interface is built for targets that support
 it. It can be disabled with the --disable-posix option.
 
-By default, the RTEMS port of the KA9Q TCP/IP stack is build for targets
-that support it.  It can be disabled with the --disable-ka9q option.
+By default, the RTEMS networking support is built for targets which
+support it.  It can be specifically disabled for those targets
+with the --disable-networking option.
 
 By default, the RTEMS support of C++ is disabled.  It can be enabled
 with the --enable-cxx option. If the rtems++ C++ library is installed

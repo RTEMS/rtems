@@ -1203,7 +1203,7 @@ rm -rf conftestdata
 echo "$ac_t""$rtems_cv_prog_MKDIR_P" 1>&6
 
 test "$rtems_cv_prog_MKDIR_P" = "yes" && MKDIR="$MKDIR -p"
-test "$rtems_cv_prog_MKDIR_M" = "yes" && MKDIR="$MKDIR -m 0755"
+#test "$rtems_cv_prog_MKDIR_M" = "yes" && MKDIR="$MKDIR -m 0755"
 
 # Extract the first word of "touch", so it can be a program name with args.
 set dummy touch; ac_word=$2
