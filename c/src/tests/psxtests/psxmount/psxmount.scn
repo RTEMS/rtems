@@ -25,8 +25,8 @@ create /b/my_file
 Verify /b/my_file
 create c/y/my_mount_point/my_dir/d
 Verify c/y/my_mount_point/my_dir/d
-Attempting to mount IMFS file system at /c/z/my_mount_point 
-2nd file system successfully mounted at /c/z/my_mount_point 
+Attempting to mount IMFS file system at /c/z/my_mount_point
+2nd file system successfully mounted at /c/z/my_mount_point
 
 chdir to /c/z/my_mount_point.
 chdir() status : 0
@@ -56,8 +56,8 @@ chdir() status : 0
 Unmount status: 0
 Mount a NULL file system and verify EINVAL
 mount with option of -62 should fail with EINVAL
-Mount a Read Only filesystem at /c/y/my_mount_point 
-Read only file system successfully mounted at /c/y/my_mount_point 
+Mount a Read Only filesystem at /c/y/my_mount_point
+Read only file system successfully mounted at /c/y/my_mount_point
 create c/y/my_mount_point/../../y/my_mount_point/new_dir
 Verify a mount point returns EBUSY for another mount
 Mount on a file should fail with ENOTDIR
