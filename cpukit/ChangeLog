@@ -1,3 +1,8 @@
+2002-05-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add libnetworking.
+	* wrapup/Makefile.am: Ditto.
+
 2002-05-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add libblock. Add libfs. Add AM_CONDITIONAL(UNIX).
