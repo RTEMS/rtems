@@ -38,23 +38,3 @@ rtems_status_code rtems_event_receive(
   return( RTEMS_NOT_CONFIGURED );
 }
 
-void _Event_Seize(
-  rtems_event_set event_in,
-  rtems_option    option_set,
-  rtems_interval  ticks
-)
-{
-}
-
-void _Event_Surrender(
-  Thread_Control *the_thread
-)
-{
-}
-
-void _Event_Timeout(
-  Objects_Id  id,
-  void       *ignored
-)
-{
-}
