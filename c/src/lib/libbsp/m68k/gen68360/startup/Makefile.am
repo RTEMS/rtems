@@ -35,9 +35,12 @@ all-local: $(PGM) $(TMPINSTALL_FILES)
 EXTRA_DIST = alloc360.c bspclean.c bspstart.c init68360.c linkcmds \
     linkcmds.bootp linkcmds.prom
 
+TMPINSTALL_FILES =
+
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/linkcmds: linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
@@ -50,5 +53,7 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.prom
 $(PROJECT_LIB)/linkcmds.bootp: linkcmds.bootp $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.bootp
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.bootp
+
+CLEANFILES = $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

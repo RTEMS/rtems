@@ -1,3 +1,9 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* startup/Makefile.am: Ditto.
+
 2004-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: Remove.

@@ -31,12 +31,17 @@ all-local: $(PGM) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bspclean.c bspstart.c dumpanic.c init68340.c linkcmds
 
+TMPINSTALL_FILES =
+
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/linkcmds: linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
+
+CLEANFILES = $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -59,5 +59,8 @@ $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start$(LIB_VARIANT).$(OBJE
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/start$(LIB_VARIANT).$(OBJEXT)
 
+CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(TMPINSTALL_FILES)
+
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../automake/local.am

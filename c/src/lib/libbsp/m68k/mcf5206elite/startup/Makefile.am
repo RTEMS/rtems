@@ -31,9 +31,12 @@ all-local: $(PGM) $(TMPINSTALL_FILES)
 EXTRA_DIST = bspclean.c bspstart.c init5206e.c linkcmds linkcmds.flash \
     gdbinit
 
+TMPINSTALL_FILES =
+
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/linkcmds: linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
@@ -46,5 +49,7 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/gdbinit
 $(PROJECT_LIB)/linkcmds.flash: linkcmds.flash $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.flash
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds.flash
+
+CLEANFILES = $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
