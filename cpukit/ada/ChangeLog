@@ -1,3 +1,8 @@
+2003-11-25	Joel Sherrill <joel@OARcorp.com>
+
+	PR 528/rtems_misc
+	* rtems.ads: Add task variables to Ada binding.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems-multiprocessing.adb, rtems-multiprocessing.ads, rtems.adb,

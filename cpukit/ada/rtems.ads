@@ -897,6 +897,30 @@ pragma Elaborate_Body (RTEMS);
       Note    : in     RTEMS.Unsigned32;
       Result  :    out RTEMS.Status_Codes
    );
+   
+   type Task_Variable_Dtor is access procedure (
+      Argument : in     RTEMS.Address;
+   );
+
+   procedure Task_Variable_Add (
+      ID            : in     RTEMS.ID;
+      Task_Variable : in     RTEMS.Address;
+      Dtor          : in     RTEMS.Task_Variable_Dtor;
+      Result        :    out RTEMS.Status_Codes
+   );
+
+   procedure Task_Variable_Get (
+      ID                  : in     RTEMS.ID;
+      Task_Variable       :    out RTEMS.Address;
+      Task_Variable_Value :    out RTEMS.Address;
+      Result              :    out RTEMS.Status_Codes
+   );
+
+   procedure Task_Variable_Delete (
+      ID                  : in     RTEMS.ID;
+      Task_Variable       :    out RTEMS.Address;
+      Result              :    out RTEMS.Status_Codes
+   );
 
    procedure Task_Wake_When (
       Time_Buffer : in     RTEMS.Time_Of_Day;
