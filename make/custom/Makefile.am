@@ -23,14 +23,11 @@ efi332.cfg \
 efi68k.cfg \
 erc32.cfg \
 eth_comm.cfg \
-force386.cfg \
 gen68302.cfg \
 gen68340.cfg \
 gen68360.cfg \
 gen68360_040.cfg \
 gensh1.cfg \
-go32.cfg \
-go32_p5.cfg \
 helas403.cfg \
 i386ex.cfg \
 idp.cfg \
