@@ -70,7 +70,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 ** 	10)  If there is a Translation Lookaside Buffer, Clear the TLB
 ** 	11)  Execute initialization code if the IDT/c library is to be used
 ** 
-** 	12)  Jump to user's "main()"
+** 	12)  Jump to user's "main()" (boot_card() for RTEMS)
 ** 	13)  Jump to promexit
 **
 **	IDT/C 5.x defines _R3000, IDT/C 6.x defines _R4000 internally. 
@@ -287,7 +287,7 @@ FRAME(start,sp,0,ra)
 /***********************  END I/O initialization **********************/
 
 
-	jal	main
+	jal	boot_card
 
 	jal	idtsim_promexit
 
