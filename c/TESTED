@@ -10,41 +10,43 @@ distribution of the Linux operating system internally for development.
 This release has been tested on the following Languages/CPUs/Targets using
 RedHat Linux 4.2 as the host environment:
 
-   CPU     CPU
-  FAMILY  MODEL             TARGET               SUITES
-  ====== ========= =======================   ===============
-   m68k   m68000    efi68k                       (note 1)
-   m68k   m68020    Motorola MVME136            NOT TESTED
-   m68k   m68030    Motorola MVME147             (note 1)
-   m68k   m68030    Motorola MVME147s            (note 1)
-   m68k  m68lc040   Motorola MVME162             (note 1)
-   m68k  m68lc040   Motorola MVME162LX           (note 1)
-   m68k  m68ec040   Motorola IDP                 (note 1)
-   m68k   m68020    DY-4 DMV152                  (note 1)
-   m68k   m68302    generic 68302                (note 1)
-   m68k   m68302    ods 68302                    (note 1)
-   m68k   m68332    efi332                       (note 1)
-   m68k   m68360    generic 68360                (note 1)
-   m68k   m68360    68360 in companion mode      (note 1)
-   i386  i386_fp    Force CPU-386                (note 1) 
-   i386  i386ex     generic i386ex               (note 1) 
-   i386   i486      DJGPP/PC-AT                 NOT TESTED
-   i386  pentium    DJGPP/PC-AT                 NOT TESTED
-   i386   ix86      bare PC (pc386)             NOT TESTED
-   i960  i960ca     Cyclone CVME961              (note 4)
-   hppa  hppa7100   simhppa                      (note 1)
-   mips  idt4600    p4000                        (note 1)
-   mips  idt4650    p4000                        (note 1)
-   ppc    403       Papyrus                      (note 1)
-   sh     sh7032    generic sh1                  (note 1)
-  sparc   erc32     generic erc32               ALL TESTS (note 5)
-   a29k   a29k      port sw                      (note 2)
-   UNIX     NA      Solaris 2 (SPARC)            (note 2) 
-   UNIX     NA      Solaris 2 (SPARC)            (note 2) 
-   UNIX     NA      Linux (i386)                ALL TESTS (inlines)
-   UNIX     NA      Linux (i386)                ALL TESTS (macros)
-   UNIX     NA      HPUX (PA-RISC)               (note 2)
-  no_cpu    NA      no_bsp                       (note 3)
+   CPU      CPU
+  FAMILY   MODEL             TARGET               SUITES
+ ========  ========= =======================   ===============
+   m68k    m68000    efi68k                       (note 1)
+   m68k    m68020    Motorola MVME136            NOT TESTED
+   m68k    m68030    Motorola MVME147             (note 1)
+   m68k    m68030    Motorola MVME147s            (note 1)
+   m68k   m68lc040   Motorola MVME162             (note 1)
+   m68k   m68lc040   Motorola MVME162LX           (note 1)
+   m68k   m68ec040   Motorola IDP                 (note 1)
+   m68k    m68020    DY-4 DMV152                  (note 1)
+   m68k    m68302    generic 68302                (note 1)
+   m68k    m68302    ods 68302                    (note 1)
+   m68k    m68332    efi332                       (note 1)
+   m68k    m68360    generic 68360                (note 1)
+   m68k    m68360    68360 in companion mode      (note 1)
+   i386   i386_fp    Force CPU-386                (note 1) 
+   i386   i386ex     generic i386ex               (note 1) 
+   i386    i486      DJGPP/PC-AT                 NOT TESTED
+   i386   pentium    DJGPP/PC-AT                 NOT TESTED
+   i386    ix86      bare PC (pc386)             NOT TESTED
+   i960   i960ca     Cyclone CVME961              (note 4)
+   hppa   hppa7100   simhppa                      (note 1)
+   mips   idt4600    p4000                        (note 1)
+   mips   idt4650    p4000                        (note 1)
+ powerpc  ppc403     helas403                     (note 1, 6)
+ powerpc  ppc403     Papyrus                      (note 1)
+ powerpc  ppc403     psim                         (note 5)
+   sh     sh7032     generic sh1                  (note 1)
+  sparc    erc32     generic erc32               ALL TESTS (note 5)
+   a29k    a29k      port sw                      (note 2)
+   UNIX      NA      Solaris 2 (SPARC)            (note 2) 
+   UNIX      NA      Solaris 2 (SPARC)            (note 2) 
+   UNIX      NA      Linux (i386)                ALL TESTS (inlines)
+   UNIX      NA      Linux (i386)                ALL TESTS (macros)
+   UNIX      NA      HPUX (PA-RISC)               (note 2)
+  no_cpu     NA      no_bsp                       (note 3)
 
 NOTES:
 
@@ -65,4 +67,6 @@ immediately preceding the snapshot.
 (4) The board owned by the RTEMS Project is broken.  The BSP is known
     to compile and link with all appropriate tests successfully.
 
-(5) This BSP is tested on the SPARC Instruction Simulator (SIS).
+(5) This BSP is tested on a CPU software simulator.
+
+(6) This BSP was tested by an RTEMS volunteer and reported to work.
