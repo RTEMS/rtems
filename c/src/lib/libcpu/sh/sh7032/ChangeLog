@@ -1,3 +1,9 @@
+2001-10-12	Joel Sherrill <joel@OARcorp.com>
+
+	* clock/ckinit.c, delay/delay.c, include/iosh7032.h,
+	include/ispsh7032.h, include/sci.h, include/sh7_pfc.h,
+	include/sh7_sci.h, sci/sci.c, score/cpu_asm.c, score/ispsh7032.c,
+	timer/timer.c: Fixed typo.
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
