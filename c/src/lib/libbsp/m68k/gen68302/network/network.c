@@ -26,7 +26,7 @@
 
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
-#include <m68302.h>
+#include <rtems/m68k/m68302.h>
 
 /*
  * Number of SCCs supported by this driver

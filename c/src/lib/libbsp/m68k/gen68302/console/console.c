@@ -16,7 +16,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 
-#include "m68302.h"
+#include <rtems/m68k/m68302.h>
 
 /*  console_initialize
  *
