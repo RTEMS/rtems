@@ -1,3 +1,9 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* console/console.c, include/bsp.h, include/coverhd.h,
+	startup/bspclean.c, startup/bspstart.c, startup/setvec.c: URL for
+	license changed.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
