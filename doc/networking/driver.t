@@ -134,7 +134,10 @@ structure.
 
 @item ifp->if_name
 The name of the device.  The network stack uses this string
-and the device number for device name lookups.
+and the device number for device name lookups.  The name should not
+contain digits as these will be assumed to be part of the unit number
+and not part of the device name.
+
 
 @item ifp->if_unit
 The device number.  The network stack uses this number and the
