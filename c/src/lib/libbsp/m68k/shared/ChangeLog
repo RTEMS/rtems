@@ -1,3 +1,7 @@
+2003-12-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Cosmetics.
+
 2003-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: merge-in gdbstub/Makefile.am.
