@@ -21,6 +21,8 @@
 extern "C" {
 #endif
 
+#include <bspopts.h>
+
 #include <rtems.h>
 #include <libcpu/i960RP.h>
 #include <iosupp.h>

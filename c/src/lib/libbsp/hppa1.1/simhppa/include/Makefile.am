@@ -4,9 +4,9 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = bsp.h ../../../shared/include/coverhd.h
-
-RTEMS_H_FILES = ttydrv.h
+include_rtemsdir = $(includedir)/rtems
+include_HEADERS = bsp.h coverhd.h bspopts.h
+include_rtems_HEADERS = ttydrv.h
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
@@ -14,21 +14,21 @@ $(PROJECT_INCLUDE):
 $(PROJECT_INCLUDE)/rtems:
 	$(mkinstalldirs) $@
 
-$(PROJECT_INCLUDE)/bsp.h: bsp.h
+$(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_INCLUDE)/coverhd.h: ../../../shared/include/coverhd.h
+coverhd.h: $(top_srcdir)/../../shared/include/coverhd.h
+	$(INSTALL_DATA) $< $@
+CLEANFILES += coverhd.h
+
+$(PROJECT_INCLUDE)/rtems/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_INCLUDE)/rtems/ttydrv.h: ttydrv.h
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/bsp.h \
-    $(PROJECT_INCLUDE)/coverhd.h $(PROJECT_INCLUDE)/rtems \
-    $(PROJECT_INCLUDE)/rtems/ttydrv.h
+TMPINSTALL_FILES += $(PROJECT_INCLUDE) \
+    $(include_HEADERS:%=%(PROJECT_INCLUDE)/%) \
+    $(PROJECT_INCLUDE)/rtems \
+    $(include_HEADERS:%=%(PROJECT_INCLUDE)/rtems/%) 
 
 all-local: $(TMPINSTALL_FILES)
-
-EXTRA_DIST = bsp.h ttydrv.h
 
 include $(top_srcdir)/../../../../../../automake/local.am
