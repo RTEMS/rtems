@@ -1,5 +1,46 @@
 2003-08-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/bsp-alias.m4: New (Copied from ../../../aclocal).
+	* aclocal/canonical-host.m4: New (Copied from ../../../aclocal).
+	* aclocal/canonicalize-tools.m4: New (Copied from ../../../aclocal).
+	* aclocal/canonical-target-name.m4: New (Copied from ../../../aclocal).
+	* aclocal/check-cpu.m4: New (Copied from ../../../aclocal).
+	* aclocal/check-custom-bsp.m4: New (Copied from ../../../aclocal).
+	* aclocal/check-cxx.m4: New (Copied from ../../../aclocal).
+	* aclocal/check-itron.m4: New (Copied from ../../../aclocal).
+	* aclocal/check-multiprocessing.m4: New (Copied from ../../../aclocal).
+	* aclocal/check-networking.m4: New (Copied from ../../../aclocal).
+	* aclocal/check-posix.m4: New (Copied from ../../../aclocal).
+	* aclocal/check-tool.m4: New (Copied from ../../../aclocal).
+	* aclocal/config-subdirs.m4: New (Copied from ../../../aclocal).
+	* aclocal/enable-bare.m4: New (Copied from ../../../aclocal).
+	* aclocal/enable-cxx.m4: New (Copied from ../../../aclocal).
+	* aclocal/enable-itron.m4: New (Copied from ../../../aclocal).
+	* aclocal/enable-multiprocessing.m4: New (Copied from ../../../aclocal).
+	* aclocal/enable-networking.m4: New (Copied from ../../../aclocal).
+	* aclocal/enable-posix.m4: New (Copied from ../../../aclocal).
+	* aclocal/enable-rtemsbsp.m4: New (Copied from ../../../aclocal).
+	* aclocal/enable-tests.m4: New (Copied from ../../../aclocal).
+	* aclocal/env-rtemsbsp.m4: New (Copied from ../../../aclocal).
+	* aclocal/gcc-isystem.m4: New (Copied from ../../../aclocal).
+	* aclocal/gcc-pipe.m4: New (Copied from ../../../aclocal).
+	* aclocal/gcc-specs.m4: New (Copied from ../../../aclocal).
+	* aclocal/multilib.m4: New (Copied from ../../../aclocal).
+	* aclocal/path-ksh.m4: New (Copied from ../../../aclocal).
+	* aclocal/prog-cc.m4: New (Copied from ../../../aclocal).
+	* aclocal/prog-cxx.m4: New (Copied from ../../../aclocal).
+	* aclocal/project-root.m4: New (Copied from ../../../aclocal).
+	* aclocal/quoting.m4: New (Copied from ../../../aclocal).
+	* aclocal/rtems-cpu-subdirs.m4: New (Copied from ../../../aclocal).
+	* aclocal/rtems-flags.m4: New (Copied from ../../../aclocal).
+	* aclocal/rtems-test-no-pause.m4: New (Copied from ../../../aclocal).
+	* aclocal/rtems-top.m4: New (Copied from ../../../aclocal).
+	* aclocal/target.m4: New (Copied from ../../../aclocal).
+	* aclocal/tool-paths.m4: New (Copied from ../../../aclocal).
+	* aclocal/version.m4: New (Copied from ../../../aclocal).
+
+2003-08-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/local.am, automake/host.am: Remove "debug".
 
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
