@@ -1,3 +1,9 @@
+2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.inc.in: Add exec_prefix, remove terminating / from
+	PROJECT_ROOT.
+	* host.cfg.in: Update from <toplevel>/make/host.cfg.in
+
 2001-02-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.inc.in: Remove RTEMS_HOST.

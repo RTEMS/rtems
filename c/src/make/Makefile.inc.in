@@ -5,6 +5,7 @@
 RTEMS_BSP = @RTEMS_BSP@
 
 prefix = @prefix@
+exec_prefix = @exec_prefix@
 
 CC_FOR_TARGET = @CC@
 AS_FOR_TARGET = @AS@
@@ -31,7 +32,7 @@ export SIZE
 export OBJCOPY
 
 RTEMS_CUSTOM = $(prefix)/make/custom/$(RTEMS_BSP).cfg
-PROJECT_ROOT = $(prefix)/
+PROJECT_ROOT = $(prefix)
 RTEMS_USE_OWN_PDIR = no
 RTEMS_HAS_POSIX_API = @RTEMS_HAS_POSIX_API@
 RTEMS_HAS_ITRON_API = @RTEMS_HAS_ITRON_API@
