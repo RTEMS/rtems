@@ -10,6 +10,28 @@
 
 The questions in this category are hints that can ease debugging.
 
+@section Malloc
+
+@subsection Is malloc reentrant?
+
+Yes.  The RTEMS Malloc implementation is reentrant.  It is
+implemented as calls to the Region Manager in the Classic API.
+
+@subsection When is malloc initialized?
+
+During BSP initialization, the @code{bsp_libc_init} routine
+is called.  This routine initializes the heap as well as
+the RTEMS system call layer (open, read, write, etc.) and
+the RTEMS reentrancy support for the Cygnus newlib Standard C  
+Library.
+
+The @code{bsp_libc_init} routine is passed the size and starting
+address of the memory area to be used for the program heap as well
+as the amount of memory to ask @code{sbrk} for when the heap is
+exhausted.  For most BSPs, all memory available is placed in the
+program heap thus it can not be extended dynamically by calls to
+@code{sbrk}.
+
 @section How do I determine how much memory is left?
 
 First there are two types of memory: RTEMS Workspace and Program Heap.
