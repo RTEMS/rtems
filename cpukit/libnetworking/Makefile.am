@@ -91,12 +91,8 @@ libnetworking_a_SOURCES += netinet/if_ether.c netinet/igmp.c netinet/in.c \
     netinet/ip_mroute.c netinet/ip_output.c netinet/raw_ip.c \
     netinet/tcp_debug.c netinet/tcp_input.c netinet/tcp_output.c \
     netinet/tcp_subr.c netinet/tcp_timer.c netinet/tcp_usrreq.c \
-    netinet/udp_usrreq.c
-
-## FIXME: these files should be renamed into *.h and put into
-## libnetworking_a_SOURCES
-EXTRA_DIST += netinet/in_cksum_arm.c netinet/in_cksum_i386.c \
-    netinet/in_cksum_m68k.c netinet/in_cksum_powerpc.c
+    netinet/udp_usrreq.c netinet/in_cksum_arm.h netinet/in_cksum_i386.h \
+    netinet/in_cksum_m68k.h netinet/in_cksum_powerpc.h
 
 ## nfs
 

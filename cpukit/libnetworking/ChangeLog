@@ -1,3 +1,17 @@
+2004-01-13  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR/549 networking
+
+	* netinet/in_cksum_powerpc.h: New (copy of in_cksum_powerpc.c).
+	* netinet/in_cksum_powerpc.c: Remove.
+	* netinet/in_cksum_i386.h: New (copy of in_cksum_i386.c).
+	* netinet/in_cksum_i386.c: Remove.
+	* netinet/in_cksum_arm.h: New (copy of in_cksum_arm.c).
+	* netinet/in_cksum_arm.c: Remove.
+	* netinet/in_cksum_m68k.c: New (copy of in_cksum_m68k.c).
+	* netinet/in_cksum_m68k.c: Remove.
+	* netinet/Makefile.am: Reflect changes above.
+
 2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Include compile.am, again.
