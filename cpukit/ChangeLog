@@ -1,3 +1,7 @@
+2003-11-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Make RTEMS_DEBUG an RTEMS_CPUOPT.
+
 2003-11-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Reflect having removed libnetworking/wrapup.

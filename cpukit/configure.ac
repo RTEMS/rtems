@@ -97,6 +97,11 @@ cat << EOF > cpuopts.tmp
 #define __CPU_OPTIONS_h
 EOF
 
+RTEMS_CPUOPT([RTEMS_DEBUG],
+  [test x"${enable_rtems_debug}" = x"yes"],
+  [1],
+  [if RTEMS_DEBUG is enabled])
+
 RTEMS_CPUOPT([USE_INLINES],
   [! test x"${RTEMS_USE_MACROS}" = x"yes"],
   [1],
