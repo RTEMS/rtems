@@ -7,6 +7,10 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
+CLEANFILES =
+EXTRA_PROGRAMS =
+noinst_DATA =
+
 # NOTE: Unlike other CPUS, we install into a subdirectory to avoid
 #       file name conflicts
 include_shdir = $(includedir)/sh
@@ -17,60 +21,64 @@ include_sh_HEADERS = include/io_types.h include/sci.h include/sh7_pfc.h \
 include_rtems_score_HEADERS = include/ispsh7045.h include/iosh7045.h
 
 # clock
+EXTRA_PROGRAMS += clock.rel
+CLEANFILES += clock.rel
+clock_rel_SOURCES = clock/ckinit.c
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-PGMS = $(ARCH)/clock.rel
+EXTRA_PROGRAMS += clock_g.rel
+CLEANFILES += clock_g.rel
+clock_g_rel_SOURCES = $(clock_rel_SOURCES)
+clock_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+clock_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-clock_C_FILES = clock/ckinit.c
-clock_rel_OBJECTS = $(clock_C_FILES:clock/%.c=$(ARCH)/%.$(OBJEXT))
-EXTRA_DIST = $(clock_C_FILES)
-
-${ARCH}/%.$(OBJEXT): clock/%.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-${ARCH}/clock.rel: $(clock_rel_OBJECTS)
-	${make-rel}
+noinst_DATA += clock$(LIB_VARIANT).rel
 
 # sci
+EXTRA_PROGRAMS += sci.rel
+CLEANFILES += sci.rel
+sci_rel_SOURCES = sci/sci.c sci/sci_termios.c
+sci_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+sci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-PGMS += $(ARCH)/sci.rel
+EXTRA_PROGRAMS += sci_g.rel
+CLEANFILES += sci_g.rel
+sci_g_rel_SOURCES = $(sci_rel_SOURCES)
+sci_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+sci_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-sci_C_FILES = sci/sci.c sci/sci_termios.c
-sci_rel_OBJECTS = $(sci_C_FILES:sci/%.c=$(ARCH)/%.$(OBJEXT))
-EXTRA_DIST += $(sci_C_FILES)
-
-${ARCH}/%.$(OBJEXT): sci/%.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-${ARCH}/sci.rel: $(sci_rel_OBJECTS)
-	${make-rel}
+noinst_DATA += sci$(LIB_VARIANT).rel
 
 # score
+EXTRA_PROGRAMS += score.rel
+CLEANFILES += score.rel
+score_rel_SOURCES = score/cpu_asm.c score/ispsh7045.c
+score_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+score_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-PGMS += $(ARCH)/score.rel
+EXTRA_PROGRAMS += score_g.rel
+CLEANFILES += score_g.rel
+score_g_rel_SOURCES = $(score_rel_SOURCES)
+score_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+score_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-score_C_FILES = score/cpu_asm.c score/ispsh7045.c
-score_rel_OBJECTS = $(score_C_FILES:score/%.c=$(ARCH)/%.$(OBJEXT))
-EXTRA_DIST += $(score_C_FILES)
-
-${ARCH}/%.$(OBJEXT): score/%.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-${ARCH}/score.rel: $(score_rel_OBJECTS)
-	${make-rel}
+noinst_DATA += score$(LIB_VARIANT).rel
 
 ## timer
+EXTRA_PROGRAMS += timer.rel
+CLEANFILES += timer.rel
+timer_rel_SOURCES = timer/timer.c
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-PGMS += $(ARCH)/timer.rel
+EXTRA_PROGRAMS += timer_g.rel
+CLEANFILES += timer_g.rel
+timer_g_rel_SOURCES = $(timer_rel_SOURCES)
+timer_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+timer_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-timer_C_FILES = timer/timer.c
-timer_rel_OBJECTS = $(timer_C_FILES:timer/%.c=$(ARCH)/%.$(OBJEXT))
-EXTRA_DIST += $(timer_C_FILES)
-
-${ARCH}/%.$(OBJEXT): timer/%.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-${ARCH}/timer.rel: $(timer_rel_OBJECTS)
-	${make-rel}
-
-all-local: $(PGMS) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(PGMS)
+noinst_DATA += timer$(LIB_VARIANT).rel
 
 PREINSTALL_FILES =
 
@@ -112,6 +120,6 @@ $(PROJECT_INCLUDE)/rtems/score/iosh7045.h: include/iosh7045.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/iosh7045.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/iosh7045.h
 
-CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -1,3 +1,10 @@
+2004-01-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Require automake 1.8.2.
+	Add subdir-objects to AUTOMAKE_OPTIONS.
+	Add AM_PROG_CC_C_0.
+	* Makefile.am: Use automake compilation rules.
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
