@@ -1,3 +1,8 @@
+2003-01-28	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds, startup/linkcmds.rom, startup/linkcmds.rom2ram: Fix
+	to work around truncated section names.
+
 2003-01-20	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds*: Add FreeBSD sysctl() sections.
