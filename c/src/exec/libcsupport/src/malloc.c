@@ -37,7 +37,7 @@ size_t RTEMS_Malloc_Sbrk_amount;
 #endif
 
 #ifdef MALLOC_STATS
-#define MSBUMP(f,n)    malloc_stats.f += (n)
+#define MSBUMP(f,n)    rtems_malloc_stats.f += (n)
 
 struct {
     unsigned32  space_available;             /* current size of malloc area */
@@ -48,9 +48,9 @@ struct {
     unsigned32  max_depth;		     /* most ever malloc'd at 1 time */
     unsigned64  lifetime_allocated;
     unsigned64  lifetime_freed;
-} malloc_stats;
+} rtems_malloc_stats;
 
-#else			/* No malloc_stats */
+#else			/* No rtems_malloc_stats */
 #define MSBUMP(f,n)
 #endif
 
@@ -115,7 +115,7 @@ void RTEMS_Malloc_Initialize(
 
 #ifdef MALLOC_STATS
   /* zero all the stats */
-  (void) memset(&malloc_stats, 0, sizeof(malloc_stats));
+  (void) memset(&rtems_malloc_stats, 0, sizeof(rtems_malloc_stats));
 #endif
   
   MSBUMP(space_available, length);
@@ -201,9 +201,9 @@ void *malloc(
       unsigned32 current_depth;
       status = rtems_region_get_segment_size(RTEMS_Malloc_Heap, return_this, &actual_size);
       MSBUMP(lifetime_allocated, actual_size);
-      current_depth = malloc_stats.lifetime_allocated - malloc_stats.lifetime_freed;
-      if (current_depth > malloc_stats.max_depth)
-          malloc_stats.max_depth = current_depth;
+      current_depth = rtems_malloc_stats.lifetime_allocated - rtems_malloc_stats.lifetime_freed;
+      if (current_depth > rtems_malloc_stats.max_depth)
+          rtems_malloc_stats.max_depth = current_depth;
   }
 #endif
 
@@ -314,23 +314,23 @@ void free(
 
 void malloc_dump(void)
 {
-    unsigned32 allocated = malloc_stats.lifetime_allocated - malloc_stats.lifetime_freed;
+    unsigned32 allocated = rtems_malloc_stats.lifetime_allocated - rtems_malloc_stats.lifetime_freed;
 
     printf("Malloc stats\n");
     printf("  avail:%uk  allocated:%uk (%d%%) max:%uk (%d%%) lifetime:%Luk freed:%Luk\n",
-           (unsigned int) malloc_stats.space_available / 1024,
+           (unsigned int) rtems_malloc_stats.space_available / 1024,
            (unsigned int) allocated / 1024,
            /* avoid float! */
-           (allocated * 100) / malloc_stats.space_available,
-           (unsigned int) malloc_stats.max_depth / 1024,
-           (malloc_stats.max_depth * 100) / malloc_stats.space_available,
-           (unsigned64) malloc_stats.lifetime_allocated / 1024,
-           (unsigned64) malloc_stats.lifetime_freed / 1024);
+           (allocated * 100) / rtems_malloc_stats.space_available,
+           (unsigned int) rtems_malloc_stats.max_depth / 1024,
+           (rtems_malloc_stats.max_depth * 100) / rtems_malloc_stats.space_available,
+           (unsigned64) rtems_malloc_stats.lifetime_allocated / 1024,
+           (unsigned64) rtems_malloc_stats.lifetime_freed / 1024);
     printf("  Call counts:   malloc:%d   free:%d   realloc:%d   calloc:%d\n",
-           malloc_stats.malloc_calls,
-           malloc_stats.free_calls,
-           malloc_stats.realloc_calls,
-           malloc_stats.calloc_calls);
+           rtems_malloc_stats.malloc_calls,
+           rtems_malloc_stats.free_calls,
+           rtems_malloc_stats.realloc_calls,
+           rtems_malloc_stats.calloc_calls);
 }
 
 

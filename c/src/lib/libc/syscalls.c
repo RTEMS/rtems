@@ -23,16 +23,19 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <assert.h>
+#include <errno.h>
+#include <string.h>
+#include <stdio.h>  /* only for puts */
 
 /*
  *  fstat, stat, and isatty must lie consistently and report that everything
  *  is a tty or stdout will not be line buffered.
  */
 
-int __fstat(int _fd, struct stat* _sbuf)
+int __rtems_fstat(int _fd, struct stat* _sbuf)
 {
   if ( _fd > 2 ) {
-    puts( "__fstat -- only stdio supported" );
+    puts( "__rtems_fstat -- only stdio supported" );
     assert( 0 );
   }
   _sbuf->st_mode = S_IFCHR;
@@ -42,7 +45,7 @@ int __fstat(int _fd, struct stat* _sbuf)
   return 0;
 }
 
-int __isatty(int _fd)
+int __rtems_isatty(int _fd)
 {
   return 1;
 }
@@ -52,7 +55,7 @@ int stat( const char *path, struct stat *buf )
   if ( strncmp( "/dev/", path, 5 ) ) {
     return -1;
   }
-  return __fstat( 0, buf );
+  return __rtems_fstat( 0, buf );
 }
 
 int link( const char *existing, const char *new )
@@ -64,6 +67,30 @@ int link( const char *existing, const char *new )
 int unlink( const char *path )
 {
   /* always fail */
+  return -1;
+}
+
+char *getcwd( char *_buf, size_t _size) {
+/*  assert( FALSE ); */
+  errno = ENOSYS;
+  return 0;
+}
+int fork() {
+  puts( "fork -- not supported!!!" );
+  assert( 0 );
+  errno = ENOSYS;
+  return -1;
+}
+int execv(const char *_path, char * const _argv[] ) {
+  puts( "execv -- not supported!!!" ); 
+  assert( 0 );
+  errno = ENOSYS;
+  return -1;
+}
+int wait() {
+  puts( "wait -- not supported!!!" );
+  assert( 0 );
+  errno = ENOSYS;
   return -1;
 }
 

@@ -1,4 +1,3 @@
-#if defined(RTEMS_NEWLIB)
 
 /*
  *  COPYRIGHT (c) 1994 by Division Incorporated
@@ -30,6 +29,8 @@
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
+
+#if defined(RTEMS_NEWLIB)
 #include <libcsupport.h>
 #include <stdlib.h>             /* for free() */
 #include <string.h>             /* for memset() */
@@ -345,6 +346,8 @@ int get_errno()
  *
  *
  */
+
+#include <stdio.h>
 
 #if !defined(RTEMS_UNIX) && !defined(__GO32__) && !defined(_AM29K)
 void _exit(int status)

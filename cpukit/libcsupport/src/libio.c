@@ -46,7 +46,7 @@ rtems_libio_t *rtems_libio_last_iop;
 
 #define rtems_libio_check_fd(fd) \
     do { \
-        if ((fd) >= rtems_libio_number_iops) \
+        if ((unsigned32) (fd) >= rtems_libio_number_iops) \
         { \
             errno = EBADF; \
             return -1; \
@@ -243,7 +243,7 @@ rtems_libio_free(rtems_libio_t *iop)
 }
 
 int
-__open(
+__rtems_open(
     const char   *pathname,
     unsigned32    flag,
     unsigned32    mode)
@@ -254,10 +254,12 @@ __open(
     rtems_libio_open_close_args_t args;
 
     if ((rc = rtems_io_lookup_name(pathname, &np)) != RTEMS_SUCCESSFUL) {
+/*
       if ( rc == RTEMS_UNSATISFIED ) {
         puts( "open -- ENOSYS case" );
         assert( 0 );
       }
+*/
         goto done;
     }
 
@@ -291,7 +293,7 @@ done:
 }
     
 int
-__close(
+__rtems_close(
     int  fd
   )    
 {
@@ -316,7 +318,7 @@ __close(
 }
     
 int
-__read(
+__rtems_read(
     int       fd,
     void *    buffer,
     unsigned32 count
@@ -352,7 +354,7 @@ __read(
 }
 
 int
-__write(
+__rtems_write(
     int         fd,
     const void *buffer,
     unsigned32  count
@@ -388,7 +390,7 @@ __write(
 }
 
 int
-__ioctl(
+__rtems_ioctl(
     int         fd,
     unsigned32  command,
     void *      buffer)
@@ -420,7 +422,7 @@ __ioctl(
 
 
 int
-__lseek(
+__rtems_lseek(
     int                  fd,
     rtems_libio_offset_t offset,
     int                  whence
