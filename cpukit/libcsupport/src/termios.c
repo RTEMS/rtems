@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
-#include <sys/filio.h>
 
 /*
  *  FreeBSD does not support a full POSIX termios so we have to help it out
