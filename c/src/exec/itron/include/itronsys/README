@@ -1,9 +1,0 @@
-#
-#  $Id$
-#
-
-This directory contains the public interface of each manager.
-Each file in this directory is included from <itron.h>.
-
-The private header file for each ITRON manager is in 
-../rtems/itron.
