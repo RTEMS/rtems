@@ -1,3 +1,7 @@
+2004-02-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/rpms.m4: New (extracted from scripts/configure.ac).
+
 2003-10-13	Joel Sherrill <joel@OARcorp.com>
 
 	* VERSION: Updated to rtems-4.6.0pre5.
