@@ -18,7 +18,7 @@
 @end ifinfo
 
 This document describes the contents, installation
-procedure, and current status of Release @value{RELEASE} of the RTEMS
+procedure, and current status of Release @value{VERSION} of the RTEMS
 executive.  An installation procedure is provided which
 describes the steps necessary to load and configure the RTEMS
 environment, including the GNU Development Environment and the

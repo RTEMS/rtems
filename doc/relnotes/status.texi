@@ -19,14 +19,14 @@
 @end ifinfo
 
 This chapter will describe the current status of
-release version @value{RELEASE} of the RTEMS Development Environment.
+release version @value{VERSION} of the RTEMS Development Environment.
 
 @ifinfo
 @node Development Environment Status RTEMS Executive Status, Development Environment Status Development Environment Status, Development Environment Status, Development Environment Status
 @end ifinfo
 @section RTEMS Executive Status
 
-Release @value{RELEASE} of the RTEMS Executive contains support
+Release @value{VERSION} of the RTEMS Executive contains support
 for both the classic RTEMS API based on the RTEID specification as well
 as support for POSIX threads and real-time extensions.
 
@@ -140,7 +140,7 @@ capabilities of newlib is provided in the RTEMS distribution.
 @section Development Environment Status
 
 This section details the versions of the tools used
-to develop and maintain RTEMS @value{RELEASE}:
+to develop and maintain RTEMS @value{VERSION}:
 
 @itemize @bullet
 @item Cross Tools
