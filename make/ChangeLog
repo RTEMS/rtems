@@ -1,3 +1,8 @@
+2002-06-14	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/jmr3904.cfg, custom/p4650.cfg, custom/p4600.cfg: Switch
+	to gcc 3.1 arguments.
+
 2002-05-01	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
 
 	* custom/dmv177.cfg: Use -mcpu=603e.
