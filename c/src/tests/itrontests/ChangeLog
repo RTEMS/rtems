@@ -1,3 +1,7 @@
+2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_CANONICAL_HOST.
+
 2003-10-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac:Remove RTEMS_CHECK_CPU.
