@@ -1,3 +1,7 @@
+2000-08-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Add RTEMS_PROG_CC_FOR_TARGET, RTEMS_CANONICAL_TOOLS
+
 2000-08-11  Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
 
 	* README:
