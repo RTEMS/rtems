@@ -27,15 +27,15 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-static rtems_unsigned32 remaining_start=0;
-static rtems_unsigned32 remaining_size=0;
+static uint32_t         remaining_start=0;
+static uint32_t         remaining_size=0;
 
 #define LIMIT_32M  0x02000000
 
-rtems_unsigned32
-_bsp_sbrk_init(rtems_unsigned32 heap_start, rtems_unsigned32 *heap_size_p)
+uint32_t        
+_bsp_sbrk_init(uint32_t         heap_start, uint32_t         *heap_size_p)
 {
-  rtems_unsigned32 rval=0;
+  uint32_t         rval=0;
 
   remaining_start =  heap_start;
   remaining_size  =*  heap_size_p;

@@ -282,8 +282,8 @@ struct pcibridge
 static int FindPCIbridge( int mybus, struct pcibridge *pb )
 {
    int          pbus, pslot;
-   unsigned8    bussec, buspri;
-   unsigned16   devid, vendorid, dclass;
+   uint8_t      bussec, buspri;
+   uint16_t     devid, vendorid, dclass;
 
    for(pbus=0; pbus< BusCountPCI(); pbus++)
    {
@@ -337,7 +337,7 @@ static int FindPCIbridge( int mybus, struct pcibridge *pb )
 void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
 {
    unsigned char        cvalue;
-   unsigned16           devid;
+   uint16_t             devid;
    int                  ismatch, i, j, pbus, pslot, int_pin, int_name;
 
    /*

@@ -1115,9 +1115,9 @@ static void print_pci_info()
 
 static struct _addr_start
 {
-      unsigned32 start_pcimem;
-      unsigned32 start_pciio;
-      unsigned32 start_prefetch;
+      uint32_t   start_pcimem;
+      uint32_t   start_pciio;
+      uint32_t   start_prefetch;
 } astart;
 
 
@@ -1180,8 +1180,8 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
 
       {
          struct _addr_start   addrhold;
-         unsigned8            base8, limit8;
-         unsigned16           base16, limit16, ubase16, ulimit16;
+         uint8_t              base8, limit8;
+         uint16_t             base16, limit16, ubase16, ulimit16;
 
          /* save the base address values */
          memcpy( &addrhold, &astart, sizeof(struct _addr_start));
@@ -1212,10 +1212,10 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
          }
          else
          {
-            base8    = (unsigned8) ((addrhold.start_pciio >> 8) & 0xf0);
-            ubase16  = (unsigned16)(addrhold.start_pciio >> 16);
-            limit8   = (unsigned8) ((astart.start_pciio >> 8 ) & 0xf0);
-            ulimit16 = (unsigned16)(astart.start_pciio >> 16);
+            base8    = (uint8_t) ((addrhold.start_pciio >> 8) & 0xf0);
+            ubase16  = (uint16_t)(addrhold.start_pciio >> 16);
+            limit8   = (uint8_t) ((astart.start_pciio >> 8 ) & 0xf0);
+            ulimit16 = (uint16_t)(astart.start_pciio >> 16);
             astart.start_pciio += 0x1000;
          }
 
@@ -1240,8 +1240,8 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
          }
          else
          {
-            limit16= (unsigned16)((astart.start_pcimem >> 16) & 0xfff0);
-            base16 = (unsigned16)((addrhold.start_pcimem >> 16) & 0xfff0);
+            limit16= (uint16_t)((astart.start_pcimem >> 16) & 0xfff0);
+            base16 = (uint16_t)((addrhold.start_pcimem >> 16) & 0xfff0);
             astart.start_pcimem += 0x100000;
          }
 #ifdef PCI_DEBUG
@@ -1261,8 +1261,8 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
          }
          else
          {
-            limit16= (unsigned16)((addrhold.start_prefetch >> 16) & 0xfff0);
-            base16 = (unsigned16)((astart.start_prefetch >> 16) & 0xfff0);
+            limit16= (uint16_t)((addrhold.start_prefetch >> 16) & 0xfff0);
+            base16 = (uint16_t)((astart.start_prefetch >> 16) & 0xfff0);
             astart.start_prefetch -= 0x100000;
          }
 #ifdef PCI_DEBUG
@@ -1277,10 +1277,10 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
 #endif
 
 #ifdef WRITE_BRIDGE_ENABLE
-         pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_BRIDGE_CONTROL, (unsigned16)( PCI_BRIDGE_CTL_PARITY |
+         pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_BRIDGE_CONTROL, (uint16_t)( PCI_BRIDGE_CTL_PARITY |
                                                                                                      PCI_BRIDGE_CTL_SERR ));
 
-         pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_COMMAND, (unsigned16)( PCI_COMMAND_IO | 
+         pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_COMMAND, (uint16_t)( PCI_COMMAND_IO | 
                                                                                               PCI_COMMAND_MEMORY |
                                                                                               PCI_COMMAND_MASTER |
                                                                                               PCI_COMMAND_PARITY |

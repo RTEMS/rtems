@@ -237,9 +237,9 @@ static int ticks_per_ms=0;
 
 /* this is from rtems_bsp_delay from libcpu */
 void
-boot_udelay(unsigned32 _microseconds)
+boot_udelay(uint32_t   _microseconds)
 {
-   unsigned32 start, ticks, now;
+   uint32_t   start, ticks, now;
 
    ticks = _microseconds * ticks_per_ms / 1000;
    CPU_Get_timebase_low( start );

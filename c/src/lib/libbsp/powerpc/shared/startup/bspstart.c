@@ -112,7 +112,7 @@ char *rtems_progname;
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -130,12 +130,12 @@ void bsp_libc_init( void *, unsigned32, int );
  
 void bsp_pretasking_hook(void)
 {
-    rtems_unsigned32        heap_start;    
-    rtems_unsigned32        heap_size;
-    rtems_unsigned32        heap_sbrk_spared;
-	extern rtems_unsigned32 _bsp_sbrk_init(rtems_unsigned32, rtems_unsigned32*);
+    uint32_t                heap_start;    
+    uint32_t                heap_size;
+    uint32_t                heap_sbrk_spared;
+	extern uint32_t         _bsp_sbrk_init(uint32_t, uint32_t*);
 
-    heap_start = ((rtems_unsigned32) __rtems_end) +INIT_STACK_SIZE + INTR_STACK_SIZE;
+    heap_start = ((uint32_t) __rtems_end) +INIT_STACK_SIZE + INTR_STACK_SIZE;
     if (heap_start & (CPU_ALIGNMENT-1))
         heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
@@ -220,7 +220,7 @@ void bsp_start( void )
   stack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
 
  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
-  *((unsigned32 *)stack) = 0;
+  *((uint32_t*)stack) = 0;
 
   /*
    * Initialize the interrupt related settings
@@ -232,10 +232,10 @@ void bsp_start( void )
   intrStack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
 
   /* make sure it's properly aligned */
-  (unsigned32)intrStack &= ~(CPU_STACK_ALIGNMENT-1);
+  (uint32_t)intrStack &= ~(CPU_STACK_ALIGNMENT-1);
 
   /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
-  *((unsigned32 *)intrStack) = 0;
+  *((uint32_t*)intrStack) = 0;
 
   _write_SPRG1((unsigned int)intrStack);
 
