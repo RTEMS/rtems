@@ -12,7 +12,7 @@
 @end tex
 
 @ifinfo
-@node MVME136 Timing Data, MVME136 Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
+@node MVME136 Timing Data, MVME136 Timing Data Introduction, Timing Specification Terminology, Top
 @end ifinfo
 @chapter MVME136 Timing Data
 @ifinfo

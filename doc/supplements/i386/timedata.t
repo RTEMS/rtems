@@ -12,7 +12,7 @@
 @end tex
  
 @ifinfo
-@node CPU386 Timing Data, CPU386 Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
+@node CPU386 Timing Data, CPU386 Timing Data Introduction, Timing Specification Terminology, Top
 @end ifinfo
 @chapter CPU386 Timing Data
 @ifinfo

@@ -12,7 +12,7 @@
 @end tex
 
 @ifinfo
-@node CVME961 Timing Data, CVME961 Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
+@node CVME961 Timing Data, CVME961 Timing Data Introduction, Timing Specification Terminology, Top
 @end ifinfo
 @chapter Timing Data
 @ifinfo

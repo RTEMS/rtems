@@ -71,7 +71,7 @@ END-INFO-DIR-ENTRY
 @include bsp.texi
 @include cputable.texi
 @include wksheets.texi
-@include ../../common/timing.texi
+@include timing.texi
 @include timedata.texi
 @include timedatadmv177.texi
 @ifinfo

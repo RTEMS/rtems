@@ -65,7 +65,9 @@ executed after a reset is actually at 0xFFFFFFF0 because the i386 asserts
 the upper twelve address until the first intersegment (FAR) JMP or CALL
 instruction.  When a JMP or CALL is executed, the upper twelve address
 lines are lowered and the processor begins executing in the first megabyte
-of memory.  @end itemize
+of memory.
+
+@end itemize
 
 Typically, an intersegment JMP to the application's initialization code is
 placed at address 0xFFFFFFF0. 

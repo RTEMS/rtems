@@ -14,7 +14,7 @@
 @end tex
 
 @ifinfo
-@node RTEMS_BSP Timing Data, RTEMS_BSP Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
+@node RTEMS_BSP Timing Data, RTEMS_BSP Timing Data Introduction, Timing Specification Terminology, Top
 @end ifinfo
 @chapter RTEMS_BSP Timing Data
 @ifinfo

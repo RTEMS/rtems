@@ -12,7 +12,7 @@
 @end tex
 
 @ifinfo
-@node ERC32 Timing Data, ERC32 Timing Data Introduction, Memory Requirements RTEMS RAM Workspace Worksheet, Top
+@node ERC32 Timing Data, ERC32 Timing Data Introduction, Timing Specification Terminology, Top
 @end ifinfo
 @chapter ERC32 Timing Data
 @ifinfo

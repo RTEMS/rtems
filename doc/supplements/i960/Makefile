@@ -18,11 +18,10 @@ all: html info ps
 dirs:
 	$(make-dirs)
 
-COMMON_FILES=../../common/cpright.texi ../../common/setup.texi \
-  ../../common/timing.texi
+COMMON_FILES=../../common/cpright.texi ../../common/setup.texi
 
 GENERATED_FILES= \
-  wksheets.texi
+  timing.texi wksheets.texi 
 
 FILES= $(PROJECT).texi \
   bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
@@ -51,21 +50,21 @@ replace: timedata.texi
 #  Chapters which get automatic processing
 #
 
+# CPU Model
+# Calling Conventions
+# Memory Model
+
+# Interrupt Chapter:
+#  1.  Replace Times and Sizes
+#  2.  Build Node Structure
+
 intr.texi: intr.t CVME961_TIMES
 	${REPLACE} -p CVME961_TIMES intr.t
 	mv intr.t.fixed intr.texi
 
-timetbl.t: ../../common/timetbl.t
-	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
-            <../../common/timetbl.t >timetbl.t
-
-timetbl.texi: timetbl.t CVME961_TIMES
-	${REPLACE} -p CVME961_TIMES timetbl.t
-	mv timetbl.t.fixed timetbl.texi
-
-timedata.texi: timedata.t CVME961_TIMES
-	${REPLACE} -p CVME961_TIMES timedata.t
-	mv timedata.t.fixed timedata.texi
+# Fatal Error
+# BSP
+# CPU Table
 
 # Worksheets Chapter:
 #  1.  Obtain the Shared File
@@ -82,7 +81,33 @@ wksheets.t: wksheets_NOTIMES.t CVME961_TIMES
 wksheets.texi: wksheets.t Makefile
 	$(BMENU) -p "Processor Dependent Information Table CPU Dependent Information Table" \
 	    -u "Top" \
-	    -n "CVME961 Timing Data" ${*}.t
+	    -n "Timing Specification" ${*}.t
+
+# Timing Specification Chapter:
+#  1.  Copy the Shared File
+#  3.  Build Node Structure
+
+timing.t: ../../common/timing.t
+	cp ../../common/timing.t timing.t
+
+timing.texi: timing.t Makefile
+	$(BMENU) -p "Memory Requirements RTEMS RAM Workspace Worksheet" \
+            -u "Top" \
+            -n "CVME961 Timing Data" ${*}.t
+
+# Timing Chapter
+
+timetbl.t: ../../common/timetbl.t
+	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
+            <../../common/timetbl.t >timetbl.t
+
+timetbl.texi: timetbl.t CVME961_TIMES
+	${REPLACE} -p CVME961_TIMES timetbl.t
+	mv timetbl.t.fixed timetbl.texi
+
+timedata.texi: timedata.t CVME961_TIMES
+	${REPLACE} -p CVME961_TIMES timedata.t
+	mv timedata.t.fixed timedata.texi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_i960
@@ -96,5 +121,5 @@ clean:
 	rm -f c_i960 c_i960-*
 	rm -f timedata.texi timetbl.texi timetbl.t intr.texi $(GENERATED_FILES)
 	rm -f wksheets.t wksheets_NOTIMES.t 
-	rm -f *.fixed _*
+	rm -f *.fixed _* timing.t timing.texi
 
