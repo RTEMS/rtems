@@ -13,7 +13,7 @@ Distribution: Linux
 Name:         @target_alias@-gdb
 Release:      @Release@
 Copyright:    1999 OARCorp
-Group:        unsorted
+Group:        rtems
 Provides:     @target_alias@-gdb
 
 Autoreqprov:  on
@@ -67,6 +67,11 @@ test -d build || mkdir build
   cd build
   make prefix=$RPM_BUILD_ROOT/opt/rtems install
   make prefix=$RPM_BUILD_ROOT/opt/rtems install-info
+
+  # gzip info files
+  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-? 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-?? 2>/dev/null
 
 %post
   if test -d $RPM_INSTALL_PREFIX/rtems/info;
