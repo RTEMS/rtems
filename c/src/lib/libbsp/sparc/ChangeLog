@@ -1,3 +1,7 @@
+2000-11-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Cleanup.
+
 2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
 	* Makefile.am, configure.in: Added shared directory as part

@@ -1,3 +1,7 @@
+2000-11-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Cleanup.
+
 2000-11-14	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
 	* wrapup/Makefile.am: Pick up cache code from libcpu and pick

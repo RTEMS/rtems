@@ -7,8 +7,8 @@ ACLOCAL_AMFLAGS = -I ../../../../../../aclocal
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUBDIRS = . include start startup gnatsupp console clock timer \
-    erc32sonic wrapup tools
+SUBDIRS = . include start startup gnatsupp console clock timer erc32sonic \
+    wrapup tools
 
 include $(top_srcdir)/../../bsp.am
 
