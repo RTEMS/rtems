@@ -69,6 +69,7 @@ END-INFO-DIR-ENTRY
 @include init.texi
 @include mounting.texi
 @include lifecycle.texi
+@include syscalls.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
 @top filesystem
@@ -83,6 +84,7 @@ This is the online version of the RTEMS Filesystem Design Guide.
 * System Initialization::
 * Mounting and Unmounting File Systems::
 * File System Lifecycle::
+* System Call Development Notes::
 * Command and Variable Index::
 * Concept Index::
 @end menu
