@@ -37,6 +37,8 @@
 #ifndef	_SYS_IOCCOM_H_
 #define	_SYS_IOCCOM_H_
 
+#include <machine/types.h>
+
 /*
  * Ioctl's have the command encoded in the lower word, and the size of
  * any in or out parameters in the upper word.  The high 3 bits of the
@@ -55,7 +57,10 @@
 #define	IOC_DIRMASK	0xe0000000	/* mask for IN/OUT/VOID */
 
 #define	_IOC(inout,group,num,len) \
-	((unsigned32)inout | (unsigned32) ((unsigned32)((unsigned32)len & IOCPARM_MASK) << 16) | (unsigned32)((group) << 8) | (unsigned32)(num))
+	((u_int32_t)inout | \
+         (u_int32_t) ((u_int32_t)((u_int32_t)len & IOCPARM_MASK) << 16) | \
+         (u_int32_t)((group) << 8) | \
+         (u_int32_t)(num))
 #define	_IO(g,n)	_IOC(IOC_VOID,	(g), (n), 0)
 #define	_IOR(g,n,t)	_IOC(IOC_OUT,	(g), (n), sizeof(t))
 #define	_IOW(g,n,t)	_IOC(IOC_IN,	(g), (n), sizeof(t))
