@@ -28,22 +28,7 @@ RTEMS_BSP_ALIAS(${RTEMS_BSP},bspdir)
 
 # Is there code where there should be for this BSP?
 # The bare bsp is a special case as it is not under the RTEMS_CPU path
-case $bspdir in
-  bare)
-    bspcpudir=
-    if test "X${BARE_CPU_CFLAGS}" = "X" ; then
-      AC_MSG_ERROR([--enable-bare-cpu-cflags not specified for bare bsp])
-    fi
-    if test "X${BARE_CPU_MODEL}" = "X" ; then
-      AC_MSG_ERROR([--enable-bare-cpu-model not specified for bare bsp])
-    fi
-    ;;
-  *)
-    bspcpudir=$RTEMS_CPU/
-    ;;
-esac
-
-if test "$RTEMS_BSP" = "bare" ; then
+if test "$bspdir" = "bare" ; then
   RTEMS_LIBBSP_CPU_SUBDIR="bare"
 else
   RTEMS_LIBBSP_CPU_SUBDIR=$RTEMS_CPU

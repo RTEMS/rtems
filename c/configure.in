@@ -35,12 +35,6 @@ for i in $rtems_bsp; do
     case $bspdir in
       bare)
         bspcpudir=
-        if test "X${BARE_CPU_CFLAGS}" = "X" ; then
-          AC_MSG_ERROR([--enable-bare-cpu-cflags not specified for bare bsp])
-        fi
-        if test "X${BARE_CPU_MODEL}" = "X" ; then
-          AC_MSG_ERROR([--enable-bare-cpu-model not specified for bare bsp])
-        fi
         ;;
       *)
         bspcpudir=$RTEMS_CPU/

@@ -3,7 +3,7 @@ dnl
 dnl $Id$
 
 AC_PREREQ(2.13)
-AC_INIT(libbsp)
+AC_INIT(libc)
 RTEMS_TOP(../../..)
 AC_CONFIG_AUX_DIR(../../..)
 
