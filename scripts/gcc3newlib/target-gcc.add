@@ -1,25 +1,28 @@
 # ==============================================================
-# @target_alias@-gcc
+# %{gcc_target}-gcc
 # ==============================================================
-%package -n @target_alias@-gcc
-Provides:	@target_alias@-gcc
-Summary:      	rtems gcc and newlib C Library for @target_alias@
+%package -n %{gcc_target}-gcc
+Provides:	%{gcc_target}-gcc
+Summary:      	rtems gcc and newlib C Library for %{gcc_target}
 Group: rtems
-Requires: @target_alias@-binutils rtems-base-gcc
+Requires: %{gcc_target}-binutils rtems-base-gcc
 
-%description -n @target_alias@-gcc
+%description -n %{gcc_target}-gcc
 RTEMS is an open source operating system for embedded systems.
 
-This is gcc and newlib C Library for @target_alias@.
+This is gcc and newlib C Library for %{gcc_target}.
 
-%files -n @target_alias@-gcc -f build/files.gcc
+%files -n %{gcc_target}-gcc -f build/files.gcc
 %defattr(-,root,root)
-%doc %{_prefix}/man/man1/@target_alias@-gcc.1*
+%doc %{_prefix}/man/man1/%{gcc_target}-gcc.1*
 
-%{_prefix}/bin/@target_alias@-cpp%{_exeext}
-%{_prefix}/bin/@target_alias@-gcc%{_exeext}
-%{_prefix}/bin/@target_alias@-gcov%{_exeext}
-%{_prefix}/bin/@target_alias@-gccbug
-%{_prefix}/@target_alias@/include
+%{_prefix}/bin/%{gcc_target}-cpp%{_exeext}
+%{_prefix}/bin/%{gcc_target}-gcc%{_exeext}
+%if "%{gcc_version}" >= "3.3"
+%{_prefix}/bin/%{gcc_target}-gcc-%{gcc_version}%{_exeext}
+%endif
+%{_prefix}/bin/%{gcc_target}-gcov%{_exeext}
+%{_prefix}/bin/%{gcc_target}-gccbug
+%{_prefix}/%{gcc_target}/include
 
-%dir %{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/include
+%dir %{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/include

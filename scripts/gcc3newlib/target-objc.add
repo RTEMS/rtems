@@ -1,20 +1,20 @@
 %if %build_objc
 # ==============================================================
-# @target_alias@-objc
+# %{gcc_target}-objc
 # ==============================================================
-%package -n @target_alias@-objc
-Provides:	@target_alias@-objc
-Summary:      gcc/objc compiler for @target_alias@
+%package -n %{gcc_target}-objc
+Provides:	%{gcc_target}-objc
+Summary:      gcc/objc compiler for %{gcc_target}
 Group: rtems
-Requires: @target_alias@-gcc
+Requires: %{gcc_target}-gcc
 
-%description -n @target_alias@-objc
+%description -n %{gcc_target}-objc
 RTEMS is an open source operating system for embedded systems.
 
-This is the gcc/objc compiler for @target_alias@
+This is the gcc/objc compiler for %{gcc_target}
 
-%files -n @target_alias@-objc -f build/files.objc
+%files -n %{gcc_target}-objc -f build/files.objc
 %defattr(-,root,root)
-%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/cc1obj%{_exeext}
-%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/include/objc
+%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/cc1obj%{_exeext}
+%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/include/objc
 %endif

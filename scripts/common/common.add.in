@@ -1,6 +1,6 @@
 #
 # Please send bugfixes or comments to
-# 	http://www.oarcorp.com/cgi-bin/gnatweb.pl
+# 	http://www.rtems.com/cgi-bin/gnatweb.pl
 # or	mailto:@PACKAGE_BUGREPORT@
 #
 
@@ -11,6 +11,9 @@
 %else
 %define _exeext %{nil}
 %endif
+
+# Without this, RPM-4.x' rpm-brp-strip screws up on cross-binaries
+%define __os_install_post %{nil}
 
 Vendor: 	OARCorp
 Distribution: 	Linux

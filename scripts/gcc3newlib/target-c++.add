@@ -1,32 +1,34 @@
 %if %build_cxx
 # ==============================================================
-# @target_alias@-c++
+# %{gcc_target}-c++
 # ==============================================================
-%package -n @target_alias@-c++
-Provides:	@target_alias@-c++
-Summary:      gcc/g++ compiler (c++) for @target_alias@
+%package -n %{gcc_target}-c++
+Provides:	%{gcc_target}-c++
+Summary:      gcc/g++ compiler (c++) for %{gcc_target}
 Group: rtems
-Requires: rtems-base-gcc @target_alias@-gcc
+Requires: rtems-base-gcc %{gcc_target}-gcc
 
-%description -n @target_alias@-c++
+%description -n %{gcc_target}-c++
 RTEMS is an open source operating system for embedded systems.
 
-This is the gcc/g++ compiler for @target_alias@
+This is the gcc/g++ compiler for %{gcc_target}
 
-%files -n @target_alias@-c++ -f build/files.g++
+%files -n %{gcc_target}-c++ -f build/files.g++
 %defattr(-,root,root)
-%doc %{_prefix}/man/man1/@target_alias@-g++.1*
+%doc %{_prefix}/man/man1/%{gcc_target}-g++.1*
 
 %dir %{_prefix}/bin
-%{_prefix}/bin/@target_alias@-c++%{_exeext}
-%{_prefix}/bin/@target_alias@-g++%{_exeext}
-%{_prefix}/bin/@target_alias@-c++filt%{_exeext}
+%{_prefix}/bin/%{gcc_target}-c++%{_exeext}
+%{_prefix}/bin/%{gcc_target}-g++%{_exeext}
+%if "{gcc_version}" < "3.3"
+%{_prefix}/bin/%{gcc_target}-c++filt%{_exeext}
+%endif
 
-%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/cc1plus%{_exeext}
-%dir %{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/include
+%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/cc1plus%{_exeext}
+%dir %{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/include
 %if "%{gcc_version}" >= "3.2"
-%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/include/c++
+%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/include/c++
 %else
-%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/include/g++
+%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/include/g++
 %endif
 %endif

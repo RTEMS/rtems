@@ -1,3 +1,27 @@
+2003-08-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* common/common.add.in: s/www.oarcorp.com/www.rtems.com/.
+	Add %define __os_install_post %{nil} to prevent RH-9's rpm-brp-strip
+	from running (Chokes on foreign object formats).
+	* gcc3newlib/base-g77.add: 
+	Use %{gcc_version} instead of @gcc_version@.
+	* gcc3newlib/gccnewlib.add:
+	Use %{gcc_version} instead of @gcc_version@.
+	Reflect gcc >= 3.3 shipping monolytic infos.
+	* gcc3newlib/target-c++.add:
+	Use %{gcc_version} instead of @gcc_version@.
+	Don't pickup c++filt.
+	* gcc3newlib/target-g77.add:
+	Use %{gcc_version} instead of @gcc_version@.
+	* gcc3newlib/target-gcc.add:
+	Use %{gcc_version} instead of @gcc_version@.
+	* gcc3newlib/target-gcj.add:
+	Use %{gcc_version} instead of @gcc_version@.
+	* gcc3newlib/target-gnat.add:
+	Use %{gcc_version} instead of @gcc_version@.
+	* gcc3newlib/target-objc.add:
+	Use %{gcc_version} instead of @gcc_version@.
+
 2003-08-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* binutils/binutils.add: Preps for 2.14.

@@ -1,22 +1,22 @@
 %if %build_g77
 # ==============================================================
-# @target_alias@-g77
+# %{gcc_target}-g77
 # ==============================================================
-%package -n @target_alias@-g77
-Provides:	@target_alias@-g77
-Summary:	gcc/g77 compiler for @target_alias@
+%package -n %{gcc_target}-g77
+Provides:	%{gcc_target}-g77
+Summary:	gcc/g77 compiler for %{gcc_target}
 Group: rtems
-Requires: rtems-base-g77 @target_alias@-gcc
+Requires: rtems-base-g77 %{gcc_target}-gcc
 
-%description -n @target_alias@-g77
+%description -n %{gcc_target}-g77
 RTEMS is an open source operating system for embedded systems.
 
-This is the gcc/g77 compiler for @target_alias@
+This is the gcc/g77 compiler for %{gcc_target}
 
-%files -n @target_alias@-g77 -f build/files.g77
+%files -n %{gcc_target}-g77 -f build/files.g77
 %defattr(-,root,root)
 %dir %{_prefix}/bin
-%{_prefix}/bin/@target_alias@-g77%{_exeext}
+%{_prefix}/bin/%{gcc_target}-g77%{_exeext}
 
-%{_prefix}/lib/gcc-lib/@target_alias@/%{gcc_version}/f771%{_exeext}
+%{_prefix}/lib/gcc-lib/%{gcc_target}/%{gcc_version}/f771%{_exeext}
 %endif
