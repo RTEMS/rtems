@@ -18,6 +18,11 @@
 
 /*PAGE
  *
+ *  sem_unlink
+ *  
+ *  Unlinks a named semaphore, sem_close must also be called to remove
+ *  the semaphore.
+ *
  *  11.2.5 Remove a Named Semaphore, P1003.1b-1993, p.225
  */
 
@@ -30,35 +35,38 @@ int sem_unlink(
   Objects_Id                        the_semaphore_id;
   Objects_Locations                 location;
  
+  _Thread_Disable_dispatch();
+
   status = _POSIX_Semaphore_Name_to_id( name, &the_semaphore_id );
-  if ( status != 0 )
+  if ( status != 0 ) {
+    _Thread_Enable_dispatch();
     set_errno_and_return_minus_one( status );
+  }
 
-  the_semaphore = _POSIX_Semaphore_Get( &the_semaphore_id, &location );
-  switch ( location ) {
-    case OBJECTS_ERROR:
-      set_errno_and_return_minus_one( EINVAL );
-    case OBJECTS_REMOTE:
-      _Thread_Dispatch();
-      return POSIX_MP_NOT_IMPLEMENTED();
-      set_errno_and_return_minus_one( EINVAL );
-    case OBJECTS_LOCAL:
+  /*
+   *  Don't support unlinking a remote semaphore.
+   */
 
+  if ( !_Objects_Is_local_id(the_semaphore_id) ) {
+    _Thread_Enable_dispatch();
+    set_errno_and_return_minus_one( ENOSYS );
+  }
+
+  the_semaphore = _Objects_Get_local_object(
+    &_POSIX_Semaphore_Information,
+    _Objects_Get_index( the_semaphore_id )
+  );
+  
 #if defined(RTEMS_MULTIPROCESSING)
-      if ( the_semaphore->process_shared == PTHREAD_PROCESS_SHARED ) {
-        _Objects_MP_Close(
-          &_POSIX_Semaphore_Information,
-          the_semaphore->Object.id
-        );
-      }
+  if ( the_semaphore->process_shared == PTHREAD_PROCESS_SHARED ) {
+    _Objects_MP_Close( &_POSIX_Semaphore_Information, the_semaphore_id );
+  }
 #endif
 
-      the_semaphore->linked = FALSE;
-      _POSIX_Semaphore_Namespace_remove( the_semaphore );
-      _POSIX_Semaphore_Delete( the_semaphore );
+  the_semaphore->linked = FALSE;
+  _POSIX_Semaphore_Namespace_remove( the_semaphore );
+  _POSIX_Semaphore_Delete( the_semaphore );
 
-      _Thread_Enable_dispatch();
-      return 0;
-  }
-  return POSIX_BOTTOM_REACHED();
+  _Thread_Enable_dispatch();
+  return 0;
 }
