@@ -425,7 +425,7 @@ res_send(buf, buflen, ans, anssiz)
 			/*
 			 * RTEMS doesn't have writev (yet)
 			 */
-			if ((write (s, len, INT16SZ) != INT16SZ)
+			if ((write (s, &len, INT16SZ) != INT16SZ)
 			 || (write (s, buf, buflen) != buflen)) {
 #endif
 				terrno = errno;
