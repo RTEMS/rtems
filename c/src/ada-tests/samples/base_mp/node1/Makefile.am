@@ -7,14 +7,12 @@ include $(top_srcdir)/ada.am
 
 AM_ADAFLAGS += -I$(srcdir)/..
 
-node1$(EXEEXT): mptest-per_node_configuration.adb
+node1$(EXEEXT): ../mptest.adb
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 if EXPADA
 noinst_PROGRAMS = node1
 endif
-
-node1_SOURCES = mptest-per_node_configuration.adb
 
 EXTRA_DIST = base_mp.scn
 

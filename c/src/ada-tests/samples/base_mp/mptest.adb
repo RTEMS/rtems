@@ -29,8 +29,6 @@ with UNSIGNED32_IO;
 
 package body MPTEST is
 
-   package body PER_NODE_CONFIGURATION is separate;
-
 --PAGE
 --
 --  INIT
@@ -39,8 +37,6 @@ package body MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      C      : RTEMS.CHARACTER;
-      TIME   : RTEMS.TIME_OF_DAY;
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -83,7 +79,6 @@ package body MPTEST is
    procedure APPLICATION_TASK (
       ARGUMENT : in     RTEMS.TASK_ARGUMENT
    ) is
-      TIME   : RTEMS.TIME_OF_DAY;
       TID    : RTEMS.ID;
       STATUS : RTEMS.STATUS_CODES;
    begin

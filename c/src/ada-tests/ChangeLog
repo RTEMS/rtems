@@ -1,3 +1,43 @@
+2002-09-03	Joel Sherrill <joel@OARcorp.com>
+
+	* base_mp now builds and can be considered a bit of an example for
+	the other mptests.
+	* mptests/mp01/node1/Makefile.am, mptests/mp01/node2/Makefile.am,
+	samples/base_mp/mptest.adb, samples/base_mp/mptest.ads,
+	samples/base_mp/node1/Makefile.am, samples/base_mp/node2/Makefile.am:
+	Modified to make compile.
+	* mptests/mp01/node1/mptest-per_node_configuration.adb,
+	mptests/mp01/node2/mptest-per_node_configuration.adb,
+	mptests/mp02/node1/mptest-per_node_configuration.adb,
+	mptests/mp02/node2/mptest-per_node_configuration.adb,
+	mptests/mp03/node1/mptest-per_node_configuration.adb,
+	mptests/mp03/node2/mptest-per_node_configuration.adb,
+	mptests/mp04/node1/mptest-per_node_configuration.adb,
+	mptests/mp04/node2/mptest-per_node_configuration.adb,
+	mptests/mp05/node1/mptest-per_node_configuration.adb,
+	mptests/mp05/node2/mptest-per_node_configuration.adb,
+	mptests/mp06/node1/mptest-per_node_configuration.adb,
+	mptests/mp06/node2/mptest-per_node_configuration.adb,
+	mptests/mp07/node1/mptest-per_node_configuration.adb,
+	mptests/mp07/node2/mptest-per_node_configuration.adb,
+	mptests/mp08/node1/mptest-per_node_configuration.adb,
+	mptests/mp08/node2/mptest-per_node_configuration.adb,
+	mptests/mp09/node1/mptest-per_node_configuration.adb,
+	mptests/mp09/node2/mptest-per_node_configuration.adb,
+	mptests/mp10/node1/mptest-per_node_configuration.adb,
+	mptests/mp10/node2/mptest-per_node_configuration.adb,
+	mptests/mp11/node1/mptest-per_node_configuration.adb,
+	mptests/mp11/node2/mptest-per_node_configuration.adb,
+	mptests/mp12/node1/mptest-per_node_configuration.adb,
+	mptests/mp12/node2/mptest-per_node_configuration.adb,
+	mptests/mp13/node1/mptest-per_node_configuration.adb,
+	mptests/mp13/node2/mptest-per_node_configuration.adb,
+	mptests/mp14/node1/mptest-per_node_configuration.adb,
+	mptests/mp14/node2/mptest-per_node_configuration.adb,
+	samples/base_mp/node1/mptest-per_node_configuration.adb,
+	samples/base_mp/node2/mptest-per_node_configuration.adb: Removed
+	as this information should come from config.h.
+
 2002-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mptests/mp01/node1/.cvsignore: New.

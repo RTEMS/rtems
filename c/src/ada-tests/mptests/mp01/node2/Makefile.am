@@ -7,7 +7,7 @@ include $(top_srcdir)/ada.am
 
 AM_ADAFLAGS += -I$(srcdir)/..
 
-node2$(EXEEXT): mptest-per_node_configuration.adb
+node2$(EXEEXT): ../mptest.adb
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 if EXPADA
