@@ -70,7 +70,7 @@ rtems_boolean is_character_ready(
   char *ch
 )
 {
-  rtems_unsigned8 rr_0;
+  uint8_t         rr_0;
 
   for ( ; ; ) {
     Z8x30_READ_CONTROL( CONSOLE_CONTROL, RR_0, rr_0 );
@@ -96,7 +96,7 @@ rtems_boolean is_character_ready(
 
 char inbyte( void )
 {
-  rtems_unsigned8 rr_0;
+  uint8_t         rr_0;
   char ch;
 
   for ( ; ; ) {
@@ -124,7 +124,7 @@ void outbyte(
   char ch
 )
 {
-  rtems_unsigned8 rr_0;
+  uint8_t         rr_0;
   char            flow_control;
 
   for ( ; ; ) {

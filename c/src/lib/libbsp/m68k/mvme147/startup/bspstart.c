@@ -41,7 +41,7 @@ char *rtems_progname;
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 void bsp_pretasking_hook(void);               /* m68k version */
 
 /*
@@ -75,7 +75,7 @@ void bsp_start( void )
 
   pcc->int_base_vector = PCC_BASE_VECTOR; /* Set the PCC int vectors base */
 
-  (*(rtems_unsigned8 *)0xfffe2001) = 0x08; 
+  (*(uint8_t*)0xfffe2001) = 0x08; 
       /* make VME access round-robin */
 
   rtems_cache_enable_instruction();

@@ -58,8 +58,8 @@ void Timer_initialize()
 
 int Read_timer()
 {
-  rtems_unsigned32 total;
-  rtems_unsigned16 counter_value;
+  uint32_t         total;
+  uint16_t         counter_value;
 
   counter_value = pcc->timer1_count; /* read the counter value */
 

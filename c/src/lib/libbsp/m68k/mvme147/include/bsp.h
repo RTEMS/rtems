@@ -49,45 +49,45 @@ extern "C" {
 
 struct pcc_map {
   /* 32 bit registers */
-  rtems_unsigned32 dma_table_address;            /* 0xfffe1000 */
-  rtems_unsigned32 dma_data_address;             /* 0xfffe1004 */
-  rtems_unsigned32 dma_bytecount;                /* 0xfffe1008 */
-  rtems_unsigned32 dma_data_holding;             /* 0xfffe100c */
+  uint32_t         dma_table_address;            /* 0xfffe1000 */
+  uint32_t         dma_data_address;             /* 0xfffe1004 */
+  uint32_t         dma_bytecount;                /* 0xfffe1008 */
+  uint32_t         dma_data_holding;             /* 0xfffe100c */
 
   /* 16 bit registers */
-  rtems_unsigned16 timer1_preload;               /* 0xfffe1010 */
-  rtems_unsigned16 timer1_count;                 /* 0xfffe1012 */
-  rtems_unsigned16 timer2_preload;               /* 0xfffe1014 */
-  rtems_unsigned16 timer2_count;                 /* 0xfffe1016 */
+  uint16_t         timer1_preload;               /* 0xfffe1010 */
+  uint16_t         timer1_count;                 /* 0xfffe1012 */
+  uint16_t         timer2_preload;               /* 0xfffe1014 */
+  uint16_t         timer2_count;                 /* 0xfffe1016 */
 
   /* 8 bit registers */
-  rtems_unsigned8 timer1_int_control;            /* 0xfffe1018 */
-  rtems_unsigned8 timer1_control;                /* 0xfffe1019 */
-  rtems_unsigned8 timer2_int_control;            /* 0xfffe101a */
-  rtems_unsigned8 timer2_control;                /* 0xfffe101b */
+  uint8_t         timer1_int_control;            /* 0xfffe1018 */
+  uint8_t         timer1_control;                /* 0xfffe1019 */
+  uint8_t         timer2_int_control;            /* 0xfffe101a */
+  uint8_t         timer2_control;                /* 0xfffe101b */
 
-  rtems_unsigned8 acfail_int_control;            /* 0xfffe101c */
-  rtems_unsigned8 watchdog_control;              /* 0xfffe101d */
+  uint8_t         acfail_int_control;            /* 0xfffe101c */
+  uint8_t         watchdog_control;              /* 0xfffe101d */
 
-  rtems_unsigned8 printer_int_control;           /* 0xfffe101e */
-  rtems_unsigned8 printer_control;               /* 0xfffe102f */
+  uint8_t         printer_int_control;           /* 0xfffe101e */
+  uint8_t         printer_control;               /* 0xfffe102f */
 
-  rtems_unsigned8 dma_int_control;               /* 0xfffe1020 */
-  rtems_unsigned8 dma_control;                   /* 0xfffe1021 */
-  rtems_unsigned8 bus_error_int_control;         /* 0xfffe1022 */
-  rtems_unsigned8 dma_status;                    /* 0xfffe1023 */
-  rtems_unsigned8 abort_int_control;             /* 0xfffe1024 */
-  rtems_unsigned8 table_address_function_code;   /* 0xfffe1025 */
-  rtems_unsigned8 serial_port_int_control;       /* 0xfffe1026 */
-  rtems_unsigned8 general_purpose_control;       /* 0xfffe1027 */
-  rtems_unsigned8 lan_int_control;               /* 0xfffe1028 */
-  rtems_unsigned8 general_purpose_status;        /* 0xfffe1029 */
-  rtems_unsigned8 scsi_port_int_control;         /* 0xfffe102a */
-  rtems_unsigned8 slave_base_address;            /* 0xfffe102b */
-  rtems_unsigned8 software_int_1_control;        /* 0xfffe102c */
-  rtems_unsigned8 int_base_vector;               /* 0xfffe102d */
-  rtems_unsigned8 software_int_2_control;        /* 0xfffe102e */
-  rtems_unsigned8 revision_level;                /* 0xfffe102f */
+  uint8_t         dma_int_control;               /* 0xfffe1020 */
+  uint8_t         dma_control;                   /* 0xfffe1021 */
+  uint8_t         bus_error_int_control;         /* 0xfffe1022 */
+  uint8_t         dma_status;                    /* 0xfffe1023 */
+  uint8_t         abort_int_control;             /* 0xfffe1024 */
+  uint8_t         table_address_function_code;   /* 0xfffe1025 */
+  uint8_t         serial_port_int_control;       /* 0xfffe1026 */
+  uint8_t         general_purpose_control;       /* 0xfffe1027 */
+  uint8_t         lan_int_control;               /* 0xfffe1028 */
+  uint8_t         general_purpose_status;        /* 0xfffe1029 */
+  uint8_t         scsi_port_int_control;         /* 0xfffe102a */
+  uint8_t         slave_base_address;            /* 0xfffe102b */
+  uint8_t         software_int_1_control;        /* 0xfffe102c */
+  uint8_t         int_base_vector;               /* 0xfffe102d */
+  uint8_t         software_int_2_control;        /* 0xfffe102e */
+  uint8_t         revision_level;                /* 0xfffe102f */
 };
 
 #define pcc      ((volatile struct pcc_map * const) 0xfffe1000)
