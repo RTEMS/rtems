@@ -9,7 +9,7 @@ RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 #H_PIECES=utsname
-H_PIECES=utime ioctl
+H_PIECES=utime 
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 
 SRCS=$(H_FILES)
