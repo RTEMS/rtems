@@ -1,3 +1,7 @@
+2003-08-14	Joel Sherrill <joel@OARcorp.com>
+
+	* runtest.in: Add fileio to list of interactive tests.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
