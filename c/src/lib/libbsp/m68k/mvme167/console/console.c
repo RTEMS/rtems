@@ -135,18 +135,17 @@
 
 
 /* Channel info */
-/* static */ struct {
+/* static */ volatile struct {
   void *tty;                    /* Really a struct rtems_termios_tty * */
   int len;                      /* Record nb of chars being TX'ed */
   const char *buf;              /* Record where DMA is coming from */
-  rtems_unsigned16 used_buf_A;  /* Nb of times we used output DMA channel A */
-  rtems_unsigned16 used_buf_B;  /* Nb of times we used output DMA channel B */
-  rtems_unsigned16 wait_buf_A;  /* Nb of times we waited for output DMA channel A */
-  rtems_unsigned16 wait_buf_B;  /* Nb of times we waited for output DMA channel B */
   rtems_unsigned32 spur_cnt;    /* Nb of spurious ints so far */
   rtems_unsigned32 spur_dev;    /* Indo on last spurious int */
   rtems_unsigned32 buserr_addr; /* Faulting address */
   rtems_unsigned32 buserr_type; /* Reason of bus error during DMA */
+  rtems_unsigned8  own_buf_A;   /* If true, buffer A belongs to the driver */
+  rtems_unsigned8  own_buf_B;   /* If true, buffer B belongs to the driver */
+  rtems_unsigned8  txEmpty;     /* If true, the output FIFO is supposed to be empty */
 } CD2401_Channel_Info[4];
 
 /*
@@ -167,7 +166,14 @@ rtems_isr_entry Prev_rx_isr;        /* Previous rx isr */
 rtems_isr_entry Prev_tx_isr;        /* Previous tx isr */
 rtems_isr_entry Prev_modem_isr;     /* Previous modem/timer isr */
 
+
+/* Define the following symbol to trace the calls to this driver */
+/* #define CD2401_RECORD_DEBUG_INFO */
+#include "console-recording.c"
+
+
 /* Utility functions */
+void cd2401_udelay( unsigned long delay );
 void cd2401_chan_cmd( rtems_unsigned8 channel, rtems_unsigned8 cmd, rtems_unsigned8 wait );
 rtems_unsigned16 cd2401_bitrate_divisor( rtems_unsigned32 clkrate, rtems_unsigned32* bitrate );
 void cd2401_initialize( void );
@@ -186,6 +192,7 @@ int cd2401_setAttributes( int minor, const struct termios *t );
 int cd2401_startRemoteTx( int minor );
 int cd2401_stopRemoteTx( int minor );
 int cd2401_write( int minor, const char *buf, int len );
+int cd2401_drainOutput( int minor );
 int _167Bug_pollRead( int minor );
 int _167Bug_pollWrite( int minor, const char *buf, int len );
 
@@ -193,6 +200,38 @@ int _167Bug_pollWrite( int minor, const char *buf, int len );
 /*
  *  Utility functions.
  */
+
+/*
+ *  Assumes that clock ticks 1 million times per second.
+ *
+ *  MAXIMUM DELAY IS ABOUT 20 ms
+ *
+ *  Input parameters:
+ *    delay: Number of microseconds to delay.
+ *
+ *  Output parameters: NONE
+ *
+ *  Return values: NONE
+ */
+ void cd2401_udelay
+(
+  unsigned long delay
+)
+{
+  unsigned long i = 20000;  /* In case clock is off */
+  rtems_interval ticks_per_second, start_ticks, end_ticks, current_ticks;
+    
+  rtems_clock_get( RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticks_per_second );
+  rtems_clock_get( RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &start_ticks );
+  end_ticks = start_ticks + delay;
+  
+  do {
+    rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &current_ticks);
+  } while ( --i && (current_ticks <= end_ticks) );
+  
+  CD2401_RECORD_DELAY_INFO(( start_ticks, end_ticks, current_ticks, i )); 
+}
+
 
 /*
  *  cd2401_chan_cmd
@@ -289,21 +328,16 @@ void cd2401_initialize( void )
   int i;
 
   for ( i = 3; i >= 0; i-- ) {
-    /*
-     *  Paranoia -- Should already be blank because array should be in bss
-     *  section, which is explicitly zeroed at boot time.
-     */
     CD2401_Channel_Info[i].tty = NULL;
     CD2401_Channel_Info[i].len = 0;
     CD2401_Channel_Info[i].buf = NULL;
-    CD2401_Channel_Info[i].used_buf_A = 0;
-    CD2401_Channel_Info[i].used_buf_B = 0;
-    CD2401_Channel_Info[i].wait_buf_A = 0;
-    CD2401_Channel_Info[i].wait_buf_B = 0;
     CD2401_Channel_Info[i].spur_cnt = 0;
     CD2401_Channel_Info[i].spur_dev = 0;
     CD2401_Channel_Info[i].buserr_type = 0;
     CD2401_Channel_Info[i].buserr_addr = 0;
+    CD2401_Channel_Info[i].own_buf_A = TRUE;
+    CD2401_Channel_Info[i].own_buf_B = TRUE;
+    CD2401_Channel_Info[i].txEmpty = TRUE;
   }
 
  /*
@@ -438,6 +472,9 @@ rtems_isr cd2401_modem_isr(
   CD2401_Channel_Info[ch].spur_cnt++;
 
   cd2401->meoir = 0;            /* EOI */
+  CD2401_RECORD_MODEM_ISR_SPURIOUS_INFO(( ch,
+                                          CD2401_Channel_Info[ch].spur_dev,
+                                          CD2401_Channel_Info[ch].spur_cnt ));
 }
 
 
@@ -473,6 +510,9 @@ rtems_isr cd2401_re_isr(
   if ( cd2401->u5.b.risrl & 0x80 )  /* Timeout interrupt? */
     cd2401->ier &= 0xDF;            /* Disable rx timeout interrupt */
   cd2401->reoir = 0x08;             /* EOI; exception char not read */
+  CD2401_RECORD_RE_ISR_SPURIOUS_INFO(( ch,
+                                       CD2401_Channel_Info[ch].spur_dev,
+                                       CD2401_Channel_Info[ch].spur_cnt ));
 }
 
 
@@ -493,28 +533,33 @@ rtems_isr cd2401_rx_isr(
 )
 {
   char c;
-  rtems_unsigned8 ch, nchars;
+  rtems_unsigned8 ch, status, nchars, i, total;
+  char buffer[256];
 
+  status = cd2401->u5.b.risrl;
   ch = cd2401->licr >> 2;
 
-  /* Has this channel been initialized? */
-  if (CD2401_Channel_Info[ch].tty) {
-    /* Yes, read chars, enqueue them, and issue EOI */
-    nchars = cd2401->rfoc;      /* Number of chars to retrieve from rx FIFO */
+  /* Has this channel been initialized or is it a condition we ignore? */
+  if ( CD2401_Channel_Info[ch].tty && !status ) {
+    /* Normal Rx Int, read chars, enqueue them, and issue EOI */
+    total = nchars = cd2401->rfoc;  /* Nb of chars to retrieve from rx FIFO */
+    i = 0;
     while ( nchars-- > 0 ) {
-      c = (char)cd2401->dr;     /* Next char in rx FIFO */
-      rtems_termios_enqueue_raw_characters (
-        CD2401_Channel_Info[ch].tty,
-        &c,
-        1 );
+      c = (char)cd2401->dr;         /* Next char in rx FIFO */
+      rtems_termios_enqueue_raw_characters( CD2401_Channel_Info[ch].tty ,&c, 1 );
+      buffer[i++] = c;
     }
-    cd2401->reoir = 0;          /* EOI */
+    cd2401->reoir = 0;              /* EOI */
+    CD2401_RECORD_RX_ISR_INFO(( ch, total, buffer ));
   } else {
     /* No, record as spurious interrupt */
     CD2401_Channel_Info[ch].spur_dev =
         (vector << 24) | (cd2401->stk << 16) | (cd2401->rir << 8) | cd2401->u5.b.risrl;
     CD2401_Channel_Info[ch].spur_cnt++;
-    cd2401->reoir = 0x04;       /* EOI - character not read */
+    cd2401->reoir = 0x04;           /* EOI - character not read */
+    CD2401_RECORD_RX_ISR_SPURIOUS_INFO(( ch, status,
+                                         CD2401_Channel_Info[ch].spur_dev,
+                                         CD2401_Channel_Info[ch].spur_cnt ));
   }
 }
 
@@ -535,10 +580,11 @@ rtems_isr cd2401_tx_isr(
   rtems_vector_number vector
 )
 {
-  rtems_unsigned8 ch, status, buserr;
+  rtems_unsigned8 ch, status, buserr, initial_ier, final_ier;
 
   status = cd2401->tisr;
   ch = cd2401->licr >> 2;
+  initial_ier = cd2401->ier;
 
   /* Has this channel been initialized? */
   if ( !CD2401_Channel_Info[ch].tty ) {
@@ -546,8 +592,11 @@ rtems_isr cd2401_tx_isr(
     CD2401_Channel_Info[ch].spur_dev =
         (vector << 24) | (cd2401->stk << 16) | (cd2401->tir << 8) | cd2401->tisr;
     CD2401_Channel_Info[ch].spur_cnt++;
-    cd2401->ier &= 0xFC;        /* Shut up, whoever you are */
-    cd2401->teoir = 0x88;       /* EOI - Terminate buffer and no transfer */
+    final_ier = cd2401->ier &= 0xFC;/* Shut up, whoever you are */
+    cd2401->teoir = 0x88;           /* EOI - Terminate buffer and no transfer */
+    CD2401_RECORD_TX_ISR_SPURIOUS_INFO(( ch, status, initial_ier, final_ier,
+                                         CD2401_Channel_Info[ch].spur_dev,
+                                         CD2401_Channel_Info[ch].spur_cnt ));
     return;
   }
 
@@ -563,26 +612,50 @@ rtems_isr cd2401_tx_isr(
     CD2401_Channel_Info[ch].buserr_addr =
         (((rtems_unsigned32)cd2401->tcbadru) << 16) | cd2401->tcbadrl;
 
-    cd2401->teoir = 0x80;       /* EOI - terminate bad buffer */
+    cd2401->teoir = 0x80;           /* EOI - terminate bad buffer */
+    CD2401_RECORD_TX_ISR_BUSERR_INFO(( ch, status, initial_ier, buserr,
+                                       CD2401_Channel_Info[ch].buserr_type,
+                                       CD2401_Channel_Info[ch].buserr_addr ));
     return;
   }
 
   if ( status & 0x20 ) {
-    /* DMA done */
-    cd2401->ier &= 0xFC;        /* Shut up the interrupts */
+    /* DMA done -- Turn off TxD int, turn on TxMpty */
+    final_ier = cd2401->ier = (cd2401->ier & 0xFE) | 0x02;
+    if( status & 0x08 ) {
+      /* Transmit buffer B was released */
+      CD2401_Channel_Info[ch].own_buf_B = TRUE;
+    }
+    else {
+      /* Transmit buffer A was released */
+      CD2401_Channel_Info[ch].own_buf_A = TRUE;
+    }
+    CD2401_RECORD_TX_ISR_INFO(( ch, status, initial_ier, final_ier,
+                                CD2401_Channel_Info[ch].txEmpty ));
 
     /* This call can result in a call to cd2401_write() */
     rtems_termios_dequeue_characters (
         CD2401_Channel_Info[ch].tty,
         CD2401_Channel_Info[ch].len );
-    cd2401->teoir = 0x08;       /* EOI - no data transfered */
+    cd2401->teoir = 0x08;           /* EOI - no data transfered */
+  }
+  else if ( status & 0x02 ) {
+    /* TxEmpty */
+    CD2401_Channel_Info[ch].txEmpty = TRUE;
+    final_ier = cd2401->ier &= 0xFD;/* Shut up the interrupts */
+    cd2401->teoir = 0x08;           /* EOI - no data transfered */
+    CD2401_RECORD_TX_ISR_INFO(( ch, status, initial_ier, final_ier,
+                                CD2401_Channel_Info[ch].txEmpty ));
   }
   else {
     /* Why did we get a Tx interrupt? */
     CD2401_Channel_Info[ch].spur_dev =
         (vector << 24) | (cd2401->stk << 16) | (cd2401->tir << 8) | cd2401->tisr;
     CD2401_Channel_Info[ch].spur_cnt++;
-    cd2401->teoir = 0x08;       /* EOI - no data transfered */
+    cd2401->teoir = 0x08;           /* EOI - no data transfered */
+    CD2401_RECORD_TX_ISR_SPURIOUS_INFO(( ch, status, initial_ier, 0xFF,
+                                         CD2401_Channel_Info[ch].spur_dev,
+                                         CD2401_Channel_Info[ch].spur_cnt ));
   }
 }
 
@@ -616,6 +689,9 @@ int cd2401_firstOpen(
   rtems_libio_ioctl_args_t newarg;
   struct termios termios;
   rtems_status_code sc;
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable (level);
 
   /*
    * Set up the line with the specified parameters. The difficulty is that
@@ -662,6 +738,10 @@ int cd2401_firstOpen(
     cd2401_interrupts_initialize( TRUE );
   }
 
+  CD2401_RECORD_FIRST_OPEN_INFO(( minor, Init_count ));
+  
+  rtems_interrupt_enable (level);
+
   /* Return something */
   return RTEMS_SUCCESSFUL;
 }
@@ -683,6 +763,10 @@ int cd2401_lastClose(
   void *arg
 )
 {
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable (level);
+  
   /* Mark that the channel is no longer is use */
   CD2401_Channel_Info[minor].tty = NULL;
 
@@ -696,6 +780,10 @@ int cd2401_lastClose(
     set_vector( Prev_tx_isr,    0x5E, 1 );
     set_vector( Prev_rx_isr,    0x5F, 1 );
   }
+
+  CD2401_RECORD_LAST_CLOSE_INFO(( minor, Init_count ));
+  
+  rtems_interrupt_enable (level);
 
   /* return something */
   return RTEMS_SUCCESSFUL;
@@ -730,10 +818,13 @@ int cd2401_setAttributes(
   rtems_unsigned8 csize, cstopb, parodd, parenb, ignpar, inpck;
   rtems_unsigned8 hw_flow_ctl, sw_flow_ctl, extra_flow_ctl;
   rtems_unsigned8 icrnl, igncr, inlcr, brkint, ignbrk, parmrk, istrip;
+  rtems_unsigned8 need_reinitialization = FALSE;
+  rtems_unsigned8 read_enabled;
   rtems_unsigned16 tx_period, rx_period;
   rtems_unsigned32 out_baud, in_baud;
+  rtems_interrupt_level level;
 
-  /* Set up the line parameters */
+  /* Determine what the line parameters should be */
 
   /* Output baud rate */
   switch ( cfgetospeed (t) ) {
@@ -877,48 +968,110 @@ int cd2401_setAttributes(
   else
     istrip = 0;                 /* Leave as 8 bits */
 
+  rx_period = cd2401_bitrate_divisor( 20000000Ul, &in_baud );
+  tx_period = cd2401_bitrate_divisor( 20000000Ul, &out_baud );
 
-  /* Clear channel and disable rx and tx */
-  cd2401_chan_cmd (minor, 0x40, 1);
+  /*
+   *  If this is the first time that the line characteristics are set up, then
+   *  the device must be re-initialized.
+   *  Also check if we need to change anything. It is preferable to not touch
+   *  the device if nothing changes. As soon as we touch it, it tends to
+   *  glitch. If anything changes, we reprogram all registers. This is
+   *  harmless.
+   */
+  if ( ( CD2401_Channel_Info[minor].tty == 0 ) ||
+       ( cd2401->cor1 != (parodd | parenb | ignpar | csize) ) ||
+       ( cd2401->cor2 != (sw_flow_ctl | hw_flow_ctl) ) ||
+       ( cd2401->cor3 != (extra_flow_ctl | cstopb) )  ||
+       ( cd2401->cor6 != (igncr | icrnl | inlcr | ignbrk | brkint | parmrk | inpck) ) ||
+       ( cd2401->cor7 != istrip ) ||
+       ( cd2401->u1.async.schr1 != t->c_cc[VSTART] ) ||
+       ( cd2401->u1.async.schr2 != t->c_cc[VSTOP] ) ||
+       ( cd2401->rbpr != (unsigned char)rx_period ) ||
+       ( cd2401->rcor != (unsigned char)(rx_period >> 8) ) ||
+       ( cd2401->tbpr != (unsigned char)tx_period ) ||
+       ( cd2401->tcor != ( (tx_period >> 3) & 0xE0 ) ) )
+    need_reinitialization = TRUE;
 
   /* Write to the ports */
+  rtems_interrupt_disable (level);
+
   cd2401->car = minor;          /* Select channel */
-  cd2401->cmr = 0x42;           /* Interrupt Rx, DMA Tx, async mode */
-  cd2401->cor1 = parodd | parenb | ignpar | csize;
-  cd2401->cor2 = sw_flow_ctl | hw_flow_ctl;
-  cd2401->cor3 = extra_flow_ctl | cstopb;
-  cd2401->cor4 = 0x0A;          /* No DSR/DCD/CTS detect; FIFO threshold of 10 */
-  cd2401->cor5 = 0x0A;          /* No DSR/DCD/CTS detect; DTR threshold of 10 */
-  cd2401->cor6 = igncr | icrnl | inlcr | ignbrk | brkint | parmrk | inpck;
-  cd2401->cor7 = istrip;        /* No LNext; ignore XON/XOFF if frame error; no tx translations */
-  cd2401->u1.async.schr1 =
-      t->c_cc[VSTART];          /* Special char 1: XON character */
-  cd2401->u1.async.schr2 =
-      t->c_cc[VSTOP];           /* special char 2: XOFF character */
-  /* Special chars 3 and 4, char range, LNext, RFAR[1..4] and CRC are unused, left as is. */
-
-  /* Set baudrates for receiver and transmitter */
-  rx_period = cd2401_bitrate_divisor( 20000000Ul, &in_baud );
-  cd2401->rbpr = (unsigned char)rx_period;
-  cd2401->rcor = (unsigned char)(rx_period >> 8); /* no DPLL */
-  tx_period = cd2401_bitrate_divisor( 20000000Ul, &out_baud );
-  cd2401->tbpr = (unsigned char)tx_period;
-  cd2401->tcor = (tx_period >> 3) & 0xE0;         /* no x1 ext clk, no loopback */
-
-  /* NEED TO LOOK AT THIS LINE! */
-  /* Timeout for 4 chars at 9600, 8 bits per char, 1 stop bit */
-  cd2401->u2.w.rtpr  = 0x04;
-
-  /*  And finally:  */
-  if ( t->c_cflag & CREAD ) {
-    /* Re-initialize channel, enable rx and tx */
-    cd2401_chan_cmd (minor, 0x2A, 1);
-    /* Enable rx data ints */
-    cd2401->ier = 0x08;
-  } else {
-    /* Re-initialize channel, enable tx, disable rx */
-    cd2401_chan_cmd (minor, 0x29, 1);
+  read_enabled = cd2401->csr & 0x80 ? TRUE : FALSE;
+  
+  if ( (t->c_cflag & CREAD ? TRUE : FALSE ) != read_enabled ) {
+    /* Read enable status is changing */
+    need_reinitialization = TRUE;
   }
+  
+  if ( need_reinitialization ) { 
+    /* 
+     *  Could not find a way to test whether the CD2401 was done transmitting.
+     *  The TxEmpty interrupt does not seem to indicate that the FIFO is empty
+     *  in DMA mode. So, just wait a while for output to drain. May not be
+     *  enough, but it will have to do (should be long enough for 1 char at
+     *  9600 bsp)...
+     */
+    cd2401_udelay( 2000L );
+  
+    /* Clear channel */
+    cd2401_chan_cmd (minor, 0x40, 1);
+
+    cd2401->car = minor;        /* Select channel */
+    cd2401->cmr = 0x42;         /* Interrupt Rx, DMA Tx, async mode */
+    cd2401->cor1 = parodd | parenb | ignpar | csize;
+    cd2401->cor2 = sw_flow_ctl | hw_flow_ctl;
+    cd2401->cor3 = extra_flow_ctl | cstopb;
+    cd2401->cor4 = 0x0A;        /* No DSR/DCD/CTS detect; FIFO threshold of 10 */
+    cd2401->cor5 = 0x0A;        /* No DSR/DCD/CTS detect; DTR threshold of 10 */
+    cd2401->cor6 = igncr | icrnl | inlcr | ignbrk | brkint | parmrk | inpck;
+    cd2401->cor7 = istrip;      /* No LNext; ignore XON/XOFF if frame error; no tx translations */
+    /* Special char 1: XON character */
+    cd2401->u1.async.schr1 = t->c_cc[VSTART]; 
+    /* special char 2: XOFF character */
+    cd2401->u1.async.schr2 = t->c_cc[VSTOP];
+    
+    /* 
+     *  Special chars 3 and 4, char range, LNext, RFAR[1..4] and CRC
+     *  are unused, left as is.
+     */
+
+    /* Set baudrates for receiver and transmitter */
+    cd2401->rbpr = (unsigned char)rx_period;
+    cd2401->rcor = (unsigned char)(rx_period >> 8); /* no DPLL */
+    cd2401->tbpr = (unsigned char)tx_period;
+    cd2401->tcor = (tx_period >> 3) & 0xE0;         /* no x1 ext clk, no loopback */
+  
+    /* Timeout for 4 chars at 9600, 8 bits per char, 1 stop bit */
+    cd2401->u2.w.rtpr  = 0x04;  /* NEED TO LOOK AT THIS LINE! */
+    
+    if ( t->c_cflag & CREAD ) {
+      /* Re-initialize channel, enable rx and tx */
+      cd2401_chan_cmd (minor, 0x2A, 1);
+      /* Enable rx data ints */
+      cd2401->ier = 0x08;
+    } else {
+      /* Re-initialize channel, enable tx, disable rx */
+      cd2401_chan_cmd (minor, 0x29, 1);
+    }
+  }   
+  
+  CD2401_RECORD_SET_ATTRIBUTES_INFO(( minor, need_reinitialization, csize,
+                                      cstopb, parodd, parenb, ignpar, inpck,
+                                      hw_flow_ctl, sw_flow_ctl, extra_flow_ctl,
+                                      icrnl, igncr, inlcr, brkint, ignbrk,
+                                      parmrk, istrip, tx_period, rx_period,
+                                      out_baud, in_baud ));
+
+  rtems_interrupt_enable (level);
+  
+  /* 
+   *  Looks like the CD2401 needs time to settle after initialization. Give it
+   *  10 ms. I don't really believe it, but if output resumes to quickly after
+   *  this call, the first few characters are not right.   
+   */
+  if ( need_reinitialization )
+    cd2401_udelay( 10000L );
 
   /* Return something */
   return RTEMS_SUCCESSFUL;
@@ -950,8 +1103,16 @@ int cd2401_startRemoteTx(
   int minor
 )
 {
-  cd2401->car = minor;          /* Select channel */
-  cd2401->stcr = 0x01;          /* Send SCHR1 ahead of chars in FIFO */
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable (level);
+
+  cd2401->car = minor;              /* Select channel */
+  cd2401->stcr = 0x01;              /* Send SCHR1 ahead of chars in FIFO */
+
+  CD2401_RECORD_START_REMOTE_TX_INFO(( minor ));
+  
+  rtems_interrupt_enable (level);
 
   /* Return something */
   return RTEMS_SUCCESSFUL;
@@ -959,7 +1120,7 @@ int cd2401_startRemoteTx(
 
 
 /*
- *  cd2401_stopRemoreTx
+ *  cd2401_stopRemoteTx
  *
  *  Defined as a callback, but it would appear that it is never called. The
  *  POSIX standard states that when the tcflow() function is called with the
@@ -984,8 +1145,16 @@ int cd2401_stopRemoteTx(
   int minor
 )
 {
-  cd2401->car = minor;          /* Select channel */
-  cd2401->stcr = 0x02;          /* Send SCHR2 ahead of chars in FIFO */
+  rtems_interrupt_level level;
+
+  rtems_interrupt_disable (level);
+
+  cd2401->car = minor;              /* Select channel */
+  cd2401->stcr = 0x02;              /* Send SCHR2 ahead of chars in FIFO */
+
+  CD2401_RECORD_STOP_REMOTE_TX_INFO(( minor ));
+
+  rtems_interrupt_enable (level);
 
   /* Return something */
   return RTEMS_SUCCESSFUL;
@@ -993,7 +1162,7 @@ int cd2401_stopRemoteTx(
 
 
 /*
- * cd2401_write
+ *  cd2401_write
  *
  *  Initiate DMA output. Termios guarantees that the buffer does not wrap
  *  around, so we can do DMA strait from the supplied buffer.
@@ -1018,42 +1187,74 @@ int cd2401_write(
   int len
 )
 {
-  cd2401->car = minor;          /* Select channel */
+  cd2401->car = minor;              /* Select channel */
 
   if ( (cd2401->dmabsts & 0x08) == 0 ) {
     /* Next buffer is A. Wait for it to be ours. */
-    if ( cd2401->atbsts & 0x01 ) {
-      CD2401_Channel_Info[minor].wait_buf_A++;
-      while ( cd2401->atbsts & 0x01 );
-    }
-    CD2401_Channel_Info[minor].used_buf_A++;
+    while ( cd2401->atbsts & 0x01 );
+
+    CD2401_Channel_Info[minor].own_buf_A = FALSE;
     CD2401_Channel_Info[minor].len = len;
     CD2401_Channel_Info[minor].buf = buf;
     cd2401->atbadru = (rtems_unsigned16)( ( (rtems_unsigned32) buf ) >> 16 );
     cd2401->atbadrl = (rtems_unsigned16)( (rtems_unsigned32) buf );
     cd2401->atbcnt = len;
-    cd2401->atbsts = 0x03;      /* CD2401 owns buffer, int when empty */
+    CD2401_RECORD_WRITE_INFO(( len, buf, 'A' ));
+    cd2401->atbsts = 0x03;          /* CD2401 owns buffer, int when empty */
   }
   else {
     /* Next buffer is B. Wait for it to be ours. */
-    if ( cd2401->btbsts & 0x01 ) {
-      CD2401_Channel_Info[minor].wait_buf_B++;
-      while ( cd2401->btbsts & 0x01 );
-    }
-    CD2401_Channel_Info[minor].used_buf_B++;
+    while ( cd2401->btbsts & 0x01 );
+
+    CD2401_Channel_Info[minor].own_buf_B = FALSE;
     CD2401_Channel_Info[minor].len = len;
     CD2401_Channel_Info[minor].buf = buf;
     cd2401->btbadru = (rtems_unsigned16)( ( (rtems_unsigned32) buf ) >> 16 );
     cd2401->btbadrl = (rtems_unsigned16)( (rtems_unsigned32) buf );
     cd2401->btbcnt = len;
-    cd2401->btbsts = 0x03;      /* CD2401 owns buffer, int when empty */
+    CD2401_RECORD_WRITE_INFO(( len, buf, 'B' ));
+    cd2401->btbsts = 0x03;          /* CD2401 owns buffer, int when empty */
   }
-  /* Should TxD interrupts be enabled before I set up the DMA transfer? */
-  cd2401->ier |= 0x01;          /* enable TxD ints */
+  /* Nuts -- Need TxD ints */
+  CD2401_Channel_Info[minor].txEmpty = FALSE;
+  cd2401->ier |= 0x01;
 
   /* Return something */
   return RTEMS_SUCCESSFUL;
 }
+
+#if 0
+/*
+ *  cd2401_drainOutput
+ *
+ *  Wait for the txEmpty indication on the specified channel.
+ *
+ *  Input parameters:
+ *    minor - selected channel
+ *
+ *  Output parameters:  NONE
+ *
+ *  Return value: IGNORED
+ *
+ *  MUST NOT BE EXECUTED WITH THE CD2401 INTERRUPTS DISABLED!
+ *  The txEmpty flag is set by the tx ISR.
+ */
+int cd2401_drainOutput(
+  int minor
+)
+{
+  CD2401_RECORD_DRAIN_OUTPUT_INFO(( CD2401_Channel_Info[minor].txEmpty,
+                                    CD2401_Channel_Info[minor].own_buf_A,
+                                    CD2401_Channel_Info[minor].own_buf_B ));
+    
+  while( ! (CD2401_Channel_Info[minor].txEmpty && 
+            CD2401_Channel_Info[minor].own_buf_A &&
+            CD2401_Channel_Info[minor].own_buf_B) );
+        
+  /* Return something */
+  return RTEMS_SUCCESSFUL;
+}
+#endif
 
 
 /*

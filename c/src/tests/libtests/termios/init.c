@@ -591,7 +591,6 @@ void canonical_input( struct termios *tp )
   printf( "Setting line to canonical input mode.\n" );
   tp->c_lflag = ISIG | ICANON | ECHO | ECHONL | ECHOK | ECHOE | ECHOPRT | ECHOCTL | IEXTEN; 
   tp->c_iflag = BRKINT | ICRNL | IXON | IMAXBEL;
-  sleep( 1 );
   if( tcsetattr( fileno( stdin ), TCSADRAIN, tp ) < 0 ) {
     perror( "canonical_input(): tcsetattr() failed" );
     exit( 1 );
@@ -635,7 +634,6 @@ void do_raw_input( int vmin, int vtime )
   new.c_lflag &= ~( ICANON | ECHO | ECHONL | ECHOK | ECHOE | ECHOPRT | ECHOCTL );
   new.c_cc[VMIN] = vmin;
   new.c_cc[VTIME] = vtime;
-  sleep( 1 );
   if( tcsetattr( fileno( stdin ), TCSADRAIN, &new ) < 0 ) {
     perror ("do_raw_input(): tcsetattr() failed" );
     return;
@@ -666,7 +664,6 @@ void do_raw_input( int vmin, int vtime )
   } while( cbuf[0] != 'q' );
   
 out:
-  sleep( 1 );
   if( tcsetattr( fileno( stdin ), TCSADRAIN, &old) < 0 )
     perror("do_raw_input(): tcsetattr() failed: %s\n" );
     
@@ -725,7 +722,6 @@ Init (rtems_task_argument ignored)
       case '1':
         printf( "\nResetting the line to the original termios setting\n\n" );
         test_termios = orig_termios;
-        sleep( 1 );
         if( tcsetattr( fileno( stdin ), TCSADRAIN, &test_termios ) < 0 ) {
           perror( "tcsetattr() failed" );
           exit( 1 );
