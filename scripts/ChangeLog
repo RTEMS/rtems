@@ -1,3 +1,7 @@
+2003-06-02	Joel Sherrill <joel@OARcorp.com>
+
+	* setup.def: Updated for RPM revision 3 of gcc3.2.3 and newlib1.11.0.
+
 2003-05-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* common/common.add.in: Add %define __os_install_post %{nil} to
