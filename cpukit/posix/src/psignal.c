@@ -25,19 +25,6 @@
 #include <rtems/posix/time.h>
 #include <stdio.h>
 
-
-/*
- *  Currently 32 signals numbered 1-32 are defined
- */
-
-#define SIGNAL_EMPTY_MASK  0x00000000
-#define SIGNAL_ALL_MASK    0xffffffff
-
-#define signo_to_mask( _sig ) (1 << ((_sig) - 1))
-
-#define is_valid_signo( _sig ) \
-  ((_sig) >= 1 && (_sig) <= 32 )
-
 /*** PROCESS WIDE STUFF ****/
 
 sigset_t  _POSIX_signals_Pending;
