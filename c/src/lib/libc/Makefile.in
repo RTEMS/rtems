@@ -47,7 +47,7 @@ MALLOC_PIECES=\
   malloc __brk __sbrk
 
 PASSWORD_GROUP_PIECES=\
-  getpwent getgwent
+  getpwent getgrent
 
 LIBC_GLUE_PIECES=\
   __gettod __times \
