@@ -1,5 +1,8 @@
-/*  mipstypes.h
- *
+/**
+ * @file rtems/score/types.h
+ */
+
+/*
  *  This include file contains type definitions pertaining to the MIPS
  *  processor family.
  *
