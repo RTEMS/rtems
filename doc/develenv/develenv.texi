@@ -47,8 +47,8 @@ END-INFO-DIR-ENTRY
 @c
 
 @set edition 4.0.0a
-@set update-date 25 April 1997
-@set update-month April 1997
+@set update-date 1 June 97
+@set update-month June 97
 
 @c
 @c  I don't really like having a short title page.  --joel
