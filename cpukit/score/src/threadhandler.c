@@ -109,11 +109,11 @@ void _Thread_Handler( void )
 
   _Thread_Enable_dispatch();
 #if defined(__USE_INIT_FINI__)
-  if (!doneCons)
+  if (!doneCons && _init)
     _init ();
 #endif
 #if defined(__USE__MAIN__)
-  if (!doneCons)
+  if (!doneCons && _main)
     __main ();
 #endif
 

@@ -1,3 +1,11 @@
+2003-03-18  Till Straumann <strauman@slac.stanford.edu>
+
+	PR 356/bsps
+	* src/threadhandlerc: This patch makes RTEMS/PowerPC eabi compliant.
+	Let Thread_Handler verify that _init/_main are non-NULL
+	before calling them (gives the linker script/user more
+	freedom to handle special cases).
+
 2002-03-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/system.h: Add __RTEMS_REVISION__.
