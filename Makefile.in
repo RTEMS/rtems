@@ -56,8 +56,9 @@ endif
 
 include $(RTEMS_ROOT)/make/main.cfg
 
-MTARGETS = all $(TARGET_VARIANTS:%=%_install) $(TARGET_VARIANTS:%=%_all) \
-clean_wrapup distclean clean_dirs clean_tools install tests clean depend
+MTARGETS = all install $(TARGET_VARIANTS) $(TARGET_VARIANTS:%=%_all) \
+  $(TARGET_VARIANTS:%=%_install) clean_wrapup distclean clean_dirs \
+  clean_tools install tests clean depend
 
 .PHONY: clean_modules mlink
 
