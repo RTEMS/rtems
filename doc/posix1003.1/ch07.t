@@ -162,10 +162,10 @@ B38400, Constant, Implemented
 @subsubsection Baud Rate Functions
 
 @example
-cfgetospeed(), Function, Unimplemented
-cfsetospeed(), Function, Unimplemented
-cfgetispeed(), Function, Unimplemented
-cfsetispeed(), Function, Unimplemented
+cfgetospeed(), Function, Implemented
+cfsetospeed(), Function, Implemented
+cfgetispeed(), Function, Implemented
+cfsetispeed(), Function, Implemented
 TCIFLUSH, Constant, Implemented
 TCOFLUSH, Constant, Implemented
 TCIOFLUSH, Constant, Implemented
@@ -188,7 +188,7 @@ tcsetattr(), Function, Implemented
 
 @example
 tcsendbreak(), Function, Unimplemented
-tcdrain(), Function, Unimplemented
+tcdrain(), Function, Implemented
 tcflush(), Function, Unimplemented
 tcflow(), Function, Unimplemented
 @end example
