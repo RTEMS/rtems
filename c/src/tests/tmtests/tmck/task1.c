@@ -156,8 +156,8 @@ void check_read_timer()
        *  Under UNIX a simple process swap takes longer than we 
        *  consider valid for our testing purposes.
        */
-      printf( "TOO LONG (%d) at %d!!!\n", end_time, index );
-#if defined(unix)
+      printf( "TOO LONG (%d) at index %d!!!\n", end_time, index );
+#if defined(unix) || defined(go32)
       index--; 
       continue;
 #else

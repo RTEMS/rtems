@@ -119,7 +119,7 @@ rtems_task Low_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_resume self",
+    "rtems_task_suspend self",
     end_time,
     OPERATION_COUNT,
     0,

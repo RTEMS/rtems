@@ -22,7 +22,6 @@
 
 #include <rtems.h>
 #include <bsp.h>
-#include <cpu.h>
 #include <libcsupport.h>
 
 #include <stackchk.h>

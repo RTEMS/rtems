@@ -28,13 +28,13 @@
 #include <dpmi.h>
 #include <go32.h>
 
-i386_isr set_vector(                            /* returns old vector */
+i386_isr_entry set_vector(                      /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */
   int                 type                      /* RTEMS or RAW intr  */
 )
 {
-  i386_isr       previous_isr;
+  i386_isr_entry   previous_isr;
 
   if ( type )  {
       rtems_interrupt_catch( handler, vector, 
@@ -55,10 +55,10 @@ i386_isr set_vector(                            /* returns old vector */
       /* structure here?  That means we might crash the system if we	*/
       /* try to restore the ISR.  Can't fix this until i386_isr	is	*/
       /* redefined.  XXX [BHC].						*/
-      previous_isr = (i386_isr) handler_info.pm_offset;
+      previous_isr = (i386_isr_entry) handler_info.pm_offset;
      
       /* install the IDT entry */
-      handler_info.pm_offset   = (int)handler;
+      handler_info.pm_offset   = (u_long)handler;
       handler_info.pm_selector = _go32_my_cs();
       _go32_dpmi_set_protected_mode_interrupt_vector( vector, &handler_info);
   }

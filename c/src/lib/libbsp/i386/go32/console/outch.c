@@ -4,7 +4,6 @@
 
 #include <go32.h>
 #include <bsp.h>
-#include <cpu.h>
 
 #include <memory.h>
 

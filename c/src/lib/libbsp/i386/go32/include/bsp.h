@@ -21,7 +21,6 @@ extern "C" {
 #endif
 
 #include <rtems.h>
-#include <cpu.h>
 #include <iosupp.h>
 
 /*
@@ -142,7 +141,7 @@ BSP_EXTERN unsigned int   Gdt_base;
 
 /* routines */
 
-i386_isr set_vector(
+i386_isr_entry set_vector(
   rtems_isr_entry     handler,
   rtems_vector_number vector,
   int                 type

@@ -24,7 +24,9 @@
 
         EXTERN(_Ttimer_val)
 
-SYM (_timerisr):	
+        PUBLIC(timerisr)
+
+SYM (timerisr):	
  	addl    $250,_Ttimer_val   # another 250 microseconds
 	push	edx
 	push	eax

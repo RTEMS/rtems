@@ -5,7 +5,6 @@
 #include <pc.h>
 #include <go32.h>
 #include <bsp.h>
-#include <cpu.h>
 
 /*
  * Ports for PC keyboard

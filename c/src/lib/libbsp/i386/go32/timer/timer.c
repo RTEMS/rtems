@@ -22,7 +22,6 @@
 
 
 #include <rtems.h>
-#include <cpu.h>
 #include <bsp.h>
 
 volatile rtems_unsigned32 Ttimer_val;
@@ -47,27 +46,27 @@ void Timer_initialize()
 #else /* pentium */
     static int First = 1;
     if ( First )  {
-	/* install ISR */
-	set_vector( timerisr, 0x8, 0 );
+        /* install ISR */
+        set_vector( timerisr, 0x8, 0 );
 
-	/* Wait for ISR to be called at least once */
-	Ttimer_val = 0;
-	while ( Ttimer_val == 0 )
-	    continue;
+        /* Wait for ISR to be called at least once */
+        Ttimer_val = 0;
+        while ( Ttimer_val == 0 )
+            continue;
 
-	/* load timer for 250 microsecond period */
-	outport_byte( TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN );
-	outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 0 & 0xff);
-	outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 8 & 0xff);
+        /* load timer for 250 microsecond period */
+        outport_byte( TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN );
+        outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 0 & 0xff);
+        outport_byte( TIMER_CNTR0, US_TO_TICK(250) >> 8 & 0xff);
 
-	First = 0;
+        First = 0;
     }
     Ttimer_val = 0;                           /* clear timer ISR count */
 #endif /* PENTIUM */
 }
 
-#define AVG_OVERHEAD	   0  /* 0.1 microseconds to start/stop timer. */
-#define LEAST_VALID	   1  /* Don't trust a value lower than this */
+#define AVG_OVERHEAD       0  /* 0.1 microseconds to start/stop timer. */
+#define LEAST_VALID        1  /* Don't trust a value lower than this */
 
 
 int Read_timer()
@@ -86,11 +85,11 @@ int Read_timer()
 #endif /* pentium */
 
     if ( Timer_driver_Find_average_overhead == 1 )
-	return total;
+        return total;
     else if ( total < LEAST_VALID )
-	return 0;		/* below timer resolution */
+        return 0;               /* below timer resolution */
     else
-	return total - AVG_OVERHEAD;
+        return total - AVG_OVERHEAD;
 }
 
 rtems_status_code Empty_function( void )
