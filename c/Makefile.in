@@ -50,10 +50,18 @@ CREATE_DIRS = \
 # Make all/install must include 'env'
 # if something is added to TARGET_VARIANTS, then account for it here
 make_src_makefiles: Makefile.in Makefile
-	find . -name Makefile -exec grep -q ^preinstall {} \; -print > make_src_makefiles
+	-find . -name Makefile \
+           -exec grep -q ^preinstall {} \; -print > make_src_makefiles.tmp
+	-grep tools make_src_makefiles.tmp > make_src_makefiles
+	-grep -v tools make_src_makefiles.tmp >> make_src_makefiles
+	-rm make_src_makefiles.tmp
+
 
 pre_install_src: env make_src_makefiles
 	cd build-tools/scripts; $(MAKE)
+	@echo "Order of preinstall directories"
+	cat make_src_makefiles
+	@echo 
 	CURRDIR=`pwd`; \
 	for i in `cat make_src_makefiles` ; do \
 		DIR=`dirname $$i`; \
