@@ -1,5 +1,9 @@
 2001-06-28	Joel Sherrill <joel@OARcorp.com>
 
+	* tverstions.texi: Updated to reflect newer versions.
+
+2001-06-28	Joel Sherrill <joel@OARcorp.com>
+
 	* buildc.t, gdb.t: Per PR54, updated to reflect multiple compression
 	schemes including bzip2.
 
