@@ -1,3 +1,7 @@
+2003-03-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/ppcn_60x.cfg: Fix mal-formed CVS-Id.
+
 2003-02-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/armulator.cfg: CPU_CFLAGS = -msoft-float.
