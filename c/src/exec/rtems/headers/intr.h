@@ -73,9 +73,9 @@ void _Interrupt_Manager_initialization( void );
  */
 
 rtems_status_code rtems_interrupt_catch(
-  rtems_isr_entry    new_isr_handler,
+  rtems_isr_entry      new_isr_handler,
   rtems_vector_number  vector,
-  rtems_isr_entry   *old_isr_handler
+  rtems_isr_entry     *old_isr_handler
 );
 
 /*
@@ -120,7 +120,7 @@ rtems_status_code rtems_interrupt_catch(
  *  DESCRIPTION:
  *
  *  This function returns TRUE if the processor is currently servicing
- *  and interrupt and FALSE otherwise.   A return value of TRUE indicates
+ *  an interrupt and FALSE otherwise.   A return value of TRUE indicates
  *  that the caller is an interrupt service routine, NOT a thread.  The
  *  directives available to an interrupt service routine are restricted.
  */
