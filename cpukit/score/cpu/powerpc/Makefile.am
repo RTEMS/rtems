@@ -26,6 +26,10 @@ include_rtems_new_exceptions_HEADERS = rtems/new-exceptions/cpu.h
 include_rtems_powerpcdir = $(includedir)/rtems/powerpc
 include_rtems_powerpc_HEADERS = rtems/powerpc/registers.h
 
+noinst_LIBRARIES = libscorecpu.a
+libscorecpu_a_SOURCES = cpu.c
+libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
+
 all-local: $(PREINSTALL_FILES)
 
 include $(srcdir)/preinstall.am
