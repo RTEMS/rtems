@@ -295,9 +295,8 @@ msdos_file_link(rtems_filesystem_location_info_t *to_loc,
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info     = to_loc->mt_entry->fs_info;
     fat_file_fd_t     *to_fat_fd   = to_loc->node_access;
-    fat_file_fd_t     *par_fat_fd  = par_loc->node_access;
-    char                 new_name[ MSDOS_NAME_MAX + 1 ];
-    int                  len;
+    char               new_name[ MSDOS_NAME_MAX + 1 ];
+    int                len;
 
     /* 
      * check spelling and format new node name 
