@@ -1,3 +1,8 @@
+2003-05-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 409:
+	* include/stdint.h: Include rtems/stdint.h
+
 2003-04-17	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	PR 399/rtems_misc
