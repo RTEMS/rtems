@@ -23,9 +23,13 @@
  *  $Id$
  */
 
-#ifndef lint
-static char _sccsid[] = "@(#)setvec.c 04/25/96     1.2\n";
-#endif
+/*
+ *  Rather than deleting this, it is commented out to (hopefully) help
+ *  the submitter send updates.
+ *
+ *  static char _sccsid[] = "@(#)setvec.c 04/25/96     1.2\n";
+ */
+
 
 #include <rtems.h>
 #include <bsp.h>
