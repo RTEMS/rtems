@@ -8,7 +8,7 @@ TEST = psxfile01
 MANAGERS = all
 
 C_FILES = main.c test.c test_cat.c test_extend.c test_write.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 DOCTYPES = scn
 DOCS = $(DOCTYPES:%=$(TEST).%)

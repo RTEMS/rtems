@@ -24,7 +24,7 @@ C_FILES = clock01.c clock02.c clock03.c clock04.c clock05.c clock06.c \
     time04.c time05.c time06.c time07.c time08.c time09.c time10.c time11.c \
     time12.c time13.c timer01.c timer02.c timer03.c timer04.c timer05.c \
     timer06.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 SRCS = $(C_FILES)
 OBJS = $(C_O_FILES)

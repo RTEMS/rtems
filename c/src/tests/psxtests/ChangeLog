@@ -1,3 +1,30 @@
+2002-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* psx01/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psx02/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psx03/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psx04/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psx05/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psx06/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psx07/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psx08/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psx09/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psx10/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psx11/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psx12/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psx13/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psxcancel/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psxchroot01/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psxfile01/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psxhdrs/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psxmount/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psxmsgq01/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psxreaddir/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psxsem01/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psxstat/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psxtime/Makefile.am: Use .$(OBJEXT) instead of .o.
+ 	* psxtimer/Makefile.am: Use .$(OBJEXT) instead of .o.
+
 2002-08-01	Joel Sherrill <joel@OARcorp.com>
 
 	* Per PR47 add support for buffered test output.  This involved

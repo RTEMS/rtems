@@ -8,7 +8,7 @@ TEST = psx05
 MANAGERS = all
 
 C_FILES = init.c task.c task2.c task3.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
+C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = system.h
 noinst_HEADERS = $(H_FILES)
