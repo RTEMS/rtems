@@ -21,9 +21,9 @@ RTEMS-specific option are supported:
 	--disable-tests
 	--disable-ka9q
         --enable-cpp
-        --enable-gcc28
+        --enable-gcc28               (also use enable-libcdir when disabled)
         --enable-gmake-print-directory
-        --enable-libcdir=<DIRECTORY>      (do not use gcc 2.8 is enabled)
+        --enable-libcdir=<DIRECTORY>      (do not use if gcc 2.8 is enabled)
 	--enable-rtemsbsp="bsp1 bsp2 ..."
 
 By default, the RTEMS posix interface is built for targets that support
@@ -46,14 +46,14 @@ the location of the Standard C Library with the --enable-libcdir
 option.  If using a gcc which supports the -specs option, then
 the --enable-gcc28 option may be used to enable this feature.
 You should use the --enable-gcc28 option when using either the
-egcs source tree or testgcc snapshots.
+egcs source tree, testgcc snapshots, or gcc 2.8.0 or newer.
 
 By default, all bsps for a target are built. There are  two ways of
 changing this:
 
   + use the --enable-rtemsbsp otion which will set the specified
     bsps as the default bsps, or 
-  + set the RTEMSBSP variable during make (see below).
+  + set the RTEMS_BSP variable during make (see below).
 
 The --enable-rtemsbsp= option configures RTEMS for a specific target
 architecture.  The following targets are supported:
@@ -83,7 +83,8 @@ overriden by one of the following methods:
     --program-prefix=m68k-coff- option.
 
 To build, run make in the build directory. To specify which bsps to build,
-add the RTEMSBSP="bsp1 bsp2 .." to the make command.
+add the RTEMS_BSP="bsp1 bsp2 .." to the make command.  Specifying multiple
+BSPs to build only works from the top level build directory.
 
 Installation is done under $(prefix)/$(target)/rtems.
 
@@ -91,10 +92,9 @@ As an example, to build and install the mvme136 and dmv152 bsps for m68k do:
 
 	(path_to_rtems_src)/configure --target=m68k-rtems
 
-	make RTEMSBSP="mvme136 dmv152"
+	make RTEMS_BSP="mvme136 dmv152"
 	
-	make install RTEMSBSP="mvme136 dmv152"
-
+	make install RTEMS_BSP="mvme136 dmv152"
 
 The sample tests are built by 'make all', do a 'make test' to build the full
 test suite.
