@@ -1,4 +1,12 @@
 
+2000-08-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+	* make/custom/pck6.cfg: New file
+	* make/custom/pc486.cfg: Use -m486 
+	* make/custom/pc586.cfg: Use -mpentium 
+	* make/custom/pc686.cfg: Use -mmpentiumpro
+	* make/custom/i386ex.cfg: Use -msoft-float
+	* custom/i386ex.cfg: Use -msoft-float
+
 2000-08-11  Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
 
 	* custom/mbx8xx.cfg: Add support for configuration parameters in NVRAM
