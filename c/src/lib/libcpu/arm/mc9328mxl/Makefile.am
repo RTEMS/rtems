@@ -12,7 +12,7 @@ include $(top_srcdir)/../../../automake/compile.am
 if mc9328mxl
 include_mc9328mxldir = $(includedir)/mc9328mxl
 include_libcpudir = $(includedir)/libcpu
-include_HEADERS = include/mc9328mxl.h 
+include_HEADERS = include/mc9328mxl.h
 
 ## clock
 EXTRA_PROGRAMS += clock.rel
@@ -62,8 +62,6 @@ irq_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 irq_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += irq$(LIB_VARIANT).rel
-
-
 endif
 
 ## --
@@ -95,7 +93,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mc9328mxl.h
 $(PROJECT_INCLUDE)/irq.h: irq/irq.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/irq.h
-
 endif
 
 CLEANFILES += $(PREINSTALL_FILES)
