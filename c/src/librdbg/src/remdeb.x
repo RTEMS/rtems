@@ -291,42 +291,7 @@ union ptrace_addr_data_out switch (ptracereq req) {
 
 typedef opaque CHAR_DATA <NET_SAFE>;	/* variable sized data */
 
-const XRY_MAX_INST_BUFF = 128;
-const XRY_MAX_INSTANCES = 16;
-%#ifndef XRY_MAX_CMD_STR
-const XRY_MAX_CMD_STR = 320; /* XRY_MAX_INST_BUFF+(XRY_MAX_INSTANCES*12) */
-%#endif	/* REMDEB_H */
-
-
-struct xry_inst
-{
-  unsigned char flags;		/* value2 interp, etc. INFL_xxx */
-  unsigned char type;		/* base type of data (str, val, etc) INST_xxx */
-  unsigned char sub_type; 	/* specific type (task, res, etc). This is
-				   set and defined by the user defined instance
-				   processor and not the auto-processor */
-  unsigned char	res_type;
-  u_long	value;		/* pointer to value or value itself */
-  u_long	value2;		/* second value (optional - based on flags) */  
-};
-
-struct instance
-{
-  struct xry_inst instances[XRY_MAX_INSTANCES];
-  unsigned char	buffer[XRY_MAX_INST_BUFF];
-};
-
-union instance_union switch (bool instances)
-{
-  case TRUE:
-	instance	inst;
-  case FALSE:
-	string		buffer <XRY_MAX_CMD_STR>;
-};
-
 typedef string	one_arg <NET_SAFE>;	
-
-const XRY_MAX_OBJ_NAME = 32;  	/* objname in some commands */
 
 %  /* now open_connex() routine which establishes a connection to server */
 

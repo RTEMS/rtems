@@ -32,6 +32,7 @@ static inline int getExcNum(Exception_context *ctx)
 }
 
 extern void connect_rdbg_exception();
+extern void disconnect_rdbg_exception();
 
 #endif
 

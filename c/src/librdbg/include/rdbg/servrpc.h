@@ -23,7 +23,7 @@ extern int CONN_LIST_INC;
 extern int PID_LIST_INC;
 extern int TSP_RETRIES;
 extern int BackPort;
-extern char ActName[];
+extern char taskName[];
 extern int getId();
 
 

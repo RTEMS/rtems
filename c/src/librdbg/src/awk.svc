@@ -26,7 +26,7 @@ $1 ~ /^\/\*HEADER_START\*\/$/ {
     printf("#include <bsp.h>\n");
     printf("#include <rdbg/servrpc.h>\n");
     printf("#include <rdbg/%s>\n", THEPROG);
-    printf("#define fprintf(a,b) printf(b)\n");
+    printf("#define fprintf(a,b,c) printf(b,c)\n");
 }
 
 $1 ~ /^\/\*HEADER_END\*\/$/ {

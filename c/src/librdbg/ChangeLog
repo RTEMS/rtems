@@ -1,3 +1,38 @@
+
+	* So many patches have been posted recently on the mailing list and 
+	because we were unable to find correct solution to compile on various 
+	linux distros (due to rpcgen incompatibilities), and because the coding 
+	style of rdbg was rather inconsistant among various pieces of code, I 
+	decided to:
+	    1) make some cleaning regarding global coding style (using
+	       indent + manual edits),
+	    2) incorporate/review the paches send by various people
+	       (S. Holford, T. Strauman),
+	    3) Fix the bug due to varying rpcgen code generation
+	       in remdeb_svc.c,
+	    4) Remove some dead code,
+	    5) Apply a patches enabling to call enterRdbg imediately
+	       after rdbg initialization is done,
+
+	NB : the paches is huge but it is mainly due to coding styke chnages. 
+	Only few lines of codes have been really changed and they do not impact 
+	rdbg functionnality (AFAIKT).
+
+	* include/rdbg/servrpc.h, include/rdbg/i386/rdbg_f.h,
+	include/rdbg/m68k/rdbg_f.h, include/rdbg/powerpc/rdbg_f.h,
+	src/_servtgt.c, src/awk.svc, src/excep.c, src/ptrace.c, src/rdbg.c,
+	src/remdeb.x, src/servbkpt.c, src/servcon.c, src/servrpc.c,
+	src/servtgt.c, src/servtsp.c, src/servutil.c, src/i386/excep_f.c,
+	src/i386/rdbg_f.c, src/i386/any/Makefile.am, src/i386/any/remdeb.h,
+	src/i386/any/remdeb_svc.c, src/i386/any/remdeb_xdr.c,
+	src/m68k/excep_f.c, src/m68k/rdbg_f.c, src/m68k/any/Makefile.am,
+	src/m68k/any/remdeb.h, src/m68k/any/remdeb_svc.c,
+	src/m68k/any/remdeb_xdr.c, src/powerpc/excep_f.c, src/powerpc/rdbg_f.c,
+	src/powerpc/new_exception_processing/Makefile.am,
+	src/powerpc/new_exception_processing/remdeb.h,
+	src/powerpc/new_exception_processing/remdeb_svc.c,
+	src/powerpc/new_exception_processing/remdeb_xdr.c: Modified.
+
 2002-01-18	Till Straumann <strauman@slac.stanford.edu>
 
 	* src/powerpc/excep_f.c: This patch addresses the following issues:

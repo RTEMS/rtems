@@ -3,7 +3,7 @@
  *
  * Component =   
  * 
- * Synopsis  =   rkdb/rkdb.c
+ * Synopsis  =   rdbg.c
  *
  * $Id$
  *
@@ -21,131 +21,128 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-u_short  rtemsPort = RTEMS_PORT;
-int	 BackPort = RTEMS_BACK_PORT;
-int      rtemsActive = 0;
-SVCXPRT* rtemsXprt;
-int      rtemsSock;
-char	 ActName[] = "RTEMS";
-volatile int 		ExitForSingleStep = 0 ;
-volatile int 		Continue;
-volatile int 		justSaveContext;
-volatile Objects_Id 	currentTargetThread;
-volatile int 		CannotRestart = 0;
-volatile int 		TotalReboot = 0;
+u_short rtemsPort = RTEMS_PORT;
+int BackPort = RTEMS_BACK_PORT;
+int rtemsActive = 0;
+SVCXPRT *rtemsXprt;
+int rtemsSock;
+char taskName[] = "RTEMS rdbg daemon";
+volatile int ExitForSingleStep = 0;
+volatile int Continue;
+volatile int justSaveContext;
+volatile Objects_Id currentTargetThread;
+volatile int CannotRestart = 0;
+volatile int TotalReboot = 0;
 int CONN_LIST_INC = 3;
-int PID_LIST_INC  = 1;
-int TSP_RETRIES   = 10;
+int PID_LIST_INC = 1;
+int TSP_RETRIES = 10;
 
-
-int
-getId()
+  int
+getId ()
 {
   rtems_id id;
-  
-  rtems_task_ident(RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &id);
-    return (int)(id) ;
+
+  rtems_task_ident (RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &id);
+  return (int) (id);
 }
 
-static void
-remotedeb_2_hook(struct svc_req *rqstp, register SVCXPRT *transp)
-{
-  connect_rdbg_exception(); /* monitor stub changes trace vector */
-  remotedeb_2(rqstp, transp);
-  connect_rdbg_exception();
-}
-
-static int
+  static int
 rdbgInit (void)
 {
-    int sock;
-    struct sockaddr_in addr;
+  int sock;
+  struct sockaddr_in addr;
 
-    sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (sock == -1) {
-	printf("%s: rkdbInit: cannot allocate socket\n", ActName);
-	return -1;
-    }
+  sock = socket (AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+  if (sock == -1) {
+    printf ("%s: rdbgInit: cannot allocate socket\n", taskName);
+    return -1;
+  }
 
-    bzero( (void *)&addr, sizeof(struct sockaddr_in));
-    addr.sin_port = htons(rtemsPort);
-    if ((bind(sock, (struct sockaddr*) &addr, sizeof(addr))) == -1) {
-	printf("%s: rkdbInit: cannot bind socket\n", ActName);
-	return -2;
-    }
-    rtemsXprt = svcudp_create(sock);
-    if (svcudp_enablecache(rtemsXprt, 1) == 0) {
-        printf("%s: rkdbInit: cannot enable rpc cache\n", ActName);
-        return -3;
-    }
-    rtemsSock = sock;
-    if (!svc_register(rtemsXprt, REMOTEDEB, REMOTEVERS, remotedeb_2, 0)) {
-        printf(stderr, "unable to register (REMOTEDEB, REMOTEVERS, udp).");
-	return -4;
-    }
+  bzero ((void *) &addr, sizeof (struct sockaddr_in));
+  addr.sin_port = htons (rtemsPort);
+  if ((bind (sock, (struct sockaddr *) &addr, sizeof (addr))) == -1) {
+    printf ("%s: rdbgInit: cannot bind socket\n", taskName);
+    return -2;
+  }
+  rtemsXprt = svcudp_create (sock);
+  if (svcudp_enablecache (rtemsXprt, 1) == 0) {
+    printf ("%s: rdbgInit: cannot enable rpc cache\n", taskName);
+    return -3;
+  }
+  rtemsSock = sock;
+  if (!svc_register (rtemsXprt, REMOTEDEB, REMOTEVERS, remotedeb_2, 0)) {
+    printf (stderr, "unable to register (REMOTEDEB, REMOTEVERS, udp).");
+    return -4;
+  }
+  connect_rdbg_exception ();
 
-    return 0;
+  return 0;
 }
 
-rtems_task
+  rtems_task
 rdbgDaemon (rtems_task_argument argument)
 {
-  svc_run();
+  svc_run ();
 }
 
-void
+  void
 rtems_rdbg_initialize (void)
 {
-  rtems_name        task_name;
-  rtems_id          tid;
+  rtems_name task_name;
+  rtems_id tid;
   rtems_status_code status;
 
 #ifdef DDEBUG
-	rdb_debug = 1;           /* DPRINTF now will display */
+  rdb_debug = 1;                /* DPRINTF now will display */
 #endif
 
-    DPRINTF (("%s init starting\n", ActName));
+  DPRINTF (("%s init starting\n", taskName));
 
-    /* Print version string */
+  /*
+   * Print version string 
+   */
 #ifdef DDEBUG
-    printk ("RDBG v.%d built on [%s %s]\n", SERVER_VERS, __DATE__, __TIME__);
+  printk ("RDBG v.%d built on [%s %s]\n", SERVER_VERS, __DATE__, __TIME__);
 #else
-    printk ("RDBG v.%d\n", SERVER_VERS);
+  printk ("RDBG v.%d\n", SERVER_VERS);
 #endif
 
-    /* Create socket and init UDP RPC server */
-    if (rdbgInit() != 0) goto error;
+  /*
+   * Create socket and init UDP RPC server 
+   */
+  if (rdbgInit () != 0)
+    goto error;
 
-    Continue = 1;
-    justSaveContext = 0;
-    currentTargetThread = 0;
-    
-    task_name = rtems_build_name( 'R', 'D', 'B', 'G' );
-    if ((status = rtems_task_create( task_name, 5, 24576,
-				     RTEMS_INTERRUPT_LEVEL(0),
-				     RTEMS_DEFAULT_ATTRIBUTES | RTEMS_SYSTEM_TASK
-				     , &tid ))
-	!= RTEMS_SUCCESSFUL){
-      printf("status = %d\n",status);
-      rtems_panic ("Can't create task.\n");
-    }
+  Continue = 1;
+  justSaveContext = 0;
+  currentTargetThread = 0;
 
-    status = rtems_task_start(tid, rdbgDaemon, 0);
+  task_name = rtems_build_name ('R', 'D', 'B', 'G');
+  if ((status = rtems_task_create (task_name, 5, 24576,
+                                   RTEMS_INTERRUPT_LEVEL (0),
+                                   RTEMS_DEFAULT_ATTRIBUTES |
+                                   RTEMS_SYSTEM_TASK, &tid))
+      != RTEMS_SUCCESSFUL) {
+    printf ("status = %d\n", status);
+    rtems_panic ("Can't create task.\n");
+  }
 
-    return;
+  status = rtems_task_start (tid, rdbgDaemon, 0);
+
+  return;
 
 error:
-    printf ("initialization failed.\n");
+  printf ("initialization failed.\n");
 }
 
-void
+  void
 setErrno (int error)
 {
-    errno = error;
+  errno = error;
 }
 
-int
-getErrno()
+  int
+getErrno ()
 {
-    return errno;
+  return errno;
 }

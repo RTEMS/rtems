@@ -71,6 +71,8 @@ if RPCTOOLS
 	  -o powerpc/new_exception_processing/tmpSvc.c remdeb.x; \
 	$(AWK) -f ./awk.svc THEPROG="remdeb.h" powerpc/new_exception_processing/tmpSvc.c \
 	  > powerpc/new_exception_processing/remdeb_svc.c; \
+	$(SED) -e 's/fprintf.*,/printf(/'  powerpc/new_exception_processing/remdeb_svc.c; > powerpc/new_exception_processing/remdeb_svc.tmp; \
+	mv powerpc/new_exception_processing/remdeb_svc.tmp powerpc/new_exception_processing/remdeb_svc.c; \
 	rm -f powerpc/new_exception_processing/tmpSvc.c )
 endif
 

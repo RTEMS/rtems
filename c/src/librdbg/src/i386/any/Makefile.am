@@ -71,6 +71,8 @@ if RPCTOOLS
 	  -o i386/any/tmpSvc.c remdeb.x; \
 	$(AWK) -f ./awk.svc THEPROG="remdeb.h" i386/any/tmpSvc.c \
 	  > i386/any/remdeb_svc.c; \
+	$(SED) -e 's/fprintf.*,/printf(/'  i386/any/remdeb_svc.c > i386/any/remdeb_svc.tmp; \
+	mv i386/any/remdeb_svc.tmp i386/any/remdeb_svc.c; \
 	rm -f i386/any/tmpSvc.c )
 endif
 
