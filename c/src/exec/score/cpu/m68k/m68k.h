@@ -194,15 +194,6 @@ extern "C" {
 #endif
 
 /*
- *  If defined, this causes some of the macros to initialize their
- *  variables to zero before doing inline assembly.  This gets rid
- *  of compile time warnings at the cost of a little execution time
- *  in some time critical routines.
- */
-
-#define NO_UNINITIALIZED_WARNINGS
-
-/*
  *  Define the name of the CPU family.
  */
 
@@ -210,78 +201,42 @@ extern "C" {
 
 #ifndef ASM
 
-#ifdef NO_UNINITIALIZED_WARNINGS
 #define m68k_disable_interrupts( _level ) \
-  { \
-    (_level) = 0;  /* avoids warnings */ \
-    asm volatile ( "movew   %%sr,%0 ; \
-                    orw     #0x0700,%%sr" \
-                    : "=d" ((_level)) : "0" ((_level)) \
-    ); \
-  }
-#else
-#define m68k_disable_interrupts( _level ) \
-  { \
-    asm volatile ( "movew   %%sr,%0 ; \
-                    orw     #0x0700,%%sr" \
-                    : "=d" ((_level)) : "0" ((_level)) \
-    ); \
-  }
-#endif
+  asm volatile ( "movew   %%sr,%0\n\t" \
+                 "orw     #0x0700,%%sr" \
+                    : "=d" (_level))
 
 #define m68k_enable_interrupts( _level ) \
-  { \
-    asm volatile ( "movew   %0,%%sr " \
-                   : "=d" ((_level)) : "0" ((_level)) \
-    ); \
-  }
+  asm volatile ( "movew   %0,%%sr " : : "d" (_level));
 
 #define m68k_flash_interrupts( _level ) \
-  { \
-    asm volatile ( "movew   %0,%%sr ; \
-                    orw     #0x0700,%%sr" \
-                    : "=d" ((_level)) : "0" ((_level)) \
-    ); \
-  }
+  asm volatile ( "movew   %0,%%sr\n\t" \
+                 "orw     #0x0700,%%sr" \
+                    : : "d" (_level))
 
 #define m68k_get_interrupt_level( _level ) \
   do { \
-    register unsigned32 _tmpsr = 0; \
+    register unsigned32 _tmpsr; \
     \
-    asm volatile( "movw  %%sr,%0" \
-                   : "=d" (_tmpsr) : "0" (_tmpsr) \
-    ); \
-    \
+    asm volatile( "movw  %%sr,%0" : "=d" (_tmpsr)); \
     _level = (_tmpsr & 0x0700) >> 8; \
   } while (0)
     
 #define m68k_set_interrupt_level( _newlevel ) \
-  { \
-    register unsigned32 _tmpsr = 0; \
+  do { \
+    register unsigned32 _tmpsr; \
     \
-    asm volatile( "movw  %%sr,%0" \
-                   : "=d" (_tmpsr) : "0" (_tmpsr) \
-    ); \
-    \
+    asm volatile( "movw  %%sr,%0" : "=d" (_tmpsr)); \
     _tmpsr = (_tmpsr & 0xf8ff) | ((_newlevel) << 8); \
-    \
-    asm volatile( "movw  %0,%%sr" \
-                   : "=d" (_tmpsr) : "0" (_tmpsr) \
-    ); \
-  }
+    asm volatile( "movw  %0,%%sr" : : "d" (_tmpsr)); \
+  } while (0)
 
 #if ( M68K_HAS_VBR == 1 )
 #define m68k_get_vbr( vbr ) \
-  { (vbr) = 0; \
-    asm volatile ( "movec   %%vbr,%0 " \
-                       : "=r" (vbr) : "0" (vbr) ); \
-  }
+  asm volatile ( "movec   %%vbr,%0 " : "=r" (vbr))
 
 #define m68k_set_vbr( vbr ) \
-  { register m68k_isr *_vbr= (m68k_isr *)(vbr); \
-    asm volatile ( "movec   %0,%%vbr " \
-                       : "=a" (_vbr) : "0" (_vbr) ); \
-  }
+  asm volatile ( "movec   %0,%%vbr " : : "r" (vbr))
 #else
 #define m68k_get_vbr( _vbr ) _vbr = (void *)_VBR
 #define m68k_set_vbr( _vbr )

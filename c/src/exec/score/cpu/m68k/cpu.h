@@ -28,8 +28,6 @@ extern "C" {
  *  in some time critical routines.
  */
 
-#define NO_UNINITIALIZED_WARNINGS
-
 #include <rtems/score/m68k.h>
 #ifndef ASM
 #include <rtems/score/m68ktypes.h>
@@ -310,27 +308,9 @@ unsigned32 _CPU_ISR_Get_level( void );
 #define CPU_USE_GENERIC_BITFIELD_DATA FALSE
 
 #if ( M68K_HAS_BFFFO == 1 )
-#ifdef NO_UNINITIALIZED_WARNINGS
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
-  { \
-    register void *__base = (void *)&(_value); \
-    \
-    (_output) = 0;  /* avoids warnings */ \
-    asm volatile( "bfffo (%0),#0,#16,%1" \
-                   : "=a" (__base), "=d" ((_output)) \
-                   : "0"  (__base), "1" ((_output))  ) ; \
-  }
-#else
-#define _CPU_Bitfield_Find_first_bit( _value, _output ) \
-  { \
-    register void *__base = (void *)&(_value); \
-    \
-    asm volatile( "bfffo (%0),#0,#16,%1" \
-                   : "=a" (__base), "=d" ((_output)) \
-                   : "0"  (__base), "1" ((_output))  ) ; \
-  }
-#endif
+  asm volatile( "bfffo (%1),#0,#16,%0" : "=d" (_output), "=a" (&_value));
 
 #else
 
