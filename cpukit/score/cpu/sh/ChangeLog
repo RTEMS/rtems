@@ -1,3 +1,7 @@
+2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/score/sh.h: Fix typo in comment (Starus->Status).
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

@@ -243,7 +243,7 @@ extern unsigned int sh_set_irq_priority(
 #define SH4_SR_T           0x00000001 /* 1 if last condiyion was true */
 #define SH4_SR_RESERV      0x8fff7d0d /* Reserved bits, read/write as 0 */
 
-/* FPSCR -- FPU Starus/Control Register */
+/* FPSCR -- FPU Status/Control Register */
 #define SH4_FPSCR_FR       0x00200000 /* FPU register bank specifier */
 #define SH4_FPSCR_SZ       0x00100000 /* FMOV 64-bit transfer mode */
 #define SH4_FPSCR_PR       0x00080000 /* Double-percision floating-point
