@@ -2,9 +2,9 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../aclocal
+ACLOCAL_AMFLAGS = -I aclocal
 
-include $(top_srcdir)/../../../automake/multilib.am
+include $(top_srcdir)/automake/multilib.am
 
 SUBDIRS = . include score rtems sapi @subdirs@ wrapup
 
@@ -19,5 +19,5 @@ AUTOMAKE_FILES = automake/compile.am automake/lib.am automake/local.am \
     automake/multilib.am automake/subdirs.am
 EXTRA_DIST = $(AUTOMAKE_FILES)
 
-include $(top_srcdir)/../../../automake/subdirs.am
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/automake/subdirs.am
+include $(top_srcdir)/automake/local.am
