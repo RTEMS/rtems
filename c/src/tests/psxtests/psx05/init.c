@@ -96,6 +96,10 @@ void *POSIX_Init(
   
   /* basic checkout of mutex attributes */
 
+  puts( "Init: pthread_mutexattr_init - EINVAL (NULL attr)" );
+  status = pthread_mutexattr_init( NULL );
+  assert( status == EINVAL );
+
   puts( "Init: pthread_mutexattr_init - SUCCESSFUL" );
   status = pthread_mutexattr_init( &attr );
   assert( !status );
