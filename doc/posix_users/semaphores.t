@@ -23,6 +23,7 @@ The directives provided by the semaphore manager are:
 @item @code{sem_unlink} - Remove a named semaphore
 @item @code{sem_wait} - Lock a semaphore
 @item @code{sem_trywait} - Lock a semaphore
+@item @code{sem_timedwait} - Wait on a Semaphore for a Specified Time
 @item @code{sem_post} - Unlock a semaphore
 @item @code{sem_getvalue} - Get the value of a semeaphore
 @end itemize
