@@ -1,3 +1,10 @@
+2003-06-12	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/rtems/msgmp.h, include/rtems/rtems/partmp.h,
+	include/rtems/rtems/regionmp.h, include/rtems/rtems/semmp.h,
+	src/msgmp.c, src/partmp.c, src/regionmp.c, src/semmp.c: Removed
+	warnings.
+
 2003-05-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/rtems/rtems/types.h: Include stdint.h.

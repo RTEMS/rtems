@@ -453,9 +453,11 @@ void _Message_queue_MP_Send_object_was_deleted (
  */
 
 void _Message_queue_MP_Send_extract_proxy (
-  Thread_Control  *the_thread
+  void           *argument
 )
 {
+  Thread_Control *the_thread = (Thread_Control *)argument;
+
   _Message_queue_MP_Send_process_packet(
     MESSAGE_QUEUE_MP_EXTRACT_PROXY,
     the_thread->Wait.id,

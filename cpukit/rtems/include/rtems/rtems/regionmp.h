@@ -144,7 +144,7 @@ void _Region_MP_Process_packet (
  */
 
 void _Region_MP_Send_extract_proxy (
-  Thread_Control *the_thread
+  void           *argument
 );
 
 /*

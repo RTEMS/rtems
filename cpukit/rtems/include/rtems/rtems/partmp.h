@@ -139,7 +139,7 @@ void _Partition_MP_Process_packet (
  */
 
 void _Partition_MP_Send_extract_proxy (
-  Thread_Control *the_thread
+  void           *argument
 );
 
 /*
