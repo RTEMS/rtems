@@ -15,7 +15,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>
-#include <rtems/sptables.h>
+#include <inttypes.h>
 
 #include <rtems/seterr.h>
 
@@ -41,7 +41,7 @@ int uname(
 
   strcpy( name->sysname, "RTEMS" );
 
-  sprintf( name->nodename, "Node %d", _Objects_Local_node );
+  sprintf( name->nodename, "Node %" PRId32, _Objects_Local_node );
 
   strcpy( name->release, RTEMS_VERSION );
 

@@ -14,6 +14,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <sys/_inttypes.h>
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,11 @@
 2004-10-28	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libcsupport/include/inttypes.h: #include <sys/_inttypes.h>
+	* libcsupport/src/utsname.c: Don't include sptables.h.
+	Include <inttypes.h>. Use PRId32 instead of "%d".
+
+2004-10-28	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libcsupport/include/rtems/_inttypes.h: Remove.
 	* libcsupport/include/rtems/_stdint.h: Remove.
 	* libcsupport/include/sys/_inttypes.h: New.
