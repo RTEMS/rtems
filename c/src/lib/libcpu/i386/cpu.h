@@ -487,7 +487,8 @@ typedef struct {
 
 static inline void flush_cache()
 {
-  asm volatile ("wbinvd");
+  /* Would this be better as a macro? */
+  asm ("wbinvd");  /* gcc did not like a volatile being on this */
 }
 
 
