@@ -69,6 +69,16 @@ void Timer_initialize(void)
   Timer_starting = get_itimer();
 }
 
+#ifndef  rtems_cpu_configuration_get_timer_least_valid
+#define  rtems_cpu_configuration_get_timer_least_valid() 0
+#warning "rtems_cpu_configuration_get_timer_least_valid HACK tripped!"
+#endif
+
+#ifndef  rtems_cpu_configuration_get_timer_average_overhead
+#define  rtems_cpu_configuration_get_timer_average_overhead() 0
+#warning "rtems_cpu_configuration_get_timer_average_overhead HACK tripped!"
+#endif
+
 int Read_timer(void)
 {
   rtems_unsigned32 clicks;

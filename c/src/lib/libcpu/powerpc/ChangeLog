@@ -1,3 +1,11 @@
+2001-10-29	Joel Sherrill <joel@OARcorp.com>
+
+	* mpc8xx/timer/timer.c: Added hack for two macros that are not defined
+	with the new exception processing model:
+		rtems_cpu_configuration_get_timer_least_valid()
+		rtems_cpu_configuration_get_timer_average_overhead()
+	This is captured as PR57.
+
 2001-10-24	Joel Sherrill <joel@OARcorp.com>
 
 	* mpc8260/clock/.cvsignore, mpc8260/console-generic/.cvsignore,
