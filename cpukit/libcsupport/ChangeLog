@@ -1,3 +1,8 @@
+2003-09-02	Ilya Alexeev <ilya@continuum.ru>
+
+	PR 472/filesystem
+	src/malloc.c: Need to include apimutex.h when MALLOC_STATS is defined.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	PR 449/rtems:

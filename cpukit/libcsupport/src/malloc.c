@@ -19,6 +19,7 @@
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 #include <rtems/libcsupport.h>
+#include <rtems/score/apimutex.h>
 #ifdef RTEMS_NEWLIB
 #include <sys/reent.h>
 #endif
@@ -35,6 +36,7 @@
 rtems_id RTEMS_Malloc_Heap;
 size_t RTEMS_Malloc_Sbrk_amount;
 
+#define MALLOC_STATS
 #ifdef RTEMS_DEBUG
 #define MALLOC_STATS
 #define MALLOC_DIRTY
