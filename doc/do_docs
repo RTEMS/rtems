@@ -5,10 +5,17 @@
 
 basedir=$1
 shift
-manuals="develenv hppa1_1 i386 i960 m68k relnotes powerpc sparc user ka9q \
-  posix_test_plan ada_user"
-# posix_test_plan manual left out until finished
+public_docs="user develenv ka9q posix_users"
+support_docs="hppa1_1 i386 i960 m68k sparc"
+partners_docs="posix1003.1"
+
+extra_manuals="hwapi"
+
+# relnotes  is obsolete
+# posix_users manual left out until finished
 # ada_user manual left out until bindings released
+manuals="$public_docs"
+#manuals="$public_docs $support_docs $partners_docs $extra_manuals"
 
 for action in $*
 do
