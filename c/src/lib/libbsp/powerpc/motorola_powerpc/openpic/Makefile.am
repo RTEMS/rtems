@@ -13,6 +13,7 @@ H_FILES = ../../shared/openpic/openpic.h
 OBJS = $(C_FILES:%.c=$(ARCH)/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
 $(PROJECT_INCLUDE)/bsp:

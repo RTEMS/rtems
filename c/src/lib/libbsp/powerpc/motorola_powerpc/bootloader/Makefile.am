@@ -17,6 +17,7 @@ S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 OBJS = $(S_O_FILES) $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
 #
@@ -28,7 +29,8 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 CFLAGS_DEBUG_V = $(CFLAGS_OPTIMIZE_V)
 
 AM_CPPFLAGS += -D__BOOT__ -DDEBUG -mrelocatable
-AM_CFLAGS += -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple -mstring -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata
+AM_CFLAGS += -msoft-float -mstrict-align -fno-builtin -Wall -mmultiple \
+    -mstring -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata
 
 IMAGES = rtems.gz
 
