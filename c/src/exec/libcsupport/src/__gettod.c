@@ -71,7 +71,6 @@ int gettimeofday(
 
 #if defined(RTEMS_NEWLIB) 
 
-#if 0
 /*
  *  "Reentrant" version
  */
@@ -84,7 +83,6 @@ int _gettimeofday_r(
 {
   return gettimeofday( tp, tzp );
 }
-#endif
 
 /*
  *  "System call" version 
