@@ -19,7 +19,6 @@
  * $Header$
  */
 
-#include <bsp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -465,6 +464,9 @@ int _CPU_change_memory_mapping_attribute
  * Display the page descriptor flags
  * CACHE_DISABLE of the whole memory
  */
+
+/* hack to avoid dependency on bsp.h */
+void printk(char *fmt, ...);             /* from 'printk.c' */
 
 int  _CPU_display_memory_attribute(){ 
   unsigned int dirCount, pageCount;
