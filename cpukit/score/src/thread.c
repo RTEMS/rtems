@@ -318,10 +318,23 @@ static unsigned32 _Thread_Stack_Allocate(
    * the RTEMS workspace allocate.  This is so the stack free
    * routine can call the correct deallocation routine.
    */
+
   if ( _CPU_Table.stack_allocate_hook )
   {
     stack_addr = (*_CPU_Table.stack_allocate_hook)( stack_size );
   } else {
+
+    /*
+     *  First pad the requested size so we allocate enough memory
+     *  so the context initialization can align it properly.  The address
+     *  returned the workspace allocate must be directly stored in the
+     *  stack control block because it is later used in the free sequence.
+     *
+     *  Thus it is the responsibility of the CPU dependent code to 
+     *  get and keep the stack adjust factor, the stack alignment, and 
+     *  the context initialization sequence in sync.
+     */
+
     stack_size = _Stack_Adjust_size( stack_size );
     stack_addr = _Workspace_Allocate( stack_size );
   }
@@ -347,6 +360,7 @@ static void _Thread_Stack_Free(void *stack_addr)
      * the RTEMS workspace free.  This is so the free
      * routine properly matches the allocation of the stack.
      */
+
     if ( _CPU_Table.stack_free_hook )
         (*_CPU_Table.stack_free_hook)( stack_addr );
     else
