@@ -1,5 +1,10 @@
 2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* configure.ac: Remove HAS_WRAPUP_LIBBSP.
+	* wrapup/Makefile.am: Remove HAS_WRAPUP_LIBBSP.
+
+2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* aclocal/ppc.m4: Reflect changes to ppc exception processing
 	building procedures.
 
