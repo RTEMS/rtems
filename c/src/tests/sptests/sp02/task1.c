@@ -26,6 +26,7 @@ rtems_task Task_1(
   rtems_id          tid2;
   rtems_id          tid3;
   rtems_status_code status;
+  rtems_name        tid2_name;
   rtems_unsigned32  previous_priority;
 
   puts( "TA1 - rtems_task_wake_after - sleep 1 second" );
@@ -36,6 +37,12 @@ rtems_task Task_1(
   directive_failed( status, "rtems_task_ident of TA2" );
 
   printf( "TA1 - rtems_task_ident - tid of TA2 (0x%.8x)\n", tid2 );
+
+  status = rtems_object_id_to_name( tid2, &tid2_name );
+  directive_failed( status, "rtems_object_id_to_name of TA2" );
+
+  printf( "TA1 - rtems_id_to_name - id -> name of TA2 %sOK\n",
+    (tid2_name != Task_name[2]) ? "NOT " : "" );
 
   status = rtems_task_ident( Task_name[ 3 ], RTEMS_SEARCH_ALL_NODES, &tid3 );
   directive_failed( status, "rtems_task_ident of TA3" );
