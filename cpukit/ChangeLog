@@ -2,6 +2,7 @@
 
 	* libnetworking/rtems/ftpfs.h, libnetworking/rtems/mkrootfs.h,
 	libnetworking/rtems/rtems_bsdnet_internal.h,
+	libnetworking/rtems/rtems_bsdnet.h,
 	libnetworking/rtems/tftp.h: New header guards.
 
 2005-02-02	Ralf Corsepius <ralf.corsepius@rtems.org>
