@@ -1,0 +1,13 @@
+@c
+@c  COPYRIGHT (c) 1988-1998.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
+@unnumbered Preface
+
+This lists each section number in POSIX 1003.1 and which functions
+are defined in that document per section number.
+

@@ -1,0 +1,136 @@
+\input ../texinfo/texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename posix1003_1
+@syncodeindex vr fn
+@synindex ky cp
+@paragraphindent 0
+@c @smallbook
+@c %**end of header
+
+@c
+@c  COPYRIGHT (c) 1988-1998.
+@c  On-Line Applications Research Corporation (OAR).
+@c  All rights reserved.
+@c
+@c  $Id$
+@c
+
+@c
+@c   Master file for the KA9Q TCP/IP Supplement
+@c
+
+@include ../common/setup.texi
+
+@ignore
+@ifinfo
+@format
+START-INFO-DIR-ENTRY
+* RTEMS KA9Q TCP/IP Supplement (posix1003_1):
+END-INFO-DIR-ENTRY
+@end format
+@end ifinfo
+@end ignore
+
+@c
+@c  Title Page Stuff
+@c
+
+@set edition 970904
+@set version 970904
+@set update-date 4 September 1997
+@set update-month September 1997
+
+@c
+@c  I don't really like having a short title page.  --joel
+@c
+@c @shorttitlepage RTEMS KA9Q TCP/IP Supplement
+
+@setchapternewpage odd
+@settitle RTEMS KA9Q TCP/IP Supplement
+@titlepage
+@finalout
+
+@title RTEMS KA9Q TCP/IP Supplement
+@subtitle Edition @value{edition}, for RTEMS @value{version}
+@sp 1
+@subtitle @value{update-month}
+@author On-Line Applications Research Corporation
+@page
+@include ../common/cpright.texi
+@end titlepage
+
+@c  This prevents a black box from being printed on "overflow" lines.
+@c  The alternative is to rework a sentence to avoid this problem.
+
+@include preface.texi
+@include ch01.texi
+@include ch02.texi
+@include ch03.texi
+@include ch04.texi
+@include ch05.texi
+@include ch06.texi
+@include ch07.texi
+@include ch08.texi
+@include ch09.texi
+@include ch10.texi
+@include ch11.texi
+@include ch12.texi
+@include ch13.texi
+@include ch14.texi
+@include ch15.texi
+@include ch16.texi
+@include ch17.texi
+@include ch18.texi
+
+@ifinfo
+@node Top, Preface, (dir), (dir)
+@top posix1003_1
+
+This is the online version of the RTEMS KA9Q TCP/IP Supplement.
+
+@menu
+* Preface::
+* General::
+* Terminology and General Requirements::
+* Process Primitives::
+* Process Environment::
+* Files and Directories::
+* Input and Output Primitives::
+* Device- and Class-Specific Functions::
+* Language-Specific Services for the C Programming Language::
+* System Databases::
+* Data Interchange Format::
+* Synchronization::
+* Memory Management::
+* Execution Scheduling::
+* Clocks and Timers::
+* Message Passing::
+* Thread Management::
+* Thread-Specific Data::
+* Thread Cancellation::
+* Command and Variable Index::
+* Concept Index::
+@end menu
+
+@end ifinfo
+@c 
+@c 
+@c Need to copy the emacs stuff and "trailer stuff" (index, toc) into here
+@c
+
+@node Command and Variable Index, Concept Index, List of Cancellation Points, Top
+@unnumbered Command and Variable Index
+
+There are currently no Command and Variable Index entries.
+
+@c @printindex fn
+
+@node Concept Index, , Command and Variable Index, Top
+@unnumbered Concept Index
+
+There are currently no Concept Index entries.
+@c @printindex cp
+
+@c @contents
+@bye
+
