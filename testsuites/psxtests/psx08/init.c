@@ -32,6 +32,10 @@ void *POSIX_Init(
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08x\n", Init_id );
 
+  puts( "Init: pthread_detach - ESRCH (invalid id)" );
+  status = pthread_detach( -1 );
+  assert( status == ESRCH );
+
   /* detach this thread */
 
   puts( "Init: pthread_detach self" );
@@ -47,8 +51,13 @@ void *POSIX_Init(
   status = pthread_create( &Task2_id, NULL, Task_2, NULL );
   assert( !status );
   
+  puts( "Init: pthread_join - ESRCH (invalid id)" );
+  status = pthread_join( -1, &return_pointer );
+  assert( status == ESRCH );
+
   puts( "Init: pthread_join - SUCCESSFUL" );
   status = pthread_join( Task_id, &return_pointer );
+  /* assert is below comment */
 
      /* switch to Task 1 */
 
