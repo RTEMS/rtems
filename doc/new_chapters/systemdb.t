@@ -38,7 +38,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection getgrgid - XXX
+@subsection getgrgid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -54,12 +54,18 @@ int getgrgid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getgrgid_r - XXX
+@subsection getgrgid_r - 
 
 @subheading CALLING SEQUENCE:
 
@@ -75,12 +81,18 @@ int getgrgid_r(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getgrnam - XXX
+@subsection getgrnam - 
 
 @subheading CALLING SEQUENCE:
 
@@ -96,12 +108,18 @@ int getgrnam(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getgrnam_r - XXX
+@subsection getgrnam_r - 
 
 @subheading CALLING SEQUENCE:
 
@@ -117,12 +135,18 @@ int getgrnam_r(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getpwuid - XXX
+@subsection getpwuid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -138,12 +162,18 @@ int getpwuid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getpwuid_r - XXX
+@subsection getpwuid_r - 
 
 @subheading CALLING SEQUENCE:
 
@@ -159,12 +189,18 @@ int getpwuid_r(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getpwnam - XXX
+@subsection getpwnam - 
 
 @subheading CALLING SEQUENCE:
 
@@ -180,12 +216,18 @@ int getpwnam(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getpwnam_r - XXX
+@subsection getpwnam_r - 
 
 @subheading CALLING SEQUENCE:
 
@@ -200,6 +242,12 @@ int getpwnam_r(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

@@ -48,7 +48,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection pipe - XXX
+@subsection pipe - 
 
 @subheading CALLING SEQUENCE:
 
@@ -64,12 +64,18 @@ int pipe(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection dup - XXX
+@subsection dup - 
 
 @subheading CALLING SEQUENCE:
 
@@ -85,12 +91,18 @@ int dup(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection dup2 - XXX
+@subsection dup2 - 
 
 @subheading CALLING SEQUENCE:
 
@@ -106,12 +118,18 @@ int dup2(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection close - XXX
+@subsection close - 
 
 @subheading CALLING SEQUENCE:
 
@@ -127,12 +145,18 @@ int close(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection read - XXX
+@subsection read - 
 
 @subheading CALLING SEQUENCE:
 
@@ -148,12 +172,18 @@ int read(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection write - XXX
+@subsection write - 
 
 @subheading CALLING SEQUENCE:
 
@@ -169,12 +199,18 @@ int write(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection fcntl - XXX
+@subsection fcntl - 
 
 @subheading CALLING SEQUENCE:
 
@@ -190,12 +226,18 @@ int fcntl(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection lseek - XXX
+@subsection lseek - 
 
 @subheading CALLING SEQUENCE:
 
@@ -211,12 +253,18 @@ int lseek(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection fsynch - XXX
+@subsection fsynch - 
 
 @subheading CALLING SEQUENCE:
 
@@ -232,12 +280,18 @@ int fsynch(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection fdatasynch - XXX
+@subsection fdatasynch - 
 
 @subheading CALLING SEQUENCE:
 
@@ -253,12 +307,18 @@ int fdatasynch(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection aio_read - XXX
+@subsection aio_read - 
 
 @subheading CALLING SEQUENCE:
 
@@ -274,12 +334,18 @@ int aio_read(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection aio_write - XXX
+@subsection aio_write - 
 
 @subheading CALLING SEQUENCE:
 
@@ -295,12 +361,18 @@ int aio_write(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection lio_listio - XXX
+@subsection lio_listio - 
 
 @subheading CALLING SEQUENCE:
 
@@ -316,12 +388,18 @@ int lio_listio(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection aio_error - XXX
+@subsection aio_error - 
 
 @subheading CALLING SEQUENCE:
 
@@ -337,12 +415,18 @@ int aio_error(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection aio_return - XXX
+@subsection aio_return - 
 
 @subheading CALLING SEQUENCE:
 
@@ -358,12 +442,18 @@ int aio_return(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection aio_cancel - XXX
+@subsection aio_cancel - 
 
 @subheading CALLING SEQUENCE:
 
@@ -379,12 +469,18 @@ int aio_cancel(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection aio_suspend - XXX
+@subsection aio_suspend - 
 
 @subheading CALLING SEQUENCE:
 
@@ -400,12 +496,18 @@ int aio_suspend(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection aio_fsync - XXX
+@subsection aio_fsync - 
 
 @subheading CALLING SEQUENCE:
 
@@ -420,6 +522,12 @@ int aio_fsync(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

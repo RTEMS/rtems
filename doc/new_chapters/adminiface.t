@@ -31,7 +31,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection admin_shutdown - XXX
+@subsection admin_shutdown - 
 
 @subheading CALLING SEQUENCE:
 
@@ -46,6 +46,12 @@ int admin_shutdown(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

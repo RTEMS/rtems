@@ -19,7 +19,7 @@ dirs:
 COMMON_FILES=../common/cpright.texi
 
 GENERATED_FILES= \
-   adminiface.texi base.texi cancel.texi clock.texi cond.texi confspace.texi \
+   adminiface.texi cancel.texi clock.texi cond.texi confspace.texi \
    cspecific.texi device.texi dumpcontrol.texi eventlog.texi files.texi \
    io.texi key.texi memorymgmt.texi message.texi mutex.texi procenv.texi \
    process.texi sched.texi semaphores.texi signal.texi systemdb.texi \

@@ -56,7 +56,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection opendir - XXX
+@subsection opendir - 
 
 @subheading CALLING SEQUENCE:
 
@@ -72,12 +72,18 @@ int opendir(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection readdir - XXX
+@subsection readdir - 
 
 @subheading CALLING SEQUENCE:
 
@@ -93,12 +99,18 @@ int readdir(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection readdir_r - XXX
+@subsection readdir_r - 
 
 @subheading CALLING SEQUENCE:
 
@@ -114,12 +126,18 @@ int readdir_r(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection rewinddir - XXX
+@subsection rewinddir - 
 
 @subheading CALLING SEQUENCE:
 
@@ -135,12 +153,18 @@ int rewinddir(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection closedir - XXX
+@subsection closedir - 
 
 @subheading CALLING SEQUENCE:
 
@@ -156,12 +180,18 @@ int closedir(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection chdir - XXX
+@subsection chdir - 
 
 @subheading CALLING SEQUENCE:
 
@@ -177,12 +207,18 @@ int chdir(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getcwd - XXX
+@subsection getcwd - 
 
 @subheading CALLING SEQUENCE:
 
@@ -198,12 +234,18 @@ int getcwd(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection open - XXX
+@subsection open - 
 
 @subheading CALLING SEQUENCE:
 
@@ -219,12 +261,18 @@ int open(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection creat - XXX
+@subsection creat - 
 
 @subheading CALLING SEQUENCE:
 
@@ -240,12 +288,18 @@ int creat(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection umask - XXX
+@subsection umask - 
 
 @subheading CALLING SEQUENCE:
 
@@ -261,12 +315,18 @@ int umask(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection link - XXX
+@subsection link - 
 
 @subheading CALLING SEQUENCE:
 
@@ -282,12 +342,18 @@ int link(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection mkdir - XXX
+@subsection mkdir - 
 
 @subheading CALLING SEQUENCE:
 
@@ -303,12 +369,18 @@ int mkdir(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection mkfifo - XXX
+@subsection mkfifo - 
 
 @subheading CALLING SEQUENCE:
 
@@ -324,12 +396,18 @@ int mkfifo(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection unlink - XXX
+@subsection unlink - 
 
 @subheading CALLING SEQUENCE:
 
@@ -345,12 +423,18 @@ int unlink(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection rmdir - XXX
+@subsection rmdir - 
 
 @subheading CALLING SEQUENCE:
 
@@ -366,12 +450,18 @@ int rmdir(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection rename - XXX
+@subsection rename - 
 
 @subheading CALLING SEQUENCE:
 
@@ -387,12 +477,18 @@ int rename(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection stat - XXX
+@subsection stat - 
 
 @subheading CALLING SEQUENCE:
 
@@ -408,12 +504,18 @@ int stat(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection fstat - XXX
+@subsection fstat - 
 
 @subheading CALLING SEQUENCE:
 
@@ -429,12 +531,18 @@ int fstat(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection access - XXX
+@subsection access - 
 
 @subheading CALLING SEQUENCE:
 
@@ -450,12 +558,18 @@ int access(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection chmod - XXX
+@subsection chmod - 
 
 @subheading CALLING SEQUENCE:
 
@@ -471,12 +585,18 @@ int chmod(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection fchmod - XXX
+@subsection fchmod - 
 
 @subheading CALLING SEQUENCE:
 
@@ -492,12 +612,18 @@ int fchmod(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection chown - XXX
+@subsection chown - 
 
 @subheading CALLING SEQUENCE:
 
@@ -513,12 +639,18 @@ int chown(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection utime - XXX
+@subsection utime - 
 
 @subheading CALLING SEQUENCE:
 
@@ -534,12 +666,18 @@ int utime(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection ftrunctate - XXX
+@subsection ftrunctate - 
 
 @subheading CALLING SEQUENCE:
 
@@ -555,12 +693,18 @@ int ftrunctate(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection pathconf - XXX
+@subsection pathconf - 
 
 @subheading CALLING SEQUENCE:
 
@@ -576,12 +720,18 @@ int pathconf(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection fpathconf - XXX
+@subsection fpathconf - 
 
 @subheading CALLING SEQUENCE:
 
@@ -596,6 +746,12 @@ int fpathconf(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

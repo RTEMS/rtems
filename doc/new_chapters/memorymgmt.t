@@ -40,7 +40,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection mlockall - XXX
+@subsection mlockall - 
 
 @subheading CALLING SEQUENCE:
 
@@ -56,12 +56,18 @@ int mlockall(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection munlockall - XXX
+@subsection munlockall - 
 
 @subheading CALLING SEQUENCE:
 
@@ -77,12 +83,18 @@ int munlockall(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection mlock - XXX
+@subsection mlock - 
 
 @subheading CALLING SEQUENCE:
 
@@ -98,12 +110,18 @@ int mlock(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection munlock - XXX
+@subsection munlock - 
 
 @subheading CALLING SEQUENCE:
 
@@ -119,12 +137,18 @@ int munlock(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection mmap - XXX
+@subsection mmap - 
 
 @subheading CALLING SEQUENCE:
 
@@ -140,12 +164,18 @@ int mmap(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection munmap - XXX
+@subsection munmap - 
 
 @subheading CALLING SEQUENCE:
 
@@ -161,12 +191,18 @@ int munmap(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection mprotect - XXX
+@subsection mprotect - 
 
 @subheading CALLING SEQUENCE:
 
@@ -182,12 +218,18 @@ int mprotect(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection msync - XXX
+@subsection msync - 
 
 @subheading CALLING SEQUENCE:
 
@@ -203,12 +245,18 @@ int msync(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection shm_open - XXX
+@subsection shm_open - 
 
 @subheading CALLING SEQUENCE:
 
@@ -224,12 +272,18 @@ int shm_open(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection shm_unlink - XXX
+@subsection shm_unlink - 
 
 @subheading CALLING SEQUENCE:
 
@@ -244,6 +298,12 @@ int shm_unlink(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

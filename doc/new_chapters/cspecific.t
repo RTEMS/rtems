@@ -51,7 +51,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection setlocale - XXX
+@subsection setlocale - 
 
 @subheading CALLING SEQUENCE:
 
@@ -67,12 +67,18 @@ int setlocale(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection fileno - XXX
+@subsection fileno - 
 
 @subheading CALLING SEQUENCE:
 
@@ -88,12 +94,18 @@ int fileno(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection fdopen - XXX
+@subsection fdopen - 
 
 @subheading CALLING SEQUENCE:
 
@@ -109,12 +121,18 @@ int fdopen(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection flcokfile - XXX
+@subsection flcokfile - 
 
 @subheading CALLING SEQUENCE:
 
@@ -130,12 +148,18 @@ int flcokfile(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection ftrylockfile - XXX
+@subsection ftrylockfile - 
 
 @subheading CALLING SEQUENCE:
 
@@ -151,12 +175,18 @@ int ftrylockfile(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection funlockfile - XXX
+@subsection funlockfile - 
 
 @subheading CALLING SEQUENCE:
 
@@ -172,12 +202,18 @@ int funlockfile(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getc_unlocked - XXX
+@subsection getc_unlocked - 
 
 @subheading CALLING SEQUENCE:
 
@@ -193,12 +229,18 @@ int getc_unlocked(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getchar_unlocked - XXX
+@subsection getchar_unlocked - 
 
 @subheading CALLING SEQUENCE:
 
@@ -214,12 +256,18 @@ int getchar_unlocked(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection putc_unlocked - XXX
+@subsection putc_unlocked - 
 
 @subheading CALLING SEQUENCE:
 
@@ -235,12 +283,18 @@ int putc_unlocked(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection putchar_unlocked - XXX
+@subsection putchar_unlocked - 
 
 @subheading CALLING SEQUENCE:
 
@@ -256,12 +310,18 @@ int putchar_unlocked(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection setjmp - XXX
+@subsection setjmp - 
 
 @subheading CALLING SEQUENCE:
 
@@ -277,12 +337,18 @@ int setjmp(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection longjmp - XXX
+@subsection longjmp - 
 
 @subheading CALLING SEQUENCE:
 
@@ -298,12 +364,18 @@ int longjmp(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection sigsetjmp - XXX
+@subsection sigsetjmp - 
 
 @subheading CALLING SEQUENCE:
 
@@ -319,12 +391,18 @@ int sigsetjmp(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection siglongjmp - XXX
+@subsection siglongjmp - 
 
 @subheading CALLING SEQUENCE:
 
@@ -340,12 +418,18 @@ int siglongjmp(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection tzset - XXX
+@subsection tzset - 
 
 @subheading CALLING SEQUENCE:
 
@@ -361,12 +445,18 @@ int tzset(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection strtok_r - XXX
+@subsection strtok_r - 
 
 @subheading CALLING SEQUENCE:
 
@@ -382,12 +472,18 @@ int strtok_r(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection asctime_r - XXX
+@subsection asctime_r - 
 
 @subheading CALLING SEQUENCE:
 
@@ -403,12 +499,18 @@ int asctime_r(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection ctime_r - XXX
+@subsection ctime_r - 
 
 @subheading CALLING SEQUENCE:
 
@@ -424,12 +526,18 @@ int ctime_r(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection gmtime_r - XXX
+@subsection gmtime_r - 
 
 @subheading CALLING SEQUENCE:
 
@@ -445,12 +553,18 @@ int gmtime_r(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection localtime_r - XXX
+@subsection localtime_r - 
 
 @subheading CALLING SEQUENCE:
 
@@ -466,12 +580,18 @@ int localtime_r(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection rand_r - XXX
+@subsection rand_r - 
 
 @subheading CALLING SEQUENCE:
 
@@ -486,6 +606,12 @@ int rand_r(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

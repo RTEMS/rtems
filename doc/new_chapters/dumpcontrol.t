@@ -31,7 +31,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection dump_setpath - XXX
+@subsection dump_setpath - 
 
 @subheading CALLING SEQUENCE:
 
@@ -46,6 +46,12 @@ int dump_setpath(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

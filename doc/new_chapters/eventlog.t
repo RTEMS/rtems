@@ -42,7 +42,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection log_write - XXX
+@subsection log_write - 
 
 @subheading CALLING SEQUENCE:
 
@@ -58,12 +58,18 @@ int log_write(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection log_open - XXX
+@subsection log_open - 
 
 @subheading CALLING SEQUENCE:
 
@@ -79,12 +85,18 @@ int log_open(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection log_read - XXX
+@subsection log_read - 
 
 @subheading CALLING SEQUENCE:
 
@@ -100,12 +112,18 @@ int log_read(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection log_notify - XXX
+@subsection log_notify - 
 
 @subheading CALLING SEQUENCE:
 
@@ -121,12 +139,18 @@ int log_notify(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection log_close - XXX
+@subsection log_close - 
 
 @subheading CALLING SEQUENCE:
 
@@ -142,12 +166,18 @@ int log_close(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection log_seek - XXX
+@subsection log_seek - 
 
 @subheading CALLING SEQUENCE:
 
@@ -163,12 +193,18 @@ int log_seek(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection log_severity_before - XXX
+@subsection log_severity_before - 
 
 @subheading CALLING SEQUENCE:
 
@@ -184,12 +220,18 @@ int log_severity_before(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection log_facilityemptyset - XXX
+@subsection log_facilityemptyset - 
 
 @subheading CALLING SEQUENCE:
 
@@ -205,12 +247,18 @@ int log_facilityemptyset(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection log_facilityfillset - XXX
+@subsection log_facilityfillset - 
 
 @subheading CALLING SEQUENCE:
 
@@ -226,12 +274,18 @@ int log_facilityfillset(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection log_facilityaddset - XXX
+@subsection log_facilityaddset - 
 
 @subheading CALLING SEQUENCE:
 
@@ -247,12 +301,18 @@ int log_facilityaddset(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection log_facilitydelset - XXX
+@subsection log_facilitydelset - 
 
 @subheading CALLING SEQUENCE:
 
@@ -268,12 +328,18 @@ int log_facilitydelset(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection log_facilityismember - XXX
+@subsection log_facilityismember - 
 
 @subheading CALLING SEQUENCE:
 
@@ -288,6 +354,12 @@ int log_facilityismember(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

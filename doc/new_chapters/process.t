@@ -41,7 +41,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection fork - XXX
+@subsection fork - 
 
 @subheading CALLING SEQUENCE:
 
@@ -57,12 +57,18 @@ int fork(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection execl - XXX
+@subsection execl - 
 
 @subheading CALLING SEQUENCE:
 
@@ -78,12 +84,18 @@ int execl(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection execv - XXX
+@subsection execv - 
 
 @subheading CALLING SEQUENCE:
 
@@ -99,12 +111,18 @@ int execv(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection execle - XXX
+@subsection execle - 
 
 @subheading CALLING SEQUENCE:
 
@@ -120,12 +138,18 @@ int execle(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection execve - XXX
+@subsection execve - 
 
 @subheading CALLING SEQUENCE:
 
@@ -141,12 +165,18 @@ int execve(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection execlp - XXX
+@subsection execlp - 
 
 @subheading CALLING SEQUENCE:
 
@@ -162,12 +192,18 @@ int execlp(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection execvp - XXX
+@subsection execvp - 
 
 @subheading CALLING SEQUENCE:
 
@@ -183,12 +219,18 @@ int execvp(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection pthread_atfork - XXX
+@subsection pthread_atfork - 
 
 @subheading CALLING SEQUENCE:
 
@@ -204,12 +246,18 @@ int pthread_atfork(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection wait - XXX
+@subsection wait - 
 
 @subheading CALLING SEQUENCE:
 
@@ -225,12 +273,18 @@ int wait(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection waitpid - XXX
+@subsection waitpid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -246,12 +300,18 @@ int waitpid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection _exit - XXX
+@subsection _exit - 
 
 @subheading CALLING SEQUENCE:
 
@@ -266,6 +326,12 @@ int _exit(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

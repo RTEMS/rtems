@@ -42,7 +42,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection cfgetispeed - XXX
+@subsection cfgetispeed - 
 
 @subheading CALLING SEQUENCE:
 
@@ -58,12 +58,18 @@ int cfgetispeed(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfgetospeed - XXX
+@subsection cfgetospeed - 
 
 @subheading CALLING SEQUENCE:
 
@@ -79,12 +85,18 @@ int cfgetospeed(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfsetispeed - XXX
+@subsection cfsetispeed - 
 
 @subheading CALLING SEQUENCE:
 
@@ -100,12 +112,18 @@ int cfsetispeed(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfsetospeed - XXX
+@subsection cfsetospeed - 
 
 @subheading CALLING SEQUENCE:
 
@@ -121,12 +139,18 @@ int cfsetospeed(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection tcgetattr - XXX
+@subsection tcgetattr - 
 
 @subheading CALLING SEQUENCE:
 
@@ -142,12 +166,18 @@ int tcgetattr(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection tcsetattr - XXX
+@subsection tcsetattr - 
 
 @subheading CALLING SEQUENCE:
 
@@ -163,12 +193,18 @@ int tcsetattr(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection tcsendbreak - XXX
+@subsection tcsendbreak - 
 
 @subheading CALLING SEQUENCE:
 
@@ -184,12 +220,18 @@ int tcsendbreak(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection tcdrain - XXX
+@subsection tcdrain - 
 
 @subheading CALLING SEQUENCE:
 
@@ -205,12 +247,18 @@ int tcdrain(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection tcflush - XXX
+@subsection tcflush - 
 
 @subheading CALLING SEQUENCE:
 
@@ -226,12 +274,18 @@ int tcflush(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection tcflow - XXX
+@subsection tcflow - 
 
 @subheading CALLING SEQUENCE:
 
@@ -247,12 +301,18 @@ int tcflow(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection tcgetpgrp - XXX
+@subsection tcgetpgrp - 
 
 @subheading CALLING SEQUENCE:
 
@@ -268,12 +328,18 @@ int tcgetpgrp(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection tcsetpgrp - XXX
+@subsection tcsetpgrp - 
 
 @subheading CALLING SEQUENCE:
 
@@ -288,6 +354,12 @@ int tcsetpgrp(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

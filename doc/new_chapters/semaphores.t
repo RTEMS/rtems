@@ -39,7 +39,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection sem_init - XXX
+@subsection sem_init - 
 
 @subheading CALLING SEQUENCE:
 
@@ -55,12 +55,18 @@ int sem_init(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection sem_destroy - XXX
+@subsection sem_destroy - 
 
 @subheading CALLING SEQUENCE:
 
@@ -76,12 +82,18 @@ int sem_destroy(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection sem_open - XXX
+@subsection sem_open - 
 
 @subheading CALLING SEQUENCE:
 
@@ -97,12 +109,18 @@ int sem_open(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection sem_close - XXX
+@subsection sem_close - 
 
 @subheading CALLING SEQUENCE:
 
@@ -118,12 +136,18 @@ int sem_close(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection sem_unlink - XXX
+@subsection sem_unlink - 
 
 @subheading CALLING SEQUENCE:
 
@@ -139,12 +163,18 @@ int sem_unlink(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection sem_wait - XXX
+@subsection sem_wait - 
 
 @subheading CALLING SEQUENCE:
 
@@ -160,12 +190,18 @@ int sem_wait(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection sem_trywait - XXX
+@subsection sem_trywait - 
 
 @subheading CALLING SEQUENCE:
 
@@ -181,12 +217,18 @@ int sem_trywait(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection sem_post - XXX
+@subsection sem_post - 
 
 @subheading CALLING SEQUENCE:
 
@@ -202,12 +244,18 @@ int sem_post(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection sem_getvalue - XXX
+@subsection sem_getvalue - 
 
 @subheading CALLING SEQUENCE:
 
@@ -222,6 +270,12 @@ int sem_getvalue(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

@@ -16,7 +16,7 @@ configuration space manager is ...
 The directives provided by the configuration space manager are:
 
 @itemize @bullet
-@item @code{cfg_mount} - 
+@item @code{cfg_mount} - Mount a Configuration Space
 @item @code{cfg_unmount} - 
 @item @code{cfg_mknod} - 
 @item @code{cfg_get} - 
@@ -42,13 +42,17 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection cfg_mount - XXX
+@subsection cfg_mount - Mount a Configuration Space
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int cfg_mount(
+  const char     *file,
+  const char     *cfgpath,
+  log_facility_t  notification,
+  int             logdes
 );
 @end example
 @end ifset
@@ -58,12 +62,18 @@ int cfg_mount(
 
 @subheading STATUS CODES:
 
+@table @b
+@item EPERM
+The caller does not have the appropriate privilege.
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfg_unmount - XXX
+@subsection cfg_unmount - 
 
 @subheading CALLING SEQUENCE:
 
@@ -79,12 +89,18 @@ int cfg_unmount(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfg_mknod - XXX
+@subsection cfg_mknod - 
 
 @subheading CALLING SEQUENCE:
 
@@ -100,12 +116,18 @@ int cfg_mknod(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfg_get - XXX
+@subsection cfg_get - 
 
 @subheading CALLING SEQUENCE:
 
@@ -121,12 +143,18 @@ int cfg_get(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfg_set - XXX
+@subsection cfg_set - 
 
 @subheading CALLING SEQUENCE:
 
@@ -142,12 +170,18 @@ int cfg_set(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfg_link - XXX
+@subsection cfg_link - 
 
 @subheading CALLING SEQUENCE:
 
@@ -163,12 +197,18 @@ int cfg_link(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfg_unlink - XXX
+@subsection cfg_unlink - 
 
 @subheading CALLING SEQUENCE:
 
@@ -184,12 +224,18 @@ int cfg_unlink(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfg_open - XXX
+@subsection cfg_open - 
 
 @subheading CALLING SEQUENCE:
 
@@ -205,12 +251,18 @@ int cfg_open(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfg_read - XXX
+@subsection cfg_read - 
 
 @subheading CALLING SEQUENCE:
 
@@ -226,12 +278,18 @@ int cfg_read(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfg_children - XXX
+@subsection cfg_children - 
 
 @subheading CALLING SEQUENCE:
 
@@ -247,12 +305,18 @@ int cfg_children(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfg_mark - XXX
+@subsection cfg_mark - 
 
 @subheading CALLING SEQUENCE:
 
@@ -268,12 +332,18 @@ int cfg_mark(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection cfg_close - XXX
+@subsection cfg_close - 
 
 @subheading CALLING SEQUENCE:
 
@@ -288,6 +358,12 @@ int cfg_close(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

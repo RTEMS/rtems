@@ -38,7 +38,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection mq_open - XXX
+@subsection mq_open - 
 
 @subheading CALLING SEQUENCE:
 
@@ -54,12 +54,18 @@ int mq_open(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection mq_close - XXX
+@subsection mq_close - 
 
 @subheading CALLING SEQUENCE:
 
@@ -75,12 +81,18 @@ int mq_close(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection mq_unlink - XXX
+@subsection mq_unlink - 
 
 @subheading CALLING SEQUENCE:
 
@@ -96,12 +108,18 @@ int mq_unlink(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection mq_send - XXX
+@subsection mq_send - 
 
 @subheading CALLING SEQUENCE:
 
@@ -117,12 +135,18 @@ int mq_send(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection mq_receive - XXX
+@subsection mq_receive - 
 
 @subheading CALLING SEQUENCE:
 
@@ -138,12 +162,18 @@ int mq_receive(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection mq_notify - XXX
+@subsection mq_notify - 
 
 @subheading CALLING SEQUENCE:
 
@@ -159,12 +189,18 @@ int mq_notify(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection mq_setattr - XXX
+@subsection mq_setattr - 
 
 @subheading CALLING SEQUENCE:
 
@@ -180,12 +216,18 @@ int mq_setattr(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection mq_getattr - XXX
+@subsection mq_getattr - 
 
 @subheading CALLING SEQUENCE:
 
@@ -200,6 +242,12 @@ int mq_getattr(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

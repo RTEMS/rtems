@@ -35,7 +35,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection pthread_cancel - XXX
+@subsection pthread_cancel - 
 
 @subheading CALLING SEQUENCE:
 
@@ -51,12 +51,18 @@ int pthread_cancel(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection pthread_setcancelstate - XXX
+@subsection pthread_setcancelstate - 
 
 @subheading CALLING SEQUENCE:
 
@@ -72,12 +78,18 @@ int pthread_setcancelstate(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection pthread_setcanceltype - XXX
+@subsection pthread_setcanceltype - 
 
 @subheading CALLING SEQUENCE:
 
@@ -93,12 +105,18 @@ int pthread_setcanceltype(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection pthread_testcancel - XXX
+@subsection pthread_testcancel - 
 
 @subheading CALLING SEQUENCE:
 
@@ -114,12 +132,18 @@ int pthread_testcancel(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection pthread_cleanup_push - XXX
+@subsection pthread_cleanup_push - 
 
 @subheading CALLING SEQUENCE:
 
@@ -134,6 +158,12 @@ int pthread_cleanup_push(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 

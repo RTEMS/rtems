@@ -52,7 +52,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection getpid - XXX
+@subsection getpid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -68,12 +68,18 @@ int getpid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getppid - XXX
+@subsection getppid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -89,12 +95,18 @@ int getppid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getuid - XXX
+@subsection getuid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -110,12 +122,18 @@ int getuid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection geteuid - XXX
+@subsection geteuid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -131,12 +149,18 @@ int geteuid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getgid - XXX
+@subsection getgid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -152,12 +176,18 @@ int getgid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getegid - XXX
+@subsection getegid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -173,12 +203,18 @@ int getegid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection setuid - XXX
+@subsection setuid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -194,12 +230,18 @@ int setuid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection setgid - XXX
+@subsection setgid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -215,12 +257,18 @@ int setgid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getgroups - XXX
+@subsection getgroups - 
 
 @subheading CALLING SEQUENCE:
 
@@ -236,12 +284,18 @@ int getgroups(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getlogin - XXX
+@subsection getlogin - 
 
 @subheading CALLING SEQUENCE:
 
@@ -257,12 +311,18 @@ int getlogin(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getlogin_r - XXX
+@subsection getlogin_r - 
 
 @subheading CALLING SEQUENCE:
 
@@ -278,12 +338,18 @@ int getlogin_r(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getpgrp - XXX
+@subsection getpgrp - 
 
 @subheading CALLING SEQUENCE:
 
@@ -299,12 +365,18 @@ int getpgrp(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection setsid - XXX
+@subsection setsid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -320,12 +392,18 @@ int setsid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection setpgid - XXX
+@subsection setpgid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -341,12 +419,18 @@ int setpgid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection uname - XXX
+@subsection uname - 
 
 @subheading CALLING SEQUENCE:
 
@@ -362,12 +446,18 @@ int uname(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection times - XXX
+@subsection times - 
 
 @subheading CALLING SEQUENCE:
 
@@ -383,12 +473,18 @@ int times(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection getenv - XXX
+@subsection getenv - 
 
 @subheading CALLING SEQUENCE:
 
@@ -404,12 +500,18 @@ int getenv(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection ctermid - XXX
+@subsection ctermid - 
 
 @subheading CALLING SEQUENCE:
 
@@ -425,12 +527,18 @@ int ctermid(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection ttyname - XXX
+@subsection ttyname - 
 
 @subheading CALLING SEQUENCE:
 
@@ -446,12 +554,18 @@ int ttyname(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection ttyname_r - XXX
+@subsection ttyname_r - 
 
 @subheading CALLING SEQUENCE:
 
@@ -467,12 +581,18 @@ int ttyname_r(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection isatty - XXX
+@subsection isatty - 
 
 @subheading CALLING SEQUENCE:
 
@@ -488,12 +608,18 @@ int isatty(
 
 @subheading STATUS CODES:
 
+@table @b
+@item E
+The
+
+@end table
+
 @subheading DESCRIPTION:
 
 @subheading NOTES:
 
 @page
-@subsection sysconf - XXX
+@subsection sysconf - 
 
 @subheading CALLING SEQUENCE:
 
@@ -508,6 +634,12 @@ int sysconf(
 @end ifset
 
 @subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
 
 @subheading DESCRIPTION:
 
