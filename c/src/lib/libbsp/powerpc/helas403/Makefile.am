@@ -27,12 +27,12 @@ include_HEADERS += include/coverhd.h
 
 noinst_PROGRAMS += dlentry.rel
 dlentry_rel_SOURCES = dlentry/dlentry.S
-dlentry_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+dlentry_rel_CPPFLAGS = $(AM_CPPFLAGS)
 dlentry_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += flashentry.rel
 flashentry_rel_SOURCES = flashentry/flashentry.S
-flashentry_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+flashentry_rel_CPPFLAGS = $(AM_CPPFLAGS)
 flashentry_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.dl
@@ -42,7 +42,7 @@ startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/main.c ../../shared/sbrk.c startup/setvec.c \
     ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)

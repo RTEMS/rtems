@@ -20,7 +20,7 @@ project_lib_LIBRARIES = librtems++.a
 librtems___a_SOURCES = src/rtemsEvent.cc src/rtemsInterrupt.cc \
     src/rtemsMessageQueue.cc src/rtemsSemaphore.cc src/rtemsStatusCode.cc \
     src/rtemsTask.cc src/rtemsTimer.cc
-librtems___a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+librtems___a_CPPFLAGS = $(AM_CPPFLAGS)
 endif
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)

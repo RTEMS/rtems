@@ -35,7 +35,7 @@ startup_rel_SOURCES = ../../mips/shared/gdbstub/mips-stub.c \
     ../../shared/bootcard.c ../../shared/main.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c ../../shared/setvec.c \
     startup/gdb-support.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
+startup_rel_CPPFLAGS = $(AM_CPPFLAGS) \
     $(startup_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -44,17 +44,17 @@ clock_CPPFLAGS = -I$(srcdir)/../../shared
 EXTRA_DIST += ../../mips/shared/clockdrv_shell.c
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/clockdrv.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(clock_CPPFLAGS)
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(clock_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = console/conscfg.c ../../shared/console.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_LIBRARIES = libbsp.a

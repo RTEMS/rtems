@@ -32,12 +32,12 @@ dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += pclock.rel
 pclock_rel_SOURCES = clock/p_clock.c
-pclock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+pclock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = console/console.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += startup.rel
@@ -45,12 +45,12 @@ startup_rel_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     startup/iss555.c ../../shared/main.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c startup/start.S
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += tm27supp.rel
 tm27supp_rel_SOURCES = startup/tm27supp.c
-tm27supp_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+tm27supp_rel_CPPFLAGS = $(AM_CPPFLAGS)
 tm27supp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)

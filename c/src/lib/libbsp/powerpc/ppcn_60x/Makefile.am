@@ -34,7 +34,7 @@ dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/clock.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
@@ -42,18 +42,18 @@ console_rel_SOURCES = console/console.c console/i8042vga.c \
     console/i8042vga.h console/i8042.c console/i8042_p.h \
     console/ns16550cfg.c console/ns16550cfg.h console/z85c30cfg.c \
     console/z85c30cfg.h console/vga.c console/vga_p.h
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += pci.rel
 pci_rel_SOURCES = pci/pci.c
-pci_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += nvram.rel
 nvram_rel_SOURCES = nvram/nvram.c nvram/ds1385.h nvram/mk48t18.h \
     nvram/prepnvr.h nvram/stk11c68.h
-nvram_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+nvram_rel_CPPFLAGS = $(AM_CPPFLAGS)
 nvram_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += startup.rel
@@ -62,36 +62,36 @@ startup_rel_SOURCES = startup/bspstart.c startup/bspclean.c \
     startup/genpvec.c startup/swap.c ../../shared/main.c \
     ../../shared/bootcard.c ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/gnatinstallhandler.c startup/bsptrap.S
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += tod.rel
 tod_rel_SOURCES = tod/tod.c tod/cmos.h
-tod_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+tod_rel_CPPFLAGS = $(AM_CPPFLAGS)
 tod_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += universe.rel
 universe_rel_SOURCES = universe/universe.c
-universe_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+universe_rel_CPPFLAGS = $(AM_CPPFLAGS)
 universe_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 EXTRA_DIST += vectors/README vectors/align_h.S
 
 noinst_PROGRAMS += vectors.rel
 vectors_rel_SOURCES = vectors/vectors.S
-vectors_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES = network/amd79c970.c network/amd79c970.h
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
+network_rel_CPPFLAGS = $(AM_CPPFLAGS) \
     $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif

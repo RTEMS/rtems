@@ -34,18 +34,18 @@ dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/clock.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = console/conscfg.c console/debugio.c \
     ../../shared/console.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += scv64.rel
 scv64_rel_SOURCES = scv64/scv64.c
-scv64_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+scv64_rel_CPPFLAGS = $(AM_CPPFLAGS)
 scv64_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += startup.rel
@@ -53,24 +53,24 @@ startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/main.c ../../shared/sbrk.c startup/setvec.c \
     startup/genpvec.c startup/vmeintr.c ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += tod.rel
 tod_rel_SOURCES = tod/todcfg.c ../../shared/tod.c
-tod_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+tod_rel_CPPFLAGS = $(AM_CPPFLAGS)
 tod_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 if HAS_NETWORKING
 sonic_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += sonic.rel
 sonic_rel_SOURCES = sonic/dmvsonic.c
-sonic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(sonic_CPPFLAGS)
+sonic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(sonic_CPPFLAGS)
 sonic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

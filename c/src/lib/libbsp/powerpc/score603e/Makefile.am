@@ -33,14 +33,14 @@ dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/clock.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = console/85c30.c console/85c30.h console/console.c \
     console/consolereserveresources.c console/tbl85c30.c \
     console/consolebsp.h
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # First and second generation used different Bridge chips :(
@@ -52,28 +52,28 @@ startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/main.c ../../shared/sbrk.c startup/setvec.c \
     startup/Hwr_init.c startup/spurious.c startup/genpvec.c \
     ../../shared/gnatinstallhandler.c startup/FPGA.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += tod.rel
 tod_rel_SOURCES = tod/tod.c
-tod_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+tod_rel_CPPFLAGS = $(AM_CPPFLAGS)
 tod_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += PCI_bus.rel
 PCI_bus_rel_SOURCES = PCI_bus/PCI.c PCI_bus/PCI.h PCI_bus/flash.c \
     PCI_bus/universe.c
-PCI_bus_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+PCI_bus_rel_CPPFLAGS = $(AM_CPPFLAGS)
 PCI_bus_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += vectors.rel
 vectors_rel_SOURCES = vectors/vectors.S
-vectors_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)

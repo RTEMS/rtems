@@ -46,17 +46,17 @@ startup_rel_SOURCES = ../../powerpc/shared/startup/bspstart.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     ../../shared/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/main.c ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += tod.rel
 tod_rel_SOURCES = ../../shared/tod.c ../../powerpc/shared/tod/todcfg.c
-tod_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+tod_rel_CPPFLAGS = $(AM_CPPFLAGS)
 tod_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += pclock.rel
 pclock_rel_SOURCES = ../../powerpc/shared/clock/p_clock.c
-pclock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+pclock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS = ../../powerpc/shared/console/consoleIo.h
@@ -72,7 +72,7 @@ console_rel_SOURCES = ../../powerpc/shared/console/polled_io.c \
     ../../powerpc/shared/console/consoleIo.h \
     ../../powerpc/shared/console/keyboard.h \
     ../../powerpc/shared/console/uart.h
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
+console_rel_CPPFLAGS = $(AM_CPPFLAGS) \
     $(console_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -82,7 +82,7 @@ noinst_PROGRAMS += irq.rel
 irq_rel_SOURCES = ../../powerpc/shared/irq/irq_init.c \
     ../../powerpc/shared/irq/i8259.c ../../powerpc/shared/irq/irq.c \
     ../../powerpc/shared/irq/irq_asm.S ../../powerpc/shared/irq/irq.h
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../powerpc/shared/motorola/motorola.h
@@ -90,7 +90,7 @@ include_bsp_HEADERS += ../../powerpc/shared/motorola/motorola.h
 noinst_PROGRAMS += motorola.rel
 motorola_rel_SOURCES = ../../powerpc/shared/motorola/motorola.h \
     ../../powerpc/shared/motorola/motorola.c
-motorola_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+motorola_rel_CPPFLAGS = $(AM_CPPFLAGS)
 motorola_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../powerpc/shared/openpic/openpic.h
@@ -100,7 +100,7 @@ openpic_rel_SOURCES = ../../powerpc/shared/openpic/openpic.h \
     ../../powerpc/shared/openpic/openpic.c \
     ../../powerpc/shared/openpic/openpic.h
 
-openpic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+openpic_rel_CPPFLAGS = $(AM_CPPFLAGS)
 openpic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
@@ -109,7 +109,7 @@ noinst_PROGRAMS += pci.rel
 pci_rel_SOURCES = ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/detect_raven_bridge.c \
     ../../powerpc/shared/pci/pcifinddevice.c ../../powerpc/shared/pci/pci.h
-pci_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../powerpc/shared/residual/residual.h \
@@ -119,7 +119,7 @@ noinst_PROGRAMS += residual.rel
 residual_rel_SOURCES = ../../powerpc/shared/residual/pnp.h \
     ../../powerpc/shared/residual/residual.h \
     ../../powerpc/shared/residual/residual.c
-residual_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+residual_rel_CPPFLAGS = $(AM_CPPFLAGS)
 residual_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h
@@ -128,7 +128,7 @@ noinst_PROGRAMS += vectors.rel
 vectors_rel_SOURCES = ../../powerpc/shared/vectors/vectors.h \
     ../../powerpc/shared/vectors/vectors_init.c \
     ../../powerpc/shared/vectors/vectors.S
-vectors_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
@@ -139,7 +139,7 @@ vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c \
     ../../shared/vmeUniverse/vmeUniverse.h \
     ../../powerpc/shared/vme/vmeconfig.c \
     ../../powerpc/shared/vme/VMEConfig.h ../../powerpc/shared/vme/VME.h
-vme_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+vme_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)

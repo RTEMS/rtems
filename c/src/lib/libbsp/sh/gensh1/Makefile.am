@@ -34,7 +34,7 @@ startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     startup/bspstart.c startup/bspclean.c ../../shared/sbrk.c \
     ../../shared/bootcard.c ../../shared/main.c \
     ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 SHGEN = $(PROJECT_TOPdir)/tools/cpu/sh/shgen
@@ -46,12 +46,12 @@ CLEANFILES += scitab.c
 
 noinst_PROGRAMS += scitab.rel
 scitab_rel_SOURCES = scitab.c
-scitab_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+scitab_rel_CPPFLAGS = $(AM_CPPFLAGS)
 scitab_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = ../../sh/shared/console.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_LIBRARIES = libbsp.a

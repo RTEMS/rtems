@@ -35,13 +35,13 @@ startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     startup/bspstart.c startup/init5272.c ../../shared/bootcard.c \
     ../../shared/main.c ../../shared/sbrk.c ../../m68k/shared/setvec.c \
     ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # console
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = console/console-io.c ../../shared/console-polled.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_LIBRARIES = libbsp.a

@@ -52,7 +52,7 @@ dist_project_lib_DATA += startup/linkcmds
 
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/ckinit.c clock/todcfg.c ../../shared/tod.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_rtemsdir = $(includedir)/rtems
@@ -65,24 +65,24 @@ console_rel_SOURCES = console/console.c console/inch.c console/outch.c \
     console/mouse_parser.c console/pc_keyb.c console/ps2_mouse.c \
     console/serial_mouse.c console/vgainit.c console/vt.c console/videoAsm.S \
     ../../i386/shared/comm/uart.c ../../i386/shared/comm/tty_drv.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += gdb.rel
 gdb_rel_SOURCES = ../../i386/shared/comm/i386-stub.c \
     ../../i386/shared/comm/i386-stub-glue.c \
     ../../i386/shared/comm/gdb_glue.c
-gdb_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+gdb_rel_CPPFLAGS = $(AM_CPPFLAGS)
 gdb_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += gnat.rel
 gnat_rel_SOURCES = ../../shared/gnatinstallhandler.c
-gnat_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+gnat_rel_CPPFLAGS = $(AM_CPPFLAGS)
 gnat_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += pci.rel
 pci_rel_SOURCES = ../../i386/shared/pci/pcibios.c
-pci_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += startup.rel
@@ -91,19 +91,19 @@ startup_rel_SOURCES = ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../i386/shared/irq/irq.c ../../i386/shared/irq/irq_init.c \
     ../../shared/bootcard.c ../../shared/main.c ../../shared/sbrk.c \
     startup/ldsegs.S ../../i386/shared/irq/irq_asm.S
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c timer/timerisr.S
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 if HAS_NETWORKING
 ne2000_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += ne2000.rel
 ne2000_rel_SOURCES = ne2000/ne2000.c
-ne2000_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
+ne2000_rel_CPPFLAGS = $(AM_CPPFLAGS) \
     $(ne2000_CPPFLAGS)
 ne2000_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -116,7 +116,7 @@ include_HEADERS += include/wd80x3.h
 wd8003_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += wd8003.rel
 wd8003_rel_SOURCES = wd8003/wd8003.c include/wd80x3.h
-wd8003_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
+wd8003_rel_CPPFLAGS = $(AM_CPPFLAGS) \
     $(wd8003_CPPFLAGS)
 wd8003_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -125,13 +125,13 @@ if HAS_NETWORKING
 3c509_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += 3c509.rel
 3c509_rel_SOURCES = 3c509/3c509.c 3c509/3c509.h 3c509/elink.c 3c509/elink.h
-3c509_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(3c509_CPPFLAGS)
+3c509_rel_CPPFLAGS = $(AM_CPPFLAGS) $(3c509_CPPFLAGS)
 3c509_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 noinst_PROGRAMS += ide.rel
 ide_rel_SOURCES = ide/idecfg.c ide/ide.c
-ide_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+ide_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ide_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_LIBRARIES = libbsp.a

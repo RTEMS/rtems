@@ -36,13 +36,13 @@ startup_rel_SOURCES = startup/bspstart.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
     startup/bspclean.c ../../shared/bsplibc.c ../../shared/bsppost.c \
     ../../shared/main.c ../../shared/gnatinstallhandler.c startup/reboot.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ###
 noinst_PROGRAMS += pclock.rel
 pclock_rel_SOURCES = ../../powerpc/shared/clock/p_clock.c
-pclock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+pclock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ###
@@ -51,7 +51,7 @@ include_bsp_HEADERS = ../../powerpc/shared/console/uart.h
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ###
@@ -60,7 +60,7 @@ include_bsp_HEADERS += pci/gtpcireg.h pci/pci.h
 noinst_PROGRAMS += pci.rel
 pci_rel_SOURCES = pci/pci.c pci/pci_interface.c pci/detect_host_bridge.c \
     pci/pcifinddevice.c
-pci_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+pci_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ###
@@ -69,7 +69,7 @@ include_bsp_HEADERS += irq/irq.h
 noinst_PROGRAMS += irq.rel
 irq_rel_SOURCES = irq/irq_init.c irq/GT64260Int.c irq/irq.c \
     ../../powerpc/shared/irq/irq_asm.S
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ###
@@ -77,7 +77,7 @@ nodist_include_HEADERS += ../../shared/tod.h
 
 noinst_PROGRAMS += tod.rel
 tod_rel_SOURCES = ../../shared/tod.c tod/todcfg.c
-tod_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+tod_rel_CPPFLAGS = $(AM_CPPFLAGS)
 tod_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ##
@@ -87,7 +87,7 @@ include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h \
 noinst_PROGRAMS += vectors.rel
 vectors_rel_SOURCES = ../../powerpc/shared/vectors/vectors_init.c \
     vectors/exceptionhandler.c ../../powerpc/shared/vectors/vectors.S
-vectors_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ##
@@ -95,7 +95,7 @@ include_bsp_HEADERS += GT64260/bspMvme5500.h GT64260/gtreg.h \
     GT64260/GT64260TWSI.h GT64260/VPD.h
 noinst_PROGRAMS += GT64260.rel
 GT64260_rel_SOURCES = GT64260/GT64260TWSI.c GT64260/MVME5500I2C.c
-GT64260_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+GT64260_rel_CPPFLAGS = $(AM_CPPFLAGS)
 GT64260_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ##
@@ -105,7 +105,7 @@ include_bsp_HEADERS += network/GT64260eth.h network/GT64260ethreg.h
 network_CPPFLAGS = -D_KERNEL
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES = network/GT64260eth.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
+network_rel_CPPFLAGS = $(AM_CPPFLAGS) \
     $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -115,7 +115,7 @@ include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h
 
 noinst_PROGRAMS += vme.rel
 vme_rel_SOURCES = ../../shared/vmeUniverse/vmeUniverse.c vme/vmeconfig.c
-vme_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+vme_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vme_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ##
@@ -127,7 +127,7 @@ project_lib_DATA = rtems_crti.$(OBJEXT)
 
 noinst_PROGRAMS += mvme5500start.$(OBJEXT)
 mvme5500start___OBJEXT__SOURCES = start/preload.S start/start.S
-mvme5500start___OBJEXT__CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+mvme5500start___OBJEXT__CPPFLAGS = $(AM_CPPFLAGS)
 mvme5500start___OBJEXT__LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 project_lib_DATA += mvme5500start.$(OBJEXT)

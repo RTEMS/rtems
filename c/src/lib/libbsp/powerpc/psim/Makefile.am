@@ -42,25 +42,25 @@ startup_rel_SOURCES = startup/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/main.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
-startup_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+startup_rel_CPPFLAGS = $(AM_CPPFLAGS)
 startup_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += pclock.rel
 pclock_rel_SOURCES = ../shared/clock/p_clock.c
-pclock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+pclock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 pclock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_PROGRAMS += console.rel
 console_rel_SOURCES = console/console-io.c console/consupp.S \
     ../../shared/console-polled.c
-console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS = irq/irq.h
 
 noinst_PROGRAMS += irq.rel
 irq_rel_SOURCES = irq/irq.c irq/irq_init.c irq/irq_asm.S
-irq_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 EXTRA_DIST += vectors/README
@@ -68,7 +68,7 @@ EXTRA_DIST += vectors/README
 noinst_PROGRAMS += vectors.rel
 vectors_rel_SOURCES = vectors/align_h.S vectors/vectors.S \
     ../../powerpc/shared/vectors/vectors_init.c
-vectors_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 include_bsp_HEADERS += ../../powerpc/shared/vectors/vectors.h
@@ -79,7 +79,7 @@ EXTRA_DIST += shmsupp/README
 noinst_PROGRAMS += shmsupp.rel
 shmsupp_rel_SOURCES = shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
     shmsupp/mpisr.c
-shmsupp_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+shmsupp_rel_CPPFLAGS = $(AM_CPPFLAGS)
 shmsupp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
