@@ -2,24 +2,24 @@
 ## $Id$
 ##
 
-dist_bsplib_DATA = bsp_specs
+dist_project_lib_DATA = bsp_specs
 
 include_HEADERS  = include/bsp.h
 nodist_include_HEADERS = include/bspopts.h
 
-$(PROJECT_ROOT)/@RTEMS_BSP@/lib/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_ROOT)/@RTEMS_BSP@/lib
-	@: > $(PROJECT_ROOT)/@RTEMS_BSP@/lib/$(dirstamp)
-PREINSTALL_FILES = $(PROJECT_ROOT)/@RTEMS_BSP@/lib/$(dirstamp)
+PREINSTALL_FILES =
+
+$(PROJECT_RELEASE)/lib/$(dirstamp):
+	@$(mkinstalldirs) $(PROJECT_RELEASE)/lib
+	@: > $(PROJECT_RELEASE)/lib/$(dirstamp)
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
 
-$(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs: bsp_specs $(PROJECT_ROOT)/@RTEMS_BSP@/lib/$(dirstamp)
+$(PROJECT_RELEASE)/lib/bsp_specs: bsp_specs $(PROJECT_RELEASE)/lib/$(dirstamp)
 	$(INSTALL_DATA) $< $@
-PREINSTALL_FILES += $(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs
+PREINSTALL_FILES += $(PROJECT_RELEASE)/lib/bsp_specs
 
 $(PROJECT_INCLUDE)/bsp.h: include/bsp.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $@

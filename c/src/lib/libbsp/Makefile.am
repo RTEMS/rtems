@@ -37,7 +37,7 @@ shmdr_OBJS = $(shmdr_C_FILES:shmdr/%.c=shmdr/$(ARCH)/%.$(OBJEXT))
 #   ../$(RTEMS_BSP_FAMILY)/wrapup/Makefile
 
 shmdr/$(ARCH)/$(dirstamp):
-	@$(mkinstalldirs) shmdr/$(ARCH)
+	@$(mkdir_p) shmdr/$(ARCH)
 	@: > shmdr/$(ARCH)/$(dirstamp)
 shmdr/$(ARCH)/%.$(OBJEXT): shmdr/%.c shmdr/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
@@ -59,9 +59,12 @@ EXTRA_DIST += shmdr/README shmdr/addlq.c shmdr/cnvpkt.c shmdr/dump.c \
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)
+	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+
+${PROJECT_RELEASE}/lib/$(dirstamp):
+	@$(mkdir_p) ${PROJECT_RELEASE}/lib
+	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
 
 if HAS_MP
 $(PROJECT_INCLUDE)/shm_driver.h: shmdr/shm_driver.h $(PROJECT_INCLUDE)/$(dirstamp)
