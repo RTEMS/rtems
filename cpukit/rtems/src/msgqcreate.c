@@ -135,7 +135,7 @@ rtems_status_code rtems_message_queue_create(
 
     _Message_queue_Free( the_message_queue );
     _Thread_Enable_dispatch();
-    return RTEMS_TOO_MANY;
+    return RTEMS_UNSATISFIED;
   }
 
   _Objects_Open(
