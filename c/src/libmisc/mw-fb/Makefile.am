@@ -17,9 +17,11 @@ SRCS = $(C_FILES) $(H_FILES)
 OBJS = $(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+    $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
 
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
@@ -35,6 +37,6 @@ ${LIB}: ${OBJS}
 
 all: ${ARCH} $(PREINSTALL_FILES) $(LIB) $(TMPINSTALL_FILES)
 
-EXTRA_DIST += $(C_FILES) $(H_FILES)
+EXTRA_DIST = $(C_FILES) $(H_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

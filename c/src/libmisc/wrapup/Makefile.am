@@ -8,6 +8,7 @@ LIBNAME = libmisc
 LIB = $(ARCH)/$(LIBNAME).a
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
+include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
 TMP_LIBS = ../monitor/$(ARCH)/libmonitor-tmp.a \
