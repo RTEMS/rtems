@@ -1,3 +1,9 @@
+2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 538/bsps:
+	* wrapup/Makefile.am: Add $(NETWORKING_DRIVER) instead of $(NETWORK)
+	to BSP_PIECES.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* clock/ckinit.c, console/console.c, console/consolereserveresources.c,

@@ -7,7 +7,7 @@ if HAS_NETWORKING
 NETWORKING_DRIVER = leon_open_eth
 endif
 
-BSP_PIECES = startup console clock timer gnatsupp $(NETWORK)
+BSP_PIECES = startup console clock timer gnatsupp $(NETWORKING_DRIVER)
 # pieces to pick up out of libcpu/sparc
 CPU_PIECES = cache reg_win syscall
 
