@@ -25,28 +25,21 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(PGM): $(OBJS)
 	$(make-rel)
 
-bsplib_DATA = linkcmds linkcmds_ROM
-
-$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_RELEASE)/lib/linkcmds_ROM: linkcmds_ROM
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT): \
-    $(ARCH)/except_vect_332_ROM.$(OBJEXT)
-	$(INSTALL_DATA) $< $@
+project_lib_DATA = linkcmds linkcmds_ROM
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds \
-    $(PROJECT_RELEASE)/lib/linkcmds_ROM \
-    $(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
 
-all-local: $(OBJS) $(PGM) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(PGM)
+all-local: $(PGM) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bspclean.c bspstart.c except_vect_332_ROM.S linkcmds \
     linkcmds_ROM
+
+${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
+
+${PROJECT_RELEASE}/lib/linkcmds_ROM: linkcmds_ROM ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds_ROM
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds_ROM
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -26,27 +26,25 @@ AM_CPPFLAGS += -I@srcdir@/../../shared/gdbstub
 $(PGM): $(OBJS)
 	$(make-rel)
 
-bsplib_DATA = linkcmds linkcmds.prom linkcmds.bootp
-
-$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_RELEASE)/lib/linkcmds.prom: linkcmds.prom
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_RELEASE)/lib/linkcmds.bootp: linkcmds.bootp
-	$(INSTALL_DATA) $< $@
+project_lib_DATA = linkcmds linkcmds.prom linkcmds.bootp
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds \
-    $(PROJECT_RELEASE)/lib/linkcmds.prom \
-    $(PROJECT_RELEASE)/lib/linkcmds.bootp
 
-all-local: $(OBJS) $(PGM) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(PGM)
+all-local: $(PGM) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = alloc360.c bspclean.c bspstart.c init68360.c linkcmds \
     linkcmds.bootp linkcmds.prom
+
+${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
+
+${PROJECT_RELEASE}/lib/linkcmds.prom: linkcmds.prom ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds.prom
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds.prom
+
+${PROJECT_RELEASE}/lib/linkcmds.bootp: linkcmds.bootp ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds.bootp
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds.bootp
 
 include $(top_srcdir)/../../../../automake/local.am

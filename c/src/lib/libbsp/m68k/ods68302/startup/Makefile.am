@@ -24,26 +24,25 @@ include $(top_srcdir)/../../../../automake/lib.am
 $(PGM): $(OBJS)
 	$(make-rel)
 
-bsplib_DATA = linkcmds rom debugger
-
-$(PROJECT_RELEASE)/lib/linkcmds: linkcmds
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_RELEASE)/lib/rom: rom
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_RELEASE)/lib/debugger: debugger
-	$(INSTALL_DATA) $< $@
+project_lib_DATA = linkcmds rom debugger
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds \
-    $(PROJECT_RELEASE)/lib/rom $(PROJECT_RELEASE)/lib/debugger
 
-all-local: $(OBJS) $(PGM) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(PGM)
+all-local: $(PGM) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = bspclean.c bspstart.c crc.c debugger debugport.c gdb-hooks.c \
     linkcmds m68302scc.c m68k-stub.c memcheck.c rom trace.c
+
+${PROJECT_RELEASE}/lib/linkcmds: linkcmds ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/linkcmds
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/linkcmds
+
+${PROJECT_RELEASE}/lib/rom: rom ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/rom
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/rom
+
+${PROJECT_RELEASE}/lib/debugger: debugger ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/debugger
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/debugger
 
 include $(top_srcdir)/../../../../automake/local.am

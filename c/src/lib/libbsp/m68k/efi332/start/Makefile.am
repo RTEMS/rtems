@@ -3,69 +3,59 @@
 ##
 
 C_FILES = start.c
-OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+OBJS = $(C_FILES:%.c=$(ARCH)/%$(LIB_VARIANT).$(OBJEXT))
 S_FILES = except_vect_332_ROM.S
-OBJS += $(S_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+OBJS += $(S_FILES:%.c=$(ARCH)/%$(LIB_VARIANT).$(OBJEXT))
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
+include $(top_srcdir)/../../bspstart.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-START_O_FILES = $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-START_O_FILES += \
-    $(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
-START_O_FILES += $(PROJECT_RELEASE)/lib/ram_init$(LIB_VARIANT)
-START_O_FILES += $(PROJECT_RELEASE)/lib/ram_init_FW$(LIB_VARIANT)
+project_lib_DATA = $(ARCH)/start$(LIB_VARIANT).$(OBJEXT)
+project_lib_DATA += $(ARCH)/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
+project_lib_DATA += $(ARCH)/ram_init$(LIB_VARIANT)
+project_lib_DATA += $(ARCH)/ram_init_FW$(LIB_VARIANT)
 
-install-data-local: $(START_O_FILES)
-	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
-	list='$(START_O_FILES)'; for i in $$list; do \
-	$(INSTALL_DATA) $$i $(DESTDIR)$(bsplibdir); \
-	done
-
-$(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT): \
-    $(ARCH)/except_vect_332_ROM.$(OBJEXT)
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_RELEASE)/lib/ram_init$(LIB_VARIANT): $(ARCH)/ram_init
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_RELEASE)/lib/ram_init_FW$(LIB_VARIANT): $(ARCH)/ram_init_FW
-	$(INSTALL_DATA) $< $@
-
-$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)
-	$(INSTALL_DATA) $< $@
-
-$(ARCH)/ram_init: $(srcdir)/start.c $(srcdir)/ram_init.ld $(srcdir)/ram_init.sed
+$(ARCH)/ram_init$(LIB_VARIANT): $(srcdir)/start.c $(srcdir)/ram_init.ld $(srcdir)/ram_init.sed $(ARCH)/$(dirstamp)
 	sed -f $(srcdir)/ram_init.sed $(srcdir)/start.c >$(ARCH)/ram_init.S
 	$(CC) -D SIM_CRB=0x0000 -E $(ARCH)/ram_init.S >$(ARCH)/ram_init1.S
 	sed "/.$(OBJEXT)rg/ {N; s/\n/%/; P;}; /\.text/P; D;" $(ARCH)/ram_init1.S | \
            sort | sed "h;1{s/.*/.data/;P;g;};s/%.*//;P;g;s/.*%//;" \
            >$(ARCH)/ram_init2.S
 	$(CC) -nostdlib -Wl,-T$(srcdir)/ram_init.ld $(ARCH)/ram_init2.S \
-           -o $(ARCH)/ram_init
+           -o $(ARCH)/ram_init$(LIB_VARIANT)
 
-$(ARCH)/ram_init_FW: $(srcdir)/ram_init.ld $(ARCH)/ram_init.S
+$(ARCH)/ram_init_FW$(LIB_VARIANT): $(srcdir)/ram_init.ld $(ARCH)/ram_init.S $(ARCH)/$(dirstamp)
 	$(CC) -D FLASHWRITE -D SIM_CRB=0x0000 -E $(ARCH)/ram_init.S \
            >$(ARCH)/ram_init_FW1.S
 	sed "/.$(OBJEXT)rg/ {N; s/\n/%/; P;}; /\.text/P; D;" $(ARCH)/ram_init_FW1.S | \
            sort | sed "h;1{s/.*/.data/;P;g;};s/%.*//;P;g;s/.*%//;" \
            >$(ARCH)/ram_init_FW2.S
 	$(CC) -nostdlib -Wl,-T$(srcdir)/ram_init.ld $(ARCH)/ram_init_FW2.S \
-           -o $(ARCH)/ram_init_FW
+           -o $(ARCH)/ram_init_FW$(LIB_VARIANT)
 
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT) \
-    $(PROJECT_RELEASE)/lib/ram_init$(LIB_VARIANT) \
-    $(PROJECT_RELEASE)/lib/ram_init_FW$(LIB_VARIANT) \
-    $(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
-
-all-local: $(OBJS) $(ARCH)/start.$(OBJEXT) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(ARCH)/start.$(OBJEXT)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = start.c except_vect_332_ROM.S ram_init.ld ram_init.sed
+
+${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start$(LIB_VARIANT).$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
+
+${PROJECT_RELEASE}/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT): $(ARCH)/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/except_vect_332_ROM$(LIB_VARIANT).$(OBJEXT)
+
+${PROJECT_RELEASE}/lib/ram_init$(LIB_VARIANT): $(ARCH)/ram_init$(LIB_VARIANT) ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/ram_init$(LIB_VARIANT)
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/ram_init$(LIB_VARIANT)
+
+${PROJECT_RELEASE}/lib/ram_init_FW$(LIB_VARIANT): $(ARCH)/ram_init_FW$(LIB_VARIANT) ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/ram_init_FW$(LIB_VARIANT)
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/ram_init_FW$(LIB_VARIANT)
 
 include $(top_srcdir)/../../../../automake/local.am

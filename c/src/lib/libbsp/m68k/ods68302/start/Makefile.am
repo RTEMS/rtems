@@ -16,6 +16,7 @@ OBJS = $(S_O_FILES) $(C_O_FILES)
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
+include $(top_srcdir)/../../bspstart.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -23,22 +24,17 @@ include $(top_srcdir)/../../../../automake/lib.am
 
 AM_CFLAGS += $(CFLAGS_V)
 
-install-data-local: $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
-	$(INSTALL_DATA) $< $(DESTDIR)$(bsplibdir)
+project_lib_DATA = $(ARCH)/start$(LIB_VARIANT).$(OBJEXT)
 
 $(ARCH)/start.$(OBJEXT): $(OBJS)
 	cp $(S_O_FILES) $(ARCH)/start.$(OBJEXT)
 
-$(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start.$(OBJEXT)
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/start$(LIB_VARIANT).$(OBJEXT)
-
-all-local: $(OBJS) $(ARCH)/start.$(OBJEXT) $(TMPINSTALL_FILES)
-
-.PRECIOUS: $(ARCH)/start.$(OBJEXT)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = cpuboot.c debugreset.S reset.S
+
+${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT): $(ARCH)/start$(LIB_VARIANT).$(OBJEXT) ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/start$(LIB_VARIANT).$(OBJEXT)
 
 include $(top_srcdir)/../../../../automake/local.am
