@@ -41,9 +41,9 @@ extern rtems_task main_task(rtems_task_argument);
 
 static int num_inst = 0;
 
-class A {
+class AClass {
 public:
-  A(const char *p = "LOCAL" ) : ptr( p )
+  AClass(const char *p = "LOCAL" ) : ptr( p )
     {
         num_inst++;
         printf(
@@ -59,7 +59,7 @@ public:
 	sprintf(string, "Instantiation order %d", num_inst);
     };
 
-    virtual ~A()
+    virtual ~AClass()
     {
         printf(
           "%s: Hey I'm in base class destructor number %d for %p.\n",
@@ -76,9 +76,9 @@ protected:
     const char *ptr;
 };
 
-class B : public A {
+class BClass : public AClass {
 public:
-  B(const char *p = "LOCAL" ) : A( p ) 
+  BClass(const char *p = "LOCAL" ) : AClass( p ) 
     {
         num_inst++;
         printf(
@@ -94,7 +94,7 @@ public:
 	sprintf(string, "Instantiation order %d", num_inst);
     };
 
-    ~B()
+    ~BClass()
     {
         printf(
           "%s: Hey I'm in derived class destructor number %d for %p.\n",
@@ -135,14 +135,14 @@ private:
 
 
 
-A foo( "GLOBAL" );
-B foobar( "GLOBAL" );
+AClass foo( "GLOBAL" );
+BClass foobar( "GLOBAL" );
 
 void
 cdtest(void)
 {
-    A bar, blech, blah;
-    B bleak;
+    AClass bar, blech, blah;
+    BClass bleak;
 
 #ifdef RTEMS_TEST_IO_STREAM
     cout << "Testing a C++ I/O stream" << endl;
