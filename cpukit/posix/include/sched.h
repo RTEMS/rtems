@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-#include <sys/features.h>
+#include <unistd.h>
 
 #if defined(_POSIX_PRIORITY_SCHEDULING)
 

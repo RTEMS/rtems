@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-#include <sys/features.h>
+#include <unistd.h>
 
 #if defined(_POSIX_DEVICE_CONTROL)
 

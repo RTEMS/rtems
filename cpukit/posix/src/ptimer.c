@@ -21,7 +21,7 @@
 /* These includes are now necessary */
 /************************************/
 
-#include <sys/features.h>
+#include <unistd.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/timer.h>
