@@ -50,15 +50,26 @@ void _CORE_message_queue_Close(
   unsigned32                  status
 )
 {
+
+  /*
+   *  This will flush blocked threads whether they were blocked on
+   *  a send or receive.
+   */
+
+  _Thread_queue_Flush(
+    &the_message_queue->Wait_queue,
+    remote_extract_callout,
+    status
+  );
+
+  /*
+   *  This removes all messages from the pending message queue.  Since
+   *  we just flushed all waiting threads, we don't have to worry about
+   *  the flush satisfying any blocked senders as a side-effect.
+   */
  
   if ( the_message_queue->number_of_pending_messages != 0 )
     (void) _CORE_message_queue_Flush_support( the_message_queue );
-  else
-    _Thread_queue_Flush(
-      &the_message_queue->Wait_queue,
-      remote_extract_callout,
-      status
-    );
 
   (void) _Workspace_Free( the_message_queue->message_buffers );
 

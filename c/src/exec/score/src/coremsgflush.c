@@ -33,8 +33,8 @@
  *
  *  _CORE_message_queue_Flush
  *
- *  This function flushes the message_queue's task wait queue.  The number
- *  of messages flushed from the queue is returned.
+ *  This function flushes the message_queue's pending message queue.  The
+ *  number of messages flushed from the queue is returned.
  *
  *  Input parameters:
  *    the_message_queue - the message_queue to be flushed
