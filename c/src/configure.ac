@@ -110,6 +110,15 @@ AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
 ])
 
 BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
+
+AC_ARG_ENABLE([ada],[enable building ada bindings])
+AS_IF([test x"$enable_ada" = x"yes"],[
+  AS_IF([test -d ${srcdir}/ada-tests],[
+    AC_CONFIG_SUBDIRS([ada-tests])
+    BSP_SUBDIRS="$BSP_SUBDIRS ada-tests"
+  ])
+])
+
 AC_CONFIG_SUBDIRS([tests])
 BSP_SUBDIRS="$BSP_SUBDIRS tests"
 
