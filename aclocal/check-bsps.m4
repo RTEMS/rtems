@@ -24,7 +24,7 @@ AC_MSG_CHECKING([for bsps])
         p4000)             rtems_bsp="$rtems_bsp p4600 p4650";;
         mvme162)           rtems_bsp="$rtems_bsp mvme162 mvme162lx";;
 	motorola_powerpc)  rtems_bsp="$rtems_bsp mvme2307 mcp750";;
-	pc386)             rtems_bsp="$rtems_bsp pc386 pc486 pc585 pc686";;
+	pc386)             rtems_bsp="$rtems_bsp pc386 pc486 pc586 pc686";;
         *) $1="[$]$1 $file";;
       esac;
     done
