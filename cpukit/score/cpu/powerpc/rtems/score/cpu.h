@@ -102,5 +102,18 @@ static inline uint32_t CPU_swap_u32(
 
 #endif /* ASM */
 
+#ifndef ASM
+/*
+ *  Macros to access PowerPC specific additions to the CPU Table
+ */
+
+#define rtems_cpu_configuration_get_clicks_per_usec() \
+   (_CPU_Table.clicks_per_usec)
+
+#define rtems_cpu_configuration_get_exceptions_in_ram() \
+   (_CPU_Table.exceptions_in_RAM)
+
+#endif /* ASM */
+
 #endif /* _RTEMS_SCORE_CPU_H */
 
