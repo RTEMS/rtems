@@ -32,7 +32,7 @@ void buffered_io_add_string( char *s )
 {
   char *p = s;
 
-  while ( *s ) {
-    Ring_buffer_Add_character( &Buffer, *s++ );
+  while ( *p ) {
+    Ring_buffer_Add_character( &Buffer, *p++ );
   }
 }
