@@ -4,22 +4,22 @@
 
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-project_bspdir = $(PROJECT_ROOT)/@RTEMS_BSP@
+include_HEADERS = include/tmacros.h include/buffer_test_io.h
 
-noinst_HEADERS = include/tmacros.h include/buffer_test_io.h
+all-local: $(PREINSTALL_FILES)
 
-TMPINSTALLFILES = $(project_bspdir)/lib/include \
-    $(project_bspdir)/lib/include/tmacros.h \
-    $(project_bspdir)/lib/include/buffer_test_io.h
+PREINSTALL_FILES =
 
-$(project_bspdir)/lib/include:
-	$(mkinstalldirs) $@
-$(project_bspdir)/lib/include/%.h: include/%.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 
-CLEANFILES = $(project_bspdir)/lib/include/tmacros.h \
-    $(project_bspdir)/lib/include/buffer_test_io.h
+$(PROJECT_INCLUDE)/tmacros.h: include/tmacros.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tmacros.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/tmacros.h
 
-all-local: $(TMPINSTALLFILES)
+$(PROJECT_INCLUDE)/buffer_test_io.h: include/buffer_test_io.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/buffer_test_io.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/buffer_test_io.h
 
 include $(top_srcdir)/../automake/local.am
