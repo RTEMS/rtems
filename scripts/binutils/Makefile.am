@@ -9,7 +9,7 @@ MKBINUTILSSPEC = $(SHELL) ./mkspec
 SUBPACKAGES = header.add
 SUBPACKAGES += $(top_builddir)/common/common.add binutils.add
 SUBPACKAGES += $(top_builddir)/common/clean.add
-SUBPACKAGES += base-binutils.add target-binutils.add
+SUBPACKAGES += target-binutils.add base-binutils.add
 
 binutils.spec.in: $(SUBPACKAGES)
 	cat $^ > $@
@@ -65,6 +65,10 @@ RPM_SPECS_DATA += sparc-rtems@osversion@-$(BINUTILSVERS).spec
 tic4x-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
 	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache tic4x-rtems@osversion@ > $@
 RPM_SPECS_DATA += tic4x-rtems@osversion@-$(BINUTILSVERS).spec
+
+avr-rtems@osversion@-$(BINUTILSVERS).spec: $(MKBINUTILSSPEC_DEPS)
+	$(MKBINUTILSSPEC) -cfg $(top_builddir)/setup.cache avr-rtems@osversion@ > $@
+RPM_SPECS_DATA += avr-rtems@osversion@-$(BINUTILSVERS).spec
 
 CLEANFILES += $(RPM_SPECS_DATA)
 

@@ -1,11 +1,11 @@
 # ==============================================================
 # %{binutils_target}-binutils
 # ==============================================================
-%package -n %{rpmprefix}%{binutils_target}-binutils
-Summary:      rtems binutils for %{binutils_target}
-Group: %{rpmgroup}
-Requires: %{rpmprefix}rtems@osversion@-base-binutils
-Autoreqprov:  	off
+# %package -n %{rpmprefix}%{binutils_target}-binutils
+# Summary:      rtems binutils for %{binutils_target}
+# Group: %{rpmgroup}
+# Requires: %{rpmprefix}rtems@osversion@-base-binutils
+# Autoreqprov:  	off
 
 %description -n %{rpmprefix}%{binutils_target}-binutils
 

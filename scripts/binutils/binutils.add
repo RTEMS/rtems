@@ -2,14 +2,14 @@
 %define binutils_version     @binutils_version@
 %define binutils_target      @target_alias@
 
-Name:         %{rpmprefix}%{binutils_target}-binutils-collection
+Name:         %{rpmprefix}%{binutils_target}-binutils
 Summary:      binutils for target %{binutils_target}
 Group:        %{rpmgroup}
 Release:      @Release@
 License:      GPL/LGPL
 
 Autoreqprov:  	on
-Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
+Packager:     	ralf_corsepius@rtems.org and joel@OARcorp.com
 Prefix:		%{_prefix}
 BuildPreReq:	/sbin/install-info
 BuildPreReq:	texinfo >= 4.2
@@ -32,11 +32,11 @@ Source0:	ftp://ftp.gnu.org/pub/gnu/binutils/binutils-%{binutils_version}.tar.bz2
 #
 NoSource:      0
 
-%description
-
-RTEMS is an open source operating system for embedded systems.
-
-This is binutils sources with patches for RTEMS.
+# %description
+#
+# RTEMS is an open source operating system for embedded systems.
+#
+# This is binutils sources with patches for RTEMS.
 
 %prep
 %setup -c -n %{name}-%{version}
@@ -71,8 +71,13 @@ This is binutils sources with patches for RTEMS.
     $RPM_BUILD_ROOT%{_prefix}/share/locale
 
 # gzip info files
-  gzip -9qf $RPM_BUILD_ROOT%{_infodir}/*.info 2>/dev/null
-  gzip -9qf $RPM_BUILD_ROOT%{_infodir}/*.info-* 2>/dev/null
+  # gzip info files
+  ls $RPM_BUILD_ROOT%{_infodir}/*.info \
+    $RPM_BUILD_ROOT%{_infodir}/*.info-? \
+    $RPM_BUILD_ROOT%{_infodir}/*.info-?? 2>/dev/null \
+  | while read a; do \
+    gzip -9qf $a 2>/dev/null; \
+  done
 
 # We assume that info/dir exists when building the RPMs
   rm -f $RPM_BUILD_ROOT%{_infodir}/dir
