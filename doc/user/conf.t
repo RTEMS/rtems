@@ -37,6 +37,7 @@ argument to the initialize_executive directive, which MUST be
 the first RTEMS directive called.  The RTEMS Configuration Table
 is defined in the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
 
+@ifset is-C
 @example
 @group
 typedef struct @{
@@ -55,6 +56,30 @@ typedef struct @{
 @} rtems_configuration_table;
 @end group
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+type Configuration_Table is
+   record
+       Work_Space_Start           : RTEMS.Address;
+       Work_Space_Size            : RTEMS.Unsigned32;
+       Maximum_Extensions         : RTEMS.Unsigned32;
+       Microseconds_Per_Tick      : RTEMS.Unsigned32;
+       Ticks_Per_Timeslice        : RTEMS.Unsigned32;
+       Maximum_Devices            : RTEMS.Unsigned32;
+       Number_Of_Device_Drivers   : RTEMS.Unsigned32;
+       Device_Driver_Table        : RTEMS.Driver_Address_Table_Pointer;
+       User_Extension_Table       : RTEMS.Extensions_Table_Pointer;
+       User_Multiprocessing_Table : RTEMS.Multiprocessing_Table_Pointer;
+       RTEMS_API_Configuration    : RTEMS.API_Configuration_Table_Pointer;
+       POSIX_API_Configuration    :
+                       RTEMS.POSIX_API_Configuration_Table_Pointer;
+   end record;
+
+type Configuration_Table_Pointer is access all Configuration_Table;
+@end example
+@end ifset
 
 @table @b
 @item work_space_start
@@ -128,6 +153,7 @@ For example, the user can configure the maximum number of tasks for
 this application. The RTEMS API Configuration Table is defined in 
 the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
 
+@ifset is-C
 @example
 @group
 typedef struct @{
@@ -144,6 +170,28 @@ typedef struct @{
 @} rtems_api_configuration_table;
 @end group
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+type API_Configuration_Table is
+   record
+      Maximum_Tasks                   : RTEMS.Unsigned32;
+      Maximum_Timers                  : RTEMS.Unsigned32;
+      Maximum_Semaphores              : RTEMS.Unsigned32;
+      Maximum_Message_queues          : RTEMS.Unsigned32;
+      Maximum_Partitions              : RTEMS.Unsigned32;
+      Maximum_Regions                 : RTEMS.Unsigned32;
+      Maximum_Ports                   : RTEMS.Unsigned32;
+      Maximum_Periods                 : RTEMS.Unsigned32;
+      Number_Of_Initialization_Tasks  : RTEMS.Unsigned32;
+      User_Initialization_Tasks_Table :
+                                RTEMS.Initialization_Tasks_Table_Pointer;
+   end record;
+
+type API_Configuration_Table_Pointer is access all API_Configuration_Table;
+@end example
+@end ifset
 
 @table @b
 @item maximum_tasks
@@ -198,10 +246,11 @@ For example, the user can configure the maximum number of threads for
 this application. The POSIX API Configuration Table is defined in
 the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
  
+@ifset is-C
 @example
 @group
 typedef struct @{
-  void       *(*entry)(void *);
+  void       *(*thread_entry)(void *);
 @} posix_initialization_threads_table;
  
 typedef struct @{
@@ -215,6 +264,45 @@ typedef struct @{
 @} posix_api_configuration_table;
 @end group
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+   type POSIX_Thread_Entry is access procedure (
+      Argument : in     RTEMS.Address
+   );
+
+   type POSIX_Initialization_Threads_Table_Entry is
+   record
+      Thread_Entry : RTEMS.POSIX_Thread_Entry;
+   end record;
+
+   type POSIX_Initialization_Threads_Table is array
+       ( RTEMS.Unsigned32 range <> ) of 
+       RTEMS.POSIX_Initialization_Threads_Table_Entry;
+
+   type POSIX_Initialization_Threads_Table_Pointer is access all
+       POSIX_Initialization_Threads_Table; 
+
+   type POSIX_API_Configuration_Table_Entry is
+      record
+         Maximum_Threads                 : Interfaces.C.Int;
+         Maximum_Mutexes                 : Interfaces.C.Int;
+         Maximum_Condition_Variables     : Interfaces.C.Int;
+         Maximum_Keys                    : Interfaces.C.Int;
+         Maximum_Queued_Signals          : Interfaces.C.Int;
+         Number_Of_Initialization_Tasks  : Interfaces.C.Int;
+         User_Initialization_Tasks_Table : 
+            RTEMS.POSIX_Initialization_Threads_Table_Pointer;
+      end record;
+
+   type POSIX_API_Configuration_Table is array ( RTEMS.Unsigned32 range <> ) of
+      RTEMS.POSIX_API_Configuration_Table_Entry;
+
+   type POSIX_API_Configuration_Table_Pointer is access all
+          RTEMS.POSIX_API_Configuration_Table;
+@end example
+@end ifset
  
 @table @b
 @item maximum_threads
@@ -278,6 +366,7 @@ Configuration Table.  The format of each entry in the
 Initialization Task Table is defined in the following C
 structure:
 
+@ifset is-C
 @example
 typedef struct @{
   rtems_name           name;
@@ -289,6 +378,28 @@ typedef struct @{
   rtems_task_argument  argument;
 @} rtems_initialization_tasks_table;
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+type Initialization_Tasks_Table_Entry is
+   record
+      Name             : RTEMS.Name;          -- task name
+      Stack_Size       : RTEMS.Unsigned32;    -- task stack size
+      Initial_Priority : RTEMS.Task_priority; -- task priority
+      Attribute_Set    : RTEMS.Attribute;     -- task attributes
+      Entry_Point      : RTEMS.Task_Entry;    -- task entry point
+      Mode_Set         : RTEMS.Mode;          -- task initial mode
+      Argument         : RTEMS.Unsigned32;    -- task argument
+   end record;
+
+type Initialization_Tasks_Table is array ( RTEMS.Unsigned32 range <> ) of
+  RTEMS.Initialization_Tasks_Table_Entry;
+
+type Initialization_Tasks_Table_Pointer is access all
+     Initialization_Tasks_Table;
+@end example
+@end ifset
 
 @table @b
 @item name
@@ -316,6 +427,7 @@ is the initial argument for this initialization task.
 
 A typical declaration for an Initialization Task Table might appear as follows:
 
+@ifset is-C
 @example
 rtems_initialization_tasks_table
 Initialization_tasks[2] = @{
@@ -333,12 +445,34 @@ Initialization_tasks[2] = @{
      250,
      FLOATING_POINT,
      Init_2,
-     INTERRUPT_LEVEL(0)|NO_PREEMPT,
+     NO_PREEMPT,
      2
 
    @}
 @};
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+Initialization_Tasks : aliased RTEMS.Initialization_Tasks_Table( 1 .. 2 ) := (
+   (INIT_1_NAME,
+    1024,
+    1,
+    RTEMS.Default_Attributes,
+    Init_1'Access,
+    RTEMS.Default_Modes,
+    1),
+   (INIT_2_NAME,
+    1024,
+    250,
+    RTEMS.Floating_Point,
+    Init_2'Access,
+    RTEMS.No_Preempt,
+    2)
+);
+@end example
+@end ifset
 
 @ifinfo
 @node Configuring a System Driver Address Table, Configuring a System User Extensions Table, Configuring a System Initialization Task Table, Configuring a System
@@ -354,6 +488,7 @@ Configuration Table.  The format of each entry in the Device
 Driver Table is defined in 
 the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
 
+@ifset is-C
 @example
 typedef struct @{
   rtems_device_driver_entry initialization;
@@ -364,6 +499,26 @@ typedef struct @{
   rtems_device_driver_entry control;
 @} rtems_driver_address_table;
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+type Driver_Address_Table_Entry is
+   record
+      Initialization : RTEMS.Device_Driver_Entry;
+      Open           : RTEMS.Device_Driver_Entry;
+      Close          : RTEMS.Device_Driver_Entry;
+      Read           : RTEMS.Device_Driver_Entry;
+      Write          : RTEMS.Device_Driver_Entry;
+      Control        : RTEMS.Device_Driver_Entry;
+   end record;
+
+type Driver_Address_Table is array ( RTEMS.Unsigned32 range <> ) of
+  RTEMS.Driver_Address_Table_Entry;
+
+type Driver_Address_Table_Pointer is access all Driver_Address_Table;
+@end example
+@end ifset
 
 @table @b
 @item initialization
@@ -393,6 +548,7 @@ executed in this situation.
 
 A typical declaration for a Device Driver Table might appear as follows:
 
+@ifset is-C
 @example
 rtems_driver_address_table Driver_table[2] = @{
    @{ tty_initialize, tty_open,  tty_close,  /* major = 0 */
@@ -403,6 +559,12 @@ rtems_driver_address_table Driver_table[2] = @{
    @}
 @};
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+@end example
+@end ifset
 
 More information regarding the construction and
 operation of device drivers is provided in the I/O Manager
@@ -422,19 +584,50 @@ in addition to this single static set.  The format of each entry
 in the User Extensions Table is defined in the following C
 structure:
 
+typedef User_extensions_routine                   rtems_extension;
+typedef User_extensions_thread_create_extension   rtems_task_create_extension;
+typedef User_extensions_thread_delete_extension   rtems_task_delete_extension;
+typedef User_extensions_thread_start_extension    rtems_task_start_extension;
+typedef User_extensions_thread_restart_extension  rtems_task_restart_extension;
+typedef User_extensions_thread_switch_extension   rtems_task_switch_extension;
+typedef User_extensions_thread_begin_extension    rtems_task_begin_extension;
+typedef User_extensions_thread_exitted_extension  rtems_task_exitted_extension;
+typedef User_extensions_fatal_extension           rtems_fatal_extension;
+
+typedef User_extensions_Table                     rtems_extensions_table;
+
+@ifset is-C
 @example
 typedef struct @{
-  User_extensions_thread_create_extension      thread_create;
-  User_extensions_thread_start_extension       thread_start;
-  User_extensions_thread_restart_extension     thread_restart;
-  User_extensions_thread_delete_extension      thread_delete;
-  User_extensions_thread_switch_extension      thread_switch;
-  User_extensions_thread_post_switch_extension thread_post_switch;
-  User_extensions_thread_begin_extension       thread_begin;
-  User_extensions_thread_exitted_extension     thread_exitted;
-  User_extensions_fatal_error_extension        fatal;
+  rtems_task_create_extension      thread_create;
+  rtems_task_start_extension       thread_start;
+  rtems_task_restart_extension     thread_restart;
+  rtems_task_delete_extension      thread_delete;
+  rtems_task_switch_extension      thread_switch;
+  rtems_task_post_switch_extension thread_post_switch;
+  rtems_task_begin_extension       thread_begin;
+  rtems_task_exitted_extension     thread_exitted;
+  rtems_fatal_extension            fatal;
 @} User_extensions_Table;
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+type Extensions_Table_Entry is
+   record
+      Thread_Create      : RTEMS.Thread_Create_Extension;
+      Thread_Start       : RTEMS.Thread_Start_Extension;
+      Thread_Restart     : RTEMS.Thread_Restart_Extension;
+      Thread_Delete      : RTEMS.Thread_Delete_Extension;
+      Thread_Switch      : RTEMS.Thread_Switch_Extension;
+      Thread_Post_Switch : RTEMS.Thread_Post_Switch_Extension;
+      Thread_Begin       : RTEMS.Thread_Begin_Extension;
+      Thread_Exitted     : RTEMS.Thread_Exitted_Extension;
+      Fatal            : RTEMS.Fatal_Error_Extension;
+   end record;
+@end example
+@end ifset
 
 @table @b
 
@@ -511,6 +704,7 @@ A typical declaration for a User Extension Table
 which defines the TASK_CREATE, TASK_DELETE, TASK_SWITCH, and
 FATAL extension might appear as follows:
 
+@ifset is-C
 @example
 rtems_extensions_table User_extensions = @{
    task_create_extension,
@@ -523,6 +717,23 @@ rtems_extensions_table User_extensions = @{
    fatal_extension
 @};
 @end example
+@end ifset
+
+@ifset is-Ada
+User_Extensions : RTEMS.Extensions_Table := (
+   Task_Create_Extension'Access,
+   null,
+   null,
+   Task_Delete_Extension'Access,
+   Task_Switch_Extension'Access,
+   null,
+   null,
+   Fatal_Extension'Access
+);
+@example
+
+@end example
+@end ifset
 
 More information regarding the user extensions is
 provided in the User Extensions chapter.
@@ -545,6 +756,7 @@ Multiprocessing chapter.  The format of the Multiprocessor
 Configuration Table is defined in 
 the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
 
+@ifset is-C
 @example
 typedef struct @{
   rtems_unsigned32  node;
@@ -554,6 +766,22 @@ typedef struct @{
   rtems_mpci_table *User_mpci_table;
 @} rtems_multiprocessing_table;
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+type Multiprocessing_Table is
+   record
+      Node                   : RTEMS.Unsigned32;
+      Maximum_Nodes          : RTEMS.Unsigned32;
+      Maximum_Global_Objects : RTEMS.Unsigned32;
+      Maximum_Proxies        : RTEMS.Unsigned32;
+      User_MPCI_Table        : RTEMS.MPCI_Table_Pointer;
+   end record;
+
+type Multiprocessing_Table_Pointer is access all Multiprocessing_Table;
+@end example
+@end ifset
 
 @table @b
 @item node
@@ -603,9 +831,10 @@ regarding its entries can be found in the next section.
 The format of this table is defined in 
 the following @value{RTEMS-LANGUAGE} @value{RTEMS-STRUCTURE}:
 
+@ifset is-C
 @example
 typedef struct @{
-  rtems_unsigned32                default_timeout; /* in ticks */
+  rtems_unsigned32                 default_timeout; /* in ticks */
   rtems_unsigned32                 maximum_packet_size;
   rtems_mpci_initialization_entry initialization;
   rtems_mpci_get_packet_entry     get_packet;
@@ -614,6 +843,24 @@ typedef struct @{
   rtems_mpci_receive_entry        receive;
 @} rtems_mpci_table;
 @end example
+@end ifset
+
+@ifset is-Ada
+@example
+type MPCI_Table is
+   record
+      Default_Timeout     : RTEMS.Unsigned32; -- in ticks
+      Maximum_Packet_Size : RTEMS.Unsigned32;
+      Initialization      : RTEMS.MPCI_Initialization_Entry;
+      Get_Packet          : RTEMS.MPCI_Get_Packet_Entry;
+      Return_Packet       : RTEMS.MPCI_Return_Packet_Entry;
+      Send                : RTEMS.MPCI_Send_Entry;
+      Receive             : RTEMS.MPCI_Receive_Entry;
+   end record;
+
+type MPCI_Table_Pointer is access all MPCI_Table;
+@end example
+@end ifset
 
 @table @b
 @item default_timeout

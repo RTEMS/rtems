@@ -258,9 +258,9 @@ void rtems_initialize_executive(
 
 @ifset is-Ada
 @example
-procedure Initialize_Executive(
+procedure Initialize_Executive (
   Configuration_Table : in     RTEMS.Configuration_Table_Pointer;
-  CPU_Table           : in     RTEMS.CPU_Table
+  CPU_Table           : in     RTEMS.CPU_Table_Pointer
 );
 @end example
 @end ifset
@@ -318,7 +318,7 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
 @ifset is-Ada
 @example
-procedure rtems.initialize_executive_early(
+procedure Initialize_Executive_Early(
   Configuration_Table : in     RTEMS.Configuration_Table_Pointer;
   CPU_Table           : in     RTEMS.Cpu_Table;
   Level               :    out RTEMS.ISR_Level
