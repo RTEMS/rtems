@@ -34,6 +34,7 @@ if test "$RTEMS_USE_MACROS" = "yes"; then
 else
   INLINEdir="inline"
 fi
+AC_SUBST(INLINEdir)
 AM_CONDITIONAL(INLINE,test "$INLINEdir" = "inline" )
 AM_CONDITIONAL(MACROS,test "$INLINEdir" = "macros" )
 AM_CONDITIONAL(HAS_MP,test "$HAS_MP" = "yes" )
@@ -49,10 +50,5 @@ fi
 AM_CONFIG_HEADER([src/config.h])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-src/Makefile
-include/Makefile
-inline/Makefile
-macros/Makefile
-])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
