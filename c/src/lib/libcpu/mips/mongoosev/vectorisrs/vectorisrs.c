@@ -76,8 +76,8 @@ int assertSoftwareInterrupt( uint32_t   n )
 //
 
 #if 0
-#define SET_ISR_FLAG( offset )	*((uint32_t   *)(0x8001e000+offset)) = 1;
-#define CLR_ISR_FLAG( offset )	*((uint32_t   *)(0x8001e000+offset)) = 0;
+#define SET_ISR_FLAG( offset )	*((uint32_t*)(0x8001e000+offset)) = 1;
+#define CLR_ISR_FLAG( offset )	*((uint32_t*)(0x8001e000+offset)) = 0;
 #else
 #define SET_ISR_FLAG( offset )
 #define CLR_ISR_FLAG( offset )

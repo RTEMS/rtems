@@ -71,7 +71,7 @@ void mips_dump_exception_frame( CPU_Interrupt_frame *frame )
   unsigned int *frame_u32;
   int   i, j;
 
-  frame_u32 = (uint32_t   *)frame;
+  frame_u32 = (uint32_t*)frame;
   for(i=0; dumpregs[i].offset > -1; i++)
   {
      printk("   %s", dumpregs[i].name);

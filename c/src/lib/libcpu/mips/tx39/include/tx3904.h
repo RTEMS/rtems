@@ -28,10 +28,10 @@
 #define TX3904_TIMER_TRR  0xF0
 
 #define TX3904_TIMER_READ( _base, _register ) \
-  *((volatile uint32_t   *)((_base) + (_register)))
+  *((volatile uint32_t*)((_base) + (_register)))
 
 #define TX3904_TIMER_WRITE( _base, _register, _value ) \
-  *((volatile uint32_t   *)((_base) + (_register))) = (_value)
+  *((volatile uint32_t*)((_base) + (_register))) = (_value)
 
 /*
  *  Interrupt Vector Numbers

@@ -764,7 +764,7 @@ MG5UART_STATIC int mg5uart_baud_rate(
 
   baud_requested = termios_baud_to_number( baud_requested );
 
-  clock = (uint32_t  ) Console_Port_Tbl[minor].ulClock;
+  clock = (uint32_t) Console_Port_Tbl[minor].ulClock;
   if (!clock)
     rtems_fatal_error_occurred(RTEMS_INVALID_NUMBER);
 
