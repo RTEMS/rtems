@@ -1,3 +1,8 @@
+2002-07-30	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* netinet/in_cksum.c, netinet/in_cksum_arm.c: Added ARM in_cksum
+	support.
+
 2002-07-24	Joel Sherrill <joel@OARcorp.com>
 
 	* sys/select.h: Add a prototype of select() to avoid warnings.
@@ -7,6 +12,7 @@
 
 	* Makefile.am, libc/res_send.c: Do not install or use <poll.h>
 	since RTEMS does not support it.
+
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* kern/Makefile.am: Use .$(OBJEXT) instead of .o.
