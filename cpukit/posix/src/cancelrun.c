@@ -53,7 +53,7 @@ void _POSIX_Threads_cancel_run(
 
   /* Now we can delete the thread */
 
-  the_thread->Wait.return_argument = (unsigned32 *)PTHREAD_CANCELED;
+  the_thread->Wait.return_argument = PTHREAD_CANCELED;
   _Thread_Close(
     _Objects_Get_information( the_thread->Object.id ),
     the_thread

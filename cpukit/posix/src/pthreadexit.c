@@ -38,7 +38,7 @@ void pthread_exit(
 
   _Thread_Disable_dispatch();
 
-  _Thread_Executing->Wait.return_argument = (unsigned32 *)value_ptr;
+  _Thread_Executing->Wait.return_argument = value_ptr;
 
   _Thread_Close( the_information, _Thread_Executing );
 

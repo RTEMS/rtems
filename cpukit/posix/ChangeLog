@@ -1,3 +1,9 @@
+2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/cancelrun.c, src/pthreadexit.c, src/pthreadjoin.c, 
+	src/sigtimedwait.c: Remove unnecessary typecasts in assignments to
+	thread->Wait.return_argument.
+
 2003-10-13	Joel Sherrill <joel@OARcorp.com>
 
 	* src/cleanuppop.c, src/cleanuppush.c: Protect use of

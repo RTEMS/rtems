@@ -123,7 +123,7 @@ int sigtimedwait(
     the_thread->Wait.queue           = &_POSIX_signals_Wait_queue;
     the_thread->Wait.return_code     = EINTR;
     the_thread->Wait.option          = *set;
-    the_thread->Wait.return_argument = (void *) the_info;
+    the_thread->Wait.return_argument = the_info;
     _Thread_queue_Enter_critical_section( &_POSIX_signals_Wait_queue ); 
     _ISR_Enable( level );
     _Thread_queue_Enqueue( &_POSIX_signals_Wait_queue, interval ); 

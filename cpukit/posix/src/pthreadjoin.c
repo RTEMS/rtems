@@ -54,7 +54,7 @@ int pthread_join(
        *  Put ourself on the threads join list
        */
 
-      _Thread_Executing->Wait.return_argument = (unsigned32 *) &return_pointer;
+      _Thread_Executing->Wait.return_argument = &return_pointer;
 
       _Thread_queue_Enter_critical_section( &api->Join_List );
 
