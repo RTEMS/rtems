@@ -2,11 +2,26 @@
 #  $Id$
 #
 
+Introduction
+============
+
 This directory contains a stack bounds checker.  It provides two
 primary features:
 
    + check for stack overflow at each context switch
    + provides an educated guess at each task's stack usage
+
+Enabling
+========
+
+Add the stack checker extension to the initial user extension set.
+If using confdefs.h to build your configuration table, this is
+as simple as adding -DSTACK_CHECK_ON to the gcc command line which
+compiles the file defining the configuration table.  In the RTEMS
+test suites and samples, this is always init.c
+
+Background
+==========
 
 The stack overflow check at context switch works by looking for
 a 16 byte pattern at the logical end of the stack to be corrupted.

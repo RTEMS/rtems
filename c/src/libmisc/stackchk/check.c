@@ -175,12 +175,14 @@ void Stack_check_Initialize( void )
       p[3] = 0x600D0D06;
   };
 
+#if 0
   status = rtems_extension_create(
     rtems_build_name( 'S', 'T', 'C', 'K' ),
     &Stack_check_Extension_table,
     &id_ignored
   );
   assert ( status == RTEMS_SUCCESSFUL );
+#endif
 
   Stack_check_Blown_task = 0;
 
@@ -254,6 +256,9 @@ boolean Stack_check_Create_extension(
   Thread_Control *the_thread
 )
 {
+    if (!stack_check_initialized)
+      Stack_check_Initialize();
+
     if (the_thread /* XXX && (the_thread != _Thread_Executing) */ )
         stack_check_dope_stack(&the_thread->Start.Initial_stack);
 
@@ -270,6 +275,9 @@ void Stack_check_Begin_extension(
 )
 {
   Stack_check_Control  *the_pattern;
+
+  if (!stack_check_initialized)
+    Stack_check_Initialize();
 
   if ( the_thread->Object.id == 0 )        /* skip system tasks */
     return;
