@@ -12,6 +12,7 @@ GENERIC_PIECES=
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS=$(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
+     $(wildcard ../consolex/$(ARCH)/consolex.rel) \
      $(foreach piece, $(GENERIC_PIECES), ../../../$(piece)/$(ARCH)/$(piece).rel)
 LIB=$(ARCH)/libbsp.a
 
