@@ -48,7 +48,6 @@
 | Size of heap and stack:	
 +----------------------------------------------------------------------------*/
 
-.set HEAP_SIZE,  256
 .set STACK_SIZE, 0x1000
 
 /*----------------------------------------------------------------------------+
@@ -129,7 +128,6 @@ speakl:	jmp	speakl             # and SPIN!!!
 SYM (_establish_stack):
 
 	movl	$_end, eax		# eax = end of bss/start of heap
-	addl	_heap_size, eax		# eax = end of heap
 	addl	$STACK_SIZE, eax	# make room for stack
 	andl	$0xffffffc0, eax	# align it on 16 byte boundary
 	movl	eax, esp		# set stack pointer
@@ -174,10 +172,6 @@ SYM (zero_bss):
 END_CODE
 
 BEGIN_DATA
-
-	PUBLIC(_heap_size)
-SYM(_heap_size):
-	.long HEAP_SIZE << 10
 
 	PUBLIC(_stack_size)
 SYM(_stack_size):

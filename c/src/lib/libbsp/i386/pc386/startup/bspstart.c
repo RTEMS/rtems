@@ -42,9 +42,16 @@
 /*-------------------------------------------------------------------------+
 | Global Variables
 +--------------------------------------------------------------------------*/
-extern rtems_unsigned32 _end;           /* End of BSS. Defined in 'linkcmds'. */
-extern rtems_unsigned32 _heap_size;   /* Size of stack. Defined in 'start.s'. */
-extern rtems_unsigned32 _stack_size;  /* Size of heap. Defined in 'start.s'.  */
+extern rtems_unsigned32 _end;         /* End of BSS. Defined in 'linkcmds'. */
+
+/* 
+ * Size of heap if it is 0 it will be dynamically defined by memory size, 
+ * otherwise the value should be changed by binary patch 
+ */
+rtems_unsigned32 _heap_size = 0; 
+
+/* Size of stack used during initialization. Defined in 'start.s'.  */
+extern rtems_unsigned32 _stack_size;
 
 rtems_unsigned32 rtemsFreeMemStart;
                          /* Address of start of free memory - should be updated
@@ -81,9 +88,43 @@ extern void rtems_irq_mngt_init();
 +--------------------------------------------------------------------------*/
 void bsp_pretasking_hook(void)
 {
+  rtems_unsigned32 topAddr, val;
+  int i;
+  
+  
   if (rtemsFreeMemStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
     rtemsFreeMemStart = (rtemsFreeMemStart+CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
+  if(_heap_size == 0)
+    {
+      /* 
+       * We have to dynamically size memory. Memory size can be anything
+       * between 2M and 2048M.
+       * let us first write
+       */
+      for(i=2048; i>=2; i--)
+	{
+	  topAddr = i*1024*1024 - 4;
+	  *(volatile rtems_unsigned32 *)topAddr = topAddr;
+	}
+
+      printk("\n");
+
+      for(i=2; i<=2048; i++)
+	{
+	  topAddr = i*1024*1024 - 4;
+	  val =  *(rtems_unsigned32 *)topAddr;
+	  if(val != topAddr)
+	    {
+	      break;
+	    }
+	}
+      
+      topAddr = (i-1)*1024*1024 - 4;
+
+      _heap_size = topAddr - rtemsFreeMemStart;
+    }
+      
   bsp_libc_init((void *)rtemsFreeMemStart, _heap_size, 0);
   rtemsFreeMemStart += _heap_size;           /* HEAP_SIZE  in KBytes */
 
@@ -105,7 +146,7 @@ void bsp_pretasking_hook(void)
 +--------------------------------------------------------------------------*/
 void bsp_start( void )
 {
-  rtemsFreeMemStart = (rtems_unsigned32)&_end + _heap_size + _stack_size;
+  rtemsFreeMemStart = (rtems_unsigned32)&_end + _stack_size;
                                     /* set the value of start of free memory. */
 
   /* If we don't have command line arguments set default program name. */
