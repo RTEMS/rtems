@@ -100,8 +100,6 @@ tmtests/tm22/Makefile
 tmtests/tm23/Makefile
 tmtests/tm24/Makefile
 tmtests/tm25/Makefile
-tmtests/tm26/Makefile
-tmtests/tm27/Makefile
 tmtests/tm28/Makefile
 tmtests/tm29/Makefile
 tmtests/tmck/Makefile
