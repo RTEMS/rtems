@@ -6,15 +6,19 @@ include $(top_srcdir)/../../../automake/lib.am
 
 include $(top_srcdir)/ada.am
 
+AM_ADAFLAGS += -I.
+
 if EXPADA
 noinst_PROGRAMS = sp19
 endif
 
-sp19_SOURCES = sp19.adb config.h sptest.ads
+sp19_SOURCES = sp19.adb sptest.adb config.h sptest.ads
 
-# FIXME: Missing sptest.adb
+sptest.adb: sptest.adp
+	pwd=`pwd` && cd $(srcdir) && $(M4) < sptest.adp > $${pwd}/sptest.adb
+CLEANFILES += sptest.adb
 
-sp19$(EXEEXT): sp19.adb
+sp19$(EXEEXT): sp19.adb sptest.adb sptest.ads
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 EXTRA_DIST = sp19.scn
