@@ -1,3 +1,8 @@
+2002-11-13	Joel Sherrill <joel@OARcorp.com>
+
+	* include/.cvsignore: Corrected.
+	* network/.cvsignore: New file.
+
 2002-11-13	Jay Monkman <jtm@smoothsmoothie.com>
 
 	* New BSP.
