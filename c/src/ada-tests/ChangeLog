@@ -1,5 +1,38 @@
 2002-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* mptests/mp01/node1/.cvsignore: New.
+	* mptests/mp01/node2/.cvsignore: New.
+	* mptests/mp02/node1/.cvsignore: New.
+	* mptests/mp02/node2/.cvsignore: New.
+	* mptests/mp03/node1/.cvsignore: New.
+	* mptests/mp03/node2/.cvsignore: New.
+	* mptests/mp04/node1/.cvsignore: New.
+	* mptests/mp04/node2/.cvsignore: New.
+	* mptests/mp05/node1/.cvsignore: New.
+	* mptests/mp05/node2/.cvsignore: New.
+	* mptests/mp06/node1/.cvsignore: New.
+	* mptests/mp06/node2/.cvsignore: New.
+	* mptests/mp07/node1/.cvsignore: New.
+	* mptests/mp07/node2/.cvsignore: New.
+	* mptests/mp08/node1/.cvsignore: New.
+	* mptests/mp08/node2/.cvsignore: New.
+	* mptests/mp09/node1/.cvsignore: New.
+	* mptests/mp09/node2/.cvsignore: New.
+	* mptests/mp10/node1/.cvsignore: New.
+	* mptests/mp10/node2/.cvsignore: New.
+	* mptests/mp11/node1/.cvsignore: New.
+	* mptests/mp11/node2/.cvsignore: New.
+	* mptests/mp12/node1/.cvsignore: New.
+	* mptests/mp12/node2/.cvsignore: New.
+	* mptests/mp13/node1/.cvsignore: New.
+	* mptests/mp13/node2/.cvsignore: New.
+	* mptests/mp14/node1/.cvsignore: New.
+	* mptests/mp14/node2/.cvsignore: New.
+	* samples/base_mp/node1/.cvsignore: New.
+	* samples/base_mp/node2/.cvsignore: New.
+
+2002-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* mptests/Makefile.am: New.
 	* mptests/mp01/Makefile.am: New.
 	* mptests/mp01/node1/Makefile.am: New.
