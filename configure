@@ -1325,8 +1325,8 @@ case "${target}" in
         target_cpu=no_cpu
 	RTEMS_HAS_POSIX_API=no
 	;;
-  powerpc-*rtems*)
-	target_cpu=ppc
+  ppc*-*rtems*)
+	target_cpu=powerpc
 	;;
   sparc-sun-solaris*)             # unix "simulator" port
 	target_cpu=unix
