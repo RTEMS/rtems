@@ -164,14 +164,15 @@ typedef struct {
  *  manage this class of objects.
  */
 
-EXTERN Objects_Information _RTEMS_tasks_Information;
+RTEMS_EXTERN Objects_Information _RTEMS_tasks_Information;
 
 /*
  *  These are used to manage the user initialization tasks.
  */
 
-EXTERN rtems_initialization_tasks_table *_RTEMS_tasks_User_initialization_tasks;
-EXTERN unsigned32   _RTEMS_tasks_Number_of_initialization_tasks;
+RTEMS_EXTERN rtems_initialization_tasks_table 
+               *_RTEMS_tasks_User_initialization_tasks;
+RTEMS_EXTERN unsigned32   _RTEMS_tasks_Number_of_initialization_tasks;
 
 /*
  *  _RTEMS_tasks_Manager_initialization

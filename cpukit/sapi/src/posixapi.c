@@ -14,21 +14,27 @@
  *  $Id$
  */
 
+#ifdef RTEMS_POSIX_API
+
 #include <assert.h>
+
+/*
+ *  POSIX_API_INIT is defined so all of the POSIX API
+ *  data will be included in this object file.
+ */
+
+#define POSIX_API_INIT
 
 #include <rtems/system.h>
 
-#define INIT
-
+#include <sys/types.h>
+#include <rtems/config.h>
 #include <rtems/posix/cond.h>
-#include <rtems/posix/condmp.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/mutex.h>
-#include <rtems/posix/mutexmp.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/pthread.h>
-#include <rtems/posix/pthreadmp.h>
 #include <rtems/posix/time.h>
 
 /*PAGE
@@ -48,20 +54,17 @@ void _POSIX_API_Initialize(
 
   assert( api_configuration );
 
-  _RTEMS_tasks_Manager_initialization(
-    api_configuration->maximum_tasks
-#if 0
-,
+  _POSIX_Threads_Manager_initialization(
+    api_configuration->maximum_threads,
     api_configuration->number_of_initialization_tasks,
     api_configuration->User_initialization_tasks_table
-#endif
   );
  
   _POSIX_Condition_variables_Manager_initialization(
     api_configuration->maximum_condition_variables
   );
 
-  void _POSIX_Key_Manager_initialization( api_configuration->maximum_keys );
+  _POSIX_Key_Manager_initialization( api_configuration->maximum_keys );
 
   _POSIX_Mutex_Manager_initialization( 
     api_configuration->maximum_mutexes
@@ -69,4 +72,5 @@ void _POSIX_API_Initialize(
 
 }
 
+#endif
 /* end of file */

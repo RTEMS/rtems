@@ -151,8 +151,8 @@ typedef struct {
  *  node number of the local node.
  */
 
-EXTERN unsigned32  _Objects_Local_node;
-EXTERN unsigned32  _Objects_Maximum_nodes;
+SCORE_EXTERN unsigned32  _Objects_Local_node;
+SCORE_EXTERN unsigned32  _Objects_Maximum_nodes;
 
 /*
  *  The following is the list of information blocks for each object
@@ -160,7 +160,7 @@ EXTERN unsigned32  _Objects_Maximum_nodes;
  *  and obtain a pointer to the appropriate object control block.
  */
 
-EXTERN Objects_Information 
+SCORE_EXTERN Objects_Information 
     *_Objects_Information_table[OBJECTS_CLASSES_LAST + 1];
 
 /*

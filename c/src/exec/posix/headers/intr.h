@@ -53,14 +53,15 @@ typedef struct {
  *  this class of objects.
  */
  
-EXTERN Objects_Information _POSIX_Interrupt_Handlers_Information;
+POSIX_EXTERN Objects_Information _POSIX_Interrupt_Handlers_Information;
 
 /*
  *  The following is an array which is used to manage the set of
  *  interrupt handlers installed on each vector.
  */
 
-EXTERN POSIX_Interrupt_Control _POSIX_Interrupt_Information[ ISR_NUMBER_OF_VECTORS ];
+POSIX_EXTERN POSIX_Interrupt_Control 
+               _POSIX_Interrupt_Information[ ISR_NUMBER_OF_VECTORS ];
  
 /*
  *  _POSIX_Interrupt_Manager_initialization

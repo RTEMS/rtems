@@ -127,33 +127,34 @@ typedef struct {
  *  This is the core semaphore which the MPCI Receive Server blocks on.
  */
 
-EXTERN CORE_semaphore_Control _MPCI_Semaphore;
+SCORE_EXTERN CORE_semaphore_Control _MPCI_Semaphore;
 /*
  *  The following thread queue is used to maintain a list of tasks
  *  which currently have outstanding remote requests.
  */
 
-EXTERN Thread_queue_Control _MPCI_Remote_blocked_threads;
+SCORE_EXTERN Thread_queue_Control _MPCI_Remote_blocked_threads;
 
 /*
  *  The following define the internal pointers to the user's
  *  configuration information.
  */
  
-EXTERN MPCI_Control *_MPCI_table;
+SCORE_EXTERN MPCI_Control *_MPCI_table;
 
 /*
  *  The following points to the MPCI Receive Server.
  */
  
-EXTERN Thread_Control *_MPCI_Receive_server_tcb;
+SCORE_EXTERN Thread_Control *_MPCI_Receive_server_tcb;
 
 /*
  *  The following table contains the process packet routines provided
  *  by each object that supports MP operations.
  */
 
-EXTERN MPCI_Packet_processor _MPCI_Packet_processors[MP_PACKET_CLASSES_LAST+1];
+SCORE_EXTERN MPCI_Packet_processor 
+               _MPCI_Packet_processors[MP_PACKET_CLASSES_LAST+1];
 
 /*
  *  _MPCI_Handler_initialization

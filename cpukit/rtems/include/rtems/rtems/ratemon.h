@@ -67,7 +67,7 @@ typedef struct {
   Thread_Control               *owner;
 }   Rate_monotonic_Control;
 
-EXTERN Objects_Information _Rate_monotonic_Information;
+RTEMS_EXTERN Objects_Information _Rate_monotonic_Information;
 
 /*
  *  _Rate_monotonic_Manager_initialization

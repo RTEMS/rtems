@@ -173,14 +173,14 @@ typedef struct {
  *  manage this class of objects.
  */
  
-EXTERN Objects_Information _Thread_Internal_information;
+SCORE_EXTERN Objects_Information _Thread_Internal_information;
  
 /*
  *  The following define the thread control pointers used to access
  *  and manipulate the idle thread.
  */
  
-EXTERN Thread_Control *_Thread_Idle;
+SCORE_EXTERN Thread_Control *_Thread_Idle;
 
 /*
  *  The following context area contains the context of the "thread"
@@ -190,7 +190,7 @@ EXTERN Thread_Control *_Thread_Idle;
  *  which initiated the system.
  */
  
-EXTERN Context_Control _Thread_BSP_context;
+SCORE_EXTERN Context_Control _Thread_BSP_context;
  
 /*
  *  The following declares the dispatch critical section nesting
@@ -198,7 +198,7 @@ EXTERN Context_Control _Thread_BSP_context;
  *  moments.
  */
 
-EXTERN unsigned32 _Thread_Dispatch_disable_level;
+SCORE_EXTERN unsigned32 _Thread_Dispatch_disable_level;
 
 /*
  *  The following holds how many user extensions are in the system.  This
@@ -206,28 +206,28 @@ EXTERN unsigned32 _Thread_Dispatch_disable_level;
  *  per thread.
  */
 
-EXTERN unsigned32 _Thread_Maximum_extensions;
+SCORE_EXTERN unsigned32 _Thread_Maximum_extensions;
 
 /*
  *  The following data items are used to manage timeslicing.
  */
 
-EXTERN unsigned32 _Thread_Ticks_remaining_in_timeslice;
-EXTERN unsigned32 _Thread_Ticks_per_timeslice;
+SCORE_EXTERN unsigned32 _Thread_Ticks_remaining_in_timeslice;
+SCORE_EXTERN unsigned32 _Thread_Ticks_per_timeslice;
 
 /*
  *  The following points to the array of FIFOs used to manage the
  *  set of ready threads.
  */
 
-EXTERN Chain_Control *_Thread_Ready_chain;
+SCORE_EXTERN Chain_Control *_Thread_Ready_chain;
 
 /*
  *  The following points to the thread which is currently executing.
  *  This thread is implicitly manipulated by numerous directives.
  */
 
-EXTERN Thread_Control *_Thread_Executing;
+SCORE_EXTERN Thread_Control *_Thread_Executing;
 
 /*
  *  The following points to the highest priority ready thread
@@ -236,14 +236,14 @@ EXTERN Thread_Control *_Thread_Executing;
  *  dispatch occurs.
  */
 
-EXTERN Thread_Control *_Thread_Heir;
+SCORE_EXTERN Thread_Control *_Thread_Heir;
 
 /*
  *  The following points to the thread whose floating point
  *  context is currently loaded.
  */
 
-EXTERN Thread_Control *_Thread_Allocated_fp;
+SCORE_EXTERN Thread_Control *_Thread_Allocated_fp;
 
 /*
  *  _Thread_Handler_initialization

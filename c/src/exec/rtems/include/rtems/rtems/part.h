@@ -55,7 +55,7 @@ typedef struct {
  *  manage this class of objects.
  */
 
-EXTERN Objects_Information _Partition_Information;
+RTEMS_EXTERN Objects_Information _Partition_Information;
 
 /*
  *  _Partition_Manager_initialization

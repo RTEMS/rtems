@@ -137,8 +137,8 @@ void _Objects_MP_Is_remote (
  *  inactive global object control blocks.
  */
 
-EXTERN unsigned32     _Objects_MP_Maximum_global_objects;
-EXTERN Chain_Control  _Objects_MP_Inactive_global_objects;
+SCORE_EXTERN unsigned32     _Objects_MP_Maximum_global_objects;
+SCORE_EXTERN Chain_Control  _Objects_MP_Inactive_global_objects;
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/objectmp.inl>

@@ -52,7 +52,7 @@ typedef void ( *Thread_queue_Extract_callout )(
                  Thread_Control *
              );
 
-EXTERN Thread_queue_Extract_callout  
+SCORE_EXTERN Thread_queue_Extract_callout  
   _Thread_queue_Extract_table[ OBJECTS_CLASSES_LAST + 1 ];
 
 /*

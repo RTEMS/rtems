@@ -159,7 +159,7 @@ void _Event_Timeout (
  *  executing thread are received properly.
  */
 
-EXTERN volatile Event_Sync_states _Event_Sync_state;
+RTEMS_EXTERN volatile Event_Sync_states _Event_Sync_state;
 
 #include <rtems/rtems/eventmp.h>
 #ifndef __RTEMS_APPLICATION__

@@ -86,10 +86,10 @@ typedef struct {
  *  Address Table and Device Name Table.
  */
 
-EXTERN unsigned32                  _IO_Number_of_drivers;
-EXTERN rtems_driver_address_table *_IO_Driver_address_table;
-EXTERN unsigned32                  _IO_Number_of_devices;
-EXTERN rtems_driver_name_t        *_IO_Driver_name_table;
+SAPI_EXTERN unsigned32                  _IO_Number_of_drivers;
+SAPI_EXTERN rtems_driver_address_table *_IO_Driver_address_table;
+SAPI_EXTERN unsigned32                  _IO_Number_of_devices;
+SAPI_EXTERN rtems_driver_name_t        *_IO_Driver_name_table;
 
 /*
  *  _IO_Manager_initialization

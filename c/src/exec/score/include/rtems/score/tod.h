@@ -69,27 +69,27 @@ typedef struct {                   /* RTEID style time/date */
  *  The following contains the current time of day.
  */
 
-EXTERN TOD_Control _TOD_Current;
+SCORE_EXTERN TOD_Control _TOD_Current;
 
 /*
  *  The following contains the number of seconds from 00:00:00
  *  January 1, TOD_BASE_YEAR until the current time of day.
  */
 
-EXTERN Watchdog_Interval _TOD_Seconds_since_epoch;
+SCORE_EXTERN Watchdog_Interval _TOD_Seconds_since_epoch;
 
 /*
  *  The following contains the number of ticks since the
  *  system was booted.
  */
 
-EXTERN Watchdog_Interval _TOD_Ticks_since_boot;
+SCORE_EXTERN Watchdog_Interval _TOD_Ticks_since_boot;
 
 /*
  *  The following contains the number of microseconds per tick.
  */
 
-EXTERN unsigned32 _TOD_Microseconds_per_tick;
+SCORE_EXTERN unsigned32 _TOD_Microseconds_per_tick;
 
 /*
  *  The following contains the number of clock ticks per second.
@@ -102,16 +102,16 @@ EXTERN unsigned32 _TOD_Microseconds_per_tick;
  *  can be a source of error in the current time of day.
  */
 
-EXTERN unsigned32 _TOD_Ticks_per_second;
+SCORE_EXTERN unsigned32 _TOD_Ticks_per_second;
 
 /*
  *  This is the control structure for the watchdog timer which
  *  fires to service the seconds chain.
  */
 
-EXTERN Watchdog_Control _TOD_Seconds_watchdog;
+SCORE_EXTERN Watchdog_Control _TOD_Seconds_watchdog;
 
-#ifdef INIT
+#ifdef SCORE_INIT
 
 /*
  *  The following array contains the number of days in all months.

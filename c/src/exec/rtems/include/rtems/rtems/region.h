@@ -59,7 +59,7 @@ typedef struct {
  *  manage this class of objects.
  */
 
-EXTERN Objects_Information _Region_Information;
+RTEMS_EXTERN Objects_Information _Region_Information;
 
 /*
  *  _Region_Manager_initialization

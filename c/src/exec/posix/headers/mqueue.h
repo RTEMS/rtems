@@ -45,7 +45,7 @@ typedef struct {
  *  this class of objects.
  */
  
-EXTERN Objects_Information  _POSIX_Message_queue_Information;
+POSIX_EXTERN Objects_Information  _POSIX_Message_queue_Information;
  
 /*
  *  _POSIX_Message_queue_Manager_initialization

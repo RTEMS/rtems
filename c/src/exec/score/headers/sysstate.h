@@ -44,13 +44,13 @@ typedef enum {
  *  an multiprocessing system.
  */
  
-EXTERN boolean _System_state_Is_multiprocessing;
+SCORE_EXTERN boolean _System_state_Is_multiprocessing;
 
 /*
  *  The following variable contains the current system state.
  */
 
-EXTERN System_state_Codes _System_state_Current;
+SCORE_EXTERN System_state_Codes _System_state_Current;
 
 /*
  *  Make it possible for the application to get the system state information.

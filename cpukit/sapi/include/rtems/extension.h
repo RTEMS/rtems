@@ -54,7 +54,7 @@ typedef User_extensions_Table                     rtems_extensions_table;
  *  this class of objects.
  */
 
-EXTERN Objects_Information  _Extension_Information;
+SAPI_EXTERN Objects_Information  _Extension_Information;
 
 /*
  *  The following records define the control block used to manage

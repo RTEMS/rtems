@@ -13,11 +13,12 @@
  */
 
 /*
- *  INIT is defined so all of the data will be included in this
- *  file.
+ *  SCORE_INIT and SAPI_INIT are defined so all of the super core and 
+ *  super API data will be included in this object file.
  */
 
-#define INIT
+#define SAPI_INIT
+#define SCORE_INIT
 
 #include <rtems/system.h>
 #include <rtems/config.h>
@@ -44,7 +45,11 @@
 #include <rtems/directives.h>
 #include <rtems/sptables.h>
 
+
 #include <rtems/rtems/rtemsapi.h>
+#ifdef RTEMS_POSIX_API
+#include <rtems/posix/posixapi.h>
+#endif
 
 /*PAGE
  *

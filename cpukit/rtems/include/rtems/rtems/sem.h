@@ -58,7 +58,7 @@ typedef struct {
  *  this class of objects.
  */
 
-EXTERN Objects_Information  _Semaphore_Information;
+RTEMS_EXTERN Objects_Information  _Semaphore_Information;
 
 /*
  *  _Semaphore_Manager_initialization

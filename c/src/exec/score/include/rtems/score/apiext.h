@@ -43,7 +43,7 @@ typedef struct {
  *  This is the list of API extensions to the system initialization.
  */
  
-EXTERN Chain_Control _API_extensions_List;
+SCORE_EXTERN Chain_Control _API_extensions_List;
 
 /*
  *  _API_extensions_Initialization

@@ -40,8 +40,8 @@ extern "C" {
 
 #if ( CPU_USE_GENERIC_BITFIELD_DATA == TRUE )
 
-#ifndef INIT
-  extern const unsigned char __log2table[256];
+#ifndef SCORE_INIT
+extern const unsigned char __log2table[256];
 #else
 const unsigned char __log2table[256] = {
     7, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4,

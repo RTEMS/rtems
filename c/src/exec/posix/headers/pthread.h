@@ -35,15 +35,15 @@ typedef Thread_Control POSIX_Threads_Control;
  *  this class of objects.
  */
  
-EXTERN Objects_Information  _POSIX_Threads_Information;
+POSIX_EXTERN Objects_Information  _POSIX_Threads_Information;
 
 /*
  *  These are used to manage the user initialization tasks.
  */
  
-EXTERN posix_initialization_tasks_table 
+POSIX_EXTERN posix_initialization_tasks_table 
                    *_POSIX_Threads_User_initialization_tasks;
-EXTERN unsigned32   _POSIX_Threads_Number_of_initialization_tasks;
+POSIX_EXTERN unsigned32   _POSIX_Threads_Number_of_initialization_tasks;
 
  
 /*

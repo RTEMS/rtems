@@ -35,7 +35,7 @@ extern "C" {
  *  currently executing thread and given to the heir thread.
  */
 
-EXTERN boolean _Context_Switch_necessary;
+SCORE_EXTERN boolean _Context_Switch_necessary;
 
 /*
  *  _Context_Initialize

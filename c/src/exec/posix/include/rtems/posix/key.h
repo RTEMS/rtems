@@ -40,7 +40,7 @@ typedef struct {
  *  this class of objects.
  */
  
-EXTERN Objects_Information  _POSIX_Keys_Information;
+POSIX_EXTERN Objects_Information  _POSIX_Keys_Information;
  
 /*
  *  _POSIX_Keys_Manager_initialization

@@ -30,7 +30,7 @@ extern "C" {
  *
  */
 
-EXTERN Heap_Control _Workspace_Area;  /* executive heap header */
+SCORE_EXTERN Heap_Control _Workspace_Area;  /* executive heap header */
 
 /*
  *  _Workspace_Handler_initialization

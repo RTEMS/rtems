@@ -40,7 +40,7 @@ typedef struct {
  *  this class of objects.
  */
  
-EXTERN Objects_Information  _POSIX_Condition_variables_Information;
+POSIX_EXTERN Objects_Information  _POSIX_Condition_variables_Information;
  
 /*
  *  _POSIX_Condition_variables_Manager_initialization

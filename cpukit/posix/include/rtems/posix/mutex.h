@@ -21,6 +21,9 @@
 extern "C" {
 #endif
 
+#include <rtems/score/coremutex.h>
+#include <pthread.h>
+
 /*
  *  Data Structure used to manage a POSIX mutex
  */
@@ -36,7 +39,7 @@ typedef struct {
  *  this class of objects.
  */
  
-EXTERN Objects_Information  _POSIX_Mutex_Information;
+POSIX_EXTERN Objects_Information  _POSIX_Mutex_Information;
  
 /*
  *  _POSIX_Mutex_Manager_initialization

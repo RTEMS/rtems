@@ -148,10 +148,10 @@ typedef struct {
 
 /* variables */
 
-EXTERN void               *_CPU_Interrupt_stack_low;
-EXTERN void               *_CPU_Interrupt_stack_high;
+SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
+SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
       /* points to jsr-exception-table in targets wo/ VBR register */
-extern char               _VBR[]; 
+extern char                      _VBR[]; 
 
 /* constants */
 

@@ -68,21 +68,21 @@ typedef ISR_Handler ( *ISR_Handler_entry )(
  *  executing thread by an ISR handler.
  */
 
-EXTERN boolean    _ISR_Signals_to_thread_executing;
+SCORE_EXTERN boolean    _ISR_Signals_to_thread_executing;
 
 /*
  *  The following contains the interrupt service routine nest level.
  *  When this variable is zero, a thread is executing.
  */
 
-EXTERN unsigned32 _ISR_Nest_level;
+SCORE_EXTERN unsigned32 _ISR_Nest_level;
 
 /*
  *  The following declares the Vector Table.  Application
  *  interrupt service routines are vectored by the ISR Handler via this table.
  */
 
-EXTERN ISR_Handler_entry _ISR_Vector_table[ ISR_NUMBER_OF_VECTORS ];
+SCORE_EXTERN ISR_Handler_entry _ISR_Vector_table[ ISR_NUMBER_OF_VECTORS ];
 
 /*
  *  _ISR_Handler_initialization

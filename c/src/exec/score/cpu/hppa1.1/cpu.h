@@ -230,10 +230,10 @@ typedef struct {
 
 /* variables */
 
-EXTERN Context_Control_fp  _CPU_Null_fp_context;
-EXTERN unsigned32          _CPU_Default_gr27;
-EXTERN void               *_CPU_Interrupt_stack_low;
-EXTERN void               *_CPU_Interrupt_stack_high;
+SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
+SCORE_EXTERN unsigned32          _CPU_Default_gr27;
+SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
+SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 #endif          /* ! ASM */
 

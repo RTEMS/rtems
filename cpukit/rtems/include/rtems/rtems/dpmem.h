@@ -51,7 +51,7 @@ typedef struct {
  *  The following define the internal Dual Ported Memory information.
  */
 
-EXTERN Objects_Information  _Dual_ported_memory_Information;
+RTEMS_EXTERN Objects_Information  _Dual_ported_memory_Information;
 
 /*
  *  _Dual_ported_memory_Manager_initialization

@@ -40,7 +40,7 @@ typedef unsigned32 rtems_debug_control;
  *  This variable contains the current debug level.
  */
 
-EXTERN rtems_debug_control _Debug_Level;
+SCORE_EXTERN rtems_debug_control _Debug_Level;
 
 /*
  *  _Debug_Manager_initialization

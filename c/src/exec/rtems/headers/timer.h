@@ -64,7 +64,7 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
  *  this class of objects.
  */
 
-EXTERN Objects_Information  _Timer_Information;
+RTEMS_EXTERN Objects_Information  _Timer_Information;
 
 /*
  *  The following records define the control block used to manage

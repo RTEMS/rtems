@@ -473,8 +473,8 @@ typedef struct {
  *        CPU_HAS_SOFTWARE_INTERRUPT_STACK is defined as TRUE.
  */
 
-EXTERN void               *_CPU_Interrupt_stack_low;
-EXTERN void               *_CPU_Interrupt_stack_high;
+SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
+SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 /*
  *  With some compilation systems, it is difficult if not impossible to
@@ -492,7 +492,7 @@ EXTERN void               *_CPU_Interrupt_stack_high;
  *  Nothing prevents the porter from declaring more CPU specific variables.
  */
 
-EXTERN struct {
+SCORE_EXTERN struct {
   unsigned32 *Nest_level;
   unsigned32 *Disable_level;
   void *Vector_table;

@@ -14,11 +14,16 @@
  *  $Id$
  */
 
+/*
+ *  RTEMS_API_INIT is defined so all of the RTEMS API
+ *  data will be included in this object file.
+ */
+
+#define RTEMS_API_INIT
+
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/rtemsapi.h>
-
-#define INIT
 
 #include <rtems/rtems/intr.h>
 #include <rtems/rtems/clock.h>

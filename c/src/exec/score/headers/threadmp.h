@@ -68,14 +68,14 @@ Thread_Control *_Thread_MP_Find_proxy (
  *  blocking the multiprocessing receive thread.
  */
 
-EXTERN Thread_Control *_Thread_MP_Receive;
+SCORE_EXTERN Thread_Control *_Thread_MP_Receive;
 
 /*
  * The following chains are used to manage proxies.
  */
 
-EXTERN Chain_Control _Thread_MP_Active_proxies;
-EXTERN Chain_Control _Thread_MP_Inactive_proxies;
+SCORE_EXTERN Chain_Control _Thread_MP_Active_proxies;
+SCORE_EXTERN Chain_Control _Thread_MP_Inactive_proxies;
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/threadmp.inl>

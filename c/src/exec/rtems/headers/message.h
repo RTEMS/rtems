@@ -68,7 +68,7 @@ typedef struct {
  *  manage this class of objects.
  */
 
-EXTERN Objects_Information  _Message_queue_Information;
+RTEMS_EXTERN Objects_Information  _Message_queue_Information;
 
 /*
  *  _Message_queue_Manager_initialization

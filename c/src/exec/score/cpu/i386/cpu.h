@@ -122,9 +122,9 @@ typedef struct {
 
 /* variables */
 
-EXTERN Context_Control_fp  _CPU_Null_fp_context;
-EXTERN void               *_CPU_Interrupt_stack_low;
-EXTERN void               *_CPU_Interrupt_stack_high;
+SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
+SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
+SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 /* constants */
 

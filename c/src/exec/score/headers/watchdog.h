@@ -92,16 +92,16 @@ typedef struct {
  *  during an insert on a watchdog delta chain.
  */
 
-EXTERN volatile unsigned32  _Watchdog_Sync_level;
-EXTERN volatile unsigned32  _Watchdog_Sync_count;
+SCORE_EXTERN volatile unsigned32  _Watchdog_Sync_level;
+SCORE_EXTERN volatile unsigned32  _Watchdog_Sync_count;
 
 /*
  *  The following defines the watchdog chains which are managed
  *  on ticks and second boundaries.
  */
 
-EXTERN Chain_Control _Watchdog_Ticks_chain;
-EXTERN Chain_Control _Watchdog_Seconds_chain;
+SCORE_EXTERN Chain_Control _Watchdog_Ticks_chain;
+SCORE_EXTERN Chain_Control _Watchdog_Seconds_chain;
 
 /*
  *  _Watchdog_Handler_initialization

@@ -84,7 +84,7 @@ typedef struct {
   rtems_extensions_table           *User_extension_table;
   rtems_multiprocessing_table      *User_multiprocessing_table;
   rtems_api_configuration_table    *RTEMS_api_configuration;
-  posix_api_configuration_table    *Posix_api_configuration;
+  posix_api_configuration_table    *POSIX_api_configuration;
 } rtems_configuration_table;
 
 /*
@@ -92,8 +92,8 @@ typedef struct {
  *  the user.  They are not used in RTEMS itself.
  */
 
-EXTERN rtems_configuration_table    *_Configuration_Table;
-EXTERN rtems_multiprocessing_table  *_Configuration_MP_table;
+SAPI_EXTERN rtems_configuration_table    *_Configuration_Table;
+SAPI_EXTERN rtems_multiprocessing_table  *_Configuration_MP_table;
 
 #ifdef __cplusplus
 }

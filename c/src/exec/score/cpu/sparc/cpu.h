@@ -514,7 +514,7 @@ typedef struct {
  *  context area during _CPU_Context_Initialize.
  */
 
-EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
+SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
 
 /*
  *  This stack is allocated by the Interrupt Manager and the switch
@@ -529,8 +529,8 @@ EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
  *  are required.
  */
 
-EXTERN void *_CPU_Interrupt_stack_low;
-EXTERN void *_CPU_Interrupt_stack_high;
+SCORE_EXTERN void *_CPU_Interrupt_stack_low;
+SCORE_EXTERN void *_CPU_Interrupt_stack_high;
 
 #if defined(erc32)
 
@@ -538,7 +538,7 @@ EXTERN void *_CPU_Interrupt_stack_high;
  *  ERC32 Specific Variables
  */
 
-EXTERN unsigned32 _ERC32_MEC_Timer_Control_Mirror;
+SCORE_EXTERN unsigned32 _ERC32_MEC_Timer_Control_Mirror;
 
 #endif
 
@@ -585,7 +585,7 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
  
 #define SPARC_TRAP_TABLE_ALIGNMENT 4096
  
-EXTERN unsigned8 _CPU_Trap_Table_area[ 8192 ]
+SCORE_EXTERN unsigned8 _CPU_Trap_Table_area[ 8192 ]
            __attribute__ ((aligned (SPARC_TRAP_TABLE_ALIGNMENT)));
  
 

@@ -58,8 +58,9 @@ typedef struct {
  *  threads are ready at that priority.
  */
 
-EXTERN volatile Priority_Bit_map_control _Priority_Major_bit_map;
-EXTERN Priority_Bit_map_control _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
+SCORE_EXTERN volatile Priority_Bit_map_control _Priority_Major_bit_map;
+SCORE_EXTERN Priority_Bit_map_control 
+               _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
 
 /*
  *  The definition of the Priority_Bit_map_control type is CPU dependent.

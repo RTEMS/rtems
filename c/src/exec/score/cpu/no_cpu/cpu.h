@@ -352,7 +352,7 @@ typedef struct {
  *  _CPU_Context_Initialize.
  */
 
-EXTERN Context_Control_fp  _CPU_Null_fp_context;
+SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
 
 /*
  *  On some CPUs, RTEMS supports a software managed interrupt stack.
@@ -367,8 +367,8 @@ EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *        CPU_HAS_SOFTWARE_INTERRUPT_STACK is defined as TRUE.
  */
 
-EXTERN void               *_CPU_Interrupt_stack_low;
-EXTERN void               *_CPU_Interrupt_stack_high;
+SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
+SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 /*
  *  With some compilation systems, it is difficult if not impossible to
@@ -380,7 +380,7 @@ EXTERN void               *_CPU_Interrupt_stack_high;
  *  sequence (if a dispatch is necessary).
  */
 
-EXTERN void           (*_CPU_Thread_dispatch_pointer)();
+SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.

@@ -100,13 +100,13 @@ typedef struct {
  *  configured by the application.
  */
 
-EXTERN User_extensions_Control _User_extensions_Initial;
+SCORE_EXTERN User_extensions_Control _User_extensions_Initial;
 
 /*
  *  The following is used to manage the list of active extensions.
  */
 
-EXTERN Chain_Control _User_extensions_List;
+SCORE_EXTERN Chain_Control _User_extensions_List;
 
 /*
  *  _User_extensions_Thread_create

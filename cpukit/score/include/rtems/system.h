@@ -36,16 +36,41 @@ extern "C" {
 
 /*
  *  The following insures that all data is declared in the space
- *  of the Initialization Manager.  It is referenced as "external"
- *  in every other file.
+ *  of the initialization routine for either the Initialization Manager
+ *  or the initialization file for the appropriate API.  It is 
+ *  referenced as "external" in every other file.
  */
 
-#ifdef INIT
-#undef EXTERN
-#define EXTERN
+#ifdef SCORE_INIT
+#undef  SCORE_EXTERN
+#define SCORE_EXTERN
 #else
-#undef EXTERN
-#define EXTERN  extern
+#undef  SCORE_EXTERN
+#define SCORE_EXTERN  extern
+#endif
+
+#ifdef SAPI_INIT
+#undef  SAPI_EXTERN
+#define SAPI_EXTERN
+#else
+#undef  SAPI_EXTERN
+#define SAPI_EXTERN  extern
+#endif
+
+#ifdef RTEMS_API_INIT
+#undef  RTEMS_EXTERN
+#define RTEMS_EXTERN
+#else
+#undef  RTEMS_EXTERN
+#define RTEMS_EXTERN  extern
+#endif
+
+#ifdef POSIX_API_INIT
+#undef  POSIX_EXTERN
+#define POSIX_EXTERN
+#else
+#undef  POSIX_EXTERN
+#define POSIX_EXTERN  extern
 #endif
 
 /*
@@ -118,7 +143,7 @@ extern const char _Copyright_Notice[];      /* RTEMS copyright string */
  *  The following defines the CPU dependent information table.
  */
 
-EXTERN rtems_cpu_table _CPU_Table;               /* CPU dependent info */
+SCORE_EXTERN rtems_cpu_table _CPU_Table;               /* CPU dependent info */
 
 /*
  *  XXX weird RTEMS stuff
