@@ -1,3 +1,8 @@
+2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 548/rtems
+	* Makefile.am: Add src/envlock.c.
+
 2003-11-26	Joel Sherrill <joel@OARcorp.com>
 
 	PR 524/filesystem

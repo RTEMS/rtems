@@ -12,8 +12,9 @@ include_HEADERS = include/chain.h include/console.h include/clockdrv.h \
     include/iosupp.h include/ringbuf.h include/rtc.h \
     include/spurious.h include/timerdrv.h include/vmeintr.h
 
+LIBC_HFILES =
 if NEED_STDINT_H
-LIBC_HFILES = include/stdint.h
+LIBC_HFILES += include/stdint.h
 endif
 if NEED_INTTYPES_H
 LIBC_HFILES += include/inttypes.h
@@ -154,7 +155,8 @@ UNIX_C_FILES = $(UNIX_LIBC_C_FILES)
 
 EMBEDDED_C_FILES = $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(TERMINAL_IDENTIFICATION_C_FILES) $(SYSTEM_CALL_C_FILES) \
-    $(DIRECTORY_SCAN_C_FILES) $(ID_C_FILES)
+    $(DIRECTORY_SCAN_C_FILES) $(ID_C_FILES) \
+    src/envlock.c
 
 if UNIX
 C_FILES = $(COMMON_C_FILES) $(UNIX_C_FILES)
