@@ -1,3 +1,7 @@
+2003-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp_specs: Remove *lib:.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.

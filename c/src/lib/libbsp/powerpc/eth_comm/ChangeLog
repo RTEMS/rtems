@@ -1,3 +1,7 @@
+2003-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp_specs: Remove *lib:.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* canbus/canbus.c, clock/p_clock.c, include/bsp.h, include/canbus.h,
