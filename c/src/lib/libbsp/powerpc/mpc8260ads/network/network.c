@@ -390,7 +390,7 @@ m8260_scc_initialize_hardware (struct m8260_hdlc_struct *sc)
 static void
 m8260Enet_retire_tx_bd (struct m8260_hdlc_struct *sc)
 {
-  rtems_unsigned16 status;
+  uint16_t         status;
   int i;
   int nRetired;
   struct mbuf *m, *n;
@@ -448,7 +448,7 @@ scc_rxDaemon (void *arg)
   struct m8260_hdlc_struct *sc = (struct m8260_hdlc_struct *)arg;
   struct ifnet *ifp = &sc->ac_if;
   struct mbuf *m;
-  rtems_unsigned16 status;
+  uint16_t         status;
   m8260BufferDescriptor_t *rxBd;
   int rxBdIndex;
   
@@ -541,7 +541,7 @@ scc_rxDaemon (void *arg)
       m = sc->rxMbuf[rxBdIndex];
 
       /* strip off HDLC CRC */
-      m->m_len = m->m_pkthdr.len = rxBd->length - sizeof(rtems_unsigned16);
+      m->m_len = m->m_pkthdr.len = rxBd->length - sizeof(uint16_t);
 
       hdlc_input( ifp, m );
 
@@ -599,7 +599,7 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
   struct m8260_hdlc_struct *sc = ifp->if_softc;
   volatile m8260BufferDescriptor_t *firstTxBd, *txBd;
   struct mbuf *l = NULL;
-  rtems_unsigned16 status;
+  uint16_t         status;
   int nAdded;
   
   /*

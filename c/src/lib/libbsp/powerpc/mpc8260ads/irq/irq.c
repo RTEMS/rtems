@@ -60,10 +60,10 @@ static inline int is_processor_irq(const rtems_irq_symbolic_name irqLine)
 }
 
 typedef struct {
-	rtems_unsigned32 mask_h;	/* mask for sipnr_h and simr_h */
-	rtems_unsigned32 mask_l;	/* mask for sipnr_l and simr_l */
-	rtems_unsigned32 priority_h;  /* mask this and lower priority ints */
-	rtems_unsigned32 priority_l;
+	uint32_t         mask_h;	/* mask for sipnr_h and simr_h */
+	uint32_t         mask_l;	/* mask for sipnr_l and simr_l */
+	uint32_t         priority_h;  /* mask this and lower priority ints */
+	uint32_t         priority_l;
 } m82xxIrqMasks_t;
 
 /*

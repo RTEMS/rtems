@@ -80,7 +80,7 @@ char *rtems_progname;
  *  rtems/c/src/lib/libbsp/shared/bsplibc.c.
  */
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 void  _BSP_GPLED1_on(void);
 void  _BSP_GPLED0_on(void);
@@ -328,7 +328,7 @@ void bsp_start(void)
 
   /* use BRG1 to generate 32kHz timebase */
 /*
-  m8260.brgc1 = M8260_BRG_EN + (unsigned32)(((unsigned16)((40016384)/(32768)) - 1) << 1) + 0;
+  m8260.brgc1 = M8260_BRG_EN + (uint32_t)(((uint16_t)((40016384)/(32768)) - 1) << 1) + 0;
 */
 
 
@@ -363,7 +363,7 @@ void bsp_start(void)
  *
  */
 Thread _Thread_Idle_body(
-  unsigned32 ignored )
+  uint32_t   ignored )
 {
 
   for( ; ; )

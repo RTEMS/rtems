@@ -39,10 +39,10 @@ extern "C" {
 typedef struct bcsr
 
 {
-    rtems_unsigned32  bcsr0; /* Board Control and Status Register */
-    rtems_unsigned32  bcsr1;
-    rtems_unsigned32  bcsr2;
-    rtems_unsigned32  bcsr3;
+    uint32_t          bcsr0; /* Board Control and Status Register */
+    uint32_t          bcsr1;
+    uint32_t          bcsr2;
+    uint32_t          bcsr3;
 
 } BCSR;
 
@@ -139,7 +139,7 @@ extern rtems_configuration_table BSP_Configuration;
 void bsp_cleanup( void );
 
 #if 0
-void M8260ExecuteRISC( rtems_unsigned32 command );
+void M8260ExecuteRISC( uint32_t         command );
 void *M8260AllocateBufferDescriptors( int count );
 void *M8260AllocateRiscTimers( int count );
 extern char M8260DefaultWatchdogFeeder;
