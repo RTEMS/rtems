@@ -1,7 +1,0 @@
-#
-#  $Id$
-#
-
-This is a snapshot of a work in process.  It is the beginnings of a
-debug monitor task and trap handler which is tasking aware.
-
