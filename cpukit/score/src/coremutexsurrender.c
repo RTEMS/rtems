@@ -84,8 +84,11 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
   the_mutex->nest_count--;
 
-  if ( the_mutex->nest_count != 0 )
+  if ( the_mutex->nest_count != 0 ) {
+    if ( the_mutex->Attributes.allow_nesting )
+      return( CORE_MUTEX_STATUS_SUCCESSFUL );
     return( CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED );
+  }
 
   _Thread_Executing->resource_count--;
   the_mutex->holder    = NULL;
