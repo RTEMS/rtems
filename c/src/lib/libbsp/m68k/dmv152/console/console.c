@@ -189,18 +189,23 @@ rtems_device_driver console_open(
   void                    * arg
 )
 {
-        rtems_status_code sc;
+  rtems_status_code sc;
+  static const rtems_termios_callbacks pollCallbacks = {
+    NULL,                        /* firstOpen */
+    NULL,                        /* lastClose */
+    console_inbyte_nonblocking,  /* pollRead */
+    console_write_support,       /* write */
+    NULL,                        /* setAttributes */
+    NULL,                        /* stopRemoteTx */
+    NULL,                        /* startRemoteTx */
+    0                            /* outputUsesInterrupts */
+  };
 
-        assert( minor <= 1 );
-        if ( minor > 2 )
-          return RTEMS_INVALID_NUMBER;
- 
-        sc = rtems_termios_open (major, minor, arg,
-                        NULL,
-                        NULL,
-                        console_inbyte_nonblocking,
-                        console_write_support,
-                        0);
+  assert( minor <= 1 );
+  if ( minor > 2 )
+    return RTEMS_INVALID_NUMBER;
+
+  sc = rtems_termios_open (major, minor, arg, &pollCallbacks );
 
   return RTEMS_SUCCESSFUL;
 }

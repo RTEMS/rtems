@@ -420,31 +420,42 @@ rtems_device_driver console_open(
   void                    * arg
 )
 {
-        rtems_status_code sc;
+  rtems_status_code sc;
 #if defined(CONSOLE_USE_INTERRUPTS)
-        rtems_libio_open_close_args_t *args = arg;
+  rtems_libio_open_close_args_t *args = arg;
+  static const rtems_termios_callbacks intrCallbacks = {
+    NULL,                        /* firstOpen */
+    NULL,                        /* lastClose */
+    NULL,                        /* pollRead */
+    console_write_support,       /* write */
+    NULL,                        /* setAttributes */
+    NULL,                        /* stopRemoteTx */
+    NULL,                        /* startRemoteTx */
+    0                            /* outputUsesInterrupts */
+  };
+#else
+  static const rtems_termios_callbacks pollCallbacks = {
+    NULL,                        /* firstOpen */
+    NULL,                        /* lastClose */
+    console_inbyte_nonblocking,  /* pollRead */
+    console_write_support,       /* write */
+    NULL,                        /* setAttributes */
+    NULL,                        /* stopRemoteTx */
+    NULL,                        /* startRemoteTx */
+    0                            /* outputUsesInterrupts */
+  };
 #endif
 
-        assert( minor <= 1 );
-        if ( minor > 2 )
-          return RTEMS_INVALID_NUMBER;
+  assert( minor <= 1 );
+  if ( minor > 2 )
+    return RTEMS_INVALID_NUMBER;
  
 #if defined(CONSOLE_USE_INTERRUPTS)
-        sc = rtems_termios_open (major, minor, arg,
-                        NULL,
-                        NULL,
-                        NULL,
-                        console_write_support,
-                        0);
+  sc = rtems_termios_open (major, minor, arg, &intrCallbacks);
 
-        console_termios_data[ minor ] = args->iop->data1;
+  console_termios_data[ minor ] = args->iop->data1;
 #else
-        sc = rtems_termios_open (major, minor, arg,
-                        NULL,
-                        NULL,
-                        console_inbyte_nonblocking,
-                        console_write_support,
-                        0);
+  sc = rtems_termios_open (major, minor, arg, &pollCallbacks);
 #endif
 
   return RTEMS_SUCCESSFUL;
