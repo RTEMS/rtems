@@ -110,7 +110,6 @@ extern "C" {
 #define PPC_ALIGNMENT		4  
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_HAS_RFCI    	1
-#define PPC_HAS_FPU     	0
 #define PPC_USE_MULTIPLE	1
 #define PPC_I_CACHE		2048
 #define PPC_D_CACHE		1024
@@ -222,8 +221,6 @@ extern "C" {
 #define PPC_D_CACHE             4096
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_INTERRUPT_MAX       71
-#define PPC_HAS_FPU     	0
-#define PPC_HAS_DOUBLE		0
 #define PPC_USE_MULTIPLE	1
 
 #define PPC_MSR_0		0x00009000
@@ -242,8 +239,6 @@ extern "C" {
 #define PPC_D_CACHE             4096
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_INTERRUPT_MAX       71
-#define PPC_HAS_FPU     	0
-#define PPC_HAS_DOUBLE		0
 
 #define PPC_MSR_0		0x00009000
 #define PPC_MSR_1		0x00001000
@@ -289,9 +284,6 @@ extern "C" {
 #define PPC_D_CACHE         	16384
 #define PPC_CACHE_ALIGNMENT	32
 #define PPC_INTERRUPT_MAX       125
-/*#define PPC_HAS_FPU     	0 */ 	/* my 8260 is one the few with no FPU */
-#define PPC_HAS_FPU		1	/* the rest do have one */
-#define PPC_HAS_DOUBLE		1
 #define PPC_USE_MULTIPLE	1
 #else
  
@@ -417,11 +409,17 @@ extern "C" {
 #endif
 
 /*
- *  Unless specified above, then assume the model has FP support.
+ *  Unless specified above, assume PPC_HAS_FPU to be a synonym for _SOFT_FLOAT.
+ *  FIXME: Should we tie PPC_HAS_FPU to _SOFT_FLOAT, directly 
+ *     and disallow explicitly setting PPC_HAS_FPU?
  */
 
 #ifndef PPC_HAS_FPU
+#ifdef _SOFT_FLOAT
+#define PPC_HAS_FPU 0
+#else
 #define PPC_HAS_FPU 1
+#endif
 #endif
 
 /*

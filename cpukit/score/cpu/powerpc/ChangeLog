@@ -1,3 +1,8 @@
+2005-02-10	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* rtems/score/powerpc.h: Remove hard-coded PPC_HAS_FPU.
+	Tie PPC_HAS_FPU to _SOFT_FLOAT.
+
 2005-02-09	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/old-exceptions/cpu.h, rtems/score/powerpc.h:
