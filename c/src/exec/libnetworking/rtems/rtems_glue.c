@@ -698,7 +698,7 @@ kmem_malloc (vm_map_t *map, vm_size_t size, boolean_t waitflag)
  * IP header checksum routine for processors which don't have an inline version
  */
 
-#ifdef (defined(__GNUC__) && defined(sparc))
+#if (defined(__GNUC__) && defined(sparc))
 
 	asm("
 	.text
