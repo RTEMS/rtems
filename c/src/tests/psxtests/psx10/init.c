@@ -81,9 +81,6 @@ void *POSIX_Init(
   assert( status == EINVAL );
   puts( "Init: pthread_condattr_getpshared - EINVAL" );
 
-  Init_id = pthread_self();
-  printf( "Init: ID is 0x%08x\n", Init_id );
-
   puts( "Init: pthread_cond_init - NULL attr" );
   status = pthread_cond_init( &cond, NULL );
   assert( !status );
@@ -93,15 +90,37 @@ void *POSIX_Init(
   assert( !status );
 
   puts( "Init: pthread_cond_init - attr" );
-  status = pthread_cond_init( &cond, &attr );
+  status = pthread_cond_init( &Cond1_id, &attr );
   assert( !status );
 
   /* create a thread */
 
-/*
-  status = pthread_create( &thread_id, NULL, Task_1_through_3, NULL );
+  empty_line();
+
+  status = pthread_create( &Task_id, NULL, Task_1, NULL );
   assert( !status );
-*/
+
+  puts( "Init: sleep to switch to Task_1" );
+  sleep( 1 );
+
+  puts( "Init: pthread_cond_signal" );
+  status = pthread_cond_signal( &Cond1_id );
+  assert( !status );
+
+  empty_line();
+
+  status = pthread_create( &Task2_id, NULL, Task_2, NULL );
+  assert( !status );
+
+  puts( "Init: sleep - switch to Task_1 and Task_2" );
+  sleep( 1 );
+
+  puts( "Init: pthread_cond_broadcast" );
+  status = pthread_cond_broadcast( &Cond1_id );
+  assert( !status );
+
+  puts( "Init: sleep - switch to Task_1" );
+  sleep( 1 );
 
   /* exit this thread */
 
