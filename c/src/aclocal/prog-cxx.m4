@@ -11,8 +11,7 @@ AC_REQUIRE([RTEMS_ENABLE_CXX])
 RTEMS_CHECK_TOOL(CXX,g++)
 if test "$RTEMS_HAS_CPLUSPLUS" = "yes";
 then
-_RTEMS_FLAGS([CXXFLAGS],
-  ["\$(CPU_CFLAGS) \$(RTEMS_CFLAGS_\$(VARIANT_V)_V) \$(CFLAGS_\$(VARIANT_V)_V) -g"])
+  CXXFLAGS=${CXXFLAGS-${CFLAGS}}
 
 dnl Only accept g++
 dnl NOTE: This might be too restrictive

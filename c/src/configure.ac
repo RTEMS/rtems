@@ -133,7 +133,8 @@ RTEMS_BSP_CONFIG_SUBDIR(
   ['--with-project-root=${with_project_root}../$RTEMS_BSP/' \
    '--includedir=${exec_prefix}/${RTEMS_BSP}/lib/include' \
    '--libdir=${exec_prefix}/${RTEMS_BSP}/lib' \
-   'CFLAGS="${CFLAGS}"'],
+   'CFLAGS="${CFLAGS}"' \
+  ],
   [test x"$multilib" = xno])
 
 ## Note: the order of the directories below is essential
@@ -195,7 +196,8 @@ RTEMS_BSP_CONFIG_SUBDIR(
    '--with-project-root=${with_project_root}../' \
    '--with-project-top=${with_project_top}../' \
    '--enable-rtemsbsp=$RTEMS_BSP' \
-   ],
+   'CFLAGS="${CFLAGS}"' \
+  ],
   [test x"$enable_tests" != x"no"])
 
 AC_SUBST([BSP_SUBDIRS],[$BSP_SUBDIRS])
