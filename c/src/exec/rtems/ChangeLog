@@ -1,3 +1,10 @@
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* src/regiongetinfo.c, include/rtems/rtems/region.h,
+	include/rtems/rtems/types.h, src/Makefile.am: Added
+	region_get_information() and information control block.
+	* src/regiongetinfo.c: New file.
+
 2000-09-29	Stephan Merker <merker@decrc.abb.de>
 
 	* include/rtems/rtems/ratemon.h, src/ratemonperiod.c,

@@ -19,6 +19,7 @@
 extern "C" {
 #endif
 
+#include <rtems/score/heap.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/tod.h>
@@ -60,6 +61,12 @@ typedef Objects_Id       rtems_id;
 typedef Context_Control            rtems_context;
 typedef Context_Control_fp         rtems_context_fp;
 typedef CPU_Interrupt_frame        rtems_interrupt_frame;
+
+/*
+ *  Region information block
+ */
+
+typedef Heap_Information_block region_information_block;
 
 /*
  *  Time related 

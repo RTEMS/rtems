@@ -129,6 +129,21 @@ rtems_status_code rtems_region_ident(
 );
 
 /*
+ *  rtems_region_ident
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine implements the rtems_region_get_information directive.
+ *  This directive returns information about the heap associated with
+ *  this region.
+ */
+
+rtems_status_code rtems_region_get_information(
+  Objects_Id              id,
+  Heap_Information_block *the_info
+);
+
+/*
  *  rtems_region_delete
  *
  *  DESCRIPTION:
