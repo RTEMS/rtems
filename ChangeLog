@@ -1,3 +1,7 @@
+2004-07-28  Joel Sherrill <joel@OARcorp.com>
+
+    * aclocal/version.m4: Updated to rtems-4.6.99.1.
+
 2004-07-14      Jay Monkman
 
         * MAINTAINERS: Added Jay Monkman as ARM architecture maintainer
