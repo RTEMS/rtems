@@ -1,35 +1,34 @@
 ## $Id$
 
 ## NOTE: This is a temporary work-around to keep 
-## "make debug" and "make debug_install" working.
+## RTEMS's non automake standard make targets working.
 ## Once automake is fully integrated these make targets 
 ## and this file will probably be removed
 
 debug-am:
-
 debug: debug-am
+.PHONY: debug debug-am
 
 debug_install-am:
-
 debug_install: debug_install-am
-
-.PHONY: debug debug_install debug-am
-
+.PHONY: debug_install debug_install-am
 
 profile-am:
-
 profile: profile-am
+.PHONY: profile profile-am
 
 profile_install-am:
-
 profile_install: profile_install-am
-
-.PHONY: profile profile_install profile-am
-
+.PHONY: profile_install profile_install-am
 
 preinstall-am:
-
 preinstall: preinstall-am
-
 .PHONY: preinstall preinstall-am
 
+clobber-am:
+clobber: clobber-am
+.PHONY: clobber clobber-am
+
+depend-am:
+depend: depend-am
+.PHONY: depend depend-am

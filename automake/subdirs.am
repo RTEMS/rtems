@@ -1,16 +1,19 @@
 ## $Id$
 
-## Borrowed from automake-1.4, adapted to support RTEMS's 
-## "make debug", "make debug_install", "make profile", "make profile_install"
+## Borrowed from automake-1.4 and adapted to RTEMS 
 
 ## NOTE: This is a temporary work-around to keep 
-## "make debug" and "make debug_install" working.
+## RTEMS's non automake standard make targets working.
 ## Once automake is fully integrated these make targets 
 ## and this file will probably be removed
 
+depend-recursive \
+clobber-recursive \
 preinstall-recursive \
-debug-recursive debug_install-recursive \
-profile-recursive profile_install-recursive:
+debug-recursive \
+debug_install-recursive \
+profile-recursive \
+profile_install-recursive:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
 	dot_seen=no; \
 	target=`echo $@ | sed s/-recursive//`; \
@@ -32,18 +35,22 @@ profile-recursive profile_install-recursive:
 	fi; test -z "$$fail"
 
 debug: debug-recursive
+.PHONY: debug-recursive
 
 debug_install: debug_install-recursive
+.PHONY: debug_install-recursive
 
 profile: profile-recursive
+.PHONY: profile-recursive
 
 profile_install: profile_install-recursive
+.PHONY: profile-recursive
 
 preinstall: preinstall-recursive
+.PHONY: preinstall-recursive
 
-.PHONY: \
-debug debug-recursive \
-debug_install \
-profile profile-recursive \
-profile_install \
-preinstall preinstall-recursive
+clobber: clobber-recursive
+.PHONY: clobber-recursive
+
+depend: depend-recursive
+.PHONY: depend-recursive
