@@ -506,7 +506,7 @@ int pthread_mutexattr_setprotocol(
   int                    protocol
 )
 {
-  if ( !attr )
+  if ( !attr || !attr->is_initialized )
     return EINVAL;
 
   switch ( protocol ) {
