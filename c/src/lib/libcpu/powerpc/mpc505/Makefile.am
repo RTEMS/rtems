@@ -15,7 +15,7 @@ include_HEADERS = ictrl/ictrl.h
 
 EXTRA_PROGRAMS += ictrl.rel
 CLEANFILES += ictrl.rel
-ictrl_rel_SOURCES = ictrl//ictrl.c
+ictrl_rel_SOURCES = ictrl/ictrl.c
 ictrl_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 ictrl_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 

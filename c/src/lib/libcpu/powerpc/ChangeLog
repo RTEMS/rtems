@@ -1,3 +1,7 @@
+2004-02-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mpc505/Makefile.am: Fix typo.
+
 2004-02-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mpc505/Makefile.am, mpc6xx/Makefile.am, mpc8260/Makefile.am,
