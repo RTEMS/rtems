@@ -6,13 +6,12 @@
 
 BSP_PIECES = startup hw_init console
 
-# pieces to pick up out of libcpu/sh/sh7750
-CPU_PIECES = clock sci timer score
-
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
-    $(foreach piece, $(CPU_PIECES), \
-    ../../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/$(piece)$(LIB_VARIANT).rel)
+    ../../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock$(LIB_VARIANT).rel \
+    ../../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer$(LIB_VARIANT).rel \
+    ../../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/sci$(LIB_VARIANT).rel \
+    ../../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score$(LIB_VARIANT).rel
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
