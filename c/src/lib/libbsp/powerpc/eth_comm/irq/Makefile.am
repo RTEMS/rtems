@@ -30,7 +30,7 @@ $(PROJECT_INCLUDE)/bsp:
 $(PROJECT_INCLUDE)/bsp/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp \
     $(include_bsp_HEADERS:%=$(PROJECT_INCLUDE)/bsp/%)
 
 #
