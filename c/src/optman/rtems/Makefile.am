@@ -8,9 +8,6 @@ C_FILES = no-dpmem.c no-event.c no-msg.c no-mp.c no-part.c no-region.c \
     no-rtmon.c no-sem.c no-signal.c no-timer.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-SRCS = $(C_FILES)
-OBJS = $(C_O_FILES)
-
 PGMS = $(C_FILES:%.c=$(ARCH)/%.rel)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
@@ -29,7 +26,9 @@ $(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel: $(ARCH)/%.rel
 AM_CFLAGS += $(CFLAGS_OS_V)
 ASM4FLAGS += -I$(PROJECT_INCLUDE)/rtems
 
-all: ${ARCH} $(PGMS) $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(PGMS) $(TMPINSTALL_FILES)
+
+.PRECIOUS: $(PGMS)
 
 EXTRA_DIST = $(C_FILES)
 
