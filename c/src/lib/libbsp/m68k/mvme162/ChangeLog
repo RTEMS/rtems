@@ -1,8 +1,13 @@
 2001-05-28	Joel Sherrill <joel@OARcorp.com>
 
+	* ChangeLog: Corrected spacing.
+
+2001-05-28	Joel Sherrill <joel@OARcorp.com>
+
 	* Per PR31, moved mvme16x_hw.h to shared/mvme.
 	* include/Makefile.am: Modified to reflect movement.
 	* include/mvme16x_hw.h: Moved to shared/mvme.
+
 2001-05-09	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: In support of gcc 3.1, added one of more
