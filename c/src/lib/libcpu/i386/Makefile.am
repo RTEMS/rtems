@@ -10,8 +10,10 @@ VPATH = @srcdir@:@srcdir@/../shared/src
 C_FILES = cache.c cache_aligned_malloc.c cache_manager.c displayCpu.c page.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = cache_.h
-INSTALLED_H_FILES = cpu.h registers.h cpuModel.h
+include_libcpudir = $(includedir)/libcpu
+
+noinst_HEADERS = cache_.h
+include_libcpu_HEADERS = cpu.h registers.h cpuModel.h cache.h
 
 S_FILES = cpuModel.S idtr.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
@@ -30,14 +32,15 @@ $(PROJECT_INCLUDE)/libcpu:
 $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_INCLUDE)/libcpu/cache.h: $(top_srcdir)/../shared/include/cache.h
-	$(INSTALL_DATA) $< $@
+cache.h: $(top_srcdir)/../shared/include/cache.h
+	cp $< $@
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
-    $(PROJECT_INCLUDE)/libcpu/cache.h \
-    $(INSTALLED_H_FILES:%=$(PROJECT_INCLUDE)/libcpu/%)
+    $(include_libcpu_HEADERS:%=$(PROJECT_INCLUDE)/libcpu/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
+
+CLEANFILES += cache.h
 
 EXTRA_DIST = cache.c cache_.h cpu.h cpuModel.S cpuModel.h displayCpu.c idt.c \
     idtr.S page.c registers.h

@@ -11,3 +11,4 @@ depcomp
 install-sh
 missing
 mkinstalldirs
+cache.h
