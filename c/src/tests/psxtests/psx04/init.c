@@ -36,8 +36,6 @@ void *POSIX_Init(
 )
 {
   int               status;
-  struct timespec   tv;
-  struct timespec   tr;
   struct sigaction  act;
   sigset_t          mask;
   sigset_t          pending_set;
@@ -53,7 +51,7 @@ void *POSIX_Init(
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08x\n", Init_id );
 
-  /* install a signal handler */
+  /* install a signal handler for SIGUSR1 */
 
   status = sigemptyset( &act.sa_mask );
   assert( !status );
@@ -75,6 +73,8 @@ void *POSIX_Init(
   Signal_occurred = 0;
 
   /* now block the signal, send it, see if it is pending, and unblock it */
+
+  empty_line();
 
   status = sigemptyset( &mask );
   assert( !status );
@@ -102,37 +102,82 @@ void *POSIX_Init(
   status = sigprocmask( SIG_UNBLOCK, &mask, NULL );
   assert( !status );
 
-  puts( "*** END OF POSIX TEST 4 ***" );
-  exit( 0 );
+  /* now let another task get interrupted by a signal */
 
-  /* create a thread */
+  empty_line();
 
+  printf( "Init: create a thread interested in SIGUSR1\n" );
   status = pthread_create( &Task_id, NULL, Task_1_through_3, NULL );
   assert( !status );
 
-  /*
-   *  Loop for 5 seconds seeing how many signals we catch 
-   */
-
-  tr.tv_sec = 5;
-  tr.tv_nsec = 0;
+  printf( "Init: Block SIGUSR1\n" );
+  status = sigprocmask( SIG_BLOCK, &mask, NULL );
+  assert( !status );
  
-  do {
-    tv = tr;
+  status = sigpending( &pending_set );
+  assert( !status );
+  printf( "Init: Signals pending 0x%08x\n", pending_set );
 
-    Signal_occurred = 0;
+  printf( "Init: sleep so the other task can block\n" ); 
+  status = sleep( 1 );
+  assert( !status );
 
-    status = nanosleep ( &tv, &tr );
-    assert( !status );
+     /* switch to task 1 */
 
-    printf(
-      "Init: signal was %sprocessed with %d:%d time remaining\n",
-      (Signal_occurred) ? "" : "not ",
-      (int) tr.tv_sec,
-      (int) tr.tv_nsec
-   );
+  printf( "Init: send SIGUSR1 to process\n" );
+  status = kill( getpid(), SIGUSR1 );
+  assert( !status );
+ 
+  status = sigpending( &pending_set );
+  assert( !status );
+  printf( "Init: Signals pending 0x%08x\n", pending_set );
 
-  } while ( tr.tv_sec || tr.tv_nsec );
+  printf( "Init: sleep so the other task can catch signal\n" ); 
+  status = sleep( 1 );
+  assert( !status );
+
+     /* switch to task 1 */
+
+  /* test alarm */
+
+  empty_line();
+
+  /* install a signal handler for SIGALRM and unblock it */
+ 
+  status = sigemptyset( &act.sa_mask );
+  assert( !status );
+ 
+  act.sa_handler = Signal_handler;
+  act.sa_flags   = 0;
+ 
+  sigaction( SIGALRM, &act, NULL );
+ 
+  status = sigemptyset( &mask );
+  assert( !status );
+ 
+  status = sigaddset( &mask, SIGALRM );
+  assert( !status );
+ 
+  printf( "Init: Unblock SIGALRM\n" );
+  status = sigprocmask( SIG_UNBLOCK, &mask, NULL );
+  assert( !status );
+
+  /* schedule the alarm */
+ 
+  printf( "Init: Firing alarm in 5 seconds\n" );
+  status = alarm( 5 );
+  printf( "Init: %d seconds left on previous alarm\n", status );
+  assert( !status );
+
+  printf( "Init: Firing alarm in 2 seconds\n" );
+  status = alarm( 2 );
+  printf( "Init: %d seconds left on previous alarm\n", status );
+  assert( status );
+
+  printf( "Init: Wait 4 seconds for alarm\n" );
+  status = sleep( 4 );
+  printf( "Init: %d seconds left in sleep\n", status );
+  assert( status );
 
   /* exit this thread */
 
