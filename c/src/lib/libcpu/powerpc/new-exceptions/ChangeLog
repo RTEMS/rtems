@@ -1,0 +1,5 @@
+2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Preinstall c_isr.inl (HACK).
+	* ChangeLog: New file.
+

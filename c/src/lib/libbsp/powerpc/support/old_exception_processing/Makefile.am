@@ -28,7 +28,8 @@ TMPINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 # FIXME: This should not be here.
-PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/score/cpu.h
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/rtems/score/cpu.h \
+    $(PROJECT_INCLUDE)/rtems/score/c_isr.inl
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
 
