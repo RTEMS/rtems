@@ -14,11 +14,10 @@
 #include <rtems/system.h>
 #include <rtems/score/object.h>
 #include <rtems/seterr.h>
-
-#include <rtems/libio_.h>
+#include <rtems/userenv.h>
 
 /*
- * MACRO in libio_.h
+ * MACRO in userenv.h
 gid_t _POSIX_types_Egid = 0;
 */
 

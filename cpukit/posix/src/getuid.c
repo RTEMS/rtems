@@ -15,10 +15,10 @@
 #include <rtems/score/object.h>
 #include <rtems/seterr.h>
 
-#include <rtems/libio_.h>
+#include <rtems/userenv.h>
 
 /* 
- * MACRO in libio_.h 
+ * MACRO in userenv.h 
  *
 uid_t _POSIX_types_Uid = 0;
 */

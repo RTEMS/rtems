@@ -14,9 +14,8 @@
 #include <rtems/system.h>
 #include <rtems/score/object.h>
 #include <rtems/seterr.h>
+#include <rtems/userenv.h>
 
-#include <rtems/libio_.h>
-#include <string.h>
 #include <unistd.h>
 #include <pwd.h>
 
@@ -28,7 +27,7 @@
  */
 
 /*
- * MACRO in libio_.h
+ * MACRO in userenv.h
  * 
 static char _POSIX_types_Getlogin_buffer[ LOGIN_NAME_MAX ];
 */

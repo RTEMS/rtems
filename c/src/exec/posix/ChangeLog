@@ -1,3 +1,13 @@
+2002-02-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/getegid.c: Add #include <rtems/userenv.h>.
+	Remove #include <rtems/libio_.h>.
+	* src/geteuid.c: Ditto.
+	* src/getgid.c: Ditto.
+	* src/getlogin.c: Ditto.
+	* src/getuid.c: Ditto.
+
+
 2001-01-16	Joel Sherrill <joel@OARcorp.com>
 
 	* inline/rtems/posix/mutex.inl (_POSIX_Mutex_Get_support): Corrected
