@@ -1,5 +1,17 @@
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/new-exceptions/cpu.h 
+	(rtems_cpu_configuration_get_clicks_per_usec,
+	rtems_cpu_configuration_get_exceptions_in_ram): Remove.
+	* rtems/old-exceptions/cpu.h 
+	(rtems_cpu_configuration_get_clicks_per_usec,
+	rtems_cpu_configuration_get_exceptions_in_ram): Remove.
+	* rtems/score/cpu.h
+	(rtems_cpu_configuration_get_clicks_per_usec,
+	rtems_cpu_configuration_get_exceptions_in_ram): New.
+
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/new-exceptions/cpu.h (CPU_swap_u32, CPU_swap_u16): Remove.
 	* rtems/old-exceptions/cpu.h (CPU_swap_u32, CPU_swap_u16): Remove.
 	* rtems/score/cpu.h (CPU_swap_u32, CPU_swap_u16): New.
