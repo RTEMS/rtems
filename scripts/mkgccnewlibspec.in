@@ -60,7 +60,7 @@ specfile=${dst}/${target_alias}-gcc-${gcc_version}-newlib-${newlib_version}.spec
 sed -e "s%@Release\@%${gccnewlib_rpm_release}%g" \
     -e "s%@target_alias\@%${target_alias}%g" \
     -e "s%@prefix\@%@prefix@%g" \
-    -e "s%@rpm_build_root\@%${rpm_build_root}%g" \
+    -e "s,@rpm_build_root\@,${rpm_build_root},g" \
     -e "s%@gcc_version\@%${gcc_version}%g" \
     -e "s%@gcc_patch_version\@%${gcc_patch_version}%g" \
     -e "s%@newlib_version\@%${newlib_version}%g" \

@@ -1,0 +1,4 @@
+*.spec
+Makefile
+Makefile.in
+rtems.spec

@@ -1,0 +1,75 @@
+#
+# spec file for package rtems-cpukit
+# 
+# Copyright  (c)  2002 Ralf Corsepius, Ulm, Germany
+#
+# please send bugfixes or comments to joel@OARcorp.com
+#
+
+%define _prefix	/opt/rtems
+
+Vendor:       OAR Corporation
+Distribution: Linux
+Name:         @target_alias@-cpukit
+Release:      @Release@
+License:      Various, Open Source.
+Group:        rtems
+
+Autoreqprov:  on
+Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
+BuildPreReq:    @target_alias@-binutils
+BuildPreReq:    @target_alias@-gcc 
+Requires:     	@target_alias@-binutils
+Requires:     	@target_alias@-gcc 
+
+Version:      @rpm_version@
+Summary:      A free operating system for embedded systems
+Source:       rtems-@rtems_version@.tar.gz
+
+#
+# The original sources are not included in the source RPM.
+# If we included them, then the source RPMs for each target
+# would duplicate MBs of source unnecessarily.  This is 
+# a duplication of over 30 MBs of source for each of
+# the more than 10 targets it is possible to build.
+#
+# You can get them yourself from the Internet and copy them to
+# your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
+# Or you can try the ftp options of rpm :-)
+#
+NoSource:      0
+# We claim to be relocatible, but in fact we are not
+Prefix:		%{_prefix}
+Buildroot:    %{_tmppath}/%{name}-%{version}-root
+
+%description
+RTEMS is a free operating system for embedded systems.
+
+This package contains the cpukit for cpu @target_alias@.
+
+Authors:
+--------
+    Joel Sherrill (joel@oarcorp.com)
+    ...
+
+%prep
+%setup -c -T -n %{name}-%{version} -a0
+test -d build || mkdir build
+%build
+cd build
+# rtems does not support building inside the source tree
+  ../rtems-@rtems_version@/cpukit/configure \
+  --build=`../rtems-@rtems_version@/config.guess` \
+  --prefix=%{_prefix} \
+  --host=@target_alias@ --target=@target_alias@ \
+  --exec-prefix=%{_prefix}/@target_alias@ \
+  --enable-multilib
+  make RTEMS_BSP=
+%install
+cd build
+  make RTEMS_BSP= DESTDIR=${RPM_BUILD_ROOT} install
+
+%files
+%{_prefix}/@target_alias@
+# ignore
+# %{_mandir}

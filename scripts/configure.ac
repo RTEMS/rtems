@@ -3,6 +3,7 @@
 AC_PREREQ(2.52)
 AC_INIT([rtems-scripts],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([binutils])
+RTEMS_TOP([..])
 AC_PREFIX_DEFAULT([/opt/rtems])
 AM_INIT_AUTOMAKE([no-define foreign 1.6])
 
@@ -91,7 +92,9 @@ gdb/Makefile
 rtems/Makefile
 autotools/Makefile
 autotools/automake-rtems.spec
+cpukit/Makefile
 ])
+AC_CONFIG_FILES([cpukit/mkspec],[chmod +x cpukit/mkspec])
 AC_CONFIG_COMMANDS([default],[[chmod 755 buildall
 chmod 755 buildalltar
 ]],[[]])

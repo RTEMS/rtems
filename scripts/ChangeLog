@@ -1,4 +1,26 @@
-2002-07-22	Joel Sherrill <joel@OARcorp.com>
+2002-07-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ChangeLog: Fix 2002-07-22 ChangeLog entry bogusly referring to
+	Joel.
+	* cpukit/Makefile.am: New.
+	* cpukit/mkspec.in: New.
+	* cpukit/rtems-cpukit.spec.in: New.
+	* cpukit/.cvsignore: New.
+	* configure.ac: Add cpukit. 
+	Add RTEMS_TOP to pickup _RTEMS_VERSION (required by cpukit).
+	* Makefile.am: Add cpukit. Add ACLOCAL_AMFLAGS (required to pickup
+	RTEMS_VERSION).
+	* setup.def: Use %{_tmppath} as default for $rpm_build_root.
+	* mkbinutilsspec.in: Use ',' as pattern delimiter in sed expression 
+	for $rpm_build_root.
+	* mkgccnewlibspec.in:  Use ',' as pattern delimiter in sed
+	expression for $rpm_build_root.
+	* mkgcc3newlibspec.in:  Use ',' as pattern delimiter in sed
+	expression for $rpm_build_root.
+	* mkgdbspec.in:  Use ',' as pattern delimiter in sed expression for
+	$rpm_build_root.
+
+2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* binutils/Makefile.am: Add or32-rtems-binutils.
 

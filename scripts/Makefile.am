@@ -2,8 +2,9 @@
 ## $Id$
 ##
 
+ACLOCAL_AMFLAGS = -I ../aclocal
 
-SUBDIRS = . binutils gccnewlib gcc3newlib gdb rtems autotools
+SUBDIRS = . binutils gccnewlib gcc3newlib gdb rtems autotools cpukit
 
 noinst_SCRIPTS = setup buildall buildalltar mkbinutilspec mkbspspec \
     mkgccnewlibspec mkgcc3newlibspec mkgdbspec mkrpms mkspec
