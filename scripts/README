@@ -16,20 +16,164 @@ bsp from an rpm-spec template (rtems.spec.in).
 A second shell script (mkrpms) is a convienience script which invokes a
 sequence of building rpms for several bsps.
 
+
+mkbinutilspec
+-------------
+
+mkbinutilspec takes two arguments:
+
+$1 ... the target_alias for binutils RPMs of this toolset
+
+Invoking mkbinutilspec will generate a <target_alias>-binutils.spec either in
+
+    /usr/src/packages/SPECS (SuSE convention) or
+    /usr/src/redhat/SPECS (Redhat convention) or
+    /usr/src/SPECS
+
+Eg. ./mkbinutilspec sparc-rtems generates
+
+On SuSE-6.2:   /usr/src/packages/SPECS/sparc-rtems-binutils.spec
+On RedHat 6.0: /usr/src/redhat/SPECS/sparc-rtems-binutils.spec
+
+mkgccnewlibspec
+---------------
+
+mkgccnewlibspec takes two arguments:
+
+$1 ... the target_alias for the gcc/newlib RPMs of this toolset
+
+Invoking mkgccnewlibspec will generate a <target_alias>-gccnewlibs.spec
+either in:
+
+    /usr/src/packages/SPECS (SuSE convention) or
+    /usr/src/redhat/SPECS (Redhat convention) or
+    /usr/src/SPECS
+
+Eg. ./mkgccnewlibspec sparc-rtems generates
+
+On SuSE-6.2:   /usr/src/packages/SPECS/sparc-rtems-gcc_newlib.spec
+On RedHat 6.0: /usr/src/redhat/SPECS/sparc-rtems-gcc_newlib.spec
+
+mkgdbspec
+---------
+
+mkgdbspec takes two arguments:
+
+$1 ... the target_alias for the gdb RPMs of this toolset
+
+Invoking mkgdbspec will generate a <target_alias>-gdb.spec
+either in:
+
+    /usr/src/packages/SPECS (SuSE convention) or
+    /usr/src/redhat/SPECS (Redhat convention) or
+    /usr/src/SPECS
+
+Eg. ./mkgdbspec sparc-rtems generates
+
+On SuSE-6.2:   /usr/src/packages/SPECS/sparc-rtems-gcc_newlib.spec
+On RedHat 6.0: /usr/src/redhat/SPECS/sparc-rtems-gcc_newlib.spec
+
+
+# XXX BSPs not tested yet by Joel
+#
+#  mkbspspec
+#  ---------
+#  
+#  mkbspspec takes two arguments: 
+#  $1 ... the target_alias this bsp belongs to
+#  $2 ... the bsp to be built
+#  
+#  Invoking mkbspspec will generate a rtems-<target_alias>-<bsp>.spec either in
+#  /usr/src/packages/SPECS (SuSE convention) or 
+#  /usr/src/redhat/SPECS (Redhat convention) or
+#  /usr/src/SPECS
+#  
+#  Eg. ./mkspec gensh1 sh-rtemself generates
+#  /usr/src/packages/SPECS/rtems-sh-rtemself-gensh1.spec on SuSE-6.2.
+
 mkspec
-------
+---------
 
-mkspec takes two arguments: 
-$1 ... the bsp to be built
-$2 ... the target_alias this bsp belongs to
+mkspec takes two arguments:
 
-Invoking mkspecs will generate a rtems-<target_alias>-<bsp>.spec either in
-/usr/src/packages/SPECS (SuSE convention) or 
-/usr/src/redhat/SPECS (Redhat convention) or
-/usr/src/SPECS
+$1 ... the target_alias for the RPMs composing this toolset
+$2 ... the bsp to be built
 
-Eg. ./mkspec gensh1 sh-rtemself generates
-/usr/src/packages/SPECS/rtems-sh-rtemself-gensh1.spec on SuSE-6.2.
+Invoking mkspec will generate a set of spec files either in:
+
+    /usr/src/packages/SPECS (SuSE convention) or
+    /usr/src/redhat/SPECS (Redhat convention) or
+    /usr/src/SPECS
+
+Eg. ./mkspec sparc-rtems erc32 generates
+
+On SuSE-6.2:   /usr/src/packages/SPECS/sparc-rtems-binutils.spec
+               /usr/src/packages/SPECS/sparc-rtems-gcc_newlib.spec
+               /usr/src/packages/SPECS/sparc-rtems-gdb.spec
+On RedHat 6.0: /usr/src/packages/SPECS/sparc-rtems-binutils.spec
+               /usr/src/packages/SPECS/sparc-rtems-gcc_newlib.spec
+               /usr/src/packages/SPECS/sparc-rtems-gdb.spec
+
+
+Building binutils-rpms
+----------------------
+
+0. Login as root.
+
+1. Install a tarball of the various tool sources (with the
+version number attached!) to /usr/src/[packages|redhat]/SOURCES
+
+  cd /usr/src/[packages|redhat]/SOURCES
+  cp .../binutils-<VERSION>  .
+  cp .../binutils-<VERSION>-rtems-<DATE>.diff  .
+
+2. Generate and install the required rpm-spec file[s]
+
+cd rtems-<VERSION>/scripts/
+mkbinutilspec <target_alias>
+
+where target_alias is of the form sparc-rtems or sh-rtems-elf.
+
+3. Build the rpms 
+
+Building a binary rpm:
+
+rpm -bb /usr/src/[packages|redhat]/SPECS/rtems-<target_alias>-binutils.spec
+
+Building a source and binary rpm
+rpm -ba /usr/src/[packages|redhat]/SPECS/rtems-<target_alias>-binutils.spec
+
+XXX Note: a BSP's src.rpm contains its spec-file and the tar-archive of the
+sources (approx. 4-5MB per BSP).
+
+Building TOOL-rpms
+------------------
+
+0. Login as root.
+
+1. Install a tarball of the various tool sources (with the
+version number attached!) to /usr/src/[packages|redhat]/SOURCES
+
+  cd /usr/src/[packages|redhat]/SOURCES
+  cp .../binutils-<VERSION>  .
+  cp .../gcc-<VERSION>       .
+  cp .../newlib-<VERSION>    .
+
+2. Generate and install the required rpm-spec file[s]
+
+cd rtems-<VERSION>/scripts/
+mktoolspec <target_alias>
+
+3. Build the rpms
+
+Building a binary rpm:
+rpm -bb /usr/src/[packages|redhat]/SPECS/rtems-<target_alias>.spec
+
+Building a source and binary rpm
+rpm -ba /usr/src/[packages|redhat]/SPECS/rtems-<target_alias>.spec
+
+XXX Note: a BSP's src.rpm contains its spec-file and the tar-archive of the
+sources (approx. 4-5MB per BSP). 
 
 Building BSP-rpms
 -----------------

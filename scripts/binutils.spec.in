@@ -1,0 +1,113 @@
+#
+# spec file for package rtems
+# 
+# Copyright  (c)  1999  OARCorp, Huntsville, AL
+#
+# please send bugfixes or comments to joel@OARcorp.com
+#
+
+# neededforbuild  @target_alias@-binutils @target_alias@-gcc
+
+Vendor:       OAR Corporation
+Distribution: Linux
+Name:         @target_alias@-binutils
+Release:      @Release@
+Copyright:    1999 OARCorp
+Group:        unsorted
+Provides:     @target_alias@-binutils
+
+Autoreqprov:  on
+Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
+
+Version:      @Version@
+Summary:      binutils for target @target_alias@
+Source0:      	binutils-990901.tar.gz
+Patch0:		binutils-990901-rtems-19991015.diff
+
+Buildroot:    /tmp
+# Patch:
+%description
+RTEMS is an open source operating system for embedded systems.
+
+This is the GNU binutils for RTEMS targetting @target_alias@.
+
+Authors:
+--------
+    Joel Sherrill (joel@oarcorp.com)
+    ...
+
+%prep
+# untar the sources inside @target_alias@-binutils-@Version@
+%setup -c -n @target_alias@-binutils -a 0
+
+%patch0 -p0
+
+%build
+test -d build || mkdir build
+( cd build
+  ../binutils-990901/configure --target=@target_alias@ \
+    --verbose --prefix=/opt/rtems 
+
+  test -d $RPM_BUILD_ROOT/opt \
+    || mkdir $RPM_BUILD_ROOT/opt
+  test -d $RPM_BUILD_ROOT/opt/rtems \
+    || mkdir $RPM_BUILD_ROOT/opt/rtems
+
+  make all
+  make info
+)
+
+%install
+( cd build
+  make prefix=$RPM_BUILD_ROOT/opt/rtems install
+  make prefix=$RPM_BUILD_ROOT/opt/rtems install-info
+)
+
+%files
+%doc /opt/rtems/info/as.info*
+%doc /opt/rtems/info/bfd.info*
+%doc /opt/rtems/info/binutils.info*
+%doc /opt/rtems/info/gasp.info*
+%doc /opt/rtems/info/ld.info*
+%doc /opt/rtems/info/standards.info*
+%doc /opt/rtems/man/man1/@target_alias@-ar.1
+%doc /opt/rtems/man/man1/@target_alias@-nm.1
+%doc /opt/rtems/man/man1/@target_alias@-objdump.1
+%doc /opt/rtems/man/man1/@target_alias@-ranlib.1
+%doc /opt/rtems/man/man1/@target_alias@-size.1
+%doc /opt/rtems/man/man1/@target_alias@-strings.1
+%doc /opt/rtems/man/man1/@target_alias@-strip.1
+%doc /opt/rtems/man/man1/@target_alias@-objcopy.1
+%doc /opt/rtems/man/man1/@target_alias@-addr2line.1
+%doc /opt/rtems/man/man1/@target_alias@-nlmconv.1
+%doc /opt/rtems/man/man1/@target_alias@-c++filt.1
+%doc /opt/rtems/man/man1/@target_alias@-as.1
+%doc /opt/rtems/man/man1/@target_alias@-ld.1
+
+/opt/rtems/bin/@target_alias@-addr2line
+/opt/rtems/bin/@target_alias@-ar
+/opt/rtems/bin/@target_alias@-as
+/opt/rtems/bin/@target_alias@-c++filt
+/opt/rtems/bin/@target_alias@-gasp
+/opt/rtems/bin/@target_alias@-ld
+/opt/rtems/bin/@target_alias@-nm
+/opt/rtems/bin/@target_alias@-objcopy
+/opt/rtems/bin/@target_alias@-objdump
+/opt/rtems/bin/@target_alias@-ranlib
+/opt/rtems/bin/@target_alias@-readelf
+/opt/rtems/bin/@target_alias@-size
+/opt/rtems/bin/@target_alias@-strings
+/opt/rtems/bin/@target_alias@-strip
+/opt/rtems/include/bfd.h
+/opt/rtems/include/ansidecl.h
+/opt/rtems/include/bfdlink.h
+/opt/rtems/lib/libbfd*
+/opt/rtems/lib/libiberty*
+/opt/rtems/lib/libopcodes*
+/opt/rtems/@target_alias@/bin/ar
+/opt/rtems/@target_alias@/bin/as
+/opt/rtems/@target_alias@/bin/ld
+/opt/rtems/@target_alias@/bin/nm
+/opt/rtems/@target_alias@/bin/ranlib
+/opt/rtems/@target_alias@/bin/strip
+/opt/rtems/@target_alias@/lib/ldscripts

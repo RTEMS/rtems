@@ -28,7 +28,18 @@ sed -e "s%@Version@%${RTEMS_VERSION}%g" \
 -e "s%@bsp@%${bsp}%g" \
 -e "s%@Release@%${release}%g" \
 -e "s%@target_alias@%${target_alias}%g" \
-< ${RTEMS_DIR}/toolchain.spec.in \
-> ${dst}/rtems-$target_alias-tools.spec
+< ${RTEMS_DIR}/gdb.spec.in \
+> ${dst}/$target_alias-gdb.spec
 
-echo Generated ${dst}/rtems-$target_alias-tools.spec.
+case ${target} in
+  powerpc*)
+     echo "/opt/rtems/bin/@target_alias@-run" 
+     ;;
+  sparc*)
+     echo "/opt/rtems/bin/@target_alias@-run" 
+     echo "/opt/rtems/bin/@target_alias@-sis" 
+     ;;
+  *) ;;
+esac >> ${dst}/$target_alias-gdb.spec
+
+echo Generated ${dst}/rtems-$target_alias-gdb.spec.

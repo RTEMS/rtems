@@ -28,7 +28,7 @@ sed -e "s%@Version@%${RTEMS_VERSION}%g" \
 -e "s%@bsp@%${bsp}%g" \
 -e "s%@Release@%${release}%g" \
 -e "s%@target_alias@%${target_alias}%g" \
-< ${RTEMS_DIR}/toolchain.spec.in \
-> ${dst}/rtems-$target_alias-tools.spec
+< ${RTEMS_DIR}/binutils.spec.in \
+> ${dst}/$target_alias-binutils.spec
 
-echo Generated ${dst}/rtems-$target_alias-tools.spec.
+echo Generated ${dst}/rtems-$target_alias-binutils.spec.

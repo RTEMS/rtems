@@ -1,0 +1,7 @@
+
+use mk* to insert tool version numbers. :)
+
+make gcc/newlib work
+
+write gdb one.
+  /opt/rtems/@target_alias@/include/readline*
