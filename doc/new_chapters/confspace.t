@@ -122,18 +122,18 @@ The notification argument specifies an invalid log facility.
 
 The @code{cfg_mount} function maps a configuration space defined
 by the file identified by the the @code{file} argument.  The 
-distinguished node of the mapped configuration space shall be
+distinguished node of the mapped configuration space is
 mounted in the active space at the point identified by the
 @code{cfgpath} configuration pathname.
 
 The @code{notification} argument specifies how changes to the
-mapped configuration space shall be communicated to the application.
-If the @code{notification} argument is NULL, no notification shall
+mapped configuration space are communicated to the application.
+If the @code{notification} argument is NULL, no notification will be
 be performed for the mapped configuration space.  If the Event
 Logging option is defined, the notification argument defines the
-facility to which changes in the mapped configuration space shall
-be logged.  Otherwise, the @code{notification} argument shall
-specify an implementation defined method of notifying the application
+facility to which changes in the mapped configuration space are
+logged.  Otherwise, the @code{notification} argument specifies
+an implementation defined method of notifying the application
 of changes to the mapped configuration space.
 
 @subheading NOTES:
@@ -273,11 +273,10 @@ The named node resides on a read-only configuration space.
 @subheading DESCRIPTION:
 
 The @code{cfg_mknod} function creates a new node in the configuration
-space which contains the pathname prefix of @code{cfgpath}.  T he node
-name shall be defined by the pathname suffix of @code{cfgpath}.  The
-node name shall be defined by the pathname suffix of @code{cfgpath}. 
-The node permissions shall be specified by the value of @code{mode}.
-The node type shall be specified by the value of @code{type}.
+space which contains the pathname prefix of @code{cfgpath}.  The node
+name is defined by the pathname suffix of @code{cfgpath}. The node
+permissions are specified by the value of @code{mode}.  The node type
+is specified by the value of @code{type}.
 
 @subheading NOTES:
 
@@ -475,13 +474,12 @@ resolution of the cfgpath argument.
 @subheading DESCRIPTION:
 
 The @code{src} and @code{dest}arguments point to pathnames which 
-name existing nodes.  The @code{cfg_link} function shall atomically 
-create a link between specified nodes, and increment by one the link 
-count of the node specified by the @code{src} argument. 
+name existing nodes.  The @code{cfg_link} function atomically creates
+a link between specified nodes, and increment by one the link count 
+of the node specified by the @code{src} argument. 
 
-If the @code{cfg_link} function fails, no link shall be created, and
-the link count of the node shall remain unchanged by this function
-call.
+If the @code{cfg_link} function fails, no link is created, and the
+link count of the node remains unchanged by this function call.
 
 This implementation may require that the calling process has permission 
 to access the specified nodes.
@@ -560,11 +558,11 @@ resolution of the cfgpath argument.
 
 The @code{cfg_unlink} function removes the link between the node
 specified by the @code{cfgpath} path prefix and the parent node 
-specified by @code{cfgpath}, and shall decrement the link count 
+specified by @code{cfgpath}, and decrements the link count 
 of the @code{cfgpath} node.
 
 When the link count of the node becomes zero, the space occupied
-by the node shall be freed and the node shall no longer be accessible.
+by the node is freed and the node is no longer be accessible.
 
 @subheading NOTES:
 
@@ -612,7 +610,7 @@ does not exist.
 
 @item EINVAL
 Either both or neither of CFG_LOGICAL and CFG_PHYSICAL are
-specified by the options argument ???????????
+specified by the options argument
 
 @item ENOMEM
 Not enough memory is available to create the necessary structures.
@@ -630,33 +628,32 @@ the substituted pathname string exceeded @code{PATH_MAX}.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_open} function shall open a configuration traversal stream
+The @code{cfg_open} function opens a configuration traversal stream
 rooted in the configuration nodes name by the @code{pathnames} argument.
-It shall store a pointer to a CFG object that represents that stream at 
+It stores a pointer to a CFG object that represents that stream at 
 the location identified the @code{cfgstream} pointer.  The @code{pathnames}
 argument is an array of character pointers to NULL-terminated strings. 
-The last member of this array shall be a NULL pointer.
+The last member of this array is a NULL pointer.
 
 The value of @code{options} is the bitwise inclusive OR of values from the 
-following lists.  Applications shall supply exactly one of the first two 
-values below in @code{options}.
+following lists.  Applications supply exactly one of the first two values
+below in @code{options}.
 
 @table @b
 
 @item CFG_LOGICAL
 When symbolic links referencing existing nodes are 
 encountered during the traversal, the @code{cfg_info}
-field of the returned CFGENT structure shall describe
-the target node pointed to by the link instead of the 
+field of the returned CFGENT structure describes the
+target node pointed to by the link instead of the 
 link itself, unless the target node does not exist. 
 If the target node has children, the pre-order return,
 followed by the return of structures referencing all of
-its descendants, followed by a post-order return, shall
-be done.
+its descendants, followed by a post-order return, is done.
                     
 @item CFG_PHYSICAL
 When symbolic links are encountered during the traversal,
-the @code{cfg_info} field shall describe the symbolic 
+the @code{cfg_info} field is used to describe the symbolic 
 link.
 
 @end table
@@ -671,7 +668,7 @@ Any combination of the remaining flags can be specified in the value of
 When symbolic links referencing existing nodes are
 specified in the @code{pathnames} argument, the 
 @code{cfg_info} field of the returned CFGENT structure
-shall describe the target node pointed to by the link
+describes the target node pointed to by the link
 instead of the link itself, unless the target node does
 not exist.  If the target node has children, the 
 pre-order return, followed by the return of structures
@@ -679,19 +676,19 @@ referencing all its descendants, followed by a post-order
 return, shall be done.
 
 @item CFG_XDEV
-The configuration space functions shall not return a
+The configuration space functions do not return a
 CFGENT structure for any node in a different configuration
 space than the configuration space of the nodes identified 
 by the CFGENT structures for the @code{pathnames} argument.
 
 @end table
 
-The @code{cfg_open} argument @code{compar} shall either be NULL or point
-to a function that shall be called with two pointers to pointers to CFGENT 
-structures that shall return less than, equal to , or greater than zero if 
+The @code{cfg_open} argument @code{compar} is either a NULL or point
+to a function that is called with two pointers to pointers to CFGENT 
+structures that returns less than, equal to , or greater than zero if 
 the node referenced by the first argument is considered to be respectively
 less than, equal to, or greater than the node referenced by the second.
-The CFGENT structure fields provided to the comparison routine shall be as 
+The CFGENT structure fields provided to the comparison routine is as 
 described with the exception that the contents of the @code{cfg_path} and
 @code{cfg_pathlen} fields are unspecified.
 
@@ -699,9 +696,9 @@ This comparison routine is used to determine the order in which nodes in
 directories encountered during the traversal are returned, and the order
 of traversal when more than one node is specified in the @code{pathnames}
 argument to @code{cfg_open}.  If a comparison routine is specified, the
-order of traversal shall be from the least to the greatest.  If the 
-@code{compar} argument is NULL, the order of traversal shall be as listed
-in the @code{pathnames} argument. 
+order of traversal is from the least to the greatest.  If the @code{compar}
+argument is NULL, the order of traversal shall be as listed in the 
+@code{pathnames} argument. 
 
 @subheading NOTES:
 
@@ -762,27 +759,27 @@ substituted pathname string exceeded @code{PATH_MATH}.
 
 The @code{cfg_read} function returns a pointer to a CFGENT structure
 representing a node in the configuration space to which @code{cfgp}
-refers.  The returned pointer shall be stored at the location 
-indicated by the @code{node} argument.
+refers.  The returned pointer is stored at the location indicated 
+by the @code{node} argument.
 
 The child nodes of each node in the configuration tree is returned
 by @code{cfg_read}.  If a comparison routine is specified to the
-@code{cfg_open} function, the order of return of the child nodes shall
-be as specified by the routine, from least to greatest.  Otherwise
+@code{cfg_open} function, the order of return of the child nodes is
+as specified by the routine, from least to greatest.  Otherwise
 the order of return is unspecified.
 
-Structures referencing nodes with children shall be returned by the 
+Structures referencing nodes with children is returned by the 
 function @code{cfg_read} at least twice [unless the application
 specifies otherwise with @code{cfg_mark}]-once immediately before
 the structures representing their descendants, are returned 
 (pre-order), and once immediately after structures representing all
 of their descendants, if any, are returned (post-order).  The 
 CFGENT structure returned in post-order (with the exception of the 
-@code{cfg_info} field) shall be identical to that returned in pre-order.
-Structures referencing nodes of other types shall be returned at least
+@code{cfg_info} field) is identical to that returned in pre-order.
+Structures referencing nodes of other types is returned at least
 once.
 
-The fields of the CFGENT structure shall contain the following 
+The fields of the CFGENT structure contains the following 
 information:
 
 @table @b
@@ -791,8 +788,8 @@ information:
 A pointer to the structure returned by the 
 @code{cfg_read} function for the node that contains
 the entry for the current node.  A @code{cfg_parent}
-structure shall be provided for the node(s) specified
-by the @code{pathnames} argument to the @code{cfg_open}
+structure is provided for the node(s) specified by
+the @code{pathnames} argument to the @code{cfg_open}
 function, but the contents of other than its 
 @code{cfg_number}, @code{cfg_pointer}, @code{cfg_parent},
 and @code{cfg_parent}, and @code{cfg_level} fields are
@@ -815,23 +812,23 @@ the @code{cfg_cycle} field is unspecified.
 
 @item cfg_number
 The @code{cfg_number} field is provided for use by the 
-application program.  It shall be initialized to zero for 
+application program.  It is initialized to zero for 
 each new node returned by the @code{cfg_read} function, 
-but shall not be further modified the configuration space
+but is not further modified by the configuration space
 routines.
 
 @item cfg_pointer
 The @code{cfg_pointer} field is provided for use by the
-application program.  It shall be initialized to NULL for
+application program.  It is initialized to NULL for
 each new node returned by the @code{cfg_read} function, 
-but shall not be further modified by the configuration 
+but is not further modified by the configuration 
 space routines.
 
 @item cfg_path
 A pathname for the node including and relative to the 
 argument supplied to the @code{cfg_open} routine for this
 configuration space.  This pathname may be longer than
-@code{PATH_MAX} bytes.  This pathname shall be NULL-terminated.
+@code{PATH_MAX} bytes.  This pathname is NULL-terminated.
 
 @item cfg_name
 The nodename of the node.
@@ -849,13 +846,13 @@ The depth of the current entry in the configuration space.
 The @code{cfg_level} field of the @code{cfg_parent} 
 structure for each of the node(s) specified in the 
 @code{pathnames} argument to the @code{cfg_open} function
-shall be set to 0, and this number shall be incremented for
-for each node level descendant.
+is set to 0, and this number is incremented for each
+node level descendant.
 
 @item cfg_info
-This field shall contain one of the values listed below.  If
+This field contains one of the values listed below.  If
 an object can have more than one info value, the first 
-appropriate value listed below shall be returned. 
+appropriate value listed below is returned. 
 
 @table @b
 
@@ -866,9 +863,9 @@ pre-order.
 @item CFG_DC
 The structure represents a node that is a parent
 of the node most recently returned by @code{cfg_read}.
-The @code{cfg_cycle} field shall reference the 
-structure previously returned by @code{cfg_read} that
-is the same as the returned structure.
+The @code{cfg_cycle} field references the structure 
+previously returned by @code{cfg_read} that is the
+same as the returned structure.
 
 @item CFG_DEFAULT
 The structure represents a node that is not 
@@ -877,17 +874,17 @@ represented by one of the other node types
 @item CFG_DNR
 The structure represents a node, not of type symlink,
 that is unreadable.  The variable @code{cfg_errno}
-shall be set to the appropriate value.
+is set to the appropriate value.
 
 @item CFG_DP
 The structure represents a node with children in
-post-order.  This value shall occur only if CFG_D 
+post-order.  This value occurs only if CFG_D 
 has previously been returned for this entry.
 
 @item CFG_ERR
 The structure represents a node for which an error has 
-occurred.  The variable @code{cfg_errno} shall be set
-to the appropriate value.
+occurred.  The variable @code{cfg_errno} is set to the
+appropriate value.
 
 @item CFG_F
 The structure represents a node without children.
@@ -905,20 +902,20 @@ information cannot be obtained.
 @end table
 
 Structures returned by @code{cfg_read} with a @code{cfg_info} field equal
-to CFG_D shall be accessible until a subsequent call, on the same
+to CFG_D is accessible until a subsequent call, on the same
 configuration traversal stream, to @code{cfg_close}, or to @code{cfg_read}
 after they have been returned by the @code{cfg_read} function in
 post-order.  Structures returned by @code{cfg_read} with an
-@code{cfg_info} field not equal to CFG_D shall be accessible until a
-subsequent call, on the same configuration traversal stream, to
-@code{cfg_close} or @code{cfg_read}. 
+@code{cfg_info} field not equal to CFG_D is accessible until a subsequent
+call, on the same configuration traversal stream, to @code{cfg_close}
+or @code{cfg_read}. 
 
 The content of the @code{cfg_path} field is specified only for the
 structure most recently returned by @code{cfg_read}. 
 
 The specified fields in structures in the list representing nodes for
 which structures have previously been returned by @code{cfg_children},
-shall be identical to those returned by @code{cfg_children}, except that
+is identical to those returned by @code{cfg_children}, except that
 the contents of the @code{cfg_path} and @code{cfg_pathlen} fields are
 unspecified. 
          
@@ -978,19 +975,18 @@ Not enough memory is available to create the necessary structures.
 
 @subheading DESCRIPTION:
 
-The first @code{cfg_children} call after a @code{cfg_read} shall 
-return information about the first node without children under the
-node returned by @code{cfg_read}.  Subsequent calls to 
-@code{cfg_children} without the intervening @code{cfg_read} shall
-return information about the remaining nodes without children under
-that same node.
+The first @code{cfg_children} call after a @code{cfg_read} returns 
+information about the first node without children under the node
+returned by @code{cfg_read}.  Subsequent calls to @code{cfg_children}
+without the intervening @code{cfg_read} shall return information
+about the remaining nodes without children under that same node.
 
 If @code{cfg_read} has not yet been called for the configuration
 traversal stream represented by @code{cfgp}, @code{cfg_children}
-shall return a pointer to the first entry in a list of the nodes 
+returns a pointer to the first entry in a list of the nodes 
 represented by the @code{pathnames} argument to @code{cfg_open}.
 
-In either case, the list shall be NULL-terminated, ordered by the 
+In either case, the list is NULL-terminated, ordered by the 
 user-specified comparison function, if any, and linked through the
 cfg_link field.
 
@@ -1038,11 +1034,10 @@ the cfg functions with regard to the node referenced by the structure
 pointed to by the argument @code{f} or the configuration space referenced 
 by the structure pointed to by the argument @code{cfgp}.
 
-Exactly one of the @code{f} argument and the @code{cfgp} argument shall
-be NULL.
+Exactly one of the @code{f} argument and the @code{cfgp} argument is NULL.
 
-The value of the @code{options} argument shall be exactly one of the
-flags specified in the following list: 
+The value of the @code{options} argument is exactly one of the flags
+specified in the following list: 
 
 @table @b
 
@@ -1050,11 +1045,11 @@ flags specified in the following list:
 If the @code{cfgp} argument is non-NULL, or the @code{f}
 argument is NULL, or the structure referenced by @code{f}
 is not the one most recently returned by @code{cfg_read},
-@code{cfg_mark} shall return an error.  Otherwise, the next 
-call to the @code{cfg_read} function shall return the 
-structure referenced by @code{f} with the @code{cfg_info}
-field reinitialized.  Subsequent behavior of the @code{cfg}
-functions shall be based on the reinitialized value of 
+@code{cfg_mark} returns an error.  Otherwise, the next 
+call to the @code{cfg_read} function returns the structure
+referenced by @code{f} with the @code{cfg_info} field
+reinitialized.  Subsequent behavior of the @code{cfg}
+functions are based on the reinitialized value of 
 @code{cfg_info}.
 
 @item CFG_SKIP
@@ -1062,17 +1057,17 @@ If the @code{cfgp} argument is non-NULL, or the @code{f}
 argument is NULL, or the structure referenced by @code{f}
 is not one of those specified as accessible, or the structure
 referenced by @code{f} is not for a node of type pre-order 
-node, @code{cfg_mark} shall return an error.  Otherwise, no 
+node, @code{cfg_mark} returns an error.  Otherwise, no 
 more structures for the node referenced by @code{f} or its 
-descendants shall be returned by the @code{cfg_read} function.
+descendants are returned by the @code{cfg_read} function.
 
 @item CFG_FOLLOW
 If the @code{cfgp} argument is non-NULL, or the @code{f} 
 argument is NULL, or the structure referenced by @code{f}
 is not one of those specified as accessible, or the structure
 referenced by @code{f} is not for a node of type symbolic link,
-@code{cfg_mark} shall return an error.  Otherwise, the next
-call to the @code{cfg_read} function shall return the structure
+@code{cfg_mark} returns an error.  Otherwise, the next
+call to the @code{cfg_read} function returns the structure
 referenced by @code{f} with the @code{cfg_info} field reset
 to reflect the target of the symbolic link instead of the 
 symbolic link itself.  If the target of the link is node with
