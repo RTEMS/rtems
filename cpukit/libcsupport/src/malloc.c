@@ -19,6 +19,7 @@
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 #include <rtems/libcsupport.h>
+#include <rtems/score/apimutex.h>
 #ifdef RTEMS_NEWLIB
 #include <sys/reent.h>
 #endif
