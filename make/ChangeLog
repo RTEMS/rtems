@@ -1,4 +1,8 @@
 
+2000-09-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/arm_bare_bsp.cfg: Fix comments.
+
 2000-08-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/gensh1.cfg, custom/gensh2.cfg: Abandon gcc-2.7.2's make-exe
