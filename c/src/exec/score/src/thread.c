@@ -630,7 +630,7 @@ void _Thread_Close(
   (void) _Workspace_Free( the_thread->Start.fp_context );
 
   if ( the_thread->Start.stack )
-    (void) _Workspace_Free( the_thread->Start.stack );
+    (void) _Thread_Stack_Free( the_thread->Start.stack );
 
   if ( the_thread->extensions )
     (void) _Workspace_Free( the_thread->extensions );
@@ -995,9 +995,24 @@ void _Thread_Load_environment(
  *
  *  _Thread_Handler
  *
+ *  This routine is the "primal" entry point for all threads.
+ *  _Context_Initialize() dummies up the thread's initial context
+ *  to cause the first Context_Switch() to jump to _Thread_Handler().
+ *
  *  This routine is the default thread exitted error handler.  It is
  *  returned to when a thread exits.  The configured fatal error handler
  *  is invoked to process the exit.
+ *
+ *  NOTE:
+ *
+ *  On entry, it is assumed all interrupts are blocked and that this
+ *  routine needs to set the initial isr level.  This may or may not 
+ *  actually be needed by the context switch routine and as a result
+ *  interrupts may already be at there proper level.  Either way,
+ *  setting the initial isr level properly here is safe.
+ *  
+ *  Currently this is only really needed for the posix port,
+ *  ref: _Context_Switch in unix/cpu.c
  *
  *  Input parameters:   NONE
  *
@@ -1006,9 +1021,18 @@ void _Thread_Load_environment(
 
 void _Thread_Handler( void )
 {
+  ISR_Level  level;
   Thread_Control *executing;
-
+ 
   executing = _Thread_Executing;
+ 
+  /*
+   * have to put level into a register for those cpu's that use
+   * inline asm here
+   */
+ 
+  level = executing->Start.isr_level;
+  _ISR_Enable(level);
 
   /*
    * Take care that 'begin' extensions get to complete before
