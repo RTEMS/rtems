@@ -215,6 +215,9 @@ int clock_getres(
   struct timespec *res
 )
 {
+  if ( !res )
+      set_errno_and_return_minus_one( EINVAL );
+ 
   switch ( clock_id ) {
  
     /*
