@@ -10,7 +10,8 @@ AC_DEFUN([RTEMS_CONFIGURE_ARGS_QUOTE],
       ac_prev=
       continue
     fi
-    case $ac_arg in
+    # the eval casts away sh quotes
+    case `eval echo $ac_arg` in
     -cache-file | --cache-file | --cache-fil | --cache-fi \
     | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
 	  ac_prev=cache_file ;;

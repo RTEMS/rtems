@@ -1,3 +1,10 @@
+2002-11-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Further preparations for autoconf > 2.52:
+	* aclocal/enable-inlines.m4: Use AS_IF instead of if/then/else.
+	* aclocal/quoting.m4: Use `eval echo $ac_args` to unquote $ac_arg.
+	* aclocal/target.m4: Use `eval echo $rtems_args` to unquote $ac_arg.
+
 2002-11-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: Adapations to autoconf > 2.52.

@@ -28,7 +28,7 @@ if test "$no_recursion" != yes; then
       rtems_prev=
       continue
     fi
-    case "$rtems_arg" in
+    case `eval echo $rtems_arg` in
     -cache-file | --cache-file | --cache-fil | --cache-fi \
     | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
       rtems_prev=cache_file ;;
