@@ -96,6 +96,7 @@
 	.set    ext_vector,0x0500
 	.set    align_vector,0x0600
 	.set    prog_vector,0x0700
+	.set    dec_vector,0x0900
 	.set    sys_vector,0x0C00
 	.set    pit_vector,0x1000
 	.set    fit_vector,0x1010
@@ -183,6 +184,22 @@ SYM (__vectors):
 	
 /* Program exception */
 	.org	prog_vector - file_base
+#if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
+#if (PPC_HAS_FPU)
+	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
+#else
+	stwu	r1, -(20*4 + IP_END)(r1)
+#endif
+#else
+	stwu	r1, -(IP_END)(r1)
+#endif
+	stw	r0, IP_0(r1)
+
+	li      r0, PPC_IRQ_PROGRAM
+	b       PROC (_ISR_Handler)
+	
+/* Decrementer exception */
+	.org	dec_vector - file_base
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
 #if (PPC_HAS_FPU)
 	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
