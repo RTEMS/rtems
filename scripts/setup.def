@@ -3,7 +3,7 @@
 #
 # $Id$
 #
-binutils_version=2.13.1
+binutils_version=2.13.2.1
 binutils_patch_version=
 binutils_rpm_release=1
 newlib_version=1.10.0
@@ -17,8 +17,8 @@ gdb_rpm_release=1
 rtems_version=ss-20000726
 rtems_rpm_release=1
 rpm_build_root=%{_tmppath}
-gcc3newlib_version=1.10.0
-gcc3newlib_patch_version=20021127
+gcc3newlib_version=1.11.0
+gcc3newlib_patch_version=20030120
 gcc3_version=3.2.1
 gcc3_patch_version=20021209
-gcc3newlib_rpm_release=4
+gcc3newlib_rpm_release=1
