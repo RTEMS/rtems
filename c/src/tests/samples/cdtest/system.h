@@ -34,9 +34,6 @@ rtems_task main_task(
 #define CONFIGURE_INIT_TASK_ENTRY_POINT   main_task
 #define CONFIGURE_INIT_TASK_NAME          rtems_build_name( 'C', 'T', 'O', 'R' )
 
-/* Guess at this one */
-#define CONFIGURE_MAXIMUM_POSIX_MUTEXES 2
-
 #include <confdefs.h>
 
 /* end of include file */
