@@ -1,5 +1,12 @@
 2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Remove AUTOMAKE_FILES.
+	* automake/compile.am: Replace contents with contents of
+	automake/amcompile.am.
+	* automake/amcompile.am, automake/lib.am: Remove.
+
+2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac, aclocal/enable-bare.m4,
 	aclocal/enable-inlines.m4, aclocal/enable-itron.m4,
 	aclocal/enable-multiprocessing.m4, aclocal/enable-networking.m4,

@@ -24,78 +24,17 @@
 ## Automake conditionals in use:
 ## RTEMS_USE_GCC     .. if we are using GCC
 
-## NOTES: 
-## * The gcc-2.8 building scheme is the nominal building scheme and
-##   is actively supported.
-## * The non-gcc building scheme requires manually setting up environment 
-##   variables and is hardly tested at all
-
 ## CFLAGS_OPTIMIZE_V, CFLAGS_DEBUG_V are the values we
 ## would want the corresponding macros to be set to.
 ##
 ## CFLAGS_OPTIMIZE, CFLAGS_DEBUG are set by the 
 ## 'VARIANT=<OPTIMIZE|DEBUG>' targets to their _V values.
 
-## XCPPFLAGS, XCFLAGS, XASFLAGS 
-## are used to add flags from the shell
-## cf. make.info ("Implicit rules/variables" for details)
+CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(DEFINES)
+CFLAGS   = @RTEMS_CFLAGS@
+ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS)
 
-DEFS = @DEFS@
-
-CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(DEFINES) $(XCPPFLAGS)
-CFLAGS   = @RTEMS_CFLAGS@ $(XCFLAGS)
-ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
-
-#
-# How to compile stuff into ${ARCH} subdirectory
-#
-
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-
-CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
-
-${ARCH}/%.$(OBJEXT): %.c $(ARCH)/$(dirstamp)
-	${COMPILE} -o $@ -c $<
-
-${ARCH}/%.$(OBJEXT): %.S $(ARCH)/$(dirstamp)
-	${CCASCOMPILE} -o $@ -c $<
-
-# Make foo.rel from foo.$(OBJEXT)
-${ARCH}/%.rel: ${ARCH}/%.$(OBJEXT)
-	${make-rel}
-
-# Dependency files for use by gmake
-# NOTE: we don't put them into $(ARCH)
-#       so that 'make clean' doesn't blow it away
-
-DEPEND=Depends-${ARCH}
-
-# We deliberately don't have anything depend on the
-# $(DEPEND) file; otherwise it will get rebuilt even
-# on 'make clean'
-#
-
-if RTEMS_USE_GCC
-## HACK: Specific to gcc
-## FIXME: The approach below is known to be conceptionally broken.
-depend-gcc: $(C_FILES) $(CC_FILES) $(S_FILES)
-##       Use gcc -M to generate dependencies
-##       Replace foo.$(OBJEXT) with $(ARCH)/foo.$(OBJEXT)
-##       Replace $(ARCH) value with string $(ARCH)
-##           so that it will for debug cases
-	$(COMPILE) -M   $^    |  \
-	sed -e 's?^\(.*\)\.o[ ]*:?$$(ARCH)/\1.o:?' \
-	    -e 's?$(ARCH)/?$$(ARCH)/?'   >$(DEPEND).tmp
-	mv $(DEPEND).tmp $(DEPEND)
-
-# pull in dependencies if they exist  
-ifeq (${DEPEND},$(wildcard ${DEPEND}))
-include ${DEPEND}
-@ENDIF@
-endif
-depend: depend-gcc
+depend:
 
 ## -------------------------------------------------------------------------
 
@@ -108,17 +47,6 @@ VARIANT_optimize_V = OPTIMIZE
 VARIANT_debug_V = DEBUG
 
 VARIANT_V = $(VARIANT_$(VARIANT)_V)
-
-## Setup the variant build subdirectory
-ARCH_OPTIMIZE_V = o-optimize
-ARCH_DEBUG_V = o-debug
-
-ARCH__V = $(ARCH_OPTIMIZE_V)
-ARCH = $(ARCH_$(VARIANT_V)_V)
-
-${ARCH}/$(dirstamp):
-	@$(mkdir_p) $(ARCH)
-	@: > $(ARCH)/$(dirstamp)
 
 ## Setup the library suffix
 LIBSUFFIX_OPTIMIZE_V =
