@@ -1,7 +1,12 @@
 /*
- * start.S -- startup file for JMR3904 BSP based upon crt0.S from
- * newlib-1.8.2/libgloss/mips and adapted for RTEMS.
+ * start.S -- startup file for GENMONGOOSE-V BSP.  
+ * It is based on the JMR3904 BSP which is in turn based upon
+ * support in newlib-1.8.2/libgloss/mips and adapted for RTEMS.
  *
+ *  COPYRIGHT (c) 2001.
+ *  On-Line Applications Research Corporation (OAR).
+ *  Mongoose-V Modifications
+ * 
  * crt0.S -- startup file for MIPS.
  *
  * Copyright (c) 1995, 1996, 1997 Cygnus Support

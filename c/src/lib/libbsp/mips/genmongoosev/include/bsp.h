@@ -3,7 +3,7 @@
  *  This include file contains some definitions specific to a board
  *  based upon the generic capabilities of a Mongoose-V.
  *
- *  COPYRIGHT (c) 1989-2000.
+ *  COPYRIGHT (c) 1989-2001.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

@@ -3,7 +3,6 @@
  *  to instantiate the libchip driver for the on-CPU DUART
  *  and any other serial ports in the system.
  *
- *
  *  COPYRIGHT (c) 1989-2001.
  *  On-Line Applications Research Corporation (OAR).
  *
