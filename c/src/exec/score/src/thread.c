@@ -93,7 +93,6 @@ void _Thread_Start_multitasking(
   Thread_Control *idle_thread
 )
 {
-
    _Thread_Executing  =
    _Thread_Heir       =
    _Thread_MP_Receive = system_thread;
