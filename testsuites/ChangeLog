@@ -1,3 +1,8 @@
+2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/rtems-top.m4: Add RTEMS_API.
+	AC_DEFAULT_PREFIX([/opt/rtems-][RTEMS_API]).
+
 2003-08-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/check-tests.m4: New (Split out from enable-tests.m4).

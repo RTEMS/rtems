@@ -1,5 +1,7 @@
 dnl $Id$
 
+m4_define([RTEMS_API],[4.7])
+
 dnl
 dnl RTEMS_TOP($1)
 dnl 
@@ -12,7 +14,7 @@ AC_CONFIG_AUX_DIR([$1])
 AC_CHECK_PROGS(MAKE, gmake make)
 AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
 
-AC_PREFIX_DEFAULT([/opt/rtems])
+AC_PREFIX_DEFAULT([/opt/rtems-][RTEMS_API])
 
 ## HACK to allow gnu-make conditionals in automake-Makefiles.
 ENDIF=endif
