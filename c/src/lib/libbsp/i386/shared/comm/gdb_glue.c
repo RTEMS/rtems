@@ -19,6 +19,9 @@
 #define BREAKPOINT() asm("   int $3");
 
 extern int BSPConsolePort;
+void i386_stub_glue_init(int);
+void i386_stub_glue_init_breakin(void);
+void set_debug_traps(void);
 
  /* Init GDB glue  */
 void init_remote_gdb( void )

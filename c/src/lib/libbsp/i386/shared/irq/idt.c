@@ -40,9 +40,9 @@ void create_interrupt_gate_descriptor (interrupt_gate_descriptor* idtEntry,
 
 rtems_raw_irq_hdl get_hdl_from_vector(rtems_vector_offset index)
 {
-    rtems_raw_irq_hdl		hdl;
+    uint32_t                    hdl;
     interrupt_gate_descriptor* 	idt_entry_tbl;
-    unsigned			limit;
+    uint32_t                    limit;
 
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
@@ -53,9 +53,9 @@ rtems_raw_irq_hdl get_hdl_from_vector(rtems_vector_offset index)
         return 0;
     }
 
-    * ((unsigned int*) &hdl) = (idt_entry_tbl[index].low_offsets_bits |
-			      (idt_entry_tbl[index].high_offsets_bits << 16));
-    return hdl;
+    hdl = (idt_entry_tbl[index].low_offsets_bits |
+          (idt_entry_tbl[index].high_offsets_bits << 16));
+    return (rtems_raw_irq_hdl) hdl;
 }
 
 int i386_set_idt_entry  (const rtems_raw_irq_connect_data* irq)
