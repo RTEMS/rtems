@@ -1,3 +1,9 @@
+2001-05-24	Eric Valette <valette@crf.canon.fr>
+
+	* mpc8xx/console-generic/console-generic.c: Bug found by Yacine
+	<elkolli@crf.canon.fr> where the initialization or irq data structure
+	was incomplete in case a SMC channel was used first and later a SCC one.
+
 2001-03-30	Eric Valette <valette@crf.canon.fr>
 
 	* mpc8xx/vectors/.cvsignore, mpc8xx/vectors/Makefile.am,

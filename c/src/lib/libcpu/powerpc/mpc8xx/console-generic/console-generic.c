@@ -639,14 +639,7 @@ int m8xx_scc_isOn(const rtems_irq_connect_data* ptr)
  return BSP_irq_enabled_at_cpm (ptr->name);
 }
 
-static rtems_irq_connect_data consoleIrqData =
-{
-  BSP_CPM_IRQ_SCC2,
-  (rtems_irq_hdl)m8xx_scc2_interrupt_handler,
-  (rtems_irq_enable) m8xx_scc_enable,
-  (rtems_irq_disable) m8xx_scc_disable,
-  (rtems_irq_is_enabled) m8xx_scc_isOn
-};
+static rtems_irq_connect_data consoleIrqData;
 	
 void
 m8xx_uart_scc_initialize (int minor)
@@ -826,9 +819,15 @@ m8xx_uart_scc_initialize (int minor)
 #endif
   }
   if ( (mbx8xx_console_get_configuration() & 0x06) == 0x02 ) {
+    consoleIrqData.on = m8xx_scc_enable;
+    consoleIrqData.off = m8xx_scc_disable;
+    consoleIrqData.isOn = m8xx_scc_isOn;
+    
     switch (minor) {
-      case SCC2_MINOR:
-        break;
+    case SCC2_MINOR:
+      consoleIrqData.name = BSP_CPM_IRQ_SCC2;
+      consoleIrqData.hdl = m8xx_scc2_interrupt_handler;
+      break;
 
 #ifdef mpc860
     case SCC3_MINOR:
