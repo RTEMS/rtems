@@ -1,3 +1,7 @@
+2005-02-12	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Fix typo in previous patch.
+
 2005-02-11	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Merge-in wrapup/Makefile.am.

@@ -98,7 +98,7 @@ libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel tod.rel \
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
-libbsp_a_LIBADD += ../../../@RTEMS_CPU@/@exceptions@/rtems-cpu.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 

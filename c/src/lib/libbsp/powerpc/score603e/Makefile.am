@@ -76,7 +76,7 @@ noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel tod.rel \
     vectors.rel PCI_bus.rel
-libbsp_a_LIBADD += ../../../@RTEMS_CPU@/@exceptions@/rtems-cpu.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel
 
 all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
