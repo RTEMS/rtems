@@ -1,3 +1,9 @@
+2003-04-15	Joel Sherrill <joel@OARcorp.com>
+
+	PR 388/networking
+	* kern/kern_sysctl.c: Revert previous patch and use strlcpy() now that
+	it is available. Also fixed some warnings.
+
 2003-03-27	Joel Sherrill <joel@OARcorp.com>
 
 	* kern/kern_sysctl.c: Converted from BSP strlcpy() to strncpy().

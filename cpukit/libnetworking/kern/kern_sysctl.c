@@ -59,6 +59,9 @@
 #include <sys/sysproto.h>
 #else
 #include <sys/buf.h>
+
+#include <stdio.h>                                /* for snprintf() */
+size_t   strlcpy(char *, const char *, size_t);
 #endif
 #include <vm/vm.h>
 #include <vm/vm_extern.h>
@@ -856,7 +859,7 @@ retry:
 	outlen = strlen((char *)arg1)+1;
 	tmparg = malloc(outlen, M_SYSCTLTMP, M_WAITOK);
 
-	if (strncpy(tmparg, (char *)arg1, outlen) >= outlen) {
+	if (strlcpy(tmparg, (char *)arg1, outlen) >= outlen) {
 		free(tmparg, M_SYSCTLTMP);
 		goto retry;
 	}
