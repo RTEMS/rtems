@@ -8,11 +8,10 @@ C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 PGMS = $(C_FILES:%.c=$(ARCH)/%.rel)
 
-## FIXME: Is this used anywhere?
-ASM4FLAGS = -I$(PROJECT_INCLUDE)/rtems
-
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
+
+bsplib_DATA = $(PGMS)
 
 TMPINSTALL_FILES += \
     $(C_FILES:%.c=$(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel)
