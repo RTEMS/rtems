@@ -122,7 +122,7 @@ do
       rpm -ba ${specfile} >${logfile} 2>&1
     fi
     ${ECHO} rm -rf ${dst}/../BUILD/${target}-binutils*
-    ${ECHO} rm -rf ${buildroot}/opt/rtems
+    ${ECHO} rm -rf ${buildroot}/opt/gnatrtems
   else
     echo Skipping binutils for ${target}
   fi
@@ -151,12 +151,12 @@ do
       rpm -ba ${specfile} >${logfile} 2>&1
     fi
     ${ECHO} rm -rf ${dst}/../BUILD/${target}-gcc*
-    ${ECHO} rm -rf ${buildroot}/opt/rtems
+    ${ECHO} rm -rf ${buildroot}/opt/gnatrtems
 
     echo uninstalling binutils for ${target} 
     if [ ${testing} = no ] ; then
       rpm -e `rpm -qa | grep rtems`
-      rm -rf /opt/rtems/*
+      rm -rf /opt/gnatrtems/*
     fi
   else
     echo Skipping gcc/newlib for ${target}
@@ -175,7 +175,7 @@ do
       rpm -ba ${specfile} >${logfile} 2>&1
     fi
     ${ECHO} rm -rf ${dst}/../BUILD/${target}-gdb*
-    ${ECHO} rm -rf ${buildroot}/opt/rtems
+    ${ECHO} rm -rf ${buildroot}/opt/gnatrtems
   else
     echo Skipping gdb for ${target}
   fi

@@ -48,7 +48,7 @@ bsp=$2
 
 . ./$CFG
 
-specfile=${dst}/$target_alias-$bsp-${rtems_version}.spec
+specfile=${dst}/${target_alias}-gnat-${bsp}-${rtems_version}.spec
 
 sed -e "s%@Release@%${rtems_rpm_release}%g" \
     -e "s%@bsp@%${bsp}%g" \

@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = . binutils gnatnewlib gdb rtems
+SUBDIRS = . binutils gnatnewlib gdb
 
 noinst_SCRIPTS = \
 setup \

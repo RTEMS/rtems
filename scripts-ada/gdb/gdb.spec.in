@@ -10,11 +10,11 @@
 
 Vendor:       OAR Corporation
 Distribution: Linux
-Name:         @target_alias@-gdb-collection
+Name:         @target_alias@-gnat-gdb-collection
 Release:      @Release@
 Copyright:    1999 OARCorp
 Group:        rtems
-Provides:     rtems-base-gdb @target_alias@-gdb
+Provides:     rtems-base-gnat-gdb @target_alias@-gnat-gdb
 
 Autoreqprov:  on
 Packager:     corsepiu@faw.uni-ulm.de and joel@OARcorp.com
@@ -42,22 +42,22 @@ RTEMS is an open source operating system for embedded systems.
 
 This is the GNU gdb for RTEMS targetting @target_alias@.
 
-%package -n rtems-base-gdb
+%package -n rtems-base-gnat-gdb
 Summary:      base package for rtems gdb
 Group: rtems
 
-%description -n rtems-base-gdb
+%description -n rtems-base-gnat-gdb
 
 RTEMS is an open source operating system for embedded systems.
 
 This is the base for gdb regardless of target CPU.
 
-%package -n @target_alias@-gdb
+%package -n @target_alias@-gnat-gdb
 Summary:      rtems gdb for @target_alias@
 Group: rtems
-Requires: rtems-base-gdb
+Requires: rtems-base-gnat-gdb
 
-%description -n @target_alias@-gdb
+%description -n @target_alias@-gnat-gdb
 
 RTEMS is an open source operating system for embedded systems.
 
@@ -71,8 +71,8 @@ Authors:
 
 %prep
 echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
-# untar the sources inside @target_alias@-gdb
-%setup -c -n @target_alias@-gdb -a 0
+# untar the sources inside @target_alias@-gnat-gdb
+%setup -c -n @target_alias@-gnat-gdb -a 0
 
 %patch0 -p0
 
@@ -80,20 +80,20 @@ echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 test -d build || mkdir build
   cd build
   ../gdb-@gdb_version@/configure --target=@target_alias@ \
-    --verbose --prefix=/opt/rtems @extra_configure_arguments@
+    --verbose --prefix=/opt/gnatrtems @extra_configure_arguments@
 
   make all
   make info
 
 %install
   cd build
-  make prefix=$RPM_BUILD_ROOT/opt/rtems install
-  make prefix=$RPM_BUILD_ROOT/opt/rtems install-info
+  make prefix=$RPM_BUILD_ROOT/opt/gnatrtems install
+  make prefix=$RPM_BUILD_ROOT/opt/gnatrtems install-info
 
   # gzip info files
-  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info 2>/dev/null
-  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-? 2>/dev/null
-  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-?? 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT/opt/gnatrtems/info/*.info 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT/opt/gnatrtems/info/*.info-? 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT/opt/gnatrtems/info/*.info-?? 2>/dev/null
 
 %post
   if test -d $RPM_INSTALL_PREFIX/rtems/info;
@@ -115,30 +115,30 @@ test -d build || mkdir build
     done
   fi
 
-%files -n rtems-base-gdb
+%files -n rtems-base-gnat-gdb
 
-%dir /opt/rtems/info
-%doc /opt/rtems/info/gdb.info*
-%doc /opt/rtems/info/mmalloc.info*
-%doc /opt/rtems/info/readline.info*
+%dir /opt/gnatrtems/info
+%doc /opt/gnatrtems/info/gdb.info*
+%doc /opt/gnatrtems/info/mmalloc.info*
+%doc /opt/gnatrtems/info/readline.info*
 
-%dir /opt/rtems/man
-%dir /opt/rtems/man/man1
+%dir /opt/gnatrtems/man
+%dir /opt/gnatrtems/man/man1
 
-%dir /opt/rtems/include
+%dir /opt/gnatrtems/include
 # We install libbfd from binutils
-# /opt/rtems/include/bfd.h
-# /opt/rtems/include/bfdlink.h
+# /opt/gnatrtems/include/bfd.h
+# /opt/gnatrtems/include/bfdlink.h
 
-%dir /opt/rtems/lib
+%dir /opt/gnatrtems/lib
 # We install libbfd from binutils
-# /opt/rtems/lib/libbfd*
+# /opt/gnatrtems/lib/libbfd*
 # We use libiberty from gcc
-# /opt/rtems/lib/libiberty*
+# /opt/gnatrtems/lib/libiberty*
 
-%files -n @target_alias@-gdb
-%doc /opt/rtems/man/man1/@target_alias@-gdb.1
+%files -n @target_alias@-gnat-gdb
+%doc /opt/gnatrtems/man/man1/@target_alias@-gnat-gdb.1
 
-%dir /opt/rtems/bin
-/opt/rtems/bin/@target_alias@-gdb@exe_ext@
+%dir /opt/gnatrtems/bin
+/opt/gnatrtems/bin/@target_alias@-gdb@exe_ext@
 

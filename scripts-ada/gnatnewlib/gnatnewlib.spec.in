@@ -8,7 +8,7 @@
 
 Vendor:       OAR Corporation
 Distribution: Linux
-Name:         @target_alias@-gnat-gcc-newlib
+Name:         @target_alias@-gnat-newlib
 Summary:      gnat, gcc, and newlib C Library for @target_alias@.
 Group:	      rtems
 Release:      @Release@
@@ -100,7 +100,7 @@ This is gnat, gcc, and newlib C Library for @target_alias@.
   cd build
   ../gcc-@gcc_version@/configure --target=@target_alias@ \
     --with-gnu-as --with-gnu-ld --with-newlib --verbose \
-    --prefix=/opt/rtems
+    --prefix=/opt/gnatrtems
 
   # for now we are building all the languages
   #  '--enable-languages=c,c++'
@@ -121,27 +121,27 @@ This is gnat, gcc, and newlib C Library for @target_alias@.
   # Bug in gcc-2.95.1: It doesn't build this installation directory
   # If it doesn't find it, gcc doesn't install @target_alias@/bin/gcc
   ../gcc-@gcc_version@/mkinstalldirs \
-    $RPM_BUILD_ROOT/opt/rtems/@target_alias@/bin
+    $RPM_BUILD_ROOT/opt/gnatrtems/@target_alias@/bin
 
-  make prefix=$RPM_BUILD_ROOT/opt/rtems install
+  make prefix=$RPM_BUILD_ROOT/opt/gnatrtems install
   cd @target_alias@/newlib
-  make prefix=$RPM_BUILD_ROOT/opt/rtems install-info
+  make prefix=$RPM_BUILD_ROOT/opt/gnatrtems install-info
 
   # cd back to build/
   cd ../..
 
   # gzip info files
-  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info 2>/dev/null
-  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-? 2>/dev/null
-  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-?? 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT/opt/gnatrtems/info/*.info 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT/opt/gnatrtems/info/*.info-? 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT/opt/gnatrtems/info/*.info-?? 2>/dev/null
 
   rm -f dirs ;
-  echo "%dir /opt/rtems/lib" >> dirs ;
-  echo "%dir /opt/rtems/lib/gcc-lib" >> dirs ;
-  echo "%dir /opt/rtems/lib/gcc-lib/@target_alias@" >> dirs ;
+  echo "%dir /opt/gnatrtems/lib" >> dirs ;
+  echo "%dir /opt/gnatrtems/lib/gcc-lib" >> dirs ;
+  echo "%dir /opt/gnatrtems/lib/gcc-lib/@target_alias@" >> dirs ;
 
   # Collect multilib subdirectories
-  TGTDIR="$RPM_BUILD_ROOT/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@"
+  TGTDIR="$RPM_BUILD_ROOT/opt/gnatrtems/lib/gcc-lib/@target_alias@/@gcc_version@"
   find $TGTDIR \
     \( -type d -a ! -path "$TGTDIR/include*" \) -print | \
     sed -e "s,^$RPM_BUILD_ROOT,%dir ,g" >> dirs
@@ -168,33 +168,33 @@ This is gnat, gcc, and newlib C Library for @target_alias@.
   done
 
 %files -n @target_alias@-gcc -f build/files.gcc
-%dir /opt/rtems/info
-%doc /opt/rtems/info/dir
-%doc /opt/rtems/info/cpp.info*
-%doc /opt/rtems/info/gcc.info*
-%doc /opt/rtems/info/libc.info*
-%doc /opt/rtems/info/libm.info*
+%dir /opt/gnatrtems/info
+%doc /opt/gnatrtems/info/dir
+%doc /opt/gnatrtems/info/cpp.info*
+%doc /opt/gnatrtems/info/gcc.info*
+%doc /opt/gnatrtems/info/libc.info*
+%doc /opt/gnatrtems/info/libm.info*
 
-%dir /opt/rtems/man
-%dir /opt/rtems/man/man1
-%doc /opt/rtems/man/man1/cccp.1
-%doc /opt/rtems/man/man1/@target_alias@-gcc.1
-%doc /opt/rtems/man/man1/@target_alias@-g++.1
+%dir /opt/gnatrtems/man
+%dir /opt/gnatrtems/man/man1
+%doc /opt/gnatrtems/man/man1/cccp.1
+%doc /opt/gnatrtems/man/man1/@target_alias@-gcc.1
+%doc /opt/gnatrtems/man/man1/@target_alias@-g++.1
 
-%dir /opt/rtems/bin
-/opt/rtems/bin/cpp@exe_ext@
-/opt/rtems/bin/gcov@exe_ext@
-/opt/rtems/bin/@target_alias@-c++@exe_ext@
-/opt/rtems/bin/@target_alias@-g++@exe_ext@
-/opt/rtems/bin/@target_alias@-gcc@exe_ext@
-/opt/rtems/bin/@target_alias@-protoize@exe_ext@
-/opt/rtems/bin/@target_alias@-unprotoize@exe_ext@
+%dir /opt/gnatrtems/bin
+/opt/gnatrtems/bin/cpp@exe_ext@
+/opt/gnatrtems/bin/gcov@exe_ext@
+/opt/gnatrtems/bin/@target_alias@-c++@exe_ext@
+/opt/gnatrtems/bin/@target_alias@-g++@exe_ext@
+/opt/gnatrtems/bin/@target_alias@-gcc@exe_ext@
+/opt/gnatrtems/bin/@target_alias@-protoize@exe_ext@
+/opt/gnatrtems/bin/@target_alias@-unprotoize@exe_ext@
 
-%dir /opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include
+%dir /opt/gnatrtems/lib/gcc-lib/@target_alias@/@gcc_version@/include
 
-%dir /opt/rtems/include
-/opt/rtems/include/g++-3
-/opt/rtems/@target_alias@
+%dir /opt/gnatrtems/include
+/opt/gnatrtems/include/g++-3
+/opt/gnatrtems/@target_alias@
 
 %post -n @target_alias@-gcc
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
@@ -218,12 +218,12 @@ This is gnat, gcc, and newlib C Library for @target_alias@.
 
 
 %files -n @target_alias@-chill -f build/files.chill
-%dir /opt/rtems/bin
-/opt/rtems/bin/@target_alias@-chill@exe_ext@
+%dir /opt/gnatrtems/bin
+/opt/gnatrtems/bin/@target_alias@-chill@exe_ext@
 
-%dir /opt/rtems/info
-%doc /opt/rtems/info/dir
-%doc /opt/rtems/info/chill.info*
+%dir /opt/gnatrtems/info
+%doc /opt/gnatrtems/info/dir
+%doc /opt/gnatrtems/info/chill.info*
 
 %post -n @target_alias@-chill
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
@@ -247,28 +247,28 @@ This is gnat, gcc, and newlib C Library for @target_alias@.
 
 
 %files -n @target_alias@-gcj -f build/files.gcj
-%dir /opt/rtems/bin
-/opt/rtems/bin/jcf-dump@exe_ext@
-/opt/rtems/bin/jv-scan@exe_ext@
-/opt/rtems/bin/gcjh@exe_ext@
-/opt/rtems/bin/@target_alias@-gcj@exe_ext@
+%dir /opt/gnatrtems/bin
+/opt/gnatrtems/bin/jcf-dump@exe_ext@
+/opt/gnatrtems/bin/jv-scan@exe_ext@
+/opt/gnatrtems/bin/gcjh@exe_ext@
+/opt/gnatrtems/bin/@target_alias@-gcj@exe_ext@
 
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jc1@exe_ext@
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/jvgenmain@exe_ext@
+/opt/gnatrtems/lib/gcc-lib/@target_alias@/@gcc_version@/jc1@exe_ext@
+/opt/gnatrtems/lib/gcc-lib/@target_alias@/@gcc_version@/jvgenmain@exe_ext@
 
 
 %files -n @target_alias@-g77 -f build/files.g77
-%dir /opt/rtems/bin
-/opt/rtems/bin/@target_alias@-g77@exe_ext@
+%dir /opt/gnatrtems/bin
+/opt/gnatrtems/bin/@target_alias@-g77@exe_ext@
 
-%dir /opt/rtems/info
-%doc /opt/rtems/info/g77.info*
+%dir /opt/gnatrtems/info
+%doc /opt/gnatrtems/info/g77.info*
 
-%dir /opt/rtems/man
-%dir /opt/rtems/man/man1
-%doc /opt/rtems/man/man1/@target_alias@-g77.1
+%dir /opt/gnatrtems/man
+%dir /opt/gnatrtems/man/man1
+%doc /opt/gnatrtems/man/man1/@target_alias@-g77.1
 
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/f771@exe_ext@
+/opt/gnatrtems/lib/gcc-lib/@target_alias@/@gcc_version@/f771@exe_ext@
 
 %post -n @target_alias@-g77
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
@@ -292,5 +292,5 @@ This is gnat, gcc, and newlib C Library for @target_alias@.
 
 
 %files -n @target_alias@-objc -f build/files.objc
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/cc1obj@exe_ext@
-/opt/rtems/lib/gcc-lib/@target_alias@/@gcc_version@/include/objc
+/opt/gnatrtems/lib/gcc-lib/@target_alias@/@gcc_version@/cc1obj@exe_ext@
+/opt/gnatrtems/lib/gcc-lib/@target_alias@/@gcc_version@/include/objc

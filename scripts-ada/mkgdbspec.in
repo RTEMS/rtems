@@ -48,7 +48,7 @@ target_alias=$1
 
 . ./$CFG
 
-specfile=${dst}/$target_alias-gdb-${gdb_version}.spec
+specfile=${dst}/${target_alias}-gnat-gdb-${gdb_version}.spec
 
 case ${target_alias} in
   powerpc*)
@@ -68,7 +68,7 @@ sed -e "s%@Release@%${gdb_rpm_release}%g" \
     -e "s%@rpm_build_root@%${rpm_build_root}%g" \
     -e "s%@target_alias@%${target_alias}%g" \
     -e "s%@gdb_version@%${gdb_version}%g" \
-    -e "s%@gdb_patch_version@%${gdb_patch_version}%g" \
+    -e "s%@gdb_patch_version@%gnat-${gdb_patch_version}%g" \
     -e "s%@extra_configure_arguments@%${extra_configure_arguments}%g" \
     -e "s%@exe_ext@%${exe_ext}%g" \
 < ${RTEMS_DIR}/gdb/gdb.spec.in \
@@ -76,11 +76,11 @@ sed -e "s%@Release@%${gdb_rpm_release}%g" \
 
 case ${target_alias} in
   powerpc*)
-     echo "/opt/rtems/bin/${target_alias}-run${exe_ext}" 
+     echo "/opt/gnatrtems/bin/${target_alias}-run${exe_ext}" 
      ;;
   sparc*)
-     echo "/opt/rtems/bin/${target_alias}-run${exe_ext}" 
-     echo "/opt/rtems/bin/${target_alias}-sis${exe_ext}" 
+     echo "/opt/gnatrtems/bin/${target_alias}-run${exe_ext}" 
+     echo "/opt/gnatrtems/bin/${target_alias}-sis${exe_ext}" 
      ;;
   *) ;;
 esac >> ${specfile}
