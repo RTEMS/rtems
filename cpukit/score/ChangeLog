@@ -1,4 +1,18 @@
 
+2001-09-27	Eric Norum <eric.norum@usask.ca>
+
+	* src/threadhandler.c: Now process C++ global constructors
+	(_init) as part of the first task execution not in BSP space.
+	This depends on the toolset defining USE_INIT_FINI so you
+	have to have the right toolset version.
+
+2001-09-23	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* include/rtems/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* inline/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
+	* macros/rtems/score/Makefile.am: Use 'PREINSTALL_FILES ='.
+
 2001-08-30	Joel Sherrill <joel@OARcorp.com>
 
 	*  src/coremutex.c, src/coremutexseize.c, src/coremutexsurrender.c,

@@ -58,6 +58,10 @@ void _Thread_Handler( void )
 {
   ISR_Level  level;
   Thread_Control *executing;
+#ifdef USE_INIT_FINI
+  static char doneConstructors;
+  char doneCons;
+#endif
  
   executing = _Thread_Executing;
  
@@ -68,6 +72,11 @@ void _Thread_Handler( void )
  
   level = executing->Start.isr_level;
   _ISR_Set_level(level);
+
+#ifdef USE_INIT_FINI
+  doneCons = doneConstructors;
+  doneConstructors = 1;
+#endif
 
   /*
    * Take care that 'begin' extensions get to complete before
@@ -82,6 +91,10 @@ void _Thread_Handler( void )
    */
 
   _Thread_Enable_dispatch();
+#ifdef USE_INIT_FINI
+  if (!doneCons)
+    _init ();
+#endif
  
   switch ( executing->Start.prototype ) {
     case THREAD_START_NUMERIC:
