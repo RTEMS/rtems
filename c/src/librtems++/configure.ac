@@ -34,7 +34,6 @@ RTEMS_PROJECT_ROOT
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 include/Makefile
-include/rtems++/Makefile
 src/Makefile
 ])
 AC_OUTPUT

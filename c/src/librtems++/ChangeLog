@@ -1,3 +1,10 @@
+2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rtems++/Makefile.am: Remove.
+	* include/Makefile.am: Handle subdirs, require automake-1.5.
+	* configure.ac: Reflect changes above.
+	* Makefile.am: Require automake-1.5.
+
 2001-10-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Add autom4te.cache for autoconf > 2.52.
