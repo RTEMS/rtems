@@ -1,4 +1,9 @@
 
+2000-11-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/leon2.cfg: Removed defines that are now generated
+	in a non-BSP specific manner.
+
 2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
 	* custom/Makefile.am: Modified to reflect addition of files.
