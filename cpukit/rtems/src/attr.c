@@ -12,6 +12,10 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <rtems/system.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/stack.h>

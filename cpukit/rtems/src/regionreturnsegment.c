@@ -12,6 +12,10 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #ifdef RTEMS_REGION_SHRED_ON_FREE
 #include <string.h>
 
