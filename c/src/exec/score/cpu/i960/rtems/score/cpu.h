@@ -20,7 +20,9 @@
 extern "C" {
 #endif
 
+#if 0
 #pragma align 4            /* for GNU C structure alignment */
+#endif
 
 #include <rtems/score/i960.h>              /* pick up machine definitions */
 #ifndef ASM
@@ -351,6 +353,11 @@ unsigned32 _CPU_ISR_Get_level( void );
  *     + scan for the highest numbered (MSB) set in a 16 bit bitfield
  */
 
+#if defined(i960gdbsim)
+
+#define CPU_USE_GENERIC_BITFIELD_CODE TRUE
+#define CPU_USE_GENERIC_BITFIELD_DATA TRUE
+#else
 #define CPU_USE_GENERIC_BITFIELD_CODE FALSE
 #define CPU_USE_GENERIC_BITFIELD_DATA FALSE
 
@@ -382,6 +389,7 @@ unsigned32 _CPU_ISR_Get_level( void );
    ( 15 - (_priority) )
 
 /* end of Priority handler macros */
+#endif
 
 /* functions */
 

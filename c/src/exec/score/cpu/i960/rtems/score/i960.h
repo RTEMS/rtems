@@ -33,16 +33,15 @@ extern "C" {
  *  NOTE: RTEMS defines a canonical name for each cpu model.
  */
 
-#if defined(rtems_multilib)
-/*
- *  Figure out all CPU Model Feature Flags based upon compiler 
- *  predefines. 
- */
+#if defined(i960gdbsim)
 
-#define CPU_MODEL_NAME  "rtems_multilib"
-#define I960_HAS_FPU 0
-#define I960_CPU_ALIGNMENT 4
-#define I960_SOFT_RESET_COMMAND 0x30000
+#define CPU_MODEL_NAME  "i960gdbsim"
+#define __RTEMS_I960KA__
+
+#elif defined(__i960KA__) || defined(__i960_KA__) || defined(__i960KA)
+
+#define CPU_MODEL_NAME  "i960ka"
+#define __RTEMS_I960KA__
 
 #elif defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
 
@@ -304,6 +303,20 @@ typedef struct {
 typedef i960rp_control_table i960_control_table;
 typedef i960rp_PRCB i960_PRCB;
 
+#elif defined(__RTEMS_I960KA__)
+
+typedef struct {
+  int fixme;
+}   i960ka_control_table;
+
+typedef struct {
+  void           **intr_tbl;      /* interrupt table base address */
+  unsigned int    *intr_stack;    /* interrupt stack pointer */
+  int fixme;
+}   i960ka_PRCB;
+
+typedef i960ka_control_table i960_control_table;
+typedef i960ka_PRCB i960_PRCB;
 #else
 #error "invalid processor selection!"
 #endif

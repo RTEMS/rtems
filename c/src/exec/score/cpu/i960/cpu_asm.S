@@ -226,6 +226,7 @@ __ISR_Dispatch:
  *  which are clobbered by the reinit operation. (Not documented, but it happens).
  */
 
+#if !defined(__i960KA__)
 		.globl __i960_soft_reset_asm
 __i960_soft_reset_asm:
 		flushreg						   		# flush register cache
@@ -242,3 +243,4 @@ __i960_reset_done:
 		mov			r5, pfp
 		mov			r6, sp
 		ret
+#endif

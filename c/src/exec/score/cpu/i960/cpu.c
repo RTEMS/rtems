@@ -17,6 +17,7 @@
 
 #if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
 #elif defined(__i960RP__)
+#elif defined(__i960KA__)
 #else
 #warning "***  ENTIRE FILE IMPLEMENTED & TESTED FOR CA & RP ONLY  ***"
 #warning "*** THIS FILE WILL NOT COMPILE ON ANOTHER FAMILY MEMBER ***"
@@ -71,6 +72,8 @@ unsigned32 _CPU_ISR_Get_level( void )
 #elif defined(__i960RP__)
 #define i960_vector_caching_enabled( _prcb ) \
    ((*((unsigned int *) ICON_ADDR)) & 0x2000)
+#elif defined(__i960KA__)
+#define i960_vector_caching_enabled( _prcb )  0 /* XXX fix me */
 #endif
 
 void _CPU_ISR_install_raw_handler(
@@ -143,8 +146,7 @@ void _CPU_ISR_install_vector(
                   : "=d" (_cmd), "=d" (_next), "=d" (_prcb) \
                   : "0"  (_cmd), "1"  (_next), "2"  (_prcb) ); \
  }
-#else
-#if defined(__i960RP__) || defined(__i960_RP__) || defined(__i960RP)
+#elif defined(__i960RP__) || defined(__i960_RP__) || defined(__i960RP)
 #define soft_reset( prcb ) \
  { register i960_PRCB *_prcb = (prcb); \
    register unsigned32  *_next=0; \
@@ -155,7 +157,8 @@ void _CPU_ISR_install_vector(
                   : "=d" (_cmd), "=d" (_next), "=d" (_prcb) \
                   : "0"  (_cmd), "1"  (_next), "2"  (_prcb) ); \
  }
-#endif
+#elif defined(__i960KA__)
+#define soft_reset( prcb ) /* XXX fix me */
 #endif
 
 void _CPU_Install_interrupt_stack( void )
@@ -173,7 +176,9 @@ void _CPU_Install_interrupt_stack( void )
 
   _CPU_ISR_Disable( level );
 
+#if !defined(__i960_KA__)
     prcb->intr_stack = _CPU_Interrupt_stack_low;
+#endif
 
 #if defined(__i960CA__) || defined(__i960_CA__) || defined(__i960CA)
     soft_reset( prcb );
