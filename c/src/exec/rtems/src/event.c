@@ -198,14 +198,22 @@ void _Event_Seize(
 
   switch ( sync_state ) {
     case EVENT_SYNC_SYNCHRONIZED:
+      /*
+       *  This cannot happen.  It indicates that this routine did not
+       *  enter the synchronization states above.
+       */
+      return;
+
     case EVENT_SYNC_NOTHING_HAPPENED:
       _ISR_Enable( level );
       return;
+
     case EVENT_SYNC_TIMEOUT:
       executing->Wait.return_code = RTEMS_TIMEOUT;
       _ISR_Enable( level );
       _Thread_Unblock( executing );
       return;
+
     case EVENT_SYNC_SATISFIED:
       if ( _Watchdog_Is_active( &executing->Timer ) ) {
         _Watchdog_Deactivate( &executing->Timer );
@@ -328,6 +336,19 @@ void _Event_Timeout(
     case OBJECTS_REMOTE:  /* impossible */
       break;
     case OBJECTS_LOCAL:
+ 
+      /*
+       *  If the event manager is not synchronized, then it is either
+       *  "nothing happened", "timeout", or "satisfied".   If the_thread
+       *  is the executing thread, then it is in the process of blocking
+       *  and it is the thread which is responsible for the synchronization 
+       *  process.
+       *
+       *  If it is not satisfied, then it is "nothing happened" and
+       *  this is the "timeout" transition.  After a request is satisfied,
+       *  a timeout is not allowed to occur.
+       */
+
       if ( _Event_Sync_state != EVENT_SYNC_SYNCHRONIZED && 
            _Thread_Is_executing( the_thread ) ) {
         if ( _Event_Sync_state != EVENT_SYNC_SATISFIED )
