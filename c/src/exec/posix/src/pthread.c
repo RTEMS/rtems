@@ -382,13 +382,14 @@ int pthread_getschedparam(
   struct sched_param *param
 )
 {
-  pthread_attr_t *attr;   /* XXX: really need to get this from the thread */
+  POSIX_API_Control  *api;
 
   if ( !policy || !param  )
     return EINVAL;
 
-  *policy = attr->schedpolicy;
-  *param  = attr->schedparam;
+  api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+  *policy = api->schedpolicy;
+  *param  = api->Schedule;
   return 0;
 }
 
@@ -404,24 +405,47 @@ int pthread_setschedparam(
   struct sched_param *param
 )
 {
-  /* XXX need to reschedule after doing this to the thread */
-  pthread_attr_t *attr;   /* XXX: really need to get this from the thread */
-
+  register Thread_Control *the_thread;
+  POSIX_API_Control       *api;
+  Objects_Locations        location;
+ 
   if ( !param )
     return EINVAL;
 
-  switch ( policy ) {
-    case SCHED_OTHER:
-    case SCHED_FIFO:
-    case SCHED_RR:
-    case SCHED_SPORADIC:
-      attr->schedpolicy = policy;
-      attr->schedparam  = *param;
-      return 0;
+  /* XXX need to reschedule after doing this to the thread */
+  /* XXX need to have one routine called by create and here */
+#warning "pthread_setschedparam needs work"
+
+  the_thread = _POSIX_Threads_Get( thread, &location );
+  switch ( location ) {
+    case OBJECTS_ERROR:
+    case OBJECTS_REMOTE:
+      return ESRCH;
+    case OBJECTS_LOCAL:
+      switch ( policy ) {
+        case SCHED_OTHER:
+        case SCHED_FIFO:
+        case SCHED_RR:
+        case SCHED_SPORADIC:
+          /* XXX this is where the interpretation work should go */
+          break;
  
-    default:
-      return EINVAL;
+        default:
+          return EINVAL;
+      }
+
+      api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+      api->schedpolicy = policy;
+      api->Schedule    = *param;
+      return 0;
   }
+ 
+  return POSIX_BOTTOM_REACHED();
+
+
+#if 0
+#endif
 }
 
 /*PAGE
@@ -781,8 +805,10 @@ int pthread_join(
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-      if ( api->detachstate == PTHREAD_CREATE_DETACHED )
+      if ( api->detachstate == PTHREAD_CREATE_DETACHED ) {
+        _Thread_Enable_dispatch();
         return EINVAL;
+      }
 
       /*
        *  Put ourself on the threads join list
@@ -822,6 +848,7 @@ int pthread_detach(
 
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
       api->detachstate = PTHREAD_CREATE_DETACHED;
+      _Thread_Enable_dispatch();
       return 0;
   }
  
@@ -883,11 +910,18 @@ int pthread_equal(
   pthread_t  t2
 )
 {
-  Objects_Locations  location;
+  int               status;
+  Objects_Locations location;
 
  /* XXX may want to do a "get" to make sure both are valid. */
  /* XXX behavior is undefined if not valid pthread_t's */
  
+  /*
+   *  By default this is not a match.
+   */
+
+  status = 0;
+
   /*
    *  Validate the first id and return 0 if it is not valid
    */
@@ -896,24 +930,30 @@ int pthread_equal(
   switch ( location ) {
     case OBJECTS_ERROR:
     case OBJECTS_REMOTE:
-      return 0;
+      break;
+
     case OBJECTS_LOCAL:
+
+      /*
+       *  Validate the second id and return 0 if it is not valid
+       */
+
+      (void) _POSIX_Threads_Get( t2, &location );
+      switch ( location ) {
+        case OBJECTS_ERROR:
+        case OBJECTS_REMOTE:
+          break; 
+        case OBJECTS_LOCAL:
+          status = _Objects_Are_ids_equal( t1, t2 ); 
+          break;
+      }
+      _Thread_Unnest_dispatch();
       break;
   }
 
-  /*
-   *  Validate the second id and return 0 if it is not valid
-   */
+  _Thread_Enable_dispatch();
+  return status;
 
-  (void) _POSIX_Threads_Get( t2, &location );
-  switch ( location ) {
-    case OBJECTS_ERROR:
-    case OBJECTS_REMOTE:
-      return 0;
-    case OBJECTS_LOCAL:
-      break;
-  }
-  return _Objects_Are_ids_equal( t1, t2 ); 
 }
 
 /*PAGE
