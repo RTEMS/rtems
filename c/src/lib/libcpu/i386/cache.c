@@ -58,15 +58,11 @@ void _CPU_invalidate_1_inst_cache_line ( const void *d_addr ) {}
 void _CPU_freeze_inst_cache(void) {}
 void _CPU_unfreeze_inst_cache(void) {}
 
-void _CPU_flush_entire_data_cache(
-  const void * d_addr
-)
+void _CPU_flush_entire_data_cache(void)
 {
   asm volatile ("wbinvd");
 }
-void _CPU_invalidate_entire_data_cache(
-  const void * d_addr
-)
+void _CPU_invalidate_entire_data_cache(void)
 {
   asm volatile ("invd");
 }

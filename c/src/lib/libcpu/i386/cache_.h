@@ -9,7 +9,7 @@
 #define _CPU_DATA_CACHE_ALIGNMENT I386_CACHE_ALIGNMENT
 #define _CPU_INST_CACHE_ALIGNEMNT I386_CACHE_ALIGNMENT
 
-#include <libcpu/cache_.h>
+#include <libcpu/cache.h>
 
 #endif
 /* end of include file */
