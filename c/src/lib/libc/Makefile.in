@@ -12,7 +12,7 @@ LIBNAME=libcsupport.a
 LIB=${ARCH}/${LIBNAME}
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES=__gettod __brk __times _execve malloc syscalls \
+C_PIECES=__gettod __brk __times _execve getdents malloc syscalls \
     no_libc newlibc newlibif newlibifr support unixlibc \
     libio hosterr tcattr tcdrain cfiospeed termios
 C_FILES=$(C_PIECES:%=%.c)
