@@ -1,3 +1,7 @@
+2003-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* support/Makefile.am: Pass @RTEMS_BSP@ to AM_CPPFLAGS.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* support/version.c: URL for license changed.
