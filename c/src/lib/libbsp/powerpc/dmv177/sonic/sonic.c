@@ -752,8 +752,10 @@ SONIC_STATIC void sonic_rda_wait(
       /*
        * Check my interpretation of the SONIC manual.
        */
+#if 0
       if (sonic_read_register( rp, SONIC_REG_CR ) & CR_RXEN)
         rtems_panic ("SONIC RBAE/RXEN");
+#endif
 
       /*
        * Update statistics
@@ -771,6 +773,7 @@ SONIC_STATIC void sonic_rda_wait(
        * driver has to move the RRP back *two* entries to
        * reuse the receive buffer holding the giant packet.
        */
+#if 0
       for (i = 0 ; i < 2 ; i++) {
         if (sonic_read_register( rp, SONIC_REG_RRP ) ==
             sonic_read_register( rp, SONIC_REG_RSA ))
@@ -785,12 +788,15 @@ SONIC_STATIC void sonic_rda_wait(
              sonic_read_register(rp, SONIC_REG_RRP) - sizeof(ReceiveResource_t)
           );
       }
+#endif
 
       /*
        * Restart reception
        */
       sonic_write_register( rp, SONIC_REG_ISR, ISR_RBAE );
+#if 0
       sonic_write_register( rp, SONIC_REG_CR, CR_RXEN );
+#endif
     }
 
     /*
