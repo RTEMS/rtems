@@ -27,7 +27,7 @@ info: env
 	./do_docs $(BASEDIR) info
 
 html: env
-	cp common/*.gif common/*.jpg $(WWW_INSTALL)
+	cp HELP.html common/*.gif common/*.jpg $(WWW_INSTALL)
 	./do_docs $(BASEDIR) html
 
 ps: dirs env
