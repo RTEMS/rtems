@@ -1,3 +1,17 @@
+2002-11-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/new-exceptions/cpu.h: Remove sections on 
+	CPU_INLINE_ENABLE_DISPATCH and CPU_UNROLL_ENQUEUE_PRIORITY.
+	* rtems/old-exceptions/cpu.h: Remove sections on 
+	CPU_INLINE_ENABLE_DISPATCH and CPU_UNROLL_ENQUEUE_PRIORITY.
+	* rtems/score/cpu.h: Insert sections on
+	CPU_INLINE_ENABLE_DISPATCH and CPU_UNROLL_ENQUEUE_PRIORITY.
+
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/new-exceptions/cpu.h: Removed warnings.
+
+
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/new-exceptions/cpu.h: Removed warnings.
