@@ -20,7 +20,7 @@ program_prefix = @program_prefix@
 
 export bindir
 
-RTEMS_ROOT = @RTEMS_ROOT@
+RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH=@srcdir@
@@ -29,22 +29,16 @@ ifeq ($(RTEMS_BSP),)
   RTEMS_BSP = @RTEMS_BSP_LIST@
 endif
 
-MAKE_CONFIG_EXTRA_DIR_PART=c/
-
 include $(RTEMS_ROOT)/make/main.cfg
 
 MTARGETS = all install $(TARGET_VARIANTS) $(TARGET_VARIANTS:%=%_all) \
   $(TARGET_VARIANTS:%=%_install) $(TARGET_VARIANTS:%=%_tests) \
   clean_wrapup distclean clean_dirs clean_tools tests clean depend
 
-.PHONY: 
-
 EXIT_CMD = exit 1
 
 # Don't pass flags from previous make - especially NOT CFLAGS 
 override MAKEFLAGS=
-
-#            \"XCFLAGS=$(CFLAGS_FOR_TARGET)\"
 
 $(MTARGETS): 
 	BASEDIR=`pwd`; \

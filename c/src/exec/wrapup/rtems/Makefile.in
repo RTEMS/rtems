@@ -4,11 +4,9 @@
 
 @SET_MAKE@
 srcdir = @srcdir@
-top_srcdir = @top_srcdir@
 VPATH = @srcdir@
-RTEMS_ROOT = @RTEMS_ROOT@
+RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
-RTEMS_CUSTOM = $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 
 CPU_OBJS=$(wildcard ../../score/cpu/$(RTEMS_CPU)/$(ARCH)/*.rel)
 CORE_OBJS=$(wildcard ../../score/src/$(ARCH)/*.o)
@@ -18,7 +16,7 @@ RTEMS_OBJS=$(wildcard ../../rtems/src/$(ARCH)/*.o)
 OBJS=$(CPU_OBJS) $(CORE_OBJS) $(RTEMS_OBJS) $(SAPI_OBJS)
 LIB=$(ARCH)/librtems.a
 
-include $(RTEMS_CUSTOM)
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/lib.cfg
 
 #

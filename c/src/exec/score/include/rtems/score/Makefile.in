@@ -4,11 +4,9 @@
 
 @SET_MAKE@
 srcdir = @srcdir@
-top_srcdir = @top_srcdir@
 VPATH = @srcdir@
-RTEMS_ROOT = @RTEMS_ROOT@
+RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
-RTEMS_CUSTOM = $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 
 # H_FILES that get installed in the rtems/score subdirectoy
 H_PIECES= address apiext bitfield chain context copyrt coremsg coremutex \
@@ -30,7 +28,7 @@ NET_H_FILES=$(NET_H_PIECES:%=$(srcdir)/%.h)
 
 SRCS=$(H_FILES) $(SAPI_H_FILES) $(EXTERNAL_H_FILES)
 
-include $(RTEMS_CUSTOM)
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 #

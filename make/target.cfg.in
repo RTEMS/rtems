@@ -1,6 +1,6 @@
 #
 #
-# Target specific settings. To be included in application Makefiles.
+# Target specific settings. 
 #
 
 prefix = @prefix@
@@ -36,8 +36,6 @@ export AR
 export SIZE
 export OBJCOPY
 
-
-RTEMS_ROOT = @RTEMS_ROOT@
 RTEMS_HOST = @RTEMS_HOST@
 RTEMS_USE_OWN_PDIR = @RTEMS_USE_OWN_PDIR@
 RTEMS_HAS_POSIX_API = @RTEMS_HAS_POSIX_API@
@@ -46,7 +44,6 @@ RTEMS_HAS_CPLUSPLUS = @RTEMS_HAS_CPLUSPLUS@
 RTEMS_USE_MACROS = @RTEMS_USE_MACROS@
 RTEMS_USE_GCC272 = @RTEMS_USE_GCC272@
 RTEMS_LIBC_DIR = @RTEMS_LIBC_DIR@
-RTEMS_CUSTOM = $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 
 INSTALL=$(PROJECT_ROOT)/$(RTEMS_BSP)/build-tools/install-if-change
 XCFLAGS=$(CFLAGS_FOR_TARGET)
