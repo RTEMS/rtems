@@ -12,11 +12,13 @@ LIBNAME=librtcio.a
 LIB=${ARCH}/${LIBNAME}
 
 C_PIECES=\
+  rtcprobe m48t08
 
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
-INSTALLED_H_FILES=$(srcdir)/rtc.h
+INSTALLED_H_FILES=$(srcdir)/rtc.h $(srcdir)/m48t08.h
+
 SRCS=$(C_FILES) $(H_FILES) $(SYS_H_FILES) $(RTEMS_H_FILES) $(PRIVATE_H_FILES)
 OBJS=$(C_O_FILES)
 

@@ -20,11 +20,9 @@
  *  Types for get and set register routines
  */
 
-typedef unsigned8 (*getRegister_f)(unsigned32 port, unsigned8 register);
-typedef void      (*setRegister_f)(
-                            unsigned32 port, unsigned8 reg, unsigned8 value);
-typedef unsigned8 (*getData_f)(unsigned32 port);
-typedef void      (*setData_f)(unsigned32 port, unsigned8 value);
+typedef unsigned32 (*getRegister_f)(unsigned32 port, unsigned8 register);
+typedef void       (*setRegister_f)(
+                            unsigned32 port, unsigned8 reg, unsigned32 value);
 
 typedef struct _rtc_fns {
   boolean (*deviceProbe)(int minor);
@@ -78,6 +76,9 @@ typedef struct _rtc_tbl {
 
 extern rtc_tbl        RTC_Port_Tbl[];
 extern unsigned long  RTC_Port_Count;
+
+
+boolean rtc_probe( int minor );
 
 #endif
 /* end of include file */
