@@ -1,3 +1,7 @@
+2001-04-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Add [-ansi -fasm] to RTEMS_PROG_CC_FOR_TARGET.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am, include/itronsys/Makefile.am,
