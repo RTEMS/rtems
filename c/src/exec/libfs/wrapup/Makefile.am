@@ -2,7 +2,7 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.5
 
 LIBNAME = libfs
 LIB = $(ARCH)/$(LIBNAME).a
@@ -13,7 +13,9 @@ include $(top_srcdir)/../../../automake/lib.am
 
 IMFSLIB = ../src/imfs/$(ARCH)/libimfs.a
 
+if !UNIX
 DOSFSLIB = ../src/dosfs/$(ARCH)/libdosfs.a
+endif
 
 TMP_LIBS = $(IMFSLIB) $(DOSFSLIB)
 
