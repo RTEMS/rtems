@@ -22,7 +22,7 @@ extern "C" {
 
 #include <rtems/score/m68k.h>              /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/score/m68ktypes.h>
+#include <rtems/score/types.h>
 #endif
 
 /* conditional compilation parameters */

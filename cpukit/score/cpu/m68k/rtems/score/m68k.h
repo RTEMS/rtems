@@ -230,7 +230,7 @@ extern "C" {
 #endif
 
 #ifndef ASM
-#include <rtems/score/m68ktypes.h>
+#include <rtems/score/types.h>
 #endif
 
 /*

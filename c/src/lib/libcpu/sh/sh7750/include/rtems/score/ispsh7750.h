@@ -45,7 +45,7 @@
 extern "C" {
 #endif
 
-#include <rtems/score/shtypes.h>
+#include <rtems/score/types.h>
 
 /* dummy ISP */
 extern void _dummy_isp( void );
