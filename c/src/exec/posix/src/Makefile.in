@@ -29,8 +29,16 @@ PTHREAD_PIECES=\
   pthreadattrgetinheritsched pthreadattrsetinheritsched \
   pthreadattrgetscope pthreadattrsetscope
 
-C_PIECES= adasupp cond getpid key mutex $(PTHREAD_PIECES) psignal sched time \
+PSIGNAL_PIECES=\
+  psignal alarm kill killinfo pause pthreadkill pthreadsigmask \
+  sigaction sigaddset sigdelset sigemptyset sigfillset sigismember \
+  sigpending sigprocmask sigqueue sigsuspend sigtimedwait sigwait \
+  sigwaitinfo
+
+C_PIECES= adasupp cond getpid key mutex $(PTHREAD_PIECES) \
+  $(PSIGNAL_PIECES) sched time \
   types unistd $(ENOSYS_C_PIECES)
+
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
