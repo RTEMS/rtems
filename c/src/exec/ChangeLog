@@ -1,3 +1,19 @@
+2001-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use AS_IF instead of if/then/else.
+	Add AC_DEFINE_UNQUOTED(RTEMS_UNIX) for RTEMS_CPU==unix.
+	Add AC_DEFINE_UNQUOTED(RTEMS_UNIXLIB) for RTEMS_CPU==unix.
+	Add include/Makefile to CONFIG_FILES.
+	Add AC_ENABLE_MULITLIB.
+	Remove wrapup/rtems, wrapup/itron, wrapup/posix.
+	Remove */optman/Makefile from CONFIG_FILES.
+	* Makefile.am: Add include to SUBDIRS.
+	* rtems/Makefile.am: Remove optman from SUBDIRS.
+	* sapi/Makefile.am: Remove optman from SUBDIRS.
+	* include/Makefile.am: New file.
+	* include/rtems/bspIo.h: Relocated from lib/include.
+	* include/rtems/libio_.h: Relocated from lib/include.
+
 2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/posix/Makefile.am: Add multilib support.
