@@ -1,3 +1,10 @@
+2001-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add RTEMS_BSPOPTS_*(CPU_CLOCK_RATE_HZ),
+	RTEMS_BSPOPTS_*(START_HW_INIT),
+	RTEMS_BSPOPTS_*(STANDALONE_EVB).
+	* wrapup/Makefile.am: Apply RTEMS_CPU_MODEL to pickup CPU_PIECES.
+
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* startup/Makefile.am: Remove AC_CFLAGS, HZ.
