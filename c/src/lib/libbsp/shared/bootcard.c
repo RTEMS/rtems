@@ -26,6 +26,12 @@ extern rtems_configuration_table  Configuration;
 extern rtems_configuration_table  BSP_Configuration;
 extern rtems_cpu_table            Cpu_table;
 
+/* Initialize C++ global Ctor/Dtor and initializes exception handling. */
+#ifdef USE_INIT_FINI 
+extern void _fini( void );
+extern void _init( void );
+#endif
+
 rtems_interrupt_level bsp_isr_level;
 
 /*
@@ -79,6 +85,10 @@ int boot_card(int argc, char **argv)
    *  Call main() and get the global constructors invoked if there
    *  are any.
    */
+#ifdef USE_INIT_FINI 
+   atexit( _fini );
+   _init();
+#endif
 
   status = main(argc, argv);
 
