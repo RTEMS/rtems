@@ -426,7 +426,7 @@ the required source is installed.
 cd <RPM_ROOT_DIRECTORY>/RPMS/i386
 rpm -i rtems-base-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
 rpm -i i386-rtems-binutils-@value{BINUTILSVERSION}-@value{BINUTILSRPMRELEASE}.i386.rpm
-export PATH=/opt/rtems/bin:$PATH
+export PATH=@value{RTEMSPREFIX}/bin:$PATH
 cd <RPM_ROOT_DIRECTORY>/SPECS
 rpm -bb i386-rtems-gcc-@value{GCCVERSION}-newlib-@value{NEWLIBVERSION}.spec
 @end example
@@ -485,7 +485,7 @@ sparc-rtems target:
 mkdir b-binutils
 cd b-binutils
 ../@value{BINUTILSUNTAR}/configure --target=sparc-rtems \
-  --prefix=/opt/rtems
+  --prefix=@value{RTEMSPREFIX}
 make all
 make info
 make install
@@ -504,7 +504,7 @@ the binutils has been installed in. This the prefix used above with
 @file{bin} post-fixed.
 
 @example
-export PATH=$PATH:/opt/rtems/bin
+export PATH=$PATH:@value{RTEMSPREFIX}/bin
 @end example
 
 Failure to have the binutils in the path will cause the GCC and NEWLIB
@@ -545,7 +545,7 @@ mkdir b-gcc
 cd b-gcc
 ../@value{GCCUNTAR}/configure --target=sparc-rtems \
    --with-gnu-as --with-gnu-ld --with-newlib --verbose \
-   --enable-threads --prefix=/opt/rtems
+   --enable-threads --prefix=@value{RTEMSPREFIX}
 make all
 make info
 make install
@@ -785,7 +785,7 @@ m68k-rtems target:
 mkdir b-gdb
 cd b-gdb
 ../@value{GDBUNTAR}/configure --target=m68k-rtems \
-  --prefix=/opt/rtems
+  --prefix=@value{RTEMSPREFIX}
 make all
 make info
 make install

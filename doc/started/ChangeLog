@@ -1,3 +1,20 @@
+2003-08-30	Ralf Corsepius <corsepius@faw.uni-ulm.de>
+
+	* started.texi: include common/rtems.texi.
+	* Makefile.am: Reflect changes to $(top_srcdir)/project.am.
+	* binaries.t: Fix list of supported binary packages.
+	Comment out references to cygwin rpms.
+	Fix definition of RPM. Add Java to optional langs.
+	Use RTEMSPREFIX instead of /opt/rtems.
+	* buildc.t: Use RTEMSPREFIX instead of /opt/rtems.
+	* buildrt.t: Various minor fixes.
+	Use --disable-networking instead of --disable-tcpip.
+	Use RTEMSPREFIX instead of /opt/rtems.
+	* nextstep.t: Remove some more refs to oarcorp.com.
+	Use RTEMSHTTPURL instead of www.rtems.com.
+	* started/tversions.texi.in: Use @value{VERSION} instead of
+	hard-coded "4.6.0"
+
 2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* tversions.texi: Remove.

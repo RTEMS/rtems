@@ -16,8 +16,7 @@ include $(top_srcdir)/main.am
 GENERATED_FILES = binaries.texi buildc.texi buildrt.texi intro.texi \
     nt.texi require.texi nextstep.texi sample.texi
 
-COMMON_FILES = $(top_srcdir)/common/setup.texi \
-    $(top_srcdir)/common/cpright.texi
+COMMON_FILES += $(top_srcdir)/common/cpright.texi
 
 FILES =
 

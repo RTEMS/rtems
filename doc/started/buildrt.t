@@ -131,10 +131,12 @@ This section describes how to build RTEMS.
 @subsection Using the RTEMS configure Script Directly
 
 Make a build directory under tools and build the RTEMS product in this
-directory. The ../@value{RTEMSUNTAR}/configure
+directory. The @code{../@value{RTEMSUNTAR}/configure}
 command has numerous command line
 arguments. These arguments are discussed in detail in documentation that
-comes with the RTEMS distribution. If you followed the procedure
+comes with the RTEMS distribution. A full list of these arguments can be
+obtained by running @code{../@value{RTEMSUNTAR}/configure --help}
+If you followed the procedure
 described in the section @ref{Unarchive the RTEMS Source}, these
 configuration options can be found in the file
 tools/@value{RTEMSUNTAR}/README.configure.
@@ -152,7 +154,7 @@ the @code{BOARD_SUPPORT_PACKAGE} board.
 mkdir build-rtems
 cd build-rtems
 ../@value{RTEMSUNTAR}/configure --target=<TARGET_CONFIGURATION> \
-    --disable-posix --disable-tcpip --disable-cxx \
+    --disable-posix --disable-networking --disable-cxx \
     --enable-rtemsbsp=<BOARD_SUPPORT_PACKAGE>\
     --prefix=<INSTALL_POINT>
 make all install
@@ -163,7 +165,7 @@ Where the list of currently supported <TARGET_CONFIGURATION>'s and
 tools/@value{RTEMSUNTAR}/README.configure.
 
 <INSTALL_POINT> is typically the installation point for the 
-tools and is @code{/opt/rtems} when using prebuilt toolset executables.
+tools and defaults to @code{@value{RTEMSPREFIX}}.
 
 BSP is a supported BSP for the selected CPU family.  The list of
 supported BSPs may be found in the file
@@ -174,4 +176,3 @@ then all supported BSPs for the selected CPU family will be built.
 @b{NOTE:}  The POSIX API must be enabled to use GNAT/RTEMS.
 
 @b{NOTE:} The @code{make} utility used should be GNU make.
-

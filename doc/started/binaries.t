@@ -12,17 +12,17 @@ Precompiled toolsets are available for Linux, Cygwin, FreeBSD,
 and Solaris.  These are packaged in the following formats:
 
 @itemize @bullet
-@item Linux - RPM and Debian
-@item Cygwin - RPM and zipped tar
-@item FreeBSD - native package
-@item Solaris - RPM and zipped tar
+@item Linux - RPM
+@item Cygwin - tar.bz2
+@item Solaris - tar.bz2
 @end itemize
 
-RPM is an acronym for the RedHat Package Manager.  RPM is the
+RPM is an acronym for the RPM Package Manager.  RPM is the
 native package installer for many Linux distributions including
-RedHat and SuSE.  RPM supports other operating systems including
-Cygwin.  @uref{mailto:D.J@@fiddes.surfaid.org,David Fiddes <D.J@@fiddes.surfaid.org>}
-did the initial groundwork that lead to Cygwin RPMs being available.
+RedHat and SuSE.
+@c RPM supports other operating systems including
+@c Cygwin.  @uref{mailto:D.J@@fiddes.surfaid.org,David Fiddes <D.J@@fiddes.surfaid.org>}
+@c did the initial groundwork that lead to Cygwin RPMs being available.
 
 The prebuilt binaries are intended to be easy to install and
 the instructions are similar regardless of the host environment.  
@@ -39,8 +39,8 @@ across all target architectures.   These are referred to as
 "base" packages.
 
 @item If buildable for a particular CPU, RPMs are provided for 
-Chill, Java (gcj), Fortran (g77), and Objective-C (objc).  These
-binaries are strictly optional.
+Ada (gnat), Chill, Java (gcj), Fortran (g77), and Objective-C (objc).
+These binaries are strictly optional.
 
 @end enumerate
 
@@ -68,8 +68,8 @@ rpm -i sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.i386.rpm
 
 Upon successful completion of the above command sequence, a 
 C/C++ cross development toolset targeting the SPARC is
-installed in @code{/opt/rtems}.  In order to use this toolset,
-the directory @code{/opt/rtems/bin} must be included in your
+installed in @code{@value{RTEMSPREFIX}}.  In order to use this toolset,
+the directory @code{@value{RTEMSPREFIX}/bin} must be included in your
 PATH.
 
 Once you have successfully installed the RPMs for BINUTILS, GCC,
@@ -124,14 +124,14 @@ tar xzf sparc-rtems-gdb-@value{GDBVERSION}-@value{GDBRPMRELEASE}.tgz
 
 Upon successful completion of the above command sequence, a
 C/C++ cross development toolset targeting the SPARC is
-installed in @code{/opt/rtems}.  In order to use this toolset,
-the directory @code{/opt/rtems/bin} must be included in your
+installed in @code{@value{RTEMSPREFIX}}.  In order to use this toolset,
+the directory @code{@value{RTEMSPREFIX}} must be included in your
 PATH.
 
 @subsection Removing Zipped Tar Files
 
 There is no automatic way to remove the contents of a @code{tgz} once
-it is installed.  The contents of the directory @code{/opt/rtems}
+it is installed.  The contents of the directory @code{@value{RTEMSPREFIX}}
 can be removed but this will likely result in other packages
 being removed as well.
 

@@ -84,8 +84,8 @@
 @c  RTEMS Version
 @c
 
-@set RTEMSVERSION   RTEMS 4.6.0
-@set RTEMSUNTAR     rtems-4.6.0
+@set RTEMSVERSION   RTEMS @value{VERSION}
+@set RTEMSUNTAR     rtems-@value{VERSION}
 @set RTEMSTAR       @value{RTEMSUNTAR}.tar.bz2
 @set RTEMSFTPSITE   ftp.rtems.com
-@set RTEMSFTPDIR    /pub/rtems/releases/4.6.0
+@set RTEMSFTPDIR    /pub/rtems/releases/@value{VERSION}
