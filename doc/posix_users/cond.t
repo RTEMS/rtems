@@ -15,16 +15,16 @@ The condition variable manager ...
 The directives provided by the condition variable manager are:
 
 @itemize @bullet
-@item @code{pthread_condattr_init} - 
-@item @code{pthread_condattr_destroy} - 
-@item @code{pthread_condattr_setpshared} - 
-@item @code{pthread_condattr_getpshared} - 
-@item @code{pthread_cond_init} - 
-@item @code{pthread_cond_destroy} - 
-@item @code{pthread_cond_signal} - 
-@item @code{pthread_cond_broadcast} - 
-@item @code{pthread_cond_wait} - 
-@item @code{pthread_cond_timedwait} - 
+@item @code{pthread_condattr_init} - Initialize a Condition Variable Attribute Set
+@item @code{pthread_condattr_destroy} - Destroy a Condition Variable Attribute Set
+@item @code{pthread_condattr_setpshared} - Set Process Shared Attribute
+@item @code{pthread_condattr_getpshared} - Get Process Shared Attribute
+@item @code{pthread_cond_init} - Initialize a Condition Variable
+@item @code{pthread_cond_destroy} - Destroy a Condition Variable
+@item @code{pthread_cond_signal} - Signal a Condition Variable
+@item @code{pthread_cond_broadcast} - Broadcast a Condition Variable
+@item @code{pthread_cond_wait} - Wait on a Condition Variable
+@item @code{pthread_cond_timedwait} - With with Timeout a Condition Variable
 @end itemize
 
 @section Background
@@ -43,7 +43,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection pthread_condattr_init - 
+@subsection pthread_condattr_init - Initialize a Condition Variable Attribute Set
 
 @subheading CALLING SEQUENCE:
 
@@ -68,7 +68,7 @@ attributes object.
 @subheading NOTES:
 
 @page
-@subsection pthread_condattr_destroy - 
+@subsection pthread_condattr_destroy - Destroy a Condition Variable Attribute Set
 
 @subheading CALLING SEQUENCE:
 
@@ -92,7 +92,7 @@ The attribute object specified is invalid.
 @subheading NOTES:
 
 @page
-@subsection pthread_condattr_setpshared - 
+@subsection pthread_condattr_setpshared - Set Process Shared Attribute
 
 @subheading CALLING SEQUENCE:
 
@@ -118,7 +118,7 @@ Invalid argument passed.
 @subheading NOTES:
 
 @page
-@subsection pthread_condattr_getpshared - 
+@subsection pthread_condattr_getpshared - Get Process Shared Attribute
 
 @subheading CALLING SEQUENCE:
 
@@ -145,7 +145,7 @@ Invalid argument passed.
 
 
 @page
-@subsection pthread_cond_init - 
+@subsection pthread_cond_init - Initialize a Condition Variable
 
 @subheading CALLING SEQUENCE:
 
@@ -180,7 +180,7 @@ The specified attribute value is invalid.
 @subheading NOTES:
 
 @page
-@subsection pthread_cond_destroy - 
+@subsection pthread_cond_destroy - Destroy a Condition Variable
 
 @subheading CALLING SEQUENCE:
 
@@ -207,7 +207,7 @@ The specified condition variable is currently in use.
 @subheading NOTES:
 
 @page
-@subsection pthread_cond_signal - 
+@subsection pthread_cond_signal - Signal a Condition Variable
 
 @subheading CALLING SEQUENCE:
 
@@ -234,7 +234,7 @@ This routine should not be invoked from a handler from an asynchronous signal
 handler or an interrupt service routine.
 
 @page
-@subsection pthread_cond_broadcast - 
+@subsection pthread_cond_broadcast - Broadcast a Condition Variable
 
 @subheading CALLING SEQUENCE:
 
@@ -261,7 +261,7 @@ This routine should not be invoked from a handler from an asynchronous signal
 handler or an interrupt service routine.
 
 @page
-@subsection pthread_cond_wait - 
+@subsection pthread_cond_wait - Wait on a Condition Variable
 
 @subheading CALLING SEQUENCE:
 
@@ -289,7 +289,7 @@ the mutex was not owned by the current thread at the time of the call.
 @subheading NOTES:
 
 @page
-@subsection pthread_cond_timedwait - 
+@subsection pthread_cond_timedwait - Wait with Timeout a Condition Variable
 
 @subheading CALLING SEQUENCE:
 

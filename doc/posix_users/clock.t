@@ -15,11 +15,11 @@ The clock manager ...
 The directives provided by the clock manager are:
 
 @itemize @bullet
-@item @code{clock_gettime} - 
-@item @code{clock_settime} -
-@item @code{clock_getres} -
+@item @code{clock_gettime} - Obtain Time of Day
+@item @code{clock_settime} - Set Time of Day
+@item @code{clock_getres} - Get Clock Resolution
 @item @code{sleep} - Delay Process Execution
-@item @code{nanosleep} -
+@item @code{nanosleep} - Delay with High Resolution
 @item @code{gettimeofday} - Get the Time of Day
 @item @code{time} - Get time in seconds
 @end itemize
@@ -39,7 +39,7 @@ A subsection is dedicated to each of this manager's directives
 and describes the calling sequence, related constants, usage,
 and status codes.
 
-@subsection clock_gettime -
+@subsection clock_gettime -Obtain Time of Day
 
 @subheading CALLING SEQUENCE:
 
@@ -71,7 +71,7 @@ The clock_id specified is invalid.
 NONE
 
 @page
-@subsection clock_settime -
+@subsection clock_settime - Set Time of Day
  
 @subheading CALLING SEQUENCE:
  
@@ -107,7 +107,7 @@ The contents of the tp structure are invalid.
 NONE
  
 @page
-@subsection clock_getres -
+@subsection clock_getres - Get Clock Resolution
  
 @subheading CALLING SEQUENCE:
  
@@ -166,7 +166,7 @@ number of @code{seconds}.
 This call is interruptible by a signal.
  
 @page
-@subsection nanosleep -
+@subsection nanosleep - Delay with High Resolution
  
 @subheading CALLING SEQUENCE:
  

@@ -16,11 +16,12 @@ thread cancellation manager is ...
 The directives provided by the thread cancellation manager are:
 
 @itemize @bullet
-@item @code{pthread_cancel} - 
-@item @code{pthread_setcancelstate} - 
-@item @code{pthread_setcanceltype} - 
-@item @code{pthread_testcancel} - 
-@item @code{pthread_cleanup_push} - 
+@item @code{pthread_cancel} - Cancel Execution of a Thread
+@item @code{pthread_setcancelstate} - Set Cancelability State
+@item @code{pthread_setcanceltype} - Set Cancelability Type
+@item @code{pthread_testcancel} - Create Cancellation Point
+@item @code{pthread_cleanup_push} - Establish Cancellation Handler
+@item @code{pthread_cleanup_pop} - Remove Cancellation Handler
 @end itemize
 
 @section Background
@@ -39,7 +40,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection pthread_cancel - 
+@subsection pthread_cancel - Cancel Execution of a Thread
 
 @subheading CALLING SEQUENCE:
 
@@ -66,7 +67,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection pthread_setcancelstate - 
+@subsection pthread_setcancelstate - Set Cancelability State
 
 @subheading CALLING SEQUENCE:
 
@@ -93,7 +94,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection pthread_setcanceltype - 
+@subsection pthread_setcanceltype - Set Cancelability Type
 
 @subheading CALLING SEQUENCE:
 
@@ -120,7 +121,7 @@ The
 @subheading NOTES:
 
 @page
-@subsection pthread_testcancel - 
+@subsection pthread_testcancel - Create Cancellation Point
 
 @subheading CALLING SEQUENCE:
 
@@ -147,7 +148,34 @@ The
 @subheading NOTES:
 
 @page
-@subsection pthread_cleanup_push - 
+@subsection pthread_cleanup_push - Establish Cancellation Handler
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+int pthread_cleanup_push(
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item E
+The
+
+@end table
+
+@subheading DESCRIPTION:
+
+@subheading NOTES:
+
+@page
+@subsection pthread_cleanup_pop - Remove Cancellation Handler
 
 @subheading CALLING SEQUENCE:
 
