@@ -29,6 +29,20 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 RTEMS_CONFIG_BUILD_SUBDIRS(tools)
 
+# bsp-specific options
+RTEMS_BSPOPTS_SET([LOAD_RTC_AT_START],[*],[1])
+RTEMS_BSPOPTS_HELP([LOAD_RTC_AT_START],
+[Initialize RTC and load into system clock at startup. This will break
+some tests.])
+
+RTEMS_BSPOPTS_SET([BSP_DEBUG],[*],[])
+RTEMS_BSPOPTS_HELP([BSP_DEBUG],
+[Enables some debugging in the BSP package.])
+
+RTEMS_BSPOPTS_SET([UARTDEBUG],[*],[])
+RTEMS_BSPOPTS_HELP([UARTDEBUG],
+[Enables some debugging in the BSP's uart.])
+
 AM_CONFIG_HEADER(include/bspopts.h)
 RTEMS_PROJECT_ROOT
 
@@ -44,5 +58,3 @@ network/Makefile
 timer/Makefile
 wrapup/Makefile])
 AC_OUTPUT
-
-RTEMS_OUTPUT_BUILD_SUBDIRS(RTEMS_BUILD_SUBDIRS)
