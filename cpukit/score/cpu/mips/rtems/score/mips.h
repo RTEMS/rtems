@@ -140,6 +140,78 @@ extern "C" {
   } while (0)
 
 
+
+
+/*
+ *  Access the Debug Cache Invalidate Control register
+ */
+
+#define mips_get_dcic( _x ) \
+  do { \
+    asm volatile( "mfc0 %0, $7; nop" : "=r" (_x) : ); \
+  } while (0)
+
+
+#define mips_set_dcic( _x ) \
+  do { \
+    register unsigned int __x = (_x); \
+    asm volatile( "mtc0 %0, $7; nop" : : "r" (__x) ); \
+  } while (0)
+
+
+
+
+/*
+ *  Access the Breakpoint Program Counter & Mask registers 
+ *  (_x for BPC, _y for mask)
+ */
+
+#define mips_get_bpcrm( _x, _y ) \
+  do { \
+    asm volatile( "mfc0 %0, $3; nop" : "=r" (_x) : ); \
+    asm volatile( "mfc0 %0, $11; nop" : "=r" (_y) : ); \
+  } while (0)
+
+
+#define mips_set_bpcrm( _x, _y ) \
+  do { \
+    register unsigned int __x = (_x); \
+    register unsigned int __y = (_y); \
+    asm volatile( "mtc0 %0, $11; nop" : : "r" (__y) ); \
+    asm volatile( "mtc0 %0, $3; nop" : : "r" (__x) ); \
+  } while (0)
+
+
+
+
+
+
+/*
+ *  Access the Breakpoint Data Address & Mask registers 
+ *  (_x for BDA, _y for mask)
+ */
+
+#define mips_get_bdarm( _x, _y ) \
+  do { \
+    asm volatile( "mfc0 %0, $5; nop" : "=r" (_x) : ); \
+    asm volatile( "mfc0 %0, $9; nop" : "=r" (_y) : ); \
+  } while (0)
+
+
+#define mips_set_bdarm( _x, _y ) \
+  do { \
+    register unsigned int __x = (_x); \
+    register unsigned int __y = (_y); \
+    asm volatile( "mtc0 %0, $9; nop" : : "r" (__y) ); \
+    asm volatile( "mtc0 %0, $5; nop" : : "r" (__x) ); \
+  } while (0)
+
+
+
+
+
+
+
 /*
  *  Access FCR31
  */

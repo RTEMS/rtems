@@ -124,7 +124,7 @@
 #define FP_OFFSET 9
 #define RA_OFFSET 10
 #define C0_SR_OFFSET 11
-/* #define C0_EPC_OFFSET 12 */
+#define C0_EPC_OFFSET 12
 
 /* NOTE: these constants must match the Context_Control_fp structure in cpu.h */
 #define FP0_OFFSET  0 
@@ -160,7 +160,11 @@
 #define FP30_OFFSET 30 
 #define FP31_OFFSET 31 
 
+	
+ASM_EXTERN(__exceptionStackFrame, SZ_INT)
 
+	
+		
 /*
  *  _CPU_Context_save_fp_context
  *
@@ -386,6 +390,32 @@ FRAME(_CPU_Context_switch,sp,0,ra)
         STREG s6,S6_OFFSET*R_SZ(a0)
         STREG s7,S7_OFFSET*R_SZ(a0)
 
+	
+	/* 
+	** this code grabs the userspace EPC if we're dispatching from
+	** an interrupt frame or fakes an address as the EPC if we're
+	** not.  This is for the gdbstub's benefit so it can know
+	**  where each thread is running.
+	**
+	** Its value is only set when calling threadDispatch from
+	** the interrupt handler and is cleared immediately when this 
+	** routine gets it.
+	*/
+	
+	la	t0,__exceptionStackFrame	/* see if we're coming in from an exception */
+	LDREG	t1, (t0)
+	NOP
+	beqz	t1,1f
+
+	STREG	zero, (t0)			/* and clear it */
+	NOP
+	LDREG	t0,R_EPC*R_SZ(t1)		/* get the userspace EPC from the frame */
+	b	2f
+		
+1:	la    t0,_Thread_Dispatch		/* if ==0, we're switched out */
+
+2:	STREG   t0,C0_EPC_OFFSET*R_SZ(a0)
+	
 
 _CPU_Context_switch_restore:
 	LDREG ra,RA_OFFSET*R_SZ(a1)		/* restore context */
@@ -502,6 +532,33 @@ ASM_EXTERN(_Thread_Executing,SZ_INT)
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
 
+
+	
+
+
+/*  void _DBG_Handler()
+ *
+ *  This routine services the (at least) MIPS1 debug vector,
+ *  only used the the hardware debugging features.  This code,
+ *  while optional, is best located here because its intrinsically
+ *  associated with exceptions in general & thus tied pretty
+ *  closely to _ISR_Handler.
+ *
+ */
+
+
+FRAME(_DBG_Handler,sp,0,ra)
+        .set noreorder
+	la	k0,_ISR_Handler
+	j	k0
+	NOP
+	.set reorder
+ENDFRAME(_DBG_Handler)
+
+
+
+
+	
 /*  void __ISR_Handler()
  *
  *  This routine provides the RTEMS interrupt management.
@@ -561,6 +618,7 @@ FRAME(_ISR_Handler,sp,0,ra)
         STREG gp, R_GP*R_SZ(sp)
         STREG t0, R_MDHI*R_SZ(sp) 
         STREG fp, R_FP*R_SZ(sp)
+	
         .set noat
         STREG AT, R_AT*R_SZ(sp)
         .set at
@@ -579,16 +637,16 @@ FRAME(_ISR_Handler,sp,0,ra)
 	
 	/* determine if an interrupt generated this exception */
 
-        MFC0     k0,C0_CAUSE
+        MFC0     t0,C0_CAUSE
 	NOP
 
-	and      k1,k0,CAUSE_EXCMASK
-        beq      k1, 0, _ISR_Handler_1
+	and      t1,t0,CAUSE_EXCMASK
+        beq      t1, 0, _ISR_Handler_1
 
 _ISR_Handler_Exception:
 
 	/*
-	sw	k0,0x8001FF00
+	sw	t0,0x8001FF00
 	sw	t1,0x8001FF04
 	*/
 	
@@ -600,19 +658,19 @@ _ISR_Handler_Exception:
          *  NOTE: This is the path the debugger stub will take.
          */
 
-	/* already got k0 = cause in the interrupt test above */
-        STREG    k0,R_CAUSE*R_SZ(sp)
+	/* already got t0 = cause in the interrupt test above */
+        STREG    t0,R_CAUSE*R_SZ(sp)
 
-        STREG    sp,SP_OFFSET*R_SZ(sp)     /* save sp */
-
-        STREG    s0,S0_OFFSET*R_SZ(sp)     /* save s0 - s7 */
-        STREG    s1,S1_OFFSET*R_SZ(sp)
-        STREG    s2,S2_OFFSET*R_SZ(sp)
-        STREG    s3,S3_OFFSET*R_SZ(sp)
-        STREG    s4,S4_OFFSET*R_SZ(sp)
-        STREG    s5,S5_OFFSET*R_SZ(sp)
-        STREG    s6,S6_OFFSET*R_SZ(sp)
-        STREG    s7,S7_OFFSET*R_SZ(sp)
+        STREG	 sp, R_SP*R_SZ(sp)
+	
+        STREG    s0,R_S0*R_SZ(sp)     /* save s0 - s7 */
+        STREG    s1,R_S1*R_SZ(sp)
+        STREG    s2,R_S2*R_SZ(sp)
+        STREG    s3,R_S3*R_SZ(sp)
+        STREG    s4,R_S4*R_SZ(sp)
+        STREG    s5,R_S5*R_SZ(sp)
+        STREG    s6,R_S6*R_SZ(sp)
+        STREG    s7,R_S7*R_SZ(sp)
 
         /* CP0 special registers */
 
@@ -644,24 +702,39 @@ _ISR_Handler_Exception:
         jal	 mips_vector_exceptions
 	NOP
 
-	/* since we're returning, compute the address of the instruction we'll return to */
+	
+	/* 
+	** note, if the exception vector returns, rely on it to have
+	** adjusted EPC so we will return to some correct address.  If
+	** this is not done, we might get stuck in an infinite loop because 
+	** we'll return to the instruction where the exception occured and
+	** it could throw again.
+	**
+	** It is expected the only code using the exception processing is
+	** either the gdb stub or some user code which is either going to
+	** panic or do something useful.
+	*/
+
+	
+/* *********************************************************************
+	* compute the address of the instruction we'll return to *
 
 	LDREG	t1, R_CAUSE*R_SZ(sp)
 	LDREG	t0, R_EPC*R_SZ(sp)
 
-	/* first see if the exception happened in the delay slot */
+	* first see if the exception happened in the delay slot *
 	li	t3,CAUSE_BD
 	AND	t4,t1,t3
 	beqz	t4,excnodelay
 	NOP
 	
-	/* it did, now see if the branch occured or not */
+	* it did, now see if the branch occured or not *
 	li	t3,CAUSE_BT
 	AND	t4,t1,t3
 	beqz	t4,excnobranch
 	NOP
 	
-	/* branch was taken, we resume at the branch target */
+	* branch was taken, we resume at the branch target *
 	LDREG	t0, R_TAR*R_SZ(sp)
 	j	excreturn
 	NOP
@@ -675,8 +748,24 @@ excnodelay:
 excreturn:	
 	STREG	t0, R_EPC*R_SZ(sp)
 	NOP
+********************************************************************* */
+	
+
+ /* if we're returning into mips_break, move to the next instruction */
+	
+        LDREG	t0,R_EPC*R_SZ(sp)
+	la	t1,mips_break
+	xor	t2,t0,t1
+	bnez	t2,3f
+	
+	addu	t0,R_SZ
+	STREG	t0,R_EPC*R_SZ(sp)
+	NOP
+3:	
+
 	
 	
+		
 #if ( CPU_HARDWARE_FP == TRUE )
         MFC0     t0,C0_SR               /* FPU is enabled, restore state */
 	NOP
@@ -694,14 +783,14 @@ excreturn:
         MTC1     t1,C1_STATUS
 2:
 #endif
-        LDREG    s0,S0_OFFSET*R_SZ(sp)    /* restore s0 - s7 */
-        LDREG    s1,S1_OFFSET*R_SZ(sp)
-        LDREG    s2,S2_OFFSET*R_SZ(sp)
-        LDREG    s3,S3_OFFSET*R_SZ(sp)
-        LDREG    s4,S4_OFFSET*R_SZ(sp)
-        LDREG    s5,S5_OFFSET*R_SZ(sp)
-        LDREG    s6,S6_OFFSET*R_SZ(sp)
-        LDREG    s7,S7_OFFSET*R_SZ(sp)
+        LDREG    s0,R_S0*R_SZ(sp)    /* restore s0 - s7 */
+        LDREG    s1,R_S1*R_SZ(sp)
+        LDREG    s2,R_S2*R_SZ(sp)
+        LDREG    s3,R_S3*R_SZ(sp)
+        LDREG    s4,R_S4*R_SZ(sp)
+        LDREG    s5,R_S5*R_SZ(sp)
+        LDREG    s6,R_S6*R_SZ(sp)
+        LDREG    s7,R_S7*R_SZ(sp)
 
         /* do NOT restore the sp as this could mess up the world */
         /* do NOT restore the cause as this could mess up the world */
@@ -711,15 +800,15 @@ excreturn:
 
 _ISR_Handler_1:
 
-        MFC0     k1,C0_SR
-        and      k0,CAUSE_IPMASK
-        and      k0,k1
+        MFC0     t1,C0_SR
+        and      t0,CAUSE_IPMASK
+        and      t0,t1
 
         /* external interrupt not enabled, ignore */
         /* but if it's not an exception or an interrupt, */
         /* Then where did it come from??? */
 	
-	beq      k0,zero,_ISR_Handler_exit
+	beq      t0,zero,_ISR_Handler_exit
 
 	
 	
@@ -794,10 +883,6 @@ _ISR_Handler_1:
 
 
 
-
-
-	
-
 	
   /*
    *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
@@ -838,13 +923,23 @@ _ISR_Handler_1:
 	or	t0, t1
         MTC0    t0, C0_SR
 	NOP
-			
+
+	/* save off our stack frame so the context switcher can get to it */
+	la	t0,__exceptionStackFrame
+	STREG	sp,(t0)
+					
         jal     _Thread_Dispatch
         NOP
 
+	/* and make sure its clear in case we didn't dispatch.  if we did, its
+	** already cleared */
+	la	t0,__exceptionStackFrame
+	STREG	zero,(t0)
+	NOP
+
 /* 
 ** turn interrupts back off while we restore context so
-** a badly timed interrupt won't accidentally mess up k0
+** a badly timed interrupt won't accidentally mess things up
 */
         MFC0    t0, C0_SR
 #if __mips == 3
@@ -888,12 +983,12 @@ _ISR_Handler_exit:
 	sw	t0, 0x8001FFFC
 #endif
 
-        LDREG k0, R_MDLO*R_SZ(sp)
+        LDREG t8, R_MDLO*R_SZ(sp)
         LDREG t0, R_T0*R_SZ(sp)
-        mtlo  k0
-        LDREG k0, R_MDHI*R_SZ(sp)           
+        mtlo  t8
+        LDREG t8, R_MDHI*R_SZ(sp)           
         LDREG t1, R_T1*R_SZ(sp)
-        mthi  k0
+        mthi  t8
         LDREG t2, R_T2*R_SZ(sp)
         LDREG t3, R_T3*R_SZ(sp)
         LDREG t4, R_T4*R_SZ(sp)
@@ -912,14 +1007,14 @@ _ISR_Handler_exit:
         LDREG v1, R_V1*R_SZ(sp)
         LDREG v0, R_V0*R_SZ(sp)
 	
-        LDREG     k0, R_EPC*R_SZ(sp)
+        LDREG     k1, R_EPC*R_SZ(sp)
 	
 	.set noat
         LDREG     AT, R_AT*R_SZ(sp)
         .set at
 
         ADDIU     sp,sp,EXCP_STACK_SIZE
-	j         k0
+	j         k1
 	rfe
         NOP
 
@@ -927,11 +1022,12 @@ _ISR_Handler_exit:
 ENDFRAME(_ISR_Handler)
 
 
+
 	
-		
 FRAME(mips_break,sp,0,ra)
         .set noreorder
-	break	0x0
+	break	0x0	/* this statement must be first in this function, assumed so by mips-stub.c */
+	NOP
         j	ra
         NOP
        .set    reorder

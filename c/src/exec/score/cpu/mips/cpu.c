@@ -47,6 +47,18 @@
 #include <rtems/score/wkspace.h>
 
 
+
+
+/* 
+** local dword used in cpu_asm to pass the exception stack frame to the
+** context switch code.
+*/
+unsigned __exceptionStackFrame = 0; 
+
+
+
+
+
 /*  _CPU_Initialize
  *
  *  This routine performs processor dependent initialization.

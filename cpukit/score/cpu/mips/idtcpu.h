@@ -58,7 +58,8 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 */
 #if  __mips == 1
 #define	UT_VEC	K0BASE			/* utlbmiss vector */
-#define E_VEC	(K0BASE+0x80)		/* exception vevtor */
+#define DB_VEC  (K0BASE+0x40)           /* debug vector */
+#define E_VEC	(K0BASE+0x80)		/* exception vector */
 #elif  __mips == 3
 #define	T_VEC	(K0BASE+0x000)		/* tlbmiss vector */
 #define X_VEC	(K0BASE+0x080)		/* xtlbmiss vector */
@@ -253,6 +254,32 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #endif
 
 #if  __mips == 1
+
+
+/* definitions for Debug and Cache Invalidate control (DCIC) register bits */
+#define DCIC_TR		0x80000000	/* Trap enable */
+#define DCIC_UD		0x40000000	/* User debug enable */
+#define DCIC_KD		0x20000000	/* Kernel debug enable */
+#define DCIC_TE		0x10000000	/* Trace enable */
+#define DCIC_DW		0x08000000	/* Enable data breakpoints on write */
+#define DCIC_DR		0x04000000	/* Enable data breakpoints on read */
+#define DCIC_DAE	0x02000000	/* Enable data addresss breakpoints */
+#define DCIC_PCE	0x01000000	/* Enable instruction breakpoints */
+#define DCIC_DE		0x00800000	/* Debug enable */
+#define DCIC_DL		0x00008000	/* Data cache line invalidate */
+#define DCIC_IL		0x00004000	/* Instruction cache line invalidate */
+#define DCIC_D		0x00002000	/* Data cache invalidate enable */
+#define DCIC_I		0x00001000	/* Instr. cache invalidate enable */
+#define DCIC_T		0x00000020	/* Trace, set by CPU */
+#define DCIC_W		0x00000010	/* Write reference, set by CPU */
+#define DCIC_R		0x00000008	/* Read reference, set by CPU */
+#define DCIC_DA		0x00000004	/* Data address, set by CPU */
+#define DCIC_PC		0x00000002	/* Program counter, set by CPU */
+#define DCIC_DB		0x00000001	/* Debug, set by CPU */
+
+
+
+
 #define	SR_CUMASK	0xf0000000	/* coproc usable bits */
 #define	SR_CU3		0x80000000	/* Coprocessor 3 usable */
 #define	SR_CU2		0x40000000	/* Coprocessor 2 usable */

@@ -1,3 +1,15 @@
+2002-03-05	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* cpu_asm.S: Added support for the debug exception vector, cleaned
+	up the exception processing & exception return stuff.  Re-added
+	EPC in the task context structure so the gdb stub will know where
+	a thread is executing.  Should've left it there in the first place...
+	* idtcpu.h: Added support for the debug exception vector.
+	* cpu.c: Added ___exceptionTaskStack to hold a pointer to the
+	stack frame in an interrupt so context switch code can get the
+	userspace EPC when scheduling.
+	* rtems/score/cpu.h: Re-added EPC to the task context.
+
 2002-02-27	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* cpu_asm.S: Fixed exception return address, modified FP context

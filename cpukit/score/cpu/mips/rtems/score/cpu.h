@@ -385,7 +385,7 @@ typedef struct {
     __MIPS_REGISTER_TYPE fp;
     __MIPS_REGISTER_TYPE ra;
     __MIPS_REGISTER_TYPE c0_sr;
-/*    __MIPS_REGISTER_TYPE c0_epc; */
+    __MIPS_REGISTER_TYPE c0_epc;
 } Context_Control;
 
 /* WARNING: If this structure is modified, the constants in cpu.h
