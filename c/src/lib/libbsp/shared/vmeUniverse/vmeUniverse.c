@@ -69,7 +69,8 @@
 #endif
 
 typedef unsigned int pci_ulong;
-#define PCI_TO_LOCAL_ADDR(memaddr) ((pci_ulong)(memaddr) + PCI_MEM_BASE)
+#define PCI_TO_LOCAL_ADDR(memaddr) \
+    ((pci_ulong)(memaddr) + PCI_MEM_BASE_ADJUSTMENT)
 
 #elif defined(__vxworks)
 typedef unsigned long pci_ulong;

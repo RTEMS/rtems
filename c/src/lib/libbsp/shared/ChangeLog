@@ -1,3 +1,9 @@
+2004-11-16	Richard Campbell <richard.campbell@OARcorp.com>
+
+	* vmeUniverse/vmeUniverse.c: Use PCI_MEM_BASE_ADJUSTMENT because some
+	boards -- notably the MVME2100 -- return the physical address, not an
+	offset in PCI memory space.
+
 2004-10-13	Eric Norum <norume@aps.anl.gov>
 
 	PR 688/bsps
