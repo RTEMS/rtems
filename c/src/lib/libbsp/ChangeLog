@@ -1,3 +1,34 @@
+2004-01-07	Joel Sherrill <joel@OARcorp.com>
+
+	* mips64orion/.cvsignore, mips64orion/ChangeLog,
+	mips64orion/Makefile.am, mips64orion/README,
+	mips64orion/acinclude.m4, mips64orion/configure.ac,
+	mips64orion/p4000/.cvsignore, mips64orion/p4000/ChangeLog,
+	mips64orion/p4000/Makefile.am, mips64orion/p4000/README,
+	mips64orion/p4000/bsp_specs, mips64orion/p4000/configure.ac,
+	mips64orion/p4000/times, mips64orion/p4000/console/.cvsignore,
+	mips64orion/p4000/console/Makefile.am,
+	mips64orion/p4000/console/console.c, mips64orion/p4000/console/led.S,
+	mips64orion/p4000/include/.cvsignore,
+	mips64orion/p4000/include/bsp.h, mips64orion/p4000/include/coverhd.h,
+	mips64orion/p4000/liblnk/.cvsignore,
+	mips64orion/p4000/liblnk/Makefile.am,
+	mips64orion/p4000/liblnk/lnklib.S,
+	mips64orion/p4000/start/.cvsignore,
+	mips64orion/p4000/start/Makefile.am, mips64orion/p4000/start/start.S,
+	mips64orion/p4000/startup/.cvsignore,
+	mips64orion/p4000/startup/Makefile.am,
+	mips64orion/p4000/startup/bspclean.c,
+	mips64orion/p4000/startup/bspstart.c,
+	mips64orion/p4000/startup/ghlinkcmds,
+	mips64orion/p4000/startup/idtmem.S,
+	mips64orion/p4000/startup/idttlb.S,
+	mips64orion/p4000/startup/inittlb.c,
+	mips64orion/p4000/startup/linkcmds,
+	mips64orion/p4000/startup/setvec.c,
+	mips64orion/p4000/wrapup/.cvsignore,
+	mips64orion/p4000/wrapup/Makefile.am: Removed.
+
 2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* shmdr/addlq.c, shmdr/cnvpkt.c, shmdr/dump.c, shmdr/fatal.c,
