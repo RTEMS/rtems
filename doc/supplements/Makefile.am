@@ -3,7 +3,6 @@
 
 SUBDIRS = arm
 SUBDIRS += c4x 
-SUBDIRS += hppa1_1 
 SUBDIRS += i386
 SUBDIRS += i960
 SUBDIRS += m68k
