@@ -5,7 +5,6 @@
 BSP_FILES = startup console liblnk
 CPU_FILES = clock timer
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 

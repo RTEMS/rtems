@@ -10,7 +10,6 @@ OBJS = $(foreach piece, $(BSP_FILES), $(wildcard ../$(piece)/$(ARCH)/*.$(OBJEXT)
     $(foreach piece, $(CPU_FILES), ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/$(piece).rel)
 LIB = $(ARCH)/libbsp.a
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 

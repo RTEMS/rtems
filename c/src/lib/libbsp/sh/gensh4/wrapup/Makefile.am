@@ -15,7 +15,6 @@ OBJS = $(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
 
 LIB = $(ARCH)/libbsp.a
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../../automake/lib.am
 
