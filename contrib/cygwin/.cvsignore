@@ -1,6 +1,12 @@
+setup.cache
 aclocal.m4
 autom4te*.cache
 config.*
 configure
 Makefile
 Makefile.in
+i386-cygwin-binutils.spec
+i386-cygwin-gcc.spec
+i386-cygwin-libs.spec
+i386-cygwin-mingw.spec
+i386-cygwin-w32api.spec
