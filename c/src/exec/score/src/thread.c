@@ -197,7 +197,31 @@ void _Thread_Start_multitasking( void )
 
   _Thread_Executing = _Thread_Heir;
 
-  _Context_Switch( &_Thread_BSP_context, &_Thread_Executing->Registers );
+   /*
+    * Get the init task(s) running.
+    *
+    * Note: Thread_Dispatch() is normally used to dispatch threads.  As
+    *       part of its work, Thread_Dispatch() restores floating point
+    *       state for the heir task.
+    *
+    *       This code avoids Thread_Dispatch(), and so we have to restore
+    *       (actually initialize) the floating point state "by hand".
+    *
+    *       Ignore the CPU_USE_DEFERRED_FP_SWITCH because we must always
+    *       switch in the first thread if it is FP.
+    */
+ 
+
+#if ( CPU_HARDWARE_FP == TRUE )
+   /*
+    *  don't need to worry about saving BSP's floating point state
+    */
+
+   if ( _Thread_Heir->fp_context != NULL )
+     _Context_Restore_fp( &_Thread_Heir->fp_context );
+#endif
+
+  _Context_Switch( &_Thread_BSP_context, &_Thread_Heir->Registers );
 }
 
 /*PAGE
