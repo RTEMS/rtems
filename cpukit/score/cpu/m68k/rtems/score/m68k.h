@@ -339,8 +339,8 @@ extern "C" {
 /* There are no rotate commands in Coldfire architecture. We will use
  * generic implementation of endian swapping for Coldfire.
  */
-static inline unsigned int m68k_swap_u32(
-  unsigned int value
+static inline uint32_t m68k_swap_u32(
+  uint32_t value
   )
 {
   uint32_t   byte1, byte2, byte3, byte4, swapped;
@@ -363,11 +363,11 @@ static inline uint16_t m68k_swap_u16(
                   
 #else
 
-static inline unsigned int m68k_swap_u32(
-  unsigned int value
+static inline uint32_t m68k_swap_u32(
+  uint32_t value
 )
 {
-  unsigned int swapped = value;
+  uint32_t swapped = value;
 
   asm volatile( "rorw  #8,%0" : "=d" (swapped) : "0" (swapped) );
   asm volatile( "swap  %0"    : "=d" (swapped) : "0" (swapped) );
