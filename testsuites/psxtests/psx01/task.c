@@ -25,14 +25,22 @@ void Test_init_routine( void )
 {
   puts( "Test_init_routine: invoked" );
 }
-  
+
 
 void *Task_1_through_3(
   void *argument
 )
 {
-  int status;
+  int            status;
   pthread_once_t once = PTHREAD_ONCE_INIT;
+
+  puts( "Task_1: sched_yield to Init" );
+  status = sched_yield();
+  assert( !status );
+ 
+    /* switch to Task_1 */
+
+  /* now do some real testing */
 
   empty_line();
 
@@ -45,19 +53,19 @@ void *Task_1_through_3(
 
   status = pthread_equal( Task_id, Task_id );
   if ( status )
-    puts( "Task_1: pthread_equal match case passed" );
+    puts( "Task_1: pthread_equal - match case passed" );
   assert( status );
 
   status = pthread_equal( Init_id, Task_id );
   if ( !status )
-    puts( "Task_1: pthread_equal different case passed" );
+    puts( "Task_1: pthread_equal - different case passed" );
   assert( !status );
 
-  puts( "Task_1: pthread_equal first id bad" );
+  puts( "Task_1: pthread_equal - first id bad" );
   status = pthread_equal( -1, Task_id );
   assert( !status );
 
-  puts( "Task_1: pthread_equal second id bad" );
+  puts( "Task_1: pthread_equal - second id bad" );
   status = pthread_equal( Init_id, -1 );
   assert( !status );
 
