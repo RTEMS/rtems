@@ -10,7 +10,7 @@ LIBNAME = libserdbg-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = serdbg.c serdbgio.c termios_printk.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 noinst_HEADERS = 
 include_HEADERS = serdbgcnf.h serdbg.h termios_printk_cnf.h \

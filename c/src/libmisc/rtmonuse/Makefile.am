@@ -9,7 +9,7 @@ LIBNAME = librtmonuse-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = rtmonuse.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS = rtmonuse.h
 

@@ -16,9 +16,9 @@ C_FILES = mon-command.c mon-symbols.c mon-prmisc.c mon-monitor.c \
     mon-dname.c mon-itask.c mon-extension.c mon-manager.c mon-config.c
 
 if HAS_MP
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o) $(MP_C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) $(MP_C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 else
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 endif
 
 include_rtems_HEADERS = monitor.h symbols.h

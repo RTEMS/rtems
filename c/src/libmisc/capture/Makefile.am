@@ -10,7 +10,7 @@ LIBNAME = libcapture-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = capture.c capture-cli.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS = capture.h capture-cli.h
 

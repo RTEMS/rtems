@@ -9,7 +9,7 @@ LIBNAME = libshell-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = cmds.c shell.c 
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_rtems_HEADERS = shell.h
 

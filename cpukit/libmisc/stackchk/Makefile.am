@@ -9,7 +9,7 @@ LIBNAME = libstackchk-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = check.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 noinst_HEADERS = internal.h
 include_rtems_HEADERS = stackchk.h

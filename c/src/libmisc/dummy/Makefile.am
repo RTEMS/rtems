@@ -7,7 +7,7 @@ LIBNAME = libdummy-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = dummy.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
