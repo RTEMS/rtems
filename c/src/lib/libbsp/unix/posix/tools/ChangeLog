@@ -1,3 +1,8 @@
+2003-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Use AC_PATH_PROG(PERL,perl) instead of
+	RTEMS_PATH_PERL.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
