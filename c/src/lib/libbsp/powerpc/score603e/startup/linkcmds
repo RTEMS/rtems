@@ -151,7 +151,9 @@ SECTIONS
   {
     PROVIDE (__sbss_start = .);
     *(.sbss)
+    *(.sbss.*)
     *(.scommon)
+    *(.gnu.linkonce.sb.*)
     PROVIDE (__sbss_end = .);
   } >RAM
   PROVIDE (__SBSS_END__ = .);

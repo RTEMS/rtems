@@ -1,3 +1,7 @@
+2005-01-26	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Now links.
+
 2005-01-18	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am: Use ../../shared/tod.h instead of include/tod.h.
