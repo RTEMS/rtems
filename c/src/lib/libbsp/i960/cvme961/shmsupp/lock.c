@@ -52,7 +52,7 @@ void Shm_Lock(
       atomic_modify( SHM_LOCK_VALUE, &lq_cb->lock, oldlock );
       if ( !(oldlock & SHM_LOCK_VALUE) )
         return;
-      delay( 28 );        /* delay 28 microseconds */
+      rtems_bsp_delay( 28 );        /* delay 28 microseconds */
     }
 }
 

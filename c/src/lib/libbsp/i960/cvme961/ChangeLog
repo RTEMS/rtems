@@ -1,3 +1,7 @@
+2001-09-27	Joel Sherrill <joel@OARcorp.com>
+
+	* include/bsp.h: Renamed delay() to rtems_bsp_delay().
+	* shmsupp/lock.c: Renamed delay() to rtems_bsp_delay().
 
 2001-09-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

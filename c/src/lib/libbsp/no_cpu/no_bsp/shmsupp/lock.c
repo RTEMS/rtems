@@ -62,7 +62,7 @@ void Shm_Lock(
        */
 
       if ( lock_value )
-        delay( 10 );   /* approximately 10 microseconds */
+        rtems_bsp_delay( 10 );   /* approximately 10 microseconds */
    }
 }
 
