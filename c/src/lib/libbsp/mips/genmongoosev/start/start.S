@@ -17,6 +17,15 @@
  * they apply.
  */
 
+
+
+#define PMON_UTIL_ROUTINES	0xbfc00200
+#define UTIL_WARMSTART_VECTOR	21*4
+#define UTIL_CPUINIT_VECTOR	22*4
+#define UTIL_CONFIGUART_VECTOR	23*4
+#define UTIL_PUTCHROM_VECTOR	24*4
+	
+	
 #include <asm.h>
 #include "regs.S"
 
@@ -37,6 +46,13 @@
 # define LA(t,x) la t,x
 #endif /* __mips_embedded_pic */ 
 
+
+/* defined by linkcmds, pointing to the start of the relocation target
+   memory, referenced in this way so we can avoid defining it
+   multiply */
+		
+
+	
 	.text
 	.align	2
 
@@ -56,30 +72,77 @@ _start:
 	$LF1 = . + 8
 	bal     $LF1
 	nop
+	
 _branch:
-	move	$5, $31				# $5 == where are we
-	li	$6, 0x8800000c			# $6 == where we want to be
-	#la      $6,_branch
-	beq	$5, $6, _start_in_ram
+	move	a1, ra				/* save return address from the jump above */
+
+	/* call down into PMON's CpuInit, so we avoid having to
+	duplicate all that code plus remember to update both copies
+	when something changes... Note, a1 must be preserved by
+	CpuInit */
+	
+	li	t7,PMON_UTIL_ROUTINES		/* get base address of pmon's vector table */
+	lw	t0,UTIL_CPUINIT_VECTOR(t7)
 	nop
-	# relocate the code from EEPROM to RAM
-        la	$7, _edata
+	jal	t0		/* init cpu */
+	nop
+
+	lw	t0,UTIL_CONFIGUART_VECTOR(t7)
+	nop
+	jal	t0		/* reconfigure UART for console output */
+	nop
+	
+	lw	t0,UTIL_PUTCHROM_VECTOR(t7)
+	li	a0,'b'		/* show we booted */
+	jal	t0
+
+
+	
+	/* 
+	   get the address of the _branch label above as it would appear in
+	   the relocated code
+	*/
+	la	a2, _branch			/* relocation destination */
+	
+	beq	a1, a2, _start_in_ram		/* skip relocating if we're already there */
+	nop
+	
+	/* relocate the code from EEPROM to RAM */
+
+	lw	t0,UTIL_PUTCHROM_VECTOR(t7)
+	li	a0,'r'		/* show we're starting relocation */
+	jal	t0
+	
+        la	a3, _edata
 relocate:
-	lw	$8, ($5)			# $8 = *EEPROM
-	addu	$5, $5, 4			# EEPROM++
-        sw      $8, ($6)			# *RAM = $8
-	addu	$6, $6, 4			# RAM++
-	bne	$6, $7, relocate		# copied all the way to edata?
+	lw	t0, (a1)			/* load from EEPROM */
+	addu	a1, 4
+        sw      t0, (a2)			/* store to RAM */
+	addu	a2, 4
+	bne	a2, a3, relocate		/* copied all the way to edata? */
 	nop
-	la	$6, _start_in_ram
-	jr	$6
+
+	lw	t0,UTIL_PUTCHROM_VECTOR(t7)
+	li	a0,'R'		/* show we relocated */
+	jal	t0
+	nop
+
+	la	a2, _start_in_ram
+	jr	a2
 	nop
 	.end _start
+
+
+
+
 
 	
 	.globl	_start_in_ram
 	.ent _start_in_ram
 _start_in_ram:
+	lw	t0,UTIL_PUTCHROM_VECTOR(t7)
+	li	a0,'S'		/* show we're starting in the target address range */
+	jal	t0
 	nop
 
 #ifdef __mips_embedded_pic
@@ -181,13 +244,23 @@ init:
 	.globl	_sys_exit
 	.ent _sys_exit
 _sys_exit:
-7:
 #ifdef GCRT0
 	jal	_mcleanup
 	nop
 #endif
+
+	/* return non-zero if we want default behavior, else return to pmon */
+	bne	a0,zero,7f
+	nop
+
+	li	t0,PMON_UTIL_ROUTINES		/* base address of PMON's util_routines table */
+	lw	t0,UTIL_WARMSTART_VECTOR(t0)	/* retrieve _warmstart vector at offset 21*4 */
+	nop
+	j	t0			/* and jump */
+	nop
+
 	# break instruction can cope with 0xfffff, but GAS limits the range:
-	break	1023
+7:	break	1023
 	nop
 	b	7b				# but loop back just in-case
 	nop

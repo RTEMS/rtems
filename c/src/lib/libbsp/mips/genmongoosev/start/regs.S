@@ -53,6 +53,8 @@
 #define fp0	$f0
 #define fp1	$f1
 
+#define WATCHDOG	0xBE000000
+
 /* Useful memory constants: */
 #define K0BASE		0x80000000
 #ifndef __mips64
