@@ -205,7 +205,7 @@ ER cre_sem(
 allocated)
 
 @code{E_OACV} - Object access violation (A semid less than -4 was
-specified from a user task.  This is implementation dependent.)
+specified from a user task.)
 
 @code{E_RSATR} - Reserved attribute (sematr was invalid or could not be
 used)
@@ -251,12 +251,7 @@ All memory is preallocated for RTEMS ITRON objects.  Thus, no dynamic
 memory allocation is performed by @code{cre_sem} and the @code{E_NOMEM}
 error can not be returned.
 
-The ITRON specification calls for @code{E_OACV} to be returned for
-some invalid semaphore IDs.  This implementation returns @code{E_ID}
-for all invalid IDs as there are no system reserved ITRON objects.
-
-This directive will not cause the running task to be
-preempted.
+This directive will not cause the running task to be preempted.
 
 The following semaphore attribute constants are
 defined by RTEMS:
@@ -321,12 +316,6 @@ is reclaimed by RTEMS.
 Multiprocessing is not supported.  Thus none of the "EN_" status codes
 will be returned.
 
-This implementation does not distinguish between an invalid ID (@code{E_ID})
-and a valid id for a non-existent object (@code{E_NOEXS}).  In addition,
-there are no system reserved ITRON objects so the @code{E_OACV} error
-is not returned.  All IDs which do not correspond to an active user 
-created semaphore return @code{E_ID}.
-
 The calling task will be preempted if it is enabled
 by the task's execution mode and a higher priority local task is
 waiting on the deleted semaphore.  The calling task will NOT be
@@ -386,12 +375,6 @@ task-independent portion
 
 Multiprocessing is not supported.  Thus none of the "EN_" status codes
 will be returned.
-
-This implementation does not distinguish between an invalid ID (@code{E_ID})
-and a valid id for a non-existent object (@code{E_NOEXS}).  In addition,
-there are no system reserved ITRON objects so the @code{E_OACV} error
-is not returned.  All IDs which do not correspond to an active user 
-created semaphore return @code{E_ID}.
 
 @c
 @c  wai_sem
@@ -454,12 +437,6 @@ by a subsequent invocation of @code{sig_sem}.
 Multiprocessing is not supported.  Thus none of the "EN_" status codes
 will be returned.
 
-This implementation does not distinguish between an invalid ID (@code{E_ID})
-and a valid id for a non-existent object (@code{E_NOEXS}).  In addition,
-there are no system reserved ITRON objects so the @code{E_OACV} error
-is not returned.  All IDs which do not correspond to an active user 
-created semaphore return @code{E_ID}.
-
 If the semaphore is not available, then the calling task will be blocked.
 
 @c
@@ -518,12 +495,6 @@ indicate the semaphore is unavailable.
 
 Multiprocessing is not supported.  Thus none of the "EN_" status codes
 will be returned.
-
-This implementation does not distinguish between an invalid ID (@code{E_ID})
-and a valid id for a non-existent object (@code{E_NOEXS}).  In addition,
-there are no system reserved ITRON objects so the @code{E_OACV} error
-is not returned.  All IDs which do not correspond to an active user 
-created semaphore return @code{E_ID}.
 
 This routine will not cause the running task to be preempted.
 
@@ -599,12 +570,6 @@ behavior as @code{wai_sem}.  Similarly, by specifiying @code{tmout} as
 Multiprocessing is not supported.  Thus none of the "EN_" status codes
 will be returned.
 
-This implementation does not distinguish between an invalid ID (@code{E_ID})
-and a valid id for a non-existent object (@code{E_NOEXS}).  In addition,
-there are no system reserved ITRON objects so the @code{E_OACV} error
-is not returned.  All IDs which do not correspond to an active user 
-created semaphore return @code{E_ID}.
-
 This routine may cause the calling task to block.
 
 A clock tick is required to support the timeout functionality of
@@ -667,12 +632,6 @@ this service call.
 
 Multiprocessing is not supported.  Thus none of the "EN_" status codes
 will be returned.
-
-This implementation does not distinguish between an invalid ID (@code{E_ID})
-and a valid id for a non-existent object (@code{E_NOEXS}).  In addition,
-there are no system reserved ITRON objects so the @code{E_OACV} error
-is not returned.  All IDs which do not correspond to an active user 
-created semaphore return @code{E_ID}.
 
 This routine will not cause the running task to be preempted.
 
