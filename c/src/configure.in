@@ -31,6 +31,7 @@ if test x"$multilib" = x"no"; then
 cfg_subdirs="$cfg_subdirs exec"
 fi
 cfg_subdirs="$cfg_subdirs lib"
+cfg_subdirs="$cfg_subdirs lib/libcpu lib/libbsp"
 cfg_subdirs="$cfg_subdirs libmisc"
 
 if test "$RTEMS_CPU" != "unix"; then
