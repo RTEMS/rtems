@@ -27,12 +27,13 @@ EXTRA_DIST += pci/pcibios.c
 # ---
 all-local: $(PREINSTALL_FILES)
 
+PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)
 	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_INCLUDE)/uart.h: comm/uart.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/uart.h
@@ -59,5 +60,6 @@ $(PROJECT_INCLUDE)/pcibios.h: pci/pcibios.h $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/pcibios.h
 
 CLEANFILES = $(PREINSTALL_FILES)
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/../../../automake/local.am
