@@ -1,3 +1,10 @@
+2001-05-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Add bspopts.h.
+	* include/bsp.h: Include bspopts.h.
+	* include/.cvsignore: Add bspopts.h*, coverhd.h, stamp-h*.
+	* include/Makefile.am: Use *_HEADERS instead of *H_FILES.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
