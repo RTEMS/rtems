@@ -1,3 +1,8 @@
+2003-09-26	Joel Sherrill <joel@OARcorp.com>
+
+	* hppa1.1/.cvsignore, hppa1.1/ChangeLog, hppa1.1/Makefile.am,
+	hppa1.1/configure.ac, hppa1.1/genoffsets.c: Removed.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
