@@ -172,16 +172,29 @@ extern "C" {
 /* null pointers of different types */
 
 #define NULL_ENV_CB             ((Shm_Envelope_control *) 0)
-#define NULL_SHM_INFO           ((struct shm_info *) 0)
 #define NULL_CONVERT            0
-#if 0
-#define NULL_CONVERT            (((rtems_unsigned32 *)())0) /* we want this */
+
+/*
+ * size of stuff before preamble in envelope.
+ * It must be a constant since we will use it to generate MAX_PACKET_SIZE
+ */
+ 
+#define SHM_ENVELOPE_PREFIX_OVERHEAD    (4 * sizeof(vol_u32))
+
+/*
+ *  The following is adjusted so envelopes are MAX_ENVELOPE_SIZE bytes long.
+ *  It must be >= RTEMS_MINIMUM_PACKET_SIZE in mppkt.h.
+ */
+ 
+#ifndef MAX_ENVELOPE_SIZE
+#define MAX_ENVELOPE_SIZE 0x180
 #endif
 
-/* The following is adjusted so envelopes are 0x80 bytes long. */
-/* It should be >= MIN_PKT_SIZE in rtems.h                     */
+#define MAX_PACKET_SIZE  (MAX_ENVELOPE_SIZE -               \
+                          SHM_ENVELOPE_PREFIX_OVERHEAD +    \
+                          sizeof(Shm_Envelope_preamble) +   \
+                          sizeof(Shm_Envelope_postamble))
 
-#define MAX_PACKET_SIZE          (80)
 
 /* constants pertinent to Locked Queue routines */
 
@@ -200,17 +213,6 @@ extern "C" {
  *        is defined in a system dependent file.
  */
 
-#if 0
-#define START_NS_CBS     ( (rtems_unsigned8 *) START_SHARED_MEM )
-#define START_LQ_CBS     ( ((rtems_unsigned8 *) START_NS_CBS) + \
-        ( (sizeof (Shm_Node_status_control)) * (Shm_Maximum_nodes + 1) ) )
-#define START_ENVELOPES  ( ((rtems_unsigned8 *) START_LQ_CBS) + \
-        ( (sizeof (Shm_Locked_queue_Control)) * (Shm_Maximum_nodes + 1) ) )
-#define END_SHMCI_AREA    ( (rtems_unsigned8 *) START_ENVELOPES + \
-        ( (sizeof (Shm_Envelope_control)) * Shm_Maximum_envelopes ) )
-#define END_SHARED_MEM   ((rtems_unsigned32)START_SHARED_MEM+SHARED_MEM_LEN)
-#endif
-
 #define START_NS_CBS     ((void *)Shm_Configuration->base)
 #define START_LQ_CBS     ((START_NS_CBS) + \
         ( (sizeof (Shm_Node_status_control)) * (Shm_Maximum_nodes + 1) ) )
@@ -222,7 +224,7 @@ extern "C" {
 
 /* macros */
 
-#define Shm_Is_master_node() \
+#define Shm_Is_master_node()  \
   ( SHM_MASTER == Shm_Local_node )
 
 #define Shm_Free_envelope( ecb ) \
@@ -241,14 +243,14 @@ extern "C" {
 
 #define Shm_Packet_prefix_to_envelope_control_pointer( pkt )   \
    ((Shm_Envelope_control *)((rtems_unsigned8 *)(pkt) - \
-   (sizeof(Shm_Envelope_preamble) + 4*sizeof(vol_u32))))
+   (sizeof(Shm_Envelope_preamble) + SHM_ENVELOPE_PREFIX_OVERHEAD)))
 
 #define Shm_Build_preamble(ecb, node) \
        (ecb)->Preamble.endian = Shm_Configuration->format
 
 #define Shm_Build_postamble( ecb )
 
-/* structures */
+/* volatile types */
 
 typedef volatile rtems_unsigned8  vol_u8;
 typedef volatile rtems_unsigned32 vol_u32;
@@ -271,15 +273,10 @@ typedef struct {
 } Shm_Envelope_preamble;
 
 typedef struct {
-  vol_u32 not_currently_used_0;
-  vol_u32 not_currently_used_1;
-  vol_u32 not_currently_used_2;
-  vol_u32 not_currently_used_3;
-  /*byte end_of_text;*/
-} Shm_Envelope_postable;
+} Shm_Envelope_postamble;
 
 /* WARNING! If you change this structure, don't forget to change
- *          Shm_Envelope_control_to_packet_prefix_pointer() and
+ *          SHM_ENVELOPE_PREFIX_OVERHEAD and
  *          Shm_Packet_prefix_to_envelope_control_pointer() above.
  */
 
@@ -305,7 +302,7 @@ typedef struct {
   vol_u32           pad0;     /* insure the next one is aligned */
   Shm_Envelope_preamble    Preamble; /* header information           */
   vol_u8            packet[MAX_PACKET_SIZE]; /* RTEMS INFO    */
-  Shm_Envelope_postable   Postamble;/* trailer information          */
+  Shm_Envelope_postamble   Postamble;/* trailer information          */
 } Shm_Envelope_control;
 
 /*  This comment block describes the contents of each field
@@ -513,6 +510,8 @@ rtems_mpci_entry Shm_Send_packet(
   rtems_packet_prefix *
 );
 
+extern rtems_mpci_table MPCI_table;
+
 #ifdef _SHM_INIT
 
 /* multiprocessor communications interface (MPCI) table */
@@ -525,10 +524,6 @@ rtems_mpci_table MPCI_table  = {
   Shm_Send_packet,            /* packet send procedure      */
   Shm_Receive_packet          /* packet receive procedure   */
 };
-
-#else
-
-extern rtems_mpci_table MPCI_table;
 
 #endif
 

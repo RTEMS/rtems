@@ -44,8 +44,9 @@ void Shm_Poll()
       Shm_Lock( Shm_Local_receive_queue );
       tmpfront = Shm_Local_receive_queue->front;
       Shm_Unlock( Shm_Local_receive_queue );
-      if ( Shm_Convert(tmpfront) == Shm_Locked_queue_End_of_list ) return;
-      rtems_multiprocessing_announce();
-      Shm_Interrupt_count++;
+      if ( Shm_Convert(tmpfront) != Shm_Locked_queue_End_of_list ) {
+        rtems_multiprocessing_announce();
+        Shm_Interrupt_count++;
+      }
   }
 }

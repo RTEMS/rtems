@@ -22,7 +22,7 @@
 extern "C" {
 #endif
 
-#include "shm.h"
+#include <shm.h>
 
 #define MPCI_Initialization( _configuration ) \
   Shm_Initialization( _configuration )

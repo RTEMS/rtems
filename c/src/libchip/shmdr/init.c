@@ -22,13 +22,15 @@
 #define _SHM_INIT
 
 #include <rtems.h>
-#include "shm.h"
+#include <shm.h>
+
+#include <string.h>    /* memset() */
 
 /*
- * Need a user extension control to install MPCI_Fatal as
- *  a fatal error handler extension
+ * User extension to install MPCI_Fatal as a fatal error
+ * handler extension
  */
-
+ 
 rtems_extensions_table MPCI_Shm_extensions;
 
 rtems_mpci_entry Shm_Initialization(
@@ -38,7 +40,7 @@ rtems_mpci_entry Shm_Initialization(
 
 )
 {
-  rtems_unsigned32         i, *u32_ptr, *endshm, all_initialized;
+  rtems_unsigned32         i, all_initialized;
   rtems_unsigned32         interrupt_cause, interrupt_value;
   void                    *interrupt_address;
   Shm_Node_status_control *nscb;
@@ -51,7 +53,7 @@ rtems_mpci_entry Shm_Initialization(
   Shm_Local_node    = Shm_RTEMS_MP_Configuration->node;
   Shm_Maximum_nodes = Shm_RTEMS_MP_Configuration->maximum_nodes;
 
-  Shm_Get_configuration( Shm_Local_node ,&Shm_Configuration );
+  Shm_Get_configuration( Shm_Local_node, &Shm_Configuration );
 
   Shm_Receive_message_count = 0;
   Shm_Null_message_count    = 0;
@@ -61,13 +63,12 @@ rtems_mpci_entry Shm_Initialization(
    *  Set the Node Status indicators
    */
 
-#define PEND Shm_Convert(rtems_build_name( 'P', 'E', 'N', 'D' ))
-#define COMP Shm_Convert(rtems_build_name( 'C', 'O', 'M', 'P' ))
-#define ACTV Shm_Convert(rtems_build_name( 'A', 'C', 'T', 'V' ))
-
-  Shm_Pending_initialization  = PEND;
-  Shm_Initialization_complete = COMP;
-  Shm_Active_node             = ACTV;
+  Shm_Pending_initialization = 
+    Shm_Convert(rtems_build_name( 'P', 'E', 'N', 'D' ));
+  Shm_Initialization_complete = 
+    Shm_Convert(rtems_build_name( 'C', 'O', 'M', 'P' ));
+  Shm_Active_node = 
+    Shm_Convert(rtems_build_name( 'A', 'C', 'T', 'V' ));
 
   /*
    *  Initialize the constants used by the Locked Queue code.
@@ -128,10 +129,11 @@ rtems_mpci_entry Shm_Initialization(
      *  Zero out the shared memory area.
      */
 
-    for ( u32_ptr = (rtems_unsigned32 *)Shm_Configuration->base,
-          endshm = (rtems_unsigned32 *)END_SHARED_MEM ;
-          u32_ptr < endshm ; )
-      *u32_ptr++ = 0;
+    (void) memset(
+      (void *) Shm_Configuration->base,
+      0,
+      Shm_Configuration->length
+    );
 
     /*
      *  Initialize all of the locked queues (the free envelope
@@ -174,18 +176,14 @@ rtems_mpci_entry Shm_Initialization(
      *  Loop until all nodes have completed initialization.
      */
 
-    all_initialized = 0;
-
-    for ( ; ; ) {
-
-      if ( all_initialized == 1 ) break;
-
+    do {
       all_initialized = 1;
 
       for ( i = SHM_FIRST_NODE ; i <= Shm_Maximum_nodes ; i++ )
         if ( Shm_Node_statuses[ i ].status != Shm_Initialization_complete )
           all_initialized = 0;
-    }
+
+    } while ( all_initialized == 0 );
 
     /*
      *  Tell the other nodes we think that the system is up.
