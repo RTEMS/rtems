@@ -1,6 +1,11 @@
 
 2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* custom/mvme2307.cfg: Reflect changes to motorola_powerpc/configure.ac.
+	* custom/mcp750.cfg: Ditto.
+
+2001-11-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* custom/dmv177.cfg: Reflect changes to dmv177/configure.ac.
 	* custom/ppcn_60x.cfg: Refect changes to ppcn_60x/configure.ac.
 	* custom/psim.cfg: Refect changes to psim/configure.ac.
