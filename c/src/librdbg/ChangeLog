@@ -1,5 +1,9 @@
 2002-10-31	Joel Sherrill <joel@OARcorp.com>
 
+	* src/i386/any/remdeb_xdr.c: Removed warnings.
+
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
 	* src/rdbg.c, src/servtsp.c, src/m68k/rdbg_f.c,
 	src/m68k/any/remdeb_xdr.c,
 	src/powerpc/new_exception_processing/remdeb_xdr.c: Removed warnings.
