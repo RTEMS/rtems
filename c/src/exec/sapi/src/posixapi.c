@@ -29,13 +29,11 @@
 
 #include <sys/types.h>
 #include <rtems/config.h>
-#include <rtems/score/object.h>
 #include <rtems/posix/cond.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/mutex.h>
 #include <rtems/posix/priority.h>
-#include <rtems/posix/psignal.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/time.h>
 
@@ -46,39 +44,20 @@
  *  XXX
  */
 
-posix_api_configuration_table _POSIX_Default_configuration = {
-  0,                             /* maximum_threads */
-  0,                             /* maximum_mutexes */
-  0,                             /* maximum_condition_variables */
-  0,                             /* maximum_keys */
-  0,                             /* maximum_queued_signals */
-  0,                             /* number_of_initialization_threads */
-  NULL                           /* User_initialization_threads_table */
-};
-
-
 void _POSIX_API_Initialize(
   rtems_configuration_table *configuration_table
 )
 {
   posix_api_configuration_table *api_configuration;
 
-  /* XXX need to assert here based on size assumptions */
-
-  assert( sizeof(pthread_t) == sizeof(Objects_Id) );
-
   api_configuration = configuration_table->POSIX_api_configuration;
-  if ( !api_configuration ) 
-    api_configuration = &_POSIX_Default_configuration;
 
-  _POSIX_signals_Manager_Initialization(
-    api_configuration->maximum_queued_signals
-  );
+  assert( api_configuration );
 
   _POSIX_Threads_Manager_initialization(
     api_configuration->maximum_threads,
-    api_configuration->number_of_initialization_threads,
-    api_configuration->User_initialization_threads_table
+    api_configuration->number_of_initialization_tasks,
+    api_configuration->User_initialization_tasks_table
   );
  
   _POSIX_Condition_variables_Manager_initialization(
