@@ -50,32 +50,104 @@
 #include <rtems/score/ispsh7045.h>
 #include <rtems/score/iosh7045.h>
 #include <sh/sh7_sci.h>
-#include <sh/io_types.h>
+#include <sh/sh7_pfc.h>
+/* #include <sh/io_types.h> */
 #include <sh/sci.h>
+
+#ifndef STANDALONE_EVB
+#define STANDALONE_EVB 0
+#endif
+
+/*
+ * NOTE: Some SH variants have 3 sci devices
+ */
+  
+#define SCI_MINOR_DEVICES       2
+  
+/*
+ * FIXME: sh7045 register names match Hitachi data book,
+ *  but conflict with RTEMS sh7032 usage.
+ */
+
+#define SH_SCI_BASE_0   SCI_SMR0
+#define SH_SCI_BASE_1   SCI_SMR1
+
+#define SH_SCI_DEF_COMM_0   B9600 | CS8
+#define SH_SCI_DEF_COMM_1   B38400 | CS8
+/*  #define SH_SCI_DEF_COMM_1   B9600 | CS8 */
 
 struct scidev_t {
   char *			name ;
+  unsigned32			addr ;
   rtems_device_minor_number	minor ;
   unsigned short		opened ;
   tcflag_t			cflags ;
-} sci_device[2] =
+} sci_device[SCI_MINOR_DEVICES] =
 {
-  { "/dev/sci0", 0, 0, B9600 | CS8 },
-  { "/dev/sci1", 1, 0, B9600 | CS8 }
+  { "/dev/sci0", SH_SCI_BASE_0, 0, 0, SH_SCI_DEF_COMM_0 },
+  { "/dev/sci1", SH_SCI_BASE_1, 1, 0, SH_SCI_DEF_COMM_1 }
 } ;
 
 /*  local data structures maintain hardware configuration */
+#if UNUSED
+static sci_setup_t sio_param[2];
+#endif
+
+/*  imported from scitab.rel */
 extern int _sci_get_brparms(
   tcflag_t      cflag,
   unsigned char *smr,
   unsigned char *brr );
 
-#if UNUSED
-static sci_setup_t sio_param[2];
-#endif
+/* Translate termios' tcflag_t into sci settings */
+static int _sci_set_cflags(
+  struct scidev_t      *sci_dev,
+  tcflag_t      c_cflag )
+{
+  unsigned8	smr ;
+  unsigned8	brr ;
+  
+  if ( c_cflag & CBAUD )
+  {
+    if ( _sci_get_brparms( c_cflag, &smr, &brr ) != 0 )
+      return -1 ;
+  }
+                    
+  if ( c_cflag & CSIZE )
+  {
+    if ( c_cflag & CS8 )
+      smr &= ~SCI_SEVEN_BIT_DATA;
+    else if ( c_cflag & CS7 )
+      smr |= SCI_SEVEN_BIT_DATA;
+    else
+      return -1 ;
+  }
 
-/* local functions operate SCI ports 0 and 1 */
-/* called from polling routines or ISRs */
+  if ( c_cflag & CSTOPB )
+    smr |= SCI_STOP_BITS_2;
+  else
+    smr &= ~SCI_STOP_BITS_2;
+
+  if ( c_cflag & PARENB )
+    smr |= SCI_PARITY_ON ;
+  else
+    smr &= ~SCI_PARITY_ON ;
+
+  if ( c_cflag & PARODD )
+    smr |= SCI_ODD_PARITY ;
+  else
+    smr &= ~SCI_ODD_PARITY;
+    
+  write8( smr, sci_dev->addr + SCI_SMR );
+  write8( brr, sci_dev->addr + SCI_BRR );
+  
+  return 0 ;
+}
+
+/*
+ * local functions operate SCI ports 0 and 1
+ * called from polling routines or ISRs
+ */
 rtems_boolean wrtSCI0(unsigned char ch)
 {
   unsigned8 temp;
@@ -242,8 +314,6 @@ rtems_device_driver sh_sci_open(
 {
   unsigned8 temp8;
   unsigned16 temp16;
-  unsigned char	smr ;
-  unsigned char brr ;
   
   unsigned 	a ;
   
