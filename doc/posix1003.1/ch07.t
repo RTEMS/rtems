@@ -196,12 +196,12 @@ tcflow(), Function, Unimplemented
 @subsection Get Foreground Process Group ID
 
 @example
-tcgetprgrp(), Function, Unimplemented
+tcgetprgrp(), Function, Unimplementable
 @end example
 
 @subsection Set Foreground Process Group ID
 
 @example
-tcsetprgrp(), Function, Unimplemented
+tcsetprgrp(), Function, Unimplementable
 @end example
 
