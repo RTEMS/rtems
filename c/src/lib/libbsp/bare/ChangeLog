@@ -1,5 +1,6 @@
 2004-10-20	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* include/bsp.h: Remove tm27 stuff.
 	* include/tm27.h: New.
 	* Makefile.am: Add tm27.h
 

@@ -48,20 +48,6 @@ extern "C" {
 #define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
 
 /*
- *  Stuff for Time Test 27
- */
-
-#define MUST_WAIT_FOR_INTERRUPT 0
-
-#define Install_tm27_vector( handler )
-
-#define Cause_tm27_intr()
-
-#define Clear_tm27_intr()
-
-#define Lower_tm27_intr()
-
-/*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  */
