@@ -66,9 +66,11 @@ END-INFO-DIR-ENTRY
 @include patheval.texi
 @include init.texi
 @include mounting.texi
+@include syscalls.texi
 @include fsrequirements.texi
 @include imfs.texi
-@include syscalls.texi
+@include miniimfs.texi
+@include tftp.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
 @top filesystem
@@ -80,9 +82,11 @@ This is the online version of the RTEMS Filesystem Design Guide.
 * Pathname Evaluation::
 * System Initialization::
 * Mounting and Unmounting Filesystems::
+* System Call Development Notes::
 * Filesystem Implementation Requirements::
 * In-Memory Filesystem::
-* System Call Development Notes::
+* Miniature In-Memory Filesystem::
+* Trivial FTP Client Filesystem::
 * Command and Variable Index::
 * Concept Index::
 @end menu

@@ -22,8 +22,8 @@ dirs:
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
 GENERATED_FILES=patheval.texi \
-    init.texi mounting.texi fsrequirements.texi imfs.texi \
-    syscalls.texi
+    init.texi mounting.texi syscalls.texi fsrequirements.texi imfs.texi \
+    miniimfs.texi tftp.texi
 
 FILES= $(PROJECT).texi \
   preface.texi $(GENERATED_FILES)
@@ -68,6 +68,11 @@ mounting.texi: mounting.t Makefile
 	   -u "Top" \
 	   -n "" ${*}.t
 
+syscalls.texi: syscalls.t Makefile
+	$(BMENU) -p "" \
+	   -u "Top" \
+	   -n "" ${*}.t
+
 fsrequirements.texi: fsrequirements.t Makefile
 	$(BMENU) -p "" \
 	   -u "Top" \
@@ -78,7 +83,12 @@ imfs.texi: imfs.t Makefile
 	   -u "Top" \
 	   -n "" ${*}.t
 
-syscalls.texi: syscalls.t Makefile
+miniimfs.texi: miniimfs.t Makefile
+	$(BMENU) -p "" \
+	   -u "Top" \
+	   -n "" ${*}.t
+
+tftp.texi: tftp.t Makefile
 	$(BMENU) -p "" \
 	   -u "Top" \
 	   -n "" ${*}.t

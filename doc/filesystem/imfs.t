@@ -7,7 +7,7 @@
 
 @chapter In-Memory Filesystem 
 
-This chapter describes the In-Memory Filesystem (IMFS).  The IMFS is a
+This chapter describes the In-Memory FileSystem (IMFS).  The IMFS is a
 full featured POSIX filesystem that keeps all information in memory.
 
 @section IMFS Per Node Data Structure
