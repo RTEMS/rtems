@@ -24,7 +24,7 @@ C_FILES = $(COMMON_C_FILES) $(UNIX_C_FILES)
 else
 C_FILES = $(COMMON_C_FILES) $(EMBEDDED_C_FILES)
 endif
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
+OBJS = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 include_HEADERS = imfs.h
 
@@ -42,8 +42,6 @@ $(PROJECT_INCLUDE):
 
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
-
-OBJS = $(C_O_FILES)
 
 #
 # Add local stuff here using +=

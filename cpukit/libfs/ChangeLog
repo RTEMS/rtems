@@ -1,3 +1,8 @@
+2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/imfs/Makefile.am: Eliminate C_O_FILES.
+	* src/dosfs/Makefile.am: Ditto.
+
 2002-12-02	Joel Sherrill <joel@OARcorp.com>
 
 	* src/dosfs/fat.h, src/dosfs/msdos.h: Added casts to remove warnings

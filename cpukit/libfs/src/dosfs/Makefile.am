@@ -20,8 +20,7 @@ if !UNIX
 LIB = ${ARCH}/libdosfs.a
 
 C_FILES = $(FATFS_C_FILES) $(DOSFS_C_FILES)
-
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
+OBJS = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 include_HEADERS = dosfs.h
 
@@ -33,9 +32,6 @@ $(PROJECT_INCLUDE):
 
 $(PROJECT_INCLUDE)/%.h: %.h
 	$(INSTALL_DATA) $< $@
-
-OBJS = $(C_O_FILES)
-
 #
 # Add local stuff here using +=
 #
