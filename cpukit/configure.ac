@@ -283,9 +283,6 @@ posix/Makefile
 itron/Makefile
 libblock/Makefile
 libfs/Makefile
-libfs/src/Makefile
-libfs/src/imfs/Makefile
-libfs/src/dosfs/Makefile
 libcsupport/Makefile
 libnetworking/Makefile
 libnetworking/lib/Makefile
@@ -305,7 +302,6 @@ libmisc/capture/Makefile
 libmisc/fsmount/Makefile
 libmisc/untar/Makefile
 libmisc/mw-fb/Makefile
-libmisc/wrapup/Makefile
 
 wrapup/Makefile
 ])
