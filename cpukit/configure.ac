@@ -227,7 +227,6 @@ AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([
 Makefile
-include/Makefile
 ada/Makefile
 rtems/Makefile
 sapi/Makefile
@@ -246,7 +245,6 @@ libnetworking/lib/Makefile
 libnetworking/libc/Makefile
 libnetworking/wrapup/Makefile
 librpc/Makefile
-librpc/include/Makefile
 librpc/src/Makefile
 librpc/src/xdr/Makefile
 librpc/src/rpc/Makefile
