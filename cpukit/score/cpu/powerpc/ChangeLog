@@ -1,5 +1,20 @@
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* rtems/new-exceptions/cpu.h (_CPU_ISR_install_vector,
+	_CPU_Initialize, _CPU_Install_interrupt_stack, _CPU_Context_switch,
+	_CPU_Context_restore, _CPU_Context_save_fp, _CPU_Context_restore_fp,
+	_CPU_Fatal_error): Remove.
+	* rtems/old-exceptions/cpu.h (_CPU_ISR_install_vector,
+	_CPU_Initialize, _CPU_Install_interrupt_stack, _CPU_Context_switch,
+	_CPU_Context_restore, _CPU_Context_save_fp, _CPU_Context_restore_fp,
+	_CPU_Fatal_error): Remove.
+	* rtems/score/cpu.h (_CPU_ISR_install_vector,
+	_CPU_Initialize, _CPU_Install_interrupt_stack, _CPU_Context_switch,
+	_CPU_Context_restore, _CPU_Context_save_fp, _CPU_Context_restore_fp,
+	_CPU_Fatal_error): New.
+
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* rtems/old-exceptions/cpu.h (_CPU_Context_Initialize,
 	_CPU_Context_Restart_self, _CPU_Context_Fp_start,
 	_CPU_Context_Initialize_fp): Remove.
