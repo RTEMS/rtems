@@ -1,0 +1,39 @@
+#
+#  $Id$
+#
+
+Configuration Table Use
+=======================
+
+pDeviceFlow
+
+   This field is ignored as hardware flow control is not currently supported.
+
+ulCtrlPort1
+
+   This field is the base address of the entire DUART.
+
+ulCtrlPort2
+
+   This field is the base address of the port specific registers.
+
+ulDataPort
+
+   This field is bit mapped as follows:
+     bit 0:  0 or 1 to indicate the A or B port on the DUART.
+     bit 1:  baud rate set a or b
+ 
+
+   Note: If both ports on single DUART are not configured for the same
+         baud rate set, then unexpected results will occur.
+
+getRegister
+setRegister
+   These follow standard conventions.
+
+getData
+setData
+   These are unused since the TX and RX data registers can be accessed
+   as regular registers.
+
+
