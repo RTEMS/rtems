@@ -114,7 +114,6 @@ void _API_extensions_Run_postdriver( void );
 /**
  *  This routine executes all of the post context switch callouts.
  */
- */
 void _API_extensions_Run_postswitch( void );
 
 /**@}*/
