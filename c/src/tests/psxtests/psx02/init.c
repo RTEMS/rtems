@@ -12,6 +12,7 @@
 
 #define CONFIGURE_INIT
 #include "system.h"
+#include <signal.h>
 
 volatile int Signal_occurred;
 
@@ -19,7 +20,7 @@ void Signal_handler(
   int signo
 )
 {
-  printf( "Signal: %d caught\n", signo );
+  printf( "Signal: %d caught by 0x%x\n", signo, pthread_self() );
   Signal_occurred = 1;
 }
 
@@ -27,9 +28,10 @@ void *POSIX_Init(
   void *argument
 )
 {
-  int             status;
-  struct timespec tv;
-  struct timespec tr;
+  int               status;
+  struct timespec   tv;
+  struct timespec   tr;
+  struct sigaction  act;
 
   puts( "\n\n*** POSIX TEST 2 ***" );
 
@@ -41,6 +43,21 @@ void *POSIX_Init(
 
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08x\n", Init_id );
+
+  /* install a signal handler */
+
+  status = sigemptyset( &act.sa_mask );
+  assert( !status );
+
+  act.sa_handler = Signal_handler;
+  act.sa_flags   = 0;
+ 
+  sigaction( SIGUSR1, &act, NULL );
+
+  /* simple signal to self */
+
+  status = pthread_kill( Init_id, SIGUSR1 );
+  assert( !status );
 
   /* create a thread */
 
@@ -62,7 +79,6 @@ void *POSIX_Init(
     status = nanosleep ( &tv, &tr );
     assert( !status );
 
-    print_current_time( "Init: ", "" );
     printf(
       "Init: signal was %sprocessed with %d:%d time remaining\n",
       (Signal_occurred) ? "" : "not ",
