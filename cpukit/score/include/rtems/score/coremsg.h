@@ -239,7 +239,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
  *
  */
  
-void _CORE_message_queue_Submit(
+CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
   unsigned32                                 size,

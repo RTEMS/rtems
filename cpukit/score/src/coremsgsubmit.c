@@ -53,7 +53,7 @@
  *    error code                    - if unsuccessful
  */
 
-void _CORE_message_queue_Submit(
+CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
   unsigned32                                 size,
@@ -67,14 +67,9 @@ void _CORE_message_queue_Submit(
   ISR_Level                            level;
   CORE_message_queue_Buffer_control   *the_message;
   Thread_Control                      *the_thread;
-  Thread_Control                      *executing;
-
-  _Thread_Executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
 
   if ( size > the_message_queue->maximum_message_size ) {
-    _Thread_Executing->Wait.return_code =
-       CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE;
-    return;
+    return CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE;
   }
 
   /*
@@ -96,7 +91,7 @@ void _CORE_message_queue_Submit(
       if ( !_Objects_Is_local_id( the_thread->Object.id ) )
         (*api_message_queue_mp_support) ( the_thread, id );
 #endif
-      return;
+      return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
     }
   }
 
@@ -114,10 +109,9 @@ void _CORE_message_queue_Submit(
     /*
      *  NOTE: If the system is consistent, this error should never occur.
      */
+
     if ( !the_message ) {
-      _Thread_Executing->Wait.return_code =
-          CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED;
-      return;
+      return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED;
     }
 
     _CORE_message_queue_Copy_buffer(
@@ -133,7 +127,7 @@ void _CORE_message_queue_Submit(
        the_message,
        submit_type
     );
-    return;
+    return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
   }
 
   /*
@@ -143,20 +137,39 @@ void _CORE_message_queue_Submit(
    */
 
   if ( !wait ) {
-    _Thread_Executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_TOO_MANY;
-    return;
+    return CORE_MESSAGE_QUEUE_STATUS_TOO_MANY;
   }
 
-  executing = _Thread_Executing;
+  /*
+   *  Do NOT block on a send if the caller is in an ISR.  It is
+   *  deadly to block in an ISR.
+   */
 
-  _ISR_Disable( level );
-  _Thread_queue_Enter_critical_section( &the_message_queue->Wait_queue );
-  executing->Wait.queue              = &the_message_queue->Wait_queue;
-  executing->Wait.id                 = id;
-  executing->Wait.return_argument    = (void *)buffer;
-  executing->Wait.return_argument_1  = (void *)size;
-  executing->Wait.count              = submit_type;
-  _ISR_Enable( level );
+  if ( _ISR_Is_in_progress() ) {
+    return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED;
+  }
 
-  _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );
+  /*
+   *  WARNING!! executing should NOT be used prior to this point.
+   *  Thus the unusual choice to open a new scope and declare 
+   *  it as a variable.  Doing this emphasizes how dangerous it
+   *  would be to use this variable prior to here.
+   */
+
+  { 
+    Thread_Control  *executing = _Thread_Executing;
+
+    _ISR_Disable( level );
+    _Thread_queue_Enter_critical_section( &the_message_queue->Wait_queue );
+    executing->Wait.queue              = &the_message_queue->Wait_queue;
+    executing->Wait.id                 = id;
+    executing->Wait.return_argument    = (void *)buffer;
+    executing->Wait.return_argument_1  = (void *)size;
+    executing->Wait.count              = submit_type;
+    _ISR_Enable( level );
+
+    _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );
+  }
+
+  return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
 }
