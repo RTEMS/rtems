@@ -577,7 +577,7 @@ int socketAlloc(char *host, int port, socketAccept_t accept, int flags)
 	socket_t	*sp;
 	int			sid;
 
-	if ((sid = hAllocEntry((void***) &socketList, &socketMax,
+	if ((sid = hAllocEntry((void*) &socketList, &socketMax,
 			sizeof(socket_t))) < 0) {
 		return -1;
 	}
@@ -652,7 +652,7 @@ void socketFree(int sid)
 	ringqClose(&sp->lineBuf);
 
 	bfree(B_L, sp);
-	socketMax = hFree((void***) &socketList, sid);
+	socketMax = hFree((void*) &socketList, sid);
 
 /*
  *	Calculate the new highest socket number

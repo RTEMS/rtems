@@ -88,7 +88,7 @@ sym_fd_t symOpen(int hash_size)
 /*
  *	Create a new handle for this symbol table
  */
-	if ((sd = hAlloc((void***) &sym)) < 0) {
+	if ((sd = hAlloc((void*) &sym)) < 0) {
 		return -1;
 	}
 
@@ -96,7 +96,7 @@ sym_fd_t symOpen(int hash_size)
  *	Create a new symbol table structure and zero
  */
 	if ((tp = (sym_tabent_t*) balloc(B_L, sizeof(sym_tabent_t))) == NULL) {
-		symMax = hFree((void***) &sym, sd);
+		symMax = hFree((void*) &sym, sd);
 		return -1;
 	}
 	memset(tp, 0, sizeof(sym_tabent_t));
@@ -147,7 +147,7 @@ void symClose(sym_fd_t sd)
 	}
 	bfree(B_L, (void*) tp->hash_table);
 
-	symMax = hFree((void***) &sym, sd);
+	symMax = hFree((void*) &sym, sd);
 	bfree(B_L, (void*) tp);
 }
 

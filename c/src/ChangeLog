@@ -1,5 +1,14 @@
 2004-03-05	Joel Sherrill <joel@OARcorp.com>
 
+	* libnetworking/rtems_webserver/ejparse.c,
+	libnetworking/rtems_webserver/emfdb.c,
+	libnetworking/rtems_webserver/sock.c,
+	libnetworking/rtems_webserver/socket.c,
+	libnetworking/rtems_webserver/sym.c,
+	libnetworking/rtems_webserver/webs.c,
+	libnetworking/rtems_webserver/websuemf.c: Remove warnings.
+2004-03-05	Joel Sherrill <joel@OARcorp.com>
+
 	* libchipnetwork/open_eth.c: Remove warnings by conditionally
 	compiling this file only only those CPU families with supported
 	exception models.

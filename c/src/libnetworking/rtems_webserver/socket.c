@@ -348,19 +348,24 @@ void socketCloseConnection(int sid)
 
 static void socketAccept(socket_t *sp)
 {
-	struct sockaddr_in	addr;
+	union {
+	  struct sockaddr	addr;
+	  struct sockaddr_in	addr_in;
+        } overlay;
+	struct sockaddr_in	*addr;
 	socket_t 			*nsp;
-	size_t				len;
+	int				len;
 	char				*pString;
 	int 				newSock, nid;
 
 	a_assert(sp);
+	addr = &overlay.addr_in;
 
 /*
  *	Accept the connection and prevent inheriting by children (F_SETFD)
  */
 	len = sizeof(struct sockaddr_in);
-	if ((newSock = accept(sp->sock, (struct sockaddr *) &addr, (int *)&len)) < 0) {
+	if ((newSock = accept(sp->sock, &overlay.addr, &len)) < 0) {
 		return;
 	}
 #ifndef __NO_FCNTL
@@ -390,8 +395,8 @@ static void socketAccept(socket_t *sp)
  *	to register for further events of interest.
  */
 	if (sp->accept != NULL) {
-		pString = inet_ntoa(addr.sin_addr);
-		if ((sp->accept)(nid, pString, ntohs(addr.sin_port), sp->sid) < 0) {
+		pString = inet_ntoa(addr->sin_addr);
+		if ((sp->accept)(nid, pString, ntohs(addr->sin_port), sp->sid) < 0) {
 			socketFree(nid);
 		}
 #if VXWORKS

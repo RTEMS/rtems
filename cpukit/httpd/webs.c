@@ -1861,7 +1861,7 @@ int websAlloc(int sid)
 /*
  *	Allocate a new handle for this connection
  */
-	if ((wid = hAllocEntry((void***) &webs, &websMax,
+	if ((wid = hAllocEntry((void*) &webs, &websMax,
 			sizeof(struct websRec))) < 0) {
 		return -1;
 	}
@@ -1972,7 +1972,7 @@ void websFree(webs_t wp)
 		ringqClose(&wp->header);
 	}
 
-	websMax = hFree((void***) &webs, wp->wid);
+	websMax = hFree((void*) &webs, wp->wid);
 	bfree(B_L, wp);
 	a_assert(websMax >= 0);
 }

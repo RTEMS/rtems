@@ -60,7 +60,7 @@ int ejOpenEngine(sym_fd_t variables, sym_fd_t functions)
 	ej_t	*ep;
 	int		eid, vid;
 
-	if ((eid = hAllocEntry((void***) &ejHandles, &ejMax, sizeof(ej_t))) < 0) {
+	if ((eid = hAllocEntry((void*) &ejHandles, &ejMax, sizeof(ej_t))) < 0) {
 		return -1;
 	}
 	ep = ejHandles[eid];
@@ -72,7 +72,7 @@ int ejOpenEngine(sym_fd_t variables, sym_fd_t functions)
  *	declarations so we use hAlloc to manage a list of variable tables.
  */
 	if ((vid = hAlloc((void***) &ep->variables)) < 0) {
-		ejMax = hFree((void***) &ejHandles, ep->eid);
+		ejMax = hFree((void*) &ejHandles, ep->eid);
 		return -1;
 	}
 	if (vid >= ep->variableMax) {
@@ -142,7 +142,7 @@ void ejCloseEngine(int eid)
 		symClose(ep->functions);
 	}
 
-	ejMax = hFree((void***) &ejHandles, ep->eid);
+	ejMax = hFree((void*) &ejHandles, ep->eid);
 	bfree(B_L, ep);
 }
 

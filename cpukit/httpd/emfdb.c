@@ -63,7 +63,7 @@ int dbRegisterDBSchema(dbTable_t *pTableRegister)
 /*
  *	Bump up the size of the table array
  */
-	tid = hAllocEntry((void***) &dbListTables, 
+	tid = hAllocEntry((void*) &dbListTables, 
 		&dbMaxTables, sizeof(dbTable_t));	
 
 /*
@@ -167,7 +167,7 @@ void dbClose(int did)
  *			Free the table
  */
 			bfreeSafe(B_L, pTable);
-			hFree((void ***) &dbListTables, table);
+			hFree((void *) &dbListTables, table);
 		}
 	}
 

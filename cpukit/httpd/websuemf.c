@@ -121,7 +121,7 @@ int emfSchedCallback(int delay, emfSchedProc *proc, void *arg)
 	sched_t	*s;
 	int		schedid;
 
-	if ((schedid = hAllocEntry((void***) &sched, &schedMax,
+	if ((schedid = hAllocEntry((void*) &sched, &schedMax,
 		sizeof(sched_t))) < 0) {
 		return -1;
 	}
@@ -165,7 +165,7 @@ void emfUnschedCallback(int schedid)
 		return;
 	}
 	bfree(B_L, s);
-	schedMax = hFree((void***) &sched, schedid);
+	schedMax = hFree((void*) &sched, schedid);
 }
 
 /******************************************************************************/
