@@ -39,6 +39,7 @@ dummy/Makefile
 dumpbuf/Makefile
 monitor/Makefile
 rtmonuse/Makefile
+rootfs/Makefile
 stackchk/Makefile
 untar/Makefile
 mw-fb/Makefile

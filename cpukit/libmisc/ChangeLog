@@ -1,3 +1,12 @@
+2001-09-19	Chris Johns <ccj@acm.org>
+
+	* Added support for populating the initial "root" filesystem
+	with information obtained via the DHCP response.
+	* rootfs: New directory.
+	* rootfs/.cvsignore, rootfs/Makefile.am, rootfs/mkrootfs.c,
+	rootfs/mkrootfs.h: New files.
+	* configure.in, Makefile.am: Modified to reflect addition.
+
 2001-09-14	Fernando Ruiz <fernando.ruiz@ctv.es>
 
 	* shell/shell.c: Don't close file it wasn't open.
