@@ -109,16 +109,16 @@ _start16:
 	outb	%al, $0x60
 	call	empty_8042
 
-	call	delay
-	call	delay
-	call	delay
+	call	pc386_delay
+	call	pc386_delay
+	call	pc386_delay
 
 	movl	%cs:HDRSTART + HDROFF, %eax	#
 	pushl	%eax				# jump to start of 32 bit code
 	ret					#
 
 /*----------------------------------------------------------------------------+
-| delay
+| pc386_delay
 +------------------------------------------------------------------------------
 | Delay is needed after doing I/O. 
 |
@@ -131,10 +131,10 @@ _start16:
 | NOTE: Saving the content of the EAX register just in case. - Rosimildo.
 +----------------------------------------------------------------------------*/
 	.p2align 4
-	.globl _delay
-	.globl delay
-delay:
-_delay:
+	.globl _pc386_delay
+	.globl pc386_delay
+pc386_delay:
+_pc386_delay:
 	pushl	%eax
 #if defined(USE_OUTB_FOR_DELAY)
 	outb	%al, $0x80	# about 1uS delay on most machines
@@ -142,9 +142,9 @@ _delay:
 #else
 
 	movl	$0x200, %eax
-delay1:
+pc386_delay1:
 	dec	%eax
-	jnz	delay1
+	jnz	pc386_delay1
 #endif
 	popl	%eax
  	ret
@@ -162,11 +162,11 @@ delay1:
 	.globl empty_8042
 empty_8042:
 _empty_8042:
-	call	delay
+	call	pc386_delay
 	inb	$0x64, %al	# 8042 status port
 	testb	$0x01, %al	# output buffer?
 	jz	no_output
-	call	delay
+	call	pc386_delay
 	in	$0x60, %al	# read it
 	jmp	empty_8042
 no_output:
