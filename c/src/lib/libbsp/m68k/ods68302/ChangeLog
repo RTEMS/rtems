@@ -1,5 +1,9 @@
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
+	* startup/m68k-stub.c: Removed typos.
+
+2002-11-01	Joel Sherrill <joel@OARcorp.com>
+
 	* startup/m68k-stub.c: Removed warnings.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

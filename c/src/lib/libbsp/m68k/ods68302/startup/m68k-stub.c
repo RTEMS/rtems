@@ -290,8 +290,8 @@ return_to_any:\n\
 copyUserLoop:                                                               \n\
         movew   %a1@-,%sp@-                                               \n\
         dbf     %d0,copyUserLoop                                             \n\
-");                                                                     \n\
-        RESTORE_FP_REGS()                                              \n\
+");
+        RESTORE_FP_REGS()
 asm("\n\
         moveml  registers,%d0-%d7/%a0-%a6\n\
         rte                          /* pop and go! */\n\
@@ -333,7 +333,7 @@ _already7:\n\
 ");
 #if defined (__mc68000__) && !defined(__mc68020__)
 asm("\n\
-        lea     %sp@(4),%sp");       /* pull off 68000 return address */\n\
+        lea     %sp@(4),%sp");       /* pull off 68000 return address */
 #endif
 asm("\n\
         rte\n\
@@ -454,7 +454,7 @@ a7saveDone:\n\
  *   Return Address  MSWord              
  *   Return Address  LSWord             
  */
-asm("
+asm("\n\
         .text\n\
         .globl _catchException\n\
         .align 4\n\
