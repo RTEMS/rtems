@@ -120,7 +120,6 @@ RTEMS_BSPOPTS_HELP([DISPATCH_HANDLER_STAT],
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 irq/Makefile
 ide/Makefile
 network/Makefile

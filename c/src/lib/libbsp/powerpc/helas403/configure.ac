@@ -34,7 +34,6 @@ RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
 AC_CONFIG_FILES([Makefile
 dlentry/Makefile
 flashentry/Makefile
-include/Makefile
 startup/Makefile
 wrapup/Makefile])
 

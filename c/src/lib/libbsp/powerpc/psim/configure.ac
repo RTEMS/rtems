@@ -37,7 +37,6 @@ RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 shmsupp/Makefile
 start/Makefile
 startup/Makefile
