@@ -9,8 +9,8 @@
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
+ *  The license and distribution terms for this file may in
+ *  the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
  * Based on the `gen68302' board support package, and covered by the
@@ -34,273 +34,275 @@ BEGIN_CODE
 Entry:
 	.long	SYM(m360)+1024		|   0: Initial SSP
 	.long	start			|   1: Initial PC
-	.long	uhoh			|   2: Bus error
-	.long	uhoh			|   3: Address error
-	.long	uhoh			|   4: Illegal instruction
-	.long	uhoh			|   5: Zero division
-	.long	uhoh			|   6: CHK, CHK2 instruction
-	.long	uhoh			|   7: TRAPcc, TRAPV instructions
-	.long	uhoh			|   8: Privilege violation
-	.long	uhoh			|   9: Trace
-	.long	uhoh			|  10: Line 1010 emulator
-	.long	uhoh			|  11: Line 1111 emulator
-	.long	uhoh			|  12: Hardware breakpoint
-	.long	uhoh			|  13: Reserved for coprocessor violation
-	.long	uhoh			|  14: Format error
-	.long	uhoh			|  15: Uninitialized interrupt
-	.long	uhoh			|  16: Unassigned, reserved
-	.long	uhoh			|  17:
-	.long	uhoh			|  18:
-	.long	uhoh			|  19:
-	.long	uhoh			|  20:
-	.long	uhoh			|  21:
-	.long	uhoh			|  22:
-	.long	uhoh			|  23:
-	.long	spurious_interrupt	|  24: Spurious interrupt
-	.long	uhoh			|  25: Level 1 interrupt autovector
-	.long	uhoh			|  26: Level 2 interrupt autovector
-	.long	uhoh			|  27: Level 3 interrupt autovector
-	.long	uhoh			|  28: Level 4 interrupt autovector
-	.long	uhoh			|  29: Level 5 interrupt autovector
-	.long	uhoh			|  30: Level 6 interrupt autovector
-	.long	uhoh			|  31: Level 7 interrupt autovector
-	.long	uhoh			|  32: Trap instruction (0-15)
-	.long	uhoh			|  33:
-	.long	uhoh			|  34:
-	.long	uhoh			|  35:
-	.long	uhoh			|  36:
-	.long	uhoh			|  37:
-	.long	uhoh			|  38:
-	.long	uhoh			|  39:
-	.long	uhoh			|  40:
-	.long	uhoh			|  41:
-	.long	uhoh			|  42:
-	.long	uhoh			|  43:
-	.long	uhoh			|  44:
-	.long	uhoh			|  45:
-	.long	uhoh			|  46:
-	.long	uhoh			|  47:
-	.long	uhoh			|  48: Reserved for coprocessor
-	.long	uhoh			|  49:
-	.long	uhoh			|  50:
-	.long	uhoh			|  51:
-	.long	uhoh			|  52:
-	.long	uhoh			|  53:
-	.long	uhoh			|  54:
-	.long	uhoh			|  55:
-	.long	uhoh			|  56:
-	.long	uhoh			|  57:
-	.long	uhoh			|  58:
-	.long	uhoh			|  59: Unassigned, reserved
-	.long	uhoh			|  60:
-	.long	uhoh			|  61:
-	.long	uhoh			|  62:
-	.long	uhoh			|  63:
-	.long	uhoh			|  64: User defined vectors (192)
-	.long	uhoh			|  65:
-	.long	uhoh			|  66:
-	.long	uhoh			|  67:
-	.long	uhoh			|  68:
-	.long	uhoh			|  69:
-	.long	uhoh			|  70:
-	.long	uhoh			|  71:
-	.long	uhoh			|  72:
-	.long	uhoh			|  73:
-	.long	uhoh			|  74:
-	.long	uhoh			|  75:
-	.long	uhoh			|  76:
-	.long	uhoh			|  77:
-	.long	uhoh			|  78:
-	.long	uhoh			|  79:
-	.long	uhoh			|  80:
-	.long	uhoh			|  81:
-	.long	uhoh			|  82:
-	.long	uhoh			|  83:
-	.long	uhoh			|  84:
-	.long	uhoh			|  85:
-	.long	uhoh			|  86:
-	.long	uhoh			|  87:
-	.long	uhoh			|  88:
-	.long	uhoh			|  89:
-	.long	uhoh			|  90:
-	.long	uhoh			|  91:
-	.long	uhoh			|  92:
-	.long	uhoh			|  93:
-	.long	uhoh			|  94:
-	.long	uhoh			|  95:
-	.long	uhoh			|  96:
-	.long	uhoh			|  97:
-	.long	uhoh			|  98:
-	.long	uhoh			|  99:
-	.long	uhoh			| 100:
-	.long	uhoh			| 101:
-	.long	uhoh			| 102:
-	.long	uhoh			| 103:
-	.long	uhoh			| 104:
-	.long	uhoh			| 105:
-	.long	uhoh			| 106:
-	.long	uhoh			| 107:
-	.long	uhoh			| 108:
-	.long	uhoh			| 109:
-	.long	uhoh			| 110:
-	.long	uhoh			| 111:
-	.long	uhoh			| 112:
-	.long	uhoh			| 113:
-	.long	uhoh			| 114:
-	.long	uhoh			| 115:
-	.long	uhoh			| 116:
-	.long	uhoh			| 117:
-	.long	uhoh			| 118:
-	.long	uhoh			| 119:
-	.long	uhoh			| 120:
-	.long	uhoh			| 121:
-	.long	uhoh			| 122:
-	.long	uhoh			| 123:
-	.long	uhoh			| 124:
-	.long	uhoh			| 125:
-	.long	uhoh			| 126:
-	.long	uhoh			| 127:
-	.long	uhoh			| 128:
-	.long	uhoh			| 129:
-	.long	uhoh			| 130:
-	.long	uhoh			| 131:
-	.long	uhoh			| 132:
-	.long	uhoh			| 133:
-	.long	uhoh			| 134:
-	.long	uhoh			| 135:
-	.long	uhoh			| 136:
-	.long	uhoh			| 137:
-	.long	uhoh			| 138:
-	.long	uhoh			| 139:
-	.long	uhoh			| 140:
-	.long	uhoh			| 141:
-	.long	uhoh			| 142:
-	.long	uhoh			| 143:
-	.long	uhoh			| 144:
-	.long	uhoh			| 145:
-	.long	uhoh			| 146:
-	.long	uhoh			| 147:
-	.long	uhoh			| 148:
-	.long	uhoh			| 149:
-	.long	uhoh			| 150:
-	.long	uhoh			| 151:
-	.long	uhoh			| 152:
-	.long	uhoh			| 153:
-	.long	uhoh			| 154:
-	.long	uhoh			| 155:
-	.long	uhoh			| 156:
-	.long	uhoh			| 157:
-	.long	uhoh			| 158:
-	.long	uhoh			| 159:
-	.long	uhoh			| 160:
-	.long	uhoh			| 161:
-	.long	uhoh			| 162:
-	.long	uhoh			| 163:
-	.long	uhoh			| 164:
-	.long	uhoh			| 165:
-	.long	uhoh			| 166:
-	.long	uhoh			| 167:
-	.long	uhoh			| 168:
-	.long	uhoh			| 169:
-	.long	uhoh			| 170:
-	.long	uhoh			| 171:
-	.long	uhoh			| 172:
-	.long	uhoh			| 173:
-	.long	uhoh			| 174:
-	.long	uhoh			| 175:
-	.long	uhoh			| 176:
-	.long	uhoh			| 177:
-	.long	uhoh			| 178:
-	.long	uhoh			| 179:
-	.long	uhoh			| 180:
-	.long	uhoh			| 181:
-	.long	uhoh			| 182:
-	.long	uhoh			| 183:
-	.long	uhoh			| 184:
-	.long	uhoh			| 185:
-	.long	uhoh			| 186:
-	.long	uhoh			| 187:
-	.long	uhoh			| 188:
-	.long	uhoh			| 189:
-	.long	uhoh			| 190:
-	.long	uhoh			| 191:
-	.long	uhoh			| 192:
-	.long	uhoh			| 193:
-	.long	uhoh			| 194:
-	.long	uhoh			| 195:
-	.long	uhoh			| 196:
-	.long	uhoh			| 197:
-	.long	uhoh			| 198:
-	.long	uhoh			| 199:
-	.long	uhoh			| 200:
-	.long	uhoh			| 201:
-	.long	uhoh			| 202:
-	.long	uhoh			| 203:
-	.long	uhoh			| 204:
-	.long	uhoh			| 205:
-	.long	uhoh			| 206:
-	.long	uhoh			| 207:
-	.long	uhoh			| 208:
-	.long	uhoh			| 209:
-	.long	uhoh			| 210:
-	.long	uhoh			| 211:
-	.long	uhoh			| 212:
-	.long	uhoh			| 213:
-	.long	uhoh			| 214:
-	.long	uhoh			| 215:
-	.long	uhoh			| 216:
-	.long	uhoh			| 217:
-	.long	uhoh			| 218:
-	.long	uhoh			| 219:
-	.long	uhoh			| 220:
-	.long	uhoh			| 221:
-	.long	uhoh			| 222:
-	.long	uhoh			| 223:
-	.long	uhoh			| 224:
-	.long	uhoh			| 225:
-	.long	uhoh			| 226:
-	.long	uhoh			| 227:
-	.long	uhoh			| 228:
-	.long	uhoh			| 229:
-	.long	uhoh			| 230:
-	.long	uhoh			| 231:
-	.long	uhoh			| 232:
-	.long	uhoh			| 233:
-	.long	uhoh			| 234:
-	.long	uhoh			| 235:
-	.long	uhoh			| 236:
-	.long	uhoh			| 237:
-	.long	uhoh			| 238:
-	.long	uhoh			| 239:
-	.long	uhoh			| 240:
-	.long	uhoh			| 241:
-	.long	uhoh			| 242:
-	.long	uhoh			| 243:
-	.long	uhoh			| 244:
-	.long	uhoh			| 245:
-	.long	uhoh			| 246:
-	.long	uhoh			| 247:
-	.long	uhoh			| 248:
-	.long	uhoh			| 249:
-	.long	uhoh			| 250:
-	.long	uhoh			| 251:
-	.long	uhoh			| 252:
-	.long	uhoh			| 253:
-	.long	uhoh			| 254:
-	.long	uhoh			| 255:
+	.long	SYM(_uhoh)		|   2: Bus error
+	.long	SYM(_uhoh)		|   3: Address error
+	.long	SYM(_uhoh)		|   4: Illegal instruction
+	.long	SYM(_uhoh)		|   5: Zero division
+	.long	SYM(_uhoh)		|   6: CHK, CHK2 instruction
+	.long	SYM(_uhoh)		|   7: TRAPcc, TRAPV instructions
+	.long	SYM(_uhoh)		|   8: Privilege violation
+	.long	SYM(_uhoh)		|   9: Trace
+	.long	SYM(_uhoh)		|  10: Line 1010 emulator
+	.long	SYM(_uhoh)		|  11: Line 1111 emulator
+	.long	SYM(_uhoh)		|  12: Hardware breakpoint
+	.long	SYM(_uhoh)		|  13: Reserved for coprocessor violation
+	.long	SYM(_uhoh)		|  14: Format error
+	.long	SYM(_uhoh)		|  15: Uninitialized interrupt
+	.long	SYM(_uhoh)		|  16: Unassigned, reserved
+	.long	SYM(_uhoh)		|  17:
+	.long	SYM(_uhoh)		|  18:
+	.long	SYM(_uhoh)		|  19:
+	.long	SYM(_uhoh)		|  20:
+	.long	SYM(_uhoh)		|  21:
+	.long	SYM(_uhoh)		|  22:
+	.long	SYM(_uhoh)		|  23:
+	.long	SYM(_spuriousInterrupt)	|  24: Spurious interrupt
+	.long	SYM(_uhoh)		|  25: Level 1 interrupt autovector
+	.long	SYM(_uhoh)		|  26: Level 2 interrupt autovector
+	.long	SYM(_uhoh)		|  27: Level 3 interrupt autovector
+	.long	SYM(_uhoh)		|  28: Level 4 interrupt autovector
+	.long	SYM(_uhoh)		|  29: Level 5 interrupt autovector
+	.long	SYM(_uhoh)		|  30: Level 6 interrupt autovector
+	.long	SYM(_uhoh)		|  31: Level 7 interrupt autovector
+	.long	SYM(_uhoh)		|  32: Trap instruction (0-15)
+	.long	SYM(_uhoh)		|  33:
+	.long	SYM(_uhoh)		|  34:
+	.long	SYM(_uhoh)		|  35:
+	.long	SYM(_uhoh)		|  36:
+	.long	SYM(_uhoh)		|  37:
+	.long	SYM(_uhoh)		|  38:
+	.long	SYM(_uhoh)		|  39:
+	.long	SYM(_uhoh)		|  40:
+	.long	SYM(_uhoh)		|  41:
+	.long	SYM(_uhoh)		|  42:
+	.long	SYM(_uhoh)		|  43:
+	.long	SYM(_uhoh)		|  44:
+	.long	SYM(_uhoh)		|  45:
+	.long	SYM(_uhoh)		|  46:
+	.long	SYM(_uhoh)		|  47:
+	.long	SYM(_uhoh)		|  48: Reserved for coprocessor
+	.long	SYM(_uhoh)		|  49:
+	.long	SYM(_uhoh)		|  50:
+	.long	SYM(_uhoh)		|  51:
+	.long	SYM(_uhoh)		|  52:
+	.long	SYM(_uhoh)		|  53:
+	.long	SYM(_uhoh)		|  54:
+	.long	SYM(_uhoh)		|  55:
+	.long	SYM(_uhoh)		|  56:
+	.long	SYM(_uhoh)		|  57:
+	.long	SYM(_uhoh)		|  58:
+	.long	SYM(_uhoh)		|  59: Unassigned, reserved
+	.long	SYM(_uhoh)		|  60:
+	.long	SYM(_uhoh)		|  61:
+	.long	SYM(_uhoh)		|  62:
+	.long	SYM(_uhoh)		|  63:
+	.long	SYM(_uhoh)		|  64: User defined vectors (192)
+	.long	SYM(_uhoh)		|  65:
+	.long	SYM(_uhoh)		|  66:
+	.long	SYM(_uhoh)		|  67:
+	.long	SYM(_uhoh)		|  68:
+	.long	SYM(_uhoh)		|  69:
+	.long	SYM(_uhoh)		|  70:
+	.long	SYM(_uhoh)		|  71:
+	.long	SYM(_uhoh)		|  72:
+	.long	SYM(_uhoh)		|  73:
+	.long	SYM(_uhoh)		|  74:
+	.long	SYM(_uhoh)		|  75:
+	.long	SYM(_uhoh)		|  76:
+	.long	SYM(_uhoh)		|  77:
+	.long	SYM(_uhoh)		|  78:
+	.long	SYM(_uhoh)		|  79:
+	.long	SYM(_uhoh)		|  80:
+	.long	SYM(_uhoh)		|  81:
+	.long	SYM(_uhoh)		|  82:
+	.long	SYM(_uhoh)		|  83:
+	.long	SYM(_uhoh)		|  84:
+	.long	SYM(_uhoh)		|  85:
+	.long	SYM(_uhoh)		|  86:
+	.long	SYM(_uhoh)		|  87:
+	.long	SYM(_uhoh)		|  88:
+	.long	SYM(_uhoh)		|  89:
+	.long	SYM(_uhoh)		|  90:
+	.long	SYM(_uhoh)		|  91:
+	.long	SYM(_uhoh)		|  92:
+	.long	SYM(_uhoh)		|  93:
+	.long	SYM(_uhoh)		|  94:
+	.long	SYM(_uhoh)		|  95:
+	.long	SYM(_uhoh)		|  96:
+	.long	SYM(_uhoh)		|  97:
+	.long	SYM(_uhoh)		|  98:
+	.long	SYM(_uhoh)		|  99:
+	.long	SYM(_uhoh)		| 100:
+	.long	SYM(_uhoh)		| 101:
+	.long	SYM(_uhoh)		| 102:
+	.long	SYM(_uhoh)		| 103:
+	.long	SYM(_uhoh)		| 104:
+	.long	SYM(_uhoh)		| 105:
+	.long	SYM(_uhoh)		| 106:
+	.long	SYM(_uhoh)		| 107:
+	.long	SYM(_uhoh)		| 108:
+	.long	SYM(_uhoh)		| 109:
+	.long	SYM(_uhoh)		| 110:
+	.long	SYM(_uhoh)		| 111:
+	.long	SYM(_uhoh)		| 112:
+	.long	SYM(_uhoh)		| 113:
+	.long	SYM(_uhoh)		| 114:
+	.long	SYM(_uhoh)		| 115:
+	.long	SYM(_uhoh)		| 116:
+	.long	SYM(_uhoh)		| 117:
+	.long	SYM(_uhoh)		| 118:
+	.long	SYM(_uhoh)		| 119:
+	.long	SYM(_uhoh)		| 120:
+	.long	SYM(_uhoh)		| 121:
+	.long	SYM(_uhoh)		| 122:
+	.long	SYM(_uhoh)		| 123:
+	.long	SYM(_uhoh)		| 124:
+	.long	SYM(_uhoh)		| 125:
+	.long	SYM(_uhoh)		| 126:
+	.long	SYM(_uhoh)		| 127:
+	.long	SYM(_uhoh)		| 128:
+	.long	SYM(_uhoh)		| 129:
+	.long	SYM(_uhoh)		| 130:
+	.long	SYM(_uhoh)		| 131:
+	.long	SYM(_uhoh)		| 132:
+	.long	SYM(_uhoh)		| 133:
+	.long	SYM(_uhoh)		| 134:
+	.long	SYM(_uhoh)		| 135:
+	.long	SYM(_uhoh)		| 136:
+	.long	SYM(_uhoh)		| 137:
+	.long	SYM(_uhoh)		| 138:
+	.long	SYM(_uhoh)		| 139:
+	.long	SYM(_uhoh)		| 140:
+	.long	SYM(_uhoh)		| 141:
+	.long	SYM(_uhoh)		| 142:
+	.long	SYM(_uhoh)		| 143:
+	.long	SYM(_uhoh)		| 144:
+	.long	SYM(_uhoh)		| 145:
+	.long	SYM(_uhoh)		| 146:
+	.long	SYM(_uhoh)		| 147:
+	.long	SYM(_uhoh)		| 148:
+	.long	SYM(_uhoh)		| 149:
+	.long	SYM(_uhoh)		| 150:
+	.long	SYM(_uhoh)		| 151:
+	.long	SYM(_uhoh)		| 152:
+	.long	SYM(_uhoh)		| 153:
+	.long	SYM(_uhoh)		| 154:
+	.long	SYM(_uhoh)		| 155:
+	.long	SYM(_uhoh)		| 156:
+	.long	SYM(_uhoh)		| 157:
+	.long	SYM(_uhoh)		| 158:
+	.long	SYM(_uhoh)		| 159:
+	.long	SYM(_uhoh)		| 160:
+	.long	SYM(_uhoh)		| 161:
+	.long	SYM(_uhoh)		| 162:
+	.long	SYM(_uhoh)		| 163:
+	.long	SYM(_uhoh)		| 164:
+	.long	SYM(_uhoh)		| 165:
+	.long	SYM(_uhoh)		| 166:
+	.long	SYM(_uhoh)		| 167:
+	.long	SYM(_uhoh)		| 168:
+	.long	SYM(_uhoh)		| 169:
+	.long	SYM(_uhoh)		| 170:
+	.long	SYM(_uhoh)		| 171:
+	.long	SYM(_uhoh)		| 172:
+	.long	SYM(_uhoh)		| 173:
+	.long	SYM(_uhoh)		| 174:
+	.long	SYM(_uhoh)		| 175:
+	.long	SYM(_uhoh)		| 176:
+	.long	SYM(_uhoh)		| 177:
+	.long	SYM(_uhoh)		| 178:
+	.long	SYM(_uhoh)		| 179:
+	.long	SYM(_uhoh)		| 180:
+	.long	SYM(_uhoh)		| 181:
+	.long	SYM(_uhoh)		| 182:
+	.long	SYM(_uhoh)		| 183:
+	.long	SYM(_uhoh)		| 184:
+	.long	SYM(_uhoh)		| 185:
+	.long	SYM(_uhoh)		| 186:
+	.long	SYM(_uhoh)		| 187:
+	.long	SYM(_uhoh)		| 188:
+	.long	SYM(_uhoh)		| 189:
+	.long	SYM(_uhoh)		| 190:
+	.long	SYM(_uhoh)		| 191:
+	.long	SYM(_uhoh)		| 192:
+	.long	SYM(_uhoh)		| 193:
+	.long	SYM(_uhoh)		| 194:
+	.long	SYM(_uhoh)		| 195:
+	.long	SYM(_uhoh)		| 196:
+	.long	SYM(_uhoh)		| 197:
+	.long	SYM(_uhoh)		| 198:
+	.long	SYM(_uhoh)		| 199:
+	.long	SYM(_uhoh)		| 200:
+	.long	SYM(_uhoh)		| 201:
+	.long	SYM(_uhoh)		| 202:
+	.long	SYM(_uhoh)		| 203:
+	.long	SYM(_uhoh)		| 204:
+	.long	SYM(_uhoh)		| 205:
+	.long	SYM(_uhoh)		| 206:
+	.long	SYM(_uhoh)		| 207:
+	.long	SYM(_uhoh)		| 208:
+	.long	SYM(_uhoh)		| 209:
+	.long	SYM(_uhoh)		| 210:
+	.long	SYM(_uhoh)		| 211:
+	.long	SYM(_uhoh)		| 212:
+	.long	SYM(_uhoh)		| 213:
+	.long	SYM(_uhoh)		| 214:
+	.long	SYM(_uhoh)		| 215:
+	.long	SYM(_uhoh)		| 216:
+	.long	SYM(_uhoh)		| 217:
+	.long	SYM(_uhoh)		| 218:
+	.long	SYM(_uhoh)		| 219:
+	.long	SYM(_uhoh)		| 220:
+	.long	SYM(_uhoh)		| 221:
+	.long	SYM(_uhoh)		| 222:
+	.long	SYM(_uhoh)		| 223:
+	.long	SYM(_uhoh)		| 224:
+	.long	SYM(_uhoh)		| 225:
+	.long	SYM(_uhoh)		| 226:
+	.long	SYM(_uhoh)		| 227:
+	.long	SYM(_uhoh)		| 228:
+	.long	SYM(_uhoh)		| 229:
+	.long	SYM(_uhoh)		| 230:
+	.long	SYM(_uhoh)		| 231:
+	.long	SYM(_uhoh)		| 232:
+	.long	SYM(_uhoh)		| 233:
+	.long	SYM(_uhoh)		| 234:
+	.long	SYM(_uhoh)		| 235:
+	.long	SYM(_uhoh)		| 236:
+	.long	SYM(_uhoh)		| 237:
+	.long	SYM(_uhoh)		| 238:
+	.long	SYM(_uhoh)		| 239:
+	.long	SYM(_uhoh)		| 240:
+	.long	SYM(_uhoh)		| 241:
+	.long	SYM(_uhoh)		| 242:
+	.long	SYM(_uhoh)		| 243:
+	.long	SYM(_uhoh)		| 244:
+	.long	SYM(_uhoh)		| 245:
+	.long	SYM(_uhoh)		| 246:
+	.long	SYM(_uhoh)		| 247:
+	.long	SYM(_uhoh)		| 248:
+	.long	SYM(_uhoh)		| 249:
+	.long	SYM(_uhoh)		| 250:
+	.long	SYM(_uhoh)		| 251:
+	.long	SYM(_uhoh)		| 252:
+	.long	SYM(_uhoh)		| 253:
+	.long	SYM(_uhoh)		| 254:
+	.long	SYM(_uhoh)		| 255:
 
 /*
  * Default trap handler
  * With an oscilloscope you can see AS* stop
  */
-uhoh:	nop				| Leave spot for breakpoint
+	PUBLIC (_uhoh)
+SYM(_uhoh):	nop				| Leave spot for breakpoint
 	stop	#0x2700			| Stop with interrupts disabled
-	bra.s	uhoh			| Stuck forever
+	bra.s	SYM(_uhoh)			| Stuck forever
 
 /*
  * Log, but otherwise ignore, spurious interrupts
  */
-spurious_interrupt:
+	PUBLIC (_spuriousInterrupt)
+SYM(_spuriousInterrupt):
 	addql	#1,SYM(_M68kSpuriousInterruptCount)
 	rte
 
@@ -320,7 +322,8 @@ spurious_interrupt:
 /*
  * Initial PC
  */
-start:	
+.globl start
+start:
 	/*
 	 * Step 2: Stay in Supervisor Mode
 	 */
@@ -353,11 +356,11 @@ start:
 	moveb	#0x33,d0		| Set the test value
 	moveb	d0,a0@			| Set the memory location
 	cmpb	a0@,d0			| Does it read back?
-	bne	uhoh			| If not, bad news!
+	bne	SYM(_uhoh)			| If not, bad news!
 	notb	d0			| Flip bits
 	moveb	d0,a0@			| Set the memory location
 	cmpb	a0@,d0			| Does it read back?
-	bne	uhoh			| If not, bad news!
+	bne	SYM(_uhoh)			| If not, bad news!
 
 	/*
 	 * Remaining steps are handled by C code
@@ -400,12 +403,13 @@ ZEROLOOPTEST:
 	movel	d0,a7@-			| argc
 	jsr	SYM(main)		| Call C main
 
-					| Should this just force a reset?
-mainDone:	nop			| Leave spot for breakpoint
+	PUBLIC (_mainDone)
+SYM(_mainDone):
+	nop				| Leave spot for breakpoint
 	movew	#1,a7			| Force a double bus error
 	movel	d0,a7@-			| This should cause a RESET
 	stop	#0x2700			| Stop with interrupts disabled
-	bra.s	mainDone		| Stuck forever
+	bra.s	SYM(_mainDone)		| Stuck forever
 
         .align 2
 	PUBLIC (_HeapSize)
@@ -427,3 +431,4 @@ SYM (_M68kSpuriousInterruptCount):
 END_DATA_DCL
 
 END
+
