@@ -7,7 +7,7 @@ ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 project_bspdir = $(PROJECT_ROOT)/@RTEMS_BSP@
 
-PREINSTALLDIRS = $(project_bspdir)/tests/screens/psxtests
+PREINSTALLDIRS = $(project_bspdir)/tests/screens/itrontests
 $(PREINSTALLDIRS):
 	@$(mkinstalldirs) $@
 

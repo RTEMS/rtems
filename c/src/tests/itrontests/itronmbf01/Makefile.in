@@ -6,20 +6,20 @@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 top_builddir = ..
-subdir = itrontask01
+subdir = itronmbf01
 
 RTEMS_ROOT = @RTEMS_ROOT@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-TEST = itrontask01
+TEST = itronmbf01
 PGM = ${ARCH}/$(TEST).exe
 
 MANAGERS = all
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = init task1
+C_PIECES = init
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
