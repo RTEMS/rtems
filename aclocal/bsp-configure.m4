@@ -1,7 +1,7 @@
 dnl $Id$
 
 dnl RTEMS_BSP_CONFIGURE
-dnl Commom macro to be included by all bsp-configure.acs
+dnl Common macro to be included by all bsp-configure.acs
 AC_DEFUN([RTEMS_BSP_CONFIGURE],
 [
   AC_PREREQ([2.52])
