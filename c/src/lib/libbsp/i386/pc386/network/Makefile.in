@@ -11,7 +11,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 PGM=${ARCH}/network.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=network
+C_PIECES=network dec21140
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 

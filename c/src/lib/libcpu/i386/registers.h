@@ -58,6 +58,14 @@
 #define CR0_PAGE_LEVEL_CACHE_DISABLE	0x40000000
 #define CR0_PAGING			0x80000000
 
+/*
+ * definitions related to CR3
+ */
+
+#define CR3_PAGE_CACHE_DISABLE		0x10
+#define CR3_PAGE_WRITE_THROUGH		0x8
+
+
 #ifndef ASM
 
 /*
@@ -152,6 +160,23 @@ typedef union {
   cr0_bits	cr0;
   unsigned int	i;
 }cr0;
+
+/*
+ * definition of cr3 registers has a bit field structure
+ */
+typedef struct {
+
+  unsigned int 		        	: 3;
+  unsigned int page_write_transparent	: 1;
+  unsigned int page_cache_disable	: 1;
+  unsigned int 				: 7;
+  unsigned int page_directory_base	:20;
+}cr3_bits;
+
+typedef union {
+  cr3_bits	cr3;
+  unsigned int	i;
+}cr3;
 
 #endif
 

@@ -10,7 +10,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=cpu displayCpu
+C_PIECES=cpu displayCpu page
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 

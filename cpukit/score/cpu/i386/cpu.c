@@ -17,6 +17,7 @@
 #include <rtems/score/isr.h>
 #include <bspIo.h>
 #include <rtems/score/thread.h>
+#include <libcpu/cpuModel.h>
 
 
 /*  _CPU_Initialize
@@ -88,6 +89,7 @@ void _CPU_Thread_Idle_body ()
 
 void _defaultExcHandler (CPU_Exception_frame *ctx)
 {
+  unsigned int faultAddr;
   printk("----------------------------------------------------------\n");
   printk("Exception %d caught at PC %x by thread %d\n",
 	 ctx->idtIndex,
@@ -103,8 +105,14 @@ void _defaultExcHandler (CPU_Exception_frame *ctx)
   printk("----------------------------------------------------------\n");
   printk("Error code pushed by processor itself (if not 0) = %x\n",
 	 ctx->faultCode);
+  printk("----------------------------------------------------------\n");
+  if (ctx->idtIndex == PAGE_FAULT){
+    faultAddr = i386_get_cr2();
+    printk("Page fault linear address (CR2) = %x\n",
+	   faultAddr);
   printk("----------------------------------------------------------\n\n");
-  if (_ISR_Nest_level > 0) {
+  }
+ if (_ISR_Nest_level > 0) {
     /*
      * In this case we shall not delete the task interrupted as
      * it has nothing to do with the fault. We cannot return either

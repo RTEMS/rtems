@@ -60,9 +60,18 @@ extern "C" {
 
 struct rtems_bsdnet_ifconfig;
 extern int rtems_wd_driver_attach (struct rtems_bsdnet_ifconfig *config);
+extern int rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config);
 
+#if 0
 #define RTEMS_BSP_NETWORK_DRIVER_NAME "wd1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH       rtems_wd_driver_attach
+#endif
+
+#if 1
+#define RTEMS_BSP_NETWORK_DRIVER_NAME "dc1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH       rtems_dec21140_driver_attach
+#endif
+
 
 /*-------------------------------------------------------------------------+
 | Constants

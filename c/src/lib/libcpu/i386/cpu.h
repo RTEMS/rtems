@@ -134,6 +134,47 @@ static inline unsigned short i386_get_gs()
 }
 
 /*
+ * Added for pagination management
+ */
+
+static inline unsigned int i386_get_cr0()
+{
+  register unsigned int segment = 0;
+
+  asm volatile ( "movl %%cr0,%0" : "=r" (segment) : "0" (segment) );
+
+  return segment;
+}
+
+static inline void i386_set_cr0(unsigned int segment)
+{
+  asm volatile ( "movl %0,%%cr0" : "=r" (segment) : "0" (segment) );
+}
+
+static inline unsigned int i386_get_cr2()
+{
+  register unsigned int segment = 0;
+
+  asm volatile ( "movl %%cr2,%0" : "=r" (segment) : "0" (segment) );
+
+  return segment;
+}
+
+static inline unsigned int i386_get_cr3()
+{
+  register unsigned int segment = 0;
+
+  asm volatile ( "movl %%cr3,%0" : "=r" (segment) : "0" (segment) );
+
+  return segment;
+}
+
+static inline void i386_set_cr3(unsigned int segment)
+{
+  asm volatile ( "movl %0,%%cr3" : "=r" (segment) : "0" (segment) );
+}
+
+/*
  *  IO Port Access Routines
  */
 
@@ -363,6 +404,112 @@ extern void i386_set_GDTR (segment_descriptors*,
 extern int i386_set_gdt_entry (unsigned short segment_selector, unsigned base,
 					     unsigned limit);
 
+/*
+ * See page 11.18 Figure 11-12.
+ *
+ */
+
+typedef struct {
+  unsigned int offset			: 12;
+  unsigned int page			: 10;
+  unsigned int directory 		: 10;
+}la_bits;
+
+typedef union {
+  la_bits	bits;
+  unsigned int	address;
+}linear_address;
+
+
+/*
+ * See page 11.20 Figure 11-14.
+ *
+ */
+
+typedef struct {
+  unsigned int present	 		: 1;
+  unsigned int writable			: 1;
+  unsigned int user			: 1;
+  unsigned int write_through		: 1;
+  unsigned int cache_disable		: 1;
+  unsigned int accessed			: 1;
+  unsigned int reserved1		: 1;
+  unsigned int page_size		: 1;
+  unsigned int reserved2		: 1;
+  unsigned int available		: 3;
+  unsigned int page_frame_address	: 20;
+}page_dir_bits;
+
+typedef union {
+  page_dir_bits	bits;
+  unsigned int	dir_entry;
+}page_dir_entry;
+
+typedef struct {
+  unsigned int present	 		: 1;
+  unsigned int writable			: 1;
+  unsigned int user			: 1;
+  unsigned int write_through		: 1;
+  unsigned int cache_disable		: 1;
+  unsigned int accessed			: 1;
+  unsigned int dirty			: 1;
+  unsigned int reserved2		: 2;
+  unsigned int available		: 3;
+  unsigned int page_frame_address	: 20;
+}page_table_bits;
+
+typedef union {
+  page_table_bits	bits;
+  unsigned int		table_entry;
+}page_table_entry;
+ 
+/*
+ * definitions related to page table entry
+ */
+#define PG_SIZE 0x1000
+#define MASK_OFFSET 0xFFF
+#define MAX_ENTRY (PG_SIZE/sizeof(page_dir_entry))
+#define FOUR_MB       0x400000
+#define MASK_FLAGS 0x1A
+
+#define PTE_PRESENT  		0x01
+#define PTE_WRITABLE 		0x02
+#define PTE_USER		0x04
+#define PTE_WRITE_THROUGH	0x08
+#define PTE_CACHE_DISABLE	0x10
+
+typedef struct {
+  page_dir_entry pageDirEntry[MAX_ENTRY];
+}page_directory;
+
+typedef struct {
+  page_table_entry pageTableEntry[MAX_ENTRY];
+}page_table;
+
+static inline void flush_cache(){
+  asm volatile ("wbinvd");
+}
+
+
+/* C declaration for paging management */
+
+extern int  	_CPU_is_cache_enabled();
+extern int  	_CPU_is_paging_enabled();
+extern int 	init_paging();
+extern void 	_CPU_enable_paging();
+extern void 	_CPU_disable_paging();
+extern void 	_CPU_disable_cache();
+extern void 	_CPU_enable_cache();
+extern int 	_CPU_map_phys_address
+                      (void **mappedAddress, void *physAddress,
+		       int size, int flag); 
+extern int 	_CPU_unmap_virt_address (void *mappedAddress, int size); 
+extern int 	_CPU_change_memory_mapping_attribute
+                         (void **newAddress, void *mappedAddress,
+			  unsigned int size, unsigned int flag);
+extern int  	_CPU_display_memory_attribute(); 
+
 # endif /* ASM */
 
 #endif
+
