@@ -1,3 +1,11 @@
+2001-11-14	Till Straumann <strauman@SLAC.Stanford.EDU>
+
+	
+	* new_exception_processing/cpu_asm.S: Support double or single
+	precision context switches.  Note that doing a single precision
+	context save/restore on a double precision PowerPC machine does not
+	only result in rounding errors but also screws up the FPSCR register!
+
 2001-11-08	Dennis Ehlin (ECS) <Dennis.Ehlin@ecs.ericsson.se>
 
 	This modification is part of the submitted modifications necessary to
