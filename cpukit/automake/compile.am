@@ -82,9 +82,6 @@ ${ARCH}/%.rel: ${ARCH}/%.$(OBJEXT)
 
 DEPEND=Depends-${ARCH}
 
-CLEAN_DEPEND=$(DEPEND).tmp
-CLOBBER_DEPEND=$(DEPEND)
-
 # We deliberately don't have anything depend on the
 # $(DEPEND) file; otherwise it will get rebuilt even
 # on 'make clean'
