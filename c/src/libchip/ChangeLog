@@ -1,3 +1,13 @@
+2001-03-01	Joel Sherrill <joel@OARcorp.com>
+
+	* network/cs8900.c, network/cs8900.h, network/sonic.c, network/sonic.h,
+	rtc/icm7170_reg.c, rtc/icm7170_reg2.c, rtc/icm7170_reg4.c,
+	rtc/icm7170_reg8.c, rtc/m48t08_reg.c, rtc/m48t08_reg2.c,
+	rtc/m48t08_reg4.c, rtc/m48t08_reg8.c, serial/mc68681_reg.c,
+	serial/mc68681_reg2.c, serial/mc68681_reg4.c, serial/mc68681_reg8.c,
+	serial/z85c30.c, serial/z85c30.h, serial/z85c30_p.h,
+	serial/z85c30_reg.c: Corrected header.
+
 2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* network/Makefile.am, rtc/Makefile.am, serial/Makefile.am: 
