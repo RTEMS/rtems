@@ -48,8 +48,7 @@ $(REL): $(C_O_FILES) $(S_O_FILES)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(REL) $(ARCH)/rtems.o $(TMPINSTALL_FILES)
 
-clean-local:
-	$(RM) -r ../o-optimize ../o-debug ../o-profile
+CLEANDIRS = ../o-optimize ../o-debug ../o-profile
 
 UNUSED_FILES = irq_stub.S
 

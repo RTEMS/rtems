@@ -50,11 +50,10 @@ $(REL): $(C_O_FILES) $(S_O_FILES)
 	$(make-rel)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(REL)
-## all: $(ARCH)/rtems.o
+## all-local: $(ARCH)/rtems.o
 all-local: $(TMPINSTALL_FILES)
 
-clean-local:
-	$(RM) -r ../o-optimize ../o-debug ../o-profile
+CLEANDIRS = ../o-optimize ../o-debug ../o-profile
 
 EXTRA_DIST = $(C_FILES) $(S_FILES)
 

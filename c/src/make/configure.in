@@ -113,7 +113,7 @@ AC_LINK_FILES($cfg_dir/Templates/Makefile.leaf,Templates/Makefile.leaf)
 AC_LINK_FILES($cfg_dir/Templates/Makefile.dir,Templates/Makefile.dir)
 AC_LINK_FILES($cfg_dir/compilers/gcc-target-default.cfg,compilers/gcc-target-default.cfg)
 AC_LINK_FILES($cfg_dir/directory.cfg,directory.cfg)
-AC_LINK_FILES($cfg_dir/leaf.cfg,leaf.cfg)
+AC_LINK_FILES(leaf.cfg,leaf.cfg)
 AC_LINK_FILES($cfg_dir/lib.cfg,lib.cfg)
 AC_LINK_FILES($cfg_dir/README,README)
 

@@ -13,7 +13,7 @@ MAKE_FILES = README directory.cfg leaf.cfg lib.cfg
 
 rtems_make_DATA = $(MAKE_FILES) $(GENERIC_FILES)
 
-noinst_DATA = main.cfg
+noinst_DATA = main.cfg leaf.cfg
 
 rtemsdir = $(prefix)
 rtems_bspdir = $(rtemsdir)/@RTEMS_BSP@

@@ -6,10 +6,4 @@
 #
 # NOTE: This file does not get exported from the source tree
 #
-
-#
-# where things are relative to PROJECT_ROOT; shouldn't need to change,
-# but could be overridden in custom files.
-#
-
-PROJECT_TOOLS = $(PROJECT_RELEASE)/build-tools
+# Now, it's empty :)
