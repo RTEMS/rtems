@@ -43,7 +43,7 @@
 @end ifinfo
 @section Introduction
 
-The timing data for RTEMS on the 603e implementation
+The timing data for RTEMS on the PPC603e implementation
 of the PowerPC architecture is provided along with the target
 dependent aspects concerning the gathering of the timing data.
 The hardware platform used to gather the times is described to
