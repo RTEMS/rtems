@@ -32,8 +32,8 @@
  *  timerisr.S,v 1.1 2001/10/26 19:32:40 joel Exp
  */
 
-#include "asm.h"
-#include "bsp.h"
+#include <rtems/asm.h>
+#include <bsp.h>
 /*
 #include "mcf5272/mcf5272.h"
 */

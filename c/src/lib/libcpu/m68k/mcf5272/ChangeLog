@@ -1,3 +1,7 @@
+2004-11-25	Joel Sherrill <joel@OARcorp.com>
+
+	* timer/timerisr.S: Include rtems/asm.h not asm.h
+
 2004-10-21	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* clock/ckinit.c, include/mcf5272.h, timer/timer.c:
