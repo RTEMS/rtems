@@ -24,12 +24,19 @@ extern "C" {
 /*
  *  External structures
  */
-#if !defined(LOGIN_NAME_MAX)
-#if defined(__linux__)
+
+/*
+ * According to IEEE Std 1003.1-2001, 
+ * limits.h is supposed to provide _POSIX_LOGIN_NAME_MAX
+ * FIXME: We should not rely on this.
+ */
+#include <limits.h>
+
+#ifdef _POSIX_LOGIN_NAME_MAX
 #define LOGIN_NAME_MAX _POSIX_LOGIN_NAME_MAX
 #else
-#error "don't know how to set LOGIN_NAME_MAX"
-#endif
+/* Fallback */
+#define LOGIN_NAME_MAX 9
 #endif
 
 typedef struct {

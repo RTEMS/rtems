@@ -1,5 +1,10 @@
 2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* include/rtems/userenv.h: Rely upon <limits.h> for
+	_POSIX_LOGIN_NAME_MAX.
+
+2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/prog-cc.m4: Acknowledge configuration-time CFLAGS.
 	* automake/compile.am: Acknowledge configuration-time CFLAGS.
 	Remove CFLAGS_DEFAULT.
