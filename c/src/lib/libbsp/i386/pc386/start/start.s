@@ -73,6 +73,18 @@ BEGIN_CODE
 #define DEBUG_EARLY_START
 
 SYM (start):
+        /*
+         *  When things are really, REALLY!, bad -- turn on the speaker and
+         *  lock up.  This shows whether or not we make it to a certain 
+         *  location.
+         */
+#if 0
+        inb     $0x61, al
+        orb     $0x03, al
+        outb    al, $0x61       # enable the speaker
+speakl:	jmp	speakl             # and SPIN!!!
+#endif
+
         nop
         cli			# DISABLE INTERRUPTS!!!
 #ifdef DEBUG_EARLY_START
