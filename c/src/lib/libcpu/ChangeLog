@@ -1,3 +1,10 @@
+2001-10-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: reformat noinst_HEADERS to work around a bug in
+	automake-1.4-p5.
+	* configure.in: autoupdate to autoconf-2.52, apply
+	RTEMS_CPU_SUBDIRS.
+
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
 	* shared/src/cache_aligned_malloc.c: Added include of <stdlib.h>
