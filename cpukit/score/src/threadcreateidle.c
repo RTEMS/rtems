@@ -31,8 +31,7 @@
  *  _Thread_Create_idle
  */
 
-/* 'I','D','L','E' */
-const Objects_Name _Thread_Idle_name = (Objects_Name) 0x49444C45;
+const char *_Thread_Idle_name = "IDLE";
 
 void _Thread_Create_idle( void )
 {
@@ -75,7 +74,7 @@ void _Thread_Create_idle( void )
     THREAD_CPU_BUDGET_ALGORITHM_NONE,
     NULL,        /* no budget algorithm callout */
     0,           /* all interrupts enabled */
-    _Thread_Idle_name
+    (Objects_Name) _Thread_Idle_name
   );
  
   /*
