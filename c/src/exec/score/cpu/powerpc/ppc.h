@@ -112,6 +112,7 @@ extern "C" {
 
 #define PPC_DEBUG_MODEL          PPC_DEBUG_MODEL_IBM4xx
 #define PPC_HAS_EXCEPTION_PREFIX 0
+#define PPC_HAS_EVPR             1
 
 #elif defined(ppc601)
 /*
@@ -284,6 +285,15 @@ extern "C" {
 
 #ifndef PPC_HAS_EXCEPTION_PREFIX
 #define PPC_HAS_EXCEPTION_PREFIX 1
+#endif
+
+/*
+ *  Unless otherwise specified, assume the model does NOT have
+ *  403 style EVPR register to set the exception address prefix.
+ */
+
+#ifndef PPC_HAS_EVPR
+#define PPC_HAS_EVPR 0
 #endif
 
 /*

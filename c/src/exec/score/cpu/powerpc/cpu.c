@@ -33,6 +33,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/context.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/interr.h>
 
 /*
  *  These are for testing purposes.
@@ -474,6 +475,12 @@ void _CPU_ISR_install_raw_handler(
      * Set u32_handler = to target address  
      */
     u32_handler = slot->b_Handler & 0x03fffffc;
+
+    /* IMD FIX: sign extend address fragment... */
+    if (u32_handler & 0x02000000) {
+      u32_handler  |= 0xfc000000;
+    }
+
     *old_handler =  (proc_ptr) u32_handler;
   } else
     *old_handler = 0;
@@ -484,6 +491,21 @@ void _CPU_ISR_install_raw_handler(
   *slot = _CPU_Trap_slot_template;
 
   u32_handler = (unsigned32) new_handler;
+
+  /* 
+   * IMD FIX: insert address fragment only (bits 6..29) 
+   *          therefore check for proper address range 
+   *          and remove unwanted bits
+   */
+  if ((u32_handler & 0xfc000000) == 0xfc000000) {
+    u32_handler  &= ~0xfc000000;
+  }
+  else if ((u32_handler & 0xfc000000) != 0x00000000) {
+    _Internal_error_Occurred(INTERNAL_ERROR_CORE,
+			     TRUE,
+			     u32_handler);
+  }
+
   slot->b_Handler |= u32_handler;
 
   slot->li_r0_IRQ  |= vector;
@@ -495,13 +517,20 @@ unsigned32  ppc_exception_vector_addr(
   unsigned32 vector
 )
 {
+#if (!PPC_HAS_EVPR)
   unsigned32 Msr;
+#endif
   unsigned32 Top = 0;
   unsigned32 Offset = 0x000;
 
+#if (PPC_HAS_EXCEPTION_PREFIX)
   _CPU_MSR_Value ( Msr );
   if ( ( Msr & PPC_MSR_EP) != 0 ) /* Vectors at FFFx_xxxx */
     Top = 0xfff00000;
+#elif (PPC_HAS_EVPR)
+  asm volatile( "mfspr %0,0x3d6" : "=r" (Top)); /* EVPR */
+  Top = Top & 0xffff0000;
+#endif
 
   switch ( vector ) {
     case PPC_IRQ_SYSTEM_RESET:   /* on 40x aka PPC_IRQ_CRIT */

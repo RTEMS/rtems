@@ -481,7 +481,8 @@ typedef struct {
   boolean      serial_cts_rts;
   unsigned32   serial_rate;
   unsigned32   timer_average_overhead; /* Average overhead of timer in ticks */
-  unsigned32   timer_least_valid;      /* Least valid number from timer */
+  unsigned32   timer_least_valid;      /* Least valid number from timer      */
+  boolean      timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 #endif
 }   rtems_cpu_table;
 
