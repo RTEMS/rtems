@@ -7,7 +7,7 @@
 #
 
 PROJECT=c_user
-DISTRIBUTION_LEVEL=support
+DISTRIBUTION_LEVEL=public
 
 include ../Make.config
 
@@ -56,7 +56,7 @@ $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
 html: $(FILES)
-	-mkdir $(WWW_INSTALL)/c_user
+	-mkdir -p $(WWW_INSTALL)/c_user
 	cp rtemsarc.gif rtemspie.gif states.gif $(WWW_INSTALL)/c_user
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi

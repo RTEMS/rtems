@@ -45,7 +45,7 @@ $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
 html:
-	-mkdir $(WWW_INSTALL)/$(PROJECT)
+	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
 	-cd .. ; gmake headers
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi

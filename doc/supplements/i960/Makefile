@@ -77,7 +77,7 @@ wksheets.texi: wksheets.t CVME961_TIMES
 	mv wksheets.t.fixed wksheets.texi
 
 html: $(FILES)
-	-mkdir $(WWW_INSTALL)/c_i960
+	-mkdir -p $(WWW_INSTALL)/c_i960
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
  	    $(PROJECT).texi
 

@@ -54,7 +54,7 @@ $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
 html:
-	-mkdir $(WWW_INSTALL)/ada_user
+	-mkdir -p $(WWW_INSTALL)/ada_user
 	cp ../user/rtemsarc.gif ../user/rtemspie.gif ../user/states.gif \
            $(WWW_INSTALL)/ada_user
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \

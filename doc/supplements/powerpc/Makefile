@@ -79,7 +79,7 @@ wksheets.texi: wksheets.t PSIM_TIMES
 	mv wksheets.t.fixed wksheets.texi
 
 html: $(FILES)
-	-mkdir $(WWW_INSTALL)/c_$(PROJECT)
+	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/c_$(PROJECT) \
  	    $(PROJECT).texi
 

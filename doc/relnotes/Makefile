@@ -45,7 +45,7 @@ $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
 
 html:
-	-mkdir $(WWW_INSTALL)/relnotes
+	-mkdir -p $(WWW_INSTALL)/relnotes
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
 
