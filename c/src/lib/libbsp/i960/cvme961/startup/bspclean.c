@@ -20,11 +20,15 @@
 
 void bsp_cleanup( void )
 {
-  asm volatile( "mov   0,g0; \
-                 fmark ; \
-                 syncf ; \
-                 .word    0xfeedface ; \
-                 bx       start" : : );
+  extern void start( void  );
+
+  register volatile void *start_addr = 0;
+
+  asm volatile( "mov   0,g0;"
+                "fmark ;"
+                "syncf ;"
+                ".word    0xfeedface ; "
+                "bx       (%0)" : "=r" (start_addr) : "0" (start_addr) );
  /*  The constant 0xfeedface is a magic word for break which
   *  is defined by NINDY.  The branch extended restarts the
   *  application if the user types "go".
