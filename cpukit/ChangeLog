@@ -1,5 +1,9 @@
 2002-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/env-rtemsbsp.m4: Remove RTEMS_CONFIG_PER_BSP.
+
+2002-08-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/env-rtemscpu.m4: Remove RTEMS_CONFIG_PER_BSP.
 	Use AS_IF instead of if/then/else/fi.
 
