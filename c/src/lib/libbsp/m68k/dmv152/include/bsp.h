@@ -25,8 +25,8 @@ extern "C" {
 #include <clockdrv.h>
 #include <iosupp.h>
 #include <vmeintr.h>
-#include <z8530.h>
-#include <z8536.h>
+#include <zilog/z8530.h>
+#include <zilog/z8536.h>
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
