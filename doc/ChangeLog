@@ -1,5 +1,10 @@
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* images/ChangeLog: Removed.
+	* ChangeLog: Merge images/ChangeLog.
+
+2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* common/ChangeLog: Removed.
 	* ChangeLog: Merge common/ChangeLog.
 
@@ -143,6 +148,10 @@
 	AM_INIT_AUTOMAKE([no-define foreign 1.6]).
 	* Makefile.am: Remove AUTOMAKE_OPTIONS.
 
+2002-03-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* images/Makefile.am: Remove AUTOMAKE_OPTIONS.
+
 2001-02-14	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac: New mips supplement.
@@ -178,6 +187,7 @@
 2002-01-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* common/Makefile.am: Require automake-1.5.
+	* images/Makefile.am: Require automake-1.5.
 
 2002-01-17	Joel Sherrill <joel@OARcorp.com>
 
