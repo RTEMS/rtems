@@ -64,8 +64,11 @@ static int  isr_is_on(const rtems_irq_connect_data *);
  * BSP initialization
  */
 
-BSP_output_char_function_type BSP_output_char = BSP_output_char_via_serial;
-BSP_polling_getchar_function_type BSP_poll_char = BSP_poll_char_via_serial;
+/* for printk support */
+BSP_output_char_function_type BSP_output_char = 
+   (BSP_output_char_function_type) BSP_output_char_via_serial;
+BSP_polling_getchar_function_type BSP_poll_char = 
+   (BSP_polling_getchar_function_type) BSP_poll_char_via_serial;
 
 
 static rtems_irq_connect_data console_isr_data = {BSP_UART,
@@ -93,13 +96,6 @@ isr_is_on(const rtems_irq_connect_data *irq)
     return 0;
   else
     return 1;
-}
-
-void console_reserve_resources(rtems_configuration_table *conf)
-{
-  rtems_termios_reserve_resources(conf, 1);
-   
-  return;
 }
 
 void __assert (const char *file, int line, const char *msg)
@@ -183,8 +179,6 @@ console_initialize(rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 } /* console_initialize */
 
-
-static int console_open_count = 0;
 
 static int console_last_close(int major, int minor, void *arg)
 {

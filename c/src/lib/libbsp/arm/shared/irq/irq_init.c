@@ -34,7 +34,7 @@ void  rtems_irq_mngt_init()
     long			*vectorTable;
     rtems_interrupt_level       level;
     
-    vectorTable = VECTOR_TABLE;
+    vectorTable = (long *) VECTOR_TABLE;
     
     _CPU_ISR_Disable(level);
 

@@ -1,3 +1,8 @@
+2000-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* comm/console.c: Added casts to eliminate warnings.
+	* comm/console.c (console_reserve_resources): Removed.
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
