@@ -6,7 +6,8 @@
 # please send bugfixes or comments to joel@OARcorp.com
 #
 
-# neededforbuild -- nothing
+%define _prefix			@prefix@
+%define _defaultbuildroot	%{_tmppath}/%{name}-%{version}
 
 Vendor:       OAR Corporation
 Distribution: Linux
@@ -24,7 +25,11 @@ Source0:      ftp://ftp.gnu.org/pub/gnu/gdb-@gdb_version@.tar.gz
 Patch0:	      gdb-@gdb_version@-rtems-base-@gdb_patch_version@.diff
 Patch1:	      gdb-@gdb_version@-rtems-cg-@gdb_patch_version@.diff
 Patch2:	      gdb-@gdb_version@-rtems-rdbg-@gdb_patch_version@.diff
-Buildroot:      /tmp/@target_alias@-gdb
+Buildroot:    %{_defaultbuildroot}
+
+%if "%{_vendor}" == "redhat"
+BuildPreReq:	ncurses-devel
+%endif
 
 #
 # The original sources are not included in the source RPM.
@@ -46,7 +51,6 @@ RTEMS is an open source operating system for embedded systems.
 This is the GNU gdb for RTEMS targetting @target_alias@.
 
 %prep
-echo RPM_BUILD_ROOT=${RPM_BUILD_ROOT}
 # untar the sources inside @target_alias@-gdb
 %setup -c -n @target_alias@-gdb -a 0
 
@@ -59,22 +63,32 @@ cd gdb-@gdb_version@
 test -d build || mkdir build
   cd build
   ../gdb-@gdb_version@/configure --target=@target_alias@ \
-    --verbose --prefix=/opt/rtems @extra_configure_arguments@
+    --verbose --prefix=%{_prefix} @extra_configure_arguments@ \
+    --disable-nls
 
   make all
   make info
 
 %install
   cd build
-  make prefix=$RPM_BUILD_ROOT/opt/rtems install
-  make prefix=$RPM_BUILD_ROOT/opt/rtems install-info
+  make prefix=$RPM_BUILD_ROOT%{_prefix} install
+  make prefix=$RPM_BUILD_ROOT%{_prefix} install-info
 
+  # host files
+  rm -rf $RPM_BUILD_ROOT%{_prefix}/include/*.h
+  rm -rf $RPM_BUILD_ROOT%{_prefix}/lib/lib*a
+
+  # These come from other packages
+  rm -rf $RPM_BUILD_ROOT%{_prefix}/info/bfd*
+  rm -rf $RPM_BUILD_ROOT%{_prefix}/info/configure*
+  rm -rf $RPM_BUILD_ROOT%{_prefix}/info/standards*
+ 
   # gzip info files
-  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info 2>/dev/null
-  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-? 2>/dev/null
-  gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info-?? 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-? 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-?? 2>/dev/null
 
 %clean
 # let rpm --clean remove BuildRoot iif using the default BuildRoot
-  test "$RPM_BUILD_ROOT" = "/tmp/@target_alias@-gdb" && \
+  test "$RPM_BUILD_ROOT" = "%{_defaultbuildroot}" && \
     rm -rf $RPM_BUILD_ROOT

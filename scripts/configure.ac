@@ -92,7 +92,7 @@ rtemsdoc/Makefile
 
 AC_CONFIG_FILES([buildalltar],[chmod +x buildalltar])
 AC_CONFIG_FILES([buildall],[chmod +x buildall])
-AC_CONFIG_FILES([mkgdbspec],[chmod +x mkgdbspec])
+AC_CONFIG_FILES([gdb/mkspec],[chmod +x gdb/mkspec])
 AC_CONFIG_FILES([mkbinutilspec],[chmod +x mkbinutilspec])
 AC_CONFIG_FILES([mkgccnewlibspec],[chmod +x mkgccnewlibspec])
 AC_CONFIG_FILES([mkbspspec],[chmod +x mkbspspec])

@@ -1,6 +1,6 @@
 #!/bin/sh 
 #
-#  Usage: mktoolspec CPU
+#  Usage: mkspec CPU
 #
 
 RTEMS_DIR=`dirname $0`/@top_srcdir@
@@ -13,7 +13,7 @@ usage()
   echo "$0 [options] <target_alias>"
   echo "  options:"
   echo "    -cfg <setup.cache>"
-  echo "    -o <rpm-spec-dir>"
+  echo "    -a <alternate specs.in>"
   exit 1 ;
 }
 

@@ -1,20 +1,21 @@
 #!/bin/sh 
 #
-#  Usage: mkgdbspec CPU
+#  Usage: mkspec CPU
 #
 
 RTEMS_DIR=`dirname $0`/@top_srcdir@
 
-CFG=setup.cache
-dst=@RPM_SPECSdir@
+CFG=../setup.cache
 exe_ext=@EXEEXT@
+
+specsrc=${RTEMS_DIR}/gdb/gdb.spec.in
 
 usage()
 {
   echo "$0 [options] <target_alias>"
   echo "  options:"
   echo "    -cfg <setup.cache>"
-  echo "    -o <rpm-spec-dir>"
+  echo "    -a <alternate specs.in>"
   exit 1 ;
 }
 
@@ -25,9 +26,9 @@ case $1 in
   CFG=$1
   shift
   ;;
--o)
+-a)        # alternate specs file
   shift
-  dst=$1
+  specsrc=$1
   shift
   ;;
 -*)
@@ -48,8 +49,6 @@ target_alias=$1
 
 . ./$CFG
 
-specfile=${dst}/$target_alias-gdb-${gdb_version}.spec
-
 case ${target_alias} in
   arm* | d10v* | d30v* | erc32* | fr30* | h8300* | h8500* | hppa1.1* | \
   i960* | m32r* | mcore* | mips* | mn10200* | mn10300* | sh* | sparc*| \
@@ -68,24 +67,10 @@ esac
 
 sed -e "s%@Release\@%${gdb_rpm_release}%g" \
     -e "s,@rpm_build_root\@,${rpm_build_root},g" \
+    -e "s%@prefix\@%@prefix@%g" \
     -e "s%@target_alias\@%${target_alias}%g" \
     -e "s%@gdb_version\@%${gdb_version}%g" \
     -e "s%@gdb_patch_version\@%${gdb_patch_version}%g" \
     -e "s%@extra_configure_arguments\@%${extra_configure_arguments}%g" \
     -e "s%@exe_ext\@%${exe_ext}%g" \
-< ${RTEMS_DIR}/gdb/gdb.spec.in \
-> ${specfile}
-
-case ${target_alias} in
-  arm* | d10v* | d30v* | erc32* | fr30* | h8300* | h8500* | i960* | m32r* | \
-  mcore* | mips* | mn10200* | mn10300* | powerpc* | sh* | v850* | w65* | z8k*)
-     echo "/opt/rtems/bin/${target_alias}-run${exe_ext}" 
-     ;;
-  sparc*)
-     echo "/opt/rtems/bin/${target_alias}-run${exe_ext}" 
-     echo "/opt/rtems/bin/${target_alias}-sis${exe_ext}" 
-     ;;
-  *) ;;
-esac >> ${specfile}
-
-echo Generated ${specfile}
+< ${specsrc}

@@ -1,17 +1,42 @@
+2003-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* ChangeLog: Fix yesterday's entry.
+	* gdb/target-gdb.add: %defattr(-,root,root).
+	Use %{_prefix} instead of /opt/rtems.
+	Misc. minor changes.
+	* gdb/gdb.add: Use %{_prefix} instead of /opt/rtems.
+	Remove stray unpackaged files.
+	Use %{_defaultbuildroot} instead of hard-coded values.
+	configure --disable-nls.
+	Misc. minor changes.
+	Add BuildPreReq: ncurses-devel.
+	* gdb/base-gdb.add: %defattr(-,root,root).
+	Use %{_prefix} instead of /opt/rtems.
+	Misc. minor changes.
+	* gdb/mkspec.in: New.
+	* gdb/Makefile.am: Reflect addition of gdb/mkspec.in.
+	* gcc3newlib/mkspec.in: Fix usage.
+	* gcc3newlib/gccnewlib.add: Use %{_defaultbuildroot} instead of
+	hard-coded values. Update copyright notice.
+	* mkgdbspec.in: Removed.
+	* Makefile.am: Remove mkgdbspec.
+	* configure.ac: Remove mkgdbspec.
+	Add gdb/mkspec.
+
 2003-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* gccnewlib.add: Add various BuildPreReq.
+	* gcc3newlib/gccnewlib.add: Add various BuildPreReq.
 	Add %defattr(-,root,root) to "dir".
-	* base-g77.add: %defattr(-,root,root).
-	* base-gcc.add %defattr(-,root,root).
-	* base-gcj.add %defattr(-,root,root).
-	* base-gnat.add %defattr(-,root,root).
-	* target-c++.add %defattr(-,root,root).
-	* target-g77.add %defattr(-,root,root).
-	* target-gcc.add %defattr(-,root,root).
-	* target-gcj.add %defattr(-,root,root).
-	* target-gnat.add %defattr(-,root,root).
-	* target-objc.add %defattr(-,root,root).
+	* gcc3newlib/base-g77.add: %defattr(-,root,root).
+	* gcc3newlib/base-gcc.add %defattr(-,root,root).
+	* gcc3newlib/base-gcj.add %defattr(-,root,root).
+	* gcc3newlib/base-gnat.add %defattr(-,root,root).
+	* gcc3newlib/target-c++.add %defattr(-,root,root).
+	* gcc3newlib/target-g77.add %defattr(-,root,root).
+	* gcc3newlib/target-gcc.add %defattr(-,root,root).
+	* gcc3newlib/target-gcj.add %defattr(-,root,root).
+	* gcc3newlib/target-gnat.add %defattr(-,root,root).
+	* gcc3newlib/target-objc.add %defattr(-,root,root).
 
 2003-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 

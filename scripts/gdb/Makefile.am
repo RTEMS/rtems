@@ -2,65 +2,66 @@
 ## $Id$
 ##
 
-
-MKGDBSPEC = $(SHELL) $(top_builddir)/mkgdbspec
+MKSPEC = $(SHELL) ./mkspec
 
 SUBPACKAGES = gdb.add base-gdb.add target-gdb.add
+
+noinst_DATA = gdb.spec.in
 
 gdb.spec.in: $(SUBPACKAGES)
 	cat $^ > $@
 CLEANFILES = gdb.spec.in
 
-MKGDBSPEC_DEPS = $(top_builddir)/mkgdbspec gdb.spec.in \
+MKGDBSPEC_DEPS = $(top_builddir)/mkspec gdb.spec.in \
     $(top_builddir)/setup.cache
 
 arm-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . arm-rtems
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache arm-rtems > $@
 
 c4x-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . c4x-rtems
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache c4x-rtems > $@
 
 h8300-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . h8300-rtems
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache h8300-rtems > $@
 
 hppa1.1-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . hppa1.1-rtems
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache hppa1.1-rtems > $@
 
 i386-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . i386-rtems
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache i386-rtems > $@
 
 i386-RTEMS-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . i386-RTEMS
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache i386-RTEMS > $@
 
 i960-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . i960-rtems
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache i960-rtems > $@
 
 m68k-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . m68k-rtems
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache m68k-rtems > $@
 
 mips64orion-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . mips64orion-rtems
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache mips64orion-rtems > $@
 
 mips-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . mips-rtems
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache mips-rtems > $@
 
 mipstx39-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . mipstx39-rtems
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache mipstx39-rtems > $@
 
 powerpc-RTEMS-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . powerpc-RTEMS
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache powerpc-RTEMS > $@
 
 powerpc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . powerpc-rtems
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache powerpc-rtems > $@
 
 sh-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . sh-rtems
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache sh-rtems > $@
 
 sh-rtemself-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . sh-rtemself
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache sh-rtemself > $@
 
 sparc-rtems-$(GDBVERS).spec: $(MKGDBSPEC_DEPS)
-	$(MKGDBSPEC) -cfg $(top_builddir)/setup.cache -o . sparc-rtems
+	$(MKSPEC) -cfg $(top_builddir)/setup.cache sparc-rtems > $@
 
 RPM_SPECS_DATA = \
     arm-rtems-$(GDBVERS).spec c4x-rtems-$(GDBVERS).spec \

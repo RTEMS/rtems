@@ -14,26 +14,34 @@ RTEMS is an open source operating system for embedded systems.
 This is the base for gdb regardless of target CPU.
 
 %files -n rtems-base-gdb
+%defattr(-,root,root)
 
-%dir /opt/rtems/info
-%doc /opt/rtems/info/gdb.info*
-%doc /opt/rtems/info/mmalloc.info*
+%dir %{_prefix}/info
+%doc %{_prefix}/info/gdb.info*
+%doc %{_prefix}/info/mmalloc.info*
+# FIXME: When had gdbint and stabs been introduced?
+%if "@gdb_version@" >= "5.0"
+%doc %{_prefix}/info/gdbint.info*
+%doc %{_prefix}/info/stabs.info*
+%endif
 # gdb 4.18 installed this, gdb 5.0 does not
-# %doc /opt/rtems/info/readline.info*
+%if "@gdb_version@" < "5.0"
+%doc %{_prefix}/info/readline.info*
+%endif
 
-%dir /opt/rtems/man
-%dir /opt/rtems/man/man1
+%dir %{_prefix}/man
+%dir %{_prefix}/man/man1
 
-%dir /opt/rtems/include
+%dir %{_prefix}/include
 # We install libbfd from binutils
-# /opt/rtems/include/bfd.h
-# /opt/rtems/include/bfdlink.h
+# %{_prefix}/include/bfd.h
+# %{_prefix}/include/bfdlink.h
 
-%dir /opt/rtems/lib
+%dir %{_prefix}/lib
 # We install libbfd from binutils
-# /opt/rtems/lib/libbfd*
+# %{_prefix}/lib/libbfd*
 # We use libiberty from gcc
-# /opt/rtems/lib/libiberty*
+# %{_prefix}/lib/libiberty*
 
 %post -n rtems-base-gdb
   if test -d $RPM_INSTALL_PREFIX/rtems/info;
