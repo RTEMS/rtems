@@ -405,20 +405,20 @@ void *POSIX_Init(
   status = sigemptyset( NULL );
   if ( status != -1 )
     printf( "status = %d\n", status );
-  assert( errno == EFAULT );
-  puts( "Init: sigemptyset - EFAULT (set invalid)" );
+  assert( errno == EINVAL );
+  puts( "Init: sigemptyset - EINVAL (set invalid)" );
 
   status = sigfillset( NULL );
   if ( status != -1 )
     printf( "status = %d\n", status );
-  assert( errno == EFAULT );
-  puts( "Init: sigfillset - EFAULT (set invalid)" );
+  assert( errno == EINVAL );
+  puts( "Init: sigfillset - EINVAL (set invalid)" );
 
   status = sigaddset( NULL, SIGUSR1 );
   if ( status != -1 )
     printf( "status = %d\n", status );
-  assert( errno == EFAULT );
-  puts( "Init: sigaddset - EFAULT (set invalid)" );
+  assert( errno == EINVAL );
+  puts( "Init: sigaddset - EINVAL (set invalid)" );
 
   status = sigaddset( &mask, 0 );
   assert( !status );
@@ -433,8 +433,8 @@ void *POSIX_Init(
   status = sigdelset( NULL, SIGUSR1 );
   if ( status != -1 )
     printf( "status = %d\n", status );
-  assert( errno == EFAULT );
-  puts( "Init: sigdelset - EFAULT (set invalid)" );
+  assert( errno == EINVAL );
+  puts( "Init: sigdelset - EINVAL (set invalid)" );
  
   status = sigdelset( &mask, 0 );
   assert( !status );
@@ -449,8 +449,8 @@ void *POSIX_Init(
   status = sigismember( NULL, SIGUSR1 );
   if ( status != -1 )
     printf( "status = %d\n", status );
-  assert( errno == EFAULT );
-  puts( "Init: sigismember - EFAULT (set invalid)" );
+  assert( errno == EINVAL );
+  puts( "Init: sigismember - EINVAL (set invalid)" );
  
   status = sigismember( &mask, 0 );
   assert( !status );
@@ -481,8 +481,8 @@ void *POSIX_Init(
   status = pthread_sigmask( SIG_BLOCK, NULL, NULL );
   if ( status != -1 )
     printf( "status = %d\n", status );
-  assert( errno == EFAULT );
-  puts( "Init: pthread_sigmask - EFAULT (set and oset invalid)" );
+  assert( errno == EINVAL );
+  puts( "Init: pthread_sigmask - EINVAL (set and oset invalid)" );
 
   status = pthread_sigmask( 999, &pending_set, NULL );
   if ( status != -1 )
@@ -493,8 +493,8 @@ void *POSIX_Init(
   status = sigpending( NULL );
   if ( status != -1 )
     printf( "status = %d\n", status );
-  assert( errno == EFAULT );
-  puts( "Init: sigpending - EFAULT (set invalid)" );
+  assert( errno == EINVAL );
+  puts( "Init: sigpending - EINVAL (set invalid)" );
 
   timeout.tv_nsec = -1;
   status = sigtimedwait( &mask, &info, &timeout );
@@ -548,6 +548,12 @@ void *POSIX_Init(
   status = kill( getpid(), 0 );
   assert( !status );
   puts( "Init: kill - SUCCESSFUL (signal = 0)" );
+
+  status = kill( getpid(), 999 );
+  if ( status != -1 )
+    printf( "status = %d\n", status );
+  assert( errno == EINVAL );
+  puts( "Init: kill - EINVAL (sig invalid)" );
 
   /* exit this thread */
 
