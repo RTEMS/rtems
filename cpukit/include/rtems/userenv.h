@@ -32,11 +32,13 @@ extern "C" {
  */
 #include <limits.h>
 
+#ifndef LOGIN_NAME_MAX
 #ifdef _POSIX_LOGIN_NAME_MAX
 #define LOGIN_NAME_MAX _POSIX_LOGIN_NAME_MAX
 #else
 /* Fallback */
 #define LOGIN_NAME_MAX 9
+#endif
 #endif
 
 typedef struct {
