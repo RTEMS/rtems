@@ -2,16 +2,17 @@
 ##  $Id$
 ##
 
-VPATH = @srcdir@:@srcdir@/..
-
 NODE = 2
 SAMPLE = base_mp-node$(NODE)
 PGM = ${ARCH}/$(SAMPLE).exe
 
 MANAGERS = io mp
 
-C_FILES = init.c apptask.c
-C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
+C_FILES = ../init.c ../apptask.c
+C_O_FILES = $(C_FILES:../%.c=${ARCH}/%.$(OBJEXT))
+
+$(ARCH)/%$(LIB_VARIANT).$(OBJEXT): ../%.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
 
 H_FILES = system.h
 
