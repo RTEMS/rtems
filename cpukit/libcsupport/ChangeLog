@@ -1,5 +1,9 @@
 2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Reformat, add UNUSED_FILES.
+
+2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Include compile.am, again.
 	Eliminate DOC_FILES.
 

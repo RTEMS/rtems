@@ -5,6 +5,19 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
+AM_CPPFLAGS += -I$(top_builddir)
+AM_CFLAGS += $(LIBC_DEFINES)
+
+UNUSED_FILES = src/envlock.c
+
+EXTRA_LIBRARIES = libcsupport.a
+CLEANFILES = libcsupport.a
+libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+
+EXTRA_LIBRARIES += libcsupport_g.a
+CLEANFILES += libcsupport_g.a
+libcsupport_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
+
 include_HEADERS = include/chain.h include/console.h include/clockdrv.h \
     include/iosupp.h include/ringbuf.h include/rtc.h include/spurious.h \
     include/timerdrv.h include/vmeintr.h
@@ -56,8 +69,6 @@ include_zilog_HEADERS = include/zilog/z8036.h include/zilog/z8530.h \
 ##  General stuff
 all-local: $(PREINSTALL_FILES) libcsupport$(LIB_VARIANT).a
 
-AM_CPPFLAGS += -I$(top_builddir)
-
 ERROR_C_FILES = src/error.c
 
 ASSOCIATION_C_FILES = src/assoc.c src/assocnamebad.c
@@ -99,39 +110,24 @@ LIBC_GLUE_C_FILES = src/__getpid.c src/__gettod.c src/__times.c \
     src/truncate.c src/access.c src/stat.c src/lstat.c src/pathconf.c \
     src/newlibc.c src/no_posix.c src/no_libc.c src/utsname.c
 
-UNIX_LIBC_C_FILES = src/unixlibc.c src/hosterr.c
-
 BSD_LIBC_C_FILES = src/strlcpy.c src/strlcat.c
 
-COMMON_C_FILES = src/gxx_wrappers.c src/printk.c $(BSD_LIBC_C_FILES) \
+libcsupport_a_SOURCES = src/gxx_wrappers.c src/printk.c $(BSD_LIBC_C_FILES) \
     $(BASE_FS_C_FILES) $(MALLOC_C_FILES) $(TERMIOS_C_FILES) $(ERROR_C_FILES) \
     $(ASSOCIATION_C_FILES)
 
-UNIX_C_FILES = $(UNIX_LIBC_C_FILES)
-
-EMBEDDED_C_FILES = $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
+if UNIX
+libcsupport_a_SOURCES += src/unixlibc.c src/hosterr.c
+else
+libcsupport_a_SOURCES += $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(TERMINAL_IDENTIFICATION_C_FILES) $(SYSTEM_CALL_C_FILES) \
     $(DIRECTORY_SCAN_C_FILES) $(ID_C_FILES)
-
-if UNIX
-C_FILES = $(COMMON_C_FILES) $(UNIX_C_FILES)
-else
-C_FILES = $(COMMON_C_FILES) $(EMBEDDED_C_FILES)
 endif
 
-AM_CFLAGS += $(LIBC_DEFINES)
-
-EXTRA_LIBRARIES = libcsupport.a
-CLEANFILES = libcsupport.a
-libcsupport_a_SOURCES = $(C_FILES)
-libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
-
-EXTRA_LIBRARIES += libcsupport_g.a
-CLEANFILES += libcsupport_g.a
 libcsupport_g_a_SOURCES = $(libcsupport_a_SOURCES)
-libcsupport_g_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
 
 EXTRA_DIST = src/TODO src/CASES src/README
+EXTRA_DIST += $(UNUSED_FILES)
 
 PREINSTALL_FILES =
 
