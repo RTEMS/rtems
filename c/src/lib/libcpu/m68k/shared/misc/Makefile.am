@@ -4,11 +4,8 @@
 
 
 C_FILES = memcpy.c m68kidle.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-OBJS = $(C_O_FILES)
-
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../automake/lib.am
 

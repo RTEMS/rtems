@@ -1,3 +1,10 @@
+2002-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* m68040/fpsp/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	Eliminate *_O_FILES.
+	* shared/cache/Makefile.am: Ditto.
+	* shared/misc/Makefile.am: Ditto.
+
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CHECK_BSP_CACHE.

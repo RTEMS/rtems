@@ -5,12 +5,11 @@
 
 PGM = $(ARCH)/fpsp.rel
 
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../automake/lib.am
 
 C_FILES = rtems_fpsp.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 noinst_HEADERS = fpsp.defs
 
@@ -20,9 +19,7 @@ S_FILES = bindec.S binstr.S bugfix.S decbin.S do_func.S gen_except.S \
     smovecr.S srem_mod.S ssin.S ssinh.S stan.S stanh.S sto_res.S stwotox.S \
     tbldo.S util.S x_bsun.S x_fline.S x_operr.S x_ovfl.S x_snan.S x_store.S \
     x_unfl.S x_unimp.S x_unsupp.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES) $(S_O_FILES)
+OBJS += $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 #
 # (OPTIONAL) Add local stuff here using +=

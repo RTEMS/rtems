@@ -2,20 +2,16 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../../shared/src
 
 C_FILES = cache.c cache_aligned_malloc.c cache_manager.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include_libcpudir = $(includedir)/libcpu
 
 noinst_HEADERS = cache_.h
 include_libcpu_HEADERS = cache.h
 
-OBJS = $(C_O_FILES)
-
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../../../automake/compile.am
 include $(top_srcdir)/../../../../../automake/lib.am
 
