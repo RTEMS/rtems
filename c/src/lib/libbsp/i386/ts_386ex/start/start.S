@@ -369,7 +369,10 @@ SYM(SetCS4):
 	data32
 #endif	
 
+#if 0
         lgdt	 (eax)                    #  location of GDT in segment
+#endif
+        lgdt SYM(GDTR) #  location of GDT
 
 /*
 	NOTE: not sure about this either so comment out for now...	
