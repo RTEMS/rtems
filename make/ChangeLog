@@ -1,5 +1,9 @@
 
 2001-09-21    Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/bare.cfg: Define dummy make-cxx-exe.
+
+2001-09-21    Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 	* custom/gensh2.cfg: Remove -lstdc++ from make-exe.
 
 	* ChangeLog: Formatting cleanup.
