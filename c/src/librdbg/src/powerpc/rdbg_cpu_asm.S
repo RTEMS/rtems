@@ -29,7 +29,7 @@ SYM (copyback_data_cache_and_invalidate_instr_cache):
 	addi	r6, r0, PPC_CACHE_ALIGNMENT
 	/* r5 = last address to handle */
 	add	r5,r3,r4
-	/* r3 = cache_align(r3, PPC_CACHE_ALIGNMENT)
+	/* r3 = cache_align(r3, PPC_CACHE_ALIGNMENT) */
 	subi	r0,r6,1
 	andc	r3,r3,r0
 	/* R4 = R3 = copy of first address */
