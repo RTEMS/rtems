@@ -1,3 +1,18 @@
+2003-03-18  Till Straumann <strauman@slac.stanford.edu>
+
+	PR 356/bsps
+	This patch makes RTEMS/powerpc/shared EABI compliant.
+	* irq/irq_init.c, start/Makefile.am, start/start.S, startup/bspstart.c,
+	startup/pgtbl_setup.c, vectors/vectors.h, vectors/vectors_init.c:
+	zero_bss() should clear not only bss but sbss and sbss2
+	also (this is probably a bugfix, as sbss/sbss2 are
+	probably used even if -msdata=eabi is not specified).
+	* start/rtems_crti.S: New file which must
+	be linked immediately after ecrti.o. rtems_crti.o contains
+	a code snippet who lets __init() return immediately. Also,
+	a new entry point '_init' to the C++ Ctors is generated
+	for use by the RTEMS Thread_Handler.
+
 2003-02-20	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 349/bsps

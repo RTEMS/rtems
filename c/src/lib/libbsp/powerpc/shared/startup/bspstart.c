@@ -36,9 +36,7 @@
 #include <bsp/motorola.h>
 
 extern void _return_to_ppcbug();
-extern unsigned long __rtems_end;
-extern unsigned long _end;
-extern unsigned long __bss_start;
+extern unsigned long __rtems_end[];
 extern void L1_caches_enables();
 extern unsigned get_L2CR();
 extern void set_L2CR(unsigned);
@@ -135,7 +133,7 @@ void bsp_pretasking_hook(void)
     rtems_unsigned32        heap_start;    
     rtems_unsigned32        heap_size;
 
-    heap_start = ((rtems_unsigned32) &__rtems_end) +INIT_STACK_SIZE + INTR_STACK_SIZE;
+    heap_start = ((rtems_unsigned32) __rtems_end) +INIT_STACK_SIZE + INTR_STACK_SIZE;
     if (heap_start & (CPU_ALIGNMENT-1))
         heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
@@ -153,7 +151,12 @@ void bsp_pretasking_hook(void)
 
 void zero_bss()
 {
-  memset(&__bss_start, 0, ((unsigned) (&__rtems_end)) - ((unsigned) &__bss_start));
+  /* prevent these from being accessed in the short data areas */
+  extern unsigned long __bss_start[], __SBSS_START__[], __SBSS_END__[];
+  extern unsigned long __SBSS2_START__[], __SBSS2_END__[];
+  memset(__SBSS_START__, 0, ((unsigned) __SBSS_END__) - ((unsigned)__SBSS_START__));
+  memset(__SBSS2_START__, 0, ((unsigned) __SBSS2_END__) - ((unsigned)__SBSS2_START__));
+  memset(__bss_start, 0, ((unsigned) __rtems_end) - ((unsigned)__bss_start));
 }
 
 void save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_options)
@@ -209,7 +212,7 @@ void bsp_start( void )
    * so there is no need to set it in r1 again... It is just for info
    * so that It can be printed without accessing R1.
    */
-  stack = ((unsigned char*) &__rtems_end) + INIT_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
+  stack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
 
  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
   *((unsigned32 *)stack) = 0;
@@ -222,9 +225,12 @@ void bsp_start( void )
    * This could be done latter (e.g in IRQ_INIT) but it helps to understand
    * some settings below...
    */
-  intrStack = ((unsigned char*) &__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
+  intrStack = ((unsigned char*) __rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
 
- /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
+  /* make sure it's properly aligned */
+  (unsigned32)intrStack &= ~(CPU_STACK_ALIGNMENT-1);
+
+  /* tag the bottom (T. Straumann 6/36/2001 <strauman@slac.stanford.edu>) */
   *((unsigned32 *)intrStack) = 0;
 
   _write_SPR1((unsigned int)intrStack);
@@ -357,7 +363,7 @@ void bsp_start( void )
   work_space_start = 
     (unsigned char *)BSP_mem_size - BSP_Configuration.work_space_size;
 
-  if ( work_space_start <= ((unsigned char *)&__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE) {
+  if ( work_space_start <= ((unsigned char *)__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE) {
     printk( "bspstart: Not enough RAM!!!\n" );
     bsp_cleanup();
   }
