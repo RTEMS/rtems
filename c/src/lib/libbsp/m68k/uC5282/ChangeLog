@@ -1,3 +1,7 @@
+2005-02-02  Eric Norum <norume@aps.anl.gov>
+
+	* network/network.c: Lock FEC/PHYS at 100 Mbs, full-duplex
+
 2005-02-01  Eric Norum <norume@aps.anl.gov>
 
 	* include/bsp.h, network/network.c, startup/bspstart.c: Add some

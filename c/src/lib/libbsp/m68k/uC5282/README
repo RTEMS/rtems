@@ -44,7 +44,7 @@ REAL-TIME CLOCK:    none
 DMA:                none
 VIDEO:              none
 SCSI:               none
-NETWORKING:         Internal 10/100MHz FEC
+NETWORKING:         Internal 10/100Mbs FEC, locked at 100 Mbs, full-duplex
 
 DRIVER INFORMATION
 ==================

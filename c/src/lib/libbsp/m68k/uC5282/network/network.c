@@ -1,7 +1,6 @@
 /*
  * RTEMS/TCPIP driver for MCF5282 Fast Ethernet Controller
  *
- * TO DO: MII communications to set speed, full/half duplex, etc.
  * TO DO: Check network stack code -- force longword alignment of all tx mbufs?
  */
 
@@ -139,23 +138,56 @@ mcf5282_bd_allocate(unsigned int count)
     return p;
 }
 
+/*
+ * Read MII register
+ * Busy-waits, but transfer time should be short!
+ */
+static int
+getMII(int phyNumber, int regNumber)
+{
+    MCF5282_FEC_MMFR = (0x1 << 30)       |
+                       (0x2 << 28)       |
+                       (phyNumber << 23) |
+                       (regNumber << 18) |
+                       (0x2 << 16);
+    while ((MCF5282_FEC_EIR & MCF5282_FEC_EIR_MII) == 0);
+    MCF5282_FEC_EIR = MCF5282_FEC_EIR_MII;
+    return MCF5282_FEC_MMFR & 0xFFFF;
+}
+
+/*
+ * Write MII register
+ * Busy-waits, but transfer time should be short!
+ */
+static void
+setMII(int phyNumber, int regNumber, int value)
+{
+    MCF5282_FEC_MMFR = (0x1 << 30)       |
+                       (0x1 << 28)       |
+                       (phyNumber << 23) |
+                       (regNumber << 18) |
+                       (0x2 << 16)       |
+                       (value & 0xFFFF);
+    while ((MCF5282_FEC_EIR & MCF5282_FEC_EIR_MII) == 0);
+    MCF5282_FEC_EIR = MCF5282_FEC_EIR_MII;
+}
+
 static void
 mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
 {
     int i;
-    unsigned char *hwaddr;
+    const unsigned char *hwaddr;
     rtems_status_code status;
     rtems_isr_entry old_handler;
 	unsigned32 clock_speed = get_CPU_clock_speed();
-
-/*  extern struct rtems_bsdnet_ifconfig netdriver_config; */
-
 
     /*
      * Issue reset to FEC
      */
     MCF5282_FEC_ECR = MCF5282_FEC_ECR_RESET;
     rtems_task_wake_after(1);
+    MCF5282_FEC_ECR = 0;
+
     /*
      * Configuration of I/O ports is done outside of this function
      */
@@ -203,19 +235,18 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
      * Set up Receive Control Register:
      *   Not promiscuous
      *   MII mode
-     *   Half duplex
+     *   Full duplex
      *   No loopback
      */
     MCF5282_FEC_RCR = MCF5282_FEC_RCR_MAX_FL(MAX_MTU_SIZE) | 
-                      MCF5282_FEC_RCR_MII_MODE             |
-                      MCF5282_FEC_RCR_DRT;
+                      MCF5282_FEC_RCR_MII_MODE;
 
     /*
      * Set up Transmit Control Register:
-     *   Half duplex
+     *   Full duplex
      *   No heartbeat
      */
-    MCF5282_FEC_TCR = 0;
+    MCF5282_FEC_TCR = MCF5282_FEC_TCR_FDEN;
 
     /*
      * Initialize statistic counters
@@ -229,20 +260,15 @@ mcf5282_fec_initialize_hardware(struct mcf5282_enet_struct *sc)
     MCF5282_FEC_MIBC = 0;
 
     /*
-     * Set MII speed to <2.5 MHz
+     * Set MII speed to <= 2.5 MHz
      */
-    if (clock_speed <= 25000000)
-        MCF5282_FEC_MSCR = MCF5282_FEC_MSCR_MII_SPEED(0x5);
-    else if (clock_speed <= 33000000)
-        MCF5282_FEC_MSCR = MCF5282_FEC_MSCR_MII_SPEED(0x7);
-    else if (clock_speed <= 40000000)
-        MCF5282_FEC_MSCR = MCF5282_FEC_MSCR_MII_SPEED(0x8);
-    else if (clock_speed <= 50000000)
-        MCF5282_FEC_MSCR = MCF5282_FEC_MSCR_MII_SPEED(0xA);
-    else if (clock_speed <= 66000000)
-        MCF5282_FEC_MSCR = MCF5282_FEC_MSCR_MII_SPEED(0xD);
-    else
-        MCF5282_FEC_MSCR = MCF5282_FEC_MSCR_MII_SPEED(0xF);
+    i = (clock_speed + 5000000 - 1) / 5000000;
+    MCF5282_FEC_MSCR = MCF5282_FEC_MSCR_MII_SPEED(i);
+
+    /*
+     * Set PHYS to 100 Mb/s, full duplex
+     */
+    setMII(1, 0, 0x2100);
 
     /*
      * Set up receive buffer descriptors
