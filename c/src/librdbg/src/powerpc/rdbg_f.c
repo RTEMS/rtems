@@ -10,13 +10,12 @@
  **************************************************************************
  */
 
-#include <rtems/score/cpu.h>
+#include <rtems.h>
 #include <assert.h>
 #include <errno.h>
 #include <rdbg/reg.h>
 #include <rdbg/remdeb.h>
 #include <rdbg/rdbg.h>
-#include <rtems/score/thread.h>
 
   void
 CtxToRegs (const CPU_Exception_frame * ctx, xdr_regs * regs)

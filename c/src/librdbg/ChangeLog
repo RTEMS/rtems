@@ -1,3 +1,8 @@
+2001-04-19	Joel Sherrill <joel@OARcorp.com>
+
+	* src/powerpc/rdbg_f.c: Always include <rtems.h> instead of 
+	internal include files.
+ 
 2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/powerpc/rdbg_cpu_asm.S: Reflect changes to
