@@ -1,6 +1,13 @@
 
+2001-11-14	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: Added missing lines about simcpu32.cfg and sim68000.cfg.
+
 2001-11-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* custom/ts_386ex.cfg: Remove make-target-options.
+	* custom/sim68000.cfg: Remove RTEMS_BSVC_MODEL, make-target-options.
+	* custom/simcpu32.cfg: Reimplement as a copy of sim68000.cfg with
 	different flags.
 
 2001-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
