@@ -1,3 +1,7 @@
+2002-10-31	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/rcmd.c, netinet/in_cksum_arm.c: Removed warnings.
+
 2002-10-28	Joel Sherrill <joel@OARcorp.com>
 
 	* Pass to eliminate warnings.

@@ -149,7 +149,7 @@ in_cksum_internal(struct mbuf *m, int off, int len, u_int sum)
 	 * allow the compiler to pick which specific machine registers to
 	 * use, instead of hard-coding this in the asm code above.
 	 */
-	register u_int tmp1, tmp2, tmp3, tmp4;
+	register u_int tmp1=0, tmp2, tmp3, tmp4;
 
 	for (; m && len; m = m->m_next) {
 		if (m->m_len == 0)

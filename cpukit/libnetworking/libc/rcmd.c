@@ -69,6 +69,7 @@ int rresvport();
 #define bzero(a,s)		memset((a),0,(s))
 #define bcmp			memcmp
 #define bcopy(s,d,i)	memcpy(d,s,i)
+int bindresvport(int, struct sockaddr_in *);
 #else /* __rtems__ */
 
 extern int innetgr __P(( const char *, const char *, const char *, const char * ));
