@@ -27,8 +27,8 @@ extern "C" {
 #define IPL_DRIVER_TABLE_ENTRY \
   { ipl_console_initialize, ipl_console_open, ipl_console_close, \
     ipl_console_read, ipl_console_write, ipl_console_control }
-    
-    
+
+
 #define NULL_SUCCESSFUL RTEMS_SUCCESSFUL
 
 rtems_device_driver ipl_console_initialize(

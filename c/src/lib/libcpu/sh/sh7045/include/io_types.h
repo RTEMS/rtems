@@ -30,10 +30,10 @@
  *
  *
  ************************************************************************/
- 
+
 #ifndef _sh_io_types_h
 #define _sh_io_types_h
- 
+
 #include <rtems/score/iosh7045.h>
 #include <termios.h>
 
@@ -46,7 +46,7 @@ typedef struct {
   portNo   line;
   int      speed_ix;
   dataBits dBits;
-  int      parEn;	
+  int      parEn;
   parity   par;
   int      mulPro;
   stopBits sBits;

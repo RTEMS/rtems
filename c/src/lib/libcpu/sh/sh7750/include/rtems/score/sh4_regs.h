@@ -8,7 +8,7 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- * 
+ *
  * @(#) $Id$
  */
 
@@ -20,14 +20,14 @@
 #define SH4_SR_RB          0x20000000 /* General register bank specifier */
 #define SH4_SR_BL          0x10000000 /* Exeption/interrupt masking bit */
 #define SH4_SR_FD          0x00008000 /* FPU disable bit */
-#define SH4_SR_M           0x00000200 /* For signed division: 
+#define SH4_SR_M           0x00000200 /* For signed division:
                                          divisor (module) is negative */
-#define SH4_SR_Q           0x00000100 /* For signed division: 
+#define SH4_SR_Q           0x00000100 /* For signed division:
                                          dividend (and quotient) is negative */
 #define SH4_SR_IMASK       0x000000f0 /* Interrupt mask level */
 #define SH4_SR_IMASK_S     4
 #define SH4_SR_S           0x00000002 /* Saturation for MAC instruction:
-                                         if set, data in MACH/L register 
+                                         if set, data in MACH/L register
                                          is restricted to 48/32 bits
                                          for MAC.W/L instructions */
 #define SH4_SR_T           0x00000001 /* 1 if last condiyion was true */
@@ -36,7 +36,7 @@
 /* FPSCR -- FPU Starus/Control Register */
 #define SH4_FPSCR_FR       0x00200000 /* FPU register bank specifier */
 #define SH4_FPSCR_SZ       0x00100000 /* FMOV 64-bit transfer mode */
-#define SH4_FPSCR_PR       0x00080000 /* Double-percision floating-point 
+#define SH4_FPSCR_PR       0x00080000 /* Double-percision floating-point
                                          operations flag */
                                       /* SH4_FPSCR_SZ & SH4_FPSCR_PR != 1 */
 #define SH4_FPSCR_DN       0x00040000 /* Treat denormalized number as zero */

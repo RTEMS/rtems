@@ -72,15 +72,15 @@ sh4uart_init(sh4uart *uart, void *tty, int chn, int int_driven)
 /*
  * sh4uart_get_Pph --
  *    Get current peripheral module clock.
- *    
+ *
  * PARAMETERS: none;
- *    Cpu clock is get from CPU_CLOCK_RATE_HZ marco 
+ *    Cpu clock is get from CPU_CLOCK_RATE_HZ marco
  *    (defined in bspopts.h, included from bsp.h)
  *
  * RETURNS:
  *    peripheral module clock in Hz.
  */
-uint32_t  
+uint32_t
 sh4uart_get_Pph(void)
 {
     uint16_t   frqcr = *(volatile uint16_t*)SH7750_FRQCR;
@@ -114,7 +114,7 @@ sh4uart_get_Pph(void)
         default: /* unreachable */
             break;
     }
-    
+
     switch (frqcr & SH7750_FRQCR_PFC)
     {
         case SH7750_FRQCR_PFCDIV2:
@@ -202,7 +202,7 @@ sh4uart_set_baudrate(sh4uart *uart, speed_t baud)
     /* Set default baudrate if specified baudrate is impossible */
     if (n >= 4)
         sh4uart_set_baudrate(uart, B9600);
-    
+
     SCSMR(uart->chn) &= ~SH7750_SCSMR_CKS;
     SCSMR(uart->chn) |= n << SH7750_SCSMR_CKS_S;
     SCBRR(uart->chn) = div;
@@ -240,7 +240,7 @@ sh4uart_reset(sh4uart *uart)
     SCSMR(chn) = 0x0;       /* 8-bit, non-parity, 1 stop bit, pf/1 clock */
 
     if (chn == SH4_SCIF)
-        SCFCR2 = SH7750_SCFCR2_TFRST | SH7750_SCFCR2_RFRST | 
+        SCFCR2 = SH7750_SCFCR2_TFRST | SH7750_SCFCR2_RFRST |
                 SH7750_SCFCR2_RTRG_1 | SH7750_SCFCR2_TTRG_4;
 
     if (chn == SH4_SCI)
@@ -259,13 +259,13 @@ sh4uart_reset(sh4uart *uart)
             ipr |= SH4_UART_INTERRUPT_LEVEL << SH7750_IPRB_SCI1_S;
             IPRB = ipr;
 
-            rc = rtems_interrupt_catch(sh4uart1_interrupt_transmit, 
-                    SH7750_EVT_TO_NUM(SH7750_EVT_SCI_TXI), 
+            rc = rtems_interrupt_catch(sh4uart1_interrupt_transmit,
+                    SH7750_EVT_TO_NUM(SH7750_EVT_SCI_TXI),
                     &uart->old_handler_transmit);
             if (rc != RTEMS_SUCCESSFUL)
                 return rc;
-            rc = rtems_interrupt_catch(sh4uart1_interrupt_receive, 
-                    SH7750_EVT_TO_NUM(SH7750_EVT_SCI_RXI), 
+            rc = rtems_interrupt_catch(sh4uart1_interrupt_receive,
+                    SH7750_EVT_TO_NUM(SH7750_EVT_SCI_RXI),
                     &uart->old_handler_receive);
             if (rc != RTEMS_SUCCESSFUL)
                 return rc;
@@ -277,13 +277,13 @@ sh4uart_reset(sh4uart *uart)
             ipr |= SH4_UART_INTERRUPT_LEVEL << SH7750_IPRC_SCIF_S;
             IPRC = ipr;
 
-            rc = rtems_interrupt_catch(sh4uart2_interrupt_transmit, 
-                    SH7750_EVT_TO_NUM(SH7750_EVT_SCIF_TXI), 
+            rc = rtems_interrupt_catch(sh4uart2_interrupt_transmit,
+                    SH7750_EVT_TO_NUM(SH7750_EVT_SCIF_TXI),
                     &uart->old_handler_transmit);
             if (rc != RTEMS_SUCCESSFUL)
                 return rc;
-            rc = rtems_interrupt_catch(sh4uart2_interrupt_receive, 
-                    SH7750_EVT_TO_NUM(SH7750_EVT_SCIF_RXI), 
+            rc = rtems_interrupt_catch(sh4uart2_interrupt_receive,
+                    SH7750_EVT_TO_NUM(SH7750_EVT_SCIF_RXI),
                     &uart->old_handler_receive);
             if (rc != RTEMS_SUCCESSFUL)
                 return rc;
@@ -295,10 +295,10 @@ sh4uart_reset(sh4uart *uart)
     sh4uart_set_baudrate(uart, B38400); /* debug defaults (unfortunately,
                                            it is differ to termios default */
 
-    SCSCR(chn) = SH7750_SCSCR_TE | SH7750_SCSCR_RE | 
-            (chn == SH4_SCI ? 0x0 : SH7750_SCSCR2_REIE) | 
+    SCSCR(chn) = SH7750_SCSCR_TE | SH7750_SCSCR_RE |
+            (chn == SH4_SCI ? 0x0 : SH7750_SCSCR2_REIE) |
             (int_driven ? (SH7750_SCSCR_RIE | SH7750_SCSCR_TIE) : 0x0);
-                    
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -324,15 +324,15 @@ sh4uart_disable(sh4uart *uart, int disable_port)
 
     if (uart->int_driven)
     {
-        rc = rtems_interrupt_catch(uart->old_handler_transmit, 
-                uart->chn == SH4_SCI ? 
-                        SH7750_EVT_SCI_TXI : SH7750_EVT_SCIF_TXI, 
+        rc = rtems_interrupt_catch(uart->old_handler_transmit,
+                uart->chn == SH4_SCI ?
+                        SH7750_EVT_SCI_TXI : SH7750_EVT_SCIF_TXI,
                 NULL);
         if (rc != RTEMS_SUCCESSFUL)
             return rc;
-        rc = rtems_interrupt_catch(uart->old_handler_receive, 
-                uart->chn == SH4_SCI ? 
-                        SH7750_EVT_SCI_RXI : SH7750_EVT_SCIF_RXI, 
+        rc = rtems_interrupt_catch(uart->old_handler_receive,
+                uart->chn == SH4_SCI ?
+                        SH7750_EVT_SCI_RXI : SH7750_EVT_SCIF_RXI,
                 NULL);
         if (rc != RTEMS_SUCCESSFUL)
             return rc;
@@ -359,7 +359,7 @@ sh4uart_set_attributes(sh4uart *uart, const struct termios *t)
     int level;
     speed_t baud;
     uint16_t   smr;
-   
+
     smr = (uint16_t)(*(uint8_t*)SH7750_SCSMR(uart->chn));
 
     baud = cfgetospeed(t);
@@ -473,7 +473,7 @@ sh4uart_poll_read(sh4uart *uart)
 
     if (chn == SH4_SCI)
     {
-        if ((SCSSR1 & (SH7750_SCSSR1_PER | SH7750_SCSSR1_FER | 
+        if ((SCSSR1 & (SH7750_SCSSR1_PER | SH7750_SCSSR1_FER |
                      SH7750_SCSSR1_ORER)) != 0)
         {
             error_occured = 1;
@@ -487,7 +487,7 @@ sh4uart_poll_read(sh4uart *uart)
     else
     {
         if ((SCSSR2 & (SH7750_SCSSR2_ER | SH7750_SCSSR2_DR |
-                     SH7750_SCSSR2_BRK)) != 0 || 
+                     SH7750_SCSSR2_BRK)) != 0 ||
                 (SCLSR2 & SH7750_SCLSR2_ORER) != 0)
         {
             error_occured = 1;
@@ -560,15 +560,15 @@ sh4uart_poll_write(sh4uart *uart, const char *buf, int len)
             while ((SCSSR2 & SH7750_SCSSR2_TDFE) != 0)
             {
                 int i;
-                for (i = 0; 
-                        i < 16 - TRANSMIT_TRIGGER_VALUE(SCFCR2 & 
-                            SH7750_SCFCR2_TTRG); 
+                for (i = 0;
+                        i < 16 - TRANSMIT_TRIGGER_VALUE(SCFCR2 &
+                            SH7750_SCFCR2_TTRG);
                         i++)
                 {
                     SCTDR2 = *buf++;
                     len--;
                 }
-                while ((SCSSR2 & SH7750_SCSSR2_TDFE) == 0 || 
+                while ((SCSSR2 & SH7750_SCSSR2_TDFE) == 0 ||
                         (SCSSR2 & SH7750_SCSSR2_TEND) == 0);
                     SCSSR2 &= ~(SH7750_SCSSR1_TDRE | SH7750_SCSSR2_TEND);
             }
@@ -604,7 +604,7 @@ sh4uart1_interrupt_receive(rtems_vector_number vec)
         if ((bp < sizeof(buf) - 1) && ((SCSSR1 & SH7750_SCSSR1_RDRF) != 0))
         {
             /* Receive character and handle frame/parity errors */
-            if ((SCSSR1 & (SH7750_SCSSR1_PER | SH7750_SCSSR1_FER | 
+            if ((SCSSR1 & (SH7750_SCSSR1_PER | SH7750_SCSSR1_FER |
                             SH7750_SCSSR1_ORER)) != 0)
             {
                 if (SCSSR1 & (SH7750_SCSSR1_PER | SH7750_SCSSR1_FER))
@@ -661,7 +661,7 @@ sh4uart2_interrupt_receive(rtems_vector_number vec)
         if ((bp < sizeof(buf) - 1) && ((SCSSR2 & SH7750_SCSSR2_RDF) != 0))
         {
             if ((SCSSR2 & (SH7750_SCSSR2_ER | SH7750_SCSSR2_DR |
-                            SH7750_SCSSR2_BRK)) != 0 || 
+                            SH7750_SCSSR2_BRK)) != 0 ||
                     (SH7750_SCLSR2 & SH7750_SCLSR2_ORER) != 0)
             {
                 if (SCSSR2 & SH7750_SCSSR2_ER)
@@ -687,7 +687,7 @@ sh4uart2_interrupt_receive(rtems_vector_number vec)
                     else
                         buf[bp++] = 0x00;   /* XXX -- SIGINT */
                 }
-                    
+
                 sh4uart_handle_error(uart);
             }
             else
@@ -722,7 +722,7 @@ sh4uart1_interrupt_transmit(rtems_vector_number vec)
 
     if (uart->tx_buf != NULL && uart->tx_ptr < uart->tx_buf_len)
     {
-        while ((SCSSR1 & SH7750_SCSSR1_TDRE) != 0 && 
+        while ((SCSSR1 & SH7750_SCSSR1_TDRE) != 0 &&
                 uart->tx_ptr < uart->tx_buf_len)
         {
             SCTDR1 = uart->tx_buf[uart->tx_ptr++];
@@ -764,9 +764,9 @@ sh4uart2_interrupt_transmit(rtems_vector_number vec)
             while ((SCSSR2 & SH7750_SCSSR2_TDFE) != 0)
             {
                 int i;
-                for (i = 0; 
-                        i < 16 - TRANSMIT_TRIGGER_VALUE(SCFCR2 & 
-                            SH7750_SCFCR2_TTRG); 
+                for (i = 0;
+                        i < 16 - TRANSMIT_TRIGGER_VALUE(SCFCR2 &
+                            SH7750_SCFCR2_TTRG);
                         i++)
                     SCTDR2 = uart->tx_buf[uart->tx_ptr++];
                 while ((SCSSR1 & SH7750_SCSSR1_TDRE) == 0 ||
@@ -807,7 +807,7 @@ sh4uart_interrupt_write(sh4uart *uart, const char *buf, int len)
     while ((SCSSR1 & SH7750_SCSSR1_TEND) == 0);
 
     rtems_interrupt_disable(level);
-    
+
     uart->tx_buf = buf;
     uart->tx_buf_len = len;
     uart->tx_ptr = 0;
@@ -932,7 +932,7 @@ int
 ipl_console_poll_write(int minor, const char *buf, int len)
 {
     int c;
-    while (len > 0) 
+    while (len > 0)
     {
         c = (len < 64 ? len : 64);
         ipl_serial_output(buf, c);

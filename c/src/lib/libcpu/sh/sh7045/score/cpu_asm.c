@@ -13,7 +13,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -48,23 +48,23 @@ extern proc_ptr         _Hardware_isr_Table[];
   unsigned long    *_old_stack_ptr;
 #endif
 
-register unsigned long  *stack_ptr asm("r15"); 
+register unsigned long  *stack_ptr asm("r15");
 
-/* 
+/*
  * sh_set_irq_priority
- * 
+ *
  * this function sets the interrupt level of the specified interrupt
  *
  * parameters:
- *             - irq : interrupt number 
+ *             - irq : interrupt number
  *             - prio: priority to set for this interrupt number
  *
  * returns:    0 if ok
  *             -1 on error
  */
 
-unsigned int sh_set_irq_priority( 
-  unsigned int irq, 
+unsigned int sh_set_irq_priority(
+  unsigned int irq,
   unsigned int prio )
 {
   uint32_t   shiftcount;
@@ -90,7 +90,7 @@ unsigned int sh_set_irq_priority(
     {
       irq = irq - 72;
       shiftcount = 12 - ((irq & ~0x03) % 16);
-      
+
       switch( irq / 16)
 	{
 	case 0: { prioreg = INTC_IPRC; break;}
@@ -185,7 +185,7 @@ void _CPU_Context_restore_fp(
  */
 
 /*
- * FIXME: This is an ugly hack, but we wanted to avoid recalculating 
+ * FIXME: This is an ugly hack, but we wanted to avoid recalculating
  *        the offset each time Context_Control is changed
  */
 void __CPU_Context_switch(
@@ -253,10 +253,10 @@ __CPU_Context_restore:\n\
 	nop" );
 }
 
-/*  
+/*
  *  This routine provides the RTEMS interrupt management.
  */
- 
+
 void __ISR_Handler( uint32_t   vector)
 {
   register uint32_t   level;
@@ -293,7 +293,7 @@ void __ISR_Handler( uint32_t   vector)
 
   if( _ISR_Nest_level == 0 )
     /* restore old stack pointer */
-    stack_ptr = _old_stack_ptr;  
+    stack_ptr = _old_stack_ptr;
 #endif
 
   _CPU_ISR_Enable( level );

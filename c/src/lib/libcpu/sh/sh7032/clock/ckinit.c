@@ -9,7 +9,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -40,11 +40,11 @@
 #define I_CLK_PHI_4	2
 #define I_CLK_PHI_8	3
 
-/* 
+/*
  * Set I_CLK_PHI to one of the I_CLK_PHI_X values from above to choose
  * a PHI/X clock rate.
  */
- 
+
 #define I_CLK_PHI 	I_CLK_PHI_4
 #define CLOCK_SCALE	(1<<I_CLK_PHI)
 
@@ -62,12 +62,12 @@
  * clicks_per_tick := clicks_per_sec * usec_per_tick
  *
  * This is a very expensive function ;-)
- * 
+ *
  * Below are two variants:
  * 1. A variant applying integer arithmetics, only.
  * 2. A variant applying floating point arithmetics
  *
- * The floating point variant pulls in the fmath routines when linking, 
+ * The floating point variant pulls in the fmath routines when linking,
  * resulting in slightly larger executables for applications that do not
  * apply fmath otherwise. However, the imath variant is significantly slower
  * than the fmath variant and more complex.
@@ -78,13 +78,13 @@
  * To the sake of simplicity, we might abandon one of both variants in
  * future.
  */
-static unsigned int sh_clicks_per_tick( 
+static unsigned int sh_clicks_per_tick(
   unsigned int clicks_per_sec,
   unsigned int usec_per_tick )
 {
 #if 1
   unsigned int clicks_per_tick = 0 ;
-  
+
   unsigned int b = clicks_per_sec ;
   unsigned int c = 1000000 ;
   unsigned int d = 1 ;
@@ -98,10 +98,10 @@ static unsigned int sh_clicks_per_tick(
     d *= 10 ;
     a = ( ( b / c ) * usec_per_tick ) / d ;
     clicks_per_tick += a ;
-  } 
+  }
   return clicks_per_tick ;
 #else
-  double fclicks_per_tick = 
+  double fclicks_per_tick =
     ((double) clicks_per_sec * (double) usec_per_tick) / 1000000.0 ;
   return (uint32_t) fclicks_per_tick ;
 #endif
@@ -138,7 +138,7 @@ static uint32_t   Clock_isrs_const;        /* only calculated once */
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
@@ -198,26 +198,26 @@ void Install_clock(
   uint32_t   microseconds_per_tick ;
   uint32_t   cclicks_per_tick ;
   uint16_t   Clock_limit ;
-  
+
   /*
    *  Initialize the clock tick device driver variables
    */
 
   Clock_driver_ticks = 0;
-    
+
   if ( rtems_configuration_get_microseconds_per_tick() != 0 )
     microseconds_per_tick = rtems_configuration_get_microseconds_per_tick() ;
   else
     microseconds_per_tick = 10000 ; /* 10000 us */
 
   /* clock clicks per tick */
-  cclicks_per_tick = 
+  cclicks_per_tick =
     sh_clicks_per_tick(
       rtems_cpu_configuration_get_clicks_per_second() / CLOCK_SCALE,
       microseconds_per_tick );
 
   Clock_isrs_const = cclicks_per_tick >> 16 ;
-  if ( ( cclicks_per_tick | 0xffff ) > 0 ) 
+  if ( ( cclicks_per_tick | 0xffff ) > 0 )
     Clock_isrs_const++ ;
   Clock_limit = cclicks_per_tick / Clock_isrs_const ;
   Clock_isrs = Clock_isrs_const;
@@ -226,7 +226,7 @@ void Install_clock(
   /*
    *  Hardware specific initialize goes here
    */
-  
+
   /* stop Timer 0 */
   temp8 = read8( ITU_TSTR) & ITU0_STARTMASK;
   write8( temp8, ITU_TSTR);
@@ -246,8 +246,8 @@ void Install_clock(
   write8( ITU0_TCRMASK , ITU_TCR0);
 
   /* use GRA without I/O - pins  */
-  write8( ITU0_TIORVAL, ITU_TIOR0); 
-    
+  write8( ITU0_TIORVAL, ITU_TIOR0);
+
   /* reset flags of the status register */
   temp8 = read8( ITU_TSR0) & ITU_STAT_MASK;
   write8( temp8, ITU_TSR0);
@@ -262,7 +262,7 @@ void Install_clock(
 
   /* set counter limits */
   write16( Clock_limit, ITU_GRA0);
-   
+
   /* start counter */
   temp8 = read8( ITU_TSTR) |~ITU0_STARTMASK;
   write8( temp8, ITU_TSTR);
@@ -312,14 +312,14 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
- 
+
   /*
    * make major/minor avail to others such as shared memory driver
    */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -331,14 +331,14 @@ rtems_device_driver Clock_control(
 {
   uint32_t   isrlevel;
   rtems_libio_ioctl_args_t *args = pargp;
-  
+
   if (args != 0)
     {
       /*
        * This is hokey, but until we get a defined interface
        * to do this, it will just be this simple...
        */
-      
+
       if (args->command == rtems_build_name('I', 'S', 'R', ' '))
 	{
 	  Clock_isr(CLOCK_VECTOR);
@@ -348,7 +348,7 @@ rtems_device_driver Clock_control(
 	  rtems_isr_entry	ignored ;
 	  rtems_interrupt_disable( isrlevel );
 	  rtems_interrupt_catch( args->buffer, CLOCK_VECTOR, &ignored );
-	  
+
 	  rtems_interrupt_enable( isrlevel );
 	}
     }

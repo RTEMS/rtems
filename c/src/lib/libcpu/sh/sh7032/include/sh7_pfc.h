@@ -104,7 +104,7 @@
 #define PB1MD0  0x0004
 #define PB0MD1  0x0002
 #define PB0MD0  0x0001
-	
+
 #define PB7MD   PB7MD1|PB7MD0
 #define PB6MD   PB6MD1|PB6MD0
 #define PB5MD   PB5MD1|PB5MD0

@@ -3,8 +3,8 @@
  * From these procedures __ISR_Handler is called with the vector number
  * as argument.
  *
- * __ISR_Handler is kept in a separate file (cpu_asm.c), because a bug in 
- * some releases of gcc doesn't properly handle #pragma interrupt, if a 
+ * __ISR_Handler is kept in a separate file (cpu_asm.c), because a bug in
+ * some releases of gcc doesn't properly handle #pragma interrupt, if a
  * file contains both isrs and normal functions.
  *
  *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de) and
@@ -15,7 +15,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE
- * 
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -38,37 +38,37 @@
  */
 proc_ptr _Hardware_isr_Table[256]={
 _dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
-_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp, 
-_dummy_isp, _dummy_isp, _dummy_isp,
-_nmi_isp, _usb_isp, 
-_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp, 
-_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp, 
-_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp, 
-_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp, 
-_dummy_isp, _dummy_isp, _dummy_isp, 
-/* trapa 0 -31 */
-_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp, 
-_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp, 
-_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp, 
-_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp, 
 _dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
-_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp, 
-_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp, 
-_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp, 
+_dummy_isp, _dummy_isp, _dummy_isp,
+_nmi_isp, _usb_isp,
+_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
+_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
+_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
+_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
+_dummy_isp, _dummy_isp, _dummy_isp,
+/* trapa 0 -31 */
+_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
+_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
+_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
+_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
+_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
+_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
+_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
+_dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
 /* irq 64 ... */
-_irq0_isp, _irq1_isp, _irq2_isp, _irq3_isp, 
+_irq0_isp, _irq1_isp, _irq2_isp, _irq3_isp,
 _irq4_isp, _irq5_isp, _irq6_isp, _irq7_isp,
-_dma0_isp, _dummy_isp, _dma1_isp, _dummy_isp, 
-_dma2_isp, _dummy_isp, _dma3_isp, _dummy_isp, 
-_imia0_isp, _imib0_isp, _ovi0_isp, _dummy_isp, 
-_imia1_isp, _imib1_isp, _ovi1_isp, _dummy_isp, 
-_imia2_isp, _imib2_isp, _ovi2_isp, _dummy_isp, 
-_imia3_isp, _imib3_isp, _ovi3_isp, _dummy_isp, 
-_imia4_isp, _imib4_isp, _ovi4_isp, _dummy_isp, 
+_dma0_isp, _dummy_isp, _dma1_isp, _dummy_isp,
+_dma2_isp, _dummy_isp, _dma3_isp, _dummy_isp,
+_imia0_isp, _imib0_isp, _ovi0_isp, _dummy_isp,
+_imia1_isp, _imib1_isp, _ovi1_isp, _dummy_isp,
+_imia2_isp, _imib2_isp, _ovi2_isp, _dummy_isp,
+_imia3_isp, _imib3_isp, _ovi3_isp, _dummy_isp,
+_imia4_isp, _imib4_isp, _ovi4_isp, _dummy_isp,
 _eri0_isp, _rxi0_isp, _txi0_isp, _tei0_isp,
 _eri1_isp, _rxi1_isp, _txi1_isp, _tei1_isp,
-_prt_isp, _adu_isp, _dummy_isp, _dummy_isp, 
-_wdt_isp, 
+_prt_isp, _adu_isp, _dummy_isp, _dummy_isp,
+_wdt_isp,
 /* 113 */ _dref_isp
 };
 
@@ -76,7 +76,7 @@ _wdt_isp,
 
 /*
  * Some versions of gcc and all version of egcs at least until egcs-1.1b
- * are not able to handle #pragma interrupt correctly if more than 1 isr is 
+ * are not able to handle #pragma interrupt correctly if more than 1 isr is
  * contained in a file and when optimizing.
  * We try to work around this problem by using the macro below.
  */
@@ -119,8 +119,8 @@ asm (".global _"Str(name)"\n\t" \
      ".long "Str(func));
 
 /************************************************
- * Dummy interrupt service procedure for 
- * interrupts being not allowed --> Trap 34 
+ * Dummy interrupt service procedure for
+ * interrupts being not allowed --> Trap 34
  ************************************************/
 asm(" .section .text\n\
 .global __dummy_isp\n\
@@ -133,17 +133,17 @@ __dummy_isp:\n\
       nop");
 
 /*****************************
- * Non maskable interrupt 
+ * Non maskable interrupt
  *****************************/
 isp( _nmi_isp, NMI_ISP_V, ___ISR_Handler);
 
-/***************************** 
- * User break controller 
+/*****************************
+ * User break controller
  *****************************/
 isp( _usb_isp, USB_ISP_V, ___ISR_Handler);
 
 /*****************************
- *  External interrupts 0-7 
+ *  External interrupts 0-7
  *****************************/
 isp( _irq0_isp, IRQ0_ISP_V, ___ISR_Handler);
 isp( _irq1_isp, IRQ1_ISP_V, ___ISR_Handler);
@@ -155,7 +155,7 @@ isp( _irq6_isp, IRQ6_ISP_V, ___ISR_Handler);
 isp( _irq7_isp, IRQ7_ISP_V, ___ISR_Handler);
 
 /*****************************
- * DMA - controller 
+ * DMA - controller
  *****************************/
 isp( _dma0_isp, DMA0_ISP_V, ___ISR_Handler);
 isp( _dma1_isp, DMA1_ISP_V, ___ISR_Handler);
@@ -163,12 +163,12 @@ isp( _dma2_isp, DMA2_ISP_V, ___ISR_Handler);
 isp( _dma3_isp, DMA3_ISP_V, ___ISR_Handler);
 
 
-/***************************** 
- * Interrupt timer unit 
+/*****************************
+ * Interrupt timer unit
  *****************************/
 
 /*****************************
- * Timer 0 
+ * Timer 0
  *****************************/
 isp( _imia0_isp, IMIA0_ISP_V, ___ISR_Handler);
 isp( _imib0_isp, IMIB0_ISP_V, ___ISR_Handler);
@@ -204,7 +204,7 @@ isp( _ovi4_isp,  OVI4_ISP_V, ___ISR_Handler);
 
 
 /*****************************
- * Serial interfaces 
+ * Serial interfaces
  *****************************/
 
 /*****************************
@@ -225,27 +225,27 @@ isp( _tei1_isp,  TEI1_ISP_V, ___ISR_Handler);
 
 
 /*****************************
- * Parity control unit of 
- * the bus state controller 
+ * Parity control unit of
+ * the bus state controller
  *****************************/
 isp( _prt_isp,  PRT_ISP_V, ___ISR_Handler);
 
 
-/****************************** 
+/******************************
  * Analog digital converter
- * ADC 
+ * ADC
  ******************************/
 isp( _adu_isp,  ADU_ISP_V, ___ISR_Handler);
 
 
 /******************************
- *  Watchdog timer 
+ *  Watchdog timer
  ******************************/
 isp( _wdt_isp,  WDT_ISP_V, ___ISR_Handler);
 
 
 /******************************
- * DRAM refresh control unit 
- * of bus state controller 
+ * DRAM refresh control unit
+ * of bus state controller
  ******************************/
 isp( _dref_isp,  DREF_ISP_V, ___ISR_Handler);

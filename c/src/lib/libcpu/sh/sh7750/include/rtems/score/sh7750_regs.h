@@ -12,26 +12,26 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
- * 
+ *
  * @(#) $Id$
  */
 
 #ifndef __SH7750_REGS_H__
 #define __SH7750_REGS_H__
 
-/* 
- * All register has 2 addresses: in 0xff000000 - 0xffffffff (P4 address)  and 
+/*
+ * All register has 2 addresses: in 0xff000000 - 0xffffffff (P4 address)  and
  * in 0x1f000000 - 0x1fffffff (area 7 address)
  */
-#define SH7750_P4_BASE       0xff000000 /* Accessable only in 
+#define SH7750_P4_BASE       0xff000000 /* Accessable only in
                                            priveleged mode */
 #define SH7750_A7_BASE       0x1f000000 /* Accessable only using TLB */
 
 #define SH7750_P4_REG32(ofs) (SH7750_P4_BASE + (ofs))
 #define SH7750_A7_REG32(ofs) (SH7750_A7_BASE + (ofs))
 
-/* 
- * MMU Registers 
+/*
+ * MMU Registers
  */
 
 /* Page Table Entry High register - PTEH */
@@ -61,9 +61,9 @@
 #define SH7750_PTEL_PR_RWPO   0x00000020 /*   read-write in priv mode */
 #define SH7750_PTEL_PR_ROPU   0x00000040 /*   read-only in priv or user mode*/
 #define SH7750_PTEL_PR_RWPU   0x00000060 /*   read-write in priv or user mode*/
-#define SH7750_PTEL_C         0x00000008 /* Cacheability 
+#define SH7750_PTEL_C         0x00000008 /* Cacheability
                                             (0 - page not cacheable) */
-#define SH7750_PTEL_D         0x00000004 /* Dirty bit (1 - write has been 
+#define SH7750_PTEL_D         0x00000004 /* Dirty bit (1 - write has been
                                             performed to a page) */
 #define SH7750_PTEL_SH        0x00000002 /* Share Status bit (1 - page are
                                             shared by processes) */
@@ -130,12 +130,12 @@
 #define SH7750_CCR_A7         SH7750_A7_REG32(SH7750_CCR_REGOFS)
 
 #define SH7750_CCR_IIX      0x00008000 /* IC index enable bit */
-#define SH7750_CCR_ICI      0x00000800 /* IC invalidation bit: 
+#define SH7750_CCR_ICI      0x00000800 /* IC invalidation bit:
                                           set it to clear IC */
 #define SH7750_CCR_ICE      0x00000100 /* IC enable bit */
 #define SH7750_CCR_OIX      0x00000080 /* OC index enable bit */
-#define SH7750_CCR_ORA      0x00000020 /* OC RAM enable bit 
-                                          if you set OCE = 0, 
+#define SH7750_CCR_ORA      0x00000020 /* OC RAM enable bit
+                                          if you set OCE = 0,
                                           you should set ORA = 0 */
 #define SH7750_CCR_OCI      0x00000008 /* OC invalidation bit */
 #define SH7750_CCR_CB       0x00000004 /* Copy-back bit for P1 area */
@@ -166,7 +166,7 @@
 #define SH7750_TRA_IMM_S    2
 
 /* Exeption event register - EXPEVT */
-#define SH7750_EXPEVT_REGOFS  0x000024 
+#define SH7750_EXPEVT_REGOFS  0x000024
 #define SH7750_EXPEVT         SH7750_P4_REG32(SH7750_EXPEVT_REGOFS)
 #define SH7750_EXPEVT_A7      SH7750_A7_REG32(SH7750_EXPEVT_REGOFS)
 
@@ -174,7 +174,7 @@
 #define SH7750_EXPEVT_EX_S    0
 
 /* Interrupt event register */
-#define SH7750_INTEVT_REGOFS  0x000028 
+#define SH7750_INTEVT_REGOFS  0x000028
 #define SH7750_INTEVT         SH7750_P4_REG32(SH7750_INTEVT_REGOFS)
 #define SH7750_INTEVT_A7      SH7750_A7_REG32(SH7750_INTEVT_REGOFS)
 #define SH7750_INTEVT_EX    0x00000fff /* Exeption code */
@@ -254,7 +254,7 @@
 
 /* Peripheral Module Interrupts - Memory Refresh Unit (REF) */
 #define SH7750_EVT_REF_RCMI            0x580 /* Compare-match Interrupt */
-#define SH7750_EVT_REF_ROVI            0x5A0 /* Refresh Counter Overflow 
+#define SH7750_EVT_REF_ROVI            0x5A0 /* Refresh Counter Overflow
                                                 interrupt */
 
 /* Peripheral Module Interrupts - Hitachi User Debug Interface (H-UDI) */
@@ -292,7 +292,7 @@
                                       standby mode:
                                          0 - normal state
                                          1 - high-impendance state */
-                                
+
 #define SH7750_STBCR_PPU      0x20 /* Peripheral module pins pull-up controls*/
 #define SH7750_STBCR_MSTP4    0x10 /* Stopping the clock supply to DMAC */
 #define SH7750_STBCR_DMAC_STP SH7750_STBCR_MSTP4
@@ -331,7 +331,7 @@
 #define SH7750_FRQCR          SH7750_P4_REG32(SH7750_FRQCR_REGOFS)
 #define SH7750_FRQCR_A7       SH7750_A7_REG32(SH7750_FRQCR_REGOFS)
 
-#define SH7750_FRQCR_CKOEN    0x0800 /* Clock Output Enable 
+#define SH7750_FRQCR_CKOEN    0x0800 /* Clock Output Enable
                                           0 - CKIO pin goes to HiZ/pullup
                                           1 - Clock is output from CKIO */
 #define SH7750_FRQCR_PLL1EN   0x0400 /* PLL circuit 1 enable */
@@ -364,7 +364,7 @@
 /*
  * Watchdog Timer (WDT)
  */
- 
+
 /* Watchdog Timer Counter register - WTCNT */
 #define SH7750_WTCNT_REGOFS   0xC00008  /* offset */
 #define SH7750_WTCNT          SH7750_P4_REG32(SH7750_WTCNT_REGOFS)
@@ -621,7 +621,7 @@
 #define SH7750_BCR1_A7        SH7750_A7_REG32(SH7750_BCR1_REGOFS)
 #define SH7750_BCR1_ENDIAN    0x80000000 /* Endianness (1 - little endian) */
 #define SH7750_BCR1_MASTER    0x40000000 /* Master/Slave mode (1-master) */
-#define SH7750_BCR1_A0MPX     0x20000000 /* Area 0 Memory Type (0-SRAM,1-MPX)*/ 
+#define SH7750_BCR1_A0MPX     0x20000000 /* Area 0 Memory Type (0-SRAM,1-MPX)*/
 #define SH7750_BCR1_IPUP      0x02000000 /* Input Pin Pull-up Control:
                                               0 - pull-up resistor is on for
                                                   control input pins
@@ -643,7 +643,7 @@
 #define SH7750_BCR1_BREQEN    0x00080000 /* BREQ Enable:
                                               0 - External requests are  not
                                                   accepted
-                                              1 - External requests are 
+                                              1 - External requests are
                                                   accepted */
 #define SH7750_BCR1_PSHR      0x00040000 /* Partial Sharing Bit:
                                               0 - Master Mode
@@ -877,14 +877,14 @@
 #define SH7750_MCR_TCAS_1     0x00000000 /*    1 */
 #define SH7750_MCR_TCAS_2     0x00800000 /*    2 */
 
-#define SH7750_MCR_TPC        0x00380000 /* DRAM: RAS Precharge Period 
+#define SH7750_MCR_TPC        0x00380000 /* DRAM: RAS Precharge Period
                                             SDRAM: minimum number of cycles
                                             until the next bank active cmd
                                             is output after precharging */
 #define SH7750_MCR_TPC_S      19
 #define SH7750_MCR_TPC_SDRAM_1 0x00000000 /* 1 cycle */
 #define SH7750_MCR_TPC_SDRAM_2 0x00080000 /* 2 cycles */
-#define SH7750_MCR_TPC_SDRAM_3 0x00100000 /* 3 cycles */ 
+#define SH7750_MCR_TPC_SDRAM_3 0x00100000 /* 3 cycles */
 #define SH7750_MCR_TPC_SDRAM_4 0x00180000 /* 4 cycles */
 #define SH7750_MCR_TPC_SDRAM_5 0x00200000 /* 5 cycles */
 #define SH7750_MCR_TPC_SDRAM_6 0x00280000 /* 6 cycles */
@@ -1148,7 +1148,7 @@
 #define SH7750_CHCR_DSA_AMEM16  0x0E000000 /* 16-bit attribute memory space */
 
 #define SH7750_CHCR_DTC       0x01000000 /* Destination Address Wait Control
-                                            Select, specifies CS5 or CS6 
+                                            Select, specifies CS5 or CS6
                                             space wait control for PCMCIA
                                             access */
 
@@ -1186,8 +1186,8 @@
                                                  Address Mode (External Addr
                                                  Space -> External Device) */
 #define SH7750_CHCR_RS_ER_SA_ED_TO_EA   0x300 /* External Request, Single
-                                                 Address Mode, (External 
-                                                 Device -> External Addr 
+                                                 Address Mode, (External
+                                                 Device -> External Addr
                                                  Space)*/
 #define SH7750_CHCR_RS_AR_EA_TO_EA      0x400 /* Auto-Request (External Addr
                                                  Space -> External Addr Space)*/
@@ -1195,7 +1195,7 @@
 #define SH7750_CHCR_RS_AR_EA_TO_OCP     0x500 /* Auto-Request (External Addr
                                                  Space -> On-chip Peripheral
                                                  Module) */
-#define SH7750_CHCR_RS_AR_OCP_TO_EA     0x600 /* Auto-Request (On-chip 
+#define SH7750_CHCR_RS_AR_OCP_TO_EA     0x600 /* Auto-Request (On-chip
                                                  Peripheral Module ->
                                                  External Addr Space */
 #define SH7750_CHCR_RS_SCITX_EA_TO_SC   0x800 /* SCI Transmit-Data-Empty intr
@@ -1206,7 +1206,7 @@
                                                  External Addr Space) */
 #define SH7750_CHCR_RS_SCIFTX_EA_TO_SC  0xA00 /* SCIF Transmit-Data-Empty intr
                                                  transfer request (external
-                                                 address space -> SCFTDR1) */ 
+                                                 address space -> SCFTDR1) */
 #define SH7750_CHCR_RS_SCIFRX_SC_TO_EA  0xB00 /* SCIF Receive-Data-Full intr
                                                  transfer request (SCFRDR2 ->
                                                  External Addr Space) */
@@ -1341,7 +1341,7 @@
 
 #define SH7750_SCSSR1_TDRE    0x80 /* Transmit Data Register Empty */
 #define SH7750_SCSSR1_RDRF    0x40 /* Receive Data Register Full */
-#define SH7750_SCSSR1_ORER    0x20 /* Overrun Error */ 
+#define SH7750_SCSSR1_ORER    0x20 /* Overrun Error */
 #define SH7750_SCSSR1_FER     0x10 /* Framing Error */
 #define SH7750_SCSSR1_PER     0x08 /* Parity Error */
 #define SH7750_SCSSR1_TEND    0x04 /* Transmit End */
@@ -1569,7 +1569,7 @@
 #define SH7750_IPRA_RTC_S     0
 
 /* Interrupt Priority Register B - IPRB (half) */
-#define SH7750_IPRB_REGOFS    0xD00008 /* offset */ 
+#define SH7750_IPRB_REGOFS    0xD00008 /* offset */
 #define SH7750_IPRB           SH7750_P4_REG32(SH7750_IPRB_REGOFS)
 #define SH7750_IPRB_A7        SH7750_A7_REG32(SH7750_IPRB_REGOFS)
 
@@ -1596,7 +1596,7 @@
 #define SH7750_IPRC_HUDI_S    0
 
 
-/* 
+/*
  * User Break Controller registers
  */
 #define SH7750_BARA           0x200000 /* Break address regiser A */

@@ -14,7 +14,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -28,7 +28,7 @@
  *  TGA Technologies, Inc.
  *  100 Pinnacle Way, Suite 140
  *  Norcross, GA 30071 U.S.A.
- *  
+ *
  *
  *  This modified file may be copied and distributed in accordance
  *  the above-referenced license. It is provided for critique and

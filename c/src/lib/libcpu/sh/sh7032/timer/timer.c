@@ -1,5 +1,5 @@
 /*
- *  timer for the Hitachi SH 703X 
+ *  timer for the Hitachi SH 703X
  *
  *  This file manages the benchmark timer used by the RTEMS Timing Test
  *  Suite.  Each measured time period is demarcated by calls to
@@ -41,9 +41,9 @@
 
 /*
  * Set I_CLK_PHI to one of the I_CLK_PHI_X values from above to choose
- * a PHI/X clock rate.  
+ * a PHI/X clock rate.
  */
-   
+
 #define I_CLK_PHI       I_CLK_PHI_4
 #define CLOCK_SCALE     (1<<I_CLK_PHI)
 
@@ -154,10 +154,10 @@ int Read_timer( void )
   /*
    *  Read the timer and see how many clicks it has been since we started.
    */
-  
+
 
   cclicks = read16( ITU_TCNT1);   /* XXX: read some HW here */
-  
+
   /*
    *  Total is calculated by taking into account the number of timer overflow
    *  interrupts since the timer was initialized and clicks since the last
@@ -168,7 +168,7 @@ int Read_timer( void )
 
   if ( Timer_driver_Find_average_overhead )
     return total / CLOCK_SCALE;          /* in XXX microsecond units */
-  else 
+  else
   {
     if ( total < LEAST_VALID )
       return 0;            /* below timer resolution */

@@ -70,11 +70,11 @@ rtems_isr_entry  Old_ticker;
  *
  * PARAMETERS:
  *     vector - interrupt vector number
- * 
+ *
  * RETURNS:
  *     none
  */
-rtems_isr 
+rtems_isr
 Clock_isr(rtems_vector_number vector)
 {
     uint16_t   tcr;
@@ -103,7 +103,7 @@ Clock_isr(rtems_vector_number vector)
  * SIDE EFFECTS:
  *     Establish clock interrupt handler, configure Timer 0 hardware
  */
-void 
+void
 Install_clock(rtems_isr_entry clock_isr)
 {
     int cpudiv = 1; /* CPU frequency divider */
@@ -111,7 +111,7 @@ Install_clock(rtems_isr_entry clock_isr)
     uint32_t   timer_divider; /* Calculated Timer Divider value */
     uint8_t   temp8;
     uint16_t   temp16;
-  
+
     /*
      *  Initialize the clock tick device driver variables
      */
@@ -124,27 +124,27 @@ Install_clock(rtems_isr_entry clock_isr)
         case SH7750_FRQCR_IFCDIV1:
             cpudiv = 1;
             break;
-        
+
         case SH7750_FRQCR_IFCDIV2:
             cpudiv = 2;
             break;
-           
+
         case SH7750_FRQCR_IFCDIV3:
             cpudiv = 3;
             break;
-        
+
         case SH7750_FRQCR_IFCDIV4:
             cpudiv = 4;
             break;
-        
+
         case SH7750_FRQCR_IFCDIV6:
             cpudiv = 6;
             break;
-        
+
         case SH7750_FRQCR_IFCDIV8:
             cpudiv = 8;
             break;
-        
+
         default:
             rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED);
     }
@@ -155,35 +155,35 @@ Install_clock(rtems_isr_entry clock_isr)
         case SH7750_FRQCR_PFCDIV2:
             tidiv = 2 * CLOCK_PRESCALER;
             break;
-           
+
         case SH7750_FRQCR_PFCDIV3:
             tidiv = 3 * CLOCK_PRESCALER;
             break;
-        
+
         case SH7750_FRQCR_PFCDIV4:
             tidiv = 4 * CLOCK_PRESCALER;
             break;
-        
+
         case SH7750_FRQCR_PFCDIV6:
             tidiv = 6 * CLOCK_PRESCALER;
             break;
-        
+
         case SH7750_FRQCR_PFCDIV8:
             tidiv = 8 * CLOCK_PRESCALER;
             break;
-        
+
         default:
             rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED);
     }
-    timer_divider = 
-        (rtems_cpu_configuration_get_clicks_per_second() * 
+    timer_divider =
+        (rtems_cpu_configuration_get_clicks_per_second() *
          cpudiv / (tidiv*1000000)) *
         rtems_configuration_get_microseconds_per_tick();
 
     /*
      *  Hardware specific initialization
      */
-  
+
     /* Stop the Timer 0 */
     temp8 = read8(SH7750_TSTR);
     temp8 &= ~SH7750_TSTR_STR0;
@@ -197,7 +197,7 @@ Install_clock(rtems_isr_entry clock_isr)
 
     /* Load divider */
     write32(timer_divider, SH7750_TCOR0);
-    
+
     write16(
         SH7750_TCR_UNIE |        /* Enable Underflow Interrupt */
         SH7750_TCR_CKEG_RAISE |  /* Count on rising edge */
@@ -233,7 +233,7 @@ Install_clock(rtems_isr_entry clock_isr)
  * SIDE EFFECTS:
  *     Stop Timer 0 counting, set timer 0 interrupt priority level to 0.
  */
-void 
+void
 Clock_exit(void)
 {
     uint8_t   temp8 = 0;
@@ -264,19 +264,19 @@ Clock_exit(void)
  * RETURNS:
  *     RTEMS_SUCCESSFUL
  */
-rtems_device_driver 
-Clock_initialize(rtems_device_major_number major, 
+rtems_device_driver
+Clock_initialize(rtems_device_major_number major,
                  rtems_device_minor_number minor,
                  void *pargp)
 {
     Install_clock( Clock_isr );
- 
+
     /*
      * make major/minor avail to others such as shared memory driver
      */
     rtems_clock_major = major;
     rtems_clock_minor = minor;
- 
+
     return RTEMS_SUCCESSFUL;
 }
 
@@ -291,21 +291,21 @@ Clock_initialize(rtems_device_major_number major,
  * RETURNS:
  *     RTEMS_SUCCESSFUL
  */
-rtems_device_driver 
+rtems_device_driver
 Clock_control(rtems_device_major_number major,
               rtems_device_minor_number minor,
               void *pargp)
 {
   uint32_t   isrlevel;
   rtems_libio_ioctl_args_t *args = pargp;
-  
+
   if (args != 0)
     {
       /*
        * This is hokey, but until we get a defined interface
        * to do this, it will just be this simple...
        */
-      
+
       if (args->command == rtems_build_name('I', 'S', 'R', ' '))
 	{
 	  Clock_isr(CLOCK_VECTOR);
@@ -315,7 +315,7 @@ Clock_control(rtems_device_major_number major,
 	  rtems_isr_entry	ignored ;
 	  rtems_interrupt_disable( isrlevel );
 	  rtems_interrupt_catch( args->buffer, CLOCK_VECTOR, &ignored );
-	  
+
 	  rtems_interrupt_enable( isrlevel );
 	}
     }

@@ -1,4 +1,4 @@
-/*  
+/*
  *  This routine is a simple spin delay
  *
  *  Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de)
@@ -37,10 +37,10 @@
  */
 
 void CPU_delay( uint32_t   microseconds )
-{ 
-  register uint32_t   clicks_per_usec = 
+{
+  register uint32_t   clicks_per_usec =
     rtems_cpu_configuration_get_clicks_per_second() / 1000000 ;
-  register uint32_t   _delay = 
+  register uint32_t   _delay =
     (microseconds) * (clicks_per_usec);
   asm volatile (
 "0:	add  #-4,%0\n\

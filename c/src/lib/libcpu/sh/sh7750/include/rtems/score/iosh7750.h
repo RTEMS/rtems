@@ -7,7 +7,7 @@
  *  Authors: Ralf Corsepius (corsepiu@faw.uni-ulm.de) and
  *           Bernd Becker (becker@faw.uni-ulm.de)
  *
- *  Based on "iosh7030.h" distributed with Hitachi's EVB's tutorials, which 
+ *  Based on "iosh7030.h" distributed with Hitachi's EVB's tutorials, which
  *  contained no copyright notice.
  *
  *  COPYRIGHT (c) 1997-1998, FAW Ulm, Germany
@@ -15,7 +15,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -24,8 +24,8 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *	Modified to reflect on-chip registers for sh7045 processor, based on 
- *	"Register.h" distributed with Hitachi's EVB7045F tutorials, and which 
+ *	Modified to reflect on-chip registers for sh7045 processor, based on
+ *	"Register.h" distributed with Hitachi's EVB7045F tutorials, and which
  *  contained no copyright notice:
  *	John M. Mills (jmills@tga.com)
  *	TGA Technologies, Inc.

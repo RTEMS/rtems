@@ -13,7 +13,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -48,7 +48,7 @@ extern proc_ptr         _Hardware_isr_Table[];
   unsigned long    *_old_stack_ptr;
 #endif
 
-register unsigned long  *stack_ptr asm("r15"); 
+register unsigned long  *stack_ptr asm("r15");
 
 /*
  *  _CPU_Context_save_fp_context
@@ -68,7 +68,7 @@ void _CPU_Context_save_fp(
 )
 {
 #if SH_HAS_FPU
- 
+
 asm volatile("\n\
     mov.l   @%0,r4    \n\
     add     %1,r4\n\
@@ -95,12 +95,12 @@ asm volatile("\n\
     fmov    xd4,@-r4\n\
     fmov    xd2,@-r4\n\
     fmov    xd0,@-r4\n\
-    " 
+    "
 #endif
    "lds     %4,fpscr\n\
    "
-    : 
-    : "r"(fp_context_ptr), "r"(sizeof(Context_Control_fp)), 
+    :
+    : "r"(fp_context_ptr), "r"(sizeof(Context_Control_fp)),
       "r"(SH4_FPSCR_SZ), "r"(SH4_FPSCR_PR | SH4_FPSCR_SZ), "r"(SH4_FPSCR_PR)
     : "r4", "r0");
 
@@ -154,7 +154,7 @@ asm volatile("\n\
     fmov    @r4+,dr14\n\
     lds.l   @r4+,fpul\n\
     lds.l   @r4+,fpscr\n\
-    " : 
+    " :
     : "r"(fp_context_ptr), "r"(SH4_FPSCR_PR | SH4_FPSCR_SZ), "r"(SH4_FPSCR_SZ)
     : "r4", "r0");
 
@@ -182,7 +182,7 @@ asm volatile("\n\
  */
 
 /*
- * FIXME: This is an ugly hack, but we wanted to avoid recalculating 
+ * FIXME: This is an ugly hack, but we wanted to avoid recalculating
  *        the offset each time Context_Control is changed
  */
 void __CPU_Context_switch(
@@ -250,10 +250,10 @@ __CPU_Context_restore:\n\
 	nop" );
 }
 
-/*  
+/*
  *  This routine provides the RTEMS interrupt management.
  */
- 
+
 void __ISR_Handler( uint32_t   vector)
 {
   register uint32_t   level;
@@ -290,7 +290,7 @@ void __ISR_Handler( uint32_t   vector)
 
   if( _ISR_Nest_level == 0 )
     /* restore old stack pointer */
-    stack_ptr = _old_stack_ptr;  
+    stack_ptr = _old_stack_ptr;
 #endif
 
   _CPU_ISR_Enable( level );

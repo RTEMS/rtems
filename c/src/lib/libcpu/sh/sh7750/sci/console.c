@@ -157,10 +157,10 @@ console_first_open(int major, int minor, void *arg)
             args->iop->data1,       /* tty */
             minor+1,                /* channel */
             (console_mode == CONSOLE_MODE_INT));
-    
+
     if (sc == RTEMS_SUCCESSFUL)
         sc = sh4uart_reset(&sh4_uarts[minor]);
-    
+
     return sc;
 }
 
@@ -193,7 +193,7 @@ console_last_close(int major, int minor, void *arg)
 void
 console_reserve_resources(rtems_configuration_table *configuration)
 {
-    if ((console_mode != CONSOLE_MODE_RAW) && 
+    if ((console_mode != CONSOLE_MODE_RAW) &&
             (console_mode != CONSOLE_MODE_IPL))
         rtems_termios_reserve_resources (configuration, 2);
 }
@@ -233,7 +233,7 @@ console_initialize(rtems_device_major_number major,
     if ((console_mode != CONSOLE_MODE_RAW) &&
                     (console_mode != CONSOLE_MODE_IPL))
         rtems_termios_initialize ();
-    
+
     /*
      * Register the devices
      */
@@ -265,7 +265,7 @@ console_initialize(rtems_device_major_number major,
             sc = sh4uart_reset(&sh4_uarts[1]);
 
         return sc;
-    }                        
+    }
 
     return RTEMS_SUCCESSFUL;
 }
@@ -348,7 +348,7 @@ console_close(rtems_device_major_number major,
         return rtems_termios_close (arg);
     else
         return RTEMS_SUCCESSFUL;
-}    
+}
 
 /* console_read --
  *     Read from the console device
@@ -425,7 +425,7 @@ console_write(rtems_device_major_number major,
             char *buf = argp->buffer;
             int count = argp->count;
             int i;
-            
+
             for (i = 0; i < count; i++)
             {
                 if (*buf == '\n')

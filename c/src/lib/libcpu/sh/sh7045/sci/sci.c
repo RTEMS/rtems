@@ -1,12 +1,12 @@
 /*
  * /dev/sci[0|1] for Hitachi SH 704X
  *
- * The SH doesn't have a designated console device. Therefore we "alias" 
- * another device as /dev/console and revector all calls to /dev/console 
+ * The SH doesn't have a designated console device. Therefore we "alias"
+ * another device as /dev/console and revector all calls to /dev/console
  * to this device.
  *
- * This approach is similar to installing a sym-link from one device to 
- * another device. If rtems once will support sym-links for devices files, 
+ * This approach is similar to installing a sym-link from one device to
+ * another device. If rtems once will support sym-links for devices files,
  * this implementation could be dropped.
  *
  *  Author: Ralf Corsepius (corsepiu@faw.uni-ulm.de)
@@ -16,7 +16,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -61,9 +61,9 @@
 /*
  * NOTE: Some SH variants have 3 sci devices
  */
-  
+
 #define SCI_MINOR_DEVICES       2
-  
+
 /*
  * FIXME: sh7045 register names match Hitachi data book,
  *  but conflict with RTEMS sh7032 usage.
@@ -106,13 +106,13 @@ static int _sci_set_cflags(
 {
   uint8_t  	smr ;
   uint8_t  	brr ;
-  
+
   if ( c_cflag & CBAUD )
   {
     if ( _sci_get_brparms( c_cflag, &smr, &brr ) != 0 )
       return -1 ;
   }
-                    
+
   if ( c_cflag & CSIZE )
   {
     if ( c_cflag & CS8 )
@@ -137,10 +137,10 @@ static int _sci_set_cflags(
     smr |= SCI_ODD_PARITY ;
   else
     smr &= ~SCI_ODD_PARITY;
-    
+
   write8( smr, sci_dev->addr + SCI_SMR );
   write8( brr, sci_dev->addr + SCI_BRR );
-  
+
   return 0 ;
 }
 
@@ -255,7 +255,7 @@ char sh_sci_inbyte_polled(
     rtems_device_minor_number  minor )
 {
 	char ch;
-	
+
 	if (minor == 0) /* blocks until char.ready */
 		while (rdSCI0(&ch) != TRUE); /* SCI0 */
 	else
@@ -296,8 +296,8 @@ rtems_device_driver sh_sci_initialize(
   rtems_device_driver status;
   rtems_device_minor_number i;
   rtems_driver_name_t driver;
-  
-  
+
+
   /*
    * register all possible devices.
    * the initialization of the hardware is done by sci_open
@@ -341,22 +341,22 @@ rtems_device_driver sh_sci_open(
 {
   uint8_t   temp8;
   uint16_t   temp16;
-  
+
   unsigned 	a ;
-  
+
  /* check for valid minor number */
    if(( minor > ( SCI_MINOR_DEVICES -1 )) || ( minor < 0 ))
    {
      return RTEMS_INVALID_NUMBER;
    }
- 
+
   /* device already opened */
   if ( sci_device[minor].opened > 0 )
   {
     sci_device[minor].opened++ ;
     return RTEMS_SUCCESSFUL ;
   }
-    
+
   /* set PFC registers to enable I/O pins */
 
   if ((minor == 0)) {
@@ -364,8 +364,8 @@ rtems_device_driver sh_sci_open(
     temp16 &= ~(PA2MD1 | PA2MD0);
     temp16 |= (PA_TXD0 | PA_RXD0);       /* enable pins for Tx0, Rx0 */
     write16(temp16, PFC_PACRL2);
-    
-  } else if (minor == 1) {  
+
+  } else if (minor == 1) {
     temp16 = read16(PFC_PACRL2);          /* disable SCK1, DMA, IRQ */
     temp16 &= ~(PA5MD1 | PA5MD0);
     temp16 |= (PA_TXD1 | PA_RXD1);        /* enable pins for Tx1, Rx1 */
@@ -390,24 +390,24 @@ rtems_device_driver sh_sci_open(
     while(temp8 & (SCI_RDRF | SCI_ORER | SCI_FER | SCI_PER)){
         temp8 = read8(sci_device[minor].addr + SCI_RDR);   /* flush input */
         temp8 = read8(sci_device[minor].addr + SCI_SSR); /* clear some flags */
-        write8(temp8 & ~(SCI_RDRF | SCI_ORER | SCI_FER | SCI_PER), 
+        write8(temp8 & ~(SCI_RDRF | SCI_ORER | SCI_FER | SCI_PER),
                sci_device[minor].addr + SCI_SSR);
         temp8 = read8(sci_device[minor].addr + SCI_SSR); /* check if everything is OK */
-    }    
+    }
     /* Clear RDRF flag */
     write8(0x00, sci_device[minor].addr + SCI_TDR);    /* force output */
      /* Clear the TDRE bit */
      temp8 = read8(sci_device[minor].addr + SCI_SSR) & ~SCI_TDRE;
      write8(temp8, sci_device[minor].addr + SCI_SSR);
-    
+
     /* add interrupt setup if required */
 
-  
+
   sci_device[minor].opened++ ;
 
   return RTEMS_SUCCESSFUL ;
 }
- 
+
 /*
  *  Close entry point
  */
@@ -423,7 +423,7 @@ rtems_device_driver sh_sci_close(
     sci_device[minor].opened-- ;
   else
     return RTEMS_INVALID_NUMBER ;
-    
+
   return RTEMS_SUCCESSFUL ;
 }
 
@@ -441,7 +441,7 @@ rtems_device_driver sh_sci_read(
   char *buffer;
   int maximum;
   int count = 0;
- 
+
   rw_args = (rtems_libio_rw_args_t *) arg;
 
   buffer = rw_args->buffer;
@@ -460,7 +460,7 @@ rtems_device_driver sh_sci_read(
 }
 
 /*
- * write bytes to the serial port. Stdout and stderr are the same. 
+ * write bytes to the serial port. Stdout and stderr are the same.
  */
 
 rtems_device_driver sh_sci_write(
@@ -527,7 +527,7 @@ static int _sh_sci_poll_read(int minor)
 {
     int value = -1;
     char ch;
-    
+
     if( minor == 0 ){
         if( rdSCI0( &ch ) )
             value = (int) ch;
@@ -539,12 +539,12 @@ static int _sh_sci_poll_read(int minor)
 }
 
 /*
- * Termios polled write 
+ * Termios polled write
  */
 static int _sh_sci_poll_write(int minor, const char *buf, int len)
 {
     int count;
-    
+
     for(count = 0; count < len; count++)
         outbyte( minor, buf[count] );
     return count;

@@ -1,5 +1,5 @@
 /*
- *  timer for the Hitachi SH 704X 
+ *  timer for the Hitachi SH 704X
  *
  *  This file manages the benchmark timer used by the RTEMS Timing Test
  *  Suite.  Each measured time period is demarcated by calls to
@@ -69,7 +69,7 @@ void Timer_initialize( void )
   rtems_isr	   *ignored;
 
   Timer_MHZ = rtems_cpu_configuration_get_clicks_per_second() / 1000000 ;
-  
+
   /*
    *  Timer has never overflowed.  This may not be necessary on some
    *  implemenations of timer but ....
@@ -150,10 +150,10 @@ int Read_timer( void )
   /*
    *  Read the timer and see how many clicks it has been since we started.
    */
-  
+
 
   clicks = read16( MTU_TCNT1);   /* XXX: read some HW here */
-  
+
   /*
    *  Total is calculated by taking into account the number of timer overflow
    *  interrupts since the timer was initialized and clicks since the last
@@ -164,7 +164,7 @@ int Read_timer( void )
 
   if ( Timer_driver_Find_average_overhead )
     return total / SCALE;          /* in XXX microsecond units */
-  else 
+  else
   {
     if ( total < LEAST_VALID )
       return 0;            /* below timer resolution */

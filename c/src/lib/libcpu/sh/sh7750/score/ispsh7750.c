@@ -13,7 +13,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE
- * 
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -117,7 +117,7 @@ asm ("        .text\n"
      "        .long __VBR_Saved\n"
      "offset100_k:\n"
      "        .long  0x100\n"
-     
+
      "        .org __vbr_base + 0x400\n"
      "vbr_400:\n"
      "        mov.l  r0,@-r15\n"
@@ -155,7 +155,7 @@ asm ("        .text\n"
      "    mov.l r5,@-r15   \n"
      "    mov.l r6,@-r15   \n"
      "    mov.l r7,@-r15   \n"
-#if 0     
+#if 0
      "    mov.l r8,@-r15   \n"
      "    mov.l r9,@-r15   \n"
      "    mov.l r10,@-r15  \n"
@@ -184,7 +184,7 @@ asm ("        .text\n"
      "    fmov  fr13,@-r15 \n"
      "    fmov  fr14,@-r15 \n"
      "    fmov  fr15,@-r15 \n"
-      
+
      "    sts.l pr,@-r15   \n"
      "    sts.l mach,@-r15 \n"
      "    sts.l macl,@-r15 \n"
@@ -200,7 +200,7 @@ asm ("        .text\n"
      "    mov.l @r4,r4     \n"
      "    shlr2 r4         \n"
      "    shlr  r4         \n"
-     
+
      "    mov.l _ISR_Table_k,r0\n"
      "    mov.l @r0,r0     \n"
      "    add   r4,r0      \n"
@@ -247,7 +247,7 @@ asm ("        .text\n"
      "    mov.l @r15+,r9   \n"
      "    mov.l @r15+,r8   \n"
 #endif
-     
+
      "    mov.l @r15+,r7   \n"
      "    mov.l @r15+,r6   \n"
      "    mov.l @r15+,r5   \n"
@@ -298,15 +298,15 @@ asm ("        .text\n"
      "    lds.l @r15+,fpul \n"
      "    lds.l @r15+,fpscr\n"
      "    mov.l @r15+,r14  \n"
-     
+
      "    mov.l @r15+,r13  \n"
      "    mov.l @r15+,r12  \n"
      "    mov.l @r15+,r11  \n"
      "    mov.l @r15+,r10  \n"
      "    mov.l @r15+,r9   \n"
      "    mov.l @r15+,r8   \n"
-     
-     
+
+
      "    mov.l @r15+,r7   \n"
      "    mov.l @r15+,r6   \n"
      "    mov.l @r15+,r5   \n"
@@ -329,10 +329,10 @@ asm ("        .text\n"
      "        .long  0x600\n"
 
  );
-     
+
 
 /************************************************
- * Dummy interrupt service procedure for 
+ * Dummy interrupt service procedure for
  * interrupts being not allowed --> Trap 2
  ************************************************/
 asm(" .section .text\n\

@@ -9,7 +9,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -30,12 +30,12 @@ extern "C" {
 
 /*
  * Devices are set to 9600 bps, 8 databits, 1 stopbit, no
- * parity and asynchronous mode by default. 
+ * parity and asynchronous mode by default.
  *
  * NOTE:
- *       The onboard serial devices of the SH do not support hardware 
+ *       The onboard serial devices of the SH do not support hardware
  *       handshake.
- */ 
+ */
 
 #define DEVSCI_DRIVER_TABLE_ENTRY \
   { sh_sci_initialize, sh_sci_open, sh_sci_close, sh_sci_read, \

@@ -62,7 +62,7 @@ rtems_boolean Timer_driver_Find_average_overhead;
  * RETURNS:
  *     none
  */
-void 
+void
 Timer_initialize(void)
 {
     uint8_t         temp8;
@@ -81,27 +81,27 @@ Timer_initialize(void)
         case SH7750_FRQCR_IFCDIV1:
             cpudiv = 1;
             break;
-        
+
         case SH7750_FRQCR_IFCDIV2:
             cpudiv = 2;
             break;
-           
+
         case SH7750_FRQCR_IFCDIV3:
             cpudiv = 3;
             break;
-        
+
         case SH7750_FRQCR_IFCDIV4:
             cpudiv = 4;
             break;
-        
+
         case SH7750_FRQCR_IFCDIV6:
             cpudiv = 6;
             break;
-        
+
         case SH7750_FRQCR_IFCDIV8:
             cpudiv = 8;
             break;
-        
+
         default:
             rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED);
     }
@@ -112,29 +112,29 @@ Timer_initialize(void)
         case SH7750_FRQCR_PFCDIV2:
             tidiv = 2 * TIMER_PRESCALER;
             break;
-           
+
         case SH7750_FRQCR_PFCDIV3:
             tidiv = 3 * TIMER_PRESCALER;
             break;
-        
+
         case SH7750_FRQCR_PFCDIV4:
             tidiv = 4 * TIMER_PRESCALER;
             break;
-        
+
         case SH7750_FRQCR_PFCDIV6:
             tidiv = 6 * TIMER_PRESCALER;
             break;
-        
+
         case SH7750_FRQCR_PFCDIV8:
             tidiv = 8 * TIMER_PRESCALER;
             break;
-        
+
         default:
             rtems_fatal_error_occurred( RTEMS_NOT_CONFIGURED);
     }
 
-    microseconds_divider = 
-        rtems_cpu_configuration_get_clicks_per_second() * cpudiv / 
+    microseconds_divider =
+        rtems_cpu_configuration_get_clicks_per_second() * cpudiv /
         (tidiv * 1000000);
     microseconds_per_int = 0xFFFFFFFF / microseconds_divider;
 
@@ -153,7 +153,7 @@ Timer_initialize(void)
     /* Reset timer constant and counter */
     write32(0xFFFFFFFF, SH7750_TCOR1);
     write32(0xFFFFFFFF, SH7750_TCNT1);
-    
+
     /* Select timer mode */
     write16(
         SH7750_TCR_UNIE |        /* Enable Underflow Interrupt */
@@ -200,7 +200,7 @@ Timer_initialize(void)
  * RETURNS:
  *     number of microseconds since timer has been started
  */
-int 
+int
 Read_timer(void)
 {
     uint32_t   clicks;
@@ -208,16 +208,16 @@ Read_timer(void)
     uint32_t   total ;
     rtems_interrupt_level level;
     uint32_t   tcr;
-    
+
 
     _CPU_ISR_Disable(level);
 
     clicks = 0xFFFFFFFF - read32(SH7750_TCNT1);
     tcr = read32(SH7750_TCR1);
     ints = Timer_interrupts;
-    
+
     _CPU_ISR_Enable(level);
-    
+
     /* Handle the case when timer overflowed but interrupt was not processed */
     if ((clicks > 0xFF000000) && ((tcr & SH7750_TCR_UNF) != 0))
     {
@@ -228,7 +228,7 @@ Read_timer(void)
 
     if ( Timer_driver_Find_average_overhead )
         return total;          /* in microsecond units */
-    else 
+    else
     {
         if ( total < LEAST_VALID )
             return 0;            /* below timer resolution */
@@ -249,7 +249,7 @@ Read_timer(void)
  * RETURNS:
  *     RTEMS_SUCCESSFUL
  */
-rtems_status_code 
+rtems_status_code
 Empty_function( void )
 {
   return RTEMS_SUCCESSFUL;
@@ -267,18 +267,18 @@ Empty_function( void )
  * RETURNS:
  *     none
  */
-void 
+void
 Set_find_average_overhead(rtems_boolean find_flag)
 {
     Timer_driver_Find_average_overhead = find_flag;
 }
 
 /* timerisr --
- *     Timer interrupt handler routine. This function invoked on timer 
+ *     Timer interrupt handler routine. This function invoked on timer
  *     underflow event; once per 2^32 clocks. It should reset the timer
  *     event and increment timer interrupts counter.
  */
-void 
+void
 timerisr(void)
 {
   uint8_t   temp8;

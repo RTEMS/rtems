@@ -9,7 +9,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * 
+ *
  *
  *  COPYRIGHT (c) 1998.
  *  On-Line Applications Research Corporation (OAR).
@@ -91,7 +91,7 @@ static uint32_t   Clock_isrs_const;        /* only calculated once */
 /*
  * These are set by clock driver during its init
  */
- 
+
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
@@ -150,8 +150,8 @@ void Install_clock(
 {
   uint8_t   temp8 = 0;
   uint32_t   factor = 1000000;
-  
-  
+
+
   /*
    *  Initialize the clock tick device driver variables
    */
@@ -159,7 +159,7 @@ void Install_clock(
   Clock_driver_ticks = 0;
   Clock_isrs_const = rtems_configuration_get_microseconds_per_tick() / 10000;
   Clock_isrs = Clock_isrs_const;
-  
+
   factor /= rtems_configuration_get_microseconds_per_tick(); /* minimalization of integer division error */
   Clock_MHZ = rtems_cpu_configuration_get_clicks_per_second() / factor ;
 
@@ -168,7 +168,7 @@ void Install_clock(
   /*
    *  Hardware specific initialize goes here
    */
-    
+
   /* stop Timer 0 */
   temp8 = read8( MTU_TSTR) & MTU0_STARTMASK;
   write8( temp8, MTU_TSTR);
@@ -188,8 +188,8 @@ void Install_clock(
   write8( MTU0_TCRMASK , MTU_TCR0);
 
   /* use GRA without I/O - pins  */
-  write8( MTU0_TIORVAL, MTU_TIORL0); 
-    
+  write8( MTU0_TIORVAL, MTU_TIORL0);
+
   /* reset flags of the status register */
   temp8 = read8( MTU_TSR0) & MTU0_STAT_MASK;
   write8( temp8, MTU_TSR0);
@@ -204,7 +204,7 @@ void Install_clock(
 
   /* set counter limits */
   write16( _MTU_COUNTER0_MICROSECOND, MTU_GR0A);
-   
+
   /* start counter */
   temp8 = read8( MTU_TSTR) |~MTU0_STARTMASK;
   write8( temp8, MTU_TSTR);
@@ -254,14 +254,14 @@ rtems_device_driver Clock_initialize(
 )
 {
   Install_clock( Clock_isr );
- 
+
   /*
    * make major/minor avail to others such as shared memory driver
    */
- 
+
   rtems_clock_major = major;
   rtems_clock_minor = minor;
- 
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -273,14 +273,14 @@ rtems_device_driver Clock_control(
 {
   uint32_t   isrlevel;
   rtems_libio_ioctl_args_t *args = pargp;
-  
+
   if (args != 0)
     {
       /*
        * This is hokey, but until we get a defined interface
        * to do this, it will just be this simple...
        */
-      
+
       if (args->command == rtems_build_name('I', 'S', 'R', ' '))
 	{
 	  Clock_isr(CLOCK_VECTOR);
@@ -290,7 +290,7 @@ rtems_device_driver Clock_control(
 	  rtems_isr_entry	ignored ;
 	  rtems_interrupt_disable( isrlevel );
 	  rtems_interrupt_catch( args->buffer, CLOCK_VECTOR, &ignored );
-	  
+
 	  rtems_interrupt_enable( isrlevel );
 	}
     }
