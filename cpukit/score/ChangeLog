@@ -558,6 +558,12 @@
 	message send operations from an ISR.  This was reported by Suvrat Gupta
 	<suvrat@utstar.com>.
 
+2001-05-25	Sergei Organov <osv@javad.ru>
+
+	* macros/rtems/score/coresem.inl, inline/rtems/score/coresem.inl: Cut
+	and paste problem incorrectly enabled interrupts twice with the first
+	time being too early.
+
 2001-05-17	Joel Sherrill <joel@OARcorp.com>
 
 	* macros/rtems/score/thread..inl: Implemented missing routines for new
@@ -727,10 +733,4 @@
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
-
-2001-05-25	Sergei Organov <osv@javad.ru>
-
-	* macros/rtems/score/coresem.inl, inline/rtems/score/coresem.inl: Cut
-	and paste problem incorrectly enabled interrupts twice with the first
-	time being too early.
 
