@@ -119,6 +119,7 @@ typedef struct {
   CORE_mutex_Attributes   Attributes;
   unsigned32              lock;
   unsigned32              nest_count;
+  unsigned32              blocked_count;
   Thread_Control         *holder;
   Objects_Id              holder_id;
 }   CORE_mutex_Control;

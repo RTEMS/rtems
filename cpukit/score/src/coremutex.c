@@ -54,8 +54,9 @@ void _CORE_mutex_Initialize(
                 initial_lock == CORE_MUTEX_UNLOCKED );
  */
 
-  the_mutex->Attributes = *the_mutex_attributes;
-  the_mutex->lock       = initial_lock;
+  the_mutex->Attributes    = *the_mutex_attributes;
+  the_mutex->lock          = initial_lock;
+  the_mutex->blocked_count = 0;
 
 #if 0
   if ( !the_mutex_attributes->only_owner_release &&
