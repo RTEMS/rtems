@@ -2,7 +2,7 @@
  *  $Id$
  */
 
-#include <stdlib.h>
+/* #include <stdlib.h> */
 
 #include <sys/param.h>
 #include <sys/queue.h>
