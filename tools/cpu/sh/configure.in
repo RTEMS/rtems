@@ -1,0 +1,14 @@
+AC_INIT(shgen.c)
+AC_CONFIG_AUX_DIR(../../../../../..)
+
+RTEMS_TOP(../../../../../..)
+RTEMS_CANONICAL_TARGET_CPU
+
+AM_INIT_AUTOMAKE(rtems-exec-score-tools-sh,$RTEMS_VERSION,no)
+
+AC_PROG_CC
+AC_CHECK_LIB(m,fabs)
+
+RTEMS_TOOLPATHS
+
+AC_OUTPUT(Makefile)

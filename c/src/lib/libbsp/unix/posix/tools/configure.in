@@ -1,0 +1,23 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl
+dnl  $Id$
+
+AC_INIT(runtest.in)
+AC_CONFIG_AUX_DIR(../../../../../../..)
+
+RTEMS_TOP(../../../../../../..)
+RTEMS_CANONICAL_TARGET_CPU
+
+AM_INIT_AUTOMAKE(rtems-lib-libbsp-unix-posix-tools,$RTEMS_VERSION,no)
+
+RTEMS_PATH_KSH
+RTEMS_PATH_PERL
+
+AM_CONDITIONAL(HAVE_PERL,test -n "$PERL")
+
+AC_OUTPUT( 
+Makefile
+runtest
+shmdump
+looptest
+semdump)

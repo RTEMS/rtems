@@ -1,0 +1,19 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl
+dnl  $Id$
+
+AC_INIT(print_dump.c)
+AC_CONFIG_AUX_DIR(../../../../../../..)
+
+RTEMS_TOP(../../../../../../..)
+RTEMS_CANONICAL_TARGET_CPU
+
+AM_INIT_AUTOMAKE(rtems-lib-libbsp-hppa-simhppa-tools,$RTEMS_VERSION,no)
+
+AC_PROG_CC
+
+AC_CHECK_FUNCS(strerror)
+AM_CONFIG_HEADER(config.h)
+
+AC_OUTPUT( 
+Makefile)
