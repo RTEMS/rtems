@@ -42,26 +42,26 @@ static volatile char _tx_stop = 0;
 
 /* _catchUARTint is the interrupt front-end */
 extern void _catchUARTint();
-asm("   .text
-        .align 2
-        .globl _catchUARTint
-_catchUARTint:
-        lea    %sp@(4),%sp                /* pop return address */
-        moveml %d0-%d7/%a0-%a6,%sp@-       /* save registers */
-        jbsr    uart_interrupt
-        moveml  %sp@+,%d0-%d7/%a0-%a6			        
-        rte
+asm("   .text\n\
+        .align 2\n\
+        .globl _catchUARTint\n\
+_catchUARTint:\n\
+        lea    %sp@(4),%sp                /* pop return address */\n\
+        moveml %d0-%d7/%a0-%a6,%sp@-       /* save registers */\n\
+        jbsr    uart_interrupt\n\
+        moveml  %sp@+,%d0-%d7/%a0-%a6			        \n\
+        rte\n\
     ");
 
 /* _fake_trap_1 will continue the UART interrupt (%sr *still*
    UART_ISR_LEVEL) as a trap #1 to enter the debugger */
-asm("   .text
-        .align 2
-_fake_trap_1:
-        unlk %a6		/* clear interrupt frame */
-        lea %sp@(4),%sp		/* remove jbsr instruction */
-        moveml %sp@+,%d0-%d7/%a0-%a6 /* pop registers */
-        jmp (33*6-12+_VBR)	/* jump exception 1 */
+asm("   .text\n\
+        .align 2\n\
+_fake_trap_1:\n\
+        unlk %a6		/* clear interrupt frame */\n\
+        lea %sp@(4),%sp		/* remove jbsr instruction */\n\
+        moveml %sp@+,%d0-%d7/%a0-%a6 /* pop registers */\n\
+        jmp (33*6-12+_VBR)	/* jump exception 1 */\n\
         ");
 
 /* dispatch UART interrupt */

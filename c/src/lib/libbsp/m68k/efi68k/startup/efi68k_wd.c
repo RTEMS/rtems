@@ -29,15 +29,15 @@ void wd_interrupt(void) {
 
 /* _catchWDint is the interrupt front-end */
 extern void _catchWDint();
-asm("   .text
-        .align 2
-        .globl _catchWDint
-_catchWDint:
-        lea    %sp@(4),%sp                /* pop return address */
-        moveml %d0-%d7/%a0-%a6,%sp@-       /* save registers */
-        jbsr    wd_interrupt
-        moveml  %sp@+,%d0-%d7/%a0-%a6			        
-        rte
+asm("   .text\n\
+        .align 2\n\
+        .globl _catchWDint\n\
+_catchWDint:\n\
+        lea    %sp@(4),%sp                /* pop return address */\n\
+        moveml %d0-%d7/%a0-%a6,%sp@-       /* save registers */\n\
+        jbsr    wd_interrupt\n\
+        moveml  %sp@+,%d0-%d7/%a0-%a6			        \n\
+        rte\n\
     ");
 
 void watch_dog_init(void) {

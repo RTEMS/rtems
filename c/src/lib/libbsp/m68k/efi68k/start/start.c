@@ -25,15 +25,15 @@ void  boot_card();
 
   /* We need to by-pass the link instruction since the RAM chip-
      select pins are not yet configured. */
-  asm volatile ( ".global start ;
+  asm volatile ( ".global start ;\n\
                   start:");
 
   /* disable interrupts, load stack pointer */
-  asm volatile ( "oriw  #0x0700, %sr;
-                  movel  #end, %d0;
-                  addl   " STACK_SIZE ",%d0;
-                  movel  %d0,%sp;
-                  link %a6, #0"
+  asm volatile ( "oriw  #0x0700, %sr;\n\
+                  movel  #end, %d0;\n\
+                  addl   " STACK_SIZE ",%d0;\n\
+                  movel  %d0,%sp;\n\
+                  link %a6, #0"\n\
 		  );
   /*
    * Initialize RAM by copying the .data section out of ROM (if
