@@ -1,8 +1,9 @@
-/* intr.c
- *
+/*
  *  NOTE: Each task has an interrupt semaphore associated with it.
  *        No matter which interrupt occurs that it has registered, 
  *        the same semaphore is used.
+ *
+ *  This whole interrupt scheme may have been eliminated in a later draft.
  *
  *  $Id$
  */

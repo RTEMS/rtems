@@ -1,5 +1,4 @@
-/*  semaphore.c
- *
+/*
  *  $Id$
  */
 

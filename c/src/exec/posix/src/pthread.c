@@ -577,10 +577,11 @@ int pthread_create(
   core_priority = _POSIX_Priority_To_core( attrp->schedparam.sched_priority );
  
   /*
-   *  Currently all POSIX threads are floating point.
+   *  Currently all POSIX threads are floating point if the hardware 
+   *  supports it.
    */
 
-  is_fp = TRUE;
+  is_fp = CPU_HARDWARE_FP;
 
   /*
    *  Disable dispatch for protection
