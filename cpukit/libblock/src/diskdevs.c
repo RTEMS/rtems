@@ -11,6 +11,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
+#include <unistd.h>	/* unlink */
 #include <string.h>
 
 #include "rtems/diskdevs.h"

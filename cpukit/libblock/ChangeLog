@@ -1,3 +1,7 @@
+2002-11-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/diskdevs.c: Include <unistd.h> to remove warning.
+
 2002-10-28	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
 
 	* Added ATA  support.
