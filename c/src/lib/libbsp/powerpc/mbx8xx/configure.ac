@@ -14,7 +14,6 @@ RTEMS_BSP_CONFIGURE
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
-RTEMS_ENABLE_LIBCDIR
 
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
@@ -113,6 +112,10 @@ RTEMS_BSPOPTS_HELP([EPPCBUG_VECTORS],
 [(BSP--RTEMS)
  If defined, vectors branch to EPPCBug, except the following:
  0x500 (external interrupt), 0x900 (decrementer).])
+
+RTEMS_BSPOPTS_SET([DISPATCH_HANDLER_STAT],[*],[])
+RTEMS_BSPOPTS_HELP([DISPATCH_HANDLER_STAT],
+[used by irq/irq.c])
 
 # Explicitly list a Makefile here 
 AC_CONFIG_FILES([Makefile
