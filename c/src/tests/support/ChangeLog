@@ -1,3 +1,9 @@
+2003-12-16	Joel Sherrill <joel@OARcorp.com>
+
+	PR 544/tests
+	* include/buffer_test_io.h: Various modifications to make tests account
+	for resources and not print at inappropriate times.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* include/tmacros.h: URL for license changed.
