@@ -1,3 +1,8 @@
+2004-10-15	Gene Smith <gene.smith@seimens.com>
+
+	PR 691/bsps
+	* startup/linkcmds: Correct bug in linker script.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
