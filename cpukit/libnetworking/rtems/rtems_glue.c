@@ -2,6 +2,12 @@
  *  $Id$
  */
 
+#define RTEMS_FAST_MUTEX
+
+#ifdef RTEMS_FAST_MUTEX
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__ 1
+#endif
+
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -45,6 +51,9 @@ unsigned long sb_efficiency = 8;
  * Network task synchronization
  */
 static rtems_id networkSemaphore;
+#ifdef RTEMS_FAST_MUTEX
+Semaphore_Control   *the_networkSemaphore;
+#endif
 static rtems_id networkDaemonTid;
 static rtems_unsigned32 networkDaemonPriority;
 static void networkDaemon (void *task_argument);
@@ -221,9 +230,9 @@ rtems_bsdnet_initialize (void)
 	 */
 	sc = rtems_semaphore_create (rtems_build_name('B', 'S', 'D', 'n'),
 					0,
-					RTEMS_FIFO |
+					RTEMS_PRIORITY |
 						RTEMS_BINARY_SEMAPHORE |
-						RTEMS_NO_INHERIT_PRIORITY |
+						RTEMS_INHERIT_PRIORITY |
 						RTEMS_NO_PRIORITY_CEILING |
 						RTEMS_LOCAL,
 					0,
@@ -232,6 +241,13 @@ rtems_bsdnet_initialize (void)
 		printf ("Can't create network seamphore: `%s'\n", rtems_status_text (sc));
 		return -1;
 	}
+#ifdef RTEMS_FAST_MUTEX
+	{
+	Objects_Locations location;
+	the_networkSemaphore = _Semaphore_Get( networkSemaphore, &location );
+	_Thread_Enable_dispatch();
+	}
+#endif
 
 	/*
 	 * Compute clock tick conversion factors
@@ -270,11 +286,25 @@ rtems_bsdnet_initialize (void)
 void
 rtems_bsdnet_semaphore_obtain (void)
 {
+#ifdef RTEMS_FAST_MUTEX
+	ISR_Level level;
+	_ISR_Disable (level);
+	_CORE_mutex_Seize (
+		&the_networkSemaphore->Core_control.mutex,
+		networkSemaphore,
+		1,		/* wait */
+		0,		/* forever */
+		level
+		);
+	if (_Thread_Executing->Wait.return_code)
+		rtems_panic ("Can't obtain network semaphore\n");
+#else
 	rtems_status_code sc;
 
 	sc = rtems_semaphore_obtain (networkSemaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 	if (sc != RTEMS_SUCCESSFUL)
 		rtems_panic ("Can't obtain network semaphore: `%s'\n", rtems_status_text (sc));
+#endif
 }
 
 /*
@@ -283,12 +313,26 @@ rtems_bsdnet_semaphore_obtain (void)
 void
 rtems_bsdnet_semaphore_release (void)
 {
+#ifdef RTEMS_FAST_MUTEX
+	int i;
+
+	_Thread_Disable_dispatch();
+	i = _CORE_mutex_Surrender (
+		&the_networkSemaphore->Core_control.mutex,
+		networkSemaphore,
+		NULL
+		);
+	_Thread_Enable_dispatch();
+	if (i)
+		rtems_panic ("Can't release network semaphore\n");
+#else
 	rtems_status_code sc;
 
 	sc = rtems_semaphore_release (networkSemaphore);
 	if (sc != RTEMS_SUCCESSFUL)
 		rtems_panic ("Can't release network semaphore: `%s'\n", rtems_status_text (sc));
-										}
+#endif
+}
 
 /*
  * Wait for something to happen to a socket buffer
