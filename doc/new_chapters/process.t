@@ -16,17 +16,17 @@ process creation and execution manager is ...
 The directives provided by the process creation and execution manager are:
 
 @itemize @bullet
-@item @code{fork} - 
-@item @code{execl} - 
-@item @code{execv} - 
-@item @code{execle} - 
-@item @code{execve} - 
-@item @code{execlp} - 
-@item @code{execvp} - 
-@item @code{pthread_atfork} - 
-@item @code{wait} - 
-@item @code{waitpid} - 
-@item @code{_exit} - 
+@item @code{fork} - Create a Process 
+@item @code{execl} - Execute a File
+@item @code{execv} - Execute a File
+@item @code{execle} - Execute a File
+@item @code{execve} - Execute a File
+@item @code{execlp} - Execute a File
+@item @code{execvp} - Execute a File
+@item @code{pthread_atfork} - Register Fork Handlers
+@item @code{wait} - Wait for Process Termination
+@item @code{waitpid} - Wait for Process Termination
+@item @code{_exit} - Terminate a Process
 @end itemize
 
 @section Background
@@ -41,14 +41,15 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection fork - 
+@subsection fork - Create a Process
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int fork(
-);
+#include <sys/types.h>
+
+int fork( void );
 @end example
 @end ifset
 
@@ -58,23 +59,30 @@ int fork(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item ENOSYS
+This routine is not supported by RTEMS.
 
 @end table
 
 @subheading DESCRIPTION:
 
+This routine is not supported by RTEMS.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection execl - 
+@subsection execl - Execute a File
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int execl(
+  const char *path,
+  const char *arg,
+  ...
 );
 @end example
 @end ifset
@@ -85,23 +93,30 @@ int execl(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item ENOSYS
+This routine is not supported by RTEMS.
 
 @end table
 
 @subheading DESCRIPTION:
 
+This routine is not supported by RTEMS.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection execv - 
+@subsection execv - Execute a File
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int execv(
+  const char *path,
+  char const *argv[],
+  ...
 );
 @end example
 @end ifset
@@ -112,23 +127,30 @@ int execv(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item ENOSYS
+This routine is not supported by RTEMS.
 
 @end table
 
 @subheading DESCRIPTION:
 
+This routine is not supported by RTEMS.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection execle - 
+@subsection execle - Execute a File
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int execle(
+  const char *path,
+  const char *arg,
+  ...
 );
 @end example
 @end ifset
@@ -139,23 +161,30 @@ int execle(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item ENOSYS
+This routine is not supported by RTEMS.
 
 @end table
 
 @subheading DESCRIPTION:
 
+This routine is not supported by RTEMS.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection execve - 
+@subsection execve - Execute a File
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int execve(
+  const char *path,
+  char *const argv[],
+  char *const envp[]
 );
 @end example
 @end ifset
@@ -166,23 +195,30 @@ int execve(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item ENOSYS
+This routine is not supported by RTEMS.
 
 @end table
 
 @subheading DESCRIPTION:
 
+This routine is not supported by RTEMS.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection execlp - 
+@subsection execlp - Execute a File
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int execlp(
+  const char *file,
+  const char *arg,
+  ...
 );
 @end example
 @end ifset
@@ -193,23 +229,30 @@ int execlp(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item ENOSYS
+This routine is not supported by RTEMS.
 
 @end table
 
 @subheading DESCRIPTION:
 
+This routine is not supported by RTEMS.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection execvp - 
+@subsection execvp - Execute a File
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int execvp(
+  const char *file,
+  char *const argv[]
+  ...
 );
 @end example
 @end ifset
@@ -220,23 +263,32 @@ int execvp(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item ENOSYS
+This routine is not supported by RTEMS.
 
 @end table
 
 @subheading DESCRIPTION:
 
+This routine is not supported by RTEMS.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection pthread_atfork - 
+@subsection pthread_atfork - Register Fork Handlers
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
+#include <sys/types.h>
+
 int pthread_atfork(
+  void (*prepare)(void),
+  void (*parent)(void),
+  void (*child)(void)
 );
 @end example
 @end ifset
@@ -247,23 +299,65 @@ int pthread_atfork(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item ENOSYS
+This routine is not supported by RTEMS.
 
 @end table
 
 @subheading DESCRIPTION:
 
+This routine is not supported by RTEMS.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection wait - 
+@subsection wait - Wait for Process Termination
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <sys/types.h>
+#include <sys/wait.h>
+  
+int wait(
+  int *stat_loc
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item ENOSYS
+This routine is not supported by RTEMS.
+
+@end table
+
+@subheading DESCRIPTION:
+
+This routine is not supported by RTEMS.
+
+@subheading NOTES:
+
+NONE
+
+@page
+@subsection waitpid - Wait for Process Termination
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int wait(
+  pid_t  pid,
+  int   *stat_loc,
+  int    options
 );
 @end example
 @end ifset
@@ -274,23 +368,28 @@ int wait(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item ENOSYS
+This routine is not supported by RTEMS.
 
 @end table
 
 @subheading DESCRIPTION:
 
+This routine is not supported by RTEMS.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection waitpid - 
+@subsection _exit - Terminate a Process
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
-int waitpid(
+void _exit(
+  int status
 );
 @end example
 @end ifset
@@ -300,40 +399,13 @@ int waitpid(
 
 @subheading STATUS CODES:
 
-@table @b
-@item E
-The
-
-@end table
+NONE
 
 @subheading DESCRIPTION:
 
-@subheading NOTES:
-
-@page
-@subsection _exit - 
-
-@subheading CALLING SEQUENCE:
-
-@ifset is-C
-@example
-int _exit(
-);
-@end example
-@end ifset
-
-@ifset is-Ada
-@end ifset
-
-@subheading STATUS CODES:
-
-@table @b
-@item E
-The
-
-@end table
-
-@subheading DESCRIPTION:
+The @code{_exit()} function terminates the calling process.
 
 @subheading NOTES:
 
+In RTEMS, a process is equivalent to the entire application on a single
+processor.  Invoking this service terminates the application.
