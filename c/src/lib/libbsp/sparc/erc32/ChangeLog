@@ -1,3 +1,10 @@
+2001-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add RTEMS_BSPOPTS*(CONSOLE_USE_INTERRUPTS).
+	Add RTEMS_BSPOPTS*(SIMSPARC_FAST_IDLE).
+	Remove RTEMS_OUTPUT_BUILD_SUBDIRS.
+	* include/bsp.h: include bspopts.h.
+
 2001-11-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Introduce RTEMS_BSP_CONFIGURE.
