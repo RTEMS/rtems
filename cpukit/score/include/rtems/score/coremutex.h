@@ -26,6 +26,8 @@ extern "C" {
 #include <rtems/score/threadq.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/score/interr.h>
+#include <rtems/score/sysstate.h>
  
 /*
  *  The following type defines the callout which the API provides
@@ -152,6 +154,7 @@ void _CORE_mutex_Initialize(
  *         a macro that uses two support routines.
  */
 
+
 #ifndef __RTEMS_APPLICATION__
 RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
   CORE_mutex_Control  *the_mutex,
@@ -166,6 +169,15 @@ void _CORE_mutex_Seize_interrupt_blocking(
 #define _CORE_mutex_Seize( \
   _the_mutex, _id, _wait, _timeout, _level ) \
   do { \
+	if ( _Thread_Dispatch_disable_level \
+		&& (_wait) \
+		&& (_System_state_Get() >= SYSTEM_STATE_BEGIN_MULTITASKING ) \
+	   ) { \
+		_Internal_error_Occurred( \
+  							INTERNAL_ERROR_CORE, \
+							FALSE, \
+							18 /* called from wrong environment */); \
+	} \
     if ( _CORE_mutex_Seize_interrupt_trylock( _the_mutex, &_level ) ) {  \
       if ( !_wait ) { \
         _ISR_Enable( _level ); \

@@ -1,3 +1,9 @@
+2003-10-02	Phil Torre <ptorre@zetron.com>
+
+	PR 504/rtems
+	* include/rtems/score/coremutex.h: Add fatal error check for a task
+	blocking on a mutex when thread dispatching is disabled.
+
 2003-09-26	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu/hppa1.1/.cvsignore, cpu/hppa1.1/ChangeLog,
