@@ -1,5 +1,9 @@
 2001-01-31	Mike Siers <mikes@poliac.com>
 
+	* pppd/rtemsdialer.h: New file missed in previous commit.
+
+2001-01-31	Mike Siers <mikes@poliac.com>
+
 	* Nice Update of PPPD support which eliminates the
 	requiremetn that drivers be in the termios TASK_DRIVEN mode.
 	Mike did significant testing and reports that it seems to be
