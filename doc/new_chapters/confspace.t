@@ -576,13 +576,39 @@ If {_POSIX_CFG} is defined:
    The value of @code{options} is the bitwise inclusive OR of values from the 
    following lists.  Applications shall supply exactly one of the first two 
    values below in @code{options}.
-      CFG_LOGICAL
-      CFG_PHYSICAL
+
+      CFG_LOGICAL   - When symbolic links referencing existing nodes are 
+                      encountered during the traversal, the @code{cfg_info}
+                      field of the returned CFGENT structure shall describe
+                      the target node pointed to by the link instead of the 
+                      link itself, unless the target node does not exist. 
+                      If the target node has children, the pre-order return,
+                      followed by the return of structures referenceing all of
+                      its descendants, followed by a post-order return, shall
+                      be done.
+                    
+      CFG_PHYSICAL  - When symbolic links are encountered during the traversal,
+                      the @codce{cfg_info} field shall describe the symbolic 
+                      link.
+                    
 
    Any combination of the remaining flags can be specified in the value of 
    @code{options}
-      CFG_COMFOLLOW
-      CFG_XDEV
+
+      CFG_COMFOLLOW - When symbolic links referencing existing nodes are
+                      specified in the @code{pathnames} argument, the 
+                      @code{cfg_info} field of the returned CFGENT structure
+                      shall describe the target node pointed to by the link
+                      instead of the link itself, unless the target node does
+                      not exist.  If the target node has children, the 
+                      pre-order return, followed by the return of structures
+                      referencing all its descendants, followed by a post-order
+                      return, shall be done.
+
+      CFG_XDEV      - The configuration space functions shall not return a
+                      CFGENT structure for any node in a different configuration
+                      space than the configuration spacce of the nodes identified 
+                      by the CFGENT structures for the @code{pathnames} argument.
 
    The @code{cfg_open} argument @code{compar} shall either be NULL or point
    to a function that shall be called with two pointers to pointers to CFGENT 
@@ -679,18 +705,95 @@ if {_POSIX_CFG} is defined:
 
    The fields of the CFGENT structure shall contain the following 
    informatation:
-      cfg_parent 
-      cfg_link
-      cfg_cycle
-      cfg_number
-      cfg_pointer
-      cfg_path
-      cfg_name
-      cfg_pathlen
-      cfg_namelen
-      cfg_level
-      cfg_info
- 
+      cfg_parent  - A pointer to the structure returned by the 
+                    @code{cfg_read} function for the node that contains
+                    the entry for the current node.  A @code{cfg_parent}
+                    structure shall be provided for the node(s) specified
+                    by the @code{pathnames} argument to the @code{cfg_open}
+                    function, but the contents of other than its 
+                    @code{cfg_number}, @code{cfg_pointer}, @code{cfg_parent},
+                    and @code{cfg_parent}, and @code{cfg_level} fields are
+                    unspecified.  Its @code{cfg_link} field is unspecified.
+      cfg_link    - Upon return from the @code{cfg_children} function, the
+                    @code{cfg_link} field points to the next CFGENT structure 
+                    in a NULL-terminated linked list of CFGENT structures.  
+                    Otherwise, the content of the @code{cfg_link} field is 
+                    unspecified.
+      cfg_cycle   - If the structure being returned by @code{cfg_read} 
+                    represents a node that appears in the @code{cfg_parent}
+                    linked list tree, the @code{cfg_cycle} field shall point 
+                    to the structure representing that entry from the 
+                    @code{cfg_parent} linked list.  Otherwise the content of
+                    the @code{cfg_cycle} field is unspecified.
+      cfg_number  - The @code{cfg_number} field is provided for use by the 
+                    application program.  It shall be initialized to zero for 
+                    each new node returned by the @code{cfg_read} function, 
+                    but shall not be further modified the configuration space
+                    routines.
+      cfg_pointer - The @code{cfg_pointer} field is provided for use by the
+                    application program.  It shall be initialized to NULL for
+                    each new node returned by the @code{cfg_read} function, 
+                    but shall not be further modified by the configuration 
+                    space routines.
+      cfg_path    - A pathname for the node including and relative to the 
+                    argument supplied to the @code{cfg_open} routine for this
+                    configuration space.  This pathname may be logner than
+                    {PATH_MAX} bytes.  This patname shall be NULL-terminated.
+      cfg_name    - The nodename of the node.
+      cfg_pathlen - The length of the string pointed at by the @code{cfg_path}
+                    field when returned by @code{cfg_read}.
+      cfg_namelen - The length of the string pointed at by the @code{cfg_name}
+                    field.
+      cfg_level   - The depth of the current entry in the configuration space.
+                    The @code{cfg_level} field of the @code{cfg_partent} 
+                    structure for each of the node(s) specified in the 
+                    @code{pathnames} argument to the @code{cfg_open} function
+                    shall be set to 0, and this number shall be incremented for
+                    for each node level descendant.
+      cfg_info    - This field shall contain one of the values listed below.  If
+                    an object can have more than one info value, the first 
+                    appropriate value listed below shall be returned. 
+
+                    CFG_D       - The structure represents a node with children in
+                                  pre-order.
+                    CFG_DC      - The structure represents a node that is a parent
+                                  of the node most recently returned by @code{cfg_read}.
+                                  The @code{cfg_cycle} field shall reference the 
+                                  structure previously returned by @code{cfg_read} that
+                                  is the same as the returned structure.
+                    CFG_DEFAULT - The structure represents a node that is not 
+                                  represented by one of the other node types
+                    CFG_DNR     - The structure represents a node, not of type symlink,
+                                  that is unreadable.   The variable @code{cfg_errno}
+                                  shall be set to the appropriate value.
+                    CFG_DP      - The structure represents a node with children in
+                                  post-order.  This value shall occur only if CFG_D 
+                                  has previously been returned for this entry.
+                    CFG_ERR     - The structure represents a node for which an error has 
+                                  occurred.  The variable @code{cfg_errno} shall be set
+                                  to the appropriate value.
+                    CFG_F       - The structure represents a node without children.
+                    CFG_SL      - The structure represents a node of type symbolic link.
+                    CFG_SLNONET - The structure represents a node of type symbolic link
+                                  with a target node for which node characteristic
+                                  information cannot be obtained.
+
+   Structurres returned by @code{cfg_read} with a @code{cfg_info} field equal to CFG_D
+   shall be accessible until a subsequent call, on the same configuration traversal 
+   stream, to @code{cfg_close}, or to @code{cfg_read} after they have been returned by
+   the @code{cfg_read} function in post-order.  Structures returnded by @code{cfg_read}
+   with an @code{cfg_info} field not equal to CFG_D shall be accessible until a 
+   subsequent call, on the same configuration traversal stream, to @code{cfg_close} or
+   @code{cfg_read}.
+
+   The content of the @code{cfg_path} field is specified only for the structure most
+   recently returned by @code{cfg_read}.
+
+   The specified fields in structures in the list representing nodes for which structures
+   have previously been returned by @code{cfg_children}, shall be identical to those 
+   returned by @code{cfg_children}, except that the contents of the @code{cfg_path} and
+   @code{cfg_pathlen} fields are unspecified.
+         
 Otherwise:
 
    The @code{cfg_read} function shall fail.
@@ -810,10 +913,42 @@ If {_POSIX_CF} is defined:
    be NULL.
 
    The value of the @code{options} argument shall be exactly one of the
-   flags specified in the following list:
-      CFG_AGAIN
-      CFG_SKIP
-      CFG_FOLLOW
+   flags specified in the following list: 
+
+      CFG_AGAIN  - If the @code{cfgp} argument is non-NULL, or the @code{f}
+                   argument is NULL, or the structure referenced by @code{f}
+                   is not the one most recently returned by @code{cfg_read},
+                   @code{cfg_mark} ahall return an error.  Otherwise, the next 
+                   call to teh @code{cfg_read} function shall return the 
+                   structure referenced by @code{f} with the @code{cfg_info}
+                   field reinitialized.  Subsequent behavior of the @code{cfg}
+                   functions shall be based on the reinitialized value of 
+                   @code{cfg_ingo}.
+
+      CFG_SKIP   - If the @code{cfgp} argument is non-NULL, or the @code{f}
+                   argument is NULL, or the structure referenced by @code{f}
+                   is not one of those specified as accessible, or the structure
+                   referenced by @code{f} is not for a node of type pre-order 
+                   node, @code{cfg_mark} shall return an error.  Otherwise, no 
+                   more structures for the node referenced by @code{f} or its 
+                   descendants shall be returned by the @code{cfg_read} function.
+
+      CFG_FOLLOW - If the @code{cfgp} argument is non-NULL, or the @code{f} 
+                   argument is NULL, or the structure referenced by @code{f}
+                   is not one of those specified as accessible, or the structure
+                   referenced by @code{f} is not for a node of type symbolic link,
+                   @code{cfg_mark} shall return an error.  Otherwise, the next
+                   call to the @code{cfg_read} function shall return the structure
+                   referenced by @code{f} with the @code{cfg_info} field reset
+                   to reflect the target of the symbolic link instead of the 
+                   symbolic link itself.  If the target of the link is node with
+                   children, the pre-order return, followed by the return of 
+                   structures referencing all of its descendants, followed by a 
+                   post-order return, shall be don.
+
+                   If the target of the symbolic link does not exist, the fields
+                   of the structure by @code{cfg_read} shall be unmodified, except
+                   that the @code{cfg_info} field shall be reset to @code{CFG_SLNONE}.
 
 Otherwise:
    
