@@ -81,9 +81,11 @@
 #define SR_PE       0x00100000  /* Mark soft reset (clear parity error) */
 
 /* defined differently for Mongoose5- we don't use these anymore */
-//#define SR_KX     0x00000080  /* Kernel extended addressing enabled */
-//#define SR_SX     0x00000040  /* Supervisor extended addressing enabled */
-//#define SR_UX     0x00000020  /* User extended addressing enabled */
+#if UNUSED
+#define SR_KX     0x00000080  /* Kernel extended addressing enabled */
+#define SR_SX     0x00000040  /* Supervisor extended addressing enabled */
+#define SR_UX     0x00000020  /* User extended addressing enabled */
+#endif
 
 /* R3000 */
 #define SR_ISC      0x00010000  /* Isolate data cache */

@@ -1,3 +1,8 @@
+2004-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* start/start.S: Replace #-ASM-style comments with C-/**/ comments.
+	* start/reg.S: Remove //-comments
+
 2004-01-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add nostdinc to AUTOMAKE_OPTIONS.

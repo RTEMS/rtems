@@ -557,141 +557,143 @@ config_uart:
    .ent _cpuinit
 _cpuinit:
 
-   #
-   # BIU/Cache config register setup
-   #
-   # RES    = 0: 31 -> 18 : Reserved
-   # RES    = 1: 17       : Reserved must be set to 1 (Synova Manual)
-   # RES    = 0: 16       : Reserved must be set to 0 (Synova Manual)
-   # BGNT   = 0: 15       : Disable Bus Grant (set to 0)
-   # NOPAD  = 1: 14       : No padding of waitstates between transactions
-   # RDPRI  = 1: 13       : Loads have priority over stores
-   # INTP   = 1: 12       : Interrupts are active high
-   # IS1    = 1: 11       : Enable I-Cache
-   # IS0    = 0: 10       : Hardwired to zero
-   # IBLKSZ =10:  9 ->  8 : I-Cache refill size = 8 words
-   # DS     = 1:  7       : Enable D-Cache
-   # RES    = 0:  6       : Hardwared to zero
-   # DBLKSZ =10:  5 ->  4 : D-Cache refill block size 8 words
-   # RAM    = 0:  3       : No Scratchpad RAM
-   # TAG    = 0:  2       : Disable tag test
-   # INV    = 0:  1       : Disable invalidate mode
-   # LOCK   = 0:  0       : Disable cache lock
-   #
-   # 0x00027AA0 caches on
-   # 0x00027220 caches off
-   #
+   /*
+   ** BIU/Cache config register setup
+   **
+   ** RES    = 0: 31 -> 18 : Reserved
+   ** RES    = 1: 17       : Reserved must be set to 1 (Synova Manual)
+   ** RES    = 0: 16       : Reserved must be set to 0 (Synova Manual)
+   ** BGNT   = 0: 15       : Disable Bus Grant (set to 0)
+   ** NOPAD  = 1: 14       : No padding of waitstates between transactions
+   ** RDPRI  = 1: 13       : Loads have priority over stores
+   ** INTP   = 1: 12       : Interrupts are active high
+   ** IS1    = 1: 11       : Enable I-Cache
+   ** IS0    = 0: 10       : Hardwired to zero
+   ** IBLKSZ =10:  9 ->  8 : I-Cache refill size = 8 words
+   ** DS     = 1:  7       : Enable D-Cache
+   ** RES    = 0:  6       : Hardwared to zero
+   ** DBLKSZ =10:  5 ->  4 : D-Cache refill block size 8 words
+   ** RAM    = 0:  3       : No Scratchpad RAM
+   ** TAG    = 0:  2       : Disable tag test
+   ** INV    = 0:  1       : Disable invalidate mode
+   ** LOCK   = 0:  0       : Disable cache lock
+   **
+   ** 0x00027AA0 caches on
+   ** 0x00027220 caches off
+   */
    li  t0,0x00027aa0
    sw  t0,M_BIU
 
-   #
-   # Refresh register setup
-   #
-   # set 94 clock cycles at 12Mhz
-   #
+   /*
+   ** Refresh register setup
+   **
+   ** set 94 clock cycles at 12Mhz
+   */
    li  t1,M_RTIC
    li  t0,0x5E
    sw  t0,(t1)
 
-   #
-   # DRAM register setup
-   #
-   #
-   # RESERVED=0: 31 -> 29 : Reserved
-   # SYNC  = 0 : 27       : No Syncronous DRAM
-   # SCFG  = 0 : 26       : No Syncronous DRAM
-   # DMARDY =1 : 25       : Internal DRDY for DMA
-   # DMABLK =0 : 24 -> 22 : 2 word blk size for DMA transfers
-   # DPTH = 0  : 21 -> 20 : No interleaved or syncronous memory
-   # RDYW = 0  : 19       : No interleaved or syncronous memory
-   # PGSZ = 110: 18 -> 16 : Page size = 1K
-   # PGMW = 0  : 15       : Disable page mode write
-   # RFWE = 0  : 14 -> 13 : Allow BIU to do non-DRAM work during refresh
-   # RFEN = 1  : 12       : Enable Refresh generator
-   # RDYEN = 1 : 11       : Internal DRDY
-   # BFD =   1 : 10       : Block fetch disable
-   # PE =    0 : 9        : No parity checking
-   # RPC =   0 : 8 -> 7   : RAS Precharge = 2 SYSCLK cycles
-   # RCD =   1 : 6 -> 5   : RAS-to-CAS delay = 3 cycles
-   # CS  =   0 : 4        : CAS shortened by 1/2 cycle
-   # CL  =   1 : 3 -> 1   : 2.5 cycle CAS pulse width
-   # DCE =   1 : 0        : Enable DRAM controller
+   /*
+   ** DRAM register setup
+   **
+   **
+   ** RESERVED=0: 31 -> 29 : Reserved
+   ** SYNC  = 0 : 27       : No Syncronous DRAM
+   ** SCFG  = 0 : 26       : No Syncronous DRAM
+   ** DMARDY =1 : 25       : Internal DRDY for DMA
+   ** DMABLK =0 : 24 -> 22 : 2 word blk size for DMA transfers
+   ** DPTH = 0  : 21 -> 20 : No interleaved or syncronous memory
+   ** RDYW = 0  : 19       : No interleaved or syncronous memory
+   ** PGSZ = 110: 18 -> 16 : Page size = 1K
+   ** PGMW = 0  : 15       : Disable page mode write
+   ** RFWE = 0  : 14 -> 13 : Allow BIU to do non-DRAM work during refresh
+   ** RFEN = 1  : 12       : Enable Refresh generator
+   ** RDYEN = 1 : 11       : Internal DRDY
+   ** BFD =   1 : 10       : Block fetch disable
+   ** PE =    0 : 9        : No parity checking
+   ** RPC =   0 : 8 -> 7   : RAS Precharge = 2 SYSCLK cycles
+   ** RCD =   1 : 6 -> 5   : RAS-to-CAS delay = 3 cycles
+   ** CS  =   0 : 4        : CAS shortened by 1/2 cycle
+   ** CL  =   1 : 3 -> 1   : 2.5 cycle CAS pulse width
+   ** DCE =   1 : 0        : Enable DRAM controller
+   */
    li  s0,0x02061C23
    sw  s0,M_DRAM
 
-   #
-   # SRAM setup
-   # Dont Care about this, we are not using SRAM
-   # Power on default of 0x0 is ok
-   #
+   /*
+   ** SRAM setup
+   ** Dont Care about this, we are not using SRAM
+   ** Power on default of 0x0 is ok
+   */
    li  t0,0
    sw  t0,M_SRAM
 
-   #
-   # SPEC0 setup
-   #
-   # SPEC0 contains the BCRT registers, BCRT Shared RAM and EEPROM
-   # This area is configured to use an external waitstate generator
-   # and Data Ready signal.
-   # Also, I see no need to cache this data. It could confuse the
-   # BCRT.
-   #
-   # - 9/29/99 - APC - set NOSNOOP to 1 and EXTGNT to 1
-   #  Bit 23 = 1 : EXTGNT External data ready = 1
-   #  Bit 19 = 1 : NOSNOOP No Snoop = 1
+   /*
+   ** SPEC0 setup
+   **
+   ** SPEC0 contains the BCRT registers, BCRT Shared RAM and EEPROM
+   ** This area is configured to use an external waitstate generator
+   ** and Data Ready signal.
+   ** Also, I see no need to cache this data. It could confuse the
+   ** BCRT.
+   **
+   ** - 9/29/99 - APC - set NOSNOOP to 1 and EXTGNT to 1
+   **  Bit 23 = 1 : EXTGNT External data ready = 1
+   **  Bit 19 = 1 : NOSNOOP No Snoop = 1
+   */
    li  t0,0x00880000         # use external waitstates
    sw  t0,M_SPEC0
 
-   #
-   # SPEC1 setup
-   #
-   # This is where most of the SDB I/O is.
-   #
-   #  Important fields:
-   #
-   #  Bit 19 =1 : NOSNOOP = 1
-   #  Bit 6 = 1 : Enable DAWG
-   #  Bit 5 -> 0  = 1 : 1 Wait state
-   #
+   /*
+   ** SPEC1 setup
+   **
+   ** This is where most of the SDB I/O is.
+   **
+   **  Important fields:
+   **
+   **  Bit 19 =1 : NOSNOOP = 1
+   **  Bit 6 = 1 : Enable DAWG
+   **  Bit 5 -> 0  = 1 : 1 Wait state
+   */
    li  t0,0x00880000      /* Bit23 EXTGNT set to 1, Bit19 NOSNOOP set to 1 */
    sw  t0,M_SPEC1
 
-   #
-   # SPEC2 setup
-   #
-   # SPEC2 is not currently used on the SDB.
-   # Bit 19 = 1 : NOSNOOP = 1
-   #
-   #li t0, 0x00080000
-   #sw t0,M_SPEC2
-   #
+   /*
+   ** SPEC2 setup
+   **
+   ** SPEC2 is not currently used on the SDB.
+   ** Bit 19 = 1 : NOSNOOP = 1
+   **
+   **li t0, 0x00080000
+   **sw t0,M_SPEC2
+   */
    li  t0, 0x0
    sw  t0,M_SPEC2
 
 
-   #
-   # SPEC3 Setup
-   # SPEC3 will be used for the SONIC ethernet controller.
-   # Use the same # of waitstates that the turborocket board uses.
-   # Bit 19 = 1 : NOSNOOP = 1
-   #
-   #li t0, (SPC_CACHED | SPC_WAITENA | (16<<SPC_WAITSHFT))
-   #sw t0,M_SPEC3
-   #
+   /*
+   ** SPEC3 Setup
+   ** SPEC3 will be used for the SONIC ethernet controller.
+   ** Use the same ** of waitstates that the turborocket board uses.
+   ** Bit 19 = 1 : NOSNOOP = 1
+   **
+   **li t0, (SPC_CACHED | SPC_WAITENA | (16<<SPC_WAITSHFT))
+   **sw t0,M_SPEC3
+   */
    li  t0, 0x0
    sw  t0,M_SPEC3
 
-   #
-   # Finally, delay to allow RAM to stabilize
-   #
+   /*
+   ** Finally, delay to allow RAM to stabilize
+   */
    li  t0,2000
 1: subu    t0,1
    bne t0,zero,1b
    nop
 
-   #
-   # Init Mongoose V registers.
-   #
+   /*
+   ** Init Mongoose V registers.
+   */
 
    /*
    ** Mongoose V Control Register Setup
@@ -870,19 +872,25 @@ promCopyDcacheFlush:
 IcacheFlush:
 
 1:
-     # Assume I cache is already enabled in BIU/Cache setup
-     # Get contents of M_BIU register and save in t1
+     /*
+     ** Assume I cache is already enabled in BIU/Cache setup
+     ** Get contents of M_BIU register and save in t1
+     */
      li        t0, M_BIU
      lw        t1, 0(t0)
 
-     # Isolate I cache
+     /* 
+     ** Isolate I cache
+     */
      mfc0      t3, C0_SR        /* Read Status Register */
      nop
      or        t0, t3, SR_ISC   /* Isolate Cache so we don't propagate operations */
      mtc0      t0, C0_SR        /* Write it back to Status Register */
      nop
 
-     # Setup for cache flush
+     /*
+     ** Setup for cache flush
+     */
      li        t8, 0            /* Store zero */
      li        t9, LR33300_IC_SIZE
 
@@ -893,7 +901,9 @@ icache_write:
      nop
 
 
-     # De-isolate I cache
+     /*
+     ** De-isolate I cache
+     */
      mtc0      t3, C0_SR        /* Load unchanged t3 to Status Register */
      nop
 
@@ -913,14 +923,18 @@ icache_write:
      .set noreorder
 DcacheFlush:
 
-     # isolate icache
+     /*
+     ** isolate icache
+     */
      mfc0      t3,C0_SR
      nop
      or        t0, t3, SR_ISC
      mtc0      t0, C0_SR
      nop
 
-     # Setup up for cache flush
+     /*
+     ** Setup up for cache flush
+     */
      li        t8, 0
      li        t9, LR33300_DC_SIZE
 
@@ -930,7 +944,9 @@ dcache_write:
      bltu      t8, t9, dcache_write /* check to see if we are done */
      nop
 
-     # De-isolate cache
+     /*
+     ** De-isolate cache
+     */
      mtc0      t3, C0_SR
      nop
 
