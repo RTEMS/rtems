@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/console.rel
 
 C_FILES = console.c consolereserveresources.c debugputs.c

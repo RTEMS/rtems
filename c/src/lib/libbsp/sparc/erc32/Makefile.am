@@ -18,12 +18,12 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
 
-$(PROJECT_INCLUDE)/erc32.h: include/erc32.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/erc32.h: include/erc32.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/erc32.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/erc32.h
 
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am

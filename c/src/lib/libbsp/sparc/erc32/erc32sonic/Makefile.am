@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/erc32sonic.rel
 
 C_FILES = erc32sonic.c
