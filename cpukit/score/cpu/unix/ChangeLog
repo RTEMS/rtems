@@ -1,3 +1,8 @@
+2004-04-13	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* asm.h: New (stub file. For consistency with other ports, only).
+	* Makefile.am: Add asm.h.
+
 2004-04-12	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* rtems/score/cpu.h: Remove defining _POSIX_C_SOURCE for solaris.

@@ -6,6 +6,9 @@ include $(top_srcdir)/automake/compile.am
 
 AM_CPPFLAGS += -DCPU_SYNC_IO
 
+include_rtemsdir = $(includedir)/rtems
+include_rtems_HEADERS = asm.h
+
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/types.h rtems/score/cpu.h \
     rtems/score/unix.h
@@ -24,6 +27,15 @@ all-local: $(PREINSTALL_FILES) libscorecpu$(LIB_VARIANT).a
 
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/rtems/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
+	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/asm.h: asm.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/asm.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/asm.h
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
