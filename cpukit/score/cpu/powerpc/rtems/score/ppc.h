@@ -291,7 +291,7 @@ extern "C" {
 #define PPC_INTERRUPT_MAX       125
 /*#define PPC_HAS_FPU     	0 */ 	/* my 8260 is one the few with no FPU */
 #define PPC_HAS_FPU		1	/* the rest do have one */
-#define PPC_HAS_DOUBLE		0
+#define PPC_HAS_DOUBLE		1
 #define PPC_USE_MULTIPLE	1
 #define PPC_USE_SPRG            1
 #else
