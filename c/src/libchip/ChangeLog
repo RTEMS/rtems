@@ -1,3 +1,10 @@
+2003-03-25	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
+
+	PR 368/filesystems
+	* ide/Makefile.am, ide/ide_ctrl_cfg.h: General improvements which
+	now work on pc386 and mbx8xx.
+	* ide/ide_controller.c: New file.
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.

@@ -26,6 +26,7 @@ extern "C" {
  * Avaible drivers for IDE controllers
  */
 typedef enum {
+    IDE_STD,
     IDE_CUSTOM                /* BSP specific driver */
 } ide_ctrl_devs_t;
 
@@ -70,7 +71,7 @@ typedef struct ide_controller_bsp_table_s {
     char                *name;  /* device name */
     ide_ctrl_devs_t      type;  /* chip type */
     ide_ctrl_fns_t      *fns;   /* pointer to the set of driver routines */
-    boolean              (*probe)(int minor); /* probe routine */
+    boolean              (*probe)(int minor); /* general probe routine */
     unsigned8            status; /* initialized/non initialized. Should be set 
                                   * to zero by static initialization  
                                   */
