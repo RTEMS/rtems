@@ -182,4 +182,11 @@ void rtems_bsdnet_do_bootp_and_rootfs (void);
 
 int rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority);
 
+/*
+ * Callback to report BSD malloc starvation.
+ * The default implementation just prints a message but an application
+ * can provide its own version.
+ */
+void rtems_bsdnet_malloc_starvation(void);
+
 #endif /* _RTEMS_BSDNET_ */

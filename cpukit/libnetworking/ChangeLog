@@ -1,3 +1,15 @@
+2002-03-25	Eric Norum <norume@aps.anl.gov>
+
+
+	PR 374/networking
+	* Makefile.am, rtems/rtems_bsdnet.h, rtems/rtems_glue.c:
+	The patch sent as part of PR270 got applied to the wrong place.  
+	The effect was that (1) startup was no faster than before and
+	(2) malloc starvation messages came way too quickly.  The attached
+	patch fixes both these problems and also provides a mechanism for
+	applications to handle malloc starvation conditions as they see fit.
+	* rtems/rtems_bsdnet_malloc_starvation.c: New file.
+
 2003-03-18	Till Straumann <strauman@slac.stanford.edu>
 
 	PR 356/bsps
@@ -123,6 +135,7 @@
 	directives.
 
 2002-12-18	Eric Norum <eric.norum@usask.ca>
+
 	* Makefile.am: Include netinet sources.
 
 2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
