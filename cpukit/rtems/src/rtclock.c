@@ -48,14 +48,14 @@ rtems_status_code rtems_clock_get(
 
   switch ( option ) {
     case RTEMS_CLOCK_GET_TOD:
-      if ( !_TOD_Is_set() )
+      if ( !_TOD_Is_set )
         return RTEMS_NOT_DEFINED;
 
       *(rtems_time_of_day *)time_buffer = _TOD_Current;
       return RTEMS_SUCCESSFUL;
 
     case RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH:
-      if ( !_TOD_Is_set() )
+      if ( !_TOD_Is_set )
         return RTEMS_NOT_DEFINED;
 
       *(rtems_interval *)time_buffer = _TOD_Seconds_since_epoch;
@@ -70,7 +70,7 @@ rtems_status_code rtems_clock_get(
       return RTEMS_SUCCESSFUL;
 
     case RTEMS_CLOCK_GET_TIME_VALUE:
-      if ( !_TOD_Is_set() )
+      if ( !_TOD_Is_set )
         return RTEMS_NOT_DEFINED;
 
       _ISR_Disable( level );

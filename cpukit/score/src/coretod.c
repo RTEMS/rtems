@@ -54,6 +54,9 @@ void _TOD_Handler_initialization(
        TOD_MICROSECONDS_PER_SECOND / microseconds_per_tick;
 
   _Watchdog_Initialize( &_TOD_Seconds_watchdog, _TOD_Tickle, 0, NULL );
+
+  _TOD_Is_set = FALSE;
+  _TOD_Activate( _TOD_Ticks_per_second );
 }
 
 /*PAGE
@@ -93,6 +96,7 @@ void _TOD_Set(
 
   _TOD_Current             = *the_tod;
   _TOD_Seconds_since_epoch = seconds_since_epoch;
+  _TOD_Is_set              = TRUE;
   _TOD_Activate( ticks_until_next_second );
 
   _Thread_Enable_dispatch();

@@ -1034,7 +1034,7 @@ rtems_time_of_day *time_buffer
 {
   Watchdog_Interval   seconds;
 
-  if ( !_TOD_Is_set() )
+  if ( !_TOD_Is_set )
     return RTEMS_NOT_DEFINED;
 
   time_buffer->ticks = 0;

@@ -19,21 +19,6 @@
 
 /*PAGE
  *
- *  _TOD_Is_set
- *
- *  DESCRIPTION:
- *
- *  This function returns TRUE if the application has set the current
- *  time of day, and FALSE otherwise.
- */
-
-RTEMS_INLINE_ROUTINE boolean _TOD_Is_set( void )
-{
-  return _Watchdog_Is_active( &_TOD_Seconds_watchdog );
-}
-
-/*PAGE
- *
  *  _TOD_Tickle_ticks
  *
  *  DESCRIPTION:

@@ -68,6 +68,13 @@ typedef struct {                   /* RTEID style time/date */
 }   TOD_Control;
 
 /*
+ *  The following is TRUE if the application has set the current
+ *  time of day, and FALSE otherwise.
+ */
+
+SCORE_EXTERN boolean _TOD_Is_set;
+
+/*
  *  The following contains the current time of day.
  */
 

@@ -19,15 +19,6 @@
 
 /*PAGE
  *
- *  _TOD_Is_set
- *
- */
-
-#define _TOD_Is_set() \
-  _Watchdog_Is_active( &_TOD_Seconds_watchdog )
-
-/*PAGE
- *
  *  _TOD_Tickle_ticks
  *
  */
