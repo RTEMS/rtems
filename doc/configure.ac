@@ -5,7 +5,6 @@ AC_PREREQ(2.57)
 AC_INIT([rtems-doc],[_RTEMS_VERSION],[rtems-bugs@OARcorp.com])
 AC_CONFIG_SRCDIR([project.am])
 RTEMS_TOP([..])
-AC_CONFIG_AUX_DIR([..])
 
 AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
 AM_MAINTAINER_MODE
@@ -82,16 +81,19 @@ AM_CONDITIONAL(GS,test x"$GS" != x"")
 
 AC_CHECK_PROGS(TEXI2DVI,texi2dvi)
 AM_CONDITIONAL(TEXI2DVI,test x"$TEXI2DVI" != x"")
-if test "$enable_pdf" = "yes"; then
-  AC_CHECK_PROGS(EPSTOPDF,epstopdf)
-  AM_CONDITIONAL(EPSTOPDF,test x"$EPSTOPDF" != x"")
 
-  AC_CHECK_PROGS(TEXI2PDF,texi2pdf)
-  AM_CONDITIONAL(TEXI2PDF,test x"$TEXI2PDF" != x"")
-fi
+AC_CHECK_PROGS(EPSTOPDF,epstopdf)
+AM_CONDITIONAL(EPSTOPDF,
+  test "$enable_pdf" = "yes" \
+    && test x"$EPSTOPDF" != x"" )
+
+AC_CHECK_PROGS(TEXI2PDF,texi2pdf)
+AM_CONDITIONAL(TEXI2PDF,
+  test "$enable_pdf" = "yes" \
+    && test x"$TEXI2PDF" != x"")
 
 AM_CONDITIONAL(USE_HTML,
-  test "$enable_html" = "yes"  \
+  test "$enable_html" = "yes" \
      && test x"PERL" != x"" )
 
 AM_CONDITIONAL(USE_DVI,
