@@ -70,8 +70,9 @@ rtems_status_code rtems_semaphore_obtain(
   register Semaphore_Control *the_semaphore;
   Objects_Locations           location;
   boolean                     wait;
+  ISR_Level                   level;
 
-  the_semaphore = _Semaphore_Get( id, &location );
+  the_semaphore = _Semaphore_Get_interrupt_disable( id, &location, &level );
   switch ( location ) {
     case OBJECTS_REMOTE:
 #if defined(RTEMS_MULTIPROCESSING)
@@ -97,22 +98,23 @@ rtems_status_code rtems_semaphore_obtain(
           &the_semaphore->Core_control.mutex,
           id, 
           wait,
-          timeout
+          timeout,
+          level
         );
-        _Thread_Enable_dispatch();
         return _Semaphore_Translate_core_mutex_return_code( 
                   _Thread_Executing->Wait.return_code );
-      } else {
-        _CORE_semaphore_Seize(
-          &the_semaphore->Core_control.semaphore,
-          id,
-          wait,
-          timeout
-        );
-        _Thread_Enable_dispatch();
-        return _Semaphore_Translate_core_semaphore_return_code( 
-                  _Thread_Executing->Wait.return_code );
       }
+
+      /* must be a counting semaphore */
+      _CORE_semaphore_Seize_isr_disable(
+        &the_semaphore->Core_control.semaphore,
+        id,
+        wait,
+        timeout,
+        &level
+      );
+      return _Semaphore_Translate_core_semaphore_return_code( 
+                  _Thread_Executing->Wait.return_code );
   }
 
   return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
