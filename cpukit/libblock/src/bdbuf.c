@@ -1088,8 +1088,8 @@ bdbuf_initialize_transfer_sema(bdbuf_buffer *bd_buf)
     mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_FIFO;
     mutex_attr.priority_ceiling = 0;
 
-    _CORE_mutex_Initialize(&bd_buf->transfer_sema, 
-                           &mutex_attr, CORE_MUTEX_LOCKED);
+    _CORE_mutex_Initialize(&bd_buf->transfer_sema, OBJECTS_NO_CLASS,
+                           &mutex_attr, CORE_MUTEX_LOCKED, NULL);
 }
 
 /* bdbuf_write_transfer_done --
@@ -1112,7 +1112,7 @@ bdbuf_write_transfer_done(void *arg, rtems_status_code status, int error)
 {
     bdbuf_buffer *bd_buf = arg;
     bd_buf->status = status;
-    bd_buf->error = error;
+    bd_buf->error = RTEMS_IO_ERROR;
     bd_buf->in_progress = bd_buf->modified = FALSE;
     _CORE_mutex_Surrender(&bd_buf->transfer_sema, 0, NULL);
     _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL, 
@@ -1139,7 +1139,7 @@ bdbuf_read_transfer_done(void *arg, rtems_status_code status, int error)
 {
     bdbuf_buffer *bd_buf = arg;
     bd_buf->status = status;
-    bd_buf->error = error;
+    bd_buf->error = RTEMS_IO_ERROR;
     _CORE_mutex_Surrender(&bd_buf->transfer_sema, 0, NULL);
     _CORE_mutex_Flush(&bd_buf->transfer_sema, NULL, 
                       CORE_MUTEX_STATUS_SUCCESSFUL);
@@ -1218,7 +1218,7 @@ rtems_bdbuf_read(dev_t device,
         req.req.bufs[0].buffer = bd_buf->buffer;
         
         bdbuf_initialize_transfer_sema(bd_buf);
-        result = dd->ioctl(device, BLKIO_REQUEST, &req);
+        result = dd->ioctl(pdd->dev, BLKIO_REQUEST, &req);
         if (result == -1)
         {
             bd_buf->status = RTEMS_IO_ERROR;

@@ -1,3 +1,10 @@
+2002-09-06	Alexander M. Kukuta <kam@oktet.ru>
+
+	* src/bdbuf.c: Per PR282, correct problem in function
+	rtems_bdbuf_read() where device ioctl() is called with the
+	logical device number used instead of corresponding physical
+	device number.
+
 2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge src/Makefile.am.
