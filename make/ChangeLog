@@ -1,4 +1,8 @@
 
+2000-12-01	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/jmr3904.cfg: Turn optimization back up to -O2.
+
 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/jmr3904.cfg: Use -m3900 not -mips3. TX3904 is actually
