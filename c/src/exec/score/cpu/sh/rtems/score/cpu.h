@@ -31,7 +31,7 @@ extern "C" {
 
 #include <rtems/score/sh.h>              /* pick up machine definitions */
 #ifndef ASM
-#include <rtems/score/shtypes.h>
+#include <rtems/score/types.h>
 #endif
 #if 0 && defined(__SH4__)
 #include <rtems/score/sh4_regs.h>

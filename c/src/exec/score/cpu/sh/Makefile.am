@@ -26,7 +26,7 @@ PREINSTALL_FILES = $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = \
     rtems/score/cpu.h \
-    rtems/score/shtypes.h \
+    rtems/score/types.h \
     rtems/score/sh.h \
     rtems/score/sh_io.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
