@@ -66,9 +66,6 @@
 	
  */
 
-.globl __eabi 
-
-				
 #if PPC_ASM == PPC_ASM_ELF
         .section .entry
 #else
@@ -155,7 +152,3 @@ clear_bss:
 
 	.comm	environ,4,4
 
-/* no eabi */
-__eabi:
-    blr
-    
