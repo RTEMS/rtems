@@ -1,0 +1,13 @@
+2001-10-11	Alexandra Kossovsky <sasha@oktet.ru>
+
+	* clock/Makefile.am, clock/ckinit.c, clock/.cvsignore, Makefile.am,
+	include/Makefile.am, include/iosh7750.h, include/ipl.h,
+	include/ispsh7750.h, include/sh4_regs.h, include/sh4uart.h,
+	include/sh7750_regs.h, include/.cvsignore, sci/Makefile.am,
+	sci/console.c, sci/sh4uart.c, sci/.cvsignore, score/Makefile.am,
+	score/cpu_asm.c, score/ispsh7750.c, score/.cvsignore,
+	timer/Makefile.am, timer/timer.c, timer/.cvsignore, configure.ac,
+	.cvsignore, ChangeLog:  New files.  
+	Reviewed and updated to latest automake and autoconf standards
+	by Ralf Corsepius <corsepiu@faw.uni-ulm.de>.
+
