@@ -3,8 +3,13 @@ OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm",
 OUTPUT_ARCH(arm)
 ENTRY(_start)
 MEMORY {
+/* Settings as submitted which won't match an arbitrary user board
+   and are not enough to link every test case so changed to link all tests.
 	FLASH (rx)  : ORIGIN = 0x200000, LENGTH = 512K
 	RAM   (!rx) : ORIGIN = 0x400000, LENGTH = 128K
+*/
+	FLASH (rx)  : ORIGIN = 0x200000, LENGTH = 1024K
+	RAM   (!rx) : ORIGIN = 0x600000, LENGTH = 128K
 }
 
 /* Do we need any of these for elf?
