@@ -53,7 +53,7 @@ SECTIONS
 
 	 _etext = .;
     }  >ram
-   .tors : {
+   .tors SIZEOF(.text) + ADDR(.text): {
         ___ctors = . ; 
         *(.ctors)
         ___ctors_end = . ;
@@ -61,9 +61,10 @@ SECTIONS
         *(.dtors)
         ___dtors_end = . ;
     }  >ram
-    .data SIZEOF(.text) + ADDR(.text):
+    .data SIZEOF(.tors) + ADDR(.tors):
     { 
  	*(.data) 
+        *(.gcc_exc*)
 	CONSTRUCTORS
 	 _edata = .;
     }  >ram
@@ -77,9 +78,6 @@ SECTIONS
 	_stack_init = .;
 	_clear_end = .;
 	_WorkspaceBase = .;
-	. += 64K;	/* reserve some memory for workspace */
-	_HeapBase = .;
-	. += _HeapSize;	/* reserve some memory for heap */
 	 _end = .;
 	 __end = .;
     } >ram

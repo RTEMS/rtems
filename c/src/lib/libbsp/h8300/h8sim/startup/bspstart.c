@@ -56,12 +56,16 @@ void bsp_libc_init( void *, unsigned32, int );
  
 void bsp_pretasking_hook(void)
 {
-    extern int HeapBase;
-    extern int HeapSize;
-    void         *heapStart = &HeapBase;
-    unsigned long heapSize = (unsigned long)&HeapSize;
+    void         *heapStart;
+    unsigned long heapSize;
     unsigned long ramSpace;
+    extern int WorkspaceBase;
 
+    heapStart =  (void *)
+       ((unsigned long)&WorkspaceBase + BSP_Configuration.work_space_size);
+    if ( (unsigned long) heapStart > (256 * 1024) )
+       rtems_fatal_error_occurred (('H'<<24) | ('E'<<16) | ('A'<<8) | 'P');
+    heapSize = (256 * 1024) - (unsigned long)(heapStart);
     bsp_libc_init(heapStart, heapSize, 0);
 
 #ifdef RTEMS_DEBUG
@@ -78,7 +82,6 @@ void bsp_pretasking_hook(void)
 
 void bsp_start( void )
 {
-  extern int _end;
   extern int WorkspaceBase;
   /* Configure Number of Register Caches */
 
