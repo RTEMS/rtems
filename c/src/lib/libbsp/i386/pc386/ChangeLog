@@ -1,3 +1,9 @@
+2003-02-20	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 353/bsps
+	* include/bsp.h: Let the application override the network driver
+	and attach routine.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
