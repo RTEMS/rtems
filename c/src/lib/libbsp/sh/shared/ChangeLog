@@ -1,3 +1,7 @@
+2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Cosmetics.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* console.c, setvec.c: URL for license changed.
