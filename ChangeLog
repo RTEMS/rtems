@@ -1,3 +1,8 @@
+2004-11-12	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* aclocal/check-bsps.m4: Add MVME2100 BSP as alias of
+	motorola_shared.
+
 2004-11-10	Joel Sherrill <joel@oarcorp.com>
 
 	* aclocal/bsp-alias.m4: Add MVME2100 BSP as alias of motorola_shared.

@@ -21,7 +21,7 @@ AC_MSG_CHECKING([for available BSPs])
           p4000)             bsps="p4600 p4650";;
           mvme162)           bsps="mvme162 mvme162lx";;
           mbx8xx)            bsps="mbx821_001 mbx860_002 mbx860_005b";;
-	  motorola_powerpc)  bsps="mvme2307 mcp750 mtx603e";;
+	  motorola_powerpc)  bsps="mvme2307 mcp750 mtx603e mvme2100";;
 	  pc386)             bsps="pc386 pc386dx pc486 pc586 pc686 pck6";;
 	  erc32)             bsps="erc32 erc32nfp";;
 	  leon)              bsps="leon1 leon2";;
