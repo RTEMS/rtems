@@ -24,9 +24,11 @@ rtems_task Task_1(
   rtems_task_argument argument
 )
 {
-  rtems_id          tmid;
-  rtems_time_of_day time;
-  rtems_status_code status;
+  rtems_id                 tmid;
+  rtems_id                 tmid2;
+  rtems_time_of_day        time;
+  rtems_status_code        status;
+  rtems_timer_information  info;
 
 /* Get id */
 
@@ -34,6 +36,72 @@ rtems_task Task_1(
   status = rtems_timer_ident( Timer_name[ 1 ], &tmid );
   directive_failed( status, "rtems_timer_ident" );
   printf( "TA1 - timer 1 has id (0x%x)\n", tmid );
+
+  puts( "TA1 - rtems_timer_ident - identing timer 2" );
+  status = rtems_timer_ident( Timer_name[ 2 ], &tmid2 );
+  directive_failed( status, "rtems_timer_ident" );
+  printf( "TA1 - timer 2 has id (0x%x)\n", tmid2 );
+
+/* now check that rescheduling an active timer works OK. */
+  puts( "TA1 - rtems_timer_server_fire_after - timer 1 in 30 seconds" );
+  status = rtems_timer_server_fire_after(
+    tmid, 30 * TICKS_PER_SECOND, Delayed_resume, NULL );
+  directive_failed( status, "rtems_timer_server_fire_after" );
+
+  puts( "TA1 - rtems_timer_server_fire_after - timer 2 in 60 seconds" );
+  status = rtems_timer_server_fire_after(
+    tmid2, 60 * TICKS_PER_SECOND, Delayed_resume, NULL );
+  directive_failed( status, "rtems_timer_server_fire_after" );
+
+  status = rtems_timer_get_information( tmid, &info );
+  printf( "Timer 1 scheduled for %d ticks since boot\n",
+    info.start_time + info.initial );
+  printf( "Timer Server scheduled for %d ticks since boot\n",
+    _Timer_Server->Timer.initial + _Timer_Server->Timer.start_time );
+
+  puts( "TA1 - rtems_task_wake_after - 1 second" );
+  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  directive_failed( status, "rtems_timer_wake_after" );
+
+  puts( "TA1 - rtems_timer_server_fire_after - timer 2 in 60 seconds" );
+  status = rtems_timer_server_fire_after(
+    tmid2, 60 * TICKS_PER_SECOND, Delayed_resume, NULL );
+  directive_failed( status, "rtems_timer_server_fire_after" );
+
+  status = rtems_timer_get_information( tmid, &info );
+  directive_failed( status, "rtems_timer_get_information" );
+  printf( "Timer 1 scheduled for %d ticks since boot\n",
+    info.start_time + info.initial );
+  printf( "Timer Server scheduled for %d ticks since boot\n",
+    _Timer_Server->Timer.initial + _Timer_Server->Timer.start_time );
+  assert(  (info.start_time + info.initial) == 
+    (_Timer_Server->Timer.initial + _Timer_Server->Timer.start_time) );
+
+  puts( "TA1 - rtems_task_wake_after - 1 second" );
+  status = rtems_task_wake_after( 1 * TICKS_PER_SECOND );
+  directive_failed( status, "rtems_timer_wake_after" );
+
+  puts( "TA1 - rtems_timer_server_fire_after - timer 2 in 60 seconds" );
+  status = rtems_timer_server_fire_after(
+    tmid2, 60 * TICKS_PER_SECOND, Delayed_resume, NULL );
+  directive_failed( status, "rtems_timer_server_fire_after" );
+
+  status = rtems_timer_get_information( tmid, &info );
+  directive_failed( status, "rtems_timer_get_information" );
+  printf( "Timer 1 scheduled for %d ticks since boot\n",
+    info.start_time + info.initial );
+  printf( "Timer Server scheduled for %d ticks since boot\n",
+    _Timer_Server->Timer.initial + _Timer_Server->Timer.start_time );
+  assert(  (info.start_time + info.initial) == 
+    (_Timer_Server->Timer.initial + _Timer_Server->Timer.start_time) );
+
+  puts( "TA1 - rtems_timer_cancel - timer 1" );
+  status = rtems_timer_cancel( tmid );
+  directive_failed( status, "rtems_timer_cancel" );
+
+  puts( "TA1 - rtems_timer_cancel - timer 2" );
+  status = rtems_timer_cancel( tmid2 );
+  directive_failed( status, "rtems_timer_cancel" );
 
 /* after which is allowed to fire */
 

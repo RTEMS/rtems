@@ -52,7 +52,7 @@ rtems_task Task_1(
 TEST_EXTERN rtems_id   Task_id[ 4 ];         /* array of task ids */
 TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
 
-TEST_EXTERN rtems_id   Timer_id[ 2 ];    /* array of timer ids */
-TEST_EXTERN rtems_name Timer_name[ 2 ];  /* array of timer names */
+TEST_EXTERN rtems_id   Timer_id[ 3 ];    /* array of timer ids */
+TEST_EXTERN rtems_name Timer_name[ 3 ];  /* array of timer names */
 
 /* end of include file */

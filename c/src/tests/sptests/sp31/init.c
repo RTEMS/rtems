@@ -47,6 +47,7 @@ rtems_task Init(
 
   Task_name[ 1 ]  = rtems_build_name( 'T', 'A', '1', ' ' );
   Timer_name[ 1 ] = rtems_build_name( 'T', 'M', '1', ' ' );
+  Timer_name[ 2 ] = rtems_build_name( 'T', 'M', '2', ' ' );
 
   status = rtems_task_create(
     Task_name[ 1 ],
@@ -64,8 +65,12 @@ rtems_task Init(
   puts( "INIT - rtems_timer_create - creating timer 1" );
   status = rtems_timer_create( Timer_name[ 1 ], &Timer_id[ 1 ] );
   directive_failed( status, "rtems_timer_create" );
-
   printf( "INIT - timer 1 has id (0x%x)\n", Timer_id[ 1 ] );
+
+  puts( "INIT - rtems_timer_create - creating timer 2" );
+  status = rtems_timer_create( Timer_name[ 2 ], &Timer_id[ 2 ] );
+  directive_failed( status, "rtems_timer_create" );
+  printf( "INIT - timer 2 has id (0x%x)\n", Timer_id[ 2 ] );
 
   status = rtems_task_delete( RTEMS_SELF );
   directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
