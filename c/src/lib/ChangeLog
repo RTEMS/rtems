@@ -1,4 +1,8 @@
 
+2000-09-05	Joel Sherrill <joel@OARcorp.com>
+
+	* libio.c: Added O_NONBLOCK to list of flags.
+
 2000-08-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Remove libcpu and libbsp

@@ -109,6 +109,7 @@ rtems_assoc_t access_modes_assoc[] = {
 
 rtems_assoc_t status_flags_assoc[] = {
   { "NO DELAY",  LIBIO_FLAGS_NO_DELAY,  O_NDELAY },
+  { "NONBLOCK",  LIBIO_FLAGS_NO_DELAY,  O_NONBLOCK },
   { "APPEND",    LIBIO_FLAGS_APPEND,    O_APPEND },
   { "CREATE",    LIBIO_FLAGS_CREATE,    O_CREAT },
   { 0, 0, 0 },
