@@ -25,4 +25,3 @@ void *POSIX_Init(
 
 #define CONFIGURE_INIT
 #include "config.h"
-
