@@ -1,3 +1,7 @@
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* stubdr/Makefile.am, wrapup/Makefile.am: Include compile.am
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
