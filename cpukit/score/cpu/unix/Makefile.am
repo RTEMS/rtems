@@ -24,7 +24,7 @@ $(PROJECT_INCLUDE)/rtems/score:
 
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = \
-    rtems/score/unixtypes.h \
+    rtems/score/types.h \
     rtems/score/cpu.h \
     rtems/score/unix.h \
     rtems/score/unixsize.h

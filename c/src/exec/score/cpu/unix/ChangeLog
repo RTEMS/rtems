@@ -1,3 +1,10 @@
+2001-04-03	Joel Sherrill <joel@OARcorp.com>
+
+	* Per PR94, all rtems/score/CPUtypes.h are named rtems/score/types.h.
+	* rtems/score/unixtypes.h: Removed.
+	* rtems/score/types.h: New file via CVS magic.
+	* Makefile.am, rtems/score/cpu.h: Account for name change.
+
 2001-03-28	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu.c: Define fix_syscall_errno() to nothing so MP links.
