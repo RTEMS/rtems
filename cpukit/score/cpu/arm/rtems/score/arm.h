@@ -1,3 +1,7 @@
+/**
+ * @file rtems/score/arm.h
+ */
+
 /*  
  *  $Id$
  *

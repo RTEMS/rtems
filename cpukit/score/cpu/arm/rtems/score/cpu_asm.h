@@ -1,3 +1,7 @@
+/**
+ * @file rtems/score/cpu_asm.h
+ */
+
 /*
  *  $Id$
  *
