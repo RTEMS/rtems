@@ -2,15 +2,12 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../../../../aclocal
-
 EXTRA_PROGRAMS =
 EXTRA_DIST =
 CLEANFILES =
 noinst_DATA =
 
 include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
 
 if mongoosev
 include_mipsdir = $(includedir)/libcpu

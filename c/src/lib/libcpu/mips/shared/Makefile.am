@@ -8,7 +8,6 @@ noinst_DATA =
 EXTRA_PROGRAMS =
 
 include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
 
 ## cache
 include_libcpudir = $(includedir)/libcpu
