@@ -6,8 +6,8 @@ $(project_bspdir)/samples/$(dirstamp):
 	@$(mkdir_p) $(project_bspdir)/samples
 	@: > $(project_bspdir)/samples/$(dirstamp)
 $(project_bspdir)/tests/$(dirstamp):
-	@$(mkdir_p) $(project_bspdir)/samples
-	@: > $(project_bspdir)/samples/$(dirstamp)
+	@$(mkdir_p) $(project_bspdir)/tests
+	@: > $(project_bspdir)/tests/$(dirstamp)
 
 $(project_bspdir)/samples/$(SAMPLE)$(LIB_VARIANT).exe: $(PGM) $(project_bspdir)/samples/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
