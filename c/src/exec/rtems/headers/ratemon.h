@@ -10,6 +10,7 @@
  *     + cancel a period
  *     + delete a rate monotonic timer
  *     + conclude current and start the next period
+ *     + obtain status information on a period
  *
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
