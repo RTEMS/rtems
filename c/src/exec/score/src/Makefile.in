@@ -22,6 +22,12 @@ INSTALL_CHANGE = @INSTALL_CHANGE@
 MP_C_PIECES_yes_V = mpci objectmp threadmp
 MP_C_PIECES = $(MP_C_PIECES_$(HAS_MP)_V)
 
+OBJECT_C_PIECES = object objectallocate objectallocatebyindex \
+    objectclearname objectcomparenameraw objectcomparenamestring \
+    objectcopynameraw objectcopynamestring objectextendinformation \
+    objectfree objectget objectgetbyindex objectgetnext \
+    objectinitializeinformation objectnametoid objectshrinkinformation
+
 THREAD_C_PIECES = thread threadchangepriority threadclearstate threadclose \
     threadcreateidle threaddelayended threaddispatch threadevaluatemode \
     threadget threadhandler threadidlebody threadinitialize threadloadenv \
@@ -32,7 +38,7 @@ THREAD_C_PIECES = thread threadchangepriority threadclearstate threadclose \
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
 C_PIECES = apiext chain coremsg coremutex coresem coretod heap interr isr \
-    object $(THREAD_C_PIECES) threadq userext watchdog wkspace \
+    $(OBJECT_C_PIECES) $(THREAD_C_PIECES) threadq userext watchdog wkspace \
     $(MP_C_PIECES)
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
