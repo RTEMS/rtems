@@ -1,3 +1,9 @@
+2004-03-05	Joel Sherrill <joel@OARcorp.com>
+
+	* libchipnetwork/open_eth.c: Remove warnings by conditionally
+	compiling this file only only those CPU families with supported
+	exception models.
+
 2004-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acinclude.m4: Fix loosing arguments when configuring cpukit and

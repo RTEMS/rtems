@@ -10,6 +10,22 @@
  *
  */
 
+/*
+ *  This driver current only supports architectures with the old style
+ *  exception processing.  The following checks try to keep this
+ *  from being compiled on systems which can't support this driver.
+ */
+
+#if defined(__i386__)
+  #define OPENETH_NOT_SUPPORTED
+#endif
+
+#if defined(__PPC__) && (defined(mpc604) || defined(mpc750) || defined(mpc603e))
+  #define OPENETH_NOT_SUPPORTED
+#endif
+
+#if !defined(OPENETH_NOT_SUPPORTED)
+#include <bsp.h>
 #include <rtems.h>
 
 #include <bsp.h>
@@ -736,3 +752,5 @@ rtems_open_eth_driver_attach (struct rtems_bsdnet_ifconfig *config,
 #endif
     return 1;
 };
+
+#endif  /* OPENETH_NOT_SUPPORTED */
