@@ -190,6 +190,10 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _RTEMS_API_Initialize( configuration_table );
 
+#ifdef RTEMS_POSIX_API
+  _POSIX_API_Initialize( configuration_table );
+#endif
+
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
 
   if ( cpu_table->pretasking_hook )

@@ -1,5 +1,5 @@
 /*
- *  RTEMS API Support
+ *  POSIX API Initialization Support
  *
  *  NOTE:
  *
