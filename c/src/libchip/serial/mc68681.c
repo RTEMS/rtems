@@ -23,9 +23,9 @@
 #include <ringbuf.h>
 
 #include <libchip/serial.h>
+#include <libchip/mc68681.h>
 #include "sersupp.h"
 #include "mc68681_p.h"
-#include "mc68681.h"
 
 /*
  * Flow control is only supported when using interrupts
@@ -597,7 +597,7 @@ MC68681_STATIC int mc68681_baud_rate(
 
   baud_tbl = (mc68681_baud_table_t *) Console_Port_Tbl[minor].ulClock;
   if (!baud_tbl)
-    rtems_fatal_error_occured(RTEMS_INVALID_ADDRESS);
+    rtems_fatal_error_occurred(RTEMS_INVALID_ADDRESS);
 
   if ( is_extended )
     baud_mask = (unsigned int)baud_tbl[ acr_bit + 2 ][ baud_requested ];
