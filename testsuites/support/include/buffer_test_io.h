@@ -22,6 +22,12 @@ extern "C" {
 
 #if !defined(TESTS_BUFFER_OUTPUT)
 
+#undef printf
+#define printf(...) \
+  do { \
+     iprintf( __VA_ARGS__); \ 
+  } while (0)
+
 #define rtems_test_exit(_s) \
   do { \
     exit(_s); \
