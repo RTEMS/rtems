@@ -1,3 +1,11 @@
+2004-11-23	Richard Campbell <richard.campbell@oarcorp.com>
+
+	* startup/bspstart.c: Removed mpc824x conditionals around call to 
+	L1_caches_enables, conditionals are now in mmuAsm.S.
+ 	* vme/VMEConfig.h: Set up VME A16, A24 and A32 windows at different 
+	locations for mvme2100.
+	* vme/vmeconfig.c: Fixed spelling.
+
 2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
 
 	* ChangeLog, Makefile.am, bootloader/misc.c, bootloader/pci.c,

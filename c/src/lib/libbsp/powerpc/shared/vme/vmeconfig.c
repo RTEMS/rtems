@@ -93,7 +93,7 @@ union {
   vmeUniverseMasterPortsShow(0);
   vmeUniverseSlavePortsShow(0);
 
-  /* install the VME insterrupt manager */
+  /* install the VME interrupt manager */
   vmeUniverseInstallIrqMgr(0,5,1,6);
   if (vmeUniverse0PciIrqLine<0)
 	BSP_panic("Unable to get interrupt line info from PCI config");

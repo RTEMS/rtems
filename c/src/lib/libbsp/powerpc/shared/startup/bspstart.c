@@ -244,9 +244,7 @@ unsigned int get_eumbbar() {
 void bsp_start( void )
 {
   unsigned char *stack;
-#if !defined(mpc8240) && !defined(mpc8245)
   unsigned l2cr;
-#endif
   register unsigned char* intrStack;
   unsigned char *work_space_start;
   ppc_cpu_id_t myCpu;
@@ -271,7 +269,6 @@ void bsp_start( void )
   { unsigned v = 0x3000 ; _CPU_MSR_SET(v); }
 #endif
 
-#if !defined(mpc8240) && !defined(mpc8245)
   /*
    * enables L1 Cache. Note that the L1_caches_enables() codes checks for
    * relevant CPU type so that the reason why there is no use of myCpu...
@@ -288,7 +285,6 @@ void bsp_start( void )
 #endif  
   if ( (! (l2cr & 0x80000000)) && ((int) l2cr == -1))
     set_L2CR(0xb9A14000);
-#endif
 
   /*
    * the initial stack has already been set to this value in start.S

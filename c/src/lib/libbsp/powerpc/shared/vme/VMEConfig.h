@@ -11,10 +11,15 @@
  * hardcoded window lengths that match this
  * layout:
  */
-#define _VME_A32_WIN0_ON_PCI	0x10000000
-#define _VME_A24_ON_PCI			0x1f000000
-#define _VME_A16_ON_PCI			0x1fff0000
-
+#if defined(mvme2100)
+  #define _VME_A32_WIN0_ON_PCI  0x80000000
+  #define _VME_A24_ON_PCI       0x8f000000
+  #define _VME_A16_ON_PCI       0x8fff0000
+#else
+  #define _VME_A32_WIN0_ON_PCI  0x10000000
+  #define _VME_A24_ON_PCI       0x1f000000
+  #define _VME_A16_ON_PCI       0x1fff0000
+#endif
 /* start of the A32 window on the VME bus
  * TODO: this should perhaps be a configuration option
  */
