@@ -12,7 +12,8 @@ LIBNAME=libserialio.a
 LIB=${ARCH}/${LIBNAME}
 
 C_PIECES=mc68681 mc68681_reg mc68681_reg2 mc68681_reg4 mc68681_reg8 \
-    ns16550 z85c30 \
+    ns16550 \
+    z85c30 z85c30_reg \
     serprobe termios_baud2index termios_baud2num
 
 C_FILES=$(C_PIECES:%=%.c)

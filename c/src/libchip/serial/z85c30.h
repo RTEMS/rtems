@@ -47,6 +47,30 @@ extern console_fns z85c30_fns_polled;
 extern console_flow z85c30_flow_RTSCTS;
 extern console_flow z85c30_flow_DTRCTS;
 
+/*
+ * Default register access routines
+ */
+
+unsigned8 z85c30_get_register(   /* registers are byte-wide */
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum
+);
+
+void z85c30_set_register(
+  unsigned32  ulCtrlPort,
+  unsigned8   ucRegNum,
+  unsigned8   ucData
+);
+
+unsigned8 z85c30_get_data(
+  unsigned32  ulDataPort
+);
+
+void z85c30_set_data(
+  unsigned32  ulDataPort,
+  unsigned8   ucData
+);
+
 #ifdef __cplusplus
 }
 #endif
