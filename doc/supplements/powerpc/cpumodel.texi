@@ -56,10 +56,11 @@ across the entire family.
 * CPU Model Dependent Features Has Double Precision Floating Point::
 * CPU Model Dependent Features Critical Interrupts::
 * CPU Model Dependent Features MSR Values::
-* CPU Model Dependent Features FPU Status Control Register Values::
 * CPU Model Dependent Features Use Multiword Load/Store Instructions::
 * CPU Model Dependent Features Instruction Cache Size::
 * CPU Model Dependent Features Data Cache Size::
+* CPU Model Dependent Features Debug Model::
+* CPU Model Dependent Features Low Power Model::
 @end menu
 @end ifinfo
 
@@ -99,94 +100,131 @@ model, this macro is set to the string "PowerPC 603e".
 @end ifinfo
 @subsection Floating Point Unit
 
-The macro PPC_HAS_FPU is set to 1 to indicate that
-this CPU model has a hardware floating point unit and 0
-otherwise.
+The macro PPC_HAS_FPU is set to 1 to indicate that this CPU model
+has a hardware floating point unit and 0 otherwise.
 
 @ifinfo
 @node CPU Model Dependent Features Alignment, CPU Model Dependent Features Cache Alignment, CPU Model Dependent Features Floating Point Unit, CPU Model Dependent Features CPU Model Feature Flags
 @end ifinfo
 @subsection Alignment
 
-The macro PPC_ALIGNMENT is set to 
+The macro PPC_ALIGNMENT is set to the PowerPC model's worst case alignment
+requirement for data types on a byte boundary.  This value is used
+to derive the alignment restrictions for memory allocated from 
+regions and partitions.
 
 @ifinfo
 @node CPU Model Dependent Features Cache Alignment, CPU Model Dependent Features Maximum Interrupts, CPU Model Dependent Features Alignment, CPU Model Dependent Features CPU Model Feature Flags
 @end ifinfo
 @subsection Cache Alignment
 
-The macro PPC_CACHE_ALIGNMENT is set to 
+The macro PPC_CACHE_ALIGNMENT is set to the line size of the cache.  It is
+used to align the entry point of critical routines so that as much code
+as possible can be retrieved with the initial read into cache.  This
+is done for the interrupt handler as well as the context switch routines.
 
-Similarly, the macro PPC_CACHE_ALIGN_POWER is set to the 
+In addition, the "shortcut" data structure used by the PowerPC implementation
+to ease access to data elements frequently accessed by RTEMS routines
+implemented in assembly language is aligned using this value.
 
 @ifinfo
 @node CPU Model Dependent Features Maximum Interrupts, CPU Model Dependent Features Has Double Precision Floating Point, CPU Model Dependent Features Cache Alignment, CPU Model Dependent Features CPU Model Feature Flags
 @end ifinfo
 @subsection Maximum Interrupts
 
-The macro PPC_INTERRUPT_MAX is set to
+The macro PPC_INTERRUPT_MAX is set to the number of exception sources
+supported by this PowerPC model.
 
 @ifinfo
 @node CPU Model Dependent Features Has Double Precision Floating Point, CPU Model Dependent Features Critical Interrupts, CPU Model Dependent Features Maximum Interrupts, CPU Model Dependent Features CPU Model Feature Flags
 @end ifinfo
 @subsection Has Double Precision Floating Point
 
-The macro PPC_HAS_DOUBLE is set to
+The macro PPC_HAS_DOUBLE is set to 1 to indicate that the PowerPC model
+has support for double precision floating point numbers.  This is
+important because the floating point registers need only be four bytes
+wide (not eight) if double precision is not supported.
 
 @ifinfo
 @node CPU Model Dependent Features Critical Interrupts, CPU Model Dependent Features MSR Values, CPU Model Dependent Features Has Double Precision Floating Point, CPU Model Dependent Features CPU Model Feature Flags
 @end ifinfo
 @subsection Critical Interrupts
 
-The macro PPC_HAS_RFCI is set to
+The macro PPC_HAS_RFCI is set to 1 to indicate that the PowerPC model
+has the Critical Interrupt capability as defined by the IBM 403 models.
 
 @ifinfo
-@node CPU Model Dependent Features MSR Values, CPU Model Dependent Features FPU Status Control Register Values, CPU Model Dependent Features Critical Interrupts, CPU Model Dependent Features CPU Model Feature Flags
+@node CPU Model Dependent Features MSR Values, CPU Model Dependent Features Use Multiword Load/Store Instructions, CPU Model Dependent Features Critical Interrupts, CPU Model Dependent Features CPU Model Feature Flags
 @end ifinfo
 @subsection MSR Values
 
-The macro PPC_MSR_DISABLE_MASK is set to
-
 The macro PPC_MSR_INITIAL is set to
 
-The macro PPC_MSR_0 is set to
-
-The macro PPC_MSR_1 is set to
-
-The macro PPC_MSR_2 is set to
-
-The macro PPC_MSR_3 is set to
-
 @ifinfo
-@node CPU Model Dependent Features FPU Status Control Register Values, CPU Model Dependent Features Use Multiword Load/Store Instructions, CPU Model Dependent Features MSR Values, CPU Model Dependent Features CPU Model Feature Flags
-@end ifinfo
-@subsection FPU Status Control Register Values
-
-The macro PPC_INIT_FPSCR is set to
-
-@ifinfo
-@node CPU Model Dependent Features Use Multiword Load/Store Instructions, CPU Model Dependent Features Instruction Cache Size, CPU Model Dependent Features FPU Status Control Register Values, CPU Model Dependent Features CPU Model Feature Flags
+@node CPU Model Dependent Features Use Multiword Load/Store Instructions, CPU Model Dependent Features Instruction Cache Size, CPU Model Dependent Features MSR Values, CPU Model Dependent Features CPU Model Feature Flags
 @end ifinfo
 @subsection Use Multiword Load/Store Instructions
 
-The macro PPC_USE_MULTIPLE is set to
+The macro PPC_USE_MULTIPLE is set to 1 to indicate that multiword load and
+store instructions should be used to perform context switch operations.
+The relative efficiency of multiword load and store instructions versus
+an equivalent set of single word load and store instructions varies based
+upon the PowerPC model.
 
 @ifinfo
 @node CPU Model Dependent Features Instruction Cache Size, CPU Model Dependent Features Data Cache Size, CPU Model Dependent Features Use Multiword Load/Store Instructions, CPU Model Dependent Features CPU Model Feature Flags
 @end ifinfo
 @subsection Instruction Cache Size
 
-The macro PPC_I_CACHE is set to 
+The macro PPC_I_CACHE is set to the size in bytes of the instruction cache.
 
 @ifinfo
-@node CPU Model Dependent Features Data Cache Size, CPU Model Dependent Features CPU Model Implementation Notes, CPU Model Dependent Features Instruction Cache Size, CPU Model Dependent Features CPU Model Feature Flags
+@node CPU Model Dependent Features Data Cache Size, CPU Model Dependent Features Debug Model, CPU Model Dependent Features Instruction Cache Size, CPU Model Dependent Features CPU Model Feature Flags
 @end ifinfo
 @subsection Data Cache Size
 
-The macro PPC_D_CACHE is set to
+The macro PPC_D_CACHE is set to the size in bytes of the data cache.
 
 @ifinfo
-@node CPU Model Dependent Features CPU Model Implementation Notes, Calling Conventions, CPU Model Dependent Features Data Cache Size, CPU Model Dependent Features
+@node CPU Model Dependent Features Debug Model, CPU Model Dependent Features Low Power Model, CPU Model Dependent Features Data Cache Size, CPU Model Dependent Features CPU Model Feature Flags
+@end ifinfo
+@subsection Debug Model
+
+The macro PPC_DEBUG_MODEL
+
+@table @b
+
+@item @code{PPC_DEBUG_MODEL_STANDARD}
+indicates XXX
+
+@item @code{PPC_DEBUG_MODEL_SINGLE_STEP_ONLY}
+indicates XXX
+
+@item @code{PPC_DEBUG_MODEL_IBM4xx}
+indicates XXX
+
+@end table
+
+@ifinfo
+@node CPU Model Dependent Features Low Power Model, CPU Model Dependent Features CPU Model Implementation Notes, CPU Model Dependent Features Debug Model, CPU Model Dependent Features CPU Model Feature Flags
+@end ifinfo
+@subsection Low Power Model
+
+The macro PPC_LOW_POWER_MODE
+
+@table @b
+
+@item @code{PPC_LOW_POWER_MODE_NONE}
+indicates XXX
+
+@item @code{PPC_LOW_POWER_MODE_STANDARD}
+indicates XXX
+
+@end table
+
+
+@ifinfo
+@node CPU Model Dependent Features CPU Model Implementation Notes, Calling Conventions, CPU Model Dependent Features Low Power Model, CPU Model Dependent Features
 @end ifinfo
 @section CPU Model Implementation Notes 
 

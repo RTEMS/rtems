@@ -25,7 +25,7 @@
 
 An RTEMS Board Support Package (BSP) must be designed
 to support a particular processor and target board combination.
-This chapter presents a discussion of SPARC specific BSP issues.
+This chapter presents a discussion of PowerPC specific BSP issues.
 For more information on developing a BSP, refer to the chapter
 titled Board Support Packages in the RTEMS
 Applications User's Guide.
@@ -36,21 +36,22 @@ Applications User's Guide.
 @section System Reset
 
 An RTEMS based application is initiated or
-re-initiated when the SPARC processor is reset.  When the SPARC
+re-initiated when the PowerPC processor is reset.  When the PowerPC
 is reset, the processor performs the following actions:
 
 @itemize @bullet
-@item the enable trap (ET) of the psr is set to 0 to disable
-traps,
+@item TBD
 
-@item the supervisor bit (S) of the psr is set to 1 to enter
-supervisor mode, and
+@item TBD
 
-@item the PC is set 0 and the nPC is set to 4.
+@item TBD
 @end itemize
 
-The processor then begins to execute the code at
-location 0.  It is important to note that all fields in the psr
+The processor then begins to execute the code at location 0x00100.  
+By using the SRR1 bit corresponding to MSR[RI] the softwere may 
+distinguish between power-on reset and other types of system resets.
+
+It is important to note that all fields in the psr
 are not explicitly set by the above steps and all other
 registers retain their value from the previous execution mode.
 This is true even of the Trap Base Register (TBR) whose contents
@@ -79,7 +80,7 @@ and this is to be utilized, then it should be enabled during the
 reset application initialization code.
 
 In addition to the requirements described in the
-Board Support Packages chapter of the @value{RTEMS-LANGUAGE}
+Board Support Packages chapter of the @value{LANGUAGE}
 Applications User's Manual for the reset code
 which is executed before the call to
 rtems_initialize executive, the SPARC version has the following
