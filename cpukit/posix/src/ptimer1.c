@@ -573,7 +573,8 @@ int timer_settime(
 
         timer_struct[timer_pos].ticks = 
              ( SEC_TO_TICKS_C * value->it_value.tv_sec ) +
-             ( value->it_value.tv_nsec / ( 1000 * 1000 * 10 ) );
+             ( value->it_value.tv_nsec / 
+                 (1000L * (unsigned32)(1000 * 10) ));
 
         return_v = rtems_timer_fire_after ( timerid, 
                                            timer_struct[timer_pos].ticks, 

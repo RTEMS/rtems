@@ -43,5 +43,6 @@ void *pthread_getspecific(
       _Thread_Enable_dispatch();
       return key_data;
   }
-  return (void *) POSIX_BOTTOM_REACHED();
+  (void) POSIX_BOTTOM_REACHED();
+  return (void *)NULL;
 }

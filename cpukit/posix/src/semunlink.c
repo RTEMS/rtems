@@ -50,7 +50,7 @@ int sem_unlink(
    *  Don't support unlinking a remote semaphore.
    */
 
-  if ( !_Objects_Is_local_id(the_semaphore_id) ) {
+  if ( !_Objects_Is_local_id((Objects_Id)the_semaphore_id) ) {
     _Thread_Enable_dispatch();
     rtems_set_errno_and_return_minus_one( ENOSYS );
   }
