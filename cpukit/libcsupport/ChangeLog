@@ -1,3 +1,8 @@
+2003-11-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/config.h: Remove.
+	* src/Makefile.am: AM_CPPFLAGS += -I$(top_builddir).
+
 2003-10-22	Joel Sherrill <joel@OARcorp.com>
 
 	PR 511/filesystem

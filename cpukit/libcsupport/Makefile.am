@@ -96,7 +96,7 @@ all-local: $(PREINSTALL_FILES)
 
 LIB = ${ARCH}/libcsupport.a
 
-AM_CPPFLAGS += -I$(srcdir)/src
+AM_CPPFLAGS += -I$(top_builddir)
 
 ERROR_C_FILES = src/error.c
 
