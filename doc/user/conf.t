@@ -861,17 +861,24 @@ in the User Extensions Table is defined in the following @value{LANGUAGE}
 
 @ifset is-C
 @example
-typedef User_extensions_routine                   rtems_extension;
-typedef User_extensions_thread_create_extension   rtems_task_create_extension;
-typedef User_extensions_thread_delete_extension   rtems_task_delete_extension;
-typedef User_extensions_thread_start_extension    rtems_task_start_extension;
-typedef User_extensions_thread_restart_extension  rtems_task_restart_extension;
-typedef User_extensions_thread_switch_extension   rtems_task_switch_extension;
-typedef User_extensions_thread_begin_extension    rtems_task_begin_extension;
-typedef User_extensions_thread_exitted_extension  rtems_task_exitted_extension;
-typedef User_extensions_fatal_extension           rtems_fatal_extension;
+typedef User_extensions_routine           rtems_extension;
+typedef User_extensions_thread_create_extension   
+           rtems_task_create_extension;
+typedef User_extensions_thread_delete_extension   
+           rtems_task_delete_extension;
+typedef User_extensions_thread_start_extension    
+           rtems_task_start_extension;
+typedef User_extensions_thread_restart_extension  
+           rtems_task_restart_extension;
+typedef User_extensions_thread_switch_extension   
+           rtems_task_switch_extension;
+typedef User_extensions_thread_begin_extension    
+           rtems_task_begin_extension;
+typedef User_extensions_thread_exitted_extension  
+           rtems_task_exitted_extension;
+typedef User_extensions_fatal_extension   rtems_fatal_extension;
 
-typedef User_extensions_Table                     rtems_extensions_table;
+typedef User_extensions_Table             rtems_extensions_table;
 
 typedef struct @{
   rtems_task_create_extension      thread_create;

@@ -116,7 +116,7 @@ sem.texi: sem.t
 	    -n "Message Manager" ${*}.t
 
 msg.texi: msg.t
-	$(BMENU) -p "Semaphore Manager SEMAPHORE_RELEASE - Release a semaphore" \
+	$(BMENU) -p "Semaphore Manager SEMAPHORE_FLUSH - Unblock all tasks waiting on a semaphore" \
 	    -u "Top" \
 	    -n "Event Manager" ${*}.t
 

@@ -26,6 +26,7 @@ semaphore manager are:
 @item @code{@value{DIRPREFIX}semaphore_delete} - Delete a semaphore
 @item @code{@value{DIRPREFIX}semaphore_obtain} - Acquire a semaphore
 @item @code{@value{DIRPREFIX}semaphore_release} - Release a semaphore
+@item @code{@value{DIRPREFIX}semaphore_flush} - Unblock all tasks waiting on a semaphore
 @end itemize
 
 @section Background
@@ -757,4 +758,64 @@ inheritance or priority ceiling semaphore may result in the
 calling task having its priority lowered.  This will occur if
 the calling task holds no other binary semaphores and it has
 inherited a higher priority.
+
+@c
+@c
+@c
+@page
+@subsection SEMAPHORE_FLUSH - Unblock all tasks waiting on a semaphore
+
+@cindex flush a semaphore
+@cindex unlock all tasks a semaphore
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@findex rtems_semaphore_flush
+@example
+rtems_status_code rtems_semaphore_flush(
+  rtems_id id
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@example
+procedure Semaphore_Flush (
+   ID     : in     RTEMS.ID;
+   Result :    out RTEMS.Status_Codes
+);
+@end example
+@end ifset
+
+@subheading DIRECTIVE STATUS CODES:
+@code{@value{RPREFIX}SUCCESSFUL} - semaphore released successfully@*
+@code{@value{RPREFIX}INVALID_ID} - invalid semaphore id@*
+@code{@value{RPREFIX}ILLEGAL_ON_REMOTE_OBJECT} - not supported for remote semaphores
+
+@subheading DESCRIPTION:
+
+This directive unblocks all tasks waiting on the semaphore specified by
+id.  Since there are tasks blocked on the semaphore, the semaphore's
+count is not changed by this directive and thus is zero before and
+after this directive is executed.  Tasks which are unblocked as the
+result of this directive will return from the 
+@code{@value{DIRPREFIX}semaphore_release} directive with a
+status code of @code{@value{RPREFIX}UNSATISFIED} to indicate
+that the semaphore was not obtained.
+
+This directive may unblock any number of tasks.  Any of the unblocked
+tasks may preempt the running task if the running task's preemption mode is
+enabled and an unblocked task has a higher priority than the
+running task.
+
+@subheading NOTES:
+
+The calling task may be preempted if it causes a
+higher priority task to be made ready for execution.
+
+If the task to be unblocked resides on a different
+node from the semaphore, then the waiting task is
+unblocked, and the proxy used to represent the task is reclaimed.
+
 
