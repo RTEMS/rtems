@@ -82,7 +82,7 @@ discovered this problem as well, as it has been fixed in later releases.
 
 I compiled a snapshot of the development sources from 07/26/99 and
 everything now works as it should.  The development sources are at
-http://sourceware.cygnus.com/binutils  (thanks Ian!)
+@uref{http://sourceware.cygnus.com/binutils} (thanks Ian!)
 
 Additional notes on converting an m68k-coff object for use with XRay (and
 others):
