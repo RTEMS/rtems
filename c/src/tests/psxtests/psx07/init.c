@@ -103,7 +103,11 @@ void *POSIX_Init(
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   assert( status == EINVAL );
 
-  attr.stacksize = BSP_Configuration.work_space_size;
+  /* reset all the fields */
+  status = pthread_attr_init( &attr );
+  assert( !status );
+
+  attr.stacksize = BSP_Configuration.work_space_size * 10;
   puts( "Init: pthread_create - EAGAIN (stacksize too large)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   assert( status == EAGAIN );
