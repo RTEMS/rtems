@@ -149,6 +149,7 @@ void _ISR_Handler()
    *    goto the label "exit interrupt (simple case)"
    *  
    *  if ( !_ISR_Signals_to_thread_executing )
+   *    _ISR_Signals_to_thread_executing = FALSE;
    *    goto the label "exit interrupt (simple case)"
    *
    *  call _Thread_Dispatch() or prepare to return to _ISR_Dispatch

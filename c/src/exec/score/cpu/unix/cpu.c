@@ -622,6 +622,7 @@ void _CPU_ISR_Handler(int vector)
 
   if (_Thread_Dispatch_disable_level == 0 &&
       (_Context_Switch_necessary || _ISR_Signals_to_thread_executing)) {
+      _ISR_Signals_to_thread_executing = FALSE;
       _CPU_ISR_Enable(0);
       _Thread_Dispatch();
   }
