@@ -28,8 +28,6 @@
 #define ENBL_CACHES (HID0_DCE | HID0_ICE)
 
 #define USE_PPCBUG
-#undef 	USE_PPCBUG
-
 	
 #define PRINT_CHAR(c)		\
 	addi	r20,r3,0	; \
@@ -67,6 +65,9 @@
 	GOT_ENTRY(banner_start)
 	GOT_ENTRY(banner_end)
 #endif	
+#ifdef USE_PPCBUG
+	GOT_ENTRY(nioc_reset_packet)
+#endif
 	END_GOT
 	.globl	start
 	.type	start,@function
@@ -75,7 +76,7 @@
  * code area, so that simple C routines can be called. 
  */
 start:	
-#ifdef 	USE_PPCBUG
+#if defined(USE_PPCBUG) && defined(DEBUG)
 	MONITOR_ENTER
 #endif
 	bl	1f
@@ -121,19 +122,29 @@ start:
 	stw	r4,4(bd)
 	stw	r5,8(bd)
 	stw	r6,12(bd)
-	lis	r3,__size@sectoff@ha
 	stw	r7,16(bd)
 	stw	r8,20(bd)
-	addi	r3,r3,__size@sectoff@l
 	stw	r9,24(bd)
 	stw	r10,28(bd)
 	stw	r28,o_msr(bd)
 	stw	r29,o_hid0(bd)
 	stw	r31,o_r31(bd)
 
+#ifdef USE_PPCBUG
+/* Stop the network interface - otherwise, memory can get
+ * corrupted by the IF DMAing data into its old buffers or
+ * by writing descriptors...
+ */
+	lwz r3,GOT(nioc_reset_packet) 
+	li  r10, 0x1d /* .NETCTRL */
+	sc
+#endif
+
 /* Call the routine to fill boot_data structure from residual data. 
  * And to find where the code has to be moved. 
  */
+	lis	r3,__size@sectoff@ha
+	addi	r3,r3,__size@sectoff@l
 	bl	early_setup
 
 /* Now we need to relocate ourselves, where we are told to. First put a 
@@ -189,12 +200,12 @@ moved:	lwz	r1,stack(bd)
  * during this time!
  */
 4:
-#ifdef USE_PPCBUG
+#if defined(USE_PPCBUG) && defined(DEBUG)
 	PRINT_CHAR('M')
 #endif
 	bl	MMUoff
 
-#ifdef USE_PPCBUG	
+#if defined(USE_PPCBUG) && defined(DEBUG)
 	PRINT_CHAR('B')
 #endif
 	bl	flush_tlb
@@ -204,7 +215,7 @@ moved:	lwz	r1,stack(bd)
  * But the 601 valid bit is in the BATL (IBAT only) and others are in
  * the [ID]BATU. Bloat, bloat.. fortunately thrown away later. 
  */
-#ifdef USE_PPCBUG	
+#if defined(USE_PPCBUG) && defined(DEBUG)
 	PRINT_CHAR('T')
 #endif
 	li	r3,0
@@ -224,12 +235,12 @@ moved:	lwz	r1,stack(bd)
 	lis	r3,__size@sectoff@ha
 	addi	r3,r3,__size@sectoff@l
 	sync				# We are going to touch SDR1 !
-#ifdef USE_PPCBUG	
+#if defined(USE_PPCBUG) && defined(DEBUG)
 	PRINT_CHAR('i')
 #endif
 	bl	mm_init
 	
-#ifdef USE_PPCBUG	
+#if defined(USE_PPCBUG) && defined(DEBUG)
 	PRINT_CHAR('M')
 #endif
 	bl	MMUon
@@ -244,7 +255,7 @@ moved:	lwz	r1,stack(bd)
 	lwz	r4,GOT(banner_end)
 	sc
 #endif	
-#ifdef USE_PPCBUG	
+#if defined(USE_PPCBUG) && defined(DEBUG)
 	PRINT_CHAR('H')
 #endif
 	bl	setup_hw
@@ -440,7 +451,22 @@ codemove:
 _size_codemove=.-codemove
 
 	.section        ".data" # .rodata
-        .align 2
+	.align 4
+#ifdef USE_PPCBUG
+/* A control 'packet' for the .NETCTRL PPCBug syscall to
+ * reset a network interface. Let's hope they used the
+ * first one for booting!! (CLUN/DLUN == 0/0)
+ * Must be 4-byte aligned...
+ */
+nioc_reset_packet:
+	.byte	0	/* Contoller LUN                                   */
+	.byte	0	/* Device LUN                                      */
+	.word   0   /* status return                                   */
+	.long	5	/* Command (5=RESET)                               */
+	.long   0   /* Mem. Addr. for real data (unused for reset)     */
+	.long   0   /* Number of bytes                                 */
+	.long   0   /* Status/Control Flags (unused for reset)         */
+#endif
 #ifdef TEST_PPCBUG_CALLS	
 banner_start:	
 	.ascii "This message was printed by PPCBug with MMU enabled"
