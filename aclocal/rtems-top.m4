@@ -15,24 +15,19 @@ AC_BEFORE([$0], [AM_INIT_AUTOMAKE])dnl
 ENDIF=endif
 AC_SUBST(ENDIF)
 
-# with_target_subdir
-AC_ARG_WITH(target-subdir,
-[  --with-target-subdir=DIR],
-with_target_subdir="$withval",
-with_target_subdir=".")
-
 RTEMS_TOPdir="$1";
 AC_SUBST(RTEMS_TOPdir)
+
+## with_target_subdirs is handled implicitly by autoconf
+test -n "$with_target_subdir" || with_target_subdir="."
 
 if test "$with_target_subdir" = "." ; then
 # Native
 PROJECT_TOPdir=${RTEMS_TOPdir}/'$(top_builddir)'
 else
 # Cross
-changequote(, )dnl
 dots=`echo $with_target_subdir|\
-sed -e 's%^\./%%' -e 's%[^/]$%&/%' -e 's%[^/]*/%../%g'`
-changequote([, ])dnl
+sed -e 's%^\./%%' -e 's%[[^/]]$%&/%' -e 's%[[^/]]*/%../%g'`
 PROJECT_TOPdir=${dots}${RTEMS_TOPdir}/'$(top_builddir)'
 fi
 AC_SUBST(PROJECT_TOPdir)
@@ -50,10 +45,8 @@ dnl Determine RTEMS Version string from the VERSION file
 dnl Hopefully, Joel never changes its format ;-
 AC_MSG_CHECKING([for RTEMS Version])
 if test -r "${srcdir}/${RTEMS_TOPdir}/VERSION"; then
-changequote(,)dnl
 RTEMS_VERSION=`grep 'RTEMS Version' ${srcdir}/${RTEMS_TOPdir}/VERSION | \
-sed -e 's%RTEMS[ 	]*Version[ 	]*\(.*\)[ 	]*%\1%g'`
-changequote([,])dnl
+sed -e 's%RTEMS[[ 	]]*Version[[ 	]]*\(.*\)[[ 	]]*%\1%g'`
 else
 AC_MSG_ERROR(Unable to find ${RTEMS_TOPdir}/VERSION)
 fi

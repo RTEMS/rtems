@@ -1,3 +1,11 @@
+2000-11-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/canonical-host.m4: Abandon changequotes (autoconf-2.49b).
+	* aclocal/check-newlib.m4: Let check message refer to RTEMS newlib.
+	* aclocal/rtems-debug.m4: Fix formating and contents of the check's
+	help string.
+	* aclocal/rtems-top.m4: Remove AC_ARG_WITH(target-subdir).
+
 2000-11-13	Jiri Gaisler <jgais@ws.estec.esa.nl>
 
 	* README.configure, aclocal/bsp-alias.m4, aclocal/check-bsps.m4:

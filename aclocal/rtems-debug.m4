@@ -3,7 +3,7 @@
 AC_DEFUN(RTEMS_ENABLE_RTEMS_DEBUG,
 [
 AC_ARG_ENABLE(rtems-debug,
-[  --disable-rtems-debug       disable RTEMS_DEBUG],
+[  --enable-rtems-debug                 enable RTEMS_DEBUG],
 [case "${enableval}" in
   yes) RTEMS_DEBUG=yes ;;
   no) RTEMS_DEBUG=no ;;

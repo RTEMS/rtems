@@ -4,7 +4,7 @@ AC_DEFUN(RTEMS_CHECK_NEWLIB,
 [dnl
 AC_REQUIRE([RTEMS_PROG_CC_FOR_TARGET])dnl
 AC_REQUIRE([RTEMS_CANONICALIZE_TOOLS])dnl
-AC_CACHE_CHECK([for newlib],
+AC_CACHE_CHECK([for RTEMS newlib],
   rtems_cv_use_newlib,
   [
 dnl some versions of newlib provide not_required_by_rtems
