@@ -94,10 +94,10 @@ void ITRON_Init( void )
    */
   
   status = chg_pri( TSK_SELF, 8 );
-  assert( status == E_OK );
+  fatal_directive_status( status, E_OK, "chg_pri of TSK_SELF");
   status = ref_tsk( &pk_rtsk, TSK_SELF );
-  assert( status == E_OK );
-  assert( pk_rtsk.tskpri == 8 );
+  fatal_directive_status( status, E_OK, "ref_tsk of TSK_SELF");
+  fatal_directive_status( pk_rtsk.tskpri, 8, "task priority of SELF");
   
   /*
    * Create and verify a DORMANT task.
@@ -111,10 +111,10 @@ void ITRON_Init( void )
 
   puts( "Init - cre_tsk - Dormant Task" );
   status = cre_tsk( DORMANT_TASK_ID, &pk_ctsk );
-  assert( status == E_OK );
+  fatal_directive_status( status, E_OK, "cre_tsk of DORMANT");
   status = ref_tsk( &pk_rtsk, DORMANT_TASK_ID );
-  assert( status == E_OK );
-  assert( pk_rtsk.tskstat == TTS_DMT );
+  fatal_directive_status( status, E_OK, "ref_tsk of DORMANT");
+  fatal_directive_status( pk_rtsk.tskstat, TTS_DMT, "task state of DORMANT");
 
   /*
    * Create, Start and verify a not DORMANT task.
@@ -123,11 +123,11 @@ void ITRON_Init( void )
   pk_ctsk.task     = Non_Dormant_task;
   puts( "Init - cre_tsk - Non-Dormant Task" );
   status = cre_tsk( NON_DORMANT_TASK_ID, &pk_ctsk );
-  assert( status == E_OK );
+  fatal_directive_status( status, E_OK, "cre_tsk of NON_DORMANT");
   status = sta_tsk( NON_DORMANT_TASK_ID, 1 );
   status = ref_tsk( &pk_rtsk, NON_DORMANT_TASK_ID );
-  assert( status == E_OK );
-  assert( pk_rtsk.tskstat == TTS_WAI);
+  fatal_directive_status( status, E_OK, "ref_tsk of NON_DORMANT");
+  fatal_directive_status( pk_rtsk.tskstat,TTS_WAI,"task state of NON_DORMANT");
     
   
   /*
@@ -138,19 +138,19 @@ void ITRON_Init( void )
 
   puts( "Init - cre_tsk - access violation ( id less than -4) - E_OACV" );
   status = cre_tsk( -5, &pk_ctsk );
-  assert( status == E_OACV );
+  fatal_directive_status( status, E_OACV, "cre_tsk of -5");
 
   puts( "Init - cre_tsk - bad id (between 0 and -4) - E_ID" );
   status = cre_tsk( -2, &pk_ctsk );
-  assert( status == E_ID );
+  fatal_directive_status( status, E_ID, "cre_tsk of -2");
 
   puts( "Init - cre_tsk - cannot create TSK_SELF  - E_ID" );
   status = cre_tsk( TSK_SELF, &pk_ctsk );
-  assert( status == E_ID );
+  fatal_directive_status( status, E_ID, "cre_tsk of TSK_SELF");
 
   puts( "Init - cre_tsk - invalid id; id already exists  - E_OBJ" );
   status = cre_tsk( 1, &pk_ctsk );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "cre_tsk of 1");
 
   /*
    *  Bad task attribute errors
@@ -159,39 +159,39 @@ void ITRON_Init( void )
   pk_ctsk.tskatr = -1;
   puts( "Init - cre_tsk - tskatr is invalid - E_RSATR" );
   status = cre_tsk( 5, &pk_ctsk );
-  assert( status == E_RSATR );
+  fatal_directive_status( status, E_RSATR, "cre_tsk with tskatr of -1");
 
   puts( "Init - cre_tsk - pk_ctsk is invalid - E_PAR" );
   status = cre_tsk( 5, NULL );
-  assert( status == E_PAR );
+  fatal_directive_status( status, E_PAR, "cre_tsk with NULL discription");
 
   pk_ctsk.tskatr = TA_HLNG;
   pk_ctsk.itskpri = 0;
   puts( "Init - cre_tsk - itskpri is 0 - E_PAR" );
   status = cre_tsk( 5, &pk_ctsk );
-  assert( status == E_PAR );
+  fatal_directive_status( status, E_PAR, "cre_tsk with priority of 0");
   pk_ctsk.itskpri = 257;         /* XXX Design parameter not requirement. */
   puts( "Init - cre_tsk - itskpri is 257 - E_PAR" );
   status = cre_tsk( 5, &pk_ctsk );
-  assert( status == E_PAR );
+  fatal_directive_status( status, E_PAR, "cre_tsk with priority of 257");
 
   pk_ctsk.stksz = -1;
   puts( "Init - cre_tsk - stksz is invalid - E_PAR" );
   status = cre_tsk( 5, &pk_ctsk );
-  assert( status == E_PAR );
+  fatal_directive_status( status, E_PAR, "cre_tsk with size of -1");
 
   pk_ctsk.task = NULL;
   puts( "Init - cre_tsk - task is invalid - E_PAR" );
   status = cre_tsk( 5, &pk_ctsk );
-  assert( status == E_PAR );
+  fatal_directive_status( status, E_PAR, "cre_tsk with null task identifier");
 
 
 #if (0)
   /* these errors can not be generated for cre_tsk at this time */
-  assert( status == E_NOMEM );
-  assert( status == EN_OBJNO );
-  assert( status == EN_CTXID );
-  assert( status == EN_PAR );
+  fatal_directive_status( status, E_NOMEM, "");
+  fatal_directive_status( status, EN_OBJNO, "");
+  fatal_directive_status( status, EN_CTXID, "");
+  fatal_directive_status( status, EN_PAR, "");
 #endif
 
   puts( "\n\n*** Delete Task Errors ***" );
@@ -209,32 +209,32 @@ void ITRON_Init( void )
 
   puts( "Init - del_tsk - cannot delete TSK_SELF - E_OBJ" );
   status = del_tsk( TSK_SELF );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "del_tsk with SELF");
 
   puts( "Init - del_tsk - task is not DORMANT - E_OBJ" );
   status = del_tsk( NON_DORMANT_TASK_ID );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "del_tsk NON_DORMANT");
 
   puts( "Init - del_tsk - task does not exist - E_NOEXS" );
   status = del_tsk( 5 );
-  assert( status == E_NOEXS );
+  fatal_directive_status( status, E_NOEXS, "del_tsk 5");
 
   puts( "Init - del_tsk - access violation ( id less than -4) - E_OACV" );
   status =  del_tsk( -5 );
-  assert( status == E_OACV );
+  fatal_directive_status( status, E_OACV, "del_tsk -5");
 
   puts( "Init - del_tsk - cannot delete TSK_SELF - E_OBJ" );
   status = del_tsk( TSK_SELF );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "del_tsk self");
 
   puts( "Init - del_tsk - bad id (between 0 and -4) - E_ID" );
   status = del_tsk( -3 );
-  assert( status == E_ID );
+  fatal_directive_status( status, E_ID, "del_tsk -3");
 
 #if (0)
   /* these errors can not be generated for del_tsk at this time */
-  assert( status == EN_OBJNO );
-  assert( status == EN_CTXID );
+  fatal_directive_status( status, EN_OBJNO, "del_tsk ");
+  fatal_directive_status( status, EN_CTXID, "del_tsk ");
 #endif
 
 
@@ -242,29 +242,29 @@ void ITRON_Init( void )
 
   puts( "Init - sta_tsk - access violation ( id less than -4) - E_OACV" );
   status = sta_tsk( -5, 1 );
-  assert( status == E_OACV );
+  fatal_directive_status( status, E_OACV, "sta_tsk of -5");
 
   puts( "Init - sta_tsk - bad id (between 0 and -4) - E_ID" );
   status = sta_tsk( -2, 1 );
-  assert( status == E_ID );
+  fatal_directive_status( status, E_ID, "sta_tsk of -2");
 
   puts( "Init - sta_tsk - cannot start TSK_SELF - E_OBJ" );
   status = sta_tsk( TSK_SELF, 1 );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "sta_tsk of self");
 
   puts( "Init - sta_tsk - task is not DORMANT  - E_OBJ" );
   status = sta_tsk( NON_DORMANT_TASK_ID, 1 );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "sta_tsk NON_DORMANT");
 
   puts( "Init - sta_tsk - task does not exist  - E_NOEXS" );
   status = sta_tsk( 5, 1 );
-  assert( status == E_NOEXS );
+  fatal_directive_status( status, E_NOEXS, "5");
 
 #if (0)
   /* these errors can not be generated for sta_tsk at this time */
-  assert( status == EN_OBJNO );
-  assert( status == EN_CTXID );
-  assert( status == EN_PAR );
+  fatal_directive_status( status, EN_OBJNO, "sta_tsk");
+  fatal_directive_status( status, EN_CTXID, "sta_tsk");
+  fatal_directive_status( status, EN_PAR, "sta_tsk");
 #endif
 
 
@@ -273,12 +273,12 @@ void ITRON_Init( void )
   puts( "\n\n*** Exit Task Errors ***" );
   puts( "Init - ext_tsk - context error - E_CTX" );
   status = ext_tsk(  );
-  assert( status == E_CTX );
+  fatal_directive_status( status, E_CTX, "ext_tsk ");
 
   puts( "\n\n*** Exit and Delete Task Errors ***" );
   puts( "Init - exd_tsk - context error - E_CTX" );
   status = exd_tsk(  );
-  assert( status == E_CTX );
+  fatal_directive_status( status, E_CTX, "exd_tsk");
 #endif
 
 
@@ -286,74 +286,72 @@ void ITRON_Init( void )
 
   puts( "Init - ter_tsk - bad id (between 0 and -4) - E_ID" );
   status = ter_tsk( -2 );
-  assert( status == E_ID );
+  fatal_directive_status( status, E_ID, "ter_tsk of -2");
 
   puts( "Init - ter_tsk - cannot terminate TSK_SELF (0) - E_OBJ" );
   status = ter_tsk( TSK_SELF );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "ter_tsk of self");
 
   puts( "Init - ter_tsk - task is not DORMANT - E_OBJ" );
   status = ter_tsk( DORMANT_TASK_ID );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "ter_tsk DORMANT");
 
   puts( "Init - ter_tsk - task does not exist - E_NOEXS" );
   status = ter_tsk( 5 );
-  assert( status == E_NOEXS );
+  fatal_directive_status( status, E_NOEXS, "ter_tsk of 5");
 
   puts( "Init - ter_tsk - access violation ( id less than -4) - E_OACV" );
   status = ter_tsk( -5 );
-  assert( status == E_OACV );
+  fatal_directive_status( status, E_OACV, "ter_tsk of -5");
 
 #if (0)
   /* these errors can not be generated for ter_tsk at this time */
-  assert( status == EN_OBJNO );
-  assert( status == EN_CTXID );
+  fatal_directive_status( status, EN_OBJNO, "ter_tsk");
+  fatal_directive_status( status, EN_CTXID, "ter_tsk");
 #endif
 
 
 #if (0)
   status = dis_dsp( );
-  assert( status == E_CTX );
+  fatal_directive_status( status, E_CTX, "dis_dsp");
 
   status = ena_dsp( );
-  assert( status == E_CTX );
+  fatal_directive_status( status, E_CTX, "ena_dsp");
 #endif
-
 
   puts( "\n\n*** Change Priority Task Errors ***" );
 
   puts( "Init - chg_pri - bad id (between 0 and -4) - E_ID" );
   status = chg_pri( -2, 1 );
-  assert( status == E_ID );
+  fatal_directive_status( status, E_ID, "chg_pri of -2");
 
   /*  Call from task independent portion to cause E_OBJ
   puts( "Init - chg_pri - change priority of TSK_SELF - E_OBJ" );
-  status = chg_pri( TSK_SELF, 1 );
+  status = chg_pri( XXX - INTERRUPT, 1 );
   assert( status == E_OBJ );
   */
 
-  /*  Need a dormant task to call */
-  puts( "Init - chg_pri - task is not DORMANT - E_OBJ" );
+  puts( "Init - chg_pri - task is DORMANT - E_OBJ" );
   status = chg_pri( DORMANT_TASK_ID, 1 );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "chg_pri of DORMANT");
 
   puts( "Init - chg_pri - task does not exist - E_NOEXS" );
   status = chg_pri( 5, 1 );
-  assert( status == E_NOEXS );
+  fatal_directive_status( status, E_NOEXS, "chg_pri of 5");
 
   puts( "Init - chg_pri - access violation ( id less than -4) - E_OACV" );
   status =  chg_pri( -5, 1 );
-  assert( status == E_OACV );
+  fatal_directive_status( status, E_OACV, "chg_pri of -5");
 
   puts( "Init - chg_pri - invalid priority - E_PAR" );
   status =  chg_pri( 1, -1 );
-  assert( status == E_PAR );
+  fatal_directive_status( status, E_PAR, "chg_pri with priority of -1");
 
 #if (0)
   /* these errors can not be generated for chg_pri at this time */
-  assert( status == EN_OBJNO );
-  assert( status == EN_CTXID );
-  assert( status == EN_PAR );
+  fatal_directive_status( status, EN_OBJNO, "chg_pri");
+  fatal_directive_status( status, EN_CTXID, "chg_pri");
+  fatal_directive_status( status, EN_PAR, "chg_pri");
 #endif
 
   /*  This gave me a nasty-gram
@@ -365,92 +363,106 @@ void ITRON_Init( void )
    puts( "\n\n*** Rotate Ready Queue Errors ***" );
    puts( "Init - rot_rdq - priority  -1 - E_PAR" );
    status = rot_rdq( -1 );
-   assert( status == E_PAR );
+   fatal_directive_status( status, E_PAR, "rot_rdq -1");
    puts( "Init - rot_rdq - priority  257 - E_PAR" );
    status = rot_rdq( 257 );
-   assert( status == E_PAR );
+   fatal_directive_status( status, E_PAR, "rot_rdq 256");
 
-#if (0)
-  /* This routine is not coded */
-  rel_wai( ID );
-  assert( status == E_OK );
-  assert( status == E_ID );
-  assert( status == E_NOEXS );
-  assert( status == E_OACV );
-  assert( status == E_OBJ );
-  assert( status == EN_OBJNO );
-  assert( status == EN_CTXID );
-#endif
+  /* XXX - This routine is not coded */
 
+  puts( "Init - rel_rdq - XXX Add when rel_wai coded - E_OK" );
+  status = rel_wai( ID );
+  fatal_directive_status( status, E_OK, "rel_wai");
 
-#if (0)
-  get_tid( ID );
-  assert( status == E_OK );
-#endif
+  puts( "Init - rel_rdq - XXX Add when rel_wai coded - E_ID" );
+  status = E_ID;
+  fatal_directive_status( status, E_ID, "rel_wai");
+
+  puts( "Init - rel_rdq - XXX Add when rel_wai coded - E_NOEXS" );
+  status = E_NOEXS;
+  fatal_directive_status( status, E_NOEXS, "rel_wai");
+
+  puts( "Init - rel_rdq - XXX Add when rel_wai coded - E_OACV" );
+  status = E_OACV;
+  fatal_directive_status( status, E_OACV, "rel_wai");
+
+  puts( "Init - rel_rdq - XXX Add when rel_wai coded - E_OBJ" );
+  status = E_OBJ;
+  fatal_directive_status( status, E_OBJ, "rel_wai");
+
+  puts( "Init - rel_rdq - XXX Add when rel_wai coded - EN_OBJNO" );
+  status = EN_OBJNO;
+  fatal_directive_status( status, EN_OBJNO, "rel_wai");
+
+  puts( "Init - rel_rdq - XXX Add when rel_wai coded - EN_CTXID" );
+  status = EN_CTXID;
+  fatal_directive_status( status, EN_CTXID, "rel_wai");
+
 
   puts( "\n\n*** Reference Task Status Errors ***" );
   puts( "Init - ref_tsk - bad id (between 0 and -4) - E_ID" );
   status = ref_tsk( &pk_rtsk, -2 );
-  assert( status == E_ID );
+  fatal_directive_status( status, E_ID, "ref_tsk -2");
 
-  /*  Call from task independent portion to cause E_ID 
-  puts( "Init - ref_tsk - reference SELF - E_ID" );
+  /*  XXX Call from task independent portion to cause E_ID 
+  puts( "Init - ref_tsk - reference INTERRUPT - E_ID" );
   status = ref_tsk( &pk_rtsk, TSK_SELF );
   assert( status == E_ID );
   */
 
   puts( "Init - ref_tsk - task does not exist - E_NOEXS" );
   status = ref_tsk( &pk_rtsk, 5 );
-  assert( status == E_NOEXS );
+  fatal_directive_status( status, E_NOEXS, "ref_tsk 5");
 
   puts( "Init - ref_tsk - access violation ( id less than -4) - E_OACV" );
   status =  ref_tsk( &pk_rtsk, -5 );
-  assert( status == E_OACV );
+  fatal_directive_status( status, E_OACV, "ref_tsk -5");
 
   puts( "Init - ref_tsk - packet address is bad - E_PAR" );
   status =  ref_tsk( NULL, 1 );
-  assert( status == E_PAR );
-
+  fatal_directive_status( status, E_PAR, "ref_tsk SELF with NULL descriptor");
 
 #if (0)
   /*  these errors can not be generated for ref_tsk at this time */
-  assert( status == EN_OBJNO );
-  assert( status == EN_CTXID );
-  assert( status == EN_RPAR );
+  fatal_directive_status( status, EN_OBJNO, "ref_tsk");
+  fatal_directive_status( status, EN_CTXID, "ref_tsk");
+  fatal_directive_status( status, EN_RPAR, "ref_tsk");
 #endif
-
 
   puts( "\n\n*** Suspend Task Errors ***" );
 
   puts( "Init - sus_tsk - access violation ( id less than -4) - E_OACV" );
   status = sus_tsk( -5 );
-  assert( status == E_OACV );
+  fatal_directive_status( status, E_OACV, "sus_tsk of -5");
 
   puts( "Init - sus_tsk - bad id (between 0 and -4) - E_ID" );
   status = sus_tsk( -2 );
-  assert( status == E_ID );
+  fatal_directive_status( status, E_ID, "sus_tsk of -2");
 
   puts( "Init - sus_tsk - cannot suspend SELF - E_OBJ" );
   status = sus_tsk( TSK_SELF );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "sus_tsk of self");
 
   puts( "Init - sus_tsk - task does not exist - E_NOEXS" );
   status = sus_tsk( 5 );
-  assert( status == E_NOEXS );
-#if (0) 
+  fatal_directive_status( status, E_NOEXS, "sus_tsk of 5");
+
+  /* XXX - We support nested suspends and will never return this error.
   puts( "Init - sus_tsk - no support for nested SUSPENDS - E_QOVR" );
   status = sus_tsk( 1 );
-  assert( status == E_QOVR );
+  fatal_directive_status( status, E_QOVR, "sus_tsk");
+  */
 
+  /* XXX - Can not test this.
   puts( "Init - sus_tsk - exceeded limit for nested SUSPENDS - E_QOVR" );
   status = sus_tsk( 1 );
-  assert( status == E_QOVR );
-#endif
+  fatal_directive_status( status, E_QOVR, "sus_tsk");
+  */
 
 #if (0)
   /* these errors can not be generated for sus_tsk at this time */
-  assert( status == EN_OBJNO );
-  assert( status == EN_CTXID );
+  fatal_directive_status( status, EN_OBJNO, "sus_tsk");
+  fatal_directive_status( status, EN_CTXID, "sus_tsk");
 #endif
 
 
@@ -458,28 +470,28 @@ void ITRON_Init( void )
 
   puts( "Init - rsm_tsk - access violation ( id less than -4) - E_OACV" );
   status = rsm_tsk( -5 );
-  assert( status == E_OACV );
+  fatal_directive_status( status, E_OACV, "rsm_tsk -5");
 
   puts( "Init - rsm_tsk - bad id (between 0 and -4) - E_ID" );
   status = rsm_tsk( -2 );
-  assert( status == E_ID );
+  fatal_directive_status( status, E_ID, "rsm_tsk -2");
 
   puts( "Init - rsm_tsk - cannot resume SELF - E_OBJ" );
   status = rsm_tsk( TSK_SELF );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "rsm_tsk self");
 
   puts( "Init - rsm_tsk - task is DORMANT - E_OBJ" );
   status = rsm_tsk( DORMANT_TASK_ID );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "rsm_tsk DORMANT");
 
   puts( "Init - rsm_tsk - task does not exist - E_NOEXS" );
   status = rsm_tsk( 5 );
-  assert( status == E_NOEXS );
+  fatal_directive_status( status, E_NOEXS, "rms_tsk 5");
 
 #if (0)
   /* these errors can not be generated for rsm_tsk at this time */
-  assert( status == EN_OBJNO );
-  assert( status == EN_CTXID );
+  fatal_directive_status( status, EN_OBJNO, "rsm_tsk");
+  fatal_directive_status( status, EN_CTXID, "rsm_tsk");
 #endif
 
 
@@ -487,69 +499,69 @@ void ITRON_Init( void )
 
   puts( "Init - frsm_tsk - access violation ( id less than -4) - E_OACV" );
   status = frsm_tsk( -5 );
-  assert( status == E_OACV );
+  fatal_directive_status( status, E_OACV, "frsm_tsk -5");
 
   puts( "Init - frsm_tsk - bad id (between 0 and -4) - E_ID" );
   status = frsm_tsk( -2 );
-  assert( status == E_ID );
+  fatal_directive_status( status, E_ID, "frsm_tsk -2");
 
   puts( "Init - frsm_tsk - cannot forcibly resume SELF - E_OBJ" );
   status = frsm_tsk( TSK_SELF );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "frsm_tsk self");
 
   puts( "Init - frsm_tsk - task is DORMANT - E_OBJ" );
   status = frsm_tsk( DORMANT_TASK_ID );
-  assert( status == E_OBJ );
+  fatal_directive_status( status, E_OBJ, "frsm_tsk DORMANT");
 
   puts( "Init - frsm_tsk - task does not exist - E_NOEXS" );
   status = frsm_tsk( 5 );
-  assert( status == E_NOEXS );
+  fatal_directive_status( status, E_NOEXS, "frsm_tsk 5");
 
 #if (0)
   /* these errors can not be generated for frsm_tsk at this time */
-  assert( status == EN_OBJNO );
-  assert( status == EN_CTXID );
+  fatal_directive_status( status, EN_OBJNO, "frsm_tsk");
+  fatal_directive_status( status, EN_CTXID, "frsm_tsk");
 #endif
 
 
 #if (0)
+XXXXX - FIX ME
   /* these directives are not coded */
   slp_tsk( );
-  assert( status == E_OK );
-  assert( status == E_PAR );
-  assert( status == E_RLWAI );
-  assert( status == E_TMOUT );
-  assert( status == E_CTX );
+  fatal_directive_status( status, E_OK, "");
+  fatal_directive_status( status, E_PAR, "");
+  fatal_directive_status( status, E_RLWAI, "");
+  fatal_directive_status( status, E_TMOUT, "");
+  fatal_directive_status( status, E_CTX, "");
 
 
   tslp_tsk( TMO );
-  assert( status == E_OK );
-  assert( status == E_PAR );
-  assert( status == E_RLWAI );
-  assert( status == E_TMOUT );
-  assert( status == E_CTX );
-
+  fatal_directive_status( status, E_OK, "");
+  fatal_directive_status( status, E_PAR, "");
+  fatal_directive_status( status, E_RLWAI, "");
+  fatal_directive_status( status, E_TMOUT, "");
+  fatal_directive_status( status, E_CTX, "");
 
   wup_tsk( ID );
-  assert( status == E_OK );
-  assert( status == E_ID );
-  assert( status == E_NOEXS );
-  assert( status == E_OACV );
-  assert( status == E_OBJ );
-  assert( status == E_QOVR );
-  assert( status == EN_OBJNO );
-  assert( status == EN_CTXID );
+  fatal_directive_status( status, E_OK, "");
+  fatal_directive_status( status, E_ID, "");
+  fatal_directive_status( status, E_NOEXS, "");
+  fatal_directive_status( status, E_OACV, "");
+  fatal_directive_status( status, E_OBJ, "");
+  fatal_directive_status( status, E_QOVR, "");
+  fatal_directive_status( status, EN_OBJNO, "");
+  fatal_directive_status( status, EN_CTXID, "");
 
 
   can_tsk( INT, ID );
-  assert( status == E_OK );
-  assert( status == E_ID );
-  assert( status == E_NOEXS );
-  assert( status == E_OACV );
-  assert( status == E_OBJ );
-  assert( status == EN_OBJNO );
-  assert( status == EN_CTXID );
-  assert( status == EN_RPAR );
+  fatal_directive_status( status, E_OK, "");
+  fatal_directive_status( status, E_ID, "");
+  fatal_directive_status( status, E_NOEXS, "");
+  fatal_directive_status( status, E_OACV, "");
+  fatal_directive_status( status, E_OBJ, "");
+  fatal_directive_status( status, EN_OBJNO, "");
+  fatal_directive_status( status, EN_CTXID, "");
+  fatal_directive_status( status, EN_RPAR, "");
 #endif
 
   puts( "*** ITRON TASK TEST 2 ***" );
