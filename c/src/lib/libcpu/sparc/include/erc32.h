@@ -384,7 +384,7 @@ extern ERC32_Register_Map ERC32_MEC;
       (_previous) = ERC32_MEC.Interrupt_Mask; \
       ERC32_MEC.Interrupt_Mask = _previous | _mask; \
     sparc_enable_interrupts( _level ); \
-    (_previous) &= ~_mask; \
+    (_previous) &= _mask; \
   } while (0)
  
 #define ERC32_Restore_interrupt( _source, _previous ) \
