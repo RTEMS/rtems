@@ -1,3 +1,19 @@
+2001-10-22	Andy Dachs <a.dachs@sstl.co.uk>
+
+	* Added mpc8260 directory.
+	* Modified Makefile.am and configure.in to build the contents
+	* mpc8260/Makefile.am, mpc8260/README, mpc8260/clock/Makefile.am,
+	mpc8260/clock/clock.c, mpc8260/console-generic/Makefile.am,
+	mpc8260/console-generic/console-generic.c, mpc8260/cpm/.cvsignore,
+	mpc8260/cpm/Makefile.am, mpc8260/cpm/brg.c, mpc8260/cpm/cp.c,
+	mpc8260/cpm/dpram.c, mpc8260/exceptions/.cvsignore,
+	mpc8260/exceptions/Makefile.am, mpc8260/exceptions/asm_utils.S,
+	mpc8260/exceptions/raw_exception.c, mpc8260/exceptions/raw_exception.h,
+	mpc8260/include/Makefile.am, mpc8260/include/console.h,
+	mpc8260/include/cpm.h, mpc8260/include/mmu.h,
+	mpc8260/include/mpc8260.h, mpc8260/mmu/Makefile.am, mpc8260/mmu/mmu.c,
+	mpc8260/timer/Makefile.am, mpc8260/timer/timer.c: New files.
+
 2001-10-12	Joel Sherrill <joel@OARcorp.com>
 
 	* mpc6xx/clock/c_clock.c, mpc6xx/clock/c_clock.h, mpc8xx/clock/clock.c,
