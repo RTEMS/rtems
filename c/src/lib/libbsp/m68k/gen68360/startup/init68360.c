@@ -334,6 +334,130 @@ void _Init68360 (void)
 	 *	Disable timers during FREEZE
 	 *	Enable bus monitor during FREEZE
 	 *	BCLRO* arbitration level 3
+
+#elif (defined (GEN68360_WITH_SRAM))
+   /*
+    ***************************************************
+    * Generic Standalone Motorola 68360               *
+    *           As described in MC68360 User's Manual *
+    * But uses SRAM instead of DRAM                   *
+    *  CS0* - 512kx8 flash memory                     *
+    *  CS1* - 512kx32 static RAM                      *
+    ***************************************************
+    */
+
+   /*
+    * Step 7: Deal with clock synthesizer
+    * HARDWARE:
+    * Change if you're not using an external oscillator which
+    * oscillates at the system clock rate.
+    */
+   m360.clkocr = 0x8F;     /* No more writes, no clock outputs */
+   m360.pllcr = 0xD000;    /* PLL, no writes, no prescale,
+                              no LPSTOP slowdown, PLL X1 */
+   m360.cdvcr = 0x8000;    /* No more writes, no clock division */
+
+   /*
+    * Step 8: Initialize system protection
+    * Enable watchdog
+    * Watchdog causes system reset
+    * Next-to-slowest watchdog timeout (21 seconds with 25 MHz oscillator)
+    * Enable double bus fault monitor
+    * Enable bus monitor for external cycles
+    * 1024 clocks for external timeout
+    */
+    m360.sypcr = 0xEC; 
+
+   /*
+    * Step 9: Clear parameter RAM and reset communication processor module
+    */
+   for (i = 0 ; i < 192  ; i += sizeof (long)) {
+      *((long *)((char *)&m360 + 0xC00 + i)) = 0;
+      *((long *)((char *)&m360 + 0xD00 + i)) = 0;
+      *((long *)((char *)&m360 + 0xE00 + i)) = 0;
+      *((long *)((char *)&m360 + 0xF00 + i)) = 0; 
+   } 
+   M360ExecuteRISC (M360_CR_RST);
+
+   /*
+    * Step 10: Write PEPAR
+    * SINTOUT not used (CPU32+ mode)
+    * CF1MODE=00 (CONFIG1 input)
+    * IPIPE1*
+    * WE0* - WE3*
+    * OE* output
+    * CAS2* - CAS3*
+    * CAS0* - CAS1*
+    * CS7*
+    * AVEC*
+    * HARDWARE:
+    * Change if you are using a different memory configuration
+    * (static RAM, external address multiplexing, etc).
+    */
+   m360.pepar = 0x0080;
+
+   /*
+    * Step 11: Set up GMR
+    *      
+    */
+   m360.gmr = 0x0;
+
+   /*
+    * Step 11a: Remap 512Kx8 flash memory on CS0*
+    * 2 wait states 
+    * Make it read-only for now 
+    */
+   m360.memc[0].br = (unsigned long)&_RomBase | M360_MEMC_BR_WP | 
+                                                   M360_MEMC_BR_V;
+   m360.memc[0].or = M360_MEMC_OR_WAITS(2) | M360_MEMC_OR_512KB |
+                                                   M360_MEMC_OR_8BIT;
+   /*
+    * Step 12: Set up main memory
+    * 512Kx32 SRAM on CS1*
+    * 0 wait states
+    */
+   m360.memc[1].br = (unsigned long)&_RamBase | M360_MEMC_BR_V;
+   m360.memc[1].or = M360_MEMC_OR_WAITS(0) | M360_MEMC_OR_2MB |
+                                                   M360_MEMC_OR_32BIT; 
+   /*
+    * Step 13: Copy  the exception vector table to system RAM
+    */
+   m68k_get_vbr (vbr);
+   for (i = 0; i < 256; ++i)
+           M68Kvec[i] = vbr[i];
+   m68k_set_vbr (M68Kvec);
+
+   /*
+    * Step 14: More system initialization
+    * SDCR (Serial DMA configuration register)
+    * Enable SDMA during FREEZE
+    * Give SDMA priority over all interrupt handlers
+    * Set DMA arbiration level to 4
+    * CICR (CPM interrupt configuration register):
+    * SCC1 requests at SCCa position
+    * SCC2 requests at SCCb position
+    * SCC3 requests at SCCc position
+    * SCC4 requests at SCCd position
+    * Interrupt request level 4
+    * Maintain original priority order
+    * Vector base 128
+    * SCCs priority grouped at top of table
+    */
+   m360.sdcr = M360_SDMA_SISM_7 | M360_SDMA_SAID_4;
+   m360.cicr = (3 << 22) | (2 << 20) | (1 << 18) | (0 << 16) |
+                  (4 << 13) | (0x1F << 8) | (128);
+
+   /*
+    * Step 15: Set module configuration register
+    * Disable timers during FREEZE
+    * Enable bus monitor during FREEZE
+    * BCLRO* arbitration level 3
+    * No show cycles
+    * User/supervisor access
+    * Bus clear interrupt service level 7
+    * SIM60 interrupt sources higher priority than CPM
+    */
+   m360.mcr = 0x4C7F;
 	 *	No show cycles
 	 *	User/supervisor access
 	 *	Bus clear interrupt service level 7
