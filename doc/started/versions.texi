@@ -76,11 +76,11 @@
 @c  RTEMS Version
 @c
 
-@set RTEMS-VERSION   RTEMS 19990423
-@set RTEMS-TAR       rtems-19990423.tgz
-@set RTEMS-UNTAR     rtems-19990423
+@set RTEMS-VERSION   RTEMS 19990709
+@set RTEMS-TAR       rtems-19990709.tgz
+@set RTEMS-UNTAR     rtems-19990709
 @set RTEMS-FTPSITE   ftp.OARcorp.com
-@set RTEMS-FTPDIR    /pub/rtems/19990423
-@set BUILDTOOLS-TAR  c_build_scripts-4.0.0.tgz
+@set RTEMS-FTPDIR    /pub/rtems/19990709
+@set BUILDTOOLS-TAR  c_build_scripts-19990709.tgz
 
 
