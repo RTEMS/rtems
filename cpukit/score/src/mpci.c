@@ -152,7 +152,7 @@ void _MPCI_Initialization ( void )
  */
  
 void _MPCI_Register_packet_processor(
-  Objects_Classes        the_class,
+  MP_packet_Classes      the_class,
   MPCI_Packet_processor  the_packet_processor
  
 )
