@@ -107,6 +107,7 @@ NTPSERVER  - Internet address of NTP server (SERVER).
 BOOTFILE   - Path to executable (epics/iocNobody/bin/RTEMS-uC5282/myApp.boot).
 CMDLINE    - Path to startup script (epics/iocBoot/iocNobody/st.cmd).
 NFSMOUNT   - NFS information: www.xxx.yyy.zzz:/remote/path /localpath
+             A : can also be used to separate the remote and local paths.
              If NFSMOUNT is not set, SERVER will be used as the NFS server,
              and the remote and local paths will be taken from the first
              component of CMDLINE.  If CMDLINE does not begin with a /
