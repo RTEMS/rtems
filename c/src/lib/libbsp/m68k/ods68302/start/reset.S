@@ -482,9 +482,9 @@ zerobss_loop:
 | The macros are to create the labels and format vectors.
 |
                                
-#define cat(x, y) x ## y
 #define FORMAT_ID(n) (n << 2)
-#define EXCEPTION_HANDLER(h, n) EH__##n: move.w cat(h, FORMAT_ID(n)),-(%sp) ;  \
+#define EXPAND(x) x
+#define EXCEPTION_HANDLER(h, n) EH__##n: move.w EXPAND(h) FORMAT_ID(n),-(%sp) ;  \
                                         bra  common_exception_handler
 
 unhandled_exception:

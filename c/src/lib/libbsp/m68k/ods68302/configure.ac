@@ -13,6 +13,7 @@ RTEMS_BSP_CONFIGURE
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
+RTEMS_PROG_CCAS
 
 AC_ARG_ENABLE(ods68302-debug,
 [AC_HELP_STRING([--enable-ods68302-debug],
@@ -32,11 +33,5 @@ AM_CONDITIONAL(ODS68302_DEBUG,[test "$ODS68302_DEBUG" = "yes"])
 # AC_DEFINE_UNQUOTED([VARIANT],[${BSP_VARIANT}],[missing explanation])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-start/Makefile
-startup/Makefile
-timer/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
