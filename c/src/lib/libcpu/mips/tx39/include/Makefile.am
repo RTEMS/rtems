@@ -20,4 +20,4 @@ all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = tx3904.h
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

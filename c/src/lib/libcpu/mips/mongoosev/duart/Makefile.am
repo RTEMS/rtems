@@ -9,8 +9,8 @@ C_FILES = mg5uart.c mg5uart_reg.c
 
 mg5uart_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 $(PROJECT_INCLUDE)/libchip:
 	@$(mkinstalldirs) $@
@@ -36,4 +36,4 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(mg5uart_rel_OBJECTS) $(PGM)
 
 EXTRA_DIST = mg5uart.c README.mguart mg5uart.c mg5uart.h mg5uart_reg.c
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am

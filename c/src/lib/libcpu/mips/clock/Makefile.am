@@ -13,8 +13,8 @@ noinst_HEADERS = clock.h
 
 clock_rel_OBJECTS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT)) $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
-include $(top_srcdir)/../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../automake/lib.am
+include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -29,4 +29,4 @@ all-local: $(ARCH) $(clock_rel_OBJECTS) $(PGM)
 
 EXTRA_DIST = ckinit.c clock.S clock.h
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am
