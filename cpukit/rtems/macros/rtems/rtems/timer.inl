@@ -51,7 +51,7 @@
  */
 
 #define _Timer_Is_interval_class( _the_class ) \
-  ( ((_the_class) == TIMER_INTERVAL) ||
+  ( ((_the_class) == TIMER_INTERVAL) || \
     ((_the_class) == TIMER_INTERVAL_ON_TASK) )
 
 /*PAGE

@@ -1,3 +1,7 @@
+2001-04-08	Joel Sherrill <joel@OARcorp.com>
+
+	* macros/rtems/score/timer.inl: Corrected typo on end of line.
+ 
 2002-04-08	Chris Johns <ccj@acm.org>
 
 	* Per PR142, make task switch extension its own list.
