@@ -26,13 +26,13 @@ m68k_isr_entry set_vector(                      /* returns old vector */
   int                 type                      /* RTEMS or RAW intr  */
 )
 {
-  m68k_isr_entry  previous_isr;
+  rtems_isr_entry  previous_isr;
 
   if ( type )
-    rtems_interrupt_catch( handler, vector, (rtems_isr_entry *) &previous_isr );
+    rtems_interrupt_catch( handler, vector, &previous_isr );
   else {
     _CPU_ISR_install_raw_handler( vector, handler, (void *)&previous_isr );
   }
-  return previous_isr;
+  return (m68k_isr_entry) previous_isr;
 }
 
