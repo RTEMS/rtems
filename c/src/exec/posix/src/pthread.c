@@ -382,15 +382,29 @@ int pthread_getschedparam(
   struct sched_param *param
 )
 {
-  POSIX_API_Control  *api;
+  Objects_Locations        location;
+  POSIX_API_Control       *api;
+  register Thread_Control *the_thread;
 
   if ( !policy || !param  )
     return EINVAL;
 
-  api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
-  *policy = api->schedpolicy;
-  *param  = api->Schedule;
-  return 0;
+  the_thread = _POSIX_Threads_Get( thread, &location );
+  switch ( location ) {
+    case OBJECTS_ERROR:
+    case OBJECTS_REMOTE:
+      _Thread_Enable_dispatch();
+      return ESRCH;
+    case OBJECTS_LOCAL:
+      api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+      *policy = api->schedpolicy;
+      *param  = api->Schedule;
+      _Thread_Enable_dispatch();
+      return 0;
+  }
+ 
+  return POSIX_BOTTOM_REACHED();
+
 }
 
 /*PAGE
@@ -420,6 +434,7 @@ int pthread_setschedparam(
   switch ( location ) {
     case OBJECTS_ERROR:
     case OBJECTS_REMOTE:
+      _Thread_Enable_dispatch();
       return ESRCH;
     case OBJECTS_LOCAL:
       switch ( policy ) {
@@ -431,6 +446,7 @@ int pthread_setschedparam(
           break;
  
         default:
+          _Thread_Enable_dispatch();
           return EINVAL;
       }
 
@@ -438,14 +454,10 @@ int pthread_setschedparam(
 
       api->schedpolicy = policy;
       api->Schedule    = *param;
+      _Thread_Enable_dispatch();
       return 0;
   }
- 
   return POSIX_BOTTOM_REACHED();
-
-
-#if 0
-#endif
 }
 
 /*PAGE
@@ -820,6 +832,8 @@ int pthread_join(
 
       _Thread_queue_Enqueue( &api->Join_List, WATCHDOG_NO_TIMEOUT );
 
+      _Thread_Enable_dispatch();
+
       return 0;
   }
 
@@ -843,6 +857,7 @@ int pthread_detach(
   switch ( location ) {
     case OBJECTS_ERROR:
     case OBJECTS_REMOTE:
+      _Thread_Enable_dispatch();
       return ESRCH;
     case OBJECTS_LOCAL:
 
