@@ -2,7 +2,7 @@
   ------------------------------------------------------------------------
   $Id$
   ------------------------------------------------------------------------
-
+  
   My Right Boot, a boot ROM for embedded hardware.
  
   Copyright Cybertec Pty Ltd, 2000
@@ -37,6 +37,8 @@
 
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
+
+/* #include <target.h> what does this provide? joel to chris */
 
 #define ET_MINLEN 60
 
@@ -382,7 +384,7 @@ typedef struct
    * The bsdnet information structure.  
    */
 
-  struct arpcom arpcom;
+  struct arpcom  arpcom;
 
   /*
    * Driver state and resources.
@@ -417,7 +419,7 @@ typedef struct
    */
 
   eth_statistics eth_stats;
-
+  
 } cs8900_device;
 
 /*

@@ -2,6 +2,14 @@
 #  $Id$
 #
 
+Target Support
+==============
+
+The target is required to provide the low level support routines as
+listed in the Configuration section of this file.
+
+The file cs8900.c.bsp is an example BSP file for a Coldfire processor.
+
 Conditionals
 ============
 CS8900_DATA_BUS_SWAPPED - XXX
