@@ -1,4 +1,8 @@
 
+2001-10-22	Andy Dachs <a.dachs@sstl.co.uk>
+
+	* custom/mpc8260ads.cfg: New file.
+
 2001-10-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/gensh4.cfg: Remove START_HW_INIT.
