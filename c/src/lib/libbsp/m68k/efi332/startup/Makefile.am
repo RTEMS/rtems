@@ -12,7 +12,7 @@ C_FILES = bsplibc.c bsppost.c bspstart.c bspclean.c bootcard.c \
     m68kpretaskinghook.c main.c sbrk.c setvec.c gnatinstallhandler.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-S_FILES = except_vect_332_ROM.S
+S_FILES = 
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES) $(S_O_FILES)
@@ -37,20 +37,14 @@ $(PROJECT_RELEASE)/lib/linkcmds: linkcmds
 $(PROJECT_RELEASE)/lib/linkcmds_ROM: linkcmds_ROM
 	$(INSTALL_DATA) $< $@
 
-$(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).o: \
-    $(ARCH)/except_vect_332_ROM.o
-	$(INSTALL_DATA) $< $@
-
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds \
-    $(PROJECT_RELEASE)/lib/linkcmds_ROM \
-    $(PROJECT_RELEASE)/lib/except_vect_332_ROM$(LIB_VARIANT).o
+    $(PROJECT_RELEASE)/lib/linkcmds_ROM
 
 all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = bspclean.c bspstart.c except_vect_332_ROM.S linkcmds \
-    linkcmds_ROM
+EXTRA_DIST = bspclean.c bspstart.c linkcmds linkcmds_ROM
 
 include $(top_srcdir)/../../../../../../automake/local.am

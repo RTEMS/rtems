@@ -112,7 +112,7 @@ void  dumby_start() {
   /*    see section 7 of the SIM Reference Manual */
 #ifdef FLASHWRITE
   *CSORBT = (unsigned short int)
-    ( BothBytes | ReadWrite | SyncAS | WaitStates_0 | UserSupSpace );
+    ( BothBytes | ReadWrite | SyncAS | WaitStates_2 | UserSupSpace );
 #else /* FLASHWRITE */
   *CSORBT = (unsigned short int)
     ( BothBytes | ReadOnly | SyncAS | WaitStates_0 | UserSupSpace );
@@ -185,7 +185,7 @@ void  dumby_start() {
   
   /* Port E and F Pin Assignment Register */
   /*    see section 9 of the SIM Reference Manual */
-  *PEPAR = (unsigned char) 0;
+  *PEPAR = (unsigned char) 0xc3; /* siz1|siz0|dsack1|dsack0 */
   *PFPAR = (unsigned char) 0;
 
   /* end of SIM initalization code */

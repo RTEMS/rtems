@@ -1,3 +1,25 @@
+2000-10-12	John S Gwynne <jgwynne@mrcday.com>
+
+	* start/start.c: Modified to support generation of ram_init.
+	* start/ram_init.ld, BSP/start/ram_init.sed: New files.
+	These changes enable RTEMS to automatically generate
+	the ram_init file used by gdb with the BDM patches. The 332 has
+	on-board chip select lines (for RAM and FLASH) that must be
+	configured before use of these peripherals. These patches parse
+	data from start.c where the chip select lines are configured in
+	the runtime executable and automatically generates the gdb
+	initialization file using the same settings. A great time saver.
+	A similar file, ram_init_FW (flash writable), is also generated
+	that the flash programming tool uses.
+	* start/Makefile.am: Modified to support above.
+	* CPU/sim.h: Modified to support above.
+	* startup/except_vect_332_ROM.S: Moved to start so it would not
+	be included in libbsp.a.  Moving it to start ensures it is
+	available as a single object file.
+	* start/except_vect_332_ROM.S: Moved from startup.
+	* startup/linkcmds, startup/linkcmds_ROM: Fixes to the memory map
+	shown in the comments.
+
 2000-09-29	Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
 
 	* startup/linkcmds: Added lines so DWARF debug information

@@ -9,6 +9,7 @@ __DYNAMIC  =  0;
 /*
  * The memory map looks like this:
  * +--------------------+ <- low memory
+ * |        _RamBase    |
  * | .text              |
  * |        etext       |
  * |        ctor list   | the ctor and dtor lists are for
@@ -23,10 +24,11 @@ __DYNAMIC  =  0;
  * |        _clear_start| start of bss, cleared by crt0
  * |        _end        | start of heap, used by sbrk()
  * +--------------------+
+ * |         _WorkspaceBase 
+ * |    work space      |
+ * |        heapStart   |
  * |    heap space      |
- * |        _ENDHEAP    |
- * |    stack space     | 
- * |        __stack     | top of stack
+ * |        _RamEnd     | top of stack
  * +--------------------+ <- high memory
  */
 
