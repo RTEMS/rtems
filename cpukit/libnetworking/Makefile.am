@@ -8,15 +8,15 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
-# Add -DFORWARD_PROTOCOL to enable UDP forwarding -- requires missing net/pf.h
-AM_CPPFLAGS += -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS -DDIAGNOSTIC \
-    -DBOOTP_COMPAT
-
-LIB = $(ARCH)/libnetworking.a
-
-SUBDIRS = . lib libc
+AM_CPPFLAGS += -I$(top_builddir)
 
 if HAS_NETWORKING
+# Add -DFORWARD_PROTOCOL to enable UDP forwarding -- requires missing net/pf.h
+libnetworking_CPPFLAGS = -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
+    -DDIAGNOSTIC -DBOOTP_COMPAT
+
+TMP_LIBS = $(ARCH) $(ARCH)/libnetworking.a
+
 ## poll.h is not in the list because RTEMS does not have poll()
 ## and installing poll.h confuses autoconf.
 include_HEADERS = bpfilter.h loop.h netdb.h opt_ipfw.h opt_mrouting.h \
@@ -34,10 +34,10 @@ include_arpa_HEADERS = arpa/ftp.h arpa/inet.h arpa/nameser.h \
 kern_C_FILES = kern/kern_mib.c kern/kern_subr.c kern/kern_sysctl.c \
     kern/uipc_domain.c kern/uipc_mbuf.c kern/uipc_socket.c \
     kern/uipc_socket2.c
-OBJS = $(kern_C_FILES:kern/%.c=$(ARCH)/%.$(OBJEXT))
+libnetworking_OBJS = $(kern_C_FILES:kern/%.c=$(ARCH)/%.$(OBJEXT))
 
 $(ARCH)/%.$(OBJEXT): kern/%.c
-	${COMPILE} -o $@ -c $<
+	${COMPILE} $(libnetworking_CPPFLAGS) -o $@ -c $<
 
 EXTRA_DIST = $(kern_C_FILES)
 
@@ -60,10 +60,10 @@ include_net_HEADERS = net/bpf.h net/ethernet.h net/if.h net/if_arp.h \
 net_C_FILES = net/if.c net/if_ethersubr.c net/if_loop.c net/radix.c \
     net/route.c net/rtsock.c net/raw_cb.c net/raw_usrreq.c net/if_ppp.c \
     net/ppp_tty.c net/pppcompress.c
-OBJS += $(net_C_FILES:net/%.c=$(ARCH)/%.$(OBJEXT))
+libnetworking_OBJS += $(net_C_FILES:net/%.c=$(ARCH)/%.$(OBJEXT))
 
 $(ARCH)/%.$(OBJEXT): net/%.c
-	${COMPILE} -o $@ -c $<
+	${COMPILE} $(libnetworking_CPPFLAGS) -o $@ -c $<
 
 EXTRA_DIST += $(net_C_FILES)
 
@@ -86,10 +86,10 @@ netinet_C_FILES = netinet/if_ether.c netinet/igmp.c netinet/in.c \
     netinet/tcp_debug.c netinet/tcp_input.c netinet/tcp_output.c \
     netinet/tcp_subr.c netinet/tcp_timer.c netinet/tcp_usrreq.c \
     netinet/udp_usrreq.c
-OBJS += $(netinet_C_FILES:netinet/%.c=$(ARCH)/%.$(OBJEXT))
+libnetworking_OBJS += $(netinet_C_FILES:netinet/%.c=$(ARCH)/%.$(OBJEXT))
 
 $(ARCH)/%.$(OBJEXT): netinet/%.c
-	${COMPILE} -o $@ -c $<
+	${COMPILE} $(libnetworking_CPPFLAGS) -o $@ -c $<
 
 EXTRA_DIST += $(netinet_C_FILES)
 
@@ -101,10 +101,10 @@ include_nfs_HEADERS = nfs/krpc.h nfs/nfs.h nfs/nfsdiskless.h nfs/nfsproto.h \
     nfs/rpcv2.h nfs/xdr_subs.h
 
 nfs_C_FILES = nfs/bootp_subr.c
-OBJS += $(nfs_C_FILES:nfs/%.c=$(ARCH)/%.$(OBJEXT))
+libnetworking_OBJS += $(nfs_C_FILES:nfs/%.c=$(ARCH)/%.$(OBJEXT))
 
 $(ARCH)/%.$(OBJEXT): nfs/%.c
-	${COMPILE} -o $@ -c $<
+	${COMPILE} $(libnetworking_CPPFLAGS) -o $@ -c $<
 
 EXTRA_DIST += $(nfs_C_FILES)
 
@@ -121,10 +121,10 @@ rtems_C_FILES = rtems/sghostname.c rtems/issetugid.c rtems/rtems_glue.c \
     rtems/rtems_showipstat.c rtems/rtems_showicmpstat.c \
     rtems/rtems_showtcpstat.c rtems/rtems_showudpstat.c rtems/rtems_select.c \
     rtems/mkrootfs.c rtems/rtems_bsdnet_malloc_starvation.c
-OBJS += $(rtems_C_FILES:rtems/%.c=$(ARCH)/%.$(OBJEXT))
+libnetworking_OBJS += $(rtems_C_FILES:rtems/%.c=$(ARCH)/%.$(OBJEXT))
 
 $(ARCH)/%.$(OBJEXT): rtems/%.c
-	${COMPILE} -o $@ -c $<
+	${COMPILE} $(libnetworking_CPPFLAGS) -o $@ -c $<
 
 EXTRA_DIST += $(rtems_C_FILES)
 
@@ -145,12 +145,88 @@ include_vmdir = $(includedir)/vm
 
 include_vm_HEADERS = vm/vm.h vm/vm_extern.h vm/vm_kern.h vm/vm_param.h
 
-# ---
+## libc
 
-$(LIB): $(OBJS)
+libc_C_FILES = libc/addr2ascii.c libc/ascii2addr.c libc/base64.c \
+    libc/gethostbydns.c libc/gethostbyht.c libc/gethostbynis.c \
+    libc/gethostnamadr.c libc/getnetbydns.c libc/getnetbyht.c \
+    libc/getnetbynis.c libc/getnetnamadr.c libc/getproto.c \
+    libc/getprotoent.c libc/getprotoname.c libc/getservbyname.c \
+    libc/getservbyport.c libc/getservent.c libc/herror.c libc/inet_addr.c \
+    libc/inet_lnaof.c libc/inet_makeaddr.c libc/inet_netof.c \
+    libc/inet_network.c libc/inet_ntoa.c libc/inet_ntop.c libc/inet_pton.c \
+    libc/linkaddr.c libc/map_v4v6.c libc/nsap_addr.c libc/ns_name.c \
+    libc/ns_netint.c libc/ns_parse.c libc/ns_print.c libc/ns_ttl.c \
+    libc/res_comp.c libc/res_data.c libc/res_debug.c libc/res_init.c \
+    libc/res_mkquery.c libc/res_mkupdate.c libc/res_query.c libc/res_send.c \
+    libc/res_stubs.c libc/res_update.c libc/strsep.c libc/rcmd.c
+libc_OBJS = $(libc/C_FILES:libc/%.c=libc/$(ARCH)/%.$(OBJEXT))
+
+man_MANS = libc/addr2ascii.3 libc/byteorder.3 libc/ethers.3 \
+    libc/gethostbyname.3 libc/getnetent.3 libc/getprotoent.3 \
+    libc/getservent.3 libc/inet.3 libc/iso_addr.3 libc/linkaddr.3 libc/ns.3 \
+    libc/rcmd.3 libc/resolver.3
+
+libc_CPPFLAGS = -DNOPOLL -DNOSELECT
+
+libc/$(ARCH):
+	@$(mkinstalldirs) $@
+libc/$(ARCH)/%.$(OBJEXT): libc/%.c
+	${COMPILE} $(libc_CPPFLAGS) -o $@ -c $<
+libc/$(ARCH)/libc.a: $(libc_OBJS)
 	$(make-library)
 
-all-local: $(PREINSTALL_FILES) $(ARCH) $(LIB)
+TMP_LIBS += libc/$(ARCH) libc/$(ARCH)/libc.a
+
+CLEANDIRS = libc/o-optimize libc/o-debug
+
+EXTRA_DIST += libc/addr2ascii.3 libc/addr2ascii.c libc/ascii2addr.c \
+    libc/base64.c libc/byteorder.3 libc/ether_addr.c libc/ethers.3 \
+    libc/gethostbydns.c libc/gethostbyht.c libc/gethostbyname.3 \
+    libc/gethostbynis.c libc/gethostnamadr.c libc/gethostname.c \
+    libc/getnetbydns.c libc/getnetbyht.c libc/getnetbynis.c libc/getnetent.3 \
+    libc/getnetnamadr.c libc/getproto.c libc/getprotoent.3 \
+    libc/getprotoent.c libc/getprotoname.c libc/getservbyname.c \
+    libc/getservbyport.c libc/getservent.3 libc/getservent.c libc/herror.c \
+    libc/inet.3 libc/inet_addr.c libc/inet_lnaof.c libc/inet_makeaddr.c \
+    libc/inet_net_ntop.c libc/inet_net_pton.c libc/inet_neta.c \
+    libc/inet_netof.c libc/inet_network.c libc/inet_ntoa.c libc/inet_ntop.c \
+    libc/inet_pton.c libc/map_v4v6.c libc/linkaddr.3 libc/linkaddr.c \
+    libc/ns.3 libc/ns_addr.c libc/ns_name.c libc/ns_netint.c libc/ns_ntoa.c \
+    libc/ns_parse.c libc/ns_print.c libc/ns_ttl.c libc/nsap_addr.c \
+    libc/rcmd.3 libc/rcmd.c libc/recv.c libc/res_comp.c libc/res_config.h \
+    libc/res_data.c libc/res_debug.c libc/res_init.c libc/res_mkquery.c \
+    libc/res_mkupdate.c libc/res_query.c libc/res_send.c libc/res_stubs.c \
+    libc/res_update.c libc/resolver.3 libc/send.c libc/strsep.c
+
+## lib
+
+lib_C_FILES = lib/getprotoby.c lib/rtems_bsdnet_ntp.c lib/ftpfs.c \
+    lib/syslog.c lib/tftpDriver.c
+lib_OBJS = $(lib_C_FILES:lib/%.c=lib/$(ARCH)/%.$(OBJEXT))
+
+lib_CPPFLAGS = -DNOPOLL -DNOSELECT
+
+lib/$(ARCH):
+	@$(mkinstalldirs) $@
+lib/$(ARCH)/%.$(OBJEXT): lib/%.c
+	${COMPILE} $(lib_CPPFLAGS) -o $@ -c $<
+lib/$(ARCH)/lib.a: $(lib_OBJS)
+	$(make-library)
+
+TMP_LIBS += lib/$(ARCH) lib/$(ARCH)/lib.a
+
+CLEANDIRS += lib/o-optimize lib/o-debug
+
+EXTRA_DIST += lib/README lib/getprotoby.c lib/rtems_bsdnet_ntp.c \
+    lib/syslog.c lib/tftpDriver.c
+
+# ---
+
+$(ARCH)/libnetworking.a: $(libnetworking_OBJS)
+	$(make-library)
+
+all-local: $(PREINSTALL_FILES) $(TMP_LIBS)
 endif
 
 PREINSTALL_FILES =

@@ -1,3 +1,9 @@
+2003-11-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libc/Makefile.am: Remove.
+	* lib/Makefile.am: Remove.
+	* Makefile.am: Merge-in the Makefile.ams above.
+
 2003-11-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* rtems/rtems_bsdnet_internal.h: Include rtems/cdefs.h instead of
