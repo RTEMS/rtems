@@ -499,6 +499,8 @@ int IMFS_memfile_remove(
   if ( info->triply_indirect ) {
     for ( i=0 ; i<IMFS_MEMFILE_BLOCK_SLOTS ; i++ ) {
       p = (block_p *) info->triply_indirect[i];
+      if (!p)  /* ensure we have a valid pointer */
+        break;
       for ( j=0 ; j<IMFS_MEMFILE_BLOCK_SLOTS ; j++ ) {
         if ( p[j] ) {
           memfile_free_blocks_in_table( (block_p **)&p[j], to_free);
