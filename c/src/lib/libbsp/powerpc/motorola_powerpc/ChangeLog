@@ -1,3 +1,10 @@
+2003-09-26  Till Straumann <strauman@slac.stanford.edu>
+
+	PR 497/bsps
+	* BOOTING: Document letting the bootloader shut down the
+	network interface since it continues to run after loading
+	RTEMS application and has to be dealt with.
+  
 2003-09-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bsp_specs: Remove *lib:.
