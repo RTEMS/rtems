@@ -259,33 +259,6 @@ SYM (x):;				\
 #define END_BSS
 #define END
 
-#elif PPC_ASM == PPC_ASM_XCOFF
-#define ALIGN(n,p)	.align	p
-#define DESCRIPTOR(x)	\
-	.csect	x[DS];		\
-	.globl	x[DS];		\
-	.long	PROC (x)[PR];	\
-	.long	TOC[tc0]
-
-#define EXT_SYM_REF(x)	.long x[RW]
-#define EXT_PROC_REF(x)	.long x[DS]
-
-/*
- *  Define macros to handle section beginning and ends.
- */
-
-#define BEGIN_CODE_DCL .csect .text[PR]
-#define END_CODE_DCL
-#define BEGIN_DATA_DCL .csect .data[RW]
-#define END_DATA_DCL
-#define BEGIN_CODE .csect .text[PR]
-#define END_CODE
-#define BEGIN_DATA .csect .data[RW]
-#define END_DATA
-#define BEGIN_BSS  .bss
-#define END_BSS
-#define END
-
 #else
 #error "PPC_ASM_TYPE is not properly defined"
 #endif

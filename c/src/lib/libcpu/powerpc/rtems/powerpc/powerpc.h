@@ -311,8 +311,7 @@ extern "C" {
 /*
  *  PowerOpen ABI.  This is Andy's hack of the
  *  PowerOpen ABI to ELF.  ELF rather than a
- *  XCOFF assembler is used.  This may work
- *  if PPC_ASM == PPC_ASM_XCOFF is defined.
+ *  XCOFF assembler is used.
  */
 #define PPC_ABI_POWEROPEN	0
 /*
@@ -358,13 +357,11 @@ extern "C" {
  *  PPC_ASM MUST be defined as one of these.
  *
  *  PPC_ASM_ELF:   ELF assembler. Currently used for all ABIs.
- *  PPC_ASM_XCOFF: XCOFF assembler. May be needed for PowerOpen ABI.
  *
  *  NOTE: Only PPC_ABI_ELF is currently fully supported.
  */
 
 #define PPC_ASM_ELF   0
-#define PPC_ASM_XCOFF 1
 
 /*
  *  Default to the assembler format used by the current GNU tools.
