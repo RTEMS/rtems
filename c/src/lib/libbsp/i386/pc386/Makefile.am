@@ -65,9 +65,8 @@ CLEANFILES += console.rel
 console_rel_SOURCES = console/console.c console/inch.c console/outch.c \
     console/defkeymap.c console/fb_vga.c console/keyboard.c \
     console/mouse_parser.c console/pc_keyb.c console/ps2_mouse.c \
-    console/serial_mouse.c console/vgainit.c console/vt.c \
-    console/videoAsm.S ../../i386/shared/comm/uart.c \
-    ../../i386/shared/comm/tty_drv.c
+    console/serial_mouse.c console/vgainit.c console/vt.c console/videoAsm.S \
+    ../../i386/shared/comm/uart.c ../../i386/shared/comm/tty_drv.c
 console_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -82,7 +81,8 @@ project_lib_DATA += console$(LIB_VARIANT).rel
 EXTRA_PROGRAMS += gdb.rel
 CLEANFILES += gdb.rel
 gdb_rel_SOURCES = ../../i386/shared/comm/i386-stub.c \
-    ../../i386/shared/comm/i386-stub-glue.c ../../i386/shared/comm/gdb_glue.c
+    ../../i386/shared/comm/i386-stub-glue.c \
+    ../../i386/shared/comm/gdb_glue.c
 gdb_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 gdb_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
@@ -339,7 +339,7 @@ $(PROJECT_LIB)/ide$(LIB_VARIANT).rel: ide$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dir
 TMPINSTALL_FILES += $(PROJECT_LIB)/ide$(LIB_VARIANT).rel
 
 CLEANFILES += $(PREINSTALL_FILES)
-DISTCLEANFILES = $(PREINSTALL_DIRS)
+DISTCLEANFILES += $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
