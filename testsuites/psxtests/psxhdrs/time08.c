@@ -17,7 +17,6 @@
  
 void test( void )
 {
-  char      *buffer;
   time_t     time;
   struct tm *timestruct;
   
