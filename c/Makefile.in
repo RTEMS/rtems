@@ -62,6 +62,8 @@ CREATE_DIRS = \
     tests/screens/mptests/node1 tests/screens/mptests/node2 \
     build-tools update-tools
 
+BUILD_DIRS = ${CREATE_DIRS:%=$(PROJECT_ROOT)/$(RTEMS_BSP)/%}
+
 # Make all/install must include 'env'
 # if something is added to TARGET_VARIANTS, then account for it here
 make_src_makefiles: Makefile.in Makefile
@@ -103,11 +105,13 @@ clean_wrapup: clean_tools clean_dirs clean_modules
 
 .PHONY:	dirs clean_wrapup clean_dirs clean_tools clean_modules env install
 
-dirs:
-	-$(MKDIR) ${CREATE_DIRS:%=$(PROJECT_ROOT)/$(RTEMS_BSP)/%}
+$(BUILD_DIRS):
+	-$(MKDIR) $(BUILD_DIRS)
 	if test -d $(PROJECT_ROOT)/c/src/lib/libhwapi; then \
 		(cd $(PROJECT_ROOT)/c/src/lib/libhwapi ; $(MAKE) mkdirs) \
 	fi
+
+dirs: $(BUILD_DIRS)
 
 distclean: clobber
 
