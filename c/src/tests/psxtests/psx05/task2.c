@@ -29,8 +29,10 @@ void *Task_2(
 
   printf( "Task 2: pthread_mutex_lock unavailable (inherit case)\n" );
   status = pthread_mutex_lock( &Mutex2_id );
-  printf( "Task 2: mutex acquired\n" );
+  if ( status )
+    printf( "status =%d\n", status );
   assert( !status );
+  printf( "Task 2: mutex acquired\n" );
 
      /* switch to init */
 
