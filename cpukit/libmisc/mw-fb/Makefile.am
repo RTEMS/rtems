@@ -21,9 +21,6 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
-    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
-
 $(PROJECT_INCLUDE)/rtems:
 	@$(mkinstalldirs) $@
 $(PROJECT_INCLUDE)/rtems/%.h: %.h
@@ -36,7 +33,12 @@ $(PROJECT_INCLUDE)/rtems/%.h: %.h
 ${LIB}: ${OBJS}
 	$(make-library)
 
-all: ${ARCH} $(PREINSTALL_FILES) $(LIB) $(TMPINSTALL_FILES)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
+    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
+
+all-local: ${ARCH} $(PREINSTALL_FILES) $(LIB) $(TMPINSTALL_FILES)
+
+.PRECIOUS: $(LIB)
 
 EXTRA_DIST = $(C_FILES)
 
