@@ -40,8 +40,6 @@ struct mdproc {
 	int	*md_regs;
 };
 
-#define USHRT_MAX	65535
-
 /*
  * Other RTEMS/BSD glue
  */
