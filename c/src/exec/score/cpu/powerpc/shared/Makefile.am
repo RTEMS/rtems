@@ -4,17 +4,18 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-ROOT_H_FILES = asm.h
-RTEMS_SCORE_H_FILES = ppc.h ppctypes.h
-noinst_HEADERS = $(ROOT_H_FILES) $(RTEMS_SCORE_H_FILES)
+include_rtems_scoredir = $(includedir)/rtems/score
+
+include_HEADERS = asm.h
+include_rtems_score_HEADERS = ppc.h ppctypes.h
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
-    $(ROOT_H_FILES:%.h=$(PROJECT_INCLUDE)/%.h) \
-    $(RTEMS_SCORE_H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
+    $(include_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h) \
+    $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@

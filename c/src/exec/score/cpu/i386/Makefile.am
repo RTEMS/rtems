@@ -12,7 +12,7 @@ REL = $(ARCH)/rtems-cpu.rel
 C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = asm.h
+include_HEADERS = asm.h
 
 S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
@@ -35,7 +35,7 @@ $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
 $(REL): $(rtems_cpu_rel_OBJECTS)
 	$(make-rel)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%=$(PROJECT_INCLUDE)/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
 
@@ -44,7 +44,7 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
 
 .PRECIOUS: $(REL)
 
-EXTRA_DIST = asm.h cpu.c cpu_asm.S rtems.S
+EXTRA_DIST = cpu.c cpu_asm.S rtems.S
 
 include $(top_srcdir)/../../../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../../../automake/local.am

@@ -4,15 +4,15 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = cpu.h no_cpu.h cpu_asm.h no_cputypes.h
-noinst_HEADERS = $(H_FILES)
+include_rtems_scoredir = $(includedir)/rtems/score
+include_rtems_score_HEADERS = cpu.h no_cpu.h cpu_asm.h no_cputypes.h
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
-    $(H_FILES:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
+    $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/rtems/score/%.h)
 
 $(PROJECT_INCLUDE)/rtems/score:
 	$(mkinstalldirs) $@

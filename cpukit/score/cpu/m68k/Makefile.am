@@ -10,7 +10,7 @@ SUBDIRS = rtems
 C_FILES = cpu.c memcpy.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = asm.h m68302.h m68360.h qsm.h sim.h
+include_HEADERS = asm.h m68302.h m68360.h qsm.h sim.h
 
 S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
@@ -35,7 +35,7 @@ rtems_cpu_rel_OBJECTS = $(C_O_FILES) $(S_O_FILES)
 $(REL): $(rtems_cpu_rel_OBJECTS)
 	$(make-rel)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%=$(PROJECT_INCLUDE)/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
 
@@ -44,8 +44,7 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
 
 .PRECIOUS: $(REL)
 
-EXTRA_DIST = asm.h cpu.c cpu_asm.S m68302.h m68360.h memcpy.c qsm.h rtems.S \
-    sim.h
+EXTRA_DIST = cpu.c cpu_asm.S memcpy.c rtems.S
 
 include $(top_srcdir)/../../../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../../../automake/local.am

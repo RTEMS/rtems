@@ -11,7 +11,7 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 
 SUBDIRS = rtems
 
-H_FILES = asm.h
+include_HEADERS= asm.h
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
@@ -32,7 +32,7 @@ rtems_cpu_rel_OBJECTS = $(C_O_FILES)
 $(REL): $(rtems_cpu_rel_OBJECTS)
 	$(make-rel)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%=$(PROJECT_INCLUDE)/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
 

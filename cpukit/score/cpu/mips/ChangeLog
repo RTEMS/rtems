@@ -1,3 +1,8 @@
+2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am, rtems/score/Makefile.am: 
+	Apply include_*HEADERS instead of H_FILES.
+
 2001-01-12	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/mips.h (mips_get_sr, mips_set_sr): Corrected

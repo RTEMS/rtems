@@ -1,3 +1,8 @@
+2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am, rtems/score/Makefile.am: 
+	Apply include_*HEADERS instead of H_FILES.
+
 2001-01-25	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu.c, rtems/score/cpu.h: Bug report from Peter Mueller

@@ -10,7 +10,7 @@ SUBDIRS = rtems
 C_FILES = cpu.c irq.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = asm.h c4xio.h
+include_HEADERS = asm.h c4xio.h
 
 S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
@@ -35,7 +35,7 @@ $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
 $(REL): $(rtems_cpu_rel_OBJECTS)
 	$(make-rel)
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(H_FILES:%=$(PROJECT_INCLUDE)/%)
+PREINSTALL_FILES += $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
 
@@ -44,7 +44,7 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
 
 .PRECIOUS: $(REL)
 
-EXTRA_DIST = asm.h cpu.c irq.c cpu_asm.S c4xio.h rtems.c
+EXTRA_DIST = cpu.c irq.c cpu_asm.S rtems.c
 
 include $(top_srcdir)/../../../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../../../automake/local.am
