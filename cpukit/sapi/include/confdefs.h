@@ -35,7 +35,7 @@
 
 #ifndef __CONFIGURATION_TEMPLATE_h
 #define __CONFIGURATION_TEMPLATE_h
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -120,7 +120,7 @@ rtems_filesystem_mount_table_t configuration_mount_table = {
   NULL
 };
 
-rtems_filesystem_mount_table_t 
+rtems_filesystem_mount_table_t
     *rtems_filesystem_mount_table = &configuration_mount_table;
 int rtems_filesystem_mount_table_size = 1;
 #endif
@@ -166,7 +166,7 @@ int rtems_filesystem_mount_table_size = 1;
 #ifdef CONFIGURE_HAS_OWN_INIT_TASK_TABLE
 
 /*
- *  The user is defining their own table information and setting the 
+ *  The user is defining their own table information and setting the
  *  appropriate variables.
  */
 
@@ -177,7 +177,7 @@ int rtems_filesystem_mount_table_size = 1;
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_STACK_SIZE
-#define CONFIGURE_INIT_TASK_STACK_SIZE    RTEMS_MINIMUM_STACK_SIZE 
+#define CONFIGURE_INIT_TASK_STACK_SIZE    RTEMS_MINIMUM_STACK_SIZE
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_PRIORITY
@@ -185,19 +185,19 @@ int rtems_filesystem_mount_table_size = 1;
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_ATTRIBUTES
-#define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_DEFAULT_ATTRIBUTES 
+#define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_DEFAULT_ATTRIBUTES
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_ENTRY_POINT
-#define CONFIGURE_INIT_TASK_ENTRY_POINT   Init 
+#define CONFIGURE_INIT_TASK_ENTRY_POINT   Init
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_INITIAL_MODES
-#define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_NO_PREEMPT 
+#define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_NO_PREEMPT
 #endif
 
 #ifndef CONFIGURE_INIT_TASK_ARGUMENTS
-#define CONFIGURE_INIT_TASK_ARGUMENTS     0 
+#define CONFIGURE_INIT_TASK_ARGUMENTS     0
 #endif
 
 #ifdef CONFIGURE_INIT
@@ -239,13 +239,13 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #endif
 #ifdef CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#endif 
+#endif
 #ifdef CONFIGURE_TEST_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#endif 
+#endif
 #ifdef CONFIGURE_TEST_NEEDS_RTC_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
-#endif 
+#endif
 #ifdef CONFIGURE_TEST_NEEDS_STUB_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
 #endif
@@ -332,7 +332,7 @@ rtems_driver_address_table Device_drivers[] = {
 /*
  *  Default Multiprocessing Configuration Table.  The defaults are
  *  appropriate for most of the RTEMS Multiprocessor Test Suite.  Each
- *  value may be overridden within each test to customize the environment. 
+ *  value may be overridden within each test to customize the environment.
  */
 
 #ifdef CONFIGURE_MP_APPLICATION
@@ -378,13 +378,13 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #define CONFIGURE_MULTIPROCESSING_TABLE    NULL
 
 #endif /* CONFIGURE_MP_APPLICATION */
- 
+
 /*
- *  Default Configuration Table.  
+ *  Default Configuration Table.
  */
 
 #ifndef CONFIGURE_HAS_OWN_CONFIGURATION_TABLE
- 
+
 #ifndef CONFIGURE_EXECUTIVE_RAM_WORK_AREA
 #define CONFIGURE_EXECUTIVE_RAM_WORK_AREA     NULL
 #endif
@@ -425,7 +425,7 @@ rtems_multiprocessing_table Multiprocessing_configuration = {
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS     0
 #endif
 
-#ifndef CONFIGURE_MICROSECONDS_PER_TICK 
+#ifndef CONFIGURE_MICROSECONDS_PER_TICK
 #define CONFIGURE_MICROSECONDS_PER_TICK RTEMS_MILLISECONDS_TO_MICROSECONDS(10)
 #endif
 
@@ -523,11 +523,11 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
  *  The user is defining their own table information and setting the
  *  appropriate variables for the POSIX Initialization Thread Table.
  */
- 
+
 #else
 
 #ifndef CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
-#define CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT   POSIX_Init 
+#define CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT   POSIX_Init
 #endif
 
 #ifndef CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
@@ -542,7 +542,7 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #endif
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME POSIX_Initialization_threads
- 
+
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE \
   sizeof(CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME) / \
       sizeof(posix_initialization_threads_table)
@@ -802,7 +802,7 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 #endif    /* RTEMS_ITRON_API */
 
 
-/* 
+/*
  *  Calculate the RAM size based on the maximum number of objects configured.
  */
 
@@ -898,7 +898,7 @@ itron_initialization_tasks_table ITRON_Initialization_tasks[] = {
 #define CONFIGURE_API_MUTEX_MEMORY \
   ( (1) * \
     ( sizeof(API_Mutex_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) \
-  ) 
+  )
 
 #define CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD \
   ( CONFIGURE_MEMORY_FOR_TASKS(1) +    /* IDLE */ \
@@ -1036,7 +1036,7 @@ itron_api_configuration_table Configuration_ITRON_API = {
 rtems_configuration_table Configuration = {
   CONFIGURE_EXECUTIVE_RAM_WORK_AREA,
   CONFIGURE_EXECUTIVE_RAM_SIZE,
-  CONFIGURE_MAXIMUM_USER_EXTENSIONS + CONFIGURE_NEWLIB_EXTENSION + 
+  CONFIGURE_MAXIMUM_USER_EXTENSIONS + CONFIGURE_NEWLIB_EXTENSION +
       CONFIGURE_STACK_CHECKER_EXTENSION,
   CONFIGURE_MICROSECONDS_PER_TICK,
   CONFIGURE_TICKS_PER_TIMESLICE,
@@ -1066,7 +1066,7 @@ rtems_configuration_table Configuration = {
 #ifdef __cplusplus
 }
 #endif
- 
+
 /*
  *  Some warnings and error checking
  */

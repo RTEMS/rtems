@@ -60,37 +60,37 @@ void _RTEMS_API_Initialize(
   _Objects_Information_table[OBJECTS_CLASSIC_API] = _RTEMS_Objects;
 
   _Attributes_Handler_initialization();
- 
+
   _Interrupt_Manager_initialization();
- 
+
 #if defined(RTEMS_MULTIPROCESSING)
   _Multiprocessing_Manager_initialization();
 #endif
- 
+
   _RTEMS_tasks_Manager_initialization(
     api_configuration->maximum_tasks,
     api_configuration->number_of_initialization_tasks,
     api_configuration->User_initialization_tasks_table
   );
- 
+
   _Timer_Manager_initialization( api_configuration->maximum_timers );
- 
+
   _Signal_Manager_initialization();
- 
+
   _Event_Manager_initialization();
- 
+
   _Message_queue_Manager_initialization(
     api_configuration->maximum_message_queues
   );
- 
+
   _Semaphore_Manager_initialization( api_configuration->maximum_semaphores );
- 
+
   _Partition_Manager_initialization( api_configuration->maximum_partitions );
- 
+
   _Region_Manager_initialization( api_configuration->maximum_regions );
- 
+
   _Dual_ported_memory_Manager_initialization( api_configuration->maximum_ports);
- 
+
   _Rate_monotonic_Manager_initialization( api_configuration->maximum_periods );
 }
 

@@ -18,29 +18,29 @@
  *
  *  _Debug_Manager_initialization
  */
- 
+
 void _Debug_Manager_initialization( void )
 {
   rtems_debug_disable( RTEMS_DEBUG_ALL_MASK );
 }
- 
+
 /*PAGE
  *
  *  rtems_debug_enable
  */
- 
+
 void rtems_debug_enable (
   rtems_debug_control  to_be_enabled
 )
 {
   _Debug_Level |= to_be_enabled;
 }
- 
+
 /*PAGE
  *
  *  rtems_debug_disable
  */
- 
+
 void rtems_debug_disable (
   rtems_debug_control  to_be_disabled
 )

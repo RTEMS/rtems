@@ -29,7 +29,7 @@
  *  workspace.
  *
  */
-  
+
 void _IO_Manager_initialization(
     rtems_driver_address_table *driver_table,
     uint32_t                    drivers_in_table,
@@ -43,11 +43,11 @@ void _IO_Manager_initialization(
 
   if ( number_of_drivers < drivers_in_table )
       number_of_drivers = drivers_in_table;
-  
+
   tmp = _Workspace_Allocate_or_fatal_error(
     sizeof( rtems_driver_address_table ) * ( number_of_drivers )
   );
- 
+
   _IO_Driver_address_table = (rtems_driver_address_table *) tmp;
 
   memset(
@@ -58,16 +58,16 @@ void _IO_Manager_initialization(
   if ( drivers_in_table )
       for ( index = 0 ; index < drivers_in_table ; index++ )
         _IO_Driver_address_table[index] = driver_table[index];
-  
+
   _IO_Number_of_drivers = number_of_drivers;
   _IO_Number_of_devices = number_of_devices;
-  
+
   tmp = _Workspace_Allocate_or_fatal_error(
     sizeof( rtems_driver_name_t ) * ( number_of_devices + 1 )
   );
- 
+
   _IO_Driver_name_table = (rtems_driver_name_t *) tmp;
- 
+
   for( index=0, np = _IO_Driver_name_table ;
        index < _IO_Number_of_devices ;
        index++, np++ ) {
@@ -109,7 +109,7 @@ void _IO_Initialize_all_drivers( void )
  *    driver_table     - driver callout function table
  *    registered_major - the major number which is registered
  *
- *  Output Parameters: 
+ *  Output Parameters:
  *    RTEMS_SUCCESSFUL - if successful
  *    error code       - if unsuccessful
  */
@@ -142,7 +142,7 @@ rtems_status_code rtems_io_register_driver(
               _IO_Driver_address_table[major].open_entry == 0 ))
             return RTEMS_TOO_MANY;
     }
-    
+
     if ( _IO_Driver_address_table[major].initialization_entry == 0 &&
          _IO_Driver_address_table[major].open_entry == 0 )
     {
@@ -166,7 +166,7 @@ rtems_status_code rtems_io_register_driver(
  *  Input Paramters:
  *    major            - device major number
  *
- *  Output Parameters: 
+ *  Output Parameters:
  *    RTEMS_SUCCESSFUL - if successful
  *    error code       - if unsuccessful
  */
@@ -198,7 +198,7 @@ rtems_status_code rtems_io_unregister_driver(
  *    major       - device major number to receive name
  *    minor       - device minor number to receive name
  *
- *  Output Parameters: 
+ *  Output Parameters:
  *    RTEMS_SUCCESSFUL - if successful
  *    error code       - if unsuccessful
  */
@@ -216,7 +216,7 @@ rtems_status_code rtems_io_register_name(
 
     /* find an empty slot */
     for( index=0, np = _IO_Driver_name_table ;
-         index < _IO_Number_of_devices ; 
+         index < _IO_Number_of_devices ;
          index++, np++ )
     {
 
@@ -260,7 +260,7 @@ rtems_status_code rtems_io_initialize(
 )
 {
     rtems_device_driver_entry callout;
-    
+
     if ( major >= _IO_Number_of_drivers )
         return RTEMS_INVALID_NUMBER;
 
@@ -290,7 +290,7 @@ rtems_status_code rtems_io_open(
 )
 {
     rtems_device_driver_entry callout;
-    
+
     if ( major >= _IO_Number_of_drivers )
         return RTEMS_INVALID_NUMBER;
 
@@ -320,7 +320,7 @@ rtems_status_code rtems_io_close(
 )
 {
     rtems_device_driver_entry callout;
-    
+
     if ( major >= _IO_Number_of_drivers )
         return RTEMS_INVALID_NUMBER;
 
@@ -350,7 +350,7 @@ rtems_status_code rtems_io_read(
 )
 {
     rtems_device_driver_entry callout;
-    
+
     if ( major >= _IO_Number_of_drivers )
         return RTEMS_INVALID_NUMBER;
 
@@ -380,7 +380,7 @@ rtems_status_code rtems_io_write(
 )
 {
     rtems_device_driver_entry callout;
-    
+
     if ( major >= _IO_Number_of_drivers )
         return RTEMS_INVALID_NUMBER;
 
@@ -410,7 +410,7 @@ rtems_status_code rtems_io_control(
 )
 {
     rtems_device_driver_entry callout;
-    
+
     if ( major >= _IO_Number_of_drivers )
         return RTEMS_INVALID_NUMBER;
 

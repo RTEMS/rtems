@@ -49,7 +49,7 @@ extern "C" {
  *  It is used in single processor configurations.
  */
 
-#if defined(SAPI_INIT) 
+#if defined(SAPI_INIT)
 const rtems_multiprocessing_table
        _Initialization_Default_multiprocessing_table = {
   1,                      /* local node number */

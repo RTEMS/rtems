@@ -75,7 +75,7 @@ void _POSIX_API_Initialize(
   assert( sizeof(pthread_t) == sizeof(Objects_Id) );
 
   api_configuration = configuration_table->POSIX_api_configuration;
-  if ( !api_configuration ) 
+  if ( !api_configuration )
     api_configuration = &_POSIX_Default_configuration;
 
   _Objects_Information_table[OBJECTS_POSIX_API] = _POSIX_Objects;
@@ -89,14 +89,14 @@ void _POSIX_API_Initialize(
     api_configuration->number_of_initialization_threads,
     api_configuration->User_initialization_threads_table
   );
- 
+
   _POSIX_Condition_variables_Manager_initialization(
     api_configuration->maximum_condition_variables
   );
 
   _POSIX_Key_Manager_initialization( api_configuration->maximum_keys );
 
-  _POSIX_Mutex_Manager_initialization( 
+  _POSIX_Mutex_Manager_initialization(
     api_configuration->maximum_mutexes
   );
 

@@ -44,12 +44,12 @@ extern "C" {
  *      table corresponds to an application provided device driver and
  *      defines the entry points for that device driver.
  */
- 
+
 typedef uint32_t   rtems_device_major_number;
 typedef uint32_t   rtems_device_minor_number;
- 
+
 typedef rtems_status_code rtems_device_driver;
- 
+
 typedef rtems_device_driver ( *rtems_device_driver_entry )(
                  rtems_device_major_number,
                  rtems_device_minor_number,
@@ -64,7 +64,7 @@ typedef struct {
   rtems_device_driver_entry write_entry;       /* write request procedure */
   rtems_device_driver_entry control_entry;     /* special functions procedure */
 }   rtems_driver_address_table;
- 
+
 /*
  * Table for the io device names
  */

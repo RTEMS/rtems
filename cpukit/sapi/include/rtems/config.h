@@ -30,10 +30,10 @@ extern "C" {
 
 #include <rtems/score/object.h>
 #define RTEMS_UNLIMITED_OBJECTS OBJECTS_UNLIMITED_OBJECTS
-  
+
 #define rtems_resource_unlimited(resource) \
   ( resource | RTEMS_UNLIMITED_OBJECTS )
-    
+
 /*
  *  This is kind of kludgy but it allows targets to totally ignore the
  *  optional APIs like POSIX and ITRON safely.

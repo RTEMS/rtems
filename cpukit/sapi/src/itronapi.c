@@ -73,18 +73,18 @@ void _ITRON_API_Initialize(
   assert( sizeof(ID) == sizeof(Objects_Id) );
 
   api_configuration = configuration_table->ITRON_api_configuration;
-  if ( !api_configuration ) 
+  if ( !api_configuration )
     api_configuration = &_ITRON_Default_configuration;
 
   _Objects_Information_table[OBJECTS_ITRON_API] = _ITRON_Objects;
-    
+
   _ITRON_Task_Manager_initialization(
     api_configuration->maximum_tasks,
     api_configuration->number_of_initialization_tasks,
     api_configuration->User_initialization_tasks_table
   );
- 
-  _ITRON_Semaphore_Manager_initialization( 
+
+  _ITRON_Semaphore_Manager_initialization(
     api_configuration->maximum_semaphores
   );
 

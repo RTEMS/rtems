@@ -12,7 +12,7 @@
  */
 
 /*
- *  SCORE_INIT and SAPI_INIT are defined so all of the super core and 
+ *  SCORE_INIT and SAPI_INIT are defined so all of the super core and
  *  super API data will be included in this object file.
  */
 
@@ -138,7 +138,7 @@ rtems_interrupt_level rtems_initialize_executive_early(
    */
 
   if ( multiprocessing_table == NULL )
-    multiprocessing_table = 
+    multiprocessing_table =
       (void *)&_Initialization_Default_multiprocessing_table;
 
   if ( cpu_table == NULL )
@@ -224,7 +224,7 @@ rtems_interrupt_level rtems_initialize_executive_early(
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
 
   /*
-   *  No threads should be created before this point!!! 
+   *  No threads should be created before this point!!!
    *  _Thread_Executing and _Thread_Heir are not set.
    *
    *  At this point all API extensions are in place.  After the call to
@@ -248,20 +248,20 @@ rtems_interrupt_level rtems_initialize_executive_early(
   /*
    *  Run the API and BSPs predriver hook.
    */
- 
+
   _API_extensions_Run_predriver();
- 
+
   if ( _CPU_Table.predriver_hook )
     (*_CPU_Table.predriver_hook)();
- 
+
   /*
    *  Initialize all the device drivers and initialize the MPCI layer.
    *
    *  NOTE:  The MPCI may be build upon a device driver.
    */
- 
+
   _IO_Initialize_all_drivers();
- 
+
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _System_state_Is_multiprocessing ) {
     _MPCI_Initialization();
@@ -270,15 +270,15 @@ rtems_interrupt_level rtems_initialize_executive_early(
     );
   }
 #endif
- 
+
   /*
    *  Run the APIs and BSPs postdriver hooks.
    *
    *  The API extensions are supposed to create user initialization tasks.
    */
- 
+
   _API_extensions_Run_postdriver();
- 
+
   if ( _CPU_Table.postdriver_hook )
     (*_CPU_Table.postdriver_hook)();
 
