@@ -77,7 +77,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <bsp.h>                /* Must be before libio.h */
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 #include <rtems/libio.h>
 #include <termios.h>
 #include <bsp/mbx.h>

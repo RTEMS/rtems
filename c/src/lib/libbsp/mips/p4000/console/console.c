@@ -273,7 +273,7 @@ rtems_device_driver console_control(
   return RTEMS_SUCCESSFUL;
 }
 
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 void P4000_output_char(char c) { outbyte( c ); }
 

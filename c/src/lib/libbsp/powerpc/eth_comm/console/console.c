@@ -30,7 +30,7 @@
 #include <bsp.h>                /* Must be before libio.h */
 #include <rtems/libio.h>
 #include <termios.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 static void _BSP_null_char( char c ) {return;}
 BSP_output_char_function_type BSP_output_char = _BSP_null_char;
