@@ -1,3 +1,11 @@
+2002-10-28	Joel Sherrill <joel@OARcorp.com>
+
+	* src/rpc/clnt_tcp.c, src/rpc/clnt_udp.c, src/rpc/pmap_rmt.c,
+	src/rpc/rtime.c, src/rpc/svc_tcp.c: Add include of <sys/select.h>
+	to eliminate warning.
+	* src/rpc/rpcdname.c: Add prototype of getdomainname() to eliminate
+	warning.
+
 2002-10-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add nostdinc to AM_INIT_AUTOMAKE.

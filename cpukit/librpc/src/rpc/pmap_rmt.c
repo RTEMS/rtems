@@ -54,6 +54,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/pmap_rmt.c,v 1.15 2000/01/27 23
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <arpa/inet.h>
+#include <sys/select.h>
 #define MAX_BROADCAST_SIZE 1400
 
 static struct timeval timeout = { 3, 0 };

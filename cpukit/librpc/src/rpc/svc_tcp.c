@@ -51,6 +51,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/svc_tcp.c,v 1.18 2000/01/27 23:
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <errno.h>
+#include <sys/select.h>
 
 /*
  * Ops vector for TCP/IP based rpc service handle

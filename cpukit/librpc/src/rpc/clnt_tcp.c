@@ -61,6 +61,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_tcp.c,v 1.14 2000/01/27 23
 #include <netdb.h>
 #include <errno.h>
 #include <rpc/pmap_clnt.h>
+#include <sys/select.h>
 
 #define MCALL_MSG_SIZE 24
 

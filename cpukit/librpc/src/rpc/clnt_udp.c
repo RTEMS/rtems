@@ -49,6 +49,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/clnt_udp.c,v 1.15 2000/01/27 23
 #include <netdb.h>
 #include <errno.h>
 #include <rpc/pmap_clnt.h>
+#include <sys/select.h>
 
 /*
  * UDP bases client side rpc operations
