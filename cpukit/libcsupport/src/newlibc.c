@@ -335,7 +335,7 @@ void _exit(int status)
 
 
 /*
- *  These are only supported in the posix api.
+ *  These are directly supported (and completely correct) in the posix api.
  */
 
 #ifndef RTEMS_POSIX_API
@@ -351,6 +351,31 @@ pid_t __getpid(void)
 int __kill( pid_t pid, int sig )
 {
   assert( 0 );
+  return 0;
+}
+
+unsigned int sleep(
+  unsigned int seconds
+)
+{
+  rtems_status_code status;
+  rtems_interval    ticks_per_second;
+  rtems_interval    ticks;
+ 
+  status = rtems_clock_get(
+    RTEMS_CLOCK_GET_TICKS_PER_SECOND,
+    &ticks_per_second
+  );
+ 
+  ticks = seconds * ticks_per_second;
+ 
+  status = rtems_task_wake_after( ticks );
+ 
+  /*
+   *  Returns the "unslept" amount of time.  In RTEMS signals are not
+   *  interruptable, so tasks really sleep all of the requested time.
+   */
+ 
   return 0;
 }
 
