@@ -71,8 +71,8 @@ typedef struct _rtc_tbl {
   setRegister_f  setRegister;
 } rtc_tbl;
 
-extern rtc_tbl        RTC_Table[];
-extern unsigned long  RTC_Count;
+extern rtc_tbl  RTC_Table[];
+extern size_t   RTC_Count;
 
 
 boolean rtc_probe( int minor );
