@@ -14,9 +14,7 @@ AM_MAINTAINER_MODE
 
 RTEMS_TOOLPATHS
 AC_SUBST(program_prefix)
-
 AC_CONFIG_SUBDIRS(generic)
-RTEMS_CPU_SUBDIRS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
