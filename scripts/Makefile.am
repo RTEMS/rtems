@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = . binutils gccnewlib
+SUBDIRS = . binutils gccnewlib gdb
 
 noinst_SCRIPTS = \
 setup \
@@ -11,14 +11,9 @@ mkbspspec \
 mkgccnewlibspec \
 mkgdbspec \
 mkrpms \
-mkspec \
-mktoolspec
+mkspec
 
-TEMPLATES = \
-gccnewlib.spec.in \
-gdb.spec.in \
-rtems.spec.in \
-toolchain.spec.in
+TEMPLATES = 
 
 noinst_DATA = \
 setup.def $(TEMPLATES)

@@ -19,19 +19,22 @@ ALL_TARGETS="i386-rtems i960-rtems m68k-rtems \
 #TARGETS=${ALL_TARGETS}
 TARGETS="sh-rtems"
 
-testing=no
-
 binutils=990901
 gcc=2.95.1
 gdb=4.18
 newlib=1.8.2
 buildroot=/opt/tmp
 
+testing=yes
+do_binutils=yes
+do_gdb=yes
+do_gccnewlib=yes
+staging_dir=/usr3/rtems_cds/test_cd/linux
+
 #
 #  Now get started
 #
 start=`date`
-
 
 echo PATH=$PATH
 
@@ -64,76 +67,105 @@ then
 dst=/usr/src/SPECS;
 fi
 
+if [ ${testing} = no ] ; then
+  cd ${RTEMS_DIR}/scripts
+  ./configure || exit 1
+  make        || exit 1
+fi
+
 #  Now generate all the specs
 for target in ${TARGETS}
 do
-  ${ECHO} ${RTEMS_DIR}/mkspec ${target}
+  tspecs=`find . -name "${target}*"`
+  ${ECHO} cp -r ${tspecs} ${dst}
 done
 
 # clean up a bit before we start
 cd ${dst}
 test -d log || mkdir log
 
-
 #  do all the tools
 for target in ${TARGETS}
 do
-  logfile=log/${target}-binutils
-  specfile=${dst}/${target}-binutils-${binutils}.spec
-  echo "rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1"
-  if [ ${testing} = no ] ; then
-    rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1
+  if [ ${do_binutils} = yes ] ; then
+    logfile=log/${target}-binutils
+    specfile=${dst}/${target}-binutils-${binutils}.spec
+    echo "rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1"
+    if [ ${testing} = no ] ; then
+      rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1
+    fi
+    ${ECHO} rm -rf ${dst}/../BUILD/${target}-binutils*
+    ${ECHO} rm -rf ${buildroot}/opt
+  else
+    echo Skipping binutils for ${target}
   fi
-  ${ECHO} rm -rf ${dst}/../BUILD/${target}-binutils*
-  ${ECHO} rm -rf ${buildroot}/opt
 
-  # now build gdb
-  logfile=log/${target}-gdb
-  specfile=${dst}/${target}-gdb-${gdb}.spec
-  echo "rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1"
-  if [ ${testing} = no ] ; then
-    rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1
+  if [ ${do_gdb} = yes ] ; then
+    # now build gdb
+    logfile=log/${target}-gdb
+    specfile=${dst}/${target}-gdb-${gdb}.spec
+    echo "rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1"
+    if [ ${testing} = no ] ; then
+      rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1
+    fi
+    ${ECHO} rm -rf ${dst}/../BUILD/${target}-gdb*
+    ${ECHO} rm -rf ${buildroot}/opt
+  else
+    echo Skipping gdb for ${target}
   fi
-  ${ECHO} rm -rf ${dst}/../BUILD/${target}-gdb*
-  ${ECHO} rm -rf ${buildroot}/opt
 
-  # now build gcc/newlib
-  #    NOTE: This requires having binutils installed and we immediately
-  #          remove it once finished.
-  ${ECHO} rpm -i ${dst}/../RPMS/i386/${target}-binutils-${binutils}-0.i386.rpm
+  if [ ${do_gccnewlib} = yes ] ; then
+    # now build gcc/newlib
+    #    NOTE: This requires having binutils installed and we immediately
+    #          remove it once finished.
+    binutils_rpm=${dst}/../RPMS/i386/${target}-binutils-${binutils}-0.i386.rpm
+    if [ ! -f ${binutils_rpm} ] ; then
+      echo There is no RPM for binutils for ${target}.
+      echo Looked for ${binutils_rpm}.
+    fi
+    ${ECHO} rpm -i ${binutils_rpm}
 
-  logfile=log/${target}-gccnewlib
-  specfile=${dst}/${target}-gcc-${gcc}-newlib-${newlib}.spec
-  echo "rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1"
-  if [ ${testing} = no ] ; then
-    rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1
-  fi
-  ${ECHO} rm -rf ${dst}/../BUILD/${target}-gcc*
-  ${ECHO} rm -rf ${buildroot}/opt
+    logfile=log/${target}-gccnewlib
+    specfile=${dst}/${target}-gcc-${gcc}-newlib-${newlib}.spec
+    echo "rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1"
+    if [ ${testing} = no ] ; then
+      rpm -ba --buildroot=${buildroot} ${specfile} >${logfile} 2>&1
+    fi
+    ${ECHO} rm -rf ${dst}/../BUILD/${target}-gcc*
+    ${ECHO} rm -rf ${buildroot}/opt
 
-  echo uninstalling binutils for ${target} 
-  if [ ${testing} = no ] ; then
-    rpm -e `rpm -qa | grep rtems`
+    echo uninstalling binutils for ${target} 
+    if [ ${testing} = no ] ; then
+      rpm -e `rpm -qa | grep rtems`
+    fi
+  else
+    echo Skipping gcc/newlib for ${target}
   fi
 done
 
-staging_dir=/usr3/rtems_cds/test_cd/linux
+if [ X${staging_dir} != X ] ; then
+  echo "Moving files to a staging directory for distribution."
+  echo "Plus it saves space in /usr. :)"
+  echo
+  echo Making staging directory..
+  ${ECHO} mkdir ${staging_dir}
+  ${ECHO} mkdir ${staging_dir}/RPMS
+  ${ECHO} mkdir ${staging_dir}/SRPMS
 
-${ECHO} mkdir ${staging_dir}
-${ECHO} mkdir ${staging_dir}/RPMS
-${ECHO} mkdir ${staging_dir}/SRPMS
+  echo Moving RPMs to CD staging directory
+  for file in `ls -1 ${dst}/../RPMS/i386/*.rpm 2>/dev/null`
+  do
+    echo Moving ${file}
+    ${ECHO} mv ${file} ${staging_dir}/RPMS
+  done
 
-echo Moving RPMs to CD staging directory
-for file in `ls -1 ${dst}/../RPMS/i386/*.rpm 2>/dev/null`
-do
-  ${ECHO} mv ${file} ${staging_dir}/RPMS
-done
-
-echo Moving SRPMs to CD staging directory
-for file in `ls -1 ${dst}/../SRPMS/*.rpm 2>/dev/null`
-do
-  ${ECHO} mv ${file} ${staging_dir}/SRPMS
-done
+  echo Moving SRPMs to CD staging directory
+  for file in `ls -1 ${dst}/../SRPMS/*.rpm 2>/dev/null`
+  do
+    echo Moving ${file}
+    ${ECHO} mv ${file} ${staging_dir}/SRPMS
+  done
+fi
 
 # Now we are done
 

@@ -49,12 +49,13 @@ rpm_release=0
 
 . ./$CFG
 
-specfile=${dst}/$target_alias-gdb.spec
+specfile=${dst}/$target_alias-gdb-${gdb_version}.spec
+
 sed -e "s%@Release@%${rpm_release}%g" \
     -e "s%@target_alias@%${target_alias}%g" \
     -e "s%@gdb_version@%${gdb_version}%g" \
     -e "s%@gdb_patch_version@%${gdb_patch_version}%g" \
-< ${RTEMS_DIR}/gdb.spec.in \
+< ${RTEMS_DIR}/gdb/gdb.spec.in \
 > ${specfile}
 
 case ${target} in
