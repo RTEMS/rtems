@@ -1,3 +1,9 @@
+2000-04-24	Eric Norum <eric.norum@usask.ca>
+
+	* lib/rtems_bsdnet_ntp.c: Modifications to make the RTEMS NTP
+	synchronization a little more robust -- no NTP daemon yet, but
+	at least it trys a little harder when the primary NTP server is down.
+
 2001-04-20  Radzislaw Galler  <rgaller@et.put.poznan.pl>
 
 	* modem/ppp.c, pppd/main.c, pppd/pppmain.c, pppd/rtems-ppp.c,

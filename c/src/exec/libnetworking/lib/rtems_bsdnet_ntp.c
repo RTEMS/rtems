@@ -85,15 +85,61 @@ processPacket (struct ntpPacketSmall *p)
 	return 1;
 }
 
+static int
+tryServer (int i, int s)
+{
+	int l;
+	struct timeval tv;
+	int farlen;
+	struct sockaddr_in farAddr;
+	struct ntpPacketSmall packet;
+
+	if (i < 0)
+		tv.tv_sec = 80;
+	else
+		tv.tv_sec = 5;
+	tv.tv_usec = 0;
+	if (setsockopt (s, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof tv) < 0) {
+		printf ("Can't set socket receive timeout: %s\n", strerror (errno));
+		close (s);
+		return -1;
+	}
+	if (i >= 0) {
+		memset (&farAddr, 0, sizeof farAddr);
+		farAddr.sin_family = AF_INET;
+		farAddr.sin_port = htons (123);
+		farAddr.sin_addr = rtems_bsdnet_ntpserver[i];
+		memset (&packet, 0, sizeof packet);
+		packet.li_vn_mode = (3 << 3) | 3; /* NTP version 3, client */
+		l = sendto (s, &packet, sizeof packet, 0, (struct sockaddr *)&farAddr, sizeof farAddr);
+		if (l != sizeof packet) {
+			printf ("Can't send: %s\n", strerror (errno));
+			return -1;
+		}
+	}
+	farlen = sizeof farAddr;
+	i = recvfrom (s, &packet, sizeof packet, 0, (struct sockaddr *)&farAddr, &farlen);
+	if (i == 0)
+		printf ("Unexpected EOF");
+	if (i < 0) {
+		if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
+			return -1;
+		printf ("Can't receive: %s\n", strerror (errno));
+	}
+	if ((i >= sizeof packet) && processPacket (&packet))
+		return 0;
+	return -1;
+}
+
 int
 rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority)
 {
 	int s;
 	int i;
-	static struct sockaddr_in myAddr, farAddr;
-	int fromlen;
-	struct ntpPacketSmall packet;
-	struct timeval tv;
+	int retry;
+	struct sockaddr_in myAddr;
+	int reuseFlag;
+	int ret;
 
 	if (interval != 0) {
 		printf ("Daemon-mode note yet supported.\n");
@@ -105,10 +151,10 @@ rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority)
 		printf ("Can't create socket: %s\n", strerror (errno));
 		return -1;
 	}
-	tv.tv_sec = 5;
-	tv.tv_usec = 0;
-	if (setsockopt (s, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof tv) < 0) {
-		printf ("Can't set socket receive timeout: %s", strerror (errno));
+	reuseFlag = 1;
+	if (setsockopt (s, SOL_SOCKET, SO_REUSEADDR, (char *)&reuseFlag, sizeof reuseFlag) < 0) {
+		printf ("Can't set socket reuse: %s\n", strerror (errno));
+		close (s);
 		return -1;
 	}
 	memset (&myAddr, 0, sizeof myAddr);
@@ -117,42 +163,25 @@ rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority)
 	myAddr.sin_addr.s_addr = htonl (INADDR_ANY);
 	if (bind (s, (struct sockaddr *)&myAddr, sizeof myAddr) < 0) {
 		printf ("Can't bind socket: %s\n", strerror (errno));
+		close (s);
 		return -1;
 	}
-	for (;;) {
+	ret = -1;
+	for (retry = 0 ; (ret == -1) && (retry < 5) ; retry++) {
 		/*
 		 * If there's no server we just have to wait
 		 * and hope that there's an NTP broadcast
 		 * server out there somewhere.
 		 */
-		if (rtems_bsdnet_ntpserver_count > 0) {
-			memset (&farAddr, 0, sizeof farAddr);
-			farAddr.sin_family = AF_INET;
-			farAddr.sin_port = htons (123);
-			/*
-			 * For now, try only the first server.
-			 */
-			farAddr.sin_addr = rtems_bsdnet_ntpserver[0];
-			memset (&packet, 0, sizeof packet);
-			packet.li_vn_mode = (3 << 3) | 3; /* NTP version 3, client */
-			i = sendto (s, &packet, sizeof packet, 0, (struct sockaddr *)&farAddr, sizeof farAddr);
-			if (i != sizeof packet) {
-				printf ("Can't send: %s\n", strerror (errno));
-				return -1;
+		if (rtems_bsdnet_ntpserver_count < 0) {
+			ret = tryServer (-1, s);
+		}
+		else {
+			for (i = 0 ; (ret == -1) && (i < rtems_bsdnet_ntpserver_count) ; i++) {
+				ret = tryServer (i, s);
 			}
 		}
-		fromlen = sizeof farAddr;
-		i = recvfrom (s, &packet, sizeof packet, 0, (struct sockaddr *)&farAddr, &fromlen);
-		if (i == 0)
-			rtems_panic ("EOF");
-		if (i < 0) {
-			if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
-				continue;
-			rtems_panic ("Can't receive: %s", strerror (errno));
-		}
-		if (i >= sizeof packet) {
-			if (processPacket (&packet))
-				return 0;
-		}
 	}
+	close (s);
+	return ret;
 }
