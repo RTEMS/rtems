@@ -1,3 +1,7 @@
+2000-11-20	Joel Sherrill <joel@OARcorp.com>
+
+	* itrontask01/system.h: Configure enough stack memory. 
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.
