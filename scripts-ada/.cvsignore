@@ -13,3 +13,4 @@ mkbinutilspec
 mkbspspec
 mkgdbspec
 mkgnatnewlibspec
+setup.cache
