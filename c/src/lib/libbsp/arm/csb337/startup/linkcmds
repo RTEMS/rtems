@@ -127,10 +127,10 @@ SECTIONS
         _edata = .;
     } > sdram 
 
-    .eh_frame : { *(.eh_frame) } > RAM
-    .data1   : { *(.data1) } > RAM
-    .eh_frame : { *(.eh_frame) } > RAM
-    .gcc_except_table : { *(.gcc_except_table) } > RAM
+    .eh_frame : { *(.eh_frame) } > sdram
+    .data1   : { *(.data1) } > sdram
+    .eh_frame : { *(.eh_frame) } > sdram
+    .gcc_except_table : { *(.gcc_except_table) } > sdram
 
     .rodata :
     {

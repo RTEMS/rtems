@@ -1,3 +1,7 @@
+2005-01-04	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Remove warnings.
+
 2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* Makefile.am, wrapup/Makefile.am: Remove build-variant support.
