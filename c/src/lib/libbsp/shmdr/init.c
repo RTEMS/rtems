@@ -24,6 +24,8 @@
 #include <shm.h>
 
 #include <string.h>    /* memset() */
+#include <stdlib.h>    /* malloc() */
+#include <assert.h>
 
 /*
  * User extension to install MPCI_Fatal as a fatal error
@@ -52,6 +54,13 @@ rtems_mpci_entry Shm_Initialization( void )
   Shm_Maximum_nodes = Shm_RTEMS_MP_Configuration->maximum_nodes;
 
   Shm_Get_configuration( Shm_Local_node, &Shm_Configuration );
+
+  Shm_Interrupt_table = (Shm_Interrupt_information *) malloc(
+    sizeof(Shm_Interrupt_information) * (Shm_Maximum_nodes + 1)
+  );
+
+  assert( Shm_Interrupt_table );
+
 
   Shm_Receive_message_count = 0;
   Shm_Null_message_count    = 0;

@@ -430,7 +430,7 @@ typedef struct shm_config_info shm_config_table;
 #endif
 
 SHM_EXTERN shm_config_table             *Shm_Configuration;
-SHM_EXTERN Shm_Interrupt_information     Shm_Interrupt_table[16];
+SHM_EXTERN Shm_Interrupt_information    *Shm_Interrupt_table;
 SHM_EXTERN Shm_Node_status_control      *Shm_Node_statuses;
 SHM_EXTERN Shm_Locked_queue_Control     *Shm_Locked_queues;
 SHM_EXTERN Shm_Envelope_control         *Shm_Envelopes;
