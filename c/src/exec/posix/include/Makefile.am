@@ -21,15 +21,6 @@ include_HEADERS = sched.h aio.h mqueue.h semaphore.h
 PREINSTALL_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
-# sys
-
-include_sysdir = $(includedir)/sys
-
-include_sys_HEADERS = sys/utsname.h
-
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys \
-    $(include_sys_HEADERS:%=$(PROJECT_INCLUDE)/%)
-
 # rtems/posix
 
 include_rtems_posixdir = $(includedir)/rtems/posix

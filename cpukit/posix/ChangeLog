@@ -1,3 +1,10 @@
+2002-05-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>	
+
+	* include/sys/utsname.h: Remove.
+	* include/Makefile.am: Reflect changes above.
+	* src/utsname.c: Remove.
+	* src/Makefile.am: Reflect changes above.
+
 2001-04-26	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/posix/mqueue.h, inline/rtems/posix/mqueue.inl,
