@@ -34,7 +34,6 @@ RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 dlentry/Makefile
-include/Makefile
 startup/Makefile
 wrapup/Makefile])
 

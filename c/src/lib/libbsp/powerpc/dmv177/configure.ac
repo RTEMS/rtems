@@ -50,7 +50,6 @@ RTEMS_BSPOPTS_HELP([DMV177_USE_INSTRUCTION_CACHE],
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 scv64/Makefile
 sonic/Makefile
 start/Makefile

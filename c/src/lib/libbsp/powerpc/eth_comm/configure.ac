@@ -41,7 +41,6 @@ AC_CONFIG_FILES([Makefile
 clock/Makefile
 canbus/Makefile
 console/Makefile
-include/Makefile
 irq/Makefile
 network/Makefile
 start/Makefile
