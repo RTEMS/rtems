@@ -53,6 +53,7 @@ void RTEMS_Malloc_Initialize(
 {
   rtems_status_code   status;
   void               *starting_address;
+  rtems_unsigned32    old_address;
   rtems_unsigned32    u32_address;
 
   /*
@@ -73,8 +74,14 @@ void RTEMS_Malloc_Initialize(
     }
 
     if (u32_address & (CPU_ALIGNMENT-1)) {
+      old_address = u32_address;
       u32_address = (u32_address + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
-      /* XXX: if we do any alignment .. then length should be shortened */
+
+      /*
+       *  Adjust the length by whatever we aligned by
+       */
+
+      length -= u32_address - old_address;
     }
 
     starting_address = (void *)u32_address;
