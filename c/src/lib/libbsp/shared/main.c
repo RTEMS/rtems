@@ -29,7 +29,7 @@ extern rtems_cpu_table            Cpu_table;
 
 rtems_interrupt_level bsp_isr_level;
 
-int main(int argc, char **argv, char **environ)
+int main(int argc, char **argv)
 {
 
   if ((argc > 0) && argv && argv[0])
@@ -42,7 +42,7 @@ int main(int argc, char **argv, char **environ)
   return 0;
 }
 
-void boot_card(void)
+int boot_card(int argc, char **argv)
 {
   int status;
 
@@ -53,10 +53,12 @@ void boot_card(void)
   bsp_isr_level =
     rtems_initialize_executive_early( &BSP_Configuration, &Cpu_table );
 
-  status = main(0, 0, 0);
+  status = main(argc, argv);
 
   bsp_cleanup();  
 
   exit( status );
+
+  return status;
 }
 
