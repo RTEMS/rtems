@@ -1,4 +1,9 @@
 
+2001-01-05	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/gensh1.cfg: Removed rest of make-target-options and
+	moved them to BSP configure options.
+
 2001-01-03	Emmanuel Raguet <raguet@crf.canon.fr>
 
 	* custom/mcp750.cfg (make-exe): Rewrite to avoid writing to
