@@ -11,7 +11,7 @@ require 'getopts.pl';
 
 if ($opt_h || ! $opt_p) {
     print STDERR <<NO_MORE_HELP;
-word-replace
+word-replace2
 
    Replace *words* with patterns.   Pattern file specifies which patterns
    to replace on each line.  All patterns are wrapped with perl \\b regexp
