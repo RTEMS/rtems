@@ -32,7 +32,6 @@
 
 #define i386_disable_interrupts( _level ) \
   { \
-    _level = 0;   /* avoids warnings */ \
     asm volatile ( "pushf ; \
                     cli ; \
                     pop %0" \
@@ -44,7 +43,7 @@
   { \
     asm volatile ( "push %0 ; \
                     popf" \
-                    : "=rm" ((_level)) \
+                    : : "rm" ((_level)) \
     ); \
   }
 
@@ -53,7 +52,7 @@
     asm volatile ( "push %0 ; \
                     popf ; \
                     cli" \
-                    : "=rm" ((_level)) \
+                    : : "rm" ((_level)) \
     ); \
   }
 
