@@ -3,7 +3,7 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
-ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/macros
 
 ## NOTE: This Makefile.am is rather fragile to the value of RTEMS_BSP
 ## Esp. make clean and make distclean have unwanted side-effects

@@ -1,3 +1,7 @@
+2000-10-30      Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Switch to GNU-canonicalization.
+
 2000-10-26      Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Make sure $SHELL inside of Makefiles does not get
