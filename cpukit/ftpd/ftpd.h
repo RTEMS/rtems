@@ -18,7 +18,7 @@ enum
   FTPD_NO_RW    = FTPD_NO_WRITE | FTPD_NO_READ
 };
 
-typedef int (*rtems_ftpd_hookfunction)(unsigned char *, unsigned long);
+typedef int (*rtems_ftpd_hookfunction)(char *, size_t);
 
 struct rtems_ftpd_hook
 {

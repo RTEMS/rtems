@@ -1,5 +1,9 @@
 2005-02-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libnetworking/rtems_servers/ftpd.h: Warning fixes.
+
+2005-02-03	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	PR 755/rtems
 	* libnetworking/pppd/ipcp.c: Include <rtems/bsdnet/servers.h>.
 	Remove local declarations of rtems_bsdnet_nameservers,
