@@ -15,6 +15,7 @@
 #include <rtems/score/interr.h>
 
 #if defined(__linux__)
+#define _XOPEN_SOURCE
 #define MALLOC_0_RETURNS_NULL
 #endif
 
