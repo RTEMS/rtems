@@ -1,3 +1,8 @@
+2001-12-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/erc32.cfg: Remove erc32nfp support, GCC272.
+	* custom/erc32nfp.cfg: Merge in portions from erc32.cfg.
+
 2001-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* custom/armulator.cfg: Remove make-target-options.
