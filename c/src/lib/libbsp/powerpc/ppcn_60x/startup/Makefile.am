@@ -2,8 +2,6 @@
 ## $Id$
 ##
 
-
-
 PGM = $(ARCH)/startup.rel
 
 C_FILES = bspstart.c bspclean.c setvec.c spurious.c genpvec.c swap.c
@@ -21,7 +19,8 @@ shared_C_FILES += $(top_srcdir)/../../shared/bsppost.c
 shared_C_FILES += $(top_srcdir)/../../shared/main.c
 shared_C_FILES += $(top_srcdir)/../../shared/sbrk.c
 shared_C_FILES += $(top_srcdir)/../../shared/gnatinstallhandler.c
-OBJS += $(shared_C_FILES:$(top_srcdir)/../../shared/%.c=$(ARCH)/%.$(OBJEXT))
+OBJS += \
+    $(shared_C_FILES:$(top_srcdir)/../../shared/%.c=$(ARCH)/%.$(OBJEXT))
 
 $(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../shared/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<

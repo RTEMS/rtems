@@ -2,8 +2,6 @@
 ## $Id$
 ##
 
-
-
 PGM = $(ARCH)/startup.rel
 
 #
@@ -12,8 +10,8 @@ PGM = $(ARCH)/startup.rel
 #       Generation 2 --> FPGA
 STARTUP_C_FILES = FPGA.c
 
-C_FILES = bspclean.c bspstart.c \
-    setvec.c Hwr_init.c spurious.c genpvec.c $(STARTUP_C_FILES)
+C_FILES = bspclean.c bspstart.c setvec.c Hwr_init.c spurious.c genpvec.c \
+    $(STARTUP_C_FILES)
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../../../../automake/compile.am
@@ -25,11 +23,11 @@ shared_C_FILES += $(top_srcdir)/../../shared/bsppost.c
 shared_C_FILES += $(top_srcdir)/../../shared/main.c
 shared_C_FILES += $(top_srcdir)/../../shared/sbrk.c
 shared_C_FILES += $(top_srcdir)/../../shared/gnatinstallhandler.c
-OBJS += $(shared_C_FILES:$(top_srcdir)/../../shared/%.c=$(ARCH)/%.$(OBJEXT))
+OBJS += \
+    $(shared_C_FILES:$(top_srcdir)/../../shared/%.c=$(ARCH)/%.$(OBJEXT))
 
 $(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../shared/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
-
 
 $(PGM): $(OBJS)
 	$(make-rel)
