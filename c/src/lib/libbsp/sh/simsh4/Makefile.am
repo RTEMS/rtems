@@ -20,16 +20,16 @@ include_HEADERS += include/coverhd.h
 
 all-local: $(PREINSTALL_FILES)
 
-$(PROJECT_INCLUDE)/syscall.h: include/syscall.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/syscall.h: include/syscall.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/syscall.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/syscall.h
 
-$(PROJECT_INCLUDE)/ramdisk.h: include/ramdisk.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/ramdisk.h: include/ramdisk.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ramdisk.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ramdisk.h
 
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am

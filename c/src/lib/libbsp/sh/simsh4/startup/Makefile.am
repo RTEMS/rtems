@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel
@@ -35,8 +34,8 @@ $(PGM): $(OBJS)
 	$(make-rel)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds \
-                    $(PROJECT_RELEASE)/lib/linkcmds-le \
-                    $(PROJECT_RELEASE)/lib/linkcmds-le.coff
+    $(PROJECT_RELEASE)/lib/linkcmds-le \
+    $(PROJECT_RELEASE)/lib/linkcmds-le.coff
 
 all-local: $(TMPINSTALL_FILES) $(OBJS) $(PGM)
 
