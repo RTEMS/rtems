@@ -1,3 +1,12 @@
+2002-06-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* src/dosfs/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* src/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* src/imfs/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	* Makefile.am: Include $(top_srcdir)/../automake/*.am.
+	Use ../aclocal.
+	* wrapup/Makefile.am: Include $(top_srcdir)/../automake/*.am.
+
 2002-05-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	Move from c/src/libfs to c/src/exec/libfs
