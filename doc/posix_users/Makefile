@@ -46,7 +46,6 @@ $(PROJECT).ps: $(PROJECT).dvi
 
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) posix_users.texi
-	mv posix_users.dvi $(PROJECT).dvi
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
