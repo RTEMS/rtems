@@ -26,6 +26,12 @@ RTEMS-specific option are supported:
         --enable-libcdir=<DIRECTORY>      (do not use if gcc 2.8 is enabled)
 	--enable-rtemsbsp="bsp1 bsp2 ..."
 
+In addition, the following standard autoconf options are frequently
+used when configuring RTEMS installations:
+
+        --prefix=INSTALL_DIRECTORY
+        --program-prefix=
+
 By default, the RTEMS posix interface is built for targets that support
 it. It can be disabled with the --disable-posix option.
 
@@ -73,11 +79,9 @@ architecture.  The following targets are supported:
 	sparc-rtems
 	
 The cross-compiler is set to $(target)-gcc by default. This can be
-overriden by one of the following methods:
+overriden by:
 
-  + running make with CC_FOR_TARGET=compiler_to_use. The same applies to
-    all the target specific tools (AS, AR, NM, OBJCOPY, SIZE, LD), or
-  + by using the --program-prefix option to configure to specify the
+  + using the --program-prefix option to configure to specify the
     string which will prepended to the tool names.  Be sure to include
     a trailing "-".  For example, to use a m68k-coff toolset, use the
     --program-prefix=m68k-coff- option.
