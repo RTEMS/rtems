@@ -1,3 +1,10 @@
+2001-01-03	Joel Sherrill <joel@OARcorp.com>
+
+	* clock: New directory with stub clock driver.
+	* clock/.cvsignore, clock/Makefile.am, clock/clockdrv.c: New files.
+	* Makefile.am, configure.in, wrapup/Makefile.am: Modified 
+	to reflect above.
+
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/bspstart.c: Removed call of console_reserve_resources().
