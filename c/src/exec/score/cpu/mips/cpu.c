@@ -52,22 +52,11 @@
  */
 
 
-void null_handler( void )
-{
-}
-
-
 void _CPU_Initialize(
   rtems_cpu_table  *cpu_table,
   void      (*thread_dispatch)      /* ignored on this CPU */
 )
 {
-   unsigned int i = ISR_NUMBER_OF_VECTORS;
-
-   while ( i-- ) {
-      _ISR_Vector_table[i] = (ISR_Handler_entry)null_handler;
-   }
-
   /*
    *  The thread_dispatch argument is the address of the entry point
    *  for the routine called at the end of an ISR once it has been

@@ -1,3 +1,8 @@
+2000-12-19	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c (_CPU_Initialize): Do not initialize _ISR_Vector_table() here
+	because it has not been allocated yet.
+
 2000-12-13	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu.c: Removed duplicate declaration for _ISR_Vector_table.
