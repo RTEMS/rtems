@@ -16,7 +16,10 @@ PROJECT_ROOT = @PROJECT_ROOT@
 VPATH = @srcdir@
 
 # following are semi-implemented and untested
-# C_PIECES=aio cancel devctl intr mqueue semaphore time utsname
+# C_PIECES=aio cancel devctl intr mqueue semaphore utsname
+
+# These are really in the stand but not really functional
+BUILD_FOR_NOW_C_PIECES=aio cancel mqueue semaphore utsname
 
 ENOSYS_C_PIECES=\
     execl execle execlp execv execve execvp fork \
@@ -44,7 +47,7 @@ PSIGNAL_PIECES=\
 
 C_PIECES= adasupp cond getpid key mutex $(PTHREAD_PIECES) \
   $(PSIGNAL_PIECES) ptimer sched time \
-  types unistd $(ENOSYS_C_PIECES)
+  types unistd $(ENOSYS_C_PIECES) $(BUILD_FOR_NOW_C_PIECES)
 
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
