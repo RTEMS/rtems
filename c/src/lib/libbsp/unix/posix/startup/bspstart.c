@@ -25,6 +25,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+
+/* for sbrk prototype in linux */
+#if defined(linux)
+#define __USE_MISC
+#endif
 #include <unistd.h>
 
 #include <bsp.h>

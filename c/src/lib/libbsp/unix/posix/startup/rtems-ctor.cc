@@ -82,7 +82,7 @@ extern "C" {
     int
     main(int argc,
          char **argv,
-         char **environp)
+         char ** /* environp is unused */)
     {
         rtems_argc = argc;
         rtems_argv = argv;
