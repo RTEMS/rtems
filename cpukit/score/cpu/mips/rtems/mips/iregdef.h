@@ -298,7 +298,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define	R_SP		R_R29
 #define	R_FP		R_R30
 #define	R_RA		R_R31
-#define R_SZ 4
+
 /* disabled for RTEMS */
 #if 0
 /* Ketan added the following */
