@@ -1,3 +1,19 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* itronhello/init.c, itronhello/itronhello.doc, itronhello/system.h,
+	itronmbf01/init.c, itronmbf01/itronmbf01.doc, itronmbf01/system.h,
+	itronmbox01/init.c, itronmbox01/system.h, itronsem01/init.c,
+	itronsem01/itronsem01.doc, itronsem01/system.h, itrontask01/init.c,
+	itrontask01/itrontask01.doc, itrontask01/system.h,
+	itrontask01/task1.c, itrontask02/dormant.c, itrontask02/init.c,
+	itrontask02/itrontask02.doc, itrontask02/system.h,
+	itrontask03/init.c, itrontask03/itrontask03.doc,
+	itrontask03/preempt.c, itrontask03/system.h, itrontask03/task1.c,
+	itrontask03/task2.c, itrontask03/task3.c, itrontask04/init.c,
+	itrontask04/itrontask04.doc, itrontask04/system.h,
+	itrontask04/task1.c, itrontask04/task2.c, itrontask04/task3.c,
+	itrontime01/init.c, itrontime01/system.h: URL for license changed.
+
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Use rtems-bugs@rtems.com as bug report email address.
