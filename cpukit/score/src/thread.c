@@ -464,6 +464,7 @@ void _Thread_Close(
 #endif
   the_thread->fp_context = NULL;
 
+  if ( the_thread->Start.fp_context )
   (void) _Workspace_Free( the_thread->Start.fp_context );
 
   if ( the_thread->Start.stack )
