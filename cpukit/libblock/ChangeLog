@@ -1,3 +1,11 @@
+2002-05-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	Move from c/src/libblock to c/src/exec/libblock
+	* configure.ac: Reflect move.
+	* Makefile.am: Ditto.
+	* include/Makefile.am: Ditto.
+	* src/Makefile.am: Ditto.
+
 2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/ramdisk.c: include <string.h>.
