@@ -1,5 +1,9 @@
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Add AC_SUBST(INLINEdir).
+
+2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Reflect changes to rtems/.
 	* configure.ac: Reflect changes to rtems/.
 

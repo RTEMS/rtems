@@ -42,7 +42,7 @@ RTEMS_CHECK_NETWORKING
 AS_IF([test "$RTEMS_USE_MACROS" = "yes"],
   [INLINEdir="macros"],
   [INLINEdir="inline"])
-
+AC_SUBST(INLINEdir)
 AM_CONDITIONAL(INLINE,test x"$INLINEdir" = x"inline" )
 AM_CONDITIONAL(MACROS,test x"$INLINEdir" = x"macros" )
 AM_CONDITIONAL(HAS_MP,test x"$HAS_MP" = x"yes" )
