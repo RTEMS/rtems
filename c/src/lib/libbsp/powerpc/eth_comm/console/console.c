@@ -30,6 +30,10 @@
 #include <bsp.h>                /* Must be before libio.h */
 #include <rtems/libio.h>
 #include <termios.h>
+#include <bspIo.h>
+
+static void _BSP_null_char( char c ) {return;}
+BSP_output_char_function_type BSP_output_char = _BSP_null_char;
 
 rtems_device_driver console_initialize(rtems_device_major_number major,
                                        rtems_device_minor_number minor,
@@ -58,11 +62,6 @@ rtems_device_driver console_initialize(rtems_device_major_number major,
   m8xx_uart_scc_initialize(SCC3_MINOR); /* /dev/tty3    */
   m8xx_uart_scc_initialize(SCC4_MINOR); /* /dev/tty4    */
   
-  /*
-   * Set up interrupts
-   */
-   m8xx_uart_interrupts_initialize();
-
   /*
    * Register the devices
    */
@@ -108,28 +107,20 @@ rtems_device_driver console_open(rtems_device_major_number major,
   switch (minor) {
   case 0:
     m8xx.smc1.smcm = 1;           /* Enable SMC1 RX interrupts */
-    m8xx.cimr |= 1UL <<  4;       /* Enable SMC1 interrupts */
     break;
   case 1:
     m8xx.smc2.smcm = 1;           /* Enable SMC2 RX interrupts */
-    m8xx.cimr |= 1UL <<  3;       /* Enable SMC2 interrupts */
     break;
   case 2:
-    m8xx.cimr |= 1UL << 30;      /* Enable SCC1 interrupts */
     sccregs = &m8xx.scc1;
     break;
   case 3: 
-#ifndef I_WANT_TERMIOS
-    m8xx.cimr |= 1UL << 29;      /* Enable SCC2 interrupts */
-#endif /* I_WANT_TERMIOS */
     sccregs = &m8xx.scc2;
     break;
   case 4:
-    m8xx.cimr |= 1UL << 28;      /* Enable SCC3 interrupts */
     sccregs = &m8xx.scc3;
     break;
   case 5:
-    m8xx.cimr |= 1UL << 27;      /* Enable SCC4 interrupts */
     sccregs = &m8xx.scc4;
     break;
   default:

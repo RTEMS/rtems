@@ -82,7 +82,8 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config);
 
 #define RAM_START 0
 #define RAM_END   0x100000
-
+#define IMAP_ADDR ((unsigned int)0xff000000)
+#define IMAP_SIZE ((unsigned int)(16 * 1024))
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;

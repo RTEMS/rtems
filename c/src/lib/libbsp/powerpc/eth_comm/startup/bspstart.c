@@ -31,7 +31,7 @@ boardinfo_t M860_binfo;
  *  some changes.
  */
 extern rtems_configuration_table Configuration;
-
+extern unsigned long intrStackPtr;
 rtems_configuration_table  BSP_Configuration;
 
 rtems_cpu_table Cpu_table;
@@ -43,6 +43,18 @@ char *rtems_progname;
  */
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, unsigned32, int );
+
+void BSP_panic(char *s)
+{
+  printk("%s PANIC %s\n",_RTEMS_version, s);
+  __asm__ __volatile ("sc"); 
+}
+
+void _BSP_Fatal_error(unsigned int v)
+{
+  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
+  __asm__ __volatile ("sc"); 
+}
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -99,10 +111,33 @@ void bsp_start(void)
   extern int _end;
   rtems_unsigned32  heap_start;
   rtems_unsigned32  ws_start;
+  ppc_cpu_id_t myCpu;
+  ppc_cpu_revision_t myCpuRevision;
+  register unsigned char* intrStack;
+  register unsigned int intrNestingLevel = 0;
+   
+  /*
+   * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
+   * store the result in global variables so that it can be used latter...
+   */
+  myCpu 	= get_ppc_cpu_type();
+  myCpuRevision = get_ppc_cpu_revision();
 
   cpu_init();
   mmu_init();
-  
+  /*
+   * Initialize some SPRG registers related to irq handling
+   */
+   
+  intrStack = (((unsigned char*)&intrStackPtr) - CPU_MINIMUM_STACK_FRAME_SIZE);
+  asm volatile ("mtspr	273, %0" : "=r" (intrStack) : "0" (intrStack));
+  asm volatile ("mtspr	272, %0" : "=r" (intrNestingLevel) : "0" (intrNestingLevel));
+ 
+   /*
+    * Install our own set of exception vectors
+    */
+   initialize_exceptions();
+ 
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
    *  a variety of places: hard coded address, malloc'ed from outside
@@ -162,6 +197,14 @@ void bsp_start(void)
   m8xx.scc2p.rbase=0;
   m8xx.scc2p.tbase=0;
   m8xx_cp_execute_cmd( M8xx_CR_OP_STOP_TX | M8xx_CR_CHAN_SCC2 );
+  /*
+   * Initalize RTEMS IRQ system
+   */
+  BSP_rtems_irq_mng_init(0);
+#ifdef SHOW_MORE_INIT_SETTINGS
+  printk("Exit from bspstart\n");
+#endif  
+
 }
 
 

@@ -1,3 +1,11 @@
+2001-04-11	Eric Valette <valette@crf.canon.fr>
+
+	* Makefile.am, configure.in, console/console.c,
+	include/Makefile.am, include/bsp.h, network/network.c,
+	startup/Makefile.am, startup/bspstart.c, startup/linkcmds,
+	wrapup/Makefile.am: Switch the eth_comm BSP to use the
+	"new exception processing model."
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

@@ -9,7 +9,7 @@ if HAS_NETWORKING
 NETWORKING = network
 endif
 
-BSP_PIECES = startup start canbus console $(NETWORKING)
+BSP_PIECES = clock irq startup start canbus vectors console $(NETWORKING)
 # pieces to pick up out of libcpu/ppc
 # CPU_PIECES = mpc860/clock mpc860/timer mpc860/console-generic \
 #    mpc860/vectors
@@ -17,7 +17,7 @@ BSP_PIECES = startup start canbus console $(NETWORKING)
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
     $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/*/$(ARCH)/*.o) \
-    $(wildcard ../../../../libcpu/powerpc/old_exception_processing/$(ARCH)/*.rel) \
+    $(wildcard ../../../../libcpu/powerpc/new_exception_processing/$(ARCH)/*.rel) \
     $(wildcard ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/*/$(ARCH)/*.o)
 LIB = $(ARCH)/libbsp.a
 
