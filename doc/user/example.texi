@@ -39,16 +39,16 @@ rtems_task init_task(
      name, 1, RTEMS_MINIMUM_STACK_SIZE,
      RTEMS_NO_PREEMPT, RTEMS_FLOATING_POINT, &tid
   );
-  if ( status != RTEMS_STATUS_SUCCESSFUL ) {
+  if ( status != RTEMS_STATUS_SUCCESSFUL ) @{
     printf( "rtems_task_create failed with status of %d.\n", status );
     exit( 1 );
-  }
+  @}
 
   status = rtems_task_start( tid, user_application, 0 );
-  if ( status != RTEMS_STATUS_SUCCESSFUL ) {
+  if ( status != RTEMS_STATUS_SUCCESSFUL ) @{
     printf( "rtems_task_start failed with status of %d.\n", status );
     exit( 1 );
-  }
+  @}
   
   status = rtems_task_delete( SELF );    /* should not return */
   printf( "rtems_task_delete returned with status of %d.\n", status );
