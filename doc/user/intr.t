@@ -265,6 +265,14 @@ routine (ISR) for the specified interrupt vector number.  The
 The entry point of the previous ISR for the specified vector is
 returned in @code{old_isr_handler}.
 
+To release an interrupt vector, pass the old handler's address obtained
+when the vector was first capture.
+
+@ifset is-C
+Passing a NULL pointer as the @code{old_handler} address and this parameter
+will be ignored.
+@endif
+
 @subheading NOTES:
 
 This directive will not cause the calling task to be preempted.
@@ -280,6 +288,8 @@ This directive will not cause the calling task to be preempted.
 void rtems_interrupt_disable(
   rtems_isr_level  level
 );
+
+/* this is implemented as a macro and sets level as a side-effect */
 @end example
 @end ifset
 
