@@ -53,9 +53,12 @@ all-local: $(PGM) $(TMPINSTALL_FILES)
 EXTRA_DIST = bspclean.c bspstart.c exit.c main.c no-ctor.c rtems-ctor.cc \
     setvec.c
 
+TMPINSTALL_FILES =
+
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 if HAS_CXX
 $(PROJECT_LIB)/libno-ctor$(LIB_VARIANT).a: ${ARCH}/libno-ctor$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
@@ -66,5 +69,7 @@ $(PROJECT_LIB)/rtems-ctor$(LIB_VARIANT).$(OBJEXT): ${ARCH}/rtems-ctor$(LIB_VARIA
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems-ctor$(LIB_VARIANT).$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/rtems-ctor$(LIB_VARIANT).$(OBJEXT)
 endif
+
+CLEANFILES = $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
