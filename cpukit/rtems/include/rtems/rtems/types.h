@@ -19,6 +19,23 @@
 extern "C" {
 #endif
 
+/*
+ *  RTEMS basic type definitions
+ */
+
+#include <rtems/stdint.h>
+
+/* backward compatibility types */
+typedef uint8_t        rtems_unsigned8;
+typedef uint16_t       rtems_unsigned16;
+typedef uint32_t       rtems_unsigned32;
+typedef uint64_t       rtems_unsigned64;
+
+typedef int8_t         rtems_signed8;
+typedef int16_t        rtems_signed16;
+typedef int32_t        rtems_signed32;
+typedef int64_t        rtems_signed64;
+
 #include <rtems/score/heap.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
@@ -30,32 +47,12 @@ extern "C" {
 #include <rtems/score/mppkt.h>
 #endif
 
-/*
- *  RTEMS basic type definitions
- */
-
-typedef unsigned8       rtems_unsigned8;  /* unsigned 8-bit value  */
-typedef unsigned16      rtems_unsigned16; /* unsigned 16-bit value */
-typedef unsigned32      rtems_unsigned32; /* unsigned 32-bit value */
-
-typedef signed8         rtems_signed8;    /* signed 8-bit value  */
-typedef signed16        rtems_signed16;   /* signed 16-bit value */
-typedef signed32        rtems_signed32;   /* signed 32-bit value */
-
-/*
- * some C++ compilers (eg: HP's) don't do 'long long'
- */
-#if defined(__GNUC__)
-typedef unsigned64      rtems_unsigned64; /* unsigned 64-bit value */
-typedef signed64        rtems_signed64;   /* signed 64-bit value */
-#endif
-
 typedef single_precision rtems_single;    /* single precision float */
 typedef double_precision rtems_double;    /* double precision float */
 
 typedef boolean          rtems_boolean;
 
-typedef unsigned32       rtems_name;
+typedef uint32_t       rtems_name;
 typedef Objects_Id       rtems_id;
 
 typedef Context_Control            rtems_context;

@@ -1,3 +1,9 @@
+2003-05-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	PR 409:
+	* include/rtems/rtems/types.h: Include rtems/stdint.h.
+	Apply c99-types to typedef rtems_[un]signed[8|16|32|64].
+
 2003-01-10	Joel Sherrill <joel@OARcorp.com>
 
 	* src/msg.c, src/part.c, src/sem.c, src/tasks.c: Correct object
