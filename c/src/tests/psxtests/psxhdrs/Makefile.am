@@ -20,10 +20,10 @@ C_FILES = clock01.c clock02.c clock03.c clock04.c clock05.c clock06.c \
     signal01.c signal02.c signal03.c signal04.c signal05.c signal06.c \
     signal07.c signal08.c signal09.c signal10.c signal11.c signal12.c \
     signal13.c signal14.c signal15.c signal16.c signal17.c signal18.c \
-    signal19.c signal20.c signal21.c signal22.c time01.c time02.c time03.c \
-    time04.c time05.c time06.c time07.c time08.c time09.c time10.c time11.c \
-    time12.c time13.c timer01.c timer02.c timer03.c timer04.c timer05.c \
-    timer06.c
+    signal19.c signal20.c signal21.c signal22.c sync01.c sync02.c sync03.c \
+    time01.c time02.c time03.c time04.c time05.c time06.c time07.c time08.c \
+    time09.c time10.c time11.c time12.c time13.c timer01.c timer02.c timer03.c \
+    timer04.c timer05.c timer06.c timer07.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 SRCS = $(C_FILES)

@@ -1,3 +1,11 @@
+2003-09-03	Joel Sherrill <joel@OARcorp.com>
+
+	PR 463/tests
+	PR 465/tests
+	* psxhdrs/Makefile.am: Add new test cases.
+	* psxhdrs/sync01.c, psxhdrs/sync02.c, psxhdrs/sync03.c,
+	psxhdrs/timer07.c: New files.
+
 2003-08-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Reflect having moved aclocal/.
