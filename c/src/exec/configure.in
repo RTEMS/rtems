@@ -40,14 +40,6 @@ RTEMS_CHECK_ITRON_API(RTEMS_BSP)
 # If RTEMS macros are enabled, then use them.  Otherwise, use inlines.
 if test "$RTEMS_USE_MACROS" = "yes"; then
   INLINEdir="macros"
-  if test "$HAS_POSIX_API" = "yes"; then
-    # The problem is that there is currently no code in posix/macros :)
-    AC_MSG_ERROR(Macros are not implemented for the POSIX API)
-  fi
-  if test "$HAS_ITRON_API" = "yes"; then
-    # The problem is that there is currently no code in itron/macros :)
-    AC_MSG_ERROR(Macros are not implemented for the ITRON API)
-  fi
 else
   INLINEdir="inline"
 fi
