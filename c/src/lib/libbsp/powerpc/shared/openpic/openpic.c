@@ -23,7 +23,6 @@
 #include <rtems/bspIo.h>
 #include <bsp/openpic.h>
 #include <bsp/pci.h>
-#include <bsp/consoleIo.h>
 #include <libcpu/io.h>
 #include <libcpu/byteorder.h>
 #include <bsp.h>
@@ -69,7 +68,7 @@ static unsigned int NumSources;
 	printk("openpic.c:%d: illegal priority %d\n", __LINE__, pri);
 #define check_arg_irq(irq) \
     if (irq < 0 || irq >= NumSources) \
-	printk("openpic.c:%d: illegal irq %d from %p,[%p],[[%p]]\n", \
+	printk("openpic.c:%d: illegal irq %d from 0x%08x,[0x%08x],[[0x%08x]]\n", \
 	       __LINE__, irq, __builtin_return_address(0), \
 	       __builtin_return_address(1), __builtin_return_address(2) \
 	       );
@@ -222,7 +221,7 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
 		break;
 	}
     }
-    printk("OpenPIC Version %s (%d CPUs and %d IRQ sources) at %p\n", version,
+    printk("OpenPIC Version %s (%d CPUs and %d IRQ sources) at 0x%08x\n", version,
 	   NumProcessors, NumSources, OpenPIC);
 
     printk("OpenPIC Vendor %d (%s), Device %d (%s), Stepping %d\n", vendorid,

@@ -43,12 +43,17 @@
 extern void boot_udelay();
 void * __palloc(u_long);
 void  pfree(void *);
-
+#else
+#include <rtems/bspIo.h>
 #endif
 
 typedef unsigned long long u64;
 typedef long long s64;
 typedef unsigned int u32;
+
+#ifndef __BOOT__
+BSP_output_char_function_type	BSP_output_char = debug_putc_onlcr;
+#endif
 
 #ifdef USE_KBD_SUPPORT
 unsigned short plain_map[NR_KEYS] = {
@@ -430,6 +435,15 @@ void debug_putc(const u_char c)
   curIo->putc(c);
 }
 
+/* const char arg to be compatible with BSP_output_char decl. */
+void
+debug_putc_onlcr(const char c)
+{
+	if ('\n'==c)
+		debug_putc('\r');
+	debug_putc(c);
+}
+
 int debug_getc(void)
 {
   return curIo->getc();
@@ -439,8 +453,6 @@ int debug_tstc(void)
 {
   return curIo->tstc();
 }
-
-
 
 #define vidmem ((__io_ptr)(ptr_mem_map->isa_mem_base+0xb8000))
 
@@ -528,9 +540,7 @@ void puts(const u_char *s)
         char c;
 
         while ( ( c = *s++ ) != '\0' ) {
-                debug_putc(c);
-                if ( c == '\n' )
-                        debug_putc('\r');
+				debug_putc_onlcr((const char)c);
         }
 }
 
@@ -875,6 +885,10 @@ int select_console(ioType t) {
 #define is_digit(c)	((c) >= '0' && (c) <= '9')
 
 
+/* provide this for the bootloader only; otherwise
+ * use libcpu implementation
+ */
+#if defined(__BOOT__)
 static int skip_atoi(const char **s)
 {
 	int i=0;
@@ -902,6 +916,8 @@ int printk(const char *fmt, ...) {
 	puts(buf);
 	return  i;
 }
+
+#endif
 
 /* Necessary to avoid including a library, and GCC won't do this inline. */
 #define div10(num, rmd)							 \
@@ -942,6 +958,7 @@ do {	u32 t1, t2, t3;							 \
 #define LONG	64		/* long argument */
 #define LLONG	128		/* 64 bit argument */
 
+#if defined(__BOOT__)
 static char * number(char * str, int size, int type, u64 num)
 {
 	char fill,sign,tmp[24];
@@ -1107,3 +1124,4 @@ int k_vsprintf(char *buf, const char *fmt, va_list args)
 	*str = '\0';
 	return str-buf;
 }
+#endif

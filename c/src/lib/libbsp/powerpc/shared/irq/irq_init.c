@@ -18,7 +18,6 @@
  *  $Id$
  */
 
-#include <bsp/consoleIo.h>
 #include <libcpu/io.h>
 #include <libcpu/spr.h>
 #include <bsp/pci.h>
