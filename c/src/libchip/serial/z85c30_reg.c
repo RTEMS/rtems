@@ -44,7 +44,7 @@ unsigned8 _Z85C30_NAME(z85c30_get_register)(
       *port = ucRegNum;
     }
     data = *port;
-  rtems_interrupt_disable(level);
+  rtems_interrupt_enable(level);
 
   return data;
 }
@@ -69,5 +69,5 @@ void _Z85C30_NAME(z85c30_set_register)(
       *port = ucRegNum;
     }
     *port = ucData;
-  rtems_interrupt_disable(level);
+  rtems_interrupt_enable(level);
 }
