@@ -1,3 +1,7 @@
+2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_CHECK_CPU.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* mptests/mp01/config.h, mptests/mp01/mp01.adb,
