@@ -58,7 +58,7 @@ CREATE_DIRS = \
     lib/include/rtems/score lib/include/rtems/rtems lib/include/rtems/posix \
     lib/include/libc lib/include/libc/sys \
     lib/include/motorola lib/include/zilog \
-    lib/include/libchip \
+    lib/include/libchip lib/include/libcpu \
     $(LIBNETWORKING) \
     $(LIBRPC) \
     $(LIBRDBG) \
