@@ -22,7 +22,7 @@ p: pcrt0%O
 
 
 link: replace
-mrtems: -dc -dp -N -T linkcmds%s -e start
+mrtems: -dc -dp -N -T linkcmds%s -e _start
 
 lib: replace
 mrtems: -( -lc -lrtemsall -lgcc -)
