@@ -60,7 +60,8 @@
     _Chain_Initialize_empty( &_User_extensions_Switches_list ); \
     \
     if ( (_initial_extensions) ) { \
-      extension = _Workspace_Allocate_or_fatal_error( \
+      extension = (User_extensions_Control *) \
+        _Workspace_Allocate_or_fatal_error( \
           sizeof(User_extensions_Control) * _number_of_extensions ); \
       \
       memset ( \
