@@ -1,9 +1,12 @@
-/*  tod.inl
+/** 
+ *  @file tod.inl
  *
  *  This file contains the static inline implementation of the inlined routines
  *  from the Time of Day Handler.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,12 +19,12 @@
 #ifndef __TIME_OF_DAY_inl
 #define __TIME_OF_DAY_inl
 
-/*PAGE
- *
- *  _TOD_Tickle_ticks
- *
- *  DESCRIPTION:
- *
+/**
+ *  @addtogroup ScoreTOD 
+ *  @{
+ */
+
+/**
  *  This routine increments the ticks field of the current time of
  *  day at each clock tick.
  */
@@ -32,12 +35,7 @@ RTEMS_INLINE_ROUTINE void _TOD_Tickle_ticks( void )
   _Watchdog_Ticks_since_boot += 1;
 }
 
-/*PAGE
- *
- *  _TOD_Deactivate
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine deactivates updating of the current time of day.
  */
 
@@ -46,12 +44,7 @@ RTEMS_INLINE_ROUTINE void _TOD_Deactivate( void )
   _Watchdog_Remove( &_TOD_Seconds_watchdog );
 }
 
-/*PAGE
- *
- *  _TOD_Activate
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine activates updating of the current time of day.
  */
 
@@ -61,6 +54,8 @@ RTEMS_INLINE_ROUTINE void _TOD_Activate(
 {
   _Watchdog_Insert_ticks( &_TOD_Seconds_watchdog, ticks );
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

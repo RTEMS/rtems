@@ -1,9 +1,12 @@
-/*  inline/address.inl
+/** 
+ *  @file address.inl
  *
  *  This include file contains the bodies of the routines
  *  about addresses which are inlined.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,12 +19,12 @@
 #ifndef __INLINE_ADDRESSES_inl
 #define __INLINE_ADDRESSES_inl
 
-/*PAGE
- *
- *  _Addresses_Add_offset
- *
- *  DESCRIPTION:
- *
+/**
+ *  @addtogroup ScoreAddress 
+ *  @{
+ */
+
+/**
  *  This function is used to add an offset to a base address.
  *  It returns the resulting address.  This address is typically
  *  converted to an access type before being used further.
@@ -35,12 +38,7 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
   return (void *)((char *)base + offset);
 }
 
-/*PAGE
- *
- *  _Addresses_Subtract_offset
- *
- *  DESCRIPTION:
- *
+/**
  *  This function is used to subtract an offset from a base
  *  address.  It returns the resulting address.  This address is
  *  typically converted to an access type before being used further.
@@ -54,16 +52,11 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
   return (void *)((char *)base - offset);
 }
 
-/*PAGE
- *
- *  _Addresses_Subtract
- *
- *  DESCRIPTION:
- *
+/**
  *  This function is used to subtract two addresses.  It returns the
  *  resulting offset.
  *
- *  NOTE:  The cast of an address to an uint32_t   makes this code
+ *  @note  The cast of an address to an uint32_t   makes this code
  *         dependent on an addresses being thirty two bits.
  */
 
@@ -75,12 +68,7 @@ RTEMS_INLINE_ROUTINE uint32_t   _Addresses_Subtract (
   return ((char *) left - (char *) right);
 }
 
-/*PAGE
- *
- *  _Addresses_Is_aligned
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns TRUE if the given address is correctly
  *  aligned for this processor and FALSE otherwise.  Proper alignment
  *  is based on correctness and efficiency.
@@ -99,12 +87,7 @@ RTEMS_INLINE_ROUTINE boolean _Addresses_Is_aligned (
 #endif
 }
 
-/*PAGE
- *
- *  _Addresses_Is_in_range
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns TRUE if the given address is within the
  *  memory range specified and FALSE otherwise.  base is the address
  *  of the first byte in the memory range and limit is the address
@@ -120,6 +103,8 @@ RTEMS_INLINE_ROUTINE boolean _Addresses_Is_in_range (
 {
   return ( address >= base && address <= limit );
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

@@ -1,9 +1,12 @@
-/*  userext.inl
+/** 
+ *  @file userext.inl
  *
  *  This file contains the macro implementation of the inlined routines
  *  from the User Extension Handler
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -18,15 +21,15 @@
 
 #include <rtems/score/wkspace.h>
 
-/*PAGE
- *
- *  _User_extensions_Add_set
- *
- *  DESCRIPTION:
- *
+/**
+ *  @addtogroup ScoreUserExt 
+ *  @{
+ */
+
+/**
  *  This routine is used to add a user extension set to the active list.
  *
- *  NOTE: Must be before _User_extensions_Handler_initialization to
+ *  @note Must be before _User_extensions_Handler_initialization to
  *        ensure proper inlining.
  */
 
@@ -49,12 +52,7 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Add_set (
   }
 }
 
-/*PAGE
- *
- *  _User_extensions_Handler_initialization
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine performs the initialization necessary for this handler.
  */
 
@@ -88,12 +86,7 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Handler_initialization (
   }
 }
 
-/*PAGE
- *
- *  _User_extensions_Add_API_set
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine is used to add an API extension set to the active list.
  */
  
@@ -114,12 +107,7 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Add_API_set (
   }
 }
 
-/*PAGE
- *
- *  _User_extensions_Remove_set
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine is used to remove a user extension set from the active list.
  */
 
@@ -137,12 +125,7 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Remove_set (
     _Chain_Extract( &the_extension->Switch.Node );
 }
 
-/*PAGE
- *
- *  _User_extensions_Thread_switch
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine is used to invoke the user extension which
  *  is invoked when a context switch occurs.
  */
@@ -164,6 +147,8 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Thread_switch (
     (*the_extension_switch->thread_switch)( executing, heir );
   }
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

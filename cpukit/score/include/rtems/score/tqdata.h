@@ -1,9 +1,12 @@
-/*  tqdata.h
+/** 
+ *  @file tqdata.h
  *
  *  This include file contains all the constants and structures
  *  needed to declare a thread queue.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -15,6 +18,13 @@
 
 #ifndef __THREAD_QUEUE_DATA_h
 #define __THREAD_QUEUE_DATA_h
+
+/**
+ *  @defgroup ScoreThreadQData Thread Queue Handler Data Definition
+ *
+ *  This group contains functionality which XXX
+ */
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -84,6 +94,8 @@ typedef struct {
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

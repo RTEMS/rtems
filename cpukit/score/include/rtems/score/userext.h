@@ -1,10 +1,13 @@
-/*  userext.h
+/** 
+ *  @file userext.h
  *
  *  This include file contains all information about user extensions.  This
  *  Handler provides mechanisms which can be used to initialize and manipulate
  *  all user extensions.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,6 +20,13 @@
 #ifndef __USER_EXTENSIONS_h
 #define __USER_EXTENSIONS_h
 
+/**
+ *  @defgroup ScoreUserExt User Extension Handler
+ *
+ *  This group contains functionality which XXX
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -25,193 +35,210 @@ extern "C" {
 #include <rtems/score/chain.h>
 #include <rtems/score/thread.h>
 
-/*
+/** @defgroup ScoreUserExtStruct User Extension Handler Structures
+ *
  *  The following records defines the User Extension Table.
  *  This table defines the application dependent routines which
  *  are invoked at critical points in the life of each thread and
  *  the system as a whole.
  */
+/*@{*/
 
+/**
+ *  XXX
+ */
 typedef void User_extensions_routine;
 
+/**
+ *  XXX
+ */
 typedef boolean ( *User_extensions_thread_create_extension )(
                  Thread_Control *,
                  Thread_Control *
              );
 
+/**
+ *  XXX
+ */
 typedef User_extensions_routine ( *User_extensions_thread_delete_extension )(
                  Thread_Control *,
                  Thread_Control *
              );
 
+/**
+ *  XXX
+ */
 typedef User_extensions_routine ( *User_extensions_thread_start_extension )(
                  Thread_Control *,
                  Thread_Control *
              );
 
+/**
+ *  XXX
+ */
 typedef User_extensions_routine ( *User_extensions_thread_restart_extension )(
                  Thread_Control *,
                  Thread_Control *
              );
 
+/**
+ *  XXX
+ */
 typedef User_extensions_routine ( *User_extensions_thread_switch_extension )(
                  Thread_Control *,
                  Thread_Control *
              );
 
+/**
+ *  XXX
+ */
 typedef User_extensions_routine (
                                 *User_extensions_thread_post_switch_extension )(
                  Thread_Control *
              );
 
+/**
+ *  XXX
+ */
 typedef User_extensions_routine ( *User_extensions_thread_begin_extension )(
                  Thread_Control *
              );
 
+/**
+ *  XXX
+ */
 typedef User_extensions_routine ( *User_extensions_thread_exitted_extension )(
                  Thread_Control *
              );
 
+/**
+ *  XXX
+ */
 typedef User_extensions_routine ( *User_extensions_fatal_extension )(
                  Internal_errors_Source  /* the_source  */,
                  boolean                 /* is_internal */,
                  uint32_t                /* the_error   */
              );
 
-
+/**
+ *  XXX
+ */
 typedef struct {
+  /** This field is XXX */
   User_extensions_thread_create_extension       thread_create;
+  /** This field is XXX */
   User_extensions_thread_start_extension        thread_start;
+  /** This field is XXX */
   User_extensions_thread_restart_extension      thread_restart;
+  /** This field is XXX */
   User_extensions_thread_delete_extension       thread_delete;
+  /** This field is XXX */
   User_extensions_thread_switch_extension       thread_switch;
+  /** This field is XXX */
   User_extensions_thread_begin_extension        thread_begin;
+  /** This field is XXX */
   User_extensions_thread_exitted_extension      thread_exitted;
+  /** This field is XXX */
   User_extensions_fatal_extension               fatal;
 }   User_extensions_Table;
 
-/*
- *  The following is used to manage the list of switch handlers.
- */
+/*@}*/
 
+/**
+ *  This is used to manage the list of switch handlers.
+ */
 typedef struct {
+  /** This field is XXX */
   Chain_Node                              Node;
+  /** This field is XXX */
   User_extensions_thread_switch_extension thread_switch;
 }   User_extensions_Switch_control;
 
-/*
- *  The following is used to manage each user extension set.
+/**
+ *  This is used to manage each user extension set.
  *  The switch control is part of the extensions control even
  *  if not used due to the extension not having a switch
  *  handler.
  */
-
 typedef struct {
+  /** This field is XXX */
   Chain_Node                     Node;
+  /** This field is XXX */
   User_extensions_Switch_control Switch;
+  /** This field is XXX */
   User_extensions_Table          Callouts;
 }   User_extensions_Control;
 
-/*
- *  The following is used to manage the list of active extensions.
+/**
+ *  This is used to manage the list of active extensions.
  */
-
 SCORE_EXTERN Chain_Control _User_extensions_List;
 
-/*
- *  The following is used to manage a chain of user extension task
+/**
+ *  This is used to manage a chain of user extension task
  *  switch nodes.
  */
-
 SCORE_EXTERN Chain_Control _User_extensions_Switches_list;
 
-/*
- *  _User_extensions_Thread_create
- *
- *  DESCRIPTION:
+/** @brief  User extensions Thread create
  *
  *  This routine is used to invoke the user extension for
  *  the thread creation operate.
  */
-
 boolean _User_extensions_Thread_create (
   Thread_Control *the_thread
 );
 
-/*
- *  _User_extensions_Thread_delete
- *
- *  DESCRIPTION:
+/** @brief  User extensions Thread delete
  *
  *  This routine is used to invoke the user extension for
  *  the thread deletion operation.
  */
-
 void _User_extensions_Thread_delete (
   Thread_Control *the_thread
 );
 
-/*
- *  _User_extensions_Thread_start
- *
- *  DESCRIPTION:
+/** @brief  User extensions Thread start
  *
  *  This routine is used to invoke the user extension for
  *  the thread start operation.
  */
-
 void _User_extensions_Thread_start (
   Thread_Control *the_thread
 );
 
-/*
- *  _User_extensions_Thread_restart
- *
- *  DESCRIPTION:
+/** @brief  User extensions Thread restart
  *
  *  This routine is used to invoke the user extension for
  *  the thread restart operation.
  */
-
 void _User_extensions_Thread_restart (
   Thread_Control *the_thread
 );
 
-/*
- *  _User_extensions_Thread_begin
- *
- *  DESCRIPTION:
+/** @brief  User extensions Thread begin
  *
  *  This routine is used to invoke the user extension which
  *  is invoked when a thread begins.
  */
-
 void _User_extensions_Thread_begin (
   Thread_Control *executing
 );
 
-/*
- *  _User_extensions_Thread_exitted
- *
- *  DESCRIPTION:
+/** @brief  User extensions Thread exitted
  *
  *  This routine is used to invoke the user extension which
  *  is invoked when a thread exits.
  */
-
 void _User_extensions_Thread_exitted (
   Thread_Control *executing
 );
 
-/*
- *  _User_extensions_Fatal
- *
- *  DESCRIPTION:
+/** @brief  User extensions Fatal
  *
  *  This routine is used to invoke the user extension invoked
  *  when a fatal error occurs.
  */
-
 void _User_extensions_Fatal (
   Internal_errors_Source  the_source,
   boolean                 is_internal,
@@ -225,6 +252,8 @@ void _User_extensions_Fatal (
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

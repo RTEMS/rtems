@@ -1,9 +1,12 @@
-/*  coremsg.inl
+/** 
+ *  @file coremsg.inl
  *
  *  This include file contains the static inline implementation of all
  *  inlined routines in the Core Message Handler.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,14 +19,14 @@
 #ifndef __CORE_MESSAGE_QUEUE_inl
 #define __CORE_MESSAGE_QUEUE_inl
 
+/**
+ *  @addtogroup ScoreMessageQueue 
+ *  @{
+ */
+
 #include <string.h>   /* needed for memcpy */
  
-/*PAGE
- *
- *  _CORE_message_queue_Send
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine sends a message to the end of the specified message queue.
  */
  
@@ -53,12 +56,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
   );
 }
  
-/*PAGE
- *
- *  _CORE_message_queue_Urgent
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine sends a message to the front of the specified message queue.
  */
  
@@ -88,12 +86,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Urgent(
  );
 }
 
-/*PAGE
- *
- *  _CORE_message_queue_Copy_buffer
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine copies the contents of the source message buffer
  *  to the destination message buffer.
  */
@@ -107,12 +100,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Copy_buffer (
   memcpy(destination, source, size);
 }
 
-/*PAGE
- *
- *  _CORE_message_queue_Allocate_message_buffer
- *
- *  DESCRIPTION:
- *
+/**
  *  This function allocates a message buffer from the inactive
  *  message buffer chain.
  */
@@ -126,12 +114,7 @@ _CORE_message_queue_Allocate_message_buffer (
      _Chain_Get( &the_message_queue->Inactive_messages );
 }
 
-/*PAGE
- *
- *  _CORE_message_queue_Free_message_buffer
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine frees a message buffer to the inactive
  *  message buffer chain.
  */
@@ -144,12 +127,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Free_message_buffer (
   _Chain_Append( &the_message_queue->Inactive_messages, &the_message->Node );
 }
 
-/*PAGE
- *
- *  _CORE_message_queue_Get_pending_message
- *
- *  DESCRIPTION:
- *
+/**
  *  This function removes the first message from the_message_queue
  *  and returns a pointer to it.
  */
@@ -163,12 +141,7 @@ RTEMS_INLINE_ROUTINE
     _Chain_Get_unprotected( &the_message_queue->Pending_messages );
 }
 
-/*PAGE
- *
- *  _CORE_message_queue_Is_priority
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns TRUE if the priority attribute is
  *  enabled in the attribute_set and FALSE otherwise.
  */
@@ -180,12 +153,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_message_queue_Is_priority(
   return (the_attribute->discipline == CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY);
 }
 
-/*PAGE
- *
- *  _CORE_message_queue_Append
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine places the_message at the rear of the outstanding
  *  messages on the_message_queue.
  */
@@ -198,12 +166,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Append (
   _Chain_Append( &the_message_queue->Pending_messages, &the_message->Node );
 }
 
-/*PAGE
- *
- *  _CORE_message_queue_Prepend
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine places the_message at the front of the outstanding
  *  messages on the_message_queue.
  */
@@ -219,12 +182,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Prepend (
   );
 }
 
-/*PAGE
- *
- *  _CORE_message_queue_Is_null
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns TRUE if the_message_queue is TRUE and FALSE otherwise.
  */
 
@@ -235,12 +193,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_message_queue_Is_null (
   return ( the_message_queue == NULL  );
 }
 
-/*PAGE
- *
- *  _CORE_message_queue_Is_notify_enabled
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns TRUE if notification is enabled on this message
  *  queue and FALSE otherwise.
  */
@@ -252,12 +205,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_message_queue_Is_notify_enabled (
   return (the_message_queue->notify_handler != NULL);
 }
  
-/*PAGE
- *
- *  _CORE_message_queue_Set_notify
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine initializes the notification information for the_message_queue.
  */
  
@@ -270,6 +218,8 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Set_notify (
   the_message_queue->notify_handler  = the_handler;
   the_message_queue->notify_argument = the_argument;
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

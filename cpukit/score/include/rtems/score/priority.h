@@ -1,10 +1,13 @@
-/*  priority.h
+/** 
+ *  @file priority.h
  *
  *  This include file contains all thread priority manipulation routines.
  *  This Handler provides mechanisms which can be used to
  *  initialize and manipulate thread priorities.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,6 +20,13 @@
 #ifndef __PRIORITY_h
 #define __PRIORITY_h
 
+/**
+ *  @defgroup ScorePriority Priority Handler
+ *
+ *  This group contains functionality which XXX
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -25,7 +35,7 @@ extern "C" {
  *  The following type defines the control block used to manage
  *  thread priorities.
  *
- *  NOTE: Priority 0 is reserved for internal threads only.
+ *  @note Priority 0 is reserved for internal threads only.
  */
 
 typedef uint32_t   Priority_Control;
@@ -69,7 +79,7 @@ SCORE_EXTERN Priority_Bit_map_control
 /*
  *  Priority Bitfield Manipulation Routines
  *
- *  NOTE:
+ *  @note
  *
  *  These may simply be pass throughs to CPU dependent routines.
  */
@@ -91,6 +101,8 @@ SCORE_EXTERN Priority_Bit_map_control
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

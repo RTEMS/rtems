@@ -1,9 +1,12 @@
-/*  inline/coremutex.inl
+/** 
+ *  @file coremutex.inl
  *
  *  This include file contains all of the inlined routines associated
  *  with the CORE mutexes.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,12 +19,12 @@
 #ifndef __INLINE_CORE_MUTEX_inl
 #define __INLINE_CORE_MUTEX_inl
 
-/*PAGE
- *
- *  _CORE_mutex_Is_locked
- *
- *  DESCRIPTION:
- *
+/**
+ *  @addtogroup ScoreMutex 
+ *  @{
+ */
+
+/**
  *  This routine returns TRUE if the mutex specified is locked and FALSE
  *  otherwise.
  */
@@ -33,12 +36,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_locked(
   return the_mutex->lock == CORE_MUTEX_LOCKED;
 }
  
-/*PAGE
- *
- *  _CORE_mutex_Is_fifo
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine returns TRUE if the mutex's wait discipline is FIFO and FALSE
  *  otherwise.
  */
@@ -50,12 +48,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_fifo(
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_FIFO;
 }
  
-/*PAGE
- *
- *  _CORE_mutex_Is_priority
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine returns TRUE if the mutex's wait discipline is PRIORITY and
  *  FALSE otherwise.
  */
@@ -67,12 +60,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority(
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_PRIORITY;
 }
  
-/*PAGE
- *
- *  _CORE_mutex_Is_inherit_priority
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine returns TRUE if the mutex's wait discipline is
  *  INHERIT_PRIORITY and FALSE otherwise.
  */
@@ -84,12 +72,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_inherit_priority(
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
 }
  
-/*PAGE
- *
- *  _CORE_mutex_Is_priority_ceiling
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine returns TRUE if the mutex's wait discipline is
  *  PRIORITY_CEILING and FALSE otherwise.
  */
@@ -101,12 +84,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority_ceiling(
   return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING;
 }
  
-/*PAGE
- *
- *  _CORE_mutex_Seize_interrupt_trylock
- *
- *  DESCRIPTION:
- *
+/*
  *  This routine returns 0 if "trylock" can resolve whether or not the
  *  mutex is immediately obtained or there was an error attempting to
  *  get it.  It returns 1 to indicate that the caller cannot obtain
@@ -115,8 +93,9 @@ RTEMS_INLINE_ROUTINE boolean _CORE_mutex_Is_priority_ceiling(
  *  NOTE: There is no MACRO version of this routine.
  *        A body is in coremutexseize.c that is duplicated
  *        from the .inl by hand.
+ *
+ *  NOTE: The Doxygen for this routine is in the .h file.
  */
-
 RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
   CORE_mutex_Control  *the_mutex,
   ISR_Level           *level_p
@@ -191,6 +170,8 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock(
 
   return 1;
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

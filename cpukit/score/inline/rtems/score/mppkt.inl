@@ -1,9 +1,12 @@
-/*  inline/mppkt.inl
+/** 
+ *  @file mppkt.inl
  *
  *  This package is the implementation of the Packet Handler
  *  routines which are inlined.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,16 +19,16 @@
 #ifndef __INLINE_MP_PACKET_inl
 #define __INLINE_MP_PACKET_inl
 
-/*PAGE
- *
- *  _Mp_packet_Is_valid_packet_class
- *
- *  DESCRIPTION:
- *
+/**
+ *  @addtogroup ScoreMPPacket 
+ *  @{
+ */
+
+/**
  *  This function returns TRUE if the the_packet_class is valid,
  *  and FALSE otherwise.
  *
- *  NOTE: Check for lower bounds (MP_PACKET_CLASSES_FIRST ) is unnecessary
+ *  @note Check for lower bounds (MP_PACKET_CLASSES_FIRST ) is unnecessary
  *        because this enum starts at lower bound of zero.
  */
 
@@ -36,12 +39,7 @@ RTEMS_INLINE_ROUTINE boolean _Mp_packet_Is_valid_packet_class (
   return ( the_packet_class <= MP_PACKET_CLASSES_LAST );
 }
 
-/*PAGE
- *
- *  _Mp_packet_Is_null
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns TRUE if the the_packet_class is null,
  *  and FALSE otherwise.
  */
@@ -52,6 +50,8 @@ RTEMS_INLINE_ROUTINE boolean _Mp_packet_Is_null (
 {
   return the_packet == NULL;
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

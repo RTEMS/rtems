@@ -1,8 +1,11 @@
-/*  bitfield.h
+/** 
+ *  @file bitfield.h
  *
  *  This include file contains all bit field manipulation routines.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -15,30 +18,26 @@
 #ifndef __RTEMS_BITFIELD_h
 #define __RTEMS_BITFIELD_h
 
+/**
+ *  @defgroup ScoreBitfield Bitfield Handler
+ *
+ *  This group contains functionality that is used to manipulate the
+ *  priority bitfields used to lookup which priority has the highest
+ *  priority ready to execute thread.
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- *  _Bitfield_Find_first_bit
- *
- *  DESCRIPTION:
- *
- *  This routine returns the bit_number of the first bit set
- *  in the specified value.  The correspondence between bit_number
- *  and actual bit position is processor dependent.  The search for
- *  the first bit set may run from most to least significant bit
- *  or vice-versa.
- *
- *  NOTE:
- *
- *  This routine is used when the executing thread is removed
- *  from the ready state and, as a result, its performance has a
- *  significant impact on the performance of the executive as a whole.
- */
-
 #if ( CPU_USE_GENERIC_BITFIELD_DATA == TRUE )
 
+/**
+ *  This table is used by the generic bitfield routines to perform
+ *  a highly optimized bit scan without the use of special CPU
+ *  instructions.
+ */ 
 #ifndef SCORE_INIT
 extern const unsigned char __log2table[256];
 #else
@@ -64,18 +63,27 @@ const unsigned char __log2table[256] = {
 
 #endif
 
-#if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
-
-#define _Bitfield_Find_first_bit( _value, _bit_number ) \
-        _CPU_Bitfield_Find_first_bit( _value, _bit_number )
-
-#else
-
-/*
- *  The following must be a macro because if a CPU specific version
+/**
+ *  This routine returns the @a _bit_number of the first bit set
+ *  in the specified value.  The correspondence between @a _bit_number
+ *  and actual bit position is processor dependent.  The search for
+ *  the first bit set may run from most to least significant bit
+ *  or vice-versa.
+ *
+ *  @param _value (in) is the value to bit scan.
+ *  @param _bit_number (in) is the position of the first bit set.
+ *
+ *  @note This routine is used when the executing thread is removed
+ *  from the ready state and, as a result, its performance has a
+ *  significant impact on the performance of the executive as a whole.
+ *
+ *  @note This routine must be a macro because if a CPU specific version
  *  is used it will most likely use inline assembly.
  */
-
+#if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
+#define _Bitfield_Find_first_bit( _value, _bit_number ) \
+        _CPU_Bitfield_Find_first_bit( _value, _bit_number )
+#else
 #define _Bitfield_Find_first_bit( _value, _bit_number ) \
   { \
     register uint32_t   __value = (uint32_t  ) (_value); \
@@ -86,12 +94,13 @@ const unsigned char __log2table[256] = {
     else \
       (_bit_number) = __p[ __value >> 8 ]; \
   }
-
 #endif
 
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

@@ -1,10 +1,13 @@
-/*  wkspace.h
+/** 
+ *  @file wkspace.h
  *
  *  This include file contains information related to the
  *  RAM Workspace.  This Handler provides mechanisms which can be used to
  *  define, initialize and manipulate the workspace.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,6 +20,13 @@
 #ifndef __WORKSPACE_h
 #define __WORKSPACE_h
 
+/**
+ *  @defgroup ScoreWorkspace Workspace Handler
+ *
+ *  This group contains functionality which XXX
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -24,36 +34,35 @@ extern "C" {
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
 
-/*
- *  The following is used to manage the Workspace.
+/** @brief Executive Workspace Control
  *
+ *  The is the heap control structure that used to manage the 
+ *  RTEMS Executive Workspace.
  */
-
 SCORE_EXTERN Heap_Control _Workspace_Area;  /* executive heap header */
 
-/*
- *  _Workspace_Handler_initialization
- *
- *  DESCRIPTION:
+/** @brief Workspace Handler Initialization
  *
  *  This routine performs the initialization necessary for this handler.
+ *
+ *  @param starting_address (in) is the base address of the RTEMS Executive
+ *         Workspace
+ *  @param size (in) is the number of bytes in the RTEMS Executive Workspace
  */
-
 void _Workspace_Handler_initialization(
   void       *starting_address,
   uint32_t    size
 );
 
-/*
- *  _Workspace_Allocate_or_fatal_error
+/** @brief Workspace Allocate or Fail with Fatal Error
  *
- *  DESCRIPTION:
- *
- *  This routine returns the address of a block of memory of size
+ *  This routine returns the address of a block of memory of @a size
  *  bytes.  If a block of the appropriate size cannot be allocated
  *  from the workspace, then the internal error handler is invoked.
+ *
+ *  @param size (in) is the desired number of bytes to allocate
+ *  @return If successful, the starting address of the allocated memory
  */
-
 void *_Workspace_Allocate_or_fatal_error(
   uint32_t     size
 );
@@ -65,6 +74,8 @@ void *_Workspace_Allocate_or_fatal_error(
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

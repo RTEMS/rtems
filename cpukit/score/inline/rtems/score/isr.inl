@@ -1,9 +1,12 @@
-/*  isr.inl
+/** 
+ *  @file isr.inl
  *
  *  This include file contains the static implementation of all
  *  inlined routines in the Interrupt Handler.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,12 +19,12 @@
 #ifndef __ISR_inl
 #define __ISR_inl
 
-/*PAGE
- *
- *  _ISR_Is_vector_number_valid
- *
- *  DESCRIPTION:
- *
+/**
+ *  @addtogroup ScoreISR 
+ *  @{
+ */
+
+/**
  *  This function returns TRUE if the vector is a valid vector number
  *  for this processor and FALSE otherwise.
  */
@@ -33,13 +36,7 @@ RTEMS_INLINE_ROUTINE boolean _ISR_Is_vector_number_valid (
   return ( vector <= CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER );
 }
 
-/*PAGE
- *
- *  _ISR_Is_valid_user_handler
- *
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns TRUE if handler is the entry point of a valid
  *  use interrupt service routine and FALSE otherwise.
  */
@@ -50,6 +47,8 @@ RTEMS_INLINE_ROUTINE boolean _ISR_Is_valid_user_handler (
 {
   return ( handler != NULL);
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

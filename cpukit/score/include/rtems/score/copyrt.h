@@ -1,9 +1,12 @@
-/*  copyrt.h
+/** 
+ *  @file copyrt.h
  *
  *  This include file contains the copyright notice for RTEMS
  *  which is included in every binary copy of the executive.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -20,16 +23,15 @@
 extern "C" {
 #endif
 
+/**
+ *  This is the copyright string for RTEMS.
+ */
 #ifdef SCORE_INIT
-
 const char _Copyright_Notice[] =
-"COPYRIGHT (c) 1989-1999.\n\
+"COPYRIGHT (c) 1989-2004.\n\
 On-Line Applications Research Corporation (OAR).\n";
-
 #else
-
 extern const char _Copyright_Notice[];
-
 #endif
 
 #ifdef __cplusplus

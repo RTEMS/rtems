@@ -1,10 +1,12 @@
-/*  interr.h
+/** 
+ *  @file interr.h
  *
  *  This include file contains constants and prototypes related
  *  to the Internal Error Handler.
- *
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -17,15 +19,22 @@
 #ifndef __RTEMS_INTERNAL_ERROR_h
 #define __RTEMS_INTERNAL_ERROR_h
 
+/**
+ *  @defgroup ScoreIntErr Internal Error Handler
+ *
+ *  This group contains functionality which provides the foundation
+ *  Semaphore services used in all of the APIs supported by RTEMS.
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
+/**
  *  This type lists the possible sources from which an error
  *  can be reported.
  */
-
 typedef enum {
   INTERNAL_ERROR_CORE,
   INTERNAL_ERROR_RTEMS_API,
@@ -36,7 +45,6 @@ typedef enum {
 /*
  *  A list of errors which are generated internally by the executive core.
  */
-
 typedef enum {
   INTERNAL_ERROR_NO_CONFIGURATION_TABLE,
   INTERNAL_ERROR_NO_CPU_TABLE,
@@ -60,7 +68,6 @@ typedef enum {
 /*
  *  This type holds the fatal error information.
  */
-
 typedef struct {
   Internal_errors_Source  the_source;
   boolean                 is_internal;
@@ -70,18 +77,13 @@ typedef struct {
 /*
  *  When a fatal error occurs, the error information is stored here.
  */
-
 SCORE_EXTERN Internal_errors_Information Internal_errors_What_happened;
 
-/*
- *  _Internal_error_Occurred
- *
- *  DESCRIPTION:
+/** @brief  Internal error Occurred
  *
  *  This routine is invoked when the application or the executive itself
  *  determines that a fatal error has occurred.
  */
-
 void volatile _Internal_error_Occurred(
   Internal_errors_Source  the_source,
   boolean                 is_internal,
@@ -91,6 +93,8 @@ void volatile _Internal_error_Occurred(
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

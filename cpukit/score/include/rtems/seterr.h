@@ -1,5 +1,12 @@
+/**
+ *  @file seterr.h
+ *
+ *  This file contains macros and definitions which ease the burden
+ *  of consistently setting errno and returning -1.
+ */
+
 /*
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be

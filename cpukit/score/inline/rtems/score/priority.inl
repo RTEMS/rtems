@@ -1,9 +1,12 @@
-/*  priority.inl
+/** 
+ *  @file priority.inl
  *
  *  This file contains the static inline implementation of all inlined
  *  routines in the Priority Handler.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,14 +19,14 @@
 #ifndef __PRIORITY_inl
 #define __PRIORITY_inl
 
+/**
+ *  @addtogroup ScorePriority 
+ *  @{
+ */
+
 #include <rtems/score/bitfield.h>
 
-/*PAGE
- *
- *  _Priority_Handler_initialization
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine performs the initialization necessary for this handler.
  */
 
@@ -36,12 +39,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Handler_initialization( void )
      _Priority_Bit_map[ index ] = 0;
 }
 
-/*PAGE
- *
- *  _Priority_Is_valid
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns TRUE if the_priority if valid for a
  *  user task, and FALSE otherwise.
  */
@@ -58,12 +56,7 @@ RTEMS_INLINE_ROUTINE boolean _Priority_Is_valid (
   return ( the_priority <= PRIORITY_MAXIMUM );
 }
 
-/*PAGE
- *
- *  _Priority_Major
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns the major portion of the_priority.
  */
 
@@ -74,12 +67,7 @@ RTEMS_INLINE_ROUTINE uint32_t   _Priority_Major (
   return ( the_priority / 16 );
 }
 
-/*PAGE
- *
- *  _Priority_Minor
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns the minor portion of the_priority.
  */
 
@@ -92,12 +80,7 @@ RTEMS_INLINE_ROUTINE uint32_t   _Priority_Minor (
 
 #if ( CPU_USE_GENERIC_BITFIELD_CODE == TRUE )
  
-/*PAGE
- *
- *  _Priority_Mask
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns the mask associated with the major or minor
  *  number passed to it.
  */
@@ -110,12 +93,7 @@ RTEMS_INLINE_ROUTINE uint32_t   _Priority_Mask (
 }
  
  
-/*PAGE
- *
- *  _Priority_Bits_index
- *
- *  DESCRIPTION:
- *
+/**
  *  This function translates the bit numbers returned by the bit scan
  *  of a priority bit field into something suitable for use as
  *  a major or minor component of a priority.
@@ -130,12 +108,7 @@ RTEMS_INLINE_ROUTINE uint32_t   _Priority_Bits_index (
 
 #endif
 
-/*PAGE
- *
- *  _Priority_Add_to_bit_map
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine uses the_priority_map to update the priority
  *  bit maps to indicate that a thread has been readied.
  */
@@ -148,12 +121,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Add_to_bit_map (
   _Priority_Major_bit_map  |= the_priority_map->ready_major;
 }
 
-/*PAGE
- *
- *  _Priority_Remove_from_bit_map
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine uses the_priority_map to update the priority
  *  bit maps to indicate that a thread has been removed from the
  *  ready state.
@@ -168,12 +136,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Remove_from_bit_map (
     _Priority_Major_bit_map &= the_priority_map->block_major;
 }
 
-/*PAGE
- *
- *  _Priority_Get_highest
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns the priority of the highest priority
  *  ready thread.
  */
@@ -190,12 +153,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _Priority_Get_highest( void )
           _Priority_Bits_index( minor );
 }
 
-/*PAGE
- *
- *  _Priority_Initialize_information
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine initializes the_priority_map so that it
  *  contains the information necessary to manage a thread
  *  at new_priority.
@@ -225,12 +183,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Initialize_information(
   the_priority_map->block_minor = ~mask;
 }
 
-/*PAGE
- *
- *  _Priority_Is_group_empty
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns TRUE if the priority GROUP is empty, and
  *  FALSE otherwise.
  */
@@ -241,6 +194,8 @@ RTEMS_INLINE_ROUTINE boolean _Priority_Is_group_empty (
 {
   return the_priority == 0;
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

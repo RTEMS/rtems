@@ -1,9 +1,12 @@
-/*  address.h
+/** 
+ *  @file address.h
  *
  *  This include file contains the information required to manipulate
  *  physical addresses.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,6 +19,14 @@
 #ifndef __RTEMS_ADDRESSES_h
 #define __RTEMS_ADDRESSES_h
 
+/**
+ *  @defgroup ScoreAddress Address Handler
+ *
+ *  This group contains functionality which abstracts address manipulation
+ *  in a portable manner.
+ */
+/**@{*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -25,6 +36,8 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

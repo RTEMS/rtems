@@ -1,9 +1,12 @@
-/*  inline/objectmp.inl
+/** 
+ *  @file objectmp.inl
  *
  *  This include file contains the bodies of all inlined routines
  *  which deal with global objects.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,12 +19,12 @@
 #ifndef __INLINE_MP_OBJECTS_inl
 #define __INLINE_MP_OBJECTS_inl
 
-/*PAGE
- *
- *  _Objects_MP_Allocate_global_object
- *
- *  DESCRIPTION:
- *
+/**
+ *  @addtogroup ScoreObjectMP 
+ *  @{
+ */
+
+/**
  *  This function allocates a Global Object control block.
  */
 
@@ -33,12 +36,7 @@ RTEMS_INLINE_ROUTINE Objects_MP_Control *_Objects_MP_Allocate_global_object (
            _Chain_Get( &_Objects_MP_Inactive_global_objects );
 }
 
-/*PAGE
- *
- *  _Objects_MP_Free_global_object
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine deallocates a Global Object control block.
  */
 
@@ -52,12 +50,7 @@ RTEMS_INLINE_ROUTINE void _Objects_MP_Free_global_object (
   );
 }
 
-/*PAGE
- *
- *  _Objects_MP_Is_null_global_object
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns whether the global object is NULL or not.
  */
 
@@ -67,6 +60,8 @@ RTEMS_INLINE_ROUTINE boolean _Objects_MP_Is_null_global_object (
 {
   return( the_object == NULL );
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

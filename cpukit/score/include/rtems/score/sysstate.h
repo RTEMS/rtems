@@ -1,8 +1,11 @@
-/*  sysstates.h
+/** 
+ *  @file sysstate.h
  *
  *  This include file contains information regarding the system state.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +17,13 @@
 
 #ifndef __RTEMS_SYSTEM_STATE_h
 #define __RTEMS_SYSTEM_STATE_h
+
+/**
+ *  @defgroup ScoreSysState System State Handler
+ *
+ *  This group contains functionality which XXX
+ */
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,6 +71,8 @@ SCORE_EXTERN System_state_Codes _System_state_Current;
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

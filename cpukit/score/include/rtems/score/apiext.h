@@ -1,8 +1,11 @@
-/*  apiext.h
+/** 
+ *  @file apiext.h
  *
  *  This is the API Extensions Handler.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -12,90 +15,109 @@
  *  $Id$
  */
 
-
 #ifndef __API_EXTENSIONS_h
 #define __API_EXTENSIONS_h
+
+/**
+ *  @defgroup ScoreAPIExtension API Extension Handler
+ *
+ *  This group contains functionality which provides mechanisms for the
+ *  SuperCore to perform API specific actions without there being 
+ *  "up-references" from the SuperCore to APIs.  If these references 
+ *  were allowed in the implementation, the cohesion would be too high
+ *  and adding an API would be more difficult.  The SuperCore is supposed
+ *  to be largely independent of any API.
+ */
+/**@{*/
 
 #include <rtems/score/chain.h>
 #include <rtems/score/thread.h>
 
-/*
- *  The control structure which defines the points at which an API
- *  can add an extension to the system initialization thread.
+/**
+ *  This type defines the prototype of the Predriver Hook.
  */
-
 typedef void (*API_extensions_Predriver_hook)(void);
+
+/**
+ *  This type defines the prototype of the Postdriver Hook.
+ */
 typedef void (*API_extensions_Postdriver_hook)(void);
+
+/**
+ *  This type defines the prototype of the Postswitch Hook.
+ */
 typedef void (*API_extensions_Postswitch_hook)(
                  Thread_Control *
              );
 
-
+/**
+ *  The control structure which defines the points at which an API
+ *  can add an extension to the system initialization thread.
+ */
 typedef struct {
+  /** This field allows this structure to be used with the Chain Handler. */
   Chain_Node                      Node;
+  /**
+   * This field is the callout invoked during RTEMS initialization after
+   * RTEMS data structures are initialized before device driver initialization
+   * has occurred.
+   *
+   * @note If this field is NULL, no extension is invoked.
+   */
   API_extensions_Predriver_hook   predriver_hook;
+  /**
+   * This field is the callout invoked during RTEMS initialization after
+   * RTEMS data structures and device driver initialization has occurred
+   * but before multitasking is initiated.
+   *
+   * @note If this field is NULL, no extension is invoked.
+   */
   API_extensions_Postdriver_hook  postdriver_hook;
+  /**
+   * This field is the callout invoked during each context switch
+   * in the context of the heir thread.
+   *
+   * @note If this field is NULL, no extension is invoked.
+   */
   API_extensions_Postswitch_hook  postswitch_hook;
 }  API_extensions_Control;
 
-/*
+/**
  *  This is the list of API extensions to the system initialization.
  */
-
 SCORE_EXTERN Chain_Control _API_extensions_List;
 
-/*
- *  _API_extensions_Initialization
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine initializes the API extension handler.
- *
  */
-
 void _API_extensions_Initialization( void );
 
-/*
- *  _API_extensions_Add
+/**
+ *  This routine adds an extension to the active set of API extensions.
  *
- *  DESCRIPTION:
- *
- *  XXX
+ *  @param the_extension (in) is the extension set to add.
  */
-
 void _API_extensions_Add(
   API_extensions_Control *the_extension
 );
 
-/*
- *  _API_extensions_Run_predriver
- *
- *  DESCRIPTION:
- *
- *  XXX
+/**
+ *  This routine executes all of the predriver callouts.
  */
-
 void _API_extensions_Run_predriver( void );
 
-/*
- *  _API_extensions_Run_postdriver
- *
- *  DESCRIPTION:
- *
- *  XXX
+/**
+ *  This routine executes all of the postdriver callouts.
  */
-
 void _API_extensions_Run_postdriver( void );
 
-/*
- *  _API_extensions_Run_postswitch
- *
- *  DESCRIPTION:
- *
- *  XXX
+/**
+ *  This routine executes all of the post context switch callouts.
  */
-
+ */
 void _API_extensions_Run_postswitch( void );
+
+/**@}*/
 
 #endif
 /* end of include file */

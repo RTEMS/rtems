@@ -1,8 +1,11 @@
-/*  states.h
+/** 
+ *  @file states.h
  *
  *  This include file contains thread execution state information.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -14,6 +17,13 @@
 
 #ifndef __RTEMS_STATES_h
 #define __RTEMS_STATES_h
+
+/**
+ *  @defgroup ScoreStates Thread States Handler
+ *
+ *  This group contains functionality which XXX
+ */
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -78,6 +88,8 @@ typedef uint32_t   States_Control;
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

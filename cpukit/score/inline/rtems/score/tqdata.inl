@@ -1,9 +1,12 @@
-/*  tqdata.inl
+/** 
+ *  @file tqdata.inl
  *
  *  This file contains the static inline implementation of the inlined
  *  routines needed to support the Thread Queue Data.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -13,15 +16,15 @@
  *  $Id$
  */
 
-#ifndef __THREAD_QUEUE_DATA_inl
-#define __THREAD_QUEUE_DATA_inl
+#ifndef __THREAD_QUEUE_inl
+#define __THREAD_QUEUE_inl
 
-/*PAGE
- *
- *  _Thread_queue_Header_number
- *
- *  DESCRIPTION:
- *
+/**
+ *  @addtogroup ScoreThreadQ 
+ *  @{
+ */
+
+/**
  *  This function returns the index of the priority chain on which
  *  a thread of the_priority should be placed.
  */
@@ -33,12 +36,7 @@ RTEMS_INLINE_ROUTINE uint32_t   _Thread_queue_Header_number (
   return (the_priority / TASK_QUEUE_DATA_PRIORITIES_PER_HEADER);
 }
 
-/*PAGE
- *
- *  _Thread_queue_Is_reverse_search
- *
- *  DESCRIPTION:
- *
+/**
  *  This function returns TRUE if the_priority indicates that the
  *  enqueue search should start at the front of this priority
  *  group chain, and FALSE if the search should start at the rear.
@@ -51,12 +49,7 @@ RTEMS_INLINE_ROUTINE boolean _Thread_queue_Is_reverse_search (
   return ( the_priority & TASK_QUEUE_DATA_REVERSE_SEARCH_MASK );
 }
 
-/*PAGE
- *
- *  _Thread_queue_Enter_critical_section
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine is invoked to indicate that the specified thread queue is
  *  entering a critical section.
  */

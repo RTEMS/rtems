@@ -1,9 +1,12 @@
-/*  inline/threadmp.inl
+/** 
+ *  @file threadmp.inl
  *
  *  This include file contains the bodies of all inlined routines
  *  for the multiprocessing part of thread package.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,12 +19,12 @@
 #ifndef __INLINE_MP_THREAD_inl
 #define __INLINE_MP_THREAD_inl
 
-/*PAGE
- *
- *  _Thread_MP_Is_receive
- *
- *  DESCRIPTION:
- *
+/**
+ *  @addtogroup ScoreThreadMP 
+ *  @{
+ */
+
+/**
  *  This function returns true if the thread in question is the
  *  multiprocessing receive thread.
  */
@@ -33,12 +36,7 @@ RTEMS_INLINE_ROUTINE boolean _Thread_MP_Is_receive (
   return the_thread == _Thread_MP_Receive;
 }
 
-/*PAGE
- *
- *  _Thread_MP_Free_proxy
- *
- *  DESCRIPTION:
- *
+/**
  *  This routine frees a proxy control block to the
  *  inactive chain of free proxy control blocks.
  */
@@ -55,6 +53,8 @@ RTEMS_INLINE_ROUTINE void _Thread_MP_Free_proxy (
 
   _Chain_Append( &_Thread_MP_Inactive_proxies, &the_thread->Object.Node );
 }
+
+/**@}*/
 
 #endif
 /* end of include file */

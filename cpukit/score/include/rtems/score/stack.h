@@ -1,10 +1,13 @@
-/*  stack.h
+/** 
+ *  @file stack.h
  *
  *  This include file contains all information about the thread
  *  Stack Handler.  This Handler provides mechanisms which can be used to
  *  initialize and utilize stacks.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -16,6 +19,13 @@
 
 #ifndef __STACK_h
 #define __STACK_h
+
+/**
+ *  @defgroup ScoreStack Stack Handler
+ *
+ *  This group contains functionality which XXX
+ */
+/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,6 +54,8 @@ typedef struct {
 #ifdef __cplusplus
 }
 #endif
+
+/**@}*/
 
 #endif
 /* end of include file */

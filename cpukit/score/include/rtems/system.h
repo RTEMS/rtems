@@ -1,10 +1,13 @@
-/*  system.h
+/** 
+ *  @file system.h
  *
  *  This include file contains information that is included in every
  *  function in the executive.  This must be the first include file
  *  included in all internal RTEMS files.
- *
- *  COPYRIGHT (c) 1989-1999.
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2004.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -168,7 +171,7 @@ SCORE_EXTERN rtems_cpu_table _CPU_Table;               /* CPU dependent info */
 /*
  *  Macros to access CPU Table fields required by ALL ports.
  *
- *  NOTE: Similar macros to access port specific fields in in the
+ *  @note Similar macros to access port specific fields in in the
  *        appropriate cpu.h file.
  */
 
