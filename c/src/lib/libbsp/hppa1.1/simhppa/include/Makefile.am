@@ -24,9 +24,9 @@ $(PROJECT_INCLUDE)/rtems/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES = $(PROJECT_INCLUDE) \
-    $(include_HEADERS:%=%(PROJECT_INCLUDE)/%) \
+    $(include_HEADERS:%=$(PROJECT_INCLUDE)/%) \
     $(PROJECT_INCLUDE)/rtems \
-    $(include_HEADERS:%=%(PROJECT_INCLUDE)/rtems/%) 
+    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%) 
 
 all-local: $(TMPINSTALL_FILES)
 
