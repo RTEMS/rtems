@@ -17,26 +17,21 @@ all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 include_rtems_scoredir = $(includedir)/rtems/score
 
 if OLD_EXCEPTIONS
-include_rtems_score_HEADERS = \
-    ../../libbsp/powerpc/support/old_exception_processing/rtems/score/ppc_offs.h
+include_rtems_score_HEADERS = old-exceptions/rtems/score/ppc_offs.h
 
-EXTRA_DIST = ../../libbsp/powerpc/support/old_exception_processing/TODO \
-    ../../libbsp/powerpc/support/old_exception_processing/irq_stub.S \
-    ../../libbsp/powerpc/support/old_exception_processing/ppccache.c
+EXTRA_DIST = old-exceptions/TODO old-exceptions/irq_stub.S \
+    old-exceptions/ppccache.c
 
 noinst_PROGRAMS = old-exceptions/rtems-cpu.rel
-old_exceptions_rtems_cpu_rel_SOURCES = \
-    ../../libbsp/powerpc/support/old_exception_processing/cpu.c \
-    ../../libbsp/powerpc/support/old_exception_processing/cpu_asm.S \
-    ../../libbsp/powerpc/support/old_exception_processing/rtems/score/ppc_offs.h
+old_exceptions_rtems_cpu_rel_SOURCES = old-exceptions/cpu.c \
+    old-exceptions/cpu_asm.S old-exceptions/rtems/score/ppc_offs.h
 old_exceptions_rtems_cpu_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-    -I$(srcdir)/../../libbsp/powerpc/support/old_exception_processing
+    -I$(srcdir)/old-exceptions
 old_exceptions_rtems_cpu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 else
 noinst_PROGRAMS = new-exceptions/rtems-cpu.rel
-new_exceptions_rtems_cpu_rel_SOURCES = \
-    ../../libbsp/powerpc/support/new_exception_processing/cpu.c \
-    ../../libbsp/powerpc/support/new_exception_processing/cpu_asm.S
+new_exceptions_rtems_cpu_rel_SOURCES = new-exceptions/cpu.c \
+    new-exceptions/cpu_asm.S
 new_exceptions_rtems_cpu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 new_exceptions_rtems_cpu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
@@ -67,7 +62,7 @@ $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 
 if OLD_EXCEPTIONS
-$(PROJECT_INCLUDE)/rtems/score/ppc_offs.h: ../../libbsp/powerpc/support/old_exception_processing/rtems/score/ppc_offs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+$(PROJECT_INCLUDE)/rtems/score/ppc_offs.h: old-exceptions/rtems/score/ppc_offs.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ppc_offs.h
 

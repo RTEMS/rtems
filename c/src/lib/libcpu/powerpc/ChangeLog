@@ -1,5 +1,18 @@
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* old-exceptions/rtems/score/ppc_offs.h, 
+	old-exceptions/ChangeLog, old-exceptions/README,
+	old-exceptions/TODO, old-exceptions/cpu.c,
+	old-exceptions/cpu_asm.S, old-exceptions/irq_stub.S,
+	old-exceptions/ppccache.c: New (Copied from
+	../../libbsp/powerpc/support/old_exception_processing)
+	* new-exceptions/ChangeLog, new-exceptions/cpu.c,
+	new-exceptions/cpu_asm.S: New (Copied from 
+	../../libbsp/powerpc/support/new_exception_processing).
+	* Makefile.am: Reflect changes above.
+
+2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* ppc403/console/console405.c: Rename round to spiBaudRound
 	(Conflict with C99). Make spiBaudRound static.
 
