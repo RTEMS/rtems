@@ -1,3 +1,8 @@
+2003-12-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* automake/compile.am: Remove LINK_LIBS (Unused).
+	* configure.ac: Reflect changes to RTEMS_CONFIG_SUBDIR.
+
 2003-12-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* automake/compile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.

@@ -61,8 +61,6 @@ CFLAGS   = @RTEMS_CFLAGS@ $(XCFLAGS)
 CXXFLAGS = @RTEMS_CFLAGS@ $(XCXXFLAGS)
 ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
 
-LINK_LIBS = $(LD_LIBS)
-
 #
 # Client compiler and support tools
 #
