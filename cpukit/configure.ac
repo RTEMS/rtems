@@ -297,7 +297,7 @@ libnetworking/Makefile
 librpc/Makefile
 libmisc/Makefile
 httpd/Makefile
-
+ftpd/Makefile
 wrapup/Makefile
 ])
 

@@ -4,8 +4,8 @@
  *  $Id$
  */
 
-#ifndef __FTPD_H__
-#define __FTPD_H__
+#ifndef _RTEMS_FTPD_H
+#define _RTEMS_FTPD_H
 
 
 #define FTPD_CONTROL_PORT   21
@@ -53,4 +53,4 @@ struct rtems_ftpd_configuration
 
 int rtems_initialize_ftpd();
 
-#endif  /* __FTPD_H__ */
+#endif  /* _RTEMS_FTPD_H */

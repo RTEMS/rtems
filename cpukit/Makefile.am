@@ -12,6 +12,7 @@ SUBDIRS += libcsupport libblock libfs
 SUBDIRS += libnetworking librpc
 SUBDIRS += libmisc
 SUBDIRS += httpd
+SUBDIRS += ftpd
 SUBDIRS += wrapup
 
 noinst_DATA = preinstall-stamp

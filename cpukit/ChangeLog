@@ -1,5 +1,15 @@
 2005-02-03	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	PR 756/rtems
+	* ftpd/ftpd.c, ftpd/ftpd.h, ftpd/Makefile.am: New (relocated from
+	/c/src/libnetworking/ftpd)
+	* ftpd/ftd.h: New header guards.
+	* ftpd/Makefile.am: Install libftd.a, install ftp.h to rtems/ftp.h.
+	* configure.ac: Add ftpd/Makefile.
+	* Makefile.am: Add ftpd.
+
+2005-02-03	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* librpc/include/rpc/clnt_stat.h, librpc/include/rpc/rpcent.h:
 	New (From FreeBSD).
 	* librpc/include/rpc/rpc.h: Partial update from FreeBSD.
