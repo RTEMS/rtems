@@ -1,3 +1,9 @@
+2000-12-19	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu.c: Do not read or write raw interrupt vector table if
+	we are on a CPU that does not have a %vbr register and the
+	BSP is configured as having the table in ROM.
+
 2000-11-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Use ... instead of RTEMS_TOPdir in ACLOCAL_AMFLAGS.

@@ -95,8 +95,8 @@ void _CPU_ISR_install_raw_handler(
    */
 
   m68k_get_vbr( interrupt_table );
-  *old_handler = interrupt_table[ vector ];
 #if ( M68K_HAS_VBR == 1 )
+  *old_handler = interrupt_table[ vector ];
   interrupt_table[ vector ] = new_handler;
 #else
 
@@ -107,6 +107,7 @@ void _CPU_ISR_install_raw_handler(
    *  load it appropriately to vector to the RTEMS jump table.
    */
 
+  *old_handler = _CPU_ISR_jump_table[vector].isr_handler;
   _CPU_ISR_jump_table[vector].isr_handler = (unsigned32) new_handler;
   if ( (unsigned32) interrupt_table != 0xFFFFFFFF )
     interrupt_table[ vector ] = (proc_ptr) &_CPU_ISR_jump_table[vector];
