@@ -43,6 +43,20 @@ int _POSIX_Semaphore_Create_support(
     set_errno_and_return_minus_one( ENOSYS );
   }
 
+  if ( name ) {
+
+    if( strlen(name) > PATH_MAX ) {  /* XXX - Is strlen ok to use here ? */
+      _Thread_Enable_dispatch();
+      set_errno_and_return_minus_one( ENAMETOOLONG );
+    }
+
+    /*
+     * XXX Greater than NAME_MAX while POSIX_NO_TRUNC in effect.
+     * XXX Error description in POSIX book different for mq_open and mq_unlink
+     *     Why???
+     */
+  }
+
   the_semaphore = _POSIX_Semaphore_Allocate();
  
   if ( !the_semaphore ) {
