@@ -1,5 +1,9 @@
 2004-01-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* start/regs.S: Remove.
+
+2004-01-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Eliminate $(LIB). 
 	Use noinst_DATA to trigger building libbsp.a.
 
