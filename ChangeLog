@@ -1,3 +1,15 @@
+2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/check-newlib.m4: Apply AS_IF.
+	* aclocal/config-subdirs.m4: Remove _RTEMS_PUSH_BUILDDIR,
+	_RTEMS_POP_BUILDDIR, _RTEMS_GIVEN_INSTALL, _RTEMS_SUB_SRCDIR.
+	* aclocal/subdirs.m4: Fix comments, apply AS_IF.
+	* aclocal/sysv-ipc.m4: Reflect autoconf-2.5x canonicalization
+	changes.
+	* aclocal/target.m4: Add _RTEMS_PUSH_BUILDDIR, _RTEMS_POP_BUILDDIR,
+	_RTEMS_GIVEN_INSTALL, _RTEMS_SUB_SRCDIR.
+	* automake/compile.am: Remove librtemsall from LINK_FILES.
+
 2001-12-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Reworked for multilibs, reflect changes to aclocal/*.m4.

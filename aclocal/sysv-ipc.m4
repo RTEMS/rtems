@@ -18,7 +18,7 @@ dnl msgget, semctl, shmctl and msgctl for details.
 
 AC_DEFUN(RTEMS_UNION_SEMUN,
 [
-AC_CACHE_CHECK([whether $RTEMS_HOST defines union semun],
+AC_CACHE_CHECK([whether $host defines union semun],
   rtems_cv_HAS_UNION_SEMUN,
   [AC_TRY_COMPILE([
 #include <sys/types.h>
@@ -35,8 +35,8 @@ fi
 
 AC_DEFUN(RTEMS_SYSV_SEM,
 [AC_REQUIRE([AC_PROG_CC]) 
-AC_REQUIRE([RTEMS_CANONICAL_HOST])
-AC_CACHE_CHECK(whether $RTEMS_HOST supports System V semaphores,
+# AC_REQUIRE([RTEMS_CANONICAL_HOST])
+AC_CACHE_CHECK(whether $host supports System V semaphores,
 rtems_cv_sysv_sem,
 [
 AC_TRY_RUN(
@@ -69,8 +69,8 @@ rtems_cv_sysv_sem="yes", rtems_cv_sysv_sem="no", :)
 
 AC_DEFUN(RTEMS_SYSV_SHM,
 [AC_REQUIRE([AC_PROG_CC]) 
-AC_REQUIRE([RTEMS_CANONICAL_HOST])
-AC_CACHE_CHECK(whether $RTEMS_HOST supports System V shared memory,
+# AC_REQUIRE([RTEMS_CANONICAL_HOST])
+AC_CACHE_CHECK(whether $host supports System V shared memory,
 rtems_cv_sysv_shm,
 [
 AC_TRY_RUN([
@@ -92,8 +92,8 @@ rtems_cv_sysv_shm="yes", rtems_cv_sysv_shm="no", :)
 
 AC_DEFUN(RTEMS_SYSV_MSG,
 [AC_REQUIRE([AC_PROG_CC]) 
-AC_REQUIRE([RTEMS_CANONICAL_HOST])
-AC_CACHE_CHECK(whether $RTEMS_HOST supports System V messages,
+# AC_REQUIRE([RTEMS_CANONICAL_HOST])
+AC_CACHE_CHECK(whether $host supports System V messages,
 rtems_cv_sysv_msg,
 [
 AC_TRY_RUN([
@@ -114,7 +114,7 @@ rtems_cv_sysv_msg="yes", rtems_cv_sysv_msg="no", :)
 ])
 
 AC_DEFUN(RTEMS_CHECK_SYSV_UNIX,
-[AC_REQUIRE([RTEMS_CANONICAL_HOST])
+[# AC_REQUIRE([RTEMS_CANONICAL_HOST])
 if test "$RTEMS_CPU" = "unix" ; then
   RTEMS_UNION_SEMUN
   RTEMS_SYSV_SEM

@@ -1,4 +1,4 @@
-## All tools belong in one of the 3 categories, and are assigned above.
+## All directories belong in one of 3 categories.
 ## ${HOST_CONFIGDIRS_LIST} is directories we build using the host tools.
 ## ${TARGET_CONFIGDIRS_LIST} is directories we build using the target tools.
 ## ${BUILD_CONFIGDIRS_LIST} is directories we build using the build tools
@@ -30,19 +30,17 @@ _RTEMS_BUILD_CONFIG_PREPARE
 _RTEMS_HOST_CONFIG_PREPARE
 _RTEMS_TARGET_CONFIG_PREPARE
 
-if test $build = $host;
-then
-  if test $host = $target;
-  then
-    dnl b=h, h=t, t=b
+AS_IF([test $build = $host],
+[
+  AS_IF([test $host = $target],
+  [dnl b=h, h=t, t=b
     BUILD_SUBDIRS="${build_configdirs}"
     build_configdirs="${build_configdirs}"
     HOST_SUBDIRS=""
     host_configdirs=""
     TARGET_SUBDIRS=""
-    target_configdirs=""
-  else
-    dnl b=h, h!=t, t!=b
+    target_configdirs=""],
+  [dnl b=h, h!=t, t!=b
     BUILD_SUBDIRS="${build_configdirs}"
     build_configdirs="${build_configdirs}"
     HOST_SUBDIRS=""
@@ -50,31 +48,28 @@ then
     TARGET_SUBDIRS=`echo "${target_configdirs}" | \
       sed -e "s%\([[^ ]][[^ ]]*\)%$target_alias/\1%g"`
     target_configdirs="${target_configdirs}"
-  fi
-else
-  if test $host = $target;
-  then
-    dnl b!=h, h=t, b!=t
+  ])
+],[
+  AS_IF([test $host = $target],
+  [ dnl b!=h, h=t, b!=t
     BUILD_SUBDIRS="${build_configdirs}"
     build_configdirs="${build_configdirs}"
     HOST_SUBDIRS=`echo "${host_configdirs}" | \
       sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
     host_configdirs="${host_configdirs}"
     TARGET_SUBDIRS=""
-    target_configdirs=""
-  else
-    if test $build = $target;
-    then
-    dnl b!=h, h!=t, b=t
+    target_configdirs=""],
+  [
+    AS_IF([test $build = $target],
+    [dnl b!=h, h!=t, b=t
       BUILD_SUBDIRS="${build_configdirs}"
       build_configdirs="${build_configdirs}"
       HOST_SUBDIRS=`echo "${host_configdirs}" | \
         sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
       host_configdirs="${host_configdirs}"
       TARGET_SUBDIRS=""
-      target_configdirs=""
-    else
-    dnl b!=h, h!=t, b!=t
+      target_configdirs=""],
+    [dnl b!=h, h!=t, b!=t
       BUILD_SUBDIRS="${build_configdirs}"
       build_configdirs="${build_configdirs}"
       HOST_SUBDIRS=`echo "${host_configdirs}" | \
@@ -83,9 +78,9 @@ else
       TARGET_SUBDIRS=`echo "${target_configdirs}" | \
         sed -e "s%\([[^ ]][[^ ]]*\)%$target_alias/\1%g"`
       target_configdirs="${target_configdirs}"
-    fi
-  fi
-fi
+    ])
+  ])
+])
 
 AC_SUBST(HOST_SUBDIRS)
 AC_SUBST(TARGET_SUBDIRS)
@@ -125,15 +120,15 @@ m4_if([$2],,
 esac])
 ac_builddir=.
 
-if test $dstdir != .; then
-  # Strip off leading ./
+AS_IF([test $dstdir != .],
+[ # Strip off leading ./
   ac_builddir_suffix=/`echo $dstdir | sed 's,^\.[[\\/]],,'`
   ac_srcdir_suffix=/`echo $1 | sed 's,^\.[[\\/]],,'`
   # A "../" for each directory in $ac_dir_suffix.
   ac_top_builddir=`echo "$ac_builddir_suffix" | sed 's,/[[^\\/]]*,../,g'`
-else
+],[
   ac_dir_suffix= ac_top_builddir=
-fi
+])
 
 case $srcdir in
   .)  # No --srcdir option.  We are building in place.
@@ -260,7 +255,7 @@ fi
 ])
 
 ## PUBLIC: RTEMS_BUILD_CONFIG_SUBDIRS(build_subdir)
-# tools to be built for the build environment
+# subdirs to be built for the build environment
 AC_DEFUN([RTEMS_BUILD_CONFIG_SUBDIRS],[
 m4_append([_RTEMS_BUILD_CONFIGDIRS_LIST],[ $1])
 dnl Always append to build_configdirs
@@ -290,8 +285,8 @@ build_subdir="."
 ],[])
 ])
 
-## PUBLIC: RTEMS_HOST_CONFIG_SUBDIR(host_subdir)
-# libraries to be build for the host environment
+## PUBLIC: RTEMS_HOST_CONFIG_SUBDIRS(host_subdir)
+# subdirs to be build for the host environment
 AC_DEFUN([RTEMS_HOST_CONFIG_SUBDIRS],[
 m4_append([_RTEMS_HOST_CONFIGDIRS_LIST],[ $1])dnl
 
@@ -341,8 +336,8 @@ host_subdir="${host_alias}"
 ],[])
 ])
 
-## PUBLIC: RTEMS_TARGET(target_subdir)
-# tools to be build for the target environment
+## PUBLIC: RTEMS_TARGET_CONFIG_SUBDIRS(target_subdir)
+# subdirs to be build for the target environment
 AC_DEFUN([RTEMS_TARGET_CONFIG_SUBDIRS],[
 m4_append([_RTEMS_TARGET_CONFIGDIRS_LIST],[ $1])
 
