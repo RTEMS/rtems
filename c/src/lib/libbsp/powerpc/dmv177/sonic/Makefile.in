@@ -15,7 +15,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-PGM=${ARCH}/dmvsonic.rel
+PGM=${ARCH}/sonic.rel
 
 # C source names, if any, go here -- minus the .c
 C_PIECES=dmvsonic
