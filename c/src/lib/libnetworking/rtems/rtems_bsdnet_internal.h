@@ -175,7 +175,7 @@ void bootpc_init(void);
 int socket (int, int, int);
 int ioctl (int, unsigned long, ...);
 struct socket *rtems_bsdnet_fdToSocket (int fd);
-int rtems_bsdnet_makeFdForSocket (struct socket *);
+int rtems_bsdnet_makeFdForSocket (void *);
 
 /*
  * Events used by networking routines.
