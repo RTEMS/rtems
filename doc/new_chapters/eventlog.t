@@ -818,3 +818,79 @@ Otherwise:
 
 @subheading NOTES:
 
+@page
+@subsection log_create - Creates a log file
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+int log_create(
+  logd_t       *ld,
+  const char   *path,
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item ENOMEM
+The is ????????????
+
+@end table
+
+@subheading DESCRIPTION:
+
+If {_POSIX_LOGGING} is defined:
+
+   This function dynamically allocates memory for the @code{ld}, associates 
+   a directory path to the @code{Ld}, andprovides access permissions to the
+   @code{ld}.
+
+Otherwise:
+
+   The function fails
+
+@subheading NOTES:
+
+@page
+@subsection log_sys_create - Creates a system log file
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+int log_sys_create();
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EEXIST
+The directory path to the system log already exist.
+
+@end table
+
+@subheading DESCRIPTION:
+
+If {_POSIX_LOGGING} is defined:
+
+   This function will create a predefined system log directory path and system log
+   file if they do not already exist.
+
+Otherwise:
+
+   The function fails
+
+@subheading NOTES:
+
+
+
