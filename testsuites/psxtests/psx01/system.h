@@ -20,6 +20,7 @@
 #include <pthread.h>
 #include <assert.h>
 #include <stdio.h>
+#include <unistd.h>
 
 void *POSIX_Init(
   void *argument
