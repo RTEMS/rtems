@@ -15,9 +15,9 @@ _RTEMS_FLAGS([CXXFLAGS],
 dnl Only accept g++
 dnl NOTE: This might be too restrictive
 RTEMS_CHECK_TOOL(CXX,g++)
-AC_PROG_CXX
 test -z "$CXX" \
   && AC_MSG_ERROR([no acceptable c++ found in \$PATH])
+AC_PROG_CXX
 
 #if test "$GCC" = yes; then
 #RTEMS_CXXFLAGS="$RTEMS_CXXFLAGS -Wall"
