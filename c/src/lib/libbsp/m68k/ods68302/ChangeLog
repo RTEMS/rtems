@@ -1,3 +1,7 @@
+2005-01-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Use AS_HELP_STRING instead of AC_HELP_STRING.
+
 2004-11-25	Joel Sherrill <joel@OARcorp.com>
 
 	* startup/linkcmds: Add new bss sections .bss.* and .gnu.linkonce.b*.

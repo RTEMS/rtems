@@ -16,8 +16,7 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
 AC_ARG_ENABLE(ods68302-debug,
-[AC_HELP_STRING([--enable-ods68302-debug],
-  [whether to support bsp debugging])],
+[AS_HELP_STRING(--enable-ods68302-debug,whether to support bsp debugging)],
 [case $enable_ods68302_debug in
  yes ) ODS68302_DEBUG=yes;;
  * )   ODS68302_DEBUG=no;;
