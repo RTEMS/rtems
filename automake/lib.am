@@ -1,0 +1,18 @@
+##
+##  $Id$
+##
+
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+define make-library
+$(RM) $@
+$(AR) $(ARFLAGS) $@ $^
+$(RANLIB) $@
+endef
+
+TMPINSTALL_FILES = $(PROJECT_RELEASE)/lib
+
+$(PROJECT_INCLUDE)/lib:
+	@$(mkinstalldirs) $@
+
+.PRECIOUS: $(LIB)
