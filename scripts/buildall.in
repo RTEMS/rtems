@@ -49,8 +49,7 @@ done
 # This is the full buildable set.
 if [ "X${TARGETS}" = "X" ] ; then
   TARGETS="i386-rtems i960-rtems m68k-rtems \
-    m68k-rtemself mips64orion-rtems \
-    powerpc-rtems sh-rtems sh-rtemself sparc-rtems"
+    mips64orion-rtems powerpc-rtems sh-rtems sparc-rtems"
 fi
 
 . $CFG
