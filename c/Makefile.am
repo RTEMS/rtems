@@ -2,6 +2,10 @@
 # $Id$
 #
 
+## NOTE: This Makefile.am is rather fragile to the value of RTEMS_BSP
+## Esp. make clean and make distclean have unwanted side-effects 
+## if RTEMS_BSP is not properly set up.
+
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
@@ -12,11 +16,11 @@ SUBDIRS= \
 . \
 $(RTEMS_BSP)
 
+
 ## Use @RTEMS_BSP_LIST@ here, using $(RTEMS_BSP_LIST) would trigger
 ## this rule for invalid BSPs
 @RTEMS_BSP_LIST@: src/configure
 	@set fnord $(MAKEFLAGS); amf=$$2; \
-	# Adjust paths
 	test -n "${RTEMS_BSP}" && for i in ${RTEMS_BSP}; do \
 	  echo "Configuring RTEMS_BSP=$$i"; \
 	  test -d $$i || mkdir $$i; \
@@ -29,9 +33,7 @@ $(RTEMS_BSP)
 ## Let all RTEMS' make targets depend on ${RTEMS_BSP}
 all-am: ${RTEMS_BSP}
 debug-am: ${RTEMS_BSP}
-debug_install-am: ${RTEMS_BSP}
 profile-am: ${RTEMS_BSP}
-profile_install-am: ${RTEMS_BSP}
 preinstall-am: ${RTEMS_BSP}
 depend-am: ${RTEMS_BSP}
 

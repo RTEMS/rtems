@@ -9,7 +9,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-SUBDIRS = make tools @TARGET_SUBDIRS@
+SUBDIRS = doc make tools @TARGET_SUBDIRS@
 
 AUTOMAKE_FILES = \
 automake/subdirs.am \

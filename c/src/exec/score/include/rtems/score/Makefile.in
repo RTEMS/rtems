@@ -87,7 +87,7 @@ $(TARGOPTS):
 	else \
 	echo "#define USE_INLINES 1"           	>>$@; \
 	fi
-	if test "$(HAS_MP)" = "yes"; then \
+	@if test "$(HAS_MP)" = "yes"; then \
 	echo "#define RTEMS_MULTIPROCESSING 1"	>>$@; \
 	fi
 	@if test "$(HAS_POSIX_API)" = "yes"; then \

@@ -37,7 +37,7 @@ $(INSTALLDIRS):
 #
 
 CLEAN_ADDITIONS +=
-CLOBBER_ADDITIONS +=
+CLOBBER_ADDITIONS += sptables.h
 
 all: preinstall
 

@@ -116,17 +116,14 @@
         CFLAGS and/or LDFLAGS are modified as per the compiler config file for
         debug and profile support.
 
-        Targets debug_install and profile_install are equivalent to 'make
-        install' except that debug (or profile) variants are built and
-        installed.
-
-        The targets debug, profile, debug_install, profile_install, etc., can be
+        The targets debug, profile, etc., can be
         invoked recursively at the directory make level.  So from the top of a
         tree, one could install a debug version of everything under that point
         by:
 
             $ cd src/lib
-            $ gmake debug_install
+            $ gmake debug
+            $ gmake install
 
         When building a command that is linked with a generated library, the
         appropriate version of the library will be linked in.

@@ -69,6 +69,7 @@ host_triplet = @host@
 target_alias = @target_alias@
 target_triplet = @target@
 CC = @CC@
+EXEEXT = @EXEEXT@
 INSTALL_CHANGE = @INSTALL_CHANGE@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
@@ -91,14 +92,17 @@ ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 EXTRA_DIST = Spec.doc
 
-noinst_PROGRAMS =  bin2boot binpatch
+noinst_PROGRAMS =  bin2boot
 
 
 bin2boot_SOURCES = bin2boot.c
-binpatch_SOURCES = binpatch.c
+
+PREINSTALL_DIRS = $(PROJECT_ROOT)/pc386/build-tools
+PREINSTALL_FILES = $(PROJECT_ROOT)/pc386/build-tools/bin2boot
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/../../../../../../../mkinstalldirs
 CONFIG_CLEAN_FILES = 
+noinst_PROGRAMS =  bin2boot$(EXEEXT)
 PROGRAMS =  $(noinst_PROGRAMS)
 
 
@@ -110,10 +114,6 @@ bin2boot_OBJECTS =  bin2boot.o
 bin2boot_LDADD = $(LDADD)
 bin2boot_DEPENDENCIES = 
 bin2boot_LDFLAGS = 
-binpatch_OBJECTS =  binpatch.o
-binpatch_LDADD = $(LDADD)
-binpatch_DEPENDENCIES = 
-binpatch_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -125,9 +125,9 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/bin2boot.P .deps/binpatch.P
-SOURCES = $(bin2boot_SOURCES) $(binpatch_SOURCES)
-OBJECTS = $(bin2boot_OBJECTS) $(binpatch_OBJECTS)
+DEP_FILES =  .deps/bin2boot.P
+SOURCES = $(bin2boot_SOURCES)
+OBJECTS = $(bin2boot_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -172,13 +172,9 @@ distclean-compile:
 
 maintainer-clean-compile:
 
-bin2boot: $(bin2boot_OBJECTS) $(bin2boot_DEPENDENCIES)
-	@rm -f bin2boot
+bin2boot$(EXEEXT): $(bin2boot_OBJECTS) $(bin2boot_DEPENDENCIES)
+	@rm -f bin2boot$(EXEEXT)
 	$(LINK) $(bin2boot_LDFLAGS) $(bin2boot_OBJECTS) $(bin2boot_LDADD) $(LIBS)
-
-binpatch: $(binpatch_OBJECTS) $(binpatch_DEPENDENCIES)
-	@rm -f binpatch
-	$(LINK) $(binpatch_LDFLAGS) $(binpatch_OBJECTS) $(binpatch_LDADD) $(LIBS)
 
 tags: TAGS
 
@@ -302,7 +298,7 @@ check-am: all-am
 check: check-am
 installcheck-am:
 installcheck: installcheck-am
-install-exec-am: install-exec-local
+install-exec-am:
 install-exec: install-exec-am
 
 install-data-am:
@@ -313,7 +309,7 @@ install-am: all-am
 install: install-am
 uninstall-am:
 uninstall: uninstall-am
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(PROGRAMS) all-local
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
@@ -361,45 +357,33 @@ mostlyclean-compile distclean-compile clean-compile \
 maintainer-clean-compile tags mostlyclean-tags distclean-tags \
 clean-tags maintainer-clean-tags distdir mostlyclean-depend \
 distclean-depend clean-depend maintainer-clean-depend info-am info \
-dvi-am dvi check check-am installcheck-am installcheck \
-install-exec-local install-exec-am install-exec install-data-am \
-install-data install-am install uninstall-am uninstall all-redirect \
-all-am all installdirs mostlyclean-generic distclean-generic \
-clean-generic maintainer-clean-generic clean mostlyclean distclean \
-maintainer-clean
+dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-local all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
+
+$(PREINSTALL_DIRS):
+	$(mkinstalldirs) $@
+
+$(PROJECT_ROOT)/pc386/build-tools/bin2boot: bin2boot
+	$(INSTALL_PROGRAM) $< $@
 
 # HACK: install into build-tree
-preinstall: install-exec-local
-
-install-exec-local: $(PROGRAMS)
-	$(mkinstalldirs) $(PROJECT_ROOT)/pc386/build-tools
-	$(INSTALL_PROGRAM) bin2boot $(PROJECT_ROOT)/pc386/build-tools
-	$(INSTALL_PROGRAM) binpatch $(PROJECT_ROOT)/pc386/build-tools
+all-local: $(PREINSTALL_DIRS) $(PREINSTALL_FILES)
 
 debug-am:
 debug: debug-am
 .PHONY: debug debug-am
 
-debug_install-am:
-debug_install: debug_install-am
-.PHONY: debug_install debug_install-am
-
 profile-am:
 profile: profile-am
 .PHONY: profile profile-am
 
-profile_install-am:
-profile_install: profile_install-am
-.PHONY: profile_install profile_install-am
-
 preinstall-am:
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am
-
-clobber-am:
-clobber: clobber-am
-.PHONY: clobber clobber-am
 
 depend-am:
 depend: depend-am

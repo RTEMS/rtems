@@ -8,12 +8,9 @@
 ## and this file will probably be removed
 
 depend-recursive \
-clobber-recursive \
 preinstall-recursive \
 debug-recursive \
-debug_install-recursive \
-profile-recursive \
-profile_install-recursive:
+profile-recursive:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
 	dot_seen=no; \
 	target=`echo $@ | sed s/-recursive//`; \
@@ -37,20 +34,11 @@ profile_install-recursive:
 debug: debug-recursive
 .PHONY: debug-recursive
 
-debug_install: debug_install-recursive
-.PHONY: debug_install-recursive
-
 profile: profile-recursive
-.PHONY: profile-recursive
-
-profile_install: profile_install-recursive
 .PHONY: profile-recursive
 
 preinstall: preinstall-recursive
 .PHONY: preinstall-recursive
-
-clobber: clobber-recursive
-.PHONY: clobber-recursive
 
 depend: depend-recursive
 .PHONY: depend-recursive

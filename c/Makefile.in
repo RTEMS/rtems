@@ -343,7 +343,6 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 @RTEMS_BSP_LIST@: src/configure
 	@set fnord $(MAKEFLAGS); amf=$$2; \
-	# Adjust paths
 	test -n "${RTEMS_BSP}" && for i in ${RTEMS_BSP}; do \
 	  echo "Configuring RTEMS_BSP=$$i"; \
 	  test -d $$i || mkdir $$i; \
@@ -355,19 +354,14 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 all-am: ${RTEMS_BSP}
 debug-am: ${RTEMS_BSP}
-debug_install-am: ${RTEMS_BSP}
 profile-am: ${RTEMS_BSP}
-profile_install-am: ${RTEMS_BSP}
 preinstall-am: ${RTEMS_BSP}
 depend-am: ${RTEMS_BSP}
 
 depend-recursive \
-clobber-recursive \
 preinstall-recursive \
 debug-recursive \
-debug_install-recursive \
-profile-recursive \
-profile_install-recursive:
+profile-recursive:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
 	dot_seen=no; \
 	target=`echo $@ | sed s/-recursive//`; \
@@ -389,20 +383,11 @@ profile_install-recursive:
 debug: debug-recursive
 .PHONY: debug-recursive
 
-debug_install: debug_install-recursive
-.PHONY: debug_install-recursive
-
 profile: profile-recursive
-.PHONY: profile-recursive
-
-profile_install: profile_install-recursive
 .PHONY: profile-recursive
 
 preinstall: preinstall-recursive
 .PHONY: preinstall-recursive
-
-clobber: clobber-recursive
-.PHONY: clobber-recursive
 
 depend: depend-recursive
 .PHONY: depend-recursive
@@ -411,25 +396,13 @@ debug-am:
 debug: debug-am
 .PHONY: debug debug-am
 
-debug_install-am:
-debug_install: debug_install-am
-.PHONY: debug_install debug_install-am
-
 profile-am:
 profile: profile-am
 .PHONY: profile profile-am
 
-profile_install-am:
-profile_install: profile_install-am
-.PHONY: profile_install profile_install-am
-
 preinstall-am:
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am
-
-clobber-am:
-clobber: clobber-am
-.PHONY: clobber clobber-am
 
 depend-am:
 depend: depend-am

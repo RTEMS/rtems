@@ -403,12 +403,3 @@ writeHeader:
 
   return 0;
 } 
-
-
-
-
-
-
-
-
-

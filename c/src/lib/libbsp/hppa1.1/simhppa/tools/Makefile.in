@@ -69,6 +69,7 @@ host_triplet = @host@
 target_alias = @target_alias@
 target_triplet = @target@
 CC = @CC@
+EXEEXT = @EXEEXT@
 INSTALL_CHANGE = @INSTALL_CHANGE@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
@@ -98,6 +99,7 @@ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/../../../../../../../mkinstalldirs
 CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES = 
+noinst_PROGRAMS =  print_dump$(EXEEXT)
 PROGRAMS =  $(noinst_PROGRAMS)
 
 
@@ -196,8 +198,8 @@ distclean-compile:
 
 maintainer-clean-compile:
 
-print_dump: $(print_dump_OBJECTS) $(print_dump_DEPENDENCIES)
-	@rm -f print_dump
+print_dump$(EXEEXT): $(print_dump_OBJECTS) $(print_dump_DEPENDENCIES)
+	@rm -f print_dump$(EXEEXT)
 	$(LINK) $(print_dump_LDFLAGS) $(print_dump_OBJECTS) $(print_dump_LDADD) $(LIBS)
 
 tags: TAGS
@@ -405,25 +407,13 @@ debug-am:
 debug: debug-am
 .PHONY: debug debug-am
 
-debug_install-am:
-debug_install: debug_install-am
-.PHONY: debug_install debug_install-am
-
 profile-am:
 profile: profile-am
 .PHONY: profile profile-am
 
-profile_install-am:
-profile_install: profile_install-am
-.PHONY: profile_install profile_install-am
-
 preinstall-am:
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am
-
-clobber-am:
-clobber: clobber-am
-.PHONY: clobber clobber-am
 
 depend-am:
 depend: depend-am

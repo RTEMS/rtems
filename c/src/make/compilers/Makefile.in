@@ -264,25 +264,13 @@ debug-am:
 debug: debug-am
 .PHONY: debug debug-am
 
-debug_install-am:
-debug_install: debug_install-am
-.PHONY: debug_install debug_install-am
-
 profile-am:
 profile: profile-am
 .PHONY: profile profile-am
 
-profile_install-am:
-profile_install: profile_install-am
-.PHONY: profile_install profile_install-am
-
 preinstall-am:
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am
-
-clobber-am:
-clobber: clobber-am
-.PHONY: clobber clobber-am
 
 depend-am:
 depend: depend-am

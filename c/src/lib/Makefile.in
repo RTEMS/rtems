@@ -41,6 +41,8 @@ LIBHWAPI = $(wildcard libhwapi)
 SUB_DIRS = start include libmisc libc $(LIBNETWORKING) libcpu libbsp \
     $(LIBRPC) $(LIBRDBG) $(LIBCHIP) $(LIBHWAPI) $(LIBRTEMSCPLUSPLUS) wrapup
 
+CLOBBER_ADDITIONS += config.log config.cache
+
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status

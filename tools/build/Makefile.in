@@ -76,12 +76,15 @@ VERSION = @VERSION@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-bin_PROGRAMS = cklength eolstrip packhex unhex
+bin_PROGRAMS = cklength eolstrip packhex unhex 
+
+noinst_PROGRAMS = binpatch
 
 cklength_SOURCES = cklength.c
 eolstrip_SOURCES = eolstrip.c
 packhex_SOURCES = packhex.c
 unhex_SOURCES = unhex.c
+binpatch_SOURCES = binpatch.c
 
 bin_SCRIPTS =  install-if-change lock-directory unlock-directory rcs-clean 
 
@@ -94,7 +97,8 @@ CONFIG_CLEAN_FILES =  install-if-change lock-directory rcs-clean \
 unlock-directory
 bin_PROGRAMS =  cklength$(EXEEXT) eolstrip$(EXEEXT) packhex$(EXEEXT) \
 unhex$(EXEEXT)
-PROGRAMS =  $(bin_PROGRAMS)
+noinst_PROGRAMS =  binpatch$(EXEEXT)
+PROGRAMS =  $(bin_PROGRAMS) $(noinst_PROGRAMS)
 
 
 DEFS = @DEFS@ -I. -I$(srcdir) -I.
@@ -117,6 +121,10 @@ unhex_OBJECTS =  unhex.o
 unhex_LDADD = $(LDADD)
 unhex_DEPENDENCIES = 
 unhex_LDFLAGS = 
+binpatch_OBJECTS =  binpatch.o
+binpatch_LDADD = $(LDADD)
+binpatch_DEPENDENCIES = 
+binpatch_LDFLAGS = 
 SCRIPTS =  $(bin_SCRIPTS) $(noinst_SCRIPTS)
 
 CFLAGS = @CFLAGS@
@@ -132,10 +140,10 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/cklength.P .deps/eolstrip.P .deps/packhex.P \
-.deps/unhex.P
-SOURCES = $(cklength_SOURCES) $(eolstrip_SOURCES) $(packhex_SOURCES) $(unhex_SOURCES)
-OBJECTS = $(cklength_OBJECTS) $(eolstrip_OBJECTS) $(packhex_OBJECTS) $(unhex_OBJECTS)
+DEP_FILES =  .deps/binpatch.P .deps/cklength.P .deps/eolstrip.P \
+.deps/packhex.P .deps/unhex.P
+SOURCES = $(cklength_SOURCES) $(eolstrip_SOURCES) $(packhex_SOURCES) $(unhex_SOURCES) $(binpatch_SOURCES)
+OBJECTS = $(cklength_OBJECTS) $(eolstrip_OBJECTS) $(packhex_OBJECTS) $(unhex_OBJECTS) $(binpatch_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -216,6 +224,15 @@ uninstall-binPROGRAMS:
 	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	done
 
+mostlyclean-noinstPROGRAMS:
+
+clean-noinstPROGRAMS:
+	-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)
+
+distclean-noinstPROGRAMS:
+
+maintainer-clean-noinstPROGRAMS:
+
 .s.o:
 	$(COMPILE) -c $<
 
@@ -247,6 +264,10 @@ packhex$(EXEEXT): $(packhex_OBJECTS) $(packhex_DEPENDENCIES)
 unhex$(EXEEXT): $(unhex_OBJECTS) $(unhex_DEPENDENCIES)
 	@rm -f unhex$(EXEEXT)
 	$(LINK) $(unhex_LDFLAGS) $(unhex_OBJECTS) $(unhex_LDADD) $(LIBS)
+
+binpatch$(EXEEXT): $(binpatch_OBJECTS) $(binpatch_DEPENDENCIES)
+	@rm -f binpatch$(EXEEXT)
+	$(LINK) $(binpatch_LDFLAGS) $(binpatch_OBJECTS) $(binpatch_LDADD) $(LIBS)
 
 install-binSCRIPTS: $(bin_SCRIPTS)
 	@$(NORMAL_INSTALL)
@@ -421,17 +442,19 @@ distclean-generic:
 
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-hdr mostlyclean-binPROGRAMS \
-		mostlyclean-compile mostlyclean-tags mostlyclean-depend \
-		mostlyclean-generic
+		mostlyclean-noinstPROGRAMS mostlyclean-compile \
+		mostlyclean-tags mostlyclean-depend mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-hdr clean-binPROGRAMS clean-compile clean-tags \
-		clean-depend clean-generic mostlyclean-am
+clean-am:  clean-hdr clean-binPROGRAMS clean-noinstPROGRAMS \
+		clean-compile clean-tags clean-depend clean-generic \
+		mostlyclean-am
 
 clean: clean-am
 
-distclean-am:  distclean-hdr distclean-binPROGRAMS distclean-compile \
+distclean-am:  distclean-hdr distclean-binPROGRAMS \
+		distclean-noinstPROGRAMS distclean-compile \
 		distclean-tags distclean-depend distclean-generic \
 		clean-am
 
@@ -439,6 +462,7 @@ distclean: distclean-am
 	-rm -f config.status
 
 maintainer-clean-am:  maintainer-clean-hdr maintainer-clean-binPROGRAMS \
+		maintainer-clean-noinstPROGRAMS \
 		maintainer-clean-compile maintainer-clean-tags \
 		maintainer-clean-depend maintainer-clean-generic \
 		distclean-am
@@ -451,6 +475,8 @@ maintainer-clean: maintainer-clean-am
 .PHONY: mostlyclean-hdr distclean-hdr clean-hdr maintainer-clean-hdr \
 mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
 maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
+mostlyclean-noinstPROGRAMS distclean-noinstPROGRAMS \
+clean-noinstPROGRAMS maintainer-clean-noinstPROGRAMS \
 mostlyclean-compile distclean-compile clean-compile \
 maintainer-clean-compile uninstall-binSCRIPTS install-binSCRIPTS tags \
 mostlyclean-tags distclean-tags clean-tags maintainer-clean-tags \
@@ -467,25 +493,13 @@ debug-am:
 debug: debug-am
 .PHONY: debug debug-am
 
-debug_install-am:
-debug_install: debug_install-am
-.PHONY: debug_install debug_install-am
-
 profile-am:
 profile: profile-am
 .PHONY: profile profile-am
 
-profile_install-am:
-profile_install: profile_install-am
-.PHONY: profile_install profile_install-am
-
 preinstall-am:
 preinstall: preinstall-am
 .PHONY: preinstall preinstall-am
-
-clobber-am:
-clobber: clobber-am
-.PHONY: clobber clobber-am
 
 depend-am:
 depend: depend-am
