@@ -31,7 +31,7 @@ $(ARCH)/start.$(OBJEXT): $(OBJS)
 
 all-local: $(TMPINSTALL_FILES)
 
-EXTRA_DIST = cpuboot.c debugreset.S reset.S
+EXTRA_DIST = debugreset.S reset.S
 
 TMPINSTALL_FILES =
 

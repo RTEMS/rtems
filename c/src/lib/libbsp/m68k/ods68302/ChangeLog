@@ -1,3 +1,9 @@
+2004-01-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove non-existing times from EXTRA_DIST.
+	* start/Makefile.am: Remove non-existing cpuboot.c from EXTRA_DIST.
+	* wrapup/Makefile.am: Reflect changes to libcpu.
+
 2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.

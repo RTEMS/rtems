@@ -18,8 +18,6 @@ include_HEADERS += include/coverhd.h
 
 all-local: $(PREINSTALL_FILES)
 
-EXTRA_DIST = times
-
 $(PROJECT_INCLUDE)/bare.h: include/bare.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bare.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bare.h
