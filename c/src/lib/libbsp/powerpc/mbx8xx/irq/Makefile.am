@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 C_FILES = irq.c irq_init.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
