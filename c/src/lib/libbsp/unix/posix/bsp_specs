@@ -1,0 +1,8 @@
+%rename lib old_lib
+
+*lib:
+%{!qrtems: %(old_lib)} \
+%{qrtems: --start-group %{!qrtems_debug: -lrtemsall } \
+%{qrtems_debug: -lrtemsall_g} \
+%(old_lib) --end-group}
+
