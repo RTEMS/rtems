@@ -214,6 +214,9 @@
     \normalturnoffactive  % \ in index entries must not stay \, e.g., if
                    % the page break happens to be in the middle of an example.
     \shipout\vbox{%
+      % Moved from the bottom of the page
+      \ifpdfmakepagedest \pdfmkdest{\the\pageno} \fi
+      %
       \ifcropmarks \vbox to \outervsize\bgroup
         \hsize = \outerhsize
         \vskip-\topandbottommargin
@@ -242,8 +245,8 @@
         \vskip 2\baselineskip
         \unvbox\footlinebox
       \fi
-      %
-      \ifpdfmakepagedest \pdfmkdest{\the\pageno} \fi
+      % Moved to the top of the page
+      %\ifpdfmakepagedest \pdfmkdest{\the\pageno} \fi
       %
       \ifcropmarks
           \egroup % end of \vbox\bgroup
