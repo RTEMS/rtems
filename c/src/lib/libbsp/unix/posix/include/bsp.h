@@ -35,23 +35,6 @@ extern "C" {
 /* #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2 */
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
 
-/*
- *  Stuff for Time Test 27
- */
-
-#define MUST_WAIT_FOR_INTERRUPT 1
-
-#define Install_tm27_vector( handler ) \
-    set_vector( (handler), 16, 1 )
-
-#define Cause_tm27_intr()  \
-    raise( 16 )
-
-#define Clear_tm27_intr()
-
-#define Lower_tm27_intr() \
-    _ISR_Set_level( 0 );
-
 #define RAM_START 0
 #define RAM_END   0x100000
 
