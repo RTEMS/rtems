@@ -76,7 +76,6 @@ mpc6xx/clock/Makefile
 mpc6xx/timer/Makefile
 mpc6xx/exceptions/Makefile
 mpc6xx/mmu/Makefile
-mpc6xx/timer/Makefile
 mpc6xx/wrapup/Makefile
 mpc8260/Makefile
 mpc8260/clock/Makefile

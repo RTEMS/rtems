@@ -1,3 +1,7 @@
+2002-09-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove duplicate mpc6xx/timer/Makefile from CONFIG_FILES.
+
 2002-09-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mpc8260/exceptions/raw_exception.c: #include <string.h>.
