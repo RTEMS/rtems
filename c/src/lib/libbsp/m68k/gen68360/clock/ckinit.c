@@ -53,33 +53,49 @@ rtems_device_minor_number rtems_clock_minor;
 char M360DefaultWatchdogFeeder = 1;
 
 /*
+ * RTEMS and hardware have different notions of clock rate.
+ */
+static unsigned long rtems_nsec_per_tick;
+static unsigned long pit_nsec_per_tick;
+
+/*
  * Periodic interval timer interrupt handler
  */
 
 rtems_isr
 Clock_isr (rtems_vector_number vector)
 {
-	/*
-	 * Perform a dummy read of DPRAM.
-	 * This works around a bug in Rev. B of the 68360
-	 */
-	m360.dpram0[0];
+	static unsigned long nsec;
 
 	/*
-	 * Feed the watchdog
-	 * Application code can override this by
-	 * setting M360DefaultWatchdogFeeder to zero.
+	 * See if it's really time for a `tick'
 	 */
-	if (M360DefaultWatchdogFeeder) {
-		m360.swsr = 0x55;
-		m360.swsr = 0xAA;
+	nsec += pit_nsec_per_tick;
+	if (nsec >= rtems_nsec_per_tick) {
+		nsec -= rtems_nsec_per_tick;
+	
+		/*
+		 * Perform a dummy read of DPRAM.
+		 * This works around a bug in Rev. B of the 68360
+		 */
+		m360.dpram0[0];
+
+		/*
+		 * Feed the watchdog
+		 * Application code can override this by
+		 * setting M360DefaultWatchdogFeeder to zero.
+		 */
+		if (M360DefaultWatchdogFeeder) {
+			m360.swsr = 0x55;
+			m360.swsr = 0xAA;
+		}
+
+		/*
+		 * Announce the clock tick
+		 */
+		Clock_driver_ticks++;
+		rtems_clock_tick();
 	}
-
-	/*
-	 * Announce the clock tick
-	 */
-	Clock_driver_ticks++;
-	rtems_clock_tick();
 }
 
 void
@@ -98,29 +114,39 @@ Install_clock (rtems_isr_entry clock_isr)
 {
 	Clock_driver_ticks = 0;
 	if ( BSP_Configuration.ticks_per_timeslice ) {
-		int pitr;
-
 		/*
 		 * Choose periodic interval timer register value
+		 * The rate at which the periodic interval timer
+		 * can generate interrupts is almost certainly not
+		 * the same as desired by the BSP configuration.
+		 * Handle the difference by choosing the largest PIT
+		 * interval which is less than or equal to the RTEMS
+		 * interval and skipping some hardware interrupts.
+		 * To reduce the jitter in the calls to RTEMS the
+		 * hardware interrupt interval is never less than
+		 * the maximum non-prescaled value from the PIT.
+		 * 
 		 * For a 25 MHz external clock the basic clock rate is
 		 *	40 nsec * 128 * 4 = 20.48 usec/tick
 		 */
-		pitr = ((BSP_Configuration.microseconds_per_tick * 100) + 1023) / 2048;
-		if (pitr >= 256) {
-			pitr = (pitr + 255) / 512;
-			if (pitr >= 256)
-				pitr = 255;
-			else if (pitr == 0)
-				pitr = 1;
-			pitr |= 0x100;
+		int divisor;
+		extern int m360_clock_rate; /* This should be somewhere in a config file */
+		unsigned long nsec_per_chip_tick = 1000000000 / m360_clock_rate;
+		unsigned long nsec_per_pit_tick = 512 * nsec_per_chip_tick;
+
+		rtems_nsec_per_tick = BSP_Configuration.microseconds_per_tick * 1000;
+		divisor = rtems_nsec_per_tick / nsec_per_pit_tick;
+		if (divisor >= 256) {
+			divisor = 255;
 		}
-		else if (pitr == 0) {
-			pitr = 1;
+		else if (divisor == 0) {
+			divisor = 1;
 		}
+		pit_nsec_per_tick = nsec_per_pit_tick * divisor;
 		m360.pitr &= ~0x1FF;
 		m360.picr = (CLOCK_IRQ_LEVEL << 8) | CLOCK_VECTOR;
 		set_vector (clock_isr, CLOCK_VECTOR, 1);
-		m360.pitr |= pitr;
+		m360.pitr |= divisor;
 		atexit (Clock_exit);
 	}
 }
