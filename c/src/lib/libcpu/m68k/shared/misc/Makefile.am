@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 C_FILES = memcpy.c m68kidle.c
 OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 

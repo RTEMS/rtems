@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/fpsp.rel
 
 include $(top_srcdir)/../../../automake/compile.am

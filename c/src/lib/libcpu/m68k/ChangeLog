@@ -1,3 +1,11 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* m68040/Makefile.am: Reformat.
+	* m68040/fpsp/Makefile.am: Reformat.
+	* shared/Makefile.am: Reformat.
+	* shared/cache/Makefile.am: Reformat. Use dirstamps for preinstallation.
+	* shared/misc/Makefile.am: Reformat.
+
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CANONICAL_HOST.

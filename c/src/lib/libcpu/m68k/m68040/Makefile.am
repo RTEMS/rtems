@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 SUBDIRS = fpsp
 
 include $(top_srcdir)/../../../automake/subdirs.am
