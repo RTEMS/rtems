@@ -9,7 +9,8 @@ RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
 H_FILES = $(srcdir)/bsp.h $(srcdir)/coverhd.h \
-  $(srcdir)/dmv170.h $(srcdir)/chain.h $(srcdir)/tod.h
+  $(srcdir)/dmv170.h $(srcdir)/chain.h \
+  $(srcdir)/../../../shared/tod.h
 
 #
 #  Equate files are for including from assembly preprocessed by
