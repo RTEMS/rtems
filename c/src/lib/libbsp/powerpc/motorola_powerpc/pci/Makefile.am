@@ -30,7 +30,7 @@ $(PROJECT_INCLUDE)/bsp/pci.h: ../../shared/pci/pci.h
 	$(INSTALL_DATA) $< $@
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/pci.h
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/pci.h
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
 

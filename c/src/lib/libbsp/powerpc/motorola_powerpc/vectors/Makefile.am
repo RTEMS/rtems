@@ -33,7 +33,7 @@ $(PROJECT_INCLUDE)/bsp:
 $(PROJECT_INCLUDE)/bsp/vectors.h: ../../shared/vectors/vectors.h
 	$(INSTALL_DATA) $< $@
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/vectors.h
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/vectors.h
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
 

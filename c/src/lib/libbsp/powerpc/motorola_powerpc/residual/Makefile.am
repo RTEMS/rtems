@@ -31,7 +31,7 @@ $(PROJECT_INCLUDE)/bsp/residual.h: ../../shared/residual/residual.h
 	$(INSTALL_DATA) $< $@
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/pnp.h \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/pnp.h \
     $(PROJECT_INCLUDE)/bsp/residual.h
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)

@@ -26,7 +26,7 @@ $(PROJECT_INCLUDE)/bsp/openpic.h: ../../shared/openpic/openpic.h
 # (OPTIONAL) Add local stuff here using +=
 #
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/openpic.h
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp $(PROJECT_INCLUDE)/bsp/openpic.h
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS)
 
