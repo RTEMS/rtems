@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 VPATH = @srcdir@:@srcdir@/../../shared:@srcdir@/../../../shared
 
 PGM = $(ARCH)/startup.rel

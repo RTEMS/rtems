@@ -20,24 +20,24 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
 
-$(PROJECT_INCLUDE)/bare.h: include/bare.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/bare.h: include/bare.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bare.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bare.h
 
-$(PROJECT_INCLUDE)/crc.h: include/crc.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/crc.h: include/crc.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/crc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/crc.h
 
-$(PROJECT_INCLUDE)/debugport.h: include/debugport.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/debugport.h: include/debugport.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/debugport.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/debugport.h
 
-$(PROJECT_INCLUDE)/m68302scc.h: include/m68302scc.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/m68302scc.h: include/m68302scc.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/m68302scc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/m68302scc.h
 
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 include $(top_srcdir)/../../../../automake/subdirs.am

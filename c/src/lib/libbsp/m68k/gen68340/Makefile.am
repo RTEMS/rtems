@@ -21,28 +21,28 @@ all-local: $(PREINSTALL_FILES)
 
 EXTRA_DIST = times
 
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
-$(PROJECT_INCLUDE)/m340uart.h: include/m340uart.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/m340uart.h: include/m340uart.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/m340uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/m340uart.h
 
-$(PROJECT_INCLUDE)/m340timer.h: include/m340timer.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/m340timer.h: include/m340timer.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/m340timer.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/m340timer.h
 
-$(PROJECT_INCLUDE)/m68340.h: include/m68340.h
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/m68340.h: include/m68340.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/m68340.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/m68340.h
 
-$(PROJECT_INCLUDE)/m68340.inc: include/m68340.inc
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/m68340.inc: include/m68340.inc $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/m68340.inc
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/m68340.inc
 
-$(PROJECT_INCLUDE)/m68349.inc: include/m68349.inc
-	$(INSTALL_DATA) $< $@
+$(PROJECT_INCLUDE)/m68349.inc: include/m68349.inc $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/m68349.inc
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/m68349.inc
 
 include $(top_srcdir)/../../../../automake/subdirs.am
