@@ -449,7 +449,12 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #define CONFIGURE_MEMORY_PER_TASK_FOR_POSIX_API 0
 #define CONFIGURE_MEMORY_FOR_POSIX              0
 
+
 #endif    /* RTEMS_POSIX_API */
+
+#ifndef CONFIGURE_POSIX_INIT_TASK_STACK_SIZE
+#define CONFIGURE_POSIX_INIT_TASK_STACK_SIZE    0
+#endif
 
 /* 
  *  Calculate the RAM size based on the maximum number of objects configured.
