@@ -24,10 +24,14 @@ This is the files for gcc and newlib that are shared by all targets.
 
 %dir /opt/rtems/man
 %dir /opt/rtems/man/man1
-%doc /opt/rtems/man/man1/cccp.1
+# not in gcc 3.x -- only in gcc 2.x
+# %doc /opt/rtems/man/man1/cccp.1
 
 %dir /opt/rtems/include
-/opt/rtems/include/g++-3
+# gcc 3.0.1 specific
+/opt/rtems/include/g++-v3
+# gcc 2.x specific
+# /opt/rtems/include/g++-3
 
 %post -n rtems-base-gcc
   if test -d $RPM_INSTALL_PREFIX/rtems/info; 
