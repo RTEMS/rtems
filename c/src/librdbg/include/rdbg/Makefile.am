@@ -20,6 +20,7 @@ all-local: $(PREINSTALL_FILES)
 
 if HAS_RDBG
 SUBDIRS = $(RTEMS_CPU)
+DIST_SUBDIRS = $(RTEMS_CPU)
 endif
 
 include $(top_srcdir)/../../automake/subdirs.am

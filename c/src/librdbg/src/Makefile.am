@@ -2,9 +2,9 @@
 ## $Id$
 ##
 
-
 if HAS_RDBG
 SUBDIRS = $(RTEMS_CPU)
+DIST_SUBDIRS = $(RTEMS_CPU)
 endif
 
 EXTRA_DIST = _servtgt.c awk.svc excep.c ptrace.c rdbg.c remdeb.x servbkpt.c \
