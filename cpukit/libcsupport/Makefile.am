@@ -25,6 +25,8 @@ include_HEADERS =
 if NEWLIB
 include_HEADERS += include/stdint.h
 include_HEADERS += include/inttypes.h
+include_rtems_HEADERS += include/rtems/_stdint.h
+include_rtems_HEADERS += include/rtems/_inttypes.h
 endif
 
 ## motorola
@@ -177,6 +179,14 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/stdint.h
 $(PROJECT_INCLUDE)/inttypes.h: include/inttypes.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/inttypes.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/inttypes.h
+
+$(PROJECT_INCLUDE)/rtems/_stdint.h: include/rtems/_stdint.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/_stdint.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/_stdint.h
+
+$(PROJECT_INCLUDE)/rtems/_inttypes.h: include/rtems/_inttypes.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/_inttypes.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/_inttypes.h
 endif
 
 $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp):
