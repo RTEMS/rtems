@@ -57,6 +57,10 @@ rtems_cache_flush_multiple_data_lines( const void * d_addr, size_t n_bytes )
   * the resulting line until final_address is passed.
   */
 
+  if( n_bytes == 0 )
+    /* Do nothing if number of bytes to flush is zero */
+    return;
+    
   final_address = (void *)((size_t)d_addr + n_bytes - 1);
   d_addr = (void *)((size_t)d_addr & ~(CPU_DATA_CACHE_ALIGNMENT - 1));
   while( d_addr <= final_address )  {
@@ -85,6 +89,10 @@ rtems_cache_invalidate_multiple_data_lines( const void * d_addr, size_t n_bytes 
   * invalidate the resulting line until final_address is passed.
   */
 
+  if( n_bytes == 0 )
+    /* Do nothing if number of bytes to invalidate is zero */
+    return;
+    
   final_address = (void *)((size_t)d_addr + n_bytes - 1);
   d_addr = (void *)((size_t)d_addr & ~(CPU_DATA_CACHE_ALIGNMENT - 1));
   while( final_address > d_addr ) {
@@ -208,6 +216,10 @@ rtems_cache_invalidate_multiple_instruction_lines( const void * i_addr, size_t n
   * invalidate the resulting line until final_address is passed.
   */
 
+  if( n_bytes == 0 )
+    /* Do nothing if number of bytes to invalidate is zero */
+    return;
+    
   final_address = (void *)((size_t)i_addr + n_bytes - 1);
   i_addr = (void *)((size_t)i_addr & ~(CPU_INSTRUCTION_CACHE_ALIGNMENT - 1));
   while( final_address > i_addr ) {
