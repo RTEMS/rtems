@@ -61,27 +61,25 @@ MAINTAINERCLEANFILES += src/powerpc/new_exception_processing/remdeb_svc.c
 MAINTAINERCLEANFILES += src/powerpc/new_exception_processing/remdeb.h
 
 if RPCTOOLS
-src/powerpc/new_exception_processing/remdeb.h: $(X_FILES) \
+$(srcdir)/src/powerpc/new_exception_processing/remdeb.h: $(X_FILES) \
     src/powerpc/new_exception_processing/remdeb_f.x
-	@rm -f $@
-	( cd $(top_srcdir)/librdbg/src; \
-	$(RPCGEN) -h -DFRONTEND=\"src/powerpc/new_exception_processing/remdeb_f.x\" \
-	  -o src/powerpc/new_exception_processing/remdeb.h remdeb.x )
+	rm -f $@; ( cd $(srcdir) && \
+	$(RPCGEN) -h -DFRONTEND=\"powerpc/new_exception_processing/remdeb_f.x\" \
+	  -o src/powerpc/new_exception_processing/remdeb.h src/remdeb.x )
 
-src/powerpc/new_exception_processing/remdeb_xdr.c: $(X_FILES) \
+$(srcdir)/src/powerpc/new_exception_processing/remdeb_xdr.c: $(X_FILES) \
    src/powerpc/new_exception_processing/remdeb_f.x
-	@rm -f $@
-	( cd $(top_srcdir)/librdbg/src; \
-	$(RPCGEN) -c -DFRONTEND=\"src/powerpc/new_exception_processing/remdeb_f.x\" \
-	  -o src/powerpc/new_exception_processing/remdeb_xdr.c remdeb.x )
+	rm -f $@; ( cd $(srcdir) && \
+	$(RPCGEN) -c -DFRONTEND=\"powerpc/new_exception_processing/remdeb_f.x\" src/remdeb.x \
+	 | sed "s,^#include.*remdeb\.h.*,#include \"src/powerpc/new_exception_processing/remdeb.h\"," \
+	 > src/powerpc/new_exception_processing/remdeb_xdr.c )
 
-src/powerpc/new_exception_processing/remdeb_svc.c: $(X_FILES) \
+$(srcdir)/src/powerpc/new_exception_processing/remdeb_svc.c: $(X_FILES) \
    src/powerpc/new_exception_processing/remdeb_f.x
-	@rm -f $@ tmpSvc.c
-	( cd $(top_srcdir)/librdbg/src; \
-	$(RPCGEN) -m -DFRONTEND=\"src/powerpc/new_exception_processing/remdeb_f.x\" \
-	  -o src/powerpc/new_exception_processing/tmpSvc.c remdeb.x; \
-	$(AWK) -f ./awk.svc THEPROG="remdeb.h" src/powerpc/new_exception_processing/tmpSvc.c \
+	rm -f $@; ( cd $(srcdir) && \
+	$(RPCGEN) -m -DFRONTEND=\"powerpc/new_exception_processing/remdeb_f.x\" \
+	  -o src/powerpc/new_exception_processing/tmpSvc.c src/remdeb.x; \
+	$(AWK) -f src/awk.svc THEPROG="remdeb.h" src/powerpc/new_exception_processing/tmpSvc.c \
 	  > src/powerpc/new_exception_processing/remdeb_svc.c; \
 	sed -e 's/fprintf.*,/printf(/'  src/powerpc/new_exception_processing/remdeb_svc.c > src/powerpc/new_exception_processing/remdeb_svc.tmp; \
 	mv src/powerpc/new_exception_processing/remdeb_svc.tmp src/powerpc/new_exception_processing/remdeb_svc.c; \
@@ -112,24 +110,22 @@ MAINTAINERCLEANFILES += src/i386/any/remdeb_svc.c
 MAINTAINERCLEANFILES += src/i386/any/remdeb.h
 
 if RPCTOOLS
-src/i386/any/remdeb.h: $(X_FILES) src/i386/any/remdeb_f.x
-	@rm -f $@
-	( cd $(top_srcdir)/librdbg/src; \
-	$(RPCGEN) -h -DFRONTEND=\"src/i386/any/remdeb_f.x\" \
-	  -o src/i386/any/remdeb.h remdeb.x )
+$(srcdir)/src/i386/any/remdeb.h: $(X_FILES) src/i386/any/remdeb_f.x
+	rm -f $@; ( cd $(srcdir) && \
+	$(RPCGEN) -h -DFRONTEND=\"i386/any/remdeb_f.x\" \
+	  -o src/i386/any/remdeb.h src/remdeb.x )
 
-src/i386/any/remdeb_xdr.c: $(X_FILES) src/i386/any/remdeb_f.x
-	@rm -f $@
-	( cd $(top_srcdir)/librdbg/src; \
-	$(RPCGEN) -c -DFRONTEND=\"src/i386/any/remdeb_f.x\" \
-	  -o src/i386/any/remdeb_xdr.c remdeb.x )
+$(srcdir)/src/i386/any/remdeb_xdr.c: $(X_FILES) src/i386/any/remdeb_f.x
+	rm -f $@; ( cd $(srcdir) && \
+	$(RPCGEN) -c -DFRONTEND=\"i386/any/remdeb_f.x\" src/remdeb.x \
+	 | sed "s,^#include.*remdeb\.h.*,#include \"src/i386/any/remdeb.h\"," \
+	 > src/i386/any/remdeb_xdr.c )
 
-src/i386/any/remdeb_svc.c: $(X_FILES) src/i386/any/remdeb_f.x
-	@rm -f $@ tmpSvc.c
-	( cd $(top_srcdir)/librdbg/src; \
-	$(RPCGEN) -m -DFRONTEND=\"src/i386/any/remdeb_f.x\" \
-	  -o src/i386/any/tmpSvc.c remdeb.x; \
-	$(AWK) -f ./awk.svc THEPROG="remdeb.h" src/i386/any/tmpSvc.c \
+$(srcdir)/src/i386/any/remdeb_svc.c: $(X_FILES) src/i386/any/remdeb_f.x
+	rm -f $@; ( cd $(srcdir) && \
+	$(RPCGEN) -m -DFRONTEND=\"i386/any/remdeb_f.x\" \
+	  -o src/i386/any/tmpSvc.c src/remdeb.x; \
+	$(AWK) -f src/awk.svc THEPROG="remdeb.h" src/i386/any/tmpSvc.c \
 	  > src/i386/any/remdeb_svc.c; \
 	sed -e 's/fprintf.*,/printf(/'  src/i386/any/remdeb_svc.c > src/i386/any/remdeb_svc.tmp; \
 	mv src/i386/any/remdeb_svc.tmp src/i386/any/remdeb_svc.c; \
@@ -160,22 +156,20 @@ MAINTAINERCLEANFILES += src/m68k/any/remdeb_svc.c
 MAINTAINERCLEANFILES += src/m68k/any/remdeb.h
 
 if RPCTOOLS
-src/m68k/any/remdeb.h: $(X_FILES) src/m68k/any/remdeb_f.x
-	@rm -f $@
-	( cd $(top_srcdir)/librdbg/src; \
-	$(RPCGEN) -h -DFRONTEND=\"src/m68k/any/remdeb_f.x\" \
-	  -o src/m68k/any/remdeb.h remdeb.x )
-src/m68k/any/remdeb_xdr.c: $(X_FILES) src/m68k/any/remdeb_f.x
-	@rm -f $@
-	( cd $(top_srcdir)/librdbg/src; \
-	$(RPCGEN) -c -DFRONTEND=\"src/m68k/any/remdeb_f.x\" \
-	  -o src/m68k/any/remdeb_xdr.c remdeb.x )
-src/m68k/any/remdeb_svc.c: $(X_FILES) src/m68k/any/remdeb_f.x
-	@rm -f $@ tmpSvc.c
-	( cd $(top_srcdir)/librdbg/src; \
-	$(RPCGEN) -m -DFRONTEND=\"src/m68k/any/remdeb_f.x\" \
-	  -o src/m68k/any/tmpSvc.c remdeb.x; \
-	$(AWK) -f ./awk.svc THEPROG="remdeb.h" src/m68k/any/tmpSvc.c \
+$(srcdir)/src/m68k/any/remdeb.h: $(X_FILES) src/m68k/any/remdeb_f.x
+	rm -f $@; ( cd $(srcdir) && \
+	$(RPCGEN) -h -DFRONTEND=\"m68k/any/remdeb_f.x\" \
+	  -o src/m68k/any/remdeb.h src/remdeb.x )
+$(srcdir)/src/m68k/any/remdeb_xdr.c: $(X_FILES) src/m68k/any/remdeb_f.x
+	rm -f $@; ( cd $(srcdir) && \
+	$(RPCGEN) -c -DFRONTEND=\"m68k/any/remdeb_f.x\" src/remdeb.x \
+	 | sed "s,^#include.*remdeb\.h.*,#include \"src/m68k/any/remdeb.h\"," \
+	 > src/m68k/any/remdeb_xdr.c )
+$(srcdir)/src/m68k/any/remdeb_svc.c: $(X_FILES) src/m68k/any/remdeb_f.x
+	rm -f $@; ( cd $(srcdir) && \
+	$(RPCGEN) -m -DFRONTEND=\"m68k/any/remdeb_f.x\" \
+	  -o src/m68k/any/tmpSvc.c src/remdeb.x; \
+	$(AWK) -f src/awk.svc THEPROG="remdeb.h" src/m68k/any/tmpSvc.c \
 	  > src/m68k/any/remdeb_svc.c; \
 	sed -e 's/fprintf.*,/printf(/'  src/m68k/any/remdeb_svc.c > src/m68k/any/remdeb_svc.tmp; \
 	mv src/m68k/any/remdeb_svc.tmp src/m68k/any/remdeb_svc.c; \

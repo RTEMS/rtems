@@ -3,7 +3,7 @@
  * It was generated using rpcgen.
  */
 
-#include "remdeb.h"
+#include "src/powerpc/new_exception_processing/remdeb.h"
 #define RTEMS_PORT 2071
 #define RTEMS_BACK_PORT 2073
 
