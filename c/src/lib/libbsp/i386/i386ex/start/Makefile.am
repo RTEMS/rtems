@@ -9,8 +9,8 @@ noinst_HEADERS = 80386ex.h 80386ex.inc macros.inc
 
 OBJS = $(S_O_FILES)
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -29,4 +29,4 @@ all-local: $(ARCH) $(OBJS) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = start.S
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am

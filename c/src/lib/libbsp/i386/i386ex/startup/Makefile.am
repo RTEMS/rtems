@@ -17,8 +17,8 @@ S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 startup_rel_OBJECTS = $(C_O_FILES) $(S_O_FILES)
 
-include $(top_srcdir)/../../../../../../automake/compile.am
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -42,4 +42,4 @@ all-local: $(ARCH) $(startup_rel_OBJECTS) $(PGM) $(TMPINSTALL_FILES)
 
 EXTRA_DIST = README bspstart.c linkcmds setvec.c
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/local.am
