@@ -106,7 +106,11 @@ SECTIONS
     copy_start = .;
     *(.data)
     *(.data.*)
-    *(.gcc_exc)
+    *(.gcc_exc*)
+    ___EH_FRAME_BEGIN__ = .;
+    *(.eh_fram*)
+    ___EH_FRAME_END__ = .;
+    LONG(0);
     *(.gcc_except_table)
     *(.gnu.linkonce.d*)
     SORT(CONSTRUCTORS)

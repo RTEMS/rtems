@@ -1,3 +1,8 @@
+2002-07-25	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Added __EH_FRAME_BEGIN__ and __EH_FRAME_END__
+	to remove problems linking empty main(){} with BSP.
+
 2002-07-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* start/Makefile.am: Eliminate PGMS.
