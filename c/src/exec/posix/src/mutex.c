@@ -215,17 +215,33 @@ int pthread_mutex_init(
   const pthread_mutexattr_t *attr
 )
 {
-  POSIX_Mutex_Control        *the_mutex;
-  CORE_mutex_Attributes      *the_mutex_attr;
-  const pthread_mutexattr_t  *the_attr;
-  CORE_mutex_Disciplines      the_discipline;
+  POSIX_Mutex_Control          *the_mutex;
+  CORE_mutex_Attributes        *the_mutex_attr;
+  const pthread_mutexattr_t    *the_attr;
+  CORE_mutex_Disciplines        the_discipline;
+  register POSIX_Mutex_Control *mutex_in_use;
+  Objects_Locations             location;
 
   if ( attr ) the_attr = attr;
   else        the_attr = &_POSIX_Mutex_Default_attributes;
 
-  /* XXX need to check for NULL mutex */
-  /* XXX EBUSY if *mutex is a valid id */
+  /* Check for NULL mutex */
 
+  if ( !mutex )
+    return EINVAL;
+
+  /* EBUSY if *mutex is a valid id */
+
+  mutex_in_use = _POSIX_Mutex_Get( mutex, &location );
+  switch ( location ) {
+    case OBJECTS_ERROR:
+      break;
+    case OBJECTS_REMOTE:
+    case OBJECTS_LOCAL:
+      _Thread_Enable_dispatch();
+      return EBUSY;
+  };
+ 
   if ( !the_attr->is_initialized ) 
     return EINVAL;
 
