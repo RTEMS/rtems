@@ -45,12 +45,12 @@
 
 static const char rcsid[] = RCSID;
 
-char *frame;
-int framelen;
-int framemax;
-int escape_flag;
-int flush_flag;
-int fcs;
+static char *frame;
+static int framelen;
+static int framemax;
+static int escape_flag;
+static int flush_flag;
+static int fcs;
 
 struct packet {
     int length;

@@ -38,9 +38,9 @@ static const char rcsid[] = RCSID;
 /*
  * LCP-related command-line options.
  */
-int	lcp_echo_interval = 0; 	/* Interval between LCP echo-requests */
-int	lcp_echo_fails = 0;	/* Tolerance to unanswered echo-requests */
-bool	lax_recv = 0;		/* accept control chars in asyncmap */
+static int	lcp_echo_interval = 0; 	/* Interval between LCP echo-requests */
+static int	lcp_echo_fails = 0;	/* Tolerance to unanswered echo-requests */
+static bool	lax_recv = 0;		/* accept control chars in asyncmap */
 
 static int setescape __P((char **));
 
@@ -335,7 +335,7 @@ lcp_close(unit, reason)
 {
     fsm *f = &lcp_fsm[unit];
 
-    if (phase != PHASE_DEAD)
+    if (pppd_phase != PHASE_DEAD)
 	new_phase(PHASE_TERMINATE);
     if (f->state == STOPPED && f->flags & (OPT_PASSIVE|OPT_SILENT)) {
 	/*
@@ -1063,7 +1063,7 @@ lcp_nakci(f, p, len)
 	    if (++try.numloops >= lcp_loopbackfail) {
 		notice("Serial line is looped back.");
 		lcp_close(f->unit, "Loopback detected");
-		status = EXIT_LOOPBACK;
+		pppd_status = EXIT_LOOPBACK;
 	    }
 	} else
 	    try.numloops = 0;
@@ -1815,7 +1815,7 @@ void LcpLinkFailure (f)
 	info("No response to %d echo-requests", lcp_echos_pending);
         notice("Serial link appears to be disconnected.");
         lcp_close(f->unit, "Peer not responding");
-	status = EXIT_PEER_DEAD;
+	pppd_status = EXIT_PEER_DEAD;
     }
 }
 
