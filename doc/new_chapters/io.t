@@ -22,9 +22,11 @@ The directives provided by the input and output primitives manager are:
 @item @code{read} - Reads from a file
 @item @code{write} - Writes to a file
 @item @code{fcntl} - Manipulates an open file descriptor
-@item @code{lseek} - XXX
+@item @code{lseek} - Reposition read/write file offset
 @item @code{fsynch} - XXX
 @item @code{fdatasynch} - XXX
+@item @code{mount} - Mount a file system
+@item @code{umount} - Unmount file systems
 @item @code{aio_read} - YYY
 @item @code{aio_write} - YYY
 @item @code{lio_listio} - YYY
@@ -72,6 +74,9 @@ The
 @subheading DESCRIPTION:
 
 @subheading NOTES:
+
+This routine is not currently supported by RTEMS but could be 
+in a future version.
 
 @page
 @subsection dup - Duplicates an open file descriptor
@@ -354,13 +359,16 @@ No locks available
 @subheading NOTES:
 
 @page
-@subsection lseek - 
+@subsection lseek - Reposition read/write file offset
 
 @subheading CALLING SEQUENCE:
 
 @ifset is-C
 @example
 int lseek(
+  int   fildes,
+  off_t offset,
+  int whence
 );
 @end example
 @end ifset
@@ -371,14 +379,41 @@ int lseek(
 @subheading STATUS CODES:
 
 @table @b
-@item E
-The
+@item EBADF
+@code{Fildes} is not an open file descriptor.
+
+@item ESPIPE
+@code{Fildes} is associated with a pipe, socket or FIFO. 
+
+@item EINVAL
+@code{Whence} is not a proper value. 
 
 @end table
 
 @subheading DESCRIPTION:
 
-@subheading NOTES:
+The @code{lseek} function repositions the offset of the file descriptor
+@code{fildes} to the argument offset according to the directive whence.   
+The argument @code{fildes} must be an open file descriptor. @code{Lseek}
+repositions the file pointer fildes as follows:
+
+  If @code{whence} is SEEK_SET, the offset is set to @code{offset} bytes.
+
+  If @code{whence} is SEEK_CUR, the offset is set to its current location
+  plus offset bytes.
+
+  If @cdoe{whence} is SEEK_END, the offset is set to the size of the
+  file plus @cdoe{offset} bytes.
+
+The @cdoe{lseek} function allows the file offset to be set beyond the end
+of the existing end-of-file of the file. If data is later written at this
+point, subsequent reads of the data in the gap return bytes of zeros
+(until data is actually written into the gap).
+
+Some devices are incapable of seeking.  The value of the pointer asso-
+ciated with such a device is undefined.
+
+@subheading NOTES: None
 
 @page
 @subsection fsynch - 
@@ -435,6 +470,178 @@ The
 @subheading NOTES:
 
 @page
+@subsection mount - Mount a file system
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <sys/mount.h>
+#include <linux/fs.h>
+
+int mount(
+  const char *specialfile,
+  const char * dir,
+  const char * filesystemtype,
+  unsigned long rwflag,
+  const void * data
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EPERM
+The user is not the super-user.
+
+@item ENODEV
+@code{Filesystemtype} not configured in the kernel.
+
+@item ENOTBLK
+@code{Specialfile} is not a block device (if a device was required).
+
+@item EBUSY
+@code{Specialfile} is already mounted.  Or, it cannot be remounted
+read-only, because it still holds files open for writing.  Or, it 
+cannot be mounted on @code{dir} because @code{dir} is still busy
+(it is the working directory of some task, the mount point of another
+device, has open files, etc.).
+
+@item EINVAL
+@code{Specialfile had an invalid superblock.  Or, a remount was 
+attempted, while @code{specialfile} was not already mounted on @code{dir}.
+Or, an umount was attempted, while @code{dir} was not a mount point.
+
+@item EFAULT
+One of the pointer arguments points outside the user address space.
+
+@item ENOMEM
+The kernel could not allocate a free page to copy filenames or data into.
+
+@item ENAMETOOLONG
+A pathname was longer than MAXPATHLEN.
+
+@item ENOTDIR
+A pathname was empty or had a nonexistent component.
+
+@item EACCES
+A component of a path was not searchable.  Or, mounting a read-only 
+filesystem was attempted without giving the MS_RDONLY flag.  Or, the 
+block device Specialfile is located on a filesystem mounted with
+the MS_NODEV option.
+
+@item ENXIO
+The major number of the block device @code{specialfile} is out of
+range.
+
+@item EMFILE
+(In case no block device is required:) Table of dummy devices is full.
+              
+@end table
+
+@subheading DESCRIPTION:
+
+@code{Mount} attaches the filesystem specified by @code{specialfile}
+(which is often a device name) to the directory specified by @code{dir}.
+
+Only the super-user may mount filesystems.
+
+The @code{filesystemtype} argument may take one of the values listed in
+/proc/filesystems (link "minix", "ext2", "msdos", "proc", "nfs", 
+"iso9660" etc.).
+
+The @code{rwflag} argument has the magic number 0xCOED in the top 16 bits,
+and various mount flags in the low order 16 bits.  If the magic number is
+absent, then the last two arguments are not used.
+
+The @code{data} argument is interpreted by the different file systems.
+
+@subheading NOTES: None
+
+@page
+@subsection umount - Umount file systems
+
+@subheading CALLING SEQUENCE:
+
+@ifset is-C
+@example
+#include <sys/mount.h>
+#include <linux/fs.h>
+
+int umount(
+  const char *specialfile
+);
+@end example
+@end ifset
+
+@ifset is-Ada
+@end ifset
+
+@subheading STATUS CODES:
+
+@table @b
+@item EPERM
+The user is not the super-user.
+
+@item ENODEV
+@code{Filesystemtype} not configured in the kernel.
+
+@item ENOTBLK
+@code{Specialfile} is not a block device (if a device was required).
+
+@item EBUSY
+@code{Specialfile} is already mounted.  Or, it cannot be remounted
+read-only, because it still holds files open for writing.  Or, it 
+cannot be mounted on @code{dir} because @code{dir} is still busy
+(it is the working directory of some task, the mount point of another
+device, has open files, etc.).
+
+@item EINVAL
+@code{Specialfile had an invalid superblock.  Or, a remount was 
+attempted, while @code{specialfile} was not already mounted on @code{dir}.
+Or, an umount was attempted, while @code{dir} was not a mount point.
+
+@item EFAULT
+One of the pointer arguments points outside the user address space.
+
+@item ENOMEM
+The kernel could not allocate a free page to copy filenames or data into.
+
+@item ENAMETOOLONG
+A pathname was longer than MAXPATHLEN.
+
+@item ENOTDIR
+A pathname was empty or had a nonexistent component.
+
+@item EACCES
+A component of a path was not searchable.  Or, mounting a read-only 
+filesystem was attempted without giving the MS_RDONLY flag.  Or, the 
+block device Specialfile is located on a filesystem mounted with
+the MS_NODEV option.
+
+@item ENXIO
+The major number of the block device @code{specialfile} is out of
+range.
+
+@item EMFILE
+(In case no block device is required:) Table of dummy devices is full.
+
+@end table
+
+@subheading DESCRIPTION:
+
+@code{Umount} removes the attachment of the filesystem specified
+by @code{specialfile} or @code{dir}.
+
+Only the super-user may umount filesystems.
+
+@subheading NOTES: None
+
+@page
 @subsection aio_read - 
 
 @subheading CALLING SEQUENCE:
@@ -460,6 +667,9 @@ The
 @subheading DESCRIPTION:
 
 @subheading NOTES:
+
+This routine is not currently supported by RTEMS but could be 
+in a future version.
 
 @page
 @subsection aio_write - 
@@ -488,6 +698,9 @@ The
 
 @subheading NOTES:
 
+This routine is not currently supported by RTEMS but could be 
+in a future version.
+
 @page
 @subsection lio_listio - 
 
@@ -514,6 +727,9 @@ The
 @subheading DESCRIPTION:
 
 @subheading NOTES:
+
+This routine is not currently supported by RTEMS but could be 
+in a future version.
 
 @page
 @subsection aio_error - 
@@ -542,6 +758,9 @@ The
 
 @subheading NOTES:
 
+This routine is not currently supported by RTEMS but could be 
+in a future version.
+
 @page
 @subsection aio_return - 
 
@@ -568,6 +787,9 @@ The
 @subheading DESCRIPTION:
 
 @subheading NOTES:
+
+This routine is not currently supported by RTEMS but could be 
+in a future version.
 
 @page
 @subsection aio_cancel - 
@@ -596,6 +818,9 @@ The
 
 @subheading NOTES:
 
+This routine is not currently supported by RTEMS but could be 
+in a future version.
+
 @page
 @subsection aio_suspend - 
 
@@ -622,6 +847,9 @@ The
 @subheading DESCRIPTION:
 
 @subheading NOTES:
+
+This routine is not currently supported by RTEMS but could be 
+in a future version.
 
 @page
 @subsection aio_fsync - 
