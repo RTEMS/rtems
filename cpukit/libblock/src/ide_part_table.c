@@ -187,7 +187,7 @@ data_to_part_desc(unsigned8 *data, part_desc_t **new_part_desc)
      * - FAT type and non-zero
      */
     if (is_extended(part_desc->sys_type) ||
-	(is_fat_partition(part_desc->sys_type)) && (part_desc->size != 0)) {
+	((is_fat_partition(part_desc->sys_type)) && (part_desc->size != 0))) {
       *new_part_desc = part_desc;
     }
     else {  
