@@ -66,7 +66,6 @@ STATIC INLINE void _Thread_queue_Enter_critical_section (
   Thread_queue_Control *the_thread_queue
 )
 {
-  the_thread_queue->sync = TRUE;
   the_thread_queue->sync_state = THREAD_QUEUE_NOTHING_HAPPENED;
 }
 

@@ -144,6 +144,7 @@ void _Event_Seize(
   rtems_event_set    pending_events;
   ISR_Level          level;
   RTEMS_API_Control  *api;
+  Event_Sync_states   sync_state;
 
   executing = _Thread_Executing;
   executing->Wait.return_code = RTEMS_SUCCESSFUL;
@@ -170,7 +171,6 @@ void _Event_Seize(
     return;
   }
 
-  _Event_Sync       = TRUE;
   _Event_Sync_state = EVENT_SYNC_NOTHING_HAPPENED;
 
   executing->Wait.option            = (unsigned32) option_set;
@@ -192,9 +192,13 @@ void _Event_Seize(
   _Thread_Set_state( executing, STATES_WAITING_FOR_EVENT );
 
   _ISR_Disable( level );
-  switch ( _Event_Sync_state ) {
+
+  sync_state = _Event_Sync_state;
+  _Event_Sync_state = EVENT_SYNC_SYNCHRONIZED;
+
+  switch ( sync_state ) {
+    case EVENT_SYNC_SYNCHRONIZED:
     case EVENT_SYNC_NOTHING_HAPPENED:
-      _Event_Sync = FALSE;
       _ISR_Enable( level );
       return;
     case EVENT_SYNC_TIMEOUT:
@@ -274,12 +278,24 @@ void _Event_Surrender(
         return;
       }
     }
-    else if ( _Event_Sync == TRUE && _Thread_Is_executing( the_thread ) ) {
-      if ( seized_events == event_condition || _Options_Is_any( option_set ) ) {
-        api->pending_events = _Event_sets_Clear( pending_events,seized_events );
-        *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
-        _Event_Sync_state = EVENT_SYNC_SATISFIED;
-      }
+
+    switch ( _Event_Sync_state ) {
+      case EVENT_SYNC_SYNCHRONIZED:
+      case EVENT_SYNC_SATISFIED:
+        break;
+ 
+      case EVENT_SYNC_NOTHING_HAPPENED:
+      case EVENT_SYNC_TIMEOUT:
+        if ( !_Thread_Is_executing( the_thread ) )
+          break;
+
+        if ( seized_events == event_condition || _Options_Is_any(option_set) ) {
+          api->pending_events = 
+               _Event_sets_Clear( pending_events,seized_events );
+          *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
+          _Event_Sync_state = EVENT_SYNC_SATISFIED;
+        }
+        break;
     }
   }
   _ISR_Enable( level );
@@ -312,7 +328,8 @@ void _Event_Timeout(
     case OBJECTS_REMOTE:  /* impossible */
       break;
     case OBJECTS_LOCAL:
-      if ( _Event_Sync == TRUE && _Thread_Is_executing( the_thread ) ) {
+      if ( _Event_Sync_state != EVENT_SYNC_SYNCHRONIZED && 
+           _Thread_Is_executing( the_thread ) ) {
         if ( _Event_Sync_state != EVENT_SYNC_SATISFIED )
           _Event_Sync_state = EVENT_SYNC_TIMEOUT;
       } else {

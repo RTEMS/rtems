@@ -41,10 +41,11 @@ typedef enum {
  */
  
 typedef enum {
+  THREAD_QUEUE_SYNCHRONIZED,
   THREAD_QUEUE_NOTHING_HAPPENED,
   THREAD_QUEUE_TIMEOUT,
   THREAD_QUEUE_SATISFIED
-}  Thread_queue_states;
+}  Thread_queue_States;
 
 /*
  *  The following record defines the control block used
@@ -59,8 +60,7 @@ typedef struct {
     Chain_Control Priority[TASK_QUEUE_DATA_NUMBER_OF_PRIORITY_HEADERS];
                                        /* priority discipline list       */
   } Queues;
-  boolean                  sync;       /* alloc/dealloc critical section */
-  Thread_queue_states      sync_state; /* what happened while in sync    */
+  Thread_queue_States      sync_state; /* alloc/dealloc critical section */
   Thread_queue_Disciplines discipline; /* queue discipline               */
   States_Control           state;      /* state of threads on Thread_q   */
   unsigned32               timeout_status;

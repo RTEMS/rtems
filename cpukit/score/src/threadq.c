@@ -55,6 +55,7 @@ void _Thread_queue_Initialize(
   the_thread_queue->state          = state;
   the_thread_queue->discipline     = the_discipline;
   the_thread_queue->timeout_status = timeout_status;
+  the_thread_queue->sync_state     = THREAD_QUEUE_SYNCHRONIZED;
 
   switch ( the_discipline ) {
     case THREAD_QUEUE_DISCIPLINE_FIFO:
@@ -326,7 +327,8 @@ void _Thread_queue_Timeout(
     case OBJECTS_LOCAL:
       the_thread_queue = the_thread->Wait.queue;
 
-      if ( the_thread_queue->sync == TRUE && _Thread_Is_executing(the_thread)) {
+      if ( the_thread_queue->sync_state != THREAD_QUEUE_SYNCHRONIZED &&
+           _Thread_Is_executing( the_thread ) ) {
         if ( the_thread_queue->sync_state != THREAD_QUEUE_SATISFIED )
           the_thread_queue->sync_state = THREAD_QUEUE_TIMEOUT;
       } else {
@@ -362,13 +364,22 @@ void _Thread_queue_Enqueue_fifo (
   Watchdog_Interval    timeout
 )
 {
-  ISR_Level level;
+  ISR_Level            level;
+  Thread_queue_States  sync_state;
 
   _ISR_Disable( level );
 
-  the_thread_queue->sync = FALSE;
+  sync_state = the_thread_queue->sync_state;
+  the_thread_queue->sync_state = THREAD_QUEUE_SYNCHRONIZED;
 
-  switch ( the_thread_queue->sync_state ) {
+  switch ( sync_state ) {
+    case THREAD_QUEUE_SYNCHRONIZED: 
+      /*
+       *  This should never happen.  It indicates that someone did not
+       *  enter a thread queue critical section.
+       */
+      break;
+
     case THREAD_QUEUE_NOTHING_HAPPENED: 
       _Chain_Append_unprotected(
         &the_thread_queue->Queues.Fifo,
@@ -449,15 +460,21 @@ Thread_Control *_Thread_queue_Dequeue_fifo(
       _Thread_MP_Free_proxy( the_thread );
 
     return the_thread;
-  } else if ( the_thread_queue->sync && 
-              the_thread_queue->sync_state != THREAD_QUEUE_SATISFIED ) {
-    the_thread_queue->sync_state = THREAD_QUEUE_SATISFIED;
-    _ISR_Enable( level );
-    return _Thread_Executing;
-  } else {
-    _ISR_Enable( level );
-    return NULL;
+  } 
+
+  switch ( the_thread_queue->sync_state ) {
+    case THREAD_QUEUE_SYNCHRONIZED:
+    case THREAD_QUEUE_SATISFIED:
+      _ISR_Enable( level );
+      return NULL;
+
+    case THREAD_QUEUE_NOTHING_HAPPENED:
+    case THREAD_QUEUE_TIMEOUT:
+      the_thread_queue->sync_state = THREAD_QUEUE_SATISFIED;
+      _ISR_Enable( level );
+      return _Thread_Executing;
   }
+  return NULL;                /* this is only to prevent warnings */
 }
 
 /*PAGE
@@ -557,17 +574,18 @@ void _Thread_queue_Enqueue_priority(
   Watchdog_Interval     timeout
 )
 {
-  Priority_Control  search_priority;
-  Thread_Control   *search_thread;
-  ISR_Level         level;
-  Chain_Control    *header;
-  unsigned32        header_index;
-  Chain_Node       *the_node;
-  Chain_Node       *next_node;
-  Chain_Node       *previous_node;
-  Chain_Node       *search_node;
-  Priority_Control  priority;
-  States_Control    block_state;
+  Priority_Control     search_priority;
+  Thread_Control      *search_thread;
+  ISR_Level            level;
+  Chain_Control       *header;
+  unsigned32           header_index;
+  Chain_Node          *the_node;
+  Chain_Node          *next_node;
+  Chain_Node          *previous_node;
+  Chain_Node          *search_node;
+  Priority_Control     priority;
+  States_Control       block_state;
+  Thread_queue_States  sync_state;
 
   _Chain_Initialize_empty( &the_thread->Wait.Block2n );
 
@@ -605,10 +623,10 @@ restart_forward_search:
        (Thread_Control *)search_thread->Object.Node.next;
   }
 
-  the_thread_queue->sync = FALSE;
-
   if ( the_thread_queue->sync_state != THREAD_QUEUE_NOTHING_HAPPENED )
-    goto syncronize;
+    goto synchronize;
+
+  the_thread_queue->sync_state = THREAD_QUEUE_SYNCHRONIZED;
 
   if ( priority == search_priority )
     goto equal_priority;
@@ -650,10 +668,10 @@ restart_reverse_search:
                          search_thread->Object.Node.previous;
   }
 
-  the_thread_queue->sync = FALSE;
-
   if ( the_thread_queue->sync_state != THREAD_QUEUE_NOTHING_HAPPENED )
-    goto syncronize;
+    goto synchronize;
+
+  the_thread_queue->sync_state = THREAD_QUEUE_SYNCHRONIZED;
 
   if ( priority == search_priority )
     goto equal_priority;
@@ -681,9 +699,19 @@ equal_priority:               /* add at end of priority group */
   _ISR_Enable( level );
   return;
 
-syncronize:
+synchronize:
 
-  switch ( the_thread_queue->sync_state ) {
+  sync_state = the_thread_queue->sync_state;
+  the_thread_queue->sync_state = THREAD_QUEUE_SYNCHRONIZED;
+
+  switch ( sync_state ) {
+    case THREAD_QUEUE_SYNCHRONIZED:
+      /*
+       *  This should never happen.  It indicates that someone did not
+       *  enter a thread queue critical section.
+       */
+      break;
+ 
     case THREAD_QUEUE_NOTHING_HAPPENED:
       /*
        *  All of this was dealt with above.  This should never happen.
@@ -738,9 +766,9 @@ Thread_Control *_Thread_queue_Dequeue_priority(
   Thread_queue_Control *the_thread_queue
 )
 {
-  unsigned32             index;
-  ISR_Level              level;
-  Thread_Control *the_thread;
+  unsigned32      index;
+  ISR_Level       level;
+  Thread_Control *the_thread = NULL;  /* just to remove warnings */
   Thread_Control *new_first_thread;
   Chain_Node     *new_first_node;
   Chain_Node     *new_second_node;
@@ -759,15 +787,18 @@ Thread_Control *_Thread_queue_Dequeue_priority(
     }
   }
 
-  if ( the_thread_queue->sync && 
-       the_thread_queue->sync_state != THREAD_QUEUE_SATISFIED ) {
-    the_thread_queue->sync_state = THREAD_QUEUE_SATISFIED;
-    _ISR_Enable( level );
-    return _Thread_Executing;
-  } 
+  switch ( the_thread_queue->sync_state ) {
+    case THREAD_QUEUE_SYNCHRONIZED:
+    case THREAD_QUEUE_SATISFIED:
+      _ISR_Enable( level );
+      return NULL;
 
-  _ISR_Enable( level );
-  return NULL;
+    case THREAD_QUEUE_NOTHING_HAPPENED:
+    case THREAD_QUEUE_TIMEOUT:
+      the_thread_queue->sync_state = THREAD_QUEUE_SATISFIED;
+      _ISR_Enable( level );
+      return _Thread_Executing;
+  }
 
 dequeue:
   new_first_node   = the_thread->Wait.Block2n.first;

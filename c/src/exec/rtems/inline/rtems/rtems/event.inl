@@ -23,7 +23,7 @@
 
 STATIC INLINE void _Event_Manager_initialization( void )
 {
-  _Event_Sync = FALSE;
+  _Event_Sync_state = EVENT_SYNC_SYNCHRONIZED;
 
   /*
    *  Register the MP Process Packet routine.

@@ -52,7 +52,6 @@
  
 #define _Thread_queue_Enter_critical_section( _the_thread_queue ) \
   do { \
-    (_the_thread_queue)->sync = TRUE; \
     (_the_thread_queue)->sync_state = THREAD_QUEUE_NOTHING_HAPPENED; \
   } while ( 0 )
 
