@@ -41,6 +41,14 @@ extern "C" {
 #define CPU_ALLOCATE_INTERRUPT_STACK     TRUE
 
 /*
+ *  Does the RTEMS invoke the user's ISR with the vector number and
+ *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  number (0)?
+ */
+
+#define CPU_ISR_PASSES_FRAME_POINTER 0
+
+/*
  *  HPPA has hardware FP, it is assumed to exist by GCC so all tasks
  *  may implicitly use it (especially for integer multiplies).  Because
  *  the FP context is technically part of the basic integer context

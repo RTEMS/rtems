@@ -40,6 +40,14 @@ extern "C" {
 #define CPU_ALLOCATE_INTERRUPT_STACK     TRUE
 
 /*
+ *  Does the RTEMS invoke the user's ISR with the vector number and
+ *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  number (0)?
+ */
+
+#define CPU_ISR_PASSES_FRAME_POINTER 0
+
+/*
  *  Some family members have no FP, some have an FPU such as the i387
  *  for the i386, others have it built in (i486DX, Pentium).
  */

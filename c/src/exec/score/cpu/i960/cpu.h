@@ -41,6 +41,14 @@ extern "C" {
 #define CPU_ALLOCATE_INTERRUPT_STACK     TRUE
 
 /*
+ *  Does the RTEMS invoke the user's ISR with the vector number and
+ *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  number (0)?
+ */
+
+#define CPU_ISR_PASSES_FRAME_POINTER 0
+
+/*
  *  Some family members have no FP (SA/KA/CA/CF), others have it built in
  *  (KB/MC/MX).  There does not appear to be an external coprocessor
  *  for this family.

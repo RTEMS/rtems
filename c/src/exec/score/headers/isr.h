@@ -46,9 +46,16 @@ typedef void ISR_Handler;
  *  Pointer to an ISR Handler
  */
 
+#if (CPU_ISR_PASSES_FRAME_POINTER == 1)
+typedef ISR_Handler ( *ISR_Handler_entry )(
+                 ISR_Vector_number,
+                 CPU_Interrupt_frame *
+             );
+#else
 typedef ISR_Handler ( *ISR_Handler_entry )(
                  ISR_Vector_number
              );
+#endif
 /*
  *  This constant promotes out the number of vectors truly supported by
  *  the current CPU being used.  This is usually the number of distinct vectors

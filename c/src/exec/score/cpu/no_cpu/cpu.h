@@ -123,6 +123,14 @@ extern "C" {
 #define CPU_ALLOCATE_INTERRUPT_STACK TRUE
 
 /*
+ *  Does the RTEMS invoke the user's ISR with the vector number and
+ *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  number (0)?
+ */
+
+#define CPU_ISR_PASSES_FRAME_POINTER 0
+
+/*
  *  Does the CPU have hardware floating point?
  *
  *  If TRUE, then the RTEMS_FLOATING_POINT task attribute is supported.

@@ -47,6 +47,14 @@ extern "C" {
 #endif
 
 /*
+ *  Does the RTEMS invoke the user's ISR with the vector number and
+ *  a pointer to the saved interrupt frame (1) or just the vector 
+ *  number (0)?
+ */
+
+#define CPU_ISR_PASSES_FRAME_POINTER 0
+
+/*
  *  Some family members have no FP, some have an FPU such as the
  *  MC68881/MC68882 for the MC68020, others have it built in (MC68030, 040).
  *
