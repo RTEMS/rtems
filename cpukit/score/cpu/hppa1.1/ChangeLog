@@ -1,3 +1,9 @@
+2002-06-27	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, cpu.c, cpu_asm.S, rtems.S: Modified to make
+	this all compile again.  It has been a while since we have
+	had a semi-working hppa1.1-rtems cross compiler. :)
+
 2002-06-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Add RTEMS_PROG_CCAS

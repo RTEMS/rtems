@@ -16,6 +16,28 @@
 #include <rtems/score/hppa.h>
 #include <rtems/score/cpu_asm.h>
 
+#if 0
+#define TEXT_SEGMENT \
+        .SPACE  $TEXT$          !\
+        .SUBSPA $CODE$
+#define RO_SEGMENT \
+        .SPACE  $TEXT$          !\
+        .SUBSPA $lit$
+#define DATA_SEGMENT \
+        .SPACE  $PRIVATE$          !\
+        .SUBSPA $data$
+#define BSS_SEGMENT \
+        .SPACE  $PRIVATE$          !\
+        .SUBSPA $bss$
+#else
+#define TEXT_SEGMENT .text
+#define RO_SEGMENT .rodata
+#define DATA_SEGMENT .data
+#define BSS_SEGMENT .bss
+#endif
+
+
+#if 0
 	.SPACE $PRIVATE$
 	.SUBSPA $DATA$,QUAD=1,ALIGN=8,ACCESS=31
 	.SUBSPA $BSS$,QUAD=1,ALIGN=8,ACCESS=31,ZERO,SORT=82
@@ -24,13 +46,16 @@
 	.SUBSPA $CODE$,QUAD=0,ALIGN=8,ACCESS=44,CODE_ONLY
 	.SPACE $TEXT$
 	.SUBSPA $CODE$
+#endif
 
+	TEXT_SEGMENT
 	.align 32
 	.EXPORT cpu_jump_to_directive,ENTRY,PRIV_LEV=0
 cpu_jump_to_directive
 	.PROC
 	.CALLINFO FRAME=0,NO_CALLS
 	.ENTRY
+
 
 # invoke user interrupt handler
 

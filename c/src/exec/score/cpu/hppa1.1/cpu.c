@@ -178,7 +178,7 @@ hppa_cpu_halt(unsigned32 the_error)
      * XXXXX NOTE: This label is only needed that that when
      * the simulator stops, it shows the label name specified
      */
-    HPPA_ASM_LABEL("_hppa_cpu_halt");
+    /* HPPA_ASM_LABEL("_asm_hppa_cpu_halt");*/
     HPPA_ASM_BREAK(0, 0);
 }
 

@@ -20,7 +20,7 @@ $(PROJECT_INCLUDE)/rtems:
 $(PROJECT_INCLUDE)/rtems/score:
 	$(mkinstalldirs) $@
 
-include_HEADERS= asm.h
+include_HEADERS= 
 PREINSTALL_FILES = $(PROJECT_INCLUDE) $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 
 include_rtems_scoredir = $(includedir)/rtems/score
@@ -32,6 +32,9 @@ include_rtems_score_HEADERS = \
     rtems/score/offsets.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score \
     $(include_rtems_score_HEADERS:%.h=$(PROJECT_INCLUDE)/%.h)
+
+$(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
+	$(INSTALL_DATA) $< $@
 
 C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
@@ -48,7 +51,7 @@ $(REL): $(rtems_cpu_rel_OBJECTS)
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o
 
-all-local: $(ARCH) $(rtems_cpu_rel_OBJECTS) $(REL) \
+all-local: $(ARCH) rtems/score/offsets.h $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
     $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(REL)
@@ -59,8 +62,8 @@ EXTRA_DIST = cpu.c cpu_asm.S rtems.S
 GENOFFSETS = $(PROJECT_TOPdir)/tools/cpu/hppa1.1/genoffsets
 
 GENERIC_H_FILES = rtems/score/offsets.h
-rtems/score/offsets.h: $(GENOFFSETS) cpu.h
-	@(mkinstalldirs) rtems/score
+rtems/score/offsets.h: $(GENOFFSETS) rtems/score/cpu.h
+	$(mkinstalldirs) rtems/score
 	$(RM) $@
 	$(GENOFFSETS) > $@
 CLEANFILES = rtems/score/offsets.h

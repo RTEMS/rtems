@@ -23,6 +23,29 @@
 #include <rtems/score/cpu.h>
 #include <rtems/score/offsets.h>
 
+#if 0
+#define TEXT_SEGMENT \
+        .SPACE  $TEXT$          !\
+        .SUBSPA $CODE$
+#define RO_SEGMENT \
+        .SPACE  $TEXT$          !\
+        .SUBSPA $lit$
+#define DATA_SEGMENT \
+        .SPACE  $PRIVATE$          !\
+        .SUBSPA $data$
+#define BSS_SEGMENT \
+        .SPACE  $PRIVATE$          !\
+        .SUBSPA $bss$
+#else
+#define TEXT_SEGMENT .text 
+#define RO_SEGMENT .rodata 
+#define DATA_SEGMENT .data
+#define BSS_SEGMENT .bss
+#endif
+ 
+ 
+
+#if 0
 	.SPACE $PRIVATE$
 	.SUBSPA $DATA$,QUAD=1,ALIGN=8,ACCESS=31
 	.SUBSPA $BSS$,QUAD=1,ALIGN=8,ACCESS=31,ZERO,SORT=82
@@ -31,6 +54,9 @@
 	.SUBSPA $CODE$,QUAD=0,ALIGN=8,ACCESS=44,CODE_ONLY
 	.SPACE $TEXT$
 	.SUBSPA $CODE$
+
+#endif
+	TEXT_SEGMENT
 
 /*
  * Special register usage for context switch and interrupts
@@ -311,7 +337,7 @@ stack_done:
         .import   _ISR_Vector_table,data
 	ldil	  L%_ISR_Vector_table,%r8
 	ldo	  R%_ISR_Vector_table(%r8),%r8
-        ldw       (%r8),%r8
+        ldw       0(%r8),%r8
         ldwx,s    %r9(%r8),%r8
 
 /*
