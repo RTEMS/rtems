@@ -32,6 +32,13 @@ struct socket *rtems_bsdnet_fdToSocket(
     return NULL;
   }
   iop = &rtems_libio_iops[fd];
+
+  /* same as rtems_libio_check_is_open(iop) but different return */
+  if ((iop->flags & LIBIO_FLAGS_OPEN) == 0) {
+    errno = EBADF;
+    return NULL;
+  }
+
   if (iop->data1 == NULL)
     errno = EBADF;
   return iop->data1;
