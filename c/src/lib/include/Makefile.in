@@ -20,7 +20,7 @@ H_PIECES=chain console clockdrv iosupp ringbuf \
 H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
 
 SYS_H_PIECES=termios utime
-ifeq ($(HAS_NETWORKING),yes)
+ifeq ($(HAS_NETWORKING),no)
 SYS_H_PIECES+=ioctl
 endif
 SYS_H_FILES=$(SYS_H_PIECES:%=$(srcdir)/sys/%.h)
