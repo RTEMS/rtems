@@ -1,5 +1,9 @@
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* build45.t: Fix typo in previous patch.
+
+2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* build45.t: Several fixes and additions.
 
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

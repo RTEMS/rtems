@@ -411,7 +411,7 @@ have been adapted to autoconf >= 2.50 demands.
 
 Several possibilities (In decreasing preference):
 @itemize @bullet
-@item File a bug report at @uref{http://www.oarcorp.com/cgi-bin/gnatweb.pl,OAR's GNAT}
+@item File a bug report at @uref{http://www.oarcorp.com/cgi-bin/gnatsweb.pl,OAR's GNAT}
 @item Send an email to @uref{mailto:rtems-bugs@@OARcorp.com,rtems-bugs@@OARcorp.com}
 @item Report your problem to one of the RTEMS mailing lists 
 (Cf. @ref{Are there any mailing lists?}).
