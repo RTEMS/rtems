@@ -1,3 +1,8 @@
+2004-04-30	Joel Sherrill <joel@OARcorp.com>
+
+	* libnetworking/kern/kern_sysctl.c: sysctl_register_all cannot be
+	static with RTEMS.
+
 2004-04-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* libnetworking/netinet/in.c: Partial update from FreeBSD.

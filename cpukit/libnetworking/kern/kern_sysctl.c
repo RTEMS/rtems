@@ -423,7 +423,11 @@ sysctl_add_oid(struct sysctl_ctx_list *clist, struct sysctl_oid_list *parent,
  */
 SET_DECLARE(sysctl_set, struct sysctl_oid);
 
+#if defined(__rtems__)
+void
+#else
 static void
+#endif
 sysctl_register_all(void *arg)
 {
 	struct sysctl_oid **oidp;
