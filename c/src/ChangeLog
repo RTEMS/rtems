@@ -1,5 +1,12 @@
 2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	Makefile.am: Reflect having moved automake.
+	lib/Makefile.am: Reflect having moved automake.
+	support/Makefile.am: Reflect having moved automake.
+	wrapup/Makefile.am: Reflect having moved automake.
+
+2003-08-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* automake/compile.am, automake/force-preinstall.am,
 	automake/host.am, automake/lib.am, automake/local.am,
 	automake/subdirs.am: New (copied from ../../automake).

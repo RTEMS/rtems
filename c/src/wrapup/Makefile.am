@@ -4,8 +4,8 @@
 ##  build and install "glommed" librtemsbsp.a
 ##
 
-include $(top_srcdir)/../../automake/compile.am
-include $(top_srcdir)/../../automake/lib.am
+include $(top_srcdir)/automake/compile.am
+include $(top_srcdir)/automake/lib.am
 
 LIB = $(PROJECT_RELEASE)/lib/librtemsbsp${LIB_VARIANT}.a
 
@@ -73,4 +73,4 @@ install-data-local:
 	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
 	$(INSTALL_DATA) $(LIB) $(DESTDIR)$(bsplibdir)
 
-include $(top_srcdir)/../../automake/local.am
+include $(top_srcdir)/automake/local.am
