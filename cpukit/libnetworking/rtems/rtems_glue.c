@@ -89,11 +89,13 @@ char *rtems_bsdnet_bootp_boot_file_name = 0;
 char *rtems_bsdnet_bootp_server_name = 0;
 char *rtems_bsdnet_domain_name = 0;
 char *rtems_bsdnet_bootp_cmdline = 0;
-struct in_addr rtems_bsdnet_nameserver[sizeof rtems_bsdnet_config.name_server /
+static struct in_addr _rtems_bsdnet_nameserver[sizeof rtems_bsdnet_config.name_server /
 			sizeof rtems_bsdnet_config.name_server[0]];
+struct in_addr *rtems_bsdnet_nameserver = _rtems_bsdnet_nameserver;
 int rtems_bsdnet_nameserver_count = 0;
-struct in_addr rtems_bsdnet_ntpserver[sizeof rtems_bsdnet_config.ntp_server /
+static struct in_addr _rtems_bsdnet_ntpserver[sizeof rtems_bsdnet_config.ntp_server /
 			sizeof rtems_bsdnet_config.ntp_server[0]];
+struct in_addr *rtems_bsdnet_ntpserver = _rtems_bsdnet_ntpserver;
 int rtems_bsdnet_ntpserver_count = 0;
 long rtems_bsdnet_timeoffset = 0;
 

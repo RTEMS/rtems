@@ -1,3 +1,19 @@
+2005-02-03	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 755/rtems
+	* libnetworking/rtems_glue.c: 
+	Rename rtems_bsdnet_nameservers to _rtems_bsdnet_nameservers.
+	Rename rtems_bsdnet_ntpservers to _rtems_bsdnet_ntpservers.
+	Add new rtems_bsdnet_nameservers, rtems_bsdnet_ntpservers as
+	pointers to _rtems_bsdnet_*servers arrays.
+	* libnetworking/rtems/rtems_bsdnet_internal.h: Remove
+	rtems_bsdnet_nameserver, rtems_bsdnet_nameserver_count.
+	* libnetworking/rtems/rtems_bsdnet.h: Remove
+	rtems_bsdnet_ntpserver, rtems_bsdnet_ntp_count.
+	* libnetworking/rtems/bsdnet/servers.h: New.
+	* libnetworking/opt_ipsec.h: New (BSD compatibility).
+	* libnetworking/Makefile.am: Reflect changes above.
+
 2005-02-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libnetworking/rtems/ftpfs.h, libnetworking/rtems/mkrootfs.h,

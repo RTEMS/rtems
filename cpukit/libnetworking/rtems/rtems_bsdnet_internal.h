@@ -29,12 +29,7 @@ typedef	unsigned int		vm_size_t;
 #include <rtems/cdefs.h>
 
 #include <sys/time.h>
-/*
-struct  itimerval {
-  struct  timeval it_interval;
-  struct  timeval it_value;
-};
-*/
+
 struct mdproc {
 	int	md_flags;
 	int	*md_regs;
@@ -162,8 +157,6 @@ extern int rtems_bsdnet_ticks_per_second;
 extern int rtems_bsdnet_microseconds_per_tick;
 extern struct in_addr rtems_bsdnet_log_host_address;
 extern char *rtems_bsdnet_domain_name;
-extern struct in_addr rtems_bsdnet_nameserver[];
-extern int rtems_bsdnet_nameserver_count;
 
 /*
  * Internal IOCTL command
