@@ -106,7 +106,7 @@
 struct MD {
     volatile unsigned long status;
     volatile unsigned long counts;
-    unsigned long buf1, buf2;	
+    volatile unsigned char *buf1, *buf2;	
 };
 
 /*
@@ -143,8 +143,8 @@ struct MD {
  struct dec21140_softc {
   struct arpcom			arpcom;
   rtems_irq_connect_data	irqInfo;
-  struct MD			*MDbase;
-  char				*bufferBase;
+  volatile struct MD		*MDbase;
+  volatile unsigned char	*bufferBase;
   int				acceptBroadcast;
   int				rxBdCount;
   int				txBdCount;
@@ -152,7 +152,7 @@ struct MD {
   rtems_id			txDaemonTid;
 
   unsigned int 			port;
-  unsigned int			*base;
+  volatile unsigned int		*base;
   unsigned long			bpar;
    
   /*
@@ -186,7 +186,7 @@ static struct dec21140_softc dec21140_softc[NDECDRIVER];
 static rtems_isr
 dec21140Enet_interrupt_handler (rtems_vector_number v)
 {
-  unsigned int *tbase;
+  volatile unsigned int *tbase;
   unsigned long status;
 
   unsigned int sc;
@@ -233,7 +233,7 @@ static int dec21140IsOn(const rtems_irq_connect_data* irq)
 #define MDIO_ENB_IN		0x40000
 #define MDIO_DATA_READ		0x80000
 
-static int mdio_read(unsigned int *ioaddr, int phy_id, int location)
+static int mdio_read(volatile unsigned int *ioaddr, int phy_id, int location)
 {
 	int i, i3;
 	int read_cmd = (0xf6 << 10) | (phy_id << 5) | location;
@@ -277,7 +277,7 @@ static int mdio_read(unsigned int *ioaddr, int phy_id, int location)
 	return ( ((retval<<8)&0xff00) | ((retval>>8)&0xff) );
 }
 
-static int mdio_write(unsigned int *ioaddr, int phy_id, int location, int value)
+static int mdio_write(volatile unsigned int *ioaddr, int phy_id, int location, int value)
 {
 	int i, i3;
 	int cmd = (0x5002 << 16) | (phy_id << 23) | (location << 18) | value;
@@ -327,7 +327,7 @@ static int mdio_write(unsigned int *ioaddr, int phy_id, int location, int value)
 #define EE_READ_CMD	(6 << 6)
 #define EE_ERASE_CMD	(7 << 6)
 
-static int eeget16(unsigned int *ioaddr, int location)
+static int eeget16(volatile unsigned int *ioaddr, int location)
 {
 	int i, i3;
 	unsigned short retval = 0;
@@ -368,13 +368,13 @@ static void
 dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
 {
   rtems_status_code st;
-  unsigned int *tbase;
+  volatile unsigned int *tbase;
   union {char c[64]; unsigned short s[32];} rombuf;
   int i, i2, i3;
-  char *cp, direction, *setup_frm, *eaddrs; 
+  volatile unsigned char *cp, direction, *setup_frm, *eaddrs; 
   unsigned long csr12_val, mii_reg0;
-  unsigned char *buffer;
-  struct MD *rmd;
+  volatile unsigned char *buffer;
+  volatile struct MD *rmd;
 
   
   tbase = sc->base;
@@ -417,10 +417,10 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
    * Init RX ring
    */
   sc->rxBdCount = 0;
-  cp = (char *)malloc((NRXBUFS+NTXBUFS)*(sizeof(struct MD)+ RBUF_SIZE) + PPC_CACHE_ALIGNMENT);
+  cp = (volatile unsigned char *)malloc((NRXBUFS+NTXBUFS)*(sizeof(struct MD)+ RBUF_SIZE) + PPC_CACHE_ALIGNMENT);
   sc->bufferBase = cp;
   if ((unsigned int)cp & (PPC_CACHE_ALIGNMENT-1))
-    cp = ((unsigned int)cp + PPC_CACHE_ALIGNMENT) & ~(PPC_CACHE_ALIGNMENT-1);
+    cp = (volatile unsigned char *) (((unsigned int)cp + PPC_CACHE_ALIGNMENT) & ~(PPC_CACHE_ALIGNMENT-1));
 #ifdef PCI_BRIDGE_DOES_NOT_ENSURE_CACHE_COHERENCY_FOR_DMA 
   if (_CPU_is_paging_enabled())
     _CPU_change_memory_mapping_attribute
@@ -428,28 +428,28 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
 		    (NRXBUFS+NTXBUFS)*(sizeof(struct MD)+ RBUF_SIZE),
 		    PTE_CACHE_DISABLE | PTE_WRITABLE);
 #endif
-  rmd = (struct MD*)cp;
+  rmd = (volatile struct MD*)cp;
   sc->MDbase = rmd;
   buffer = cp + ((NRXBUFS+NTXBUFS)*sizeof(struct MD));
   st_le32( (tbase+memCSR3), (long)((long)(sc->MDbase) + PREP_PCI_DRAM_OFFSET));
   for (i=0 ; i<NRXBUFS; i++){
-    rmd->buf2 = 0;
-    rmd->buf1 = (unsigned long)(buffer + (i*RBUF_SIZE) + PREP_PCI_DRAM_OFFSET);  
-    if (i == NRXBUFS-1)
-      rmd->counts = 0xfec00000 | (RBUF_SIZE);
-    else
-      rmd->counts = 0xfcc00000 | (RBUF_SIZE);
+    rmd->buf2 = (volatile unsigned char *) 0;
+    rmd->buf1 = (buffer + (i*RBUF_SIZE) + PREP_PCI_DRAM_OFFSET);  
+    rmd->counts = 0xfcc00000 | (RBUF_SIZE);
     rmd->status = 0x80000000;
     rmd++;
   }
-
+  /*
+   * mark last RX buffer.
+   */
+  sc->MDbase [NRXBUFS-1].counts = 0xfec00000 | (RBUF_SIZE);
   /*
    * Init TX ring
    */
   sc->txBdCount = 0;
-  st_le32( (tbase+memCSR4), (long)((long)(rmd) + PREP_PCI_DRAM_OFFSET));
-  rmd->buf2 = 0;
-  rmd->buf1 = (unsigned long)(buffer + (NRXBUFS*RBUF_SIZE) + PREP_PCI_DRAM_OFFSET);
+  st_le32( (tbase+memCSR4), (long)(((long)(rmd)) + PREP_PCI_DRAM_OFFSET));
+  rmd->buf2 = (volatile unsigned char *) 0;
+  rmd->buf1 = buffer + (NRXBUFS*RBUF_SIZE) + PREP_PCI_DRAM_OFFSET;
   rmd->counts = 0x62000000;
   rmd->status = 0x0;
   
@@ -476,7 +476,7 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
   /*
    * Build setup frame
    */
-  setup_frm = (char *)((long)(rmd->buf1) - PREP_PCI_DRAM_OFFSET);
+  setup_frm = rmd->buf1 - PREP_PCI_DRAM_OFFSET;
   eaddrs = (char *)(sc->arpcom.ac_enaddr);
   /* Fill the buffer with our physical address. */
   for (i = 1; i < 16; i++) {
@@ -494,7 +494,7 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
 	*setup_frm++ = eaddrs[5];
   }
   /* Add the broadcast address when doing perfect filtering */
-  memset(setup_frm, 0xff, 12);
+  memset((void*) setup_frm, 0xff, 12);
   rmd->counts = 0x0a000000 | 192 ;
   rmd->status = 0x80000000;
   st_le32( (tbase+memCSR1), 1);
@@ -525,12 +525,12 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
 static void
 dec21140_rxDaemon (void *arg)
 {
-  unsigned int *tbase;
+  volatile unsigned int *tbase;
   struct ether_header *eh;
   struct dec21140_softc *dp = (struct dec21140_softc *)&dec21140_softc[0];
   struct ifnet *ifp = &dp->arpcom.ac_if;
   struct mbuf *m;
-  struct MD *rmd;
+  volatile struct MD *rmd;
   unsigned int len;
   char *temp;
   rtems_event_set events;
@@ -555,7 +555,7 @@ dec21140_rxDaemon (void *arg)
 	m->m_pkthdr.rcvif = ifp;
 	temp = m->m_data;
 	m->m_len = m->m_pkthdr.len = len - sizeof(struct ether_header);
-	memcpy(temp, (char *)((long)(rmd->buf1)-PREP_PCI_DRAM_OFFSET), len);
+	memcpy(temp, (void*) (rmd->buf1-PREP_PCI_DRAM_OFFSET), len);
 	rmd->status = 0x80000000;
 	eh = mtod (m, struct ether_header *);
 	m->m_data += sizeof(struct ether_header);
@@ -573,10 +573,10 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 {
   struct dec21140_softc *dp = ifp->if_softc;
   volatile struct MD *tmd;
-  unsigned char *temp;
+  volatile unsigned char *temp;
   struct mbuf *n;
   unsigned int len;
-  unsigned int *tbase;
+  volatile unsigned int *tbase;
 
   tbase = dp->base;
 
@@ -587,11 +587,11 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
   while ( (tmd->status & 0x80000000) != 0 );
   len = 0;
   n = m;
-  temp = (char *)((long)(tmd->buf1)-PREP_PCI_DRAM_OFFSET);
+  temp = tmd->buf1-PREP_PCI_DRAM_OFFSET;
   
   for (;;){
     len += m->m_len;
-    memcpy(temp, (char *)m->m_data, m->m_len);
+    memcpy((void*) temp, (char *)m->m_data, m->m_len);
     temp += m->m_len ;
     if ((m = m->m_next) == NULL)
       break;
@@ -688,7 +688,7 @@ dec21140_init (void *arg)
 static void
 dec21140_stop (struct dec21140_softc *sc)
 {
-  unsigned int *tbase;
+  volatile unsigned int *tbase;
   struct ifnet *ifp = &sc->arpcom.ac_if;
 
   ifp->if_flags &= ~IFF_RUNNING;
@@ -699,7 +699,7 @@ dec21140_stop (struct dec21140_softc *sc)
   tbase=dec21140_softc[0].base ;
   st_le32( (tbase+memCSR7), NO_IT);
   st_le32( (tbase+memCSR6), CSR6_INIT);
-  free(sc->bufferBase);
+  free((void*)sc->bufferBase);
 }
 
 
