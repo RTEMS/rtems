@@ -37,10 +37,4 @@ tcsetattr(int fd, int opt, struct termios *tp)
     return __rtems_ioctl(fd,RTEMS_IO_SET_ATTRIBUTES,tp);
 }
 
-int
-tcdrain(int fd)
-{
-	return __rtems_ioctl(fd,RTEMS_IO_TCDRAIN,0);
-}
-
 #endif

@@ -297,6 +297,31 @@ rtems_termios_open (
 	return RTEMS_SUCCESSFUL;
 }
 
+/*
+ * Drain output queue
+ */
+static void
+drainOutput (struct rtems_termios_tty *tty)
+{
+	rtems_interrupt_level level;
+	rtems_status_code sc;
+
+	if (tty->device.outputUsesInterrupts) {
+		rtems_interrupt_disable (level);
+		while (tty->rawOutBufTail != tty->rawOutBufHead) {
+			tty->rawOutBufState = rob_wait;
+			rtems_interrupt_enable (level);
+			sc = rtems_semaphore_obtain (tty->rawOutBufSemaphore,
+							RTEMS_WAIT,
+							RTEMS_NO_TIMEOUT);
+			if (sc != RTEMS_SUCCESSFUL)
+				rtems_fatal_error_occurred (sc);
+			rtems_interrupt_disable (level);
+		}
+		rtems_interrupt_enable (level);
+	}
+}
+
 rtems_status_code
 rtems_termios_close (void *arg)
 {
@@ -308,6 +333,7 @@ rtems_termios_close (void *arg)
 	if (sc != RTEMS_SUCCESSFUL)
 		rtems_fatal_error_occurred (sc);
 	if (--tty->refcount == 0) {
+		drainOutput (tty);
 		if (tty->device.lastClose)
 			 (*tty->device.lastClose)(tty->major, tty->minor, arg);
 		if (tty->forw == NULL)
@@ -383,6 +409,10 @@ rtems_termios_ioctl (void *arg)
 		}
 		if (tty->device.setAttributes)
 			(*tty->device.setAttributes)(tty->minor, &tty->termios);
+		break;
+
+	case RTEMS_IO_TCDRAIN:
+		drainOutput (tty);
 		break;
 	}
 	rtems_semaphore_release (tty->osem);
