@@ -59,6 +59,8 @@
 
 #else
 
+#include <stdio.h> /* for puts */
+
 /*
  * Checksum routine for Internet Protocol family headers (Portable Version).
  *
