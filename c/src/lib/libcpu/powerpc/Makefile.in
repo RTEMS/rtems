@@ -10,4 +10,4 @@ VPATH=@srcdir@
 include $(RTEMS_CUSTOM)
 include $(PROJECT_ROOT)/make/directory.cfg
 
-SUB_DIRS=ppc403
+SUB_DIRS=$(wildcard $(RTEMS_CPU_MODEL))
