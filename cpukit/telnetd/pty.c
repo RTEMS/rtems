@@ -10,6 +10,11 @@
  * 
  *  $Id$
  */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /*-----------------------------------------*/
 #include <termios.h>
 #include <rtems.h>
@@ -21,12 +26,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-/*-----------------------------------------*/
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-/*-----------------------------------------*/
-#define printk printf
 /*-----------------------------------------*/
 #define IAC_ESC    255
 #define IAC_DONT   254

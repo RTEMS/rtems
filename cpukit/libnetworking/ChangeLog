@@ -1,3 +1,9 @@
+2002-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems_telnetd/pty.c: Move config.h to were it belongs.
+	Remove printf (Reported by Till Straumann
+	<strauman@SLAC.Stanford.EDU>).
+
 2001-01-16	Eric Norum <eric.norum@usask.ca>
 
 	* lib/tftpDriver.clib/tftpDriver.c: Fix TFTP block number checking.
