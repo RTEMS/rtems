@@ -64,22 +64,22 @@ BEGIN_CODE
 | are going to call this function only a few times
 
 +----------------------------------------------------------------------------*/
+#define DELAY_USE_OUTB
+	
 	.p2align 4
 	.globl _delay
 	.globl delay
 delay:
 _delay:
-/*
-	outb	%al, $0xED	# about 1uS delay on most machines
-*/
-/*
- 
-	movl	$0x200, %eax
+#ifdef 	DELAY_USE_OUTB
+	outb	al, $0x80	# about 1uS delay on most machines
+#else
+	movl	$0x200, eax
 delay1:
-	dec	%eax
+	dec	eax
 	jnz	delay1
 	ret
-
+#endif
 
 /*-------------------------------------------------------------------------+
 |         Function: _load_segments
