@@ -9,7 +9,6 @@ CLEANFILES =
 noinst_DATA =
 
 include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
 
 include_libcpudir = $(includedir)/libcpu
 
