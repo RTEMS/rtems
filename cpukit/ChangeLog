@@ -1,5 +1,27 @@
 2004-11-07	Ralf Corsepius <ralf.corsepiu@rtems.org>
 
+	* backward/asm.h: Add doxygen preamble.
+	* backward/chain.h: Add doxygen preamble.
+	* backward/clockdrv.h: Add doxygen preamble.
+	* backward/confdefs.h: Add doxygen preamble.
+	* backward/console.h: Add doxygen preamble.
+	* backward/dosfs.h: Add doxygen preamble.
+	* backward/imfs.h: Add doxygen preamble.
+	* backward/iosupp.h: Add doxygen preamble.
+	* backward/itron.h: Add doxygen preamble.
+	* backward/ringbuf.h: Add doxygen preamble.
+	* backward/rtc.h: Add doxygen preamble.
+	* backward/spurious.h: Add doxygen preamble.
+	* backward/timerdrv.h: Add doxygen preamble.
+	* backward/vmeintr.h: Add doxygen preamble.
+	* backward/motorola/mc68230.h: Add doxygen preamble.
+	* backward/motorola/mc68681.h: Add doxygen preamble.
+	* backward/zilog/z8030.h: Add doxygen preamble.
+	* backward/zilog/z8036.h: Add doxygen preamble.
+	* backward/zilog/z8536.h: Add doxygen preamble.
+
+2004-11-07	Ralf Corsepius <ralf.corsepiu@rtems.org>
+
 	* libcsupport/include/sys/_stdint.h: Special-case int64_t (GCC has
 	__LONG_LONG_MAX__, while POSIX mandates LLONG_MAX. This break 
 	__EXP(LONG_LONG_MAX)).
