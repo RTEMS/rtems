@@ -123,6 +123,9 @@ extern "C" {
 #define PPC_ALIGNMENT		4
 #define PPC_CACHE_ALIGNMENT	16
 
+/* Added by querbach@realtime.bc.ca */
+#define PPC_LOW_POWER_MODE	PPC_LOW_POWER_MODE_STANDARD
+
 /* Based on comments by Sergei Organov <osv@Javad.RU> */
 #define PPC_I_CACHE        	0 
 #define PPC_D_CACHE        	0 
@@ -495,6 +498,16 @@ extern "C" {
 #define PPC_IRQ_INST_BP   (PPC_STD_IRQ_LAST+ 3)
 #define PPC_IRQ_MEXT_BP   (PPC_STD_IRQ_LAST+ 4)
 #define PPC_IRQ_NMEXT_BP  (PPC_STD_IRQ_LAST+ 5)
+
+#elif defined(mpc555)
+#define PPC_IRQ_SOFTEMU   (PPC_STD_IRQ_LAST+1)  /* Software emulation. */
+#define PPC_IRQ_INST_PE   (PPC_STD_IRQ_LAST+2)  /* Insn protection error */
+#define PPC_IRQ_DATA_PE   (PPC_STD_IRQ_LAST+3)  /* Data protection error */
+#define PPC_IRQ_DATA_BP   (PPC_STD_IRQ_LAST+4)  /* Data breakpoint */
+#define PPC_IRQ_INST_BP   (PPC_STD_IRQ_LAST+5)  /* Insn breakpoint */
+#define PPC_IRQ_MEXT_BP   (PPC_STD_IRQ_LAST+6)  /* Maskable ext bkpt */
+#define PPC_IRQ_NMEXT_BP  (PPC_STD_IRQ_LAST+7)  /* Non-maskable ext bkpt */
+#define PPC_IRQ_LAST      PPC_IRQ_NMEXT_BP
 
 #elif defined(ppc601)
 #define PPC_IRQ_TRACE    (PPC_STD_IRQ_LAST+1) /*0x02000-Run/Trace Exception*/

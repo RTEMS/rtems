@@ -1,3 +1,8 @@
+2004-04-12	David Querbach <querbach@realtime.bc.ca>
+
+	* asm.h, rtems/new-exceptions/cpu.h, rtems/score/ppc.h: addition of
+	MPC555 support as part of the addition of the SS555 BSP.
+
 2004-04-06	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Remove (Merged into $(top_srcdir)/configure.ac).

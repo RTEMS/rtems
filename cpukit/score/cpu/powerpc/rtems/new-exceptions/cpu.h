@@ -414,7 +414,7 @@ typedef struct {
   boolean      timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 #endif
 
-#if (defined(mpc860) || defined(mpc821) || defined(mpc8260))
+#if (defined(mpc555) || defined(mpc860) || defined(mpc821) || defined(mpc8260))
   uint32_t     clock_speed;            /* Speed of CPU in Hz */
 #endif
 }   rtems_cpu_table;
