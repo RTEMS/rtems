@@ -1,3 +1,10 @@
+2001-05-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Remove AC_EXEEXT, treat .exe manually.
+	* gccnewlib/base-gcc.add: Remove cpp.
+	* gccnewlib/gccnewlib.add: mv cpp $target_alias-cpp, update
+	copyright.
+
 2001-04-16	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def: Modified the binutils version to 2.11 and 

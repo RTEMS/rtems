@@ -20,7 +20,6 @@ This is the files for gcc and newlib that are shared by all targets.
 %doc /opt/rtems/info/libm.info*.gz
 
 %dir /opt/rtems/bin
-/opt/rtems/bin/cpp@exe_ext@
 /opt/rtems/bin/gcov@exe_ext@
 
 %dir /opt/rtems/man

@@ -1,7 +1,7 @@
 #
 # spec file for building gcc for rtems
 # 
-# Copyright  (c) 1999,2000 OARCorp, Huntsville, AL
+# Copyright  (c) 1999,2000,2001 OARCorp, Huntsville, AL
 #
 # please send bugfixes or comments to joel@OARcorp.com
 #
@@ -87,6 +87,14 @@ This is gcc's and newlib C Library's sources with patches for RTEMS.
 
   # cd back to build/
   cd ../..
+
+  # Bug in gcc-2.95.x: It bogusly tries to share cpp for all targets.
+  # Rename it to target_alias-cpp
+  if test -f $RPM_BUILD_ROOT/opt/rtems/bin/cpp@exe_ext@;
+  then
+    mv $RPM_BUILD_ROOT/opt/rtems/bin/cpp@exe_ext@ \
+      $RPM_BUILD_ROOT/opt/rtems/bin/@target_alias@-cpp@exe_ext@
+  fi
 
   # gzip info files
   gzip -f $RPM_BUILD_ROOT/opt/rtems/info/*.info 2>/dev/null
