@@ -23,7 +23,7 @@ $(PGM): $(OBJS)
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
 if HAS_MP
-all-local: $(ARCH) $(OBJS) $(PGM)
+all-local: $(OBJS) $(PGM)
 endif
 
 .PRECIOUS: $(PGM)
