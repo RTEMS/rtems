@@ -30,7 +30,7 @@ void Non_Dormant_task();
 
 #define CONFIGURE_ITRON_INIT_TASK_TABLE
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 

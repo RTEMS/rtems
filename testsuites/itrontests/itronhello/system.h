@@ -30,7 +30,7 @@ void ITRON_Init( void );
 
 #define CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 

@@ -1,5 +1,17 @@
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* itronhello/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* itronmbf01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* itronmbox01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* itronsem01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* itrontask01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* itrontask02/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* itrontask03/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* itrontask04/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* itrontime01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* itronhello/system.h: Include <rtems/itron.h> instead of <itron.h>.
 	* itronmbf01/system.h: Include <rtems/itron.h> instead of <itron.h>.
 	* itronmbox01/system.h: Include <rtems/itron.h> instead of <itron.h>.

@@ -31,7 +31,7 @@ void ITRON_Init( void );
 #define CONFIGURE_ITRON_INIT_TASK_TABLE
 #define CONFIGURE_ITRON_INIT_TASK_STACK_SIZE (4 * RTEMS_MINIMUM_STACK_SIZE)
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 
