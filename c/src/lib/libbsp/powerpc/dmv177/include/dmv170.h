@@ -54,10 +54,10 @@ extern "C" {
 /* base address for the SCC (85C30) */ 
 #define  Z85C30_ADDR       0xfb000000
 #define  Z85C30_CTRL_A     0xfb000000
-#define  Z85C30_DATA_A     0xfb000000
-#define  Z85C30_CTRL_B     0xfb000000
-#define  Z85C30_DATA_B     0xfb000000
-#define  Z85C30_CLOCK      0
+#define  Z85C30_DATA_A     0xfb000008
+#define  Z85C30_CTRL_B     0xfb000010
+#define  Z85C30_DATA_B     0xfb000018
+#define  Z85C30_CLOCK      (8 * 1024 * 1024)
 
 #define DMV170_LOCAL_CONTROL_STATUS_REG                   0xf2400000
 #define DMV170_TIMER0_COUNT_INTERVAL_REG                  0xf2400008
