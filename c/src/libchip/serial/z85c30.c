@@ -1,6 +1,11 @@
 /*
  *  This file contains the console driver chip level routines for the
- *  z85c30 chip.
+ *  Zilog z85c30 chip.
+ *
+ *  The Zilog Z8530 is also available as:
+ *
+ *    + Intel 82530
+ *    + AMD ???
  *
  *  COPYRIGHT (c) 1998 by Radstone Technology
  *
@@ -36,6 +41,7 @@
 /*
  * Flow control is only supported when using interrupts
  */
+
 console_flow z85c30_flow_RTSCTS =
 {
   z85c30_negate_RTS,    /* deviceStopRemoteTx */
@@ -51,6 +57,7 @@ console_flow z85c30_flow_DTRCTS =
 /*
  * Exported driver function table
  */
+
 console_fns z85c30_fns =
 {
   z85c30_probe,                  /* deviceProbe */
@@ -346,9 +353,11 @@ static void z85c30_init(int minor)
 /*
  * These routines provide control of the RTS and DTR lines
  */
+
 /*
  *  z85c30_assert_RTS
  */
+
 static int z85c30_assert_RTS(int minor)
 {
   rtems_interrupt_level  Irql;
@@ -377,6 +386,7 @@ static int z85c30_assert_RTS(int minor)
 /*
  *  z85c30_negate_RTS
  */
+
 static int z85c30_negate_RTS(int minor)
 {
   rtems_interrupt_level  Irql;
@@ -406,9 +416,11 @@ static int z85c30_negate_RTS(int minor)
  * These flow control routines utilise a connection from the local DTR
  * line to the remote CTS line
  */
+
 /*
  *  z85c30_assert_DTR
  */
+
 static int z85c30_assert_DTR(int minor)
 {
   rtems_interrupt_level  Irql;
@@ -437,6 +449,7 @@ static int z85c30_assert_DTR(int minor)
 /*
  *  z85c30_negate_DTR
  */
+
 static int z85c30_negate_DTR(int minor)
 {
   rtems_interrupt_level  Irql;
@@ -712,6 +725,7 @@ static void z85c30_initialize_interrupts(
  *  Console Termios output entry point.
  *
  */
+
 static int z85c30_write_support_int(
   int   minor, 
   const char *buf, 
@@ -774,6 +788,7 @@ static int z85c30_write_support_int(
  *
  *  This routine polls for a character.
  */
+
 static int z85c30_inbyte_nonblocking_polled(
   int  minor
 )

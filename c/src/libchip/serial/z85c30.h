@@ -1,6 +1,6 @@
-/*  z85c30.h
- *
- *  This include file contains all console driver definations for the z85c30
+/*
+ *  This include file contains all console driver definitions for the
+ *  Zilog z85c30.
  *
  *  COPYRIGHT (c) 1998 by Radstone Technology
  *
