@@ -32,7 +32,6 @@
 #include <rtems/score/copyrt.h>
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
-#include <rtems/intthrd.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/mpci.h>
 #include <rtems/score/priority.h>
@@ -174,13 +173,6 @@ rtems_interrupt_level rtems_initialize_executive_early(
     multiprocessing_table->maximum_proxies
   );
 
-  /*
-   *  No threads should be created before this point!!! _Thread_Executing
-   *  and _Thread_Heir are not set yet.
-   */
-
-  _Internal_threads_Initialization();
-
   _MPCI_Handler_initialization(
     multiprocessing_table->User_mpci_table,
     RTEMS_TIMEOUT
@@ -198,12 +190,22 @@ rtems_interrupt_level rtems_initialize_executive_early(
 
   _RTEMS_API_Initialize( configuration_table );
 
+  _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
+
   if ( cpu_table->pretasking_hook )
     (*cpu_table->pretasking_hook)();
 
-  _Internal_threads_Start();
+  /*
+   *  No threads should be created before this point!!! 
+   *
+   *  At this point all API extensions are in place.  After the call to
+   *  _Thread_Create_idle() _Thread_Executing will be set.
+   *  and _Thread_Heir are not set yet.
+   */
 
-  _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
+  _Thread_Create_idle();
+
+  _MPCI_Create_server();
 
   /*
    *  Run the API and BSPs predriver hook.
@@ -224,8 +226,8 @@ rtems_interrupt_level rtems_initialize_executive_early(
  
   if ( _System_state_Is_multiprocessing ) {
     _MPCI_Initialization();
-    _Internal_threads_MP_Send_process_packet(
-      INTERNAL_THREADS_MP_SYSTEM_VERIFY
+    _MPCI_Internal_packets_Send_process_packet(
+      MPCI_PACKETS_SYSTEM_VERIFY
     );
   }
  
