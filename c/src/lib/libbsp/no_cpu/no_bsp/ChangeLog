@@ -1,3 +1,7 @@
+2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* wrapup/Makefile.am: Remove GENERIC_FILES.
+
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* startup/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.

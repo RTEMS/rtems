@@ -3,11 +3,6 @@
 ##
 
 if HAS_MP
-GENERIC_MP_REL_FILES = shmdr
-endif
-GENERIC_FILES = $(GENERIC_MP_REL_FILES)
-
-if HAS_MP
 BSP_MP_O_FILES = shmsupp
 endif
 BSP_FILES = startup clock console timer $(BSP_MP_O_FILES)
@@ -18,15 +13,9 @@ include $(top_srcdir)/../../../../automake/lib.am
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
 OBJS = $(foreach piece, $(BSP_FILES), ../$(piece)/$(ARCH)/*.$(OBJEXT)) \
     $(wildcard \
-    ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(ARCH)/*.$(OBJEXT)) \
-    $(foreach piece, $(GENERIC_FILES), \
-    ../../../$(piece)/$(ARCH)/$(piece).rel)
+    ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(ARCH)/*.$(OBJEXT))
 
 LIB = $(ARCH)/libbsp.a
-
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 $(LIB): ${OBJS}
 	$(make-library)
