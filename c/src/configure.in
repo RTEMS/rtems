@@ -31,7 +31,7 @@ cfg_subdirs1="make"
 if test x"$multilib" = x"no"; then
 hst_subdirs1="$hst_subdirs1 exec"
 fi
-cfg_subdirs="$cfg_subdirs lib"
+hst_subdirs1="$hst_subdirs1 lib"
 cfg_subdirs="$cfg_subdirs lib/libcpu lib/libbsp"
 hst_subdirs="libfs"
 hst_subdirs="$hst_subdirs libmisc"
@@ -78,7 +78,8 @@ RTEMS_CANONICALIZE_TOOLS
 # Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile
-wrapup/Makefile
+wrapup/Makefile,,
+test -d lib || mkdir lib
 )
 
 RTEMS_OUTPUT_HOST_SUBDIRS(RTEMS_HOST_SUBDIRS)
