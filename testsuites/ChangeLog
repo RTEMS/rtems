@@ -1,5 +1,13 @@
 2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/enable-bare.m4, aclocal/enable-cxx.m4,
+	aclocal/enable-itron.m4, aclocal/enable-multiprocessing.m4,
+	aclocal/enable-networking.m4, aclocal/enable-posix.m4,
+	aclocal/enable-tests.m4, aclocal/multilib.m4,
+	aclocal/rtems-test-no-pause.m4: Autoupdate to autoconf-2.59.
+
+2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Add 2nd arg to RTEMS_TOP.
 
 2004-03-25	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

@@ -3,7 +3,7 @@ dnl $Id$
 AC_DEFUN([RTEMS_ENABLE_NETWORKING],
 [
 AC_ARG_ENABLE(networking,
-[AC_HELP_STRING([--enable-networking],[enable TCP/IP stack])],
+[AS_HELP_STRING(--enable-networking,enable TCP/IP stack)],
 [case "${enableval}" in
   yes) RTEMS_HAS_NETWORKING=yes ;;
   no) RTEMS_HAS_NETWORKING=no ;;

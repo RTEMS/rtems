@@ -3,8 +3,7 @@ dnl $Id$
 AC_DEFUN([RTEMS_ENABLE_CXX],
 [
 AC_ARG_ENABLE(cxx,
-[AC_HELP_STRING([--enable-cxx],
-[enable C++ support and build the rtems++ library])],
+[AS_HELP_STRING(--enable-cxx,enable C++ support and build the rtems++ library)],
 [case "${enable_cxx}" in
   yes) RTEMS_HAS_CPLUSPLUS=yes ;;
   no) RTEMS_HAS_CPLUSPLUS=no   ;;
