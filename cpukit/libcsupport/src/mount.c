@@ -142,7 +142,7 @@ int mount(
    temp_mt_entry->mt_fs_root.mt_entry = temp_mt_entry;
    temp_mt_entry->options = options;
    if ( device )
-     sprintf( temp_mt_entry->dev, "%s", device );
+     strcpy( temp_mt_entry->dev, device );
    else
      temp_mt_entry->dev = 0;
 

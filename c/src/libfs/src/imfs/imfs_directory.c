@@ -126,7 +126,7 @@ int imfs_dir_read(
          tmp_dirent.d_reclen = sizeof( struct dirent );
          the_jnode = (IMFS_jnode_t *) the_node;
          tmp_dirent.d_namlen = strlen( the_jnode->name );
-         sprintf( tmp_dirent.d_name, "%s", the_jnode->name );
+         strcpy( tmp_dirent.d_name, the_jnode->name );
          memcpy( 
             buffer + bytes_transferred, 
             (void *)&tmp_dirent, 
