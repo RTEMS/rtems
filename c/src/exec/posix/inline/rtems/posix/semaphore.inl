@@ -41,6 +41,21 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
  
 /*PAGE
  *
+ *  _POSIX_Semaphore_Namespace_remove
+ */
+ 
+RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Namespace_remove (
+  POSIX_Semaphore_Control *the_semaphore
+)
+{
+  _Objects_Namespace_remove( 
+    &_POSIX_Semaphore_Information, &the_semaphore->Object );
+}
+ 
+
+
+/*PAGE
+ *
  *  _POSIX_Semaphore_Get
  */
  
