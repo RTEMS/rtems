@@ -1,3 +1,15 @@
+2005-03-11	Jay Monkman <jtm@lopingdog.com>
+
+	* acinclude.m4: Removed vegaplus BSP.
+	* vegaplus/.cvsignore, vegaplus/ChangeLog, vegaplus/Makefile.am,
+	vegaplus/bsp_specs, vegaplus/configure.ac, vegaplus/clock/clockdrv.c,
+	vegaplus/include/.cvsignore, vegaplus/include/bsp.h,
+	vegaplus/include/registers.h, vegaplus/include/tm27.h,
+	vegaplus/irq/bsp_irq_asm.S, vegaplus/irq/bsp_irq_init.c,
+	vegaplus/irq/irq.c, vegaplus/irq/irq.h, vegaplus/start/start.S,
+	vegaplus/startup/bspstart.c, vegaplus/startup/exit.c,
+	vegaplus/startup/linkcmds: Removed.
+
 2005-03-11	Philippe Simons <loki_666@fastmail.fm>
 
 	* acinclude.m4: Added gp32 BSP.
