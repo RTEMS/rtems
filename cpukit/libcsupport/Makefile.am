@@ -117,7 +117,7 @@ DIRECTORY_SCAN_C_FILES = src/opendir.c src/closedir.c src/readdir.c \
 
 MALLOC_C_FILES = src/malloc.c src/mallocfreespace.c src/__brk.c src/__sbrk.c
 
-PASSWORD_GROUP_C_FILES = src/getpwent.c src/getgrent.c
+PASSWORD_GROUP_C_FILES = src/getpwent.c
 
 TERMINAL_IDENTIFICATION_C_FILES = src/ctermid.c src/isatty.c src/ttyname.c \
     src/ttyname_r.c

@@ -1,3 +1,10 @@
+2002-10-02	Eric Norum <eric.norum@usask.ca>
+
+	* src/getpwent.c: Per PR283, reimplement to address reentrancy problems.
+	* src/getgrent.c: Removed as functionality is now just a wrapper for 
+	common routines in src/getpwent.c.
+	* Makefile.am: Reflect file removal.
+
 2002-09-14	Joel Sherrill <joel@OARcorp.com>
 
 	* include/rtems/libio.h: Change rtems_filesystem_read_t and
