@@ -39,6 +39,7 @@ static int isValidInterrupt(int irq)
 int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_irq_hdl *HdlTable;
+    rtems_interrupt_level level;
     
     if (!isValidInterrupt(irq->name)) {
       return 0;
@@ -46,7 +47,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Check if default handler is actually connected. If not issue an error.
      */
-    HdlTable = VECTOR_TABLE;
+    HdlTable = (rtems_irq_hdl *) VECTOR_TABLE;
     if (*(HdlTable + irq->name) != default_int_handler) {
       return 0;
     }
@@ -86,6 +87,7 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 {
     rtems_irq_hdl *HdlTable;
+    rtems_interrupt_level level;
   
     if (!isValidInterrupt(irq->name)) {
       return 0;
@@ -93,7 +95,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
     /*
      * Check if the handler is actually connected. If not issue an error.
      */
-    HdlTable = VECTOR_TABLE;
+    HdlTable = (rtems_irq_hdl *) VECTOR_TABLE;
     if (*(HdlTable + irq->name) != irq->hdl) {
       return 0;
     }

@@ -19,5 +19,5 @@
 %{qrtems_debug: start_g.o%s crtbegin.o%s}}
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -Qy -dp -Bstatic -T linkcmds%s -e _start}
+%{!qrtems: %(old_link)} %{qrtems: -Qy -dp -Bstatic -N -e _start}
 

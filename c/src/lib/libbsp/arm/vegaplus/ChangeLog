@@ -1,3 +1,11 @@
+2000-09-13	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am, bsp_specs, configure.in, console/Makefile.am,
+	include/Makefile.am, irq/Makefile.am, irq/irq.c, start/Makefile.am,
+	startup/Makefile.am, startup/exit.c, wrapup/Makefile.am:
+	Made to conform to current practice concerning automake and 
+	autoconf.  Corrected minor warnings.
+
 2000-09-13	Emmanuel Raguet <raguet@crf.canon.fr>
 
 	* vegaplus BSP submitted by Emmanuel Raguet <raguet@crf.canon.fr> and
