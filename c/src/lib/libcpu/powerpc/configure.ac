@@ -41,7 +41,6 @@ AM_CONDITIONAL(new_exception_processing, \
 test "$RTEMS_CPU_MODEL" = "mpc750" || \
 test "$RTEMS_CPU_MODEL" = "mpc604" || \
 test "$RTEMS_CPU_MODEL" = "mpc8xx" || \
-test "$RTEMS_CPU_MODEL" = "mpc8260" || \
 test "$RTEMS_CPU_MODEL" = "mpc860" \
 )
 
