@@ -1,6 +1,14 @@
+2003-12-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: merge-in gdbstub/Makefile.am.
+	Add stray files bspspuriousinit.c, m68000spurious.c.
+	* gdbstub/Makefile.am: Remove.
+
 2003-12-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.
+	Add mvme/mvme16x_hw.h.
+
 	Add mvme/mvme16x_hw.h.
 
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
