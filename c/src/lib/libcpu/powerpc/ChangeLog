@@ -1,3 +1,36 @@
+2002-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Remove RTEMS_CHEC_CUSTOM_BSP.
+	* mpc505/ictrl/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc505/timer/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc505/vectors/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc6xx/clock/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc6xx/exceptions/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc6xx/mmu/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc6xx/timer/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc6xx/wrapup/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc8260/clock/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc8260/console-generic/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc8260/cpm/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc8260/exceptions/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc8260/mmu/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc8260/timer/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc8xx/clock/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc8xx/console-generic/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc8xx/cpm/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc8xx/exceptions/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc8xx/mmu/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* mpc8xx/timer/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* ppc403/clock/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* ppc403/console/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* ppc403/ictrl/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* ppc403/timer/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* ppc403/tty_drv/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* ppc403/vectors/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* shared/include/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* shared/src/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+	* wrapup/Makefile.am: Don't include @RTEMS_BSP@.cfg.
+
 2002-12-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CHECK_BSP_CACHE.
