@@ -26,8 +26,8 @@ RTEMS_PROJECT_ROOT
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 
-RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
-RTEMS_CHECK_POSIX_API(RTEMS_BSP)
+RTEMS_CHECK_MULTIPROCESSING
+RTEMS_CHECK_POSIX_API
 
 # If RTEMS macros are enabled, then use them.  Otherwise, use inlines.
 if test "$RTEMS_USE_MACROS" = "yes"; then
@@ -44,7 +44,7 @@ RTEMS_CHECK_NEWLIB
 
 ## Refuse to build if bsp does not support libposix
 if test "$HAS_POSIX_API" != "yes"; then
-AC_MSG_ERROR([BSP $RTEMS_BSP does not support libposix])
+AC_MSG_ERROR([libposix is not supported by this configuration])
 fi
 
 AM_CONFIG_HEADER(src/config.h)

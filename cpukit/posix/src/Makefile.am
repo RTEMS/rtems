@@ -2,6 +2,7 @@
 ##  $Id$
 ##
 
+LIB=$(ARCH)/libposix.a
 
 INCLUDES = -I.
 
@@ -96,7 +97,10 @@ include $(top_srcdir)/../automake/lib.am
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-all-local: ${ARCH} ${OBJS}
+all-local: ${ARCH} $(LIB)
+
+$(LIB): ${OBJS}
+	$(make-library)
 
 # temporary so we can see how many things are left to implement
 not:
