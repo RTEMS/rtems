@@ -1,3 +1,5 @@
 Makefile
 Makefile.in
 setup.texi
+rtems.texi
+rtems.sed
