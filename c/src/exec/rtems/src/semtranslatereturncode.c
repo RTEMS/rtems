@@ -114,7 +114,7 @@ rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
       return RTEMS_INTERNAL_ERROR;
 
     case THREAD_STATUS_PROXY_BLOCKING:
-      return THREAD_STATUS_PROXY_BLOCKING;
+      return RTEMS_PROXY_BLOCKING;
   }
   return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
