@@ -54,6 +54,13 @@ case $target in
       echo Not supported on unix port.
       exit 0
       ;;
+  i[3456]86-unknown-freebsd2.[12]*)
+      echo freebsd
+      rtems_cpu=unix
+      bsp=freebsd2
+      echo Not supported on unix port.
+      exit 0
+      ;;
   *-rtems*)
     cpu=`echo $target | sed -e 's/-.*//'`
     rtems_cpu=$cpu

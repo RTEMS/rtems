@@ -153,6 +153,12 @@ case "${target}" in
         # override these settings
 	RTEMS_HAS_POSIX_API=no
 	;;
+  i[[3456]]86-unknown-freebsd2.[[12]]*) # unix "simulator" port
+	target_cpu=unix
+        RTEMS_HOST=FreeBSD
+        # override these settings
+	RTEMS_HAS_POSIX_API=no
+	;;
   no_cpu-*rtems*)
         target_cpu=no_cpu
 	RTEMS_HAS_POSIX_API=no

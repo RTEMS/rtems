@@ -382,12 +382,21 @@ extern "C" {
  */
  
 #ifdef RTEMS_UNIXLIB
+#if defined(__FreeBSD__)
+#define RET_OFF    0
+#define EBX_OFF    1
+#define EBP_OFF    2
+#define ESP_OFF    3
+#define ESI_OFF    4
+#define EDI_OFF    5
+#else
 #define EBX_OFF    0
 #define ESI_OFF    1
 #define EDI_OFF    2
 #define EBP_OFF    3
 #define ESP_OFF    4
 #define RET_OFF    5
+#endif
 #endif
  
 #endif

@@ -120,6 +120,9 @@ The following persons/organizations have made contributions:
   for numerous enhancements to the RTEMS autoconf support as well as
   for the Hitachi SH port.
 
++ Dario Alcocer <alcocer@connectnet.com> submitted a port of the
+  RTEMS port to FreeBSD.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU

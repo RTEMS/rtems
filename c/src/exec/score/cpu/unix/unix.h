@@ -46,6 +46,10 @@ extern "C" {
  
 #define CPU_MODEL_NAME  "Linux"
  
+#elif defined(__FreeBSD__)
+ 
+#define CPU_MODEL_NAME  "FreeBSD"
+ 
 #else
  
 #error "Unsupported CPU Model"

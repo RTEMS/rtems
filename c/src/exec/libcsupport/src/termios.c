@@ -25,6 +25,20 @@
 #include <unistd.h>
 
 /*
+ *  FreeBSD does not support a full POSIX termios so we have to help it out
+ */
+
+
+#if defined(__FreeBSD__)
+#define XTABS   0
+#define ONLRET  0
+#define ONOCR   0
+#define TABDLY  0
+#define OLCUC   0
+#define ILCUC   0
+#endif
+
+/*
  * The size of the cooked buffer
  */
 #define CBUFSIZE	256

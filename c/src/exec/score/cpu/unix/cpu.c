@@ -152,8 +152,12 @@ void _CPU_Signal_initialize( void )
   sigaction(SIGUSR1, &act, 0);
   sigaction(SIGUSR2, &act, 0);
   sigaction(SIGCHLD, &act, 0);
+#ifdef SIGCLD
   sigaction(SIGCLD, &act, 0);
+#endif
+#ifdef SIGPWR
   sigaction(SIGPWR, &act, 0);
+#endif
   sigaction(SIGVTALRM, &act, 0);
   sigaction(SIGPROF, &act, 0);
   sigaction(SIGIO, &act, 0);
@@ -741,9 +745,10 @@ void _CPU_Stray_signal(int sig_num)
 
   switch (sig_num)
   {
+#ifdef SIGCLD
       case SIGCLD:
           break;
-
+#endif
       default:
       {
         /*
@@ -987,7 +992,7 @@ void _CPU_SHM_Init(
 
         help.val = 1;
         status = semctl( _CPU_SHM_Semid, i, SETVAL, help );
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__FreeBSD__)
         union semun help;
 
         help.val = 1;
