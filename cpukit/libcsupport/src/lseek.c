@@ -68,14 +68,13 @@ off_t lseek(
    */
 
   status = (*iop->handlers->lseek_h)( iop, offset, whence );
-  if ( !status )
-    return 0;
+  if ( status == (off_t) -1 )
+    iop->offset = old_offset;
 
   /*
    *  So if the operation failed, we have to restore iop->offset.
    */
 
-  iop->offset = old_offset;
   return status;
 }
 
