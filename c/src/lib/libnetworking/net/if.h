@@ -162,6 +162,8 @@ struct ifnet {
 		__P((struct ifnet *, struct mbuf *));
 	void	(*if_init)		/* Init routine */
 		__P((void *));
+	int	(*if_tap)		/* Packet filter routine */
+		(struct ifnet *, struct ether_header *, struct mbuf *);
 	struct	ifqueue if_snd;		/* output queue */
 	struct	ifqueue *if_poll_slowq;	/* input queue for slow devices */
 };
@@ -369,6 +371,7 @@ struct	ifreq {
 		int	ifru_phys;
 		int	ifru_media;
 		caddr_t	ifru_data;
+		int	(*ifru_tap)(struct ifnet *, struct ether_header *, struct mbuf *);
 	} ifr_ifru;
 #define	ifr_addr	ifr_ifru.ifru_addr	/* address */
 #define	ifr_dstaddr	ifr_ifru.ifru_dstaddr	/* other end of p-to-p link */
@@ -379,6 +382,7 @@ struct	ifreq {
 #define ifr_phys	ifr_ifru.ifru_phys	/* physical wire */
 #define ifr_media	ifr_ifru.ifru_media	/* physical media */
 #define	ifr_data	ifr_ifru.ifru_data	/* for use by interface */
+#define ifr_tap		ifr_ifru.ifru_tap	/* tap function */
 };
 
 struct ifaliasreq {

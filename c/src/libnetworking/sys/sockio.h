@@ -83,4 +83,11 @@
 #define	SIOCSIFMEDIA	_IOWR('i', 55, struct ifreq)	/* set net media */
 #define	SIOCGIFMEDIA	_IOWR('i', 56, struct ifmediareq) /* get net media */
 
+
+/*
+ * RTEMS additions for setting/getting `tap' function on incoming packets.
+ */
+#define SIOCSIFTAP	 _IOW('i', 80, struct ifreq)	/* set tap function */
+#define SIOCGIFTAP	_IOWR('i', 81, struct ifreq)	/* get tap function */
+
 #endif /* !_SYS_SOCKIO_H_ */

@@ -483,6 +483,15 @@ ether_input(ifp, eh, m)
 	if (m->m_flags & (M_BCAST|M_MCAST))
 		ifp->if_imcasts++;
 
+	/*
+	 * RTEMS addition -- allow application to `tap into'
+	 * the incoming packet stream.
+	 */
+	if (ifp->if_tap && (*ifp->if_tap)(ifp, eh, m)) {
+		m_freem(m);
+		return;
+	}
+
 	ether_type = ntohs(eh->ether_type);
 
 	switch (ether_type) {

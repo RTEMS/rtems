@@ -664,6 +664,17 @@ ifioctl(so, cmd, data, p)
 
 	    }
 #endif
+
+	/*
+	 * RTEMS additions for setting/getting `tap' function
+	 */
+	case SIOCSIFTAP:
+		ifp->if_tap = ifr->ifr_tap;
+		return 0;
+
+	case SIOCGIFTAP:
+		ifr->ifr_tap = ifp->if_tap;
+		return 0;
 	}
 	return (0);
 }
