@@ -2,10 +2,7 @@
 ## $Id$
 ##
 
-ACLOCAL_AMFLAGS = -I ../../../aclocal
-
-include $(top_srcdir)/../../../automake/multilib.am
-include $(top_srcdir)/../../../automake/compile.am
+include $(top_srcdir)/automake/compile.am
 
 EXTRA_LIBRARIES = libscorecpu.a
 CLEANFILES = libscorecpu.a
@@ -84,4 +81,4 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/types.h
 CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 
-include $(top_srcdir)/../../../automake/local.am
+include $(top_srcdir)/automake/local.am
