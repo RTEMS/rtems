@@ -68,7 +68,8 @@ void _Objects_Initialize_information(
   unsigned32           maximum,
   unsigned32           size,
   boolean              is_string,
-  unsigned32           maximum_name_length
+  unsigned32           maximum_name_length,
+  boolean              is_thread
 )
 {
   unsigned32       minimum_index;
@@ -80,6 +81,13 @@ void _Objects_Initialize_information(
   information->maximum   = maximum;
   information->the_class = the_class; 
   information->is_string = is_string; 
+  information->is_thread = is_thread; 
+
+  /*
+   *  Set the entry in the object information table.
+   */
+
+  _Objects_Information_table[ the_class ] = information;
 
   /*
    *  Calculate minimum and maximum Id's
@@ -379,8 +387,8 @@ rtems_status_code _Objects_Name_to_id(
 
 Objects_Control *_Objects_Get(
   Objects_Information *information,
-  Objects_Id                  id,
-  Objects_Locations          *location
+  Objects_Id           id,
+  Objects_Locations   *location
 )
 {
   Objects_Control *the_object;

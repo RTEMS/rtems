@@ -295,7 +295,7 @@ uninitialized =
 
 /*taskmp.h*/    0                                         +
 
-/*tasks.h*/     0                                         +
+/*tasks.h*/     (sizeof _RTEMS_tasks_Information)         +
 
 /*thread.h*/    (sizeof _Thread_Dispatch_disable_level)   +
                 (sizeof _Thread_Ticks_remaining_in_timeslice)   +
@@ -304,7 +304,6 @@ uninitialized =
                 (sizeof _Thread_Executing)                +
                 (sizeof _Thread_Heir)                     +
                 (sizeof _Thread_Allocated_fp)             +
-                (sizeof _Thread_Information)              +
                 (sizeof _Thread_BSP_context)              +
 
 /*threadmp.h*/  (sizeof _Thread_MP_Receive)               +

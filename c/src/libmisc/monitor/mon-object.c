@@ -60,7 +60,7 @@ rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_dump_fn)        rtems_monitor_init_task_dump,
     },
     { RTEMS_OBJECT_TASK,
-      (void *) &_Thread_Information,
+      (void *) &_RTEMS_tasks_Information,
       sizeof(rtems_monitor_task_t),
       (rtems_monitor_object_next_fn)        rtems_monitor_manager_next,
       (rtems_monitor_object_canonical_fn)   rtems_monitor_task_canonical,

@@ -231,6 +231,7 @@ STATIC INLINE boolean _Thread_Is_null (
  *
  *  _Thread_Get
  *
+ *  NOTE:  XXX... This routine may be able to be optimized.
  */
 
 STATIC INLINE Thread_Control *_Thread_Get (
@@ -238,14 +239,30 @@ STATIC INLINE Thread_Control *_Thread_Get (
   Objects_Locations *location
 )
 {
+  Objects_Classes      the_class;
+  Objects_Information *information;
+ 
   if ( _Objects_Are_ids_equal( id, OBJECTS_ID_OF_SELF ) ) {
-     _Thread_Disable_dispatch();
-     *location = OBJECTS_LOCAL;
-     return( _Thread_Executing );
+    _Thread_Disable_dispatch();
+    *location = OBJECTS_LOCAL;
+    return( _Thread_Executing );
   }
-
-  return (Thread_Control *)
-          _Objects_Get( &_Thread_Information, id, location );
+ 
+  the_class = rtems_get_class( id );
+ 
+  if ( the_class > OBJECTS_CLASSES_LAST ) {
+    *location = OBJECTS_ERROR;
+    return (Thread_Control *) 0;
+  }
+ 
+  information = _Objects_Information_table[ the_class ];
+ 
+  if ( !information || !information->is_thread ) {
+    *location = OBJECTS_ERROR;
+    return (Thread_Control *) 0;
+  }
+ 
+  return (Thread_Control *) _Objects_Get( information, id, location );
 }
 
 #endif

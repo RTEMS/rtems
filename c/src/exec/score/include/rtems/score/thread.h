@@ -229,13 +229,6 @@ EXTERN Thread_Control *_Thread_Heir;
 EXTERN Thread_Control *_Thread_Allocated_fp;
 
 /*
- *  The following defines the information control block used to
- *  manage this class of objects.
- */
-
-EXTERN Objects_Information _Thread_Information;
-
-/*
  *  The following context area contains the context of the "thread"
  *  which invoked rtems_initialize_executive.  This context is restored
  *  as the last action of the rtems_shutdown_executive directive.  Thus
@@ -254,7 +247,6 @@ EXTERN Context_Control _Thread_BSP_context;
  */
 
 void _Thread_Handler_initialization (
-  unsigned32 maximum_tasks,
   unsigned32 ticks_per_timeslice,
   unsigned32 maximum_proxies
 );

@@ -30,7 +30,7 @@
 
 STATIC INLINE Thread_Control *_RTEMS_tasks_Allocate( void )
 {
-  return (Thread_Control *) _Objects_Allocate( &_Thread_Information );
+  return (Thread_Control *) _Objects_Allocate( &_RTEMS_tasks_Information );
 }
 
 /*PAGE
@@ -43,7 +43,7 @@ STATIC INLINE void _RTEMS_tasks_Free (
   Thread_Control *the_task
 )
 {
-  _Objects_Free( &_Thread_Information, &the_task->Object );
+  _Objects_Free( &_RTEMS_tasks_Information, &the_task->Object );
 }
 
 /*PAGE

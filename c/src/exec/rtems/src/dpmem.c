@@ -43,7 +43,8 @@ void _Dual_ported_memory_Manager_initialization(
     maximum_ports,
     sizeof( Dual_ported_memory_Control ),
     FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH
+    RTEMS_MAXIMUM_NAME_LENGTH,
+    FALSE
   );
 }
 

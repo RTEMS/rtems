@@ -35,14 +35,13 @@
  *  This routine initializes all thread manager related data structures.
  *
  *  Input parameters:
- *    maximum_tasks       - number of tasks to initialize
  *    ticks_per_timeslice - clock ticks per quantum
+ *    maximum_proxies     - number of proxies to initialize
  *
  *  Output parameters:  NONE
  */
 
 void _Thread_Handler_initialization(
-  unsigned32   maximum_tasks,
   unsigned32   ticks_per_timeslice,
   unsigned32   maximum_proxies
 )
@@ -56,16 +55,6 @@ void _Thread_Handler_initialization(
 
   _Thread_Ticks_remaining_in_timeslice = ticks_per_timeslice;
   _Thread_Ticks_per_timeslice          = ticks_per_timeslice;
-
-  _Objects_Initialize_information(
-    &_Thread_Information,
-    OBJECTS_RTEMS_TASKS,
-    TRUE,
-    maximum_tasks,
-    sizeof( Thread_Control ),
-    FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH
-  );
 
   _Thread_Ready_chain = _Workspace_Allocate_or_fatal_error(
     (RTEMS_MAXIMUM_PRIORITY + 1) * sizeof(Chain_Control)
@@ -789,22 +778,40 @@ boolean _Thread_Change_mode(
  *
  *  NOTE:  If we are not using static inlines, this must be a real
  *         subroutine call.
+ *
+ *  NOTE:  XXX... This routine may be able to be optimized.
  */
 
 #ifndef USE_INLINES
 
 STATIC INLINE Thread_Control *_Thread_Get (
-  Objects_Id         id,
-  Objects_Locations *location
+  Objects_Id           id,
+  Objects_Locations   *location
 )
 {
+  Objects_Classes      the_class;
+  Objects_Information *information;
+ 
   if ( _Objects_Are_ids_equal( id, OBJECTS_ID_OF_SELF ) ) {
-     _Thread_Disable_dispatch();
-     *location = OBJECTS_LOCAL;
-     return( _Thread_Executing );
+    _Thread_Disable_dispatch();
+    *location = OBJECTS_LOCAL;
+    return( _Thread_Executing );
   }
-
-  return (Thread_Control *) _Objects_Get( &_Thread_Information, id, location );
+ 
+  the_class = rtems_get_class( id );
+ 
+  if ( the_class > OBJECTS_CLASSES_LAST ) {
+    *location = OBJECTS_ERROR;
+    return (Thread_Control *) 0;
+  } 
+ 
+  information = _Objects_Information_table[ the_class ];
+ 
+  if ( !information || !information->is_thread ) { 
+    *location = OBJECTS_ERROR;
+    return (Thread_Control *) 0;
+  }
+ 
+  return (Thread_Control *) _Objects_Get( information, id, location );
 }
 #endif
-

@@ -194,7 +194,7 @@ void _RTEMS_tasks_MP_Process_packet (
     case RTEMS_TASKS_MP_ANNOUNCE_CREATE:
 
       ignored = _Objects_MP_Open(
-                  &_Thread_Information,
+                  &_RTEMS_tasks_Information,
                   the_packet->name,
                   the_packet->Prefix.id,
                   TRUE
@@ -205,7 +205,7 @@ void _RTEMS_tasks_MP_Process_packet (
 
     case RTEMS_TASKS_MP_ANNOUNCE_DELETE:
 
-      _Objects_MP_Close( &_Thread_Information, the_packet->Prefix.id );
+      _Objects_MP_Close( &_RTEMS_tasks_Information, the_packet->Prefix.id );
 
       _MPCI_Return_packet( the_packet_prefix );
       break;

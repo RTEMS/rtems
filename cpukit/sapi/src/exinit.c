@@ -152,7 +152,6 @@ rtems_interrupt_level rtems_initialize_executive_early(
   _TOD_Handler_initialization( configuration_table->microseconds_per_tick );
 
   _Thread_Handler_initialization(
-    configuration_table->maximum_tasks,
     configuration_table->ticks_per_timeslice,
     multiprocessing_table->maximum_proxies
   );
@@ -164,6 +163,8 @@ rtems_interrupt_level rtems_initialize_executive_early(
   _Interrupt_Manager_initialization();
 
   _Multiprocessing_Manager_initialization();
+
+  _RTEMS_tasks_Manager_initialization( configuration_table->maximum_tasks );
 
   _Timer_Manager_initialization( configuration_table->maximum_timers );
 

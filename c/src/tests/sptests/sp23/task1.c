@@ -33,7 +33,7 @@ rtems_task Task_1(
 
   status = rtems_port_ident( Port_name[ 1 ], &dpid );
   directive_failed( status, "rtems_port_ident" );
-  printf( "TA1 - rtems_port_ident - %08x\n", dpid );
+  printf( "TA1 - rtems_port_ident - 0x%08x\n", dpid );
 
   to_be_converted = &External_port_area[ 0xe ];
   status = rtems_port_external_to_internal(

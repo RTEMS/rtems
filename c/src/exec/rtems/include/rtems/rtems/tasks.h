@@ -62,6 +62,25 @@ extern "C" {
 #define RTEMS_YIELD_PROCESSOR RTEMS_NO_TIMEOUT
 
 /*
+ *  The following defines the information control block used to
+ *  manage this class of objects.
+ */
+
+EXTERN Objects_Information _RTEMS_tasks_Information;
+
+/*
+ *  _RTEMS_tasks_Manager_initialization
+ *
+ *  DESCRIPTION:
+ *
+ *  This routine initializes all Task Manager related data structures.
+ */
+ 
+void _RTEMS_tasks_Manager_initialization(
+  unsigned32   maximum_tasks
+);
+
+/*
  *  rtems_task_create
  *
  *  DESCRIPTION:

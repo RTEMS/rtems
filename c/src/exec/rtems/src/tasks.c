@@ -28,6 +28,34 @@
 
 /*PAGE
  *
+ *  _RTEMS_tasks_Manager_initialization
+ *
+ *  This routine initializes all Task Manager related data structures.
+ *
+ *  Input parameters:
+ *    maximum_tasks       - number of tasks to initialize
+ *
+ *  Output parameters:  NONE
+ */
+
+void _RTEMS_tasks_Manager_initialization(
+  unsigned32   maximum_tasks
+)
+{
+  _Objects_Initialize_information(
+    &_RTEMS_tasks_Information,
+    OBJECTS_RTEMS_TASKS,
+    TRUE,
+    maximum_tasks,
+    sizeof( Thread_Control ),
+    FALSE,
+    RTEMS_MAXIMUM_NAME_LENGTH,
+    TRUE
+  );
+}
+
+/*PAGE
+ *
  *  rtems_task_create
  *
  *  This directive creates a thread by allocating and initializing a
@@ -136,7 +164,7 @@ rtems_status_code rtems_task_create(
   the_thread->Start.fp_context = the_thread->fp_context;
 
   if ( _Attributes_Is_global( the_attribute_set ) &&
-       !( _Objects_MP_Open( &_Thread_Information, name,
+       !( _Objects_MP_Open( &_RTEMS_tasks_Information, name,
                             the_thread->Object.id, FALSE ) ) ) {
     _RTEMS_tasks_Free( the_thread );
     (void) _Workspace_Free( memory );
@@ -157,7 +185,7 @@ rtems_status_code rtems_task_create(
 
   _ASR_Initialize( &the_thread->Signal );
 
-  _Objects_Open( &_Thread_Information, &the_thread->Object, &name );
+  _Objects_Open( &_RTEMS_tasks_Information, &the_thread->Object, &name );
 
   *id = the_thread->Object.id;
 
@@ -199,7 +227,7 @@ rtems_status_code rtems_task_ident(
 )
 {
   if ( name != OBJECTS_ID_OF_SELF )
-    return( _Objects_Name_to_id( &_Thread_Information, &name, node, id ) );
+    return( _Objects_Name_to_id( &_RTEMS_tasks_Information, &name, node, id ) );
 
   *id = _Thread_Executing->Object.id;
   return( RTEMS_SUCCESSFUL );
@@ -368,7 +396,7 @@ rtems_status_code rtems_task_delete(
       _Thread_Dispatch();
       return( RTEMS_ILLEGAL_ON_REMOTE_OBJECT );
     case OBJECTS_LOCAL:
-      _Objects_Close( &_Thread_Information, &the_thread->Object );
+      _Objects_Close( &_RTEMS_tasks_Information, &the_thread->Object );
 
       _Thread_Set_state( the_thread, STATES_TRANSIENT );
 
@@ -388,7 +416,7 @@ rtems_status_code rtems_task_delete(
 
       if ( _Attributes_Is_global( the_thread->attribute_set ) ) {
 
-        _Objects_MP_Close( &_Thread_Information, the_thread->Object.id );
+        _Objects_MP_Close( &_RTEMS_tasks_Information, the_thread->Object.id );
 
         _RTEMS_tasks_MP_Send_process_packet(
           RTEMS_TASKS_MP_ANNOUNCE_DELETE,

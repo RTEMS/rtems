@@ -62,7 +62,8 @@ void _Semaphore_Manager_initialization(
     maximum_semaphores,
     sizeof( Semaphore_Control ),
     FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH
+    RTEMS_MAXIMUM_NAME_LENGTH,
+    FALSE
   );
 }
 

@@ -44,7 +44,8 @@ void _Timer_Manager_initialization(
     maximum_timers,
     sizeof( Timer_Control ),
     FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH
+    RTEMS_MAXIMUM_NAME_LENGTH,
+    FALSE
   );
 }
 

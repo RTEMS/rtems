@@ -415,9 +415,11 @@ void Stack_check_Fatal_extension( unsigned32 status )
 
 void Stack_check_Dump_usage( void )
 {
-  unsigned32      i;
-  Thread_Control *the_thread;
-  unsigned32      hit_running = 0;
+  unsigned32           i;
+  unsigned32           class_index;
+  Thread_Control      *the_thread;
+  unsigned32           hit_running = 0;
+  Objects_Information *information;
 
   if (stack_check_initialized == 0)
       return;
@@ -425,11 +427,19 @@ void Stack_check_Dump_usage( void )
   printf(
     "   ID          NAME         LOW        HIGH      AVAILABLE     USED\n"
   );
-  for ( i=1 ; i<_Thread_Information.maximum ; i++ ) {
-    the_thread = (Thread_Control *)_Thread_Information.local_table[ i ];
-    Stack_check_Dump_threads_usage( the_thread );
-    if ( the_thread == _Thread_Executing )
-      hit_running = 1;
+
+  for ( class_index = OBJECTS_CLASSES_FIRST ; 
+        class_index <= OBJECTS_CLASSES_LAST ; 
+        class_index++ ) {
+    information = _Objects_Information_table[ class_index ];
+    if ( information && information->is_thread ) {
+      for ( i=1 ; i < information->maximum ; i++ ) {
+        the_thread = (Thread_Control *)information->local_table[ i ];
+        Stack_check_Dump_threads_usage( the_thread );
+        if ( the_thread == _Thread_Executing )
+          hit_running = 1;
+      }
+    }
   }
 
   if ( !hit_running )

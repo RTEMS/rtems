@@ -29,7 +29,7 @@
  */
 
 #define _RTEMS_tasks_Allocate() \
-  (Thread_Control *) _Objects_Allocate( &_Thread_Information )
+  (Thread_Control *) _Objects_Allocate( &_RTEMS_tasks_Information )
 
 /*PAGE
  *
@@ -38,7 +38,7 @@
  */
 
 #define _RTEMS_tasks_Free( _the_task ) \
-  _Objects_Free( &_Thread_Information, &(_the_task)->Object )
+  _Objects_Free( &_RTEMS_tasks_Information, &(_the_task)->Object )
 
 /*PAGE
  *

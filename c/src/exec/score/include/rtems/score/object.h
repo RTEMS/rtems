@@ -78,16 +78,20 @@ typedef unsigned32 Objects_Id;
 
 typedef enum {
   OBJECTS_NO_CLASS             =  0,
-  OBJECTS_RTEMS_TASKS          =  1,
-  OBJECTS_RTEMS_TIMERS         =  2,
-  OBJECTS_RTEMS_SEMAPHORES     =  3,
-  OBJECTS_RTEMS_MESSAGE_QUEUES =  4,
-  OBJECTS_RTEMS_PARTITIONS     =  5,
-  OBJECTS_RTEMS_REGIONS        =  6,
-  OBJECTS_RTEMS_PORTS          =  7,
-  OBJECTS_RTEMS_PERIODS        =  8,
-  OBJECTS_RTEMS_EXTENSIONS     =  9
+  OBJECTS_INTERNAL_THREADS     =  1,
+  OBJECTS_RTEMS_TASKS          =  2,
+  OBJECTS_RTEMS_TIMERS         =  3,
+  OBJECTS_RTEMS_SEMAPHORES     =  4,
+  OBJECTS_RTEMS_MESSAGE_QUEUES =  5,
+  OBJECTS_RTEMS_PARTITIONS     =  6,
+  OBJECTS_RTEMS_REGIONS        =  7,
+  OBJECTS_RTEMS_PORTS          =  8,
+  OBJECTS_RTEMS_PERIODS        =  9,
+  OBJECTS_RTEMS_EXTENSIONS     = 10
 } Objects_Classes;
+
+#define OBJECTS_CLASSES_FIRST  OBJECTS_NO_CLASS
+#define OBJECTS_CLASSES_LAST   OBJECTS_RTEMS_EXTENSIONS
 
 /*
  *  This enumerated type lists the locations which may be returned
@@ -128,6 +132,8 @@ typedef struct {
   Chain_Control     Inactive;        /* chain of inactive ctl blocks */
   boolean           is_string;       /* TRUE if names are strings */
   unsigned32        name_length;     /* maximum length of names */
+  boolean           is_thread;       /* TRUE if these are threads */
+                                     /*   irregardless of API */
 }   Objects_Information;
 
 /*
@@ -136,6 +142,15 @@ typedef struct {
  */
 
 EXTERN unsigned32  _Objects_Local_node;
+
+/*
+ *  The following is the list of information blocks for each object
+ *  class.  From the ID, we can go to one of these information blocks,
+ *  and obtain a pointer to the appropriate object control block.
+ */
+
+EXTERN Objects_Information 
+    *_Objects_Information_table[OBJECTS_CLASSES_LAST + 1];
 
 /*
  *  The following defines the constant which may be used
@@ -201,7 +216,8 @@ void _Objects_Initialize_information (
   unsigned32           maximum,
   unsigned32           size,
   boolean              is_string,
-  unsigned32           maximum_name_length
+  unsigned32           maximum_name_length,
+  boolean              is_task
 );
 
 /*

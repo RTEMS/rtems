@@ -51,7 +51,8 @@ void _Message_queue_Manager_initialization(
     maximum_message_queues,
     sizeof( Message_queue_Control ),
     FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH
+    RTEMS_MAXIMUM_NAME_LENGTH,
+    FALSE
   );
 }
 

@@ -45,7 +45,8 @@ void _Partition_Manager_initialization(
     maximum_partitions,
     sizeof( Partition_Control ),
     FALSE,
-    RTEMS_MAXIMUM_NAME_LENGTH
+    RTEMS_MAXIMUM_NAME_LENGTH,
+    FALSE
   );
 
 }
