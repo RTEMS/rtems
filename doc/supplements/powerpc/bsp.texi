@@ -75,7 +75,7 @@ place when the rtems_initialize_executive directive was invoked.
 Upon completion of executive initialization, interrupts are
 enabled.
 
-If this SPARC implementation supports on-chip caching
+If this PowerPC implementation supports on-chip caching
 and this is to be utilized, then it should be enabled during the
 reset application initialization code.
 
@@ -83,24 +83,24 @@ In addition to the requirements described in the
 Board Support Packages chapter of the @value{LANGUAGE}
 Applications User's Manual for the reset code
 which is executed before the call to
-rtems_initialize executive, the SPARC version has the following
+rtems_initialize executive, the PowrePC version has the following
 specific requirements:
 
 @itemize @bullet
-@item Must leave the S bit of the status register set so that
-the SPARC remains in the supervisor state.
+@item Must leave the PR bit of the machine state  register set so that
+the PowerPC remains in the supervisor state.
 
 @item Must set stack pointer (sp) such that a minimum stack
 size of MINIMUM_STACK_SIZE bytes is provided for the
 rtems_initialize executive directive.
 
-@item Must disable all external interrupts (i.e. set the pil
-to 15).
+@item Must disable all external interrupts (i.e. clear the EI (EE)
+bit of the machine state register).
 
 @item Must enable traps so window overflow and underflow
 conditions can be properly handled.
 
-@item Must initialize the SPARC's initial trap table with at
+@item Must initialize the PowerPC's initial trap table with at
 least trap handlers for register window overflow and register
 window underflow.
 @end itemize
