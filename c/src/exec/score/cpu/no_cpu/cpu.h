@@ -508,11 +508,15 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  8 - 255 would be available for bsp/application specific meaning.
  *  This could be used to manage a programmable interrupt controller
  *  via the rtems_task_mode directive.
+ *
+ *  The get routine usually must be implemented as a subroutine.
  */
 
 #define _CPU_ISR_Set_level( new_level ) \
   { \
   }
+
+unsigned32 _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
