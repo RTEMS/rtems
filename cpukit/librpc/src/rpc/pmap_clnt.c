@@ -66,7 +66,7 @@ pmap_set(program, version, protocol, port)
 	u_long program;
 	u_long version;
 	int protocol;
-	u_short port;
+	int port;    /* was u_short but changed to match prototype */
 {
 	struct sockaddr_in myaddress;
 	int socket = -1;

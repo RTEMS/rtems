@@ -1,3 +1,7 @@
+2002-07-23	Joel Sherrill <joel@OARcorp.com>
+
+	* src/rpc/pmap_clnt.c (pmap_set): Changed prototype to match .h.
+
 2002-07-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/xdr/Makefile.am: Use .$(OBJEXT) instead of .o.
