@@ -295,6 +295,9 @@ sub parse
 		    &printHTML("<P>\[" . ($n+1) . "\] $footnote[$n]</P>\n");
 		}
 	    }
+            &printHTML("<P><HR>\n");
+            &print_arrows;
+            &printHTML("</P>\n");
 	    &print_footer if $footer;
 	    &printHTML("</BODY></HTML>\n");
 	    close (HTML);
@@ -335,6 +338,7 @@ sub parse
 	} elsif ($1 eq 'menu') {
 	    &parse_menu();
 	} elsif ($1 eq 'node') {
+	    $node=$_;
 	    &process_node();
 	} elsif ($1 eq 'printindex') {
 	    /^\@printindex\s+([a-z]+)/;
@@ -766,6 +770,38 @@ sub process_index
 } # process_index
 
 ########################################################################
+sub print_arrows
+{
+    &printHTML("<LINK REL=\"Precedes\" HREF=\"$cnext\">\n") if $next;
+    &printHTML("<LINK REV=\"Precedes\" HREF=\"$cprev\">\n") if $prev;
+    &printHTML("<LINK REV=\"Subdocument\" HREF=\"$cup\">\n") if $up;
+    &printHTML("</HEAD><BODY><P>\n");
+    if ($cprev) {
+        &printHTML("<A HREF=\"$cprev\"><IMG ALIGN=MIDDLE "
+                   . "SRC=\"$icons/prev-arrow.gif\" ALT=\"PREV\"></A>\n");
+    } else {
+        &printHTML("<A><IMG ALIGN=MIDDLE "
+                   . "SRC=\"$icons/missing-arrow.gif\" ALT=\"prev\"></A>\n");
+    }
+    if ($cup) {
+        &printHTML("<A HREF=\"$cup\"> <IMG ALIGN=MIDDLE "
+                   . "SRC=\"$icons/up-arrow.gif\" ALT=\"UP\"></A>\n");
+    } else {
+        &printHTML("<A><IMG ALIGN=MIDDLE "
+                   . "SRC=\"$icons/missing-arrow.gif\" ALT=\"up\"></A>\n");
+    }
+    if ($cnext) {
+        &printHTML("<A HREF=\"$cnext\"><IMG ALIGN=MIDDLE "
+                   . "SRC=\"$icons/next-arrow.gif\" ALT=\"NEXT\"></A>\n");
+    } else {
+        &printHTML("<A><IMG ALIGN=MIDDLE "
+                   . "SRC=\"$icons/missing-arrow.gif\" ALT=\"next\"></A>\n");
+    }
+
+    &printHTML("<CITE>$title</CITE>") if $title;
+}
+
+########################################################################
 sub process_node
 # On entry, $_ is an @node line.
 {
@@ -791,35 +827,11 @@ sub process_node
 	       $origin[$start_index] . " via texi2www -->\n");
     &print_header if $header;
     &printHTML("<HEAD>\n<TITLE>$this</TITLE>\n");
-    &printHTML("<LINK REL=\"Precedes\" HREF=\"$cnext\">\n") if $next;
-    &printHTML("<LINK REV=\"Precedes\" HREF=\"$cprev\">\n") if $prev;
-    &printHTML("<LINK REV=\"Subdocument\" HREF=\"$cup\">\n") if $up;
-    &printHTML("</HEAD><BODY><P>\n");
-    if ($cprev) {
-	&printHTML("<A HREF=\"$cprev\"><IMG ALIGN=MIDDLE "
-		   . "SRC=\"$icons/prev-arrow.gif\" ALT=\"PREV\"></A>\n");
-    } else {
-	&printHTML("<A><IMG ALIGN=MIDDLE "
-		   . "SRC=\"$icons/missing-arrow.gif\" ALT=\"prev\"></A>\n");
-    }
-    if ($cup) {
-	&printHTML("<A HREF=\"$cup\"> <IMG ALIGN=MIDDLE "
-		   . "SRC=\"$icons/up-arrow.gif\" ALT=\"UP\"></A>\n");
-    } else {
-	&printHTML("<A><IMG ALIGN=MIDDLE "
-		   . "SRC=\"$icons/missing-arrow.gif\" ALT=\"up\"></A>\n");
-    }
-    if ($cnext) {
-	&printHTML("<A HREF=\"$cnext\"><IMG ALIGN=MIDDLE "
-		   . "SRC=\"$icons/next-arrow.gif\" ALT=\"NEXT\"></A>\n");
-    } else {
-	&printHTML("<A><IMG ALIGN=MIDDLE "
-		   . "SRC=\"$icons/missing-arrow.gif\" ALT=\"next\"></A>\n");
-    }
-    &printHTML("<CITE>$title</CITE>") if $title;
+    &print_arrows;
     &printHTML("</P>\n");
         
 } # process_node
+
 sub terminate_node
 {
     if ($nfootnotes) {
@@ -828,6 +840,11 @@ sub terminate_node
 	    &printHTML("<P>\[" . ($n+1) . "\] $footnote[$n]</P>\n");
 	}
     }
+
+    
+    &printHTML("<P><HR>\n");
+    &print_arrows;
+    &printHTML("</P>\n");
     &print_footer if $footer;
     &printHTML("</BODY></HTML>\n");
     close (HTML);
