@@ -20,7 +20,7 @@ $(PROJECT_INCLUDE)/libcpu:
 $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
 $(PROJECT_INCLUDE)/libcpu/c_clock.h
 
 #
@@ -29,7 +29,7 @@ $(PROJECT_INCLUDE)/libcpu/c_clock.h
 
 AM_CFLAGS = $(CFLAGS_OS_V)
 
-all-local: ${ARCH} $(c_clock_rel_OBJECTS) $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(PREINSTALL_FILES) $(c_clock_rel_OBJECTS)
 
 EXTRA_DIST = $(C_FILES)
 

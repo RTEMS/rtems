@@ -25,7 +25,7 @@ $(PROJECT_INCLUDE)/libcpu:
 $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu \
 $(PROJECT_INCLUDE)/libcpu/raw_exception.h
 
 #
@@ -37,7 +37,7 @@ AM_CFLAGS = $(CFLAGS_OS_V)
 $(PGM): $(exceptions_rel_OBJECTS)
 	$(make-rel)
 
-all-local: ${ARCH} $(PGM) $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(PREINSTALL_FILES) $(PGM)
 
 EXTRA_DIST = $(C_FILES) $(S_FILES)
 

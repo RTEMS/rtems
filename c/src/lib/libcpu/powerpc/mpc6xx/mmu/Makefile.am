@@ -25,7 +25,7 @@ $(PROJECT_INCLUDE)/libcpu:
 $(PROJECT_INCLUDE)/libcpu/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu $(PROJECT_INCLUDE)/libcpu/bat.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu $(PROJECT_INCLUDE)/libcpu/bat.h
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -36,7 +36,7 @@ AM_CFLAGS = $(CFLAGS_OS_V)
 $(PGM): $(mmu_rel_OBJECTS)
 	$(make-rel)
 
-all-local: ${ARCH} $(PGM) $(TMPINSTALL_FILES)
+all-local: ${ARCH} $(PREINSTALL_FILES) $(PGM)
 
 EXTRA_DIST = $(C_FILES) $(S_FILES)
 
