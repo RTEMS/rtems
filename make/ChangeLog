@@ -1,6 +1,10 @@
 
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
+	* custom/psim.cfg: Removed unused variables.
+
+2001-01-03	Joel Sherrill <joel@OARcorp.com>
+
 	* custom/sim68000.cfg: Corrected CPU model for simcpu32 configuration.
 	* custom/simcpu32.cfg: Removed MVME162 reference.
 
