@@ -91,11 +91,12 @@ timer_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 noinst_DATA += timer$(LIB_VARIANT).rel
 
 if HAS_NETWORKING
+network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 EXTRA_PROGRAMS += network.rel
 CLEANFILES += network.rel
 network_rel_SOURCES = network/netexterns.h network/network.c \
     network/uti596.h
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 EXTRA_PROGRAMS += network_g.rel
