@@ -46,3 +46,4 @@ pkgconfig_DATA = @host_alias@-@RTEMS_BSP@.pc
 DISTCLEANFILES += @host_alias@-@RTEMS_BSP@.pc
 
 include $(top_srcdir)/automake/subdirs.am
+include $(top_srcdir)/automake/local.am
