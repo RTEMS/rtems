@@ -157,13 +157,13 @@ SAPI_EXTERN rtems_multiprocessing_table  *_Configuration_MP_table;
         (_Configuration_Table->user_extension_table)
 
 #define rtems_configuration_get_user_multiprocessing_table() \
-        (_Configuration_Table->user_multiprocessing_table)
+        (_Configuration_Table->User_multiprocessing_table)
 
 #define rtems_configuration_get_rtems_api_configuration() \
-        (_Configuration_Table->rtems_api_configuration)
+        (_Configuration_Table->RTEMS_api_configuration)
 
 #define rtems_configuration_get_posix_api_configuration() \
-        (_Configuration_Table->posix_api_configuration)
+        (_Configuration_Table->POSIX_api_configuration)
 
 #ifdef __cplusplus
 }
