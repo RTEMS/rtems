@@ -338,7 +338,7 @@ sendmsg (int s, const struct msghdr *mp, int flags)
 		if (auio.uio_resid != len && (error == EINTR || error == EWOULDBLOCK))
 			error = 0;
 	}
-	if (error) 
+	if (error)
 		errno = error;
 	else
 		ret = len - auio.uio_resid;
@@ -413,7 +413,7 @@ recvmsg (int s, struct msghdr *mp, int flags)
 	}
 	len = auio.uio_resid;
 	mp->msg_flags = flags;
-	error = soreceive (so, &from, &auio, (struct mbuf **)NULL, 
+	error = soreceive (so, &from, &auio, (struct mbuf **)NULL,
 			mp->msg_control ? &control : (struct mbuf **)NULL,
 			&mp->msg_flags);
 	if (error) {
@@ -449,7 +449,7 @@ recvmsg (int s, struct msghdr *mp, int flags)
 			while (m && (len > 0)) {
 				unsigned int tocopy;
 
-				if (len >= m->m_len) 
+				if (len >= m->m_len)
 					tocopy = m->m_len;
 				else {
 					mp->msg_flags |= MSG_CTRUNC;
@@ -642,13 +642,13 @@ sysctl(int *name, u_int namelen, void *oldp,
   int    error;
 	size_t j;
 
-  rtems_bsdnet_semaphore_obtain ();  
+  rtems_bsdnet_semaphore_obtain ();
   error = userland_sysctl (0, name, namelen, oldp, oldlenp, 1, newp, newlen, &j);
   rtems_bsdnet_semaphore_release ();
 
   if (oldlenp)
     *oldlenp = j;
-  
+
   if (error)
   {
     errno = error;

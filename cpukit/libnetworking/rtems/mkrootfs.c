@@ -2,7 +2,7 @@
   ------------------------------------------------------------------------
   $Id$
   ------------------------------------------------------------------------
-  
+
   Copyright Cybertec Pty Ltd, 2000
   All rights reserved Cybertec Pty Ltd, 2000
 
@@ -11,7 +11,7 @@
 
   The license and distribution terms for this file may be
   found in the file LICENSE in this distribution or at
-  
+
   http://www.rtems.com/license/LICENSE.
 
   This software with is provided ``as is'' and with NO WARRANTY.
@@ -22,7 +22,7 @@
   in RTEMS is the In Memory Filesystem (IMFS). We could copy an exiting
   filesystem to here, how-ever a number of files can have target
   specific initialisation info which we need to write.
-  
+
  */
 
 #include <errno.h>
@@ -81,7 +81,7 @@ rtems_rootfs_mkdir (const char *path_orig, mode_t omode)
     printf ("root fs: mkdir path too long `%s'\n", path);
     return -1;
   }
-    
+
   strcpy (path, path_orig);
   oumask = 0;
   retval = 0;
@@ -174,7 +174,7 @@ rtems_rootfs_file_append (const char *file,
    */
 
   fd = -1;
-  
+
   if (stat(file, &sb))
   {
     if (errno == ENOENT)
@@ -200,14 +200,14 @@ rtems_rootfs_file_append (const char *file,
 
           strncpy (path, file, i);
           path[i] = '\0';
-          
+
           if (rtems_rootfs_mkdir (path, MKDIR_MODE))
             return -1;
           break;
         }
         i--;
       }
-      
+
       if ((fd = open (file, O_CREAT | O_APPEND | O_WRONLY, omode)) < 0)
       {
         printf ("root fs, cannot create file `%s' : %s\n",
@@ -226,7 +226,7 @@ rtems_rootfs_file_append (const char *file,
       return -1;
     }
   }
-  
+
   for (i = 0; i < line_cnt; i++)
   {
     int len = strlen (lines[i]);
@@ -242,7 +242,7 @@ rtems_rootfs_file_append (const char *file,
       }
     }
   }
-  
+
   return close (fd);
 }
 
@@ -261,7 +261,7 @@ rtems_rootfs_append_host_rec (unsigned long cip,
   struct in_addr ip;
 
   ip.s_addr = cip;
-  
+
   if (cname && strlen (cname))
   {
     snprintf (bufp, sizeof (buf), "%s\t\t%s", inet_ntoa (ip), cname);
@@ -272,11 +272,11 @@ rtems_rootfs_append_host_rec (unsigned long cip,
       snprintf (bufp, sizeof (buf), "\t\t%s.%s", cname, dname);
       bufp += strlen (buf);
     }
-    
+
     strcat (buf, "\n");
- 
+
     bufl[0] = buf;
-    
+
     if (rtems_rootfs_file_append ("/etc/hosts", MKFILE_MODE, 1, bufl) < 0)
       return -1;
   }
@@ -298,7 +298,7 @@ rtems_create_root_fs ()
 {
   const char *lines[1];
   int        i;
-  
+
   /*
    * Create the directories.
    */
@@ -314,18 +314,18 @@ rtems_create_root_fs ()
    * The TCP/IP stack likes this one. If DNS does not work
    * use the host file.
    */
-  
+
   lines[0] = "hosts,bind\n";
-  
+
   if (rtems_rootfs_file_append ("/etc/host.conf", MKFILE_MODE, 1, lines))
     return -1;
-  
+
   /*
    * Create a `/etc/hosts' file.
    */
 
   if (rtems_rootfs_append_host_rec (0x7f000001, "localhost", "localdomain"))
     return -1;
-  
+
   return 0;
 }

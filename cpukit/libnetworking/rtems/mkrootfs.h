@@ -2,7 +2,7 @@
   ------------------------------------------------------------------------
   $Id$
   ------------------------------------------------------------------------
-  
+
   Copyright Cybertec Pty Ltd, 2000
   All rights reserved Cybertec Pty Ltd, 2000
 
@@ -11,11 +11,11 @@
 
   The license and distribution terms for this file may be
   found in the file LICENSE in this distribution or at
-  
+
   http://www.rtems.com/license/LICENSE.
 
   This software with is provided ``as is'' and with NO WARRANTY.
-  
+
   ------------------------------------------------------------------------
 
   RTEMS Root FS creatation support.
@@ -30,7 +30,7 @@
 /*
  *  Builds the complete path, like "mkdir -p".
  */
- 
+
 int
 rtems_rootfs_mkdir (const char *path, mode_t omode);
 
@@ -38,7 +38,7 @@ rtems_rootfs_mkdir (const char *path, mode_t omode);
  *  Appends the lines to the a file. Create the file
  *  and builds the path if it does not exist.
  */
- 
+
 int
 rtems_rootfs_file_append (const char *file,
                           mode_t     omode,

@@ -49,7 +49,7 @@ rtems_bsdnet_show_if_stats (void)
 		for (ifa = ifp->if_addrlist ; ifa ; ifa = ifa->ifa_next) {
 
 			if ( !ifa->ifa_addr )
-				continue; 
+				continue;
 
 			switch ( ifa->ifa_addr->sa_family ) {
 				case AF_LINK:

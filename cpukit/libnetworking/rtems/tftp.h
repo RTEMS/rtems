@@ -16,7 +16,7 @@
 
 /*
  * Usage:
- * 
+ *
  * To open `/bootfiles/image' on `hostname' for reading:
  *         fd = open ("/TFTP/hostname/bootfiles/image", O_RDONLY);
  *

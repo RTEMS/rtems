@@ -204,7 +204,7 @@ bsd_init (void)
    * Setup the sysctl, normally done by a SYSINIT call.
    */
   sysctl_register_all(0);
-    
+
 	/*
 	 * Set up interfaces
 	 */
@@ -362,7 +362,7 @@ sbwait(sb)
 	 * The sleep/wakeup synchronization in the FreeBSD
 	 * kernel has no memory.
 	 */
-	rtems_event_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events); 
+	rtems_event_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events);
 
 	/*
 	 * Set this task as the target of the wakeup operation.
@@ -449,7 +449,7 @@ soconnsleep (struct socket *so)
 	 * The sleep/wakeup synchronization in the FreeBSD
 	 * kernel has no memory.
 	 */
-	rtems_event_receive (SOSLEEP_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events); 
+	rtems_event_receive (SOSLEEP_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events);
 
 	/*
 	 * Set this task as the target of the wakeup operation.
@@ -532,7 +532,7 @@ networkDaemon (void *task_argument)
 		ticksPassed = now - ticksWhenCalloutsLastChecked;
 		if (ticksPassed != 0) {
 			ticksWhenCalloutsLastChecked = now;
-			
+
 			c = calltodo.c_next;
 			if (c) {
 				c->c_time -= ticksPassed;
@@ -567,7 +567,7 @@ static void
 taskEntry (rtems_task_argument arg)
 {
 	struct newtask t;
-	
+
 	/*
 	 * Pick up task information and free
 	 * the memory allocated to pass the
@@ -745,7 +745,7 @@ void
 rtems_bsdnet_log (int priority, const char *fmt, ...)
 {
 	va_list args;
-	
+
 	if (priority & rtems_bsdnet_log_priority) {
 		va_start (args, fmt);
 		vprintf (fmt, args);
@@ -875,7 +875,7 @@ rtems_bsdnet_setup (void)
 		}
 
 		/*
-		 * Set interface broadcast address if the interface has the 
+		 * Set interface broadcast address if the interface has the
 		 * broadcast flag set.
 		 */
 		if (rtems_bsdnet_ifconfig (ifp->name, SIOCGIFFLAGS, &flags) < 0) {
@@ -886,7 +886,7 @@ rtems_bsdnet_setup (void)
 			memset (&broadcast, '\0', sizeof broadcast);
 			broadcast.sin_len = sizeof broadcast;
 			broadcast.sin_family = AF_INET;
-			broadcast.sin_addr.s_addr = 
+			broadcast.sin_addr.s_addr =
 					address.sin_addr.s_addr | ~netmask.sin_addr.s_addr;
 			if (rtems_bsdnet_ifconfig (ifp->name, SIOCSIFBRDADDR, &broadcast) < 0) {
 				struct in_addr	in_addr;
@@ -911,7 +911,7 @@ rtems_bsdnet_setup (void)
 		gateway.sin_family = AF_INET;
 		gateway.sin_addr.s_addr = inet_addr (rtems_bsdnet_config.gateway);
 		if (rtems_bsdnet_rtrequest (
-				RTM_ADD, 
+				RTM_ADD,
 				(struct sockaddr *)&address,
 				(struct sockaddr *)&gateway,
 				(struct sockaddr *)&netmask,
@@ -1096,8 +1096,8 @@ int rtems_bsdnet_ifconfig (const char *ifname, uint32_t   cmd, void *param)
 			if ((r = ioctl (s, cmd, &ifreq)) < 0)
 				break;
 			*((int*) param) = ifreq.ifr_media;
-			break;	
-			
+			break;
+
 		case SIOCAIFADDR:
 		case SIOCDIFADDR:
 			r = ioctl(s, cmd, (struct freq *) param);

@@ -19,7 +19,7 @@ typedef	long long		vm_ooffset_t;
 typedef	unsigned int		vm_pindex_t;
 typedef	unsigned int		vm_size_t;
 
-#define _BSD_OFF_T_	int32_t  
+#define _BSD_OFF_T_	int32_t
 #define _BSD_PID_T_	rtems_id
 #define _BSD_VA_LIST_	char *
 

@@ -164,7 +164,7 @@ link_ascii (struct sockaddr_dl *sdl, char *buf, int bufsize)
 	*cp = '\0';
 	return buf;
 }
-		
+
 void
 rtems_bsdnet_show_inet_routes (void)
 {

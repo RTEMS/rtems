@@ -98,7 +98,7 @@ selscan (rtems_id tid, fd_mask **ibits, fd_mask **obits, int nfd, int *retval)
 				if (so == NULL)
 					return (EBADF);
 				if (socket_select (so, flag[msk], tid)) {
-					obits[msk][fd/NFDBITS] |= 
+					obits[msk][fd/NFDBITS] |=
 							(1 << (fd % NFDBITS));
 					n++;
 				}
@@ -144,7 +144,7 @@ select (int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct t
 #undef getbits
 
 	rtems_task_ident (RTEMS_SELF, 0, &tid);
-	rtems_event_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events); 
+	rtems_event_receive (SBWAIT_EVENT, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT, &events);
 	for (;;) {
 		rtems_bsdnet_semaphore_obtain ();
 		error = selscan(tid, ibits, obits, nfds, &retval);
