@@ -16,8 +16,8 @@
  */
 /* @(#)bsp.h       03/15/96     1.1 */
 
-#ifndef __NO_BSP_h
-#define __NO_BSP_h
+#ifndef __P4000_BSP_h
+#define __P4000_BSP_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -108,11 +108,17 @@ extern rtems_configuration_table BSP_Configuration;
 
 #define BSP_LIBIO_MAX_FDS       20
 
-/* functions */
+/* miscellaneous stuff assumed to exist */
+
+int bsp_start(
+  int   argc,
+  char **argv,
+  char **environp
+);
 
 void bsp_cleanup( void );
 
-mips_isr_entry set_vector(                    /* returns old vector */
+mips_isr_entry set_vector(                      /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
   rtems_vector_number vector,                   /* vector number      */
   int                 type                      /* RTEMS or RAW intr  */
