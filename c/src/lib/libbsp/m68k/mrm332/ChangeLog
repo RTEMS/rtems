@@ -1,3 +1,7 @@
+2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* console/sci.c: Remove CVS Log.
+
 2005-01-04	Joel Sherrill <joel@OARcorp.com>
 
 	* console/sci.c: Remove warnings.

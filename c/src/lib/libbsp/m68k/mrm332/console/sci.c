@@ -35,53 +35,6 @@
 *
 * $Id$
 *
-* $Log$
-* Revision 1.8  2004/04/21 16:01:35  ralf
-* Remove duplicate white lines.
-*
-* Revision 1.7  2004/04/21 10:42:52  ralf
-* Remove stray white spaces.
-*
-* Revision 1.6  2004/04/15 13:26:13  ralf
-* Remove stray white spaces.
-*
-* Revision 1.5  2004/03/31 04:37:05  ralf
-* 2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
-*
-* 	* clock/ckinit.c, console/sci.c, console/sci.h, include/bsp.h,
-* 	misc/interr.c, startup/bspstart.c, timer/timer.c: Convert to using
-* 	c99 fixed size types.
-*
-* Revision 1.4  2004/01/07 21:13:50  joel
-* 2004-01-07	Joel Sherrill <joel@OARcorp.com>
-*
-* 	* times, console/sci.c: Remove efi68k and efi332 references as they are
-* 	no longer in the tree.
-*
-* Revision 1.3  2003/01/20 20:33:17  joel
-* 2003-01-20	Duane Gustavus <duane@unt.edu>
-*
-* 	* console/sci.c, include/mrm332.h, startup/linkcmds,
-* 	startup/linkcmds_ROM: Various updates to make this run properly
-* 	from ROM.
-*
-* Revision 1.2  2002/11/04 14:26:47  joel
-* 2002-11-04	Joel Sherrill <joel@OARcorp.com>
-*
-* 	* console/sci.c, spurious/spinit.c: Removed warnings.
-*
-* Revision 1.1  2002/02/28 23:10:39  joel
-* 2002-02-28	Mike Panetta <ahuitzot@mindspring.com>
-*
-* 	* console/sci.c, console/sci.h,
-* 	console/console.c: Added new SCI driver.
-* 	* start/start.c: Removed file.
-* 	* start/start.S: New file, the asm portion of the updated start code.
-* 	* start/configure.am: Added start.S, removed start.c
-* 	* startup/start_c.c: New file, the C portion of the updated start code. 	Contains most of the code that was in the old start.c.
-* 	* startup/configure.am: Added start_c.c to C_FILES.
-* 	* include/bsp.h: Added include <rtems/bspIo.h>
-*
 *****************************************************************************/
 
 
