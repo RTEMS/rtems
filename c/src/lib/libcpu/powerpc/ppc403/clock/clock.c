@@ -20,6 +20,12 @@
  *
  *  Derived from c/src/lib/libcpu/hppa1.1/clock/clock.c:
  *
+ *  Modifications for deriving timer clock from cpu system clock by
+ *              Thomas Doerfler <td@imd.m.isar.de>
+ *  for these modifications:
+ *  COPYRIGHT (c) 1997 by IMD, Puchheim, Germany.
+ *
+ *
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
@@ -133,8 +139,14 @@ void Install_clock(rtems_isr_entry clock_isr)
     Clock_driver_ticks = 0;
  
     asm volatile ("mfdcr %0, 0xa0" : "=r" (iocr)); /* IOCR */
-    iocr &= ~4;
-    iocr |= 4;  /* Select external timer clock */
+
+    if (Cpu_table.timer_internal_clock) {
+	iocr &= ~4; /* timer clocked from system clock */
+    }
+    else {
+	iocr |= 4; /* select external timer clock */
+    }
+
     asm volatile ("mtdcr 0xa0, %0" : "=r" (iocr) : "0" (iocr)); /* IOCR */
  
     asm volatile ("mfspr %0, 0x11f" : "=r" ((pvr))); /* PVR */
@@ -143,7 +155,12 @@ void Install_clock(rtems_isr_entry clock_isr)
       return; /* Not a ppc403 */
  
     if ((pvr & 0xff00) == 0x0000) /* 403GA */
+#if 0 /* FIXME: in which processor versions will "autoload" work properly? */
       auto_restart = (pvr & 0x00f0) > 0x0000 ? 1 : 0;
+#else 
+    /* no known chip version supports auto restart of timer... */
+    auto_restart = 0;
+#endif
     else if ((pvr & 0xff00) == 0x0100) /* 403GB */
       auto_restart = 1;
  
