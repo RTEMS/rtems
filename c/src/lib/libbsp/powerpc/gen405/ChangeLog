@@ -1,5 +1,10 @@
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
+	* include/bsp.h, include/coverhd.h, startup/bspclean.c,
+	startup/setvec.c: URL for license changed.
+
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
 	* startup/bspstart.c: Removed incorrect statement about copyright
 	assignment.
 
