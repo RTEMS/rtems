@@ -1,3 +1,12 @@
+2003-03-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* acinclude.m4: Fix broken comments.
+	Add hidden option --enable-experimental.
+	* README.cdn-X: Update.
+	* configure.ac:	Build tools/build as host and build-host tools to
+	accomodate those BSPs applying packhex in <BSP>.cfg.
+	Build tools/cpu as build-host tools.
+
 2003-03-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* tools/Makefile.am: Remove.
