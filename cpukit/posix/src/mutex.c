@@ -2,6 +2,7 @@
  *  $Id$
  */
 
+#include <assert.h>
 #include <errno.h>
 #include <pthread.h>
 
@@ -131,7 +132,7 @@ int pthread_mutexattr_getpshared(
   int                       *pshared
 )
 {
-  if ( !attr )
+  if ( !attr || attr->is_initialized == FALSE )
     return EINVAL;
 
   *pshared = attr->process_shared;
@@ -148,7 +149,7 @@ int pthread_mutexattr_setpshared(
   int                  pshared
 )
 {
-  if ( !attr )
+  if ( !attr || attr->is_initialized == FALSE )
     return EINVAL;
 
   switch ( pshared ) {
@@ -183,16 +184,18 @@ int pthread_mutex_init(
   if ( attr ) the_attr = attr;
   else        the_attr = &_POSIX_Mutex_Default_attributes;
 
+  if ( !the_attr->is_initialized ) 
+    return EINVAL;
+
   /*
    *  XXX: Be careful about attributes when global!!!
    */
 
+  assert( the_attr->process_shared == PTHREAD_PROCESS_PRIVATE );
+
   if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
     return POSIX_MP_NOT_IMPLEMENTED();
  
-  if ( !the_attr->is_initialized ) 
-    return EINVAL;
-
   /*
    *  Determine the discipline of the mutex
    */
@@ -249,7 +252,7 @@ int pthread_mutex_init(
     OBJECTS_POSIX_MUTEXES,
     the_mutex_attr,
     CORE_MUTEX_UNLOCKED,
-    0                  /* XXX proxy_extract_callout */
+    NULL                      /* proxy_extract_callout */
   );
 
   _Objects_Open( &_POSIX_Mutex_Information, &the_mutex->Object, 0 );
@@ -495,7 +498,7 @@ int pthread_mutexattr_getprotocol(
   int                         *protocol
 )
 {
-  if ( !attr )
+  if ( !attr || attr->is_initialized == FALSE )
     return EINVAL;
 
   *protocol = attr->protocol;
@@ -512,7 +515,7 @@ int pthread_mutexattr_setprioceiling(
   int                    prioceiling
 )
 {
-  if ( !attr )
+  if ( !attr || attr->is_initialized == FALSE )
     return EINVAL;
 
   if ( !_POSIX_Priority_Is_valid( attr->prio_ceiling ) )
@@ -532,7 +535,7 @@ int pthread_mutexattr_getprioceiling(
   int                         *prioceiling
 )
 {
-  if ( !attr )
+  if ( !attr || attr->is_initialized == FALSE )
     return EINVAL;
 
   *prioceiling = attr->prio_ceiling;
@@ -573,7 +576,8 @@ int pthread_mutex_setprioceiling(
     case OBJECTS_ERROR:
       return EINVAL;
     case OBJECTS_REMOTE:
-      return POSIX_MP_NOT_IMPLEMENTED();   /* XXX feels questionable */
+      /*  XXX It feels questionable to set the ceiling on a remote mutex. */
+      return POSIX_MP_NOT_IMPLEMENTED();
       return EINVAL;
     case OBJECTS_LOCAL:
       the_mutex->Mutex.Attributes.priority_ceiling = the_priority;
