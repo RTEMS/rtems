@@ -765,26 +765,6 @@ void _CPU_Initialize_vectors(void);
 	); \
   }
 
-
-#define _CPU_Data_Cache_Block_Flush( _address ) \
-  do { register void *__address = (_address); \
-       register unsigned32 _zero = 0; \
-       asm volatile ( "dcbf %0,%1" : \
-		      "=r" (_zero), "=r" (__address) : \
-                      "0" (_zero), "1" (__address) \
-       ); \
-  } while (0)
-
-#define _CPU_Data_Cache_Block_Invalidate( _address ) \
-  do { register void *__address = (_address); \
-       register unsigned32 _zero = 0; \
-       asm volatile ( "dcbi %0,%1" : \
-		      "=r" (_zero), "=r" (__address) : \
-                      "0" (_zero), "1" (__address) \
-       ); \
-  } while (0)
-
-
 /*
  *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
  *  This indicates the end of an RTEMS critical section.  The parameter

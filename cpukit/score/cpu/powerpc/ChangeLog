@@ -1,3 +1,10 @@
+2002-04-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/score/ppc.h: Remove rtems_multilib.
+	Add mpc555 (Based on comments from Sergei Organov <osv@javad.ru>).
+	* rtems/old-exceptions/cpu.h: Remove _CPU_Data_Cache_Block_Flush.
+	Remove _CPU_Data_Cache_Block_Invalidate.
+
 2002-04-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* asm.h: Include cpuopts.h instead of targopts.h.
