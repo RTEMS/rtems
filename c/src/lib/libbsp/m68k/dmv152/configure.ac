@@ -13,7 +13,7 @@ RTEMS_BSP_CONFIGURE
 
 RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
-
+RTEMS_PROG_CCAS
 
 RTEMS_BSPOPTS_SET([USE_CHANNEL_A],[*],[1])
 RTEMS_BSPOPTS_HELP([USE_CHANNEL_A],
@@ -25,11 +25,5 @@ RTEMS_BSPOPTS_HELP([USE_CHANNEL_B],
 
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-clock/Makefile
-console/Makefile
-spurious/Makefile
-startup/Makefile
-timer/Makefile
-wrapup/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
