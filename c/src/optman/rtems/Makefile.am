@@ -24,8 +24,6 @@ $(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel: $(ARCH)/%.rel
 # (OPTIONAL) Add local stuff here using +=
 #
 
-ASM4FLAGS += -I$(PROJECT_INCLUDE)/rtems
-
 all-local: ${ARCH} $(PGMS) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGMS)

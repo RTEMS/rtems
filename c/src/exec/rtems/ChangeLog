@@ -1,3 +1,10 @@
+2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am, include/rtems/rtems/Makefile.am,
+	inline/rtems/rtems/Makefile.am, macros/rtems/rtems/Makefile.am, 
+	rtems/optman/Makefile.am:
+	Apply include_*HEADERS instead of H_FILES.
+
 2001-01-22	Michael Hamel <mhamel@adi.co.nz>
 
 	* include/rtems.h, src/signalcatch.c: Modifications to make
