@@ -33,9 +33,8 @@ EXTRA_DIST = cache.c cache_.h
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/libcpu/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/libcpu
+	@$(mkdir_p) $(PROJECT_INCLUDE)/libcpu
 	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 
 $(PROJECT_INCLUDE)/libcpu/cache.h: cache.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
