@@ -2,24 +2,20 @@
 
 project_bspdir=$(PROJECT_ROOT)/@RTEMS_BSP@
 
-$(project_bspdir)/tests:
-	@$(mkdir_p) $@
+$(project_bspdir)/tests/$(dirstamp):
+	@$(mkdir_p) $(project_bspdir)/tests
+	@: > $(project_bspdir)/tests/$(dirstamp)
 
-$(project_bspdir)/tests/$(TEST)$(LIB_VARIANT).exe: $(PGM)
+$(project_bspdir)/tests/$(TEST)$(LIB_VARIANT).exe: $(PGM) $(project_bspdir)/tests/$(dirstamp)
 	$(INSTALL_PROGRAM) $< $@
 
-$(project_bspdir)/tests/screens:
-	@$(mkdir_p) $@
+$(project_bspdir)/tests/screens/itrontests/$(dirstamp):
+	@$(mkdir_p) $(project_bspdir)/tests/screens/itrontests
+	@: > $(project_bspdir)/tests/screens/itrontests/$(dirstamp)
 
-$(project_bspdir)/tests/screens/itrontests:
-	@$(mkdir_p) $@
-
-$(project_bspdir)/tests/screens/itrontests/$(TEST).scn: $(TEST).scn
+$(project_bspdir)/tests/screens/itrontests/$(TEST).scn: $(TEST).scn $(project_bspdir)/tests/screens/itrontests/$(dirstamp)
 	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES = \
-$(project_bspdir)/tests \
 $(project_bspdir)/tests/$(TEST)$(LIB_VARIANT).exe \
-$(project_bspdir)/tests/screens \
-$(project_bspdir)/tests/screens/itrontests \
 $(project_bspdir)/tests/screens/itrontests/$(TEST).scn
