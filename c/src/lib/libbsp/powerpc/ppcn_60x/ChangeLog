@@ -1,3 +1,7 @@
+2005-02-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove argument from RTEMS_PPC_EXCEPTIONS.
+
 2005-02-14	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* startup/spurious.c: Merge ppc603 and ppc603e.

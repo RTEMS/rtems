@@ -1,3 +1,7 @@
+2005-02-16	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove argument from RTEMS_PPC_EXCEPTIONS.
+
 2005-02-15	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* flashentry/flashentry.S: #include <rtems/powerpc/powerpc.h>
