@@ -59,7 +59,7 @@ The source file which declares the network configuration
 structures and calls the network initialization function must include
 
 @example
-#include <rtems_bsdnet.h>
+#include <rtems/rtems_bsdnet.h>
 @end example
 
 @subsection Network configuration
