@@ -147,8 +147,10 @@ unsigned32 stack_check_initialized = 0;
 
 void Stack_check_Initialize( void )
 {
+#if 0
   rtems_status_code    status;
   Objects_Id           id_ignored;
+#endif
   unsigned32          *p;
 #if 0
   unsigned32           i;
