@@ -10,12 +10,11 @@ $(project_bspdir)/tests/$(TEST)-node$(NODE)$(LIB_VARIANT).exe: $(PGM) $(project_
 	$(INSTALL_PROGRAM) $< $@
 
 $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp):
-	@$(mkdir_p) $(project_bspdir)/tests/screens/itrontests
+	@$(mkdir_p) $(project_bspdir)/tests/screens/mptests/node$(NODE)
 	@: > $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
 
 $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(TEST).scn: $(TEST).scn $(project_bspdir)/tests/screens/mptests/node$(NODE)/$(dirstamp)
 	$(INSTALL_DATA) $< $@
-
 
 TMPINSTALL_FILES = \
 $(project_bspdir)/tests/$(TEST)-node$(NODE)$(LIB_VARIANT).exe \

@@ -1,5 +1,9 @@
 2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* mptests.am: Fix typos in previous patch.
+
+2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* mptests.am: Add dirstamp support.
 	* mptests/mp01/node1/Makefile.am: Eliminate VPATH.
 	* mptests/mp01/node2/Makefile.am: Eliminate VPATH.
