@@ -268,6 +268,8 @@ void _Thread_Dispatch( void )
     _Thread_Executing = heir;
     _ISR_Enable( level );
 
+    heir->ticks_executed++;
+
     _User_extensions_Thread_switch( executing, heir );
 
     if ( heir->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE )
