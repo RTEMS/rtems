@@ -12,7 +12,7 @@ include_rtems_HEADERS = pty.h telnetd.h
 
 noinst_LIBRARIES += libtelnetd.a
 libtelnetd_a_SOURCES = pty.c pty.h telnetd.c telnetd.h icmds.c
-libtelnetd_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libtelnetd_a_CPPFLAGS = $(AM_CPPFLAGS)
 endif
 
 EXTRA_DIST = README

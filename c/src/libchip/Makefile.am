@@ -20,7 +20,7 @@ include_libchip_HEADERS += ide/ata.h ide/ide_ctrl_cfg.h ide/ide_ctrl.h \
 
 noinst_LIBRARIES += libide.a
 libide_a_SOURCES = ide/ata.c ide/ide_controller.c ide/ata_internal.h
-libide_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libide_a_CPPFLAGS = $(AM_CPPFLAGS)
 endif
 
 # network
@@ -34,7 +34,7 @@ libnetchip_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_LIBRARIES += libnetchip.a
 libnetchip_a_SOURCES = network/cs8900.c network/dec21140.c network/i82586.c \
     network/sonic.c network/if_fxp.c network/elnk.c network/open_eth.c
-libnetchip_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V) \
+libnetchip_a_CPPFLAGS = $(AM_CPPFLAGS) \
     $(libnetchip_CPPFLAGS)
 endif
 endif
@@ -49,7 +49,7 @@ include_libchip_HEADERS += rtc/rtc.h rtc/icm7170.h rtc/m48t08.h \
     rtc/mc146818a.h
 
 noinst_LIBRARIES += librtcio.a
-librtcio_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+librtcio_a_CPPFLAGS = $(AM_CPPFLAGS)
 librtcio_a_SOURCES = rtc/rtcprobe.c rtc/icm7170.c rtc/icm7170_reg.c \
     rtc/icm7170_reg2.c rtc/icm7170_reg4.c rtc/icm7170_reg8.c rtc/m48t08.c \
     rtc/m48t08_reg.c rtc/m48t08_reg2.c rtc/m48t08_reg4.c rtc/m48t08_reg8.c \
@@ -65,7 +65,7 @@ include_libchip_HEADERS += serial/mc68681.h serial/ns16550.h serial/z85c30.h \
     serial/serial.h serial/sersupp.h
 
 noinst_LIBRARIES += libserialio.a
-libserialio_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libserialio_a_CPPFLAGS = $(AM_CPPFLAGS)
 libserialio_a_SOURCES = serial/mc68681.c serial/mc68681_baud.c \
     serial/mc68681_reg.c serial/mc68681_reg2.c serial/mc68681_reg4.c \
     serial/mc68681_reg8.c serial/ns16550.c serial/z85c30.c \
@@ -86,7 +86,7 @@ shmdr_rel_SOURCES = shmdr/addlq.c shmdr/cnvpkt.c shmdr/getlq.c shmdr/dump.c \
     shmdr/fatal.c shmdr/getpkt.c shmdr/init.c shmdr/initlq.c shmdr/intr.c \
     shmdr/mpisr.c shmdr/poll.c shmdr/receive.c shmdr/retpkt.c shmdr/send.c \
     shmdr/setckvec.c
-shmdr_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+shmdr_rel_CPPFLAGS = $(AM_CPPFLAGS)
 shmdr_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

@@ -11,7 +11,7 @@ include_HEADERS = ftpd.h
 
 noinst_LIBRARIES += libftpd.a
 libftpd_a_SOURCES = ftpd.c ftpd.h
-libftpd_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+libftpd_a_CPPFLAGS = $(AM_CPPFLAGS)
 endif
 
 all-local: $(PREINSTALL_FILES)

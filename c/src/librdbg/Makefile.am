@@ -17,7 +17,7 @@ include_rdbgdir = $(includedir)/rdbg
 include_rdbg_HEADERS = include/rdbg/rdbg.h include/rdbg/servrpc.h
 
 noinst_LIBRARIES = librdbg.a
-librdbg_a_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+librdbg_a_CPPFLAGS = $(AM_CPPFLAGS)
 librdbg_a_SOURCES = src/rdbg.c src/servcon.c src/servbkpt.c src/servrpc.c \
     src/excep.c src/servtgt.c src/servtsp.c src/servutil.c src/_servtgt.c \
     src/ptrace.c
