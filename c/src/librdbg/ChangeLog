@@ -1,3 +1,14 @@
+2004-01-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rdbg/Makefile.am: Re-add dirstamps to PRE/TMPINSTALL_FILES.
+	Add PRE/TMPINSTALL_FILES to CLEANFILES.
+	* include/rdbg/i386/Makefile.am: Ditto.
+	* include/rdbg/m68k/Makefile.am: Ditto.
+	* include/rdbg/powerpc/Makefile.am: Ditto.
+	* src/i386/Makefile.am: Ditto.
+	* src/m68k/Makefile.am: Ditto.
+	* src/powerpc/Makefile.am: Ditto.
+
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/i386/Makefile.am: s,${PROJECT_RELEASE}/lib,$(PROJECT_LIB),g.

@@ -13,6 +13,7 @@ PREINSTALL_FILES =
 $(PROJECT_INCLUDE)/rdbg/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rdbg
 	@: > $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rdbg/rdbg_f.h: rdbg_f.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/rdbg_f.h
@@ -21,5 +22,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/rdbg_f.h
 $(PROJECT_INCLUDE)/rdbg/reg.h: reg.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/reg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/reg.h
+
+CLEANFILES = $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

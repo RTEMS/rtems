@@ -90,10 +90,12 @@ all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 EXTRA_DIST += remdeb_f.x $(GEN_C_FILES)
 
 PREINSTALL_FILES =
+TMPINSTALL_FILES =
 
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
+TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/librdbg$(LIB_VARIANT).a: $(ARCH)/librdbg$(LIB_VARIANT).a $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/librdbg$(LIB_VARIANT).a
@@ -102,9 +104,13 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/librdbg$(LIB_VARIANT).a
 $(PROJECT_INCLUDE)/rdbg/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rdbg
 	@: > $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rdbg/remdeb.h: $(srcdir)/new_exception_processing/remdeb.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/remdeb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/remdeb.h
+
+CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am
