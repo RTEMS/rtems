@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 # pieces to pick up out of libcpu/hppa
 CPU_FILES = clock milli timer
