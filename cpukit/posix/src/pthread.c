@@ -450,7 +450,10 @@ int pthread_attr_setstacksize(
   if ( !attr || !attr->is_initialized )
     return EINVAL;
 
-  attr->stacksize = stacksize;
+  if ( stacksize < STACK_MINIMUM_SIZE )
+    attr->stacksize = STACK_MINIMUM_SIZE;
+  else
+    attr->stacksize = stacksize;
   return 0;
 }
  
