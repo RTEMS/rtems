@@ -18,13 +18,14 @@
 
 #include <bsp.h>
 #include <pthread.h>
+#include <assert.h>
 #include <stdio.h>
 
-void Init(
+void *Init(
   void *argument
 );
 
-void Task_1_through_3(
+void *Task_1_through_3(
   void *argument
 );
 

@@ -25,10 +25,12 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-void Init(
+void *Init(
   void *argument
 )
 {
+  int        status;
+  pthread_t  thread_id;
 
   puts( "\n\n*** POSIX TEST 1 ***" );
 
@@ -38,5 +40,12 @@ void Init(
 
   /* exit */
 
+  status = pthread_create( &thread_id, NULL, Task_1_through_3, NULL );
+  assert( !status );
+
   pthread_exit( NULL );
+
+  /* just to satisfy compilers which think we did not return anything */
+
+  return NULL;
 }
