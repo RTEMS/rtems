@@ -1,5 +1,5 @@
 +-----------------------------------------------------------------------------+
-| RTEMS 4.5.0 PC386 BSP HOWTO - 1998/04/21                                    |
+| RTEMS 4.6.0 PC386 BSP HOWTO - 2003/05/08                                    |
 |                                                                             |
 +-----------------------------------------------------------------------------+
 | (C) Copyright 1998 -                                                        |
@@ -16,6 +16,7 @@
 +-----------------------------------------------------------------------------+
 | History:                                                                    |
 |  12 June 2000 - Updated to 4.5 (Joel)                                       |
+|   8 May  2003 - PXE GRUB (Chris Johns)                                      |
 +-----------------------------------------------------------------------------+
 
 CVS Revision: $Id$
@@ -30,7 +31,7 @@ above.
 
     It covers essentially the aspects of loading images, since
 information concerning other issues such as building the development
-tools and the RTEMS distribution can be found in the 'RTEMS 4.0.0
+tools and the RTEMS distribution can be found in the 'RTEMS 4.6.0
 On-Line Library' under 'Getting Started with RTEMS for C/C++ Users'.
 
     Please note that everything in the following text using the
@@ -42,7 +43,7 @@ substituted by the real thing!
 ------------------------------------------------
 
     Obtaining, building and installing the tools for building the
-PC386 BSP of RTEMS is covered in detail in the 'RTEMS 4.5.0 On-Line
+PC386 BSP of RTEMS is covered in detail in the 'RTEMS 4.6.0 On-Line
 Library' -> 'Getting Started with RTEMS for C/C++ Users'.  You can
 either use pre-built toolset executables or build your own from
 the instructions given there.
@@ -54,7 +55,7 @@ This is format used by the i386-rtems target.
 4. Building RTEMS
 -----------------
     Obtaining, building and installing the tools for building the
-PC386 BSP is covered in detail in the 'RTEMS 4.5.0 On-Line Library' ->
+PC386 BSP is covered in detail in the 'RTEMS 4.6.0 On-Line Library' ->
 'Getting Started with RTEMS for C/C++ Users' -> 'Building RTEMS'.
 
     When running configure, use the following values for the listed
@@ -106,31 +107,49 @@ restoring any files, use a command similar to the following:
       zcat <file>.tgz | tar tvf -
 
 
-6.2 Using GRUB to load RTEMS PC386 applications
------------------------------------------------
+6.2 Using GRUB to load RTEMS PC386 applications from Floppy
+-----------------------------------------------------------
 
     Using GRUB (GRand Unified Bootloader) is the simplest way to load
-and run your PC386 BSP samples, tests and programs.
+and run your PC386 BSP samples, tests and programs. You will need to build GRUB
+so you need a working GCC and friends. The online documentation for GRUB lists
+what you need:
+
+    - http://www.gnu.org/manual/grub/html_node/index.html
 
     You can get the latest release of GRUB from its homepage:
 
-    - http://www.gnu.org/grub/
+    - http://www.gnu.org/software/grub/
 
-NOTE: The former location was http://www.uruk.org/grub and ftp from
-      ftp://ftp.uruk.org/public/grub.
+    Once you obtain the .tar.gz archive from:
 
-    Once you obtain the .tar.gz archive 'grub-0.4.tar.gz', change to a
-temporary directory (you won't need the grub files after this and can
-just go ahead and delete the whole directory structure that was
-generated) and unarchive 'grub-0.4.tar.gz' following the instructions
-given above in [2. Unarchiving].
+    - ftp://alpha.gnu.org/gnu/grub/
 
-    After this is done change the directory to:
+Download the lastest version (grub-0.93.tar.gz), change to a temporary
+directory (you won't need the grub files after this and can just go ahead and
+delete the whole directory structure that was generated) and unarchive
+'grub-0.93.tar.gz' following the instructions given above in [2. Unarchiving].
 
-      grub-0.4/bin_std
+      $ cd /tmp
+      $ mkdir grub
+      $ cd grub
+      $ cat grub-0.93.tar.gz | gzip -d | tar xf -
 
-and there you'll find the two files you'll need from this archive:
-'stage1' and 'stage2'.
+after this is done create a build directory and decend into it:
+
+      $ mkdir build
+      $ cd build
+
+then configure GRUB with the standard options:
+
+      $ ../grub-0.93/configure
+
+and if successful run make:
+
+      $ make
+
+    Once complete you should have the 'stage1' and 'stage2' files. They will be
+in the directories with the same name.
 
     You should have two (2) formatted diskettes available. One of
 these will only be used temporarily to create the other one, and we'll
@@ -172,18 +191,20 @@ diskette.
    Execute your OS's equivalent of (this should work for recent
 FreeBSD versions and Linux just fine):
 
-     dd if=stage1 of=/dev/fd0 bs=512 count=1
-     dd if=stage2 of=/dev/fd0 bs=512 seek=1
+     dd if=stage1/stage1 of=/dev/fd0 bs=512 count=1
+     dd if=stage2/stage2 of=/dev/fd0 bs=512 seek=1
 
    Under DOS/Windows/NT, courtesy of Eric Hanchrow (erich@microsoft.com):
 
      * Use the copy /b command to binary concatenate the stage1 and
        stage2 files together via:
 
-         copy /b stage1 stage2 grub.raw
+         copy /b stage1\stage1 stage2\stage2 grub.raw
 
      * Use rawrite.exe (which is available in many places on the net and
        in some Linux distributions) to write grub.raw to a diskette.
+
+(CCJ: I am not sure about the Windows location etc)
 
    Next stage: copy the 'stage1' and 'stage2' files to the 'GRUB FS'
 diskette (if you are using Linux you can mount the diskette in an
@@ -233,7 +254,79 @@ to choose which program you want to load from GRUB's menu.
 directory of the GRUB tree starting with the 'index.html' file.
 
 
-6.3  Using NetBoot to load RTEMS PC386 applications
+6.3 Using GRUB to load RTEMS PC386 applications via PXE NetBoot
+----------------------------------------------------------------
+
+PXE is the Intel Preboot Execution Environment. A number of PC 
+manufactures provide a PXE option in the BIOS. This is usually a 
+Net Boot option in a BIOS configuration screen. The simplist way to 
+load an RTEMS application via PXE is to use GRUB as a first stage 
+loader.
+
+You will need to determine your network card, and have a working
+network with a DHCP (or BOOTP), and TFTP server.
+
+You may to find a TFTP server that does not support option 
+negotiations. A google search shows a number of PC's have a buggy
+PXE loader. Supressing option negotiations seems to make them
+work.
+
+You will need to build GRUB for your network card. Follow the
+procedure in item 6.2 up to the configure point. At this point
+run the following configure command:
+
+    $ ../grub-0.93/configure --enable-diskless --enable-eepro100
+
+for an Etherexpress Pro 100 network card, then run make:
+
+    $ make
+
+    Once complete you should have the 'stage2/pxegrub' file. Copy 
+this to your TFTP server's download directory. Configure your
+DHCP server to provide an IP address and download the image. For
+the ISC server found on operating systems such as Linux something
+like the following should do:
+
+  #
+  # PC loading RTEMS via PXE and GRUB
+  #
+
+  group
+  {
+    filename "/tftpboot/pxeboot";
+    host rtems-pc { hardware ethernet 00:08:c7:73:41:65; }
+  }
+
+If all works your PC should boot and load GRUB over the network:
+
+    GRUB  version 0.93  (639K lower / 64512K upper memory)
+
+  Address: 10.10.10.10
+  NetMask: 255.255.255.0
+  Server: 10.10.10.1
+  Gateway: 10.10.10.1
+
+   [ Minimal BASH-like line editing is supported.  For the first word, TAB
+     lists possible command completions.  Anywhere else TAB lists the possible
+     completions of a device/filename. ]
+
+  grub>
+
+Copy your RTEMS executable to the TFTP server directory then enter 
+the following GRUB commands:
+
+  grub> root (nd)
+    Filesystem type is tftp, using whole disk
+
+  grub> kernel ticker.exe
+     [Multiboot-elf, <0x100000:0x1e5a4:0x2b08>, shtab=0x122140, entry=0x10000c]
+
+  grub> boot
+
+The GRUB documents how to get GRUB to load a configuration file.
+
+
+6.4 Using NetBoot to load RTEMS PC386 applications
 ---------------------------------------------------
 
     To load the '*.bt' files you can
