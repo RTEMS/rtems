@@ -24,6 +24,13 @@ TASK_PIECES=\
   taskmode taskrestart taskresume tasksetnote tasksetpriority \
   taskstart tasksuspend taskwakeafter taskwakewhen
 
+RATEMON_PIECES=\
+  ratemon ratemoncancel ratemoncreate ratemondelete ratemongetstatus \
+  ratemonident ratemonperiod ratemontimeout
+
+INTR_PIECES=\
+  intr intrbody intrcatch
+
 CLOCK_PIECES=\
   clock clockget clockset clocktick
 
@@ -46,10 +53,6 @@ EVENT_PIECES=\
 SIGNAL_PIECES=\
   signal signalcatch signalsend
 
-RATEMON_PIECES=\
-  ratemon ratemoncancel ratemoncreate ratemondelete ratemongetstatus \
-  ratemonident ratemonperiod ratemontimeout
-
 REGION_PIECES=\
   region regioncreate regiondelete regionextend regiongetsegment \
   regiongetsegmentsize regionident regionreturnsegemnt regionreturnsegemnt
@@ -63,7 +66,7 @@ DPMEM_PIECES=\
 
 C_PIECES=\
   attr $(TASK_PIECES) $(RATEMON_PIECES) \
-  intr intrbody \
+  $(INTR_PIECES) \
   $(CLOCK_PIECES) $(TIMER_PIECES) \
   $(SEMAPHORE_PIECES) $(MESSAGE_QUEUE_PIECES) \
   $(EVENT_PIECES) $(SIGNAL_PIECES) \
