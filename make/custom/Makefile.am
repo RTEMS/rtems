@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 rtems_makedir = $(prefix)/make
 rtems_make_customdir = $(rtems_makedir)/custom
