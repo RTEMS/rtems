@@ -1,5 +1,10 @@
 2003-08-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* shmdr/Makefile.am: Reflect having merged configure.ac into
+	../../configure.ac.
+
+2003-08-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Remove (Merged into ../../configure.ac).
 	* Makefile.am: Reflect having merged configure.ac into
 	../../configure.ac.
