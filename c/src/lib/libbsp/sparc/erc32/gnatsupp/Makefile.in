@@ -29,7 +29,7 @@ S_PIECES=
 S_FILES=$(S_PIECES:%=%.S)
 S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
 
-SRCS=linkcmds $(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES)
+SRCS=$(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES)
 OBJS=$(C_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
@@ -61,7 +61,6 @@ ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 
 all:	${ARCH} $(SRCS) $(PGM)
-	$(INSTALL_CHANGE) $(srcdir)/linkcmds ${PROJECT_RELEASE}/lib
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

@@ -15,7 +15,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-BSP_PIECES=startup console clock timer gnat_supp
+BSP_PIECES=startup console clock timer gnatsupp
 # pieces to pick up out of libcpu/sparc
 CPU_PIECES=reg_win
 GENERIC_PIECES=
