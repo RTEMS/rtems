@@ -38,6 +38,6 @@ all-local: $(ARCH) $(OBJS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = bspstart.c imbx8xx.c linkcmds mmutlbtab.c setvec.c
+EXTRA_DIST = bspstart.c imbx8xx.c linkcmds mmutlbtab.c
 
 include $(top_srcdir)/../../../../../../automake/local.am
