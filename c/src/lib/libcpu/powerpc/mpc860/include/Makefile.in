@@ -19,17 +19,21 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-H_FILES = $(wildcard $(srcdir)/*.h)
-SRCS=$(H_FILES)
+H_FILES = $(srcdir)/mpc860.h
+MPC860_H_FILES = $(srcdir)/console.h
+SRCS=$(H_FILES) $(MPC860_H_FILES)
 
 include $(RTEMS_ROOT)/make/custom/${RTEMS_BSP}.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 all:	install
 
-install:
+install: preinstall
+
+preinstall:
 	$(RTEMS_ROOT)/mkinstalldirs $(PROJECT_INCLUDE)/mpc860
-	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)/mpc860
+	$(INSTALL_CHANGE) -m 444 $(H_FILES) $(PROJECT_INCLUDE)
+	$(INSTALL_CHANGE) -m 444 $(MPC860_H_FILES) $(PROJECT_INCLUDE)/mpc860
 
 all: FORCEIT
 	cd ../../../../libbsp/$(RTEMS_CPU)/${RTEMS_BSP}/include; $(MAKE) all
