@@ -71,7 +71,7 @@ tests="$args"
 if [ ! "$tests" ]
 then
      cd $logdir
-     set -- `echo sp?? mp??_? psx?? sp??_g mp??_?_g psx??_g`
+     set -- `ls -1 sp* mp??_? psx* sp*_g mp*_?_g psx*_g 2>/dev/null | grep -v info`
      cd ..
      tests="$*"
 fi
