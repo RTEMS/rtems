@@ -1,3 +1,8 @@
+2004-03-31	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* configure.ac: Explicitly pass --includedir and --libdir to
+	cpukit/configure.
+
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* librdbg/Makefile.am: Fix rpcgen rules.

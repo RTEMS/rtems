@@ -122,7 +122,8 @@ BSP_SUBDIRS=
 RTEMS_BSP_CONFIG_SUBDIR(
   [cpukit],[../../cpukit],
   ['--with-project-root=${with_project_root}../$RTEMS_BSP/' \
-   '--enable-rtemsbsp=$RTEMS_BSP'],
+   '--includedir=${exec_prefix}/${RTEMS_BSP}/lib/include' \
+   '--libdir=${exec_prefix}/${RTEMS_BSP}/lib'],
   [test x"$multilib" = x"no"])
 
 ## Note: the order of the directories below is essential
