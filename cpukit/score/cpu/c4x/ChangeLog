@@ -1,3 +1,7 @@
+2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* Makefile.am: Install c4xio.h to $(includedir)/rtems/c4x.
+
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* Makefile.am: Install asm.h to $(includedir)/rtems.

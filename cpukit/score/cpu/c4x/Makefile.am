@@ -10,7 +10,8 @@ include $(top_srcdir)/../../../automake/compile.am
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = asm.h
 
-include_HEADERS = c4xio.h
+include_rtems_c4xdir = $(includedir)/rtems/c4x
+include_rtems_c4x_HEADERS = c4xio.h
 
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/cpu.h rtems/score/c4x.h \
