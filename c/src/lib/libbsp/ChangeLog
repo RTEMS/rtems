@@ -1,3 +1,8 @@
+2003-12-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bspstart.am: Use .$(OBJEXT) instead of .o.
+	* Makefile.am: Remove shmdr.
+
 2003-12-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bsp.am: Use $(mkdir_p) instead of $(mkinstalldirs).
