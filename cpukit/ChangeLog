@@ -1,3 +1,21 @@
+2004-03-23	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* libcsupport/include/chain.h, libcsupport/include/clockdrv.h, 
+	libcsupport/include/ringbuf.h, libcsupport/include/spurious.h, 
+	libcsupport/include/timerdrv.h, libcsupport/include/vmeintr.h, 
+	libcsupport/include/motorola/mc68230.h, 
+	libcsupport/include/rtems/assoc.h, libcsupport/include/rtems/libio.h,
+	libcsupport/include/rtems/libio_.h,
+	libcsupport/include/rtems/termiostypes.h,
+	libcsupport/include/zilog/z8036.h, libcsupport/include/zilog/z8530.h,
+	libcsupport/include/zilog/z8536.h, libcsupport/src/__gettod.c,
+	libcsupport/src/assoc.c, libcsupport/src/assocnamebad.c,
+	libcsupport/src/error.c,  libcsupport/src/libio.c,
+	libcsupport/src/libio_sockets.c, libcsupport/src/malloc.c,
+	libcsupport/src/no_libc.c, libcsupport/src/termios.c,
+	libcsupport/src/termiosreserveresources.c: Convert to using c99
+	fixed-size types.
+
 2004-03-22	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* libfs/src/dosfs/fat.c, libfs/src/dosfs/fat.h,

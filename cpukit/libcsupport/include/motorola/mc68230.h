@@ -58,7 +58,7 @@
 
 /* Some RTEMS style defines: */
 #ifndef VOL8
-#define VOL8( ptr )   ((volatile rtems_unsigned8 *)(ptr))
+#define VOL8( ptr )   ((volatile uint8_t   *)(ptr))
 #endif
 
 #define MC68230_WRITE( reg, data ) \

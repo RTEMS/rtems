@@ -12,8 +12,8 @@
 
 typedef struct {
     const char   *name;
-    unsigned32   local_value;
-    unsigned32   remote_value;
+    uint32_t     local_value;
+    uint32_t     remote_value;
 } rtems_assoc_t;
 
 /*
@@ -23,20 +23,20 @@ typedef struct {
 #define RTEMS_ASSOC_DEFAULT_NAME "(default)"
 
 const rtems_assoc_t *rtems_assoc_ptr_by_name(const rtems_assoc_t *, const char *);
-const rtems_assoc_t *rtems_assoc_ptr_by_value(const rtems_assoc_t *, unsigned32);
-const rtems_assoc_t *rtems_assoc_ptr_by_remote(const rtems_assoc_t *, unsigned32);
+const rtems_assoc_t *rtems_assoc_ptr_by_value(const rtems_assoc_t *, uint32_t  );
+const rtems_assoc_t *rtems_assoc_ptr_by_remote(const rtems_assoc_t *, uint32_t  );
 
-unsigned32   rtems_assoc_remote_by_local(const rtems_assoc_t *, unsigned32);
-unsigned32   rtems_assoc_local_by_remote(const rtems_assoc_t *, unsigned32);
-unsigned32   rtems_assoc_remote_by_name(const rtems_assoc_t *, const char *);
-unsigned32   rtems_assoc_local_by_name(const rtems_assoc_t *, const char *);
-const char  *rtems_assoc_name_by_local(const rtems_assoc_t *, unsigned32);
-const char  *rtems_assoc_name_by_remote(const rtems_assoc_t *, unsigned32);
+uint32_t     rtems_assoc_remote_by_local(const rtems_assoc_t *, uint32_t  );
+uint32_t     rtems_assoc_local_by_remote(const rtems_assoc_t *, uint32_t  );
+uint32_t     rtems_assoc_remote_by_name(const rtems_assoc_t *, const char *);
+uint32_t     rtems_assoc_local_by_name(const rtems_assoc_t *, const char *);
+const char  *rtems_assoc_name_by_local(const rtems_assoc_t *, uint32_t  );
+const char  *rtems_assoc_name_by_remote(const rtems_assoc_t *, uint32_t  );
 
-unsigned32   rtems_assoc_remote_by_local_bitfield(const rtems_assoc_t *, unsigned32);
-char  *rtems_assoc_name_by_local_bitfield(const rtems_assoc_t *, unsigned32, char *);
-char  *rtems_assoc_name_by_remote_bitfield(const rtems_assoc_t *, unsigned32, char *);
-unsigned32   rtems_assoc_local_by_remote_bitfield(const rtems_assoc_t *, unsigned32);
+uint32_t     rtems_assoc_remote_by_local_bitfield(const rtems_assoc_t *, uint32_t  );
+char  *rtems_assoc_name_by_local_bitfield(const rtems_assoc_t *, uint32_t  , char *);
+char  *rtems_assoc_name_by_remote_bitfield(const rtems_assoc_t *, uint32_t  , char *);
+uint32_t     rtems_assoc_local_by_remote_bitfield(const rtems_assoc_t *, uint32_t  );
 
 
 #endif /* ! _INCLUDE_ASSOC_H */

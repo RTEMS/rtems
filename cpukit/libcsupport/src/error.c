@@ -108,7 +108,7 @@ rtems_status_text(
 
 
 static int rtems_verror(
-    unsigned32   error_flag,
+    uint32_t     error_flag,
     const char   *printf_format,
     va_list      arglist
 )

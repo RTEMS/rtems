@@ -49,8 +49,8 @@ int gettimeofday(
 )
 {
   rtems_interrupt_level level;
-  rtems_unsigned32      seconds;
-  rtems_unsigned32      microseconds;
+  uint32_t        seconds;
+  uint32_t        microseconds;
 
   if ( !tp ) {
     errno = EFAULT;

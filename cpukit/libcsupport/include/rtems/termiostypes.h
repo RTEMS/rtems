@@ -90,7 +90,7 @@ struct rtems_termios_tty {
 	 * Raw input character buffer
 	 */
         struct rtems_termios_rawbuf rawInBuf;
-	rtems_unsigned32	rawInBufSemaphoreOptions;
+	uint32_t  	rawInBufSemaphoreOptions;
 	rtems_interval		rawInBufSemaphoreTimeout;
 	rtems_interval		rawInBufSemaphoreFirstTimeout;
 	unsigned int		rawInBufDropped;	/* Statistics */

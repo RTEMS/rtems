@@ -38,7 +38,7 @@ rtems_assoc_ptr_by_name(
 const rtems_assoc_t *
 rtems_assoc_ptr_by_local(
     const rtems_assoc_t *ap,
-    unsigned32     local_value
+    uint32_t       local_value
   )
 {
     const rtems_assoc_t *default_ap = 0;
@@ -57,7 +57,7 @@ rtems_assoc_ptr_by_local(
 const rtems_assoc_t *
 rtems_assoc_ptr_by_remote(
     const rtems_assoc_t *ap,
-    unsigned32     remote_value
+    uint32_t       remote_value
   )
 {
     const rtems_assoc_t *default_ap = 0;
@@ -77,10 +77,10 @@ rtems_assoc_ptr_by_remote(
  * Get values
  */
 
-unsigned32
+uint32_t  
 rtems_assoc_remote_by_local(
     const rtems_assoc_t *ap,
-    unsigned32     local_value
+    uint32_t       local_value
   )
 {
     const rtems_assoc_t *nap;
@@ -91,10 +91,10 @@ rtems_assoc_remote_by_local(
     return 0;
 }
 
-unsigned32
+uint32_t  
 rtems_assoc_local_by_remote(
     const rtems_assoc_t *ap,
-    unsigned32     remote_value
+    uint32_t       remote_value
   )
 {
     const rtems_assoc_t *nap;
@@ -105,7 +105,7 @@ rtems_assoc_local_by_remote(
     return 0;
 }
 
-unsigned32
+uint32_t  
 rtems_assoc_remote_by_name(
     const rtems_assoc_t *ap,
     const char          *name
@@ -119,7 +119,7 @@ rtems_assoc_remote_by_name(
     return 0;
 }
 
-unsigned32
+uint32_t  
 rtems_assoc_local_by_name(
     const rtems_assoc_t *ap,
     const char          *name
@@ -139,7 +139,7 @@ rtems_assoc_local_by_name(
  */
 
 const char *rtems_assoc_name_bad(
-    unsigned32 bad_value
+    uint32_t   bad_value
 );
 
 /* body in separate file to reduce dependency on printf */
@@ -148,7 +148,7 @@ const char *rtems_assoc_name_bad(
 const char *
 rtems_assoc_name_by_local(
     const rtems_assoc_t *ap,
-    unsigned32     local_value
+    uint32_t       local_value
   )
 {
     const rtems_assoc_t *nap;
@@ -162,7 +162,7 @@ rtems_assoc_name_by_local(
 const char *
 rtems_assoc_name_by_remote(
     const rtems_assoc_t *ap,
-    unsigned32     remote_value
+    uint32_t       remote_value
   )
 {
     const rtems_assoc_t *nap;
@@ -178,13 +178,13 @@ rtems_assoc_name_by_remote(
  *      entries; they do not check for this.
  */
 
-unsigned32 rtems_assoc_remote_by_local_bitfield(
+uint32_t   rtems_assoc_remote_by_local_bitfield(
     const rtems_assoc_t *ap,
-    unsigned32     local_value
+    uint32_t       local_value
   )
 {  
-    unsigned32 b;
-    unsigned32 remote_value = 0;
+    uint32_t   b;
+    uint32_t   remote_value = 0;
 
     for (b = 1; b; b <<= 1)
         if (b & local_value)
@@ -194,13 +194,13 @@ unsigned32 rtems_assoc_remote_by_local_bitfield(
 }
 
 
-unsigned32 rtems_assoc_local_by_remote_bitfield(
+uint32_t   rtems_assoc_local_by_remote_bitfield(
     const rtems_assoc_t *ap,
-    unsigned32     remote_value
+    uint32_t       remote_value
   )
 {  
-    unsigned32 b;
-    unsigned32 local_value = 0;
+    uint32_t   b;
+    uint32_t   local_value = 0;
 
     for (b = 1; b; b <<= 1)
         if (b & remote_value)
@@ -212,11 +212,11 @@ unsigned32 rtems_assoc_local_by_remote_bitfield(
 char *
 rtems_assoc_name_by_remote_bitfield(
     const rtems_assoc_t *ap,
-    unsigned32     value,
+    uint32_t       value,
     char          *buffer
   )
 {  
-    unsigned32 b;
+    uint32_t   b;
 
     *buffer = 0;
 
@@ -234,11 +234,11 @@ rtems_assoc_name_by_remote_bitfield(
 char *
 rtems_assoc_name_by_local_bitfield(
     const rtems_assoc_t *ap,
-    unsigned32     value,
+    uint32_t       value,
     char          *buffer
   )
 {  
-    unsigned32 b;
+    uint32_t   b;
 
     *buffer = 0;
 

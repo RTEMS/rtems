@@ -39,7 +39,7 @@ extern rtems_filesystem_file_handlers_r  rtems_filesystem_null_handlers;
  *  File descriptor Table Information
  */
 
-extern unsigned32      rtems_libio_number_iops;
+extern uint32_t        rtems_libio_number_iops;
 extern rtems_libio_t  *rtems_libio_iops;
 extern rtems_libio_t  *rtems_libio_last_iop;
 extern rtems_libio_t *rtems_libio_iop_freelist;
@@ -51,7 +51,7 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
  */
 
 #define rtems_libio_iop(_fd) \
-  ((((unsigned32)(_fd)) < rtems_libio_number_iops) ? \
+  ((((uint32_t  )(_fd)) < rtems_libio_number_iops) ? \
          &rtems_libio_iops[_fd] : 0)
 
 /*
@@ -86,7 +86,7 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
 
 #define rtems_libio_check_fd(_fd) \
   do {                                                     \
-      if ((unsigned32) (_fd) >= rtems_libio_number_iops) { \
+      if ((uint32_t  ) (_fd) >= rtems_libio_number_iops) { \
           errno = EBADF;                                   \
           return -1;                                       \
       }                                                    \
@@ -206,12 +206,12 @@ rtems_status_code rtems_libio_share_private_env(rtems_id task_id) ;
 
 rtems_libio_t *rtems_libio_allocate(void);
 
-unsigned32 rtems_libio_fcntl_flags(
-  unsigned32 fcntl_flags
+uint32_t   rtems_libio_fcntl_flags(
+  uint32_t   fcntl_flags
 );
 
-unsigned32 rtems_libio_to_fcntl_flags(
-  unsigned32 flags
+uint32_t   rtems_libio_to_fcntl_flags(
+  uint32_t   flags
 );
 
 void rtems_libio_free(

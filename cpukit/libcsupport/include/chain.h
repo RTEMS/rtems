@@ -28,8 +28,8 @@
  *
  *  Chain_Control                    *the_chain,		 * IN  * 
  *  void                             *starting_address,		 * IN  * 
- *  rtems_unsigned32                  number_nodes,		 * IN  * 
- *  rtems_unsigned32                  node_size			 * IN  * 
+ *  uint32_t                    number_nodes,		 * IN  * 
+ *  uint32_t                    node_size			 * IN  * 
  */
 
 #define Chain_Initialize( the_chain, starting_address, \

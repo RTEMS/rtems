@@ -32,7 +32,7 @@ typedef struct {
 
 #define Ring_buffer_Add_character( _buffer, _ch ) \
   do { \
-    rtems_unsigned32 isrlevel; \
+    uint32_t   isrlevel; \
     \
     rtems_interrupt_disable( isrlevel ); \
       (_buffer)->tail = ((_buffer)->tail+1) % RINGBUF_QUEUE_LENGTH; \
@@ -42,7 +42,7 @@ typedef struct {
 
 #define Ring_buffer_Remove_character( _buffer, _ch ) \
   do { \
-    rtems_unsigned32 isrlevel; \
+    uint32_t   isrlevel; \
     \
     rtems_interrupt_disable( isrlevel ); \
       (_buffer)->head = ((_buffer)->head+1) % RINGBUF_QUEUE_LENGTH; \

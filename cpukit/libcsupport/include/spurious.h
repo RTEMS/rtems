@@ -27,7 +27,7 @@ rtems_device_driver Spurious_Initialize(
   rtems_device_minor_number,
   void *,
   rtems_id,
-  rtems_unsigned32 *
+  uint32_t   *
 );
 
 #ifdef __cplusplus

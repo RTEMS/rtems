@@ -30,7 +30,7 @@ extern "C" {
  *
  */
 
-typedef rtems_unsigned8 VME_interrupt_Mask;
+typedef uint8_t   VME_interrupt_Mask;
 
 /*
  *  VME_interrupt_Disable

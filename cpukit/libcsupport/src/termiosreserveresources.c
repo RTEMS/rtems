@@ -16,7 +16,7 @@ static int first_time;   /* assumed to be zeroed by BSS initialization */
 
 void rtems_termios_reserve_resources (
   rtems_configuration_table *configuration,
-  rtems_unsigned32           number_of_devices
+  uint32_t             number_of_devices
 )
 {
 #if 0

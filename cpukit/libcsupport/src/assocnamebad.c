@@ -25,7 +25,7 @@
 
 const char *
 rtems_assoc_name_bad(
-    unsigned32 bad_value
+    uint32_t   bad_value
 )
 {
 #ifdef RTEMS_DEBUG

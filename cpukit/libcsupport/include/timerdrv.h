@@ -23,7 +23,7 @@ extern "C" {
 
 void Timer_initialize( void );
 
-rtems_unsigned32 Read_timer( void );
+uint32_t   Read_timer( void );
 
 rtems_status_code Empty_function( void );
 

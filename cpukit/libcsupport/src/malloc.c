@@ -49,14 +49,14 @@ size_t RTEMS_Malloc_Sbrk_amount;
 #define MSBUMP(f,n)    rtems_malloc_stats.f += (n)
 
 struct {
-    unsigned32  space_available;             /* current size of malloc area */
-    unsigned32  malloc_calls;                /* # calls to malloc */
-    unsigned32  free_calls;
-    unsigned32  realloc_calls;
-    unsigned32  calloc_calls;
-    unsigned32  max_depth;		     /* most ever malloc'd at 1 time */
-    unsigned64  lifetime_allocated;
-    unsigned64  lifetime_freed;
+    uint32_t    space_available;             /* current size of malloc area */
+    uint32_t    malloc_calls;                /* # calls to malloc */
+    uint32_t    free_calls;
+    uint32_t    realloc_calls;
+    uint32_t    calloc_calls;
+    uint32_t    max_depth;		     /* most ever malloc'd at 1 time */
+    uint64_t    lifetime_allocated;
+    uint64_t    lifetime_freed;
 } rtems_malloc_stats;
 
 #else			/* No rtems_malloc_stats */
@@ -71,8 +71,8 @@ void RTEMS_Malloc_Initialize(
 {
   rtems_status_code   status;
   void               *starting_address;
-  rtems_unsigned32    old_address;
-  rtems_unsigned32    u32_address;
+  uint32_t      old_address;
+  uint32_t      u32_address;
 
   /*
    *  Initialize the garbage collection list to start with nothing on it.
@@ -91,7 +91,7 @@ void RTEMS_Malloc_Initialize(
   if (!starting_address) {
     u32_address = (unsigned int)sbrk(length);
 
-    if (u32_address == (rtems_unsigned32) -1) {
+    if (u32_address == (uint32_t  ) -1) {
       rtems_fatal_error_occurred( RTEMS_NO_MEMORY );
       /* DOES NOT RETURN!!! */
     }
@@ -156,8 +156,8 @@ void *malloc(
 {
   void              *return_this;
   void              *starting_address;
-  rtems_unsigned32   the_size;
-  rtems_unsigned32   sbrk_amount;
+  uint32_t     the_size;
+  uint32_t     sbrk_amount;
   rtems_status_code  status;
   Chain_Node        *to_be_freed;
 
@@ -212,8 +212,8 @@ void *malloc(
 
     the_size = ((size + sbrk_amount) / sbrk_amount * sbrk_amount);
 
-    if (((rtems_unsigned32)starting_address = (void *)sbrk(the_size)) 
-            == (rtems_unsigned32) -1)
+    if (((uint32_t  )starting_address = (void *)sbrk(the_size)) 
+            == (uint32_t  ) -1)
       return (void *) 0;
 
     status = rtems_region_extend(
@@ -245,8 +245,8 @@ void *malloc(
 #ifdef MALLOC_STATS
   if (return_this)
   {
-      unsigned32 actual_size;
-      unsigned32 current_depth;
+      uint32_t   actual_size;
+      uint32_t   current_depth;
       status = rtems_region_get_segment_size(
                    RTEMS_Malloc_Heap, return_this, &actual_size);
       MSBUMP(lifetime_allocated, actual_size);
@@ -289,7 +289,7 @@ void *realloc(
   size_t size
 )
 {
-  rtems_unsigned32  old_size;
+  uint32_t    old_size;
   rtems_status_code status;
   char *new_area;
 
@@ -369,7 +369,7 @@ void free(
  
 #ifdef MALLOC_STATS
   {
-      unsigned32        size;
+      uint32_t          size;
       status = rtems_region_get_segment_size( RTEMS_Malloc_Heap, ptr, &size );
       if ( status == RTEMS_SUCCESSFUL ) {
           MSBUMP(lifetime_freed, size);
@@ -395,7 +395,7 @@ void free(
 
 void malloc_dump(void)
 {
-    unsigned32 allocated = rtems_malloc_stats.lifetime_allocated -
+    uint32_t   allocated = rtems_malloc_stats.lifetime_allocated -
                      rtems_malloc_stats.lifetime_freed;
 
     printf("Malloc stats\n");
@@ -407,8 +407,8 @@ void malloc_dump(void)
            (allocated * 100) / rtems_malloc_stats.space_available,
            (unsigned int) rtems_malloc_stats.max_depth / 1024,
            (rtems_malloc_stats.max_depth * 100) / rtems_malloc_stats.space_available,
-           (unsigned64) rtems_malloc_stats.lifetime_allocated / 1024,
-           (unsigned64) rtems_malloc_stats.lifetime_freed / 1024);
+           (uint64_t  ) rtems_malloc_stats.lifetime_allocated / 1024,
+           (uint64_t  ) rtems_malloc_stats.lifetime_freed / 1024);
     printf("  Call counts:   malloc:%d   free:%d   realloc:%d   calloc:%d\n",
            rtems_malloc_stats.malloc_calls,
            rtems_malloc_stats.free_calls,

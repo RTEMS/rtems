@@ -35,7 +35,7 @@ void libc_suspend_main(void)
 
 
 void libc_global_exit(
-  rtems_unsigned32 code
+  uint32_t   code
 )
 {
 }

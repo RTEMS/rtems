@@ -48,8 +48,8 @@ typedef int rtems_filesystem_node_types_t;
 typedef int (*rtems_filesystem_open_t)(
   rtems_libio_t *iop,
   const char    *pathname,
-  unsigned32     flag,
-  unsigned32     mode
+  uint32_t       flag,
+  uint32_t       mode
 );
 
 typedef int (*rtems_filesystem_close_t)(
@@ -59,18 +59,18 @@ typedef int (*rtems_filesystem_close_t)(
 typedef ssize_t (*rtems_filesystem_read_t)(
   rtems_libio_t *iop,
   void          *buffer,
-  unsigned32     count
+  uint32_t       count
 );
 
 typedef ssize_t (*rtems_filesystem_write_t)(
   rtems_libio_t *iop,
   const void    *buffer,
-  unsigned32    count
+  uint32_t      count
 );
 
 typedef int (*rtems_filesystem_ioctl_t)(
   rtems_libio_t *iop,
-  unsigned32     command,
+  uint32_t       command,
   void          *buffer
 );
 
@@ -340,10 +340,10 @@ struct rtems_libio_tt {
     rtems_driver_name_t              *driver;
     off_t                             size;      /* size of file */
     off_t                             offset;    /* current offset into file */
-    unsigned32                        flags;
+    uint32_t                          flags;
     rtems_filesystem_location_info_t  pathinfo;
     Objects_Id                        sem;      
-    unsigned32                        data0;     /* private to "driver" */
+    uint32_t                          data0;     /* private to "driver" */
     void                             *data1;     /* ... */
     void                             *file_info; /* used by file handlers */
     rtems_filesystem_file_handlers_r *handlers;  /* type specific handlers */
@@ -358,10 +358,10 @@ struct rtems_libio_tt {
 typedef struct {
     rtems_libio_t          *iop;
     off_t                   offset;
-    unsigned8              *buffer;
-    unsigned32              count;
-    unsigned32              flags;
-    unsigned32              bytes_moved;
+    uint8_t                *buffer;
+    uint32_t                count;
+    uint32_t                flags;
+    uint32_t                bytes_moved;
 } rtems_libio_rw_args_t;
 
 /*
@@ -370,8 +370,8 @@ typedef struct {
 
 typedef struct {
     rtems_libio_t          *iop;
-    unsigned32              flags;
-    unsigned32              mode;
+    uint32_t                flags;
+    uint32_t                mode;
 } rtems_libio_open_close_args_t;
 
 /*
@@ -380,9 +380,9 @@ typedef struct {
 
 typedef struct {
     rtems_libio_t          *iop;
-    unsigned32              command;
+    uint32_t                command;
     void                   *buffer;
-    unsigned32              ioctl_return;
+    uint32_t                ioctl_return;
 } rtems_libio_ioctl_args_t;
 
 /*
@@ -406,8 +406,8 @@ void rtems_libio_init(void);
 
 typedef int (*rtems_libio_open_t)(
   const char  *pathname,
-  unsigned32  flag,
-  unsigned32  mode
+  uint32_t    flag,
+  uint32_t    mode
 );
 
 typedef int (*rtems_libio_close_t)(
@@ -417,18 +417,18 @@ typedef int (*rtems_libio_close_t)(
 typedef int (*rtems_libio_read_t)(
   int         fd,
   void       *buffer,
-  unsigned32  count
+  uint32_t    count
 );
 
 typedef int (*rtems_libio_write_t)(
   int         fd,
   const void *buffer,
-  unsigned32  count
+  uint32_t    count
 );
 
 typedef int (*rtems_libio_ioctl_t)(
   int         fd,
-  unsigned32  command,
+  uint32_t    command,
   void       *buffer
 );
 
@@ -601,7 +601,7 @@ int rtems_termios_dequeue_characters(
 
 void rtems_termios_reserve_resources(
   rtems_configuration_table *configuration,
-  rtems_unsigned32           number_of_devices
+  uint32_t             number_of_devices
 );
 
 int unmount(

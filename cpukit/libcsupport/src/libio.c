@@ -48,7 +48,7 @@
  *  File descriptor Table Information
  */         
 
-extern unsigned32  rtems_libio_number_iops;
+extern uint32_t    rtems_libio_number_iops;
 rtems_id           rtems_libio_semaphore;
 rtems_libio_t     *rtems_libio_iops;
 rtems_libio_t     *rtems_libio_iop_freelist;
@@ -121,12 +121,12 @@ rtems_assoc_t status_flags_assoc[] = {
   { 0, 0, 0 },
 };
 
-unsigned32 rtems_libio_fcntl_flags(
-  unsigned32 fcntl_flags
+uint32_t   rtems_libio_fcntl_flags(
+  uint32_t   fcntl_flags
 )
 {
-  unsigned32 flags = 0;
-  unsigned32 access_modes;
+  uint32_t   flags = 0;
+  uint32_t   access_modes;
 
   /*
    * Access mode is a small integer
@@ -151,11 +151,11 @@ unsigned32 rtems_libio_fcntl_flags(
  *  Convert RTEMS internal flags to UNIX fnctl(2) flags
  */
 
-unsigned32 rtems_libio_to_fcntl_flags(
-  unsigned32 flags
+uint32_t   rtems_libio_to_fcntl_flags(
+  uint32_t   flags
 )
 {
-  unsigned32 fcntl_flags = 0;
+  uint32_t   fcntl_flags = 0;
 
   if ( (flags & LIBIO_FLAGS_READ_WRITE) == LIBIO_FLAGS_READ_WRITE ) {
     fcntl_flags |= O_RDWR;

@@ -29,7 +29,7 @@ extern "C" {
 
 /* macros */
 
-#define VOL8( ptr )   ((volatile rtems_unsigned8 *)(ptr))
+#define VOL8( ptr )   ((volatile uint8_t   *)(ptr))
 
 #define Z8x36_STATE0 ( z8536 ) \
   { char *garbage; \
