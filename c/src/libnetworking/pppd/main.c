@@ -273,7 +273,7 @@ char *argv[];
 	UnlockSTBSystemParam();
 #endif
 /* initialize DNS services here */
-	 SetStatusInfo(0, "Nawi¹zujê po³¹czenie...",0);
+	 SetStatusInfo(0, "Connecting...",0);
 
 	__res_init();
 		/*
@@ -330,10 +330,11 @@ char *argv[];
 
 		if ((i=connect_script(ttyfd)) >0) {
 /* here go error messages ... */
-		static char *bledy_ppp[]={"B³êdny skrypt","B³¹d wejœcia/wyjœcia","Przekroczenie limitu czasowego","Numer zajêty","Brak sygna³u wybierania numeru","Brak sygna³u",
-									"Brak odpowiedzi","Brak odpowiedzi serwera"};
+		static char *error_msgs[]={ "Bad script", "IO Error"
+		 	"Timeout", "Busy", "No dialtone", "No carrier",
+			"No answer", "No answer from server" };
 			setdtr(ttyfd, FALSE);
-	    	sprintf(t,"Po³¹czenie nieudane : %s",bledy_ppp[i-1]);
+	    	sprintf(t,"Communication error: %s",error_msgs[i-1]);
 		syslog(LOG_ERR, "Connect script failed");
 	    	SetStatusInfo(0, t,1);
 			goto fail;
