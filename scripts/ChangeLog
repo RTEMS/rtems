@@ -1,3 +1,8 @@
+2005-02-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* gcc3newlib/gccnewlib.add, gcc3newlib/mkspec.in, setup.def:
+	Add gcc_suffix. Add newlib_suffix.
+
 2005-02-16	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* autotools/automake-rtems.spec.in: automake-1.9.5.

@@ -17,7 +17,7 @@ Packager:     	ralf.corsepius@rtems.org and joel@OARcorp.com
 Version:      	gcc%{gcc_version}newlib%{newlib_version}
 
 %if "%{gcc_version}" >= "3.2.2"
-Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.bz2
+Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}@gcc_suffix@
 %else
 %if "%{gcc_version}" >= "3.0"
 Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.gz
@@ -25,7 +25,7 @@ Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar
 Source0: ftp://ftp.gnu.org/pub/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}-everything.tar.gz
 %endif
 %endif
-Source1:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}.tar.gz
+Source1:	ftp://sources.redhat.com/pub/newlib/newlib-%{newlib_version}@newlib_suffix@
 @PATCH1@
 @PATCH3@
 BuildPreReq:	texinfo >= 4.2
@@ -65,9 +65,9 @@ NoSource:	1
 %endif
 
 
-%define build_cxx 	1
-%define build_g77 	0
-%define build_objc	0
+%define build_cxx 	%{?cxx:%cxx}%{!?cxx:1}
+%define build_g77 	%{?g77:%g77}%{!?g77:0}
+%define build_objc	%{?objc:%objc}%{!?objc:0}
 %define build_gcj	0
 %define build_gnat	0
 

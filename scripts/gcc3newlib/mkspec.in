@@ -75,6 +75,8 @@ sed -e "s,@PATCH1\@,${PATCH1}," \
     -e "s,@rpm_build_root\@,${rpm_build_root},g" \
     -e "s%@gcc_version\@%${gcc3_version}%g" \
     -e "s%@gcc_patch_version\@%${gcc3_patch_version}%g" \
+    -e "s%@gcc_suffix\@%${gcc3_suffix}%g" \
     -e "s%@newlib_version\@%${gcc3newlib_version}%g" \
     -e "s%@newlib_patch_version\@%${gcc3newlib_patch_version}%g" \
+    -e "s%@newlib_suffix\@%${gcc3newlib_suffix}%g" \
 < ${specsrc} 
