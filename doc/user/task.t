@@ -1586,7 +1586,7 @@ procedure Task_Wake_When (
 
 @subheading DIRECTIVE STATUS CODES:
 @code{@value{RPREFIX}SUCCESSFUL} - awakened at date/time successfully@*
-@code{INVALID_TIME_OF_DAY} - invalid time buffer@*
+@code{@value{RPREFIX}INVALID_TIME_OF_DAY} - invalid time buffer@*
 @code{@value{RPREFIX}NOT_DEFINED} - system date and time is not set
 
 @subheading DESCRIPTION:
