@@ -98,8 +98,8 @@ SECTIONS
   PROVIDE (__fini_array_end = .);
 
 _SDA2_BASE_ = __SDATA2_START__ + 0x8000;
-  .sdata2   	  : { *(.sdata2) *(.gnu.linkonce.s2.*)	} >CODE
-  .sbss2   	  : { *(.sbss2) *(.gnu.linkonce.sb2.*)	} >CODE
+  .sdata2         : { *(.sdata2 .sdata2.* .gnu.linkonce.s2.*) } >CODE
+  .sbss2          : { *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*) } >CODE
   .eh_frame	  : { *.(eh_frame)		} >CODE
 
   /* NOTE: if the BSP uses page tables, the correctness of
@@ -198,9 +198,9 @@ _SDA_BASE_ = __SDATA_START__ + 0x8000;
   .sbss      :
   {
     PROVIDE (__sbss_start = .);
-    *(.sbss)
-    *(.scommon)
     *(.dynsbss)
+    *(.sbss .sbss.* .gnu.linkonce.sb.*)
+    *(.scommon)
     PROVIDE (__sbss_end = .);
   } > CODE
   .plt   : { *(.plt) }	> CODE
@@ -208,7 +208,7 @@ _SDA_BASE_ = __SDATA_START__ + 0x8000;
   {
    PROVIDE (__bss_start = .);
    *(.dynbss)
-   *(.bss)
+   *(.bss .bss.* .gnu.linkonce.b.*)
    *(COMMON)
   . = ALIGN(16);
   } > CODE

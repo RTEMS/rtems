@@ -1,3 +1,7 @@
+2004-11-17	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/linkcmds: Add sections required by gcc 3.3.x so it will link.
+
 2004-11-16	Richard Campbell <richard.campbell@OARcorp.com>
 
 	* README.MVME2100: Update to include DBAT0.
