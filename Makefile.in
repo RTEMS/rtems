@@ -1,0 +1,99 @@
+#
+# top level directory for RTEMS build tree
+#
+# Modified by Jiri to implement autoconf and cygnus one-tree build
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+libdir = @libdir@
+includedir = @includedir@
+target = @target@
+manext = 1
+mandir = @mandir@/man$(manext)
+program_prefix = @program_prefix@
+
+
+VPATH=@srcdir@
+
+CFLAGS = @CFLAGS@
+CPPFLAGS = @CPPFLAGS@
+DEFS = @DEFS@
+LDFLAGS =
+LIBS = @LIBS@
+CC_FOR_BUILD = gcc
+
+
+CC_FOR_TARGET = $(program_prefix)gcc
+AS_FOR_TARGET = $(program_prefix)as
+AR_FOR_TARGET = $(program_prefix)ar
+NM_FOR_TARGET = $(program_prefix)nm
+LD_FOR_TARGET = $(program_prefix)ld
+OBJCOPY_FOR_TARGET = $(program_prefix)objcopy
+SIZE_FOR_TARGET = $(program_prefix)size
+
+AWK = @AWK@
+
+RTEMS_ROOT = @RTEMS_ROOT@
+RTEMS_HOST = @RTEMS_HOST@
+PROJECT_ROOT = @PROJECT_ROOT@
+RTEMS_HAS_POSIX_API = @RTEMS_HAS_POSIX_API@
+RTEMS_USE_MACROS = @RTEMS_USE_MACROS@
+
+ifeq ($(RTEMSBSP),)
+  RTEMS_BSP = @RTEMS_BSP@
+else
+  RTEMS_BSP = $(RTEMSBSP)
+endif
+
+include $(RTEMS_ROOT)/make/main.cfg
+
+MTARGETS = all $(TARGET_VARIANTS:%=%_install) $(TARGET_VARIANTS:%=%_all) \
+clean_wrapup distclean clean_dirs clean_tools install tests clean
+
+.PHONY: clean_modules mlink
+
+EXIT_CMD = exit 1
+
+# Don't pass flags from previous make - especially NOT CFLAGS 
+override MAKEFLAGS=
+
+$(MTARGETS): mlink
+	BASEDIR=`pwd`; \
+	for bsp in $(RTEMS_BSP) xxx; \
+	do if [ $$bsp != xxx ] ; then  \
+	    cd $$BASEDIR; \
+	    cmd="cd c; $(MAKE) RTEMS_BSP=$$bsp $(FLAGS_TO_PASS) \
+	    RTEMS_CUSTOM=$(RTEMS_ROOT)/make/custom/$$bsp.cfg \
+	    INSTALL=$(PROJECT_ROOT)/$$bsp/build-tools/install-if-change \
+            \"CC=$(CC_FOR_TARGET)\" \
+            \"XCFLAGS=$(CFLAGS_FOR_TARGET)\" \
+            \"CC_FOR_BUILD=$(CC_FOR_BUILD)\" \
+            \"AS=$(AS_FOR_TARGET)\" \
+            \"LD=$(LD_FOR_TARGET)\" \
+            \"NM=$(NM_FOR_TARGET)\" \
+            \"AR=$(AR_FOR_TARGET)\" \
+            \"SIZE=$(SIZE_FOR_TARGET)\" \
+            \"OBJCOPY=$(OBJCOPY_FOR_TARGET)\" \
+            \"RTEMS_ROOT=$(RTEMS_ROOT)\" \
+            \"RTEMS_HOST=$(RTEMS_HOST)\" \
+            \"PROJECT_HOME=$(PROJECT_ROOT)/$$bsp\" \
+            \"PROJECT_ROOT=$(PROJECT_ROOT)\" \
+            \"RTEMS_HAS_POSIX_API=$(RTEMS_HAS_POSIX_API)\" \
+            \"RTEMS_USE_MACROS=$(RTEMS_USE_MACROS)\" \
+            \"AWK=$(AWK)\" $@" ; \
+	    eval $$cmd || $(EXIT_CMD); \
+	fi; done; 
+
+clean_modules:
+	rm -f src/Modules/rtems/.moduleavailcache
+	rm -f src/Modules/rtems/.moduleavailcachedir
+
+mlink:
+	test -d make || ln -s $(RTEMS_ROOT)/make make
+
+
+

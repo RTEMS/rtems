@@ -1,0 +1,560 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_PREREQ(2.12)
+AC_INIT(README)
+
+a29k_mk="c/src/exec/score/cpu/a29k/Makefile \
+c/src/lib/libbsp/a29k/Makefile \
+c/src/lib/libbsp/a29k/portsw/Makefile \
+c/src/lib/libbsp/a29k/portsw/console/Makefile \
+c/src/lib/libbsp/a29k/portsw/include/Makefile \
+c/src/lib/libbsp/a29k/portsw/shmsupp/Makefile \
+c/src/lib/libbsp/a29k/portsw/startup/Makefile \
+c/src/lib/libbsp/a29k/portsw/wrapup/Makefile \
+c/src/lib/start/a29k/Makefile"
+
+i386_mk="c/src/exec/score/cpu/i386/Makefile \
+c/src/lib/libbsp/i386/Makefile \
+c/src/lib/libbsp/i386/force386/Makefile \
+c/src/lib/libbsp/i386/force386/clock/Makefile \
+c/src/lib/libbsp/i386/force386/console/Makefile \
+c/src/lib/libbsp/i386/force386/include/Makefile \
+c/src/lib/libbsp/i386/force386/shmsupp/Makefile \
+c/src/lib/libbsp/i386/force386/startup/Makefile \
+c/src/lib/libbsp/i386/force386/timer/Makefile \
+c/src/lib/libbsp/i386/force386/wrapup/Makefile \
+c/src/lib/libbsp/i386/i386ex/Makefile \
+c/src/lib/libbsp/i386/i386ex/clock/Makefile \
+c/src/lib/libbsp/i386/i386ex/console/Makefile \
+c/src/lib/libbsp/i386/i386ex/include/Makefile \
+c/src/lib/libbsp/i386/i386ex/startup/Makefile \
+c/src/lib/libbsp/i386/i386ex/timer/Makefile \
+c/src/lib/libbsp/i386/i386ex/wrapup/Makefile \
+c/src/lib/start/i386/Makefile"
+
+i386_go32_mk="c/src/exec/score/cpu/i386/Makefile \
+c/src/lib/libbsp/i386/Makefile \
+c/src/lib/libbsp/i386/go32/Makefile \
+c/src/lib/libbsp/i386/go32/clock/Makefile \
+c/src/lib/libbsp/i386/go32/console/Makefile \
+c/src/lib/libbsp/i386/go32/include/Makefile \
+c/src/lib/libbsp/i386/go32/startup/Makefile \
+c/src/lib/libbsp/i386/go32/timer/Makefile \
+c/src/lib/libbsp/i386/go32/wrapup/Makefile"
+
+m68k_mk="c/src/exec/score/cpu/m68k/Makefile \
+c/src/lib/libbsp/m68k/Makefile \
+c/src/lib/libbsp/m68k/dmv152/Makefile \
+c/src/lib/libbsp/m68k/dmv152/clock/Makefile \
+c/src/lib/libbsp/m68k/dmv152/console/Makefile \
+c/src/lib/libbsp/m68k/dmv152/include/Makefile \
+c/src/lib/libbsp/m68k/dmv152/spurious/Makefile \
+c/src/lib/libbsp/m68k/dmv152/startup/Makefile \
+c/src/lib/libbsp/m68k/dmv152/timer/Makefile \
+c/src/lib/libbsp/m68k/dmv152/wrapup/Makefile \
+c/src/lib/libbsp/m68k/efi332/Makefile \
+c/src/lib/libbsp/m68k/efi332/clock/Makefile \
+c/src/lib/libbsp/m68k/efi332/console/Makefile \
+c/src/lib/libbsp/m68k/efi332/include/Makefile \
+c/src/lib/libbsp/m68k/efi332/spurious/Makefile \
+c/src/lib/libbsp/m68k/efi332/startup/Makefile \
+c/src/lib/libbsp/m68k/efi332/start332/Makefile \
+c/src/lib/libbsp/m68k/efi332/timer/Makefile \
+c/src/lib/libbsp/m68k/efi332/wrapup/Makefile \
+c/src/lib/libbsp/m68k/efi68k/Makefile \
+c/src/lib/libbsp/m68k/efi68k/clock/Makefile \
+c/src/lib/libbsp/m68k/efi68k/console/Makefile \
+c/src/lib/libbsp/m68k/efi68k/include/Makefile \
+c/src/lib/libbsp/m68k/efi68k/spurious/Makefile \
+c/src/lib/libbsp/m68k/efi68k/startup/Makefile \
+c/src/lib/libbsp/m68k/efi68k/start68k/Makefile \
+c/src/lib/libbsp/m68k/efi68k/timer/Makefile \
+c/src/lib/libbsp/m68k/efi68k/wrapup/Makefile \
+c/src/lib/libbsp/m68k/gen68302/Makefile \
+c/src/lib/libbsp/m68k/gen68302/clock/Makefile \
+c/src/lib/libbsp/m68k/gen68302/console/Makefile \
+c/src/lib/libbsp/m68k/gen68302/include/Makefile \
+c/src/lib/libbsp/m68k/gen68302/start302/Makefile \
+c/src/lib/libbsp/m68k/gen68302/startup/Makefile \
+c/src/lib/libbsp/m68k/gen68302/timer/Makefile \
+c/src/lib/libbsp/m68k/gen68302/wrapup/Makefile \
+c/src/lib/libbsp/m68k/gen68360/Makefile \
+c/src/lib/libbsp/m68k/gen68360/clock/Makefile \
+c/src/lib/libbsp/m68k/gen68360/console/Makefile \
+c/src/lib/libbsp/m68k/gen68360/include/Makefile \
+c/src/lib/libbsp/m68k/gen68360/start360/Makefile \
+c/src/lib/libbsp/m68k/gen68360/startup/Makefile \
+c/src/lib/libbsp/m68k/gen68360/timer/Makefile \
+c/src/lib/libbsp/m68k/gen68360/wrapup/Makefile \
+c/src/lib/libbsp/m68k/idp/Makefile \
+c/src/lib/libbsp/m68k/idp/clock/Makefile \
+c/src/lib/libbsp/m68k/idp/console/Makefile \
+c/src/lib/libbsp/m68k/idp/include/Makefile \
+c/src/lib/libbsp/m68k/idp/startup/Makefile \
+c/src/lib/libbsp/m68k/idp/timer/Makefile \
+c/src/lib/libbsp/m68k/idp/wrapup/Makefile \
+c/src/lib/libbsp/m68k/mvme136/Makefile \
+c/src/lib/libbsp/m68k/mvme136/clock/Makefile \
+c/src/lib/libbsp/m68k/mvme136/console/Makefile \
+c/src/lib/libbsp/m68k/mvme136/include/Makefile \
+c/src/lib/libbsp/m68k/mvme136/shmsupp/Makefile \
+c/src/lib/libbsp/m68k/mvme136/startup/Makefile \
+c/src/lib/libbsp/m68k/mvme136/timer/Makefile \
+c/src/lib/libbsp/m68k/mvme136/wrapup/Makefile \
+c/src/lib/libbsp/m68k/mvme147/Makefile \
+c/src/lib/libbsp/m68k/mvme147/clock/Makefile \
+c/src/lib/libbsp/m68k/mvme147/console/Makefile \
+c/src/lib/libbsp/m68k/mvme147/include/Makefile \
+c/src/lib/libbsp/m68k/mvme147/startup/Makefile \
+c/src/lib/libbsp/m68k/mvme147/timer/Makefile \
+c/src/lib/libbsp/m68k/mvme147/wrapup/Makefile \
+c/src/lib/libbsp/m68k/mvme147s/Makefile \
+c/src/lib/libbsp/m68k/mvme147s/clock/Makefile \
+c/src/lib/libbsp/m68k/mvme147s/console/Makefile \
+c/src/lib/libbsp/m68k/mvme147s/include/Makefile \
+c/src/lib/libbsp/m68k/mvme147s/shmsupp/Makefile \
+c/src/lib/libbsp/m68k/mvme147s/startup/Makefile \
+c/src/lib/libbsp/m68k/mvme147s/timer/Makefile \
+c/src/lib/libbsp/m68k/mvme147s/wrapup/Makefile \
+c/src/lib/libbsp/m68k/mvme162/Makefile \
+c/src/lib/libbsp/m68k/mvme162/clock/Makefile \
+c/src/lib/libbsp/m68k/mvme162/console/Makefile \
+c/src/lib/libbsp/m68k/mvme162/include/Makefile \
+c/src/lib/libbsp/m68k/mvme162/startup/Makefile \
+c/src/lib/libbsp/m68k/mvme162/timer/Makefile \
+c/src/lib/libbsp/m68k/mvme162/tools/Makefile \
+c/src/lib/libbsp/m68k/mvme162/wrapup/Makefile \
+c/src/lib/start/m68k/Makefile"
+
+no_cpu_mk="c/src/exec/score/cpu/no_cpu/Makefile \
+c/src/lib/libbsp/no_cpu/Makefile \
+c/src/lib/libbsp/no_cpu/no_bsp/Makefile \
+c/src/lib/libbsp/no_cpu/no_bsp/clock/Makefile \
+c/src/lib/libbsp/no_cpu/no_bsp/console/Makefile \
+c/src/lib/libbsp/no_cpu/no_bsp/include/Makefile \
+c/src/lib/libbsp/no_cpu/no_bsp/shmsupp/Makefile \
+c/src/lib/libbsp/no_cpu/no_bsp/startup/Makefile \
+c/src/lib/libbsp/no_cpu/no_bsp/timer/Makefile \
+c/src/lib/libbsp/no_cpu/no_bsp/wrapup/Makefile"
+
+sparc_mk="c/src/exec/score/cpu/sparc/Makefile \
+c/src/lib/libbsp/sparc/Makefile \
+c/src/lib/libbsp/sparc/erc32/Makefile \
+c/src/lib/libbsp/sparc/erc32/clock/Makefile \
+c/src/lib/libbsp/sparc/erc32/console/Makefile \
+c/src/lib/libbsp/sparc/erc32/include/Makefile \
+c/src/lib/libbsp/sparc/erc32/startsis/Makefile \
+c/src/lib/libbsp/sparc/erc32/startup/Makefile \
+c/src/lib/libbsp/sparc/erc32/timer/Makefile \
+c/src/lib/libbsp/sparc/erc32/wrapup/Makefile \
+c/src/lib/libcpu/sparc/Makefile \
+c/src/lib/libcpu/sparc/reg_win/Makefile"
+
+hppa1_1_mk="c/src/exec/score/cpu/hppa1_1/Makefile \
+c/src/exec/score/tools/hppa1_1/Makefile \
+c/src/lib/libbsp/hppa1_1/Makefile \
+c/src/lib/libbsp/hppa1_1/pxfl/Makefile \
+c/src/lib/libbsp/hppa1_1/simhppa/Makefile \
+c/src/lib/libbsp/hppa1_1/simhppa/include/Makefile \
+c/src/lib/libbsp/hppa1_1/simhppa/shmsupp/Makefile \
+c/src/lib/libbsp/hppa1_1/simhppa/startup/Makefile \
+c/src/lib/libbsp/hppa1_1/simhppa/tools/Makefile \
+c/src/lib/libbsp/hppa1_1/simhppa/tty/Makefile \
+c/src/lib/libbsp/hppa1_1/simhppa/wrapup/Makefile \
+c/src/lib/libcpu/hppa1_1/Makefile \
+c/src/lib/libcpu/hppa1_1/clock/Makefile \
+c/src/lib/libcpu/hppa1_1/include/Makefile \
+c/src/lib/libcpu/hppa1_1/milli/Makefile \
+c/src/lib/libcpu/hppa1_1/runway/Makefile \
+c/src/lib/libcpu/hppa1_1/semaphore/Makefile \
+c/src/lib/libcpu/hppa1_1/timer/Makefile \
+c/src/lib/start/hppa1_1/Makefile"
+
+i960_mk="c/src/exec/score/cpu/i960/Makefile \
+c/src/lib/libbsp/i960/Makefile \
+c/src/lib/libbsp/i960/cvme961/Makefile \
+c/src/lib/libbsp/i960/cvme961/clock/Makefile \
+c/src/lib/libbsp/i960/cvme961/console/Makefile \
+c/src/lib/libbsp/i960/cvme961/include/Makefile \
+c/src/lib/libbsp/i960/cvme961/shmsupp/Makefile \
+c/src/lib/libbsp/i960/cvme961/startup/Makefile \
+c/src/lib/libbsp/i960/cvme961/timer/Makefile \
+c/src/lib/libbsp/i960/cvme961/wrapup/Makefile \
+c/src/lib/start/i960/Makefile"
+
+mips64orion_mk="c/src/exec/score/cpu/mips64orion/Makefile \
+c/src/lib/libbsp/mips64orion/Makefile \
+c/src/lib/libbsp/mips64orion/p4000/Makefile \
+c/src/lib/libbsp/mips64orion/p4000/console/Makefile \
+c/src/lib/libbsp/mips64orion/p4000/include/Makefile \
+c/src/lib/libbsp/mips64orion/p4000/liblnk/Makefile \
+c/src/lib/libbsp/mips64orion/p4000/startup/Makefile \
+c/src/lib/libbsp/mips64orion/p4000/wrapup/Makefile \
+c/src/lib/libcpu/mips64orion/Makefile \
+c/src/lib/libcpu/mips64orion/clock/Makefile \
+c/src/lib/libcpu/mips64orion/include/Makefile \
+c/src/lib/libcpu/mips64orion/timer/Makefile \
+c/src/lib/start/mips64orion/Makefile"
+
+powerpc_mk="c/src/exec/score/cpu/ppc/Makefile \
+c/src/lib/libbsp/ppc/Makefile \
+c/src/lib/libbsp/ppc/papyrus/Makefile \
+c/src/lib/libbsp/ppc/papyrus/dlentry/Makefile \
+c/src/lib/libbsp/ppc/papyrus/flashentry/Makefile \
+c/src/lib/libbsp/ppc/papyrus/include/Makefile \
+c/src/lib/libbsp/ppc/papyrus/startup/Makefile \
+c/src/lib/libbsp/ppc/papyrus/wrapup/Makefile \
+c/src/lib/libcpu/ppc/Makefile \
+c/src/lib/libcpu/ppc/ppc403/Makefile \
+c/src/lib/libcpu/ppc/ppc403/clock/Makefile \
+c/src/lib/libcpu/ppc/ppc403/console/Makefile \
+c/src/lib/libcpu/ppc/ppc403/include/Makefile \
+c/src/lib/libcpu/ppc/ppc403/timer/Makefile \
+c/src/lib/libcpu/ppc/ppc403/vectors/Makefile"
+
+posix_mk="c/src/exec/score/cpu/unix/Makefile \
+c/src/exec/score/tools/unix/Makefile \
+c/src/lib/libbsp/unix/Makefile \
+c/src/lib/libbsp/unix/posix/Makefile \
+c/src/lib/libbsp/unix/posix/clock/Makefile \
+c/src/lib/libbsp/unix/posix/console/Makefile \
+c/src/lib/libbsp/unix/posix/include/Makefile \
+c/src/lib/libbsp/unix/posix/shmsupp/Makefile \
+c/src/lib/libbsp/unix/posix/startup/Makefile \
+c/src/lib/libbsp/unix/posix/timer/Makefile \
+c/src/lib/libbsp/unix/posix/wrapup/Makefile"
+
+tests_mk="c/src/tests/Makefile \
+c/src/tests/libtests/Makefile \
+c/src/tests/libtests/malloctest/Makefile \
+c/src/tests/libtests/stackchk/Makefile \
+c/src/tests/mptests/Makefile \
+c/src/tests/mptests/mp01/Makefile \
+c/src/tests/mptests/mp01/node1/Makefile \
+c/src/tests/mptests/mp01/node2/Makefile \
+c/src/tests/mptests/mp02/Makefile \
+c/src/tests/mptests/mp02/node1/Makefile \
+c/src/tests/mptests/mp02/node2/Makefile \
+c/src/tests/mptests/mp03/Makefile \
+c/src/tests/mptests/mp03/node1/Makefile \
+c/src/tests/mptests/mp03/node2/Makefile \
+c/src/tests/mptests/mp04/Makefile \
+c/src/tests/mptests/mp04/node1/Makefile \
+c/src/tests/mptests/mp04/node2/Makefile \
+c/src/tests/mptests/mp05/Makefile \
+c/src/tests/mptests/mp05/node1/Makefile \
+c/src/tests/mptests/mp05/node2/Makefile \
+c/src/tests/mptests/mp06/Makefile \
+c/src/tests/mptests/mp06/node1/Makefile \
+c/src/tests/mptests/mp06/node2/Makefile \
+c/src/tests/mptests/mp07/Makefile \
+c/src/tests/mptests/mp07/node1/Makefile \
+c/src/tests/mptests/mp07/node2/Makefile \
+c/src/tests/mptests/mp08/Makefile \
+c/src/tests/mptests/mp08/node1/Makefile \
+c/src/tests/mptests/mp08/node2/Makefile \
+c/src/tests/mptests/mp09/Makefile \
+c/src/tests/mptests/mp09/node1/Makefile \
+c/src/tests/mptests/mp09/node2/Makefile \
+c/src/tests/mptests/mp10/Makefile \
+c/src/tests/mptests/mp10/node1/Makefile \
+c/src/tests/mptests/mp10/node2/Makefile \
+c/src/tests/mptests/mp11/Makefile \
+c/src/tests/mptests/mp11/node1/Makefile \
+c/src/tests/mptests/mp11/node2/Makefile \
+c/src/tests/mptests/mp12/Makefile \
+c/src/tests/mptests/mp12/node1/Makefile \
+c/src/tests/mptests/mp12/node2/Makefile \
+c/src/tests/mptests/mp13/Makefile \
+c/src/tests/mptests/mp13/node1/Makefile \
+c/src/tests/mptests/mp13/node2/Makefile \
+c/src/tests/mptests/mp14/Makefile \
+c/src/tests/mptests/mp14/node1/Makefile \
+c/src/tests/mptests/mp14/node2/Makefile \
+c/src/tests/psxtests/Makefile \
+c/src/tests/psxtests/psx01/Makefile \
+c/src/tests/psxtests/psx02/Makefile \
+c/src/tests/psxtests/psx03/Makefile \
+c/src/tests/psxtests/psx04/Makefile \
+c/src/tests/psxtests/psx05/Makefile \
+c/src/tests/psxtests/psx06/Makefile \
+c/src/tests/psxtests/psx07/Makefile \
+c/src/tests/psxtests/psx08/Makefile \
+c/src/tests/psxtests/psx09/Makefile \
+c/src/tests/psxtests/psx10/Makefile \
+c/src/tests/psxtests/psx11/Makefile \
+c/src/tests/psxtests/psx12/Makefile \
+c/src/tests/psxtests/psxhdrs/Makefile \
+c/src/tests/psxtests/support/Makefile \
+c/src/tests/psxtests/support/include/Makefile \
+c/src/tests/samples/Makefile \
+c/src/tests/samples/base_mp/Makefile \
+c/src/tests/samples/base_mp/node1/Makefile \
+c/src/tests/samples/base_mp/node2/Makefile \
+c/src/tests/samples/base_sp/Makefile \
+c/src/tests/samples/cdtest/Makefile \
+c/src/tests/samples/hello/Makefile \
+c/src/tests/samples/paranoia/Makefile \
+c/src/tests/samples/ticker/Makefile \
+c/src/tests/sptests/Makefile \
+c/src/tests/sptests/sp01/Makefile \
+c/src/tests/sptests/sp02/Makefile \
+c/src/tests/sptests/sp03/Makefile \
+c/src/tests/sptests/sp04/Makefile \
+c/src/tests/sptests/sp05/Makefile \
+c/src/tests/sptests/sp06/Makefile \
+c/src/tests/sptests/sp07/Makefile \
+c/src/tests/sptests/sp08/Makefile \
+c/src/tests/sptests/sp09/Makefile \
+c/src/tests/sptests/sp11/Makefile \
+c/src/tests/sptests/sp12/Makefile \
+c/src/tests/sptests/sp13/Makefile \
+c/src/tests/sptests/sp14/Makefile \
+c/src/tests/sptests/sp15/Makefile \
+c/src/tests/sptests/sp16/Makefile \
+c/src/tests/sptests/sp17/Makefile \
+c/src/tests/sptests/sp19/Makefile \
+c/src/tests/sptests/sp20/Makefile \
+c/src/tests/sptests/sp21/Makefile \
+c/src/tests/sptests/sp22/Makefile \
+c/src/tests/sptests/sp23/Makefile \
+c/src/tests/sptests/sp24/Makefile \
+c/src/tests/sptests/sp25/Makefile \
+c/src/tests/sptests/spfatal/Makefile \
+c/src/tests/sptests/spsize/Makefile \
+c/src/tests/support/Makefile \
+c/src/tests/support/include/Makefile \
+c/src/tests/support/stubdr/Makefile \
+c/src/tests/support/wrapup/Makefile \
+c/src/tests/tmtests/Makefile \
+c/src/tests/tmtests/include/Makefile \
+c/src/tests/tmtests/tm01/Makefile \
+c/src/tests/tmtests/tm02/Makefile \
+c/src/tests/tmtests/tm03/Makefile \
+c/src/tests/tmtests/tm04/Makefile \
+c/src/tests/tmtests/tm05/Makefile \
+c/src/tests/tmtests/tm06/Makefile \
+c/src/tests/tmtests/tm07/Makefile \
+c/src/tests/tmtests/tm08/Makefile \
+c/src/tests/tmtests/tm09/Makefile \
+c/src/tests/tmtests/tm10/Makefile \
+c/src/tests/tmtests/tm11/Makefile \
+c/src/tests/tmtests/tm12/Makefile \
+c/src/tests/tmtests/tm13/Makefile \
+c/src/tests/tmtests/tm14/Makefile \
+c/src/tests/tmtests/tm15/Makefile \
+c/src/tests/tmtests/tm16/Makefile \
+c/src/tests/tmtests/tm17/Makefile \
+c/src/tests/tmtests/tm18/Makefile \
+c/src/tests/tmtests/tm19/Makefile \
+c/src/tests/tmtests/tm20/Makefile \
+c/src/tests/tmtests/tm21/Makefile \
+c/src/tests/tmtests/tm22/Makefile \
+c/src/tests/tmtests/tm23/Makefile \
+c/src/tests/tmtests/tm24/Makefile \
+c/src/tests/tmtests/tm25/Makefile \
+c/src/tests/tmtests/tm26/Makefile \
+c/src/tests/tmtests/tm27/Makefile \
+c/src/tests/tmtests/tm28/Makefile \
+c/src/tests/tmtests/tm29/Makefile \
+c/src/tests/tmtests/tmck/Makefile \
+c/src/tests/tmtests/tmoverhd/Makefile \
+c/src/tests/tools/Makefile \
+c/src/tests/tools/generic/Makefile \
+c/src/tests/tools/hppa1_1/Makefile \
+c/src/tests/tools/hppa1_1/simhppa/Makefile \
+c/src/tests/tools/sparc/Makefile \
+c/src/tests/tools/sparc/erc32/Makefile \
+c/src/tests/tools/unix/Makefile \
+c/src/tests/tools/unix/posix/Makefile"
+
+dnl Checks for programs.
+AC_PROG_MAKE_SET
+AC_CANONICAL_SYSTEM
+AC_ARG_WITH(cross-host,[  --with-cross-host=HOST      host (cygnus)], \
+host=$withval)
+
+AC_ARG_ENABLE(posix, \
+[  --disable-posix 	     	    disable posix interface], \
+RTEMS_HAS_POSIX_API=no,RTEMS_HAS_POSIX_API=yes)
+
+AC_ARG_ENABLE(rtems-inlines, \
+[  --disable-rtems-inlines 	    disable RTEMS inline functions (use macros)], \
+RTEMS_USE_MACROS=yes,RTEMS_USE_MACROS=no)
+
+RTEMS_PREFIX=${target_cpu}-${target_vendor}
+
+case "${target}" in
+  a29k-rtems*)
+	rtems_bsp=portsw
+       	makefiles=$a29k_mk
+	;;
+  # hpux unix port should go here
+  hppa1.1-rtems*)
+	rtems_bsp=simhppa
+	makefiles=$hppa1_1_mk
+	;;
+  i[[3456]]86-go32-rtems*)
+	rtems_bsp="go32 go32_p5"
+       	makefiles=$i386_go32_mk
+	RTEMS_HAS_POSIX_API=no
+	;;
+  i[[3456]]86-rtems*)
+	rtems_bsp="force386 i386ex"
+       	makefiles=$i386_mk
+	;;
+  i[[3456]]86-pc-linux*)         # unix "simulator" port
+	rtems_bsp=posix
+       	makefiles=$posix_mk
+	RTEMS_HAS_POSIX_API=no
+	;;
+  i960-rtems*)
+	rtems_bsp=cvme961
+       	makefiles=$i960_mk
+	;;
+  m68k-rtems*)
+	rtems_bsp="efi332 gen68302 idp mvme147 mvme162 \
+           dmv152 efi68k gen68360 mvme136 mvme147s"
+       	makefiles=$m68k_mk
+	;;
+  mips64orion-rtems*)
+	rtems_bsp="p4600 p4650"
+       	makefiles=$mips64orion_mk
+	;;
+  no_cpu-rtems*)
+	rtems_bsp=no_bsp
+	makefiles=$no_cpu_mk
+	;;
+  powerpc-rtems*)
+	rtems_bsp=papyrus
+       	makefiles=$powerpc_mk
+	;;
+  sparc-sun-solaris*)             # unix "simulator" port
+	rtems_bsp=posix
+       	makefiles=$posix_mk
+	RTEMS_HAS_POSIX_API=no
+	;;
+  sparc-rtems*)         
+	rtems_bsp=erc32 
+	makefiles=$sparc_mk
+	;;
+  *)                    
+	rtems_bsp=no_bsp
+	makefiles=$no_cpu_mk
+	echo Error: RTEMS is not supported on target: $target
+	exit 1
+	;;
+esac
+
+case "${host}" in
+  *-pc-linux*)		host_os=Linux ;;
+  sparc-sun-sunos*)     host_os=SunOS ;;
+  sparc-sun-solaris*)   host_os=Solaris ;;
+  *-nextstep*)		host_os=Nextstep3;;
+  mips*-sgi-irix5*)	host_os=Irix5;;
+  *-hp-hpux9*)		host_os=HPUX9;;
+  *)                    host_os=none
+			echo RTEMS not supported on host: $host
+			exit 1;;
+esac
+
+if [[ "${program_prefix}" = "NONE" ]] ; then
+  if [[ "${target}" = "${host}" ]] ; then
+    program_prefix=
+  else
+    program_prefix=${target}-
+  fi
+fi
+
+
+AC_PROG_AWK
+AC_PROG_LN_S
+dnl AC_PROG_CC
+dnl AC_PROG_CXX
+
+RTEMS_BSP=$rtems_bsp
+RTEMS_HOST=$host_os
+RTEMS_ROOT=`cd $srcdir/c; pwd`
+PROJECT_ROOT=`pwd;`
+
+AC_ARG_ENABLE(tests, \
+[  --disable-tests 	     	    disable tests], \
+tests_mk=,makefiles="${makefiles} ${tests_mk}")
+
+AC_ARG_ENABLE(rtemsbsp, \
+[  --enable-rtemsbsp=bsp1 bsp2 ..   prefix for cross-tools], \
+RTEMS_BSP=$enableval)
+
+AC_SUBST(RTEMS_BSP)
+AC_SUBST(RTEMS_HOST)
+AC_SUBST(RTEMS_LIBC_DIR)
+AC_SUBST(RTEMS_ROOT)
+AC_SUBST(RTEMS_HAS_POSIX_API)
+AC_SUBST(RTEMS_USE_MACROS)
+AC_SUBST(PROJECT_ROOT)
+AC_SUBST(program_prefix)
+
+AC_OUTPUT( Makefile \
+c/Makefile \
+c/build-tools/Makefile \
+c/build-tools/os/Makefile \
+c/build-tools/os/msdos/Makefile \
+c/build-tools/scripts/Makefile \
+c/build-tools/src/Makefile \
+c/make/Makefile \
+c/make/Templates/Makefile.inc \
+c/src/Makefile \
+c/src/exec/Makefile \
+c/src/exec/posix/Makefile \
+c/src/exec/posix/base/Makefile \
+c/src/exec/posix/headers/Makefile \
+c/src/exec/posix/inline/Makefile \
+c/src/exec/posix/macros/Makefile \
+c/src/exec/posix/optman/Makefile \
+c/src/exec/posix/src/Makefile \
+c/src/exec/posix/sys/Makefile \
+c/src/exec/rtems/Makefile \
+c/src/exec/rtems/headers/Makefile \
+c/src/exec/rtems/inline/Makefile \
+c/src/exec/rtems/macros/Makefile \
+c/src/exec/rtems/optman/Makefile \
+c/src/exec/rtems/src/Makefile \
+c/src/exec/sapi/Makefile \
+c/src/exec/sapi/headers/Makefile \
+c/src/exec/sapi/inline/Makefile \
+c/src/exec/sapi/macros/Makefile \
+c/src/exec/sapi/optman/Makefile \
+c/src/exec/sapi/src/Makefile \
+c/src/exec/score/Makefile \
+c/src/exec/score/cpu/Makefile \
+c/src/exec/score/headers/Makefile \
+c/src/exec/score/inline/Makefile \
+c/src/exec/score/macros/Makefile \
+c/src/exec/score/src/Makefile \
+c/src/exec/score/tools/Makefile \
+c/src/exec/score/tools/generic/Makefile \
+c/src/exec/wrapup/Makefile \
+c/src/exec/wrapup/posix/Makefile \
+c/src/exec/wrapup/rtems/Makefile \
+c/src/lib/Makefile \
+c/src/lib/include/Makefile \
+c/src/lib/libbsp/Makefile \
+c/src/lib/libbsp/shmdr/Makefile \
+c/src/lib/libc/Makefile \
+c/src/lib/libcpu/Makefile \
+c/src/lib/libmisc/Makefile \
+c/src/lib/libmisc/assoc/Makefile \
+c/src/lib/libmisc/error/Makefile \
+c/src/lib/libmisc/monitor/Makefile \
+c/src/lib/libmisc/stackchk/Makefile \
+c/src/lib/libmisc/wrapup/Makefile \
+c/src/lib/start/Makefile \
+c/src/lib/wrapup/Makefile \
+$makefiles \
+c/update-tools/Makefile )
+
+echo
+echo target architecture: $target_cpu.
+echo available BSPs: $rtems_bsp.
+echo \'make all\' will build the following BSPs: $RTEMS_BSP.
+echo other BSPs can be built with \'make RTEMSBSP=\"bsp1 bsp2 ...\"\' 
+echo

@@ -1,0 +1,14 @@
+#
+#  Makefile,v 1.2 1995/05/31 16:56:44 joel Exp
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/directory.cfg
+
+# Descend into the $(RTEMS_BSP) directory if it exists
+SUB_DIRS=$(wildcard $(RTEMS_BSP))

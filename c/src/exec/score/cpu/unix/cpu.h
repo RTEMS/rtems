@@ -251,7 +251,7 @@ extern "C" {
 
 #if defined(hppa1_1)
 #define CPU_STACK_GROWS_UP               TRUE
-#elif defined(sparc) || defined(i386)
+#elif defined(sparc) || defined(i386) || defined(__i386__)
 #define CPU_STACK_GROWS_UP               FALSE
 #else
 #error "unknown CPU!!"
@@ -353,7 +353,7 @@ extern "C" {
 #endif
 #endif
 
-#if defined(i386)
+#if defined(i386) || defined(__i386__)
  
 #ifdef RTEMS_NEWLIB
 #error "Newlib not installed"
@@ -544,7 +544,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 #define CPU_FRAME_SIZE  (32 * 4)
 #elif defined(sparc)
 #define CPU_FRAME_SIZE  (112)   /* based on disassembled test code */
-#elif defined(i386)
+#elif defined(i386) || defined(__i386__)
 #define CPU_FRAME_SIZE  (24)  /* return address, sp, and bp pushed plus fudge */
 #else
 #error "Unknown CPU!!!"

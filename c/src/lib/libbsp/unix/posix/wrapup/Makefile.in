@@ -1,0 +1,64 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+# MP_XXX_PARTS are the pieces of the BSP required in a MP environment
+# We only build them if HAS_MP was defined
+ 
+MP_BSP_PARTS_yes_V = shmsupp
+MP_BSP_PARTS = $(MP_BSP_PARTS_$(HAS_MP)_V)
+
+MP_GENERIC_PARTS_yes_V = shmdr
+MP_GENERIC_PARTS = $(MP_GENERIC_PARTS_$(HAS_MP)_V)
+
+
+
+BSP_PIECES=startup clock console $(MP_BSP_PARTS) timer
+# pieces to pick up out of libcpu/unix
+CPU_PIECES=
+GENERIC_PIECES=$(MP_GENERIC_PARTS)
+
+# bummer; have to use $foreach since % pattern subst rules only replace 1x
+OBJS=$(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
+     $(foreach piece, $(CPU_PIECES), \
+       ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/$(piece).rel) \
+     $(foreach piece, $(GENERIC_PIECES), \
+       ../../../$(piece)/$(ARCH)/$(piece).rel)
+LIB=$(ARCH)/libbsp.a
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/lib.cfg
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS +=
+CFLAGS   +=
+
+LD_PATHS  +=
+LD_LIBS   +=
+LDFLAGS   +=
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+$(LIB): ${OBJS}
+	$(make-library)
+
+all:	${ARCH} $(SRCS) $(LIB)
+	$(INSTALL_VARIANT) -m 644 $(LIB) ${PROJECT_RELEASE}/lib
+

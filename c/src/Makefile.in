@@ -1,0 +1,15 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/directory.cfg
+
+SUB_DIRS=exec lib tests/tools tests/support tests/samples
+
+

@@ -1,0 +1,49 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+C_FILES= no-dpmem.c no-event.c no-mp.c no-msg.c \
+         no-part.c no-region.c no-rtmon.c no-sem.c no-signal.c no-timer.c
+
+S_FILES=
+
+H_FILES=
+
+SRCS=$(C_FILES) $(CC_FILES) $(H_FILES)
+OBJS=$(C_O_FILES) $(CC_O_FILES)
+
+PGMS=$(C_FILES:%.c=$(ARCH)/%.rel)
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/leaf.cfg
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS +=
+CFLAGS   += $(CFLAGS_OS_V)
+
+ASM4FLAGS += -I $(PROJECT_RELEASE)/include/rtems
+LD_PATHS  +=
+LD_LIBS   +=
+LDFLAGS   +=
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+all:	${ARCH} $(SRCS) $(OBJS) $(PGMS)
+	$(INSTALL_VARIANT) -m 555 ${PGMS} ${PROJECT_RELEASE}/lib

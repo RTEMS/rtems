@@ -1,0 +1,179 @@
+
+1. Autoconf support
+===================
+
+This version of RTEMS is configured with GNU autoconf. RTEMS can be
+configured and built either standalone or together with the compiler
+tools in the Cygnus one-tree structure. Using autoconf also means
+that RTEMS now can be built in a separate build directory.
+
+2. Installation
+===============
+
+2.1 Standalone build
+
+To configure RTEMS for a specific target, run configure in the build
+directory. In addition to the standard configure options, the following
+RTEMS-specific option are supported:
+
+	--disable-rtems-inlines
+	--disable-posix
+	--disable-tests
+	--enable-rtemsbsp="bsp1 bsp2 ..."
+
+By default, the RTEMS posix interface is built for targets that support
+it. It can be disabled with the --disable-posix option. The --disable-tests
+will not configure the RTEMS test suite. This is used only to speed-up
+configuration in case building the tests are not necessary. By default,
+all bsps for a target are built. There is two ways of changing this:
+
+  + use the --enable-rtemsbsp otion which will set the specified
+    bsps as the default bsps, or 
+  + set the RTEMSBSP variable during make (see below).
+
+The cross-compiler is set to $(target)-gcc by default. This can be
+overriden by one of the following methods:
+
+  + running make with CC_FOR_TARGET=compiler_to_use. The same applies to
+    all the target specific tools (AS, AR, NM, OBJCOPY, SIZE, LD), or
+  + by using the --program-prefix option to configure to specify the
+    string which will prepended to the tool names.  Be sure to include
+    a trailing "-".  For example, to use a m68k-coff toolset, use the
+    --program-prefix=m68k-coff- option.
+
+The --target= option configures RTEMS for a specific target architecture.
+The following targets are supported:
+
+	(none)			will build the host-based version on Linux,
+				Solaris and HPUX.
+
+	a29k-rtems		only standalone, uses non-gnu compiler
+	i386-rtems
+	i960-rtems
+	hppa1_1-rtems
+	m68k-rtems
+	mips64orion-rtems
+        no_cpu-rtems
+	powerpc-rtems
+	sparc-rtems
+	
+To build, run make in the build directory. To specify which bsps to build,
+add the RTEMSBSP="bsp1 bsp2 .." to the make command.
+
+Installation is done under $(prefix)/$(target)/rtems.
+
+As an example, to build and install the mvme136 and dmv152 bsps for m68k do:
+
+	(path_to_rtems_src)/configure --target=m68k-rtems
+
+	make RTEMSBSP="mvme136 dmv152"
+	
+	make install RTEMSBSP="mvme136 dmv152"
+
+
+The sample tests are built by 'make all', do a 'make test' to build the full
+test suite.
+
+2.2 Build with Cygnus one-tree release
+
+To build and install RTEMS with the one-tree structure, just copy the rtems
+directory to the tree. The one-tree configure.in and Makefile.in has to be 
+replaced with the RTEMS-aware versions. The build options are the same as 
+for the standalone build.
+
+3. To use the installed RTEMS library
+=====================================
+
+To use the installed RTEMS bsps to build applications, the application
+makefile has to include a bsp-specific makefile that will define the
+RTEMS variables necessary to find include files and libraries. The
+bsp-specific makefile is installed at 
+
+	$(prefix)/$(target)/rtmes/$(RTEMS_BSP)/Makefile.inc
+
+For the erc32 bsp installed at /usr/local/cross, the line would read:
+
+include /usr/local/cross/sparc-rtems/rtems/erc32/Makefile.inc
+
+
+4. Supported target bsps
+========================
+
+The following bsps are supported:
+
+host-based	: posix (on linux, solaris and hpux)
+
+a29k		: portsw
+i386		: force386 i386ex
+i960		: cvme961
+hppa1_1		: simhppa
+m68k		: efi332 gen68302 idp mvme147 mvme162 dmv152 efi68k gen68360 
+		  mvme136 mvme147s go32
+no_cpu          : no_bsp
+mips64orion 	: p4600 p4650 (p4000 port with either R4600 or R4650)
+powerpc		: papyrus
+sparc 		: erc32
+
+5. Makefile structure
+=====================
+
+The makefiles have been re-organised. Most gnu-based bsps now use three
+main makefiles:
+    + custom/default.cfg,
+    + custom/bsp.cfg and
+    + ompilers/gcc-target-default.cfg.
+
+Default.cfg sets the deafult values of certain common build options.
+
+Bsp.cfg set bsp-specific build options and can also override the
+default settings.
+
+Gcc-target-default.cfg contains the common gcc definitions. Some targets
+(a29k, no_cpu, and posix) still use the old structure.
+
+6. Adding a bsp
+===============
+
+The top-level configure.in has to be modified if a new target is added
+or if a new bsp is to be built by default. The additions required is
+basically to add which makefiles are to be created by configure and
+to add the target to the selection statement. To re-generate
+configure, autoconf-2.12 is needed.
+
+7. Tested configurations
+========================
+
+All gnu-based bsps have been built on Linux. 
+The native (posix) ports have been built and run on Linux ans Solaris.
+The sparc port has been tested on SunOS and Linux. 
+
+The following configurations have NOT been tested:
+
+    + Anything on Nextstep, HPUX and Irix.
+    + The a29k port.
+
+8. Pre-requisites
+=================
+
+Gawk version 2 or higher.
+GNU make version 3.72 or higher.
+Bash.
+gcc version ???
+
+TODO
+====
+
+The install-if-change script requires bash. On solaris systems, this should
+be changed to ksh, since ksh is provided with solaris (bash not).
+
+A fairly rescent version of gawk is needed to build RTEMS. This should be
+changed so that a plain vanilla awk also works.
+
+'make install' should only install necessary files, not the full
+PROJECT_RELEASE directory as now.
+
+Posix port on solaris-2.5 fails due to undefined built-in functions
+(gcc-2.7.2, might be my installation).
+
+Improve support for 'make CFLAGS=xxx'. 
+

@@ -27,6 +27,10 @@
 #ifndef _INCLUDE_HPPA_H
 #define _INCLUDE_HPPA_H
 
+#ifdef ASM
+#include <rtems/score/targopts.h>
+#endif
+
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -39,8 +43,6 @@ extern "C" {
  *  present in a particular member of the family.
  */
 
-#if !defined(CPU_MODEL_NAME)
-
 #if defined(hppa7100)
 
 #define CPU_MODEL_NAME  "hppa 7100"
@@ -51,11 +53,9 @@ extern "C" {
 
 #else
 
-#define CPU_MODEL_NAME  Unsupported CPU Model	     /* cause an error on usage */
+#error "Unsupported CPU Model"
 
 #endif
-
-#endif /* !defined(CPU_MODEL_NAME) */
           
 /*
  *  Define the name of the CPU family.
@@ -68,6 +68,7 @@ extern "C" {
 /*
  * Processor Status Word (PSW) Masks
  */
+
 
 #define HPPA_PSW_Y      0x80000000    /* Data Debug Trap Disable */
 #define HPPA_PSW_Z      0x40000000    /* Instruction Debug Trap Disable */

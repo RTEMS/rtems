@@ -1,0 +1,74 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+RELS=$(ARCH)/rtems-cpu.rel
+
+# C source names, if any, go here -- minus the .c
+C_PIECES=cpu
+C_FILES=$(C_PIECES:%=%.c)
+C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+
+H_FILES=$(srcdir)/cpu.h $(srcdir)/sparc.h $(srcdir)/sparctypes.h
+
+# H_FILES that get installed externally
+EXTERNAL_H_FILES = $(srcdir)/asm.h $(srcdir)/erc32.h
+
+# Assembly source names, if any, go here -- minus the .s
+S_PIECES=cpu_asm rtems
+S_FILES=$(S_PIECES:%=%.s)
+S_O_FILES=$(S_FILES:%.s=${ARCH}/%.o)
+
+SRCS=$(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES) $(EXTERNAL_H_FILES) 
+OBJS=$(C_O_FILES) $(CC_O_FILES) $(S_O_FILES)
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/leaf.cfg
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS +=
+CFLAGS   += $(CFLAGS_OS_V)
+
+LD_PATHS  +=
+LD_LIBS   +=
+LDFLAGS   +=
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+$(ARCH)/rtems-cpu.rel: $(OBJS)
+	$(make-rel)
+
+all:	${ARCH} $(SRCS) preinstall $(OBJS) $(RELS)
+
+preinstall: ${PROJECT_RELEASE}/include/rtems/score/targopts.h \
+            ${PROJECT_RELEASE}/lib/bsp_specs
+	$(INSTALL) -m 444 ${H_FILES} ${PROJECT_RELEASE}/include/rtems/score
+# we will share the basic cpu file
+	$(INSTALL) -m 444 ${EXTERNAL_H_FILES} ${PROJECT_RELEASE}/include
+
+${PROJECT_RELEASE}/include/rtems/score/targopts.h: $(ARCH)/targopts.h-tmp
+	$(INSTALL) -m 444 $(ARCH)/targopts.h-tmp $@
+
+# $(ARCH)/targopts.h-tmp rule is in leaf.cfg
+
+${PROJECT_RELEASE}/lib/bsp_specs: $(ARCH)/bsp_specs.tmp
+	$(INSTALL) -m 444 $(ARCH)/bsp_specs.tmp $@
+
+# $(ARCH)/bsp_specs.tmp rule is in leaf.cfg

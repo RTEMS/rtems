@@ -1,0 +1,40 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+LIB=$(ARCH)/libmisc.a
+
+#  Using the wildcard on the Purify support makes sure it may not be there
+
+LIBS=../monitor/$(ARCH)/libmonitor-tmp.a \
+     ../error/$(ARCH)/liberror-tmp.a \
+     ../assoc/$(ARCH)/libassoc-tmp.a \
+     ../stackchk/$(ARCH)/libstackchk-tmp.a \
+     $(wildcard ../purify/$(ARCH)/libpurify-tmp.a)
+RELS=
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/lib.cfg
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+$(LIB): ${LIBS} $(RELS)
+	$(RM) -r $(ARCH)
+	$(MKDIR) $(ARCH)
+	cd $(ARCH); for lib in $(LIBS:%=../%); do \
+                         $(AR) -xv $$lib; \
+                    done
+	# cd $(ARCH); $(LN) -s $(RELS:%=../%) .
+	$(RM) $@
+	$(AR) ruv $@ $(ARCH)/*
+	$(MKLIB) $@
+
+all:	${ARCH} $(SRCS) $(LIB)
+	$(INSTALL_VARIANT) -m 644 $(LIB) ${PROJECT_RELEASE}/lib
+

@@ -1,0 +1,48 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+CPU_OBJS=$(wildcard ../../score/cpu/$(RTEMS_CPU)/$(ARCH)/*.rel)
+CORE_OBJS=$(wildcard ../../score/src/$(ARCH)/*.o)
+SAPI_OBJS=$(wildcard ../../sapi/src/$(ARCH)/*.o)
+RTEMS_OBJS=$(wildcard ../../rtems/src/$(ARCH)/*.o)
+
+OBJS=$(CPU_OBJS) $(CORE_OBJS) $(RTEMS_OBJS) $(SAPI_OBJS)
+LIB=$(ARCH)/librtems.a
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/lib.cfg
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS +=
+CFLAGS   +=
+
+LD_PATHS  +=
+LD_LIBS   +=
+LDFLAGS   +=
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+$(LIB): ${OBJS}
+	$(make-library)
+
+all:	${ARCH} $(SRCS) $(LIB)
+	$(INSTALL_VARIANT) -m 644 $(LIB) ${PROJECT_RELEASE}/lib
+

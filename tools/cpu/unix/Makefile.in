@@ -1,0 +1,61 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+# we use host compiler here for gensize.  Hopefully it has same alignment!!
+USE_HOST_COMPILER=yes
+
+# C source names, if any, go here -- minus the .c
+C_PIECES=gensize
+C_FILES=$(C_PIECES:%=%.c)
+C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+
+H_FILES=
+
+SRCS=$(C_FILES) $(H_FILES)
+OBJS=$(C_O_FILES)
+
+PGMS=${ARCH}/gensize
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/leaf.cfg
+
+# We use files that have not been installed yet.
+CPU_DIR=../../cpu/$(RTEMS_CPU)
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS += -I$(PROJECT_RELEASE)/include \
+	    -I$(CPU_DIR)
+CFLAGS   +=
+
+LD_PATHS  +=
+LD_LIBS   +=
+LDFLAGS   +=
+
+#
+# Add your list of files to delete here.
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+all:	${ARCH} $(SRCS) $(PGMS)
+	$(INSTALL) -m 555 ${PGMS} ${PROJECT_RELEASE}/bin
+
+# Hack
+# we are #including files that haven't been installed yet.
+# Make sure they are available in the src tree (ie: checked
+# out from SCCS or RCS)
+preinstall: 
+
+# Install the program(s), appending _g or _p as appropriate.
+# for include files, just use $(INSTALL)

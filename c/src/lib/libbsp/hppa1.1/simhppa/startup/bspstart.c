@@ -348,7 +348,7 @@ bsp_start(void)
 
     Cpu_table.itimer_clicks_per_microsecond = 1;
 
-#ifdef 0
+#if 0
     /*
      * Commented by DIVISION INC.  External interrupt
      * processing is now divorced from RTEMS for HPPA.

@@ -1,0 +1,34 @@
+#
+# $Id$
+#
+# RTEMS build tools
+# NOTE: of course we can't use any of these tools
+#		in this Makefile.  Most notably: install-if-change
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+include $(RTEMS_CUSTOM)
+include $(RTEMS_ROOT)/make/leaf.cfg
+
+DESTDIR=$(PROJECT_RELEASE)/build-tools
+
+PGMS=hackspecs.awk install-if-change rcs-clean \
+     lock-directory unlock-directory rtems-glom
+
+INSTALLED=$(PGMS:%=$(DESTDIR)/%)
+
+all:	$(DESTDIR) $(PGMS) install
+	echo $(DESTDIR)
+
+$(DESTDIR):
+	[ -d $@ ] || $(MKDIR) $@
+
+install:  $(INSTALLED)
+
+# Install the program
+$(DESTDIR)/%: %
+	$(make-script)

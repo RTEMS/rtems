@@ -1,0 +1,29 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+I_PIECES= extension
+I_FILES=$(I_PIECES:%=$(srcdir)/%.inl)
+
+SRCS=$(I_FILES)
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/lib.cfg
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS += $(LIB)
+CLOBBER_ADDITIONS +=
+
+all:	$(SRCS)
+	$(INSTALL) -m 444 ${I_FILES} ${PROJECT_RELEASE}/include/rtems

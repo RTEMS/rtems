@@ -1,0 +1,30 @@
+#
+# $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/leaf.cfg
+
+DESTDIR=$(PROJECT_RELEASE)/tests
+
+# We use the generic difftest
+PGMS=runtest looptest semdump shmdump
+
+INSTALLED=$(PGMS:%=$(DESTDIR)/%)
+
+all:	$(DESTDIR) $(PGMS) install
+
+install:  $(INSTALLED)
+
+# Install the program, replacing #!KSHELL with $(KSH)
+# and first line #!SHELL with $(SHELL)
+$(DESTDIR)/%: %
+	-$(RM) $@.old
+	-$(MV) $@ $@.old >/dev/null 2>&1
+	$(SED) -e '1,1s?^#!KSHELL?#!$(KSH)?' -e '1,1s?^#!SHELL?#!$(SHELL)?' < $< > $@
+	$(CHMOD) 0555 $@

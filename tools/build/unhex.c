@@ -88,10 +88,10 @@ void error(int errn, ...);
 #define ERR_ABORT  (ERR_ERRNO / 4)              /* error is fatal; abort */
 #define ERR_MASK   (ERR_ERRNO | ERR_FATAL | ERR_ABORT) /* all */
 
-#if (defined(sparc) && (sunos < 500))
-#define stol(p) strtol(p, (char **) NULL, 0)            /* Sunos */
+#ifdef HAVE_STRTOUL
+#define stol(p) strtoul(p, (char **) NULL, 0)
 #else
-#define stol(p) strtoul(p, (char **) NULL, 0)           /* Solaris */
+#define stol(p) strtol(p, (char **) NULL, 0)
 #endif
  
 int   unhex(FILE *ifp, char *inm, FILE *ofp, char *onm);

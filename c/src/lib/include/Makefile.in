@@ -1,0 +1,28 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+H_FILES=console.h clockdrv.h iosupp.h ringbuf.h \
+   spurious.h timerdrv.h vmeintr.h z8036.h z8530.h z8536.h
+
+HH_FILES=$(H_FILES:%=$(srcdir)/%)
+
+SYS_H_FILES=
+
+SRCS=$(HH_FILES) $(SYS_H_FILES)
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/leaf.cfg
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+all:	$(SRCS)
+	$(INSTALL) -m 444 $(HH_FILES) ${PROJECT_RELEASE}/include
+	$(INSTALL) -m 444 $(SYS_H_FILES) ${PROJECT_RELEASE}/include/sys
+

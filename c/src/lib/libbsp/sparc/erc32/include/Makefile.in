@@ -1,0 +1,34 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+H_FILES = $(srcdir)/bsp.h $(srcdir)/coverhd.h
+
+#
+#  Equate files are for including from assembly preprocessed by
+#  gm4 or gasp.  No examples are provided except for those for
+#  other CPUs.  The best way to generate them would be to
+#  provide a program which generates the constants used based
+#  on the C equivalents.
+#
+#  If you add equate files, don't forget to uncomment the install line
+#  below.
+#
+
+EQ_FILES =
+
+SRCS=$(H_FILES) $(EQ_FILES)
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/leaf.cfg
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+all:	$(SRCS)
+	$(INSTALL) -m 444 $(H_FILES) ${PROJECT_RELEASE}/include

@@ -1,0 +1,98 @@
+#
+#  $Id$
+#
+# top level directory for RTEMS build tree
+# This Makefile is *not* a good example of a directory Makefile.
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+libdir = @libdir@
+includedir = @includedir@
+target = @target@
+manext = 1
+mandir = @mandir@/man$(manext)
+program_prefix = @program_prefix@
+VPATH=@srcdir@
+
+include $(RTEMS_CUSTOM)
+include $(RTEMS_ROOT)/make/directory.cfg
+
+# dubious, but needed by rtems-glom ...
+export PROJECT_HOME
+
+SUB_DIRS=build-tools src
+
+# directories to be created in install point
+CREATE_DIRS = 	include include/sys \
+    include/rtems include/rtems/score include/rtems/rtems include/rtems/posix \
+		include/libc include/libc/sys \
+		lib \
+		bin \
+		samples tests \
+		build-tools update-tools
+
+# Make all/install must include 'env'
+all $(TARGET_VARIANTS:%=%_install) $(TARGET_VARIANTS:%=%_all): env 
+
+# top level clean/clobber will delete the install points
+clean_WRAPUP = $(MAKE) clean_wrapup
+clobber_WRAPUP = $(MAKE) clean_wrapup
+
+clean_wrapup: clean_tools clean_dirs clean_modules
+
+.PHONY:	dirs clean_wrapup clean_dirs clean_tools clean_modules env install
+
+#  XXX The link is temporary while switching to -specs options.
+dirs:
+	-$(MKDIR) ${CREATE_DIRS:%=$(PROJECT_ROOT)/$(RTEMS_BSP)/%}
+	-ln -s $(PROJECT_ROOT)/$(RTEMS_BSP)/include \
+		$(PROJECT_ROOT)/$(RTEMS_BSP)/lib/include 
+
+distclean: clobber
+
+clean_dirs:
+	$(RM) -r $(PROJECT_RELEASE)
+
+clean_tools:
+	cd build-tools; $(MAKE) clean
+
+# NOTE: The wildcard on the install should pick up everything except
+#       the tests directory.  This significantly minimizes the install size.
+install: all
+	 -$(MKDIR) $(prefix)/$(target)
+	 -$(MKDIR) $(prefix)/$(target)/rtems
+	 -$(MKDIR) $(prefix)/$(target)/rtems/make
+	 -$(MKDIR) $(prefix)/$(target)/rtems/make/compilers
+	 -$(MKDIR) $(prefix)/$(target)/rtems/make/custom
+	 -$(MKDIR) $(prefix)/$(target)/rtems/make/os
+	-rm -rf $(prefix)/$(target)/rtems/$(RTEMS_BSP)
+	cd ../; tar cf - $(RTEMS_BSP)/[bilsu]* | \
+		(cd $(prefix)/$(target)/rtems; tar xpBf - )
+	cd $(srcdir); tar cf - make/compilers make/custom make/os \
+		make/leaf.cfg make/directory.cfg make/main.cfg | \
+		(cd $(prefix)/$(target)/rtems; tar xpBf - )
+	echo RTEMS_BSP = $(RTEMS_BSP) > \
+		$(prefix)/$(target)/rtems/$(RTEMS_BSP)/Makefile.inc
+	cat make/Templates/Makefile.inc >> \
+		$(prefix)/$(target)/rtems/$(RTEMS_BSP)/Makefile.inc
+
+tests:
+	cd src/tests; $(MAKE) all
+
+env:    $(SRCS) dirs
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,48 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+BSP_PIECES=startup clock console shmsupp timer
+GENERIC_PIECES=shmdr
+
+# bummer; have to use $foreach since % pattern subst rules only replace 1x
+OBJS=$(foreach piece, $(BSP_PIECES), ../$(piece)/$(ARCH)/$(piece).rel) \
+     $(foreach piece, $(GENERIC_PIECES), ../../../$(piece)/$(ARCH)/$(piece).rel)
+LIB=$(ARCH)/libbsp.a
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/lib.cfg
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS +=
+CFLAGS   +=
+
+LD_PATHS  +=
+LD_LIBS   +=
+LDFLAGS   +=
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+$(LIB): ${OBJS}
+	$(make-library)
+
+all:	${ARCH} $(SRCS) $(LIB)
+	$(INSTALL_VARIANT) -m 644 $(LIB) ${PROJECT_RELEASE}/lib
+

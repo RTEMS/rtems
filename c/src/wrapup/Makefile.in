@@ -1,0 +1,34 @@
+#
+#  $Id$
+#
+#  build and install "glommed" librtemsall.a
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/lib.cfg
+ 
+LIB=$(PROJECT_HOME)/lib/librtemsall.a
+ 
+SRCS=$(wildcard $(PROJECT_HOME)/lib/libbsp$(LIB_VARIANT).a) \
+     $(PROJECT_HOME)/lib/librtems$(LIB_VARIANT).a \
+     $(wildcard $(PROJECT_HOME)/lib/libposix$(LIB_VARIANT).a) \
+     $(PROJECT_HOME)/lib/libcsupport$(LIB_VARIANT).a \
+     $(wildcard $(PROJECT_HOME)/lib/rtems-ctor$(LIB_VARIANT).o) \
+     $(wildcard $(PROJECT_HOME)/lib/libno-ctor$(LIB_VARIANT).a)
+ 
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+ 
+all:    $(ARCH) $(LIB)
+ 
+$(LIB):  $(SRCS)
+	$(PROJECT_RELEASE)/build-tools/rtems-glom \
+          -d $(PROJECT_HOME)/lib -v -V "$(LIB_VARIANT)" -a $(AR)
+ 
+install:  all
+

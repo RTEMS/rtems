@@ -38,6 +38,10 @@ extern "C" {
  
 #define CPU_MODEL_NAME  "Solaris"
  
+#elif defined(__linux__)
+ 
+#define CPU_MODEL_NAME  "Linux"
+ 
 #elif defined(linux)
  
 #define CPU_MODEL_NAME  "Linux"

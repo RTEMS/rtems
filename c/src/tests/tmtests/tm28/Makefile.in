@@ -1,0 +1,60 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+TEST=tm28
+
+MANAGERS=io dpmem
+
+# C source names, if any, go here -- minus the .c
+C_PIECES=task1
+C_FILES=$(C_PIECES:%=%.c)
+C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+
+H_FILES=system.h
+
+DOCTYPES=doc
+DOCS=$(DOCTYPES:%=$(TEST).%)
+
+SRCS=$(DOCS) $(C_FILES) $(H_FILES)
+OBJS=$(C_O_FILES)
+
+PRINT_SRCS=$(DOCS)
+
+PGM=${ARCH}/$(TEST).exe
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/leaf.cfg
+
+#
+# (OPTIONAL) Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS +=
+CFLAGS   +=
+
+LD_PATHS  +=
+LD_LIBS   +=
+LDFLAGS   +=
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+all:	${ARCH} $(SRCS) $(PGM)
+	$(INSTALL_VARIANT) -m 555 ${PGM} ${PROJECT_RELEASE}/tests
+
+${PGM}: $(OBJS) $(LINK_FILES)
+	$(make-exe)

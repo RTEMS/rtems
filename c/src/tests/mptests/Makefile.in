@@ -1,0 +1,15 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/directory.cfg
+
+all: README
+
+SUB_DIRS=mp01 mp02 mp03 mp04 mp05 mp06 mp07 mp08 mp09 mp10 mp11 mp12 mp13 mp14

@@ -1,0 +1,17 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/directory.cfg
+
+POSIX_DIRS_yes_V=posix
+POSIX_DIRS = $(POSIX_DIRS_$(HAS_POSIX_API)_V)
+
+SUB_DIRS=score rtems $(POSIX_DIRS) sapi wrapup
+

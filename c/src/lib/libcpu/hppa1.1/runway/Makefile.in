@@ -1,0 +1,22 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+H_PIECES = runway
+H_FILES=$(H_PIECES:%=$(srcdir)/%.h)
+
+SRCS=$(H_FILES) $(EQ_FILES)
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/leaf.cfg
+
+CLEAN_ADDITIONS +=
+CLOBBER_ADDITIONS +=
+
+all:	$(SRCS)
+	$(INSTALL) -m 444 $(H_FILES) ${PROJECT_RELEASE}/include

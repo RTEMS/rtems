@@ -1,0 +1,39 @@
+#
+# $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/leaf.cfg
+
+DESTDIR=$(PROJECT_RELEASE)/build-tools
+
+INSTALLED=$(DESTDIR)/ifc.exe \
+          $(DESTDIR)/cklength.exe \
+          $(DESTDIR)/fixtimer.exe
+
+all:	$(DESTDIR) $(PGMS) install
+	echo $(DESTDIR)
+
+$(DESTDIR):
+	[ -d $@ ] || $(MKDIR) $@
+
+install:  $(INSTALLED)
+
+# Install the programs
+$(DESTDIR)/ifc.exe: ifc_exe.uue
+	uudecode <ifc_exe.uue
+	mv ifc.exe $(DESTDIR)/ifc.exe
+
+$(DESTDIR)/cklength.exe: cklength.uue
+	uudecode <cklength.uue
+	mv cklength.exe $(DESTDIR)/cklength.exe
+
+$(DESTDIR)/fixtimer.exe: fixtimer.uue
+	uudecode <fixtimer.uue
+	mv fixtimer.exe $(DESTDIR)/fixtimer.exe
+

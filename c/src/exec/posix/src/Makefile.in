@@ -1,0 +1,50 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+#C_PIECES= aio cancel cond devctl intr key mqueue mutex pthread \
+#    ptimer sched semaphore signal time types unistd utsname
+C_PIECES= adasupp cond getpid key mutex pthread psignal sched time \
+  types unistd
+C_FILES=$(C_PIECES:%=%.c)
+C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+
+SRCS=$(C_FILES) $(CC_FILES)
+OBJS=$(C_O_FILES) $(CC_O_FILES)
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/lib.cfg
+
+#
+# Add local stuff here using +=
+#
+
+DEFINES  +=
+CPPFLAGS +=
+CFLAGS   += $(CFLAGS_OS_V)
+
+#
+# Add your list of files to delete here.  The config files
+#  already know how to delete some stuff, so you may want
+#  to just run 'make clean' first to see what gets missed.
+#  'make clobber' already includes 'make clean'
+#
+
+CLEAN_ADDITIONS += 
+CLOBBER_ADDITIONS +=
+
+all:	${ARCH} $(SRCS) ${OBJS}
+
+# temporary so we can see how many things are left to implement
+not:
+	grep -i NOT_IMPL $(C_FILES) | grep -v MP_NOT_IMPL
+	@echo
+	@echo
+	@echo
+	@echo `grep -i NOT_IMPL $(C_FILES) | grep -v MP_NOT_IMPL | wc -l ` places marked not implemented
+	@echo `wc -l $(C_FILES) | grep total` lines of C code to test

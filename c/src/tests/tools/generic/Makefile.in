@@ -1,0 +1,25 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH=@srcdir@
+
+include $(RTEMS_CUSTOM)
+include $(PROJECT_ROOT)/make/leaf.cfg
+
+DESTDIR=$(PROJECT_RELEASE)/tests
+
+PGMS=difftest sorttimes
+
+INSTALLED=$(PGMS:%=$(DESTDIR)/%)
+
+all:	$(DESTDIR) $(PGMS) install
+
+install:  $(INSTALLED)
+
+# Install the program
+$(DESTDIR)/%: %
+	$(make-script)

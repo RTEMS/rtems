@@ -447,7 +447,7 @@ void _CPU_Context_Initialize(
   *(addr + SP_OFF) = (unsigned32)(_stack_high - CPU_FRAME_SIZE);
   *(addr + FP_OFF) = (unsigned32)(_stack_high);
 
-#elif defined(i386)
+#elif defined(i386) || defined(__i386__)
 
     /*
      *  This information was gathered by disassembling setjmp().
@@ -817,7 +817,7 @@ void _CPU_SHM_Init(
   char        *shm_addr;
   key_t        shm_key;
   key_t        sem_key;
-  int          status = 0;
+  int          status;
   int          shm_size;
 
   if (getenv("RTEMS_SHM_KEY"))
