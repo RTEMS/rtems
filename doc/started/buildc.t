@@ -202,9 +202,15 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{GCC-UNTAR}
-zcat ../../archive/@value{GCC-RTEMSPATCH} | \
+cat ../../archive/@value{GCC-RTEMSPATCH} | \
     patch -p1
 @end example
+
+If the patch was compressed with the @code{gzip} program, it will
+have a suffix of @code{.gz} and you should use @code{zcat} instead
+of @code{cat} as shown above.  If the patch was compressed with
+the @code{gzip} program, it will have a suffix of @code{.bz2} and
+you should use @code{bzcat} instead of @code{cat} as shown above.
 
 Check to see if any of these patches have been rejected using the following
 sequence:
@@ -235,9 +241,15 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{BINUTILS-UNTAR}
-zcat ../../archive/@value{BINUTILS-RTEMSPATCH} | \
+cat ../../archive/@value{BINUTILS-RTEMSPATCH} | \
     patch -p1
 @end example
+
+If the patch was compressed with the @code{gzip} program, it will
+have a suffix of @code{.gz} and you should use @code{zcat} instead
+of @code{cat} as shown above.  If the patch was compressed with
+the @code{gzip} program, it will have a suffix of @code{.bz2} and
+you should use @code{bzcat} instead of @code{cat} as shown above.
 
 Check to see if any of these patches have been rejected using the following
 sequence: 
@@ -269,9 +281,15 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{NEWLIB-UNTAR}
-zcat ../../archive/@value{NEWLIB-RTEMSPATCH} | \
+cat ../../archive/@value{NEWLIB-RTEMSPATCH} | \
     patch -p1
 @end example
+
+If the patch was compressed with the @code{gzip} program, it will
+have a suffix of @code{.gz} and you should use @code{zcat} instead
+of @code{cat} as shown above.  If the patch was compressed with
+the @code{gzip} program, it will have a suffix of @code{.bz2} and
+you should use @code{bzcat} instead of @code{cat} as shown above.
 
 Check to see if any of these patches have been rejected using the following
 sequence: 
@@ -647,9 +665,15 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{GDB-UNTAR}
-zcat archive/@value{GDB-RTEMSPATCH} | \
+cat archive/@value{GDB-RTEMSPATCH} | \
     patch -p1
 @end example
+
+If the patch was compressed with the @code{gzip} program, it will
+have a suffix of @code{.gz} and you should use @code{zcat} instead
+of @code{cat} as shown above.  If the patch was compressed with
+the @code{gzip} program, it will have a suffix of @code{.bz2} and
+you should use @code{bzcat} instead of @code{cat} as shown above.
 
 Check to see if any of these patches have been rejected using the following
 sequence:
