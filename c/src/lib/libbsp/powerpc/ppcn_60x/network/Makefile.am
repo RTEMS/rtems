@@ -22,7 +22,7 @@ $(PGM): $(OBJS)
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 
 if HAS_NETWORKING
-all-local: $(OBJS) $(PGM)
+all-local: $(PGM)
 endif
 
 .PRECIOUS: $(PGM)

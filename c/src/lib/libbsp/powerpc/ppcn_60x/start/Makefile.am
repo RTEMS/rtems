@@ -3,17 +3,11 @@
 ##
 
 S_FILES = start.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(S_O_FILES)
+OBJS = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 include $(top_srcdir)/../../bspstart.am
-
-#
-# (OPTIONAL) Add local stuff here using +=
-#
 
 project_lib_DATA = $(ARCH)/start$(LIB_VARIANT).$(OBJEXT)
 

@@ -2,31 +2,29 @@
 ## $Id$
 ##
 
-VPATH = @srcdir@:@srcdir@/../../../shared
+
 
 PGM = $(ARCH)/startup.rel
 
-C_FILES = bspstart.c bspclean.c sbrk.c setvec.c spurious.c genpvec.c swap.c \
-    main.c bootcard.c bsplibc.c bsppost.c gnatinstallhandler.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
+C_FILES = bspstart.c bspclean.c setvec.c spurious.c genpvec.c swap.c
+OBJS = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 S_FILES = bsptrap.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
-
-OBJS = $(C_O_FILES) $(S_O_FILES)
+OBJS += $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../../../automake/lib.am
 
-#FIXME: What is this?
-# Files expected to be from the shared directory:
-#  sbrk bootcard main bsplibc bsppost
-STARTUP_C_PIECES = bspstart bspclean sbrk setvec spurious genpvec swap main \
-    bootcard bsplibc bsppost
+shared_C_FILES = $(top_srcdir)/../../shared/bootcard.c
+shared_C_FILES += $(top_srcdir)/../../shared/bsplibc.c
+shared_C_FILES += $(top_srcdir)/../../shared/bsppost.c
+shared_C_FILES += $(top_srcdir)/../../shared/main.c
+shared_C_FILES += $(top_srcdir)/../../shared/sbrk.c
+shared_C_FILES += $(top_srcdir)/../../shared/gnatinstallhandler.c
+OBJS += $(shared_C_FILES:$(top_srcdir)/../../shared/%.c=$(ARCH)/%.$(OBJEXT))
 
-#
-# (OPTIONAL) Add local stuff here using +=
-#
+$(ARCH)/%.$(OBJEXT): $(top_srcdir)/../../shared/%.c $(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
 
 $(PGM): $(OBJS)
 	$(make-rel)
@@ -35,8 +33,7 @@ project_lib_DATA = linkcmds
 
 all-local: $(PGM) $(TMPINSTALL_FILES)
 
-EXTRA_DIST = bspclean.c bspstart.c bsptrap.S genpvec.c linkcmds \
-    rtems-ctor.cc setvec.c spurious.c swap.c
+EXTRA_DIST = linkcmds $(C_FILES) $(S_FILES)
 
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
