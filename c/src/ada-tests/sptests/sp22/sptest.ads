@@ -21,7 +21,6 @@
 --  $Id$
 --
 
-with CLOCK_DRIVER;
 with RTEMS;
 
 package SPTEST is

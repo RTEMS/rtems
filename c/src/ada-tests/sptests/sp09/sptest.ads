@@ -21,7 +21,6 @@
 --  $Id$
 --
 
-with CLOCK_DRIVER;
 with RTEMS;
 with SYSTEM;
 with System.Storage_Elements;
