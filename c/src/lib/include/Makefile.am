@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.5
 
 include_HEADERS = chain.h console.h clockdrv.h iosupp.h ringbuf.h rtc.h \
     spurious.h timerdrv.h vmeintr.h

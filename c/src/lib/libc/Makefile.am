@@ -2,7 +2,6 @@
 ##  $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 LIBNAME = libcsupport
 LIB = ${ARCH}/${LIBNAME}.a
