@@ -14,7 +14,7 @@ C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 H_FILES = system.h
 noinst_HEADERS = $(H_FILES)
 
-DOCTYPES = doc scn
+DOCTYPES = doc
 DOCS = $(DOCTYPES:%=$(SAMPLE).%)
 
 SRCS = $(DOCS) $(C_FILES) $(H_FILES)

@@ -13,10 +13,7 @@ C_O_FILES = $(C_FILES:%.c=${ARCH}/%.$(OBJEXT))
 
 H_FILES = netconfig.h  system.h
 
-DOCTYPES = scn
-DOCS = $(DOCTYPES:%=$(SAMPLE).%)
-
-SRCS = $(DOCS) $(C_FILES) $(H_FILES)
+SRCS = $(C_FILES) $(H_FILES)
 OBJS = $(C_O_FILES)
 
 PRINT_SRCS = $(DOCS)
@@ -38,6 +35,6 @@ ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 endif
 
-EXTRA_DIST = $(C_FILES) $(H_FILES) $(DOCS)
+EXTRA_DIST = $(C_FILES) $(H_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am

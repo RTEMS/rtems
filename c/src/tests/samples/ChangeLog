@@ -1,3 +1,8 @@
+2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* fileio/Makefile.am: Remove references to *.scn (Doesn't exist).
+	* pppd/Makefile.am: Remove references to DOC* (Don't exist).
+
 2003-08-06	Thomas Doerfler<Thomas.Doerfler@imd-systems.de>
 
 	PR 369/filesystem
