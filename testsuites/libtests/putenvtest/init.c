@@ -26,6 +26,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/* putenv is beyond ANSI so prototype it here */
+int putenv(const char *string);
+
 rtems_task Init(
   rtems_task_argument argument
 );
