@@ -20,11 +20,18 @@
  *  the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  $Id: 
+ *  $Id$
  */
 
 #include <rtems.h>
 #include <bsp.h>
+
+/*PAGE
+ *
+ *  set_vector
+ *
+ *  This routine installs an interrupt handler for vector.
+ */
 
 rtems_isr_entry set_vector(                    /* returns old vector */
   rtems_isr_entry     handler,                  /* isr routine        */
