@@ -31,30 +31,18 @@ rtems_unsigned32 Clock_driver_vector;
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
-void
-Install_clock(rtems_isr_entry clock_isr)
+void Install_clock(rtems_isr_entry clock_isr)
 {
     Clock_driver_ticks = 0;
 
-    (void)set_vector(clock_isr, Clock_driver_vector, 1);
+    (void) set_vector( clock_isr, Clock_driver_vector, 1 );
 
     _CPU_Start_clock( BSP_Configuration.microseconds_per_tick );
 
     atexit(Clock_exit);
 }
 
-void
-ReInstall_clock(rtems_isr_entry new_clock_isr)
-{
-    rtems_unsigned32  isrlevel = 0;
-
-    rtems_interrupt_disable(isrlevel);
-    (void)set_vector(new_clock_isr, Clock_driver_vector, 1);
-    rtems_interrupt_enable(isrlevel);
-}
-
-void
-Clock_isr(int vector)
+void Clock_isr(int vector)
 {
     Clock_driver_ticks++;
     rtems_clock_tick();
@@ -65,16 +53,14 @@ Clock_isr(int vector)
  * Remove the clock signal
  */
 
-void
-Clock_exit(void)
+void Clock_exit(void)
 {
   _CPU_Stop_clock();
 
-  (void)set_vector(0, Clock_driver_vector, 1);
+  (void) set_vector( 0, Clock_driver_vector, 1 );
 }
 
-rtems_device_driver
-Clock_initialize(
+rtems_device_driver Clock_initialize(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void *pargp
@@ -99,6 +85,7 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
+    rtems_unsigned32 isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
 
     if (args == 0)
@@ -115,7 +102,9 @@ rtems_device_driver Clock_control(
     }
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
     {
-        ReInstall_clock(args->buffer);
+      rtems_interrupt_disable( isrlevel );
+       (void) set_vector( args->buffer, Clock_driver_vector, 1 );
+      rtems_interrupt_enable( isrlevel );
     }
     
 done:

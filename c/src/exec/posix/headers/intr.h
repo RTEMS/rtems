@@ -60,8 +60,7 @@ EXTERN Objects_Information _POSIX_Interrupt_Handlers_Information;
  *  interrupt handlers installed on each vector.
  */
 
-EXTERN POSIX_Interrupt_Control 
-  _POSIX_Interrupt_Information[ ISR_NUMBER_OF_VECTORS ];
+EXTERN POSIX_Interrupt_Control _POSIX_Interrupt_Information[ ISR_NUMBER_OF_VECTORS ];
  
 /*
  *  _POSIX_Interrupt_Manager_initialization

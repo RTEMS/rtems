@@ -105,7 +105,7 @@ void Install_clock(
    */
 
   if ( BSP_Configuration.ticks_per_timeslice ) {
-    Old_ticker = ( rtems_isr_entry ) set_vector( clock_isr, CLOCK_VECTOR, 1 );
+    Old_ticker = (rtems_isr_entry) set_vector( clock_isr, CLOCK_VECTOR, 1 );
     /*
      *  Hardware specific initialize goes here
      */
@@ -118,30 +118,6 @@ void Install_clock(
    */
 
   atexit( Clock_exit );
-}
-
-/*
- *  Reinstall_clock
- *
- *  Install a clock tick handler without reprogramming the chip.  This
- *  is used by the polling shared memory device driver.
- */
-
-void ReInstall_clock(
-  rtems_isr_entry clock_isr
-)
-{
-  rtems_unsigned32 isrlevel = 0;
-
-  /*
-   *  Disable interrupts and install the clock ISR vector using the
-   *  BSP dependent set_vector routine.  In the below example, the clock
-   *  ISR is on vector 4 and is an RTEMS interrupt.
-   */
-
-  rtems_interrupt_disable( isrlevel );
-   (void) set_vector( clock_isr, CLOCK_VECTOR, 1 );
-  rtems_interrupt_enable( isrlevel );
 }
 
 /*
@@ -188,6 +164,7 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
+    rtems_unsigned32 isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
  
     if (args == 0)
@@ -204,7 +181,9 @@ rtems_device_driver Clock_control(
     }
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
     {
-        ReInstall_clock(args->buffer);
+      rtems_interrupt_disable( isrlevel );
+       (void) set_vector( args->buffer, CLOCK_VECTOR, 1 );
+      rtems_interrupt_enable( isrlevel );
     }
  
 done:

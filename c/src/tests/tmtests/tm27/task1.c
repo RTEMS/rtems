@@ -11,6 +11,12 @@
  *  $Id$
  */
 
+/*
+ *  WARNING!!!!!!!!!   
+ *
+ *  THIS TEST USES INTERNAL RTEMS VARIABLES!!!
+ */
+
 #define TEST_INIT
 #include "system.h"
 
@@ -32,15 +38,6 @@ rtems_unsigned32 Interrupt_nest;
 rtems_isr Isr_handler(
   rtems_vector_number vector
 );
-
-/*
- *  INTERNAL RTEMS VARIABLES!!!
- */
-
-extern rtems_unsigned32 _Thread_Dispatch_disable_level;
-extern rtems_unsigned32 _Context_Switch_necessary;
-extern Chain_Control *_Thread_Ready_chain;
-extern rtems_tcb     *_Thread_Heir;
 
 rtems_task Init(
   rtems_task_argument argument
@@ -169,8 +166,22 @@ rtems_task Task_1(
   Interrupt_occurred = 0;
   Timer_initialize();
     Cause_tm27_intr();
-  /* goes to Isr_handler */
+
+  /*
+   *  goes to Isr_handler and then returns
+   */
+
+  puts( "*** END OF TEST 27 ***" );
+  exit( 0 );
 }
+
+/*
+ *  NOTE:  When this task is executing, some of the assumptions made 
+ *         regarding the placement of the currently executing task's TCB
+ *         on the ready chains have been violated.  At least the assumption
+ *         that this task is at the head of the chain for its priority
+ *         has been violated.
+ */
 
 rtems_task Task_2(
   rtems_task_argument argument
@@ -197,8 +208,20 @@ rtems_task Task_2(
     0
   );
 
-  puts( "*** END OF TEST 27 ***" );
-  exit( 0 );
+  fflush( stdout );
+
+  /*
+   *  Switch back to the other task to exit the test.
+   */
+
+  _Thread_Dispatch_disable_level = 0;
+ 
+  _Thread_Heir = (rtems_tcb *) _Thread_Ready_chain[254].first;
+ 
+  _Context_Switch_necessary = 1;
+
+  _Thread_Dispatch();
+
 }
 
 /*  The Isr_handler() and Isr_handler_inner() routines are structured

@@ -278,7 +278,8 @@ EXTERN void               *_CPU_Interrupt_stack_high;
  * interrupts (genie, rhino, etc)
  */
 
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS  (HPPA_INTERRUPT_MAX)
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS      (HPPA_INTERRUPT_MAX)
+#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /*
  * Don't be chintzy here; we don't want to debug these problems
@@ -387,7 +388,7 @@ unsigned32 _CPU_ISR_Get_level( void );
  */
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                  _new_level, _entry_point ) \
+                                  _new_level, _entry_point, _is_fp ) \
   do { \
     unsigned32 _stack; \
     \
@@ -456,6 +457,9 @@ void    hppa_cpu_halt(unsigned32 type_of_halt, unsigned32 the_error);
  *  is implemented in software.
  */
 
+#define CPU_USE_GENERIC_BITFIELD_CODE FALSE
+#define CPU_USE_GENERIC_BITFIELD_DATA FALSE
+
 int hppa_rtems_ffs(unsigned int value);
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
     _output = hppa_rtems_ffs(_value)
@@ -477,7 +481,7 @@ int hppa_rtems_ffs(unsigned int value);
 #define _CPU_Priority_Mask( _bit_number ) \
   ( 1 << (_bit_number) )
 
-#define _CPU_Priority_Bits_index( _priority ) \
+#define _CPU_Priority_bits_index( _priority ) \
   (_priority)
 
 /* end of Priority handler macros */

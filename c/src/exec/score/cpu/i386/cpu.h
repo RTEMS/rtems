@@ -143,7 +143,8 @@ EXTERN void               *_CPU_Interrupt_stack_high;
  *  i386 family supports 256 distinct vectors.
  */
 
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS 256
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS      256
+#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /*
  *  Minimum size of a thread's stack.
@@ -208,7 +209,7 @@ unsigned32 _CPU_ISR_Get_level( void );
 #define CPU_EFLAGS_INTERRUPTS_OFF 0x00003002
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                   _isr, _entry_point ) \
+                                   _isr, _entry_point, _is_fp ) \
   do { \
     unsigned32 _stack; \
     \
@@ -265,6 +266,9 @@ unsigned32 _CPU_ISR_Get_level( void );
  *     + scan for the highest numbered (MSB) set in a 16 bit bitfield
  */
 
+#define CPU_USE_GENERIC_BITFIELD_CODE FALSE
+#define CPU_USE_GENERIC_BITFIELD_DATA FALSE
+
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
     register unsigned16 __value_in_register = (_value); \
@@ -292,7 +296,7 @@ unsigned32 _CPU_ISR_Get_level( void );
 #define _CPU_Priority_Mask( _bit_number ) \
   ( 1 << (_bit_number) )
 
-#define _CPU_Priority_Bits_index( _priority ) \
+#define _CPU_Priority_bits_index( _priority ) \
   (_priority)
 
 /* functions */

@@ -25,7 +25,11 @@ void Screen9()
   rtems_status_code status;
   rtems_isr_entry   old_service_routine;
 
-  status = rtems_interrupt_catch( Service_routine, 500, &old_service_routine );
+  status = rtems_interrupt_catch(
+    Service_routine,
+    ISR_INTERRUPT_MAXIMUM_VECTOR_NUMBER + 10,
+    &old_service_routine
+  );
   fatal_directive_status(
     status,
     RTEMS_INVALID_NUMBER,

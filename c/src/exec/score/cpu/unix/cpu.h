@@ -549,7 +549,8 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  by RTEMS.
  */
 
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS  64
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS      64
+#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /*
  *  Should be large enough to run all RTEMS tests.  This insures
@@ -721,7 +722,8 @@ extern void _CPU_Context_Initialize(
   unsigned32       *_stack_base,
   unsigned32        _size,
   unsigned32        _new_level,
-  void             *_entry_point
+  void             *_entry_point,
+  boolean           _is_fp
 );
 
 /* end of Context handler macros */
@@ -757,11 +759,11 @@ extern void _CPU_Context_Initialize(
  *
  *  RTEMS guarantees that (1) will never happen so it is not a concern.
  *  (2),(3), (4) are handled by the macros _CPU_Priority_mask() and
- *  _CPU_Priority_Bits_index().  These three form a set of routines
+ *  _CPU_Priority_bits_index().  These three form a set of routines
  *  which must logically operate together.  Bits in the _value are
  *  set and cleared based on masks built by _CPU_Priority_mask().
  *  The basic major and minor values calculated by _Priority_Major()
- *  and _Priority_Minor() are "massaged" by _CPU_Priority_Bits_index()
+ *  and _Priority_Minor() are "massaged" by _CPU_Priority_bits_index()
  *  to properly range between the values returned by the "find first bit"
  *  instruction.  This makes it possible for _Priority_Get_highest() to
  *  calculate the major and directly index into the minor table.
@@ -796,30 +798,25 @@ extern void _CPU_Context_Initialize(
  *      bit set
  */
 
-#define _CPU_Bitfield_Find_first_bit( _value, _output ) \
-    _output = _CPU_ffs( _value )
-
+/*
+ *  The UNIX port uses the generic C algorithm for bitfield scan to avoid
+ *  dependencies on either a native bitscan instruction or an ffs() in the
+ *  C library.
+ */
+ 
+#define CPU_USE_GENERIC_BITFIELD_CODE TRUE
+#define CPU_USE_GENERIC_BITFIELD_DATA TRUE
+ 
 /* end of Bitfield handler macros */
-
+ 
+/* Priority handler handler macros */
+ 
 /*
- *  This routine builds the mask which corresponds to the bit fields
- *  as searched by _CPU_Bitfield_Find_first_bit().  See the discussion
- *  for that routine.
+ *  The UNIX port uses the generic C algorithm for bitfield scan to avoid
+ *  dependencies on either a native bitscan instruction or an ffs() in the
+ *  C library.
  */
-
-#define _CPU_Priority_Mask( _bit_number ) \
-  ( 1 << (_bit_number) )
-
-/*
- *  This routine translates the bit numbers returned by
- *  _CPU_Bitfield_Find_first_bit() into something suitable for use as
- *  a major or minor component of a priority.  See the discussion
- *  for that routine.
- */
-
-#define _CPU_Priority_Bits_index( _priority ) \
-  (_priority)
-
+ 
 /* end of Priority handler macros */
 
 /* functions */
@@ -933,10 +930,6 @@ void _CPU_ISR_Set_signal_level(
 
 void _CPU_Fatal_error(
   unsigned32 _error
-);
-
-int _CPU_ffs(
-  unsigned32 _value
 );
 
 /*  The following routine swaps the endian format of an unsigned int.

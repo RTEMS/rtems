@@ -47,8 +47,9 @@ EXTERN boolean _Context_Switch_necessary;
  *  thread's initial state.
  */
 
-#define _Context_Initialize( _the_context, _stack, _size, _isr, _entry ) \
-   _CPU_Context_Initialize( _the_context, _stack, _size, _isr, _entry )
+#define \
+   _Context_Initialize( _the_context, _stack, _size, _isr, _entry, _is_fp ) \
+   _CPU_Context_Initialize( _the_context, _stack, _size, _isr, _entry, _is_fp )
 
 /*
  *  _Context_Switch

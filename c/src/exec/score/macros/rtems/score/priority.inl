@@ -64,6 +64,28 @@
 
 #define _Priority_Minor( _the_priority ) ( (_the_priority) % 16 )
 
+#if ( CPU_USE_GENERIC_BITFIELD_CODE == TRUE )
+ 
+/*PAGE
+ *
+ *  _Priority_Mask
+ *
+ */
+ 
+#define _Priority_Mask( _bit_number ) \
+  (0x8000 >> _bit_number)
+ 
+/*PAGE
+ *
+ *  _Priority_Bits_index
+ *
+ */
+ 
+#define _Priority_Bits_index( _bit_number ) \
+  (_bit_number)
+ 
+#endif
+ 
 /*PAGE
  *
  *  _Priority_Add_to_bit_map
@@ -103,8 +125,8 @@
     _Bitfield_Find_first_bit( _Priority_Major_bit_map, major ); \
     _Bitfield_Find_first_bit( _Priority_Bit_map[major], minor ); \
     \
-    (_high_priority) = (_CPU_Priority_Bits_index( major ) * 16) +  \
-                       _CPU_Priority_Bits_index( minor ); \
+    (_high_priority) = (_Priority_Bits_index( major ) * 16) +  \
+                        _Priority_Bits_index( minor ); \
   }
 
 /*PAGE
@@ -124,13 +146,13 @@
     _minor = _Priority_Minor( (_new_priority) ); \
     \
     (_the_priority_map)->minor =  \
-      &_Priority_Bit_map[ _CPU_Priority_Bits_index(_major) ]; \
+      &_Priority_Bit_map[ _Priority_Bits_index(_major) ]; \
     \
-    _mask = _CPU_Priority_Mask( _major ); \
+    _mask = _Priority_Mask( _major ); \
     (_the_priority_map)->ready_major = _mask; \
     (_the_priority_map)->block_major = ~_mask; \
     \
-    _mask = _CPU_Priority_Mask( _minor ); \
+    _mask = _Priority_Mask( _minor ); \
     (_the_priority_map)->ready_minor = _mask; \
     (_the_priority_map)->block_minor = ~_mask; \
   }

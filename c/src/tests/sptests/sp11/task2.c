@@ -73,9 +73,9 @@ rtems_task Task_2(
   status = rtems_clock_set( &time );
   directive_failed( status, "TA2 rtems_clock_set" );
 
-  time.second += 5;
+  time.second += 4;
   puts(
-    "TA2 - rtems_event_send - sending RTEMS_EVENT_10 to self after 5 seconds"
+    "TA2 - rtems_event_send - sending RTEMS_EVENT_10 to self after 4 seconds"
   );
   status = rtems_timer_fire_when(
     Timer_id[ 5 ],
@@ -83,7 +83,7 @@ rtems_task Task_2(
     TA2_send_10_to_self,
     NULL
   );
-  directive_failed( status, "rtems_timer_fire_when after 5 seconds" );
+  directive_failed( status, "rtems_timer_fire_when after 4 seconds" );
 
   puts( "TA2 - rtems_event_receive - waiting forever on RTEMS_EVENT_10" );
   status = rtems_event_receive(

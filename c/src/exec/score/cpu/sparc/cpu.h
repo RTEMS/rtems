@@ -1,7 +1,7 @@
 /*  cpu.h
  *
- *  This include file contains information pertaining to the XXX
- *  processor.
+ *  This include file contains information pertaining to the port of 
+ *  the executive to the SPARC processor.
  *
  *  $Id$
  */
@@ -25,16 +25,6 @@ extern "C" {
  *
  *  If TRUE, then they are inlined.
  *  If FALSE, then a subroutine call is made.
- *
- *  Basically this is an example of the classic trade-off of size
- *  versus speed.  Inlining the call (TRUE) typically increases the
- *  size of the executive while speeding up the enabling of dispatching.
- *  [NOTE: In general, the _Thread_Dispatch_disable_level will
- *  only be 0 or 1 unless you are in an interrupt handler and that
- *  interrupt handler invokes the executive.]  When not inlined
- *  something calls _Thread_Enable_dispatch which in turns calls
- *  _Thread_Dispatch.  If the enable dispatch is inlined, then
- *  one subroutine call is avoided entirely.]
  */
 
 #define CPU_INLINE_ENABLE_DISPATCH       TRUE
@@ -48,13 +38,10 @@ extern "C" {
  *  If TRUE, then the loops are unrolled.
  *  If FALSE, then the loops are not unrolled.
  *
- *  The primary factor in making this decision is the cost of disabling
- *  and enabling interrupts (_ISR_Flash) versus the cost of rest of the
- *  body of the loop.  On some CPUs, the flash is more expensive than
- *  one iteration of the loop body.  In this case, it might be desirable
- *  to unroll the loop.  It is important to note that on some CPUs, this
- *  code is the longest interrupt disable period in the executive.  So it is
- *  necessary to strike a balance when setting this parameter.
+ *  This parameter could go either way on the SPARC.  The interrupt flash
+ *  code is relatively lengthy given the requirements for nops following
+ *  writes to the psr.  But if the clock speed were high enough, this would
+ *  not represent a great deal of time.
  */
 
 #define CPU_UNROLL_ENQUEUE_PRIORITY      TRUE
@@ -65,25 +52,11 @@ extern "C" {
  *  If TRUE, then a stack is allocated in _Interrupt_Manager_initialization.
  *  If FALSE, nothing is done.
  *
- *  If the CPU supports a dedicated interrupt stack in hardware,
- *  then it is generally the responsibility of the BSP to allocate it
- *  and set it up.
- *
- *  If the CPU does not support a dedicated interrupt stack, then
- *  the porter has two options: (1) execute interrupts on the stack of 
- *  the interrupted task, and (2) have the executive manage a dedicated
- *  interrupt stack.
- *
- *  If this is TRUE, CPU_ALLOCATE_INTERRUPT_STACK should also be TRUE.
- *
- *  Only one of CPU_HAS_SOFTWARE_INTERRUPT_STACK and
- *  CPU_HAS_HARDWARE_INTERRUPT_STACK should be set to TRUE.  It is
- *  possible that both are FALSE for a particular CPU.  Although it
- *  is unclear what that would imply about the interrupt processing
- *  procedure on that CPU.
+ *  The SPARC does not have a dedicated HW interrupt stack and one has
+ *  been implemented in SW.
  */
 
-#define CPU_HAS_SOFTWARE_INTERRUPT_STACK   FALSE /* XXX */
+#define CPU_HAS_SOFTWARE_INTERRUPT_STACK   TRUE
 
 /*
  *  Does this CPU have hardware support for a dedicated interrupt stack?
@@ -91,25 +64,16 @@ extern "C" {
  *  If TRUE, then it must be installed during initialization.
  *  If FALSE, then no installation is performed.
  *
- *  If this is TRUE, CPU_ALLOCATE_INTERRUPT_STACK should also be TRUE.
- *
- *  Only one of CPU_HAS_SOFTWARE_INTERRUPT_STACK and
- *  CPU_HAS_HARDWARE_INTERRUPT_STACK should be set to TRUE.  It is
- *  possible that both are FALSE for a particular CPU.  Although it
- *  is unclear what that would imply about the interrupt processing
- *  procedure on that CPU.
+ *  The SPARC does not have a dedicated HW interrupt stack.
  */
 
-#define CPU_HAS_HARDWARE_INTERRUPT_STACK TRUE /* XXX */
+#define CPU_HAS_HARDWARE_INTERRUPT_STACK  FALSE
 
 /*
  *  Do we allocate a dedicated interrupt stack in the Interrupt Manager?
  *
  *  If TRUE, then the memory is allocated during initialization.
  *  If FALSE, then the memory is allocated during initialization.
- *
- *  This should be TRUE is CPU_HAS_SOFTWARE_INTERRUPT_STACK is TRUE
- *  or CPU_INSTALL_HARDWARE_INTERRUPT_STACK is TRUE.
  */
 
 #define CPU_ALLOCATE_INTERRUPT_STACK      TRUE
@@ -119,15 +83,6 @@ extern "C" {
  *
  *  If TRUE, then the FLOATING_POINT task attribute is supported.
  *  If FALSE, then the FLOATING_POINT task attribute is ignored.
- *
- *  If there is a FP coprocessor such as the i387 or mc68881, then
- *  the answer is TRUE.
- *
- *  The macro name "SPARC_HAS_FPU" should be made CPU specific.
- *  It indicates whether or not this CPU model has FP support.  For
- *  example, it would be possible to have an i386_nofp CPU model
- *  which set this to false to indicate that you have an i386 without
- *  an i387 and wish to leave floating point support out.
  */
 
 #if ( SPARC_HAS_FPU == 1 )
@@ -141,15 +96,6 @@ extern "C" {
  *
  *  If TRUE, then the FLOATING_POINT task attribute is assumed.
  *  If FALSE, then the FLOATING_POINT task attribute is followed.
- *
- *  So far, the only CPU in which this option has been used is the
- *  HP PA-RISC.  The HP C compiler and gcc both implicitly use the
- *  floating point registers to perform integer multiplies.  If
- *  a function which you would not think utilize the FP unit DOES,
- *  then one can not easily predict which tasks will use the FP hardware.
- *  In this case, this option should be TRUE.
- *
- *  If CPU_HARDWARE_FP is FALSE, then this should be FALSE as well.
  */
 
 #define CPU_ALL_TASKS_ARE_FP     FALSE
@@ -160,10 +106,6 @@ extern "C" {
  *  If TRUE, then the IDLE task is created as a FLOATING_POINT task
  *  and it has a floating point context which is switched in and out.
  *  If FALSE, then the IDLE task does not have a floating point context.
- *
- *  Setting this to TRUE negatively impacts the time required to preempt
- *  the IDLE task from an interrupt because the floating point context
- *  must be saved as part of the preemption.
  */
 
 #define CPU_IDLE_TASK_IS_FP      FALSE
@@ -181,17 +123,6 @@ extern "C" {
  *  point task is switched out and restored when the next floating point
  *  task is restored.  The state of the floating point registers between
  *  those two operations is not specified.
- *
- *  If the floating point context does NOT have to be saved as part of
- *  interrupt dispatching, then it should be safe to set this to TRUE.
- *
- *  Setting this flag to TRUE results in using a different algorithm
- *  for deciding when to save and restore the floating point context.
- *  The deferred FP switch algorithm minimizes the number of times
- *  the FP context is saved and restored.  The FP context is not saved
- *  until a context switch is made to another, different FP task.
- *  Thus in a system with only one FP task, the FP context will never
- *  be saved or restored.
  */
 
 #define CPU_USE_DEFERRED_FP_SWITCH       TRUE
@@ -205,19 +136,13 @@ extern "C" {
  *
  *  If FALSE, then use the generic IDLE thread body if the BSP does
  *  not provide one.
- *
- *  This is intended to allow for supporting processors which have
- *  a low power or idle mode.  When the IDLE thread is executed, then
- *  the CPU can be powered down.
- *
- *  The order of precedence for selecting the IDLE thread body is:
- *
- *    1.  BSP provided
- *    2.  CPU dependent (if provided)
- *    3.  generic (if no BSP and no CPU dependent)
  */
 
+#if (SPARC_HAS_LOW_POWER_MODE == 1)
+#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
+#else
 #define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
+#endif
 
 /*
  *  Does the stack grow up (toward higher addresses) or down
@@ -225,6 +150,8 @@ extern "C" {
  *
  *  If TRUE, then the grows upward.
  *  If FALSE, then the grows toward smaller addresses.
+ *
+ *  The stack grows to lower addresses on the SPARC.
  */
 
 #define CPU_STACK_GROWS_UP               FALSE
@@ -236,17 +163,8 @@ extern "C" {
  *  the minimum requirements of the compiler in order to have as
  *  much of the critical data area as possible in a cache line.
  *
- *  The placement of this macro in the declaration of the variables
- *  is based on the syntactically requirements of the GNU C
- *  "__attribute__" extension.  For example with GNU C, use
- *  the following to force a structures to a 32 byte boundary.
- *
- *      __attribute__ ((aligned (32)))
- *
- *  NOTE:  Currently only the Priority Bit Map table uses this feature.
- *         To benefit from using this, the data must be heavily
- *         used so it will stay in the cache and used frequently enough
- *         in the executive to justify turning this on.
+ *  The SPARC does not appear to have particularly strict alignment 
+ *  requirements.  This value was chosen to take advantages of caches.
  */
 
 #define CPU_STRUCTURE_ALIGNMENT          __attribute__ ((aligned (16)))
@@ -255,18 +173,80 @@ extern "C" {
  *  The following defines the number of bits actually used in the
  *  interrupt field of the task mode.  How those bits map to the
  *  CPU interrupt levels is defined by the routine _CPU_ISR_Set_level().
+ *
+ *  The SPARC has 16 interrupt levels in the PIL field of the PSR.
  */
 
 #define CPU_MODES_INTERRUPT_MASK   0x0000000F
 
 /*
- *  Processor defined structures
- *
- *  Examples structures include the descriptor tables from the i386
- *  and the processor control structure on the i960ca.
+ *  This structure represents the organization of the minimum stack frame 
+ *  for the SPARC.  More framing information is required in certain situaions
+ *  such as when there are a large number of out parameters or when the callee
+ *  must save floating point registers.
  */
 
-/* XXX may need to put some structures here.  */
+#ifndef ASM
+
+typedef struct {
+  unsigned32  l0;
+  unsigned32  l1;
+  unsigned32  l2;
+  unsigned32  l3;
+  unsigned32  l4;
+  unsigned32  l5;
+  unsigned32  l6;
+  unsigned32  l7;
+  unsigned32  i0;
+  unsigned32  i1;
+  unsigned32  i2;
+  unsigned32  i3;
+  unsigned32  i4;
+  unsigned32  i5;
+  unsigned32  i6_fp;
+  unsigned32  i7;
+  void       *structure_return_address;
+  /*
+   *  The following are for the callee to save the register arguments in
+   *  should this be necessary.
+   */
+  unsigned32  saved_arg0;
+  unsigned32  saved_arg1;
+  unsigned32  saved_arg2;
+  unsigned32  saved_arg3;
+  unsigned32  saved_arg4;
+  unsigned32  saved_arg5;
+  unsigned32  pad0;
+}  CPU_Minimum_stack_frame;
+
+#endif /* ASM */
+
+#define CPU_STACK_FRAME_L0_OFFSET             0x00
+#define CPU_STACK_FRAME_L1_OFFSET             0x04
+#define CPU_STACK_FRAME_L2_OFFSET             0x08
+#define CPU_STACK_FRAME_L3_OFFSET             0x0c
+#define CPU_STACK_FRAME_L4_OFFSET             0x10
+#define CPU_STACK_FRAME_L5_OFFSET             0x14
+#define CPU_STACK_FRAME_L6_OFFSET             0x18
+#define CPU_STACK_FRAME_L7_OFFSET             0x1c
+#define CPU_STACK_FRAME_I0_OFFSET             0x20
+#define CPU_STACK_FRAME_I1_OFFSET             0x24
+#define CPU_STACK_FRAME_I2_OFFSET             0x28
+#define CPU_STACK_FRAME_I3_OFFSET             0x2c
+#define CPU_STACK_FRAME_I4_OFFSET             0x30
+#define CPU_STACK_FRAME_I5_OFFSET             0x34
+#define CPU_STACK_FRAME_I6_FP_OFFSET          0x38
+#define CPU_STACK_FRAME_I7_OFFSET             0x3c
+#define CPU_STRUCTURE_RETURN_ADDRESS_OFFSET   0x40
+#define CPU_STACK_FRAME_SAVED_ARG0_OFFSET     0x44
+#define CPU_STACK_FRAME_SAVED_ARG1_OFFSET     0x48
+#define CPU_STACK_FRAME_SAVED_ARG2_OFFSET     0x4c
+#define CPU_STACK_FRAME_SAVED_ARG3_OFFSET     0x50
+#define CPU_STACK_FRAME_SAVED_ARG4_OFFSET     0x54
+#define CPU_STACK_FRAME_SAVED_ARG5_OFFSET     0x58
+#define CPU_STACK_FRAME_PAD0_OFFSET           0x5c
+
+#define CPU_MINIMUM_STACK_FRAME_SIZE          0x60
 
 /*
  * Contexts
@@ -280,35 +260,21 @@ extern "C" {
  *     2. floating point task stuff:: Context_Control_fp
  *     3. special interrupt level context :: Context_Control_interrupt
  *
- *  On some processors, it is cost-effective to save only the callee
- *  preserved registers during a task context switch.  This means
- *  that the ISR code needs to save those registers which do not
- *  persist across function calls.  It is not mandatory to make this
- *  distinctions between the caller/callee saves registers for the
- *  purpose of minimizing context saved during task switch and on interrupts.
- *  If the cost of saving extra registers is minimal, simplicity is the
- *  choice.  Save the same context on interrupt entry as for tasks in
- *  this case.
- *
- *  Additionally, if gdb is to be made aware of tasks for this CPU, then
- *  care should be used in designing the context area.
- *
- *  On some CPUs with hardware floating point support, the Context_Control_fp
- *  structure will not be used or it simply consist of an array of a
- *  fixed number of bytes.   This is done when the floating point context
- *  is dumped by a "FP save context" type instruction and the format
- *  is not really defined by the CPU.  In this case, there is no need
- *  to figure out the exact format -- only the size.  Of course, although
- *  this is enough information for context switches, it is probably not 
- *  enough for a debugger such as gdb.  But that is another problem.
+ *  On the SPARC, we are relatively conservative in that we save most
+ *  of the CPU state in the context area.  The ET (enable trap) bit and
+ *  the CWP (current window pointer) fields of the PSR are considered
+ *  system wide resources and are not maintained on a per-thread basis.
  */
 
 #ifndef ASM
 
-/* XXX */
 typedef struct {
-    unsigned32 g0;
-    unsigned32 g1;
+    /*
+     *  Using a double g0_g1 will put everything in this structure on a 
+     *  double word boundary which allows us to use double word loads
+     *  and stores safely in the context switch.
+     */
+    double     g0_g1;
     unsigned32 g2;
     unsigned32 g3;
     unsigned32 g4;
@@ -331,7 +297,7 @@ typedef struct {
     unsigned32 i3;
     unsigned32 i4;
     unsigned32 i5;
-    unsigned32 i6;
+    unsigned32 i6_fp;
     unsigned32 i7;
 
     unsigned32 o0;
@@ -340,10 +306,9 @@ typedef struct {
     unsigned32 o3;
     unsigned32 o4;
     unsigned32 o5;
-    unsigned32 o6;
+    unsigned32 o6_sp;
     unsigned32 o7;
 
-    unsigned32 wim;
     unsigned32 psr;
 } Context_Control;
 
@@ -377,7 +342,7 @@ typedef struct {
 #define I3_OFFSET    0x4C
 #define I4_OFFSET    0x50
 #define I5_OFFSET    0x54
-#define I6_OFFSET    0x58
+#define I6_FP_OFFSET 0x58
 #define I7_OFFSET    0x5C
 
 #define O0_OFFSET    0x60
@@ -386,15 +351,19 @@ typedef struct {
 #define O3_OFFSET    0x6C
 #define O4_OFFSET    0x70
 #define O5_OFFSET    0x74
-#define O6_OFFSET    0x78
+#define O6_SP_OFFSET 0x78
 #define O7_OFFSET    0x7C
 
-#define WIM_OFFSET   0x80
-#define PSR_OFFSET   0x84
+#define PSR_OFFSET   0x80
+
+#define CONTEXT_CONTROL_SIZE 0x84
+
+/*
+ *  The floating point context area.
+ */
 
 #ifndef ASM
 
-/* XXX */
 typedef struct {
     double      f0_f1;
     double      f2_f3;
@@ -439,10 +408,39 @@ typedef struct {
 #define F3O_F31_OFFSET   0x78
 #define FSR_OFFSET       0x80
 
+#define CONTEXT_CONTROL_FP_SIZE 0x84
+
 #ifndef ASM
 
+/*
+ *  Context saved on stack for an interrupt.
+ *
+ *  NOTE:  The PSR, PC, and NPC are only saved in this structure for the
+ *         benefit of the user's handler.
+ */
+
 typedef struct {
-    unsigned32 special_interrupt_register_XXX;
+  CPU_Minimum_stack_frame  Stack_frame;
+  unsigned32               psr;
+  unsigned32               pc;
+  unsigned32               npc;
+  unsigned32               g1;
+  unsigned32               g2;
+  unsigned32               g3;
+  unsigned32               g4;
+  unsigned32               g5;
+  unsigned32               g6;
+  unsigned32               g7;
+  unsigned32               i0;
+  unsigned32               i1;
+  unsigned32               i2;
+  unsigned32               i3;
+  unsigned32               i4;
+  unsigned32               i5;
+  unsigned32               i6_fp;
+  unsigned32               i7;
+  unsigned32               y;
+  unsigned32               pad0_offset;
 } CPU_Interrupt_frame;
 
 #endif /* ASM */
@@ -451,11 +449,34 @@ typedef struct {
  *  Offsets of fields with CPU_Interrupt_frame for assembly routines.
  */
 
+#define ISF_STACK_FRAME_OFFSET 0x00
+#define ISF_PSR_OFFSET         CPU_MINIMUM_STACK_FRAME_SIZE + 0x00
+#define ISF_PC_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x04
+#define ISF_NPC_OFFSET         CPU_MINIMUM_STACK_FRAME_SIZE + 0x08
+#define ISF_G1_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x0c
+#define ISF_G2_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x10
+#define ISF_G3_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x14
+#define ISF_G4_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x18
+#define ISF_G5_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x1c
+#define ISF_G6_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x20
+#define ISF_G7_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x24
+#define ISF_I0_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x28
+#define ISF_I1_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x2c
+#define ISF_I2_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x30
+#define ISF_I3_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x34
+#define ISF_I4_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x38
+#define ISF_I5_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x3c
+#define ISF_I6_FP_OFFSET       CPU_MINIMUM_STACK_FRAME_SIZE + 0x40
+#define ISF_I7_OFFSET          CPU_MINIMUM_STACK_FRAME_SIZE + 0x44
+#define ISF_Y_OFFSET           CPU_MINIMUM_STACK_FRAME_SIZE + 0x48
+#define ISF_PAD0_OFFSET        CPU_MINIMUM_STACK_FRAME_SIZE + 0x4c
+
+#define CONTEXT_CONTROL_INTERRUPT_FRAME_SIZE CPU_MINIMUM_STACK_FRAME_SIZE + 0x50 
 #ifndef ASM
 
 /*
  *  The following table contains the information required to configure
- *  the XXX processor specific parameters.
+ *  the processor specific parameters.
  *
  *  NOTE: The interrupt_stack_size field is required if
  *        CPU_ALLOCATE_INTERRUPT_STACK is defined as TRUE.
@@ -472,60 +493,96 @@ typedef struct {
   boolean      do_zero_of_workspace;
   unsigned32   interrupt_stack_size;
   unsigned32   extra_system_initialization_stack;
-  unsigned32   some_other_cpu_dependent_info_XXX;
 }   rtems_cpu_table;
 
 /*
- *  This variable is optional.  It is used on CPUs on which it is difficult
- *  to generate an "uninitialized" FP context.  It is filled in by
- *  _CPU_Initialize and copied into the task's FP context area during
- *  _CPU_Context_Initialize.
+ *  This variable is contains the initialize context for the FP unit.
+ *  It is filled in by _CPU_Initialize and copied into the task's FP 
+ *  context area during _CPU_Context_Initialize.
  */
 
 EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
 
 /*
- *  On some CPUs, software managed interrupt stack is supported.
  *  This stack is allocated by the Interrupt Manager and the switch
  *  is performed in _ISR_Handler.  These variables contain pointers
  *  to the lowest and highest addresses in the chunk of memory allocated
  *  for the interrupt stack.  Since it is unknown whether the stack
  *  grows up or down (in general), this give the CPU dependent
- *  code the option of picking the version it wants to use.
+ *  code the option of picking the version it wants to use.  Thus
+ *  both must be present if either is.
  *
- *  NOTE: These two variables are required if the macro
- *        CPU_HAS_SOFTWARE_INTERRUPT_STACK is defined as TRUE.
+ *  The SPARC supports a software based interrupt stack and these
+ *  are required.
  */
 
-EXTERN void               *_CPU_Interrupt_stack_low;
-EXTERN void               *_CPU_Interrupt_stack_high;
+EXTERN void *_CPU_Interrupt_stack_low;
+EXTERN void *_CPU_Interrupt_stack_high;
+
+#if defined(erc32)
 
 /*
- *  With some compilation systems, it is difficult if not impossible to
- *  call a high-level language routine from assembly language.  This
- *  is especially true of commercial Ada compilers and name mangling
- *  C++ ones.  This variable can be optionally defined by the CPU porter
- *  and contains the address of the routine _Thread_Dispatch.  This
- *  can make it easier to invoke that routine at the end of the interrupt
- *  sequence (if a dispatch is necessary).
+ *  ERC32 Specific Variables
  */
 
-EXTERN void           (*_CPU_Thread_dispatch_pointer)();
+EXTERN unsigned32 _ERC32_MEC_Timer_Control_Mirror;
+
+#endif
 
 /*
- *  Nothing prevents the porter from declaring more CPU specific variables.
+ *  The following type defines an entry in the SPARC's trap table.
+ *
+ *  NOTE: The instructions chosen are RTEMS dependent although one is
+ *        obligated to use two of the four instructions to perform a
+ *        long jump.  The other instructions load one register with the
+ *        trap type (a.k.a. vector) and another with the psr.
  */
-
-/* XXX: if needed, put more variables here */
+ 
+typedef struct {
+  unsigned32   mov_psr_l0;                     /* mov   %psr, %l0           */
+  unsigned32   sethi_of_handler_to_l4;         /* sethi %hi(_handler), %l4  */
+  unsigned32   jmp_to_low_of_handler_plus_l4;  /* jmp   %l4 + %lo(_handler) */
+  unsigned32   mov_vector_l3;                  /* mov   _vector, %l3        */
+} CPU_Trap_table_entry;
+ 
+/*
+ *  This is the set of opcodes for the instructions loaded into a trap
+ *  table entry.  The routine which installs a handler is responsible
+ *  for filling in the fields for the _handler address and the _vector
+ *  trap type.
+ *
+ *  The constants following this structure are masks for the fields which
+ *  must be filled in when the handler is installed.
+ */
+ 
+extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 
 /*
- *  The size of the floating point context area.  On some CPUs this
- *  will not be a "sizeof" because the format of the floating point
- *  area is not defined -- only the size is.  This is usually on
- *  CPUs with a "floating point save context" instruction.
+ *  This is the executive's trap table which is installed into the TBR
+ *  register.
+ *
+ *  NOTE:  Unfortunately, this must be aligned on a 4096 byte boundary.
+ *         The GNU tools as of binutils 2.5.2 and gcc 2.7.0 would not
+ *         align an entity to anything greater than a 512 byte boundary.
+ *
+ *         Because of this, we pull a little bit of a trick.  We allocate
+ *         enough memory so we can grab an address on a 4096 byte boundary
+ *         from this area.
+ */
+ 
+#define SPARC_TRAP_TABLE_ALIGNMENT 4096
+ 
+EXTERN unsigned8 _CPU_Trap_Table_area[ 8192 ]
+           __attribute__ ((aligned (SPARC_TRAP_TABLE_ALIGNMENT)));
+ 
+
+/*
+ *  The size of the floating point context area.  
  */
 
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
+
+#endif
 
 /*
  *  Amount of extra stack (above minimum stack size) required by
@@ -538,23 +595,55 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 /*
  *  This defines the number of entries in the ISR_Vector_table managed
  *  by the executive.
+ *
+ *  On the SPARC, there are really only 256 vectors.  However, the executive
+ *  has no easy, fast, reliable way to determine which traps are synchronous
+ *  and which are asynchronous.  By default, synchronous traps return to the
+ *  instruction which caused the interrupt.  So if you install a software
+ *  trap handler as an executive interrupt handler (which is desirable since
+ *  RTEMS takes care of window and register issues), then the executive needs
+ *  to know that the return address is to the trap rather than the instruction
+ *  following the trap.
+ *
+ *  So vectors 0 through 255 are treated as regular asynchronous traps which
+ *  provide the "correct" return address.  Vectors 256 through 512 are assumed
+ *  by the executive to be synchronous and to require that the return address
+ *  be fudged.
+ *
+ *  If you use this mechanism to install a trap handler which must reexecute
+ *  the instruction which caused the trap, then it should be installed as
+ *  an asynchronous trap.  This will avoid the executive changing the return
+ *  address.
  */
 
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS  255
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS     256
+#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER 511
+
+#define SPARC_SYNCHRONOUS_TRAP_BIT_MASK     0x100
+#define SPARC_ASYNCHRONOUS_TRAP( _trap )    (_trap)
+#define SPARC_SYNCHRONOUS_TRAP( _trap )     ((_trap) + 256 )
+
+#define SPARC_REAL_TRAP_NUMBER( _trap )     ((_trap) % 256)
 
 /*
  *  Should be large enough to run all tests.  This insures
  *  that a "reasonable" small application should not have any problems.
+ *
+ *  This appears to be a fairly generous number for the SPARC since
+ *  represents a call depth of about 20 routines based on the minimum
+ *  stack frame.
  */
 
-#define CPU_STACK_MINIMUM_SIZE          (1024*2)
+#define CPU_STACK_MINIMUM_SIZE  (1024*2)
 
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
  *  alignment does not take into account the requirements for the stack.
+ *
+ *  On the SPARC, this is required for double word loads and stores.
  */
 
-#define CPU_ALIGNMENT              8
+#define CPU_ALIGNMENT      8
 
 /*
  *  This number corresponds to the byte alignment requirement for the
@@ -591,11 +680,14 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  is strict enough for the stack, then this should be set to 0.
  *
  *  NOTE:  This must be a power of 2 either 0 or greater than CPU_ALIGNMENT.
+ *
+ *  The alignment restrictions for the SPARC are not that strict but this
+ *  should unsure that the stack is always sufficiently alignment that the
+ *  window overflow, underflow, and flush routines can use double word loads
+ *  and stores.
  */
 
 #define CPU_STACK_ALIGNMENT        16
-
-#endif  /* ASM */
 
 #ifndef ASM
 
@@ -631,12 +723,7 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 /*
  *  Map interrupt level in task mode onto the hardware that the CPU
  *  actually provides.  Currently, interrupt levels which do not
- *  map onto the CPU in a generic fashion are undefined.  Someday,
- *  it would be nice if these were "mapped" by the application
- *  via a callout.  For example, m68k has 8 levels 0 - 7, levels
- *  8 - 255 would be available for bsp/application specific meaning.
- *  This could be used to manage a programmable interrupt controller
- *  via the rtems_task_mode directive.
+ *  map onto the CPU in a straight fashion are undefined.  
  */
 
 #define _CPU_ISR_Set_level( _newlevel ) \
@@ -659,46 +746,33 @@ unsigned32 _CPU_ISR_Get_level( void );
  *     - setting the proper interrupt level in the context
  *     - initializing the floating point context
  *
- *  This routine generally does not set any unnecessary register
- *  in the context.  The state of the "general data" registers is
- *  undefined at task start time.
- *
  *  NOTE:  Implemented as a subroutine for the SPARC port.
  */
 
 void _CPU_Context_Initialize(
-  Context_Control  *_the_context,
-  unsigned32       *_stack_base,
-  unsigned32        _size,
-  unsigned32        _new_level,
-  void             *_entry_point
+  Context_Control  *the_context,
+  unsigned32       *stack_base,
+  unsigned32        size,
+  unsigned32        new_level,
+  void             *entry_point,
+  boolean           is_fp
 );
 
 /*
  *  This routine is responsible for somehow restarting the currently
- *  executing task.  If you are lucky, then all that is necessary
- *  is restoring the context.  Otherwise, there will need to be
- *  a special assembly routine which does something special in this
- *  case.  Context_Restore should work most of the time.  It will
- *  not work if restarting self conflicts with the stack frame
- *  assumptions of restoring a context.
+ *  executing task.  
+ *
+ *  On the SPARC, this is is relatively painless but requires a small
+ *  amount of wrapper code before using the regular restore code in
+ *  of the context switch.
  */
 
 #define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( (_the_context) );
 
 /*
- *  The purpose of this macro is to allow the initial pointer into
- *  a floating point context area (used to save the floating point
- *  context) to be at an arbitrary place in the floating point
- *  context area.
- *
- *  This is necessary because some FP units are designed to have
- *  their context saved as a stack which grows into lower addresses.
- *  Other FP units can be saved by simply moving registers into offsets
- *  from the base of the context area.  Finally some FP units provide
- *  a "dump context" instruction which could fill in from high to low
- *  or low to high based on the whim of the CPU designers.
+ *  The FP context area for the SPARC is a simple structure and nothing
+ *  special is required to find the "starting load point"
  */
 
 #define _CPU_Context_Fp_start( _base, _offset ) \
@@ -706,20 +780,17 @@ void _CPU_Context_Initialize(
 
 /*
  *  This routine initializes the FP context area passed to it to.
- *  There are a few standard ways in which to initialize the
- *  floating point context.  The code included for this macro assumes
- *  that this is a CPU in which a "initial" FP context was saved into
- *  _CPU_Null_fp_context and it simply copies it to the destination
- *  context passed to it.
  *
- *  Other models include (1) not doing anything, and (2) putting
- *  a "null FP status word" in the correct place in the FP context.
+ *  The SPARC allows us to use the simple initialization model
+ *  in which an "initial" FP context was saved into _CPU_Null_fp_context 
+ *  at CPU initialization and it is simply copied into the destination
+ *  context.
  */
 
 #define _CPU_Context_Initialize_fp( _destination ) \
-  { \
+  do { \
    *((Context_Control_fp *) *((void **) _destination)) = _CPU_Null_fp_context; \
-  }
+  } while (0)
 
 /* end of Context handler macros */
 
@@ -732,122 +803,42 @@ void _CPU_Context_Initialize(
  */
 
 #define _CPU_Fatal_halt( _error ) \
-  { \
-  }
+  do { \
+    unsigned32 level; \
+    \
+    sparc_disable_interrupts( level ); \
+    asm volatile ( "mov  %0, %%g1 " : "=r" (level) : "0" (level) ); \
+    while (1); /* loop forever */ \
+  } while (0)
 
 /* end of Fatal Error manager macros */
 
 /* Bitfield handler macros */
 
 /*
- *  This routine sets _output to the bit number of the first bit
- *  set in _value.  _value is of CPU dependent type Priority_Bit_map_control.
- *  This type may be either 16 or 32 bits wide although only the 16
- *  least significant bits will be used.
- *
- *  There are a number of variables in using a "find first bit" type
- *  instruction.
- *
- *    (1) What happens when run on a value of zero?
- *    (2) Bits may be numbered from MSB to LSB or vice-versa.
- *    (3) The numbering may be zero or one based.
- *    (4) The "find first bit" instruction may search from MSB or LSB.
- *
- *  The executive guarantees that (1) will never happen so it is not a concern.
- *  (2),(3), (4) are handled by the macros _CPU_Priority_mask() and
- *  _CPU_Priority_Bits_index().  These three form a set of routines
- *  which must logically operate together.  Bits in the _value are
- *  set and cleared based on masks built by _CPU_Priority_mask().
- *  The basic major and minor values calculated by _Priority_Major()
- *  and _Priority_Minor() are "massaged" by _CPU_Priority_Bits_index()
- *  to properly range between the values returned by the "find first bit"
- *  instruction.  This makes it possible for _Priority_Get_highest() to
- *  calculate the major and directly index into the minor table.
- *  This mapping is necessary to ensure that 0 (a high priority major/minor)
- *  is the first bit found.
- *
- *  This entire "find first bit" and mapping process depends heavily
- *  on the manner in which a priority is broken into a major and minor
- *  components with the major being the 4 MSB of a priority and minor
- *  the 4 LSB.  Thus (0 << 4) + 0 corresponds to priority 0 -- the highest
- *  priority.  And (15 << 4) + 14 corresponds to priority 254 -- the next
- *  to the lowest priority.
- *
- *  If your CPU does not have a "find first bit" instruction, then
- *  there are ways to make do without it.  Here are a handful of ways
- *  to implement this in software:
- *
- *    - a series of 16 bit test instructions
- *    - a "binary search using if's"
- *    - _number = 0
- *      if _value > 0x00ff
- *        _value >>=8
- *        _number = 8;
- *
- *      if _value > 0x0000f
- *        _value >=8
- *        _number += 4
- *
- *      _number += bit_set_table[ _value ]
- *
- *    where bit_set_table[ 16 ] has values which indicate the first
- *      bit set
+ *  The SPARC port uses the generic C algorithm for bitfield scan if the
+ *  CPU model does not have a scan instruction.
  */
 
-#ifndef INIT
-  extern const unsigned char __log2table[256];
+#if ( SPARC_HAS_BITSCAN == 0 )
+#define CPU_USE_GENERIC_BITFIELD_CODE TRUE
+#define CPU_USE_GENERIC_BITFIELD_DATA TRUE
 #else
-const unsigned char __log2table[256] = {
-    0, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
-    4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-    5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-    5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-    6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-    6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-    6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-    6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-    7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7
-};
+#error "scan instruction not currently supported by RTEMS!!"
 #endif
-
-#define _CPU_Bitfield_Find_first_bit( _value, _output ) \
-  { \
-    register __value = (_value); \
-    \
-    if ( !(__value & 0xff00) ) \
-      (_output) = __log2table[ __value ]; \
-    else \
-      (_output) = __log2table[ __value >> 8 ] + 8; \
-  }
-
 
 /* end of Bitfield handler macros */
 
-/*
- *  This routine builds the mask which corresponds to the bit fields
- *  as searched by _CPU_Bitfield_Find_first_bit().  See the discussion
- *  for that routine.
- */
-
-#define _CPU_Priority_Mask( _bit_number ) \
-  ( 0x8000 >> (_bit_number) )
+/* Priority handler handler macros */
 
 /*
- *  This routine translates the bit numbers returned by
- *  _CPU_Bitfield_Find_first_bit() into something suitable for use as
- *  a major or minor component of a priority.  See the discussion
- *  for that routine.
+ *  The SPARC port uses the generic C algorithm for bitfield scan if the
+ *  CPU model does not have a scan instruction.
  */
 
-#define _CPU_Priority_Bits_index( _priority ) \
-  (15 - (_priority))
+#if ( SPARC_HAS_BITSCAN == 1 )
+#error "scan instruction not currently supported by RTEMS!!"
+#endif
 
 /* end of Priority handler macros */
 
@@ -865,6 +856,19 @@ void _CPU_Initialize(
 );
 
 /*
+ *  _CPU_ISR_install_raw_handler
+ *
+ *  This routine installs new_handler to be directly called from the trap
+ *  table.
+ */
+ 
+void _CPU_ISR_install_raw_handler(
+  unsigned32  vector,
+  proc_ptr    new_handler,
+  proc_ptr   *old_handler
+);
+
+/*
  *  _CPU_ISR_install_vector
  *
  *  This routine installs an interrupt vector.
@@ -876,27 +880,18 @@ void _CPU_ISR_install_vector(
   proc_ptr   *old_handler
 );
 
-/*
- *  _CPU_Install_interrupt_stack
- *
- *  This routine installs the hardware interrupt stack pointer.
- *
- *  NOTE:  It need only be provided if CPU_HAS_HARDWARE_INTERRUPT_STACK
- *         is TRUE.
- */
-
-void _CPU_Install_interrupt_stack( void );
-
+#if (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
+ 
 /*
  *  _CPU_Internal_threads_Idle_thread_body
  *
- *  This routine is the CPU dependent IDLE thread body.
- *
- *  NOTE:  It need only be provided if CPU_PROVIDES_IDLE_THREAD_BODY
- *         is TRUE.
+ *  Some SPARC implementations have low power, sleep, or idle modes.  This
+ *  tries to take advantage of those models.
  */
-
+ 
 void _CPU_Internal_threads_Idle_thread_body( void );
+ 
+#endif /* CPU_PROVIDES_IDLE_THREAD_BODY */
 
 /*
  *  _CPU_Context_switch
@@ -913,9 +908,7 @@ void _CPU_Context_switch(
  *  _CPU_Context_restore
  *
  *  This routine is generallu used only to restart self in an
- *  efficient manner.  It may simply be a label in _CPU_Context_switch.
- *
- *  NOTE: May be unnecessary to reload some registers.
+ *  efficient manner.
  */
 
 void _CPU_Context_restore(
@@ -942,24 +935,23 @@ void _CPU_Context_restore_fp(
   void **fp_context_ptr
 );
 
-/*  The following routine swaps the endian format of an unsigned int.
+/*
+ *  CPU_swap_u32
+ *
+ *  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.
  *
- *  This version will work on any processor, but if there is a better
- *  way for your CPU PLEASE use it.  The most common way to do this is to:
+ *  This version will work on any processor, but if you come across a better
+ *  way for the SPARC PLEASE use it.  The most common way to swap a 32-bit 
+ *  entity as shown below is not any more efficient on the SPARC.
  *
  *     swap least significant two bytes with 16-bit rotate
  *     swap upper and lower 16-bits
  *     swap most significant two bytes with 16-bit rotate
  *
- *  Some CPUs have special instructions which swap a 32-bit quantity in
- *  a single instruction (e.g. i486).  It is probably best to avoid
- *  an "endian swapping control bit" in the CPU.  One good reason is
- *  that interrupts would probably have to be disabled to insure that
- *  an interrupt does not try to access the same "chunk" with the wrong
- *  endian.  Another good reason is that on some CPUs, the endian bit
- *  endianness for ALL fetches -- both code and data -- so the code
- *  will be fetched incorrectly.
+ *  It is not obvious how the SPARC can do significantly better than the
+ *  generic code.  gcc 2.7.0 only generates about 12 instructions for the
+ *  following code at optimization level four (i.e. -O4).
  */
  
 static inline unsigned int CPU_swap_u32(

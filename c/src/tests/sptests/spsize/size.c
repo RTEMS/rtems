@@ -390,6 +390,22 @@ uninitialized += (sizeof _CPU_Interrupt_stack_low) +
 
 #endif
 
+#ifdef sparc
+ 
+/* cpu.h */
+uninitialized += (sizeof _CPU_Interrupt_stack_low) +
+                 (sizeof _CPU_Interrupt_stack_high) +
+                 (sizeof _CPU_Null_fp_context) +
+                 (sizeof _CPU_Trap_Table_area);
+
+#ifdef erc32
+uninitialized += (sizeof _ERC32_MEC_Timer_Control_Mirror);
+#endif
+
+ 
+#endif
+
+
 #ifdef no_cpu
 
 /* cpu.h */
@@ -421,13 +437,16 @@ initialized +=
                 (sizeof _TOD_Days_to_date)      +
                 (sizeof _TOD_Days_since_last_leap_year);
 
+#ifdef sparc
+
+initialized +=  (sizeof _CPU_Trap_slot_template);
+
+#endif
+
 puts( "" );
-#ifdef i960CA
-  print_formula();
-#else
+
   if ( mode == 0 ) help_size();
   else             print_formula();
-#endif
 
 printf( "\n" );
 printf( "RTEMS uninitialized data consumes %d bytes\n", uninitialized );

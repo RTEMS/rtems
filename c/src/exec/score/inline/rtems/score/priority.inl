@@ -78,6 +78,37 @@ STATIC INLINE unsigned32 _Priority_Minor (
   return ( the_priority % 16 );
 }
 
+#if ( CPU_USE_GENERIC_BITFIELD_CODE == TRUE )
+ 
+/*PAGE
+ *
+ *  _Priority_Mask
+ *
+ */
+ 
+STATIC INLINE unsigned32 _Priority_Mask (
+  unsigned32 bit_number
+)
+{
+  return (0x8000 >> bit_number);
+}
+ 
+ 
+/*PAGE
+ *
+ *  _Priority_Bits_index
+ *
+ */
+ 
+STATIC INLINE unsigned32 _Priority_Bits_index (
+  unsigned32 bit_number
+)
+{
+  return bit_number;
+}
+
+#endif
+
 /*PAGE
  *
  *  _Priority_Add_to_bit_map
@@ -121,8 +152,8 @@ STATIC INLINE Priority_Control _Priority_Get_highest( void )
   _Bitfield_Find_first_bit( _Priority_Major_bit_map, major );
   _Bitfield_Find_first_bit( _Priority_Bit_map[major], minor );
 
-  return (_CPU_Priority_Bits_index( major ) << 4) +
-          _CPU_Priority_Bits_index( minor );
+  return (_Priority_Bits_index( major ) << 4) +
+          _Priority_Bits_index( minor );
 }
 
 /*PAGE
@@ -144,13 +175,13 @@ STATIC INLINE void _Priority_Initialize_information(
   minor = _Priority_Minor( new_priority );
 
   the_priority_map->minor =
-    &_Priority_Bit_map[ _CPU_Priority_Bits_index(major) ];
+    &_Priority_Bit_map[ _Priority_Bits_index(major) ];
 
-  mask = _CPU_Priority_Mask( major );
+  mask = _Priority_Mask( major );
   the_priority_map->ready_major = mask;
   the_priority_map->block_major = ~mask;
 
-  mask = _CPU_Priority_Mask( minor );
+  mask = _Priority_Mask( minor );
   the_priority_map->ready_minor = mask;
   the_priority_map->block_minor = ~mask;
 }

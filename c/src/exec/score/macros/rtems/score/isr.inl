@@ -33,7 +33,7 @@
  */
 
 #define _ISR_Is_vector_number_valid( _vector ) \
-  ( (_vector) < CPU_INTERRUPT_NUMBER_OF_VECTORS )
+  ( (_vector) <= CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER )
 
 /*PAGE
  *

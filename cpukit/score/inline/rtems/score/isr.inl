@@ -38,7 +38,7 @@ STATIC INLINE boolean _ISR_Is_vector_number_valid (
   unsigned32 vector
 )
 {
-  return ( vector < CPU_INTERRUPT_NUMBER_OF_VECTORS );
+  return ( vector <= CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER );
 }
 
 /*PAGE

@@ -36,8 +36,12 @@ rtems_task Init(
 
   setvbuf(stdout, 0, _IONBF, 0);
 
+  puts( "\n*** RTEMS SIZE PROGRAM ***" );
+  size_rtems( 1 );
+  puts( "*** END OF RTEMS SIZE PROGRAM ***" );
+  exit( 0 );
+#if 0
   do {
-    puts( "\n*** RTEMS SIZE PROGRAM ***" );
     printf( "\n\nPlease select program mode:\n" );
     printf( "  1) Print Formulas\n" );
     printf( "  2) Determine Workspace Size\n" );
@@ -52,4 +56,5 @@ rtems_task Init(
       default:  continue;
     }
   } while ( FOREVER );
+#endif
 }

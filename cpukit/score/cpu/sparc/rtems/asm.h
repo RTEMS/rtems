@@ -28,7 +28,9 @@
  */
 
 #define ASM
+
 #include <rtems/score/sparc.h>
+#include <rtems/score/cpu.h>
 
 /*
  *  Recent versions of GNU cpp define variables which indicate the
@@ -37,7 +39,9 @@
  *  have to define these as appropriate.
  */
 
-/* XXX This does not appear to work on gcc 2.7.0 on the sparc */
+/* XXX __USER_LABEL_PREFIX__ and __REGISTER_PREFIX__ do not work on gcc 2.7.0 */
+/* XXX The following ifdef magic fixes the problem but results in a warning   */
+/* XXX when compiling assembly code.                                          */
 #undef  __USER_LABEL_PREFIX__
 #ifndef __USER_LABEL_PREFIX__
 #define __USER_LABEL_PREFIX__ _
@@ -90,6 +94,16 @@
 
 #define PUBLIC(sym) .globl SYM (sym)
 #define EXTERN(sym) .globl SYM (sym)
+
+/*
+ *  Entry for traps which jump to a programmer-specified trap handler.
+ */
+ 
+#define TRAP(_vector, _handler)  \
+  mov   %psr, %l0 ; \
+  sethi %hi(_handler), %l4 ; \
+  jmp   %l4+%lo(_handler); \
+  mov   _vector, %l3
 
 #endif
 /* end of include file */

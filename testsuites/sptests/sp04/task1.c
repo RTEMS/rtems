@@ -30,8 +30,8 @@ rtems_task Task_1(
   rtems_mode        previous_mode;
   rtems_time_of_day time;
   rtems_status_code status;
-  rtems_unsigned32  start;
-  rtems_unsigned32  end;
+  rtems_unsigned32  start_time;
+  rtems_unsigned32  end_time;
 
   puts( "TA1 - rtems_task_suspend - on Task 2" );
   status = rtems_task_suspend( Task_id[ 2 ] );
@@ -41,16 +41,16 @@ rtems_task Task_1(
   status = rtems_task_suspend( Task_id[ 3 ] );
   directive_failed( status, "rtems_task_suspend of TA3" );
 
-  status = rtems_clock_get( RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH, &start );
+  status = rtems_clock_get( RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH, &start_time );
   directive_failed( status, "rtems_clock_get" );
 
   puts( "TA1 - killing time" );
 
   for ( ; ; ) {
-    status = rtems_clock_get( RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH, &end );
+    status = rtems_clock_get( RTEMS_CLOCK_GET_SECONDS_SINCE_EPOCH, &end_time );
     directive_failed( status, "rtems_clock_get" );
 
-    if ( end > (start + 2) )
+    if ( end_time > (start_time + 2) )
       break;
   }
 

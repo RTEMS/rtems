@@ -805,9 +805,12 @@ void _Thread_Load_environment(
   Thread_Control *the_thread
 )
 {
+  boolean is_fp = FALSE;
+
   if ( the_thread->Start.fp_context ) {
     the_thread->fp_context = the_thread->Start.fp_context;
     _Context_Initialize_fp( &the_thread->fp_context );
+    is_fp = TRUE;
   }
 
   the_thread->is_preemptible = the_thread->Start.is_preemptible;
@@ -818,7 +821,8 @@ void _Thread_Load_environment(
     the_thread->Start.Initial_stack.area,
     the_thread->Start.Initial_stack.size,
     the_thread->Start.isr_level,
-    _Thread_Handler
+    _Thread_Handler,
+    is_fp
   );
 
 }

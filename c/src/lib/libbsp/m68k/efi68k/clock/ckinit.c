@@ -93,17 +93,6 @@ void Install_clock(
   }
 }
 
-void ReInstall_clock(
-  rtems_isr_entry clock_isr
-)
-{
-  rtems_unsigned32 isrlevel = 0 ;
-
-  rtems_interrupt_disable( isrlevel );
-   (void) set_vector( clock_isr, CLOCK_VECTOR, 1 );
-  rtems_interrupt_enable( isrlevel );
-}
-
 void Clock_exit( void )
 {
 
@@ -141,6 +130,7 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
+    rtems_unsigned32 isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
  
     if (args == 0)
@@ -157,7 +147,9 @@ rtems_device_driver Clock_control(
     }
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
     {
-        ReInstall_clock(args->buffer);
+      rtems_interrupt_disable( isrlevel );
+       (void) set_vector( args->buffer, CLOCK_VECTOR, 1 );
+      rtems_interrupt_enable( isrlevel );
     }
  
 done:

@@ -198,7 +198,7 @@ rtems_task test_task(
   end_time = Read_timer();
 
   put_time(
-    "rtems_task_set_note",
+    "rtems_task_get_note",
     end_time,
     OPERATION_COUNT,
     overhead,

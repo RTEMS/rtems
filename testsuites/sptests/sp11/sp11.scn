@@ -11,7 +11,7 @@ TA1 - rtems_event_receive - waiting with 10 second timeout on RTEMS_EVENT_14
 TA2 - RTEMS_EVENT_17 or RTEMS_EVENT_18 received - eventout => 00040000
 TA2 - rtems_event_send - send RTEMS_EVENT_14 to TA1
 TA2 - rtems_clock_set - 08:15:00   02/12/1988
-TA2 - rtems_event_send - sending RTEMS_EVENT_10 to self after 5 seconds
+TA2 - rtems_event_send - sending RTEMS_EVENT_10 to self after 4 seconds
 TA2 - rtems_event_receive - waiting forever on RTEMS_EVENT_10
 TA1 - RTEMS_EVENT_14 received - eventout => 00004000
 TA1 - rtems_event_send - send RTEMS_EVENT_19 to TA2

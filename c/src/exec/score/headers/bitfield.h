@@ -38,8 +38,57 @@ extern "C" {
  *  significant impact on the performance of the executive as a whole.
  */
 
+#if ( CPU_USE_GENERIC_BITFIELD_DATA == TRUE )
+
+#ifndef INIT
+  extern const unsigned char __log2table[256];
+#else
+const unsigned char __log2table[256] = {
+    7, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4,
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+#endif
+ 
+#endif
+
+#if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
+
 #define _Bitfield_Find_first_bit( _value, _bit_number ) \
         _CPU_Bitfield_Find_first_bit( _value, _bit_number )
+
+#else
+
+/*
+ *  The following must be a macro because if a CPU specific version
+ *  is used it will most likely use inline assembly.
+ */
+
+#define _Bitfield_Find_first_bit( _value, _bit_number ) \
+  { \
+    register __value = (_value); \
+    register const unsigned char *__p = __log2table; \
+    \
+    if ( __value < 0x100 ) \
+      (_bit_number) = __p[ __value ] + 8; \
+    else \
+      (_bit_number) = __p[ __value >> 8 ]; \
+  }
+
+#endif
 
 #ifdef __cplusplus
 }

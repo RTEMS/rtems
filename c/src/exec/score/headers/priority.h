@@ -114,6 +114,51 @@ STATIC INLINE unsigned32 _Priority_Minor (
 );
 
 /*
+ *  _Priority_Mask
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns the mask associated with the major or minor
+ *  number passed to it.
+ */
+ 
+#if ( CPU_USE_GENERIC_BITFIELD_CODE == TRUE )
+
+STATIC INLINE unsigned32 _Priority_Mask (
+  unsigned32 bit_number
+);
+
+#else
+
+#define _Priority_Mask( _bit_number ) \
+  _CPU_Priority_Mask( _bit_number )
+ 
+#endif
+
+/*
+ *  _Priority_Bits_index
+ *
+ *  DESCRIPTION:
+ *
+ *  This function translates the bit numbers returned by the bit scan 
+ *  of a priority bit field into something suitable for use as
+ *  a major or minor component of a priority.
+ */
+ 
+#if ( CPU_USE_GENERIC_BITFIELD_CODE == TRUE )
+
+STATIC INLINE unsigned32 _Priority_Bits_index (
+  unsigned32 bit_number
+);
+
+#else
+
+#define _Priority_Bits_index( _priority ) \
+  _CPU_Priority_bits_index( _priority )
+
+#endif
+ 
+/*
  *  _Priority_Add_to_bit_map
  *
  *  DESCRIPTION:

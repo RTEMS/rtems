@@ -193,7 +193,6 @@ cpy_Bad1:	move.l	d1,(a0)+
 
 |		move.l	#_cnsl_isr,vbase+0x028	| SCC2
 		move.l	#timerisr,vbase+0x018	| Timer ISR
-		move.l	#RTC_ISR,vbase+0x024	| Real Time Clock ISR
 
         |
         | zero out uninitialized data area
@@ -236,14 +235,6 @@ loop:   movel   d0,a1@+                | to zero out uninitialized
 Bad:	bra	Bad
 
 	nop
-RTC_ISR:
-        movem.l  d0-d1/a0-a1,a7@-    | save d0-d1,a0-a1
-        addql   #1,_ISR_Nest_level       | one nest level deeper
-        addql   #1,_Thread_Dispatch_disable_level
-                                         | disable multitasking
-
-	jbsr	Clock_isr		| invoke the user ISR
-	jmp	_ISR_Exit
 END_CODE
 
 

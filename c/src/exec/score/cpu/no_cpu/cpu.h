@@ -412,7 +412,8 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  by RTEMS.
  */
 
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS  32
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS      32
+#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /*
  *  Should be large enough to run all RTEMS tests.  This insures
@@ -536,7 +537,7 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  */
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                 _isr, _entry_point ) \
+                                 _isr, _entry_point, _is_fp ) \
   { \
   }
 
@@ -621,11 +622,11 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *
  *  RTEMS guarantees that (1) will never happen so it is not a concern.
  *  (2),(3), (4) are handled by the macros _CPU_Priority_mask() and
- *  _CPU_Priority_Bits_index().  These three form a set of routines
+ *  _CPU_Priority_bits_index().  These three form a set of routines
  *  which must logically operate together.  Bits in the _value are
  *  set and cleared based on masks built by _CPU_Priority_mask().
  *  The basic major and minor values calculated by _Priority_Major()
- *  and _Priority_Minor() are "massaged" by _CPU_Priority_Bits_index()
+ *  and _Priority_Minor() are "massaged" by _CPU_Priority_bits_index()
  *  to properly range between the values returned by the "find first bit"
  *  instruction.  This makes it possible for _Priority_Get_highest() to
  *  calculate the major and directly index into the minor table.
@@ -660,10 +661,17 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *      bit set
  */
 
+#define CPU_USE_GENERIC_BITFIELD_CODE TRUE
+#define CPU_USE_GENERIC_BITFIELD_DATA TRUE
+
+#if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
+
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
     (_output) = 0;   /* do something to prevent warnings */ \
   }
+
+#endif
 
 /* end of Bitfield handler macros */
 
@@ -673,8 +681,12 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  for that routine.
  */
 
+#if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
+
 #define _CPU_Priority_Mask( _bit_number ) \
   ( 1 << (_bit_number) )
+
+#endif
 
 /*
  *  This routine translates the bit numbers returned by
@@ -683,8 +695,12 @@ EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  for that routine.
  */
 
-#define _CPU_Priority_Bits_index( _priority ) \
+#if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
+
+#define _CPU_Priority_bits_index( _priority ) \
   (_priority)
+
+#endif
 
 /* end of Priority handler macros */
 

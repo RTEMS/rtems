@@ -175,7 +175,8 @@ extern char               _VBR[];
  *  m68k family supports 256 distinct vectors.
  */
 
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS  256
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS      256
+#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /*
  *  Minimum size of a thread's stack.
@@ -237,7 +238,7 @@ unsigned32 _CPU_ISR_Get_level( void );
  */
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                 _isr, _entry_point ) \
+                                 _isr, _entry_point, _is_fp ) \
    do { \
      void   *_stack; \
      \
@@ -301,6 +302,9 @@ unsigned32 _CPU_ISR_Get_level( void );
  *    have a real 16 bit wide bitfield which operates "correctly."
  */
 
+#define CPU_USE_GENERIC_BITFIELD_CODE FALSE
+#define CPU_USE_GENERIC_BITFIELD_DATA FALSE
+
 #if ( M68K_HAS_BFFFO == 1 )
 #ifdef NO_UNINITIALIZED_WARNINGS
 
@@ -327,7 +331,7 @@ unsigned32 _CPU_ISR_Get_level( void );
 #else
 
 /* duplicates BFFFO results for 16 bits (i.e., 15-(_priority) in
-   _CPU_Priority_Bits_index is not needed), handles the 0 case, and
+   _CPU_Priority_bits_index is not needed), handles the 0 case, and
    does not molest _value -- jsg */
 #ifndef m68000
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
@@ -386,7 +390,7 @@ unsigned32 _CPU_ISR_Get_level( void );
 #define _CPU_Priority_Mask( _bit_number ) \
   ( 0x8000 >> (_bit_number) )
 
-#define _CPU_Priority_Bits_index( _priority ) \
+#define _CPU_Priority_bits_index( _priority ) \
   (_priority)
 
 /* end of Priority handler macros */

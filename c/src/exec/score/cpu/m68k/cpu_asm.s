@@ -174,9 +174,6 @@ SYM (_ISR_Handler):
  *   in place to know what vector we got on a 68000 core.
  */
 
-        .global SYM (_ISR_Exit)
-SYM (_ISR_Exit):
-
         subql   #1,SYM (_ISR_Nest_level) | one less nest level
         subql   #1,SYM (_Thread_Dispatch_disable_level)
                                          | unnest multitasking

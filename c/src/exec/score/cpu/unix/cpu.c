@@ -341,17 +341,10 @@ void _CPU_Install_interrupt_stack( void )
  *
  *  _CPU_Internal_threads_Idle_thread_body
  *
- *  NOTES:
- *
- *  1. This is the same as the regular CPU independent algorithm.
- *
- *  2. If you implement this using a "halt", "idle", or "shutdown"
- *     instruction, then don't forget to put it in an infinite loop.
- *
- *  3. Be warned. Some processors with onboard DMA have been known
- *     to stop the DMA if the CPU were put in IDLE mode.  This might
- *     also be a problem with other on-chip peripherals.  So use this
- *     hook with caution.
+ *  Stop until we get a signal which is the logically the same thing 
+ *  entering low-power or sleep mode on a real processor and waiting for
+ *  an interrupt.  This significantly reduces the consumption of host
+ *  CPU cycles which is again similar to low power mode.
  */
 
 void _CPU_Internal_threads_Idle_thread_body( void )
@@ -370,7 +363,8 @@ void _CPU_Context_Initialize(
   unsigned32       *_stack_base,
   unsigned32        _size,
   unsigned32        _new_level,
-  void             *_entry_point
+  void             *_entry_point,
+  boolean           _is_fp
 )
 {
   void        *source;
@@ -697,48 +691,14 @@ void _CPU_Fatal_error(unsigned32 error)
   _exit(error);
 }
 
-/*PAGE
- *
- *  _CPU_ffs
- */
-
-int _CPU_ffs(unsigned32 value)
-{
-  int output;
-  extern int ffs( int );
-
-  output = ffs(value);
-  output = output - 1;
-
-  return output;
-}
-
-
 /*
  *  Special Purpose Routines to hide the use of UNIX system calls.
  */
-
-#if 0
-/* XXX clock had this set of #define's */
-
-/*
- *  In order to get the types and prototypes used in this file under
- *  Solaris 2.3, it is necessary to pull the following magic.
- */
- 
-#if defined(solaris)
-#warning "Ignore the undefining __STDC__ warning"
-#undef __STDC__
-#define __STDC__ 0
-#undef  _POSIX_C_SOURCE
-#endif
-#endif
 
 int _CPU_Get_clock_vector( void )
 {
   return SIGALRM;
 }
-
 
 void _CPU_Start_clock( 
   int microseconds

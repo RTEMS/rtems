@@ -185,7 +185,8 @@ EXTERN void               *_CPU_Interrupt_stack_high;
  *  i960 family supports 256 distinct vectors.
  */
 
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS 256
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS      256
+#define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /*
  *  Minimum size of a thread's stack.
@@ -252,7 +253,7 @@ unsigned32 _CPU_ISR_Get_level( void );
  */
 
 #define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                  _isr, _entry ) \
+                                  _isr, _entry, _is_fp ) \
  { CPU_Call_frame *_texit_frame; \
    unsigned32 _mask; \
    unsigned32 _base_pc; \
@@ -318,6 +319,9 @@ unsigned32 _CPU_ISR_Get_level( void );
  *     + scan for the highest numbered (MSB) set in a 16 bit bitfield
  */
 
+#define CPU_USE_GENERIC_BITFIELD_CODE FALSE
+#define CPU_USE_GENERIC_BITFIELD_DATA FALSE
+
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { unsigned32 _search = (_value); \
     \
@@ -341,7 +345,7 @@ unsigned32 _CPU_ISR_Get_level( void );
 #define _CPU_Priority_Mask( _bit_number ) \
    ( 0x8000 >> (_bit_number) )
 
-#define _CPU_Priority_Bits_index( _priority ) \
+#define _CPU_Priority_bits_index( _priority ) \
    ( 15 - (_priority) )
 
 /* end of Priority handler macros */
