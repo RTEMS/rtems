@@ -13,7 +13,7 @@ include $(top_srcdir)/../../../automake/lib.am
 LIB = $(PROJECT_RELEASE)/lib/librtemsbsp${LIB_VARIANT}.a
 
 if HAS_NETWORKING
-LIBNETWORKING = $(PROJECT_RELEASE)/lib/libnetapps$(LIB_VARIANT).a
+LIBNETWORKING = ../libnetworking/wrapup/$(ARCH)/libnetapps.a
 endif
 
 if HAS_RDBG

@@ -1,5 +1,9 @@
 2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: Pickup libnetapps.a from build directory.
+
+2002-06-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Pickup libmisc.a from build directory.
 	Remove libxdr.a.
 
