@@ -46,4 +46,33 @@ $9 = @{back_flag = 1, front_flag = 8058280, next = 0x7ea5b4,
 
 In this case, the first block on the C Heap has 8,058,280 bytes left.
 
+@section How do I convert an executable to IEEE-695?
+
+This section is based on an email from Andrew Bythell
+<abythell@@nortelnetworks.com> in July 1999.
+
+Using Objcopy to convert m68k-coff to IEEE did not work.  The new IEEE
+object could not be read by tools like the XRay BDM Debugger.  
+
+The exact nature of this problem is beyond me, but I did narrow it down to a
+problem with objcopy in binutils 2-9.1.  To no surprise, others have
+discovered this problem as well, as it has been fixed in later releases.
+
+I compiled a snapshot of the development sources from 07/26/99 and
+everything now works as it should.  The development sources are at
+http://sourceware.cygnus.com/binutils  (thanks Ian!)
+
+Additional notes on converting an m68k-coff object for use with XRay (and
+others):
+
+@enumerate
+
+
+@item The m68k-coff object must be built with the -gstabs+ flag.  The -g flag
+alone didn't work for me.  
+
+@item Run Objcopy with the --debugging flag to copy debugging information. 
+
+@end enumerate
+
 
