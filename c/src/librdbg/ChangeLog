@@ -1,3 +1,9 @@
+2002-07-01	Joel Sherrill <joel@OARcorp.com>
+
+	* src/_servtgt.c, src/ptrace.c: Corrected use of
+	_Objects_Information_table now that it is a two dimensional
+	array based upon API and class.
+
 2001-05-15	Joel Sherrill <joel@OARcorp.com>
 
 	* src/i386/any/remdeb_svc.c, src/m68k/any/remdeb_svc.c,

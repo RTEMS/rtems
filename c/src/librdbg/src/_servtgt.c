@@ -241,12 +241,12 @@ TgtGetThreadName (PID_LIST * plst,  /* Process entry */
   int index;
   unsigned name;
 
-  if (Id < _Objects_Information_table[OBJECTS_RTEMS_TASKS]->maximum_id &&
-      Id > _Objects_Information_table[OBJECTS_RTEMS_TASKS]->minimum_id) {
+  if (Id < _Objects_Information_table[OBJECTS_CLASSIC_API][1]->maximum_id &&
+      Id > _Objects_Information_table[OBJECTS_CLASSIC_API][1]->minimum_id) {
 
-    index = Id - _Objects_Information_table[OBJECTS_RTEMS_TASKS]->minimum_id;
+    index = Id - _Objects_Information_table[OBJECTS_CLASSIC_API][1]->minimum_id;
     name =
-      *(unsigned *) (_Objects_Information_table[OBJECTS_RTEMS_TASKS]->
+      *(unsigned *) (_Objects_Information_table[OBJECTS_CLASSIC_API][1]->
                      local_table[1 + index]->name);
     ThrName[0] = (char) ((name >> 24) & 0xFF);
     ThrName[1] = (char) ((name >> 16) & 0xFF);
@@ -256,13 +256,13 @@ TgtGetThreadName (PID_LIST * plst,  /* Process entry */
     return 0;
   }
 
-  if (Id < _Objects_Information_table[OBJECTS_POSIX_THREADS]->maximum_id &&
-      Id > _Objects_Information_table[OBJECTS_POSIX_THREADS]->minimum_id) {
+  if (Id < _Objects_Information_table[OBJECTS_POSIX_API][1]->maximum_id &&
+      Id > _Objects_Information_table[OBJECTS_POSIX_API][1]->minimum_id) {
 
     index =
-      Id - _Objects_Information_table[OBJECTS_POSIX_THREADS]->minimum_id;
+      Id - _Objects_Information_table[OBJECTS_POSIX_API][1]->minimum_id;
     name =
-      *(unsigned *) (_Objects_Information_table[OBJECTS_POSIX_THREADS]->
+      *(unsigned *) (_Objects_Information_table[OBJECTS_POSIX_API][1]->
                      local_table[1 + index]->name);
     ThrName[0] = (char) ((name >> 24) & 0xFF);
     ThrName[1] = (char) ((name >> 16) & 0xFF);
@@ -288,11 +288,11 @@ TgtThreadList (PID_LIST * plst, /* Process entry */
   Objects_Id id;
   unsigned index;
 
-  id = _Objects_Information_table[OBJECTS_RTEMS_TASKS]->minimum_id;
+  id = _Objects_Information_table[OBJECTS_CLASSIC_API][1]->minimum_id;
 
-  while (id < _Objects_Information_table[OBJECTS_RTEMS_TASKS]->maximum_id) {
-    index = id - _Objects_Information_table[OBJECTS_RTEMS_TASKS]->minimum_id;
-    if (_Objects_Information_table[OBJECTS_RTEMS_TASKS]->
+  while (id < _Objects_Information_table[OBJECTS_CLASSIC_API][1]->maximum_id) {
+    index = id - _Objects_Information_table[OBJECTS_CLASSIC_API][1]->minimum_id;
+    if (_Objects_Information_table[OBJECTS_CLASSIC_API][1]->
         local_table[1 + index] != NULL) {
       threads[curr] = (unsigned) id;
       curr++;
@@ -300,18 +300,20 @@ TgtThreadList (PID_LIST * plst, /* Process entry */
     id++;
   }
 
-  id = _Objects_Information_table[OBJECTS_POSIX_THREADS]->minimum_id;
+  id = _Objects_Information_table[OBJECTS_POSIX_API][1]->minimum_id;
 
-  while (id < _Objects_Information_table[OBJECTS_POSIX_THREADS]->maximum_id) {
+  while (id < _Objects_Information_table[OBJECTS_POSIX_API][1]->maximum_id) {
     index =
-      id - _Objects_Information_table[OBJECTS_POSIX_THREADS]->minimum_id;
-    if (_Objects_Information_table[OBJECTS_POSIX_THREADS]->
+      id - _Objects_Information_table[OBJECTS_POSIX_API][1]->minimum_id;
+    if (_Objects_Information_table[OBJECTS_POSIX_API][1]->
         local_table[1 + index] != NULL) {
       threads[curr] = (unsigned) id;
       curr++;
     }
     id++;
   }
+
+#warning "ignores ITRON tasks and could be a single loop"
 
   return curr;
 }

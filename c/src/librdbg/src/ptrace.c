@@ -35,22 +35,22 @@ Thread_Get_RDBG (Objects_Id Id)
 {
   unsigned index;
 
-  if (Id < _Objects_Information_table[OBJECTS_RTEMS_TASKS]->maximum_id &&
-      Id > _Objects_Information_table[OBJECTS_RTEMS_TASKS]->minimum_id) {
+  if (Id < _Objects_Information_table[OBJECTS_CLASSIC_API][1]->maximum_id &&
+      Id > _Objects_Information_table[OBJECTS_CLASSIC_API][1]->minimum_id) {
 
-    index = Id - _Objects_Information_table[OBJECTS_RTEMS_TASKS]->minimum_id;
-    if (_Objects_Information_table[OBJECTS_RTEMS_TASKS]->local_table[1 + index] != NULL) {
-      return (Thread_Control*) (_Objects_Information_table[OBJECTS_RTEMS_TASKS]->local_table[1 + index]);
+    index = Id - _Objects_Information_table[OBJECTS_CLASSIC_API][1]->minimum_id;
+    if (_Objects_Information_table[OBJECTS_CLASSIC_API][1]->local_table[1 + index] != NULL) {
+      return (Thread_Control*) (_Objects_Information_table[OBJECTS_CLASSIC_API][1]->local_table[1 + index]);
     }
   }
 
-  if (Id < _Objects_Information_table[OBJECTS_POSIX_THREADS]->maximum_id &&
-      Id > _Objects_Information_table[OBJECTS_POSIX_THREADS]->minimum_id) {
+  if (Id < _Objects_Information_table[OBJECTS_POSIX_API][1]->maximum_id &&
+      Id > _Objects_Information_table[OBJECTS_POSIX_API][1]->minimum_id) {
 
-    index = Id - _Objects_Information_table[OBJECTS_POSIX_THREADS]->minimum_id;
-    if (_Objects_Information_table[OBJECTS_POSIX_THREADS]->
+    index = Id - _Objects_Information_table[OBJECTS_POSIX_API][1]->minimum_id;
+    if (_Objects_Information_table[OBJECTS_POSIX_API][1]->
         local_table[1 + index] != NULL)
-      return (Thread_Control*) (_Objects_Information_table[OBJECTS_POSIX_THREADS]->local_table[1 + index]);
+      return (Thread_Control*) (_Objects_Information_table[OBJECTS_POSIX_API][1]->local_table[1 + index]);
   }
 
   return 0;
