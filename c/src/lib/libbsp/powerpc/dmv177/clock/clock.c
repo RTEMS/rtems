@@ -22,6 +22,8 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 
+extern rtems_cpu_table Cpu_table;
+
 /*
  *  The Real Time Clock Counter Timer uses this trap type.
  */
@@ -174,8 +176,8 @@ rtems_device_driver Clock_initialize(
   void *pargp
 )
 {
-  Clock_Decrementer_value = (int) &CPU_PPC_CLICKS_PER_MS *
-                       (BSP_Configuration.microseconds_per_tick / 1000);
+  Clock_Decrementer_value = Cpu_table.clicks_per_usec *
+                       BSP_Configuration.microseconds_per_tick;
 
   Install_clock( Clock_isr );
  
