@@ -810,7 +810,6 @@ int _POSIX_signals_Get_highest(
 
   return 0;
 }
-  
 
 int sigtimedwait(
   const sigset_t         *set,
