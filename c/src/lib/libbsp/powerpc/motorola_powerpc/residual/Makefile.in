@@ -64,7 +64,7 @@ preinstall:
 	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
 	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/bsp
 
-${PGM}: ${SRCS} ${OBJS}
+$(PGM): ${OBJS}
 	$(make-rel)
 
 all: ${ARCH} $(SRCS) preinstall $(PGM)

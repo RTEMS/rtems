@@ -16,8 +16,8 @@ VPATH = @srcdir@:@srcdir@/../../../shared
 PGM = ${ARCH}/startup.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = bspstart bspclean sbrk setvec spurious genpvec swap main \
- bootcard bsplibc bsppost gnatinstallhandler
+C_PIECES = bspstart bspclean sbrk setvec spurious genpvec swap main bootcard \
+    bsplibc bsppost gnatinstallhandler
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
@@ -69,7 +69,7 @@ LDFLAGS +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-${PGM}: ${SRCS} ${OBJS}
+$(PGM): ${OBJS}
 	$(make-rel)
 
 all: ${ARCH} $(SRCS) $(PGM)

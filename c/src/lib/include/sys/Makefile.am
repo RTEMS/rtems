@@ -14,13 +14,13 @@ else
 NEWLIB_H_FILES += termios.h
 endif
 
-H_FILES += utime.h $(NEWLIB_H_FILES) $(NETWORKING_H_FILES)
+H_FILES = utime.h $(NEWLIB_H_FILES) $(NETWORKING_H_FILES)
 
-noinst_HEADERS = $(H_FILES)
+noinst_HEADERS = utime.h termios.h ioctl.h
 
 PREINSTALL_FILES = \
 $(PROJECT_INCLUDE)/sys \
-$(noinst_HEADERS:%=$(PROJECT_INCLUDE)/sys/%)
+$(H_FILES:%=$(PROJECT_INCLUDE)/sys/%)
 
 $(PROJECT_INCLUDE)/sys:
 	@$(mkinstalldirs) $@

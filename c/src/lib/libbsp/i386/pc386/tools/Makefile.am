@@ -12,16 +12,17 @@ bin2boot
 
 bin2boot_SOURCES = bin2boot.c
 
-PREINSTALL_DIRS=$(PROJECT_ROOT)/pc386/build-tools
-PREINSTALL_FILES = $(PROJECT_ROOT)/pc386/build-tools/bin2boot$(EXEEXT)
+PREINSTALL_FILES = \
+$(PROJECT_ROOT)/pc386/build-tools \
+$(PROJECT_ROOT)/pc386/build-tools/bin2boot$(EXEEXT)
 
-$(PREINSTALL_DIRS):
+$(PROJECT_ROOT)/pc386/build-tools:
 	$(mkinstalldirs) $@
 
 $(PROJECT_ROOT)/pc386/build-tools/bin2boot$(EXEEXT): bin2boot
 	$(INSTALL_PROGRAM) $< $@
 
 ## HACK: install into build-tree
-all-local: $(PREINSTALL_DIRS) $(PREINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../../../../automake/local.am

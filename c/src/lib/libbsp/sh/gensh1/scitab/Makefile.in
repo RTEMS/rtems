@@ -58,7 +58,7 @@ LDFLAGS +=
 CLEAN_ADDITIONS += scitab.c
 CLOBBER_ADDITIONS +=
 
-$(PGM): $(SRCS) ${OBJS}
+$(PGM): ${OBJS}
 	$(make-rel)
 
 all: ${ARCH} $(SRCS) $(PGM)

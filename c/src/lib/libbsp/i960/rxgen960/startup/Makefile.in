@@ -18,8 +18,8 @@ PGM = ${ARCH}/startup.rel
 # C source names, if any, go here -- minus the .c
 #C_PIECES = bspclean bsplibc bsppost bspstart bootcard main sbrk setvec \
 #    gnatinstallhandler
-C_PIECES = bspstart cntrltbl exit fault flttbl frmstr intrtbl kkprintf \
-   nmi nulsystbl prcb rom_cntrltbl rom_ibr rom_prcb sctns setvec systbl
+C_PIECES = bspstart cntrltbl exit fault flttbl frmstr intrtbl kkprintf nmi \
+    nulsystbl prcb rom_cntrltbl rom_ibr rom_prcb sctns setvec systbl
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
@@ -65,7 +65,7 @@ LDFLAGS +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-${PGM}: ${SRCS} ${OBJS}
+$(PGM): ${OBJS}
 	$(make-rel)
 
 # XXX JRS look at the list of objects installed

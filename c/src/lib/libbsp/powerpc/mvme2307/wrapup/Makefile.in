@@ -17,10 +17,10 @@ VPATH = @srcdir@
 NETWORK_yes_V = network
 NETWORK = $(NETWORK_$(HAS_NETWORKING)_V)
 
-BSP_PIECES=startup clock console nvram timer pci $(NETWORK)
+BSP_PIECES = startup clock console nvram timer pci $(NETWORK)
 # pieces to pick up out of libcpu/ppc
-CPU_PIECES=
-GENERIC_PIECES=
+CPU_PIECES =
+GENERIC_PIECES =
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/lib.cfg
@@ -29,24 +29,23 @@ INSTALL = @INSTALL@
 INSTALL_CHANGE = @INSTALL_CHANGE@
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS=$(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
-     $(foreach piece, $(CPU_PIECES), \
-         ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/$(piece).rel) \
-     $(foreach piece, $(GENERIC_PIECES), \
-         ../../../$(piece)/$(ARCH)/$(piece).rel)
-LIB=$(ARCH)/libbsp.a
+OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
+    $(foreach piece, $(CPU_PIECES), \
+    ../../../../libcpu/$(RTEMS_CPU)/$(piece)/$(ARCH)/$(piece).rel) $(foreach \
+    piece, $(GENERIC_PIECES), ../../../$(piece)/$(ARCH)/$(piece).rel)
+LIB = $(ARCH)/libbsp.a
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-DEFINES  +=
+DEFINES +=
 CPPFLAGS +=
-CFLAGS   +=
+CFLAGS +=
 
-LD_PATHS  +=
-LD_LIBS   +=
-LDFLAGS   +=
+LD_PATHS +=
+LD_LIBS +=
+LDFLAGS +=
 
 #
 # Add your list of files to delete here.  The config files
@@ -61,7 +60,7 @@ CLOBBER_ADDITIONS +=
 $(LIB): ${OBJS}
 	$(make-library)
 
-all:	${ARCH} $(SRCS) $(LIB)
+all: ${ARCH} $(SRCS) $(LIB)
 	$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
 
 $(PROJECT_ROOT)/@RTEMS_BSP@/lib/bsp_specs: ../bsp_specs

@@ -13,7 +13,7 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@
 
-H_FILES = $(srcdir)/runway.h $(srcdir)/semaphore.h 
+H_FILES = $(srcdir)/runway.h $(srcdir)/semaphore.h
 
 SRCS = $(H_FILES)
 
@@ -23,7 +23,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 INSTALL_CHANGE = @INSTALL_CHANGE@
 mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
 
-INSTALLDIRS = $(PROJECT_INCLUDE)/hppa1.1
+INSTALLDIRS = $(PROJECT_INCLUDE)
 
 $(INSTALLDIRS):
 	@$(mkinstalldirs) $(INSTALLDIRS)

@@ -37,7 +37,7 @@ include $(RTEMS_ROOT)/make/leaf.cfg
 INSTALL_CHANGE = @INSTALL_CHANGE@
 mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
 
-INSTALLDIRS = $(PROJECT_INCLUDE)/hppa1.1
+INSTALLDIRS = $(PROJECT_INCLUDE)
 
 $(INSTALLDIRS):
 	@$(mkinstalldirs) $(INSTALLDIRS)
@@ -59,7 +59,7 @@ LDFLAGS +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-${PGM}: ${SRCS} ${OBJS}
+$(PGM): ${OBJS}
 	$(make-rel)
 
 all: ${ARCH} $(SRCS) $(PGM)

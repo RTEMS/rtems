@@ -63,7 +63,7 @@ LDFLAGS +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-${PGM}: ${SRCS} ${OBJS}
+$(PGM): ${OBJS}
 	$(make-rel)
 
 preinstall: $(INSTALLDIRS) $(H_FILES)

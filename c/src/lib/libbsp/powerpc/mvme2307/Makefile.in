@@ -18,7 +18,7 @@ include $(RTEMS_ROOT)/make/directory.cfg
 
 INSTALL_CHANGE = @INSTALL_CHANGE@
 
-SRCS=README
+SRCS = README
 
 all: $(SRCS)
 
@@ -28,8 +28,8 @@ NETWORK = $(NETWORK_$(HAS_NETWORKING)_V)
 
 # wrapup is the one that actually builds and installs the library
 #  from the individual .rel files built in other directories
-SUBDIRS=include clock console startup boot \
-    nvram timer pci $(NETWORK) wrapup
+SUBDIRS = include clock console startup boot nvram timer pci $(NETWORK) \
+    wrapup
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \

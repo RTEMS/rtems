@@ -13,39 +13,45 @@ PROJECT_ROOT = @PROJECT_ROOT@
 
 VPATH = @srcdir@:@srcdir@/../../../shared
 
-PGM=${ARCH}/startup.rel
+PGM = ${ARCH}/startup.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES=bspclean bsplibc bsppost bspstart main sbrk setvec
-C_FILES=$(C_PIECES:%=%.c)
-C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
+C_PIECES = bspclean bsplibc bsppost bspstart main sbrk setvec
+C_FILES = $(C_PIECES:%=%.c)
+C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES=
+H_FILES =
 
 # Assembly source names, if any, go here -- minus the .S
-S_PIECES=
-S_FILES=$(S_PIECES:%=%.S)
-S_O_FILES=$(S_FILES:%.S=${ARCH}/%.o)
+S_PIECES =
+S_FILES = $(S_PIECES:%=%.S)
+S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 
-SRCS=linkcmds $(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES)
-OBJS=$(C_O_FILES) $(CC_O_FILES) $(S_O_FILES)
+SRCS = linkcmds $(C_FILES) $(CC_FILES) $(H_FILES) $(S_FILES)
+OBJS = $(C_O_FILES) $(CC_O_FILES) $(S_O_FILES)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(RTEMS_ROOT)/make/leaf.cfg
 
 INSTALL_CHANGE = @INSTALL_CHANGE@
+mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
+
+INSTALLDIRS = $(PROJECT_RELEASE)/lib
+
+$(INSTALLDIRS):
+	@$(mkinstalldirs) $(INSTALLDIRS)
 
 #
 # (OPTIONAL) Add local stuff here using +=
 #
 
-DEFINES  +=
+DEFINES +=
 CPPFLAGS +=
-CFLAGS   +=
+CFLAGS +=
 
-LD_PATHS  +=
-LD_LIBS   +=
-LDFLAGS   +=
+LD_PATHS +=
+LD_LIBS +=
+LDFLAGS +=
 
 #
 # Add your list of files to delete here.  The config files
@@ -57,14 +63,14 @@ LDFLAGS   +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-${PGM}: ${SRCS} ${OBJS}
+$(PGM): ${OBJS}
 	$(make-rel)
 
-all:	${ARCH} $(SRCS) $(PGM)
+all: ${ARCH} $(SRCS) $(PGM)
 	$(INSTALL_CHANGE) $(srcdir)/linkcmds $(PROJECT_RELEASE)/lib
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
-install:  all
+install: all
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
