@@ -91,8 +91,10 @@ static volatile m8260BufferDescriptor_t *RxBd[NUM_PORTS], *TxBd[NUM_PORTS];
 /* Used to track termios private data for callbacks */
 struct rtems_termios_tty *ttyp[NUM_PORTS];
 
+#if 0
 /* Used to record previous ISR */
 static rtems_isr_entry old_handler[NUM_PORTS];
+#endif
 
 /*
  * Device-specific routines
@@ -100,12 +102,12 @@ static rtems_isr_entry old_handler[NUM_PORTS];
 void m8xx_console_reserve_resources(rtems_configuration_table *);
 static int m8xx_smc_set_attributes(int, const struct termios*);
 static int m8xx_scc_set_attributes(int, const struct termios*);
-static rtems_isr m8xx_smc1_interrupt_handler(rtems_vector_number);
-static rtems_isr m8xx_smc2_interrupt_handler(rtems_vector_number);
-static rtems_isr m8xx_scc1_interrupt_handler(rtems_vector_number);
-static rtems_isr m8xx_scc2_interrupt_handler(rtems_vector_number);
-static rtems_isr m8xx_scc3_interrupt_handler(rtems_vector_number);
-static rtems_isr m8xx_scc4_interrupt_handler(rtems_vector_number);
+static rtems_isr m8xx_smc1_interrupt_handler();
+static rtems_isr m8xx_smc2_interrupt_handler();
+static rtems_isr m8xx_scc1_interrupt_handler();
+static rtems_isr m8xx_scc2_interrupt_handler();
+static rtems_isr m8xx_scc3_interrupt_handler();
+static rtems_isr m8xx_scc4_interrupt_handler();
 
 
 
@@ -350,7 +352,7 @@ m8xx_uart_setAttributes(
  */
 
 static void
-m8xx_scc1_interrupt_handler (rtems_vector_number v)
+m8xx_scc1_interrupt_handler ()
 {
   int nb_overflow;
 
@@ -394,7 +396,7 @@ m8xx_scc1_interrupt_handler (rtems_vector_number v)
 }
 
 static void
-m8xx_scc2_interrupt_handler (rtems_vector_number v)
+m8xx_scc2_interrupt_handler ()
 {
   int nb_overflow;
 
@@ -439,7 +441,7 @@ m8xx_scc2_interrupt_handler (rtems_vector_number v)
 
 
 static void
-m8xx_scc3_interrupt_handler (rtems_vector_number v)
+m8xx_scc3_interrupt_handler ()
 {
   int nb_overflow;
 
@@ -485,7 +487,7 @@ m8xx_scc3_interrupt_handler (rtems_vector_number v)
 
 
 static void
-m8xx_scc4_interrupt_handler (rtems_vector_number v)
+m8xx_scc4_interrupt_handler ()
 {
   int nb_overflow;
 
@@ -529,7 +531,7 @@ m8xx_scc4_interrupt_handler (rtems_vector_number v)
 }
 
 static void
-m8xx_smc1_interrupt_handler (rtems_vector_number v)
+m8xx_smc1_interrupt_handler ()
 {
   int nb_overflow;
 
@@ -574,7 +576,7 @@ m8xx_smc1_interrupt_handler (rtems_vector_number v)
 
 
 static void
-m8xx_smc2_interrupt_handler (rtems_vector_number v)
+m8xx_smc2_interrupt_handler ()
 {
   int nb_overflow;
 

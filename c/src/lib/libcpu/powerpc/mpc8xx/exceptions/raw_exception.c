@@ -26,6 +26,8 @@
 #include <rtems/bspIo.h>	/* for printk */
 #include <string.h>
 
+void * codemove(void *, const void *, unsigned int, unsigned long);
+
 static rtems_raw_except_connect_data* 		raw_except_table;
 static rtems_raw_except_connect_data  		default_raw_except_entry;
 static rtems_raw_except_global_settings* 	local_settings;

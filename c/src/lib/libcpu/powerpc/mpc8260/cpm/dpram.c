@@ -21,6 +21,8 @@
 #include <mpc8260.h>
 #include <mpc8260/cpm.h>
 
+void rtems_panic(char *, int);
+
 /*
  * Allocation order:
  *      - Dual-Port RAM section 0

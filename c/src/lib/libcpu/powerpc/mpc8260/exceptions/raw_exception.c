@@ -32,6 +32,8 @@ static rtems_raw_except_connect_data* 		raw_except_table;
 static rtems_raw_except_connect_data  		default_raw_except_entry;
 static rtems_raw_except_global_settings* 	local_settings;
 
+void * codemove(void *, const void *, unsigned int, unsigned long);
+
 int mpc8260_vector_is_valid(rtems_vector vector)
 {
   switch(vector) {

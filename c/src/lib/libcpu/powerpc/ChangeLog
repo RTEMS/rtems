@@ -1,3 +1,9 @@
+2002-11-04	Joel Sherrill <joel@OARcorp.com>
+
+	* mpc8260/console-generic/console-generic.c, mpc8260/cpm/dpram.c,
+	mpc8260/exceptions/raw_exception.c,
+	mpc8xx/exceptions/raw_exception.c: Removed warnings.
+
 2002-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* mpc8xx/console-generic/console-generic.c, mpc8xx/cpm/dpram.c,
