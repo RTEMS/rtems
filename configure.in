@@ -225,7 +225,7 @@ if test "$RTEMS_HAS_CPLUSPLUS" = "yes"; then
     AC_MSG_ERROR([***]
      [Inconsistency in compiler configuration:]
      [Target C compiler and Target C++ compiler]
-     [must both ether be cross compilers or native compilers]
+     [must both either be cross compilers or native compilers]
      [Hint: If building a posix bsp: LD_LIBRARY_PATH?] )
   fi
 else

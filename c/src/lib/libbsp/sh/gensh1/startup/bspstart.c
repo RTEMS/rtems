@@ -86,7 +86,7 @@ void bsp_start(void)
      For real boards you need to setup the hardware 
      and need to copy the vector table from rom to ram.
 
-     Depending on the board this can ether be done from inside the rom 
+     Depending on the board this can either be done from inside the rom 
      startup code, rtems startup code or here.
    */
    

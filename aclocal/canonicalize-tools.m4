@@ -55,7 +55,7 @@ else
     *)  # invalid for AC_PATH_PROG
       AC_MSG_RESULT("no")
       AC_MSG_ERROR([***]
-        [Environment variable $1 should ether]
+        [Environment variable $1 should either]
 	[be unset (preferred) or contain an absolute path])
     ;;
     esac
@@ -86,7 +86,7 @@ dnl special treatment of ranlib
     else
       AC_MSG_ERROR([***]
         [Can't figure out how to build a library index]
-	[Nether ranlib nor ar -s seem to be available] )
+	[Neither ranlib nor ar -s seem to be available] )
     fi
   fi
 
