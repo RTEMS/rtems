@@ -1,3 +1,10 @@
+2001-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* untar/Makefile.am, monitor/Makefile.am, dummy/Makefile.am,
+	devnull/Makefile.am, dumpbuf/Makefile.am, mw-fb/Makefile.am,
+	stackchk/Makefile.am, rtmonuse/Makefile.am, cpuuse/Makefile.am:
+	Apply include_*HEADERS instead of H_FILES.
+
 2001-01-05	Joel Sherrill <joel@OARcorp.com>
 
 	* devnull: New addition.  Moved from libcpu/sh.

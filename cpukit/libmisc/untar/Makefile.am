@@ -4,13 +4,15 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+include_rtemsdir = $(includedir)/rtems
+
 LIBNAME = libuntar-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = untar.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = untar.h
+include_rtems_HEADERS = untar.h
 
 OBJS = $(C_O_FILES)
 
@@ -31,12 +33,12 @@ $(LIB): $(OBJS)
 	$(make-library)
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
+    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 
-EXTRA_DIST = README untar.c untar.h
+EXTRA_DIST = README untar.c
 
 include $(top_srcdir)/../../../automake/local.am

@@ -4,6 +4,8 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+include_rtemsdir = $(includedir)/rtems
+
 LIBNAME = libmonitor-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
@@ -20,7 +22,7 @@ else
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 endif
 
-H_FILES = monitor.h symbols.h
+include_rtems_HEADERS = monitor.h symbols.h
 
 OBJS = $(C_O_FILES)
 
@@ -41,7 +43,7 @@ $(LIB): $(OBJS)
 	$(make-library)
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
+    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 
@@ -50,6 +52,6 @@ all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 EXTRA_DIST = README mon-command.c mon-config.c mon-dname.c mon-driver.c \
     mon-extension.c mon-itask.c mon-manager.c mon-monitor.c mon-mpci.c \
     mon-object.c mon-prmisc.c mon-queue.c mon-server.c mon-symbols.c \
-    mon-task.c monitor.h symbols.h
+    mon-task.c
 
 include $(top_srcdir)/../../../automake/local.am

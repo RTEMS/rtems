@@ -4,14 +4,15 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+include_rtemsdir = $(includedir)/rtems
+
 LIBNAME = libdevnull-tmp
 LIB = $(ARCH)/$(LIBNAME).a
-
 
 C_FILES = devnull.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = devnull.h
+include_rtems_HEADERS = devnull.h
 
 OBJS = $(C_O_FILES)
 
@@ -32,7 +33,7 @@ $(LIB): $(OBJS)
 	$(make-library)
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
-    $(H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
+    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 

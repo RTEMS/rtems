@@ -4,14 +4,16 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
+include_rtemsdir = $(includedir)/rtems
+
 LIBNAME = libstackchk-tmp
 LIB = $(ARCH)/$(LIBNAME).a
 
 C_FILES = check.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
-H_FILES = internal.h
-INSTALLED_H_FILES = stackchk.h
+noinst_HEADERS = internal.h
+include_rtems_HEADERS = stackchk.h
 
 OBJS = $(C_O_FILES)
 
@@ -32,12 +34,12 @@ $(LIB): $(OBJS)
 	$(make-library)
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
-    $(INSTALLED_H_FILES:%=$(PROJECT_INCLUDE)/rtems/%)
+    $(include_rtems_HEADERS:%=$(PROJECT_INCLUDE)/rtems/%)
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(OBJS) $(LIB)
 
 .PRECIOUS: $(LIB)
 
-EXTRA_DIST = README check.c internal.h stackchk.h
+EXTRA_DIST = README check.c
 
 include $(top_srcdir)/../../../automake/local.am
