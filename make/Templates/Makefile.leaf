@@ -27,11 +27,13 @@ OBJS=$(C_O_FILES) $(CC_O_FILES) $(S_O_FILES)
 
 PGMS=${ARCH}/xxx-your-program-here ${ARCH}/xxx-another-one
 
-# List of RTEMS managers to be included in the application goes here.
-# Use:
+#  List of RTEMS Classic API Managers to be included in the application
+#  goes here. Use:
 #     MANAGERS=all
-# to include all RTEMS managers in the application.
-MANAGERS=io event message rate_monotonic semaphore timer, etc.
+# to include all RTEMS Classic API Managers in the application or
+# something like this to include a specific set of managers.
+#     MANAGERS=io event message rate_monotonic semaphore timer
+MANAGERS=XXX
 
 include $(RTEMS_MAKEFILE_PATH)/Makefile.inc
 

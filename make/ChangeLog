@@ -1,3 +1,7 @@
+2002-07-22	Joel Sherrill <joel@OARcorp.com>
+
+	* Templates/Makefile.leaf: Clarify the MANAGERS example.
+
 2002-07-01	Joel Sherrill <joel@OARcorp.com>
 
 	* custom/p4650.cfg: Update arguments to gcc3.
