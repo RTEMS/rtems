@@ -259,6 +259,7 @@ procedure Message_Queue_Create (
 @code{@value{RPREFIX}INVALID_NUMBER} - invalid message count@*
 @code{@value{RPREFIX}INVALID_SIZE} - invalid message size@*
 @code{@value{RPREFIX}TOO_MANY} - too many queues created@*
+@code{@value{RPREFIX}UNSATISFIED} - unable to allocate message buffers@*
 @code{@value{RPREFIX}MP_NOT_CONFIGURED} - multiprocessing not configured@*
 @code{@value{RPREFIX}TOO_MANY} - too many global objects
 
@@ -274,8 +275,8 @@ is used to access the message queue.
 
 Specifying @code{@value{RPREFIX}PRIORITY} in attribute_set causes tasks
 waiting for a message to be serviced according to task priority.
-When @code{@value{RPREFIX}FIFO} is specified, waiting tasks are serviced in First
-In-First Out order.
+When @code{@value{RPREFIX}FIFO} is specified, waiting tasks are serviced
+in First In-First Out order.
 
 @subheading NOTES:
 

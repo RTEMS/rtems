@@ -1,3 +1,9 @@
+2004-06-29	Joel Sherrill <joel@OARcorp.com>
+
+	PR 631/rtems
+	* msg.t: Document the return status from message_queue_create when
+	unable to allocate message buffer memory.
+
 2004-05-21	Joel Sherrill <joel@OARcorp.com>
 
 	PR 627/doc
