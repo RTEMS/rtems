@@ -19,6 +19,7 @@
  *
  *  $Id$
  */
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -246,17 +247,27 @@ int main(
   status = fcntl( fd, F_GETFD, 1 );
   assert( status == 1 );
 
+#if 0
   printf("fcntl F_DUPFD should return 0\n");
   status = fcntl( fd, F_DUPFD, 0 );
   assert ( status == 0 );
+#else
+  printf("fcntl F_DUPFD should return 0 -- skip until implemented\n");
+#endif
 
-  printf("fcntl F_GETFL should return -1\n");
+  printf("fcntl F_GETFL returns current flags\n");
   status = fcntl( fd, F_GETFL, 1 );
-  assert ( status == -1 );
+  printf("fcntl F_GETFL returned 0x%x\n", status );
+  assert( status != -1 );
 
-  printf("fcntl F_SETFL should return -1\n");
-  status = fcntl( fd, F_SETFL, 1 );
-  assert ( status == -1 );
+  printf("fcntl F_SETFL to add O_APPEND and O_NONBLOCK\n");
+  status = fcntl( fd, F_SETFL, O_APPEND|O_NONBLOCK );
+  assert ( status != -1 );
+
+  printf("fcntl F_GETFL return current flags to see changes\n");
+  status = fcntl( fd, F_GETFL, 1 );
+  printf("fcntl F_GETFL returned 0x%x\n", status );
+  assert( status != -1 );
 
   printf("fcntl F_GETLK should return -1\n");
   status = fcntl( fd, F_GETLK, 1 );
@@ -363,6 +374,7 @@ int main(
     );
   }
 
+  printf( "Send seekdir a NULL pointer\n");
   seekdir( NULL, off );
 
   printf( "\nClosing directory\n" );
