@@ -25,6 +25,9 @@
  *  DESCRIPTION:
  *
  *  This routine is used to add a user extension set to the active list.
+ *
+ *  NOTE: Must be before _User_extensions_Handler_initialization to
+ *        ensure proper inlining.
  */
 
 RTEMS_INLINE_ROUTINE void _User_extensions_Add_set (
