@@ -235,8 +235,8 @@ User_extensions_Control _RTEMS_tasks_User_extensions = {
  */
 
 void _RTEMS_tasks_Manager_initialization(
-  unsigned32                        maximum_tasks,
-  unsigned32                        number_of_initialization_tasks,
+  uint32_t                          maximum_tasks,
+  uint32_t                          number_of_initialization_tasks,
   rtems_initialization_tasks_table *user_tasks
 )
 {

@@ -29,7 +29,7 @@ extern "C" {
  *  each signal set.
  */
 
-typedef unsigned32 rtems_signal_set;
+typedef uint32_t   rtems_signal_set;
 
 /*
  *  Return type for ASR Handler
@@ -58,7 +58,7 @@ typedef struct {
   Modes_Control     mode_set;         /* RTEMS_ASR mode */
   rtems_signal_set  signals_posted;   /* signal set */
   rtems_signal_set  signals_pending;  /* pending signal set */
-  unsigned32        nest_level;       /* nest level of RTEMS_ASR */
+  uint32_t          nest_level;       /* nest level of RTEMS_ASR */
 }   ASR_Information;
 
 /*

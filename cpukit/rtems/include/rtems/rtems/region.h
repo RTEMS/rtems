@@ -45,11 +45,11 @@ typedef struct {
   Objects_Control       Object;
   Thread_queue_Control  Wait_queue;            /* waiting threads        */
   void                 *starting_address;      /* physical start addr    */
-  unsigned32            length;                /* physical length(bytes) */
-  unsigned32            page_size;             /* in bytes               */
-  unsigned32            maximum_segment_size;  /* in bytes               */
+  uint32_t              length;                /* physical length(bytes) */
+  uint32_t              page_size;             /* in bytes               */
+  uint32_t              maximum_segment_size;  /* in bytes               */
   rtems_attribute       attribute_set;
-  unsigned32            number_of_used_blocks; /* blocks allocated       */
+  uint32_t              number_of_used_blocks; /* blocks allocated       */
   Heap_Control          Memory;
 }  Region_Control;
 
@@ -69,7 +69,7 @@ RTEMS_EXTERN Objects_Information _Region_Information;
  */
 
 void _Region_Manager_initialization(
-  unsigned32 maximum_regions
+  uint32_t   maximum_regions
 );
 
 /*
@@ -89,8 +89,8 @@ void _Region_Manager_initialization(
 rtems_status_code rtems_region_create(
   rtems_name          name,
   void               *starting_address,
-  unsigned32          length,
-  unsigned32          page_size,
+  uint32_t            length,
+  uint32_t            page_size,
   rtems_attribute  attribute_set,
   Objects_Id         *id
 );
@@ -109,7 +109,7 @@ rtems_status_code rtems_region_create(
 rtems_status_code rtems_region_extend(
   Objects_Id          id,
   void               *starting_address,
-  unsigned32          length
+  uint32_t            length
 );
 
 /*
@@ -172,7 +172,7 @@ rtems_status_code rtems_region_delete(
 
 rtems_status_code rtems_region_get_segment(
   Objects_Id         id,
-  unsigned32         size,
+  uint32_t           size,
   rtems_option       option_set,
   rtems_interval     timeout,
   void              **segment
@@ -190,7 +190,7 @@ rtems_status_code rtems_region_get_segment(
 rtems_status_code rtems_region_get_segment_size(
   Objects_Id         id,
   void              *segment,
-  unsigned32        *size
+  uint32_t          *size
 );
 
 /*

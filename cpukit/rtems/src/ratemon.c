@@ -37,7 +37,7 @@
  */
 
 void _Rate_monotonic_Manager_initialization(
-  unsigned32 maximum_periods
+  uint32_t   maximum_periods
 )
 {
   _Objects_Initialize_information(

@@ -48,7 +48,7 @@
 
 rtems_status_code rtems_task_restart(
   Objects_Id id,
-  unsigned32 argument
+  uint32_t   argument
 )
 {
   register Thread_Control *the_thread;

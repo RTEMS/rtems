@@ -52,7 +52,7 @@ typedef struct {
   Region_MP_Remote_operations  operation;
   rtems_name                   name;
   rtems_option                 option_set;
-  unsigned32                   size;
+  uint32_t                     size;
   Objects_Id                   proxy_id;
   void                        *segment;
 }   Region_MP_Packet;
@@ -86,7 +86,7 @@ rtems_status_code _Region_MP_Send_request_packet (
   Region_MP_Remote_operations  operation,
   Objects_Id                   region_id,
   void                        *segment,
-  unsigned32                   size,
+  uint32_t                     size,
   rtems_option                 option_set,
   rtems_interval               timeout
 );

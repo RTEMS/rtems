@@ -48,7 +48,7 @@
 
 rtems_status_code rtems_task_ident(
   rtems_name    name,
-  unsigned32    node,
+  uint32_t      node,
   Objects_Id   *id
 )
 {

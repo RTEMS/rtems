@@ -67,7 +67,7 @@
 
 rtems_status_code rtems_semaphore_create(
   rtems_name           name,
-  unsigned32           count,
+  uint32_t             count,
   rtems_attribute      attribute_set,
   rtems_task_priority  priority_ceiling,
   Objects_Id          *id
@@ -76,7 +76,7 @@ rtems_status_code rtems_semaphore_create(
   register Semaphore_Control *the_semaphore;
   CORE_mutex_Attributes       the_mutex_attributes;
   CORE_semaphore_Attributes   the_semaphore_attributes;
-  unsigned32                  lock;
+  uint32_t                    lock;
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;

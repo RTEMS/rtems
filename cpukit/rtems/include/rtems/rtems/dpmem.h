@@ -43,7 +43,7 @@ typedef struct {
   Objects_Control  Object;
   void            *internal_base; /* base internal address */
   void            *external_base; /* base external address */
-  unsigned32       length;        /* length of dual-ported area */
+  uint32_t         length;        /* length of dual-ported area */
 }   Dual_ported_memory_Control;
 
 /*
@@ -61,7 +61,7 @@ RTEMS_EXTERN Objects_Information  _Dual_ported_memory_Information;
  */
 
 void _Dual_ported_memory_Manager_initialization(
-  unsigned32 maximum_ports
+  uint32_t   maximum_ports
 );
 
 /*
@@ -80,7 +80,7 @@ rtems_status_code rtems_port_create(
   rtems_name    name,
   void         *internal_start,
   void         *external_start,
-  unsigned32    length,
+  uint32_t      length,
   Objects_Id   *id
 );
 

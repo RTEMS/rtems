@@ -35,7 +35,7 @@
  */
 
 void _Partition_Manager_initialization(
-  unsigned32 maximum_partitions
+  uint32_t   maximum_partitions
 )
 {
   _Objects_Initialize_information(

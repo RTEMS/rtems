@@ -46,8 +46,8 @@
 rtems_status_code rtems_region_create(
   rtems_name          name,
   void               *starting_address,
-  unsigned32          length,
-  unsigned32          page_size,
+  uint32_t            length,
+  uint32_t            page_size,
   rtems_attribute  attribute_set,
   Objects_Id         *id
 )

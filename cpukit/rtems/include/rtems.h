@@ -106,10 +106,10 @@ extern "C" {
 #define RTEMS_MINIMUM_PACKET_SIZE  MP_PACKET_MINIMUM_PACKET_SIZE
  
 /*
- *  The following constant defines the number of unsigned32's
+ *  The following constant defines the number of uint32_t  's
  *  in a packet which must be converted to native format in a
  *  heterogeneous system.  In packets longer than
- *  MP_PACKET_MINIMUN_HETERO_CONVERSION unsigned32's, some of the "extra" data
+ *  MP_PACKET_MINIMUN_HETERO_CONVERSION uint32_t  's, some of the "extra" data
  *  may a user message buffer which is not automatically endian swapped.
  */
  

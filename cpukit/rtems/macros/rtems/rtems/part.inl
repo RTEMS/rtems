@@ -41,7 +41,7 @@
  */
 
 #define _Partition_Is_buffer_on_boundary( _the_buffer, _the_partition ) \
-  ((((unsigned32) _Addresses_Subtract( \
+  ((((uint32_t  ) _Addresses_Subtract( \
                     (_the_buffer), \
                     (_the_partition)->starting_address ) \
                   ) % \

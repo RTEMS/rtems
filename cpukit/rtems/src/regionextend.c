@@ -42,12 +42,12 @@
 rtems_status_code rtems_region_extend(
   Objects_Id          id,
   void               *starting_address,
-  unsigned32          length
+  uint32_t            length
 )
 {
   Region_Control     *the_region;
   Objects_Locations   location;
-  unsigned32          amount_extended;
+  uint32_t            amount_extended;
   Heap_Extend_status  heap_status;
   rtems_status_code   status;
 

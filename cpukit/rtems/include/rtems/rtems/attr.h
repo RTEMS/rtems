@@ -22,7 +22,7 @@ extern "C" {
 
 /* types */
 
-typedef unsigned32 rtems_attribute;
+typedef uint32_t   rtems_attribute;
 
 /* constants */
 

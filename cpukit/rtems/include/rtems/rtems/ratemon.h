@@ -61,8 +61,8 @@ typedef enum {
 
 typedef struct {
   rtems_rate_monotonic_period_states  state;
-  unsigned32                          ticks_since_last_period;
-  unsigned32                          ticks_executed_since_last_period;
+  uint32_t                            ticks_since_last_period;
+  uint32_t                            ticks_executed_since_last_period;
 }  rtems_rate_monotonic_period_status;
 
 /*
@@ -74,9 +74,9 @@ typedef struct {
   Objects_Control                     Object;
   Watchdog_Control                    Timer;
   rtems_rate_monotonic_period_states  state;
-  unsigned32                          owner_ticks_executed_at_period;
-  unsigned32                          time_at_period;
-  unsigned32                          next_length;
+  uint32_t                            owner_ticks_executed_at_period;
+  uint32_t                            time_at_period;
+  uint32_t                            next_length;
   Thread_Control                     *owner;
 }   Rate_monotonic_Control;
 
@@ -91,7 +91,7 @@ RTEMS_EXTERN Objects_Information _Rate_monotonic_Information;
  */
 
 void _Rate_monotonic_Manager_initialization(
-  unsigned32 maximum_periods
+  uint32_t   maximum_periods
 );
 
 /*

@@ -52,8 +52,8 @@
 rtems_status_code rtems_message_queue_broadcast(
   Objects_Id            id,
   void                 *buffer,
-  unsigned32            size,
-  unsigned32           *count
+  uint32_t              size,
+  uint32_t             *count
 )
 {
   register Message_queue_Control *the_message_queue;

@@ -77,8 +77,8 @@ rtems_status_code _RTEMS_tasks_MP_Send_request_packet (
   RTEMS_tasks_MP_Remote_operations operation,
   Objects_Id                       task_id,
   rtems_task_priority                 new_priority,
-  unsigned32                       notepad,
-  unsigned32                       note
+  uint32_t                         notepad,
+  uint32_t                         note
 )
 {
   RTEMS_tasks_MP_Packet *the_packet;
@@ -286,7 +286,7 @@ void _RTEMS_tasks_MP_Process_packet (
 
       the_thread = _MPCI_Process_response( the_packet_prefix );
 
-      *(unsigned32 *)the_thread->Wait.return_argument = the_packet->note;
+      *(uint32_t   *)the_thread->Wait.return_argument = the_packet->note;
 
       _MPCI_Return_packet( the_packet_prefix );
       break;

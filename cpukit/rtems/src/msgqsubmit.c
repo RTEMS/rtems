@@ -61,7 +61,7 @@
 rtems_status_code _Message_queue_Submit(
   Objects_Id                  id,
   void                       *buffer,
-  unsigned32                  size,
+  uint32_t                    size,
   Message_queue_Submit_types  submit_type
 )
 {

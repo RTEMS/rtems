@@ -44,7 +44,7 @@
  */
 
 void _Message_queue_Manager_initialization(
-  unsigned32 maximum_message_queues
+  uint32_t   maximum_message_queues
 )
 {
   _Objects_Initialize_information(

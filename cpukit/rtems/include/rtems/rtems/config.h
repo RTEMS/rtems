@@ -33,15 +33,15 @@ extern "C" {
  */
 
 typedef struct {
-  rtems_unsigned32                  maximum_tasks;
-  rtems_unsigned32                  maximum_timers;
-  rtems_unsigned32                  maximum_semaphores;
-  rtems_unsigned32                  maximum_message_queues;
-  rtems_unsigned32                  maximum_partitions;
-  rtems_unsigned32                  maximum_regions;
-  rtems_unsigned32                  maximum_ports;
-  rtems_unsigned32                  maximum_periods;
-  rtems_unsigned32                  number_of_initialization_tasks;
+  uint32_t                    maximum_tasks;
+  uint32_t                    maximum_timers;
+  uint32_t                    maximum_semaphores;
+  uint32_t                    maximum_message_queues;
+  uint32_t                    maximum_partitions;
+  uint32_t                    maximum_regions;
+  uint32_t                    maximum_ports;
+  uint32_t                    maximum_periods;
+  uint32_t                    number_of_initialization_tasks;
   rtems_initialization_tasks_table *User_initialization_tasks_table;
 } rtems_api_configuration_table;
 

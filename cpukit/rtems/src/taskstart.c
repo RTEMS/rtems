@@ -49,7 +49,7 @@
 rtems_status_code rtems_task_start(
   rtems_id         id,
   rtems_task_entry entry_point,
-  unsigned32       argument
+  uint32_t         argument
 )
 {
   register Thread_Control *the_thread;

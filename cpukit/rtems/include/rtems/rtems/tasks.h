@@ -118,7 +118,7 @@ typedef void rtems_task;
  *  The following defines the argument to an RTEMS task.
  */
  
-typedef unsigned32 rtems_task_argument;
+typedef uint32_t   rtems_task_argument;
 
 /*
  *  The following defines the type for the entry point of an RTEMS task.
@@ -137,12 +137,12 @@ typedef rtems_task ( *rtems_task_entry )(
  
 typedef struct {
   rtems_name            name;              /* task name */
-  unsigned32            stack_size;        /* task stack size */
+  uint32_t              stack_size;        /* task stack size */
   rtems_task_priority   initial_priority;  /* task priority */
   rtems_attribute       attribute_set;     /* task attributes */
   rtems_task_entry      entry_point;       /* task entry point */
   rtems_mode            mode_set;          /* task initial mode */
-  unsigned32            argument;          /* task argument */
+  uint32_t              argument;          /* task argument */
 } rtems_initialization_tasks_table;
 
 /*
@@ -152,7 +152,7 @@ typedef struct {
 
  
 typedef struct {
-  unsigned32               Notepads[ RTEMS_NUMBER_NOTEPADS ];
+  uint32_t                 Notepads[ RTEMS_NUMBER_NOTEPADS ];
   rtems_event_set          pending_events;
   rtems_event_set          event_condition;
   ASR_Information          Signal;
@@ -171,7 +171,7 @@ RTEMS_EXTERN Objects_Information _RTEMS_tasks_Information;
 
 RTEMS_EXTERN rtems_initialization_tasks_table 
                *_RTEMS_tasks_User_initialization_tasks;
-RTEMS_EXTERN unsigned32   _RTEMS_tasks_Number_of_initialization_tasks;
+RTEMS_EXTERN uint32_t     _RTEMS_tasks_Number_of_initialization_tasks;
 
 /*
  *  _RTEMS_tasks_Manager_initialization
@@ -182,8 +182,8 @@ RTEMS_EXTERN unsigned32   _RTEMS_tasks_Number_of_initialization_tasks;
  */
  
 void _RTEMS_tasks_Manager_initialization(
-  unsigned32                        maximum_tasks,
-  unsigned32                        number_of_initialization_tasks,
+  uint32_t                          maximum_tasks,
+  uint32_t                          number_of_initialization_tasks,
   rtems_initialization_tasks_table *user_tasks
 );
 
@@ -203,7 +203,7 @@ void _RTEMS_tasks_Manager_initialization(
 rtems_status_code rtems_task_create(
   rtems_name           name,
   rtems_task_priority  initial_priority,
-  unsigned32           stack_size,
+  uint32_t             stack_size,
   rtems_mode           initial_modes,
   rtems_attribute      attribute_set,
   Objects_Id          *id
@@ -225,7 +225,7 @@ rtems_status_code rtems_task_create(
 
 rtems_status_code rtems_task_ident(
   rtems_name    name,
-  unsigned32    node,
+  uint32_t      node,
   Objects_Id   *id
 );
 
@@ -254,8 +254,8 @@ rtems_status_code rtems_task_delete(
 
 rtems_status_code rtems_task_get_note(
   Objects_Id  id,
-  unsigned32  notepad,
-  unsigned32 *note
+  uint32_t    notepad,
+  uint32_t   *note
 );
 
 /*
@@ -270,8 +270,8 @@ rtems_status_code rtems_task_get_note(
 
 rtems_status_code rtems_task_set_note(
   Objects_Id id,
-  unsigned32 notepad,
-  unsigned32 note
+  uint32_t   notepad,
+  uint32_t   note
 );
 
 /*
@@ -303,7 +303,7 @@ rtems_status_code rtems_task_mode(
 
 rtems_status_code rtems_task_restart(
   Objects_Id id,
-  unsigned32 arg
+  uint32_t   arg
 );
 
 /*
@@ -362,7 +362,7 @@ rtems_status_code rtems_task_set_priority(
 rtems_status_code rtems_task_start(
   Objects_Id   id,
   rtems_task_entry entry_point,
-  unsigned32   argument
+  uint32_t     argument
 );
 
 /*

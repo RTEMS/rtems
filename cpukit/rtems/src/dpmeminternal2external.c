@@ -47,7 +47,7 @@ rtems_status_code rtems_port_internal_to_external(
 {
   register Dual_ported_memory_Control *the_port;
   Objects_Locations                    location;
-  unsigned32                           ending;
+  uint32_t                             ending;
 
   the_port = _Dual_ported_memory_Get( id, &location );
   switch ( location ) {

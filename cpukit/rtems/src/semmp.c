@@ -37,7 +37,7 @@ void _Semaphore_MP_Send_process_packet (
 )
 {
   Semaphore_MP_Packet *the_packet;
-  unsigned32           node;
+  uint32_t             node;
 
   switch ( operation ) {
 

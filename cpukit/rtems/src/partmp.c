@@ -36,7 +36,7 @@ void _Partition_MP_Send_process_packet (
 )
 {
   Partition_MP_Packet *the_packet;
-  unsigned32           node;
+  uint32_t             node;
 
   switch ( operation ) {
 

@@ -57,8 +57,8 @@ typedef struct {
   RTEMS_tasks_MP_Remote_operations  operation;
   rtems_name                        name;
   rtems_task_priority               the_priority;
-  unsigned32                        notepad;
-  unsigned32                        note;
+  uint32_t                          notepad;
+  uint32_t                          note;
 }   RTEMS_tasks_MP_Packet;
 
 /*
@@ -89,8 +89,8 @@ rtems_status_code _RTEMS_tasks_MP_Send_request_packet (
   RTEMS_tasks_MP_Remote_operations operation,
   Objects_Id                       task_id,
   rtems_task_priority                 the_priority,
-  unsigned32                       notepad,
-  unsigned32                       note
+  uint32_t                         notepad,
+  uint32_t                         note
 );
 
 /*

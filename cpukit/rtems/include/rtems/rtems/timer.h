@@ -116,7 +116,7 @@ typedef struct {
  */
 
 void _Timer_Manager_initialization(
-  unsigned32 maximum_timers
+  uint32_t   maximum_timers
 );
 
 /*
@@ -131,7 +131,7 @@ void _Timer_Manager_initialization(
  */
 
 Thread _Timer_Server_body(
-  unsigned32 ignored
+  uint32_t   ignored
 );
 
 /*
@@ -295,8 +295,8 @@ rtems_status_code rtems_timer_reset(
 #define RTEMS_TIMER_SERVER_DEFAULT_PRIORITY -1
 
 rtems_status_code rtems_timer_initiate_server(
-  unsigned32           priority,
-  unsigned32           stack_size,
+  uint32_t             priority,
+  uint32_t             stack_size,
   rtems_attribute      attribute_set
 );
 

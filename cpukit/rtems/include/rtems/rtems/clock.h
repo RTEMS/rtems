@@ -48,8 +48,8 @@ typedef enum {
  */
 
 typedef struct {
-  unsigned32  seconds;
-  unsigned32  microseconds;
+  uint32_t    seconds;
+  uint32_t    microseconds;
 } rtems_clock_time_value;
 
 /*

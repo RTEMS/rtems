@@ -46,8 +46,8 @@
  */
 
 Message_queue_Control *_Message_queue_Allocate (
-  unsigned32           count,
-  unsigned32           max_message_size
+  uint32_t             count,
+  uint32_t             max_message_size
 )
 {
   return 

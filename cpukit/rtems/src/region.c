@@ -35,7 +35,7 @@
  */
 
 void _Region_Manager_initialization(
-  unsigned32 maximum_regions
+  uint32_t   maximum_regions
 )
 {
   /* XXX move me */

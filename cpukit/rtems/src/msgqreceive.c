@@ -52,8 +52,8 @@
 rtems_status_code rtems_message_queue_receive(
   Objects_Id            id,
   void                 *buffer,
-  unsigned32           *size,
-  unsigned32            option_set,
+  uint32_t             *size,
+  uint32_t              option_set,
   rtems_interval        timeout
 )
 {

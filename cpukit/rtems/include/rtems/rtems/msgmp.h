@@ -61,9 +61,9 @@ typedef struct {
   rtems_name                         name;
   rtems_option                       option_set;
   Objects_Id                         proxy_id;
-  unsigned32                         count;
-  unsigned32                         size;
-  unsigned32                         pad0;
+  uint32_t                           count;
+  uint32_t                           size;
+  uint32_t                           pad0;
   CORE_message_queue_Buffer          Buffer;
 }   Message_queue_MP_Packet;
 
@@ -96,7 +96,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
   Message_queue_MP_Remote_operations  operation,
   Objects_Id                          message_queue_id,
   void                               *buffer,
-  unsigned32                         *size_p,
+  uint32_t                           *size_p,
   rtems_option                        option_set,
   Watchdog_Interval                   timeout
 );

@@ -27,7 +27,7 @@ extern "C" {
  *  each a mode set.
  */
 
-typedef unsigned32 Modes_Control;
+typedef uint32_t   Modes_Control;
 
 /*
  *  The following constants define the individual modes and masks

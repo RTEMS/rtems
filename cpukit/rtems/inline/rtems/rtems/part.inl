@@ -66,9 +66,9 @@ RTEMS_INLINE_ROUTINE boolean _Partition_Is_buffer_on_boundary (
   Partition_Control *the_partition
 )
 {
-  unsigned32   offset;
+  uint32_t     offset;
 
-  offset = (unsigned32) _Addresses_Subtract(
+  offset = (uint32_t  ) _Addresses_Subtract(
     the_buffer,
     the_partition->starting_address
   );
@@ -115,7 +115,7 @@ RTEMS_INLINE_ROUTINE boolean _Partition_Is_buffer_valid (
  */
 
 RTEMS_INLINE_ROUTINE boolean _Partition_Is_buffer_size_aligned (
-   unsigned32 buffer_size
+   uint32_t   buffer_size
 )
 {
   return ((buffer_size % CPU_PARTITION_ALIGNMENT) == 0);

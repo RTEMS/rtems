@@ -42,8 +42,8 @@
 
 void _RTEMS_tasks_Initialize_user_tasks( void )
 {
-  unsigned32                        index;
-  unsigned32                        maximum;
+  uint32_t                          index;
+  uint32_t                          maximum;
   rtems_id                          id;
   rtems_status_code                 return_value;
   rtems_initialization_tasks_table *user_tasks;

@@ -42,10 +42,10 @@ extern "C" {
 typedef struct {
   Objects_Control     Object;
   void               *starting_address;      /* physical address */
-  unsigned32          length;                /* in bytes */
-  unsigned32          buffer_size;           /* in bytes */
+  uint32_t            length;                /* in bytes */
+  uint32_t            buffer_size;           /* in bytes */
   rtems_attribute  attribute_set;         /* attributes */
-  unsigned32          number_of_used_blocks; /* or allocated buffers */
+  uint32_t            number_of_used_blocks; /* or allocated buffers */
   Chain_Control       Memory;                /* buffer chain */
 }   Partition_Control;
 
@@ -65,7 +65,7 @@ RTEMS_EXTERN Objects_Information _Partition_Information;
  */
 
 void _Partition_Manager_initialization(
-  unsigned32 maximum_partitions
+  uint32_t   maximum_partitions
 );
 
 /*
@@ -85,8 +85,8 @@ void _Partition_Manager_initialization(
 rtems_status_code rtems_partition_create(
   rtems_name          name,
   void               *starting_address,
-  unsigned32          length,
-  unsigned32          buffer_size,
+  uint32_t            length,
+  uint32_t            buffer_size,
   rtems_attribute  attribute_set,
   Objects_Id         *id
 );
@@ -107,7 +107,7 @@ rtems_status_code rtems_partition_create(
 
 rtems_status_code rtems_partition_ident(
   rtems_name    name,
-  unsigned32    node,
+  uint32_t      node,
   Objects_Id   *id
 );
 

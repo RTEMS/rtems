@@ -37,7 +37,7 @@ void _Message_queue_MP_Send_process_packet (
 )
 {
   Message_queue_MP_Packet *the_packet;
-  unsigned32               node;
+  uint32_t                 node;
 
   switch ( operation ) {
 
@@ -89,7 +89,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
   Message_queue_MP_Remote_operations  operation,
   Objects_Id                          message_queue_id,
   void                               *buffer,
-  unsigned32                         *size_p,
+  uint32_t                           *size_p,
   rtems_option                        option_set,
   rtems_interval                      timeout
 )
@@ -164,7 +164,7 @@ rtems_status_code _Message_queue_MP_Send_request_packet (
       the_packet->option_set = option_set;
       the_packet->size       = 0;        /* just in case of an error */
 
-      _Thread_Executing->Wait.return_argument   = (unsigned32 *)buffer;
+      _Thread_Executing->Wait.return_argument   = (uint32_t   *)buffer;
       _Thread_Executing->Wait.return_argument_1 = size_p;
       
       return (rtems_status_code) _MPCI_Send_request_packet(
@@ -318,7 +318,7 @@ void _Message_queue_MP_Process_packet (
       the_thread = _MPCI_Process_response( the_packet_prefix );
 
       if (the_packet->Prefix.return_code == RTEMS_SUCCESSFUL) {
-        *(rtems_unsigned32 *)the_thread->Wait.return_argument_1 = 
+        *(uint32_t   *)the_thread->Wait.return_argument_1 = 
            the_packet->size;
 
         _CORE_message_queue_Copy_buffer(
@@ -391,7 +391,7 @@ void _Message_queue_MP_Process_packet (
 
       the_thread = _MPCI_Process_response( the_packet_prefix );
 
-      *(unsigned32 *)the_thread->Wait.return_argument = the_packet->count;
+      *(uint32_t   *)the_thread->Wait.return_argument = the_packet->count;
 
       _MPCI_Return_packet( the_packet_prefix );
       break;

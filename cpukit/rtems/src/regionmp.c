@@ -36,7 +36,7 @@ void _Region_MP_Send_process_packet (
 )
 {
   Region_MP_Packet *the_packet;
-  unsigned32           node;
+  uint32_t             node;
 
   switch ( operation ) {
 
@@ -79,7 +79,7 @@ rtems_status_code _Region_MP_Send_request_packet (
   Region_MP_Remote_operations  operation,
   Objects_Id                   region_id,
   void                        *segment,
-  unsigned32                   size,
+  uint32_t                     size,
   rtems_option                 option_set,
   rtems_interval               timeout
 )

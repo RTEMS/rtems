@@ -25,7 +25,7 @@ extern "C" {
  *  The following defines the type used to control event sets.
  */
 
-typedef unsigned32 rtems_event_set;
+typedef uint32_t   rtems_event_set;
 
 /*
  *  The following constants define the individual events which may

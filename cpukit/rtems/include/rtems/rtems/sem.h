@@ -68,7 +68,7 @@ RTEMS_EXTERN Objects_Information  _Semaphore_Information;
  */
 
 void _Semaphore_Manager_initialization(
-  unsigned32 maximum_semaphores
+  uint32_t   maximum_semaphores
 );
 
 /*
@@ -85,7 +85,7 @@ void _Semaphore_Manager_initialization(
 
 rtems_status_code rtems_semaphore_create(
   rtems_name           name,
-  unsigned32           count,
+  uint32_t             count,
   rtems_attribute      attribute_set,
   rtems_task_priority  priority_ceiling,
   rtems_id            *id
@@ -107,7 +107,7 @@ rtems_status_code rtems_semaphore_create(
 
 rtems_status_code rtems_semaphore_ident(
   rtems_name    name,
-  unsigned32    node,
+  uint32_t      node,
   rtems_id     *id
 );
 
@@ -140,7 +140,7 @@ rtems_status_code rtems_semaphore_delete(
 
 rtems_status_code rtems_semaphore_obtain(
   rtems_id       id,
-  unsigned32     option_set,
+  uint32_t       option_set,
   rtems_interval timeout
 );
 
@@ -184,7 +184,7 @@ rtems_status_code rtems_semaphore_flush(
 
 boolean _Semaphore_Seize(
   Semaphore_Control *the_semaphore,
-  unsigned32         option_set
+  uint32_t           option_set
 );
 
 /*
@@ -197,7 +197,7 @@ boolean _Semaphore_Seize(
  */
  
 rtems_status_code _Semaphore_Translate_core_mutex_return_code (
-  unsigned32 the_mutex_status
+  uint32_t   the_mutex_status
 );
 
 /*
@@ -210,7 +210,7 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code (
  */
  
 rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
-  unsigned32 the_mutex_status
+  uint32_t   the_mutex_status
 );
  
 /*PAGE

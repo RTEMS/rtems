@@ -17,11 +17,11 @@
 #include <rtems/score/stack.h>
 #include <rtems/rtems/modes.h>
 
-rtems_unsigned32 rtems_minimum_stack_size = STACK_MINIMUM_SIZE;
-rtems_unsigned32 rtems_interrupt_mask = RTEMS_INTERRUPT_MASK;
+uint32_t   rtems_minimum_stack_size = STACK_MINIMUM_SIZE;
+uint32_t   rtems_interrupt_mask = RTEMS_INTERRUPT_MASK;
 
 rtems_attribute rtems_interrupt_level_attribute(
-  unsigned32 level
+  uint32_t   level
 )
 {
   return RTEMS_INTERRUPT_LEVEL(level);

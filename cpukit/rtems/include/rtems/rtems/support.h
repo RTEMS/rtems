@@ -37,7 +37,7 @@ extern "C" {
  */
  
 #define rtems_build_name( _C1, _C2, _C3, _C4 ) \
-  ( (unsigned32)(_C1) << 24 | (unsigned32)(_C2) << 16 | (unsigned32)(_C3) << 8 | (unsigned32)(_C4) )
+  ( (uint32_t  )(_C1) << 24 | (uint32_t  )(_C2) << 16 | (uint32_t  )(_C3) << 8 | (uint32_t  )(_C4) )
  
 /*
  *  rtems_get_class

@@ -47,8 +47,8 @@
 
 rtems_status_code rtems_task_set_note(
   Objects_Id id,
-  unsigned32 notepad,
-  unsigned32 note
+  uint32_t   notepad,
+  uint32_t   note
 )
 {
   register Thread_Control *the_thread;

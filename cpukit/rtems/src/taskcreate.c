@@ -53,7 +53,7 @@
 rtems_status_code rtems_task_create(
   rtems_name           name,
   rtems_task_priority  initial_priority,
-  unsigned32           stack_size,
+  uint32_t             stack_size,
   rtems_mode           initial_modes,
   rtems_attribute      attribute_set,
   Objects_Id          *id

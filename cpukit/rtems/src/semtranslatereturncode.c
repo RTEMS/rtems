@@ -69,7 +69,7 @@ rtems_status_code _Semaphore_Translate_core_mutex_return_code_[] = {
 
 
 rtems_status_code _Semaphore_Translate_core_mutex_return_code (
-  unsigned32 the_mutex_status
+  uint32_t   the_mutex_status
 )
 {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -105,7 +105,7 @@ rtems_status_code _Semaphore_Translate_core_semaphore_return_code_[] = {
 };
 
 rtems_status_code _Semaphore_Translate_core_semaphore_return_code (
-  unsigned32 the_semaphore_status
+  uint32_t   the_semaphore_status
 )
 {
 #if defined(RTEMS_MULTIPROCESSING)

@@ -34,7 +34,7 @@
  */
 
 void _Timer_Manager_initialization(
-  unsigned32 maximum_timers
+  uint32_t   maximum_timers
 )
 {
   _Objects_Initialize_information(

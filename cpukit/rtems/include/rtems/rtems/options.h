@@ -25,7 +25,7 @@ extern "C" {
  *  option sets.
  */
 
-typedef unsigned32 rtems_option;
+typedef uint32_t   rtems_option;
 
 /*
  *  The following constants define the individual options which may

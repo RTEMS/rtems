@@ -50,7 +50,7 @@
 
 rtems_status_code rtems_message_queue_flush(
   Objects_Id  id,
-  unsigned32 *count
+  uint32_t   *count
 )
 {
   register Message_queue_Control *the_message_queue;

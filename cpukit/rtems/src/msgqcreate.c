@@ -52,8 +52,8 @@
 
 rtems_status_code rtems_message_queue_create(
   rtems_name          name,
-  unsigned32          count,
-  unsigned32          max_message_size,
+  uint32_t            count,
+  uint32_t            max_message_size,
   rtems_attribute     attribute_set,
   Objects_Id         *id
 )

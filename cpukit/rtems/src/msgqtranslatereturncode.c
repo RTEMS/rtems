@@ -53,7 +53,7 @@ rtems_status_code _Message_queue_Translate_core_return_code_[] = {
 };
 
 rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
-  unsigned32 status
+  uint32_t   status
 )
 {
 #if defined(RTEMS_MULTIPROCESSING)
