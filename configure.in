@@ -244,6 +244,22 @@ dnl check for host library functions
 dnl NOTE: must be called after AC_PROG_CC
 AC_CHECK_FUNCS(strerror)
 
+dnl check for SysV IPC used by simulators
+if test "$target_cpu" = "unix" ; then
+  RTEMS_SYSV_SEM
+  if test "$rtems_cv_sysv_sem" != "yes" ; then
+    AC_MSG_ERROR([System V semaphores don't work, required by simulator])
+  fi
+  RTEMS_SYSV_SHM
+  if test "$rtems_cv_sysv_shm" != "yes" ; then
+    AC_MSG_ERROR([System V shared memory doesn't work, required by simulator])
+  fi
+  RTEMS_SYSV_MSG
+  if test "$rtems_cv_sysv_msg" != "yes" ; then
+    AC_MSG_ERROR([System V messages don't work, required by simulator])
+  fi
+fi
+
 # find all the Executive Makefiles
 RTEMS_CHECK_MAKEFILE(c/src/exec/score/tools/$target_cpu)
 RTEMS_CHECK_MAKEFILE(c/src/exec/rtems)

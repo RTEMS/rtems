@@ -2723,10 +2723,159 @@ fi
 done
 
 
+if test "$target_cpu" = "unix" ; then
+   
+
+echo $ac_n "checking whether $RTEMS_HOST supports System V semaphores""... $ac_c" 1>&6
+echo "configure:2731: checking whether $RTEMS_HOST supports System V semaphores" >&5
+if eval "test \"`echo '$''{'rtems_cv_sysv_sem'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  
+if test "$cross_compiling" = yes; then
+  :
+else
+  cat > conftest.$ac_ext <<EOF
+#line 2740 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+int main () {
+  union semun arg ;
+  int id=semget(IPC_PRIVATE,1,IPC_CREAT|0400);
+  if (id == -1)
+    exit(1);
+  arg.val = 0; /* avoid implicit type cast to union */
+  if (semctl(id, 0, IPC_RMID, arg) == -1)
+    exit(1);
+  exit(0);
+}
+
+EOF
+if { (eval echo configure:2758: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
+then
+  rtems_cv_sysv_sem="yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -fr conftest*
+  rtems_cv_sysv_sem="no"
+fi
+rm -fr conftest*
+fi
+
+
+fi
+
+echo "$ac_t""$rtems_cv_sysv_sem" 1>&6
+
+  if test "$rtems_cv_sysv_sem" != "yes" ; then
+    { echo "configure: error: System V semaphores don't work, required by simulator" 1>&2; exit 1; }
+  fi
+   
+
+echo $ac_n "checking whether $RTEMS_HOST supports System V shared memory""... $ac_c" 1>&6
+echo "configure:2781: checking whether $RTEMS_HOST supports System V shared memory" >&5
+if eval "test \"`echo '$''{'rtems_cv_sysv_shm'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  
+if test "$cross_compiling" = yes; then
+  :
+else
+  cat > conftest.$ac_ext <<EOF
+#line 2790 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+int main () {
+  int id=shmget(IPC_PRIVATE,1,IPC_CREAT|0400);
+  if (id == -1)
+    exit(1);
+  if (shmctl(id, IPC_RMID, 0) == -1)
+    exit(1);
+  exit(0);
+}
+
+EOF
+if { (eval echo configure:2806: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
+then
+  rtems_cv_sysv_shm="yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -fr conftest*
+  rtems_cv_sysv_shm="no"
+fi
+rm -fr conftest*
+fi
+
+
+fi
+
+echo "$ac_t""$rtems_cv_sysv_shm" 1>&6
+
+  if test "$rtems_cv_sysv_shm" != "yes" ; then
+    { echo "configure: error: System V shared memory doesn't work, required by simulator" 1>&2; exit 1; }
+  fi
+   
+
+echo $ac_n "checking whether $RTEMS_HOST supports System V messages""... $ac_c" 1>&6
+echo "configure:2829: checking whether $RTEMS_HOST supports System V messages" >&5
+if eval "test \"`echo '$''{'rtems_cv_sysv_msg'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  
+if test "$cross_compiling" = yes; then
+  :
+else
+  cat > conftest.$ac_ext <<EOF
+#line 2838 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+int main () {
+  int id=msgget(IPC_PRIVATE,IPC_CREAT|0400);
+  if (id == -1)
+    exit(1);
+  if (msgctl(id, IPC_RMID, 0) == -1)
+    exit(1);
+  exit(0);
+}
+
+EOF
+if { (eval echo configure:2854: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
+then
+  rtems_cv_sysv_msg="yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -fr conftest*
+  rtems_cv_sysv_msg="no"
+fi
+rm -fr conftest*
+fi
+
+
+fi
+
+echo "$ac_t""$rtems_cv_sysv_msg" 1>&6
+
+  if test "$rtems_cv_sysv_msg" != "yes" ; then
+    { echo "configure: error: System V messages don't work, required by simulator" 1>&2; exit 1; }
+  fi
+fi
+
 # find all the Executive Makefiles
 
 echo $ac_n "checking for Makefile.in in c/src/exec/score/tools/$target_cpu""... $ac_c" 1>&6
-echo "configure:2730: checking for Makefile.in in c/src/exec/score/tools/$target_cpu" >&5
+echo "configure:2879: checking for Makefile.in in c/src/exec/score/tools/$target_cpu" >&5
 if test -d $srcdir/c/src/exec/score/tools/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2741,7 +2890,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/exec/rtems""... $ac_c" 1>&6
-echo "configure:2745: checking for Makefile.in in c/src/exec/rtems" >&5
+echo "configure:2894: checking for Makefile.in in c/src/exec/rtems" >&5
 if test -d $srcdir/c/src/exec/rtems; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2756,7 +2905,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/exec/sapi""... $ac_c" 1>&6
-echo "configure:2760: checking for Makefile.in in c/src/exec/sapi" >&5
+echo "configure:2909: checking for Makefile.in in c/src/exec/sapi" >&5
 if test -d $srcdir/c/src/exec/sapi; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2773,7 +2922,7 @@ fi
 if test "$RTEMS_HAS_POSIX_API" = "yes"; then
   
 echo $ac_n "checking for Makefile.in in c/src/exec/posix""... $ac_c" 1>&6
-echo "configure:2777: checking for Makefile.in in c/src/exec/posix" >&5
+echo "configure:2926: checking for Makefile.in in c/src/exec/posix" >&5
 if test -d $srcdir/c/src/exec/posix; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2795,7 +2944,7 @@ if test -d "$srcdir/c/src/lib/libbsp/$target_cpu"; then
 
   if test -z "$rtems_bsp"; then
     echo $ac_n "checking for bsps""... $ac_c" 1>&6
-echo "configure:2799: checking for bsps" >&5
+echo "configure:2948: checking for bsps" >&5
     files=`ls $srcdir/c/src/lib/libbsp/$target_cpu`
     for file in $files; do
       case $file in
@@ -2850,7 +2999,7 @@ echo "configure:2799: checking for bsps" >&5
         bspdirs="$bspdirs $bspdir"
         
 echo $ac_n "checking for Makefile.in in c/src/lib/libbsp/$bspcpudir$bspdir""... $ac_c" 1>&6
-echo "configure:2854: checking for Makefile.in in c/src/lib/libbsp/$bspcpudir$bspdir" >&5
+echo "configure:3003: checking for Makefile.in in c/src/lib/libbsp/$bspcpudir$bspdir" >&5
 if test -d $srcdir/c/src/lib/libbsp/$bspcpudir$bspdir; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2873,7 +3022,7 @@ fi
 # find all the CPU dependent library Makefiles
 
 echo $ac_n "checking for Makefile.in in c/src/lib/libcpu/$target_cpu""... $ac_c" 1>&6
-echo "configure:2877: checking for Makefile.in in c/src/lib/libcpu/$target_cpu" >&5
+echo "configure:3026: checking for Makefile.in in c/src/lib/libcpu/$target_cpu" >&5
 if test -d $srcdir/c/src/lib/libcpu/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2890,7 +3039,7 @@ fi
 if test "$skip_startfiles" != "yes"; then
   
 echo $ac_n "checking for Makefile.in in c/src/lib/start/$target_cpu""... $ac_c" 1>&6
-echo "configure:2894: checking for Makefile.in in c/src/lib/start/$target_cpu" >&5
+echo "configure:3043: checking for Makefile.in in c/src/lib/start/$target_cpu" >&5
 if test -d $srcdir/c/src/lib/start/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2932,7 +3081,7 @@ fi
 
 # If the tests are enabled, then find all the test suite Makefiles
 echo $ac_n "checking if the test suites are enabled? ""... $ac_c" 1>&6
-echo "configure:2936: checking if the test suites are enabled? " >&5
+echo "configure:3085: checking if the test suites are enabled? " >&5
 tests_enabled=yes
 # Check whether --enable-tests or --disable-tests was given.
 if test "${enable_tests+set}" = set; then
@@ -2951,7 +3100,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/tests/tools/$target_cpu""... $ac_c" 1>&6
-echo "configure:2955: checking for Makefile.in in c/src/tests/tools/$target_cpu" >&5
+echo "configure:3104: checking for Makefile.in in c/src/tests/tools/$target_cpu" >&5
 if test -d $srcdir/c/src/tests/tools/$target_cpu; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2968,7 +3117,7 @@ fi
 if test "$tests_enabled" = "yes"; then
    
 echo $ac_n "checking for Makefile.in in c/src/tests/libtests""... $ac_c" 1>&6
-echo "configure:2972: checking for Makefile.in in c/src/tests/libtests" >&5
+echo "configure:3121: checking for Makefile.in in c/src/tests/libtests" >&5
 if test -d $srcdir/c/src/tests/libtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2983,7 +3132,7 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/sptests""... $ac_c" 1>&6
-echo "configure:2987: checking for Makefile.in in c/src/tests/sptests" >&5
+echo "configure:3136: checking for Makefile.in in c/src/tests/sptests" >&5
 if test -d $srcdir/c/src/tests/sptests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -2998,7 +3147,7 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/tmtests""... $ac_c" 1>&6
-echo "configure:3002: checking for Makefile.in in c/src/tests/tmtests" >&5
+echo "configure:3151: checking for Makefile.in in c/src/tests/tmtests" >&5
 if test -d $srcdir/c/src/tests/tmtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3013,7 +3162,7 @@ fi
 
    
 echo $ac_n "checking for Makefile.in in c/src/tests/mptests""... $ac_c" 1>&6
-echo "configure:3017: checking for Makefile.in in c/src/tests/mptests" >&5
+echo "configure:3166: checking for Makefile.in in c/src/tests/mptests" >&5
 if test -d $srcdir/c/src/tests/mptests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3029,7 +3178,7 @@ fi
    if test "$RTEMS_HAS_POSIX_API" = "yes"; then
      
 echo $ac_n "checking for Makefile.in in c/src/tests/psxtests""... $ac_c" 1>&6
-echo "configure:3033: checking for Makefile.in in c/src/tests/psxtests" >&5
+echo "configure:3182: checking for Makefile.in in c/src/tests/psxtests" >&5
 if test -d $srcdir/c/src/tests/psxtests; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3047,7 +3196,7 @@ fi
 
 # If the HWAPI is enabled, the find the HWAPI Makefiles
 echo $ac_n "checking if the HWAPI is enabled? ""... $ac_c" 1>&6
-echo "configure:3051: checking if the HWAPI is enabled? " >&5
+echo "configure:3200: checking if the HWAPI is enabled? " >&5
 # Check whether --enable-hwapi or --disable-hwapi was given.
 if test "${enable_hwapi+set}" = set; then
   enableval="$enable_hwapi"
@@ -3058,7 +3207,7 @@ if test "${enable_hwapi+set}" = set; then
             makefiles="$makefiles c/src/lib/libhwapi/Makefile"
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/analog""... $ac_c" 1>&6
-echo "configure:3062: checking for Makefile.in in c/src/lib/libhwapi/analog" >&5
+echo "configure:3211: checking for Makefile.in in c/src/lib/libhwapi/analog" >&5
 if test -d $srcdir/c/src/lib/libhwapi/analog; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3073,7 +3222,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/discrete""... $ac_c" 1>&6
-echo "configure:3077: checking for Makefile.in in c/src/lib/libhwapi/discrete" >&5
+echo "configure:3226: checking for Makefile.in in c/src/lib/libhwapi/discrete" >&5
 if test -d $srcdir/c/src/lib/libhwapi/discrete; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3088,7 +3237,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/drivers""... $ac_c" 1>&6
-echo "configure:3092: checking for Makefile.in in c/src/lib/libhwapi/drivers" >&5
+echo "configure:3241: checking for Makefile.in in c/src/lib/libhwapi/drivers" >&5
 if test -d $srcdir/c/src/lib/libhwapi/drivers; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3103,7 +3252,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/non_volatile_memory""... $ac_c" 1>&6
-echo "configure:3107: checking for Makefile.in in c/src/lib/libhwapi/non_volatile_memory" >&5
+echo "configure:3256: checking for Makefile.in in c/src/lib/libhwapi/non_volatile_memory" >&5
 if test -d $srcdir/c/src/lib/libhwapi/non_volatile_memory; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3118,7 +3267,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/serial""... $ac_c" 1>&6
-echo "configure:3122: checking for Makefile.in in c/src/lib/libhwapi/serial" >&5
+echo "configure:3271: checking for Makefile.in in c/src/lib/libhwapi/serial" >&5
 if test -d $srcdir/c/src/lib/libhwapi/serial; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3133,7 +3282,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/support""... $ac_c" 1>&6
-echo "configure:3137: checking for Makefile.in in c/src/lib/libhwapi/support" >&5
+echo "configure:3286: checking for Makefile.in in c/src/lib/libhwapi/support" >&5
 if test -d $srcdir/c/src/lib/libhwapi/support; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3148,7 +3297,7 @@ fi
 
             
 echo $ac_n "checking for Makefile.in in c/src/lib/libhwapi/wrapup""... $ac_c" 1>&6
-echo "configure:3152: checking for Makefile.in in c/src/lib/libhwapi/wrapup" >&5
+echo "configure:3301: checking for Makefile.in in c/src/lib/libhwapi/wrapup" >&5
 if test -d $srcdir/c/src/lib/libhwapi/wrapup; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3193,7 +3342,7 @@ fi
 # pick up all the Makefiles in required parts of the tree
 
 echo $ac_n "checking for Makefile.in in c/build-tools""... $ac_c" 1>&6
-echo "configure:3197: checking for Makefile.in in c/build-tools" >&5
+echo "configure:3346: checking for Makefile.in in c/build-tools" >&5
 if test -d $srcdir/c/build-tools; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3208,7 +3357,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in make""... $ac_c" 1>&6
-echo "configure:3212: checking for Makefile.in in make" >&5
+echo "configure:3361: checking for Makefile.in in make" >&5
 if test -d $srcdir/make; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3223,7 +3372,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/lib/libmisc""... $ac_c" 1>&6
-echo "configure:3227: checking for Makefile.in in c/src/lib/libmisc" >&5
+echo "configure:3376: checking for Makefile.in in c/src/lib/libmisc" >&5
 if test -d $srcdir/c/src/lib/libmisc; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
@@ -3238,7 +3387,7 @@ fi
 
 
 echo $ac_n "checking for Makefile.in in c/src/tests/samples""... $ac_c" 1>&6
-echo "configure:3242: checking for Makefile.in in c/src/tests/samples" >&5
+echo "configure:3391: checking for Makefile.in in c/src/tests/samples" >&5
 if test -d $srcdir/c/src/tests/samples; then
   rtems_av_save_dir=`pwd`;
   cd $srcdir;
