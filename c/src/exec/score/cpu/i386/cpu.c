@@ -12,12 +12,14 @@
  *  $Id$
  */
 
+#include <rtems.h>
 #include <rtems/system.h>
+#include <rtems/score/types.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/idtr.h>
+
 #include <rtems/bspIo.h>
 #include <rtems/score/thread.h>
-#include <libcpu/cpuModel.h>
-
 
 /*  _CPU_Initialize
  *
