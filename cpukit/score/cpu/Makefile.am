@@ -2,8 +2,8 @@
 ##  $Id$
 ##
 
-SUBDIRS = $(RTEMS_CPU)
-DIST_SUBDIRS = $(RTEMS_CPU)
+SUBDIRS = @RTEMS_CPU@
+DIST_SUBDIRS = @RTEMS_CPU@
 
 ## FIXME: this does not work
 ## DIST_SUBDIRS = \
