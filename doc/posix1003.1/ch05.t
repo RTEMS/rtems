@@ -15,12 +15,12 @@
 @subsection Directory Operations
 
 @example
-struct dirent, Type, Unimplemented
-opendir(), Function, Untested Implementation, assumes directory services
-readdir(), Function, Untested Implementation, assumes directory services
-readdir_r(), Function, Untested Implementation, assumes directory services
-rewinddir(), Function, Untested Implementation, assumes directory services
-closedir(), Function, Untested Implementation, assumes directory services
+struct dirent, Type, Implemented
+opendir(), Function, Implemented
+readdir(), Function, Implemented
+readdir_r(), Function, Implemented
+rewinddir(), Function, Implemented
+closedir(), Function, Implemented
 @end example
 
 @section Working Directory
@@ -28,7 +28,7 @@ closedir(), Function, Untested Implementation, assumes directory services
 @subsection Change Current Working Directory
 
 @example
-chdir(), Function, Unimplemented
+chdir(), Function, Implemented
 @end example
 
 @subsection Get Working Directory Pathname
@@ -42,7 +42,7 @@ getcwd(), Function, Untested Implementation, assumes directory services
 @subsection Open a File
 
 @example
-open(), Function, Implemented, requires rework for directory services
+open(), Function, Implemented
 O_RDONLY, Constant, Implemented
 O_WRONLY, Constant, Implemented
 O_RDWR, Constant, Implemented
@@ -63,19 +63,19 @@ not defined.  This seems wrong.
 @subsection Create a New File or Rewrite an Existing One
 
 @example
-creat(), Function, Untested Implementation
+creat(), Function, Implemented
 @end example
 
 @subsection Set File Creation Mask
 
 @example
-umask(), Function, Unimplemented
+umask(), Function, Implemented
 @end example
 
 @subsection Link to a File
 
 @example
-link(), Function, Dummy Implementation
+link(), Function, Implemented
 @end example
 
 @section Special File Creation
@@ -83,13 +83,13 @@ link(), Function, Dummy Implementation
 @subsection Make a Directory
 
 @example
-mkdir(), Function, Unimplemented, assumes directory services
+mkdir(), Function, Implemented
 @end example
 
 @subsection Make a FIFO Special File
 
 @example
-mkfifo(), Function, Unimplemented
+mkfifo(), Function, Untested Implementation
 @end example
 
 @section File Removal
@@ -97,19 +97,19 @@ mkfifo(), Function, Unimplemented
 @subsection Remove Directory Entries
 
 @example
-unlink(), Function, Dummy Implementation
+unlink(), Function, Implemented
 @end example
 
 @subsection Remove a Directory
 
 @example
-rmdir(), Function, Unimplemented
+rmdir(), Function, Implemented
 @end example
 
 @subsection Rename a File
 
 @example
-rename(), Function, Untested Implementation, assumes link/unlink
+rename(), Function, Implemented
 @end example
 
 @section File Characteristics
@@ -117,7 +117,7 @@ rename(), Function, Untested Implementation, assumes link/unlink
 @subsection File Characteristics Header and Data Structure
 
 @example
-struct stat, Type, Untested Implementation
+struct stat, Type, Implemented
 @end example
 
 @subsubsection <sys/stat.h> File Types
@@ -157,40 +157,40 @@ S_ISGID, Constant, Implemented
 @subsection Get File Status
 
 @example
-stat(), Function, Partial Implementation
-fstat(), Function, Partial Implementation
+stat(), Function, Implemented
+fstat(), Function, Implemented
 @end example
 
 @subsection Check File Accessibility
 
 @example
-access(), Function, Unimplemented
+access(), Function, Implemented
 @end example
 
 @subsection Change File Modes
 
 @example
-chmod(), Function, Unimplemented
-fchmod(), Function, Unimplemented
+chmod(), Function, Implemented
+fchmod(), Function, Implemented
 @end example
 
 @subsection Change Owner and Group of a File
 
 @example
-chown(), Function, Unimplemented
+chown(), Function, Implemented
 @end example
 
 @subsection Set File Access and Modification Times
 
 @example
-struct utimbuf, Type, Unimplemented
-utime(), Function, Unimplemented
+struct utimbuf, Type, Implemented
+utime(), Function, Dummy Implementation
 @end example
 
 @subsection Truncate a File to a Specified Length
 
 @example
-ftruncate(), Function, Unimplemented
+ftruncate(), Function, Implemented
 @end example
 
 @section Configurable Pathname Variable
@@ -198,23 +198,23 @@ ftruncate(), Function, Unimplemented
 @subsection Get Configurable Pathname Variables
 
 @example
-pathconf(), Function, Unimplemented
-fpathconf(), Function, Unimplemented
-_PC_LINK_MAX, Constant, Unimplemented
-_PC_MAX_CANON, Constant, Unimplemented
-_PC_MAX_INPUT, Constant, Unimplemented
-_PC_MAX_INPUT, Constant, Unimplemented
-_PC_NAME_MAX, Constant, Unimplemented
-_PC_PATH_MAX, Constant, Unimplemented
-_PC_PIPE_BUF, Constant, Unimplemented
-_PC_ASYNC_IO, Constant, Unimplemented
-_PC_CHOWN_RESTRICTED, Constant, Unimplemented
-_PC_NO_TRUNC, Constant, Unimplemented
-_PC_PRIO_IO, Constant, Unimplemented
-_PC_SYNC_IO, Constant, Unimplemented
-_PC_VDISABLE, Constant, Unimplemented
+pathconf(), Function, Implemented
+fpathconf(), Function, Implemented
+_PC_LINK_MAX, Constant, Implemented
+_PC_MAX_CANON, Constant, Implemented
+_PC_MAX_INPUT, Constant, Implemented
+_PC_MAX_INPUT, Constant, Implemented
+_PC_NAME_MAX, Constant, Implemented
+_PC_PATH_MAX, Constant, Implemented
+_PC_PIPE_BUF, Constant, Implemented
+_PC_ASYNC_IO, Constant, Implemented
+_PC_CHOWN_RESTRICTED, Constant, Implemented
+_PC_NO_TRUNC, Constant, Implemented
+_PC_PRIO_IO, Constant, Implemented
+_PC_SYNC_IO, Constant, Implemented
+_PC_VDISABLE, Constant, Implemented
 @end example
 
 NOTE: The newlib unistd.h and sys/unistd.h are installed and the
 include search patch is used to get the right one.  There are 
-conflicts between the newlib unistd.h and RTEMS' version.' version.
+conflicts between the newlib unistd.h and RTEMS' version.

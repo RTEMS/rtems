@@ -13,7 +13,7 @@
 @subsection Create an Inter-Process Channel
 
 @example
-pipe(), Function, Unimplemented
+pipe(), Function, Dummy Implementation
 @end example
 
 @section File Descriptor Manipulation
@@ -21,8 +21,8 @@ pipe(), Function, Unimplemented
 @subsection Duplicate an Open File Descriptor
 
 @example
-dup(), Function, Unimplemented
-dup2(), Function, Unimplemented
+dup(), Function, Implemented
+dup2(), Function, Untested Iimplementation
 @end example
 
 @section File Descriptor Deassignment
@@ -30,7 +30,7 @@ dup2(), Function, Unimplemented
 @subsection Close a File
 
 @example
-close(), Function, Partial Implementation
+close(), Function, Implemented
 @end example
 
 @section Input and Output
@@ -38,13 +38,13 @@ close(), Function, Partial Implementation
 @subsection Read from a File
 
 @example
-read(), Function, Partial Implementation
+read(), Function, Implemented
 @end example
 
 @subsection Write to a File
 
 @example
-write(), Function, Partial Implementation
+write(), Function, Implemented
 @end example
 
 @section Control Operations on Files
@@ -55,7 +55,7 @@ write(), Function, Partial Implementation
 
 @example
 struct flock, Type, Unimplemented
-fcntl(), Function, Unimplemented
+fcntl(), Function, Implemented
 F_DUPFD, Constant, Implemented
 F_GETFD, Constant, Implemented
 F_GETLK, Constant, Implemented
@@ -91,13 +91,13 @@ SEEK_END, Constant, Implemented
 @subsection Synchronize the State of a File
 
 @example
-fsync(), Function, Unimplemented
+fsync(), Function, Implemented
 @end example
 
 @subsection Synchronize the Data of a File
 
 @example
-fdatasync(), Function, Unimplemented
+fdatasync(), Function, Implemented
 @end example
 
 @section Asynchronous Input and Output
