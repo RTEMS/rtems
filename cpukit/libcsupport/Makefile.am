@@ -56,11 +56,11 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems \
 
 include_sysdir = $(includedir)/sys
 
-
 if NEWLIB
-NEWLIB_H_FILES = include/sys/termios.h include/sys/cdefs.h include/sys/utsname.h
+NEWLIB_H_FILES = include/sys/termios.h include/sys/utsname.h
 endif
 
+# FIXME: We should not install to include/sys unless using newlib.
 include_sys_HEADERS = \
 include/sys/filio.h \
 include/sys/ioccom.h \
@@ -68,6 +68,7 @@ include/sys/ioctl.h \
 include/sys/sockio.h \
 include/sys/termios.h \
 include/sys/ttycom.h \
+include/sys/cdefs.h \
 $(NEWLIB_H_FILES)
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys \
