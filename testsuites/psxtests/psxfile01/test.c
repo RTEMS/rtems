@@ -35,6 +35,8 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 
+void test_case_reopen_append(void);
+
 char test_write_buffer[ 1024 ];
 
 /*
@@ -498,8 +500,48 @@ int main(
 
   rtems_status = rtems_io_register_name( "/dev/console", 0, 0 );
 
+  test_case_reopen_append();
+
   printf( "*** END OF FILE TEST 1 ***\n" );
   exit( 0 );
+}
+
+/*
+ *  Open/Create a File and write to it
+ *
+ *  Test case submitted by Andrew Bythell <abythell@nortelnetworks.com>.
+ *
+ */
+
+void test_file (char *filename, char *mode);
+
+void test_case_reopen_append(void)
+{
+  printf ("Writing First File\n");
+  test_file ("/one.txt", "a");
+  test_file ("/one.txt", "a");
+
+  /* but not the second time - this will insert junk.
+     the number of ^@'s seems to equal the number of
+     actual characters in the file */
+
+  printf ("Writing Second File\n");
+  test_file ("/two.txt", "a");
+  test_file ("/two.txt", "a");
+
+  test_cat( "/one.txt", 0, 1024 );
+  test_cat( "/two.txt", 0, 1024 );
+}
+
+void test_file (char *filename, char *mode)
+{
+  FILE *fp;
+  fp = fopen (filename, mode);
+  if (!fp)
+      perror ("fopen");
+  fprintf (fp, "this is a test line\n");
+  if (fclose (fp))
+      perror ("fclose");
 }
 
 

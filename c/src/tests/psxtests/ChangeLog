@@ -1,3 +1,10 @@
+2001-04-24	Joel Sherrill <joel@OARcorp.com>
+
+ 	* psxfile01/test.c, psxfile01/psxfile01.scn : Added test case for 
+	open, write, reopen, append twice from Andrew Bythell
+	<abythell@nortelnetworks.com> that tripped an initialization
+	problem in the IMFS.
+
 2001-04-20	Joel Sherrill <joel@OARcorp.com>
 
 	* psx04/init.c, psx04/psx04.scn, psx07/init.c, psx07/psx07.scn,

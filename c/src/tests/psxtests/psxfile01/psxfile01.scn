@@ -197,5 +197,12 @@ truncate /tmp to length of 0 should fail with EISDIR
 ........john (file 0)
 ........j (file 0)
 ***************       End of Dump        ***************
+Writing First File
+Writing Second File
+(0)this is a test line
+this is a test line
+
+(0)this is a test line
+this is a test line
 *** END OF FILE TEST 1 ***
 
