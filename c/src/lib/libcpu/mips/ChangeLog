@@ -1,3 +1,7 @@
+2005-03-14	Joel Sherrill <joel@OARcorp.com>
+
+	* au1x00/.cvsignore: New file.
+
 2005-02-24	Jay Monkman <jtm@lopingdog.com>
 
 	* au1x00/include/au1x00.h: Converted types to C99 types.
