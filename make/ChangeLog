@@ -1,4 +1,8 @@
 
+2000-08-29	Joel Sherrill <joel.sherrill@OARcorp.com>
+
+	* custom/armulator.cfg: Corrected make-exe rule to pick up debug flags.
+
 2000-08-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 	* make/custom/pck6.cfg: New file
 	* make/custom/pc486.cfg: Use -m486 
