@@ -4,8 +4,6 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = nvram.h bsp.h
-
-EXTRA_DIST = bsp.h nvram.h
+noinst_HEADERS = nvram.h bsp.h
 
 include $(top_srcdir)/../../../../../automake/local.am

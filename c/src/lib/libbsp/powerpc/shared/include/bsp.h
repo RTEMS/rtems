@@ -12,6 +12,8 @@
 #ifndef LIBBSP_POWERPC_MOTOROLA_SHARED_BSP_H
 #define LIBBSP_POWERPC_MOTOROLA_SHARED_BSP_H
 
+#include <bspopts.h>
+
 #include <rtems.h>
 #include <console.h>
 #include <libcpu/io.h>

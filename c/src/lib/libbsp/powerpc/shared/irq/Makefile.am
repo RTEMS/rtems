@@ -6,7 +6,8 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 C_FILES = i8259.c irq.c irq_init.c
 
-H_FILES = irq.h
+include_bspdir = $(includedir)/bsp
+include_bsp_HEADERS = irq.h
 
 S_FILES = irq_asm.S
 
@@ -17,7 +18,7 @@ $(PROJECT_INCLUDE)/bsp/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE)/bsp \
-    $(H_FILES:%.h=$(PROJECT_INCLUDE)/bsp/%.h)
+    $(include_bsp_HEADERS:%=$(PROJECT_INCLUDE)/bsp/%)
 
 all-local: $(PREINSTALL_FILES)
 
