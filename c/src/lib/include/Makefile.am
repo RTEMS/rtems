@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = chain.h console.h clockdrv.h iosupp.h ringbuf.h spurious.h \
+H_FILES = bspIo.h chain.h console.h clockdrv.h iosupp.h ringbuf.h spurious.h \
     timerdrv.h vmeintr.h
 
 noinst_HEADERS = $(H_FILES)

@@ -48,7 +48,8 @@ LIBC_GLUE_C_FILES = __getpid.c __gettod.c __times.c truncate.c access.c \
 
 UNIX_LIBC_C_FILES = unixlibc.c hosterr.c
 
-COMMON_C_FILES = gxx_wrappers.c $(BASE_FS_C_FILES) $(MALLOC_C_FILES) $(TERMIOS_C_FILES) \
+COMMON_C_FILES = gxx_wrappers.c printk.c $(BASE_FS_C_FILES) \
+    $(MALLOC_C_FILES) $(TERMIOS_C_FILES) \
     $(ERROR_C_FILES) $(ASSOCIATION_C_FILES)
 
 UNIX_C_FILES = $(UNIX_LIBC_C_FILES) imfs_unixstub.c
