@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __INLINE_ADDRESSES_inl
-#define __INLINE_ADDRESSES_inl
+#ifndef _RTEMS_SCORE_ADDRESS_INL
+#define _RTEMS_SCORE_ADDRESS_INL
 
 /**
  *  @addtogroup ScoreAddress 

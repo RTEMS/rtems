@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __MACROS_CORE_SEMAPHORE_h
-#define __MACROS_CORE_SEMAPHORE_h
+#ifndef _RTEMS_SCORE_CORESEM_INL
+#define _RTEMS_SCORE_CORESEM_INL
 
 /*PAGE
  *

@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __SYSTEM_STATE_inl
-#define __SYSTEM_STATE_inl
+#ifndef _RTEMS_SCORE_SYSSTATE_INL
+#define _RTEMS_SCORE_SYSSTATE_INL
 
 /*PAGE
  *

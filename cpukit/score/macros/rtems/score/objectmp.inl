@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __MACROS_MP_OBJECTS_inl
-#define __MACROS_MP_OBJECTS_inl
+#ifndef _RTEMS_SCORE_OBJECTMP_INL
+#define _RTEMS_SCORE_OBJECTMP_INL
 
 /*PAGE
  *

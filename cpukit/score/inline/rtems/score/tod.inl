@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __TIME_OF_DAY_inl
-#define __TIME_OF_DAY_inl
+#ifndef _RTEMS_SCORE_TOD_INL
+#define _RTEMS_SCORE_TOD_INL
 
 /**
  *  @addtogroup ScoreTOD 

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __INLINE_MP_THREAD_inl
-#define __INLINE_MP_THREAD_inl
+#ifndef _RTEMS_SCORE_THREADMP_INL
+#define _RTEMS_SCORE_THREADMP_INL
 
 /**
  *  @addtogroup ScoreThreadMP 

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __STACK_inl
-#define __STACK_inl
+#ifndef _RTEMS_SCORE_STACK_INL
+#define _RTEMS_SCORE_STACK_INL
 
 /**
  *  @addtogroup ScoreStack 

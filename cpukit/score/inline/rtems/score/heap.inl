@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __HEAP_inl
-#define __HEAP_inl
+#ifndef _RTEMS_SCORE_HEAP_INL
+#define _RTEMS_SCORE_HEAP_INL
 
 /**
  *  @addtogroup ScoreHeap 

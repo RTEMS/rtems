@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __THREAD_inl
-#define __THREAD_inl
+#ifndef _RTEMS_SCORE_THREAD_INL
+#define _RTEMS_SCORE_THREAD_INL
 
 /*PAGE
  *

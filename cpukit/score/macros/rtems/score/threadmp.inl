@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __MACROS_MP_THREAD_h
-#define __MACROS_MP_THREAD_h
+#ifndef _RTEMS_SCORE_THREADMP_INL
+#define _RTEMS_SCORE_THREADMP_INL
 
 /*PAGE
  *

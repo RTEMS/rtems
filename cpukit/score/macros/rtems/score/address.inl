@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __MACROS_ADDRESSES_h
-#define __MACROS_ADDRESSES_h
+#ifndef _RTEMS_SCORE_ADDRESS_INL
+#define _RTEMS_SCORE_ADDRESS_INL
 
 /*PAGE
  *

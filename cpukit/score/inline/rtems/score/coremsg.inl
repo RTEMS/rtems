@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __CORE_MESSAGE_QUEUE_inl
-#define __CORE_MESSAGE_QUEUE_inl
+#ifndef _RTEMS_SCORE_COREMSG_INL
+#define _RTEMS_SCORE_COREMSG_INL
 
 /**
  *  @addtogroup ScoreMessageQueue 

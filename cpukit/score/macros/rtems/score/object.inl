@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __OBJECTS_inl
-#define __OBJECTS_inl
+#ifndef _RTEMS_SCORE_OBJECT_INL
+#define _RTEMS_SCORE_OBJECT_INL
 
 /*PAGE
  *

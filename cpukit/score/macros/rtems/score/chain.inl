@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __MACROS_CHAIN_h
-#define __MACROS_CHAIN_h
+#ifndef _RTEMS_SCORE_CHAIN_INL
+#define _RTEMS_SCORE_CHAIN_INL
 
 /*PAGE
  *

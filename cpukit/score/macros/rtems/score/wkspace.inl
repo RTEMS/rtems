@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __WORKSPACE_inl
-#define __WORKSPACE_inl
+#ifndef _RTEMS_SCORE_WKSPACE_INL
+#define _RTEMS_SCORE_WKSPACE_INL
 
 /*PAGE
  *

@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __INLINE_CORE_SEMAPHORE_inl
-#define __INLINE_CORE_SEMAPHORE_inl
+#ifndef _RTEMS_SCORE_CORESEM_INL
+#define _RTEMS_SCORE_CORESEM_INL
 
 /**
  *  @addtogroup ScoreSemaphore 

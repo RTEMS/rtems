@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __STATES_inl
-#define __STATES_inl
+#ifndef _RTEMS_SCORE_STATES_INL
+#define _RTEMS_SCORE_STATES_INL
 
 /**
  *  @addtogroup ScoreStates 

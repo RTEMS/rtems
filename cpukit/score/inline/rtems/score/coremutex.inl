@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __INLINE_CORE_MUTEX_inl
-#define __INLINE_CORE_MUTEX_inl
+#ifndef _RTEMS_SCORE_COREMUTEX_INL
+#define _RTEMS_SCORE_COREMUTEX_INL
 
 /**
  *  @addtogroup ScoreMutex 

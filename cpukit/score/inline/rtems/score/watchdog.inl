@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __WATCHDOG_inl
-#define __WATCHDOG_inl
+#ifndef _RTEMS_SCORE_WATCHDOG_INL
+#define _RTEMS_SCORE_WATCHDOG_INL
 
 /**
  *  @addtogroup ScoreWatchdog 

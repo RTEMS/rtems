@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __INLINE_MP_PACKET_inl
-#define __INLINE_MP_PACKET_inl
+#ifndef _RTEMS_SCORE_MPPKT_INL
+#define _RTEMS_SCORE_MPPKT_INL
 
 /**
  *  @addtogroup ScoreMPPacket 

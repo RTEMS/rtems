@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __PRIORITY_inl
-#define __PRIORITY_inl
+#ifndef _RTEMS_SCORE_PRIORITY_INL
+#define _RTEMS_SCORE_PRIORITY_INL
 
 /**
  *  @addtogroup ScorePriority 

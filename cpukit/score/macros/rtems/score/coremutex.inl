@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __MACROS_CORE_MUTEX_h
-#define __MACROS_CORE_MUTEX_h
+#ifndef _RTEMS_SCORE_COREMUTEX_INL
+#define _RTEMS_SCORE_COREMUTEX_INL
 
 
 /*PAGE

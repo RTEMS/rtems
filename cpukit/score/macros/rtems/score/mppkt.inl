@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __MACROS_MP_PACKET_h
-#define __MACROS_MP_PACKET_h
+#ifndef _RTEMS_SCORE_MPPKT_INL
+#define _RTEMS_SCORE_MPPKT_INL
 
 /*PAGE
  *

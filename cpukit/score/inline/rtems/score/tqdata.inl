@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef __THREAD_QUEUE_inl
-#define __THREAD_QUEUE_inl
+#ifndef _RTEMS_SCORE_TQDATA_INL
+#define _RTEMS_SCORE_TQDATA_INL
 
 /**
  *  @addtogroup ScoreThreadQ 

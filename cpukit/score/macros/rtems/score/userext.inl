@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __USER_EXTENSIONS_inl
-#define __USER_EXTENSIONS_inl
+#ifndef _RTEMS_SCORE_USEREXT_INL
+#define _RTEMS_SCORE_USEREXT_INL
 
 #include <rtems/score/wkspace.h>
 

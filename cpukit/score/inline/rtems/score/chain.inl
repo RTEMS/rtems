@@ -20,8 +20,8 @@
  *  $Id$
  */
 
-#ifndef __INLINE_CHAIN_inl
-#define __INLINE_CHAIN_inl
+#ifndef _RTEMS_SCORE_CHAIN_INL
+#define _RTEMS_SCORE_CHAIN_INL
 
 /**
  *  @addtogroup ScoreChain 

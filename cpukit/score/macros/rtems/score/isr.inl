@@ -13,8 +13,8 @@
  *  $Id$
  */
 
-#ifndef __ISR_inl
-#define __ISR_inl
+#ifndef _RTEMS_SCORE_ISR_INL
+#define _RTEMS_SCORE_ISR_INL
 
 /*PAGE
  *
