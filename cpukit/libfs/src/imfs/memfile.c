@@ -59,14 +59,14 @@ MEMFILE_STATIC block_p *IMFS_memfile_get_block_pointer(
    int             malloc_it
 );
 
-MEMFILE_STATIC int IMFS_memfile_read(
+MEMFILE_STATIC ssize_t IMFS_memfile_read(
    IMFS_jnode_t    *the_jnode,
    off_t            start,
    unsigned char   *destination,
    unsigned int     length
 );
 
-MEMFILE_STATIC int IMFS_memfile_write(
+ssize_t IMFS_memfile_write(  /* cannot be static as used in imfs_fchmod.c */
    IMFS_jnode_t          *the_jnode,
    off_t                  start,
    const unsigned char   *source,
@@ -131,7 +131,7 @@ int memfile_close(
  *  This routine processes the read() system call.
  */
 
-int memfile_read(
+ssize_t memfile_read(
   rtems_libio_t *iop,
   void          *buffer,
   unsigned32     count
@@ -150,14 +150,14 @@ int memfile_read(
  *  This routine processes the write() system call.
  */
 
-int memfile_write(
+ssize_t memfile_write(
   rtems_libio_t *iop,
   const void    *buffer,
   unsigned32     count
 )
 {
   IMFS_jnode_t   *the_jnode;
-  int             status;
+  ssize_t         status;
 
   the_jnode = iop->file_info;
 
@@ -541,7 +541,7 @@ int IMFS_memfile_remove(
  *  read).
  */
 
-MEMFILE_STATIC int IMFS_memfile_read(
+MEMFILE_STATIC ssize_t IMFS_memfile_read(
    IMFS_jnode_t    *the_jnode,
    off_t            start,
    unsigned char   *destination,
@@ -691,7 +691,7 @@ MEMFILE_STATIC int IMFS_memfile_read(
  *  file pointed to by the_jnode.  The file is extended as needed.
  */
 
-MEMFILE_STATIC int IMFS_memfile_write(
+MEMFILE_STATIC ssize_t IMFS_memfile_write(
    IMFS_jnode_t          *the_jnode,
    off_t                  start,
    const unsigned char   *source,

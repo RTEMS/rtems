@@ -1,3 +1,11 @@
+2002-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* src/dosfs/fat.c, src/imfs/deviceio.c, src/imfs/imfs.h,
+	src/imfs/imfs_directory.c, src/imfs/imfs_fchmod.c,
+	src/imfs/memfile.c: Eliminated warnings.  A lot of this focus
+	was on changing read and write entry points to return ssize_t
+	as read(2) and write(2) now do.
+
 2002-07-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Remove.

@@ -72,7 +72,7 @@ int imfs_dir_open(
  *  size of a directory entry.
  */
 
-int imfs_dir_read(
+ssize_t imfs_dir_read(
   rtems_libio_t  *iop,
   void *buffer,
   unsigned32 count

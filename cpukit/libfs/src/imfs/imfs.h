@@ -395,7 +395,7 @@ int imfs_dir_close(
   rtems_libio_t *iop             /* IN  */
 );
 
-int imfs_dir_read(
+ssize_t imfs_dir_read(
   rtems_libio_t *iop,              /* IN  */
   void          *buffer,           /* IN  */
   unsigned32     count             /* IN  */
@@ -439,13 +439,13 @@ int memfile_close(
   rtems_libio_t *iop             /* IN  */
 );
 
-int memfile_read(
+ssize_t memfile_read(
   rtems_libio_t *iop,             /* IN  */
   void          *buffer,          /* IN  */
   unsigned32     count            /* IN  */
 );
 
-int memfile_write(
+ssize_t memfile_write(
   rtems_libio_t *iop,             /* IN  */
   const void    *buffer,          /* IN  */
   unsigned32     count            /* IN  */
@@ -478,13 +478,13 @@ int device_close(
   rtems_libio_t *iop             /* IN  */
 );
 
-int device_read(
+ssize_t device_read(
   rtems_libio_t *iop,            /* IN  */
   void          *buffer,         /* IN  */
   unsigned32     count           /* IN  */
 );
 
-int device_write(
+ssize_t device_write(
   rtems_libio_t *iop,               /* IN  */
   const void    *buffer,            /* IN  */
   unsigned32     count              /* IN  */

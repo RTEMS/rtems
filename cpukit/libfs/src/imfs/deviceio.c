@@ -130,7 +130,7 @@ int device_close(
  *  This handler maps a read() operation onto rtems_io_read().
  */
 
-int device_read(
+ssize_t device_read(
   rtems_libio_t *iop,
   void          *buffer,
   unsigned32     count
@@ -158,7 +158,7 @@ int device_read(
   if ( status )
     return rtems_deviceio_errno(status);
 
-  return args.bytes_moved;
+  return (ssize_t) args.bytes_moved;
 }
 
 /*
@@ -167,7 +167,7 @@ int device_read(
  *  This handler maps a write() operation onto rtems_io_write().
  */
 
-int device_write(
+ssize_t device_write(
   rtems_libio_t *iop,
   const void    *buffer,
   unsigned32     count
@@ -195,7 +195,7 @@ int device_write(
   if ( status )
     return rtems_deviceio_errno(status);
 
-  return args.bytes_moved;
+  return (ssize_t) args.bytes_moved;
 }
 
 /*

@@ -20,6 +20,7 @@
 #include <rtems/libio_.h>
 
 #include "fat.h"
+#include "fat_fat_operations.h"
 
 /* _fat_block_read --
  *     This function reads 'count' bytes from device filesystem is mounted on,
@@ -692,4 +693,4 @@ fat_fat32_update_fsinfo_sector(
 
     return RC_OK;
 }
-                        
+

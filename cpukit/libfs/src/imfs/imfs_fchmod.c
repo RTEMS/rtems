@@ -30,6 +30,13 @@ int IMFS_fchmod(
 #if defined(RTEMS_POSIX_API)
   uid_t          st_uid;
 #endif
+   int IMFS_memfile_write(
+      IMFS_jnode_t          *the_jnode,
+      off_t                  start,
+      const unsigned char   *source,
+      unsigned int           length
+   );
+
     
   jnode = loc->node_access;
 
