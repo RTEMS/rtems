@@ -191,6 +191,14 @@ rtems_termios_open (
 			return RTEMS_NO_MEMORY;
 		}
 		/*
+		 * Initialize wakeup callbacks
+		 */
+		tty->tty_snd.sw_pfn = NULL;
+		tty->tty_snd.sw_arg = NULL;
+		tty->tty_rcv.sw_pfn = NULL;
+		tty->tty_rcv.sw_arg = NULL;
+		tty->tty_rcvwakeup  = 0;
+		/*
 		 * link tty
 		 */
 		if (rtems_termios_ttyHead)
@@ -497,6 +505,7 @@ rtems_termios_ioctl (void *arg)
 {
 	rtems_libio_ioctl_args_t *args = arg;
 	struct rtems_termios_tty *tty = args->iop->data1;
+	struct ttywakeup         *wakeup = (struct ttywakeup *)args->buffer;
 	rtems_status_code sc;
 
  	args->ioctl_return = 0;
@@ -559,6 +568,14 @@ rtems_termios_ioctl (void *arg)
 
 	case RTEMS_IO_TCDRAIN:
 		drainOutput (tty);
+		break;
+
+	case RTEMS_IO_SNDWAKEUP:
+		tty->tty_snd = *wakeup;
+		break;
+
+	case RTEMS_IO_RCVWAKEUP:
+		tty->tty_rcv = *wakeup;
 		break;
 
 		/*
@@ -1059,6 +1076,7 @@ rtems_termios_read (void *arg)
 		return sc;
 	if (linesw[tty->t_line].l_read != NULL) {
 		sc = linesw[tty->t_line].l_read(tty,args);
+		tty->tty_rcvwakeup = 0;
 		rtems_semaphore_release (tty->isem);
 		return sc;
 	}
@@ -1078,6 +1096,7 @@ rtems_termios_read (void *arg)
 		count--;
 	}
 	args->bytes_moved = args->count - count;
+	tty->tty_rcvwakeup = 0;
 	rtems_semaphore_release (tty->isem);
 	return sc;
 }
@@ -1116,6 +1135,14 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 	    c = *buf++;
 	    linesw[tty->t_line].l_rint(c,tty);
 	  }
+	    
+	  /*
+	   * check to see if rcv wakeup callback was set
+	   */
+	  if (( !tty->tty_rcvwakeup ) && ( tty->tty_rcv.sw_pfn != NULL )) {
+	    (*tty->tty_rcv.sw_pfn)(&tty->termios, tty->tty_rcv.sw_arg);
+	    tty->tty_rcvwakeup = 1;
+    	  }
 	  return 0;
 	}
 
@@ -1201,6 +1228,14 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 		else {
 		        tty->rawInBuf.theBuf[newTail] = c;
 		        tty->rawInBuf.Tail = newTail;
+	    
+			/*
+			 * check to see if rcv wakeup callback was set
+			 */
+			if (( !tty->tty_rcvwakeup ) && ( tty->tty_rcv.sw_pfn != NULL )) {
+			  (*tty->tty_rcv.sw_pfn)(&tty->termios, tty->tty_rcv.sw_arg);
+			  tty->tty_rcvwakeup = 1;
+			}
 		}		
 	  }
 	}
@@ -1288,6 +1323,13 @@ rtems_termios_refill_transmitter (struct rtems_termios_tty *tty)
 	     */
 	    tty->rawOutBufState = rob_idle;
 	    nToSend = 0;
+	    
+	    /*
+	     * check to see if snd wakeup callback was set
+	     */
+	    if ( tty->tty_snd.sw_pfn != NULL) {
+	      (*tty->tty_snd.sw_pfn)(&tty->termios, tty->tty_snd.sw_arg);
+	    }
 	  }
 	  /* check, whether output should stop due to received XOFF */
 	  else if ((tty->flow_ctrl & (FL_MDXON | FL_ORCVXOF)) 
