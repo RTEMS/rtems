@@ -4,9 +4,6 @@
 
 This is the list of outstanding problems in this release.
 
-+   The shell scripts runtest and difftest do not work properly when 
-    testing "debug" executables.
-
 +   AMD 29k port is based on a non-GNU toolset.
  
 +   The test spfatal is out of date and as a result will NOT execute
@@ -30,14 +27,9 @@ This is the list of outstanding problems in this release.
     It is better to define these in the linkcmds file.  It is also nice
     to use the linkcmds file to place overlays for on-board hardware.
 
-+   The __read() system call in all of the BSPs using single
-    character input/output needs to be smarter.  The following
-    issues need to be addressed:
-
-       + echoing of characters on input
-       + CR/NL echoing
-       + backspaces
-       + tabs
++   Not all of the BSP console drivers have been converted to termios.
+    Look at the m68k/gen68360, sparc/erc32, and powerpc/psim BSPs for
+    examples.
 
 +   UNIX port notes:
 
