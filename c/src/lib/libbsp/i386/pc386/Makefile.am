@@ -7,6 +7,8 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 # FIXME: We must not include *.cfg
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 
+CLEANFILES =
+
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
@@ -229,7 +231,7 @@ $(PROJECT_INCLUDE)/wd80x3.h: include/wd80x3.h $(PROJECT_INCLUDE)/$(dirstamp)
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/wd80x3.h
 endif
 
-CLEANFILES = $(PREINSTALL_FILES)
+CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES += $(PREINSTALL_DIRS)
 CLEANFILES += $(TMPINSTALL_FILES)
 
