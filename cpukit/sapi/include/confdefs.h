@@ -360,10 +360,14 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 #ifdef RTEMS_POSIX_API
 
 #include <sys/types.h>
+#include <sys/siginfo.h>
+#include <mqueue.h>
 #include <rtems/posix/cond.h>
+#include <rtems/posix/mqueue.h>
 #include <rtems/posix/mutex.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/psignal.h>
+#include <rtems/posix/semaphore.h>
 #include <rtems/posix/threadsup.h>
 
 #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
@@ -388,6 +392,14 @@ rtems_extensions_table Configuration_Initial_Extensions[] = {
 
 #ifndef CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
 #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 0
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
+#define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 0
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
+#define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 0
 #endif
 
 #ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
@@ -458,6 +470,12 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
   ((_queued_signals) * \
    ( sizeof(POSIX_signals_Siginfo_node) + CONFIGURE_OBJECT_TABLE_STUFF ) )
 
+#define CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
+  ((_message_queues) * \
+   ( sizeof( POSIX_Message_queue_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
+#define CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
+  ((_semaphores) * \
+   ( sizeof( POSIX_Semaphore_Control) + CONFIGURE_OBJECT_TABLE_STUFF ) )
   
 
 #define CONFIGURE_MEMORY_FOR_POSIX \
@@ -468,6 +486,10 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
     CONFIGURE_MEMORY_FOR_POSIX_KEYS( CONFIGURE_MAXIMUM_POSIX_KEYS ) + \
     CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS( \
         CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ) + \
+    CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES( \
+        CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES ) + \
+    CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \
+        CONFIGURE_MAXIMUM_POSIX_SEMAPHORES ) + \
     (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE) \
    )
 
@@ -667,6 +689,8 @@ posix_api_configuration_table Configuration_POSIX_API = {
   CONFIGURE_MAXIMUM_POSIX_KEYS + CONFIGURE_GNAT_KEYS,
   CONFIGURE_MAXIMUM_POSIX_TIMERS,
   CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
+  CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,
+  CONFIGURE_MAXIMUM_POSIX_SEMAPHORES,
   CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE,
   CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME
 };
