@@ -23,8 +23,7 @@
  */
 
 #define _Message_queue_Copy_buffer( _source, _destination ) \
-  *(Message_queue_Buffer *)(_destination) = \
-        *(Message_queue_Buffer *)(_source)
+  memcpy( _destination, _source, _size)
 
 /*PAGE
  *
@@ -86,23 +85,24 @@
 
 /*PAGE
  *
- *  _Message_queue_Allocate
- *
- */
-
-#define _Message_queue_Allocate() \
-  (Message_queue_Control *) \
-      _Objects_Allocate( &_Message_queue_Information )
-
-/*PAGE
- *
  *  _Message_queue_Free
  *
  */
 
 #define _Message_queue_Free( _the_message_queue ) \
-  _Objects_Free( &_Message_queue_Information, \
-                 &(_the_message_queue)->Object )
+  do { \
+    \
+    if ( (_the_messsage_queue)->message_buffers ) { \
+      _Workspace_Free((void *) (_the_message_queue)->message_buffers); \
+      (_the_message_queue)->message_buffers = 0; \
+    }
+    \
+    _Objects_Free( \
+      &_Message_queue_Information, \
+      &(_the_message_queue)->Object \
+    ); \
+  } while ( 0 )
+
 
 /*PAGE
  *

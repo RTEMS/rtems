@@ -133,10 +133,9 @@ STATIC INLINE void _Message_queue_Free (
   Message_queue_Control *the_message_queue
 )
 {
-  if (the_message_queue->message_buffers)
-  {
-      _Workspace_Free((void *) the_message_queue->message_buffers);
-      the_message_queue->message_buffers = 0;
+  if (the_message_queue->message_buffers) {
+    _Workspace_Free((void *) the_message_queue->message_buffers);
+    the_message_queue->message_buffers = 0;
   }
   
   _Objects_Free( &_Message_queue_Information, &the_message_queue->Object );
