@@ -11,6 +11,10 @@
  *  $Id$
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #define _STAT_NAME         lstat
 #define _STAT_R_NAME       _lstat_r
 #define _STAT_FOLLOW_LINKS FALSE

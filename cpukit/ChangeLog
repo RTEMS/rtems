@@ -1,5 +1,10 @@
 2005-01-27	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libcsupport/src/lstat.c, libcsupport/src/readdir_r.c:
+	Include config.h.
+
+2005-01-27	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libmisc/untar/untar.h: New prototype to eleminate warnings.
 	* libmisc/untar/untar.c: Cosmetics, add symlinks.
 
