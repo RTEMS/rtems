@@ -1,6 +1,6 @@
 2002-10-04	Joel Sherrill <joel@OARcorp.com>
 
-	* VERSION: Updated to rtems-ss-20021004.
+	* aclocal/version.m4: Updated to rtems-ss-20021004.
 
 2002-10-04	Joel Sherrill <joel@OARcorp.com>
 
