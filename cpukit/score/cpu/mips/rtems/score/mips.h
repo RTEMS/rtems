@@ -1,23 +1,6 @@
-/*  mips64orion.h
+/*  mips.h
  *
- *  Author:     Craig Lebakken <craigl@transition.com>
- *
- *  COPYRIGHT (c) 1996 by Transition Networks Inc.
- *
- *  To anyone who acknowledges that this file is provided "AS IS"
- *  without any express or implied warranty:
- *      permission to use, copy, modify, and distribute this file
- *      for any purpose is hereby granted without fee, provided that
- *      the above copyright notice and this notice appears in all
- *      copies, and that the name of Transition Networks not be used in
- *      advertising or publicity pertaining to distribution of the
- *      software without specific, written prior permission.
- *      Transition Networks makes no representations about the suitability
- *      of this software for any purpose.
- *
- *  Derived from c/src/exec/score/cpu/no_cpu/no_cpu.h:
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -67,6 +50,56 @@ extern "C" {
  */
 
 #define CPU_NAME "MIPS"
+
+/*
+ *  Some macros to access registers
+ */
+
+#define mips_get_sr( _x ) \
+  do { \
+    asm volatile( "mfc0 %0, $12; nop" : "=g" (_x) :  ); \
+  } while (0)
+
+#define mips_set_sr( _x ) \
+  do { \
+    unsigned int __x = (_x); \
+    asm volatile( "mtc0 %0, $12; nop" : : "r" (__x) ); \
+  } while (0)
+
+/*
+ *  Manipulate interrupt mask 
+ *
+ *  mips_unmask_interrupt( _mask) 
+ *    enables interrupts - mask is positioned so it only needs to be or'ed
+ *    into the status reg. This also does some other things !!!! Caution
+ *    should be used if invoking this while in the middle of a debugging
+ *    session where the client may have nested interrupts.
+ *
+ *  mips_mask_interrupt( _mask )
+ *    disable the interrupt - mask is the complement of the bits to be
+ *    cleared - i.e. to clear ext int 5 the mask would be - 0xffff7fff
+ *
+ *
+ *  NOTE: mips_mask_interrupt() used to be disable_int().
+ *        mips_unmask_interrupt() used to be enable_int().
+ *
+ */
+
+#define mips_enable_in_interrupt_mask( _mask ) \
+  do { \
+    unsigned int _sr; \
+    mips_get_sr( _sr ); \
+    _sr |= (_mask) | SR_IEC; \
+    mips_set_sr( _sr ); \
+  } while (0)
+
+#define mips_disable_in_interrupt_mask( _mask ) \
+  do { \
+    unsigned int _sr; \
+    mips_get_sr( _sr ); \
+    _sr &= ~(_mask); \
+    mips_set_sr( _sr ); \
+  } while (0)
 
 #ifdef __cplusplus
 }

@@ -1,27 +1,29 @@
-/*  cpu_asm.S 
- *
+/*
  *  This file contains the basic algorithms for all assembly code used
  *  in an specific CPU port of RTEMS.  These algorithms must be implemented
  *  in assembly language
  *
- *  Author:     Craig Lebakken <craigl@transition.com>
- *
- *  COPYRIGHT (c) 1996 by Transition Networks Inc.
- *
- *  To anyone who acknowledges that this file is provided "AS IS"
- *  without any express or implied warranty:
- *      permission to use, copy, modify, and distribute this file
- *      for any purpose is hereby granted without fee, provided that
- *      the above copyright notice and this notice appears in all
- *      copies, and that the name of Transition Networks not be used in
- *      advertising or publicity pertaining to distribution of the
- *      software without specific, written prior permission.
- *      Transition Networks makes no representations about the suitability
- *      of this software for any purpose.
- *
- *  Derived from c/src/exec/score/cpu/no_cpu/cpu_asm.s:
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  History:
+ *    Baseline: no_cpu
+ *    1996:     Ported to MIPS64ORION by Craig Lebakken <craigl@transition.com>
+ *          COPYRIGHT (c) 1996 by Transition Networks Inc.
+ *          To anyone who acknowledges that the modifications to this file to
+ *          port it to the MIPS64ORION are provided "AS IS" without any
+ *          express or implied warranty:
+ *             permission to use, copy, modify, and distribute this file
+ *             for any purpose is hereby granted without fee, provided that
+ *             the above copyright notice and this notice appears in all
+ *             copies, and that the name of Transition Networks not be used in
+ *             advertising or publicity pertaining to distribution of the
+ *             software without specific, written prior permission. Transition
+ *             Networks makes no representations about the suitability
+ *             of this software for any purpose.
+ *    2000: Reworked by Alan Cudmore <alanc@linuxstart.com> to become
+ *          the more general MIPS port.  Joel Sherrill <joel@OARcorp.com>
+ *          continued this rework, rewriting as much as possible in
+ *          C and testing on the TX39.
+ *  
+ *  COPYRIGHT (c) 1989-2000.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -30,20 +32,10 @@
  *
  *  $Id$
  */
-/* @(#)cpu_asm.S       08/20/96     1.15 */
 
-#include "cpu_asm.h"
-
+#include <asm.h>
 #include "iregdef.h"
 #include "idtcpu.h"
-
-#define FRAME(name,frm_reg,offset,ret_reg)      \
-        .globl  name;                           \
-        .ent    name;                           \
-name:;                                          \
-        .frame  frm_reg,offset,ret_reg
-#define ENDFRAME(name)                          \
-        .end name
 
 #define EXCP_STACK_SIZE (NREGS*R_SZ)
 #define ISR_VEC_SIZE 4
@@ -123,16 +115,11 @@ name:;                                          \
 /*PAGE
  *
  *  _CPU_ISR_Get_level
+ *
+ *  unsigned32 _CPU_ISR_Get_level( void )
+ *
+ *  This routine returns the current interrupt level.
  */
-
-#if 0
-unsigned32 _CPU_ISR_Get_level( void )
-{
-  /*
-   *  This routine returns the current interrupt level.
-   */
-}
-#endif
 
 #if __mips == 3
 /* return the current exception level for the 4650 */
@@ -188,24 +175,8 @@ ENDFRAME(_CPU_ISR_Set_level)
 #elif __mips == 1
 
 /* MIPS ISA 1 ( R3000 ) */
-/* These routines might not be needed for the R3000 */
-/* Q:Who calls _CPU_ISR_Get/Set_level? */
-FRAME(_CPU_ISR_Get_level,sp,0,ra)
-        mfc0 v0,C0_SR
-        nop
-        andi v0, SR_IEC
-        j ra
-ENDFRAME(_CPU_ISR_Get_level)
-
-FRAME(_CPU_ISR_Set_level,sp,0,ra)
-        nop
-        mfc0 t0,C0_SR
-        andi a0, SR_IEC 
-	or   t0, a0
-	mtc0 t0,C0_SR
-	nop
-	j ra
-ENDFRAME(_CPU_ISR_Set_level)
+/* _CPU_ISR_Get/Set_level are called as part of task mode manipulation. */
+/*  and are defined in C for the __mips == 1 */
 
 #else
    #error "__mips is set to 1 or 3"
@@ -225,10 +196,8 @@ ENDFRAME(_CPU_ISR_Set_level)
  */
 
 /* void _CPU_Context_save_fp(
- * void **fp_context_ptr
- * )
- * {
- * }
+ *   void **fp_context_ptr
+ * );
  */
 
 FRAME(_CPU_Context_save_fp,sp,0,ra)
@@ -285,10 +254,8 @@ ENDFRAME(_CPU_Context_save_fp)
  */
 
 /* void _CPU_Context_restore_fp(
- * void **fp_context_ptr
+ *   void **fp_context_ptr
  * )
- * {
- * }
  */
 
 FRAME(_CPU_Context_restore_fp,sp,0,ra)
@@ -337,11 +304,9 @@ ENDFRAME(_CPU_Context_restore_fp)
  */
 
 /* void _CPU_Context_switch(
- * Context_Control  *run,
- * Context_Control  *heir
+ *   Context_Control  *run,
+ *   Context_Control  *heir
  * )
- * {
- * }
  */
 #if __mips == 3
 /* MIPS ISA Level 3 ( R4xxx ) */
@@ -402,7 +367,7 @@ ENDFRAME(_CPU_Context_switch)
 FRAME(_CPU_Context_switch,sp,0,ra)
 
         mfc0 t0,C0_SR
-        li t1,~SR_IEC
+	li t1,~SR_IEC
         sw t0,C0_SR_OFFSET*4(a0)        /* save status register */
         and t0,t1
         mtc0 t0,C0_SR                   /* first disable ie bit (recommended) */
@@ -436,10 +401,14 @@ _CPU_Context_switch_restore:
         lw ra,RA_OFFSET*4(a1)
         lw t0,C0_EPC_OFFSET*4(a1)
         mtc0 t0,C0_EPC
-	lw t1, C0_SR_OFFSET*4(a1)
-        mtc0 t1,C0_SR
-
-	/* Q:Changes needed to SR_IEC bit in SR/_CPU_Context_switch_restore? */
+	lw t0, C0_SR_OFFSET*4(a1)
+        andi t0,SR_IEC                  /* we know IEC=0, e.g. disabled */
+        beq t0,$0,_CPU_Context_1        /* set IEC level from restore context */
+	mfc0 t0,C0_SR
+        nop
+        or  t0,SR_IEC                   /* new_sr = sr | SR_IEC */
+        mtc0 t0,C0_SR                   /* set with enabled */
+        
 
 _CPU_Context_1:
         j ra
@@ -459,15 +428,11 @@ ENDFRAME(_CPU_Context_switch)
  *  efficient manner.  It may simply be a label in _CPU_Context_switch.
  *
  *  NOTE: May be unnecessary to reload some registers.
+ *
+ *  void _CPU_Context_restore(
+ *    Context_Control *new_context
+ *  );
  */
-
-#if 0
-void _CPU_Context_restore(
-  Context_Control *new_context
-)
-{
-}
-#endif
 
 #if __mips == 3
 
@@ -502,35 +467,29 @@ EXTERN(_ISR_Signals_to_thread_executing,SZ_INT)
  *
  *  This routine provides the RTEMS interrupt management.
  *
+ *  void _ISR_Handler()
+ * 
+ *
+ *  This discussion ignores a lot of the ugly details in a real
+ *  implementation such as saving enough registers/state to be
+ *  able to do something real.  Keep in mind that the goal is
+ *  to invoke a user's ISR handler which is written in C and
+ *  uses a certain set of registers.
+ *
+ *  Also note that the exact order is to a large extent flexible.
+ *  Hardware will dictate a sequence for a certain subset of
+ *  _ISR_Handler while requirements for setting
+ *
+ *  At entry to "common" _ISR_Handler, the vector number must be
+ *  available.  On some CPUs the hardware puts either the vector
+ *  number or the offset into the vector table for this ISR in a
+ *  known place.  If the hardware does not give us this information,
+ *  then the assembly portion of RTEMS for this port will contain
+ *  a set of distinct interrupt entry points which somehow place
+ *  the vector number in a known place (which is safe if another
+ *  interrupt nests this one) and branches to _ISR_Handler.
+ *
  */
-
-#if 0
-void _ISR_Handler()
-{
-   /*
-    *  This discussion ignores a lot of the ugly details in a real
-    *  implementation such as saving enough registers/state to be
-    *  able to do something real.  Keep in mind that the goal is
-    *  to invoke a user's ISR handler which is written in C and
-    *  uses a certain set of registers.
-    *
-    *  Also note that the exact order is to a large extent flexible.
-    *  Hardware will dictate a sequence for a certain subset of
-    *  _ISR_Handler while requirements for setting
-    */
-
-  /*
-   *  At entry to "common" _ISR_Handler, the vector number must be
-   *  available.  On some CPUs the hardware puts either the vector
-   *  number or the offset into the vector table for this ISR in a
-   *  known place.  If the hardware does not give us this information,
-   *  then the assembly portion of RTEMS for this port will contain
-   *  a set of distinct interrupt entry points which somehow place
-   *  the vector number in a known place (which is safe if another
-   *  interrupt nests this one) and branches to _ISR_Handler.
-   *
-   */
-#endif
 
 #if __mips == 3
 /* ----------------------------------------------------------------------------- */
@@ -583,12 +542,13 @@ FRAME(_ISR_Handler,sp,0,ra)
 /* determine if an interrupt generated this exception */
 	mfc0 k0,C0_CAUSE
 	and k1,k0,CAUSE_EXCMASK
-        bnez k1,_ISR_Handler_prom_exit /* not an external interrup
-t, pass exception to Monitor */
+        bnez k1,_ISR_Handler_prom_exit /* not an external interrupt,
+						pass exception to Monitor */
         mfc0 k1,C0_SR
 	and k0,k1
 	and k0,CAUSE_IPMASK
-	beq k0,zero,_ISR_Handler_quick_exit /* external interrupt not enabled, ignore */
+	beq k0,zero,_ISR_Handler_quick_exit /* external interrupt not
+							enabled, ignore */
 	nop
 
   /*
@@ -1035,81 +995,6 @@ ENDFRAME(_ISR_Handler)
 
 #endif
 
-FRAME(mips_enable_interrupts,sp,0,ra)
-	mfc0 t0,C0_SR		/* get status reg */
-	nop
-	or t0,t0,a0		 
-	mtc0 t0,C0_SR		/* save updated status reg */
-	j ra
-	nop
-ENDFRAME(mips_enable_interrupts)
-
-FRAME(mips_disable_interrupts,sp,0,ra)
-	mfc0 v0,C0_SR		/* get status reg */
-	li t1,SR_IMASK		/* t1 = load interrupt mask word */
-	not t0,t1		/* t0 = ~t1 */
-	and t0,v0		/* clear imask bits */
-	mtc0 t0,C0_SR		/* save status reg */
-	and v0,t1		/* mask return value (only return imask bits) */
-	jr ra
-	nop
-ENDFRAME(mips_disable_interrupts)
-
-#if __mips == 3
-
-FRAME(mips_enable_global_interrupts,sp,0,ra)
-	mfc0 t0,C0_SR		/* get status reg */
-	nop
-	ori t0,SR_IE
-	mtc0 t0,C0_SR		/* save updated status reg */
-	j ra
-	nop
-ENDFRAME(mips_enable_global_interrupts)
-
-FRAME(mips_disable_global_interrupts,sp,0,ra)
-	li t1,SR_IE
-	mfc0 t0,C0_SR		/* get status reg */
-	not t1
-	and t0,t1
-	mtc0 t0,C0_SR		/* save updated status reg */
-	j ra
-	nop
-ENDFRAME(mips_disable_global_interrupts)
-
-#elif __mips == 1
-
-FRAME(mips_enable_global_interrupts,sp,0,ra)
-	mfc0 t0,C0_SR		/* get status reg */
-	nop
-	ori t0,SR_IEC
-	mtc0 t0,C0_SR		/* save updated status reg */
-	j ra
-	nop
-ENDFRAME(mips_enable_global_interrupts)
-
-FRAME(mips_disable_global_interrupts,sp,0,ra)
-	li t1,SR_IEC
-	mfc0 t0,C0_SR		/* get status reg */
-	not t1
-	and t0,t1
-	mtc0 t0,C0_SR		/* save updated status reg */
-	j ra
-	nop
-ENDFRAME(mips_disable_global_interrupts)
-
-#else
-
-   #error "__mips is not set to 1 or 3"
-
-#endif
-
-/* return the value of the status register in v0.  Used for debugging */
-FRAME(mips_get_sr,sp,0,ra)
-	mfc0 v0,C0_SR
-	j ra
-	nop
-ENDFRAME(mips_get_sr)
-
 FRAME(mips_break,sp,0,ra)
 #if 1
 	break 0x0
@@ -1119,267 +1004,4 @@ FRAME(mips_break,sp,0,ra)
 #endif
 	nop
 ENDFRAME(mips_break)
-
-
-/**************************************************************************
-**
-** enable_int(mask) - enables interrupts - mask is positioned so it only
-**                      needs to be or'ed into the status reg. This
-**                      also does some other things !!!! caution should
-**                      be used if invoking this while in the middle
-**                      of a debugging session where the client may have
-**                      nested interrupts.
-**
-****************************************************************************/
-FRAME(enable_int,sp,0,ra)
-        .set    noreorder
-        mfc0    t0,C0_SR
-        or      a0,1
-        or      t0,a0
-        mtc0    t0,C0_SR
-        j       ra
-        nop
-        .set    reorder
-ENDFRAME(enable_int)
-
-
-/***************************************************************************
-**
-**      disable_int(mask) - disable the interrupt - mask is the complement
-**                          of the bits to be cleared - i.e. to clear ext int
-**                          5 the mask would be - 0xffff7fff
-**
-****************************************************************************/
-FRAME(disable_int,sp,0,ra)
-        .set    noreorder
-        mfc0    t0,C0_SR
-        nop
-        and     t0,a0
-        mtc0    t0,C0_SR
-        j       ra
-        nop
-ENDFRAME(disable_int)
-
-
-/*PAGE
- *
- *  _CPU_Internal_threads_Idle_thread_body
- *
- *  NOTES:
- *
- *  1. This is the same as the regular CPU independent algorithm.
- *
- *  2. If you implement this using a "halt", "idle", or "shutdown"
- *     instruction, then don't forget to put it in an infinite loop.
- *
- *  3. Be warned. Some processors with onboard DMA have been known
- *     to stop the DMA if the CPU were put in IDLE mode.  This might
- *     also be a problem with other on-chip peripherals.  So use this
- *     hook with caution.
- */
-
-#if __mips == 3
-
-FRAME(_CPU_Thread_Idle_body,sp,0,ra)
-	wait			/* enter low power mode */
-	j _CPU_Thread_Idle_body
-	nop
-ENDFRAME(_CPU_Thread_Idle_body)
-
-#elif __mips == 1
-
-FRAME(_CPU_Thread_Idle_body,sp,0,ra)
-	nop			/* no wait instruction */
-	j _CPU_Thread_Idle_body
-	nop
-ENDFRAME(_CPU_Thread_Idle_body)
-
-#else
-
-   #error "__mips not set to 1 or 3"
-   
-#endif
-
-/**************************************************************************
-**
-**	init_exc_vecs() - moves the exception code into the addresses
-**			  reserved for exception vectors
-**
-**	UTLB Miss exception vector at address 0x80000000
-**
-**	General exception vector at address 0x80000080
-**
-**	RESET exception vector is at address 0xbfc00000
-**
-***************************************************************************/
-
-#define VEC_CODE_LENGTH 10*4
-
-FRAME(init_exc_vecs,sp,0,ra)
-
-#if __mips == 1
-
-	.set	noreorder
-	la	t1,exc_utlb_code
-	la	t2,exc_norm_code
-	li	t3,UT_VEC
-	li	t4,E_VEC
-	li	t5,VEC_CODE_LENGTH
-1:
-	lw	t6,0(t1)
-	lw	t7,0(t2)
-	sw	t6,0(t3)
-	sw	t7,0(t4)
-	addiu	t1,4
-	addiu	t3,4
-	addiu	t4,4
-	subu	t5,4
-	bne	t5,zero,1b
-	addiu	t2,4
-	move	t5,ra		# assumes clear_cache doesnt use t5
-	li	a0,UT_VEC
-	jal	clear_cache          /* Check out clear cache.... */
-	li	a1,VEC_CODE_LENGTH
-	nop
-	li	a0,E_VEC
-	jal	clear_cache
-	li	a1,VEC_CODE_LENGTH
-	move	ra,t5		# restore ra
-	j	ra
-	nop
-	.set	reorder
-
-#elif __mips == 3 
-
-	.set reorder
-	move	t5,ra		# assumes clear_cache doesnt use t5
-
-	/* TLB exception vector */
-	la	t1,exc_tlb_code
-	li	t2,T_VEC |K1BASE
-	li	t3,VEC_CODE_LENGTH
-1:
-	lw	t6,0(t1)
-	addiu	t1,4
-	subu	t3,4
-	sw	t6,0(t2)
-	addiu	t2,4
-	bne	t3,zero,1b
-
-	li	a0,T_VEC
-	li	a1,VEC_CODE_LENGTH
-	jal	clear_cache
-
-	la	t1,exc_xtlb_code
-	li	t2,X_VEC |K1BASE
-	li	t3,VEC_CODE_LENGTH
-1:
-	lw	t6,0(t1)
-	addiu	t1,4
-	subu	t3,4
-	sw	t6,0(t2)
-	addiu	t2,4
-	bne	t3,zero,1b
-
-	/* extended TLB exception vector */
-	li	a0,X_VEC
-	li	a1,VEC_CODE_LENGTH
-	jal	clear_cache
-
-	/* cache error exception vector */
-	la	t1,exc_cache_code
-	li	t2,C_VEC |K1BASE
-	li	t3,VEC_CODE_LENGTH
-1:
-	lw	t6,0(t1)
-	addiu	t1,4
-	subu	t3,4
-	sw	t6,0(t2)
-	addiu	t2,4
-	bne	t3,zero,1b
-
-	li	a0,C_VEC
-	li	a1,VEC_CODE_LENGTH
-	jal	clear_cache
-
-	/* normal exception vector */
-	la	t1,exc_norm_code
-	li	t2,E_VEC |K1BASE
-	li	t3,VEC_CODE_LENGTH
-1:
-	lw	t6,0(t1)
-	addiu	t1,4
-	subu	t3,4
-	sw	t6,0(t2)
-	addiu	t2,4
-	bne	t3,zero,1b
-
-	li	a0,E_VEC
-	li	a1,VEC_CODE_LENGTH
-	jal	clear_cache
-
-	move	ra,t5		# restore ra
-	j	ra
-
-#else
-   #error "__mips not set to 1 or 3"
-#endif
-
-ENDFRAME(init_exc_vecs)
-
-FRAME(exc_utlb_code,sp,0,ra)
-	la	k0, _ISR_Handler /* XXX not right -- but need to link*/
-	j	k0
-	nop
-ENDFRAME(exc_utlb_code)
-
-FRAME(exc_norm_code,sp,0,ra)
-	la	k0, _ISR_Handler /* generic external int hndlr */
-	j	k0
-	nop
-ENDFRAME(exc_norm_code)
-
-/* 
-** Again, reliance on SIM. Not good.
-*/
-#if __mips == 3
-
-FRAME(exc_tlb_code,sp,0,ra)
-        la      k0, (R_VEC+((112)*8)) /* R4000 Sim location */
-        j       k0
-	nop
-ENDFRAME(exc_tlb_code)
-
-FRAME(exc_xtlb_code,sp,0,ra)
-        la      k0, (R_VEC+((112)*8)) /* R4000 Sim location */
-        j       k0
-	nop
-
-ENDFRAME(exc_xtlb_code)
-
-FRAME(exc_cache_code,sp,0,ra)
-        la      k0, (R_VEC+((112)*8)) /* R4000 Sim location */
-        j       k0
-	nop
-ENDFRAME(exc_cache_code)
-
-#elif __mips == 1
-/* ------------------------------------------------------ */
-FRAME(exc_tlb_code,sp,0,ra)
-        la      k0, (R_VEC+((48)*8))  /* Need something else here besides IDT/SIM call */
-        j       k0
-	nop
-ENDFRAME(exc_tlb_code)
-
-FRAME(exc_cache_code,sp,0,ra)
-        la      k0, (R_VEC+((48)*8))
-        j       k0
-	nop
-ENDFRAME(exc_cache_code)
-
-#else
-
-   #error "__mips is not set to 1 or 3"
-
-#endif
 

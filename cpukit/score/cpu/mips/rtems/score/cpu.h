@@ -38,16 +38,11 @@
 extern "C" {
 #endif
 
-#include <rtems/score/mips64orion.h>       /* pick up machine definitions */
+#include <rtems/score/mips.h>       /* pick up machine definitions */
 #ifndef ASM
+#include <idtcpu.h>
 #include <rtems/score/mipstypes.h>
 #endif
-
-extern int mips_disable_interrupts( void );
-extern void mips_enable_interrupts( int _level );
-extern int mips_disable_global_interrupts( void );
-extern void mips_enable_global_interrupts( void );
-extern void mips_fatal_error ( int error );
 
 /* conditional compilation parameters */
 
@@ -530,6 +525,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  by RTEMS.
  */
 
+extern unsigned int mips_interrupt_number_of_vectors;
 #define CPU_INTERRUPT_NUMBER_OF_VECTORS      8
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
@@ -593,10 +589,11 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  level is returned in _level.
  */
 
-#define _CPU_ISR_Disable( _int_level ) \
-  do{ \
-	_int_level = mips_disable_interrupts(); \
-  }while(0)
+#define _CPU_ISR_Disable( _level ) \
+  do { \
+    mips_get_sr( _level ); \
+    mips_set_sr( (_level) & ~SR_IEC ); \
+  } while(0)
 
 /*
  *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
@@ -605,9 +602,9 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  */
 
 #define _CPU_ISR_Enable( _level )  \
-  do{ \
-	mips_enable_interrupts(_level); \
-  }while(0)
+  do { \
+    mips_set_sr(_level); \
+  } while(0)
 
 /*
  *  This temporarily restores the interrupt to _level before immediately
@@ -617,11 +614,11 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  */
 
 #define _CPU_ISR_Flash( _xlevel ) \
-  do{ \
-	int _scratch; \
-	_CPU_ISR_Enable( _xlevel ); \
-	_CPU_ISR_Disable( _scratch ); \
-  }while(0)
+  do { \
+    unsigned int _scratch; \
+    _CPU_ISR_Enable( _xlevel ); \
+    _CPU_ISR_Disable( _scratch ); \
+  } while(0)
 
 /*
  *  Map interrupt level in task mode onto the hardware that the CPU
@@ -632,10 +629,30 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  8 - 255 would be available for bsp/application specific meaning.
  *  This could be used to manage a programmable interrupt controller
  *  via the rtems_task_mode directive.
+ *
+ *  On the MIPS, 0 is all on.  Non-zero is all off.  This only 
+ *  manipulates the IEC.
  */
+
+#if __mips == 3
 extern void _CPU_ISR_Set_level( unsigned32 _new_level );
 
-unsigned32 _CPU_ISR_Get_level( void );
+unsigned32 _CPU_ISR_Get_level( void ); /* in cpu_asm.S */
+#elif __mips == 1
+
+#define _CPU_ISR_Set_level( _new_level ) \
+  do { \
+    unsigned int _sr; \
+    mips_get_sr(_sr); \
+    (_sr) &= ~SR_IEC;                    /* clear the IEC bit */ \
+    if ( !(_new_level) ) (_sr) |= SR_IEC; /* enable interrupts */ \
+    mips_set_sr(_sr); \
+  } while (0)
+
+unsigned32 _CPU_ISR_Get_level( void );  /* in cpu.c */
+#else
+#error "CPU ISR level: unknown MIPS level for SR handling"
+#endif
 
 /* end of ISR handler macros */
 
@@ -670,7 +687,8 @@ unsigned32 _CPU_ISR_Get_level( void );
   	(_the_context)->sp = _stack_tmp; \
   	(_the_context)->fp = _stack_tmp; \
 	(_the_context)->ra = (unsigned64)_entry_point; \
-	(_the_context)->c0_sr = 0; \
+	if (_isr) (_the_context)->c0_sr = 0xff00; \
+	else      (_the_context)->c0_sr = 0xff01; \
   }
 
 /*
@@ -730,11 +748,14 @@ unsigned32 _CPU_ISR_Get_level( void );
  *  halts/stops the CPU.
  */
 
+void mips_fatal_error ( int error );
+
 #define _CPU_Fatal_halt( _error ) \
-  { \
-    mips_disable_global_interrupts(); \
+  do { \
+    unsigned int _level; \
+    _CPU_ISR_Disable(_level); \
     mips_fatal_error(_error); \
-  }
+  } while (0)
 
 /* end of Fatal Error manager macros */
 
@@ -979,15 +1000,6 @@ static inline unsigned int CPU_swap_u32(
 
 #define CPU_swap_u16( value ) \
   (((value&0xff) << 8) | ((value >> 8)&0xff))
-
-/*
- *  Miscellaneous prototypes 
- *
- *  NOTE:  The names should have mips64orion in them.
- */
-
-void disable_int( unsigned32 mask );
-void enable_int( unsigned32 mask );
 
 #ifdef __cplusplus
 }

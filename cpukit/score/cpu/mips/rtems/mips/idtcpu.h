@@ -59,12 +59,13 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #if  __mips == 1
 #define	UT_VEC	K0BASE			/* utlbmiss vector */
 #define E_VEC	(K0BASE+0x80)		/* exception vevtor */
-#endif
-#if  __mips == 3
+#elif  __mips == 3
 #define	T_VEC	(K0BASE+0x000)		/* tlbmiss vector */
 #define X_VEC	(K0BASE+0x080)		/* xtlbmiss vector */
 #define C_VEC	(K0BASE+0x100)		/* cache error vector */
 #define E_VEC	(K0BASE+0x180)		/* exception vector */
+#else 
+#error "EXCEPTION VECTORS: unknown ISA level"
 #endif
 #define	R_VEC	(K1BASE+0x1fc00000)	/* reset vector */
 

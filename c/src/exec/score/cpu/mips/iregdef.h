@@ -296,7 +296,7 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define	R_RA		R_R31
 
 /* Ketan added the following */
-#ifdef __mips == 1
+#if __mips == 1
 #define sreg	sw
 #define lreg	lw
 #define rmfc0	mfc0

@@ -35,7 +35,7 @@
 #define ASM
 #endif
 #include <rtems/score/targopts.h>
-#include <rtems/score/mips64orion.h>
+#include <rtems/score/mips.h>
 
 /*
  *  Recent versions of GNU cpp define variables which indicate the
@@ -116,6 +116,43 @@ name:;                                          \
 _##name:
 #define ENDFRAME(name)
 #endif  XDS
+
+/*
+ * Hardware Floating Point Registers
+ */
+
+#define R_FP0 	0
+#define R_FP1 	1
+#define R_FP2 	2
+#define R_FP3 	3
+#define R_FP4 	4
+#define R_FP5 	5
+#define R_FP6 	6
+#define R_FP7 	7
+#define R_FP8 	8
+#define R_FP9 	9
+#define R_FP10 	10
+#define R_FP11 	11
+#define R_FP12 	12
+#define R_FP13 	13
+#define R_FP14 	14
+#define R_FP15 	15
+#define R_FP16 	16
+#define R_FP17 	17
+#define R_FP18 	18
+#define R_FP19 	19
+#define R_FP20 	20
+#define R_FP21 	21
+#define R_FP22 	22
+#define R_FP23	23
+#define R_FP24 	24
+#define R_FP25 	25
+#define R_FP26 	26
+#define R_FP27 	27
+#define R_FP28 	28
+#define R_FP29 	29
+#define R_FP30 	30
+#define R_FP31 	31
 
 #endif
 /* end of include file */

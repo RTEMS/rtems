@@ -66,8 +66,7 @@ void _CPU_Initialize(
 {
    unsigned int i = ISR_NUMBER_OF_VECTORS;
 
-   while ( i-- )
-   {
+   while ( i-- ) {
       _ISR_Vector_table[i] = (ISR_Handler_entry)null_handler;
    }
 
@@ -100,15 +99,25 @@ void _CPU_Initialize(
 /*PAGE
  *
  *  _CPU_ISR_Get_level
+ *
+ *  This routine returns the current interrupt level.
  */
- 
-#if 0 /* located in cpu_asm.S */
+   
+#if __mips == 3
+
+/* in cpu_asm.S for now */
+
+#elif __mips == 1
 unsigned32 _CPU_ISR_Get_level( void )
 {
-  /*
-   *  This routine returns the current interrupt level.
-   */
+  unsigned int sr;
+
+  mips_get_sr(sr);
+
+  return ((sr & SR_IEC) ? 0 : 1);
 }
+#else
+#error "CPU ISR level: unknown MIPS level for SR handling"
 #endif
 
 /*PAGE
@@ -200,14 +209,18 @@ void _CPU_Install_interrupt_stack( void )
  *     hook with caution.
  */
 
-#if 0 /* located in cpu_asm.S */
 void _CPU_Thread_Idle_body( void )
 {
-
-  for( ; ; )
-    /* insert your "halt" instruction here */ ;
-}
+#if __mips == 3
+   for( ; ; )
+     asm volatile("wait"); /* use wait to enter low power mode */
+#elif __mips == 1
+   for( ; ; )
+     ;
+#else
+#error "IDLE: __mips not set to 1 or 3"
 #endif
+}
 
 extern void mips_break( int error );
 

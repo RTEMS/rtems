@@ -4,7 +4,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-H_FILES = cpu.h mips64orion.h mipstypes.h
+H_FILES = cpu.h mips.h mipstypes.h
 noinst_HEADERS = $(H_FILES)
 
 #

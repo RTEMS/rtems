@@ -1,3 +1,44 @@
+2000-12-13	Joel Sherrill <joel@OARcorp.com>
+
+	* cpu_asm.h: Removed.
+	* Makefile.am: Remove cpu_asm.h.
+	* rtems/score/mips64orion.h: Renamed mips.h.
+	* rtems/score/mips.h: New file, formerly mips64orion.h.
+	Header rewritten.
+	(mips_get_sr, mips_set_sr, mips_enable_in_interrupt_mask,
+	mips_disable_in_interrupt_mask): New macros.
+	* rtems/score/Makefile.am: Reflect renaming mips64orion.h.
+	* asm.h: Include <mips.h> not <mips64orion.h>. Now includes the
+	few defines that were in <cpu_asm.h>.
+	* cpu.c (_CPU_ISR_Get_level): Added MIPS ISA I version of this routine.
+	MIPS ISA 3 is still in assembly for now.
+	(_CPU_Thread_Idle_body): Rewrote in C.
+	* cpu_asm.S: Rewrote file header. 
+	(FRAME,ENDFRAME) now in asm.h.
+	(_CPU_ISR_Get_level): Removed ISA I version and rewrote in C.
+	(_CPU_ISR_Set_level): Removed ISA I version and rewrote in C.
+	(_CPU_Context_switch): MIPS ISA I now manages preserves SR_IEC and
+	leaves other bits in SR alone on task switch.
+	(mips_enable_interrupts,mips_disable_interrupts,
+	mips_enable_global_interrupts,mips_disable_global_interrupts,
+	disable_int, enable_int): Removed.
+	(mips_get_sr): Rewritten as C macro.
+	(_CPU_Thread_Idle_body): Rewritten in C.
+	(init_exc_vecs): Rewritten in C as mips_install_isr_entries() and
+	placed in libcpu.
+	(exc_tlb_code, exc_xtlb_code, exc_cache_code, exc_norm_code): Moved
+	to libcpu/mips/shared/interrupts.
+	(general): Cleaned up comment blocks and #if 0 areas.
+	* idtcpu.h: Made ifdef report an error.
+	* iregdef.h: Removed warning.
+	* rtems/score/cpu.h (CPU_INTERRUPT_NUMBER_OF_VECTORS): Now a variable
+	number defined by libcpu.
+	(_CPU_ISR_Disable, _CPU_ISR_Enable): Rewritten to use new routines
+	to access SR.
+	(_CPU_ISR_Set_level): Rewritten as macro for ISA I.
+	(_CPU_Context_Initialize): Honor ISR level in task initialization.
+	(_CPU_Fatal_halt): Use new _CPU_ISR_Disable() macro.
+
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h: When mips ISA level is 1, registers in the
