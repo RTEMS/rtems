@@ -1,3 +1,13 @@
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/rdbg/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* include/rdbg/i386/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* include/rdbg/m68k/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* include/rdbg/powerpc/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* src/i386/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* src/m68k/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+	* src/powerpc/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
+
 2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/powerpc/new_exception_processing/Makefile.am: Remove.

@@ -91,14 +91,17 @@ EXTRA_DIST += remdeb_f.x $(GEN_C_FILES)
 
 PREINSTALL_FILES =
 
+${PROJECT_RELEASE}/lib/$(dirstamp):
+	@$(mkdir_p) ${PROJECT_RELEASE}/lib
+	@: > ${PROJECT_RELEASE}/lib/$(dirstamp)
+
 ${PROJECT_RELEASE}/lib/librdbg$(LIB_VARIANT).a: $(ARCH)/librdbg$(LIB_VARIANT).a ${PROJECT_RELEASE}/lib/$(dirstamp)
 	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/librdbg$(LIB_VARIANT).a
 TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/librdbg$(LIB_VARIANT).a
 
 $(PROJECT_INCLUDE)/rdbg/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rdbg
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rdbg
 	@: > $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rdbg/remdeb.h: $(srcdir)/new_exception_processing/remdeb.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/remdeb.h

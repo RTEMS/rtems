@@ -11,9 +11,8 @@ all-local: $(PREINSTALL_FILES)
 PREINSTALL_FILES =
 
 $(PROJECT_INCLUDE)/rdbg/$(dirstamp):
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/rdbg
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rdbg
 	@: > $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
 
 $(PROJECT_INCLUDE)/rdbg/rdbg_f.h: rdbg_f.h $(PROJECT_INCLUDE)/rdbg/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rdbg/rdbg_f.h
