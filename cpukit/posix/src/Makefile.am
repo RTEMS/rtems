@@ -31,7 +31,7 @@ MESSAGE_QUEUE_C_FILES = mqueue.c mqueueclose.c mqueuecreatesupp.c \
     mqueuedeletesupp.c mqueuegetattr.c mqueuenametoid.c mqueuenotify.c \
     mqueueopen.c mqueuereceive.c mqueuerecvsupp.c mqueuesend.c \
     mqueuesendsupp.c mqueuesetattr.c mqueuetimedreceive.c mqueuetimedsend.c \
-    mqueueunlink.c
+    mqueuetranslatereturncode.c mqueueunlink.c
 
 MUTEX_C_FILES = mutex.c mutexattrdestroy.c mutexattrgetprioceiling.c \
     mutexattrgetprotocol.c mutexattrgetpshared.c mutexattrinit.c \
