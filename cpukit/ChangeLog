@@ -1,5 +1,10 @@
 2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/env-rtemscpu.m4: Remove stray '/' in PROJECT_LIB.
+	* wrapup/Makefile.am: Remove duplicate $(PROJECT_LIB) rule.
+
+2003-12-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/env-rtemscpu.m4: Add PROJECT_LIB.
 	* wrapup/Makefile.am: Use $(PROJECT_LIB) instead of ${PROJECT_RELEASE}/lib.
 

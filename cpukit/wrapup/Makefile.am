@@ -100,13 +100,6 @@ $(ARCH)/librtemscpu$(LIB_VARIANT).a: ${LIBS}
 
 all-local: $(TMPINSTALL_FILES)
 
-${PROJECT_LIB}/$(dirstamp):
-	@$(mkdir_p) ${PROJECT_LIB}
-	@: > ${PROJECT_LIB}/$(dirstamp)
-
-${PROJECT_LIB}/librtemscpu$(LIB_VARIANT).a: $(ARCH)/librtemscpu$(LIB_VARIANT).a ${PROJECT_LIB}/$(dirstamp)
-	$(INSTALL_DATA) $< ${PROJECT_LIB}/librtemscpu$(LIB_VARIANT).a
-
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
