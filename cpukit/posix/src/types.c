@@ -7,34 +7,6 @@
 
 #include <rtems/system.h>
 
-/*
- * TEMPORARY
- */
-
-#include <assert.h>
-
-int POSIX_MP_NOT_IMPLEMENTED()
-{
-  assert( 0 );
-  return 0;
-}
-
-int POSIX_BOTTOM_REACHED()
-{
-  assert( 0 );
-  return 0;
-}
-
-int POSIX_NOT_IMPLEMENTED()
-{
-  assert( 0 );
-  return 0;
-}
-
-/*
- * END OF TEMPORARY
- */
-
 /*PAGE
  *
  *  4.1.1 Get Process and Parent Process IDs, P1003.1b-1993, p. 83
@@ -195,3 +167,32 @@ int setpgid(
 {
   return POSIX_NOT_IMPLEMENTED();
 }
+
+/*
+ * TEMPORARY
+ */
+
+#include <assert.h>
+
+int POSIX_MP_NOT_IMPLEMENTED()
+{
+  assert( 0 );
+  return 0;
+}
+
+int POSIX_BOTTOM_REACHED()
+{
+  assert( 0 );
+  return 0;
+}
+
+int POSIX_NOT_IMPLEMENTED()
+{
+  assert( 0 );
+  return 0;
+}
+
+/*
+ * END OF TEMPORARY
+ */
+

@@ -19,6 +19,10 @@ int kill(
   int   sig
 )
 {
+  /* SIGABRT comes from abort via assert */
+  if ( sig == SIGABRT ) {
+    exit( 1 );
+  }
   return POSIX_NOT_IMPLEMENTED();
 }
 
