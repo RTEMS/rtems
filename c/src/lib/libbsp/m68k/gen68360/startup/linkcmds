@@ -1,0 +1,77 @@
+/*
+ *  This file contains GNU linker directives for a generic MC68360 board.
+ *
+ * Saskatchewan Accelerator Laboratory
+ * University of Saskatchewan
+ * Saskatoon, Saskatchewan, CANADA
+ * eric@skatter.usask.ca
+ * 
+ *  $Id$
+ */
+
+/*
+ * Declare on-board memory
+ */
+MEMORY {
+	  ram : ORIGIN = 0x00000000, LENGTH = 4M
+	  rom : ORIGIN = 0xFF000000, LENGTH = 1M
+	dpram : ORIGIN = 0xFE000000, LENGTH = 8k
+}
+
+/*
+ * Declare some sizes
+ */
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
+StackSize = DEFINED(StackSize) ? StackSize : 0x1000;
+
+/*
+ * Load objects
+ */
+SECTIONS {
+        .text : {
+		__RamBase = .;
+		CREATE_OBJECT_SYMBOLS
+		*(.text)
+		. = ALIGN (16);
+		_etext = .;
+        } >ram 
+        .data : {
+		*(.data)
+		. = ALIGN (16);
+		_edata = .;
+        } >ram
+        .bss : {
+		_M68Kvec = .;
+		. += (256 * 4);
+		clear_start = .;
+		*(.bss)
+		*(COMMON)
+		. = ALIGN (16);
+		_end = .;
+
+		__HeapStart = .;
+		. += HeapSize;
+		. += StackSize;
+		. = ALIGN (16);
+		stack_init = .;
+		clear_end = .;
+
+		__WorkspaceBase = .;
+	} >ram
+
+	/*
+	 * On-chip memory/peripherals
+	 */
+	dpram : {
+		_m360 = .;
+		. += (8 * 1024);
+
+	} >dpram
+
+	/*
+	 * Boot PROM
+	 */
+	rom : {
+		__RomBase = .;
+	} >rom
+}
