@@ -59,7 +59,7 @@ rdbgInit (void)
     return -1;
   }
 
-  bzero ((void *) &addr, sizeof (struct sockaddr_in));
+  memset ((void *) &addr, 0, sizeof (struct sockaddr_in));
   addr.sin_port = htons (rtemsPort);
   if ((bind (sock, (struct sockaddr *) &addr, sizeof (addr))) == -1) {
     printf ("%s: rdbgInit: cannot bind socket\n", taskName);
