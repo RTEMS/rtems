@@ -1,5 +1,10 @@
 2005-01-27	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* libmisc/untar/untar.h: New prototype to eleminate warnings.
+	* libmisc/untar/untar.c: Cosmetics, add symlinks.
+
+2005-01-27	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libcsupport/include/tar.h: New (SUSv3).
 	* Makefile.am: Integrate newlib-specific headers.
 	Add libcsupport/include/tar.h.

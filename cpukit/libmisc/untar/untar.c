@@ -44,7 +44,7 @@
  *   297     32 bytes  Group name ('\0' terminated, 31 maxmum length)
  *   329      8 bytes  Major device ID (in octal ascii)
  *   337      8 bytes  Minor device ID (in octal ascii)
- *   345    167 bytes  Padding
+ *   345    155 bytes  Prefix
  *   512   (s+p)bytes  File contents (s+p) := (((s) + 511) & ~511),
  *                     round up to 512 bytes
  *
@@ -108,8 +108,8 @@ octal2ulong(char *octascii, int len)
  *                                                                        *
  * Inputs:                                                                *
  *                                                                        *
- *    unsigned char *tar_buf    - Pointer to TAR buffer.                  *
- *    unsigned long size        - Length of TAR buffer.                   *
+ *    char          *tar_buf    - Pointer to TAR buffer.                  *
+ *    size_t         size       - Length of TAR buffer.                   *
  *                                                                        *
  *                                                                        *
  * Output:                                                                *
@@ -123,7 +123,7 @@ octal2ulong(char *octascii, int len)
  *  12/30/1998 - Creation (JWJ)                                           *
  *************************************************************************/
 int
-Untar_FromMemory(unsigned char *tar_buf, unsigned long size)
+Untar_FromMemory(char *tar_buf, size_t size)
 {
    FILE           *fp;
    char           *bufr;
@@ -169,7 +169,7 @@ Untar_FromMemory(unsigned char *tar_buf, unsigned long size)
        * the archive.  The checksum is computed over the entire
        * header, but the checksum field is substituted with blanks.
        ******************************************************************/
-      hdr_chksum = (int)octal2ulong(&bufr[148], 8);
+      hdr_chksum = octal2ulong(&bufr[148], 8);
       sum = 0;
       for (i=0; i<512; i++)
       {
@@ -197,7 +197,7 @@ Untar_FromMemory(unsigned char *tar_buf, unsigned long size)
       {
          strncpy(linkname, &bufr[157], MAX_NAME_FIELD_SIZE);
          linkname[MAX_NAME_FIELD_SIZE] = '\0';
-         /* symlink(fname, linkname); */
+         symlink(linkname, fname);
       }
       else if (linkflag == LF_NORMAL)
       {
@@ -210,7 +210,7 @@ Untar_FromMemory(unsigned char *tar_buf, unsigned long size)
          else
          {
             unsigned long sizeToGo = file_size;
-            unsigned long len;
+            size_t len;
 
             /***************************************************************
              * Read out the data.  There are nblocks of data where nblocks
@@ -335,7 +335,6 @@ Untar_FromFile(char *tar_name)
          break;
       }
 
-
       /******************************************************************
        * We've decoded the header, now figure out what it contains and
        * do something with it.
@@ -344,6 +343,7 @@ Untar_FromFile(char *tar_name)
       {
          strncpy(linkname, &bufr[157], MAX_NAME_FIELD_SIZE);
          linkname[MAX_NAME_FIELD_SIZE] = '\0';
+         symlink(linkname,fname);
       }
       else if (linkflag == LF_NORMAL)
       {

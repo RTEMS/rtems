@@ -11,6 +11,8 @@
 #ifndef __UNTAR_H__
 #define __UNTAR_H__
 
+#include <stddef.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -21,7 +23,7 @@ extern "C" {
 #define UNTAR_INVALID_HEADER     3
 
 
-int Untar_FromMemory(unsigned char *tar_buf, unsigned long size);
+int Untar_FromMemory(char *tar_buf, size_t size);
 int Untar_FromFile(char *tar_name);
 
 #ifdef __cplusplus
