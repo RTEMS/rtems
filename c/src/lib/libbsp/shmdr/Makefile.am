@@ -7,7 +7,7 @@ PGM = $(ARCH)/shmdr.rel
 
 C_FILES = addlq.c cnvpkt.c getlq.c dump.c fatal.c getpkt.c init.c initlq.c \
     intr.c mpisr.c poll.c receive.c retpkt.c send.c setckvec.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 H_FILES = shm_driver.h mpci.h
 
