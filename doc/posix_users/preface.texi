@@ -13,9 +13,12 @@
 
 This is the user's guide for the POSIX API support for RTEMS.
 
-At this point, this is just a basic shell of what this manual
-should ultimately be.  
+We intend for this manual to only be a listing of the API.  Please
+refer to the ISO/IEC 9945-1 @i{Information Technology -
+Portable Operating System Interface (POSIX) - Part 1: System
+Application Program Interface (API) [C Language]} for the specific
+functionality and behavior of the services.
 
-Much of the POSIX API standard is actually implemented in the
-newlib ANSI C Library.  Please refer to documentation on
+In addition, much of the POSIX API standard is actually implemented
+in the newlib ANSI C Library.  Please refer to documentation on
 newlib for more information on what it supplies.
