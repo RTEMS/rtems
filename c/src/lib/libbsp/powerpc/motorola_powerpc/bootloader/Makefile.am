@@ -11,9 +11,10 @@ VPATH = @srcdir@:@srcdir@/../../shared/bootloader:@srcdir@/../../shared/console
 
 noinst_PROGRAMS = bootloader.o
 
-bootloader_o_SOURCES = misc.c pci.c zlib.c mm.c em86.c polled_io.c lib.c
+## IMPORTANT: head.S must be first, T. Straumann 12/17/2001
+bootloader_o_SOURCES = head.S exception.S em86real.S
+bootloader_o_SOURCES += misc.c pci.c zlib.c mm.c em86.c polled_io.c lib.c
 bootloader_o_SOURCES += bootldr.h zlib.h pci.h keyboard.h
-bootloader_o_SOURCES += head.S exception.S em86real.S
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 
