@@ -2,7 +2,6 @@
 ## $Id$
 ## 
 
-
 PGM = $(ARCH)/clock.rel
 
 C_FILES = ckinit.c

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 PGM = $(ARCH)/console.rel
 
 C_FILES = mcfuart.c

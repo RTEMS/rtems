@@ -1,3 +1,11 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Reformat.
+	* clock/Makefile.am: Reformat.
+	* console/Makefile.am: Reformat.
+	* include/Makefile.am: Reformat. Use dirstamps for preinstallation.
+	* timer/Makefile.am: Reformat.
+
 2003-10-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_CANONICAL_HOST.
