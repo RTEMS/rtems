@@ -1,3 +1,12 @@
+2001-04-03	Joel Sherrill <joel@OARcorp.com>
+
+	* Closed PR57.  The hack is OK as it allows a BSP to override
+	or not at its discretion.
+	* mpc8xx/timer/timer.c: Removed #warning declaring providing a 
+	default definition for the macros
+	rtems_cpu_configuration_get_timer_least_valid and
+	rtems_cpu_configuration_get_timer_average_overhead.
+
 2002-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* shared/include/byteorder.h: Use unsigned instead of __unsigned 
