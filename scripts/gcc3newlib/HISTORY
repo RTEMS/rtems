@@ -1,0 +1,8 @@
+#
+#  History of the gccnewlib RPMs
+#
+#  $Id$
+#
+
+Created since gcc 2.95.x needed to be supported while still making
+gcc 3.x RPMs available.

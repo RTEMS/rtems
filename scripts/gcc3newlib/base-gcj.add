@@ -1,0 +1,20 @@
+# ==============================================================
+# rtems-base-gcj
+# ==============================================================
+%package -n rtems-base-gcj
+Provides:	rtems-base-gcj
+Summary:      base package for rtems gcc/java compiler (gcj).
+Group: rtems
+Requires: rtems-base-gcc
+
+%description -n rtems-base-gcj
+RTEMS is an open source operating system for embedded systems.
+
+This is the files for gcc/java (gcj) that are shared by all targets.
+
+%files -n rtems-base-gcj
+%dir %{_prefix}/bin
+%{_prefix}/bin/jcf-dump@exe_ext@
+%{_prefix}/bin/jv-scan@exe_ext@
+%{_prefix}/bin/gcjh@exe_ext@
+

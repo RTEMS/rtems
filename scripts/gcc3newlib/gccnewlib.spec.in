@@ -1,0 +1,363 @@
+#
+# spec file for building gcc for rtems
+# 
+# Copyright  (c) 1999,2000,2001 OARCorp, Huntsville, AL
+#
+# please send bugfixes or comments to joel@OARcorp.com
+#
+
+%define	_prefix	@prefix@
+
+Vendor:       OAR Corporation
+Distribution: Linux
+Name:         @target_alias@-gcc-newlib
+Summary:      gcc and newlib C Library for @target_alias@.
+Group:	      rtems
+Release:      @Release@
+License:      gcc is GPL/LGPL ; newlib no has restrictions on run-time usage
+
+Autoreqprov:  	on
+Packager:     	corsepiu@faw.uni-ulm.de and joel@OARcorp.com
+
+Version:      	gcc@gcc_version@newlib@newlib_version@
+# gcc 3.x and gcc 2.9
+# Source0:      ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.bz2
+# gcc 2.95.x
+Source0:	ftp://ftp.gnu.org/pub/gnu/gcc/gcc-@gcc_version@.tar.gz
+Source1:	ftp://sources.redhat.com/pub/newlib/newlib-@newlib_version@.tar.gz
+Patch0:		gcc-@gcc_version@-rtems-@gcc_patch_version@.diff
+Patch1:		newlib-@newlib_version@-rtems-@newlib_patch_version@.diff
+Buildroot:	%{_tmppath}/%{name}
+
+#
+# The original sources are not included in the source RPM.
+# If we included them, then the source RPMs for each target
+# would duplicate MBs of source unnecessarily.  This is 
+# a duplication of over 30 MBs of source for each of
+# the more than 10 targets it is possible to build.
+#
+# You can get them yourself from the Internet and copy them to
+# your /usr/src/redhat/SOURCES directory ($RPM_SOURCE_DIR).
+# Or you can try the ftp options of rpm :-)
+#
+NoSource:	0
+NoSource:	1
+
+%description
+RTEMS is an open source operating system for embedded systems.
+
+This is gcc's and newlib C Library's sources with patches for RTEMS.
+
+ The original sources are not included in the source RPM.
+ If we included them, then the source RPMs for each target
+ would duplicate MBs of source unnecessarily.  This is 
+ a duplication of over 30 MBs of source for each of
+ the more than 10 targets it is possible to build.
+
+ You can get them yourself from the Internet and copy them to
+ your /usr/src/[redhat|packages]/SOURCES directory ($RPM_SOURCE_DIR).
+ Or you can try the ftp options of rpm :-)
+
+%prep
+# untar the sources inside @target_alias@-gcc-newlib
+%setup -c -n %{name} -a 0 -a 1
+
+%patch0 -p0
+%patch1 -p0
+
+  # Copy the C library into gcc's source tree
+  ln -s ../newlib-@newlib_version@/newlib gcc-@gcc_version@
+  test -d build || mkdir build
+
+%build
+  cd build
+
+# HACK: This should be %{target} != %{build}, but SuSE's rpm screws it.
+# %if "%{target_os}" != "%{build_os}"
+#   CONFIGURE_ARGS="--build=%{_build} --host=%{_target}"
+# %endif
+
+  ../gcc-@gcc_version@/configure $CONFIGURE_ARGS --target=@target_alias@ \
+    --with-gnu-as --with-gnu-ld --with-newlib --verbose \
+    --enable-threads=rtems --prefix=%{_prefix} 
+
+  make all
+  make info
+
+%install
+  cd build
+  # Bug in gcc-2.95.1: It doesn't build this installation directory
+  # If it doesn't find it, gcc doesn't install @target_alias@/bin/gcc
+  ../gcc-@gcc_version@/mkinstalldirs \
+    $RPM_BUILD_ROOT%{_prefix}/@target_alias@/bin
+
+  make prefix=$RPM_BUILD_ROOT%{_prefix} install
+  cd @target_alias@/newlib
+  make prefix=$RPM_BUILD_ROOT%{_prefix} install-info
+
+  # cd back to build/
+  cd ../..
+
+  # Bug in gcc-2.95.x: It bogusly tries to share cpp for all targets.
+  # Rename it to target_alias-cpp
+  if test -f $RPM_BUILD_ROOT%{_prefix}/bin/cpp@exe_ext@;
+  then
+    mv $RPM_BUILD_ROOT%{_prefix}/bin/cpp@exe_ext@ \
+      $RPM_BUILD_ROOT%{_prefix}/bin/@target_alias@-cpp@exe_ext@
+  fi
+
+  # gzip info files
+  gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-? 2>/dev/null
+  gzip -f $RPM_BUILD_ROOT%{_prefix}/info/*.info-?? 2>/dev/null
+
+  rm -f dirs ;
+  echo "%dir %{_prefix}/lib" >> dirs ;
+  echo "%dir %{_prefix}/lib/gcc-lib" >> dirs ;
+  echo "%dir %{_prefix}/lib/gcc-lib/@target_alias@" >> dirs ;
+
+  # Collect multilib subdirectories
+  TGTDIR="%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@"
+  f=`gcc/xgcc --print-multi-lib | sed -e 's,;.*$,,'`
+  for i in $f; do
+    case $i in
+    \.) echo "%dir ${TGTDIR}" >> dirs
+      ;;
+    *)  echo "%dir ${TGTDIR}/$i" >> dirs
+      ;;
+    esac
+  done
+
+  # Collect files to go into different packages
+  cp dirs files.gcc
+  cp dirs files.g77
+  cp dirs files.objc
+  cp dirs files.gcj
+
+  f=`find ${RPM_BUILD_ROOT}${TGTDIR} ! -type d -print | sed -e "s,^$RPM_BUILD_ROOT,,g"`;
+  for i in $f; do
+    case $i in
+    *f771) ;;
+    *cc1obj) ;;
+    *libobjc*) echo "$i" >> files.objc ;;
+    *include/objc*) ;;
+    *jc1) ;;
+    *jvgenmain) ;;
+    *) echo "$i" >> files.gcc ;;
+    esac
+  done
+
+%clean
+# let rpm --clean remove BuildRoot iif using the default BuildRoot
+  test "$RPM_BUILD_ROOT" = "%{_tmppath}/%{name}" && \
+    rm -rf $RPM_BUILD_ROOT
+
+# ==============================================================
+# rtems-base-gcc
+# ==============================================================
+%package -n rtems-base-gcc
+Provides:	rtems-base-gcc
+Summary:      	base package for rtems gcc and newlib C Library 
+Group: rtems
+
+%description -n rtems-base-gcc
+
+RTEMS is an open source operating system for embedded systems.
+
+This is the files for gcc and newlib that are shared by all targets.
+
+%files -n rtems-base-gcc
+%dir %{_prefix}/info
+%doc %{_prefix}/info/cpp.info*.gz
+%doc %{_prefix}/info/cppinternals.info*.gz
+%doc %{_prefix}/info/gcc.info*.gz
+%doc %{_prefix}/info/libc.info*.gz
+%doc %{_prefix}/info/libm.info*.gz
+%doc %{_prefix}/info/libm.info*.gz
+
+%dir %{_prefix}/bin
+%{_prefix}/bin/gcov@exe_ext@
+%{_prefix}/bin/gccbug@exe_ext@
+
+%dir %{_prefix}/man
+%dir %{_prefix}/man/man1
+%doc %{_prefix}/man/man1/cpp.1
+%doc %{_prefix}/man/man1/gcov.1
+# %doc %{_prefix}/man/man1/cccp.1
+%dir %{_prefix}/man/man7
+%doc %{_prefix}/man/man7/fsf-funding.7
+%doc %{_prefix}/man/man7/gfdl.7
+%doc %{_prefix}/man/man7/gpl.7
+
+%dir %{_prefix}/include
+%{_prefix}/include/g++-v3
+
+%post -n rtems-base-gcc
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
+  then
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    done
+  fi
+
+%postun -n rtems-base-gcc
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
+  then
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    done
+  fi
+
+# ==============================================================
+# @target_alias@-gcc
+# ==============================================================
+%package -n @target_alias@-gcc
+Provides:	@target_alias@-gcc
+Summary:      	rtems gcc and newlib C Library for @target_alias@
+Group: rtems
+Requires: @target_alias@-binutils rtems-base-gcc
+
+%description -n @target_alias@-gcc
+RTEMS is an open source operating system for embedded systems.
+
+This is gcc and newlib C Library for @target_alias@.
+
+%files -n @target_alias@-gcc -f build/files.gcc
+%doc %{_prefix}/man/man1/@target_alias@-gcc.1
+%doc %{_prefix}/man/man1/@target_alias@-g++.1
+
+%{_prefix}/bin/@target_alias@-cpp@exe_ext@
+%{_prefix}/bin/@target_alias@-c++@exe_ext@
+%{_prefix}/bin/@target_alias@-g++@exe_ext@
+%{_prefix}/bin/@target_alias@-gcc@exe_ext@
+%{_prefix}/bin/@target_alias@-c++filt@exe_ext@
+# %{_prefix}/bin/@target_alias@-protoize@exe_ext@
+# %{_prefix}/bin/@target_alias@-unprotoize@exe_ext@
+
+%dir %{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/include
+
+%{_prefix}/@target_alias@
+
+# ==============================================================
+# rtems-base-g77
+# ==============================================================
+%package -n rtems-base-g77
+Provides:	rtems-base-g77
+Summary:      rtems base package for gcc/g77 compiler
+Group: rtems
+Requires: rtems-base-gcc
+
+%description -n rtems-base-g77
+RTEMS is an open source operating system for embedded systems.
+
+This is the files for gcc/g77 that are shared by all targets.
+
+%files -n rtems-base-g77
+%dir %{_prefix}/info
+%doc %{_prefix}/info/g77.info*.gz
+
+%dir %{_prefix}/man
+%dir %{_prefix}/man/man1
+%doc %{_prefix}/man/man1/@target_alias@-g77.1
+
+%post -n rtems-base-g77
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
+  then
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    done
+  fi
+
+%postun -n rtems-base-g77
+  if test -d $RPM_INSTALL_PREFIX%{_prefix}/info; 
+  then
+    rm -f $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    f=`find $RPM_INSTALL_PREFIX%{_prefix}/info -name '*.info.gz'`
+    test -n "$f" && for i in $f; do
+      install-info $i $RPM_INSTALL_PREFIX%{_prefix}/info/dir
+    done
+  fi
+
+# ==============================================================
+# @target_alias@-g77
+# ==============================================================
+%package -n @target_alias@-g77
+Provides:	@target_alias@-g77
+Summary:	gcc/g77 compiler for @target_alias@
+Group: rtems
+Requires: rtems-base-g77 @target_alias@-gcc
+
+%description -n @target_alias@-g77
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/g77 compiler for @target_alias@
+
+%files -n @target_alias@-g77 -f build/files.g77
+%dir %{_prefix}/bin
+%{_prefix}/bin/@target_alias@-g77@exe_ext@
+
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/f771@exe_ext@
+# ==============================================================
+# rtems-base-gcj
+# ==============================================================
+%package -n rtems-base-gcj
+Provides:	rtems-base-gcj
+Summary:      base package for rtems gcc/java compiler (gcj).
+Group: rtems
+Requires: rtems-base-gcc
+
+%description -n rtems-base-gcj
+RTEMS is an open source operating system for embedded systems.
+
+This is the files for gcc/java (gcj) that are shared by all targets.
+
+%files -n rtems-base-gcj
+%dir %{_prefix}/bin
+%{_prefix}/bin/jcf-dump@exe_ext@
+%{_prefix}/bin/jv-scan@exe_ext@
+%{_prefix}/bin/gcjh@exe_ext@
+
+# ==============================================================
+# @target_alias@-gcj
+# ==============================================================
+%package -n @target_alias@-gcj
+Provides:	@target_alias@-gcj
+Summary:      gcc/java compiler (gcj) for @target_alias@
+Group: rtems
+Requires: rtems-base-gcj @target_alias@-gcc
+
+%description -n @target_alias@-gcj
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/java compiler for @target_alias@
+
+%files -n @target_alias@-gcj -f build/files.gcj
+%dir %{_prefix}/bin
+%{_prefix}/bin/@target_alias@-gcj@exe_ext@
+
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/jc1@exe_ext@
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/jvgenmain@exe_ext@
+
+# ==============================================================
+# @target_alias@-objc
+# ==============================================================
+%package -n @target_alias@-objc
+Provides:	@target_alias@-objc
+Summary:      gcc/objc compiler for @target_alias@
+Group: rtems
+Requires: @target_alias@-gcc
+
+%description -n @target_alias@-objc
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/objc compiler for @target_alias@
+
+%files -n @target_alias@-objc -f build/files.objc
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/cc1obj@exe_ext@
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/include/objc

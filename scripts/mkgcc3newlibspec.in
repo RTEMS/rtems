@@ -1,0 +1,73 @@
+#!/bin/sh 
+#
+#  Usage: mktoolspec CPU
+#
+
+RTEMS_DIR=`dirname $0`/@top_srcdir@
+
+CFG=setup.cache
+dst=@RPM_SPECSdir@
+exe_ext=@EXEEXT@
+
+usage()
+{
+  echo "$0 [options] <target_alias>"
+  echo "  options:"
+  echo "    -cfg <setup.cache>"
+  echo "    -o <rpm-spec-dir>"
+  exit 1 ;
+}
+
+specsrc=${RTEMS_DIR}/gcc3newlib/gccnewlib.spec.in
+
+while test $# -ge 2; do
+case $1 in
+-cfg) 
+  shift
+  CFG=$1
+  shift
+  ;;
+-o)
+  shift
+  dst=$1
+  shift
+  ;;
+-a)        # alternate specs file
+  shift
+  specsrc=$1
+  shift
+  ;;
+-*)
+  echo "invalid option $1";
+  usage
+  ;;
+esac
+done
+
+if test ! $# -eq 1;
+then
+  echo "Invalid number of arguments"
+  usage
+fi
+
+# target to build for
+target_alias=$1
+
+. ./$CFG
+
+specfile=${dst}/${target_alias}-gcc-${gcc3_version}-newlib-${gcc3newlib_version}.spec
+
+# note that the variables in the gcc3newlib directory are actually the same
+sed -e "s%@Release\@%${gcc3newlib_rpm_release}%g" \
+    -e "s%@target_alias\@%${target_alias}%g" \
+    -e "s%@prefix\@%@prefix@%g" \
+    -e "s%@rpm_build_root\@%${rpm_build_root}%g" \
+    -e "s%@gcc_version\@%${gcc3_version}%g" \
+    -e "s%@gcc_patch_version\@%${gcc3_patch_version}%g" \
+    -e "s%@newlib_version\@%${gcc3newlib_version}%g" \
+    -e "s%@newlib_patch_version\@%${gcc3newlib_patch_version}%g" \
+    -e "s%@exe_ext\@%${exe_ext}%g" \
+< ${specsrc} \
+> ${specfile}
+
+echo Generated ${specfile}.

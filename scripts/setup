@@ -37,6 +37,11 @@ do
   echo "b rtems version           : $rtems_version"
   echo "c rtems rpm release       : $rtems_rpm_release"
   echo "d rpm build root          : $rpm_build_root"
+  echo "e gcc3 version             : $gcc3_version"
+  echo "f gcc3 patch version       : $gcc3_patch_version"
+  echo "g gcc3 newlib version      : $gcc3newlib_version"
+  echo "h gcc3 newlib patch version: $gcc3newlib_patch_version"
+  echo "i gcc3/newlib rpm release  : $gcc3newlib_rpm_release"
   echo
 
   echo -n "[0-9a-d] or any other key to quit >"
@@ -70,6 +75,16 @@ do
      read rtems_rpm_release ;;
   d) echo -n "RPM build root >"
      read rpm_build_root ;;
+  e) echo -n "GCC3 source >"
+     read gcc3_version ;;
+  f) echo -n "GCC3 patch version>"
+     read gcc3_patch_version ;;
+  g) echo -n "NEWLIB source >"
+     read newlib_version ;;
+  h) echo -n "NEWLIB patch version>"
+     read newlib_patch_version ;;
+  i) echo -n "GCC3/NEWLIB RPM release >"
+     read gcc3newlib_rpm_release ;;
   *) 
      return 0 ;;
   esac
@@ -96,6 +111,11 @@ echo "gdb_rpm_release=$gdb_rpm_release" >> $CFG
 echo "rtems_version=$rtems_version" >> $CFG
 echo "rtems_rpm_release=$rtems_rpm_release" >> $CFG
 echo "rpm_build_root=$rpm_build_root" >> $CFG
+echo "gcc3newlib_version=$gcc3newlib_version" >> $CFG
+echo "gcc3newlib_patch_version=$gcc3newlib_patch_version" >> $CFG
+echo "gcc3_version=$gcc3_version" >> $CFG
+echo "gcc3_patch_version=$gcc3_patch_version" >> $CFG
+echo "gcc3newlib_rpm_release=$gcc3newlib_rpm_release" >> $CFG
 
 echo " done"
 test -f Makefile || ./configure

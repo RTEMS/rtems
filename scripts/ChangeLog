@@ -1,5 +1,16 @@
 2001-03-28	Joel Sherrill <joel@OARcorp.com>
 
+	* Per PR64 added support for gcc 3.x RPMs
+	* Makefile.am, configure.ac, mkspec, setup, setup.def: Modified.
+	* mkgcc3newlibspec.in: New file.
+	* gcc3newlib: New subdirectory.
+	* base-g77.add, base-gcc.add, base-gcj.add, gccnewlib.add,
+	gccnewlib_c_only.spec.in, gccnewlib.spec.in, HISTORY, Makefile.am,
+	README, target-g77.add, target-gcc.add, target-gcj.add,
+	target-objc.add: New files.
+
+2001-03-28	Joel Sherrill <joel@OARcorp.com>
+
 	* binutils/binutils.add: Commented out patch since binutils 2.12
 	does not require one.
 

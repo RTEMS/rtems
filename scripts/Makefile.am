@@ -3,10 +3,10 @@
 ##
 
 
-SUBDIRS = . binutils gccnewlib gdb rtems autotools
+SUBDIRS = . binutils gccnewlib gcc3newlib gdb rtems autotools
 
 noinst_SCRIPTS = setup buildall buildalltar mkbinutilspec mkbspspec \
-    mkgccnewlibspec mkgdbspec mkrpms mkspec
+    mkgccnewlibspec mkgcc3newlibspec mkgdbspec mkrpms mkspec
 
 TEMPLATES =
 

@@ -1,0 +1,17 @@
+# ==============================================================
+# @target_alias@-objc
+# ==============================================================
+%package -n @target_alias@-objc
+Provides:	@target_alias@-objc
+Summary:      gcc/objc compiler for @target_alias@
+Group: rtems
+Requires: @target_alias@-gcc
+
+%description -n @target_alias@-objc
+RTEMS is an open source operating system for embedded systems.
+
+This is the gcc/objc compiler for @target_alias@
+
+%files -n @target_alias@-objc -f build/files.objc
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/cc1obj@exe_ext@
+%{_prefix}/lib/gcc-lib/@target_alias@/@gcc_version@/include/objc

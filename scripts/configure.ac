@@ -65,6 +65,8 @@ AC_MSG_RESULT($RPM_CPU)
 
 GCCNEWLIBVERS="gcc-${gcc_version}-newlib-${newlib_version}"
 AC_SUBST(GCCNEWLIBVERS)
+GCC3NEWLIBVERS="gcc-${gcc3_version}-newlib-${gcc3newlib_version}"
+AC_SUBST(GCC3NEWLIBVERS)
 BINUTILSVERS="binutils-${binutils_version}"
 AC_SUBST(BINUTILSVERS)
 GDBVERS="gdb-${gdb_version}"
@@ -79,10 +81,12 @@ buildall
 buildalltar
 mkbinutilspec
 mkgccnewlibspec
+mkgcc3newlibspec
 mkgdbspec
 mkbspspec
 binutils/Makefile
 gccnewlib/Makefile
+gcc3newlib/Makefile
 gdb/Makefile
 rtems/Makefile
 autotools/Makefile
