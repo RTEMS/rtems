@@ -1,3 +1,8 @@
+2003-08-14	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Add fileio to list of interactive tests.
+	* src/sync.c: New file.
+
 2003-08-05	Till Strauman <strauman@slac.stanford.edu>
 
 	PR 442/filesystem

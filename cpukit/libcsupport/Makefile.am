@@ -117,7 +117,7 @@ SYSTEM_CALL_C_FILES = src/open.c src/close.c src/read.c src/write.c \
     src/unlink.c src/umask.c src/ftruncate.c src/utime.c src/fstat.c \
     src/fcntl.c src/fpathconf.c src/getdents.c src/fsync.c src/fdatasync.c \
     src/pipe.c src/dup.c src/dup2.c src/symlink.c src/readlink.c src/creat.c \
-    src/chroot.c
+    src/chroot.c src/sync.c
 
 DIRECTORY_SCAN_C_FILES = src/opendir.c src/closedir.c src/readdir.c \
     src/readdir_r.c src/rewinddir.c src/scandir.c src/seekdir.c \
