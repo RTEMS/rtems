@@ -1,3 +1,9 @@
+2003-01-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* setup.def: Update to binutils-20021117-1.
+	* i386-cygwin-binutils.spec.in: Reflect update to binutils-20021127-1.
+	Adaptations to RH-8.0/rpm-4.1.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

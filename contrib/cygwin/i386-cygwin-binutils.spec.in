@@ -53,6 +53,8 @@ Cross binutils for target cygwin
 # c++filt now comes from gcc
   rm -f $RPM_BUILD_ROOT%{prefix}/bin/i386-cygwin-c++filt
 
+  rm -f $RPM_BUILD_ROOT%{prefix}/lib/libiberty.a
+
 %clean
 # let rpm --clean remove BuildRoot iff using the default BuildRoot
   test "$RPM_BUILD_ROOT" = "@RPM_BUILD_ROOT@" && \
@@ -64,13 +66,13 @@ Cross binutils for target cygwin
 %dir %{prefix}/man/man1
 %doc %{prefix}/man/man1/i386-cygwin-*.1*
 
-%dir %{prefix}/include
-%{prefix}/include/*.h
+# %dir %{prefix}/include
+# %{prefix}/include/*.h
 
-%dir %{prefix}/lib
-%{prefix}/lib/libbfd*
-%{prefix}/lib/libiberty*
-%{prefix}/lib/libopcodes*
+# %dir %{prefix}/lib
+# %{prefix}/lib/libbfd*
+# %{prefix}/lib/libiberty*
+# %{prefix}/lib/libopcodes*
 
 %dir %{prefix}/share
 %dir %{prefix}/share/locale

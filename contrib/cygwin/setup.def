@@ -3,7 +3,7 @@
 #
 # $Id$
 #
-binutils_version=20011002-1
+binutils_version=20021117-1
 binutils_rpm_release=1
 mingw_version=1.2-1
 mingw_rpm_release=1
