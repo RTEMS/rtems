@@ -22,7 +22,7 @@
  */
 #include <rtems/system.h>
 #include <rtems/score/ppc.h>
-#include <rtems/system.h>
+#include <rtems/bspIo.h>
 #include <libcpu/raw_exception.h>
 #include <libcpu/cpuIdent.h>
 
@@ -121,7 +121,7 @@ int mpc60x_vector_is_valid(rtems_vector vector)
             break;
         case PPC_604:
         case PPC_604e:
-        case PPC_604r:
+        /* case PPC_604r: -- same value as PPC_750 */
             if (!mpc604_vector_is_valid(vector)) {
                 return 0;
             }

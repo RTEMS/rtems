@@ -21,7 +21,7 @@
 #ifndef DEBUG_MAIN
 #include <rtems.h>
 #include <rtems/bspIo.h>
-#include <libcpu/cpu.h>
+#include <libcpu/cpuIdent.h>
 #include <bsp.h>
 #ifdef	DEBUG_EXC
 #include <bsp/vectors.h>
