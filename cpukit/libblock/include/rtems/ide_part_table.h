@@ -79,8 +79,8 @@
  */
 typedef struct sector_data_s 
 {
-    unsigned32 sector_num; /* sector number on the device */
-    unsigned8  data[0]; /* raw sector data */
+    uint32_t   sector_num; /* sector number on the device */
+    uint8_t    data[0]; /* raw sector data */
 } sector_data_t;
 
 
@@ -115,12 +115,12 @@ struct disk_desc_s;
  *      contains all neccessary information about partition
  */
 typedef struct part_desc_s {
-    unsigned8           bootable; /* is the partition active */
-    unsigned8           sys_type; /* type of partition */
-    unsigned8           log_id; /* logical number of partition */
-    unsigned32          start; /* first partition sector, in absolute numeration */
-    unsigned32          size; /* size in sectors */
-    unsigned32          end; /* last partition sector, end = start + size - 1 */
+    uint8_t             bootable; /* is the partition active */
+    uint8_t             sys_type; /* type of partition */
+    uint8_t             log_id; /* logical number of partition */
+    uint32_t            start; /* first partition sector, in absolute numeration */
+    uint32_t            size; /* size in sectors */
+    uint32_t            end; /* last partition sector, end = start + size - 1 */
     struct disk_desc_s *disk_desc; /* descriptor of disk, partition contains in */
     struct part_desc_s *ext_part; /* extended partition containing this one */
 
@@ -134,11 +134,11 @@ typedef struct disk_desc_s {
     dev_t        dev; /* device number */
 
     /* device name in /dev filesystem */
-    unsigned8    dev_name[RTEMS_IDE_PARTITION_DEV_NAME_LENGTH_MAX];
+    uint8_t      dev_name[RTEMS_IDE_PARTITION_DEV_NAME_LENGTH_MAX];
 
-    unsigned32   sector_size; /* size of sector */
-    unsigned32   sector_bits; /* the base-2 logarithm of sector_size */
-    unsigned32   lba_size; /* total amount of sectors in lba address mode */
+    uint32_t     sector_size; /* size of sector */
+    uint32_t     sector_bits; /* the base-2 logarithm of sector_size */
+    uint32_t     lba_size; /* total amount of sectors in lba address mode */
     int          last_log_id; /* used for logical disks enumerating */
 
     /* primary partition descriptors */

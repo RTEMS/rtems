@@ -46,7 +46,7 @@
  *      and does not support devices with sector size other than 512 bytes
  */
 static rtems_status_code
-get_sector(dev_t dev, unsigned32 sector_num, sector_data_t **sector) 
+get_sector(dev_t dev, uint32_t sector_num, sector_data_t **sector) 
 {
     sector_data_t      *s;
     bdbuf_buffer       *buf;
@@ -94,7 +94,7 @@ get_sector(dev_t dev, unsigned32 sector_num, sector_data_t **sector)
 static rtems_boolean
 msdos_signature_check (sector_data_t *sector) 
 {
-    unsigned8 *p = sector->data + RTEMS_IDE_PARTITION_MSDOS_SIGNATURE_OFFSET;
+    uint8_t *p = sector->data + RTEMS_IDE_PARTITION_MSDOS_SIGNATURE_OFFSET;
 
     return ((p[0] == RTEMS_IDE_PARTITION_MSDOS_SIGNATURE_DATA1) &&
             (p[1] == RTEMS_IDE_PARTITION_MSDOS_SIGNATURE_DATA2));
@@ -112,7 +112,7 @@ msdos_signature_check (sector_data_t *sector)
  *      TRUE if partition type is extended, FALSE otherwise
  */
 static rtems_boolean
-is_extended(unsigned8 type) 
+is_extended(uint8_t type) 
 {
     return ((type == EXTENDED_PARTITION) || (type == LINUX_EXTENDED));
 }
@@ -128,9 +128,9 @@ is_extended(unsigned8 type)
  *      TRUE if partition type is extended, FALSE otherwise
  */
 static rtems_boolean
-is_fat_partition(unsigned8 type) 
+is_fat_partition(uint8_t type) 
 {
-  static const unsigned8 fat_part_types[] = {
+  static const uint8_t fat_part_types[] = {
     DOS_FAT12_PARTITION,DOS_FAT16_PARTITION,
     DOS_P32MB_PARTITION,
     FAT32_PARTITION    ,FAT32_LBA_PARTITION,
@@ -156,10 +156,10 @@ is_fat_partition(unsigned8 type)
  *      RTEMS_INTERNAL_ERROR, if other error occurs.
  */
 static rtems_status_code
-data_to_part_desc(unsigned8 *data, part_desc_t **new_part_desc)
+data_to_part_desc(uint8_t *data, part_desc_t **new_part_desc)
 {
     part_desc_t *part_desc;
-    unsigned32   temp;
+    uint32_t     temp;
 
     if (new_part_desc == NULL)
     {
@@ -179,10 +179,10 @@ data_to_part_desc(unsigned8 *data, part_desc_t **new_part_desc)
     /* read the offset start position and partition size in sectors */
 
     /* due to incorrect data alignment one have to align data first */
-    memcpy(&temp, data + RTEMS_IDE_PARTITION_START_OFFSET, sizeof(unsigned32));
+    memcpy(&temp, data + RTEMS_IDE_PARTITION_START_OFFSET, sizeof(uint32_t));
     part_desc->start = LE_TO_CPU_U32(temp);
 
-    memcpy(&temp, data + RTEMS_IDE_PARTITION_SIZE_OFFSET, sizeof(unsigned32));
+    memcpy(&temp, data + RTEMS_IDE_PARTITION_SIZE_OFFSET, sizeof(uint32_t));
     part_desc->size = LE_TO_CPU_U32(temp);
 
     /*
@@ -219,13 +219,13 @@ data_to_part_desc(unsigned8 *data, part_desc_t **new_part_desc)
  *      RTEMS_INTERNAL_ERROR if other error occurs.
  */
 static rtems_status_code
-read_extended_partition(unsigned32 start, part_desc_t *ext_part) 
+read_extended_partition(uint32_t start, part_desc_t *ext_part) 
 {
     int                 i;
     dev_t               dev;
     sector_data_t      *sector;
-    unsigned32          here;
-    unsigned8          *data;
+    uint32_t            here;
+    uint8_t            *data;
     part_desc_t        *new_part_desc;
     rtems_status_code   rc;
 
@@ -319,7 +319,7 @@ read_mbr(disk_desc_t *disk_desc)
     int                 part_num;
     sector_data_t      *sector;
     part_desc_t        *part_desc;
-    unsigned8          *data;
+    uint8_t            *data;
     rtems_status_code   rc;
     dev_t               dev = disk_desc->dev;
 

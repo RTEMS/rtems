@@ -1,5 +1,11 @@
 2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* include/rtems/blkdev.h, include/rtems/ide_part_table.h,
+	src/bdbuf.c, src/ide_part_table.c, src/ramdisk.c: 
+	Switch to using c99 fixed size types instead of RTEMS-types.
+
+2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Build libblock$(LIB_VARIANT).a instead of
 	$(ARCH)/libblock.a.
 

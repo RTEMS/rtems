@@ -51,9 +51,9 @@ static int
 ramdisk_read(struct ramdisk *rd, blkdev_request *req)
 {
     char *from;
-    rtems_unsigned32 i;
+    uint32_t   i;
     blkdev_sg_buffer *sg;
-    rtems_unsigned32 remains;
+    uint32_t   remains;
     
     from = (char *)rd->area + (req->start * rd->block_size);
     remains = rd->block_size * req->count;
@@ -86,9 +86,9 @@ static int
 ramdisk_write(struct ramdisk *rd, blkdev_request *req)
 {
     char *to;
-    rtems_unsigned32 i;
+    uint32_t   i;
     blkdev_sg_buffer *sg;
-    rtems_unsigned32 remains;
+    uint32_t   remains;
     
     to = (char *)rd->area + (req->start * rd->block_size);
     remains = rd->block_size * req->count;

@@ -27,7 +27,7 @@ extern "C" {
 
 
 /* Block device block number datatype */
-typedef rtems_unsigned32 blkdev_bnum;
+typedef uint32_t   blkdev_bnum;
 
 /* Block device request type */
 typedef enum blkdev_request_op {
@@ -51,7 +51,7 @@ typedef void (* blkdev_request_cb)(void *arg,
  * Block device scatter/gather buffer structure
  */
 typedef struct blkdev_sg_buffer {
-    rtems_unsigned32 length;  /* Buffer length */
+    uint32_t   length;  /* Buffer length */
     void            *buffer;  /* Buffer pointer */
 } blkdev_sg_buffer;
 
@@ -67,8 +67,8 @@ typedef struct blkdev_request {
                                 * contains error code
                                 */
     blkdev_bnum       start;    /* Start block number */
-    rtems_unsigned32  count;    /* Number of blocks to be exchanged */
-    rtems_unsigned32  bufnum;   /* Number of buffers provided */    
+    uint32_t    count;    /* Number of blocks to be exchanged */
+    uint32_t    bufnum;   /* Number of buffers provided */    
     
     blkdev_sg_buffer  bufs[0];/* List of scatter/gather buffers */
 } blkdev_request;
