@@ -10,6 +10,10 @@ VPATH=@srcdir@
 include $(RTEMS_CUSTOM)
 include $(PROJECT_ROOT)/make/directory.cfg
 
+# We only build the KA9Q library if HAS_KA9Q was defined
+LIBKA9Q_yes_V = libka9q
+LIBKA9Q = $(LIBKA9Q_$(HAS_KA9Q)_V)
+
 # We only build the rtems++ library if HAS_CPLUSPLUS was defined
 LIBRTEMSCPLUSPLUS_yes_V = librtems++
 LIBRTEMSCPLUSPLUS = $(LIBRTEMSCPLUSPLUS_$(HAS_CPLUSPLUS)_V)
