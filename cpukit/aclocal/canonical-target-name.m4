@@ -10,9 +10,9 @@ dnl and we have to fix it for rtems ourselves
 
 AC_DEFUN([RTEMS_CANONICAL_TARGET_CPU],
 [
-AC_CANONICAL_TARGET
+AC_CANONICAL_HOST
 AC_MSG_CHECKING(rtems target cpu)
-case "${target}" in
+case "${host}" in
   # hpux unix port should go here
   i[[34567]]86-*linux*)		# unix "simulator" port
 	RTEMS_CPU=unix
@@ -33,7 +33,7 @@ case "${target}" in
 	RTEMS_CPU=c4x
 	;;
   *) 
-	RTEMS_CPU=`echo $target | sed 's%^\([[^-]]*\)-\(.*\)$%\1%'`
+	RTEMS_CPU=`echo $host | sed 's%^\([[^-]]*\)-\(.*\)$%\1%'`
 	;;
 esac
 AC_SUBST(RTEMS_CPU)

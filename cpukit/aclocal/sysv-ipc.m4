@@ -32,7 +32,6 @@ fi
 
 AC_DEFUN(RTEMS_SYSV_SEM,
 [AC_REQUIRE([AC_PROG_CC]) 
-# AC_REQUIRE([RTEMS_CANONICAL_HOST])
 AC_CACHE_CHECK(whether $host supports System V semaphores,
 rtems_cv_sysv_sem,
 [

@@ -1,5 +1,15 @@
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* aclocal/check-posix.m4: Add m4-quotes.
+	Require RTEMS_CANONICAL_TARGET_CPU instead of RTEMS_CHECK_CPU.
+	* aclocal/canonical-host.m4: Remove.
+	* configure.ac: Remove RTEMS_CANONICAL_HOST.
+	* aclocal/sysv-ipc.m4: Remove reference to RTEMS_CANONICAL_HOST.
+	* aclocal/canonical-target-name.m4: Use AC_CANONICAL_HOST instead of
+	AC_CANONICAL_TARGET. Use $host instead of $target.
+
+2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* aclocal/check-multiprocessing.m4: Add m4-quotes.
 	Remove RTEMS_CHECK_CPU.
 	* aclocal/check-itron.m4: Add m4-quotes.
