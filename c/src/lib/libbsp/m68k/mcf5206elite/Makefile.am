@@ -14,5 +14,5 @@ include $(top_srcdir)/../../bsp.am
 
 EXTRA_DIST = bsp_specs times README
 
-include $(top_srcdir)/../../../../../../automake/subdirs.am
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/subdirs.am
+include $(top_srcdir)/../../../../automake/local.am
