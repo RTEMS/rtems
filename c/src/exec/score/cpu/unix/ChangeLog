@@ -1,3 +1,14 @@
+2002-01-23	Ralf Corsepius	<corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge in rtems/Makefile.am and
+	rtems/score/Makefile.am. Remove gensize. Require automake-1.5.
+	* rtems/Makefile.am: Removed.
+	* rtems/score/Makefile.am: Removed.
+	* rtems/score/.cvsignore: Add unixsize.h*. Add stamp-h*.
+	* configure.ac: Add AM_CONFIG_HEADER(rtems/score/unixsize.h).
+	* rtems/score/cpu.h: Replace CPU_CONTEXT_SIZE_IN_BYTES with
+	SIZEOF_CPU_CONTEXT.
+
 2001-12-19	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Add multilib support.

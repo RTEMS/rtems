@@ -493,7 +493,7 @@ extern "C" {
 #endif
 
 typedef struct {
-  char      Area[ CPU_CONTEXT_SIZE_IN_BYTES ] CONTEXT_STRUCTURE_ALIGNMENT;
+  char      Area[ SIZEOF_CPU_CONTEXT ] CONTEXT_STRUCTURE_ALIGNMENT;
 } Context_Control;
 
 typedef struct {
