@@ -1,5 +1,6 @@
 2003-07-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	PR 427/rtems
 	* src/rdbg.c: Use memset instead of bzero (deprecated).
 	* src/servtsp.c: Ditto.
 
