@@ -1,3 +1,12 @@
+2003-03-18	Till Straumann <strauman@slac.stanford.edu>
+
+	PR 356/bsps
+	* sys/linker_set.h: This patch makes RTEMS/PowerPC eabi compliant.
+	Declare all linker-script defined addresses as
+	variables of unknown size and not as short objects
+	like 'int', 'void*' etc.  Since only addresses are used and never those
+	variable's values, the type used in a declaration is not important.
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.

@@ -63,13 +63,13 @@
  * Initialize before referring to a give linker set
  */
 #define SET_DECLARE(set, ptype)						\
-	extern ptype *__CONCAT(__start_set_,set);			\
-	extern ptype *__CONCAT(__stop_set_,set)
+	extern ptype *__CONCAT(__start_set_,set)[];			\
+	extern ptype *__CONCAT(__stop_set_,set)[]
 
 #define SET_BEGIN(set)							\
-	(&__CONCAT(__start_set_,set))
+	(__CONCAT(__start_set_,set))
 #define SET_LIMIT(set)							\
-	(&__CONCAT(__stop_set_,set))
+	(__CONCAT(__stop_set_,set))
 
 /*
  * Iterate over all the elements of a set.
