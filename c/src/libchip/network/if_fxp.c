@@ -1681,7 +1681,6 @@ fxp_init(void *xsc)
 	struct fxp_cb_tx *txp;
 	int i, prm, s;
 
-rtems_task_wake_after(100);
 	DBGLVL_PRINTK(2,"fxp_init called\n");
 
 	s = splimp();
