@@ -1,5 +1,9 @@
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Explicitly check for NM.
+
+2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: Reflect changes to bsp.am.
 
 2004-02-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
