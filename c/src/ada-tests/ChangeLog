@@ -1,5 +1,41 @@
 2002-08-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* tmtests/Makefile.am: New.
+	* tmtests/tm01/Makefile.am: New.
+	* tmtests/tm02/Makefile.am: New.
+	* tmtests/tm03/Makefile.am: New.
+	* tmtests/tm04/Makefile.am: New.
+	* tmtests/tm05/Makefile.am: New.
+	* tmtests/tm06/Makefile.am: New.
+	* tmtests/tm07/Makefile.am: New.
+	* tmtests/tm08/Makefile.am: New.
+	* tmtests/tm09/Makefile.am: New.
+	* tmtests/tm10/Makefile.am: New.
+	* tmtests/tm11/Makefile.am: New.
+	* tmtests/tm12/Makefile.am: New.
+	* tmtests/tm13/Makefile.am: New.
+	* tmtests/tm14/Makefile.am: New.
+	* tmtests/tm15/Makefile.am: New.
+	* tmtests/tm16/Makefile.am: New.
+	* tmtests/tm17/Makefile.am: New.
+	* tmtests/tm18/Makefile.am: New.
+	* tmtests/tm19/Makefile.am: New.
+	* tmtests/tm20/Makefile.am: New.
+	* tmtests/tm21/Makefile.am: New.
+	* tmtests/tm22/Makefile.am: New.
+	* tmtests/tm23/Makefile.am: New.
+	* tmtests/tm24/Makefile.am: New.
+	* tmtests/tm25/Makefile.am: New.
+	* tmtests/tm26/Makefile.am: New.
+	* tmtests/tm26/tmtest.adb
+	* tmtests/tm27/Makefile.am: New.
+	* tmtests/tm28/Makefile.am: New.
+	* tmtests/tm29/Makefile.am: New.
+	* tmtests/tmck/Makefile.am: New.
+	* tmtests/tmoverhd/Makefile.am: New.
+
+2002-08-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* Makefile.am: New.
 	* configure.ac: New.
 	* ada.am: New.
