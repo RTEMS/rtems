@@ -115,6 +115,7 @@ int pthread_setschedparam(
  
         case SCHED_SPORADIC:
           api->ss_high_priority = api->schedparam.sched_priority;
+          _Watchdog_Remove( &api->Sporadic_timer );
           _POSIX_Threads_Sporadic_budget_TSR( 0, the_thread );
           break;
       }
