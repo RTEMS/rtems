@@ -8,7 +8,9 @@
 %(old_cpp) %{qrtems: -D__embedded__} -Asystem(embedded)
 
 *lib:
-%{!qrtems: %(old_lib)} %{qrtems: --start-group -lrtemsall -lc -lgcc --end-group -lcgo32 -lpc}
+%{!qrtems: %(old_lib)} %{qrtems: --start-group \
+%{!qrtems_debug: -lrtemsall} %{qrtems_debug: -lrtemsall_g} \
+-lc -lgcc --end-group -lcgo32 -lpc}
 
 *startfile:
 %{!qrtems: %(old_startfile)} %{qrtems: crt0_go32.o%s}
