@@ -28,18 +28,16 @@ nodist_include_HEADERS += ../../shared/include/coverhd.h
 project_lib_DATA =
 
 if HAS_CXX
-# FIXME: libno-ctor ??
+EXTRA_LIBRARIES = librtemscxx.a
+
+librtemscxx_a_SOURCES = startup/no-ctor.c
+
+# Install as a separate .$(OBJEXT)
+project_lib_DATA += no-ctor.$(OBJEXT)
 
 # We install the RTEMS constructor as a separate .$(OBJEXT)
 # so it can be easily place correctly by the compiler config file.
-rtems-ctor.$(OBJEXT): startup/rtems-ctor.cc
-	${CXXCOMPILE} -o $@ -c $<
 project_lib_DATA += rtems-ctor.$(OBJEXT)
-
-no-ctor.$(OBJEXT): startup/no-ctor.cc
-	${CXXCOMPILE} -o $@ -c $<
-
-project_lib_DATA += no-ctor.$(OBJEXT)
 endif
 
 noinst_PROGRAMS += startup.rel
@@ -77,6 +75,9 @@ endif
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
+if HAS_CXX
+libbsp_a_SOURCES += startup/rtems-ctor.cc
+endif
 libbsp_a_LIBADD = startup.rel clock.rel console.rel timer.rel
 if HAS_MP
 libbsp_a_LIBADD += shmsupp.rel
@@ -121,13 +122,13 @@ $(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
 
 if HAS_CXX
-$(PROJECT_LIB)/rtems-ctor.$(OBJEXT): rtems-ctor.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems-ctor.$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/rtems-ctor.$(OBJEXT)
-
 $(PROJECT_LIB)/no-ctor.$(OBJEXT): no-ctor.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/no-ctor.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/no-ctor.$(OBJEXT)
+
+$(PROJECT_LIB)/rtems-ctor.$(OBJEXT): rtems-ctor.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/rtems-ctor.$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/rtems-ctor.$(OBJEXT)
 endif
 
 CLEANFILES = $(PREINSTALL_FILES)
