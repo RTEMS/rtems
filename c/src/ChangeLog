@@ -1,5 +1,10 @@
 2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/compile.am: Add RTEMS_RELLDFLAGS.
+	Remove XLDFLAGS.
+
+2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Reflect changes to libchip/*.
 
 2004-01-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

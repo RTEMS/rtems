@@ -146,13 +146,14 @@ LINK_FILES =\
 
 if RTEMS_USE_GCC
 ## gcc >= 2.8
+RTEMS_RELLDFLAGS = -qnolinkcmds -nostdlib -Wl,-r
 define make-rel
-	$(LINK) -qnolinkcmds -nostdlib -Wl,-r $(XLDFLAGS) $^
+	$(LINK) $(RTEMS_RELLDFLAGS) $^
 endef
 else
 ## non-gcc
 define make-rel
-	$(LINK) $(XLDFLAGS) $^
+	$(LINK) $(RTEMS_RELLDFLAGS) $^
 endef
 endif
 
