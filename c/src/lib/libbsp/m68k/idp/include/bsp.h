@@ -27,22 +27,6 @@
 
 #define DUART_ADDR	0xb00003   /* base address of the MC68681 DUART */
 
-/*
- *  Define the interrupt mechanism for Time Test 27
- *
- *  NOTE: tm27 apparently not supported.
- */
-
-#define MUST_WAIT_FOR_INTERRUPT 0
-
-#define Install_tm27_vector( handler )
-
-#define Cause_tm27_intr()
-
-#define Clear_tm27_intr()
-
-#define Lower_tm27_intr()
-
 /* Constants */
 
 #define RAM_START 0

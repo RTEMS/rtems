@@ -55,21 +55,6 @@ extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_scc1_driver_attach
 
 /*
- *  Stuff for Time Test 27
- *  Don't bother with hardware -- just use a software-interrupt
- */
-
-#define MUST_WAIT_FOR_INTERRUPT 0
-
-#define Install_tm27_vector( handler ) set_vector( (handler), 34, 1 )
-
-#define Cause_tm27_intr()	asm volatile ("trap #2");
-
-#define Clear_tm27_intr()
-
-#define Lower_tm27_intr()
-
-/*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  */

@@ -184,24 +184,6 @@ struct vme_gcsr_map {
 #define EXTERN extern
 #endif
 
-/*
- *  Define the interrupt mechanism for Time Test 27
- *
- *  NOTE: Use the MPCSR vector for the MVME147
- */
-
-#define MUST_WAIT_FOR_INTERRUPT 0
-
-#define Install_tm27_vector( handler ) set_vector( (handler), \
-						   SOFT_1_VECTOR, 1 )
-
-#define Cause_tm27_intr()  pcc->software_int_1_control = 0x0c
-  /* generate level 4 sotware int. */
-
-#define Clear_tm27_intr()  pcc->software_int_1_control = 0x00
-
-#define Lower_tm27_intr()
-
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;

@@ -36,22 +36,6 @@ extern "C" {
 #define CONFIGURE_INTERRUPT_STACK_MEMORY  (4 * 1024)
 
 /*
- *  Define the interrupt mechanism for Time Test 27
- *
- *  NOTE: Use the MPCSR vector for the MVME136
- */
-
-#define MUST_WAIT_FOR_INTERRUPT 0
-
-#define Install_tm27_vector( handler ) set_vector( (handler), 75, 1 )
-
-#define Cause_tm27_intr()  (*(volatile uint8_t*)0xfffb006b) = 0x80
-
-#define Clear_tm27_intr()  (*(volatile uint8_t*)0xfffb006b) = 0x00
-
-#define Lower_tm27_intr()
-
-/*
  *  Simple spin delay in microsecond units for device drivers.
  *  This is very dependent on the clock speed of the target.
  */
