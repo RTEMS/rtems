@@ -15,6 +15,7 @@ typedef struct {
   Thread_queue_Control    Join_List;
   int                     schedpolicy;
   struct sched_param      schedparam;
+  int                     ss_high_priority;
   Watchdog_Control        Sporadic_timer;
 
   sigset_t                signals_blocked;
