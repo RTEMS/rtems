@@ -64,28 +64,56 @@ rtems_isr external_exception_ISR (
   rtems_vector_number   vector             /* IN  */
 )
 { 
- rtems_unsigned16      index;
- rtems_vector_number   chained_vector;
- Chain_Node           *node;
- EE_ISR_Type          *ee_isr;
- 
- /*
-  * Read vector.
-  */
- chained_vector = Get_interrupt();
- index = chained_vector - DMV170_IRQ_FIRST;
- node = ISR_Array[ index ].first;
- while ( !_Chain_Is_tail( &ISR_Array[ index ], node ) ) {
-   ee_isr = (EE_ISR_Type *) node;
-   (*ee_isr->handler)( ee_isr->vector );
-   node = node->next;
- }
+  rtems_unsigned16      index;
+  rtems_boolean         is_active=FALSE;
+  rtems_unsigned32      scv64_status;
+  rtems_vector_number   chained_vector;
+  Chain_Node           *node;
+  EE_ISR_Type          *ee_isr;
+  
 
- /*
-  * Clear the interrupt.
-  */
- Clear_interrupt( chained_vector );
+  /*
+   * Get all active interrupts. 
+   */
+  scv64_status = SCV64_Get_Interrupt();
 
+  /*
+   * Process any set interrupts.
+   */
+  for (index = 0; index <= 5; index++) {
+    switch(index) {
+      case 0:
+        is_active = SCV64_Is_IRQ0( scv64_status );
+        break;
+      case 1:
+        is_active = SCV64_Is_IRQ1( scv64_status );
+        break;
+      case 2:
+        is_active = SCV64_Is_IRQ2( scv64_status );
+        break;
+      case 3:
+        is_active = SCV64_Is_IRQ3( scv64_status );
+        break;
+      case 4:
+        is_active = SCV64_Is_IRQ4( scv64_status );
+        break;
+      case 5:
+        is_active = SCV64_Is_IRQ5( scv64_status );
+        break;
+    }
+
+    if (is_active) {
+      /*
+       * Read vector.
+       */
+      node = ISR_Array[ index ].first;
+      while ( !_Chain_Is_tail( &ISR_Array[ index ], node ) ) {
+        ee_isr = (EE_ISR_Type *) node;
+        (*ee_isr->handler)( ee_isr->vector );
+        node = node->next;
+      }
+    }
+  }
 }
 
 
@@ -110,6 +138,11 @@ void initialize_external_exception_vector ()
 
   Nodes_Used = 0;
 
+  /*
+   * Initialize the SCV64 chip
+   */
+  SCV64_Initialize(); 
+
   for (i=0; i <NUM_LIRQ; i++)
     Chain_Initialize_empty( &ISR_Array[i] );
 
@@ -121,7 +154,6 @@ void initialize_external_exception_vector ()
   status = rtems_interrupt_catch( external_exception_ISR, 
            PPC_IRQ_EXTERNAL , (rtems_isr_entry *) &previous_isr );
 
-  Init_Css();
 }
 
 /*PAGE
@@ -187,7 +219,10 @@ rtems_isr_entry  set_EE_vector(
   /*
    * Enable the interrupt.
    */
-   enable_card_interrupt( vector );
+  if (vector == DMV170_LIRQ5)
+    SCV64_Generate_DUART_Interrupts();
+  else
+    enable_card_interrupt( vector );
 
   /*
    * No interrupt service routine was removed so return 0
