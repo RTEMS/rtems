@@ -42,8 +42,6 @@
 
 if RTEMS_USE_GCC
 ## All the stuff below is specific to gcc
-
-CFLAGS_DEFAULT=-g -Wall
 ## gcc >= 2.8.x
 GCCSPECS = $(GCC_SPECS)
 else
@@ -56,7 +54,7 @@ DEFS = @DEFS@
 
 CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) \
    $(DEFINES) $(XCPPFLAGS) $(CPPFLAGS_GCC)
-CFLAGS   = $(CFLAGS_DEFAULT) $(CPU_CFLAGS) $(XCFLAGS)
+CFLAGS   = @CFLAGS@ $(CPU_CFLAGS) $(XCFLAGS)
 ASFLAGS  = $(CPU_ASFLAGS) $(CPU_CFLAGS) $(XASFLAGS)
 
 ## FIXME: This doesn't seem to be correct
