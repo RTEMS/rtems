@@ -1,3 +1,7 @@
+2003-12-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add tversions.texi.in to EXTRA_DIST.
+
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Cosmetics.

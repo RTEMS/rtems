@@ -87,6 +87,7 @@ tversions.texi: tversions.texi.in tversions.sed
 	sed -f tversions.sed $(srcdir)/tversions.texi.in > tversions.texi
 CLEANFILES += tversions.texi
 
+EXTRA_DIST += tversions.texi.in
 DISTCLEANFILES = tversions.sed
 
 CLEANFILES += started.info started.info-?
