@@ -7,8 +7,8 @@ BSP_PIECES = startup console i2c tod nvram
 CPU_PIECES = clock console timer mbus
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
-OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.o)) \
-    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/misc/$(ARCH)/memcpy.o) \
+OBJS = $(foreach piece, $(BSP_PIECES), $(wildcard ../$(piece)/$(ARCH)/*.$(OBJEXT))) \
+    $(wildcard ../../../../libcpu/$(RTEMS_CPU)/shared/misc/$(ARCH)/memcpy.$(OBJEXT)) \
     $(foreach piece, $(CPU_PIECES), $(wildcard \
        ../../../../libcpu/$(RTEMS_CPU)/$(RTEMS_CPU_MODEL)/$(piece)/$(ARCH)/$(piece).rel)) \
     $(wildcard \

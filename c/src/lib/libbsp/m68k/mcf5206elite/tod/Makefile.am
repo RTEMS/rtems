@@ -8,7 +8,7 @@ VPATH = @srcdir@:@srcdir@/../../../shared
 PGM = $(ARCH)/tod.rel
 
 C_FILES = ds1307.c todcfg.c tod.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 

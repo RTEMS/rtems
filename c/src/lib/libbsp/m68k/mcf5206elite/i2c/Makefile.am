@@ -6,7 +6,7 @@
 PGM = $(ARCH)/i2c.rel
 
 C_FILES = i2c.c i2cdrv.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES)
 
