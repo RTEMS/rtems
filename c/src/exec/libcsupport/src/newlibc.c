@@ -391,13 +391,25 @@ pid_t __getpid(void)
 #if !defined(RTEMS_POSIX_API)
 pid_t getpid(void)
 {
-  return (0);
+  return 0;
+}
+
+pid_t _getpid_r(
+  struct _reent *ptr
+)
+{
+  return getpid();
 }
 #endif
 
 /* #if !defined(RTEMS_POSIX_API) || defined(__GO32__) */
 #if !defined(RTEMS_POSIX_API)
 int kill( pid_t pid, int sig )
+{
+  return 0;
+}
+
+int _kill_r( pid_t pid, int sig )
 {
   return 0;
 }
