@@ -1,3 +1,10 @@
+2003-11-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* rtems/rtems_bsdnet_internal.h: Include rtems/cdefs.h instead of
+	sys/cdefs.h (Nonportable).
+	* wrapup/Makefile.am: Removed.
+	* Makefile.am: Reworked.
+
 2003-09-15	Jay Monkman <jtm@smoothsmoothie.com>
 
 	PR 482/networking
