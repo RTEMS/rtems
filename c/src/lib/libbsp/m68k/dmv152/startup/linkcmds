@@ -48,6 +48,17 @@ SECTIONS
         etext = ALIGN( 0x10 ) ;
         _etext = .;
         }
+
+	.eh_fram : {
+		. = ALIGN (16);
+		*(.eh_fram)
+	}
+
+	.gcc_exc : {
+		. = ALIGN (16);
+		*(.gcc_exc)
+	}
+
         .data ADDR( .text ) + SIZEOF( .text ):
         {
         data_start = . ;
