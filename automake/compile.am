@@ -60,7 +60,7 @@ LIBC_LIBGCC = `$(CC) $(CPU_CFLAGS) -print-libgcc-file-name $(GCCSED)`
 
 ### FIXME: False if using multilibbed RTEMS
 LINK_LIBS_RTEMS = $(PROJECT_RELEASE)/lib/librtemsbsp$(LIBSUFFIX_VA) \
-   $(PROJECT_RELEASE)/lib/librtemscpu$(LIBSUFFIX_VA) \
+   $(PROJECT_RELEASE)/lib/librtemscpu$(LIBSUFFIX_VA)
 
 LINK_LIBS_GCC272 = $(LINK_LIBS_RTEMS) $(LIBC_LIBC) $(LIBC_LIBGCC)
 GCCSPECS =

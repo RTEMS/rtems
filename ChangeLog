@@ -1,3 +1,8 @@
+2002-01-07	Joel Sherrill <joel@OARcorp.com>
+
+	* automake/compile.am (LINK_LIB_RTEMS): Removed line continuation for
+	last line to eliminate 100's of warnings.
+
 2002-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/check-newlib.m4: Apply AS_IF.
