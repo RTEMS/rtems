@@ -1,3 +1,8 @@
+2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* sh7032/Makefile.am, sh7045/Makefile.am, sh7750/Makefile.am:
+	Eliminate CFLAGS_OPTIMIZE_V.
+
 2005-01-02	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* sh7032/Makefile.am, sh7045/Makefile.am, sh7750/Makefile.am:

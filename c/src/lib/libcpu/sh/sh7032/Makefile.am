@@ -19,31 +19,31 @@ include_rtems_score_HEADERS = include/ispsh7032.h include/iosh7032.h
 # clock
 noinst_PROGRAMS += clock.rel
 clock_rel_SOURCES = clock/ckinit.c
-clock_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # delay
 noinst_PROGRAMS += delay.rel
 delay_rel_SOURCES = delay/delay.c
-delay_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+delay_rel_CPPFLAGS = $(AM_CPPFLAGS)
 delay_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # sci
 noinst_PROGRAMS += sci.rel
 sci_rel_SOURCES = sci/sci.c
-sci_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+sci_rel_CPPFLAGS = $(AM_CPPFLAGS)
 sci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # score
 noinst_PROGRAMS += score.rel
 score_rel_SOURCES =score/cpu_asm.c score/ispsh7032.c
-score_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+score_rel_CPPFLAGS = $(AM_CPPFLAGS)
 score_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 ## timer
 noinst_PROGRAMS += timer.rel
 timer_rel_SOURCES = timer/timer.c
-timer_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
+timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
