@@ -42,7 +42,9 @@ void _POSIX_Message_queue_Notify_handler(
 
   the_mq = user_data;
 
-  /* XXX do something with signals here!!!! */
+  kill( getpid(), the_mq->notification.sigev_signo );
+
+  _CORE_message_queue_Set_notify( &the_mq->Message_queue, NULL, NULL );
 }
 
 /*PAGE
