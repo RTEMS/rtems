@@ -54,7 +54,7 @@ aclocal/tool-paths.m4 \
 aclocal/tool-prefix.m4
 
 noinst_SCRIPTS = \
-autogen
+bootstrap
 
 EXTRA_DIST = \
 $(AUTOMAKE_FILES) \

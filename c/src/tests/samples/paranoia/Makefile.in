@@ -52,7 +52,7 @@ CPPFLAGS +=
 CFLAGS +=
 
 LD_PATHS +=
-LD_LIBS += $(LIBC_LIBM)
+LD_LIBS += -lm
 LDFLAGS +=
 
 #

@@ -8,7 +8,7 @@ ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 rtems_makedir=$(prefix)/make
 
 GENERIC_FILES = \
-host.cfg target.cfg
+host.cfg
 
 MAKE_FILES = README \
 directory.cfg leaf.cfg \
@@ -37,8 +37,6 @@ $(srcdir)/main.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/main.cfg
 $(srcdir)/host.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/host.cfg.in
 	cp $< $@
 
-$(srcdir)/target.cfg.in: $(top_srcdir)/@RTEMS_TOPdir@/make/target.cfg.in
-	cp $< $@
 endif
 
 SUBDIRS = compilers custom

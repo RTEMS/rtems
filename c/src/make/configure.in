@@ -124,7 +124,6 @@ Makefile
 Makefile.inc
 main.cfg
 host.cfg
-target.cfg
 bsp.cfg
 custom/Makefile
 custom/default.cfg

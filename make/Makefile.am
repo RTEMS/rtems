@@ -14,8 +14,7 @@ README \
 directory.cfg \
 host.cfg.in \
 leaf.cfg \
-lib.cfg \
-target.cfg.in
+lib.cfg
 
 SUBDIRS = \
 Templates \

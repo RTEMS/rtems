@@ -17,11 +17,11 @@ PROJECT_INCLUDE=$(PROJECT_RELEASE)/lib/include
 PROJECT_TOOLS = $(PROJECT_RELEASE)/build-tools
 
 #
-# Target architecture; may be changed as per 'make "ARCH=${TARGET_ARCH}-debug"'
+# Target architecture; may be changed as per 'make "ARCH=debug"'
 # This is where the object files get put.
 #
 
-ARCH=${TARGET_ARCH}
+ARCH=o-optimize
 
 VARIANT=
 
@@ -43,12 +43,12 @@ MAKEFILE=Makefile
 #
 # Target variant names
 #
-TARGET_VARIANTS = debug profile
+TARGET_VARIANTS = optimize debug profile
 
 #
-# Generate list of object directories: sun4, sun4-debug, sun4-profile
+# Generate list of object directories: o-optimize, o-debug, o-profile
 #
-VARIANTS=${TARGET_ARCH} ${TARGET_VARIANTS:%=${TARGET_ARCH}-%}
+VARIANTS=${TARGET_VARIANTS:%=o-%}
 
 #
 # List of "recursion-able" targets for directory Makefiles

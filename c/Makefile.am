@@ -12,6 +12,7 @@ RTEMS_BSP = $(RTEMS_BSP_LIST)
 ## The '.' in SUBDIRS ensures that local make-targets (xxx-am) will be 
 ## triggered before $(RTEMS_BSP_LIST) subdirectories are made.
 SUBDIRS= \
+make \
 . \
 $(RTEMS_BSP)
 
