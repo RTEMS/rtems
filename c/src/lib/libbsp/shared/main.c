@@ -30,19 +30,6 @@ extern rtems_cpu_table            Cpu_table;
 
 rtems_interrupt_level bsp_isr_level;
 
-int main(int argc, char **argv)
-{
-
-  if ((argc > 0) && argv && argv[0])
-    rtems_progname = argv[0];
-  else
-    rtems_progname = "RTEMS";
-
-  rtems_initialize_executive_late( bsp_isr_level );
-
-  return 0;
-}
-
 int boot_card(int argc, char **argv)
 {
   int status;
@@ -102,5 +89,18 @@ int boot_card(int argc, char **argv)
    */
 
   return status;
+}
+
+int main(int argc, char **argv)
+{
+
+  if ((argc > 0) && argv && argv[0])
+    rtems_progname = argv[0];
+  else
+    rtems_progname = "RTEMS";
+
+  rtems_initialize_executive_late( bsp_isr_level );
+
+  return 0;
 }
 
