@@ -21,6 +21,7 @@
 
 @include version.texi
 @include common/setup.texi
+@include common/rtems.texi
 
 @ifset use-ascii
 @dircategory RTEMS Target Supplements

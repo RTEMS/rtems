@@ -1,3 +1,7 @@
+2003-09-19	Joel Sherrill <joel@OARcorp.com>
+
+	* i960.texi: Merge from branch.
+
 2003-05-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* cpumodel.t: Reflect c/src/exec having moved to cpukit.
