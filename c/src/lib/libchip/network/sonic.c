@@ -1502,23 +1502,27 @@ rtems_sonic_driver_attach (
   struct sonic_softc *sc;
   struct ifnet *ifp;
   int mtu;
-  int i;
+  int unitNumber;
+  char *unitName;
 
   /*
-   * Find an unused entry
+   * Parse driver name
    */
-  i = 0;
-  sc = sonic_softc;
-  for (;;) {
-    if (sc == &sonic_softc[NSONIC]) {
-      printf ("No more SONIC devices.\n");
-      return 0;
-    }
-    ifp = &sc->arpcom.ac_if;
-    if (ifp->if_softc == NULL)
-      break;
-    sc++;
-    i++;
+  if ((unitNumber = rtems_bsdnet_parse_driver_name (config, &unitName)) < 0)
+    return 0;
+
+  /*
+   * Is driver free?
+   */
+  if ((unitNumber <= 0) || (unitNumber > NSONIC)) {
+    printf ("Bad SONIC unit number.\n");
+     return 0;
+  }
+  sc = &sonic_softc[unitNumber - 1];
+  ifp = &sc->arpcom.ac_if;
+  if (ifp->if_softc != NULL) {
+    printf ("Driver already in use.\n");
+    return 0;
   }
 
   /*
@@ -1562,8 +1566,8 @@ rtems_sonic_driver_attach (
    * Set up network interface values
    */
   ifp->if_softc = sc;
-  ifp->if_unit = i + 1;
-  ifp->if_name = "sonic";
+  ifp->if_unit = unitNumber;
+  ifp->if_name = unitName;
   ifp->if_mtu = mtu;
   ifp->if_init = sonic_init;
   ifp->if_ioctl = sonic_ioctl;
