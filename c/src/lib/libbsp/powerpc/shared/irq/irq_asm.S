@@ -227,7 +227,7 @@ nested:
 	/*
 	 * Call High Level signal handling code
 	 */
-	bl	_ISR_Signals_to_thread_executing
+	bl	_ThreadProcessSignalsFromIrq
 	/*
 	 * start restoring exception like frame
 	 */
