@@ -86,6 +86,8 @@ void _CPU_Initialize(
 
 #endif
 
+#if (SPARC_HAS_FPU == 1)
+
   /*
    *  This seems to be the most appropriate way to obtain an initial
    *  FP context on the SPARC.  The NULL fp context is copied it to
@@ -94,6 +96,7 @@ void _CPU_Initialize(
 
   pointer = &_CPU_Null_fp_context;
   _CPU_Context_save_fp( &pointer );
+#endif
 
   /*
    *  Grab our own copy of the user's CPU table.
@@ -222,6 +225,11 @@ void _CPU_ISR_install_raw_handler(
   slot->sethi_of_handler_to_l4 |= 
     (u32_handler & HIGH_BITS_MASK) >> HIGH_BITS_SHIFT;
   slot->jmp_to_low_of_handler_plus_l4 |= (u32_handler & LOW_BITS_MASK);
+
+  /* need to flush icache after this !!! */
+
+  rtems_cache_invalidate_entire_instruction();
+
 }
 
 /*PAGE

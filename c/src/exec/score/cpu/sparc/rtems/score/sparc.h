@@ -65,7 +65,12 @@ extern "C" {
  *  cpp predefine but gcc does not currently give us that information.
  */
 
-#define SPARC_HAS_FPU                    1
+
+#if defined(_SOFT_FLOAT)
+#define SPARC_HAS_FPU 0
+#else
+#define SPARC_HAS_FPU 1
+#endif
 
 #if SPARC_HAS_FPU
 #define CPU_MODEL_NAME "w/FPU"
