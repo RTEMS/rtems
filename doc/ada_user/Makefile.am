@@ -52,3 +52,5 @@ endif
 
 $(PROJECT).dvi: rtemspie.eps states.eps
 PDF_IMAGES = rtemspie.pdf states.pdf
+
+CLEANFILES += ada_user.info ada_user.info-? ada_user.info-??

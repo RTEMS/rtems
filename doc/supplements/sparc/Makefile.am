@@ -105,3 +105,5 @@ CLEANFILES += timeERC32_.t
 
 EXTRA_DIST = ERC32_TIMES bsp.t callconv.t cpumodel.t cputable.t fatalerr.t \
     intr_NOTIMES.t memmodel.t timeERC32.t
+
+CLEANFILES += sparc.info sparc.info-?

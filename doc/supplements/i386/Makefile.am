@@ -107,3 +107,5 @@ CLEANFILES += timeFORCE386_.t
 
 EXTRA_DIST = FORCE386_TIMES bsp.t callconv.t cpumodel.t cputable.t \
     fatalerr.t intr_NOTIMES.t memmodel.t timeFORCE386.t
+
+CLEANFILES += i386.info i386.info-?

@@ -19,3 +19,5 @@ FILES = install.texi intro.texi probrep.texi relnotes.texi status.texi
 
 info_TEXINFOS = relnotes.texi
 relnotes_TEXINFOS = $(FILES) $(COMMON_FILES)
+
+CLEANFILES += relnotes.info

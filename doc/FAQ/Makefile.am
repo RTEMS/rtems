@@ -83,5 +83,7 @@ endoftime.texi: endoftime.t
 	    -u "Top" \
 	    -n "" < $< > $@
 
+CLEANFILES += FAQ.info FAQ.info-?
+
 EXTRA_DIST = entry basic.t bsp.t build45.t concepts.t debug.t embeddedinfo.t \
     endoftime.t freesw.t hwdebugaids.t projects.t tools.t

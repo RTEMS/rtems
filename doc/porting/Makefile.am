@@ -78,3 +78,5 @@ miscellaneous.texi: miscellaneous.t
 
 EXTRA_DIST = codetuning.t cpuinit.t cpumodels.t developtools.t idlethread.t \
     interrupts.t miscellaneous.t prioritybitmap.t sourcecode.t taskcontext.t
+
+CLEANFILES += porting.info porting.info-?

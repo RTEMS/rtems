@@ -73,3 +73,5 @@ noinst_SCRIPTS = gen_section
 
 EXTRA_DIST = adminiface.t base.t confspace.t cpuuse.t dumpcontrol.t error.t \
     eventlog.t monitor.t rtmonuse.t stackchk.t STATUS TODO $(noinst_SCRIPTS)
+
+CLEANFILES += new_chapters.info new_chapters.info-?

@@ -105,3 +105,5 @@ CLEANFILES += timeBSP_.t
 
 EXTRA_DIST = BSP_TIMES bsp.t callconv.t cpumodel.t cputable.t fatalerr.t \
     intr_NOTIMES.t memmodel.t timeBSP.t
+
+CLEANFILES += c4x.info c4x.info-?

@@ -36,3 +36,5 @@ $(srcdir)/utils.texi: utils.t
 	$(BMENU2) -p "Sample Applications Network Loopback Test" \
 	    -u "Top" \
 	    -n "Command and Variable Index" < $< > $@
+
+CLEANFILES += develenv.info

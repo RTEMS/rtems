@@ -100,3 +100,5 @@ noinst_SCRIPTS = gen_all gen_section gen_status_shell
 EXTRA_DIST = config.t eventflags.t fixedblock.t interrupt.t mailbox.t \
     memorypool.t msgbuffer.t network.t rendezvous.t semaphore.t status.t \
     task.t tasksync.t time.t $(noinst_SCRIPTS)
+
+CLEANFILES += itron.info itron.info-?

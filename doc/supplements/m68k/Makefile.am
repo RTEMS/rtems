@@ -107,3 +107,5 @@ CLEANFILES += timeMVME136_.t
 
 EXTRA_DIST = MVME136_TIMES bsp.t callconv.t cpumodel.t cputable.t fatalerr.t \
     intr_NOTIMES.t memmodel.t timeMVME136.t timedata.t
+
+CLEANFILES += m68k.info m68k.info-?

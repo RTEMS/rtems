@@ -141,3 +141,4 @@ EXTRA_DIST = cancel.t clock.t cond.t cspecific.t device.t files.t io.t key.t \
     semaphores.t signal.t status.t systemdb.t thread.t timer.t \
     gen_size_report
 
+CLEANFILES += posix_users.info posix_users.info-? posix_users.info-??

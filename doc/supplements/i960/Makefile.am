@@ -106,3 +106,5 @@ CLEANFILES += timeCVME961_.t
 
 EXTRA_DIST = CVME961_TIMES bsp.t callconv.t cpumodel.t cputable.t fatalerr.t \
     intr_NOTIMES.t memmodel.t timeCVME961.t
+
+CLEANFILES += i960.info i960.info-?

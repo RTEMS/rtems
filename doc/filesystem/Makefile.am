@@ -66,3 +66,6 @@ tftp.texi: tftp.t
 
 EXTRA_DIST = fsrequirements.t imfs.t init.t miniimfs.t mounting.t patheval.t \
     syscalls.t tftp.t
+
+CLEANFILES += filesystem.info filesystem.info-?
+

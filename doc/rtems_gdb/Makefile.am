@@ -58,3 +58,5 @@ example.texi: example.t
 	    -n "" < $< > $@
 
 EXTRA_DIST = commands.t example.t intro.t started.t swarch.t trouble.t
+
+CLEANFILES += rtems_gdb.info

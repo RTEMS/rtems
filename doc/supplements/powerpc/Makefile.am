@@ -121,3 +121,5 @@ timeDMV177.texi: $(top_srcdir)/common/timetbl.t timeDMV177.t
 
 EXTRA_DIST = DMV177_TIMES PSIM_TIMES bsp.t callconv.t cpumodel.t cputable.t \
     fatalerr.t intr_NOTIMES.t memmodel.t timeDMV177.t timePSIM.t
+
+CLEANFILES += powerpc.info powerpc.info-?

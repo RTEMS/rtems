@@ -163,3 +163,5 @@ EXTRA_DIST = bsp.t concepts.t clock.t datatypes.t conf.t dpmem.t event.t \
     fatal.t init.t intr.t io.t mp.t msg.t overview.t part.t region.t rtmon.t \
     sem.t schedule.t signal.t task.t timer.t userext.t $(PNG_FILES) \
     $(EPS_IMAGES) $(noinst_DATA)
+
+CLEANFILES += c_user.info c_user.info-? c_user.info-??
