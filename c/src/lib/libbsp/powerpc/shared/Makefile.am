@@ -5,7 +5,7 @@
 # FIXME: Herein lies madness ;)
 
 ## include
-EXTRA_DIST = include/nvram.h include/bsp.h
+EXTRA_DIST = include/nvram.h
 
 ## bootloader
 EXTRA_DIST += bootloader/em86.c bootloader/lib.c bootloader/misc.c \
