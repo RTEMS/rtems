@@ -1,3 +1,9 @@
+2003-01-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in include/Makefile.am.
+	* include/Makefile.am: Removed.
+	* configure.ac: Reflect changes above.
+
 2002-12-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove CPU_MODEL_SUBDIR.

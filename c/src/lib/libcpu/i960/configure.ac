@@ -32,7 +32,6 @@ AM_CONDITIONAL(i960rp, test "$RTEMS_CPU_MODEL" = "i960rp")
 AC_CONFIG_FILES([Makefile
 i960ca/Makefile
 i960ka/Makefile
-i960rp/Makefile
-include/Makefile])
+i960rp/Makefile])
 AC_OUTPUT
 
