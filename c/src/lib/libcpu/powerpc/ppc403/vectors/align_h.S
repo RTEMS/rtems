@@ -44,7 +44,8 @@
  */
 
 #include "asm.h"
-#include "rtems.h"
+#define ALIGN_REGS 0x0140
+
 
 .set    CACHE_SIZE,16           # cache line size of 32 bytes
 .set    CACHE_SIZE_L2,4         # cache line size, log 2
