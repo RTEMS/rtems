@@ -21,50 +21,28 @@ directory.  The command sequence to do this is shown
 below:
 
 @example
-mkdir arc
+mkdir archive
 mkdir tools
 @end example
 
 This will result in an initial directory structure similar to the
 one shown in the following figure:
 
-@ifset use-ascii
 @example
 @group
-                parent directory common to the 
-               tools and archive subdirectories
-                             |
-      +----------------------+----------------------+
-      |                                             |  
-   tools                                           arc
+/whatever/prefix/you/choose/
+        archive/
+        tools/
+
 @end group
 @end example
-@end ifset
 
-
-@ifset use-tex
-@c for now use the ascii version
-@example 
-@group
-                parent directory common to the 
-               tools and archive subdirectories
-                             |
-      +----------------------+----------------------+
-      |                                             |
-   tools                                           arc
-@end group
-@end example
-@tex
-@end tex
-@end ifset
-
-
-@ifset use-html
-@html
-<IMG SRC="sfile12c.jpg" WIDTH=417 HEIGHT=178 
-    ALT="Starting Directory Organization">
-@end html
-@end ifset
+@c @ifset use-html
+@c @html
+@c <IMG SRC="sfile12c.jpg" WIDTH=417 HEIGHT=178 
+@c      ALT="Starting Directory Organization">
+@c @end html
+@c @end ifset
 
 @section Get All the Pieces 
 
@@ -148,9 +126,9 @@ tar files using the following command sequence:
 
 @example
 cd tools
-tar xzf ../arc/@value{GCC-TAR}
-tar xzf ../arc/@value{BINUTILS-TAR}
-tar xzf ../arc/@value{NEWLIB-TAR}
+tar xzf ../archive/@value{GCC-TAR}
+tar xzf ../archive/@value{BINUTILS-TAR}
+tar xzf ../archive/@value{NEWLIB-TAR}
 @end example
 
 After the compressed tar files have been unpacked, the following
@@ -162,51 +140,64 @@ directories will have been created under tools.
 @item @value{NEWLIB-UNTAR}
 @end itemize
 
-The @code{bit} script will automatically create two other
-subdirectories:
+Copy the @code{bit} script from the @code{archive} directory
+to the @code{tools} directory as shown below:
+
+@example
+cp ../archive/bit .
+@end example
+
+When the @code{bit} script is executed later in this process, 
+it will automatically create two other subdirectories:
 
 @itemize @bullet
 @item src
 @item build-$@{CPU@}-tools
 @end itemize
 
-Ignoring version numbers, this will look something like the following figure:
+@itemize @bullet
+@item src
+@item build-$@{CPU@}-tools
+@end itemize
 
-@ifset use-ascii
+The tree should look something like the following figure:
+
 @example
 @group
-                       tools
-                         |    bit (script)
-                         +
- +---------+-------------+------------+----------------+
- |         |             |            |                |
-src   binutils-2.9   egcs-1.0.2  newlib-1.8.0  build-$@{CPU@}-tools
+/whatever/prefix/you/choose/
+        bit
+        archive/
+            @value{GCC-TAR}
+            @value{BINUTILS-TAR}
+            @value{NEWLIB-TAR}
+            @value{RTEMS-TAR}
+@ifset GCC-RTEMSPATCH
+            @value{GCC-RTEMSPATCH}
+@end ifset
+@ifset BINUTILS-RTEMSPATCH
+            @value{BINUTILS-RTEMSPATCH}
+@end ifset
+@ifset NEWLIB-RTEMSPATCH
+            @value{NEWLIB-RTEMSPATCH}
+@end ifset
+            hello_world_c.tgz
+            bit
+        tools/
+            @value{BINUTILS-UNTAR}/
+            @value{GCC-UNTAR}/
+            @value{NEWLIB-UNTAR}/
+            @value{RTEMS-UNTAR}/
+            bit
+
 @end group
 @end example
-@end ifset
 
 
-@ifset use-tex
-@c for now use the ascii version
-@example
-@group
-                       tools
-                         |    bit (script)
-                         +
- +---------+-------------+------------+----------------+
- |         |             |            |                |
-src   binutils-2.9   egcs-1.0.2  newlib-1.8.0  build-${CPU}-tools
-@end group
-@end example
-@tex
-@end tex
-@end ifset
-
-@ifset use-html
-@html
-<IMG SRC="bit_c.jpg" WIDTH=816 HEIGHT=267 ALT="Directory Organization">
-@end html
-@end ifset
+@c @ifset use-html
+@c @html
+@c <IMG SRC="bit_c.jpg" WIDTH=816 HEIGHT=267 ALT="Directory Organization">
+@c @end html
+@c @end ifset
 
 @c
 @c  Reading the Documentation
@@ -235,7 +226,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{GCC-UNTAR}
-zcat arc/@value{GCC-RTEMSPATCH} | patch -p1
+zcat archive/@value{GCC-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -267,7 +258,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{BINUTILS-UNTAR}
-zcat arc/@value{BINUTILS-RTEMSPATCH} | patch -p1
+zcat archive/@value{BINUTILS-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -300,7 +291,7 @@ Apply the patch using the following command sequence:
 
 @example
 cd tools/@value{NEWLIB-UNTAR}
-zcat arc/@value{NEWLIB-RTEMSPATCH} | patch -p1
+zcat archive/@value{NEWLIB-RTEMSPATCH} | patch -p1
 @end example
 
 Check to see if any of these patches have been rejected using the following
@@ -322,7 +313,7 @@ This should not happen with a good patch file.
 
 @section Modify the bit Script
 
-Copy the @code{bit} script from arc to the tools directory.
+Copy the @code{bit} script from @code{archive} to the tools directory.
 
 Edit the @code{bit} file to alter the following environmental variables:
 

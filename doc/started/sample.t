@@ -14,7 +14,7 @@ Use the following command to unarchive the sample application:
 
 @example
 cd tools
-tar xzf ../arc/hello_world_c.tgz
+tar xzf ../archive/hello_world_c.tgz
 @end example
 
 @section Set the Environment Variable RTEMS_MAKEFILE_PATH 
