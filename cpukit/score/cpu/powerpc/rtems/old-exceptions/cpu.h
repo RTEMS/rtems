@@ -683,6 +683,8 @@ void _CPU_Initialize_vectors(void);
  */
 
 #ifndef ASM
+extern const unsigned int _PPC_MSR_DISABLE_MASK;
+
 #define _CPU_MSR_Value( _msr_value ) \
   do { \
     _msr_value = 0; \
@@ -694,7 +696,7 @@ void _CPU_Initialize_vectors(void);
 
 #if 0
 #define _CPU_ISR_Disable( _isr_cookie ) \
-  { register unsigned int _disable_mask = PPC_MSR_DISABLE_MASK; \
+  { register unsigned int _disable_mask = _PPC_MSR_DISABLE_MASK; \
     _isr_cookie = 0; \
     asm volatile ( 
 	"mfmsr %0" : \
@@ -715,7 +717,7 @@ void _CPU_Initialize_vectors(void);
 #endif
 
 #define _CPU_ISR_Disable( _isr_cookie ) \
-  { register unsigned int _disable_mask = PPC_MSR_DISABLE_MASK; \
+  { register unsigned int _disable_mask = _PPC_MSR_DISABLE_MASK; \
     _isr_cookie = 0; \
     asm volatile ( \
 	"mfmsr %0; andc %1,%0,%1; mtmsr %1" : \
@@ -753,7 +755,7 @@ void _CPU_Initialize_vectors(void);
 
 #ifndef ASM
 #define _CPU_ISR_Flash( _isr_cookie ) \
-  { register unsigned int _disable_mask = PPC_MSR_DISABLE_MASK; \
+  { register unsigned int _disable_mask = _PPC_MSR_DISABLE_MASK; \
     asm volatile ( \
       "mtmsr %0; andc %1,%0,%1; mtmsr %1" : \
       "=r" ((_isr_cookie)), "=r" ((_disable_mask)) : \
