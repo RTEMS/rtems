@@ -1,3 +1,8 @@
+2005-01-14	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	PR 742/rtems
+	* score/include/rtems/system.h: Remove stringify().
+
 2005-01-13	Joel Sherrill <joel@oarcorp.com>
 		Ralf Corsepius <ralf.corsepius@rtems.org>
 

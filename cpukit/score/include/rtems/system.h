@@ -143,8 +143,6 @@ typedef void * proc_ptr;
 #include <rtems/stdint.h>
 #include <rtems/score/cpu.h>        /* processor specific information */
 
-#define stringify( _x ) # _x
-
 #define RTEMS_offsetof(type, field) \
 	((uint32_t  ) &(((type *) 0)->field))
 
