@@ -6,7 +6,7 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 PGM = $(ARCH)/clock.rel
 
-C_FILES = ckinit.c
+C_FILES = clock.c
 C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
 
 OBJS = $(C_O_FILES)
@@ -28,6 +28,6 @@ all-local: $(ARCH) $(OBJS) $(PGM)
 
 .PRECIOUS: $(PGM)
 
-EXTRA_DIST = ckinit.c
+EXTRA_DIST = clock.c
 
 include $(top_srcdir)/../../../../../../automake/local.am

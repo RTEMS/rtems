@@ -302,7 +302,7 @@ The board support package has been tested with:
 
 Interrupt Notes
 ===============
-ckinit.c:
+clock.c:
         Occasional network lockups have been noted when the PIT has a higher
 interrupt request level than the CPM.  The SCC1 bit in the CISR is set
 even though the SCC1 interrupt handler is not active.  This blocks

@@ -1,3 +1,10 @@
+2001-01-12	Eric Norum <eric.norum@usask.ca>
+
+	* README, clock/Makefile.am, clock/ckinit.c, clock/clock.c:
+	Clock driver updated to use shell driver mechanism.
+	* clock/ckinit.c: Removed.
+	* clock/clock.c: New file.
+
 2000-12-19	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Removed unneeded blank line.
