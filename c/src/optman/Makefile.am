@@ -28,8 +28,6 @@ ${ARCH}/%.$(OBJEXT): rtems/%.c
 ${ARCH}/%$(LIB_VARIANT).rel: ${ARCH}/%.o
 	${make-rel}
 
-bsplib_DATA = $(PGMS)
-
 TMPINSTALL_FILES += \
     $(PGMS:${ARCH}/%$(LIB_VARIANT).rel=$(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel)
 
@@ -37,6 +35,13 @@ $(PROJECT_RELEASE)/lib/%$(LIB_VARIANT).rel: $(ARCH)/%$(LIB_VARIANT).rel
 	$(INSTALL_DATA) $< $@
 
 all-local: ${ARCH} $(PGMS) $(TMPINSTALL_FILES)
+
+install-data-local: $(PGMS)
+	@$(mkinstalldirs) $(DESTDIR)$(bsplibdir)
+	@list='$(PGMS)'; for p in $$list; do \
+	  echo "$(INSTALL_DATA) $$p $(DESTDIR)$(bsplibdir)" ; \
+	  $(INSTALL_DATA) $$p $(DESTDIR)$(bsplibdir); \
+	done
 
 .PRECIOUS: $(PGMS) $(OBJS)
 
