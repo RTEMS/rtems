@@ -76,8 +76,6 @@ void early_hw_init (void)
 /*  to be called from 'bspstart.c' */
 void bsp_hw_init (void) 
 {
-  int a;
-  unsigned8 temp8;
   unsigned16 temp16;
 
 #ifdef STANDALONE_EVB

@@ -133,7 +133,7 @@ SYM (start):
 	mov.l	r3, @r0
 	mov.l   vects_k,r0   	! point vbr to vectab
 	ldc     r0,vbr
-#endif  ! STANDALONE_EVB
+#endif /* ! STANDALONE_EVB */
 
 	! call the mainline	
 	mov #0,r4		! argc
