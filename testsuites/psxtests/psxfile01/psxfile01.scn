@@ -17,9 +17,9 @@ stat of /dev/console
 ....nlink = 1
 ....uid = 0
 ....gid = 0
-....atime = Fri Jan 01 00:00:00 1988
-....mtime = Fri Jan 01 00:00:00 1988
-....ctime = Fri Jan 01 00:00:00 1988
+....atime = Fri Jan  1 00:00:00 1988
+....mtime = Fri Jan  1 00:00:00 1988
+....ctime = Fri Jan  1 00:00:00 1988
 
 mkdir /dev/tty
 
@@ -104,9 +104,9 @@ stat(/tmp/j) returned -1 (errno=2)
 ....nlink = 1
 ....uid = 0
 ....gid = 0
-....atime = Fri Jan 01 00:00:00 1988
-....mtime = Fri Jan 01 00:00:00 1988
-....ctime = Fri Jan 01 00:00:00 1988
+....atime = Fri Jan  1 00:00:00 1988
+....mtime = Fri Jan  1 00:00:00 1988
+....ctime = Fri Jan  1 00:00:00 1988
 fopen of /tmp/j
 fprintf to /tmp/j
 (1) 26 characters written to the file
@@ -145,13 +145,13 @@ This is call 5 to fprintf
 ............S3 (device 255, 128)
 ........test_console (device 0, 0)
 ....etc/
-........passwd (file 0 0x0 0x0 0x0)
+........passwd (file 0)
 ....tmp/
 ........my_dir/
-........tom (file 0 0x0 0x0 0x0)
-........john (file 0 0x0 0x0 0x0)
-........joel (file 279487 0x7d58d8 0x7d5388 0x7cfe38)
-........j (file 130 0x77a338 0x0 0x0)
+........tom (file 0)
+........john (file 0)
+........joel (file 279487)
+........j (file 130)
 ***************       End of Dump        ***************
 truncate /tmp/j to length of 40
 ....st_dev     (0x0:0x0)
@@ -171,12 +171,12 @@ truncate /tmp/j to length of 40
 ............S3 (device 255, 128)
 ........test_console (device 0, 0)
 ....etc/
-........passwd (file 0 0x0 0x0 0x0)
+........passwd (file 0)
 ....tmp/
 ........my_dir/
-........tom (file 0 0x0 0x0 0x0)
-........john (file 0 0x0 0x0 0x0)
-........j (file 40 0x77a338 0x0 0x0)
+........tom (file 0)
+........john (file 0)
+........j (file 40)
 ***************       End of Dump        ***************
 truncate /tmp/j to length of 0
 truncate /tmp to length of 0 should fail with EISDIR
@@ -190,12 +190,12 @@ truncate /tmp to length of 0 should fail with EISDIR
 ............S3 (device 255, 128)
 ........test_console (device 0, 0)
 ....etc/
-........passwd (file 0 0x0 0x0 0x0)
+........passwd (file 0)
 ....tmp/
 ........my_dir/
-........tom (file 0 0x0 0x0 0x0)
-........john (file 0 0x0 0x0 0x0)
-........j (file 0 0x77a338 0x0 0x0)
+........tom (file 0)
+........john (file 0)
+........j (file 0)
 ***************       End of Dump        ***************
 *** END OF FILE TEST 1 ***
 

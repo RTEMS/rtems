@@ -48,7 +48,7 @@ Init: pthread_attr_getstacksize - EINVAL (NULL attr)
 Init: pthread_attr_getstacksize - EINVAL (NULL stacksize)
 Init: pthread_attr_getstacksize - EINVAL (not initialized attr)
 Init: pthread_attr_getstacksize - SUCCESSFUL
-Init: current stack size attribute = 5120
+Init: current stack size attribute is OK
 Init: pthread_attr_setstackaddr - EINVAL (NULL attr)
 Init: pthread_attr_setstackaddr - EINVAL (not initialized attr)
 Init: pthread_attr_setstackaddr - SUCCESSFUL

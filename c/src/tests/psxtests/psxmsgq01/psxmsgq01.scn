@@ -72,22 +72,22 @@ Init: mq_send -  to Qnoblock msg: 12345678 priority 31
 waiting on any signal for 3 seconds.
 _______________multi-thread Task 4 Receive Test
 Init: mq_receive - Empty queue changes to non-blocking (EAGAIN)
-Task_4: Fri Jan 01 00:00:18 1988
+Task_4: Fri Jan  1 00:00:18 1988
 Task_4: Set queue to non-blocking
 Task_4: Return queue to blocking
 Task_4: pthread_exit
-Init: Fri Jan 01 00:00:18 1988
+Init: Fri Jan  1 00:00:18 1988
 _______________multi-thread Task 1 Test
-Task_1: Fri Jan 01 00:00:18 1988
+Task_1: Fri Jan  1 00:00:18 1988
 Task_1: mq_send -  to Qblock msg: 12345678 priority 31
 Task_1: pthread_exit
-Init: Fri Jan 01 00:00:18 1988
+Init: Fri Jan  1 00:00:18 1988
 _______________multi-thread Task 4 Send Test
 Init: Verify Queues are empty
 Init: Fill Queues with messages
 Init: Verify Queues are full
 Init: mq_send - Full queue changes to non-blocking (EAGAIN)
-Task_4: Fri Jan 01 00:00:18 1988
+Task_4: Fri Jan  1 00:00:18 1988
 Task_4: Set queue to non-blocking
 Task_4: Return queue to blocking
 Task_4: pthread_exit
@@ -98,10 +98,10 @@ Init: Verify Queues are empty
 Init: Fill Queues with messages
 Init: Verify Queues are full
 Init: mq_send -  to Qblock msg: Last priority 32
-Task_2: Fri Jan 01 00:00:18 1988
+Task_2: Fri Jan  1 00:00:18 1988
 Task_2: Verify Queues are full
 Task_2: pthread_exit
-Init: Fri Jan 01 00:00:18 1988
+Init: Fri Jan  1 00:00:18 1988
 Init: Verify Queues are full
 Init: Empty all Queues
 _______________multi-thread Task 3 Test
@@ -109,7 +109,7 @@ Init: Verify Queues are empty
 Init: Fill Queues with messages
 Init: Verify Queues are full
 Init: mq_send - Block while thread deletes queue (EBADF)
-Task_3: Fri Jan 01 00:00:18 1988
+Task_3: Fri Jan  1 00:00:18 1988
 _______________Unlink and Close All Files
 Task_3: pthread_exit
 *** END OF POSIX MESSAGE QUEUE TEST ***

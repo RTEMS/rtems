@@ -304,7 +304,8 @@ void *POSIX_Init(
   puts( "Init: pthread_attr_getstacksize - SUCCESSFUL" );
   status = pthread_attr_getstacksize( &attr, &stacksize );
   assert( !status );
-  printf( "Init: current stack size attribute = %ld\n", (long) stacksize );
+  if ( stacksize == (STACK_MINIMUM_SIZE * 2) )
+  printf( "Init: current stack size attribute is OK\n" );
 
   /* exercise get and set stack address */
  

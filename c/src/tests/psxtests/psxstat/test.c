@@ -194,7 +194,7 @@ void stat_a_file(
     rtems_filesystem_split_dev_t( statbuf.st_rdev, major2, minor2 );
 
 
-    printf("\n\tst_dev     (0x%x:0x%x)\n", major1, minor1 );
+    printf("\n...st_dev     (0x%x:0x%x)\n", major1, minor1 );
     printf(  "...st_ino     %x\n", (int) statbuf.st_ino );
     printf(  "...st_mode    %o\n", statbuf.st_mode );
     printf(  "...st_nlink   %x\n", statbuf.st_nlink );
@@ -687,7 +687,7 @@ void Cause_faults()
   assert( status != 0 );
   assert( errno == EACCES );
 
-  printf(" Making too many hard links.\n" );
+  printf("Making too many hard links.\n" );
   make_too_many_links( );
 
   printf( "pass fstat a null pointer should fail with EFAULT\n");

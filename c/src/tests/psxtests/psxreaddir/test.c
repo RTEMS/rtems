@@ -54,12 +54,12 @@ void printdir( DIR *directory )
 {
   struct dirent *d;
 
-  printf( "    %-20s %8s %8s %8s %4s\n",
-     "     name", "inode", " offset", "reclen", " type" );
+  printf( "%-20s %8s %8s %8s %4s\n",
+     "name", "    inode", " offset", "reclen", " type" );
   d = readdir(directory);
   
   while (d) {
-    printf( "    %-20s %8d %8d %6d   0x%04x\n",
+    printf( "%-20s %8d %8d %6d   0x%04x\n",
        d->d_name, (int)d->d_ino, (int)d->d_off, d->d_reclen, d->d_type );
     d = readdir(directory);
 
@@ -263,7 +263,7 @@ int main(
   status = mkdir( "/many", 0x1c0 );
   status = chdir( "/many" ); 
   for (i = 0; i<44; i++) {
-    printf("  Create %s\n", many_files[i]);
+    printf("Create %s\n", many_files[i]);
     fd = open (many_files[i], O_CREAT, S_IRWXU);
     close (fd);
   }

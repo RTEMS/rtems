@@ -515,17 +515,6 @@ void *POSIX_Init(
   assert( errno == EINVAL );
   puts( "Init: pthread_kill - EINVAL (sig invalid)" );
 
-/*
- *  This is now implemented.  We should delete this but for now
- *  we will just comment this out.
- *
- *   status = pthread_kill( 0, SIGUSR1 );
- *   if ( status != -1 )
- *     printf( "status = %d\n", status );
- *   assert( errno == ENOSYS );
- *   puts( "Init: pthread_kill - ENOSYS (signal SA_SIGINFO)" );
- */
-
   status = pthread_kill( 0, SIGUSR2 );
   if ( status != -1 )
     printf( "status = %d\n", status );

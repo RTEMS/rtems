@@ -1,3 +1,11 @@
+2001-04-20	Joel Sherrill <joel@OARcorp.com>
+
+	* psx04/init.c, psx04/psx04.scn, psx07/init.c, psx07/psx07.scn,
+	psxfile01/psxfile01.scn, psxmsgq01/psxmsgq01.scn, 
+	psxreaddir/test.c, psxstat/psxstat.scn, psxstat/test.c,
+	psxtime/psxtime.scn, psxtimer/psxtimer.scn:
+	Various adjustments so test output matches screens more reliably.
+
 2001-01-25	Joel Sherrill <joel@OARcorp.com>
 
 	* psx01/psx01.scn: Corrected to reflect clock_getres() now working.
