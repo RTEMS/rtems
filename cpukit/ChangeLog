@@ -1,7 +1,11 @@
+2004-10-26	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* libcsupport/include/sys/ioccom.h: Cosmetical update from FreeBSD.
+
 2004-10-25	Eric Norum <norume@aps.anl.gov>
 
 	* libnetworking/net/if_ethersubr.c: Working version of ether_sprintf().
-    * cpukit/librpc/include/rpc/xdr.h: No kernel/user distinction.
+	* cpukit/librpc/include/rpc/xdr.h: No kernel/user distinction.
 
 2004-10-22	Ralf Corsepius <ralf_corsepius@rtems.org>
 
