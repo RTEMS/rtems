@@ -761,7 +761,7 @@ PROC (_ISR_Handler):
 #define MTMSR(x)	mtspr	srr1, x
 #define MFMSR(x)	mfspr	x, srr1
 
-	#include	"irq_stub.s"
+	#include	"irq_stub.S"
 	rfi
 
 #if (PPC_HAS_RFCI == 1)
@@ -790,7 +790,7 @@ PROC (_ISR_HandlerC):
 #define MFPC(x)		mfspr	x, srr2
 #define MTMSR(x)	mtspr	srr3, x
 #define MFMSR(x)	mfspr	x, srr3
-	#include	"irq_stub.s"
+	#include	"irq_stub.S"
 	rfci
 #endif
 
