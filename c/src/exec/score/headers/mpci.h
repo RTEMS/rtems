@@ -200,7 +200,7 @@ void _MPCI_Initialization ( void );
  */
  
 void _MPCI_Register_packet_processor( 
-  MP_packet_Classes      the_object,
+  MP_packet_Classes      the_class,
   MPCI_Packet_processor  the_packet_processor
   
 );
