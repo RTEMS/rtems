@@ -1,3 +1,7 @@
+2004-02-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* binaries.t, buildc.t: Use @value{RTEMSRPMPREFIX} in refs to rpms.
+
 2004-01-20	Joel Sherrill <joel@OARcorp.com>
 
 	PR 555/doc
