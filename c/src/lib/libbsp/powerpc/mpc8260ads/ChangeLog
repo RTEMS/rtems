@@ -1,3 +1,7 @@
+2002-01-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.ac: Add RTEMS_CHECK_NETWORKING.
+
 2002-01-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/p_clock.c: Include rtems/bspIo.h instead of bspIo.h.
