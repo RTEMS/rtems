@@ -85,31 +85,26 @@ CLEANFILES += wksheets.t
 #  3.  Build Node Structure
 
 timing.texi: $(top_srcdir)/common/timing.t
-	cp $(top_srcdir)/common/timing.t timing.t
-	$(BMENU) -p "Memory Requirements RTEMS RAM Workspace Worksheet" \
+	$(BMENU2) -p "Memory Requirements RTEMS RAM Workspace Worksheet" \
 	    -u "Top" \
-	    -n "MYBSP Timing Data" timing.t
-CLEANFILES += timing.t
+	    -n "MYBSP Timing Data" < $< > $@
 
 # Timing Data for BSP BSP Chapter:
 #  1.  Copy the Shared File
 #  2.  Replace Times and Sizes
 #  3.  Build Node Structure
 
-timeBSP_.t: $(top_srcdir)/common/timetbl.t timeBSP.t
+timeBSP.texi: $(top_srcdir)/common/timetbl.t timeBSP.t
 	cat timeBSP.t $(top_srcdir)/common/timetbl.t      >timeBSP_.t
 	@echo                                               >>timeBSP_.t
 	@echo "@tex"                                        >>timeBSP_.t
 	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeBSP_.t
 	@echo "@end tex"                                    >>timeBSP_.t
-	${REPLACE} -p BSP_TIMES timeBSP_.t
-	mv timeBSP_.t.fixed timeBSP_.t
-MAINTAINERCLEANFILES += timeBSP_.t
-
-timeBSP.texi: timeBSP_.t
+	${REPLACE2} -p BSP_TIMES timeBSP_.t timeBSP_.t
 	$(BMENU) -p "Timing Specification Terminology" \
 	    -u "Top" \
 	    -n "Command and Variable Index" timeBSP_.t
 	mv timeBSP_.texi timeBSP.texi
+CLEANFILES += timeBSP_.t timeBSP_.texi
 
 EXTRA_DIST = BSP_TIMES *.t

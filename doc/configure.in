@@ -12,6 +12,12 @@ AC_SUBST(RTEMS_VERSION)
 RTEMS_RELEASE="4.5.0"
 AC_SUBST(RTEMS_RELEASE)
 
+RTEMS_UPDATE_DATE="April 26 2000"
+AC_SUBST(RTEMS_UPDATE_DATE)
+
+RTEMS_UPDATE_MONTH="April 2000"
+AC_SUBST(RTEMS_UPDATE_MONTH)
+
 AC_ARG_ENABLE(html,
 [  --disable-html           disable html support ],
 [case $enableval in
@@ -99,6 +105,8 @@ AM_CONDITIONAL(USE_EXP, test x=y )
 
 BMENU='$(top_builddir)/tools/bmenu/bmenu'
 AC_SUBST(BMENU)
+BMENU2='$(top_builddir)/tools/bmenu/bmenu2'
+AC_SUBST(BMENU2)
 
 dnl Checks for libraries.
 

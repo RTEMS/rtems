@@ -1,4 +1,5 @@
-Makefile.in
-Makefile
 .deps
+Makefile
+Makefile.in
 bmenu
+bmenu2

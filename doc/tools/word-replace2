@@ -76,26 +76,26 @@ if ( $#ARGV > -1 )
   shift @ARGV ;
 }
 
-print STDERR "$outfile\t";
-
 open (INFILE, "<$infile") ||
         die "could not open input file $infile: $!";
+$line = join('',<INFILE>) ;
+close INFILE;
+
+
+print STDERR "$outfile\t";
 
 open (OUTFILE, ">$outfile") ||
         die "could not open output file $outfile: $!";
 
-$line = join('',<INFILE>) ;
-
-  foreach $key (keys %patterns)
+foreach $key (keys %patterns)
+{
+  if ( $line =~ s/\b$key\b/$patterns{$key}/ge )
   {
-    if ( $line =~ s/\b$key\b/$patterns{$key}/ge )
-    {
-      print STDERR "." ;
-    }
+    print STDERR "." ;
   }
+}
 
 print OUTFILE $line ;
 
 print STDERR "\n";
-close INFILE;
 close OUTFILE;

@@ -86,30 +86,26 @@ CLEANFILES += wksheets.t
 #  1.  Copy the Shared File
 #  3.  Build Node Structure
 timing.texi: $(top_srcdir)/common/timing.t
-	cp $(top_srcdir)/common/timing.t timing.t
-	$(BMENU) -p "Memory Requirements RTEMS RAM Workspace Worksheet" \
+	$(BMENU2) -p "Memory Requirements RTEMS RAM Workspace Worksheet" \
             -u "Top" \
-            -n "CPU386 Timing Data" timing.t
-CLEANFILES += timing.t
+            -n "CPU386 Timing Data" < $< > $@
 
 # Timing Data for BSP Chapter:
 #  1.  Copy the Shared File
 #  2.  Replace Times and Sizes
 #  3.  Build Node Structure
 
-timeFORCE386_.t: $(top_srcdir)/common/timetbl.t timeFORCE386.t
-	cat timeFORCE386.t $(top_srcdir)/common/timetbl.t            >timeFORCE386_.t
+timeFORCE386.texi: $(top_srcdir)/common/timetbl.t timeFORCE386.t
+	cat timeFORCE386.t $(top_srcdir)/common/timetbl.t   >timeFORCE386_.t
 	@echo                                               >>timeFORCE386_.t
 	@echo "@tex"                                        >>timeFORCE386_.t
 	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeFORCE386_.t
 	@echo "@end tex"                                    >>timeFORCE386_.t
-	${REPLACE} -p FORCE386_TIMES timeFORCE386_.t
-	mv timeFORCE386_.t.fixed timeFORCE386_.t
-
-timeFORCE386.texi: timeFORCE386_.t
+	${REPLACE2} -p FORCE386_TIMES timeFORCE386_.t timeFORCE386_.t
 	$(BMENU) -p "Timing Specification Terminology" \
 	    -u "Top" \
 	    -n "Command and Variable Index" timeFORCE386_.t
 	mv timeFORCE386_.texi timeFORCE386.texi
+CLEANFILES += timeFORCE386_.t timeFORCE386_.texi
 
 EXTRA_DIST = FORCE386_TIMES *.t

@@ -25,13 +25,6 @@ info_TEXINFOS = bsp_howto.texi
 bsp_howto_TEXINFOS = $(FILES) $(COMMON_FILES) $(GENERATED_FILES)   
 
 #
-#  Grab the chapter on writing a network device driver.
-#
-network.t: 
-	ln -s ../networking/driver.t  network.t
-
-
-#
 #  Process Automatically Generated Files
 #
 
@@ -94,11 +87,13 @@ nvmem.texi: nvmem.t
 	$(BMENU) -p "" \
 	    -u "Top" \
 	    -n "" $<
-
-network.texi: network.t
-	$(BMENU) -p "" \
+#
+#  Grab the chapter on writing a network device driver.
+#
+network.texi: ../networking/driver.t
+	$(BMENU2) -p "" \
 	    -u "Top" \
-	    -n "" $<
+	    -n "" < $< > $@
 
 shmsupp.texi: shmsupp.t
 	$(BMENU) -p "" \

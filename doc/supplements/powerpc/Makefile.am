@@ -85,50 +85,46 @@ CLEANFILES += wksheets.t
 #  1.  Copy the Shared File
 #  3.  Build Node Structure
 timing.texi: $(top_srcdir)/common/timing.t
-	cp $(top_srcdir)/common/timing.t timing.t
-	$(BMENU) -p "Memory Requirements RTEMS RAM Workspace Worksheet" \
+	$(BMENU2) -p "Memory Requirements RTEMS RAM Workspace Worksheet" \
             -u "Top" \
-            -n "PSIM Timing Data" timing.t
-CLEANFILES += timing.t
+            -n "PSIM Timing Data" < $< > $@
 
 # Timing Data for PSIM BSP Chapter:
 #  1.  Copy the Shared File
 #  2.  Replace Times and Sizes
 #  3.  Build Node Structure
 
-timePSIM_.t: $(top_srcdir)/common/timetbl.t timePSIM.t
-	cat timePSIM.t $(top_srcdir)/common/timetbl.t                >timePSIM_.t
+timePSIM.texi: $(top_srcdir)/common/timetbl.t timePSIM.t
+	cat timePSIM.t $(top_srcdir)/common/timetbl.t   >timePSIM_.t
 	@echo                                               >>timePSIM_.t
 	@echo "@tex"                                        >>timePSIM_.t
 	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timePSIM_.t
 	@echo "@end tex"                                    >>timePSIM_.t
-	${REPLACE} -p PSIM_TIMES timePSIM_.t
-	mv timePSIM_.t.fixed timePSIM_.t
-
-timePSIM.texi: timePSIM_.t
+	${REPLACE2} -p PSIM_TIMES timePSIM_.t timePSIM_.t
 	$(BMENU) -p "Timing Specification Terminology" \
 	    -u "Top" \
 	    -n "DMV177 Timing Data" timePSIM_.t
 	mv timePSIM_.texi timePSIM.texi
+CLEANFILES += timePSIM_.t timePSIM_.texi
+
 
 # Timing Data for DMV177 BSP Chapter:
 #  1.  Copy the Shared File
 #  2.  Replace Times and Sizes
 #  3.  Build Node Structure
 
-timeDMV177_.t: $(top_srcdir)/common/timetbl.t timeDMV177.t
-	cat timeDMV177.t $(top_srcdir)/common/timetbl.t              >timeDMV177_.t
+timeDMV177.texi: $(top_srcdir)/common/timetbl.t timeDMV177.t
+	cat timeDMV177.t $(top_srcdir)/common/timetbl.t   >timeDMV177_.t
 	@echo                                               >>timeDMV177_.t
 	@echo "@tex"                                        >>timeDMV177_.t
 	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeDMV177_.t
 	@echo "@end tex"                                    >>timeDMV177_.t
-	${REPLACE} -p DMV177_TIMES timeDMV177_.t
-	mv timeDMV177_.t.fixed timeDMV177_.t
-
-timeDMV177.texi: timeDMV177_.t
+	${REPLACE2} -p DMV177_TIMES timeDMV177_.t timeDMV177_.t
 	$(BMENU) -p "PSIM Timing Data Rate Monotonic Manager" \
 	    -u "Top" \
 	    -n "Command and Variable Index" timeDMV177_.t
 	mv timeDMV177_.texi timeDMV177.texi
+CLEANFILES += timeDMV177_.t timeDMV177_.texi
+
 
 EXTRA_DIST = DMV177_TIMES PSIM_TIMES *.t

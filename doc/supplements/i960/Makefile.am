@@ -87,30 +87,26 @@ CLEANFILES += wksheets.t
 #  3.  Build Node Structure
 
 timing.texi: $(top_srcdir)/common/timing.t
-	cp $(top_srcdir)/common/timing.t timing.t
-	$(BMENU) -p "Memory Requirements RTEMS RAM Workspace Worksheet" \
+	$(BMENU2) -p "Memory Requirements RTEMS RAM Workspace Worksheet" \
             -u "Top" \
-            -n "CVME961 Timing Data" timing.t
-CLEANFILES += timing.t
+            -n "CVME961 Timing Data" < $< > $@
 
 # Timing Data for BSP Chapter:
 #  1.  Copy the Shared File
 #  2.  Replace Times and Sizes
 #  3.  Build Node Structure
 
-timeCVME961_.t: $(top_srcdir)/common/timetbl.t timeCVME961.t
-	cat timeCVME961.t $(top_srcdir)/common/timetbl.t            >timeCVME961_.t
+timeCVME961.texi: $(top_srcdir)/common/timetbl.t timeCVME961.t
+	cat timeCVME961.t $(top_srcdir)/common/timetbl.t   >timeCVME961_.t
 	@echo                                               >>timeCVME961_.t
 	@echo "@tex"                                        >>timeCVME961_.t
 	@echo "\\global\\advance \\smallskipamount by 4pt"  >>timeCVME961_.t
 	@echo "@end tex"                                    >>timeCVME961_.t
-	${REPLACE} -p CVME961_TIMES timeCVME961_.t
-	mv timeCVME961_.t.fixed timeCVME961_.t
-
-timeCVME961.texi: timeCVME961_.t
+	${REPLACE2} -p CVME961_TIMES timeCVME961_.t timeCVME961_.t
 	$(BMENU) -p "Timing Specification Terminology" \
 	    -u "Top" \
 	    -n "Command and Variable Index" timeCVME961_.t
 	mv timeCVME961_.texi timeCVME961.texi
+CLEANFILES += timeCVME961_.t timeCVME961_.texi
 
 EXTRA_DIST = CVME961_TIMES *.t

@@ -4,7 +4,8 @@
 ## Makefile fragment common to all supplements/<cpu>/Makefile.ams
 ##
 
-REPLACE = $(PERL) $(top_srcdir)/tools/word-replace
+## Unused
+## REPLACE = $(PERL) $(top_srcdir)/tools/word-replace
 REPLACE2 = $(PERL) $(top_srcdir)/tools/word-replace2
 
 MAINTAINERCLEANFILES += $(GENERATED_FILES)
