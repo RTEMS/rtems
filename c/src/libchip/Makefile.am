@@ -5,10 +5,11 @@
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/lib.am
 
+noinst_DATA =
+
 if LIBCHIP
 include_libchipdir = $(includedir)/libchip
 include_libchip_HEADERS =
-TMP_LIBS =
 endif
 
 EXTRA_DIST =
@@ -31,7 +32,7 @@ ide/$(ARCH)/%.$(OBJEXT): ide/%.c ide/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 ide/$(ARCH)/libide.a: $(libide_OBJS)
 	$(make-library)
-TMP_LIBS += ide/$(ARCH)/libide.a
+noinst_DATA += ide/$(ARCH)/libide.a
 endif
 
 EXTRA_DIST += $(libide_C_FILES)
@@ -58,8 +59,6 @@ network/$(ARCH)/%.$(OBJEXT): network/%.c network/$(ARCH)/$(dirstamp)
 	${COMPILE} $(libnetchip_CPPFLAGS) -o $@ -c $<
 network/$(ARCH)/libnetchip$(LIB_VARIANT).a: $(libnetchip_OBJS)
 	$(make-library)
-TMP_LIBS += network/$(ARCH)/libnetchip$(LIB_VARIANT).a
-
 project_lib_DATA = network/$(ARCH)/libnetchip$(LIB_VARIANT).a
 endif
 endif
@@ -87,7 +86,7 @@ rtc/$(ARCH)/%.$(OBJEXT): rtc/%.c rtc/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 rtc/$(ARCH)/librtcio.a: $(librtcio_OBJS)
 	$(make-library)
-TMP_LIBS += rtc/$(ARCH)/librtcio.a
+noinst_DATA += rtc/$(ARCH)/librtcio.a
 endif
 
 librtcio_DOC_FILES = rtc/README.ds1643 rtc/README.icm7170 rtc/README.m48t08 \
@@ -101,6 +100,7 @@ libserialio_C_FILES = serial/mc68681.c serial/mc68681_baud.c \
     serial/mc68681_reg8.c serial/ns16550.c serial/z85c30.c \
     serial/z85c30_reg.c serial/serprobe.c serial/termios_baud2index.c \
     serial/termios_baud2num.c
+EXTRA_DIST += $(libserialio_C_FILES)
 libserialio_OBJS = \
     $(libserialio_C_FILES:serial/%.c=serial/$(ARCH)/%.$(OBJEXT))
 
@@ -117,19 +117,49 @@ serial/$(ARCH)/%.$(OBJEXT): serial/%.c serial/$(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 serial/$(ARCH)/libserialio.a: $(libserialio_OBJS)
 	$(make-library)
-TMP_LIBS += serial/$(ARCH)/libserialio.a
+noinst_DATA += serial/$(ARCH)/libserialio.a
 endif
 
 libserialio_DOC_FILES = serial/README.mc68681 serial/README.ns16550 \
     serial/README.xr88681 serial/README.z85c30 serial/STATUS
+EXTRA_DIST += $(libserialio_DOC_FILES)
 
-all-local: $(PREINSTALL_FILES) $(TMP_LIBS) $(TMPINSTALL_FILES)
+## shmdr
+shmdr_C_FILES = shmdr/addlq.c shmdr/cnvpkt.c shmdr/getlq.c shmdr/dump.c \
+    shmdr/fatal.c shmdr/getpkt.c shmdr/init.c shmdr/initlq.c shmdr/intr.c \
+    shmdr/mpisr.c shmdr/poll.c shmdr/receive.c shmdr/retpkt.c shmdr/send.c \
+    shmdr/setckvec.c
+EXTRA_DIST += $(shmdr_C_FILES)
+shmdr_OBJECTS = $(shmdr_C_FILES:shmdr/%.c=shmdr/$(ARCH)/%.$(OBJEXT))
+
+shmdr/$(ARCH)/$(dirstamp):
+	@$(mkdir_p) shmdr/$(ARCH)
+	@: > shmdr/$(ARCH)/$(dirstamp)
+shmdr/$(ARCH)/%.$(OBJEXT): shmdr/%.c shmdr/$(ARCH)/$(dirstamp)
+	${COMPILE} -o $@ -c $<
+shmdr/$(ARCH)/shmdr$(LIB_VARIANT).rel: $(shmdr_OBJECTS)
+	$(make-rel)
+
+if HAS_MP
+include_HEADERS = shmdr/shm_driver.h shmdr/mpci.h
+project_lib_DATA = shmdr/$(ARCH)/shmdr$(LIB_VARIANT).rel
+endif
+
+EXTRA_DIST += shmdr/README
+
+## --
+
+all-local: $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
 
 EXTRA_DIST += $(libserialio_C_FILES) $(libserialio_DOC_FILES)
 
 CLEANDIRS = */$(ARCH)
 
 PREINSTALL_FILES =
+
+$(PROJECT_INCLUDE)/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)
+	@: > $(PROJECT_INCLUDE)/$(dirstamp)
 
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
@@ -229,6 +259,20 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/serial.h
 $(PROJECT_INCLUDE)/libchip/sersupp.h: serial/sersupp.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/sersupp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/sersupp.h
+endif
+
+if HAS_MP
+$(PROJECT_INCLUDE)/shm_driver.h: shmdr/shm_driver.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/shm_driver.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/shm_driver.h
+
+$(PROJECT_INCLUDE)/mpci.h: shmdr/mpci.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpci.h
+
+$(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel: shmdr/$(ARCH)/shmdr$(LIB_VARIANT).rel $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel
+TMPINSTALL_FILES += $(PROJECT_LIB)/shmdr$(LIB_VARIANT).rel
 endif
 
 include $(top_srcdir)/automake/local.am
