@@ -45,8 +45,8 @@ case "${with_project_root}" in
   *) # relative directory
    sav0dir=`pwd` && cd ./${rtems_updir}
    sav1dir=`pwd` && cd ../${MULTIBUILDTOP}
-   sav2dir=`pwd` && cd $sav0dir
-   mydir=`echo $sav1dir | sed s,^$sav2dir${MULTISUBDIR}/,,`
+   sav2dir=`pwd` && cd "$sav0dir"
+   mydir=`echo "$sav1dir" | sed "s,^$sav2dir${MULTISUBDIR}/,,"`
    PROJECT_ROOT='$(top_builddir)'${rtems_updir}'../$(MULTIBUILDTOP)'${mydir}/${with_project_root}
    ;;
 esac],[

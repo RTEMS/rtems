@@ -1,6 +1,11 @@
+2004-08-18  Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	PR 673/make_build
+	* aclocal/rtems-top.m4 (RTEMS_TOP): Add further quotes.
+
 2004-07-28  Joel Sherrill <joel@OARcorp.com>
 
-    * aclocal/version.m4: Updated to rtems-4.6.99.1.
+	* aclocal/version.m4: Updated to rtems-4.6.99.1.
 
 2004-07-25	Till Straumann <strauman@slac.stanford.edu>
 
