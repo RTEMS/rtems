@@ -157,12 +157,12 @@ AM_CPPFLAGS += -D__RTEMS_INSIDE__
 $(LIB): ${OBJS}
 	$(make-library)
 
-${ARCH}/%.$(OBJEXT): src/%.c
+${ARCH}/%.$(OBJEXT): src/%.c $(ARCH)/$(dirstamp)
 	${COMPILE} -o $@ -c $<
 
 EXTRA_DIST += $(STD_C_FILES) $(MP_C_FILES) src/Unlimited.txt
 
-all-local: $(PREINSTALL_FILES) ${ARCH} $(LIB)
+all-local: $(PREINSTALL_FILES) $(LIB)
 
 PREINSTALL_FILES =
 
