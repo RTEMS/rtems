@@ -36,7 +36,7 @@ UNUSED_C_FILES = setvec.c
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/linkcmds
 
-all-local: $(ARCH) $(startup_rel_OBJECTS) $(PGM) $(TMPINSTALL_FILES)
+all-local: $(startup_rel_OBJECTS) $(PGM) $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(PGM)
 
