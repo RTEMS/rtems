@@ -48,12 +48,6 @@ rtems_libio_t     *rtems_libio_iops;
 rtems_libio_t     *rtems_libio_iop_freelist;
 
 /*
- *  Default mode for all files.
- */
-
-mode_t    rtems_filesystem_umask;
-
-/*
  *  rtems_libio_init
  *
  *  Called by BSP startup code to initialize the libio subsystem.
