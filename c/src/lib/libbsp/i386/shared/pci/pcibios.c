@@ -218,6 +218,64 @@ pcib_find_by_class(int classCode, int idx, int *sig)
 #define PCI_MAX_DEVICES		 16
 #define PCI_MAX_FUNCTIONS	 8
 
+#define PCI_VENDOR_ID           0x00    /* 16 bits */
+#define PCI_DEVICE_ID           0x02    /* 16 bits */
+#define PCI_CLASS_REVISION      0x08
+#define PCI_HEADER_TYPE         0x0e  
+#define PCI_SUBORDINATE_BUS     0x1a 
+
+#define  PCI_CLASS_BRIDGE_PCI           0x0604
+
+static unsigned8 ucBusCount = 0xff;
+
+int
+BusCountPCI()
+{
+   if( ucBusCount == 0xff )
+   {
+      unsigned char bus,dev,hd;
+      unsigned int d;
+      int sig;
+
+      ucBusCount = 0;
+
+      for(bus=0; bus< 0xff; bus++)
+      {  
+         for(dev=0; dev<PCI_MAX_DEVICES; dev++)
+         {
+            sig = PCIB_DEVSIG_MAKE(bus,dev,0);
+            pcib_conf_read32(sig, PCI_VENDOR_ID, &d); 
+
+            if( d != -1 )
+            {
+               pcib_conf_read32(sig, PCI_CLASS_REVISION, &d); 
+               
+               if( (d >> 16) == PCI_CLASS_BRIDGE_PCI )
+               {
+                  pcib_conf_read8(sig, PCI_SUBORDINATE_BUS, &hd); 
+
+                  if( hd > ucBusCount ) 
+                     ucBusCount = hd;
+               }
+            }
+         }
+         
+      }
+
+      if( ucBusCount == 0 )
+      {
+         printk("BusCountPCI() found 0 busses, assuming 1\n");
+         ucBusCount = 1;
+      }
+      else if( ucBusCount == 0xff )
+      {
+         printk("BusCountPCI() found 0xff busses, assuming 1\n");
+         ucBusCount = 1;
+      }
+   }                       
+
+   return ucBusCount;
+}
 
 int
 BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
