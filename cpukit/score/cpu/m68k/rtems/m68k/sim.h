@@ -50,14 +50,28 @@
 #define _SIM_H_
 
 
+/*
+ *  XXX Why is a generic file like this including a bsp specific file?
+
 #include <efi332.h>
+ */
 
 
 /* SAM-- shift and mask */
 #undef  SAM
 #define SAM(a,b,c) ((a << b) & c)
 
+/*
+ *  These macros make this file usable from assembly.
+ */
 
+#ifdef ASM
+#define SIM_VOLATILE_USHORT_POINTER
+#define SIM_VOLATILE_UCHAR_POINTER
+#else
+#define SIM_VOLATILE_USHORT_POINTER (volatile unsigned short int * const)
+#define SIM_VOLATILE_UCHAR_POINTER  (volatile unsigned char * const)
+#endif
 
 /* SIM_CRB (SIM Control Register Block) base address of the SIM
    control registers */
@@ -73,7 +87,7 @@
 
 
 
-#define SIMCR (volatile unsigned short int * const)(0x00 + SIM_CRB)
+#define SIMCR SIM_VOLATILE_USHORT_POINTER(0x00 + SIM_CRB)
 				/* Module Configuration Register */
 #define    EXOFF 0x8000		/*    External Clock Off */
 #define    FRZSW 0x4000		/*    Freeze Software Enable */
@@ -86,13 +100,13 @@
 
 
 
-#define SIMTR (volatile unsigned short int * const)(0x02 + SIM_CRB)
+#define SIMTR SIM_VOLATILE_USHORT_POINTER(0x02 + SIM_CRB)
 				/* SIM Test Register */
 /* Used only for factor testing */
 
 
 
-#define SYNCR (volatile unsigned short int * const)(0x04 + SIM_CRB)
+#define SYNCR SIM_VOLATILE_USHORT_POINTER(0x04 + SIM_CRB)
 				/* Clock Synthesizer Control Register */
 #define    W     0x8000		/*    Frequency Control (VCO) */
 #define    X     0x4000		/*    Frequency Control Bit (Prescale) */
@@ -106,7 +120,7 @@
 
 
 
-#define RSR (volatile unsigned char * const)(0x07 + SIM_CRB)
+#define RSR SIM_VOLATILE_UCHAR_POINTER(0x07 + SIM_CRB)
 				/* Reset Status Register */
 #define    EXT   0x0080		/*    External Reset */
 #define    POW   0x0040		/*    Power-On Reset */
@@ -118,18 +132,18 @@
 
 
 
-#define SIMTRE (volatile unsigned short int * const)(0x08 + SIM_CRB)
+#define SIMTRE SIM_VOLATILE_USHORT_POINTER(0x08 + SIM_CRB)
 				/* System Integration Test Register */
 /* Used only for factor testing */
 
 
 
-#define PORTE0 (volatile unsigned char * const)(0x11 + SIM_CRB)
-#define PORTE1 (volatile unsigned char * const)(0x13 + SIM_CRB)
+#define PORTE0 SIM_VOLATILE_UCHAR_POINTER(0x11 + SIM_CRB)
+#define PORTE1 SIM_VOLATILE_UCHAR_POINTER(0x13 + SIM_CRB)
 				/* Port E Data Register */
-#define DDRE (volatile unsigned char * const)(0x15 + SIM_CRB)
+#define DDRE SIM_VOLATILE_UCHAR_POINTER(0x15 + SIM_CRB)
 				/* Port E Data Direction Register */
-#define PEPAR (volatile unsigned char * const)(0x17 + SIM_CRB)
+#define PEPAR SIM_VOLATILE_UCHAR_POINTER(0x17 + SIM_CRB)
 				/* Port E Pin Assignment Register */
 /* Any bit cleared (zero) defines the corresponding pin to be an I/O
    pin. Any bit set defines the corresponding pin to be a bus control
@@ -137,19 +151,19 @@
 
 
 
-#define PORTF0 (volatile unsigned char * const)(0x19 + SIM_CRB)
-#define PORTF1 (volatile unsigned char * const)(0x1b + SIM_CRB)
+#define PORTF0 SIM_VOLATILE_UCHAR_POINTER(0x19 + SIM_CRB)
+#define PORTF1 SIM_VOLATILE_UCHAR_POINTER(0x1b + SIM_CRB)
 				/* Port F Data Register */
-#define DDRF (volatile unsigned char * const)(0x1d + SIM_CRB)
+#define DDRF SIM_VOLATILE_UCHAR_POINTER(0x1d + SIM_CRB)
 				/* Port E Data Direction Register */
-#define PFPAR (volatile unsigned char * const)(0x1f + SIM_CRB)
+#define PFPAR SIM_VOLATILE_UCHAR_POINTER(0x1f + SIM_CRB)
 /* Any bit cleared (zero) defines the corresponding pin to be an I/O
    pin. Any bit set defines the corresponding pin to be a bus control
    signal. */
 
 
 
-#define SYPCR (volatile unsigned char * const)(0x21 + SIM_CRB)
+#define SYPCR SIM_VOLATILE_UCHAR_POINTER(0x21 + SIM_CRB)
 /* !!! can write to only once after reset !!! */
 				/* System Protection Control Register */
 #define    SWE   0x80		/*    Software Watch Enable */
@@ -161,55 +175,55 @@
 
 
 
-#define PICR (volatile unsigned short int * const)(0x22 + SIM_CRB)
+#define PICR SIM_VOLATILE_USHORT_POINTER(0x22 + SIM_CRB)
 				/* Periodic Interrupt Control Reg. */
 #define    PIRQL 0x0700		/*    Periodic Interrupt Request Level */
 #define    PIV   0x00ff		/*    Periodic Interrupt Level */
 
 
 
-#define PITR (volatile unsigned short int * const)(0x24 + SIM_CRB)
+#define PITR SIM_VOLATILE_USHORT_POINTER(0x24 + SIM_CRB)
 				/* Periodic Interrupt Timer Register */
 #define    PTP   0x0100		/*    Periodic Timer Prescaler Control */
 #define    PITM  0x00ff		/*    Periodic Interrupt Timing Modulus */
 
 
 
-#define SWSR (volatile unsigned char * const)(0x27 + SIM_CRB)
+#define SWSR SIM_VOLATILE_UCHAR_POINTER(0x27 + SIM_CRB)
 				/* Software Service Register */
 /* write 0x55 then 0xaa to service the software watchdog */
 
 
 
-#define TSTMSRA (volatile unsigned short int * const)(0x30 + SIM_CRB)
+#define TSTMSRA SIM_VOLATILE_USHORT_POINTER(0x30 + SIM_CRB)
 				/* Test Module Master Shift A */
-#define TSTMSRB (volatile unsigned short int * const)(0x32 + SIM_CRB)
+#define TSTMSRB SIM_VOLATILE_USHORT_POINTER(0x32 + SIM_CRB)
 				/* Test Module Master Shift A */
-#define TSTSC (volatile unsigned short int * const)(0x34 + SIM_CRB)
+#define TSTSC SIM_VOLATILE_USHORT_POINTER(0x34 + SIM_CRB)
 				/* Test Module Shift Count */
-#define TSTRC (volatile unsigned short int * const)(0x36 + SIM_CRB)
+#define TSTRC SIM_VOLATILE_USHORT_POINTER(0x36 + SIM_CRB)
 				/* Test Module Repetition Counter */
-#define CREG (volatile unsigned short int * const)(0x38 + SIM_CRB)
+#define CREG SIM_VOLATILE_USHORT_POINTER(0x38 + SIM_CRB)
 				/* Test Module Control */
-#define DREG (volatile unsigned short int * const)(0x3a + SIM_CRB)
+#define DREG SIM_VOLATILE_USHORT_POINTER(0x3a + SIM_CRB)
 				/* Test Module Distributed */
 /* Used only for factor testing */
 
 
 
-#define PORTC (volatile unsigned char * const)(0x41 + SIM_CRB)
+#define PORTC SIM_VOLATILE_UCHAR_POINTER(0x41 + SIM_CRB)
 				/* Port C Data */
 
 
 
-#define CSPAR0 (volatile unsigned short int * const)(0x44 + SIM_CRB)
+#define CSPAR0 SIM_VOLATILE_USHORT_POINTER(0x44 + SIM_CRB)
 				/* Chip Select Pin Assignment
 				   Resgister 0 */
 /* CSPAR0 contains seven two-bit fields that determine the functions
    of corresponding chip-select pins. CSPAR0[15:14] are not
    used. These bits always read zero; write have no effect. CSPAR0 bit
    1 always reads one; writes to CSPAR0 bit 1 have no effect. */
-#define CSPAR1 (volatile unsigned short int * const)(0x46 + SIM_CRB)
+#define CSPAR1 SIM_VOLATILE_USHORT_POINTER(0x46 + SIM_CRB)
 				/* Chip Select Pin Assignment 
 				   Register 1 */
 /* CSPAR1 contains five two-bit fields that determine the finctions of
@@ -255,18 +269,18 @@
 #define BS_512K 0x6
 #define BS_1M 0x7
 
-#define CSBARBT (volatile unsigned short int * const)(0x48 + SIM_CRB)
-#define CSBAR0 (volatile unsigned short int * const)(0x4c + SIM_CRB)
-#define CSBAR1 (volatile unsigned short int * const)(0x50 + SIM_CRB)
-#define CSBAR2 (volatile unsigned short int * const)(0x54 + SIM_CRB)
-#define CSBAR3 (volatile unsigned short int * const)(0x58 + SIM_CRB)
-#define CSBAR4 (volatile unsigned short int * const)(0x5c + SIM_CRB)
-#define CSBAR5 (volatile unsigned short int * const)(0x60 + SIM_CRB)
-#define CSBAR6 (volatile unsigned short int * const)(0x64 + SIM_CRB)
-#define CSBAR7 (volatile unsigned short int * const)(0x68 + SIM_CRB)
-#define CSBAR8 (volatile unsigned short int * const)(0x6c + SIM_CRB)
-#define CSBAR9 (volatile unsigned short int * const)(0x70 + SIM_CRB)
-#define CSBAR10 (volatile unsigned short int * const)(0x74 + SIM_CRB)
+#define CSBARBT SIM_VOLATILE_USHORT_POINTER(0x48 + SIM_CRB)
+#define CSBAR0 SIM_VOLATILE_USHORT_POINTER(0x4c + SIM_CRB)
+#define CSBAR1 SIM_VOLATILE_USHORT_POINTER(0x50 + SIM_CRB)
+#define CSBAR2 SIM_VOLATILE_USHORT_POINTER(0x54 + SIM_CRB)
+#define CSBAR3 SIM_VOLATILE_USHORT_POINTER(0x58 + SIM_CRB)
+#define CSBAR4 SIM_VOLATILE_USHORT_POINTER(0x5c + SIM_CRB)
+#define CSBAR5 SIM_VOLATILE_USHORT_POINTER(0x60 + SIM_CRB)
+#define CSBAR6 SIM_VOLATILE_USHORT_POINTER(0x64 + SIM_CRB)
+#define CSBAR7 SIM_VOLATILE_USHORT_POINTER(0x68 + SIM_CRB)
+#define CSBAR8 SIM_VOLATILE_USHORT_POINTER(0x6c + SIM_CRB)
+#define CSBAR9 SIM_VOLATILE_USHORT_POINTER(0x70 + SIM_CRB)
+#define CSBAR10 SIM_VOLATILE_USHORT_POINTER(0x74 + SIM_CRB)
 
 #define MODE 0x8000
 #define Disable 0
@@ -312,17 +326,17 @@
 
 #define AVEC 1
 
-#define CSORBT (volatile unsigned short int * const)(0x4a + SIM_CRB)
-#define CSOR0 (volatile unsigned short int * const)(0x4e + SIM_CRB)
-#define CSOR1 (volatile unsigned short int * const)(0x52 + SIM_CRB)
-#define CSOR2 (volatile unsigned short int * const)(0x56 + SIM_CRB)
-#define CSOR3 (volatile unsigned short int * const)(0x5a + SIM_CRB)
-#define CSOR4 (volatile unsigned short int * const)(0x5e + SIM_CRB)
-#define CSOR5 (volatile unsigned short int * const)(0x62 + SIM_CRB)
-#define CSOR6 (volatile unsigned short int * const)(0x66 + SIM_CRB)
-#define CSOR7 (volatile unsigned short int * const)(0x6a + SIM_CRB)
-#define CSOR8 (volatile unsigned short int * const)(0x6e + SIM_CRB)
-#define CSOR9 (volatile unsigned short int * const)(0x72 + SIM_CRB)
-#define CSOR10 (volatile unsigned short int * const)(0x76 + SIM_CRB)
+#define CSORBT SIM_VOLATILE_USHORT_POINTER(0x4a + SIM_CRB)
+#define CSOR0 SIM_VOLATILE_USHORT_POINTER(0x4e + SIM_CRB)
+#define CSOR1 SIM_VOLATILE_USHORT_POINTER(0x52 + SIM_CRB)
+#define CSOR2 SIM_VOLATILE_USHORT_POINTER(0x56 + SIM_CRB)
+#define CSOR3 SIM_VOLATILE_USHORT_POINTER(0x5a + SIM_CRB)
+#define CSOR4 SIM_VOLATILE_USHORT_POINTER(0x5e + SIM_CRB)
+#define CSOR5 SIM_VOLATILE_USHORT_POINTER(0x62 + SIM_CRB)
+#define CSOR6 SIM_VOLATILE_USHORT_POINTER(0x66 + SIM_CRB)
+#define CSOR7 SIM_VOLATILE_USHORT_POINTER(0x6a + SIM_CRB)
+#define CSOR8 SIM_VOLATILE_USHORT_POINTER(0x6e + SIM_CRB)
+#define CSOR9 SIM_VOLATILE_USHORT_POINTER(0x72 + SIM_CRB)
+#define CSOR10 SIM_VOLATILE_USHORT_POINTER(0x76 + SIM_CRB)
 
 #endif /* _SIM_h_ */
