@@ -1,14 +1,20 @@
 
+2000-08-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* custom/gensh1.cfg, custom/gensh2.cfg: Abandon gcc-2.7.2's make-exe
+	* custom/simcpu32.cfg: Set RTEMS_BSVC_MODEL = simcpu32
+	* ChangeLog: File paths corrected
+
 2000-08-29	Joel Sherrill <joel.sherrill@OARcorp.com>
 
 	* custom/armulator.cfg: Corrected make-exe rule to pick up debug flags.
 
 2000-08-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
-	* make/custom/pck6.cfg: New file
-	* make/custom/pc486.cfg: Use -m486 
-	* make/custom/pc586.cfg: Use -mpentium 
-	* make/custom/pc686.cfg: Use -mmpentiumpro
-	* make/custom/i386ex.cfg: Use -msoft-float
+
+	* custom/pck6.cfg: New file
+	* custom/pc486.cfg: Use -m486 
+	* custom/pc586.cfg: Use -mpentium 
+	* custom/pc686.cfg: Use -mmpentiumpro
 	* custom/i386ex.cfg: Use -msoft-float
 
 2000-08-11  Charles-Antoine Gauthier  <charles.gauthier@nrc.ca>
