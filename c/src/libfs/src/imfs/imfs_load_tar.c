@@ -220,7 +220,9 @@ octal2ulong(char *octascii, int len)
    mult = 1;
    for (i=len-1; i>=0; i--)
    {
-      if ((octascii[i] < '0') || (octascii[i] > '9'))
+      if (octascii[i] < '0') 
+         continue;
+      if (octascii[i] > '9')
          continue;
 
       num  += mult*((unsigned long)(octascii[i] - '0'));

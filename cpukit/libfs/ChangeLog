@@ -1,3 +1,8 @@
+2001-10-26	Victor V. Vengerov <vvv@oktet.ru>
+
+	* src/imfs/imfs_load_tar.c: Minor modification so this will
+	compile with gcc-2.95.3 with the arguments "-m5200 -O4".
+
 2001-10-16	Chris Johns <ccj@acm.org>
 
 	* imfs/imfs_load_tar.c: Changed the code around to remove an
