@@ -6,7 +6,7 @@
 #  $Id$
 #
 
-PROJECT=started
+PROJECT=bsp_howto
 DISTRIBUTION_LEVEL=public
 
 include ../Make.config
@@ -18,8 +18,8 @@ dirs:
 
 COMMON_FILES=../common/cpright.texi ../common/setup.texi
 
-GENERATED_FILES= buildc.texi buildrt.texi gdb.texi intro.texi \
-    nt.texi require.texi sample.texi
+GENERATED_FILES= clock.texi console.texi init.texi intro.texi \
+    linkcmds.texi bspstruct.texi makefiles.texi target.texi timer.texi
 
 FILES= $(PROJECT).texi versions.texi $(GENERATED_FILES)
 
@@ -44,45 +44,53 @@ $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) -v $(PROJECT).texi
 	texi2dvi -v $(PROJECT).texi
 
-intro.texi: intro.t versions.texi
-	$(BMENU) -c -p "Top" \
+intro.texi: intro.t Makefile
+	$(BMENU) -c -p "" \
 	    -u "Top" \
-	    -n "Requirements" ${*}.t
+	    -n "" ${*}.t
 
-require.texi: require.t versions.texi
-	$(BMENU) -c -p "EGCS Mailing List" \
+target.texi: target.t Makefile
+	$(BMENU) -c -p "" \
 	    -u "Top" \
-	    -n "Building the GNU C/C++ Cross Compiler Toolset" ${*}.t
+	    -n "" ${*}.t
 
-buildc.texi: buildc.t versions.texi
-	$(BMENU) -c -p "Requirements" \
+bspstruct.texi: bspstruct.t Makefile
+	$(BMENU) -c -p "" \
 	    -u "Top" \
-	    -n "Building RTEMS" ${*}.t
+	    -n "" ${*}.t
 
-buildrt.texi: buildrt.t versions.texi
-	$(BMENU) -c -p "Running the bit Script" \
+makefiles.texi: makefiles.t Makefile
+	$(BMENU) -c -p "" \
 	    -u "Top" \
-	    -n "Building the Sample Application" ${*}.t
+	    -n "" ${*}.t
 
-sample.texi: sample.t versions.texi
-	$(BMENU) -c -p "Generate RTEMS for a Specific Target and BSP" \
+linkcmds.texi: linkcmds.t Makefile
+	$(BMENU) -c -p "" \
 	    -u "Top" \
-	    -n "Building the GNU Debugger" ${*}.t
+	    -n "" ${*}.t
 
-gdb.texi: gdb.t versions.texi
-	$(BMENU) -c -p "Application Executable" \
+init.texi: init.t Makefile
+	$(BMENU) -c -p "" \
 	    -u "Top" \
-	    -n "Using MS-Windows as a Development Host" ${*}.t
+	    -n "" ${*}.t
 
-nt.texi: nt.t versions.texi
-	$(BMENU) -c -p "GDB for DINK32" \
+clock.texi: clock.t Makefile
+	$(BMENU) -c -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+console.texi: console.t Makefile
+	$(BMENU) -c -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+timer.texi: timer.t Makefile
+	$(BMENU) -c -p "" \
 	    -u "Top" \
 	    -n "" ${*}.t
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
-	-cp pictures/sfile12c.jpg $(WWW_INSTALL)/$(PROJECT)
-	-cp pictures/bit_c.jpg $(WWW_INSTALL)/$(PROJECT)
 	$(TEXI2WWW) $(TEXI2WWW_ARGS) -dir $(WWW_INSTALL)/$(PROJECT) \
  	    $(PROJECT).texi
 
