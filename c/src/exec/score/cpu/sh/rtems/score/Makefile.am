@@ -11,10 +11,6 @@ noinst_HEADERS = \
     iosh7032.h ispsh7032.h \
     iosh7045.h ispsh7045.h
 
-## HACK: this should not be here
-## Currently needed to get RTEMS_CPU_MODEL
-include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-
 #
 # (OPTIONAL) Add local stuff here using +=
 #

@@ -67,7 +67,7 @@ if test "$HAS_ITRON_API" = "yes"; then
   cfg_subdirs="$cfg_subdirs itron"
 fi
 AC_CONFIG_SUBDIRS($cfg_subdirs)
-AC_CONFIG_SUBDIRS(score/cpu)
+AC_CONFIG_SUBDIRS(score/cpu/$RTEMS_CPU)
 
 PROJECT_INCLUDE="\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"
 AC_SUBST(PROJECT_INCLUDE)

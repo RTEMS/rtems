@@ -23,6 +23,7 @@ aclocal/canonical-host.m4 \
 aclocal/canonical-target-name.m4 \
 aclocal/canonicalize-tools.m4 \
 aclocal/check-bsps.m4 \
+aclocal/check-bsp-cache.m4 \
 aclocal/check-cpu.m4 \
 aclocal/check-cxx.m4 \
 aclocal/check-files-in.m4 \

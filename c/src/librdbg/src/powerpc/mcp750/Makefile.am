@@ -46,28 +46,21 @@ RPCGEN = @RPCGEN@
 AWK = @AWK@
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(RTEMS_ROOT)/make/lib.cfg
+include $(top_srcdir)/../../../automake/lib.am
 
-INSTALL_CHANGE = @INSTALL_CHANGE@
-mkinstalldirs = $(SHELL) $(top_srcdir)/@RTEMS_TOPdir@/mkinstalldirs
+PREINSTALL_FILES = \
+$(PROJECT_INCLUDE)/rdbg \
+$(PROJECT_INCLUDE)/rdbg/remdeb.h
 
-INSTALLDIRS = $(PROJECT_INCLUDE)/rdbg
+$(PROJECT_INCLUDE)/rdbg:
+	@$(mkinstalldirs) $@
 
-$(INSTALLDIRS):
-	@$(mkinstalldirs) $(INSTALLDIRS)
+TMPINSTALL_FILES += \
+$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIBVARIANT).a
 
 #
 # Add local stuff here using +=
 #
-
-DEFINES +=
-CPPFLAGS +=
-#
-# Enable traces in RDBG
-#
-#CFLAGS   += -DDDEBUG
-#
-CFLAGS +=
 
 #
 # Add your list of files to delete here.  The config files
@@ -76,15 +69,16 @@ CFLAGS +=
 #  'make clobber' already includes 'make clean'
 #
 
-CLEAN_ADDITIONS += $(LIB) $(H_FILES) $(GEN_C_FILES)
-CLOBBER_ADDITIONS +=
+CLEANFILES += $(LIB) $(H_FILES) $(GEN_C_FILES)
 
 FRONTEND = \"$(RTEMS_CPU)/@RTEMS_BSP@/remdeb_f.x\"
 
-all: ${ARCH} $(LIB)
-	@$(INSTALL_VARIANT) -m 644 $(LIB) $(PROJECT_RELEASE)/lib
+$(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIBVARIANT).a: $(LIB)
+	$(INSTALL_DATA) $< $@
 
-$(LIB): $(SRCS) ${OBJS}
+all: ${ARCH} $(PREINSTALL_FILES) $(TMPINSTALL_FILES)
+
+$(LIB): ${OBJS}
 	$(make-library)
 
 remdeb.h: $(X_FILES)
@@ -92,7 +86,9 @@ remdeb.h: $(X_FILES)
 	( pwd=`pwd`; cd $(srcdir)/../..; \
 	$(RPCGEN) -h -DFRONTEND=$(FRONTEND) \
 	  -o $$pwd/$@ remdeb.x )
-	@$(INSTALL_CHANGE) -m 755 $@ $(PROJECT_INCLUDE)/rdbg
+
+$(PROJECT_INCLUDE)/rdbg/remdeb.h: remdeb.h
+	$(INSTALL_DATA) $< $@
 
 remdeb_xdr.c: $(X_FILES)
 	@rm -f $@
@@ -108,6 +104,6 @@ remdeb_svc.c: $(X_FILES)
 	$(AWK) -f $(srcdir)/../../awk.svc THEPROG="remdeb.h" tmpSvc.c >$@
 	@rm -f tmpSvc.c
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
-	cd $(top_builddir) \
-	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+EXTRA_DIST = remdeb_f.x
+
+include $(top_srcdir)/../../../automake/local.am

@@ -5,10 +5,10 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
-if MPC750
-CPUDIR = mpc750
+if PPC_NEW_EXCEPTION_PROCESSING
+CPUDIR = new_exception_processing
 else
-CPUDIR = other_cpu
+CPUDIR = old_exception_processing
 endif
 
 SUBDIRS = shared $(CPUDIR)

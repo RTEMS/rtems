@@ -243,3 +243,4 @@ void *POSIX_Init(
 
   return NULL; /* just so the compiler thinks we returned something */
 }
+

@@ -128,5 +128,7 @@ host.cfg
 bsp.cfg
 custom/Makefile
 custom/default.cfg
-compilers/Makefile
+compilers/Makefile,
+make $RTEMS_BSP.cache,
+RTEMS_BSP=${RTEMS_BSP}
 )
