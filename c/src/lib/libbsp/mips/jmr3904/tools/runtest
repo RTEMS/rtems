@@ -1,0 +1,261 @@
+#!/bin/sh -p
+#
+# Run rtems tests on the powerpc simulator
+# This program generates a simulator script to run each test
+# Typically the test is then run, although it can be generated
+# and left as a file using -s
+#
+#  COPYRIGHT (c) 1989-1999.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in found in the file LICENSE in this distribution or at
+#  http://www.OARcorp.com/rtems/license.html.
+#
+#  $Id$
+#
+
+# progname=`basename $0`
+progname=${0##*/}        # fast basename hack for ksh, bash
+
+USAGE=\
+"usage: $progname [ -opts ] test [ test ... ]
+        -o options  -- specify options to be passed to simulator
+	-v	    -- verbose
+        -d          -- generate device tree file (as 'test'.device) and exit
+        -l logdir   -- specify log directory (default is 'logdir')
+
+  Specify test as 'test' or 'test.exe'.
+  All multiprocessing tests *must* be specified simply as 'mp01', etc.
+"
+
+# export everything
+set -a
+
+#   log an error to stderr
+prerr()
+{
+    echo "$*" >&2
+}
+
+fatal() {
+    [ "$1" ] && prerr $*
+    prerr "$USAGE"
+    exit 1
+}
+
+warn() {
+    [ "$1" ] && prerr $*
+}
+
+# print args, 1 per line
+ml_echo()
+{
+    for l
+    do
+       echo "$l"
+    done
+}
+
+# run at normal and signalled exit
+test_exit()
+{
+    exit_code=$1
+
+    rm -f ${logfile}.tmp*
+    [ "$sim_pid" ] && kill -9 $sim_pid
+
+    exit $exit_code
+}
+
+#
+# process the options
+#
+# defaults for getopt vars
+#
+# max_run_time is defaulted to 5 minutes
+#
+
+verbose=""
+extra_options=""
+device_and_exit=""
+stdio_setup="yes"
+run_to_completion="yes"
+logdir=log
+update_on_tick="no"
+max_run_time=$((5 * 60))
+using_print_buffer="yes"
+simulator=mipstx39-rtems-run 
+
+while getopts vdl:o:s: OPT
+do
+    case "$OPT" in
+	v)
+	    verbose="yes";;
+	d)
+	    device_and_exit="yes"
+            run_to_completion="no"
+            stdio_setup="no";;
+        l)
+            logdir="$OPTARG";;
+        o)
+            extra_options="$OPTARG";;
+        s)
+            simulator="$OPTARG";;
+        *)
+            fatal;;
+    esac
+done
+
+let $((shiftcount = $OPTIND - 1))
+shift $shiftcount
+
+args=$*
+
+#
+#  Check some parameters
+#
+
+# JRS CHANGE 
+# if [ ! -x ${simulator} ] ; then
+#    fatal "${simulator} is not executable"
+# fi;
+
+#
+# Run the tests
+#
+
+tests="$args"
+if [ ! "$tests" ]
+then
+     set -- `echo *.exe`
+     tests="$*"
+fi
+
+[ -d $logdir ] ||
+  mkdir $logdir || fatal "could not create log directory ($logdir)"
+
+# where the tmp files go
+trap "test_exit" 1 2 3 13 14 15
+
+for tfile in $tests
+do
+
+   tname=`basename $tfile .exe`
+   cpus="1"
+   TEST_TYPE="single"
+
+   case $tname in
+       # size is no longer interactive.
+       monitor*| termios*)
+            if [ $run_to_completion = "yes" ]
+            then
+                 warn "Skipping $tname; it is interactive"
+                 continue
+            fi
+            ;;
+       *-node2*)
+           warn "Skipping $tname; 'runtest' runs both nodes when for *-node1"
+           continue;;
+       *-node1*)
+           warn "Running both nodes associated with $tname"
+           variant=`echo $tname | sed 's/.*-node[12]//' | sed 's/\.exe//'`
+           tname=`echo $tname | sed 's/-node.*//'`
+           TEST_TYPE="mp"
+           ;;
+       minimum*|stackchk*|spfatal*|termio*)
+           continue
+           ;;
+   esac
+
+   if [ $TEST_TYPE = "mp" ]
+   then
+       cpus="1 2"
+
+       logfile1=$logdir/${tname}_1${variant}
+       logfile2=$logdir/${tname}_2${variant}
+       infofile1=$logfile1.info
+       infofile2=$logfile2.info
+
+       rm -f ${logfile1} ${logfile2}
+
+       date=`date`
+       echo "Starting $tname at $date"
+
+       ${simulator} --board=jmr3904 ${tname}-node1${variant}.exe | \
+         sed -e 's///' -e '/^$/d' > ${logfile1} &
+
+       ${simulator} --board=jmr3904 ${tname}-node2${variant}.exe | \
+         sed -e 's///' -e '/^$/d' > ${logfile2} &
+
+       wait
+
+   fi
+
+   if [ $TEST_TYPE = "single" ]
+   then
+     logfile=$logdir/${tname}_1
+     infofile=$logfile.info
+
+     rm -f ${logfile}.tmp*
+
+     date=`date`
+     echo "Starting $tname at $date"
+
+     # Generate a device file to get the work done.
+     # The device file must do the following:
+     #
+     #       arrange for more memory (2 Mb)
+
+     if [ "$device_and_exit" = "yes" ]
+     then
+          fatal "Cannot currently generate device files"
+     fi
+
+     # Spin off the simulator in the background
+     #   -c sets an instruction limit
+
+     # XXX need to make sure it won't run forever... 
+
+     ${simulator} --board=jmr3904 $tfile | \
+         sed -e 's///' -e '/^$/d' > ${logfile}
+   fi
+
+   # Create the info files
+   for cpu in $cpus
+   do
+   {
+       echo "$date"
+       echo "Test run on: `uname -n`"
+       echo "Host Information:"
+       echo `uname -a`
+       echo
+
+       #sed -e 's///' < ${logdir}/${tname}_${cpu}
+       cat ${logdir}/${tname}_${cpu}
+
+       if [ "$ran_too_long" = "yes" ]
+       then
+           echo "Test did NOT finish normally; killed after $max_run_time seconds"
+       fi
+
+       echo
+       date;
+   } > ${logdir}/${tname}_${cpu}.info
+   done
+
+   if [ "$cpus" = "1" ]
+   then
+        mv ${infofile} $logdir/${tname}.info
+        mv ${logfile}  $logdir/${tname}
+   fi
+
+done
+
+echo "Tests completed at " `date`
+test_exit 0
+
+# Local Variables: ***
+# mode:ksh ***
+# End: ***
+

@@ -21,9 +21,6 @@
 
 /* external prototypes for monitor interface routines */
 
-void outbyte( char );
-char inbyte( void );
-
 #define READ_UINT8( _register_, _value_ ) \
         ((_value_) = *((volatile unsigned char *)(_register_)))
 

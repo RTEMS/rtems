@@ -15,7 +15,7 @@
 #define Clock_driver_support_at_tick()
 
 /* XXX */
-#define CLICKS 10000
+#define CLICKS 5000
 #define Clock_driver_support_install_isr( _new, _old ) \
   do { \
     unsigned32 _clicks = CLICKS; \

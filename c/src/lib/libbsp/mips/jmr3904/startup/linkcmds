@@ -110,7 +110,8 @@ SECTIONS
     _stack_init = .;
     _clear_end = .;
     WorkspaceBase = .;
-    . += 512K;    /* reserve some memory for workspace */
+     /* HACK -- tied to value bspstart */
+    . += 4096K;    /* reserve some memory for workspace */
     HeapBase = .;
     . += HeapSize;    /* reserve some memory for heap */
   }

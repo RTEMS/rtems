@@ -22,6 +22,7 @@
 	.set nomips16
 #endif
 
+#include <asm.h>
 #include "regs.S"
 
 /*
@@ -206,16 +207,15 @@ init:
 	.end	init
 	
 /*
- * _exit -- Exit from the application. Normally we cause a user trap
- *          to return to the ROM monitor for another run. NOTE: This is
- *	    the only other routine we provide in the crt0.o object, since
- *          it may be tied to the "_start" routine. It also allows
- *          executables that contain a complete world to be linked with
- *          just the crt0.o object.
+ *  Exit from the application. Normally we cause a user trap
+ *  to return to the ROM monitor for another run. NOTE: This is
+ *  the only other routine we provide in the crt0.o object, since
+ *  it may be tied to the "_start" routine. It also allows
+ *  executables that contain a complete world to be linked with
+ *  just the crt0.o object.
  */
-	.globl	_sys_exit
-	.ent _sys_exit
-_sys_exit:
+
+FRAME(_sys_exit,sp,0,ra)
 7:
 #ifdef GCRT0
 	jal	_mcleanup
@@ -226,6 +226,6 @@ _sys_exit:
 	nop
 	b	7b				# but loop back just in-case
 	nop
-	.end _exit
+ENDFRAME(_sys_exit)
 
 /* EOF crt0.S */

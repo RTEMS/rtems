@@ -46,9 +46,10 @@ extern "C" {
 
 #define MUST_WAIT_FOR_INTERRUPT 0
 
-#define Install_tm27_vector( handler ) 
+#define Install_tm27_vector( handler ) \
+    (void) set_vector( handler, TX3904_IRQ_SOFTWARE_1, 1 ); \
 
-#define Cause_tm27_intr()  
+#define Cause_tm27_intr() \
 
 #define Clear_tm27_intr()  
 

@@ -1,3 +1,15 @@
+2000-12-19	Joel Sherrill <joel@OARcorp.com>
+
+	* Makefile.am: Added tools subdirectory and removed commented out line.
+	* configure.in: Added tools subdirectory.
+	* tools: New subdirectory.
+	* tools/.cvsignore, tools/Makefile.am, tools/configure.in,
+	tools/runtest: New files -- based on powerpc/psim.
+	* clock/clockdrv.c: Guessed new value for clock tick.  Need to
+	add fast idle support.
+	* include/bsp.h: tm27 support initiated.
+	* Most tests appear to run correctly!
+
 2000-12-13	Joel Sherrill <joel@OARcorp.com>
 
 	* README: Updated.  We are now vectoring a clock tick ISR handler.

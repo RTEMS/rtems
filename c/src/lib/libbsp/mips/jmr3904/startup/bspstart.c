@@ -86,7 +86,8 @@ void bsp_start( void )
   Cpu_table.postdriver_hook = bsp_postdriver_hook;
   Cpu_table.interrupt_stack_size = 4096;
 
-  if ( BSP_Configuration.work_space_size >(512*1024) )
+  /* HACK -- tied to value linkcmds */
+  if ( BSP_Configuration.work_space_size >(4096*1024) )
    _sys_exit( 1 );
 
   BSP_Configuration.work_space_start = (void *) &WorkspaceBase;
