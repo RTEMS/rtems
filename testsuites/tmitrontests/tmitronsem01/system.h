@@ -30,7 +30,7 @@ void ITRON_Init( void );
 #define CONFIGURE_MAXIMUM_ITRON_SEMAPHORES  100
 #define CONFIGURE_ITRON_INIT_TASK_TABLE
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 

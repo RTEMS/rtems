@@ -1,5 +1,9 @@
 2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* tmitronsem01/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* tmitronsem01/system.h: Include <rtems/itron.h> instead of <itron.h>.
 
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
