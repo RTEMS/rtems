@@ -8,6 +8,22 @@
  *  http://www.OARcorp.com/rtems/license.html.
  *
  * $Id$
+ *
+ * ------------------------------------------------------------------------
+ * [22.05.2000,StWi/CWA] added support for the DEC/Intel 21143 chip
+ *
+ * This support is (for now) only available for the __i386 target, because
+ * that's the only testing platform I have. It should to my best knowledge
+ * work in the same way for the "__PPC" target, but someone should test
+ * this first before it's put into the code. Thanks go to Andrew Klossner
+ * who provided the vital information about the Intel 21143 chip.
+ *
+ * (FWIW: my network card is a Kingston KNE100TX with 21143PD chip)
+ *
+ * The 21143 support is enabled by defining the macro
+ * "ENABLE_21143_VARIANT" (see the "#if defined(__i386)" section right
+ * below, just add or remove comments as needed)
+ * ------------------------------------------------------------------------
  */
 
 #include <rtems.h>
@@ -19,11 +35,12 @@
  */
 
 #if defined(__i386)
-#define DEC21140_SUPPORTED
+  #define DEC21140_SUPPORTED
+  #define ENABLE_21143_VARIANT
 #endif
 
 #if defined(__PPC) && (defined(mpc604) || defined(mpc750))
-#define DEC21140_SUPPORTED
+  #define DEC21140_SUPPORTED
 #endif
 
 #if defined(DEC21140_SUPPORTED)
@@ -72,7 +89,11 @@
 
 #define PCI_INVALID_VENDORDEVICEID	0xffffffff
 #define PCI_VENDOR_ID_DEC 0x1011
-#define PCI_DEVICE_ID_DEC_TULIP_FAST 0x0009
+#if defined(ENABLE_21143_VARIANT)
+  #define PCI_DEVICE_ID_DEC_TULIP_FAST 0x0019
+#else
+  #define PCI_DEVICE_ID_DEC_TULIP_FAST 0x0009
+#endif
 
 #define IO_MASK  0x3
 #define MEM_MASK  0xF
@@ -830,6 +851,12 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	 * Process options
 	 */
 #if defined(__i386)
+
+#if defined(ENABLE_21143_VARIANT)
+  /* the 21143 chip must be enabled before it can be accessed */
+  pcib_conf_write32( signature, 0x40, 0 );
+#endif
+
 	pcib_conf_read32(signature, 16, &value);
 	sc->port = value & ~IO_MASK;
         
@@ -922,6 +949,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config)
 	if_attach (ifp);
 	ether_ifattach (ifp);
 
+        printk( "DEC21140 : driver has been attached\n" );
 	return 1;
 };
 #endif /* DEC21140_SUPPORTED */
