@@ -129,7 +129,11 @@ int sched_rr_get_interval(
    *  Only supported for the "calling process" (i.e. this node).
    */
 
-  assert( pid == getpid() );
+  if ( pid == getpid() )
+    set_errno_and_return_minus_one( ESRCH );
+
+  if ( !interval )
+    set_errno_and_return_minus_one( EINVAL );
 
   _POSIX_Interval_to_timespec( _Thread_Ticks_per_timeslice, interval );
   return 0;
