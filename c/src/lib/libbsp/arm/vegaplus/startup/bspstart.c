@@ -115,8 +115,6 @@ void bsp_start_default( void )
  
    rtemsFreeMemStart += BSP_Configuration.work_space_size;
 
-  console_reserve_resources(&BSP_Configuration);
-
   /*
    * Init rtems exceptions management
    */
