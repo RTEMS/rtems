@@ -1,5 +1,11 @@
 2004-07-14	Joel Sherrill <joel@OARcorp.com>
 
+	PR 650/rtems
+	* score/src/coremsg.c: Check for mathemathical overflow when calculating
+	amount of memory to allocate for message buffers.
+
+2004-07-14	Joel Sherrill <joel@OARcorp.com>
+
 	PR 651/core
 	* rtems/src/taskident.c: Add NULL check for id.
 

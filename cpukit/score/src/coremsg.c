@@ -51,46 +51,64 @@
 boolean _CORE_message_queue_Initialize(
   CORE_message_queue_Control    *the_message_queue,
   CORE_message_queue_Attributes *the_message_queue_attributes,
-  uint32_t                       maximum_pending_messages,
-  uint32_t                       maximum_message_size
+  unsigned32                     maximum_pending_messages,
+  unsigned32                     maximum_message_size
 )
 {
-  uint32_t   message_buffering_required;
-  uint32_t   allocated_message_size;
+  unsigned32 message_buffering_required;
+  unsigned32 allocated_message_size;
 
   the_message_queue->maximum_pending_messages   = maximum_pending_messages;
   the_message_queue->number_of_pending_messages = 0;
   the_message_queue->maximum_message_size       = maximum_message_size;
   _CORE_message_queue_Set_notify( the_message_queue, NULL, NULL );
-
+ 
   /*
-   * round size up to multiple of a ptr for chain init
+   *  Round size up to multiple of a pointer for chain init and 
+   *  check for overflow on adding overhead to each message.
    */
-
+ 
   allocated_message_size = maximum_message_size;
-  if (allocated_message_size & (sizeof(uint32_t  ) - 1)) {
-      allocated_message_size += sizeof(uint32_t  );
-      allocated_message_size &= ~(sizeof(uint32_t  ) - 1);
+  if (allocated_message_size & (sizeof(unsigned32) - 1)) {
+      allocated_message_size += sizeof(unsigned32);
+      allocated_message_size &= ~(sizeof(unsigned32) - 1);
   }
-
-  message_buffering_required = maximum_pending_messages *
-       (allocated_message_size + sizeof(CORE_message_queue_Buffer_control));
-
-  the_message_queue->message_buffers = (CORE_message_queue_Buffer *)
-     _Workspace_Allocate( message_buffering_required );
-
-  if (the_message_queue->message_buffers == 0)
+   
+  if (allocated_message_size < maximum_message_size)
     return FALSE;
 
+  /*
+   *  Calculate how much total memory is required for message buffering and
+   *  check for overflow on the multiplication. 
+   */
+  message_buffering_required = maximum_pending_messages *
+       (allocated_message_size + sizeof(CORE_message_queue_Buffer_control));
+ 
+  if (message_buffering_required < allocated_message_size)
+    return FALSE;
+
+  /*
+   *  Attempt to allocate the message memory
+   */
+  the_message_queue->message_buffers = (CORE_message_queue_Buffer *) 
+     _Workspace_Allocate( message_buffering_required );
+ 
+  if (the_message_queue->message_buffers == 0)
+    return FALSE;
+ 
+  /*
+   *  Initialize the pool of inactive messages, pending messages,
+   *  and set of waiting threads.
+   */
   _Chain_Initialize (
     &the_message_queue->Inactive_messages,
     the_message_queue->message_buffers,
     maximum_pending_messages,
     allocated_message_size + sizeof( CORE_message_queue_Buffer_control )
   );
-
+ 
   _Chain_Initialize_empty( &the_message_queue->Pending_messages );
-
+ 
   _Thread_queue_Initialize(
     &the_message_queue->Wait_queue,
     _CORE_message_queue_Is_priority( the_message_queue_attributes ) ?
