@@ -6,6 +6,9 @@
 include_HEADERS = chain.h console.h clockdrv.h iosupp.h ringbuf.h rtc.h \
     spurious.h timerdrv.h vmeintr.h
 
+LIBC_HFILES = stdint.h inttypes.h
+include_HEADERS += $(LIBC_HFILES)
+
 PREINSTALL_FILES = $(PROJECT_INCLUDE) \
     $(include_HEADERS:%=$(PROJECT_INCLUDE)/%)
 

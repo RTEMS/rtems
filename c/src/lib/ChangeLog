@@ -1,3 +1,10 @@
+2002-04-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* include/Makefile.am: Add stdint.h and inttypes.h.
+	  (reported by Mike Siers <mikes@poliac.com>)
+	* include/stdint.h: New file.
+	* include/inttypes.h: New file.
+
 2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libc/stat.c: include <string.h>.
