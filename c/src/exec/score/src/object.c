@@ -95,10 +95,10 @@ void _Objects_Extend_information(
    */
 
   minimum_index = _Objects_Get_index( information->minimum_id );
-  index_base = minimum_index;
-  block = 0;
+  index_base    = minimum_index;
+  block         = 0;
   
-  if (information->maximum < minimum_index)
+  if ( information->maximum < minimum_index )
     block_count = 0;
   else {
     block_count = information->maximum / information->allocation_size;
@@ -439,6 +439,8 @@ void _Objects_Initialize_information(
   boolean              is_thread
 )
 {
+  static Objects_Control *null_local_table = NULL;
+  
   unsigned32       minimum_index;
   unsigned32       index;
   unsigned32       name_length;
@@ -471,13 +473,19 @@ void _Objects_Initialize_information(
    */
 
   information->auto_extend = (maximum & OBJECTS_UNLIMITED_OBJECTS) ? TRUE : FALSE;
-  maximum &= ~OBJECTS_UNLIMITED_OBJECTS;
+  maximum                 &= ~OBJECTS_UNLIMITED_OBJECTS;
   
   /*
    *  The allocation unit is the maximum value
    */
 
   information->allocation_size = maximum;
+
+  /*
+   *  Provide a null local table entry for the case of any empty table.
+   */
+
+  information->local_table = &null_local_table;
 
   /*
    *  Calculate minimum and maximum Id's
@@ -495,7 +503,7 @@ void _Objects_Initialize_information(
 
   name_length = maximum_name_length;
 
-  if (name_length & (OBJECTS_NAME_ALIGNMENT-1))
+  if ( name_length & (OBJECTS_NAME_ALIGNMENT-1) )
     name_length = (name_length + OBJECTS_NAME_ALIGNMENT) & 
                   ~(OBJECTS_NAME_ALIGNMENT-1);
 
