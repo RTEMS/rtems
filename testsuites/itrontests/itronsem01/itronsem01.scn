@@ -40,8 +40,8 @@ Init - sig_sem - semaphore 1 (count --> 1) - E_OK
 Init - twai_sem(TMO_POL) - semaphore 1 available (count --> 0) - E_OK
 Init - twai_sem(TMO_POL) - semaphore 1 available - E_TMOUT
 Init - twai_sem - semaphore 1 unavailable - 1 second E_TMOUT
-Init - starting to block at Fri Jan 01 00:00:00 1988
-Init - timed out at Fri Jan 01 00:00:01 1988
+Init - starting to block at Fri Jan  1 00:00:00 1988
+Init - timed out at Fri Jan  1 00:00:01 1988
 Init - twai_sem - semaphore 1 unavailable - timeout completed
 Init - sig_sem - semaphore 1 (count --> 1) - E_OK
 Init - sig_sem - semaphore 1 (count --> 2) - E_OK

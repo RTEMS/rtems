@@ -66,6 +66,6 @@ Init - trcv_mbf - NULL msg returns E_PAR
 Init - trcv_mbf - NULL p_msgsz returns E_PAR
 Init - trcv_mbf - tmout <-2  returns E_PAR
 Init - trcv_mbf -- E_TMOUT
-Init - starting to block at Fri Jan 01 00:00:00 1988
-Init - time out at Fri Jan 01 00:00:01 1988
+Init - starting to block at Fri Jan  1 00:00:00 1988
+Init - time out at Fri Jan  1 00:00:01 1988
 *** ITRONMBF01 --- ITRON MESSAGE BUFFER TEST ***
