@@ -1,3 +1,8 @@
+2003-10-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* comm/uart.h: Add extern "C" guards.
+	* pci/pcibios.h: Ditto.
+
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	* comm/gdb_glue.c, irq/idt.c, irq/irq.c, irq/irq.h, irq/irq_asm.S,
