@@ -473,7 +473,7 @@ int main_monitor(int argc,char * argv[]) {
  rtems_monitor_node = rtems_get_node(rtems_monitor_task_id);
  rtems_monitor_default_node = rtems_monitor_node;
  if ((command=rtems_monitor_command_lookup(rtems_monitor_commands,argc,argv)))
-  command->command_function(argc, argv, &command->command_arg, 0);
+  command->command_function(argc, argv, command->command_arg, 0);
  return 0;
 }
 /*-----------------------------------------------------------*/  	
