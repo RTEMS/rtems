@@ -8,7 +8,6 @@ EXTRA_PROGRAMS =
 noinst_DATA =
 
 include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
 
 if mpc8xx
 include_mpc8xxdir = $(includedir)/mpc8xx

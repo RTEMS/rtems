@@ -8,7 +8,6 @@ CLEANFILES =
 noinst_DATA =
 
 include $(top_srcdir)/../../../automake/compile.am
-include $(top_srcdir)/../../../automake/lib.am
 
 if mpc8260
 include_mpc8260dir = $(includedir)/mpc8260

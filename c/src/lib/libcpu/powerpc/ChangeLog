@@ -1,3 +1,8 @@
+2004-02-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mpc505/Makefile.am, mpc6xx/Makefile.am, mpc8260/Makefile.am,
+	mpc8xx/Makefile.am, ppc403/Makefile.am: Don't include .../lib.am.
+
 2004-01-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* wrapup/Makefile.am: Remove.
