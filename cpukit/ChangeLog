@@ -1,5 +1,9 @@
 2004-04-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	* libnetworking/sys/protosw.h: More partial updates from FreeBSD.
+
+2004-04-24	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* libnetworking/net/route.c: Reflect changes to radix.h.
 
 2004-04-22	Ralf Corsepius <ralf_corsepius@rtems.org>

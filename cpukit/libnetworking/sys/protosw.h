@@ -10,10 +10,6 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
  * 4. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
@@ -31,13 +27,13 @@
  * SUCH DAMAGE.
  *
  *	@(#)protosw.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: src/sys/sys/protosw.h,v 1.42 2003/11/18 00:39:07 rwatson Exp $
+ * $FreeBSD: src/sys/sys/protosw.h,v 1.43 2004/04/07 04:19:49 imp Exp $
  */
 
 #ifndef _SYS_PROTOSW_H_
 #define _SYS_PROTOSW_H_
 
-struct ifnet;
+/* Forward declare these structures referenced from prototypes below. */
 struct mbuf;
 struct sockaddr;
 struct socket;
@@ -114,12 +110,13 @@ struct protosw {
 #define	PR_WANTRCVD	0x08		/* want PRU_RCVD calls */
 #define	PR_RIGHTS	0x10		/* passes capabilities */
 #define PR_IMPLOPCL	0x20		/* implied open/close */
+#define	PR_LASTHDR	0x40		/* enforce ipsec policy; last header */
 
 /*
  * The arguments to usrreq are:
  *	(*protosw[].pr_usrreq)(up, req, m, nam, opt);
  * where up is a (struct socket *), req is one of these requests,
- * m is a optional mbuf chain containing a message,
+ * m is an optional mbuf chain containing a message,
  * nam is an optional mbuf chain containing an address,
  * and opt is a pointer to a socketopt structure or nil.
  * The protocol is responsible for disposal of the mbuf chain m,
@@ -203,14 +200,14 @@ struct pr_usrreqs {
 	int	(*pru_sockaddr) __P((struct socket *so, struct mbuf *nam));
 };
 
-int	pru_accept_notsupp __P((struct socket *so, struct mbuf *nam));
-int	pru_connect2_notsupp __P((struct socket *so1, struct socket *so2));
-int	pru_control_notsupp __P((struct socket *so, int cmd, caddr_t data,
-				 struct ifnet *ifp));
-int	pru_listen_notsupp __P((struct socket *so));
-int	pru_rcvd_notsupp __P((struct socket *so, int flags));
-int	pru_rcvoob_notsupp __P((struct socket *so, struct mbuf *m, int flags));
-int	pru_sense_null __P((struct socket *so, struct stat *sb));
+int	pru_accept_notsupp(struct socket *so, struct mbuf *nam);
+int	pru_connect2_notsupp(struct socket *so1, struct socket *so2);
+int	pru_control_notsupp(struct socket *so, int cmd, caddr_t data,
+				 struct ifnet *ifp);
+int	pru_listen_notsupp(struct socket *so);
+int	pru_rcvd_notsupp(struct socket *so, int flags);
+int	pru_rcvoob_notsupp(struct socket *so, struct mbuf *m, int flags);
+int	pru_sense_null(struct socket *so, struct stat *sb);
 
 #define	PRU_OLDSTYLE
 
