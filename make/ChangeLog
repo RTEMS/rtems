@@ -1,3 +1,11 @@
+2005-01-20	Joel Sherrill <joel@OARcorp.com>
+
+	* custom/arm_bare_bsp.cfg, custom/armulator.cfg, custom/csb336.cfg,
+	custom/csb337.cfg, custom/edb7312.cfg, custom/jmr3904.cfg,
+	custom/pc486.cfg, custom/pc586.cfg, custom/pc686.cfg,
+	custom/pck6.cfg, custom/vegaplus.cfg: Correct use of arguments for
+	gcc 4.x. Hopefully they are still OK for gcc 3.3.5.
+
 2005-01-01	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* compilers/gcc-portsw.cfg: Remove.
