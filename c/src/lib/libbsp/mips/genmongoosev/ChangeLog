@@ -1,3 +1,7 @@
+2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Correct path to clockdrv_shell.c.
+
 2004-01-31	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in clock/Makefile.am, console/Makefile.am,

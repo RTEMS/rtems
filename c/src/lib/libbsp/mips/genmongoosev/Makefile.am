@@ -43,9 +43,9 @@ startup_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 noinst_DATA += startup$(LIB_VARIANT).rel
 
-# FIXME: clockdrv.c and clockdrv_sheck.c are structurally flawed
+# FIXME: clockdrv.c and clockdrv_shell.c are structurally flawed
 clock_CPPFLAGS = -I$(srcdir)/../../shared
-EXTRA_DIST += ./../shared/clockdrv_shell.c
+EXTRA_DIST += ../../mips/shared/clockdrv_shell.c
 EXTRA_PROGRAMS += clock.rel
 CLEANFILES += clock.rel
 clock_rel_SOURCES = clock/clockdrv.c
