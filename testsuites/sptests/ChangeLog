@@ -1,3 +1,38 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sp01/Makefile.am: Remove all-local: $(ARCH).
+	* sp02/Makefile.am: Remove all-local: $(ARCH).
+	* sp03/Makefile.am: Remove all-local: $(ARCH).
+	* sp04/Makefile.am: Remove all-local: $(ARCH).
+	* sp05/Makefile.am: Remove all-local: $(ARCH).
+	* sp06/Makefile.am: Remove all-local: $(ARCH).
+	* sp07/Makefile.am: Remove all-local: $(ARCH).
+	* sp08/Makefile.am: Remove all-local: $(ARCH).
+	* sp09/Makefile.am: Remove all-local: $(ARCH).
+	* sp11/Makefile.am: Remove all-local: $(ARCH).
+	* sp12/Makefile.am: Remove all-local: $(ARCH).
+	* sp13/Makefile.am: Remove all-local: $(ARCH).
+	* sp14/Makefile.am: Remove all-local: $(ARCH).
+	* sp15/Makefile.am: Remove all-local: $(ARCH).
+	* sp16/Makefile.am: Remove all-local: $(ARCH).
+	* sp17/Makefile.am: Remove all-local: $(ARCH).
+	* sp19/Makefile.am: Remove all-local: $(ARCH).
+	* sp20/Makefile.am: Remove all-local: $(ARCH).
+	* sp21/Makefile.am: Remove all-local: $(ARCH).
+	* sp22/Makefile.am: Remove all-local: $(ARCH).
+	* sp23/Makefile.am: Remove all-local: $(ARCH).
+	* sp24/Makefile.am: Remove all-local: $(ARCH).
+	* sp25/Makefile.am: Remove all-local: $(ARCH).
+	* sp26/Makefile.am: Remove all-local: $(ARCH).
+	* sp27/Makefile.am: Remove all-local: $(ARCH).
+	* sp28/Makefile.am: Remove all-local: $(ARCH).
+	* sp29/Makefile.am: Remove all-local: $(ARCH).
+	* sp30/Makefile.am: Remove all-local: $(ARCH).
+	* sp31/Makefile.am: Remove all-local: $(ARCH).
+	* sp32/Makefile.am: Remove all-local: $(ARCH).
+	* spfatal/Makefile.am: Remove all-local: $(ARCH).
+	* spsize/Makefile.am: Remove all-local: $(ARCH).
+
 2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Reflect having moved to testsuites/.
