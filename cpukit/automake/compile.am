@@ -2,25 +2,8 @@
 ## $Id$
 ##
 
-## -------------------------------------------------------------------------
-## NOTE: This file is rather immature and has to be considered to be 
-## almost experimental.
-##
-## Expect frequent changes -- It deserves to be cleaned up :(
-## -------------------------------------------------------------------------
-
-CPPFLAGS = @CPPFLAGS@ $(CPU_DEFINES) $(DEFINES)
-CFLAGS   = @RTEMS_CFLAGS@
-
 depend:
 
-## -------------------------------------------------------------------------
-
-## These are supposed to be set in make/custom/<bsp>.cfg
-CPU_CFLAGS = @CPU_CFLAGS@
-CFLAGS_OPTIMIZE_V = @CFLAGS_OPTIMIZE_V@
-
-## -------------------------------------------------------------------------
 AM_CPPFLAGS = $(RTEMS_CPPFLAGS)
-AM_CFLAGS =
+AM_CFLAGS = $(RTEMS_CFLAGS)
 AM_CCASFLAGS = $(RTEMS_CPPFLAGS) $(RTEMS_ASFLAGS)

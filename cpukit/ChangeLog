@@ -1,5 +1,15 @@
 2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* aclocal/env-rtemscpu.m4: Remove CFLAGS_OPTIMIZE_V.
+	Remove CPU_CFLAGS.
+	* aclocal/prog-cc.m4: Don't invoke _RTEMS_FLAGS to set up
+	RTEMS_CFLAGS.
+	* automake/compile.am: AM_CFLAGS = RTEMS_CFLAGS.
+	Remove CPPFLAGS, CFLAGS, CPU_CFLAGS, CFLAGS_OPTIMIZE.
+	Cleanup comments.
+
+2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* aclocal/env-rtemscpu.m4: Remove CFLAGS_DEBUG_V.
 	* aclocal/prog-cc.m4: Remove RTEMS_USE_GCC.
 	* automake/compile.am: Cleanup comments. Remove ASFLAGS.
