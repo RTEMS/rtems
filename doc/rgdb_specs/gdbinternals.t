@@ -34,9 +34,10 @@ struct target_ops
 @{
   char         *to_shortname;   /* Name this target type */
   char         *to_longname;    /* Name for printing */
-  char         *to_doc;         /* Documentation.  Does not include trailing
-                                   newline, and starts with a one-line descrip-
-                                   tion (probably similar to to_longname). */
+  char         *to_doc;    /* Documentation.  Does not include trailing
+                              newline, and starts with a one-line
+                              description (probably similar to
+                              to_longname). */
   void        (*to_open) PARAMS ((char *, int));
   void        (*to_close) PARAMS ((int));
   void        (*to_attach) PARAMS ((char *, int));
@@ -48,14 +49,15 @@ struct target_ops
   void        (*to_prepare_to_store) PARAMS ((void));
 
   /* Transfer LEN bytes of memory between GDB address MYADDR and
-     target address MEMADDR.  If WRITE, transfer them to the target, else
-     transfer them from the target.  TARGET is the target from which we
-     get this function.
+     target address MEMADDR.  If WRITE, transfer them to the target,
+     else transfer them from the target.  TARGET is the target from
+     which we get this function.
 
      Return value, N, is one of the following:
 
-     0 means that we can't handle this.  If errno has been set, it is the
-     error which prevented us from doing it (FIXME: What about bfd_error?).
+     0 means that we can't handle this.  If errno has been set,
+     it is the error which prevented us from doing it (FIXME:
+     What about bfd_error?).
 
      positive (call it N) means that we have transferred N bytes
      starting at MEMADDR.  We might be able to handle more bytes
@@ -65,9 +67,10 @@ struct target_ops
      transfer right at MEMADDR, but we could transfer at least
      something at MEMADDR + N.  */
 
-  int         (*to_xfer_memory) PARAMS ((CORE_ADDR memaddr, char *myaddr,
-                                         int len, int write,
-                                         struct target_ops * target));
+  int         (*to_xfer_memory)
+                 PARAMS ((CORE_ADDR memaddr, char *myaddr,
+                          int len, int write,
+                          struct target_ops * target));
 
   void        (*to_files_info) PARAMS ((struct target_ops *));
   int         (*to_insert_breakpoint) PARAMS ((CORE_ADDR, char *));

@@ -37,7 +37,8 @@ typedef struct @{
   /* end of fields required on all CPUs */
 
   unsigned32   clicks_per_usec;       /* Timer clicks per microsecond */
-  void       (*spurious_handler)(unsigned32 vector, CPU_Interrupt_frame *);
+  void       (*spurious_handler)(
+                unsigned32 vector, CPU_Interrupt_frame *);
   boolean      exceptions_in_RAM;     /* TRUE if in RAM */
 
 #if defined(ppc403)
@@ -47,7 +48,7 @@ typedef struct @{
   boolean      serial_cts_rts;
   unsigned32   serial_rate;
   unsigned32   timer_average_overhead; /* in ticks */
-  unsigned32   timer_least_valid;      /* Least valid number from timer */
+  unsigned32   timer_least_valid;   /* Least valid number from timer */
 #endif
 @};
 @end example

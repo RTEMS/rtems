@@ -428,7 +428,8 @@ how to accomplish this:
 @example
 #define _CPU_Context_Initialize_fp( _destination ) \
   @{ \
-   *((Context_Control_fp *) *((void **) _destination)) = _CPU_Null_fp_context; \
+   *((Context_Control_fp *) *((void **) _destination)) = \
+       _CPU_Null_fp_context; \
   @}
 @end example
 

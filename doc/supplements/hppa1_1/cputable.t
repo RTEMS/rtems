@@ -41,7 +41,8 @@ typedef struct @{
  
   hppa_rtems_isr_entry spurious_handler;
  
-  unsigned32   itimer_clicks_per_microsecond; /* for use by Clock driver */
+      /* itimer_clicks_per_microsecond is for the Clock driver */
+  unsigned32   itimer_clicks_per_microsecond;
 @}   rtems_cpu_table;
 @end example
 

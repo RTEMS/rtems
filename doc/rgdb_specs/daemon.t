@@ -108,7 +108,7 @@ These events will be treated by the debugger because they are the
 primary event used when debugging a software for instruction stepping. In both
 cases, the DEBUG EXCEPTION handler code is executed. Please note that the execution
 context of the exception handler is the supervisor stack of the task that generated
-the exception . This implies :
+the exception. This implies:
 
 @itemize @bullet
 @item We may sleep in this context,
@@ -163,6 +163,7 @@ before to signal a debug event to GDB. The command task shall be able to preempt
 this task for emergency command such as DEL, or REBOOT,
 @item Applications tasks (task we are able to debug),
 @end enumerate
+
 Using theses priorities eliminates the need for adding more synchronization
 objects in the next section. My belief is that symmetric MP support will require
 more important change in the RTEMS than RGDBSD itself like multiple scheduler
@@ -339,14 +340,18 @@ specific stop condition can be found as macros in the GDB source tree.
 
 @section Output of a Debug Session with the Prototype
 
+This is a sample session with the remote debugging prototype.  Note that
+some lines have been broken so they would print properly when printed.
+
 @example
 GNU gdb 4.17
 Copyright 1998 Free Software Foundation, Inc.
-GDB is free software, covered by the GNU General Public License, and you are
-welcome to change it and/or distribute copies of it under certain conditions.
-Type "show copying" to see the conditions.
-There is absolutely no warranty for GDB.  Type "show warranty" for details.
-This GDB was configured as --host=i686-pc-linux-gnu --target=i386-rtems".
+GDB is free software, covered by the GNU General Public License,
+and you are welcome to change it and/or distribute copies of it
+under certain conditions.  Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.
+Type "show warranty" for details.
+This GDB was configured as --host=i686-pc-linux-gnu --target=i386-rtems.
 Attaching remote machine across net...
 Connected to net-test. 
 Now the "run" command will start a remote process.
@@ -374,45 +379,57 @@ _Thread_Dispatch () at /rtems/c/src/exec/score/src/thread.c:315
 134283266 ntwk   No         No 
 _Thread_Dispatch () at /rtems/c/src/exec/score/src/thread.c:315 
 (gdb) b init.c:89 
-Breakpoint 1 at 0x200180: file /rtems/c/src/tests/samples/debug/init.c, line 89.
+Breakpoint 1 at 0x200180: file \
+    /rtems/c/src/tests/samples/debug/init.c, line 89.
 (gdb) c 
 Continuing. 
 Thread 134283273 (Rini) has been deleted. 
-[Switching to Rtems thread 134283271 (Not suspended) ( <= current target thread )]
-Breakpoint 1, example2 (argument=4) at /rtems/c/src/tests/samples/debug/init.c:89 
+[Switching to Rtems thread 134283271 (Not suspended) \
+    ( <= current target thread )]
+Breakpoint 1, example2 (argument=4) at \
+    /rtems/c/src/tests/samples/debug/init.c:89 
 89          tuto += tuti; 
 (gdb) s 
 90          if (print_enable2) 
 (gdb) c 
 Continuing.
-Breakpoint 1, example2 (argument=4) at /rtems/c/src/tests/samples/debug/init.c:89 
+Breakpoint 1, example2 (argument=4) at \
+    /rtems/c/src/tests/samples/debug/init.c:89 
 89          tuto += tuti; 
 (gdb) b init.c:66 
-Breakpoint 2 at 0x200128: file /rtems/c/src/tests/samples/debug/init.c, line 66.
+Breakpoint 2 at 0x200128: file \
+    /rtems/c/src/tests/samples/debug/init.c, line 66.
 (gdb) c
 Continuing. 
-Switching to Rtems thread 134283270 (Not suspended) ( <= current target thread )]
-Breakpoint 2, example1 (argument=4) at /rtems/c/src/tests/samples/debug/init.c:66 
+Switching to Rtems thread 134283270 (Not suspended) \
+    ( <= current target thread )]
+Breakpoint 2, example1 (argument=4) at \
+    /rtems/c/src/tests/samples/debug/init.c:66 
 66          toto += titi; 
 (gdb) c 
 Continuing. 
-[Switching to Rtems thread 134283271 (Not suspended) ( <= current target thread )]
-Breakpoint 1, example2 (argument=4) at /rtems/c/src/tests/samples/debug/init.c:89 
+[Switching to Rtems thread 134283271 (Not suspended) \
+    ( <= current target thread )]
+Breakpoint 1, example2 (argument=4) at \
+    /rtems/c/src/tests/samples/debug/init.c:89 
 89          tuto += tuti; 
 (gdb) bt 
 #0  example2 (argument=4) 
     at /rtems/c/src/tests/samples/debug/init.c:89 
 #1  0xf0009bd0 in ?? () 
 (gdb) thread target 134283270
-thread 134283270 [SPE1], _Thread_Dispatch () at /rtems/c/src/exec/score/src/thread.c:315 
+thread 134283270 [SPE1], _Thread_Dispatch () at \
+    /rtems/c/src/exec/score/src/thread.c:315 
 315         executing = _Thread_Executing; 
 (gdb) c 
 Continuing.
-Breakpoint 2, example1 (argument=4) at /rtems/c/src/tests/samples/debug/init.c:66 
+Breakpoint 2, example1 (argument=4) at \
+    /rtems/c/src/tests/samples/debug/init.c:66 
 66          toto += titi; 
 (gdb) detach 
 Detaching program: /build-rtems/pc386/tests/debug.exe pid 1 
-Warning: the next command will be done localy! If you want to restart another remote 
+Warning: the next command will be done localy! \
+    If you want to restart another remote 
 program, reuse the target command 
 (gdb) 
 @end example
