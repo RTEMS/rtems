@@ -158,9 +158,10 @@ void _CPU_ISR_install_vector(
 )
 {
    proc_ptr ignored ;
-
+#if 0 
    if(( vector <= 113) && ( vector >= 11))
      {
+#endif
        *old_handler = _ISR_Vector_table[ vector ];
 
        /*
@@ -178,7 +179,9 @@ void _CPU_ISR_install_vector(
 	*/
 
        _ISR_Vector_table[ vector ] = new_handler;
+#if 0
      }
+#endif
 }
 
 /*PAGE

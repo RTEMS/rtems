@@ -1,3 +1,9 @@
+2001-07-25  Radzislaw Galler  <rgaller@et.put.poznan.pl>
+
+	* cpu.c (_CPU_ISR_install_vector): Corrected interrupt range
+	checking which was SH1 specific. It didn't work for SH2 (has more
+	interrupt sources). 
+
 2001-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am, rtems/score/Makefile.am: 
