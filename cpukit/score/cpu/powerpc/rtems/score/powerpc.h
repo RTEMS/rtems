@@ -74,7 +74,6 @@ extern "C" {
  *    + PPC_HAS_FPU              - 1
  *    + PPC_HAS_DOUBLE           - 1 if PPC_HAS_FPU, 
  *                               - 0 otherwise
- *    + PPC_USE_MULTIPLE         - 0
  */
  
 /*
@@ -110,7 +109,6 @@ extern "C" {
 #define PPC_ALIGNMENT		4  
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_HAS_RFCI    	1
-#define PPC_USE_MULTIPLE	1
 
 #define PPC_HAS_EXCEPTION_PREFIX 0
 #define PPC_HAS_EVPR             1
@@ -147,7 +145,6 @@ extern "C" {
 #define CPU_MODEL_NAME  "PowerPC 601"
 
 #define PPC_ALIGNMENT		8
-#define PPC_USE_MULTIPLE	1
 
 #elif defined(ppc602)
 /*
@@ -200,7 +197,6 @@ extern "C" {
 #define PPC_ALIGNMENT		4
 #define PPC_CACHE_ALIGNMENT	16
 #define PPC_INTERRUPT_MAX       71
-#define PPC_USE_MULTIPLE	1
 
 #elif defined(mpc821)
 /* 
@@ -243,7 +239,6 @@ extern "C" {
 #define PPC_ALIGNMENT		4
 #define PPC_CACHE_ALIGNMENT	32
 #define PPC_INTERRUPT_MAX       125
-#define PPC_USE_MULTIPLE	1
 #else
  
 #error "Unsupported CPU Model"
@@ -390,15 +385,6 @@ extern "C" {
 
 #ifndef PPC_HAS_RFCI
 #define PPC_HAS_RFCI 0
-#endif
-
-/*
- *  Unless specified above, do not use the load/store multiple instructions
- *  in a context switch.
- */
-
-#ifndef PPC_USE_MULTIPLE
-#define PPC_USE_MULTIPLE 0
 #endif
 
 /*
