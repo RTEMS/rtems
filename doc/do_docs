@@ -14,17 +14,37 @@ extra_manuals="hwapi"
 # relnotes  is obsolete
 # posix_users manual left out until finished
 # ada_user manual left out until bindings released
-manuals="$public_docs"
-#manuals="$public_docs $support_docs $partners_docs $extra_manuals"
+
+case ${MANUAL_SET} in
+  support)
+    manuals="$public_docs $support_docs"
+    ;;
+  partners)
+    manuals="$public_docs $support_docs $partners_docs"
+    ;;
+  internal)
+    manuals="$public_docs $support_docs $partners_docs $extra_manuals"
+    ;;
+  *)
+    echo "ERROR: Unknown manual set $(MANUAL_SET)"
+    exit 1
+    ;;
+esac
 
 for action in $*
 do
   for manual in $manuals
   do
-    echo
-    echo "*** make $action on ${basedir}/${manual} ***"
-    echo
-    cd ${basedir}/${manual}
-    gmake $action || exit $?
+    if [ x${TEST} = xyes ] ; then
+        echo "TEST *** make $action on ${basedir}/${manual} ***"
+    else
+        echo
+        echo "*** make $action on ${basedir}/${manual} ***"
+        echo
+        cd ${basedir}/${manual}
+        gmake $action || exit $?
+    fi
   done
 done
+
+exit 0
