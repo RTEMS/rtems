@@ -65,14 +65,14 @@ rtems_device_driver console_initialize(
   p->scc2.bd.rx[0].status = 0xA000;	/* RxBD0 empty, wrap, no intr */
   p->scc2.bd.rx[0].length = 0x0000;
   p->scc2.bd.rx[0].buffer =
-      (rtems_unsigned8 *) &m302.scc2.bd.rx[1]; /* RxBD1 is Rx buffer */
+      (uint8_t*) &m302.scc2.bd.rx[1]; /* RxBD1 is Rx buffer */
 
   p->reg.scc[1].dsr = 0x7000;		/* set full-length last stop bit */
 
   p->scc2.bd.tx[0].status = 0x3000;	/* TxBD0 not ready, wrap, intr */
   p->scc2.bd.tx[0].length = 0x0001;
   p->scc2.bd.tx[0].buffer =
-      (rtems_unsigned8 *) &m302.scc2.bd.tx[1]; /* TxBD1 is Tx buffer */
+      (uint8_t*) &m302.scc2.bd.tx[1]; /* TxBD1 is Tx buffer */
 
   p->reg.scc[1].scce = 0xFF;		/* clear all SCC event flags */
   p->reg.scc[1].sccm = 0x03;		/* enable only Tx & Rx interrupts */

@@ -287,7 +287,7 @@ static void
 m302Enet_retire_tx_bd (struct scc_softc *sc)
 {
 
-	rtems_unsigned16 status;
+	uint16_t         status;
 	int i;
 	int nRetired;
 	struct mbuf *m, *n;
@@ -388,7 +388,7 @@ scc_rxDaemon (void *arg)
 	struct scc_softc *sc = (struct scc_softc *)arg;
 	struct ifnet *ifp = &sc->arpcom.ac_if;
 	struct mbuf *m;
-	rtems_unsigned16 status;
+	uint16_t         status;
 	volatile struct m68302_scc_bd *rxBd;
 	int rxBdIndex;
 
@@ -474,7 +474,7 @@ scc_rxDaemon (void *arg)
 
 			m = sc->rxMbuf[rxBdIndex];
 			m->m_len = m->m_pkthdr.len = rxBd->data_lgth -
-						sizeof(rtems_unsigned32) -
+						sizeof(uint32_t) -
 						sizeof(struct ether_header);
 			eh = mtod (m, struct ether_header *);
 			m->m_data += sizeof(struct ether_header);
@@ -533,7 +533,7 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
 	struct scc_softc *sc = ifp->if_softc;
 	volatile struct m68302_scc_bd *firstTxBd, *txBd;
 	struct mbuf *l = NULL;
-	rtems_unsigned16 status;
+	uint16_t         status;
 	int nAdded;
 	
 	/*
