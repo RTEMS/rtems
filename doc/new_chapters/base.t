@@ -29,7 +29,11 @@ The directives provided by the mutex manager are:
 
 @section Background
 
+There is currently no text in this section.
+
 @section Operations
+
+There is currently no text in this section.
 
 @section Directives
 

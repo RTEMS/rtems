@@ -10,8 +10,7 @@
 
 @section Introduction
 
-The 
-process creation and execution manager is ...
+The process creation and execution manager is ...
 
 The directives provided by the process creation and execution manager are:
 
@@ -31,7 +30,11 @@ The directives provided by the process creation and execution manager are:
 
 @section Background
 
+There is currently no text in this section.
+
 @section Operations
+
+There is currently no text in this section.
 
 @section Directives
 

@@ -60,6 +60,8 @@ the thread resumes its initial priority and has its budget replenished.
 
 @section Operations
 
+There is currently no text in this section.
+
 @section Directives
 
 This section details the scheduler manager's directives.

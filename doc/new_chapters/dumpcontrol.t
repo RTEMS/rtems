@@ -24,11 +24,11 @@ The directives provided by the process dump control manager are:
 
 @section Background
 
-There is no background.
+There is currently no text in this section.
 
 @section Operations
 
-There is no discussion of the operations.
+There is currently no text in this section.
 
 @section Directives
 
