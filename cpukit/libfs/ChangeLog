@@ -1,3 +1,7 @@
+2003-10-22	Joel Sherrill <joel@OARcorp.com>
+
+	* ChangeLog: Correct line length.
+
 2003-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* src/dosfs/Makefile.am: noinst_HEADERS += fat.h
@@ -62,7 +66,8 @@
 2003-08-05	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	PR 440/filesystem
-	* src/dosfs/fat_fat_operations.c: Improve write data speed for DOSFS FAT12/FAT16 systems
+	* src/dosfs/fat_fat_operations.c: Improve write data speed for
+	DOSFS FAT12/FAT16 systems.
 
 2003-08-05	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
