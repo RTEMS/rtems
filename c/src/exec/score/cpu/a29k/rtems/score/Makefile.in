@@ -15,7 +15,7 @@ C_PIECES=
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
-H_PIECES=cpu.h a29k.h a29ktypes.h
+H_PIECES=a29k.h a29ktypes.h cpu.h cpu_asm.h
 H_FILES=$(H_PIECES:%=$(srcdir)/%)
 
 # Assembly source names, if any, go here -- minus the .S
