@@ -1,3 +1,7 @@
+2004-02-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* index.html.in: Change header URL to www.rtems.com.
+
 2004-02-03	Joel Sherrill <joel@OARcorp.com>
 
 	* HELP.html, index.html.in, rtems_footer.html.in, rtems_header.html.in,
