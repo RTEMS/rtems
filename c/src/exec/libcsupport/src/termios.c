@@ -837,8 +837,9 @@ rtems_termios_read (void *arg)
  * Place characters on raw queue.
  * NOTE: This routine runs in the context of the
  *       device receive interrupt handler.
+ * Returns the number of characters dropped because of overlow.
  */
-void
+int
 rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 {
 	struct rtems_termios_tty *tty = ttyp;
@@ -855,6 +856,7 @@ rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len)
 		tty->rawInBufTail = newTail;
 	}
 	rtems_semaphore_release (tty->rawInBufSemaphore);
+	return len;
 }
 
 /*

@@ -156,7 +156,7 @@ rtems_status_code rtems_termios_close (void *arg);
 rtems_status_code rtems_termios_read (void *arg);
 rtems_status_code rtems_termios_write (void *arg);
 rtems_status_code rtems_termios_ioctl (void *arg);
-void rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len);
+int rtems_termios_enqueue_raw_characters (void *ttyp, char *buf, int len);
 void rtems_termios_dequeue_characters (void *ttyp, int len);
 void rtems_termios_reserve_resources(
   rtems_configuration_table *configuration,
