@@ -59,42 +59,42 @@
     ((RTEMS_MAXIMUM_PRIORITY + 1) * sizeof(Chain_Control ))
 
 #define PER_TASK      \
-     (sizeof (Thread_Control) + \
+     (long) (sizeof (Thread_Control) + \
       NAME_PTR_SIZE + HEAP_OVHD + sizeof( RTEMS_API_Control ))
 #define PER_SEMAPHORE \
-     (sizeof (Semaphore_Control) + NAME_PTR_SIZE)
+     (long) (sizeof (Semaphore_Control) + NAME_PTR_SIZE)
 #define PER_TIMER     \
-     (sizeof (Timer_Control) + NAME_PTR_SIZE)
+     (long) (sizeof (Timer_Control) + NAME_PTR_SIZE)
 #define PER_MSGQ      \
-     (sizeof (Message_queue_Control) + NAME_PTR_SIZE)
+     (long) (sizeof (Message_queue_Control) + NAME_PTR_SIZE)
 #define PER_REGN      \
-     (sizeof (Region_Control) + NAME_PTR_SIZE)
+     (long) (sizeof (Region_Control) + NAME_PTR_SIZE)
 #define PER_PART      \
-     (sizeof (Partition_Control) + NAME_PTR_SIZE)
+     (long) (sizeof (Partition_Control) + NAME_PTR_SIZE)
 #define PER_PERIOD      \
-     (sizeof (Rate_monotonic_Control) + NAME_PTR_SIZE)
+     (long) (sizeof (Rate_monotonic_Control) + NAME_PTR_SIZE)
 #define PER_PORT      \
-     (sizeof (Dual_ported_memory_Control) + NAME_PTR_SIZE)
+     (long) (sizeof (Dual_ported_memory_Control) + NAME_PTR_SIZE)
 #define PER_EXTENSION     \
-     (sizeof (Extension_Control) + NAME_PTR_SIZE)
+     (long) (sizeof (Extension_Control) + NAME_PTR_SIZE)
 
-#define PER_DRV       (0)
-#define PER_FPTASK    (CONTEXT_FP_SIZE)
-#define PER_GOBTBL    (sizeof (Chain_Control)*4)
-#define PER_NODE      PER_GOBTBL
-#define PER_GOBJECT   (sizeof (Objects_MP_Control))
-#define PER_PROXY     (sizeof (Thread_Proxy_control))
+#define PER_DRV       (long) (0)
+#define PER_FPTASK    (long) (CONTEXT_FP_SIZE)
+#define PER_GOBTBL    (long) (sizeof (Chain_Control)*4)
+#define PER_NODE      (long) PER_GOBTBL
+#define PER_GOBJECT   (long) (sizeof (Objects_MP_Control))
+#define PER_PROXY     (long) (sizeof (Thread_Proxy_control))
 
 #if (CPU_ALL_TASKS_ARE_FP == TRUE)
-#define MPCI_RECEIVE_SERVER_FP (sizeof( Context_Control_fp ))
+#define MPCI_RECEIVE_SERVER_FP (long) (sizeof( Context_Control_fp ))
 #else
-#define MPCI_RECEIVE_SERVER_FP 0
+#define MPCI_RECEIVE_SERVER_FP (long) 0
 #endif
 
 #if (CPU_IDLE_TASK_IS_FP == TRUE)
-#define SYSTEM_IDLE_FP (sizeof( Context_Control_fp ))
+#define SYSTEM_IDLE_FP (long) (sizeof( Context_Control_fp ))
 #else
-#define SYSTEM_IDLE_FP 0
+#define SYSTEM_IDLE_FP (long) 0
 #endif
 
 #define SYSTEM_TASKS  \
@@ -584,43 +584,43 @@ if ( c == 'n' || c == 'N' ) {
 
 printf( "\n\n" );
 printf( " ************** EXECUTIVE WORK SPACE REQUIRED **************\n" );
-printf( " Tasks                - %03d * %03d            =  %d\n",
-          maximum_tasks, PER_TASK, size_tasks );
-printf( " Semaphores           - %03d * %03d            =  %d\n",
-          maximum_sems, PER_SEMAPHORE, size_sems );
-printf( " Timers               - %03d * %03d            =  %d\n",
-          maximum_timers, PER_TIMER, size_timers );
-printf( " Msg Queues           - %03d * %03d            =  %d\n",
-          maximum_msgqs, PER_MSGQ, size_msgqs );
-printf( " Messages Overhead    - %03d * %03d            =  %d\n",
-          maximum_msgs, 0 /* PER_MSG_OVERHEAD */, size_msgs_overhead );
-printf( " Regions              - %03d * %03d            =  %d\n",
-          maximum_regns, PER_REGN, size_regns);
-printf( " Partitions           - %03d * %03d            =  %d\n",
-          maximum_parts, PER_PART, size_parts );
-printf( " Periods              - %03d * %03d            =  %d\n",
-          maximum_periods, PER_PERIOD, size_periods );
-printf( " Extensions           - %03d * %03d            =  %d\n",
-          maximum_extensions, PER_EXTENSION, size_extensions );
-printf( " Device Drivers       - %03d * %03d            =  %d\n",
-          maximum_drvs, PER_DRV, size_drvs );
+printf( " Tasks                - %03d * %03ld            =  %ld\n",
+          maximum_tasks, PER_TASK, (long) size_tasks );
+printf( " Semaphores           - %03d * %03ld            =  %ld\n",
+          maximum_sems, PER_SEMAPHORE, (long) size_sems );
+printf( " Timers               - %03d * %03ld            =  %ld\n",
+          maximum_timers, PER_TIMER, (long) size_timers );
+printf( " Msg Queues           - %03d * %03ld            =  %ld\n",
+          maximum_msgqs, PER_MSGQ, (long) size_msgqs );
+printf( " Messages Overhead    - %03d * %03d            =  %ld\n",
+          maximum_msgs, 0 /* PER_MSG_OVERHEAD */, (long) size_msgs_overhead );
+printf( " Regions              - %03d * %03ld            =  %ld\n",
+          maximum_regns, PER_REGN, (long) size_regns);
+printf( " Partitions           - %03d * %03ld            =  %ld\n",
+          maximum_parts, PER_PART, (long) size_parts );
+printf( " Periods              - %03d * %03ld            =  %ld\n",
+          maximum_periods, PER_PERIOD, (long) size_periods );
+printf( " Extensions           - %03d * %03ld            =  %ld\n",
+          maximum_extensions, PER_EXTENSION, (long) size_extensions );
+printf( " Device Drivers       - %03d * %03ld            =  %ld\n",
+          maximum_drvs, PER_DRV, (long) size_drvs );
 
 printf( " System Requirements  - %04d                 =  %d\n",
           sys_req, sys_req );
 
-printf( " Floating Point Tasks - %03d * %03d            =  %d\n",
-          maximum_fps, PER_FPTASK, size_fps );
+printf( " Floating Point Tasks - %03d * %03ld            =  %ld\n",
+          maximum_fps, PER_FPTASK, (long) size_fps );
 printf( " Application Task Stacks -                     =  %d\n",
           task_stacks );
 printf( " Interrupt Stacks -                            =  %d\n",
           task_stacks );
 printf( " \n" );
-printf( " Global object tables - %03d * %03d            =  %d\n",
-          maximum_nodes, PER_NODE, size_nodes );
-printf( " Global objects       - %03d * %03d            =  %d\n",
-          maximum_gobjs, PER_GOBJECT, size_gobjs );
-printf( " Proxies              - %03d * %03d            =  %d\n",
-          maximum_proxies, PER_PROXY, size_proxies );
+printf( " Global object tables - %03d * %03ld            =  %ld\n",
+          maximum_nodes, PER_NODE, (long) size_nodes );
+printf( " Global objects       - %03d * %03ld            =  %ld\n",
+          maximum_gobjs, PER_GOBJECT, (long) size_gobjs );
+printf( " Proxies              - %03d * %03ld            =  %ld\n",
+          maximum_proxies, PER_PROXY, (long) size_proxies );
 printf( "\n\n" );
 printf( " TOTAL                                       = %d bytes\n",
       total_size );
@@ -629,23 +629,23 @@ printf( " TOTAL                                       = %d bytes\n",
 void print_formula()
 {
 printf( " ************** EXECUTIVE WORK SPACE FORMULA **************\n" );
-printf( " Tasks                - maximum_tasks * %d\n",      PER_TASK );
-printf( " Timers               - maximum_timers * %d\n",     PER_TIMER );
-printf( " Semaphores           - maximum_semaphores * %d\n", PER_SEMAPHORE);
-printf( " Message Queues       - maximum_message_queues * %d\n", PER_MSGQ );
+printf( " Tasks                - maximum_tasks * %ld\n",      PER_TASK );
+printf( " Timers               - maximum_timers * %ld\n",     PER_TIMER );
+printf( " Semaphores           - maximum_semaphores * %ld\n", PER_SEMAPHORE);
+printf( " Message Queues       - maximum_message_queues * %ld\n", PER_MSGQ );
 printf( " Messages             -\n");
-printf( " Regions              - maximum_regions * %d\n",    PER_REGN );
-printf( " Partitions           - maximum_partitions * %d\n", PER_PART );
-printf( " Ports                - maximum_ports * %d\n",      PER_PORT );
-printf( " Periods              - maximum_periods * %d\n",    PER_PORT );
-printf( " Extensions           - maximum_extensions * %d\n", PER_EXTENSION );
-printf( " Device Drivers       - number_of_device_drivers * %d\n", PER_DRV);
-printf( " System Requirements  - %d\n",                      sys_req );
-printf( " Floating Point Tasks - FPMASK Tasks * %d\n",       CONTEXT_FP_SIZE );
+printf( " Regions              - maximum_regions * %ld\n",    PER_REGN );
+printf( " Partitions           - maximum_partitions * %ld\n", PER_PART );
+printf( " Ports                - maximum_ports * %ld\n",      PER_PORT );
+printf( " Periods              - maximum_periods * %ld\n",    PER_PORT );
+printf( " Extensions           - maximum_extensions * %ld\n", PER_EXTENSION );
+printf( " Device Drivers       - number_of_device_drivers * %ld\n", PER_DRV);
+printf( " System Requirements  - %d\n",                       sys_req );
+printf( " Floating Point Tasks - FPMASK Tasks * %ld\n",       PER_FPTASK );
 printf( " User's Tasks' Stacks -\n" );
 printf( " Interrupt Stack      -\n" );
 printf( " \n" );
-printf( " Global object tables - maximum_nodes * %d\n",          PER_NODE );
-printf( " Global objects       - maximum_global_objects * %d\n", PER_GOBJECT );
-printf( " Proxies              - maximum_proxies * %d\n",        PER_PROXY );
+printf( " Global object tables - maximum_nodes * %ld\n",          PER_NODE );
+printf( " Global objects       - maximum_global_objects * %ld\n", PER_GOBJECT );
+printf( " Proxies              - maximum_proxies * %ld\n",        PER_PROXY );
 }

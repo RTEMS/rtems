@@ -95,7 +95,7 @@ void *POSIX_Init(
 
   key_data = pthread_getspecific( Key_id );
   printf( "Init: Got the key value of %ld\n",
-          (rtems_unsigned32 *)key_data - Data_array );
+          (unsigned long) ((rtems_unsigned32 *)key_data - Data_array) );
 
   remaining = sleep( 3 );
   if ( remaining )
