@@ -1,3 +1,14 @@
+2005-02-24	Jay Monkman <jtm@lopingdog.com>
+
+	* acinclude.m4: Added csb350 to list of BSPs.
+	* csb350/Makefile.am, csb350/README, csb350/bsp_specs,
+	csb350/configure.ac, csb350/times, csb350/clock/clockdrv.c,
+	csb350/console/console-io.c, csb350/include/bsp.h,
+	csb350/include/tm27.h, csb350/network/network.c, csb350/start/regs.S,
+	csb350/start/start.S, csb350/startup/bspclean.c,
+	csb350/startup/bspstart.c, csb350/startup/linkcmds,
+	csb350/timer/timer.c: New BSP.
+
 2004-09-24	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* configure.ac: Require automake > 1.9.
