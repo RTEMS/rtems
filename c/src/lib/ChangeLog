@@ -1,3 +1,9 @@
+2001-05-17	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/envlock.c: Implemented code to let newlib's envlock share
+	the libio open/close mutex.  Since both should be lightly used,
+	this should not lead to problems and saves resources.
+
 2002-05-15	Chris Johns <ccj@acm.org>
 
 	* libc/newlibc.c: Per PR141, move the C library re-enterrant

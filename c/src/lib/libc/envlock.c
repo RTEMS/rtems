@@ -1,7 +1,7 @@
 /*
- *  $Id$
- *
  *  Author: Till Straumann <strauman@slac.stanford.edu>, 3/2002
+ * 
+ *  $Id$
  */
 
 /* provide locking for the global environment 'environ' */
@@ -29,9 +29,14 @@
  *    lock-lock-unlock-unlock).
  *  - NEWLIB-1.8.2 has an ugly BUG: if environ is NULL, _findenv_r() bails
  *    out leaving the lock held :-(
+ *
+ *  Used by the following functions:
+ *    findenv_r(), setenv_r(), and unsetenv_r() which are called by
+ *    getenv(), getenv_r(), setenv(), and unsetenv().
  *  
  */
 
+#if defined(ENVLOCK_DEDIDCATED_MUTEX)
 static rtems_id envLock=0;
 
 static void
@@ -80,3 +85,24 @@ __env_unlock(struct _reent *r)
   if (_Thread_Executing)
     rtems_semaphore_release(envLock);
 }
+#else
+
+/*
+ *  Reuse the libio mutex -- it is always initialized before we
+ *  could possibly run.
+ */
+
+#include <rtems/libio_.h>
+
+void
+__env_lock(struct _reent *r)
+{
+  rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+}
+
+void
+__env_unlock(struct _reent *r)
+{
+  rtems_semaphore_release( rtems_libio_semaphore );
+}
+#endif
