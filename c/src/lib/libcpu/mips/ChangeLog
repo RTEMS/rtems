@@ -1,3 +1,7 @@
+2002-11-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* mongoosev/Makefile.am: TMPINSTALL_FILES -> PREINSTALL_FILES.
+
 2002-11-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mongoosev/Makefile.am: Merge-in mongoosev/include/Makefile.am.

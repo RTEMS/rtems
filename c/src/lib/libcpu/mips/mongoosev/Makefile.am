@@ -15,10 +15,10 @@ $(PROJECT_INCLUDE)/libcpu:
 $(PROJECT_INCLUDE)/libcpu/%.h: include/%.h
 	$(INSTALL_DATA) $< $@
 
-TMPINSTALL_FILES = $(PROJECT_INCLUDE)/libcpu \
+PREINSTALL_FILES = $(PROJECT_INCLUDE)/libcpu \
     $(include_mips_HEADERS:include/%.h=$(PROJECT_INCLUDE)/libcpu/%.h)
 
-all-local: $(TMPINSTALL_FILES)
+all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/../../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../../automake/local.am
