@@ -66,8 +66,8 @@ END-INFO-DIR-ENTRY
 @include preface.texi
 @include cpumodel.texi
 @include callconv.texi
-@c @include memmodel.texi
-@c @include intr.texi
+@include memmodel.texi
+@include intr.texi
 @c @include fatalerr.texi
 @c @include bsp.texi
 @c @include cputable.texi
@@ -85,8 +85,8 @@ Applications Supplement.
 * Preface::
 * CPU Model Dependent Features::
 * Calling Conventions::
-** Memory Model::
-** Interrupt Processing::
+* Memory Model::
+* Interrupt Processing::
 ** Default Fatal Error Processing::
 ** Board Support Packages::
 ** Processor Dependent Information Table::

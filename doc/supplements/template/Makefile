@@ -24,7 +24,7 @@ COMMON_FILES=../../common/cpright.texi ../../common/setup.texi \
 FILES= $(PROJECT).texi preface.texi \
   $(COMMON_FILES) $(GENERATED_FILES)
 GENERATED_FILES=\
-  cpumodel.texi callconv.texi memmodel.texi intr.texi
+  cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi
 
 #  bsp.texi callconv.texi cpumodel.texi cputable.texi fatalerr.texi \
 #  intr.texi memmodel.texi preface.texi timetbl.texi timedata.texi wksheets.texi 
@@ -71,6 +71,12 @@ intr.t: intr_NOTIMES.t BSP_TIMES
 	${REPLACE} -p BSP_TIMES intr_NOTIMES.t
 	mv intr_NOTIMES.t.fixed intr.t
 
+fatalerr.texi: fatalerr.t Makefile
+	$(BMENU) -p "" \
+	    -u "Top" \
+	    -n "" ${*}.t
+
+intr.texi: intr.t Makefile
 replace: timedata.texi
 
 timetbl.t: ../../common/timetbl.t
