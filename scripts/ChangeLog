@@ -1,5 +1,6 @@
 2004-01-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	PR 554/tools
 	* scripts/automake.spec.in: Add defattr, URL:-tag.
 	Release 2.
 
