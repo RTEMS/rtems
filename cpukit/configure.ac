@@ -67,12 +67,17 @@ AM_CONDITIONAL([LIBSCORECPU],
 AC_CONFIG_SUBDIRS([libcsupport])
 AC_CONFIG_SUBDIRS([libblock])
 AC_CONFIG_SUBDIRS([libfs])
-AS_IF([test x"$HAS_NETWORKING" = x"yes"],
-  [AC_CONFIG_SUBDIRS(libnetworking)
-  AS_IF([test x"$RTEMS_CPU" != x"c4x" -o test x"$RTEMS_CPU" != x"or32"],[
-    AC_CONFIG_SUBDIRS([librpc])
-    LIBRPC=yes],[
-    LIBRPC=no
+AS_IF([test x"$HAS_NETWORKING" = x"yes"],[
+  AC_CONFIG_SUBDIRS(libnetworking)
+## FIXME: Should better use a feature-based test
+  case "$RTEMS_CPU" in
+  c4x )  LIBRPC=no;;
+  or32 ) LIBRPC=no;;
+  * )    LIBRPC=yes;;
+  esac
+
+  AS_IF([test "$LIBRPC" = "yes"]
+    [AC_CONFIG_SUBDIRS([librpc])
   ])
 ])
 AM_CONDITIONAL(LIBRPC,[test "$LIBRPC" = "yes"])
