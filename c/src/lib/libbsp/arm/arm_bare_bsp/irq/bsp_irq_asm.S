@@ -10,6 +10,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
+ *  $Id$
  */
 
 #define __asm__
@@ -27,8 +28,9 @@ ExecuteITHandler :
    * Here is the code to execute the appropriate INT handler 
    */
 	
-  b	ReturnFromHandler	/* return to ISR handler */
-	
+	mov pc, r0
+
+#if 0	
 /* 
  * Function to acknowledge the IT controller 
  */
@@ -42,3 +44,4 @@ AckControler:
 	
   b	ReturnFromAck		/* return to ISR handler */
 
+#endif
