@@ -327,6 +327,18 @@ void _Thread_queue_Timeout(
     case OBJECTS_LOCAL:
       the_thread_queue = the_thread->Wait.queue;
 
+      /*
+       *  If the_thread_queue is not synchronized, then it is either
+       *  "nothing happened", "timeout", or "satisfied".   If the_thread
+       *  is the executing thread, then it is in the process of blocking
+       *  and it is the thread which is responsible for the synchronization
+       *  process.
+       *
+       *  If it is not satisfied, then it is "nothing happened" and
+       *  this is the "timeout" transition.  After a request is satisfied,
+       *  a timeout is not allowed to occur.
+       */
+
       if ( the_thread_queue->sync_state != THREAD_QUEUE_SYNCHRONIZED &&
            _Thread_Is_executing( the_thread ) ) {
         if ( the_thread_queue->sync_state != THREAD_QUEUE_SATISFIED )
@@ -714,7 +726,7 @@ synchronize:
  
     case THREAD_QUEUE_NOTHING_HAPPENED:
       /*
-       *  All of this was dealt with above.  This should never happen.
+       *  This should never happen.  All of this was dealt with above.
        */
       break;
  
