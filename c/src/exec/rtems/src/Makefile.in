@@ -40,11 +40,14 @@ SEMAPHORE_PIECES=\
   sem semcreate semdelete semident semobtain semrelease \
   semtranslatereturncode
 
+EVENT_PIECES=\
+  event eventreceive eventseize eventsend eventsurrender eventtimeout
+
 RATEMON_PIECES=\
   ratemon ratemoncancel ratemoncreate ratemondelete ratemongetstatus \
   ratemonident ratemonperiod ratemontimeout
 
-C_PIECES=attr $(CLOCK_PIECES) dpmem event intr intrbody \
+C_PIECES=attr $(CLOCK_PIECES) dpmem $(EVENT_PIECES) intr intrbody \
    $(MESSAGE_QUEUE_PIECES) \
    part $(RATEMON_PIECES)  $(REGION_PIECES) $(SEMAPHORE_PIECES) signal \
    $(TASK_PIECES) timer $(MP_PIECES)
