@@ -57,7 +57,7 @@ typedef unsigned32 States_Control;
                                  STATES_WAITING_FOR_SEMAPHORE          | \
                                  STATES_WAITING_FOR_MUTEX              | \
                                  STATES_WAITING_FOR_CONDITION_VARIABLE | \
-                                 STATES_WAITING_FOR_JOIN_AT_EXIT )
+                                 STATES_WAITING_FOR_JOIN_AT_EXIT       )
 
 #define STATES_WAITING_ON_THREAD_QUEUE \
                                ( STATES_LOCALLY_BLOCKED         | \
@@ -67,7 +67,8 @@ typedef unsigned32 States_Control;
                                  STATES_WAITING_FOR_TIME        | \
                                  STATES_WAITING_FOR_PERIOD      | \
                                  STATES_WAITING_FOR_EVENT       | \
-                                 STATES_WAITING_ON_THREAD_QUEUE )
+                                 STATES_WAITING_ON_THREAD_QUEUE | \
+                                 STATES_INTERRUPTIBLE_BY_SIGNAL )
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/states.inl>
