@@ -1,3 +1,14 @@
+2002-07-17	Jay Monkman <jtm@smoothsmoothie.com>
+
+	* rtems/score/cpu_asm.h: Enhanced to include register offsets.
+	* Makefile.am: Install rtems/score/cpu_asm.h.
+	* cpu.c: Significantly enhanced including the implementation of
+	_CPU_ISR_Get_level.
+	* cpu_asm.S: Improved behavior of context switch and interrupt 
+	dispatching.
+	* rtems/score/arm.h: Improved the CPU model name determination.
+	* rtems/score/cpu.h: Improved interrupt disable/enable functions.
+
 2002-07-05	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/score/cpu.h: Filled in something that was marked XXX.

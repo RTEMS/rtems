@@ -1,11 +1,12 @@
-/*  no_cpu.h
- *
- *  This file is an example (i.e. "no CPU") of the file which is
- *  created for each CPU family port of RTEMS.
+/*  
+ *  $Id$
  *
  *
  *  COPYRIGHT (c) 2000 Canon Research Centre France SA.
  *  Emmanuel Raguet, mailto:raguet@crf.canon.fr
+ *
+ *  Copyright (c) 2002 Advent Networks, Inc.
+ *       Jay Monkman <jmonkman@adventnetworks.com>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -28,16 +29,23 @@ extern "C" {
  *  dependent features are present in a particular member
  *  of the family.
  */
- 
-#if defined(__arm__)
- 
-#define CPU_MODEL_NAME  "arm"
-#define ARM_HAS_FPU     0
- 
+#if defined(__arm9__)
+#  define CPU_MODEL_NAME  "arm9"
+#  define ARM_HAS_FPU     0
+#elif defined(__arm9tdmi__)
+#  define CPU_MODEL_NAME  "arm9tdmi"
+#  define ARM_HAS_FPU     0
+#elif defined(__arm7__)
+#  define CPU_MODEL_NAME  "arm7"
+#  define ARM_HAS_FPU     0
+#elif defined(__arm7tdmi__)
+#  define CPU_MODEL_NAME  "arm7tdmi"
+#  define ARM_HAS_FPU     0
+#elif defined(__arm__)
+#  define CPU_MODEL_NAME  "unknown ARM"
+#  define ARM_HAS_FPU     0
 #else
- 
-#error "Unsupported CPU Model"
- 
+#  error "Unsupported CPU Model"
 #endif
 
 /*

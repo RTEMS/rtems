@@ -1,7 +1,9 @@
-/*  cpu.h
- *
- *  This include file contains information pertaining to the arm
+/*
+ *  This include file contains information pertaining to the ARM
  *  processor.
+ *
+ *  COPYRIGHT (c) 2002 Advent Networks, Inc.
+ *        Jay Monkman <jmonkman@adventnetworks.com>
  *
  *  COPYRIGHT (c) 2000 Canon Research Centre France SA.
  *  Emmanuel Raguet, mailto:raguet@crf.canon.fr
@@ -10,8 +12,10 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
  *
+ *  $Id$
  */
 
+/* FIXME: finish commenting/cleaning up this file */
 #ifndef __CPU_h
 #define __CPU_h
 
@@ -43,7 +47,7 @@ extern "C" {
  *  one subroutine call is avoided entirely.]
  */
 
-#define CPU_INLINE_ENABLE_DISPATCH       FALSE
+#define CPU_INLINE_ENABLE_DISPATCH       TRUE
 
 /*
  *  Should the body of the search loops in _Thread_queue_Enqueue_priority
@@ -63,7 +67,7 @@ extern "C" {
  *  necessary to strike a balance when setting this parameter.
  */
 
-#define CPU_UNROLL_ENQUEUE_PRIORITY      FALSE
+#define CPU_UNROLL_ENQUEUE_PRIORITY      TRUE
 
 /*
  *  Does RTEMS manage a dedicated interrupt stack in software?
@@ -99,14 +103,14 @@ extern "C" {
  *
  *  If this is TRUE, CPU_ALLOCATE_INTERRUPT_STACK should also be TRUE.
  *
- *  Only one of CPU_HAS_SOFTWARE_INTERRUPT_STACK and
+ *  Only one of CPU_HAS_SOFTWARE_INTERRU
  *  CPU_HAS_HARDWARE_INTERRUPT_STACK should be set to TRUE.  It is
  *  possible that both are FALSE for a particular CPU.  Although it
  *  is unclear what that would imply about the interrupt processing
  *  procedure on that CPU.
  */
 
-#define CPU_HAS_HARDWARE_INTERRUPT_STACK FALSE
+#define CPU_HAS_HARDWARE_INTERRUPT_STACK TRUE
 
 /*
  *  Does RTEMS allocate a dedicated interrupt stack in the Interrupt Manager?
@@ -118,7 +122,7 @@ extern "C" {
  *  or CPU_INSTALL_HARDWARE_INTERRUPT_STACK is TRUE.
  */
 
-#define CPU_ALLOCATE_INTERRUPT_STACK FALSE
+#define CPU_ALLOCATE_INTERRUPT_STACK TRUE
 
 /*
  *  Does the RTEMS invoke the user's ISR with the vector number and
@@ -273,8 +277,8 @@ extern "C" {
  */
 
 #define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
-#define CPU_BIG_ENDIAN                           TRUE
-#define CPU_LITTLE_ENDIAN                        FALSE
+#define CPU_BIG_ENDIAN                           FALSE
+#define CPU_LITTLE_ENDIAN                        TRUE
 
 /*
  *  The following defines the number of bits actually used in the
@@ -282,7 +286,7 @@ extern "C" {
  *  CPU interrupt levels is defined by the routine _CPU_ISR_Set_level().
  */
 
-#define CPU_MODES_INTERRUPT_MASK   0x00000001
+#define CPU_MODES_INTERRUPT_MASK   0x000000c0
 
 /*
  *  Processor defined structures
@@ -345,6 +349,7 @@ typedef struct {
     unsigned32 register_sp;
     unsigned32 register_lr;
     unsigned32 register_pc;
+    unsigned32 register_cpsr;
 } Context_Control;
 
 typedef struct {
@@ -476,14 +481,14 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  that a "reasonable" small application should not have any problems.
  */
 
-#define CPU_STACK_MINIMUM_SIZE          (1024*4)
+#define CPU_STACK_MINIMUM_SIZE          (1024*16)
 
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
  *  alignment does not take into account the requirements for the stack.
  */
 
-#define CPU_ALIGNMENT              8
+#define CPU_ALIGNMENT              4
 
 /*
  *  This number corresponds to the byte alignment requirement for the
@@ -522,7 +527,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  NOTE:  This must be a power of 2 either 0 or greater than CPU_ALIGNMENT.
  */
 
-#define CPU_STACK_ALIGNMENT        32
+#define CPU_STACK_ALIGNMENT        4
 
 /* ISR handler macros */
 
@@ -537,14 +542,16 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  level is returned in _level.
  */
 
-#define _CPU_ISR_Disable( _level ) \
-  { \
-    (_level) = 0; \
-   asm volatile ("MRS r0, cpsr		\n"  \
-                 "ORR  r0, r0, #0xc0	\n" \
-                 "MSR  cpsr, r0 	\n" \
-                   : : : "r0"); \
-  }
+#define _CPU_ISR_Disable( _level )                \
+  do {                                            \
+    int reg;                                      \
+    asm volatile ("MRS        %0, cpsr \n"        \
+                  "ORR  %1, %0, #0xc0 \n"         \
+                  "MSR  cpsr, %1 \n"              \
+                  "AND  %0, %0, #0xc0 \n"         \
+                   : "=r" (_level), "=r" (reg)    \
+                   : "0" (_level), "1" (reg));    \
+  } while (0)
 
 /*
  *  Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
@@ -552,14 +559,17 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  *  _level is not modified.
  */
 
-#define _CPU_ISR_Enable( _level )  \
-  { \
-   asm volatile ("MRS r0, cpsr			\n"  \
-                 "AND  r0, r0, #0xFFFFFF3F	\n" \
-                 "MSR  cpsr, r0			\n" \
-                 : : : "r0" ); \
-  }
-  
+#define _CPU_ISR_Enable( _level )               \
+  do {                                          \
+    int reg;                                    \
+    asm volatile ("MRS        %0, cpsr \n"      \
+                  "BIC  %0, %0, #0xc0 \n"       \
+                  "ORR  %0, %0, %2 \n"          \
+                  "MSR  cpsr, %0 \n"            \
+                  : "=r" (reg)                  \
+                  : "0" (reg), "r" (_level));   \
+  } while (0)
+
 /*
  *  This temporarily restores the interrupt to _level before immediately
  *  disabling them again.  This is used to divide long RTEMS critical
@@ -567,8 +577,17 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  * modified.
  */
 
-#define _CPU_ISR_Flash( _isr_cookie ) \
+#define _CPU_ISR_Flash( _level ) \
   { \
+    int reg1;                                   \
+    int reg2;                                   \
+    asm volatile ("MRS	%0, cpsr \n"            \
+                  "BIC  %1, %0, #0xc0 \n"       \
+                  "ORR  %1, %1, %4 \n"          \
+                  "MSR  cpsr, %1 \n"            \
+                  "MSR  cpsr, %0 \n"            \
+                  : "=r" (reg1), "=r" (reg2)    \
+                  : "0" (reg1), "1" (reg2),  "r" (_level));       \
   }
 
 /*
@@ -586,7 +605,15 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
 
 #define _CPU_ISR_Set_level( new_level ) \
   { \
+    int reg;                                    \
+    asm volatile ("MRS	%0, cpsr \n"            \
+                  "BIC  %0, %0, #0xc0 \n"            \
+                  "ORR  %0, %0, %2 \n"          \
+                  "MSR  cpsr_c, %0 \n"            \
+                  : "=r" (reg)                 \
+                  : "0" (reg), "r" (new_level)); \
   }
+
 
 unsigned32 _CPU_ISR_Get_level( void );
 
@@ -615,12 +642,14 @@ unsigned32 _CPU_ISR_Get_level( void );
  *        where the PSR contains an enable FPU bit.
  */
 
-#define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                 _isr, _entry_point, _is_fp ) \
-  { \
-   (_the_context)->register_sp = ((unsigned32)(_stack_base)) + (_size) ; \
-   (_the_context)->register_pc = (_entry_point); \
-  }
+void _CPU_Context_Initialize(
+  Context_Control  *the_context,
+  unsigned32       *stack_base,
+  unsigned32        size,
+  unsigned32        new_level,
+  void             *entry_point,
+  boolean           is_fp
+);
 
 /*
  *  This routine is responsible for somehow restarting the currently
