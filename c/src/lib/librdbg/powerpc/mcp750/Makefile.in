@@ -17,9 +17,8 @@ LIBNAME = librdbg.a
 LIB = ${ARCH}/${LIBNAME}
 
 # C and C++ source names, if any, go here -- minus the .c or .cc
-C_PIECES = rdbg servcon servbkpt servrpc excep excep_f \
-	  servtgt servtsp servutil _servtgt rdbg_f \
-	  ptrace 
+C_PIECES = rdbg servcon servbkpt servrpc excep excep_f servtgt servtsp \
+    servutil _servtgt rdbg_f ptrace
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
