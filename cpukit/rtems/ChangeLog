@@ -1,3 +1,8 @@
+2002-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Don't create $ARCH as side-effect of compilation.
+	Re-order all-local.
+
 2002-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* include/Makefile.am: Remove.

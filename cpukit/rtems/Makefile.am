@@ -145,10 +145,9 @@ OBJS = $(C_FILES:src/%.c=${ARCH}/%.$(OBJEXT))
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
-all-local: ${ARCH} $(PREINSTALL_FILES) $(LIB)
+all-local: $(PREINSTALL_FILES) $(ARCH) $(LIB)
 
 ${ARCH}/%.o: src/%.c
-	test -d $(ARCH) || mkdir $(ARCH)
 	${COMPILE} -o $@ -c $<
 
 $(LIB): ${OBJS}
