@@ -41,7 +41,7 @@ void	formDefineUserMgmt(void);
  */
 
 extern const char *tftpServer;
-static char_t		*rootWeb = T("goahead");			/* Root web directory */
+/* static char_t		*rootWeb = T("goahead");			* Root web directory */
 static char_t		*password = T("");				/* Security password */
 static int			port = 80;						/* Server port */
 static int			retries = 5;					/* Server port retries */
