@@ -1,3 +1,9 @@
+2002-02-27	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* mongoosev/include/mongoose-v.h: Added cache constants.
+	* mongoosev/vectorisrs/vectorisrs.c: More tinkering to improve
+	performance.
+
 2002-02-08	Joel Sherrill <joel@OARcorp.com>
 
 	* mongoosev/vectorisrs/vectorisrs.c: Fixed to use new frame format.

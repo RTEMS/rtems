@@ -31,7 +31,7 @@ int mips_default_isr( int vector )
   mips_get_sr( sr );
   mips_get_cause( cause );
 
-  sr2 = sr & ~0xff;
+  sr2 = sr & ~0xffff;
   mips_set_sr(sr2);
 
   printk( "Unhandled isr exception: vector 0x%02x, cause 0x%08X, sr 0x%08X\n", vector, cause, sr );
@@ -75,7 +75,7 @@ int assertSoftwareInterrupt( unsigned32 n )
 // via this #if will remove the code entirely from the RTEMS kernel.
 //
 
-#if 1
+#if 0
 #define SET_ISR_FLAG( offset )	*((unsigned32 *)(0x8001e000+offset)) = 1;
 #define CLR_ISR_FLAG( offset )	*((unsigned32 *)(0x8001e000+offset)) = 0;
 #else
@@ -244,7 +244,7 @@ void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
 		  // if another interrupt has arrived, jump out right
 		  // away but be sure to reset all the interrupts we've
 		  // already serviced
-		  //if( READ_CAUSE() & 0xff ) goto pfexit;
+		  if( READ_CAUSE() & 0xff ) goto pfexit;
 	       }
 	    }
 	 }
