@@ -25,7 +25,7 @@ void Screen5()
   status = rtems_semaphore_create(
     0,
     1,
-    RTEMS_DEFAULT_ATTRIBUTES, 
+    RTEMS_DEFAULT_ATTRIBUTES,
     RTEMS_NO_PRIORITY,
     &Junk_id
   );

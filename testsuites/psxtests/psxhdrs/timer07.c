@@ -13,10 +13,10 @@
  */
 
 #include <unistd.h>
- 
+
 void test( void )
 {
-  unsigned long usec; 
+  unsigned long usec;
   unsigned      result;
 
   usec = 0;

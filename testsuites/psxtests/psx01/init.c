@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -39,7 +39,7 @@ void *POSIX_Init(
   status = uname( NULL );
   assert( status == -1 );
   assert( errno == EFAULT );
-   
+
   status = uname( &uts );
   assert( !status );
   printf( "Init: uts.sysname: %s\n", uts.sysname );
@@ -48,7 +48,7 @@ void *POSIX_Init(
   printf( "Init: uts.version: %s\n", uts.version );
   printf( "Init: uts.machine: %s\n", uts.machine );
   puts("");
-   
+
   /* error cases in clock_gettime and clock_settime */
 
   puts( "Init: clock_gettime - EINVAL (invalid clockid)" );
@@ -113,7 +113,7 @@ void *POSIX_Init(
   printf( ctime( &seconds ) );
 
   /*  just to have the value copied out through the parameter */
-  
+
   seconds = time( &seconds1 );
   assert( seconds == seconds1 );
 
@@ -146,10 +146,10 @@ void *POSIX_Init(
 
   /* use nanosleep to yield */
 
-  tv.tv_sec = 0; 
-  tv.tv_nsec = 0; 
+  tv.tv_sec = 0;
+  tv.tv_nsec = 0;
 
-  puts( "Init: nanosleep - yield" ); 
+  puts( "Init: nanosleep - yield" );
   status = nanosleep ( &tv, &tr );
   assert( !status );
   assert( !tr.tv_sec );
@@ -157,10 +157,10 @@ void *POSIX_Init(
 
   /* use nanosleep to delay */
 
-  tv.tv_sec = 3; 
-  tv.tv_nsec = 500000; 
+  tv.tv_sec = 3;
+  tv.tv_nsec = 500000;
 
-  puts( "Init: nanosleep - 3.05 seconds" ); 
+  puts( "Init: nanosleep - 3.05 seconds" );
   status = nanosleep ( &tv, &tr );
   assert( !status );
 
@@ -168,7 +168,7 @@ void *POSIX_Init(
 
   status = clock_gettime( CLOCK_REALTIME, &tv );
   assert( !status );
- 
+
   printf( ctime( &tv.tv_sec ) );
 
   /* check the time remaining */
@@ -193,7 +193,7 @@ void *POSIX_Init(
   assert( errno == EINVAL );
 
   /* exercise get maximum priority */
- 
+
   priority = sched_get_priority_max( SCHED_FIFO );
   printf( "Init: sched_get_priority_max (SCHED_FIFO) -- %d\n", priority );
   assert( priority != -1 );
@@ -204,7 +204,7 @@ void *POSIX_Init(
   assert( errno == EINVAL );
 
   /* print the round robin time quantum */
- 
+
   status = sched_rr_get_interval( getpid(), &tr );
   printf(
     "Init: Round Robin quantum is %ld seconds, %ld nanoseconds\n",
@@ -212,7 +212,7 @@ void *POSIX_Init(
     tr.tv_nsec
   );
   assert( !status );
-  
+
   /* create a thread */
 
   puts( "Init: pthread_create - SUCCESSFUL" );

@@ -20,22 +20,22 @@
 rtems_task Init(
   rtems_task_argument argument
 );
- 
+
 rtems_task First_FP_task(
   rtems_task_argument argument
 );
- 
+
 rtems_task FP_task(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_1(
   rtems_task_argument argument
 );
 
 /* configuration information */
 
-#define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_FLOATING_POINT 
+#define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_FLOATING_POINT
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

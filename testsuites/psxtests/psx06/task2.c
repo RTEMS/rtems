@@ -26,7 +26,7 @@ void *Task_2(
 {
   int               status;
   uint32_t   *key_data;
- 
+
   printf( "Destructor invoked %d times\n", Destructor_invoked );
 
   printf( "Task_2: Setting the key to %d\n", 2 );
@@ -34,18 +34,18 @@ void *Task_2(
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
- 
+
   key_data = pthread_getspecific( Key_id );
   printf( "Task_2: Got the key value of %ld\n",
           (unsigned long) ((uint32_t   *)key_data - Data_array) );
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
- 
+
   puts( "Task2: exitting" );
   pthread_exit( NULL );
- 
+
      /* switch to init task */
- 
+
   return NULL; /* just so the compiler thinks we returned something */
 }

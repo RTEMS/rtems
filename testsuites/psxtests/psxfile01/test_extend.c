@@ -1,5 +1,5 @@
 /*
- *  A test support function which extends the file to the specified 
+ *  A test support function which extends the file to the specified
  *  length.  This handles the implied open(), lseek(), write(), and close()
  *  operations.
  *

@@ -44,13 +44,13 @@ rtems_task Task_1(
 
 TEST_EXTERN rtems_id   Task_id[ 2 ];     /* array of task ids */
 TEST_EXTERN rtems_name Task_name[ 2 ];   /* array of task names */
- 
+
 TEST_EXTERN rtems_id   Port_id[ 2 ];     /* array of port ids */
 TEST_EXTERN rtems_name Port_name[ 2 ];   /* array of port names */
- 
+
 #define Internal_port_area ((uint8_t   *) 0x00001000)
 #define External_port_area ((uint8_t   *) 0x00002000)
- 
+
 #define Below_port_area    ((uint8_t   *) 0x00000500)
 #define Above_port_area    ((uint8_t   *) 0x00003000)
 

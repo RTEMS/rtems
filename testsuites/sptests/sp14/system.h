@@ -20,20 +20,20 @@
 rtems_task Init(
   rtems_task_argument argument
 );
- 
+
 rtems_timer_service_routine Signal_3_to_task_1(
   rtems_id  id,
   void     *pointer
 );
- 
+
 rtems_asr Process_asr(
   rtems_signal_set the_signal_set
 );
- 
+
 rtems_task Task_1(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_2(
   rtems_task_argument argument
 );

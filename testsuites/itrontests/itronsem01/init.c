@@ -152,8 +152,8 @@ void ITRON_Init( void )
 
   puts( "Init - preq_sem - bad id (less than -4) - E_OACV" );
   status = preq_sem( -5 );
-  assert( status == E_OACV ); 
-  
+  assert( status == E_OACV );
+
   puts( "Init - preq_sem - bad id (between 0 and -4) - E_ID" );
   status = preq_sem( -4 );
   assert( status == E_ID );
@@ -256,7 +256,7 @@ void ITRON_Init( void )
   assert( status == E_TMOUT );
 
   /*
-   *  Exercise twai_sem 
+   *  Exercise twai_sem
    */
 
   puts( "Init - twai_sem - semaphore 1 unavailable - 1 second E_TMOUT" );

@@ -194,7 +194,7 @@ void Screen3()
   puts( "TA1 - rtems_task_create - 11 - RTEMS_TOO_MANY" );
 
   /*
-   *  The check for an object being global is only made if 
+   *  The check for an object being global is only made if
    *  multiprocessing is enabled.
    */
 

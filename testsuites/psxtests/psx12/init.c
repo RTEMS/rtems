@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -50,7 +50,7 @@ void *POSIX_Init(
 
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08x\n", Init_id );
-  
+
   /* invalid scheduling policy error */
 
   puts( "Init: pthread_attr_init - SUCCESSFUL" );
@@ -79,7 +79,7 @@ void *POSIX_Init(
   schedparam.ss_replenish_period.tv_nsec = 0;
   schedparam.ss_initial_budget.tv_sec = 2;
   schedparam.ss_initial_budget.tv_nsec = 0;
- 
+
   schedparam.sched_priority = 200;
   schedparam.ss_low_priority = 100;
 
@@ -88,7 +88,7 @@ void *POSIX_Init(
 
   status = pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
   assert( !status );
- 
+
   puts( "Init: pthread_create - EINVAL (replenish < budget)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   assert( status == EINVAL );
@@ -99,7 +99,7 @@ void *POSIX_Init(
   schedparam.ss_replenish_period.tv_nsec = 0;
   schedparam.ss_initial_budget.tv_sec = 1;
   schedparam.ss_initial_budget.tv_nsec = 0;
- 
+
   schedparam.sched_priority = 200;
   schedparam.ss_low_priority = -1;
 
@@ -116,13 +116,13 @@ void *POSIX_Init(
   schedparam.ss_replenish_period.tv_nsec = 0;
   schedparam.ss_initial_budget.tv_sec = 1;
   schedparam.ss_initial_budget.tv_nsec = 0;
- 
+
   schedparam.sched_priority = 200;
   schedparam.ss_low_priority = 100;
- 
+
   status = pthread_attr_setschedparam( &attr, &schedparam );
   assert( !status );
- 
+
   puts( "Init: pthread_create - SUCCESSFUL" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   assert( !status );

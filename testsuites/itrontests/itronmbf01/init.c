@@ -69,7 +69,7 @@ void TestCre()
 {
     ER      status;
     T_CMBF  pk_cmbf;
-    
+
     /*
      *  Exercise cre_mbf - this code seems to exercise every path.
      */
@@ -97,7 +97,7 @@ void TestCre()
     pk_cmbf.maxmsz  = 101;
     status = cre_mbf( 1, &pk_cmbf );
     assert( status == E_PAR );
-  
+
     /*
      *  Now run through all the bad ID errors
      */
@@ -126,7 +126,7 @@ void TestCre()
     pk_cmbf.mbfatr  = TA_TFIFO;
     status = cre_mbf( 1, &pk_cmbf );
     assert( status == E_OK );
-    
+
     puts( "Init - cre_mbf - create mbf 1 again - E_OBJ" );
     status = cre_mbf( 1, &pk_cmbf );
     assert( status == E_OBJ );
@@ -142,7 +142,7 @@ void TestCre()
 void TestDel()
 {
     ER    status;
-    
+
     /*
      *  Generate all the bad id errors for del_mbf
      */
@@ -163,7 +163,7 @@ void TestDel()
     status = del_mbf( CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS + 1 );
     assert( status == E_ID );
 
-    
+
     puts("Init - del_mbf   - E_OK" );
     status = del_mbf(2);
     assert(status == E_OK);
@@ -173,7 +173,7 @@ void TestPsnd()
 {
     ER   status;
     char msg[100] = "This is test message 1";
-    
+
     /*
      *  Generate all the bad id errors for psnd_mbf
      */
@@ -192,23 +192,23 @@ void TestPsnd()
 
     puts( "Init - psnd_mbf - bad id (too great) - E_ID" );
     status = psnd_mbf(CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS + 1, msg,
-                      sizeof(msg)); 
+                      sizeof(msg));
     assert( status == E_ID );
 
     puts( "Init - psnd_mbf - msg == 0, E_PAR" );
-    status = psnd_mbf(1, 0, sizeof(msg)); 
+    status = psnd_mbf(1, 0, sizeof(msg));
     assert( status == E_PAR );
 
     puts( "Init - psnd_mbf - msgsz too big - E_PAR" );
-    status = psnd_mbf(1, msg, 300); 
+    status = psnd_mbf(1, msg, 300);
     assert( status == E_PAR );
 
     puts( "Init - psnd_mbf - msgsz <0 - E_PAR" );
-    status = psnd_mbf(1, msg, -10); 
+    status = psnd_mbf(1, msg, -10);
     assert( status == E_PAR );
 
     puts( "Init - psnd_mbf - E_OK" );
-    status = psnd_mbf(1, msg, sizeof(msg)); 
+    status = psnd_mbf(1, msg, sizeof(msg));
     assert( status == E_OK );
 }
 
@@ -216,7 +216,7 @@ void TestRef()
 {
     ER       status;
     T_RMBF   pk_rmbf;
-    
+
     puts( "Init - ref_mbf - bad id (less than -4) - E_OACV" );
     status = ref_mbf(&pk_rmbf, -5);
     assert( status == E_OACV );
@@ -241,7 +241,7 @@ void TestRef()
     puts( "Init - ref_mbf - mbf 1 - E_OK" );
     status = ref_mbf( &pk_rmbf, 1 );
     assert( status == E_OK );
-    
+
     printf( "Init - mbf 1 msgsz = %d\n", pk_rmbf.msgsz );
     printf( "Init - mbf 1 frbufsz = %d\n", pk_rmbf.frbufsz );
     printf( "Init - mbf 1 waiting tasks = %d\n", pk_rmbf.wtsk );
@@ -342,7 +342,7 @@ void TestTrcv()
     puts( "Init - trcv_mbf - bad id (too great) - E_ID" );
     status = trcv_mbf(buffer, &s,
                       CONFIGURE_MAXIMUM_ITRON_MESSAGE_BUFFERS + 1,
-                      5000); 
+                      5000);
     assert( status == E_ID );
 
     puts( "Init - trcv_mbf - NULL msg returns E_PAR" );

@@ -24,7 +24,7 @@ rtems_task Init(
 rtems_task Task_1(
   rtems_task_argument argument
 );
- 
+
 #define put_mode( _comment, _output_mode ) \
    printf( "%s %08x\n", _comment, _output_mode );
 

@@ -36,7 +36,7 @@ void *Task_1_through_3(
   puts( "Task_1: sched_yield to Init" );
   status = sched_yield();
   assert( !status );
- 
+
     /* switch to Task_1 */
 
   /* now do some real testing */

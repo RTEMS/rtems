@@ -14,7 +14,7 @@
 
 #include <sys/types.h>
 #include <limits.h>   /* for LOGIN_NAME_MAX */
- 
+
 void test( void )
 {
   char  loginnamebuffer[ LOGIN_NAME_MAX ];

@@ -14,13 +14,13 @@
 
 #include <sys/types.h>
 #include <signal.h>
- 
+
 void test( void )
 {
   pid_t pid;
   int   signal_number;
   int   result;
-  
+
   pid = 0;
   signal_number = SIGALRM;
 

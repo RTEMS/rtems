@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -42,10 +42,10 @@ void *POSIX_Init(
   assert( !status );
 
   /* create thread */
- 
+
   status = pthread_create( &Task1_id, NULL, Task_1, NULL );
   assert( !status );
-  
+
   puts( "Init: pthread_join - ESRCH (invalid id)" );
   status = pthread_join( -1, &return_pointer );
   assert( status == ESRCH );
@@ -66,14 +66,14 @@ void *POSIX_Init(
       return_pointer,
       &Task1_id
     );
-  
+
   puts( "Init: creating two pthreads" );
   status = pthread_create( &Task2_id, NULL, Task_2, NULL );
   assert( !status );
-  
+
   status = pthread_create( &Task3_id, NULL, Task_3, NULL );
   assert( !status );
-  
+
   puts( "Init: pthread_join - SUCCESSFUL" );
   status = pthread_join( Task2_id, &return_pointer );
   /* assert is below comment */
@@ -91,7 +91,7 @@ void *POSIX_Init(
       return_pointer,
       &Task2_id
     );
-  
+
   puts( "Init: exitting" );
   return NULL;
 }

@@ -32,7 +32,7 @@ void Task_2_through_4()
   directive_failed( status, "get_tid");
 
   tid_index = tid - 1;  /* account for init tasks */
-  
+
   sprintf(name, "TA%d", tid_index);
 
   while( FOREVER ) {

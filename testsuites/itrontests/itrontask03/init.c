@@ -33,8 +33,8 @@ void ITRON_Init( void )
 
   pk_ctsk.exinf    = NULL;
   pk_ctsk.tskatr   = TA_HLNG;
-  pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE; 
-  pk_ctsk.itskpri  = PREEMPT_PRIORITY; 
+  pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE;
+  pk_ctsk.itskpri  = PREEMPT_PRIORITY;
   pk_ctsk.task     = Preempt_task;
 
   puts( "\n\n*** ITRON TASK TEST 3 ***" );
@@ -47,7 +47,7 @@ void ITRON_Init( void )
   puts( "INIT - Create and Start PREEMPT" );
   status = chg_pri( TSK_SELF, (PREEMPT_PRIORITY+2) );
   directive_failed( status, "chg_pri of SELF" );
-  
+
   status = cre_tsk(  PREEMPT_TASK_ID, &pk_ctsk );
   directive_failed( status, "cre_tsk of RTEMS_PREEMPT" );
 
@@ -61,7 +61,7 @@ void ITRON_Init( void )
   status = ref_tsk( &pk_rtsk, PREEMPT_TASK_ID );
   directive_failed( status, "INIT - ref_tsk of RTEMS_PREEMPT");
   fatal_directive_status(pk_rtsk.tskstat,TTS_DMT,"tskstat of PREEMPT");
-  
+
   /*
    * Restart the Preempt Task.
    */
@@ -76,12 +76,12 @@ void ITRON_Init( void )
   fatal_directive_status( status, E_NOEXS, "tskstat of PREEMPT");
   status = chg_pri( TSK_SELF, PREEMPT_PRIORITY );
   directive_failed( status, "chg_pri of SELF" );
-  
+
   /*
-   * XXX 
+   * XXX
    */
-	
-  pk_ctsk.itskpri  = 3; 
+
+  pk_ctsk.itskpri  = 3;
   pk_ctsk.task     = Task_1;
   status = cre_tsk( TA1_ID, &pk_ctsk );
   directive_failed( status, "cre_tsk of TA1" );
@@ -121,7 +121,7 @@ void ITRON_Init( void )
   status = ter_tsk( TA3_ID );
   directive_failed( status, "ter_tsk of TA3" );
 
-  pk_ctsk.itskpri  = 1; 
+  pk_ctsk.itskpri  = 1;
   pk_ctsk.task     = Task_1;
   status = cre_tsk( TA1_ID, &pk_ctsk );
   directive_failed( status, "cre_tsk of TA1 at priority 1" );

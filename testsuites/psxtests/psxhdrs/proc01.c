@@ -13,7 +13,7 @@
  */
 
 #include <sys/types.h>
- 
+
 void test( void )
 {
   pid_t pid;

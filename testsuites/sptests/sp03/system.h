@@ -24,7 +24,7 @@ rtems_task Init(
 rtems_task Task_1(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_2(
   rtems_task_argument argument
 );

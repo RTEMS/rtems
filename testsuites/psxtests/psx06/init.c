@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -46,7 +46,7 @@ void *POSIX_Init(
 
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08x\n", Init_id );
-  
+
   /* create a couple of threads */
 
   status = pthread_create( &Task_id, NULL, Task_1, NULL );

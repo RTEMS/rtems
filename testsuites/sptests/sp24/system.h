@@ -20,12 +20,12 @@
 rtems_task Init(
   rtems_task_argument argument
 );
- 
+
 rtems_timer_service_routine Resume_task(
   rtems_id  timer_id,
   void     *ignored_address
 );
- 
+
 rtems_task Task_1_through_3(
   rtems_task_argument argument
 );

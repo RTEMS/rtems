@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -31,7 +31,7 @@ void *POSIX_Init(
 
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08x\n", Init_id );
-  
+
   /* exercise pthread_setschedparam */
 
   param.sched_priority = 127;
@@ -53,33 +53,33 @@ void *POSIX_Init(
   assert( !status );
 
   /* create a thread as SCHED_FIFO */
- 
+
   puts( "Init: create a thread of SCHED_FIFO with priority 120" );
   status = pthread_attr_init( &attr );
   assert( !status );
- 
+
   attr.schedpolicy = SCHED_FIFO;
   attr.schedparam.sched_priority = 120;
- 
+
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   assert( !status );
- 
+
   puts( "Init: join with the other thread" );
   status = pthread_join( Task_id, NULL );
   assert( !status );
 
   /* create a thread as SCHED_RR */
- 
+
   puts( "Init: create a thread of SCHED_RR with priority 120" );
   status = pthread_attr_init( &attr );
   assert( !status );
- 
+
   attr.schedpolicy = SCHED_RR;
   attr.schedparam.sched_priority = 120;
- 
+
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   assert( !status );
- 
+
   puts( "Init: join with the other thread" );
   status = pthread_join( Task_id, NULL );
   assert( !status );

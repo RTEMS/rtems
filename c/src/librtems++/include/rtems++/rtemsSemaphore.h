@@ -6,7 +6,7 @@
   COPYRIGHT (c) 1997
   Objective Design Systems Ltd Pty (ODS)
   All rights reserved (R) Objective Design Systems Ltd Pty
-  
+
   The license and distribution terms for this file may be found in the
   file LICENSE in this distribution or at
   http://www.rtems.com/license/LICENSE.
@@ -73,7 +73,7 @@ public:
 
   // connect to an existing semaphore object by name
   rtemsSemaphore(const char *name, const rtems_unsigned32 node);
-  
+
   // attach this object to an other objects semaphore
   rtemsSemaphore(const rtemsSemaphore& semaphore);
   rtemsSemaphore();
@@ -91,28 +91,28 @@ public:
                                          const Ceiling ceiling = no_priority_ceiling,
                                          const rtems_task_priority priority_ceiling = 0);
   virtual const rtems_status_code destroy();
-  
+
   // connect to an existing semaphore object, will not be the owner
   const rtemsSemaphore& operator=(const rtemsSemaphore& semaphore);  
   virtual const rtems_status_code connect(const char *name, rtems_unsigned32 node);
-  
+
   // obtain the semaphore, timeout is in micro-seconds
   inline const rtems_status_code obtain(bool wait = true,
                                         const rtems_unsigned32 micro_secs = RTEMS_NO_TIMEOUT);
-  
+
   // release the semaphore, blocks threads eligble
   inline const rtems_status_code release();
-    
+
   // object id, and name
   const rtems_id id_is() const { return id; }
   const rtems_name name_is() const { return name; }
   const char *name_string() const { return name_str; }
-  
+
 private:
 
   // make the object reference no valid RTEMS object
   void make_invalid();
-  
+
   // semaphore name
   rtems_name name;
   char name_str[5];
@@ -120,7 +120,7 @@ private:
   // owner, true if this object owns the semaphore
   // will delete the semaphore when it destructs
   bool owner;
-    
+
   // the rtems id, object handle
   rtems_id id;
 };

@@ -20,14 +20,14 @@
 rtems_task Init(
   rtems_task_argument argument
 );
- 
+
 rtems_timer_service_routine Delayed_resume(
   rtems_id  ignored_id,
   void     *ignored_address
 );
- 
+
 void Print_time( void );
- 
+
 rtems_task Task_1(
   rtems_task_argument argument
 );

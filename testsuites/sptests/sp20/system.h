@@ -26,13 +26,13 @@ struct counters {
 rtems_task Init(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_1_through_6(
   rtems_task_argument argument
 );
- 
+
 void Get_all_counters( void );
- 
+
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER

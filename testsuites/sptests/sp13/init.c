@@ -74,7 +74,7 @@ rtems_task Init(
 
   status = rtems_task_start( Task_id[ 3 ], Task_3, 0 );
   directive_failed( status, "rtems_task_start of TA3" );
-  
+
   Queue_name[ 1 ] = rtems_build_name( 'Q', '1', ' ', ' ' );
   Queue_name[ 2 ] = rtems_build_name( 'Q', '2', ' ', ' ' );
   Queue_name[ 3 ] = rtems_build_name( 'Q', '3', ' ', ' ' );

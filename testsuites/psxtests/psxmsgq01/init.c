@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -17,7 +17,7 @@
 #include <tmacros.h>
 #include <signal.h>   /* signal facilities */
 
-typedef struct { 
+typedef struct {
   char         msg[ 50 ];
   int          size;
   unsigned int priority;
@@ -26,7 +26,7 @@ Test_Message_t Predefined_Msgs[MAXMSG+1];
 Test_Message_t Predefined_Msgs[MAXMSG+1] = {
   { "12345678",   9, MQ_PRIO_MAX-1 },  /* Max Length Message med  */
   { "",           1, 1             },  /* NULL  Message      low  */
-  { "Last",       5, MQ_PRIO_MAX   },  /* Queue Full Message hi   */  
+  { "Last",       5, MQ_PRIO_MAX   },  /* Queue Full Message hi   */
   { "No Message", 0, MQ_PRIO_MAX-1 },  /* 0 length Message   med  */
   { "1",          2, 0             },  /* Cause Overflow Behavior */
 };
@@ -43,9 +43,9 @@ typedef struct {
   int                count;
 } Test_queue_type;
 
-Test_queue_type Test_q[ NUMBER_OF_TEST_QUEUES ] = 
+Test_queue_type Test_q[ NUMBER_OF_TEST_QUEUES ] =
 {
-  { 0, 0, "Qread",    ( O_CREAT | O_RDONLY | O_NONBLOCK ), MAXMSG, MSGSIZE, 0 }, 
+  { 0, 0, "Qread",    ( O_CREAT | O_RDONLY | O_NONBLOCK ), MAXMSG, MSGSIZE, 0 },
   { 0, 1, "Qwrite",   ( O_CREAT | O_WRONLY | O_NONBLOCK ), MAXMSG, MSGSIZE, 0 },
   { 0, 2, "Qnoblock", ( O_CREAT | O_RDWR   | O_NONBLOCK ), MAXMSG, MSGSIZE, 0 },
   { 0, 3, "Qblock",   ( O_CREAT | O_RDWR )               , MAXMSG, MSGSIZE, 0 },
@@ -89,7 +89,7 @@ void Validate_attributes(
 
   status = mq_getattr( mq, &attr );
   fatal_posix_service_status( status, 0, "mq_getattr valid return status");
-  
+
   if ( mq != Test_q[ DEFAULT_RW ].mq ){
     fatal_int_service_status((int)attr.mq_maxmsg, MAXMSG, "maxmsg attribute" );
     fatal_int_service_status((int)attr.mq_msgsize,MSGSIZE,"msgsize attribute");
@@ -132,7 +132,7 @@ void open_test_queues()
 
   for( que = 0; que < NUMBER_OF_TEST_QUEUES; que++ ) {
 
-    tq = &Test_q[ que ]; 
+    tq = &Test_q[ que ];
     if ( que == DEFAULT_RW)
       Test_q[que].mq = mq_open( tq->name, tq->oflag, 0x777, NULL );
     else
@@ -142,9 +142,9 @@ void open_test_queues()
   }
 
   status = mq_close( Test_q[CLOSED].mq );
-  fatal_posix_service_status( status, 0, "mq_close message queue"); 
+  fatal_posix_service_status( status, 0, "mq_close message queue");
   status = mq_unlink( CLOSED_NAME );
-  fatal_posix_service_status( status, 0, "mq_unlink message queue"); 
+  fatal_posix_service_status( status, 0, "mq_unlink message queue");
 }
 
 /*
@@ -176,9 +176,9 @@ void validate_mq_open_error_codes()
   attr.mq_maxmsg = -1;
   puts( "Init: mq_open - Create with maxmsg (-1) (EINVAL)" );
   n_mq2 = mq_open( "mq2", O_CREAT | O_RDONLY, 0x777, &attr);
-  fatal_posix_service_status( 
+  fatal_posix_service_status(
     (int) n_mq2, (int ) (-1), "mq_open error return status" );
-  fatal_posix_service_status( errno, EINVAL,  "mq_open errno EINVAL"); 
+  fatal_posix_service_status( errno, EINVAL,  "mq_open errno EINVAL");
   attr.mq_maxmsg  = MAXMSG;
 
   /*
@@ -188,9 +188,9 @@ void validate_mq_open_error_codes()
   attr.mq_msgsize = -1;
   puts( "Init: mq_open - Create with msgsize (-1) (EINVAL)" );
   n_mq2 = mq_open( "mq2", O_CREAT | O_RDONLY, 0x777, &attr);
-  fatal_posix_service_status( 
+  fatal_posix_service_status(
     (int) n_mq2, (int ) (-1), "mq_open error return status" );
-  fatal_posix_service_status( errno, EINVAL,  "mq_open errno EINVAL"); 
+  fatal_posix_service_status( errno, EINVAL,  "mq_open errno EINVAL");
   attr.mq_msgsize = MSGSIZE;
 
   /*
@@ -199,9 +199,9 @@ void validate_mq_open_error_codes()
 
   puts( "Init: mq_open - Open new mq without create flag (ENOENT)" );
   n_mq2 = mq_open( "mq3", O_EXCL | O_RDONLY, 0x777, NULL);
-  fatal_posix_service_status( 
+  fatal_posix_service_status(
     (int) n_mq2, (int ) (-1), "mq_open error return status" );
-  fatal_posix_service_status( errno, ENOENT,  "mq_open errno ENOENT"); 
+  fatal_posix_service_status( errno, ENOENT,  "mq_open errno ENOENT");
 
   /*
    * XXX EINTR  - call was interrupted by a signal
@@ -213,10 +213,10 @@ void validate_mq_open_error_codes()
 
   puts( "Init: mq_open - Open with too long of a name (ENAMETOOLONG)" );
   n_mq2 = mq_open( Get_Too_Long_Name(), O_CREAT | O_RDONLY, 0x777, NULL );
-  fatal_posix_service_status( 
+  fatal_posix_service_status(
     (int) n_mq2, (int ) (-1), "mq_open error return status" );
   fatal_posix_service_status( errno, ENAMETOOLONG, "mq_open errno ENAMETOOLONG");
-  
+
   /*
    * XXX - ENAMETOOLONG - Give a name greater than NAME_MAX
    *       Per implementation not possible.
@@ -227,21 +227,21 @@ void validate_mq_open_error_codes()
    */
 
   puts( "Init: mq_open - Create an Existing mq (EEXIST)" );
-  open_mq[0] = mq_open( 
+  open_mq[0] = mq_open(
     Build_Queue_Name(0), O_CREAT | O_RDWR | O_NONBLOCK, 0x777, NULL );
   assert( open_mq[0] != (-1) );
 
   n_mq2 = mq_open(
     Build_Queue_Name(0), O_CREAT | O_EXCL | O_RDONLY, 0x777, NULL);
-  fatal_posix_service_status( 
+  fatal_posix_service_status(
     (int) n_mq2, (int ) (-1), "mq_open error return status" );
   fatal_posix_service_status( errno, EEXIST,  "mq_open errno EEXIST");
 
   status = mq_unlink( Build_Queue_Name(0) );
-  fatal_posix_service_status( status, 0, "mq_unlink message queue"); 
+  fatal_posix_service_status( status, 0, "mq_unlink message queue");
 
   status = mq_close( open_mq[0]);
-  fatal_posix_service_status( status, 0, "mq_close message queue"); 
+  fatal_posix_service_status( status, 0, "mq_close message queue");
 
   /*
    * Open maximum number of message queues
@@ -249,11 +249,11 @@ void validate_mq_open_error_codes()
 
   puts( "Init: mq_open - SUCCESSFUL" );
   for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES; i++) {
-    open_mq[i] = mq_open( 
+    open_mq[i] = mq_open(
       Build_Queue_Name(i), O_CREAT | O_RDWR | O_NONBLOCK, 0x777, NULL );
     assert( open_mq[i] != (-1) );
     assert( open_mq[i] );
-    /*XXX - Isn't there a more general check */ 
+    /*XXX - Isn't there a more general check */
 /* JRS     printf( "mq_open 0x%x %s\n", open_mq[i], Build_Queue_Name(i) ); */
   }
 
@@ -275,9 +275,9 @@ void validate_mq_open_error_codes()
 
   puts( "Init: mq_open - system is out of resources (ENFILE)" );
   n_mq2 = mq_open( Build_Queue_Name(i), O_CREAT | O_RDONLY, 0x777, NULL );
-  fatal_posix_service_status( 
+  fatal_posix_service_status(
     (int) n_mq2, (int ) (-1), "mq_open error return status" );
-  fatal_posix_service_status( errno, ENFILE,  "mq_open errno ENFILE"); 
+  fatal_posix_service_status( errno, ENFILE,  "mq_open errno ENFILE");
 
   /*
    * Unlink and Close all queues.
@@ -287,12 +287,12 @@ void validate_mq_open_error_codes()
   for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES; i++) {
 
     status = mq_close( open_mq[i]);
-    fatal_posix_service_status( status, 0, "mq_close message queue"); 
+    fatal_posix_service_status( status, 0, "mq_close message queue");
 
     status = mq_unlink( Build_Queue_Name(i) );
     if ( status == -1 )
       perror( "mq_unlink" );
-    fatal_posix_service_status( status, 0, "mq_unlink message queue"); 
+    fatal_posix_service_status( status, 0, "mq_unlink message queue");
     /* JRS printf( "mq_close/mq_unlink 0x%x %s\n", open_mq[i], Build_Queue_Name(i) ); */
   }
 }
@@ -315,7 +315,7 @@ void validate_mq_unlink_error_codes()
   status = mq_unlink( Get_Too_Long_Name() );
   fatal_posix_service_status( status, -1, "mq_unlink error return status");
   fatal_posix_service_status( errno, ENAMETOOLONG, "mq_unlink errno ENAMETOOLONG");
-  
+
   /*
    * XXX - ENAMETOOLONG - Give a name greater than NAME_MAX
    *       Per implementation not possible.
@@ -343,7 +343,7 @@ void validate_mq_unlink_error_codes()
   puts( "Init: mq_unlink (NULL) - EINVAL" );
   status = mq_unlink( NULL );
   fatal_posix_service_status( status, -1, "mq_unlink error return status");
-  fatal_posix_service_status( errno, EINVAL, "mq_unlink errno value"); 
+  fatal_posix_service_status( errno, EINVAL, "mq_unlink errno value");
 
   /*
    *  EINVAL - Unlink a queue with a null name
@@ -352,7 +352,7 @@ void validate_mq_unlink_error_codes()
   puts( "Init: mq_unlink (\"\") - EINVAL" );
   status = mq_unlink( "" );
   fatal_posix_service_status( status, -1, "mq_unlink error return status");
-  fatal_posix_service_status( errno, EINVAL, "mq_unlink errno value"); 
+  fatal_posix_service_status( errno, EINVAL, "mq_unlink errno value");
 }
 
 void validate_mq_close_error_codes()
@@ -370,7 +370,7 @@ void validate_mq_close_error_codes()
   fatal_posix_service_status( status, -1, "mq_close error return status");
   fatal_posix_service_status( errno, EBADF, "mq_close errno EBADF");
 }
-  
+
 
 void validate_mq_getattr_error_codes()
 {
@@ -386,7 +386,7 @@ void validate_mq_getattr_error_codes()
   puts( "Init: mq_getattr - unopened queue (EBADF)" );
   status = mq_getattr( Test_q[CLOSED].mq, &attr );
   fatal_posix_service_status( status, -1, "mq_close error return status");
-  fatal_posix_service_status( errno, EBADF, "mq_close errno EBADF");  
+  fatal_posix_service_status( errno, EBADF, "mq_close errno EBADF");
 
   /*
    * XXX - The following are not listed in the POSIX manual but
@@ -400,7 +400,7 @@ void validate_mq_getattr_error_codes()
   puts( "Init: mq_getattr - NULL attributes (EINVAL)" );
   status = mq_getattr( Test_q[RW_QUEUE].mq, NULL );
   fatal_posix_service_status( status, -1, "mq_close error return status");
-  fatal_posix_service_status( errno, EINVAL, "mq_close errno EINVAL");  
+  fatal_posix_service_status( errno, EINVAL, "mq_close errno EINVAL");
 
 }
 
@@ -425,12 +425,12 @@ void Show_send_msg_to_que(
 )
 {
   Test_Message_t *ptr = &Predefined_Msgs[msg];
-  printf( "%s mq_send -  to %s msg: %s priority %d\n", 
+  printf( "%s mq_send -  to %s msg: %s priority %d\n",
     task_name, Test_q[que].name, ptr->msg, ptr->priority);
   Send_msg_to_que( que, msg );
 }
 
-void verify_queues_full(  
+void verify_queues_full(
   char *task_name
 )
 {
@@ -452,7 +452,7 @@ void verify_queues_empty(
   int             que;
 
   printf( "%s Verify Queues are empty\n", task_name );
-  for( que = RW_QUEUE; que < CLOSED; que++ ) 
+  for( que = RW_QUEUE; que < CLOSED; que++ )
     Validate_attributes( Test_q[que].mq, Test_q[que].oflag, 0 );
 }
 
@@ -478,7 +478,7 @@ int fill_message_queues(
   }
 
   verify_queues_full( "Init:" );
-  return msg; 
+  return msg;
 }
 
 
@@ -586,17 +586,17 @@ int validate_mq_send_error_codes( )
   i = fill_message_queues( "Init:" );
 
   /*
-   * ENOSYS - send not supported 
+   * ENOSYS - send not supported
   puts( "Init: mq_send - Blocking Queue overflow (ENOSYS)" );
   status = mq_send( n_mq1, Predefined_Msgs[i], 0, 0 );
   fatal_posix_service_status( status, -1, "mq_send error return status");
   fatal_posix_service_status( errno, EBADF, "mq_send errno EBADF");
 
   status = mq_close( n_mq1 );
-  fatal_posix_service_status( status, 0, "mq_close message queue"); 
+  fatal_posix_service_status( status, 0, "mq_close message queue");
 
   status = mq_unlink( "read_only" );
-  fatal_posix_service_status( status, 0, "mq_unlink message queue"); 
+  fatal_posix_service_status( status, 0, "mq_unlink message queue");
    */
 
   /*
@@ -643,14 +643,14 @@ void validate_mq_receive_error_codes( )
    */
 
   puts( "Init: mq_receive - Size is less than the message (EMSGSIZE)" );
-  status = mq_receive( 
+  status = mq_receive(
     Test_q[RW_QUEUE].mq, message, Predefined_Msgs[0].size-1, &priority );
   fatal_posix_service_status( status, -1, "mq_ error return status");
   fatal_posix_service_status( errno, EMSGSIZE, "mq_receive errno EMSGSIZE");
 
 
   /*
-   * EAGAIN - O_NONBLOCK and Queue is empty 
+   * EAGAIN - O_NONBLOCK and Queue is empty
    */
   verify_queues_full( "Init:" );
   empty_message_queues( "Init:" );
@@ -688,26 +688,26 @@ void verify_open_functionality()
 #if 0
   puts( "Init: mq_open - Open an existing mq ( same id )" );
   n_mq = mq_open( RD_NAME, 0 );
-  fatal_posix_service_status( 
+  fatal_posix_service_status(
     (int) n_mq, (int ) Test_q[RD_QUEUE].mq, "mq_open error return status" );
 #endif
 }
 
 void verify_unlink_functionality()
-{  
+{
   mqd_t           n_mq;
   int             status;
 
   Start_Test( "mq_unlink functionality" );
 
   /*
-   * Unlink the message queue, then verify an open of the same name produces a 
+   * Unlink the message queue, then verify an open of the same name produces a
    * different message queue.
    */
 
   puts( "Init: Unlink and Open without closing SUCCESSFUL" );
   status = mq_unlink( DEFAULT_NAME );
-  fatal_posix_service_status( status, 0, "mq_unlink locked message queue"); 
+  fatal_posix_service_status( status, 0, "mq_unlink locked message queue");
 
   n_mq = mq_open( DEFAULT_NAME, DEFAULT_ATTR, 0x777, NULL );
   assert( n_mq != (-1) );
@@ -715,9 +715,9 @@ void verify_unlink_functionality()
 
 
   status = mq_unlink( DEFAULT_NAME );
-  fatal_posix_service_status( status, 0, "mq_unlink locked message queue"); 
+  fatal_posix_service_status( status, 0, "mq_unlink locked message queue");
   status = mq_close( Test_q[ DEFAULT_RW ].mq );
-  fatal_posix_service_status( status, 0, "mq_close message queue"); 
+  fatal_posix_service_status( status, 0, "mq_close message queue");
 
   Test_q[ DEFAULT_RW ].mq = n_mq;
 }
@@ -728,12 +728,12 @@ void verify_close_functionality()
   int status;
   Start_Test( "Unlink and Close All Files"  );
   for (i=0; i<DEFAULT_RW; i++) {
-    
+
     status = mq_unlink( Get_Queue_Name(i) );
-    fatal_posix_service_status( status, 0, "mq_unlink message queue"); 
+    fatal_posix_service_status( status, 0, "mq_unlink message queue");
 
     status = mq_close( Test_q[i].mq );
-    fatal_posix_service_status( status, 0, "mq_close message queue"); 
+    fatal_posix_service_status( status, 0, "mq_close message queue");
   }
 }
 
@@ -752,7 +752,7 @@ void verify_timed_send_queue(
 
   timeout.tv_sec  = 1;
   timeout.tv_nsec = 0;
- 
+
   printf( "Init: mq_timedsend - on queue %s ", Test_q[que].name);
   len = Predefined_Msgs[MAXMSG].size;
   msg = Predefined_Msgs[MAXMSG].msg;
@@ -785,7 +785,7 @@ void verify_timed_send()
   Start_Test( "mq_timedsend"  );
 
   for( que = RW_QUEUE; que < CLOSED; que++ ) {
-    if ( que == BLOCKING ) 
+    if ( que == BLOCKING )
       verify_timed_send_queue( que, 1 );
     else
       verify_timed_send_queue( que, 0 );
@@ -804,7 +804,7 @@ void verify_timed_receive_queue(
   struct timeval  tv1, tv2, tv3;
   struct timezone tz1, tz2;
   int              status;
- 
+
   tm.tv_sec  = 1;
   tm.tv_nsec = 0;
 
@@ -832,7 +832,7 @@ void verify_timed_receive_queue(
 void verify_timed_receive()
 {
   int  que;
- 
+
   Start_Test( "mq_timedreceive"  );
 
   for( que = RW_QUEUE; que < CLOSED; que++ ) {
@@ -868,7 +868,7 @@ void verify_set_attr()
   for( i = RW_QUEUE; i < CLOSED; i++ ) {
     verify_timed_receive_queue( "Init:", i, 1 );
   }
-  
+
   for(i=0; i<CLOSED; i++) {
     attr.mq_flags =  Test_q[i].oflag & (~O_NONBLOCK );
     status = mq_setattr( Test_q[i].mq, &save_attr[i], NULL );
@@ -925,7 +925,7 @@ void verify_notify()
   /* timer create */
   event.sigev_notify = SIGEV_SIGNAL;
   event.sigev_signo  = SIGUSR1;
-  if (timer_create (CLOCK_REALTIME, &event, &timer_id) == -1) 
+  if (timer_create (CLOCK_REALTIME, &event, &timer_id) == -1)
     fatal_posix_service_status( errno, 0,  "errno ETIMEDOUT");
 
   /* block the timer signal */
@@ -947,7 +947,7 @@ void verify_notify()
    */
 
   /*
-   * XXX setup notification 
+   * XXX setup notification
    */
 
   printf( "_____mq_notify - notify when %s gets a message\n",RW_NAME);
@@ -1038,7 +1038,7 @@ void verify_with_threads()
   Read_msg_from_que(  BLOCKING, 0 ); /* Block until init writes */
   print_current_time( "Init: ", "" );
 
-#if 0 
+#if 0
   /*
    * Fill the queue then create a task then block until the task receives a message.
    * Task tests set attributes so one queue will have a thread
@@ -1064,7 +1064,7 @@ void verify_with_threads()
   fill_message_queues( "Init:" );
   status = pthread_create( &id, NULL, Task_2, NULL );
   assert( !status );
-  Show_send_msg_to_que( "Init:", BLOCKING, Priority_Order[0] ); 
+  Show_send_msg_to_que( "Init:", BLOCKING, Priority_Order[0] );
   print_current_time( "Init: ", "" );
   verify_queues_full( "Init:" );
   empty_message_queues( "Init:" );
@@ -1100,7 +1100,7 @@ void validate_mq_setattr()
   puts( "Task1:mq_setattr - unopened queue (EBADF)" );
   status = mq_setattr( Test_q[CLOSED].mq, &attr, NULL );
   fatal_posix_service_status( status, -1, "mq_setattr error return status");
-  fatal_posix_service_status( errno, EBADF, "mq_setattr errno EBADF");  
+  fatal_posix_service_status( errno, EBADF, "mq_setattr errno EBADF");
 
   /*
    * XXX - The following are not listed in the POSIX manual but
@@ -1114,7 +1114,7 @@ void validate_mq_setattr()
   puts( "Task1:mq_setattr - NULL attributes (EINVAL)" );
   status = mq_setattr( Test_q[RW_QUEUE].mq, NULL, NULL );
   fatal_posix_service_status( status, -1, "mq_setattr error return status");
-  fatal_posix_service_status( errno, EINVAL, "mq_setattr errno EINVAL");  
+  fatal_posix_service_status( errno, EINVAL, "mq_setattr errno EINVAL");
 
   /*
    * Verify change queues to blocking, by verifying all queues block
@@ -1135,7 +1135,7 @@ void validate_mq_setattr()
   /*
    * Restore restore all queues to their old attribute.
    */
-  
+
   for(i=0; i<CLOSED; i++) {
     status = mq_setattr( Test_q[i].mq, &save_attr[i], NULL );
     fatal_int_service_status( status, 0, "mq_setattr valid return status");
@@ -1163,7 +1163,7 @@ void *POSIX_Init(
   verify_open_functionality();
   verify_notify();
   verify_with_threads();
-  
+
   puts( "*** END OF POSIX MESSAGE QUEUE TEST ***" );
   rtems_test_exit( 0 );
 
@@ -1196,7 +1196,7 @@ void *Task_2(
 {
   print_current_time( "Task_2: ", "" );
 
- 
+
   /* Block waiting to send a message */
 
   verify_queues_full( "Task_2:" );

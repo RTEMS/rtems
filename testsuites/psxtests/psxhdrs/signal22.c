@@ -13,7 +13,7 @@
  */
 
 #include <unistd.h>
- 
+
 void test( void )
 {
   unsigned int seconds;

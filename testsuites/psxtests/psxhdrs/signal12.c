@@ -13,7 +13,7 @@
  */
 
 #include <signal.h>
- 
+
 void test( void )
 {
   void (*signal_function_pointer)();

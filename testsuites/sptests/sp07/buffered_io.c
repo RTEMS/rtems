@@ -20,7 +20,7 @@ void buffered_io_initialize( void )
 void buffered_io_flush(void)
 {
   char ch;
- 
+
   while ( !Ring_buffer_Is_empty(&Buffer) ) {
      Ring_buffer_Remove_character( &Buffer, ch );
      fprintf( stderr, "%c", ch );

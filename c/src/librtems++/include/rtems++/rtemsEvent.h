@@ -6,7 +6,7 @@
   COPYRIGHT (c) 1997
   Objective Design Systems Ltd Pty (ODS)
   All rights reserved (R) Objective Design Systems Ltd Pty
-  
+
   The license and distribution terms for this file may be found in the
   file LICENSE in this distribution or at
   http://www.rtems.com/license/LICENSE.
@@ -34,12 +34,12 @@ class rtemsEvent
 {
 public:
   // attribute a task can have
-  
+
   enum WaitMode { wait = RTEMS_WAIT,
                   no_wait = RTEMS_NO_WAIT};
   enum Condition { any = RTEMS_EVENT_ANY,
                    all = RTEMS_EVENT_ALL};
-  
+
   // only the first 4 characters of the name are taken  
 
   // connect to a task
@@ -48,14 +48,14 @@ public:
   // copy and default constructors
   rtemsEvent(const rtemsEvent& event);
   rtemsEvent();
-  
+
   virtual ~rtemsEvent();    
-  
+
   // connect to an existing task object, will not be the owner
   const rtemsEvent& operator=(const rtemsEvent& event);
   virtual const rtems_status_code connect(const char *name,
                                           const rtems_unsigned32 node = RTEMS_SEARCH_ALL_NODES);
-  
+
   // send an event
   inline const rtems_status_code send(const rtems_id task,
                                       const rtems_event_set events);
@@ -73,7 +73,7 @@ public:
   // object id, and name
   const rtems_id task_id_is() const { return id; }
   const rtems_name task_name_is() const { return name; }
-  
+
 private:   
   // task name
   rtems_name name;

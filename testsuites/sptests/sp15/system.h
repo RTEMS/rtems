@@ -20,7 +20,7 @@
 rtems_task Init(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_1(
   rtems_task_argument argument
 );
@@ -45,16 +45,16 @@ TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
 
 TEST_EXTERN rtems_name Partition_id[ 4 ];   /* array of partition ids */
 TEST_EXTERN rtems_name Partition_name[ 4 ]; /* array of partition names */
- 
+
 TEST_EXTERN uint8_t   Area_1[4096] CPU_STRUCTURE_ALIGNMENT;
 TEST_EXTERN uint8_t   Area_2[274] CPU_STRUCTURE_ALIGNMENT;
- 
+
 #define Put_address_from_area_1( _to_be_printed ) \
    printf( "0x%08lx", \
      (unsigned long)((uint8_t   *)(_to_be_printed) - Area_1 ) )
- 
+
 #define Put_address_from_area_2( _to_be_printed ) \
    printf( "0x%08lx", \
      (unsigned long)((uint8_t   *)(_to_be_printed) - Area_2 ) )
- 
+
 /* end of include file */

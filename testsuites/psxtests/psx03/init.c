@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -61,7 +61,7 @@ void *POSIX_Init(
 
   act.sa_handler = Signal_handler;
   act.sa_flags   = 0;
- 
+
   sigaction( SIGUSR1, &act, NULL );
 
   /* initialize signal handler variables */
@@ -70,7 +70,7 @@ void *POSIX_Init(
   Signal_occurred = 0;
 
   /*
-   *  wait on SIGUSR1 for 3 seconds, will timeout 
+   *  wait on SIGUSR1 for 3 seconds, will timeout
    */
 
   /* initialize the signal set we will wait for to SIGUSR1 */
@@ -88,7 +88,7 @@ void *POSIX_Init(
   signo = sigtimedwait( &waitset, &siginfo, &timeout );
   assert( signo == -1 );
 
-  if ( errno == EAGAIN ) 
+  if ( errno == EAGAIN )
     puts( "Init: correctly timed out waiting for SIGUSR1." );
   else
     printf( "sigtimedwait returned wrong errno - %d\n", errno );
@@ -119,10 +119,10 @@ void *POSIX_Init(
   assert( !status );
 
   /* signal handler is still installed, waitset is still set for SIGUSR1 */
-   
+
   timeout.tv_sec = 3;
   timeout.tv_nsec = 0;
- 
+
   puts( "Init: waiting on any signal for 3 seconds." );
   signo = sigtimedwait( &waitset, &siginfo, &timeout );
 
@@ -133,7 +133,7 @@ void *POSIX_Init(
   else
     printf( "sigtimedwait returned wrong errno - %d\n", errno );
   assert( signo == -1 );
- 
+
   /*
    *  wait on SIGUSR1 for 3 seconds, Task_2 will send it to us
    */
@@ -146,12 +146,12 @@ void *POSIX_Init(
   assert( !status );
 
   /* signal handler is still installed, waitset is still set for SIGUSR1 */
- 
+
   /* wait on SIGUSR1 for 3 seconds, will receive SIGUSR1 from Task_2 */
- 
+
   timeout.tv_sec = 3;
   timeout.tv_nsec = 0;
- 
+
   /* just so we can check that these were altered */
 
   siginfo.si_code = -1;
@@ -165,7 +165,7 @@ void *POSIX_Init(
   assert( siginfo.si_signo == SIGUSR1 );
   assert( siginfo.si_code == SI_USER );
   assert( siginfo.si_value.sival_int != -1 );   /* rtems does always set this */
- 
+
   /* try out a process signal */
 
   empty_line();

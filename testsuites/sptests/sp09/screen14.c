@@ -182,7 +182,7 @@ void Screen14()
     rtems_timer_initiate_server( RTEMS_TIMER_SERVER_DEFAULT_PRIORITY, 0, 0 );
   directive_failed( status, "rtems_timer_initiate_server" );
   puts( "TA1 - rtems_timer_initiate_server" );
-  
+
   status = rtems_timer_server_fire_after(
     0x010100,
     5 * TICKS_PER_SECOND,

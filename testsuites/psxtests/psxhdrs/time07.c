@@ -13,11 +13,11 @@
  */
 
 #include <time.h>
- 
+
 void test( void )
 {
   char     *buffer;
   time_t    time;
-  
+
   buffer = ctime( &time );
 }

@@ -13,11 +13,11 @@
  */
 
 #include <time.h>
- 
+
 void test( void )
 {
   time_t     time;
   struct tm *timestruct;
-  
+
   timestruct = localtime( &time );
 }

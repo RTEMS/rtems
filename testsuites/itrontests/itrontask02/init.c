@@ -32,48 +32,48 @@ void ITRON_Init( void )
    *  Status Codes for these errors
    *
    *
-   *  E_OK - Normal Completion 
+   *  E_OK - Normal Completion
    *
    *  E_NOMEM - Insufficient memory (Memory for control block and/or user
-   *            stack cannot be allocated) 
+   *            stack cannot be allocated)
    *
-   *  E_ID - Invalid ID Number (tskid was invalid or could not be used) 
+   *  E_ID - Invalid ID Number (tskid was invalid or could not be used)
    *
-   *  E_RSATR - Reserved attribute (tskatr was invalid or could not be used) 
+   *  E_RSATR - Reserved attribute (tskatr was invalid or could not be used)
    *
-   *  E_OBJ - Invalid object state (a task of the same ID already exists) 
+   *  E_OBJ - Invalid object state (a task of the same ID already exists)
    *
-   *  E_OACV - Object access violation (A tskid less than -4 was specified 
-   *           from a user task. This is implementation dependent.) 
+   *  E_OACV - Object access violation (A tskid less than -4 was specified
+   *           from a user task. This is implementation dependent.)
    *
-   *  E_PAR - Parameter error (pk_ctsk, task, itskpri and/or stksz is invalid) 
+   *  E_PAR - Parameter error (pk_ctsk, task, itskpri and/or stksz is invalid)
    *
    *  E_NOEXS - Object does not exist (the task specified by tskid does not
-   *            exist) 
+   *            exist)
    *
-   *  E_CTX - Context error (issued from task-independent portions or a task 
-   *          in dispatch disabled state) 
+   *  E_CTX - Context error (issued from task-independent portions or a task
+   *          in dispatch disabled state)
    *
    *
    *
    *  Network Specific Errors  (ITRON calls these Connection Function Errors)
    *
    *  EN_OBJNO - An object number which could not be accessed on the target
-   *             node is specified. 
+   *             node is specified.
    *
    *  EN_CTXID - Specified an object on another node when the system call
    *             was issued from a task in dispatch disabled state or from
-   *             a task-independent portion 
+   *             a task-independent portion
    *
-   *  EN_PAR - A value outside the range supported by the target node and/or 
+   *  EN_PAR - A value outside the range supported by the target node and/or
    *           transmission packet format was specified as a parameter
    *           (a value outside supported range was specified for exinf,
-   *           tskatr, task, itskpri and/or stksz) 
+   *           tskatr, task, itskpri and/or stksz)
    *
-   *  EN_RPAR - A value outside the range supported by the requesting node 
-   *            and/or transmission packet format was returned as a return 
+   *  EN_RPAR - A value outside the range supported by the requesting node
+   *            and/or transmission packet format was returned as a return
    *            parameter (a value outside supported range was returned for
-   *            exinf, tskpri and/or tskstat) 
+   *            exinf, tskpri and/or tskstat)
    *
    */
 
@@ -81,7 +81,7 @@ void ITRON_Init( void )
   rtems_time_of_day  time;
   ER                 status;
   T_CTSK             pk_ctsk;
-  T_RTSK             pk_rtsk;   /* Reference Task Packet */ 
+  T_RTSK             pk_rtsk;   /* Reference Task Packet */
 
 
   puts( "\n\n*** ITRON TASK TEST 2 ***\n" );
@@ -95,13 +95,13 @@ void ITRON_Init( void )
    * Set My priority to 8 so that dummy tasks will be
    * forced to run when started.
    */
-  
+
   status = chg_pri( TSK_SELF, 8 );
   fatal_directive_status( status, E_OK, "chg_pri of TSK_SELF");
   status = ref_tsk( &pk_rtsk, TSK_SELF );
   fatal_directive_status( status, E_OK, "ref_tsk of TSK_SELF");
   fatal_directive_status( pk_rtsk.tskpri, 8, "task priority of SELF");
-  
+
   /*
    * Create and verify a DORMANT task.
    */
@@ -110,7 +110,7 @@ void ITRON_Init( void )
   pk_ctsk.tskatr   = TA_HLNG;
   pk_ctsk.itskpri  = 1;
   pk_ctsk.task     = Dormant_task;
-  pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE; 
+  pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE;
 
   puts( "Init - cre_tsk - Dormant Task" );
   status = cre_tsk( DORMANT_TASK_ID, &pk_ctsk );
@@ -122,7 +122,7 @@ void ITRON_Init( void )
   /*
    * Create, Start and verify a not DORMANT task.
    */
-  
+
   pk_ctsk.task     = Non_Dormant_task;
   puts( "Init - cre_tsk - Non-Dormant Task" );
   status = cre_tsk( NON_DORMANT_TASK_ID, &pk_ctsk );
@@ -131,8 +131,8 @@ void ITRON_Init( void )
   status = ref_tsk( &pk_rtsk, NON_DORMANT_TASK_ID );
   fatal_directive_status( status, E_OK, "ref_tsk of NON_DORMANT");
   fatal_directive_status( pk_rtsk.tskstat,TTS_WAI,"task state of NON_DORMANT");
-    
-  
+
+
   /*
    *  Bad ID errors
    */
@@ -199,15 +199,15 @@ void ITRON_Init( void )
 
   puts( "\n\n*** Delete Task Errors ***" );
 
-  /* 
+  /*
    *  Reset structure
    */
 
   pk_ctsk.exinf    = NULL;
   pk_ctsk.tskatr   = TA_HLNG;
-  pk_ctsk.itskpri  = 1; 
+  pk_ctsk.itskpri  = 1;
   pk_ctsk.task     = Dormant_task;
-  pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE; 
+  pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE;
 
 
   puts( "Init - del_tsk - cannot delete TSK_SELF - E_OBJ" );
@@ -362,7 +362,7 @@ void ITRON_Init( void )
    *   to handle this - addr=0x80002098 nr_bytes=0x4 processor=0x40134008
    *   cia=0xc744"
    */
-  
+
    puts( "\n\n*** Rotate Ready Queue Errors ***" );
    puts( "Init - rot_rdq - priority  -1 - E_PAR" );
    status = rot_rdq( -1 );
@@ -407,7 +407,7 @@ void ITRON_Init( void )
   status = ref_tsk( &pk_rtsk, -2 );
   fatal_directive_status( status, E_ID, "ref_tsk -2");
 
-  /*  XXX Call from task independent portion to cause E_ID 
+  /*  XXX Call from task independent portion to cause E_ID
   puts( "Init - ref_tsk - reference INTERRUPT - E_ID" );
   status = ref_tsk( &pk_rtsk, TSK_SELF );
   assert( status == E_ID );

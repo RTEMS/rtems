@@ -20,18 +20,18 @@
 rtems_task Init(
   rtems_task_argument argument
 );
- 
+
 void put_error(
   uint32_t    error,
   rtems_status_code expected
 );
- 
+
 rtems_extension Fatal_extension(
   uint32_t   source,
   boolean          is_internal,
   uint32_t   error
 );
- 
+
 rtems_task Task_1(
   rtems_task_argument argument
 );

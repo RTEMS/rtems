@@ -6,7 +6,7 @@
   COPYRIGHT (c) 1997
   Objective Design Systems Ltd Pty (ODS)
   All rights reserved (R) Objective Design Systems Ltd Pty
-  
+
   The license and distribution terms for this file may be found in the
   file LICENSE in this distribution or at
   http://www.rtems.com/license/LICENSE.
@@ -29,11 +29,11 @@
   the old handler is not an instance of this class the chain is passed
   as "void (*)(void)". If it is an instance of this class, the handler
   method is directly called.
-  
+
   The isr catch extends the documented return codes with :
 
     RTEMS_RESOURCE_IN_USE = interrupt already caught
-  
+
   ------------------------------------------------------------------------ */
 
 #if !defined(_rtemsInterrupt_h_)
@@ -54,13 +54,13 @@ public:
 
   // catch the interrupt
   virtual const rtems_status_code isr_catch(const rtems_vector_number vector);
-  
+
   // release the interrupt back to the previous handle
   virtual const rtems_status_code release();
 
   // the old handler
   const rtems_isr_entry old_isr_handler() const { return old_handler; }
-  
+
 protected:
 
   // called after the interrupt is caught and it goes off
@@ -68,17 +68,17 @@ protected:
 
   // chain to the previous handler, 
   inline void chain() const;
-  
+
 private:   
   const rtemsInterrupt& operator=(const rtemsInterrupt& );
   rtemsInterrupt(const rtemsInterrupt& );
-  
+
   // the vector caught
   rtems_vector_number vector;
-  
+
   // true when the interrupt is caught
   bool caught;
-  
+
   // returned when catching the interrupt
   rtems_isr_entry old_handler;
 

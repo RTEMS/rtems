@@ -20,45 +20,45 @@
 rtems_task Init(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_1(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_2(
   rtems_task_argument argument
 );
- 
+
 rtems_timer_service_routine TA1_send_18_to_self_5_seconds(
   rtems_id  ignored_id,
   void     *ignored_address
 );
- 
+
 rtems_timer_service_routine TA1_send_8_to_self_60_seconds(
   rtems_id  ignored_id,
   void     *ignored_address
 );
- 
+
 rtems_timer_service_routine TA1_send_9_to_self_60_seconds(
   rtems_id  ignored_id,
   void     *ignored_address
 );
- 
+
 rtems_timer_service_routine TA1_send_10_to_self(
   rtems_id  ignored_id,
   void     *ignored_address
 );
- 
+
 rtems_timer_service_routine TA1_send_1_to_self_every_second(
   rtems_id  ignored_id,
   void     *ignored_address
 );
- 
+
 rtems_timer_service_routine TA1_send_11_to_self(
   rtems_id  ignored_id,
   void     *ignored_address
 );
- 
+
 rtems_timer_service_routine TA2_send_10_to_self(
   rtems_id  ignored_id,
   void     *ignored_address

@@ -24,15 +24,15 @@ rtems_task Init(
 rtems_task Task_1(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_2(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_3(
   rtems_task_argument argument
 );
- 
+
 void Task_switch(
   rtems_tcb *unused,
   rtems_tcb *heir
@@ -60,10 +60,10 @@ TEST_EXTERN rtems_name Task_name[ 4 ];       /* array of task names */
 
 TEST_EXTERN rtems_id   Extension_id[ 4 ];
 TEST_EXTERN rtems_name Extension_name[ 4 ];  /* array of task names */
- 
+
 /* array of task run counts */
-TEST_EXTERN volatile uint32_t   Run_count[ 4 ];  
- 
+TEST_EXTERN volatile uint32_t   Run_count[ 4 ];
+
 /*
  * Keep track of task switches
  */

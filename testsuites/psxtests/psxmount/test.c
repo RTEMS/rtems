@@ -2,12 +2,12 @@
  *  This is a native test to explore how the readdir() family works.
  *  Newlib supports the following readdir() family members:
  *
- *    closedir()   - 
- *    readdir()    - 
- *    scandir()    - 
- *    opendir()    - 
- *    rewinddir()  - 
- *    telldir()    - BSD not in POSIX 
+ *    closedir()   -
+ *    readdir()    -
+ *    scandir()    -
+ *    opendir()    -
+ *    rewinddir()  -
+ *    telldir()    - BSD not in POSIX
  *    seekdir()    - BSD not in POSIX
  *
  *
@@ -56,7 +56,7 @@ char *dnames[] = {
 	"c/x",
 	"c/y/a3333",
 	"c/y/j123",
-        "c/y/my_mount_point", 
+        "c/y/my_mount_point",
         "c/y/my_mount_point/my_dir",
         "c/z/my_mount_point",
         "END"
@@ -144,7 +144,7 @@ int main(
   fd = open ("c/y/my_mount_point/my_dir/d", O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO);
   assert( fd != 0 );
   close (fd);
- 
+
   printf("Verify c/y/my_mount_point/my_dir/d\n");
   fd = open("c/y/my_mount_point/my_dir/d", S_IRWXU|S_IRWXG|S_IRWXO);
   assert( fd != 0 );
@@ -298,7 +298,7 @@ int main(
   assert( status == -1 );
   assert( errno == ENOTDIR );
 
- 
+
   /*
    * Verify we cannot unmount a file system while we are in it.
    */
@@ -335,7 +335,7 @@ int main(
   status = unmount( "/b/mount_point" );
   assert( status == -1 );
   assert( errno == ENOENT );
-  
+
   /*
    * Remount the filesystem.
    */
@@ -364,15 +364,15 @@ int main(
   status = mkdir( "/c/y/my_mount_point/my_dir", 0x1c0 );
   printf("Open /c/y/my_mount_point/my_dir\n");
   directory = opendir( "/c/y/my_mount_point/my_dir" );
-  assert( directory ); 
-  
+  assert( directory );
+
   printf("Unmount /c/y/my_mount_point should fail with EBUSY\n");
   status = unmount( "/c/y/my_mount_point" );
   assert( status == -1 );
   assert( errno == EBUSY );
 
   printf("Close /c/y/my_mount_point/my_dir\n");
-  status = closedir( directory ); 
+  status = closedir( directory );
   assert( status == 0 );
 
   /*
@@ -409,7 +409,7 @@ int main(
 
   printf("Verify a hard link across filesystems fails with EXDEV\n");
   status = mkdir( "/c/y/my_mount_point/my_dir2", S_IRWXU  );
-  assert( status == 0 ); 
+  assert( status == 0 );
 
   status = link( "/c/y/my_mount_point/my_dir2", "/c/y/my_mount_point/my_dir/my_link" );
   assert( status == -1 );

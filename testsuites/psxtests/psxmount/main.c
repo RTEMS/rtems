@@ -1,5 +1,5 @@
 /*
- *  Simple test program -- check out of the basic file system mounting 
+ *  Simple test program -- check out of the basic file system mounting
  *  capabilities
  *  Attempt to mount the IMFS file system on a mount point in the base IMFS
  */

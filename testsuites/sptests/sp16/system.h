@@ -20,27 +20,27 @@
 rtems_task Init(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_1(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_2(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_3(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_4(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task5(
   rtems_task_argument argument
 );
- 
+
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER

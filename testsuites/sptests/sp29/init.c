@@ -74,7 +74,7 @@ rtems_task Init (rtems_task_argument ignored)
 
 	puts( "*** SP29 - SIMPLE SEMAPHORE TEST ***" );
 	puts( "This test only prints on errors." );
- 
+
 	sc = rtems_clock_get (RTEMS_CLOCK_GET_TICKS_PER_SECOND, &ticksPerSecond);
 	if (sc != RTEMS_SUCCESSFUL) {
 		printf ("Can't get ticks per second: %s\n", rtems_status_text (sc));
@@ -179,7 +179,7 @@ rtems_task Init (rtems_task_argument ignored)
 		else if (diff < (2 * ticksPerSecond))
 			printf ("%d: Obtained obtain non-recursive-lock semaphore too quickly -- %d ticks not %d ticks\n", __LINE__, diff, (2 * ticksPerSecond) );
 	}
-		
+
 	puts( "*** END OF SP29 ***" );
 	exit (0);
 }

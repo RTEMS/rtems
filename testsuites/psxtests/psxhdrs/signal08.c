@@ -13,7 +13,7 @@
  */
 
 #include <signal.h>
- 
+
 #ifndef _POSIX_THREADS
 #error "rtems is supposed to have pthread_sigmask"
 #endif

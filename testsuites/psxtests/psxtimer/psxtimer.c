@@ -36,7 +36,7 @@ struct periodic_params {
    struct timespec period;
    int signo;       /* signal number */
    int id;          /* task identification */
- };   
+ };
 
 pthread_attr_t attr;
 
@@ -201,7 +201,7 @@ void * task_c (void *arg)
       if (sigwait(&set,&received_sig) == -1) {
        perror ("Error in sigwait\n");
        pthread_exit ((void *) -1);
-     } 
+     }
      pthread_mutex_lock (&data.mutex);
      while (data.updated == FALSE) {
        pthread_cond_wait (&data.sync,&data.mutex);
@@ -227,10 +227,10 @@ void *POSIX_Init (
    pthread_attr_t attr;              /* task attributes */
    pthread_t ta,tb,tc;               /* threads */
    sigset_t  set;                    /* signals */
-  
+
    struct sched_param sch_param;     /* schedule parameters */
    struct periodic_params params_a, params_b, params_c;
-   
+
    puts( "\n\n*** POSIX Timers Test ***" );
 
    data.updated = FALSE;
@@ -282,7 +282,7 @@ void *POSIX_Init (
       priority) */
    if (pthread_attr_setschedpolicy (&attr,
      SCHED_FIFO) != 0) {
-      perror ("Error in attribute setschedpolicy\n"); 
+      perror ("Error in attribute setschedpolicy\n");
     }
 
    /* set and create thread A with priority 1 */
@@ -291,7 +291,7 @@ void *POSIX_Init (
    if (pthread_attr_setschedparam(&attr, &sch_param) != 0) {
       perror ("Error in attribute schedparam\n");
     }
- 
+
    /* Temporal parameters (1 sec. periodicity) */
 
    params_a.period.tv_sec  = 1;         /* seconds */
@@ -302,12 +302,12 @@ void *POSIX_Init (
    }
 
    /* set and create thread B with priority 15 */
-   
+
    sch_param.sched_priority = 15;
    if (pthread_attr_setschedparam(&attr, &sch_param) != 0) {
       perror ("Error in attribute schedparam");
     }
-   
+
    /* Temporal parameters (2 sec. periodicity) */
    params_b.period.tv_sec  = 2;         /* seconds */
    params_b.period.tv_nsec = 000000000; /* nanoseconds */

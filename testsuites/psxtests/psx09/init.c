@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -54,7 +54,7 @@ void *POSIX_Init(
 
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08x\n", Init_id );
-  
+
   /* try to use this thread as a sporadic server */
 
   puts( "Init: pthread_getschedparam - SUCCESSFUL" );
@@ -89,7 +89,7 @@ void *POSIX_Init(
   for ( passes=0 ; passes <= 3 ; ) {
     status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
     assert( !status );
- 
+
     if ( priority != schedparam.sched_priority ) {
       priority = schedparam.sched_priority;
       sprintf( buffer, " - new priority = %d", priority );
@@ -117,7 +117,7 @@ void *POSIX_Init(
 
   schedparam.sched_priority = HIGH_PRIORITY;
   schedparam.ss_low_priority = LOW_PRIORITY;
- 
+
   puts( "Init: pthread_setschedparam - SUCCESSFUL (sporadic server)" );
   status = pthread_setschedparam( pthread_self(), SCHED_SPORADIC, &schedparam );
   assert( !status );
@@ -128,10 +128,10 @@ void *POSIX_Init(
 
   status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_PROTECT );
   assert( !status );
- 
+
   status = pthread_mutexattr_setprioceiling( &attr, MEDIUM_PRIORITY );
   assert( !status );
- 
+
   puts( "Init: Creating a mutex" );
   status = pthread_mutex_init( &Mutex_id, &attr );
   if ( status )
@@ -140,7 +140,7 @@ void *POSIX_Init(
 
   status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
   assert( !status );
- 
+
   priority = schedparam.sched_priority;
   sprintf( buffer, " - new priority = %d", priority );
   print_current_time( "Init: ", buffer );
@@ -179,18 +179,18 @@ void *POSIX_Init(
   for ( ; ; ) {
     status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
     assert( !status );
- 
+
     if ( schedparam.sched_priority == HIGH_PRIORITY )
       break;
   }
- 
+
   priority = schedparam.sched_priority;
   sprintf( buffer, " - new priority = %d", priority );
   print_current_time( "Init: ", buffer );
- 
+
   /* with this unlock we should be able to go to low priority */
 
-  puts( "Init: unlock mutex" ); 
+  puts( "Init: unlock mutex" );
   status = pthread_mutex_unlock( &Mutex_id );
   if ( status )
     printf( "status = %d\n", status );
@@ -206,14 +206,14 @@ void *POSIX_Init(
   for ( ; ; ) {
     status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
     assert( !status );
- 
+
     if ( schedparam.sched_priority == LOW_PRIORITY )
       break;
   }
 
   status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
   assert( !status );
- 
+
   priority = schedparam.sched_priority;
   sprintf( buffer, " - new priority = %d", priority );
   print_current_time( "Init: ", buffer );

@@ -31,7 +31,7 @@ rtems_boolean Task_create_extension(
   if ( task_number( created_task->Object.id ) > 0 ) {
     name = Task_name[ task_number( created_task->Object.id ) ];
     sprintf( line, "TASK_CREATE - %c%c%c%c - created\n",
-      (name >> 24) & 0xff, 
+      (name >> 24) & 0xff,
       (name >> 16) & 0xff,
       (name >> 8) & 0xff,
       name & 0xff

@@ -40,7 +40,7 @@ void task1(void);
 
 TEST_EXTERN rtems_id   Task_id[ 6 ];      /* array of task ids */
 TEST_EXTERN rtems_name Task_name[ 6 ];    /* array of task names */
- 
+
 #define BASE_PRIORITY 140
- 
+
 /* end of include file */

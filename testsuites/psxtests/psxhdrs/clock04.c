@@ -13,7 +13,7 @@
  */
 
 #include <time.h>
- 
+
 #ifndef _POSIX_CPUTIME
 #error "rtems is supposed to have clock_getcpuclockid"
 #endif

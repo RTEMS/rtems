@@ -1,5 +1,5 @@
 /*
- *  A test support function which performs a crude version of 
+ *  A test support function which performs a crude version of
  *  "cat" so you can look at specific parts of a file.
  *
  *  $Id$

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Psx13
  *  Chris Bond (working under Jennifer's account)
  *
@@ -40,8 +40,8 @@
 /*-------------------------------------------------------------------
  * InitFiles function
  *
- * Initializes the three files to be used in the test. 
- * 
+ * Initializes the three files to be used in the test.
+ *
  * arguments: none
  * assumptions: fopen, fprintf, fwrite, FILE are available
  * actions: creates testfile1, a text file with 'a'..'z' listed 4 times.
@@ -49,7 +49,7 @@
  *          creates testfile3, a binary file with 0..9 listed 4 times.
  * returns: TRUE if files opened successfully.
  *          FALSE if fail on file open for write.
- * 
+ *
  * ------------------------------------------------------------------
  */
 
@@ -77,7 +77,7 @@ int InitFiles (void) {
       if (letter > 'z')
 	letter = 'a';
     }
-   
+
     number = 0;
 
     for (count = 0; count <40; ++count) {
@@ -96,7 +96,7 @@ int InitFiles (void) {
     retval = TRUE;
   }
 
-  else 
+  else
     retval = FALSE;
 
   /* assert (retval == TRUE);*/
@@ -111,7 +111,7 @@ int InitFiles (void) {
  *
  * arguments: none
  * assumptions: lseek available
- * actions: hits lseek with some dummy arguments. 
+ * actions: hits lseek with some dummy arguments.
  * returns: value of return from lseek.
  *
  * ---------------------------------------------------------------
@@ -146,7 +146,7 @@ int DeviceLSeekTest (void) {
  * actions: Gets a file descriptor(fd1) for test file1.
  *          dups fd1 to fd2.
  *          sets fd1 to append mode
- *          checks fd2 to ensure it's in append mode, also. 
+ *          checks fd2 to ensure it's in append mode, also.
  * returns: success if fd2 is indeed a copy of fd1.
  *
  * ---------------------------------------------------------------
@@ -169,7 +169,7 @@ int DupTest(void) {
     close (fd1);
 
     flags = (flags & O_APPEND);
-    
+
     retval = (flags == O_APPEND);
   }
 
@@ -192,7 +192,7 @@ int DupTest(void) {
  * actions: Gets a file descriptor(fd1) for test file1.
  *          dups fd1 to fd2.
  *          sets fd1 to append mode
- *          checks fd2 to ensure it's in append mode, also. 
+ *          checks fd2 to ensure it's in append mode, also.
  *          sets fd1 to invalid value, fd2 to valid, tries to dup2.
  *          sets fd2 to invalid value, fd1 to valid tries to dup2.
  * returns: success if fd2 is a copy of fd1, and invalid fd1 or fd2 produce errors.
@@ -240,14 +240,14 @@ int Dup2Test(void) {
     else {
       fd1 = dup(fd2);
       fd2 = -1;
-      
+
       if (dup2(fd1, fd2) != -1)
 	retval = FALSE;
     }
   }
 
   close (fd1);
-  
+
   /* assert (retval == TRUE);*/
 
   return (retval);
@@ -276,9 +276,9 @@ int FDataSyncTest(void) {
 
   int fd = -1;
   int error = 0, retval = TRUE;
- 
+
   /* Try it with a RD_ONLY file. */
- 
+
   fd = open ("testfile1.tst", O_RDONLY);
 
   error = fdatasync(fd);
@@ -286,7 +286,7 @@ int FDataSyncTest(void) {
     retval = TRUE;
   else
     retval = FALSE;
- 
+
   close (fd);
 
   if (retval == TRUE) {
@@ -314,7 +314,7 @@ int FDataSyncTest(void) {
       retval = FALSE;
 
     close (fd);
-  
+
   }
 
   /* assert (retval == TRUE);*/
@@ -359,7 +359,7 @@ int UMaskTest (void) {
 /* ---------------------------------------------------------------
  * UTimeTest function
  *
- * Hits the utime code. Does NOT test the functionality of the underlying utime 
+ * Hits the utime code. Does NOT test the functionality of the underlying utime
  * entry in the IMFS op table.
  *
  * arguments: none
@@ -402,7 +402,7 @@ int UTimeTest (void) {
 
       if ((fstat.st_atime == 12345) && (fstat.st_mtime == 54321 ))
 	retval = TRUE;
-      else 
+      else
 	retval = FALSE;
     }
 
@@ -435,7 +435,7 @@ int PipeTest (void) {
 
   int error = 0, retval = FALSE;
   int fd[2];
-  
+
   error = pipe(fd);
 
   if ((error == -1) && (errno == ENOSYS))
@@ -479,8 +479,8 @@ int PathConfTest (void) {
     else
       retval = FALSE;
   }
-  
-  else 
+
+  else
     retval = FALSE;
 
   /* assert (retval == TRUE);*/
@@ -498,7 +498,7 @@ int PathConfTest (void) {
  * assumptions: fpathconf function available.
  * actions: Call fpathconf with all arguments, plus an invalid.
  *
- * returns: TRUE always. 
+ * returns: TRUE always.
  *
  * ---------------------------------------------------------------
  */
@@ -513,7 +513,7 @@ int FPathConfTest (void) {
 
   if (error == -1) {
     fd = open("testfile1.tst", O_RDWR);
-    
+
     error = fpathconf(fd, _PC_LINK_MAX);
     error = fpathconf(fd, _PC_MAX_CANON);
     error = fpathconf(fd, _PC_MAX_INPUT);
@@ -521,17 +521,17 @@ int FPathConfTest (void) {
     error = fpathconf(fd, _PC_PATH_MAX);
     error = fpathconf(fd, _PC_PIPE_BUF);
     error = fpathconf(fd, _PC_CHOWN_RESTRICTED);
-    error = fpathconf(fd, _PC_NO_TRUNC);     
+    error = fpathconf(fd, _PC_NO_TRUNC);
     error = fpathconf(fd, _PC_VDISABLE);
     error = fpathconf(fd, _PC_ASYNC_IO);
     error = fpathconf(fd, _PC_PRIO_IO);
     error = fpathconf(fd, _PC_SYNC_IO);
     error = fpathconf(fd, 255);
-    
+
     retval = TRUE;
   }
-  
-  else 
+
+  else
     retval = FALSE;
 
   /* assert (retval == TRUE);*/
@@ -560,7 +560,7 @@ int FSyncTest (void) {
 
   int error = 0, retval = FALSE;
   int fd = -1;
-  
+
   fd = open("testfile1.tst", O_RDWR);
 
   if (fd != -1) {
@@ -575,7 +575,7 @@ int FSyncTest (void) {
     close(fd);
   }
 
-  else 
+  else
     retval = FALSE;
 
   /* assert (retval == TRUE);*/
@@ -589,7 +589,7 @@ int FSyncTest (void) {
  *
  *  main entry point to the test
  *
- * --------------------------------------------------------------- 
+ * ---------------------------------------------------------------
  */
 
 #if defined(__rtems__)
@@ -617,7 +617,7 @@ int main(
       printf ("Success.\n");
     else
       printf ("Failed!!!\n");
-    
+
     printf ("Testing dup2()........... ");
     if (Dup2Test() == TRUE)
       printf ("Success.\n");
@@ -659,7 +659,7 @@ int main(
       printf ("Success.\n");
     else
       printf ("Failed!!!\n");
- 
+
    printf ("Testing fpathconf()...... ");
     if (FPathConfTest() == TRUE)
       printf ("Success.\n");

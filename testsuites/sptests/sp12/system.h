@@ -20,31 +20,31 @@
 rtems_task Init(
   rtems_task_argument argument
 );
- 
+
 void Priority_test_driver(
   uint32_t   priority_base
 );
- 
+
 rtems_task Priority_task(
   rtems_task_argument its_index
 );
- 
+
 rtems_task Task_1(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_2(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_3(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_4(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task5(
   rtems_task_argument argument
 );
@@ -67,15 +67,15 @@ rtems_task Task5(
 
 /* global variables */
 
- 
+
 TEST_EXTERN rtems_id   Task_id[ 6 ];             /* array of task ids */
 TEST_EXTERN rtems_name Task_name[ 6 ];           /* array of task names */
- 
+
 TEST_EXTERN rtems_id   Priority_task_id[ 6 ];    /* array of task ids */
 TEST_EXTERN rtems_name Priority_task_name[ 6 ];  /* array of task names */
- 
+
 TEST_EXTERN rtems_task_priority Task_priority[ 6 ];
- 
+
 TEST_EXTERN rtems_id   Semaphore_id[ 4 ];        /* array of semaphore ids */
 TEST_EXTERN rtems_name Semaphore_name[ 4 ];      /* array of semaphore names */
 

@@ -13,7 +13,7 @@
  */
 
 #include <pthread.h>
- 
+
 #ifndef _POSIX_THREAD_PRIORITY_SCHEDULING
 #error "RTEMS is supposed to have pthread_attr_setschedpolicy"
 #endif
@@ -30,6 +30,6 @@ void test( void )
 #ifdef _POSIX_SPORADIC_SERVER
   policy = SCHED_SPORADIC;
 #endif
-  
+
   result = pthread_attr_setschedpolicy( &attr, policy );
 }

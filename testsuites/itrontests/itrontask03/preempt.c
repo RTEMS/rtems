@@ -38,7 +38,7 @@ void Preempt_task()
 
   if ( Preempt_task_Count == 0 ) {
     Preempt_task_Count ++;
-    puts( "PREEMPT - chg_pri increment priority "); 
+    puts( "PREEMPT - chg_pri increment priority ");
     status = chg_pri( PREEMPT_TASK_ID, (PREEMPT_PRIORITY+1) );
     directive_failed( status, "chg_pri" );
     puts( "PREEMPT - ext_tsk - going to DORMANT state" );

@@ -56,7 +56,7 @@ char *Directories[] = {
   "/my_mount_point/dir4",
   "/my_mount_point/dir1/dir1",
   "/./././my_mount_point/dir1/ dir1",
-  "/./././my_mount_point/links",  
+  "/./././my_mount_point/links",
   "///my_mount_point/dir1/dir1/../../dir1/../symlinks/////",
   0
 };
@@ -444,15 +444,15 @@ void make_many_symlinks(
 /*
  *  mkdir() multiple directories at a time
  */
-  
+
 void make_multiple_directories(
   char **files
-) 
+)
 {
   int    i;
   int    status;
 
-  i = 0; 
+  i = 0;
   while ( files[i] ) {
     printf( "Making directory %s\n", files[i] );
     status = mkdir( files[i], S_IRWXU );
@@ -460,7 +460,7 @@ void make_multiple_directories(
     i++;
   }
   puts( "" );
-}  
+}
 
 /*
  * Cause faults.
@@ -480,11 +480,11 @@ void Cause_faults()
 
   printf("\n\nPass an invalid mode to chmod should fail with EPERM \n" );
   status = chmod( Files[0], S_IFREG );
-  assert( status == -1 ); 
+  assert( status == -1 );
   assert( errno == EPERM );
 
   /*
-   * Change file to executable then try to chdir to it. 
+   * Change file to executable then try to chdir to it.
    */
 
   status = chmod( Files[0], S_IXUSR );
@@ -525,7 +525,7 @@ void Cause_faults()
   assert( status == -1 );
   assert( errno == EACCES );
 
-  /* 
+  /*
    * Check stat with a NULL buffer.
    */
 
@@ -560,7 +560,7 @@ void Cause_faults()
   printf("\n%s Should not have execute permission( access )\n",Directories[0] );
   status = access( Directories[0], X_OK );
   assert( status != 0 );
-  
+
   printf("\nRestore %s to RWX\n",Directories[0] );
   status = chmod( Directories[0], S_IRWXU );
   assert( status == 0 );
@@ -677,7 +677,7 @@ void Cause_faults()
   assert( status == 0 );
 
   printf("Open %s for write should fail with EACCES\n", Files[0] );
-  fd = open (Files[0], O_WRONLY); 
+  fd = open (Files[0], O_WRONLY);
   assert( fd == -1 );
   assert( errno == EACCES );
 
@@ -696,7 +696,7 @@ void Cause_faults()
 
   printf( "pass fstat a null pointer should fail with EFAULT\n");
   status = fstat( fd, NULL );
-  assert( status == -1 ); 
+  assert( status == -1 );
   assert( errno == EFAULT);
 
   /*
@@ -813,7 +813,7 @@ int main(
   stat_multiple_files( Links_to_Files );
   stat_multiple_files( Links_to_dirlinks  );
   stat_multiple_files( Links_to_filelinks );
-  
+
   /*
    * Chmod on dir1/dir1.  This allows the error path to be hit.
    */
@@ -844,7 +844,7 @@ int main(
 
   status = rtems_task_wake_after( TIMEOUT_VALUE );
   chown_multiple_files( Links_to_Dirs );
- 
+
   puts( "\n\n*** END OF STAT TEST 01 ***" );
   rtems_test_exit(0);
 }

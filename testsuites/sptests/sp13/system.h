@@ -20,24 +20,24 @@
 rtems_task Init(
   rtems_task_argument argument
 );
- 
+
 void Fill_buffer(
   char  source[],
   long *buffer
 );
- 
+
 void Put_buffer(
   long *buffer
 );
- 
+
 rtems_task Task_1(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_2(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_3(
   rtems_task_argument argument
 );

@@ -29,7 +29,7 @@ void Task_3()
     puts("TA3 - frsm_tsk TA1");
     status = frsm_tsk( TA1_ID );
     directive_failed( status, "TA3 - frsm_tsk TA1" );
-    
+
     puts("TA3 - rsm_tsk TA2");
     status = rsm_tsk( TA2_ID );
     directive_failed( status, "TA3 - rsm_tsk TA2" );

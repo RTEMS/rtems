@@ -36,8 +36,8 @@ void ITRON_Init( void )
 
   pk_ctsk.exinf    = NULL;
   pk_ctsk.tskatr   = TA_HLNG;
-  pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE; 
-  pk_ctsk.itskpri  = 2; 
+  pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE;
+  pk_ctsk.itskpri  = 2;
 
   pk_ctsk.task     = Task_1;
   status = cre_tsk( TA1_ID, &pk_ctsk );
@@ -47,7 +47,7 @@ void ITRON_Init( void )
   status = cre_tsk( TA2_ID, &pk_ctsk );
   directive_failed( status, "cre_tsk of TA2" );
 
-  pk_ctsk.itskpri  = 1; 
+  pk_ctsk.itskpri  = 1;
   pk_ctsk.task     = Task_3;
   status = cre_tsk( TA3_ID, &pk_ctsk );
   directive_failed( status, "cre_tsk of TA3" );
@@ -57,7 +57,7 @@ void ITRON_Init( void )
 
   /* dispatching disabled */
 
-  directive_failed_with_level( status, "dis_dsp from ITRON_Init", 1 );  
+  directive_failed_with_level( status, "dis_dsp from ITRON_Init", 1 );
   status  = sta_tsk( TA1_ID, 0 );
   directive_failed_with_level( status, "sta_tsk of TA1", 1 );
   status  = sta_tsk( TA2_ID, 0 );

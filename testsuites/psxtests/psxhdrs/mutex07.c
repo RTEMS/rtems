@@ -13,7 +13,7 @@
  */
 
 #include <pthread.h>
- 
+
 #ifndef _POSIX_THREAD_PRIO_INHERIT
 #error "rtems is supposed to have pthread_mutexattr_setprotocol"
 #endif

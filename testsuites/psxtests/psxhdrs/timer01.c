@@ -13,7 +13,7 @@
  */
 
 #include <time.h>
- 
+
 #ifndef _POSIX_TIMERS
 #error "rtems is supposed to have timer_create"
 #endif
@@ -31,6 +31,6 @@ void test( void )
   evp.sigev_signo = SIGALRM;
   evp.sigev_value.sival_int = 0;
   evp.sigev_value.sival_ptr = NULL;
-  
+
   result = timer_create( clock_id, &evp, &timerid );
 }

@@ -13,7 +13,7 @@
  */
 
 #include <pthread.h>
- 
+
 #ifndef _POSIX_THREAD_PRIORITY_SCHEDULING
 #error "RTEMS is supposed to have pthread_attr_setinheritsched"
 #endif
@@ -26,6 +26,6 @@ void test( void )
 
   inheritsched = PTHREAD_INHERIT_SCHED;
   inheritsched = PTHREAD_EXPLICIT_SCHED;
-  
+
   result = pthread_attr_setinheritsched( &attr, inheritsched );
 }

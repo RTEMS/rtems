@@ -17,7 +17,7 @@
 #ifndef _POSIX_THREADS
 #define "rtems is supposed to have pthread_sigmask"
 #endif
- 
+
 void test( void )
 {
   int       how;

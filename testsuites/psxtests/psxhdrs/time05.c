@@ -13,14 +13,14 @@
  */
 
 #include <time.h>
- 
+
 void test( void )
 {
   size_t    length;
   size_t    max_length;
   char      buffer[ 80 ];
   struct tm timestruct;
-  
+
   max_length = sizeof( buffer );
 
   length = strftime( buffer, max_length, "%A", &timestruct );

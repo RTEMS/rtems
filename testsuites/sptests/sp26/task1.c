@@ -74,7 +74,7 @@ subTask2 (rtems_task_argument arg)
   rtems_task_wake_after (ticksPerSecond * 4);
   printf ("subTask2 - Task 1 suspended? - should be 1: %d\n",
      isSuspended (taskId1));
-  
+
   puts( "*** END OF TEST 26 ***" );
   rtems_test_exit( 0 );
 }

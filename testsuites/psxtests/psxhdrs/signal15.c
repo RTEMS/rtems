@@ -13,7 +13,7 @@
  */
 
 #include <signal.h>
- 
+
 void test( void )
 {
   sigset_t  sigmask;

@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -59,7 +59,7 @@ void *POSIX_Init(
 
   act.sa_handler = Signal_handler;
   act.sa_flags   = 0;
- 
+
   sigaction( SIGUSR1, &act, NULL );
 
   /* simple signal to self */
@@ -87,8 +87,8 @@ void *POSIX_Init(
   status = sigpending( &pending_set );
   assert( !status );
   printf( "Init: Signals pending 0x%08x\n", (unsigned int) pending_set );
-  
-  
+
+
   printf( "Init: send SIGUSR1 to self\n" );
   status = pthread_kill( Init_id, SIGUSR1 );
   assert( !status );
@@ -96,7 +96,7 @@ void *POSIX_Init(
   status = sigpending( &pending_set );
   assert( !status );
   printf( "Init: Signals pending 0x%08x\n", (unsigned int) pending_set );
-  
+
   printf( "Init: Unblock SIGUSR1\n" );
   status = sigprocmask( SIG_UNBLOCK, &mask, NULL );
   assert( !status );
@@ -107,26 +107,26 @@ void *POSIX_Init(
   assert( !status );
 
   /*
-   *  Loop for 5 seconds seeing how many signals we catch 
+   *  Loop for 5 seconds seeing how many signals we catch
    */
 
   tr.tv_sec = 5;
   tr.tv_nsec = 0;
- 
+
   do {
     tv = tr;
 
     Signal_occurred = 0;
 
     status = nanosleep ( &tv, &tr );
-  
+
     if ( status == -1 ) {
       assert( errno == EINTR );
       assert( tr.tv_nsec || tr.tv_sec );
     } else if ( !status ) {
       assert( !tr.tv_nsec && !tr.tv_sec );
     }
-     
+
     printf(
       "Init: signal was %sprocessed with %d:%d time remaining\n",
       (Signal_occurred) ? "" : "not ",

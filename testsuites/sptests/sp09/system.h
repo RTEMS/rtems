@@ -103,36 +103,36 @@ void Screen14( void );
 
 TEST_EXTERN rtems_id   Task_id[ 11 ];       /* array of task ids */
 TEST_EXTERN rtems_name Task_name[ 11 ];     /* array of task names */
- 
+
 TEST_EXTERN rtems_name Timer_name[ 2 ];     /* array of timer names */
 TEST_EXTERN rtems_id   Timer_id[ 2 ];       /* array of timer ids */
- 
+
 TEST_EXTERN rtems_name Semaphore_name[ 4 ]; /* array of semaphore names */
 TEST_EXTERN rtems_id   Semaphore_id[ 4 ];   /* array of semaphore ids */
- 
+
 TEST_EXTERN rtems_name Queue_name[ 3 ];     /* array of queue names */
 TEST_EXTERN rtems_id   Queue_id[ 3 ];       /* array of queue ids */
- 
+
 TEST_EXTERN rtems_name Partition_name[ 2 ]; /* array of partition names */
 TEST_EXTERN rtems_id   Partition_id[ 2 ];   /* array of partition ids */
- 
+
 TEST_EXTERN rtems_name Region_name[ 2 ];    /* array of region names */
 TEST_EXTERN rtems_id   Region_id[ 2 ];      /* array of region ids */
- 
+
 TEST_EXTERN rtems_name Port_name[ 2 ];      /* array of port names */
 TEST_EXTERN rtems_id   Port_id[ 2 ];        /* array of port ids */
- 
+
 TEST_EXTERN rtems_name Period_name[ 2 ];    /* array of period names */
 TEST_EXTERN rtems_id   Period_id[ 2 ];      /* array of period ids */
- 
+
 TEST_EXTERN rtems_id   Junk_id;             /* id used to return errors */
- 
+
 #define Internal_port_area (void *) 0x00001000
 #define External_port_area (void *) 0x00002000
- 
+
 TEST_EXTERN uint8_t   Partition_good_area[256] CPU_STRUCTURE_ALIGNMENT;
 #define Partition_bad_area (void *) 0x00000006
- 
+
 TEST_EXTERN uint32_t   Region_good_area[4096] CPU_STRUCTURE_ALIGNMENT;
 #define Region_bad_area    (void *) 0x00000006
 #define REGION_START_OFFSET 1024

@@ -6,7 +6,7 @@
   COPYRIGHT (c) 1997
   Objective Design Systems Ltd Pty (ODS)
   All rights reserved (R) Objective Design Systems Ltd Pty
-  
+
   The license and distribution terms for this file may be found in the
   file LICENSE in this distribution or at
   http://www.rtems.com/license/LICENSE.
@@ -29,7 +29,7 @@
   Methods are provided for accessing and controlling a specific
   mode. The returned value will only contain the requested mode's flags,
   and only the that mode will be changed when setting a mode.
-  
+
   ------------------------------------------------------------------------ */
 
 #if !defined(_rtemsTaskMode_h_)
@@ -45,9 +45,9 @@ class rtemsTaskMode
   : public rtemsStatusCode
 {
 public:
-  
+
   rtemsTaskMode() {};
-  
+
   // group mode control, OR the values together
   inline const rtems_status_code get_mode(rtems_mode& mode);
   inline const rtems_status_code set_mode(const rtems_mode mode,
@@ -55,7 +55,7 @@ public:
   inline const rtems_status_code set_mode(const rtems_mode mode,
                                           const rtems_mode mask,
                                           rtems_mode& old_mode);
-  
+
   // preemption control
   inline const rtems_status_code get_preemption_state(rtems_mode& preemption);
   inline const rtems_status_code set_preemption_state(const rtems_mode preemption);

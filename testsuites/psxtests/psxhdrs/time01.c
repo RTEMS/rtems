@@ -13,7 +13,7 @@
  */
 
 #include <time.h>
- 
+
 void test( void )
 {
   clock_t clock_ticks;

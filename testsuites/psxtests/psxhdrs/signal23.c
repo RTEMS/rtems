@@ -13,14 +13,14 @@
  */
 
 #include <signal.h>
- 
+
 useconds_t _EXFUN(ualarm, (useconds_t __useconds, useconds_t __interval));
 void test( void )
 {
   useconds_t useconds;
   useconds_t interval;
   useconds_t result;
-  
+
   useconds = 10;
   interval = 10;
 

@@ -49,13 +49,13 @@ void *Task_2(
   int status;
 
   /* send SIGUSR1 to Init which is waiting on SIGUSR1 */
- 
+
   print_current_time( "Task_2: ", "" );
 
   puts( "Task_1: pthread_kill - SIGUSR1 to Init" );
   status = pthread_kill( Init_id, SIGUSR1 );
   assert( !status );
- 
+
   pthread_exit( NULL );
 
      /* switch to Init */

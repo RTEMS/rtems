@@ -13,7 +13,7 @@
  */
 
 #include <pthread.h>
- 
+
 #ifndef _POSIX_THREAD_CPUTIME
 #error "rtems is supposed to have pthread_attr_getcputime"
 #endif

@@ -41,7 +41,7 @@ void *task_c(
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS             4 
+#define CONFIGURE_MAXIMUM_POSIX_THREADS             4
 #define CONFIGURE_MAXIMUM_POSIX_TIMERS              4
 #define CONFIGURE_MAXIMUM_TIMERS                    4
 #define CONFIGURE_MAXIMUM_POSIX_MUTEXES             2

@@ -29,14 +29,14 @@ void diff_timespec(
 )
 {
    int nsecs_per_sec = 1000000000;
- 
+
    result->tv_sec = stop->tv_sec - start->tv_sec;
    if ( stop->tv_nsec < start->tv_nsec ) {
       result->tv_nsec = nsecs_per_sec - start->tv_nsec + stop->tv_nsec;
       result->tv_sec--;
    } else
       result->tv_nsec = stop->tv_nsec - start->tv_nsec;
- 
+
 }
 
 void *Task_1(
@@ -51,7 +51,7 @@ void *Task_1(
 
   status = clock_gettime( CLOCK_REALTIME, &start );
   assert( !status );
-  
+
   status = sched_rr_get_interval( getpid(), &delay );
   assert( !status );
 
@@ -63,8 +63,8 @@ void *Task_1(
     delay.tv_nsec -= 1000000000;
     delay.tv_sec++;
   }
-    
-  
+
+
   puts( "Task_1: killing time" );
   for ( ; ; ) {
 
@@ -78,10 +78,10 @@ void *Task_1(
 
     if ( difference.tv_sec > delay.tv_sec )
       break;
-    
+
     if ( difference.tv_nsec > delay.tv_nsec )
       break;
-    
+
   }
 
   puts( "Task_1: exitting" );

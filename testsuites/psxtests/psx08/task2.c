@@ -38,7 +38,7 @@ void *Task_2(
   if ( status != EINVAL )
     printf( "status = %d\n", status );
   assert( status == EINVAL );
-  
+
   puts( "Task_2: join to self task (Init) -- EDEADLK" );
   status = pthread_join( pthread_self(), NULL );
   if ( status != EDEADLK )

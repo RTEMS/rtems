@@ -65,36 +65,36 @@ void *Task_3(
 
   status = sigemptyset( &mask );
   assert( !status );
- 
+
   status = sigaddset( &mask, SIGUSR1 );
   assert( !status );
- 
+
   printf( "Task_3: sigwait SIGUSR1\n" );
   status = sigwait( &mask, &sig );
- 
+
      /* switch to Init */
- 
+
   assert( !status );
   printf( "Task_3: signo= %d\n", sig );
 
      /* catch signal with pause */
- 
+
   empty_line();
 
   status = sigemptyset( &mask );
   assert( !status );
- 
+
   status = sigaddset( &mask, SIGUSR1 );
   assert( !status );
- 
+
   printf( "Task_3: pause\n" );
   status = pause( );
- 
+
      /* switch to Init */
- 
+
   assert( !(status==-1) );
   printf( "Task_3: pause= %d\n", status );
- 
+
 
      /* send signal to Init task before it has pended for a signal */
 
@@ -104,7 +104,7 @@ void *Task_3(
   status = pthread_kill( Init_id, SIGUSR2 );
   assert( !status );
 
-  printf( "Task_3: sleep so the Init task can reguest a signal\n" ); 
+  printf( "Task_3: sleep so the Init task can reguest a signal\n" );
   status = sleep( 1 );
   assert( !status );
 

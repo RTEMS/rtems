@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -221,7 +221,7 @@ void *POSIX_Init(
     printf( "status = %d\n", status );
   assert( status == EINVAL );
   puts( "Init: pthread_cond_wait - EINVAL (mutex invalid)" );
- 
+
   status = pthread_cond_timedwait( &Cond1_id, NULL, &timeout );
   if ( status != EINVAL )
     printf( "status = %d\n", status );
@@ -261,7 +261,7 @@ void *POSIX_Init(
 /* wait and timedwait without mutex */
 
 /* XXX - this case is commented out in the code pending review
- * 
+ *
  *   status = pthread_cond_wait( &Cond1_id, &Mutex_id );
  *   if ( status != EINVAL )
  *     printf( "status = %d\n", status );
@@ -270,7 +270,7 @@ void *POSIX_Init(
   puts( "Init: pthread_cond_wait - EINVAL (mutex not locked before call)" );
 
 /* XXX - this case is commented out in the code pending review
- * 
+ *
  *  status = clock_gettime( CLOCK_REALTIME, &timeout );
  *  assert( !status );
  *  timeout.tv_sec += 1;

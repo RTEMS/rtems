@@ -13,7 +13,7 @@
  */
 
 #include <pthread.h>
- 
+
 #ifndef _POSIX_THREAD_PRIORITY_SCHEDULING
 #error "RTEMS is supposed to have pthread_setschedparam"
 #endif
@@ -38,7 +38,7 @@ void test( void )
    *  really should use sched_get_priority_min() and sched_get_priority_max()
    */
 
-  param.sched_priority = 0; 
+  param.sched_priority = 0;
 #ifdef _POSIX_SPORADIC_SERVER
   param.ss_low_priority = 0;
   param.ss_replenish_period.tv_sec = 0;

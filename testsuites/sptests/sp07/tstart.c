@@ -31,7 +31,7 @@ rtems_extension Task_start_extension(
   if ( task_number( started_task->Object.id ) > 0 ) {
     name = Task_name[ task_number( started_task->Object.id ) ];
     sprintf( line, "TASK_START - %c%c%c%c - started\n",
-      (name >> 24) & 0xff, 
+      (name >> 24) & 0xff,
       (name >> 16) & 0xff,
       (name >> 8) & 0xff,
       name & 0xff

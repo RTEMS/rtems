@@ -24,7 +24,7 @@ void buffered_io_flush(void);
 void buffered_io_add_string( char *s );
 
 /* end of buffered IO */
- 
+
 /* functions */
 
 rtems_task Init(
@@ -34,39 +34,39 @@ rtems_task Init(
 rtems_task Task_1(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_2(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_3(
   rtems_task_argument argument
 );
- 
+
 rtems_task Task_4(
   rtems_task_argument argument
 );
- 
+
 rtems_boolean Task_create_extension(
   rtems_tcb *unused,
   rtems_tcb *created_task
 );
- 
+
 rtems_extension Task_delete_extension(
   rtems_tcb *running_task,
   rtems_tcb *deleted_task
 );
- 
+
 rtems_extension Task_restart_extension(
   rtems_tcb *unused,
   rtems_tcb *restarted_task
 );
- 
+
 rtems_extension Task_start_extension(
   rtems_tcb *unused,
   rtems_tcb *started_task
 );
- 
+
 rtems_extension Task_exit_extension(
   rtems_tcb *running_task
 );
@@ -93,5 +93,5 @@ TEST_EXTERN rtems_name Task_name[ 5 ];       /* array of task names */
 
 TEST_EXTERN rtems_id   Extension_id[ 4 ];
 TEST_EXTERN rtems_name Extension_name[ 4 ];  /* array of task names */
- 
+
 /* end of include file */

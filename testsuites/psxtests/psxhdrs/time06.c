@@ -13,11 +13,11 @@
  */
 
 #include <time.h>
- 
+
 void test( void )
 {
   char      *buffer;
   struct tm  timestruct;
-  
+
   buffer = asctime( &timestruct );
 }

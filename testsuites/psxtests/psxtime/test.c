@@ -58,7 +58,7 @@ void check_a_tod(
   print_time( "rtems_clock_set          ", the_tod, "\n" );
   status = rtems_clock_set( the_tod );
   assert( !status );
- 
+
   do {
     status = rtems_clock_get( RTEMS_CLOCK_GET_TOD, &new_tod );
     assert( !status );
@@ -69,7 +69,7 @@ void check_a_tod(
     assert( result == 0 );
     a_time_t = tv.tv_sec;   /* ctime() takes a time_t */
     printf( "gettimeofday: %s", ctime( &a_time_t) );
-  
+
     a_time_t = time( 0 );
     printf( "time:         %s", ctime( &a_time_t ) );
 

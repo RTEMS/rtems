@@ -13,12 +13,12 @@
  */
 
 #include <time.h>
- 
+
 void test( void )
 {
   time_t     time;
   struct tm *timestruct_pointer;
   struct tm  timestruct;
-  
+
   timestruct_pointer = gmtime_r( &time, &timestruct );
 }

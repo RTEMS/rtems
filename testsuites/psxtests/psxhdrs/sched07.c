@@ -17,7 +17,7 @@
 #ifndef _POSIX_PRIORITY_SCHEDULING
 #error "rtems is supposed to have sched_get_priority_min"
 #endif
- 
+
 void test( void )
 {
   int    policy;

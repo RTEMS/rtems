@@ -42,10 +42,10 @@ void ITRON_Init( void )
 
   pk_ctsk.exinf    = NULL;
   pk_ctsk.tskatr   = TA_HLNG;
-  pk_ctsk.itskpri  = 1; 
+  pk_ctsk.itskpri  = 1;
   pk_ctsk.task     = Task_2_through_4;
 
-  pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE * 2; 
+  pk_ctsk.stksz    = RTEMS_MINIMUM_STACK_SIZE * 2;
   status = cre_tsk( 2, &pk_ctsk );
   directive_failed( status, "cre_tsk of TA1" );
 
@@ -53,7 +53,7 @@ void ITRON_Init( void )
   status = cre_tsk( 3, &pk_ctsk );
   directive_failed( status, "cre_tsk of TA2" );
 
-  pk_ctsk.stksz = RTEMS_MINIMUM_STACK_SIZE * 3; 
+  pk_ctsk.stksz = RTEMS_MINIMUM_STACK_SIZE * 3;
   status = cre_tsk( 4, &pk_ctsk );
   directive_failed( status, "cre_tsk of TA3" );
 

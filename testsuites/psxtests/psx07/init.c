@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -18,7 +18,7 @@ void print_schedparam(
   struct sched_param *schedparam
 )
 {
-  printf( "%ssched priority      = %d\n", prefix, schedparam->sched_priority ); 
+  printf( "%ssched priority      = %d\n", prefix, schedparam->sched_priority );
 #if defined(_POSIX_SPORADIC_SERVER)
   printf( "%sss_low_priority     = %d\n", prefix, schedparam->ss_low_priority );
   printf( "%sss_replenish_period = (%ld, %ld)\n", prefix,
@@ -31,7 +31,7 @@ void print_schedparam(
   printf( "%s_POSIX_SPORADIC_SERVER is not defined\n" );
 #endif
 }
- 
+
 void *POSIX_Init(
   void *argument
 )
@@ -57,7 +57,7 @@ void *POSIX_Init(
 
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08x\n", Init_id );
-  
+
   /* exercise init and destroy */
 
   puts( "Init: pthread_attr_init - EINVAL (NULL attr)" );
@@ -92,10 +92,10 @@ void *POSIX_Init(
   /* junk stack address */
   status = pthread_attr_setstackaddr( &attr, (void *)&schedparam );
   assert( !status );
- 
+
   /* must go around pthread_attr_setstacksize to set a bad stack size */
   attr.stacksize = 0;
- 
+
   puts( "Init: pthread_create - EINVAL (stacksize too small)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   assert( status == EINVAL );
@@ -114,7 +114,7 @@ void *POSIX_Init(
 
   /* must go around pthread_attr_set routines to set a bad value */
   attr.inheritsched = -1;
-  
+
   puts( "Init: pthread_create - EINVAL (invalid inherit scheduler)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   assert( status == EINVAL );
@@ -138,7 +138,7 @@ void *POSIX_Init(
 
   status = pthread_attr_setinheritsched( &attr, PTHREAD_INHERIT_SCHED );
   assert( !status );
-  
+
   puts( "Init: pthread_create - SUCCESSFUL (inherit scheduler)" );
   status = pthread_create( &Task_id, &attr, Task_1, NULL );
   assert( !status );
@@ -174,19 +174,19 @@ void *POSIX_Init(
   puts( "Init: pthread_attr_setscope - SUCCESSFUL" );
   status = pthread_attr_setscope( &attr, PTHREAD_SCOPE_PROCESS );
   assert( !status );
- 
+
   puts( "Init: pthread_attr_getscope - EINVAL (NULL attr)" );
   status = pthread_attr_getscope( NULL, &scope );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getscope - EINVAL (NULL scope)" );
   status = pthread_attr_getscope( &attr, NULL );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getscope - EINVAL (not initialized attr)" );
   status = pthread_attr_getscope( &destroyed_attr, &scope );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getscope - SUCCESSFUL" );
   status = pthread_attr_getscope( &attr, &scope );
   assert( !status );
@@ -199,88 +199,88 @@ void *POSIX_Init(
   puts( "Init: pthread_attr_setinheritsched - EINVAL (NULL attr)" );
   status = pthread_attr_setinheritsched( NULL, PTHREAD_INHERIT_SCHED );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setinheritsched - EINVAL (not initialized attr)" );
   status =
      pthread_attr_setinheritsched( &destroyed_attr, PTHREAD_INHERIT_SCHED );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setinheritsched - ENOTSUP (invalid inheritsched)" );
   status = pthread_attr_setinheritsched( &attr, -1 );
   assert( status == ENOTSUP );
- 
+
   puts( "Init: pthread_attr_setinheritsched - SUCCESSFUL" );
   status = pthread_attr_setinheritsched( &attr, PTHREAD_INHERIT_SCHED );
   assert( !status );
- 
+
   puts( "Init: pthread_attr_getinheritsched - EINVAL (NULL attr)" );
   status = pthread_attr_getinheritsched( NULL, &inheritsched );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getinheritsched - EINVAL (NULL inheritsched)" );
   status = pthread_attr_getinheritsched( &attr, NULL );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getinheritsched - EINVAL (not initialized attr)" );
   status = pthread_attr_getinheritsched( &destroyed_attr, &inheritsched );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getinheritsched - SUCCESSFUL" );
   status = pthread_attr_getinheritsched( &attr, &inheritsched );
   assert( !status );
   printf( "Init: current inherit scheduler attribute = %d\n", inheritsched );
 
   /* exercise get and set inherit scheduler */
- 
+
   empty_line();
- 
+
   puts( "Init: pthread_attr_setschedpolicy - EINVAL (NULL attr)" );
   status = pthread_attr_setschedpolicy( NULL, SCHED_FIFO );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setschedpolicy - EINVAL (not initialized attr)" );
   status =
      pthread_attr_setschedpolicy( &destroyed_attr, SCHED_OTHER );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setschedpolicy - ENOTSUP (invalid schedpolicy)" );
   status = pthread_attr_setschedpolicy( &attr, -1 );
   assert( status == ENOTSUP );
- 
+
   puts( "Init: pthread_attr_setschedpolicy - SUCCESSFUL" );
   status = pthread_attr_setschedpolicy( &attr, SCHED_RR );
   assert( !status );
- 
+
   puts( "Init: pthread_attr_getschedpolicy - EINVAL (NULL attr)" );
   status = pthread_attr_getschedpolicy( NULL, &schedpolicy );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getschedpolicy - EINVAL (NULL schedpolicy)" );
   status = pthread_attr_getschedpolicy( &attr, NULL );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getschedpolicy - EINVAL (not initialized attr)" );
   status = pthread_attr_getschedpolicy( &destroyed_attr, &schedpolicy );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getschedpolicy - SUCCESSFUL" );
   status = pthread_attr_getschedpolicy( &attr, &schedpolicy );
   assert( !status );
   printf( "Init: current scheduler policy attribute = %d\n", schedpolicy );
- 
+
   /* exercise get and set stack size */
- 
+
   empty_line();
- 
+
   puts( "Init: pthread_attr_setstacksize - EINVAL (NULL attr)" );
   status = pthread_attr_setstacksize( NULL, 0 );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setstacksize - EINVAL (not initialized attr)" );
   status =
      pthread_attr_setstacksize( &destroyed_attr, 0 );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setstacksize - SUCCESSFUL (low stacksize)" );
   status = pthread_attr_setstacksize( &attr, 0 );
   assert( !status );
@@ -288,19 +288,19 @@ void *POSIX_Init(
   puts( "Init: pthread_attr_setstacksize - SUCCESSFUL (high stacksize)" );
   status = pthread_attr_setstacksize( &attr, STACK_MINIMUM_SIZE * 2 );
   assert( !status );
- 
+
   puts( "Init: pthread_attr_getstacksize - EINVAL (NULL attr)" );
   status = pthread_attr_getstacksize( NULL, &stacksize );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getstacksize - EINVAL (NULL stacksize)" );
   status = pthread_attr_getstacksize( &attr, NULL );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getstacksize - EINVAL (not initialized attr)" );
   status = pthread_attr_getstacksize( &destroyed_attr, &stacksize );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getstacksize - SUCCESSFUL" );
   status = pthread_attr_getstacksize( &attr, &stacksize );
   assert( !status );
@@ -308,72 +308,72 @@ void *POSIX_Init(
   printf( "Init: current stack size attribute is OK\n" );
 
   /* exercise get and set stack address */
- 
+
   empty_line();
- 
+
   puts( "Init: pthread_attr_setstackaddr - EINVAL (NULL attr)" );
   status = pthread_attr_setstackaddr( NULL, NULL );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setstackaddr - EINVAL (not initialized attr)" );
   status =
      pthread_attr_setstackaddr( &destroyed_attr, NULL );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setstackaddr - SUCCESSFUL" );
   status = pthread_attr_setstackaddr( &attr, 0 );
   assert( !status );
- 
+
   puts( "Init: pthread_attr_getstackaddr - EINVAL (NULL attr)" );
   status = pthread_attr_getstackaddr( NULL, &stackaddr );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getstackaddr - EINVAL (NULL stackaddr)" );
   status = pthread_attr_getstackaddr( &attr, NULL );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getstackaddr - EINVAL (not initialized attr)" );
   status = pthread_attr_getstackaddr( &destroyed_attr, &stackaddr );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getstackaddr - SUCCESSFUL" );
   status = pthread_attr_getstackaddr( &attr, &stackaddr );
   assert( !status );
   printf( "Init: current stack address attribute = %p\n", stackaddr );
- 
+
   /* exercise get and set detach state */
- 
+
   empty_line();
- 
+
   puts( "Init: pthread_attr_setdetachstate - EINVAL (NULL attr)" );
   status = pthread_attr_setdetachstate( NULL, PTHREAD_CREATE_DETACHED );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setdetachstate - EINVAL (not initialized attr)" );
   status =
      pthread_attr_setdetachstate( &destroyed_attr, PTHREAD_CREATE_JOINABLE );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setdetachstate - EINVAL (invalid detachstate)" );
   status = pthread_attr_setdetachstate( &attr, -1 );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setdetachstate - SUCCESSFUL" );
   status = pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_JOINABLE );
   assert( !status );
- 
+
   puts( "Init: pthread_attr_getdetachstate - EINVAL (NULL attr)" );
   status = pthread_attr_getdetachstate( NULL, &detachstate );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getdetachstate - EINVAL (NULL detatchstate)" );
   status = pthread_attr_getdetachstate( &attr, NULL );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getdetachstate - EINVAL (not initialized attr)" );
   status = pthread_attr_getdetachstate( &destroyed_attr, &detachstate );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getdetachstate - SUCCESSFUL" );
   status = pthread_attr_getdetachstate( &attr, &detachstate );
   assert( !status );
@@ -392,31 +392,31 @@ void *POSIX_Init(
   puts( "Init: pthread_attr_setschedparam - EINVAL (NULL attr)" );
   status = pthread_attr_setschedparam( NULL, &schedparam );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setschedparam - EINVAL (not initialized attr)" );
   status = pthread_attr_setschedparam( &destroyed_attr, &schedparam );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setschedparam - EINVAL (NULL schedparam)" );
   status = pthread_attr_setschedparam( &attr, NULL );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_setschedparam - SUCCESSFUL" );
   status = pthread_attr_setschedparam( &attr, &schedparam );
   assert( !status );
- 
+
   puts( "Init: pthread_attr_getschedparam - EINVAL (NULL attr)" );
   status = pthread_attr_getschedparam( NULL, &schedparam );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getschedparam - EINVAL (not initialized attr)" );
   status = pthread_attr_getschedparam( &destroyed_attr, &schedparam );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_attr_getschedparam - EINVAL (NULL schedparam)" );
   status = pthread_attr_getschedparam( &attr, NULL );
   assert( status == EINVAL );
- 
+
   /* exercise pthread_getschedparam */
 
   empty_line();
@@ -424,19 +424,19 @@ void *POSIX_Init(
   puts( "Init: pthread_getschedparam - EINVAL (NULL policy)" );
   status = pthread_getschedparam( pthread_self(), NULL, &schedparam );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_getschedparam - EINVAL (NULL schedparam)" );
   status = pthread_getschedparam( pthread_self(), &schedpolicy, NULL );
   assert( status == EINVAL );
- 
+
   puts( "Init: pthread_getschedparam - ESRCH (bad thread)" );
   status = pthread_getschedparam( -1, &schedpolicy, &schedparam );
   assert( status == ESRCH );
- 
+
   puts( "Init: pthread_getschedparam - SUCCESSFUL" );
   status = pthread_getschedparam( pthread_self(), &schedpolicy, &schedparam );
   assert( !status );
- 
+
   printf( "Init: policy = %d\n", schedpolicy );
 
   print_schedparam( "Init: ", &schedparam );
@@ -465,7 +465,7 @@ void *POSIX_Init(
   status = pthread_setschedparam( -1, SCHED_OTHER, &schedparam );
   assert( status == ESRCH );
 
-  /* now get sporadic server errors */ 
+  /* now get sporadic server errors */
 
   schedparam.ss_replenish_period.tv_sec = 1;
   schedparam.ss_replenish_period.tv_nsec = 0;

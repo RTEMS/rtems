@@ -438,7 +438,7 @@ int main(
   while ( fgets(buffer, 128, file) )
     printf( "%s", buffer );
 
-  /* 
+  /*
    * Verify only atime changed for a read.
    */
   status = stat( "/tmp/j", &buf );
@@ -464,7 +464,7 @@ int main(
   status = truncate( "/tmp/j", 40 );
   assert( !status );
 
-  /* 
+  /*
    * Verify truncate changed only atime.
    */
   status = stat( "/tmp/j", &buf );

@@ -27,10 +27,10 @@
 
 /*
  * get the current time in second since epoch (1970), change it since 1985,
- * compute the time in millisecond 
+ * compute the time in millisecond
  *
  */
- 
+
 int time_sec_epoch( void ) {
 
 int s_time,t_time,r_time;
@@ -47,7 +47,7 @@ printf( "Time from 1985: %d\n", r_time );
 printf("milliseconds: %ld\n",m_sec);
 
 return 0;
-} 
+}
 
 
 

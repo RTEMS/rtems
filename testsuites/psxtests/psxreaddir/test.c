@@ -2,12 +2,12 @@
  *  This is a native test to explore how the readdir() family works.
  *  Newlib supports the following readdir() family members:
  *
- *    closedir()   - 
- *    readdir()    - 
- *    scandir()    - 
- *    opendir()    - 
- *    rewinddir()  - 
- *    telldir()    - BSD not in POSIX 
+ *    closedir()   -
+ *    readdir()    -
+ *    scandir()    -
+ *    opendir()    -
+ *    rewinddir()  -
+ *    telldir()    - BSD not in POSIX
  *    seekdir()    - BSD not in POSIX
  *
  *
@@ -60,7 +60,7 @@ void printdir( DIR *directory )
   printf( "%-20s %8s %8s %8s %4s\n",
      "name", "    inode", " offset", "reclen", " type" );
   d = readdir(directory);
-  
+
   while (d) {
     printf( "%-20s %8d %8d %6d   0x%04x\n",
        d->d_name, (int)d->d_ino, (int)d->d_off, d->d_reclen, d->d_type );
@@ -212,7 +212,7 @@ void test_across_mount()
   assert( status == 0 );
   status = mkdir( "/imfs/testdir/testsubdir", 0777 );
   assert( status == 0 );
-  
+
   complete_printdir("/imfs" );
   complete_printdir("/imfs/" );
   complete_printdir("/imfs/." );
@@ -264,7 +264,7 @@ int main(
 
   printf("Create a lot of files\n");
   status = mkdir( "/many", 0x1c0 );
-  status = chdir( "/many" ); 
+  status = chdir( "/many" );
   for (i = 0; i<44; i++) {
     printf("Create %s\n", many_files[i]);
     fd = open (many_files[i], O_CREAT, S_IRWXU);
@@ -421,10 +421,10 @@ int main(
   rewinddir( directory );
   for( off=0 ; off<=200 ; off=off + sizeof(struct dirent) / 4 ) {
     seekdir( directory, off );
-    printf( 
-       "seeked to %2d -- currently at %2d\n", 
-       (int)off, 
-       (int)telldir(directory) 
+    printf(
+       "seeked to %2d -- currently at %2d\n",
+       (int)off,
+       (int)telldir(directory)
     );
   }
 

@@ -13,12 +13,12 @@
  */
 
 #include <time.h>
- 
+
 void test( void )
 {
   char     *buffer_pointer;
   char      buffer[ 80 ];
   time_t    time;
-  
+
   buffer_pointer = ctime_r( &time, buffer );
 }

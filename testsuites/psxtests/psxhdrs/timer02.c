@@ -13,7 +13,7 @@
  */
 
 #include <time.h>
- 
+
 #ifndef _POSIX_TIMERS
 #error "rtems is supposed to have timer_delete"
 #endif
@@ -22,6 +22,6 @@ void test( void )
 {
   timer_t timerid = 0;
   int     result;
-  
+
   result = timer_delete( timerid );
 }

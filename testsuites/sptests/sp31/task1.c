@@ -73,7 +73,7 @@ rtems_task Task_1(
 
   if ( TSR_fired ) {
     puts( "TA1 - TSR fired and should not have!" );
-    rtems_test_exit(1); 
+    rtems_test_exit(1);
   }
 
   puts( "TA1 - rtems_timer_cancel - timer 1" );
@@ -84,7 +84,7 @@ rtems_task Task_1(
   status = rtems_timer_cancel( tmid2 );
   directive_failed( status, "rtems_timer_cancel" );
 
-  
+
 /* now check that rescheduling an active timer works OK. */
   puts( "TA1 - rtems_timer_server_fire_after - timer 1 in 30 seconds" );
   status = rtems_timer_server_fire_after(
@@ -117,7 +117,7 @@ rtems_task Task_1(
     info.start_time + info.initial );
   printf( "Timer Server scheduled for %d ticks since boot\n",
     _Timer_Server->Timer.initial + _Timer_Server->Timer.start_time );
-  assert(  (info.start_time + info.initial) == 
+  assert(  (info.start_time + info.initial) ==
     (_Timer_Server->Timer.initial + _Timer_Server->Timer.start_time) );
 
   puts( "TA1 - rtems_task_wake_after - 1 second" );
@@ -135,7 +135,7 @@ rtems_task Task_1(
     info.start_time + info.initial );
   printf( "Timer Server scheduled for %d ticks since boot\n",
     _Timer_Server->Timer.initial + _Timer_Server->Timer.start_time );
-  assert(  (info.start_time + info.initial) == 
+  assert(  (info.start_time + info.initial) ==
     (_Timer_Server->Timer.initial + _Timer_Server->Timer.start_time) );
 
   puts( "TA1 - rtems_timer_cancel - timer 1" );
@@ -196,7 +196,7 @@ rtems_task Task_1(
 
   /*
    *  Reset the time since we do not know how long the user waited
-   *  before pressing <cr> at the pause.  This insures that the 
+   *  before pressing <cr> at the pause.  This insures that the
    *  actual output matches the screen.
    */
 

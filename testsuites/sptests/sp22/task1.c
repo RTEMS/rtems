@@ -85,7 +85,7 @@ rtems_task Task_1(
 
   /*
    *  Reset the time since we do not know how long the user waited
-   *  before pressing <cr> at the pause.  This insures that the 
+   *  before pressing <cr> at the pause.  This insures that the
    *  actual output matches the screen.
    */
 

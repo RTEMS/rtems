@@ -13,7 +13,7 @@
  */
 
 #include <sys/types.h>
- 
+
 void test( void )
 {
   gid_t grouplist[ 20 ];

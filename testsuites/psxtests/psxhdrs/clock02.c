@@ -13,7 +13,7 @@
  */
 
 #include <time.h>
- 
+
 #ifndef _POSIX_TIMERS
 #error "rtems is supposed to have clock_settime"
 #endif

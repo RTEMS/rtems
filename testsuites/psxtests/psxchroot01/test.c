@@ -2,12 +2,12 @@
  *  This is a native test to explore how the readdir() family works.
  *  Newlib supports the following readdir() family members:
  *
- *    closedir()   - 
- *    readdir()    - 
- *    scandir()    - 
- *    opendir()    - 
- *    rewinddir()  - 
- *    telldir()    - BSD not in POSIX 
+ *    closedir()   -
+ *    readdir()    -
+ *    scandir()    -
+ *    opendir()    -
+ *    rewinddir()  -
+ *    telldir()    - BSD not in POSIX
  *    seekdir()    - BSD not in POSIX
  *
  *
@@ -96,19 +96,19 @@ int main(
 
   touch( "/one/one.test" );
   touch( "/one/two/two.test" );
- 
+
   status = chroot( "/one" );
   assert( status == 0 );
 
   status = fileexists( "/one/one.test" );
   printf( "%s on /one/one.test\n", (!status) ? "SUCCESS" : "FAILURE" );
-   
+
   status = fileexists( "/two/two.test" );
   printf( "%s on /two/two.test\n", (status) ? "SUCCESS" : "FAILURE" );
 
   puts( "Reset the private environment" );
   rtems_libio_set_private_env();
-   
+
   status = fileexists( "/one/one.test" );
   printf( "%s on /one/one.test\n", ( status) ? "SUCCESS" : "FAILURE" );
 

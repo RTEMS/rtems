@@ -13,15 +13,15 @@
  */
 
 #include <time.h>
- 
+
 #ifndef _POSIX_TIMERS
 #error "rtems is supposed to have nanosleep"
 #endif
 
 void test( void )
 {
-  struct timespec rqtp; 
-  struct timespec rmtp; 
+  struct timespec rqtp;
+  struct timespec rmtp;
   int             result;
 
   rqtp.tv_sec = 0;

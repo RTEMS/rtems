@@ -1,6 +1,6 @@
 /*
  * Thread Test Program
- * 
+ *
  *  - test of POSIX's pthread_init() function from rtemstask Init()
  *
  *     ott@linux.thai.net

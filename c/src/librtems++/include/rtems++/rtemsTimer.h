@@ -6,7 +6,7 @@
   COPYRIGHT (c) 1997
   Objective Design Systems Ltd Pty (ODS)
   All rights reserved (R) Objective Design Systems Ltd Pty
-  
+
   The license and distribution terms for this file may be found in the
   file LICENSE in this distribution or at
   http://www.rtems.com/license/LICENSE.
@@ -22,7 +22,7 @@
   method.
 
   Timers are always local to a node.
-  
+
   ------------------------------------------------------------------------ */
 
 #if !defined(_rtemsTimer_h_)
@@ -43,32 +43,32 @@ public:
   // create a timer object
   rtemsTimer(const char* name);
   rtemsTimer();
-  
+
   // destroies the actual object
   virtual ~rtemsTimer();
 
   // create or destroy (delete) the timer
   virtual const rtems_status_code create(const char* name);
   virtual const rtems_status_code destroy();
-  
+
   // timer control
   inline const rtems_status_code fire_after(const rtems_interval micro_secs);
   inline const rtems_status_code repeat_fire_at(const rtems_interval micro_secs);
   inline const rtems_status_code fire_when(const rtems_time_of_day& when);
-  
+
   inline const rtems_status_code cancel();
   inline const rtems_status_code reset();
-    
+
   // object id, and name
   const rtems_id id_is() const { return id; }
   const rtems_name name_is() const { return name; }
   const char *name_string() const { return name_str; }
-  
+
 protected:
 
   // triggered method is called when the timer fires
   virtual void triggered() = 0;
-  
+
 private:
   // not permitted
   rtemsTimer(const rtemsTimer& timer);
@@ -76,7 +76,7 @@ private:
 
   // make this object reference an invalid RTEMS object
   void make_invalid();
-  
+
   // semaphore name
   rtems_name name;
   char name_str[5];

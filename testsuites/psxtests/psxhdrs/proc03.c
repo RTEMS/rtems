@@ -14,7 +14,7 @@
 
 #include <unistd.h>
 #include <sys/types.h>
- 
+
 void test( void )
 {
   uid_t uid;

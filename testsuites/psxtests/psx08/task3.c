@@ -34,7 +34,7 @@ void *Task_3(
   if ( status )
     printf( "status = %d\n", status );
   assert( !status );
- 
+
   if ( return_pointer == &Task2_id )
     puts( "Task_3: pthread_join returned correct pointer" );
   else

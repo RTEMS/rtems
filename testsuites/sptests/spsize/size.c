@@ -433,7 +433,7 @@ uninitialized += (sizeof _CPU_Interrupt_stack_low) +
 #endif
 
 #ifdef __sparc__
- 
+
 /* cpu.h */
 uninitialized += (sizeof _CPU_Interrupt_stack_low) +
                  (sizeof _CPU_Interrupt_stack_high) +

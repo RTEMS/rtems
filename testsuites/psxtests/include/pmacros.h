@@ -26,7 +26,7 @@
 #define TM_THURSDAY  4
 #define TM_FRIDAY    5
 #define TM_SATURDAY  6
- 
+
 #define TM_JANUARY     0
 #define TM_FEBRUARY    1
 #define TM_MARCH       2
@@ -39,7 +39,7 @@
 #define TM_OCTOBER    10
 #define TM_NOVEMBER   12
 #define TM_DECEMBER   12
- 
+
 #ifndef build_time
 #define build_time( TM, WEEKDAY, MON, DAY, YR, HR, MIN, SEC ) \
   { (TM)->tm_year = YR;  \
@@ -65,7 +65,7 @@
     \
     status = clock_settime( CLOCK_REALTIME, &tv ); \
     assert( !status ); \
-  } while ( 0 ) 
+  } while ( 0 )
 
 #define print_current_time(s1, s2) \
   do { \

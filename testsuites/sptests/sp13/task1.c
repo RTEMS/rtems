@@ -33,7 +33,7 @@ void dope_buffer(unsigned char *buff,
     unsigned char ch;
 
     ch = (' ' + (v % (0x7f - ' ')));
-    
+
     for (i=0; i<buff_size; i++)
     {
         *buff++ = ch++;
@@ -53,7 +53,7 @@ rtems_task Task_1(
   uint32_t    size;
   uint32_t    queue_size;
   char             *cp;
-  
+
   status = rtems_message_queue_ident(
     Queue_name[ 1 ],
     RTEMS_SEARCH_ALL_NODES,
@@ -263,13 +263,13 @@ rtems_test_pause();
   directive_failed( status, "rtems_message_queue_create of Q1; 20 bytes each" );
   status = rtems_message_queue_send( Queue_id[ 3 ], big_send_buffer, 40 );
   fatal_directive_status(status, RTEMS_INVALID_SIZE, "expected RTEMS_INVALID_SIZE");
-  
+
   puts( "TA1 - rtems_message_queue_delete - delete queue 1" );
   status = rtems_message_queue_delete( Queue_id[ 1 ] );
   directive_failed( status, "rtems_message_queue_delete" );
 
 rtems_test_pause();
-  
+
   puts( "TA1 - rtems_message_queue_create - variable sizes " );
   for (queue_size = 1; queue_size < 1030; queue_size++)
   {
@@ -289,7 +289,7 @@ rtems_test_pause();
       status = rtems_message_queue_delete( Queue_id[ 1 ] );
       directive_failed( status, "rtems_message_queue_delete" );
   }
-  
+
   puts( "TA1 - rtems_message_queue_create and send - variable sizes " );
   for (queue_size = 1; queue_size < 1030; queue_size++)
   {
@@ -350,12 +350,12 @@ rtems_test_pause();
               puts("TA1 - exact size overrun match failed");
               rtems_test_exit(1);
           }
-          
+
       /* all done with this one; delete it */
       status = rtems_message_queue_delete( Queue_id[ 1 ] );
       directive_failed( status, "rtems_message_queue_delete" );
   }
-  
+
   puts( "*** END OF TEST 13 ***" );
   rtems_test_exit( 0 );
 }

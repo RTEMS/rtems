@@ -6,7 +6,7 @@
   COPYRIGHT (c) 1997
   Objective Design Systems Ltd Pty (ODS)
   All rights reserved (R) Objective Design Systems Ltd Pty
-  
+
   The license and distribution terms for this file may be found in the
   file LICENSE in this distribution or at
   http://www.rtems.com/license/LICENSE.
@@ -29,7 +29,7 @@
 
   The third constructor is a copy constructor. Connects to an existing
   object which is in scope.
-  
+
   The RTEMS id is set to self in the default construction.
 
   The creation of the task object can be defered until after
@@ -50,7 +50,7 @@
   Mode control is through the rtemsTaskMode class.
 
   The rtemsTask class reserved notepad register 31.
-  
+
   ------------------------------------------------------------------------ */
 
 #if !defined(_rtemsTask_h_)
@@ -90,10 +90,10 @@ public:
   // copy and default constructors
   rtemsTask(const rtemsTask& task);
   rtemsTask();
-  
+
   // only the creator's destructor will delete the actual object
   virtual ~rtemsTask();
-    
+
   // create or destroy (delete) the task
   virtual const rtems_status_code create(const char* name,
                                          const rtems_task_priority initial_priority,
@@ -110,7 +110,7 @@ public:
   const rtemsTask& operator=(const rtemsTask& task);
   virtual const rtems_status_code connect(const char *name,
                                           const rtems_unsigned32 node = RTEMS_SEARCH_ALL_NODES);
-  
+
   // run control
   virtual const rtems_status_code start(const rtems_task_argument argument);
   virtual const rtems_status_code restart(const rtems_task_argument argument);
@@ -120,13 +120,13 @@ public:
   // sleep control, the timeout is in micro-seconds
   virtual const rtems_status_code wake_after(const rtems_interval micro_secs);
   virtual const rtems_status_code wake_when(const rtems_time_of_day& tod);
-  
+
   // priority control
   const rtems_status_code get_priority(rtems_task_priority& priority);
   const rtems_status_code set_priority(const rtems_task_priority priority);
   const rtems_status_code set_priority(const rtems_task_priority priority,
                                        rtems_task_priority& old_priority);
-  
+
   // notepad control
   const rtems_status_code get_note(const rtems_unsigned32 notepad,
                                    rtems_unsigned32& note);
@@ -137,17 +137,17 @@ public:
   const rtems_id id_is() const { return id; }
   const rtems_name name_is() const { return name; }
   const char *name_string() const { return name_str; }
-  
+
 protected:
 
   // task entry point
   virtual void body(rtems_task_argument argument);
-  
+
 private:
 
   // make the object to point to RTEMS_SELF
   void make_self();
-  
+
   // task name
   rtems_name name;
   char name_str[5];
@@ -155,14 +155,14 @@ private:
   // owner, true if this object owns the task
   // will delete the task when it destructs
   bool owner;
-    
+
   // the rtems id, object handle
   rtems_id id;
 
   // the argument for the task, this class uses the actual argument
   // passed to RTEMS
   rtems_task_argument argument;
-  
+
   // common entry point to the task
   static rtems_task origin(rtems_task_argument argument);
 };
