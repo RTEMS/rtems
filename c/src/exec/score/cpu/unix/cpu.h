@@ -660,7 +660,7 @@ void _CPU_ISR_Enable(unsigned32 level);
 
 #define _CPU_ISR_Flash( _level ) \
   do { \
-      register _ignored = 0; \
+      register unsigned32 _ignored = 0; \
       _CPU_ISR_Enable( (_level) ); \
       _CPU_ISR_Disable( _ignored ); \
   } while ( 0 )
