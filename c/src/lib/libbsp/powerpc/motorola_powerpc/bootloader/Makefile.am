@@ -62,7 +62,7 @@ TMPINSTALL_FILES =
 $(PROJECT_LIB)/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_LIB)
 	@: > $(PROJECT_LIB)/$(dirstamp)
-TMPINSTALL_FILES += $(PROJECT_LIB)/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_LIB)/$(dirstamp)
 
 $(PROJECT_LIB)/bootloader.$(OBJEXT): bootloader.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/bootloader.$(OBJEXT)
@@ -72,6 +72,7 @@ $(PROJECT_LIB)/ppcboot.lds: ../../shared/bootloader/ppcboot.lds $(PROJECT_LIB)/$
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/ppcboot.lds
 TMPINSTALL_FILES += $(PROJECT_LIB)/ppcboot.lds
 
+DISTCLEANFILES = $(PREINSTALL_DIRS)
 CLEANFILES = $(TMPINSTALL_FILES)
 
 include $(top_srcdir)/../../../../automake/local.am
