@@ -32,12 +32,8 @@ The directives provided by the configuration space manager are:
 @item @code{cfg_mark} - Set Configuration Space Option
 @item @code{cfg_readdir} - Reads a directory
 @item @code{cfg_umask} - Sets a file creation mask
-@item @code{link} - Creates a link to a file
-@item @code{unlink} - Removes a directory entry
-@item @code{cfg_mkdir} - Makes a directory
-@item @code{open} - Opens a file
 @item @code{cfg_chmod} - Changes file mode
-@item @code{{cfg_chown} - Changes the owner and/or group of a file
+@item @code{cfg_chown} - Changes the owner and/or group of a file
 @end itemize
 
 @section Background
@@ -105,7 +101,7 @@ or an entire path name exceed @code{PATH_MAX} characters while
 @code{_POSIX_NO_TRUNC} is in effect.
 
 @item ENOENT
-A component of cfgpath does not exist.
+A component of @code{cfgpath} does not exist.
 
 @item ENOTDIR
 A component of the file path prefix is not a directory.
@@ -120,7 +116,7 @@ The notification argument specifies an invalid log facility.
 
 @subheading DESCRIPTION:
 
-The @code{cfg_mount} function maps a configuration space defined
+The @code{cfg_mount()} function maps a configuration space defined
 by the file identified by the the @code{file} argument.  The 
 distinguished node of the mapped configuration space is
 mounted in the active space at the point identified by the
@@ -187,7 +183,7 @@ referenced by the cfgpath argument.
 
 @item ELOOP
 A node appears more than once in the path specified by the 
-cfg_path argument
+@code{cfg_path} argument
 
 @item ELOOP
 More than @code{SYMLOOP_MAX} symbolic links were encountered during
@@ -197,7 +193,7 @@ resolution of the cfgpath argument
 
 @subheading DESCRIPTION:
 
-The @code{cfg_umount} function unmaps the configuration space whose 
+The @code{cfg_umount()} function unmaps the configuration space whose 
 distinguished node is mapped in the active space at the location defined
 by @code{cfgpath} configuration pathname.  All system resources 
 allocated for this configuration space should be deallocated.
@@ -252,27 +248,27 @@ The calling process does not have the appropriate privilege.
 The named node exists.
 
 @item EINVAL
-The value of mode is invalid.
+The value of @code{mode} is invalid.
 
 @item EINVAL
-The value of type is invalid.
+The value of @code{type} is invalid.
 
 @item ELOOP
 A node appears more than once in the path specified by the 
-cfg_path argument
+@cdoe{cfg_path} argument
 
 @item ELOOP
 More than @code{SYMLOOP_MAX} symbolic links were encountered during
 resolution of the cfgpath argument.
 
 @item EROFS
-The named node resides on a read-only configuration space.
+The named @code{node} resides on a read-only configuration space.
 
 @end table
 
 @subheading DESCRIPTION:
 
-The @code{cfg_mknod} function creates a new node in the configuration
+The @code{cfg_mknod()} function creates a new node in the configuration
 space which contains the pathname prefix of @code{cfgpath}.  The node
 name is defined by the pathname suffix of @code{cfgpath}. The node
 permissions are specified by the value of @code{mode}.  The node type
@@ -1588,7 +1584,7 @@ Read-only file system.
 @subheading DESCRIPTION:
 
 The user ID and group ID of the file named by @code{path} are set to 
-@cdoe{owner} and @code{path}, respectively.
+@code{owner} and @code{path}, respectively.
 
 For regular files, the set group ID (S_ISGID) and set user ID (S_ISUID)
 bits are cleared.
