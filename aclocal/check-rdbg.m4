@@ -24,18 +24,14 @@ AC_CACHE_CHECK([whether BSP supports librdbg],
 	   B=`basename ${i} .cfg`;
 	   C="${C} ${B}";
 	done
-	target_found="no";
+	rtems_cv_HAS_RDBG="no";
 	for j in ${C} ;
 	do
 		if test "${$1}" = "${j}" ;
 		then
-			target_found="yes";
+			rtems_cv_HAS_RDBG="yes";
 		fi
 	done
-	if test "$target_found" = "yes" ;
-	then 
-		rtems_cv_HAS_RDBG="yes" ;
-	fi
     else
       rtems_cv_HAS_RDBG="no";
     fi

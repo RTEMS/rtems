@@ -1,3 +1,8 @@
+2001-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* aclocal/check-rdbg.m4: Fix latent bug exposed by removal of
+	config.cache's which prevented powerpc targets librdbg from building. 
+
 2001-10-16	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/rtems-cpu-subdirs.m4: Add PREFIX arg to RTEMS_CPU_SUBDIRS,
