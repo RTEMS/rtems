@@ -41,36 +41,36 @@ static volatile char _debug_flag = 0;
 /* _catchSCIint, _catchCTSint, and _catchSPURIOUSint are the 
    interrupt front-ends */
 extern void _catchSCIint();
-asm("   .text
-        .align 2
-        .globl _catchSCIint
-_catchSCIint:
-        moveml %d0-%d7/%a0-%a6,%sp@-       /* save registers */
-        jbsr    uart_interrupt
-        moveml  %sp@+,%d0-%d7/%a0-%a6			        
-        rte
+asm("   .text\n\
+        .align 2\n\
+        .globl _catchSCIint\n\
+_catchSCIint:\n\
+        moveml %d0-%d7/%a0-%a6,%sp@-       /* save registers */\n\
+        jbsr    uart_interrupt\n\
+        moveml  %sp@+,%d0-%d7/%a0-%a6			        \n\
+        rte\n\
     ");
 
 extern void _catchCTSint();
-asm("   .text
-        .align 2
-        .globl _catchCTSint
-_catchCTSint:
-        moveml %d0-%d7/%a0-%a6,%sp@-       /* save registers */
-        jbsr    cts_interrupt
-        moveml  %sp@+,%d0-%d7/%a0-%a6			        
-        rte
+asm("   .text\n\
+        .align 2\n\
+        .globl _catchCTSint\n\
+_catchCTSint:\n\
+        moveml %d0-%d7/%a0-%a6,%sp@-       /* save registers */\n\
+        jbsr    cts_interrupt\n\
+        moveml  %sp@+,%d0-%d7/%a0-%a6			        \n\
+        rte\n\
     ");
 
 extern void _catchSPURIOUSint();
-asm("   .text
-        .align 2
-        .globl _catchSPURIOUSint
-_catchSPURIOUSint:
-        moveml %d0-%d7/%a0-%a6,%sp@-       /* save registers */
-        jbsr    spurious_interrupt
-        moveml  %sp@+,%d0-%d7/%a0-%a6			        
-        rte
+asm("   .text\n\
+        .align 2\n\
+        .globl _catchSPURIOUSint\n\
+_catchSPURIOUSint:\n\
+        moveml %d0-%d7/%a0-%a6,%sp@-       /* save registers */\n\
+        jbsr    spurious_interrupt\n\
+        moveml  %sp@+,%d0-%d7/%a0-%a6			        \n\
+        rte\n\
     ");
 
 int _spurious_int_counter=0;
@@ -84,13 +84,13 @@ void spurious_interrupt(void) {
    UART_ISR_LEVEL) as a trap #1 to enter the debugger */
 
 /* *****fix me; this is for 68000 w/jsr ram exception table ******* */
-asm("   .text
-        .align 2
-_fake_trap_1:
-        unlk %a6		/* clear interrupt frame */
-        lea %sp@(4),%sp		/* remove jbsr instruction */
-        moveml %sp@+,%d0-%d7/%a0-%a6 /* pop registers */
-        jmp (33*6-12)	/* jump exception 1 */
+asm("   .text\n\
+        .align 2\n\
+_fake_trap_1:\n\
+        unlk %a6		/* clear interrupt frame */\n\
+        lea %sp@(4),%sp		/* remove jbsr instruction */\n\
+        moveml %sp@+,%d0-%d7/%a0-%a6 /* pop registers */\n\
+        jmp (33*6-12)	/* jump exception 1 */\n\
         ");
 
 /* dispatch UART interrupt */

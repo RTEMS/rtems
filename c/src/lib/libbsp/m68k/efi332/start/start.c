@@ -24,16 +24,16 @@ void  dumby_start() {
 
   /* We need to by-pass the link instruction since the RAM chip-
      select pins are not yet configured. */
-  asm volatile ( ".global start ;
+  asm volatile ( ".global start ;\n\
                   start:");
 
   /* disable interrupts, load stack pointer */
-  asm volatile ( "oriw  #0x0700, %sr;
-                  moveal #M68Kvec, %a0;
-                  movec %a0, %vbr;
-                  movel  #end, %d0;
-                  addl   " STACK_SIZE ",%d0;
-                  movel  %d0,%sp;
+  asm volatile ( "oriw  #0x0700, %sr;\n\
+                  moveal #M68Kvec, %a0;\n\
+                  movec %a0, %vbr;\n\
+                  movel  #end, %d0;\n\
+                  addl   " STACK_SIZE ",%d0;\n\
+                  movel  %d0,%sp;\n\
                   movel  %d0,%a6"
 		  );
 
