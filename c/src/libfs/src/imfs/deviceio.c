@@ -20,9 +20,41 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
-#include <rtems/libio_.h>
+#include <rtems/assoc.h>                /* assoc.h not included by rtems.h */
+#include <errno.h>
 
 #include "imfs.h"
+
+/*
+ * Convert RTEMS status to a UNIX errno
+ */
+
+rtems_assoc_t errno_assoc[] = {
+    { "OK",                 RTEMS_SUCCESSFUL,                0 },
+    { "BUSY",               RTEMS_RESOURCE_IN_USE,           EBUSY },
+    { "INVALID NAME",       RTEMS_INVALID_NAME,              EINVAL },
+    { "NOT IMPLEMENTED",    RTEMS_NOT_IMPLEMENTED,           ENOSYS },
+    { "TIMEOUT",            RTEMS_TIMEOUT,                   ETIMEDOUT },
+    { "NO MEMORY",          RTEMS_NO_MEMORY,                 ENOMEM },
+    { "NO DEVICE",          RTEMS_UNSATISFIED,               ENODEV },
+    { "INVALID NUMBER",     RTEMS_INVALID_NUMBER,            EBADF},
+    { "NOT RESOURCE OWNER", RTEMS_NOT_OWNER_OF_RESOURCE,     EPERM},
+    { "IO ERROR",           RTEMS_IO_ERROR,                  EIO},
+    { 0, 0, 0 },
+};
+
+static unsigned32
+rtems_deviceio_errno(rtems_status_code code)
+{
+    int rc;
+    
+    if ((rc = rtems_assoc_remote_by_local(errno_assoc, (unsigned32) code)))
+    {
+        errno = rc;
+        return -1;
+    }
+    return -1;
+}
 
 /*
  *  device_open
@@ -52,8 +84,10 @@ int device_open(
     the_jnode->info.device.minor,
     (void *) &args
   );
-  if ( status )
+  if ( status ) {
+    rtems_deviceio_errno(status);
     return RTEMS_UNSATISFIED;
+  }
 
   return 0;
 }
@@ -83,9 +117,10 @@ int device_close(
     the_jnode->info.device.minor,
     (void *) &args
   );
-  if ( status )
+  if ( status ) {
+    rtems_deviceio_errno(status);
     return RTEMS_UNSATISFIED;
-
+  }
   return 0;
 }
 
@@ -121,7 +156,7 @@ int device_read(
   );
 
   if ( status )
-    return -1;
+    return rtems_deviceio_errno(status);
 
   return args.bytes_moved;
 }
@@ -158,7 +193,7 @@ int device_write(
   );
 
   if ( status )
-    return -1;
+    return rtems_deviceio_errno(status);
 
   return args.bytes_moved;
 }
@@ -192,7 +227,7 @@ int device_ioctl(
   );
 
   if ( status )
-    return -1;
+    return rtems_deviceio_errno(status);
 
   return args.ioctl_return;
 }
