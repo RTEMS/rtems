@@ -124,8 +124,15 @@ void waitabit ();
 
 static const char hexchars[] = "0123456789abcdef";
 
+/* Number of registers.  */
+#define NUMREGS 16
+
+/* Number of bytes per register.  */
+#define REGBYTES 4
+
 /* Number of bytes of registers.  */
-#define NUMREGBYTES 64
+#define NUMREGBYTES (NUMREGS * REGBYTES)
+
 enum regnames
   {
     EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI,
@@ -137,7 +144,7 @@ enum regnames
 /*
  * these should not be static cuz they can be used outside this module
  */
-int registers[NUMREGBYTES / 4];
+int registers[NUMREGS];
 
 #define STACKSIZE 10000
 int remcomStack[STACKSIZE / sizeof (int)];
@@ -741,7 +748,7 @@ void
 handle_exception (int exceptionVector)
 {
   int sigval;
-  int addr, length;
+  int addr, length, reg;
   char *ptr;
   int newPC;
 
@@ -753,12 +760,33 @@ handle_exception (int exceptionVector)
 	    registers[PS],
 	    registers[PC]);
 
-  /* reply to host that an exception has occurred */
+  /* Reply to host that an exception has occurred.  Always return the
+     PC, SP, and FP, since gdb always wants them.  */
+  ptr = remcomOutBuffer;
+  *ptr++ = 'T';
   sigval = computeSignal (exceptionVector);
-  remcomOutBuffer[0] = 'S';
-  remcomOutBuffer[1] = hexchars[sigval >> 4];
-  remcomOutBuffer[2] = hexchars[sigval % 16];
-  remcomOutBuffer[3] = 0;
+  *ptr++ = hexchars[sigval >> 4];
+  *ptr++ = hexchars[sigval % 16];
+
+  *ptr++ = hexchars[ESP];
+  *ptr++ = ':';
+  mem2hex ((char *) &registers[ESP], ptr, REGBYTES, 0);
+  ptr += REGBYTES * 2;
+  *ptr++ = ';';
+
+  *ptr++ = hexchars[EBP];
+  *ptr++ = ':';
+  mem2hex ((char *) &registers[EBP], ptr, REGBYTES, 0);
+  ptr += REGBYTES * 2;
+  *ptr++ = ';';
+
+  *ptr++ = hexchars[PC];
+  *ptr++ = ':';
+  mem2hex ((char *) &registers[PC], ptr, REGBYTES, 0);
+  ptr += REGBYTES * 2;
+  *ptr++ = ';';
+
+  *ptr = '\0';
 
   putpacket (remcomOutBuffer);
 
@@ -784,6 +812,22 @@ handle_exception (int exceptionVector)
 	case 'G':		/* set the value of the CPU registers - return OK */
 	  hex2mem (&remcomInBuffer[1], (char *) registers, NUMREGBYTES, 0);
 	  strcpy (remcomOutBuffer, "OK");
+	  break;
+
+	case 'P':		/* Set specific register */
+	  ptr = &remcomInBuffer[1];
+	  if (hexToInt (&ptr, &reg)
+	      && *ptr++ == '=')
+	    {
+	      hex2mem (ptr, (char *) &registers[reg], REGBYTES, 0);
+	      strcpy (remcomOutBuffer, "OK");
+	    }
+	  else
+	    {
+	      strcpy (remcomOutBuffer, "E01");
+	      debug_error ("malformed register set command; %s",
+			   remcomInBuffer);
+	    }
 	  break;
 
 	  /* mAA..AA,LLLL  Read LLLL bytes at address AA..AA */
@@ -860,6 +904,14 @@ handle_exception (int exceptionVector)
 	  if (remcomInBuffer[0] == 's')
 	    registers[PS] |= 0x100;
 
+	  _returnFromException ();	/* this is a jump */
+
+	  break;
+
+	  /* Detach.  */
+	case 'D':
+	  putpacket (remcomOutBuffer);
+	  registers[PS] &= 0xfffffeff;
 	  _returnFromException ();	/* this is a jump */
 
 	  break;
