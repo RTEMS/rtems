@@ -16,6 +16,7 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/priority.h>
 #include <rtems/posix/config.h>
+#include <rtems/posix/time.h>
 
 /*PAGE
  *
@@ -606,6 +607,60 @@ int pthread_attr_setdetachstate(
 
 /*PAGE
  *
+ *  _POSIX_Threads_Sporadic_budget_TSR
+ */
+
+void _POSIX_Threads_Sporadic_budget_TSR(
+  Objects_Id      id,
+  void           *argument
+)
+{
+  Thread_Control     *the_thread;
+  POSIX_API_Control  *api;
+
+  the_thread = argument;
+
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+  the_thread->cpu_time_budget =
+    _POSIX_Timespec_to_interval( &api->schedparam.ss_initial_budget );
+
+  _Thread_Change_priority(
+    the_thread,
+    _POSIX_Priority_To_core( api->schedparam.sched_priority )
+  );
+  
+  _Watchdog_Insert_ticks(
+    &api->Sporadic_timer,
+    _POSIX_Timespec_to_interval( &api->schedparam.ss_replenish_period )
+  );
+}
+
+/*PAGE
+ *
+ *  _POSIX_Threads_Sporadic_budget_callout
+ */
+
+void _POSIX_Threads_Sporadic_budget_callout(
+  Thread_Control *the_thread
+)
+{
+  POSIX_API_Control                  *api;
+
+  /* XXX really should be based on MAX_U32 */
+
+  api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
+
+  the_thread->cpu_time_budget = 0xFFFFFFFF;
+
+  _Thread_Change_priority(
+    the_thread, 
+    _POSIX_Priority_To_core( api->schedparam.ss_low_priority )
+  );
+}
+
+/*PAGE
+ *
  *  16.1.2 Thread Creation, P1003.1c/Draft 10, p. 144
  */
 
@@ -616,16 +671,17 @@ int pthread_create(
   void                   *arg
 )
 {
-  const pthread_attr_t  *the_attr;
-  Priority_Control       core_priority;
-  boolean                is_timesliced;
-  boolean                is_fp;
-  boolean                status;
-  Thread_Control        *the_thread;
-  char                  *default_name = "psx";
-  POSIX_API_Control     *api;
-  int                    schedpolicy = SCHED_RR;
-  struct sched_param     schedparam;
+  const pthread_attr_t               *the_attr;
+  Priority_Control                    core_priority;
+  Thread_CPU_budget_algorithms        budget_algorithm;
+  Thread_CPU_budget_algorithm_callout budget_callout;
+  boolean                             is_fp;
+  boolean                             status;
+  Thread_Control                     *the_thread;
+  char                               *default_name = "psx";
+  POSIX_API_Control                  *api;
+  int                                 schedpolicy = SCHED_RR;
+  struct sched_param                  schedparam;
 
   the_attr = (attr) ? attr : &_POSIX_Threads_Default_attributes;
 
@@ -641,12 +697,8 @@ int pthread_create(
     return EINVAL;
 
 #if 0
-  int schedpolicy;
-  struct sched_param schedparam;
-
-#if defined(_POSIX_THREAD_CPUTIME)
   int  cputime_clock_allowed;  /* see time.h */
-#endif
+  POSIX_NOT_IMPLEMENTED();
 #endif
 
   /*
@@ -686,27 +738,42 @@ int pthread_create(
    *  Interpret the scheduling parameters.
    */
 
-  is_timesliced = FALSE;
-
-  if ( !_POSIX_Priority_Is_valid( the_attr->schedparam.sched_priority ) )
+  if ( !_POSIX_Priority_Is_valid( schedparam.sched_priority ) )
     return EINVAL;
  
-  core_priority = _POSIX_Priority_To_core(the_attr->schedparam.sched_priority);
+  core_priority = _POSIX_Priority_To_core( schedparam.sched_priority );
  
+  /*
+   *  Set the core scheduling policy information.
+   */
+
+  budget_callout = NULL;
+  budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
+
   switch ( schedpolicy ) {
     case SCHED_OTHER:
+      budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
+      break;
+     
     case SCHED_FIFO:
+      budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
       break;
+
     case SCHED_RR:
-      is_timesliced = TRUE;
+      budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE;
       break;
+
     case SCHED_SPORADIC:
-      /*  XXX interpret the following parameters */
-#if 0
-  ss_low_priority;     /* Low scheduling priority for sporadic */
-  ss_replenish_period; /* Replenishment period for sporadic server */
-  ss_initial_budget;   /* Initial budget for sporadic server */
-#endif
+      budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
+      budget_callout = _POSIX_Threads_Sporadic_budget_callout;
+  
+      if ( _POSIX_Timespec_to_interval( &schedparam.ss_replenish_period ) <
+           _POSIX_Timespec_to_interval( &schedparam.ss_initial_budget ) )
+        return EINVAL;
+
+      if ( !_POSIX_Priority_Is_valid( schedparam.ss_low_priority ) )
+        return EINVAL;
+
       break;
   }
 
@@ -748,7 +815,8 @@ int pthread_create(
     is_fp,
     core_priority,
     TRUE,                 /* preemptible */
-    is_timesliced,        /* timesliced */
+    budget_algorithm,
+    budget_callout,
     0,                    /* isr level */
     &default_name         /* posix threads don't have a name */
   );
@@ -791,6 +859,20 @@ int pthread_create(
     arg,
     0                     /* unused */
   );
+
+  if ( schedpolicy == SCHED_SPORADIC ) {
+    _Watchdog_Initialize(
+      &api->Sporadic_timer,
+      _POSIX_Threads_Sporadic_budget_TSR,
+      the_thread->Object.id,
+      the_thread
+    );
+
+    _Watchdog_Insert_ticks(
+      &api->Sporadic_timer,
+      _POSIX_Timespec_to_interval( &api->schedparam.ss_replenish_period )
+    );
+  }
 
   /*
    *  _Thread_Start only fails if the thread was in the incorrect state
