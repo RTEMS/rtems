@@ -582,7 +582,15 @@ extern unsigned int mips_interrupt_number_of_vectors;
 
 #define CPU_STACK_ALIGNMENT        CPU_ALIGNMENT
 
-/* ISR handler macros */
+/*
+ *  ISR handler macros
+ */
+
+/*
+ *  Support routine to initialize the RTEMS vector table after it is allocated.
+ */
+
+#define _CPU_Initialize_vectors()
 
 /*
  *  Disable all interrupts for an RTEMS critical section.  The previous

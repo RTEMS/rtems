@@ -1,3 +1,8 @@
+2001-01-03	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h: Added _CPU_Initialize_vectors().
+	* cpu_asm.S: Eliminated warning for duplicate definition of EXTERN.
+
 2000-12-19	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu_asm.S (_ISR_Handler): Return to the address in the EPC register.

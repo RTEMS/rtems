@@ -57,9 +57,9 @@
 #endif
 
 #ifdef __GNUC__
-#define EXTERN(x,size) .extern x,size
+#define ASM_EXTERN(x,size) .extern x,size
 #else
-#define EXTERN(x,size)
+#define ASM_EXTERN(x,size)
 #endif
 
 /* NOTE: these constants must match the Context_Control structure in cpu.h */
@@ -456,10 +456,10 @@ ENDFRAME(_CPU_Context_restore)
 
 #endif
 
-EXTERN(_ISR_Nest_level, SZ_INT)
-EXTERN(_Thread_Dispatch_disable_level,SZ_INT)
-EXTERN(_Context_Switch_necessary,SZ_INT)
-EXTERN(_ISR_Signals_to_thread_executing,SZ_INT)
+ASM_EXTERN(_ISR_Nest_level, SZ_INT)
+ASM_EXTERN(_Thread_Dispatch_disable_level,SZ_INT)
+ASM_EXTERN(_Context_Switch_necessary,SZ_INT)
+ASM_EXTERN(_ISR_Signals_to_thread_executing,SZ_INT)
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
 
