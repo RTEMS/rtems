@@ -683,16 +683,15 @@ rtems_bsdnet_close (int fd)
 		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
-	error = soclose (so);
 	i = rtems_file_descriptor_base(fd);
 	fdsock[i].indexFreeNext = indexFreeHead;;
 	indexFreeHead = i;
+	error = soclose (so);
+	rtems_bsdnet_semaphore_release ();
 	if (error) {
 		errno = error;
-		rtems_bsdnet_semaphore_release ();
 		return -1;
 	}
-	rtems_bsdnet_semaphore_release ();
 	return 0;
 }
 
