@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-AUTOMAKE_OPTIONS = foreign 1.4
 
 BSP_FILES = startup console liblnk
 CPU_FILES = clock timer
