@@ -508,8 +508,3 @@ int  _CPU_display_memory_attribute(){
   return 0;
 
 }
-
-
-
-
-

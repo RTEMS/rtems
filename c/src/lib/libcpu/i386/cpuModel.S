@@ -252,4 +252,3 @@ SYM(x86_vendor_id):
 SYM(hard_math):	
 	.byte 0
 END_DATA
-	
