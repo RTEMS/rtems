@@ -1,3 +1,10 @@
+2000-05-24	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/mips.h: Added constants for MIPS exception numbers.
+	All exceptions should be given low numbers and thus can be installed
+	and processed in a uniform manner.  Variances between various MIPS
+	ISA levels were not accounted for.
+
 2001-05-24	Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	* Assisted in design and debug by Joel Sherrill <joel@OARcorp.com>.
