@@ -1,3 +1,8 @@
+2000-09-14	Joel Sherrill <joel@OARcorp.com>
+
+	* include/mvme16x_hw.h: Include rtems/score/targopts.h so we
+	can check which BSP this is being used with.
+
 2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* clock/Makefile.am, console/Makefile.am, consolex/Makefile.am,
