@@ -2,10 +2,8 @@
 ## $Id$
 ##
 
-EXTRA_PROGRAMS =
+noinst_PROGRAMS =
 EXTRA_DIST =
-CLEANFILES =
-noinst_DATA =
 
 include $(top_srcdir)/../../../automake/compile.am
 
@@ -19,35 +17,17 @@ include_libchip_HEADERS = duart/mg5uart.h
 
 EXTRA_DIST += duart/README.mguart
 
-EXTRA_PROGRAMS += duart.rel
-CLEANFILES += duart.rel
+noinst_PROGRAMS += duart.rel
 duart_rel_SOURCES = duart/mg5uart.c duart/mg5uart.h duart/mg5uart_reg.c
 duart_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 duart_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-EXTRA_PROGRAMS += duart_g.rel
-CLEANFILES += duart_g.rel
-duart_g_rel_SOURCES = $(duart_rel_SOURCES)
-duart_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-duart_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += duart$(LIB_VARIANT).rel
-
 ## vectorisrs
 
-EXTRA_PROGRAMS += vectorisrs.rel
-CLEANFILES += vectorisrs.rel
+noinst_PROGRAMS += vectorisrs.rel
 vectorisrs_rel_SOURCES = vectorisrs/maxvectors.c vectorisrs/vectorisrs.c
 vectorisrs_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 vectorisrs_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-EXTRA_PROGRAMS += vectorisrs_g.rel
-CLEANFILES += vectorisrs_g.rel
-vectorisrs_g_rel_SOURCES = $(vectorisrs_rel_SOURCES)
-vectorisrs_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-vectorisrs_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += vectorisrs$(LIB_VARIANT).rel
 endif
 
 all-local: $(PREINSTALL_FILES)
@@ -75,7 +55,7 @@ $(PROJECT_INCLUDE)/libchip/mg5uart.h: duart/mg5uart.h $(PROJECT_INCLUDE)/libchip
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/mg5uart.h
 endif
 
-CLEANFILES += $(PREINSTALL_FILES)
+CLEANFILES = $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/../../../automake/local.am

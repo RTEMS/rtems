@@ -2,9 +2,7 @@
 ## $Id$
 ##
 
-EXTRA_PROGRAMS =
-CLEANFILES =
-noinst_DATA =
+noinst_PROGRAMS =
 
 include $(top_srcdir)/../../../automake/compile.am
 
@@ -12,19 +10,10 @@ if tx39
 include_libcpudir = $(includedir)/libcpu
 include_libcpu_HEADERS = include/tx3904.h
 
-EXTRA_PROGRAMS += vectorisrs.rel
-CLEANFILES += vectorisrs.rel
+noinst_PROGRAMS += vectorisrs.rel
 vectorisrs_rel_SOURCES = vectorisrs/maxvectors.c vectorisrs/vectorisrs.c
 vectorisrs_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_OPTIMIZE_V)
 vectorisrs_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-EXTRA_PROGRAMS += vectorisrs_g.rel
-CLEANFILES += vectorisrs_g.rel
-vectorisrs_g_rel_SOURCES = $(vectorisrs_rel_SOURCES)
-vectorisrs_g_rel_CPPFLAGS = $(AM_CPPFLAGS) $(CFLAGS_DEBUG_V)
-vectorisrs_g_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_DATA += vectorisrs$(LIB_VARIANT).rel
 endif
 
 all-local: $(PREINSTALL_FILES)
@@ -43,7 +32,7 @@ $(PROJECT_INCLUDE)/libcpu/tx3904.h: include/tx3904.h $(PROJECT_INCLUDE)/libcpu/$
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/tx3904.h
 endif
 
-CLEANFILES += $(PREINSTALL_FILES)
+CLEANFILES = $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
 
 include $(top_srcdir)/../../../automake/local.am
