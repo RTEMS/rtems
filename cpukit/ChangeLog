@@ -1,5 +1,17 @@
 2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
 
+	PR 561/rtems
+	* include/rtems/concat.h: New.
+	* Makefile.am: Add include/rtems/concat.h.
+	
+	PR/589 rtems
+	* Makefile.am: Add include/rtems/pci.h.
+
+	* Makefile.am: Include automake/compile.am.
+	* configure.ac: RTEMS_TOP([..],[]).
+
+2004-03-29	Ralf Corsepius <ralf_corsepius@rtems.org>
+
 	* aclocal/rtems-top.m4: Add MULTISUBDIR. Add MULTIBUILDTOP.
 	Add rtems_updir. Remove version.m4 check. 
 	Add PROJECT_ROOT/with_project_root processing.

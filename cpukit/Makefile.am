@@ -4,6 +4,7 @@
 
 ACLOCAL_AMFLAGS = -I aclocal
 
+include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/multilib.am
 
 SUBDIRS = . ada score rtems sapi posix itron
@@ -21,7 +22,8 @@ CLEANFILES = preinstall-stamp
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = include/rtems/bspIo.h include/rtems/userenv.h \
-    include/rtems/fs.h include/rtems/stdint.h
+    include/rtems/fs.h include/rtems/pci.h include/rtems/stdint.h \
+    include/rtems/concat.h
 
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
@@ -43,9 +45,17 @@ $(PROJECT_INCLUDE)/rtems/fs.h: include/rtems/fs.h $(PROJECT_INCLUDE)/rtems/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/fs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fs.h
 
+$(PROJECT_INCLUDE)/rtems/pci.h: include/rtems/pci.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/pci.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/pci.h
+
 $(PROJECT_INCLUDE)/rtems/stdint.h: include/rtems/stdint.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/stdint.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/stdint.h
+
+$(PROJECT_INCLUDE)/rtems/concat.h: include/rtems/concat.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/concat.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/concat.h
 
 CLEANFILES += $(PREINSTALL_FILES)
 DISTCLEANFILES = $(PREINSTALL_DIRS)
