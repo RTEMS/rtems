@@ -421,6 +421,7 @@ c/src/tests/support/wrapup/Makefile
 c/src/tests/tools/Makefile
 c/src/tests/tools/generic/Makefile
 $makefiles
+c/build-tools/scripts/rtems-glom
 c/update-tools/Makefile)
 
 echo

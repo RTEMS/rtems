@@ -2918,6 +2918,7 @@ c/src/tests/support/wrapup/Makefile
 c/src/tests/tools/Makefile
 c/src/tests/tools/generic/Makefile
 $makefiles
+c/build-tools/scripts/rtems-glom
 c/update-tools/Makefile c/build-tools/src/config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -3074,6 +3075,7 @@ c/src/tests/support/wrapup/Makefile
 c/src/tests/tools/Makefile
 c/src/tests/tools/generic/Makefile
 $makefiles
+c/build-tools/scripts/rtems-glom
 c/update-tools/Makefile"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
