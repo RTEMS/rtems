@@ -380,11 +380,12 @@ wakeup (void *p)
 /*
  * Wait for a connection/disconnection event.
  */
-void
+int
 soconnsleep (struct socket *so)
 {
 	rtems_event_set events;
 	rtems_id tid;
+	rtems_status_code sc;
 
 	/*
 	 * Soak up any pending events.
@@ -404,12 +405,18 @@ soconnsleep (struct socket *so)
 	/*
 	 * Wait for the wakeup event.
 	 */
-	rtems_bsdnet_event_receive (SOSLEEP_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, RTEMS_NO_TIMEOUT, &events);
+	sc = rtems_bsdnet_event_receive (SOSLEEP_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, so->so_rcv.sb_timeo, &events);
 
 	/*
 	 * Relinquish ownership of the socket.
 	 */
 	so->so_pgid = 0;
+
+	switch (sc) {
+	case RTEMS_SUCCESSFUL:	return 0;
+	case RTEMS_TIMEOUT:	return EWOULDBLOCK;
+	default:		return ENXIO;
+	}
 }
 
 /*

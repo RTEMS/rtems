@@ -41,7 +41,7 @@ struct mdproc {
  * Other RTEMS/BSD glue
  */
 struct socket;
-extern void soconnsleep (struct socket *so);
+extern int soconnsleep (struct socket *so);
 extern void soconnwakeup (struct socket *so);
 #define splnet()	0
 #define splimp()	0

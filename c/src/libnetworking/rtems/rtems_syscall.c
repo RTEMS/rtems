@@ -211,7 +211,7 @@ connect (int s, struct sockaddr *name, int namelen)
 		return -1;
 	}
 	while ((so->so_state & SS_ISCONNECTING) && so->so_error == 0) {
-		soconnsleep (so);
+		so->so_error = soconnsleep (so);
 	}
 	if (error == 0) {
 		error = so->so_error;
@@ -271,7 +271,7 @@ accept (int s, struct sockaddr *name, int *namelen)
                         head->so_error = ECONNABORTED;
                         break;
                 }
-		soconnsleep (head);
+		head->so_error = soconnsleep (head);
         }
 	if (head->so_error) {
 		errno = head->so_error;
