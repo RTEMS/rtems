@@ -31,18 +31,36 @@ RTEMS_ENABLE_GCC28
 RTEMS_ENABLE_LIBCDIR
 RTEMS_ENABLE_TESTS  
 RTEMS_ENABLE_RTEMS_DEBUG
+RTEMS_ENABLE_RTEMSBSP(dummy)
+
+if test $host != $build; then
+AC_MSG_WARN([]
+[*** *** *** WARNING *** *** ***]
+[]
+[Entering BEYOND BLEEDING EDGE TERRITORY]
+[]
+[You are trying to build RTEMS Canadian cross]
+[If you really mean it, feel free to continue ...]
+[*** *** *** *** *** *** *** ***])
+fi
+
+## NOTES:
+## The tools/*-directories situation is unclear
+## * tools/build are host-native tools to be installed on the host.
+## * tools/cpu are host-native or host-cross-target-tools
+## * tools/update are build-host-native tools
 
 # these tools are built for the build environment
 #
-build_tools="tools/build tools/update tools/cpu"
+build_tools="tools/update"
 
-# these libraries are used for the host environment
+# these libraries are built for the host environment
 #
 host_libs=""
 
 # these tools are built for the host environment
 #
-host_tools=""
+host_tools="tools/build tools/cpu"
 
 # these libraries are built for the target environment, and are built after
 # the host libraries and the host tools (which may be a cross compiler)
@@ -54,53 +72,44 @@ target_libs="c"
 #
 target_tools=""
 
-## All tools belong in one of the four categories, and are assigned above
-## We assign ${configdirs} this way to remove all embedded newlines.  This
-## is important because configure will choke if they ever get through.
-## ${configdirs} is directories we build using the host tools.
+## All tools belong in one of the five categories, and are assigned above.
+## ${host_configdirs} is directories we build using the host tools.
 ## ${target_configdirs} is directories we build using the target tools.
 #
-configdirs="${host_libs} ${host_tools}"
-AC_SUBST(configdirs)
+host_configdirs="${host_libs} ${host_tools}"
+AC_SUBST(host_configdirs)
 
 target_configdirs="${target_libs} ${target_tools}"
 AC_SUBST(target_configdirs)
 
-# Record target_configdirs and the configure arguments in Makefile.
-targargs=`echo "${ac_configure_args}" | \
-        sed -e 's/--no[^ 	]*//' \
-            -e 's/--cache[a-z-]*=[^ 	]*//' \
-            -e 's/--ho[a-z-]*=[^ 	]*//' \
-            -e 's/--bu[a-z-]*=[^ 	]*//' \
-            -e 's/--ta[a-z-]*=[^ 	]*//'`;
-
-targargs="--host=${target_alias} --build=${build} ${targargs}"
-AC_SUBST(targargs)
-
+RTEMS_TARGET_CONFIG_PREPARE
 target_subdir=${target_alias}
 
-changequote(,)dnl
-if test $target = $host; 
-then
-  HOST_SUBDIRS="$configdirs $target_configdirs"
-  TARGET_SUBDIRS=""
-else
-  HOST_SUBDIRS="$configdirs"
-  TARGET_SUBDIRS=`echo "$target_configdirs" | \
-    sed -e "s%\([^ ]\+\)%$target_alias/\1%g"`
-fi
-changequote([,])dnl
+RTEMS_HOST_CONFIG_PREPARE
+host_subdir=${host_alias}
 
-if test $host = $build;
+if test $build = $host;
 then
-  HOST_SUBDIRS="$build_tools $HOST_SUBDIRS"
+  BUILD_SUBDIRS="$build_tools $host_configdirs"
+
+  if test $build = $target;
+  then
+    BUILD_SUBDIRS="$BUILD_SUBDIRS $target_configdirs";
+  else
+    TARGET_SUBDIRS=`echo "$target_configdirs" | \
+      sed -e "s%\([[^ ]][[^ ]]*\)%$target_alias/\1%g"`
+  fi
 else
-  build_configdirs="$build_tools"
+## If building Canadian cross, disable the target directories
+  target_configdirs=""
+  BUILD_SUBDIRS="$build_tools"
+  TARGET_SUBDIRS=`echo "$host_configdirs" | \
+    sed -e "s%\([[^ ]][[^ ]]*\)%$host_alias/\1%g"`
 fi
 
-AC_CONFIG_SUBDIRS($HOST_SUBDIRS)
+AC_CONFIG_SUBDIRS($BUILD_SUBDIRS)
 AC_SUBST(TARGET_SUBDIRS)
-AC_SUBST(HOST_SUBDIRS)
+AC_SUBST(BUILD_SUBDIRS)
 
 AC_OUTPUT(
 Makefile
@@ -111,192 +120,5 @@ make/Templates/Makefile
 make/compilers/Makefile 
 doc/Makefile)
 
-if test "$no_recursion" != yes; then
-
- if test $target != $host; then
-  # Remove --srcdir arguments so they do not pile up.
-  ac_sub_configure_args=
-  ac_prev=
-  for ac_arg in $targargs; do
-    if test -n "$ac_prev"; then
-      ac_prev=
-      continue
-    fi
-    case "$ac_arg" in
-    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
-      ac_prev=srcdir ;;
-    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
-      ;;
-    *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;
-    esac
-  done
-
-  test -d $target_subdir || mkdir $target_subdir
-  for ac_config_dir in $target_configdirs; do
-    # Do not complain, so a configure script can configure whichever
-    # parts of a large source tree are present.
-    if test ! -d $srcdir/$ac_config_dir; then
-      continue
-    fi
-
-    echo configuring in $target_subdir/$ac_config_dir
-
-    case "$srcdir" in
-    .) ;;
-    *)
-      if test -d $target_subdir/$ac_config_dir || mkdir $target_subdir/$ac_config_dir; then :;
-      else
-        AC_MSG_ERROR(can not create `pwd`/$target_subdir/$ac_config_dir)
-      fi
-      ;;
-    esac
-
-    ac_popdir=`pwd`
-    cd $target_subdir/$ac_config_dir
-
-changequote(, )dnl
-      # A "../" for each directory in /$ac_config_dir.
-      ac_dots=`echo $target_subdir/$ac_config_dir|sed -e 's%^\./%%' -e 's%[^/]$%&/%' -e 's%[^/]*/%../%g'`
-changequote([, ])dnl
-
-    case "$srcdir" in
-    .) # No --srcdir option.  We are building in place.
-      ac_sub_srcdir=$srcdir ;;
-    /*) # Absolute path.
-      ac_sub_srcdir=$srcdir/$ac_config_dir ;;
-    *) # Relative path.
-      ac_sub_srcdir=$ac_dots$srcdir/$ac_config_dir ;;
-    esac
-
-    # Check for configure
-    if test -f $ac_sub_srcdir/configure; then
-      ac_sub_configure=$ac_sub_srcdir/configure
-    else
-      AC_MSG_WARN(no configuration information is in $ac_config_dir)
-      ac_sub_configure=
-    fi
-
-    # The recursion is here.
-    if test -n "$ac_sub_configure"; then
-
-      # Make the cache file name correct relative to the subdirectory.
-      ac_sub_cache_file=$cache_file
-ifdef([AC_PROVIDE_AC_PROG_INSTALL],
-      [  case "$ac_given_INSTALL" in
-changequote(, )dnl
-        [/$]*) INSTALL="$ac_given_INSTALL" ;;
-changequote([, ])dnl
-        *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
-        esac
-])dnl
-
-      echo "[running ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file] --srcdir=$ac_sub_srcdir"
-      # The eval makes quoting arguments work.
-      if eval ${CONFIG_SHELL-/bin/sh} $ac_sub_configure \
-	$ac_sub_configure_args --srcdir=$ac_sub_srcdir \
-	--with-target-subdir=$target_subdir \
-	--cache-file=$ac_sub_cache_file \
-	--libdir='${exec_prefix}'/$target_alias/lib
-      then :
-      else
-        AC_MSG_ERROR($ac_sub_configure failed for $ac_config_dir)
-      fi
-    fi
-
-    cd $ac_popdir
-  done
- fi
-
- if test $build != $host; then
-  # Remove --srcdir arguments so they do not pile up.
-  ac_sub_configure_args=
-  ac_prev=
-  for ac_arg in $targargs; do
-    if test -n "$ac_prev"; then
-      ac_prev=
-      continue
-    fi
-    case "$ac_arg" in
-    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
-      ac_prev=srcdir ;;
-    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
-      ;;
-    *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;
-    esac
-  done
-
-#  test -d $target_subdir || mkdir $target_subdir
-  for ac_config_dir in $build_configdirs; do
-    # Do not complain, so a configure script can configure whichever
-    # parts of a large source tree are present.
-    if test ! -d $srcdir/$ac_config_dir; then
-      continue
-    fi
-
-    echo configuring in $ac_config_dir
-
-    case "$srcdir" in
-    .) ;;
-    *)
-      if test -d $ac_config_dir || mkdir $ac_config_dir; then :;
-      else
-        AC_MSG_ERROR(can not create `pwd`/$ac_config_dir)
-      fi
-      ;;
-    esac
-
-    ac_popdir=`pwd`
-    cd $ac_config_dir
-
-changequote(, )dnl
-      # A "../" for each directory in /$ac_config_dir.
-      ac_dots=`echo $ac_config_dir|sed -e 's%^\./%%' -e 's%[^/]$%&/%' -e 's%[^/]*/%../%g'`
-changequote([, ])dnl
-
-    case "$srcdir" in
-    .) # No --srcdir option.  We are building in place.
-      ac_sub_srcdir=$srcdir ;;
-    /*) # Absolute path.
-      ac_sub_srcdir=$srcdir/$ac_config_dir ;;
-    *) # Relative path.
-      ac_sub_srcdir=$ac_dots$srcdir/$ac_config_dir ;;
-    esac
-
-    # Check for configure
-    if test -f $ac_sub_srcdir/configure; then
-      ac_sub_configure=$ac_sub_srcdir/configure
-    else
-      AC_MSG_WARN(no configuration information is in $ac_config_dir)
-      ac_sub_configure=
-    fi
-
-    # The recursion is here.
-    if test -n "$ac_sub_configure"; then
-
-      # Make the cache file name correct relative to the subdirectory.
-      ac_sub_cache_file=$cache_file
-ifdef([AC_PROVIDE_AC_PROG_INSTALL],
-      [  case "$ac_given_INSTALL" in
-changequote(, )dnl
-        [/$]*) INSTALL="$ac_given_INSTALL" ;;
-changequote([, ])dnl
-        *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
-        esac
-])dnl
-
-      echo "[running ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file] --srcdir=$ac_sub_srcdir"
-      # The eval makes quoting arguments work.
-      if eval ${CONFIG_SHELL-/bin/sh} $ac_sub_configure \
-	$ac_sub_configure_args --srcdir=$ac_sub_srcdir \
-	--cache-file=$ac_sub_cache_file \
-        --build=$build --host=$build
-      then :
-      else
-        AC_MSG_ERROR($ac_sub_configure failed for $ac_config_dir)
-      fi
-    fi
-
-    cd $ac_popdir
-  done
- fi
-fi
+RTEMS_TARGET_CONFIG_SUBDIRS
+RTEMS_HOST_CONFIG_SUBDIRS

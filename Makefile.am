@@ -9,7 +9,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I aclocal
 
-SUBDIRS = doc make tools $(HOST_SUBDIRS) $(TARGET_SUBDIRS)
+SUBDIRS = doc make tools $(BUILD_SUBDIRS) $(TARGET_SUBDIRS)
 
 AUTOMAKE_FILES = automake/compile.am automake/host.am automake/lib.am \
     automake/local.am automake/multilib.am automake/subdirs.am

@@ -2,7 +2,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.4
 
-SUBDIRS = build cpu update
+SUBDIRS = update
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/host.am

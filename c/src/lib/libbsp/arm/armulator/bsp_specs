@@ -20,3 +20,4 @@
 
 *link:
 %{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -e _start}
+

@@ -1,3 +1,11 @@
+2001-02-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* configure.in: Reworked for Canadian Cross support.
+	* Makefile.am: Reflect changes to configure.in.
+	* config.guess, config.sub: Update from subversions.gnu.org.
+	* README.cdn-X: New file.
+	* tools/Makefile.am: Remove build, tools from SUBDIRS.
+
 2001-02-20	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/config-subdirs.m4: Let CC default to $host_alias-gcc in

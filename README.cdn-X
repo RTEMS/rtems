@@ -1,0 +1,78 @@
+Building RTEMS Canadian Cross
+=============================
+
+RTEMS now contains experimental and yet incomplete support for building
+it Canadian Cross.
+
+1. Introduction
+---------------
+If you don't know what Canadian Cross Building means, you probably don't want
+to apply it and should consider stop reading here. 
+
+Interested readers might want to read Ian Lance Taylor's article at 
+http://www.airs.com/ian/configure for underlaying details and working 
+principles.
+
+2. RTEMS
+--------
+Example: Building RTEMS for sparc-rtems under i386-pc-linux-gnu to be hosted 
+on a i386-cygwin platform.
+
+2.1 Required tools
+------------------
+* A i386-pc-linux-gnu cross sparc-rtems toolchain.
+* A i386-pc-linux-gnu cross i386-cygwin toolchain.
+* A i386-pc-linux-gnu native toolchain.
+
+We further on assume these to be installed to these locations:
+/opt/rtems .. linux cross sparc-rtems toolchain
+/opt/i386-cygwin .. linux cross i386-cygwin cross toolchain
+/usr .. linux native toolchain and further tools. 
+
+2.2 Building sparc-rtems
+------------------------
+The first step is to build RTEMS for sparc-rtems under linux. 
+
+mkdir build
+cd build
+<path>/rtems/configure [options] \
+--target=sparc-rtems \
+--prefix=/opt/i386-cygwin/rtems/sparc-rtems
+make
+make install
+
+This will build a standard sparc-rtems RTEMS to the given PREFIX.
+
+
+2.3 Building i386-cygwin host support
+-------------------------------------
+The next step is to build RTEMS host support for i386-cygwin.
+This basically means to cross-build the host tools contained in RTEMS.
+
+mkdir host
+cd host
+<path>/rtems/configure [options] \
+--target=sparc-rtems \
+--build=`<path>/rtems/config.guess` \
+--host=i386-cygwin \
+--prefix=/opt/i386-cygwin/rtems
+
+3. Known issues
+---------------
+
+* At present time, building RTEMS Canadian Cross is known to be immature, and
+to require additional work. Do not expect this to work.
+
+* The configure scripts expect to find a native c-compiler called "cc". If
+your host doesn't have such a "cc" (e.g. Cygwin) or has a non-functional
+"cc" (eg. Solaris) try introducing a symlink <functional-cc> -> cc.
+(Eg. ln -s <path-to>/gcc /opt/rtems/bin/cc) and make sure this cc can be
+found on $PATH.
+
+* It will *not* work for all targets requiring BSP-specific host-tools 
+(Unfortunately, this comprizes i386-rtems/pcx86 and all powerpc BSPs).
+
+* Incomplete support for *_FOR_TARGET, *_FOR_HOST, *_FOR_BUILD environment
+variables.
+
+* The <toplevel>/make/ directory hierarchy is not treated correctly.
