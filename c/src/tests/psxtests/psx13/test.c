@@ -665,9 +665,10 @@ int main(
       printf ("Success.\n");
     else
       printf ("Failed!!!\n");
+
+    printf ("Testing sync()...... ");
+    sync();
   }
-
-
   else
     printf ("\n\nError opening files for write!!!!\n");
 
