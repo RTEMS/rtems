@@ -6,6 +6,8 @@
  *
  * Synopsis = Machine-dependent header file
  *
+ * $Id$
+ *
  **************************************************************************
  */
 
@@ -17,35 +19,21 @@
 
 #define EFLAGS_TF 0x00100
 
-typedef struct Exception_context_struct {
-  struct Exception_context_struct *next;
-  struct Exception_context_struct *previous;
-  Objects_Id id;
-  Objects_Id semaphoreId;
-  CPU_Exception_frame *ctx;
-} Exception_context;
+static inline int isRdbgException(Exception_context *ctx)
+{
+  if (
+      ctx->ctx->idtIndex != I386_EXCEPTION_DEBUG &&
+      ctx->ctx->idtIndex != I386_EXCEPTION_BREAKPOINT &&
+      ctx->ctx->idtIndex != I386_EXCEPTION_ENTER_RDBG
+      ) return 0;
+  else return 1;
+}
+static inline int getExcNum(Exception_context *ctx)
+{
+  return ctx->ctx->idtIndex;
+}
 
-extern int 	PushExceptCtx 		(Objects_Id Id,
-					 Objects_Id semId,
-					 CPU_Exception_frame *ctx);
-extern int	PopExceptCtx  		(Objects_Id Id);
-extern Exception_context *GetExceptCtx  (Objects_Id Id);
-extern int  	Single_Step		(CPU_Exception_frame* ctx);
-extern int 	CheckForSingleStep 	(CPU_Exception_frame* ctx);
-extern void	BreakPointExcHdl   	(CPU_Exception_frame *ctx);
-extern void	CtxToRegs	   	(const CPU_Exception_frame*,xdr_regs*);
-extern void	RegsToCtx	   	(const xdr_regs*,CPU_Exception_frame*);
-
-extern void	enterRdbg		();
-extern void 	get_ctx_thread		(Thread_Control *thread,
-					 CPU_Exception_frame* ctx);
-extern void 	set_ctx_thread		(Thread_Control *thread,
-					 CPU_Exception_frame* ctx);
-
-void copyback_data_cache_and_invalidate_instr_cache();
-
-extern int    	ExitForSingleStep;
-
+extern void connect_rdbg_exception();
 
 #endif
 

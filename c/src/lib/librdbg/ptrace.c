@@ -5,6 +5,8 @@
  * 
  * Synopsis  =   rkdb/rkdb.c
  *
+ * $Id$
+ *
  **************************************************************************
  */
 
@@ -142,7 +144,7 @@ ptrace (int request, int pid, char* addr, int data, char* addr2)
       */
      
      if (diag == 0) {
-       copyback_data_cache_and_invalidate_instr_cache();
+       copyback_data_cache_and_invalidate_instr_cache(addr, sizeof data);
        return 0;
      }
      goto mem_error; 
@@ -162,11 +164,7 @@ ptrace (int request, int pid, char* addr, int data, char* addr2)
              
      ctx = GetExceptCtx (currentTargetThread);
 
-     if (
-	 ctx->ctx->idtIndex != I386_EXCEPTION_DEBUG &&
-	 ctx->ctx->idtIndex != I386_EXCEPTION_BREAKPOINT &&
-	 ctx->ctx->idtIndex != I386_EXCEPTION_ENTER_RDBG
-	 ) {
+     if (!isRdbgException(ctx)) {
        CannotRestart = 1;
        setErrno (EIO);
        return -1;

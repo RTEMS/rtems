@@ -1,4 +1,8 @@
-
+/*
+ * Registers Offset in frame definition
+ *
+ * $Id$
+ */
 
 #define NBREGS	19
 

@@ -3,6 +3,8 @@
  *  This file contains all assembly code for the Intel i386 implementation
  *  of RDBG.
  *
+ * $Id$
+ *
  */
 
 #include <asm.h>
@@ -10,7 +12,7 @@
         BEGIN_CODE
 
 /*
- *  void copyback_data_cache_and_invalidate_instr_cache()
+ *  void copyback_data_cache_and_invalidate_instr_cache(addr, size)
  *
  *  This routine performs a copy of the data cache 
  *  and invalidate the instruction cache

@@ -378,7 +378,7 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     
     
   
-void _ThreadProcessSignalsFromIrq (exception_frame* ctx)
+void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
 {
   /*
    * Process pending signals that have not already been

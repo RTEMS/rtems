@@ -86,6 +86,14 @@ SYM (push_normalized_frame):
 	stw	r30,  EXC_CTR_OFFSET(r1)
 	mfxer	r28
 	stw	r28,  EXC_XER_OFFSET(r1)
+        /*
+         * compute SP at exception entry
+         */
+        addi    r2, r1, EXCEPTION_FRAME_END
+        /*
+         * store it at the right place
+         */
+        stw     r2, GPR1_OFFSET(r1)
 	/*
 	 * Enable data and instruction address translation, exception nesting
 	 */
@@ -97,8 +105,17 @@ SYM (push_normalized_frame):
 	/*
 	 * Call C exception handler
 	 */
+	/*
+	 * store the execption frame address in r3 (first param)
+	 */
 	addi	r3, r1, 0x8
-	bl C_exception_handler
+	/*
+	 * globalExceptHdl(r3)
+	 */
+	addis	r4, 0, globalExceptHdl@ha
+	lwz	r5, globalExceptHdl@l(r4)
+	mtlr	r5
+	blrl
 	/*
 	 * Restore registers status
 	 */
@@ -135,8 +152,3 @@ SYM (push_normalized_frame):
 	addi 	r1,r1, EXCEPTION_FRAME_END
 	SYNC
 	rfi
-
-
-
-
-

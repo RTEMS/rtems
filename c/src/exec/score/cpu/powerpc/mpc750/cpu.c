@@ -58,8 +58,6 @@ void _CPU_Initialize(
  *  _CPU_Context_Initialize
  */
 
-#define CPU_MINIMUM_STACK_FRAME_SIZE 8
-
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
   unsigned32       *stack_base,

@@ -117,7 +117,7 @@ struct MD {
 /*
  * Receive buffer size -- Allow for a full ethernet packet including CRC
  */
-#define RBUF_SIZE	1520
+#define RBUF_SIZE	1536
 
 #define	ET_MINLEN 60		/* minimum message length */
 
@@ -419,7 +419,8 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
   sc->rxBdCount = 0;
   cp = (char *)malloc((NRXBUFS+NTXBUFS)*(sizeof(struct MD)+ RBUF_SIZE) + PPC_CACHE_ALIGNMENT);
   sc->bufferBase = cp;
-  cp += (PPC_CACHE_ALIGNMENT - (int)cp) & MASK_OFFSET;
+  if ((unsigned int)cp & (PPC_CACHE_ALIGNMENT-1))
+    cp = ((unsigned int)cp + PPC_CACHE_ALIGNMENT) & ~(PPC_CACHE_ALIGNMENT-1);
 #ifdef PCI_BRIDGE_DOES_NOT_ENSURE_CACHE_COHERENCY_FOR_DMA 
   if (_CPU_is_paging_enabled())
     _CPU_change_memory_mapping_attribute

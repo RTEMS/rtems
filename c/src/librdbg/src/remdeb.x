@@ -7,6 +7,8 @@
  *  Synopsis:	XDR definitions for remote debug server RPC calls.
  *		XDR definitions for RPCGEN to build remote debug server.
  *
+ * $Id$
+ *
  **********************************************************************
  */
 

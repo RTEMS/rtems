@@ -6,6 +6,8 @@
  *
  *  Synopsis:	Transport management for remote debug server.
  *
+ * $Id$
+ *
  **************************************************************************
  */
 

@@ -128,9 +128,16 @@ typedef struct {
   unsigned	EXC_LR;
   unsigned 	EXC_MSR;
   unsigned	EXC_DAR;
-} exception_frame;
+}BSP_Exception_frame;
 
-extern void C_exception_handler(exception_frame* excPtr);
+
+typedef void (*exception_handler_t) (BSP_Exception_frame* excPtr);
+extern exception_handler_t globalExceptHdl;
+/*
+ * Compatibility with pc386
+ */
+typedef BSP_Exception_frame CPU_Exception_frame;
+typedef exception_handler_t cpuExcHandlerType;
 
 #endif /* ASM */
 

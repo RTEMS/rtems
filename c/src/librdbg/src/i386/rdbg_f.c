@@ -5,6 +5,8 @@
  * 
  * Synopsis  =   rdbg/i386/rdbg_f.c
  *
+ * $Id$
+ *
  **************************************************************************
  */
 
@@ -127,4 +129,27 @@ CancelSingleStep (CPU_Exception_frame* ctx)
 	/* Cancel scheduled SS */
     ctx->eflags &= ~EFLAGS_TF;
     ExitForSingleStep-- ;
+}
+
+cpuExcHandlerType old_currentExcHandler;
+extern void  rtems_exception_prologue_50();
+
+void connect_rdbg_exception()
+{
+  interrupt_gate_descriptor	 *currentIdtEntry;
+  unsigned			 limit;
+  unsigned			 level;
+
+  /*
+   *  Connect the Exception used to debug
+   */
+  i386_get_info_from_IDTR (&currentIdtEntry, &limit);
+  
+  _CPU_ISR_Disable(level);
+  create_interrupt_gate_descriptor (&currentIdtEntry[50], rtems_exception_prologue_50);
+  _CPU_ISR_Enable(level);
+
+  old_currentExcHandler = _currentExcHandler;
+  _currentExcHandler = BreakPointExcHdl ;
+
 }

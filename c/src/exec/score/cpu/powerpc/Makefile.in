@@ -24,7 +24,7 @@ INSTALL_CHANGE = @INSTALL_CHANGE@
 SHARED_LIB = shared
 
 ifeq ($(RTEMS_CPU_MODEL),mpc750)
-CPUDIR = other_cpu
+CPUDIR = mpc750
 else 
 CPUDIR = other_cpu
 endif 

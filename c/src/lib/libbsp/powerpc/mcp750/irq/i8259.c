@@ -21,9 +21,8 @@
 /*
  * lower byte is interrupt mask on the master PIC.
  * while upper bits are interrupt on the slave PIC.
- * This cache is initialized in ldseg.s
  */
-volatile rtems_i8259_masks i8259s_cache;
+volatile rtems_i8259_masks i8259s_cache = 0xfffb;
 
 /*-------------------------------------------------------------------------+
 |         Function:  BSP_irq_disable_at_i8259s
@@ -53,7 +52,7 @@ int BSP_irq_disable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
   }
   else
   {
-    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) > 8));
+    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) >> 8));
   }
   _CPU_ISR_Enable (level);
 
@@ -88,7 +87,7 @@ int BSP_irq_enable_at_i8259s    (const rtems_irq_symbolic_name irqLine)
   }
   else
   {
-    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) > 8));
+    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) >> 8));
   }
   _CPU_ISR_Enable (level);
 
@@ -119,9 +118,12 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine)
 int BSP_irq_ack_at_i8259s  	(const rtems_irq_symbolic_name irqLine)
 {
   if (irqLine >= 8) {
-   outport_byte(PIC_SLAVE_COMMAND_IO_PORT, PIC_EOI);
+    outport_byte(PIC_MASTER_COMMAND_IO_PORT, SLAVE_PIC_EOSI);
+    outport_byte(PIC_SLAVE_COMMAND_IO_PORT, (PIC_EOSI | (irqLine - 8)));
   }
-  outport_byte(PIC_MASTER_COMMAND_IO_PORT, PIC_EOI);
+  else {
+    outport_byte(PIC_MASTER_COMMAND_IO_PORT, (PIC_EOSI | irqLine));
+  }
 
   return 0;
 
@@ -146,6 +148,5 @@ void BSP_i8259s_init(void)
   outport_byte(PIC_SLAVE_IMR_IO_PORT, 0x01); /* Select 8086 mode */
   outport_byte(PIC_SLAVE_IMR_IO_PORT, 0xFF); /* Mask all */
   
-  i8259s_cache = 0xFFFB;
 }
 

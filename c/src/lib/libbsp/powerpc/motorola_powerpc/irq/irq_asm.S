@@ -212,6 +212,13 @@ nested:
 	 */
 	stmw	r16, GPR16_OFFSET(r1)
 	addi	r3, r1, 0x8
+        /*
+         * compute SP at exception entry
+         */
+        addi    r2, r1, EXCEPTION_FRAME_END
+        /*
+         * store it at the right place
+         */
 	bl	_ISR_Signals_to_thread_executing
 	/*
 	 * start restoring exception like frame

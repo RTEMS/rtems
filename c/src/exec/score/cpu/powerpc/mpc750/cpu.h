@@ -344,6 +344,8 @@ extern "C" {
  *  a debugger such as gdb.  But that is another problem.
  */
 
+#ifndef ASM
+
 typedef struct {
     unsigned32 gpr1;	/* Stack pointer for all */
     unsigned32 gpr2;	/* TOC in PowerOpen, reserved SVR4, section ptr EABI + */
@@ -465,6 +467,8 @@ typedef struct {
 SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
 SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
+#endif /* ndef ASM */
+
 /*
  *  This defines the number of levels and the mask used to pick those
  *  bits out of a thread mode.
@@ -489,7 +493,8 @@ SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
  *  Nothing prevents the porter from declaring more CPU specific variables.
  */
 
-
+#ifndef ASM
+  
 SCORE_EXTERN struct {
   unsigned32 *Disable_level;
   void *Stack;
@@ -497,6 +502,8 @@ SCORE_EXTERN struct {
   boolean *Signal;
 
 } _CPU_IRQ_info CPU_STRUCTURE_ALIGNMENT;
+
+#endif /* ndef ASM */
 
 /*
  *  The size of the floating point context area.  On some CPUs this
@@ -584,6 +591,12 @@ SCORE_EXTERN struct {
 
 #define CPU_STACK_ALIGNMENT        (PPC_STACK_ALIGNMENT)
 
+/*
+ * Needed for Interrupt stack
+ */
+#define CPU_MINIMUM_STACK_FRAME_SIZE 8
+
+
 /* ISR handler macros */
 
 /*
@@ -593,6 +606,7 @@ SCORE_EXTERN struct {
 
 #define loc_string(a,b)	a " (" #b ")\n"
 
+#ifndef ASM
   
 static inline unsigned32 _CPU_ISR_Get_level( void )
 {
@@ -940,6 +954,8 @@ static inline unsigned64 PPC_Get_timebase_register( void )
   tbr |= tbr_low;
   return tbr;
 }
+
+#endif /* ndef ASM */
 
 #ifdef __cplusplus
 }

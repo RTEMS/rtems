@@ -7,7 +7,9 @@
 #		by rpcgen(1) into something suitable for RDB servers.
 #
 #########################################################################
-
+#
+# $Id$
+#
 BEGIN {
     headerstarted = 0
     withinproc = 0

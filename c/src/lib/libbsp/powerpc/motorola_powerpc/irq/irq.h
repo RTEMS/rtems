@@ -54,6 +54,7 @@
 
     /* Command for specific EOI (End Of Interrupt): Interrupt acknowledge */
 #define PIC_EOSI	0x60	/* End of Specific Interrupt (EOSI) */
+#define	SLAVE_PIC_EOSI  0x62	/* End of Specific Interrupt (EOSI) for cascade */
 #define PIC_EOI		0x20	/* Generic End of Interrupt (EOI) */
 
 #ifndef ASM

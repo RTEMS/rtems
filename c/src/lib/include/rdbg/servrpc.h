@@ -1,3 +1,6 @@
+/*
+ * $Id$
+ */
 
 #ifndef SERVRPC_H
 #define SERVRPC_H
@@ -29,6 +32,15 @@ int   rdb_debug;		/* True if env var RDB_DEBUG defined */
 extern const char* PtraceNames[]; /* list of ptrace requests for debug out */
 extern const char* BmsgNames[]; /* list of BMSG_xxx names */
 extern const char* PtraceName(int req);
+
+#ifdef i386			/* low-high machine such as 386 */
+#define HL_W(w)		(((UINT16)(w)>>8)+((((w)&0xFF)<<8)))
+#define HL_D(d)		(((UINT32)(d)>>24)+(((d)&0x00FF0000)>>8) \
+		       +(((d)&0xFF00)<<8)+(((d)&0xFF)<<24))
+#else
+#define HL_W(w)		w
+#define HL_D(d)		d
+#endif
 
 # define DPRINTF(a)	(rdb_debug ? printk ("%d >>> ", getId()), printk a : 0)
 #else

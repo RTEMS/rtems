@@ -16,6 +16,7 @@
 #include <console.h>
 #include <libcpu/io.h>
 #include <clockdrv.h>
+#include <bsp/vectors.h>
 
 #ifndef ASM
 #define outport_byte(port,value) outb(value,port)

@@ -131,7 +131,9 @@ void bsp_pretasking_hook(void)
 
     heap_size = (BSP_mem_size - heap_start) - BSP_Configuration.work_space_size;
 
+#ifdef SHOW_MORE_INIT_SETTINGS
     printk(" HEAP start %x  size %x\n", heap_start, heap_size);
+#endif    
     bsp_libc_init((void *) heap_start, heap_size, 0);
 
 #ifdef RTEMS_DEBUG
@@ -141,7 +143,7 @@ void bsp_pretasking_hook(void)
 
 void zero_bss()
 {
-  memset(&__bss_start, 0, &__rtems_end - &__bss_start);
+  memset(&__bss_start, 0, ((unsigned) (&__rtems_end)) - ((unsigned) &__bss_start));
 }
 
 void save_boot_params(RESIDUAL* r3, void *r4, void* r5, char *additional_boot_options)
@@ -184,7 +186,7 @@ void bsp_start( void )
    * the initial stack  has aready been set to this value in start.S
    * so there is no need to set it in r1 again...
    */
-  stack = ((unsigned char*) &__rtems_end) + INIT_STACK_SIZE;
+  stack = ((unsigned char*) &__rtems_end) + INIT_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
   /*
    * Initialize the interrupt related settings
    * SPRG0 = interrupt nesting level count
@@ -193,7 +195,7 @@ void bsp_start( void )
    * This could be done latter (e.g in IRQ_INIT) but it helps to understand
    * some settings below...
    */
-  intrStack = ((unsigned char*) &__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE;
+  intrStack = ((unsigned char*) &__rtems_end) + INIT_STACK_SIZE + INTR_STACK_SIZE - CPU_MINIMUM_STACK_FRAME_SIZE;
   asm volatile ("mtspr	273, %0" : "=r" (intrStack) : "0" (intrStack));
   asm volatile ("mtspr	272, %0" : "=r" (intrNestingLevel) : "0" (intrNestingLevel));
   /*
@@ -286,7 +288,9 @@ void bsp_start( void )
   Cpu_table.clicks_per_usec 		= BSP_processor_frequency/(BSP_time_base_divisor * 1000);
   Cpu_table.exceptions_in_RAM 		= TRUE;
 
+#ifdef SHOW_MORE_INIT_SETTINGS
   printk("BSP_Configuration.work_space_size = %x\n", BSP_Configuration.work_space_size);
+#endif  
   work_space_start = 
     (unsigned char *)BSP_mem_size - BSP_Configuration.work_space_size;
 
@@ -306,5 +310,7 @@ void bsp_start( void )
    * Initalize RTEMS IRQ system
    */
   BSP_rtems_irq_mng_init(0);
+#ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");
+#endif  
 }

@@ -5,6 +5,8 @@
  * 
  * Synopsis  =   rdbg.h
  *
+ * $Id$
+ *
  **************************************************************************
  */
 
@@ -14,9 +16,9 @@
 #include <rpc/rpc.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <rdbg/rdbg_f.h>
 #include <stdlib.h>		/* For malloc() and free() prototypes */
 #include <bsp.h>		
+#include <rtems.h>
 
 #define	Malloc(size)		malloc (size)
 #define	Free(block)		free (block)
@@ -48,6 +50,46 @@ void	  svc_processrequest 	(SVCXPRT* xprt,
 				 u_long prog, u_long vers,
 				 void (*dispatch)());
 int 	  svcudp_enablecache   	(SVCXPRT *transp, u_long size);
+
+typedef struct Exception_context_struct {
+  struct Exception_context_struct *next;
+  struct Exception_context_struct *previous;
+  Objects_Id id;
+  Objects_Id semaphoreId;
+  CPU_Exception_frame *ctx;
+} Exception_context;
+
+struct		xdr_regs;
+
+extern int 	PushExceptCtx 		(Objects_Id Id,
+					 Objects_Id semId,
+					 CPU_Exception_frame *ctx);
+extern int	PopExceptCtx  		(Objects_Id Id);
+extern Exception_context *GetExceptCtx  (Objects_Id Id);
+extern int  	Single_Step		(CPU_Exception_frame* ctx);
+extern int 	CheckForSingleStep 	(CPU_Exception_frame* ctx);
+extern void	BreakPointExcHdl   	(CPU_Exception_frame *ctx);
+extern void	CtxToRegs	   	(const CPU_Exception_frame*,struct xdr_regs*);
+extern void	RegsToCtx	   	(const struct xdr_regs*,CPU_Exception_frame*);
+
+extern void	enterRdbg		();
+extern void 	get_ctx_thread		(Thread_Control *thread,
+					 CPU_Exception_frame* ctx);
+extern void 	set_ctx_thread		(Thread_Control *thread,
+					 CPU_Exception_frame* ctx);
+extern int      PushSavedExceptCtx      ( Objects_Id Id,
+					  CPU_Exception_frame *ctx );
+extern int	ExcepToSig		(Exception_context *ctx);
+
+extern int    	ExitForSingleStep;
+
+extern rtems_id serializeSemId;
+extern rtems_id wakeupEventSemId;
+extern volatile unsigned int NbSerializedCtx;
+
+void copyback_data_cache_and_invalidate_instr_cache(unsigned char* addr, int size);
+
+#include <rdbg/rdbg_f.h>
 
 #endif /* !RDBG_H */
 

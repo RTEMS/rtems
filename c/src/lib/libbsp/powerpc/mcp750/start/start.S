@@ -1,35 +1,22 @@
 /*
- *  arch/ppc/kernel/head.S
+ *  start.S :	  RTEMS entry point
+ *
+ *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
+ *
+ *  The license and distribution terms for this file may be
+ *  found in found in the file LICENSE in this distribution or at
+ *  http://www.OARcorp.com/rtems/license.html.
  *
  *  $Id$
  *
- *  PowerPC version 
- *    Copyright (C) 1995-1996 Gary Thomas (gdt@linuxppc.org)
- *
- *  Rewritten by Cort Dougan (cort@cs.nmt.edu) for PReP
- *  Adapted for Power Macintosh by Paul Mackerras.
- *  Low-level exception handlers and MMU support
- *  rewritten by Paul Mackerras.
- *    Copyright (C) 1996 Paul Mackerras.
- *  MPC8xx modifications Copyright (C) 1997 Dan Malek (dmalek@jlc.net).
- *  Amiga/APUS changes by Jesper Skov (jskov@cygnus.co.uk).
- *
- *  This file contains the low-level support and setup for the
- *  PowerPC platform, including trap and interrupt dispatch.
- *  Also included here is low-level thread/task switch support.
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version
- *  2 of the License, or (at your option) any later version.
- *	
  */
 
 #include <libcpu/cpu.h>
 #include <libcpu/io.h>
 #include <rtems/score/targopts.h>
+#include <rtems/score/cpu.h>
 #include "asm.h"
-	
+
 #define SYNC \
 	sync; \
 	isync
@@ -91,8 +78,8 @@ enter_C_code:
 	/*
 	 * stack = &__rtems_end + 4096
 	 */
-	addis	r9,r0, __rtems_end+4096@ha
-        addi	r9,r9, __rtems_end+4096@l
+	addis	r9,r0, __rtems_end+(4096-CPU_MINIMUM_STACK_FRAME_SIZE)@ha
+        addi	r9,r9, __rtems_end+(4096-CPU_MINIMUM_STACK_FRAME_SIZE)@l
 	mr	r1, r9
 	bl	zero_bss
 	/*
@@ -142,8 +129,3 @@ _return_to_ppcbug:
 	bl	MMUon
 	mtctr	r30
 	bctr	
-	
-	
-
-
-

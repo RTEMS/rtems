@@ -1,6 +1,7 @@
 /*
  ============================================================================
- _SERVTGT 
+ _SERVTGT
+ $Id$
  ============================================================================
 */
 
@@ -17,9 +18,6 @@
 #include <assert.h>
 #include <rtems/score/cpu.h>
 
-extern void rtems_exception_prologue_50();
-
-
 #ifdef DDEBUG
 #define Ptrace	TgtDbgPtrace
 #else
@@ -34,8 +32,6 @@ rtems_id wakeupEventSemId;
 
 CPU_Exception_frame Idle_frame;
 
-cpuExcHandlerType old_currentExcHandler;
-
 /* -----------------------------------------------------------------
    TgtRealPtrace - lowest level ptrace() wrapper
    ----------------------------------------------------------------- */
@@ -47,43 +43,6 @@ TgtRealPtrace(int req, PID aid, char* addr, int d, void* addr2)
 }
 
 
-/* -----------------------------------------------------------------
-   Maping of hardware exceptions into Unix-like signal numbers.
-   It is identical to the one used by the PM and the AM.
-   ----------------------------------------------------------------- */
-
-    int
-ExcepToSig (int excep)
-{
-    switch (excep) {
-      
-    case I386_EXCEPTION_MATH_COPROC_UNAVAIL: 
-    case I386_EXCEPTION_I386_COPROC_SEG_ERR: 
-    case I386_EXCEPTION_FLOAT_ERROR: 
-    case I386_EXCEPTION_BOUND: 
-	return SIGFPE;
-
-    case I386_EXCEPTION_DEBUG: 
-    case I386_EXCEPTION_BREAKPOINT: 
-    case I386_EXCEPTION_ENTER_RDBG: 
-	return SIGTRAP;
-
-    case I386_EXCEPTION_OVERFLOW: 
-    case I386_EXCEPTION_DIVIDE_BY_ZERO:
-    case I386_EXCEPTION_ILLEGAL_INSTR:  
-	return SIGILL;
-
-    case I386_EXCEPTION_SEGMENT_NOT_PRESENT:
-    case I386_EXCEPTION_STACK_SEGMENT_FAULT:
-    case I386_EXCEPTION_GENERAL_PROT_ERR: 
-    case I386_EXCEPTION_PAGE_FAULT: 
-	return SIGSEGV;
-
-    default:
-	break;
-    }
-    return SIGKILL;
-}
 
 /* -----------------------------------------------------------------------
    TgtChange() is called when the system stops.
@@ -128,7 +87,7 @@ rtems_task eventTask( rtems_task_argument pid)
 
     CheckForSingleStep(ctx->ctx);
 
-    TgtChange(pid, ctx->ctx,STS_MAKESIG(ExcepToSig(ctx->ctx->idtIndex)));
+    TgtChange(pid, ctx->ctx,STS_MAKESIG(ExcepToSig(ctx)));
       
   }
 }
@@ -162,9 +121,6 @@ Boolean TgtAttach(
   rtems_name task_name;
   rtems_status_code status;
   rtems_id debugId;
-  interrupt_gate_descriptor	 *currentIdtEntry;
-  unsigned			 limit;
-  unsigned			 level;
   
   errno = 0;
 
@@ -177,19 +133,8 @@ Boolean TgtAttach(
   TgtCreateNew(pid, conn_idx, 0, NULL, False);
 
 
-  /*
-   *  Connect the Exception used to debug
-   */
-  i386_get_info_from_IDTR (&currentIdtEntry, &limit);
+  connect_rdbg_exception();
   
-  _CPU_ISR_Disable(level);
-  create_interrupt_gate_descriptor (&currentIdtEntry[50], rtems_exception_prologue_50);
-  _CPU_ISR_Enable(level);
-
-  old_currentExcHandler = _currentExcHandler;
-  _currentExcHandler = BreakPointExcHdl ;
-
-
   /*
    * Create the attach debuger task
    */

@@ -19,7 +19,9 @@
 static rtems_raw_except_global_settings exception_config;
 static rtems_raw_except_connect_data    exception_table[LAST_VALID_EXC + 1];
 
-void C_exception_handler(exception_frame* excPtr)
+exception_handler_t globalExceptHdl;
+
+void C_exception_handler(BSP_Exception_frame* excPtr)
 {
   int recoverable = 0;
   
@@ -81,9 +83,17 @@ int except_always_enabled(const rtems_raw_except_connect_data* ptr)
 void initialize_exceptions()
 {
   int i;
-  
-  exception_config.exceptSize 		= LAST_VALID_EXC + 1;
-  exception_config.rawExceptHdlTbl 	= &exception_table[0];
+
+  /*
+   * Initialize pointer used by low level execption handling
+   */
+  globalExceptHdl 				= C_exception_handler;
+  /*
+   * Put  default_exception_vector_code_prolog at relevant exception
+   * code entry addresses
+   */
+  exception_config.exceptSize 			= LAST_VALID_EXC + 1;
+  exception_config.rawExceptHdlTbl 		= &exception_table[0];
   exception_config.defaultRawEntry.exceptIndex	= 0;
   exception_config.defaultRawEntry.hdl.vector	= 0;
   exception_config.defaultRawEntry.hdl.raw_hdl	= default_exception_vector_code_prolog;
