@@ -1,5 +1,10 @@
 2000-10-19  Antti P Miettinen  <anmietti@trshp.ntc.nokia.com>
 
+	* src/m68k/any/remdeb.h, src/m68k/any/remdeb_xdr.c,
+	src/m68k/any/remdeb_svc.c: New files missed in merger.
+
+2000-10-19  Antti P Miettinen  <anmietti@trshp.ntc.nokia.com>
+
 	* configure.in: Add m68k support.
 	* include/rdbg/m68k, src/m68k, src/m68k/any: New subdirectory.
 	* src/_servtgt.c: add status text to prinf upon task creation failure.
