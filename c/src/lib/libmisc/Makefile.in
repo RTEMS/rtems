@@ -11,4 +11,4 @@ PROJECT_ROOT = @PROJECT_ROOT@
 include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 include $(RTEMS_ROOT)/make/directory.cfg
 
-SUB_DIRS=assoc error stackchk monitor cpuuse rtmonuse wrapup
+SUB_DIRS=assoc dumpbuf error stackchk monitor cpuuse rtmonuse wrapup
