@@ -21,6 +21,7 @@ DISTCLEANFILES = make/@RTEMS_BSP@.cache
 rtems_makedir = $(prefix)/make
 rtems_make_customdir = $(rtems_makedir)/custom
 rtems_make_custom_DATA = @CUSTOM_CFG_FILES@
+DISTCLEANFILES += @CUSTOM_CFG_FILES@
 
 make/custom/default.cfg: $(srcdir)/make/custom/default.cfg.in
 	cp $< $@

@@ -1,5 +1,9 @@
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* Makefile.am: DISTCLEANFILES += @CUSTOM_CFG_FILES.
+
+2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Reflect new location of librdbg.a.
 
 2004-02-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
