@@ -334,7 +334,8 @@ on a process wide basis.  A blocked signal will not be received by the
 process.  The behavior of this function is dependent on the value of
 @code{how} which may be one of the following:
 
-@itemize @code
+@table @code
+
 @item SIG_BLOCK
 The set of blocked signals is set to the union of @code{set} and 
 those signals currently blocked.
@@ -346,7 +347,7 @@ blocked set.
 @item SIG_SETMASK
 The set of currently blocked signals is set to @code{set}.
 
-@end itemize
+@end table
 
 If @code{oset} is not @code{NULL}, then the set of blocked signals
 prior to this call is returned in @code{oset}.
@@ -457,7 +458,8 @@ int sigpending(
  
 @subheading STATUS CODES:
 
-On error, this routine returns -1 and sets errno to one of the following:
+On error, this routine returns -1 and sets @code{errno} to one of
+the following:
  
 @table @b
 
@@ -491,8 +493,10 @@ int sigsuspend(
  
 @subheading STATUS CODES:
 
+On error, this routine returns -1 and sets @code{errno} to one of
+the following:
+
 @table @b
-Returns -1 and sets errno.
 
 @item EINTR
 Signal interrupted this function.
@@ -522,8 +526,10 @@ int pause( void );
  
 @subheading STATUS CODES:
 
+On error, this routine returns -1 and sets @code{errno} to one of
+the following:
+
 @table @b
-Returns -1 and sets errno.
  
 @item EINTR
 Signal interrupted this function.
