@@ -177,7 +177,7 @@ The following persons/organizations have made contributions:
   MBX8XX BSP and consolidated libcpu support for the MPC860 and MPC821
   into MPC8XX.
 
-+ John Cotton <John.Cotton@nrc.ca> and Charles Gauthier
++ John Cotton <jcotton@ualberta.ca> and Charles Gauthier
   <Charles.Gauthier@nrc.ca> of the Institute for Information
   Technology for the National Research Council of Canada
   submitted the RTEMS Cache Manager.
