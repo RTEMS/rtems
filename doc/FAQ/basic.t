@@ -111,7 +111,6 @@ RTEMS is available for the following processor families:
 @item MIPS
 @item PowerPC
 @item SPARC
-@item Hewlett-Packard PA-RISC
 @item Texas Instruments C3x/C4x
 @item OpenCores OR32
 @end itemize
