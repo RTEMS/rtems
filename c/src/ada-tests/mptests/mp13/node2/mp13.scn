@@ -1,0 +1,16 @@
+*** TEST 13 -- NODE 2 ***
+Creating Test_task 1 (local)
+Starting Test_task 1 (local)
+Creating Test_task 2 (local)
+Starting Test_task 2 (local)
+Deleting initialization task
+Getting QID of message queue
+Getting SMID of semaphore
+Getting semaphore ...
+Releasing semaphore ...
+Receiving message ...
+Getting semaphore ...
+message_queue_receive correctly returned TIMEOUT
+Deleting self
+semaphore_obtain correctly returned TIMEOUT
+*** END OF TEST 13 ***

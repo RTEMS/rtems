@@ -1,0 +1,11 @@
+*** TEST 6 -- NODE 2 ***
+Creating Test_task (Global)
+Starting Test_task (Global)
+Deleting initialization task
+Remote task's name is : 111
+Getting TID of remote task
+Receiving events from remote task
+....................................................   
+....................................................   
+event_receive - correctly returned TIMEOUT
+*** END OF TEST 6 ***

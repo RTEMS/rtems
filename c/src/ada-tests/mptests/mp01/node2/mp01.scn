@@ -1,0 +1,15 @@
+*** TEST 1 -- NODE 2 ***
+Creating task 1 (Global)
+Creating task 2 (Global)
+Creating task 3 (Local)
+SA1 - clock_get -  9: 0: 0   12/31/1988
+SA2 - clock_get -  9: 0: 0   12/31/1988
+SA3 - clock_get -  9: 0: 0   12/31/1988
+SA1 - clock_get -  9: 0: 5   12/31/1988
+SA1 - deleting self
+SA2 - clock_get -  9: 0:10   12/31/1988
+SA2 - waiting to be deleted by SA3
+SA3 - clock_get -  9: 0:15   12/31/1988
+SA3 - getting TID of SA2
+SA3 - deleting SA2
+*** END OF TEST 1 ***

@@ -1,0 +1,26 @@
+*** TEST 9 -- NODE 2 ***
+Creating Test_task (local)
+Starting Test_task (local)
+Deleting initialization task
+Getting QID of message queue
+message_queue_delete correctly returned ILLEGAL_ON_REMOTE_OBJECT
+message_queue_send : 123456789012345 
+Delaying for a second
+message_queue_urgent : abcdefghijklmno 
+Delaying for a second
+message_queue_broadcast : ABCDEFGHIJKLMNO 
+Delaying for a second
+Receiving message ...
+Received : 123456789012345 
+Receiving message ...
+Received : abcdefghijklmno 
+Receiving message ...
+Received : ABCDEFGHIJKLMNO 
+Receiver delaying for a second
+Flushing remote empty queue
+0 messages were flushed from remote empty queue
+Send messages to be flushed from remote queue
+Flushing remote queue
+1 messages were flushed from the remote queue
+Waiting for message queue to be deleted
+*** END OF TEST 9 ***

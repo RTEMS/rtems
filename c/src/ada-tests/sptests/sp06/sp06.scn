@@ -1,0 +1,38 @@
+*** TEST 6 ***
+TA1 - is beginning to run
+TA1 - restarting TA3
+TA2 - is beginning to run
+TA2 - task_wake_after - sleep 1/2 second
+TA2 - task_wake_after - sleep 1/2 second
+TA1 - task_restart - restarting TA2
+TA2 - is beginning to run
+TA2 - task_wake_after - sleep 1/2 second
+TA2 - task_wake_after - sleep 1/2 second
+TA1 - task_restart - restarting self
+TA2 - task_wake_after - sleep 1/2 second
+TA1 - is beginning to run
+TA2 - task_wake_after - sleep 1/2 second
+TA1 - task_restart - restarting TA2
+TA2 - is beginning to run
+TA2 - task_wake_after - sleep 1/2 second
+TA2 - task_wake_after - sleep 1/2 second
+TA1 - task_restart - restarting self
+TA2 - task_wake_after - sleep 1/2 second
+TA1 - is beginning to run
+TA2 - task_wake_after - sleep 1/2 second
+TA1 - task_restart - restarting TA2
+TA2 - is beginning to run
+TA2 - task_wake_after - sleep 1/2 second
+TA2 - task_wake_after - sleep 1/2 second
+TA1 - task_restart - restarting self
+TA2 - task_wake_after - sleep 1/2 second
+TA1 - is beginning to run
+TA2 - task_wake_after - sleep 1/2 second
+TA1 - task_restart - restarting TA2
+TA2 - is beginning to run
+TA2 - task_wake_after - sleep 1/2 second
+TA2 - task_wake_after - sleep 1/2 second
+TA1 - task_restart - restarting self
+TA2 - task_wake_after - sleep 1/2 second
+TA1 - is beginning to run
+*** END OF TEST 6 ***
