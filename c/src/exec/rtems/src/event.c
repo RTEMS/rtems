@@ -170,13 +170,14 @@ void _Event_Seize(
     return;
   }
 
-  _Event_Sync = TRUE;
+  _Event_Sync       = TRUE;
+  _Event_Sync_state = EVENT_SYNC_NOTHING_HAPPENED;
+
   executing->Wait.option            = (unsigned32) option_set;
   executing->Wait.count             = (unsigned32) event_in;
   executing->Wait.return_argument   = event_out;
 
   _ISR_Enable( level );
-  _Thread_Set_state( executing, STATES_WAITING_FOR_EVENT );
 
   if ( ticks ) {
     _Watchdog_Initialize(
@@ -188,20 +189,23 @@ void _Event_Seize(
     _Watchdog_Insert_ticks(
       &executing->Timer,
       ticks,
-      WATCHDOG_NO_ACTIVATE
+      WATCHDOG_ACTIVATE_NOW
     );
   }
+
+  _Thread_Set_state( executing, STATES_WAITING_FOR_EVENT );
 
   _ISR_Disable( level );
   if ( _Event_Sync == TRUE ) {
     _Event_Sync = FALSE;
-    if ( ticks )
-      _Watchdog_Activate( &executing->Timer );
     _ISR_Enable( level );
     return;
   }
+  if ( _Event_Sync_state == EVENT_SYNC_TIMEOUT )
+    executing->Wait.return_code = RTEMS_TIMEOUT;
   _ISR_Enable( level );
-  (void) _Watchdog_Remove( &executing->Timer );
+  if ( ticks )
+    (void) _Watchdog_Remove( &executing->Timer );
   _Thread_Unblock( executing );
   return;
 }
@@ -266,11 +270,11 @@ void _Event_Surrender(
         return;
       }
     }
-    else if ( _Thread_Is_executing( the_thread ) && _Event_Sync == TRUE ) {
+    else if ( _Event_Sync == TRUE && _Thread_Is_executing( the_thread ) ) {
       if ( seized_events == event_condition || _Options_Is_any( option_set ) ) {
         api->pending_events = _Event_sets_Clear( pending_events,seized_events );
         *(rtems_event_set *)the_thread->Wait.return_argument = seized_events;
-        _Event_Sync = FALSE;
+        _Event_Sync_state = EVENT_SYNC_SATISFIED;
       }
     }
   }
@@ -304,8 +308,13 @@ void _Event_Timeout(
     case OBJECTS_REMOTE:  /* impossible */
       break;
     case OBJECTS_LOCAL:
-      the_thread->Wait.return_code = RTEMS_TIMEOUT;
-      _Thread_Unblock( the_thread );
+      if ( _Event_Sync == TRUE && _Thread_Is_executing( the_thread ) ) {
+        if ( _Event_Sync_state != EVENT_SYNC_SATISFIED )
+          _Event_Sync_state = EVENT_SYNC_TIMEOUT;
+      } else {
+        the_thread->Wait.return_code = RTEMS_TIMEOUT;
+        _Thread_Unblock( the_thread );
+      }
       _Thread_Unnest_dispatch();
       break;
   }
