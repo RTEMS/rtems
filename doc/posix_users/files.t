@@ -51,7 +51,20 @@ The directives provided by the files and directories manager are:
 
 @section Background
 
-There is currently no text in this section.
+@subsection Path Name Evaluation
+
+A pathname is a string that consists of no more than @code{PATH_MAX}
+bytes, including the terminating null character.  A pathname has an optional
+beginning slash, followed by zero or more filenames separated by slashes.  
+If the pathname refers to a directory, it may also have one or more trailing
+slashes.  Multiple successive slahes are considered to be the same as
+one slash.  
+
+POSIX allows a pathname that begins with precisely two successive slashes to be
+interpreted in an implementation-defined manner.  RTEMS does not currently
+recognize this as a special condition.  Any number of successive 
+slashes is treated the same as a single slash.   POSIX requires that
+an implementation treat more than two leading slashes as a single slash.
 
 @section Operations
 
