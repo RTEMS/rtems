@@ -1,5 +1,20 @@
 2001-11-20	Joel Sherrill <joel@OARcorp.com>
 
+	* acinclude.m4: papyrus reference removed.
+	* papyrus/.cvsignore, papyrus/ChangeLog, papyrus/Makefile.am,
+	papyrus/README, papyrus/bsp_specs, papyrus/configure.ac, papyrus/times,
+	papyrus/dlentry/.cvsignore, papyrus/dlentry/Makefile.am,
+	papyrus/dlentry/dlentry.S, papyrus/flashentry/.cvsignore,
+	papyrus/flashentry/Makefile.am, papyrus/flashentry/flashentry.S,
+	papyrus/include/.cvsignore, papyrus/include/Makefile.am,
+	papyrus/include/bsp.h, papyrus/include/coverhd.h,
+	papyrus/startup/.cvsignore, papyrus/startup/Makefile.am,
+	papyrus/startup/bspclean.c, papyrus/startup/bspstart.c,
+	papyrus/startup/linkcmds, papyrus/startup/setvec.c,
+	papyrus/wrapup/.cvsignore, papyrus/wrapup/Makefile.am: Deleted.
+
+2001-11-20	Joel Sherrill <joel@OARcorp.com>
+
 	* support/new_exception_processing/configure.ac,
 	support/new_exception_processing/rtems/score/c_isr.inl,
 	support/new_exception_processing/rtems/score/cpu.h,

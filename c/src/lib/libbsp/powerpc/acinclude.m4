@@ -17,8 +17,6 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([motorola_powerpc]);;
   mpc8260ads )
     AC_CONFIG_SUBDIRS([mpc8260ads]);;
-  papyrus )
-    AC_CONFIG_SUBDIRS([papyrus]);;
   ppcn_60x )
     AC_CONFIG_SUBDIRS([ppcn_60x]);;
   psim )
