@@ -5,7 +5,7 @@
 @SET_MAKE@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-VPATH=@srcdir@:@srcdir@/../../mvme147/startup
+VPATH=@srcdir@:@srcdir@/../../mvme147/startup:@srcdir@/../../shared
 
 PGM=${ARCH}/startup.rel
 
