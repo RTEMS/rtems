@@ -74,8 +74,8 @@ BUILD_DIRS = ${CREATE_DIRS:%=$(PROJECT_ROOT)/$(RTEMS_BSP)/%}
 # Make all/install must include 'env'
 # if something is added to TARGET_VARIANTS, then account for it here
 make_src_makefiles: Makefile.in Makefile
-	-find . -name Makefile \
-	    -exec grep -l "^preinstall" {} \; > make_src_makefiles.tmp
+	-find src -name Makefile \
+	    -exec grep -l "^preinstall" {} \; | sort > make_src_makefiles.tmp
 	-grep tools make_src_makefiles.tmp > make_src_makefiles
 	-grep -v tools make_src_makefiles.tmp >> make_src_makefiles
 	-rm make_src_makefiles.tmp
@@ -93,6 +93,7 @@ pre_install_src: env make_src_makefiles
 		$(MAKE) preinstall; \
 		cd $$CURRDIR; \
 	done
+
 all: pre_install_src env 
 debug: pre_install_src env
 profile: pre_install_src env
