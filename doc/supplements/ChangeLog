@@ -1,3 +1,7 @@
+2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* supplements.am: Remove AM_MAKEINFOFLAGS, TEXI2DVI, TEXI2PDF.
+
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* supplements.am: Use automake rules to build ps, pdf, info.
