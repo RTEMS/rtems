@@ -1,5 +1,12 @@
 2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
 
+	* score/include/rtems/score/heap.h: Use uintptr_t for _H_uptr_t.
+	* score/inline/rtems/score/address.inl: Remove 
+	RTEMS_CPU_HAS_16_BIT_ADDRESSES.
+	Use uintptr_t for void* to address cast.
+
+2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
 	* libcsupport/include/stdint.h: Use __PTRDIFF_TYPE for intptr_t.
 
 2005-01-23	Ralf Corsepius <ralf.corsepius@rtems.org>

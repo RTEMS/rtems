@@ -51,7 +51,7 @@ extern "C" {
  *        'rtems/score/types.h' and used here.
  */
 
-typedef unsigned long int _H_uptr_t;
+typedef uintptr_t _H_uptr_t;
 
 /**
  *  Forward reference

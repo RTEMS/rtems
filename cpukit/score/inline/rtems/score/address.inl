@@ -80,10 +80,8 @@ RTEMS_INLINE_ROUTINE boolean _Addresses_Is_aligned (
 {
 #if (CPU_ALIGNMENT == 0)
     return TRUE;
-#elif defined(RTEMS_CPU_HAS_16_BIT_ADDRESSES)
-    return ( ( (unsigned short)address % CPU_ALIGNMENT ) == 0 );
 #else
-    return ( ( (uint32_t  )address % CPU_ALIGNMENT ) == 0 );
+    return ( ( (uintptr_t)address % CPU_ALIGNMENT ) == 0 );
 #endif
 }
 
