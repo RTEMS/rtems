@@ -37,18 +37,14 @@
 #define LANGUAGE_ASSEMBLY
 #endif
 
-
 #include <rtems/asm.h>
 #include "regs.S"
 #include "mg5.h"
-
-
 
 #ifdef __mips16
    /* This file contains 32 bit assembly code.  */
    .set nomips16
 #endif
-
 
 /*
 ** defined by linkcmds, pointing to the start of the relocation target
@@ -59,7 +55,6 @@
    .word 0
    .text
    .align 2
-
 
 /**********************************************************************
 **
@@ -100,7 +95,6 @@ _branch:
    mtc0    t0, C0_CAUSE
    nop
 
-
    /*
    ** Call cpuinit. Masking used to call EEPROM address of _cpuinit.  Label is RAM label.
    */
@@ -123,8 +117,6 @@ _branch:
    jal    t0
    nop
 
-
-
    /*
    ** Print 'b'.  Show that we started.
    */
@@ -136,10 +128,6 @@ _branch:
    or     t0,t2
    jal    t0
    nop
-
-
-
-
 
    li	k0,0
    li   k1,0
@@ -157,8 +145,6 @@ _branch:
    srl  t0,31		/* shift high bit down to bit 0 */
    bnez t0,1f		/* booting from above kseg1 */
 
-
-
    /*
    ** Call IcacheFlush. Masking used to call EEPROM address of IcacheFlush.  Label is RAM label.
    */
@@ -170,7 +156,6 @@ _branch:
    move	  k0,t0		/* save cache flush in-prom address */
    jal    t0
    nop
-
 
    /*
    ** Print 'I'.  Show that we flushed I cache.
@@ -184,7 +169,6 @@ _branch:
    jal    t0
    nop
 
-
    /*
    ** Call DcacheFlush. Masking used to call EEPROM address of DcacheFlush.  Label is RAM label.
    */
@@ -195,7 +179,6 @@ _branch:
    or     t0,t2
    jal    t0
    nop
-
 
    /*
    ** Print 'D'.  Show that we flushed D cache.
@@ -209,7 +192,6 @@ _branch:
    move	  k1,t0		/* save cache flush in-prom address */
    jal    t0
    nop
-
 
 1:
    /*
@@ -287,7 +269,6 @@ _branch:
    jal    t0
    nop
 
-
    /*
    ** get the address of the _branch label above as it would appear in
    ** the relocated code
@@ -335,7 +316,6 @@ relocate:
    nop
    .end _start
 
-
 /**********************************************************************
 **
 ** Function: _start_in_ram
@@ -354,7 +334,6 @@ _start_in_ram:
 
    la	gp, _gp			/* set the global data pointer */
    .end _start_in_ram
-
 
 /**********************************************************************
 **
@@ -405,7 +384,6 @@ zerobss:
 
    .end    zerobss
 
-
 /**********************************************************************
 **
 ** Function: _init
@@ -421,7 +399,6 @@ _initialize_rtems:
    li		a0, 'i'
    jal		putch_rom
    nop
-
 
    /*
    ** Save the boot-time addresses of the I & D cache flush routines.
@@ -447,7 +424,6 @@ _initialize_rtems:
    nop
    .end _initialize_rtems
 
-
 /**********************************************************************
 **
 ** Function: _sys_exit
@@ -460,8 +436,6 @@ _sys_exit:
    la  t0, PMON_ADDRESS
    jal t0
    .end _sys_exit
-
-
 
 /**********************************************************************
 **
@@ -506,7 +480,6 @@ putch_rom:
    j    ra
   .end putch_rom
 
-
 /**********************************************************************
 **
 ** function: config_uart
@@ -542,7 +515,6 @@ config_uart:
    */
    j    ra
 .end config_uart
-
 
 /*************************************************************
 * CpuInit:
@@ -670,7 +642,6 @@ _cpuinit:
    li  t0, 0x0
    sw  t0,M_SPEC2
 
-
    /*
    ** SPEC3 Setup
    ** SPEC3 will be used for the SONIC ethernet controller.
@@ -797,14 +768,6 @@ _cpuinit:
    j ra
    .end _cpuinit
 
-
-
-
-
-
-
-
-
 /**********************************************************************
 **
 ** Keep the boot-time address of the I & D cache reset code for
@@ -815,8 +778,6 @@ _cpuinit:
 
 _promIcache:	.word 0
 _promDcache:	.word 0
-
-
 
 	.globl promCopyIcacheFlush
 	.ent promCopyIcacheFlush
@@ -837,8 +798,6 @@ promCopyIcacheFlush:
 	.set reorder
 	.end promCopyIcacheFlush
 
-
-
 	.globl promCopyDcacheFlush
 	.ent promCopyDcacheFlush
 	.set noreorder
@@ -857,10 +816,6 @@ promCopyDcacheFlush:
 	nop
 	.set reorder
 	.end promCopyDcacheFlush
-
-
-
-
 
 /*******************************************************************************
 ** Function Name:   IcacheFlush
@@ -900,7 +855,6 @@ icache_write:
      bltu      t8, t9, icache_write /* check to see if we are done */
      nop
 
-
      /*
      ** De-isolate I cache
      */
@@ -912,12 +866,10 @@ icache_write:
      .set reorder
      .end IcacheFlush
 
-
 /********************************************************
 ** Function Name:   DcacheFlush
 ** Description:     This functions flushes the on chip dcache.
 */
-
 
      .ent DcacheFlush
      .set noreorder
@@ -954,6 +906,5 @@ dcache_write:
      nop
      .set reorder
      .end DcacheFlush
-
 
 /* EOF start.S */

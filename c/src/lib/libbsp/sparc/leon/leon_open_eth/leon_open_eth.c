@@ -3,7 +3,6 @@
  *
  */
 
-
 #include <bsp.h>
 #include <libchip/open_eth.h>
 #if (OPEN_ETH_DEBUG & OPEN_ETH_DEBUG_PRINT_REGISTERS)

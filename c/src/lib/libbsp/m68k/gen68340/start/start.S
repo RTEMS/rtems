@@ -622,7 +622,6 @@ _csepld_clear1:
 	moves.b		REG_PDCS(crt0_glue),crt0_pdcs
 /*	move.b		#0x3F,crt0_pdcs 					pour test */
 
-
 	/*---------------------------------------*/
 	/* -- EPLD chip-select initialization -- */
 	/*---------------------------------------*/
@@ -719,7 +718,6 @@ _init_cache_end:
 
 	move.l 		#68349,crt0_cpu_type
 
-
 	/* -- jump back to PROM -- */
 
 	jmp.l		(_fill_test)				| must be absolute long
@@ -761,7 +759,6 @@ _b_cs340:
 	move.l	#68340,crt0_cpu_type
 	move.b	#0,crt0_csswitch				| CPU
 	move.b	#1,crt0_buswidth				| 16 bits
-
 
 	/*-------------------------------------------------
 	  fill RAM if COLDSTART

@@ -22,7 +22,6 @@
 #define  MODE_MAX	3
 typedef int MODE;    /* drawing mode*/
 
-
 /* Define one and only one of the following to be nonzero*/
 #define	VGA_ET4000	0	/* TSENG LABS ET4000 chip 800x600*/
 #define	VGA_STANDARD	1	/* standard VGA 640x480*/
@@ -150,7 +149,6 @@ out_word(unsigned int p,unsigned int d)
   outp(p + 1, (d >> 8) & 0xff);
 }
 
-
 /* Values for the data rotate register to implement drawing modes. */
 static unsigned char mode_table[MODE_MAX + 1] = {
   0x00, 0x18, 0x10, 0x08
@@ -167,7 +165,6 @@ setmode(MODE mode)
   outp(GRREG, DATA_ROTATE);
   outp(GRVAL, mode_table[mode]);
 }
-
 
 #if VGA_ET4000
 
@@ -268,7 +265,6 @@ static REGIO graphics_on[] = {
   DONE, 0, 0, 0, 0
 };
 
-
 /* VGA 80x25 text (BIOS mode 3).
  */
 static REGIO graph_off[] = {
@@ -367,7 +363,6 @@ static REGIO graph_off[] = {
 };
 
 #endif
-
 
 #if VGA_STANDARD
 
@@ -468,7 +463,6 @@ static REGIO graphics_on[] = {
   { DONE, 0, 0, 0, 0 }
 };
 
-
 /* VGA 80x25 text (BIOS mode 3).
  */
 static REGIO graph_off[] = {
@@ -568,7 +562,6 @@ static REGIO graph_off[] = {
 
 #endif
 
-
 #if EGA_STANDARD
 
 /* EGA 640x350 16-color graphics (BIOS mode 0x10).
@@ -667,7 +660,6 @@ static REGIO graphics_on[] = {
   /* End of table */
   DONE, 0, 0, 0, 0
 };
-
 
 /* EGA 80x25 text (BIOS mode 3).
  */

@@ -253,7 +253,6 @@ void InitializeUniverse()
    PCI_bus_write( &UNIVERSE->LSI0_BD,  0x05000000 );
    PCI_bus_write( &UNIVERSE->LSI0_TO,  0x7C000000 );
 
-
 #if 0
    /*
     * Set the PCI Slave Image 0 Control register with posted write enable,

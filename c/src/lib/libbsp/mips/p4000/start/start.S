@@ -35,14 +35,12 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #include <rtems/mips/idtcpu.h>
 #include <rtems/asm.h>
 
-
 .extern _fbss,4		  /* this is defined by the linker */
 .extern end,4		  /* this is defined by the linker */
 
 .lcomm sim_mem_cfg_struct,12
 
 	.text
-
 
 #define TMP_STKSIZE  1024
 
@@ -144,7 +142,6 @@ FRAME(start,sp,0,ra)
 	bltu	v0,v1,3b
 	add	v0,4
 
-
 /************************************************************************
 **
 ** 	Temporary Stack - needed to  handle stack saves until
@@ -211,13 +208,11 @@ FRAME(start,sp,0,ra)
 12:
 #endif
 
-
 /*
  * P_STACKSIZE is the size of the Prom Stack.
  * the prom stack grows downward
  */
 #define P_STACKSIZE     0x2000   /* sets stack size to 8k */
-
 
 /**************************************************************************
 **
@@ -250,8 +245,6 @@ FRAME(start,sp,0,ra)
 	jal	flush_cache_nowrite	/* flush Data & Instruction caches */
 #endif
 
-
-
 /**************************************************************************
 **
 **	If this chip supports a Translation Lookaside Buffer, clear it
@@ -272,7 +265,6 @@ FRAME(start,sp,0,ra)
 	jal	init_tlb		/* clear the tlb */
 #endif
 
-
 /************************************************************************
 **
 **  Initialization required if using IDT/c or libc.a, standard C Lib
@@ -286,13 +278,11 @@ FRAME(start,sp,0,ra)
 	jal	idtsim_init_file
 /***********************  END I/O initialization **********************/
 
-
 	jal	boot_card
 
 	jal	idtsim_promexit
 
 ENDFRAME(start)
-
 
 	.globl	sim_mem_cfg
 sim_mem_cfg:

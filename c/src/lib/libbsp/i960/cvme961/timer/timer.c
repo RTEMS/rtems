@@ -25,7 +25,6 @@
  *  $Id$
  */
 
-
 #include <rtems.h>
 #include <bsp.h>
 #include <rtems/zilog/z8536.h>

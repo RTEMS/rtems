@@ -18,7 +18,6 @@
  * is flat and that stack is big enough
  */
 
-
 static int pcibInitialized = 0;
 static unsigned int pcibEntry;
 
@@ -211,13 +210,9 @@ pcib_find_by_class(int classCode, int idx, int *sig)
   return PCIB_ERR_SUCCESS;
 }
 
-
-
-
 #define PCI_MULTI_FUNCTION       0x80
 #define PCI_MAX_DEVICES		 16
 #define PCI_MAX_FUNCTIONS	 8
-
 
 int
 BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
@@ -273,9 +268,6 @@ BSP_pciFindDevice( unsigned short vendorid, unsigned short deviceid,
    return -1;
 }
 
-
-
-
 /*
  * Generate Special Cycle
  */
@@ -305,7 +297,6 @@ pcib_special_cycle(int busNo, int data)
 
   return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
 }
-
 
 /*
  * Read byte from config space
@@ -344,7 +335,6 @@ pcib_conf_read8(int sig, int off, unsigned char *data)
   return PCIB_ERR_SUCCESS;
 }
 
-
 /*
  * Read word from config space
  */
@@ -382,7 +372,6 @@ pcib_conf_read16(int sig, int off, unsigned short *data)
   return PCIB_ERR_SUCCESS;
 }
 
-
 /*
  * Read dword from config space
  */
@@ -419,7 +408,6 @@ pcib_conf_read32(int sig, int off, unsigned int *data)
 
   return PCIB_ERR_SUCCESS;
 }
-
 
 /*
  * Write byte into  config space
@@ -483,8 +471,6 @@ pcib_conf_write16(int sig, int off, unsigned int data)
   return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
 }
 
-
-
 /*
  * Write dword into config space
  */
@@ -515,7 +501,6 @@ pcib_conf_write32(int sig, int off, unsigned int data)
 
   return pcib_convert_err((pcibExchg[0] >> 8) & 0xff);
 }
-
 
 static int
 pcib_convert_err(int err)

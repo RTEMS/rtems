@@ -107,7 +107,6 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine)
   return  (~(i8259s_cache & mask));
 }
 
-
 /*-------------------------------------------------------------------------+
 |         Function: BSP_irq_ack_at_i8259s
 |      Description: Signal generic End Of Interrupt (EOI) to appropriate PIC.

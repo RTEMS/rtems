@@ -62,7 +62,6 @@
 
 #define INET_ADDR_MAX_BUF_SIZE (sizeof "255.255.255.255")
 
-
 extern void m8xx_dump_brgs( void );
 
 /*
@@ -76,7 +75,6 @@ extern void m8xx_dump_brgs( void );
  * This must not be the same as INTERRUPT_EVENT.
  */
 #define START_TRANSMIT_EVENT    RTEMS_EVENT_2
-
 
 /*
  * Receive buffer size -- Allow for a full ethernet packet plus CRC (1518).
@@ -127,7 +125,6 @@ struct m8260_hdlc_struct {
         unsigned long   txRawWait;
 };
 static struct m8260_hdlc_struct hdlc_driver[NIFACES];
-
 
 static void  m8xx_scc3_hdlc_on(const rtems_irq_connect_data* ptr)
 {
@@ -187,7 +184,6 @@ m8xx_scc3_interrupt_handler ()
 #endif
 }
 
-
 static rtems_irq_connect_data hdlcSCC3IrqData = {
   BSP_CPM_IRQ_SCC3,
   (rtems_irq_hdl) m8xx_scc3_interrupt_handler,
@@ -195,7 +191,6 @@ static rtems_irq_connect_data hdlcSCC3IrqData = {
   (rtems_irq_disable) m8xx_scc3_hdlc_off,
   (rtems_irq_is_enabled)m8xx_scc3_hdlc_isOn
 };
-
 
 /*
  * Initialize the SCC hardware
@@ -232,7 +227,6 @@ m8260_scc_initialize_hardware (struct m8260_hdlc_struct *sc)
   m8260.psord &= ~0x00000080;
   m8260.pdird |=  0x00200080;
 
-
   /* External Rx Clock from CLK5 */
   if( m8xx_get_clk( M8xx_CLK_5 ) == -1 )
     printk( "Error allocating CLK5 for network device.\n" );
@@ -244,8 +238,6 @@ m8260_scc_initialize_hardware (struct m8260_hdlc_struct *sc)
     printk( "Error allocating BRG for network device\n" );
   else
     m8260.cmxscr |= ((unsigned)brg << 8);
-
-
 
   /*
    * Allocate mbuf pointers
@@ -283,7 +275,6 @@ m8260_scc_initialize_hardware (struct m8260_hdlc_struct *sc)
    */
   m8260.scc3p.mrblr = RBUF_SIZE;
 
-
   m8260.scc3p.un.hdlc.c_mask = 0xF0B8;
   m8260.scc3p.un.hdlc.c_pres = 0xFFFF;
   m8260.scc3p.un.hdlc.disfc  = 0;
@@ -300,7 +291,6 @@ m8260_scc_initialize_hardware (struct m8260_hdlc_struct *sc)
   m8260.scc3p.un.hdlc.haddr2 = 0xFFFF;	/* Station address */
   m8260.scc3p.un.hdlc.haddr3 = 0xFFFF;	/* Dummy */
   m8260.scc3p.un.hdlc.haddr4 = 0xFFFF;	/* Dummy */
-
 
   /*
    * Send "Init parameters" command
@@ -325,7 +315,6 @@ m8260_scc_initialize_hardware (struct m8260_hdlc_struct *sc)
   }
   sc->txBdHead = sc->txBdTail = 0;
   sc->txBdActiveCount = 0;
-
 
   m8260.scc3.sccm = 0;     /* No interrupts unmasked till necessary */
 
@@ -364,8 +353,6 @@ m8260_scc_initialize_hardware (struct m8260_hdlc_struct *sc)
 
 #endif
 
-
-
   m8260.scc3.gsmr_h  = 0;
   m8260.scc3.gsmr_l  = 0x10000000;
   m8260.scc3.dsr     = 0x7E7E;	/* flag character */
@@ -376,8 +363,6 @@ m8260_scc_initialize_hardware (struct m8260_hdlc_struct *sc)
   m8260.scc3.gsmr_l |=  0x00000030;  /* Set ENR and ENT to enable Rx and Tx */
 
 }
-
-
 
 /*
  * Soak up buffer descriptors that have been sent
@@ -592,7 +577,6 @@ scc_rxDaemon (void *arg)
   }
 }
 
-
 static void
 scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
 {
@@ -682,13 +666,11 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
       txBd->buffer = mtod (m, void *);
       txBd->length = m->m_len;
 
-
       /*
        * Flush the buffer for this descriptor
        */
 
       rtems_cache_flush_multiple_data_lines((void *)txBd->buffer, txBd->length);
-
 
 /* throw off the header for Ethernet Emulation mode */
 /*
@@ -734,7 +716,6 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
   }
 }
 
-
 /*
  * Driver transmit daemon
  */
@@ -763,15 +744,12 @@ scc_txDaemon (void *arg)
       if (!m)
         break;
 
-
       scc_sendpacket (ifp, m);
-
 
     }
     ifp->if_flags &= ~IFF_OACTIVE;
   }
 }
-
 
 /*
  * Send packet (caller provides header).
@@ -830,8 +808,6 @@ scc_init (void *arg)
   m8260.scc3.gsmr_l |= 0x30;
 }
 
-
-
 /*
  * Stop the device
  */
@@ -847,7 +823,6 @@ scc_stop (struct m8260_hdlc_struct *sc)
    */
   m8260.scc3.gsmr_l &= ~0x30;
 }
-
 
 /*
  * Show interface statistics
@@ -917,8 +892,6 @@ scc_ioctl (struct ifnet *ifp, int command, caddr_t data)
   }
   return error;
 }
-
-
 
 /*
  * Attach an SCC driver to the system
@@ -999,7 +972,6 @@ rtems_scc3_driver_attach (struct rtems_bsdnet_ifconfig *config)
   hdlc_ifattach (ifp);
   return 1;
 };
-
 
 int
 rtems_enet_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)

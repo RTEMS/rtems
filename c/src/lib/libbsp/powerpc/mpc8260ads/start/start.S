@@ -41,7 +41,6 @@
  *  version of the data segment to the correct location.
  */
 
-
         .section ".entry"  /* This might have to be the first thing in the
                             * text section. At one time, it had to be
                             * first, but I don't believe it is true
@@ -68,8 +67,6 @@ PUBLIC_VAR (data_addr )
 data_addr:
 	.long	data.start
 
-
-
 PUBLIC_VAR (text_addr)
 text_addr:
         .long   text.start
@@ -78,14 +75,12 @@ PUBLIC_VAR (text_length)
 text_length:
         .long   text.size
 
-
 /*
  * Initialization code
  */
 .startup:
     /* Get start address */
         mflr    r1
-
 
     /* --------------------------------------------------
      * Clear MSR[EE] to disable interrupts
@@ -100,9 +95,6 @@ text_length:
 	ori	r5, r5, 0x2000    		/* Enable FPU */
 #endif
 	mtmsr	r5
-
-
-
 
 #ifdef ENABLE_CACHE
 	/* Enable caches */
@@ -119,7 +111,6 @@ text_length:
 #endif
 #endif
 
-
 	/*--------------------------------------------------
 	 * Set up the power management modes
 	 * The 8260 has a dynamic power management mode that
@@ -135,11 +126,8 @@ text_length:
 	 *
 	 *-------------------------------------------------- */
 
-
-
         /* clear the bss section */
         bl      bssclr
-
 
 /*
  * C_setup.
@@ -151,7 +139,6 @@ text_length:
         /* Set up stack pointer = beginning of text section - 56 */
         addi    r1, r1, -56-4
 
-
         /* clear argc and argv */
         xor     r3, r3, r3
         xor     r4, r4, r4
@@ -159,15 +146,11 @@ text_length:
         .extern SYM (boot_card)
         bl       SYM (boot_card)	/* call the first C routine */
 
-
-
 	/* we don't expect to return from boot_card but if we do */
 	/* wait here for watchdog to kick us into hard reset     */
 
-
 twiddle:
 	b 		twiddle
-
 
 /*
  * bssclr - zero out bss

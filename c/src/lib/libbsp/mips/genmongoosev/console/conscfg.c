@@ -26,7 +26,6 @@
 #define MG5UART_FUNCTIONS &mg5uart_fns_polled
 #endif
 
-
 console_tbl     Console_Port_Tbl[] = {
 {
   "/dev/com0",                             /* sDeviceName */
@@ -79,7 +78,6 @@ unsigned long  Console_Port_Count = NUM_CONSOLE_PORTS;
 console_data  Console_Port_Data[NUM_CONSOLE_PORTS];
 
 rtems_device_minor_number  Console_Port_Minor;
-
 
 /*
  *  printk() support that simply routes printk to stderr

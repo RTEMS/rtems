@@ -23,7 +23,6 @@
  *  $Id$
  */
 
-
 #include <rtems.h>
 #include <bsp.h>
 #include <stdlib.h>
@@ -129,7 +128,6 @@ void Timer_initialize(void)
     continue;
   Ttimer_val = 0;
 }
-
 
 #define AVG_OVERHEAD      3  /* It typically takes 3.0 microseconds */
                              /* (3 ticks) to start/stop the timer. */

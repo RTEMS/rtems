@@ -39,7 +39,6 @@
 
 extern const char gdb_hexchars[];
 
-
 /*
  *  Prototypes for CPU dependent routines that are conditional
  *  at the bottom of this file.
@@ -50,12 +49,6 @@ void rtems_gdb_stub_get_registers_from_context(
   Thread_Control *th
 );
 
-
-
-
-
-
-
 /* Check whether it is OK to enable thread support */
 int rtems_gdb_stub_thread_support_ok(void)
 {
@@ -64,10 +57,6 @@ int rtems_gdb_stub_thread_support_ok(void)
   }
   return 0;
 }
-
-
-
-
 
 /*
  *  rtems_gdb_stub_id_to_index
@@ -110,8 +99,6 @@ int rtems_gdb_stub_id_to_index(
 
   return first_posix_id + (thread_obj_id - min_id);
 }
-
-
 
 /* Return the RTEMS thread id from a gdb thread id */
 Thread_Control *rtems_gdb_index_to_stub_id(
@@ -175,19 +162,11 @@ Thread_Control *rtems_gdb_index_to_stub_id(
    return th;
 }
 
-
-
-
-
-
 /* Get id of the thread stopped by exception */
 int rtems_gdb_stub_get_current_thread(void)
 {
   return rtems_gdb_stub_id_to_index( _Thread_Executing->Object.id );
 }
-
-
-
 
 /* Get id of the next thread after athread, if argument <= 0 find the
    first available thread, return thread if found or 0 if not */
@@ -257,11 +236,6 @@ int rtems_gdb_stub_get_next_thread(int athread)
   return 0;
 }
 
-
-
-
-
-
 /* Get thread registers, return 0 if thread does not
    exist, and 1 otherwise */
 int rtems_gdb_stub_get_thread_regs(
@@ -281,11 +255,6 @@ int rtems_gdb_stub_get_thread_regs(
    return 0;
 }
 
-
-
-
-
-
 /* Set thread registers, return 0 if thread does not
    exist or register values will screw up the threads,
    and 1 otherwise */
@@ -301,11 +270,6 @@ int rtems_gdb_stub_set_thread_regs(
      though */
   return 1;
 }
-
-
-
-
-
 
 /* Get thread information, return 0 if thread does not
    exist and 1 otherwise */
@@ -431,11 +395,6 @@ int rtems_gdb_stub_get_thread_info(
 }
 
 /*******************************************************/
-
-
-
-
-
 
 /* Format: x<type-1x>,<address-x>,<length-x>, where x is 'z' or 'Z' */
 int parse_zbreak(const char *in, int *type, unsigned char **addr, int *len)
@@ -670,17 +629,6 @@ pack_qm_header(char *out, int count, int done, int athread)
    return;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void rtems_gdb_process_query(
   char *inbuffer,
   char *outbuffer,
@@ -704,9 +652,6 @@ void rtems_gdb_process_query(
       optr    = thread2vhstr(optr, thread);
       *optr   = 0;
       break;
-
-
-
 
     case 'P':
       /* Thread info query */
@@ -736,10 +681,6 @@ void rtems_gdb_process_query(
         pack_qq(outbuffer, mask, rthread, &info);
       }
       break;
-
-
-
-
 
     case 'L':
       /* Thread list query */
@@ -797,11 +738,6 @@ void rtems_gdb_process_query(
       }
       break;
 
-
-
-
-
-
     default:
       if (memcmp(inbuffer, "qOffsets", 8) == 0) {
         unsigned char *t, *d, *b;
@@ -848,11 +784,6 @@ void rtems_gdb_process_query(
       break;
     }
 }
-
-
-
-
-
 
 /* Present thread in the variable length string format */
 char*
@@ -957,7 +888,6 @@ vhstr2thread(const char *buf, int *thread)
   ASSERT(buf != NULL);
   ASSERT(thread != NULL);
 
-
   /* If we have leading zeros, skip them */
   found_zero = 0;
 
@@ -1003,7 +933,6 @@ vhstr2thread(const char *buf, int *thread)
   *thread = val;
   return buf;
 }
-
 
 /* Present integer in the variable length string format */
 char*
@@ -1094,7 +1023,6 @@ vhstr2int(const char *buf, int *ival)
 
   ASSERT(buf != NULL);
   ASSERT(ival != NULL);
-
 
   /* If we have leading zeros, skip them */
   found_zero = 0;
@@ -1194,8 +1122,6 @@ static volatile char mem_err = 0;
 void  set_mem_err(void);
 static void (*volatile mem_fault_routine) (void) = NULL;
 
-
-
 /* convert count bytes of the memory pointed to by mem into hex string,
    placing result in buf, return pointer to next location in hex strng
    in case of success or NULL otherwise */
@@ -1270,7 +1196,6 @@ set_mem_err (void)
   mem_err = 1;
 }
 
-
 /* These are separate functions so that they are so short and sweet
    that the compiler won't save any registers (if there is a fault
    to mem_fault, they won't get restored, so there better not be any
@@ -1287,14 +1212,6 @@ set_byte (unsigned char *addr, int val)
 {
   *addr = val;
 }
-
-
-
-
-
-
-
-
 
 /*
  *  From here down, the code is CPU model specific and generally maps
@@ -1359,12 +1276,7 @@ int rtems_gdb_stub_get_offsets(
   return 1;
 }
 
-
-
-
-
 #elif defined(__mips__)
-
 
 void rtems_gdb_stub_get_registers_from_context(
   int            *registers,
@@ -1386,7 +1298,6 @@ void rtems_gdb_stub_get_registers_from_context(
    registers[SR] = (unsigned)th->Registers.c0_sr;
    registers[PC] = (unsigned)th->Registers.c0_epc;
 }
-
 
 int rtems_gdb_stub_get_offsets(
   unsigned char **text_addr,
@@ -1410,7 +1321,6 @@ int rtems_gdb_stub_get_offsets(
 }
 
 #elif defined(__mc68000__)
-
 
 void rtems_gdb_stub_get_registers_from_context(
   int            *registers,
@@ -1447,7 +1357,6 @@ void rtems_gdb_stub_get_registers_from_context(
   registers[PC] = (uint32_t)_CPU_Context_switch;
 #endif
 }
-
 
 int rtems_gdb_stub_get_offsets(
   unsigned char **text_addr,

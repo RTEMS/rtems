@@ -22,14 +22,12 @@
 extern "C" {
 #endif
 
-
 /*
  *
  * Note:  The Ports are numbered 0..NUM_Z85C30_CHIPS with port 0 and 1
  *        being on the first chip, and ports 2 and 3 being on the
  *        second chip...
  */
-
 
 /*
  * Z85c30 configuration informaiton.
@@ -85,7 +83,6 @@ typedef struct {
 
 } Console_Protocol;
 
-
 /*
  * Structure used for chip level information.
  */
@@ -116,7 +113,6 @@ typedef struct {
  */
 extern Chip_85C30_info Chips_85C30 [ NUM_Z85C30_CHIPS ];
 extern const Port_85C30_info Ports_85C30 [ NUM_Z85C30_PORTS ];
-
 
 /*
  *  85c30.c prototypes.

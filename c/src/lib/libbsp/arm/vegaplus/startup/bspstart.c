@@ -13,7 +13,6 @@
 |
 +--------------------------------------------------------------------------*/
 
-
 #include <bsp.h>
 #include <rtems/libcsupport.h>
 #include <rtems/libio.h>
@@ -77,7 +76,6 @@ void bsp_pretasking_hook(void)
 
   rtemsFreeMemStart += _heap_size;           /* HEAP_SIZE  in KBytes */
 
-
 #ifdef RTEMS_DEBUG
 
   rtems_debug_enable(RTEMS_DEBUG_ALL_MASK);
@@ -85,7 +83,6 @@ void bsp_pretasking_hook(void)
 #endif /* RTEMS_DEBUG */
 
 } /* bsp_pretasking_hook */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: bsp_start

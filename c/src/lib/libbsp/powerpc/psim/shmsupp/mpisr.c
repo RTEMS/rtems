@@ -16,7 +16,6 @@
 #include <bsp.h>
 #include <shm_driver.h>
 
-
 /*  void _Shm_setvec( )
  *
  *  This driver routine sets the SHM interrupt vector to point to the

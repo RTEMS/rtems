@@ -6,7 +6,6 @@
 #include <rtems/bspIo.h>
 #include <libcpu/pte121.h>
 
-
 /* Default setup of the page tables. This is a weak
  * alias, so applications may easily override this
  * default setup.
@@ -23,7 +22,6 @@
 
 Triv121PgTbl
 BSP_pgtbl_setup(unsigned long) __attribute__ (( weak, alias("__BSP_default_pgtbl_setup") ));
-
 
 Triv121PgTbl
 __BSP_default_pgtbl_setup(unsigned int *pmemsize)

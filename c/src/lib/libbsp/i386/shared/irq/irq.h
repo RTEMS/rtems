@@ -60,9 +60,6 @@ typedef enum {
   BSP_RT_TIMER3		= 	10
 } rtems_irq_symbolic_name;
 
-
-
-
 /*
  * Type definition for RTEMS managed interrupts
  */
@@ -139,9 +136,6 @@ typedef struct {
    */
     rtems_irq_prio*		irqPrioTbl;
 }rtems_irq_global_settings;
-
-
-
 
 /*-------------------------------------------------------------------------+
 | Function Prototypes.

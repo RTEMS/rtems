@@ -40,11 +40,9 @@
 .equ I_Bit,           	     0x80
 .equ F_Bit,           	     0x40
 
-
 .equ Mode_SVC_MIRQ,	Mode_SVC | I_Bit | F_Bit
 .equ Mode_SVC_UIRQ,	Mode_SVC
 .equ Mode_IRQ_MIRQ,	Mode_SVC | I_Bit | F_Bit
-
 
 .equ MARK_STACK,  0    /*Fill every stack with a pattern for debug (0 or 1)*/
 
@@ -129,7 +127,6 @@ Real_start:
 	LDR     r1, =0xA2
 	STR     r1, [r0,#CSCNTL1_2]
 
-
 	MOV		r0,#CNTL_CLK_ADR
 /* Load clock mode 55 MHz */
    	LDR     r1, =0x0010
@@ -154,7 +151,6 @@ zi_init:
         CMP     r0, r1		       /* loop whilst r0 < r1 */
         STRLOT   r2, [r0], #4
         BLO     zi_init
-
 
 /* Load basic ARM7 interrupt table */
 VectorInit:

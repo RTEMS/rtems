@@ -42,7 +42,6 @@ XXX: FIX THE COMMENTS BELOW WHEN THE CPU IS KNOWN
 #define INTERRUPT 0        /* XXX: */
 #define POLLING   1        /* XXX: fix me -- is polling ONLY!!! */
 
-
 shm_config_table BSP_shm_cfgtbl;
 
 void Shm_Get_configuration(

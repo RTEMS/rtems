@@ -30,7 +30,6 @@
 #define SWI_InstallHandler         0x70
 #define SWI_GenerateError          0x71
 
-
 /* Now the SWI numbers and reason codes for RDI (Angel) monitors */
 #define AngelSWI_ARM 			(0x123456)
 #ifdef __thumb__

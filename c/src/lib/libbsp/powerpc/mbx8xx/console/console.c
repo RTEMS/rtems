@@ -93,7 +93,6 @@ static void serial_putchar(const char c);
 
 BSP_output_char_function_type BSP_output_char = _BSP_null_char;
 
-
 /*
  * _EPPCBug_pollRead
  *
@@ -199,7 +198,6 @@ static int _EPPCBug_pollRead(
   _ISR_Enable( level );
   return retval;
 }
-
 
 /*
  * _EPPCBug_pollWrite
@@ -325,7 +323,6 @@ error:
   return -1;
 }
 
-
 /*
  *  do_poll_read
  *
@@ -391,7 +388,6 @@ static rtems_status_code do_poll_read(
 
 #endif
 }
-
 
 /*
  *  do_poll_write
@@ -459,7 +455,6 @@ static rtems_status_code do_poll_write(
 
 #endif
 }
-
 
 /*
  *  Print functions prototyped in bspIo.h
@@ -814,7 +809,6 @@ rtems_device_driver console_initialize(
 
 #endif /* NVRAM_CONFIGURE != 1 */
 
-
   status = rtems_io_register_name ("/dev/tty0", major, SMC1_MINOR);
   if (status != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (status);
@@ -845,7 +839,6 @@ rtems_device_driver console_initialize(
 
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  * Open the device
@@ -881,7 +874,6 @@ rtems_device_driver console_open(
     0                           	/* outputUsesInterrupts */
   };
   rtems_status_code sc;
-
 
 #if (NVRAM_CONFIGURE == 1) || \
     ((NVRAM_CONFIGURE != 1) && (UARTS_USE_TERMIOS == 1) && \
@@ -947,7 +939,6 @@ rtems_device_driver console_open(
 #endif /* NVRAM_CONFIGURE != 1 */
 }
 
-
 /*
  * Close the device
  */
@@ -980,7 +971,6 @@ rtems_device_driver console_close(
 
 #endif /* NVRAM_CONFIGURE != 1 */
 }
-
 
 /*
  * Read from the device
@@ -1015,7 +1005,6 @@ rtems_device_driver console_read(
 #endif
 }
 
-
 /*
  * Write to the device
  */
@@ -1049,7 +1038,6 @@ rtems_device_driver console_write(
 
 #endif
 }
-
 
 /*
  * Handle ioctl request.

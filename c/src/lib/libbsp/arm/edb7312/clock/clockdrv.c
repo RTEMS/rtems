@@ -16,7 +16,6 @@
 #include <bsp.h>
 #include <irq.h>
 
-
 rtems_isr clock_isr(rtems_vector_number vector);
 rtems_isr Clock_isr(rtems_vector_number vector);
 static void clock_isr_on(const rtems_irq_connect_data *unused);
@@ -42,7 +41,6 @@ rtems_irq_connect_data clock_isr_data = {BSP_TC1OI,
   do {                                                                      \
       BSP_install_rtems_irq_handler(&clock_isr_data);                       \
      } while(0)
-
 
 /*
  * Set up the clock hardware
@@ -73,6 +71,5 @@ static int clock_isr_is_on(const rtems_irq_connect_data *irq)
 {
     return 1;
 }
-
 
 #include "../../../shared/clockdrv_shell.c"

@@ -19,7 +19,6 @@
 
 #include <stdio.h> /* for sprintf */
 
-
 /*
  * Proto types for this file
  */
@@ -41,7 +40,6 @@ typedef struct
   rtems_isr_entry     handler;                  /* isr routine        */
   rtems_vector_number vector;                   /* vector number      */
 } EE_ISR_Type;
-
 
 /* Note:  The following will not work if we add a method to remove
  *        handlers at a later time.

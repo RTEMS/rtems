@@ -109,7 +109,6 @@ _kd_mksound(unsigned int hz, unsigned int ticks)
 
 void (*kd_mksound)(unsigned int hz, unsigned int ticks) = _kd_mksound;
 
-
 #define i (tmp.kb_index)
 #define s (tmp.kb_table)
 #define v (tmp.kb_value)
@@ -143,7 +142,6 @@ do_kdsk_ioctl(int cmd, struct kbentry *user_kbe, int perm, struct kbd_struct *kb
 #undef i
 #undef s
 #undef v
-
 
 #define  HZ  100
 

@@ -30,7 +30,6 @@ i82527_msg_t rxMsgBuf[NUM_CAN_DEVS][RX_CAN_BUF_SIZE];
 
 volatile i82527_t *candev[NUM_CAN_DEVS];
 
-
 static rtems_isr
 canInterruptHandler (rtems_vector_number v)
 {
@@ -94,7 +93,6 @@ canInterruptHandler (rtems_vector_number v)
     }
   }
 
-
   candev[dev]->msg15.ctrl0  = 0xff & (I82527_MSG_CTRL_MSGVAL_SET |
                                       I82527_MSG_CTRL_INTPND_CLR);
   candev[dev]->msg15.ctrl1  = 0xff & (I82527_MSG_CTRL_NEWDAT_CLR |
@@ -145,7 +143,6 @@ rtems_device_driver canbus_initialize(
 #error NUM_CAN_DEVS is 0. It needs to be at least 1
 #endif /* NUM_CAN_DEVS > 0 */
 
-
   for (i=0; i < NUM_CAN_DEVS; i++) {
 
     /* clear rx buffers */
@@ -160,7 +157,6 @@ rtems_device_driver canbus_initialize(
                       I82527_CTRL_INIT; /* Disable external xfers */
 
     candev[i]->cir = I82527_CIR_DMC;    /* Divide memory clock by 2 */
-
 
     /* We want 250 kbps so assuming an input clock rate of 10 MHz:
      *   DSC = 0  =>  SCLK = 10 MHz, tSCLK = 100ns
@@ -336,7 +332,6 @@ rtems_device_driver canbus_close(
   return RTEMS_SUCCESSFUL;
 }
 
-
 rtems_device_driver canbus_read(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
@@ -421,8 +416,6 @@ rtems_device_driver canbus_write(
                                        I82527_MSG_CTRL_CPUUPD_CLR |
                                        I82527_MSG_CTRL_TXRQ_SET);
 
-
-
   return RTEMS_SUCCESSFUL;
 }
 rtems_device_driver canbus_control(
@@ -433,7 +426,6 @@ rtems_device_driver canbus_control(
 {
   return RTEMS_SUCCESSFUL;
 }
-
 
 /* part of old canbus_read */
 #if 0
@@ -453,7 +445,6 @@ rtems_device_driver canbus_control(
     for (j=0; j < pkt_len; j++)
       msg.data[j] = rxMsgBuf[minor][i].data[j];
 
-
   /* wait until there is a msg */
   while (!(candev->msg15.ctrl1 & I82527_MSG_CTRL_NEWDAT))
      continue;
@@ -472,7 +463,6 @@ rtems_device_driver canbus_control(
                                  I82527_MSG_CTRL_RMTPND_CLR);
 
   candev->status = 0x0;
-
 
   return RTEMS_SUCCESSFUL;
 #endif

@@ -15,7 +15,6 @@
  * $Id$
  */
 
-
 #include <sys/types.h>
 #include <rtems/bspIo.h>
 #include <libcpu/spr.h>
@@ -27,15 +26,12 @@
 
 #include <string.h>
 
-
 typedef unsigned int u32;
-
 
 /*
 #define DEBUG
 #define PCI_DEBUG
 */
-
 
 /* Used to reorganize PCI space on stupid machines which spread resources
  * across a wide address space. This is bad when P2P bridges are present
@@ -166,18 +162,14 @@ static struct blacklist_entry blacklist[] = {
    {0xffff, 0, 0, 0}
 };
 
-
 /* This function filters resources and then inserts them into a list of
  * configurable pci resources.
  */
-
 
 #define AREA(r) \
 (((r->type&PCI_BASE_ADDRESS_SPACE)==PCI_BASE_ADDRESS_SPACE_IO) ? PCI_AREA_IO :\
 	  ((r->type&PCI_BASE_ADDRESS_MEM_PREFETCH) ? PCI_AREA_PREFETCHABLE :\
 	   PCI_AREA_MEMORY))
-
-
 
 static int insert_before(pci_resource *e, pci_resource *t) {
    if (e->dev->bus->number != t->dev->bus->number)
@@ -185,10 +177,6 @@ static int insert_before(pci_resource *e, pci_resource *t) {
    if (AREA(e) != AREA(t)) return AREA(e)<AREA(t);
    return (e->size > t->size);
 }
-
-
-
-
 
 static void insert_resource(pci_resource *r) {
    struct blacklist_entry *b;
@@ -280,10 +268,6 @@ static void insert_resource(pci_resource *r) {
    }
 }
 
-
-
-
-
 /* This version only works for bus 0. I don't have any P2P bridges to test
  * a more sophisticated version which has therefore not been implemented.
  * Prefetchable memory is not yet handled correctly either.
@@ -323,11 +307,6 @@ static u_long find_range(u_char bus, u_char type,
    return total;
 }
 
-
-
-
-
-
 static inline void init_free_area(pci_area_head *h, u_long start,
                                   u_long end, u_int mask, int high) {
    pci_area *p;
@@ -341,11 +320,6 @@ static inline void init_free_area(pci_area_head *h, u_long start,
    h->mask = mask;
    h->high = high;
 }
-
-
-
-
-
 
 static void insert_area(pci_area_head *h, pci_area *p) {
    pci_area *q = h->head;
@@ -371,10 +345,6 @@ static void insert_area(pci_area_head *h, pci_area *p) {
    }
 }
 
-
-
-
-
 static
 void remove_area(pci_area_head *h, pci_area *p)
 {
@@ -389,11 +359,6 @@ void remove_area(pci_area_head *h, pci_area *p)
    for(;q && q->next!=p; q=q->next);
    if (q) q->next=p->next;
 }
-
-
-
-
-
 
 static pci_area * alloc_area(pci_area_head *h, struct pci_bus *bus,
                              u_long required, u_long mask, u_int flags) {
@@ -460,10 +425,6 @@ static pci_area * alloc_area(pci_area_head *h, struct pci_bus *bus,
    return new;
 }
 
-
-
-
-
 static inline
 void alloc_space(pci_area *p, pci_resource *r)
 {
@@ -475,10 +436,6 @@ void alloc_space(pci_area *p, pci_resource *r)
       p->start += r->size;
    }
 }
-
-
-
-
 
 static void reconfigure_bus_space(u_char bus, u_char type, pci_area_head *h)
 {
@@ -500,12 +457,6 @@ static void reconfigure_bus_space(u_char bus, u_char type, pci_area_head *h)
    }
 }
 
-
-
-
-
-
-
 #define BUS0_IO_START           0x10000
 #define BUS0_IO_END             0x1ffff
 #define BUS0_MEM_START          0x1000000
@@ -515,10 +466,6 @@ static void reconfigure_bus_space(u_char bus, u_char type, pci_area_head *h)
 #define BUSREST_IO_END          0x7ffff
 #define BUSREST_MEM_START       0xb000000
 #define BUSREST_MEM_END        0x10000000
-
-
-
-
 
 static void reconfigure_pci(void) {
    pci_resource *r;
@@ -534,7 +481,6 @@ static void reconfigure_pci(void) {
 
    init_free_area(&pci->io, BUS0_IO_START, BUS0_IO_END, 0xfff, 0);
    init_free_area(&pci->mem, BUS0_MEM_START, BUS0_MEM_END, 0xfffff, 0);
-
 
    /* First reconfigure the I/O space, this will be more
     * complex when there is more than 1 bus. And 64 bits
@@ -585,11 +531,6 @@ static void reconfigure_pci(void) {
       }
    }
 }
-
-
-
-
-
 
 static int
 indirect_pci_read_config_byte(unsigned char bus, unsigned char dev_fn,
@@ -659,7 +600,6 @@ static const struct pci_config_access_functions indirect_functions = {
    indirect_pci_write_config_word,
    indirect_pci_write_config_dword
 };
-
 
 static int
 direct_pci_read_config_byte(unsigned char bus, unsigned char dev_fn,
@@ -750,11 +690,6 @@ static const struct pci_config_access_functions direct_functions = {
    direct_pci_write_config_dword
 };
 
-
-
-
-
-
 void pci_read_bases(struct pci_dev *dev, unsigned int howmany)
 {
    unsigned int reg, nextreg;
@@ -820,13 +755,6 @@ void pci_read_bases(struct pci_dev *dev, unsigned int howmany)
       insert_resource(r);
    }
 }
-
-
-
-
-
-
-
 
 u_int pci_scan_bus(struct pci_bus *bus)
 {
@@ -1018,15 +946,6 @@ u_int pci_scan_bus(struct pci_bus *bus)
    return max;
 }
 
-
-
-
-
-
-
-
-
-
 #if 0
 
 void
@@ -1042,11 +961,6 @@ pci_fixup(void)
       }
    }
 }
-
-
-
-
-
 
 static void print_pci_info()
 {
@@ -1102,27 +1016,12 @@ static void print_pci_info()
 
 #endif
 
-
-
-
-
-
-
-
-
-
-
-
 static struct _addr_start
 {
       uint32_t   start_pcimem;
       uint32_t   start_pciio;
       uint32_t   start_prefetch;
 } astart;
-
-
-
-
 
 static pci_resource *enum_device_resources( struct pci_dev *pdev, int i )
 {
@@ -1138,20 +1037,11 @@ static pci_resource *enum_device_resources( struct pci_dev *pdev, int i )
    return r;
 }
 
-
-
-
-
-
-
-
-
 static void recursive_bus_reconfigure( struct pci_bus *pbus )
 {
    struct pci_dev       *pdev;
    struct pci_bus       *childbus;
    int  isroot = 0;
-
 
    if( !pbus )
    {
@@ -1164,12 +1054,10 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
       isroot = -1;
    }
 
-
 #define WRITE_BRIDGE_IO
 #define WRITE_BRIDGE_MEM
 #define WRITE_BRIDGE_PF
 #define WRITE_BRIDGE_ENABLE
-
 
 /*
 ** Run thru the p2p bridges on this bus and recurse into subordinate busses
@@ -1197,8 +1085,6 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
                 childbus->secondary,
                 childbus->subordinate );
 #endif
-
-
 
          /*
          **use the current values & the saved ones to figure out
@@ -1230,9 +1116,6 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
          pcibios_write_config_byte(pdev->bus->number, pdev->devfn, PCI_IO_LIMIT, limit8 );
 #endif
 
-
-
-
          if( addrhold.start_pcimem == astart.start_pcimem )
          {
             limit16 = 0;
@@ -1251,8 +1134,6 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
          pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_MEMORY_BASE, base16 );
          pcibios_write_config_word(pdev->bus->number, pdev->devfn, PCI_MEMORY_LIMIT, limit16 );
 #endif
-
-
 
          if( astart.start_prefetch == addrhold.start_prefetch )
          {
@@ -1288,11 +1169,6 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
 #endif
       }
    }
-
-
-
-
-
 
    if( !isroot )
    {
@@ -1370,15 +1246,6 @@ static void recursive_bus_reconfigure( struct pci_bus *pbus )
 
 }
 
-
-
-
-
-
-
-
-
-
 void pci_init(void)
 {
    PPC_DEVICE *hostbridge;
@@ -1438,6 +1305,5 @@ void pci_init(void)
 
    print_pci_resources("Allocated PCI resources:\n");
 }
-
 
 /* eof */

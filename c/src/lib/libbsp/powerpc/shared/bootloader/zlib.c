@@ -105,7 +105,6 @@ extern char *z_errmsg[]; /* indexed by 1-zlib_error */
 #  define Tracecv(c,x)
 #endif
 
-
 typedef uLong (*check_func) OF((uLong check, Bytef *buf, uInt len));
 
 /* voidpf zcalloc OF((voidpf opaque, unsigned items, unsigned size)); */
@@ -229,7 +228,6 @@ local int inflate_trees_free OF((
     inflate_huft *,             /* tables to free */
     z_stream *));               /* for zfree function */
 
-
 /*+++++*/
 /* infcodes.h -- header to use infcodes.c
  * Copyright (C) 1995 Mark Adler
@@ -257,7 +255,6 @@ local int inflate_codes OF((
 local void inflate_codes_free OF((
     inflate_codes_statef *,
     z_stream *));
-
 
 /*+++++*/
 /* inflate.c -- zlib interface to inflate modules
@@ -299,7 +296,6 @@ struct internal_state {
 
 };
 
-
 int inflateReset(z)
 z_stream *z;
 {
@@ -315,7 +311,6 @@ z_stream *z;
   return Z_OK;
 }
 
-
 int inflateEnd(z)
 z_stream *z;
 {
@@ -330,7 +325,6 @@ z_stream *z;
   Trace("inflate: end\n");
   return Z_OK;
 }
-
 
 int inflateInit2(z, w)
 z_stream *z;
@@ -377,13 +371,11 @@ int w;
   return Z_OK;
 }
 
-
 int inflateInit(z)
 z_stream *z;
 {
   return inflateInit2(z, DEF_WBITS);
 }
-
 
 #define NEEDBYTE {if(z->avail_in==0)goto empty;r=Z_OK;}
 #define NEXTBYTE (z->avail_in--,z->total_in++,*z->next_in++)
@@ -513,7 +505,6 @@ z_stream *z;
     return inflate_addhistory(z->state->blocks, z);
 }
 
-
 int inflateSync(z)
 z_stream *z;
 {
@@ -625,7 +616,6 @@ struct inflate_blocks_state {
 
 };
 
-
 /* defines for inflate input/output */
 /*   update pointers and return */
 #define UPDBITS {s->bitb=b;s->bitk=k;}
@@ -680,7 +670,6 @@ local int inflate_fast OF((
     inflate_huft *,
     inflate_blocks_statef *,
     z_stream *));
-
 
 /*+++++*/
 /* infblock.c -- interpret and process block types to last block
@@ -737,7 +726,6 @@ local uInt border[] = { /* Order of the bit length code lengths */
       the two sets of lengths.
  */
 
-
 local void inflate_blocks_reset(s, z, c)
 inflate_blocks_statef *s;
 z_stream *z;
@@ -762,7 +750,6 @@ uLongf *c;
   Trace("inflate:   blocks reset\n");
 }
 
-
 local inflate_blocks_statef *inflate_blocks_new(z, c, w)
 z_stream *z;
 check_func c;
@@ -785,7 +772,6 @@ uInt w;
   inflate_blocks_reset(s, z, &s->check);
   return s;
 }
-
 
 local int inflate_blocks(s, z, r)
 inflate_blocks_statef *s;
@@ -1049,7 +1035,6 @@ int r;
   }
 }
 
-
 local int inflate_blocks_free(s, z, c)
 inflate_blocks_statef *s;
 z_stream *z;
@@ -1115,7 +1100,6 @@ z_stream *z;
     return Z_OK;
 }
 
-
 /*
  * At the end of a Deflate-compressed PPP packet, we expect to have seen
  * a `stored' block type value but not the (zero) length bytes.
@@ -1129,7 +1113,6 @@ local int inflate_packet_flush(s)
     return Z_OK;
 }
 
-
 /*+++++*/
 /* inftrees.c -- generate Huffman trees for efficient decoding
  * Copyright (C) 1995 Mark Adler
@@ -1141,7 +1124,6 @@ local int inflate_packet_flush(s)
 #define next more.Next
 #define exop word.what.Exop
 #define bits word.what.Bits
-
 
 local int huft_build OF((
     uIntf *,            /* code lengths in bits */
@@ -1212,7 +1194,6 @@ local uInt cpdext[] = { /* Extra bits for distance codes */
    possibly even between compilers.  Your mileage may vary.
  */
 
-
 /* If BMAX needs to be larger than 16, then h and x[] should be uLong. */
 #define BMAX 15         /* maximum bit length of any code */
 #define N_MAX 288       /* maximum number of codes in any set */
@@ -1257,7 +1238,6 @@ z_stream *zs;           /* for zalloc function */
   int y;                        /* number of dummy codes added */
   uInt z;                       /* number of entries in current table */
 
-
   /* Generate counts for each bit length */
   p = c;
 #define C0 *p++ = 0;
@@ -1275,7 +1255,6 @@ z_stream *zs;           /* for zalloc function */
     return Z_OK;
   }
 
-
   /* Find minimum and maximum length, bound *m by those */
   l = *m;
   for (j = 1; j <= BMAX; j++)
@@ -1292,7 +1271,6 @@ z_stream *zs;           /* for zalloc function */
     l = i;
   *m = l;
 
-
   /* Adjust last length count to fill out codes, if needed */
   for (y = 1 << j; j < i; j++, y <<= 1)
     if ((y -= c[j]) < 0)
@@ -1301,7 +1279,6 @@ z_stream *zs;           /* for zalloc function */
     return Z_DATA_ERROR;
   c[i] += y;
 
-
   /* Generate starting offsets into the value table for each length */
   x[1] = j = 0;
   p = c + 1;  xp = x + 2;
@@ -1309,14 +1286,12 @@ z_stream *zs;           /* for zalloc function */
     *xp++ = (j += *p++);
   }
 
-
   /* Make a table of values in order of bit lengths */
   p = b;  i = 0;
   do {
     if ((j = *p++) != 0)
       v[x[j]++] = i;
   } while (++i < n);
-
 
   /* Generate the Huffman codes and for each, make the table entries */
   x[0] = i = 0;                 /* first Huffman code is zero */
@@ -1418,11 +1393,9 @@ z_stream *zs;           /* for zalloc function */
     }
   }
 
-
   /* Return Z_BUF_ERROR if we were given an incomplete table */
   return y != 0 && g != 1 ? Z_BUF_ERROR : Z_OK;
 }
-
 
 local int inflate_trees_bits(c, bb, tb, z)
 uIntf *c;               /* 19 code lengths */
@@ -1443,7 +1416,6 @@ z_stream *z;            /* for zfree function */
   }
   return r;
 }
-
 
 local int inflate_trees_dynamic(nl, nd, c, bl, bd, tl, td, z)
 uInt nl;                /* number of literal/length codes */
@@ -1494,7 +1466,6 @@ z_stream *z;            /* for zfree function */
   return Z_OK;
 }
 
-
 /* build fixed tables only once--keep them here */
 local int fixed_lock = 0;
 local int fixed_built = 0;
@@ -1505,7 +1476,6 @@ local uInt fixed_bl;
 local uInt fixed_bd;
 local inflate_huft *fixed_tl;
 local inflate_huft *fixed_td;
-
 
 local voidpf falloc(q, n, s)
 voidpf q;        /* opaque pointer (not used) */
@@ -1519,7 +1489,6 @@ uInt s;         /* size of item */
   return (voidpf)(fixed_mem + fixed_left);
 }
 
-
 local void ffree(q, p, n)
 voidpf q;
 voidpf p;
@@ -1528,7 +1497,6 @@ uInt n;
   Assert(0, "inflate_trees ffree called!");
   if (q) q = p; /* to make some compilers happy */
 }
-
 
 local int inflate_trees_fixed(bl, bd, tl, td)
 uIntf *bl;               /* literal desired/actual bit depth */
@@ -1578,7 +1546,6 @@ inflate_huft * FAR *td;  /* distance tree result */
   *td = fixed_td;
   return Z_OK;
 }
-
 
 local int inflate_trees_free(t, z)
 inflate_huft *t;        /* table to free */
@@ -1651,7 +1618,6 @@ struct inflate_codes_state {
 
 };
 
-
 local inflate_codes_statef *inflate_codes_new(bl, bd, tl, td, z)
 uInt bl, bd;
 inflate_huft *tl, *td;
@@ -1671,7 +1637,6 @@ z_stream *z;
   }
   return c;
 }
-
 
 local int inflate_codes(s, z, r)
 inflate_blocks_statef *s;
@@ -1832,7 +1797,6 @@ int r;
   }
 }
 
-
 local void inflate_codes_free(c, z)
 inflate_codes_statef *c;
 z_stream *z;
@@ -1912,7 +1876,6 @@ int r;
   /* done */
   return r;
 }
-
 
 /*+++++*/
 /* inffast.c -- process literals and length/distance pairs fast
@@ -2074,7 +2037,6 @@ z_stream *z;
   return Z_OK;
 }
 
-
 /*+++++*/
 /* zutil.c -- target dependent utility functions for the compression library
  * Copyright (C) 1995 Jean-loup Gailly.
@@ -2094,7 +2056,6 @@ char *z_errmsg[] = {
 "insufficient memory", /* Z_MEM_ERROR    (-4) */
 "buffer error",        /* Z_BUF_ERROR    (-5) */
 ""};
-
 
 /*+++++*/
 /* adler32.c -- compute the Adler-32 checksum of a data stream

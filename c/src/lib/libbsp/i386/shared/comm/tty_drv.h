@@ -15,6 +15,9 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.3  2004/04/21 10:42:44  ralf
+ * Remove stray white spaces.
+ *
  * Revision 1.2  2004/04/15 13:26:12  ralf
  * Remove stray white spaces.
  *
@@ -38,7 +41,6 @@
 extern "C" {
 #endif
 
-
 /* ttyS1 entry points */
 rtems_device_driver tty1_initialize(
   rtems_device_major_number,
@@ -58,14 +60,12 @@ rtems_device_driver tty1_control(
   void *
 );
 
-
 /* tty1 & tty2 shared entry points */
 rtems_device_driver tty_close(
   rtems_device_major_number,
   rtems_device_minor_number,
   void *
 );
-
 
 rtems_device_driver tty_read(
   rtems_device_major_number,
@@ -78,8 +78,6 @@ rtems_device_driver tty_write(
   rtems_device_minor_number,
   void *
 );
-
-
 
 /* tty2 entry points */
 rtems_device_driver tty2_initialize(
@@ -100,18 +98,13 @@ rtems_device_driver tty2_control(
   void *
 );
 
-
-
 #define TTY1_DRIVER_TABLE_ENTRY \
   { tty1_initialize, tty1_open, tty_close, \
     tty_read, tty_write, tty1_control }
 
-
 #define TTY2_DRIVER_TABLE_ENTRY \
   { tty2_initialize, tty2_open, tty_close, \
     tty_read, tty_write, tty2_control }
-
-
 
 #ifdef __cplusplus
 }

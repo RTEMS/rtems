@@ -46,10 +46,7 @@
 #define PPC603e_SPR_IABR        1010
 #define PPC603e_SPR_EAR          282
 
-
-
 #define PCI_MEM_CMD   (SCORE603E_PCI_MEM_BASE >> 16)
-
 
 typedef struct {
   uint32_t          counter_1_100;
@@ -170,7 +167,6 @@ void init_PCI()
           : "0" (_value) \
       ); \
   } while (0)
-
 
 void instruction_cache_enable ()
 {

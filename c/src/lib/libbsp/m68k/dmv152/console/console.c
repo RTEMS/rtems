@@ -111,7 +111,6 @@ void DEBUG_puts(
   /* should enable interrupts here */
 }
 
-
 /*
  *  Console Termios Support Entry Points
  *

@@ -287,7 +287,6 @@ wd_rxDaemon (void *arg)
 
   for (;;){
 
-
     rtems_bsdnet_event_receive (INTERRUPT_EVENT,
 				RTEMS_WAIT|RTEMS_EVENT_ANY,
 				RTEMS_NO_TIMEOUT,
@@ -490,7 +489,6 @@ wd_stop (struct wd_softc *sc)
 
 }
 
-
 /*
  * Show interface statistics
  */
@@ -605,7 +603,6 @@ rtems_wd_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 		mtu = config->mtu;
 	else
 		mtu = ETHERMTU;
-
 
 	if (config->irno)
 		sc->irqInfo.name = config->irno;

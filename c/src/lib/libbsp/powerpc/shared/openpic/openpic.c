@@ -34,12 +34,10 @@
 #define REGISTER_DEBUG
 #undef REGISTER_DEBUG
 
-
 volatile struct OpenPIC *OpenPIC = NULL;
 
 static unsigned int NumProcessors;
 static unsigned int NumSources;
-
 
     /*
      *  Accesses to the current processor's registers
@@ -47,7 +45,6 @@ static unsigned int NumSources;
 
 #define THIS_CPU		Processor[cpu]
 #define CHECK_THIS_CPU		check_arg_cpu(cpu)
-
 
     /*
      *  Sanity checks
@@ -84,8 +81,6 @@ static unsigned int NumSources;
 #define check_arg_cpu(cpu)	do {} while (0)
 #endif
 
-
-
     /*
      *  I/O functions
      */
@@ -108,7 +103,6 @@ static inline void openpic_write(volatile unsigned int *addr, unsigned int val)
 #endif
     out_le32(addr, val);
 }
-
 
 static inline unsigned int openpic_readfield(volatile unsigned int *addr, unsigned int mask)
 {
@@ -133,7 +127,6 @@ static inline void openpic_setfield(volatile unsigned int *addr, unsigned int ma
     openpic_writefield(addr, mask, mask);
 }
 
-
     /*
      *  Update a Vector/Priority register in a safe manner. The interrupt will
      *  be disabled.
@@ -148,9 +141,7 @@ static void openpic_safe_writefield(volatile unsigned int *addr, unsigned int ma
     openpic_writefield(addr, mask | OPENPIC_MASK, field | OPENPIC_MASK);
 }
 
-
 /* -------- Global Operations ---------------------------------------------- */
-
 
     /*
      *  Initialize the OpenPIC
@@ -272,7 +263,6 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
     }
 }
 
-
     /*
      *  Reset the OpenPIC
      */
@@ -282,7 +272,6 @@ void openpic_reset(void)
     openpic_setfield(&OpenPIC->Global.Global_Configuration0,
     		       OPENPIC_CONFIG_RESET);
 }
-
 
     /*
      *  Enable/disable 8259 Pass Through Mode
@@ -300,7 +289,6 @@ void openpic_disable_8259_pass_through(void)
     		     OPENPIC_CONFIG_8259_PASSTHROUGH_DISABLE);
 }
 
-
     /*
      *  Find out the current interrupt
      */
@@ -315,7 +303,6 @@ unsigned int openpic_irq(unsigned int cpu)
     return vec;
 }
 
-
     /*
      *  Signal end of interrupt (EOI) processing
      */
@@ -325,7 +312,6 @@ void openpic_eoi(unsigned int cpu)
     check_arg_cpu(cpu);
     openpic_write(&OpenPIC->THIS_CPU.EOI, 0);
 }
-
 
     /*
      *  Get/set the current task priority
@@ -363,7 +349,6 @@ void openpic_set_spurious(unsigned int vec)
     		       vec);
 }
 
-
     /*
      *  Initialize one or more CPUs
      */
@@ -373,9 +358,7 @@ void openpic_init_processor(unsigned int cpumask)
     openpic_write(&OpenPIC->Global.Processor_Initialization, cpumask);
 }
 
-
 /* -------- Interprocessor Interrupts -------------------------------------- */
-
 
     /*
      *  Initialize an interprocessor interrupt (and disable it)
@@ -395,7 +378,6 @@ void openpic_initipi(unsigned int ipi, unsigned int pri, unsigned int vec)
     			    (pri << OPENPIC_PRIORITY_SHIFT) | vec);
 }
 
-
     /*
      *  Send an IPI to one or more CPUs
      */
@@ -407,9 +389,7 @@ void openpic_cause_IPI(unsigned int cpu, unsigned int ipi, unsigned int cpumask)
     openpic_write(&OpenPIC->THIS_CPU.IPI_Dispatch(ipi), cpumask);
 }
 
-
 /* -------- Timer Interrupts ----------------------------------------------- */
-
 
     /*
      *  Initialize a timer interrupt (and disable it)
@@ -429,7 +409,6 @@ void openpic_inittimer(unsigned int timer, unsigned int pri, unsigned int vec)
     			    (pri << OPENPIC_PRIORITY_SHIFT) | vec);
 }
 
-
     /*
      *  Map a timer interrupt to one or more CPUs
      */
@@ -440,9 +419,7 @@ void openpic_maptimer(unsigned int timer, unsigned int cpumask)
     openpic_write(&OpenPIC->Global.Timer[timer].Destination, cpumask);
 }
 
-
 /* -------- Interrupt Sources ---------------------------------------------- */
-
 
     /*
      *  Enable/disable an interrupt source
@@ -466,7 +443,6 @@ unsigned long flags;
 	rtems_interrupt_enable(flags);
 }
 
-
     /*
      *  Initialize an interrupt source (and disable it!)
      *
@@ -489,7 +465,6 @@ void openpic_initirq(unsigned int irq, unsigned int pri, unsigned int vec, int p
 			    (pol ? OPENPIC_SENSE_POLARITY : 0) |
 			    (sense ? OPENPIC_SENSE_LEVEL : 0));
 }
-
 
     /*
      *  Map an interrupt source to one or more CPUs

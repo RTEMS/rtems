@@ -58,7 +58,6 @@ static rtems_irq_connect_data     	defaultIrq = {
 	without knowing more about the application they are kept the same.
 */
 
-
 static rtems_irq_prio irqPrioTable[BSP_CPM_IRQ_NUMBER]={
   /*
    * actual priorities for interrupt :
@@ -72,7 +71,6 @@ static rtems_irq_prio irqPrioTable[BSP_CPM_IRQ_NUMBER]={
   29, 31, 33, 37, 38, 41, 47, 48, 55, 56, 57,  60, 64, 65, 69, 70,
 
 };
-
 
 /*
  * Initialize CPM interrupt management

@@ -12,7 +12,6 @@
         .global __bsp_board_init
 __bsp_board_init:
 
-
 /* Check if MEC is initialised. If not, this means that we are
    running on the simulator. Initiate some of the parameters
    that are done by the boot-prom otherwise.

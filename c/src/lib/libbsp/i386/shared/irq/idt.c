@@ -64,7 +64,6 @@ int i386_set_idt_entry  (const rtems_raw_irq_connect_data* irq)
     unsigned			limit;
     unsigned int 		level;
 
-
     i386_get_info_from_IDTR (&idt_entry_tbl, &limit);
 
     /* Convert limit into number of entries */
@@ -240,7 +239,6 @@ int i386_set_gdt_entry (unsigned short segment_selector, unsigned base,
     unsigned short              tmp_segment = 0;
     unsigned int                limit_adjusted;
     segment_descriptors* 	gdt_entry_tbl;
-
 
     i386_get_info_from_GDTR (&gdt_entry_tbl, &gdt_limit);
 

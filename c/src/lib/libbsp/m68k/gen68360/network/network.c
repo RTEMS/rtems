@@ -858,7 +858,6 @@ scc_stop (struct scc_softc *sc)
 	m360.scc1.gsmr_l &= ~0x30;
 }
 
-
 /*
  * Show interface statistics
  */

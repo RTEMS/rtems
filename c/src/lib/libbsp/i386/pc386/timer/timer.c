@@ -38,7 +38,6 @@
 |  $Id$
 +--------------------------------------------------------------------------*/
 
-
 #include <stdlib.h>
 
 #include <bsp.h>
@@ -90,7 +89,6 @@ rdtsc(void)
   return result;
 } /* rdtsc */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: Timer_exit
 |      Description: Timer cleanup routine at RTEMS exit. NOTE: This routine is
@@ -103,7 +101,6 @@ void
 Timer_exit(void)
 {
 } /* Timer_exit */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: Timer_initialize
@@ -125,7 +122,6 @@ Timer_initialize(void)
   }
   Ttimer_val = rdtsc(); /* read starting time */
 } /* Timer_initialize */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: Read_timer
@@ -156,7 +152,6 @@ Read_timer(void)
 +--------------------------------------------------------------------------*/
 #define US_PER_ISR   250  /* Number of micro-seconds per timer interruption */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: Timer_exit
 |      Description: Timer cleanup routine at RTEMS exit. NOTE: This routine is
@@ -177,7 +172,6 @@ timerOff(const rtems_raw_irq_connect_data* used)
      outport_byte(TIMER_CNTR0, 0);
      outport_byte(TIMER_CNTR0, 0);
 } /* Timer_exit */
-
 
 static void
 timerOn(const rtems_raw_irq_connect_data* used)
@@ -248,7 +242,6 @@ Timer_initialize(void)
   Ttimer_val = 0;
 } /* Timer_initialize */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: Read_timer
 |      Description: Read hardware timer value.
@@ -278,7 +271,6 @@ Read_timer(void)
 
 #endif /* pentium */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: Empty_function
 |      Description: Empty function used in time tests.
@@ -290,7 +282,6 @@ rtems_status_code Empty_function(void)
 {
   return RTEMS_SUCCESSFUL;
 } /* Empty function */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: Set_find_average_overhead
@@ -318,7 +309,6 @@ void loadTimerValue( unsigned short loadedValue )
   outport_byte(TIMER_CNTR0, loadedValue & 0xff);
   outport_byte(TIMER_CNTR0, (loadedValue >> 8) & 0xff);
 }
-
 
 /*-------------------------------------------------------------------------+
 | Description: Reads the current value of the timer, and converts the

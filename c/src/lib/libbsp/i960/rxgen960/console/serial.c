@@ -5,7 +5,6 @@
 #include "serial.h"
 #include "rtems.h"
 
-
 typedef unsigned char uchar ;           /* Abbreviations */
 typedef unsigned short ushort ;
 typedef unsigned long ulong ;
@@ -22,8 +21,6 @@ static struct{
 	char in_line[128];
 }cons_input[MAX_CONSOLE];
 
-
-
 /* This uses the message out and in buffers as serial emulator.
 	Pretty stupid eh?
 */
@@ -35,11 +32,8 @@ static struct{
 static volatile unsigned int * uart = { uart1 };
 static volatile unsigned int * uart_rx = { uart1_rx };
 
-
 extern void	display_msg(void);
 /*extern int	sprintf();*/
-
-
 
 int
 console_uartinit(unsigned int BAUDRate)
@@ -50,7 +44,6 @@ console_uartinit(unsigned int BAUDRate)
 #endif
 	return(0);
 }
-
 
 /* Introduce a new console channel */
 console_new(char * name)
@@ -71,8 +64,6 @@ console_new(char * name)
 	rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &consoles[active_consoles] );
 #endif
 }
-
-
 
     /***********************************************************************
      ***  Transmit character to host.
@@ -126,7 +117,6 @@ wait:
 	return cc;
 
 }
-
 
     /*
       * putnum -- print a 32 bit number in hex
@@ -304,7 +294,6 @@ int console_sps_getc()
 	rtems_interrupt_enable(level);
 	return ch;
 }
-
 
 void cons_isr()
 {

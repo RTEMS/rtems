@@ -59,7 +59,6 @@
 
 #define INET_ADDR_MAX_BUF_SIZE (sizeof "255.255.255.255")
 
-
 /*
  * RTEMS event used by interrupt handler to signal daemons.
  * This must *not* be the same event used by the TCP/IP task synchronization.
@@ -125,7 +124,6 @@ struct m8xx_enet_struct {
         unsigned long   txRawWait;
 };
 static struct m8xx_enet_struct enet_driver[NIFACES];
-
 
 static void  m8xx_scc1_ethernet_on(const rtems_irq_connect_data* ptr)
 {
@@ -418,7 +416,6 @@ m8xx_enet_initialize (struct m8xx_enet_struct *sc)
   m8xx.scc1.gsmr_l = 0x1088003c;
 }
 
-
 #ifdef MPC860T
 /*
  * Please organize FEC controller code better by moving code from
@@ -467,7 +464,6 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
    * Take ethernet transciever out of reset
    */
   m8xx.pgcra &= ~0x80;
-
 
   /*
    * Set SIU interrupt level to LVL2
@@ -575,8 +571,6 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
   sc->txBdHead = sc->txBdTail = 0;
   sc->txBdActiveCount = 0;
 
-
-
   /*
    * Mask all FEC interrupts and clear events
    */
@@ -592,7 +586,6 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
 
 }
 #endif
-
 
 /*
  * Soak up buffer descriptors that have been sent.
@@ -815,7 +808,6 @@ scc_rxDaemon (void *arg)
   }
 }
 
-
 #ifdef MPC860T
 static void
 fec_rxDaemon (void *arg)
@@ -949,7 +941,6 @@ fec_rxDaemon (void *arg)
 }
 #endif
 
-
 static void
 scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
 {
@@ -1075,7 +1066,6 @@ scc_sendpacket (struct ifnet *ifp, struct mbuf *m)
     txBd = sc->txBdBase + sc->txBdHead;
   }
 }
-
 
 #ifdef MPC860T
 static void
@@ -1208,7 +1198,6 @@ fec_sendpacket (struct ifnet *ifp, struct mbuf *m)
 }
 #endif
 
-
 /*
  * Driver transmit daemon
  */
@@ -1241,7 +1230,6 @@ scc_txDaemon (void *arg)
     ifp->if_flags &= ~IFF_OACTIVE;
   }
 }
-
 
 #ifdef MPC860T
 void
@@ -1278,7 +1266,6 @@ fec_txDaemon (void *arg)
 }
 #endif
 
-
 /*
  * Send packet (caller provides header).
  */
@@ -1290,7 +1277,6 @@ m8xx_enet_start (struct ifnet *ifp)
   rtems_event_send (sc->txDaemonTid, START_TRANSMIT_EVENT);
   ifp->if_flags |= IFF_OACTIVE;
 }
-
 
 /*
  * Initialize and start the device
@@ -1335,7 +1321,6 @@ scc_init (void *arg)
   m8xx.scc1.gsmr_l |= 0x30;
 }
 
-
 #ifdef MPC860T
 static void
 fec_init (void *arg)
@@ -1366,7 +1351,6 @@ fec_init (void *arg)
   else
     m8xx.fec.r_cntrl &= ~0x8;
 
-
   /*
    * Tell the world that we're running.
    */
@@ -1378,7 +1362,6 @@ fec_init (void *arg)
   m8xx.fec.ecntrl = 0x2;
 }
 #endif
-
 
 /*
  * Stop the device
@@ -1396,7 +1379,6 @@ scc_stop (struct m8xx_enet_struct *sc)
   m8xx.scc1.gsmr_l &= ~0x30;
 }
 
-
 #ifdef MPC860T
 static void
 fec_stop (struct m8xx_enet_struct *sc)
@@ -1411,7 +1393,6 @@ fec_stop (struct m8xx_enet_struct *sc)
   m8xx.fec.ecntrl = 0x0;
 }
 #endif
-
 
 /*
  * Show interface statistics
@@ -1439,7 +1420,6 @@ enet_stats (struct m8xx_enet_struct *sc)
   printf ("           Underrun:%-8lu", sc->txUnderrun);
   printf (" Raw output wait:%-8lu\n", sc->txRawWait);
 }
-
 
 /*
  * Driver ioctl handler
@@ -1490,7 +1470,6 @@ scc_ioctl (struct ifnet *ifp, int command, caddr_t data)
   return error;
 }
 
-
 #ifdef MPC860T
 static int
 fec_ioctl (struct ifnet *ifp, int command, caddr_t data)
@@ -1538,7 +1517,6 @@ fec_ioctl (struct ifnet *ifp, int command, caddr_t data)
   return error;
 }
 #endif
-
 
 /*
  * Attach an SCC driver to the system
@@ -1671,7 +1649,6 @@ rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config)
   return 1;
 };
 
-
 #ifdef MPC860T
 int
 rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
@@ -1748,7 +1725,6 @@ rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
   return 1;
 };
 #endif
-
 
 int
 rtems_enet_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)

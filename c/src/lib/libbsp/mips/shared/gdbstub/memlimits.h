@@ -78,7 +78,6 @@ struct memseg
 
 #define NUM_MEMSEGS     10
 
-
 int add_memsegment(unsigned,unsigned,int);
 int is_readable(unsigned,unsigned);
 int is_writeable(unsigned,unsigned);

@@ -165,7 +165,6 @@ extern int   end;        /* last address in the program */
  * NOTE: Use the standard Clock driver entry
  */
 
-
 /* miscellaneous stuff assumed to exist */
 
 void bsp_cleanup( void );

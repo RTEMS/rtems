@@ -29,8 +29,6 @@ void PCI_bus_delay ()
   asm(" nop");
 }
 
-
-
 /*
  * PCI_bus_write
  */

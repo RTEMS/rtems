@@ -18,6 +18,9 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.6  2004/04/21 10:42:44  ralf
+ * Remove stray white spaces.
+ *
  * Revision 1.5  2001/08/16 20:52:05  joel
  * 2001-08-16	Mike Siers <mikes@poliac.com>
  *
@@ -84,11 +87,9 @@ static void isr_on(const rtems_irq_connect_data *);
 static void isr_off(const rtems_irq_connect_data *);
 static int  isr_is_on(const rtems_irq_connect_data *);
 
-
 extern BSP_polling_getchar_function_type BSP_poll_char;
 extern int BSPConsolePort;
 extern void rtems_set_waiting_id_comx( int port,  rtems_id id, rtems_event_set event );
-
 
 /*
  * Interrupt structure for tty1
@@ -183,7 +184,6 @@ tty1_initialize(rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 } /* tty_initialize */
 
-
 static int tty1_last_close(int major, int minor, void *arg)
 {
   BSP_remove_rtems_irq_handler( &tty1_isr_data );
@@ -255,7 +255,6 @@ tty_close(rtems_device_major_number major,
 
 } /* tty_close */
 
-
 /*
  * TTY device driver READ entry point.
  * Read characters from the tty device.
@@ -267,7 +266,6 @@ tty_read(rtems_device_major_number major,
 {
   return rtems_termios_read (arg);
 } /* tty_read */
-
 
 /*
  * TTY device driver WRITE entry point.
@@ -299,8 +297,6 @@ static rtems_device_driver tty_control( int port, void  *arg )
    return RTEMS_SUCCESSFUL;
 }
 
-
-
 /*
  * Handle ioctl request for ttyS1.
  */
@@ -312,7 +308,6 @@ tty1_control(rtems_device_major_number major,
 {
   return tty_control( BSP_UART_COM1, arg );
 }
-
 
 static int
 conSetAttr(int port, int minor, const struct termios *t)
@@ -424,8 +419,6 @@ tty1_conSetAttr( int minor, const struct termios *t)
   return conSetAttr( BSP_UART_COM1, minor, t );
 }
 
-
-
 /*
  * TTY2 device driver INITIALIZE entry point.
  */
@@ -472,7 +465,6 @@ tty2_initialize(rtems_device_major_number major,
   printk("Device: /dev/ttyS2 initialized.\n");
   return RTEMS_SUCCESSFUL;
 } /* tty_initialize */
-
 
 static int tty2_last_close(int major, int minor, void *arg)
 {

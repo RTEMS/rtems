@@ -14,7 +14,6 @@
 /*-------------------------------------*/
 extern void romStart(void);
 
-
 struct IBR rom_ibr = {
  {((REGION_BOOT_CONFIG) & 0xff),            /* Initial Bus Configuration */
   ((REGION_BOOT_CONFIG) >> 8) & 0xff,

@@ -9,8 +9,6 @@
 */
 #define  PMON_ADDRESS  0xbfc00000
 
-
-
 /*
 ** Mongoose V Peripheral Function Registers
 */
@@ -65,7 +63,6 @@
 #define MG5_MAVN_RANGE_4_REG    0xfffe01d0   /* Range 4 */
 #define MG5_MAVN_RANGE_5_REG    0xfffe01d4   /* Range 5 */
 
-
 /*
 ** Uart Specific Peripheral Function Registers
 */
@@ -75,7 +72,6 @@
 #define MG5_UART_1_RX_REG       0xfffe01f4
 #define MG5_UART_1_TX_REG       0xfffe01f8
 #define MG5_UART_1_BAUD_REG     0xfffe01fc
-
 
 /*
 ** Section 2: Bit definitions
@@ -105,7 +101,6 @@
 #define UART_LOOPBACK_MODE_BIT  0x00000008
 #define UART_CTSN_TEST_BIT       0x00000004
 #define UART_RESET_BIT           0x00000002
-
 
 /*
 ** Interrupt Status/Cause/Mask register bits - from 31 to 0
@@ -138,7 +133,6 @@
 #define EXTERN_INT_1_BIT           0x00000002
 #define EXTERN_INT_0_BIT           0x00000001
 
-
 /*
 ** MAVN Range Bits
 */
@@ -151,7 +145,6 @@
 #define MAVN_RANGE_5_WRITE_BIT  0x00000020
 
 #define MAVN_GLOBAL_WRITE_BIT     0x00000200
-
 
 #define MAVN_RANGE_0_READ_BIT     0x00000400
 #define MAVN_RANGE_1_READ_BIT   0x00000800
@@ -239,11 +232,6 @@
 #define MAVN_START_ADDR_MASK    0xFFFFFE00
 #define MAVN_PS_CODE_MASK       0x0000001F
 
-
-
-
-
-
 /* lr33000.h - defines for LSI Logic LR33000 */
 
 /* Define counter/timer register addresses */
@@ -267,11 +255,6 @@
 #define TC_INT   0x00000001 /* interrupt request */
 
 /* lr33000.h */
-
-
-
-
-
 
 #define _LR33300_
 
@@ -340,12 +323,6 @@
 
 /* _LR33300_ */
 
-
-
-
-
-
-
 #define _ERNIE_CORE_
 
 #define M_BIU       0xfffe0130
@@ -395,7 +372,6 @@
 #define BIU_LOCK    (1<<0)
 
 /* _ERNIE_CORE_ */
-
 
 /* Definitions for cache sizes */
 

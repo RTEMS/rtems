@@ -100,8 +100,6 @@ int uart_poll_read(int minor)
         return -1;
     }
 
-
-
     err  = *data_reg;
     c    = err & 0xff;
     err &= (EP7312_UART_FRMERR | EP7312_UART_PARERR | EP7312_UART_OVERR);
@@ -156,6 +154,5 @@ static void uart_init(int minor)
     *ctrl_reg1 = (EP7312_UART_WRDLEN8    |
                  EP7312_UART_FIFOEN     |
                  0x17);              /* 9600 baud */
-
 
 }

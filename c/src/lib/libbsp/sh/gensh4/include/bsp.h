@@ -51,7 +51,6 @@ extern "C" {
 
 #include "rtems/score/sh7750_regs.h"
 
-
 /*
  *  confdefs.h overrides for this BSP:
  *   - number of termios serial ports (defaults to 1)
@@ -121,7 +120,6 @@ extern "C" {
 #define delay( microseconds ) CPU_delay(microseconds)
 #define sh_delay( microseconds ) CPU_delay( microseconds )
 
-
 /*
  * Defined in the linker script 'linkcmds'
  */
@@ -146,7 +144,6 @@ extern uint32_t   boot_mode;
 extern rtems_configuration_table BSP_Configuration;
 
 extern void bsp_cleanup( void );
-
 
 /*
  *  Device Driver Table Entries

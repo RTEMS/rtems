@@ -69,7 +69,6 @@ rtems_isr external_exception_ISR (
   Chain_Node           *node;
   EE_ISR_Type          *ee_isr;
 
-
   /*
    * Get all active interrupts.
    */
@@ -114,7 +113,6 @@ rtems_isr external_exception_ISR (
     }
   }
 }
-
 
 /*PAGE
  *

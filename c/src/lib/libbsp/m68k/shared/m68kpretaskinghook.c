@@ -38,7 +38,6 @@ extern void          *_RamBase;
 extern void          *_WorkspaceBase;
 extern void          *_HeapSize;
 
-
 unsigned long  _M68k_Ramsize;
 
 void bsp_pretasking_hook(void)

@@ -23,7 +23,6 @@ RTEMS_BSPOPTS_SET([USE_CHANNEL_B],[*],[0])
 RTEMS_BSPOPTS_HELP([USE_CHANNEL_B],
 [set to 1 to indicate this serial port to be used as RTEMS_CONSOLE])
 
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

@@ -125,7 +125,6 @@ ibmpc_console_write(int minor, const char *buf, int len)
   return 0;
 }
 
-
 int kbd_poll_read( int minor )
 {
   if( rtems_kbpoll() )
@@ -174,7 +173,6 @@ void __assert (const char *file, int line, const char *msg)
 
 }
 
-
 /*-------------------------------------------------------------------------+
 | Console device driver INITIALIZE entry point.
 +--------------------------------------------------------------------------+
@@ -186,7 +184,6 @@ console_initialize(rtems_device_major_number major,
                    void                      *arg)
 {
   rtems_status_code status;
-
 
   /* Initialize the KBD interface */
   kbd_init();
@@ -240,7 +237,6 @@ console_initialize(rtems_device_major_number major,
        */
       /* 9600-8-N-1 */
       BSP_uart_init(BSPConsolePort, 9600, CHR_8_BITS, 0, 0, 0);
-
 
       /* Set interrupt handler */
       if(BSPConsolePort == BSP_UART_COM1)
@@ -302,7 +298,6 @@ console_initialize(rtems_device_major_number major,
     }
   return RTEMS_SUCCESSFUL;
 } /* console_initialize */
-
 
 static int console_open_count = 0;
 
@@ -391,7 +386,6 @@ console_close(rtems_device_major_number major,
    return rtems_termios_close (arg);
 } /* console_close */
 
-
 /*-------------------------------------------------------------------------+
 | Console device driver READ entry point.
 +--------------------------------------------------------------------------+
@@ -404,7 +398,6 @@ console_read(rtems_device_major_number major,
 {
  return rtems_termios_read( arg );
 } /* console_read */
-
 
 /*-------------------------------------------------------------------------+
 | Console device driver WRITE entry point.
@@ -430,7 +423,6 @@ console_write(rtems_device_major_number major,
   rw_args->bytes_moved = maximum;
   return RTEMS_SUCCESSFUL;
 } /* console_write */
-
 
 extern int vt_ioctl( unsigned int cmd, unsigned long arg);
 

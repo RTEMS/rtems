@@ -38,7 +38,6 @@ static rtems_irq_connect_data	default_rtems_entry;
 static rtems_irq_global_settings* 	internal_config;
 static rtems_irq_connect_data*		rtems_hdl_tbl;
 
-
 /*
  * Check if symbolic IRQ name is an CPM IRQ
  */
@@ -141,8 +140,6 @@ static m82xxIrqMasks_t SIU_MaskBit[BSP_CPM_IRQ_NUMBER] =
 
 };
 
-
-
 void dump_irq_masks(void )
 {
 	int i;
@@ -226,7 +223,6 @@ int BSP_irq_disable_at_cpm(const rtems_irq_symbolic_name irqLine)
 	m8260.simr_h &= ~(SIU_MaskBit[cpm_irq_index].mask_h);
 	m8260.simr_l &= ~(SIU_MaskBit[cpm_irq_index].mask_l);
 
-
 	return 0;
 }
 
@@ -242,7 +238,6 @@ int BSP_irq_enabled_at_cpm(const rtems_irq_symbolic_name irqLine)
 	return ((m8260.simr_h & SIU_MaskBit[cpm_irq_index].mask_h) ||
 		    (m8260.simr_l & SIU_MaskBit[cpm_irq_index].mask_l));
 }
-
 
 /*
  * ------------------------ RTEMS Single Irq Handler Mngt Routines ----------------
@@ -303,7 +298,6 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 	*/
 	return 1;
 }
-
 
 int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 {
@@ -418,7 +412,6 @@ int BSP_rtems_irq_mngt_get(rtems_irq_global_settings** config)
 volatile unsigned int maxLoop = 0;
 #endif
 
-
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
@@ -435,8 +428,6 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 #ifdef DISPATCH_HANDLER_STAT
 	unsigned loopCounter;
 #endif
-
-
 
 	/*
 	 * Handle decrementer interrupt
@@ -506,8 +497,6 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 #endif
 	}
 }
-
-
 
 void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
 {

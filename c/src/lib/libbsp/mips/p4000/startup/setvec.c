@@ -29,7 +29,6 @@
  *  static char _sccsid[] = "@(#)setvec.c 04/25/96     1.2\n";
  */
 
-
 #include <rtems.h>
 #include <bsp.h>
 

@@ -14,7 +14,6 @@ void printk_time(void);
 
 #define KERNEL
 
-
 /*
 
   EII: Oct 16 : Version 0.0
@@ -62,11 +61,9 @@ int count_rx = 0;
 #include <rtems/asm.h>
 #include <string.h>
 
-
 /* #include "../misc/utils.h" */
 
 static struct uti596_softc uti596_softc;
-
 
 static    int scbStatus;
 static    struct i596_cmd *pIsrCmd;
@@ -102,7 +99,6 @@ char uti596initSetup[] = {
 #define NIC_RESET_EVENT	        RTEMS_EVENT_3
 
 #define RBUF_SIZE	1520
-
 
 /*
  * Local Routines
@@ -177,8 +173,6 @@ uti596_request_reset(void){
      rtems_panic ("Can't notify resetDaemon: %s\n", rtems_status_text (sc));
 }
 
-
-
 static void uti596_maskOn(const rtems_irq_connect_data* irq)
 {
   /*
@@ -202,7 +196,6 @@ static int uti596_isOn(const rtems_irq_connect_data* irq)
   return BSP_irq_enabled_at_i8259s (irq->name);
 }
 
-
 /***********************************************************************
  *  Function:   uti596initRFA(int num) ( New )
  *
@@ -214,12 +207,10 @@ static int uti596_isOn(const rtems_irq_connect_data* irq)
  *
  ***********************************************************************/
 
-
 int uti596_initRFA(int num)
 {
     struct i596_rfd *pRfd;
     int i = 0;
-
 
 #ifdef DBG_596
     printf ("%s: uti596_initRFA %d.\n", num);
@@ -285,7 +276,6 @@ int uti596_initRFA(int num)
     printf ( "Head of RFA is buffer @ %p \n", uti596_softc.pBeginRFA );
 #endif
 
-
     uti596_softc.pSavedRfdQueue =
       uti596_softc.pEndSavedQueue = I596_NULL;   /* initially empty */
 
@@ -308,7 +298,6 @@ int uti596_initRFA(int num)
 void uti596supplyFD(struct i596_rfd * pRfd )
 {
  struct i596_rfd *pLastRfd;
-
 
  UTI_596_ASSERT(pRfd != I596_NULL, "Supplying NULL RFD!\n");
  pRfd -> cmd  = CMD_EOL;
@@ -405,7 +394,6 @@ void uti596supplyFD(struct i596_rfd * pRfd )
 
    uti596_softc.pEndSavedQueue = pRfd;                /* reset end of saved queue */
    uti596_softc.savedCount++;
-
 
    return;
  }
@@ -520,7 +508,6 @@ uti596_reset_hardware(struct uti596_softc *sc)
   rtems_status_code status_code;
   struct i596_cmd *pCmd;
 
-
   printf("uti596_reset_hardware\n");
   pCmd = sc->pCmdHead;  /* This is a tx command for sure (99.99999%)  */
 
@@ -542,7 +529,6 @@ uti596_reset_hardware(struct uti596_softc *sc)
 #ifdef DBG_RESET
   printf("reset_hardware:change scp address to : %p\n",sc->pScp);
 #endif
-
 
   /* change the scp address */
 #ifdef DBG_RESET
@@ -624,7 +610,6 @@ uti596_reset_hardware(struct uti596_softc *sc)
  *  Algorithm:
  *
  ***********************************************************************/
-
 
  void
 uti596_initMem(struct uti596_softc * sc)
@@ -736,7 +721,6 @@ uti596_initMem(struct uti596_softc * sc)
 
 }
 
-
 
 /***********************************************************************
  *  Function:   uti596dump
@@ -750,7 +734,6 @@ uti596dump(char * pDumpArea)
 {
   struct i596_dump dumpCmd;
   int boguscnt = 25000000; /* over a second! */
-
 
 #ifdef DBG_596
 printf("uti596dump:\n");
@@ -770,7 +753,6 @@ printf("uti596dump:\n");
       if ( uti596_softc.cmdOk )
 	return 1; /* successful completion */
     }
-
 
 }
 
@@ -851,7 +833,6 @@ uti596_rxDaemon(void *arg)
 	    printf("Good frame, @%p, data @%p length %d\n", pRfd, pRfd -> data , pkt_len);
 #endif
 	    frames++;
-
 
             /*
 	     * Allocate an mbuf to give to the stack
@@ -1044,7 +1025,6 @@ void uti596reset(void)
 
 #endif
 
-
   /* restore the RFA */
 
   /*dumpQ();*/
@@ -1149,8 +1129,6 @@ void uti596reset(void)
 
 #endif
 
-
-
      pCmd->status = 0;
      pCmd->command |= (CMD_EOL | CMD_INTR ); /* all commands last in list & return an interrupt */
 
@@ -1180,7 +1158,6 @@ void uti596reset(void)
 	 uti596_softc.pCmdTail = pCmd;           /* added Jan 30 */
      _ISR_Enable(level);
        }
-
 
 #ifdef DBG_596
 	 printf("Scb status & command 0x%x 0x%x\n",
@@ -1398,13 +1375,11 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
     }
   } while( m != NULL && ++bd_count < 16 );
 
-
   /* This should never happen */
   if ( bd_count == 16 ) {
     printf("TX ERROR:Too many mbufs in the packet!!!\n");
     printf("Must coalesce!\n");
   }
-
 
   if ( length < UTI_596_ETH_MIN_SIZE ) {
     pTbd->data = sc->zeroes;       /* add padding to pTbd */
@@ -1431,7 +1406,6 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
   /* Sending Zero length packet: shouldn't happen */
   if (pTbd->size <= 0) return ;
 
-
 #ifdef DEBUG_INIT_2
   printf("\nTransmitter adds packet\n");
   print_hdr    ( sc->pTxCmd->pTbd->data ); /* print the first part */
@@ -1441,7 +1415,6 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
 #ifdef DBG_VERSION
 	  BREAKPOINT();
 #endif
-
 
   /* add the command to the output command queue */
   uti596addCmd ( (struct i596_cmd *) sc->pTxCmd );
@@ -1501,7 +1474,6 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
     MFREE(m,n);
     m = n;
   }
-
 
 }
 
@@ -1608,7 +1580,6 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
 	 */
 	}
 
-
  }
 #ifdef DEBUG_INIT
 
@@ -1646,7 +1617,6 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
      printf ("\n");
 
      printf ("frame type %2.2X%2.2X\n", add[12], add[13]);
-
 
  }
  /***********************************************************************
@@ -1734,7 +1704,6 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
 	 printf("ICMP identifier: %2.2x %2.2x\n", add[38], add[39]);
 	 printf("ICMP sequence nbr: %2.2x %2.2x\n", add[40], add[41]);
 	}
-
 
  }
  /***********************************************************************
@@ -1827,7 +1796,6 @@ void send_packet(struct ifnet *ifp, struct mbuf *m)
   *
   ***********************************************************************/
 
-
 int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 {
   struct uti596_softc *sc = &uti596_softc;          /* soft config */
@@ -1837,7 +1805,6 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 #ifdef DBG_ATTACH
   printf("attach");
 #endif
-
 
   sc->started = 0; /* The NIC is not started yet */
   sc->ioAddr = IO_ADDR;
@@ -1894,7 +1861,6 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
   /* to init_hardware */
   sc->started = 1;
   sc->pInboundFrameQueue = I596_NULL;
-
 
   ifp->if_ioctl = uti596_ioctl;
   ifp->if_init  = uti596_init;
@@ -2221,7 +2187,6 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
    }
  }  /* end if command complete */
 
-
  /* if the receiver has stopped,
   * check if this is a No Resources scenario,
   * Try to add more RFD's ( no RBDs are used )
@@ -2320,7 +2285,6 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
        uti596_softc.savedCount = 0;
      }
 
-
 #ifdef DBG_596_RFD
      printk("The list starts here %p\n",uti596_softc.pBeginRFA );
 #endif
@@ -2363,7 +2327,6 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
 	 printk("Frame @ %x, status: %x, cmd: %x\n",
 		pISR_Rfd, pISR_Rfd->stat, pISR_Rfd->cmd);
 
-
        printk("\nSaved: \n");
        for ( pISR_Rfd = uti596_softc.pSavedRfdQueue;
 	     pISR_Rfd != I596_NULL;
@@ -2396,7 +2359,6 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig )
  return;
  }
 
-
 /***********************************************************************
  *  Function:   void uti596dequeue
  *
@@ -2423,7 +2385,6 @@ struct i596_rfd * uti596dequeue( struct i596_rfd ** ppQ )
      pRfd = *ppQ;            /* The dequeued buffer           */
      *ppQ = pRfd->next;      /* advance the queue pointer     */
      pRfd->next = I596_NULL; /* unlink the rfd being returned */
-
 
    _ISR_Enable(level);
    return pRfd;
@@ -2485,7 +2446,6 @@ void uti596append( struct i596_rfd ** ppQ , struct i596_rfd * pRfd )
  *
  ***********************************************************************/
 
-
 /* static */
 void uti596_stop(struct uti596_softc *sc)
 {
@@ -2501,7 +2461,6 @@ void uti596_stop(struct uti596_softc *sc)
     outport_word( CHAN_ATTN, 0 );
 
 }
-
 
 static int
 uti596_ioctl (struct ifnet *ifp, int command, caddr_t data)
@@ -2569,7 +2528,6 @@ uti596_ioctl (struct ifnet *ifp, int command, caddr_t data)
  *            use printf
  *
  ***********************************************************************/
-
 
 void
 uti596_stats(struct uti596_softc *sc)
@@ -2669,7 +2627,6 @@ void show_buffers (void)
 	printf("Frame @ %p, status: %2.2x, cmd: %2.2x\n",
 	       pRfd, pRfd->stat, pRfd->cmd);
 
-
       printf("\nSaved: \n");
       for ( pRfd = uti596_softc.pSavedRfdQueue;
 	    pRfd != I596_NULL;
@@ -2682,7 +2639,6 @@ void show_buffers (void)
 void show_queues(void)
 {
     struct i596_rfd *pRfd;
-
 
       printf("CMD: 0x%x, Status: 0x%x\n",
 	     uti596_softc.scb.command,
@@ -2707,12 +2663,10 @@ void show_queues(void)
       printf("uti596_softc.pEndRFA: %p\n",uti596_softc.pEndRFA);
 }
 
-
 void uti596_init(void * arg){
 
   struct uti596_softc  *sc = arg;
   struct ifnet *ifp = &sc->arpcom.ac_if;
-
 
   if (sc->txDaemonTid == 0) {
 
@@ -2726,7 +2680,6 @@ void uti596_init(void * arg){
     sc->rxDaemonTid = rtems_bsdnet_newproc ("UTrx", 2*4096, uti596_rxDaemon, sc);
     sc->resetDaemonTid = rtems_bsdnet_newproc ("UTrt", 2*4096,
 					       uti596_resetDaemon, sc);
-
 
 #ifdef DBG_INIT
     printf("After attach, status of board = 0x%x\n", sc->scb.status );

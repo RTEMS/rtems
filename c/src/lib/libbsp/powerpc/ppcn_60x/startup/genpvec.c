@@ -60,7 +60,6 @@ typedef struct
   rtems_vector_number vector;                   /* vector number      */
 } EE_ISR_Type;
 
-
 /* Note:  The following will not work if we add a method to remove
  *        handlers at a later time.
  */

@@ -46,7 +46,6 @@ RTEMS_BSPOPTS_HELP([DMV177_USE_INSTRUCTION_CACHE],
  This code can conflict with debuggers or emulators.
  The BSP actually contains the call that enables this.])
 
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 wrapup/Makefile

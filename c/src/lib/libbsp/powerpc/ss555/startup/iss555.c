@@ -26,7 +26,6 @@ SPR_RW(MI_GRA);
 SPR_RW(L2U_GRA);
 SPR_RW(BBCMCR);
 
-
 /*
  *  Initialize SS555
  */

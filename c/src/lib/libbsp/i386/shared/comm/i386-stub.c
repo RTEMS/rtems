@@ -464,7 +464,6 @@ hex (char ch)
   return (-1);
 }
 
-
 /* scan for the sequence $<data>#<checksum>     */
 void
 getpacket (char *buffer)
@@ -529,7 +528,6 @@ getpacket (char *buffer)
 }
 
 /* send the packet in buffer.  */
-
 
 void
 putpacket (char *buffer)

@@ -23,7 +23,6 @@
  *  $Id$
  */
 
-
 #include <bsp.h>
 #include <rtems/zilog/z8036.h>
 

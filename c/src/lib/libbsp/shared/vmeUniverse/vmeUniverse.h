@@ -203,7 +203,6 @@ typedef struct VmeUniverseDMAPacketRec_ {
 #define		UNIV_REGOFF_D_LLUE	0x224
 # define	UNIV_D_LLUE_UPDATE	(1<<31)
 
-
 /* PCI (local) interrupt enable register */
 #define		UNIV_REGOFF_LINT_EN	0x300
 # define	UNIV_LINT_EN_LM3	(1<<23)	/* location monitor 3 mask */
@@ -434,7 +433,6 @@ extern "C" {
 extern volatile LERegister *vmeUniverse0BaseAddr;
 extern int vmeUniverse0PciIrqLine;
 
-
 /* Initialize the driver */
 int
 vmeUniverseInit(void);
@@ -635,7 +633,6 @@ int
 vmeUniverseIntEnable(unsigned int level);
 int
 vmeUniverseIntDisable(unsigned int level);
-
 
 /* use these special vectors to connect a handler to the
  * universe specific interrupts (such as "DMA done",

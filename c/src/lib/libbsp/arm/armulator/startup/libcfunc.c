@@ -25,7 +25,6 @@ do_AngelSWI (int reason, void * arg)
 }
 #endif /* ARM_RDI_MONITOR */
 
-
 void
 abort_program (void)
 {

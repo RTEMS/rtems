@@ -854,7 +854,6 @@ vector_table:
 start_frame:
         .space  4,0
 
-
 |
 | Uninitialised data
 |

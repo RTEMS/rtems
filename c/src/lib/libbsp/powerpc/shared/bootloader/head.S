@@ -38,17 +38,12 @@
 	li	r10,0x26	; \
 	sc
 
-
-
-
 #define MONITOR_ENTER			\
 	mfmsr	r10		;	\
 	ori	r10,r10,MSR_IP	;	\
 	mtmsr	r10		;	\
 	li	r10,0x63	;	\
 	sc
-
-
 
 	START_GOT
 	GOT_ENTRY(_GOT2_TABLE_)
@@ -98,7 +93,6 @@ start:
 	cmplwi	cr2,r0,1
 	beq	2,2f
 
-
 /*
  * commented out, 11/7/2002, gregm.  This instruction sequence seems to
  * be pathological on the 603e.
@@ -112,7 +106,6 @@ start:
 	mtspr	HID0,r0
 #endif
 */
-
 
 2:	bl	reloc
 
@@ -313,8 +306,6 @@ moved:	lwz	r1,stack(bd)
 #else
 1:	bctr
 #endif
-
-
 
 /* relocation function, r30 must point to got2+0x8000 */
 reloc:

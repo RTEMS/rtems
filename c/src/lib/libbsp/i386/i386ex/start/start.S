@@ -28,18 +28,15 @@
  *
  *  $Id$
 
-
 changes:
     SetExRegByte(ICW3S  , 0x02 ) # MUST be 0x02 according to intel
     SetExRegByte(ICW3M  , 0x04 ) # IR2 is cascaded internally: was 0x02 => IR1 is cascaded
 
  */
 
-
 #include <rtems/asm.h>
 #include "macros.inc"
 #include "80386ex.inc"
-
 
 /*
  * NEW_GAS Needed for binutils 2.9.1.0.7 and higher
@@ -75,7 +72,6 @@ SYM(GDT_DATA):	DESC2(0xffff,0,0x0,0x92,0xDF,0x00); # was CF
 SYM(GDT_END):
 
 END_DATA
-
 
 /* This section is the section that is used by the interrupt
    descriptor table.  It is used to provide the IDT with the
@@ -130,7 +126,6 @@ SYM(A20):
 	andb    $0xfe	, al   # b0 Fast Reset(0)=disabled,(1)=reset triggered
 	orb	$0x02	, al   # Bit 1 Fast A20 = 0 (always 0) else enabled.
 	outb	al	, dx
-
 
 SYM(Watchdog):
 	movw	$WDTSTATUS	, dx    # address the WDT status port
@@ -284,7 +279,6 @@ SYM(InitTimer):
 	SetExRegByte(TMR0   , 0x00 ) # sfa
 	SetExRegByte(TMR0   , 0x00 ) # sfa
 
-
 	SetExRegByte(TMRCON , 0x70 ) # mode 0 disables on Gate= Vcc
 	SetExRegByte(TMR1   , 0x00 ) # sfa
 	SetExRegByte(TMR1   , 0x00 ) # sfa
@@ -342,7 +336,6 @@ SYM(InitInt):
 					# for IR0 and IR2 use 0xfa
 	SetExRegByte(INTCFG , 0x00 )
 
-
 SYM(SetCS4):
 	SetExRegWord(CS4ADL , 0x702)         #Configure chip select 4
 	SetExRegWord(CS4ADH , 0x00)
@@ -382,7 +375,6 @@ SYM(SetUCS1):
 #else
         lgdt SYM(GDTR) #  location of GDT
 #endif
-
 
 SYM(SetUCS):
  	SetExRegWord(UCSADL, 0x0702)      # now 512K starting at 0x3f80000.
@@ -471,7 +463,6 @@ SYM (zero_bss):
         xorl    eax,eax               # value to clear out memory
         repne                           # while ecx != 0
         stosl                           #   clear a long in the bss
-
 
 /*
  *  Transfer control to User's Board Support Package

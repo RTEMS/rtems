@@ -67,8 +67,6 @@ typedef enum {
   BSP_MAX_INT,
 } rtems_irq_symbolic_name;
 
-
-
 /*
  * Type definition for RTEMS managed interrupts
  */
@@ -136,7 +134,6 @@ typedef struct __rtems_irq_connect_data__ {
  * function to initialize the interrupt for a specific BSP
  */
 void BSP_rtems_irq_mngt_init();
-
 
 /*
  * function to connect a particular irq handler. This hanlder will NOT be called

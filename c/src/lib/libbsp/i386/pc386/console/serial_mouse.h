@@ -15,6 +15,9 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.3  2004/04/21 10:42:44  ralf
+ * Remove stray white spaces.
+ *
  * Revision 1.2  2004/04/15 13:26:12  ralf
  * Remove stray white spaces.
  *
@@ -58,7 +61,6 @@
 extern "C" {
 #endif
 
-
 /* ttyS1 entry points */
 rtems_device_driver serial_mouse_initialize(
   rtems_device_major_number,
@@ -78,14 +80,12 @@ rtems_device_driver serial_mouse_control(
   void *
 );
 
-
 /* serial_mouse  entry points */
 rtems_device_driver serial_mouse_close(
   rtems_device_major_number,
   rtems_device_minor_number,
   void *
 );
-
 
 rtems_device_driver serial_mouse_read(
   rtems_device_major_number,
@@ -99,14 +99,12 @@ rtems_device_driver serial_mouse_write(
   void *
 );
 
-
 /* Select the mouse type:  "ms","pc","ps2" */
 #define  MOUSE_TYPE        "ms"
 
 /* Select the serial port for the serial mouse driver */
 #define  SERIAL_MOUSE_COM1  1
 /* #define  SERIAL_MOUSE_COM2  1  */
-
 
 #define SERIAL_MOUSE_DRIVER_TABLE_ENTRY \
   { serial_mouse_initialize, serial_mouse_open, serial_mouse_close, \

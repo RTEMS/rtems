@@ -10,7 +10,6 @@
 #include "intrtbl.h"
 /*-------------------------------------*/
 
-
   /* Interrupt Table. Dedicated Interrupts are cached.
    * So NMI handler has to be defined here.
    */

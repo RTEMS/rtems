@@ -24,7 +24,6 @@
 #define CONSOLE_DEFAULT_WRITE_CHARACTER_BITS CONSOLE_CHARACTER_BITS_8
 #define CONSOLE_DEFAULT_CONSOLE_CLOCK        CONSOLE_x16_CLOCK
 
-
 #define DEFAULT_PROTOCOL  { CONSOLE_DEFAULT_BAUD_RATE,              \
                             CONSOLE_DEFAULT_STOP_BITS,              \
                             CONSOLE_DEFAULT_PARITY,                 \

@@ -391,7 +391,6 @@ zerobss_loop:
 bsp_exitted:
 	jmp 	bsp_exitted
 
-
 |
 | Initialised data
 |

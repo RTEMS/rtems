@@ -34,7 +34,6 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/interr.h>
 
-
 /*  _CPU_Initialize
  *
  *  This routine performs processor dependent initialization.
@@ -139,8 +138,6 @@ void _CPU_Context_Initialize(
 #error unsupported PPC_ABI
 #endif
 }
-
-
 
 /*PAGE
  *

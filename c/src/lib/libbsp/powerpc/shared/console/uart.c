@@ -167,7 +167,6 @@ BSP_uart_init(int uart, int baud, int hwFlow)
   /* 8-bit, no parity , 1 stop */
   uwrite(uart, LCR, CHR_8_BITS);
 
-
   /* Set DTR, RTS and OUT2 high */
   uwrite(uart, MCR, DTR | RTS | OUT_2);
 
@@ -374,7 +373,6 @@ BSP_uart_polled_status(int uart)
   return BSP_UART_STATUS_ERROR;
 }
 
-
 /*
  * Polled mode write function
  */
@@ -489,7 +487,6 @@ BSP_uart_remove_isr(int uart, rtems_irq_hdl handler)
 	return doit(uart, handler, BSP_remove_rtems_irq_handler);
 }
 
-
 /* ================ Termios support  =================*/
 
 static volatile int  termios_stopped_com[2]        = {0,0};
@@ -538,7 +535,6 @@ BSP_uart_termios_write_com(int minor, const char *buf, int len)
 
   /* If there TX buffer is busy - something is royally screwed up */
   /*   assert((uread(BSP_UART_COM1, LSR) & THRE) != 0); */
-
 
   if(termios_stopped_com[uart])
     {

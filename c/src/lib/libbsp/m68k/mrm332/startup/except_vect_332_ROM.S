@@ -280,7 +280,6 @@
 	.long reboot   /* exception vector: 254 */
 	.long reboot   /* exception vector: 255 */
 
-
 _reboot:
 	move	#0x2700,%sr	/* mask interrupts */
 	movea.l	(0x0).w,%a7	/* load stack */

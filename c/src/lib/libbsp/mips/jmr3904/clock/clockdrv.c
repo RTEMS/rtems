@@ -33,7 +33,6 @@
     *((volatile uint32_t*) 0xFFFFC01C) = 0x00000700; \
   } while(0)
 
-
 #define Clock_driver_support_initialize_hardware()
 
 #define Clock_driver_support_shutdown_hardware()

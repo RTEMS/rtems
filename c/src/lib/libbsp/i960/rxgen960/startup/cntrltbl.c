@@ -18,7 +18,6 @@
 #define IMAP2           0xA90000
 #define ICON	(VECTOR_CACHE | MSK_UNCHNG | I_ENABLE)
 
-
 /* Bus configuration */
 #define RP_CONFIG_REGS     I960RP_BUS_WIDTH_32
 #define FLASH              I960RP_BUS_WIDTH_8
@@ -43,8 +42,6 @@
 
 /*Bus Control Initial value */
 #define BCON CONF_TBL_VALID
-
-
 
 ControlTblEntry controlTbl[] = {
   /* --group 0 -- */

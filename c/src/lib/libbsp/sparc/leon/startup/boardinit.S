@@ -24,7 +24,6 @@ __bsp_board_init:
 	bne	2f
 	nop
 
-
 	flush
 	set	0x1000f, %l1
 	st      %l1, [%l0 + LEON_REG_CACHECTRL_OFFSET]     ! enable caches

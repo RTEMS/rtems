@@ -89,7 +89,6 @@ void unmask_irq(
   set_irq_mask( value );
 }
 
-
 void init_irq_data_register()
 {
   uint32_t         index;

@@ -21,7 +21,6 @@
 #include <stdio.h>
 #include <string.h>
 
-
 /*
 
 We're going to call right down into the uart driver because we're
@@ -38,12 +37,7 @@ extern int mg5uart_close(int major,int minor, void *arg);
 extern void mg5uart_write_polled(int minor, char c );
 extern int mg5uart_inbyte_nonblocking_polled(int minor);
 
-
 static int debugUartEnabled = 0;
-
-
-
-
 
 int mg5rdbgOpenGDBuart(int breakoninit)
 {
@@ -80,7 +74,6 @@ int mg5rdbgOpenGDBuart(int breakoninit)
    gdbstub_add_memsegment(0x80b00000, 0x814fffff, MEMOPT_READABLE );
    gdbstub_add_memsegment(0x81500000, 0x81ffffff, MEMOPT_READABLE | MEMOPT_WRITEABLE );
 
-
    if( breakoninit )
    {
       printf("gdbstub: GDB stub entered, connect host debugger now\n");
@@ -97,15 +90,11 @@ int mg5rdbgOpenGDBuart(int breakoninit)
    return RTEMS_SUCCESSFUL;
 }
 
-
 void mg5rdbgCloseGDBuart(void)
 {
    mg5uart_close(0,1,NULL);
    debugUartEnabled  = 0;
 }
-
-
-
 
 char getDebugChar (void)
 {
@@ -120,15 +109,11 @@ char getDebugChar (void)
    return 0;
 }
 
-
 void putDebugChar (char c)
 {
    if( debugUartEnabled )
       return mg5uart_write_polled(1,c);
 }
-
-
-
 
 /*
    {

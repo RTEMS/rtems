@@ -158,7 +158,6 @@ console_initialize(rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 } /* console_initialize */
 
-
 static int console_last_close(int major, int minor, void *arg)
 {
   BSP_remove_rtems_irq_handler (&console_isr_data);
@@ -225,7 +224,6 @@ console_close(rtems_device_major_number major,
 
 } /* console_close */
 
-
 /*-------------------------------------------------------------------------+
 | Console device driver READ entry point.
 +--------------------------------------------------------------------------+
@@ -247,7 +245,6 @@ console_read(rtems_device_major_number major,
 
 } /* console_read */
 
-
 /*-------------------------------------------------------------------------+
 | Console device driver WRITE entry point.
 +--------------------------------------------------------------------------+
@@ -261,8 +258,6 @@ console_write(rtems_device_major_number major,
         return rtems_termios_write (arg);
 
 } /* console_write */
-
-
 
 /*
  * Handle ioctl request.

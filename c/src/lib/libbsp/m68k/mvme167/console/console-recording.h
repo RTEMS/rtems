@@ -24,7 +24,6 @@
 #define CD2401_RECORD_DRAIN_OUTPUT
 #define CD2401_RECORD_DELAY
 
-
 /* Call the data recording functions */
 #ifdef CD2401_RECORD_WRITE
 #define CD2401_RECORD_WRITE_INFO( args )              cd2401_record_write_info args
@@ -104,7 +103,6 @@
 #define CD2401_RECORD_DELAY_INFO( args )
 #endif
 
-
 /* Define the data and the recording functions */
 #define CD2401_DEBUG_BUFFER_SIZE     256
 #define CD2401_DEBUG_CHAR_BUFSIZE     64
@@ -123,7 +121,6 @@
 #define CD2401_SET_ATTRIBUTE_INFO     13
 #define CD2401_DRAIN_OUTPUT_INFO      14
 #define CD2401_DELAY_INFO             15
-
 
 struct cd2401_debug_info {
   short discriminant;
@@ -244,7 +241,6 @@ int cd2401_get_record_size(
   return size + 4;
 }
 
-
 void cd2401_record_write_info(
   int len,
   const char * buf,
@@ -266,7 +262,6 @@ void cd2401_record_write_info(
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
-
 void cd2401_record_tx_isr_info(
   unsigned char ch,
   unsigned char status,
@@ -287,7 +282,6 @@ void cd2401_record_tx_isr_info(
 
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
-
 
 void cd2401_record_tx_isr_spurious_info(
   unsigned char ch,
@@ -312,7 +306,6 @@ void cd2401_record_tx_isr_spurious_info(
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
-
 void cd2401_record_tx_isr_buserr_info(
   unsigned char ch,
   unsigned char status,
@@ -336,7 +329,6 @@ void cd2401_record_tx_isr_buserr_info(
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
-
 void cd2401_record_rx_isr_info(
   unsigned char ch,
   unsigned char total,
@@ -357,7 +349,6 @@ void cd2401_record_rx_isr_info(
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
-
 void cd2401_record_rx_isr_spurious_info(
   unsigned char ch,
   unsigned char status,
@@ -377,7 +368,6 @@ void cd2401_record_rx_isr_spurious_info(
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
-
 void cd2401_record_re_isr_spurious_info(
   unsigned char ch,
   uint32_t         spur_dev,
@@ -394,7 +384,6 @@ void cd2401_record_re_isr_spurious_info(
 
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
-
 
 void cd2401_record_modem_isr_spurious_info(
   unsigned char ch,
@@ -413,7 +402,6 @@ void cd2401_record_modem_isr_spurious_info(
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
-
 void cd2401_record_first_open_info(
   unsigned char ch,
   uint8_t         init_count
@@ -428,7 +416,6 @@ void cd2401_record_first_open_info(
 
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
-
 
 void cd2401_record_last_close_info(
   unsigned char ch,
@@ -445,7 +432,6 @@ void cd2401_record_last_close_info(
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
-
 void cd2401_record_start_remote_tx_info(
   unsigned char ch
 )
@@ -459,7 +445,6 @@ void cd2401_record_start_remote_tx_info(
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
-
 void cd2401_record_stop_remote_tx_info(
   unsigned char ch
 )
@@ -472,7 +457,6 @@ void cd2401_record_stop_remote_tx_info(
 
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
-
 
 void cd2401_record_set_attributes_info(
   int minor,
@@ -530,7 +514,6 @@ void cd2401_record_set_attributes_info(
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
 
-
 void cd2401_record_drain_output_info(
   uint8_t         txEmpty,
   uint8_t         own_buf_A,
@@ -547,7 +530,6 @@ void cd2401_record_drain_output_info(
 
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
-
 
 void cd2401_record_delay_info(
   rtems_interval start,
@@ -567,7 +549,6 @@ void cd2401_record_delay_info(
 
   cd2401_debug_index = (cd2401_debug_index + 1 ) % CD2401_DEBUG_BUFFER_SIZE;
 }
-
 
 #else
 

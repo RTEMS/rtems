@@ -16,7 +16,6 @@
 #include <bsp.h>
 #include <registers.h>
 
-
 void BSP_rtems_irq_mngt_init() {
 
   /*

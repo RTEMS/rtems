@@ -210,8 +210,6 @@ static char do_threads;      /* != 0 means we are supporting threads */
 extern char getDebugChar (void);
 extern void putDebugChar (char);
 
-
-
 /*
  * The following definitions are used for the gdb stub memory map
  */
@@ -223,11 +221,6 @@ struct memseg
 static int is_readable(unsigned,unsigned);
 static int is_writeable(unsigned,unsigned);
 static int is_steppable(unsigned);
-
-
-
-
-
 
 /*
  * BUFMAX defines the maximum number of characters in the inbound & outbound
@@ -271,7 +264,6 @@ const char gdb_hexchars[] = "0123456789abcdef";
 
 #define highhex(x) gdb_hexchars [(x >> 4) & 0xf]
 #define lowhex(x) gdb_hexchars [x & 0xf]
-
 
 /*
  * Convert length bytes of data starting at addr into hex, placing the
@@ -359,7 +351,6 @@ hex (char ch)
   return (-1);
 }
 
-
 /*
  * Convert a string from hex to int until a non-hex digit
  * is found.  Return the number of characters processed.
@@ -389,7 +380,6 @@ hexToInt (char **ptr, int *intValue)
   return (numChars);
 }
 
-
 /*
  * Convert a string from hex to long long until a non-hex
  * digit is found.  Return the number of characters processed.
@@ -418,7 +408,6 @@ hexToLongLong (char **ptr, long long *intValue)
 
   return (numChars);
 }
-
 
 /*
  * Convert the hex array buf into binary, placing the result at the
@@ -506,7 +495,6 @@ hex2mem (char *buf, void *_addr, int length)
   return 1;
 }
 
-
 /* Convert the binary stream in BUF to memory.
 
    Gdb will escape $, #, and the escape char (0x7d).
@@ -543,7 +531,6 @@ bin2mem (
 
   return mem;
 }
-
 
 
 /*
@@ -597,7 +584,6 @@ getpacket (char *buffer)
   while (checksum != xmitcsum);
 }
 
-
 /*
  * Get a positive/negative acknowledgment for a transmitted packet.
  */
@@ -614,7 +600,6 @@ getAck (void)
 
   return c;
 }
-
 
 /*
  * Send the packet in buffer and wait for a positive acknowledgement.
@@ -665,11 +650,6 @@ putpacket (char *buffer)
   while  (getAck () != '+');
 }
 
-
-
-
-
-
 
 /*
  * Saved instruction data for single step support
@@ -680,7 +660,6 @@ static struct
     unsigned savedInstr;
   }
 instrBuffer;
-
 
 /*
  * If a step breakpoint was planted restore the saved instruction.
@@ -695,7 +674,6 @@ undoSStep (void)
     }
   instrBuffer.savedInstr = NOP_INSTR;
 }
-
 
 /*
  * If a single step is requested put a temporary breakpoint at the instruction
@@ -818,7 +796,6 @@ doSStep (void)
          break;
    }
 
-
    if( is_steppable((unsigned)instrBuffer.targetAddr) && *(instrBuffer.targetAddr) != BREAK_INSTR )
    {
       instrBuffer.savedInstr = *instrBuffer.targetAddr;
@@ -831,10 +808,6 @@ doSStep (void)
    }
    return;
 }
-
-
-
-
 
 
 /*
@@ -945,7 +918,6 @@ void gdb_stub_report_exception_info(
    *optr++ = '\0';
 }
 
-
 
 
 /*
@@ -954,14 +926,11 @@ void gdb_stub_report_exception_info(
  */
 CPU_Interrupt_frame current_thread_registers;
 
-
-
 /*
  * This function handles all exceptions.  It only does two things:
  * it figures out why it was activated and tells gdb, and then it
  * reacts to gdb's requests.
  */
-
 
 void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
 {
@@ -975,7 +944,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
    void         *regptr;
    int          binary;
 
-
    registers = (mips_register_t *)frame;
 
    thread = 0;
@@ -985,7 +953,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
    }
 #endif
    current_thread = thread;
-
 
    {
       /* reapply all breakpoints regardless of how we came in */
@@ -1001,8 +968,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
             *(zother->address) = BREAK_INSTR;
          }
       }
-
-
 
       /* see if we're coming from a breakpoint */
       if( *((unsigned *)frame->epc) == BREAK_INSTR )
@@ -1040,15 +1005,9 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
       }
    }
 
-
-
-
-
    /* reply to host that an exception has occurred with some basic info */
    gdb_stub_report_exception_info(vector, frame, thread);
    putpacket (outBuffer);
-
-
 
    while (!(host_has_detached)) {
       outBuffer[0] = '\0';
@@ -1079,7 +1038,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
             mem2hex (regptr, NUM_REGS * (sizeof registers), outBuffer);
             break;
 
-
          case 'G':       /* set the values of the CPU registers - return OK */
             regptr = registers;
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
@@ -1091,7 +1049,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
             else
                strcpy (outBuffer, "E00"); /* E00 = bad "set register" command */
             break;
-
 
          case 'P':
             /* Pn...=r...  Write register n... with value r... - return OK */
@@ -1107,7 +1064,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
                strcpy (outBuffer, "E00"); /* E00 = bad "set register" command */
             break;
 
-
          case 'm':
             /* mAA..AA,LLLL  Read LLLL bytes at address AA..AA */
             ptr = &inBuffer[1];
@@ -1120,7 +1076,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
             else
                strcpy (outBuffer, "E01"); /* E01 = bad 'm' command */
             break;
-
 
          case 'X':  /* XAA..AA,LLLL:<binary data>#cs */
             binary = 1;
@@ -1142,8 +1097,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
                strcpy (outBuffer, "E02"); /* E02 = bad 'M' command */
             break;
 
-
-
          case 'c':
             /* cAA..AA    Continue at address AA..AA(optional) */
          case 's':
@@ -1158,10 +1111,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
                doSStep ();
          }
          goto stubexit;
-
-
-
-
 
          case 'k':  /* remove all zbreaks if any */
         dumpzbreaks:
@@ -1192,10 +1141,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
             strcpy(outBuffer, "OK");
          }
          break;
-
-
-
-
 
          case 'q':   /* queries */
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
@@ -1281,9 +1226,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
 #endif
             break;
 
-
-
-
          case 'Z':  /* Add breakpoint */
          {
             int ret, type, len;
@@ -1325,7 +1267,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
                strcpy(outBuffer, "E05");
                break;
             }
-
 
             /* Get entry */
             z0 = z0break_avail;
@@ -1376,12 +1317,10 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
          }
          break;
 
-
          case 'z': /* remove breakpoint */
             if (inBuffer[1] == 'z')
             {
                goto dumpzbreaks;
-
 
                /*
                 * zz packet - remove all breaks *
@@ -1416,7 +1355,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
                int ret, type, len;
                unsigned *address;
                struct z0break *z0;
-
 
                ret = parse_zbreak(inBuffer, &type, (unsigned char **)&address, &len);
                if (!ret) {
@@ -1479,7 +1417,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
             }
             break;
 
-
          default: /* do nothing */
             break;
       }
@@ -1510,15 +1447,6 @@ void handle_exception (rtems_vector_number vector, CPU_Interrupt_frame *frame)
    return;
 }
 
-
-
-
-
-
-
-
-
-
 static int numsegs;
 static struct memseg   memsegments[NUM_MEMSEGS];
 
@@ -1533,9 +1461,6 @@ int gdbstub_add_memsegment( unsigned base, unsigned end, int opts )
    ++numsegs;
    return RTEMS_SUCCESSFUL;
 }
-
-
-
 
 static int is_readable(unsigned ptr, unsigned len)
 {
@@ -1554,7 +1479,6 @@ static int is_readable(unsigned ptr, unsigned len)
    return 0;
 }
 
-
 static int is_writeable(unsigned ptr, unsigned len)
 {
    struct memseg *ms;
@@ -1572,7 +1496,6 @@ static int is_writeable(unsigned ptr, unsigned len)
    return 0;
 }
 
-
 static int is_steppable(unsigned ptr)
 {
    struct memseg *ms;
@@ -1589,19 +1512,6 @@ static int is_steppable(unsigned ptr)
    }
    return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 static char initialized = 0;   /* 0 means we are not initialized */
 

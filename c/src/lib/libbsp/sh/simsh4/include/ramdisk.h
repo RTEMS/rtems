@@ -22,7 +22,6 @@
 extern "C" {
 #endif
 
-
 rtems_device_driver ramdisk_initialize(rtems_device_major_number major,
                                        rtems_device_minor_number minor,
                                        void *arg);

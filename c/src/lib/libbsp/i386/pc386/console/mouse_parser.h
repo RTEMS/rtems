@@ -31,5 +31,4 @@ void unregister_kbd_msg_queue( int port );
 }
 #endif
 
-
 #endif /*  __mouse_parser_h__  */

@@ -24,8 +24,6 @@
  *  static char _sccsid[] = "@(#)bspclean.c 03/15/96     1.1\n";
  */
 
-
-
 #include <rtems.h>
 #include <bsp.h>
 

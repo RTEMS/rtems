@@ -58,7 +58,6 @@ rtems_device_minor_number rtems_clock_minor;
  */
 volatile uint32_t         Clock_driver_ticks;
 
-
 /*
  *  Clock_isrs is the number of clock ISRs until the next invocation of the
  *  RTEMS clock tick routine. This clock tick device driver gets an interrupt
@@ -70,18 +69,15 @@ volatile uint32_t         Clock_driver_ticks;
  */
 uint32_t         Clock_isrs;
 
-
 /*
  *  Records the previous clock ISR (should be NULL)
  */
 rtems_isr_entry  Old_ticker;
 
-
 /*
  *  Called when the kernel exits.
  */
 void clock_exit( void );
-
 
 /*
  *  VMEchip2_T2_isr
@@ -132,7 +128,6 @@ rtems_isr VMEchip2_T2_isr(
     Clock_isrs -= overflow;
 }
 
-
 /*
  *  VMEchip2_T2_initialize
  *
@@ -171,7 +166,6 @@ void VMEchip2_T2_initialize( void )
   atexit( clock_exit );           /* Turn off T2 interrupts when we exit */
 }
 
-
 /*
  *  clock_exit
  *
@@ -193,7 +187,6 @@ void clock_exit( void )
 
   set_vector( Old_ticker, CLOCK_VECTOR, 1 );
 }
-
 
 /*
  *  Clock_initialize()
@@ -228,7 +221,6 @@ rtems_device_driver Clock_initialize(
 
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  *  Clock_control().

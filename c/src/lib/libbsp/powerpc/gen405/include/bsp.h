@@ -80,7 +80,6 @@ extern "C" {
 #define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
 #define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
 
-
 /*
  *  Stuff for Time Test 27
  */
@@ -99,7 +98,6 @@ extern "C" {
 
 #define RAM_START 0
 #define RAM_END   0x00800000
-
 
 /* miscellaneous stuff assumed to exist */
 

@@ -48,7 +48,6 @@ void Clock_exit( void );
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
-
 /*
  *  ISR Handler
  *

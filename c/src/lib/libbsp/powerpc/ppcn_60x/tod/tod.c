@@ -144,7 +144,6 @@ Routine Description:
     This function was added to bridge the BCD format of the IBM roms
     and the binary formate of NT
 
-
 Arguments:
 
     Register - Supplies the number of the register whose value is read.
@@ -177,7 +176,6 @@ Routine Description:
 
     This function was added to bridge the BCD format of the IBM roms
     and the binary formate of NT
-
 
 Arguments:
 
@@ -609,7 +607,6 @@ void setRealTimeFromRTEMS()
 	(pTimeFunc->SetTime)(&rtems_tod);
 	rtems_semaphore_release(semRTC);
 }
-
 
 int checkRealTime()
 {

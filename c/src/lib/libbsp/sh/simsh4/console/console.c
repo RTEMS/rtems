@@ -20,7 +20,6 @@
 #include <rtems/libio.h>
 #include <syscall.h>
 
-
 /* Console operations mode:
  *     0 - raw (non-termios) polled input/output
  *     1 - termios-based polled input/output
@@ -31,7 +30,6 @@
 #define CONSOLE_MODE_INT  (2)
 
 int console_mode = CONSOLE_MODE_RAW;
-
 
 /* console_poll_read --
  *     poll read operation for simulator console through trap 34 mechanism.

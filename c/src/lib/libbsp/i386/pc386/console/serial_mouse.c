@@ -18,6 +18,9 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.6  2004/04/21 10:42:44  ralf
+ * Remove stray white spaces.
+ *
  * Revision 1.5  2000/12/05 16:37:38  joel
  * 2000-12-01	Joel Sherrill <joel@OARcorp.com>
  *
@@ -58,7 +61,6 @@ static int serial_mouse_conSetAttr( int minor, const struct termios *t);
 static void isr_on(const rtems_irq_connect_data *);
 static void isr_off(const rtems_irq_connect_data *);
 static int  isr_is_on(const rtems_irq_connect_data *);
-
 
 extern BSP_polling_getchar_function_type BSP_poll_char;
 extern int BSPConsolePort;
@@ -162,7 +164,6 @@ serial_mouse_initialize(rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 } /* tty_initialize */
 
-
 static int serial_mouse_last_close(int major, int minor, void *arg)
 {
   BSP_remove_rtems_irq_handler( &serial_mouse_isr_data );
@@ -220,7 +221,6 @@ serial_mouse_close(rtems_device_major_number major,
 
 } /* tty_close */
 
-
 /*
  * TTY device driver READ entry point.
  * Read characters from the tty device.
@@ -232,7 +232,6 @@ serial_mouse_read(rtems_device_major_number major,
 {
   return rtems_termios_read (arg);
 } /* tty_read */
-
 
 /*
  * TTY device driver WRITE entry point.
@@ -285,8 +284,6 @@ serial_mouse_control(rtems_device_major_number major,
 {
   return serial_mouse_control_internal( BSP_UART_PORT, arg );
 }
-
-
 
 static int
 conSetAttr(int port, int minor, const struct termios *t)

@@ -85,7 +85,6 @@ _asm_imask:
 	/* alterbit g0, sf1, sf1 XXX JRS */
 	ret
 
-
 ########################################################################
 #
 # PURPOSE:	get the value of the interrupt mask register

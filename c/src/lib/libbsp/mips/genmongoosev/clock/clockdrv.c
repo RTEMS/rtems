@@ -23,8 +23,6 @@
 #define CLOCK_VECTOR MONGOOSEV_IRQ_TIMER1
 #endif
 
-
-
 /* reset Timeout (TO) bit */
 
 #define Clock_driver_support_at_tick() \
@@ -33,12 +31,10 @@
          (MONGOOSEV_TIMER_CONTROL_COUNTER_ENABLE | MONGOOSEV_TIMER_CONTROL_INTERRUPT_ENABLE)); \
   } while(0)
 
-
 #define Clock_driver_support_install_isr( _new, _old ) \
   do { \
     _old = set_vector( _new, CLOCK_VECTOR, 1 ); \
   } while(0)
-
 
 #define Clock_driver_support_initialize_hardware() \
    do { \

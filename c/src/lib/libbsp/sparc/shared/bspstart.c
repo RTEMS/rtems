@@ -125,7 +125,6 @@ void bsp_pretasking_hook(void)
 
   bsp_libc_init((void *) heap_start, heap_size, 0);
 
-
 #if SIMSPARC_FAST_IDLE
   /*
    *  Install the fast idle task switch extension

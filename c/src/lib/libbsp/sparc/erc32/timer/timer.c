@@ -20,7 +20,6 @@
  *  $Id$
  */
 
-
 #include <bsp.h>
 
 rtems_boolean Timer_driver_Find_average_overhead;

@@ -30,7 +30,6 @@
 |  $Id$
 +--------------------------------------------------------------------------*/
 
-
 #include <stdlib.h>
 
 #include <bsp.h>
@@ -109,7 +108,6 @@ void clockOff(const rtems_irq_connect_data* unused)
   outport_byte(TIMER_CNTR0, 0);
 } /* Clock_exit */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: Install_clock
 |      Description: Initialize and install clock interrupt handler.
@@ -177,8 +175,6 @@ static rtems_irq_connect_data clockIrqData = {BSP_PERIODIC_TIMER,
 					      clockOff,
 					      clockIsOn};
 
-
-
 /*-------------------------------------------------------------------------+
 | Clock device driver INITIALIZE entry point.
 +--------------------------------------------------------------------------+
@@ -201,7 +197,6 @@ Clock_initialize(rtems_device_major_number major,
 
   return RTEMS_SUCCESSFUL;
 } /* Clock_initialize */
-
 
 /*-------------------------------------------------------------------------+
 | Console device driver CONTROL entry point
@@ -244,7 +239,6 @@ void Clock_exit()
 |              those who wish to use it with PENTIUM based machine. It needs
 |              to be correctly integrated with the rest of the code!!!
 +--------------------------------------------------------------------------*/
-
 
 #if 0 && defined(pentium)
 

@@ -50,7 +50,6 @@
 #define INTERRUPT 1                   /* CVME961 target supports both */
 #define POLLING   0                   /* polling and interrupt modes  */
 
-
 shm_config_table BSP_shm_cfgtbl;
 
 void Shm_Get_configuration(

@@ -10,6 +10,9 @@
 //
 // MODIFICATION/HISTORY:
 // $Log$
+// Revision 1.3  2004/04/21 10:42:44  ralf
+// Remove stray white spaces.
+//
 // Revision 1.2  2000/08/30 17:06:23  joel
 // 2000-08-30	Joel Sherrill <joel@OARcorp.com>
 //
@@ -81,7 +84,6 @@ extern unsigned char keyboard_type;
 
 #define MAX_NR_FUNC	256	/* max nr of strings assigned to keys */
 #define MAX_NR_CONSOLES 1
-
 
 extern char *func_table[MAX_NR_FUNC];
 
@@ -360,7 +362,6 @@ extern char *func_table[MAX_NR_FUNC];
 #define K_F245		K(KT_FN,254)
 #define K_UNDO		K(KT_FN,255)
 
-
 #define K_HOLE		K(KT_SPEC,0)
 #define K_ENTER		K(KT_SPEC,1)
 #define K_SH_REGS	K(KT_SPEC,2)
@@ -622,6 +623,5 @@ void compute_shiftstate(void);
 /* defkeymap.c */
 
 extern unsigned int keymap_count;
-
 
 #endif

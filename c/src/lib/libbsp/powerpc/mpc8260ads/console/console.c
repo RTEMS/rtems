@@ -98,11 +98,7 @@ static void _BSP_output_char( char c );
 static rtems_status_code do_poll_read( rtems_device_major_number major, rtems_device_minor_number minor, void * arg);
 static rtems_status_code do_poll_write( rtems_device_major_number major, rtems_device_minor_number minor, void * arg);
 
-
 BSP_output_char_function_type BSP_output_char = _BSP_output_char;
-
-
-
 
 /*
  *  do_poll_read
@@ -145,7 +141,6 @@ static rtems_status_code do_poll_read(
   rw_args->bytes_moved = 1;
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  *  do_poll_write
@@ -190,7 +185,6 @@ static rtems_status_code do_poll_write(
 
 }
 
-
 /*
  *  Print functions prototyped in bspIo.h
  */
@@ -210,7 +204,6 @@ static void _BSP_output_char( char c )
     PRINTK_WRITE( PRINTK_MINOR, &cr, 1 );
 
 }
-
 
 /*
  ***************
@@ -266,8 +259,6 @@ rtems_device_driver console_initialize(
   m8xx_uart_scc_initialize(SCC4_MINOR); /* /dev/tty3    */
 #endif
 
-
-
   /*
    * Set up interrupts
    */
@@ -278,7 +269,6 @@ rtems_device_driver console_initialize(
     rtems_fatal_error_occurred (status);
   chmod("/dev/tty0",0660);
   chown("/dev/tty0",2,0);
-
 
   status = rtems_io_register_name ("/dev/tty1", major, SCC2_MINOR);
   if (status != RTEMS_SUCCESSFUL)
@@ -312,7 +302,6 @@ rtems_device_driver console_initialize(
 
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  * Open the device
@@ -359,7 +348,6 @@ rtems_device_driver console_open(
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 
-
 #if UARTS_USE_TERMIOS == 1
 
 #if UARTS_IO_MODE == 1  /* RTEMS interrupt-driven I/O with termios */
@@ -377,7 +365,6 @@ rtems_device_driver console_open(
   return sc;
 
 }
-
 
 /*
  * Close the device
@@ -399,7 +386,6 @@ rtems_device_driver console_close(
 
 }
 
-
 /*
  * Read from the device
  */
@@ -412,7 +398,6 @@ rtems_device_driver console_read(
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 
-
 #if UARTS_USE_TERMIOS == 1
   return rtems_termios_read( arg );
 #else
@@ -420,7 +405,6 @@ rtems_device_driver console_read(
 #endif
 
 }
-
 
 /*
  * Write to the device
@@ -434,7 +418,6 @@ rtems_device_driver console_write(
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
 
-
 #if UARTS_USE_TERMIOS == 1
   return rtems_termios_write( arg );
 #else
@@ -443,7 +426,6 @@ rtems_device_driver console_write(
 #endif
 
 }
-
 
 /*
  * Handle ioctl request.
@@ -456,7 +438,6 @@ rtems_device_driver console_control(
 {
   if ( minor > NUM_PORTS-1 )
     return RTEMS_INVALID_NUMBER;
-
 
 #if UARTS_USE_TERMIOS == 1
   return rtems_termios_ioctl( arg );

@@ -21,7 +21,6 @@ void i386_stub_glue_init(int);
 void i386_stub_glue_init_breakin(void);
 void set_debug_traps(void);
 
-
  /* Init GDB glue  */
 
 void init_serial_gdb( void )
@@ -47,7 +46,6 @@ void init_serial_gdb( void )
   printk( "Remote GDB: setting traps...\n" );
   /* Init GDB stub itself */
   set_debug_traps();
-
 
   printk( "Remote GDB: waiting for remote connection...\n" );
 

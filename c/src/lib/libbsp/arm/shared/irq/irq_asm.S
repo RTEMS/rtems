@@ -26,7 +26,6 @@ _ISR_Handler:
         stmdb   sp!, {r0, r1, r2, r3, r12}   /* save regs on INT stack */
         stmdb   sp!, {lr}               /*    now safe to call C funcs */
 
-
 /* one nest level deeper */
         ldr     r0, =_ISR_Nest_level
         ldr     r1, [r0]
@@ -111,7 +110,6 @@ bframe:
         ldmia   sp!, {r1}                 /* out with the old          */
         stmdb   sp!, {lr}                 /*    in with the new (lr) */
 
-
         orr     r0, r0, #0xc0
         msr     spsr, r0
 
@@ -119,8 +117,6 @@ exitit:
         ldmia   sp!, {lr}                     /* restore regs from INT stack */
         ldmia   sp!, {r0, r1, r2, r3, r12}    /* restore regs from INT stack */
         subs    pc, lr, #4                /* return */
-
-
 
         /* on entry to _ISR_Dispatch, we're in SVC mode */
         .globl _ISR_Dispatch

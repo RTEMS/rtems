@@ -165,7 +165,6 @@ static unsigned char e0_keys[128] = {
   0, 0, 0, 0, 0, 0, 0, 0			      /* 0x78-0x7f */
 };
 
-
 static void mdelay( unsigned long t )
 {
    Wait_X_ms( t );
@@ -217,7 +216,6 @@ int pckbd_translate(unsigned char scancode, unsigned char *keycode,
 		    char raw_mode)
 {
 	static int prev_scancode = 0;
-
 
 	/* special prefix scancodes.. */
 	if (scancode == 0xe0 || scancode == 0xe1) {
@@ -318,8 +316,6 @@ char pckbd_unexpected_up(unsigned char keycode)
 	    return 0200;
 }
 
-
-
 static void kb_wait(void)
 {
 	unsigned long timeout = KBC_TIMEOUT;
@@ -340,7 +336,6 @@ static void kb_wait(void)
 	printk( "Keyboard timed out[1]\n");
 #endif
 }
-
 
 /*
  * This reads the keyboard status port, and does the
@@ -388,7 +383,6 @@ static unsigned char handle_kbd_event(void)
 	resend = 0;
 	return status;
 }
-
 
 void keyboard_interrupt( void )
 {
@@ -595,7 +589,6 @@ static char * initialize_kbd(void)
 		kbd_wait_for_input();
 	}
 
-
 	kbd_write_output_w(KBD_CMD_ENABLE);
 	if (kbd_wait_for_input() != KBD_REPLY_ACK)
 		return "Enable keyboard: no ACK";
@@ -610,7 +603,6 @@ static char * initialize_kbd(void)
 		return "Set rate: no ACK";
 	return NULL;
 }
-
 
 void pckbd_init_hw(void)
 {

@@ -93,7 +93,6 @@ void bsp_start( void )
     /* Make VME access round-robin */
   }
 
-
   node_number =
     (uint8_t)
     (Configuration.User_multiprocessing_table->node - 1) & 0xF;

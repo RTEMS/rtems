@@ -58,7 +58,6 @@ void bsp_start( void )
    *  BSP, it is dynamically set in start.S.
    */
 
-
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
    *  a variety of places: hard coded address, malloc'ed from outside

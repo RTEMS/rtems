@@ -66,7 +66,6 @@ static char shift_map[] =
   '1','2','3','0',177
 }; /* Keyboard scancode -> character map with SHIFT key modifier. */
 
-
 static unsigned short   kbd_buffer[KBD_BUF_SIZE];
 static uint16_t         kbd_first = 0;
 static uint16_t         kbd_last  = 0;
@@ -84,7 +83,6 @@ void rtemsReboot(void)
   /* shutdown and reboot */
   outport_byte(0x64, 0xFE);      /* use keyboard controler to do the job... */
 } /* rtemsReboot */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: _IBMPC_scankey
@@ -238,7 +236,6 @@ _IBMPC_chrdy(char *c)
     return FALSE;
 } /* _IBMPC_chrdy */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: _IBMPC_inch
 |      Description: Poll keyboard until a character is ready and return it.
@@ -255,7 +252,6 @@ _IBMPC_inch(void)
 
     return c;
 } /* _IBMPC_inch */
-
 
  /*
   * Routine that can be used before interrupt management is initialized.

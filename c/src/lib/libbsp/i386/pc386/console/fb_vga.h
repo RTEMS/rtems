@@ -16,6 +16,9 @@
  * MODIFICATION/HISTORY:
  *
  * $Log$
+ * Revision 1.3  2004/04/21 10:42:44  ralf
+ * Remove stray white spaces.
+ *
  * Revision 1.2  2004/04/15 13:26:12  ralf
  * Remove stray white spaces.
  *
@@ -83,7 +86,6 @@ rtems_device_driver fbvga_close(
   rtems_device_minor_number,
   void *
 );
-
 
 rtems_device_driver fbvga_read(
   rtems_device_major_number,

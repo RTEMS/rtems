@@ -14,7 +14,6 @@
  *  $Id$
 */
 
-
 /* Some standard definitions...*/
 
 .equ Mode_USR,        	     0x10
@@ -29,10 +28,8 @@
 .equ I_Bit,           	     0x80
 .equ F_Bit,           	     0x40
 
-
 	.text
 	.globl	_start
-
 
 _start:
 	/* store the sp */

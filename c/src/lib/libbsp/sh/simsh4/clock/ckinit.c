@@ -25,7 +25,6 @@
  */
 volatile uint32_t         Clock_driver_ticks;
 
-
 /*
  * These are set by clock driver during its init
  */
@@ -63,7 +62,6 @@ Clock_isr (rtems_vector_number vector)
     rtems_clock_tick();
 }
 
-
 /* Clock_exit --
  *     This shuts down the timer if it was enabled and removes it
  *     from the interrupt mask.
@@ -83,7 +81,6 @@ Clock_exit(void)
         set_clock_period(0);
     }
 }
-
 
 /* Install_clock --
  *     This initialises timer1 with the BSP timeslice config value
@@ -117,7 +114,6 @@ Install_clock(rtems_isr_entry clock_isr)
     }
 }
 
-
 /* Clock_initialize --
  *     This is called to setup the clock driver. It calls the hardware
  *     setup function and make the driver major/minor values available
@@ -144,7 +140,6 @@ Clock_initialize(rtems_device_major_number major,
 
     return RTEMS_SUCCESSFUL;
 }
-
 
 /* Clock_control --
  *     I/O control (IOCTL) function for Clock driver. At this moment this

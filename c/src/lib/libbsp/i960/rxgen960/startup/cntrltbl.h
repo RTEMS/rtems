@@ -32,8 +32,6 @@ extern ControlTblEntry rom_controlTbl[];
 
 #define VECTOR_CACHE   	(0x1<<13)
 
-
-
   /* BreakPoint Control Register Initial.
    */
 #define BPCON		0
@@ -42,8 +40,6 @@ extern ControlTblEntry rom_controlTbl[];
 #define CONF_TBL_VALID	0x1
 #define PROTECT_RAM	0x2
 #define PROTECT_RAM_SUP	0x4
-
-
 
 #endif
 /*-------------*/

@@ -23,7 +23,6 @@
 #include <rtems/libio.h>
 #include <rtems/zilog/z8530.h>
 
-
 /*  console_initialize
  *
  *  This routine initializes the console IO driver.

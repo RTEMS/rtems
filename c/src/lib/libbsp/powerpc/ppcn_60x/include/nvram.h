@@ -29,7 +29,6 @@ extern "C" {
 
 void InitializeNvRAM(void);
 
-
 /*
  * These routines access data in the NvRAM's OS area
  */

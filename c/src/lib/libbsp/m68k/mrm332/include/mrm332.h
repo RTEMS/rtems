@@ -6,13 +6,11 @@
 #ifndef _MRM332_H_
 #define _MRM332_H_
 
-
 /* SIM_MM (SIM Module Mapping) determines the location of the control
    register block. When MM=0, register addresses range fom 0x7ff000 to
    0x7FFFFF. When MM=1, register addresses range from 0xfff000 to
    0xffffff. */
 #define SIM_MM 1
-
 
 /* Interrupt related definitions */
 #define SIM_IARB 15
@@ -27,8 +25,6 @@
 #define EFI_SPINT 24		/* spurious interrupt */
 #define EFI_INT1 25		/* CTS interrupt */
 #define ISRL_SCI 6
-
-
 
 /* System Clock definitions */
 #define XTAL 32768.0		/* crystal frequency in Hz */
@@ -56,7 +52,6 @@
 
 #define SYS_CLOCK (XTAL*4.0*(MRM_Y+1)*(1 << (2*MRM_W+MRM_X)))
 #define SCI_BAUD 19200		/* RS232 Baud Rate */
-
 
 /* macros/functions */
 

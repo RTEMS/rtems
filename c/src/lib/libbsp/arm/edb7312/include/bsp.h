@@ -50,16 +50,11 @@ extern rtems_configuration_table BSP_Configuration;
 
 #define Lower_tm27_intr()
 
-
-
 /*
  * Network driver configuration
  */
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"eth0"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	cs8900_driver_attach
-
-
-
 
 #ifdef __cplusplus
 }

@@ -28,15 +28,12 @@
  *  $Id$
  */
 
-
 /*
  *  Rather than deleting this, it is commented out to (hopefully) help
  *  the submitter send updates.
  *
  *  static char _sccsid[] = "@(#)console.c 08/20/96     1.6\n";
  */
-
-
 
 #include <bsp.h>
 #include <rtems/libio.h>
@@ -45,7 +42,6 @@
 char idtsim_getchar( void );
 void idtsim_putchar( char c );
 void mips_leddisplay( char a, char b, char c, char d );
-
 
 /*  console_initialize
  *
@@ -77,7 +73,6 @@ rtems_device_driver console_initialize(
 
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*  is_character_ready
  *
@@ -158,7 +153,6 @@ void outbyte(
   }
 
 }
-
 
 #if 0
 static int console_fd = -1;

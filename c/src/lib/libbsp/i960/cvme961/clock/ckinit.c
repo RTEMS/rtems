@@ -38,7 +38,6 @@ void Clock_exit( void );
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
-
 /* this is later in the file to avoid it being inlined */
 rtems_isr Clock_isr( rtems_vector_number vector );
 

@@ -152,7 +152,6 @@ volatile void init_pit()
    */
   MC68681_WRITE(DUART_ADDR, MC68681_CLOCK_SELECT_REG_B, MC68681_BAUD_RATE_MASK_9600);
 
-
 #define EIGHT_BITS_NO_PARITY
 #ifdef EIGHT_BITS_NO_PARITY
   /*
@@ -167,7 +166,6 @@ volatile void init_pit()
   MC68681_WRITE(DUART_ADDR, MC68681_MODE_REG_1B,
                 (MC68681_WITH_PARITY |  MC68681_7BIT_CHARS) );
 #endif
-
 
   /*
    * Set Stop Bit length to 1
@@ -245,7 +243,6 @@ void transmit_char(char ch)
    */
   MC68681_WRITE(DUART_ADDR, MC68681_TRANSMIT_BUFFER_A, ch);
 }
-
 
 /*#####################################################################
 # This is the routine that actually transmits a character one at a time

@@ -111,7 +111,6 @@ i960_isr_entry set_vector(                 /* returns old vector */
   volatile unsigned int *ipnd = (unsigned int *) IPND_ADDR;
   volatile unsigned int *imsk = (unsigned int *) IMSK_ADDR;
 
-
   cached_intr_tbl = (i960_isr_entry *) 0;
   intr_tbl        = (i960_isr_entry *) Prcb->intr_tbl;
 

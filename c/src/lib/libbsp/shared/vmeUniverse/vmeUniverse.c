@@ -71,7 +71,6 @@
 typedef unsigned int pci_ulong;
 #define PCI_TO_LOCAL_ADDR(memaddr) ((pci_ulong)(memaddr) + PCI_MEM_BASE)
 
-
 #elif defined(__vxworks)
 typedef unsigned long pci_ulong;
 #define PCI_TO_LOCAL_ADDR(memaddr) (memaddr)
@@ -176,7 +175,6 @@ return READ_LE0((volatile LERegister *)(((unsigned long)adrs)+off));
 #define PORT_UNALIGNED(addr,port) \
 	( (port)%4 ? ((addr) & 0xffff) : ((addr) & 4095) )
 
-
 #define UNIV_REV(base) (READ_LE(base,2*sizeof(LERegister)) & 0xff)
 
 #if defined(__rtems__) && 0
@@ -197,7 +195,6 @@ char	buf[200];
 	return rval;
 }
 #endif
-
 
 /* private printing wrapper */
 static void
@@ -468,7 +465,6 @@ unsigned long	mode=0;
 #undef base
 }
 
-
 static int
 showUniversePort(
 		int		ismaster,
@@ -600,7 +596,6 @@ unsigned long cntrl, start, bound, offst, mask, x;
 	return 0;
 }
 
-
 static int
 mapOverAll(int ismaster, int (*func)(int,int,volatile LERegister *,void*), void *arg)
 {
@@ -696,7 +691,6 @@ vmeUniverseReset(void)
 
 	/* disable VME bus image of VME CSR */
 	vmeUniverseWriteReg(0, UNIV_REGOFF_VCSR_CTL);
-
 
 	/* I had problems with a Joerger vtr10012_8 card who would
 	 * only be accessible after tweaking the U2SPEC register
@@ -1043,7 +1037,6 @@ unsigned long lvl,msk,lintstat,linten,status;
 					UNIV_REGOFF_VINT_STAT);
 */
 
-
 		/* re-enable the previous level */
 		vmeUniverseWriteReg(linten, UNIV_REGOFF_LINT_EN);
 }
@@ -1123,7 +1116,6 @@ rtems_irq_connect_data aarrggh;
 	return 0;
 }
 
-
 int
 vmeUniverseInstallISR(unsigned long vector, VmeUniverseISR hdl, void *arg)
 {
@@ -1184,6 +1176,5 @@ vmeUniverseIntDisable(unsigned int level)
 				UNIV_REGOFF_LINT_EN);
 		return 0;
 }
-
 
 #endif

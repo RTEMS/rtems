@@ -28,7 +28,6 @@
 	.text
 	.p2align 5
 
-
 	PUBLIC_VAR(decrementer_exception_vector_prolog_code)
 
 SYM (decrementer_exception_vector_prolog_code):
@@ -258,7 +257,6 @@ nested:
 	 */
 	bl		_ThreadProcessSignalsFromIrq
 
-
 	/*
 	 * start restoring exception like frame
 	 */
@@ -272,9 +270,7 @@ nested:
 	mtcr	r29
 	mtlr	r28
 
-
 	lmw		r4, GPR4_OFFSET(r1)
-
 
 	lwz		r2, GPR2_OFFSET(r1)
 	lwz		r0, GPR0_OFFSET(r1)

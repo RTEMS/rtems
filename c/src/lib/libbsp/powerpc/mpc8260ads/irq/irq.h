@@ -29,7 +29,6 @@
 #ifndef LIBBSP_POWERPC_MBX8XX_IRQ_IRQ_H
 #define LIBBSP_POWERPC_MBX8XX_IRQ_IRQ_H
 
-
 #define BSP_ASM_IRQ_VECTOR_BASE 0x0
 
 #ifndef ASM
@@ -144,7 +143,6 @@ typedef enum {
   BSP_CPM_IRQ_PC1		=	BSP_CPM_IRQ_LOWEST_OFFSET + 62,
   BSP_CPM_IRQ_PC0		=	BSP_CPM_IRQ_LOWEST_OFFSET + 63,
 
-
     /*
      * Some Processor exception handled as rtems IRQ symbolic name definition
      */
@@ -154,7 +152,6 @@ typedef enum {
 }rtems_irq_symbolic_name;
 
 #define CPM_INTERRUPT
-
 
 /*
  * Type definition for RTEMS managed interrupts
@@ -229,9 +226,6 @@ typedef struct {
     rtems_irq_prio*		irqPrioTbl;
 }rtems_irq_global_settings;
 
-
-
-
 /*-------------------------------------------------------------------------+
 | Function Prototypes.
 +--------------------------------------------------------------------------*/
@@ -263,8 +257,6 @@ int BSP_irq_ack_at_cpm              	(const rtems_irq_symbolic_name irqLine);
  * function to check if a particular irq is enabled. After calling
  */
 int BSP_irq_enabled_at_cpm     	(const rtems_irq_symbolic_name irqLine);
-
-
 
 /*
  * ------------------------ RTEMS Single Irq Handler Mngt Routines ----------------
@@ -314,7 +306,6 @@ int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* ptr);
  * The user can use the previous function to get it.
  */
 int BSP_remove_rtems_irq_handler    	(const rtems_irq_connect_data*);
-
 
 /*
  * ------------------------ RTEMS Global Irq Handler Mngt Routines ----------------

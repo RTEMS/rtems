@@ -449,7 +449,6 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
    */
   m8xx.pgcra &= ~0x80;
 
-
   /*
    * Set SIU interrupt level to LVL2
    *
@@ -556,8 +555,6 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
   sc->txBdHead = sc->txBdTail = 0;
   sc->txBdActiveCount = 0;
 
-
-
   /*
    * Mask all FEC interrupts and clear events
    */
@@ -572,7 +569,6 @@ m860_fec_initialize_hardware (struct m860_enet_struct *sc)
     rtems_panic ("Can't attach M860 FEC interrupt handler\n", 0);
 
 }
-
 
 /*
  * Soak up buffer descriptors that have been sent
@@ -1308,7 +1304,6 @@ fec_init (void *arg)
   else
     m8xx.fec.r_cntrl &= ~0x8;
 
-
   /*
    * Tell the world that we're running.
    */
@@ -1319,7 +1314,6 @@ fec_init (void *arg)
    */
   m8xx.fec.ecntrl = 0x2;
 }
-
 
 /*
  * Stop the device
@@ -1562,7 +1556,6 @@ rtems_fec_driver_attach (struct rtems_bsdnet_ifconfig *config)
   ifp = &sc->arpcom.ac_if;
   if (ifp->if_softc != NULL)
     return 0;
-
 
   /*
    * Process options

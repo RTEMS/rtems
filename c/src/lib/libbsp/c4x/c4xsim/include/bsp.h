@@ -30,7 +30,6 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
 
-
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
  *  Long test and short test duration limits are provided.  These
@@ -41,7 +40,6 @@ extern "C" {
 
 #define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
 #define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
-
 
 /*
  *  Stuff for Time Test 27
@@ -82,7 +80,6 @@ extern "C" {
 /*
  * NOTE: Use the standard Clock driver entry
  */
-
 
 /*
  *  Information placed in the linkcmds file.

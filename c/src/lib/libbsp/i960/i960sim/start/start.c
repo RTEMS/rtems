@@ -32,7 +32,6 @@ void _start(void)
   __asm__ volatile ("mov %0,sp" : : "d" (ptr + STACK_ALIGN));
   __asm__ volatile ("mov %0,fp" : : "d" (ptr));
 
-
   init_Cregs();
   boot_card();
   _sys_exit(0);

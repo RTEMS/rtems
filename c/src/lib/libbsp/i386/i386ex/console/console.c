@@ -116,7 +116,6 @@ console_initialize(rtems_device_major_number major,
   /* 9600-8-N-1, no hardware flow control */
   BSP_uart_init(BSPConsolePort, 9600, CHR_8_BITS, 0, 0, 0);
 
-
   /* Set interrupt handler */
   if(BSPConsolePort == BSP_UART_COM1)
     {
@@ -158,7 +157,6 @@ console_initialize(rtems_device_major_number major,
 
   return RTEMS_SUCCESSFUL;
 } /* console_initialize */
-
 
 static int console_last_close(int major, int minor, void *arg)
 {
@@ -226,7 +224,6 @@ console_close(rtems_device_major_number major,
 
 } /* console_close */
 
-
 /*-------------------------------------------------------------------------+
 | Console device driver READ entry point.
 +--------------------------------------------------------------------------+
@@ -249,7 +246,6 @@ console_read(rtems_device_major_number major,
 
 } /* console_read */
 
-
 /*-------------------------------------------------------------------------+
 | Console device driver WRITE entry point.
 +--------------------------------------------------------------------------+
@@ -263,8 +259,6 @@ console_write(rtems_device_major_number major,
         return rtems_termios_write (arg);
 
 } /* console_write */
-
-
 
 /*
  * Handle ioctl request.

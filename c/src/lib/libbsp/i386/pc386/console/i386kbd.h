@@ -58,8 +58,6 @@ extern unsigned char pckbd_sysrq_xlate[128];
 
 #define aux_free_irq(dev_id)   /* free_irq(AUX_IRQ, dev_id) */
 
-
-
 /*
  *	include/linux/pc_keyb.h
  *
@@ -77,8 +75,6 @@ extern unsigned char pckbd_sysrq_xlate[128];
 #define KBD_REPORT_TIMEOUTS		/* Report keyboard timeouts */
 #undef KBD_IS_FOCUS_9000		/* We have the brain-damaged FOCUS-9000 keyboard */
 #undef INITIALIZE_MOUSE			/* Define if your PS/2 mouse needs initialization. */
-
-
 
 #define KBD_INIT_TIMEOUT 1000		/* Timeout in ms for initializing the keyboard */
 #define KBC_TIMEOUT 250			/* Timeout in ms for sending to keyboard controller */

@@ -28,7 +28,6 @@ console_initialize(rtems_device_major_number major,
   return 0;
 }
 
-
 /*
  *  Open entry point
  */

@@ -77,5 +77,4 @@ extern void (*Restart_Check_B_Timer)();
 #define m340_OUT		(1<<9)
 #define m340_COM		(1<<8)
 
-
 #endif

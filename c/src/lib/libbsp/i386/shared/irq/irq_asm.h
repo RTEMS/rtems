@@ -26,5 +26,4 @@
 #define PIC_EOSI	0x60	/* End of Specific Interrupt (EOSI) */
 #define PIC_EOI		0x20	/* Generic End of Interrupt (EOI) */
 
-
 #endif

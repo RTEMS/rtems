@@ -94,7 +94,6 @@ struct pcc_map {
 
 #define z8530 0xfffe3001
 
-
 /* interrupt vectors - see MVME146/D1 4.14 */
 #define PCC_BASE_VECTOR        0x40 /* First user int */
 #define SCC_VECTOR             PCC_BASE_VECTOR+3
@@ -113,8 +112,6 @@ struct pcc_map {
 #define CONSOLE_CONTROL  0xfffe3000
 #define CONSOLE_DATA     0xfffe3001
 #endif
-
-
 
 #define FOREVER       1                  /* infinite loop */
 
@@ -154,7 +151,6 @@ struct pcc_map {
 #define Clear_tm27_intr()  pcc->software_int_1_control = 0x00
 
 #define Lower_tm27_intr()
-
 
 /* miscellaneous stuff assumed to exist */
 

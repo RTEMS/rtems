@@ -78,7 +78,6 @@ void bsp_pretasking_hook(void)
     uint32_t   heap_start;
     uint32_t   heap_size;
 
-
     /*
      * Set up the heap. It uses all free SDRAM except that reserved
      * for non-cached uses.
@@ -97,7 +96,6 @@ void bsp_pretasking_hook(void)
 #endif /* RTEMS_DEBUG */
 
 } /* bsp_pretasking_hook */
-
 
 /**************************************************************************/
 /*                                                                        */
@@ -152,7 +150,6 @@ void bsp_start_default( void )
      */
     rtems_irq_mngt_init();
 
-
     /*
      *  The following information is very useful when debugging.
      */
@@ -174,9 +171,6 @@ void bsp_start_default( void )
     printk( "work_space_size = 0x%x\n", BSP_Configuration.work_space_size );
 #endif
 } /* bsp_start */
-
-
-
 
 /*
  *  By making this a weak alias for bsp_start_default, a brave soul

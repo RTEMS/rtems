@@ -25,7 +25,6 @@
 #define STATUS_REGISTER     0x00
 #define DATA_REGISTER       0x08
 
-
 #define Z8530_Status_Is_RX_character_available( _status ) \
   ( (_status) & 0x01 )
 
@@ -56,7 +55,6 @@ static const unsigned char Stop_bit_85c30[] = {
 
 static const unsigned char Parity_85c30[] = {
   Z8530_PARITY_NONE, Z8530_PARITY_ODD, Z8530_PARITY_EVEN };
-
 
 /* PAGE
  *
@@ -102,7 +100,6 @@ static void  Write_85c30_register(
   rtems_bsp_delay_in_bus_cycles( 40 );
 }
 
-
 /* PAGE
  *
  *  Reset_85c30_chip
@@ -118,7 +115,6 @@ void Reset_85c30_chip(
   Write_85c30_register( ctrl_0, 0x09, 0x80 );
   Write_85c30_register( ctrl_1, 0x09, 0x40 );
 }
-
 
 /* PAGE
  *
@@ -285,7 +281,6 @@ void initialize_85c30_port(
    */
   Write_85c30_register( ctrl, 9, 0x0A );
 
-
   /* XXX */
 
   /*
@@ -361,7 +356,6 @@ int inbyte_nonblocking_85c30(
 
   return data;
 }
-
 
 /*
  *  Interrupt driven console IO

@@ -76,7 +76,6 @@ static inline int is_processor_irq(const rtems_irq_symbolic_name irqLine)
 	 );
 }
 
-
 /*
  * ------------------------ RTEMS Irq helper functions ----------------
  */
@@ -118,7 +117,6 @@ static int isValidInterrupt(int irq)
   return 1;
 }
 
-
 /*
  * ------------------------ RTEMS Shared Irq Handler Mngt Routines ----------------
  */
@@ -153,7 +151,6 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
     /* link chain to new topmost handler */
     rtems_hdl_tbl[irq->name].next_handler = (void *)vchain;
 
-
     if (is_isa_irq(irq->name)) {
       /*
        * Enable interrupt at PIC level
@@ -182,7 +179,6 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
 
     return 1;
 }
-
 
 /*
  * ------------------------ RTEMS Single Irq Handler Mngt Routines ----------------
@@ -244,7 +240,6 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
     return 1;
 }
-
 
 int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 {
@@ -517,7 +512,6 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
   register unsigned msr;
   register unsigned new_msr;
 
-
   if (excNum == ASM_DEC_VECTOR) {
     _CPU_MSR_GET(msr);
     new_msr = msr | MSR_EE;
@@ -566,7 +560,6 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
      }
   }
 
-
   _CPU_MSR_SET(msr);
 
   if (isaIntr)  {
@@ -585,8 +578,6 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     		openpic_eoi(0);
   }
 }
-
-
 
 void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
 {

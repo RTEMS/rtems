@@ -11,7 +11,6 @@
 #define Clock_driver_support_install_isr( _new, _old )  \
   do { _old = (rtems_isr_entry) set_vector( _new, CLOCK_VECTOR, 1 ); } while(0)
 
-
 typedef struct {
   volatile uint8_t    cr;       /*  0 -  0 : Timer Control Register */
   volatile uint8_t    pad0;     /*  1 -  1 : pad */
@@ -43,7 +42,6 @@ void Clock_driver_support_at_tick()
 
   t->sr  = 0xA0;  /* Negate timer interrupt request */
 }
-
 
 void Clock_driver_support_shutdown_hardware()
 {

@@ -64,7 +64,6 @@ static inline int is_processor_irq(const rtems_irq_symbolic_name irqLine)
 	 );
 }
 
-
 /*
  * masks used to mask off the interrupts. For exmaple, for ILVL2, the
  * mask is used to mask off interrupts ILVL2, IRQ3, ILVL3, ... IRQ7
@@ -250,7 +249,6 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
     return 1;
 }
-
 
 int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 {
@@ -484,8 +482,6 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
 #endif
   }
 }
-
-
 
 void _ThreadProcessSignalsFromIrq (BSP_Exception_frame* ctx)
 {

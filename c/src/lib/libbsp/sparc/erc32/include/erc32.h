@@ -225,7 +225,6 @@ typedef struct {
 #define ERC32_CONFIGURATION_ACCESS_PROTECTION_ENABLED     0x00000008
 #define ERC32_CONFIGURATION_ACCESS_PROTECTION_DISABLED    0x00000000
 
-
 /*
  *  The following defines the bits in the Memory Configuration Register.
  */
@@ -507,7 +506,6 @@ extern uint32_t   _ERC32_MEC_Timer_Control_Mirror;
   do { \
     (_value) = (_ERC32_MEC_Timer_Control_Mirror >> 8) & 0xf; \
   } while ( 0 )
-
 
 #endif /* !ASM */
 

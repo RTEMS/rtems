@@ -35,7 +35,6 @@
 #include <bsp/irq.h>
 #include <bsp.h>
 
-
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
@@ -116,7 +115,6 @@ void bsp_pretasking_hook(void)
   rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
 }
-
 
 /*
  *  bsp_start()

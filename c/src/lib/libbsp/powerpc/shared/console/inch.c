@@ -209,7 +209,6 @@ void _IBMPC_keyboard_isr()
   }
 } /* _IBMPC_keyboard_isr */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: _IBMPC_chrdy
 |      Description: Check keyboard ISR buffer and return character if not empty.
@@ -233,7 +232,6 @@ _IBMPC_chrdy(char *c)
     return FALSE;
 } /* _IBMPC_chrdy */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: _IBMPC_inch
 |      Description: Poll keyboard until a character is ready and return it.
@@ -250,7 +248,6 @@ _IBMPC_inch(void)
 
     return c;
 } /* _IBMPC_inch */
-
 
  /*
   * Routine that can be used before interrupt management is initialized.

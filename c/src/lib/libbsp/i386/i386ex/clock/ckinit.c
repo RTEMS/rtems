@@ -82,7 +82,6 @@ static rtems_irq_connect_data clockIrqData = {BSP_PERIODIC_TIMER,
 					      ClockOff,
 					      ClockIsOn};
 
-
 rtems_device_driver Clock_initialize(
   rtems_device_major_number major,
   rtems_device_minor_number minor,

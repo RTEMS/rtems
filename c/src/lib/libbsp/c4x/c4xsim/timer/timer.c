@@ -35,7 +35,6 @@ void Timer_initialize( void )
    *  implemenations of timer but ....
    */
 
-
   c4x_timer_stop(C4X_TIMER_0);
   c4x_timer_set_period(C4X_TIMER_0, 0xffffffff); /* so no interupts */
   c4x_timer_start(C4X_TIMER_0);

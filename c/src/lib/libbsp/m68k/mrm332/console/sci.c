@@ -36,6 +36,9 @@
 * $Id$
 *
 * $Log$
+* Revision 1.7  2004/04/21 10:42:52  ralf
+* Remove stray white spaces.
+*
 * Revision 1.6  2004/04/15 13:26:13  ralf
 * Remove stray white spaces.
 *
@@ -162,13 +165,11 @@
 
 #define SCI_MINOR       0                   // minor device number
 
-
 // IMPORTANT - if the device driver api is opened, it means the sci is being
 // used for direct hardware access, so other users (like termios) get ignored
 
 #define DRIVER_CLOSED   0                   // the device driver api is closed
 #define DRIVER_OPENED   1                   // the device driver api is opened
-
 
 // system clock definitions, i dont have documentation on this...
 
@@ -187,7 +188,6 @@
 /*****************************************************************************
   Section C - External Data
 *****************************************************************************/
-
 
 
 
@@ -266,7 +266,6 @@ void SciPrintStats();                                   // test routine
 
 static struct rtems_termios_tty *SciTermioTty;
 
-
 static uint8_t   SciInited = 0;             // has the driver been inited
 
 static uint8_t   SciOpened;                 // has the driver been opened
@@ -291,7 +290,6 @@ BSP_output_char_function_type      BSP_output_char = SCI_output_char;
 BSP_polling_getchar_function_type  BSP_poll_char   = NULL;
 
 #endif
-
 
 // cvs id string so you can use the unix ident command on the object
 
@@ -338,7 +336,6 @@ static const rtems_termios_callbacks SciInterruptCallbacks =
     TRUE                                    // output uses interrupts
 };
 
-
 /*****************************************************************************
   Section I - RTEMS termios callbacks for the polled version of the driver
 *****************************************************************************/
@@ -362,7 +359,6 @@ static const rtems_termios_callbacks SciPolledCallbacks =
 //                        MISCELLANEOUS ROUTINES
 //
 /////////////////////////////////////////////////////////////////////////////
-
 
 /****************************************************************************
 * Func:     SCI_output_char
@@ -419,12 +415,10 @@ rtems_isr SciIsr( rtems_vector_number vector )
 {
     uint8_t   ch;
 
-
     if ( (*SCSR) & SCI_ERROR_PARITY  )   SciErrorsParity  ++;
     if ( (*SCSR) & SCI_ERROR_FRAMING )   SciErrorsFraming ++;
     if ( (*SCSR) & SCI_ERROR_NOISE   )   SciErrorsNoise   ++;
     if ( (*SCSR) & SCI_ERROR_OVERRUN )   SciErrorsOverrun ++;
-
 
     // see if it was a transmit interrupt
 
@@ -474,7 +468,6 @@ rtems_isr SciIsr( rtems_vector_number vector )
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
 /****************************************************************************
 * Func:     SciRcvBufGetChar
 * Desc:     read a character from the circular buffer
@@ -510,7 +503,6 @@ static int8_t   SciRcvBufGetChar()
     return ch;                                  // return the char
 }
 
-
 
 /****************************************************************************
 * Func:     SciRcvBufPutChar
@@ -584,7 +576,6 @@ static void SciRcvBufFlush( void )
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
 /****************************************************************************
 * Func:     SciInterruptOpen
 * Desc:     open routine for the interrupt based device driver
@@ -634,7 +625,6 @@ SciSetBaud( 19200);                         // set the baud rate
     SciSetParity(SCI_PARITY_NONE);              // set parity to none
 
     SciSetDataBits(SCI_8_DATA_BITS);            // set data bits to 8
-
 
     // Install our interrupt handler into RTEMS, where does 66 come from?
 
@@ -778,7 +768,6 @@ int32_t   SciSetAttributes(
         sci_parity = SCI_PARITY_NONE;           // no parity, most common
     }
 
-
     //  set the number of data bits, 8 is most common
 
     if (t->c_cflag & CSIZE)                     // was it specified?
@@ -794,14 +783,12 @@ int32_t   SciSetAttributes(
         sci_databits = SCI_8_DATA_BITS;         // default to 8 data bits
     }
 
-
     //  the number of stop bits; always 1 for SCI
 
     if (t->c_cflag & CSTOPB)
     {
         // do nothing
     }
-
 
     // setup the hardware with these serial port parameters
 
@@ -810,7 +797,6 @@ int32_t   SciSetAttributes(
     SciSetParity(sci_parity);                   // set the parity type
 
     SciSetDataBits(sci_databits);               // set the data bits
-
 
     return RTEMS_SUCCESSFUL;
 }
@@ -978,7 +964,6 @@ int32_t   SciPolledWrite(
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
 /****************************************************************************
 * Func:     SciInit
 * Desc:     Initialize the lasers device driver and hardware
@@ -1000,7 +985,6 @@ rtems_device_driver SciInitialize (
 
 //printk("%s\r\n", __FUNCTION__);
 
-
     // register the SCI device name for termios console i/o
     // this is done over in console.c which doesn't seem exactly right
     // but there were problems doing it here...
@@ -1010,14 +994,11 @@ rtems_device_driver SciInitialize (
 //  if (status != RTEMS_SUCCESSFUL)
 //      rtems_fatal_error_occurred(status);
 
-
     SciMajor = major;                           // save the rtems major number
 
     SciOpened = DRIVER_CLOSED;                  // initial state is closed
 
-
     // if you have an interrupt handler, install it here
-
 
     SciInited = 1;                              // set the inited flag
 
@@ -1128,7 +1109,6 @@ rtems_device_driver SciRead (
     uint16_t   length;
 
     rw_args = (rtems_libio_rw_args_t *) arg;    // arguments to read()
-
 
     if (minor != SCI_MINOR)
     {
@@ -1281,7 +1261,6 @@ rtems_device_driver SciControl (
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
 /****************************************************************************
 * Func:     SciSetBaud
 * Desc:     setup the uart based on the termios modules requests
@@ -1298,7 +1277,6 @@ static void SciSetBaud(uint32_t   rate)
 
 // when you open the console you need to set the termio struct baud rate
 // it has a default value of 9600, when someone calls tcsetattr it reverts!
-
 
     SciBaud = rate;                             // save the rate
 
@@ -1499,7 +1477,6 @@ void SciWriteCharWait(uint8_t   c)
     return;
 }
 
-
 /****************************************************************************
 * Func:     SciWriteCharNoWait
 * Desc:     if no room in the fifo throw the char on the floor
@@ -1554,7 +1531,6 @@ uint8_t   inline SciReadCharWait( void )
     return ch;                                  // return the char
 }
 
-
 /****************************************************************************
 * Func:     SciReadCharNoWait
 * Desc:     try to get a char but dont wait for one
@@ -1578,7 +1554,6 @@ uint8_t   inline SciReadCharNoWait( void )
     return ch;                                  // return the char
 }
 
-
 
 /****************************************************************************
 * Func:     SciCharAvailable
@@ -1628,7 +1603,6 @@ void SciSendBreak( void )
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
 /****************************************************************************
 * Func:     SciUnitTest
 * Desc:     test the device driver
@@ -1646,16 +1620,13 @@ void SciUnitTest()
     uint16_t   fd;                              // file descriptor for device
     uint16_t   result;                          // result of ioctl
 
-
     fd = open("/dev/sci",O_RDWR);               // open the device
 
 printk("SCI open fd=%d\r\n",fd);
 
-
     result = write(fd, "abcd\r\n", 6);          // send a string
 
 printk("SCI write result=%d\r\n",result);
-
 
     result = read(fd, &byte, 1);                // read a byte
 

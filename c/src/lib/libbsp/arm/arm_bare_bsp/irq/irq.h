@@ -110,7 +110,6 @@ typedef struct __rtems_irq_connect_data__ {
  */
 void BSP_rtems_irq_mngt_init();
 
-
 /*
  * function to connect a particular irq handler. This hanlder will NOT be called
  * directly as the result of the corresponding interrupt. Instead, a RTEMS
@@ -158,7 +157,6 @@ int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* ptr);
  * The user can use the previous function to get it.
  */
 int BSP_remove_rtems_irq_handler    	(const rtems_irq_connect_data*);
-
 
 #ifdef __cplusplus
 }

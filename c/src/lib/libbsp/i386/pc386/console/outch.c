@@ -17,7 +17,6 @@
  * $Id$
  */
 
-
 #include <bsp.h>
 
 #include <stdlib.h>
@@ -76,7 +75,6 @@ doCRNL(int cr, int nl)
     	wr_cursor(row * maxCol + column, ioCrtBaseAddr);
 }
 
-
 int (*videoHook)(char, int *)=0;
 
 static void
@@ -100,7 +98,6 @@ gotorc(int r, int c)
 #define ESC		((char)27)
 /* erase current location without moving the cursor */
 #define BLANK	((char)0x7f)
-
 
 static void
 videoPutChar(char car)
@@ -273,7 +270,6 @@ static int escaped = 0;
   	videoPutChar(c);
 } /* _IBMPC_outch */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: _IBMPC_initVideo
 |      Description: Video system initialization. Hook for any early setup.
@@ -309,13 +305,11 @@ _IBMPC_initVideo(void)
 #endif
 } /* _IBMPC_initVideo */
 
-
 /* for old DOS compatibility n-curses type of applications */
 void gotoxy( int x, int y )
 {
   gotorc(y,x);
 }
-
 
 int whereX( void )
 {

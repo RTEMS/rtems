@@ -25,7 +25,6 @@ BEGIN_CODE
 	movel  d0,sp
 	movel  d0,a6
 
-
   /* include in ram_init.S */
   /*
    * Initalize the SIM module.

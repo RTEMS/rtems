@@ -158,14 +158,11 @@ m302Enet_initialize_hardware (struct scc_softc *sc)
 #define DSQE	0x0010
 #define FDE		0x0020
 
-
-
 	/*
 	 * standard loopback
 	 */
 	M68302imp_port_data	(1) &= ~(LBK);
 	M68302imp_port_data	(1) |= (FDE);
-
 
 	M68en302imp_ecntrl=0x0001;
 	/*
@@ -188,7 +185,6 @@ m302Enet_initialize_hardware (struct scc_softc *sc)
 	 * Set interrupt vector
 	 */
 	M68en302imp_intr_vect = M302_ETHER_IVECTOR;
-
 
 	M68en302imp_intr_mask=0x0;
 
@@ -232,12 +228,10 @@ m302Enet_initialize_hardware (struct scc_softc *sc)
 	cam[5] = (hwaddr[2] << 8) | hwaddr[3];
 	cam[6] = (hwaddr[4] << 8) | hwaddr[5];
 
-
 	/*
 	 * Set receiver and transmitter buffer descriptor bases
 	 */
 	a_bd = M68302imp_a_eth_bd (0);			/* point to first BD */
-
 
 	for (i=0;i<128;i++){
 
@@ -245,7 +239,6 @@ m302Enet_initialize_hardware (struct scc_softc *sc)
 		M68302_scc_bd_data_lgth	(a_bd + i) = 0;
 		M68302_scc_bd_p_buffer	(a_bd + i) = NULL;
 	}
-
 
 	sc->txBdBase = M68302imp_a_eth_bd (  0 );			/* point to first BD */
 	sc->rxBdBase = M68302imp_a_eth_bd ( sc->txBdCount);		/* point to first RX BD atfer all TX*/
@@ -305,7 +298,6 @@ m302Enet_retire_tx_bd (struct scc_softc *sc)
 				BUF_STAT_RETRY_LIMIT |
 				BUF_STAT_UNDERRUN)) {
 			int j;
-
 
 			if (status & BUF_STAT_LATE_COLLISION)
 				sc->txLateCollision++;
@@ -403,7 +395,6 @@ scc_rxDaemon (void *arg)
 		sc->rxMbuf[rxBdIndex] = m;
 		rxBd->p_buffer = mtod (m, void *);
 
-
 		if (++rxBdIndex == sc->rxBdCount) {
 			rxBd->stat_ctrl = BUF_STAT_EMPTY | BUF_STAT_INTERRUPT | BUF_STAT_WRAP;
 			break;
@@ -451,7 +442,6 @@ scc_rxDaemon (void *arg)
 						&events);
 			}
 		}
-
 
 		/*
 		 * Check that packet is valid
@@ -777,7 +767,6 @@ scc_init (void *arg)
 		 */
 		m302Enet_initialize_hardware (sc);
 
-
 		sc->txDaemonTid = rtems_bsdnet_newproc ("SCtx", 4096, scc_txDaemon, sc);
 		sc->rxDaemonTid = rtems_bsdnet_newproc ("SCrx", 4096, scc_rxDaemon, sc);
 
@@ -820,7 +809,6 @@ scc_stop (struct scc_softc *sc)
 	M68en302imp_ecntrl &= ~(ECNTRL_BIT_RESET	| ECNTRL_BIT_ETHER_EN);
 
 }
-
 
 /*
  * Show interface statistics
@@ -902,7 +890,6 @@ scc_ioctl (struct ifnet *ifp, int command, caddr_t data)
 	return error;
 
 }
-
 
 /*
  * Attach an SCC driver to the system

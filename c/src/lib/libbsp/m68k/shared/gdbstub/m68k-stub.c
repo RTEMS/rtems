@@ -129,10 +129,8 @@ int current_thread_registers[NUMREGBYTES/4];
 typedef void (*ExceptionHook)(int);   /* pointer to function with int parm */
 typedef void (*Function)();           /* pointer to a function */
 
-
 extern void putDebugChar();	/* write a single character      */
 extern int getDebugChar();	/* read and return a single char */
-
 
 /************************/
 /* FORWARD DECLARATIONS */
@@ -153,7 +151,6 @@ int     remote_debug;
 const char gdb_hexchars[]="0123456789abcdef";
 #define highhex(x) gdb_hexchars [(x >> 4) & 0xf]
 #define lowhex(x) gdb_hexchars [x & 0xf]
-
 
 
 /* We keep a whole frame cache here.  "Why?", I hear you cry, "doesn't
@@ -205,7 +202,6 @@ static ExceptionHook oldExceptionHook;
  * although each member only implements some of the formats
  */
 const short exceptionSize[] = { 4,4,6,6,4,4,4,30,29,10,16,46,12,4,4,4 };
-
 
 /************* jump buffer used for setjmp/longjmp **************************/
 jmp_buf remcomEnv;
@@ -321,7 +317,6 @@ already7:					\n\
 asm("	lea     4(%sp),%sp");     /* pull off 68000 return address */
 #endif
 asm("	rte");
-
 
 #if M68K_HAS_VBR
 /* This function is called when a 68020 exception occurs.  It saves
@@ -493,7 +488,6 @@ saveDone: \n\
 ");
 #endif
 
-
 /*
  * remcomHandler is a front end for handle_exception.  It moves the
  * stack pointer into an area reserved for debugger use in case the
@@ -553,7 +547,6 @@ char ch;
   return (-1);
 }
 
-
 /* scan for the sequence $<data>#<checksum>     */
 void getpacket(buffer)
 char * buffer;
@@ -610,7 +603,6 @@ char * buffer;
 /* send the packet in buffer.  The host get's one chance to read it.
    This routine does not wait for a positive acknowledge.  */
 
-
 /*
  * Send the packet in buffer and wait for a positive acknowledgement.
  */
@@ -663,7 +655,6 @@ putpacket (char *buffer)
 char  remcomInBuffer[BUFMAX];
 char  remcomOutBuffer[BUFMAX];
 static short error;
-
 
 void debug_error(
   char * format,
@@ -954,7 +945,6 @@ void handle_exception(int exceptionVector)
             mem2hex (regptr, remcomOutBuffer, sizeof registers);
             break;
 
-
          case 'G':       /* set the values of the CPU registers - return OK */
 	   regptr = registers;
 #if defined(GDB_STUB_ENABLE_THREAD_SUPPORT)
@@ -1242,7 +1232,6 @@ void handle_exception(int exceptionVector)
     putpacket(remcomOutBuffer);
     }
 }
-
 
 void
 initializeRemcomErrorFrame()

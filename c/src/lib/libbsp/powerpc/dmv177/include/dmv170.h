@@ -22,7 +22,6 @@
 #ifndef _INCLUDE_DMV170_h
 #define _INCLUDE_DMV170_h
 
-
 /*
  *  DY-4 uses a non-standard clock for the Exar 88681.
  */
@@ -215,7 +214,6 @@ extern "C" {
 #define DMV170_64_BIT_NON_VOLITAL_MEM_INSTALLED           0x2000
 #define DMV170_64_BIT_NON_VOLITAL_MEM_NOT_INSTALLED       0x0000
 
-
 /*
  * DUART Baud Rate Definitions.
  */
@@ -223,7 +221,6 @@ extern "C" {
 #define DMV170_DUART_9621     MC68681_BAUD_RATE_MASK_600 /* close to 9600 */
 
 #define DMV170_RTC_FREQUENCY             0x0000
-
 
 /*
  * CPU General Purpose Interrupt definations (PPC_IRQ_EXTERNAL).
@@ -270,7 +267,6 @@ extern "C" {
 #define SCV64_Is_IRQ3( _status ) (_status&0x08)
 #define SCV64_Is_IRQ4( _status ) (_status&0x10)
 #define SCV64_Is_IRQ5( _status ) (_status&0x20)
-
 
 /*
  *  scv64.c

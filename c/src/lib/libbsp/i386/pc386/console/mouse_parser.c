@@ -30,7 +30,6 @@
 #include "mouse_parser.h"
 #include "serial_mouse.h"
 
-
 /* NOTE NOTE NOTE NOTE:
    Select here the mouse type !!!!!
 */
@@ -225,7 +224,6 @@ static int ParsePC(int byte)
 	return 0;
 }
 
-
 /*
  * Input routine for Microsoft mouse.
  * Returns nonzero when a new mouse state has been completed.
@@ -393,7 +391,6 @@ void register_kbd_msg_queue( char *q_name, int port )
    }
    kbd_set_driver_handler( kbd_parser );
 }
-
 
 void unregister_kbd_msg_queue( int port )
 {

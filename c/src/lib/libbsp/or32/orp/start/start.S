@@ -17,7 +17,6 @@
 
 #include <rtems/asm.h>
 
-
 /* Since we don't yet have a memory map for Bender, I am
    assuming the following. Hopefully, this will be easily
    modified once we get the real values.
@@ -307,7 +306,6 @@ __Internal_error_Occurred:
 	.scl	-1
 	.endef
 
-
 	/*********************/
 	/*   _int_reenable   */
 	/*********************/
@@ -426,7 +424,6 @@ L4_2:
 	.val	.
 	.scl	-1
 	.endef
-
 
 	/* Code wasted between here and 0x300 */
 

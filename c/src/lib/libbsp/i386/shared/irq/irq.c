@@ -11,7 +11,6 @@
  *  $Id$
  */
 
-
 #include <bsp.h>
 #include <irq.h>
 #include <rtems/score/thread.h>
@@ -138,7 +137,6 @@ int BSP_irq_enabled_at_i8259s        	(const rtems_irq_symbolic_name irqLine)
   return  (~(i8259s_cache & mask));
 }
 
-
 /*-------------------------------------------------------------------------+
 |         Function: BSP_irq_ack_at_i8259s
 |      Description: Signal generic End Of Interrupt (EOI) to appropriate PIC.
@@ -204,7 +202,6 @@ static void make_copy_of_handlers ()
   }
 }
 
-
 /*
  * This function check that the value given for the irq line
  * is valid.
@@ -262,7 +259,6 @@ int BSP_install_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
     return 1;
 }
-
 
 int BSP_get_current_rtems_irq_handler	(rtems_irq_connect_data* irq)
 {

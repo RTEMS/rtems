@@ -130,7 +130,6 @@ typedef struct {
   unsigned	EXC_DAR;
 }BSP_Exception_frame;
 
-
 typedef void (*exception_handler_t) (BSP_Exception_frame* excPtr);
 extern exception_handler_t globalExceptHdl;
 /*

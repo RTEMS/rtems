@@ -274,7 +274,6 @@ extern int inflateInit OF((z_stream *strm));
    inflate().
 */
 
-
 extern int inflate OF((z_stream *strm, int flush));
 /*
   Performs one or both of the following actions:
@@ -324,7 +323,6 @@ extern int inflate OF((z_stream *strm, int flush));
   progress is possible or if there was not enough room in the output buffer
   when Z_FINISH is used. In the Z_DATA_ERROR case, the application may then
   call inflateSync to look for a good compression block.  */
-
 
 extern int inflateEnd OF((z_stream *strm));
 /*

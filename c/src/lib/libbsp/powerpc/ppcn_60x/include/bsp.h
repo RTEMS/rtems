@@ -76,7 +76,6 @@ extern "C" {
 #define BL_128M        (0x3FF<2)
 #define BL_256M        (0x7FF<2)
 
-
 /*  Define bit fields for lower MPC603/4 BAT registers. */
 
 #define BRPN_FIELD_60X      0xFFFE0000
@@ -193,7 +192,6 @@ extern "C" {
 #define ELCRS_INT8_LVL		0x01
 #define ELCRM_INT7_LVL		0x80
 #define ELCRM_INT5_LVL		0x20
-
 
 #define NONSPECIFIC_EOI 0x20
 
@@ -382,7 +380,6 @@ void InitializeNvRAM(void);
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
-
 #define Clear_tm27_intr() \
   do { \
     uint32_t   _clicks = 0xffffffff; \
@@ -397,7 +394,6 @@ void InitializeNvRAM(void);
     _msr |=  0x8002; \
     asm volatile( "mtmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
   } while (0)
-
 
 /* Constants */
 

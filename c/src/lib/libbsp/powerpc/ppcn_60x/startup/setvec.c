@@ -25,7 +25,6 @@
 #include <rtems.h>
 #include <bsp.h>
 
-
 /*
  *  This routine installs vector number vector.
  *

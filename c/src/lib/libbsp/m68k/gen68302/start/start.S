@@ -40,7 +40,6 @@
   .set	tmpSRAM_BASE,	0x400000	| start of temporary SRAM
   .set	FLASH_BASE,	0xc00000	| start of FLASH''s normal location
 
-
 BEGIN_CODE
          PUBLIC (M68Kvec)               | Vector Table
 SYM (M68Kvec):				| standard location for vectors
@@ -232,7 +231,6 @@ Bad:	bra	Bad
 	nop
 END_CODE
 
-
 BEGIN_DATA
 
 	PUBLIC (start_frame)
@@ -256,7 +254,6 @@ SYM (environ):
 
         PUBLIC (stack_size)
         .set   SYM (stack_size),0x1000
-
 
 END_DATA
 END

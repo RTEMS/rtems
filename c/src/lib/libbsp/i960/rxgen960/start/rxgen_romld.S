@@ -108,8 +108,6 @@ _romExit :
 //	fmark
 	b	_romExit
 
-
-
 SYM(led_array):
 	.byte 99
 	.byte 1
@@ -124,7 +122,6 @@ SYM(led_array):
 	.byte 0xa
 	.byte 0xb
 	.byte 0xc
-
 
 /* just to compile and link application XXX JOEL */
 	.globl _faultStart

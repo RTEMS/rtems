@@ -49,7 +49,6 @@
 #define START_TRANSMIT_EVENT    RTEMS_EVENT_2
 #define NIC_RESET_EVENT         RTEMS_EVENT_3
 
-
 #include <bsp.h>
 #include <stdio.h>
 #include <string.h>
@@ -120,7 +119,6 @@ char uti596initSetup[] = {
   0x3f    /* Byte 13: no multi IA, backoff enabled */
 };
 
-
 /* Local Routines */
 
 static unsigned long word_swap ( unsigned long );
@@ -155,7 +153,6 @@ static void uti596_append ( i596_rfd ** , i596_rfd * );
 static void uti596_supplyFD ( i596_rfd * );
 static void send_packet ( struct ifnet *, struct mbuf * );
 
-
 /* Required RTEMS network driver functions and tasks (plus reset daemon) */
 
 static void uti596_start ( struct ifnet * );
@@ -178,8 +175,6 @@ static void print_pkt  ( unsigned char * );
 static void print_echo ( unsigned char * );
 #endif
 
-
-
 /*
  *  word_swap
  *
@@ -199,7 +194,6 @@ static unsigned long word_swap(
 {
   return (((val >> 16)&(0x0000ffff)) | ((val << 16)&(0xffff0000)));
 }
-
 
 /*
  *  malloc_16byte_aligned
@@ -235,7 +229,6 @@ static void * malloc_16byte_aligned(
   *adjusted_pointer = (void *)(((unsigned long)*real_pointer + 0xF ) & 0xFFFFFFF0 );
   return *adjusted_pointer;
 }
-
 
 /*
  *  uti596_scp_alloc
@@ -273,7 +266,6 @@ static i596_scp * uti596_scp_alloc(
   return sc->pScp;
 }
 
-
 /*
  *  uti596_writePortFunction
  *
@@ -298,7 +290,6 @@ RTEMS_INLINE_ROUTINE void uti596_writePortFunction(
   i82596->port_upper = (unsigned short)(((unsigned long)addr >> 16 ) & 0xFFFF);
 }
 
-
 /*
  *  uti596_portReset
  *
@@ -314,7 +305,6 @@ RTEMS_INLINE_ROUTINE void uti596_portReset( void )
 {
   uti596_writePortFunction( NULL, UTI596_RESET_PORT_FUNCTION );
 }
-
 
 /* currently unused by RTEMS */
 #if 0
@@ -370,7 +360,6 @@ static unsigned long uti596_portSelfTest(
 }
 #endif
 
-
 /* currently unused by RTEMS */
 #if 0
 /*
@@ -423,7 +412,6 @@ static int uti596_portDump(
 }
 #endif
 
-
 /*
  *  uti596_wait
  *
@@ -457,7 +445,6 @@ static int uti596_wait(
 
     case UTI596_NO_WAIT:
       return 0;
-
 
     case UTI596_WAIT_FOR_CU_ACCEPT:
 		  do {
@@ -521,7 +508,6 @@ static int uti596_wait(
 	 return -1;
 }
 
-
 /*
  *  uti596_issueCA
  *
@@ -549,7 +535,6 @@ static int uti596_issueCA(
 
   return (uti596_wait ( sc, waitType ));
 }
-
 
 /*
  *  uti596_addCmd
@@ -604,7 +589,6 @@ static void uti596_addCmd(
 	#endif
 }
 
-
 /*
  *  uti596_addPolledCmd
  *
@@ -648,7 +632,6 @@ void uti596_addPolledCmd(
 	#endif
 }
 
-
 /* currently unused by RTEMS */
 #if 0
 /*
@@ -678,7 +661,6 @@ static void uti596_CU_dump ( i596_dump_result * drp)
 }
 #endif
 
-
 /*
  *  uti596_dump_scb
  *
@@ -706,7 +688,6 @@ static void uti596_dump_scb ( void )
   printk(("t_on 0x%x\n",uti596_softc.scb.t_on))
   printk(("t_off 0x%x\n",uti596_softc.scb.t_off))
 }
-
 
 /*
  *  uti596_setScpAndScb
@@ -740,7 +721,6 @@ static int uti596_setScpAndScb(
   return ( uti596_issueCA ( sc, UTI596_WAIT_FOR_INITIALIZATION ) );
 }
 
-
 /*
  *  uti596_diagnose
  *
@@ -768,7 +748,6 @@ static int uti596_diagnose( void )
 	#endif
 }
 
-
 /*
  *  uti596_configure
  *
@@ -795,7 +774,6 @@ static int uti596_configure (
   sc->pCurrent_command_status = (unsigned short *)&(sc->set_conf.cmd.status);
   return ( uti596_wait ( sc, UTI596_WAIT_FOR_STAT_C ) );
 }
-
 
 /*
  *  uti596_IAsetup
@@ -828,7 +806,6 @@ static int uti596_IAsetup (
   sc->pCurrent_command_status = (unsigned short *)&(sc->set_add.cmd.status);
   return ( uti596_wait ( sc, UTI596_WAIT_FOR_STAT_C ) );
 }
-
 
 /*
  *  uti596_initTBD
@@ -876,7 +853,6 @@ static int uti596_initTBD ( uti596_softc_ * sc )
   pTbd->next = I596_NULL;
   return 0;
 }
-
 
 /*
  *  uti596_initRFA
@@ -960,7 +936,6 @@ static int uti596_initRFA( int num )
 
   return (i); /* the number of allocated buffers */
 }
-
 
 /*
  *  uti596_initMem
@@ -1075,7 +1050,6 @@ void uti596_initialize(
   sc->scb.command = 0;
 }
 
-
 /*
  *  uti596_initialize_hardware
  *
@@ -1124,7 +1098,6 @@ void uti596_initialize_hardware(
   printk(("uti596_initialize_hardware: After attach, status of board = 0x%x\n", sc->scb.status ))
   #endif
 }
-
 
 /*
  *  uti596_reset_hardware
@@ -1175,7 +1148,6 @@ void uti596_reset_hardware(
   #endif
 }
 
-
 /*
  *  uti596_clearListStatus
  *
@@ -1197,7 +1169,6 @@ void uti596_clearListStatus(
     pRfd = (i596_rfd *) word_swap((unsigned long)pRfd-> next);
   }
 }
-
 
 /*
  *  uti596_reset
@@ -1241,7 +1212,6 @@ void uti596_reset( void )
 
   sc->pCmdHead = sc->pCmdTail = sc->scb.pCmd = I596_NULL;
 
-
   /* restore the RFA */
 
   if ( sc->pLastUnkRFD != I596_NULL ) {
@@ -1277,7 +1247,6 @@ void uti596_reset( void )
   printk(("uti596_reset: completed\n"))
 	#endif
 }
-
 
 /*
  *  uti596_dequeue
@@ -1318,7 +1287,6 @@ i596_rfd * uti596_dequeue(
   _ISR_Enable(level);
   return pRfd;
 }
-
 
 /*
  *  uti596_append
@@ -1366,7 +1334,6 @@ void uti596_append(
     printk(("Illegal attempt to append: %p\n", pRfd))
   }
 }
-
 
 /*
  *  uti596_supplyFD
@@ -1502,7 +1469,6 @@ void uti596_supplyFD (
    return;
  }
 }
-
 
 /*
  *  send_packet
@@ -1644,7 +1610,6 @@ void send_packet(
     m = n;
   }
 }
-
 
 /***********************************************************************
  *  Function:   uti596_attach
@@ -1934,8 +1899,6 @@ void uti596_init(
   i82596->chan_attn = 0x00000000;
 }
 
-
-
 /***********************************************************************
  *  Function:   void uti596_txDaemon
  *
@@ -2124,7 +2087,6 @@ void uti596_txDaemon(
 	#endif
 }
 
-
 /***********************************************************************
  *  Function:   void uti596_resetDaemon
  *
@@ -2157,7 +2119,6 @@ void uti596_resetDaemon(
     rtems_bsdnet_semaphore_release ();
   }
 }
-
 
 /***********************************************************************
  *  Function:   uti596_DynamicInterruptHandler
@@ -2208,7 +2169,6 @@ void uti596_resetDaemon(
     printk(("\n***ERROR: Spurious interrupt. Resetting...\n"))
     uti596_softc.nic_reset = 1;
   }
-
 
   if ( (scbStatus & SCB_STAT_CX) && !(scbStatus & SCB_STAT_CNA) ) {
     printk(("\n*****ERROR: Command Complete, and CNA available: 0x%x\nResetting...", scbStatus))
@@ -2324,7 +2284,6 @@ void uti596_resetDaemon(
       }
     }
   } /* end if ( scbStatus & SCB_STAT_FR ) */
-
 
  /*
   * Command Unit Control
@@ -2474,7 +2433,6 @@ void uti596_resetDaemon(
     }
   }  /* end if command complete */
 
-
  /*
   * If the receiver has stopped,
   * check if this is a No Resources scenario,
@@ -2607,7 +2565,6 @@ void uti596_resetDaemon(
 	#endif
   count_rx=0;
 
-
  /* Do this last, to ensure that the reset is called at the right time. */
   if ( uti596_softc.nic_reset ) {
     uti596_softc.nic_reset = 0;
@@ -2617,7 +2574,6 @@ void uti596_resetDaemon(
   }
   return;
 }
-
 
 /***********************************************************************
  *  Function:  uti596_ioctl
@@ -2688,7 +2644,6 @@ static int uti596_ioctl(
   return error;
 }
 
-
 /***********************************************************************
  *  Function:   uti596_stats
  *
@@ -2739,9 +2694,6 @@ void uti596_stats(
   #endif
 }
 
-
-
-
 /************************ PACKET DEBUG ROUTINES ************************/
 
 #ifdef DBG_PACKETS
@@ -2780,7 +2732,6 @@ static void dumpQ( void )
     printk(("pRfd: %p, stat: 0x%x cmd: 0x%x\n",pRfd,pRfd -> stat,pRfd -> cmd))
   }
 }
-
 
 /*
  *  show_buffers
@@ -2825,7 +2776,6 @@ static void show_buffers (void)
   printk(("\nUnknown: %p\n",uti596_softc.pLastUnkRFD))
 }
 
-
 /*
  *  show_queues
  *
@@ -2860,7 +2810,6 @@ static void show_queues(void)
 
   printk(("uti596_softc.pEndRFA: %p\n",uti596_softc.pEndRFA))
 }
-
 
 /*
  *  print_eth
@@ -2924,7 +2873,6 @@ static void print_eth(
     printk (("%u\n", add[41]))
   }
 
-
   if ( add[12] == 0x08 && add[13] == 0x00 ) {
   	/* an IP packet */
     printk (("*********************IP HEADER******************\n"))
@@ -2949,7 +2897,6 @@ static void print_eth(
     printk (("%u\n", add[33]))
   }
 }
-
 
 /*
  *  print_hdr
@@ -2978,7 +2925,6 @@ static  void print_hdr(
   printk (("\nframe type %2.2X%2.2X\n", add[12], add[13]))
   printk (("print_hdr: completed"))
 }
-
 
 /*
  *  Function:   print_pkt
@@ -3064,7 +3010,6 @@ static void print_pkt(
     printk(("print_pkt: completed"))
   }
 }
-
 
 /*
  *  print_echo

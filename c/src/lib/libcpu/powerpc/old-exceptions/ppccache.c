@@ -28,7 +28,6 @@
       ); \
   } while (0)
 
-
 void powerpc_instruction_cache_enable ()
 {
   uint32_t   value;

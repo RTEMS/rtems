@@ -149,7 +149,6 @@ void bsp_pretasking_hook(void)
 
     bsp_libc_init((void *) 0, heap_size, heap_sbrk_spared);
 
-
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
@@ -319,7 +318,6 @@ void bsp_start( void )
        printk("pci : Interrupt routing not available for this bsp\n");
  }
 
-
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Number of PCI buses found is : %d\n", BusCountPCI());
 #endif
@@ -336,7 +334,6 @@ void bsp_start( void )
   __asm__ __volatile ("sc");
 #endif
 
-
   BSP_mem_size 				= residualCopy.TotalMemory;
   BSP_bus_frequency			= residualCopy.VitalProductData.ProcessorBusHz;
   BSP_processor_frequency		= residualCopy.VitalProductData.ProcessorHz;
@@ -347,7 +344,6 @@ void bsp_start( void )
    * PCI config space scanning code will trip otherwise :-(
    */
   _BSP_clear_hostbridge_errors(0 /* enableMCP */, 0/*quiet*/);
-
 
   /* Allocate and set up the page table mappings
    * This is only available on >604 CPUs.
@@ -400,7 +396,6 @@ void bsp_start( void )
    * Initalize RTEMS IRQ system
    */
   BSP_rtems_irq_mng_init(0);
-
 
   /* Activate the page table mappings only after
    * initializing interrupts because the irq_mng_init()

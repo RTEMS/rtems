@@ -33,7 +33,6 @@
 #define WRITE_UINT16( _register_, _value_ ) \
      (*((volatile unsigned short *)(_register_)) = (_value_))
 
-
  /* - Board specific addresses for serial chip */
 #define DIAG_BASE       0xfffff300
 #define DIAG_SLCR       (DIAG_BASE+0x00)

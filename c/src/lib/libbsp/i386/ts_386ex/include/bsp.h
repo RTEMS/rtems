@@ -11,7 +11,6 @@
  *  $Id$
  */
 
-
 #ifndef __TS386_h
 #define __TS386_h
 
@@ -99,7 +98,6 @@ extern void Wait_X_ms (unsigned);
 
 #define MUST_WAIT_FOR_INTERRUTPT 0
 
-
 #define Install_tm27_vector(handler) \
 { \
   rtems_isr_entry dummy; \
@@ -146,7 +144,6 @@ extern void Wait_X_ms (unsigned);
 /* dec 20. try the TE instead of TBE as the check */
 
 #define Is_tx_ready( _status ) ( (_status) & 0x40 )
-
 
 #define Is_rx_ready( _status ) ( (_status) & 0x01 )
 

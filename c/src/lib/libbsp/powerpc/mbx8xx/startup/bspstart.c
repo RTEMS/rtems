@@ -28,7 +28,6 @@
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
 
-
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
@@ -107,7 +106,6 @@ void bsp_pretasking_hook(void)
 #endif
 }
 
-
 /*
  *  bsp_start()
  *
@@ -178,7 +176,6 @@ void bsp_start(void)
    * Install our own set of exception vectors
    */
   initialize_exceptions();
-
 
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from

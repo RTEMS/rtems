@@ -39,7 +39,6 @@ extern SystemTbl nulsystemTbl;
    */
 #define REG_CACHE_CONFIG        0x200
 
-
 struct PRCB rom_prcb = {
   & faultTbl[0],                        /* Fault Table Base */
   & rom_controlTbl[0],                  /* Control Table Base */

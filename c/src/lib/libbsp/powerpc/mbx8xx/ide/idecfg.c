@@ -25,7 +25,6 @@
 #include <libchip/ide_ctrl_cfg.h>
 #include <libchip/ide_ctrl_io.h>
 
-
 /*
  * The following table configures the IDE driver used in this BSP.
  */

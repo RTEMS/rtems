@@ -10,6 +10,9 @@
 //
 // MODIFICATION/HISTORY:
 // $Log$
+// Revision 1.2  2004/04/21 10:42:44  ralf
+// Remove stray white spaces.
+//
 // Revision 1.1  2000/08/30 08:15:30  joel
 // 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
 //
@@ -109,7 +112,6 @@ struct kbsentry {
 	unsigned char kb_func;
 	unsigned char kb_string[512];
 };
-
 
 struct kbdiacr {
         unsigned char diacr, base, result;

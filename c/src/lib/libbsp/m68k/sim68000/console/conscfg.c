@@ -37,8 +37,6 @@
 #define MC68681_FUNCTIONS &mc68681_fns_polled
 #endif
 
-
-
 console_tbl	Console_Port_Tbl[] = {
 	{
 		"/dev/com0",			/* sDeviceName */

@@ -27,7 +27,6 @@ rtems_boolean Timer_driver_Find_average_overhead;
 /* External assembler interrupt handler routine */
 extern rtems_isr timerisr(rtems_vector_number vector);
 
-
 /* Timer_initialize --
  *     Initialize timer 2 for accurate time measurement.
  *
@@ -74,7 +73,6 @@ Read_timer( void )
 {
     return 0;
 }
-
 
 /* Empty_function --
  *     Empty function call used in loops to measure basic cost of looping

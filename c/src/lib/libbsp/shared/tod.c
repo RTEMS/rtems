@@ -101,7 +101,6 @@ rtems_device_driver rtc_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
-
 /*PAGE
  *
  *  This routine copies the time from the real time clock to RTEMS
@@ -202,7 +201,6 @@ int setRealTime(
   RTC_Table[RTC_Minor].pDeviceFns->deviceSetTime(RTC_Minor, tod);
   return 0;
 }
-
 
 /*PAGE
  *

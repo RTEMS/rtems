@@ -58,7 +58,6 @@ void Install_clock(
   volatile unsigned int *imsk = (unsigned int *) IMSK_ADDR;
   void clockHandler();
 
-
   Clock_driver_ticks = 0;
   Reload_Clock_isrs = BSP_Configuration.microseconds_per_tick / 1000;
   Clock_isrs = Reload_Clock_isrs;

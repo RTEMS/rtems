@@ -15,7 +15,6 @@
  *  $Id$
  */
 
-
 #include <rtems/asm.h>
 
         .text
@@ -75,7 +74,6 @@ SYM (_Debug_ISR_Handler_Console):
         moveml  d0-d1/a0-a1,a7@-         | save d0-d1,a0-a1
         movew   a7@(SAVED+FVO_OFFSET),d0 | d0 = F/VO
         andl    #0x0fff,d0               | d0 = vector offset in vbr
-
 
 #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
 	movew	sr,d1			| Save status register
@@ -146,7 +144,6 @@ SYM (_Debug_ISR_Handler_Console):
                                          | signals sent to Run_thread
                                          |   while in interrupt handler?
         beq     Debug_exit               | No, then Debug_exit
-
 
 bframe: clrl    SYM (_ISR_Signals_to_thread_executing)
                                          | If sent, will be processed

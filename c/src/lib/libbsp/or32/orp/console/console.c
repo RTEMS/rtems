@@ -131,7 +131,6 @@ rtems_device_driver console_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
-
 /*  is_character_ready
  *
  *  This routine returns TRUE if a character is available.
@@ -207,7 +206,6 @@ void outbyte(char ch)
     outbyte( '\r' );
 }
 
-
 /*
  *  Open entry point
  */
@@ -253,7 +251,6 @@ rtems_device_driver console_read(
 
   buffer = rw_args->buffer;
   maximum = rw_args->count;
-
 
   for (count = 0; count < maximum; count++)
     {

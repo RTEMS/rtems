@@ -25,11 +25,9 @@
  *  $Id$
  */
 
-
 #include <bsp.h>
 #include <stdlib.h>
 #include <rtems/libio.h>
-
 
 #define TIMER_VECTOR 34
 
@@ -58,7 +56,6 @@ void Timer_initialize()
     *tmr1 = BUS_CLOCK_1 | TMR_AUTO_RELOAD;
      *icon = 0x6000;
 
-
     set_vector( (((unsigned int) timerisr) | 0x2), TIMER_VECTOR, 1 );
 
     *imap2 = (*imap2 & 0xff0fffff) | (((TIMER_VECTOR >> 4) & 0xf) << 20);
@@ -75,8 +72,6 @@ void Timer_initialize()
     *tmr1 = BUS_CLOCK_1 | TMR_AUTO_RELOAD | TMR_ENABLE;
 
 }
-
-
 
 rtems_isr timerisr(
   rtems_vector_number vector

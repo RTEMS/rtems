@@ -31,7 +31,6 @@
 |  $Id$
 +--------------------------------------------------------------------------*/
 
-
 #include <string.h>
 
 #include <bsp.h>
@@ -70,7 +69,6 @@
 
 #define RTC_CENTURY    0x32  /* current century - increment in Dec99   */
 
-
 /*-------------------------------------------------------------------------+
 | Auxiliary Functions
 +--------------------------------------------------------------------------*/
@@ -106,7 +104,6 @@ ytos(uint16_t         y)
 {                                       /* v NUM LEAP YEARS v */
   return ((y - 1970) * SECS_PER_REG_YEAR + (y - 1970 + 1) / 4 * SECS_PER_DAY);
 } /* ytos */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: mtos
@@ -144,7 +141,6 @@ rtcin(uint8_t         what)
     return r;
 } /* rtcin */
 
-
 /*-------------------------------------------------------------------------+
 | Functions
 +--------------------------------------------------------------------------*/
@@ -174,7 +170,6 @@ init_rtc(void)
   /* FIXME: This was last line's original version. How was it supposed to work?
        printf("RTC BIOS diagnostic error %b\n", s, RTCDG_BITS); */
 } /* init_rtc */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: rtc_read

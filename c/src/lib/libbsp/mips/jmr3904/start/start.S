@@ -76,7 +76,6 @@ relocate:
 	nop
 	.end _start
 
-
 	.globl	_start_in_ram
 	.ent _start_in_ram
 _start_in_ram:

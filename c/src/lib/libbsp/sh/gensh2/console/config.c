@@ -24,7 +24,6 @@
 #include <rtems/score/iosh7045.h>
 #include <rtems/termiostypes.h>
 
-
 /*
  * Function set for interrupt enabled termios console
  */
@@ -72,7 +71,6 @@ static const struct termios term1 = {
     { 0 }
 };
 
-
 static const struct termios term2 = {
     0,
     0,
@@ -81,7 +79,6 @@ static const struct termios term2 = {
     0,
     { 0 }
 };
-
 
 console_tbl	Console_Port_Tbl[] = {
     {

@@ -32,7 +32,6 @@
 #include <rtems/bspIo.h>
 #endif
 
-
 /* Code options,  put them on the compiler command line */
 /* #define EIP_STATS */	/* EIP based profiling */
 /* #undef EIP_STATS */
@@ -77,7 +76,6 @@ typedef struct _x86 {
 } x86;
 
 x86 v86_private __attribute__((aligned(32)));
-
 
 /* Emulator is in another source file */
 extern
@@ -461,7 +459,6 @@ void cleanup_v86_mess(void) {
 	p->ioperm=0;
 }
 
-
 int init_v86(void) {
 	x86 *p = (x86 *) bd->v86_private;
 
@@ -501,7 +498,6 @@ void em86_main(struct pci_dev *dev){
 #else
 #define IOMASK 0
 #endif
-
 
 #ifndef __BOOT__
 	int i;
@@ -549,7 +545,6 @@ void em86_main(struct pci_dev *dev){
 	length = ptr_mem_map->isa_mem_base[0xc0002];
 	p->rom = palloc(length*512);
 	if (!p->rom) return;
-
 
 	for(dst=(u_int *) p->rom,
 	    src=(volatile u_int *)(ptr_mem_map->isa_mem_base+0xc0000),

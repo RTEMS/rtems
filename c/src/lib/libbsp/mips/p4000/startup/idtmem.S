@@ -67,7 +67,6 @@ scache_linesize:
 	.word	0
 #endif
 
-
 		.text
 
 #if __mips == 1
@@ -100,7 +99,6 @@ FRAME(config_Dcache,sp, CONFIGFRM, ra)
 	addu	sp,CONFIGFRM		/* pop stack */
 	j	ra
 ENDFRAME(config_Dcache)
-
 
 /*************************************************************************
 **
@@ -189,7 +187,6 @@ FRAME(_size_cache,sp,0,ra)
 ENDFRAME(_size_cache)
 	.set	reorder
 
-
 #define FLUSHFRM (2*4)
 
 /***************************************************************************
@@ -229,7 +226,6 @@ _Dflush_done:
 	.set	reorder
 	j	ra
 ENDFRAME(flush_Dcache)
-
 
 /***************************************************************************
 **
@@ -326,7 +322,6 @@ FRAME(clear_Dcache,sp,0,ra)
 	j	ra
 ENDFRAME(clear_Dcache)
 
-
 /**************************************************************************
 **
 ** clear_Icache(base_addr, byte_count) - flush portion of Instruction cache
@@ -383,13 +378,11 @@ FRAME(clear_Icache,sp,0,ra)
 	j	ra
 ENDFRAME(clear_Icache)
 
-
 /**************************************************************************
 **
 **  get_mem_conf - get memory configuration
 **
 ***************************************************************************/
-
 
 FRAME(get_mem_conf,sp,0,ra)
 
@@ -530,7 +523,6 @@ LEAF(_size_cache)
 1:	j	ra
 END(_size_cache)
 
-
 /*
  * void config_cache()   R4000
  *
@@ -551,7 +543,6 @@ LEAF(config_cache)
 	sw	t7,scache_linesize
 8:	j	ra
 END(config_cache)
-
 
 /*
  * void _init_cache()   R4000
@@ -603,7 +594,6 @@ LEAF(_init_cache)
 1:	mtc0	v0,C0_SR
 	j	ra
 END(_init_cache)
-
 
 /*
  * void flush_cache (void)   R4000
@@ -832,8 +822,6 @@ LEAF(clean_icache_indexed)
 2:	j	ra
 END(clean_icache_indexed)
 
-
-
 /*
  * void clean_scache (unsigned kva, size_t n)   R4000
  *
@@ -906,7 +894,6 @@ END(clean_scache_nowrite_indexed)
 **  get_mem_conf - get memory configuration  R4000
 **
 ***************************************************************************/
-
 
 FRAME(get_mem_conf,sp,0,ra)
 

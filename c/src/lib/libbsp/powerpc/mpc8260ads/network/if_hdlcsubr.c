@@ -77,7 +77,6 @@
 
 #include "if_hdlcsubr.h"
 
-
 /*
 u_char	etherbroadcastaddr[6] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 */
@@ -162,7 +161,6 @@ hdlc_output(ifp, m0, dst, rt0)
 		senderr(EAFNOSUPPORT);
 	}
 
-
 	if (mcopy)
 		(void) looutput(ifp, mcopy, dst, rt);
 #if 0
@@ -241,7 +239,6 @@ hdlc_input(ifp, m)
 	if (m->m_flags & (M_BCAST|M_MCAST))
 		ifp->if_imcasts++;
 
-
 	/*
 	 * RTEMS addition -- allow application to `tap into'
 	 * the incoming packet stream.
@@ -253,7 +250,6 @@ hdlc_input(ifp, m)
 
 	schednetisr(NETISR_IP);
 	inq = &ipintrq;
-
 
 	s = splimp();
 	if (IF_QFULL(inq)) {
@@ -293,7 +289,6 @@ hdlc_ifattach(ifp)
 			break;
 		}
 }
-
 
 /* SYSCTL_NODE(_net_link, IFT_ETHER, ether, CTLFLAG_RW, 0, "Ethernet"); */
 

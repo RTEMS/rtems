@@ -12,12 +12,10 @@
  *  $Id$
  */
 
-
 #include <bsp/motorola.h>
 #include <rtems/bspIo.h>
 #include <libcpu/io.h>
 #include <string.h>
-
 
 /*
 ** Board-specific table that maps interrupt names to onboard pci
@@ -67,8 +65,6 @@
 #define NULL_PINMAP     {-1,{-1,-1,-1,-1}}
 #define NULL_INTMAP     {-1,-1,-1,{}}
 
-
-
 static struct _int_map mcp750_intmap[] = {
 
    { 0, 16, 0, {{1,  {5, 19,-1,-1}}, /* pmc slot */
@@ -84,9 +80,6 @@ static struct _int_map mcp750_intmap[] = {
                 NULL_PINMAP}},
 
    NULL_INTMAP };
-
-
-
 
 static struct _int_map mtx603_intmap[] = {
 
@@ -116,13 +109,6 @@ static struct _int_map mtx603_intmap[] = {
 
    NULL_INTMAP };
 
-
-
-
-
-
-
-
 /*
  * This table represents the standard PCI swizzle defined in the
  * PCI bus specification.  Table taken from Linux 2.4.18, prep_pci.c,
@@ -141,14 +127,6 @@ static int prep_pci_swizzle(int slot, int pin)
    return prep_pci_intpins[ slot % 4 ][ pin-1 ];
 }
 
-
-
-
-
-
-
-
-
 typedef struct {
   /*
    * 0x100 mask assumes for Raven and Hawk boards
@@ -162,7 +140,6 @@ typedef struct {
       struct _int_map   *intmap;
       int               (*swizzler)(int, int);
 } mot_info_t;
-
 
 static const mot_info_t mot_boards[] = {
   {0x300, 0x00, "MVME 2400", NULL, NULL},
@@ -187,8 +164,6 @@ static const mot_info_t mot_boards[] = {
   {0x1E0, 0xFF, "MVME 1600-001 or 1600-011", NULL, NULL},
   {0x000, 0x00, ""}
 };
-
-
 
 prep_t currentPrepType;
 motorolaBoard		currentBoard;
@@ -250,20 +225,17 @@ motorolaBoard	getMotorolaBoard()
   return currentBoard;
 }
 
-
 const char* motorolaBoardToString(motorolaBoard board)
 {
   if (board == MOTOROLA_UNKNOWN) return "Unknown motorola board";
   return (mot_boards[board].name);
 }
 
-
 const struct _int_map *motorolaIntMap(motorolaBoard board)
 {
   if (board == MOTOROLA_UNKNOWN) return NULL;
   return mot_boards[board].intmap;
 }
-
 
 const void *motorolaIntSwizzle(motorolaBoard board)
 {

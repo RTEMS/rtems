@@ -414,7 +414,6 @@ _avec7_int:
 	nop
 	jmp	_unexp_int
 
-
 END_CODE
 
 END

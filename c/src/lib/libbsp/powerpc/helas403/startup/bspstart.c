@@ -127,7 +127,6 @@ void bsp_pretasking_hook(void)
 #endif
 }
 
-
 /*
  *  bsp_start
  *

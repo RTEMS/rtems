@@ -41,7 +41,6 @@ static int mystrcat(
   return i;
 }
 
-
 /*
  *  bsp_fatal_error_occurred
  *

@@ -49,7 +49,6 @@ static void nop_func(){}
  */
 static int not_connected() {return 0;}
 
-
 static rtems_raw_irq_connect_data 	idtHdl[IDT_SIZE];
 
 /*
@@ -100,8 +99,6 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_LINES_NUMBER]={
   0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 };
 
-
-
 static interrupt_gate_descriptor	idtEntry;
 
 static rtems_irq_global_settings     initial_config;
@@ -128,7 +125,6 @@ void  rtems_irq_mngt_init()
        printk("IDT table size mismatch !!! System locked\n");
        while(1);
     }
-
 
     _CPU_ISR_Disable(level);
 

@@ -23,7 +23,6 @@ void Clock_exit( void );
 void Clock_isr( rtems_vector_number vector,unsigned int pc,
 		unsigned int address, unsigned int sr);
 
-
 /*
  *  The interrupt vector number associated with the clock tick device
  *  driver.

@@ -56,8 +56,6 @@
 extern void add_to_queue( unsigned short );
 extern void rtemsReboot( void );
 
-
-
 int set_bit(int nr, unsigned long * addr)
 {
 	int	mask, retval,level;
@@ -96,7 +94,6 @@ int test_bit(int nr, unsigned long * addr)
 #define  test_and_set_bit(x,y)      set_bit(x,y)
 #define  test_and_clear_bit(x,y)    clear_bit(x,y)
 
-
 /*
  * global state includes the following, and various static variables
  * in this module: prev_scancode, shift_state, diacr, npadch, dead_key_next.
@@ -123,7 +120,6 @@ static char rep = 0;			/* flag telling character repeat */
 /* default console for RTEMS */
 static int  fg_console = 0;
 
-
 struct kbd_struct kbd_table[MAX_NR_CONSOLES];
 static struct kbd_struct * kbd = kbd_table;
 
@@ -149,7 +145,6 @@ static k_hand key_handler[16] = {
 
 typedef void (*void_fnp)(void);
 typedef void (void_fn)(void);
-
 
 static void show_mem(void)
 {
@@ -210,7 +205,6 @@ void to_utf8(ushort c) {
     /* UTF-8 is defined for words of up to 31 bits,
        but we need only 16 bits here */
 }
-
 
 /*
  * Translation of escaped scancodes to keycodes.
@@ -277,7 +271,6 @@ void handle_scancode(unsigned char scancode, int down)
 	} else
 		rep = test_and_set_bit(keycode, key_down);
 
-
 #ifdef CONFIG_MAGIC_SYSRQ		/* Handle the SysRq Hack */
 	if (keycode == SYSRQ_KEY) {
 		sysrq_pressed = !up_flag;
@@ -288,7 +281,6 @@ void handle_scancode(unsigned char scancode, int down)
 		return;
 	}
 #endif
-
 
 	if (kbd->kbdmode == VC_MEDIUMRAW) {
 		/* soon keycodes will require more than one byte */
@@ -319,7 +311,6 @@ void handle_scancode(unsigned char scancode, int down)
 		/* the XOR below used to be an OR */
 		int shift_final = shift_state ^ kbd->lockstate ^ kbd->slockstate;
 		ushort *key_map = key_maps[shift_final];
-
 
 		if (key_map != NULL) {
 			keysym = key_map[keycode];
@@ -382,7 +373,6 @@ static void put_queue(int ch)
      add_to_queue( ch );
   }
 }
-
 
 static void puts_queue(char *cp)
 {
@@ -577,7 +567,6 @@ static void do_dead2(unsigned char value, char up_flag)
 		return;
 	diacr = (diacr ? handle_diacr(value) : value);
 }
-
 
 /*
  * We have a combining character DIACR here, followed by the character CH.
@@ -846,7 +835,6 @@ void register_leds(int console, unsigned int led,
 
 static inline unsigned char getleds(void){
 
-
     struct kbd_struct *kbd = kbd_table + fg_console;
 
     unsigned char leds;
@@ -899,12 +887,10 @@ static void kbd_bh(void)
 	}
 }
 
-
 void set_leds(void)
 {
   kbd_bh();
 }
-
 
 int kbd_init(void)
 {

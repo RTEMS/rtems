@@ -165,7 +165,6 @@ void bsp_start(void)
   if (heap_start & (CPU_ALIGNMENT-1))
     heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
-
   ws_start = heap_start + (256 * 1024);
   if (ws_start & ((512 * 1024) - 1)) {  /* align to 512K boundary */
     ws_start = (ws_start + (512 * 1024)) & ~((512 * 1024) - 1);
@@ -200,7 +199,6 @@ void bsp_start(void)
   */
   m8xx.fec.mii_speed = 0x0a;
   m8xx.fec.mii_data = 0x680a0000;
-
 
   m8xx.scc2.sccm=0;
   m8xx.scc2p.rbase=0;

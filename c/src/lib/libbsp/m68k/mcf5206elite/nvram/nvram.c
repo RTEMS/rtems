@@ -25,7 +25,6 @@
 #include <i2c.h>
 #include <ds1307.h>
 
-
 /* nvram_driver_initialize --
  *     Non-volatile memory device driver initialization.
  */

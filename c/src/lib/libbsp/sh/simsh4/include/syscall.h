@@ -20,7 +20,6 @@
 #define SYS_fstat       22
 #define SYS_time 	23
 
-
 #define SYS_ARG		24
 #define	SYS_stat	38
 

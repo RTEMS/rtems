@@ -44,7 +44,6 @@ extern "C" {
 
 #include <mvme16x_hw.h>
 
-
 /*----------------------------------------------------------------*/
 
 typedef volatile struct {

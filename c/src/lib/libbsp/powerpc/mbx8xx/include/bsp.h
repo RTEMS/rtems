@@ -32,7 +32,6 @@ extern "C" {
 #include <mpc8xx/console.h>
 #include <bsp/vectors.h>
 
-
 /*
  *  Representation of initialization data in NVRAM
  */
@@ -54,7 +53,6 @@ typedef volatile struct nvram_config_ {
  *  Pointer to the base of User Area NVRAM
  */
 #define nvram			((nvram_config * const) 0xFA001000)
-
 
 /*
  * Network driver configuration

@@ -28,7 +28,6 @@
 
 #define SOFT_TRAP BAD_TRAP
 
-
   .seg    "text"
   PUBLIC(start)
   .global start, __bsp_mem_init
@@ -44,7 +43,6 @@ start:
  *  uses an abbreviated trap which has every entry which might be used
  *  before RTEMS installs its own trap table.
  */
-
 
   PUBLIC(trap_table)
 SYM(trap_table):
@@ -87,7 +85,6 @@ SYM(trap_table):
   BAD_TRAP;                                     ! 1D real time clock
   BAD_TRAP;                                     ! 1E external 5
   BAD_TRAP;                                     ! 1F watchdog timeout
-
 
   BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 20 - 23 undefined
   BAD_TRAP;                                     ! 24 cp_disabled
@@ -219,7 +216,6 @@ SYM(hard_reset):
 	call	__bsp_board_init
 	nop
 
-
 	set	(SYM(rdb_start)), %g6	! End of work-space area
 	st	%sp, [%g6]
 	set	(SYM(Configuration)), %l1
@@ -237,7 +233,6 @@ SYM(hard_reset):
          *  TO:     _data_start
          *  LENGTH: (__bss_start - _data_start) bytes
          */
-
 
         sethi %hi(_endtext),%g2
         or    %g2,%lo(_endtext),%g2     ! g2 = start of initialized data in ROM

@@ -21,7 +21,6 @@
 #include <bsp/vectors.h>
 #include <libcpu/raw_exception.h>
 
-
 #define SYNC \
 	sync; \
 	isync

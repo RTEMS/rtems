@@ -526,7 +526,6 @@ saveDone:\n\
 ");
 #endif
 
-
 /*
  * remcomHandler is a front end for handle_exception.  It moves the
  * stack pointer into an area reserved for debugger use in case the
@@ -637,7 +636,6 @@ void getpacket(char *buffer)
 
 /* send the packet in buffer.  The host get's one chance to read it.
    This routine does not wait for a positive acknowledge.  */
-
 
 void
 putpacket(char *buffer)
@@ -1025,7 +1023,6 @@ void handle_exception(int exceptionVector)
     putpacket(remcomOutBuffer);
   }
 }
-
 
 void initializeRemcomErrorFrame()
 {

@@ -11,6 +11,9 @@
 // MODIFICATION/HISTORY:
 //
 // $Log$
+// Revision 1.2  2004/04/21 10:42:44  ralf
+// Remove stray white spaces.
+//
 // Revision 1.1  2000/08/30 08:15:30  joel
 // 2000-08-26  Rosimildo da Silva  <rdasilva@connecttel.com>
 //
@@ -66,7 +69,6 @@
 extern void ega_hwinit( void );
 extern void ega_hwterm( void );
 
-
 /* screen information for the VGA driver */
 static struct fb_screeninfo fb_info =
 {
@@ -78,7 +80,6 @@ static struct fb_screeninfo fb_info =
    FB_TYPE_VGA_PLANES,           /* type of dsplay    */
 	FB_VISUAL_PSEUDOCOLOR         /* color scheme used */
 };
-
 
 static __u16 red16[] = {
     0x0000, 0x0000, 0x0000, 0x0000, 0xaaaa, 0xaaaa, 0xaaaa, 0xaaaa,
@@ -116,7 +117,6 @@ fbvga_initialize(  rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 }
 
-
 /*
  * fbvga device driver OPEN entry point
  */
@@ -142,7 +142,6 @@ fbvga_close(rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 }
 
-
 /*
  * fbvga device driver READ entry point.
  * Read characters from the PS/2 mouse.
@@ -157,7 +156,6 @@ fbvga_read( rtems_device_major_number major,
   rw_args->bytes_moved = 0;
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  * fbvga device driver WRITE entry point.
@@ -174,13 +172,11 @@ fbvga_write( rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 }
 
-
 static int get_screen_info( struct fb_screeninfo *info )
 {
   *info = fb_info;
   return 0;
 }
-
 
 static int get_palette( struct fb_cmap *cmap )
 {
@@ -198,7 +194,6 @@ static int get_palette( struct fb_cmap *cmap )
   return 0;
 }
 
-
 static int set_palette( struct fb_cmap *cmap )
 {
   __u32 i;
@@ -214,7 +209,6 @@ static int set_palette( struct fb_cmap *cmap )
   }
   return 0;
 }
-
 
 /*
  * IOCTL entry point -- This method is called to carry

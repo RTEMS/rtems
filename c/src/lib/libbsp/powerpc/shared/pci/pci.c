@@ -216,21 +216,8 @@ const pci_config_access_functions pci_direct_functions = {
   	direct_pci_write_config_dword
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
 #define PRINT_MSG() \
              printk("pci : Device %d:%02x routed to interrupt_line %d\n", pbus, pslot, int_name )
-
 
 /*
 ** Validate a test interrupt name and print a warning if its not one of
@@ -269,15 +256,10 @@ static int test_intname(
    return 0;
 }
 
-
-
-
-
 struct pcibridge
 {
       int bus,slot;
 };
-
 
 static int FindPCIbridge( int mybus, struct pcibridge *pb )
 {
@@ -321,18 +303,10 @@ static int FindPCIbridge( int mybus, struct pcibridge *pb )
 #endif
          }
 
-
       }
    }
    return -1;
 }
-
-
-
-
-
-
-
 
 void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
 {
@@ -406,7 +380,6 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
                }
             }
 
-
             if( !ismatch )
             {
                /*
@@ -444,7 +417,6 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
                            */
                            if( tbus ) int_pin = (*swizzler)(tslot,int_pin);
 
-
                            /*
                            ** int_pin points to the interrupt channel
                            ** this card ends up delivering interrupts
@@ -475,7 +447,6 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
                         goto donesearch;
                      }
                   }
-
 
                   if( !ismatch )
                   {
@@ -511,26 +482,15 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
             }
            donesearch:
 
-
             if( !ismatch && int_pin != 0 && int_name == 255 )
             {
                printk("pci : Unable to match device %d:%d with an int routing table entry\n", pbus, pslot  );
             }
 
-
          }
       }
    }
 }
-
-
-
-
-
-
-
-
-
 
 /*
  * This routine determines the maximum bus number in the system

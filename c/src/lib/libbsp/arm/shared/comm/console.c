@@ -47,7 +47,6 @@ int BSPPrintkPort  = BSP_UART_COM1;
 
 int BSPBaseBaud    = 115200;
 
-
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
@@ -69,7 +68,6 @@ BSP_output_char_function_type BSP_output_char =
    (BSP_output_char_function_type) BSP_output_char_via_serial;
 BSP_polling_getchar_function_type BSP_poll_char =
    (BSP_polling_getchar_function_type) BSP_poll_char_via_serial;
-
 
 static rtems_irq_connect_data console_isr_data = {BSP_UART,
 						   BSP_uart_termios_isr_com1,
@@ -125,7 +123,6 @@ void __assert (const char *file, int line, const char *msg)
 
 }
 
-
 /*-------------------------------------------------------------------------+
 | Console device driver INITIALIZE entry point.
 +--------------------------------------------------------------------------+
@@ -149,7 +146,6 @@ console_initialize(rtems_device_major_number major,
 
   /* 38400-8-N-1 */
   BSP_uart_init(BSPConsolePort, 38400, 0);
-
 
   /* Set interrupt handler */
   console_isr_data.name = BSP_UART;
@@ -178,7 +174,6 @@ console_initialize(rtems_device_major_number major,
 
   return RTEMS_SUCCESSFUL;
 } /* console_initialize */
-
 
 static int console_last_close(int major, int minor, void *arg)
 {
@@ -243,7 +238,6 @@ console_close(rtems_device_major_number major,
   return res;
 } /* console_close */
 
-
 /*-------------------------------------------------------------------------+
 | Console device driver READ entry point.
 +--------------------------------------------------------------------------+
@@ -259,7 +253,6 @@ console_read(rtems_device_major_number major,
 
 } /* console_read */
 
-
 /*-------------------------------------------------------------------------+
 | Console device driver WRITE entry point.
 +--------------------------------------------------------------------------+
@@ -274,8 +267,6 @@ console_write(rtems_device_major_number major,
   return rtems_termios_write (arg);
 
 } /* console_write */
-
-
 
 /*
  * Handle ioctl request.

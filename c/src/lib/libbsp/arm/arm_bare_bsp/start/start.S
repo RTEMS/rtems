@@ -29,17 +29,14 @@
 .equ I_Bit,           	     0x80
 .equ F_Bit,           	     0x40
 
-
 	.text
 	.globl	_start
-
 
 _start:
 
 /*
  * Here is the code to initialize the low-level BSP environment
  * (Chip Select, PLL, ....?)
-
 
 /* Copy data from FLASH to RAM */
         LDR     r0, =_initdata        /* load address of region */
@@ -60,7 +57,6 @@ zi_init:
         CMP     r0, r1		       /* loop whilst r0 < r1 */
         STRLOT   r2, [r0], #4
         BLO     zi_init
-
 
 /* Load basic ARM7 interrupt table */
 VectorInit:

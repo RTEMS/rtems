@@ -58,13 +58,11 @@ int rtems_dmv177_sonic_driver_attach(struct rtems_bsdnet_ifconfig *config);
 #define RTEMS_BSP_NETWORK_DRIVER_NAME   "sonic1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_dmv177_sonic_driver_attach
 
-
 /*
  * The following macro calculates the Baud constant. For the Z8530 chip.
  */
 #define Z8530_Baud( _frequency, _clock_by, _baud_rate  )   \
   ( (_frequency /( _clock_by * 2 * _baud_rate))  - 2)
-
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
@@ -76,7 +74,6 @@ int rtems_dmv177_sonic_driver_attach(struct rtems_bsdnet_ifconfig *config);
 
 #define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
 #define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
-
 
 /*
  *  Stuff for Time Test 27
@@ -127,7 +124,6 @@ int rtems_dmv177_sonic_driver_attach(struct rtems_bsdnet_ifconfig *config);
  * NOTE: Use the standard Clock driver entry
  */
 
-
 /*
  *  Information placed in the linkcmds file.
  */
@@ -167,8 +163,6 @@ void initialize_external_exception_vector ();
 void DEBUG_puts( char *string );
 
 void BSP_fatal_return( void );
-
-
 
 void bsp_start( void );
 

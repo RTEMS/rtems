@@ -1153,7 +1153,6 @@ pci_write_config_dword(unsigned char bus, unsigned char slot, unsigned char func
 extern unsigned char BusCountPCI();
 extern void InitializePCI();
 
-
 struct _pin_routes
 {
       int pin, int_name[4];
@@ -1165,7 +1164,6 @@ struct _int_map
 };
 
 void FixupPCI( const struct _int_map *, int (*swizzler)(int,int) );
-
 
 /* scan for a specific device */
 /* find a particular PCI device

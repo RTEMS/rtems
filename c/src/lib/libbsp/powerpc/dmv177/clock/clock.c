@@ -46,7 +46,6 @@ uint32_t   Clock_Decrementer_value;
  */
 rtems_isr_entry  Old_ticker;
 
-
 void Clock_exit( void );
 
 /*

@@ -60,8 +60,6 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config, int a
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"eth1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_enet_driver_attach
 
-
-
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;
@@ -114,7 +112,6 @@ extern rtems_configuration_table BSP_Configuration;
 #define RAM_START 0
 #define RAM_END   0x1000000
 */
-
 
 /*
  *  Device Driver Table Entries

@@ -33,7 +33,6 @@ struct wait_queue;
 struct buffer_head;
 typedef struct { int counter; } atomic_t;
 
-
 typedef struct page {
 	/* these must be first (free area handling) */
 	struct page *next;
@@ -47,7 +46,6 @@ typedef struct page {
 	struct page **pprev_hash;
 	struct buffer_head * buffers;
 } mem_map_t;
-
 
 extern opaque mm_private, pci_private, v86_private, console_private;
 
@@ -74,7 +72,6 @@ static void exit(void) {
 	while(1);
 }
 
-
 void hang(const char *s, u_long x, ctxt *p) {
 	u_long *r1;
 #ifdef DEBUG
@@ -90,7 +87,6 @@ void hang(const char *s, u_long x, ctxt *p) {
 	}
 	exit();
 };
-
 
 void *zalloc(void *x, unsigned items, unsigned size)
 {
@@ -114,7 +110,6 @@ void zfree(void *x, void *addr, unsigned nb)
 #define RESERVED	0xe0
 
 #define DEFLATED	8
-
 
 void gunzip(void *dst, int dstlen, unsigned char *src, int *lenp)
 {
@@ -421,7 +416,6 @@ setup_hw(void)
 	}
 	*cp = 0;
 }
-
 
 /* Functions to deal with the residual data */
 static int same_DevID(unsigned short vendor,

@@ -335,7 +335,6 @@ _crt0_init_stack:
 		ds.l	0x1000
 _crt0_init_stktop:
 
-
 BEGIN_CODE
         dc.l    _crt0_init_stktop        /* reset SP */
         dc.l    _crt0_cold_start         /* reset PC */

@@ -18,7 +18,6 @@
  *  $Id$
  */
 
-
 #include <string.h>
 
 #include <bsp.h>
@@ -94,7 +93,6 @@ void bsp_start( void )
    */
   rom_monitor_vector_table = (m68k_isr_entry *)0xFFE00000;
   m68k_set_vbr( rom_monitor_vector_table );
-
 
   /*
    *  Copy 167Bug Bus Error handler into our exception vector. All 167Bug

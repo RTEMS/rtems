@@ -21,7 +21,6 @@
 #ifndef LIBBSP_POWERPC_ETH_COMM_IRQ_IRQ_H
 #define LIBBSP_POWERPC_ETH_COMM_IRQ_IRQ_H
 
-
 #define BSP_ASM_IRQ_VECTOR_BASE 0x0
 
 #ifndef ASM
@@ -143,7 +142,6 @@ typedef enum {
 
 #define CPM_INTERRUPT
 
-
 /*
  * Type definition for RTEMS managed interrupts
  */
@@ -216,9 +214,6 @@ typedef struct {
    */
     rtems_irq_prio*		irqPrioTbl;
 }rtems_irq_global_settings;
-
-
-
 
 /*-------------------------------------------------------------------------+
 | Function Prototypes.

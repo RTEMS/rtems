@@ -23,7 +23,6 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
   $Id$
 */
 
-
 /*
 **	idttlb.s - fetch the registers associated with and the contents
 **		   of the tlb.
@@ -33,7 +32,6 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #include <rtems/mips/iregdef.h>
 #include <rtems/mips/idtcpu.h>
 #include <rtems/asm.h>
-
 
 	.text
 
@@ -374,7 +372,6 @@ FRAME(map_tlb4000,sp,0,ra)
 	j	ra
 ENDFRAME(map_tlb4000)
 #endif
-
 
 /*
 ** Set current TLBPID. This assumes PID is positioned correctly in reg.

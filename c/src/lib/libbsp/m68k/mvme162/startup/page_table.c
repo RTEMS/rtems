@@ -71,8 +71,6 @@ static unsigned long *table_alloc(int size){
     return addr;
 }
 
-
-
 /*
    void page_table_init();
 

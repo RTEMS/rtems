@@ -13,7 +13,6 @@
 #define NVRAM_AS1  0x75
 #define NVRAM_DATA 0x77
 
-
 /* RTC Offsets */
 
 #define MOTO_RTC_SECONDS	0x1FF9

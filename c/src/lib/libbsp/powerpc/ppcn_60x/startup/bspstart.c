@@ -123,7 +123,6 @@ void bsp_pretasking_hook(void)
 	 */
 	InitializeUniverse();
 
-
 #ifdef RTEMS_DEBUG
   rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
@@ -142,7 +141,6 @@ void bsp_std_close( void )
 	close(stdout_fd);
 	close(stderr_fd);
 }
-
 
 /*
  *  bsp_predriver_hook
@@ -257,7 +255,6 @@ void bsp_start( void )
 		}
 	}
 
-
   /*
    *  Allocate the memory for the RTEMS Work Space.  This can come from
    *  a variety of places: hard coded address, malloc'ed from outside
@@ -287,6 +284,5 @@ void bsp_start( void )
   Cpu_table.do_zero_of_workspace = TRUE;
   Cpu_table.interrupt_stack_size = CONFIGURE_INTERRUPT_STACK_MEMORY;
   Cpu_table.clicks_per_usec = ulCpuBusClock/4000000;
-
 
 }

@@ -69,7 +69,6 @@ extern "C" {
 #define MAX_LONG_TEST_DURATION       300 /* 5 minutes = 300 seconds */
 #define MAX_SHORT_TEST_DURATION      3   /* 3 seconds */
 
-
 /*
  *  Stuff for Time Test 27
  */
@@ -84,7 +83,6 @@ extern "C" {
     uint32_t   _clicks = 1; \
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
-
 
 #define Clear_tm27_intr() \
   do { \
@@ -114,7 +112,6 @@ extern "C" {
 /*
  * NOTE: Use the standard Clock driver entry
  */
-
 
 /*
  *  Information placed in the linkcmds file.

@@ -89,7 +89,6 @@ extern "C" {
 #define PARITYERR     0x20               /* status reg parity error mask */
 #define FRAMEERR      0x40               /* status reg frame error mask */
 
-
 #define FOREVER       1                  /* infinite loop */
 
 /* Structures */

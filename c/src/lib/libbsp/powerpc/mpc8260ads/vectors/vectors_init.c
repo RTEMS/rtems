@@ -133,7 +133,6 @@ void initialize_exceptions()
 
 /*  _BSP_GPLED0_on(); */
 
-
   if (!mpc8xx_init_exceptions(&exception_config)) {
     /*
      * At this stage we may not call BSP_Panic because it uses exceptions!!!

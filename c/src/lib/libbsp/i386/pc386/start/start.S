@@ -64,7 +64,6 @@ BEGIN_CODE
 	EXTERN (debugPollingGetChar)
 	EXTERN (checkCPUtypeSetCr0)
 
-
 /*
  * In case this crashes on your machine and this is not due
  * to video mode set by the loader, you may try to define

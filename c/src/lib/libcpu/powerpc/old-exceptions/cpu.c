@@ -302,7 +302,6 @@ void _CPU_Context_Initialize(
 #endif
 }
 
-
 /*  _CPU_ISR_install_vector
  *
  *  This kernel routine installs the RTEMS handler for the
@@ -410,7 +409,6 @@ void _CPU_Fatal_error(uint32_t   _error)
 #define PPC_SYNCHRONOUS_TRAP ( _trap ) ((_trap)+PPC_SYNCHRONOUS_TRAP_BIT_MASK)
 #define PPC_REAL_TRAP_NUMBER ( _trap ) ((_trap)%PPC_SYNCHRONOUS_TRAP_BIT_MASK)
 
-
 const CPU_Trap_table_entry _CPU_Trap_slot_template = {
 
 #if (PPC_ABI == PPC_ABI_POWEROPEN || PPC_ABI == PPC_ABI_GCC27)
@@ -443,7 +441,6 @@ const CPU_Trap_table_entry _CPU_Trap_slot_template_m860 = {
 uint32_t    ppc_exception_vector_addr(
   uint32_t   vector
 );
-
 
 /*PAGE
  *

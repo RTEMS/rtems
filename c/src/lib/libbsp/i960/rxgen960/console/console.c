@@ -42,7 +42,6 @@ rtems_device_driver console_initialize(
      if ( console_pmr_init(*(uint32_t*)arg) )
         return RTEMS_INVALID_NUMBER;
 
-
   status = rtems_io_register_name(
     "/dev/console",
     major,
@@ -54,7 +53,6 @@ rtems_device_driver console_initialize(
 
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*  is_character_ready
  *
@@ -119,7 +117,6 @@ void outbyte( unsigned int minor,
   if ( ch == '\n' )
     outbyte( minor, '\r' );
 }
-
 
 /*
  *  Open entry point

@@ -37,7 +37,6 @@
 #ifndef _RTEMS_OPENPIC_H
 #define _RTEMS_OPENPIC_H
 
-
     /*
      *  OpenPIC supports up to 2048 interrupt sources and up to 32 processors
      */
@@ -50,7 +49,6 @@
 #define OPENPIC_NUM_PRI		16
 #define OPENPIC_NUM_VECTORS	256
 
-
     /*
      *  Vector numbers
      */
@@ -60,7 +58,6 @@
 #define OPENPIC_VEC_IPI         0x50    /* and up */
 #define OPENPIC_VEC_SPURIOUS    99
 
-
     /*
      *  OpenPIC Registers are 32 bits and aligned on 128 bit boundaries
      */
@@ -69,7 +66,6 @@ typedef struct _OpenPIC_Reg {
     unsigned int Reg;					/* Little endian! */
     char Pad[0xc];
 } OpenPIC_Reg;
-
 
     /*
      *  Per Processor Registers
@@ -103,7 +99,6 @@ typedef struct _OpenPIC_Processor {
     char Pad5[0xf40];
 } OpenPIC_Processor;
 
-
     /*
      *  Timer Registers
      */
@@ -114,7 +109,6 @@ typedef struct _OpenPIC_Timer {
     OpenPIC_Reg _Vector_Priority;		/* Read/Write */
     OpenPIC_Reg _Destination;			/* Read/Write */
 } OpenPIC_Timer;
-
 
     /*
      *  Global Registers
@@ -159,7 +153,6 @@ typedef struct _OpenPIC_Global {
     char Pad1[0xee00];
 } OpenPIC_Global;
 
-
     /*
      *  Interrupt Source Registers
      */
@@ -168,7 +161,6 @@ typedef struct _OpenPIC_Source {
     OpenPIC_Reg _Vector_Priority;		/* Read/Write */
     OpenPIC_Reg _Destination;			/* Read/Write */
 } OpenPIC_Source;
-
 
     /*
      *  OpenPIC Register Map
@@ -191,7 +183,6 @@ struct OpenPIC {
 };
 
 extern volatile struct OpenPIC *OpenPIC;
-
 
     /*
      *  Current Task Priority Register
@@ -243,14 +234,12 @@ extern volatile struct OpenPIC *OpenPIC;
 #define OPENPIC_PRIORITY_SHIFT			16
 #define OPENPIC_VECTOR_MASK			0x000000ff
 
-
     /*
      *  Interrupt Source Registers
      */
 
 #define OPENPIC_SENSE_POLARITY			0x00800000	/* Undoc'd */
 #define OPENPIC_SENSE_LEVEL			0x00400000
-
 
     /*
      *  Timer Registers
@@ -259,7 +248,6 @@ extern volatile struct OpenPIC *OpenPIC;
 #define OPENPIC_COUNT_MASK			0x7fffffff
 #define OPENPIC_TIMER_TOGGLE			0x80000000
 #define OPENPIC_TIMER_COUNT_INHIBIT		0x80000000
-
 
     /*
      *  Aliases to make life simpler
@@ -293,14 +281,12 @@ extern volatile struct OpenPIC *OpenPIC;
 #define Vector_Priority			_Vector_Priority.Reg
 #define Destination			_Destination.Reg
 
-
     /*
      *  Vendor and Device IDs
      */
 
 #define OPENPIC_VENDOR_ID_APPLE		0x14
 #define OPENPIC_DEVICE_ID_APPLE_HYDRA	0x46
-
 
     /*
      *  OpenPIC Operations

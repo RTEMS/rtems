@@ -129,7 +129,6 @@ struct vme_lcsr_map {
 
 #define vme_lcsr      ((volatile struct vme_lcsr_map * const) 0xfffe2000)
 
-
 struct vme_gcsr_map {
   uint8_t         unused_1;
   uint8_t         global_0;                      /* 0xfffe2021 */
@@ -151,10 +150,7 @@ struct vme_gcsr_map {
 
 #define vme_gcsr      ((volatile struct vme_gcsr_map * const) 0xfffe2020)
 
-
-
 #define z8530 0xfffe3001
-
 
 /* interrupt vectors - see MVME147/D1 4.14 */
 #define PCC_BASE_VECTOR        0x40 /* First user int */
@@ -177,8 +173,6 @@ struct vme_gcsr_map {
 #define CONSOLE_CONTROL  0xfffe3000
 #define CONSOLE_DATA     0xfffe3001
 #endif
-
-
 
 #define FOREVER       1                  /* infinite loop */
 
@@ -218,7 +212,6 @@ struct vme_gcsr_map {
 #define Clear_tm27_intr()  pcc->software_int_1_control = 0x00
 
 #define Lower_tm27_intr()
-
 
 /* miscellaneous stuff assumed to exist */
 

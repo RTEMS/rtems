@@ -155,7 +155,6 @@ i2c_transfer_wait(i2c_bus_number bus, i2c_message *msg, int nmsg)
     return I2C_SUCCESSFUL;
 }
 
-
 /* i2c_write --
  *     Send single message over specified I2C bus to addressed device and
  *     wait while transfer is finished.

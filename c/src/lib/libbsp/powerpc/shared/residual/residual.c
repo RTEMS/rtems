@@ -19,7 +19,6 @@
 #include <libcpu/io.h>
 #include <libcpu/byteorder.h>
 
-
 static int same_DevID(unsigned short vendor,
 	       unsigned short Number,
 	       char * str)

@@ -74,7 +74,6 @@ static void mdelay( unsigned long t )
   Wait_X_ms( t );
 }
 
-
 static void*    termios_ttyp_paux = NULL;
 
 static void
@@ -94,10 +93,8 @@ static int isr_is_on(const rtems_irq_connect_data *irq)
   return BSP_irq_enabled_at_i8259s( irq->name );
 }
 
-
 static rtems_irq_connect_data ps2_isr_data = { AUX_IRQ,
 						   ps2_mouse_interrupt, isr_on,  isr_off, isr_is_on };
-
 
 /*
  * Wait for keyboard controller input buffer to drain.
@@ -160,7 +157,6 @@ static int do_acknowledge(unsigned char scancode)
 	}
 	return 1;
 }
-
 
 static inline void handle_mouse_event(unsigned char scancode)
 {
@@ -227,7 +223,6 @@ static unsigned char handle_kbd_event(void)
 
 	return status;
 }
-
 
 static void ps2_mouse_interrupt()
 {
@@ -404,7 +399,6 @@ static unsigned char get_from_queue(void)
 	return result;
 }
 
-
 static int queue_empty(void)
 {
 	return queue->head == queue->tail;
@@ -438,7 +432,6 @@ static int open_aux()
 		return 0;
 	}
 	queue->head = queue->tail = 0;		/* Flush input queue */
-
 
    status = BSP_install_rtems_irq_handler( &ps2_isr_data );
    if( !status )
@@ -578,7 +571,6 @@ paux_initialize(  rtems_device_major_number major,
   return RTEMS_SUCCESSFUL;
 } /* tty_initialize */
 
-
 static int paux_last_close(int major, int minor, void *arg)
 {
   release_aux();
@@ -595,7 +587,6 @@ static int write_aux_echo( int minor, const char * buffer, int count )
    return 0;
 }
 
-
 /*
  * Some initialization if necessary
  */
@@ -606,7 +597,6 @@ paux_first_open( rtems_device_minor_number major,
 {
    return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  * paux device driver OPEN entry point
@@ -645,7 +635,6 @@ paux_close(rtems_device_major_number major,
   return (rtems_termios_close (arg));
 }
 
-
 /*
  * paux device driver READ entry point.
  * Read characters from the PS/2 mouse.
@@ -657,7 +646,6 @@ paux_read(rtems_device_major_number major,
 {
   return rtems_termios_read (arg);
 } /* tty_read */
-
 
 /*
  * paux device driver WRITE entry point.
@@ -674,7 +662,6 @@ paux_write(rtems_device_major_number major,
   rw_args->bytes_moved = write_aux( minor, buffer, maximum );
   return RTEMS_SUCCESSFUL;
 } /* tty_write */
-
 
 /*
  * Handle ioctl request.

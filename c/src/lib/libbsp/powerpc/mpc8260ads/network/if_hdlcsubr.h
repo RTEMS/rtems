@@ -22,13 +22,10 @@
 #ifndef __IF_HDLCSUBR_H
 #define __IF_HDLCSUBR_H
 
-
 struct ifnet;
 struct mbuf;
 struct sockaddr;
 struct rtentry;
-
-
 
 void	hdlc_ifattach __P((struct ifnet *));
 void	hdlc_input __P((struct ifnet *, struct mbuf *));

@@ -77,13 +77,11 @@ bsp_pretasking_hook(void)
 
     bsp_libc_init((void *) heap_start, 64 * 1024, 0);
 
-
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif
 *(unsigned char *)(0x120f) = 0xf;
 }
-
 
 /* we need to have the top of memory remembered later to start libc_init with
    the correct values
@@ -131,7 +129,6 @@ bsp_start(void)
 
   BSP_Configuration.work_space_start = (void *) top_of_used_memory;
      top_of_used_memory +=  (BSP_Configuration.work_space_size + 0x1000);
-
 
 *(unsigned char *)(0x120f) = 0x0a;
 

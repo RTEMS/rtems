@@ -21,7 +21,6 @@
 #ifndef __MVME167_H
 #define __MVME167_H
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -33,7 +32,6 @@ extern "C" {
 #include <rtems/console.h>
 #include <rtems/iosupp.h>
 #include <rtems/bspIo.h>
-
 
 /*
  *  confdefs.h overrides for this BSP:
@@ -142,7 +140,6 @@ typedef volatile struct memc040_regs_ {
 #define memc040_1   ((memc040_regs * const) 0xFFF43000)
 #define memc040_2   ((memc040_regs * const) 0xFFF43100)
 
-
 /*
  *  The MVME167 may be equiped with error-correcting RAM cards. In this case,
  *  each MEMC040 is replaced by two MCECC ECC DRAM controllers. This port
@@ -153,7 +150,6 @@ typedef volatile struct memc040_regs_ {
  *  nearly identical to the ones of the MEMC040, and the memc040_X structures
  *  can be used to read those first eight registers.
  */
-
 
 /*
  *  Representation of the Cirrus Logic CL-CD2401 Multi-Protocol Controller
@@ -298,13 +294,11 @@ typedef volatile struct cd2401_regs_ {
   unsigned char     dr;             /* 0xFFF450F8 - Receive/Transmit Data */
 } cd2401_regs;
 
-
 /*
  *  Base address of the CD2401.
  *  This is not configurable in the MVME167.
  */
 #define cd2401          ((cd2401_regs * const) 0xFFF45000)
-
 
 /* CD2401 is clocked at 20 MHz */
 #define CD2401_CLK_RATE 20000000
@@ -345,13 +339,11 @@ m68k_isr_entry set_vector(
 
 #define BSP_LIBIO_MAX_FDS       20
 
-
 /* miscellaneous stuff assumed to exist */
 
 extern rtems_configuration_table BSP_Configuration;
 
 extern m68k_isr_entry M68Kvec[];   /* vector table address */
-
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.

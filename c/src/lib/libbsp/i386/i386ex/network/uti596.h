@@ -55,8 +55,6 @@ struct enet_statistics{
   int   nic_reset_count;      /* The number of times uti596reset() has been called. */
 };
 
-
-
 enum commands {
   CmdNOp           = 0,
   CmdSASetup       = 1,
@@ -68,9 +66,7 @@ enum commands {
   CmdDiagnose      = 7
 };
 
-
 #define UTI596_MUTEX   1
-
 
 #define CMD_EOL		0x8000	/* The last command of the list, stop. */
 #define CMD_SUSP	0x4000	/* Suspend after doing cmd. */
@@ -86,7 +82,6 @@ enum commands {
 #define SCB_CUS_SUSPENDED 0x0100
 #define SCB_CUS_ACTIVE    0x0200
 
-
 #define STAT_C		0x8000	/* Set to 1 after execution              */
 #define STAT_B		0x4000	/* 1 : Cmd being executed, 0 : Cmd done. */
 #define STAT_OK		0x2000	/* 1: Command executed ok 0 : Error      */
@@ -100,7 +95,6 @@ enum commands {
 #define STAT_S6         0x0040
 #define STAT_S5         0x0020
 #define STAT_MAX_COLLS  0x000F
-
 
 #define RBD_STAT_P      0x4000  /* prefetch */
 #define RBD_STAT_F      0x4000  /* used */
@@ -117,7 +111,6 @@ enum commands {
 #define  RU_SUSPENDED    0x0010
 #define  RU_NO_RESOURCES 0x0020
 #define  RU_READY        0x0040
-
 
 #define IO_ADDR         0x360
 #define PORT_ADDR       IO_ADDR
@@ -168,7 +161,6 @@ struct tx_cmd {
     unsigned short pad;
 } ;
 
-
 /*
  * Receive Frame Descriptor
  */
@@ -181,7 +173,6 @@ struct i596_rfd {
     unsigned short size;
     char data [1532 ];
 } ;
-
 
 struct i596_dump {
   struct i596_cmd cmd;
@@ -226,7 +217,6 @@ struct i596_scb {
     volatile unsigned short t_on;
     volatile unsigned short t_off;
 };
-
 
 /*
  * Intermediate System Control Block

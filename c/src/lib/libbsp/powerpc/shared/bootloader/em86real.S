@@ -193,7 +193,6 @@
  *
  */
 
-
 /* Now the details of flag evaluation with the necessary macros */
 
 /* Alignment check is toggable so the system believes it is a 486, but
@@ -1721,7 +1720,6 @@ outl_eax_dx:	li r4,DX
 		eieio
 		NEXT
 
-
 /* Macro used for add and sub */
 #define ARITH(op,fl) \
 op##b_reg_mem:	lbzx op1,MEM; SET_FLAGS(fl(B)); lbzx op2,REG; \
@@ -2611,7 +2609,6 @@ _finish_strw:	li r4,SI
 		li r4,CX
 		sthbrx r3,state,r4		# update cx
 		NEXT
-
 
 lodsb_a16:	bl _setup_stringw
 1:		lbzx r0,STRINGSRC		# [rep] lodsb
@@ -3878,7 +3875,6 @@ ldlptrw:	lhzux r7,MEM
 		lwz ssb,ssbase(state)
 		blr
 
-
 /* Intructions that may modify the current code segment: the next optimization
  * might be to avoid calling C code when the code segment does not change. But
  * it's probably not worth the effort.
@@ -4531,7 +4527,6 @@ grp3##bwl:	ENTRY(test##bwl##_imm,t); OP(ud); \
 		grp3table(b,2)
 		grp3table(w,3)
 		grp3table(l,3)
-
 
 grp4b:		BOP(incb); BOP(decb); \
 		OP(ud); OP(ud); \

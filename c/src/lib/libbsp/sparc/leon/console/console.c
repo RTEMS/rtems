@@ -204,7 +204,6 @@ void console_exit()
   LEON_REG.UART_Status_1 = 0;
   LEON_REG.UART_Status_2 = 0;
 
-
 }
 
 #define CONSOLE_UART_1_TRAP  LEON_TRAP_TYPE( LEON_INTERRUPT_UART_1_RX_TX )

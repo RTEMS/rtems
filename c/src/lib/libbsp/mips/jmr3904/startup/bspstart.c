@@ -113,7 +113,6 @@ struct s_mem
   unsigned int dcsize;
 };
 
-
 void
 get_mem_info (mem)
      struct s_mem *mem;

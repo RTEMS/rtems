@@ -14,7 +14,6 @@
 #include <uart.h>
 #include <assert.h>
 
-
 int  putDebugChar(int ch);     /* write a single character      */
 int  getDebugChar(void);       /* read and return a single char */
 
@@ -54,7 +53,6 @@ int BSP_uart_isOn(const rtems_raw_irq_connect_data* used)
 {
   return BSP_irq_enabled_at_i8259s(used->idtIndex - BSP_IRQ_VECTOR_BASE);
 }
-
 
 /*
  * In order to have a possibility to break into
@@ -114,7 +112,6 @@ void i386_stub_glue_init_breakin(void)
 
   return;
 }
-
 
 int
 putDebugChar(int ch)

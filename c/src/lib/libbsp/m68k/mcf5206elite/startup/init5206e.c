@@ -60,7 +60,6 @@
 #define mcf5206e_enable_cache() \
   m68k_set_cacr( MCF5206E_CACR_CENB )
 
-
 #define mcf5206e_disable_cache() \
   asm volatile (  "nop\n\t"    \
                   "movec %0,%%cacr\n\t" \

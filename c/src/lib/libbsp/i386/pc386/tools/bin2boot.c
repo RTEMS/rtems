@@ -32,7 +32,6 @@ static void usage(void)
   return;
 }
 
-
 int main(int argc, char* argv[])
 {
   int      c, verbose;
@@ -130,7 +129,6 @@ int main(int argc, char* argv[])
       return 1;
     }
 
-
   /* Copy first image out and remember its length */
   cnt  = 0;
   for(;;)
@@ -177,7 +175,6 @@ int main(int argc, char* argv[])
       size1 = cnt;
     }
 
-
   /* Let us check agains overlapping */
   if(!(addr1 >= (headerAddr + sizeof(buf)) || (headerAddr >= addr1+size1)))
     {
@@ -198,7 +195,6 @@ int main(int argc, char* argv[])
       fclose(ofp);
       return 1;
     }
-
 
   if(optind == (argc - 1))
     {
@@ -363,7 +359,6 @@ writeHeader:
       buf[0x20] = 4;
 
       buf[0x23] = 4;
-
 
       /* Load address */
       buf[0x24] = addr2 & 0xff;

@@ -222,7 +222,6 @@ BSP_uart_intr_ctrl(int uart, int cmd)
   return;
 }
 
-
 /*
  * Status function, -1 if error
  * detected, 0 if no received chars available,
@@ -268,7 +267,6 @@ BSP_uart_polled_status(int uart)
 
   return BSP_UART_STATUS_ERROR;
 }
-
 
 /*
  * Polled mode write function
@@ -329,7 +327,6 @@ BSP_poll_char_via_serial()
 {
 	return BSP_uart_polled_read(BSPConsolePort);
 }
-
 
 /* ================ Termios support  =================*/
 
@@ -422,7 +419,6 @@ BSP_uart_termios_write_com2(int minor, const char *buf, int len)
       return 0;
     }
 
-
   /* If there TX buffer is busy - something is royally screwed up */
   assert((uread(BSP_UART_COM2, LSR) & THRE) != 0);
 
@@ -452,7 +448,6 @@ BSP_uart_termios_write_com2(int minor, const char *buf, int len)
 
   return 0;
 }
-
 
 void
 BSP_uart_termios_isr_com1(void)

@@ -121,7 +121,6 @@ void bsp_pretasking_hook(void)
     uint32_t  	    heap_size;
     uint32_t  	    heap_end;
 
-
     heap_start = (uint32_t  ) &_end;
     if (heap_start & (CPU_ALIGNMENT-1))
         heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
@@ -139,7 +138,6 @@ void bsp_pretasking_hook(void)
 #endif
 
 }
-
 
 /*
  *  bsp_start

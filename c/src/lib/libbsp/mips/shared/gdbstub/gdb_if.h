@@ -32,7 +32,6 @@ struct rtems_gdb_stub_thread_info {
 
 int parse_zbreak(const char *in, int *type, unsigned char **addr, int *len);
 
-
 char* mem2hstr(char *buf, const unsigned char *mem, int count);
 int   hstr2mem(unsigned char *mem, const char *buf, int count);
 void  set_mem_err(void);
@@ -160,13 +159,7 @@ void rtems_gdb_process_query(
 
 #define	NUM_REGS	72
 
-
-
-
-
-
 void mips_gdb_stub_install(int enableThreads) ;
-
 
 #define MEMOPT_READABLE   1
 #define MEMOPT_WRITEABLE  2
@@ -176,7 +169,5 @@ void mips_gdb_stub_install(int enableThreads) ;
 #endif
 
 int gdbstub_add_memsegment(unsigned,unsigned,int);
-
-
 
 #endif /* _GDB_IF_H */

@@ -316,9 +316,6 @@ struct kbdiacr accent_table[MAX_DIACR] = {
 
 unsigned int accent_table_size = 68;
 
-
-
-
 /* These #defines have been copied from drivers/char/pc_keyb.h, by
  * Martin Mares (mj@ucw.cz).
  * converted to offsets by Till Straumann <strauman@slac.stanford.edu>
@@ -384,7 +381,6 @@ SPR_RO(PVR)
 
 #endif /* USE_KBD_SUPPORT */
 
-
 /* Early messages after mm init but before console init are kept in log
  * buffers.
  */
@@ -410,7 +406,6 @@ static board_memory_map mem_map = {
 };
 
 board_memory_map *ptr_mem_map = &mem_map;
-
 
 struct _console_global_data {
 	console_log *log;
@@ -494,7 +489,6 @@ int vacuum_tstc(void) {
 #define LSR_TEMT 0x40  /* Xmitter empty */
 #define LSR_ERR  0x80  /* Error */
 
-
 #ifdef STATIC_LOG_ALLOC
 static int global_index = 0;
 
@@ -509,7 +503,6 @@ static void pfree(void* p)
   --global_index;
 }
 #endif
-
 
 void log_putc(const u_char c) {
 	console_log *l;
@@ -543,7 +536,6 @@ void puts(const u_char *s)
 				debug_putc_onlcr((const char)c);
         }
 }
-
 
 static
 void flush_log(void) {
@@ -883,7 +875,6 @@ int select_console(ioType t) {
 
 /* we use this so that we can do without the ctype library */
 #define is_digit(c)	((c) >= '0' && (c) <= '9')
-
 
 /* provide this for the bootloader only; otherwise
  * use libcpu implementation

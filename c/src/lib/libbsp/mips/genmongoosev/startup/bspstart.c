@@ -25,9 +25,6 @@
 #include <rtems/libcsupport.h>
 #include <libcpu/mongoose-v.h>
 
-
-
-
 /*
  *  The original table from the application and our copy of it with
  *  some changes.
@@ -76,8 +73,6 @@ void bsp_pretasking_hook(void)
 #endif
 
 }
-
-
 
 /*
  *  bsp_start
@@ -150,9 +145,6 @@ void bsp_start( void )
    mips_install_isr_entries();
 }
 
-
-
-
 void clear_cache( void )
 {
    extern void promCopyIcacheFlush(void);       /* from start.S */
@@ -162,13 +154,9 @@ void clear_cache( void )
    promCopyDcacheFlush();
 }
 
-
-
-
 /*
 
 //Structure filled in by get_mem_info.
-
 
 struct s_mem
 {
@@ -176,7 +164,6 @@ struct s_mem
   unsigned int icsize;
   unsigned int dcsize;
 };
-
 
 extern uint32_t   _RamSize;
 

@@ -49,7 +49,6 @@
 
 	PUBLIC( SYM(_init_i386ex) )
 
-
 	.section .initial, "ax"
 
 /*
@@ -273,7 +272,6 @@ SYM(InitTimer):
 	SetExRegByte(TMR0   , 0x00 ) # sfa
 	SetExRegByte(TMR0   , 0x00 ) # sfa
 
-
 	SetExRegByte(TMRCON , 0x70 ) # mode 0 disables on Gate= Vcc
 	SetExRegByte(TMR1   , 0x00 ) # sfa
 	SetExRegByte(TMR1   , 0x00 ) # sfa
@@ -478,7 +476,6 @@ SYM (zero_bss):
 	cli                              # stops interrupts after hlt!
 	hlt                              # shutdown
 
-
 	.balign 4	                 # align tables to 4 byte boundary
 
 SYM(IDTR):	DESC3( SYM(Interrupt_descriptor_table), 0x07ff );
@@ -487,7 +484,6 @@ SYM(Interrupt_descriptor_table):   /* Now in data section */
 	.rept 256
 	.word 0,0,0,0
 	.endr
-
 
 /*
  *  Use the first (null) entry in the the GDT as a self-pointer for the GDTR.

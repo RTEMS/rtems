@@ -8,10 +8,8 @@
 * $Id$
 ****************************************************************************/
 
-
 #ifndef _sci_h_
 #define _sci_h_
-
 
 /*******************************************************************************
   IOCTL commands for the sci driver.
@@ -46,11 +44,9 @@
 #define SCI_IOCTL_MODE_9_BIT            0x82    // 9600,forced,8,1 command mode
 
 
-
 /*******************************************************************************
   SCI Registers
 *******************************************************************************/
-
 
 // SCI Control Register 0  (SCCR0)  $FFFC08
 
@@ -79,7 +75,6 @@
 
 //  0 0 0 0 - 0 0 0 0 - 0 0 0 0 - 0 1 0 0       reset value - (64k baud?)
 
-
 #define SCI_BAUD_57_6K            9
 #define SCI_BAUD_38_4K           14
 #define SCI_BAUD_19_2K           27
@@ -88,7 +83,6 @@
 #define SCI_BAUD_2400           218
 #define SCI_BAUD_1200           437
 
-
 
 //  SCI Control Register 1  (SCCR1)  $FFFC0A
 
@@ -182,7 +176,6 @@
 
 //  0 0 0 0 - 0 0 0 1 - 1 0 0 0 - 0 0 0 0       reset value
 
-
 #define SCI_ERROR_PARITY        0x0001          // 0000-0000-0000-0001
 #define SCI_ERROR_FRAMING       0x0002          // 0000-0000-0000-0010
 #define SCI_ERROR_NOISE         0x0004          // 0000-0000-0000-0100
@@ -211,16 +204,13 @@
 extern "C" {
 #endif
 
-
 // look at console_open to see how this is called
 
 const rtems_termios_callbacks * SciGetTermiosHandlers( int32_t   polled );
 
-
 /* SCI interrupt */
 
 //rtems_isr SciIsr( rtems_vector_number vector );
-
 
 //int32_t   SciOpenPolled    ( int32_t   major, int32_t   minor, void *arg );
 //int32_t   SciOpenInterrupt ( int32_t   major, int32_t   minor, void *arg );
@@ -234,10 +224,8 @@ const rtems_termios_callbacks * SciGetTermiosHandlers( int32_t   polled );
 
 //int32_t   SciSetAttributes ( int32_t   minor, const struct termios *t );
 
-
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif  // _sci_h_

@@ -86,7 +86,6 @@ char inbyte( void )
   return ch;
 }
 
-
 /*  outbyte
  *
  *  This routine transmits a character out the console using NINDY.

@@ -21,7 +21,6 @@
 void Clock_exit( void );
 rtems_isr Clock_isr( rtems_vector_number vector );
 
-
 /*
  *  The interrupt vector number associated with the clock tick device
  *  driver.
@@ -60,7 +59,6 @@ rtems_device_minor_number rtems_clock_minor;
 rtems_isr_entry  Old_ticker;
 
 void Clock_exit( void );
-
 
 /*
  *  Isr Handler

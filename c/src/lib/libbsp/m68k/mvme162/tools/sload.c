@@ -23,7 +23,6 @@
 #include <string.h>
 #include <ctype.h>
 
-
 #include <sys/types.h>
 #include <sys/fcntl.h>
 #include <sys/resource.h>

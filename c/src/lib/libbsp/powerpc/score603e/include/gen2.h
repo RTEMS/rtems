@@ -56,7 +56,6 @@ extern "C" {
 #define SCORE603E_PCI_DEVICE_ADDRESS( _offset) \
          ((volatile uint32_t*)( SCORE603E_PCI_PMC_DEVICE_BASE + _offset ))
 
-
 #define SCORE603E_PMC_SERIAL_ADDRESS( _offset )    \
         ((volatile uint8_t*)(SCORE603E_PCI_REGISTER_BASE + _offset))
 
@@ -90,7 +89,6 @@ extern "C" {
 #define SCORE603E_RTC_ADDRESS          ((volatile unsigned char *)0xfd180000)
 #define SCORE603E_JP1_JP2_PROM_BASE    0xfff00000
 #define SCORE603E_NOT_JP1_2_FLASH_BASE 0xff800000
-
 
 #if (SCORE603E_USE_SDS) | (SCORE603E_USE_OPEN_FIRMWARE) | (SCORE603E_USE_NONE)
 #define SCORE603E_VME_A16_OFFSET       0x04000000
@@ -144,7 +142,6 @@ extern "C" {
 #define SCORE603E_85C30_4_CLOCK_X     SCORE603E_85C30_PMC_CLOCK_X
 #define SCORE603E_85C30_5_CLOCK_X     SCORE603E_85C30_PMC_CLOCK_X
 
-
 #define SCORE603E_UNIVERSE_CHIP_ID     0x000010E3
 
 /*
@@ -171,7 +168,6 @@ extern "C" {
 #define PMC_CLEAR_232_LOOPBACK(_word) (_word & 0xfd)
 #define PMC_SET_422_LOOPBACK(_word)   (_word | 0x01)
 #define PMC_CLEAR_422_LOOPBACK(_word) (_word & 0xfe)
-
 
 /*
  *  Score603e Interupt Definations.
@@ -238,7 +234,6 @@ extern "C" {
 #define SCORE603E_85C30_3_IRQ          SCORE603E_IRQ19    /* SCC 232-2 */
 
 #define MAX_BOARD_IRQS                 SCORE603E_IRQ19
-
 
 /*
  *  BSP_TIMER_AVG_OVERHEAD and BSP_TIMER_LEAST_VALID for the shared timer

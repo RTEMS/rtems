@@ -122,7 +122,6 @@ rtems_boolean is_character_ready(
     }
 }
 
-
 /*  inbyte
  *
  *  Receive a character from the MC68302's SCC2.
@@ -154,7 +153,6 @@ char inbyte( void )
 
     return ch;
 }
-
 
 /*  outbyte
  *

@@ -38,7 +38,6 @@
 | **************************************************************************
 +--------------------------------------------------------------------------*/
 
-
 #include <bsp.h>
 
 #include <stdlib.h>
@@ -72,7 +71,6 @@ static uint8_t    videoCols = VGA_NUM_COLS; /* Number of columns in display. */
 static uint8_t    cursRow   = 0;       /* Current cursor row.           */
 static uint8_t    cursCol   = 0;       /* Current cursor column.        */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: setHardwareCursorPos
 |      Description: Set hardware video cursor at given offset into video RAM.
@@ -87,7 +85,6 @@ setHardwareCursorPos(uint16_t   videoCursor)
 	VGA_WRITE_CRTC(0x0f, videoCursor & 0xff);
 } /* setHardwareCursorPos */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: updateVideoRamPtr
 |      Description: Updates value of global variable "videoRamPtr" based on
@@ -101,7 +98,6 @@ updateVideoRamPtr(void)
 {
 	videoRamPtr = videoRam + cursRow * videoCols + cursCol;
 } /* updateVideoRamPtr */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: scrollUp
@@ -152,7 +148,6 @@ scrollUp(uint8_t   lines)
 		*ptrDst++ = BLANK;
 	}
 } /* scrollUp */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: printCHAR
@@ -208,7 +203,6 @@ printBS(void)
 	*(--videoRamPtr) = BLANK;
 } /* printBS */
 
-
 /*-------------------------------------------------------------------------+
 |         Function: printHT
 |      Description: Print HT (Horizontal Tab - '\t') character to display.
@@ -225,7 +219,6 @@ printHT(void)
 	}
 	while (cursCol % TABSIZE);
 } /* printHT */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: printLF
@@ -245,7 +238,6 @@ printLF(void)
 	}
 	updateVideoRamPtr();
 } /* printLF */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: printCR

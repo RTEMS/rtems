@@ -122,7 +122,6 @@ stack_top:
 
 	mtdcr	br0,r2 /* write to DCR BR0 */
 
-
 	/*--------------------------------------------------------------------
 	 * test various RAM configurations (from big to small per bank)
 	 *------------------------------------------------------------------*/
@@ -464,10 +463,8 @@ ramaccfx:
 	lwz	r4,0(r2)		/* get memory at start adr  */
 	blr
 
-
 #if PPC_ABI == PPC_ABI_POWEROPEN
 	DESCRIPTOR (startup)
 #endif
-
 
 	.comm	environ,4,4

@@ -47,7 +47,6 @@ rtems_device_driver console_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
-
 /*  is_character_ready
  *
  *  This routine returns TRUE if a character is available.
@@ -116,7 +115,6 @@ void outbyte(
   if ( ch == '\n' )
     outbyte( '\r' );
 }
-
 
 /*
  *  Open entry point

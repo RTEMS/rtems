@@ -52,7 +52,6 @@
 #include <bsp/openpic.h>
 #define BSP_PIC_DO_EOI openpic_eoi(0)
 
-
 #ifndef ASM
 #define outport_byte(port,value) outb(value,port)
 #define outport_word(port,value) outw(value,port)
@@ -105,7 +104,6 @@ extern int BSP_connect_clock_handler (void);
  */
 extern unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet);
 
-
 /*
  *  TM27 stuff
  */
@@ -137,7 +135,6 @@ void Install_tm27_vector(void (*_handler)())
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
-
 #define Clear_tm27_intr() \
   do { \
     uint32_t   _clicks = 0xffffffff; \
@@ -153,7 +150,6 @@ void Install_tm27_vector(void (*_handler)())
     asm volatile( "mtmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
   } while (0)
 #endif
-
 
 #endif
 

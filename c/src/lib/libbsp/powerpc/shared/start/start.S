@@ -28,7 +28,6 @@
 	li	r10,0x63	;	\
 	sc
 
-
 	.text
 	.globl	__rtems_entry_point
 	.type	__rtems_entry_point,@function
@@ -146,7 +145,6 @@ MMUoff:
 	.globl	_return_to_ppcbug
 	.type	_return_to_ppcbug,@function
 
-
 _return_to_ppcbug:
 	mflr	r30
 	bl	MMUoff
@@ -197,6 +195,5 @@ flush_tlbs:
 	bgt	1b
 	sync
 	blr
-
 
 	.comm	environ,4,4

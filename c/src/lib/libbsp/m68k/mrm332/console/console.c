@@ -138,7 +138,6 @@ rtems_device_driver console_initialize(
    */
   rtems_termios_initialize();
 
-
   /*
    * register the SCI device name for termios
    * do this over in the sci driver init routine?
@@ -150,7 +149,6 @@ rtems_device_driver console_initialize(
   {
     rtems_fatal_error_occurred(status);
   }
-
 
   /*
    * Link the uart device to the console device

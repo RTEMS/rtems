@@ -109,7 +109,6 @@ hw_init_end:
         mov.l   copy_end_k, r1
         mov.l   copy_start_in_rom_k, r2
 
-
         ! if copy_from == copy_to do not copy anything
         cmp/eq  r0, r2
         bt      real_address
@@ -170,7 +169,6 @@ zero_bss:
         ! Set FPSCR register
         mov.l   initial_fpscr_k,r0
         lds     r0,fpscr
-
 
         ! call the mainline
         mov #0,r4		! argc

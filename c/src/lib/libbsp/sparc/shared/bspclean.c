@@ -32,6 +32,5 @@ void bsp_cleanup( void )
      * set %g1 to 1 to detect clean exit.
      */
 
-
   asm volatile( "mov 1, %g1; ta 0" );
 }

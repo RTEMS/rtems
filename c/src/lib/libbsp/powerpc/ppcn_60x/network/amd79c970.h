@@ -235,7 +235,6 @@ typedef volatile struct initblk {
 	uint32_t  	ib_tdra;	/* xmit ring desc addr */
 } initblk_t;
 
-
 /*
  * bits in mode register: allows alteration of the chips operating parameters
  */
@@ -285,7 +284,6 @@ typedef volatile struct rmde {
 
 	uint32_t  	align;
 } rmde_t;
-
 
 /*
  * bits in the flags field

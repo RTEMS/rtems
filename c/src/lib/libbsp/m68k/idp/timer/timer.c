@@ -25,7 +25,6 @@
  *  $Id$
  */
 
-
 #include <rtems.h>
 #include <bsp.h>
 #include <rtems/motorola/mc68230.h>

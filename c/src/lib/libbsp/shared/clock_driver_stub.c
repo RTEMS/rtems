@@ -14,7 +14,6 @@
 #define Clock_driver_support_install_isr( _new, _old ) \
   do { _old = 0; } while(0)
 
-
 #define Clock_driver_support_initialize_hardware()
 
 #define Clock_driver_support_shutdown_hardware()

@@ -87,6 +87,4 @@ typedef struct BoardInfoBlock_ {
 #define IFACE_RS232_TX4 0x0100;
 #define IFACE_RS232_RX4 0x0200;
 
-
-
 #endif /* __info_h__*/

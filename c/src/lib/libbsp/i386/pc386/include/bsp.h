@@ -38,7 +38,6 @@
 |  $Id$
 +--------------------------------------------------------------------------*/
 
-
 #ifndef __BSP_H_
 #define __BSP_H_
 
@@ -210,7 +209,6 @@ char          _IBMPC_inch_sleep (void);  /* from 'inch.c'   */
 void rtemsReboot(void);                  /* from 'exit.c'   */
 
 void Wait_X_ms(unsigned int timeToWait); /* from 'timer.c'  */
-
 
 /* Definitions for BSPConsolePort */
 #define BSP_CONSOLE_PORT_CONSOLE (-1)

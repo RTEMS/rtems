@@ -43,7 +43,6 @@
 #define EDMA_BLIM_MASK      0x0007
 #define EDMA_BLIM_8ACCESS    0x0003
 
-
 /* Ethernet Maximum Receive Buffer Length EMRBLR */
 #define EMRBLR_MASK          0x07FFE
 
@@ -104,7 +103,6 @@
 
 #define AR_CNTRL_MULTI_MASK      (AR_CNTRL_BIT_MULTI0 | AR_CNTRL_BIT_MULTI1)
 
-
 /* Ethernet buffer Status TX */
 #define BUF_STAT_CARRIER_LOST    0x0001
 #define BUF_STAT_UNDERRUN        0x0002
@@ -119,7 +117,6 @@
 #define BUF_STAT_WRAP            0x2000
 #define BUF_STAT_TO              0x4000
 #define BUF_STAT_READY          0x8000
-
 
 /* Ethernet buffer Status RX */
 #define BUF_STAT_COLLISION      0x0001
@@ -280,8 +277,6 @@ struct m68302_imp {
 
   uchar  reserved_3[0x74A];
 
-
-
 /****************** 68 EN 302 specific registers **********************/
 /** only available here if
     M68302_INTERNAL_RAM_BASE_ADD+0x1000=M68EN302_INTERNAL_RAM_BASE_ADD*/
@@ -302,7 +297,6 @@ struct m68302_imp {
   ushort  dba[2];           /* DRAM Bank Base Address Register */
 
   uchar  dram_reserved[0x7E8];
-
 
     /* Ethernet Controller Registers */
 
@@ -387,7 +381,6 @@ struct m68302_imp {
 #define M68302imp_sccm(i)            (M68302imp_ scc_regs[i].sccm)
 #define M68302imp_sccs(i)            (M68302imp_ scc_regs[i].sccs)
 
-
 /*----------------------------------------------------------------------------*/
 
 #define M68en302imp_mbc              (M68302imp_ mbc)
@@ -398,7 +391,6 @@ struct m68302_imp {
 #define M68en302imp_dcr              (M68302imp_ dcr)
 #define M68en302imp_drfrsh           (M68302imp_ drfrsh)
 #define M68en302imp_dba(i)           (M68302imp_ dba[i])
-
 
 #define M68en302imp_ecntrl           (M68302imp_ ecntrl)
 #define M68en302imp_edma             (M68302imp_ edma)
@@ -516,7 +508,6 @@ struct m68302_imp {
 #define M68302_CS_READ_ONLY      0x02 /* read only memory access */
 #define M68302_CS_WRITE_ONLY     0x22 /* write only memory access */
 #define M68302_CS_READ_AND_WRITE 0x00 /* read and write memory access */
-
 
 #define M68302_cs_install(cs_nb,base_add,range,nb_wait_state,read_write) \
   do { \

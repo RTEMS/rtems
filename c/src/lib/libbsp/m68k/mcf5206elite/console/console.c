@@ -21,7 +21,6 @@
 #include "mcf5206/mcf5206e.h"
 #include "mcf5206/mcfuart.h"
 
-
 /* Descriptor structures for two on-chip UART channels */
 static mcfuart uart[2];
 

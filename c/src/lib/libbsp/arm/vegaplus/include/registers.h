@@ -10,7 +10,6 @@
  *
  */
 
-
 #ifndef  __LMREGS_H__
 #define __LMREGS_H__
 
@@ -27,8 +26,6 @@
 #ifndef __asm__
 extern volatile unsigned long *Regs;        /* Chip registers        */
 #endif
-
-
 
 /******************************************************************************
  * RADIO CONTROLLER BLOCK                 0x0C00 - 0x0FFF                    *
@@ -70,7 +67,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define SYNTCNTL3       ((RC_BASE+0x78)/4)
 #define ADCPERIOD       ((RC_BASE+0x7C)/4)
 #define SYNTIOCNTL      ((RC_BASE+0x80)/4)   /* added 30/08/99 */
-
 
 /* modified 30/08/99 by LHT */
 #define SHAPE0          ((RC_BASE+0x100)/4)  /* previously 0x80 */
@@ -120,7 +116,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define TSTTXD          ((PLP_BASE+0x74)/4)
 #define TSTRXD          ((PLP_BASE+0x78)/4)
 #define PLPID           ((PLP_BASE+0x7C)/4)
-
 
 /** ENCRYPTION ENGINE                       0x1800 - 0x1BFF                   */
 
@@ -250,7 +245,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define RSCNT           ((UART_BASE+0x20)/4)
 /*PRODUCT_VERSION*/
 
-
 /** THUMB and INTERFACES BLOCK              0x3400 - 0x4FFF                   */
 
 #define TIM_BASE        0x3400
@@ -333,8 +327,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define SLEEPTIMER      ((TI_BASE+0x204)/4)
 #define SLEEPCNTL       ((TI_BASE+0x208)/4)
 
-
-
 /******************************************************************************
  * BIT MASKS for Chip registers
  ******************************************************************************
@@ -357,8 +349,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 /* TADCMD register                                                            */
 #define MSK_TADCMD      0x0F                /* Mask on TADCMD                 */
 #define CONTINUE        0x10
-
-
 
 /** RADIO CONTROLER BLOCK (RC3)                                               */
 
@@ -461,7 +451,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 /* RCCNTL register                                                            */
 #define RCCNTL_ENABLE   0x80
 
-
 /* ADCCNTL1 register                                                          */
 #define ADCSTART        0x80
 #define SCAN            0x40
@@ -473,8 +462,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define ADCOVER2        0x02
 #define ADCDWN1         0x04
 #define ADCDWN2         0x08
-
-
 
 /** PLP BLOCK                                                                 */
 
@@ -511,7 +498,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 
 #define MSK_PRES        0x0F                /* mask on PRES field             */
 
-
 /* PLPALIN register                                                           */
 #define SYNM            0x08
 #define BITSLIP         0x10
@@ -537,7 +523,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 /* Bit ENABLE already defined                                                 */
 #define EECNTL_ENABLE   0x80
 
-
 /** PAINT+ BLOCK                                                              */
 
 /* PAINTCNTL register                                                         */
@@ -554,7 +539,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define PADENABLE       0x2000
 #define FORCE13         0x4000
 #define PAINTENB        0x8000
-
 
 /* PAINTPLLCNTL register                                                      */
 #define MSK_MC          0x001F              /* Mask on MC field               */
@@ -649,7 +633,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define G726ENB0        0x0001
 #define G726ENB1        0x0003
 
-
 /** GENERAL REGISTERS BLOCK                                                   */
 
 /* RINGCNTL register                                                          */
@@ -730,7 +713,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define PWM0_PADENB     0x20
 #define MIRROR          0x10
 
-
 /* LCDEECNTL1 register                                                        */
 /* Bit ENABLE already defined                                                 */
 #define LCDEE_ENABLE   0x80
@@ -788,7 +770,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define CSMODE_16_WHWL  0x0002
 #define CSMODE_16_BHBL  0x0003
 
-
 /* MUXADCNTL register                                                         */
 #define MSK_AHOLD       0x0007
 #define MSK_ALEWIDTH    0x0070
@@ -815,10 +796,8 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define ADDRESS_1M      0x3000
 #define ADDRESS_2M      0x4000
 
-
 /* CSGCNTL register                                                           */
 #define CSSWITCH        0x0040
-
 
 /* SLEEPCNTL register                                                         */
 #define EXPIRED         0x01
@@ -828,11 +807,9 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define WDSTROKE        0x80
 #define WDFLAG          0x80                /* same bit                       */
 
-
 /* DCC register                                                               */
 /* bit ENABLE=0x80 already defined */
 #define DCC_ENABLE   0x80
-
 
 /* TIMERCNTL[0:1] register                                                    */
 /* bit ENABLE=0x80 already defined */
@@ -843,7 +820,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define TIMER_864kHz    0x0002
 #define TIMER_216kHz    0x0001
 #define TIMER_27kHz     0x0000
-
 
 /* INTMASKALL register                                                        */
 #define MASKIRQ         0x80
@@ -880,7 +856,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 /* INTHPAI register                                                           */
 #define AUTOACK         0x0080
 
-
 /******************************************************************************
  * Memory Mapping definition
  ******************************************************************************
@@ -898,7 +873,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 #define SHRAM_BASE_ADR  0x00080000          /* Base Address of Share Memory   */
 #define REGS_BASE_ADR   0x000F0000          /* Base Address of registers      */
 #define RADRAM_BASE_ADR 0x000F0000          /* Base Address of registers      */
-
 
 /******************************************************************************
  * Slot Control bloc
@@ -1067,10 +1041,6 @@ typedef LM_SCB *LM_SCB_P;                   /* pointer to Slot Control Block  */
 #define LM_WIN_OPEN 0x3F                    /* wide open window size          */
 #define MSK_WINSZ   0x3F
 
-
-
-
-
 /*
  * Some macros to mask the VEGA+ interrupt sources
  ******************************************************************************
@@ -1084,7 +1054,6 @@ typedef LM_SCB *LM_SCB_P;                   /* pointer to Slot Control Block  */
 #define LM_MaskSRX()           (LM_Regs[RSIER]   &= ~RX_INT_ENABLE)
 #define LM_MaskSTX()           (LM_Regs[RSIER]   &= ~TX_INT_ENABLE)
 #define LM_MaskUARTStatus()    (LM_Regs[RSIER]   &= ~LINE_STATUS_ENABLE)
-
 
 #define LM_MaskTMR0()          (LM_Regs[INTMASK] |= TMR0)
 #define LM_MaskTMR1()          (LM_Regs[INTMASK] |= TMR1)

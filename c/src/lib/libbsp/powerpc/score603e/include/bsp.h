@@ -97,7 +97,6 @@ extern "C" {
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
-
 #define Clear_tm27_intr() \
   do { \
     uint32_t   _clicks = 0xffffffff; \
@@ -113,7 +112,6 @@ extern "C" {
     asm volatile( "mtmsr %0 ;" : "=r" (_msr) : "r" (_msr) ); \
   } while (0)
 
-
 /* Constants */
 
 /*
@@ -127,7 +125,6 @@ extern "C" {
 /*
  * NOTE: Use the standard Clock driver entry
  */
-
 
 /*
  *  Information placed in the linkcmds file.
@@ -197,7 +194,6 @@ void BSP_fatal_return( void );
 void init_PCI();
 void instruction_cache_enable ();
 void data_cache_enable ();
-
 
 void initialize_PCI_bridge ();
 uint16_t         read_and_clear_irq ();

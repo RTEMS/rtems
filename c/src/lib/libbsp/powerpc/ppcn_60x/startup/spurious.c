@@ -38,8 +38,6 @@ rtems_isr bsp_spurious_handler(
 )
 {
 
-
-
   DEBUG_puts( "Spurious Trap" );
 
   switch ( trap ) {

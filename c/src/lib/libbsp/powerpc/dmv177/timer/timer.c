@@ -38,9 +38,7 @@ void Timer_initialize()
    *  Timer runs long and accurate enough not to require an interrupt.
    */
 
-
   Timer_driver_Start_time = PPC_Get_timebase_register();
-
 
 }
 

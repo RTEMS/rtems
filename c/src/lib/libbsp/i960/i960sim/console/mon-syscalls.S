@@ -11,8 +11,6 @@
 #define ENTRY(name)     \
         _ENTRY(_C_LABEL(name))
 
-
-
 ENTRY(_sys_exit)
 	lda	257,g13
 	calls	g13

@@ -213,7 +213,6 @@ typedef struct {
 
 #define LEON_MEMORY_CONFIGURATION_RAM_SIZE_MASK  0x00001E00
 
-
 /*
  *  The following defines the bits in the Timer Control Register.
  */
@@ -244,7 +243,6 @@ typedef struct {
 #define LEON_REG_UART_STATUS_PE   0x00000020 /* RX Parity Error */
 #define LEON_REG_UART_STATUS_FE   0x00000040 /* RX Framing Error */
 #define LEON_REG_UART_STATUS_ERR  0x00000078 /* Error Mask */
-
 
 /*
  *  The following defines the bits in the LEON UART Status Registers.

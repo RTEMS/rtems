@@ -58,6 +58,9 @@
  *
  * MODIFICATION/HISTORY:
  * $Log$
+ * Revision 1.3  2004/04/21 10:42:43  ralf
+ * Remove stray white spaces.
+ *
  * Revision 1.2  1999/12/13 21:21:31  joel
  * Warning removal patch from Philip A. Prindeville <philipp@zembu.com>.
  *
@@ -151,7 +154,6 @@ struct isa_device
   u_int	id_irq;		/* interrupt request */
 };
 
-
 struct ep_board
 {
   int epb_addr;	        /* address of this board */
@@ -161,7 +163,6 @@ struct ep_board
   u_short prod_id;		/* product ID */
   u_short res_cfg;		/* resource configuration */
 };
-
 
 /*
  * Ethernet software status per interface.
@@ -192,7 +193,6 @@ struct ep_softc
     short rx_overrunl;
 };
 
-
 /*  static unsigned long loopc; */
 static volatile unsigned long overrun;
 static volatile unsigned long resend;
@@ -216,7 +216,6 @@ static	char *ep_conn_type[] = {"UTP", "AUI", "???", "BNC"};
 #define ep_fset(f) (sc->stat|=(f))
 #define ep_frst(f) (sc->stat&=~(f))
 
-
 /* forward declarations for functions */
 static int ep_attach( struct ep_softc *sc );
 static int ep_isa_probe( struct isa_device *is );
@@ -230,7 +229,6 @@ static void ep_intr( struct ep_softc *sc );
 
 /* external functions */
 extern void Wait_X_ms( unsigned int timeToWait );  /* timer.c ??? */
-
 
 /**********************************************************************************
  *
@@ -285,7 +283,6 @@ static __inline void outsb( unsigned short io_addr, unsigned char *out_data, int
    }
 }
 
-
 /**********************************************************************************
  *
  * DESCRIPTION: Read a buffer of data from an I/O port. The data is read as 16 bits
@@ -338,7 +335,6 @@ static __inline void insb( unsigned short io_addr, unsigned char *in_data, int l
    }
 }
 
-
 /**********************************************************************************
  *
  * DESCRIPTION: Writes a word to the I/O port.
@@ -353,7 +349,6 @@ static __inline void outw( unsigned short io_addr, unsigned short out_data )
 {
   outport_word( io_addr, out_data );
 }
-
 
 /**********************************************************************************
  *
@@ -395,7 +390,6 @@ static __inline unsigned char inb( unsigned short io_addr )
   return in_data;
 }
 
-
 /**********************************************************************************
  *
  * DESCRIPTION:
@@ -422,7 +416,6 @@ static int get_eeprom_data( int id_port, int offset )
 	    data = (data << 1) | (inw(id_port) & 1);
     return( data );
 }
-
 
 /**********************************************************************************
  *
@@ -464,7 +457,6 @@ u_short get_e(  struct ep_softc *sc, int offset )
     return( inw( BASE + EP_W0_EEPROM_DATA ) );
 }
 
-
 /**********************************************************************************
  *
  * DESCRIPTION:
@@ -484,7 +476,6 @@ static rtems_isr ap_interrupt_handler( rtems_vector_number v )
   outw( BASE + EP_COMMAND, SET_INTR_MASK ); 	/* disable all Ints */
   rtems_event_send( sc->rxDaemonTid, INTERRUPT_EVENT );
 }
-
 
 /**********************************************************************************
  *
@@ -509,7 +500,6 @@ static int _3c509_IsOn(const rtems_irq_connect_data* irq)
 {
   return BSP_irq_enabled_at_i8259s (irq->name);
 }
-
 
 /**********************************************************************************
  *
@@ -568,7 +558,6 @@ static void _3c509_rxDaemon (void *arg)
   printf ("3C509: RX Daemon is finishing.\n");
 }
 
-
 /**********************************************************************************
  *
  * DESCRIPTION: Driver transmit daemon
@@ -600,7 +589,6 @@ static void _3c509_txDaemon (void *arg)
 	}
    printf ("3C509: TX Daemon is finishing.\n");
 }
-
 
 /**********************************************************************************
  *
@@ -679,7 +667,6 @@ static void _3c509_stop (struct ep_softc *sc)
   outw(BASE + EP_COMMAND, SET_INTR_MASK);
   outw(BASE + EP_COMMAND, SET_RX_FILTER);
 }
-
 
 /**********************************************************************************
  *
@@ -857,7 +844,6 @@ int rtems_3c509_driver_attach (struct rtems_bsdnet_ifconfig *config )
 	return 1;
 }
 
-
 /**********************************************************************************
  *
  * DESCRIPTION:
@@ -971,8 +957,6 @@ static struct ep_board *ep_look_for_board_at( struct isa_device *is )
     }
 }
 
-
-
 /**********************************************************************************
  *
  * DESCRIPTION:
@@ -1038,8 +1022,6 @@ static int ep_isa_probe( struct isa_device *is )
 
     return (EP_IOSIZE);	 /* 16 bytes of I/O space used. */
 }
-
-
 
 /**********************************************************************************
  *
@@ -1126,7 +1108,6 @@ static int ep_attach( struct ep_softc *sc )
     sc->top = sc->mcur = 0;
     return 0;
 }
-
 
 /**********************************************************************************
  *
@@ -1255,7 +1236,6 @@ static void epinit( struct ep_softc *sc )
     ifp->if_flags |= IFF_RUNNING;
     ifp->if_flags &= ~IFF_OACTIVE;	/* just in case */
 
-
     sc->rx_no_first = sc->rx_no_mbuf =
 	sc->rx_bpf_disc = sc->rx_overrunf = sc->rx_overrunl =
 	sc->tx_underrun = 0;
@@ -1277,7 +1257,6 @@ static void epinit( struct ep_softc *sc )
 
     GO_WINDOW(1);
 }
-
 
 static const char padmap[] = {0, 3, 2, 1};
 
@@ -1385,8 +1364,6 @@ readcheck:
     }
     goto startagain;
 }
-
-
 
 /**********************************************************************************
  *
@@ -1529,8 +1506,6 @@ out:
     while (inw(BASE + EP_STATUS) & S_COMMAND_IN_PROGRESS) ;
     outw(BASE + EP_COMMAND, SET_RX_EARLY_THRESH | RX_INIT_EARLY_THRESH);
 }
-
-
 
 /**********************************************************************************
  *

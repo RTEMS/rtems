@@ -144,7 +144,6 @@ extern i82527_t canbus0;
 extern i82527_t canbus1;
 extern i82527_t canbus2;
 
-
 rtems_device_driver canbus_initialize(rtems_device_major_number,
 				      rtems_device_minor_number,
 				      void *);
@@ -163,7 +162,6 @@ rtems_device_driver canbus_write(rtems_device_major_number,
 rtems_device_driver canbus_control(rtems_device_major_number,
 				   rtems_device_minor_number,
 				   void *);
-
 
 #define CANBUS_DRIVER_TABLE_ENTRY \
   { canbus_initialize, canbus_open, canbus_close, \

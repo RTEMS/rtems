@@ -88,7 +88,6 @@ void bsp_pretasking_hook(void)
 
     bsp_libc_init((void *)heap_start, Heap_size, 1024 * 1024);
 
-
 #ifdef RTEMS_DEBUG
     rtems_debug_enable( RTEMS_DEBUG_ALL_MASK );
 #endif

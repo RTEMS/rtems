@@ -55,7 +55,6 @@
 #include <stackchk.h>
 #endif
 
-
 SPR_RW(SPRG0)
 SPR_RW(SPRG1)
 
@@ -72,7 +71,6 @@ rtems_configuration_table  BSP_Configuration;
 rtems_cpu_table Cpu_table;
 
 char *rtems_progname;
-
 
 /*
  *  Use the shared implementations of the following routines.
@@ -159,13 +157,7 @@ void _BSP_Uart2_disable()
 
 }
 
-
-
-
-
-
 extern void m8260_console_reserve_resources(rtems_configuration_table *);
-
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -199,8 +191,6 @@ bsp_pretasking_hook(void)
 
     bsp_libc_init( &_HeapStart, &_HeapEnd - &_HeapStart, 0 );
 
-
-
 #ifdef STACK_CHECKER_ON
   /*
    *  Initialize the stack bounds checker
@@ -215,7 +205,6 @@ bsp_pretasking_hook(void)
 #endif
 }
 
-
 void bsp_start(void)
 {
   extern void *_WorkspaceBase;
@@ -223,13 +212,11 @@ void bsp_start(void)
   ppc_cpu_revision_t myCpuRevision;
   register unsigned char* intrStack;
 
-
   /* Set MPC8260ADS board LEDS and Uart enable lines */
   _BSP_GPLED0_off();
   _BSP_GPLED1_off();
   _BSP_Uart1_enable();
   _BSP_Uart2_enable();
-
 
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
@@ -237,8 +224,6 @@ void bsp_start(void)
    */
   myCpu 	= get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
-
-
 
   cpu_init();
 
@@ -293,7 +278,6 @@ void bsp_start(void)
 
   BSP_Configuration.work_space_start = (void *)&_WorkspaceBase;
 
-
 /*
   BSP_Configuration.microseconds_per_tick  = 1000;
 */
@@ -317,9 +301,6 @@ void bsp_start(void)
   Cpu_table.timer_least_valid 	   = 3;
   Cpu_table.clock_speed 	   = 40000000;
 
-
-
-
 #ifdef REV_0_2
   /* set up some board specific registers */
   m8260.siumcr &= 0xF3FFFFFF;		/* set TBEN ** BUG FIX ** */
@@ -331,12 +312,10 @@ void bsp_start(void)
   m8260.brgc1 = M8260_BRG_EN + (uint32_t)(((uint16_t)((40016384)/(32768)) - 1) << 1) + 0;
 */
 
-
   /*
    * Initalize RTEMS IRQ system
    */
   BSP_rtems_irq_mng_init(0);
-
 
   /*
    * Call this in case we use TERMIOS for console I/O

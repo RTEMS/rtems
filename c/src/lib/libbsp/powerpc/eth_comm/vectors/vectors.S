@@ -8,12 +8,9 @@
  * $Id$
  */
 
-
-
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <bsp/vectors.h>
-
 
 #define SYNC \
 	sync; \

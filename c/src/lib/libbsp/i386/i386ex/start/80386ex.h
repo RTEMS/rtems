@@ -47,7 +47,6 @@
 #define OCW3MDOS	  0x0020
 #define OCW3SDOS	  0x00A0
 
-
 /* CONFIGURATION Registers */
 #define DMACFG	  0xF830
 #define INTCFG	  0xF832

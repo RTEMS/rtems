@@ -19,11 +19,9 @@
  *  $Id$
  */
 
-
 #include <rtems.h>
 #include <bsp.h>
 #include <rtems/m68k/m68302.h>
-
 
 #define TMR2_VAL 0x071b	/* Timer mode register
 			 * (section 3.5.2.1 in 68302 manual)
@@ -109,7 +107,6 @@ int Read_timer( void )
 
   return (total - AVG_OVERHEAD) >> 1;
 }
-
 
 /*
  *  Empty function call used in loops to measure basic cost of looping

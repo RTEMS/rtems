@@ -103,7 +103,6 @@ extern "C" {
 #define delay( microseconds ) CPU_delay(microseconds)
 #define sh_delay( microseconds ) CPU_delay( microseconds )
 
-
 /*
  * Defined in the linker script 'linkcmds'
  */
@@ -115,7 +114,6 @@ extern uint32_t         WorkSpaceEnd ;
 
 extern void *CPU_Interrupt_stack_low ;
 extern void *CPU_Interrupt_stack_high ;
-
 
 /* miscellaneous stuff assumed to exist */
 
@@ -137,7 +135,6 @@ extern void bsp_cleanup( void );
 #define RAMDISK_DRIVER_TABLE_ENTRY \
   { ramdisk_initialize, ramdisk_open, ramdisk_close, \
         ramdisk_read, ramdisk_write, ramdisk_control }
-
 
 /*
  * NOTE: Use the standard Clock driver entry

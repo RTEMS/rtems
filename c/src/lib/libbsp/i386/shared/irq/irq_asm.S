@@ -130,7 +130,6 @@ nested:
 	movb	  ah, al
 	outb	  $PIC_SLAVE_IMR_IO_PORT
 
-
         decl      SYM (_ISR_Nest_level)     /* one less ISR nest level */
                                             /* If interrupts are nested, */
                                             /*   then dispatching is disabled */
@@ -148,7 +147,6 @@ nested:
                                             /* signals sent to Run_thread */
                                             /*   while in interrupt handler? */
         je        .exit                     /* No, exit */
-
 
 .bframe:
         movl      $0, SYM (_ISR_Signals_to_thread_executing)
@@ -202,7 +200,6 @@ nested:
 	popl	ecx
 	popl	eax
 	iret
-
 
 #define DISTINCT_INTERRUPT_ENTRY(_vector) \
         .p2align 4                         ; \

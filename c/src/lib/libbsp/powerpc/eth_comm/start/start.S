@@ -45,8 +45,6 @@
  * can tell. It should still be in the papyrus BSP. -Jay
  */
 
-
-
 /*
  * On entry to download_entry, R3 will hold a pointer to a Board Info
  *  Block (boardinfo_t). This should be copied as soon as possible
@@ -80,7 +78,6 @@ text_addr:
 PUBLIC_VAR (text_length)
 text_length:
         .long   text.size
-
 
 /*
  * Initialization code

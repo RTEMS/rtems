@@ -78,7 +78,6 @@ int Read_timer()
   return (total-AVG_OVERHEAD) >> 1;
 }
 
-
 rtems_status_code Empty_function( void )
 {
   return RTEMS_SUCCESSFUL;

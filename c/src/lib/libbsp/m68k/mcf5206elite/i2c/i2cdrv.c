@@ -79,7 +79,6 @@ static int i2cdrv_bus_clock_div_current;
 /* Forward function declaration */
 static void i2cdrv_unload(void);
 
-
 /* i2cdrv_done --
  *     Callback function which is called from MBus low-level driver when
  *     transfer is finished.
@@ -189,7 +188,6 @@ i2c_transfer(i2c_bus_number bus, int nmsg, i2c_message *msg,
     return RTEMS_SUCCESSFUL;
 }
 
-
 /* i2cdrv_initialize --
  *     I2C driver initialization (rtems I/O driver primitive)
  */
@@ -248,7 +246,6 @@ i2c_select_clock_rate(i2c_bus_number bus, int bps)
     i2cdrv_bus_clock_div[bus] = div;
     return RTEMS_SUCCESSFUL;
 }
-
 
 /* i2c_poll --
  *     Poll I2C bus controller for events and hanle it. This function is

@@ -55,7 +55,6 @@ int uti596_attach(struct rtems_bsdnet_ifconfig * pConfig, int attaching );
  */
 #define GROUP_BASE_ADDRESS 0x0000CC00
 
-
 /*
  *  Representation of the VMEchip2 LCSR.
  *  Could be made more detailed.
@@ -244,7 +243,6 @@ typedef volatile struct nvram_config_ {
 
 #endif
 
-
 /*
  *  Flag to indicate if J1-4 is on (and parameters should be
  *  sought in User Area NVRAM)
@@ -256,7 +254,6 @@ typedef volatile struct nvram_config_ {
 #else
 #define NVRAM_CONFIGURE 0
 #endif
-
 
 #ifdef __cplusplus
 }

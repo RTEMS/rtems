@@ -131,7 +131,6 @@ void page_table_init(
 	  :: "d" (0), "d" (dtt0), "d" (0xFF00C040), "d" (cacr));
 }
 
-
 /*
  *  page_table_teardown
  *

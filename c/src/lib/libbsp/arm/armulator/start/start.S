@@ -64,7 +64,6 @@ _mainCRTStartup:
 	ldr	a3, .LC2
 	sub	a3, a3, a1		/* Third arg: length of block */
 
-
 #ifdef __thumb__		/* Enter Thumb mode.... */
 
 	add	a4, pc, #1	/* Get the address of the Thumb block */

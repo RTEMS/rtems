@@ -12,13 +12,11 @@
  *  $Id$
  */
 
-
 #include <bsp.h>
 #include <irq.h>
 #include <registers.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/apiext.h>
-
 
 /*
  * This function check that the value given for the irq line
@@ -102,8 +100,6 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
 
     return 1;
 }
-
-
 
 void _ThreadProcessSignalsFromIrq (CPU_Exception_frame* ctx)
 {

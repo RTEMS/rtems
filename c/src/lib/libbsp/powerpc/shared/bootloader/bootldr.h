@@ -173,7 +173,6 @@ extern void * codemove(void *, const void *, size_t, unsigned long);
 
 #define isa_io_base (bd->io_base)
 
-
 void * __palloc(u_long, int);
 void  pfree(void *);
 

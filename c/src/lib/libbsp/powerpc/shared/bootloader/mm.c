@@ -129,7 +129,6 @@ void print_maps(map *, const char *);
  * designed to properly handle MMU interrupts to fill the hash table.
  */
 
-
 void _handler(int vec, ctxt *p) {
 	map *area;
 	struct _mm_private *mm = (struct _mm_private *) bd->mm_private;
@@ -260,7 +259,6 @@ int insert_map(map **head, map *p) {
 	}
 	return 0;
 }
-
 
 /* Removal from linked list */
 
@@ -420,7 +418,6 @@ MEM_MAP seg_fix[] = {
     { 0x0500, 0x81000, 0x3E800 },
     { 0x0480, 0x80800, 0x00800 },
     { 0x0440, 0x80000, 0x00800 } };
-
 
 /* The Motorola NT firmware does not set up all required info in the residual
  * data. This routine changes some things in a way that the bootloader and

@@ -107,7 +107,6 @@ rtems_device_driver console_open(
     0                            /* outputUsesInterrupts */
   };
 
-
   assert( minor <= 1 );
   if ( minor > 2 )
     return RTEMS_INVALID_NUMBER;

@@ -19,7 +19,6 @@
  *  $Id$
  */
 
-
 #include <bsp.h>
 
 rtems_boolean Timer_driver_Find_average_overhead;
@@ -63,7 +62,6 @@ int Read_timer( void )
 
   return (total - AVG_OVERHEAD);
 }
-
 
 /*
  *  Empty function call used in loops to measure basic cost of looping

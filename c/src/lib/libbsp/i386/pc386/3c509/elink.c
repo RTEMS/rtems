@@ -37,7 +37,6 @@
 
 #include "elink.h"
 
-
 extern void outb( unsigned short io_addr, unsigned char out_data );
 
 /*

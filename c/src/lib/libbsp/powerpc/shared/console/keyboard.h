@@ -308,7 +308,6 @@
 #define K_F245		K(KT_FN,254)
 #define K_UNDO		K(KT_FN,255)
 
-
 #define K_HOLE		K(KT_SPEC,0)
 #define K_ENTER		K(KT_SPEC,1)
 #define K_SH_REGS	K(KT_SPEC,2)

@@ -21,7 +21,6 @@
 #ifndef LIBBSP_POWERPC_MCP750_IRQ_IRQ_H
 #define LIBBSP_POWERPC_MCP750_IRQ_IRQ_H
 
-
 /*
  * 8259 edge/level control definitions at VIA
  */
@@ -62,7 +61,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 /*
  * Symblolic IRQ names and related definitions.
@@ -127,9 +125,6 @@ typedef enum {
   BSP_DECREMENTER		=	BSP_PROCESSOR_IRQ_LOWEST_OFFSET
 
 }rtems_irq_symbolic_name;
-
-
-
 
 /*
  * Type definition for RTEMS managed interrupts
@@ -212,9 +207,6 @@ typedef struct {
    */
     rtems_irq_prio*		irqPrioTbl;
 }rtems_irq_global_settings;
-
-
-
 
 /*-------------------------------------------------------------------------+
 | Function Prototypes.

@@ -27,7 +27,6 @@
 
 /*** Board resources allocation ***/
 
-
 /*
  * To achieve some compatibility with dBUG monitor, we use the same
  * memory resources allocation as it is used in dBUG.

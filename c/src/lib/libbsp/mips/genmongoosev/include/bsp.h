@@ -28,7 +28,6 @@ extern "C" {
 #include <rtems/clockdrv.h>
 #include <libcpu/mongoose-v.h>
 
-
 #ifndef CPU_CLOCK_RATE
 #define CLOCK_RATE	12000000
 #endif
@@ -36,14 +35,11 @@ extern "C" {
 #define CPU_CLOCK_RATE_HZ	CLOCK_RATE
 #define CPU_CLOCK_RATE_MHZ	(CLOCK_RATE/1000000)
 
-
 /*
  * Useful defines set here so we can avoid duplicating them all over
  * creation.
  *
  */
-
-
 
 /*
  * assertSoftwareInt defined in vectorisrs.c the prototype is here so
@@ -51,10 +47,6 @@ extern "C" {
  *  */
 
 extern void assertSoftwareInterrupt(uint32_t);
-
-
-
-
 
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
@@ -74,9 +66,7 @@ extern void assertSoftwareInterrupt(uint32_t);
  *
  */
 
-
 #define CLOCK_VECTOR	MONGOOSEV_IRQ_TIMER1
-
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
@@ -84,8 +74,6 @@ extern void assertSoftwareInterrupt(uint32_t);
 
 #define Install_tm27_vector( handler ) \
     (void) set_vector( handler, MONGOOSEV_IRQ_SOFTWARE_1, 1 );
-
-
 
 #define Cause_tm27_intr()   assertSoftwareInterrupt(0);
 

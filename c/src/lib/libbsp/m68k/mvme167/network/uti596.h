@@ -101,7 +101,6 @@ struct enet_statistics{
 #define I596_NULL ( ( void * ) 0xffffffff)
 #define UTI_596_END_OF_FRAME 0x8000
 
-
 struct i596_tbd;  /* necessary forward declaration */
 
 enum commands {

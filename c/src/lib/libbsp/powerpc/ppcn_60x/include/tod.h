@@ -13,7 +13,6 @@
  *  $Id$
  */
 
-
 #ifndef TOD_H
 #define TOD_H
 

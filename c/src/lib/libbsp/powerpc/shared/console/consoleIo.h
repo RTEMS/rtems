@@ -13,7 +13,6 @@
 #ifndef __CONSOLE_IO_H
 #define __CONSOLE_IO_H
 
-
 typedef enum {
   CONSOLE_LOG 		= 1,
   CONSOLE_SERIAL       	= 2,
@@ -37,6 +36,5 @@ extern void debug_putc_onlcr(const char c);
 extern int debug_getc(void);
 extern int debug_tstc(void);
 int kbdreset(void);
-
 
 #endif

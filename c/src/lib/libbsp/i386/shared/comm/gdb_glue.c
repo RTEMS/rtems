@@ -45,7 +45,6 @@ void init_remote_gdb( void )
   /* Init GDB stub itself */
   set_debug_traps();
 
-
   printf( "Remote GDB: waiting remote connection....\n" );
 
   /*

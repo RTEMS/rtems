@@ -90,7 +90,6 @@
 .set	Open_srr0,152
 .set	Open_srr1,156
 
-
 /*
  *  This code makes several assumptions for processing efficiency
  *  *  General purpose registers are continuous in the image, beginning with

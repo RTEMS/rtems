@@ -84,7 +84,6 @@ static void _BSP_null_char( char c ) {return;}
 
 BSP_output_char_function_type BSP_output_char = _BSP_null_char;
 
-
 /*
  *  do_poll_read
  *
@@ -125,7 +124,6 @@ static rtems_status_code do_poll_read(
 
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  *  do_poll_write
@@ -168,7 +166,6 @@ static rtems_status_code do_poll_write(
   return RTEMS_SUCCESSFUL;
 }
 
-
 /*
  *  Print functions prototyped in bspIo.h
  */
@@ -186,7 +183,6 @@ static void _BSP_output_char( char c )
   if( c == '\n' )
     m5xx_uart_pollWrite( PRINTK_MINOR, &cr, 1 );
 }
-
 
 /*
  ***************
@@ -236,7 +232,6 @@ rtems_device_driver console_initialize(
 
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  * Open the device
@@ -296,7 +291,6 @@ rtems_device_driver console_open(
   return sc;
 }
 
-
 /*
  * Close the device
  */
@@ -315,7 +309,6 @@ rtems_device_driver console_close(
     return RTEMS_SUCCESSFUL;
   #endif
 }
-
 
 /*
  * Read from the device
@@ -336,7 +329,6 @@ rtems_device_driver console_read(
   #endif
 }
 
-
 /*
  * Write to the device
  */
@@ -355,7 +347,6 @@ rtems_device_driver console_write(
     return do_poll_write( major, minor, arg );
   #endif
 }
-
 
 /*
  * Handle ioctl request.

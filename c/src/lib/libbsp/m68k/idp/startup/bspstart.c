@@ -78,7 +78,6 @@ void bsp_start( void )
   for ( index=2 ; index<=255 ; index++ )
     M68Kvec[ index ] = monitors_vector_table[ 32 ];
 
-
   M68Kvec[  2 ] = monitors_vector_table[  2 ];   /* bus error vector */
   M68Kvec[  4 ] = monitors_vector_table[  4 ];   /* breakpoints vector */
   M68Kvec[  9 ] = monitors_vector_table[  9 ];   /* trace vector */

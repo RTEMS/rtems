@@ -174,7 +174,6 @@ IMPORT	BOOL sysICset0;		/* inst cache set 0 present ? */
 #define LR33300_DC_SIZE	0x800		/* 33300 Data cache = 2Kbytes */
 #define LR33310_DC_SIZE	0x1000		/* 33310 Data cache = 4Kbytes */
 
-
 #ifdef __cplusplus
 }
 #endif

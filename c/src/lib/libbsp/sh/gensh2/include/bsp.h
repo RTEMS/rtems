@@ -110,7 +110,6 @@ extern "C" {
 #define rtems_bsp_delay( microseconds ) CPU_delay(microseconds)
 #define sh_delay( microseconds ) CPU_delay( microseconds )
 
-
 /*
  * Defined in the linker script 'linkcmds'
  */
@@ -122,7 +121,6 @@ extern uint32_t         WorkSpaceEnd ;
 
 extern void *CPU_Interrupt_stack_low ;
 extern void *CPU_Interrupt_stack_high ;
-
 
 /* miscellaneous stuff assumed to exist */
 

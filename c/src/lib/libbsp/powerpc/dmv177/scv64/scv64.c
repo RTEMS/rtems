@@ -95,7 +95,6 @@ typedef struct {
  */
 #define AUTOVECTOR_5  0x80
 
-
 /*
  * Set the registers pointer to the base address of the SCV64
  */

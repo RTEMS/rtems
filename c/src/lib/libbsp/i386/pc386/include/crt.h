@@ -25,7 +25,6 @@
 	/* In color	 */
 #define V_COLOR	0xb8000
 
-
 /*
  * Video Option Byte location. It must be maintained
  * by the BIOS.
@@ -71,7 +70,6 @@
 #define BLINK           0x8	/* Mask used to determine blinking */
 #define OFF             0
 #define ON              1
-
 
 /*
  * CRT Controller register offset definitions

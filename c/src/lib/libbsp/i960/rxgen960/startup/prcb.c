@@ -38,7 +38,6 @@
    */
 #define REG_CACHE_CONFIG        0x000
 
-
 struct PRCB ram_prcb = {
   & faultTbl[0],                        /* Fault Table Base */
   & controlTbl[0],                  /* Control Table Base */

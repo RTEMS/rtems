@@ -54,7 +54,6 @@ SYM (start):
         mov.l   _vbr_base_k,r0
         ldc     r0,vbr
 
-
 #ifdef	START_HW_INIT	/* from $RTEMS_BSP.cfg */
 	! Initialize minimal hardware
 	mov.l	hw_init_k, r0
@@ -111,7 +110,6 @@ ___trap34:
 !	.align	2
 !perrno:
 !	.long	_errno
-
 
 	END_CODE
 

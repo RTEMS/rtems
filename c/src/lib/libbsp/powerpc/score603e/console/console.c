@@ -158,8 +158,6 @@ rtems_device_driver console_control(
   return rtems_termios_ioctl (arg);
 }
 
-
-
 /*
  *  Interrupt driven console IO
  */
@@ -223,7 +221,6 @@ void console_initialize_interrupts( void )
   for (i=0; i < NUM_Z85C30_CHIPS; i++)
     set_vector( console_isr, Chips_85C30[i].vector, 1 );
 
-
   atexit( console_exit );
 
 }
@@ -234,7 +231,6 @@ void console_outbyte_interrupts(
 
 /* XXXXXX */
 #endif
-
 
 /* PAGE
  *
@@ -268,7 +264,6 @@ rtems_device_driver console_initialize(
   /*
    *  Initialize Hardware
    */
-
 
 /*
  * INITIALIZE_COM_PORTS is defined in the linker script.  If it is
@@ -403,7 +398,6 @@ rtems_device_driver console_open(
   };
 #endif
 
-
   /*
    * Verify the minor number is valid.
    */
@@ -427,7 +421,6 @@ rtems_device_driver console_open(
 
   return sc;
 }
-
 
 #if (CONSOLE_USE_INTERRUPTS)
 

@@ -53,7 +53,6 @@ extern int rtems_leon_open_eth_driver_attach (struct rtems_bsdnet_ifconfig *conf
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"open_eth1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_leon_open_eth_driver_attach
 
-
 /*
  *  Define the time limits for RTEMS Test Suite test durations.
  *  Long test and short test duration limits are provided.  These
@@ -164,7 +163,6 @@ extern int   end;        /* last address in the program */
 /*
  * NOTE: Use the standard Clock driver entry
  */
-
 
 /* miscellaneous stuff assumed to exist */
 

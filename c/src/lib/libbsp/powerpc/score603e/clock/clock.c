@@ -56,7 +56,6 @@ rtems_device_minor_number rtems_clock_minor;
     asm volatile( "mtdec %0" : "=r" ((_clicks)) : "r" ((_clicks)) ); \
   } while (0)
 
-
 /*
  *  Clock_isr
  *

@@ -224,7 +224,6 @@ PROC (_CPU_Context_restore_fp):
 #endif
 	blr
 
-
 /*  _CPU_Context_switch
  *
  *  This routine performs a normal non-FP context switch.

@@ -15,7 +15,6 @@
  *  $Id$
  */
 
-
 void* memset(void *p, int c, unsigned int n)
 {
   char *q =p;

@@ -10,7 +10,6 @@
  *
  */
 
-
 #ifndef  __REGS_H__
 #define __REGS_H__
 
@@ -22,8 +21,6 @@
 extern volatile unsigned long *Regs;        /* Chip registers        */
 #endif
 
-
-
 /*
  * Here must be "defined" each register, to use with Regs as
  * LM_Regs[REGISTER1] = value
@@ -31,7 +28,6 @@ extern volatile unsigned long *Regs;        /* Chip registers        */
 
 #define	REGISTER1      1
 #define REGISTER2      2
-
 
 /*
  * define for UART registers to be able

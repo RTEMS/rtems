@@ -243,7 +243,6 @@ rtems_device_driver sh_gdbsci_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
-
 /*
  *  Open entry point
  */

@@ -60,7 +60,6 @@ RTEMS_BSPOPTS_HELP([CONSOLE_MINOR],
  SMC2_MINOR, SCC2_MINOR, SCC3_MINOR, or SCC4_MINOR. 
  Determines which device will be registered as /dev/console.])
 
-
 RTEMS_BSPOPTS_SET([UARTS_IO_MODE],[*],[0])
 RTEMS_BSPOPTS_HELP([UARTS_IO_MODE],
 [(BSP--console driver)
@@ -74,7 +73,6 @@ RTEMS_BSPOPTS_HELP([UARTS_IO_MODE],
  must be set to SMC1_MINOR. This is a deficiency of the firmware: it
  does not perform serial I/O on any port other than its default debug
  port, which must be SMC1.])
-
 
 RTEMS_BSPOPTS_SET([PRINTK_MINOR],[mbx860_005b],[SMC1_MINOR])
 RTEMS_BSPOPTS_SET([PRINTK_MINOR],[*],[SMC2_MINOR])
@@ -97,7 +95,6 @@ RTEMS_BSPOPTS_HELP([PRINTK_IO_MODE],
  This is a deficiency of the firmware: it does not perform serial I/O
  on any port other than its default debug port, which must be SMC1.
  Printk always uses polled output.])
-
 
 RTEMS_BSPOPTS_SET([EPPCBUG_SMC1],[mbx860_005b],[])
 RTEMS_BSPOPTS_SET([EPPCBUG_SMC1],[*],[1])

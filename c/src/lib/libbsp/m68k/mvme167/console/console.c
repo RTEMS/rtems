@@ -157,11 +157,9 @@ int cd2401_drainOutput( int minor );
 int _167Bug_pollRead( int minor );
 int _167Bug_pollWrite( int minor, const char *buf, int len );
 
-
 /* Printk function */
 static void _BSP_output_char( char c );
 BSP_output_char_function_type BSP_output_char = _BSP_output_char;
-
 
 /* Channel info */
 /* static */ volatile struct {
@@ -188,18 +186,15 @@ BSP_output_char_function_type BSP_output_char = _BSP_output_char;
  */
 uint8_t         Init_count;
 
-
 /* Record previous handlers */
 rtems_isr_entry Prev_re_isr;        /* Previous rx exception isr */
 rtems_isr_entry Prev_rx_isr;        /* Previous rx isr */
 rtems_isr_entry Prev_tx_isr;        /* Previous tx isr */
 rtems_isr_entry Prev_modem_isr;     /* Previous modem/timer isr */
 
-
 /* Define the following symbol to trace the calls to this driver */
 /* #define CD2401_RECORD_DEBUG_INFO */
 #include "console-recording.h"
-
 
 /*
  *  Utility functions.
@@ -235,7 +230,6 @@ rtems_isr_entry Prev_modem_isr;     /* Previous modem/timer isr */
 
   CD2401_RECORD_DELAY_INFO(( start_ticks, end_ticks, current_ticks, i ));
 }
-
 
 /*
  *  cd2401_chan_cmd
@@ -273,7 +267,6 @@ void cd2401_chan_cmd(
     rtems_fatal_error_occurred( RTEMS_INVALID_NUMBER );
   }
 }
-
 
 /*
  *  cd2401_bitrate_divisor
@@ -313,7 +306,6 @@ uint16_t         cd2401_bitrate_divisor(
   *bitrate = clkrate / (1 << ((clksource >> 7)+3)) / (divisor+1);
   return( clksource | divisor );
 }
-
 
 /*
  *  cd2401_initialize
@@ -401,7 +393,6 @@ void cd2401_initialize( void )
   cd2401->tpr  = 0x0A;          /* Same value as 167Bug */
 }
 
-
 /*
  *  cd2401_interrupts_initialize
  *
@@ -445,7 +436,6 @@ void cd2401_interrupts_initialize(
   }
 }
 
-
 /* ISRs */
 
 /*
@@ -480,7 +470,6 @@ rtems_isr cd2401_modem_isr(
                                           CD2401_Channel_Info[ch].spur_dev,
                                           CD2401_Channel_Info[ch].spur_cnt ));
 }
-
 
 /*
  *  cd2401_re_isr
@@ -518,7 +507,6 @@ rtems_isr cd2401_re_isr(
                                        CD2401_Channel_Info[ch].spur_dev,
                                        CD2401_Channel_Info[ch].spur_cnt ));
 }
-
 
 /*
  *  cd2401_rx_isr
@@ -566,7 +554,6 @@ rtems_isr cd2401_rx_isr(
                                          CD2401_Channel_Info[ch].spur_cnt ));
   }
 }
-
 
 /*
  *  cd2401_tx_isr
@@ -664,7 +651,6 @@ rtems_isr cd2401_tx_isr(
   }
 }
 
-
 /*
  *  termios callbacks
  */
@@ -751,7 +737,6 @@ int cd2401_firstOpen(
   return RTEMS_SUCCESSFUL;
 }
 
-
 /*
  * cd2401_lastClose
  *
@@ -793,7 +778,6 @@ int cd2401_lastClose(
   /* return something */
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  *  cd2401_setAttributes
@@ -1083,7 +1067,6 @@ int cd2401_setAttributes(
   return RTEMS_SUCCESSFUL;
 }
 
-
 /*
  *  cd2401_startRemoreTx
  *
@@ -1123,7 +1106,6 @@ int cd2401_startRemoteTx(
   /* Return something */
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  *  cd2401_stopRemoteTx
@@ -1165,7 +1147,6 @@ int cd2401_stopRemoteTx(
   /* Return something */
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  *  cd2401_write
@@ -1266,7 +1247,6 @@ int cd2401_drainOutput(
 }
 #endif
 
-
 /*
  * _167Bug_pollRead
  *
@@ -1324,7 +1304,6 @@ int _167Bug_pollRead(
   return (int)c;
 }
 
-
 /*
  * _167Bug_pollWrite
  *
@@ -1361,7 +1340,6 @@ int _167Bug_pollWrite(
   /* Return something */
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  *  do_poll_read
@@ -1443,7 +1421,6 @@ rtems_status_code do_poll_write(
   return RTEMS_SUCCESSFUL;
 }
 
-
 /*
  *  _BSP_output_char
  *
@@ -1468,7 +1445,6 @@ void _BSP_output_char(char c)
   if ( c == '\n' )
       _167Bug_pollWrite(printk_minor, &cr, 1);
 }
-
 
 /*
  ***************
@@ -1601,7 +1577,6 @@ rtems_device_driver console_open(
 #endif
 }
 
-
 /*
  * Close the device
  */
@@ -1630,7 +1605,6 @@ rtems_device_driver console_close(
     return RTEMS_SUCCESSFUL;
 #endif
 }
-
 
 /*
  * Read from the device
@@ -1661,7 +1635,6 @@ rtems_device_driver console_read(
 #endif
 }
 
-
 /*
  * Write to the device
  */
@@ -1690,7 +1663,6 @@ rtems_device_driver console_write(
     return do_poll_write (major, minor, arg);
 #endif
 }
-
 
 /*
  * Handle ioctl request.

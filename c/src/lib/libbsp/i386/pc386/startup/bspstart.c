@@ -30,7 +30,6 @@
 |  $Id$
 +--------------------------------------------------------------------------*/
 
-
 #include <bsp.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
@@ -84,7 +83,6 @@ void bsp_pretasking_hook(void)
   uint32_t         topAddr, val;
   int i;
 
-
   if (rtemsFreeMemStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
     rtemsFreeMemStart = (rtemsFreeMemStart+CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 
@@ -119,14 +117,12 @@ void bsp_pretasking_hook(void)
   bsp_libc_init((void *)rtemsFreeMemStart, _heap_size, 0);
   rtemsFreeMemStart += _heap_size;           /* HEAP_SIZE  in KBytes */
 
-
 #ifdef RTEMS_DEBUG
 
   rtems_debug_enable(RTEMS_DEBUG_ALL_MASK);
 
 #endif /* RTEMS_DEBUG */
 } /* bsp_pretasking_hook */
-
 
 /*-------------------------------------------------------------------------+
 |         Function: bsp_start

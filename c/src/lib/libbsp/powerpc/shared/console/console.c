@@ -75,7 +75,6 @@ static TtySTblRec ttyS[]={
 		},
 };
 
-
 /*-------------------------------------------------------------------------+
 | Console device driver INITIALIZE entry point.
 +--------------------------------------------------------------------------+
@@ -157,7 +156,6 @@ static int console_first_open(int major, int minor, void *arg)
 	  return 0;
 }
 
-
 static int console_last_close(int major, int minor, void *arg)
 {
   BSP_uart_remove_isr(minor, ttyS[minor].isr);
@@ -219,7 +217,6 @@ console_close(rtems_device_major_number major,
   return res;
 } /* console_close */
 
-
 /*-------------------------------------------------------------------------+
 | Console device driver READ entry point.
 +--------------------------------------------------------------------------+
@@ -233,7 +230,6 @@ console_read(rtems_device_major_number major,
 
   return rtems_termios_read (arg);
 } /* console_read */
-
 
 /*-------------------------------------------------------------------------+
 | Console device driver WRITE entry point.
@@ -249,8 +245,6 @@ console_write(rtems_device_major_number major,
   return rtems_termios_write (arg);
 
 } /* console_write */
-
-
 
 /*
  * Handle ioctl request.

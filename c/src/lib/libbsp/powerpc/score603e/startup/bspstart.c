@@ -136,7 +136,6 @@ void initialize_PMC() {
 
 #endif
 
-
 #if (1)
 
   /*
@@ -158,8 +157,6 @@ void initialize_PMC() {
 
 #endif
 }
-
-
 
 /*PAGE
  *

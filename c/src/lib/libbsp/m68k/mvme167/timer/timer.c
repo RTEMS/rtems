@@ -92,7 +92,6 @@ void Timer_initialize()
                                 /* (3 countdowns) to start/stop the timer. */
 #define LEAST_VALID       3UL   /* Don't trust a value lower than this */
 
-
 /*
  *  This routine reads the Tick Timer 1 on the MVME167 board.
  *
@@ -121,7 +120,6 @@ int Read_timer()
   return total - AVG_OVERHEAD;
 }
 
-
 /*
  *  Empty function call used in loops to measure basic cost of looping
  *  in Timing Test Suite.
@@ -134,7 +132,6 @@ rtems_status_code Empty_function( void )
 {
   return RTEMS_SUCCESSFUL;
 }
-
 
 /*
  *  This routine sets the Timer_driver_Find_average_overhead flag in this

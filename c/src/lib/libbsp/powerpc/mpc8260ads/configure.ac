@@ -15,7 +15,6 @@ RTEMS_PROG_CC_FOR_TARGET([-ansi -fasm])
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
-
 RTEMS_BSPOPTS_SET([DATA_CACHE_ENABLE],[*],[0])
 RTEMS_BSPOPTS_HELP([DATA_CACHE_ENABLE],
 [If defined, the data cache will be enabled after address translation
