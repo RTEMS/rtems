@@ -3,6 +3,7 @@
 ##
 
 AUTOMAKE_OPTIONS = foreign 1.4
+ACLOCAL_AMFLAGS = -I $(RTEMS_TOPdir)/aclocal
 
 C_FILES = cpu.c
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
@@ -15,7 +16,7 @@ S_FILES = cpu_asm.S
 S_O_FILES = $(S_FILES:%.S=${ARCH}/%.o)
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
-include $(top_srcdir)/../../../../../../automake/lib.am
+include $(top_srcdir)/../../../../../automake/lib.am
 
 #
 # (OPTIONAL) Add local stuff here using +=
@@ -24,12 +25,6 @@ include $(top_srcdir)/../../../../../../automake/lib.am
 PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems/score \
     $(ROOT_H_FILES:%=$(PROJECT_INCLUDE)/%) \
     $(RTEMS_SCORE_H_FILES:%=$(PROJECT_INCLUDE)/rtems/score/%)
-
-##TMPINSTALL_FILES += \
-##$(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o
-
-##$(PROJECT_RELEASE)/lib/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
-##	$(INSTALL_DATA) $< $@
 
 $(PROJECT_INCLUDE):
 	$(mkinstalldirs) $@
@@ -57,4 +52,4 @@ CLEANDIRS = ../o-optimize ../o-debug ../o-profile
 
 EXTRA_DIST = $(C_FILES) $(S_FILES)
 
-include $(top_srcdir)/../../../../../../automake/local.am
+include $(top_srcdir)/../../../../../automake/local.am
