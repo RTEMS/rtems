@@ -56,7 +56,7 @@
 * left it in...
 */
 
-#define INSTRUMENT_ISR_VECTORING
+/* #define INSTRUMENT_ISR_VECTORING */
 /* #define INSTRUMENT_EXECUTING_THREAD */
 
 
@@ -484,7 +484,7 @@ _CPU_Context_switch_restore:
 #if __mips == 3
 	or	t2,SR_EXL + SR_IE
 #elif __mips == 1
-	or	t2,SR_IEC + SR_IEP	/* save current & previous int enable */
+	or	t2,SR_IEC + SR_IEP + SR_IEO	/* save current & previous int enable */
 #endif
 	and	t0,t2		/* keep only the per-task bits */
 		
