@@ -210,11 +210,13 @@ void bsp_start( void )
 
   Cpu_table.exceptions_in_RAM = TRUE;
 
+/*
 #if defined(RTEMS_POSIX_API)
   BSP_Configuration.work_space_size *= 3;
 #endif
+*/
 
-  BSP_Configuration.work_space_size += 32 * 1024;
+  BSP_Configuration.work_space_size += 1024;
 
 #if 0
   work_space_start = 

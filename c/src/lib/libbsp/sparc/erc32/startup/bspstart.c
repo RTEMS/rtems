@@ -213,9 +213,11 @@ void bsp_start( void )
 
   Cpu_table.interrupt_stack_size = (24 * 1024);
 
+/*
 #if defined(RTEMS_POSIX_API)
   BSP_Configuration.work_space_size *= 3;
 #endif
+*/
 
   work_space_start = 
     (unsigned char *)rdb_start - BSP_Configuration.work_space_size;
