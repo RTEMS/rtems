@@ -1,3 +1,7 @@
+2001-02-27	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.ac: Be a little more lenient in matching sparc-solaris.
+
 2002-01-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* mkbinutilspec.in, mkgccnewlibspec.in, gccnewlib/base-chill.add,

@@ -56,7 +56,7 @@ AC_MSG_CHECKING(for RPM CPU type)
 case "$host" in
   i?86-*linux*)  	RPM_CPU=i386 ;;
   i?86-*cygwin*) 	RPM_CPU=i386 ;;
-  sparc-sun-solaris*)   RPM_CPU=sparc ;;
+  sparc-*solaris*)      RPM_CPU=sparc ;;
   *)
     AC_MSG_ERROR([RPM CPU for ${host} is unknown])
     ;;
