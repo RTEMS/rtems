@@ -167,7 +167,7 @@ the execution of this section and restores them to the previous
 level upon completion of the section.  RTEMS has been optimized
 to insure that interrupts are disabled for less than 
 RTEMS_MAXIMUM_DISABLE_PERIOD microseconds on a 
-RTEMS_MAXIMUM_DISABLE_PERIOD_MHZ Mhz XXX with 
+RTEMS_MAXIMUM_DISABLE_PERIOD_MHZ Mhz processor with 
 zero wait states.  These numbers will vary based the 
 number of wait states and processor speed present on the target board.
 [NOTE:  The maximum period with interrupts disabled is hand calculated.  This
@@ -189,7 +189,7 @@ interrupt stack is determined by the interrupt_stack_size field
 in the CPU Configuration Table.  During the initialization
 process, RTEMS will install its interrupt stack.
 
-The XXX port of RTEMS supports a software managed
+The mips port of RTEMS supports a software managed
 dedicated interrupt stack on those CPU models which do not
 support a separate interrupt stack in hardware.
 
