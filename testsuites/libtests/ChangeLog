@@ -1,3 +1,14 @@
+2003-12-01	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* cpuuse/Makefile.am: Remove all-local: $(ARCH).
+	* malloctest/Makefile.am: Remove all-local: $(ARCH).
+	* monitor/Makefile.am: Remove all-local: $(ARCH).
+	* putenvtest/Makefile.am: Remove all-local: $(ARCH).
+	* rtems++/Makefile.am: Remove all-local: $(ARCH).
+	* rtmonuse/Makefile.am: Remove all-local: $(ARCH).
+	* stackchk/Makefile.am: Remove all-local: $(ARCH).
+	* termios/Makefile.am: Remove all-local: $(ARCH).
+
 2003-11-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Reflect having moved to testsuites/.

@@ -2,7 +2,6 @@
 ## $Id$
 ##
 
-
 TEST = rtmonuse
 
 MANAGERS = io rate_monotonic
@@ -35,7 +34,7 @@ include $(top_srcdir)/libtests.am
 ${PGM}: $(OBJS) $(LINK_FILES)
 	$(make-exe)
 
-all-local: $(ARCH) $(TMPINSTALL_FILES)
+all-local: $(TMPINSTALL_FILES)
 
 EXTRA_DIST = $(C_FILES) $(DOCS)
 
