@@ -16,7 +16,7 @@
  *     
  *     The license and distribution terms for this file may in
  *     the file LICENSE in this distribution or at
- *     http://www.OARcorp.com/rtems/license.html.
+ *     http://www.rtems.com/license/LICENSE.
  *
  * (2) start.s for the eth_comm port by
  *     Jay Monkman (jmonkman@fracsa.com),
