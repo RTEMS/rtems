@@ -1,5 +1,11 @@
 2004-02-05	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ChangeLog: Merge-in bsp_howto/ChangeLog.
+	* ChangeLog: Merge-in porting/ChangeLog.
+	* ChangeLog: Merge-in rgdb_specs/ChangeLog.
+	* ChangeLog: Merge-in rtems_gdb/ChangeLog.
+	* bsp_howto/ChangeLog, porting/ChangeLog, rgdb_specs/ChangeLog,
+	rtems_gdb/ChangeLog: Remove.
 	* ChangeLog: Merge-in filesystem/ChangeLog.
 	* ChangeLog: Merge-in networking/ChangeLog.
 	* filesystem/ChangeLog, networking/ChangeLog: Remove.
@@ -42,6 +48,7 @@
 	* Makefile.am: Remove AUTOMAKE_FILES. Add ../scripts/setup.def
 	../COPYING to EXTRA_DIST. Add rtems.html.in to EXTRA_DIST.
 	* develenv/Makefile.am: Add direct.t sample.t utils.t to EXTRA_DIST.
+	* bsp_howto/Makefile.am: Add ata.t, ide_ctrl.t to EXTRA_DIST.
 
 2004-01-09	Joel Sherrill <joel@OARcorp.com>
 
@@ -67,6 +74,10 @@
 	* itron3.0/Makefile.am: Cosmetics.
 	* filesystem/Makefile.am: Cosmetics.
 	* networking/Makefile.am: Cosmetics.
+	* bsp_howto/Makefile.am: Cosmetics.
+	* porting/Makefile.am: Cosmetics.
+	* rgdb_specs/Makefile.am: Cosmetics.
+	* rtems_gdb/Makefile.am: Cosmetics.
 
 2003-12-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -78,6 +89,10 @@
 	* itron3.0/Makefile.am: Cosmetics.
 	* filesystem/Makefile.am: Cosmetics.
 	* networking/Makefile.am: Cosmetics.
+	* bsp_howto/Makefile.am: Cosmetics.
+	* porting/Makefile.am: Cosmetics.
+	* rgdb_specs/Makefile.am: Cosmetics.
+	* rtems_gdb/Makefile.am: Cosmetics.
 
 2003-11-26	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -98,6 +113,14 @@
 	* filesystem/Makefile.am: Add *.info to CLEANFILES to accomodate
 	automake-1.7f/1.8 breaking building infos.
 	* networking/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
+	* bsp_howto/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
+	* porting/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
+	* rgdb_specs/Makefile.am: Add *.info to CLEANFILES to accomodate
+	automake-1.7f/1.8 breaking building infos.
+	* rtems_gdb/Makefile.am: Add *.info to CLEANFILES to accomodate
 	automake-1.7f/1.8 breaking building infos.
 
 2003-11-25	Joel Sherrill <joel@OARcorp.com>
@@ -135,6 +158,8 @@
 
 	* FAQ/basic.t, FAQ/entry: Obsoleting HP PA-RISC port and removing all
 	references.
+	* porting/cpumodels.t: Obsoleting HP PA-RISC port and removing all
+	references.
 
 2003-09-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -156,6 +181,10 @@
 	* itron3.0/Makefile.am: Merger from rtems-4-6-branch.
 	* filesystem/Makefile.am: Merger from rtems-4-6-branch.
 	* networking/Makefile.am: Merger from rtems-4-6-branch.
+	* bsp_howto/Makefile.am: Merger from rtems-4-6-branch.
+	* porting/Makefile.am: Merger from rtems-4-6-branch.
+	* rgdb_specs/Makefile.am: Merger from rtems-4-6-branch.
+	* rtems_gdb/Makefile.am: Merger from rtems-4-6-branch.
 
 2003-09-19	Joel Sherrill <joel@OARcorp.com>
 
@@ -177,11 +206,27 @@
 	* itron3.0/itron.texi: Merge from branch.
 	* filesystem/filesystem.texi: Merge from branch.
 	* networking/networking.texi: Merge from branch.
+	* bsp_howto/analog.t, bsp_howto/bsp_howto.texi, bsp_howto/discrete.t,
+	bsp_howto/nvmem.t, bsp_howto/target.t: Merge from branch.
+	* porting/porting.texi: Merge from branch.
+	* rgdb_specs/rgdb_specs.texi: Merge from branch.
+	* rtems_gdb/rtems_gdb.texi: Merge from branch.
 
 2003-09-04	Joel Sherrill <joel@OARcorp.com>
 
 	PR 466/doc
 	* posix_users/io.t: Added sync().
+
+2003-08-22	Joel Sherrill <joel@OARcorp.com>
+
+	* bsp_howto/adaintr.t, bsp_howto/ata.t, bsp_howto/target.t: Reconcile
+	differences between CVS trunk and 4.6 branch.
+	* porting/cpumodels.t, porting/sourcecode.t: Reconcile differences
+	between CVS trunk and 4.6 branch.
+
+2003-08-13	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* bsp_howto/ide-ctrl.t: Merger from 4.6-branch.
 
 2003-08-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -191,6 +236,8 @@
 
 	* user/fatal.t: Reflect c/src/exec having moved to cpukit.
 	* FAQ/build45.t: Fix typo (config.long).
+	* rgdb_specs/daemon.t: Reflect c/src/exec having moved to cpukit.
+	* rtems_gdb/example.t: Reflect c/src/exec having moved to cpukit.
 
 2003-04-29	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -231,11 +278,19 @@
 
 	* index.html.in: Removed a29k reference.
 	* FAQ/basic.t, FAQ/entry: Remove A29k references and update.
+	* porting/cpumodels.t: Removed a29k reference and updated.
 
 2003-02-11	Mike Siers <mikes@poliac.com>
 
 	* networking/networkapp.t: Add an example code snippet for adding an IP
 	alias.
+
+2003-02-11	Joel Sherrill <joel@OARcorp.com>
+
+	* porting/interrupts.t: Rework logic that decides when to call
+	_Thread_Dispatch.  Analysis by Sergei Organov <osv@javad.ru> determined
+	that _ISR_Signals_to_thread_executing was not being honored and/or
+	cleared properly.
 
 2003-02-11	Jay Monkman <jtm@smoothsmoothie.com>
 
@@ -254,6 +309,11 @@
 	* user/io.t: Fix Ada binding as side-effect of fixing reentrancy problem
 	with rtems_io_lookup_name() (API change).
 
+2003-01-28	Joel Sherrill <joel@OARcorp.com>
+
+	* bsp_howto/makefiles.t, bsp_howto/support.t: Updated to reflect use of
+	automake in addition to autoconf.
+
 2003-01-27	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* index.html.in: Fix duplicate c4x entry.
@@ -271,6 +331,10 @@
 	* itron3.0/itron.texi: Set @setfilename itron.info.
 	* filesystem/filesystem.texi: Set @setfilename filesystem.info.
 	* networking/networking.texi: Set @setfilename networking.info.
+	* bsp_howto/bsp_howto.texi: Set @setfilename bsp_howto.info.
+	* porting/porting.texi: Set @setfilename porting.info.
+	* rgdb_specs/rgdb_specs.texi: Set @setfilename rgdb_specs.info.
+	* rtems_gdb/rtems_gdb.texi: Set @setfilename rtems_gdb.info.
 
 2003-01-24	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -285,6 +349,10 @@
 	* itron3.0/Makefile.am: Put GENERATED_FILES into $builddir.
 	* filesystem/Makefile.am: Put GENERATED_FILES into $builddir.
 	* networking/Makefile.am: Put GENERATED_FILES into $builddir.
+	* bsp_howto/Makefile.am: Put GENERATED_FILES into $builddir.
+	* porting/Makefile.am: Put GENERATED_FILES into $builddir.
+	* rgdb_specs/Makefile.am: Put GENERATED_FILES into $builddir.
+	* rtems_gdb/Makefile.am: Put GENERATED_FILES into $builddir.
 
 2003-01-22	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -323,6 +391,18 @@
 	* networking/version.texi: Remove from CVS.
 	* networking/stamp-vti: Remove from CVS.
 	* networking/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* bsp_howto/version.texi: Remove from CVS.
+	* bsp_howto/stamp-vti: Remove from CVS.
+	* bsp_howto/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* porting/version.texi: Remove from CVS.
+	* porting/stamp-vti: Remove from CVS.
+	* porting/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* rgdb_specs/version.texi: Remove from CVS.
+	* rgdb_specs/stamp-vti: Remove from CVS.
+	* rgdb_specs/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
+	* rtems_gdb/version.texi: Remove from CVS.
+	* rtems_gdb/stamp-vti: Remove from CVS.
+	* rtems_gdb/.cvsignore: Add version.texi. Add stamp-vti. Re-sort.
 
 2003-01-21	Joel Sherrill <joel@OARcorp.com>
 
@@ -334,6 +414,10 @@
 	* itron3.0/stamp-vti, itron3.0/version.texi: Regenerated.
 	* filesystem/stamp-vti, filesystem/version.texi: Regenerated.
 	* networking/stamp-vti, networking/version.texi: Regenerated.
+	* bsp_howto/stamp-vti, bsp_howto/version.texi: Regenerated.
+	* porting/stamp-vti, porting/version.texi: Regenerated.
+	* rgdb_specs/stamp-vti, rgdb_specs/version.texi: Regenerated.
+	* rtems_gdb/stamp-vti, rtems_gdb/version.texi: Regenerated.
 
 2002-12-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -355,6 +439,10 @@
 	* itron3.0/stamp-vti, itron3.0/version.texi: Regenerated.
 	* filesystem/stamp-vti, filesystem/version.texi: Regenerated.
 	* networking/stamp-vti, networking/version.texi: Regenerated.
+	* bsp_howto/stamp-vti, bsp_howto/version.texi: Regenerated.
+	* porting/stamp-vti, porting/version.texi: Regenerated.
+	* rgdb_specs/stamp-vti, rgdb_specs/version.texi: Regenerated.
+	* rtems_gdb/stamp-vti, rtems_gdb/version.texi: Regenerated.
 
 2002-10-24	Joel Sherrill <joel@OARcorp.com>
 
@@ -367,6 +455,18 @@
 	* itron3.0/stamp-vti, itron3.0/version.texi: Regenerated.
 	* filesystem/stamp-vti, filesystem/version.texi: Regenerated.
 	* networking/stamp-vti, networking/version.texi: Regenerated.
+	* bsp_howto/stamp-vti, bsp_howto/version.texi: Regenerated.
+	* porting/stamp-vti, porting/version.texi: Regenerated.
+	* rgdb_specs/stamp-vti, rgdb_specs/version.texi: Regenerated.
+	* rtems_gdb/stamp-vti, rtems_gdb/version.texi: Regenerated.
+
+2002-10-24	Eugeny S. Mints <Eugeny.Mints@oktet.ru>
+
+	* bsp_howto/ata.t, bsp_howto/ide-ctrl.t: New file.
+	* bsp_howto/.cvsignore: Added new .texi files.
+	* bsp_howto/Makefile.am:: Added new files to generate.
+	* bsp_howto/bsp_howto.texi: Added new chapters.
+	* bsp_howto/stamp-vti, bsp_howto/version.texi: Regenerated.
 
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
@@ -376,11 +476,17 @@
 
 	* user/io.t: Correct Ada bindings.
 
+2002-08-01	Joel Sherrill <joel@OARcorp.com>
+
+	* porting/stamp-vti, porting/version.texi: Regenerated.
+
 2002-07-30	Joel Sherrill <joel@OARcorp.com>
 
 	* configure.ac: Added supplements/arm/Makefile.
 	* README: Updated.
 	* user/stamp-vti, user/version.texi: Regenerated.
+	* porting/miscellaneous.t: Added some markups for fonts and clarified
+	some places.
 
 2002-06-28	Joel Sherrill <joel@OARcorp.com>
 
@@ -428,6 +534,10 @@
 	* itron3.0/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* filesystem/Makefile.am: Remove AUTOMAKE_OPTIONS.
 	* networking/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* bsp_howto/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* porting/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* rgdb_specs/Makefile.am: Remove AUTOMAKE_OPTIONS.
+	* rtems_gdb/Makefile.am: Remove AUTOMAKE_OPTIONS.
 
 2002-03-27	Eric Norum <eric.norum@usask.ca>
 
@@ -482,6 +592,10 @@
 	* itron3.0/Makefile.am: include main.am, require automake-1.5.
 	* filesystem/Makefile.am: include main.am, require automake-1.5.
 	* networking/Makefile.am: include main.am, require automake-1.5.
+	* bsp_howto/Makefile.am: include main.am, require automake-1.5.
+	* porting/Makefile.am: include main.am, require automake-1.5.
+	* rgdb_specs/Makefile.am: include main.am, require automake-1.5.
+	* rtems_gdb/Makefile.am: include main.am, require automake-1.5.
 
 2002-01-17	Joel Sherrill <joel@OARcorp.com>
 
@@ -521,6 +635,10 @@
 	* itron3.0/.cvsignore: Added rtems_header.html and rtems_footer.html.
 	* filesystem/.cvsignore: Added rtems_header.html and rtems_footer.html.
 	* networking/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* bsp_howto/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* porting/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* rgdb_specs/.cvsignore: Added rtems_header.html and rtems_footer.html.
+	* rtems_gdb/.cvsignore: Added rtems_header.html and rtems_footer.html.
 
 2000-09-22	Joel Sherrill <joel@OARcorp.com>
 
@@ -538,4 +656,8 @@
 	* itron3.0/ChangeLog: New file.
 	* filesystem/ChangeLog: New file.
 	* networking/ChangeLog: New file.
+	* bsp_howto/ChangeLog: New file.
+	* porting/ChangeLog: New file.
+	* rgdb_specs/ChangeLog: New file.
+	* rtems_gdb/ChangeLog: New file.
 
