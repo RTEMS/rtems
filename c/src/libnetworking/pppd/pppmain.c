@@ -39,9 +39,11 @@
 #include <sys/resource.h>
 #include <sys/stat.h>
 #include <sys/socket.h>
-#include <rtems/rtems/tasks.h>
 #include <sys/types.h>
 #include <netinet/in.h>
+
+#include <rtems.h>
+#include <rtems/rtems_bsdnet.h>
 
 /* #include <stbconfig.h> */
 #include "pppd.h"
@@ -71,6 +73,9 @@ extern char *strerror();
 #endif
 
 void SetStatusInfo(int state, char * text, int res);
+
+/* prototypes for routines in this file */
+int connect_script(int fd);
 
 /* interface vars */
 char ifname[32];				/* Interface name */
@@ -107,15 +112,17 @@ char *no_ppp_msg = "lack of PPP\n";
 
 /* Prototypes for procedures local to this file. */
 static void cleanup(void);
-static void create_pidfile __P((void));
 static void close_tty __P((void));
 static void get_input __P((void));
 static void calltimeout __P((void));
 static struct timeval *timeleft __P((struct timeval *));
 static void holdoff_end __P((void *));
-static int device_script __P((char *[], int, int));
 static void reap_kids __P((void));
+/* XXX currently unused */
+#if 0
+static int device_script __P((char *[], int, int));
 static void pr_log __P((void *, char *,...));
+#endif
 
 extern char *ttyname __P((int));
 extern char *getlogin __P((void));
@@ -164,10 +171,14 @@ int argc;
 char *argv[];
 {
 	int i;
+#if 0
 	struct timeval timo;
+#endif
 	struct protent *protp;
 	struct stat statbuf;
+#if 0
     	char t[100];
+#endif
 
 
 	phase = PHASE_INITIALIZE;
@@ -757,15 +768,9 @@ int sig;
 	kill_link = 1;
 }
 
-static int input_fd, output_fd;
-#include <rtems/rtems/tasks.h>
-
-
-
 int modem_fd; /* FIXME: should not be global... */
 int connect_script(int fd)
 {
-	int status;
 #if 0 /* FIXME: This is WinNT special */
 	char program[256] = "TIMEOUT@10@@CLIENT@CLIENTSERVER";
 #else
@@ -775,12 +780,14 @@ int connect_script(int fd)
 /* XXX PPPConfiguration */
 	GlobalSystemStatus * volatile stat;
 #endif
+#if 0
 /* Connect scripts are almost the same as in Linux Chat ... */
 	static char *scripts[] =
 	{
 		"TIMEOUT@5@@\rAT@OK-+++\\c-OK@ATH0@TIMEOUT@90@OK@ATDT%s@CONNECT@",
 		"TIMEOUT@5@@\rAT@OK-+++\\c-OK@ATH0@TIMEOUT@90@OK@ATDT%s@CONNECT@@ppp@@Username:@%s@Password:@%s@"
 	};
+#endif
 	modem_fd = fd;
 #if 0
 /* XXX PPPConfiguration */
@@ -898,6 +905,8 @@ void *arg;
 
 
 
+/* XXX currently unused */
+#if 0
 static void
 pr_log __V((void *arg, char *fmt,...))
 {
@@ -925,6 +934,7 @@ pr_log __V((void *arg, char *fmt,...))
 	strcpy(linep, buf);
 	linep += n;
 }
+#endif
 
 /*
  * print_string - print a readable representation of a string using

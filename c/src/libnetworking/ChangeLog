@@ -1,3 +1,13 @@
+2000-12-08	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/linkaddr.c: Initialized variable to remove warning.
+	* modem/ppp.c, modem/ppp_tty.c: Made numerous variable declarations
+	conditional on PPP_COMPRESS and PPP_FILTER.  Commented out variables
+	that were not used because the code using them was commented out.
+	Removed totally unused variables.
+	* modem/pppcompress.c: Added parentheses to avoid warnings.
+	* pppd/pppmain.c: Removed numerous warnings.
+
 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 
 	* modem/ppp_tty.c: Changed to include <rtems/termiostypes.h> since

@@ -134,8 +134,10 @@
 extern struct	ifqueue ipintrq;
 static int	pppsioctl __P((struct ifnet *, int, caddr_t));
 static void	ppp_requeue __P((struct ppp_softc *));
+#ifdef PPP_COMPRESS
 static void	ppp_ccp __P((struct ppp_softc *, struct mbuf *m, int rcvd));
 static void	ppp_ccp_closed __P((struct ppp_softc *));
+#endif
 static void	ppp_inproc __P((struct ppp_softc *, struct mbuf *));
 static void	pppdumpm __P((struct mbuf *m0));
 
@@ -193,7 +195,8 @@ int rtems_ppp_driver_attach (struct rtems_bsdnet_ifconfig *config,
 {
     register struct ppp_softc *sc;
     register int i = 0;
-    extern void (*netisrs[])__P((void));
+/*  XXX unused in rtems 
+    extern void (*netisrs[])__P((void)); */
 
     for (sc = ppp_softc; i < NPPP; sc++) {
 	sc->sc_if.if_name = "ppp";
@@ -336,17 +339,19 @@ pppioctl(sc, cmd, data, flag, p)
     int flag;
     struct proc *p;
 {
-    int s, error, flags, mru, nb, npx;
-    struct ppp_option_data *odp;
-    struct compressor **cp;
+    int s, flags, mru, npx;
     struct npioctl *npi;
     time_t t;
 #ifdef PPP_FILTER
+    int error;
     struct bpf_program *bp, *nbp;
     struct bpf_insn *newcode, *oldcode;
     int newcodelen;
 #endif /* PPP_FILTER */
 #ifdef	PPP_COMPRESS
+    int nb;
+    struct ppp_option_data *odp;
+    struct compressor **cp;
     u_char ccp_option[CCP_MAX_OPTION_LENGTH];
 #endif
 
@@ -1016,7 +1021,7 @@ void
 pppintr()
 {
     struct ppp_softc *sc;
-    int i, s, s2;
+    int i, s2;
     struct mbuf *m;
 
     sc = ppp_softc;
@@ -1189,7 +1194,10 @@ ppp_inproc(sc, m)
     struct ifqueue *inq;
     int s, ilen, xlen, proto, rv;
     u_char *cp, adrs, ctrl;
-    struct mbuf *mp, *dmp = NULL;
+    struct mbuf *mp;
+#ifdef PPP_COMPRESS
+    *dmp = NULL;
+#endif
     u_char *iphdr;
     u_int hlen;
 

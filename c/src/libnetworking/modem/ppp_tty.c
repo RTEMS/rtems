@@ -303,8 +303,6 @@ static void
 pppasyncrelinq(sc)
     struct ppp_softc *sc;
 {
-    int s;
-
     if (sc->sc_outm) {
 	m_freem(sc->sc_outm);
 	sc->sc_outm = NULL;
@@ -322,7 +320,7 @@ pppasyncrelinq(sc)
 /*
  * Line specific (tty) read routine.
  */
-pppread(struct rtems_termios_tty *tty,
+int pppread(struct rtems_termios_tty *tty,
 	    rtems_libio_rw_args_t *rw_args)
 {
   char *buffer;
@@ -330,8 +328,6 @@ pppread(struct rtems_termios_tty *tty,
   rtems_status_code status;
 
   struct mbuf *m, *m0;
-  register int s;
-  int error = 0;
   rtems_interval    ticks;
   register struct ppp_softc *sc = (struct ppp_softc *)tty->t_sc;
   buffer = rw_args->buffer;
@@ -380,7 +376,7 @@ int
 pppwrite(struct rtems_termios_tty *tty,
 	  rtems_libio_rw_args_t *rw_args)
 {
-  int count,len;
+  int len;
   char *out_buffer;
   int n,maximum;
   
@@ -574,15 +570,11 @@ pppasyncstart(sc)
 
 void modem_sendpacket(struct rtems_termios_tty *tty)
 {
-  struct mbuf *l = NULL;
-  rtems_unsigned16 status;
-  int curr;
   register struct mbuf *m;
   register int len;
   register u_char *start, *stop, *cp;
-  int n, ndone, done, idle;
+  int n, ndone, done;
   struct mbuf *m2;
-  int s;
   char c;
    register struct ppp_softc *sc=tty->t_sc;
   
@@ -679,7 +671,7 @@ void modem_sendpacket(struct rtems_termios_tty *tty)
 	     */
 	    done = len == 0;
 	    if (done && m->m_next == NULL) {
-		u_char *p, *q;
+		u_char *p;
 		int c;
 		u_char endseq[8];
 
@@ -791,7 +783,6 @@ ppp_timeout(x)
     struct rtems_termios_tty *tty = ((struct rtems_termios_tty *)x);
     struct ppp_softc *sc = tty->t_sc;
     struct rtems_termios_tty *tp = (struct rtems_termios_tty *) sc->sc_devp;
-    int s;
 
     sc->sc_flags &= ~SC_TIMEOUT;
     pppstart(tp);

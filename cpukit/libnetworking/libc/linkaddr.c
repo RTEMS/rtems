@@ -60,7 +60,8 @@ link_addr(addr, sdl)
 {
 	register char *cp = sdl->sdl_data;
 	char *cplim = sdl->sdl_len + (char *)sdl;
-	register int byte = 0, state = NAMING, new;
+	register int byte = 0, state = NAMING,
+		new=0; /* new=0 to avoid warning */
 
 	bzero((char *)&sdl->sdl_family, sdl->sdl_len - 1);
 	sdl->sdl_family = AF_LINK;

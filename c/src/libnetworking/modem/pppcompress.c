@@ -278,19 +278,19 @@ vj_compress_tcp(m, ip, comp, compress_cid)
 		 * with it. */
 		 goto uncompressed;
 
-	if (deltaS = (u_short)(ntohs(th->th_win) - ntohs(oth->th_win))) {
+	if ((deltaS = (u_short)(ntohs(th->th_win) - ntohs(oth->th_win)))) {
 		ENCODE(deltaS);
 		changes |= NEW_W;
 	}
 
-	if (deltaA = ntohl(th->th_ack) - ntohl(oth->th_ack)) {
+	if ((deltaA = ntohl(th->th_ack) - ntohl(oth->th_ack))) {
 		if (deltaA > 0xffff)
 			goto uncompressed;
 		ENCODE(deltaA);
 		changes |= NEW_A;
 	}
 
-	if (deltaS = ntohl(th->th_seq) - ntohl(oth->th_seq)) {
+	if ((deltaS = ntohl(th->th_seq) - ntohl(oth->th_seq))) {
 		if (deltaS > 0xffff)
 			goto uncompressed;
 		ENCODE(deltaS);
