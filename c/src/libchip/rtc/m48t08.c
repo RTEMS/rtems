@@ -32,9 +32,9 @@
  *  Control register bits
  */
 
-#define MK48T08_CONTROL_WRITE  0x80
-#define MK48T08_CONTROL_READ   0x40
-#define MK48T08_CONTROL_SIGN   0x20
+#define M48T08_CONTROL_WRITE  0x80
+#define M48T08_CONTROL_READ   0x40
+#define M48T08_CONTROL_SIGN   0x20
 
 /*
  *  m48t08_initialize
@@ -65,16 +65,16 @@ int m48t08_get_time(
   unsigned32     value1;
   unsigned32     value2;
 
-  m48t08 = RTC_Port_Tbl[ minor ].ulCtrlPort1;
-  getReg = RTC_Port_Tbl[ minor ].getRegister;
-  setReg = RTC_Port_Tbl[ minor ].setRegister;
+  m48t08 = RTC_Table[ minor ].ulCtrlPort1;
+  getReg = RTC_Table[ minor ].getRegister;
+  setReg = RTC_Table[ minor ].setRegister;
 
   /*
    *  Put the RTC into read mode
    */
 
   controlReg = (*getReg)( m48t08, M48T08_CONTROL );
-  (*setReg)( m48t08, M48T08_CONTROL, controlReg | MK48T08_CONTROL_READ );
+  (*setReg)( m48t08, M48T08_CONTROL, controlReg | M48T08_CONTROL_READ );
   
   value1 = (*getReg)( m48t08, M48T08_YEAR );
   value2 = From_BCD( value1 );
@@ -98,6 +98,8 @@ int m48t08_get_time(
   value1 = (*getReg)( m48t08, M48T08_SECOND );
   time->second = From_BCD( value1 );
   
+  time->ticks  = 0;
+
   /*
    *  Put the RTC back into normal mode.
    */
@@ -121,16 +123,16 @@ int m48t08_set_time(
   setRegister_f  setReg;
   unsigned8      controlReg;
 
-  m48t08 = RTC_Port_Tbl[ minor ].ulCtrlPort1;
-  getReg = RTC_Port_Tbl[ minor ].getRegister;
-  setReg = RTC_Port_Tbl[ minor ].setRegister;
+  m48t08 = RTC_Table[ minor ].ulCtrlPort1;
+  getReg = RTC_Table[ minor ].getRegister;
+  setReg = RTC_Table[ minor ].setRegister;
 
   /*
    *  Put the RTC into read mode
    */
 
   controlReg = (*getReg)( m48t08, M48T08_CONTROL );
-  (*setReg)( m48t08, M48T08_CONTROL, controlReg | MK48T08_CONTROL_WRITE );
+  (*setReg)( m48t08, M48T08_CONTROL, controlReg | M48T08_CONTROL_WRITE );
   
   if ( time->year >= 2088 )
     rtems_fatal_error_occurred( RTEMS_INVALID_NUMBER );
@@ -150,3 +152,14 @@ int m48t08_set_time(
 
   return 0;
 }
+
+/*
+ *  Driver function table
+ */
+
+rtc_fns m48t08_fns = {
+  m48t08_initialize,
+  m48t08_get_time,
+  m48t08_set_time
+};
+
