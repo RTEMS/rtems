@@ -25,7 +25,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <rtems/bspIo.h>
-/* #include <libcpu/cpu.h> */
 
 /*-------------------------------------------------------------------------+
 |         Function: printNum

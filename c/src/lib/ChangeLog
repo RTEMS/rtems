@@ -1,3 +1,8 @@
+2002-04-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* libc/stat.c: include <string.h>.
+	* libc/printk.c: Remove libcpu/cpu.h.
+
 2002-04-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* libc/ctermid.c: Include <string.h>.
