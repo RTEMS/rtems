@@ -1,7 +1,7 @@
 /*
  * ide_ctrl_cfg.h
  *
- * LibChip library IDE controller header file - structuers used for
+ * LibChip library IDE controller header file - structures used for 
  * configuration and plugin interface definition.
  *
  * Copyright (C) 2002 OKTET Ltd., St.-Petersburg, Russia
@@ -29,6 +29,27 @@ typedef enum {
     IDE_STD,
     IDE_CUSTOM                /* BSP specific driver */
 } ide_ctrl_devs_t;
+
+/* ATA modes: bit masks used in ctrl_config_io_speed call */
+#define ATA_MODES_PIO3    0x001
+#define ATA_MODES_PIO4    0x002
+
+#define ATA_MODES_PIO     0x003
+
+#define ATA_MODES_DMA0    0x004
+#define ATA_MODES_DMA1    0x008
+#define ATA_MODES_DMA2    0x010
+
+#define ATA_MODES_UDMA0   0x020
+#define ATA_MODES_UDMA1   0x040
+#define ATA_MODES_UDMA2   0x080
+#define ATA_MODES_UDMA3   0x100
+#define ATA_MODES_UDMA4   0x200
+#define ATA_MODES_UDMA5   0x400
+
+#define ATA_MODES_UDMA    0x7e0
+#define ATA_MODES_DMA     0x7fc
+
 
 /*
  * Each driver for a particular controller have to provide following
@@ -60,7 +81,7 @@ typedef struct ide_ctrl_fns_s {
                               uint32_t   *pos);
 
     rtems_status_code (*ctrl_config_io_speed)(int minor,
-                                              uint8_t   modes_available);
+                                              uint16_t modes_available);
 } ide_ctrl_fns_t;
 
 /*

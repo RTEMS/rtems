@@ -1159,7 +1159,7 @@ ata_initialize(rtems_device_major_number major,
 	      ATA_DEV_INFO(ctrl_minor, dev).mode_active = ATA_MODES_PIO3;
 	    }
 	    else {
-	      ATA_DEV_INFO(ctrl_minor, dev).modes_avaible =
+	      ATA_DEV_INFO(ctrl_minor, dev).modes_available =
 		((CF_LE_W(buffer[64]) & 0x1) ? ATA_MODES_PIO3 : 0) |
 		((CF_LE_W(buffer[64]) & 0x2) ? ATA_MODES_PIO4 : 0) |
 		((CF_LE_W(buffer[63]) & 0x1) ? ATA_MODES_DMA0 : 0) |
@@ -1167,7 +1167,7 @@ ata_initialize(rtems_device_major_number major,
 		 ATA_MODES_DMA0 | ATA_MODES_DMA1 : 0) |
 		((CF_LE_W(buffer[63]) & 0x4) ?
 		 ATA_MODES_DMA0 | ATA_MODES_DMA1 | ATA_MODES_DMA2 : 0);
-	      if (ATA_DEV_INFO(ctrl_minor, dev).modes_avaible == 0)
+	      if (ATA_DEV_INFO(ctrl_minor, dev).modes_available == 0)
                 continue;
 	      /*
 	       * choose most appropriate ATA device data I/O speed supported
@@ -1175,7 +1175,7 @@ ata_initialize(rtems_device_major_number major,
 	       */
 	      status = ide_controller_config_io_speed(
                 ctrl_minor,
-                ATA_DEV_INFO(ctrl_minor, dev).modes_avaible);
+                ATA_DEV_INFO(ctrl_minor, dev).modes_available);
 	      if (status != RTEMS_SUCCESSFUL)
                 continue;
 	    }

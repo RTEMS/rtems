@@ -52,26 +52,6 @@
 
 #define ATA_MAX_CMD_REG_OFFSET          8
 
-/* ATA modes */
-#define ATA_MODES_PIO3    0x001
-#define ATA_MODES_PIO4    0x002
-
-#define ATA_MODES_PIO     0x003
-
-#define ATA_MODES_DMA0    0x004
-#define ATA_MODES_DMA1    0x008
-#define ATA_MODES_DMA2    0x010
-
-#define ATA_MODES_UDMA0   0x020
-#define ATA_MODES_UDMA1   0x040
-#define ATA_MODES_UDMA2   0x080
-#define ATA_MODES_UDMA3   0x100
-#define ATA_MODES_UDMA4   0x200
-#define ATA_MODES_UDMA5   0x400
-
-#define ATA_MODES_UDMA    0x7e0
-#define ATA_MODES_DMA     0x7fc
-
 
 /* ATA Commands */
 
@@ -308,8 +288,8 @@ typedef struct ata_dev_s {
     uint8_t     max_multiple; /* 0 if READ/WRITE MULTIPLE is unsupported */
     uint8_t     current_multiple;
 
-    uint8_t     modes_avaible; /* OR of values for this modes */
-    uint8_t     mode_active;
+    uint16_t  modes_available; /* OR of values for this modes */
+    uint16_t  mode_active;
 } ata_dev_t;
 
 /*
