@@ -8,7 +8,11 @@ VPATH = @srcdir@
 RTEMS_ROOT = @top_srcdir@
 PROJECT_ROOT = @PROJECT_ROOT@
 
-BSP_PIECES=startup clock console timer pc386dev network
+# We only build the Network library if HAS_KA9Q was defined
+NETWORK_yes_V = network
+NETWORK = $(NETWORK_$(HAS_KA9Q)_V)
+
+BSP_PIECES=startup clock console timer pc386dev $(NETWORK) 
 GENERIC_PIECES=
 
 # bummer; have to use $foreach since % pattern subst rules only replace 1x
@@ -49,6 +53,7 @@ all:	${ARCH} $(SRCS) $(LIB)
 # we create here a directory specific to the PC386 BSP to store the BootImage
 # files so they can be easily found
 	mkdir -p ${PROJECT_RELEASE}/BootImgs
+
 
 
 

@@ -461,8 +461,8 @@ AC_TRY_RUN([
 #include <sys/ipc.h>
 #include <sys/sem.h>
 int main () {
-#if !defined(sun)
-  union semun arg;
+#if !defined(sun) 
+  union semun arg ;
 #else
   union semun {
     int val;

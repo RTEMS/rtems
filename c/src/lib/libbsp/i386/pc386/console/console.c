@@ -40,6 +40,7 @@
 #include <rtems/libio.h>
 #include <termios.h>
 #include <pc386uart.h>
+#include <libcpu/cpuModel.h>
 
 int PC386ConsolePort = PC386_CONSOLE_PORT_CONSOLE;
 
@@ -61,8 +62,8 @@ static rtems_irq_connect_data console_isr_data = {PC_386_KEYBOARD,
 						   
 
 extern rtems_boolean _IBMPC_scankey(char *);  /* defined in 'inch.c' */
-extern BSP_polling_getchar_function_type BSP_wait_polled_input();
-extern void _IBMPC_initVideo();
+extern char BSP_wait_polled_input(void);
+extern void _IBMPC_initVideo(void);
 
 void console_reserve_resources(rtems_configuration_table *conf)
 {
@@ -169,9 +170,9 @@ console_initialize(rtems_device_major_number major,
     {
 
       /* Install keyboard interrupt handler */
-  status = pc386_install_rtems_irq_handler(&console_isr_data);
+      status = pc386_install_rtems_irq_handler(&console_isr_data);
   
-  if (!status)
+      if (!status)
 	{
 	  printk("Error installing keyboard interrupt handler!\n");
 	  rtems_fatal_error_occurred(status);
@@ -481,8 +482,11 @@ conSetAttr(int minor, const struct termios *t)
  * BSP initialization
  */
 
-BSP_output_char_function_type BSP_output_char = (BSP_output_char_function_type) _IBMPC_outch;
-BSP_polling_getchar_function_type 	BSP_poll_char = BSP_wait_polled_input;
+BSP_output_char_function_type BSP_output_char = 
+                       (BSP_output_char_function_type) _IBMPC_outch;
+
+BSP_polling_getchar_function_type BSP_poll_char = BSP_wait_polled_input;
+
 void BSP_emergency_output_init()
 {
   _IBMPC_initVideo();

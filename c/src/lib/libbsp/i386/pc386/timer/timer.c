@@ -55,9 +55,8 @@ volatile rtems_unsigned32 Ttimer_val;
 /*-------------------------------------------------------------------------+
 | External Prototypes
 +--------------------------------------------------------------------------*/
-extern void timerisr();
+extern void timerisr(void);
        /* timer (int 08h) Interrupt Service Routine (defined in 'timerisr.s') */
-extern int clockIsOn(const rtems_irq_connect_data*);
 
 /*-------------------------------------------------------------------------+
 | Pentium optimized timer handling.
@@ -155,7 +154,7 @@ Read_timer(void)
 |        Arguments: None.
 |          Returns: Nothing. 
 +--------------------------------------------------------------------------*/
-void
+static void
 timerOff(const rtems_raw_irq_connect_data* used)
 {
     /*
@@ -169,7 +168,8 @@ timerOff(const rtems_raw_irq_connect_data* used)
 } /* Timer_exit */
 
 
-void timerOn(const rtems_raw_irq_connect_data* used)
+static void 
+timerOn(const rtems_raw_irq_connect_data* used)
 {
      /* load timer for US_PER_ISR microsecond period */
      outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
@@ -181,12 +181,17 @@ void timerOn(const rtems_raw_irq_connect_data* used)
      pc386_irq_enable_at_i8259s(used->idtIndex - PC386_IRQ_VECTOR_BASE);
 }
 
+static int 
+timerIsOn(const rtems_raw_irq_connect_data *used)
+{
+     return pc386_irq_enabled_at_i8259s(used->idtIndex - PC386_IRQ_VECTOR_BASE);}
+
 static rtems_raw_irq_connect_data timer_raw_irq_data = {
   PC_386_PERIODIC_TIMER + PC386_IRQ_VECTOR_BASE,
   timerisr,
   timerOn,
   timerOff,
-  clockIsOn
+  timerIsOn
 };
 
 /*-------------------------------------------------------------------------+

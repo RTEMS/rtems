@@ -511,7 +511,7 @@ rtems_ka9q_driver_attach (int argc, char *argv[], void *p)
       sscanf(argv[++argIndex], "%x", &(dp->port));
     }
     else if (strcmp ("bpar", argv[argIndex]) == 0) {
-      sscanf(argv[++argIndex], "%x", (unsigned) &(dp->bpar));
+      sscanf(argv[++argIndex], "%x", (unsigned *) &(dp->bpar));
       dp->base = (unsigned char *)(dp->bpar);
     }
     else {

@@ -21,13 +21,13 @@
 	
 
 /*PAGE
- *  void _new_ISR_Displatch()
+ *  void _New_ISR_Displatch()
  *
  *  Entry point from the outermost interrupt service routine exit.
  *  The current stack is the supervisor mode stack.
  */
 
-        PUBLIC (_new_ISR_Displatch)
+        PUBLIC (_New_ISR_Displatch)
 SYM (_New_ISR_Displatch):
 
         call      SYM (_Thread_Dispatch)   # invoke Dispatcher
