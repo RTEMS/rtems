@@ -1,15 +1,19 @@
-2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2000-09-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* kern/Makefile.am, lib/Makefile.am, libc/Makefile.am,
-	net/Makefile.am, netinet/Makefile.am, nfs/Makefile.am,
-	pppd/Makefile.am, rtems/Makefile.am, rtems_servers/Makefile.am,
-	rtems_webserver/Makefile.am, wrapup/Makefile.am: Include compile.am
+	* ChangeLog: Cleanup.
 
 2000-09-05	Joel Sherrill <joel@OARcorp.com>
 
 	* rtems/rtems_syscall.c: Changed from O_NONBLOCK to internal
 	RTEMS_LIBIO_FLAGS_NO_DELAY to avoid O_NONBLOCK/O_NDELAY confusion
 	and to work with the converted flags.
+
+2000-09-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* kern/Makefile.am, lib/Makefile.am, libc/Makefile.am,
+	net/Makefile.am, netinet/Makefile.am, nfs/Makefile.am,
+	pppd/Makefile.am, rtems/Makefile.am, rtems_servers/Makefile.am,
+	rtems_webserver/Makefile.am, wrapup/Makefile.am: Include compile.am
 
 2000-09-01	Rosimildo daSilva <rdasilva@connecttel.com>
 
