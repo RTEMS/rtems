@@ -31,6 +31,7 @@
  *  will usually be 0x0000 or 0x0100.
  */
 
+#include <bsp.h>
 #include "asm.h"
 
 #ifndef PPC_VECTOR_FILE_BASE
