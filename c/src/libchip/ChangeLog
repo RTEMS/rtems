@@ -1,3 +1,7 @@
+2003-12-09	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Fix variant-tmpinstall support.
+
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* ide/Makefile.am, network/Makefile.am, rtc/Makefile.am, 

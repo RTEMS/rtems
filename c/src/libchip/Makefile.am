@@ -56,18 +56,13 @@ network/$(ARCH)/$(dirstamp):
 	@: > network/$(ARCH)/$(dirstamp)
 network/$(ARCH)/%.$(OBJEXT): network/%.c network/$(ARCH)/$(dirstamp)
 	${COMPILE} $(libnetchip_CPPFLAGS) -o $@ -c $<
-network/$(ARCH)/libnetchip.a: $(libnetchip_OBJS)
+network/$(ARCH)/libnetchip$(LIB_VARIANT).a: $(libnetchip_OBJS)
 	$(make-library)
-TMP_LIBS += network/$(ARCH)/libnetchip.a
+TMP_LIBS += network/$(ARCH)/libnetchip$(LIB_VARIANT).a
 
-$(PROJECT_RELEASE)/lib/libnetchip$(LIB_VARIANT).a: network/$(ARCH)/libnetchip.a
-	$(INSTALL_DATA) $< $@
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/libnetchip$(LIB_VARIANT).a
+project_lib_DATA = network/$(ARCH)/libnetchip$(LIB_VARIANT).a
 endif
 endif
-
-.PRECIOUS: network/$(ARCH)/libnetchip.a
 
 libnetchip_DOC_FILES = network/README network/README.cs8900 \
     network/README.dec21140 network/README.i82586 network/README.open_eth \
@@ -190,6 +185,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/mii.h
 $(PROJECT_INCLUDE)/libchip/open_eth.h: network/open_eth.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/open_eth.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/open_eth.h
+
+${PROJECT_RELEASE}/lib/libnetchip$(LIB_VARIANT).a: network/$(ARCH)/libnetchip$(LIB_VARIANT).a ${PROJECT_RELEASE}/lib/$(dirstamp)
+	$(INSTALL_DATA) $< ${PROJECT_RELEASE}/lib/libnetchip$(LIB_VARIANT).a
+TMPINSTALL_FILES += ${PROJECT_RELEASE}/lib/libnetchip$(LIB_VARIANT).a
 endif
 endif
 
