@@ -94,7 +94,7 @@ END-INFO-DIR-ENTRY
 @include error.texi
 @include monitor.texi
 @ifinfo
-@node Top, Preface, (dir), (dir)
+@node Top, , (dir), (dir)
 @top posix_users_new
 
 This is the online version of the RTEMS POSIX API User's Guide
