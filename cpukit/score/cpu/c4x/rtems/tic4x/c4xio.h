@@ -4,8 +4,8 @@
  *  $Id$
  */
 
-#ifndef __C4XIO_h
-#define __C4XIO_h
+#ifndef _RTEMS_TIC4X_C4XIO_H
+#define _RTEMS_TIC4X_C4XIO_H
 
 /*
  *  Address defines
