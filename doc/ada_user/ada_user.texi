@@ -1,6 +1,6 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename ada_user
+@setfilename ada_user.info
 @setcontentsaftertitlepage
 @syncodeindex vr fn
 @synindex ky cp
