@@ -360,6 +360,21 @@ extern void mips_fatal_error ( int error );
 
 /* WARNING: If this structure is modified, the constants in cpu.h must be updated. */
 typedef struct {
+#if __mips == 1
+    unsigned32 s0;
+    unsigned32 s1;
+    unsigned32 s2;
+    unsigned32 s3;
+    unsigned32 s4;
+    unsigned32 s5;
+    unsigned32 s6;
+    unsigned32 s7;
+    unsigned32 sp;
+    unsigned32 fp;
+    unsigned32 ra;
+    unsigned32 c0_sr;
+    unsigned32 c0_epc;
+#else
     unsigned64 s0;
     unsigned64 s1;
     unsigned64 s2;
@@ -373,6 +388,7 @@ typedef struct {
     unsigned64 ra;
     unsigned64 c0_sr;
     unsigned64 c0_epc;
+#endif
 } Context_Control;
 
 /* WARNING: If this structure is modified, the constants in cpu.h must be updated. */

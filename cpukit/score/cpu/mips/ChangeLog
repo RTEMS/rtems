@@ -1,3 +1,8 @@
+2000-12-06	Joel Sherrill <joel@OARcorp.com>
+
+	* rtems/score/cpu.h: When mips ISA level is 1, registers in the
+	context should be 32 not 64 bits.
+
 2000-11-30	Joel Sherrill <joel@OARcorp.com>
 
 	* cpu_asm.S: Changed "_CPU_Ccontext_switch_restore: typo to
