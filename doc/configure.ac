@@ -172,7 +172,6 @@ _RTEMS_UPDATE_CONDITIONAL([common/rtems.sed],[common/rtems.sed~])
 ])
 
 AC_CONFIG_FILES([
-rtems_support.html
 index.html
 FAQ/Makefile
 develenv/Makefile
@@ -218,7 +217,6 @@ supplements/i386/Makefile
 supplements/i960/Makefile
 supplements/m68k/Makefile
 supplements/mips/Makefile
-supplements/mips64orion/Makefile
 supplements/powerpc/Makefile
 supplements/sh/Makefile
 supplements/sparc/Makefile

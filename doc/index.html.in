@@ -272,16 +272,6 @@
             <A HREF="supplements/c4x/index.html">
                RTEMS Texas Instruments C3x/C4x Applications Supplement</A>
             </LI>
-
-        <LI><A HREF="HELP.html">
-                    <IMG SRC="images/pdf1.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-                    <IMG SRC="images/ps.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-                    <IMG SRC="images/dvi.gif" HEIGHT=18 WIDTH=16></A>
-            <A HREF="HELP.html">
-               RTEMS MIPS64 ORION Applications Supplement</A>
-            </LI>
     </MENU>
 </LI>
 
