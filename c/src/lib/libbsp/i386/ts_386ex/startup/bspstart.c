@@ -24,8 +24,7 @@ void bsp_clean_up(void);
 
 #include <bsp.h>
 #include <rtems/libio.h>
- 
-#include <libcsupport.h>
+#include <rtems/libcsupport.h>
 
 /*
  *  The original table from the application and our copy of it with

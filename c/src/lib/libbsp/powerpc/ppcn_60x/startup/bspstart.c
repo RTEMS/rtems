@@ -31,11 +31,12 @@
  *  $Id: 
  */
 
-#include <bsp.h>
-#include <pci.h>
-#include <rtems/libio.h>
+#include <string.h>
 
-#include <libcsupport.h>
+#include <bsp.h>
+#include <rtems/libio.h>
+#include <rtems/libcsupport.h>
+#include <pci.h>
 
 unsigned char ucSystemType;
 unsigned char ucBoardRevMaj;

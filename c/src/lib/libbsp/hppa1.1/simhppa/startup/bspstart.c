@@ -14,13 +14,11 @@
  *  $Id$
  */
 
-#include <rtems.h>
+#include <string.h>
+
 #include <bsp.h>
 #include <rtems/libio.h>
-
-#include <libcsupport.h>
-
-#include <string.h>
+#include <rtems/libcsupport.h>
 
 extern rtems_configuration_table  Configuration;
 

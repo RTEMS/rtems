@@ -20,15 +20,13 @@
  *  $Id$
  */
 
-#include <bsp.h>
-#include <rtems/libio.h>
- 
-#include <libcsupport.h>
- 
 #include <string.h>
 #include <fcntl.h>
 #include <stdio.h>
+ 
+#include <bsp.h>
 #include <rtems/libio.h>
+#include <rtems/libcsupport.h>
  
 #define HEAP_SIZE 1024*1024*2
 

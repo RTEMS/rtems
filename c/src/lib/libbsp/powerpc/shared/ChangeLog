@@ -1,3 +1,10 @@
+	vector function (mpc60x_vector_is_valid) instead of MPC750 
+	specific function to allow operation on boards with CPUs other
+	than the MPC750.
+
+2001-03-30	Eric Valette <valette@crf.canon.fr>
+
+	* Makefile.am, console/consoleIo.h, include/bsp.h:
 	These modifications are part of the conversion of the
 	mpc8xx CPU to the "new exception processing model."
 

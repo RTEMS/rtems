@@ -14,13 +14,12 @@
  *  $Id$
  */
 
+#include <string.h>
+
 #include <bsp.h>
 #include <rtems/libio.h>
- 
-#include <libcsupport.h>
- 
-#include <string.h>
- 
+#include <rtems/libcsupport.h>
+
 /*
  *  The original table from the application and our copy of it with
  *  some changes.

@@ -18,10 +18,10 @@
  *  $Id$
  */
 
-#include <bsp.h>
-#include <rtems/libio.h>
-#include <libcsupport.h>
 #include <string.h>
+
+#include <rtems/libio.h>
+#include <rtems/libcsupport.h>
 #include <bsp/consoleIo.h>
 #include <libcpu/spr.h>
 #include <bsp/residual.h>

@@ -18,12 +18,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <unistd.h>
 
 #include <bsp.h>
-#include <libcsupport.h>
-
+#include <rtems/libcsupport.h>
 #include <rtems/libio.h>
 
 extern rtems_configuration_table  Configuration;

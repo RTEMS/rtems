@@ -1,3 +1,10 @@
+2000-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* startup/bspstart.c: assoc.h, error.h, libio_.h, libio.h,
+	and libcsupport.h moved from libc to lib/include/rtems and
+	now must be referenced as <rtems/XXX.h>.   Header file order
+	was cleaned up while doing this.
+
 2000-10-30	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* bsp_specs: Add qnolinkcmds.

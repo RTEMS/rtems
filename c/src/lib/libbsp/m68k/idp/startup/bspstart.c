@@ -14,12 +14,11 @@
  *  $Id$
  */
 
+#include <string.h>
+
 #include <bsp.h>
 #include <rtems/libio.h>
- 
-#include <libcsupport.h>
- 
-#include <string.h>
+#include <rtems/libcsupport.h>
  
 unsigned char *duart_base;
 extern struct duart_regs duart_info;

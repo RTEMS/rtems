@@ -32,8 +32,8 @@
 
 
 #include <bsp.h>
-#include <libcsupport.h>
 #include <rtems/libio.h>
+#include <rtems/libcsupport.h>
 #include <libcpu/cpuModel.h>
 
 /*-------------------------------------------------------------------------+

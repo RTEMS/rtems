@@ -14,12 +14,11 @@
  *  $Id$
  */
 
+#include <string.h>
+
 #include <bsp.h>
 #include <rtems/libio.h>
- 
-#include <libcsupport.h>
- 
-#include <string.h>
+#include <rtems/libcsupport.h>
  
 #ifndef lint
 static char _sccsid[] = "@(#)bspstart.c 09/11/96     1.15\n";

@@ -15,9 +15,10 @@
 
 
 #include <bsp.h>
-#include <uart.h>
-#include <libcsupport.h>
+#include <rtems/libcsupport.h>
 #include <rtems/libio.h>
+
+#include <uart.h>
 
 /*-------------------------------------------------------------------------+
 | Global Variables
