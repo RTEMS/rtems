@@ -1,3 +1,10 @@
+2002-05-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* sys/ioctl.h: Remove.
+	* sys/sockio.h: Remove.
+	* sys/filio.h: Remove.
+	* sys/Makefile.am: Reflect changes above.
+
 2001-05-14	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: Corrected -- entry should have been in libchip.
