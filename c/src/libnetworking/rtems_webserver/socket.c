@@ -18,6 +18,10 @@
 #include	<stdlib.h>
 #include	<unistd.h>
 
+#if __rtems__
+#include	<sys/select.h>
+#endif
+
 #include	"uemf.h"
 
 /*********************************** Defines **********************************/
