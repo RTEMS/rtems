@@ -45,19 +45,14 @@ S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
 
 rtems_cpu_rel_OBJECTS = $(C_O_FILES) $(S_O_FILES)
 
-$(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o: $(ARCH)/rtems.o
-	$(INSTALL_DATA) $< $@
-
 $(REL): $(rtems_cpu_rel_OBJECTS)
 	$(make-rel)
-
-TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib$(MULTISUBDIR)/rtems$(LIB_VARIANT).o
 
 all-local: $(ARCH) $(PREINSTALL_FILES) $(rtems_cpu_rel_OBJECTS) $(REL) \
     $(TMPINSTALL_FILES)
 
 .PRECIOUS: $(REL)
 
-EXTRA_DIST = cpu.c cpu_asm.S rtems.S
+EXTRA_DIST = cpu.c cpu_asm.S
 
 include $(top_srcdir)/../../../automake/local.am
