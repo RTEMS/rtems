@@ -1,3 +1,7 @@
+2004-02-04	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Add missing $ in reference to 3c509.rel.
+
 2004-02-03	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Merge-in 3c509/Makefile.am, clock/Makefile.am,

@@ -193,7 +193,7 @@ libbsp_a_LIBADD = startup$(LIB_VARIANT).rel clock$(LIB_VARIANT).rel \
 # dec21140 is supported via libchip
 if HAS_NETWORKING
 libbsp_a_LIBADD += ne2000$(LIB_VARIANT).rel wd8003$(LIB_VARIANT).rel \
-    3c509(LIB_VARIANT).rel
+    3c509$(LIB_VARIANT).rel
 endif
 libbsp_a_LIBADD += ../../../libcpu/i386/cache$(LIB_VARIANT).rel \
     ../../../libcpu/i386/page$(LIB_VARIANT).rel \
