@@ -286,7 +286,7 @@ This directive will not cause the calling task to be preempted.
 @c @findex rtems_interrupt_disable
 @example
 void rtems_interrupt_disable(
-  rtems_isr_level  level
+  rtems_interrupt_level  level
 );
 
 /* this is implemented as a macro and sets level as a side-effect */
@@ -329,7 +329,7 @@ parameter.}
 @c @findex rtems_interrupt_enable
 @example
 void rtems_interrupt_enable(
-  rtems_isr_level  level
+  rtems_interrupt_level  level
 );
 @end example
 @end ifset
@@ -369,7 +369,7 @@ This directive will not cause the calling task to be preempted.
 @c @findex rtems_interrupt_flash
 @example
 void rtems_interrupt_flash(
-  rtems_isr_level level
+  rtems_interrupt_level level
 );
 @end example
 @end ifset
