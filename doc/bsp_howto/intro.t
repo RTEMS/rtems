@@ -16,22 +16,43 @@ are provided for the following topics:
 
 @itemize @bullet
 
-@item RTEMS Board Support Packages organization,
+@item RTEMS Board Support Package Organization
 
-@item Makefiles and the linker command script,
+@item Makefiles and the Linker Command Script
 
-@item Board initialization code,
+@item Board Initialization Sequence
 
-@item Clock driver,
+@item Device Drivers Including:
 
-@item Console driver,
+@itemize @bullet
 
-@item Timer driver.
+@item Clock Driver
+
+@item Console Driver
+
+@item Timer Driver
+
+@item Real-Time Clock Driver
+
+@item Non-Volatile Memory Driver
+
+@item Networking Driver
+
+@item Shared Memory Support Driver
+
+@item Analog Driver
+
+@item Discrete Driver
+
+@end itemize
 
 @end itemize
 
 The original version of this manual was written by Geoffroy Montel
 <g_montel@@yahoo.com>.  When he started development of the gen68340
-BSP, this manual did not exist.  He wrote this manual as the result
-of his experiences.  At that time, this document was viewed internally
-as the most important "missing manual" in the RTEMS documentation set.
+BSP, this manual did not exist.  He wrote the initial version of
+this manual as the result of his experiences.  At that time, this
+document was viewed internally as the most important "missing manual"
+in the RTEMS documentation set.
+
+
