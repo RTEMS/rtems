@@ -14,7 +14,7 @@ LIB=${ARCH}/${LIBNAME}
 # C and C++ source names, if any, go here -- minus the .c or .cc
 C_PIECES=__gettod __brk __times _execve getdents malloc syscalls \
     no_libc newlibc newlibif newlibifr support unixlibc \
-    libio hosterr tcattr tcdrain cfiospeed termios
+    libio hosterr tcattr tcdrain cfiospeed termios readdir opendir
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
