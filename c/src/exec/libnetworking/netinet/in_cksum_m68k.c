@@ -113,16 +113,15 @@ in_cksum(m, len)
 		 * It should work for all 68k family members.
 		 */
 		{
-		unsigned long tcnt = mlen, t1, t2;
+		unsigned long tcnt = mlen, t1;
 		__asm__ volatile (
 		"movel   %2,%3\n\t"
 		"lsrl    #6,%2       | count/64 = # loop traversals\n\t"
 		"andl    #0x3c,%3    | Then find fractions of a chunk\n\t"
 		"negl    %3\n\t      | Each long uses 4 instruction bytes\n\t"
 #if IS_COLDFIRE
-		"move    %%cc,%4     | Move the CC into a temp reg\n\t"
-		"andil   #0xf,%4     | Clear X (extended carry flag)\n\t"
-		"move    %4,%%cc     | Move the modified value back to the cc\n\t"
+		"addql   #1,%2       | Clear X (extended carry flag)\n\t"
+		"subql   #1,%2       | \n\t"
 #else
 		"andi    #0xf,%%cc   | Clear X (extended carry flag)\n\t"
 #endif
@@ -169,12 +168,13 @@ in_cksum(m, len)
 		"movel   #0xffff,%2  | Get word mask\n\t"
 		"movel   %0,%3       | Fold 32 bit sum to 16 bits\n\t"
 		"swap    %3          |\n\t"
-		"andl    %2,%0       |\n\t"
-		"andl    %2,%3       |\n\t"
+		"andl    %2,%0       | Mask to 16-bit sum\n\t"
+		"andl    %2,%3       | Mask to 16-bit sum\n\t"
 		"addl    %3,%0       |\n\t"
 		"movel   %0,%3       | Add in last carry\n\t"
 		"swap    %3          |\n\t"
 		"addl    %3,%0       |\n\t"
+		"andl    %2,%0       | Mask to 16-bit sum\n\t"
 #else
 		"dbf     %2,lcsum1_lbl | (NB- dbf doesn't affect X)\n\t"
 		"movel   %0,%3       | Fold 32 bit sum to 16 bits\n\t"
@@ -182,9 +182,10 @@ in_cksum(m, len)
 		"addxw   %3,%0       |\n\t"
 		"moveq   #0,%3       | Add in last carry\n\t"
 		"addxw   %3,%0       |\n\t"
+		"andl    #0xffff,%0  | Mask to 16-bit sum\n"
 #endif
-		"andl    #0xffff,%0     | Mask to 16-bit sum\n" :
-			"=d" (sum), "=a" (w), "=d" (tcnt) , "=d" (t1), "=d" (t2) :
+			:
+			"=d" (sum), "=a" (w), "=d" (tcnt) , "=d" (t1) :
 			"0" (sum), "1" (w), "2" (tcnt) :
 			"cc", "memory");
 		}
