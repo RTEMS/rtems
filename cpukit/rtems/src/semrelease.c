@@ -59,6 +59,12 @@
  *    error code        - if unsuccessful
  */
 
+#if defined(RTEMS_MULTIPROCESSING)
+#define MUTEX_MP_SUPPORT _Semaphore_Core_mutex_mp_support
+#else
+#define MUTEX_MP_SUPPORT NULL
+#endif
+
 rtems_status_code rtems_semaphore_release(
   Objects_Id id
 )
@@ -87,30 +93,22 @@ rtems_status_code rtems_semaphore_release(
     case OBJECTS_LOCAL:
       if ( !_Attributes_Is_counting_semaphore(the_semaphore->attribute_set) ) {
         mutex_status = _CORE_mutex_Surrender(
-                         &the_semaphore->Core_control.mutex,
-                         id,
-#if defined(RTEMS_MULTIPROCESSING)
-                         _Semaphore_Core_mutex_mp_support
-#else
-                         NULL
-#endif
-                       );
+          &the_semaphore->Core_control.mutex,
+          id,
+          MUTEX_MP_SUPPORT
+        );
         _Thread_Enable_dispatch();
         return _Semaphore_Translate_core_mutex_return_code( mutex_status );
-      }
-      else
+      } else {
         semaphore_status = _CORE_semaphore_Surrender(
-                             &the_semaphore->Core_control.semaphore,
-                             id,
-#if defined(RTEMS_MULTIPROCESSING)
-                             _Semaphore_Core_semaphore_mp_support
-#else
-                             NULL
-#endif
-                           );
+          &the_semaphore->Core_control.semaphore,
+          id,
+          MUTEX_MP_SUPPORT
+        );
         _Thread_Enable_dispatch();
         return
           _Semaphore_Translate_core_semaphore_return_code( semaphore_status );
+      }
   }
 
   return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
