@@ -9,7 +9,7 @@
 
 
 /*
- *  3.4.3 Delay Process Execution, P1003.1b-1993, p. 73
+ *  3.4.3 Delay Process Execution, P1003.1b-1993, p. 81
  */
 
 unsigned int sleep(
