@@ -1,4 +1,4 @@
-AM_MAKEINFOFLAGS = -I ..
+AM_MAKEINFOFLAGS = -I .. -I $(top_srcdir)
 
 html_projectdir = $(htmldir)/$(PROJECT)
 

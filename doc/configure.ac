@@ -138,8 +138,6 @@ AC_CONFIG_SUBDIRS(tools)
 AC_CONFIG_FILES([Makefile
 rtems_support.html
 index.html
-images/Makefile
-common/Makefile
 FAQ/Makefile
 develenv/Makefile
 user/Makefile

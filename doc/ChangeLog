@@ -1,3 +1,11 @@
+2002-12-08	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Merge-in images/Makefile.am, common/Makefile.am.
+	* images/Makefile.am: Remove.
+	* common/Makefile.am: Remove.
+	* configure.ac: Reflect changes above.
+	* main.am: Append -I $(topsrc_dir) to AM_MAKEINFOFLAGS.
+
 2002-11-13	Joel Sherrill <joel@OARcorp.com>
 
 	* index.html.in: Note that the Getting Started with GNAT/RTEMS 
