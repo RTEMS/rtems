@@ -1,3 +1,49 @@
+2000-09-14	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* macros: New directory.
+	* macros/bsp-alias.m4: new file.
+	* macros/canonical-host.m4: new file.
+	* macros/canonical-target-name.m4: new file.
+	* macros/canonicalize-tools.m4: new file.
+	* macros/check-bsp-cache.m4: new file.
+	* macros/check-bsps.m4: new file.
+	* macros/check-cpu.m4: new file.
+	* macros/rtems-debug.m4: new file.
+	* macros/check-cxx.m4: new file.
+	* macros/check-itron.m4: new file.
+	* macros/check-multiprocessing.m4: new file.
+	* macros/check-networking.m4: new file.
+	* macros/check-newlib.m4: new file.
+	* macros/check-posix.m4: new file.
+	* macros/check-rdbg.m4: new file.
+	* macros/enable-bare.m4: new file.
+	* macros/enable-cxx.m4: new file.
+	* macros/enable-gcc28.m4: new file.
+	* macros/enable-inlines.m4: new file.
+	* macros/enable-itron.m4: new file.
+	* macros/enable-libcdir.m4: new file.
+	* macros/enable-multiprocessing.m4: new file.
+	* macros/enable-networking.m4: new file.
+	* macros/enable-posix.m4: new file.
+	* macros/enable-rdbg.m4: new file.
+	* macros/enable-rtemsbsp.m4: new file.
+	* macros/enable-tests.m4: new file.
+	* macros/gcc-pipe.m4: new file.
+	* macros/gcc-specs.m4: new file.
+	* macros/i386-gas-code16.m4: new file.
+	* macros/path-ksh.m4: new file.
+	* macros/path-perl.m4: new file.
+	* macros/prog-cc.m4: new file.
+	* macros/prog-cxx.m4: new file.
+	* macros/project-root.m4: new file.
+	* macros/rtems-top.m4: new file.
+	* macros/sysv-ipc.m4: new file.
+	* macros/target.m4: new file.
+	* macros/rtems-test-no-pause.m4: new file.
+	* macros/multilib.m4: new file.
+	* macros/tool-paths.m4: new file.
+	* macros/tool-prefix.m4: new file.
+
 2000-09-14	Joel Sherrill <joel@OARcorp.com>
 
 	* Makefile.am: Referenceed aclocal/enable-hwapi.m4 that was removed.
