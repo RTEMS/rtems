@@ -101,8 +101,6 @@ else { $rtems_top .= "/" ; }
 
   foreach ( @buffer )
   {
-#    tr /\{\}/\(\)/ ;
-
     if ( /^(TMP|PRE)INSTALL_FILES[\s]*=(.*)$/o )
     { # force "+="
       push @ibuf, "$1INSTALL_FILES +=$2\n" ;
@@ -149,8 +147,6 @@ else { $rtems_top .= "/" ; }
   }
   @buffer = @ibuf ;
 }
-
-# print STDERR "<tmp>\n", @buffer, "</tmp>\n" ;
 
 {
   my @ibuf = () ;
@@ -296,7 +292,7 @@ foreach( @vars )
       push @ibuf, "\nAUTOMAKE_OPTIONS = @{$l}\n" ;
       if ( "$rtems_cfg" eq "." )
       {
-        push @ibuf, "ACLOCAL_AMFLAGS = -I \$(RTEMS_TOPdir)/aclocal\n" ;
+        push @ibuf, "ACLOCAL_AMFLAGS = -I ${rtems_top}aclocal\n" ;
       }
       if ( defined( @{$var_{"\$(VPATH)"}} ) )
       {
