@@ -1,0 +1,7 @@
+#
+#  $Id$
+#
+
+ifc.exe is an MS-DOS executable which is equivalent to the program
+install-if-change.  It was compiled using Borland C 2.00.
+
