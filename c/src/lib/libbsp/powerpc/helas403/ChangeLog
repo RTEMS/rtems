@@ -1,3 +1,8 @@
+2004-04-13	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* flashentry/flashentry.S: Include <rtems/score/powerpc.h> instead of
+	<rtems/score/ppc.h>.
+
 2004-04-02	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* dlentry/dlentry.S: Include <rtems/asm.h> instead of <asm.h>.
