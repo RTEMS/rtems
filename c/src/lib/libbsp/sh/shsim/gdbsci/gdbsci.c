@@ -17,7 +17,7 @@
 #include <stdlib.h>
 
 #include <rtems/libio.h>
-#include <iosupp.h>
+#include <rtems/iosupp.h>
 #include <rtems/score/sh_io.h>
 /* HACK: There must be something better than this :) */
 #if defined(__sh1__)
