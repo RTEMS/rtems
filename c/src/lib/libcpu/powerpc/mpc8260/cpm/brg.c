@@ -36,7 +36,7 @@
 #include <rtems.h>
 #include <mpc8260.h>
 #include <mpc8260/cpm.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 #define NUM_BRGS 8
 #define NUM_CLKS 20

@@ -15,7 +15,7 @@
  */
 
 #include <libcpu/spr.h>
-#include <bspIo.h>
+#include <rtems/bspIo.h>
 
 /*
  * Generate inline code to read Processor Version Register

@@ -25,7 +25,7 @@
 #include <assert.h>
 #include <libcpu/cpu.h>
 #include <libcpu/c_clock.h>
-#include <bspIo.h>                     /* for printk() */
+#include <rtems/bspIo.h>                     /* for printk() */
 
 /*
  *  Clock ticks since initialization

@@ -54,7 +54,7 @@
 #include <unistd.h>
 #include <termios.h>
 #include <bsp/irq.h>
-#include <bspIo.h>   /* for printk */
+#include <rtems/bspIo.h>   /* for printk */
 
 extern rtems_cpu_table Cpu_table;
 
