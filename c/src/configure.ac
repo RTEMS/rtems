@@ -63,42 +63,44 @@ AC_CACHE_CHECK([for RTEMS_CPU_MODEL], [rtems_cv_RTEMS_CPU_MODEL],
 [. $RTEMS_TOPdir/c/${RTEMS_BSP}/make/${RTEMS_BSP}.cache])
 RTEMS_CPU_MODEL=$rtems_cv_RTEMS_CPU_MODEL
 AC_SUBST(RTEMS_CPU_MODEL)
+test -n "${RTEMS_CPU_MODEL}" && \
+  ac_configure_args="$ac_configure_args 'RTEMS_CPU_MODEL=${RTEMS_CPU_MODEL}'"
 
 AC_CACHE_CHECK([for RTEMS_BSP_FAMILY],[rtems_cv_RTEMS_BSP_FAMILY],
 [. $RTEMS_TOPdir/c/${RTEMS_BSP}/make/${RTEMS_BSP}.cache])
 RTEMS_BSP_FAMILY=$rtems_cv_RTEMS_BSP_FAMILY
 AC_SUBST(RTEMS_BSP_FAMILY)
+test -n "${RTEMS_BSP_FAMILY}" && \
+  ac_configure_args="$ac_configure_args 'RTEMS_BSP_FAMILY=${RTEMS_BSP_FAMILY}'"
 
 AC_CACHE_CHECK([for RTEMS_BSP_CFLAGS],[rtems_cv_RTEMS_BSP_CFLAGS],
 [. $RTEMS_TOPdir/c/${RTEMS_BSP}/make/${RTEMS_BSP}.cache])
 RTEMS_BSP_CFLAGS=$rtems_cv_RTEMS_BSP_CFLAGS
 AC_SUBST(RTEMS_BSP_CFLAGS)
+test -n "${RTEMS_BSP_CFLAGS}" && \
+  ac_configure_args="$ac_configure_args 'CPU_CFLAGS=${RTEMS_BSP_CFLAGS}'"
 
 AC_CACHE_CHECK([for RTEMS_BSP_CFLAGS_OPTIMIZE_V],[rtems_cv_RTEMS_BSP_CFLAGS_OPTIMIZE_V],
 [. $RTEMS_TOPdir/c/${RTEMS_BSP}/make/${RTEMS_BSP}.cache])
 RTEMS_BSP_CFLAGS_OPTIMIZE_V=$rtems_cv_RTEMS_BSP_CFLAGS_OPTIMIZE_V
 AC_SUBST(RTEMS_BSP_CFLAGS_OPTIMIZE_V)
+test -n "{RTEMS_BSP_CFLAGS_OPTIMIZE_V}" && \
+  ac_configure_args="$ac_configure_args 'CFLAGS_OPTIMIZE_V=${RTEMS_BSP_CFLAGS_OPTIMIZE_V}'"
 
 AC_CACHE_CHECK([for RTEMS_BSP_CFLAGS_DEBUG_V],[rtems_cv_RTEMS_BSP_CFLAGS_DEBUG_V],
 [. $RTEMS_TOPdir/c/${RTEMS_BSP}/make/${RTEMS_BSP}.cache])
 RTEMS_BSP_CFLAGS_DEBUG_V=$rtems_cv_RTEMS_BSP_CFLAGS_DEBUG_V
 AC_SUBST(RTEMS_BSP_CFLAGS_DEBUG_V)
+test -n "${RTEMS_BSP_CFLAGS_DEBUG_V}" && \
+  ac_configure_args="$ac_configure_args 'CFLAGS_DEBUG_V=${RTEMS_BSP_CFLAGS_DEBUG_V}'"
 
 AC_CACHE_CHECK([for RTEMS_BSP_CFLAGS_PROFILE_V],[rtems_cv_RTEMS_BSP_CFLAGS_PROFILE_V],
 [. $RTEMS_TOPdir/c/${RTEMS_BSP}/make/${RTEMS_BSP}.cache])
 RTEMS_BSP_CFLAGS_PROFILE_V=$rtems_cv_RTEMS_BSP_CFLAGS_PROFILE_V
 AC_SUBST(RTEMS_BSP_CFLAGS_PROFILE_V)
-
-test -n "${RTEMS_BSP_CFLAGS}" && \
-  ac_configure_args="$ac_configure_args 'CPU_CFLAGS=${RTEMS_BSP_CFLAGS}'"
-test -n "{RTEMS_BSP_CFLAGS_OPTIMIZE_V}" && \
-  ac_configure_args="$ac_configure_args 'CFLAGS_OPTIMIZE_V=${RTEMS_BSP_CFLAGS_OPTIMIZE_V}'"
-test -n "${RTEMS_BSP_CFLAGS_DEBUG_V}" && \
-  ac_configure_args="$ac_configure_args 'CFLAGS_DEBUG_V=${RTEMS_BSP_CFLAGS_DEBUG_V}'"
 test -n "${RTEMS_BSP_CFLAGS_PROFILE_V}" && \
   ac_configure_args="$ac_configure_args 'CFLAGS_PROFILE_V=${RTEMS_BSP_CFLAGS_PROFILE_V}'"
-test -n "${RTEMS_BSP_FAMILY}" && \
-  ac_configure_args="$ac_configure_args 'RTEMS_BSP_FAMILY=${RTEMS_BSP_FAMILY}'"
+
 
 AC_SUBST(CUSTOM_CFG_FILES)
 AC_SUBST(cfg_dir)
