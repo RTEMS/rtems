@@ -18,7 +18,7 @@ C_PIECES = c_clock
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES =
+H_FILES = $(srcdir)/c_clock.h
 
 # Assembly source names, if any, go here -- minus the .S
 S_PIECES =
@@ -55,7 +55,10 @@ LDFLAGS +=
 CLEAN_ADDITIONS +=
 CLOBBER_ADDITIONS +=
 
-all: ${ARCH} $(SRCS) $(OBJS)
+all: ${ARCH} $(SRCS) preinstall $(OBJS)
+
+preinstall: $(INSTALLDIRS) $(H_FILES)
+	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/libcpu
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 install: all

@@ -20,12 +20,12 @@
  *  $Id$
  */
 
-#include <bsp.h>
-#include <bsp/irq.h>
+#include <rtems.h>
 #include <rtems/libio.h>
 #include <stdlib.h>                     /* for atexit() */
 #include <assert.h>
 #include <libcpu/cpu.h>
+#include <libcpu/c_clock.h>
 
 /*
  *  Clock ticks since initialization
@@ -46,7 +46,7 @@ rtems_unsigned32 Clock_Decrementer_value;
 rtems_device_major_number rtems_clock_major = ~0;
 rtems_device_minor_number rtems_clock_minor;
 
-void clockOff(const rtems_irq_connect_data* unused)
+void clockOff(void* unused)
 {
   if (BSP_Configuration.ticks_per_timeslice)    {
     /*
@@ -55,7 +55,7 @@ void clockOff(const rtems_irq_connect_data* unused)
      */
   }
 }
-static void clockOn(const rtems_irq_connect_data* unused)
+void clockOn(void* unused)
 {
   PPC_Set_decrementer( Clock_Decrementer_value );
 }
@@ -90,7 +90,7 @@ void clockIsr()
   rtems_clock_tick();
 }
 
-int clockIsOn(const rtems_irq_connect_data* unused)
+int clockIsOn(void* unused)
 {
   unsigned32 msr_value;
 
@@ -99,12 +99,6 @@ int clockIsOn(const rtems_irq_connect_data* unused)
   return 0;
 }
 
-static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
-					      clockIsr,
-					      clockOn,
-					      clockOff,
-					      clockIsOn};
-					      
 
 /*
  *  Clock_exit
@@ -123,7 +117,7 @@ static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
 void Clock_exit( void )
 {
   if ( BSP_Configuration.ticks_per_timeslice ) {
-   BSP_remove_rtems_irq_handler (&clockIrqData);
+   (void) BSP_disconnect_clock_handler ();
   }
 }
  
@@ -152,7 +146,7 @@ rtems_device_driver Clock_initialize(
   Clock_Decrementer_value = (BSP_bus_frequency/4000)*
                             (BSP_Configuration.microseconds_per_tick/1000);
 
-  if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
+  if (!BSP_connect_clock_handler ()) {
     printk("Unable to initialize system clock\n");
     rtems_fatal_error_occurred(1);
   }
@@ -186,7 +180,6 @@ rtems_device_driver Clock_control(
   void *pargp
 )
 {
-    rtems_unsigned32 isrlevel;
     rtems_libio_ioctl_args_t *args = pargp;
  
     if (args == 0)
@@ -199,7 +192,7 @@ rtems_device_driver Clock_control(
       clockIsr();
     else if (args->command == rtems_build_name('N', 'E', 'W', ' '))
     {
-      if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
+      if (!BSP_connect_clock_handler ()) {
 	printk("Error installing clock interrupt handler!\n");
 	rtems_fatal_error_occurred(1);
       }

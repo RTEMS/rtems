@@ -16,11 +16,11 @@ VPATH = @srcdir@
 PGM = ${ARCH}/clock.rel
 
 # C source names, if any, go here -- minus the .c
-C_PIECES = c_clock
+C_PIECES = p_clock
 C_FILES = $(C_PIECES:%=%.c)
 C_O_FILES = $(C_PIECES:%=${ARCH}/%.o)
 
-H_FILES = 
+H_FILES =
 
 SRCS = $(C_FILES) $(H_FILES)
 OBJS = $(C_O_FILES)
@@ -61,11 +61,7 @@ CLOBBER_ADDITIONS +=
 ${PGM}: ${SRCS} ${OBJS}
 	$(make-rel)
 
-preinstall: 
-	@$(mkinstalldirs) $(PROJECT_INCLUDE)/bsp
-	@$(INSTALL_CHANGE) -m 644 $(H_FILES) $(PROJECT_INCLUDE)/bsp
-
-all: ${ARCH} $(SRCS) preinstall $(PGM)
+all: ${ARCH} $(SRCS) $(PGM)
 
 # the .rel file built here will be put into libbsp.a by ../wrapup/Makefile
 install: all
