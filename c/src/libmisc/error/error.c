@@ -115,10 +115,8 @@ static int rtems_verror(
 
     if (error_flag & RTEMS_ERROR_PANIC)
     {
-        rtems_panic_in_progress++;
-
-        /* disable task switches */
-        _Thread_Disable_dispatch();
+        if (rtems_panic_in_progress++)
+            _Thread_Disable_dispatch();       /* disable task switches */
 
         /* don't aggravate things */
         if (rtems_panic_in_progress > 2)
