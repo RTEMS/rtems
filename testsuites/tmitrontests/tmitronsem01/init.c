@@ -140,5 +140,5 @@ void ITRON_Init( void )
 
 
   printf( "*** END OF TMITRON01 -- ITRON TIMING TEST ***\n" );
-  exit( 0 );
+  rtems_test_exit( 0 );
 }
