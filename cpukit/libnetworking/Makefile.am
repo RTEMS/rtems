@@ -5,12 +5,18 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 include $(top_srcdir)/automake/multilib.am
-include $(top_srcdir)/automake/amcompile.am
+include $(top_srcdir)/automake/compile.am
 
 AM_CPPFLAGS += -I$(top_builddir)
 
-if HAS_NETWORKING
+EXTRA_DIST = README
 
+UNUSED_FILES = poll.h
+
+UNUSED_FILES += net/zlib.c net/zlib.h
+UNUSED_FILES += net/ppp.h net/ppp-deflate.c net/bsd-comp.c
+
+if HAS_NETWORKING
 # Add -DFORWARD_PROTOCOL to enable UDP forwarding -- requires missing net/pf.h
 libnetworking_CPPFLAGS = -D_COMPILING_BSD_KERNEL_ -DKERNEL -DINET -DNFS \
     -DDIAGNOSTIC -DBOOTP_COMPAT
@@ -32,7 +38,6 @@ TMP_LIBS = libnetworking$(LIB_VARIANT).a
 ## and installing poll.h confuses autoconf.
 include_HEADERS = bpfilter.h loop.h netdb.h opt_ipfw.h opt_mrouting.h \
     opt_tcpdebug.h resolv.h syslog.h memory.h
-
 # arpa
 
 include_arpadir = $(includedir)/arpa
@@ -52,6 +57,8 @@ include_machinedir = $(includedir)/machine
 
 include_machine_HEADERS = machine/conf.h machine/cpu.h machine/cpufunc.h \
     machine/endian.h machine/in_cksum.h machine/vmparam.h
+
+libnetworking_a_SOURCES += machine/limits.h
 
 ## net
 
@@ -86,6 +93,11 @@ libnetworking_a_SOURCES += netinet/if_ether.c netinet/igmp.c netinet/in.c \
     netinet/tcp_subr.c netinet/tcp_timer.c netinet/tcp_usrreq.c \
     netinet/udp_usrreq.c
 
+## FIXME: these files should be renamed into *.h and put into
+## libnetworking_a_SOURCES
+EXTRA_DIST += netinet/in_cksum_arm.c netinet/in_cksum_i386.c \
+    netinet/in_cksum_m68k.c netinet/in_cksum_powerpc.c
+
 ## nfs
 
 include_nfsdir = $(includedir)/nfs
@@ -102,9 +114,9 @@ include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = rtems/rtems_bsdnet.h rtems/rtems_bsdnet_internal.h \
     rtems/tftp.h rtems/ftpfs.h rtems/mkrootfs.h
 
-libnetworking_a_SOURCES += rtems/sghostname.c rtems/issetugid.c rtems/rtems_glue.c \
-    rtems/rtems_syscall.c rtems/rtems_bootp.c rtems/rtems_showmbuf.c \
-    rtems/rtems_showroute.c rtems/rtems_showifstat.c \
+libnetworking_a_SOURCES += rtems/sghostname.c rtems/issetugid.c \
+    rtems/rtems_glue.c rtems/rtems_syscall.c rtems/rtems_bootp.c \
+    rtems/rtems_showmbuf.c rtems/rtems_showroute.c rtems/rtems_showifstat.c \
     rtems/rtems_showipstat.c rtems/rtems_showicmpstat.c \
     rtems/rtems_showtcpstat.c rtems/rtems_showudpstat.c rtems/rtems_select.c \
     rtems/mkrootfs.c rtems/rtems_bsdnet_malloc_starvation.c
@@ -152,30 +164,25 @@ libc_a_SOURCES = libc/addr2ascii.c libc/ascii2addr.c libc/base64.c \
     libc/res_mkquery.c libc/res_mkupdate.c libc/res_query.c libc/res_send.c \
     libc/res_stubs.c libc/res_update.c libc/strsep.c libc/rcmd.c
 libc_g_a_SOURCES = $(libc_a_SOURCES)
+endif
 
-man_MANS = libc/addr2ascii.3 libc/byteorder.3 libc/ethers.3 \
+UNUSED_FILES += libc/ether_addr.c libc/gethostname.c libc/inet_neta.c \
+    libc/inet_net_ntop.c libc/inet_net_pton.c libc/iso_addr.c libc/ns_addr.c \
+    libc/ns_ntoa.c libc/recv.c libc/res_config.h libc/send.c
+
+libc_mans = libc/addr2ascii.3 libc/byteorder.3 libc/ethers.3 \
     libc/gethostbyname.3 libc/getnetent.3 libc/getprotoent.3 \
     libc/getservent.3 libc/inet.3 libc/iso_addr.3 libc/linkaddr.3 libc/ns.3 \
     libc/rcmd.3 libc/resolver.3
+EXTRA_DIST += $(libc_mans)
 
+if HAS_NETWORKING
+man_MANS = $(libc_MANS)
 TMP_LIBS += libc$(LIB_VARIANT).a
 
-EXTRA_DIST = libc/addr2ascii.3 libc/byteorder.3 libc/ether_addr.c \
-    libc/ethers.3 libc/gethostbyname.3 libc/gethostname.c libc/getnetbydns.c \
-    libc/getnetbyht.c libc/getnetbynis.c libc/getnetent.3 \
-    libc/getnetnamadr.c libc/getproto.c libc/getprotoent.3 libc/getservent.3 \
-    libc/inet.3 libc/inet_addr.c libc/inet_lnaof.c libc/inet_makeaddr.c \
-    libc/inet_net_ntop.c libc/inet_net_pton.c libc/inet_neta.c \
-    libc/inet_netof.c libc/inet_network.c libc/inet_ntoa.c libc/inet_ntop.c \
-    libc/inet_pton.c libc/map_v4v6.c libc/linkaddr.3 libc/linkaddr.c \
-    libc/ns.3 libc/ns_addr.c libc/ns_name.c libc/ns_netint.c libc/ns_ntoa.c \
-    libc/ns_parse.c libc/ns_print.c libc/ns_ttl.c libc/nsap_addr.c \
-    libc/rcmd.3 libc/rcmd.c libc/recv.c libc/res_comp.c libc/res_config.h \
-    libc/res_data.c libc/res_debug.c libc/res_init.c libc/res_mkquery.c \
-    libc/res_mkupdate.c libc/res_query.c libc/res_stubs.c libc/res_update.c \
-    libc/resolver.3 libc/send.c
-
 ## lib
+
+EXTRA_DIST += lib/README
 
 lib_CPPFLAGS = -DNOPOLL -DNOSELECT
 
@@ -196,6 +203,8 @@ TMP_LIBS += lib$(LIB_VARIANT).a
 # ---
 all-local: $(PREINSTALL_FILES) $(TMP_LIBS)
 endif
+
+EXTRA_DIST += $(UNUSED_FILES)
 
 PREINSTALL_FILES =
 

@@ -1,3 +1,8 @@
+2004-01-11  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Include compile.am, again.
+	Cleanup.
+
 2004-01-08  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* Makefile.am: Remove *C_FILES.
