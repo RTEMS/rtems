@@ -27,14 +27,15 @@ AM_CONDITIONAL(UNIX,test x"$RTEMS_CPU" = x"unix")
 AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
 
 AS_IF([test x"$RTEMS_USE_NEWLIB" != x"yes"],[
-## Provide sys/cdefs.h only if the host doesn't.
+## Provide headers only if the host doesn't.
   AC_CHECK_HEADERS([sys/cdefs.h],[NEED_SYS_CDEFS_H=no],[NEED_SYS_CDEFS_H=yes])
-# FIXME: These checks are only in here to provide
-# configuration-time diagnostics and are not really used.
-  AC_CHECK_HEADERS([stdint.h inttypes.h])
+  AC_CHECK_HEADERS([stdint.h],[NEED_STDINT_H=no],[NEED_STDINT_H=yes])
+  AC_CHECK_HEADERS([inttypes.h],[NEED_INTTYPES_H=no],[NEED_INTTYPES=yes])
 ],[
 ## Using newlib, we provide sys/cdefs.h
   NEED_SYS_CDEFS_H=yes
+  NEED_STDINT_H=yes
+  NEED_INTTYPES_H=yes
 ])
 
 # FIXME: These checks are only in here to provide
@@ -75,6 +76,8 @@ AC_CHECK_DECLS([sbrk],,,[#include <unistd.h>])
 AC_CHECK_FUNCS(strlcpy strlcat)
 
 AM_CONDITIONAL([NEED_SYS_CDEFS_H],[test x"$NEED_SYS_CDEFS_H" = x"yes"])
+AM_CONDITIONAL([NEED_STDINT_H],[test x"$NEED_STDINT_H" = x"yes"])
+AM_CONDITIONAL([NEED_INTTYPES_H],[test x"$NEED_INTTYPES_H" = x"yes"])
 
 AM_CONFIG_HEADER([src/config.h])
 

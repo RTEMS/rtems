@@ -12,7 +12,12 @@ include_HEADERS = include/chain.h include/console.h include/clockdrv.h \
     include/iosupp.h include/ringbuf.h include/rtc.h \
     include/spurious.h include/timerdrv.h include/vmeintr.h
 
-LIBC_HFILES = include/stdint.h include/inttypes.h
+if NEED_STDINT_H
+LIBC_HFILES = include/stdint.h
+endif
+if NEED_INTTYPES_H
+LIBC_HFILES += include/inttypes.h
+endif
 include_HEADERS += $(LIBC_HFILES)
 
 PREINSTALL_FILES = $(PROJECT_INCLUDE) \
