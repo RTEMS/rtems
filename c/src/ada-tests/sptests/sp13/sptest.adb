@@ -26,7 +26,6 @@ with INTERFACES; use INTERFACES;
 with RTEMS;
 with TEST_SUPPORT;
 with TEXT_IO;
-with UNCHECKED_CONVERSION;
 with UNSIGNED32_IO;
 
 package body SPTEST is
