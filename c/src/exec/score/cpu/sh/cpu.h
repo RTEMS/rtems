@@ -249,6 +249,24 @@ extern "C" {
 #define CPU_STRUCTURE_ALIGNMENT __attribute__ ((aligned(16)))
 
 /*
+ *  Define what is required to specify how the network to host conversion
+ *  routines are handled.
+ *
+ *  NOTE: SHes can be big or little endian, the default is big endian
+ */
+
+#define CPU_CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES FALSE
+
+/* __LITTLE_ENDIAN__ is defined if -ml is given to gcc */
+#if defined(__LITTLE_ENDIAN__)
+#define CPU_BIG_ENDIAN                           FALSE
+#define CPU_LITTLE_ENDIAN                        TRUE
+#else
+#define CPU_BIG_ENDIAN                           TRUE
+#define CPU_LITTLE_ENDIAN                        FALSE
+#endif
+ 
+/*
  *  The following defines the number of bits actually used in the
  *  interrupt field of the task mode.  How those bits map to the
  *  CPU interrupt levels is defined by the routine _CPU_ISR_Set_level().
