@@ -22,12 +22,20 @@ include_rtems_HEADERS = include/chain.h include/console.h include/clockdrv.h \
 
 include_HEADERS =
 
-if NEWLIB
+#if NEWLIB
+include_sysdir = $(includedir)/sys
+include_sys_HEADERS =
+
+if RTEMS_PROVIDES_STDINT_H
 include_HEADERS += include/stdint.h
-include_HEADERS += include/inttypes.h
-include_rtems_HEADERS += include/rtems/_stdint.h
-include_rtems_HEADERS += include/rtems/_inttypes.h
+include_sys_HEADERS += include/sys/_stdint.h
 endif
+
+if RTEMS_PROVIDES_INTTYPES_H
+include_HEADERS += include/inttypes.h
+include_sys_HEADERS += include/sys/_inttypes.h
+endif
+#endif
 
 ## motorola
 
@@ -44,8 +52,7 @@ include_rtems_HEADERS += include/rtems/assoc.h include/rtems/error.h \
 ## sys
 
 if NEWLIB
-include_sysdir = $(includedir)/sys
-include_sys_HEADERS = include/sys/ioccom.h include/sys/filio.h \
+include_sys_HEADERS += include/sys/ioccom.h include/sys/filio.h \
     include/sys/ioctl.h include/sys/sockio.h include/sys/ttycom.h \
     include/sys/termios.h include/sys/utsname.h include/sys/cdefs.h
 endif
@@ -122,6 +129,48 @@ EXTRA_DIST = src/TODO src/CASES src/README
 
 DISTCLEANFILES =
 
+libcsupport/include/sys/$(dirstamp):
+	@$(mkdir_p) libcsupport/include/sys
+	@: > libcsupport/include/sys/$(dirstamp)
+
+if RTEMS_PROVIDES_STDINT_H
+
+libcsupport/include/sys/_stdint.h: include/sys/_stdint.h libcsupport/include/sys/$(dirstamp)
+	$(INSTALL_DATA) $< libcsupport/include/sys/_stdint.h
+endif
+
+if RTEMS_PROVIDES_INTTYPES_H
+
+libcsupport/include/sys/_inttypes.h: include/sys/_inttypes.h libcsupport/include/sys/$(dirstamp)
+	$(INSTALL_DATA) $< libcsupport/include/sys/_inttypes.h
+endif
+
+if NEWLIB
+libcsupport/include/sys/ioccom.h: include/sys/ioccom.h libcsupport/include/sys/$(dirstamp)
+	$(INSTALL_DATA) $< libcsupport/include/sys/ioccom.h
+
+libcsupport/include/sys/filio.h: include/sys/filio.h libcsupport/include/sys/$(dirstamp)
+	$(INSTALL_DATA) $< libcsupport/include/sys/filio.h
+
+libcsupport/include/sys/ioctl.h: include/sys/ioctl.h libcsupport/include/sys/$(dirstamp)
+	$(INSTALL_DATA) $< libcsupport/include/sys/ioctl.h
+
+libcsupport/include/sys/sockio.h: include/sys/sockio.h libcsupport/include/sys/$(dirstamp)
+	$(INSTALL_DATA) $< libcsupport/include/sys/sockio.h
+
+libcsupport/include/sys/ttycom.h: include/sys/ttycom.h libcsupport/include/sys/$(dirstamp)
+	$(INSTALL_DATA) $< libcsupport/include/sys/ttycom.h
+
+libcsupport/include/sys/termios.h: include/sys/termios.h libcsupport/include/sys/$(dirstamp)
+	$(INSTALL_DATA) $< libcsupport/include/sys/termios.h
+
+libcsupport/include/sys/utsname.h: include/sys/utsname.h libcsupport/include/sys/$(dirstamp)
+	$(INSTALL_DATA) $< libcsupport/include/sys/utsname.h
+
+libcsupport/include/sys/cdefs.h: include/sys/cdefs.h libcsupport/include/sys/$(dirstamp)
+	$(INSTALL_DATA) $< libcsupport/include/sys/cdefs.h
+endif
+
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
@@ -171,22 +220,29 @@ $(PROJECT_INCLUDE)/rtems/vmeintr.h: include/vmeintr.h $(PROJECT_INCLUDE)/rtems/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/vmeintr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/vmeintr.h
 
-if NEWLIB
+$(PROJECT_INCLUDE)/sys/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
+	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
+
+if RTEMS_PROVIDES_STDINT_H
 $(PROJECT_INCLUDE)/stdint.h: include/stdint.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/stdint.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/stdint.h
 
+$(PROJECT_INCLUDE)/sys/_stdint.h: include/sys/_stdint.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_stdint.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_stdint.h
+endif
+
+if RTEMS_PROVIDES_INTTYPES_H
 $(PROJECT_INCLUDE)/inttypes.h: include/inttypes.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/inttypes.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/inttypes.h
 
-$(PROJECT_INCLUDE)/rtems/_stdint.h: include/rtems/_stdint.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/_stdint.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/_stdint.h
-
-$(PROJECT_INCLUDE)/rtems/_inttypes.h: include/rtems/_inttypes.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/_inttypes.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/_inttypes.h
+$(PROJECT_INCLUDE)/sys/_inttypes.h: include/sys/_inttypes.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_inttypes.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_inttypes.h
 endif
 
 $(PROJECT_INCLUDE)/rtems/motorola/$(dirstamp):
@@ -231,11 +287,6 @@ $(PROJECT_INCLUDE)/rtems/cdefs.h: include/rtems/cdefs.h $(PROJECT_INCLUDE)/rtems
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/cdefs.h
 
 if NEWLIB
-$(PROJECT_INCLUDE)/sys/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)/sys
-	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
-
 $(PROJECT_INCLUDE)/sys/ioccom.h: include/sys/ioccom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioccom.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioccom.h
