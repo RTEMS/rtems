@@ -32,11 +32,6 @@ all-local: $(PREINSTALL_FILES) libscorecpu$(LIB_VARIANT).a
 PREINSTALL_DIRS =
 PREINSTALL_FILES =
 
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(mkdir_p) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
@@ -46,9 +41,14 @@ $(PROJECT_INCLUDE)/rtems/asm.h: asm.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/asm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/asm.h
 
-$(PROJECT_INCLUDE)/c4xio.h: c4xio.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/c4xio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/c4xio.h
+$(PROJECT_INCLUDE)/rtems/c4x/$(dirstamp):
+	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/c4x
+	@: > $(PROJECT_INCLUDE)/rtems/c4x/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/c4x/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/c4x/c4xio.h: c4xio.h $(PROJECT_INCLUDE)/rtems/c4x/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/c4x/c4xio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/c4x/c4xio.h
 
 $(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
 	@$(mkdir_p) $(PROJECT_INCLUDE)/rtems/score
