@@ -1,5 +1,12 @@
 2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* ide/Makefile.am, network/Makefile.am, rtc/Makefile.am, 
+	serial/Makefile.am: Remove.
+	* Makefile.am: Merge-in Makefile.am above.
+	Add preinstallation + compilation dirstamp support.
+
+2003-12-02	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* ide/Makefile.am: Remove all-local: $(ARCH).
 	* network/Makefile.am: Remove all-local: $(ARCH).
 	* rtc/Makefile.am: Remove all-local: $(ARCH).
