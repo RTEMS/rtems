@@ -1,4 +1,11 @@
 
+2000-10-18	Joel Sherrill <joel@OARcorp.com>
+
+	* libc/fcntl.c: Do not require every filesystem to have an fcntl()
+	handler.  Most fcntl() operations can be performed with no
+	filesystem support.
+	* ChangeLog: Corrected comment.
+
 2000-09-28	Joel Sherrill <joel@OARcorp.com>
 
 	* libc/libio.h (rtems_filesystem_file_handlers_r,
@@ -52,11 +59,12 @@
 	* libc/fsync.c: Ditto.
 	* libc/ioctl.c: Ditto.
 	* libc/ioman.c: Ditto.
-	* libc/memfile.c: Ditto.
 	* libc/link.c: Ditto.
 	* libc/mknod.c: Ditto.
 	* libc/symlink.c: Ditto.
 	* libc/libio.h(rtems_filesystem_dev_major_t): New macro.
+	* libc/libio.h(rtems_filesystem_dev_minor_t): New macro.
+	* libc/memfile.c: Deleted assert.  Added code to properly handle
 	appending to a file.
 
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
