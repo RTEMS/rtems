@@ -120,8 +120,8 @@ discrete.texi: discrete.t
 	    -u "Top" \
 	    -n "" < $< > $@
 
-EXTRA_DIST = adaintr.t analog.t clock.t console.t discrete.t init.t intro.t \
-    linkcmds.t makefiles.t nvmem.t rtc.t shmsupp.t support.t target.t \
-    timer.t
-
 CLEANFILES += bsp_howto.info bsp_howto.info-?
+
+EXTRA_DIST = adaintr.t analog.t ata.t clock.t console.t discrete.t \
+    ide-ctrl.t init.t intro.t linkcmds.t makefiles.t nvmem.t rtc.t shmsupp.t \
+    support.t target.t timer.t
