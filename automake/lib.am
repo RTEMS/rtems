@@ -12,7 +12,7 @@ endef
 
 TMPINSTALL_FILES = $(PROJECT_RELEASE)/lib
 
-$(PROJECT_INCLUDE)/lib:
+$(PROJECT_RELEASE)/lib:
 	@$(mkinstalldirs) $@
 
 .PRECIOUS: $(LIB)
