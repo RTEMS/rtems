@@ -51,7 +51,7 @@ IMFS_jnode_t *IMFS_create_node(
 
   node->st_nlink = 1;
   node->type     = type;
-  strncpy( node->name, name, NAME_MAX );
+  strncpy( node->name, name, IMFS_NAME_MAX );
 
   /*
    *  Fill in the mode and permission information for the jnode structure.

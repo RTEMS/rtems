@@ -28,7 +28,7 @@ int IMFS_symlink(
 {
   IMFS_types_union   info;
   IMFS_jnode_t      *new_node;
-  char               new_name[ NAME_MAX + 1 ];
+  char               new_name[ IMFS_NAME_MAX + 1 ];
   int                i;
 
   /*

@@ -35,7 +35,7 @@ int IMFS_mknod(
   IMFS_token_types   type = 0;
   IMFS_jnode_t      *new_node;
   int                result;
-  char               new_name[ NAME_MAX + 1 ];
+  char               new_name[ IMFS_NAME_MAX + 1 ];
   IMFS_types_union   info;
   
   IMFS_get_token( token, new_name, &result );

@@ -126,25 +126,31 @@ typedef union {
 } IMFS_types_union;
 
 /*
+ *  Maximum length of a "basename" of an IMFS file/node.
+ */
+
+#define IMFS_NAME_MAX  32
+
+/*
  *  The control structure for an IMFS jnode.
  */
 
 struct IMFS_jnode_tt {
-  Chain_Node               Node;             /* for chaining them together */
-  IMFS_jnode_t            *Parent;           /* Parent node */
-  char                     name[NAME_MAX+1]; /* "basename" */ 
-  mode_t                   st_mode;          /* File mode */
-  nlink_t                  st_nlink;         /* Link count */
-  ino_t                    st_ino;           /* inode */
+  Chain_Node          Node;                  /* for chaining them together */
+  IMFS_jnode_t       *Parent;                /* Parent node */
+  char                name[IMFS_NAME_MAX+1]; /* "basename" */ 
+  mode_t              st_mode;               /* File mode */
+  nlink_t             st_nlink;              /* Link count */
+  ino_t               st_ino;                /* inode */
 
-  uid_t                    st_uid;           /* User ID of owner */
-  gid_t                    st_gid;           /* Group ID of owner */
+  uid_t               st_uid;                /* User ID of owner */
+  gid_t               st_gid;                /* Group ID of owner */
 
-  time_t                   st_atime;         /* Time of last access */
-  time_t                   st_mtime;         /* Time of last modification */
-  time_t                   st_ctime;         /* Time of last status change */
-  IMFS_jnode_types_t       type;             /* Type of this entry */
-  IMFS_types_union         info;
+  time_t              st_atime;              /* Time of last access */
+  time_t              st_mtime;              /* Time of last modification */
+  time_t              st_ctime;              /* Time of last status change */
+  IMFS_jnode_types_t  type;                  /* Type of this entry */
+  IMFS_types_union    info;
 };
 
 #define IMFS_update_atime( _jnode )         \

@@ -277,7 +277,7 @@ int IMFS_evaluate_for_make(
   int                                 i = 0;
   int                                 len;
   IMFS_token_types                    type;
-  char                                token[ NAME_MAX + 1 ];
+  char                                token[ IMFS_NAME_MAX + 1 ];
   rtems_filesystem_location_info_t    newloc;
   IMFS_jnode_t                       *node;
   int                                 done = 0;
@@ -467,7 +467,7 @@ int IMFS_eval_path(
   int                                 i = 0;
   int                                 len;
   IMFS_token_types                    type = IMFS_CURRENT_DIR;
-  char                                token[ NAME_MAX + 1 ];
+  char                                token[ IMFS_NAME_MAX + 1 ];
   rtems_filesystem_location_info_t    newloc;
   IMFS_jnode_t                       *node;
   int                                 result; 

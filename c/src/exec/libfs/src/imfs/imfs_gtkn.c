@@ -32,11 +32,11 @@ IMFS_token_types IMFS_get_token(
    *  Copy a name into token.  (Remember NULL is a token.)
    */
 
-  while ( !IMFS_is_separator( path[i] ) && (i <= NAME_MAX) ) {
+  while ( !IMFS_is_separator( path[i] ) && (i <= IMFS_NAME_MAX) ) {
 
      token[i] = path[i];
 
-     if (i == NAME_MAX)
+     if (i == IMFS_NAME_MAX)
        return IMFS_INVALID_TOKEN;
 
      if ( !IMFS_is_valid_name_char( token[i] ) )
