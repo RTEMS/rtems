@@ -1,3 +1,8 @@
+2005-02-08	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* Makefile.am: Split out preinstallation rules.
+	* preinstall.am: New (Split out from Makefile.am).
+
 2005-02-04	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* rtems/m68k/m68302.h, rtems/m68k/m68360.h, rtems/m68k/qsm.h,
