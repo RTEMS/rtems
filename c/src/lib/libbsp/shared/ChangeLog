@@ -1,3 +1,10 @@
+2000-11-13	Joel Sherrill <joel@OARcorp.com>
+
+	* clock_driver_stub.c: This is a stub of a clock driver that
+	is sufficient for linking the ticker application.  Some
+	simulators do not have a soruce for a clock tick.  Also
+	this can be used while constructing a BSP so everything links.
+
 2000-11-01	Joel Sherrill <joel@OARcorp.com>
 
 	* bsplibc.c: assoc.h, error.h, libio_.h, libio.h, and
