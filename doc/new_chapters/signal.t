@@ -15,24 +15,24 @@ The signal manager ...
 The directives provided by the signal manager are:
 
 @itemize @bullet
-@item @code{sigaddset} - 
-@item @code{sigdelset} - 
-@item @code{sigfillset} - 
-@item @code{sigismember} - 
-@item @code{sigemptyset} - 
-@item @code{sigaction} - 
-@item @code{pthread_kill} - 
-@item @code{sigprocmask} - 
-@item @code{pthread_sigmask} - 
-@item @code{kill} - 
-@item @code{sigpending} - 
-@item @code{sigsuspend} - 
-@item @code{pause} - 
-@item @code{sigwait} - 
-@item @code{sigwaitinfo} - 
-@item @code{sigtimedwait} - 
-@item @code{sigqueue} - 
-@item @code{alarm} - 
+@item @code{sigaddset} - Add a Signal to a Signal Set
+@item @code{sigdelset} - Delete a Signal from a Signal Set
+@item @code{sigfillset} - Fill a Signal Set
+@item @code{sigismember} - Is Signal a Member of a Signal Set
+@item @code{sigemptyset} - Empty a Signal Set
+@item @code{sigaction} - Examine and Change Signal Action
+@item @code{pthread_kill} - Send a Signal to a Thread
+@item @code{sigprocmask} - Examine and Change Process Blocked Signals
+@item @code{pthread_sigmask} - Examine and Change Thread Blocked Signals
+@item @code{kill} - Send a Signal to a Process
+@item @code{sigpending} - Examine Pending Signals
+@item @code{sigsuspend} - Wait for a Signal
+@item @code{pause} - Suspend Process Execution
+@item @code{sigwait} - Synchronously Accept a Signal
+@item @code{sigwaitinfo} - Synchronously Accept a Signal
+@item @code{sigtimedwait} - Synchronously Accept a Signal with Timeout
+@item @code{sigqueue} - Queue a Signal to a Process
+@item @code{alarm} - Schedule Alarm
 @end itemize
 
 @section Background
@@ -45,14 +45,14 @@ Signals directed at a process are delivered to a thread which is selected
 based on the following algorithm:
 
 @enumerate
-@item If the action for this signal is currently SIG_IGN, then the signal
-is simply ignored.
+@item If the action for this signal is currently @code{SIG_IGN},
+then the signal is simply ignored.
 
 @item If the currently executing thread has the signal unblocked, then
 the signal is delivered to it.
 
 @item If any threads are currently blocked waiting for this signal 
-(sigwait()), then the signal is delivered to the highest priority 
+(@code{sigwait()}), then the signal is delivered to the highest priority 
 thread waiting for this signal.
 
 @item If any other threads are willing to accept delivery of the signal, then
@@ -63,13 +63,15 @@ blocked on calls which may be interrupted, and finally to threads blocked
 on non-interruptible calls.
 
 @item In the event the signal still can not be delivered, then it is left
-pending.  The first thread to unblock the signal (sigprocmask() or
-pthread_sigprocmask()) or to wait for this signal (sigwait()) will be
-the recipient of the signal.
+pending.  The first thread to unblock the signal (@code{sigprocmask()} or
+@code{pthread_sigprocmask()}) or to wait for this signal
+(@code{sigwait()}) will be the recipient of the signal.
 
 @end enumerate
 
 @section Operations
+
+There is currently no text in this section.
 
 @section Directives
 
@@ -79,7 +81,7 @@ and describes the calling sequence, related constants, usage,
 and status codes.
 
 @page
-@subsection sigaddset
+@subsection sigaddset - Add a Signal to a Signal Set
 
 @subheading CALLING SEQUENCE:
 
@@ -102,10 +104,12 @@ Invalid argument passed.
 
 @subheading DESCRIPTION:
 
+This function adds the @code{signo} to the specified signal @code{set}.
+
 @subheading NOTES:
 
 @page
-@subsection sigdelset
+@subsection sigdelset - Delete a Signal from a Signal Set
 
 @subheading CALLING SEQUENCE:
 
@@ -128,10 +132,14 @@ Invalid argument passed.
 
 @subheading DESCRIPTION:
 
+This function deletes the @code{signo} to the specified signal @code{set}.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection sigfillset
+@subsection sigfillset - Fill a Signal Set
 
 @subheading CALLING SEQUENCE:
 
@@ -144,7 +152,9 @@ int sigfillset(
 @end example
 
 @subheading STATUS CODES:
+
 @table @b
+
 @item EINVAL
 Invalid argument passed.
 
@@ -152,10 +162,15 @@ Invalid argument passed.
 
 @subheading DESCRIPTION:
 
+This function fills the specified signal @code{set} such that all
+signals are set.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection sigismember
+@subsection sigismember - Is Signal a Member of a Signal Set
 
 @subheading CALLING SEQUENCE:
 
@@ -169,7 +184,9 @@ int sigismember(
 @end example
 
 @subheading STATUS CODES:
+
 @table @b
+
 @item EINVAL
 Invalid argument passed.
 
@@ -177,10 +194,15 @@ Invalid argument passed.
 
 @subheading DESCRIPTION:
 
+This function returns returns 1 if @code{signo} is a member of @code{set}
+and 0 otherwise.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection sigemptyset
+@subsection sigemptyset - Empty a Signal Set
 
 @subheading CALLING SEQUENCE:
 
@@ -195,6 +217,7 @@ int sigemptyset(
 @subheading STATUS CODES:
 
 @table @b
+
 @item EINVAL
 Invalid argument passed.
 
@@ -202,10 +225,15 @@ Invalid argument passed.
 
 @subheading DESCRIPTION:
 
+This function fills the specified signal @code{set} such that all
+signals are cleared.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection sigaction
+@subsection sigaction - Examine and Change Signal Action
 
 @subheading CALLING SEQUENCE:
 
@@ -232,11 +260,17 @@ Realtime Signals Extension option not supported.
 
 @subheading DESCRIPTION:
 
+This function is used to change the action taken by a process on 
+receipt of the specfic signal @code{sig}.  The new action is 
+specified by @code{act} and the previous action is returned
+via @code{oact}.
+
 @subheading NOTES:
 
 The signal number cannot be SIGKILL.
+
 @page
-@subsection pthread_kill
+@subsection pthread_kill - Send a Signal to a Thread
 
 @subheading CALLING SEQUENCE:
 
@@ -250,7 +284,9 @@ int pthread_kill(
 @end example
 
 @subheading STATUS CODES:
+
 @table @b
+
 @item ESRCH
 The thread indicated by the parameter thread is invalid.
 
@@ -261,10 +297,14 @@ Invalid argument passed.
 
 @subheading DESCRIPTION:
 
+This functions sends the specified signal @code{sig} to @code{thread}.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection sigprocmask
+@subsection sigprocmask - Examine and Change Process Blocked Signals
  
 @subheading CALLING SEQUENCE:
  
@@ -279,7 +319,9 @@ int sigprocmask(
 @end example
  
 @subheading STATUS CODES:
+
 @table @b
+
 @item EINVAL
 Invalid argument passed.
  
@@ -287,11 +329,34 @@ Invalid argument passed.
  
 @subheading DESCRIPTION:
  
+This function is used to alter the set of currently blocked signals
+on a process wide basis.  A blocked signal will not be received by the
+process.  The behavior of this function is dependent on the value of
+@code{how} which may be one of the following:
+
+@itemize @code
+@item SIG_BLOCK
+The set of blocked signals is set to the union of @code{set} and 
+those signals currently blocked.
+
+@item SIG_UNBLOCK
+The signals specific in @code{set} are removed from the currently
+blocked set.
+
+@item SIG_SETMASK
+The set of currently blocked signals is set to @code{set}.
+
+@end itemize
+
+If @code{oset} is not @code{NULL}, then the set of blocked signals
+prior to this call is returned in @code{oset}.
+
 @subheading NOTES:
- 
+
+It is not an error to unblock a signal which is not blocked.
 
 @page
-@subsection pthread_sigmask
+@subsection pthread_sigmask - Examine and Change Thread Blocked Signals
 
 @subheading CALLING SEQUENCE:
 
@@ -314,11 +379,35 @@ Invalid argument passed.
 
 @subheading DESCRIPTION:
 
+This function is used to alter the set of currently blocked signals
+for the calling thread.  A blocked signal will not be received by the
+process.  The behavior of this function is dependent on the value of
+@code{how} which may be one of the following:
+
+@table @code
+@item SIG_BLOCK
+The set of blocked signals is set to the union of @code{set} and
+those signals currently blocked.
+
+@item SIG_UNBLOCK
+The signals specific in @code{set} are removed from the currently
+blocked set.
+
+@item SIG_SETMASK
+The set of currently blocked signals is set to @code{set}.
+
+@end table
+
+If @code{oset} is not @code{NULL}, then the set of blocked signals
+prior to this call is returned in @code{oset}.
+
 @subheading NOTES:
+
+It is not an error to unblock a signal which is not blocked.
 
 
 @page
-@subsection kill
+@subsection kill - Send a Signal to a Process
 
 @subheading CALLING SEQUENCE:
 
@@ -347,11 +436,14 @@ The process indicated by the parameter pid is invalid.
 
 @subheading DESCRIPTION:
 
+This function sends the signal @code{sig} to the process @code{pid}.
+
 @subheading NOTES:
 
+NONE
  
 @page
-@subsection sigpending
+@subsection sigpending - Examine Pending Signals
  
 @subheading CALLING SEQUENCE:
  
@@ -368,17 +460,24 @@ int sigpending(
 On error, this routine returns -1 and sets errno to one of the following:
  
 @table @b
+
 @item EFAULT
 Invalid address for set.
 
 @end table
 
 @subheading DESCRIPTION:
+
+This function allows the caller to examine the set of currently pending
+signals.  A pending signal is one which has been raised but is currently
+blocked.  The set of pending signals is returned in @code{set}.
  
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection sigsuspend
+@subsection sigsuspend - Wait for a Signal
  
 @subheading CALLING SEQUENCE:
  
@@ -391,6 +490,7 @@ int sigsuspend(
 @end example
  
 @subheading STATUS CODES:
+
 @table @b
 Returns -1 and sets errno.
 
@@ -400,11 +500,17 @@ Signal interrupted this function.
 @end table
  
 @subheading DESCRIPTION:
+
+This function temporarily replaces the signal mask for the process
+with that specified by @code{sigmask} and blocks the calling thread
+until the signal is raised.
  
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection pause
+@subsection pause - Suspend Process Execution
  
 @subheading CALLING SEQUENCE:
  
@@ -415,6 +521,7 @@ int pause( void );
 @end example
  
 @subheading STATUS CODES:
+
 @table @b
 Returns -1 and sets errno.
  
@@ -424,11 +531,16 @@ Signal interrupted this function.
 @end table
  
 @subheading DESCRIPTION:
+
+This function causes the calling thread to be blocked until the signal
+is received.
  
 @subheading NOTES:
+
+NONE
  
 @page
-@subsection sigwait
+@subsection sigwait - Synchronously Accept a Signal
 
 @subheading CALLING SEQUENCE:
 
@@ -453,10 +565,17 @@ Signal interrupted this function.
 
 @subheading DESCRIPTION:
 
+This function selects a pending signal based on the set specified in
+@code{set}, atomically clears it from the set of pending signals, and
+returns the signal number for that signal in @code{sig}.
+
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection sigwaitinfo
+@subsection sigwaitinfo - Synchronously Accept a Signal
  
 @subheading CALLING SEQUENCE:
  
@@ -478,10 +597,16 @@ Signal interrupted this function.
  
 @subheading DESCRIPTION:
  
+This function selects a pending signal based on the set specified in
+@code{set}, atomically clears it from the set of pending signals, and
+returns information about that signal in @code{info}.
+
 @subheading NOTES:
 
+NONE
+
 @page
-@subsection sigtimedwait
+@subsection sigtimedwait - Synchronously Accept a Signal with Timeout
  
 @subheading CALLING SEQUENCE:
  
@@ -510,13 +635,18 @@ Signal interrupted this function.
  
 @subheading DESCRIPTION:
  
+This function selects a pending signal based on the set specified in
+@code{set}, atomically clears it from the set of pending signals, and
+returns information about that signal in @code{info}.  The calling thread
+will block up to @code{timeout} waiting for the signal to arrive.
+
 @subheading NOTES:
 
-If timeout is NULL, then the thread will wait forever for the specified 
-signal set.
+If @code{timeout} is NULL, then the calling thread will wait forever for
+the specified signal set.
 
 @page
-@subsection sigqueue
+@subsection sigqueue - Queue a Signal to a Process
  
 @subheading CALLING SEQUENCE:
  
@@ -553,12 +683,16 @@ The process pid does not exist.
 @end table
  
 @subheading DESCRIPTION:
+
+This function sends the signal specified by @code{signo} to the
+process @code{pid}
  
 @subheading NOTES:
 
+NONE
 
 @page
-@subsection alarm
+@subsection alarm - Schedule Alarm
  
 @subheading CALLING SEQUENCE:
  
@@ -572,12 +706,15 @@ unsigned int alarm(
  
 @subheading STATUS CODES:
 
-If there was a previous alarm() request with time remaining, then this routine
-returns the number of seconds until that outstanding alarm would have fired.
-If no previous alarm() request was outstanding, then zero is returned.
+This call always succeeds.
  
 @subheading DESCRIPTION:
  
+If there was a previous @code{alarm()} request with time remaining,
+then this routine returns the number of seconds until that outstanding
+alarm would have fired.  If no previous @code{alarm()} request was
+outstanding, then zero is returned.
+
 @subheading NOTES:
 
-
+NONE
