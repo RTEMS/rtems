@@ -1,6 +1,6 @@
 \input ../texinfo/texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename posix_users
+@setfilename posix_users_new
 @syncodeindex vr fn
 @synindex ky cp
 @paragraphindent 0
@@ -87,6 +87,7 @@ END-INFO-DIR-ENTRY
 @include preface.texi
 @include process.texi
 @include procenv.texi
+@include files.texi
 @include thread.texi
 @include signal.texi
 @include mutex.texi
@@ -96,7 +97,7 @@ END-INFO-DIR-ENTRY
 @include sched.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
-@top posix_users
+@top posix_users_new
 
 This is the online version of the RTEMS POSIX API User's Guide
 
@@ -104,6 +105,7 @@ This is the online version of the RTEMS POSIX API User's Guide
 * Preface::
 * Process Creation and Execution Manager::
 * Process Environment Manager::
+* Files and Directories Manager::
 * Thread Manager::
 * Signal Manager::
 * Mutex Manager::
