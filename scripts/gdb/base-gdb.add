@@ -18,7 +18,8 @@ This is the base for gdb regardless of target CPU.
 %dir /opt/rtems/info
 %doc /opt/rtems/info/gdb.info*
 %doc /opt/rtems/info/mmalloc.info*
-%doc /opt/rtems/info/readline.info*
+# gdb 4.18 installed this, gdb 5.0 does not
+# %doc /opt/rtems/info/readline.info*
 
 %dir /opt/rtems/man
 %dir /opt/rtems/man/man1
