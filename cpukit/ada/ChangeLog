@@ -1,3 +1,8 @@
+2003-07-08	Joel Sherrill <joel@OARcorp.com>
+
+	PR 418/ada
+	* rtems.adb: Add missing all keyword to derefence pointer.
+
 2003-03-06	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove AC_CONFIG_AUX_DIR.

@@ -1665,7 +1665,7 @@ package body RTEMS is
          Interfaces.C.To_C (Name),
          Device_Info_Base'Unchecked_Access
       );
-      Device_Info := Device_Info_Base;
+      Device_Info.All := Device_Info_Base;
 
    end IO_Lookup_Name;
 
