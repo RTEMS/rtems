@@ -21,7 +21,7 @@
 /* #include <sys/ioctl.h> */
 
 #include <rtems/libio.h>
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int tcsetattr(
   int             fd,

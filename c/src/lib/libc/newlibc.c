@@ -17,7 +17,7 @@
 #include <rtems.h>
 
 #if defined(RTEMS_NEWLIB)
-#include <libcsupport.h>
+#include <rtems/libcsupport.h>
 #include <stdlib.h>             /* for free() */
 #include <string.h>             /* for memset() */
 

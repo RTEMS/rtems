@@ -47,7 +47,7 @@ static char sccsid[] = "@(#)closedir.c	5.9 (Berkeley) 2/23/91";
 #include <errno.h>
 
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 /*
  * close a directory.

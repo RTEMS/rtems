@@ -6,7 +6,7 @@
  */
 
 #include <rtems.h>
-#include "assoc.h"
+#include <rtems/assoc.h>
 
 #include <stdio.h>              /* sprintf */
 #include <string.h>             /* strcat, strcmp */

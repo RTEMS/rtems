@@ -16,7 +16,7 @@
 #include <errno.h>
 
 #include <rtems.h>
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int fcntl(
   int fd,

@@ -22,7 +22,7 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int mknod(
   const char *pathname,

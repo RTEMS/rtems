@@ -1,4 +1,31 @@
 
+2000-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* configure.in: Added include/rtems subdirectory.
+
+2000-11-01	Joel Sherrill <joel@OARcorp.com>
+
+	* include/Makefile.am, include/rtems/libio_.h, libc/Makefile.am,
+	libc/assoc.c, libc/assocnamebad.c, libc/base_fs.c, libc/cfsetispeed.c,
+	libc/cfsetospeed.c, libc/chdir.c, libc/chmod.c, libc/chown.c,
+	libc/close.c, libc/closedir.c, libc/dup2.c, libc/error.c, libc/eval.c,
+	libc/fchdir.c, libc/fchmod.c, libc/fcntl.c, libc/fdatasync.c,
+	libc/fpathconf.c, libc/fstat.c, libc/fsync.c, libc/ftruncate.c,
+	libc/getdents.c, libc/ioctl.c, libc/libio.c, libc/libio_sockets.c,
+	libc/link.c, libc/lseek.c, libc/malloc.c, libc/mallocfreespace.c,
+	libc/mknod.c, libc/mount.c, libc/newlibc.c, libc/no_libc.c,
+	libc/open.c, libc/read.c, libc/readlink.c, libc/rmdir.c, libc/stat.c,
+	libc/symlink.c, libc/tcsetattr.c, libc/telldir.c, libc/ttyname.c,
+	libc/ttyname_r.c, libc/umask.c, libc/unlink.c, libc/unmount.c,
+	libc/utime.c, libc/write.c:
+	assoc.h, error.h, libio_.h, libio.h, and libcsupport.h moved 
+	from libc to lib/include/rtems and now must be referenced as
+	<rtems/XXX.h>.  
+	* include/rtems/Makefile.am, include/rtems/.cvsignore: New file.
+	* include/rtems/assoc.h, include/rtems/error.h,
+	include/rtems/libcsupport.h, include/rtems/libio.h,
+	include/rtems/libio_.h: New/moved files.
+
 2000-10-26      Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.in: Remove bogus cfg_subdirs.

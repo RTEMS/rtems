@@ -27,7 +27,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 Chain_Control rtems_filesystem_mount_table_control;
 

@@ -19,7 +19,7 @@
 #include <errno.h>
 #include <termios.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int cfsetispeed(
   struct termios *tp,

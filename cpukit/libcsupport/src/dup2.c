@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int dup2(
   int fildes,

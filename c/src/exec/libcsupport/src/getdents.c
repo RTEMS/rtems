@@ -19,7 +19,7 @@
 
 #include <errno.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int getdents(
   int   dd_fd,

@@ -14,7 +14,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 mode_t umask(
   mode_t cmask

@@ -26,7 +26,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 /*
  *  Data structures and routines private to mount/unmount pair.

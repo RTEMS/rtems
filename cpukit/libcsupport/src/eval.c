@@ -14,7 +14,7 @@
  */
 
 #include <rtems.h>
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int rtems_filesystem_evaluate_path(
   const char                        *pathname,

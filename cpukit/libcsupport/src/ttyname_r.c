@@ -50,7 +50,7 @@ static char sccsid[] = "@(#)ttyname.c	5.10 (Berkeley) 5/6/91";
 #include <_syslist.h>
 #include <errno.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 /*
  *  ttyname_r() - POSIX 1003.1b 4.7.2 - Demetermine Terminal Device Name

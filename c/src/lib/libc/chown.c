@@ -17,7 +17,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int chown(
   const char *path,

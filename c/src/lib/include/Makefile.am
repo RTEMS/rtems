@@ -19,7 +19,7 @@ $(PROJECT_INCLUDE)/%.h: %.h
 
 all-local: $(PREINSTALL_FILES)
 
-SUBDIRS = sys motorola zilog
+SUBDIRS = sys rtems motorola zilog
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

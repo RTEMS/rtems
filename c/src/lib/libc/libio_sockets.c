@@ -12,7 +12,7 @@
  *  $Id$
  */
 
-#include "libio_.h"                   /* libio_.h pulls in rtems */
+#include <rtems/libio_.h>             /* libio_.h pulls in rtems */
 #include <rtems.h>
 
 #include <errno.h>

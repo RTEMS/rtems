@@ -43,7 +43,7 @@
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
 
-#include "error.h"
+#include <rtems/error.h>
 #include <rtems/assoc.h>
 
 #include <stdio.h>

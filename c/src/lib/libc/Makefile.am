@@ -56,33 +56,9 @@ C_FILES = $(COMMON_C_FILES) $(EMBEDDED_C_FILES)
 endif
 C_O_FILES = $(C_FILES:%.c=${ARCH}/%.o)
 
-H_FILES = libcsupport.h
-SYS_H_FILES =
-RTEMS_H_FILES = assoc.h error.h libio.h
-noinst_HEADERS = libio_.h
-
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
-
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems \
-    $(PROJECT_INCLUDE)/sys $(H_FILES:%=$(PROJECT_INCLUDE)/%) \
-    $(RTEMS_H_FILES:%=$(PROJECT_INCLUDE)/rtems/%) \
-    $(SYS_H_FILES:%=$(PROJECT_INCLUDE)/sys/%)
-
-$(PROJECT_INCLUDE):
-	@$(mkinstalldirs) $@
-$(PROJECT_INCLUDE)/rtems:
-	@$(mkinstalldirs) $@
-$(PROJECT_INCLUDE)/sys:
-	@$(mkinstalldirs) $@
-
-$(PROJECT_INCLUDE)/%.h: %.h
-	$(INSTALL_DATA) $< $@
-$(PROJECT_INCLUDE)/rtems/%.h: %.h
-	$(INSTALL_DATA) $< $@
-$(PROJECT_INCLUDE)/sys/%.h: %.h
-	$(INSTALL_DATA) $< $@
 
 TMPINSTALL_FILES += $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a
 
@@ -105,6 +81,6 @@ $(PROJECT_RELEASE)/lib/$(LIBNAME)$(LIB_VARIANT).a: $(LIB)
 DOC_FILES = TODO CASES
 
 EXTRA_DIST = $(DOC_FILES) $(COMMON_C_FILES) $(EMBEDDED_C_FILES) \
-    $(UNIX_C_FILES) $(H_FILES) $(RTEMS_H_FILES) $(SYS_H_FILES)
+    $(UNIX_C_FILES)
 
 include $(top_srcdir)/../../../automake/local.am

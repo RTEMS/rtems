@@ -15,7 +15,7 @@
 #include <rtems/libio.h>
 #include <errno.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int link(
   const char *existing,

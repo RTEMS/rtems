@@ -13,7 +13,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 /*
  *  Global information for the base file system.

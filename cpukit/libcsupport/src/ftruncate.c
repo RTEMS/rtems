@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int ftruncate(
   int     fd,

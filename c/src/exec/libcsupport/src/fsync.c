@@ -13,7 +13,7 @@
 
 #include <unistd.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int fsync(
   int     fd

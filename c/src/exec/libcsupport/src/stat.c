@@ -36,7 +36,7 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int _STAT_NAME(
   const char  *path,

@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int chdir(
   const char *pathname

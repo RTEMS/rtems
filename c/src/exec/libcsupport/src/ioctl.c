@@ -14,7 +14,7 @@
  *  $Id$
  */
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 #include <unistd.h>
 

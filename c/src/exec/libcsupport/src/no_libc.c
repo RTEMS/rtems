@@ -16,7 +16,7 @@
 #include <rtems.h>
 #if !defined(RTEMS_NEWLIB) && !defined(RTEMS_UNIX)
 
-#include "libcsupport.h"
+#include <rtems/libcsupport.h>
 
 #include <stdlib.h>             /* for free() */
 

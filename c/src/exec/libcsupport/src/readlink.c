@@ -11,7 +11,7 @@
  *  $Id$
  */
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int readlink(
   const char *pathname,

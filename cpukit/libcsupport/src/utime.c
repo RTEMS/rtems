@@ -15,7 +15,7 @@
 #include <utime.h>
 #include <errno.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int utime(
   const char           *path,

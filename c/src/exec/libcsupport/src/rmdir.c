@@ -17,7 +17,7 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int rmdir(
   const char *pathname

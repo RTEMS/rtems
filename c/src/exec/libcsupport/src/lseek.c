@@ -13,7 +13,7 @@
 
 #include <stdio.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 off_t lseek(
   int     fd,

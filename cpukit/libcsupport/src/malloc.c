@@ -14,7 +14,7 @@
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
 #include <rtems.h>
-#include "libcsupport.h"
+#include <rtems/libcsupport.h>
 #ifdef RTEMS_NEWLIB
 #include <sys/reent.h>
 #endif

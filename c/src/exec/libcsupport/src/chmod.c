@@ -18,7 +18,7 @@
 #include <errno.h>
 #include <unistd.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int chmod(
   const char *path,

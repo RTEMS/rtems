@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "libio_.h"
+#include <rtems/libio_.h>
 
 int fstat(
   int          fd,
