@@ -42,8 +42,6 @@
 #include <rtems/score/wkspace.h>
 
 
-ISR_Handler_entry _ISR_Vector_table[ ISR_NUMBER_OF_VECTORS ];
-
 /*  _CPU_Initialize
  *
  *  This routine performs processor dependent initialization.

@@ -1,5 +1,13 @@
 2000-12-13	Joel Sherrill <joel@OARcorp.com>
 
+	* cpu.c: Removed duplicate declaration for _ISR_Vector_table.
+	* cpu_asm.S: Removed assembly language to vector ISR handler
+	on MIPS ISA I.  Now call mips_vector_isr_handlers() in libcpu or BSP.
+	* rtems/score/cpu.h (CPU_INTERRUPT_NUMBER_OF_VECTORS): No
+	longer a constant -- get the real value from libcpu.
+
+2000-12-13	Joel Sherrill <joel@OARcorp.com>
+
 	* cpu_asm.h: Removed.
 	* Makefile.am: Remove cpu_asm.h.
 	* rtems/score/mips64orion.h: Renamed mips.h.

@@ -792,9 +792,10 @@ _ISR_Handler_1:
         mfc0 k1,C0_SR
 	and k0,k1
 	and k0,CAUSE_IPMASK
-	beq k0,zero,_ISR_Handler_exit /* external interrupt not enabled, ignore */
-	                              /* but if it's not an exception or an interrupt,
-				      /* Then where did it come from??? */
+	beq k0,zero,_ISR_Handler_exit
+		/* external interrupt not enabled, ignore */
+                /* but if it's not an exception or an interrupt, */
+		/* Then where did it come from??? */
 	nop
 
   /*
@@ -821,85 +822,12 @@ _ISR_Handler_1:
 	sw   t1,_Thread_Dispatch_disable_level
 
   /*
-   *  while ( interrupts_pending(cause_reg) ) {
-   *     vector = BITFIELD_TO_INDEX(cause_reg);
-   *     (*_ISR_Vector_table[ vector ])( vector );
-   *  }
+   *  Call the CPU model or BSP specific routine to decode the
+   *  interrupt source and actually vector to device ISR handlers.
    */
-        /* k0 has the SR interrupt bits */
-        la t3, _ISR_Vector_table
 
-        /* The bits you look at can be prioritized here just by */
-        /*  changing what bit is looked at. I.E. SR_IBITx */
-        /* This code might become a loop, servicing all ints before returning.. */
-        /*   Right now, it will go thru the whole list once */
-
-_ISR_check_bit_0:
-	and k1, k0, SR_IBIT1
-        beq k1, zero, _ISR_check_bit_1
+	jal	mips_vector_isr_handlers
         nop
-	li  t1, ISR_VEC_SIZE*0 
-	add t3, t1
-        jal t3  
-        nop
-_ISR_check_bit_1:
-	and k1, k0, SR_IBIT2
-        beq k1, zero, _ISR_check_bit_2
-        nop
-	li  t1, ISR_VEC_SIZE*1
-	add t3, t1
-        jal t3 
-        nop
-_ISR_check_bit_2:
-	and k1, k0, SR_IBIT3
-        beq k1, zero, _ISR_check_bit_3
-        nop
-	li  t1, ISR_VEC_SIZE*2
-	add t3, t1
-        jal t3 
-        nop
-_ISR_check_bit_3:
-	and k1, k0, SR_IBIT4
-        beq k1, zero, _ISR_check_bit_4
-        nop
-	li  t1, ISR_VEC_SIZE*3
-	add t3, t1
-        jal t3 
-        nop
-_ISR_check_bit_4:
-	and k1, k0, SR_IBIT5
-        beq k1, zero, _ISR_check_bit_5
-        nop
-	li  t1, ISR_VEC_SIZE*4
-	add t3, t1
-        jal t3 
-        nop
-_ISR_check_bit_5:
-	and k1, k0, SR_IBIT6
-        beq k1, zero, _ISR_check_bit_6
-        nop
-	li  t1, ISR_VEC_SIZE*5
-	add t3, t1
-        jal t3 
-        nop
-_ISR_check_bit_6:
-	and k1, k0, SR_IBIT7
-        beq k1, zero, _ISR_check_bit_7
-        nop
-	li  t1, ISR_VEC_SIZE*6
-	add t3, t1
-        jal t3 
-        nop
-_ISR_check_bit_7:
-	and k1, k0, SR_IBIT8
-        beq k1, zero, _ISR_exit_int_check
-        nop
-	li  t1, ISR_VEC_SIZE*7
-	add t3, t1
-        jal t3 
-        nop
-
-_ISR_exit_int_check:
 
   /*
    *  --_ISR_Nest_level;

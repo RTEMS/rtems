@@ -526,7 +526,7 @@ SCORE_EXTERN void           (*_CPU_Thread_dispatch_pointer)();
  */
 
 extern unsigned int mips_interrupt_number_of_vectors;
-#define CPU_INTERRUPT_NUMBER_OF_VECTORS      8
+#define CPU_INTERRUPT_NUMBER_OF_VECTORS      (mips_interrupt_number_of_vectors)
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /*
