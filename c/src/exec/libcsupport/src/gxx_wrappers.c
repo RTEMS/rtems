@@ -29,6 +29,7 @@
 
 #include <rtems.h>
 #include <rtems/system.h>
+#include <rtems/error.h> 	/* rtems_panic */
 #include <rtems/rtems/tasks.h>
 
 /* 
