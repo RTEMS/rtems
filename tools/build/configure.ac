@@ -13,12 +13,12 @@ AM_INIT_AUTOMAKE([no-define foreign 1.7.2])
 AM_MAINTAINER_MODE
 
 AC_PROG_CC
-AC_CHECK_HEADERS
+AC_CHECK_HEADERS([getopt.h])
 AC_CHECK_FUNCS(strerror strtol)
 
 RTEMS_PATH_KSH
 
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
