@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 AUTOMAKE_OPTIONS = foreign
 
 MKGDBSPEC = $(SHELL) $(top_builddir)/mkgdbspec

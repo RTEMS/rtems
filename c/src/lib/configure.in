@@ -51,9 +51,6 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 
 AC_CONFIG_SUBDIRS($cfg_subdirs)
 
-PROJECT_INCLUDE="\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"
-AC_SUBST(PROJECT_INCLUDE)
-
 # try to explicitly list a Makefile here 
 AC_OUTPUT( 
 Makefile

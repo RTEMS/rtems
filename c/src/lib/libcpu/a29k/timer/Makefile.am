@@ -1,7 +1,6 @@
 ## 
-## Makefile,v 1.2 1995/05/31 16:56:37 joel Exp
+## $Id$
 ## 
-## @(#)Makefile        03/26/96     1.2
 
 AUTOMAKE_OPTIONS = foreign 1.4
 

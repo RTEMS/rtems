@@ -9,13 +9,7 @@ include $(top_srcdir)/../bsp.am
 
 SUBDIRS = . include
 
-$(PROJECT_RELEASE)/bsp_specs: bsp_specs
-	$(INSTALL_DATA) $< $@
-
-all-local : $(PREINSTALL_FILES)
-
-EXTRA_DIST = \
-build-tools bsp_specs do-bare-bsp-build
+EXTRA_DIST = bsp_specs build-tools do-bare-bsp-build
 
 include $(top_srcdir)/../../../../../automake/subdirs.am
 include $(top_srcdir)/../../../../../automake/local.am

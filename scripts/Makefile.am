@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = . binutils gccnewlib gdb rtems

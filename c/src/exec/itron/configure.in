@@ -57,9 +57,6 @@ if test "$RTEMS_USE_MACROS" = "yes"; then
 AC_MSG_ERROR(Macros are not implemented for the ITRON API)
 fi
 
-PROJECT_INCLUDE="\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"
-AC_SUBST(PROJECT_INCLUDE)
-
 ##
 ## FIXME: We configure and build the macros subdirectory, too.
 ## Should probably use AM_CONDITIONALs to disable them in future

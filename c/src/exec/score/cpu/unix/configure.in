@@ -37,9 +37,6 @@ if test "$HAS_MP" = "yes"; then
   RTEMS_CHECK_SYSV_UNIX
 fi
 
-PROJECT_INCLUDE="\$(PROJECT_ROOT)/$RTEMS_BSP/lib/include"
-AC_SUBST(PROJECT_INCLUDE)
-
 # Try to explicitly list a Makefile here 
 AC_OUTPUT( 
 Makefile

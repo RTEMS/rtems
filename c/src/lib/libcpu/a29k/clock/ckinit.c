@@ -10,7 +10,7 @@
  *  to the copyright license under the clause at DFARS 252.227-7013.  This
  *  notice must appear in all copies of this file and its derivatives.
  *
- *  ckinit.c,v 1.5 1995/10/30 21:53:23 joel Exp
+ *  $Id$
  */
 
 #ifndef lint

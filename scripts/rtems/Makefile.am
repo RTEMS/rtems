@@ -1,3 +1,7 @@
+##
+## $Id$
+##
+
 AUTOMAKE_OPTIONS = foreign
 
 MKBSPSPEC = $(SHELL) $(top_builddir)/mkbspspec
