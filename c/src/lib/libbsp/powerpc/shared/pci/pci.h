@@ -1164,7 +1164,7 @@ struct _int_map
       struct _pin_routes pin_route[5];
 };
 
-void FixupPCI( struct _int_map *, int (*swizzler)(int,int) );
+void FixupPCI( const struct _int_map *, int (*swizzler)(int,int) );
 
 
 /* scan for a specific device */

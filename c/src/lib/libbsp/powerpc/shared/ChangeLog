@@ -1,3 +1,27 @@
+2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
+
+	* ChangeLog, Makefile.am, bootloader/misc.c, bootloader/pci.c,
+	bootloader/pci.h, console/console.c, console/inch.c,
+	console/reboot.c, console/uart.c, console/uart.h, include/bsp.h,
+	irq/irq.c, irq/irq.h, irq/irq_init.c, motorola/motorola.c,
+	motorola/motorola.h, openpic/openpic.c, openpic/openpic.h,
+	pci/detect_raven_bridge.c, pci/pci.c, pci/pci.h, start/start.S,
+	startup/bspstart.c, vectors/vectors_init.c, vme/vmeconfig.c: Add
+	MVME2100 BSP and MPC8240 support. There was also a significant amount
+	of spelling and whitespace cleanup.
+	* tod/.cvsignore, tod/Makefile.am, tod/todcfg.c: New files.
+
+2004-11-10	Richard Campbell <richard.campbell@oarcorp.com>
+
+	* Makefile.am, bootloader/misc.c, bootloader/pci.c, bootloader/pci.h,
+	console/console.c, console/inch.c, console/reboot.c, console/uart.c,
+	console/uart.h, include/bsp.h, irq/irq.c, irq/irq.h, irq/irq_init.c,
+	motorola/motorola.c, motorola/motorola.h, openpic/openpic.c,
+	openpic/openpic.h, pci/detect_raven_bridge.c, pci/pci.c, pci/pci.h,
+	start/start.S, startup/bspstart.c, vectors/vectors_init.c,
+	vme/vmeconfig.c: Add MVME2100 BSP and MPC8240 support.
+	* tod/.cvsignore, tod/Makefile.am, tod/todcfg.c: New files.
+
 2004-09-27      Greg Menke <gregory.menke@gsfc.nasa.gov>
 
 	PR 606/bsps

@@ -132,7 +132,7 @@ void
 BSP_uart_init(int uart, int baud, int hwFlow)
 {
   unsigned char tmp;
-  
+ 
   /* Sanity check */
   SANITY_CHECK(uart);
   
@@ -156,10 +156,10 @@ BSP_uart_init(int uart, int baud, int hwFlow)
       assert(0);
       return;
     }
-  
+
   /* Set DLAB bit to 1 */
   uwrite(uart, LCR, DLAB);
-  
+
   /* Set baud rate */
   uwrite(uart, DLL,  (BSPBaseBaud/baud) & 0xff); 
   uwrite(uart, DLM,  ((BSPBaseBaud/baud) >> 8) & 0xff); 
@@ -185,6 +185,7 @@ BSP_uart_init(int uart, int baud, int hwFlow)
   /* Remember state */
   uart_data[uart].hwFlow     = hwFlow;
   uart_data[uart].baud       = baud;
+
   return;
 }
 
@@ -201,7 +202,7 @@ BSP_uart_set_baud(int uart, int baud)
   
   /* 
    * This function may be called whenever TERMIOS parameters
-   * are changed, so we have to make sire that baud change is 
+   * are changed, so we have to make sure that baud change is 
    * indeed required
    */
 
@@ -460,8 +461,14 @@ uart_noop(const rtems_irq_connect_data *unused)
 static int
 uart_isr_is_on(const rtems_irq_connect_data *irq)
 {
-int uart = (irq->name == BSP_ISA_UART_COM1_IRQ) ?
+  int uart;
+
+#if defined(mvme2100)
+  uart = BSP_UART_COM1;
+#else
+  uart = (irq->name == BSP_ISA_UART_COM1_IRQ) ?
 			BSP_UART_COM1 : BSP_UART_COM2;
+#endif
   return uread(uart,IER);
 }
 
@@ -469,8 +476,12 @@ static int
 doit(int uart, rtems_irq_hdl handler, int (*p)(const rtems_irq_connect_data*))
 {
 	rtems_irq_connect_data d={0};
+#if defined(mvme2100)
+        d.name = BSP_UART_COM1_IRQ;
+#else
 	d.name = (uart == BSP_UART_COM1) ? 
 			BSP_ISA_UART_COM1_IRQ : BSP_ISA_UART_COM2_IRQ;
+#endif
 	d.off  = d.on = uart_noop;
 	d.isOn = uart_isr_is_on;
 	d.hdl  = handler;
@@ -526,6 +537,21 @@ BSP_uart_termios_set(int uart, void *ttyp)
 }
 
 int
+BSP_uart_termios_write_polled(int minor, const char *buf, int len)
+{
+  int uart=minor;	/* could differ, theoretically */
+  int nwrite;
+  const char *b = buf;
+
+  assert(buf != NULL);
+
+  for (nwrite=0 ; nwrite < len ; nwrite++) {
+    BSP_uart_polled_write(uart, *b++);
+  }
+  return nwrite;
+}
+
+int
 BSP_uart_termios_write_com(int minor, const char *buf, int len)
 {
   int uart=minor;	/* could differ, theoretically */
@@ -536,7 +562,7 @@ BSP_uart_termios_write_com(int minor, const char *buf, int len)
       return 0;
     }
 
-  /* If there TX buffer is busy - something is royally screwed up */
+  /* If the TX buffer is busy - something is royally screwed up */
   /*   assert((uread(BSP_UART_COM1, LSR) & THRE) != 0); */
        
 

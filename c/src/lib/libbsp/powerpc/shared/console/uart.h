@@ -16,7 +16,7 @@
 #include <rtems/libio.h>
 
 void BSP_uart_init(int uart, int baud, int hwFlow);
-void BSP_uart_set_baud(int aurt, int baud);
+void BSP_uart_set_baud(int uart, int baud);
 void BSP_uart_intr_ctrl(int uart, int cmd);
 void BSP_uart_throttle(int uart);
 void BSP_uart_unthrottle(int uart);
@@ -31,6 +31,7 @@ void BSP_uart_dbgisr_com1(void);
 void BSP_uart_dbgisr_com2(void);
 int  BSP_uart_install_isr(int uart, rtems_irq_hdl handler);
 int  BSP_uart_remove_isr(int uart, rtems_irq_hdl handler);
+int  BSP_uart_termios_write_polled(int minor, const char *buf, int len);
 int  BSP_uart_get_break_cb(int uart, rtems_libio_ioctl_args_t *arg);
 int  BSP_uart_set_break_cb(int uart, rtems_libio_ioctl_args_t *arg);
 

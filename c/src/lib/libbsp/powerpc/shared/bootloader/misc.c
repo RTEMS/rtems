@@ -24,6 +24,7 @@
 #include <libcpu/page.h>
 #include <libcpu/byteorder.h>
 #include <rtems/bspIo.h>
+#include <bsp.h>
 
 SPR_RW(DEC)
 SPR_RO(PVR)
@@ -280,8 +281,13 @@ setup_hw(void)
 	/* We check that the keyboard is present and immediately 
 	 * select the serial console if not.
 	 */
+#if defined(BSP_KBD_IOBASE)
 	err = kbdreset();
-	if (err) select_console(CONSOLE_SERIAL);
+        if (err) select_console(CONSOLE_SERIAL);
+#else
+	err = 1;
+	select_console(CONSOLE_SERIAL);
+#endif
 
 	printk("\nModel: %s\nSerial: %s\n"
 	       "Processor/Bus frequencies (Hz): %ld/%ld\n"
@@ -293,8 +299,6 @@ setup_hw(void)
                vpd.ProcessorBusHz,
 	       (vpd.TimeBaseDivisor ? vpd.TimeBaseDivisor : 4000),
 	       res->TotalMemory);
-	printk("Original MSR: %lx\nOriginal HID0: %lx\nOriginal R31: %lx\n",
-	       bd->o_msr, bd->o_hid0, bd->o_r31); 
 
 	/* This reconfigures all the PCI subsystem */
         pci_init();

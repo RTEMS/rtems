@@ -1,9 +1,9 @@
 /*
  * pci.c :  this file contains basic PCI Io functions.
  *
- *  CopyRight (C) 1999 valette@crf.canon.fr
+ *  Copyright (C) 1999 valette@crf.canon.fr
  *
- *  This code is heavilly inspired by the public specification of STREAM V2
+ *  This code is heavily inspired by the public specification of STREAM V2
  *  that can be found at :
  *
  *      <http://www.chorus.com/Documentation/index.html> by following
@@ -217,17 +217,6 @@ const pci_config_access_functions pci_direct_functions = {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
 #define PRINT_MSG() \
              printk("pci : Device %d:%02x routed to interrupt_line %d\n", pbus, pslot, int_name )
 
@@ -236,9 +225,15 @@ const pci_config_access_functions pci_direct_functions = {
 ** Validate a test interrupt name and print a warning if its not one of
 ** the names defined in the routing record.
 */
-static int test_intname( struct _int_map *row, int pbus, int pslot, int int_pin, int int_name )
+static int test_intname(
+  const struct _int_map *row,
+  int pbus,
+  int pslot,
+  int int_pin,
+  int int_name
+)
 {
-   int j,k;
+   int j, k;
    int _nopin= -1, _noname= -1;
 
    for(j=0; row->pin_route[j].pin > -1; j++)
@@ -333,7 +328,7 @@ static int FindPCIbridge( int mybus, struct pcibridge *pb )
 
 
 
-void FixupPCI( struct _int_map *bspmap, int (*swizzler)(int,int) )
+void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
 {
    unsigned char        cvalue;
    unsigned16           devid;

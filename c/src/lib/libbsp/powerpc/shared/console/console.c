@@ -75,7 +75,6 @@ static TtySTblRec ttyS[]={
 		},
 };
 
-
 /*-------------------------------------------------------------------------+
 | Console device driver INITIALIZE entry point.
 +--------------------------------------------------------------------------+
@@ -135,6 +134,7 @@ console_initialize(rtems_device_major_number major,
 		}
 
   }
+
   return RTEMS_SUCCESSFUL;
 } /* console_initialize */
 
@@ -174,22 +174,35 @@ console_open(rtems_device_major_number major,
 {
   rtems_status_code              status;
   static rtems_termios_callbacks cb = 
+#if defined(USE_POLLED_IO)
+  {
+    NULL,				/* firstOpen */
+    NULL,				/* lastClose */
+    NULL,				/* pollRead */
+    BSP_uart_termios_write_polled,	/* write */
+    conSetAttr,				/* setAttributes */
+    NULL,				/* stopRemoteTx */
+    NULL,				/* startRemoteTx */
+    0					/* outputUsesInterrupts */
+  };
+#else
   {
     console_first_open,			/* firstOpen */
     console_last_close,			/* lastClose */
-    NULL,						/* pollRead */
-    BSP_uart_termios_write_com,	/* write */
-    conSetAttr,					/* setAttributes */
-    NULL,						/* stopRemoteTx */
-    NULL,						/* startRemoteTx */
-    1							/* outputUsesInterrupts */
+    NULL,				/* pollRead */
+    BSP_uart_termios_write_com,		/* write */
+    conSetAttr,				/* setAttributes */
+    NULL,				/* stopRemoteTx */
+    NULL,				/* startRemoteTx */
+    1					/* outputUsesInterrupts */
   };
+#endif
 
   status = rtems_termios_open (major, minor, arg, &cb);
 
   if(status != RTEMS_SUCCESSFUL)
     {
-      printk("Error openning console device\n");
+      printk("Error opening console device\n");
       return status;
     }
 

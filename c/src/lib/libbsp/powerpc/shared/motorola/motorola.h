@@ -52,6 +52,8 @@ typedef enum {
   MVME_3600_W_MVME712M		= 17,
   MVME_3600_W_MVME761		= 18,
   MVME_1600			= 19,
+  /* In the table, slot 20 is the marker for end of automatic probe and scan */
+  MVME_2100			= 21,
   MOTOROLA_UNKNOWN		= 255
 } motorolaBoard;
 
@@ -59,7 +61,7 @@ typedef enum {
   HOST_BRIDGE_RAVEN	= 0,
   HOST_BRIDGE_HAWK	= 1,
   HOST_BRIDGE_UNKNOWN	= 255
-}motorolaHostBridge;
+} motorolaHostBridge;
   
 #define MOTOROLA_CPUTYPE_REG	0x800
 #define MOTOROLA_BASETYPE_REG	0x803  

@@ -34,23 +34,17 @@ union {
 	unsigned long	batbits;
 } dbat0u;
 
-  if (currentBoard < MVME_2300 || currentBoard >= MVME_1600) {
-		printk("VME bridge for this board is unknown - if it's a Tundra Universe, add the board to 'shared/vme/vmeconfig.c'\n");
-		printk("Skipping VME initialization...\n");
-		return;
-  }
-
   vmeUniverseInit();
   vmeUniverseReset();
-
   /* setup a PCI area to map the VME bus */
 
   dbat0u.batbits = _read_DBAT0U();
 
   /* if we have page tables, BAT0 is available */
   if (dbat0u.bat.vs || dbat0u.bat.vp) {
-	printk("WARNING: BAT0 is taken (no pagetables?); VME bridge must share PCI range for VME access\n");
-	printk("Skipping VME initialization...\n");
+	printk("WARNING: BAT0 is taken (no pagetables?); "
+               "VME bridge must share PCI range for VME access\n"
+	       "Skipping VME initialization...\n");
 	return;
   }
 

@@ -29,10 +29,6 @@
 #include <bsp/motorola.h>
 #include <rtems/bspIo.h>
 
-/*
-#define SHOW_ISA_PCI_BRIDGE_SETTINGS
-*/
-
 typedef struct {
   unsigned char bus;	/* few chance the PCI/ISA bridge is not on first bus but ... */
   unsigned char device;
@@ -68,14 +64,14 @@ static rtems_irq_connect_data     	defaultIrq = {
 };
 static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
   /*
-   * actual rpiorities for interrupt :
+   * actual priorities for interrupt :
    *	0   means that only current interrupt is masked
    *	255 means all other interrupts are masked
    */
   /*
    * ISA interrupts.
    * The second entry has a priority of 255 because
-   * it is the slave pic entry and is should always remain
+   * it is the slave pic entry and should always remain
    * unmasked.
    */
   0,0,
@@ -91,6 +87,45 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_NUMBER]={
   0
 };
 
+#if defined(mvme2100)
+static unsigned char mvme2100_openpic_initpolarities[16] = {
+    0,  /* Not used - should be disabled */
+    0,	/* DEC21143 Controller */
+    0,  /* PMC/PC-MIP Type I Slot 0 */
+    0,  /* PC-MIP Type I Slot 1 */
+    0,  /* PC-MIP Type II Slot 0 */
+    0,  /* PC-MIP Type II Slot 1 */
+    0,  /* Not used - should be disabled */
+    0,  /* PCI Expansion Interrupt A/Universe II (LINT0) */
+    0,  /* PCI Expansion Interrupt B/Universe II (LINT1) */
+    0,  /* PCI Expansion Interrupt C/Universe II (LINT2) */
+    0,  /* PCI Expansion Interrupt D/Universe II (LINT3) */
+    0,  /* Not used - should be disabled */
+    0,  /* Not used - should be disabled */
+    1,  /* 16550 UART */
+    0,  /* Front panel Abort Switch */
+    0,  /* RTC IRQ */
+};
+
+static unsigned char mvme2100_openpic_initsenses[] = {
+    0,  /* Not used - should be disabled */
+    1,	/* DEC21143 Controller */
+    1,  /* PMC/PC-MIP Type I Slot 0 */
+    1,  /* PC-MIP Type I Slot 1 */
+    1,  /* PC-MIP Type II Slot 0 */
+    1,  /* PC-MIP Type II Slot 1 */
+    0,  /* Not used - should be disabled */
+    1,  /* PCI Expansion Interrupt A/Universe II (LINT0) */
+    1,  /* PCI Expansion Interrupt B/Universe II (LINT1) */
+    1,  /* PCI Expansion Interrupt C/Universe II (LINT2) */
+    1,  /* PCI Expansion Interrupt D/Universe II (LINT3) */
+    0,  /* Not used - should be disabled */
+    0,  /* Not used - should be disabled */
+    1,  /* 16550 UART */
+    0,  /* Front panel Abort Switch */
+    1,  /* RTC IRQ */
+};
+#else
 static unsigned char mcp750_openpic_initpolarities[16] = {
     1,  /* 8259 cascade */
     0,	/* all the rest of them */
@@ -114,6 +149,7 @@ static unsigned char mcp750_openpic_initsenses[] = {
     1,	/* MCP750_INT_PCI_BUS2_INTC */
     1,	/* MCP750_INT_PCI_BUS2_INTD */
 };
+#endif
 
 void VIA_isa_bridge_interrupts_setup(void)
 {
@@ -226,17 +262,28 @@ loop_exit:
    */
 void BSP_rtems_irq_mng_init(unsigned cpuId)
 {
-  rtems_raw_except_connect_data vectorDesc;
+#if !defined(mvme2100)
   int known_cpi_isa_bridge = 0;
+#endif
+  rtems_raw_except_connect_data vectorDesc;
   int i;
   
   /*
    * First initialize the Interrupt management hardware
    */
-#ifdef TRACE_IRQ_INIT  
+#if defined(mvme2100)
+#ifdef TRACE_IRQ_INIT 
+  printk("Going to initialize EPIC interrupt controller (openpic compliant)\n");
+#endif
+  openpic_init(1, mvme2100_openpic_initpolarities, mvme2100_openpic_initsenses);
+#else
+#ifdef TRACE_IRQ_INIT 
   printk("Going to initialize raven interrupt controller (openpic compliant)\n");
-#endif       
+#endif
   openpic_init(1, mcp750_openpic_initpolarities, mcp750_openpic_initsenses);
+#endif       
+
+#if !defined(mvme2100)
 #ifdef TRACE_IRQ_INIT  
   printk("Going to initialize the PCI/ISA bridge IRQ related setting (VIA 82C586)\n");
 #endif
@@ -261,9 +308,12 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 #ifdef TRACE_IRQ_INIT  
   printk("Going to initialize the ISA PC legacy IRQ management hardware\n");
 #endif       
+
   BSP_i8259s_init();
+#endif
+
   /*
-   * Initialize Rtems management interrupt table
+   * Initialize RTEMS management interrupt table
    */
     /*
      * re-init the rtemsIrq table
@@ -309,8 +359,8 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     if (!mpc60x_set_exception (&vectorDesc)) {
       BSP_panic("Unable to initialize RTEMS external raw exception\n");
     }
-#ifdef TRACE_IRQ_INIT  
-    printk("RTEMS IRQ management is now operationnal\n");
+#ifdef TRACE_IRQ_INIT
+    printk("RTEMS IRQ management is now operational\n");
 #endif
 }
 

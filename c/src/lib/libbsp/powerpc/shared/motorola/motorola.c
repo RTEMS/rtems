@@ -12,7 +12,7 @@
  *  $Id$
  */
 
-
+#include <bsp.h>
 #include <bsp/motorola.h>
 #include <rtems/bspIo.h>
 #include <libcpu/io.h>
@@ -20,8 +20,8 @@
 
 
 /*
-** Board-specific table that maps interrupt names to onboard pci
-** peripherals as well as local pci busses.  This table is used at
+** Board-specific table that maps interrupt names to onboard PCI
+** peripherals as well as local PCI busses.  This table is used at
 ** bspstart() to configure the interrupt name & pin for all devices that
 ** do not have it already specified.  If the device is already
 ** configured, we leave it alone but sanity check & print a warning if
@@ -116,12 +116,18 @@ static struct _int_map mtx603_intmap[] = {
 
    NULL_INTMAP };
 
+static struct _int_map mvme2100_intmap[] = {
+   {0, 0, 0, {{1, {16,-1,-1,-1}}, /* something shows up in slot 0 and OpenPIC */
+                                  /* 0 is unused.  This hushes the init code. */
+               NULL_PINMAP}},
 
+   {0, 13, 0, {{1, {23,24,25,26}},  /* PCI INT[A-D]/Universe Lint[0-3] */
+               NULL_PINMAP}},
 
+   {0, 14, 0, {{1, {17,-1,-1,-1}},  /* onboard ethernet */
+               NULL_PINMAP}},
 
-
-
-
+   NULL_INTMAP };
 
 /*
  * This table represents the standard PCI swizzle defined in the
@@ -141,14 +147,6 @@ static int prep_pci_swizzle(int slot, int pin)
    return prep_pci_intpins[ slot % 4 ][ pin-1 ];
 }
 
-
-
-
-
-
-
-
-
 typedef struct {
   /*
    * 0x100 mask assumes for Raven and Hawk boards
@@ -162,7 +160,6 @@ typedef struct {
       struct _int_map   *intmap;
       int               (*swizzler)(int, int);
 } mot_info_t;
-
 
 static const mot_info_t mot_boards[] = {
   {0x300, 0x00, "MVME 2400", NULL, NULL},
@@ -185,13 +182,13 @@ static const mot_info_t mot_boards[] = {
   {0x1E0, 0xFD, "MVME 3600 with MVME712M", NULL, NULL},
   {0x1E0, 0xFE, "MVME 3600 with MVME761", NULL, NULL},
   {0x1E0, 0xFF, "MVME 1600-001 or 1600-011", NULL, NULL},
-  {0x000, 0x00, ""}
+  {0x000, 0x00, ""},   /* end of probeable values for automatic scan */
+  {0x000, 0x00, "MVME 2100", mvme2100_intmap, prep_pci_swizzle},
 };
 
-
-
 prep_t currentPrepType;
-motorolaBoard		currentBoard;
+motorolaBoard currentBoard;
+
 prep_t checkPrepBoardType(RESIDUAL *res)
 {
   prep_t PREP_type;
@@ -213,13 +210,22 @@ prep_t checkPrepBoardType(RESIDUAL *res)
   return PREP_type;
 }
 
-motorolaBoard	getMotorolaBoard()
+motorolaBoard getMotorolaBoard()
 {
+/*
+ *  At least the MVME2100 does not have the CPU Type and Base Type Registers,
+ *  so it cannot be probed.
+ *
+ *  NOTE: Every path must set currentBoard.
+ */
+#if defined(mvme2100)
+  currentBoard = (motorolaBoard) MVME_2100;
+#else
   unsigned char  cpu_type;
   unsigned char  base_mod;
   int	       	 entry;
   int	       	 mot_entry = -1;
-
+  
   cpu_type = inb(MOTOROLA_CPUTYPE_REG) & 0xF0;
   base_mod = inb(MOTOROLA_BASETYPE_REG);
 
@@ -234,7 +240,7 @@ motorolaBoard	getMotorolaBoard()
       
     if (mot_boards[entry].base_type != base_mod)
       continue;
-    else{
+    else {
       mot_entry = entry;
       break;
     }
@@ -247,6 +253,7 @@ motorolaBoard	getMotorolaBoard()
     return currentBoard;
   }
   currentBoard = (motorolaBoard) mot_entry;
+#endif
   return currentBoard;
 }
 
@@ -261,6 +268,7 @@ const char* motorolaBoardToString(motorolaBoard board)
 const struct _int_map *motorolaIntMap(motorolaBoard board)
 {
   if (board == MOTOROLA_UNKNOWN) return NULL;
+  /* printk( "IntMap board %d 0x%08x\n", board, mot_boards[board].intmap ); */
   return mot_boards[board].intmap;
 }
 

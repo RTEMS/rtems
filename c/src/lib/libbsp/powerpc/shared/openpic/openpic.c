@@ -20,12 +20,12 @@
  */
 
 #include <rtems.h>
+#include <bsp.h>
 #include <rtems/bspIo.h>
 #include <bsp/openpic.h>
 #include <bsp/pci.h>
 #include <libcpu/io.h>
 #include <libcpu/byteorder.h>
-#include <bsp.h>
 #include <rtems/bspIo.h>
 
 #ifndef NULL
@@ -198,7 +198,9 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
 	       OPENPIC_VENDOR_ID_STEPPING_SHIFT;
 
     /* Kludge for the Raven */
+/*
     pci_read_config_dword(0, 0, 0, 0, &t);
+*/
     if (t == PCI_VENDOR_ID_MOTOROLA + (PCI_DEVICE_ID_MOTOROLA_RAVEN<<16)) {
     	vendor = "Motorola";
 	device = "Raven";
@@ -479,6 +481,11 @@ unsigned long flags;
 
 void openpic_initirq(unsigned int irq, unsigned int pri, unsigned int vec, int pol, int sense)
 {
+#if 0
+  printk("openpic_initirq: irq=%d pri=%d vec=%d pol=%d sense=%d\n",
+    irq, pri, vec, pol, sense);
+#endif
+
     check_arg_irq(irq);
     check_arg_pri(pri);
     check_arg_vec(vec);
