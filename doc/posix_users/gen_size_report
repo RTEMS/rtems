@@ -17,6 +17,7 @@ bsp=mcp750
 
 objdir=/usr1/rtems/build/build-${cpu}-rtems/${cpu}-rtems/c/${bsp}/
 libc=/opt/rtems/${cpu}-rtems/lib/libc.a
+libm=/opt/rtems/${cpu}-rtems/lib/libm.a
 srcdir=$r/src
 docdir=$d
 nm=${cpu}-rtems-nm
@@ -92,6 +93,17 @@ if [ ! -d ${objdir}/newlib_extract/o-optimize ] ; then
   done
 fi
 
+# extract libm
+if [ ! -d ${objdir}/libm_extract/o-optimize ] ; then
+  mkdir -p ${objdir}/libm_extract/o-optimize
+  cd ${objdir}/libm_extract/o-optimize
+  list=`${ar} t ${libm}`
+  for i in $list
+  do
+    ${ar} x ${libm} ${i}
+  done
+fi
+
 # grab the size of the Classic API
 #
 #  NOTE: This API is always configured.
@@ -106,12 +118,16 @@ echo "====                                                      ===="
 echo "=============================================================="
 echo "=============================================================="
 echo
-for i in *.t
-do
-  per_manager $i exec/rtems/src exec/sapi/src lib/libc
-done
+if [ -r ${objdir}/../../../${bsp}/lib/librtems.a ] ; then
+  for i in *.t
+  do
+    per_manager $i exec/rtems/src exec/sapi/src lib/libc
+  done
+else
+  echo "RTEMS Classic API not configured."
+fi
 
-# Grab the size of the Classic API
+# Grab the size of the POSIX API
 cd ${docdir}/posix_users
 echo
 echo "=============================================================="
@@ -123,13 +139,45 @@ echo "=============================================================="
 echo "=============================================================="
 echo
 if [ -r ${objdir}/../../../${bsp}/lib/libposix.a ] ; then
-  for i in *.t
+  for i in `ls -1 *.t | grep -v libc.t | grep -v libm.t`
   do
     per_manager $i exec/posix/src lib/libc newlib_extract
   done
 else
   echo "POSIX API not configured."
 fi
+
+# Grab the size of the POSIX routines provided by the C Library
+cd ${docdir}/posix_users
+echo
+echo "=============================================================="
+echo "=============================================================="
+echo "====                                                      ===="
+echo "====             LIBC API SIZE INFORMATION                ===="
+echo "====                                                      ===="
+echo "=============================================================="
+echo "=============================================================="
+echo
+for i in libc.t
+do
+  per_manager $i exec/posix/src lib/libc newlib_extract
+done
+
+# Grab the size of the libm routines
+cd ${docdir}/posix_users
+echo
+echo "=============================================================="
+echo "=============================================================="
+echo "====                                                      ===="
+echo "====             LIBM API SIZE INFORMATION                ===="
+echo "====                                                      ===="
+echo "=============================================================="
+echo "=============================================================="
+echo
+for i in libm.t
+do
+  per_manager $i exec/posix/src lib/libc libm_extract
+done
 
 # Grab the size of the ITRON API
 cd ${docdir}/itron3.0

@@ -15,285 +15,285 @@ This section lists the routines that provided by the Newlib C Library.
 @section Standard Utility Functions (stdlib.h)
 
 @itemize @bullet
-@item abort - Abnormal termination of a program
-@item abs - Integer absolute value (magnitude)
-@item assert - Macro for Debugging Diagnostics
-@item atexit - Request execution of functions at program exit
-@item atof - String to double or float
-@item atoi - String to integer
-@item bsearch - Binary search
-@item calloc - Allocate space for arrays
-@item div - Divide two integers
-@item ecvtbuf - Double or float to string of digits
-@item ecvt - Double or float to string of digits (malloc result)
-@item __env_lock - Lock environment list for getenv and setenv
-@item gvcvt - Format double or float as string
-@item exit - End program execution
-@item getenv - Look up environment variable
-@item labs - Long integer absolute value (magnitude)
-@item ldiv - Divide two long integers
-@item malloc - Allocate and manage memory (malloc, realloc, free)
-@item mallinfo - Get information about allocated memory
-@item __malloc_lock - Lock memory pool for malloc and free
-@item mbstowcs - Minimal multibyte string to wide string converter
-@item mblen - Minimal multibyte length
-@item mbtowc - Minimal multibyte to wide character converter
-@item qsort - Sort an array
-@item rand - Pseudo-random numbers
-@item strtod - String to double or float
-@item strtol - String to long
-@item strtoul - String to unsigned long
-@item system - Execute command string
-@item wcstombs - Minimal wide string to multibyte string converter
-@item wctomb - Minimal wide character to multibyte converter
+@item @code{abort} - Abnormal termination of a program
+@item @code{abs} - Integer absolute value (magnitude)
+@item @code{assert} - Macro for Debugging Diagnostics
+@item @code{atexit} - Request execution of functions at program exit
+@item @code{atof} - String to double or float
+@item @code{atoi} - String to integer
+@item @code{bsearch} - Binary search
+@item @code{calloc} - Allocate space for arrays
+@item @code{div} - Divide two integers
+@item @code{ecvtbuf} - Double or float to string of digits
+@item @code{ecvt} - Double or float to string of digits (malloc result)
+@item @code{__env_lock} - Lock environment list for getenv and setenv
+@item @code{gvcvt} - Format double or float as string
+@item @code{exit} - End program execution
+@item @code{getenv} - Look up environment variable
+@item @code{labs} - Long integer absolute value (magnitude)
+@item @code{ldiv} - Divide two long integers
+@item @code{malloc} - Allocate and manage memory (malloc, realloc, free)
+@item @code{mallinfo} - Get information about allocated memory
+@item @code{__malloc_lock} - Lock memory pool for malloc and free
+@item @code{mbstowcs} - Minimal multibyte string to wide string converter
+@item @code{mblen} - Minimal multibyte length
+@item @code{mbtowc} - Minimal multibyte to wide character converter
+@item @code{qsort} - Sort an array
+@item @code{rand} - Pseudo-random numbers
+@item @code{strtod} - String to double or float
+@item @code{strtol} - String to long
+@item @code{strtoul} - String to unsigned long
+@item @code{system} - Execute command string
+@item @code{wcstombs} - Minimal wide string to multibyte string converter
+@item @code{wctomb} - Minimal wide character to multibyte converter
 @end itemize
 
 @section Character Type Macros and Functions (ctype.h)
 
 @itemize @bullet
-@item isalnum - Alphanumeric character predicate
-@item isalpha - Alphabetic character predicate
-@item isascii - ASCII character predicate
-@item iscntrl - Control character predicate
-@item isdigit - Decimal digit predicate
-@item islower - Lower-case character predicate
-@item isprint - Printable character predicates (isprint, isgraph)
-@item ispunct - Punctuation character predicate
-@item isspace - Whitespace character predicate
-@item isupper - Uppercase character predicate
-@item isxdigit - Hexadecimal digit predicate
-@item toascii - Force integers to ASCII range
-@item tolower - Translate characters to lower case
-@item toupper - Translate characters to upper case
+@item @code{isalnum} - Alphanumeric character predicate
+@item @code{isalpha} - Alphabetic character predicate
+@item @code{isascii} - ASCII character predicate
+@item @code{iscntrl} - Control character predicate
+@item @code{isdigit} - Decimal digit predicate
+@item @code{islower} - Lower-case character predicate
+@item @code{isprint} - Printable character predicates (isprint, isgraph)
+@item @code{ispunct} - Punctuation character predicate
+@item @code{isspace} - Whitespace character predicate
+@item @code{isupper} - Uppercase character predicate
+@item @code{isxdigit} - Hexadecimal digit predicate
+@item @code{toascii} - Force integers to ASCII range
+@item @code{tolower} - Translate characters to lower case
+@item @code{toupper} - Translate characters to upper case
 @end itemize
 
 @section Input and Output (stdio.h)
 
 @itemize @bullet
-@item clearerr - Clear file or stream error indicator
-@item fclose - Close a file
-@item feof - Test for end of file
-@item ferror - Test whether read/write error has occurred
-@item fflush - Flush buffered file output
-@item fgetc - Get a character from a file or stream
-@item fgetpos - Record position in a stream or file
-@item fgets - Get character string from a file or stream
-@item fiprintf - Write formatted output to file (integer only)
-@item fopen - Open a file
-@item fdopen - Turn an open file into a stream
-@item fputc - Write a character on a stream or file
-@item fputs - Write a character string in a file or stream
-@item fread - Read array elements from a file
-@item freopen - Open a file using an existing file descriptor
-@item fseek - Set file position
-@item fsetpos - Restore position of a stream or file
-@item ftell - Return position in a stream or file
-@item fwrite - Write array elements from memory to a file or stream
-@item getc - Get a character from a file or stream (macro)
-@item getchar - Get a character from standard input (macro)
-@item gets - Get character string from standard input (obsolete)
-@item iprintf - Write formatted output (integer only)
-@item mktemp - Generate unused file name
-@item perror - Print an error message on standard error
-@item putc - Write a character on a stream or file (macro)
-@item putchar - Write a character on standard output (macro)
-@item puts - Write a character string on standard output
-@item remove - Delete a file's name
-@item rename - Rename a file
-@item rewind - Reinitialize a file or stream
-@item setbuf - Specify full buffering for a file or stream
-@item setvbuf - Specify buffering for a file or stream
-@item siprintf - Write formatted output (integer only)
-@item printf - Write formatted output
-@item scanf - Scan and format input
-@item tmpfile - Create a temporary file
-@item tmpnam - Generate name for a temporary file
-@item vprintf - Format variable argument list
+@item @code{clearerr} - Clear file or stream error indicator
+@item @code{fclose} - Close a file
+@item @code{feof} - Test for end of file
+@item @code{ferror} - Test whether read/write error has occurred
+@item @code{fflush} - Flush buffered file output
+@item @code{fgetc} - Get a character from a file or stream
+@item @code{fgetpos} - Record position in a stream or file
+@item @code{fgets} - Get character string from a file or stream
+@item @code{fiprintf} - Write formatted output to file (integer only)
+@item @code{fopen} - Open a file
+@item @code{fdopen} - Turn an open file into a stream
+@item @code{fputc} - Write a character on a stream or file
+@item @code{fputs} - Write a character string in a file or stream
+@item @code{fread} - Read array elements from a file
+@item @code{freopen} - Open a file using an existing file descriptor
+@item @code{fseek} - Set file position
+@item @code{fsetpos} - Restore position of a stream or file
+@item @code{ftell} - Return position in a stream or file
+@item @code{fwrite} - Write array elements from memory to a file or stream
+@item @code{getc} - Get a character from a file or stream (macro)
+@item @code{getchar} - Get a character from standard input (macro)
+@item @code{gets} - Get character string from standard input (obsolete)
+@item @code{iprintf} - Write formatted output (integer only)
+@item @code{mktemp} - Generate unused file name
+@item @code{perror} - Print an error message on standard error
+@item @code{putc} - Write a character on a stream or file (macro)
+@item @code{putchar} - Write a character on standard output (macro)
+@item @code{puts} - Write a character string on standard output
+@item @code{remove} - Delete a file's name
+@item @code{rename} - Rename a file
+@item @code{rewind} - Reinitialize a file or stream
+@item @code{setbuf} - Specify full buffering for a file or stream
+@item @code{setvbuf} - Specify buffering for a file or stream
+@item @code{siprintf} - Write formatted output (integer only)
+@item @code{printf} - Write formatted output
+@item @code{scanf} - Scan and format input
+@item @code{tmpfile} - Create a temporary file
+@item @code{tmpnam} - Generate name for a temporary file
+@item @code{vprintf} - Format variable argument list
 @end itemize
 
 @section Strings and Memory (string.h)
 
 @itemize @bullet
-@item bcmp - Compare two memory areas
-@item bcopy - Copy memory regions
-@item bzero - Initialize memory to zero
-@item index - Search for character in string
-@item memchr - Find character in memory
-@item memcmp - Compare two memory areas
-@item memcpy - Copy memory regions
-@item memmove - Move possibly overlapping memory
-@item memset - Set an area of memory
-@item rindex - Reverse search for character in string
-@item strcasecmp - Compare strings ignoring case
-@item strcat - Concatenate strings
-@item strchr - Search for character in string
-@item strcmp - Character string compare
-@item strcoll - Locale specific character string compare
-@item strcpy - Copy string
-@item strcspn - Count chars not in string
-@item strerror - Convert error number to string
-@item strlen - Character string length
-@item strlwr - Convert string to lower case
-@item strncasecmp - Compare strings ignoring case
-@item strncat - Concatenate strings
-@item strncmp - Character string compare
-@item strncpy - Counted copy string
-@item strpbrk - Find chars in string
-@item strrchr - Reverse search for character in string
-@item strspn - Find initial match
-@item strstr - Find string segment
-@item strtok - Get next token from a string
-@item strupr - Convert string to upper case
-@item strxfrm - Transform string
+@item @code{bcmp} - Compare two memory areas
+@item @code{bcopy} - Copy memory regions
+@item @code{bzero} - Initialize memory to zero
+@item @code{index} - Search for character in string
+@item @code{memchr} - Find character in memory
+@item @code{memcmp} - Compare two memory areas
+@item @code{memcpy} - Copy memory regions
+@item @code{memmove} - Move possibly overlapping memory
+@item @code{memset} - Set an area of memory
+@item @code{rindex} - Reverse search for character in string
+@item @code{strcasecmp} - Compare strings ignoring case
+@item @code{strcat} - Concatenate strings
+@item @code{strchr} - Search for character in string
+@item @code{strcmp} - Character string compare
+@item @code{strcoll} - Locale specific character string compare
+@item @code{strcpy} - Copy string
+@item @code{strcspn} - Count chars not in string
+@item @code{strerror} - Convert error number to string
+@item @code{strlen} - Character string length
+@item @code{strlwr} - Convert string to lower case
+@item @code{strncasecmp} - Compare strings ignoring case
+@item @code{strncat} - Concatenate strings
+@item @code{strncmp} - Character string compare
+@item @code{strncpy} - Counted copy string
+@item @code{strpbrk} - Find chars in string
+@item @code{strrchr} - Reverse search for character in string
+@item @code{strspn} - Find initial match
+@item @code{strstr} - Find string segment
+@item @code{strtok} - Get next token from a string
+@item @code{strupr} - Convert string to upper case
+@item @code{strxfrm} - Transform string
 @end itemize
 
 @section Signal Handling (signal.h)
 
 @itemize @bullet
-@item raise - Send a signal
-@item signal - Specify handler subroutine for a signal
+@item @code{raise} - Send a signal
+@item @code{signal} - Specify handler subroutine for a signal
 @end itemize
 
 @section Time Functions (time.h)
 
 @itemize @bullet
-@item asctime - Format time as string
-@item clock - Cumulative processor time
-@item ctime - Convert time to local and format as string
-@item difftime - Subtract two times
-@item gmtime - Convert time to UTC (GMT) traditional representation
-@item localtime - Convert time to local representation
-@item mktime - Convert time to arithmetic representation
-@item strftime - Flexible calendar time formatter
-@item time - Get current calendar time (as single number)
+@item @code{asctime} - Format time as string
+@item @code{clock} - Cumulative processor time
+@item @code{ctime} - Convert time to local and format as string
+@item @code{difftime} - Subtract two times
+@item @code{gmtime} - Convert time to UTC (GMT) traditional representation
+@item @code{localtime} - Convert time to local representation
+@item @code{mktime} - Convert time to arithmetic representation
+@item @code{strftime} - Flexible calendar time formatter
+@item @code{time} - Get current calendar time (as single number)
 @end itemize
 
 @section Locale (locale.h)
 
 @itemize @bullet
-@item setlocale - Select or query locale
+@item @code{setlocale} - Select or query locale
 @end itemize
 
 @section Reentrant Versions of Functions
 
 
 @itemize @bullet
-@item Equivalent for errno variable:
+@item @code{Equivalent for errno variable:
 
 @itemize @bullet
-@item errno_r - XXX
+@item @code{errno_r} - XXX
 @end itemize
 
-@item Locale functions:
+@item @code{Locale functions:
 
 @itemize @bullet
-@item localeconv_r - XXX
-@item setlocale_r - XXX
+@item @code{localeconv_r} - XXX
+@item @code{setlocale_r} - XXX
 @end itemize
 
-@item Equivalents for stdio variables:
+@item @code{Equivalents for stdio variables:
 
 @itemize @bullet
-@item stdin_r - XXX
-@item stdout_r - XXX
-@item stderr_r - XXX
+@item @code{stdin_r} - XXX
+@item @code{stdout_r} - XXX
+@item @code{stderr_r} - XXX
 @end itemize
 
-@item Stdio functions:
+@item @code{Stdio functions:
 
 @itemize @bullet
-@item fdopen_r - XXX
-@item perror_r - XXX
-@item tempnam_r - XXX
-@item fopen_r - XXX
-@item putchar_r - XXX
-@item tmpnam_r - XXX
-@item getchar_r - XXX
-@item puts_r - XXX
-@item tmpfile_r - XXX
-@item gets_r - XXX
-@item remove_r - XXX
-@item vfprintf_r - XXX
-@item iprintf_r - XXX
-@item rename_r - XXX
-@item vsnprintf_r - XXX
-@item mkstemp_r - XXX
-@item snprintf_r - XXX
-@item vsprintf_r - XXX
-@item mktemp_t - XXX
-@item sprintf_r - XXX
+@item @code{fdopen_r} - XXX
+@item @code{perror_r} - XXX
+@item @code{tempnam_r} - XXX
+@item @code{fopen_r} - XXX
+@item @code{putchar_r} - XXX
+@item @code{tmpnam_r} - XXX
+@item @code{getchar_r} - XXX
+@item @code{puts_r} - XXX
+@item @code{tmpfile_r} - XXX
+@item @code{gets_r} - XXX
+@item @code{remove_r} - XXX
+@item @code{vfprintf_r} - XXX
+@item @code{iprintf_r} - XXX
+@item @code{rename_r} - XXX
+@item @code{vsnprintf_r} - XXX
+@item @code{mkstemp_r} - XXX
+@item @code{snprintf_r} - XXX
+@item @code{vsprintf_r} - XXX
+@item @code{mktemp_t} - XXX
+@item @code{sprintf_r} - XXX
 @end itemize
 
-@item Signal functions:
+@item @code{Signal functions:
 
 @itemize @bullet
-@item init_signal_r - XXX
-@item signal_r - XXX
-@item kill_r - XXX
-@item _sigtramp_r - XXX
-@item raise_r - XXX
+@item @code{init_signal_r} - XXX
+@item @code{signal_r} - XXX
+@item @code{kill_r} - XXX
+@item @code{_sigtramp_r} - XXX
+@item @code{raise_r} - XXX
 @end itemize
 
-@item Stdlib functions:
+@item @code{Stdlib functions:
 
 @itemize @bullet
-@item calloc_r - XXX
-@item mblen_r - XXX
-@item srand_r - XXX
-@item dtoa_r - XXX
-@item mbstowcs_r - XXX
-@item strtod_r - XXX
-@item free_r - XXX
-@item mbtowc_r - XXX
-@item strtol_r - XXX
-@item getenv_r - XXX
-@item memalign_r - XXX
-@item strtoul_r - XXX
-@item mallinfo_r - XXX
-@item mstats_r - XXX
-@item system_r - XXX
-@item malloc_r - XXX
-@item rand_r - XXX
-@item wcstombs_r - XXX
-@item malloc_r - XXX
-@item realloc_r - XXX
-@item wctomb_r - XXX
-@item malloc_stats_r - XXX
-@item setenv_r - XXX
+@item @code{calloc_r} - XXX
+@item @code{mblen_r} - XXX
+@item @code{srand_r} - XXX
+@item @code{dtoa_r} - XXX
+@item @code{mbstowcs_r} - XXX
+@item @code{strtod_r} - XXX
+@item @code{free_r} - XXX
+@item @code{mbtowc_r} - XXX
+@item @code{strtol_r} - XXX
+@item @code{getenv_r} - XXX
+@item @code{memalign_r} - XXX
+@item @code{strtoul_r} - XXX
+@item @code{mallinfo_r} - XXX
+@item @code{mstats_r} - XXX
+@item @code{system_r} - XXX
+@item @code{malloc_r} - XXX
+@item @code{rand_r} - XXX
+@item @code{wcstombs_r} - XXX
+@item @code{malloc_r} - XXX
+@item @code{realloc_r} - XXX
+@item @code{wctomb_r} - XXX
+@item @code{malloc_stats_r} - XXX
+@item @code{setenv_r} - XXX
 @end itemize
 
-@item String functions:
+@item @code{String functions:
 
 @itemize @bullet
-@item strtok_r - XXX
+@item @code{strtok_r} - XXX
 @end itemize
 
-@item System functions:
+@item @code{System functions:
 
 @itemize @bullet
-@item close_r - XXX
-@item link_r - XXX
-@item unlink_r - XXX
-@item execve_r - XXX
-@item lseek_r - XXX
-@item wait_r - XXX
-@item fcntl_r - XXX
-@item open_r - XXX
-@item write_r - XXX
-@item fork_r - XXX
-@item read_r - XXX
-@item fstat_r - XXX
-@item sbrk_r - XXX
-@item gettimeofday_r - XXX
-@item stat_r - XXX
-@item getpid_r - XXX
-@item times_r - XXX
+@item @code{close_r} - XXX
+@item @code{link_r} - XXX
+@item @code{unlink_r} - XXX
+@item @code{execve_r} - XXX
+@item @code{lseek_r} - XXX
+@item @code{wait_r} - XXX
+@item @code{fcntl_r} - XXX
+@item @code{open_r} - XXX
+@item @code{write_r} - XXX
+@item @code{fork_r} - XXX
+@item @code{read_r} - XXX
+@item @code{fstat_r} - XXX
+@item @code{sbrk_r} - XXX
+@item @code{gettimeofday_r} - XXX
+@item @code{stat_r} - XXX
+@item @code{getpid_r} - XXX
+@item @code{times_r} - XXX
 @end itemize
 
-@item Time function:
+@item @code{Time function:
 
 @itemize @bullet
-@item asctime_r - XXX
+@item @code{asctime_r} - XXX
 @end itemize
 
 @end itemize
@@ -302,7 +302,7 @@ This section lists the routines that provided by the Newlib C Library.
 
 
 @itemize @bullet
-@item unctrl - Return printable representation of a character
+@item @code{unctrl} - Return printable representation of a character
 @end itemize
 
 @section Variable Argument Lists
@@ -310,37 +310,37 @@ This section lists the routines that provided by the Newlib C Library.
 
 @itemize @bullet
 
-@item Stdarg (stdarg.h):
+@item @code{Stdarg (stdarg.h):
 @itemize @bullet
-@item va_start - XXX
-@item va_arg - XXX
-@item va_end - XXX
+@item @code{va_start} - XXX
+@item @code{va_arg} - XXX
+@item @code{va_end} - XXX
 @end itemize
 
-@item Vararg (varargs.h):
+@item @code{Vararg (varargs.h):
 @itemize @bullet
-@item va_alist - XXX
-@item va_start-trad - XXX
-@item va_arg-trad - XXX
-@item va_end-trad - XXX
+@item @code{va_alist} - XXX
+@item @code{va_start-trad} - XXX
+@item @code{va_arg-trad} - XXX
+@item @code{va_end-trad} - XXX
 @end itemize
 @end itemize
 
 @section Reentrant System Calls
 
 @itemize @bullet
-@item open_r - XXX
-@item close_r - XXX
-@item lseek_r - XXX
-@item read_r - XXX
-@item write_r - XXX
-@item fork_r - XXX
-@item wait_r - XXX
-@item stat_r - XXX
-@item fstat_r - XXX
-@item link_r - XXX
-@item unlink_r - XXX
-@item sbrk_r - XXX
+@item @code{open_r} - XXX
+@item @code{close_r} - XXX
+@item @code{lseek_r} - XXX
+@item @code{read_r} - XXX
+@item @code{write_r} - XXX
+@item @code{fork_r} - XXX
+@item @code{wait_r} - XXX
+@item @code{stat_r} - XXX
+@item @code{fstat_r} - XXX
+@item @code{link_r} - XXX
+@item @code{unlink_r} - XXX
+@item @code{sbrk_r} - XXX
 @end itemize
 
 
