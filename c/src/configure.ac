@@ -96,23 +96,14 @@ test -n "${RTEMS_BSP_FAMILY}" && \
 AC_CACHE_CHECK([for CPU_CFLAGS],[ac_cv_env_CPU_CFLAGS],
 [. ./make/${RTEMS_BSP}.cache])
 CPU_CFLAGS=$ac_cv_env_CPU_CFLAGS
-AC_SUBST(CPU_CFLAGS)
 test -n "${CPU_CFLAGS}" && \
   ac_configure_args="$ac_configure_args 'CPU_CFLAGS=${CPU_CFLAGS}'"
 
 AC_CACHE_CHECK([for CFLAGS_OPTIMIZE_V],[ac_cv_env_CFLAGS_OPTIMIZE_V],
 [. ./make/${RTEMS_BSP}.cache])
 CFLAGS_OPTIMIZE_V=$ac_cv_env_CFLAGS_OPTIMIZE_V
-AC_SUBST(CFLAGS_OPTIMIZE_V)
 test -n "${CFLAGS_OPTIMIZE_V}" && \
   ac_configure_args="$ac_configure_args 'CFLAGS_OPTIMIZE_V=${CFLAGS_OPTIMIZE_V}'"
-
-AC_CACHE_CHECK([for CFLAGS_DEBUG_V],[ac_cv_env_CFLAGS_DEBUG_V],
-[. ./make/${RTEMS_BSP}.cache])
-CFLAGS_DEBUG_V=$ac_cv_env_CFLAGS_DEBUG_V
-AC_SUBST(CFLAGS_DEBUG_V)
-test -n "${CFLAGS_DEBUG_V}" && \
-  ac_configure_args="$ac_configure_args 'CFLAGS_DEBUG_V=${CFLAGS_DEBUG_V}'"
 
 RTEMS_PROG_CC_FOR_TARGET
 AM_PROG_CC_C_O

@@ -1,3 +1,8 @@
+2005-01-24	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove CFLAGS_DEBUG_V.
+	Don't AC_SUBST(CFLAGS_OPTIMIZE_V), AC_SUBST(CPU_CFLAGS).
+
 2005-01-22	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* wrapup/Makefile.am: Remove rtems-ctor.o.
