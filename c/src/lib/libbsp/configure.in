@@ -42,6 +42,12 @@ AC_CONFIG_SUBDIRS($cfg_subdirs)
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
-AC_OUTPUT( 
+AC_OUTPUT(
 Makefile
-shmdr/Makefile)
+shmdr/Makefile
+shared/Makefile
+shared/include/Makefile
+include/Makefile
+include/rtems/Makefile
+include/rtems/score/Makefile
+)

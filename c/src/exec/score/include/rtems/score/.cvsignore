@@ -1,2 +1,4 @@
 Makefile
 Makefile.in
+stamp-h.in
+cpuopts-tmp.h.in

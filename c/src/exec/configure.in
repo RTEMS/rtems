@@ -67,6 +67,8 @@ fi
 AC_CONFIG_SUBDIRS($cfg_subdirs)
 AC_CONFIG_SUBDIRS(score/cpu/$RTEMS_CPU)
 
+AM_CONFIG_HEADER(score/include/rtems/score/cpuopts-tmp.h)
+
 # Explicitly list all Makefiles here
 AC_OUTPUT( 
 Makefile

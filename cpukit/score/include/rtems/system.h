@@ -27,6 +27,10 @@ extern "C" {
  *  first so the basic macro definitions are in place.
  */
 
+/*
+ * FIXME: Instead of targopts.h, cpuopts.h should be included here.
+ * #include <rtems/score/cpuopts.h>
+ */
 #include <rtems/score/targopts.h>
 
 /*
