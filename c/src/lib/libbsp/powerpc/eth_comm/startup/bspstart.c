@@ -20,10 +20,13 @@
 #include <string.h>
 
 #include <bsp.h>
+#include <bsp/irq.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <info.h>
- 
+#include <libcpu/cpuIdent.h>
+#include <rtems/bspIo.h>
+
 boardinfo_t M860_binfo;
 
 /*
