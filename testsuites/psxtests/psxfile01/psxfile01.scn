@@ -28,18 +28,32 @@ mkdir /j/j1
 mkdir tmp
 
 rmdir /usr
+rmdir /dev
+rmdir /fred
+mknod /dev/test_console
+mknod /dev/tty/S3
+mknod /etc/passwd
+mkdir /tmp/my_dir
+mkfifo /c/my_dir
 mkdir /etc/passwd/j
 open /tmp/joel - should fail with ENOENT
 open /tmp/j
 open returned file descriptor 3
 close /tmp/j
+close /tmp/j again
 unlink /tmp/j
+unlink /tmp
+create and close /tmp/tom
+Attempt to recreate /tmp/tom
+create /tmp/john
+tcdrain /tmp/john
+mknod /tmp/joel
 (0)the first write!!!
 
 (10)the first write!!!
 
-stat( /tmp/joel ) returned     st_dev     (0x1a7f8:0x3e86f0)
-    st_ino     d
+stat( /tmp/joel ) returned     st_dev     (0x0:0x0)
+    st_ino     10
     mode  = 00100700
     nlink = 1
     uid = 0
@@ -47,6 +61,9 @@ stat( /tmp/joel ) returned     st_dev     (0x1a7f8:0x3e86f0)
     atime = Sat Dec 31 09:00:00 1988
     mtime = Sat Dec 31 09:00:00 1988
     ctime = Sat Dec 31 09:00:00 1988
+unlink /tmp/joel
+unlink /tmp/joel
+mknod /tmp/joel
 (514)the first write!!!
 
 (513)the first write!!!
@@ -64,8 +81,8 @@ stat( /tmp/joel ) returned     st_dev     (0x1a7f8:0x3e86f0)
 (513)the first write!!!
 
 (139743)
-stat( /tmp/joel ) returned     st_dev     (0x1a7f8:0x3e86f0)
-    st_ino     e
+stat( /tmp/joel ) returned     st_dev     (0x0:0x0)
+    st_ino     11
     mode  = 00100700
     nlink = 1
     uid = 0
@@ -92,7 +109,7 @@ fprintf to /tmp/j
 (4) 26 characters written to the file
 (5) 26 characters written to the file
     st_dev     (0x0:0x0)
-    st_ino     f
+    st_ino     12
     mode  = 00100660
     nlink = 1
     uid = 0
@@ -106,7 +123,7 @@ This is call 3 to fprintf
 This is call 4 to fprintf
 This is call 5 to fprintf
     st_dev     (0x0:0x0)
-    st_ino     f
+    st_ino     12
     mode  = 00100660
     nlink = 1
     uid = 0
@@ -124,12 +141,15 @@ This is call 5 to fprintf
     etc/
         passwd (file 0 0x0 0x0 0x0)
     tmp/
-        joel (file 279487 0x3d5ac0 0x3d5570 0x3d5020)
-        j (file 130 0x37f530 0x0 0x0)
+        my_dir/
+        tom (file 0 0x0 0x0 0x0)
+        john (file 0 0x0 0x0 0x0)
+        joel (file 279487 0x7d58d8 0x7d5388 0x7cfe38)
+        j (file 130 0x77a338 0x0 0x0)
 ***************       End of Dump        ***************
 truncate /tmp/j to length of 40
     st_dev     (0x0:0x0)
-    st_ino     f
+    st_ino     12
     mode  = 00100660
     nlink = 1
     uid = 0
@@ -147,7 +167,10 @@ truncate /tmp/j to length of 40
     etc/
         passwd (file 0 0x0 0x0 0x0)
     tmp/
-        j (file 40 0x37f530 0x0 0x0)
+        my_dir/
+        tom (file 0 0x0 0x0 0x0)
+        john (file 0 0x0 0x0 0x0)
+        j (file 40 0x77a338 0x0 0x0)
 ***************       End of Dump        ***************
 truncate /tmp/j to length of 0
 truncate /tmp to length of 0 should fail with EISDIR
@@ -163,6 +186,10 @@ truncate /tmp to length of 0 should fail with EISDIR
     etc/
         passwd (file 0 0x0 0x0 0x0)
     tmp/
-        j (file 0 0x37f530 0x0 0x0)
+        my_dir/
+        tom (file 0 0x0 0x0 0x0)
+        john (file 0 0x0 0x0 0x0)
+        j (file 0 0x77a338 0x0 0x0)
 ***************       End of Dump        ***************
 *** END OF FILE TEST 1 ***
+
