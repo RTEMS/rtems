@@ -29,6 +29,11 @@ ps:
 
 html: dirs
 	-mkdir -p $(WWW_INSTALL)/$(PROJECT)
-	$(SRC2HTML) -d3 RTEMS.test
+	$(SRC2HTML) -d3 RTEMS.src
 
+RTEMS.src:
+	sed -e 's/WWW_INSTALL/$(WWW_INSTALL)/' \
+	    <RTEMS.test >RTEMS.src
+	
 clean:
+	rm -f RTEMS.src

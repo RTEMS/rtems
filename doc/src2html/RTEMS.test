@@ -20,7 +20,7 @@
 
 set Srctree /usr1/rtems/rtems-work/c/src/exec/
 #set Htmltree /tmp/www
-set Htmlroot /usr1/tmp/rtemsdoc-4.0.0-beta3/html/internal/browseable_rtems
+set Htmlroot WWW_INSTALL/internal/browseable_rtems
 set Htmldir .
 set Newsrctree .                   # Comments here too
 #  default is . and that is fine for us right now
