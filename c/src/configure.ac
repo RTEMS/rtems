@@ -81,7 +81,7 @@ AC_CONFIG_SUBDIRS([libmisc])
 
 AS_IF([test "$RTEMS_CPU" != "unix"],[
 ## HACK: Suppress libchip for unix
-  AC_CONFIG_SUBDIRS(libchip)
+  AC_CONFIG_SUBDIRS([libchip])
 ])
 
 AS_IF([test "$HAS_NETWORKING" = "yes"],[
@@ -92,21 +92,21 @@ AS_IF([test "$HAS_NETWORKING" = "yes"],[
 ])
 
 AS_IF([test "$HAS_RDBG" = "yes"],[
-  AC_CONFIG_SUBDIRS(librdbg)
+  AC_CONFIG_SUBDIRS([librdbg])
 ])
 
 AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
-  AC_CONFIG_SUBDIRS(librtems++)
+  AC_CONFIG_SUBDIRS([librtems++])
 ])
 
-AC_CONFIG_SUBDIRS(wrapup tests)
+AC_CONFIG_SUBDIRS([tests])
 
 AM_CONDITIONAL(HAS_NETWORKING, test "$HAS_NETWORKING" = "yes" )
 AM_CONDITIONAL(HAS_RDBG, test "$HAS_RDBG" = "yes" )
 
 # The bare bsp doesn't have libbsp.a
 # FIXME: We should use a feature based check, here
-AM_CONDITIONAL(HAS_LIBBSP,[! test "$RTEMS_BSP_FAMILY" = "bare"])
+AM_CONDITIONAL([HAS_LIBBSP],[! test "$RTEMS_BSP_FAMILY" = "bare"])
 AM_CONDITIONAL([MULTILIB],[test x"${enable_multilib}" = x"yes"])
 
 RTEMS_PROJECT_ROOT

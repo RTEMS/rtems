@@ -1,5 +1,10 @@
 2002-08-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Remove AC_CONFIG_SUBDIR(wrapup).
+	Cosmetic cleanups.
+
+2002-08-10	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Pick up ../libchip/rtc/$(ARCH)/librtcio.a and
     	../libchip/serial/$(ARCH)/libserialio.a.
 
