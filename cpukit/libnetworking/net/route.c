@@ -688,7 +688,7 @@ rt_fixchange(struct radix_node *rn, void *vp)
 	xm1 = (u_char *)rt_mask(rt0);
 	xk2 = (u_char *)rt_key(rt);
 
-	for (i = rnh->rnh_treetop->rn_off; i < len; i++) {
+	for (i = rnh->rnh_treetop->rn_offset; i < len; i++) {
 		if ((xk2[i] & xm1[i]) != xk1[i]) {
 #ifdef DEBUG
 			if(rtfcdebug) printf("no match\n");
