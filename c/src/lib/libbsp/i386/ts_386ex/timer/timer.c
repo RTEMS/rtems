@@ -28,7 +28,7 @@
 #include <bsp.h>
 #include <stdlib.h>
 
-volatile rtems_unsigned32  Ttimer_val;  /* Updated from ISR!!! */
+volatile uint32_t          Ttimer_val;  /* Updated from ISR!!! */
 rtems_boolean Timer_driver_Find_average_overhead;
 
 extern void timerisr();
@@ -137,8 +137,8 @@ void Timer_initialize(void)
 
 int Read_timer(void)
 {
-  register rtems_unsigned32 clicks, total;
-  register rtems_unsigned8 lsb, msb;
+  register uint32_t         clicks, total;
+  register uint8_t         lsb, msb;
 
   /* latch the count */
   outport_byte (TIMER_MODE, TIMER_SEL0|TIMER_LATCH );

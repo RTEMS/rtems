@@ -40,14 +40,14 @@ rtems_cpu_table Cpu_table;
  *  Tells us where to put the workspace in case remote debugger is present.
  */
 
-extern rtems_unsigned32  rdb_start;
+extern uint32_t          rdb_start;
 
 /*
  *  Use the shared implementations of the following routines
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 
 /*
  *  Function:   bsp_pretasking_hook
@@ -66,10 +66,10 @@ void bsp_libc_init( void *, unsigned32, int );
 void bsp_pretasking_hook(void)
 {
     extern int heap_bottom;
-    rtems_unsigned32 heap_start;
-    rtems_unsigned32 heap_size;
+    uint32_t         heap_start;
+    uint32_t         heap_size;
 
-    heap_start = (rtems_unsigned32) &heap_bottom;
+    heap_start = (uint32_t) &heap_bottom;
     if (heap_start & (CPU_ALIGNMENT-1))
       heap_start = (heap_start + CPU_ALIGNMENT) & ~(CPU_ALIGNMENT-1);
 

@@ -26,10 +26,10 @@
 
 #include <stdlib.h>
 
-rtems_unsigned32 Clock_isrs;              /* ISRs until next tick */
-static rtems_unsigned32 Clock_initial_isr_value;
+uint32_t         Clock_isrs;              /* ISRs until next tick */
+static uint32_t         Clock_initial_isr_value;
 
-volatile rtems_unsigned32 Clock_driver_ticks;
+volatile uint32_t         Clock_driver_ticks;
 
 void Clock_exit( void );
 
