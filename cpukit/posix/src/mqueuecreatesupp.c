@@ -81,20 +81,6 @@ int _POSIX_Message_queue_Create_support(
   }
 #endif
  
-  if ( name ) {
-
-    if( strlen(name) > PATH_MAX ) {  /* XXX - on non-null terminated name? */
-      _Thread_Enable_dispatch();
-      set_errno_and_return_minus_one( ENAMETOOLONG );
-    }
-
-    /*
-     * XXX Greater than NAME_MAX while POSIX_NO_TRUNC in effect.
-     * XXX Error description in POSIX book different for mq_open and mq_unlink
-     *     Why???
-     */
-  }
-
   the_mq = _POSIX_Message_queue_Allocate();
   if ( !the_mq ) {
     _Thread_Enable_dispatch();
@@ -103,40 +89,19 @@ int _POSIX_Message_queue_Create_support(
  
   the_mq->process_shared  = pshared;
   the_mq->oflag = oflag;
- 
-  if ( name ) {
-    the_mq->named = TRUE;
-    the_mq->open_count = 1;
-    the_mq->linked = TRUE;
- }
-  else {
-    the_mq->named = FALSE;
+  the_mq->named = TRUE;
+  the_mq->open_count = 1;
+  the_mq->linked = TRUE;
 
-  }
-
-  if ( oflag & O_NONBLOCK ) 
-    the_mq->blocking = FALSE;
-  else
-    the_mq->blocking = TRUE;
  
   /* XXX
    *
-   *  Note that this should be based on the current scheduling policy.
+   *  Note that thread blocking discipline should be based on the
+   *  current scheduling policy.
    */
 
-  /* XXX
-   *
-   *  Message and waiting disciplines are not distinguished.
-   */
-/*
-  the_mq_attr->message_discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
-  the_mq_attr->waiting_discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
- */
-   
-
-  the_mq->Message_queue.Attributes.discipline =
-                                         CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
   the_mq_attr = &the_mq->Message_queue.Attributes;
+  the_mq_attr->discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
 
   if ( ! _CORE_message_queue_Initialize(
            &the_mq->Message_queue,
