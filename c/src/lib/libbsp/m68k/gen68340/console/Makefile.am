@@ -6,10 +6,10 @@
 PGM = $(ARCH)/console.rel
 
 C_FILES = console.c m340uart.c
-C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.o)
+C_O_FILES = $(C_FILES:%.c=$(ARCH)/%.$(OBJEXT))
 
 S_FILES = Modif_cpu_asm.S
-S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.o)
+S_O_FILES = $(S_FILES:%.S=$(ARCH)/%.$(OBJEXT))
 
 OBJS = $(C_O_FILES) $(S_O_FILES)
 
