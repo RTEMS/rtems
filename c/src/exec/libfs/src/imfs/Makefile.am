@@ -40,7 +40,7 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
 
-PREINSTALL_FILES += $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems \
+PREINSTALL_FILES = $(PROJECT_INCLUDE) $(PROJECT_INCLUDE)/rtems \
     $(PROJECT_INCLUDE)/sys $(include_HEADERS:%=$(PROJECT_INCLUDE)/%) \
     $(RTEMS_H_FILES:%=$(PROJECT_INCLUDE)/rtems/%) \
     $(SYS_H_FILES:%=$(PROJECT_INCLUDE)/sys/%)
