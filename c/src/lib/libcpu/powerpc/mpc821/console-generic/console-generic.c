@@ -99,7 +99,7 @@ m821_get_brg_cd (int baud)
 /*  at any time since the OS started. It needs to be fixed. FIXME */
 unsigned char m821_get_brg_clk(int baud)
 {
-  static short brg_spd[4];
+  static int   brg_spd[4];
   static char  brg_used[4];
   int i;
 
