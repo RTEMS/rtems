@@ -1,3 +1,8 @@
+2001-08-09	Fernando-Ruiz Casas <correo@fernando-ruiz.com>
+
+	* src/imfs/imfs_eval.c: The CD_UP problem in imfs_eval has been
+	touched. The order of the questions is the key.
+
 2001-07-06	Thomas Doerfler <Thomas.Doerfler@imd-systems.de>
 
 	* src/imfs/deviceio.c: Make sure errno gets set to reflect

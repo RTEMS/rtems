@@ -31,7 +31,7 @@
 
 #define MAXSYMLINK 5
 
-int IMFS_Set_handlers( 
+int IMFS_Set_handlers(
   rtems_filesystem_location_info_t   *loc
 )
 {
@@ -292,7 +292,7 @@ int IMFS_evaluate_for_make(
   int                                 result; 
   
   /*
-   * This was filled in by the caller and is valid in the 
+   * This was filled in by the caller and is valid in the
    * mount table.
    */
   node = pathloc->node_access;
@@ -323,6 +323,13 @@ int IMFS_evaluate_for_make(
     switch( type ) {
 
       case IMFS_UP_DIR:
+       /*
+        *  Am I at the root of all filesystems? (chroot'ed?)
+	*/
+
+       if ( pathloc->node_access == rtems_filesystem_root.node_access )
+         break;       /* Throw out the .. in this case */
+
 
 	/*
 	 * Am I at the root of this mounted filesystem?
@@ -516,6 +523,12 @@ int IMFS_eval_path(
 
     switch( type ) {
       case IMFS_UP_DIR:
+       /*
+        *  Am I at the root of all filesystems? (chroot'ed?)
+	*/
+
+       if ( pathloc->node_access == rtems_filesystem_root.node_access )
+         break;       /* Throw out the .. in this case */
 
 	/*
 	 *  Am I at the root of this mounted filesystem?
@@ -559,7 +572,7 @@ int IMFS_eval_path(
 
           node = pathloc->node_access;
           if ( !node )
-            set_errno_and_return_minus_one( ENOTDIR ); 
+            set_errno_and_return_minus_one( ENOTDIR );
 
 	} else if ( node->type == IMFS_SYM_LINK ) {
 
