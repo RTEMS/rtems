@@ -30,8 +30,8 @@ extern "C" {
 #include <bspopts.h>
 
 #include <rtems.h>
-#include <console.h>
-#include <clockdrv.h>
+#include <rtems/console.h>
+#include <rtems/clockdrv.h>
 #include <mpc5xx.h>
 #include <mpc5xx/console.h>
 #include <libcpu/vectors.h>

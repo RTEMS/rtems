@@ -49,7 +49,7 @@
  * Copyright (C) 2004, Real-Time Systems Inc. (querbach@realtime.bc.ca)
  */
 
-#include "asm.h"
+#include <rtems/asm.h>
 #include <rtems/powerpc/registers.h>
 
 /*
