@@ -1,5 +1,9 @@
 2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Reflect changes to cpukit.
+
+2004-01-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* wrapup/Makefile.am: Reflect changes to librdbg.
 	* aclocal/enable-bare.m4: Convert to autoconf-2.59.
 

@@ -108,9 +108,9 @@ test -n "${CFLAGS_DEBUG_V}" && \
   ac_configure_args="$ac_configure_args 'CFLAGS_DEBUG_V=${CFLAGS_DEBUG_V}'"
 
 RTEMS_PROG_CC_FOR_TARGET
+AM_PROG_CC_C_O
 RTEMS_PROG_CCAS
 RTEMS_CANONICALIZE_TOOLS
-AM_PROG_CC_C_O
 
 AC_SUBST(CUSTOM_CFG_FILES)
 AC_SUBST(cfg_dir)
@@ -121,7 +121,7 @@ AS_IF([test x"$multilib" = x"no"],[
   AC_CONFIG_COMMANDS_POST([
     if test x"$multilib" = x"no"; then
     RTEMS_CONFIG_SUBDIR([exec],[../../cpukit],
-      ['--with-project-root=../../' '--enable-rtemsbsp=$RTEMS_BSP'])
+      ['--with-project-root=../../..' '--enable-rtemsbsp=$RTEMS_BSP'])
     fi
   ])
   BSP_SUBDIRS="exec"
