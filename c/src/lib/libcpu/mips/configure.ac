@@ -34,15 +34,9 @@ AM_CONDITIONAL(mongoosev, test "$RTEMS_CPU_MODEL" = "mongoosev")
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 mongoosev/Makefile
-mongoosev/duart/Makefile
-mongoosev/vectorisrs/Makefile
 shared/Makefile
-shared/cache/Makefile
-shared/interrupts/Makefile
 r46xx/Makefile
-r46xx/vectorisrs/Makefile
 timer/Makefile
 tx39/Makefile
-tx39/vectorisrs/Makefile
 ])
 AC_OUTPUT

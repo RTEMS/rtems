@@ -1,5 +1,21 @@
 2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* mongoosev/duart/Makefile.am: Remove.
+	* mongoosev/vectorisrs/Makefile.am: Remove.
+	* mongoosev/Makefile.am: Merge-in vectorisrs/Makefile.am,
+	duart/Makefile.am.
+	* r46xx/vectorisrs/Makefile.am: Remove.
+	* r46xx/Makefile.am: Merge-in vectorisrs/Makefile.am.
+	* shared/cache/Makefile.am: Remove.
+	* shared/interrupts/Makefile.am: Remove.
+	* shared/Makefile.am: Merge-in cache/Makefile.am,
+	interrupts/Makefile.am.
+	* tx39/vectorisrs/Makefile.am: Remove.
+	* tx39/Makefile.am: Merge-in vectorisrs/Makefile.am.
+	* configure.ac: Reflect changes above.
+
+2003-12-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* mongoosev/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
 	* mongoosev/duart/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
 	* shared/cache/Makefile.am: Use mkdir_p. Remove dirs from PRE/TMPINSTALL_FILES.
