@@ -19,4 +19,4 @@ all: $(PREINSTALL_FILES)
 
 EXTRA_DIST = console.c uart.c
 
-include $(top_srcdir)/../../../../../automake/local.am
+include $(top_srcdir)/../../../automake/local.am
