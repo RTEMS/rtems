@@ -64,7 +64,6 @@ extern "C" {
  *  The following architectural feature definitions are defaulted
  *  unless specifically set by the model definition:
  *
- *    + PPC_DEBUG_MODEL          - PPC_DEBUG_MODEL_STANDARD
  *    + PPC_INTERRUPT_MAX        - 16
  *    + PPC_CACHE_ALIGNMENT      - 32
  *    + PPC_LOW_POWER_MODE       - PPC_LOW_POWER_MODE_NONE
@@ -75,18 +74,6 @@ extern "C" {
  *    + PPC_USE_MULTIPLE         - 0
  */
  
-/*
- *  Define the debugging assistance models found in the PPC family.
- *
- *  Standard:         single step and branch trace
- *  Single Step Only: single step only
- *  IBM 4xx:          debug exception
- */
-
-#define PPC_DEBUG_MODEL_STANDARD         1
-#define PPC_DEBUG_MODEL_SINGLE_STEP_ONLY 2
-#define PPC_DEBUG_MODEL_IBM4xx           3
-
 /*
  *  Define the low power mode models
  *
@@ -125,7 +112,6 @@ extern "C" {
 #define PPC_I_CACHE		2048
 #define PPC_D_CACHE		1024
 
-#define PPC_DEBUG_MODEL          PPC_DEBUG_MODEL_IBM4xx
 #define PPC_HAS_EXCEPTION_PREFIX 0
 #define PPC_HAS_EVPR             1
 
@@ -168,8 +154,6 @@ extern "C" {
 #define PPC_USE_MULTIPLE	1
 #define PPC_I_CACHE		0
 #define PPC_D_CACHE		32768
-
-#define PPC_DEBUG_MODEL PPC_DEBUG_MODEL_SINGLE_STEP_ONLY
 
 #elif defined(ppc602)
 /*
@@ -370,15 +354,6 @@ extern "C" {
 
 #ifndef PPC_ASM
 #define PPC_ASM PPC_ASM_ELF
-#endif
-
-/*
- *  Use the default debug scheme defined in the architectural specification
- *  if another model has not been specified.
- */
-
-#ifndef PPC_DEBUG_MODEL
-#define PPC_DEBUG_MODEL PPC_DEBUG_MODEL_STANDARD
 #endif
 
 /*
@@ -729,27 +704,6 @@ extern "C" {
 #define PPC_MSR_POW      0x000000000 /* bit 13 - power management enable */
 #else
 #define PPC_MSR_POW      0x000040000 /* bit 13 - power management enable */
-#endif
-
-/*
- *  Interrupt/exception MSR bits set as defined on p. 2-20 in "The Programming
- *  Environments" and the manuals for various PPC models.
- */
-
-#if (PPC_DEBUG_MODEL == PPC_DEBUG_MODEL_STANDARD)
-#define PPC_MSR_DE       0x000000000 /* bit 22 - debug exception enable */
-#define PPC_MSR_BE       0x000000200 /* bit 22 - branch trace enable */
-#define PPC_MSR_SE       0x000000400 /* bit 21 - single step trace enable */
-#elif (PPC_DEBUG_MODEL == PPC_DEBUG_MODEL_SINGLE_STEP_ONLY)
-#define PPC_MSR_DE       0x000000000 /* bit 22 - debug exception enable */
-#define PPC_MSR_BE       0x000000200 /* bit 22 - branch trace enable */
-#define PPC_MSR_SE       0x000000000 /* bit 21 - single step trace enable */
-#elif (PPC_DEBUG_MODEL == PPC_DEBUG_MODEL_IBM4xx)
-#define PPC_MSR_DE       0x000000200 /* bit 22 - debug exception enable */
-#define PPC_MSR_BE       0x000000000 /* bit 22 - branch trace enable */
-#define PPC_MSR_SE       0x000000000 /* bit 21 - single step trace enable */
-#else
-#error "MSR constants -- unknown PPC_DEBUG_MODEL!!"
 #endif
 
 #define PPC_MSR_ME       0x000001000 /* bit 19 - machine check enable */
