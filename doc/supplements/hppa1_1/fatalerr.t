@@ -6,20 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Default Fatal Error Processing, Default Fatal Error Processing Introduction, Interrupt Processing Disabling of Interrupts by RTEMS, Top
-@end ifinfo
 @chapter Default Fatal Error Processing
-@ifinfo
-@menu
-* Default Fatal Error Processing Introduction::
-* Default Fatal Error Processing Default Fatal Error Handler Operations::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Default Fatal Error Processing Introduction, Default Fatal Error Processing Default Fatal Error Handler Operations, Default Fatal Error Processing, Default Fatal Error Processing
-@end ifinfo
 @section Introduction
 
 Upon detection of a fatal error by either the
@@ -32,9 +20,6 @@ default fatal error handler is then invoked.  This chapter
 describes the precise operations of the default fatal error
 handler.
 
-@ifinfo
-@node Default Fatal Error Processing Default Fatal Error Handler Operations, Board Support Packages, Default Fatal Error Processing Introduction, Default Fatal Error Processing
-@end ifinfo
 @section Default Fatal Error Handler Operations
 
 The default fatal error handler which is invoked by

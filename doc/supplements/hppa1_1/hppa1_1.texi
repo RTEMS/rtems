@@ -72,7 +72,7 @@ END-INFO-DIR-ENTRY
 @include cputable.texi
 @include wksheets.texi
 @include timing.texi
-@include timedata.texi
+@include timeSIMHPPA.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
 @top c_hppa1_1

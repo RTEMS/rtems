@@ -6,21 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Board Support Packages, Board Support Packages Introduction, Default Fatal Error Processing Default Fatal Error Handler Operations, Top
-@end ifinfo
 @chapter Board Support Packages
-@ifinfo
-@menu
-* Board Support Packages Introduction::
-* Board Support Packages System Reset::
-* Board Support Packages Processor Initialization::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Board Support Packages Introduction, Board Support Packages System Reset, Board Support Packages, Board Support Packages
-@end ifinfo
 @section Introduction
 
 An RTEMS Board Support Package (BSP) must be designed
@@ -30,9 +17,6 @@ issues.   For more information on developing a BSP, refer to the
 chapter titled Board Support Packages in the RTEMS
 Applications User's Guide.
 
-@ifinfo
-@node Board Support Packages System Reset, Board Support Packages Processor Initialization, Board Support Packages Introduction, Board Support Packages
-@end ifinfo
 @section System Reset
 
 An RTEMS based application is initiated or
@@ -40,9 +24,6 @@ re-initiated when the PA-RISC processor is reset.  The behavior
 of a PA-RISC upon reset is implementation defined and thus is
 beyond the scope of this manual.
 
-@ifinfo
-@node Board Support Packages Processor Initialization, Processor Dependent Information Table, Board Support Packages System Reset, Board Support Packages
-@end ifinfo
 @section Processor Initialization
 
 The precise requirements for initialization of a

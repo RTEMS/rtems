@@ -6,24 +6,8 @@
 @c  $Id$
 @c
 
-@ifinfo
-@node Interrupt Processing, Interrupt Processing Introduction, Memory Model Flat Memory Model, Top
-@end ifinfo
 @chapter Interrupt Processing
-@ifinfo
-@menu
-* Interrupt Processing Introduction::
-* Interrupt Processing Vectoring of Interrupt Handler::
-* Interrupt Processing Interrupt Stack Frame::
-* Interrupt Processing External Interrupts and Traps::
-* Interrupt Processing Interrupt Levels::
-* Interrupt Processing Disabling of Interrupts by RTEMS::
-@end menu
-@end ifinfo
 
-@ifinfo
-@node Interrupt Processing Introduction, Interrupt Processing Vectoring of Interrupt Handler, Interrupt Processing, Interrupt Processing
-@end ifinfo
 @section Introduction
 
 Different types of processors respond to the
@@ -41,9 +25,6 @@ unique architecture. Discussed in this chapter are the PA-RISC's
 interrupt response and control mechanisms as they pertain to
 RTEMS.
 
-@ifinfo
-@node Interrupt Processing Vectoring of Interrupt Handler, Interrupt Processing Interrupt Stack Frame, Interrupt Processing Introduction, Interrupt Processing
-@end ifinfo
 @section Vectoring of Interrupt Handler
 
 Upon receipt of an interrupt the PA-RISC
@@ -115,9 +96,6 @@ the exception that the nested interrupt occurred while executing
 on the interrupt stack and, thus, the current stack need not be
 switched.
 
-@ifinfo
-@node Interrupt Processing Interrupt Stack Frame, Interrupt Processing External Interrupts and Traps, Interrupt Processing Vectoring of Interrupt Handler, Interrupt Processing
-@end ifinfo
 @section Interrupt Stack Frame
 
 The PA-RISC architecture does not alter the stack
@@ -138,9 +116,6 @@ the PA-RISC as defined by RTEMS:
 @end group
 @end example
 
-@ifinfo
-@node Interrupt Processing External Interrupts and Traps, Interrupt Processing Interrupt Levels, Interrupt Processing Interrupt Stack Frame, Interrupt Processing
-@end ifinfo
 @section External Interrupts and Traps
 
 In addition to the thirty-two unique interrupt
@@ -171,9 +146,6 @@ not have a handler configured, then the spurious interrupt
 handler will be invoked.  The spurious interrupt handler may
 also be specifiec by the user in the CPU Configuration Table.
 
-@ifinfo
-@node Interrupt Processing Interrupt Levels, Interrupt Processing Disabling of Interrupts by RTEMS, Interrupt Processing External Interrupts and Traps, Interrupt Processing
-@end ifinfo
 @section Interrupt Levels
 
 Two levels (enabled and disabled) of interrupt
@@ -195,9 +167,6 @@ indicates that interrupts are enabled and level 1 indicates that
 interrupts are disabled.  All other RTEMS interrupt levels are
 undefined and their behavior is unpredictable.
 
-@ifinfo
-@node Interrupt Processing Disabling of Interrupts by RTEMS, Default Fatal Error Processing, Interrupt Processing Interrupt Levels, Interrupt Processing
-@end ifinfo
 @section Disabling of Interrupts by RTEMS
 
 During the execution of directive calls, critical

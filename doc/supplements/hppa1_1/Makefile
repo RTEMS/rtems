@@ -22,12 +22,10 @@ COMMON_FILES=../../common/cpright.texi ../../common/setup.texi
 
 GENERATED_FILES=\
   cpumodel.texi callconv.texi memmodel.texi intr.texi fatalerr.texi \
-  bsp.texi cputable.texi wksheets.texi 
-
-# timing.texi timeBSP.texi
+  bsp.texi cputable.texi wksheets.texi timing.texi timeSIMHPPA.texi
 
 FILES= $(PROJECT).texi \
-  preface.texi timetbl.texi timedata.texi \
+  preface.texi \
   $(GENERATED_FILES)
 
 info: dirs c_hppa1_1
@@ -45,8 +43,6 @@ $(PROJECT).ps: $(PROJECT).dvi
 
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) $(PROJECT).texi
-
-replace: timedata.texi
 
 #
 #  Chapters which get automatic processing
@@ -78,9 +74,11 @@ intr.t: intr_NOTIMES.t SIMHPPA_TIMES
 intr.texi: intr.t Makefile
 	$(BMENU) -p "Memory Model Flat Memory Model" \
 	    -u "Top" \
+	    -n "Default Fatal Error Processing" ${*}.t
+
 
 fatalerr.texi: fatalerr.t Makefile
-	$(BMENU) -p "Interrupt Processing Interrupt Stack" \
+	$(BMENU) -p "Interrupt Processing Disabling of Interrupts by RTEMS" \
 	    -u "Top" \
 	    -n "Board Support Packages" ${*}.t
 
@@ -93,7 +91,6 @@ cputable.texi: cputable.t Makefile
 	$(BMENU) -p "Board Support Packages Processor Initialization" \
 	    -u "Top" \
 	    -n "Memory Requirements" ${*}.t
-
 
 # Worksheets Chapter:
 #  1.  Obtain the Shared File
@@ -124,19 +121,15 @@ timing.texi: timing.t Makefile
 	    -u "Top" \
 	    -n "HP-7100 Timing Data" ${*}.t
 
-# Timing Chapter
+# Timing Data for BSP Chapter:
+#  1.  Copy the Shared File
+#  2.  Replace Times and Sizes
+#  3.  Build Node Structure
 
-timetbl.t: ../../common/timetbl.t
-	sed -e 's/TIMETABLE_NEXT_LINK/Command and Variable Index/' \
-            <../../common/timetbl.t >timetbl.t
-
-timetbl.texi: timetbl.t SIMHPPA_TIMES
-	${REPLACE} -p SIMHPPA_TIMES timetbl.t
-	mv timetbl.t.fixed timetbl.texi
-
-timedata.texi: timedata.t SIMHPPA_TIMES
-	${REPLACE} -p SIMHPPA_TIMES timedata.t
-	mv timedata.t.fixed timedata.texi
+timeSIMHPPA.texi: timeSIMHPPA.t Makefile
+	$(BMENU) -p "Timing Specification Terminology" \
+	    -u "Top" \
+	    -n "Command and Variable Index" ${*}.t
 
 html: dirs $(FILES)
 	-mkdir -p $(WWW_INSTALL)/c_$(PROJECT)
@@ -148,7 +141,7 @@ clean:
 	rm -f *.dvi *.ps *.log *.aux *.cp *.fn *.ky *.pg *.toc *.tp *.vr $(BASE)
 	rm -f $(PROJECT) $(PROJECT)-*
 	rm -f c_hppa1_1 c_hppa1_1-*
-	rm -f timedata.texi timetbl.texi timetbl.t intr.t
+	rm -f intr.t
 	rm -f timing.t timing.texi
 	rm -f wksheets.t wksheets_NOTIMES.t $(GENERATED_FILES)
 	rm -f *.fixed _*
