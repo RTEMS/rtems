@@ -28,7 +28,6 @@ $(PROJECT).ps: $(PROJECT).dvi
 	dvips -o $(PROJECT).ps $(PROJECT).dvi
 	cp $(PROJECT).ps $(PS_INSTALL)
 
-# run texi2dvi twice to generate the xref's properly.
 $(PROJECT).dvi: $(FILES)
 	$(TEXI2DVI) -v $(PROJECT).texi
 
