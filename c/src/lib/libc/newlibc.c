@@ -44,18 +44,6 @@
 #include <stdio.h>
 #endif
 
-static int extension_index;
-
-/*
- *  Private routines
- */
-
-#define set_newlib_extension( _the_thread, _value ) \
-  (_the_thread)->extensions[ extension_index ] = (_value);
-
-#define get_newlib_extension( _the_thread ) \
-  (_the_thread)->extensions[ extension_index ]
-
 int              libc_reentrant;        /* do we think we are reentrant? */
 struct _reent    libc_global_reent;
 
@@ -114,7 +102,7 @@ rtems_boolean libc_create_hook(
   rtems_tcb *creating_task
 )
 {
-  set_newlib_extension( creating_task, NULL );
+  creating_task->libc_reent = NULL;
   return TRUE;
 }
 
@@ -156,7 +144,7 @@ rtems_extension libc_start_hook(
   ptr->_new._reent._rand_next = 1;
 #endif
 
-  set_newlib_extension( starting_task, ptr );
+  starting_task->libc_reent = ptr;
 }
 
 /*
@@ -169,22 +157,6 @@ rtems_extension libc_begin_hook(rtems_tcb *current_task)
   setvbuf( stdout, NULL, _IOLBF, BUFSIZ );
 }
 #endif
-
-rtems_extension libc_switch_hook(
-  rtems_tcb *current_task,
-  rtems_tcb *heir_task
-)
-{
-  /*
-   *  Don't touch the outgoing task if it has been deleted.
-   */
-
-  if ( !_States_Is_transient( current_task->current_state ) ) {
-    set_newlib_extension( current_task, _REENT );
-  }
-
-  _REENT = (struct _reent *) get_newlib_extension( heir_task );
-}
 
 /*
  *  Function:   libc_delete_hook
@@ -225,7 +197,7 @@ rtems_extension libc_delete_hook(
   if (current_task == deleted_task) {
     ptr = _REENT;
   } else {
-    ptr = (struct _reent *) get_newlib_extension( deleted_task );
+    ptr = (struct _reent *) deleted_task->libc_reent;
   }
 
   /* if (ptr) */
@@ -235,7 +207,7 @@ rtems_extension libc_delete_hook(
     free(ptr);
   }
 
-  set_newlib_extension( deleted_task, NULL );
+  deleted_task->libc_reent = NULL;
 
   /*
    * Require the switch back to another task to install its own
@@ -294,8 +266,9 @@ libc_init(int reentrant)
 #ifdef NEED_SETVBUF
     libc_extension.thread_begin   = libc_begin_hook;
 #endif
-    libc_extension.thread_switch  = libc_switch_hook;
     libc_extension.thread_delete  = libc_delete_hook;
+
+    _Thread_Set_libc_reent ((void**) &_REENT);
 
     rc = rtems_extension_create(rtems_build_name('L', 'I', 'B', 'C'),
                           &libc_extension, &extension_id);
@@ -303,7 +276,6 @@ libc_init(int reentrant)
       rtems_fatal_error_occurred( rc );
 
     libc_reentrant = reentrant;
-    extension_index = rtems_get_index( extension_id );
   }
 }
 
@@ -358,6 +330,5 @@ void exit(int status)
   rtems_shutdown_executive(status);
 }
 #endif
-
 
 #endif

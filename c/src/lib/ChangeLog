@@ -1,3 +1,11 @@
+2002-05-15	Chris Johns <ccj@acm.org>
+
+	* libc/newlibc.c: Per PR141, move the C library re-enterrant
+	support directly into the thread dispatch code. RTEMS needs
+	libc and so requiring libc to use a user extension with its
+	overhead is not the best solution. This patch lowers the
+	overhead to 2 pointer moves.
+
 2001-05-15	Joel Sherrill <joel@OARcorp.com>
 
 	* libc/Makefile.am: envlock.c should only be built for embedded
