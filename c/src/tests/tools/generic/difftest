@@ -70,7 +70,7 @@ cd $RTEMS_HOME/tests/$logdir || fatal "No log directory: $RTEMS_HOME/tests/$logd
 tests="$args"
 if [ ! "$tests" ]
 then
-     set -- `echo sp?? mp??_?`
+     set -- `echo sp?? mp??_? psx??`
      tests="$*"
 fi
 
@@ -93,6 +93,8 @@ do
            scn_file=$RTEMS_ROOT/c/src/tests/mptests/$mptest/node$node/$mptest.scn;;
        sp*)
            scn_file=$RTEMS_ROOT/c/src/tests/sptests/$t/$t.scn;;
+       psx*)
+           scn_file=$RTEMS_ROOT/c/src/tests/psxtests/$t/$t.scn;;
        *)
            fatal "unknown test $t";;
    esac
