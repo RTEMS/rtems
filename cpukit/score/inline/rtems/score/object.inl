@@ -28,9 +28,9 @@
 
 RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
   Objects_APIs     the_api,
-  unsigned32       the_class,
-  unsigned32       node,
-  unsigned32       index
+  uint32_t         the_class,
+  uint32_t         node,
+  uint32_t         index
 )
 {
   return (( (Objects_Id) the_api )   << OBJECTS_API_START_BIT)   |
@@ -64,11 +64,11 @@ RTEMS_INLINE_ROUTINE Objects_APIs _Objects_Get_API(
  *  This function returns the class portion of the ID.
  */
  
-RTEMS_INLINE_ROUTINE unsigned32 _Objects_Get_class(
+RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_class(
   Objects_Id id
 )
 {
-  return (unsigned32) 
+  return (uint32_t  ) 
     ((id >> OBJECTS_CLASS_START_BIT) & OBJECTS_CLASS_VALID_BITS);
 }
  
@@ -81,7 +81,7 @@ RTEMS_INLINE_ROUTINE unsigned32 _Objects_Get_class(
  *  This function returns the node portion of the ID.
  */
 
-RTEMS_INLINE_ROUTINE unsigned32 _Objects_Get_node(
+RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_node(
   Objects_Id id
 )
 {
@@ -97,7 +97,7 @@ RTEMS_INLINE_ROUTINE unsigned32 _Objects_Get_node(
  *  This function returns the index portion of the ID.
  */
 
-RTEMS_INLINE_ROUTINE unsigned32 _Objects_Get_index(
+RTEMS_INLINE_ROUTINE uint32_t   _Objects_Get_index(
   Objects_Id id
 )
 {
@@ -114,7 +114,7 @@ RTEMS_INLINE_ROUTINE unsigned32 _Objects_Get_index(
  */
  
 RTEMS_INLINE_ROUTINE boolean _Objects_Is_class_valid(
-  unsigned32 the_class
+  uint32_t   the_class
 )
 {
   /* XXX how do we determine this now? */
@@ -132,7 +132,7 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Is_class_valid(
  */
 
 RTEMS_INLINE_ROUTINE boolean _Objects_Is_local_node(
-  unsigned32 node
+  uint32_t   node
 )
 {
   return ( node == _Objects_Local_node );
@@ -185,7 +185,7 @@ RTEMS_INLINE_ROUTINE boolean _Objects_Are_ids_equal(
 
 RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
   Objects_Information *information,
-  unsigned32           index
+  uint32_t             index
 )
 {
   if ( index > information->maximum )
@@ -205,7 +205,7 @@ RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_local_object(
 
 RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
   Objects_Information *information,
-  unsigned32           index,
+  uint32_t             index,
   Objects_Control     *the_object
 )
 {
@@ -229,7 +229,7 @@ RTEMS_INLINE_ROUTINE Objects_Information *_Objects_Get_information(
 )
 {
   Objects_APIs  the_api;
-  unsigned32    the_class;
+  uint32_t      the_class;
 
 
   the_class = _Objects_Get_class( id );
@@ -257,7 +257,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Open(
   Objects_Name         name
 )
 {
-  unsigned32  index;
+  uint32_t    index;
 
   index = _Objects_Get_index( the_object->id );
   _Objects_Set_local_object( information, index, the_object );
@@ -285,7 +285,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Close(
   Objects_Control      *the_object
 )
 {
-  unsigned32 index;
+  uint32_t   index;
 
   index = _Objects_Get_index( the_object->id );
   _Objects_Set_local_object( information, index, NULL );

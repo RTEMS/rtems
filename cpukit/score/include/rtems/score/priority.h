@@ -28,7 +28,7 @@ extern "C" {
  *  NOTE: Priority 0 is reserved for internal threads only.
  */
 
-typedef unsigned32 Priority_Control;
+typedef uint32_t   Priority_Control;
 
 #define PRIORITY_MINIMUM      0         /* highest thread priority */
 #define PRIORITY_MAXIMUM      255       /* lowest thread priority */

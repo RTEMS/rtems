@@ -26,7 +26,7 @@ extern "C" {
  *  The following type is used to manage the debug mask.
  */
 
-typedef unsigned32 rtems_debug_control;
+typedef uint32_t   rtems_debug_control;
 
 /*
  *  These constants represent various classes of debugging.

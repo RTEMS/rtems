@@ -74,7 +74,7 @@ typedef struct {
   Thread_queue_States      sync_state; /* alloc/dealloc critical section */
   Thread_queue_Disciplines discipline; /* queue discipline               */
   States_Control           state;      /* state of threads on Thread_q   */
-  unsigned32               timeout_status;
+  uint32_t                 timeout_status;
 }   Thread_queue_Control;
 
 #ifndef __RTEMS_APPLICATION__

@@ -29,7 +29,7 @@ extern "C" {
  */
 
 void _Thread_MP_Handler_initialization (
-  unsigned32 maximum_proxies
+  uint32_t   maximum_proxies
 );
 
 /*

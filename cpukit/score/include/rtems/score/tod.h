@@ -27,21 +27,21 @@ extern "C" {
  *  The following constants are related to the time of day.
  */
 
-#define TOD_SECONDS_PER_MINUTE (unsigned32)60
-#define TOD_MINUTES_PER_HOUR   (unsigned32)60
-#define TOD_MONTHS_PER_YEAR    (unsigned32)12
-#define TOD_DAYS_PER_YEAR      (unsigned32)365
-#define TOD_HOURS_PER_DAY      (unsigned32)24
-#define TOD_SECONDS_PER_DAY    (unsigned32) (TOD_SECONDS_PER_MINUTE * \
+#define TOD_SECONDS_PER_MINUTE (uint32_t  )60
+#define TOD_MINUTES_PER_HOUR   (uint32_t  )60
+#define TOD_MONTHS_PER_YEAR    (uint32_t  )12
+#define TOD_DAYS_PER_YEAR      (uint32_t  )365
+#define TOD_HOURS_PER_DAY      (uint32_t  )24
+#define TOD_SECONDS_PER_DAY    (uint32_t  ) (TOD_SECONDS_PER_MINUTE * \
                                 TOD_MINUTES_PER_HOUR   * \
                                 TOD_HOURS_PER_DAY)
 
 #define TOD_SECONDS_PER_NON_LEAP_YEAR (365 * TOD_SECONDS_PER_DAY)
 
-#define TOD_MILLISECONDS_PER_SECOND     (unsigned32)1000
-#define TOD_MICROSECONDS_PER_SECOND     (unsigned32)1000000
-#define TOD_NANOSECONDS_PER_SECOND      (unsigned32)1000000000
-#define TOD_NANOSECONDS_PER_MICROSECOND (unsigned32)1000
+#define TOD_MILLISECONDS_PER_SECOND     (uint32_t  )1000
+#define TOD_MICROSECONDS_PER_SECOND     (uint32_t  )1000000
+#define TOD_NANOSECONDS_PER_SECOND      (uint32_t  )1000000000
+#define TOD_NANOSECONDS_PER_MICROSECOND (uint32_t  )1000
 
 /*
  *  The following constant define the earliest year to which an
@@ -57,13 +57,13 @@ extern "C" {
  */
 
 typedef struct {                   /* RTEID style time/date */
-  unsigned32 year;                 /* year, A.D. */
-  unsigned32 month;                /* month, 1 -> 12 */
-  unsigned32 day;                  /* day, 1 -> 31 */
-  unsigned32 hour;                 /* hour, 0 -> 23 */
-  unsigned32 minute;               /* minute, 0 -> 59 */
-  unsigned32 second;               /* second, 0 -> 59 */
-  unsigned32 ticks;                /* elapsed ticks between secs */
+  uint32_t   year;                 /* year, A.D. */
+  uint32_t   month;                /* month, 1 -> 12 */
+  uint32_t   day;                  /* day, 1 -> 31 */
+  uint32_t   hour;                 /* hour, 0 -> 23 */
+  uint32_t   minute;               /* minute, 0 -> 59 */
+  uint32_t   second;               /* second, 0 -> 59 */
+  uint32_t   ticks;                /* elapsed ticks between secs */
 }   TOD_Control;
 
 /*
@@ -90,7 +90,7 @@ SCORE_EXTERN Watchdog_Interval _TOD_Seconds_since_epoch;
  *  The following contains the number of microseconds per tick.
  */
 
-SCORE_EXTERN unsigned32 _TOD_Microseconds_per_tick;
+SCORE_EXTERN uint32_t   _TOD_Microseconds_per_tick;
 
 /*
  *  The following contains the number of clock ticks per second.
@@ -103,7 +103,7 @@ SCORE_EXTERN unsigned32 _TOD_Microseconds_per_tick;
  *  can be a source of error in the current time of day.
  */
 
-SCORE_EXTERN unsigned32 _TOD_Ticks_per_second;
+SCORE_EXTERN uint32_t   _TOD_Ticks_per_second;
 
 /*
  *  This is the control structure for the watchdog timer which
@@ -121,7 +121,7 @@ SCORE_EXTERN Watchdog_Control _TOD_Seconds_watchdog;
  *  February, respectively.
  */
 
-const unsigned32 _TOD_Days_per_month[ 2 ][ 13 ] = {
+const uint32_t   _TOD_Days_per_month[ 2 ][ 13 ] = {
   { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
   { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
 };
@@ -132,7 +132,7 @@ const unsigned32 _TOD_Days_per_month[ 2 ][ 13 ] = {
  *  The first dimension should be 1 for leap years, and 0 otherwise.
  */
 
-const unsigned16 _TOD_Days_to_date[2][13] = {
+const uint16_t   _TOD_Days_to_date[2][13] = {
   { 0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 },
   { 0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335 }
 };
@@ -144,13 +144,13 @@ const unsigned16 _TOD_Days_to_date[2][13] = {
  *  year otherwise.
  */
 
-const unsigned16 _TOD_Days_since_last_leap_year[4] = { 0, 366, 731, 1096 };
+const uint16_t   _TOD_Days_since_last_leap_year[4] = { 0, 366, 731, 1096 };
 
 #else
 
-extern const unsigned16 _TOD_Days_to_date[2][13]; /* Julian days */
-extern const unsigned16 _TOD_Days_since_last_leap_year[4];
-extern const unsigned32 _TOD_Days_per_month[2][13];
+extern const uint16_t   _TOD_Days_to_date[2][13]; /* Julian days */
+extern const uint16_t   _TOD_Days_since_last_leap_year[4];
+extern const uint32_t   _TOD_Days_per_month[2][13];
 
 #endif
 
@@ -163,7 +163,7 @@ extern const unsigned32 _TOD_Days_per_month[2][13];
  */
 
 void _TOD_Handler_initialization(
-  unsigned32 microseconds_per_tick
+  uint32_t   microseconds_per_tick
 );
 
 /*

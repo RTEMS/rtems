@@ -50,10 +50,10 @@ typedef enum {
  */
 
 typedef struct {
-  unsigned32   free_blocks;
-  unsigned32   free_size;
-  unsigned32   used_blocks;
-  unsigned32   used_size;
+  uint32_t     free_blocks;
+  uint32_t     free_size;
+  uint32_t     used_blocks;
+  uint32_t     used_size;
 } Heap_Information_block;
 
 /*
@@ -82,7 +82,7 @@ typedef struct {
  */
 
 #define HEAP_OVERHEAD \
-  (sizeof( unsigned32 ) * 2)         /* size dummy first and last blocks */
+  (sizeof( uint32_t   ) * 2)         /* size dummy first and last blocks */
 #define HEAP_BLOCK_USED_OVERHEAD \
   (sizeof( void * ) * 2)             /* num bytes overhead in used block */
 #define HEAP_MINIMUM_SIZE \
@@ -107,8 +107,8 @@ typedef struct {
 typedef struct Heap_Block_struct Heap_Block;
 
 struct Heap_Block_struct {
-  unsigned32  back_flag;   /* size and status of prev block */
-  unsigned32  front_flag;  /* size and status of block */
+  uint32_t    back_flag;   /* size and status of prev block */
+  uint32_t    front_flag;  /* size and status of block */
   Heap_Block *next;        /* pointer to next block */
   Heap_Block *previous;    /* pointer to previous block */
 };
@@ -134,8 +134,8 @@ typedef struct {
   Heap_Block *first;       /* pointer to first block in heap */
   Heap_Block *permanent_null;  /* always NULL pointer */
   Heap_Block *last;        /* pointer to last block in heap */
-  unsigned32  page_size;   /* allocation unit */
-  unsigned32  reserved;
+  uint32_t    page_size;   /* allocation unit */
+  uint32_t    reserved;
 }   Heap_Control;
 
 /*
@@ -149,11 +149,11 @@ typedef struct {
  *  page_size byte units.
  */
 
-unsigned32 _Heap_Initialize(
+uint32_t   _Heap_Initialize(
   Heap_Control *the_heap,
   void         *starting_address,
-  unsigned32    size,
-  unsigned32    page_size
+  uint32_t      size,
+  uint32_t      page_size
 );
 
 /*
@@ -168,8 +168,8 @@ unsigned32 _Heap_Initialize(
 Heap_Extend_status _Heap_Extend(
   Heap_Control *the_heap,
   void         *starting_address,
-  unsigned32    size,
-  unsigned32   *amount_extended
+  uint32_t      size,
+  uint32_t     *amount_extended
 );
 
 /*
@@ -186,7 +186,7 @@ Heap_Extend_status _Heap_Extend(
 
 void *_Heap_Allocate(
   Heap_Control *the_heap,
-  unsigned32    size
+  uint32_t      size
 );
 
 /*
@@ -202,7 +202,7 @@ void *_Heap_Allocate(
 boolean _Heap_Size_of_user_area(
   Heap_Control        *the_heap,
   void                *starting_address,
-  unsigned32          *size
+  uint32_t            *size
 );
 
 /*

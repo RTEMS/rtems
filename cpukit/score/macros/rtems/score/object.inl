@@ -43,7 +43,7 @@
  */
  
 #define _Objects_Get_class( _id ) \
-  (unsigned32) \
+  (uint32_t  ) \
     (((_id) >> OBJECTS_CLASS_START_BIT) & OBJECTS_CLASS_VALID_BITS)
 
 /*PAGE
@@ -145,7 +145,7 @@
 
 #define _Objects_Open( _information, _the_object, _name ) \
   do { \
-    unsigned32 _index; \
+    uint32_t   _index; \
     \
     _index = _Objects_Get_index( (_the_object)->id ); \
     (_information)->local_table[ _index ] = (_the_object); \
@@ -167,7 +167,7 @@
 
 #define _Objects_Close( _information, _the_object ) \
   do { \
-    unsigned32 _index; \
+    uint32_t   _index; \
     \
     _index = _Objects_Get_index( (_the_object)->id ); \
     (_information)->local_table[ _index ] = (Objects_Control *) NULL; \

@@ -26,7 +26,7 @@
  *  a thread of the_priority should be placed.
  */
 
-RTEMS_INLINE_ROUTINE unsigned32 _Thread_queue_Header_number (
+RTEMS_INLINE_ROUTINE uint32_t   _Thread_queue_Header_number (
   Priority_Control the_priority
 )
 {

@@ -119,9 +119,9 @@ typedef struct {
 typedef struct {
   Thread_queue_Control    Wait_queue;
   CORE_mutex_Attributes   Attributes;
-  unsigned32              lock;
-  unsigned32              nest_count;
-  unsigned32              blocked_count;
+  uint32_t                lock;
+  uint32_t                nest_count;
+  uint32_t                blocked_count;
   Thread_Control         *holder;
   Objects_Id              holder_id;
 }   CORE_mutex_Control;
@@ -137,7 +137,7 @@ typedef struct {
 void _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,
   CORE_mutex_Attributes        *the_mutex_attributes,
-  unsigned32                    initial_lock
+  uint32_t                      initial_lock
 );
  
 /*
@@ -222,7 +222,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 void _CORE_mutex_Flush(
   CORE_mutex_Control         *the_mutex,
   Thread_queue_Flush_callout  remote_extract_callout,
-  unsigned32                  status
+  uint32_t                    status
 );
  
 #include <rtems/score/coremutex.inl>

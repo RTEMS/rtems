@@ -38,7 +38,7 @@
  *
  *  _Addresses_Subtract
  *
- *  NOTE:  The cast of an address to an unsigned32 makes this code
+ *  NOTE:  The cast of an address to an uint32_t   makes this code
  *         dependent on an addresses being thirty two bits.
  */
 
@@ -59,7 +59,7 @@
     ( ( (unsigned short)(_address) % CPU_ALIGNMENT ) == 0 )
 #else
 #define _Addresses_Is_aligned( _address ) \
-    ( ( (unsigned32)(_address) % CPU_ALIGNMENT ) == 0 )
+    ( ( (uint32_t  )(_address) % CPU_ALIGNMENT ) == 0 )
 #endif
 
 /*PAGE

@@ -309,8 +309,8 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get (
   Objects_Locations *location
 )
 {
-  unsigned32           the_api;
-  unsigned32           the_class;
+  uint32_t             the_api;
+  uint32_t             the_class;
   Objects_Information *information;
   Thread_Control      *tp = (Thread_Control *) 0;
  
@@ -357,7 +357,7 @@ done:
  */
 
 RTEMS_INLINE_ROUTINE boolean _Thread_Is_proxy_blocking (
-  unsigned32 code
+  uint32_t   code
 )
 {
   return (code == THREAD_STATUS_PROXY_BLOCKING);

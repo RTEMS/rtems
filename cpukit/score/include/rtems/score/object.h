@@ -45,7 +45,7 @@ typedef void * Objects_Name;
  *  NOTE:  Must be a power of 2.  Matches the name manipulation routines.
  */
 
-#define OBJECTS_NAME_ALIGNMENT     sizeof( unsigned32 )
+#define OBJECTS_NAME_ALIGNMENT     sizeof( uint32_t   )
 
 /*
  *  Functions which compare names are prototyped like this.
@@ -54,7 +54,7 @@ typedef void * Objects_Name;
 typedef boolean (*Objects_Name_comparators)(
   void       * /* name_1 */,
   void       * /* name_2 */,
-  unsigned32   /* length */
+  uint32_t     /* length */
 );
 
 /*
@@ -67,7 +67,7 @@ typedef boolean (*Objects_Name_comparators)(
  *     Bits 27 .. 31    = class  (up to 31 object types per API)
  */
 
-typedef unsigned32 Objects_Id;
+typedef uint32_t   Objects_Id;
 
 #define OBJECTS_INDEX_START_BIT  0
 #define OBJECTS_NODE_START_BIT  16
@@ -190,21 +190,21 @@ typedef struct {
 
 typedef struct {
   Objects_APIs      the_api;            /* API of this object */
-  unsigned32        the_class;          /* class of this object */
+  uint32_t          the_class;          /* class of this object */
   Objects_Id        minimum_id;         /* minimum valid id of this type */
   Objects_Id        maximum_id;         /* maximum valid id of this type */
-  unsigned32        maximum;            /* maximum number of objects */
+  uint32_t          maximum;            /* maximum number of objects */
   boolean           auto_extend;        /* TRUE if unlimited objects */
-  unsigned32        allocation_size;    /* number of objects in a block */
-  unsigned32        size;               /* size of the objects */
+  uint32_t          allocation_size;    /* number of objects in a block */
+  uint32_t          size;               /* size of the objects */
   Objects_Control **local_table;
   Objects_Name     *name_table;
   Chain_Control     Inactive;           /* chain of inactive ctl blocks */
-  unsigned32        inactive;           /* number of objects on the InActive list */
-  unsigned32       *inactive_per_block; /* used to release a block */
+  uint32_t          inactive;           /* number of objects on the InActive list */
+  uint32_t         *inactive_per_block; /* used to release a block */
   void            **object_blocks;      /* the object memory to remove */
   boolean           is_string;          /* TRUE if names are strings */
-  unsigned32        name_length;        /* maximum length of names */
+  uint32_t          name_length;        /* maximum length of names */
   Objects_Thread_queue_Extract_callout *extract;
 #if defined(RTEMS_MULTIPROCESSING)
   Chain_Control    *global_table;       /* pointer to global table */
@@ -216,8 +216,8 @@ typedef struct {
  *  node number of the local node.
  */
 
-SCORE_EXTERN unsigned32  _Objects_Local_node;
-SCORE_EXTERN unsigned32  _Objects_Maximum_nodes;
+SCORE_EXTERN uint32_t    _Objects_Local_node;
+SCORE_EXTERN uint32_t    _Objects_Maximum_nodes;
 
 /*
  *  The following is the list of information blocks per API for each object
@@ -267,9 +267,9 @@ SCORE_EXTERN Objects_Information
  */
 
 void _Objects_Handler_initialization(
-  unsigned32 node,
-  unsigned32 maximum_nodes,
-  unsigned32 maximum_global_objects
+  uint32_t   node,
+  uint32_t   maximum_nodes,
+  uint32_t   maximum_global_objects
 );
 
 /*
@@ -313,11 +313,11 @@ void _Objects_Shrink_information(
 void _Objects_Initialize_information (
   Objects_Information *information,
   Objects_APIs         the_api,
-  unsigned32           the_class,
-  unsigned32           maximum,
-  unsigned32           size,
+  uint32_t             the_class,
+  uint32_t             maximum,
+  uint32_t             size,
   boolean              is_string,
-  unsigned32           maximum_name_length
+  uint32_t             maximum_name_length
 #if defined(RTEMS_MULTIPROCESSING)
   ,
   boolean              supports_global,
@@ -351,8 +351,8 @@ Objects_Control *_Objects_Allocate(
 
 Objects_Control *_Objects_Allocate_by_index(
   Objects_Information *information,
-  unsigned32           index,
-  unsigned32           sizeof_control
+  uint32_t             index,
+  uint32_t             sizeof_control
 );
 
 /*PAGE
@@ -380,7 +380,7 @@ void _Objects_Free(
  
 void _Objects_Clear_name(
   void       *name,
-  unsigned32  length
+  uint32_t    length
 );
 
 /*
@@ -407,7 +407,7 @@ void _Objects_Copy_name_string(
 void _Objects_Copy_name_raw(
   void       *source,
   void       *destination,
-  unsigned32  length
+  uint32_t    length
 );
 
 /*
@@ -421,7 +421,7 @@ void _Objects_Copy_name_raw(
 boolean _Objects_Compare_name_string(
   void       *name_1,
   void       *name_2,
-  unsigned32  length
+  uint32_t    length
 );
 
 /*
@@ -435,7 +435,7 @@ boolean _Objects_Compare_name_string(
 boolean _Objects_Compare_name_raw(
   void       *name_1,
   void       *name_2,
-  unsigned32  length
+  uint32_t    length
 );
 
 /*
@@ -467,7 +467,7 @@ typedef enum {
 Objects_Name_or_id_lookup_errors _Objects_Name_to_id(
   Objects_Information *information,
   Objects_Name         name,
-  unsigned32           node,
+  uint32_t             node,
   Objects_Id          *id
 );
 

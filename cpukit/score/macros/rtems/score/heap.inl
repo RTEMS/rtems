@@ -76,7 +76,7 @@
 #define _Heap_User_block_at( _base ) \
   _Heap_Block_at( \
     (_base), \
-    -*(((unsigned32 *) (_base)) - 1) + -HEAP_BLOCK_USED_OVERHEAD \
+    -*(((uint32_t   *) (_base)) - 1) + -HEAP_BLOCK_USED_OVERHEAD \
   )
 
 /*PAGE

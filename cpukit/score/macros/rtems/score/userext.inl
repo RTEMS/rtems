@@ -54,7 +54,7 @@
 ) \
   { \
     User_extensions_Control *extension; \
-    unsigned32               i; \
+    uint32_t                 i; \
     \
     _Chain_Initialize_empty( &_User_extensions_List ); \
     _Chain_Initialize_empty( &_User_extensions_Switches_list ); \

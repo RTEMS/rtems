@@ -65,9 +65,9 @@ typedef struct {
   Objects_Id              id;
   Objects_Id              source_tid;
   Priority_Control        source_priority;
-  unsigned32              return_code;
-  unsigned32              length;
-  unsigned32              to_convert;
+  uint32_t                return_code;
+  uint32_t                length;
+  uint32_t                to_convert;
   Watchdog_Interval       timeout;
 }   MP_packet_Prefix;
 
@@ -78,15 +78,15 @@ typedef struct {
 #define MP_PACKET_MINIMUM_PACKET_SIZE  64
 
 /*
- *  The following constant defines the number of unsigned32's
+ *  The following constant defines the number of uint32_t  's
  *  in a packet which must be converted to native format in a
  *  heterogeneous system.  In packets longer than
- *  MP_PACKET_MINIMUN_HETERO_CONVERSION unsigned32's, some of the "extra" data
+ *  MP_PACKET_MINIMUN_HETERO_CONVERSION uint32_t  's, some of the "extra" data
  *  may a user message buffer which is not automatically endian swapped.
  */
 
 #define MP_PACKET_MINIMUN_HETERO_CONVERSION  \
-  ( sizeof( MP_packet_Prefix ) / sizeof( unsigned32 ) )
+  ( sizeof( MP_packet_Prefix ) / sizeof( uint32_t   ) )
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/mppkt.inl>

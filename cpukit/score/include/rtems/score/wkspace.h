@@ -41,7 +41,7 @@ SCORE_EXTERN Heap_Control _Workspace_Area;  /* executive heap header */
  
 void _Workspace_Handler_initialization(
   void       *starting_address,
-  unsigned32  size
+  uint32_t    size
 );
 
 /*
@@ -55,7 +55,7 @@ void _Workspace_Handler_initialization(
  */
 
 void *_Workspace_Allocate_or_fatal_error(
-  unsigned32   size
+  uint32_t     size
 );
 
 #ifndef __RTEMS_APPLICATION__

@@ -76,7 +76,7 @@ typedef MPCI_Entry ( *MPCI_return_packet_entry )(
              );
 
 typedef MPCI_Entry ( *MPCI_send_entry )(
-                 unsigned32,
+                 uint32_t  ,
                  MP_packet_Prefix *
              );
 
@@ -85,8 +85,8 @@ typedef MPCI_Entry ( *MPCI_receive_entry )(
              );
 
 typedef struct {
-  unsigned32                 default_timeout;        /* in ticks */
-  unsigned32                 maximum_packet_size;
+  uint32_t                   default_timeout;        /* in ticks */
+  uint32_t                   maximum_packet_size;
   MPCI_initialization_entry  initialization;
   MPCI_get_packet_entry      get_packet;
   MPCI_return_packet_entry   return_packet;
@@ -118,8 +118,8 @@ typedef enum {
 typedef struct {
   MP_packet_Prefix                 Prefix;
   MPCI_Internal_Remote_operations  operation;
-  unsigned32                       maximum_nodes;
-  unsigned32                       maximum_global_objects;
+  uint32_t                         maximum_nodes;
+  uint32_t                         maximum_global_objects;
 }    MPCI_Internal_packet;
 
 /*
@@ -165,7 +165,7 @@ SCORE_EXTERN MPCI_Packet_processor
 
 void _MPCI_Handler_initialization( 
   MPCI_Control            *users_mpci_table,
-  unsigned32               timeout_status
+  uint32_t                 timeout_status
 );
 
 /*
@@ -238,7 +238,7 @@ void _MPCI_Return_packet (
  */
 
 void _MPCI_Send_process_packet (
-  unsigned32        destination,
+  uint32_t          destination,
   MP_packet_Prefix *the_packet
 );
 
@@ -251,8 +251,8 @@ void _MPCI_Send_process_packet (
  *  MPCI send callout.
  */
 
-unsigned32 _MPCI_Send_request_packet (
-  unsigned32         destination,
+uint32_t   _MPCI_Send_request_packet (
+  uint32_t           destination,
   MP_packet_Prefix  *the_packet,
   States_Control     extra_state
 );
@@ -267,7 +267,7 @@ unsigned32 _MPCI_Send_request_packet (
  */
 
 void _MPCI_Send_response_packet (
-  unsigned32        destination,
+  uint32_t          destination,
   MP_packet_Prefix *the_packet
 );
 
@@ -302,7 +302,7 @@ Thread_Control *_MPCI_Process_response (
  */
  
 Thread _MPCI_Receive_server(
-  unsigned32 ignored
+  uint32_t   ignored
 );
 
 /*PAGE

@@ -104,7 +104,7 @@ RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Next_block (
 
 RTEMS_INLINE_ROUTINE Heap_Block *_Heap_Block_at(
   void       *base,
-  unsigned32  offset
+  uint32_t    offset
 )
 {
   return (Heap_Block *) _Addresses_Add_offset( (void *)base, offset );
@@ -123,9 +123,9 @@ RTEMS_INLINE_ROUTINE Heap_Block *_Heap_User_block_at(
   void       *base
 )
 {
-  unsigned32         offset;
+  uint32_t           offset;
  
-  offset = *(((unsigned32 *) base) - 1);
+  offset = *(((uint32_t   *) base) - 1);
   return _Heap_Block_at( base, -offset + -HEAP_BLOCK_USED_OVERHEAD);
 }
 
@@ -188,7 +188,7 @@ RTEMS_INLINE_ROUTINE boolean _Heap_Is_block_used (
  *  This function returns the size of the_block in bytes.
  */
 
-RTEMS_INLINE_ROUTINE unsigned32 _Heap_Block_size (
+RTEMS_INLINE_ROUTINE uint32_t   _Heap_Block_size (
   Heap_Block *the_block
 )
 {
@@ -243,7 +243,7 @@ RTEMS_INLINE_ROUTINE boolean _Heap_Is_block_in (
  */
 
 RTEMS_INLINE_ROUTINE boolean _Heap_Is_page_size_valid(
-  unsigned32 page_size
+  uint32_t   page_size
 )
 {
   return ((page_size != 0) &&
@@ -261,9 +261,9 @@ RTEMS_INLINE_ROUTINE boolean _Heap_Is_page_size_valid(
  *  heap block.
  */
 
-RTEMS_INLINE_ROUTINE unsigned32 _Heap_Build_flag (
-  unsigned32 size,
-  unsigned32 in_use_flag
+RTEMS_INLINE_ROUTINE uint32_t   _Heap_Build_flag (
+  uint32_t   size,
+  uint32_t   in_use_flag
 )
 {
   return  size | in_use_flag;

@@ -39,7 +39,7 @@ extern "C" {
  *  NOTE:  This cannot always be right.  Some APIs have void
  *         tasks/threads, others return pointers, others may 
  *         return a numeric value.  Hopefully a pointer is
- *         always at least as big as an unsigned32. :)
+ *         always at least as big as an uint32_t  . :)
  */
 
 typedef void *Thread;
@@ -47,7 +47,7 @@ typedef void *Thread;
 /*
  *  The following defines the ways in which the entry point for a
  *  thread can be invoked.  Basically, it can be passed any
- *  combination/permutation of a pointer and an unsigned32 value.
+ *  combination/permutation of a pointer and an uint32_t   value.
  *
  *  NOTE: For now, we are ignoring the return type.
  */
@@ -61,10 +61,10 @@ typedef enum {
 
 typedef Thread ( *Thread_Entry )();   /* basic type */
 
-typedef Thread ( *Thread_Entry_numeric )( unsigned32 );
+typedef Thread ( *Thread_Entry_numeric )( uint32_t   );
 typedef Thread ( *Thread_Entry_pointer )( void * );
-typedef Thread ( *Thread_Entry_both_pointer_first )( void *, unsigned32 );
-typedef Thread ( *Thread_Entry_both_numeric_first )( unsigned32, void * );
+typedef Thread ( *Thread_Entry_both_pointer_first )( void *, uint32_t   );
+typedef Thread ( *Thread_Entry_both_numeric_first )( uint32_t  , void * );
 
 /*
  *  The following lists the algorithms used to manage the thread cpu budget.
@@ -110,12 +110,12 @@ typedef struct {
   Thread_Entry         entry_point;      /* starting thread address         */
   Thread_Start_types   prototype;        /* how task is invoked             */
   void                *pointer_argument; /* pointer argument                */
-  unsigned32           numeric_argument; /* numeric argument                */
+  uint32_t             numeric_argument; /* numeric argument                */
                                          /* initial execution modes         */
   boolean              is_preemptible;
   Thread_CPU_budget_algorithms          budget_algorithm;
   Thread_CPU_budget_algorithm_callout   budget_callout;
-  unsigned32           isr_level;
+  uint32_t             isr_level;
   Priority_Control     initial_priority; /* initial priority                */
   boolean              core_allocated_stack;
   Stack_Control        Initial_stack;    /* stack information               */
@@ -134,16 +134,16 @@ typedef struct {
 
 typedef struct {
   Objects_Id            id;              /* waiting on this object       */
-  unsigned32            count;           /* "generic" fields to be used */
+  uint32_t              count;           /* "generic" fields to be used */
   void                 *return_argument; /*   when blocking */
   void                 *return_argument_1;
-  unsigned32            option;
+  uint32_t              option;
 
   /*
    *  NOTE: The following assumes that all API return codes can be
-   *        treated as an unsigned32.  
+   *        treated as an uint32_t  .  
    */
-  unsigned32            return_code;     /* status for thread awakened   */
+  uint32_t              return_code;     /* status for thread awakened   */
 
   Chain_Control         Block2n;         /* 2 - n priority blocked chain */
   Thread_queue_Control *queue;           /* pointer to thread queue      */
@@ -162,7 +162,7 @@ typedef struct {
   States_Control           current_state;
   Priority_Control         current_priority;
   Priority_Control         real_priority;
-  unsigned32               resource_count;
+  uint32_t                 resource_count;
   Thread_Wait_information  Wait;
   Watchdog_Control         Timer;
 #if defined(RTEMS_MULTIPROCESSING)
@@ -195,24 +195,24 @@ struct Thread_Control_struct {
   States_Control                        current_state;
   Priority_Control                      current_priority;
   Priority_Control                      real_priority;
-  unsigned32                            resource_count;
+  uint32_t                              resource_count;
   Thread_Wait_information               Wait;
   Watchdog_Control                      Timer;
 #if defined(RTEMS_MULTIPROCESSING)
   MP_packet_Prefix                     *receive_packet;
 #endif
      /****************** end of common block ********************/
-  unsigned32                            suspend_count;
+  uint32_t                              suspend_count;
   boolean                               is_global;
   boolean                               do_post_task_switch_extension;
 
   boolean                               is_preemptible;
   void                                 *rtems_ada_self;
-  unsigned32                            cpu_time_budget;
+  uint32_t                              cpu_time_budget;
   Thread_CPU_budget_algorithms          budget_algorithm;
   Thread_CPU_budget_algorithm_callout   budget_callout;
 
-  unsigned32                            ticks_executed;
+  uint32_t                              ticks_executed;
   Chain_Control                        *ready;
   Priority_Information                  Priority_map;
   Thread_Start_information              Start;
@@ -262,14 +262,14 @@ SCORE_EXTERN Context_Control _Thread_BSP_context;
  *  moments.
  */
 
-SCORE_EXTERN volatile unsigned32 _Thread_Dispatch_disable_level;
+SCORE_EXTERN volatile uint32_t   _Thread_Dispatch_disable_level;
 
 /*
  *  If this is non-zero, then the post-task switch extension
  *  is run regardless of the state of the per thread flag.
  */
 
-SCORE_EXTERN unsigned32 _Thread_Do_post_task_switch_extension;
+SCORE_EXTERN uint32_t   _Thread_Do_post_task_switch_extension;
 
 /*
  *  The following holds how many user extensions are in the system.  This
@@ -277,13 +277,13 @@ SCORE_EXTERN unsigned32 _Thread_Do_post_task_switch_extension;
  *  per thread.
  */
 
-SCORE_EXTERN unsigned32 _Thread_Maximum_extensions;
+SCORE_EXTERN uint32_t   _Thread_Maximum_extensions;
 
 /*
  *  The following is used to manage the length of a timeslice quantum.
  */
 
-SCORE_EXTERN unsigned32 _Thread_Ticks_per_timeslice;
+SCORE_EXTERN uint32_t   _Thread_Ticks_per_timeslice;
 
 /*
  *  The following points to the array of FIFOs used to manage the
@@ -334,9 +334,9 @@ SCORE_EXTERN struct _reent **_Thread_libc_reent;
  */
 
 void _Thread_Handler_initialization (
-  unsigned32   ticks_per_timeslice,
-  unsigned32   maximum_extensions,
-  unsigned32   maximum_proxies
+  uint32_t     ticks_per_timeslice,
+  uint32_t     maximum_extensions,
+  uint32_t     maximum_proxies
 );
 
 /*
@@ -393,9 +393,9 @@ void _Thread_Dispatch( void );
  *
  */
 
-unsigned32 _Thread_Stack_Allocate(
+uint32_t   _Thread_Stack_Allocate(
   Thread_Control *the_thread,
-  unsigned32 stack_size
+  uint32_t   stack_size
 );
 
 /*
@@ -434,13 +434,13 @@ boolean _Thread_Initialize(
   Objects_Information                  *information,
   Thread_Control                       *the_thread,
   void                                 *stack_area,
-  unsigned32                            stack_size,
+  uint32_t                              stack_size,
   boolean                               is_fp,
   Priority_Control                      priority,
   boolean                               is_preemptible,
   Thread_CPU_budget_algorithms          budget_algorithm,
   Thread_CPU_budget_algorithm_callout   budget_callout,
-  unsigned32                            isr_level,
+  uint32_t                              isr_level,
   Objects_Name                          name
 );
 
@@ -459,7 +459,7 @@ boolean _Thread_Start(
   Thread_Start_types        the_prototype,
   void                     *entry_point,
   void                     *pointer_argument,
-  unsigned32                numeric_argument
+  uint32_t                  numeric_argument
 );
 
 /*
@@ -477,7 +477,7 @@ boolean _Thread_Start(
 boolean _Thread_Restart(
   Thread_Control           *the_thread,
   void                     *pointer_argument,
-  unsigned32                numeric_argument
+  uint32_t                  numeric_argument
 );
 
 /*
@@ -492,7 +492,7 @@ boolean _Thread_Restart(
 void _Thread_Reset(
   Thread_Control      *the_thread,
   void                *pointer_argument,
-  unsigned32           numeric_argument
+  uint32_t             numeric_argument
 );
 
 /*
@@ -758,7 +758,7 @@ Thread_Control *_Thread_Get (
  
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
 Thread _Thread_Idle_body(
-  unsigned32 ignored
+  uint32_t   ignored
 );
 #endif
 

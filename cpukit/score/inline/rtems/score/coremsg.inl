@@ -30,7 +30,7 @@
 RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
-  unsigned32                                 size,
+  uint32_t                                   size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
   boolean                                    wait,
@@ -65,7 +65,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
 RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Urgent(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
-  unsigned32                                 size,
+  uint32_t                                   size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
   boolean                                    wait,
@@ -101,7 +101,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Urgent(
 RTEMS_INLINE_ROUTINE void _CORE_message_queue_Copy_buffer (
   void      *source,
   void      *destination,
-  unsigned32 size
+  uint32_t   size
 )
 {
   memcpy(destination, source, size);

@@ -139,7 +139,7 @@ Thread_Control *_Thread_queue_First(
 void _Thread_queue_Flush(
   Thread_queue_Control       *the_thread_queue,
   Thread_queue_Flush_callout  remote_extract_callout,
-  unsigned32                  status
+  uint32_t                    status
 );
 
 /*
@@ -156,7 +156,7 @@ void _Thread_queue_Initialize(
   Thread_queue_Control         *the_thread_queue,
   Thread_queue_Disciplines      the_discipline,
   States_Control                state,
-  unsigned32                    timeout_status
+  uint32_t                      timeout_status
 );
 
 /*

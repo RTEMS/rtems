@@ -30,7 +30,7 @@ extern "C" {
 
 #define WATCHDOG_MAXIMUM_INTERVAL ((Watchdog_Interval) 0xffffffff)
 
-typedef unsigned32 Watchdog_Interval;
+typedef uint32_t   Watchdog_Interval;
 
 /*
  *  The following types define a pointer to a watchdog service routine.
@@ -95,8 +95,8 @@ typedef struct {
  *  during an insert on a watchdog delta chain.
  */
 
-SCORE_EXTERN volatile unsigned32  _Watchdog_Sync_level;
-SCORE_EXTERN volatile unsigned32  _Watchdog_Sync_count;
+SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_level;
+SCORE_EXTERN volatile uint32_t    _Watchdog_Sync_count;
 
 /*
  *  The following contains the number of ticks since the

@@ -40,13 +40,13 @@ typedef void ( *CORE_message_queue_API_mp_support_callout )(
  *  The following defines the data types needed to manipulate
  *  the contents of message buffers.
  *
- *  NOTE:  The buffer field is normally longer than a single unsigned32.
+ *  NOTE:  The buffer field is normally longer than a single uint32_t  .
  *         but since messages are variable length we just make a ptr to 1.  
  */
  
 typedef struct {
-    unsigned32  size;
-    unsigned32  buffer[1];
+    uint32_t    size;
+    uint32_t    buffer[1];
 } CORE_message_queue_Buffer;
  
 /*
@@ -124,9 +124,9 @@ typedef void (*CORE_message_queue_Notify_Handler)( void * );
 typedef struct {
   Thread_queue_Control               Wait_queue;
   CORE_message_queue_Attributes      Attributes;
-  unsigned32                         maximum_pending_messages;
-  unsigned32                         number_of_pending_messages;
-  unsigned32                         maximum_message_size;
+  uint32_t                           maximum_pending_messages;
+  uint32_t                           number_of_pending_messages;
+  uint32_t                           maximum_message_size;
   Chain_Control                      Pending_messages;
   CORE_message_queue_Buffer         *message_buffers;
   CORE_message_queue_Notify_Handler  notify_handler;
@@ -145,8 +145,8 @@ typedef struct {
 boolean _CORE_message_queue_Initialize(
   CORE_message_queue_Control    *the_message_queue,
   CORE_message_queue_Attributes *the_message_queue_attributes,
-  unsigned32                     maximum_pending_messages,
-  unsigned32                     maximum_message_size
+  uint32_t                       maximum_pending_messages,
+  uint32_t                       maximum_message_size
 );
  
 /*
@@ -161,7 +161,7 @@ boolean _CORE_message_queue_Initialize(
 void _CORE_message_queue_Close(
   CORE_message_queue_Control *the_message_queue,
   Thread_queue_Flush_callout  remote_extract_callout,
-  unsigned32                  status
+  uint32_t                    status
 );
 
 /*
@@ -174,7 +174,7 @@ void _CORE_message_queue_Close(
  *
  */
 
-unsigned32 _CORE_message_queue_Flush(
+uint32_t   _CORE_message_queue_Flush(
   CORE_message_queue_Control *the_message_queue
 );
 
@@ -187,7 +187,7 @@ unsigned32 _CORE_message_queue_Flush(
  *  them to the inactive message chain.
  */
  
-unsigned32 _CORE_message_queue_Flush_support(
+uint32_t   _CORE_message_queue_Flush_support(
   CORE_message_queue_Control *the_message_queue
 );
  
@@ -218,10 +218,10 @@ void _CORE_message_queue_Flush_waiting_threads(
 CORE_message_queue_Status _CORE_message_queue_Broadcast(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
-  unsigned32                                 size,
+  uint32_t                                   size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
-  unsigned32                                *count
+  uint32_t                                  *count
 );
 
 /*
@@ -241,7 +241,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
 CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control                *the_message_queue,
   void                                      *buffer,
-  unsigned32                                 size,
+  uint32_t                                   size,
   Objects_Id                                 id,
   CORE_message_queue_API_mp_support_callout  api_message_queue_mp_support,
   CORE_message_queue_Submit_types            submit_type,
@@ -266,7 +266,7 @@ void _CORE_message_queue_Seize(
   CORE_message_queue_Control      *the_message_queue,
   Objects_Id                       id,
   void                            *buffer,
-  unsigned32                      *size,
+  uint32_t                        *size,
   boolean                          wait,
   Watchdog_Interval                timeout
 );

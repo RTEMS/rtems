@@ -28,7 +28,7 @@
  */
 
 RTEMS_INLINE_ROUTINE void *_Workspace_Allocate(
-  unsigned32 size
+  uint32_t   size
 )
 {
    return _Heap_Allocate( &_Workspace_Area, size );

@@ -59,12 +59,12 @@ RTEMS_INLINE_ROUTINE void _User_extensions_Add_set (
  */
 
 RTEMS_INLINE_ROUTINE void _User_extensions_Handler_initialization (
-    unsigned32              number_of_extensions,
+    uint32_t                number_of_extensions,
     User_extensions_Table  *initial_extensions
 )
 {
   User_extensions_Control *extension;
-  unsigned32               i;
+  uint32_t                 i;
 
   _Chain_Initialize_empty( &_User_extensions_List );
   _Chain_Initialize_empty( &_User_extensions_Switches_list );

@@ -64,7 +64,7 @@ typedef enum {
  */
 
 typedef struct {
-  unsigned32                  maximum_count;
+  uint32_t                    maximum_count;
   CORE_semaphore_Disciplines  discipline;
 }   CORE_semaphore_Attributes;
  
@@ -76,7 +76,7 @@ typedef struct {
 typedef struct {
   Thread_queue_Control        Wait_queue;
   CORE_semaphore_Attributes   Attributes;
-  unsigned32                  count;
+  uint32_t                    count;
 }   CORE_semaphore_Control;
 
 /*
@@ -90,7 +90,7 @@ typedef struct {
 void _CORE_semaphore_Initialize(
   CORE_semaphore_Control       *the_semaphore,
   CORE_semaphore_Attributes    *the_semaphore_attributes,
-  unsigned32                    initial_value
+  uint32_t                      initial_value
 );
  
 /*
@@ -139,7 +139,7 @@ CORE_semaphore_Status _CORE_semaphore_Surrender(
 void _CORE_semaphore_Flush(
   CORE_semaphore_Control         *the_semaphore,
   Thread_queue_Flush_callout      remote_extract_callout,
-  unsigned32                      status
+  uint32_t                        status
 );
 
 #ifndef __RTEMS_APPLICATION__

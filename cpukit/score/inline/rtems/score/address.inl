@@ -29,7 +29,7 @@
 
 RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
   void       *base,
-  unsigned32  offset
+  uint32_t    offset
 )
 {
   return (void *)((char *)base + offset);
@@ -48,7 +48,7 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
 
 RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
   void       *base,
-  unsigned32  offset
+  uint32_t    offset
 )
 {
   return (void *)((char *)base - offset);
@@ -63,11 +63,11 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
  *  This function is used to subtract two addresses.  It returns the
  *  resulting offset.
  *
- *  NOTE:  The cast of an address to an unsigned32 makes this code
+ *  NOTE:  The cast of an address to an uint32_t   makes this code
  *         dependent on an addresses being thirty two bits.
  */
 
-RTEMS_INLINE_ROUTINE unsigned32 _Addresses_Subtract (
+RTEMS_INLINE_ROUTINE uint32_t   _Addresses_Subtract (
   void *left,
   void *right
 )
@@ -95,7 +95,7 @@ RTEMS_INLINE_ROUTINE boolean _Addresses_Is_aligned (
 #elif defined(RTEMS_CPU_HAS_16_BIT_ADDRESSES)
     return ( ( (unsigned short)address % CPU_ALIGNMENT ) == 0 );
 #else
-    return ( ( (unsigned32)address % CPU_ALIGNMENT ) == 0 );
+    return ( ( (uint32_t  )address % CPU_ALIGNMENT ) == 0 );
 #endif
 }
 

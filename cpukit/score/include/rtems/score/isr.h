@@ -27,13 +27,13 @@ extern "C" {
  *  the interrupt level portion of the status register.
  */
 
-typedef unsigned32 ISR_Level;
+typedef uint32_t   ISR_Level;
 
 /*
  *  The following type defines the type used to manage the vectors.
  */
 
-typedef unsigned32 ISR_Vector_number;
+typedef uint32_t   ISR_Vector_number;
 
 /*
  *  Return type for ISR Handler
@@ -81,7 +81,7 @@ SCORE_EXTERN boolean    _ISR_Signals_to_thread_executing;
  *  When this variable is zero, a thread is executing.
  */
 
-SCORE_EXTERN volatile unsigned32 _ISR_Nest_level;
+SCORE_EXTERN volatile uint32_t   _ISR_Nest_level;
 
 /*
  *  The following declares the Vector Table.  Application

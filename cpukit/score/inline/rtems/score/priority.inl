@@ -29,7 +29,7 @@
 
 RTEMS_INLINE_ROUTINE void _Priority_Handler_initialization( void )
 {
-  unsigned32 index;
+  uint32_t   index;
 
   _Priority_Major_bit_map = 0;
   for ( index=0 ; index <16 ; index++ )
@@ -67,7 +67,7 @@ RTEMS_INLINE_ROUTINE boolean _Priority_Is_valid (
  *  This function returns the major portion of the_priority.
  */
 
-RTEMS_INLINE_ROUTINE unsigned32 _Priority_Major (
+RTEMS_INLINE_ROUTINE uint32_t   _Priority_Major (
   Priority_Control the_priority
 )
 {
@@ -83,7 +83,7 @@ RTEMS_INLINE_ROUTINE unsigned32 _Priority_Major (
  *  This function returns the minor portion of the_priority.
  */
 
-RTEMS_INLINE_ROUTINE unsigned32 _Priority_Minor (
+RTEMS_INLINE_ROUTINE uint32_t   _Priority_Minor (
   Priority_Control the_priority
 )
 {
@@ -102,8 +102,8 @@ RTEMS_INLINE_ROUTINE unsigned32 _Priority_Minor (
  *  number passed to it.
  */
  
-RTEMS_INLINE_ROUTINE unsigned32 _Priority_Mask (
-  unsigned32 bit_number
+RTEMS_INLINE_ROUTINE uint32_t   _Priority_Mask (
+  uint32_t   bit_number
 )
 {
   return (0x8000 >> bit_number);
@@ -121,8 +121,8 @@ RTEMS_INLINE_ROUTINE unsigned32 _Priority_Mask (
  *  a major or minor component of a priority.
  */
  
-RTEMS_INLINE_ROUTINE unsigned32 _Priority_Bits_index (
-  unsigned32 bit_number
+RTEMS_INLINE_ROUTINE uint32_t   _Priority_Bits_index (
+  uint32_t   bit_number
 )
 {
   return bit_number;

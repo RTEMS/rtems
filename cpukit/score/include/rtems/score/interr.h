@@ -64,7 +64,7 @@ typedef enum {
 typedef struct {
   Internal_errors_Source  the_source;
   boolean                 is_internal;
-  unsigned32              the_error;
+  uint32_t                the_error;
 } Internal_errors_Information;
 
 /*
@@ -85,7 +85,7 @@ SCORE_EXTERN Internal_errors_Information Internal_errors_What_happened;
 void volatile _Internal_error_Occurred(
   Internal_errors_Source  the_source,
   boolean                 is_internal,
-  unsigned32              the_error
+  uint32_t                the_error
 );
 
 #ifdef __cplusplus

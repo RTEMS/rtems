@@ -27,7 +27,7 @@
  */
 
 RTEMS_INLINE_ROUTINE boolean _ISR_Is_vector_number_valid (
-  unsigned32 vector
+  uint32_t   vector
 )
 {
   return ( vector <= CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER );

@@ -24,7 +24,7 @@ extern "C" {
  *  thread's state.
  */
 
-typedef unsigned32 States_Control;
+typedef uint32_t   States_Control;
 
 /*
  *  The following constants define the individual states which may be

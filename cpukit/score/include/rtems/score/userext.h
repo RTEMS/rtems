@@ -75,7 +75,7 @@ typedef User_extensions_routine ( *User_extensions_thread_exitted_extension )(
 typedef User_extensions_routine ( *User_extensions_fatal_extension )(
                  Internal_errors_Source  /* the_source  */,
                  boolean                 /* is_internal */,
-                 unsigned32              /* the_error   */
+                 uint32_t                /* the_error   */
              );
 
  
@@ -215,7 +215,7 @@ void _User_extensions_Thread_exitted (
 void _User_extensions_Fatal (
   Internal_errors_Source  the_source,
   boolean                 is_internal,
-  unsigned32              the_error
+  uint32_t                the_error
 );
 
 #ifndef __RTEMS_APPLICATION__

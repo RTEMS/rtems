@@ -45,7 +45,7 @@ RTEMS_INLINE_ROUTINE boolean _CORE_semaphore_Is_priority(
  *  This routine returns the current count associated with the semaphore.
  */
  
-RTEMS_INLINE_ROUTINE unsigned32 _CORE_semaphore_Get_count(
+RTEMS_INLINE_ROUTINE uint32_t   _CORE_semaphore_Get_count(
   CORE_semaphore_Control  *the_semaphore
 )
 {

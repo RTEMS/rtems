@@ -27,7 +27,7 @@ extern "C" {
 
 typedef struct {
   Objects_Control Object;
-  unsigned32      name;     /* XXX broken but works */
+  uint32_t        name;     /* XXX broken but works */
   /* XXX If any API is MP with variable length names .. BOOM!!!! */
 }   Objects_MP_Control;
 
@@ -41,9 +41,9 @@ typedef struct {
  */
 
 void _Objects_MP_Handler_initialization (
-  unsigned32 node,
-  unsigned32 maximum_nodes,
-  unsigned32 maximum_global_objects
+  uint32_t   node,
+  uint32_t   maximum_nodes,
+  uint32_t   maximum_global_objects
 );
 
 /*PAGE
@@ -59,7 +59,7 @@ void _Objects_MP_Handler_initialization (
 void _Objects_MP_Open (
   Objects_Information *information,
   Objects_MP_Control  *the_global_object,
-  unsigned32           the_name,      /* XXX -- wrong for variable */
+  uint32_t             the_name,      /* XXX -- wrong for variable */
   Objects_Id           the_id
 );
 
@@ -76,7 +76,7 @@ void _Objects_MP_Open (
 
 boolean _Objects_MP_Allocate_and_open (
   Objects_Information *information,
-  unsigned32           the_name,     /* XXX -- wrong for variable length */
+  uint32_t             the_name,     /* XXX -- wrong for variable length */
   Objects_Id           the_id,
   boolean              is_fatal_error
 );
@@ -108,7 +108,7 @@ void _Objects_MP_Close (
 Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
   Objects_Information *information,
   Objects_Name         the_name,
-  unsigned32           nodes_to_search,
+  uint32_t             nodes_to_search,
   Objects_Id          *the_id
 );
 
@@ -136,7 +136,7 @@ void _Objects_MP_Is_remote (
  *  inactive global object control blocks.
  */
 
-SCORE_EXTERN unsigned32     _Objects_MP_Maximum_global_objects;
+SCORE_EXTERN uint32_t       _Objects_MP_Maximum_global_objects;
 SCORE_EXTERN Chain_Control  _Objects_MP_Inactive_global_objects;
 
 #ifndef __RTEMS_APPLICATION__

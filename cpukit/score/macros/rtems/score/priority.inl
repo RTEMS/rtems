@@ -26,7 +26,7 @@
 
 #define _Priority_Handler_initialization() \
   { \
-    unsigned32 index; \
+    uint32_t   index; \
     \
     _Priority_Major_bit_map = 0; \
     for ( index=0 ; index <16 ; index++ ) \
