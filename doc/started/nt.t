@@ -43,7 +43,7 @@ CYGWIN=nontsec for compile to work properly (otherwise there were
 complaints about permissions on a temporary file).
 
 @item If you want to build the tools from source, you have the 
-same options as UNIX users -- @code{bit} or @code{RPM}.
+same options as UNIX users.
 
 @end itemize
 
@@ -279,7 +279,7 @@ command to configure @value{BINUTILS-VERSION}:
 @end example
 
 Replace @code{m68k-rtems} with the target configuration
-of your choice.  See @ref{Using the bit Script} for a
+of your choice.  See @ref{Using the RTEMS configure Script Directly} for a
 list of the targets available.
 
 @item Execute the following command to compile the toolset:
@@ -357,7 +357,7 @@ or Objective-C as Cygwin32 cross-compilers):
 @end example
 
 Replace @code{m68k-rtems} with the target configuration
-of your choice.  See @ref{Using the bit Script} for a
+of your choice.  See @ref{Using the RTEMS configure Script Directly} for a
 list of the targets available.
 
 @item Compile the toolset as follows:

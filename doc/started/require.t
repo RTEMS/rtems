@@ -120,9 +120,8 @@ The following problems have been reported by Solaris 2.x users:
 
 @item The build scripts are written in "shell".  The program @code{/bin/sh}
 on Solaris 2.x is not robust enough to execute these scripts.  If you
-are on a Solaris 2.x host, then change the first line of the files
-@code{bit}, @code{bit_gdb}, and @code{bit_rtems} to use the
-@code{/bin/ksh} shell instead.
+are on a Solaris 2.x host, then use the @code{/bin/ksh} or
+@code{/bin/bash} shell instead.
 
 @item The native @code{patch} program is broken.  Install the GNU version.
 

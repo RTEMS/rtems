@@ -52,7 +52,7 @@ $(srcdir)/buildrt.texi: buildrt.t tversions.texi
 	    -n "Building the Sample Application" < $< > $@
 
 $(srcdir)/sample.texi: sample.t tversions.texi
-	$(BMENU2) -c -p "Using the bit_rtems Script" \
+	$(BMENU2) -c -p "Using the RTEMS configure Script Directly" \
 	    -u "Top" \
 	    -n "Where To Go From Here" < $< > $@
 
@@ -66,5 +66,5 @@ $(srcdir)/nt.texi: nt.t tversions.texi
 	    -u "Top" \
 	    -n "" < $< > $@
 
-EXTRA_DIST = binaries.t buildc.t buildrt.t gdb.t intro.t nextstep.t nt.t \
+EXTRA_DIST = binaries.t buildc.t buildrt.t intro.t nextstep.t nt.t \
     require.t sample.t

@@ -1,5 +1,11 @@
 2002-11-13	Joel Sherrill <joel@OARcorp.com>
 
+	* Makefile.am, buildc.t, buildrt.t, nt.t, require.t, tversions.texi:
+	Removed all references to bit scripts.
+	* gdb.t: Removed.
+
+2002-11-13	Joel Sherrill <joel@OARcorp.com>
+
 	* stamp-vti, version.texi: Regenerated.
 
 2002-10-24	Joel Sherrill <joel@OARcorp.com>

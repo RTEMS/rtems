@@ -115,8 +115,8 @@ of each component as well as any required RTEMS specific patches.
 @subsection Unarchiving the Tools
 
 NOTE: This step is required if building BINUTILS, GCC, and NEWLIB
-using the procedures described in @ref{Using configure and make}
-or @ref{Using the bit Script}.  It is @b{NOT} required if using the procedure
+using the procedure described in @ref{Using configure and make}.
+It is @b{NOT} required if using the procedure
 described in @ref{Using RPM to Build BINUTILS GCC and NEWLIB}.
 
 GNU source distributions are archived using @code{tar} and
@@ -169,12 +169,6 @@ The tree should look something like the following figure:
 @end group
 @end example
 
-@c @ifset use-html
-@c @html
-@c <IMG SRC="bit_c.jpg" WIDTH=816 HEIGHT=267 ALT="Directory Organization">
-@c @end html
-@c @end ifset
-
 @c
 @c  Applying RTEMS Patches
 @c
@@ -182,8 +176,8 @@ The tree should look something like the following figure:
 @subsection Applying RTEMS Patches
 
 NOTE: This step is required if building BINUTILS, GCC, and NEWLIB
-using the procedures described in @ref{Using configure and make}
-or @ref{Using the bit Script}.  It is @b{NOT} required if using the procedure
+using the procedures described in @ref{Using configure and make}.
+It is @b{NOT} required if using the procedure
 described in @ref{Using RPM to Build BINUTILS GCC and NEWLIB}.
 
 This section describes the process of applying the RTEMS patches
@@ -297,12 +291,12 @@ This should not happen with a good patch file which is properly applied.
 
 @subsection Compiling and Installing BINUTILS GCC and NEWLIB
 
-There are three methods to compile and install BINUTILS, GCC, and NEWLIB:
+There are two supported methods to compile and install BINUTILS, GCC,
+and NEWLIB:
 
 @itemize @bullet
 @item RPM
 @item direct invocation of @code{configure} and @code{make}
-@item using the @code{bit} script
 @end itemize
 
 Direct invocation of @code{configure} and @code{make} provides more control
@@ -544,248 +538,6 @@ invoke the @value{GCC-UNTAR} @code{configure} command with the
 @code{--help} option.
 
 @c
-@c  Using the bit Script
-@c
-
-@subsubsection Using the bit Script
-
-NOTE:  The procedures described in the following sections must
-be completed before this step:
-
-@itemize @bullet
-@item @ref{Obtain Source and Patches for BINUTILS GCC and NEWLIB}
-@item @ref{Unarchiving the Tools}
-@item @ref{Applying RTEMS Patches}
-@end itemize
-
-This section describes the process of building using the 
-@code{bit} script.  This script hides many of the details
-of building the tools but can be a hindrance if you
-encounter problems building the tools.
-
-@c
-@c  Unarchiving the Build Scripts
-@c
-
-@subheading Unarchiving the Build Scripts
-
-While in the @code{tools} directory, unpack the compressed
-tar file for the build tools using the following command sequence: 
-
-@example
-cd tools
-tar xzf ../archive/@value{BUILDTOOLS-TAR}
-@end example
-
-After the compressed tar file @value{BUILDTOOLS-TAR} has been unpacked, there
-will be a set of scripts in the tools directory along with
-any source code you have previously unarchived.
-These scripts are intended to aid in building the tools and RTEMS.
-These scripts may be used to automate the tool building process and hide
-the invocation of @code{configure} and @code{make} from you.  They are:
-
-@itemize @bullet
-@item bit
-@item bit_gdb
-@item bit_rtems
-@item common.sh
-@item user.cfg
-@end itemize
-
-If @code{bit} is executed later in this process, 
-it will automatically create this subdirectory:
-
-@itemize @bullet
-@item build-$@{CPU@}-tools
-@end itemize
-
-At this point, the tree should look something like the following figure:
-
-@example
-@group
-/whatever/prefix/you/choose/
-        archive/
-            @value{GCC-TAR}
-            @value{BINUTILS-TAR}
-            @value{NEWLIB-TAR}
-            @value{BUILDTOOLS-TAR}
-@ifset GCC-RTEMSPATCH
-            @value{GCC-RTEMSPATCH}
-@end ifset
-@ifset BINUTILS-RTEMSPATCH
-            @value{BINUTILS-RTEMSPATCH}
-@end ifset
-@ifset NEWLIB-RTEMSPATCH
-            @value{NEWLIB-RTEMSPATCH}
-@end ifset
-        tools/
-            @value{BINUTILS-UNTAR}/
-            @value{GCC-UNTAR}/
-            @value{NEWLIB-UNTAR}/
-            bit
-            bit_gdb
-            bit_rtems
-            common.sh
-            user.cfg
-@end group
-@end example
-
-@c @ifset use-html
-@c @html
-@c <IMG SRC="bit_c.jpg" WIDTH=816 HEIGHT=267 ALT="Directory Organization">
-@c @end html
-@c @end ifset
-
-@c
-@c  Localizing the Configuration
-@c
-
-@subheading Localizing the Configuration
-
-Edit the @code{user.cfg} file to alter the settings of various 
-variables which are used to tailor the build process.
-Each of the variables set in @code{user.cfg} may be modified
-as described below:
-
-@table @code
-@item INSTALL_POINT
-is the location where you wish the GNU C/C++ cross compilation tools for
-RTEMS to be built. It is recommended that the directory chosen to receive
-these tools be named so that it is clear from which gcc distribution it
-was generated and for which target system the tools are to produce code for.
-
-@b{WARNING}: The @code{INSTALL_POINT} should not be a subdirectory 
-under the build directory.  The build directory will be removed
-automatically upon successful completion of the build procedure.
-
-@item BINUTILS
-is the directory under tools that contains @value{BINUTILS-UNTAR}. 
-For example:
-
-@example
-BINUTILS=@value{BINUTILS-UNTAR}
-@end example
-
-@item GCC
-is the directory under tools that contains @value{GCC-UNTAR}.
-For example,
-
-@example
-GCC=@value{GCC-UNTAR}
-@end example
-
-@item GDB
-is the directory under tools that contains @value{GDB-UNTAR}.
-For example,
-
-@example
-GDB=@value{GDB-UNTAR}
-@end example
-
-@item NEWLIB
-is the directory under tools that contains @value{NEWLIB-UNTAR}.
-For example:
-
-@example
-NEWLIB=@value{NEWLIB-UNTAR}
-@end example
-
-@item BUILD_DOCS
-is set to "yes" if you want to install documentation.  This requires
-that tools supporting documentation production be installed.  This
-currently is limited to the GNU texinfo package.
-For example:
-
-@example
-BUILD_DOCS=yes
-@end example
-
-@item BUILD_OTHER_LANGUAGES
-is set to "yes" if you want to build languages other than C and C++.  At
-the current time, the set of alternative languages includes Java, Fortran,
-and Objective-C.  These alternative languages do not always build cross. 
-Hence this option defaults to "no".
-
-For example:
-
-@example
-BUILD_OTHER_LANGUAGES=yes
-@end example
-
-@b{NOTE:} Based upon the version of the compiler being used, it may not
-be possible to build languages other than C and C++ cross.  In many cases,
-the language run-time support libraries are not "multilib'ed".  Thus the
-executable code in these libraries will be for the default compiler settings
-and not necessarily be correct for your CPU model.
-
-@end table
-
-The other variables in @code{user.cfg} are RTEMS specific and are
-not technically required to be set unless you build RTEMS using
-the @code{bit_rtems} script as described in
-@ref{Using the bit_rtems Script}.  They are described in detail
-in that section.
-
-@c
-@c   Running the bit Script
-@c
-@subheading Running the bit Script
-
-After the @code{bit} script has been modified to reflect the
-local installation, the modified @code{bit} script is run
-using the following sequence:
-
-@example
-cd tools
-./bit <target configuration>
-@end example
-
-Where <target configuration> is one of the following:
-
-@itemize @bullet
-@item hppa1.1
-@item i386
-@item i386-coff
-@item i386-elf
-@item i960
-@item m68k
-@item m68k-coff
-@item mips64orion
-@item powerpc
-@item sh
-@item sh-elf
-@item sparc
-@end itemize
-
-The build process can take a while to complete.  Many users find it
-handy to run the build process in the background, capture the output
-in a file, and monitor the output.  This can be done as follows:
-
-@example
-./bit <target configuration> >bit.log 2>&1 &
-tail -f bit.log
-@end example
-
-If no errors are encountered, the @code{bit} script will conclude by 
-printing messages similar to the following:
-
-@example
-
-The build-i386-tools subdirectory may now be removed.
-
-Started:  Fri Apr 10 10:14:07 CDT 1998
-Finished: Fri Apr 10 12:01:33 CDT 1998
-@end example
-
-If the @code{bit} script successfully completes, then the
-GNU C/C++ cross compilation tools are installed.
-
-If the @code{bit} script does not successfully complete, then investigation
-will be required to determine the source of the error.
-
-@c -------------------
-
-@c
 @c Building the GNU Debugger GDB
 @c
 
@@ -919,7 +671,6 @@ There are three methods of building the GNU Debugger:
 @itemize @bullet
 @item RPM
 @item direct invocation of @code{configure} and @code{make}
-@item using the @code{bit_gdb} script
 @end itemize
 
 Direct invocation of @code{configure} and @code{make} provides more control
@@ -1043,43 +794,6 @@ For more information on the invocation of @code{configure}, please
 refer to the documentation for @value{GDB-UNTAR} or
 invoke the @value{GDB-UNTAR} @code{configure} command with the
 @code{--help} option.
-
-@subsubsection Using the bit_gdb Script
-
-The simplest way to build gdb for RTEMS is to use the @code{bit_gdb} script.
-This script interprets the settings in the @code{user.cfg} file to
-produce the GDB configuration most appropriate for the target CPU.
-The variables in @code{user.cfg} were described in @ref{Using the bit Script}
-but only the @code{GDB} variable setting is used by @code{bit_gdb}.
-
-The @code{bit_gdb} script is invoked as follows:
-
-@example
-./bit_gdb CPU
-@end example
-
-Where CPU is one of the RTEMS supported CPU families from the following
-list:
-
-@itemize @bullet
-@item hppa1.1
-@item i386
-@item i386-coff
-@item i386-elf
-@item i960
-@item m68k
-@item m68k-coff
-@item mips64orion
-@item powerpc
-@item sh
-@item sh-elf
-@item sparc
-@end itemize
-
-If gdb supports a CPU instruction simulator for this configuration, then
-it is included in the build.
-
-@c -------------------
 
 @c
 @c Common Problems
