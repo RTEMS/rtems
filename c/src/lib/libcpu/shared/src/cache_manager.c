@@ -95,7 +95,7 @@ rtems_cache_invalidate_multiple_data_lines( const void * d_addr, size_t n_bytes 
     
   final_address = (void *)((size_t)d_addr + n_bytes - 1);
   d_addr = (void *)((size_t)d_addr & ~(CPU_DATA_CACHE_ALIGNMENT - 1));
-  while( final_address > d_addr ) {
+  while( final_address >= d_addr ) {
     _CPU_cache_invalidate_1_data_line( d_addr );
     d_addr = (void *)((size_t)d_addr + CPU_DATA_CACHE_ALIGNMENT);
   }
