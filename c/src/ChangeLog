@@ -1,3 +1,10 @@
+2003-09-04	Joel Sherrill <joel@OARcorp.com>
+
+	* lib/libcpu/shared/include/cache.h,
+	lib/libcpu/shared/src/cache_aligned_malloc.c,
+	lib/libcpu/shared/src/cache_manager.c, support/version.c: URL for
+	license changed.
+
 2003-08-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* aclocal/rtems-top.m4: Add RTEMS_API.
