@@ -29,11 +29,11 @@
 */
 #define __EXTENSIONS__
 #endif
- 
+
 #if defined(linux)
 #define MALLOC_0_RETURNS_NULL
 #endif
- 
+
 #include <sys/types.h>
 #include <sys/times.h>
 #include <stdio.h>
@@ -63,8 +63,10 @@ void  _CPU_Stray_signal(int);
 void  _CPU_ISR_Handler(int);
 
 static sigset_t         _CPU_Signal_mask;
-static Context_Control_overlay  _CPU_Context_Default_with_ISRs_enabled;
-static Context_Control_overlay  _CPU_Context_Default_with_ISRs_disabled;
+static Context_Control_overlay
+          CPU_STRUCTURE_ALIGNMENT _CPU_Context_Default_with_ISRs_enabled;
+static Context_Control_overlay
+          CPU_STRUCTURE_ALIGNMENT _CPU_Context_Default_with_ISRs_disabled;
 
 /*
  * Which cpu are we? Used by libcpu and libbsp.
@@ -123,16 +125,16 @@ void _CPU_Signal_initialize( void )
 {
   struct sigaction  act;
   sigset_t          mask;
- 
+
   /* mark them all active except for TraceTrap  and Abort */
- 
+
   mask = _CPU_Signal_mask;
   sigprocmask(SIG_UNBLOCK, &mask, 0);
- 
+
   act.sa_handler = _CPU_ISR_Handler;
   act.sa_mask = mask;
   act.sa_flags = SA_RESTART;
- 
+
   sigaction(SIGHUP, &act, 0);
   sigaction(SIGINT, &act, 0);
   sigaction(SIGQUIT, &act, 0);
@@ -193,7 +195,7 @@ void _CPU_Context_From_CPU_Init()
    *  get default values to use in _CPU_Context_Initialize()
    */
 
- 
+
   (void) memset(
     &_CPU_Context_Default_with_ISRs_enabled,
     0,
@@ -210,7 +212,7 @@ void _CPU_Context_From_CPU_Init()
     (Context_Control *) &_CPU_Context_Default_with_ISRs_enabled,
     (Context_Control *) &_CPU_Context_Default_with_ISRs_enabled
   );
- 
+
   _CPU_ISR_Set_level( 1 );
   _CPU_Context_switch(
     (Context_Control *) &_CPU_Context_Default_with_ISRs_disabled,
@@ -226,12 +228,12 @@ void _CPU_Context_From_CPU_Init()
 unsigned32 _CPU_ISR_Get_level( void )
 {
   sigset_t old_mask;
- 
+
   sigprocmask(SIG_BLOCK, 0, &old_mask);
- 
+
   if (memcmp((void *)&posix_empty_mask, (void *)&old_mask, sizeof(sigset_t)))
       return 1;
- 
+
   return 0;
 }
 
@@ -346,7 +348,7 @@ void _CPU_Install_interrupt_stack( void )
  *
  *  _CPU_Thread_Idle_body
  *
- *  Stop until we get a signal which is the logically the same thing 
+ *  Stop until we get a signal which is the logically the same thing
  *  entering low-power or sleep mode on a real processor and waiting for
  *  an interrupt.  This significantly reduces the consumption of host
  *  CPU cycles which is again similar to low power mode.
@@ -366,7 +368,7 @@ void _CPU_Thread_Idle_body( void )
 }
 
 /*PAGE
- * 
+ *
  *  _CPU_Context_Initialize
  */
 
@@ -389,8 +391,8 @@ void _CPU_Context_Initialize(
 
   /*
    *  On CPUs with stacks which grow down, we build the stack
-   *  based on the _stack_high address.  On CPUs with stacks which 
-   *  grow up, we build the stack based on the _stack_low address.  
+   *  based on the _stack_high address.  On CPUs with stacks which
+   *  grow up, we build the stack based on the _stack_low address.
    */
 
   _stack_low = (unsigned32)(_stack_base) + CPU_STACK_ALIGNMENT - 1;
@@ -414,7 +416,7 @@ void _CPU_Context_Initialize(
   else
       *_the_context = *(Context_Control *)
                          &_CPU_Context_Default_with_ISRs_disabled;
-      
+
   addr = (unsigned32 *)_the_context;
 
 #if defined(hppa1_1)
@@ -446,7 +448,7 @@ void _CPU_Context_Initialize(
   *(addr + FP_OFF) = (unsigned32)(_stack_high);
 
 #elif defined(i386)
- 
+
     /*
      *  This information was gathered by disassembling setjmp().
      */
@@ -462,9 +464,9 @@ void _CPU_Context_Initialize(
       *(addr + EBP_OFF) = stack_ptr;
       *(addr + ESP_OFF) = stack_ptr;
       *(addr + RET_OFF) = jmp_addr;
- 
+
       addr = (unsigned32 *) stack_ptr;
- 
+
       addr[ 0 ] = jmp_addr;
       addr[ 1 ] = (unsigned32) stack_ptr;
       addr[ 2 ] = (unsigned32) stack_ptr;
@@ -511,9 +513,9 @@ void _CPU_Context_switch(
 #if 0
   int status;
 #endif
- 
+
   currentp->isr_level = _CPU_ISR_Disable_support();
- 
+
   do_jump( currentp, nextp );
 
 #if 0
@@ -526,18 +528,18 @@ void _CPU_Context_switch(
        );
   }
 #endif
- 
+
 #ifdef RTEMS_DEBUG
     if (_CPU_ISR_Get_level() == 0)
        abort();
 #endif
- 
+
   _CPU_ISR_Enable(currentp->isr_level);
 }
- 
-static void do_jump( 
+
+static void do_jump(
   Context_Control_overlay *currentp,
-  Context_Control_overlay *nextp 
+  Context_Control_overlay *nextp
 )
 {
   int status;
@@ -671,25 +673,25 @@ void _CPU_ISR_Handler(int vector)
 void _CPU_Stray_signal(int sig_num)
 {
   char buffer[ 4 ];
- 
+
   /*
    * print "stray" msg about ones which that might mean something
    * Avoid using the stdio section of the library.
    * The following is generally safe.
    */
- 
+
   switch (sig_num)
   {
       case SIGCLD:
           break;
- 
+
       default:
       {
         /*
          *  We avoid using the stdio section of the library.
          *  The following is generally safe
          */
- 
+
         int digit;
         int number = sig_num;
         int len = 0;
@@ -704,21 +706,21 @@ void _CPU_Stray_signal(int sig_num)
 
         digit = number;
         buffer[len++] = '0' + digit;
- 
+
         buffer[ len++ ] = '\n';
- 
+
         write( 2, "Stray signal ", 13 );
         write( 2, buffer, len );
 
       }
   }
- 
+
   /*
    * If it was a "fatal" signal, then exit here
    * If app code has installed a hander for one of these, then
    * we won't call _CPU_Stray_signal, so this is ok.
    */
- 
+
   switch (sig_num) {
       case SIGINT:
       case SIGHUP:
@@ -765,7 +767,7 @@ int _CPU_Get_clock_vector( void )
   return SIGALRM;
 }
 
-void _CPU_Start_clock( 
+void _CPU_Start_clock(
   int microseconds
 )
 {
@@ -783,19 +785,19 @@ void _CPU_Stop_clock( void )
 {
   struct itimerval  new;
   struct sigaction  act;
- 
+
   /*
    * Set the SIGALRM signal to ignore any last
    * signals that might come in while we are
    * disarming the timer and removing the interrupt
    * vector.
    */
- 
+
   (void) memset(&act, 0, sizeof(act));
   act.sa_handler = SIG_IGN;
- 
+
   sigaction(SIGALRM, &act, 0);
- 
+
   (void) memset(&new, 0, sizeof(new));
   setitimer(ITIMER_REAL, &new, 0);
 }
@@ -803,7 +805,7 @@ void _CPU_Stop_clock( void )
 int  _CPU_SHM_Semid;
 extern       void fix_syscall_errno( void );
 
-void _CPU_SHM_Init( 
+void _CPU_SHM_Init(
   unsigned32   maximum_nodes,
   boolean      is_master_node,
   void       **shm_address,
@@ -817,7 +819,7 @@ void _CPU_SHM_Init(
   key_t        sem_key;
   int          status;
   int          shm_size;
- 
+
   if (getenv("RTEMS_SHM_KEY"))
     shm_key = strtol(getenv("RTEMS_SHM_KEY"), 0, 0);
   else
@@ -826,7 +828,7 @@ void _CPU_SHM_Init(
 #else
     shm_key = 0xa000;
 #endif
- 
+
     if (getenv("RTEMS_SHM_SIZE"))
       shm_size = strtol(getenv("RTEMS_SHM_SIZE"), 0, 0);
     else
@@ -835,7 +837,7 @@ void _CPU_SHM_Init(
 #else
       shm_size = 64 * 1024;
 #endif
- 
+
     if (getenv("RTEMS_SHM_SEMAPHORE_KEY"))
       sem_key = strtol(getenv("RTEMS_SHM_SEMAPHORE_KEY"), 0, 0);
     else
@@ -844,28 +846,28 @@ void _CPU_SHM_Init(
 #else
       sem_key = 0xa001;
 #endif
- 
+
     shmid = shmget(shm_key, shm_size, IPC_CREAT | 0660);
     if ( shmid == -1 ) {
       fix_syscall_errno(); /* in case of newlib */
       perror( "shmget" );
       _CPU_Fatal_halt( 0xdead0001 );
     }
- 
+
     shm_addr = shmat(shmid, (char *)0, SHM_RND);
     if ( shm_addr == (void *)-1 ) {
       fix_syscall_errno(); /* in case of newlib */
       perror( "shmat" );
       _CPU_Fatal_halt( 0xdead0002 );
     }
- 
+
     _CPU_SHM_Semid = semget(sem_key, maximum_nodes + 1, IPC_CREAT | 0660);
     if ( _CPU_SHM_Semid == -1 ) {
       fix_syscall_errno(); /* in case of newlib */
       perror( "semget" );
       _CPU_Fatal_halt( 0xdead0003 );
     }
- 
+
     if ( is_master_node ) {
       for ( i=0 ; i <= maximum_nodes ; i++ ) {
 #if defined(solaris2)
@@ -874,21 +876,21 @@ void _CPU_SHM_Init(
           struct semid_ds *buf;
           ushort *array;
         } help;
- 
+
         help.val = 1;
         status = semctl( _CPU_SHM_Semid, i, SETVAL, help );
 #endif
 #if defined(hpux)
         status = semctl( _CPU_SHM_Semid, i, SETVAL, 1 );
 #endif
- 
+
         fix_syscall_errno(); /* in case of newlib */
         if ( status == -1 ) {
           _CPU_Fatal_halt( 0xdead0004 );
         }
       }
     }
- 
+
   *shm_address = shm_addr;
   *shm_length = shm_size;
 
@@ -914,8 +916,8 @@ int _CPU_Get_pid( void )
  *          RTEMS programs.
  *          Maybe systems that use /proc don't have this problem...
  */
- 
- 
+
+
 int _CPU_SHM_Get_vector( void )
 {
 #ifdef CPU_USE_SHM_INTERRUPTS
@@ -933,17 +935,17 @@ void _CPU_SHM_Send_interrupt(
   kill((pid_t) pid, vector);
 }
 
-void _CPU_SHM_Lock( 
+void _CPU_SHM_Lock(
   int semaphore
 )
 {
   struct sembuf      sb;
   int                status;
- 
+
   sb.sem_num = semaphore;
   sb.sem_op  = -1;
   sb.sem_flg = 0;
- 
+
   while (1) {
     status = semop(_CPU_SHM_Semid, &sb, 1);
     if ( status >= 0 )
@@ -965,16 +967,16 @@ void _CPU_SHM_Unlock(
 {
   struct sembuf  sb;
   int            status;
- 
+
   sb.sem_num = semaphore;
   sb.sem_op  = 1;
   sb.sem_flg = 0;
- 
+
   while (1) {
     status = semop(_CPU_SHM_Semid, &sb, 1);
     if ( status >= 0 )
       break;
- 
+
     if ( status == -1 ) {
       fix_syscall_errno();    /* in case of newlib */
       if (errno == EINTR)
