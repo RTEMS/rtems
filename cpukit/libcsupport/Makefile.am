@@ -60,6 +60,10 @@ if NEWLIB
 NEWLIB_H_FILES = include/sys/termios.h include/sys/utsname.h
 endif
 
+if NEED_SYS_CDEFS_H
+SYS_H_FILES = include/sys/cdefs.h
+endif
+
 # FIXME: We should not install to include/sys unless using newlib.
 include_sys_HEADERS = \
 include/sys/filio.h \
@@ -68,7 +72,7 @@ include/sys/ioctl.h \
 include/sys/sockio.h \
 include/sys/termios.h \
 include/sys/ttycom.h \
-include/sys/cdefs.h \
+$(SYS_H_FILES) \
 $(NEWLIB_H_FILES)
 
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys \

@@ -1,5 +1,12 @@
 2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* configure.ac: Check for sys/cdefs.h, Add NEED_SYS_CDEFS_H.
+	Add check for CHAR_BIT.
+	* Makefile.am: Conditionally install sys/cdefs.h iff using newlib or
+	if the host does not provide sys/cdefs.h (Fixes Linux/posix).
+
+2002-11-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* configure.ac: Remove -ansi -fasm.
 	Add checks to diagnose potential system header conflicts.
 	* Makefile.am: Unconditionally install sys/cdefs.h.
