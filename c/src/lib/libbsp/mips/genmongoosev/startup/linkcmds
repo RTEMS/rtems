@@ -5,24 +5,28 @@
  *  $Id$
  */
 
+/*    . = 0x80020000; */
+
 /*
  * Declare some sizes.
  */
+
 _RamBase = DEFINED(_RamBase) ? _RamBase : 0x80000000;
 _RamSize = DEFINED(_RamSize) ? _RamSize : 32M;
-HeapSize = DEFINED(HeapSize) ? HeapSize : 0x10000;
+HeapSize = DEFINED(HeapSize) ? HeapSize : 0x40000;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 ClockRate = DEFINED(ClockRate) ? ClockRate : 12000000;
 
+
+
+MEMORY
+{
+   romstore : ORIGIN = 0xbfc40000, LENGTH = 4M
+   ram      : ORIGIN = 0x80020000, LENGTH = 4M
+}
+
 SECTIONS
 { 
-/*
-Ken's response is correct.  Locate it at 0x80020000 or higher.  The PMON 
-data segment after the exception vectors and below 0x80020000,
-
-. = 0x80020000;
-*/
-    . = 0x80020000;
     .text : 
     { 
        _ftext = . ;
@@ -35,12 +39,12 @@ data segment after the exception vectors and below 0x80020000,
       *(.mips16.call.*)
       PROVIDE (__runtime_reloc_start = .);
       *(.rel.sdata)
+      *(.rel.dyn)
       PROVIDE (__runtime_reloc_stop = .);
       *(.fini)
-       etext  =  .;
-       _etext  =  .;
-    }  
-  .ctors    :
+    } >ram  AT>romstore
+
+  .ctors    : 
   {
     /* gcc uses crtbegin.o to find the start of
        the constructors, so we make sure it is
@@ -62,54 +66,76 @@ data segment after the exception vectors and below 0x80020000,
     KEEP (*(EXCLUDE_FILE (*crtend.o) .ctors))
     KEEP (*(SORT(.ctors.*)))
     KEEP (*(.ctors))
-  }
+  } >ram  AT>romstore
 
-  .dtors    :
+  .dtors    : 
   {
     KEEP (*crtbegin.o(.dtors))
     KEEP (*(EXCLUDE_FILE (*crtend.o) .dtors))
     KEEP (*(SORT(.dtors.*)))
     KEEP (*(.dtors))
-  }
 
-    . = .;
-  .rdata : {
+    etext  =  .;
+    _etext  =  .;
+  } >ram  AT>romstore
+
+/*    . = .; */
+
+  .rdata : 
+  {
     *(.rdata)
     *(.rodata)
     *(.rodata.*)
     *(.gnu.linkonce.r*)
-  }
-   _fdata = ALIGN(16);
-  .data : {
+  } >ram  AT>romstore
+
+  .data : 
+  {
+    _fdata = ALIGN(16);
+
     *(.data)
     *(.data.*)
     *(.gnu.linkonce.d*)
-  }
-  . = ALIGN(8);
-  _gp = . + 0x8000;
-  __global = _gp;
-  .lit8 : {
+  } >ram  AT>romstore
+
+
+  .lit8 : 
+  {
+    . = ALIGN(8);
+
+    _gp = . + 0x8000;
+    __global = _gp;
     *(.lit8)
-  }
-  .lit4 : {
+  } >ram  AT>romstore
+
+  .lit4 : 
+  {
     *(.lit4)
-  }
-  .sdata : {
+  } >ram  AT>romstore 
+
+  .sdata :   
+  {
     *(.sdata)
     *(.sdata.*)
     *(.gnu.linkonce.s*)
-  }
+  } >ram  AT>romstore
+
+  .sbss : 
+  {
   . = ALIGN(4);
    edata  =  .;
    _edata  =  .;
    _fbss = .;
-  .sbss : {
     *(.sbss)
     *(.scommon)
-  }
-  .bss : {
+  } >ram  AT>romstore 
+
+
+  .bss : 
+  {
     _bss_start = . ;
     *(.bss)
+    *(.reginfo)
     *(COMMON)
     . = ALIGN (64);
     _stack_limit = .;
@@ -120,42 +146,41 @@ data segment after the exception vectors and below 0x80020000,
     HeapBase = .;
     . += HeapSize;    /* reserve some memory for heap */
     WorkspaceBase = .;
-  }
- end = .;
- _end = .;
+    end = .;
+    _end = .;
+  } >ram  AT>romstore 
 
 
-/* Put starting stack in SRAM (8 Kb); this size is the same as the stack from
-      the original script (when everything was in SRAM). */
-   /* __stack = 0x8000A000; */
-  /* DWARF debug sections.
-     Symbols in the DWARF debugging sections are relative to
-     the beginning of the section so we begin them at 0.  */
+/* 
+** DWARF debug sections.
+** Symbols in the DWARF debugging sections are relative to
+** the beginning of the section so we begin them at 0.  
+*/
 
   /* DWARF 1 */
-  .debug          0 : { *(.debug) }
-  .line           0 : { *(.line) }
+  .debug          0 : { *(.debug) } AT>romstore
+  .line           0 : { *(.line) } AT>romstore
 
   /* GNU DWARF 1 extensions */
-  .debug_srcinfo  0 : { *(.debug_srcinfo) }
-  .debug_sfnames  0 : { *(.debug_sfnames) }
+  .debug_srcinfo  0 : { *(.debug_srcinfo) } AT>romstore
+  .debug_sfnames  0 : { *(.debug_sfnames) } AT>romstore
 
   /* DWARF 1.1 and DWARF 2 */
-  .debug_aranges  0 : { *(.debug_aranges) }
-  .debug_pubnames 0 : { *(.debug_pubnames) }
+  .debug_aranges  0 : { *(.debug_aranges) } AT>romstore
+  .debug_pubnames 0 : { *(.debug_pubnames) } AT>romstore
 
   /* DWARF 2 */
-  .debug_info     0 : { *(.debug_info) }
-  .debug_abbrev   0 : { *(.debug_abbrev) }
-  .debug_line     0 : { *(.debug_line) }
-  .debug_frame    0 : { *(.debug_frame) }
-  .debug_str      0 : { *(.debug_str) }
-  .debug_loc      0 : { *(.debug_loc) }
-  .debug_macinfo  0 : { *(.debug_macinfo) }
+  .debug_info     0 : { *(.debug_info) }    AT>romstore
+  .debug_abbrev   0 : { *(.debug_abbrev) }  AT>romstore
+  .debug_line     0 : { *(.debug_line) }    AT>romstore
+  .debug_frame    0 : { *(.debug_frame)}    AT>romstore
+  .debug_str      0 : { *(.debug_str) }     AT>romstore
+  .debug_loc      0 : { *(.debug_loc) }     AT>romstore
+  .debug_macinfo  0 : { *(.debug_macinfo) } AT>romstore
 
   /* SGI/MIPS DWARF 2 extensions */
-  .debug_weaknames 0 : { *(.debug_weaknames) }
-  .debug_funcnames 0 : { *(.debug_funcnames) }
-  .debug_typenames 0 : { *(.debug_typenames) }
-  .debug_varnames  0 : { *(.debug_varnames) }
+  .debug_weaknames 0 : { *(.debug_weaknames) } AT>romstore
+  .debug_funcnames 0 : { *(.debug_funcnames) } AT>romstore
+  .debug_typenames 0 : { *(.debug_typenames) } AT>romstore
+  .debug_varnames  0 : { *(.debug_varnames) }  AT>romstore
 }

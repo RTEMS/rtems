@@ -129,12 +129,12 @@ extern rtems_configuration_table BSP_Configuration;
 
 void bsp_cleanup( void );
 
-rtems_isr_entry set_vector(
-  rtems_isr_entry, rtems_vector_number, int );
-
+rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
+   
 #ifdef __cplusplus
 }
 #endif
 
 #endif
+
 /* end of include file */

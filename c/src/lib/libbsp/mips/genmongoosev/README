@@ -38,28 +38,52 @@ The Mongoose-V on this board is at 12 Mhz.
 Downloading
 ===========
 
-At startup, PMON looks for a <space> to be pressed.  If it is pressed,
-then a PMON prompt is displayed.  Otherwise, PMON automatically jumps
-to the code at 0xBFC4_0000.  This code may be a boot manager or
-simply a collection of noop's that fall into the code at 
-0xBFC5_0000.  If the code at 0xBFC4_0000 is a boot manager, then it
-can determine which program image to load.  This layout allows for the
-possible compression of program images.  Given that there is much
-more RAM than EEPROM, compression could be desirable for certain
-applications.
+On the breadboard, a locally hacked PMON waits for a space to be pressed
+while the board is reset/powered up.  If found, the PMON console is
+entered, else PMON jumps to the EEPROM address above, presuming a user
+program is located there.
+
+The default output of an RTEMS link is an image linked to run from
+80020000, but has had its LMA shifted up to BFC40000.  It is suitable
+for copying to S3 records or can be burned to ROMs in whatever manner
+the user desires.
+
+Operation
+=========
+
+A small relocator is supplied in the bsp startup code which copies the
+image down to RAM for execution before doing any other initialization.
+This locator code is location independent, and will do nothing if the
+image is already located at its run location.  The LMA and VMA are both
+controlled via the bsp's link script.  The above behavior is produced by
+using the default script.  If this is not desirable, something like the
+following may be added to the user's RTEMS link statement to override
+the default linkcmds with a user-supplied version;
+
+-qnolinkcmds -Wl,-T -Wl,mips-rtems-linkcmds-eprom
+
+this causes the file ./mips-rtems-linkcmds-eprom to override the default
+linkcmds.
+
+Before relocating the RTEMS image, the bsp startup routine attempts to
+configure the processor into a rational state.  During this process,
+status characters are emitted at 19200N81 baud on UART port 0.
+
 
 Questions
 =========
 
-+  XXX
- 
+Why can I send characters slowly to a Mongoose V, but get framing errors
+when sending them fast?
+
+- The MongooseV chip seems to <require> that all incoming data have 2
+  stop bits.  When typing on a serial terminal, this is not an issue
+  because the idle state of an RS232 line looks just like a stop bit-
+  but when streaming in data, such pacing is required.  The manual does
+  not indicate anything along these lines, instead, we suspect a
+  somewhat faulty UART design.
+
+
 Status
 ======
 
-+ untested
-
-+ no mkeeprom script
-
-+ start code must copy from EEPROM to RAM and then run.
-
-+ XXX

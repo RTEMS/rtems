@@ -1,18 +1,22 @@
 /*
- *  This routine starts the application.  It includes application,
- *  board, and monitor specific initialization and configuration.
- *  The generic CPU dependent initialization has been performed
- *  before this routine is invoked.
- *
- *  COPYRIGHT (c) 1989-2001.
- *  On-Line Applications Research Corporation (OAR).
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
- *
- *  $Id$
- */
+**  This routine starts the application.  It includes application,
+**  board, and monitor specific initialization and configuration.
+**  The generic CPU dependent initialization has been performed
+**  before this routine is invoked.
+**
+**  COPYRIGHT (c) 1989-2001.
+**  On-Line Applications Research Corporation (OAR).
+**
+**  The license and distribution terms for this file may be
+**  found in the file LICENSE in this distribution or at
+**  http://www.OARcorp.com/rtems/license.html.
+**
+**  $Id$
+**
+** Modification History:
+**        12/10/01  A.Ferrer, NASA/GSFC, Code 582
+**           Set interrupt mask to 0xAF00 (Line 139).
+*/
 
 #include <string.h>
 
@@ -39,7 +43,7 @@ char *rtems_progname;
 /*
  *  Use the shared implementations of the following routines
  */
- 
+
 void bsp_postdriver_hook(void);
 void bsp_libc_init( void *, unsigned32, int );
 
@@ -56,7 +60,7 @@ void bsp_libc_init( void *, unsigned32, int );
  *      not yet initialized.
  *
  */
- 
+
 void bsp_pretasking_hook(void)
 {
     extern int HeapBase;
@@ -83,8 +87,8 @@ void bsp_pretasking_hook(void)
 
 void bsp_start( void )
 {
-  extern int _end;
   extern int WorkspaceBase;
+  extern void mips_install_isr_entries();
 
   /* Configure Number of Register Caches */
 
@@ -93,10 +97,13 @@ void bsp_start( void )
   Cpu_table.interrupt_stack_size = 4096;
 
   /* HACK -- tied to value linkcmds */
-  if ( BSP_Configuration.work_space_size >(4096*1024) )
-   _sys_exit( 1 );
+  if ( BSP_Configuration.work_space_size > (4096*1024) )
+     _sys_exit( 1 );
 
   BSP_Configuration.work_space_start = (void *) &WorkspaceBase;
+
+  /* mask off any interrupts */
+  MONGOOSEV_WRITE( MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_MASK_REGISTER, 0 );
 
   MONGOOSEV_WRITE( MONGOOSEV_WATCHDOG, 0xA0 );
 
@@ -112,14 +119,26 @@ void bsp_start( void )
   MONGOOSEV_WRITE_REGISTER( MONGOOSEV_TIMER2_BASE, MONGOOSEV_TIMER_INITIAL_COUNTER_REGISTER, 0xffffffff );
   MONGOOSEV_WRITE_REGISTER( MONGOOSEV_TIMER2_BASE, MONGOOSEV_TIMER_CONTROL_REGISTER, 0);
 
-  MONGOOSEV_WRITE( MONGOOSEV_PERIPHERAL_FUNCTION_INTERRUPT_MASK_REGISTER, 0 );
+  /* clear any pending interrupts */
   MONGOOSEV_WRITE( MONGOOSEV_PERIPHERAL_STATUS_REGISTER, 0xffffffff );
 
   /* clear any writable bits in the cause register */
   mips_set_cause( 0 );
 
-  /*all interrupts unmasked but globally off.  depend on the IRC to take care of things */
-  mips_set_sr( (SR_CU0 | SR_CU1 | 0xff00) );
+  /* set interrupt mask, but globally off. */
+
+  /*
+  **  Bit 15 | Bit 14 | Bit 13 | Bit 12 | Bit 11 | Bit 10 | Bit  9 | Bit  8 |
+  **  periph | unused |  FPU   | unused | timer2 | timer1 | swint1 | swint2 |
+  **  extern |        |        |        |        |        |        |        |
+  **
+  **    1        0        1        0        0        1        0        0
+  **
+  **    0x8C00   Enable only internal Mongoose V timers.
+  **    0xA400   Enable Peripherial ints, FPU and timer1
+  */
+
+  mips_set_sr( (SR_CU0 | SR_CU1 | 0xA400) );
 
   mips_install_isr_entries();
 }
@@ -140,10 +159,11 @@ struct s_mem
 };
 
 
-void
-get_mem_info (mem)
-     struct s_mem *mem;
+
+extern unsigned32 _RamSize;
+
+void get_mem_info ( struct s_mem *mem )
 {
-  mem->size = 0x1000000;        /* XXX figure out something here */
+   mem->size = (unsigned32)&_RamSize;
 }
 

@@ -1,3 +1,10 @@
+2001-02-01	Greg Menke <gregory.menke@gsfc.nasa.gov>
+
+	* Update of BSP to address problems restarting, provide more
+	information during boot, and better handle ROM vs RAM images.
+	* README, include/bsp.h, start/regs.S, start/start.S,
+	startup/bspstart.c, startup/linkcmds, timer/timer.c: Updated
+
 2002-02-07	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: Remove RTEMS_OUTPUT_BUILD_SUBDIRS.
