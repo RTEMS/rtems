@@ -19,8 +19,10 @@ C_PIECES= base64 \
         map_v4v6 \
         nsap_addr ns_name ns_netint ns_parse ns_print ns_ttl \
         res_comp res_data res_debug res_init res_mkquery res_mkupdate \
-        res_query res_send res_stubs res_update \
-        strsep
+        res_query res_send res_stubs res_update 
+
+# XXX this one is including a non-existent header file.
+#        strsep
 C_FILES=$(C_PIECES:%=%.c)
 C_O_FILES=$(C_PIECES:%=${ARCH}/%.o)
 
