@@ -25,7 +25,7 @@ extern "C" {
  */
 
 #define MC68681_STATUS          1
-#define MC68681_RX_BUFFER       2
+#define MC68681_RX_BUFFER       3
 
 #define MC68681_MODE            0
 #define MC68681_CLOCK_SELECT    1
