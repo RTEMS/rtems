@@ -778,7 +778,7 @@ typedef int sym_fd_t;						/* Returned by symOpen */
 #define EMF_SCRIPT_MAX	 			3
 
 #define	MAXINT		INT_MAX
-#define BITSPERBYTE 8
+#define BITSPERBYTE 	CHAR_BIT
 #define BITS(type)	(BITSPERBYTE * (int) sizeof(type))
 #define	STRSPACE	T("\t \n\r\t")
 
