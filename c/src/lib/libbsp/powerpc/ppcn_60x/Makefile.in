@@ -1,0 +1,25 @@
+#
+#  $Id$
+#
+
+@SET_MAKE@
+srcdir = @srcdir@
+VPATH = @srcdir@
+RTEMS_ROOT = @top_srcdir@
+PROJECT_ROOT = @PROJECT_ROOT@
+
+include $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
+include $(RTEMS_ROOT)/make/directory.cfg
+
+SRCS=README
+
+# We only build the network device driver if HAS_NETWORK was defined
+# NETWORK_DRIVER_yes_V = network
+# NETWORK_DRIVER = $(NETWORK_DRIVER_$(HAS_NETWORK)_V)
+
+all: $(SRCS)
+
+# wrapup is the one that actually builds and installs the library
+#  from the individual .rel files built in other directories
+SUB_DIRS=include clock console startup start timer tod \
+    $(NETWORK_DRIVER) universe pci nvram vectors wrapup 

@@ -1,0 +1,8 @@
+#
+#  $Id$
+#
+
+These are the notes made while updating this BSP to a more current
+RTEMS version.
+
+  + device-tree is psim specific and was removed
