@@ -1,3 +1,14 @@
+2004-04-01	Ralf Corsepius <ralf_corsepius@rtems.org>
+
+	* cpuuse/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* malloctest/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* monitor/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* putenvtest/init.c: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* rtems++/System.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* rtmonuse/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* stackchk/system.h: Include <rtems/confdefs.h> instead of <confdefs.h>.
+	* termios/init.c: Include <rtems/confdefs.h> instead of <confdefs.h>.
+
 2004-03-30	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* cpuuse/system.h, cpuuse/task1.c, cpuuse/tswitch.c, monitor/init.c,

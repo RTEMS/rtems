@@ -51,7 +51,7 @@ void Task_switch(
 
 #define CONFIGURE_EXTRA_TASK_STACKS (6 * RTEMS_MINIMUM_STACK_SIZE)
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 

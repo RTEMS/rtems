@@ -49,7 +49,7 @@ void Get_all_counters( void );
   (6 * (3 * RTEMS_MINIMUM_STACK_SIZE)) /* our tasks */ + \
   (1 * RTEMS_MINIMUM_STACK_SIZE)       /* monitor tasks */
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 

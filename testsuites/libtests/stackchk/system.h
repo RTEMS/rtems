@@ -43,7 +43,7 @@ void blow_stack( void );
 
 #define STACK_CHECKER_ON
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* global variables */
 

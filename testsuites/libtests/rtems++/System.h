@@ -130,6 +130,6 @@ class Io_during_interrupt
 
 #define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
 
-#include <confdefs.h>
+#include <rtems/confdefs.h>
 
 /* end of include file */
