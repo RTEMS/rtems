@@ -4,19 +4,20 @@
 
 This is the list of outstanding problems in this release.
 
-1.  The m68000 support is not complete.  Someone with target hardware
-    needs to complete the missing gaps.  Look for ifdef's based on the
-    M68K_* macros defined in c/make/cpu/m68k.cfg.  Most of the code
-    is present but none of it is tested.  An attempt was made to insert
-    "#warnings" preprocessor directives in the appropriate places.
-    So these are a good starting spot.
++   The m68000 support is not quite complete yet.  The missing piece
+    inside the executive proper is support for the software interrupt 
+    stack.  Also, the m68k family has become quite large and an 
+    understanding of the compatibility of the peripherals on the various 
+    members of the 683xx family would allow someone to designate some
+    of the drivers submitted for the gen68302 BSP as useful on other
+    members.
 
-2.  The only i960 family member tested is the CA.  No support for the
++   The only i960 family member tested is the CA.  No support for the
     floating point support found in other family members is present.
     This also implies that RTEMS may "think" of something as generic
     across the i960 family when in fact it is specific to the CA.
 
-3.  The __read() system call in all of the BSPs using single
++   The __read() system call in all of the BSPs using single
     character input/output needs to be smarter.  The following
     issues need to be addressed:
 
@@ -25,7 +26,7 @@ This is the list of outstanding problems in this release.
        + backspaces
        + tabs
 
-4.  Solaris 2.3 port notes:
++   UNIX port notes:
 
        + Some of the tests run correctly when run interactively but
          the screen and output do not match when the output is 
@@ -33,7 +34,38 @@ This is the list of outstanding problems in this release.
 
        + sometimes a stray SIGALRM is reported as spfatal completes.
 
-5.  Some of the tests may execute correctly and not produce the exact
+       + multiple BSPs need to be merged into a single source one.
+
+       + CPU code appears to not set the interrupt level correctly
+         when doing a context initialization and sigsetjmp should be used.
+
+       + General cleanup and reorganization to enhance portability.
+
+       +  Currently the routines which need to make access to the 
+          native library (not newlib) are spread across a number of 
+          directories.  There should be a "unix_XYZ" wrapper for every 
+          one of these routines so there is only 1 directory which directly 
+          references the "real" native library.
+
++   Some of the tests may execute correctly and not produce the exact
     ordering of lines in the screen file.  This appears to be a combination
     of a number of factors including buffering, processor speed, IO
     device overhead, and clock interrupt rate.
+
++   The compiler configuration files (c/make/gcc-XYZ.cfg) are largely
+    the same when the different targets have the same CPU.  It would
+    be desirable to have a gcc-CPU.cfg or gcc-CPU_MODEL.cfg (e.g.
+    gcc-m68k.cfg or gcc-m68020.cfg) and have the file gcc-TARGET.cfg
+    include this and possibly override default settings.
+ 
++   The clock device drivers should really avoid doing the division
+    by 1000 in the clock tick ISR to convert microseconds into
+    milliseconds.  This only applies to clock drivers which generate
+    an ISR each millisecond and only call rtems_clock_tick every
+    so many ISRs.
+ 
++   The MP code for the Message Manager copies the message buffer
+    in and out of the MPCI packet at at least two unecessary times:
+ 
+      + as part of some send requests
+      + on a non-successful receive response
