@@ -3,7 +3,7 @@
  *  This include file contains the static inline implementation of all
  *  of the inlined routines in the Object Handler.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -27,14 +27,32 @@
  */
 
 RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
-  Objects_Classes  the_class,
+  Objects_APIs     the_api,
+  unsigned32       the_class,
   unsigned32       node,
   unsigned32       index
 )
 {
-  return (( (Objects_Id) the_class ) << OBJECTS_CLASS_START_BIT) |
-         (( (Objects_Id) node ) << OBJECTS_NODE_START_BIT)       |
-         (( (Objects_Id) index ) << OBJECTS_INDEX_START_BIT);
+  return (( (Objects_Id) the_api )   << OBJECTS_API_START_BIT)   |
+         (( (Objects_Id) the_class ) << OBJECTS_CLASS_START_BIT) |
+         (( (Objects_Id) node )      << OBJECTS_NODE_START_BIT)  |
+         (( (Objects_Id) index )     << OBJECTS_INDEX_START_BIT);
+}
+
+/*PAGE
+ *
+ *  _Objects_Get_API
+ *
+ *  DESCRIPTION:
+ *
+ *  This function returns the API portion of the ID.
+ */
+
+RTEMS_INLINE_ROUTINE Objects_APIs _Objects_Get_API(
+  Objects_Id id
+)
+{
+  return (Objects_APIs) ((id >> OBJECTS_API_START_BIT) & OBJECTS_API_VALID_BITS);
 }
 
 /*PAGE
@@ -46,15 +64,14 @@ RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
  *  This function returns the class portion of the ID.
  */
  
-RTEMS_INLINE_ROUTINE Objects_Classes _Objects_Get_class(
+RTEMS_INLINE_ROUTINE unsigned32 _Objects_Get_class(
   Objects_Id id
 )
 {
-  return (Objects_Classes) 
+  return (unsigned32) 
     ((id >> OBJECTS_CLASS_START_BIT) & OBJECTS_CLASS_VALID_BITS);
 }
  
-
 /*PAGE
  *
  *  _Objects_Get_node
@@ -97,10 +114,11 @@ RTEMS_INLINE_ROUTINE unsigned32 _Objects_Get_index(
  */
  
 RTEMS_INLINE_ROUTINE boolean _Objects_Is_class_valid(
-  Objects_Classes the_class
+  unsigned32 the_class
 )
 {
-  return the_class && the_class <= OBJECTS_CLASSES_LAST;
+  /* XXX how do we determine this now? */
+  return TRUE; /* the_class && the_class <= OBJECTS_CLASSES_LAST; */
 }
 
 /*PAGE
@@ -210,14 +228,17 @@ RTEMS_INLINE_ROUTINE Objects_Information *_Objects_Get_information(
   Objects_Id  id
 )
 {
-  Objects_Classes  the_class;
+  Objects_APIs  the_api;
+  unsigned32    the_class;
+
 
   the_class = _Objects_Get_class( id );
 
   if ( !_Objects_Is_class_valid( the_class ) )
     return NULL;
 
-  return _Objects_Information_table[ the_class ];
+  the_api = _Objects_Get_API( id );
+  return _Objects_Information_table[ the_api ][ the_class ];
 }
 
 /*PAGE
@@ -245,7 +266,8 @@ RTEMS_INLINE_ROUTINE void _Objects_Open(
     /* _Objects_Copy_name_string( name, the_object->name ); */
     the_object->name = name;
   else
-    _Objects_Copy_name_raw( name, the_object->name, information->name_length );
+    /* _Objects_Copy_name_raw( name, the_object->name, information->name_length ); */
+    the_object->name = name;
 }
 
 /*PAGE

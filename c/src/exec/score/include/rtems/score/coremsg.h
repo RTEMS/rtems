@@ -144,11 +144,9 @@ typedef struct {
 
 boolean _CORE_message_queue_Initialize(
   CORE_message_queue_Control    *the_message_queue,
-  Objects_Classes                the_class,
   CORE_message_queue_Attributes *the_message_queue_attributes,
   unsigned32                     maximum_pending_messages,
-  unsigned32                     maximum_message_size,
-  Thread_queue_Extract_callout   proxy_extract_callout
+  unsigned32                     maximum_message_size
 );
  
 /*

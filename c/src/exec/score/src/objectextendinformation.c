@@ -208,9 +208,11 @@ void _Objects_Extend_information(
     information->name_table = name_table;
     information->local_table = local_table;
     information->maximum = maximum;
-    information->maximum_id =
-      _Objects_Build_id(
-        information->the_class, _Objects_Local_node, information->maximum
+    information->maximum_id = _Objects_Build_id(
+        information->the_api, 
+        information->the_class,
+        _Objects_Local_node,
+        information->maximum
       );
 
     _ISR_Enable( level );
@@ -268,9 +270,11 @@ void _Objects_Extend_information(
   
   while ( (the_object = (Objects_Control *) _Chain_Get( &Inactive ) ) != NULL ) {
     
-    the_object->id = 
-      _Objects_Build_id(
-        information->the_class, _Objects_Local_node, index
+    the_object->id = _Objects_Build_id(
+        information->the_api, 
+        information->the_class,
+        _Objects_Local_node,
+        index
       );
       
     the_object->name = (void *) name_area;

@@ -47,12 +47,14 @@ typedef void ( *Thread_queue_Flush_callout )(
  *  extracted from the remote queue).
  */
  
+#if 0
 typedef void ( *Thread_queue_Extract_callout )(
                  Thread_Control *
              );
 
 SCORE_EXTERN Thread_queue_Extract_callout  
   _Thread_queue_Extract_table[ OBJECTS_CLASSES_LAST + 1 ];
+#endif
 
 /*
  *  _Thread_queue_Dequeue
@@ -103,7 +105,7 @@ void _Thread_queue_Extract(
  *  DESCRIPTION:
  *
  *  This routine extracts the_thread from the_thread_queue
- *  and insures that if there is a proxy for this task on 
+ *  and ensures that if there is a proxy for this task on 
  *  another node, it is also dealt with.
  */
  
@@ -152,10 +154,8 @@ void _Thread_queue_Flush(
 
 void _Thread_queue_Initialize(
   Thread_queue_Control         *the_thread_queue,
-  Objects_Classes               the_class,
   Thread_queue_Disciplines      the_discipline,
   States_Control                state,
-  Thread_queue_Extract_callout  proxy_extract_callout,
   unsigned32                    timeout_status
 );
 

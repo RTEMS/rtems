@@ -309,7 +309,8 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get (
   Objects_Locations *location
 )
 {
-  Objects_Classes      the_class;
+  unsigned32           the_api;
+  unsigned32           the_class;
   Objects_Information *information;
   Thread_Control      *tp = (Thread_Control *) 0;
  
@@ -320,16 +321,21 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Get (
     goto done;
   }
  
+  the_api = _Objects_Get_API( id );
+  if ( the_api && the_api > OBJECTS_APIS_LAST ) {
+    *location = OBJECTS_ERROR;
+    goto done;
+  }
+  
   the_class = _Objects_Get_class( id );
- 
-  if ( the_class > OBJECTS_CLASSES_LAST ) {
+  if ( the_class != 1 ) {       /* threads are always first class :) */
     *location = OBJECTS_ERROR;
     goto done;
   }
  
-  information = _Objects_Information_table[ the_class ];
+  information = _Objects_Information_table[ the_api ][ the_class ];
  
-  if ( !information || !information->is_thread ) {
+  if ( !information ) {
     *location = OBJECTS_ERROR;
     goto done;
   }

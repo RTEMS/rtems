@@ -36,20 +36,16 @@
  *
  *  Input parameters:
  *    the_semaphore            - the semaphore control block to initialize
- *    the_class                - the API class of the object
  *    the_semaphore_attributes - the attributes specified at create time
  *    initial_value            - semaphore's initial value
- *    proxy_extract_callout    - MP specific extract callout
  *
  *  Output parameters:  NONE
  */
 
 void _CORE_semaphore_Initialize(
   CORE_semaphore_Control       *the_semaphore,
-  Objects_Classes               the_class,
   CORE_semaphore_Attributes    *the_semaphore_attributes,
-  unsigned32                    initial_value,
-  Thread_queue_Extract_callout  proxy_extract_callout
+  unsigned32                    initial_value
 )
 {
 
@@ -58,11 +54,9 @@ void _CORE_semaphore_Initialize(
 
   _Thread_queue_Initialize(
     &the_semaphore->Wait_queue,
-    the_class,
     _CORE_semaphore_Is_priority( the_semaphore_attributes ) ?
               THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_SEMAPHORE,
-    proxy_extract_callout,
     CORE_SEMAPHORE_TIMEOUT
   );
 }

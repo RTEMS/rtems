@@ -46,7 +46,6 @@ void _Thread_Close(
   _Thread_Set_state( the_thread, STATES_TRANSIENT );
  
   if ( !_Thread_queue_Extract_with_proxy( the_thread ) ) {
- 
     if ( _Watchdog_Is_active( &the_thread->Timer ) )
       (void) _Watchdog_Remove( &the_thread->Timer );
   }

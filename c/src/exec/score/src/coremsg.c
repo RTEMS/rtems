@@ -42,7 +42,6 @@
  *    the_message_queue_attributes - the message queue's attributes
  *    maximum_pending_messages     - maximum message and reserved buffer count
  *    maximum_message_size         - maximum size of each message
- *    proxy_extract_callout        - remote extract support
  *
  *  Output parameters:
  *    TRUE   - if the message queue is initialized
@@ -51,11 +50,9 @@
 
 boolean _CORE_message_queue_Initialize(
   CORE_message_queue_Control    *the_message_queue,
-  Objects_Classes                the_class,
   CORE_message_queue_Attributes *the_message_queue_attributes,
   unsigned32                     maximum_pending_messages,
-  unsigned32                     maximum_message_size,
-  Thread_queue_Extract_callout   proxy_extract_callout
+  unsigned32                     maximum_message_size
 )
 {
   unsigned32 message_buffering_required;
@@ -96,11 +93,9 @@ boolean _CORE_message_queue_Initialize(
  
   _Thread_queue_Initialize(
     &the_message_queue->Wait_queue,
-    the_class,
     _CORE_message_queue_Is_priority( the_message_queue_attributes ) ?
        THREAD_QUEUE_DISCIPLINE_PRIORITY : THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_MESSAGE,
-    proxy_extract_callout,
     CORE_MESSAGE_QUEUE_STATUS_TIMEOUT
   );
 

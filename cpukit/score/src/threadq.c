@@ -29,10 +29,8 @@
  *
  *  Input parameters:
  *    the_thread_queue      - pointer to a threadq header
- *    the_class             - class of the object to which this belongs
  *    discipline            - queueing discipline
  *    state                 - state of waiting threads
- *    proxy_extract_callout - MP specific callout
  *    timeout_status        - return on a timeout
  *
  *  Output parameters: NONE
@@ -40,16 +38,12 @@
 
 void _Thread_queue_Initialize(
   Thread_queue_Control         *the_thread_queue,
-  Objects_Classes               the_class,
   Thread_queue_Disciplines      the_discipline,
   States_Control                state,
-  Thread_queue_Extract_callout  proxy_extract_callout,
   unsigned32                    timeout_status
 )
 {
   unsigned32 index;
-
-  _Thread_queue_Extract_table[ the_class ] = proxy_extract_callout;
 
   the_thread_queue->state          = state;
   the_thread_queue->discipline     = the_discipline;

@@ -22,10 +22,20 @@
  *
  */
 
-#define _Objects_Build_id( _the_class, _node, _index ) \
-  ( (( (Objects_Id) (_the_class) ) << OBJECTS_CLASS_START_BIT) | \
-    (( (Objects_Id) (_node) ) << OBJECTS_NODE_START_BIT)       | \
-    (( (Objects_Id) (_index) ) << OBJECTS_INDEX_START_BIT) )
+#define _Objects_Build_id( _the_api, _the_class, _node, _index ) \
+  ( (( (Objects_Id) _the_api ) << OBJECTS_API_START_BIT) | \
+    (( (Objects_Id) _the_class ) << OBJECTS_CLASS_START_BIT) | \
+    (( (Objects_Id) _node ) << OBJECTS_NODE_START_BIT)       | \
+    (( (Objects_Id) _index ) << OBJECTS_INDEX_START_BIT) )
+
+/*PAGE
+ *
+ *  _Objects_Get_API
+ */
+ 
+#define _Objects_Get_API( _id ) \
+  (Objects_APIs) \
+    (((_id) >> OBJECTS_API_START_BIT) & OBJECTS_API_VALID_BITS)
 
 /*PAGE
  *
@@ -33,7 +43,7 @@
  */
  
 #define _Objects_Get_class( _id ) \
-  (Objects_Classes) \
+  (unsigned32) \
     (((_id) >> OBJECTS_CLASS_START_BIT) & OBJECTS_CLASS_VALID_BITS)
 
 /*PAGE
@@ -61,7 +71,7 @@
  */
  
 #define _Objects_Is_class_valid( _the_class ) \
-  ( (_the_class) && (_the_class) <= OBJECTS_CLASSES_LAST )
+  ( (_the_class) /* XXX && (_the_class) <= OBJECTS_CLASSES_LAST */ )
 
 /*PAGE
  *
@@ -123,7 +133,8 @@
  ( \
    ( !_Objects_Is_class_valid( _Objects_Get_class( id ) ) ) ? \
      NULL : \
-     _Objects_Information_table[ _Objects_Get_class( id ) ] \
+     _Objects_Information_table[ _Objects_Get_API( id ) ] \
+       [ _Objects_Get_class( id ) ] \
  )
 
 /*PAGE

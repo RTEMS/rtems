@@ -89,10 +89,8 @@ typedef struct {
 
 void _CORE_semaphore_Initialize(
   CORE_semaphore_Control       *the_semaphore,
-  Objects_Classes               the_class,
   CORE_semaphore_Attributes    *the_semaphore_attributes,
-  unsigned32                    initial_value,
-  Thread_queue_Extract_callout  proxy_extract_callout
+  unsigned32                    initial_value
 );
  
 /*

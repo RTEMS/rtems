@@ -73,9 +73,7 @@ Objects_Name_to_id_errors _Objects_Name_to_id(
     else                          compare_them = _Objects_Compare_name_raw;
 
     for ( index = 1; index <= information->maximum; index++ ) {
-
       the_object = information->local_table[ index ];
-
       if ( !the_object || !the_object->name )
         continue;
 

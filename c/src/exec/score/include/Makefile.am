@@ -27,6 +27,7 @@ MP_H_FILES = rtems/score/mpci.h rtems/score/mppkt.h rtems/score/objectmp.h \
 
 # H_FILES that get installed in the rtems/score subdirectoy
 STD_H_FILES = rtems/score/address.h rtems/score/apiext.h \
+    rtems/score/apimutex.h \
     rtems/score/bitfield.h rtems/score/chain.h rtems/score/context.h \
     rtems/score/copyrt.h rtems/score/coremsg.h rtems/score/coremutex.h \
     rtems/score/coresem.h rtems/score/heap.h rtems/score/interr.h \

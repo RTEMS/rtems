@@ -26,7 +26,8 @@ extern "C" {
 #include <rtems/score/isr.h>
 
 /*
- *  Mask to enable unlimited objects
+ *  Mask to enable unlimited objects.  This is used in the configuration
+ *  table when specifying the number of configured objects.
  */
 
 #define OBJECTS_UNLIMITED_OBJECTS 0x80000000
@@ -60,63 +61,95 @@ typedef boolean (*Objects_Name_comparators)(
  *  The following type defines the control block used to manage
  *  object IDs.  The format is as follows (0=LSB):
  *
- *     Bits  0 .. 15    = index
- *     Bits 16 .. 25    = node
- *     Bits 26 .. 31    = class
+ *     Bits  0 .. 15    = index  (up to 65535 objects of a type)
+ *     Bits 16 .. 23    = node   (up to 255 nodes)
+ *     Bits 24 .. 26    = API    (up to 7 API classes)
+ *     Bits 27 .. 31    = class  (up to 31 object types per API)
  */
 
 typedef unsigned32 Objects_Id;
 
 #define OBJECTS_INDEX_START_BIT  0
 #define OBJECTS_NODE_START_BIT  16
-#define OBJECTS_CLASS_START_BIT 26
+#define OBJECTS_API_START_BIT   24
+#define OBJECTS_CLASS_START_BIT 27
 
 #define OBJECTS_INDEX_MASK      0x0000ffff
-#define OBJECTS_NODE_MASK       0x03ff0000
-#define OBJECTS_CLASS_MASK      0xfc000000
+#define OBJECTS_NODE_MASK       0x00ff0000
+#define OBJECTS_API_MASK        0x07000000
+#define OBJECTS_CLASS_MASK      0xf8000000
 
 #define OBJECTS_INDEX_VALID_BITS  0x0000ffff
-#define OBJECTS_NODE_VALID_BITS   0x000003ff
-#define OBJECTS_CLASS_VALID_BITS  0x000000cf
+#define OBJECTS_NODE_VALID_BITS   0x000000ff
+#define OBJECTS_API_VALID_BITS    0x00000007
+#define OBJECTS_CLASS_VALID_BITS  0x0000001f
 
 /*
  *  This enumerated type is used in the class field of the object ID.
  */
 
+#define OBJECTS_NO_CLASS 0
+
 typedef enum {
-  OBJECTS_NO_CLASS                    =  0,
-  OBJECTS_INTERNAL_THREADS            =  1,
-  OBJECTS_RTEMS_TASKS                 =  2,
-  OBJECTS_POSIX_THREADS               =  3,
-  OBJECTS_ITRON_TASKS                 =  4,
-  OBJECTS_RTEMS_TIMERS                =  5,
-  OBJECTS_RTEMS_SEMAPHORES            =  6,
-  OBJECTS_RTEMS_MESSAGE_QUEUES        =  7,
-  OBJECTS_RTEMS_PARTITIONS            =  8,
-  OBJECTS_RTEMS_REGIONS               =  9,
-  OBJECTS_RTEMS_PORTS                 = 10,
-  OBJECTS_RTEMS_PERIODS               = 11,
-  OBJECTS_RTEMS_EXTENSIONS            = 12,
-  OBJECTS_POSIX_KEYS                  = 13,
-  OBJECTS_POSIX_INTERRUPTS            = 14,
-  OBJECTS_POSIX_MESSAGE_QUEUE_FDS     = 15,
-  OBJECTS_POSIX_MESSAGE_QUEUES        = 16,
-  OBJECTS_POSIX_MUTEXES               = 17,
-  OBJECTS_POSIX_SEMAPHORES            = 18,
-  OBJECTS_POSIX_CONDITION_VARIABLES   = 19,
-  OBJECTS_ITRON_EVENTFLAGS            = 10,
-  OBJECTS_ITRON_MAILBOXES             = 21,
-  OBJECTS_ITRON_MESSAGE_BUFFERS       = 22,
-  OBJECTS_ITRON_PORTS                 = 23,
-  OBJECTS_ITRON_SEMAPHORES            = 24,
-  OBJECTS_ITRON_VARIABLE_MEMORY_POOLS = 25,
-  OBJECTS_ITRON_FIXED_MEMORY_POOLS    = 26
-} Objects_Classes;
- 
-#define OBJECTS_CLASSES_FIRST               OBJECTS_NO_CLASS
-#define OBJECTS_CLASSES_LAST                OBJECTS_ITRON_FIXED_MEMORY_POOLS
-#define OBJECTS_CLASSES_FIRST_THREAD_CLASS  OBJECTS_INTERNAL_THREADS
-#define OBJECTS_CLASSES_LAST_THREAD_CLASS   OBJECTS_ITRON_TASKS
+  OBJECTS_NO_API       = 0,
+  OBJECTS_INTERNAL_API = 1,
+  OBJECTS_CLASSIC_API  = 2,
+  OBJECTS_POSIX_API    = 3,
+  OBJECTS_ITRON_API    = 4
+} Objects_APIs;
+
+#define OBJECTS_APIS_LAST OBJECTS_ITRON_API
+
+typedef enum {
+  OBJECTS_INTERNAL_NO_CLASS =  0,
+  OBJECTS_INTERNAL_THREADS  =  1,
+  OBJECTS_INTERNAL_MUTEXES  =  2
+} Objects_Internal_API;
+
+#define OBJECTS_INTERNAL_CLASSES_LAST OBJECTS_INTERNAL_MUTEXES
+
+typedef enum {
+  OBJECTS_CLASSIC_NO_CLASS     = 0,
+  OBJECTS_RTEMS_TASKS          = 1,
+  OBJECTS_RTEMS_TIMERS         = 2,
+  OBJECTS_RTEMS_SEMAPHORES     = 3,
+  OBJECTS_RTEMS_MESSAGE_QUEUES = 4,
+  OBJECTS_RTEMS_PARTITIONS     = 5,
+  OBJECTS_RTEMS_REGIONS        = 6,
+  OBJECTS_RTEMS_PORTS          = 7,
+  OBJECTS_RTEMS_PERIODS        = 8,
+  OBJECTS_RTEMS_EXTENSIONS     = 9
+} Objects_Classic_API;
+
+#define OBJECTS_RTEMS_CLASSES_LAST OBJECTS_RTEMS_EXTENSIONS
+
+typedef enum {
+  OBJECTS_POSIX_NO_CLASS            = 0,
+  OBJECTS_POSIX_THREADS             = 1,
+  OBJECTS_POSIX_KEYS                = 2,
+  OBJECTS_POSIX_INTERRUPTS          = 3,
+  OBJECTS_POSIX_MESSAGE_QUEUE_FDS   = 4,
+  OBJECTS_POSIX_MESSAGE_QUEUES      = 5,
+  OBJECTS_POSIX_MUTEXES             = 6,
+  OBJECTS_POSIX_SEMAPHORES          = 7,
+  OBJECTS_POSIX_CONDITION_VARIABLES = 8
+} Objects_POSIX_API;
+
+#define OBJECTS_POSIX_CLASSES_LAST OBJECTS_POSIX_CONDITION_VARIABLES
+
+typedef enum {
+  OBJECTS_ITRON_NO_CLASS              = 0,
+  OBJECTS_ITRON_TASKS                 = 1,
+  OBJECTS_ITRON_EVENTFLAGS            = 2,
+  OBJECTS_ITRON_MAILBOXES             = 3,
+  OBJECTS_ITRON_MESSAGE_BUFFERS       = 4,
+  OBJECTS_ITRON_PORTS                 = 5,
+  OBJECTS_ITRON_SEMAPHORES            = 6,
+  OBJECTS_ITRON_VARIABLE_MEMORY_POOLS = 7,
+  OBJECTS_ITRON_FIXED_MEMORY_POOLS    = 8
+} Objects_ITRON_API;
+
+#define OBJECTS_ITRON_CLASSES_LAST OBJECTS_ITRON_FIXED_MEMORY_POOLS
 
 /*
  *  This enumerated type lists the locations which may be returned
@@ -129,6 +162,15 @@ typedef enum {
   OBJECTS_REMOTE = 1,         /* object is remote */
   OBJECTS_ERROR  = 2          /* id was invalid */
 }  Objects_Locations;
+
+/*
+ *  The following type defines the callout used when a local task
+ *  is extracted from a remote thread queue (i.e. it's proxy must
+ *  extracted from the remote queue).
+ */
+
+typedef void ( *Objects_Thread_queue_Extract_callout )( void * );
+
 
 /*
  *  The following defines the Object Control Block used to manage
@@ -147,7 +189,8 @@ typedef struct {
  */
 
 typedef struct {
-  Objects_Classes   the_class;          /* Class of this object */
+  Objects_APIs      the_api;            /* API of this object */
+  unsigned32        the_class;          /* class of this object */
   Objects_Id        minimum_id;         /* minimum valid id of this type */
   Objects_Id        maximum_id;         /* maximum valid id of this type */
   unsigned32        maximum;            /* maximum number of objects */
@@ -156,15 +199,16 @@ typedef struct {
   unsigned32        size;               /* size of the objects */
   Objects_Control **local_table;
   Objects_Name     *name_table;
-  Chain_Control    *global_table;       /* pointer to global table */
   Chain_Control     Inactive;           /* chain of inactive ctl blocks */
   unsigned32        inactive;           /* number of objects on the InActive list */
   unsigned32       *inactive_per_block; /* used to release a block */
   void            **object_blocks;      /* the object memory to remove */
   boolean           is_string;          /* TRUE if names are strings */
   unsigned32        name_length;        /* maximum length of names */
-  boolean           is_thread;          /* TRUE if these are threads */
-                                        /*   irregardless of API */
+  Objects_Thread_queue_Extract_callout *extract;
+#if defined(RTEMS_MULTIPROCESSING)
+  Chain_Control    *global_table;       /* pointer to global table */
+#endif
 }   Objects_Information;
 
 /*
@@ -176,13 +220,13 @@ SCORE_EXTERN unsigned32  _Objects_Local_node;
 SCORE_EXTERN unsigned32  _Objects_Maximum_nodes;
 
 /*
- *  The following is the list of information blocks for each object
+ *  The following is the list of information blocks per API for each object
  *  class.  From the ID, we can go to one of these information blocks,
  *  and obtain a pointer to the appropriate object control block.
  */
 
-SCORE_EXTERN Objects_Information 
-    *_Objects_Information_table[OBJECTS_CLASSES_LAST + 1];
+SCORE_EXTERN Objects_Information
+    **_Objects_Information_table[OBJECTS_APIS_LAST + 1];
 
 /*
  *  The following defines the constant which may be used
@@ -208,8 +252,8 @@ SCORE_EXTERN Objects_Information
 #define OBJECTS_ID_INITIAL_INDEX   (0)
 #define OBJECTS_ID_FINAL_INDEX     (0xffff)
 
-#define OBJECTS_ID_INITIAL(_class, _node) \
-  _Objects_Build_id( (_class), (_node), OBJECTS_ID_INITIAL_INDEX )
+#define OBJECTS_ID_INITIAL(_api, _class, _node) \
+  _Objects_Build_id( (_api), (_class), (_node), OBJECTS_ID_INITIAL_INDEX )
 
 #define OBJECTS_ID_FINAL           ((Objects_Id)~0)
 
@@ -268,13 +312,17 @@ void _Objects_Shrink_information(
 
 void _Objects_Initialize_information (
   Objects_Information *information,
-  Objects_Classes      the_class,
-  boolean              supports_global,
+  Objects_APIs         the_api,
+  unsigned32           the_class,
   unsigned32           maximum,
   unsigned32           size,
   boolean              is_string,
-  unsigned32           maximum_name_length,
-  boolean              is_task
+  unsigned32           maximum_name_length
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  boolean              supports_global,
+  Objects_Thread_queue_Extract_callout *extract
+#endif
 );
 
 /*PAGE
@@ -460,6 +508,13 @@ Objects_Control *_Objects_Get_by_index (
   Objects_Id           id,
   Objects_Locations   *location
 );
+
+Objects_Control *_Objects_Get_no_protection(
+  Objects_Information *information,
+  Objects_Id           id,
+  Objects_Locations   *location
+);
+
 /*
  *  _Objects_Get_next
  *

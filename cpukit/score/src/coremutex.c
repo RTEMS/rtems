@@ -32,20 +32,16 @@
  *
  *  Input parameters: 
  *    the_mutex             - the mutex control block to initialize
- *    the_class             - the API class of the object
  *    the_mutex_attributes  - the mutex attributes specified at create time
  *    initial_lock          - mutex initial lock or unlocked status
- *    proxy_extract_callout - MP specific extract callout
  *
  *  Output parameters:  NONE
  */
 
 void _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,
-  Objects_Classes               the_class,
   CORE_mutex_Attributes        *the_mutex_attributes,
-  unsigned32                    initial_lock,
-  Thread_queue_Extract_callout  proxy_extract_callout
+  unsigned32                    initial_lock
 )
 {
 
@@ -84,11 +80,9 @@ void _CORE_mutex_Initialize(
 
   _Thread_queue_Initialize(
     &the_mutex->Wait_queue,
-    the_class,
     _CORE_mutex_Is_fifo( the_mutex_attributes ) ?
       THREAD_QUEUE_DISCIPLINE_FIFO : THREAD_QUEUE_DISCIPLINE_PRIORITY,
     STATES_WAITING_FOR_MUTEX,
-    proxy_extract_callout,
     CORE_MUTEX_TIMEOUT
   );
 }

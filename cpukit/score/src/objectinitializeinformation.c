@@ -32,37 +32,42 @@
  *
  *  Input parameters:
  *    information         - object information table
- *    the_class           - object class
- *    supports_global     - TRUE if this is a global object class
  *    maximum             - maximum objects of this class
  *    size                - size of this object's control block
  *    is_string           - TRUE if names for this object are strings
  *    maximum_name_length - maximum length of each object's name
- *    is_thread           - TRUE if this class is threads
+ *    When multiprocessing is configured, 
+ *      supports_global     - TRUE if this is a global object class
+ *      extract_callout     - pointer to threadq extract callout if MP
  *
  *  Output parameters:  NONE
  */
 
 void _Objects_Initialize_information(
   Objects_Information *information,
-  Objects_Classes      the_class,
-  boolean              supports_global,
+  Objects_APIs         the_api,
+  unsigned32           the_class,
   unsigned32           maximum,
   unsigned32           size,
   boolean              is_string,
-  unsigned32           maximum_name_length,
-  boolean              is_thread
+  unsigned32           maximum_name_length
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  boolean              supports_global,
+  Objects_Thread_queue_Extract_callout *extract
+#endif
 )
 {
   static Objects_Control *null_local_table = NULL;
-  
   unsigned32       minimum_index;
-  unsigned32       index;
   unsigned32       name_length;
+#if defined(RTEMS_MULTIPROCESSING)
+  unsigned32       index;
+#endif
 
+  information->the_api            = the_api;
   information->the_class          = the_class; 
   information->is_string          = is_string; 
-  information->is_thread          = is_thread;
   
   information->local_table        = 0;
   information->name_table         = 0;
@@ -75,7 +80,7 @@ void _Objects_Initialize_information(
    *  Set the entry in the object information table.
    */
 
-  _Objects_Information_table[ the_class ] = information;
+  _Objects_Information_table[ the_api ][ the_class ] = information;
 
   /*
    *  Set the size of the object
@@ -110,7 +115,7 @@ void _Objects_Initialize_information(
   else                minimum_index = 1;
 
   information->minimum_id =
-    _Objects_Build_id( the_class, _Objects_Local_node, minimum_index );
+    _Objects_Build_id( the_api, the_class, _Objects_Local_node, minimum_index );
 
   /*
    *  Calculate the maximum name length
@@ -153,6 +158,9 @@ void _Objects_Initialize_information(
    *  Take care of multiprocessing
    */
 
+#if defined(RTEMS_MULTIPROCESSING)
+  information->extract = extract;
+
   if ( supports_global == TRUE && _System_state_Is_multiprocessing ) {
 
     information->global_table =
@@ -165,4 +173,5 @@ void _Objects_Initialize_information(
    }
    else
      information->global_table = NULL;
+#endif
 }

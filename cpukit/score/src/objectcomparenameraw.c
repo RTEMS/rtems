@@ -37,13 +37,21 @@ boolean _Objects_Compare_name_raw(
   unsigned32  length
 )
 {
+#if 0
   unsigned32 *name_1_p = (unsigned32 *) name_1;
   unsigned32 *name_2_p = (unsigned32 *) name_2;
   unsigned32  tmp_length = length / OBJECTS_NAME_ALIGNMENT;
+#endif
  
+  if ( name_1 == name_2 )
+    return TRUE;
+  return FALSE;
+
+#if 0
   while ( tmp_length-- )
     if ( *name_1_p++ != *name_2_p++ )
       return FALSE;
 
   return TRUE;
+#endif
 }

@@ -28,7 +28,7 @@ OBJECT_C_FILES = object.c objectallocate.c objectallocatebyindex.c \
     objectcopynameraw.c objectcopynamestring.c objectextendinformation.c \
     objectfree.c objectget.c objectgetisr.c objectgetbyindex.c \
     objectgetnext.c objectinitializeinformation.c objectnametoid.c \
-    objectshrinkinformation.c
+    objectshrinkinformation.c objectgetnoprotection.c
 
 THREAD_C_FILES = thread.c threadchangepriority.c threadclearstate.c \
     threadclose.c threadcreateidle.c threaddelayended.c threaddispatch.c \
@@ -44,8 +44,7 @@ THREADQ_C_FILES = threadq.c threadqdequeue.c threadqdequeuefifo.c \
     threadqdequeuepriority.c threadqenqueue.c threadqenqueuefifo.c \
     threadqenqueuepriority.c threadqextract.c threadqextractfifo.c \
     threadqextractpriority.c threadqextractwithproxy.c threadqfirst.c \
-    threadqfirstfifo.c threadqfirstpriority.c threadqflush.c \
-    threadqtimeout.c
+    threadqfirstfifo.c threadqfirstpriority.c threadqflush.c threadqtimeout.c
 
 TOD_C_FILES = coretod.c coretodset.c coretodtickle.c coretodtoseconds.c \
     coretodvalidate.c

@@ -90,13 +90,18 @@ void _Thread_Handler_initialization(
  
   _Objects_Initialize_information(
     &_Thread_Internal_information,
+    OBJECTS_INTERNAL_API,
     OBJECTS_INTERNAL_THREADS,
-    FALSE,
     ( _System_state_Is_multiprocessing ) ?  2 : 1,
     sizeof( Thread_Control ),
-    TRUE,
-    8,
-    TRUE
+                                /* size of this object's control block */
+    TRUE,                       /* TRUE if names for this object are strings */
+    8                           /* maximum length of each object's name */
+#if defined(RTEMS_MULTIPROCESSING)
+    ,
+    FALSE,                      /* TRUE if this is a global object class */
+    NULL                        /* Proxy extraction support callout */
+#endif
   );
 
 }

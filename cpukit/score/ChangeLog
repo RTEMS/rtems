@@ -1,3 +1,34 @@
+2002-07-01    Joel Sherrill <joel@OARcorp.com>
+
+	* Mega patch merge to change the format of the object IDs to
+	loosen the dependency between the SCORE and the various APIs.
+	There was considerable work to simplify the object name management
+        and it appears that the name_table field is no longer needed.
+	This patch also includes the addition of the internal mutex
+	which is currently only used to protect some types of allocation
+	and deallocation.  This significantly can reduce context 
+	switch latency under certain circumstances.  In particular,
+	some heap/region operations were O(n) and had dispatching
+	disabled.  This should help enormously.  With this merge,
+	the patch is not as clean as it should be.  In particular,
+	the documentation has not been modified to reflect the new object
+	ID layout, the IDs in the test screens are not updated, and
+	_Objects_Get_information needs to be a real routine not inlined.
+	As part of this patch a lot of MP code for thread/proxy blocking
+	was made conditional and cleaned up.
+	* include/Makefile.am, include/rtems/score/coremsg.h,
+	include/rtems/score/coremutex.h, include/rtems/score/coresem.h,
+	include/rtems/score/object.h, include/rtems/score/threadq.h,
+	inline/rtems/score/object.inl, inline/rtems/score/thread.inl,
+	macros/rtems/score/object.inl, src/Makefile.am, src/coremsg.c,
+	src/coremutex.c, src/coresem.c, src/mpci.c,
+	src/objectcomparenameraw.c, src/objectextendinformation.c,
+	src/objectinitializeinformation.c, src/objectnametoid.c,
+	src/thread.c, src/threadclose.c, src/threadget.c, src/threadq.c,
+	src/threadqextractwithproxy.c: Modified as part of above.
+	* include/rtems/score/apimutex.h, src/objectgetnoprotection.c: New
+	files.
+
 2001-05-17	Joel Sherrill <joel@OARcorp.com>
 
 	* macros/rtems/score/thread..inl: Implemented missing routines

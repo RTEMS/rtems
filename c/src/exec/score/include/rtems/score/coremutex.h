@@ -134,10 +134,8 @@ typedef struct {
 
 void _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,
-  Objects_Classes               the_class,
   CORE_mutex_Attributes        *the_mutex_attributes,
-  unsigned32                    initial_lock,
-  Thread_queue_Extract_callout  proxy_extract_callout
+  unsigned32                    initial_lock
 );
  
 /*

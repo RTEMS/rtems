@@ -26,7 +26,7 @@
  *  _Thread_queue_Extract_with_proxy
  *
  *  This routine extracts the_thread from the_thread_queue
- *  and insures that if there is a proxy for this task on 
+ *  and ensures that if there is a proxy for this task on 
  *  another node, it is also dealt with.
  *
  *  XXX
@@ -37,8 +37,8 @@ boolean _Thread_queue_Extract_with_proxy(
 )
 {
   States_Control                state;
-  Objects_Classes               the_class;
-  Thread_queue_Extract_callout  proxy_extract_callout;
+  Objects_Information          *the_information;
+  Objects_Thread_queue_Extract_callout  proxy_extract_callout;
 
   state = the_thread->current_state;
 
@@ -46,9 +46,10 @@ boolean _Thread_queue_Extract_with_proxy(
     if ( _States_Is_waiting_for_rpc_reply( state ) &&
          _States_Is_locally_blocked( state ) ) {
 
-      the_class = _Objects_Get_class( the_thread->Wait.id );
+      the_information = _Objects_Get_information( the_thread->Wait.id );
 
-      proxy_extract_callout = _Thread_queue_Extract_table[ the_class ];
+      proxy_extract_callout = 
+        (Objects_Thread_queue_Extract_callout) the_information->extract;
 
       if ( proxy_extract_callout )
         (*proxy_extract_callout)( the_thread );

@@ -71,18 +71,14 @@ void _MPCI_Handler_initialization(
 
   _CORE_semaphore_Initialize(
     &_MPCI_Semaphore,
-    OBJECTS_NO_CLASS,         /* free floating semaphore */
     &attributes,              /* the_semaphore_attributes */
-    0,                        /* initial_value */
-    NULL                      /* proxy_extract_callout */
+    0                         /* initial_value */
   );
 
   _Thread_queue_Initialize(
     &_MPCI_Remote_blocked_threads,
-    OBJECTS_NO_CLASS,
     THREAD_QUEUE_DISCIPLINE_FIFO,
     STATES_WAITING_FOR_RPC_REPLY,
-    NULL,
     timeout_status
   );
 }
