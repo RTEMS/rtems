@@ -1,8 +1,8 @@
 *** TEST 15 ***
 INIT - rtems_partition_create - partition 1
 INIT - rtems_partition_create - partition 2
-TA1 - rtems_partition_ident - partition 1 id = 20010001
-TA1 - rtems_partition_ident - partition 2 id = 20010002
+TA1 - rtems_partition_ident - partition 1 id = 2a010001
+TA1 - rtems_partition_ident - partition 2 id = 2a010002
 TA1 - rtems_partition_get_buffer - buffer 1 from partition 1  - 0x00000000
 TA1 - rtems_partition_get_buffer - buffer 2 from partition 1  - 0x00000200
 TA1 - rtems_partition_get_buffer - buffer 1 from partition 2  - 0x00000000

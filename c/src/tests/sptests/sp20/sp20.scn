@@ -1,21 +1,21 @@
 *** TEST 20 ***
-TA1 - rtems_rate_monotonic_create id = 0x2c010001
-TA1 - rtems_rate_monotonic_ident id = 0x2c010001
+TA1 - rtems_rate_monotonic_create id = 0x42010001
+TA1 - rtems_rate_monotonic_ident id = 0x42010001
 TA1 - (0x2c010001) period 2
-TA2 - rtems_rate_monotonic_create id = 0x2c010002
-TA2 - rtems_rate_monotonic_ident id = 0x2c010002
+TA2 - rtems_rate_monotonic_create id = 0x42010002
+TA2 - rtems_rate_monotonic_ident id = 0x42010002
 TA2 - (0x2c010002) period 2
-TA3 - rtems_rate_monotonic_create id = 0x2c010003
-TA3 - rtems_rate_monotonic_ident id = 0x2c010003
+TA3 - rtems_rate_monotonic_create id = 0x42010003
+TA3 - rtems_rate_monotonic_ident id = 0x42010003
 TA3 - (0x2c010003) period 2
-TA4 - rtems_rate_monotonic_create id = 0x2c010004
-TA4 - rtems_rate_monotonic_ident id = 0x2c010004
+TA4 - rtems_rate_monotonic_create id = 0x42010004
+TA4 - rtems_rate_monotonic_ident id = 0x42010004
 TA4 - (0x2c010004) period 2
-TA5 - rtems_rate_monotonic_create id = 0x2c010005
-TA5 - rtems_rate_monotonic_ident id = 0x2c010005
+TA5 - rtems_rate_monotonic_create id = 0x42010005
+TA5 - rtems_rate_monotonic_ident id = 0x42010005
 TA5 - (0x2c010005) period 100
-TA6 - rtems_rate_monotonic_create id = 0x2c010006
-TA6 - rtems_rate_monotonic_ident id = 0x2c010006
+TA6 - rtems_rate_monotonic_create id = 0x42010006
+TA6 - rtems_rate_monotonic_ident id = 0x42010006
 TA6 - (0x2c010006) period 0
 TA5 - PERIODS CHECK OK (1)
 TA5 - PERIODS CHECK OK (2)

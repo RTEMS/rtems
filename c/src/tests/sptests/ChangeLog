@@ -1,3 +1,9 @@
+2002-11-14	Joel Sherrill <joel@OARcorp.com>
+
+	* sp02/sp02.scn, sp15/sp15.scn, sp16/sp16.scn, sp20/sp20.scn,
+	sp22/sp22.scn, sp23/sp23.scn, sp25/sp25.scn, sp31/sp31.scn: Per PR239
+	update the IDs in the screens.
+
 2002-10-21	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* .cvsignore: Reformat.

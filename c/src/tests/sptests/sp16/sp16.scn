@@ -1,5 +1,5 @@
 *** TEST 16 ***
-TA1 - rtems_region_ident - rnid => 24010002
+TA1 - rtems_region_ident - rnid => 32010002
 TA1 - rtems_region_get_segment - wait on 100 byte segment from region 2
 TA1 - got segment from region 2 - 0x00000f78
 TA1 - rtems_region_get_segment - wait on 3K segment from region 3

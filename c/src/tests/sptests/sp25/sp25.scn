@@ -2,7 +2,7 @@ NOTE: Addresses vary between BSPs.  Please check that the addresses
       printed are reasonable for your target board and that the
       segments noted as being returned were allocated from the region.
 *** TEST 25 ***
-TA1 - rtems_region_ident - 0x24010002
+TA1 - rtems_region_ident - 0x32010002
 TA1 - rtems_region_get_segment - wait on 64 byte segment from region 1
 TA1 - got segment from region 1 - 0xXXXXXXXX
 TA1 - rtems_region_get_segment - wait on 128 byte segment from region 1
