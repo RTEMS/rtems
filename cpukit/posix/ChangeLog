@@ -1,3 +1,8 @@
+2000-12-19	Joel Sherrill <joel@OARcorp.com>
+
+	* src/pthreadgetschedparam.c: Do not set output parameters if
+	the pointers are NULL.
+
 2000-12-06	Joel Sherrill <joel@OARcorp.com>
 
 	* src/pthreadgetcpuclockid.c: Add include of <rtems/system.h> to

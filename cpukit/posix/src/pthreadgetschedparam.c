@@ -40,10 +40,13 @@ int pthread_getschedparam(
       return ESRCH;
     case OBJECTS_LOCAL:
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-      *policy = api->schedpolicy;
-      *param  = api->schedparam;
-      param->sched_priority =
-        _POSIX_Priority_From_core( the_thread->current_priority );
+      if ( policy )
+        *policy = api->schedpolicy;
+      if ( param ) {
+        *param  = api->schedparam;
+        param->sched_priority =
+          _POSIX_Priority_From_core( the_thread->current_priority );
+      }
       _Thread_Enable_dispatch();
       return 0;
   }
