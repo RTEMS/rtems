@@ -1,20 +1,6 @@
-# Default target settings
-#
-# Some of these values are redefined in the target specific .cfg files.
-#
-# Created by Jiri Gaisler, 16-03-97  (who is owed a debt of gratitude
-#   for converting RTEMS to autoconf.  Thanks. --joel)
 #
 #  $Id$
 #
-
-include $(RTEMS_ROOT)/../make/target.cfg
-include $(RTEMS_ROOT)/make/host.cfg
-
-include $(RTEMS_ROOT)/make/bsp.cfg
-
-## Target compiler config file, if any
-CONFIG.CC = $(RTEMS_ROOT)/make/compilers/gcc-target-default.cfg
 
 # Base name of start file
 START_BASE=start

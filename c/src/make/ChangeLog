@@ -1,3 +1,9 @@
+2000-09-12	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* leaf.cfg: Remove include ${CONFIG.CC}, add MANAGERS, START_FILE,
+	LINKCMDS handling.
+	* default.cfg.in: Remove everything but START_BASE.
+
 2000-08-10	Joel Sherrill <joel@OARcorp.com>
 
 	* ChangeLog: New file.
