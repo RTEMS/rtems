@@ -1,3 +1,7 @@
+2005-01-05	Ralf Corsepius <ralf.corsepius@rtems.org>
+
+	* aclocal/rtems-flags.new: New (moved from ../aclocal).
+
 2004-11-22	Ralf Corsepius <ralf_corsepius@rtems.org>
 
 	* aclocal/enable-itron.m4: New (moved from ../aclocal).
