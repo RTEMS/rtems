@@ -29,7 +29,6 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/fatal.h>
 #include <rtems/core/isr.h>
 #include <rtems/core/context.h>
 #include <rtems/core/thread.h>

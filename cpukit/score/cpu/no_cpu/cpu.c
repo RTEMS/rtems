@@ -14,7 +14,6 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/fatal.h>
 #include <rtems/core/isr.h>
 #include <rtems/core/wkspace.h>
 

@@ -20,7 +20,6 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/fatal.h>
 #include <rtems/core/isr.h>
 
 /*  _CPU_Initialize
