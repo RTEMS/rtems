@@ -2,7 +2,7 @@
 @c  $Id$
 @c
 
-@chapter Building RTEMS 4.5
+@chapter Building RTEMS
 
 Building any package in a cross-compilation fashion can be difficult,
 but configuring and building a real-time operating system that 
@@ -15,7 +15,7 @@ was changed to be more compatible with GNU standards.  This transition
 has lead to a number of subtle differences.  
 
 This section of the FAQ tries to address the more frequently asked
-questions about building RTEMS 4.5.  Thanks to Ralf Corsepius for
+questions about building RTEMS.  Thanks to Ralf Corsepius for
 compiling this section from excerpts from various postings to the
 rtems-users mailing list.
 
@@ -38,7 +38,7 @@ rtems-users mailing list.
 @subsection Do I need autoconf and automake to build RTEMS?
 
 No, you don't.  Or to be more accurate, you won't need them until you
-modify something in RTEMS's Makefile.ams/configure.ins or start to develop
+modify something in RTEMS's Makefile.ams/configure.acs or start to develop
 with RTEMS.
  
 I.e.  you won't need them to get started, but you will need them when getting
@@ -51,9 +51,8 @@ using a native gcc is highly recommended.
 
 @subsection Can I use a non-gcc cross-toolchain?
 
-
 Generally speaking, it should be possible.
-However, most RTEMS-4.5 development has taken place using gcc-2.9x, therefore
+However, most RTEMS development has taken place using gcc, therefore
 getting it working may not be easy.
 
 @subsection Do I need gcc-2.9x for cross compilation?
@@ -80,14 +79,14 @@ to build them from source are available from
 
 You are probably trying to build within the source-tree.
 RTEMS requires a separate build directory.  I.e.  if the
-sources are located at @code{/usr/local/src/rtems-4.5.0},
+sources are located at @code{/usr/local/src/rtems-@value{VERSION}},
 use something similar to this to configure RTEMS: 
 
 @example
 cd somewhere
 mkdir build
 cd build
-/usr/local/src/rtems-4.5.0/configure [options]
+/usr/local/src/rtems-@value{VERSION}/configure [options]
 @end example
 
 @subsection Why can I not build RTEMS inside of the source tree?
@@ -123,20 +122,23 @@ All target tools are supposed to be prefixed with a target-canonicalization
 prefix, eg.  i386-rtems-gcc, m68k-rtems-ld are target tools.
 
 Host tools are supposed not to be prefixed.
-e.g.: cc, ld, gcc etc.
+e.g.: cc, ld, gcc, autoconf, automake, aclocal etc.
 
 If using OAR Corporation's rpms for the toolchain, simply prepend
 @code{/opt/rtems/bin} to @code{$PATH}.
 
 @subsection Can I build RTEMS Canadian Cross?
 
-Unfortunately, not (yet).
+RTEMS >= 4.6.0 configuration is prepared for building RTEMS Canadian Cross,
+however building RTEMS Canadian Cross is known to be in it's infancy, so
+your mileage may vary (See @code{README.cdn-X} in the toplevel directory of
+RTEMS's source tree for details.)
 
 @subsection Building RTEMS is slow
 
 RTEMS has become fairly large :).
 
-In comparison to building previous versions, building RTEMS-4.5 is slow,
+In comparison to building previous versions, building RTEMS is slow,
  but that's the tradeoff to pay for simplier and safer configuration.
 
 If using Cygwin, remember that Cygwin is emulating one OS ontop of another
@@ -166,11 +168,15 @@ make VARIANT=DEBUG all
 make VARIANT=PROFILE all
 @end example
 
+
 @subsection Building RTEMS does not honor XXX_FOR_TARGET
 
-RTEMS currently does not support passing flags from the environment.
-Instead add a @code{make/custom/mybsp.cfg} for your bsp and set
-appropriate flags there.
+RTEMS < 4.6.0 did not support passing flags from the environment.
+If using RTEMS < 4.6.0, editing your BSP's @code{make/custom/mybsp.cfg} and
+setting appropriate flags there is required.
+
+RTEMS >= 4.6.0 honors several XXX_FOR_TARGET environment variables. 
+Run @code{<path-to-rtems>/configure --help} for a full list of supported variables.
 
 @subsection Editing Makefile.in Makefile configure
 
@@ -184,10 +190,10 @@ RTEMS uses automake, therefore @b{never}, @b{ever}, @b{ever}
 edit Makefile.ins, Makefiles, configure or other auto* generated files.
 Changes to them will be swapped away soon and will get lost.
 
-Instead edit the sources (eg.: Makefile.ams, configure.ins) auto* generated
+Instead edit the sources (eg.: Makefile.ams, configure.acs) auto* generated
 files are generated from directly.
 
-If sending patches always send Makefile.ams and configure.ins.
+If sending patches always send Makefile.ams and configure.acs.
 Sending Makefile.ins, Makefiles and configure scripts is pretty much useless.
 If sending larger patches, consider removing all auto* generated files
 by running @code{bootstrap -c} (cf. See @ref{./bootstrap})
@@ -233,7 +239,7 @@ configurable entities.
  
 
 Each BSP now has its own configure script.
-I highly recommend you look at the Makefile.am's, configure.in, of a similar
+I highly recommend you look at the Makefile.am's, configure.ac, of a similar
 BSP.  You might even want to consider running "bootstrap -c" from the top of
 the tree and looking at what is left.  bootstrap (cf. @ref{./bootstrap})
 generates/removes all automatically generated files.
@@ -327,15 +333,15 @@ updated.
 Once all autoconf/automake generated files are present, you will rarely
 need to run @code{bootstrap}, because automake automatically updates
 generated files when it detects some files need to be updated (Cf.
-@ref{--enable-maintainer-mode}).
+@ref{configure --enable-maintainer-mode}).
 
-@subsection --enable-maintainer-mode
+@subsection configure --enable-maintainer-mode
 
 When working within the source-tree, consider to append 
 @code{--enable-maintainer-mode} to the options passed to configure RTEMS.
 
 @example
-<path>/rtems-4.5.0/configure <options> --enable-maintainer-mode
+<path>/rtems-@value{VERSION}/configure <options> --enable-maintainer-mode
 @end example
 
 This will enable the maintainer-mode in automake generated Makefiles, which
@@ -344,3 +350,12 @@ files.  I.e.  auto* generated files will get automatically updated.
 
 Configuring RTEMS in maintainer-mode will require to have autoconf, automake
 and underlying tools installed (Cf. @ref{Required Tools}).
+
+@subsection configure.ac vs. configure.in
+
+autoconf < 2.50 used the name @code{configure.in} for it's input files. 
+autoconf >= 2.50 recommends using the name @code{configure.ac}, instead.
+
+RTEMS > 4.5.0 applies autoconf >= 2.50, therefore all former RTEMS's
+@code{configure.in}'s have been renamed into @code{configure.ac} and 
+adapted to autoconf >= 2.50 demands.

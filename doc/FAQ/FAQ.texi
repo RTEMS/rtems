@@ -82,7 +82,7 @@ Common questions have been divided into the following categories.
 * Basic Information::
 * General Development Tool Hints::
 * RTEMS Concepts::
-* Building RTEMS 4.5::
+* Building RTEMS::
 * BSP Questions::
 * Debugging Hints::
 * Free Software that Works with RTEMS::
