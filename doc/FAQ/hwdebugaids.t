@@ -13,27 +13,32 @@ debugging assistants that are available.
 
 @section MC683xx BDM Support for GDB
 
-Eric Norum (eric@@skatter.usask.ca) wrote a driver for a parallel
-port interface to a BDM module.  He and Chris Johns (ccj@@acm.org)
-have put together a package containing everything you need to
-use this.  From the README: "This
-package contains everything you need to be able to run GDB on
+Eric Norum (eric@@skatter.usask.ca) has a driver for a parallel
+port interface to a BDM module.  This driver has a long history 
+and is based on a driver by Gunter Magin (gunter@@skil.camelot.de)
+which in turn was based on BD32 for DOS by Scott Howard.  Eric Norum
+and Chris Johns (ccj@@acm.org) have put together a package containing
+everything you need to use this BDM driver including software, PCB layouts,
+and machining drawings.  From the README:
+
+"This package contains everything you need to be able to run GDB on
 Linux and control a Motorola CPU32+ (68360) or Coldfire (5206, 5206e, or
-5207) target through a standard PC parallel port." Information on
-this is available at the following URL:
+5207) target through a standard PC parallel port."
+
+Information on this BDM driver is available at the following URL:
+
 http://www.calm.hw.ac.uk/davidf/coldfire/gdb-bdm-linux.htm.
 
 Peter Shoebridge (peter@@zeecube.com) has ported the Linux
-parallel port BDM driver by Eric Norum to Windows NT.  It is
+parallel port BDM driver from Eric Norum to Windows NT.  It is
 available at http://www.zeecube.com/bdm.
-
 
 The efi332 project has a home-built BDM module and gdb driver for 
 Linux.  See http://egi332.eng.ohio-state.edu/efi332/hardware.html)
 for details.
 
-http://cmp.felk.cvut.cz/~pisa/m683xx/bdm_driver.html
-
+Pavel Pisa (pisa@@cmp.felk.cvut.cz) has one available at
+http://cmp.felk.cvut.cz/~pisa/m683xx/bdm_driver.html.
 
 Huntsville Microsystems (HMI) has GDB support for their BDM module
 available upon request.  It is also available from their ftp site:
@@ -50,6 +55,7 @@ Information in this section from:
 @item W Gerald Hicks <wghicks@@bellsouth.net>
 @item Chris Johns <cjohns@@plessey.com.au>
 @item Eric Norum <eric@@skatter.usask.ca>
+@item Gunter Magin <magin@@skil.camelot.de>
 
 @end itemize
 

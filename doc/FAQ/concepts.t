@@ -10,6 +10,10 @@
 
 The questions in this category are hints that help basic understanding.
 
-@section RTEMS Wokspace vs. Program Heap
+@section RTEMS Workspace versus Program Heap
 
+The RTEMS Workspace is used to allocate space for objects created
+by RTEMS such as tasks, semaphores, message queues, etc..  It is
+primarily used during system initialization although task stacks
+and message buffer areas are also allocated from here. 
 @ref{How do I determine how much memory is left?}.
