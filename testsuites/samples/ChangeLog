@@ -1,3 +1,8 @@
+2001-10-25	Eric Norum <eric.norum@usask.ca>
+
+	* cdtest/system.h: Configure 1 semaphore.  This probably covers
+	up not defining one for the GCC C++ Run-Time Libraries.
+
 2001-10-17	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* paranoia/Makefile.am: Use LD_LIBS = -lm to make automake-1.5 happy.
