@@ -1,0 +1,18 @@
+#! /bin/sh
+
+cfiles=`ls -1 $1/*.[ch] $1/*.inl 2>/dev/null | grep -v "/no-"`
+adafiles=`ls -1 $1/*.ad[sb] 2>/dev/null`
+
+if [ "x${cfiles}" != x ] ; then
+  /avenger/afcc/textools/src2html/ctags-new -d -t -w -y ${cfiles}
+  #mv tags tags.c
+fi
+
+if [ "x${adafiles}" != x ] ; then
+  /usr1/tmp/build/lib-src/ctags -d -t -x --no-warn ${adafiles} 
+fi 
+# cat tags
+#mv tags tags.ada
+#
+#cat tags.c tags.ada 
+#rm -f tags.c tags.ada
