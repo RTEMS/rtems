@@ -77,7 +77,7 @@ int pppifunit;			/* Interface unit number */
 char hostname[MAXNAMELEN];	/* Our hostname */
 static char ppp_devnam[MAXPATHLEN]; /* name of PPP tty (maybe ttypx) */
 
-int ttyfd;			/* Serial port file descriptor */
+/* int pppd_ttyfd;			* Serial port file descriptor */
 int baud_rate;			/* Actual bits/second for serial device */
 int hungup;			/* terminal has been hung up */
 int privileged;			/* we're running as real uid root */
@@ -232,7 +232,7 @@ pppdmain(argc, argv)
     for (;;) {
 
 	need_holdoff = 1;
-	ttyfd = -1;
+	pppd_ttyfd = -1;
 	real_ttyfd = -1;
 	pppd_status = EXIT_OK;
 	++unsuccess;
@@ -264,9 +264,9 @@ pppdmain(argc, argv)
 		/* If the user specified the device name, become the
 		   user before opening it. */
 		int err;
-		ttyfd = open(devnam, O_NONBLOCK | O_RDWR, 0);
+		pppd_ttyfd = open(devnam, O_NONBLOCK | O_RDWR, 0);
 		err = errno;
-		if (ttyfd >= 0) {
+		if (pppd_ttyfd >= 0) {
 		    break;
 		}
 		errno = err;
@@ -277,8 +277,8 @@ pppdmain(argc, argv)
 		if (!persist || err != EINTR)
 		    goto fail;
 	    }
-	    if ((fdflags = fcntl(ttyfd, F_GETFL)) == -1
-		|| fcntl(ttyfd, F_SETFL, fdflags & ~O_NONBLOCK) < 0)
+	    if ((fdflags = fcntl(pppd_ttyfd, F_GETFL)) == -1
+		|| fcntl(pppd_ttyfd, F_SETFL, fdflags & ~O_NONBLOCK) < 0)
 		warn("Couldn't reset non-blocking mode on device: %m");
 
 	    /*
@@ -291,9 +291,9 @@ pppdmain(argc, argv)
 	     * successfully to the modem with CLOCAL clear and CD down,
 	     * we could clear CLOCAL at this point.
 	     */
-	    set_up_tty(ttyfd, ((connector != NULL && connector[0] != 0)
+	    set_up_tty(pppd_ttyfd, ((connector != NULL && connector[0] != 0)
 			       || initializer != NULL));
-	    real_ttyfd = ttyfd;
+	    real_ttyfd = pppd_ttyfd;
 	}
 
 	/* run connection script */
@@ -308,7 +308,7 @@ pppdmain(argc, argv)
 	    }
 
 	    if (initializer && initializer[0]) {
-		if (device_script(ttyfd, DIALER_INIT, initializer) < 0) {
+		if (device_script(pppd_ttyfd, DIALER_INIT, initializer) < 0) {
 		    error("Initializer script failed");
 		    pppd_status = EXIT_INIT_FAILED;
 		    goto fail;
@@ -320,7 +320,7 @@ pppdmain(argc, argv)
 	    }
 
 	    if (connector && connector[0]) {
-		if (device_script(ttyfd, DIALER_CONNECT, connector) < 0) {
+		if (device_script(pppd_ttyfd, DIALER_CONNECT, connector) < 0) {
 		    error("Connect script failed");
 		    pppd_status = EXIT_CONNECT_FAILED;
 		    goto fail;
@@ -360,12 +360,12 @@ pppdmain(argc, argv)
 
 	/* run welcome script, if any */
 	if (welcomer && welcomer[0]) {
-	    if (device_script(ttyfd, DIALER_WELCOME, welcomer) < 0)
+	    if (device_script(pppd_ttyfd, DIALER_WELCOME, welcomer) < 0)
 		warn("Welcome script failed");
 	}
 
 	/* set up the serial device as a ppp interface */
-	fd_ppp = establish_ppp(ttyfd);
+	fd_ppp = establish_ppp(pppd_ttyfd);
 	if (fd_ppp < 0) {
 	    pppd_status = EXIT_FATAL_ERROR;
 	    goto disconnect;
@@ -415,7 +415,7 @@ pppdmain(argc, argv)
 	clean_check();
 	if (demand)
 	    restore_loop();
-	disestablish_ppp(ttyfd);
+	disestablish_ppp(pppd_ttyfd);
 	fd_ppp = -1;
 	if (!hungup)
 	    lcp_lowerdown(0);
@@ -429,7 +429,7 @@ pppdmain(argc, argv)
 	    new_phase(PHASE_DISCONNECT);
 	    if (real_ttyfd >= 0)
 		set_up_tty(real_ttyfd, 1);
-	    if (device_script(ttyfd, DIALER_DISCONNECT, disconnect_script) < 0) {
+	    if (device_script(pppd_ttyfd, DIALER_DISCONNECT, disconnect_script) < 0) {
 		warn("disconnect script failed");
 	    } else {
 		info("Serial link disconnected.");
@@ -685,7 +685,7 @@ cleanup()
     sys_cleanup();
 
     if (fd_ppp >= 0)
-	disestablish_ppp(ttyfd);
+	disestablish_ppp(pppd_ttyfd);
     if (real_ttyfd >= 0)
 	close_tty();
 

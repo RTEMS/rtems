@@ -163,7 +163,7 @@ static int use_env          = 0;
 static int exit_code        = 0;
 static char *phone_num      = (char *) 0;
 static char *phone_num2     = (char *) 0;
-static int ttyfd;
+/* static */ int pppd_ttyfd;
 static int timeout   = DEFAULT_CHAT_TIMEOUT;
 
 #ifdef TERMIOS
@@ -246,7 +246,7 @@ int chatmain(int fd, int mode, char *pScript)
 
   /* initialize exit code */
   exit_code = 0;
-  ttyfd     = fd;
+  pppd_ttyfd     = fd;
 
   script=pScript;
   
@@ -271,14 +271,14 @@ int chatmain(int fd, int mode, char *pScript)
       }
     }
   }
-  ttyfd = (int)-1;
+  pppd_ttyfd = (int)-1;
 
   return ( exit_code );
 }
 
 void break_sequence()
 {
-  tcsendbreak(ttyfd, 0);
+  tcsendbreak(pppd_ttyfd, 0);
 }
 
 /*
@@ -699,7 +699,7 @@ static int get_char()
 
 	while(tries)
 	{
-	    status = read(ttyfd, &c, 1);
+	    status = read(pppd_ttyfd, &c, 1);
 	    switch (status) {
 		   case 1:
 				return ((int)c & 0x7F);
@@ -715,7 +715,7 @@ int c;
 {
   char ch = c;
 
-  return(write(ttyfd, &ch, 1));
+  return(write(pppd_ttyfd, &ch, 1));
 }
 
 static int write_char (c)
@@ -791,10 +791,10 @@ register char *in_string;
 
     memset(temp2, 0, sizeof(temp2));
 
-    tcgetattr(ttyfd, &tios);
+    tcgetattr(pppd_ttyfd, &tios);
     tios.c_cc[VMIN] = 0;
     tios.c_cc[VTIME] = timeout*10/MAX_TIMEOUTS;
-    tcsetattr(ttyfd, TCSANOW, &tios);
+    tcsetattr(pppd_ttyfd, TCSANOW, &tios);
 		
     string = clean(in_string, 0);
     len = strlen(string);

@@ -141,7 +141,7 @@ extern int	pppd_kill_link;	/* Signal to terminate processing loop */
 extern int	hungup;		/* Physical layer has disconnected */
 extern int	pppifunit;	/* Interface unit number */
 extern char	ifname[];	/* Interface name */
-extern int	ttyfd;		/* Serial device file descriptor */
+extern int	pppd_ttyfd;	/* Serial device file descriptor */
 extern char	hostname[];	/* Our hostname */
 extern u_char	outpacket_buf[]; /* Buffer for outgoing packets */
 extern int	pppd_phase;		/* Current state of link - see values below */
@@ -301,7 +301,7 @@ void new_phase __P((int));	/* signal start of new phase */
 /* Procedures exported from utils.c. */
 void log_packet __P((u_char *, int, char *, int));
 				/* Format a packet and log it with syslog */
-void print_string __P((char *, int,  void (*) (void *, char *, ...),
+void print_string __P((void *, int,  void (*) (void *, char *, ...),
 		void *));	/* Format a string for output */
 int slprintf __P((char *, int, char *, ...));		/* sprintf++ */
 int vslprintf __P((char *, int, char *, va_list));	/* vsprintf++ */

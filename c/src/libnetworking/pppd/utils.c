@@ -468,13 +468,14 @@ pr_log __V((void *arg, char *fmt, ...))
  * printer.
  */
 void
-print_string(p, len, printer, arg)
-    char *p;
+print_string(p_arg, len, printer, arg)
+    void *p_arg;
     int len;
     void (*printer) __P((void *, char *, ...));
     void *arg;
 {
     int c;
+    unsigned char *p = (unsigned char *)p_arg;
 
     printer(arg, "\"");
     for (; len > 0; --len) {

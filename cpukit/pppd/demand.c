@@ -45,7 +45,7 @@
 
 static const char rcsid[] = RCSID;
 
-static char *frame;
+static unsigned char *frame;
 static int framelen;
 static int framemax;
 static int escape_flag;

@@ -488,7 +488,7 @@ output(unit, p, len)
 	dbglog("sent %P", p, len);
 /*    printf("sent packet [%d]\n", len); */
 
-    if (write(ttyfd, p, len) < 0) {
+    if (write(pppd_ttyfd, p, len) < 0) {
 	if (errno != EIO)
 	    error("write: %m");
     }
@@ -531,7 +531,7 @@ read_packet(buf)
 {
     int len;
 
-    if ((len = read(ttyfd, buf, PPP_MTU + PPP_HDRLEN)) < 0) {
+    if ((len = read(pppd_ttyfd, buf, PPP_MTU + PPP_HDRLEN)) < 0) {
 	if (errno == EWOULDBLOCK || errno == EINTR) len = -1;
 	/*fatal("read: %m"); */
     }
@@ -649,7 +649,7 @@ ccp_test(unit, opt_ptr, opt_len, for_transmit)
     data.ptr = opt_ptr;
     data.length = opt_len;
     data.transmit = for_transmit;
-    if (ioctl(ttyfd, PPPIOCSCOMPRESS, (caddr_t) &data) >= 0)
+    if (ioctl(pppd_ttyfd, PPPIOCSCOMPRESS, (caddr_t) &data) >= 0)
 	return 1;
     return (errno == ENOBUFS)? 0: -1;
 }

@@ -1,3 +1,11 @@
+2005-01-20	Joel Sherrill <joel@OARcorp.com>
+
+	PR 736/pppd
+	* libnetworking/pppd/chat.c, libnetworking/pppd/demand.c,
+	libnetworking/pppd/pppd.h, libnetworking/pppd/rtemsmain.c,
+	libnetworking/pppd/sys-rtems.c, libnetworking/pppd/utils.c: ttyfd
+	should not be static and should have a name more specific to pppd.
+
 2005-01-07	Ralf Corsepius <ralf.corsepius@rtems.org>
 
 	* libchip/Makefile.am, libnetworking/pppd/Makefile.am,
