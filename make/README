@@ -4,21 +4,26 @@
 
     make/README
 
-    This file describes the layout and conventions of the make tree used in
-    the RTEMS software project and others.
-    All of these "make" trees are substantially similar; however this
-    file documents the current state of the rtems Makefile tree.
+    This file describes the layout and conventions of the application
+    makefile support for RTEMS applications.  Internally, RTEMS uses
+    GNU-style autoconf/automake Makefiles as much as possible to 
+    ease integration with other GNU tools.
 
-    This make tree was developed originally to simplify porting projects
-    between various os's.  The primary goals are:
+    All of these "make" trees are substantially similar; however this
+    file documents the current state of the RTEMS Application Makefile
+    support.
+
+    This make tree is based on a build system originally developed
+    to simplify porting projects between various OS's.  The primary
+    goals were:
 
         .  simple *and* customizable individual makefiles
 
         .  use widely available GNU make.  There is no pre-processing or
             automatic generation of Makefiles.
 
-        .  Same makefiles work on *many* host os's due to portability
-            of GNU make and the host os config files.
+        .  Same makefiles work on *many* host OS's due to portability
+            of GNU make and the host OS config files.
 
         .  Support for different compilers and operating systems
             on a per-user basis.  Using the same sources (including
@@ -34,6 +39,13 @@
             have been removed whenever possible.  No matter what your
             PATH variable is set to, you should get the same thing
             when you 'make' as everyone else on the project.
+
+    This Makefile system has evolved into its present form and as it
+    exists in RTEMS today, its sole goal is to build RTEMS applications.
+    The use of these Makefiles hides the complexity of producing
+    executables for a wide variety of embedded CPU families and target
+    BSPs.  Switching between RTEMS BSPs is accomplished via setting
+    the environment variable "RTEMS_MAKEFILE_PATH."
 
     This description attempts to cover all aspects of the Makefile tree.  Most
     of what is described here is maintained automatically by the configuration
@@ -88,7 +100,7 @@
     combining source and directories (that make(1) would be expected to
     recurse into) in one source directory.  Ie., a directory in the source
     tree may contain EITHER source files OR recursive sub directories, but NOT
-    both.
+    both.  This assumption is generally shared with GNU automake.
 
     Variants (where objects go)
     ---------------------------
@@ -96,30 +108,30 @@
         All binary targets are placed in a sub-directory whose name is (for
         example):
 
-            o-pc386/                -- binaries (no debug, no profile)
-            o-pc386-debug/          -- debug binaries
-            o-pc386-profile/        -- profiling binaries
+            o-optimize/       -- optimized binaries
+            o-debug/          -- debug binaries
+            o-profile/        -- profiling binaries
 
-        Using the template Makefiles, this will all happen automatically.
+        Using the template Makefiles, this will all happen automatically. 
+        The contents of these directories are specific to a BSP.
 
-        Within a Makefile, the ${ARCH} variable is set to o-pc386,
-        o-pc386-debug, etc., as appropriate.
+        Within a Makefile, the ${ARCH} variable is set to o-optimize,
+        o-debug, etc., as appropriate.
 
-        Typing 'make' will place objects in o-pc386.
-        'make debug' will place objects in o-pc386-debug.
-        'make profile' will place objects in o-pc386-profile.
-
-        NOTE:  For RTEMS work, the word 'pc386' is the specified
-               RTEMS_BSP (specified in the modules file)
+        HISTORICAL NOTE: Prior to version 4.5, the name of the sub-directory
+          in which objects were placed included the BSP name.
+           
+        Typing 'make' will place objects in o-optimize.
+        'make debug' will place objects in o-debug.
+        'make profile' will place objects in o-profile.
 
         The debug and profile targets are equivalent to 'all' except that
         CFLAGS and/or LDFLAGS are modified as per the compiler config file for
         debug and profile support.
 
-        The targets debug, profile, etc., can be
-        invoked recursively at the directory make level.  So from the top of a
-        tree, one could install a debug version of everything under that point
-        by:
+        The targets debug, profile, etc., can be invoked recursively at
+        the directory make level.  So from the top of a tree, one could
+        install a debug version of everything under that point by:
 
             $ cd src/lib
             $ gmake debug
@@ -131,14 +143,14 @@
         For example, the following fragments link the normal, debug, or
         profile version of "libmine.a" as appropriate:
 
-            LDLIBS   += $(LIBMINE)
+            LD_LIBS   += $(LIBMINE)
             LIBMINE = ../libmine/${ARCH}/libmine.a
 
             ${ARCH}/pgm: $(LIBMINE) ${OBJS}
-                $(LINK.c) -o $@ ${OBJS} $(LDLIBS)
+                $(make-exe)
 
         If we do 'gmake debug', then the library in
-        ../libmine/sparc-debug/libmine.a will be linked in.  If $(LIBMINE)
+        ../libmine/o-debug/libmine.a will be linked in.  If $(LIBMINE)
         might not exist (or might be out of date) at this point, we could add
 
             ${LIBMINE}: FORCEIT
@@ -165,9 +177,6 @@
         the included config files:
 
             clean                   -- delete all targets
-            clobber                 -- 'clean' plus delete sccs'd files
-            lint                    -- run lint or lint-like tool
-            get                     -- "sccs get" all sources
             depend                  -- build a make dependency file
             "variant targets"       -- special variants, see below
 
@@ -186,9 +195,9 @@
 
         All Makefiles include a customization file which is used to select
         compiler and host operating system.  The environment variable
-        RTEMS_CUSTOM must point to this file; eg:
+        RTEMS_MAKEFILE_PATH must point to the directory containing this file; eg:
 
-                /.../make/custom/pc386.cfg
+                export RTEMS_MAKEFILE_PATH=/.../pc386/
 
         All leaf Makefile's also include either 'make/leaf.cfg' (or
         'make/lib.cfg' for building libraries).  These config files provide
@@ -208,14 +217,6 @@
             personality modules specified by the customization file for:
                 compiler            ( make/compilers/??.cfg )
 
-
-        private customization files
-        ---------------------------
-
-            [ $(RTEMS_CUSTOM) ]
-
-            Your own private configuration file.  Specifies which of the above
-            files you want to include.
 
         generic rules file
         ------------------
@@ -257,29 +258,32 @@
     -----------------------
 
         Variables you have to set in the environment or in your Makefile.
-        Note: the rtems module files set RTEMS_ROOT and RTEMS_CUSTOM
+        Note: the RTEMS module files set RTEMS_ROOT and RTEMS_CUSTOM
         for you.
 
-        Environment Variables
-        ---------------------
+        Makefile Variables
+        ------------------
 
-            RTEMS_BSP      -- name of your 'bsp' eg: pc386
+            RTEMS_BSP        -- name of your 'bsp' eg: pc386, mvme136
+
+            RTEMS_CPU        -- CPU architecture e.g.: i386, m68k
+
+            RTEMS_CPU_FAMILY -- CPU model e.g.: i486dx, m68020
 
             RTEMS_ROOT     -- The root of your source tree.
                               All other file names are derived from this.
-                              [ eg: % setenv RTEMS_ROOT $HOME/work/rtems ]
+                              [ eg: % setenv RTEMS_ROOT $HOME/work/RTEMS ]
 
             RTEMS_CUSTOM   -- name of your config files in make/custom
                               Example:
                                  $(RTEMS_ROOT)/make/custom/$(RTEMS_BSP).cfg
 
-            RTEMS_GNUTOOLS -- root of the gcc tools for the target
-
             The value RTEMS_ROOT is used in the custom
             files to generate the make(1) variables:
 
-                PROJECT_ROOT
                 PROJECT_RELEASE
+                PROJECT_BIN
+                PROJECT_INCLUDE
                 PROJECT_TOOLS
 
             etc., which are used within the make config files themselves.
@@ -289,7 +293,7 @@
         Preset variables
         ----------------
 
-            Aside from command names set by the os and compiler config files,
+            Aside from command names set by the OS and compiler config files,
             a number of MAKE variables are automatically set and maintained by
             the config files.
 
@@ -305,16 +309,12 @@
                         -- directory for build environment commands
                            [ eg: $(PROJECT_ROOT)/build-tools ]
 
-            TARCH       -- ${TARGET_ARCH}
-                           [ eg: o-forc386 ]
-                           obsolete and should not be referenced
-
             ARCH        -- target sub-directory for object code
-                           [ eg: o-pc386 or o-pc386-debug ]
+                           [ eg: o-optimize or o-debug ]
 
             VARIANTS    -- full list of all possible values for $(ARCH);
                            used mainly for 'make clean'
-                           [ eg: "o-pc386 o-pc386-debug o-pc386-profile" ]
+                           [ eg: "o-optimize o-debug o-profile" ]
 
             VARIANT_VA  -- Variant name.
                            Normally "", but for 'make debug' it is "debug",
@@ -355,14 +355,6 @@
                                 -- ld option for dynamic libraries
                                     -Bdynamic or -dn (svr4)
 
-            LIB_SOCKET
-                                -- ld(1) -l option(s) to provide
-                                    socket support.
-
-            LIB_MATH            -- ld(1) -l option(s) to provide
-                                    math library.
-
-
             Makefile Variables
             ------------------
 
@@ -388,10 +380,6 @@
                 CPPFLAGS    -- -I include directories.
                                leaf Makefiles.
                                [ eg: CPPFLAGS += -I../include ]
-
-                YFLAGS      -- Yacc flags.
-                               leaf Makefiles.
-                               [ eg: YFLAGS += -v ]
 
                 LD_PATHS    -- arguments to -L for ld.
                                Will be prefixed with '-L' or '-L ' as appropriate
@@ -434,12 +422,6 @@
                                Since 'make clobber' includes 'make clean',
                                you don't need to duplicate items in both.
 
-                TARGET_ARCH -- target architecture (eg: o-pc386)
-                               leaf makefiles only.
-                               Should be specified before 'include leaf.cfg'.
-                               Only needs to be specified if your target is
-                               different from output of `arch`.
-
             Command names
             -------------
 
@@ -448,9 +430,9 @@
 
                     MAKE,INSTALL,SHELL
 
-                    ECHO,CAT,RM,CP,MV,LN,MKDIR,CHMOD
+                    ECHO,CAT,CP,MV,LN,MKDIR,CHMOD
 
-                    ED,SED
+                    SED
 
                     CC,CPP,AS,AR,LD,NM,SIZE,RANLIB,MKLIB,
                     YACC,LEX,LINT,CTAGS,ETAGS
