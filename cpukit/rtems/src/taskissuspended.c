@@ -73,4 +73,6 @@ rtems_status_code rtems_task_is_suspended(
       _Thread_Enable_dispatch();
       return RTEMS_ALREADY_SUSPENDED;
   }
+
+  return RTEMS_INTERNAL_ERROR;   /* unreached - only to remove warnings */
 }
