@@ -36,6 +36,13 @@
 * $Id$
 *
 * $Log$
+* Revision 1.3  2003/01/20 20:33:17  joel
+* 2003-01-20	Duane Gustavus <duane@unt.edu>
+*
+* 	* console/sci.c, include/mrm332.h, startup/linkcmds,
+* 	startup/linkcmds_ROM: Various updates to make this run properly
+* 	from ROM.
+*
 * Revision 1.2  2002/11/04 14:26:47  joel
 * 2002-11-04	Joel Sherrill <joel@OARcorp.com>
 *
@@ -1281,7 +1288,7 @@ static void SciSetBaud(unsigned32 rate)
 
     // calculate the register value as a float and convert to an int
     // set baud rate - you must define the system clock constant
-    // see efi332.h for an example
+    // see mrm332.h for an example
 
     value = ( (unsigned16) ( SYS_CLOCK / rate / 32.0 + 0.5 ) & 0x1fff );
 

@@ -1,5 +1,10 @@
 2004-01-07	Joel Sherrill <joel@OARcorp.com>
 
+	* times, console/sci.c: Remove efi68k and efi332 references as they are
+	no longer in the tree.
+
+2004-01-07	Joel Sherrill <joel@OARcorp.com>
+
 	* timer/timer.c: Remove efi68k and efi332 references as they are no
 	longer in the tree.
 

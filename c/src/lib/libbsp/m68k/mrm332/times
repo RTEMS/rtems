@@ -1,14 +1,14 @@
 #
-#  Timing Test Suite Results for the EFI332 BSP
+#  Timing Test Suite Results for the MRM332 BSP
 #
 #  $Id$
 #
 
-NOTE:  This BSP is used submitted and no information is currently available. 
+NOTE:  This BSP is user submitted and no information is currently available. 
 
 TBD: MATT - update this with real times!
 
-Board:                EFI332 
+Board:                MRM332 
 CPU:                  68332
 Clock Speed:          20 Mhz
 Memory Configuration: SRAM, DRAM, cache, etc
