@@ -22,10 +22,10 @@
 #include <bsp.h>
 #include <c4xio.h>
 
-rtems_unsigned32 Timer_interrupts;
+uint32_t         Timer_interrupts;
 rtems_boolean Timer_driver_Find_average_overhead;
 
-static unsigned32 start;
+static uint32_t   start;
 
 void Timer_initialize( void )
 {
@@ -65,8 +65,8 @@ void Timer_initialize( void )
 
 int Read_timer( void )
 {
-  rtems_unsigned32 clicks;
-  rtems_unsigned32 total;
+  uint32_t         clicks;
+  uint32_t         total;
   int            tmp;
 
   /*

@@ -35,7 +35,7 @@ rtems_cpu_table   Cpu_table;
  */
  
 void bsp_postdriver_hook(void);
-void bsp_libc_init( void *, unsigned32, int );
+void bsp_libc_init( void *, uint32_t, int );
 extern void bsp_spurious_initialize();
 
 /*
@@ -48,7 +48,7 @@ extern void bsp_spurious_initialize();
 void bsp_pretasking_hook(void)
 {
   extern void *_HeapStart;
-  extern rtems_unsigned32 _HeapSize;
+  extern uint32_t         _HeapSize;
 
   bsp_libc_init(&_HeapStart, (unsigned int) &_HeapSize, 0);
 
@@ -74,7 +74,7 @@ extern void C4X_BSP_output_char(char c);
 void bsp_start( void )
 {
   extern void *_WorkspaceBase;
-  extern rtems_unsigned32 _WorkspaceMax;
+  extern uint32_t         _WorkspaceMax;
   /*
    * Set up our hooks
    * Make sure libc_init is done before drivers initialized so that
