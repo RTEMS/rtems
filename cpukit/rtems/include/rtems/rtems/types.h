@@ -23,7 +23,7 @@ extern "C" {
  *  RTEMS basic type definitions
  */
 
-#include <rtems/stdint.h>
+#include <stdint.h>
 
 /* backward compatibility types */
 typedef uint8_t        rtems_unsigned8;
