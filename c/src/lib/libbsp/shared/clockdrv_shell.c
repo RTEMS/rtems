@@ -56,7 +56,7 @@ rtems_isr Clock_isr(
     Clock_driver_ticks += 1;
     rtems_clock_tick();
   } while ( _Thread_Executing == _Thread_Idle &&
-          _Thread_Heir == _Thread_Executing)
+          _Thread_Heir == _Thread_Executing);
 
   Clock_driver_support_at_tick();
   return;

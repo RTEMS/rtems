@@ -1,5 +1,9 @@
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
+	* clockdrv_shell.c: Fixed syntax error in fast idle support.
+
+2001-01-03	Joel Sherrill <joel@OARcorp.com>
+
 	* clockdrv_shell.c: Added fast idle mode which is enabled by defining
 	CLOCK_DRIVER_USE_FAST_IDLE.
 	* console-polled.c: Added console_initialize_hardware() hook.
