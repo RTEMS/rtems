@@ -1,4 +1,9 @@
 
+2000-11-02	Joel Sherrill <joel@OARcorp.com>
+
+	* include/rtems/system.h: Add prototypes for POSIX_MP_NOT_IMPLEMENTED(),
+	POSIX_NOT_IMPLEMENTED(), POSIX_BOTTOM_REACHED() removed from newlib.
+
 2000-10-18	Nick Simon <Nick.SIMON@syntegra.bt.co.uk>
 
 	* src/heapgetinfo.c, include/rtems/score/heap.h, src/Makefile.am:

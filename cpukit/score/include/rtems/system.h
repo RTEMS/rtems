@@ -46,7 +46,7 @@ extern "C" {
 #endif
 
 /*
- *  The following insures that all data is declared in the space
+ *  The following ensures that all data is declared in the space
  *  of the initialization routine for either the Initialization Manager
  *  or the initialization file for the appropriate API.  It is 
  *  referenced as "external" in every other file.
@@ -107,6 +107,16 @@ extern "C" {
 # endif
 #else
 # define RTEMS_INLINE_ROUTINE
+#endif
+
+/*
+ *  The following are used by the POSIX implementation to catch bad paths.
+ */
+
+#ifdef POSIX_API_INIT
+int POSIX_MP_NOT_IMPLEMENTED( void );
+int POSIX_NOT_IMPLEMENTED( void );
+int POSIX_BOTTOM_REACHED( void );
 #endif
 
 /*
