@@ -88,7 +88,15 @@
 #define sr  REG (sr)
 #define vbr REG (vbr)
 #define dfc REG (dfc)
-#define sfc REG(sfc)
+#define sfc REG (sfc)
+
+/* mcf52xx special regs */
+#define cacr    REG (cacr)
+#define acr0    REG (acr0)
+#define acr1    REG (acr1)
+#define rambar0 REG (rambar0)
+#define mbar    REG (mbar)
+
 
 #define fp0 REG (fp0)
 #define fp1 REG (fp1)
