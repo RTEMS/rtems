@@ -14,7 +14,7 @@
 @c
 
 @c
-@c   Master file for the Motorola MC68xxx C Applications Supplement
+@c   Master file for the Motorola MC68xxx Applications Supplement
 @c
 
 @include ../common/setup.texi
@@ -23,7 +23,7 @@
 @ifinfo
 @format
 START-INFO-DIR-ENTRY
-* RTEMS Motorola MC68xxx C Applications Supplement (m68k):
+* RTEMS Motorola MC68xxx Applications Supplement (m68k):
 END-INFO-DIR-ENTRY
 @end format
 @end ifinfo
@@ -40,14 +40,14 @@ END-INFO-DIR-ENTRY
 @c
 @c  I don't really like having a short title page.  --joel
 @c
-@c @shorttitlepage RTEMS Motorola MC68xxx C Applications Supplement 
+@c @shorttitlepage RTEMS Motorola MC68xxx Applications Supplement 
 
 @setchapternewpage odd
-@settitle RTEMS Motorola MC68xxx C Applications Supplement 
+@settitle RTEMS Motorola MC68xxx Applications Supplement 
 @titlepage
 @finalout
 
-@title RTEMS Motorola MC68xxx C Supplement 
+@title RTEMS Motorola MC68xxx Applications Supplement 
 @subtitle Edition @value{edition}, for RTEMS 4.1.0
 @sp 1
 @subtitle @value{update-month}
@@ -75,7 +75,7 @@ END-INFO-DIR-ENTRY
 @node Top, Preface, (dir), (dir)
 @top c_m68k
 
-This is the online version of the RTEMS Motorola MC68xxx C 
+This is the online version of the RTEMS Motorola MC68xxx
 Applications Supplement.
 
 @menu

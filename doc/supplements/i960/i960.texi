@@ -14,7 +14,7 @@
 @c
 
 @c
-@c   Master file for the Intel i960 C Applications Supplement
+@c   Master file for the Intel i960 Applications Supplement
 @c
 
 @include ../common/setup.texi
@@ -23,7 +23,7 @@
 @ifinfo
 @format
 START-INFO-DIR-ENTRY
-* RTEMS Intel i960 C Applications Supplement (i960):
+* RTEMS Intel i960 Applications Supplement (i960):
 END-INFO-DIR-ENTRY
 @end format
 @end ifinfo
@@ -40,14 +40,14 @@ END-INFO-DIR-ENTRY
 @c
 @c  I don't really like having a short title page.  --joel
 @c
-@c @shorttitlepage RTEMS Intel i960 C Applications Supplement 
+@c @shorttitlepage RTEMS Intel i960 Applications Supplement 
 
 @setchapternewpage odd
-@settitle RTEMS Intel i960 C Applications Supplement 
+@settitle RTEMS Intel i960 Applications Supplement 
 @titlepage
 @finalout
 
-@title RTEMS Intel i960 C Supplement 
+@title RTEMS Intel i960 Applications Supplement 
 @subtitle Edition @value{edition}, for RTEMS 4.1.0
 @sp 1
 @subtitle @value{update-month}
@@ -74,7 +74,7 @@ END-INFO-DIR-ENTRY
 @node Top, Preface, (dir), (dir)
 @top c_i960
 
-This is the online version of the RTEMS Intel i960 C 
+This is the online version of the RTEMS Intel i960
 Applications Supplement.
 
 @menu

@@ -14,7 +14,7 @@
 @c
 
 @c
-@c   Master file for the Hewlett Packard PA-RISC C Applications Supplement
+@c   Master file for the Hewlett Packard PA-RISC Applications Supplement
 @c
 
 @include ../common/setup.texi
@@ -23,7 +23,7 @@
 @ifinfo
 @format
 START-INFO-DIR-ENTRY
-* RTEMS Hewlett Packard PA-RISC C Applications Supplement (hppa1_1):
+* RTEMS Hewlett Packard PA-RISC Applications Supplement (hppa1_1):
 END-INFO-DIR-ENTRY
 @end format
 @end ifinfo
@@ -40,14 +40,14 @@ END-INFO-DIR-ENTRY
 @c
 @c  I don't really like having a short title page.  --joel
 @c
-@c @shorttitlepage RTEMS Hewlett Packard PA-RISC C Applications Supplement 
+@c @shorttitlepage RTEMS Hewlett Packard PA-RISC Applications Supplement 
 
 @setchapternewpage odd
-@settitle RTEMS Hewlett Packard PA-RISC C Applications Supplement 
+@settitle RTEMS Hewlett Packard PA-RISC Applications Supplement 
 @titlepage
 @finalout
 
-@title RTEMS Hewlett Packard PA-RISC C Supplement 
+@title RTEMS Hewlett Packard PA-RISC Applications Supplement 
 @subtitle Edition @value{edition}, for RTEMS 4.1.0
 @sp 1
 @subtitle @value{update-month}
@@ -74,7 +74,7 @@ END-INFO-DIR-ENTRY
 @node Top, Preface, (dir), (dir)
 @top c_hppa1_1
 
-This is the online version of the RTEMS Hewlett Packard PA-RISC C 
+This is the online version of the RTEMS Hewlett Packard PA-RISC
 Applications Supplement.
 
 @menu

@@ -25,7 +25,7 @@ An RTEMS Board Support Package (BSP) must be designed
 to support a particular processor and target board combination.
 This chapter presents a discussion of PA-RISC specific BSP
 issues.   For more information on developing a BSP, refer to the
-chapter titled Board Support Packages in the RTEMS C
+chapter titled Board Support Packages in the RTEMS
 Applications User's Guide.
 
 @ifinfo
@@ -63,7 +63,7 @@ cache, then it should be be done during the reset application
 initialization code.
 
 Finally, the requirements in the Board Support
-Packages chapter of the C Applications User's Manual for the
+Packages chapter of the Applications User's Manual for the
 reset code which is executed before the call to initialize
 executive must be satisfied.
 

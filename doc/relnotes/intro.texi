@@ -204,15 +204,15 @@ the following documents:
 @itemize @bullet
 @item C Applications User's Guide
 
-@item Intel i386 C Applications Supplement
+@item Intel i386 Applications Supplement
 
-@item Intel i960CA C Applications Supplement
+@item Intel i960CA Applications Supplement
 
-@item Motorola MC68xxx C Applications Supplement
+@item Motorola MC68xxx Applications Supplement
 
-@item Hewlett Packard PA-RISC 1.1 C Applications Supplement
+@item Hewlett Packard PA-RISC 1.1 Applications Supplement
 
-@item SPARC C Applications Supplement
+@item SPARC Applications Supplement
 
 @item Development Environment Guide
 

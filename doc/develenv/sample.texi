@@ -25,8 +25,7 @@
 @end ifinfo
 @section Introduction
 
-RTEMS is shipped with the following sample
-applications:
+RTEMS is shipped with the following sample applications:
 
 @itemize @bullet
 @item Hello World - C and Ada
@@ -50,8 +49,8 @@ can be used to test locally developed board support packages and
 device drivers.
 
 The reader should be familiar with the terms used and
-material presented in the RTEMS C Applications User's Guide or
-the RTEMS Ada Applications User's Guide.
+material presented in the RTEMS Applications User's Guide or
+the RTEMS @value{RTEMS-LANGUAGE} Applications User's Guide.
 
 @ifinfo
 @node Sample Applications Hello World, Sample Applications Clock Tick, Sample Applications Introduction, Sample Applications

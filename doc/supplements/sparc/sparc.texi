@@ -14,7 +14,7 @@
 @c
 
 @c
-@c   Master file for the SPARC C Applications Supplement
+@c   Master file for the SPARC Applications Supplement
 @c
 
 @include ../common/setup.texi
@@ -23,7 +23,7 @@
 @ifinfo
 @format
 START-INFO-DIR-ENTRY
-* RTEMS SPARC C Applications Supplement (sparc):
+* RTEMS SPARC Applications Supplement (sparc):
 END-INFO-DIR-ENTRY
 @end format
 @end ifinfo
@@ -40,14 +40,14 @@ END-INFO-DIR-ENTRY
 @c
 @c  I don't really like having a short title page.  --joel
 @c
-@c @shorttitlepage RTEMS SPARC C Applications Supplement 
+@c @shorttitlepage RTEMS SPARC Applications Supplement 
 
 @setchapternewpage odd
-@settitle RTEMS SPARC C Applications Supplement 
+@settitle RTEMS SPARC Applications Supplement 
 @titlepage
 @finalout
 
-@title RTEMS SPARC C Supplement 
+@title RTEMS SPARC Applications Supplement 
 @subtitle Edition @value{edition}, for RTEMS 4.1.0
 @sp 1
 @subtitle @value{update-month}
@@ -74,8 +74,7 @@ END-INFO-DIR-ENTRY
 @node Top, Preface, (dir), (dir)
 @top c_sparc
 
-This is the online version of the RTEMS SPARC C 
-Applications Supplement.
+This is the online version of the RTEMS SPARC Applications Supplement.
 
 @menu
 * Preface::

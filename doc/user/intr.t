@@ -142,7 +142,7 @@ dependent.  RTEMS internally supports 256 interrupt levels which
 are mapped to the processor's interrupt levels.  For specific
 information on the mapping between RTEMS and the target
 processor's interrupt levels, refer to the Interrupt Processing
-chapter of the C Applications Supplement document for a specific
+chapter of the Applications Supplement document for a specific
 target processor.
 
 @ifinfo
@@ -158,7 +158,7 @@ upon completion of the section.  RTEMS has been optimized to
 insure that interrupts are disabled for a minimum length of
 time.  The maximum length of time interrupts are disabled by
 RTEMS is processor dependent and is detailed in the Timing
-Specification chapter of the C Applications Supplement document
+Specification chapter of the Applications Supplement document
 for a specific target processor.
 
 Non-maskable interrupts (NMI) cannot be disabled, and

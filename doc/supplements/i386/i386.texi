@@ -20,7 +20,7 @@
 @c
 
 @c
-@c   Master file for the Intel i386 C Applications Supplement
+@c   Master file for the Intel i386 Applications Supplement
 @c
 
 @include ../common/setup.texi
@@ -29,7 +29,7 @@
 @ifinfo
 @format
 START-INFO-DIR-ENTRY
-* RTEMS Intel i386 C Applications Supplement (i386):
+* RTEMS Intel i386 Applications Supplement (i386):
 END-INFO-DIR-ENTRY
 @end format
 @end ifinfo
@@ -46,14 +46,14 @@ END-INFO-DIR-ENTRY
 @c
 @c  I don't really like having a short title page.  --joel
 @c
-@c @shorttitlepage RTEMS Intel i386 C Applications Supplement 
+@c @shorttitlepage RTEMS Intel i386 Applications Supplement 
 
 @setchapternewpage odd
-@settitle RTEMS Intel i386 C Applications Supplement 
+@settitle RTEMS Intel i386 Applications Supplement 
 @titlepage
 @finalout
 
-@title RTEMS Intel i386 C Supplement 
+@title RTEMS Intel i386 Applications Supplement 
 @subtitle Edition @value{edition}, for RTEMS 4.1.0
 @sp 1
 @subtitle @value{update-month}
@@ -80,7 +80,7 @@ END-INFO-DIR-ENTRY
 @node Top, Preface, (dir), (dir)
 @top c_i386
 
-This is the online version of the RTEMS Intel i386 C 
+This is the online version of the RTEMS Intel i386
 Applications Supplement.
 
 @menu

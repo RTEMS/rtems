@@ -56,7 +56,7 @@ following features:
 This manual describes the usage of RTEMS for
 applications written in the @value{RTEMS-LANGUAGE} programming language.  Those
 implementation details that are processor dependent are provided
-in the C Applications Supplement documents.  A supplement
+in the Applications Supplement documents.  A supplement
 document which addresses specific architectural issues that
 affect RTEMS is provided for each processor type that is
 supported.
@@ -374,7 +374,7 @@ RTEMS to most efficiently meet system requirements while still
 satisfying even the most stringent memory constraints.  As a
 result, the size of the RTEMS executive is application
 dependent.  A worksheet is provided in the Memory Requirements
-chapter of the C Applications Supplement document for a specific
+chapter of the Applications Supplement document for a specific
 target processor.  The worksheet is used to calculate the memory
 requirements of a custom RTEMS run-time environment.  The
 following managers may be optionally excluded:

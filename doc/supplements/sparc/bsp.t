@@ -25,8 +25,8 @@ An RTEMS Board Support Package (BSP) must be designed
 to support a particular processor and target board combination.
 This chapter presents a discussion of SPARC specific BSP issues.
 For more information on developing a BSP, refer to the chapter
-titled Board Support Packages in the RTEMS C Applications User's
-Guide.
+titled Board Support Packages in the RTEMS
+Applications User's Guide.
 
 @ifinfo
 @node Board Support Packages System Reset, Board Support Packages Processor Initialization, Board Support Packages Introduction, Board Support Packages
@@ -77,8 +77,9 @@ and this is to be utilized, then it should be enabled during the
 reset application initialization code.
 
 In addition to the requirements described in the
-Board Support Packages chapter of the C Applications User's
-Manual for the reset code which is executed before the call to
+Board Support Packages chapter of the @value{RTEMS-LANGUAGE}
+Applications User's Manual for the reset code
+which is executed before the call to
 rtems_initialize executive, the SPARC version has the following
 specific requirements:
 

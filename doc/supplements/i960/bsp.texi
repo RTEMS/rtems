@@ -25,7 +25,7 @@ An RTEMS Board Support Package (BSP) must be designed
 to support a particular processor and target board combination.
 This chapter presents a discussion of i960CA specific BSP
 issues.   For more information on developing a BSP, refer to the
-chapter titled Board Support Packages in the RTEMS C
+chapter titled Board Support Packages in the RTEMS
 Applications User's Guide.
 
 @ifinfo

@@ -347,7 +347,7 @@ describe processor dependent information required by RTEMS.
 This table is generally used to supply RTEMS with information
 only known by the Board Support Package.  The contents of this
 table are discussed in the CPU Dependent Information Table
-chapter of the C Applications Supplement document for a specific
+chapter of the Applications Supplement document for a specific
 target processor.
 
 @ifinfo
@@ -916,7 +916,7 @@ This allows the application designer the flexibility to tailor
 RTEMS to most efficiently meet system requirements while still
 satisfying even the most stringent memory constraints.  As
 result, the size of the RTEMS executive is application
-dependent.  A Memory Requirements worksheet is provided in the C
+dependent.  A Memory Requirements worksheet is provided in the
 Applications Supplement document for a specific target
 processor.  This worksheet can be used to calculate the memory
 requirements of a custom RTEMS run-time environment.  To insure
@@ -943,7 +943,7 @@ be in RAM, its code space can be located in either ROM or RAM.
 In addition, the user must allocate RAM for the RTEMS RAM
 Workspace.  The size of this area is application dependent and
 can be calculated using the formula provided in the Memory
-Requirements chapter of the C Applications Supplement document
+Requirements chapter of the Applications Supplement document
 for a specific target processor.
 
 All RTEMS data variables and routine names used by
@@ -973,7 +973,7 @@ the workspace area will result in the fatal_error_occurred
 directive being invoked with the INVALID_ADDRESS error code.
 
 A worksheet is provided in the Memory Requirements
-chapter of the C Applications Supplement document for a specific
+chapter of the Applications Supplement document for a specific
 target processor to assist the user in calculating the minimum
 size of the RTEMS RAM Workspace for each application.  The value
 calculated with this worksheet is the minimum value that should

@@ -25,8 +25,8 @@ An RTEMS Board Support Package (BSP) must be designed
 to support a particular processor and target board combination.
 This chapter presents a discussion of i386 specific BSP issues.
 For more information on developing a BSP, refer to the chapter
-titled Board Support Packages in the RTEMS C Applications User's
-Guide.
+titled Board Support Packages in the RTEMS
+Applications User's Guide.
 
 @ifinfo
 @node Board Support Packages System Reset, Board Support Packages Processor Initialization, Board Support Packages Introduction, Board Support Packages
