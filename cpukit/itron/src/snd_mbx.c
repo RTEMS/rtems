@@ -64,7 +64,7 @@ ER snd_msg(
      break;
   }
 
-  _ITRON_return_errorno( 
+  _ITRON_return_errorno(
      _ITRON_Mailbox_Translate_core_message_queue_return_code( msg_status )
   );
 }

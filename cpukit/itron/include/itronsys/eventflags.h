@@ -39,7 +39,7 @@ typedef struct t_cflg {
 /*
  *  wfmode
  */
- 
+
 #define TWF_ANDW   0x00   /* AND wait */
 #define TWF_ORW    0x02   /* OR wait */
 #define TWF_CLR    0x01   /* clear specification */
@@ -143,4 +143,3 @@ ER ref_flg(
 
 #endif
 /* end of include file */
-

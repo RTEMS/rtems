@@ -48,7 +48,7 @@ ER cre_mbf(
 
   if (pk_cmbf->bufsz < 0 || pk_cmbf->maxmsz < 0)
     return E_PAR;
-    
+
   if (pk_cmbf->bufsz < pk_cmbf->maxmsz)
     return E_PAR;
 
@@ -74,7 +74,7 @@ ER cre_mbf(
 
   _ITRON_Objects_Open( &_ITRON_Message_buffer_Information,
                        &the_message_buffer->Object );
-    
+
   /*
    *  If multiprocessing were supported, this is where we would announce
    *  the existence of the semaphore to the rest of the system.

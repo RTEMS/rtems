@@ -70,4 +70,3 @@ ER _ITRON_Mailbox_Translate_core_message_queue_return_code(
 
 #endif
 /* end of include file */
-

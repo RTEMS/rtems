@@ -58,4 +58,3 @@ void _ITRON_Port_Manager_initialization(
 
 #endif
 /* end of include file */
-

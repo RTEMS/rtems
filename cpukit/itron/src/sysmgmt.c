@@ -73,4 +73,3 @@ ER def_exc(
 {
   return E_OK;
 }
-

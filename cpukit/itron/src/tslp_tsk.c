@@ -34,5 +34,3 @@ ER tslp_tsk(
 {
   return E_OK;
 }
-
-

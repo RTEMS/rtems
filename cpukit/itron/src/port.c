@@ -17,9 +17,9 @@
 
 #include <rtems/itron/port.h>
 
-/*    
+/*
  *  _ITRON_Port_Manager_initialization
- *  
+ *
  *  This routine initializes all ports manager related data structures.
  *
  *  Input parameters:
@@ -30,7 +30,7 @@
 
 void _ITRON_Port_Manager_initialization(
   uint32_t   maximum_ports
-) 
+)
 {
   _Objects_Initialize_information(
     &_ITRON_Port_Information,     /* object information table */
@@ -46,14 +46,14 @@ void _ITRON_Port_Manager_initialization(
     NULL                       /* Proxy extraction support callout */
 #endif
   );
-    
+
   /*
    *  Register the MP Process Packet routine.
    *
    *  NOTE: No MP Support YET in RTEMS ITRON implementation.
    */
- 
-} 
+
+}
 
 /*
  *  cre_por - Create Port for Rendezvous
@@ -79,7 +79,7 @@ ER del_por(
 }
 
 /*
- *  cal_por - Call Port for Rendezvous Poll 
+ *  cal_por - Call Port for Rendezvous Poll
  */
 
 ER cal_por(
@@ -209,4 +209,3 @@ ER ref_por(
 {
   return E_OK;
 }
-

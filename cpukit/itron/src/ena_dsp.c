@@ -34,4 +34,3 @@ ER ena_dsp( void )
 
   return E_OK;
 }
-

@@ -28,6 +28,6 @@
 ER preq_sem(
   ID semid
 )
-{ 
+{
   return twai_sem( semid, TMO_POL );
 }

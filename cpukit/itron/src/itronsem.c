@@ -58,4 +58,3 @@ void _ITRON_Semaphore_Manager_initialization(
    */
 
 }
-

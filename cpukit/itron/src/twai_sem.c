@@ -35,7 +35,7 @@ ER twai_sem(
   Watchdog_Interval        interval;
   boolean                  wait;
   CORE_semaphore_Status    status;
-  
+
   interval = 0;
   if ( tmout == TMO_POL ) {
     wait = FALSE;
@@ -47,7 +47,7 @@ ER twai_sem(
 
   if ( wait && _ITRON_Is_in_non_task_state() )
     return E_CTX;
-  
+
   the_semaphore = _ITRON_Semaphore_Get( semid, &location );
   switch ( location ) {
     case OBJECTS_REMOTE:               /* Multiprocessing not supported */

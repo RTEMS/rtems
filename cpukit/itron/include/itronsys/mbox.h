@@ -92,7 +92,7 @@ ER snd_msg(
 );
 
 /*
- *  rcv_msg - Receive Message from Mailbox 
+ *  rcv_msg - Receive Message from Mailbox
  */
 
 ER rcv_msg(
@@ -135,4 +135,3 @@ ER ref_mbx(
 
 #endif
 /* end of include file */
-

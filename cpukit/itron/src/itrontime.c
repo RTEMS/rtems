@@ -36,7 +36,7 @@ void converTime(SYSTIME ms, TOD_Control *time)
    millisecond = 0;
 #endif
 }
-   
+
 
 /*
  *  set_tim - Set System Clock
@@ -48,10 +48,10 @@ ER set_tim(
 {
  Watchdog_Interval temp; /* an integer in seconds after conversion from SYSTIME */
  TOD_Control the_tod;
- 
+
 /* convert *pk_tim which is 48 bits integer in binary into an ordinary
  integer in milliseconds */
- 
+
 /* XXX */ temp = 0;
   if(temp > 0) {
     _Thread_Disable_dispatch();
@@ -117,7 +117,7 @@ ER def_cyc(
 #if 0
   Watchdog_Interval timeInterval;
 #endif
-  
+
 /* XXX */ object = 0;
   if ( pk_dcyc->cycatr != TA_HLNG)
      return E_RSATR;
@@ -131,7 +131,7 @@ ER def_cyc(
          cycno,
          pk_dcyc->exinf);
   _Watchdog_Deactivate(object);
-               
+
   return E_OK;
 }
 
@@ -145,7 +145,7 @@ ER act_cyc(
 )
 {
   Watchdog_Control *object;
-   
+
   if(cycact != TCY_OFF || cycact != TCY_ON)
      return E_PAR;
 
@@ -153,9 +153,9 @@ ER act_cyc(
   if( object->Object_ID != cycno)
      return E_NOEXS;
 #endif
-  
+
   _Watchdog_Activate(object);
-         
+
   return E_OK;
 }
 
@@ -176,8 +176,8 @@ ER ref_cyc(
   Watchdog_Control *object;
 #endif
 
-/* XXX */ pk_dcyc = 0; 
-  
+/* XXX */ pk_dcyc = 0;
+
 /* XXX will to use a "get" routine to map from id to object pointer */
 /* XXX and the object pointer should be of type specific to this manager */
 #if 0
@@ -191,11 +191,11 @@ ER ref_cyc(
 #if 0
      pk_rcyc->lfttim = pk_dcyc->cyctim - timeElapse_since_actCyclic;
 #endif
-     
+
      return E_OK;
   }
   else
-     return E_NOEXS;   
+     return E_NOEXS;
 }
 
 /*
@@ -206,11 +206,11 @@ ER def_alm(
   HNO     almno,
   T_DALM *pk_dalm
 )
-{  
+{
 #if 0
   Objects_Control *objectAlrm;
   Watchdog_Interval timeInterval;
-  
+
   timeInterval = pk_dalm->almtim / 1000;
   (void) _Watchdog_Remove(&objectAlrm);
   _Watchdog_Initialize(
@@ -221,7 +221,7 @@ ER def_alm(
   _Watchdong_Insert_seconds(objectAlrm,timeInterval);
   _Thread_Enable_dispatch();
 #endif
-              
+
   return E_OK;
 }
 
@@ -234,7 +234,7 @@ ER ref_alm(
   HNO     almno
 )
 {
-   
+
   return E_OK;
 }
 
@@ -245,4 +245,3 @@ ER ref_alm(
 void ret_tmr( void )
 {
 }
-

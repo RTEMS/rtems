@@ -21,7 +21,7 @@
 #include <rtems/itron/task.h>
 
 /*
- *  rcv_msg - Receive Message from Mailbox 
+ *  rcv_msg - Receive Message from Mailbox
  */
 
 ER rcv_msg(

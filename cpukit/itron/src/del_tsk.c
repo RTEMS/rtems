@@ -40,7 +40,7 @@ ER del_tsk(
   switch ( location ) {
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
-      return _ITRON_Task_Clarify_get_id_error( tskid ); 
+      return _ITRON_Task_Clarify_get_id_error( tskid );
 
     case OBJECTS_LOCAL:
 
@@ -56,4 +56,3 @@ ER del_tsk(
 
   _ITRON_return_errorno( result );
 }
-

@@ -59,4 +59,3 @@ void _ITRON_Variable_memory_pool_Manager_initialization(
 
 #endif
 /* end of include file */
-

@@ -32,16 +32,16 @@ ER ref_sem(
 {
   ITRON_Semaphore_Control *the_semaphore;
   Objects_Locations        location;
-  
+
   if ( !pk_rsem )
     return E_PAR;   /* XXX check this error code */
 
   the_semaphore = _ITRON_Semaphore_Get( semid, &location );
-  switch ( location ) {   
+  switch ( location ) {
     case OBJECTS_REMOTE:               /* Multiprocessing not supported */
     case OBJECTS_ERROR:
       return _ITRON_Semaphore_Clarify_get_id_error( semid );
-  
+
     case OBJECTS_LOCAL:
       /*
        *  Fill in the current semaphore count
@@ -60,7 +60,6 @@ ER ref_sem(
 
       _Thread_Enable_dispatch();
       return E_OK;
-  }   
+  }
   return E_OK;
 }
-

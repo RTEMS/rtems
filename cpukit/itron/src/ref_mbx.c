@@ -47,7 +47,7 @@ ER ref_mbx(
       pending = &the_mailbox->message_queue.Pending_messages;
       if ( _Chain_Is_empty( pending ) )
         pk_rmbx->pk_msg = NULL;
-      else 
+      else
         pk_rmbx->pk_msg = (T_MSG *) pending->first;
 
       /*
@@ -63,4 +63,3 @@ ER ref_mbx(
   }
   _ITRON_return_errorno( E_OK );
 }
-

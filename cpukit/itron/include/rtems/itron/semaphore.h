@@ -56,4 +56,3 @@ void _ITRON_Semaphore_Manager_initialization(
 
 #endif
 /* end of include file */
-

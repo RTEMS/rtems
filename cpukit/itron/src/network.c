@@ -69,4 +69,3 @@ ER nget_ver(
 {
   return E_OK;
 }
-

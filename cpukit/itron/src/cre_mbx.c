@@ -22,7 +22,7 @@
 
 /*
  *  cre_mbx - Create Mailbox
- * 
+ *
  *      Creates a Mailbox according to the following spec:
  *
  * ------Parameters-------------------------

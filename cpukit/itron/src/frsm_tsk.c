@@ -39,7 +39,7 @@ ER frsm_tsk(
   switch ( location ) {
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
-      return _ITRON_Task_Clarify_get_id_error( tskid ); 
+      return _ITRON_Task_Clarify_get_id_error( tskid );
 
     case OBJECTS_LOCAL:
       if ( _Thread_Is_executing( the_thread ) )
@@ -47,7 +47,7 @@ ER frsm_tsk(
 
       if (_States_Is_dormant( the_thread->current_state ))
         _ITRON_return_errorno( E_OBJ );
-    
+
       if ( ! _States_Is_suspended(the_thread->current_state) )
         _ITRON_return_errorno( E_OK );
 
@@ -58,5 +58,3 @@ ER frsm_tsk(
  _ITRON_return_errorno( E_OK );
 
 }
-
-

@@ -17,8 +17,8 @@ extern "C" {
 #endif
 
 /* XXX some of these may need to be moved */
-/* 
- *  XXX: These names are too short and conflict with numerous 
+/*
+ *  XXX: These names are too short and conflict with numerous
  *       off the shell programs including paranoia.
  */
 
@@ -46,10 +46,10 @@ typedef void (*FP)();         /* program start address */
  */
 
 /*
- *  Data Types Dependent on ITRON Specification 
+ *  Data Types Dependent on ITRON Specification
  *
  *  In order to clarify the meanings of certain parameters, the
- *  following names are used for data types which appear frequently 
+ *  following names are used for data types which appear frequently
  *  and/or have special meanings.
  */
 
@@ -118,4 +118,3 @@ typedef int32_t   TMO;      /* Timeout value.  A signed integer. */
 
 #endif
 /* end of include file */
-

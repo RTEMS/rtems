@@ -35,7 +35,7 @@ ER ref_tsk(
 {
   register Thread_Control *the_thread;
   Objects_Locations        location;
-  Priority_Control         core_priority;  
+  Priority_Control         core_priority;
 
   if (!pk_rtsk)
     return E_PAR;
@@ -45,7 +45,7 @@ ER ref_tsk(
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
       return _ITRON_Task_Clarify_get_id_error( tskid );
-  
+
     case OBJECTS_LOCAL:
 
       if ( location != OBJECTS_LOCAL )
@@ -61,7 +61,7 @@ ER ref_tsk(
       pk_rtsk->wupcnt  = 0;
       pk_rtsk->suscnt  = the_thread->suspend_count;
       pk_rtsk->tskatr  = 0;       /* XXX - Not correctly implemented */
-      pk_rtsk->task    = (FP) the_thread->Start.entry_point; 
+      pk_rtsk->task    = (FP) the_thread->Start.entry_point;
       core_priority    = the_thread->Start.initial_priority;
       pk_rtsk->itskpri = _ITRON_Task_Core_to_Priority( core_priority );
       pk_rtsk->stksz   = the_thread->Start.Initial_stack.size;
@@ -83,7 +83,7 @@ ER ref_tsk(
       if ( the_thread == _Thread_Executing )
         pk_rtsk->tskstat |= TTS_RUN;
       if ( _States_Is_ready(the_thread->current_state) )
-        pk_rtsk->tskstat |= TTS_RDY;  
+        pk_rtsk->tskstat |= TTS_RDY;
       if ( _States_Is_dormant( the_thread->current_state) )
         pk_rtsk->tskstat |= TTS_DMT;
       if ( _States_Is_suspended(the_thread->current_state) )
@@ -97,7 +97,3 @@ ER ref_tsk(
   _ITRON_return_errorno( E_OK );
 
 }
-
-
-
-

@@ -79,7 +79,7 @@ typedef Objects_Control ITRON_Objects_Control;
  *  This function is invoked when an object get ID error
  *  occurs to determine the specific ITRON error code to return.
  */
- 
+
 #define _ITRON_Objects_Clarify_get_id_error( _the_information, _id ) \
   (((_id) < -4) ? E_OACV : /* attempt to access a "system object" */ \
   ((_id) <= 0) ? E_ID :    /* bogus index of 0 - -3 */ \
@@ -117,4 +117,3 @@ typedef Objects_Control ITRON_Objects_Control;
 
 #endif
 /* end of include file */
-

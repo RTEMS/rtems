@@ -75,4 +75,3 @@ ER nget_ver(
 
 #endif
 /* end of include file */
-

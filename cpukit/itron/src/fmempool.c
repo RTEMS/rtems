@@ -17,9 +17,9 @@
 
 #include <rtems/itron/fmempool.h>
 
-/*    
+/*
  *  _ITRON_Fixed_memory_pool_Manager_initialization
- *  
+ *
  *  This routine initializes all fixed memory pool manager related
  *  data structures.
  *
@@ -31,7 +31,7 @@
 
 void _ITRON_Fixed_memory_pool_Manager_initialization(
   uint32_t   maximum_fixed_memory_pools
-) 
+)
 {
   _Objects_Initialize_information(
     &_ITRON_Fixed_memory_pool_Information, /* object information table */
@@ -48,14 +48,14 @@ void _ITRON_Fixed_memory_pool_Manager_initialization(
     NULL                         /* Proxy extraction support callout */
 #endif
   );
-    
+
   /*
    *  Register the MP Process Packet routine.
    *
    *  NOTE: No MP Support YET in RTEMS ITRON implementation.
    */
- 
-} 
+
+}
 
 /*
  *  cre_mpf - Create Fixed-Size Memorypool
@@ -140,4 +140,3 @@ ER ref_mpf(
 {
   return E_OK;
 }
-

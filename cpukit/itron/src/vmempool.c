@@ -19,7 +19,7 @@
 
 /*
  *  _ITRON_Variable_memory_pool_Manager_initialization
- *  
+ *
  *  This routine initializes all variable memory pool manager related
  *  data structures.
  *
@@ -31,7 +31,7 @@
 
 void _ITRON_Variable_memory_pool_Manager_initialization(
   uint32_t   maximum_variable_memory_pools
-) 
+)
 {
   _Objects_Initialize_information(
     &_ITRON_Variable_memory_pool_Information, /* object information table */
@@ -47,15 +47,15 @@ void _ITRON_Variable_memory_pool_Manager_initialization(
     FALSE,                      /* TRUE if this is a global object class */
     NULL                        /* Proxy extraction support callout */
 #endif
-  ); 
-    
+  );
+
   /*
    *  Register the MP Process Packet routine.
    *
    *  NOTE: No MP Support YET in RTEMS ITRON implementation.
    */
- 
-}   
+
+}
 
 /*
  *  cre_mpl - Create Variable-Size Memorypool
@@ -143,4 +143,3 @@ ER ref_mpl(
 {
   return E_OK;
 }
-

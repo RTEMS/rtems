@@ -17,9 +17,9 @@
 
 #include <rtems/itron/eventflags.h>
 
-/*    
+/*
  *  _ITRON_Eventflags_Manager_initialization
- *  
+ *
  *  This routine initializes all event flags manager related data structures.
  *
  *  Input parameters:
@@ -30,14 +30,14 @@
 
 void _ITRON_Eventflags_Manager_initialization(
   uint32_t   maximum_eventflags
-) 
+)
 {
   _Objects_Initialize_information(
     &_ITRON_Eventflags_Information,     /* object information table */
     OBJECTS_ITRON_API,                  /* object API */
     OBJECTS_ITRON_EVENTFLAGS,           /* object class */
     maximum_eventflags,                 /* maximum objects of this class */
-    sizeof( ITRON_Eventflags_Control ), 
+    sizeof( ITRON_Eventflags_Control ),
                                  /* size of this object's control block */
     FALSE,                       /* TRUE if names for this object are strings */
     ITRON_MAXIMUM_NAME_LENGTH    /* maximum length of each object's name */
@@ -47,14 +47,14 @@ void _ITRON_Eventflags_Manager_initialization(
     NULL                         /* Proxy extraction support callout */
 #endif
   );
-    
+
   /*
    *  Register the MP Process Packet routine.
    *
    *  NOTE: No MP Support YET in RTEMS ITRON implementation.
    */
- 
-} 
+
+}
 
 /*
  *  cre_flg - Create Eventflag
@@ -157,4 +157,3 @@ ER ref_flg(
 {
   return E_OK;
 }
-

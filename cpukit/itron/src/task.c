@@ -66,7 +66,7 @@ User_extensions_routine _ITRON_Task_Delete_extension(
 )
 {
   (void) _Workspace_Free( deleted->API_Extensions[ THREAD_API_ITRON ] );
- 
+
   deleted->API_Extensions[ THREAD_API_ITRON ] = NULL;
 }
 
@@ -95,7 +95,7 @@ void _ITRON_Task_Initialize_user_tasks( void )
     return;
 
   for ( index=0 ; index < maximum ; index++ ) {
-    
+
     return_value = cre_tsk(
        user_tasks[ index ].id,
        &user_tasks[ index ].attributes
@@ -136,8 +136,8 @@ ER _ITRON_Delete_task(
 }
 
 /*
- *  At this point in time, the ITRON API does not need any other 
- *  extensions.  See the POSIX and RTEMS API extensions for 
+ *  At this point in time, the ITRON API does not need any other
+ *  extensions.  See the POSIX and RTEMS API extensions for
  *  examples of how they can be used.
  */
 

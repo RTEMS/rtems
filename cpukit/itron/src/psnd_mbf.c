@@ -30,5 +30,5 @@ ER psnd_mbf(
   INT msgsz
 )
 {
-  return tsnd_mbf( mbfid, msg, msgsz, TMO_POL ); 
+  return tsnd_mbf( mbfid, msg, msgsz, TMO_POL );
 }

@@ -35,8 +35,7 @@ ER get_tid(
    *  This does not support multiprocessing.  The id handling will have
    *  to be enhanced to support multiprocessing.
    */
-   
+
   *p_tskid = _Objects_Get_index( _Thread_Executing->Object.id );
   return E_OK;
 }
-

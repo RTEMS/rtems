@@ -32,11 +32,9 @@ ER dis_dsp( void )
 {
   /*
    *  Disable dispatch for protection
-   */ 
+   */
 
   _Thread_Disable_dispatch();
 
   return E_OK;
 }
-
-

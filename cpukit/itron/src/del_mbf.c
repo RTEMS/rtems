@@ -53,6 +53,6 @@ ER del_mbf(
       _Thread_Enable_dispatch();
       return E_OK;
   }
-  
+
   return E_OK;
 }

@@ -10,10 +10,10 @@
  *
  *  $Id$
  */
- 
+
 #ifndef __ITRON_API_h
 #define __ITRON_API_h
- 
+
 #include <rtems/config.h>
 
 /*
@@ -21,7 +21,7 @@
  *
  *  Initialize the ITRON API.
  */
- 
+
 void _ITRON_API_Initialize(
   rtems_configuration_table *configuration_table
 );

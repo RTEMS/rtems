@@ -32,7 +32,7 @@ ER rot_rdq(
 )
 {
   PRI priority;
-  
+
 
   if (( tskpri <= 0 ) || ( tskpri >= 256 ))
     return E_PAR;
@@ -47,11 +47,9 @@ ER rot_rdq(
   if ( priority == tskpri )
     _Thread_Yield_processor();
   else {
-    _Thread_Rotate_Ready_Queue( _ITRON_Task_Core_to_Priority( tskpri ) ); 
+    _Thread_Rotate_Ready_Queue( _ITRON_Task_Core_to_Priority( tskpri ) );
   }
   _Thread_Enable_dispatch();
-  
+
   return E_OK;
 }
-
-

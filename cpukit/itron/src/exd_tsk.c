@@ -41,7 +41,6 @@ void exd_tsk( void )
 
   _Thread_Set_state( _Thread_Executing, STATES_DORMANT );
   _ITRON_Delete_task( _Thread_Executing );
-  
+
   _Thread_Enable_dispatch();
 }
-

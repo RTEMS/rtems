@@ -87,19 +87,19 @@ typedef struct t_ver {
  *  When using the format given in Figure 47(2) the code used for MAKER1 is
  *  assigned by using the lower 8 bits of MAKER described in the previous
  *  subsection.  The code assignment of CPU2 is left up to each maker.
- *  
- *  
- *  
+ *
+ *
+ *
  *        +---------------+---------------+---------------+---------------+
  *    (1) | 0   0   0   0   0   0   0   0 |              CPU1             |
  *        +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
  *        +---------------+---------------+---------------+---------------+
  *    (2) |             MAKER1            |              CPU2             |
  *        +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
- *  
+ *
  *                   Figure 47 Format of cpu Returned by get_ver
- *  
- *  
+ *
+ *
  *  Specific CPU codes established as of March, 1993 are as follows.
  */
 
@@ -179,32 +179,32 @@ typedef struct t_ver {
  *
  *  The version numbers of ITRON and uITRON specifications take the following
  *  form.
- *  
+ *
  *          Ver X.YY.ZZ[.WW]
- *  
+ *
  *  where "X" represents major version number of the ITRON specification to
  *  distinguish ITRON1, ITRON2 and uITRON 3.0 specifications.  Specific
  *  assignment is as follows.
- *  
+ *
  *          "X" = 1  ITRON1 specification
  *              = 2  ITRON2 or uITRON 2.0 specification
  *              = 3  uITRON 3.0 specification
- *  
+ *
  *  "YY" is a number used to distinguish versions according to changes and
  *  additions made to the specification.  After the specification is published,
  *  this number is incremented in order "YY" = 00, 01, 02... according to
  *  version upgrades.  The first digit of "YY" is 'A', 'B' or 'C' for draft
  *  standard versions and test versions within the TRON Association before the
  *  specification have been published.
- *  
+ *
  *  The "X.YY" part of the specification version numbers is returned by spver
  *  to get_ver system call.  The corresponding hexadecimal value is used when
  *  "YY" includes 'A', 'B' or 'C'.
- *  
+ *
  *  "ZZ" represents a number used to distinguish versions related to the written
  *  style of a specification.  This number is incremented in order
  *  "ZZ" = 00, 01, 02... when there have been changes in specification
- *  configuration, reordering of chapters or corrections of misprints.  
+ *  configuration, reordering of chapters or corrections of misprints.
  *  When a further distinction of the written style of specifications is
  *  desired, ".WW" may be added optionally after "ZZ".  WW will be assumed
  *  to be zero if ".WW" is omitted.
@@ -316,4 +316,3 @@ ER def_exc(
 
 #endif
 /* end of include file */
-

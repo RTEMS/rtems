@@ -77,7 +77,7 @@ ER dis_int(
 }
 
 /*
- *  ena_int - Enable Interrupt 
+ *  ena_int - Enable Interrupt
  */
 
 ER ena_int(
@@ -108,4 +108,3 @@ ER ref_iXX(
 {
   return E_OK;
 }
-

@@ -20,7 +20,7 @@
 #include <rtems/score/tod.h>
 
 /*
- *  wai_sem - Wait on Semaphore 
+ *  wai_sem - Wait on Semaphore
  *
  *  This function implements the ITRON 3.0 wai_sem() service.
  */

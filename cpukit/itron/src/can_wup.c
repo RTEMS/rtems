@@ -50,4 +50,3 @@ ER can_wup(
 
   _ITRON_return_errorno( E_OK );
 }
-

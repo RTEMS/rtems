@@ -22,7 +22,7 @@ extern "C" {
 
 /*
  *  This macro evaluates to TRUE if there should be a "context error."
- *  This is defined as a blocking directive being issed from 
+ *  This is defined as a blocking directive being issed from
  *  task-independent portions or a task in dispatch disabled state.
  *
  *  NOTE: Dispatching is disabled in interrupts so this should cover
@@ -31,7 +31,7 @@ extern "C" {
 
 #define _ITRON_Is_in_non_task_state() \
   (_Thread_Dispatch_disable_level != 0)
- 
+
 /*
  *  This is the API specific information required by each thread for
  *  the ITRON API to function correctly.
@@ -40,7 +40,7 @@ extern "C" {
 
 typedef struct {
   uint32_t                  unused;  /* no use for the API extension */
-                                     /*   structure for ITRON identified yet */ 
+                                     /*   structure for ITRON identified yet */
 }  ITRON_API_Control;
 
 /*
@@ -99,4 +99,3 @@ do {                                                   \
 
 #endif
 /* end of include file */
-

@@ -42,16 +42,16 @@ ER trcv_mbf(
     wait = FALSE;
   } else {
     wait = TRUE;
-    if (tmout != TMO_FEVR) 
+    if (tmout != TMO_FEVR)
       interval = TOD_MILLISECONDS_TO_TICKS(tmout);
   }
 
-  if (wait && _ITRON_Is_in_non_task_state() ) 
+  if (wait && _ITRON_Is_in_non_task_state() )
     return E_CTX;
 
   if (!p_msgsz || !msg || tmout <= -2)
     return E_PAR;
-    
+
   the_message_buffer = _ITRON_Message_buffer_Get(mbfid, &location);
   switch (location) {
     case OBJECTS_REMOTE:
@@ -68,7 +68,7 @@ ER trcv_mbf(
           interval
       );
       _Thread_Enable_dispatch();
-      status = (CORE_message_queue_Status)_Thread_Executing->Wait.return_code; 
+      status = (CORE_message_queue_Status)_Thread_Executing->Wait.return_code;
       return
         _ITRON_Message_buffer_Translate_core_message_buffer_return_code(status);
     }

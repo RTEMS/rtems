@@ -65,12 +65,12 @@ ER trcv_msg(
         ppk_msg,
         &size,
         wait,
-        interval 
+        interval
       );
       break;
   }
 
-  _ITRON_return_errorno( 
+  _ITRON_return_errorno(
     _ITRON_Mailbox_Translate_core_message_queue_return_code(
         _Thread_Executing->Wait.return_code ) );
 }

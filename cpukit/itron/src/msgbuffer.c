@@ -20,11 +20,11 @@
 #include <rtems/itron/msgbuffer.h>
 #include <rtems/itron/task.h>
 
-/*    
+/*
  *  _ITRON_Message_buffer_Manager_initialization
- *  
+ *
  *  This routine initializes all message buffer manager related data
- *  structures. 
+ *  structures.
  *
  *  Input parameters:
  *    maximum_message_buffers - maximum configured message buffers
@@ -34,7 +34,7 @@
 
 void _ITRON_Message_buffer_Manager_initialization(
   uint32_t   maximum_message_buffers
-) 
+)
 {
   _Objects_Initialize_information(
     &_ITRON_Message_buffer_Information, /* object information table */
@@ -42,20 +42,19 @@ void _ITRON_Message_buffer_Manager_initialization(
     OBJECTS_ITRON_MESSAGE_BUFFERS,      /* object class */
     maximum_message_buffers,            /* maximum objects of this class */
     sizeof( ITRON_Message_buffer_Control ),
-                               /* size of this object's control block */ 
-    FALSE,                     /* TRUE if names for this object are strings */ 
-    ITRON_MAXIMUM_NAME_LENGTH  /* maximum length of each object's name */ 
+                               /* size of this object's control block */
+    FALSE,                     /* TRUE if names for this object are strings */
+    ITRON_MAXIMUM_NAME_LENGTH  /* maximum length of each object's name */
 #if defined(RTEMS_MULTIPROCESSING)
     ,
     FALSE,                     /* TRUE if this is a global object class */
     NULL                       /* Proxy extraction support callout */
 #endif
   );
-  
+
   /*
    *  Register the MP Process Packet routine.
    *
    *  NOTE: No MP Support YET in RTEMS ITRON implementation.
    */
-} 
-
+}

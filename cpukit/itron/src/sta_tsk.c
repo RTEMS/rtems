@@ -41,7 +41,7 @@ ER sta_tsk(
   switch ( location ) {
     case OBJECTS_REMOTE:
     case OBJECTS_ERROR:
-      return _ITRON_Task_Clarify_get_id_error( tskid ); 
+      return _ITRON_Task_Clarify_get_id_error( tskid );
 
     case OBJECTS_LOCAL:
 
@@ -56,18 +56,14 @@ ER sta_tsk(
         0                     /* unused */
       );
 
-      /* 
-       * This error can not happen entry_point is checked in create. 
-         if ( !status )           
+      /*
+       * This error can not happen entry_point is checked in create.
+         if ( !status )
            _ITRON_return_errorno(  E_OBJ );
        */
 
       break;
   }
 
-  _ITRON_return_errorno( E_OK ); 
+  _ITRON_return_errorno( E_OK );
 }
-
-
-
-

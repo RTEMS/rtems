@@ -79,7 +79,7 @@ ER sig_sem(
 );
 
 /*
- *  wai_sem - Wait on Semaphore 
+ *  wai_sem - Wait on Semaphore
  */
 
 ER wai_sem(
@@ -118,4 +118,3 @@ ER ref_sem(
 
 #endif
 /* end of include file */
-

@@ -35,12 +35,12 @@ ER cre_tsk(
 {
   register Thread_Control     *the_thread;
   boolean                      status;
-  Priority_Control             core_priority;  
+  Priority_Control             core_priority;
 
   /*
    * Validate Parameters.
    */
-  
+
  if ( pk_ctsk == NULL )
     return E_PAR;
 
@@ -62,11 +62,11 @@ ER cre_tsk(
     return E_PAR;
   if ( pk_ctsk->stksz < 0 )
     return E_PAR;
-  
+
   /*
    * Disable dispatching.
    */
-  
+
   _Thread_Disable_dispatch();
 
   /*
@@ -84,7 +84,7 @@ ER cre_tsk(
   core_priority = _ITRON_Task_Priority_to_Core( pk_ctsk->itskpri );
   status = _Thread_Initialize(
     &_ITRON_Task_Information,
-    the_thread, 
+    the_thread,
     NULL,
     pk_ctsk->stksz,
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
@@ -118,7 +118,3 @@ ER cre_tsk(
 
   _ITRON_return_errorno( E_OK );
 }
-
-
-
-

@@ -122,4 +122,3 @@ ER ref_mpf(
 
 #endif
 /* end of include file */
-

@@ -74,7 +74,7 @@ ER del_por(
 );
 
 /*
- *  cal_por - Call Port for Rendezvous Poll 
+ *  cal_por - Call Port for Rendezvous Poll
  */
 
 ER cal_por(
@@ -187,4 +187,3 @@ ER ref_por(
 
 #endif
 /* end of include file */
-

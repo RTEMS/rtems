@@ -19,7 +19,7 @@ extern "C" {
 #include <rtems/itron/object.h>
 
 /*
- *  The following defines the control block used to manage each 
+ *  The following defines the control block used to manage each
  *  fixed memory pool.
  */
 
@@ -59,4 +59,3 @@ void _ITRON_Fixed_memory_pool_Manager_initialization(
 
 #endif
 /* end of include file */
-

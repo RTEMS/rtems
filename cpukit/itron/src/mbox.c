@@ -20,9 +20,9 @@
 #include <rtems/itron/mbox.h>
 #include <rtems/itron/task.h>
 
-/*    
+/*
  *  _ITRON_Mailbox_Manager_initialization
- *  
+ *
  *  This routine initializes all mailboxes manager related data structures.
  *
  *  Input parameters:
@@ -33,7 +33,7 @@
 
 void _ITRON_Mailbox_Manager_initialization(
   uint32_t   maximum_mailboxes
-) 
+)
 {
   _Objects_Initialize_information(
     &_ITRON_Mailbox_Information, /* object information table */
@@ -49,11 +49,11 @@ void _ITRON_Mailbox_Manager_initialization(
     NULL                         /* Proxy extraction support callout */
 #endif
   );
-    
+
   /*
    *  Register the MP Process Packet routine.
    *
    *  NOTE: No MP Support YET in RTEMS ITRON implementation.
    */
- 
-} 
+
+}
