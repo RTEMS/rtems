@@ -18,7 +18,6 @@ RTEMS_CANONICALIZE_TOOLS
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 irq/Makefile
 start/Makefile
 startup/Makefile

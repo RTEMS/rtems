@@ -33,7 +33,6 @@ RTEMS_BSPOPTS_HELP([ARM_RDP_MONITOR],
 AC_CONFIG_FILES([Makefile
 clock/Makefile
 console/Makefile
-include/Makefile
 start/Makefile
 startup/Makefile
 timer/Makefile
