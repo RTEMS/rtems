@@ -233,8 +233,7 @@ void bsp_start( void )
    * Must have acces to open pic PCI ACK registers 
    * provided by the RAVEN
    */
-  setdbat(3, 0xfeff0000, 0xfeff0000, 0x10000, IO_PAGE);
-
+  setdbat(3, 0xf0000000, 0xf0000000, 0x10000000, IO_PAGE);
   select_console(CONSOLE_LOG);
 
   /* We check that the keyboard is present and immediately 

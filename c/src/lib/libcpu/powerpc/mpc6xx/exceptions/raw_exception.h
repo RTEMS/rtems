@@ -13,6 +13,9 @@
  * Copyright (C) 1999  Eric Valette (valette@crf.canon.fr)
  *                     Canon Centre Recherche France.
  *
+ * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
+ * to support 603, 603e, 604, 604e exceptions
+ *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
@@ -38,6 +41,10 @@
 #define	ASM_DEC_VECTOR		0x09
 #define	ASM_SYS_VECTOR		0x0C
 #define	ASM_TRACE_VECTOR	0x0D
+#define	ASM_PERFMON_VECTOR	0x0F
+#define	ASM_IMISS_VECTOR	0x10
+#define	ASM_DLMISS_VECTOR	0x11
+#define	ASM_DSMISS_VECTOR	0x12
 #define	ASM_ADDR_VECTOR		0x13
 #define	ASM_SYSMGMT_VECTOR	0x14
 #define	ASM_ITM_VECTOR		0x17

@@ -191,6 +191,40 @@ extern ppc_cpu_id_t get_ppc_cpu_type();
 extern ppc_cpu_id_t current_ppc_cpu;
 extern ppc_cpu_revision_t get_ppc_cpu_revision();
 extern ppc_cpu_revision_t current_ppc_revision;
+/*
+ *  Routines to access the time base register
+ */
+
+static inline unsigned long long PPC_Get_timebase_register( void )
+{
+  unsigned long tbr_low;
+  unsigned long tbr_high;
+  unsigned long tbr_high_old;
+  unsigned long long tbr;
+
+  do {
+    asm volatile( "mftbu %0" : "=r" (tbr_high_old));
+    asm volatile( "mftb  %0" : "=r" (tbr_low));
+    asm volatile( "mftbu %0" : "=r" (tbr_high));
+  } while ( tbr_high_old != tbr_high );
+
+  tbr = tbr_high;
+  tbr <<= 32;
+  tbr |= tbr_low;
+  return tbr;
+}
+
+static inline  void PPC_Set_timebase_register (unsigned long long tbr)
+{
+  unsigned long tbr_low;
+  unsigned long tbr_high;
+
+  tbr_low = (tbr & 0xffffffff) ;
+  tbr_high = (tbr >> 32) & 0xffffffff;
+  asm volatile( "mtspr 284, %0" : : "r" (tbr_low));
+  asm volatile( "mtspr 285, %0" : : "r" (tbr_high));
+  
+}
 #endif
 
 #define _CPU_MSR_GET( _msr_value ) \

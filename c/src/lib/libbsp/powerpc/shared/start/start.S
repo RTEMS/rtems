@@ -49,6 +49,8 @@ __rtems_entry_point:
  *   r6: Start of command line string
  *   r7: End of command line string
  *
+ *   The Prep boot loader insure that the MMU is currently off...
+ *
  */
 	
 	mr	r31,r3			/* save parameters */
@@ -56,6 +58,11 @@ __rtems_entry_point:
 	mr	r29,r5
 	mr	r28,r6
 	mr	r27,r7
+	/*
+	 * Make sure we have nothing in BATS and TLB
+	 */
+	bl	clear_bats
+	bl	flush_tlbs
 /*
  * Use the first pair of BAT registers to map the 1st 64MB
  * of RAM to KERNELBASE. 
@@ -63,6 +70,7 @@ __rtems_entry_point:
 	lis	r11,KERNELBASE@h
 	ori	r11,r11,0x7fe		/* set up BAT registers for 604 */
 	li	r8,2			/* R/W access */
+	isync
 	mtspr	DBAT0L,r8		/* N.B. 6xx (not 601) have valid */
 	mtspr	DBAT0U,r11		/* bit in upper BAT register */
 	mtspr	IBAT0L,r8
@@ -129,3 +137,47 @@ _return_to_ppcbug:
 	bl	MMUon
 	mtctr	r30
 	bctr	
+
+/* 
+ * An undocumented "feature" of 604e requires that the v bit
+ * be cleared before changing BAT values.
+ *
+ * Also, newer IBM firmware does not clear bat3 and 4 so
+ * this makes sure it's done.
+ *  -- Cort 
+ */
+clear_bats:
+	li	r20,0
+	mfspr	r9,PVR
+	rlwinm	r9,r9,16,16,31		/* r9 = 1 for 601, 4 for 604 */
+	cmpwi	r9, 1
+	SYNC
+	beq	1f
+	mtspr	DBAT0U,r20
+	mtspr	DBAT0L,r20	
+	mtspr	DBAT1U,r20
+	mtspr	DBAT1L,r20
+	mtspr	DBAT2U,r20
+	mtspr	DBAT2L,r20	
+	mtspr	DBAT3U,r20
+	mtspr	DBAT3L,r20
+1:	
+	mtspr	IBAT0U,r20
+	mtspr	IBAT0L,r20
+	mtspr	IBAT1U,r20
+	mtspr	IBAT1L,r20
+	mtspr	IBAT2U,r20
+	mtspr	IBAT2L,r20
+	mtspr	IBAT3U,r20
+	mtspr	IBAT3L,r20
+	SYNC	
+	blr
+
+flush_tlbs:
+	lis	r20, 0x1000
+1:	addic.	r20, r20, -0x1000
+	tlbie	r20
+	blt	1b
+	sync
+	blr
+	

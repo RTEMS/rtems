@@ -19,27 +19,48 @@
 #include <rtems/score/targopts.h>
 #include "asm.h"
 
+/*
+ * Each setdbat routine start by invalidating the DBAT as some
+ * proc (604e) request the valid bit set to 0 before accepting 
+ * to write in BAT
+ */
+
 	.globl  asm_setdbat1
 	.type	asm_setdbat1,@function
-asm_setdbat1:	
-	mtspr DBAT1U, r3
+asm_setdbat1:
+	li	r20,0
+	SYNC
+	mtspr	DBAT1U,r20
+	mtspr	DBAT1L,r20
+	SYNC
 	mtspr DBAT1L, r4
+	mtspr DBAT1U, r3
 	SYNC
 	blr
 
 	.globl  asm_setdbat2
 	.type	asm_setdbat2,@function
 asm_setdbat2:	
-	mtspr DBAT2U, r3
+	li	r20,0
+	SYNC
+	mtspr	DBAT2U,r20
+	mtspr	DBAT2L,r20
+	SYNC
 	mtspr DBAT2L, r4
+	mtspr DBAT2U, r3
 	SYNC
 	blr
 
 	.globl  asm_setdbat3
 	.type	asm_setdbat3,@function
 asm_setdbat3:	
-	mtspr DBAT3U, r3
+	li	r20,0
+	SYNC
+	mtspr	DBAT3U,r20
+	mtspr	DBAT3L,r20
+	SYNC
 	mtspr DBAT3L, r4
+	mtspr DBAT3U, r3
 	SYNC
 	blr
 		

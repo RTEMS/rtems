@@ -143,7 +143,7 @@ rtems_device_driver Clock_initialize(
   void *pargp
 )
 {
-  Clock_Decrementer_value = (BSP_bus_frequency/4000)*
+  Clock_Decrementer_value = (BSP_bus_frequency/BSP_time_base_divisor)*
                             (BSP_Configuration.microseconds_per_tick/1000);
 
   if (!BSP_connect_clock_handler ()) {
@@ -185,7 +185,7 @@ rtems_device_driver Clock_control(
     if (args == 0)
         goto done;
  
-    Clock_Decrementer_value = (BSP_bus_frequency/4000)*
+    Clock_Decrementer_value = (BSP_bus_frequency/BSP_time_base_divisor)*
       (BSP_Configuration.microseconds_per_tick/1000);
 
     if      (args->command == rtems_build_name('I', 'S', 'R', ' '))

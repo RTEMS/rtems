@@ -11,6 +11,9 @@
  * Copyright (C) 1999  Eric Valette (valette@crf.canon.fr)
  *                     Canon Centre Recherche France.
  *
+ * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
+ * to support 603, 603e, 604, 604e exceptions
+ *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
@@ -50,12 +53,61 @@ int mpc750_vector_is_valid(rtems_vector vector)
   }
 }
 
+int mpc603_vector_is_valid(rtems_vector vector)
+{
+  switch(vector) {
+  case ASM_RESET_VECTOR: /* fall through */
+  case ASM_MACH_VECTOR:
+  case ASM_PROT_VECTOR:
+  case ASM_ISI_VECTOR:
+  case ASM_EXT_VECTOR:
+  case ASM_ALIGN_VECTOR:
+  case ASM_PROG_VECTOR:
+  case ASM_FLOAT_VECTOR:
+  case ASM_DEC_VECTOR:
+  case ASM_SYS_VECTOR:
+  case ASM_TRACE_VECTOR:
+    return 1;
+  case ASM_PERFMON_VECTOR:
+    return 0;
+  case ASM_IMISS_VECTOR: /* fall through */
+  case ASM_DLMISS_VECTOR:
+  case ASM_DSMISS_VECTOR:
+  case ASM_ADDR_VECTOR:
+  case ASM_SYSMGMT_VECTOR:
+    return 1;
+  case ASM_ITM_VECTOR:
+    return 0;
+  }
+  return 0;
+}
+
 int mpc604_vector_is_valid(rtems_vector vector)
 {
-  /*
-   * Please fill this for MVME2307
-   */
-  printk("Please complete libcpu/powerpc/XXX/raw_exception.c\n");
+  switch(vector) {
+  case ASM_RESET_VECTOR: /* fall through */
+  case ASM_MACH_VECTOR:
+  case ASM_PROT_VECTOR:
+  case ASM_ISI_VECTOR:
+  case ASM_EXT_VECTOR:
+  case ASM_ALIGN_VECTOR:
+  case ASM_PROG_VECTOR:
+  case ASM_FLOAT_VECTOR:
+  case ASM_DEC_VECTOR:
+  case ASM_SYS_VECTOR:
+  case ASM_TRACE_VECTOR:
+  case ASM_PERFMON_VECTOR:
+    return 1;
+  case ASM_IMISS_VECTOR: /* fall through */
+  case ASM_DLMISS_VECTOR:
+  case ASM_DSMISS_VECTOR:
+    return 0;
+  case ASM_ADDR_VECTOR: /* fall through */
+  case ASM_SYSMGMT_VECTOR:
+    return 1;
+  case ASM_ITM_VECTOR:
+    return 0;
+  }
   return 0;
 }
 
@@ -63,22 +115,31 @@ int mpc60x_set_exception  (const rtems_raw_except_connect_data* except)
 {
     unsigned int level;
 
-    if (current_ppc_cpu == PPC_750) {
-      if (!mpc750_vector_is_valid(except->exceptIndex)){
-	return 0;
-      }
-      goto exception_ok;
+    switch (current_ppc_cpu) {
+        case PPC_750:
+            if (!mpc750_vector_is_valid(except->exceptIndex)) {
+                return 0;
+            }
+            break;
+        case PPC_604:
+        case PPC_604e:
+        case PPC_604r:
+            if (!mpc604_vector_is_valid(except->exceptIndex)) {
+                return 0;
+            }
+            break;
+        case PPC_603:
+        case PPC_603e:
+            if (!mpc603_vector_is_valid(except->exceptIndex)) {
+                return 0;
+            }
+            break;
+        default:
+            printk("Please complete libcpu/powerpc/mpc6xx/raw_exception.c\n");
+            printk("current_ppc_cpu = %x\n", current_ppc_cpu);
+            return 0;
     }
-    if (current_ppc_cpu == PPC_604) {
-      if (!mpc604_vector_is_valid(except->exceptIndex)){
-	return 0;
-      }
-      goto exception_ok;
-    }
-    printk("Please complete libcpu/powerpc/XXX/raw_exception.c\n");
-    return 0;
-    
-exception_ok:
+
     /*
      * Check if default handler is actually connected. If not issue an error.
      * You must first get the current handler via mpc60x_get_current_exception

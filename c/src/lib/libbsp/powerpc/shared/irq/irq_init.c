@@ -5,6 +5,9 @@
  *
  *  CopyRight (C) 1999 valette@crf.canon.fr
  *
+ * Enhanced by Jay Kulpinski <jskulpin@eng01.gdds.com>
+ * to make it valid for MVME2300 Motorola boards.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.OARcorp.com/rtems/license.html.
@@ -249,8 +252,12 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 #ifdef TRACE_IRQ_INIT  
   printk("Going to initialize the PCI/ISA bridge IRQ related setting (VIA 82C586)\n");
 #endif
-  if ( (currentBoard == MESQUITE) ) {
+  if ( currentBoard == MESQUITE ) {
     VIA_isa_bridge_interrupts_setup();
+    known_cpi_isa_bridge = 1;
+  }
+  if ( currentBoard == MVME_2300 ) {
+    /* nothing to do for W83C553 bridge */
     known_cpi_isa_bridge = 1;
   }
   if (!known_cpi_isa_bridge) {
