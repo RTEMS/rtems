@@ -1,5 +1,11 @@
 2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
+	* automake/compile.am: Introduce depend-gcc.
+	* automake/lib.am: Remove stray comment.
+	* automake/local.am: Introduce depend-gcc.
+
+2003-02-28	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
 	* config-ml.in: Don't build arm-rtems/*fpu* multilib variants.
 
 2003-02-18	Ralf Corsepius <corsepiu@faw.uni-ulm.de>

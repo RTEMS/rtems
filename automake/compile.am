@@ -110,9 +110,10 @@ DEPEND=Depends-${ARCH}
 # on 'make clean'
 #
 
+if RTEMS_USE_GCC
 ## HACK: Specific to gcc
 ## FIXME: The approach below is known to be conceptionally broken.
-depend-am: $(C_FILES) $(CC_FILES) $(S_FILES)
+depend-gcc: $(C_FILES) $(CC_FILES) $(S_FILES)
 ##       Use gcc -M to generate dependencies
 ##       Replace foo.o with $(ARCH)/foo.o
 ##       Replace $(ARCH) value with string $(ARCH)
@@ -121,13 +122,13 @@ depend-am: $(C_FILES) $(CC_FILES) $(S_FILES)
 	sed -e 's?^\(.*\)\.o[ ]*:?$$(ARCH)/\1.o:?' \
 	    -e 's?$(ARCH)/?$$(ARCH)/?'   >$(DEPEND).tmp
 	mv $(DEPEND).tmp $(DEPEND)
-depend: depend-am
 
 # pull in dependencies if they exist  
 ifeq (${DEPEND},$(wildcard ${DEPEND}))
 include ${DEPEND}
 @ENDIF@
-
+endif
+depend: depend-am
 
 # spell out all the LINK_FILE's, rather than using -lbsp, so
 #  that $(LINK_FILES) can be a dependency
