@@ -68,10 +68,17 @@ void rtems_bsdnet_show_tcp_stats (void);
  */
 struct rtems_bsdnet_ifconfig {
 	/*
-	 * These two entries must be supplied for each interface.
+	 * These three entries must be supplied for each interface.
 	 */
 	char		*name;
-	int		(*attach)(struct rtems_bsdnet_ifconfig *conf);
+
+	/*
+	 * This function now handles attaching and detaching an interface.
+	 * The parameter attaching indicates the operation being invoked.
+	 * For older attach functions which do not have the extra parameter
+	 * it will be ignored.
+	 */
+	int		(*attach)(struct rtems_bsdnet_ifconfig *conf, int attaching);
 
 	/*
 	 * Link to next interface
@@ -132,8 +139,36 @@ struct rtems_bsdnet_config {
 	char			*name_server[3];	/* BOOTP	*/
 	char			*ntp_server[3];		/* BOOTP	*/
 };
+
+/*
+ * Default global device configuration structure. This is scanned
+ * by the initialize network function. Check the network demo's for
+ * an example of the structure. Like the RTEMS configuration tables,
+ * they are not part of RTEMS but part of your application or bsp
+ * code.
+ */
 extern struct rtems_bsdnet_config rtems_bsdnet_config;
+
+/*
+ * Initialise the BSD stack, attach and `up' interfaces
+ * in the `rtems_bsdnet_config'. RTEMS must already be initialised.
+ */
 int rtems_bsdnet_initialize_network (void);
+
+/*
+ * Dynamic interface control. Drivers must free any resources such as
+ * memory, interrupts, io regions claimed during the `attach' and/or
+ * `up' operations when asked to `detach'.
+ * You must configure the interface after attaching it.
+ */
+void rtems_bsdnet_attach (struct rtems_bsdnet_ifconfig *ifconfig);
+void rtems_bsdnet_detach (struct rtems_bsdnet_ifconfig *ifconfig);
+
+/*
+ * Interface configuration. The commands are listed in `sys/sockio.h'.
+ */
+int rtems_bsdnet_ifconfig (const char *ifname, unsigned32 cmd, void *param);
+
 void rtems_bsdnet_do_bootp (void);
 int rtems_bsdnet_synchronize_ntp (int interval, rtems_task_priority priority);
 

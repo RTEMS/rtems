@@ -738,8 +738,7 @@ static int
 rtems_bsdnet_setup (void)
 {
 	struct rtems_bsdnet_ifconfig *ifp;
-	int s;
-	struct ifreq ifreq;
+	short flags;
 	struct sockaddr_in address;
 	struct sockaddr_in netmask;
 	struct sockaddr_in broadcast;
@@ -777,31 +776,17 @@ rtems_bsdnet_setup (void)
 	/*
 	 * Configure interfaces
 	 */
-	s = socket (AF_INET, SOCK_DGRAM, 0);
-	if (s < 0) {
-		printf ("Can't create initial socket: %s\n", strerror (errno));
-		return -1;
-	}
 	for (ifp = rtems_bsdnet_config.ifconfig ; ifp ; ifp = ifp->next) {
 		if (ifp->ip_address == NULL)
 			continue;
 
 		/*
-		 * Get the interface flags
-		 */
-		strcpy (ifreq.ifr_name, ifp->name);
-		if (ioctl (s, SIOCGIFFLAGS, &ifreq) < 0) {
-			printf ("Can't get %s flags: %s\n", ifp->name, strerror (errno));
-			return -1;
-		}
-
-		/*
 		 * Bring interface up
 		 */
-		ifreq.ifr_flags |= IFF_UP;
-		if (ioctl (s, SIOCSIFFLAGS, &ifreq) < 0) {
+		flags = IFF_UP;
+		if (rtems_bsdnet_ifconfig (ifp->name, SIOCSIFFLAGS, &flags) < 0) {
 			printf ("Can't bring %s up: %s\n", ifp->name, strerror (errno));
-			return -1;
+			continue;
 		}
 
 		/*
@@ -811,10 +796,9 @@ rtems_bsdnet_setup (void)
 		netmask.sin_len = sizeof netmask;
 		netmask.sin_family = AF_INET;
 		netmask.sin_addr.s_addr = inet_addr (ifp->ip_netmask);
-		memcpy (&ifreq.ifr_addr, &netmask, sizeof netmask);
-		if (ioctl (s, SIOCSIFNETMASK, &ifreq) < 0) {
+		if (rtems_bsdnet_ifconfig (ifp->name, SIOCSIFNETMASK, &netmask) < 0) {
 			printf ("Can't set %s netmask: %s\n", ifp->name, strerror (errno));
-			return -1;
+			continue;
 		}
 
 		/*
@@ -824,28 +808,33 @@ rtems_bsdnet_setup (void)
 		address.sin_len = sizeof address;
 		address.sin_family = AF_INET;
 		address.sin_addr.s_addr = inet_addr (ifp->ip_address);
-		memcpy (&ifreq.ifr_addr, &address, sizeof address);
-		if (ioctl (s, SIOCSIFADDR, &ifreq) < 0) {
+		if (rtems_bsdnet_ifconfig (ifp->name, SIOCSIFADDR, &address) < 0) {
 			printf ("Can't set %s address: %s\n", ifp->name, strerror (errno));
-			return -1;
+			continue;
 		}
 
 		/*
-		 * Set interface broadcast address
+		 * Set interface broadcast address if the interface has the 
+		 * broadcast flag set.
 		 */
-		memset (&broadcast, '\0', sizeof broadcast);
-		broadcast.sin_len = sizeof broadcast;
-		broadcast.sin_family = AF_INET;
-		broadcast.sin_addr.s_addr = address.sin_addr.s_addr | ~netmask.sin_addr.s_addr;
-		memcpy (&ifreq.ifr_broadaddr, &broadcast, sizeof broadcast);
-		if (ioctl (s, SIOCSIFBRDADDR, &ifreq) < 0)
-			printf ("Can't set %s broadcast address: %s\n", ifp->name, strerror (errno));
+		if (rtems_bsdnet_ifconfig (ifp->name, SIOCGIFFLAGS, &flags) < 0) {
+			printf ("Can't read %s flags: %s\n", ifp->name, strerror (errno));
+			continue;
+		}
+		if (flags & IFF_BROADCAST) {
+			memset (&broadcast, '\0', sizeof broadcast);
+			broadcast.sin_len = sizeof broadcast;
+			broadcast.sin_family = AF_INET;
+			broadcast.sin_addr.s_addr = 
+					address.sin_addr.s_addr | ~netmask.sin_addr.s_addr;
+			if (rtems_bsdnet_ifconfig (ifp->name, SIOCSIFBRDADDR, &broadcast) < 0) {
+				struct in_addr in_addr;
+				in_addr.s_addr = broadcast.sin_addr.s_addr;
+				printf ("Can't set %s broadcast address %s: %s\n",
+					ifp->name, inet_ntoa (in_addr), strerror (errno));
+			}
+		}
 	}
-
-	/*
-	 * We're done with the dummy socket
-	 */
-	close (s);
 
 	/*
 	 * Set default route
@@ -889,9 +878,7 @@ rtems_bsdnet_initialize_network (void)
 	 * Attach interfaces
 	 */
 	for (ifp = rtems_bsdnet_config.ifconfig ; ifp ; ifp = ifp->next) {
-		rtems_bsdnet_semaphore_obtain ();
-		(ifp->attach)(ifp);
-		rtems_bsdnet_semaphore_release ();
+		rtems_bsdnet_attach (ifp);
 	}
 
 	/*
@@ -902,6 +889,157 @@ rtems_bsdnet_initialize_network (void)
 	if (rtems_bsdnet_config.bootp)
 		(*rtems_bsdnet_config.bootp)();
 	return 0;
+}
+
+/*
+ * Attach a network interface.
+ */
+void rtems_bsdnet_attach (struct rtems_bsdnet_ifconfig *ifp)
+{
+	if (ifp) {
+		rtems_bsdnet_semaphore_obtain ();
+		(ifp->attach)(ifp, 1);
+		rtems_bsdnet_semaphore_release ();
+	}
+}
+
+/*
+ * Detach a network interface.
+ */
+void rtems_bsdnet_detach (struct rtems_bsdnet_ifconfig *ifp)
+{
+	if (ifp) {
+		rtems_bsdnet_semaphore_obtain ();
+		(ifp->attach)(ifp, 0);
+		rtems_bsdnet_semaphore_release ();
+	}
+}
+
+/*
+ * Interface Configuration.
+ */
+int rtems_bsdnet_ifconfig (const char *ifname, unsigned32 cmd, void *param)
+{
+	int s, r = 0;
+	struct ifreq ifreq;
+
+	/*
+	 * Configure interfaces
+	 */
+	s = socket (AF_INET, SOCK_DGRAM, 0);
+	if (s < 0)
+		return -1;
+
+	strncpy (ifreq.ifr_name, ifname, IFNAMSIZ);
+
+	rtems_bsdnet_semaphore_obtain ();
+
+	switch (cmd) {
+		case SIOCSIFADDR:
+		case SIOCSIFNETMASK:
+			memcpy (&ifreq.ifr_addr, param, sizeof (struct sockaddr));
+			r = ioctl (s, cmd, &ifreq);
+			break;
+
+		case OSIOCGIFADDR:
+		case SIOCGIFADDR:
+		case OSIOCGIFNETMASK:
+		case SIOCGIFNETMASK:
+			if ((r = ioctl (s, cmd, &ifreq)) < 0)
+				break;
+			memcpy (param, &ifreq.ifr_addr, sizeof (struct sockaddr));
+			break;
+
+		case SIOCGIFFLAGS:
+		case SIOCSIFFLAGS:
+			if ((r = ioctl (s, SIOCGIFFLAGS, &ifreq)) < 0)
+				break;
+			if (cmd == SIOCGIFFLAGS) {
+				*((short*) param) = ifreq.ifr_flags;
+				break;
+			}
+			ifreq.ifr_flags |= *((short*) param);
+			r = ioctl (s, SIOCSIFFLAGS, &ifreq);
+			break;
+
+		case SIOCSIFDSTADDR:
+			memcpy (&ifreq.ifr_dstaddr, param, sizeof (struct sockaddr));
+			r = ioctl (s, cmd, &ifreq);
+			break;
+
+		case OSIOCGIFDSTADDR:
+		case SIOCGIFDSTADDR:
+			if ((r = ioctl (s, cmd, &ifreq)) < 0)
+				break;
+			memcpy (param, &ifreq.ifr_dstaddr, sizeof (struct sockaddr));
+			break;
+
+		case SIOCSIFBRDADDR:
+			memcpy (&ifreq.ifr_broadaddr, param, sizeof (struct sockaddr));
+			r = ioctl (s, cmd, &ifreq);
+			break;
+
+		case OSIOCGIFBRDADDR:
+		case SIOCGIFBRDADDR:
+			if ((r = ioctl (s, cmd, &ifreq)) < 0)
+				break;
+			memcpy (param, &ifreq.ifr_broadaddr, sizeof (struct sockaddr));
+			break;
+
+		case SIOCSIFMETRIC:
+			ifreq.ifr_metric = *((int*) param);
+			r = ioctl (s, cmd, &ifreq);
+			break;
+
+		case SIOCGIFMETRIC:
+			if ((r = ioctl (s, cmd, &ifreq)) < 0)
+				break;
+			*((int*) param) = ifreq.ifr_metric;
+			break;
+
+		case SIOCSIFMTU:
+			ifreq.ifr_mtu = *((int*) param);
+			r = ioctl (s, cmd, &ifreq);
+			break;
+
+		case SIOCGIFMTU:
+			if ((r = ioctl (s, cmd, &ifreq)) < 0)
+				break;
+			*((int*) param) = ifreq.ifr_mtu;
+			break;
+
+		case SIOCSIFPHYS:
+			ifreq.ifr_phys = *((int*) param);
+			r = ioctl (s, cmd, &ifreq);
+			break;
+
+		case SIOCGIFPHYS:
+			if ((r = ioctl (s, cmd, &ifreq)) < 0)
+				break;
+			*((int*) param) = ifreq.ifr_phys;
+			break;
+
+		case SIOCSIFMEDIA:
+			ifreq.ifr_media = *((int*) param);
+			r = ioctl (s, cmd, &ifreq);
+			break;
+
+		case SIOCGIFMEDIA:
+			if ((r = ioctl (s, cmd, &ifreq)) < 0)
+				break;
+			*((int*) param) = ifreq.ifr_media;
+			break;	
+			
+		default:
+			errno = EOPNOTSUPP;
+			r = -1;
+			break;
+	}
+
+	rtems_bsdnet_semaphore_release ();
+
+	close (s);
+	return r;
 }
 
 /*
