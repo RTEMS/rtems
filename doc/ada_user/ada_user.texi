@@ -45,8 +45,8 @@ END-INFO-DIR-ENTRY
 @set STRUCTURE record
 @set ROUTINE subprogram
 @set OR or
-@set RPREFIX
-@set DIRPREFIX
+@set RPREFIX RTEMS.
+@set DIRPREFIX rtems.
 @c the language is @value{LANGUAGE}
 @c NOTE:  don't use underscore in the name
 @c
