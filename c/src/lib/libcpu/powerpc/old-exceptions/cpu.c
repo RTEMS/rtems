@@ -63,7 +63,6 @@ void _CPU_Initialize(
 #if (PPC_USE_SPRG)
   int i;
 #endif
-#if (PPC_ABI != PPC_ABI_POWEROPEN)
   register uint32_t   r2 = 0;
   register uint32_t   r13 = 0;
 
@@ -72,14 +71,10 @@ void _CPU_Initialize(
 
   asm ("mr %0,2" : "=r" ((r2)) : "0" ((r2)));
   _CPU_IRQ_info.Default_r2 = r2;
-#endif
 
   _CPU_IRQ_info.Nest_level = &_ISR_Nest_level;
   _CPU_IRQ_info.Disable_level = &_Thread_Dispatch_disable_level;
   /* fill in _CPU_IRQ_info.Vector_table later */
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-  _CPU_IRQ_info.Dispatch_r2 = ((uint32_t*)_Thread_Dispatch)[1];
-#endif
   _CPU_IRQ_info.Switch_necessary = &_Context_Switch_necessary;
   _CPU_IRQ_info.Signal = &_ISR_Signals_to_thread_executing;
 
@@ -224,11 +219,8 @@ uint32_t   _CPU_ISR_Get_level( void )
  *  _CPU_Context_Initialize
  */
 
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#define CPU_MINIMUM_STACK_FRAME_SIZE 56
-#else /* PPC_ABI_SVR4 or PPC_ABI_EABI */
+/* PPC_ABI_SVR4 or PPC_ABI_EABI */
 #define CPU_MINIMUM_STACK_FRAME_SIZE 8
-#endif
 
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
@@ -271,14 +263,6 @@ void _CPU_Context_Initialize(
   the_context->msr |= (msr_value & PPC_MSR_EP);
   the_context->msr |= PPC_MSR_RI;
   the_context->msr |= msr_value & (PPC_MSR_DR|PPC_MSR_IR);
-
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-  { uint32_t   *desc = (uint32_t*)entry_point;
-
-    the_context->pc = desc[0];
-    the_context->gpr2 = desc[1];
-  }
-#endif
 
 #if (PPC_ABI == PPC_ABI_SVR4)
   { unsigned    r13 = 0;
@@ -354,11 +338,8 @@ void _CPU_ISR_install_vector(
 
 void _CPU_Install_interrupt_stack( void )
 {
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-  _CPU_IRQ_info.Stack = _CPU_Interrupt_stack_high - 56;
-#else
+/* PPC_ABI_EABI */
   _CPU_IRQ_info.Stack = _CPU_Interrupt_stack_high - 8;
-#endif
 }
 
 /* Handle a spurious interrupt */
@@ -410,18 +391,7 @@ void _CPU_Fatal_error(uint32_t   _error)
 
 const CPU_Trap_table_entry _CPU_Trap_slot_template = {
 
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-#error " Vector install not tested."
-#if (PPC_HAS_FPU)
-#error " Vector install not tested."
-  0x9421feb0,           /* stwu r1, -(20*4 + 18*8 + IP_END)(r1) */
-#else
-#error " Vector install not tested."
-  0x9421ff40,           /* stwu    r1, -(20*4 + IP_END)(r1)     */
-#endif
-#else
   0x9421ff90,           /* stwu    r1, -(IP_END)(r1)            */
-#endif
 
   0x90010008,           /* stw   %r0, IP_0(%r1)                 */
   0x38000000,           /* li    %r0, PPC_IRQ                   */

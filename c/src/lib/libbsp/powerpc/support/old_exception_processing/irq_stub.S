@@ -128,12 +128,6 @@ LABEL (nested):
   /*
    *  (*_ISR_Vector_table[ vector ])( vector );
    */
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-	lwz	r6,0(r4)
-	lwz	r2,4(r4)
-	mtlr	r6
-	lwz	r11,8(r4)
-#endif
 #if (PPC_ABI == PPC_ABI_SVR4 || PPC_ABI == PPC_ABI_EABI)
 	mtlr	r4
 	lwz	r2, Default_r2(r11)
@@ -210,11 +204,7 @@ LABEL (switch):
 	stw	r6, 0(r31)
 	/* Re-enable interrupts */
 	lwz	r0, IP_MSR(r1)
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-	lwz	r2, Dispatch_r2(r11)
-#else
 	/* R2 and R13 still hold their values from the last call */
-#endif
 	mtmsr	r0
 	bl	SYM (_Thread_Dispatch)
 	/* NOP marker for debuggers */

@@ -106,11 +106,8 @@
 #endif
 
 	.set	IP_LINK, 0
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-	.set	IP_0, (IP_LINK + 56)
-#else
+/* PPC_ABI_EABI */
 	.set	IP_0, (IP_LINK + 8)
-#endif
 	.set	IP_2, (IP_0 + 4)
 
 	.set	IP_3, (IP_2 + 4)
@@ -148,14 +145,11 @@
 	.set	Disable_level, 4
 	.set	Vector_table, 8
 	.set	Stack, 12
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-	.set	Dispatch_r2, 16
-	.set	Switch_necessary, 20
-#else
+/* PPC_ABI_EABI */
 	.set	Default_r2, 16
 	.set	Default_r13, 20
 	.set	Switch_necessary, 24
-#endif
+
 	.set	Signal, Switch_necessary + 4
         .set    msr_initial, Signal + 4
 

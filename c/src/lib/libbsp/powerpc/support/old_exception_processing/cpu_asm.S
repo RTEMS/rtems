@@ -570,15 +570,7 @@ PROC (_CPU_Context_restore):
 	blr
 
 /*  Individual interrupt prologues look like this:
- * #if (PPC_ABI == PPC_ABI_POWEROPEN)
- * #if (PPC_HAS_FPU)
- *	stwu	r1, -(20*4 + 18*8 + IP_END)(r1)
- * #else
- *	stwu	r1, -(20*4 + IP_END)(r1)
- * #endif
- * #else
  *	stwu	r1, -(IP_END)(r1)
- * #endif
  *	stw	r0, IP_0(r1)
  *
  *	li      r0, vectornum
@@ -635,18 +627,4 @@ PROC (_ISR_HandlerC):
 #define MFMSR(x)	mfspr	x, srr3
 	#include	"irq_stub.S"
 	rfci
-#endif
-
-/*  PowerOpen descriptors for indirect function calls.
- */
-
-#if (PPC_ABI == PPC_ABI_POWEROPEN)
-	DESCRIPTOR (_CPU_Context_save_fp)
-	DESCRIPTOR (_CPU_Context_restore_fp)
-	DESCRIPTOR (_CPU_Context_switch)
-	DESCRIPTOR (_CPU_Context_restore)
-	DESCRIPTOR (_ISR_Handler)
-#if (PPC_HAS_RFCI == 1)
-	DESCRIPTOR (_ISR_HandlerC)
-#endif
 #endif
