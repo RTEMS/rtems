@@ -1,3 +1,9 @@
+2003-02-15	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* Makefile.am: Remove references to obsolete files
+	README.DOS REQUIRES PROBLEMS TESTED README UPDATE_HELP.
+	Add TOOL_TARGETS.
+
 2003-02-11	Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* configure.ac: AM_INIT_AUTOMAKE([1.7.2]).
