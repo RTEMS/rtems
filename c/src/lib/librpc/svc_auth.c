@@ -62,11 +62,13 @@ enum auth_stat _svcauth_short();	/* short hand unix style */
 static struct {
 	enum auth_stat (*authenticator)();
 } svcauthsw[] = {
+  {
 	_svcauth_null,			/* AUTH_NULL */
 #ifdef MR
 	_svcauth_unix,			/* AUTH_UNIX */
 	_svcauth_short			/* AUTH_SHORT */
 #endif
+  }
 };
 
 #ifdef MR
