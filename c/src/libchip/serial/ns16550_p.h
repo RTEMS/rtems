@@ -37,7 +37,6 @@ typedef volatile struct _SP_READ_REGISTERS {
     unsigned char ScratchPad;
 } SP_READ_REGISTERS, *PSP_READ_REGISTERS;
 
-
 #define NS16550_RECEIVE_BUFFER   0
 #define NS16550_INTERRUPT_ENABLE 1
 #define NS16550_INTERRUPT_ID     2

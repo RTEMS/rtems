@@ -84,15 +84,6 @@ console_fns z85c30_fns_polled =
 
 extern void set_vector( rtems_isr_entry, rtems_vector_number, int );
 
-/*
- *  Types for get and set register routines
- */
-
-typedef unsigned8 (*getRegister_f)(unsigned32 port, unsigned8 register);
-typedef void      (*setRegister_f)(
-                            unsigned32 port, unsigned8 reg, unsigned8 value);
-typedef unsigned8 (*getData_f)(unsigned32 port);
-typedef void      (*setData_f)(unsigned32 port, unsigned8 value);
 
 
 /* 
@@ -299,7 +290,7 @@ static void z85c30_write_polled(
 static boolean z85c30_probe(int minor)
 {
   /*
-   * If the configuration dependant probe has located the device then
+   * If the configuration dependent probe has located the device then
    * assume it is there
    */
 
@@ -507,7 +498,7 @@ static void z85c30_process(
   setReg     = Console_Port_Tbl[minor].setRegister;
   getReg     = Console_Port_Tbl[minor].getRegister;
   getData    = Console_Port_Tbl[minor].getData;
-  getData    = Console_Port_Tbl[minor].getData;
+  setData    = Console_Port_Tbl[minor].setData;
 
   /*
    * Deal with any received characters
