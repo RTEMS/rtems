@@ -1,5 +1,14 @@
 2001-02-05	Joel Sherrill <joel@OARcorp.com>
 
+	* cpu_asm.S: Enhanced to save/restore more registers on 
+	exceptions.
+	* rtems/score/cpu.h (CPU_Interrupt_frame): Enhanced to list every
+	register individually and document when it is saved.
+	* idtcpu.h: Added constants for the coprocessor 1 registers 
+	revision and status.
+
+2001-02-05	Joel Sherrill <joel@OARcorp.com>
+
 	* rtems/Makefile.am, rtems/score/Makefile.am: Removed again.
 
 2001-02-04	Joel Sherrill <joel@OARcorp.com>

@@ -427,6 +427,9 @@ LICENSED MATERIAL - PROGRAM PROPERTY OF IDT
 #define C0_ERRPC	$30		/* cache error pc */
 #endif
 
+#define C1_REVISION     $0
+#define C1_STATUS       $31
+
 #endif XDS
 
 #ifdef R4650

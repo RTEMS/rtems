@@ -30,8 +30,10 @@
  *    2002: Greg Menke <gregory.menke@gsfc.nasa.gov>, overhauled cpu_asm.S,
  *          cpu.c and cpu.h to manage FP vs int only tasks, interrupt levels
  *          and deferred FP contexts.
+ *    2002: Joel Sherrill <joel@OARcorp.com> enhanced the exception processing
+ *          by increasing the amount of context saved/restored.
  *  
- *  COPYRIGHT (c) 1989-2000.
+ *  COPYRIGHT (c) 1989-2002.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -196,6 +198,8 @@ FRAME(_CPU_Context_save_fp,sp,0,ra)
 		
 	ld   a1,(a0)
 	NOP
+	.globl _CPU_Context_save_fp_from_exception
+_CPU_Context_save_fp_from_exception:
         swc1 $f0,FP0_OFFSET*F_SZ(a1)
         swc1 $f1,FP1_OFFSET*F_SZ(a1)
         swc1 $f2,FP2_OFFSET*F_SZ(a1)
@@ -269,6 +273,8 @@ FRAME(_CPU_Context_restore_fp,sp,0,ra)
 
 	ld a1,(a0)
 	NOP
+	.globl _CPU_Context_restore_fp_from_exception
+_CPU_Context_restore_fp_from_exception:
         lwc1 $f0,FP0_OFFSET*4(a1)
         lwc1 $f1,FP1_OFFSET*4(a1)
         lwc1 $f2,FP2_OFFSET*4(a1)
@@ -534,12 +540,84 @@ FRAME(_ISR_Handler,sp,0,ra)
 
 _ISR_Handler_Exception:
 
-	/* if we return from the exception, it is assumed nothing */
-	/* bad is going on and we can continue to run normally */
-	
+	/*  If we return from the exception, it is assumed nothing
+         *  bad is going on and we can continue to run normally.
+         *  But we want to save the entire CPU context so exception
+         *  handlers can look at it and change it.
+         *
+         *  NOTE: This is the path the debugger stub will take.
+         */
+
+        STREG    sp,SP_OFFSET*R_SZ(sp)     /* save sp */
+
+        STREG    s0,S0_OFFSET*R_SZ(sp)     /* save s0 - s7 */
+        STREG    s1,S1_OFFSET*R_SZ(sp)
+        STREG    s2,S2_OFFSET*R_SZ(sp)
+        STREG    s3,S3_OFFSET*R_SZ(sp)
+        STREG    s4,S4_OFFSET*R_SZ(sp)
+        STREG    s5,S5_OFFSET*R_SZ(sp)
+        STREG    s6,S6_OFFSET*R_SZ(sp)
+        STREG    s7,S7_OFFSET*R_SZ(sp)
+
+        MFC0     k0,C0_CAUSE               /* save cause */
+	NOP
+        STREG    k0,R_CAUSE*R_SZ(sp)
+
+        /* CP0 special registers */
+
+        MFC0     t0,C0_BADVADDR
+        nop
+        STREG    t0,R_BADVADDR*R_SZ(sp)
+
+#if ( CPU_HARDWARE_FP == TRUE )
+        MFC0     t0,C0_SR                 /* FPU is enabled, save state */
+        srl      t0,t0,16
+        andi     t0,t0,(SR_CU1 >> 16)
+        beqz     t0, 1f
+        nop
+        
+        la       a1,R_F0*R_SZ(sp)
+        jal      _CPU_Context_save_fp_from_exception 
+        nop
+        MFC1     t0,C1_REVISION
+        MFC1     t1,C1_STATUS
+        STREG    t0,R_FEIR*R_SZ(sp)
+        STREG    t1,R_FCSR*R_SZ(sp)
+        
+1:      
+#endif
 	move	 a0,sp
         jal	 mips_vector_exceptions
 	nop
+
+#if ( CPU_HARDWARE_FP == TRUE )
+        MFC0     t0,C0_SR               /* FPU is enabled, restore state */
+        srl      t0,t0,16
+        andi     t0,t0,(SR_CU1 >> 16)
+        beqz     t0, 2f
+        nop
+        
+        la       a1,R_F0*R_SZ(sp)
+        jal      _CPU_Context_restore_fp_from_exception
+        nop
+        LDREG    t0,R_FEIR*R_SZ(sp)
+        LDREG    t1,R_FCSR*R_SZ(sp)
+        MTC1     t0,C1_REVISION
+        MTC1     t1,C1_STATUS
+2:
+#endif
+        LDREG    s0,S0_OFFSET*R_SZ(sp)    /* restore s0 - s7 */
+        LDREG    s1,S1_OFFSET*R_SZ(sp)
+        LDREG    s2,S2_OFFSET*R_SZ(sp)
+        LDREG    s3,S3_OFFSET*R_SZ(sp)
+        LDREG    s4,S4_OFFSET*R_SZ(sp)
+        LDREG    s5,S5_OFFSET*R_SZ(sp)
+        LDREG    s6,S6_OFFSET*R_SZ(sp)
+        LDREG    s7,S7_OFFSET*R_SZ(sp)
+
+        /* do NOT restore the sp as this could mess up the world */
+        /* do NOT restore the cause as this could mess up the world */
+
 	j	 _ISR_Handler_exit
 	nop
 
@@ -746,7 +824,7 @@ ENDFRAME(_ISR_Handler)
 	
 FRAME(mips_break,sp,0,ra)
 #if 1
-        break 0x0
+        break 0x0 
         j mips_break
 #else
         j ra
