@@ -84,6 +84,9 @@ sed -e "s%@Release@%${gdb_rpm_release}%g" \
 > ${specfile}
 
 case ${target_alias} in
+  mipstx39*)
+     echo "/opt/rtems/bin/${target_alias}-run${exe_ext}" 
+     ;;
   powerpc*)
      echo "/opt/rtems/bin/${target_alias}-run${exe_ext}" 
      ;;

@@ -1,3 +1,8 @@
+2001-03-14	Joel Sherrill <joel@OARcorp.com>
+
+	* gdb/Makefile.am, mkgdbspec.in: Added mipstx39-rtems
+	configuration to gdb since this includes the JMR3904 simulator.
+
 2001-01-03	Joel Sherrill <joel@OARcorp.com>
 
 	* setup.def, binutils/HISTORY, gccnewlib/HISTORY: Updated 
