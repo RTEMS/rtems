@@ -149,6 +149,12 @@ The following persons/organizations have made contributions:
   (http://www.t-systems.com), and provided patches to enable software
   floating-point emulation for x86 targets. 
 
++ Jay Kulpinski (jskulpin@eng01.gdds.com) of General Dynamics Defense
+  Systems (Pittsfield, MA) submitted a board support package for the
+  Motorola MVME230x PowerPC family, borrowing from the PSIM and MPC750
+  BSPs.  This includes support for the Raven ASIC, DEC21140 ethernet, 
+  16550 serial port, and MK48T59 NVRAM.
+
 Finally, the RTEMS project would like to thank those who have contributed
 to the other free software efforts which RTEMS utilizes.  The primary RTEMS
 development environment is from the Free Software Foundation (the GNU
