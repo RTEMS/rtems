@@ -317,7 +317,10 @@ m4_ifdef([_RTEMS_BUILD_CONFIGDIRS_LIST],
 [
 m4_expand_once([_RTEMS_CONFIGURE_ARGS_PRUNE([buildargs])])
 eval buildargs_prune $ac_configure_args
-buildargs="'--host=${build}' '--build=${build}' '--target=${target_alias}' ${buildargs}"
+buildargs="'--host=${build}' '--build=${build}' ${buildargs}"
+test -n "${target_alias}" && \
+buildargs="${buildargs} --target='${target_alias}'"
+
 ## AC_SUBST(buildargs)
 
 build_subdir="."
