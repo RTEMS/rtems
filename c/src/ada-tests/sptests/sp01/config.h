@@ -28,6 +28,8 @@
 #define CONFIGURE_MAXIMUM_POSIX_MUTEXES              20
 #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES  10
 
+#define CONFIGURE_MAXIMUM_TASKS             4
+
 #include <confdefs.h>
 
 /* end of include file */

@@ -1,5 +1,15 @@
 2003-01-03	Joel Sherrill <joel@OARcorp.com>
 
+	* ada.am, samples/ticker/Makefile.am, sptests/sp01/Makefile.am,
+	sptests/sp01/config.h, sptests/sp04/Makefile.am,
+	sptests/sp04/config.h, support/init.c: Modified build rules slightly
+	so gnat_main is used as the Ada main entry point.  Modified
+	sp01 and sp04 Makefile.am's to compile and link with init.o.
+	The test config.h's specified the Ada application requirements -- not
+	the Classic API ones.
+
+2003-01-03	Joel Sherrill <joel@OARcorp.com>
+
 	* Makefile.am, configure.ac, samples/Makefile.am: Do not configure
 	them unless multiprocessing is enabled.
 

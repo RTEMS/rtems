@@ -42,4 +42,7 @@ rtems_id tcb_to_id(
  */
 
 #define CONFIGURE_INIT
+#define CONFIGURE_GNAT_RTEMS
+#define CONFIGURE_MEMORY_OVERHEAD        (256)
+
 #include <config.h>

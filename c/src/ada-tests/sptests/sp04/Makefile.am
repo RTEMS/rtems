@@ -1,5 +1,7 @@
 ## $Id$
 
+VPATH = @srcdir@:@srcdir@/../../support
+
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../../../automake/compile.am
 include $(top_srcdir)/../../../automake/lib.am
@@ -12,7 +14,7 @@ endif
 
 sp04_SOURCES = sp04.adb config.h sptest.adb sptest.ads
 
-sp04$(EXEEXT): sp04.adb
+sp04$(EXEEXT): sp04.adb init.o
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 EXTRA_DIST = sp04.scn
