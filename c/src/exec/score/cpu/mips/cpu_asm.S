@@ -426,6 +426,10 @@ FRAME(_ISR_Handler,sp,0,ra)
         /* This needs to be figured out.........*/
         ADDIU    sp,sp,-40
         STREG    ra,32(sp)                /* store ra on the stack */
+        MFC0     t0, C0_EPC		  /* XXX */
+        STREG    t0,16(sp)                /* XXX store EPC on the stack */
+        mfc0     t0,C0_SR
+        STREG    t0,24(sp)                /* XXX store SR on the stack */
 
 /* determine if an interrupt generated this exception */
 
@@ -529,6 +533,10 @@ _ISR_Handler_1:
 
 _ISR_Handler_exit:
         LDREG    ra,32(sp)
+        LDREG    t0,16(sp)                /* XXX restore EPC on the stack */
+        MTC0     t0, C0_EPC		  /* XXX */
+        LDREG    t0,24(sp)                /* XXX restore SR on the stack */
+        mtc0     t0,C0_SR
         ADDIU    sp,sp,40    /* Q: Again with the 40...Is this needed? */
 
 /* restore interrupt context from stack */
@@ -563,6 +571,7 @@ _ISR_Handler_exit:
         ADDIU     sp,sp,EXCP_STACK_SIZE 
 
         MFC0      k0, C0_EPC
+	nop
         
         rfe  /* Might not need to do RFE here... */
         j         k0
